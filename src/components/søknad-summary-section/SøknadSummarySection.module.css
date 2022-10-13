@@ -1,0 +1,16 @@
+.søknadSummarySection {
+    padding: 1rem;
+}
+
+.søknadHeading {
+    margin-top: 1rem;
+}
+
+.søknadDetails {
+    margin-top: 0.5rem;
+}
+
+.søknadDetail {
+    display: block;
+    margin-top: 0.5rem;
+}

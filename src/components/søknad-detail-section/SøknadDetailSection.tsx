@@ -1,6 +1,6 @@
 import React from 'react';
-import Søknad from '../types/Søknad';
-import { Heading } from '@navikt/ds-react';
+import Søknad from '../../types/Søknad';
+import { Alert, Heading } from '@navikt/ds-react';
 
 interface SøknadDetailSectionProps {
     søknad: Søknad;
@@ -13,6 +13,9 @@ const SøknadDetailSection = (props: SøknadDetailSectionProps) => {
                 Søknad
             </Heading>
             <p>{props.søknad.registrertTiltak.beskrivelse}</p>
+            <Alert variant="info" fullWidth style={{ width: '100%' }}>
+                Foreløpig har vi ikke alle opplysninger til å vurdere søknaden
+            </Alert>
         </div>
     );
 };
