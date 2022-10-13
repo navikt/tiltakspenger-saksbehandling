@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import SøknadSummarySection from '../../components/SøknadSummarySection';
 import SøknadDetailSection from '../../components/SøknadDetailSection';
 import Søknad from '../../types/Søknad';
+import styles from './Søknad.module.css';
 
 async function fetchSøknadsdetaljer(søknadId: string): Promise<Søknad> {
     return Promise.resolve({
@@ -40,16 +41,9 @@ const SøknadPage: NextPage = () => {
         return <div>Henter data om søknad {id}</div>;
     } else {
         return (
-            <div
-                style={{
-                    display: 'flex',
-                    borderTop: '1px solid #cfcfcf',
-                    marginTop: '1rem',
-                    height: '100%',
-                }}
-            >
+            <div className={styles.søknadWrapper}>
                 <SøknadSummarySection søknad={søknadsdetaljer} />
-                <div style={{ width: '1px', backgroundColor: '#cfcfcf' }}></div>
+                <div className={styles.verticalLine}></div>
                 <SøknadDetailSection søknad={søknadsdetaljer} />
             </div>
         );
