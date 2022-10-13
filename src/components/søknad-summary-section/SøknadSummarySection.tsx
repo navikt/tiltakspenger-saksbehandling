@@ -1,7 +1,9 @@
 import React from 'react';
-import Søknad from '../../types/Søknad';
 import { Heading } from '@navikt/ds-react';
+import { Calender, FileContent, Office1, Refresh } from '@navikt/ds-icons';
+import Søknad from '../../types/Søknad';
 import styles from './SøknadSummarySection.module.css';
+import IconWithText from '../icon-with-text/IconWithText';
 
 interface SøknadSummarySectionProps {
     søknad: Søknad;
@@ -26,14 +28,18 @@ const SøknadSummarySection = ({
             Søknad
         </Heading>
         <div className={styles.søknadDetails}>
-            <span className={styles.søknadDetail}>Søknadsdato {søknadsdato}</span>
-            <span className={styles.søknadDetail}>
-                {fom} - {tom}
-            </span>
-            <span className={styles.søknadDetail}>{beskrivelse}</span>
-            <span className={styles.søknadDetail}>
-                {antallDager} dager i uka ({prosent}%)
-            </span>
+            <IconWithText
+                className={styles.søknadDetail}
+                iconRenderer={() => <FileContent />}
+                text={`Søknadsdato: ${søknadsdato}`}
+            />
+            <IconWithText className={styles.søknadDetail} iconRenderer={() => <Calender />} text={`${fom} - ${tom}`} />
+            <IconWithText className={styles.søknadDetail} iconRenderer={() => <Office1 />} text={beskrivelse} />
+            <IconWithText
+                className={styles.søknadDetail}
+                iconRenderer={() => <Refresh />}
+                text={`${antallDager} dager i uka (${prosent}%)`}
+            />
         </div>
     </div>
 );
