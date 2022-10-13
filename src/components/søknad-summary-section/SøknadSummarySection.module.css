@@ -1,5 +1,6 @@
 .søknadSummarySection {
     padding: 1rem;
+    flex-basis: 30%;
 }
 
 .søknadHeading {
