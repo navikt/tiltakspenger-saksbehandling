@@ -28,8 +28,8 @@ const StatligeYtelserTable = ({ rows }: StatligeYtelserTableProps) => {
                 </Table.Row>
             </Table.Header>
             <Table.Body>
-                {rows.map(({ vedtak, ytelse, periode, kilde, detaljer }) => (
-                    <Table.Row>
+                {rows.map(({ vedtak, ytelse, periode, kilde, detaljer }, index) => (
+                    <Table.Row key={`${vedtak}${index}`}>
                         <Table.DataCell>
                             <IconWithText
                                 iconRenderer={() => (vedtak === 'Ja' ? <SuccessColored /> : <ErrorColored />)}
