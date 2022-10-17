@@ -15,11 +15,9 @@ type Person = {
 };
 
 async function fetchPerson(personId: string): Promise<Person> {
-    return Promise.resolve({
-        id: '123',
-        navn: 'Foo Bar',
-        søknader: [{ id: '123' }, { id: '456' }],
-    });
+    const response = await fetch(`https://tiltakspenger-vedtak.dev.intern.nav.no/saker/person`);
+    const data = await response.json();
+    return data;
 }
 
 const Home: NextPage = () => {
