@@ -58,7 +58,7 @@ const onBehalfOfGrant = async (token: string) => {
     return (resBody as unknown as TokenResponse).access_token;
 };
 
-export const getToken = async (token: string) => {
+export const exchangeToken = async (token: string) => {
     const oboToken = await onBehalfOfGrant(token);
     return oboToken;
 };
@@ -74,22 +74,16 @@ const extractToken = (req: NextApiRequest) => {
     return token;
 };
 
-const getUrl = async (req: NextApiRequest): Promise<string> => {
-    const apiUrl = backendUrl;
-    const path = req?.url?.replace('/api', '');
-    return apiUrl + path;
-};
-
-export async function middleware(req: NextApiRequest, response: NextApiResponse) {
+export async function middleware(request: NextApiRequest, response: NextApiResponse) {
     try {
-        const oboToken = await getToken(extractToken(req));
-        const url = await getUrl(req);
-        const res = await fetch(url, {
-            method: req.method,
-            body: req.method === 'GET' ? undefined : req.body,
+        const authToken = extractToken(request);
+        const onBehalfOfToken = exchangeToken(authToken);
+        const res = await fetch(request.url || backendUrl, {
+            method: request.method,
+            body: request.method === 'GET' ? undefined : request.body,
             headers: {
                 'content-type': 'application/json',
-                [Authorization]: `Bearer ${oboToken}`,
+                [Authorization]: `Bearer ${onBehalfOfToken}`,
             },
         });
         const body = await (res.status === 200 ? res.json() : res.text());
