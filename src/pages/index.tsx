@@ -15,7 +15,7 @@ type Person = {
 };
 
 async function fetchPerson(personId: string): Promise<Person> {
-    const response = await fetch(`https://tiltakspenger-vedtak.dev.intern.nav.no/saker/person`);
+    const response = await fetch('/saker/person');
     const data = await response.json();
     return data;
 }
