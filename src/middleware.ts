@@ -77,7 +77,9 @@ const extractToken = (req: NextApiRequest) => {
 export async function middleware(request: NextApiRequest, response: NextApiResponse) {
     try {
         const authToken = extractToken(request);
+        console.info('Request has a token');
         const onBehalfOfToken = exchangeToken(authToken);
+        console.info('Acquired on behalf of token');
         const res = await fetch(request.url || backendUrl, {
             method: request.method,
             body: request.method === 'GET' ? undefined : request.body,
@@ -86,9 +88,11 @@ export async function middleware(request: NextApiRequest, response: NextApiRespo
                 [Authorization]: `Bearer ${onBehalfOfToken}`,
             },
         });
+        console.info('Got a response with status', res.status);
         const body = await (res.status === 200 ? res.json() : res.text());
         response.status(res.status).json(body);
     } catch (err) {
+        console.error('Something went wrong getting OBO token');
         if (response.status) {
             response.status(500).json({ message: 'Internal server error' });
         }
