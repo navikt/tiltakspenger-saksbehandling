@@ -66,18 +66,19 @@ export const exchangeToken = async (token: string) => {
 const Authorization = 'authorization';
 const tokenRegex = /^Bearer (?<token>(\.?([A-Za-z0-9-_]+)){3})$/m;
 
-const extractToken = (req: NextApiRequest) => {
-    const authHeader = req.headers[Authorization];
-    if (!authHeader) throw new Error('No authorization header was found');
-    const token = authHeader.match(tokenRegex)?.groups?.token;
-    if (!token) throw new Error('Invalid authorization header');
-    return token;
-};
-
 export async function middleware(request: NextApiRequest, response: NextApiResponse) {
     try {
-        const authToken = extractToken(request);
-        console.info('Request has a token');
+        const { authorization } = request.headers;
+        if (!authorization) {
+            console.error('Missing authorization header on request');
+            throw new Error();
+        }
+        const authToken = authorization.match(tokenRegex)?.groups?.token;
+        if (!authToken) {
+            console.error('Invalid authorization header');
+            throw new Error();
+        }
+
         const onBehalfOfToken = exchangeToken(authToken);
         console.info('Acquired on behalf of token');
         const res = await fetch(request.url || backendUrl, {
@@ -91,11 +92,8 @@ export async function middleware(request: NextApiRequest, response: NextApiRespo
         console.info('Got a response with status', res.status);
         const body = await (res.status === 200 ? res.json() : res.text());
         response.status(res.status).json(body);
-    } catch (err) {
-        console.error('Something went wrong getting OBO token');
-        if (response.status) {
-            response.status(500).json({ message: 'Internal server error' });
-        }
+    } catch (error) {
+        console.error('Something went wrong during authorization');
     }
 }
 
