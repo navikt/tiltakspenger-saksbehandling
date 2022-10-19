@@ -47,8 +47,8 @@ const onBehalfOfGrant = async (token: string) => {
     });
 
     const resBody = await getBody(res);
-    console.info(`Resbody from MS: ${resBody}`);
-    
+    console.info(`Resbody from MS: ${JSON.stringify(resBody)}`);
+
     if (!res.ok) {
         console.info(`Call to ${url(tenant)} is not ok`);
         console.error(`Error: ${resBody}`);
