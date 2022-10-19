@@ -66,7 +66,7 @@ export const exchangeToken = async (token: string) => {
 const Authorization = 'authorization';
 const tokenRegex = /^Bearer (?<token>(\.?([A-Za-z0-9-_]+)){3})$/m;
 
-export async function middleware(request: NextRequest, response: NextResponse) {
+export async function middleware(request: NextRequest) {
     try {
         const authorization = request.headers.get(Authorization);
         if (!authorization) {
@@ -79,22 +79,20 @@ export async function middleware(request: NextRequest, response: NextResponse) {
             throw new Error();
         }
 
-        const onBehalfOfToken = exchangeToken(authToken);
-        console.info('Acquired on behalf of token');
         const res = await fetch(request.url || backendUrl, {
             method: request.method,
             body: request.method === 'GET' ? undefined : request.body,
             headers: {
                 'content-type': 'application/json',
-                [Authorization]: `Bearer ${onBehalfOfToken}`,
+                [Authorization]: `Bearer ${authorization}`,
             },
         });
-        console.info('Got a response with status', res.status);
-        const status = response.status;
+
+        const status = res.status;
         if (status === 200) {
-            return response.json();
+            return res.json();
         }
-        return response.text();
+        return res.text();
     } catch (error) {
         console.error('Something went wrong during authorization');
     }
