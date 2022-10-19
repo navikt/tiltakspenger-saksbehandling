@@ -96,11 +96,7 @@ export async function middleware(request: NextRequest, response: NextResponse) {
             },
         });
         console.info('Got a response with status', res.status);
-        const status = response.status;
-        if (status === 200) {
-            return response.json();
-        }
-        return response.text();
+        return new NextResponse(res.body, { status: res.status, headers: res.headers });
     } catch (error) {
         console.error('Something went wrong during authorization');
     }
