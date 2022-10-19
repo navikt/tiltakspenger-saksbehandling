@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextRequest, NextResponse } from 'next/server';
 
 const backendUrl = 'https://tiltakspenger-vedtak.dev.intern.nav.no';
 
@@ -66,9 +66,9 @@ export const exchangeToken = async (token: string) => {
 const Authorization = 'authorization';
 const tokenRegex = /^Bearer (?<token>(\.?([A-Za-z0-9-_]+)){3})$/m;
 
-export async function middleware(request: NextApiRequest, response: NextApiResponse) {
+export async function middleware(request: NextRequest, response: NextResponse) {
     try {
-        const { authorization } = request.headers;
+        const authorization = request.headers.get(Authorization);
         if (!authorization) {
             console.error('Missing authorization header on request');
             throw new Error();
@@ -91,7 +91,7 @@ export async function middleware(request: NextApiRequest, response: NextApiRespo
         });
         console.info('Got a response with status', res.status);
         const body = await (res.status === 200 ? res.json() : res.text());
-        response.status(res.status).json(body);
+        return NextResponse.json(body);
     } catch (error) {
         console.error('Something went wrong during authorization');
     }
