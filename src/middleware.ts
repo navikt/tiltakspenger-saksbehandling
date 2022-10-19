@@ -84,7 +84,7 @@ export async function middleware(request: NextRequest, response: NextResponse) {
             throw new Error();
         }
 
-        const onBehalfOfToken = exchangeToken(authToken);
+        const onBehalfOfToken = await exchangeToken(authToken);
         console.info('Acquired on behalf of token');
         const fullUrl = buildApiUrl(request.nextUrl.pathname);
         console.info(`Making request to ${fullUrl}`);
