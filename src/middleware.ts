@@ -37,6 +37,7 @@ const onBehalfOfGrant = async (token: string) => {
         body.append(key, entry || '');
     });
 
+    console.info(`Making call to ${url(tenant)}`);
     const res = await fetch(url(tenant), {
         method: 'POST',
         body,
@@ -46,8 +47,11 @@ const onBehalfOfGrant = async (token: string) => {
     });
 
     const resBody = await getBody(res);
-
+    console.info(`Resbody from MS: ${resBody}`);
+    
     if (!res.ok) {
+        console.info(`Call to ${url(tenant)} is not ok`);
+        console.error(`Error: ${resBody}`);
         return Promise.reject({
             status: res.status,
             content: res.headers.get('content-type'),
