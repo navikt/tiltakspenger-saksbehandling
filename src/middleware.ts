@@ -88,6 +88,9 @@ export async function middleware(request: NextRequest, response: NextResponse) {
         console.info('Acquired on behalf of token');
         const fullUrl = buildApiUrl(request.nextUrl.pathname);
         console.info(`Making request to ${fullUrl}`);
+        if (fullUrl.indexOf('dev.intern') > 0) {
+            console.info(`Token is to ${onBehalfOfToken}`);
+        }
         const res = await fetch(fullUrl, {
             method: request.method,
             body: request.method === 'GET' ? undefined : request.body,
