@@ -15,11 +15,7 @@ type Person = {
 };
 
 async function fetchPerson(personId: string): Promise<Person> {
-    const response = await fetch('/api/saker/person', {
-        body: {
-            ident: '123',
-        } as any,
-    });
+    const response = await fetch('/api/saker/person');
     const data = await response.json();
     return data;
 }
