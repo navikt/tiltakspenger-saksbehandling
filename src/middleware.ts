@@ -66,6 +66,11 @@ export const exchangeToken = async (token: string) => {
 const Authorization = 'authorization';
 const tokenRegex = /^Bearer (?<token>(\.?([A-Za-z0-9-_]+)){3})$/m;
 
+const buildApiUrl = (pathname: string) => {
+    const pathnameWithoutPrefix = pathname.replace('/api', '');
+    return `${backendUrl}${pathnameWithoutPrefix}`;
+};
+
 export async function middleware(request: NextRequest, response: NextResponse) {
     try {
         const authorization = request.headers.get(Authorization);
@@ -81,7 +86,8 @@ export async function middleware(request: NextRequest, response: NextResponse) {
 
         const onBehalfOfToken = exchangeToken(authToken);
         console.info('Acquired on behalf of token');
-        const res = await fetch(request.url || backendUrl, {
+        const fullUrl = buildApiUrl(request.nextUrl.pathname);
+        const res = await fetch(fullUrl, {
             method: request.method,
             body: request.method === 'GET' ? undefined : request.body,
             headers: {
@@ -99,5 +105,9 @@ export async function middleware(request: NextRequest, response: NextResponse) {
         console.error('Something went wrong during authorization');
     }
 }
+
+export const config = {
+    matcher: '/api/:path*',
+};
 
 export default middleware;

@@ -15,7 +15,7 @@ type Person = {
 };
 
 async function fetchPerson(personId: string): Promise<Person> {
-    const response = await fetch('/saker/person');
+    const response = await fetch('/api/saker/person');
     const data = await response.json();
     return data;
 }
