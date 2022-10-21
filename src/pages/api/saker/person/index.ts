@@ -87,7 +87,7 @@ export default async function handler(request: NextApiRequest, response: NextApi
         console.info('Acquired on behalf of token');
         const fullUrl = buildApiUrl('/saker/person');
         console.info(`Making request to ${fullUrl}`);
-        const { status, json, text, body } = await fetch(fullUrl, {
+        const apiResponse = await fetch(fullUrl, {
             method: request.method,
             body: request.method === 'GET' ? undefined : request.body,
             headers: {
@@ -97,15 +97,16 @@ export default async function handler(request: NextApiRequest, response: NextApi
         });
         console.info(`Received response`);
 
-        if (status !== 200) {
-            const errorMessage = await text();
-            response.status(status).json({ error: errorMessage });
+        if (apiResponse.status !== 200) {
+            const errorMessage = await apiResponse.text();
+            response.status(apiResponse.status).json({ error: errorMessage });
         } else {
             try {
-                const jsonResponse = await json();
-                response.status(status).json(jsonResponse);
+                const jsonResponse = await apiResponse.json();
+                response.status(apiResponse.status).json(jsonResponse);
             } catch (error) {
-                console.error('Error processing json response', error, JSON.stringify(body));
+                console.error('Error processing json response', error, JSON.stringify(apiResponse.body));
+                response.status(500).json({ error: 'Internal server error' });
             }
         }
     } catch (error) {
