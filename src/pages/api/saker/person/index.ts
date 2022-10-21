@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextApiRequest, NextApiResponse } from 'next';
 
 const backendUrl = 'https://tiltakspenger-vedtak.dev.intern.nav.no';
 
@@ -47,8 +47,6 @@ const onBehalfOfGrant = async (token: string) => {
     });
 
     const resBody = await getBody(res);
-    console.info(`Resbody from MS: ${JSON.stringify(resBody)}`);
-
     if (!res.ok) {
         console.info(`Call to ${url(tenant)} is not ok`);
         console.error(`Error: ${resBody}`);
@@ -70,24 +68,26 @@ const buildApiUrl = (pathname: string) => {
     return `${backendUrl}${pathnameWithoutPrefix}`;
 };
 
-export async function middleware(request: NextRequest, response: NextResponse) {
+export default async function handler(request: NextApiRequest, response: NextApiResponse) {
     try {
-        const authorization = request.headers.get(Authorization);
+        const { authorization } = request.headers;
         if (!authorization) {
             console.error('Missing authorization header on request');
+            response.status(401).json({ error: 'Ingen tilgang' });
             throw new Error();
         }
         const authToken = authorization.match(tokenRegex)?.groups?.token;
         if (!authToken) {
             console.error('Invalid authorization header');
+            response.status(401).json({ error: 'Ingen tilgang' });
             throw new Error();
         }
 
         const onBehalfOfToken = await onBehalfOfGrant(authToken);
         console.info('Acquired on behalf of token');
-        const fullUrl = buildApiUrl(request.nextUrl.pathname);
+        const fullUrl = buildApiUrl('/saker/person');
         console.info(`Making request to ${fullUrl}`);
-        const res = await fetch(fullUrl, {
+        return await fetch(fullUrl, {
             method: request.method,
             body: request.method === 'GET' ? undefined : request.body,
             headers: {
@@ -95,15 +95,7 @@ export async function middleware(request: NextRequest, response: NextResponse) {
                 [Authorization]: `Bearer ${onBehalfOfToken}`,
             },
         });
-        console.info('Got a response with status', res.status);
-        return new NextResponse(null, { status: res.status, headers: res.headers });
     } catch (error) {
         console.error('Something went wrong during authorization');
     }
 }
-
-export const config = {
-    matcher: '/api/:path*',
-};
-
-export default middleware;
