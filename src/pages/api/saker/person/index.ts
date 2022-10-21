@@ -87,7 +87,7 @@ export default async function handler(request: NextApiRequest, response: NextApi
         console.info('Acquired on behalf of token');
         const fullUrl = buildApiUrl('/saker/person');
         console.info(`Making request to ${fullUrl}`);
-        const { status, body } = await fetch(fullUrl, {
+        const { status, json, text } = await fetch(fullUrl, {
             method: request.method,
             body: request.method === 'GET' ? undefined : request.body,
             headers: {
@@ -97,9 +97,11 @@ export default async function handler(request: NextApiRequest, response: NextApi
         });
 
         if (status !== 200) {
-            response.status(status).json({ error: body });
+            const errorMessage = await text();
+            response.status(status).json({ error: errorMessage });
         } else {
-            response.status(status).json(body);
+            const jsonResponse = await json();
+            response.status(status).json(jsonResponse);
         }
     } catch (error) {
         console.error('Something went wrong during authorization');
