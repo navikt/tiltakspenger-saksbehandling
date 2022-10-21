@@ -62,11 +62,6 @@ const onBehalfOfGrant = async (token: string) => {
     return (resBody as unknown as TokenResponse).access_token;
 };
 
-export const exchangeToken = async (token: string) => {
-    const oboToken = await onBehalfOfGrant(token);
-    return oboToken;
-};
-
 const Authorization = 'authorization';
 const tokenRegex = /^Bearer (?<token>(\.?([A-Za-z0-9-_]+)){3})$/m;
 
@@ -88,13 +83,10 @@ export async function middleware(request: NextRequest, response: NextResponse) {
             throw new Error();
         }
 
-        const onBehalfOfToken = await exchangeToken(authToken);
+        const onBehalfOfToken = await onBehalfOfGrant(authToken);
         console.info('Acquired on behalf of token');
         const fullUrl = buildApiUrl(request.nextUrl.pathname);
         console.info(`Making request to ${fullUrl}`);
-        if (fullUrl.indexOf('dev.intern') > 0) {
-            console.info(`Token is to ${onBehalfOfToken}`);
-        }
         const res = await fetch(fullUrl, {
             method: request.method,
             body: request.method === 'GET' ? undefined : request.body,
