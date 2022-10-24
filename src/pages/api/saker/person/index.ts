@@ -49,7 +49,6 @@ const onBehalfOfGrant = async (token: string) => {
     const resBody = await getBody(res);
     if (!res.ok) {
         console.info(`Call to ${url(tenant)} is not ok`);
-        console.error(`Error: ${resBody}`);
         return Promise.reject({
             status: res.status,
             content: res.headers.get('content-type'),
@@ -84,7 +83,6 @@ export default async function handler(request: NextApiRequest, response: NextApi
         }
 
         const onBehalfOfToken = await onBehalfOfGrant(authToken);
-        console.info('Acquired on behalf of token');
         const fullUrl = buildApiUrl('/saker/person');
         console.info(`Making request to ${fullUrl}`);
         const apiResponse = await fetch(fullUrl, {
@@ -105,7 +103,7 @@ export default async function handler(request: NextApiRequest, response: NextApi
                 const jsonResponse = await apiResponse.json();
                 response.status(apiResponse.status).json(jsonResponse);
             } catch (error) {
-                console.error('Error processing json response', error, JSON.stringify(apiResponse.body));
+                console.error('Error processing json response');
                 response.status(500).json({ error: 'Internal server error' });
             }
         }
