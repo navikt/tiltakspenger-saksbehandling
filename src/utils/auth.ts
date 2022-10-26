@@ -1,6 +1,9 @@
 import { NextApiRequest } from 'next';
 
-function getFieldsForOnBehalfOfGrant(clientId: string, clientSecret: string, token: string, scope: string) {
+const clientId = process.env.AZURE_APP_CLIENT_ID || '';
+const clientSecret = process.env.AZURE_APP_CLIENT_SECRET || '';
+
+function getFieldsForOnBehalfOfGrant(token: string, scope: string) {
     return {
         grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
         client_id: clientId,
@@ -11,8 +14,8 @@ function getFieldsForOnBehalfOfGrant(clientId: string, clientSecret: string, tok
     };
 }
 
-function createOnBehalfOfGrantBody(clientId: string, clientSecret: string, token: string, scope: string) {
-    const oboGrantFields = getFieldsForOnBehalfOfGrant(clientId, clientSecret, token, scope);
+function createOnBehalfOfGrantBody(token: string, scope: string) {
+    const oboGrantFields = getFieldsForOnBehalfOfGrant(token, scope);
     const body = new URLSearchParams();
     Object.entries(oboGrantFields).map(([fieldName, fieldValue = '']) => {
         body.append(fieldName, fieldValue);
@@ -34,8 +37,8 @@ async function makeOnBehalfOfGrant(body: URLSearchParams) {
     });
 }
 
-export async function getAccessToken(clientId: string, clientSecret: string, token: string, scope: string) {
-    const grantBody = createOnBehalfOfGrantBody(clientId, clientSecret, token, scope);
+async function getOnBehalfOfToken(token: string, scope: string) {
+    const grantBody = createOnBehalfOfGrantBody(token, scope);
     const response = await makeOnBehalfOfGrant(grantBody);
     if (!response.ok) {
         return Promise.reject({
@@ -50,7 +53,7 @@ export async function getAccessToken(clientId: string, clientSecret: string, tok
 
 const tokenRegex = /^Bearer (?<token>(\.?([A-Za-z0-9-_]+)){3})$/m;
 
-export async function validateAuthorizationHeader(request: NextApiRequest) {
+function validateAuthorizationHeader(request: NextApiRequest) {
     const { authorization } = request.headers;
     if (!authorization) {
         throw new Error('Ingen tilgang');
@@ -60,4 +63,16 @@ export async function validateAuthorizationHeader(request: NextApiRequest) {
         throw new Error('Ingen tilgang');
     }
     return authToken;
+}
+
+export async function getToken(request: NextApiRequest) {
+    const scope = 'api://eafda703-c821-44de-990c-950dec1ad22f/.default';
+    try {
+        const authToken = validateAuthorizationHeader(request);
+        const onBehalfOfToken = await getOnBehalfOfToken(authToken, scope);
+        return onBehalfOfToken;
+    } catch (error) {
+        console.error('Something went wrong during authorization', error);
+        throw new Error('Ingen tilgang');
+    }
 }
