@@ -8,3 +8,7 @@ envs:
     value: https://tiltakspenger-vedtak.dev.intern.nav.no
   - name: AUTH_PROVIDER_URL
     value:
+  - name: SCOPE
+    value: eafda703-c821-44de-990c-950dec1ad22f
+  - name: TENANT_ID
+    value: eafda703-c821-44de-990c-950dec1ad22f

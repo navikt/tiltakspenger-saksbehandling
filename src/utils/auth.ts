@@ -23,10 +23,11 @@ function createOnBehalfOfGrantBody(token: string, scope: string) {
     return body;
 }
 
-const createOnBehalfOfGrantUrl = (tenantId: string) => `${process.env.AUTH_PROVIDER_URL}/${tenantId}/oauth2/v2.0/token`;
+const createOnBehalfOfGrantUrl = () => `${process.env.AUTH_PROVIDER_URL}/${process.env.TENANT_ID}/token`;
 
 async function makeOnBehalfOfGrant(body: URLSearchParams) {
-    const url = createOnBehalfOfGrantUrl('966ac572-f5b7-4bbe-aa88-c76419c0f851');
+    const url = createOnBehalfOfGrantUrl();
+    console.info(`URL er ${url}`);
     return fetch(url, {
         method: 'POST',
         body,
@@ -47,6 +48,7 @@ async function getOnBehalfOfToken(token: string, scope: string) {
         });
     }
     const jsonResponse = await response.json();
+    console.info(`access token er ${jsonResponse.access_token}`)
     return jsonResponse.access_token;
 }
 
@@ -65,10 +67,12 @@ function validateAuthorizationHeader(request: NextApiRequest) {
 }
 
 export async function getToken(request: NextApiRequest) {
-    const scope = 'api://eafda703-c821-44de-990c-950dec1ad22f/.default';
+    const scope = `api://${process.env.SCOPE}/.default`;
+    console.info(`Scope er ${scope}`)
     try {
         const authToken = validateAuthorizationHeader(request);
         const onBehalfOfToken = await getOnBehalfOfToken(authToken, scope);
+        console.log(`OBO token er ${onBehalfOfToken}`)
         return onBehalfOfToken;
     } catch (error) {
         console.error('Something went wrong during authorization');

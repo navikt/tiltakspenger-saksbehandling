@@ -37,7 +37,7 @@ export default async function handler(request: NextApiRequest, response: NextApi
             }
         }
     } catch (error) {
-        console.error('Something went wrong during authorization');
+        console.error('Something went wrong during authorization', error);
         response.status(401).json({ error: 'Unauthorized' });
     }
 }
