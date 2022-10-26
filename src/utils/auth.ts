@@ -23,8 +23,7 @@ function createOnBehalfOfGrantBody(token: string, scope: string) {
     return body;
 }
 
-const createOnBehalfOfGrantUrl = (tenantId: string) =>
-    `https://login.microsoftonline.com/${tenantId}/oauth2/v2.0/token`;
+const createOnBehalfOfGrantUrl = (tenantId: string) => `${process.env.AUTH_PROVIDER_URL}/${tenantId}/oauth2/v2.0/token`;
 
 async function makeOnBehalfOfGrant(body: URLSearchParams) {
     const url = createOnBehalfOfGrantUrl('966ac572-f5b7-4bbe-aa88-c76419c0f851');

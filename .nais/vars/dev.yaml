@@ -3,3 +3,8 @@ ingress:
 replyURLs:
   - https://tiltakspenger-assistent.dev.intern.nav.no/oauth2/callback
   - http://127.0.0.1:3000/oauth2/callback
+envs:
+  - name: TILTAKSPENGER_VEDTAK_URL
+    value: https://tiltakspenger-vedtak.dev.intern.nav.no
+  - name: AUTH_PROVIDER_URL
+    value:

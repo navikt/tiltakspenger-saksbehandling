@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getToken } from '../../../../utils/auth';
 
-const backendUrl = 'https://tiltakspenger-vedtak.dev.intern.nav.no';
+const backendUrl = process.env.TILTAKSPENGER_VEDTAK_URL;
 
 const buildApiUrl = (pathname: string) => {
     const pathnameWithoutPrefix = pathname.replace('/api', '');
