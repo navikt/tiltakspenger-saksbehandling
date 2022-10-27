@@ -2,13 +2,10 @@ ingress:
   - https://tiltakspenger-assistent.dev.intern.nav.no
 replyURLs:
   - https://tiltakspenger-assistent.dev.intern.nav.no/oauth2/callback
-  - http://127.0.0.1:3000/oauth2/callback
 envs:
   - name: TILTAKSPENGER_VEDTAK_URL
     value: https://tiltakspenger-vedtak.dev.intern.nav.no
   - name: AUTH_PROVIDER_URL
-    value:
+    value: https://login.microsoftonline.com/966ac572-f5b7-4bbe-aa88-c76419c0f851/oauth2/v2.0/token
   - name: SCOPE
-    value: eafda703-c821-44de-990c-950dec1ad22f
-  - name: TENANT_ID
     value: eafda703-c821-44de-990c-950dec1ad22f

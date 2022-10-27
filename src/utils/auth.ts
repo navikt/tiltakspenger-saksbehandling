@@ -23,10 +23,8 @@ function createOnBehalfOfGrantBody(token: string, scope: string) {
     return body;
 }
 
-const createOnBehalfOfGrantUrl = () => `${process.env.AUTH_PROVIDER_URL}/${process.env.TENANT_ID}/token`;
-
 async function makeOnBehalfOfGrant(body: URLSearchParams) {
-    const url = createOnBehalfOfGrantUrl();
+    const url = `${process.env.AUTH_PROVIDER_URL}`;
     return fetch(url, {
         method: 'POST',
         body,
