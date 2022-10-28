@@ -3,15 +3,13 @@ import type { NextPage } from 'next';
 import { TextField, Button } from '@navikt/ds-react';
 import '@navikt/ds-css';
 import { useRouter } from 'next/router';
-import SøknadSummarySection from '../components/søknad-summary-section/SøknadSummarySection';
-import { Html } from 'next/document';
 
 type Søknad = {
-    søknadId: string,
-    arrangoernavn: string,
-    tiltakskode: string,
-    startdato: string,
-    sluttdato?: string,
+    søknadId: string;
+    arrangoernavn: string;
+    tiltakskode: string;
+    startdato: string;
+    sluttdato?: string;
 };
 
 type SøknadResponse = {
@@ -20,7 +18,12 @@ type SøknadResponse = {
 };
 
 async function fetchSøknader(personId: string): Promise<SøknadResponse> {
-    const response = await fetch('/api/person/soknader');
+    const response = await fetch('/api/person/soknader', {
+        method: 'post',
+        body: JSON.stringify({
+            ident: personId,
+        }),
+    });
     const data = await response.json();
     return data;
 }
@@ -32,11 +35,9 @@ const Home: NextPage = () => {
         try {
             const { søknader } = await fetchSøknader(personInput);
             setSøknader(søknader);
-        } catch(error)
-        {
+        } catch (error) {
             console.error(error);
         }
-        
     }
 
     const [personInput, setPersonInput] = React.useState('');
@@ -48,7 +49,11 @@ const Home: NextPage = () => {
             <Button style={{ marginTop: '0.5rem' }} onClick={() => getPerson(personInput)}>
                 Søk
             </Button>
-            <ul>{søknader.map((søknad) => <li>{søknad.søknadId}</li>)}</ul>
+            <ul>
+                {søknader.map((søknad) => (
+                    <li onClick={() => router.push(`/soknad/${søknad.søknadId}`)}>{søknad.søknadId}</li>
+                ))}
+            </ul>
         </div>
     );
 };
