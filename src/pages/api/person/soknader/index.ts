@@ -9,7 +9,7 @@ const buildApiUrl = (pathname: string) => {
 };
 
 function getSøknader(onBehalfOfToken: string, body: string) {
-    const personUrl = buildApiUrl('/person/søknader');
+    const personUrl = buildApiUrl('/person/soknader');
     return fetch(personUrl, {
         method: 'POST',
         body: body,
