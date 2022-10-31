@@ -2,6 +2,7 @@ import React from 'react';
 import { SøknadResponse } from '../../types/Søknad';
 import SøknadDetails from '../søknad-details/SøknadDetails';
 import RegistrertTiltakDetails from '../registrert-tiltak-details/RegistrertTiltakDetails';
+import styles from './SøknadSummarySection.module.css';
 
 interface SøknadSummarySectionProps {
     søknadResponse: SøknadResponse;
@@ -9,7 +10,7 @@ interface SøknadSummarySectionProps {
 
 const SøknadSummarySection = ({ søknadResponse: { søknad, registrerteTiltak } }: SøknadSummarySectionProps) => {
     return (
-        <div className="">
+        <div className={styles.søknadSummarySection}>
             <SøknadDetails søknad={søknad} />
             {registrerteTiltak.map((registrertTiltak) => {
                 return <RegistrertTiltakDetails registrertTiltak={registrertTiltak} />;
