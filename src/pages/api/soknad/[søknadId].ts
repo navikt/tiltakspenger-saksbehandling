@@ -10,7 +10,6 @@ const buildApiUrl = (pathname: string) => {
 
 function getSøknad(onBehalfOfToken: string, søknadId: string) {
     const personUrl = buildApiUrl(`/soknad/${søknadId}`);
-    console.log(personUrl);
     return fetch(personUrl, {
         method: 'GET',
         headers: {
@@ -25,7 +24,6 @@ export default async function handler(request: NextApiRequest, response: NextApi
         const onBehalfOfToken = await getToken(request);
         const { søknadId } = request.query;
         const apiResponse = await getSøknad(onBehalfOfToken, søknadId as string);
-        console.log('apiResponse', apiResponse);
 
         if (apiResponse.status !== 200) {
             const errorMessage = await apiResponse.text();
@@ -33,7 +31,6 @@ export default async function handler(request: NextApiRequest, response: NextApi
         } else {
             try {
                 const jsonResponse = await apiResponse.json();
-                console.log('body', jsonResponse);
                 response.status(apiResponse.status).json(jsonResponse);
             } catch (error) {
                 console.error('Error processing json response');
