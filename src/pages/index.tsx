@@ -36,7 +36,7 @@ const Home: NextPage = () => {
             const { søknader } = await fetchSøknader(personInput);
             setSøknader(søknader);
         } catch (error) {
-            console.error(error);
+            console.error('Noe gikk galt ved henting av søknader');
         }
     }
 
