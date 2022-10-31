@@ -29,6 +29,15 @@ const SøknadPage: NextPage = () => {
     const [søknadsdetaljer, setSøknadsdetaljer] = React.useState<Søknad | null>(null);
 
     React.useEffect(() => {
+        if (!!id) {
+            fetch(`/api/soknad/${id}`).then(
+                (response) => console.log('response', response),
+                (error) => console.error('error', error)
+            );
+        }
+    }, [id]);
+
+    React.useEffect(() => {
         async function getSøknadsdetaljer(søknadId: string) {
             const søknadsdetaljer = await fetchSøknadsdetaljer(søknadId);
             setSøknadsdetaljer(søknadsdetaljer);
