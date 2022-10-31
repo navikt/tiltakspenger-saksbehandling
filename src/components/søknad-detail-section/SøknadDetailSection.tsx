@@ -15,7 +15,7 @@ const SøknadDetailSection = (props: SøknadDetailSectionProps) => {
             <Heading level="1" size="small">
                 Søknad
             </Heading>
-            <p>{props.søknad.registrertTiltak.beskrivelse}</p>
+            <p>Beskrivelse</p>
             <Alert variant="info" fullWidth style={{ width: '100%' }}>
                 Foreløpig har vi ikke alle opplysninger til å vurdere søknaden
             </Alert>

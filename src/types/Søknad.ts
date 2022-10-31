@@ -8,13 +8,23 @@ type RegistrertTiltak = {
     beskrivelse: string;
 };
 
-type Søknad = {
-    id: string;
+interface Søknad {
+    søknadId: string;
     søknadsdato: string;
-    registrertTiltak: RegistrertTiltak;
-    status: string;
+    arrangoernavn: string;
+    tiltakskode: string;
+    startdato: string;
+    sluttdato: string;
     antallDager: number;
-    prosent: number;
-};
+}
+
+export interface SøknadResponse {
+    søknad: Søknad;
+    registrerteTiltak: RegistrertTiltak[];
+    vurderingsperiode: {
+        fra: string;
+        til: string;
+    };
+}
 
 export default Søknad;

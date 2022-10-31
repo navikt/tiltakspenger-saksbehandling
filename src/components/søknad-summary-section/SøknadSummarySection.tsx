@@ -10,15 +10,7 @@ interface SøknadSummarySectionProps {
 }
 
 const SøknadSummarySection = ({
-    søknad: {
-        prosent,
-        registrertTiltak: {
-            beskrivelse,
-            periode: { fom, tom },
-        },
-        søknadsdato,
-        antallDager,
-    },
+    søknad: { søknadsdato, antallDager, startdato, sluttdato, arrangoernavn },
 }: SøknadSummarySectionProps) => (
     <div className={styles.søknadSummarySection}>
         <Heading size="small" level="1">
@@ -33,12 +25,16 @@ const SøknadSummarySection = ({
                 iconRenderer={() => <FileContent />}
                 text={`Søknadsdato: ${søknadsdato}`}
             />
-            <IconWithText className={styles.søknadDetail} iconRenderer={() => <Calender />} text={`${fom} - ${tom}`} />
-            <IconWithText className={styles.søknadDetail} iconRenderer={() => <Office1 />} text={beskrivelse} />
+            <IconWithText
+                className={styles.søknadDetail}
+                iconRenderer={() => <Calender />}
+                text={`${startdato} - ${sluttdato}`}
+            />
+            <IconWithText className={styles.søknadDetail} iconRenderer={() => <Office1 />} text={arrangoernavn} />
             <IconWithText
                 className={styles.søknadDetail}
                 iconRenderer={() => <Refresh />}
-                text={`${antallDager} dager i uka (${prosent}%)`}
+                text={`${antallDager} dager i uka (${(antallDager / 5.0) * 100.0}%)`}
             />
         </div>
     </div>
