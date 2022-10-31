@@ -1,11 +1,12 @@
-type Periode = {
-    fom: string;
-    tom: string;
-};
+import { Periode } from './Periode';
 
-type RegistrertTiltak = {
+export type RegistrertTiltak = {
+    arrangør: string;
+    dagerIUken: number;
+    navn: string;
     periode: Periode;
-    beskrivelse: string;
+    prosent: number;
+    status: string;
 };
 
 interface Søknad {
