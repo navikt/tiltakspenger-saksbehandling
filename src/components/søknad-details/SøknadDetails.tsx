@@ -30,7 +30,7 @@ const SøknadDetails = ({
                 <IconWithText
                     className={styles.søknadDetail}
                     iconRenderer={() => <Calender />}
-                    text={`${formatDate(startdato)} - ${formatDate(sluttdato)}`}
+                    text={`${formatDate(startdato)}${!!sluttdato ? ` - ${formatDate(sluttdato)}` : ''}`}
                 />
                 <IconWithText className={styles.søknadDetail} iconRenderer={() => <Office1 />} text={arrangoernavn} />
                 <IconWithText

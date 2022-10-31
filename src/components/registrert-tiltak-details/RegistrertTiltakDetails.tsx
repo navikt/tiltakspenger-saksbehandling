@@ -2,7 +2,7 @@ import React from 'react';
 import { Heading } from '@navikt/ds-react';
 import { SuccessColored } from '@navikt/ds-icons';
 import { RegistrertTiltak } from '../../types/Søknad';
-import { formatPeriode } from '../../utils/date';
+import { formatDate, formatPeriode } from '../../utils/date';
 import IconWithText from '../icon-with-text/IconWithText';
 import styles from './RegistrertTiltakDetails.module.css';
 
@@ -25,9 +25,11 @@ const RegistrertTiltakDetails = ({ registrertTiltak }: RegistrertTiltakDetailsPr
                 {navn}
             </Heading>
             <p className={styles.registrertTiltakDetails__field}>{arrangør}</p>
-            <p className={styles.registrertTiltakDetails__field}>{formatPeriode(periode)}</p>
             <p className={styles.registrertTiltakDetails__field}>
-                {prosent} - {formatDagerIUken(dagerIUken)}
+                {!!periode.til ? formatPeriode(periode) : formatDate(periode.fra)}
+            </p>
+            <p className={styles.registrertTiltakDetails__field}>
+                {prosent}%{!!dagerIUken ? ` - ${formatDagerIUken(dagerIUken)}` : ''}
             </p>
             <div style={{ marginTop: '1rem' }}>
                 <IconWithText iconRenderer={() => <SuccessColored />} text={status} />
