@@ -3,7 +3,9 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import SøknadSummarySection from '../../components/søknad-summary-section/SøknadSummarySection';
 import { SøknadResponse } from '../../types/Søknad';
+import DetailSection from '../../components/detail-section/DetailSection';
 import styles from './Søknad.module.css';
+import PersonaliaHeader from '../../components/personalia-header/PersonaliaHeader';
 
 const SøknadPage: NextPage = () => {
     const router = useRouter();
@@ -25,11 +27,14 @@ const SøknadPage: NextPage = () => {
         return <div>Henter data om søknad {id}</div>;
     } else {
         return (
-            <div className={styles.søknadWrapper}>
-                <SøknadSummarySection søknadResponse={søknadResponse} />
-                <div className={styles.verticalLine}></div>
-                {/*<SøknadDetailSection søknad={søknadsdetaljer} />*/}
-            </div>
+            <>
+                <PersonaliaHeader personalia={søknadResponse.personopplysninger}></PersonaliaHeader>
+                <div className={styles.søknadWrapper}>
+                    <SøknadSummarySection søknadResponse={søknadResponse} />
+                    <div className={styles.verticalLine}></div>
+                    <DetailSection />
+                </div>
+            </>
         );
     }
 };

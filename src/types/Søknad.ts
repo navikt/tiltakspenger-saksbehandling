@@ -1,4 +1,5 @@
 import { Periode } from './Periode';
+import Personalia from './Personalia';
 
 export type RegistrertTiltak = {
     arrangør: string;
@@ -26,6 +27,7 @@ export interface SøknadResponse {
         fra: string;
         til: string;
     };
+    personopplysninger: Personalia;
 }
 
 export default Søknad;

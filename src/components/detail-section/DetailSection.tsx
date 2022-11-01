@@ -1,15 +1,10 @@
 import React from 'react';
-import Søknad from '../../types/Søknad';
 import { Alert, Heading } from '@navikt/ds-react';
 import ParagraphExpand from '../paragraph-expand/ParagraphExpand';
-import styles from './SøknadDetailSection.module.css';
 import StatligeYtelserTable from '../statlige-ytelser-table/StatligeYtelserTable';
+import styles from './DetailSection.module.css';
 
-interface SøknadDetailSectionProps {
-    søknad: Søknad;
-}
-
-const SøknadDetailSection = (props: SøknadDetailSectionProps) => {
+const DetailSection = () => {
     return (
         <div className={styles.søknadDetailSection}>
             <Heading level="1" size="small">
@@ -57,4 +52,4 @@ const SøknadDetailSection = (props: SøknadDetailSectionProps) => {
     );
 };
 
-export default SøknadDetailSection;
+export default DetailSection;
