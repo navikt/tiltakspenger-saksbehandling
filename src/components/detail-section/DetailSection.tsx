@@ -3,8 +3,13 @@ import { Alert, Heading } from '@navikt/ds-react';
 import ParagraphExpand from '../paragraph-expand/ParagraphExpand';
 import StatligeYtelserTable from '../statlige-ytelser-table/StatligeYtelserTable';
 import styles from './DetailSection.module.css';
+import { SøknadResponse } from '../../types/Søknad';
 
-const DetailSection = () => {
+interface DetailSectionProps {
+    søknadResponse: SøknadResponse;
+}
+
+const DetailSection = (props: DetailSectionProps) => {
     return (
         <div className={styles.søknadDetailSection}>
             <Heading level="1" size="small">
@@ -18,29 +23,7 @@ const DetailSection = () => {
                 <ParagraphExpand title="Søknad om dagpenger (§7)">Test</ParagraphExpand>
                 <ParagraphExpand title="Statlige ytelser (§7)">
                     <StatligeYtelserTable
-                        rows={[
-                            {
-                                vedtak: 'Ja',
-                                ytelse: 'Dagpenger',
-                                periode: '-',
-                                kilde: 'Arena',
-                                detaljer: '5 dager igjen',
-                            },
-                            {
-                                vedtak: 'Nei',
-                                ytelse: 'Arbeidsavklaringspenger',
-                                periode: '-',
-                                kilde: 'Arena',
-                                detaljer: '-',
-                            },
-                            {
-                                vedtak: 'Nei',
-                                ytelse: 'Tiltakspenger',
-                                periode: '-',
-                                kilde: 'Arena',
-                                detaljer: '-',
-                            },
-                        ]}
+                        vilkårsvurderinger={props.søknadResponse.statligeYtelser.vilkårsvurderinger}
                     />
                 </ParagraphExpand>
                 <ParagraphExpand title="Kommunale ytelser (§7)">Test</ParagraphExpand>

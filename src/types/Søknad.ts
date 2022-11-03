@@ -1,4 +1,4 @@
-import { Periode } from './Periode';
+import { Periode, ÅpenPeriode } from './Periode';
 import Personalia from './Personalia';
 
 export type RegistrertTiltak = {
@@ -20,6 +20,24 @@ interface Søknad {
     antallDager: number;
 }
 
+export interface Vilkårsvurdering {
+    ytelse: string;
+    lovreferanse: string;
+    utfall: string;
+    detaljer: string;
+    periode: ÅpenPeriode;
+    kilde: string;
+    vilkår: string;
+}
+
+interface StatligeYtelser {
+    tittel: string;
+    lovreferanse: string;
+    utfall: string;
+    detaljer: string;
+    vilkårsvurderinger: Vilkårsvurdering[];
+}
+
 export interface SøknadResponse {
     søknad: Søknad;
     registrerteTiltak: RegistrertTiltak[];
@@ -28,6 +46,7 @@ export interface SøknadResponse {
         til: string;
     };
     personopplysninger: Personalia;
+    statligeYtelser: StatligeYtelser;
 }
 
 export default Søknad;

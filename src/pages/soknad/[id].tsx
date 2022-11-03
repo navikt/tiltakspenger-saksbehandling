@@ -32,7 +32,7 @@ const SøknadPage: NextPage = () => {
                 <div className={styles.søknadWrapper}>
                     <SøknadSummarySection søknadResponse={søknadResponse} />
                     <div className={styles.verticalLine}></div>
-                    <DetailSection />
+                    <DetailSection søknadResponse={søknadResponse}/>
                 </div>
             </>
         );

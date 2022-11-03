@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { Periode } from '../types/Periode';
+import { Periode, ÅpenPeriode } from '../types/Periode';
 
 export function formatDate(dateString: string) {
     return dayjs(dateString).format('DD.MM.YYYY');
@@ -7,4 +7,9 @@ export function formatDate(dateString: string) {
 
 export function formatPeriode({ fra, til }: Periode) {
     return `${formatDate(fra)} - ${formatDate(til)}`;
+}
+
+export function formatÅpenPeriode({ fra, til }: ÅpenPeriode) {
+    if (til) return formatPeriode({ fra, til } as Periode);
+    return `${formatDate(fra)} - `;
 }
