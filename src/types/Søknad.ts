@@ -38,6 +38,15 @@ interface StatligeYtelser {
     vilkårsvurderinger: Vilkårsvurdering[];
 }
 
+export interface KommunaleYtelser {
+    ytelse: string;
+    lovreferanse: string;
+    utfall: string;
+    detaljer: String;
+    introProgrammet: Vilkårsvurdering[];
+    kvp: Vilkårsvurdering[];
+}
+
 export interface SøknadResponse {
     søknad: Søknad;
     registrerteTiltak: RegistrertTiltak[];
@@ -47,6 +56,7 @@ export interface SøknadResponse {
     };
     personopplysninger: Personalia;
     statligeYtelser: StatligeYtelser;
+    kommunaleYtelser: KommunaleYtelser;
 }
 
 export default Søknad;

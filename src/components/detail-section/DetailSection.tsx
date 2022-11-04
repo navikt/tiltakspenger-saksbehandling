@@ -4,6 +4,7 @@ import ParagraphExpand from '../paragraph-expand/ParagraphExpand';
 import StatligeYtelserTable from '../statlige-ytelser-table/StatligeYtelserTable';
 import styles from './DetailSection.module.css';
 import { SøknadResponse } from '../../types/Søknad';
+import KommunaleYtelserContent from "../kommunale-ytelser-content/KommunaleYtelserContent";
 
 interface DetailSectionProps {
     søknadResponse: SøknadResponse;
@@ -26,7 +27,11 @@ const DetailSection = (props: DetailSectionProps) => {
                         vilkårsvurderinger={props.søknadResponse.statligeYtelser.vilkårsvurderinger}
                     />
                 </ParagraphExpand>
-                <ParagraphExpand title="Kommunale ytelser (§7)">Test</ParagraphExpand>
+                <ParagraphExpand title="Kommunale ytelser (§7)">
+                    <KommunaleYtelserContent
+                        kommunaleYtelser={props.søknadResponse.kommunaleYtelser}
+                    />
+                </ParagraphExpand>
                 <ParagraphExpand title="Pensjonsordninger (§7)">Test</ParagraphExpand>
                 <ParagraphExpand title="Lønnsinntekt (§8)">Test</ParagraphExpand>
                 <ParagraphExpand title="Institusjon (§9)">Test</ParagraphExpand>

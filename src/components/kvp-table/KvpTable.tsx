@@ -1,11 +1,12 @@
 import React from 'react';
 import { Table } from '@navikt/ds-react';
 import { ErrorColored, SuccessColored, InformationColored } from '@navikt/ds-icons';
+import styles from './KvpTable.module.css';
 import IconWithText from '../icon-with-text/IconWithText';
 import { Vilkårsvurdering } from '../../types/Søknad';
 import { formatPeriode, formatÅpenPeriode } from '../../utils/date';
 
-interface StatligeYtelserTableProps {
+interface KvpTableProps {
     vilkårsvurderinger: Vilkårsvurdering[];
 }
 
@@ -15,26 +16,22 @@ function renderIcon(utfall: string) {
     return <InformationColored />;
 }
 
-const StatligeYtelserTable = ({ vilkårsvurderinger }: StatligeYtelserTableProps) => {
+const KvpTable = ({ vilkårsvurderinger }: KvpTableProps) => {
     return (
         <Table>
             <Table.Header>
                 <Table.Row>
-                    <Table.HeaderCell>Vedtak</Table.HeaderCell>
-                    <Table.HeaderCell>Ytelse</Table.HeaderCell>
-                    <Table.HeaderCell>Periode</Table.HeaderCell>
+                    <Table.HeaderCell>Registrering</Table.HeaderCell>
                     <Table.HeaderCell>Kilde</Table.HeaderCell>
                     <Table.HeaderCell>Detaljer</Table.HeaderCell>
                 </Table.Row>
             </Table.Header>
             <Table.Body>
-                {vilkårsvurderinger.map(({ utfall, ytelse, periode, kilde, detaljer }, index) => (
+                {vilkårsvurderinger.map(({ utfall, kilde, detaljer }, index) => (
                     <Table.Row key={`${utfall}${index}`}>
-                        <Table.DataCell>
+                        <Table.DataCell className={styles.registreringCell}>
                             <IconWithText iconRenderer={() => renderIcon(utfall)} text={utfall} />
                         </Table.DataCell>
-                        <Table.DataCell>{ytelse}</Table.DataCell>
-                        <Table.DataCell>{(periode && formatÅpenPeriode(periode)) || '-'}</Table.DataCell>
                         <Table.DataCell>{kilde}</Table.DataCell>
                         <Table.DataCell>{detaljer}</Table.DataCell>
                     </Table.Row>
@@ -44,4 +41,4 @@ const StatligeYtelserTable = ({ vilkårsvurderinger }: StatligeYtelserTableProps
     );
 };
 
-export default StatligeYtelserTable;
+export default KvpTable;
