@@ -34,6 +34,7 @@ const DetailSection = (props: DetailSectionProps) => {
                     <PensjonsordningerTable pensjonsordninger={props.søknadResponse.pensjonsordninger} />
                 </ParagraphExpand>
                 <ParagraphExpand title="Lønnsinntekt (§8)">
+                    <span>Foreløpig har vi ikke alle opplysninger</span>
                     <LønnsinntekterTable lønnsinntekt={props.søknadResponse.lønnsinntekt}></LønnsinntekterTable>
                 </ParagraphExpand>
                 <ParagraphExpand title="Institusjon (§9)">Test</ParagraphExpand>

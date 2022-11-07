@@ -1,5 +1,6 @@
 import React from 'react';
 import { Accordion } from '@navikt/ds-react';
+import styles from './ParagraphExpand.module.css';
 
 interface ParagraphExpandProps {
     title: string;
@@ -11,7 +12,7 @@ const ParagraphExpand = ({ title, children }: ParagraphExpandProps) => {
         <Accordion style={{ marginTop: '1.5rem' }}>
             <Accordion.Item defaultOpen>
                 <Accordion.Header>{title}</Accordion.Header>
-                <Accordion.Content>{children}</Accordion.Content>
+                <Accordion.Content className={styles.paragraphExpandContent}>{children}</Accordion.Content>
             </Accordion.Item>
         </Accordion>
     );
