@@ -28,6 +28,7 @@ export interface Vilkårsvurdering {
     periode: ÅpenPeriode;
     kilde: string;
     vilkår: string;
+    tittel: string;
 }
 
 interface StatligeYtelser {
@@ -47,6 +48,14 @@ export interface KommunaleYtelser {
     kvp: Vilkårsvurdering[];
 }
 
+export interface Pensjonsordninger {
+    tittel: string;
+    lovreferanse: string;
+    utfall: string;
+    detaljer: string;
+    vilkårsvurderinger: Vilkårsvurdering[];
+}
+
 export interface SøknadResponse {
     søknad: Søknad;
     registrerteTiltak: RegistrertTiltak[];
@@ -57,6 +66,7 @@ export interface SøknadResponse {
     personopplysninger: Personalia;
     statligeYtelser: StatligeYtelser;
     kommunaleYtelser: KommunaleYtelser;
+    pensjonsordninger: Pensjonsordninger;
 }
 
 export default Søknad;
