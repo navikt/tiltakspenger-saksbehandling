@@ -56,6 +56,14 @@ export interface Pensjonsordninger {
     vilkårsvurderinger: Vilkårsvurdering[];
 }
 
+export interface Lønnsinntekt {
+    tittel: string;
+    lovreferanse: string;
+    utfall: string;
+    detaljer: string;
+    vilkårsvurderinger: Vilkårsvurdering[];
+}
+
 export interface SøknadResponse {
     søknad: Søknad;
     registrerteTiltak: RegistrertTiltak[];
@@ -67,6 +75,7 @@ export interface SøknadResponse {
     statligeYtelser: StatligeYtelser;
     kommunaleYtelser: KommunaleYtelser;
     pensjonsordninger: Pensjonsordninger;
+    lønnsinntekt: Lønnsinntekt;
 }
 
 export default Søknad;

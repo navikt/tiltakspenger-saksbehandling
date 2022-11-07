@@ -6,6 +6,7 @@ import styles from './DetailSection.module.css';
 import { SøknadResponse } from '../../types/Søknad';
 import KommunaleYtelserContent from '../kommunale-ytelser-content/KommunaleYtelserContent';
 import PensjonsordningerTable from '../pensjonsordninger-table/PensjonsordningerTable';
+import LønnsinntekterTable from '../lønnsinntekter-table/LønnsinntekterTable';
 
 interface DetailSectionProps {
     søknadResponse: SøknadResponse;
@@ -32,7 +33,9 @@ const DetailSection = (props: DetailSectionProps) => {
                 <ParagraphExpand title="Pensjonsordninger (§7)">
                     <PensjonsordningerTable pensjonsordninger={props.søknadResponse.pensjonsordninger} />
                 </ParagraphExpand>
-                <ParagraphExpand title="Lønnsinntekt (§8)">Test</ParagraphExpand>
+                <ParagraphExpand title="Lønnsinntekt (§8)">
+                    <LønnsinntekterTable lønnsinntekt={props.søknadResponse.lønnsinntekt}></LønnsinntekterTable>
+                </ParagraphExpand>
                 <ParagraphExpand title="Institusjon (§9)">Test</ParagraphExpand>
             </div>
         </div>

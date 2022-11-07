@@ -1,13 +1,13 @@
 import React from 'react';
 import { ErrorColored, InformationColored, SuccessColored } from '@navikt/ds-icons';
 import { Table } from '@navikt/ds-react';
-import { Pensjonsordninger } from '../../types/Søknad';
+import { Lønnsinntekt } from '../../types/Søknad';
 import IconWithText from '../icon-with-text/IconWithText';
 import { formatÅpenPeriode } from '../../utils/date';
 import { ÅpenPeriode } from '../../types/Periode';
 
-interface PensjonsordningerTableProps {
-    pensjonsordninger: Pensjonsordninger;
+interface LønnsinntekterTableProps {
+    lønnsinntekt: Lønnsinntekt;
 }
 
 function renderIcon(utfall: string) {
@@ -16,8 +16,8 @@ function renderIcon(utfall: string) {
     return <InformationColored />;
 }
 
-const PensjonsordningerTable = ({ pensjonsordninger }: PensjonsordningerTableProps) => {
-    const { vilkårsvurderinger } = pensjonsordninger;
+const LønnsinntekterTable = ({ lønnsinntekt }: LønnsinntekterTableProps) => {
+    const { vilkårsvurderinger } = lønnsinntekt;
     return (
         <div>
             <Table>
@@ -48,4 +48,4 @@ const PensjonsordningerTable = ({ pensjonsordninger }: PensjonsordningerTablePro
     );
 };
 
-export default PensjonsordningerTable;
+export default LønnsinntekterTable;
