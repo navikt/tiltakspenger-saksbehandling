@@ -67,11 +67,8 @@ export async function getToken(request: NextApiRequest) {
     try {
         const authToken = validateAuthorizationHeader(request);
         const onBehalfOfToken = await getOnBehalfOfToken(authToken, scope);
-        console.log(onBehalfOfToken);
-        console.log("ksabdfksdjbfsdkfjb");
         return onBehalfOfToken;
     } catch (error) {
-        console.error(error);
         console.error('Something went wrong during authorization');
         throw new Error('Ingen tilgang');
     }
