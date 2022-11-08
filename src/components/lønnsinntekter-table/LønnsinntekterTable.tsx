@@ -1,19 +1,12 @@
 import React from 'react';
-import { ErrorColored, InformationColored, SuccessColored } from '@navikt/ds-icons';
 import { Table } from '@navikt/ds-react';
 import { Lønnsinntekt } from '../../types/Søknad';
-import IconWithText from '../icon-with-text/IconWithText';
 import { formatÅpenPeriode } from '../../utils/date';
 import { ÅpenPeriode } from '../../types/Periode';
+import VedtakUtfallText from '../vedtak-utfall-text/VedtakUtfallText';
 
 interface LønnsinntekterTableProps {
     lønnsinntekt: Lønnsinntekt;
-}
-
-function renderIcon(utfall: string) {
-    if (utfall === 'Oppfylt') return <SuccessColored />;
-    if (utfall === 'IkkeOppfylt') return <ErrorColored />;
-    return <InformationColored />;
 }
 
 const LønnsinntekterTable = ({ lønnsinntekt }: LønnsinntekterTableProps) => {
@@ -34,7 +27,7 @@ const LønnsinntekterTable = ({ lønnsinntekt }: LønnsinntekterTableProps) => {
                     {vilkårsvurderinger.map(({ utfall, kilde, detaljer, ytelse, tittel, periode }, index) => (
                         <Table.Row key={`${utfall}${index}`}>
                             <Table.DataCell>
-                                <IconWithText iconRenderer={() => renderIcon(utfall)} text={utfall} />
+                                <VedtakUtfallText utfall={utfall} />
                             </Table.DataCell>
                             <Table.DataCell>{tittel}</Table.DataCell>
                             <Table.DataCell>{periode ? formatÅpenPeriode(periode as ÅpenPeriode) : '-'}</Table.DataCell>

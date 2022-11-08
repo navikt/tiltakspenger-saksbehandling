@@ -1,19 +1,11 @@
 import React from 'react';
 import { Table } from '@navikt/ds-react';
-import { ErrorColored, SuccessColored, InformationColored } from '@navikt/ds-icons';
-import styles from './KvpTable.module.css';
-import IconWithText from '../icon-with-text/IconWithText';
 import { Vilkårsvurdering } from '../../types/Søknad';
-import { formatPeriode, formatÅpenPeriode } from '../../utils/date';
+import VedtakUtfallText from '../vedtak-utfall-text/VedtakUtfallText';
+import styles from './KvpTable.module.css';
 
 interface KvpTableProps {
     vilkårsvurderinger: Vilkårsvurdering[];
-}
-
-function renderIcon(utfall: string) {
-    if (utfall === 'Oppfylt') return <SuccessColored />;
-    if (utfall === 'IkkeOppfylt') return <ErrorColored />;
-    return <InformationColored />;
 }
 
 const KvpTable = ({ vilkårsvurderinger }: KvpTableProps) => {
@@ -30,7 +22,7 @@ const KvpTable = ({ vilkårsvurderinger }: KvpTableProps) => {
                 {vilkårsvurderinger.map(({ utfall, kilde, detaljer }, index) => (
                     <Table.Row key={`${utfall}${index}`}>
                         <Table.DataCell className={styles.registreringCell}>
-                            <IconWithText iconRenderer={() => renderIcon(utfall)} text={utfall} />
+                            <VedtakUtfallText utfall={utfall} />
                         </Table.DataCell>
                         <Table.DataCell>{kilde}</Table.DataCell>
                         <Table.DataCell>{detaljer}</Table.DataCell>

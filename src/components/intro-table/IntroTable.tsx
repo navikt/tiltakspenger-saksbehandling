@@ -1,20 +1,13 @@
 import React from 'react';
 import { Table } from '@navikt/ds-react';
-import { ErrorColored, SuccessColored, InformationColored } from '@navikt/ds-icons';
 import styles from './IntroTable.module.css';
-import IconWithText from '../icon-with-text/IconWithText';
 import { Vilkårsvurdering } from '../../types/Søknad';
-import { formatDate, formatPeriode, formatÅpenPeriode } from '../../utils/date';
+import { formatDate, formatPeriode } from '../../utils/date';
 import { Periode, ÅpenPeriode } from '../../types/Periode';
+import VedtakUtfallText from '../vedtak-utfall-text/VedtakUtfallText';
 
 interface IntroTableProps {
     vilkårsvurderinger: Vilkårsvurdering[];
-}
-
-function renderIcon(utfall: string) {
-    if (utfall === 'Oppfylt') return <SuccessColored />;
-    if (utfall === 'IkkeOppfylt') return <ErrorColored />;
-    return <InformationColored />;
 }
 
 function renderPeriode(periode?: ÅpenPeriode) {
@@ -42,7 +35,7 @@ const IntroTable = ({ vilkårsvurderinger }: IntroTableProps) => {
                 {vilkårsvurderinger.map(({ utfall, kilde, detaljer, periode }, index) => (
                     <Table.Row key={`${utfall}${index}`}>
                         <Table.DataCell className={styles.registreringCell}>
-                            <IconWithText iconRenderer={() => renderIcon(utfall)} text={utfall} />
+                            <VedtakUtfallText utfall={utfall} />
                         </Table.DataCell>
                         <Table.HeaderCell>{renderPeriode(periode)}</Table.HeaderCell>
                         <Table.DataCell>{kilde}</Table.DataCell>

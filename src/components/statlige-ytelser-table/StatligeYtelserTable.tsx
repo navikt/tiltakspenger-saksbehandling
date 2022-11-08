@@ -1,18 +1,11 @@
 import React from 'react';
 import { Table } from '@navikt/ds-react';
-import { ErrorColored, SuccessColored, InformationColored } from '@navikt/ds-icons';
-import IconWithText from '../icon-with-text/IconWithText';
 import { Vilkårsvurdering } from '../../types/Søknad';
-import { formatPeriode, formatÅpenPeriode } from '../../utils/date';
+import { formatÅpenPeriode } from '../../utils/date';
+import VedtakUtfallText from '../vedtak-utfall-text/VedtakUtfallText';
 
 interface StatligeYtelserTableProps {
     vilkårsvurderinger: Vilkårsvurdering[];
-}
-
-function renderIcon(utfall: string) {
-    if (utfall === 'Oppfylt') return <SuccessColored />;
-    if (utfall === 'IkkeOppfylt') return <ErrorColored />;
-    return <InformationColored />;
 }
 
 const StatligeYtelserTable = ({ vilkårsvurderinger }: StatligeYtelserTableProps) => {
@@ -31,7 +24,7 @@ const StatligeYtelserTable = ({ vilkårsvurderinger }: StatligeYtelserTableProps
                 {vilkårsvurderinger.map(({ utfall, ytelse, periode, kilde, detaljer }, index) => (
                     <Table.Row key={`${utfall}${index}`}>
                         <Table.DataCell>
-                            <IconWithText iconRenderer={() => renderIcon(utfall)} text={utfall} />
+                            <VedtakUtfallText utfall={utfall} />
                         </Table.DataCell>
                         <Table.DataCell>{ytelse}</Table.DataCell>
                         <Table.DataCell>{(periode && formatÅpenPeriode(periode)) || '-'}</Table.DataCell>
