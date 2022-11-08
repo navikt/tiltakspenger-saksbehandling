@@ -50,7 +50,7 @@ const Home: NextPage = () => {
                 Søk
             </Button>
             <ul>
-                {søknader.map((søknad) => (
+                {(søknader || []).map((søknad) => (
                     <li onClick={() => router.push(`/soknad/${søknad.søknadId}`)}>{søknad.søknadId}</li>
                 ))}
             </ul>
