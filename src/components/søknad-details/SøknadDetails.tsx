@@ -11,7 +11,7 @@ interface SøknadDetailsProps {
 }
 
 const SøknadDetails = ({
-    søknad: { søknadsdato, startdato, sluttdato, arrangoernavn, antallDager },
+    søknad: { søknadsdato, startdato, sluttdato, arrangoernavn, antallDager, tiltakskode },
 }: SøknadDetailsProps) => {
     return (
         <div className={styles.søknadSummarySection}>
@@ -32,7 +32,11 @@ const SøknadDetails = ({
                     iconRenderer={() => <Calender />}
                     text={`${formatDate(startdato)}${!!sluttdato ? ` - ${formatDate(sluttdato)}` : ''}`}
                 />
-                <IconWithText className={styles.søknadDetail} iconRenderer={() => <Office1 />} text={arrangoernavn} />
+                <IconWithText
+                    className={styles.søknadDetail}
+                    iconRenderer={() => <Office1 />}
+                    text={`${tiltakskode} - ${arrangoernavn}`}
+                />
                 <IconWithText
                     className={styles.søknadDetail}
                     iconRenderer={() => <Refresh />}
