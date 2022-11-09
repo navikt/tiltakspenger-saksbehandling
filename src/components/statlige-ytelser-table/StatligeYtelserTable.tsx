@@ -3,6 +3,7 @@ import { Table } from '@navikt/ds-react';
 import { Vilkårsvurdering } from '../../types/Søknad';
 import { formatÅpenPeriode } from '../../utils/date';
 import VedtakUtfallText from '../vedtak-utfall-text/VedtakUtfallText';
+import readableTextsByYtelse from '../../constants/readableTextsByYtelse';
 
 interface StatligeYtelserTableProps {
     vilkårsvurderinger: Vilkårsvurdering[];
@@ -26,7 +27,7 @@ const StatligeYtelserTable = ({ vilkårsvurderinger }: StatligeYtelserTableProps
                         <Table.DataCell>
                             <VedtakUtfallText utfall={utfall} />
                         </Table.DataCell>
-                        <Table.DataCell>{ytelse}</Table.DataCell>
+                        <Table.DataCell>{readableTextsByYtelse[ytelse]}</Table.DataCell>
                         <Table.DataCell>{(periode && formatÅpenPeriode(periode)) || '-'}</Table.DataCell>
                         <Table.DataCell>{kilde}</Table.DataCell>
                         <Table.DataCell>{detaljer}</Table.DataCell>

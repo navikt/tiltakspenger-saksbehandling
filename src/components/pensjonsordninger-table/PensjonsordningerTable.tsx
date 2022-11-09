@@ -4,6 +4,7 @@ import { Pensjonsordninger } from '../../types/Søknad';
 import { formatÅpenPeriode } from '../../utils/date';
 import { ÅpenPeriode } from '../../types/Periode';
 import VedtakUtfallText from '../vedtak-utfall-text/VedtakUtfallText';
+import readableTextsByYtelse from '../../constants/readableTextsByYtelse';
 
 interface PensjonsordningerTableProps {
     pensjonsordninger: Pensjonsordninger;
@@ -29,7 +30,7 @@ const PensjonsordningerTable = ({ pensjonsordninger }: PensjonsordningerTablePro
                             <Table.DataCell>
                                 <VedtakUtfallText utfall={utfall} />
                             </Table.DataCell>
-                            <Table.DataCell>{ytelse}</Table.DataCell>
+                            <Table.DataCell>{readableTextsByYtelse[ytelse]}</Table.DataCell>
                             <Table.DataCell>{periode ? formatÅpenPeriode(periode as ÅpenPeriode) : '-'}</Table.DataCell>
                             <Table.DataCell>{kilde}</Table.DataCell>
                             <Table.DataCell>{detaljer}</Table.DataCell>

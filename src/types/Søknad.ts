@@ -1,6 +1,7 @@
 import { Periode, ÅpenPeriode } from './Periode';
 import Personalia from './Personalia';
 import { Utfall } from './Utfall';
+import { Ytelse } from './Ytelse';
 
 export type RegistrertTiltak = {
     arrangør: string;
@@ -22,7 +23,7 @@ interface Søknad {
 }
 
 export interface Vilkårsvurdering {
-    ytelse: string;
+    ytelse: Ytelse;
     lovreferanse: string;
     utfall: Utfall;
     detaljer: string;
