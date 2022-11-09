@@ -24,12 +24,12 @@ const PensjonsordningerTable = ({ pensjonsordninger }: PensjonsordningerTablePro
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {vilkårsvurderinger.map(({ utfall, kilde, detaljer, ytelse, tittel, periode }, index) => (
+                    {vilkårsvurderinger.map(({ utfall, kilde, detaljer, ytelse, periode }, index) => (
                         <Table.Row key={`${utfall}${index}`}>
                             <Table.DataCell>
                                 <VedtakUtfallText utfall={utfall} />
                             </Table.DataCell>
-                            <Table.DataCell>{tittel}</Table.DataCell>
+                            <Table.DataCell>{ytelse}</Table.DataCell>
                             <Table.DataCell>{periode ? formatÅpenPeriode(periode as ÅpenPeriode) : '-'}</Table.DataCell>
                             <Table.DataCell>{kilde}</Table.DataCell>
                             <Table.DataCell>{detaljer}</Table.DataCell>
