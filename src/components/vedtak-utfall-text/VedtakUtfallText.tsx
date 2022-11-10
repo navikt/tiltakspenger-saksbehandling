@@ -20,7 +20,7 @@ function getUtfallText(utfall: Utfall) {
         case Utfall.IkkeOppfylt:
             return 'Ja';
         case Utfall.IkkeImplementert:
-            return 'Ukjent';
+            return 'Mangler';
         case Utfall.KreverManuellVurdering:
             return 'Krever manuell vurdering';
     }

@@ -4,6 +4,8 @@ import { Vilkårsvurdering } from '../../types/Søknad';
 import { formatÅpenPeriode } from '../../utils/date';
 import VedtakUtfallText from '../vedtak-utfall-text/VedtakUtfallText';
 import readableTextsByYtelse from '../../constants/readableTextsByYtelse';
+import { Utfall } from '../../types/Utfall';
+import styles from './StatligeYtelserTable.module.css';
 
 interface StatligeYtelserTableProps {
     vilkårsvurderinger: Vilkårsvurdering[];
@@ -23,7 +25,10 @@ const StatligeYtelserTable = ({ vilkårsvurderinger }: StatligeYtelserTableProps
             </Table.Header>
             <Table.Body>
                 {vilkårsvurderinger.map(({ utfall, ytelse, periode, kilde, detaljer }, index) => (
-                    <Table.Row key={`${utfall}${index}`}>
+                    <Table.Row
+                        className={utfall === Utfall.IkkeImplementert ? styles.missingStatusRow : ''}
+                        key={`${utfall}${index}`}
+                    >
                         <Table.DataCell>
                             <VedtakUtfallText utfall={utfall} />
                         </Table.DataCell>
