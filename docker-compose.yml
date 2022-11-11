@@ -28,11 +28,11 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
       ZOOKEEPER_LOG4J_ROOT_LOGLEVEL: ERROR
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://zookeeper:2181" ]
-      interval: 30s
-      timeout: 10s
-      retries: 5
+#    healthcheck:
+#      test: [ "CMD", "curl", "-f", "http://zookeeper:2181" ]
+#      interval: 30s
+#      timeout: 10s
+#      retries: 5
 
   kafka:
     image: confluentinc/cp-kafka:7.2.2
@@ -70,11 +70,11 @@ services:
     ports:
       - 8080:8080
       - 5005:5005
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://backend:8080/internal/isready" ]
-      interval: 30s
-      timeout: 10s
-      retries: 5
+#    healthcheck:
+#      test: [ "CMD", "curl", "-f", "http://backend:8080/internal/isready" ]
+#      interval: 30s
+#      timeout: 10s
+#      retries: 5
     environment:
       # Postgres env
       DB_HOST: postgres

@@ -34,7 +34,7 @@ async function makeOnBehalfOfGrant(body: URLSearchParams) {
     });
 }
 
-async function getOnBehalfOfToken(token: string, scope: string) {
+export async function getOnBehalfOfToken(token: string, scope: string) {
     const grantBody = createOnBehalfOfGrantBody(token, scope);
     const response = await makeOnBehalfOfGrant(grantBody);
     if (!response.ok) {
