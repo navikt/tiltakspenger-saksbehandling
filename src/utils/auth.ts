@@ -1,4 +1,4 @@
-import { NextApiRequest } from 'next';
+import {NextApiRequest} from 'next';
 
 const clientId = process.env.AZURE_APP_CLIENT_ID || '';
 const clientSecret = process.env.AZURE_APP_CLIENT_SECRET || '';
@@ -34,7 +34,13 @@ async function makeOnBehalfOfGrant(body: URLSearchParams) {
     });
 }
 
-export async function getOnBehalfOfToken(token: string, scope: string) {
+export type SimpleResponse = {
+    status : number
+    content: string
+    body: string
+}
+
+async function getOnBehalfOfToken(token: string, scope: string) : Promise<SimpleResponse | string>{
     const grantBody = createOnBehalfOfGrantBody(token, scope);
     const response = await makeOnBehalfOfGrant(grantBody);
     if (!response.ok) {
@@ -62,14 +68,8 @@ function validateAuthorizationHeader(request: NextApiRequest) {
     return authToken;
 }
 
-export async function getToken(request: NextApiRequest) {
+export async function getToken(request: NextApiRequest) : Promise<SimpleResponse | string>{
     const scope = `api://${process.env.SCOPE}/.default`;
-    try {
-        const authToken = validateAuthorizationHeader(request);
-        const onBehalfOfToken = await getOnBehalfOfToken(authToken, scope);
-        return onBehalfOfToken;
-    } catch (error) {
-        console.error('Something went wrong during authorization');
-        throw new Error('Ingen tilgang');
-    }
+    const authToken = validateAuthorizationHeader(request);
+    return await getOnBehalfOfToken(authToken, scope);
 }
