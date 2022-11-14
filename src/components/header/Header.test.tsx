@@ -4,7 +4,7 @@ import { render, screen } from '@testing-library/react';
 import { Saksbehandler } from '../../types/Saksbehandler';
 
 describe('Header', () => {
-    it('renders a header with ', () => {
+    it('renders a header with navIdent', () => {
         const saksbehandlerMock: Saksbehandler = {
             navIdent: 'MockBruker',
             brukernavn: 'mockbruker',
