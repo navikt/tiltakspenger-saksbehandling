@@ -1,46 +1,44 @@
-import { getToken, SimpleResponse } from '../../utils/auth';
+import { getToken } from '../../utils/auth';
 import { NextApiRequest, NextApiResponse } from 'next';
+import SimpleResponse from '../../types/SimpleResponse';
 
-const Authorization = 'authorization';
-const backendUrl = "http://localhost:8080/";
+const backendUrl = process.env.TILTAKSPENGER_VEDTAK_URL || '';
 
-const getUrl = async (req: NextApiRequest): Promise<string> => {
-    const apiUrl = backendUrl;
+function getUrl(req: NextApiRequest): string {
     const path = req?.url?.replace('/api', '');
-    return apiUrl + path;
-};
+    return `${backendUrl}${path}`;
+}
 
-export async function middleware(
-    req: NextApiRequest,
-    response: NextApiResponse
-): Promise<void> {
-    let oboToken = null
+async function makeApiRequest(request: NextApiRequest, oboToken: string): Promise<Response> {
+    const url = getUrl(request);
+    console.info(`Making request to ${url}`);
+    return await fetch(url, {
+        method: request.method,
+        body: request.method === 'GET' ? undefined : request.body,
+        headers: {
+            'content-type': 'application/json',
+            authorization: `Bearer ${oboToken}`,
+        },
+    });
+}
+
+export async function middleware(request: NextApiRequest, response: NextApiResponse): Promise<void> {
+    let oboToken = null;
     try {
-        oboToken = await getToken(req);
+        oboToken = await getToken(request);
     } catch (err: any) {
-        const simpleResponse = err as SimpleResponse
+        const simpleResponse = err as SimpleResponse;
         console.log('Bruker har ikke tilgang, kall mot Azure feilet', simpleResponse.body);
         response.status(simpleResponse.status).json({ message: 'Bruker har ikke tilgang' });
     }
-    if( oboToken ) {
+    if (oboToken) {
         try {
-            const url = await getUrl(req);
-            const res = await fetch(url, {
-                method: req.method,
-                body: req.method === 'GET' ? undefined : req.body,
-                headers: {
-                    'content-type': 'application/json',
-                    [Authorization]: `Bearer ${oboToken}`,
-                },
-            });
+            const res = await makeApiRequest(request, oboToken as string);
             const body = await (res.status === 200 ? res.json() : res.text());
             response.status(res.status).json(body);
         } catch (err) {
-            console.error('Her kommer det en feil');
-            console.error(err);
-            console.error( {err});
-            console.error("Error: ", err);
-            response.status(500).json({ message: 'Internal server error' });
+            console.error('Fikk ikke kontakt med APIet');
+            response.status(502).json({ message: 'Bad Gateway' });
         }
     }
 }
