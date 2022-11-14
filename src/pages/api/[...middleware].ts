@@ -28,7 +28,7 @@ export async function middleware(request: NextApiRequest, response: NextApiRespo
         oboToken = await getToken(request);
     } catch (err: any) {
         const simpleResponse = err as SimpleResponse;
-        console.log('Bruker har ikke tilgang, kall mot Azure feilet', simpleResponse.body);
+        console.log('Bruker har ikke tilgang, kall mot Azure feilet');
         response.status(simpleResponse.status).json({ message: 'Bruker har ikke tilgang' });
     }
     if (oboToken) {
