@@ -87,6 +87,17 @@ export interface SøknadResponse {
     pensjonsordninger: Pensjonsordninger;
     lønnsinntekt: Lønnsinntekt;
     institusjonsopphold: Institusjonsopphold;
+    barnetillegg: Barnetillegg[];
+}
+
+export interface Barnetillegg {
+    alder: number;
+    bosatt: string;
+    kilde: string;
+    navn: string;
+    fødselsdato: string;
+    søktBarnetillegg: boolean;
+    utfall: Utfall;
 }
 
 export default Søknad;

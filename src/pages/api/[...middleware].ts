@@ -35,8 +35,13 @@ export async function middleware(request: NextApiRequest, response: NextApiRespo
     if (oboToken) {
         try {
             const res = await makeApiRequest(request, oboToken as string);
-            const body = await (res.status === 200 ? res.json() : res.text());
-            response.status(res.status).json(body);
+            if (res.ok) {
+                const body = await res.json();
+                response.status(res.status).json(body);
+            } else {
+                const error = await res.text();
+                response.status(res.status).json({ error });
+            }
         } catch (error) {
             logger.error('Fikk ikke kontakt med APIet, returnerer 502', error);
             response.status(502).json({ message: 'Bad Gateway' });

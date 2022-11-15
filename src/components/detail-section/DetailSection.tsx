@@ -8,6 +8,7 @@ import KommunaleYtelserContent from '../kommunale-ytelser-content/KommunaleYtels
 import PensjonsordningerTable from '../pensjonsordninger-table/PensjonsordningerTable';
 import LønnsinntekterTable from '../lønnsinntekter-table/LønnsinntekterTable';
 import InstitusjonsoppholdTable from '../institusjonsopphold-table/InstitusjonsoppholdTable';
+import BarnetilleggTable from "../barnetillegg/BarnetilleggTable";
 
 interface DetailSectionProps {
     søknadResponse: SøknadResponse;
@@ -41,6 +42,10 @@ const DetailSection = (props: DetailSectionProps) => {
                 <ParagraphExpand title="Institusjon (§9)">
                     <span>Foreløpig har vi ikke alle opplysninger</span>
                     <InstitusjonsoppholdTable institusjonsopphold={props.søknadResponse.institusjonsopphold} />
+                </ParagraphExpand>
+                <ParagraphExpand title="Barnetillegg (§3)">
+                    <span>Foreløpig viser vi bare data fra søknaden</span>
+                    <BarnetilleggTable barnetillegg={props.søknadResponse.barnetillegg} />
                 </ParagraphExpand>
             </div>
         </div>

@@ -1,6 +1,10 @@
 import dayjs from 'dayjs';
 import { Periode, ÅpenPeriode } from '../types/Periode';
 
+export function formatDateShort(dateString: string) {
+    return dayjs(dateString).format('DD.MM.YY');
+}
+
 export function formatDate(dateString: string) {
     return dayjs(dateString).format('DD.MM.YYYY');
 }
