@@ -45,10 +45,16 @@ const Home: NextPage = () => {
 
     return (
         <div style={{ padding: '1rem' }}>
-            <TextField label="Oppgi person" onChange={({ target }) => setPersonInput(target.value)} />
-            <Button style={{ marginTop: '0.5rem' }} onClick={() => getPerson(personInput)}>
-                Søk
-            </Button>
+            <form
+                onSubmit={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    getPerson(personInput);
+                }}
+            >
+                <TextField label="Oppgi person" onChange={({ target }) => setPersonInput(target.value)} />
+                <Button style={{ marginTop: '0.5rem' }}>Søk</Button>
+            </form>
             <ul>
                 {(søknader || []).map((søknad) => (
                     <li onClick={() => router.push(`/soknad/${søknad.søknadId}`)}>{søknad.søknadId}</li>
