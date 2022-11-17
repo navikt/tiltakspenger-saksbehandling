@@ -1,0 +1,9 @@
+.søknadWrapper {
+    display: flex;
+    width: 100%;
+}
+
+.verticalLine {
+    background-color: #cfcfcf;
+    width: 1px;
+}

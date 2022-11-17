@@ -5,15 +5,15 @@ import useSWR from 'swr';
 import SøknadSummarySection from '../../components/søknad-summary-section/SøknadSummarySection';
 import { SøknadResponse } from '../../types/Søknad';
 import VilkårsvurderingDetails from '../../components/vilkårsvurdering-details/VilkårsvurderingDetails';
-import styles from './Søknad.module.css';
 import PersonaliaHeader from '../../components/personalia-header/PersonaliaHeader';
 import { fetcher } from '../../utils/http';
 import { ApiError } from '../../types/Error';
+import styles from './Søker.module.css';
 
 const SøkerPage: NextPage = () => {
     const router = useRouter();
     const { id } = router.query;
-    const { data: søknadResponse, error } = useSWR<SøknadResponse | ApiError>(`/api/soknad/${id}`, fetcher);
+    const { data: søknadResponse, error } = useSWR<SøknadResponse | ApiError>(`/api/person/soknader/${id}`, fetcher);
 
     if (søknadResponse === null || søknadResponse === undefined) {
         return <div>Henter data om søknad</div>;
@@ -36,4 +36,4 @@ const SøkerPage: NextPage = () => {
     }
 };
 
-export default SøkerdPage;
+export default SøkerPage;
