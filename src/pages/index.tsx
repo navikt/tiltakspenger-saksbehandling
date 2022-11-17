@@ -4,17 +4,9 @@ import { TextField, Button } from '@navikt/ds-react';
 import '@navikt/ds-css';
 import { useRouter } from 'next/router';
 
-type Søknad = {
-    søknadId: string;
-    arrangoernavn: string;
-    tiltakskode: string;
-    startdato: string;
-    sluttdato?: string;
-};
-
 type SøknadResponse = {
     ident: string;
-    søknader: Søknad[];
+    behandlinger: SøknadResponse[];
 };
 
 async function fetchSøknader(personId: string): Promise<SøknadResponse> {
@@ -33,15 +25,15 @@ const Home: NextPage = () => {
 
     async function getPerson(personId: string) {
         try {
-            const { søknader } = await fetchSøknader(personInput);
-            setSøknader(søknader);
+            const { behandlinger } = await fetchSøknader(personInput);
+            setSøknader(behandlinger);
         } catch (error) {
             console.error('Noe gikk galt ved henting av søknader');
         }
     }
 
     const [personInput, setPersonInput] = React.useState('');
-    const [søknader, setSøknader] = React.useState<Søknad[]>([]);
+    const [søknader, setSøknader] = React.useState<SøknadResponse[]>([]);
 
     return (
         <div style={{ padding: '1rem' }}>
@@ -55,11 +47,11 @@ const Home: NextPage = () => {
                 <TextField label="Oppgi person" onChange={({ target }) => setPersonInput(target.value)} />
                 <Button style={{ marginTop: '0.5rem' }}>Søk</Button>
             </form>
-            <ul>
-                {(søknader || []).map((søknad) => (
-                    <li onClick={() => router.push(`/soknad/${søknad.søknadId}`)}>{søknad.søknadId}</li>
-                ))}
-            </ul>
+            {/*<ul>*/}
+            {/*    {(søknader || []).map((søknad) => (*/}
+            {/*        <li onClick={() => router.push(`/soknad/${søknad.søknadId}`)}>{søknad.søknadId}</li>*/}
+            {/*    ))}*/}
+            {/*</ul>*/}
         </div>
     );
 };

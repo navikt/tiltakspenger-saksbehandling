@@ -10,7 +10,7 @@ import PersonaliaHeader from '../../components/personalia-header/PersonaliaHeade
 import { fetcher } from '../../utils/http';
 import { ApiError } from '../../types/Error';
 
-const SøknadPage: NextPage = () => {
+const SøkerPage: NextPage = () => {
     const router = useRouter();
     const { id } = router.query;
     const { data: søknadResponse, error } = useSWR<SøknadResponse | ApiError>(`/api/soknad/${id}`, fetcher);
@@ -36,4 +36,4 @@ const SøknadPage: NextPage = () => {
     }
 };
 
-export default SøknadPage;
+export default SøkerdPage;

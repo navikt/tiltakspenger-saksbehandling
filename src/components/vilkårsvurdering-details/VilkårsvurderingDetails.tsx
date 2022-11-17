@@ -2,21 +2,21 @@ import React from 'react';
 import { Alert, Heading } from '@navikt/ds-react';
 import ParagraphExpand from '../paragraph-expand/ParagraphExpand';
 import StatligeYtelserTable from '../statlige-ytelser-table/StatligeYtelserTable';
-import styles from './DetailSection.module.css';
+import styles from './VilkårsvurderingDetails.module.css';
 import { SøknadResponse } from '../../types/Søknad';
 import KommunaleYtelserContent from '../kommunale-ytelser-content/KommunaleYtelserContent';
 import PensjonsordningerTable from '../pensjonsordninger-table/PensjonsordningerTable';
 import LønnsinntekterTable from '../lønnsinntekter-table/LønnsinntekterTable';
 import InstitusjonsoppholdTable from '../institusjonsopphold-table/InstitusjonsoppholdTable';
-import BarnetilleggTable from "../barnetillegg/BarnetilleggTable";
+import BarnetilleggTable from '../barnetillegg/BarnetilleggTable';
 
-interface DetailSectionProps {
+interface VilkårsvurderingDetailsProps {
     søknadResponse: SøknadResponse;
 }
 
-const DetailSection = (props: DetailSectionProps) => {
+const VilkårsvurderingDetails = (props: VilkårsvurderingDetailsProps) => {
     return (
-        <div className={styles.søknadDetailSection}>
+        <div className={styles.vilkårsvurderingDetails}>
             <Heading level="1" size="small">
                 Søknad
             </Heading>
@@ -52,4 +52,4 @@ const DetailSection = (props: DetailSectionProps) => {
     );
 };
 
-export default DetailSection;
+export default VilkårsvurderingDetails;
