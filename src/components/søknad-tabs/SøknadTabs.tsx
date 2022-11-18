@@ -3,15 +3,17 @@ import React from 'react';
 import { Tabs } from '@navikt/ds-react';
 import { Behandling } from '../../types/Søknad';
 import { formatDate } from '../../utils/date';
+import { FileContent } from '@navikt/ds-icons';
 
-interface DetailSectionProps {
+interface SøknadTabsProps {
+    defaultTab: string;
     onChange: (søknadId: string) => void;
     behandlinger: Behandling[];
 }
 
-const SøknadTabs = ({ onChange, behandlinger }: DetailSectionProps) => {
+const SøknadTabs = ({ defaultTab, onChange, behandlinger }: SøknadTabsProps) => {
     return (
-        <Tabs>
+        <Tabs defaultValue={defaultTab}>
             <Tabs.List>
                 {behandlinger.map((behandling) => {
                     return (
@@ -19,7 +21,8 @@ const SøknadTabs = ({ onChange, behandlinger }: DetailSectionProps) => {
                             key={behandling.søknad.id}
                             value={behandling.søknad.id}
                             label={`${behandling.søknad.arrangoernavn} (${formatDate(behandling.søknad.startdato)})`}
-                            onChange={() => {
+                            icon={<FileContent />}
+                            onClick={() => {
                                 onChange(behandling.søknad.id);
                             }}
                         />

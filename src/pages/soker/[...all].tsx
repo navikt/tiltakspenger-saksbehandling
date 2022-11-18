@@ -12,17 +12,13 @@ import SøknadTabs from '../../components/søknad-tabs/SøknadTabs';
 
 const SøkerPage: NextPage = () => {
     const router = useRouter();
-    const id = (router.query.all as any)[0];
+    const søkerId = (router.query.all as any)[0];
     const søknadId = (router.query.all as any)[1];
-    const { data: søkerResponse, error } = useSWR<Søker | ApiError>(`/api/person/soknader/${id}`, fetcher);
+    const { data: søkerResponse, error } = useSWR<Søker | ApiError>(`/api/person/soknader/${søkerId}`, fetcher);
 
-    console.log(router.query);
-    React.useEffect(() => {
-        if (søkerResponse) {
-            const søknadId = (søkerResponse as Søker).behandlinger[0].søknad.id;
-            router.push(`/soker/${id}/${søknadId}`, undefined, { shallow: true });
-        }
-    }, [søkerResponse]);
+    const redirectToSøknad = (id: string) => {
+        router.push(`/soker/${søkerId}/${id}`, undefined, { shallow: false });
+    };
 
     if (søkerResponse === null || søkerResponse === undefined) {
         return <div>Henter data om søknad</div>;
@@ -39,9 +35,8 @@ const SøkerPage: NextPage = () => {
                     <SøknadSummarySection søknadResponse={søkerData.behandlinger[0]} />
                     <div className={styles.verticalLine}></div>
                     <SøknadTabs
-                        onChange={() => {
-                            søknadId;
-                        }}
+                        onChange={(id) => redirectToSøknad(id)}
+                        defaultTab={søknadId || søkerData.behandlinger[0].søknad.id}
                         behandlinger={søkerData.behandlinger}
                     />
                 </div>
