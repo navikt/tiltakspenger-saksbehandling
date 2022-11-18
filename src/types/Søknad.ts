@@ -1,5 +1,4 @@
 import { Periode, ÅpenPeriode } from './Periode';
-import Personalia from './Personalia';
 import { Utfall } from './Utfall';
 import { Ytelse } from './Ytelse';
 
