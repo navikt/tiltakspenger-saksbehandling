@@ -12,35 +12,44 @@ import SøknadTabs from '../../components/søknad-tabs/SøknadTabs';
 
 const SøkerPage: NextPage = () => {
     const router = useRouter();
-    const søkerId = (router.query.all as any)[0];
-    const søknadId = (router.query.all as any)[1];
+    const urlParams = router.query.all;
+    const [søkerId, søknadId] = urlParams as string[];
+
     const { data: søkerResponse, error } = useSWR<Søker | ApiError>(`/api/person/soknader/${søkerId}`, fetcher);
 
-    const redirectToSøknad = (id: string) => {
-        router.push(`/soker/${søkerId}/${id}`, undefined, { shallow: false });
-    };
-
-    if (søkerResponse === null || søkerResponse === undefined) {
-        return <div>Henter data om søknad</div>;
+    function redirectToSøknadPage(id: string) {
+        return router.push(`/soker/${søkerId}/${id}`);
     }
 
-    if ((søkerResponse as ApiError).error || error) {
+    function isWaitingForSøkerResponse() {
+        return søkerResponse === null || søkerResponse === undefined;
+    }
+
+    function søkerRequestHasFailed() {
+        const { error: søkerResponseError } = søkerResponse as ApiError;
+        return søkerResponseError || error;
+    }
+
+    if (isWaitingForSøkerResponse()) {
+        return <div>Henter data om søknad</div>;
+    }
+    if (søkerRequestHasFailed()) {
         return <div>{(søkerResponse as ApiError).error}</div>;
     } else {
         const søkerData = søkerResponse as Søker;
         return (
-            <>
+            <React.Fragment>
                 <PersonaliaHeader personalia={søkerData.personopplysninger}></PersonaliaHeader>
                 <div className={styles.søknadWrapper}>
                     <SøknadSummarySection søknadResponse={søkerData.behandlinger[0]} />
                     <div className={styles.verticalLine}></div>
                     <SøknadTabs
-                        onChange={(id) => redirectToSøknad(id)}
+                        onChange={(id) => redirectToSøknadPage(id)}
                         defaultTab={søknadId || søkerData.behandlinger[0].søknad.id}
                         behandlinger={søkerData.behandlinger}
                     />
                 </div>
-            </>
+            </React.Fragment>
         );
     }
 };

@@ -40,7 +40,7 @@ export async function middleware(request: NextApiRequest, response: NextApiRespo
                 response.status(res.status).json(body);
             } else {
                 const error = await res.text();
-                response.status(res.status).json({ error });
+                response.status(res.status).json({ error: !error ? res.statusText : error });
             }
         } catch (error) {
             logger.error('Fikk ikke kontakt med APIet, returnerer 502', error);
