@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FormEvent } from 'react';
 import { Header as NavInternalHeader } from '@navikt/ds-react-internal';
 import { Saksbehandler } from '../../types/Saksbehandler';
 import styles from './Header.module.css';
@@ -21,41 +21,62 @@ async function fetchSøker(personId: string): Promise<Response> {
 const Header = ({ innloggetSaksbehandler }: HeaderProps) => {
     const { navIdent } = innloggetSaksbehandler;
     const [search, setSearch] = React.useState('');
-    const [error, setError] = React.useState<string | null>(null);
+    const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
     const router = useRouter();
+
+    function showErrorMessage(text: string) {
+        setErrorMessage(text);
+    }
+
+    function resetErrorMessage() {
+        setErrorMessage(null);
+    }
+
+    async function redirectToSøkerPage(response: Response) {
+        const data = await response.json();
+        return router.push(`/soker/${data.id}`);
+    }
+
+    async function searchHandler(event: FormEvent<HTMLFormElement>) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        resetErrorMessage();
+
+        const response = await fetchSøker(search);
+        if (response.ok) {
+            try {
+                await redirectToSøkerPage(response);
+            } catch (error) {
+                console.error(error);
+                showErrorMessage('Noe har gått galt ved henting av data om søker, vennligst prøv igjen senere');
+            }
+        }
+        showErrorMessage('Personen finnes ikke');
+    }
+
     return (
-        <>
+        <React.Fragment>
             <NavInternalHeader>
                 <NavInternalHeader.Title>NAV Tiltakspenger</NavInternalHeader.Title>
-                <form
-                    data-theme="dark"
-                    onSubmit={async (e) => {
-                        setError(null);
-                        e.preventDefault();
-                        e.stopPropagation();
-                        const response = await fetchSøker(search);
-                        if (response.ok) {
-                            const data = await response.json();
-                            return router.push(`/soker/${data.id}`);
-                        }
-                        setError('Bruker finnes ikke');
-                    }}
-                >
-                    <Search
-                        className={styles.header__search}
-                        label={''}
-                        variant="simple"
-                        onChange={(value) => setSearch(value)}
-                    ></Search>
-                </form>
+                <div className={styles.header__searchWrapper}>
+                    <form data-theme="dark" onSubmit={searchHandler}>
+                        <Search
+                            label={''}
+                            variant="simple"
+                            onChange={(value) => setSearch(value)}
+                            autoComplete="off"
+                        ></Search>
+                    </form>
+                </div>
                 <NavInternalHeader.User className={styles.header__user} name={navIdent} />
             </NavInternalHeader>
-            {error && (
+            {errorMessage && (
                 <Alert variant="error" fullWidth>
-                    {error}
+                    {errorMessage}
                 </Alert>
             )}
-        </>
+        </React.Fragment>
     );
 };
 
