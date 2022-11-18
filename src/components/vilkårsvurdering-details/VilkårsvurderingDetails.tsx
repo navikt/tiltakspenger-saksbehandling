@@ -3,7 +3,7 @@ import { Alert, Heading } from '@navikt/ds-react';
 import ParagraphExpand from '../paragraph-expand/ParagraphExpand';
 import StatligeYtelserTable from '../statlige-ytelser-table/StatligeYtelserTable';
 import styles from './VilkårsvurderingDetails.module.css';
-import { SøknadResponse } from '../../types/Søknad';
+import { Behandling } from '../../types/Søknad';
 import KommunaleYtelserContent from '../kommunale-ytelser-content/KommunaleYtelserContent';
 import PensjonsordningerTable from '../pensjonsordninger-table/PensjonsordningerTable';
 import LønnsinntekterTable from '../lønnsinntekter-table/LønnsinntekterTable';
@@ -11,7 +11,7 @@ import InstitusjonsoppholdTable from '../institusjonsopphold-table/Institusjonso
 import BarnetilleggTable from '../barnetillegg/BarnetilleggTable';
 
 interface VilkårsvurderingDetailsProps {
-    søknadResponse: SøknadResponse;
+    søknadResponse: Behandling;
 }
 
 const VilkårsvurderingDetails = (props: VilkårsvurderingDetailsProps) => {

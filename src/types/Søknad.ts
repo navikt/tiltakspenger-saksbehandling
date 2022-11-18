@@ -13,6 +13,7 @@ export type RegistrertTiltak = {
 };
 
 interface Søknad {
+    id: string;
     søknadId: string;
     søknadsdato: string;
     arrangoernavn: string;
@@ -74,14 +75,13 @@ export interface Institusjonsopphold {
     vilkårsvurderinger: Vilkårsvurdering[];
 }
 
-export interface SøknadResponse {
+export interface Behandling {
     søknad: Søknad;
     registrerteTiltak: RegistrertTiltak[];
     vurderingsperiode: {
         fra: string;
         til: string;
     };
-    personopplysninger: Personalia;
     statligeYtelser: StatligeYtelser;
     kommunaleYtelser: KommunaleYtelser;
     pensjonsordninger: Pensjonsordninger;

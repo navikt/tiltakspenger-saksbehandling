@@ -1,11 +1,11 @@
 import React from 'react';
-import { SøknadResponse } from '../../types/Søknad';
+import { Behandling } from '../../types/Søknad';
 import SøknadDetails from '../søknad-details/SøknadDetails';
 import RegistrertTiltakDetails from '../registrert-tiltak-details/RegistrertTiltakDetails';
 import styles from './SøknadSummarySection.module.css';
 
 interface SøknadSummarySectionProps {
-    søknadResponse: SøknadResponse;
+    søknadResponse: Behandling;
 }
 
 const SøknadSummarySection = ({ søknadResponse: { søknad, registrerteTiltak } }: SøknadSummarySectionProps) => {
