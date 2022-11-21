@@ -20,7 +20,7 @@ const VilkårsvurderingDetails = (props: VilkårsvurderingDetailsProps) => {
             <Heading level="1" size="small">
                 Søknad
             </Heading>
-            <Alert variant="info" fullWidth style={{ width: '100%' }}>
+            <Alert variant="info" fullWidth style={{ width: '100%', marginTop: '1rem' }}>
                 Foreløpig har vi ikke alle opplysninger til å vurdere søknaden
             </Alert>
             <div style={{ marginTop: '4rem' }}>

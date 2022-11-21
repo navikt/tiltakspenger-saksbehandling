@@ -1,9 +1,11 @@
 import VilkårsvurderingDetails from '../vilkårsvurdering-details/VilkårsvurderingDetails';
 import React from 'react';
 import { Tabs } from '@navikt/ds-react';
+import { FileContent } from '@navikt/ds-icons';
+import { useAtom } from 'jotai';
 import { Behandling } from '../../types/Søknad';
 import { formatDate } from '../../utils/date';
-import { FileContent } from '@navikt/ds-icons';
+import { søknadIdAtom } from '../../pages/soker/[...all]';
 
 interface SøknadTabsProps {
     defaultTab: string;
@@ -12,6 +14,7 @@ interface SøknadTabsProps {
 }
 
 const SøknadTabs = ({ defaultTab, onChange, behandlinger }: SøknadTabsProps) => {
+    const [søknadId, setSøknadId] = useAtom(søknadIdAtom);
     return (
         <Tabs defaultValue={defaultTab}>
             <Tabs.List>
@@ -23,6 +26,7 @@ const SøknadTabs = ({ defaultTab, onChange, behandlinger }: SøknadTabsProps) =
                             label={`${behandling.søknad.arrangoernavn} (${formatDate(behandling.søknad.startdato)})`}
                             icon={<FileContent />}
                             onClick={() => {
+                                setSøknadId(behandling.søknad.id);
                                 onChange(behandling.søknad.id);
                             }}
                         />
