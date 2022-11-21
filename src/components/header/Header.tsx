@@ -51,8 +51,12 @@ const Header = ({ innloggetSaksbehandler }: HeaderProps) => {
                 console.error(error);
                 showErrorMessage('Noe har gått galt ved henting av data om søker, vennligst prøv igjen senere');
             }
-        } else {
+        } else if (response.status === 404) {
             showErrorMessage('Personen finnes ikke');
+        } else if (response.status === 403) {
+            showErrorMessage('Du har ikke tilgang til å se informasjon om denne brukeren');
+        } else {
+            showErrorMessage('Noe har gått galt ved henting av data om søker, vennligst prøv igjen senere');
         }
     }
 
