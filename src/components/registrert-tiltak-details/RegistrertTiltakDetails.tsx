@@ -1,10 +1,9 @@
 import React from 'react';
 import { Heading } from '@navikt/ds-react';
-import { SuccessColored } from '@navikt/ds-icons';
 import { RegistrertTiltak } from '../../types/Søknad';
 import { formatDate, formatPeriode } from '../../utils/date';
-import IconWithText from '../icon-with-text/IconWithText';
 import { Periode, ÅpenPeriode } from '../../types/Periode';
+import Tiltaksstatus from '../tiltaksstatus/Tiltaksstatus';
 import styles from './RegistrertTiltakDetails.module.css';
 
 interface RegistrertTiltakDetailsProps {
@@ -41,7 +40,7 @@ const RegistrertTiltakDetails = ({ registrertTiltak }: RegistrertTiltakDetailsPr
                 {prosent}%{!!dagerIUken ? ` - ${formatDagerIUken(dagerIUken)}` : ''}
             </p>
             <div style={{ marginTop: '1rem' }}>
-                <IconWithText iconRenderer={() => <SuccessColored />} text={status} />
+                <Tiltaksstatus tiltaksstatus={status} />
             </div>
         </div>
     );
