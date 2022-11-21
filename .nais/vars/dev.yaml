@@ -1,7 +1,7 @@
 ingress:
-  - https://tiltakspenger-assistent.dev.intern.nav.no
+  - https://tiltakspenger-saksbehandler.dev.intern.nav.no
 replyURLs:
-  - https://tiltakspenger-assistent.dev.intern.nav.no/oauth2/callback
+  - https://tiltakspenger-saksbehandler.dev.intern.nav.no/oauth2/callback
 envs:
   - name: TILTAKSPENGER_VEDTAK_URL
     value: https://tiltakspenger-vedtak.dev.intern.nav.no

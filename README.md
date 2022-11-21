@@ -1,4 +1,4 @@
-Tiltakspenger-assistent
+Tiltakspenger-saksbehandler
 ================
 
 Frontend-koden for støtteverktøy til bruk i saksbehandling av Tiltakspenger.
@@ -21,7 +21,7 @@ Legg til følgende i `/etc/hosts`
 127.0.0.1 host.docker.internal
 ```
 
-Opprett en `.env.local` på roten av `tiltakspenger-assistent`, med følgende innhold
+Opprett en `.env.local` på roten av `tiltakspenger-saksbehandler`, med følgende innhold
 
 ```
 TILTAKSPENGER_VEDTAK_URL=http://localhost:8080
@@ -35,10 +35,10 @@ Det er lagd et docker-compose oppsett i `docker-compose.yml` som mocker ut Azure
 og [Wonderwall](https://doc.nais.io/appendix/wonderwall/), som appen er avhengig av når den kjører i miljø.
 
 docker-compose oppsettet antar at man har [tiltakspenger-vedtak](https://github.com/navikt/tiltakspenger-vedtak) repoet 
-liggende lokalt på `./../` relativt til tiltakspenger-assistent, og vil per nå bruke `Dockerfile` som ligger der for å bygge imaget til tiltakspenger-vedtak.
+liggende lokalt på `./../` relativt til tiltakspenger-saksbehandler, og vil per nå bruke `Dockerfile` som ligger der for å bygge imaget til tiltakspenger-vedtak.
 
 tiltakspenger-vedtak må bygges med gradle før Docker-imaget vil kunne bygges. `./gradlew build app:installDist` på rot av tiltakspenger-vedtak.
-Etter man har gjort det skal verdikjeden kunne kjøres opp med `docker-compose up --build -d` på rot av tiltakspenger-assistent.
+Etter man har gjort det skal verdikjeden kunne kjøres opp med `docker-compose up --build -d` på rot av tiltakspenger-saksbehandler.
 
 ---
 
