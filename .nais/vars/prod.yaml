@@ -1,0 +1,11 @@
+ingress:
+  - https://tiltakspenger-saksbehandler.intern.nav.no
+replyURLs:
+  - https://tiltakspenger-saksbehandler.intern.nav.no/oauth2/callback
+envs:
+  - name: TILTAKSPENGER_VEDTAK_URL
+    value: https://tiltakspenger-vedtak.intern.nav.no
+  - name: AUTH_PROVIDER_URL
+    value: https://login.microsoftonline.com/62366534-1ec3-4962-8869-9b5535279d0b/oauth2/v2.0/token
+  - name: SCOPE
+    value: 9dd72d44-f3f7-48d1-846b-94f317d10119
