@@ -26,7 +26,10 @@ spec:
       errorPath: ""
     application:
       enabled: true
+      tenant: {{ tenant }}
       claims:
+        groups:
+          - id: {{ ROLE_SAKSBEHANDLER }}
         extra:
           - "NAVident"
       {{#if replyUrls}}
