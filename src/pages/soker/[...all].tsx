@@ -65,6 +65,7 @@ const SøkerPage: NextPage = () => {
                 <SøknadSummarySection søknadResponse={valgtBehandling} />
                 <div className={styles.verticalLine}></div>
                 <SøknadTabs
+                    className={styles.søknadTabs}
                     onChange={(id) => redirectToSøknadPage(id)}
                     defaultTab={activeSøknadId}
                     behandlinger={søkerData.behandlinger}

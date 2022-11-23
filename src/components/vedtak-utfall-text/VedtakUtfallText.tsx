@@ -1,16 +1,10 @@
 import React from 'react';
 import IconWithText from '../icon-with-text/IconWithText';
 import { Utfall } from '../../types/Utfall';
-import { ErrorColored, InformationColored, SuccessColored } from '@navikt/ds-icons';
+import UtfallIcon from '../utfall-icon/UtfallIcon';
 
 interface VedtakUtfallText {
     utfall: Utfall;
-}
-
-function renderIcon(utfall: Utfall) {
-    if (utfall === 'Oppfylt') return <SuccessColored />;
-    if (utfall === 'IkkeOppfylt') return <ErrorColored />;
-    return <InformationColored />;
 }
 
 function getUtfallText(utfall: Utfall) {
@@ -27,9 +21,9 @@ function getUtfallText(utfall: Utfall) {
 }
 
 const VedtakUtfallText = ({ utfall }: VedtakUtfallText) => {
-    const iconRenderer = () => renderIcon(utfall);
     const utfallText = getUtfallText(utfall);
-    return <IconWithText iconRenderer={iconRenderer} text={utfallText} />;
+    const utfallIconRenderer = () => <UtfallIcon utfall={utfall} />;
+    return <IconWithText iconRenderer={utfallIconRenderer} text={utfallText} />;
 };
 
 export default VedtakUtfallText;

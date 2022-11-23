@@ -8,15 +8,16 @@ import { formatDate } from '../../utils/date';
 import { søknadIdAtom } from '../../pages/soker/[...all]';
 
 interface SøknadTabsProps {
+    className?: string;
     defaultTab: string;
     onChange: (søknadId: string) => void;
     behandlinger: Behandling[];
 }
 
-const SøknadTabs = ({ defaultTab, onChange, behandlinger }: SøknadTabsProps) => {
+const SøknadTabs = ({ className, defaultTab, onChange, behandlinger }: SøknadTabsProps) => {
     const [søknadId, setSøknadId] = useAtom(søknadIdAtom);
     return (
-        <Tabs defaultValue={defaultTab}>
+        <Tabs defaultValue={defaultTab} className={className || ''}>
             <Tabs.List>
                 {behandlinger.map((behandling) => {
                     return (

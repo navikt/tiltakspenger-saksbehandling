@@ -10,7 +10,7 @@ interface IconWithTextProps {
 const IconWithText = ({ className, iconRenderer, text }: IconWithTextProps) => (
     <span className={className}>
         <div className={styles.iconWithText__icon}>{iconRenderer()}</div>
-        {text}
+        <span className={styles.iconWithText__text}>{text}</span>
     </span>
 );
 
