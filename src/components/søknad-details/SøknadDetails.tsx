@@ -37,11 +37,13 @@ const SøknadDetails = ({
                     iconRenderer={() => <Office1 />}
                     text={`${tiltakskode} - ${arrangoernavn}`}
                 />
-                <IconWithText
-                    className={styles.søknadDetail}
-                    iconRenderer={() => <Refresh />}
-                    text={`${antallDager} dager i uka`}
-                />
+                {antallDager && (
+                    <IconWithText
+                        className={styles.søknadDetail}
+                        iconRenderer={() => <Refresh />}
+                        text={`${antallDager} dager i uka`}
+                    />
+                )}
             </div>
         </div>
     );
