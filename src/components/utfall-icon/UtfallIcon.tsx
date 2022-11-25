@@ -7,8 +7,8 @@ interface UtfallIconProps {
 }
 
 const UtfallIcon = ({ utfall }: UtfallIconProps) => {
-    if (utfall === 'Oppfylt') return <SuccessColored />;
-    if (utfall === 'IkkeOppfylt') return <ErrorColored />;
+    if (utfall === Utfall.Oppfylt) return <SuccessColored />;
+    if (utfall === Utfall.IkkeOppfylt) return <ErrorColored />;
     return <InformationColored />;
 };
 

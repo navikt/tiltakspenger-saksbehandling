@@ -17,10 +17,10 @@ function createYtelseText(ytelse: Ytelse, utfall: Utfall) {
     if (Utfall.Oppfylt === utfall) {
         return `Bruker er ikke innvilget ${readableTextsByYtelse[ytelse]}`;
     }
-    if (Utfall.IkkeOppfylt) {
+    if (Utfall.IkkeOppfylt === utfall) {
         return `Bruker er innvilget ${readableTextsByYtelse[ytelse]}`;
     }
-    return readableTextsByYtelse[ytelse];
+    return `Mangler informasjon om ${readableTextsByYtelse[ytelse]}`;
 }
 
 const StatligeYtelserTable = ({ vilkårsvurderinger }: StatligeYtelserTableProps) => {
