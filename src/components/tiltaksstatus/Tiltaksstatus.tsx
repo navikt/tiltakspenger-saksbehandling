@@ -17,13 +17,13 @@ const iconRenderer = (tiltaksstatus: TiltaksstatusType) => {
         case TiltaksstatusType.AKTUELL:
         case TiltaksstatusType.VENTELISTE:
         case TiltaksstatusType.INFORMASJONSMØTE:
+        case TiltaksstatusType.DELTAKELSE_AVBRUTT:
+        case TiltaksstatusType.GJENNOMFØRING_AVBRUTT:
             return <WarningColored />;
         case TiltaksstatusType.IKKE_MØTT:
         case TiltaksstatusType.IKKE_AKTUELL:
         case TiltaksstatusType.FÅTT_AVSLAG:
         case TiltaksstatusType.GJENNOMFØRING_AVLYST:
-        case TiltaksstatusType.GJENNOMFØRING_AVBRUTT:
-        case TiltaksstatusType.DELTAKELSE_AVBRUTT:
         case TiltaksstatusType.TAKKET_NEI_TIL_TILBUD:
             return <ErrorColored />;
         default:
