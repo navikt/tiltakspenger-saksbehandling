@@ -35,7 +35,7 @@ const SøknadDetails = ({
                 <IconWithText
                     className={styles.søknadDetail}
                     iconRenderer={() => <Office1 />}
-                    text={`${tiltakskode} - ${arrangoernavn}`}
+                    text={`${tiltakskode} - ${arrangoernavn ? ` - ${arrangoernavn}` : ''}`}
                 />
                 {antallDager && (
                     <IconWithText

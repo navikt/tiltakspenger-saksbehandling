@@ -20,15 +20,16 @@ const SøknadTabs = ({ className, defaultTab, onChange, behandlinger }: SøknadT
         <Tabs defaultValue={defaultTab} className={className || ''}>
             <Tabs.List>
                 {behandlinger.map((behandling) => {
+                    const { søknad } = behandling;
                     return (
                         <Tabs.Tab
-                            key={behandling.søknad.id}
-                            value={behandling.søknad.id}
-                            label={`${behandling.søknad.arrangoernavn} (${formatDate(behandling.søknad.startdato)})`}
+                            key={søknad.id}
+                            value={søknad.id}
+                            label={`${søknad.arrangoernavn || søknad.tiltakskode} (${formatDate(søknad.startdato)})`}
                             icon={<FileContent />}
                             onClick={() => {
-                                setSøknadId(behandling.søknad.id);
-                                onChange(behandling.søknad.id);
+                                setSøknadId(søknad.id);
+                                onChange(søknad.id);
                             }}
                         />
                     );
