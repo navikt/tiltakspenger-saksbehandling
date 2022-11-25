@@ -9,6 +9,7 @@ interface UtfallIconProps {
 const UtfallIcon = ({ utfall }: UtfallIconProps) => {
     if (utfall === Utfall.Oppfylt) return <SuccessColored />;
     if (utfall === Utfall.IkkeOppfylt) return <ErrorColored />;
+    if (utfall === Utfall.KreverManuellVurdering) return <ErrorColored />;
     return <InformationColored />;
 };
 

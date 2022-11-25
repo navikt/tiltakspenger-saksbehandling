@@ -17,7 +17,7 @@ function createYtelseText(ytelse: Ytelse, utfall: Utfall) {
     if (Utfall.Oppfylt === utfall) {
         return `Bruker er ikke innvilget ${readableTextsByYtelse[ytelse]}`;
     }
-    if (Utfall.IkkeOppfylt === utfall) {
+    if (Utfall.IkkeOppfylt === utfall || Utfall.KreverManuellVurdering === utfall) {
         return `Bruker er innvilget ${readableTextsByYtelse[ytelse]}`;
     }
     return `Mangler informasjon om ${readableTextsByYtelse[ytelse]}`;
