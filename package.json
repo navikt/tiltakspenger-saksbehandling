@@ -10,7 +10,7 @@
         "test:ci": "jest --ci"
     },
     "dependencies": {
-        "@navikt/ds-css": "^1.3.18",
+        "@navikt/ds-css": "^1.5.4",
         "@navikt/ds-css-internal": "^1.3.18",
         "@navikt/ds-icons": "^1.3.19",
         "@navikt/ds-react": "^1.3.18",
