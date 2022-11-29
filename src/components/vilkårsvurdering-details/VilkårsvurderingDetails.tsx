@@ -25,9 +25,7 @@ const VilkårsvurderingDetails = (props: VilkårsvurderingDetailsProps) => {
             </Alert>
             <div style={{ marginTop: '4rem' }}>
                 <ParagraphExpand title="Statlige ytelser (§7)">
-                    <StatligeYtelserTable
-                        vilkårsvurderinger={props.søknadResponse.statligeYtelser.vilkårsvurderinger}
-                    />
+                    <StatligeYtelserTable statligeYtelser={props.søknadResponse.statligeYtelser} />
                 </ParagraphExpand>
                 <ParagraphExpand title="Kommunale ytelser (§7)">
                     <KommunaleYtelserContent kommunaleYtelser={props.søknadResponse.kommunaleYtelser} />
