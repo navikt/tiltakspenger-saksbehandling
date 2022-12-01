@@ -44,7 +44,7 @@ const PensjonsordningerTable = ({ pensjonsordninger }: PensjonsordningerTablePro
                             <Table.DataCell>
                                 <VedtakUtfallText utfall={samletUtfall} />
                             </Table.DataCell>
-                            <Table.DataCell>Test</Table.DataCell>
+                            <Table.DataCell>Pensjonsordning</Table.DataCell>
                             <Table.DataCell>{periode ? formatÅpenPeriode(periode as ÅpenPeriode) : '-'}</Table.DataCell>
                             <Table.DataCell>{kilde}</Table.DataCell>
                             <Table.DataCell>{detaljer}</Table.DataCell>
