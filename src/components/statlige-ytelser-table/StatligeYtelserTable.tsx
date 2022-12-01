@@ -1,29 +1,15 @@
 import React from 'react';
 import { Table } from '@navikt/ds-react';
-import { Vilkårsvurdering } from '../../types/Søknad';
-import { formatÅpenPeriode } from '../../utils/date';
-import readableTextsByYtelse from '../../constants/readableTextsByYtelse';
-import { Utfall } from '../../types/Utfall';
-import UtfallIcon from '../utfall-icon/UtfallIcon';
-import IconWithText from '../icon-with-text/IconWithText';
-import { Ytelse } from '../../types/Ytelse';
-import styles from './StatligeYtelserTable.module.css';
+import { StatligeYtelser } from '../../types/Søknad';
+import StatligeYtelserTableRows from '../statlige-ytelser-table-rows/StatligeYtelserTableRows';
+import StatligYtelseNotImplementedRow from '../statlig-ytelse-not-implemented-row/StatligYtelseNotImplementedRow';
 
 interface StatligeYtelserTableProps {
-    vilkårsvurderinger: Vilkårsvurdering[];
+    statligeYtelser: StatligeYtelser;
 }
 
-function createYtelseText(ytelse: Ytelse, utfall: Utfall) {
-    if (Utfall.Oppfylt === utfall) {
-        return `Bruker er ikke innvilget ${readableTextsByYtelse[ytelse]}`;
-    }
-    if (Utfall.IkkeOppfylt === utfall || Utfall.KreverManuellVurdering === utfall) {
-        return `Bruker er innvilget ${readableTextsByYtelse[ytelse]}`;
-    }
-    return `Mangler informasjon om ${readableTextsByYtelse[ytelse]}`;
-}
-
-const StatligeYtelserTable = ({ vilkårsvurderinger }: StatligeYtelserTableProps) => {
+const StatligeYtelserTable = ({ statligeYtelser }: StatligeYtelserTableProps) => {
+    const { aap, dagpenger } = statligeYtelser;
     return (
         <Table>
             <Table.Header>
@@ -35,22 +21,19 @@ const StatligeYtelserTable = ({ vilkårsvurderinger }: StatligeYtelserTableProps
                 </Table.Row>
             </Table.Header>
             <Table.Body>
-                {vilkårsvurderinger.map(({ utfall, ytelse, periode, kilde, detaljer }, index) => (
-                    <Table.Row
-                        className={utfall === Utfall.IkkeImplementert ? styles.missingStatusRow : ''}
-                        key={`${utfall}${index}`}
-                    >
-                        <Table.DataCell>
-                            <IconWithText
-                                iconRenderer={() => <UtfallIcon utfall={utfall} />}
-                                text={createYtelseText(ytelse, utfall)}
-                            />
-                        </Table.DataCell>
-                        <Table.DataCell>{(periode && formatÅpenPeriode(periode)) || '-'}</Table.DataCell>
-                        <Table.DataCell>{kilde}</Table.DataCell>
-                        <Table.DataCell>{detaljer}</Table.DataCell>
-                    </Table.Row>
-                ))}
+                <StatligeYtelserTableRows ytelseText="Arbeidsavklaringspenger" vilkårsvurderinger={aap} />
+                <StatligeYtelserTableRows ytelseText="Dagpenger" vilkårsvurderinger={dagpenger} />
+                <StatligYtelseNotImplementedRow ytelseText="Sykepenger" />
+                <StatligYtelseNotImplementedRow ytelseText="Uføretrygd" />
+                <StatligYtelseNotImplementedRow ytelseText="Overgangsstønad" />
+                <StatligYtelseNotImplementedRow ytelseText="Pleiepenger" />
+                <StatligYtelseNotImplementedRow ytelseText="Foreldrepenger" />
+                <StatligYtelseNotImplementedRow ytelseText="Svangerskapspenger" />
+                <StatligYtelseNotImplementedRow ytelseText="Gjenlevendepensjon" />
+                <StatligYtelseNotImplementedRow ytelseText="Supplerende stønad" />
+                <StatligYtelseNotImplementedRow ytelseText="Alderspensjon" />
+                <StatligYtelseNotImplementedRow ytelseText="Opplæringspenger" />
+                <StatligYtelseNotImplementedRow ytelseText="Omsorgspenger" />
             </Table.Body>
         </Table>
     );

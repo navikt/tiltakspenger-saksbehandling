@@ -1,6 +1,5 @@
 import { Periode, ÅpenPeriode } from './Periode';
 import { Utfall } from './Utfall';
-import { Ytelse } from './Ytelse';
 import Tiltaksstatus from './Tiltaksstatus';
 
 export type RegistrertTiltak = {
@@ -24,55 +23,38 @@ interface Søknad {
 }
 
 export interface Vilkårsvurdering {
-    ytelse: Ytelse;
-    lovreferanse: string;
-    utfall: Utfall;
+    kilde: string;
     detaljer: string;
     periode: ÅpenPeriode;
-    kilde: string;
-    vilkår: string;
-    tittel: string;
+    kreverManuellVurdering: boolean;
+    utfall: Utfall;
 }
 
-interface StatligeYtelser {
-    tittel: string;
-    lovreferanse: string;
-    utfall: string;
-    detaljer: string;
-    vilkårsvurderinger: Vilkårsvurdering[];
+export interface StatligeYtelser {
+    samletUtfall: Utfall;
+    aap: Vilkårsvurdering[];
+    dagpenger: Vilkårsvurdering[];
 }
 
 export interface KommunaleYtelser {
-    ytelse: string;
-    lovreferanse: string;
-    utfall: string;
-    detaljer: String;
+    samletUtfall: Utfall;
     introProgrammet: Vilkårsvurdering[];
     kvp: Vilkårsvurdering[];
 }
 
 export interface Pensjonsordninger {
-    tittel: string;
-    lovreferanse: string;
-    utfall: string;
-    detaljer: string;
-    vilkårsvurderinger: Vilkårsvurdering[];
+    samletUtfall: Utfall;
+    perioder: Vilkårsvurdering[];
 }
 
 export interface Lønnsinntekt {
-    tittel: string;
-    lovreferanse: string;
-    utfall: string;
-    detaljer: string;
-    vilkårsvurderinger: Vilkårsvurdering[];
+    samletUtfall: Utfall;
+    perioder: Vilkårsvurdering[];
 }
 
 export interface Institusjonsopphold {
-    tittel: string;
-    lovreferanse: string;
-    utfall: string;
-    detaljer: string;
-    vilkårsvurderinger: Vilkårsvurdering[];
+    samletUtfall: Utfall;
+    perioder: Vilkårsvurdering[];
 }
 
 export interface Behandling {

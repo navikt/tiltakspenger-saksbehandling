@@ -31,7 +31,13 @@ const SøkerPage: NextPage = () => {
         }
     }
 
-    React.useEffect(setDefaultActiveSøknadId, [søkerResponse]);
+    React.useEffect(() => {
+        if (søkerResponse) {
+            if (!(søkerResponse as ApiError).error) {
+                setDefaultActiveSøknadId();
+            }
+        }
+    }, [søkerResponse]);
 
     function redirectToSøknadPage(id: string) {
         return router.push(`/soker/${søkerId}/${id}`);

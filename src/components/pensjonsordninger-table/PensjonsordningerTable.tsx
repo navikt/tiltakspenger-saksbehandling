@@ -4,14 +4,28 @@ import { Pensjonsordninger } from '../../types/Søknad';
 import { formatÅpenPeriode } from '../../utils/date';
 import { ÅpenPeriode } from '../../types/Periode';
 import VedtakUtfallText from '../vedtak-utfall-text/VedtakUtfallText';
-import readableTextsByYtelse from '../../constants/readableTextsByYtelse';
+import IconWithText from '../icon-with-text/IconWithText';
+import UtfallIcon from '../utfall-icon/UtfallIcon';
+import { Utfall } from '../../types/Utfall';
 
 interface PensjonsordningerTableProps {
     pensjonsordninger: Pensjonsordninger;
 }
 
 const PensjonsordningerTable = ({ pensjonsordninger }: PensjonsordningerTableProps) => {
-    const { vilkårsvurderinger } = pensjonsordninger;
+    const { samletUtfall, perioder } = pensjonsordninger;
+    if (perioder.length === 0) {
+        return (
+            <Table.Row key="Pensjonsordninger">
+                <Table.DataCell>
+                    <IconWithText iconRenderer={() => <UtfallIcon utfall={Utfall.Oppfylt} />} text="Nei" />
+                </Table.DataCell>
+                <Table.DataCell>-</Table.DataCell>
+                <Table.DataCell>-</Table.DataCell>
+                <Table.DataCell>-</Table.DataCell>
+            </Table.Row>
+        );
+    }
     return (
         <div>
             <Table>
@@ -25,12 +39,12 @@ const PensjonsordningerTable = ({ pensjonsordninger }: PensjonsordningerTablePro
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {vilkårsvurderinger.map(({ utfall, kilde, detaljer, ytelse, periode }, index) => (
-                        <Table.Row key={`${utfall}${index}`}>
+                    {perioder.map(({ kilde, detaljer, periode, utfall }, index) => (
+                        <Table.Row key={`${samletUtfall}${index}`}>
                             <Table.DataCell>
                                 <VedtakUtfallText utfall={utfall} />
                             </Table.DataCell>
-                            <Table.DataCell>{readableTextsByYtelse[ytelse]}</Table.DataCell>
+                            <Table.DataCell>Pensjonsordning</Table.DataCell>
                             <Table.DataCell>{periode ? formatÅpenPeriode(periode as ÅpenPeriode) : '-'}</Table.DataCell>
                             <Table.DataCell>{kilde}</Table.DataCell>
                             <Table.DataCell>{detaljer}</Table.DataCell>
