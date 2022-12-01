@@ -20,6 +20,7 @@ interface Søknad {
     startdato: string;
     sluttdato: string;
     antallDager: number;
+    fritekst: string;
 }
 
 export interface Vilkårsvurdering {

@@ -1,7 +1,7 @@
 import React from 'react';
-import { Heading } from '@navikt/ds-react';
-import IconWithText from '../icon-with-text/IconWithText';
+import { Heading, ReadMore } from '@navikt/ds-react';
 import { Calender, FileContent, Office1, Refresh } from '@navikt/ds-icons';
+import IconWithText from '../icon-with-text/IconWithText';
 import { formatDate } from '../../utils/date';
 import Søknad from '../../types/Søknad';
 import styles from './SøknadDetails.module.css';
@@ -11,7 +11,7 @@ interface SøknadDetailsProps {
 }
 
 const SøknadDetails = ({
-    søknad: { søknadsdato, startdato, sluttdato, arrangoernavn, antallDager, tiltakskode },
+    søknad: { søknadsdato, startdato, sluttdato, arrangoernavn, antallDager, tiltakskode, fritekst },
 }: SøknadDetailsProps) => {
     return (
         <div className={styles.søknadSummarySection}>
@@ -44,6 +44,7 @@ const SøknadDetails = ({
                         text={`${antallDager} dager i uka`}
                     />
                 )}
+                {fritekst && <ReadMore header="Bruker har fylt ut fritekst">{fritekst}</ReadMore>}
             </div>
         </div>
     );
