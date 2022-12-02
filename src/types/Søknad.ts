@@ -44,6 +44,11 @@ export interface KommunaleYtelser {
     kvp: Vilkårsvurdering[];
 }
 
+export interface TiltakspengerYtelser {
+    samletUtfall: Utfall;
+    perioder: Vilkårsvurdering[];
+}
+
 export interface Pensjonsordninger {
     samletUtfall: Utfall;
     perioder: Vilkårsvurdering[];
@@ -66,6 +71,7 @@ export interface Behandling {
         fra: string;
         til: string;
     };
+    tiltakspengerYtelser: TiltakspengerYtelser;
     statligeYtelser: StatligeYtelser;
     kommunaleYtelser: KommunaleYtelser;
     pensjonsordninger: Pensjonsordninger;
