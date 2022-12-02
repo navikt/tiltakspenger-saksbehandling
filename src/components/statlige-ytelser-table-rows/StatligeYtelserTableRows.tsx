@@ -1,24 +1,14 @@
 import React from 'react';
-import { Vilkårsvurdering } from '../../types/Søknad';
 import { Table } from '@navikt/ds-react';
-import { Utfall } from '../../types/Utfall';
+import { Vilkårsvurdering } from '../../types/Søknad';
 import IconWithText from '../icon-with-text/IconWithText';
 import UtfallIcon from '../utfall-icon/UtfallIcon';
 import { formatÅpenPeriode } from '../../utils/date';
+import createVurderingText from '../../utils/vurderingText';
 
 interface StatligeYtelserTableRowsProps {
     vilkårsvurderinger: Vilkårsvurdering[];
     ytelseText: string;
-}
-
-function createVurderingText({ utfall }: Vilkårsvurdering, ytelseText: string) {
-    if (Utfall.Oppfylt === utfall) {
-        return `Bruker er ikke innvilget ${ytelseText}`;
-    }
-    if (Utfall.IkkeOppfylt === utfall || Utfall.KreverManuellVurdering === utfall) {
-        return `Bruker er innvilget ${ytelseText}`;
-    }
-    return '';
 }
 
 const StatligeYtelserTableRows = ({ vilkårsvurderinger, ytelseText }: StatligeYtelserTableRowsProps) => {

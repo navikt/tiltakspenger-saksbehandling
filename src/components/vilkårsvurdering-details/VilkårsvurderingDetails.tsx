@@ -9,6 +9,7 @@ import PensjonsordningerTable from '../pensjonsordninger-table/Pensjonsordninger
 import LønnsinntekterTable from '../lønnsinntekter-table/LønnsinntekterTable';
 import InstitusjonsoppholdTable from '../institusjonsopphold-table/InstitusjonsoppholdTable';
 import BarnetilleggTable from '../barnetillegg/BarnetilleggTable';
+import TiltakspengerYtelserTable from '../tiltakspenger-ytelser-table/TiltakspengerYtelserTable';
 
 interface VilkårsvurderingDetailsProps {
     søknadResponse: Behandling;
@@ -24,6 +25,9 @@ const VilkårsvurderingDetails = (props: VilkårsvurderingDetailsProps) => {
                 Foreløpig har vi ikke alle opplysninger til å vurdere søknaden
             </Alert>
             <div style={{ marginTop: '4rem' }}>
+                <ParagraphExpand title="Tiltakspenger (§7)">
+                    <TiltakspengerYtelserTable tiltakspengerYtelser={props.søknadResponse.tiltakspengerYtelser} />
+                </ParagraphExpand>
                 <ParagraphExpand title="Statlige ytelser (§7)">
                     <StatligeYtelserTable statligeYtelser={props.søknadResponse.statligeYtelser} />
                 </ParagraphExpand>
