@@ -22,7 +22,7 @@ interface Søknad {
     antallDager: number;
     fritekst: string;
     beskrivelse: string;
-    antallVedlegg: number;
+    vedlegg: Vedlegg[];
 }
 
 export interface Vilkårsvurdering {
@@ -89,6 +89,12 @@ export interface Barnetillegg {
     fødselsdato: string;
     søktBarnetillegg: boolean;
     utfall: Utfall;
+}
+
+export interface Vedlegg {
+    dokumentInfoId: string;
+    filnavn: string;
+    journalpostId: string;
 }
 
 export default Søknad;
