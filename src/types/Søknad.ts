@@ -21,6 +21,7 @@ interface Søknad {
     sluttdato: string;
     antallDager: number;
     fritekst: string;
+    beskrivelse: string;
 }
 
 export interface Vilkårsvurdering {

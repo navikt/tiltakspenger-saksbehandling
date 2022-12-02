@@ -11,7 +11,7 @@ interface SøknadDetailsProps {
 }
 
 const SøknadDetails = ({
-    søknad: { søknadsdato, startdato, sluttdato, arrangoernavn, antallDager, tiltakskode, fritekst },
+    søknad: { søknadsdato, startdato, sluttdato, arrangoernavn, antallDager, tiltakskode, beskrivelse },
 }: SøknadDetailsProps) => {
     return (
         <div className={styles.søknadSummarySection}>
@@ -44,7 +44,7 @@ const SøknadDetails = ({
                         text={`${antallDager} dager i uka`}
                     />
                 )}
-                {fritekst && <ReadMore header="Bruker har fylt ut fritekst">{fritekst}</ReadMore>}
+                {beskrivelse && <ReadMore header="Tiltaksbeskrivelse">{beskrivelse}</ReadMore>}
             </div>
         </div>
     );
