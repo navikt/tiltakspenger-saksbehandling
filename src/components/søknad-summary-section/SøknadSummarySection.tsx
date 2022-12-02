@@ -12,8 +12,8 @@ const SøknadSummarySection = ({ søknadResponse: { søknad, registrerteTiltak }
     return (
         <div className={styles.søknadSummarySection}>
             <SøknadDetails søknad={søknad} />
-            {registrerteTiltak.map((registrertTiltak) => {
-                return <RegistrertTiltakDetails registrertTiltak={registrertTiltak} />;
+            {registrerteTiltak.map((registrertTiltak, index) => {
+                return <RegistrertTiltakDetails key={index} registrertTiltak={registrertTiltak} />;
             })}
         </div>
     );

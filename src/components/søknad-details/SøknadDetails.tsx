@@ -1,6 +1,6 @@
 import React from 'react';
 import { Heading, ReadMore } from '@navikt/ds-react';
-import { Calender, FileContent, Office1, Refresh } from '@navikt/ds-icons';
+import { Calender, FileContent, Office1, Refresh, Attachment } from '@navikt/ds-icons';
 import IconWithText from '../icon-with-text/IconWithText';
 import { formatDate } from '../../utils/date';
 import Søknad from '../../types/Søknad';
@@ -11,7 +11,7 @@ interface SøknadDetailsProps {
 }
 
 const SøknadDetails = ({
-    søknad: { søknadsdato, startdato, sluttdato, arrangoernavn, antallDager, tiltakskode, beskrivelse },
+    søknad: { søknadsdato, startdato, sluttdato, arrangoernavn, antallDager, tiltakskode, beskrivelse, vedlegg },
 }: SøknadDetailsProps) => {
     return (
         <div className={styles.søknadSummarySection}>
@@ -22,30 +22,22 @@ const SøknadDetails = ({
                 Søknad
             </Heading>
             <div className={styles.søknadDetails}>
-                <IconWithText
-                    className={styles.søknadDetail}
-                    iconRenderer={() => <FileContent />}
-                    text={`Søknadsdato: ${formatDate(søknadsdato)}`}
-                />
+                <IconWithText iconRenderer={() => <FileContent />} text={`Søknadsdato: ${formatDate(søknadsdato)}`} />
+                <IconWithText iconRenderer={() => <FileContent />} text={`Søknadsdato: ${formatDate(søknadsdato)}`} />
                 {startdato && (
                     <IconWithText
-                        className={styles.søknadDetail}
                         iconRenderer={() => <Calender />}
                         text={`${formatDate(startdato)}${!!sluttdato ? ` - ${formatDate(sluttdato)}` : ''}`}
                     />
                 )}
+                {vedlegg && (
+                    <IconWithText iconRenderer={() => <Attachment />} text={`Antall vedlegg: ${vedlegg.length}`} />
+                )}
                 <IconWithText
-                    className={styles.søknadDetail}
                     iconRenderer={() => <Office1 />}
                     text={`${tiltakskode} - ${arrangoernavn ? ` - ${arrangoernavn}` : ''}`}
                 />
-                {antallDager && (
-                    <IconWithText
-                        className={styles.søknadDetail}
-                        iconRenderer={() => <Refresh />}
-                        text={`${antallDager} dager i uka`}
-                    />
-                )}
+                {antallDager && <IconWithText iconRenderer={() => <Refresh />} text={`${antallDager} dager i uka`} />}
                 {beskrivelse && <ReadMore header="Tiltaksbeskrivelse">{beskrivelse}</ReadMore>}
             </div>
         </div>
