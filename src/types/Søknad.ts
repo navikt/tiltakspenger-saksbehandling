@@ -22,6 +22,7 @@ interface Søknad {
     antallDager: number;
     fritekst: string;
     beskrivelse: string;
+    antallVedlegg: number;
 }
 
 export interface Vilkårsvurdering {
