@@ -27,11 +27,13 @@ const SøknadDetails = ({
                     iconRenderer={() => <FileContent />}
                     text={`Søknadsdato: ${formatDate(søknadsdato)}`}
                 />
-                <IconWithText
-                    className={styles.søknadDetail}
-                    iconRenderer={() => <Calender />}
-                    text={`${formatDate(startdato)}${!!sluttdato ? ` - ${formatDate(sluttdato)}` : ''}`}
-                />
+                {startdato && (
+                    <IconWithText
+                        className={styles.søknadDetail}
+                        iconRenderer={() => <Calender />}
+                        text={`${formatDate(startdato)}${!!sluttdato ? ` - ${formatDate(sluttdato)}` : ''}`}
+                    />
+                )}
                 <IconWithText
                     className={styles.søknadDetail}
                     iconRenderer={() => <Office1 />}

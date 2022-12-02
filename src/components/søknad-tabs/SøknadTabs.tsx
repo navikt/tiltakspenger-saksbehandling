@@ -3,7 +3,7 @@ import React from 'react';
 import { Tabs } from '@navikt/ds-react';
 import { FileContent } from '@navikt/ds-icons';
 import { useAtom } from 'jotai';
-import { Behandling } from '../../types/Søknad';
+import Søknad, { Behandling } from '../../types/Søknad';
 import { formatDate } from '../../utils/date';
 import { søknadIdAtom } from '../../pages/soker/[...all]';
 
@@ -14,6 +14,14 @@ interface SøknadTabsProps {
     behandlinger: Behandling[];
 }
 
+function createSøknadLabel({ startdato, arrangoernavn, tiltakskode }: Søknad) {
+    const arrangørNavnEllerTiltakskode = arrangoernavn || tiltakskode;
+    if (startdato) {
+        return `${arrangørNavnEllerTiltakskode} (${formatDate(startdato)})`;
+    }
+    return arrangørNavnEllerTiltakskode;
+}
+
 const SøknadTabs = ({ className, defaultTab, onChange, behandlinger }: SøknadTabsProps) => {
     const [søknadId, setSøknadId] = useAtom(søknadIdAtom);
     return (
@@ -21,11 +29,12 @@ const SøknadTabs = ({ className, defaultTab, onChange, behandlinger }: SøknadT
             <Tabs.List>
                 {behandlinger.map((behandling) => {
                     const { søknad } = behandling;
+                    const søknadLabel = createSøknadLabel(søknad);
                     return (
                         <Tabs.Tab
                             key={søknad.id}
                             value={søknad.id}
-                            label={`${søknad.arrangoernavn || søknad.tiltakskode} (${formatDate(søknad.startdato)})`}
+                            label={søknadLabel}
                             icon={<FileContent />}
                             onClick={() => {
                                 setSøknadId(søknad.id);
