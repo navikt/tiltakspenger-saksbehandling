@@ -1,9 +1,11 @@
 import React from 'react';
 import { Table } from '@navikt/ds-react';
 import { TiltakspengerYtelser } from '../../types/Søknad';
-import VedtakUtfallText from '../vedtak-utfall-text/VedtakUtfallText';
 import { formatÅpenPeriode } from '../../utils/date';
 import { ÅpenPeriode } from '../../types/Periode';
+import UtfallIcon from '../utfall-icon/UtfallIcon';
+import IconWithText from '../icon-with-text/IconWithText';
+import createVurderingText from '../../utils/vurderingText';
 
 interface TiltakspengerYtelserTableProps {
     tiltakspengerYtelser: TiltakspengerYtelser;
@@ -22,16 +24,22 @@ const TiltakspengerYtelserTable = ({ tiltakspengerYtelser }: TiltakspengerYtelse
                 </Table.Row>
             </Table.Header>
             <Table.Body>
-                {perioder.map(({ kilde, detaljer, periode, utfall }, index) => (
-                    <Table.Row key={`${utfall}${index}`}>
-                        <Table.DataCell>
-                            <VedtakUtfallText utfall={utfall} />
-                        </Table.DataCell>
-                        <Table.DataCell>{periode ? formatÅpenPeriode(periode as ÅpenPeriode) : '-'}</Table.DataCell>
-                        <Table.DataCell>{kilde}</Table.DataCell>
-                        <Table.DataCell>{detaljer}</Table.DataCell>
-                    </Table.Row>
-                ))}
+                {perioder.map((vilkårsvurdering, index) => {
+                    const { utfall, kilde, periode, detaljer } = vilkårsvurdering;
+                    return (
+                        <Table.Row key={`${utfall}${index}`}>
+                            <Table.DataCell>
+                                <IconWithText
+                                    iconRenderer={() => <UtfallIcon utfall={utfall} />}
+                                    text={createVurderingText(vilkårsvurdering, 'Tiltakspenger')}
+                                />
+                            </Table.DataCell>
+                            <Table.DataCell>{periode ? formatÅpenPeriode(periode as ÅpenPeriode) : '-'}</Table.DataCell>
+                            <Table.DataCell>{kilde}</Table.DataCell>
+                            <Table.DataCell>{detaljer}</Table.DataCell>
+                        </Table.Row>
+                    );
+                })}
             </Table.Body>
         </Table>
     );
