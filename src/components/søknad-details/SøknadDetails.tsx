@@ -23,7 +23,6 @@ const SøknadDetails = ({
             </Heading>
             <div className={styles.søknadDetails}>
                 <IconWithText iconRenderer={() => <FileContent />} text={`Søknadsdato: ${formatDate(søknadsdato)}`} />
-                <IconWithText iconRenderer={() => <FileContent />} text={`Søknadsdato: ${formatDate(søknadsdato)}`} />
                 {startdato && (
                     <IconWithText
                         iconRenderer={() => <Calender />}
