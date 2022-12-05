@@ -66,7 +66,7 @@ const SøkerPage: NextPage = () => {
     }
     return (
         <React.Fragment>
-            <PersonaliaHeader personalia={søkerData.personopplysninger}></PersonaliaHeader>
+            <PersonaliaHeader personalia={søkerData.personopplysninger} />
             <div className={styles.søknadWrapper}>
                 <SøknadSummarySection søknadResponse={valgtBehandling} />
                 <div className={styles.verticalLine}></div>
