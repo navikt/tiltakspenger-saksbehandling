@@ -61,6 +61,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     }
     return (
         <React.Fragment>
+            <title>Tiltakspenger saksbehandler</title>
             <Header
                 innloggetSaksbehandler={innloggetSaksbehandler}
                 onSearch={(searchString) => {
