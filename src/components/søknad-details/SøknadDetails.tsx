@@ -29,7 +29,7 @@ const SøknadDetails = ({
                         text={`${formatDate(startdato)}${!!sluttdato ? ` - ${formatDate(sluttdato)}` : ''}`}
                     />
                 )}
-                {vedlegg?.length && (
+                {vedlegg?.length > 0 && (
                     <IconWithText iconRenderer={() => <Attachment />} text={`Antall vedlegg: ${vedlegg.length}`} />
                 )}
                 <IconWithText
