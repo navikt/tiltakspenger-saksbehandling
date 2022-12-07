@@ -6,6 +6,8 @@ interface Personalia {
     fortrolig: boolean;
     strengtFortrolig: boolean;
     skjermet: boolean;
+    barnFortrolig: boolean;
+    barnStrengtFortrolig: boolean;
 }
 
 export default Personalia;

@@ -9,7 +9,8 @@ interface PersonaliaHeaderProps {
 }
 
 const PersonaliaHeader = ({ personalia }: PersonaliaHeaderProps) => {
-    const { fornavn, etternavn, ident, skjermet, strengtFortrolig, fortrolig } = personalia;
+    const { fornavn, etternavn, ident, skjermet, strengtFortrolig, fortrolig, barnFortrolig, barnStrengtFortrolig } =
+        personalia;
     return (
         <div className={styles.personaliaHeader}>
             <People className={styles.personaliaHeader__personIcon} />
@@ -32,6 +33,16 @@ const PersonaliaHeader = ({ personalia }: PersonaliaHeaderProps) => {
             {skjermet && (
                 <Tag variant="error" className={styles.personaliaHeader__tag}>
                     Søker er skjermet
+                </Tag>
+            )}
+            {barnFortrolig && (
+                <Tag variant="error" className={styles.personaliaHeader__tag}>
+                    Barn har fortrolig adresse
+                </Tag>
+            )}
+            {barnStrengtFortrolig && (
+                <Tag variant="error" className={styles.personaliaHeader__tag}>
+                    Barn har strengt fortrolig adresse
                 </Tag>
             )}
         </div>
