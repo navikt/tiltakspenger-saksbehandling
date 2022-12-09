@@ -1,8 +1,8 @@
 import React from 'react';
 import { Table } from '@navikt/ds-react';
-import { StatligeYtelser } from '../../types/Søknad';
 import StatligeYtelserTableRows from '../statlige-ytelser-table-rows/StatligeYtelserTableRows';
 import StatligYtelseNotImplementedRow from '../statlig-ytelse-not-implemented-row/StatligYtelseNotImplementedRow';
+import StatligeYtelser from '../../types/StatligeYtelser';
 
 interface StatligeYtelserTableProps {
     statligeYtelser: StatligeYtelser;

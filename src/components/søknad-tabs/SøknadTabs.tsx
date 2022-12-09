@@ -3,9 +3,10 @@ import React from 'react';
 import { Tabs } from '@navikt/ds-react';
 import { FileContent } from '@navikt/ds-icons';
 import { useAtom } from 'jotai';
-import Søknad, { Behandling } from '../../types/Søknad';
+import Søknad from '../../types/Søknad';
 import { formatDate } from '../../utils/date';
 import { søknadIdAtom } from '../../pages/soker/[...all]';
+import Behandling from '../../types/Behandling';
 
 interface SøknadTabsProps {
     className?: string;

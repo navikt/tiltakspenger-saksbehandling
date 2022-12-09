@@ -1,7 +1,7 @@
 import React from 'react';
-import { Behandling } from '../../types/Søknad';
 import SøknadDetails from '../søknad-details/SøknadDetails';
 import RegistrertTiltakDetails from '../registrert-tiltak-details/RegistrertTiltakDetails';
+import Behandling from '../../types/Behandling';
 import styles from './SøknadSummarySection.module.css';
 
 interface SøknadSummarySectionProps {
