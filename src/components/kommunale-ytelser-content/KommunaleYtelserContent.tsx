@@ -1,9 +1,9 @@
 import React from 'react';
 import { Heading } from '@navikt/ds-react';
-import { KommunaleYtelser } from '../../types/Søknad';
 import KvpTable from '../kvp-table/KvpTable';
 import styles from './KommunaleYtelserContent.module.css';
 import IntroTable from '../intro-table/IntroTable';
+import KommunaleYtelser from '../../types/KommunaleYtelser';
 
 interface KommunaleYtelserContentProps {
     kommunaleYtelser: KommunaleYtelser;

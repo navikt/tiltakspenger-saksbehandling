@@ -33,18 +33,6 @@ export interface Vilkårsvurdering {
     utfall: Utfall;
 }
 
-export interface StatligeYtelser {
-    samletUtfall: Utfall;
-    aap: Vilkårsvurdering[];
-    dagpenger: Vilkårsvurdering[];
-}
-
-export interface KommunaleYtelser {
-    samletUtfall: Utfall;
-    introProgrammet: Vilkårsvurdering[];
-    kvp: Vilkårsvurdering[];
-}
-
 export interface TiltakspengerYtelser {
     samletUtfall: Utfall;
     perioder: Vilkårsvurdering[];
@@ -63,22 +51,6 @@ export interface Lønnsinntekt {
 export interface Institusjonsopphold {
     samletUtfall: Utfall;
     perioder: Vilkårsvurdering[];
-}
-
-export interface Behandling {
-    søknad: Søknad;
-    registrerteTiltak: RegistrertTiltak[];
-    vurderingsperiode: {
-        fra: string;
-        til: string;
-    };
-    tiltakspengerYtelser: TiltakspengerYtelser;
-    statligeYtelser: StatligeYtelser;
-    kommunaleYtelser: KommunaleYtelser;
-    pensjonsordninger: Pensjonsordninger;
-    lønnsinntekt: Lønnsinntekt;
-    institusjonsopphold: Institusjonsopphold;
-    barnetillegg: Barnetillegg[];
 }
 
 export interface Barnetillegg {

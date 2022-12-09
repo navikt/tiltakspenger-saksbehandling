@@ -1,10 +1,16 @@
 import Personalia from './Personalia';
-import Søknad, { Behandling } from './Søknad';
+import Behandling from './Behandling';
 
-interface Søker {
+class Søker {
     ident: string;
     personopplysninger: Personalia;
     behandlinger: Behandling[];
+
+    constructor(søkerData: any) {
+        this.ident = søkerData.ident;
+        this.personopplysninger = søkerData.personopplysninger;
+        this.behandlinger = søkerData.behandlinger.map((behandlingData: any) => new Behandling(behandlingData));
+    }
 }
 
 export default Søker;

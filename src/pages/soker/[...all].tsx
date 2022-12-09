@@ -6,7 +6,6 @@ import { atom, useAtom } from 'jotai';
 import { Alert } from '@navikt/ds-react';
 import SøknadSummarySection from '../../components/søknad-summary-section/SøknadSummarySection';
 import PersonaliaHeader from '../../components/personalia-header/PersonaliaHeader';
-import { fetcher } from '../../utils/http';
 import { ApiError } from '../../types/Error';
 import Søker from '../../types/Søker';
 import SøknadTabs from '../../components/søknad-tabs/SøknadTabs';
@@ -14,13 +13,25 @@ import styles from './Søker.module.css';
 
 export const søknadIdAtom = atom('');
 
+export const søkerFetcher = (input: RequestInfo | URL, init?: RequestInit) =>
+    fetch(input, init)
+        .then((res) => res.json())
+        .then((data) => {
+            try {
+                const søker = new Søker(data);
+                return Promise.resolve(søker);
+            } catch (error) {
+                return Promise.reject(error);
+            }
+        });
+
 const SøkerPage: NextPage = () => {
     const router = useRouter();
     const urlParams = router.query.all;
     const [søkerId, søknadId] = urlParams as string[];
     const [activeSøknadId, setActiveSøknadId] = useAtom(søknadIdAtom);
 
-    const { data: søkerResponse, error } = useSWR<Søker | ApiError>(`/api/person/soknader/${søkerId}`, fetcher);
+    const { data: søkerResponse, error } = useSWR<Søker | ApiError>(`/api/person/soknader/${søkerId}`, søkerFetcher);
 
     function setDefaultActiveSøknadId() {
         if (søknadId) {
