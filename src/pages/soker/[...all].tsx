@@ -18,6 +18,9 @@ export const søkerFetcher = (input: RequestInfo | URL, init?: RequestInit) =>
         .then((res) => res.json())
         .then((data) => {
             try {
+                if (data.error) {
+                    return Promise.reject(data.error);
+                }
                 const søker = new Søker(data);
                 return Promise.resolve(søker);
             } catch (error) {
@@ -31,7 +34,9 @@ const SøkerPage: NextPage = () => {
     const [søkerId, søknadId] = urlParams as string[];
     const [activeSøknadId, setActiveSøknadId] = useAtom(søknadIdAtom);
 
-    const { data: søkerResponse, error } = useSWR<Søker | ApiError>(`/api/person/soknader/${søkerId}`, søkerFetcher);
+    const { data: søkerResponse, error } = useSWR<Søker | ApiError>(`/api/person/soknader/${søkerId}`, søkerFetcher, {
+        shouldRetryOnError: false
+    });
 
     function setDefaultActiveSøknadId() {
         if (søknadId) {
@@ -55,19 +60,23 @@ const SøkerPage: NextPage = () => {
     }
 
     function isWaitingForSøkerResponse() {
-        return søkerResponse === null || søkerResponse === undefined;
+        return (søkerResponse === null || søkerResponse === undefined) && !error;
     }
 
     function søkerRequestHasFailed() {
-        const { error: søkerResponseError } = søkerResponse as ApiError;
-        return søkerResponseError || error;
+        if (søkerResponse) {
+            const { error: søkerResponseError } = søkerResponse as ApiError;
+            return søkerResponseError || error;
+        } else {
+            return !!error;
+        }
     }
 
     if (isWaitingForSøkerResponse()) {
         return <div>Henter data om søknad</div>;
     }
     if (søkerRequestHasFailed()) {
-        return <div>{(søkerResponse as ApiError).error}</div>;
+        return <div>{error || (søkerResponse as ApiError).error}</div>;
     }
 
     const søkerData = søkerResponse as Søker;

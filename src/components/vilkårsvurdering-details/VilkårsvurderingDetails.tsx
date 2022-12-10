@@ -14,6 +14,7 @@ import DagpengerAlert from '../dagpenger-alert/DagpengerAlert';
 import AapAlert from '../aap-alert/AapAlert';
 import KvpAlert from "../kvp-alert/KvpAlert";
 import IntroAlert from "../intro-alert/IntroAlert";
+import {formatDate} from "../../utils/date";
 
 interface VilkårsvurderingDetailsProps {
     søknadResponse: Behandling;
@@ -28,12 +29,17 @@ const VilkårsvurderingDetails = ({
         lønnsinntekt,
         institusjonsopphold,
         barnetillegg,
+        registrerteTiltak,
+        søknad: {
+            startdato, sluttdato
+        }
     },
 }: VilkårsvurderingDetailsProps) => {
     const dagpengePerioder = statligeYtelser.finnDagpengeperioder();
     const aapPerioder = statligeYtelser.finnAapPerioder();
     const kvpPerioder = kommunaleYtelser.finnKvpPerioderFraSøknaden();
     const introPerioder = kommunaleYtelser.finnIntroprogramPerioderFraSøknaden();
+    const visManglendeRegistrertTiltakMelding = !registrerteTiltak || registrerteTiltak.length === 0;
     return (
         <div className={styles.vilkårsvurderingDetails}>
             <Heading level="1" size="small">
@@ -42,6 +48,14 @@ const VilkårsvurderingDetails = ({
             <Alert variant="info" fullWidth style={{ marginTop: '1rem' }}>
                 Foreløpig har vi ikke alle opplysninger til å vurdere søknaden
             </Alert>
+            {visManglendeRegistrertTiltakMelding &&
+                <Alert variant="warning" fullWidth style={{ marginTop: '1rem', paddingBottom: 0 }}>
+                    <strong>
+                        Det er ikke registrert tiltak på bruker i perioden {formatDate(startdato)} - {formatDate(sluttdato)}
+                    </strong>
+                    <p>Søknaden trenger manuell behandling</p>
+                </Alert>
+            }
             {dagpengePerioder.length > 0 && <DagpengerAlert perioder={dagpengePerioder} />}
             {aapPerioder.length > 0 && <AapAlert perioder={aapPerioder} />}
             {kvpPerioder.length > 0 && <KvpAlert perioder={kvpPerioder} />}
