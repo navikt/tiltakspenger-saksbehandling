@@ -15,12 +15,12 @@ class StatligeYtelser {
 
     finnPerioderTilManuellVurdering(vilkårsvurderinger: Vilkårsvurdering[]): ÅpenPeriode[] {
         const defaultArray: ÅpenPeriode[] = [];
-        return vilkårsvurderinger.reduce((perioderMedDagpenger, { utfall, periode }) => {
+        return vilkårsvurderinger.reduce((perioder, { utfall, periode }) => {
             if (Utfall.KreverManuellVurdering === utfall) {
-                perioderMedDagpenger.push(periode);
-                return perioderMedDagpenger;
+                perioder.push(periode);
+                return perioder;
             }
-            return perioderMedDagpenger;
+            return perioder;
         }, defaultArray);
     }
 

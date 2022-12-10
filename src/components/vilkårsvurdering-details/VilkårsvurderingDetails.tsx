@@ -12,6 +12,8 @@ import TiltakspengerYtelserTable from '../tiltakspenger-ytelser-table/Tiltakspen
 import Behandling from '../../types/Behandling';
 import DagpengerAlert from '../dagpenger-alert/DagpengerAlert';
 import AapAlert from '../aap-alert/AapAlert';
+import KvpAlert from "../kvp-alert/KvpAlert";
+import IntroAlert from "../intro-alert/IntroAlert";
 
 interface VilkårsvurderingDetailsProps {
     søknadResponse: Behandling;
@@ -30,6 +32,8 @@ const VilkårsvurderingDetails = ({
 }: VilkårsvurderingDetailsProps) => {
     const dagpengePerioder = statligeYtelser.finnDagpengeperioder();
     const aapPerioder = statligeYtelser.finnAapPerioder();
+    const kvpPerioder = kommunaleYtelser.finnKvpPerioderFraSøknaden();
+    const introPerioder = kommunaleYtelser.finnIntroprogramPerioderFraSøknaden();
     return (
         <div className={styles.vilkårsvurderingDetails}>
             <Heading level="1" size="small">
@@ -40,6 +44,8 @@ const VilkårsvurderingDetails = ({
             </Alert>
             {dagpengePerioder.length > 0 && <DagpengerAlert perioder={dagpengePerioder} />}
             {aapPerioder.length > 0 && <AapAlert perioder={aapPerioder} />}
+            {kvpPerioder.length > 0 && <KvpAlert perioder={kvpPerioder} />}
+            {introPerioder.length > 0 && <IntroAlert perioder={introPerioder} />}
             <div style={{ marginTop: '4rem' }}>
                 <ParagraphExpand title="Tiltakspenger (§7)">
                     <TiltakspengerYtelserTable tiltakspengerYtelser={tiltakspengerYtelser} />
