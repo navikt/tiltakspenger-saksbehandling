@@ -3,11 +3,12 @@ import { Periode, ÅpenPeriode } from '../../types/Periode';
 import { formatDate, formatPeriode, formatÅpenPeriode } from '../../utils/date';
 import AnnenYtelseAlertMessage from '../annen-ytelse-alert-message/AnnenYtelseAlertMessage';
 
-interface DagpengerAlertProps {
+interface HarStatligYtelseMeldingProps {
     perioder: ÅpenPeriode[];
+    ytelseText: string;
 }
 
-const DagpengerAlert = ({ perioder }: DagpengerAlertProps) => {
+const HarStatligYtelseMelding = ({ perioder, ytelseText }: HarStatligYtelseMeldingProps) => {
     if (perioder.length === 1) {
         const periode = perioder[0];
         const periodeString = periode.til
@@ -15,14 +16,14 @@ const DagpengerAlert = ({ perioder }: DagpengerAlertProps) => {
             : `fra ${formatDate(periode.fra)}.`;
         return (
             <AnnenYtelseAlertMessage
-                heading={`Bruker er innvilget Dagpenger ${periodeString}`}
+                heading={`Bruker er innvilget ${ytelseText} ${periodeString}`}
                 content={<p>Søknaden trenger manuell behandling.</p>}
             />
         );
     }
     return (
         <AnnenYtelseAlertMessage
-            heading="Bruker er innvilget Dagpenger i følgende perioder:"
+            heading={`Bruker er innvilget ${ytelseText} i følgende perioder:`}
             content={
                 <React.Fragment>
                     <ul>
@@ -37,4 +38,4 @@ const DagpengerAlert = ({ perioder }: DagpengerAlertProps) => {
         />
     );
 };
-export default DagpengerAlert;
+export default HarStatligYtelseMelding;

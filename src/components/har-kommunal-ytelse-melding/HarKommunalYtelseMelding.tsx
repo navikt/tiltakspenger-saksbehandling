@@ -3,14 +3,15 @@ import { ÅpenPeriode } from '../../types/Periode';
 import { formatÅpenPeriode } from '../../utils/date';
 import AnnenYtelseAlertMessage from '../annen-ytelse-alert-message/AnnenYtelseAlertMessage';
 
-interface KvpAlertProps {
+interface HarKommunalYtelseMeldingProps {
     perioder: ÅpenPeriode[];
+    ytelseText: string;
 }
 
-const KvpAlert = ({ perioder }: KvpAlertProps) => {
+const HarKommunalYtelseMelding = ({ perioder, ytelseText }: HarKommunalYtelseMeldingProps) => {
     return (
         <AnnenYtelseAlertMessage
-            heading="Bruker har svart ja på deltakelse ved Kvalifiseringsprogrammet i følgende perioder:"
+            heading={`Bruker har svart ja på deltakelse ved ${ytelseText} i følgende perioder:`}
             content={
                 <React.Fragment>
                     <ul>
@@ -25,4 +26,4 @@ const KvpAlert = ({ perioder }: KvpAlertProps) => {
         />
     );
 };
-export default KvpAlert;
+export default HarKommunalYtelseMelding;
