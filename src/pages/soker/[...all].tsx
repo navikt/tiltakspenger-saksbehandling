@@ -35,7 +35,7 @@ const SøkerPage: NextPage = () => {
     const [activeSøknadId, setActiveSøknadId] = useAtom(søknadIdAtom);
 
     const { data: søkerResponse, error } = useSWR<Søker | ApiError>(`/api/person/soknader/${søkerId}`, søkerFetcher, {
-        shouldRetryOnError: false
+        shouldRetryOnError: false,
     });
 
     function setDefaultActiveSøknadId() {
@@ -48,12 +48,11 @@ const SøkerPage: NextPage = () => {
     }
 
     React.useEffect(() => {
-        if (søkerResponse) {
-            if (!(søkerResponse as ApiError).error) {
-                setDefaultActiveSøknadId();
-            }
+        const shouldRenderSøknadContent = !isWaitingForSøkerResponse() && !søkerRequestHasFailed();
+        if (shouldRenderSøknadContent) {
+            setDefaultActiveSøknadId();
         }
-    }, [søkerResponse]);
+    }, [søkerResponse, error]);
 
     function redirectToSøknadPage(id: string) {
         return router.push(`/soker/${søkerId}/${id}`);
@@ -64,19 +63,14 @@ const SøkerPage: NextPage = () => {
     }
 
     function søkerRequestHasFailed() {
-        if (søkerResponse) {
-            const { error: søkerResponseError } = søkerResponse as ApiError;
-            return søkerResponseError || error;
-        } else {
-            return !!error;
-        }
+        return !!error;
     }
 
     if (isWaitingForSøkerResponse()) {
         return <div>Henter data om søknad</div>;
     }
     if (søkerRequestHasFailed()) {
-        return <div>{error || (søkerResponse as ApiError).error}</div>;
+        return <div>{error}</div>;
     }
 
     const søkerData = søkerResponse as Søker;
