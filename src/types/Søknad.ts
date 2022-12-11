@@ -33,26 +33,6 @@ export interface Vilkårsvurdering {
     utfall: Utfall;
 }
 
-export interface TiltakspengerYtelser {
-    samletUtfall: Utfall;
-    perioder: Vilkårsvurdering[];
-}
-
-export interface Pensjonsordninger {
-    samletUtfall: Utfall;
-    perioder: Vilkårsvurdering[];
-}
-
-export interface Lønnsinntekt {
-    samletUtfall: Utfall;
-    perioder: Vilkårsvurdering[];
-}
-
-export interface Institusjonsopphold {
-    samletUtfall: Utfall;
-    perioder: Vilkårsvurdering[];
-}
-
 export interface Barnetillegg {
     alder: number;
     bosatt: string;

@@ -12,6 +12,9 @@ import Behandling from '../../types/Behandling';
 import { formatDate } from '../../utils/date';
 import HarStatligYtelseMelding from '../har-statlig-ytelse-melding/HarStatligYtelseMelding';
 import HarKommunalYtelseMelding from '../har-kommunal-ytelse-melding/HarKommunalYtelseMelding';
+import HarPensjonsordningMelding from '../har-pensjonsordning-melding/HarPensjonsordningMelding';
+import HarInstitusjonsoppholdMelding from '../har-institusjonsopphold-melding/HarInstitusjonsoppholdMelding';
+import HarLønnsinntektMelding from '../har-lønnsinntekt-melding/HarLønnsinntektMelding';
 import styles from './VilkårsvurderingDetails.module.css';
 
 interface VilkårsvurderingDetailsProps {
@@ -35,6 +38,10 @@ const VilkårsvurderingDetails = ({
     const aapPerioder = statligeYtelser.finnAapPerioder();
     const kvpPerioder = kommunaleYtelser.finnKvpPerioderFraSøknaden();
     const introPerioder = kommunaleYtelser.finnIntroprogramPerioderFraSøknaden();
+    const pensjonsordningPerioder = pensjonsordninger.finnPensjonsordningerOppgittISøknaden();
+    const lønnsinntektPerioder = lønnsinntekt.finnLønnsinntektOppgittISøknaden();
+    const institusjonsoppholdPerioder = institusjonsopphold.finnInstitusjonsoppholdOppgittISøknaden();
+    const tiltakspengerPerioder = tiltakspengerYtelser.finnPerioderTilManuellVurdering();
     const visManglendeRegistrertTiltakMelding = !registrerteTiltak || registrerteTiltak.length === 0;
     return (
         <div className={styles.vilkårsvurderingDetails}>
@@ -53,6 +60,9 @@ const VilkårsvurderingDetails = ({
                     <p>Søknaden trenger manuell behandling</p>
                 </Alert>
             )}
+            {tiltakspengerPerioder.length > 0 && (
+                <HarStatligYtelseMelding perioder={tiltakspengerPerioder} ytelseText="Tiltakspenger" />
+            )}
             {dagpengePerioder.length > 0 && (
                 <HarStatligYtelseMelding perioder={dagpengePerioder} ytelseText="Dagpenger" />
             )}
@@ -63,6 +73,11 @@ const VilkårsvurderingDetails = ({
             {introPerioder.length > 0 && (
                 <HarKommunalYtelseMelding perioder={introPerioder} ytelseText="Introduksjonsprogrammet" />
             )}
+            {pensjonsordningPerioder.length > 0 && <HarPensjonsordningMelding perioder={pensjonsordningPerioder} />}
+            {institusjonsoppholdPerioder.length > 0 && (
+                <HarInstitusjonsoppholdMelding perioder={institusjonsoppholdPerioder} />
+            )}
+            {lønnsinntektPerioder.length > 0 && <HarLønnsinntektMelding perioder={lønnsinntektPerioder} />}
             <div style={{ marginTop: '4rem' }}>
                 <ParagraphExpand title="Tiltakspenger (§7)">
                     <TiltakspengerYtelserTable tiltakspengerYtelser={tiltakspengerYtelser} />

@@ -1,9 +1,9 @@
 import React from 'react';
 import { Table } from '@navikt/ds-react';
-import { Lønnsinntekt } from '../../types/Søknad';
 import { formatÅpenPeriode } from '../../utils/date';
 import { ÅpenPeriode } from '../../types/Periode';
 import VedtakUtfallText from '../vedtak-utfall-text/VedtakUtfallText';
+import Lønnsinntekt from '../../types/Lønnsinntekt';
 
 interface LønnsinntekterTableProps {
     lønnsinntekt: Lønnsinntekt;

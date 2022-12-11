@@ -1,6 +1,6 @@
 import { Utfall } from './Utfall';
 import { Vilkårsvurdering } from './Søknad';
-import {ÅpenPeriode} from "./Periode";
+import { ÅpenPeriode } from './Periode';
 
 class KommunaleYtelser {
     samletUtfall: Utfall;
@@ -15,8 +15,8 @@ class KommunaleYtelser {
 
     finnPerioderFraSøknaden(vilkårsvurderinger: Vilkårsvurdering[]): ÅpenPeriode[] {
         const defaultArray: ÅpenPeriode[] = [];
-        return vilkårsvurderinger.reduce((perioder, { utfall, periode , kilde}) => {
-            if (Utfall.KreverManuellVurdering === utfall && kilde === "Søknad") {
+        return vilkårsvurderinger.reduce((perioder, { utfall, periode, kilde }) => {
+            if (Utfall.KreverManuellVurdering === utfall && kilde?.toLowerCase() === 'søknad') {
                 perioder.push(periode);
                 return perioder;
             }

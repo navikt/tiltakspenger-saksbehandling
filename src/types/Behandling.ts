@@ -1,13 +1,10 @@
-import Søknad, {
-    Barnetillegg,
-    Institusjonsopphold,
-    Lønnsinntekt,
-    Pensjonsordninger,
-    RegistrertTiltak,
-    TiltakspengerYtelser,
-} from './Søknad';
+import Søknad, { Barnetillegg, RegistrertTiltak } from './Søknad';
 import StatligeYtelser from './StatligeYtelser';
 import KommunaleYtelser from './KommunaleYtelser';
+import Pensjonsordninger from './Pensjonsordninger';
+import Lønnsinntekt from './Lønnsinntekt';
+import Institusjonsopphold from './Institusjonsopphold';
+import TiltakspengerYtelser from './TiltakspengerYtelser';
 
 export class Behandling {
     søknad: Søknad;
@@ -28,12 +25,12 @@ export class Behandling {
         this.søknad = behandlingData.søknad;
         this.registrerteTiltak = behandlingData.registrerteTiltak;
         this.vurderingsperiode = behandlingData.vurderingsperiode;
-        this.tiltakspengerYtelser = behandlingData.tiltakspengerYtelser;
+        this.tiltakspengerYtelser = new TiltakspengerYtelser(behandlingData.tiltakspengerYtelser);
         this.statligeYtelser = new StatligeYtelser(behandlingData.statligeYtelser);
         this.kommunaleYtelser = new KommunaleYtelser(behandlingData.kommunaleYtelser);
-        this.pensjonsordninger = behandlingData.pensjonsordninger;
-        this.lønnsinntekt = behandlingData.lønnsinntekt;
-        this.institusjonsopphold = behandlingData.institusjonsopphold;
+        this.pensjonsordninger = new Pensjonsordninger(behandlingData.pensjonsordninger);
+        this.lønnsinntekt = new Lønnsinntekt(behandlingData.lønnsinntekt);
+        this.institusjonsopphold = new Institusjonsopphold(behandlingData.institusjonsopphold);
         this.barnetillegg = behandlingData.barnetillegg;
     }
 }
