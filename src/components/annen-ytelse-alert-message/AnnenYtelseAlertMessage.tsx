@@ -9,7 +9,7 @@ interface AnnenYtelseAlertMessage {
 
 const AnnenYtelseAlertMessage = ({ heading, content }: AnnenYtelseAlertMessage) => {
     return (
-        <Alert className={styles.annenYtelseAlertMessage} variant="error">
+        <Alert className={styles.annenYtelseAlertMessage} variant="warning">
             <strong>{heading}</strong>
             {content}
         </Alert>
