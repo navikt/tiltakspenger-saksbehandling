@@ -1,6 +1,6 @@
 import React from 'react';
 import { Alert, Heading } from '@navikt/ds-react';
-import ParagraphExpand from '../paragraph-expand/ParagraphExpand';
+import Accordion from '../accordion/Accordion';
 import StatligeYtelserTable from '../statlige-ytelser-table/StatligeYtelserTable';
 import KommunaleYtelserContent from '../kommunale-ytelser-content/KommunaleYtelserContent';
 import PensjonsordningerTable from '../pensjonsordninger-table/PensjonsordningerTable';
@@ -31,7 +31,7 @@ const VilkårsvurderingDetails = ({
         institusjonsopphold,
         barnetillegg,
         registrerteTiltak,
-        søknad: { startdato, sluttdato },
+        søknad: { startdato, sluttdato, fritekst },
     },
 }: VilkårsvurderingDetailsProps) => {
     const dagpengePerioder = statligeYtelser.finnDagpengeperioder();
@@ -79,30 +79,31 @@ const VilkårsvurderingDetails = ({
             )}
             {lønnsinntektPerioder.length > 0 && <HarLønnsinntektMelding perioder={lønnsinntektPerioder} />}
             <div style={{ marginTop: '4rem' }}>
-                <ParagraphExpand title="Tiltakspenger (§7)">
+                {fritekst && <Accordion title="Tilleggsopplysninger fra søknaden">{fritekst}</Accordion>}
+                <Accordion title="Tiltakspenger (§7)">
                     <TiltakspengerYtelserTable tiltakspengerYtelser={tiltakspengerYtelser} />
-                </ParagraphExpand>
-                <ParagraphExpand title="Statlige ytelser (§7)">
+                </Accordion>
+                <Accordion title="Statlige ytelser (§7)">
                     <StatligeYtelserTable statligeYtelser={statligeYtelser} />
-                </ParagraphExpand>
-                <ParagraphExpand title="Kommunale ytelser (§7)">
+                </Accordion>
+                <Accordion title="Kommunale ytelser (§7)">
                     <KommunaleYtelserContent kommunaleYtelser={kommunaleYtelser} />
-                </ParagraphExpand>
-                <ParagraphExpand title="Pensjonsordninger (§7)">
+                </Accordion>
+                <Accordion title="Pensjonsordninger (§7)">
                     <PensjonsordningerTable pensjonsordninger={pensjonsordninger} />
-                </ParagraphExpand>
-                <ParagraphExpand title="Lønnsinntekt (§8)">
+                </Accordion>
+                <Accordion title="Lønnsinntekt (§8)">
                     <span>Foreløpig har vi ikke alle opplysninger</span>
                     <LønnsinntekterTable lønnsinntekt={lønnsinntekt}></LønnsinntekterTable>
-                </ParagraphExpand>
-                <ParagraphExpand title="Institusjon (§9)">
+                </Accordion>
+                <Accordion title="Institusjon (§9)">
                     <span>Foreløpig har vi ikke alle opplysninger</span>
                     <InstitusjonsoppholdTable institusjonsopphold={institusjonsopphold} />
-                </ParagraphExpand>
-                <ParagraphExpand title="Barnetillegg (§3)">
+                </Accordion>
+                <Accordion title="Barnetillegg (§3)">
                     <span>Foreløpig viser vi bare data fra søknaden</span>
                     <BarnetilleggTable barnetillegg={barnetillegg} />
-                </ParagraphExpand>
+                </Accordion>
             </div>
         </div>
     );
