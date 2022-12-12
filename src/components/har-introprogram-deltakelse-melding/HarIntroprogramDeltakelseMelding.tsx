@@ -5,13 +5,12 @@ import AnnenYtelseAlertMessage from '../annen-ytelse-alert-message/AnnenYtelseAl
 
 interface HarKommunalYtelseMeldingProps {
     perioder: ÅpenPeriode[];
-    ytelseText: string;
 }
 
-const HarKommunalYtelseMelding = ({ perioder, ytelseText }: HarKommunalYtelseMeldingProps) => {
+const HarIntroprogramDeltakelseMelding = ({ perioder }: HarKommunalYtelseMeldingProps) => {
     return (
         <AnnenYtelseAlertMessage
-            heading={`Bruker har svart ja på deltakelse ved ${ytelseText} i følgende perioder:`}
+            heading={`Bruker har svart ja på deltakelse ved Introduksjonsprogrammet i følgende perioder:`}
             content={
                 <React.Fragment>
                     <ul>
@@ -26,4 +25,4 @@ const HarKommunalYtelseMelding = ({ perioder, ytelseText }: HarKommunalYtelseMel
         />
     );
 };
-export default HarKommunalYtelseMelding;
+export default HarIntroprogramDeltakelseMelding;

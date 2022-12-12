@@ -11,10 +11,11 @@ import TiltakspengerYtelserTable from '../tiltakspenger-ytelser-table/Tiltakspen
 import Behandling from '../../types/Behandling';
 import { formatDate } from '../../utils/date';
 import HarStatligYtelseMelding from '../har-statlig-ytelse-melding/HarStatligYtelseMelding';
-import HarKommunalYtelseMelding from '../har-kommunal-ytelse-melding/HarKommunalYtelseMelding';
+import HarIntroprogramDeltakelseMelding from '../har-introprogram-deltakelse-melding/HarIntroprogramDeltakelseMelding';
 import HarPensjonsordningMelding from '../har-pensjonsordning-melding/HarPensjonsordningMelding';
 import HarInstitusjonsoppholdMelding from '../har-institusjonsopphold-melding/HarInstitusjonsoppholdMelding';
 import HarLønnsinntektMelding from '../har-lønnsinntekt-melding/HarLønnsinntektMelding';
+import HarKvpDeltakelseMelding from '../har-kvp-deltakelse-melding/HarKvpDeltakelseMelding';
 import styles from './VilkårsvurderingDetails.module.css';
 
 interface VilkårsvurderingDetailsProps {
@@ -72,16 +73,10 @@ const VilkårsvurderingDetails = ({
                 <HarStatligYtelseMelding perioder={dagpengePerioder} ytelseText="Dagpenger" />
             )}
             {aapPerioder.length > 0 && <HarStatligYtelseMelding perioder={aapPerioder} ytelseText="AAP" />}
-            {kvpPerioder.length > 0 && (
-                <HarKommunalYtelseMelding perioder={kvpPerioder} ytelseText="Kvalifiseringsprogrammet" />
-            )}
-            {introPerioder.length > 0 && (
-                <HarKommunalYtelseMelding perioder={introPerioder} ytelseText="Introduksjonsprogrammet" />
-            )}
+            {kvpPerioder.length > 0 && <HarKvpDeltakelseMelding />}
+            {introPerioder.length > 0 && <HarIntroprogramDeltakelseMelding perioder={introPerioder} />}
             {pensjonsordningPerioder.length > 0 && <HarPensjonsordningMelding perioder={pensjonsordningPerioder} />}
-            {institusjonsoppholdPerioder.length > 0 && (
-                <HarInstitusjonsoppholdMelding perioder={institusjonsoppholdPerioder} />
-            )}
+            {institusjonsoppholdPerioder.length > 0 && <HarInstitusjonsoppholdMelding />}
             {lønnsinntektPerioder.length > 0 && <HarLønnsinntektMelding perioder={lønnsinntektPerioder} />}
             <div style={{ marginTop: '4rem' }}>
                 <Accordion title="Tiltakspenger (§7)">
