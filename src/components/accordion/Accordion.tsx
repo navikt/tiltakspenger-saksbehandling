@@ -2,12 +2,12 @@ import React from 'react';
 import { Accordion as DsAccordion } from '@navikt/ds-react';
 import styles from './Accordion.module.css';
 
-interface ParagraphExpandProps {
+interface AccordionProps {
     title: string;
     children: React.ReactNode;
 }
 
-const Accordion = ({ title, children }: ParagraphExpandProps) => {
+const Accordion = ({ title, children }: AccordionProps) => {
     return (
         <DsAccordion style={{ marginTop: '1.5rem' }}>
             <DsAccordion.Item defaultOpen>
