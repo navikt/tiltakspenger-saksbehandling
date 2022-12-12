@@ -49,8 +49,13 @@ const VilkårsvurderingDetails = ({
                 Søknad
             </Heading>
             <Alert variant="info" fullWidth style={{ marginTop: '1rem' }}>
-                Foreløpig har vi ikke alle opplysninger til å vurdere søknaden
+                Foreløpig har vi ikke alle opplysninger til å vurdere søknaden.
             </Alert>
+            {fritekst && (
+                <Alert variant="info" fullWidth style={{ marginTop: '1rem' }}>
+                    Bruker har fylt ut tilleggsopplysninger i søknaden.
+                </Alert>
+            )}
             {visManglendeRegistrertTiltakMelding && (
                 <Alert variant="warning" fullWidth style={{ marginTop: '1rem', paddingBottom: 0 }}>
                     <strong>
@@ -79,7 +84,6 @@ const VilkårsvurderingDetails = ({
             )}
             {lønnsinntektPerioder.length > 0 && <HarLønnsinntektMelding perioder={lønnsinntektPerioder} />}
             <div style={{ marginTop: '4rem' }}>
-                {fritekst && <Accordion title="Tilleggsopplysninger fra søknaden">{fritekst}</Accordion>}
                 <Accordion title="Tiltakspenger (§7)">
                     <TiltakspengerYtelserTable tiltakspengerYtelser={tiltakspengerYtelser} />
                 </Accordion>
@@ -104,6 +108,7 @@ const VilkårsvurderingDetails = ({
                     <span>Foreløpig viser vi bare data fra søknaden</span>
                     <BarnetilleggTable barnetillegg={barnetillegg} />
                 </Accordion>
+                {fritekst && <Accordion title="Tilleggsopplysninger fra søknaden">{fritekst}</Accordion>}
             </div>
         </div>
     );
