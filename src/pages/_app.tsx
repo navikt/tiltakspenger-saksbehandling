@@ -65,9 +65,8 @@ export default function MyApp({ Component, pageProps }: AppProps) {
             <Header
                 innloggetSaksbehandler={innloggetSaksbehandler}
                 onSearch={(searchString) => {
-                    const sanitizedSearchString = searchString.trim();
                     resetErrorMessage();
-                    searchForSøker(sanitizedSearchString);
+                    searchForSøker(searchString);
                 }}
             />
             {errorMessage && <ErrorMessage errorMessage={errorMessage} />}
