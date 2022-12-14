@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import HarBarnFortroligAdresse from '../../../components/har-barn-fortrolig-adresse/HarBarnFortroligAdresse';
-import { Barn } from '../../../types/Personalia';
+import { Barn } from '../../types/Personalia';
+import HarBarnFortroligAdresse from './HarBarnFortroligAdresse';
 
 test('skal vise at barn har fortrolig adresse', async () => {
     const mockBarn: Partial<Barn>[] = [
