@@ -18,7 +18,7 @@ const HarBarnFortroligAdresse = ({ barn }: HarBarnFortroligAdresse) => {
 function utledFortroligAdresseForBarn(barn: Barn[]): string {
     const fortrolig = barn.some((barn) => barn.fortrolig);
     const strengtFortrolig = barn.some((barn) => barn.strengtFortrolig);
-    return fortrolig || strengtFortrolig ? `Barn har${strengtFortrolig && ` strengt`} fortrolig adresse` : '';
+    return fortrolig || strengtFortrolig ? `Barn har${strengtFortrolig ? ` strengt` : ''} fortrolig adresse` : '';
 }
 
 export default HarBarnFortroligAdresse;
