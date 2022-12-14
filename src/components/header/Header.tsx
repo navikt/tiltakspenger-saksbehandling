@@ -25,7 +25,7 @@ const Header = ({ innloggetSaksbehandler, onSearch }: HeaderProps) => {
                 <NavInternalHeader.Title href="/">NAV Tiltakspenger</NavInternalHeader.Title>
                 <div className={styles.header__searchWrapper}>
                     <form data-theme="dark" onSubmit={searchHandler}>
-                        <Search label={''} onChange={(value) => setSearch(value)} autoComplete="off" />
+                        <Search label={''} onChange={(value) => setSearch(value.trim())} autoComplete="off" />
                     </form>
                 </div>
                 <NavInternalHeader.User className={styles.header__user} name={navIdent} />
