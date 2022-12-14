@@ -27,6 +27,7 @@ const Header = ({ innloggetSaksbehandler, onSearch }: HeaderProps) => {
                     <form data-theme="dark" onSubmit={searchHandler}>
                         <Search
                             label={''}
+                            placeholder="Søk på fødselsnummer"
                             onChange={(value) => setSearch(value.trim())}
                             value={search}
                             autoComplete="off"
