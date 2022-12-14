@@ -31,7 +31,7 @@ const RegistrertTiltakDetails = ({ registrertTiltak }: RegistrertTiltakDetailsPr
     const { arrangør, periode, prosent, status, navn, dagerIUken } = registrertTiltak;
     return (
         <div className={styles.registrertTiltakDetails}>
-            <Heading size="small" level="1">
+            <Heading size="xsmall" level="3">
                 {navn}
             </Heading>
             <p className={styles.registrertTiltakDetails__field}>{arrangør}</p>
