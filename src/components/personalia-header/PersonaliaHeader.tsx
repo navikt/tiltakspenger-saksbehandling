@@ -3,7 +3,6 @@ import { Tag } from '@navikt/ds-react';
 import { People } from '@navikt/ds-icons';
 import Personalia from '../../types/Personalia';
 import styles from './PersonaliaHeader.module.css';
-import HarBarnFortroligAdresse from '../har-barn-fortrolig-adresse/HarBarnFortroligAdresse';
 
 interface PersonaliaHeaderProps {
     personalia: Personalia;
