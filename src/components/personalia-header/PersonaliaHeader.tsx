@@ -35,7 +35,16 @@ const PersonaliaHeader = ({ personalia }: PersonaliaHeaderProps) => {
                     Søker er skjermet
                 </Tag>
             )}
-            <HarBarnFortroligAdresse barn={personalia.barn} />
+            {personalia.finnBarnMedFortroligAdresse().length && (
+                <Tag variant="error" className={styles.personaliaHeader__tag}>
+                    Barn har fortrolig adresse
+                </Tag>
+            )}
+            {personalia.finnBarnMedStrengtFortroligAdresse().length && (
+                <Tag variant="error" className={styles.personaliaHeader__tag}>
+                    Barn har strengt fortrolig adresse
+                </Tag>
+            )}
         </div>
     );
 };
