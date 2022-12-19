@@ -5,7 +5,6 @@ import { atom, useAtom } from 'jotai';
 import { Alert } from '@navikt/ds-react';
 import SøknadSummarySection from '../../components/søknad-summary-section/SøknadSummarySection';
 import PersonaliaHeader from '../../components/personalia-header/PersonaliaHeader';
-import { ApiError } from '../../types/Error';
 import Søker from '../../types/Søker';
 import SøknadTabs from '../../components/søknad-tabs/SøknadTabs';
 import { SøkerLayout } from '../../layouts/soker/SøkerLayout';
