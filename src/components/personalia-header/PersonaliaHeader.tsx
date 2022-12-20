@@ -34,12 +34,12 @@ const PersonaliaHeader = ({ personalia }: PersonaliaHeaderProps) => {
                     Søker er skjermet
                 </Tag>
             )}
-            {personalia.finnBarnMedFortroligAdresse().length && (
+            {personalia.finnBarnMedFortroligAdresse().length > 0 && (
                 <Tag variant="error" className={styles.personaliaHeader__tag}>
                     Barn har fortrolig adresse
                 </Tag>
             )}
-            {personalia.finnBarnMedStrengtFortroligAdresse().length && (
+            {personalia.finnBarnMedStrengtFortroligAdresse().length > 0 && (
                 <Tag variant="error" className={styles.personaliaHeader__tag}>
                     Barn har strengt fortrolig adresse
                 </Tag>
