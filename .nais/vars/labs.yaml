@@ -2,7 +2,7 @@ ingress:
   - https://tiltakspenger-saksbehandler.labs.nais.io
 replyURLs:
   - https://tiltakspenger-saksbehandler.labs.nais.io/oauth2/callback
-tenant: labs.io
+tenant: trygdeetaten.no
 ROLE_SAKSBEHANDLER: 7dded2a9-c8e8-4f5c-8a54-c3b6bad3ee8c 
 envs:
   - name: NEXT_PUBLIC_API_MOCKING
