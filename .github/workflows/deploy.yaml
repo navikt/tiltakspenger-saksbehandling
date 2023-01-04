@@ -89,3 +89,18 @@ jobs:
           RESOURCE: .nais/nais.yaml
           VAR: image=${{ env.IMAGE }},name=${{ github.event.repository.name }}
           VARS: .nais/vars/prod.yaml
+
+  deploy-labs:
+    name: Deploy to NAIS labs
+    needs: build
+    if: github.ref == 'refs/heads/feature/legg-opp-labs-demoversjon'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_KEY }}
+          CLUSTER: labs-gcp
+          RESOURCE: .nais/nais.yaml
+          VAR: image=${{ env.IMAGE }},name=${{ github.event.repository.name }}
+          VARS: .nais/vars/labs.yaml
