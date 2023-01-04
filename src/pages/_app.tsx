@@ -10,6 +10,10 @@ import { Saksbehandler } from '../types/Saksbehandler';
 import ErrorMessage from '../components/error-message/ErrorMessage';
 import './../styles/globals.css';
 
+if (process.env.NEXT_PUBLIC_API_MOCKING === 'enabled') {
+    require('../mock');
+}
+
 export default function MyApp({ Component, pageProps }: AppProps) {
     const router = useRouter();
 
