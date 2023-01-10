@@ -1,0 +1,12 @@
+FROM node:16-alpine as runtime
+WORKDIR /usr/app
+
+ENV PORT 3000
+
+COPY mock .
+
+EXPOSE 3000
+
+RUN npm i -g json-server
+
+CMD ["json-server", "db.json", "--routes", "routes.json", "--middlewares", "mw.js"]

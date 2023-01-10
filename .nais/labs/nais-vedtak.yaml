@@ -1,0 +1,15 @@
+apiVersion: nais.io/v1alpha1
+kind: Application
+metadata:
+  name: tiltakspenger-vedtak
+  namespace: tpts
+  labels:
+    team: tpts
+spec:
+  image: {{ image }}
+  port: 3000
+  ingresses:
+    - https://tiltakspenger-vedtak.labs.nais.io
+  replicas:
+    min: 1
+    max: 1

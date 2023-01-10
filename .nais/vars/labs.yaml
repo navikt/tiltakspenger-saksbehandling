@@ -1,5 +1,0 @@
-ingress:
-  - https://tiltakspenger-saksbehandler.labs.nais.io
-envs:
-  - name: NEXT_PUBLIC_API_MOCKING
-    value: enabled

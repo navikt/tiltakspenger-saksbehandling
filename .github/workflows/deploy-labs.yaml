@@ -1,0 +1,92 @@
+name: Build, push, and deploy (labs)
+
+on: push
+
+env:
+  IMAGE: ghcr.io/${{ github.repository }}:${{ github.sha }}
+
+jobs:
+  test:
+    name: Run tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "16.x"
+      - run: npm ci
+      - run: npm run test:ci
+
+  build:
+    name: Build and push (labs)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+
+      - name: Set up Docker Buildx
+        if: github.ref == 'refs/heads/feature/legg-opp-labs-demoversjon'
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to GitHub Docker Registry
+        if: github.ref == 'refs/heads/feature/legg-opp-labs-demoversjon'
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Docker build and push
+        if: github.ref == 'refs/heads/feature/legg-opp-labs-demoversjon'
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          tags: ${{ env.IMAGE }}-labs
+          file: .nais/labs/Dockerfile.saksbehandler
+          push: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Docker build and push
+        if: github.ref == 'refs/heads/feature/legg-opp-labs-demoversjon'
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          tags: ${{ env.IMAGE }}-labs-vedtak
+          file: .nais/labs/Dockerfile.vedtak
+          push: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy-saksbehandler:
+    name: Deploy to NAIS labs
+    needs: build-labs
+    if: github.ref == 'refs/heads/feature/legg-opp-labs-demoversjon'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_KEY }}
+          CLUSTER: labs-gcp
+          RESOURCE: .nais/labs/nais.saksbehandler.yaml
+          VAR: image=${{ env.IMAGE }}-labs,name=${{ github.event.repository.name }}
+
+  deploy-vedtak:
+    name: Deploy to NAIS labs
+    needs: build-labs
+    if: github.ref == 'refs/heads/feature/legg-opp-labs-demoversjon'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_KEY }}
+          CLUSTER: labs-gcp
+          RESOURCE: .nais/labs/nais.vedtak.yaml
+          VAR: image=${{ env.IMAGE }}-labs-vedtak,name=${{ github.event.repository.name }}

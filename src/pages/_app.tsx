@@ -16,17 +16,6 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     const { data: innloggetSaksbehandler, error } = useSWR<Saksbehandler>('/api/saksbehandler', fetcher);
     const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
 
-    useEffect(() => {
-        // This is the recommended way to set up Web/Service Workers in the browser. See
-        // https://github.com/vercel/next.js/blob/canary/examples/with-web-worker/pages/index.tsx
-        // https://github.com/vercel/next.js/blob/canary/examples/with-service-worker/pages/index.tsx
-        if (process.env.NEXT_PUBLIC_API_MOCKING === 'enabled') {
-            Promise.all([import('msw'), import('../mock/handlers')]).then(([msw, { handlers }]) =>
-                msw.setupWorker(...handlers).start()
-            );
-        }
-    }, []);
-
     function showErrorMessage(text: string) {
         setErrorMessage(text);
     }
