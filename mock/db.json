@@ -1,8 +1,8 @@
 {
   "saksbehandler": {
-    "navIdent": "Z994073",
-    "brukernavn": "F_Z994073 E_Z994073",
-    "epost": "F_Z994073.E_Z994073@trygdeetaten.no",
+    "navIdent": "Z12345",
+    "brukernavn": "test",
+    "epost": "test@testesen.no",
     "roller": [
       "SAKSBEHANDLER"
     ]

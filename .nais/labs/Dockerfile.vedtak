@@ -9,4 +9,4 @@ EXPOSE 3000
 
 RUN npm i -g json-server
 
-CMD ["json-server", "db.json", "--routes", "routes.json", "--middlewares", "mw.js"]
+CMD ["json-server", "db.json", "--host", "0.0.0.0", "--routes", "routes.json", "--middlewares", "mw.js"]
