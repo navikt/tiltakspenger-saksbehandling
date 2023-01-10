@@ -24,8 +24,7 @@ ENV NODE_ENV development
 
 COPY --from=builder /usr/app/.next/standalone ./
 COPY --from=builder /usr/app/.next/static ./.next/static
-COPY --from=builder /usr/app/public ./public
-COPY --from=builder /usr/app/public ./.next/static
+COPY --from=builder /usr/app/public ./
 
 EXPOSE 3000
 
