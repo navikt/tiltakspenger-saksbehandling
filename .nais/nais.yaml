@@ -18,23 +18,23 @@ spec:
     - name: {{name}}
       value: {{value}}
   {{/each}}
-  # azure:
-  #   sidecar:
-  #     enabled: true
-  #     autoLogin: true
-  #     openid.provider: "azure"
-  #     errorPath: ""
-  #   application:
-  #     enabled: true
-  #     tenant: {{ tenant }}
-  #     claims:
-  #       groups:
-  #         - id: {{ ROLE_SAKSBEHANDLER }}
-  #       extra:
-  #         - "NAVident"
-  #     {{#if replyUrls}}
-  #       replyURLs:
-  #       {{#each replyUrls}}
-  #         - {{ this }}
-  #       {{/each}}
-  #     {{/if}}
+  azure:
+    sidecar:
+      enabled: true
+      autoLogin: true
+      openid.provider: "azure"
+      errorPath: ""
+    application:
+      enabled: true
+      tenant: {{ tenant }}
+      claims:
+        groups:
+          - id: {{ ROLE_SAKSBEHANDLER }}
+        extra:
+          - "NAVident"
+      {{#if replyUrls}}
+        replyURLs:
+        {{#each replyUrls}}
+          - {{ this }}
+        {{/each}}
+      {{/if}}
