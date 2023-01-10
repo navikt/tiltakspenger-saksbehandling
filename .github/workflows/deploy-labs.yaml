@@ -74,11 +74,11 @@ jobs:
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_KEY }}
           CLUSTER: labs-gcp
-          RESOURCE: .nais/labs/nais.saksbehandler.yaml
+          RESOURCE: .nais/labs/nais-saksbehandler.yaml
           VAR: image=${{ env.IMAGE }}-labs,name=${{ github.event.repository.name }}
       - uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_KEY }}
           CLUSTER: labs-gcp
-          RESOURCE: .nais/labs/nais.vedtak.yaml
+          RESOURCE: .nais/labs/nais-vedtak.yaml
           VAR: image=${{ env.IMAGE }}-labs-vedtak,name=${{ github.event.repository.name }}
