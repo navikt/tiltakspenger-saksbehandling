@@ -63,7 +63,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-  deploy-saksbehandler:
+  deploy:
     name: Deploy to NAIS labs
     needs: build
     if: github.ref == 'refs/heads/feature/legg-opp-labs-demoversjon'
@@ -76,14 +76,6 @@ jobs:
           CLUSTER: labs-gcp
           RESOURCE: .nais/labs/nais.saksbehandler.yaml
           VAR: image=${{ env.IMAGE }}-labs,name=${{ github.event.repository.name }}
-
-  deploy-vedtak:
-    name: Deploy to NAIS labs
-    needs: build
-    if: github.ref == 'refs/heads/feature/legg-opp-labs-demoversjon'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
       - uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_KEY }}
