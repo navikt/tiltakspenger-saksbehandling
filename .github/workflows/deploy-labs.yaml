@@ -65,7 +65,7 @@ jobs:
 
   deploy-saksbehandler:
     name: Deploy to NAIS labs
-    needs: build-labs
+    needs: build
     if: github.ref == 'refs/heads/feature/legg-opp-labs-demoversjon'
     runs-on: ubuntu-latest
     steps:
@@ -79,7 +79,7 @@ jobs:
 
   deploy-vedtak:
     name: Deploy to NAIS labs
-    needs: build-labs
+    needs: build
     if: github.ref == 'refs/heads/feature/legg-opp-labs-demoversjon'
     runs-on: ubuntu-latest
     steps:
