@@ -1,9 +1,11 @@
+# Kjøres opp som mock for tiltakspenger-vedtak
+
 FROM node:16-alpine as runtime
 WORKDIR /usr/app
 
 ENV PORT 3000
 
-COPY mock .
+COPY .nais/labs/mock .
 
 EXPOSE 3000
 

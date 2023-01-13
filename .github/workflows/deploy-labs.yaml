@@ -18,7 +18,7 @@ jobs:
       - run: npm run test:ci
 
   build:
-    name: Build and push (labs)
+    name: Build and push
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -41,24 +41,24 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Docker build and push
+      - name: Docker build and push frontend
         if: github.ref == 'refs/heads/feature/legg-opp-labs-demoversjon'
         uses: docker/build-push-action@v3
         with:
           context: .
-          tags: ${{ env.IMAGE }}-labs
-          file: .nais/labs/Dockerfile.saksbehandler
+          tags: ${{ env.IMAGE }}-labs-frontend
+          file: .nais/labs/Dockerfile.frontend
           push: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Docker build and push
+      - name: Docker build and push backend
         if: github.ref == 'refs/heads/feature/legg-opp-labs-demoversjon'
         uses: docker/build-push-action@v3
         with:
           context: .
-          tags: ${{ env.IMAGE }}-labs-vedtak
-          file: .nais/labs/Dockerfile.vedtak
+          tags: ${{ env.IMAGE }}-labs-backend
+          file: .nais/labs/Dockerfile.backend
           push: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -70,15 +70,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: nais/deploy/actions/deploy@v1
+      - name: Deploy frontend
+        uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_KEY }}
           CLUSTER: labs-gcp
-          RESOURCE: .nais/labs/nais-saksbehandler.yaml
+          RESOURCE: .nais/labs/nais.yaml
           VAR: image=${{ env.IMAGE }}-labs,name=${{ github.event.repository.name }}
-      - uses: nais/deploy/actions/deploy@v1
+          VARS: .nais/labs/vars/frontend.yaml
+      - name: Deploy backend
+        uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_KEY }}
           CLUSTER: labs-gcp
-          RESOURCE: .nais/labs/nais-vedtak.yaml
+          RESOURCE: .nais/labs/nais.yaml
           VAR: image=${{ env.IMAGE }}-labs-vedtak,name=${{ github.event.repository.name }}
+          VARS: .nais/labs/vars/backend.yaml
