@@ -11,7 +11,7 @@ COPY package.json .
 COPY package-lock.json .
 COPY next.config.js .
 COPY src/ ./src
-COPY .nais/labs/mock/\[...middleware\].ts ./src/pages/api/
+COPY .nais/labs/mock/\[...middleware\].ts ./src/pages/api/\[...middleware\].ts
 
 RUN npm ci --no-audit
 RUN npm run build
