@@ -11,7 +11,7 @@ COPY package.json .
 COPY package-lock.json .
 COPY next.config.js .
 COPY src/ ./src
-COPY mock/ ./src/pages/api/
+COPY .nais/labs/mock/ ./src/pages/api/
 
 RUN npm ci --no-audit
 RUN npm run build
