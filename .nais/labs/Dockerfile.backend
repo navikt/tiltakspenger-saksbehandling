@@ -5,7 +5,7 @@ WORKDIR /usr/app
 
 ENV PORT 3000
 
-COPY .nais/labs/mock .
+COPY mock .
 
 EXPOSE 3000
 
