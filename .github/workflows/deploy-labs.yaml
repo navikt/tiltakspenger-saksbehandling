@@ -76,7 +76,7 @@ jobs:
           APIKEY: ${{ secrets.NAIS_DEPLOY_KEY }}
           CLUSTER: labs-gcp
           RESOURCE: .nais/labs/nais.yaml
-          VAR: image=${{ env.IMAGE }}-labs,name=${{ github.event.repository.name }}
+          VAR: image=${{ env.IMAGE }}-labs-frontend,name=${{ github.event.repository.name }}
           VARS: .nais/labs/vars/frontend.yaml
       - name: Deploy backend
         uses: nais/deploy/actions/deploy@v1
@@ -84,5 +84,5 @@ jobs:
           APIKEY: ${{ secrets.NAIS_DEPLOY_KEY }}
           CLUSTER: labs-gcp
           RESOURCE: .nais/labs/nais.yaml
-          VAR: image=${{ env.IMAGE }}-labs-vedtak,name=${{ github.event.repository.name }}
+          VAR: image=${{ env.IMAGE }}-labs-backend,name=${{ github.event.repository.name }}
           VARS: .nais/labs/vars/backend.yaml
