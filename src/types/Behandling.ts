@@ -5,6 +5,7 @@ import Pensjonsordninger from './Pensjonsordninger';
 import Lønnsinntekt from './Lønnsinntekt';
 import Institusjonsopphold from './Institusjonsopphold';
 import TiltakspengerYtelser from './TiltakspengerYtelser';
+import AlderVilkårsvurdering from './AlderVilkårsvurdering';
 
 export class Behandling {
     søknad: Søknad;
@@ -19,6 +20,7 @@ export class Behandling {
     pensjonsordninger: Pensjonsordninger;
     lønnsinntekt: Lønnsinntekt;
     institusjonsopphold: Institusjonsopphold;
+    alderVilkårsvurdering: AlderVilkårsvurdering;
     barnetillegg: Barnetillegg[];
 
     constructor(behandlingData: any) {
@@ -31,6 +33,7 @@ export class Behandling {
         this.pensjonsordninger = new Pensjonsordninger(behandlingData.pensjonsordninger);
         this.lønnsinntekt = new Lønnsinntekt(behandlingData.lønnsinntekt);
         this.institusjonsopphold = new Institusjonsopphold(behandlingData.institusjonsopphold);
+        this.alderVilkårsvurdering = new AlderVilkårsvurdering(behandlingData.alderVilkårsvurdering);
         this.barnetillegg = behandlingData.barnetillegg;
     }
 }

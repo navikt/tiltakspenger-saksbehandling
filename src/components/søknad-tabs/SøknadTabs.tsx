@@ -7,12 +7,14 @@ import Søknad from '../../types/Søknad';
 import { formatDate } from '../../utils/date';
 import { søknadIdAtom } from '../../pages/soker/[...all]';
 import Behandling from '../../types/Behandling';
+import Personalia from '../../types/Personalia';
 
 interface SøknadTabsProps {
     className?: string;
     defaultTab: string;
     onChange: (søknadId: string) => void;
     behandlinger: Behandling[];
+    personalia: Personalia;
 }
 
 function createSøknadLabel({ startdato, arrangoernavn, tiltakskode }: Søknad) {
@@ -23,7 +25,7 @@ function createSøknadLabel({ startdato, arrangoernavn, tiltakskode }: Søknad) 
     return arrangørNavnEllerTiltakskode;
 }
 
-const SøknadTabs = ({ className, defaultTab, onChange, behandlinger }: SøknadTabsProps) => {
+const SøknadTabs = ({ className, defaultTab, onChange, behandlinger, personalia }: SøknadTabsProps) => {
     const [søknadId, setSøknadId] = useAtom(søknadIdAtom);
     return (
         <Tabs defaultValue={defaultTab} className={className || ''}>
@@ -48,7 +50,7 @@ const SøknadTabs = ({ className, defaultTab, onChange, behandlinger }: SøknadT
             {behandlinger.map((behandling) => {
                 return (
                     <Tabs.Panel key={behandling.søknad.id} value={behandling.søknad.id}>
-                        <VilkårsvurderingDetails søknadResponse={behandling} />
+                        <VilkårsvurderingDetails søknadResponse={behandling} personalia={personalia} />
                     </Tabs.Panel>
                 );
             })}
