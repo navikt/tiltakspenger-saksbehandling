@@ -1,0 +1,6 @@
+appName: tiltakspenger-saksbehandler
+ingress:
+  - https://tiltakspenger-saksbehandler.labs.nais.io
+envs:
+  - name: TILTAKSPENGER_VEDTAK_URL
+    value: https://tiltakspenger-vedtak.labs.nais.io

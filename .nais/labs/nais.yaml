@@ -1,0 +1,20 @@
+apiVersion: nais.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ appName }} 
+  namespace: tpts
+  labels:
+    team: tpts
+spec:
+  image: {{ image }}
+  port: 3000
+  ingresses:
+    - {{ ingress }}
+  replicas:
+    min: 1
+    max: 1
+  env:
+  {{#each envs}}
+    - name: {{name}}
+      value: {{value}}
+  {{/each}}

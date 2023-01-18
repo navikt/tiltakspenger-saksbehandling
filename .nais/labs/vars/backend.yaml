@@ -1,0 +1,3 @@
+appName: tiltakspenger-vedtak
+ingress:
+  - https://tiltakspenger-vedtak.labs.nais.io
