@@ -27,9 +27,5 @@ spec:
           envFrom:
             - secretRef:
                 name: tiltakspenger-e2e-test-users
-            - secretRef:
-                name: slack-e2e-secrets
-            - configMapRef:
-                name: slack-e2e-configmap
       dnsPolicy: ClusterFirst
       restartPolicy: Never
