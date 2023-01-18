@@ -18,7 +18,7 @@ jobs:
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_KEY }}
           CLUSTER: dev-gcp  
-          VAR: app=tiltakspenger-e2e-tests,jobname=tiltakspenger-e2e-tests-job-${{ steps.generate-uuid.outputs.uuid }}
+          VAR: app=tiltakspenger-e2e-tests,jobname=tpts-e2e-tests-job-${{ steps.generate-uuid.outputs.uuid }}
           TEAM: tpts
           RESOURCE: .nais/e2e.yaml
         timeout-minutes: 5
