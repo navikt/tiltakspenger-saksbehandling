@@ -9,7 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          repository: navikt/kabal
+          repository: navikt/tiltakspenger-saksbehandler
       - name: Set UUID
         id: generate-uuid
         uses: filipstefansson/uuid-action@v1.1
