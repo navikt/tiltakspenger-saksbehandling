@@ -13,7 +13,7 @@ spec:
         job-name: {{ jobname }}
         app: tiltakspenger-e2e-tests
       annotations:
-        linkerd.io/inject: "false"
+        linkerd.io/inject: enabled
     spec:
       imagePullSecrets:
         - name: gpr-credentials
