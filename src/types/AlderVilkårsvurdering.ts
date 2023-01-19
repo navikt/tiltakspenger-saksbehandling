@@ -11,10 +11,6 @@ class AlderVilkårsvurdering {
         this.perioder = alderVilkårsvurdering.perioder;
     }
 
-    harFlereVilkårsvurderinger() {
-        return this.perioder.length > 1;
-    }
-
     finnPeriodeHvorBrukerIkkeHarFylt18År(): Periode | ÅpenPeriode | null {
         const ikkeOppfyltVurdering = this.perioder.find(({ utfall }) => {
             return utfall === Utfall.IkkeOppfylt;

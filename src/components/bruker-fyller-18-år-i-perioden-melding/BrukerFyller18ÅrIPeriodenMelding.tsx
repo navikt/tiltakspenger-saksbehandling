@@ -11,7 +11,7 @@ const BrukerFyller18ÅrIPeriodenMelding = ({ periode }: BrukerFyller18ÅrIPeriod
     return (
         <Alert variant="error" style={{ marginTop: '1rem' }}>
             <span>
-                Bruker har ikke fylt 18 år i deler av perioden det er søkt tiltakspenger for:
+                <strong>Bruker har ikke fylt 18 år i deler av perioden det er søkt tiltakspenger for:</strong>
                 <ul style={{ marginTop: '0.5rem', marginBottom: '0' }}>
                     <li>
                         {periode.til ? formatPeriode(periode as Periode) : formatÅpenPeriode(periode as ÅpenPeriode)}

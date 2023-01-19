@@ -21,6 +21,7 @@ import AlderVilkårsvurderingTable from '../alder-vilkårsvurdering-table/AlderV
 import Personalia from '../../types/Personalia';
 import BrukerFyller18ÅrIPeriodenMelding from '../bruker-fyller-18-år-i-perioden-melding/BrukerFyller18ÅrIPeriodenMelding';
 import BrukerUnder18ÅrIHelePeriodenMelding from '../bruker-under-18-år-i-hele-perioden-melding/BrukerUnder18ÅrIHelePeriodenMelding';
+import dayjs from 'dayjs';
 
 interface VilkårsvurderingDetailsProps {
     søknadResponse: Behandling;
@@ -50,13 +51,13 @@ const VilkårsvurderingDetails = ({
     const lønnsinntektPerioder = lønnsinntekt.finnLønnsinntektOppgittISøknaden();
     const institusjonsoppholdPerioder = institusjonsopphold.finnInstitusjonsoppholdOppgittISøknaden();
     const tiltakspengerPerioder = tiltakspengerYtelser.finnPerioderTilManuellVurdering();
+
     const periodeBrukerIkkeHarFylt18År = alderVilkårsvurdering.finnPeriodeHvorBrukerIkkeHarFylt18År();
-    const harOppdeltVilkårsvurderingAvAlder = alderVilkårsvurdering.harFlereVilkårsvurderinger();
+    const datoBrukerFyller18År = dayjs(fødselsdato).add(18, 'years');
+    const brukerErUnder18ÅrIHelePerioden = datoBrukerFyller18År.isAfter(dayjs(sluttdato));
 
     const visManglendeRegistrertTiltakMelding = !registrerteTiltak || registrerteTiltak.length === 0;
-    const visMeldingOmAtBrukerFyller18ÅrIPerioden = harOppdeltVilkårsvurderingAvAlder && periodeBrukerIkkeHarFylt18År;
-    const visMeldingOmAtBrukerErUnder18ÅrIHelePerioden =
-        !harOppdeltVilkårsvurderingAvAlder && periodeBrukerIkkeHarFylt18År;
+    const visMeldingOmAtBrukerFyller18ÅrIPerioden = !brukerErUnder18ÅrIHelePerioden && periodeBrukerIkkeHarFylt18År;
 
     return (
         <div className={styles.vilkårsvurderingDetails}>
@@ -71,10 +72,10 @@ const VilkårsvurderingDetails = ({
                     Bruker har fylt ut tilleggsopplysninger i søknaden.
                 </Alert>
             )}
+            {brukerErUnder18ÅrIHelePerioden && <BrukerUnder18ÅrIHelePeriodenMelding />}
             {visMeldingOmAtBrukerFyller18ÅrIPerioden && (
                 <BrukerFyller18ÅrIPeriodenMelding periode={periodeBrukerIkkeHarFylt18År} />
             )}
-            {visMeldingOmAtBrukerErUnder18ÅrIHelePerioden && <BrukerUnder18ÅrIHelePeriodenMelding />}
             {visManglendeRegistrertTiltakMelding && (
                 <Alert variant="warning" fullWidth style={{ marginTop: '1rem', paddingBottom: 0 }}>
                     <strong>
