@@ -2,6 +2,7 @@
 *.iml
 .idea/
 .vscode/
+.gradle/
 
 # dependencies
 /node_modules
