@@ -17,9 +17,15 @@ import HarInstitusjonsoppholdMelding from '../har-institusjonsopphold-melding/Ha
 import HarLønnsinntektMelding from '../har-lønnsinntekt-melding/HarLønnsinntektMelding';
 import HarKvpDeltakelseMelding from '../har-kvp-deltakelse-melding/HarKvpDeltakelseMelding';
 import styles from './VilkårsvurderingDetails.module.css';
+import AlderVilkårsvurderingTable from '../alder-vilkårsvurdering-table/AlderVilkårsvurderingTable';
+import Personalia from '../../types/Personalia';
+import BrukerFyller18ÅrIPeriodenMelding from '../bruker-fyller-18-år-i-perioden-melding/BrukerFyller18ÅrIPeriodenMelding';
+import BrukerUnder18ÅrIHelePeriodenMelding from '../bruker-under-18-år-i-hele-perioden-melding/BrukerUnder18ÅrIHelePeriodenMelding';
+import dayjs from 'dayjs';
 
 interface VilkårsvurderingDetailsProps {
     søknadResponse: Behandling;
+    personalia: Personalia;
 }
 
 const VilkårsvurderingDetails = ({
@@ -32,8 +38,10 @@ const VilkårsvurderingDetails = ({
         institusjonsopphold,
         barnetillegg,
         registrerteTiltak,
+        alderVilkårsvurdering,
         søknad: { startdato, sluttdato, fritekst },
     },
+    personalia: { fødselsdato },
 }: VilkårsvurderingDetailsProps) => {
     const dagpengePerioder = statligeYtelser.finnDagpengeperioder();
     const aapPerioder = statligeYtelser.finnAapPerioder();
@@ -43,7 +51,14 @@ const VilkårsvurderingDetails = ({
     const lønnsinntektPerioder = lønnsinntekt.finnLønnsinntektOppgittISøknaden();
     const institusjonsoppholdPerioder = institusjonsopphold.finnInstitusjonsoppholdOppgittISøknaden();
     const tiltakspengerPerioder = tiltakspengerYtelser.finnPerioderTilManuellVurdering();
+
+    const periodeBrukerIkkeHarFylt18År = alderVilkårsvurdering.finnPeriodeHvorBrukerIkkeHarFylt18År();
+    const datoBrukerFyller18År = dayjs(fødselsdato).add(18, 'years');
+    const brukerErUnder18ÅrIHelePerioden = datoBrukerFyller18År.isAfter(dayjs(sluttdato));
+
     const visManglendeRegistrertTiltakMelding = !registrerteTiltak || registrerteTiltak.length === 0;
+    const visMeldingOmAtBrukerFyller18ÅrIPerioden = !brukerErUnder18ÅrIHelePerioden && periodeBrukerIkkeHarFylt18År;
+
     return (
         <div className={styles.vilkårsvurderingDetails}>
             <Heading level="1" size="small">
@@ -56,6 +71,10 @@ const VilkårsvurderingDetails = ({
                 <Alert variant="info" fullWidth style={{ marginTop: '1rem' }}>
                     Bruker har fylt ut tilleggsopplysninger i søknaden.
                 </Alert>
+            )}
+            {brukerErUnder18ÅrIHelePerioden && <BrukerUnder18ÅrIHelePeriodenMelding />}
+            {visMeldingOmAtBrukerFyller18ÅrIPerioden && (
+                <BrukerFyller18ÅrIPeriodenMelding periode={periodeBrukerIkkeHarFylt18År} />
             )}
             {visManglendeRegistrertTiltakMelding && (
                 <Alert variant="warning" fullWidth style={{ marginTop: '1rem', paddingBottom: 0 }}>
@@ -79,6 +98,12 @@ const VilkårsvurderingDetails = ({
             {institusjonsoppholdPerioder.length > 0 && <HarInstitusjonsoppholdMelding />}
             {lønnsinntektPerioder.length > 0 && <HarLønnsinntektMelding perioder={lønnsinntektPerioder} />}
             <div style={{ marginTop: '4rem' }}>
+                <Accordion title="Alder (§3)">
+                    <AlderVilkårsvurderingTable
+                        alderVilkårsvurderinger={alderVilkårsvurdering}
+                        fødselsdato={fødselsdato}
+                    />
+                </Accordion>
                 <Accordion title="Tiltakspenger (§7)">
                     <TiltakspengerYtelserTable tiltakspengerYtelser={tiltakspengerYtelser} />
                 </Accordion>

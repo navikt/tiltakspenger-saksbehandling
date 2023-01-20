@@ -89,6 +89,7 @@ const SøkerPage: NextPage = () => {
                     onChange={(id) => redirectToSøknadPage(id)}
                     defaultTab={activeSøknadId}
                     behandlinger={søkerData.behandlinger}
+                    personalia={søkerData.personopplysninger}
                 />
             </div>
         </React.Fragment>
