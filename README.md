@@ -42,6 +42,10 @@ Etter man har gjort det skal verdikjeden kunne kjøres opp med `docker-compose u
 
 ---
 
+## E2E tester
+
+Testene ligger i repoet [her](https://github.com/navikt/tiltakspenger-e2e-tests). Kan kjøres opp lokalt eller trigges manuelt via workflow dispatch.
+
 # Henvendelser
 
 Spørsmål knyttet til koden eller prosjektet kan stilles som issues her på GitHub
