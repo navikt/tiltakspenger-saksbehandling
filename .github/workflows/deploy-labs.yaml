@@ -73,6 +73,7 @@ jobs:
       - name: Deploy frontend
         uses: nais/deploy/actions/deploy@v1
         env:
+          DEPLOY_SERVER: deploy.nais.io:443
           APIKEY: ${{ secrets.NAIS_DEPLOY_KEY }}
           CLUSTER: labs-gcp
           RESOURCE: .nais/labs/nais.yaml
@@ -81,6 +82,7 @@ jobs:
       - name: Deploy backend
         uses: nais/deploy/actions/deploy@v1
         env:
+          DEPLOY_SERVER: deploy.nais.io:443
           APIKEY: ${{ secrets.NAIS_DEPLOY_KEY }}
           CLUSTER: labs-gcp
           RESOURCE: .nais/labs/nais.yaml
