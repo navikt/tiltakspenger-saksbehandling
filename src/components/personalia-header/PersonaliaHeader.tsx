@@ -13,10 +13,12 @@ const PersonaliaHeader = ({ personalia }: PersonaliaHeaderProps) => {
     return (
         <div className={styles.personaliaHeader}>
             <People className={styles.personaliaHeader__personIcon} />
-            <span className={styles.personaliaHeader__name}>
+            <span data-testid="nav-personalia-header-name" className={styles.personaliaHeader__name}>
                 {fornavn} {etternavn}
             </span>
-            <span className={styles.personaliaHeader__ident}>{ident}</span>
+            <span data-testid="nav-personalia-header-ident" className={styles.personaliaHeader__ident}>
+                {ident}
+            </span>
             {strengtFortrolig && (
                 <Tag variant="error" className={styles.personaliaHeader__tag}>
                     Søker har strengt fortrolig adresse
