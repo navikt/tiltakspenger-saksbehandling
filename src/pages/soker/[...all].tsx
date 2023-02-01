@@ -79,7 +79,7 @@ const SøkerPage: NextPage = () => {
         return <Alert variant="error">Fant ikke behandlingen</Alert>;
     }
     return (
-        <React.Fragment>
+        <main>
             <PersonaliaHeader personalia={søkerData.personopplysninger} />
             <div className={styles.søknadWrapper}>
                 <SøknadSummarySection søknadResponse={valgtBehandling} />
@@ -92,7 +92,7 @@ const SøkerPage: NextPage = () => {
                     personalia={søkerData.personopplysninger}
                 />
             </div>
-        </React.Fragment>
+        </main>
     );
 };
 
