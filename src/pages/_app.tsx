@@ -1,8 +1,8 @@
+import '@navikt/ds-css';
+import '@navikt/ds-css-internal';
 import React from 'react';
 import { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
-import '@navikt/ds-css';
-import '@navikt/ds-css-internal';
 import useSWR from 'swr';
 import Header from '../components/header/Header';
 import { fetcher, fetchSøker } from '../utils/http';
