@@ -7,7 +7,7 @@ interface ErrorMessageProps {
 
 const ErrorMessage = ({ errorMessage }: ErrorMessageProps) => {
     return (
-        <Alert variant="error" fullWidth>
+        <Alert data-testid="nav-search-error" variant="error" fullWidth>
             {errorMessage}
         </Alert>
     );

@@ -22,10 +22,13 @@ const Header = ({ innloggetSaksbehandler, onSearch }: HeaderProps) => {
     return (
         <React.Fragment>
             <NavInternalHeader>
-                <NavInternalHeader.Title href="/">NAV Tiltakspenger</NavInternalHeader.Title>
+                <NavInternalHeader.Title data-testid="nav-header" href="/">
+                    NAV Tiltakspenger
+                </NavInternalHeader.Title>
                 <div className={styles.header__searchWrapper}>
                     <form data-theme="dark" onSubmit={searchHandler}>
                         <Search
+                            data-testid="nav-search-input"
                             label={''}
                             placeholder="Søk på fødselsnummer"
                             onChange={(value) => setSearch(value.trim())}
