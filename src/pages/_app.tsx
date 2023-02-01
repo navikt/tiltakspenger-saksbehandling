@@ -8,7 +8,6 @@ import Header from '../components/header/Header';
 import { fetcher, fetchSøker } from '../utils/http';
 import { Saksbehandler } from '../types/Saksbehandler';
 import ErrorMessage from '../components/error-message/ErrorMessage';
-import './../styles/globals.css';
 import Head from 'next/head';
 
 export default function MyApp({ Component, pageProps }: AppProps) {
