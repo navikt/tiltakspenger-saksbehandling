@@ -51,7 +51,7 @@ const SøknadTabs = ({ className, defaultTab, onChange, behandlinger, personalia
             {behandlinger.map((behandling) => {
                 return (
                     <Tabs.Panel key={behandling.søknad.id} value={behandling.søknad.id}>
-                        <VilkårsvurderingDetails søknadResponse={behandling} personalia={personalia} />
+                        <VilkårsvurderingDetails behandling={behandling} personalia={personalia} />
                     </Tabs.Panel>
                 );
             })}
