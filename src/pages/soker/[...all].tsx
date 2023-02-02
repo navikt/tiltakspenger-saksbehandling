@@ -83,7 +83,6 @@ const SøkerPage: NextPage = () => {
             <PersonaliaHeader personalia={søkerData.personopplysninger} />
             <div className={styles.søknadWrapper}>
                 <SøknadSummarySection søknadResponse={valgtBehandling} />
-                <div className={styles.verticalLine}></div>
                 <SøknadTabs
                     className={styles.søknadTabs}
                     onChange={(id) => redirectToSøknadPage(id)}
