@@ -8,6 +8,7 @@ import { formatDate } from '../../utils/date';
 import { søknadIdAtom } from '../../pages/soker/[...all]';
 import Behandling from '../../types/Behandling';
 import Personalia from '../../types/Personalia';
+import styles from './SøknadTabs.module.css';
 
 interface SøknadTabsProps {
     className?: string;
@@ -28,7 +29,7 @@ function createSøknadLabel({ startdato, arrangoernavn, tiltakskode }: Søknad) 
 const SøknadTabs = ({ className, defaultTab, onChange, behandlinger, personalia }: SøknadTabsProps) => {
     const [søknadId, setSøknadId] = useAtom(søknadIdAtom);
     return (
-        <Tabs defaultValue={defaultTab} className={className || ''}>
+        <Tabs defaultValue={defaultTab} className={styles.søknadTabs}>
             <Tabs.List>
                 {behandlinger.map((behandling) => {
                     const { søknad } = behandling;

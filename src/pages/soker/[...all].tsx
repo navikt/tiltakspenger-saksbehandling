@@ -9,7 +9,7 @@ import PersonaliaHeader from '../../components/personalia-header/PersonaliaHeade
 import { ApiError } from '../../types/Error';
 import Søker from '../../types/Søker';
 import SøknadTabs from '../../components/søknad-tabs/SøknadTabs';
-import styles from './Søker.module.css';
+import { SøkerLayout } from '../../layouts/soker/SøkerLayout';
 
 export const søknadIdAtom = atom('');
 
@@ -79,19 +79,16 @@ const SøkerPage: NextPage = () => {
         return <Alert variant="error">Fant ikke behandlingen</Alert>;
     }
     return (
-        <main>
+        <SøkerLayout>
             <PersonaliaHeader personalia={søkerData.personopplysninger} />
-            <div className={styles.søknadWrapper}>
-                <SøknadSummarySection søknadResponse={valgtBehandling} />
-                <SøknadTabs
-                    className={styles.søknadTabs}
-                    onChange={(id) => redirectToSøknadPage(id)}
-                    defaultTab={activeSøknadId}
-                    behandlinger={søkerData.behandlinger}
-                    personalia={søkerData.personopplysninger}
-                />
-            </div>
-        </main>
+            <SøknadSummarySection søknadResponse={valgtBehandling} />
+            <SøknadTabs
+                onChange={(id) => redirectToSøknadPage(id)}
+                defaultTab={activeSøknadId}
+                behandlinger={søkerData.behandlinger}
+                personalia={søkerData.personopplysninger}
+            />
+        </SøkerLayout>
     );
 };
 
