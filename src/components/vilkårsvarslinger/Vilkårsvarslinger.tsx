@@ -11,12 +11,12 @@ import HarLønnsinntektMelding from '../har-lønnsinntekt-melding/HarLønnsinnte
 import HarPensjonsordningMelding from '../har-pensjonsordning-melding/HarPensjonsordningMelding';
 import HarStatligYtelseMelding from '../har-statlig-ytelse-melding/HarStatligYtelseMelding';
 
-interface VilkårsVarslingerProps {
+interface VilkårsvarslingerProps {
     behandling: Behandling;
     fødselsdato: string;
 }
 
-function VilkårsVarslinger({ behandling, fødselsdato }: VilkårsVarslingerProps) {
+function Vilkårsvarslinger({ behandling, fødselsdato }: VilkårsvarslingerProps) {
     const {
         tiltakspengerYtelser,
         statligeYtelser,
@@ -76,4 +76,4 @@ function VilkårsVarslinger({ behandling, fødselsdato }: VilkårsVarslingerProp
     );
 }
 
-export default VilkårsVarslinger;
+export default Vilkårsvarslinger;
