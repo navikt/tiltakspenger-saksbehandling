@@ -1,5 +1,5 @@
 import React from 'react';
-import { Accordion as DsAccordion } from '@navikt/ds-react';
+import { Accordion } from '@navikt/ds-react';
 import styles from './Accordion.module.css';
 import { AccordionItemProps } from '@navikt/ds-react/esm/accordion/AccordionItem';
 
@@ -8,15 +8,13 @@ interface AccordionProps extends AccordionItemProps {
     children: React.ReactNode;
 }
 
-const Accordion = ({ title, children, defaultOpen = true, open }: AccordionProps) => {
+const AccordionItem = ({ title, children, defaultOpen = true, open }: AccordionProps) => {
     return (
-        <DsAccordion style={{ marginTop: '1.5rem' }}>
-            <DsAccordion.Item open={open} defaultOpen={defaultOpen}>
-                <DsAccordion.Header>{title}</DsAccordion.Header>
-                <DsAccordion.Content className={styles.accordionContent}>{children}</DsAccordion.Content>
-            </DsAccordion.Item>
-        </DsAccordion>
+        <Accordion.Item style={{ marginTop: '1.5rem' }} open={open} defaultOpen={defaultOpen}>
+            <Accordion.Header>{title}</Accordion.Header>
+            <Accordion.Content className={styles.accordionContent}>{children}</Accordion.Content>
+        </Accordion.Item>
     );
 };
 
-export default Accordion;
+export { Accordion, AccordionItem };

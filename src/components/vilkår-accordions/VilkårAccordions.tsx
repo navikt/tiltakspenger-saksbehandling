@@ -1,5 +1,5 @@
 import Behandling from '../../types/Behandling';
-import Accordion from '../accordion/Accordion';
+import { Accordion, AccordionItem } from '../accordion/Accordion';
 import AlderVilkårsvurderingTable from '../alder-vilkårsvurdering-table/AlderVilkårsvurderingTable';
 import BarnetilleggTable from '../barnetillegg/BarnetilleggTable';
 import InstitusjonsoppholdTable from '../institusjonsopphold-table/InstitusjonsoppholdTable';
@@ -28,34 +28,39 @@ function VilkårAccordions({ behandling, fødselsdato, fritekst }: VilkårAccord
     } = behandling;
     return (
         <div style={{ marginTop: '4rem' }}>
-            <Accordion title="Alder (§3)">
-                <AlderVilkårsvurderingTable alderVilkårsvurderinger={alderVilkårsvurdering} fødselsdato={fødselsdato} />
+            <Accordion>
+                <AccordionItem title="Alder (§3)">
+                    <AlderVilkårsvurderingTable
+                        alderVilkårsvurderinger={alderVilkårsvurdering}
+                        fødselsdato={fødselsdato}
+                    />
+                </AccordionItem>
+                <AccordionItem title="Tiltakspenger (§7)">
+                    <TiltakspengerYtelserTable tiltakspengerYtelser={tiltakspengerYtelser} />
+                </AccordionItem>
+                <AccordionItem title="Statlige ytelser (§7)">
+                    <StatligeYtelserTable statligeYtelser={statligeYtelser} />
+                </AccordionItem>
+                <AccordionItem title="Kommunale ytelser (§7)">
+                    <KommunaleYtelserContent kommunaleYtelser={kommunaleYtelser} />
+                </AccordionItem>
+                <AccordionItem title="Pensjonsordninger (§7)">
+                    <PensjonsordningerTable pensjonsordninger={pensjonsordninger} />
+                </AccordionItem>
+                <AccordionItem title="Lønnsinntekt (§8)">
+                    <span>Foreløpig har vi ikke alle opplysninger</span>
+                    <LønnsinntekterTable lønnsinntekt={lønnsinntekt}></LønnsinntekterTable>
+                </AccordionItem>
+                <AccordionItem title="Institusjon (§9)">
+                    <span>Foreløpig har vi ikke alle opplysninger</span>
+                    <InstitusjonsoppholdTable institusjonsopphold={institusjonsopphold} />
+                </AccordionItem>
+                <AccordionItem title="Barnetillegg (§3)">
+                    <span>Foreløpig viser vi bare data fra søknaden</span>
+                    <BarnetilleggTable barnetillegg={barnetillegg} />
+                </AccordionItem>
             </Accordion>
-            <Accordion title="Tiltakspenger (§7)">
-                <TiltakspengerYtelserTable tiltakspengerYtelser={tiltakspengerYtelser} />
-            </Accordion>
-            <Accordion title="Statlige ytelser (§7)">
-                <StatligeYtelserTable statligeYtelser={statligeYtelser} />
-            </Accordion>
-            <Accordion title="Kommunale ytelser (§7)">
-                <KommunaleYtelserContent kommunaleYtelser={kommunaleYtelser} />
-            </Accordion>
-            <Accordion title="Pensjonsordninger (§7)">
-                <PensjonsordningerTable pensjonsordninger={pensjonsordninger} />
-            </Accordion>
-            <Accordion title="Lønnsinntekt (§8)">
-                <span>Foreløpig har vi ikke alle opplysninger</span>
-                <LønnsinntekterTable lønnsinntekt={lønnsinntekt}></LønnsinntekterTable>
-            </Accordion>
-            <Accordion title="Institusjon (§9)">
-                <span>Foreløpig har vi ikke alle opplysninger</span>
-                <InstitusjonsoppholdTable institusjonsopphold={institusjonsopphold} />
-            </Accordion>
-            <Accordion title="Barnetillegg (§3)">
-                <span>Foreløpig viser vi bare data fra søknaden</span>
-                <BarnetilleggTable barnetillegg={barnetillegg} />
-            </Accordion>
-            {fritekst && <Accordion title="Tilleggsopplysninger fra søknaden">{fritekst}</Accordion>}
+            {/* {fritekst && <Accordion title="Tilleggsopplysninger fra søknaden">{fritekst}</Accordion>} */}
         </div>
     );
 }
