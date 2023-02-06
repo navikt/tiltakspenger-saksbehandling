@@ -28,7 +28,7 @@ function VilkårAccordions({ behandling, fødselsdato, fritekst }: VilkårAccord
         barnetillegg,
     } = behandling;
 
-    const [kanBehandles, setKanBehandles] = useState(false);
+    const [kanBehandles, setKanBehandles] = useState(true);
 
     return (
         <div style={{ marginTop: '4rem' }}>

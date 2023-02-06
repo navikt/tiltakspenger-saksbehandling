@@ -23,8 +23,8 @@ const VilkårsvurderingDetails = ({ behandling, personalia }: VilkårsvurderingD
             <Heading level="1" size="small">
                 Søknad
             </Heading>
-            <SøknadsVarslinger fritekst={fritekst} kanBehandles={false} />
-            {false && <Vilkårsvarslinger behandling={behandling} fødselsdato={fødselsdato} />}
+            <SøknadsVarslinger fritekst={fritekst} kanBehandles={true} />
+            <Vilkårsvarslinger behandling={behandling} fødselsdato={fødselsdato} />
             <VilkårAccordions behandling={behandling} fødselsdato={fødselsdato} fritekst={fritekst} />
         </div>
     );
