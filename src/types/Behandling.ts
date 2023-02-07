@@ -16,6 +16,7 @@ export class Behandling {
     };
     tiltakspengerYtelser: TiltakspengerYtelser;
     statligeYtelser: StatligeYtelser;
+    klarForBehandling: boolean;
     kommunaleYtelser: KommunaleYtelser;
     pensjonsordninger: Pensjonsordninger;
     lønnsinntekt: Lønnsinntekt;
@@ -29,6 +30,7 @@ export class Behandling {
         this.vurderingsperiode = behandlingData.vurderingsperiode;
         this.tiltakspengerYtelser = new TiltakspengerYtelser(behandlingData.tiltakspengerYtelser);
         this.statligeYtelser = new StatligeYtelser(behandlingData.statligeYtelser);
+        this.klarForBehandling = behandlingData.klarForBehandling;
         this.kommunaleYtelser = new KommunaleYtelser(behandlingData.kommunaleYtelser);
         this.pensjonsordninger = new Pensjonsordninger(behandlingData.pensjonsordninger);
         this.lønnsinntekt = new Lønnsinntekt(behandlingData.lønnsinntekt);

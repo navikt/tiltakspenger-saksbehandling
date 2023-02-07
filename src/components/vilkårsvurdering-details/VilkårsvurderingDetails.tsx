@@ -14,6 +14,7 @@ interface VilkårsvurderingDetailsProps {
 
 const VilkårsvurderingDetails = ({ behandling, personalia }: VilkårsvurderingDetailsProps) => {
     const {
+        klarForBehandling,
         søknad: { fritekst },
     } = behandling;
     const { fødselsdato } = personalia;
@@ -23,7 +24,7 @@ const VilkårsvurderingDetails = ({ behandling, personalia }: VilkårsvurderingD
             <Heading level="1" size="small">
                 Søknad
             </Heading>
-            <SøknadsVarslinger fritekst={fritekst} kanBehandles={true} />
+            <SøknadsVarslinger fritekst={fritekst} klarForBehandling={klarForBehandling} />
             <Vilkårsvarslinger behandling={behandling} fødselsdato={fødselsdato} />
             <VilkårAccordions behandling={behandling} fødselsdato={fødselsdato} fritekst={fritekst} />
         </div>
