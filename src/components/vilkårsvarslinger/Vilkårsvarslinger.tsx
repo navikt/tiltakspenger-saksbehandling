@@ -52,7 +52,7 @@ function Vilkårsvarslinger({ behandling, fødselsdato }: VilkårsvarslingerProp
                 <BrukerFyller18ÅrIPeriodenMelding periode={periodeBrukerIkkeHarFylt18År} />
             )}
             {visManglendeRegistrertTiltakMelding && (
-                <Alert variant="warning" fullWidth style={{ marginTop: '1rem', paddingBottom: 0 }}>
+                <Alert variant="warning" style={{ marginTop: '1rem', paddingBottom: 0 }}>
                     <strong>
                         Det er ikke registrert tiltak på bruker i perioden {formatDate(startdato)} -{' '}
                         {formatDate(sluttdato)}

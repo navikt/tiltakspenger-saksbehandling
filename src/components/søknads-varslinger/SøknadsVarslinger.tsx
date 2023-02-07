@@ -8,7 +8,7 @@ interface SøknadsVarslingerProps {
 function SøknadsVarslinger({ fritekst, klarForBehandling }: SøknadsVarslingerProps) {
     if (!klarForBehandling) {
         return (
-            <Alert variant="warning" style={{ marginTop: '1rem' }}>
+            <Alert variant="warning">
                 <Heading spacing size="small" level="3">
                     Søknaden mangler data fra alle relevante systemer
                 </Heading>
@@ -18,14 +18,8 @@ function SøknadsVarslinger({ fritekst, klarForBehandling }: SøknadsVarslingerP
     }
     return (
         <>
-            <Alert variant="info" style={{ marginTop: '1rem' }}>
-                Foreløpig har vi ikke alle opplysninger til å vurdere søknaden.
-            </Alert>
-            {fritekst && (
-                <Alert variant="info" style={{ marginTop: '1rem' }}>
-                    Bruker har fylt ut tilleggsopplysninger i søknaden.
-                </Alert>
-            )}
+            <Alert variant="info">Foreløpig har vi ikke alle opplysninger til å vurdere søknaden.</Alert>
+            {fritekst && <Alert variant="info">Bruker har fylt ut tilleggsopplysninger i søknaden.</Alert>}
         </>
     );
 }
