@@ -6,7 +6,7 @@ import { useAtom } from 'jotai';
 import Søknad from '../../types/Søknad';
 import { formatDate } from '../../utils/date';
 import { søknadIdAtom } from '../../pages/soker/[...all]';
-import Behandling from '../../types/Behandling';
+import { Behandlinger } from '../../types/Behandling';
 import Personalia from '../../types/Personalia';
 import styles from './SøknadTabs.module.css';
 
@@ -14,7 +14,7 @@ interface SøknadTabsProps {
     className?: string;
     defaultTab: string;
     onChange: (søknadId: string) => void;
-    behandlinger: Behandling[];
+    behandlinger: Behandlinger;
     personalia: Personalia;
 }
 
