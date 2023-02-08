@@ -3,7 +3,7 @@ Tiltakspenger-saksbehandler
 
 Frontend-koden for støtteverktøy til bruk i saksbehandling av Tiltakspenger.
 
-# Komme i gang
+# 🚀 Komme i gang
 
 For å kjøre opp frontend i dev
 
@@ -46,7 +46,7 @@ Etter man har gjort det skal verdikjeden kunne kjøres opp med `docker-compose u
 
 Testene ligger i repoet [her](https://github.com/navikt/tiltakspenger-e2e-tests). Kan kjøres opp lokalt eller trigges manuelt via workflow dispatch.
 
-# Henvendelser
+# 📣 Henvendelser
 
 Spørsmål knyttet til koden eller prosjektet kan stilles som issues her på GitHub
 
