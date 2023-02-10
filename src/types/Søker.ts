@@ -1,19 +1,19 @@
 import Personalia from './Personalia';
-import { Behandling, Behandlinger, KlarBehandling } from './Behandling';
+import { Behandling, IkkeKlarBehandling } from './Behandling';
 
 class Søker {
     ident: string;
     personopplysninger: Personalia;
-    behandlinger: Behandlinger;
+    behandlinger: Behandling[];
 
     constructor(søkerData: any) {
         this.ident = søkerData.ident;
         this.personopplysninger = søkerData.personopplysninger;
         this.behandlinger = søkerData.behandlinger.map((behandlingData: any) => {
             if (behandlingData.klarForBehandling) {
-                return new KlarBehandling(behandlingData);
-            } else {
                 return new Behandling(behandlingData);
+            } else {
+                return new IkkeKlarBehandling(behandlingData);
             }
         });
     }

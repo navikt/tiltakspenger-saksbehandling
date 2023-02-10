@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { Behandling, KlarBehandling } from '../../types/Behandling';
+import { Behandling } from '../../types/Behandling';
 import { Accordion, AccordionItem } from '../accordion/Accordion';
 import AlderVilkårsvurderingTable from '../alder-vilkårsvurdering-table/AlderVilkårsvurderingTable';
 import BarnetilleggTable from '../barnetillegg/BarnetilleggTable';
@@ -11,7 +10,7 @@ import StatligeYtelserTable from '../statlige-ytelser-table/StatligeYtelserTable
 import TiltakspengerYtelserTable from '../tiltakspenger-ytelser-table/TiltakspengerYtelserTable';
 
 interface VilkårAccordionsProps {
-    behandling: KlarBehandling;
+    behandling: Behandling;
     fødselsdato: string;
     fritekst?: string;
 }

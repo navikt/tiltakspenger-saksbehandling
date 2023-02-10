@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import useSWR from 'swr';
 import { atom, useAtom } from 'jotai';
 import { Alert } from '@navikt/ds-react';
 import SøknadSummarySection from '../../components/søknad-summary-section/SøknadSummarySection';
@@ -10,6 +9,8 @@ import { ApiError } from '../../types/Error';
 import Søker from '../../types/Søker';
 import SøknadTabs from '../../components/søknad-tabs/SøknadTabs';
 import { SøkerLayout } from '../../layouts/soker/SøkerLayout';
+import { fetcher } from '../../utils/http';
+import useSWR from 'swr';
 
 export const søknadIdAtom = atom('');
 
@@ -18,9 +19,7 @@ export const søkerFetcher = (input: RequestInfo | URL, init?: RequestInit) =>
         .then((res) => res.json())
         .then((data) => {
             try {
-                if (data.error) {
-                    return Promise.reject(data.error);
-                }
+                console.log('data lol', data);
                 const søker = new Søker(data);
                 return Promise.resolve(søker);
             } catch (error) {
@@ -34,46 +33,41 @@ const SøkerPage: NextPage = () => {
     const [søkerId, søknadId] = urlParams as string[];
     const [activeSøknadId, setActiveSøknadId] = useAtom(søknadIdAtom);
 
-    const { data: søkerResponse, error } = useSWR<Søker | ApiError>(`/api/person/soknader/${søkerId}`, søkerFetcher, {
+    const { data, error, isLoading } = useSWR<Søker>(`/api/person/soknader/${søkerId}`, fetcher, {
         shouldRetryOnError: false,
     });
 
     function setDefaultActiveSøknadId() {
         if (søknadId) {
             setActiveSøknadId(søknadId);
-        } else if (søkerResponse) {
-            const behandlinger = (søkerResponse as Søker).behandlinger;
+        } else if (data) {
+            const behandlinger = (data as Søker).behandlinger;
             setActiveSøknadId(behandlinger[0].søknad.id);
         }
     }
 
-    React.useEffect(() => {
-        const shouldRenderSøknadContent = !isWaitingForSøkerResponse() && !søkerRequestHasFailed();
-        if (shouldRenderSøknadContent) {
+    useEffect(() => {
+        if (!isLoading) {
             setDefaultActiveSøknadId();
         }
-    }, [søkerResponse, error]);
+    }, [data]);
 
     function redirectToSøknadPage(id: string) {
         return router.push(`/soker/${søkerId}/${id}`);
-    }
-
-    function isWaitingForSøkerResponse() {
-        return (søkerResponse === null || søkerResponse === undefined) && !error;
     }
 
     function søkerRequestHasFailed() {
         return !!error;
     }
 
-    if (isWaitingForSøkerResponse()) {
+    if (isLoading) {
         return <div>Henter data om søknad</div>;
     }
     if (søkerRequestHasFailed()) {
         return <div>{error}</div>;
     }
 
-    const søkerData = søkerResponse as Søker;
+    const søkerData = new Søker(data);
     const valgtBehandling = søkerData.behandlinger.find((behandling) => behandling.søknad.id === activeSøknadId);
     if (!valgtBehandling) {
         return <Alert variant="error">Fant ikke behandlingen</Alert>;

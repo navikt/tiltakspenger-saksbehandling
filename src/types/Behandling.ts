@@ -7,19 +7,18 @@ import Institusjonsopphold from './Institusjonsopphold';
 import TiltakspengerYtelser from './TiltakspengerYtelser';
 import AlderVilkårsvurdering from './AlderVilkårsvurdering';
 
-export type Behandlinger = Behandling[] | KlarBehandling[];
+export class IkkeKlarBehandling {
+    søknad: Søknad;
+    klarForBehandling: boolean;
+    constructor(ikkeKlarBehandlingData: any) {
+        this.søknad = ikkeKlarBehandlingData.søknad;
+        this.klarForBehandling = ikkeKlarBehandlingData.klarForBehandling;
+    }
+}
 
 export class Behandling {
     søknad: Søknad;
     klarForBehandling: boolean;
-
-    constructor(behandlingData: any) {
-        this.søknad = behandlingData.søknad;
-        this.klarForBehandling = behandlingData.klarForBehandling;
-    }
-}
-
-export class KlarBehandling extends Behandling {
     registrerteTiltak: RegistrertTiltak[];
     vurderingsperiode: {
         fra: string;
@@ -34,17 +33,18 @@ export class KlarBehandling extends Behandling {
     alderVilkårsvurdering: AlderVilkårsvurdering;
     barnetillegg: Barnetillegg[];
 
-    constructor(klarBehandlingData: any) {
-        super(klarBehandlingData);
-        this.registrerteTiltak = klarBehandlingData.registrerteTiltak;
-        this.vurderingsperiode = klarBehandlingData.vurderingsperiode;
-        this.tiltakspengerYtelser = new TiltakspengerYtelser(klarBehandlingData.tiltakspengerYtelser);
-        this.statligeYtelser = new StatligeYtelser(klarBehandlingData.statligeYtelser);
-        this.kommunaleYtelser = new KommunaleYtelser(klarBehandlingData.kommunaleYtelser);
-        this.pensjonsordninger = new Pensjonsordninger(klarBehandlingData.pensjonsordninger);
-        this.lønnsinntekt = new Lønnsinntekt(klarBehandlingData.lønnsinntekt);
-        this.institusjonsopphold = new Institusjonsopphold(klarBehandlingData.institusjonsopphold);
-        this.alderVilkårsvurdering = new AlderVilkårsvurdering(klarBehandlingData.alderVilkårsvurdering);
-        this.barnetillegg = klarBehandlingData.barnetillegg;
+    constructor(behandlingData: any) {
+        this.søknad = behandlingData.søknad;
+        this.klarForBehandling = behandlingData.klarForBehandling;
+        this.registrerteTiltak = behandlingData.registrerteTiltak;
+        this.vurderingsperiode = behandlingData.vurderingsperiode;
+        this.tiltakspengerYtelser = new TiltakspengerYtelser(behandlingData.tiltakspengerYtelser);
+        this.statligeYtelser = new StatligeYtelser(behandlingData.statligeYtelser);
+        this.kommunaleYtelser = new KommunaleYtelser(behandlingData.kommunaleYtelser);
+        this.pensjonsordninger = new Pensjonsordninger(behandlingData.pensjonsordninger);
+        this.lønnsinntekt = new Lønnsinntekt(behandlingData.lønnsinntekt);
+        this.institusjonsopphold = new Institusjonsopphold(behandlingData.institusjonsopphold);
+        this.alderVilkårsvurdering = new AlderVilkårsvurdering(behandlingData.alderVilkårsvurdering);
+        this.barnetillegg = behandlingData.barnetillegg;
     }
 }

@@ -1,6 +1,6 @@
 import { Alert } from '@navikt/ds-react';
 import dayjs from 'dayjs';
-import { Behandling, KlarBehandling } from '../../types/Behandling';
+import { Behandling } from '../../types/Behandling';
 import { formatDate } from '../../utils/date';
 import BrukerFyller18ÅrIPeriodenMelding from '../bruker-fyller-18-år-i-perioden-melding/BrukerFyller18ÅrIPeriodenMelding';
 import BrukerUnder18ÅrIHelePeriodenMelding from '../bruker-under-18-år-i-hele-perioden-melding/BrukerUnder18ÅrIHelePeriodenMelding';
@@ -12,7 +12,7 @@ import HarPensjonsordningMelding from '../har-pensjonsordning-melding/HarPensjon
 import HarStatligYtelseMelding from '../har-statlig-ytelse-melding/HarStatligYtelseMelding';
 
 interface VilkårsvarslingerProps {
-    behandling: KlarBehandling;
+    behandling: Behandling;
     fødselsdato: string;
 }
 
