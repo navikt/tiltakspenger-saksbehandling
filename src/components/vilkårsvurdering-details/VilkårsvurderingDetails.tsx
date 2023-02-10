@@ -19,10 +19,7 @@ const VilkårsvurderingDetails = ({ behandling, personalia }: VilkårsvurderingD
     const { fødselsdato } = personalia;
 
     return (
-        <div className={styles.vilkårsvurderingDetails}>
-            <Heading level="1" size="small" className={styles.vilkårsvurderingDetails__header}>
-                Søknad
-            </Heading>
+        <div>
             <SøknadsVarslinger fritekst={fritekst} />
             <Vilkårsvarslinger behandling={behandling} fødselsdato={fødselsdato} />
             <VilkårAccordions behandling={behandling} fødselsdato={fødselsdato} fritekst={fritekst} />

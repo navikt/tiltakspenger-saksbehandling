@@ -9,6 +9,7 @@ import { søknadIdAtom } from '../../pages/soker/[...all]';
 import { Behandling } from '../../types/Behandling';
 import Personalia from '../../types/Personalia';
 import styles from './SøknadTabs.module.css';
+import { SøknadLayout } from '../../layouts/soker/SøknadLayout';
 
 interface SøknadTabsProps {
     className?: string;
@@ -53,16 +54,18 @@ const SøknadTabs = ({ defaultTab, onChange, behandlinger, personalia }: Søknad
                 const { klarForBehandling } = behandling;
                 return (
                     <Tabs.Panel key={behandling.søknad.id} value={behandling.søknad.id}>
-                        {klarForBehandling ? (
-                            <VilkårsvurderingDetails behandling={behandling} personalia={personalia} />
-                        ) : (
-                            <Alert variant="warning">
-                                <Heading spacing size="small" level="3">
-                                    Søknaden mangler data fra alle relevante systemer
-                                </Heading>
-                                Vent noen minutter og oppdater siden
-                            </Alert>
-                        )}
+                        <SøknadLayout>
+                            {klarForBehandling ? (
+                                <VilkårsvurderingDetails behandling={behandling} personalia={personalia} />
+                            ) : (
+                                <Alert variant="warning">
+                                    <Heading spacing size="small" level="3">
+                                        Søknaden mangler data fra alle relevante systemer
+                                    </Heading>
+                                    Vent noen minutter og oppdater siden
+                                </Alert>
+                            )}
+                        </SøknadLayout>
                     </Tabs.Panel>
                 );
             })}
