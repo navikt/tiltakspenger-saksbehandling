@@ -2,9 +2,3 @@
     padding: 1rem 0 2rem 2.25rem;
     border-bottom: none;
 }
-
-.accordionDisabled, .accordionDisabled:hover {
-    background-color: #f1f1f1;
-    color: #bbb;
-    border-color: #bbb;
-}
