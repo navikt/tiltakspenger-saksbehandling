@@ -7,8 +7,18 @@ import Institusjonsopphold from './Institusjonsopphold';
 import TiltakspengerYtelser from './TiltakspengerYtelser';
 import AlderVilkårsvurdering from './AlderVilkårsvurdering';
 
+export class IkkeKlarBehandling {
+    søknad: Søknad;
+    klarForBehandling: boolean;
+    constructor(ikkeKlarBehandlingData: any) {
+        this.søknad = ikkeKlarBehandlingData.søknad;
+        this.klarForBehandling = ikkeKlarBehandlingData.klarForBehandling;
+    }
+}
+
 export class Behandling {
     søknad: Søknad;
+    klarForBehandling: boolean;
     registrerteTiltak: RegistrertTiltak[];
     vurderingsperiode: {
         fra: string;
@@ -25,6 +35,7 @@ export class Behandling {
 
     constructor(behandlingData: any) {
         this.søknad = behandlingData.søknad;
+        this.klarForBehandling = behandlingData.klarForBehandling;
         this.registrerteTiltak = behandlingData.registrerteTiltak;
         this.vurderingsperiode = behandlingData.vurderingsperiode;
         this.tiltakspengerYtelser = new TiltakspengerYtelser(behandlingData.tiltakspengerYtelser);
@@ -37,5 +48,3 @@ export class Behandling {
         this.barnetillegg = behandlingData.barnetillegg;
     }
 }
-
-export default Behandling;
