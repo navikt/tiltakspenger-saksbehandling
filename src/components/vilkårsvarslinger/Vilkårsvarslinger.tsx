@@ -31,6 +31,13 @@ function Vilkårsvarslinger({ behandling, fødselsdato }: VilkårsvarslingerProp
 
     const dagpengePerioder = statligeYtelser.finnDagpengeperioder();
     const aapPerioder = statligeYtelser.finnAapPerioder();
+    const uførePerioder = statligeYtelser.finnUførePerioder();
+    const foreldrepengePerioder = statligeYtelser.finnForeldrepengePerioder();
+    const pleiepengerNærståendePerioder = statligeYtelser.finnPleiepengerNærståendePerioder();
+    const pleiepengerSyktBarnPerioder = statligeYtelser.finnPleiepengerSyktBarnPerioder();
+    const svangerskapspengerPerioder = statligeYtelser.finnSvangerskapspengerPerioder();
+    const opplæringspengerPerioder = statligeYtelser.finnOpplæringspengerPerioder();
+    const omsorgspengerPerioder = statligeYtelser.finnOmsorgspengerPerioder();
     const kvpPerioder = kommunaleYtelser.finnKvpPerioderFraSøknaden();
     const introPerioder = kommunaleYtelser.finnIntroprogramPerioderFraSøknaden();
     const pensjonsordningPerioder = pensjonsordninger.finnPensjonsordningerOppgittISøknaden();
@@ -67,6 +74,13 @@ function Vilkårsvarslinger({ behandling, fødselsdato }: VilkårsvarslingerProp
                 <HarStatligYtelseMelding perioder={dagpengePerioder} ytelseText="Dagpenger" />
             )}
             {aapPerioder.length > 0 && <HarStatligYtelseMelding perioder={aapPerioder} ytelseText="AAP" />}
+            {uførePerioder.length > 0 && <HarStatligYtelseMelding perioder={uførePerioder} ytelseText="Uføre" />}
+            {foreldrepengePerioder.length > 0 && <HarStatligYtelseMelding perioder={foreldrepengePerioder} ytelseText="Foreldrepenger" />}
+            {pleiepengerNærståendePerioder.length > 0 && <HarStatligYtelseMelding perioder={pleiepengerNærståendePerioder} ytelseText="Pleiepenger nærstående" />}
+            {pleiepengerSyktBarnPerioder.length > 0 && <HarStatligYtelseMelding perioder={pleiepengerSyktBarnPerioder} ytelseText="Pleiepenger sykt barn" />}
+            {svangerskapspengerPerioder.length > 0 && <HarStatligYtelseMelding perioder={svangerskapspengerPerioder} ytelseText="Svangerskapspenger" />}
+            {opplæringspengerPerioder.length > 0 && <HarStatligYtelseMelding perioder={opplæringspengerPerioder} ytelseText="Opplæringspenger" />}
+            {omsorgspengerPerioder.length > 0 && <HarStatligYtelseMelding perioder={omsorgspengerPerioder} ytelseText="Omsorgspenger" />}
             {kvpPerioder.length > 0 && <HarKvpDeltakelseMelding />}
             {introPerioder.length > 0 && <HarIntroprogramDeltakelseMelding perioder={introPerioder} />}
             {pensjonsordningPerioder.length > 0 && <HarPensjonsordningMelding perioder={pensjonsordningPerioder} />}

@@ -9,7 +9,7 @@ interface StatligeYtelserTableProps {
 }
 
 const StatligeYtelserTable = ({ statligeYtelser }: StatligeYtelserTableProps) => {
-    const { aap, dagpenger } = statligeYtelser;
+    const { aap, dagpenger, uføre, foreldrepenger, pleiepengerNærstående, pleiepengerSyktBarn, svangerskapspenger, opplæringspenger, omsorgspenger } = statligeYtelser;
     return (
         <Table>
             <Table.Header>
@@ -23,17 +23,17 @@ const StatligeYtelserTable = ({ statligeYtelser }: StatligeYtelserTableProps) =>
             <Table.Body>
                 <StatligeYtelserTableRows ytelseText="Arbeidsavklaringspenger" vilkårsvurderinger={aap} />
                 <StatligeYtelserTableRows ytelseText="Dagpenger" vilkårsvurderinger={dagpenger} />
+                <StatligeYtelserTableRows ytelseText="Uføretrygd" vilkårsvurderinger={uføre} />
+                <StatligeYtelserTableRows ytelseText="Foreldrepenger" vilkårsvurderinger={foreldrepenger} />
+                <StatligeYtelserTableRows ytelseText="Pleiepenger nærstående" vilkårsvurderinger={pleiepengerNærstående} />
+                <StatligeYtelserTableRows ytelseText="Pleiepenger sykt barn" vilkårsvurderinger={pleiepengerSyktBarn} />
+                <StatligeYtelserTableRows ytelseText="Svangerskapspenger" vilkårsvurderinger={svangerskapspenger} />
+                <StatligeYtelserTableRows ytelseText="Opplæringspenger" vilkårsvurderinger={opplæringspenger} />
+                <StatligeYtelserTableRows ytelseText="Omsorgspenger" vilkårsvurderinger={omsorgspenger} />
                 <StatligYtelseNotImplementedRow ytelseText="Sykepenger" />
-                <StatligYtelseNotImplementedRow ytelseText="Uføretrygd" />
-                <StatligYtelseNotImplementedRow ytelseText="Overgangsstønad" />
-                <StatligYtelseNotImplementedRow ytelseText="Pleiepenger" />
-                <StatligYtelseNotImplementedRow ytelseText="Foreldrepenger" />
-                <StatligYtelseNotImplementedRow ytelseText="Svangerskapspenger" />
                 <StatligYtelseNotImplementedRow ytelseText="Gjenlevendepensjon" />
                 <StatligYtelseNotImplementedRow ytelseText="Supplerende stønad" />
                 <StatligYtelseNotImplementedRow ytelseText="Alderspensjon" />
-                <StatligYtelseNotImplementedRow ytelseText="Opplæringspenger" />
-                <StatligYtelseNotImplementedRow ytelseText="Omsorgspenger" />
             </Table.Body>
         </Table>
     );
