@@ -2,7 +2,7 @@ import React from 'react';
 import { Heading } from '@navikt/ds-react';
 import SøknadDetails from '../søknad-details/SøknadDetails';
 import RegistrertTiltakDetails from '../registrert-tiltak-details/RegistrertTiltakDetails';
-import Behandling from '../../types/Behandling';
+import { Behandling } from '../../types/Behandling';
 import styles from './SøknadSummarySection.module.css';
 
 interface SøknadSummarySectionProps {
