@@ -194,7 +194,35 @@
                         }
                     ]
                 },
-                "barnetillegg": [],
+                "barnetillegg": [
+                    {
+                        "navn": "LEDENDE OPPLAG",
+                        "alder": 3,
+                        "fødselsdato": "2019-09-04",
+                        "bosatt": "NOR",
+                        "kilde": "Søknad",
+                        "utfall": "Oppfylt",
+                        "søktBarnetillegg": true
+                    },
+                    {
+                        "navn": "ALDRENDE FARTSRETNING",
+                        "alder": 4,
+                        "fødselsdato": "2018-10-09",
+                        "bosatt": "NOR",
+                        "kilde": "Søknad",
+                        "utfall": "Oppfylt",
+                        "søktBarnetillegg": true
+                    },
+                    {
+                        "navn": "SJENERT MORENE",
+                        "alder": 9,
+                        "fødselsdato": "2013-10-19",
+                        "bosatt": "NOR",
+                        "kilde": "Søknad",
+                        "utfall": "Oppfylt",
+                        "søktBarnetillegg": false
+                    }
+                ],
                 "alderVilkårsvurdering": {
                     "samletUtfall": "Oppfylt",
                     "perioder": [
