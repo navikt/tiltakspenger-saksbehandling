@@ -2,7 +2,7 @@ import VilkårsvurderingDetails from '../vilkårsvurdering-details/Vilkårsvurde
 import React from 'react';
 import { Alert, Heading, Tabs } from '@navikt/ds-react';
 import { FileContent } from '@navikt/ds-icons';
-import { useAtom } from 'jotai';
+import { useSetAtom } from 'jotai';
 import Søknad from '../../types/Søknad';
 import { formatDate } from '../../utils/date';
 import { søknadIdAtom } from '../../pages/soker/[...all]';
@@ -28,8 +28,7 @@ function createSøknadLabel({ startdato, arrangoernavn, tiltakskode }: Søknad) 
 }
 
 const SøknadTabs = ({ defaultTab, onChange, behandlinger, personalia }: SøknadTabsProps) => {
-    const [søknadId, setSøknadId] = useAtom(søknadIdAtom);
-    console.log('behandlinger', behandlinger);
+    const setSøknadId = useSetAtom(søknadIdAtom);
     return (
         <Tabs defaultValue={defaultTab} className={styles.søknadTabs}>
             <Tabs.List>
