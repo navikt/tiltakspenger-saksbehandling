@@ -7,191 +7,33 @@
     },
     "soker": { "id": "soker_01GM5VXJWHW6641HDPYVDK0K3G" },
     "soknader": {
-        "ident": "23918199063",
+        "ident": "21836499961",
         "behandlinger": [
             {
                 "søknad": {
-                    "id": "soknad_01GM5W411YWTE41EWZ9Y6Y0HK2",
-                    "søknadId": "14172",
-                    "søknadsdato": "2022-12-13",
-                    "arrangoernavn": "NAV AURSKOG HØLAND",
-                    "tiltakskode": "Individuell jobbstøtte (IPS)",
+                    "id": "soknad_01GS7W8WB8ABGV0HH4CN9F0VD4",
+                    "søknadId": "14560",
+                    "søknadsdato": "2023-02-14",
+                    "arrangoernavn": "RESSURS KOMPETANSE AS",
+                    "tiltakskode": "Oppfølging",
                     "beskrivelse": null,
-                    "startdato": "2022-10-01",
-                    "sluttdato": "2023-02-01",
-                    "antallDager": null,
-                    "fritekst": null,
-                    "vedlegg": [
-                        { "journalpostId": "573810978", "dokumentInfoId": "599116066", "filnavn": "CV'en min" },
-                        { "journalpostId": "573810978", "dokumentInfoId": "599116069", "filnavn": "CV'en til kona mi" }
-                    ]
-                },
-                "registrerteTiltak": [
-                    {
-                        "arrangør": "NAV Aurskog-Høland",
-                        "navn": "Individuell jobbstøtte (IPS)",
-                        "periode": { "fra": "2022-10-01", "til": "2023-02-01" },
-                        "prosent": 60,
-                        "dagerIUken": 3,
-                        "status": "Gjennomføres"
-                    }
-                ],
-                "vurderingsperiode": { "fra": "2022-10-01", "til": "2023-02-01" },
-                "tiltakspengerYtelser": {
-                    "samletUtfall": "Oppfylt",
-                    "perioder": [
-                        {
-                            "kilde": "Arena",
-                            "detaljer": "",
-                            "periode": null,
-                            "kreverManuellVurdering": false,
-                            "utfall": "Oppfylt"
-                        }
-                    ]
-                },
-                "statligeYtelser": {
-                    "samletUtfall": "KreverManuellVurdering",
-                    "aap": [
-                        {
-                            "kilde": "Arena",
-                            "detaljer": "",
-                            "periode": null,
-                            "kreverManuellVurdering": false,
-                            "utfall": "Oppfylt"
-                        }
-                    ],
-                    "dagpenger": [
-                        {
-                            "kilde": "Arena",
-                            "detaljer": "104 uker (520 dager) igjen",
-                            "periode": { "fra": "2022-08-01", "til": null },
-                            "kreverManuellVurdering": true,
-                            "utfall": "KreverManuellVurdering"
-                        }
-                    ]
-                },
-                "kommunaleYtelser": {
-                    "samletUtfall": "Oppfylt",
-                    "kvp": [
-                        {
-                            "kilde": "Søknad",
-                            "detaljer": "Svart NEI i søknaden",
-                            "periode": null,
-                            "kreverManuellVurdering": false,
-                            "utfall": "Oppfylt"
-                        }
-                    ],
-                    "introProgrammet": [
-                        {
-                            "kilde": "Søknad",
-                            "detaljer": "Ikke relevant",
-                            "periode": null,
-                            "kreverManuellVurdering": false,
-                            "utfall": "Oppfylt"
-                        }
-                    ]
-                },
-                "pensjonsordninger": {
-                    "samletUtfall": "Oppfylt",
-                    "perioder": [
-                        {
-                            "kilde": "SØKNAD",
-                            "detaljer": "Svart NEI i søknaden",
-                            "periode": null,
-                            "kreverManuellVurdering": false,
-                            "utfall": "Oppfylt"
-                        }
-                    ]
-                },
-                "lønnsinntekt": {
-                    "samletUtfall": "Oppfylt",
-                    "perioder": [
-                        {
-                            "kilde": "A-Inntekt",
-                            "detaljer": "",
-                            "periode": null,
-                            "kreverManuellVurdering": false,
-                            "utfall": "IkkeImplementert"
-                        },
-                        {
-                            "kilde": "SØKNAD",
-                            "detaljer": "Svart NEI i søknaden",
-                            "periode": null,
-                            "kreverManuellVurdering": false,
-                            "utfall": "Oppfylt"
-                        }
-                    ]
-                },
-                "institusjonsopphold": {
-                    "samletUtfall": "Oppfylt",
-                    "perioder": [
-                        {
-                            "kilde": "SØKNAD",
-                            "detaljer": "Svart NEI i søknaden",
-                            "periode": null,
-                            "kreverManuellVurdering": false,
-                            "utfall": "Oppfylt"
-                        }
-                    ]
-                },
-                "barnetillegg": [
-                    {
-                        "navn": "TREIG HISTOLOG",
-                        "alder": 4,
-                        "fødselsdato": "2018-03-14",
-                        "bosatt": "NOR",
-                        "kilde": "Søknad",
-                        "utfall": "Oppfylt",
-                        "søktBarnetillegg": true
-                    },
-                    {
-                        "navn": "UTGÅTT BART",
-                        "alder": 14,
-                        "fødselsdato": "2007-12-15",
-                        "bosatt": "NOR",
-                        "kilde": "Søknad",
-                        "utfall": "Oppfylt",
-                        "søktBarnetillegg": false
-                    }
-                ],
-                "alderVilkårsvurdering": {
-                    "samletUtfall": "Oppfylt",
-                    "perioder": [
-                        {
-                            "kilde": "PDL",
-                            "detaljer": "-",
-                            "periode": { "fra": "2022-10-01", "til": "2023-02-01" },
-                            "kreverManuellVurdering": false,
-                            "utfall": "Oppfylt"
-                        }
-                    ]
-                }
-            },
-            {
-                "søknad": {
-                    "id": "soknad_01GM5VXJS8FQXJ0X2SYBGW0VJ5",
-                    "søknadId": "14171",
-                    "søknadsdato": "2022-12-13",
-                    "arrangoernavn": "HELGELAND INDUSTRIER AS",
-                    "tiltakskode": "Gruppe AMO",
-                    "beskrivelse": null,
-                    "startdato": "2022-07-01",
-                    "sluttdato": "2022-12-30",
+                    "startdato": "2023-02-01",
+                    "sluttdato": "2023-10-01",
                     "antallDager": null,
                     "fritekst": null,
                     "vedlegg": []
                 },
                 "registrerteTiltak": [
                     {
-                        "arrangør": "NAV Aurskog-Høland",
-                        "navn": "Individuell jobbstøtte (IPS)",
-                        "periode": { "fra": "2022-10-01", "til": "2023-02-01" },
+                        "arrangør": "RESSURS KOMPETANSE AS",
+                        "navn": "Oppfølging",
+                        "periode": { "fra": "2023-02-01", "til": "2023-10-01" },
                         "prosent": 60,
                         "dagerIUken": 3,
-                        "status": "Gjennomføres"
+                        "status": "Godkjent tiltaksplass"
                     }
                 ],
-                "vurderingsperiode": { "fra": "2022-07-01", "til": "2022-12-30" },
+                "vurderingsperiode": { "fra": "2023-02-01", "til": "2023-10-01" },
                 "tiltakspengerYtelser": {
                     "samletUtfall": "Oppfylt",
                     "perioder": [
@@ -210,18 +52,81 @@
                         {
                             "kilde": "Arena",
                             "detaljer": "",
-                            "periode": null,
-                            "kreverManuellVurdering": false,
-                            "utfall": "Oppfylt"
+                            "periode": { "fra": "2023-01-02", "til": null },
+                            "kreverManuellVurdering": true,
+                            "utfall": "KreverManuellVurdering"
                         }
                     ],
                     "dagpenger": [
                         {
                             "kilde": "Arena",
-                            "detaljer": "104 uker (520 dager) igjen",
-                            "periode": { "fra": "2022-08-01", "til": null },
-                            "kreverManuellVurdering": true,
-                            "utfall": "KreverManuellVurdering"
+                            "detaljer": "",
+                            "periode": null,
+                            "kreverManuellVurdering": false,
+                            "utfall": "Oppfylt"
+                        }
+                    ],
+                    "uføre": [
+                        {
+                            "kilde": "pesys",
+                            "detaljer": "",
+                            "periode": null,
+                            "kreverManuellVurdering": false,
+                            "utfall": "Oppfylt"
+                        }
+                    ],
+                    "pleiepengerNærstående": [
+                        {
+                            "kilde": "K9SAK",
+                            "detaljer": "",
+                            "periode": null,
+                            "kreverManuellVurdering": false,
+                            "utfall": "Oppfylt"
+                        }
+                    ],
+                    "pleiepengerSyktBarn": [
+                        {
+                            "kilde": "K9SAK",
+                            "detaljer": "",
+                            "periode": null,
+                            "kreverManuellVurdering": false,
+                            "utfall": "Oppfylt"
+                        }
+                    ],
+                    "foreldrepenger": [
+                        {
+                            "kilde": "FPSAK",
+                            "detaljer": "",
+                            "periode": null,
+                            "kreverManuellVurdering": false,
+                            "utfall": "Oppfylt"
+                        }
+                    ],
+                    "svangerskapspenger": [
+                        {
+                            "kilde": "FPSAK",
+                            "detaljer": "",
+                            "periode": null,
+                            "kreverManuellVurdering": false,
+                            "utfall": "Oppfylt"
+                        }
+                    ],
+                    "opplæringspenger": [
+                        {
+                            "kilde": "K9SAK",
+                            "detaljer": "",
+                            "periode": null,
+                            "kreverManuellVurdering": false,
+                            "utfall": "Oppfylt"
+                        }
+                    ],
+                    "omsorgspenger": [
+                        {
+                            "kilde": "K9SAK",
+                            "detaljer": "",
+                            "periode": null,
+                            "kreverManuellVurdering": false,
+                            "utfall": "Oppfylt"
                         }
                     ]
                 },
@@ -289,45 +194,27 @@
                         }
                     ]
                 },
-                "barnetillegg": [
-                    {
-                        "navn": "TREIG HISTOLOG",
-                        "alder": 4,
-                        "fødselsdato": "2018-03-14",
-                        "bosatt": "NOR",
-                        "kilde": "Søknad",
-                        "utfall": "Oppfylt",
-                        "søktBarnetillegg": true
-                    },
-                    {
-                        "navn": "UTGÅTT BART",
-                        "alder": 14,
-                        "fødselsdato": "2007-12-15",
-                        "bosatt": "NOR",
-                        "kilde": "Søknad",
-                        "utfall": "Oppfylt",
-                        "søktBarnetillegg": false
-                    }
-                ],
+                "barnetillegg": [],
                 "alderVilkårsvurdering": {
                     "samletUtfall": "Oppfylt",
                     "perioder": [
                         {
                             "kilde": "PDL",
                             "detaljer": "-",
-                            "periode": { "fra": "2022-07-01", "til": "2022-12-30" },
+                            "periode": { "fra": "2023-02-01", "til": "2023-10-01" },
                             "kreverManuellVurdering": false,
                             "utfall": "Oppfylt"
                         }
                     ]
-                }
+                },
+                "klarForBehandling": true
             }
         ],
         "personopplysninger": {
-            "fornavn": "RAFFINERT",
-            "etternavn": "BEUNDRING",
-            "ident": "23918199063",
-            "fødselsdato": "1981-11-23",
+            "fornavn": "NYBAKT",
+            "etternavn": "LUGG",
+            "ident": "21836499961",
+            "fødselsdato": "1964-03-21",
             "barn": [],
             "fortrolig": false,
             "strengtFortrolig": false,
