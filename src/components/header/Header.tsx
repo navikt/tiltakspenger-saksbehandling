@@ -3,14 +3,16 @@ import { Header as NavInternalHeader } from '@navikt/ds-react-internal';
 import { Search } from '@navikt/ds-react';
 import { Saksbehandler } from '../../types/Saksbehandler';
 import styles from './Header.module.css';
+import ContentLoader from 'react-content-loader';
+import Loaders from '../loaders/Loaders';
 
 interface HeaderProps {
-    innloggetSaksbehandler: Saksbehandler;
-    onSearch: (searchString: string) => void;
+    saksbehandler?: Saksbehandler;
+    onSearch: (searchQuery: string) => void;
+    isSearchLoading: boolean;
 }
 
-const Header = ({ innloggetSaksbehandler, onSearch }: HeaderProps) => {
-    const { navIdent } = innloggetSaksbehandler;
+const Header = ({ saksbehandler, onSearch, isSearchLoading }: HeaderProps) => {
     const [search, setSearch] = React.useState('');
 
     async function searchHandler(event: FormEvent<HTMLFormElement>) {
@@ -26,7 +28,7 @@ const Header = ({ innloggetSaksbehandler, onSearch }: HeaderProps) => {
                     NAV Tiltakspenger
                 </NavInternalHeader.Title>
                 <div className={styles.header__searchWrapper}>
-                    <form data-theme="dark" onSubmit={searchHandler}>
+                    <form onSubmit={searchHandler}>
                         <Search
                             data-testid="nav-search-input"
                             label={''}
@@ -34,10 +36,16 @@ const Header = ({ innloggetSaksbehandler, onSearch }: HeaderProps) => {
                             onChange={(value) => setSearch(value.trim())}
                             value={search}
                             autoComplete="off"
-                        />
+                        >
+                            <Search.Button loading={isSearchLoading} />
+                        </Search>
                     </form>
                 </div>
-                <NavInternalHeader.User className={styles.header__user} name={navIdent} />
+                {saksbehandler ? (
+                    <NavInternalHeader.User className={styles.header__user} name={saksbehandler.navIdent} />
+                ) : (
+                    <Loaders.User />
+                )}
             </NavInternalHeader>
         </React.Fragment>
     );

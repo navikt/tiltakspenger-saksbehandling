@@ -1,6 +1,14 @@
 import Personalia from './Personalia';
 import { Behandling, IkkeKlarBehandling } from './Behandling';
 
+export interface SøkerIdent {
+    ident: string;
+}
+
+export interface SøkerResponse {
+    id: string;
+}
+
 class Søker {
     ident: string;
     personopplysninger: Personalia;
