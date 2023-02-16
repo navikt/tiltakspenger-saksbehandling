@@ -4,6 +4,7 @@ import { Search } from '@navikt/ds-react';
 import { Saksbehandler } from '../../types/Saksbehandler';
 import styles from './Header.module.css';
 import ContentLoader from 'react-content-loader';
+import Loaders from '../loaders/Loaders';
 
 interface HeaderProps {
     saksbehandler?: Saksbehandler;
@@ -26,34 +27,24 @@ const Header = ({ saksbehandler, onSearch, isSearchLoading }: HeaderProps) => {
                 <NavInternalHeader.Title data-testid="nav-header" href="/">
                     NAV Tiltakspenger
                 </NavInternalHeader.Title>
-                <form style={{ padding: '0 5px' }} onSubmit={searchHandler}>
-                    <Search
-                        data-testid="nav-search-input"
-                        label={''}
-                        variant="simple"
-                        size="small"
-                        placeholder="Søk på fødselsnummer"
-                        onChange={(value) => setSearch(value.trim())}
-                        value={search}
-                        autoComplete="off"
-                    >
-                        <Search.Button loading={isSearchLoading} />
-                    </Search>
-                </form>
+                <div className={styles.header__searchWrapper}>
+                    <form onSubmit={searchHandler}>
+                        <Search
+                            data-testid="nav-search-input"
+                            label={''}
+                            placeholder="Søk på fødselsnummer"
+                            onChange={(value) => setSearch(value.trim())}
+                            value={search}
+                            autoComplete="off"
+                        >
+                            <Search.Button loading={isSearchLoading} />
+                        </Search>
+                    </form>
+                </div>
                 {saksbehandler ? (
                     <NavInternalHeader.User className={styles.header__user} name={saksbehandler.navIdent} />
                 ) : (
-                    <div className={`navdsi-header__user ${styles.header__user}`}>
-                        <ContentLoader
-                            width={80}
-                            height={20}
-                            speed={1}
-                            backgroundColor={'#333'}
-                            foregroundColor={'#999'}
-                        >
-                            <rect rx="3" ry="3" width="120" height="15" />
-                        </ContentLoader>
-                    </div>
+                    <Loaders.User />
                 )}
             </NavInternalHeader>
         </React.Fragment>

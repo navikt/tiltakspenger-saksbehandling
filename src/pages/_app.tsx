@@ -31,7 +31,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
                 <Header
                     isSearchLoading={isMutating}
                     onSearch={(searchString) => trigger({ ident: searchString })}
-                    saksbehandler={saksbehandler}
+                    // saksbehandler={saksbehandler}
                 />
                 <Component {...pageProps} />
             </ErrorBoundary>
