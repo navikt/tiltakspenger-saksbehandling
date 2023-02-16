@@ -1,4 +1,6 @@
+import { Loader } from '@navikt/ds-react';
 import ContentLoader from 'react-content-loader';
+import styles from './Loaders.module.css';
 
 function User() {
     return (
@@ -10,8 +12,17 @@ function User() {
     );
 }
 
+function Page() {
+    return (
+        <div className={styles.page}>
+            <Loader size="3xlarge" title="Laster inn side..." />
+        </div>
+    );
+}
+
 const Loaders = {
     User,
+    Page,
 };
 
 export default Loaders;

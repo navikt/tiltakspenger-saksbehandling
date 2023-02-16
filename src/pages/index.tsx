@@ -3,9 +3,9 @@ import type { NextPage } from 'next';
 
 const HomePage: NextPage = () => {
     return (
-        <main style={{ paddingLeft: '1rem' }}>
+        <div style={{ paddingLeft: '1rem' }}>
             <p>Start med å søke opp en person i søkefeltet.</p>
-        </main>
+        </div>
     );
 };
 

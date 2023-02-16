@@ -3,7 +3,6 @@ import { Header as NavInternalHeader } from '@navikt/ds-react-internal';
 import { Search } from '@navikt/ds-react';
 import { Saksbehandler } from '../../types/Saksbehandler';
 import styles from './Header.module.css';
-import ContentLoader from 'react-content-loader';
 import Loaders from '../loaders/Loaders';
 
 interface HeaderProps {
