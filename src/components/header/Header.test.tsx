@@ -11,7 +11,7 @@ describe('Header', () => {
             epost: 'mockepost',
             roller: [],
         };
-        render(<Header onSearch={jest.fn()} innloggetSaksbehandler={saksbehandlerMock} />);
+        render(<Header saksbehandler={saksbehandlerMock} />);
         const saksbehandlersBrukernavn = screen.getByText(saksbehandlerMock.navIdent);
         expect(saksbehandlersBrukernavn).toBeInTheDocument();
     });

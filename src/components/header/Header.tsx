@@ -3,14 +3,15 @@ import { Header as NavInternalHeader } from '@navikt/ds-react-internal';
 import { Search } from '@navikt/ds-react';
 import { Saksbehandler } from '../../types/Saksbehandler';
 import styles from './Header.module.css';
+import ContentLoader from 'react-content-loader';
 
 interface HeaderProps {
-    innloggetSaksbehandler: Saksbehandler;
-    onSearch: (searchString: string) => void;
+    saksbehandler?: Saksbehandler;
+    onSearch: (searchQuery: string) => void;
+    isSearchLoading: boolean;
 }
 
-const Header = ({ innloggetSaksbehandler, onSearch }: HeaderProps) => {
-    const { navIdent } = innloggetSaksbehandler;
+const Header = ({ saksbehandler, onSearch, isSearchLoading }: HeaderProps) => {
     const [search, setSearch] = React.useState('');
 
     async function searchHandler(event: FormEvent<HTMLFormElement>) {
@@ -25,19 +26,35 @@ const Header = ({ innloggetSaksbehandler, onSearch }: HeaderProps) => {
                 <NavInternalHeader.Title data-testid="nav-header" href="/">
                     NAV Tiltakspenger
                 </NavInternalHeader.Title>
-                <div className={styles.header__searchWrapper}>
-                    <form data-theme="dark" onSubmit={searchHandler}>
-                        <Search
-                            data-testid="nav-search-input"
-                            label={''}
-                            placeholder="Søk på fødselsnummer"
-                            onChange={(value) => setSearch(value.trim())}
-                            value={search}
-                            autoComplete="off"
-                        />
-                    </form>
-                </div>
-                <NavInternalHeader.User className={styles.header__user} name={navIdent} />
+                <form style={{ padding: '0 5px' }} onSubmit={searchHandler}>
+                    <Search
+                        data-testid="nav-search-input"
+                        label={''}
+                        variant="simple"
+                        size="small"
+                        placeholder="Søk på fødselsnummer"
+                        onChange={(value) => setSearch(value.trim())}
+                        value={search}
+                        autoComplete="off"
+                    >
+                        <Search.Button loading={isSearchLoading} />
+                    </Search>
+                </form>
+                {saksbehandler ? (
+                    <NavInternalHeader.User className={styles.header__user} name={saksbehandler.navIdent} />
+                ) : (
+                    <div className={`navdsi-header__user ${styles.header__user}`}>
+                        <ContentLoader
+                            width={80}
+                            height={20}
+                            speed={1}
+                            backgroundColor={'#333'}
+                            foregroundColor={'#999'}
+                        >
+                            <rect rx="3" ry="3" width="120" height="15" />
+                        </ContentLoader>
+                    </div>
+                )}
             </NavInternalHeader>
         </React.Fragment>
     );

@@ -5,7 +5,6 @@ import { atom, useAtom } from 'jotai';
 import { Alert } from '@navikt/ds-react';
 import SøknadSummarySection from '../../components/søknad-summary-section/SøknadSummarySection';
 import PersonaliaHeader from '../../components/personalia-header/PersonaliaHeader';
-import { ApiError } from '../../types/Error';
 import Søker from '../../types/Søker';
 import SøknadTabs from '../../components/søknad-tabs/SøknadTabs';
 import { SøkerLayout } from '../../layouts/soker/SøkerLayout';
@@ -13,19 +12,6 @@ import { fetcher } from '../../utils/http';
 import useSWR from 'swr';
 
 export const søknadIdAtom = atom('');
-
-export const søkerFetcher = (input: RequestInfo | URL, init?: RequestInit) =>
-    fetch(input, init)
-        .then((res) => res.json())
-        .then((data) => {
-            try {
-                console.log('data lol', data);
-                const søker = new Søker(data);
-                return Promise.resolve(søker);
-            } catch (error) {
-                return Promise.reject(error);
-            }
-        });
 
 const SøkerPage: NextPage = () => {
     const router = useRouter();
