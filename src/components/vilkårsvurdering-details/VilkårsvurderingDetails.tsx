@@ -18,13 +18,14 @@ interface VilkårsvurderingDetailsProps {
 
 const VilkårsvurderingDetails = ({ behandling, personalia, søkerId }: VilkårsvurderingDetailsProps) => {
     const {
-        søknad: { fritekst },
+        søknad: { fritekst, søknadId },
+        hash,
     } = behandling;
     const { fødselsdato } = personalia;
 
     return (
         <div>
-            <OppdatertDataTilgjengeligMelding søkerId={søkerId} behandling={behandling} />
+            <OppdatertDataTilgjengeligMelding søkerId={søkerId} søknadId={søknadId} hash={hash} />
             <SøknadsVarslinger fritekst={fritekst} />
             <Vilkårsvarslinger behandling={behandling} fødselsdato={fødselsdato} />
             <VilkårAccordions behandling={behandling} fødselsdato={fødselsdato} fritekst={fritekst} />
