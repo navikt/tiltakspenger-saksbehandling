@@ -10,12 +10,15 @@ import { Behandling } from '../../types/Behandling';
 import Personalia from '../../types/Personalia';
 import styles from './SøknadTabs.module.css';
 import { SøknadLayout } from '../../layouts/soker/SøknadLayout';
+import { KeyedMutator } from 'swr';
+import Søker from '../../types/Søker';
 
 interface SøknadTabsProps {
     className?: string;
     defaultTab: string;
     onChange: (søknadId: string) => void;
     behandlinger: Behandling[];
+    søkerId: string;
     personalia: Personalia;
 }
 
@@ -27,7 +30,7 @@ function createSøknadLabel({ startdato, arrangoernavn, tiltakskode }: Søknad) 
     return arrangørNavnEllerTiltakskode;
 }
 
-const SøknadTabs = ({ defaultTab, onChange, behandlinger, personalia }: SøknadTabsProps) => {
+const SøknadTabs = ({ defaultTab, onChange, behandlinger, personalia, søkerId }: SøknadTabsProps) => {
     const setSøknadId = useSetAtom(søknadIdAtom);
     return (
         <Tabs defaultValue={defaultTab} className={styles.søknadTabs}>
@@ -55,7 +58,11 @@ const SøknadTabs = ({ defaultTab, onChange, behandlinger, personalia }: Søknad
                     <Tabs.Panel key={behandling.søknad.id} value={behandling.søknad.id}>
                         <SøknadLayout>
                             {klarForBehandling ? (
-                                <VilkårsvurderingDetails behandling={behandling} personalia={personalia} />
+                                <VilkårsvurderingDetails
+                                    søkerId={søkerId}
+                                    behandling={behandling}
+                                    personalia={personalia}
+                                />
                             ) : (
                                 <Alert variant="warning">
                                     <Heading spacing size="small" level="3">

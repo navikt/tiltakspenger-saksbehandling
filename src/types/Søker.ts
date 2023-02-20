@@ -10,11 +10,13 @@ export interface SøkerResponse {
 }
 
 class Søker {
+    søkerId: string;
     ident: string;
     personopplysninger: Personalia;
     behandlinger: Behandling[];
 
     constructor(søkerData: any) {
+        this.søkerId = søkerData.søkerId;
         this.ident = søkerData.ident;
         this.personopplysninger = søkerData.personopplysninger;
         this.behandlinger = søkerData.behandlinger.map((behandlingData: any) => {
