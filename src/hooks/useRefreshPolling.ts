@@ -4,8 +4,8 @@ const DEFAULT_DELAY = 600 * 1000; // 10 minutter
 const DEFAULT_INITAL_DELAY = 30 * 1000; // 30 sekunder
 
 interface UseRefreshPollingOptions {
-    initialDelay: number;
-    delay: number;
+    initialDelay?: number;
+    delay?: number;
 }
 
 function useRefreshPolling(
