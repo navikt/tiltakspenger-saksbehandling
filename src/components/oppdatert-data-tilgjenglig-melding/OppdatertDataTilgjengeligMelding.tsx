@@ -3,6 +3,7 @@ import { useSWRConfig } from 'swr';
 import useRefreshPolling from '../../hooks/useRefreshPolling';
 import styles from './OppdatertDataTilgjengeligMelding.module.css';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useEffect } from 'react';
 
 interface OppdatertDataTilgjengeligMeldingProps {
     søknadId: string;
@@ -12,9 +13,7 @@ interface OppdatertDataTilgjengeligMeldingProps {
 
 function OppdatertDataTilgjengeligMelding({ søknadId, hash, søkerId }: OppdatertDataTilgjengeligMeldingProps) {
     const { mutate } = useSWRConfig();
-    const { oppdatertDataTilgjengelig, setOppdatertDataTilgjengelig } = useRefreshPolling(søknadId, hash, {
-        delay: 10000,
-    });
+    const { oppdatertDataTilgjengelig, setOppdatertDataTilgjengelig } = useRefreshPolling(søknadId, hash);
 
     const handleOppdater = async () => {
         await mutate(`/api/person/soknader/${søkerId}`).then(() => setOppdatertDataTilgjengelig(false));
@@ -24,9 +23,9 @@ function OppdatertDataTilgjengeligMelding({ søknadId, hash, søkerId }: Oppdate
         <AnimatePresence>
             {oppdatertDataTilgjengelig ? (
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, x: 20 }}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0 }}
                     transition={{ ease: 'easeOut', duration: 0.25 }}
                 >
                     <Alert className={styles.oppdatertData} variant="info">

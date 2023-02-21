@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-const DEFAULT_DELAY = 600 * 1000; // 10 minutter
+const DEFAULT_DELAY = 300 * 1000; // 5 minutter
 const DEFAULT_INITAL_DELAY = 30 * 1000; // 30 sekunder
 
 interface UseRefreshPollingOptions {
@@ -17,6 +17,7 @@ function useRefreshPolling(
     }
 ) {
     const [oppdatertDataTilgjengelig, setOppdatertDataTilgjengelig] = useState(false);
+    const [tickDelay, setTickDelay] = useState(options.initialDelay);
 
     useEffect(() => {
         if (søknadId && hash) {
@@ -28,15 +29,16 @@ function useRefreshPolling(
                 if (hash !== res.hash) {
                     setOppdatertDataTilgjengelig(true);
                 }
+                setTickDelay(options.delay);
             };
-            if (options.delay) {
-                const id = setInterval(tick, options.delay);
+            if (tickDelay) {
+                const id = setInterval(tick, tickDelay);
                 return () => {
                     clearInterval(id);
                 };
             }
         }
-    }, [options.delay, søknadId, hash]);
+    }, [tickDelay, søknadId, hash]);
 
     return { oppdatertDataTilgjengelig, setOppdatertDataTilgjengelig };
 }
