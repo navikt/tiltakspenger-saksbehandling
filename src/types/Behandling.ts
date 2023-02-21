@@ -18,6 +18,7 @@ export class IkkeKlarBehandling {
 
 export class Behandling {
     søknad: Søknad;
+    hash: string;
     klarForBehandling: boolean;
     registrerteTiltak: RegistrertTiltak[];
     vurderingsperiode: {
@@ -35,6 +36,7 @@ export class Behandling {
 
     constructor(behandlingData: any) {
         this.søknad = behandlingData.søknad;
+        this.hash = behandlingData.hash;
         this.klarForBehandling = behandlingData.klarForBehandling;
         this.registrerteTiltak = behandlingData.registrerteTiltak;
         this.vurderingsperiode = behandlingData.vurderingsperiode;
