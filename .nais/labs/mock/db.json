@@ -7,6 +7,7 @@
     },
     "soker": { "id": "soker_01GM5VXJWHW6641HDPYVDK0K3G" },
     "soknader": {
+        "søkerId": "soker_01GS7W8WN0HQZ60NES5RBE1DEW",
         "ident": "21836499961",
         "behandlinger": [
             {
@@ -194,35 +195,7 @@
                         }
                     ]
                 },
-                "barnetillegg": [
-                    {
-                        "navn": "LEDENDE OPPLAG",
-                        "alder": 3,
-                        "fødselsdato": "2019-09-04",
-                        "bosatt": "NOR",
-                        "kilde": "Søknad",
-                        "utfall": "Oppfylt",
-                        "søktBarnetillegg": true
-                    },
-                    {
-                        "navn": "ALDRENDE FARTSRETNING",
-                        "alder": 4,
-                        "fødselsdato": "2018-10-09",
-                        "bosatt": "NOR",
-                        "kilde": "Søknad",
-                        "utfall": "Oppfylt",
-                        "søktBarnetillegg": true
-                    },
-                    {
-                        "navn": "SJENERT MORENE",
-                        "alder": 9,
-                        "fødselsdato": "2013-10-19",
-                        "bosatt": "NOR",
-                        "kilde": "Søknad",
-                        "utfall": "Oppfylt",
-                        "søktBarnetillegg": false
-                    }
-                ],
+                "barnetillegg": [],
                 "alderVilkårsvurdering": {
                     "samletUtfall": "Oppfylt",
                     "perioder": [
@@ -235,12 +208,13 @@
                         }
                     ]
                 },
+                "hash": "1777146442",
                 "klarForBehandling": true
             }
         ],
         "personopplysninger": {
-            "fornavn": "DEMO",
-            "etternavn": "DEMONSEN",
+            "fornavn": "NYBAKT",
+            "etternavn": "LUGG",
             "ident": "21836499961",
             "fødselsdato": "1964-03-21",
             "barn": [],
