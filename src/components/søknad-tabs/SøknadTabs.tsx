@@ -10,8 +10,6 @@ import { Behandling } from '../../types/Behandling';
 import Personalia from '../../types/Personalia';
 import styles from './SøknadTabs.module.css';
 import { SøknadLayout } from '../../layouts/soker/SøknadLayout';
-import { KeyedMutator } from 'swr';
-import Søker from '../../types/Søker';
 
 interface SøknadTabsProps {
     className?: string;
