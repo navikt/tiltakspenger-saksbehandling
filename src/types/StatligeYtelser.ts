@@ -13,6 +13,7 @@ class StatligeYtelser {
     svangerskapspenger: Vilkårsvurdering[];
     opplæringspenger: Vilkårsvurdering[];
     omsorgspenger: Vilkårsvurdering[];
+    overgangsstønad: Vilkårsvurdering[];
 
     constructor(statligeYtelser: any) {
         this.samletUtfall = statligeYtelser.samletUtfall;
@@ -25,6 +26,7 @@ class StatligeYtelser {
         this.svangerskapspenger = statligeYtelser.svangerskapspenger;
         this.opplæringspenger = statligeYtelser.opplæringspenger;
         this.omsorgspenger = statligeYtelser.omsorgspenger;
+        this.overgangsstønad = statligeYtelser.overgangsstønad;
     }
 
     finnPerioderTilManuellVurdering(vilkårsvurderinger: Vilkårsvurdering[]): ÅpenPeriode[] {
@@ -72,6 +74,10 @@ class StatligeYtelser {
 
     finnOmsorgspengerPerioder(): ÅpenPeriode[] {
         return this.finnPerioderTilManuellVurdering(this.omsorgspenger);
+    }
+
+    finnOvergangsstønadPerioder(): ÅpenPeriode[] {
+        return this.finnPerioderTilManuellVurdering(this.overgangsstønad);
     }
 }
 

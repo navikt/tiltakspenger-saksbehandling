@@ -9,7 +9,7 @@ interface StatligeYtelserTableProps {
 }
 
 const StatligeYtelserTable = ({ statligeYtelser }: StatligeYtelserTableProps) => {
-    const { aap, dagpenger, uføre, foreldrepenger, pleiepengerNærstående, pleiepengerSyktBarn, svangerskapspenger, opplæringspenger, omsorgspenger } = statligeYtelser;
+    const { aap, dagpenger, uføre, foreldrepenger, pleiepengerNærstående, pleiepengerSyktBarn, svangerskapspenger, opplæringspenger, omsorgspenger, overgangsstønad } = statligeYtelser;
     return (
         <Table>
             <Table.Header>
@@ -30,6 +30,7 @@ const StatligeYtelserTable = ({ statligeYtelser }: StatligeYtelserTableProps) =>
                 <StatligeYtelserTableRows ytelseText="Svangerskapspenger" vilkårsvurderinger={svangerskapspenger} />
                 <StatligeYtelserTableRows ytelseText="Opplæringspenger" vilkårsvurderinger={opplæringspenger} />
                 <StatligeYtelserTableRows ytelseText="Omsorgspenger" vilkårsvurderinger={omsorgspenger} />
+                <StatligeYtelserTableRows ytelseText="Overgangsstønad" vilkårsvurderinger={overgangsstønad} />
                 <StatligYtelseNotImplementedRow ytelseText="Sykepenger" />
                 <StatligYtelseNotImplementedRow ytelseText="Gjenlevendepensjon" />
                 <StatligYtelseNotImplementedRow ytelseText="Supplerende stønad" />

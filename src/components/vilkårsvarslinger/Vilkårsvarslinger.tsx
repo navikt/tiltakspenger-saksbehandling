@@ -38,6 +38,7 @@ function Vilkårsvarslinger({ behandling, fødselsdato }: VilkårsvarslingerProp
     const svangerskapspengerPerioder = statligeYtelser.finnSvangerskapspengerPerioder();
     const opplæringspengerPerioder = statligeYtelser.finnOpplæringspengerPerioder();
     const omsorgspengerPerioder = statligeYtelser.finnOmsorgspengerPerioder();
+    const overgangsstønadPerioder = statligeYtelser.finnOvergangsstønadPerioder();
     const kvpPerioder = kommunaleYtelser.finnKvpPerioderFraSøknaden();
     const introPerioder = kommunaleYtelser.finnIntroprogramPerioderFraSøknaden();
     const pensjonsordningPerioder = pensjonsordninger.finnPensjonsordningerOppgittISøknaden();
@@ -81,6 +82,7 @@ function Vilkårsvarslinger({ behandling, fødselsdato }: VilkårsvarslingerProp
             {svangerskapspengerPerioder.length > 0 && <HarStatligYtelseMelding perioder={svangerskapspengerPerioder} ytelseText="Svangerskapspenger" />}
             {opplæringspengerPerioder.length > 0 && <HarStatligYtelseMelding perioder={opplæringspengerPerioder} ytelseText="Opplæringspenger" />}
             {omsorgspengerPerioder.length > 0 && <HarStatligYtelseMelding perioder={omsorgspengerPerioder} ytelseText="Omsorgspenger" />}
+            {overgangsstønadPerioder.length > 0 && <HarStatligYtelseMelding perioder={overgangsstønadPerioder} ytelseText="Overgangsstønad" />}
             {kvpPerioder.length > 0 && <HarKvpDeltakelseMelding />}
             {introPerioder.length > 0 && <HarIntroprogramDeltakelseMelding perioder={introPerioder} />}
             {pensjonsordningPerioder.length > 0 && <HarPensjonsordningMelding perioder={pensjonsordningPerioder} />}
