@@ -11,7 +11,7 @@ function useSoknader(søkerId: string, søknadId?: string) {
         data,
         error,
         isLoading: isLoadingSøknader,
-    } = useSWR<Søker>(`/api/person/soknader/${søkerId}`, fetcher, {
+    } = useSWR<Søker>(`/api/soker/${søkerId}`, fetcher, {
         shouldRetryOnError: false,
         revalidateOnFocus: false,
         revalidateOnReconnect: false,

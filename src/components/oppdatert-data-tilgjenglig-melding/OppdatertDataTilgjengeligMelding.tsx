@@ -17,7 +17,7 @@ function OppdatertDataTilgjengeligMelding({ søknadId, hash, søkerId }: Oppdate
     const { oppdatertDataTilgjengelig, setOppdatertDataTilgjengelig } = useRefreshPolling(søknadId, hash);
 
     const handleOppdater = async () => {
-        await mutate(`/api/person/soknader/${søkerId}`).then(() => {
+        await mutate(`/api/soker/${søkerId}`).then(() => {
             setOppdatertDataTilgjengelig(false);
             toast('Oppdatering var vellykket!');
         });
