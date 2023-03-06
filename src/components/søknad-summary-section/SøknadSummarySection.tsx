@@ -6,10 +6,10 @@ import { Behandling } from '../../types/Behandling';
 import styles from './SøknadSummarySection.module.css';
 
 interface SøknadSummarySectionProps {
-    søknadResponse: Behandling;
+    behandling: Behandling;
 }
 
-const SøknadSummarySection = ({ søknadResponse: { søknad, registrerteTiltak } }: SøknadSummarySectionProps) => {
+const SøknadSummarySection = ({ behandling: { søknad, registrerteTiltak } }: SøknadSummarySectionProps) => {
     return (
         <div className={styles.søknadSummarySection}>
             <SøknadDetails søknad={søknad} />
