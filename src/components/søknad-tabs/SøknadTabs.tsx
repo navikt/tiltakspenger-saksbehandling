@@ -58,7 +58,7 @@ const SøknadTabs = ({ defaultTab, onChange, behandlinger, personalia, søkerId 
                             {klarForBehandling ? (
                                 <VilkårsvurderingDetails
                                     søkerId={søkerId}
-                                    behandling={behandling}
+                                    behandling={new Behandling(behandling)}
                                     personalia={personalia}
                                 />
                             ) : (
