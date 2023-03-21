@@ -16,6 +16,8 @@ const CustomToaster = () => (
                 {({ icon, message }) => {
                     if (t.type === 'blank') {
                         return <Alert variant="info">{message}</Alert>;
+                    } else if (t.type === 'error') {
+                        return <Alert variant="error">{message}</Alert>;
                     }
                     return <></>;
                 }}
