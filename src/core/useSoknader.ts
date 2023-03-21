@@ -3,6 +3,7 @@ import useSWR from 'swr';
 import { Behandling } from '../types/Behandling';
 import Søker from '../types/Søker';
 import { fetcher } from '../utils/http';
+import toast from 'react-hot-toast';
 
 function useSoknader(søkerId: string, søknadId?: string) {
     const [isLoading, setIsLoading] = useState(true);
@@ -21,6 +22,9 @@ function useSoknader(søkerId: string, søknadId?: string) {
             } else {
                 setValgBehandling(data.behandlinger[0]);
             }
+        },
+        onError: (error) => {
+            toast.error('hallo');
         },
     });
 
