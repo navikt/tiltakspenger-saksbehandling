@@ -46,6 +46,10 @@ Etter man har gjort det skal verdikjeden kunne kjøres opp med `docker-compose u
 
 Testene ligger i repoet [her](https://github.com/navikt/tiltakspenger-e2e-tests). Kan kjøres opp lokalt eller trigges manuelt via workflow dispatch.
 
+# Demo-versjon
+
+`tiltakspenger-saksbehandler` er i dag kjørt opp på [https://tiltakspenger-saksbehandler.labs.nais.io](https://tiltakspenger-saksbehandler.labs.nais.io). Denne versjonen deployes manuelt via en workflow dispatch.
+
 # 📣 Henvendelser
 
 Spørsmål knyttet til koden eller prosjektet kan stilles som issues her på GitHub
