@@ -1,6 +1,4 @@
-import { SøkerIdent, SøkerResponse } from '../types/Søker';
-
-// export const fetcher = (input: RequestInfo | URL, init?: RequestInit) => fetch(input, init).then((res) => res.json());
+import { SøkerIdent } from '../types/Søker';
 
 export class FetcherError extends Error {
     info: { [key: string]: any } | undefined;
