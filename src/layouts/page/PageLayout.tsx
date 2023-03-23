@@ -4,31 +4,27 @@ import { Saksbehandler } from '../../types/Saksbehandler';
 import { SøkerResponse } from '../../types/Søker';
 import { fetcher, FetcherError, fetchSøker } from '../../utils/http';
 import useSWRMutation from 'swr/mutation';
-import useSWRImmutable from 'swr/immutable';
 import styles from './PageLayout.module.css';
 import Loaders from '../../components/loaders/Loaders';
 import { toast } from 'react-hot-toast';
+import useSaksbehandler from '../../core/useSaksbehandler';
+import useSokOppPerson from '../../core/useSokOppPerson';
 
 interface PageLayoutProps extends React.PropsWithChildren {}
 
 export function PageLayout({ children }: PageLayoutProps) {
-    const router = useRouter();
+    const { saksbehandler, isSaksbehandlerLoading } = useSaksbehandler();
 
-    const { data: saksbehandler, error, isLoading } = useSWRImmutable<Saksbehandler>('/api/saksbehandler', fetcher);
+    const { trigger, isSokerMutating } = useSokOppPerson();
 
-    const { trigger, isMutating } = useSWRMutation<SøkerResponse>('/api/soker', fetchSøker, {
-        onSuccess: (data) => router.push(`/soker/${data.id}`),
-        onError: (error: FetcherError) => toast.error(`${error.info}`),
-    });
-
-    if (isLoading) {
+    if (isSaksbehandlerLoading) {
         return <Loaders.Page />;
     }
 
     return (
         <>
             <Header
-                isSearchLoading={isMutating}
+                isSearchLoading={isSokerMutating}
                 onSearch={(searchString) => trigger({ ident: searchString })}
                 saksbehandler={saksbehandler}
             />

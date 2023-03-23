@@ -2,17 +2,13 @@ import { useEffect, useState } from 'react';
 import useSWR from 'swr';
 import { Behandling } from '../types/Behandling';
 import Søker from '../types/Søker';
-import { fetcher } from '../utils/http';
+import { fetcher, FetcherError } from '../utils/http';
 import toast from 'react-hot-toast';
 
 function useSoknader(søkerId: string, søknadId?: string) {
     const [isLoading, setIsLoading] = useState(true);
     const [valgtBehandling, setValgBehandling] = useState<Behandling>();
-    const {
-        data,
-        error,
-        isLoading: isLoadingSøknader,
-    } = useSWR<Søker>(`/api/soker/${søkerId}`, fetcher, {
+    const { data, isLoading: isLoadingSøknader } = useSWR<Søker>(`/api/soker/${søkerId}`, fetcher, {
         shouldRetryOnError: false,
         revalidateOnFocus: false,
         revalidateOnReconnect: false,
@@ -23,9 +19,7 @@ function useSoknader(søkerId: string, søknadId?: string) {
                 setValgBehandling(data.behandlinger[0]);
             }
         },
-        onError: (error) => {
-            toast.error('hallo');
-        },
+        onError: (error: FetcherError) => toast.error(`[${error.status}]: ${error.info}`),
     });
 
     useEffect(() => {
