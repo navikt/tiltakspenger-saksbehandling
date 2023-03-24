@@ -7,7 +7,7 @@ export class FetcherError extends Error {
 
 export const fetcher = async (url: string) => {
     const res = await fetch(url);
-    throwErrorIfFatal(res);
+    await throwErrorIfFatal(res);
     return res.json();
 };
 
@@ -16,12 +16,12 @@ export async function fetchSøker<R>(url: string, { arg }: { arg: SøkerIdent })
         method: 'POST',
         body: JSON.stringify(arg),
     });
-    throwErrorIfFatal(res);
+    await throwErrorIfFatal(res);
     return res.json();
 }
 
 const throwErrorIfFatal = async (res: Response) => {
-    if (!res.ok && res.status >= 500) {
+    if (!res.ok) {
         const error = new FetcherError('En feil har oppstått');
         const errorMessage = await res.json();
         error.info = errorMessage.error;
