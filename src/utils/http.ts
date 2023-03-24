@@ -7,17 +7,7 @@ export class FetcherError extends Error {
 
 export const fetcher = async (url: string) => {
     const res = await fetch(url);
-
-    // If the status code is not in the range 200-299,
-    // we still try to parse and throw it.
-    if (!res.ok) {
-        const error = new FetcherError('En feil har oppstått');
-        // Attach extra info to the error object.
-        error.info = await res.json();
-        error.status = res.status;
-        throw error;
-    }
-
+    throwErrorIfFatal(res);
     return res.json();
 };
 
@@ -26,17 +16,16 @@ export async function fetchSøker<R>(url: string, { arg }: { arg: SøkerIdent })
         method: 'POST',
         body: JSON.stringify(arg),
     });
+    throwErrorIfFatal(res);
+    return res.json();
+}
 
-    if (!res.ok) {
+const throwErrorIfFatal = async (res: Response) => {
+    if (!res.ok && res.status >= 500) {
         const error = new FetcherError('En feil har oppstått');
-        // Attach extra info to the error object.
         const errorMessage = await res.json();
         error.info = errorMessage.error;
         error.status = res.status;
         throw error;
     }
-
-    console.log('res', res);
-
-    return res.json();
-}
+};
