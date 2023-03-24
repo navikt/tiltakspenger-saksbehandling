@@ -12,7 +12,7 @@ function useSokOppPerson(navigateToSoker: boolean = true) {
     const router = useRouter();
     const { trigger, isMutating: isSokerMutating } = useSWRMutation<SøkerResponse>('/api/soker', fetchSøker, {
         onSuccess: (data) => navigateToSoker && router.push(`/soker/${data.id}`),
-        onError: (error: FetcherError) => toast.error(`${error.info}`),
+        onError: (error: FetcherError) => toast.error(`[${error.status}] ${error.info}`),
     });
 
     return { trigger, isSokerMutating };
