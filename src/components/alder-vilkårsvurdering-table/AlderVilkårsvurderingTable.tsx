@@ -41,7 +41,7 @@ const AlderVilkårsvurderingTable = ({ alderVilkårsvurderinger, fødselsdato }:
                                 }}
                             />
                         </Table.DataCell>
-                        <Table.DataCell>{formatÅpenPeriode(periode)}</Table.DataCell>
+                        <Table.DataCell>{(periode && formatÅpenPeriode(periode)) || '-'}</Table.DataCell>
                         <Table.DataCell>{formatDate(fødselsdato)}</Table.DataCell>
                         <Table.DataCell>{kilde}</Table.DataCell>
                         <Table.DataCell>{detaljer}</Table.DataCell>
