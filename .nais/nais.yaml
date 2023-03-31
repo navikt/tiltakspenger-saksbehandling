@@ -18,6 +18,10 @@ spec:
     - name: {{name}}
       value: {{value}}
   {{/each}}
+  accessPolicy:
+    outbound:
+      rules:
+        - application: tiltakspenger-vedtak
   azure:
     sidecar:
       enabled: true
