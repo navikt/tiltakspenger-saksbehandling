@@ -7,7 +7,7 @@ module.exports = {
         return [
             {
                 source: '/saker/person',
-                destination: `https://tiltakspenger-vedtak.dev.intern.nav.no/saker/person`,
+                destination: `https://tiltakspenger-vedtak.intern.dev.nav.no/saker/person`,
             },
         ];
     },
