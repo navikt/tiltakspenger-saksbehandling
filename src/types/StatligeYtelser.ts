@@ -1,6 +1,6 @@
-import { Utfall } from './Utfall';
-import { Vilkårsvurdering } from './Søknad';
-import { ÅpenPeriode } from './Periode';
+import {Utfall} from './Utfall';
+import {Vilkårsvurdering} from './Søknad';
+import {ÅpenPeriode} from './Periode';
 
 class StatligeYtelser {
     samletUtfall: Utfall;
@@ -14,6 +14,11 @@ class StatligeYtelser {
     opplæringspenger: Vilkårsvurdering[];
     omsorgspenger: Vilkårsvurdering[];
     overgangsstønad: Vilkårsvurdering[];
+    sykepenger: Vilkårsvurdering[];
+    gjenlevendepensjon: Vilkårsvurdering[];
+    alderspensjon: Vilkårsvurdering[];
+    supplerendeFlyktning: Vilkårsvurdering[];
+    supplerendeAlder: Vilkårsvurdering[];
 
     constructor(statligeYtelser: any) {
         this.samletUtfall = statligeYtelser.samletUtfall;
@@ -27,11 +32,16 @@ class StatligeYtelser {
         this.opplæringspenger = statligeYtelser.opplæringspenger;
         this.omsorgspenger = statligeYtelser.omsorgspenger;
         this.overgangsstønad = statligeYtelser.overgangsstønad;
+        this.sykepenger = statligeYtelser.sykepenger;
+        this.gjenlevendepensjon = statligeYtelser.gjenlevendepensjon;
+        this.alderspensjon = statligeYtelser.alderspensjon;
+        this.supplerendeFlyktning = statligeYtelser.supplerendeFlyktning;
+        this.supplerendeAlder = statligeYtelser.supplerendeAlder;
     }
 
     finnPerioderTilManuellVurdering(vilkårsvurderinger: Vilkårsvurdering[]): ÅpenPeriode[] {
         const defaultArray: ÅpenPeriode[] = [];
-        return vilkårsvurderinger.reduce((perioder, { utfall, periode }) => {
+        return vilkårsvurderinger.reduce((perioder, {utfall, periode}) => {
             if (Utfall.KreverManuellVurdering === utfall) {
                 perioder.push(periode);
                 return perioder;
@@ -78,6 +88,26 @@ class StatligeYtelser {
 
     finnOvergangsstønadPerioder(): ÅpenPeriode[] {
         return this.finnPerioderTilManuellVurdering(this.overgangsstønad);
+    }
+
+    finnSykepengerPerioder(): ÅpenPeriode[] {
+        return this.finnPerioderTilManuellVurdering(this.sykepenger);
+    }
+
+    finnGjenlevendepensjonPerioder(): ÅpenPeriode[] {
+        return this.finnPerioderTilManuellVurdering(this.gjenlevendepensjon);
+    }
+
+    finnAlderspensjonPerioder(): ÅpenPeriode[] {
+        return this.finnPerioderTilManuellVurdering(this.alderspensjon);
+    }
+
+    finnSupplerendeFlyktningPerioder(): ÅpenPeriode[] {
+        return this.finnPerioderTilManuellVurdering(this.supplerendeFlyktning);
+    }
+
+    finnSupplerendeAlderPerioder(): ÅpenPeriode[] {
+        return this.finnPerioderTilManuellVurdering(this.supplerendeAlder);
     }
 }
 
