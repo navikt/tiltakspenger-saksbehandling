@@ -17,8 +17,8 @@ class StatligeYtelser {
     sykepenger: Vilkårsvurdering[];
     gjenlevendepensjon: Vilkårsvurdering[];
     alderspensjon: Vilkårsvurdering[];
-    supplerendeFlyktning: Vilkårsvurdering[];
-    supplerendeAlder: Vilkårsvurdering[];
+    supplerendeStønadFlyktning: Vilkårsvurdering[];
+    supplerendeStønadAlder: Vilkårsvurdering[];
 
     constructor(statligeYtelser: any) {
         this.samletUtfall = statligeYtelser.samletUtfall;
@@ -35,8 +35,8 @@ class StatligeYtelser {
         this.sykepenger = statligeYtelser.sykepenger;
         this.gjenlevendepensjon = statligeYtelser.gjenlevendepensjon;
         this.alderspensjon = statligeYtelser.alderspensjon;
-        this.supplerendeFlyktning = statligeYtelser.supplerendeFlyktning;
-        this.supplerendeAlder = statligeYtelser.supplerendeAlder;
+        this.supplerendeStønadFlyktning = statligeYtelser.supplerendeStønadFlyktning;
+        this.supplerendeStønadAlder = statligeYtelser.supplerendeStønadAlder;
     }
 
     finnPerioderTilManuellVurdering(vilkårsvurderinger: Vilkårsvurdering[]): ÅpenPeriode[] {
@@ -102,12 +102,12 @@ class StatligeYtelser {
         return this.finnPerioderTilManuellVurdering(this.alderspensjon);
     }
 
-    finnSupplerendeFlyktningPerioder(): ÅpenPeriode[] {
-        return this.finnPerioderTilManuellVurdering(this.supplerendeFlyktning);
+    finnSupplerendeStønadFlyktningPerioder(): ÅpenPeriode[] {
+        return this.finnPerioderTilManuellVurdering(this.supplerendeStønadFlyktning);
     }
 
-    finnSupplerendeAlderPerioder(): ÅpenPeriode[] {
-        return this.finnPerioderTilManuellVurdering(this.supplerendeAlder);
+    finnSupplerendeStønadAlderPerioder(): ÅpenPeriode[] {
+        return this.finnPerioderTilManuellVurdering(this.supplerendeStønadAlder);
     }
 }
 

@@ -8,7 +8,7 @@ interface StatligeYtelserTableProps {
 }
 
 const StatligeYtelserTable = ({ statligeYtelser }: StatligeYtelserTableProps) => {
-    const { aap, dagpenger, uføre, foreldrepenger, pleiepengerNærstående, pleiepengerSyktBarn, svangerskapspenger, opplæringspenger, omsorgspenger, overgangsstønad, sykepenger, gjenlevendepensjon, alderspensjon, supplerendeFlyktning, supplerendeAlder } = statligeYtelser;
+    const { aap, dagpenger, uføre, foreldrepenger, pleiepengerNærstående, pleiepengerSyktBarn, svangerskapspenger, opplæringspenger, omsorgspenger, overgangsstønad, sykepenger, gjenlevendepensjon, alderspensjon, supplerendeStønadFlyktning, supplerendeStønadAlder } = statligeYtelser;
     return (
         <Table>
             <Table.Header>
@@ -33,8 +33,8 @@ const StatligeYtelserTable = ({ statligeYtelser }: StatligeYtelserTableProps) =>
                 <StatligeYtelserTableRows ytelseText="Sykepenger" vilkårsvurderinger={sykepenger} />
                 <StatligeYtelserTableRows ytelseText="Gjenlevendepensjon" vilkårsvurderinger={gjenlevendepensjon} />
                 <StatligeYtelserTableRows ytelseText="Alderspensjon" vilkårsvurderinger={alderspensjon} />
-                <StatligeYtelserTableRows ytelseText="Supplerende stønad flyktning" vilkårsvurderinger={supplerendeFlyktning} />
-                <StatligeYtelserTableRows ytelseText="Supplerende stønad alder" vilkårsvurderinger={supplerendeAlder} />
+                <StatligeYtelserTableRows ytelseText="Supplerende stønad flyktning" vilkårsvurderinger={supplerendeStønadFlyktning} />
+                <StatligeYtelserTableRows ytelseText="Supplerende stønad alder" vilkårsvurderinger={supplerendeStønadAlder} />
             </Table.Body>
         </Table>
     );
