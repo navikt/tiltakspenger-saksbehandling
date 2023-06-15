@@ -14,7 +14,7 @@
         "@navikt/ds-css-internal": "^2.0.6",
         "@navikt/ds-icons": "^2.0.6",
         "@navikt/ds-react": "^2.0.6",
-        "@navikt/ds-react-internal": "^2.0.11",
+        "@navikt/ds-react-internal": "^2.9.8",
         "dayjs": "^1.11.6",
         "framer-motion": "^9.0.4",
         "jotai": "^1.11.0",
