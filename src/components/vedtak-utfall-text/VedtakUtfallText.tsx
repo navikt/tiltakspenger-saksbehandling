@@ -1,6 +1,6 @@
 import React from 'react';
 import IconWithText from '../icon-with-text/IconWithText';
-import { Utfall } from '../../types/Utfall';
+import {Utfall} from '../../types/Utfall';
 import UtfallIcon from '../utfall-icon/UtfallIcon';
 
 interface VedtakUtfallText {
@@ -14,8 +14,6 @@ function getDefaultUtfallText(utfall: Utfall) {
             return 'Nei';
         case Utfall.IkkeOppfylt:
             return 'Ja';
-        case Utfall.IkkeImplementert:
-            return 'Mangler';
         case Utfall.KreverManuellVurdering:
             return 'Krever manuell vurdering';
     }
