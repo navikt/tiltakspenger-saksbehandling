@@ -39,6 +39,9 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
 
+      - name: Build app
+        run: npm run build
+
       - name: Set up Docker Buildx
         if: github.ref == 'refs/heads/main'
         uses: docker/setup-buildx-action@v2
