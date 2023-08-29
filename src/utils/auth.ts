@@ -1,5 +1,6 @@
 import { NextApiRequest } from 'next';
 import SimpleResponse from '../types/SimpleResponse';
+import { validateAzureToken } from '@navikt/next-auth-wonderwall';
 
 const clientId = process.env.AZURE_APP_CLIENT_ID || '';
 const clientSecret = process.env.AZURE_APP_CLIENT_SECRET || '';
@@ -51,7 +52,7 @@ async function getOnBehalfOfToken(token: string, scope: string): Promise<SimpleR
 
 const tokenRegex = /^Bearer (?<token>(\.?([A-Za-z0-9-_]+)){3})$/m;
 
-function validateAuthorizationHeader(request: NextApiRequest) {
+async function validateAuthorizationHeader(request: NextApiRequest) {
     const { authorization } = request.headers;
     if (!authorization) {
         throw new Error('Ingen tilgang');
@@ -60,11 +61,15 @@ function validateAuthorizationHeader(request: NextApiRequest) {
     if (!authToken) {
         throw new Error('Ingen tilgang');
     }
+    const validationResult = await validateAzureToken(authorization);
+    if (validationResult !== 'valid') {
+        throw new Error('Ingen tilgang');
+    }
     return authToken;
 }
 
 export async function getToken(request: NextApiRequest): Promise<SimpleResponse | string> {
     const scope = `api://${process.env.SCOPE}/.default`;
-    const authToken = validateAuthorizationHeader(request);
+    const authToken = await validateAuthorizationHeader(request);
     return await getOnBehalfOfToken(authToken, scope);
 }
