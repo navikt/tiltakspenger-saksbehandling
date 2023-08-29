@@ -12,7 +12,6 @@ COPY package-lock.json .
 COPY next.config.js .
 COPY src/ ./src
 
-RUN npm ci --no-audit
 RUN npm run build
 
 FROM node:16-alpine as runtime
