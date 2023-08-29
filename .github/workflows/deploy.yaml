@@ -14,7 +14,11 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: "16.x"
-      - run: npm ci
+          registry-url: "https://npm.pkg.github.com"
+      - name: Install dependencies
+        run: npm ci
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
       - run: npm run test:ci
 
   build:
