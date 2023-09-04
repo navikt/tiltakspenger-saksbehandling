@@ -27,6 +27,7 @@ Opprett en `.env.local` på roten av `tiltakspenger-saksbehandler`, med følgend
 TILTAKSPENGER_VEDTAK_URL=http://localhost:8080
 AZURE_APP_CLIENT_ID=tiltakspenger-vedtak
 AZURE_APP_CLIENT_SECRET=secret
+AZURE_APP_WELL_KNOWN_URL=http://host.docker.internal:6969/azure/.well-known/openid-configuration
 AUTH_PROVIDER_URL=http://host.docker.internal:6969/azure/token
 SCOPE=tiltakspenger-vedtak
 ```
