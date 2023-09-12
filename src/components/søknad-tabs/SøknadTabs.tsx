@@ -1,5 +1,5 @@
 import VilkårsvurderingDetails from '../vilkårsvurdering-details/VilkårsvurderingDetails';
-import React from 'react';
+import React, { useState } from 'react';
 import { Alert, BodyShort, Button, Heading, Radio, RadioGroup, Select, Tabs, UNSAFE_Combobox } from '@navikt/ds-react';
 import { FileContent } from '@navikt/ds-icons';
 import { useSetAtom } from 'jotai';
@@ -36,6 +36,8 @@ function createSøknadLabel({ startdato, arrangoernavn, tiltakskode }: Søknad) 
 
 const SøknadTabs = ({ defaultTab, onChange, behandlinger, personalia, søkerId }: SøknadTabsProps) => {
     const setSøknadId = useSetAtom(søknadIdAtom);
+    const [åpneRedigering, onÅpneRedigering] = useState<boolean>(false);
+
     const handleChange = (val: any) => console.log(val);
     const { datepickerProps, toInputProps, fromInputProps, selectedRange } = useRangeDatepicker({
         fromDate: new Date('Sep 12 2023'),
@@ -87,49 +89,62 @@ const SøknadTabs = ({ defaultTab, onChange, behandlinger, personalia, søkerId 
                                         tom={''}
                                         kilde={''}
                                         detaljer={''}
+                                        handleStartRedigering={onÅpneRedigering}
                                     />
-                                    <div
-                                        style={{
-                                            background: '#F2F3F5',
-                                            width: '100%',
-                                            height: '100%',
-                                            padding: '1rem',
-                                        }}
-                                    >
-                                        <RadioGroup legend="Endre vilkår" onChange={(val: string) => handleChange(val)}>
-                                            <Radio value="Deltar ikke">Deltar ikke</Radio>
-                                            <Radio value="Deltar">Deltar</Radio>
-                                        </RadioGroup>
-                                        <div style={{ padding: '1rem' }} />
-
+                                    {åpneRedigering && (
                                         <div
                                             style={{
-                                                display: 'flex',
-                                                gap: '1rem',
-                                                paddingBottom: '0.5rem',
+                                                background: '#F2F3F5',
+                                                width: '100%',
+                                                height: '100%',
+                                                padding: '1rem',
                                             }}
                                         >
-                                            <DatePicker {...datepickerProps}>
-                                                <DatePicker.Input {...fromInputProps} label="Fra" />
-                                                <DatePicker.Input {...toInputProps} label="Til" />
-                                            </DatePicker>
+                                            <RadioGroup
+                                                legend="Endre vilkår"
+                                                onChange={(val: string) => handleChange(val)}
+                                            >
+                                                <Radio value="Deltar ikke">Deltar ikke</Radio>
+                                                <Radio value="Deltar">Deltar</Radio>
+                                            </RadioGroup>
+                                            <div style={{ padding: '1rem' }} />
+
+                                            <div
+                                                style={{
+                                                    gap: '1rem',
+                                                    paddingBottom: '0.5rem',
+                                                }}
+                                            >
+                                                <DatePicker {...datepickerProps}>
+                                                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                                        <DatePicker.Input {...fromInputProps} label="Fra" />
+                                                        <div style={{ padding: '1rem' }} />
+                                                        <DatePicker.Input {...toInputProps} label="Til" />
+                                                    </div>
+                                                </DatePicker>
+                                            </div>
+                                            <div style={{ padding: '1rem' }} />
+                                            <Select label="Begrunnelse for endring">
+                                                <option value="">Velg grunn</option>
+                                                <option value="Bruker møtte ikke opp">Bruker møtte ikke opp</option>
+                                                <option value="Bruker vil ikke ha penger">
+                                                    Bruker vil ikke ha penger
+                                                </option>
+                                            </Select>
+                                            <div style={{ padding: '1rem' }} />
+                                            <div>
+                                                <Button
+                                                    onClick={() => onÅpneRedigering(false)}
+                                                    variant="tertiary"
+                                                    style={{ marginRight: '2rem' }}
+                                                >
+                                                    Avbryt
+                                                </Button>
+                                                <Button>Lagre</Button>
+                                            </div>
                                         </div>
-                                        <div style={{ padding: '1rem' }} />
-                                        <Select label="Begrunnelse for endring">
-                                            <option value="">Velg grunn</option>
-                                            <option value="Bruker møtte ikke opp">Bruker møtte ikke opp</option>
-                                            <option value="Bruker vil ikke ha penger">Bruker vil ikke ha penger</option>
-                                        </Select>
-                                        <div style={{ padding: '1rem' }} />
-                                        <div>
-                                            <Button variant="tertiary" style={{ marginRight: '2rem' }}>
-                                                Avbryt
-                                            </Button>
-                                            <Button>Lagre</Button>
-                                        </div>
-                                    </div>
+                                    )}
                                 </AccordionItem>
-                                <div style={{ padding: '1em' }} />
                                 <AccordionItem title="§ et vilkår">
                                     <SaksopplysningTable
                                         vilkårsVurdering={false}
@@ -139,7 +154,6 @@ const SøknadTabs = ({ defaultTab, onChange, behandlinger, personalia, søkerId 
                                         detaljer={''}
                                     />
                                 </AccordionItem>
-                                <div style={{ padding: '1em' }} />
                                 <AccordionItem title="§ et vilkår">
                                     <SaksopplysningTable
                                         vilkårsVurdering={false}

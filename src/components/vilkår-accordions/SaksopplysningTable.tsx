@@ -1,7 +1,7 @@
 import { BodyShort, Button, Table } from '@navikt/ds-react';
 import { UtfallIconTo } from '../utfall-icon/UtfallIcon';
 import { Utfall } from '../../types/Utfall';
-import React from 'react';
+import React, { ReactElement, useState } from 'react';
 import { PencilIcon } from '@navikt/aksel-icons';
 
 interface SaksopplysningProps {
@@ -11,9 +11,10 @@ interface SaksopplysningProps {
     // vilkår: string; // Vilkår inneholder lovverk: String, val paragraf: String, val ledd: String?, val beskrivelse:
     kilde: string;
     detaljer: string;
+    handleStartRedigering?: (value: React.SetStateAction<boolean>) => void;
 }
 
-export const SaksopplysningTable = ({ fom, tom, kilde, detaljer }: SaksopplysningProps) => {
+export const SaksopplysningTable = ({ fom, tom, kilde, detaljer, handleStartRedigering }: SaksopplysningProps) => {
     return (
         <Table>
             <Table.Header>
@@ -49,7 +50,13 @@ export const SaksopplysningTable = ({ fom, tom, kilde, detaljer }: Saksopplysnin
                         <BodyShort>{detaljer ? detaljer : '-'}</BodyShort>
                     </Table.DataCell>
                     <Table.DataCell>
-                        <Button variant="tertiary" iconPosition="left" icon={<PencilIcon />} aria-label="hidden" />
+                        <Button
+                            onClick={() => handleStartRedigering(true)}
+                            variant="tertiary"
+                            iconPosition="left"
+                            icon={<PencilIcon />}
+                            aria-label="hidden"
+                        />
                     </Table.DataCell>
                 </Table.Row>
             </Table.Body>
