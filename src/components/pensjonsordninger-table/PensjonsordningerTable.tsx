@@ -4,7 +4,7 @@ import { formatÅpenPeriode } from '../../utils/date';
 import { ÅpenPeriode } from '../../types/Periode';
 import VedtakUtfallText from '../vedtak-utfall-text/VedtakUtfallText';
 import IconWithText from '../icon-with-text/IconWithText';
-import UtfallIcon from '../utfall-icon/UtfallIcon';
+import { UtfallIcon } from '../utfall-icon/UtfallIcon';
 import { Utfall } from '../../types/Utfall';
 import Pensjonsordninger from '../../types/Pensjonsordninger';
 

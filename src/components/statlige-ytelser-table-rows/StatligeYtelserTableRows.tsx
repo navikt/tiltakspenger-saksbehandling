@@ -2,7 +2,7 @@ import React from 'react';
 import { Table } from '@navikt/ds-react';
 import { Vilkårsvurdering } from '../../types/Søknad';
 import IconWithText from '../icon-with-text/IconWithText';
-import UtfallIcon from '../utfall-icon/UtfallIcon';
+import { UtfallIcon } from '../utfall-icon/UtfallIcon';
 import { formatÅpenPeriode } from '../../utils/date';
 import createVurderingText from '../../utils/vurderingText';
 
