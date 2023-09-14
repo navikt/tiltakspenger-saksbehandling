@@ -10,10 +10,15 @@ interface AccordionProps extends AccordionItemProps {
     onClick?: () => void;
 }
 
-const AccordionItem = ({ title, children, defaultOpen = true, open, onClick }: AccordionProps) => {
+const AccordionItem = ({ title, children, defaultOpen = false, open, onClick }: AccordionProps) => {
+    const farge = open ? '#FFFFFF' : '#F2F3F5';
     return (
         <span onClick={onClick}>
-            <Accordion.Item open={open} defaultOpen={defaultOpen}>
+            <Accordion.Item
+                open={open}
+                defaultOpen={defaultOpen}
+                style={{ background: `${open ? '#FFFFFF' : '#F2F3F5'}` }}
+            >
                 <Accordion.Header>{title}</Accordion.Header>
                 <Accordion.Content className={styles.accordionContent}>{children}</Accordion.Content>
             </Accordion.Item>
