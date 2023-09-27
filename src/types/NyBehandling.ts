@@ -1,9 +1,37 @@
 import { Behandling, IkkeKlarBehandling } from './Behandling';
 import Søknad from "./Søknad";
 
-export class NyBehandling {
-    // behandlingId: string;
-    // søknader: Søknad[];
+interface Vilkår {
+    lovreferanse : string;
+    tittel : string;
+}
+
+interface Saksopplysning {
+    fom: string;
+    tom: string;
+    vilkår: Vilkår;
+    kilde: string;
+    detaljer: string;
+    typeSaksopplysning: string;
+}
+
+interface Vurdering {
+    fom: string;
+    tom: string;
+    vilkår: Vilkår;
+    kilde: string;
+    detaljer: string;
+    utfall: string;
+}
+
+export interface NyBehandling {
+    behandlingId: string;
+    fom: string;
+    tom: string;
+    søknad: any;
+    saksopplysninger: Saksopplysning[];
+    vurderinger: Vurdering[];
+
     //
     //
     // constructor(søkerData: any) {
