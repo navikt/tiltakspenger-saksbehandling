@@ -1,6 +1,17 @@
 import VilkårsvurderingDetails from '../vilkårsvurdering-details/VilkårsvurderingDetails';
 import React, { useState } from 'react';
-import { Alert, BodyShort, Button, Heading, Radio, RadioGroup, Select, Tabs, UNSAFE_Combobox } from '@navikt/ds-react';
+import {
+    Alert,
+    BodyShort,
+    Button, DatePicker,
+    Heading,
+    Radio,
+    RadioGroup,
+    Select,
+    Tabs,
+    UNSAFE_Combobox,
+    useRangeDatepicker
+} from '@navikt/ds-react';
 import { FileContent } from '@navikt/ds-icons';
 import { useSetAtom } from 'jotai';
 import Søknad from '../../types/Søknad';
@@ -12,8 +23,6 @@ import styles from './SøknadTabs.module.css';
 import { SøknadLayout } from '../../layouts/soker/SøknadLayout';
 import { SaksopplysningTable } from '../vilkår-accordions/SaksopplysningTable';
 import { Accordion, AccordionItem } from '../vilkår-accordions/Accordion';
-import { useRangeDatepicker } from '@navikt/ds-react/esm/date/hooks/useRangeDatepicker';
-import DatePicker from '@navikt/ds-react/esm/date/datepicker/DatePicker';
 import format from 'date-fns/format';
 import nbLocale from 'date-fns/locale/nb';
 
