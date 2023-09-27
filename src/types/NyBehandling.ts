@@ -1,6 +1,3 @@
-import { Behandling, IkkeKlarBehandling } from './Behandling';
-import Søknad from "./Søknad";
-
 interface Vilkår {
     lovreferanse : string;
     tittel : string;
@@ -28,22 +25,20 @@ export interface NyBehandling {
     behandlingId: string;
     fom: string;
     tom: string;
-    søknad: any;
+    søknad: Søknad;
     saksopplysninger: Saksopplysning[];
     vurderinger: Vurdering[];
+}
 
-    //
-    //
-    // constructor(søkerData: any) {
-    //     this.søkerId = søkerData.søkerId;
-    //     this.ident = søkerData.ident;
-    //     this.personopplysninger = søkerData.personopplysninger;
-    //     this.behandlinger = søkerData.behandlinger.map((behandlingData: any) => {
-    //         if (behandlingData.klarForBehandling) {
-    //             return new Behandling(behandlingData);
-    //         } else {
-    //             return new IkkeKlarBehandling(behandlingData);
-    //         }
-    //     });
-    // }
+export interface Søknad {
+    personopplysninger: Personopplysninger;
+}
+
+export interface Personopplysninger {
+    ident: string;
+    fornavn: string;
+    etternavn: string;
+    skjermet: boolean;
+    strengtFortrolig: boolean;
+    fortrolig: boolean;
 }

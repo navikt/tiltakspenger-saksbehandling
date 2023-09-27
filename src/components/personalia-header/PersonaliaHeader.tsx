@@ -1,15 +1,15 @@
 import React from 'react';
 import { Tag } from '@navikt/ds-react';
 import { People } from '@navikt/ds-icons';
-import Personalia from '../../types/Personalia';
 import styles from './PersonaliaHeader.module.css';
+import {Personopplysninger} from "../../types/NyBehandling";
 
 interface PersonaliaHeaderProps {
-    personalia: Personalia;
+    personopplysninger: Personopplysninger;
 }
 
-const PersonaliaHeader = ({ personalia }: PersonaliaHeaderProps) => {
-    const { fornavn, etternavn, ident, skjermet, strengtFortrolig, fortrolig } = personalia;
+const PersonaliaHeader = ({ personopplysninger }: PersonaliaHeaderProps) => {
+    const { fornavn, etternavn, ident, skjermet, strengtFortrolig, fortrolig } = personopplysninger;
     return (
         <div className={styles.personaliaHeader}>
             <People className={styles.personaliaHeader__personIcon} />

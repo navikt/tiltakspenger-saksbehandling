@@ -16,8 +16,7 @@ const SøkerPage: NextPage = () => {
     const router = useRouter();
     const [søkerId, søknadId] = router.query.all as string[];
 
-    const { data, valgtBehandling, isLoading } = useSoknader(søkerId, søknadId);
-    useBehandling("beh_01H27W28VJSRPR1ESE5ASR04N8");
+    const { data, valgtBehandling, isLoading } = useBehandling("beh_01H27W28VJSRPR1ESE5ASR04N8");
 
     if (isLoading) {
         return <Loaders.Page />;
@@ -25,15 +24,15 @@ const SøkerPage: NextPage = () => {
 
     return (
         <SøkerLayout>
-            <PersonaliaHeader personalia={data!!.personopplysninger} />
-            <SøknadSummarySection behandling={valgtBehandling!!} />
-            <SøknadTabs
-                søkerId={data!!.søkerId}
-                onChange={(id) => router.push(`/soker/${søkerId}/${id}`)}
-                defaultTab={valgtBehandling!!.søknad.id}
-                behandlinger={data!!.behandlinger}
-                personalia={data!!.personopplysninger}
-            />
+            <PersonaliaHeader personopplysninger={data!!.søknad.personopplysninger} />
+            {/*<SøknadSummarySection behandling={valgtBehandling!!} />*/}
+            {/*<SøknadTabs*/}
+            {/*    søkerId={data!!.søkerId}*/}
+            {/*    onChange={(id) => router.push(`/soker/${søkerId}/${id}`)}*/}
+            {/*    defaultTab={valgtBehandling!!.søknad.id}*/}
+            {/*    behandlinger={data!!.behandlinger}*/}
+            {/*    personalia={data!!.personopplysninger}*/}
+            {/*/>*/}
         </SøkerLayout>
     );
 };
