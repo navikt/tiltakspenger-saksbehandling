@@ -8,6 +8,7 @@ import SøknadTabs from '../../components/søknad-tabs/SøknadTabs';
 import { SøkerLayout } from '../../layouts/soker/SøkerLayout';
 import Loaders from '../../components/loaders/Loaders';
 import useSoknader from '../../core/useSoknader';
+import {useBehandling} from '../../core/useBehandling'
 
 export const søknadIdAtom = atom('');
 
@@ -16,6 +17,7 @@ const SøkerPage: NextPage = () => {
     const [søkerId, søknadId] = router.query.all as string[];
 
     const { data, valgtBehandling, isLoading } = useSoknader(søkerId, søknadId);
+    useBehandling("beh_01H27W28VJSRPR1ESE5ASR04N8");
 
     if (isLoading) {
         return <Loaders.Page />;
