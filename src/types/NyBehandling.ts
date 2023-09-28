@@ -1,3 +1,5 @@
+import Søknad from "./Søknad";
+
 interface Vilkår {
     lovreferanse : string;
     tittel : string;
@@ -31,9 +33,6 @@ export interface NyBehandling {
     personopplysninger: Personopplysninger;
 }
 
-export interface Søknad {
-    personopplysninger: Personopplysninger;
-}
 
 export interface Personopplysninger {
     ident: string;
