@@ -11,6 +11,7 @@ export function useBehandling(behandlingId: string) {
         revalidateOnFocus: false,
         revalidateOnReconnect: false,
         onSuccess: (data) => {
+            console.log(data);
             setValgtBehandling(data)
         },
         onError: (error: FetcherError) => toast.error(`[${error.status}]: ${error.info}`),
