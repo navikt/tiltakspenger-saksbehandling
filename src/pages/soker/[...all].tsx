@@ -24,8 +24,8 @@ const SøkerPage: NextPage = () => {
 
     return (
         <SøkerLayout>
-            <PersonaliaHeader personopplysninger={data!!.søknad.personopplysninger} />
-            {/*<SøknadSummarySection behandling={valgtBehandling!!} />*/}
+            <PersonaliaHeader personopplysninger={data!!.personopplysninger} />
+            <SøknadSummarySection søknad={valgtBehandling!!.søknad} registrerteTiltak={}/>
             {/*<SøknadTabs*/}
             {/*    søkerId={data!!.søkerId}*/}
             {/*    onChange={(id) => router.push(`/soker/${søkerId}/${id}`)}*/}

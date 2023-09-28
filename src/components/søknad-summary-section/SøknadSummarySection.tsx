@@ -4,12 +4,14 @@ import SøknadDetails from '../søknad-details/SøknadDetails';
 import RegistrertTiltakDetails from '../registrert-tiltak-details/RegistrertTiltakDetails';
 import { Behandling } from '../../types/Behandling';
 import styles from './SøknadSummarySection.module.css';
+import Søknad, {RegistrertTiltak} from "../../types/Søknad";
 
 interface SøknadSummarySectionProps {
-    behandling: Behandling;
+    søknad: Søknad;
+    registrerteTiltak: RegistrertTiltak[]
 }
 
-const SøknadSummarySection = ({ behandling: { søknad, registrerteTiltak } }: SøknadSummarySectionProps) => {
+const SøknadSummarySection = ({ søknad, registrerteTiltak  }: SøknadSummarySectionProps) => {
     return (
         <div className={styles.søknadSummarySection}>
             <SøknadDetails søknad={søknad} />

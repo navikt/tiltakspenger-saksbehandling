@@ -28,6 +28,7 @@ export interface NyBehandling {
     søknad: Søknad;
     saksopplysninger: Saksopplysning[];
     vurderinger: Vurdering[];
+    personopplysninger: Personopplysninger;
 }
 
 export interface Søknad {
@@ -38,7 +39,7 @@ export interface Personopplysninger {
     ident: string;
     fornavn: string;
     etternavn: string;
-    skjermet: boolean;
+    skjerming: boolean;
     strengtFortrolig: boolean;
     fortrolig: boolean;
 }
