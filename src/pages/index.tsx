@@ -1,5 +1,6 @@
 import React from 'react';
 import type { NextPage } from 'next';
+import { pageWithAuthentication } from '../utils/pageWithAuthentication';
 
 const HomePage: NextPage = () => {
     return (
@@ -10,3 +11,5 @@ const HomePage: NextPage = () => {
 };
 
 export default HomePage;
+
+export const getServerSideProps = pageWithAuthentication();
