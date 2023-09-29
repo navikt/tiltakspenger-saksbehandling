@@ -5,7 +5,7 @@ interface Vilkår {
     tittel : string;
 }
 
-interface Saksopplysning {
+export interface Saksopplysning {
     fom: string;
     tom: string;
     vilkår: Vilkår;
@@ -28,7 +28,7 @@ export interface NyBehandling {
     fom: string;
     tom: string;
     søknad: Søknad;
-    saksopplysninger: Saksopplysning[];
+    saksopplysninger: SaksopplysningInnDTO[];
     vurderinger: Vurdering[];
     personopplysninger: Personopplysninger;
 }
@@ -42,3 +42,16 @@ export interface Personopplysninger {
     strengtFortrolig: boolean;
     fortrolig: boolean;
 }
+
+export interface SaksopplysningInnDTO{
+    fom: string;
+    tom: string;
+    kilde: string;
+    detaljer: string;
+    typeSaksopplysning: string;
+    vilkårTittel: string;
+    vilkårParagraf: string;
+    vilkårLedd: string;
+}
+
+

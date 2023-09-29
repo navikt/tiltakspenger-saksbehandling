@@ -16,6 +16,6 @@ export function useBehandling(behandlingId: string) {
         },
         onError: (error: FetcherError) => toast.error(`[${error.status}]: ${error.info}`),
     });
-    return { data, valgtBehandling, isLoading };
+    return { valgtBehandling, isLoading };
 }
 
