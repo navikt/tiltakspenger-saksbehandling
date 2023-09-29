@@ -14,12 +14,18 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: "16.x"
-      - run: npm ci
+          registry-url: "https://npm.pkg.github.com"
+      - name: Install dependencies
+        run: npm ci
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
       - run: npm run test:ci
 
   build:
     name: Build and push
     runs-on: ubuntu-latest
+    permissions:
+      packages: 'write'
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -28,6 +34,15 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16.x'
+          registry-url: "https://npm.pkg.github.com"
+
+      - name: Install dependencies
+        run: npm ci
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+
+      - name: Build app
+        run: npm run build
 
       - name: Set up Docker Buildx
         if: github.ref == 'refs/heads/main'
@@ -75,17 +90,17 @@ jobs:
           VAR: image=${{ env.IMAGE }},name=${{ github.event.repository.name }}
           VARS: .nais/vars/dev.yaml
 
-#  deploy-prod:
-#    name: Deploy to NAIS production
-#    needs: build
-#    if: github.ref == 'refs/heads/main'
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v3
-#      - uses: nais/deploy/actions/deploy@v1
-#        env:
-#          APIKEY: ${{ secrets.NAIS_DEPLOY_KEY }}
-#          CLUSTER: prod-gcp
-#          RESOURCE: .nais/nais.yaml
-#          VAR: image=${{ env.IMAGE }},name=${{ github.event.repository.name }}
-#          VARS: .nais/vars/prod.yaml
+  deploy-prod:
+    name: Deploy to NAIS production
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_KEY }}
+          CLUSTER: prod-gcp
+          RESOURCE: .nais/nais.yaml
+          VAR: image=${{ env.IMAGE }},name=${{ github.event.repository.name }}
+          VARS: .nais/vars/prod.yaml

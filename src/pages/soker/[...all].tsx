@@ -8,6 +8,7 @@ import SøknadTabs from '../../components/søknad-tabs/SøknadTabs';
 import { SøkerLayout } from '../../layouts/soker/SøkerLayout';
 import Loaders from '../../components/loaders/Loaders';
 import useSoknader from '../../core/useSoknader';
+import { pageWithAuthentication } from '../../utils/pageWithAuthentication';
 
 export const søknadIdAtom = atom('');
 
@@ -37,3 +38,5 @@ const SøkerPage: NextPage = () => {
 };
 
 export default SøkerPage;
+
+export const getServerSideProps = pageWithAuthentication();

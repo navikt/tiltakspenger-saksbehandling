@@ -2,6 +2,10 @@ import { getToken } from '../auth';
 
 global.fetch = jest.fn();
 
+jest.mock('@navikt/next-auth-wonderwall', () => {
+    return { validateAzureToken: jest.fn(() => 'valid') };
+});
+
 const okResponse = {
     ok: true,
     json: () => Promise.resolve({ access_token: 'accessTokenMock' }),
