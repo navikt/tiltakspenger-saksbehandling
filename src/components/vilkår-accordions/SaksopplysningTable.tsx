@@ -1,27 +1,27 @@
-import { BodyShort, Button, Table } from '@navikt/ds-react';
-import { UtfallIconTo } from '../utfall-icon/UtfallIcon';
-import { Utfall } from '../../types/Utfall';
-import React, { ReactElement, useState } from 'react';
-import { PencilIcon } from '@navikt/aksel-icons';
+import {BodyShort, Button, Table} from '@navikt/ds-react';
+import {UtfallIconTo} from '../utfall-icon/UtfallIcon';
+import {Utfall} from '../../types/Utfall';
+import React from 'react';
+import {PencilIcon} from '@navikt/aksel-icons';
 
 interface SaksopplysningProps {
-    vilkårsVurdering: boolean;
+    utfall: boolean;
     fom: string;
     tom: string;
     // vilkår: string; // Vilkår inneholder lovverk: String, val paragraf: String, val ledd: String?, val beskrivelse:
     kilde: string;
     detaljer: string;
-    handleStartRedigering?: (value: React.SetStateAction<boolean>) => void;
+    håndterStartRedigering: (value: React.SetStateAction<boolean>) => void;
 }
 
-export const SaksopplysningTable = ({ fom, tom, kilde, detaljer, handleStartRedigering }: SaksopplysningProps) => {
+export const SaksopplysningTable = ({ utfall, fom, tom, kilde, detaljer, håndterStartRedigering }: SaksopplysningProps) => {
     return (
         <Table>
             <Table.Header>
                 <Table.Row>
-                    <Table.HeaderCell>Vilkår</Table.HeaderCell>
-                    <Table.HeaderCell>Fra dato</Table.HeaderCell>
-                    <Table.HeaderCell>Til dato</Table.HeaderCell>
+                    <Table.HeaderCell></Table.HeaderCell>
+                    <Table.HeaderCell>Registrering</Table.HeaderCell>
+                    <Table.HeaderCell>Periode</Table.HeaderCell>
                     <Table.HeaderCell>Kilde</Table.HeaderCell>
                     <Table.HeaderCell>Detaljer</Table.HeaderCell>
                     <Table.HeaderCell />
@@ -32,16 +32,19 @@ export const SaksopplysningTable = ({ fom, tom, kilde, detaljer, handleStartRedi
                     <Table.DataCell>
                         {
                             <div style={{ display: 'flex' }}>
-                                <UtfallIconTo utfall={Utfall.IkkeOppfylt} />
-                                <BodyShort>Yay/nay</BodyShort>
+                                <UtfallIconTo utfall={utfall ? Utfall.Oppfylt :  Utfall.IkkeOppfylt} />
                             </div>
                         }
                     </Table.DataCell>
                     <Table.DataCell>
-                        <BodyShort>{fom ? fom : '-'}</BodyShort>
+                        {
+                            <div style={{ display: 'flex' }}>
+                                <BodyShort>test om vilkår er oppfylt</BodyShort>
+                            </div>
+                        }
                     </Table.DataCell>
                     <Table.DataCell>
-                        <BodyShort>{tom ? tom : '-'}</BodyShort>
+                        <BodyShort>{fom && tom ? `${fom} - ${tom}` : '-'}</BodyShort>
                     </Table.DataCell>
                     <Table.DataCell>
                         <BodyShort>{kilde ? kilde : '-'}</BodyShort>
@@ -51,7 +54,7 @@ export const SaksopplysningTable = ({ fom, tom, kilde, detaljer, handleStartRedi
                     </Table.DataCell>
                     <Table.DataCell>
                         <Button
-                            onClick={() => handleStartRedigering(true)}
+                            onClick={() => håndterStartRedigering(true)}
                             variant="tertiary"
                             iconPosition="left"
                             icon={<PencilIcon />}

@@ -26,14 +26,14 @@ export const InngangsvilkårTab = ({saksopplysninger}: InngangsvilkårTabProps) 
             {saksopplysninger.map(saksopplysning => {
                 return (
                     <>
-                        <AccordionItem title={`${saksopplysning.vilkårParagraf}-${saksopplysning.vilkårLedd} ${saksopplysning.vilkårTittel}`}>
+                        <AccordionItem title={saksopplysning.vilkårTittel}>
                             <SaksopplysningTable
-                                vilkårsVurdering={false}
-                                fom={''}
-                                tom={''}
-                                kilde={''}
-                                detaljer={''}
-                                handleStartRedigering={onÅpneRedigering}
+                                utfall={true}
+                                fom={saksopplysning.fom}
+                                tom={saksopplysning.tom}
+                                kilde={saksopplysning.kilde}
+                                detaljer={saksopplysning.detaljer}
+                                håndterStartRedigering={onÅpneRedigering}
                             />
                             {åpneRedigering && (
                                 <div

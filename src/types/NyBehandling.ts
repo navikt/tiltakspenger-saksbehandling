@@ -33,7 +33,6 @@ export interface NyBehandling {
     personopplysninger: Personopplysninger;
 }
 
-
 export interface Personopplysninger {
     ident: string;
     fornavn: string;
@@ -53,5 +52,3 @@ export interface SaksopplysningInnDTO{
     vilkårParagraf: string;
     vilkårLedd: string;
 }
-
-
