@@ -15,7 +15,7 @@ const SøkerPage: NextPage = () => {
     const router = useRouter();
     const [søkerId, søknadId] = router.query.all as string[];
 
-    const {valgtBehandling, isLoading} = useBehandling("beh_01H27W28VJSRPR1ESE5ASR04N8");
+    const {valgtBehandling, isLoading} = useBehandling("beh_01H27W28VJSRPR1ESE5ASR04N8"); // todo: gjørnome
 
     if (isLoading || !valgtBehandling) {
         return <Loaders.Page/>;
