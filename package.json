@@ -14,7 +14,7 @@
         "@navikt/ds-css-internal": "^2.9.8",
         "@navikt/ds-icons": "^2.9.8",
         "@navikt/ds-react": "^2.9.8",
-        "@navikt/ds-react-internal": "^2.0.11",
+        "@navikt/ds-react-internal": "^2.9.8",
         "@navikt/next-auth-wonderwall": "^1.5.0",
         "dayjs": "^1.11.6",
         "framer-motion": "^9.1.7",
