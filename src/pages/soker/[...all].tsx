@@ -7,6 +7,7 @@ import PersonaliaHeader from '../../components/personalia-header/PersonaliaHeade
 import BehandlingTabs from '../../components/søknad-tabs/BehandlingTabs';
 import {SøkerLayout} from '../../layouts/soker/SøkerLayout';
 import Loaders from '../../components/loaders/Loaders';
+import { pageWithAuthentication } from '../../utils/pageWithAuthentication';
 import {useBehandling} from '../../core/useBehandling'
 
 export const søknadIdAtom = atom('');
@@ -35,3 +36,5 @@ const SøkerPage: NextPage = () => {
 };
 
 export default SøkerPage;
+
+export const getServerSideProps = pageWithAuthentication();
