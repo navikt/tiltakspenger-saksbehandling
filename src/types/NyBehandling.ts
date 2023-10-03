@@ -29,7 +29,6 @@ export interface NyBehandling {
     tom: string;
     søknad: Søknad;
     saksopplysninger: SaksopplysningInnDTO[];
-    vurderinger: Vurdering[];
     personopplysninger: Personopplysninger;
 }
 
