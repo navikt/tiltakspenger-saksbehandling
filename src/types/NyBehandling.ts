@@ -51,4 +51,6 @@ export interface SaksopplysningInnDTO{
     vilkårTittel: string;
     vilkårParagraf: string;
     vilkårLedd: string;
+    fakta: string;
+    utfall: string;
 }

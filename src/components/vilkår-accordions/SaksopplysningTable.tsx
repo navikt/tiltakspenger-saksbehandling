@@ -1,20 +1,20 @@
 import {BodyShort, Button, Table} from '@navikt/ds-react';
-import {UtfallIconTo} from '../utfall-icon/UtfallIcon';
-import {Utfall} from '../../types/Utfall';
+import {UtfallIcon} from '../utfall-icon/UtfallIcon';
 import React from 'react';
 import {PencilIcon} from '@navikt/aksel-icons';
 
 interface SaksopplysningProps {
-    utfall: boolean;
+    utfall: string;
     fom: string;
     tom: string;
     // vilkår: string; // Vilkår inneholder lovverk: String, val paragraf: String, val ledd: String?, val beskrivelse:
     kilde: string;
     detaljer: string;
+    fakta: string;
     håndterStartRedigering: (value: React.SetStateAction<boolean>) => void;
 }
 
-export const SaksopplysningTable = ({ utfall, fom, tom, kilde, detaljer, håndterStartRedigering }: SaksopplysningProps) => {
+export const SaksopplysningTable = ({ utfall, fom, tom, kilde, detaljer, fakta, håndterStartRedigering }: SaksopplysningProps) => {
     return (
         <Table>
             <Table.Header>
@@ -32,14 +32,14 @@ export const SaksopplysningTable = ({ utfall, fom, tom, kilde, detaljer, håndte
                     <Table.DataCell>
                         {
                             <div style={{ display: 'flex' }}>
-                                <UtfallIconTo utfall={utfall ? Utfall.Oppfylt :  Utfall.IkkeOppfylt} />
+                                <UtfallIcon utfall={utfall} />
                             </div>
                         }
                     </Table.DataCell>
                     <Table.DataCell>
                         {
                             <div style={{ display: 'flex' }}>
-                                <BodyShort>test om vilkår er oppfylt</BodyShort>
+                                <BodyShort>{fakta}</BodyShort>
                             </div>
                         }
                     </Table.DataCell>

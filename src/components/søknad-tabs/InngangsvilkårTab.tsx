@@ -28,11 +28,12 @@ export const InngangsvilkårTab = ({saksopplysninger}: InngangsvilkårTabProps) 
                     <>
                         <AccordionItem title={saksopplysning.vilkårTittel}>
                             <SaksopplysningTable
-                                utfall={true}
+                                utfall={saksopplysning.utfall}
                                 fom={saksopplysning.fom}
                                 tom={saksopplysning.tom}
                                 kilde={saksopplysning.kilde}
                                 detaljer={saksopplysning.detaljer}
+                                fakta={saksopplysning.fakta}
                                 håndterStartRedigering={onÅpneRedigering}
                             />
                             {åpneRedigering && (
