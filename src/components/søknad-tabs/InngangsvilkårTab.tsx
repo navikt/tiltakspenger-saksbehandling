@@ -23,6 +23,7 @@ export const InngangsvilkårTab = ({ saksopplysninger }: InngangsvilkårTabProps
                                 <Accordion.Header>{saksopplysning.vilkårTittel}</Accordion.Header>
                                 <Accordion.Content className={styles.accordionContent}>
                                     <SaksopplysningTable
+                                        vilkår={saksopplysning.vilkårTittel}
                                         utfall={saksopplysning.utfall}
                                         fom={saksopplysning.fom}
                                         tom={saksopplysning.tom}

@@ -13,6 +13,8 @@ function getUrl(req: NextApiRequest): string {
 async function makeApiRequest(request: NextApiRequest, oboToken: string): Promise<Response> {
     const url = getUrl(request);
     logger.info(`Making request to ${url}`);
+    logger.info(`Request body: ${JSON.stringify(request.body)}`);
+    // todo request.body er undefined når vi kaller den fra SaksopplysningTable. Fiks dette!!
     return await fetch(url, {
         method: request.method,
         body: request.method === 'GET' ? undefined : request.body,
@@ -49,4 +51,5 @@ export async function middleware(request: NextApiRequest, response: NextApiRespo
     }
 }
 
+export const config = {api : {bodyParser: false}}
 export default middleware;

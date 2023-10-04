@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { PencilIcon } from '@navikt/aksel-icons';
 
 interface SaksopplysningProps {
+    vilkår: string;
     utfall: string;
     fom: string;
     tom: string;
@@ -13,14 +14,43 @@ interface SaksopplysningProps {
     fakta: string;
 }
 
-export const SaksopplysningTable = ({ utfall, fom, tom, kilde, detaljer, fakta }: SaksopplysningProps) => {
+const basepath = process.env.TILTAKSPENGER_VEDTAK_URL || '';
+
+export const SaksopplysningTable = ({ vilkår, utfall, fom, tom, kilde, detaljer, fakta }: SaksopplysningProps) => {
     const [åpneRedigering, onÅpneRedigering] = useState<boolean>(false);
+    const [valgtFom, setFom] = useState<Date>();
+    const [valgtTom, setTom] = useState<Date>();
+    const [harYtelse, setHarYtelse] = useState<boolean>();
+    const [begrunnelse, setBegrunnelse] = useState<string>("");
     const handleChange = (val: any) => console.log(val);
+
+    const behandlingid = 'beh_01H27W28VJSRPR1ESE5ASR04N8';
+
+
+    const håndterLagreSaksopplysning = async () => {
+        //fetch(`${basepath}/api/behandling/${behandlingid}`, {})
+        const res = fetch(`/api/behandling/${behandlingid}`, {
+            method: 'POST',
+            body: JSON.stringify({
+                fom: valgtFom?.toISOString().split('T')[0],
+                tom: valgtTom?.toISOString().split('T')[0],
+                vilkår: vilkår,
+                begrunnelse: "begrunnelse",
+                harYtelse: harYtelse,
+            }),
+        }).then((r) => r.json());
+    }
 
     const { datepickerProps, toInputProps, fromInputProps, selectedRange } = useRangeDatepicker({
         fromDate: new Date('Sep 12 2023'),
-        onRangeChange: console.log,
+        onRangeChange: (range) => {
+            if ( range ) {
+                setFom(range.from);
+                setTom(range.to);
+            }
+        }
     });
+
     return (
         <>
             <Table>
@@ -81,9 +111,9 @@ export const SaksopplysningTable = ({ utfall, fom, tom, kilde, detaljer, fakta }
                             padding: '1rem',
                         }}
                     >
-                        <RadioGroup legend="Endre vilkår" onChange={(val: string) => handleChange(val)}>
-                            <Radio value="Deltar ikke">Deltar ikke</Radio>
-                            <Radio value="Deltar">Deltar</Radio>
+                        <RadioGroup legend="Endre vilkår" onChange={(value: boolean) => setHarYtelse(value)}>
+                            <Radio value={false}>Deltar ikke</Radio>
+                            <Radio value={true}>Deltar</Radio>
                         </RadioGroup>
                         <div style={{ padding: '1rem' }} />
 
@@ -116,7 +146,8 @@ export const SaksopplysningTable = ({ utfall, fom, tom, kilde, detaljer, fakta }
                             >
                                 Avbryt
                             </Button>
-                            <Button>Lagre endring</Button>
+                            <Button onClick={ () => håndterLagreSaksopplysning}
+                            >Lagre endring</Button>
                         </div>
                     </div>
                 )}
