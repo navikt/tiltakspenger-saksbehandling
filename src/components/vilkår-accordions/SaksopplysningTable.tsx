@@ -35,10 +35,10 @@ export const SaksopplysningTable = ({ vilkår, utfall, fom, tom, kilde, detaljer
                 fom: valgtFom?.toISOString().split('T')[0],
                 tom: valgtTom?.toISOString().split('T')[0],
                 vilkår: vilkår,
-                begrunnelse: "begrunnelse",
+                begrunnelse: begrunnelse,
                 harYtelse: harYtelse,
             }),
-        }).then((r) => r.json());
+        });
     }
 
     const { datepickerProps, toInputProps, fromInputProps, selectedRange } = useRangeDatepicker({
@@ -132,7 +132,9 @@ export const SaksopplysningTable = ({ vilkår, utfall, fom, tom, kilde, detaljer
                             </DatePicker>
                         </div>
                         <div style={{ padding: '0.5rem' }} />
-                        <Select label="Begrunnelse for endring" style={{ width: '415px' }}>
+                        <Select label="Begrunnelse for endring" style={{ width: '415px' }}
+                                onChange={(e) => setBegrunnelse(e.target.value)}
+                        >
                             <option value="">Velg grunn</option>
                             <option value="Bruker møtte ikke opp">Bruker møtte ikke opp</option>
                             <option value="Bruker vil ikke ha penger">Bruker vil ikke ha penger</option>
@@ -146,7 +148,7 @@ export const SaksopplysningTable = ({ vilkår, utfall, fom, tom, kilde, detaljer
                             >
                                 Avbryt
                             </Button>
-                            <Button onClick={ () => håndterLagreSaksopplysning}
+                            <Button onClick={ () => håndterLagreSaksopplysning()}
                             >Lagre endring</Button>
                         </div>
                     </div>
