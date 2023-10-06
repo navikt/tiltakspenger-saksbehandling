@@ -50,6 +50,11 @@ export interface SaksopplysningInnDTO{
     vilkårTittel: string;
     vilkårParagraf: string;
     vilkårLedd: string;
-    fakta: string;
+    fakta: FaktaDTO;
     utfall: string;
+}
+
+export interface FaktaDTO{
+    harYtelse: string;
+    harIkkeYtelse: string;
 }

@@ -2,13 +2,18 @@ import { Accordion, Alert } from '@navikt/ds-react';
 import { SaksopplysningTable } from '../vilkår-accordions/SaksopplysningTable';
 import { SøknadLayout } from '../../layouts/soker/SøknadLayout';
 import React from 'react';
-import { SaksopplysningInnDTO } from '../../types/NyBehandling';
+import {FaktaDTO, SaksopplysningInnDTO} from '../../types/NyBehandling';
 import styles from './Accordion.module.css';
 
 interface InngangsvilkårTabProps {
     saksopplysninger: SaksopplysningInnDTO[];
 }
 
+const velgFaktaTekst = (typeSaksopplysning: string, fakta: FaktaDTO) => {
+    if (typeSaksopplysning === "HAR_YTELSE") return fakta.harYtelse
+    if (typeSaksopplysning === "HAR_IKKE_YTELSE") return fakta.harIkkeYtelse
+    return "Ikke innhentet"
+}
 export const InngangsvilkårTab = ({ saksopplysninger }: InngangsvilkårTabProps) => {
     return (
         <SøknadLayout>
@@ -29,7 +34,7 @@ export const InngangsvilkårTab = ({ saksopplysninger }: InngangsvilkårTabProps
                                         tom={saksopplysning.tom}
                                         kilde={saksopplysning.kilde}
                                         detaljer={saksopplysning.detaljer}
-                                        fakta={saksopplysning.fakta}
+                                        fakta={velgFaktaTekst(saksopplysning.typeSaksopplysning, saksopplysning.fakta)}
                                     />
                                 </Accordion.Content>
                             </Accordion.Item>
