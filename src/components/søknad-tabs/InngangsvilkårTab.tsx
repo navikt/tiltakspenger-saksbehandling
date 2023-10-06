@@ -1,8 +1,8 @@
-import { Accordion, Alert, Button, DatePicker, Radio, RadioGroup, Select, useRangeDatepicker } from '@navikt/ds-react';
+import { Accordion, Alert } from '@navikt/ds-react';
 import { SaksopplysningTable } from '../vilkår-accordions/SaksopplysningTable';
 import { SøknadLayout } from '../../layouts/soker/SøknadLayout';
-import React, { useState } from 'react';
-import { Saksopplysning, SaksopplysningInnDTO } from '../../types/NyBehandling';
+import React from 'react';
+import { SaksopplysningInnDTO } from '../../types/NyBehandling';
 import styles from './Accordion.module.css';
 
 interface InngangsvilkårTabProps {

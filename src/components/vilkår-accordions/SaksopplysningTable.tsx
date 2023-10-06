@@ -8,27 +8,21 @@ interface SaksopplysningProps {
     utfall: string;
     fom: string;
     tom: string;
-    // vilkår: string; // Vilkår inneholder lovverk: String, val paragraf: String, val ledd: String?, val beskrivelse:
     kilde: string;
     detaljer: string;
     fakta: string;
 }
-
-const basepath = process.env.TILTAKSPENGER_VEDTAK_URL || '';
 
 export const SaksopplysningTable = ({ vilkår, utfall, fom, tom, kilde, detaljer, fakta }: SaksopplysningProps) => {
     const [åpneRedigering, onÅpneRedigering] = useState<boolean>(false);
     const [valgtFom, setFom] = useState<Date>();
     const [valgtTom, setTom] = useState<Date>();
     const [harYtelse, setHarYtelse] = useState<boolean>();
-    const [begrunnelse, setBegrunnelse] = useState<string>("");
-    const handleChange = (val: any) => console.log(val);
+    const [begrunnelse, setBegrunnelse] = useState<string>('');
 
     const behandlingid = 'beh_01H27W28VJSRPR1ESE5ASR04N8';
 
-
     const håndterLagreSaksopplysning = async () => {
-        //fetch(`${basepath}/api/behandling/${behandlingid}`, {})
         const res = fetch(`/api/behandling/${behandlingid}`, {
             method: 'POST',
             body: JSON.stringify({
@@ -39,16 +33,16 @@ export const SaksopplysningTable = ({ vilkår, utfall, fom, tom, kilde, detaljer
                 harYtelse: harYtelse,
             }),
         });
-    }
+    };
 
-    const { datepickerProps, toInputProps, fromInputProps, selectedRange } = useRangeDatepicker({
+    const { datepickerProps, toInputProps, fromInputProps } = useRangeDatepicker({
         fromDate: new Date('Sep 12 2023'),
         onRangeChange: (range) => {
-            if ( range ) {
+            if (range) {
                 setFom(range.from);
                 setTom(range.to);
             }
-        }
+        },
     });
 
     return (
@@ -57,7 +51,7 @@ export const SaksopplysningTable = ({ vilkår, utfall, fom, tom, kilde, detaljer
                 <Table.Header>
                     <Table.Row>
                         <Table.HeaderCell></Table.HeaderCell>
-                        <Table.HeaderCell>Registrering</Table.HeaderCell>
+                        <Table.HeaderCell>Fakta</Table.HeaderCell>
                         <Table.HeaderCell>Periode</Table.HeaderCell>
                         <Table.HeaderCell>Kilde</Table.HeaderCell>
                         <Table.HeaderCell>Detaljer</Table.HeaderCell>
@@ -112,8 +106,8 @@ export const SaksopplysningTable = ({ vilkår, utfall, fom, tom, kilde, detaljer
                         }}
                     >
                         <RadioGroup legend="Endre vilkår" onChange={(value: boolean) => setHarYtelse(value)}>
-                            <Radio value={false}>Deltar ikke</Radio>
-                            <Radio value={true}>Deltar</Radio>
+                            <Radio value={false}>Mottar ikke</Radio>
+                            <Radio value={true}>Mottar</Radio>
                         </RadioGroup>
                         <div style={{ padding: '1rem' }} />
 
@@ -132,12 +126,14 @@ export const SaksopplysningTable = ({ vilkår, utfall, fom, tom, kilde, detaljer
                             </DatePicker>
                         </div>
                         <div style={{ padding: '0.5rem' }} />
-                        <Select label="Begrunnelse for endring" style={{ width: '415px' }}
-                                onChange={(e) => setBegrunnelse(e.target.value)}
+                        <Select
+                            label="Begrunnelse for endring"
+                            style={{ width: '415px' }}
+                            onChange={(e) => setBegrunnelse(e.target.value)}
                         >
-                            <option value="">Velg grunn</option>
-                            <option value="Bruker møtte ikke opp">Bruker møtte ikke opp</option>
-                            <option value="Bruker vil ikke ha penger">Bruker vil ikke ha penger</option>
+                            ,<option value="">Velg grunn</option>
+                            <option value="Feil i innhentet data">Feil i innhentet data</option>
+                            <option value="Endring etter søknadstidspunkt">Endring etter søknadstidspunkt</option>
                         </Select>
                         <div style={{ padding: '1rem' }} />
                         <div>
@@ -148,8 +144,7 @@ export const SaksopplysningTable = ({ vilkår, utfall, fom, tom, kilde, detaljer
                             >
                                 Avbryt
                             </Button>
-                            <Button onClick={ () => håndterLagreSaksopplysning()}
-                            >Lagre endring</Button>
+                            <Button onClick={() => håndterLagreSaksopplysning()}>Lagre endring</Button>
                         </div>
                     </div>
                 )}
