@@ -10,7 +10,7 @@
         "test:ci": "jest --ci"
     },
     "dependencies": {
-        "@navikt/aksel-icons": "5.3.4",
+        "@navikt/aksel-icons": "5.5.0",
         "@navikt/ds-css": "5.4.0",
         "@navikt/ds-css-internal": "^3.4.3",
         "@navikt/ds-icons": "3.4.3",
