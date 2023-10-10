@@ -12,17 +12,12 @@ export type RegistrertTiltak = {
 };
 
 interface Søknad {
-    id: string;
-    søknadId: string;
     søknadsdato: string;
     arrangoernavn: string;
-    tiltakskode: string;
+    tiltakstype: string;
     startdato: string;
     sluttdato: string;
     antallDager: number;
-    fritekst: string;
-    beskrivelse: string;
-    vedlegg: Vedlegg[];
 }
 
 export interface Vilkårsvurdering {

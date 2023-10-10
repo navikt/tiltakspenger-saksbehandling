@@ -1,16 +1,13 @@
 import React from 'react';
-import { Utfall } from '../../types/Utfall';
 import { ErrorColored, InformationColored, SuccessColored } from '@navikt/ds-icons';
 
 interface UtfallIconProps {
-    utfall: Utfall;
+    utfall: string;
 }
 
-const UtfallIcon = ({ utfall }: UtfallIconProps) => {
-    if (utfall === Utfall.Oppfylt) return <SuccessColored />;
-    if (utfall === Utfall.IkkeOppfylt) return <ErrorColored />;
-    if (utfall === Utfall.KreverManuellVurdering) return <ErrorColored />;
+export const UtfallIcon = ({ utfall }: UtfallIconProps) => {
+    if (utfall === "OPPFYLT") return <SuccessColored />;
+    if (utfall === "IKKE_OPPFYLT") return <ErrorColored />;
+    if (utfall === "KREVER_MANUELL_VURDERING") return <InformationColored />;
     return <InformationColored />;
 };
-
-export default UtfallIcon;

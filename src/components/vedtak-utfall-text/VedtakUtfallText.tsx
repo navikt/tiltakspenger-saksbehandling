@@ -1,7 +1,7 @@
 import React from 'react';
 import IconWithText from '../icon-with-text/IconWithText';
 import {Utfall} from '../../types/Utfall';
-import UtfallIcon from '../utfall-icon/UtfallIcon';
+import { UtfallIcon } from '../utfall-icon/UtfallIcon';
 
 interface VedtakUtfallText {
     utfall: Utfall;

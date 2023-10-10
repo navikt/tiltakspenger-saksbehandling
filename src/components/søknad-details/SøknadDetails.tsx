@@ -1,17 +1,17 @@
 import React from 'react';
-import { Heading, ReadMore } from '@navikt/ds-react';
-import { Calender, FileContent, Office1, Refresh, Attachment } from '@navikt/ds-icons';
+import { Heading } from '@navikt/ds-react';
+import { Calender, FileContent, Office1, Refresh } from '@navikt/ds-icons';
 import IconWithText from '../icon-with-text/IconWithText';
 import { formatDate } from '../../utils/date';
-import Søknad from '../../types/Søknad';
 import styles from './SøknadDetails.module.css';
+import Søknad from '../../types/Søknad';
 
 interface SøknadDetailsProps {
     søknad: Søknad;
 }
 
 const SøknadDetails = ({
-    søknad: { søknadsdato, startdato, sluttdato, arrangoernavn, antallDager, tiltakskode, beskrivelse, vedlegg },
+    søknad: { søknadsdato, startdato, sluttdato, arrangoernavn, antallDager, tiltakstype },
 }: SøknadDetailsProps) => {
     return (
         <div className={styles.søknadSummarySection}>
@@ -29,15 +29,11 @@ const SøknadDetails = ({
                         text={`${formatDate(startdato)}${!!sluttdato ? ` - ${formatDate(sluttdato)}` : ''}`}
                     />
                 )}
-                {vedlegg?.length > 0 && (
-                    <IconWithText iconRenderer={() => <Attachment />} text={`Antall vedlegg: ${vedlegg.length}`} />
-                )}
                 <IconWithText
                     iconRenderer={() => <Office1 />}
-                    text={`${tiltakskode} - ${arrangoernavn ? ` - ${arrangoernavn}` : ''}`}
+                    text={`${tiltakstype} - ${arrangoernavn ? ` - ${arrangoernavn}` : ''}`}
                 />
                 {antallDager && <IconWithText iconRenderer={() => <Refresh />} text={`${antallDager} dager i uka`} />}
-                {beskrivelse && <ReadMore header="Tiltaksbeskrivelse">{beskrivelse}</ReadMore>}
             </div>
         </div>
     );

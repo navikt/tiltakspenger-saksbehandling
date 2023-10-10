@@ -5,7 +5,7 @@ interface Personalia {
     fødselsdato: string;
     fortrolig: boolean;
     strengtFortrolig: boolean;
-    skjermet: boolean;
+    skjerming: boolean;
 }
 
 export default Personalia;

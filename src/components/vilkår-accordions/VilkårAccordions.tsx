@@ -1,5 +1,4 @@
 import { Behandling } from '../../types/Behandling';
-import { Accordion, AccordionItem } from '../accordion/Accordion';
 import AlderVilkårsvurderingTable from '../alder-vilkårsvurdering-table/AlderVilkårsvurderingTable';
 import BarnetilleggTable from '../barnetillegg/BarnetilleggTable';
 import InstitusjonsoppholdTable from '../institusjonsopphold-table/InstitusjonsoppholdTable';
@@ -8,6 +7,7 @@ import LønnsinntekterTable from '../lønnsinntekter-table/LønnsinntekterTable'
 import PensjonsordningerTable from '../pensjonsordninger-table/PensjonsordningerTable';
 import StatligeYtelserTable from '../statlige-ytelser-table/StatligeYtelserTable';
 import TiltakspengerYtelserTable from '../tiltakspenger-ytelser-table/TiltakspengerYtelserTable';
+import {Accordion, AccordionItem} from "./Accordion";
 
 interface VilkårAccordionsProps {
     behandling: Behandling;
