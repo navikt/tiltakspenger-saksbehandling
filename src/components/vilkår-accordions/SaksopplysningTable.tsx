@@ -1,7 +1,8 @@
-import { BodyShort, Button, DatePicker, Radio, RadioGroup, Select, Table, useRangeDatepicker } from '@navikt/ds-react';
+import { BodyShort, Button, Table } from '@navikt/ds-react';
 import { UtfallIcon } from '../utfall-icon/UtfallIcon';
 import React, { useState } from 'react';
 import { PencilIcon } from '@navikt/aksel-icons';
+import { RedigeringSkjema } from './RedigeringSkjema';
 
 interface SaksopplysningProps {
     vilkår: string;
@@ -15,36 +16,10 @@ interface SaksopplysningProps {
 
 export const SaksopplysningTable = ({ vilkår, utfall, fom, tom, kilde, detaljer, fakta }: SaksopplysningProps) => {
     const [åpneRedigering, onÅpneRedigering] = useState<boolean>(false);
-    const [valgtFom, setFom] = useState<Date>();
-    const [valgtTom, setTom] = useState<Date>();
-    const [harYtelse, setHarYtelse] = useState<boolean>();
-    const [begrunnelse, setBegrunnelse] = useState<string>('');
 
-    const behandlingid = 'beh_01H27W28VJSRPR1ESE5ASR04N8';
-
-    const håndterLagreSaksopplysning = async () => {
-        const res = fetch(`/api/behandling/${behandlingid}`, {
-            method: 'POST',
-            body: JSON.stringify({
-                fom: valgtFom?.toISOString().split('T')[0],
-                tom: valgtTom?.toISOString().split('T')[0],
-                vilkår: vilkår,
-                begrunnelse: begrunnelse,
-                harYtelse: harYtelse,
-            }),
-        });
+    const håndterLukkRedigering = () => {
+        onÅpneRedigering(false);
     };
-
-    const { datepickerProps, toInputProps, fromInputProps } = useRangeDatepicker({
-        fromDate: new Date('Sep 12 2023'),
-        onRangeChange: (range) => {
-            if (range) {
-                setFom(range.from);
-                setTom(range.to);
-            }
-        },
-    });
-
     return (
         <>
             <Table>
@@ -95,60 +70,7 @@ export const SaksopplysningTable = ({ vilkår, utfall, fom, tom, kilde, detaljer
                     </Table.Row>
                 </Table.Body>
             </Table>
-            <>
-                {åpneRedigering && (
-                    <div
-                        style={{
-                            background: '#F2F3F5',
-                            width: '100%',
-                            height: '100%',
-                            padding: '1rem',
-                        }}
-                    >
-                        <RadioGroup legend="Endre vilkår" onChange={(value: boolean) => setHarYtelse(value)}>
-                            <Radio value={false}>Mottar ikke</Radio>
-                            <Radio value={true}>Mottar</Radio>
-                        </RadioGroup>
-                        <div style={{ padding: '1rem' }} />
-
-                        <div
-                            style={{
-                                gap: '1rem',
-                                paddingBottom: '0.5rem',
-                            }}
-                        >
-                            <DatePicker {...datepickerProps}>
-                                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                    <DatePicker.Input {...fromInputProps} label="Fra" />
-                                    <div style={{ padding: '1rem' }} />
-                                    <DatePicker.Input {...toInputProps} label="Til" />
-                                </div>
-                            </DatePicker>
-                        </div>
-                        <div style={{ padding: '0.5rem' }} />
-                        <Select
-                            label="Begrunnelse for endring"
-                            style={{ width: '415px' }}
-                            onChange={(e) => setBegrunnelse(e.target.value)}
-                        >
-                            ,<option value="">Velg grunn</option>
-                            <option value="Feil i innhentet data">Feil i innhentet data</option>
-                            <option value="Endring etter søknadstidspunkt">Endring etter søknadstidspunkt</option>
-                        </Select>
-                        <div style={{ padding: '1rem' }} />
-                        <div>
-                            <Button
-                                onClick={() => onÅpneRedigering(false)}
-                                variant="tertiary"
-                                style={{ marginRight: '2rem' }}
-                            >
-                                Avbryt
-                            </Button>
-                            <Button onClick={() => håndterLagreSaksopplysning()}>Lagre endring</Button>
-                        </div>
-                    </div>
-                )}
-            </>
+            <>{åpneRedigering && <RedigeringSkjema vilkår={vilkår} håndterLukkRedigering={håndterLukkRedigering} />}</>
         </>
     );
 };

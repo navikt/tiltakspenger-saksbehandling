@@ -1,8 +1,8 @@
-import { Accordion, Alert } from '@navikt/ds-react';
+import { Accordion, Alert, VStack } from '@navikt/ds-react';
 import { SaksopplysningTable } from '../vilkår-accordions/SaksopplysningTable';
 import { SøknadLayout } from '../../layouts/soker/SøknadLayout';
 import React from 'react';
-import {FaktaDTO, SaksopplysningInnDTO} from '../../types/NyBehandling';
+import { FaktaDTO, SaksopplysningInnDTO } from '../../types/NyBehandling';
 import styles from './Accordion.module.css';
 
 interface InngangsvilkårTabProps {
@@ -10,23 +10,23 @@ interface InngangsvilkårTabProps {
 }
 
 const velgFaktaTekst = (typeSaksopplysning: string, fakta: FaktaDTO) => {
-    if (typeSaksopplysning === "HAR_YTELSE") return fakta.harYtelse
-    if (typeSaksopplysning === "HAR_IKKE_YTELSE") return fakta.harIkkeYtelse
-    return "Ikke innhentet"
-}
+    if (typeSaksopplysning === 'HAR_YTELSE') return fakta.harYtelse;
+    if (typeSaksopplysning === 'HAR_IKKE_YTELSE') return fakta.harIkkeYtelse;
+    return 'Ikke innhentet';
+};
 export const InngangsvilkårTab = ({ saksopplysninger }: InngangsvilkårTabProps) => {
     return (
         <SøknadLayout>
-            <Alert variant="info">Det er noe greier her</Alert>
-            <div style={{ padding: '1em' }} />
-
-            <Accordion variant="neutral">
-                {saksopplysninger.map((saksopplysning) => {
-                    return (
-                        <>
-                            <Accordion.Item style={{ background: '#FFFFFF' }}>
+            <Alert variant="info" style={{ marginBottom: '1em' }}>
+                Det er noe greier her
+            </Alert>
+            <Accordion indent={false}>
+                <VStack>
+                    {saksopplysninger.map((saksopplysning) => {
+                        return (
+                            <Accordion.Item key={saksopplysning.vilkårTittel} style={{ background: '#FFFFFF' }}>
                                 <Accordion.Header>{saksopplysning.vilkårTittel}</Accordion.Header>
-                                <Accordion.Content className={styles.accordionContent}>
+                                <Accordion.Content>
                                     <SaksopplysningTable
                                         vilkår={saksopplysning.vilkårTittel}
                                         utfall={saksopplysning.utfall}
@@ -38,10 +38,9 @@ export const InngangsvilkårTab = ({ saksopplysninger }: InngangsvilkårTabProps
                                     />
                                 </Accordion.Content>
                             </Accordion.Item>
-                            <div style={{ marginTop: '0.5rem' }} />
-                        </>
-                    );
-                })}
+                        );
+                    })}
+                </VStack>
             </Accordion>
         </SøknadLayout>
     );
