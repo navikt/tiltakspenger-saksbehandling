@@ -17,7 +17,7 @@
         "@navikt/ds-react": "5.4.1",
         "@navikt/ds-react-internal": "^3.4.3",
         "@navikt/next-auth-wonderwall": "^1.5.0",
-        "dayjs": "^1.11.6",
+        "dayjs": "^1.11.9",
         "framer-motion": "^9.1.7",
         "jotai": "^1.11.0",
         "next": "^13.4.19",
