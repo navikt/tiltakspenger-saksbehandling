@@ -7,7 +7,8 @@ import LønnsinntekterTable from '../lønnsinntekter-table/LønnsinntekterTable'
 import PensjonsordningerTable from '../pensjonsordninger-table/PensjonsordningerTable';
 import StatligeYtelserTable from '../statlige-ytelser-table/StatligeYtelserTable';
 import TiltakspengerYtelserTable from '../tiltakspenger-ytelser-table/TiltakspengerYtelserTable';
-import {Accordion, AccordionItem} from "./Accordion";
+import {Accordion} from "@navikt/ds-react";
+
 
 interface VilkårAccordionsProps {
     behandling: Behandling;
@@ -30,37 +31,37 @@ function VilkårAccordions({ behandling, fødselsdato, fritekst }: VilkårAccord
     return (
         <div style={{ marginTop: '4rem' }}>
             <Accordion>
-                <AccordionItem title="Alder (§3)">
+                <Accordion.Item title="Alder (§3)">
                     <AlderVilkårsvurderingTable
                         alderVilkårsvurderinger={alderVilkårsvurdering}
                         fødselsdato={fødselsdato}
                     />
-                </AccordionItem>
-                <AccordionItem title="Tiltakspenger (§7)">
+                </Accordion.Item>
+                <Accordion.Item title="Tiltakspenger (§7)">
                     <TiltakspengerYtelserTable tiltakspengerYtelser={tiltakspengerYtelser} />
-                </AccordionItem>
-                <AccordionItem title="Statlige ytelser (§7)">
+                </Accordion.Item>
+                <Accordion.Item title="Statlige ytelser (§7)">
                     <StatligeYtelserTable statligeYtelser={statligeYtelser} />
-                </AccordionItem>
-                <AccordionItem title="Kommunale ytelser (§7)">
+                </Accordion.Item>
+                <Accordion.Item title="Kommunale ytelser (§7)">
                     <KommunaleYtelserContent kommunaleYtelser={kommunaleYtelser} />
-                </AccordionItem>
-                <AccordionItem title="Pensjonsordninger (§7)">
+                </Accordion.Item>
+                <Accordion.Item title="Pensjonsordninger (§7)">
                     <PensjonsordningerTable pensjonsordninger={pensjonsordninger} />
-                </AccordionItem>
-                <AccordionItem title="Lønnsinntekt (§8)">
+                </Accordion.Item>
+                <Accordion.Item title="Lønnsinntekt (§8)">
                     <span>Foreløpig har vi ikke alle opplysninger</span>
                     <LønnsinntekterTable lønnsinntekt={lønnsinntekt}></LønnsinntekterTable>
-                </AccordionItem>
-                <AccordionItem title="Institusjon (§9)">
+                </Accordion.Item>
+                <Accordion.Item title="Institusjon (§9)">
                     <span>Foreløpig har vi ikke alle opplysninger</span>
                     <InstitusjonsoppholdTable institusjonsopphold={institusjonsopphold} />
-                </AccordionItem>
-                <AccordionItem title="Barnetillegg (§3)">
+                </Accordion.Item>
+                <Accordion.Item title="Barnetillegg (§3)">
                     <span>Foreløpig viser vi bare data fra søknaden</span>
                     <BarnetilleggTable barnetillegg={barnetillegg} />
-                </AccordionItem>
-                {fritekst && <AccordionItem title="Tilleggsopplysninger fra søknaden">{fritekst}</AccordionItem>}
+                </Accordion.Item>
+                {fritekst && <Accordion.Item title="Tilleggsopplysninger fra søknaden">{fritekst}</Accordion.Item>}
             </Accordion>
         </div>
     );

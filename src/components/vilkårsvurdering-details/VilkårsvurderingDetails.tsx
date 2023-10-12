@@ -13,6 +13,8 @@ interface VilkårsvurderingDetailsProps {
 }
 
 const VilkårsvurderingDetails = ({ behandling, personalia, søkerId }: VilkårsvurderingDetailsProps) => {
+/*    Komponent ikke i bruk.
+
     const {
         søknad: { fritekst, søknadId },
         hash,
@@ -26,7 +28,7 @@ const VilkårsvurderingDetails = ({ behandling, personalia, søkerId }: Vilkårs
             <Vilkårsvarslinger behandling={behandling} fødselsdato={fødselsdato} />
             <VilkårAccordions behandling={behandling} fødselsdato={fødselsdato} fritekst={fritekst} />
         </div>
-    );
+    );*/
 };
 
 export default VilkårsvurderingDetails;

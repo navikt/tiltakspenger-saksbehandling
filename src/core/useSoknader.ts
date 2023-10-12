@@ -6,6 +6,8 @@ import { fetcher, FetcherError } from '../utils/http';
 import toast from 'react-hot-toast';
 
 function useSoknader(søkerId: string, søknadId?: string) {
+/*  Komponent ikke i bruk
+
     const [isLoading, setIsLoading] = useState(true);
     const [valgtBehandling, setValgBehandling] = useState<Behandling>();
     const { data, isLoading: isLoadingSøknader } = useSWR<Søker>(`/api/soker/${søkerId}`, fetcher, {
@@ -28,7 +30,7 @@ function useSoknader(søkerId: string, søknadId?: string) {
         }
     }, [isLoadingSøknader, valgtBehandling]);
 
-    return { data, valgtBehandling, isLoading };
+    return { data, valgtBehandling, isLoading };*/
 }
 
 export default useSoknader;
