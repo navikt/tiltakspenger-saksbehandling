@@ -1,5 +1,4 @@
 import '@navikt/ds-css';
-import '@navikt/ds-css-internal';
 import React from 'react';
 import { AppProps } from 'next/app';
 import Head from 'next/head';

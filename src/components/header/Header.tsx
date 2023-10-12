@@ -1,5 +1,5 @@
 import React, { FormEvent } from 'react';
-import { Header as NavInternalHeader } from '@navikt/ds-react-internal';
+import { InternalHeader } from '@navikt/ds-react';
 import { Search } from '@navikt/ds-react';
 import { Saksbehandler } from '../../types/Saksbehandler';
 import styles from './Header.module.css';
@@ -22,10 +22,10 @@ const Header = ({ saksbehandler, onSearch, isSearchLoading }: HeaderProps) => {
 
     return (
         <React.Fragment>
-            <NavInternalHeader>
-                <NavInternalHeader.Title data-testid="nav-header" href="/">
+            <InternalHeader>
+                <InternalHeader.Title data-testid="nav-header" href="/">
                     NAV Tiltakspenger
-                </NavInternalHeader.Title>
+                </InternalHeader.Title>
                 <div className={styles.header__searchWrapper}>
                     <form onSubmit={searchHandler}>
                         <Search
@@ -41,11 +41,11 @@ const Header = ({ saksbehandler, onSearch, isSearchLoading }: HeaderProps) => {
                     </form>
                 </div>
                 {saksbehandler ? (
-                    <NavInternalHeader.User className={styles.header__user} name={saksbehandler.navIdent} />
+                    <InternalHeader.User className={styles.header__user} name={saksbehandler.navIdent} />
                 ) : (
                     <Loaders.User />
                 )}
-            </NavInternalHeader>
+            </InternalHeader>
         </React.Fragment>
     );
 };

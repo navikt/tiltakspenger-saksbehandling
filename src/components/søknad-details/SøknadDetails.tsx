@@ -1,6 +1,6 @@
 import React from 'react';
 import { Heading } from '@navikt/ds-react';
-import { Calender, FileContent, Office1, Refresh } from '@navikt/ds-icons';
+import { CalendarIcon, FileTextIcon, Buldings3Icon, ArrowsCirclepathIcon } from '@navikt/aksel-icons';
 import IconWithText from '../icon-with-text/IconWithText';
 import { formatDate } from '../../utils/date';
 import styles from './SøknadDetails.module.css';
@@ -22,18 +22,20 @@ const SøknadDetails = ({
                 Søknad
             </Heading>
             <div className={styles.søknadDetails}>
-                <IconWithText iconRenderer={() => <FileContent />} text={`Søknadsdato: ${formatDate(søknadsdato)}`} />
+                <IconWithText iconRenderer={() => <FileTextIcon />} text={`Søknadsdato: ${formatDate(søknadsdato)}`} />
                 {startdato && (
                     <IconWithText
-                        iconRenderer={() => <Calender />}
+                        iconRenderer={() => <CalendarIcon />}
                         text={`${formatDate(startdato)}${!!sluttdato ? ` - ${formatDate(sluttdato)}` : ''}`}
                     />
                 )}
                 <IconWithText
-                    iconRenderer={() => <Office1 />}
+                    iconRenderer={() => <Buldings3Icon />}
                     text={`${tiltakstype} - ${arrangoernavn ? ` - ${arrangoernavn}` : ''}`}
                 />
-                {antallDager && <IconWithText iconRenderer={() => <Refresh />} text={`${antallDager} dager i uka`} />}
+                {antallDager && (
+                    <IconWithText iconRenderer={() => <ArrowsCirclepathIcon />} text={`${antallDager} dager i uka`} />
+                )}
             </div>
         </div>
     );

@@ -1,9 +1,9 @@
 import React from 'react';
 import { Tabs } from '@navikt/ds-react';
-import { FileContent } from '@navikt/ds-icons';
+import { FileTextIcon } from '@navikt/aksel-icons';
 import styles from './SøknadTabs.module.css';
 import { NyBehandling } from '../../types/NyBehandling';
-import { BankNoteIcon, CardIcon, EnvelopeClosedIcon, MonitorIcon, ParagraphIcon } from '@navikt/aksel-icons';
+import { BankNoteIcon, CardIcon } from '@navikt/aksel-icons';
 import { InngangsvilkårTab } from './InngangsvilkårTab';
 
 interface SøknadTabsProps {
@@ -21,7 +21,7 @@ const BehandlingTabs = ({ defaultTab, behandling }: SøknadTabsProps) => {
                     key={'Inngangsvilkår'}
                     value={'Inngangsvilkår'}
                     label={'Inngangsvilkår'}
-                    icon={<FileContent />}
+                    icon={<FileTextIcon />}
                     onClick={() => {}}
                 />
                 <Tabs.Tab
