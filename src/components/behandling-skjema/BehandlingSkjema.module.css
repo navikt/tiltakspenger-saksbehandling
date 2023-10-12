@@ -1,0 +1,5 @@
+.behandlingSkjema {
+    padding: 1em;
+    align-items: center;
+    grid-area: behandlingbanner;
+}

@@ -1,8 +1,7 @@
 .søknadSummarySection {
-    /* width: 264px; */
     border-right: 1px solid #cfcfcf;
+    border-top: 1px solid #cfcfcf;
     grid-area: summary;
-    /* 7.5rem er summert nav-header, personalia-header + padding */
     min-height: calc(100vh - 7.5rem);
 }
 

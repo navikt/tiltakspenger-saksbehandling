@@ -4,5 +4,6 @@
     grid-template-rows: auto;
     grid-template-areas: 
         "personalia personalia"
+        "behandlingtag behandlingbanner"
         "summary soknad";
 }
