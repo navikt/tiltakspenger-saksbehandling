@@ -1,5 +1,5 @@
 import React from 'react';
-import { ErrorColored, InformationColored, SuccessColored, WarningColored } from '@navikt/ds-icons';
+import { XMarkOctagonFillIcon, InformationSquareFillIcon, CheckmarkCircleFillIcon } from '@navikt/aksel-icons';
 import TiltaksstatusType from '../../types/Tiltaksstatus';
 import IconWithText from '../icon-with-text/IconWithText';
 
@@ -13,21 +13,21 @@ const iconRenderer = (tiltaksstatus: TiltaksstatusType) => {
         case TiltaksstatusType.TAKKET_JA_TIL_TILBUD:
         case TiltaksstatusType.GJENNOMFØRES:
         case TiltaksstatusType.FULLFØRT:
-            return <SuccessColored />;
+            return <CheckmarkCircleFillIcon />;
         case TiltaksstatusType.AKTUELL:
         case TiltaksstatusType.VENTELISTE:
         case TiltaksstatusType.INFORMASJONSMØTE:
         case TiltaksstatusType.DELTAKELSE_AVBRUTT:
         case TiltaksstatusType.GJENNOMFØRING_AVBRUTT:
-            return <WarningColored />;
+            return <InformationSquareFillIcon />;
         case TiltaksstatusType.IKKE_MØTT:
         case TiltaksstatusType.IKKE_AKTUELL:
         case TiltaksstatusType.FÅTT_AVSLAG:
         case TiltaksstatusType.GJENNOMFØRING_AVLYST:
         case TiltaksstatusType.TAKKET_NEI_TIL_TILBUD:
-            return <ErrorColored />;
+            return <XMarkOctagonFillIcon />;
         default:
-            return <InformationColored />;
+            return <InformationSquareFillIcon />;
     }
 };
 
