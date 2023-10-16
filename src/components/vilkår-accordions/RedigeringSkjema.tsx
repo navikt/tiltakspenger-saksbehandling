@@ -4,21 +4,20 @@ import { FormEvent, useState } from 'react';
 interface RedigeringSkjemaProps {
     vilkår: string;
     håndterLukkRedigering: () => void;
+    behandlingId: string;
 }
 
-export const RedigeringSkjema = ({ håndterLukkRedigering, vilkår }: RedigeringSkjemaProps) => {
+export const RedigeringSkjema = ({ håndterLukkRedigering, vilkår, behandlingId }: RedigeringSkjemaProps) => {
     const [valgtFom, setFom] = useState<Date>();
     const [valgtTom, setTom] = useState<Date>();
     const [harYtelse, setHarYtelse] = useState<boolean>();
     const [begrunnelse, setBegrunnelse] = useState<string>('');
 
-    const behandlingid = 'beh_01H27W28VJSRPR1ESE5ASR04N8';
-
     const håndterLagreSaksopplysning = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         håndterLukkRedigering();
 
-        const res = fetch(`/api/behandling/${behandlingid}`, {
+        const res = fetch(`/api/behandling/${behandlingId}`, {
             method: 'POST',
             body: JSON.stringify({
                 fom: valgtFom?.toISOString().split('T')[0],
