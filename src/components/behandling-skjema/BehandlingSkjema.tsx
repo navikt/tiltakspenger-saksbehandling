@@ -3,17 +3,17 @@ import styles from './BehandlingSkjema.module.css';
 import { FormEvent } from 'react';
 
 interface behandlingSkjemaProps {
-    behandlingid:string;
+    behandlingid: string;
 }
 
-export const BehandlingSkjema = ({behandlingid}: behandlingSkjemaProps) => {
+export const BehandlingSkjema = ({ behandlingid }: behandlingSkjemaProps) => {
     const håndterSendTilBeslutter = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
         const res = fetch(`/api/behandling/beslutter/${behandlingid}`, {
             method: 'POST',
             body: JSON.stringify({
-                tilstand: "tilBeslutting"
+                saksbehandler: 'Z994572',
             }),
         });
 
