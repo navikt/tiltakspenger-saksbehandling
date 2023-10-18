@@ -6,6 +6,7 @@ import { FaktaDTO, SaksopplysningInnDTO } from '../../types/NyBehandling';
 import styles from './Accordion.module.css';
 
 interface InngangsvilkårTabProps {
+    behandlingId: string;
     saksopplysninger: SaksopplysningInnDTO[];
 }
 
@@ -14,7 +15,7 @@ const velgFaktaTekst = (typeSaksopplysning: string, fakta: FaktaDTO) => {
     if (typeSaksopplysning === 'HAR_IKKE_YTELSE') return fakta.harIkkeYtelse;
     return 'Ikke innhentet';
 };
-export const InngangsvilkårTab = ({ saksopplysninger }: InngangsvilkårTabProps) => {
+export const InngangsvilkårTab = ({ behandlingId, saksopplysninger }: InngangsvilkårTabProps) => {
     return (
         <SøknadLayout>
             <Alert variant="info" style={{ marginBottom: '1em' }}>
@@ -35,6 +36,7 @@ export const InngangsvilkårTab = ({ saksopplysninger }: InngangsvilkårTabProps
                                         kilde={saksopplysning.kilde}
                                         detaljer={saksopplysning.detaljer}
                                         fakta={velgFaktaTekst(saksopplysning.typeSaksopplysning, saksopplysning.fakta)}
+                                        behandlingId={behandlingId}
                                     />
                                 </Accordion.Content>
                             </Accordion.Item>
