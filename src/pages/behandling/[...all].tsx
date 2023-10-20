@@ -9,7 +9,7 @@ import { SøkerLayout } from '../../layouts/soker/SøkerLayout';
 import Loaders from '../../components/loaders/Loaders';
 import { pageWithAuthentication } from '../../utils/pageWithAuthentication';
 import { useBehandling } from '../../core/useBehandling';
-import { BehandlingSkjema } from '../../components/behandling-skjema/BehandlingSkjema';
+import { BehandlingKnapper } from '../../components/behandling-knapper/BehandlingKnapper';
 import { Tag } from '@navikt/ds-react';
 import styles from './Soker.module.css';
 
@@ -31,10 +31,10 @@ const BehandlingPage: NextPage = () => {
             <Tag variant="info-filled" size="medium" className={styles.behandlingtag}>
                 Førstegangsbehandling
             </Tag>
-            <BehandlingSkjema />
+            <BehandlingKnapper behandlingid={valgtBehandling.behandlingId} tilstand={valgtBehandling.tilstand} />
             <SøknadSummarySection søknad={valgtBehandling.søknad} />
             <BehandlingTabs
-                onChange={(id) => router.push(`/behandling/${behandlingId}/${id}`)}
+                onChange={(id) => router.push(`/behandling/${valgtBehandling?.behandlingId}/${id}`)}
                 defaultTab={'Inngangsvilkår'}
                 behandling={valgtBehandling}
             />

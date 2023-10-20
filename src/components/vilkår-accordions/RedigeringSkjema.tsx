@@ -21,8 +21,6 @@ export const RedigeringSkjema = ({ håndterLukkRedigering, vilkår, behandlingId
         event.preventDefault();
         håndterLukkRedigering();
 
-        console.log("redraw")
-
         const res = fetch(`/api/behandling/${behandlingId}`, {
             method: 'POST',
             body: JSON.stringify({
