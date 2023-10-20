@@ -41,7 +41,7 @@ export const BehandlingKnapper = ({ behandlingid, tilstand }: behandlingKnapperP
                         </Button>
                     </>
                 ) : (
-                    <Button type="submit" size="small" onClick={() => håndterSendTilBeslutter}>
+                    <Button type="submit" size="small" onClick={() => håndterSendTilBeslutter()}>
                         Send til beslutter{' '}
                     </Button>
                 )}
