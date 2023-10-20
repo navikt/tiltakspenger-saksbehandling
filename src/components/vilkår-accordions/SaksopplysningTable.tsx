@@ -12,9 +12,10 @@ interface SaksopplysningProps {
     kilde: string;
     detaljer: string;
     fakta: string;
+    behandlingId: string;
 }
 
-export const SaksopplysningTable = ({ vilkår, utfall, fom, tom, kilde, detaljer, fakta }: SaksopplysningProps) => {
+export const SaksopplysningTable = ({ vilkår, utfall, fom, tom, kilde, detaljer, fakta, behandlingId }: SaksopplysningProps) => {
     const [åpneRedigering, onÅpneRedigering] = useState<boolean>(false);
 
     const håndterLukkRedigering = () => {
@@ -70,7 +71,7 @@ export const SaksopplysningTable = ({ vilkår, utfall, fom, tom, kilde, detaljer
                     </Table.Row>
                 </Table.Body>
             </Table>
-            <>{åpneRedigering && <RedigeringSkjema vilkår={vilkår} håndterLukkRedigering={håndterLukkRedigering} />}</>
+            <>{åpneRedigering && <RedigeringSkjema behandlingId={behandlingId} vilkår={vilkår} håndterLukkRedigering={håndterLukkRedigering} />}</>
         </>
     );
 };
