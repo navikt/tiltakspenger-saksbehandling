@@ -1,8 +1,8 @@
-import Søknad from "./Søknad";
+import Søknad from './Søknad';
 
 interface Vilkår {
-    lovreferanse : string;
-    tittel : string;
+    lovreferanse: string;
+    tittel: string;
 }
 
 export interface Saksopplysning {
@@ -30,6 +30,7 @@ export interface NyBehandling {
     søknad: Søknad;
     saksopplysninger: SaksopplysningInnDTO[];
     personopplysninger: Personopplysninger;
+    tilstand: string;
 }
 
 export interface Personopplysninger {
@@ -41,7 +42,7 @@ export interface Personopplysninger {
     fortrolig: boolean;
 }
 
-export interface SaksopplysningInnDTO{
+export interface SaksopplysningInnDTO {
     fom: string;
     tom: string;
     kilde: string;
@@ -54,7 +55,7 @@ export interface SaksopplysningInnDTO{
     utfall: string;
 }
 
-export interface FaktaDTO{
+export interface FaktaDTO {
     harYtelse: string;
     harIkkeYtelse: string;
 }

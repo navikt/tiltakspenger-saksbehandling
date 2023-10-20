@@ -31,8 +31,7 @@ const BehandlingPage: NextPage = () => {
             <Tag variant="info-filled" size="medium" className={styles.behandlingtag}>
                 Førstegangsbehandling
             </Tag>
-            <BehandlingSkjema
-            behandlingid={valgtBehandling.behandlingId}/>
+            <BehandlingSkjema behandlingid={valgtBehandling.behandlingId} tilstand={valgtBehandling.tilstand} />
             <SøknadSummarySection søknad={valgtBehandling.søknad} />
             <BehandlingTabs
                 onChange={(id) => router.push(`/behandling/${valgtBehandling?.behandlingId}/${id}`)}

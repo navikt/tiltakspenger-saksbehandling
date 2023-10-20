@@ -6,9 +6,10 @@ import { useSWRConfig } from 'swr';
 
 interface behandlingSkjemaProps {
     behandlingid: string;
+    tilstand: string;
 }
 
-export const BehandlingSkjema = ({ behandlingid }: behandlingSkjemaProps) => {
+export const BehandlingSkjema = ({ behandlingid, tilstand }: behandlingSkjemaProps) => {
     const mutator = useSWRConfig().mutate;
 
     const håndterSendTilBeslutter = (event: FormEvent<HTMLFormElement>) => {
@@ -25,9 +26,27 @@ export const BehandlingSkjema = ({ behandlingid }: behandlingSkjemaProps) => {
     return (
         <form onSubmit={håndterSendTilBeslutter} className={styles.behandlingSkjema}>
             <HStack justify="end" gap="3" align="end">
-                <Button type="submit" size="small">
-                    Send til beslutter
-                </Button>
+                <>
+                    {tilstand == 'tilBeslutter' ? (
+                        <>
+                            <Button
+                                type="submit"
+                                size="small"
+                                variant="secondary"
+                                onClick={() => console.log('Send tilbake')}
+                            >
+                                Send tilbake
+                            </Button>
+                            <Button type="submit" size="small" onClick={() => console.log('Godkjenner vedtak')}>
+                                Godkjenn vedtaket
+                            </Button>
+                        </>
+                    ) : (
+                        <Button type="submit" size="small">
+                            Send til beslutter{' '}
+                        </Button>
+                    )}
+                </>
             </HStack>
         </form>
     );
