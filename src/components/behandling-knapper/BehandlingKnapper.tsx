@@ -22,6 +22,16 @@ export const BehandlingKnapper = ({ behandlingid, tilstand }: behandlingKnapperP
         });
     };
 
+    const håndterSendTilbake = () => {
+        const res = fetch(`/api/behandling/sendtilbake/${behandlingid}`, {
+            method: 'POST',
+        }).then(() => {
+            mutator(`/api/behandling/${behandlingid}`).then(() => {
+                toast('Behandling sendt tilbake til saksbehandler');
+            });
+        });
+    };
+
     return (
         <HStack justify="end" gap="3" align="end" className={styles.behandlingSkjema}>
             <>
@@ -31,7 +41,7 @@ export const BehandlingKnapper = ({ behandlingid, tilstand }: behandlingKnapperP
                             type="submit"
                             size="small"
                             variant="secondary"
-                            onClick={() => console.log('Send tilbake')}
+                            onClick={() => håndterSendTilbake()}
                         >
                             Send tilbake
                         </Button>
