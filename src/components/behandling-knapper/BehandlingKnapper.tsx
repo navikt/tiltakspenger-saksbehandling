@@ -12,8 +12,7 @@ interface behandlingKnapperProps {
 export const BehandlingKnapper = ({ behandlingid, tilstand }: behandlingKnapperProps) => {
     const mutator = useSWRConfig().mutate;
 
-    const håndterSendTilBeslutter = (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
+    const håndterSendTilBeslutter = () => {
         const res = fetch(`/api/behandling/beslutter/${behandlingid}`, {
             method: 'POST',
         }).then(() => {
