@@ -12,6 +12,16 @@ interface behandlingKnapperProps {
 export const BehandlingKnapper = ({ behandlingid, tilstand }: behandlingKnapperProps) => {
     const mutator = useSWRConfig().mutate;
 
+    const håndterRefreshSaksopplysninger = () => {
+        const res = fetch(`/api/behandling/oppdater/${behandlingid}`, {
+            method: 'POST',
+        }).then(() => {
+            mutator(`/api/behandling/${behandlingid}`).then(() => {
+                toast('Startet refresh av saksopplysninger');
+            });
+        });
+    };
+
     const håndterSendTilBeslutter = () => {
         const res = fetch(`/api/behandling/beslutter/${behandlingid}`, {
             method: 'POST',
@@ -50,9 +60,15 @@ export const BehandlingKnapper = ({ behandlingid, tilstand }: behandlingKnapperP
                         </Button>
                     </>
                 ) : (
-                    <Button type="submit" size="small" onClick={() => håndterSendTilBeslutter()}>
-                        Send til beslutter{' '}
-                    </Button>
+                    <>
+                        <Button type="submit" size="small" onClick={() => håndterRefreshSaksopplysninger()}>
+                            Oppdater saksopplysninger{' '}
+                        </Button>
+                        <Button type="submit" size="small" onClick={() => håndterSendTilBeslutter()}>
+                            Send til beslutter{' '}
+                        </Button>
+                    </>
+
                 )}
             </>
         </HStack>
