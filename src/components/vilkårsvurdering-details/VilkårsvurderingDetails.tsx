@@ -3,7 +3,7 @@ import { Behandling } from '../../types/Behandling';
 import Personalia from '../../types/Personalia';
 import SøknadsVarslinger from '../søknads-varslinger/SøknadsVarslinger';
 import Vilkårsvarslinger from '../vilkårsvarslinger/Vilkårsvarslinger';
-import VilkårAccordions from '../vilkår-accordions/VilkårAccordions';
+import VilkårAccordions from '../../containers/vilkår-accordions/VilkårAccordions';
 import OppdatertDataTilgjengeligMelding from '../oppdatert-data-tilgjenglig-melding/OppdatertDataTilgjengeligMelding';
 
 interface VilkårsvurderingDetailsProps {
@@ -13,7 +13,7 @@ interface VilkårsvurderingDetailsProps {
 }
 
 const VilkårsvurderingDetails = ({ behandling, personalia, søkerId }: VilkårsvurderingDetailsProps) => {
-/*    Komponent ikke i bruk.
+    /*    Komponent ikke i bruk.
 
     const {
         søknad: { fritekst, søknadId },

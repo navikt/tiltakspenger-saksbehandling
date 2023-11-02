@@ -1,4 +1,4 @@
-import Header from '../../components/header/Header';
+import Header from '../../containers/header/Header';
 import Loaders from '../../components/loaders/Loaders';
 import useSaksbehandler from '../../core/useSaksbehandler';
 import useSokOppPerson from '../../core/useSokOppPerson';

@@ -3,7 +3,7 @@ import { Heading } from '@navikt/ds-react';
 import { RegistrertTiltak } from '../../types/Søknad';
 import { formatDate, formatPeriode } from '../../utils/date';
 import { Periode, ÅpenPeriode } from '../../types/Periode';
-import Tiltaksstatus from '../tiltaksstatus/Tiltaksstatus';
+import Tiltaksstatus from '../../components/tiltaksstatus/Tiltaksstatus';
 import styles from './RegistrertTiltakDetails.module.css';
 
 interface RegistrertTiltakDetailsProps {

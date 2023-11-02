@@ -1,14 +1,13 @@
 import { Behandling } from '../../types/Behandling';
-import AlderVilkårsvurderingTable from '../alder-vilkårsvurdering-table/AlderVilkårsvurderingTable';
-import BarnetilleggTable from '../barnetillegg/BarnetilleggTable';
-import InstitusjonsoppholdTable from '../institusjonsopphold-table/InstitusjonsoppholdTable';
-import KommunaleYtelserContent from '../kommunale-ytelser-content/KommunaleYtelserContent';
-import LønnsinntekterTable from '../lønnsinntekter-table/LønnsinntekterTable';
-import PensjonsordningerTable from '../pensjonsordninger-table/PensjonsordningerTable';
-import StatligeYtelserTable from '../statlige-ytelser-table/StatligeYtelserTable';
-import TiltakspengerYtelserTable from '../tiltakspenger-ytelser-table/TiltakspengerYtelserTable';
-import {Accordion} from "@navikt/ds-react";
-
+import AlderVilkårsvurderingTable from '../../components/alder-vilkårsvurdering-table/AlderVilkårsvurderingTable';
+import BarnetilleggTable from '../../components/barnetillegg/BarnetilleggTable';
+import InstitusjonsoppholdTable from '../../components/institusjonsopphold-table/InstitusjonsoppholdTable';
+import KommunaleYtelserContent from '../../components/kommunale-ytelser-content/KommunaleYtelserContent';
+import LønnsinntekterTable from '../../components/lønnsinntekter-table/LønnsinntekterTable';
+import PensjonsordningerTable from '../../components/pensjonsordninger-table/PensjonsordningerTable';
+import StatligeYtelserTable from '../../components/statlige-ytelser-table/StatligeYtelserTable';
+import TiltakspengerYtelserTable from '../../components/tiltakspenger-ytelser-table/TiltakspengerYtelserTable';
+import { Accordion } from '@navikt/ds-react';
 
 interface VilkårAccordionsProps {
     behandling: Behandling;
