@@ -1,6 +1,5 @@
 import { Button, HStack } from '@navikt/ds-react';
 import styles from './BehandlingSkjema.module.css';
-import { FormEvent } from 'react';
 import toast from 'react-hot-toast';
 import { useSWRConfig } from 'swr';
 
@@ -32,6 +31,16 @@ export const BehandlingKnapper = ({ behandlingid, tilstand }: behandlingKnapperP
         });
     };
 
+    const håndterGodkjenn = () => {
+        const res = fetch(`/api/behandling/godkjenn/${behandlingid}`, {
+            method: 'POST',
+        }).then(() => {
+            mutator(`/api/behandling/${behandlingid}`).then(() => {
+                toast('Behandling godkjent');
+            });
+        });
+    };
+
     const håndterSendTilbake = () => {
         const res = fetch(`/api/behandling/sendtilbake/${behandlingid}`, {
             method: 'POST',
@@ -55,7 +64,7 @@ export const BehandlingKnapper = ({ behandlingid, tilstand }: behandlingKnapperP
                         >
                             Send tilbake
                         </Button>
-                        <Button type="submit" size="small" onClick={() => console.log('Godkjenner vedtak')}>
+                        <Button type="submit" size="small" onClick={() => håndterGodkjenn()}>
                             Godkjenn vedtaket
                         </Button>
                     </>
