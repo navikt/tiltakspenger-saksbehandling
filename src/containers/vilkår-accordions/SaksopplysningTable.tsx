@@ -1,5 +1,5 @@
 import { BodyShort, Button, Table } from '@navikt/ds-react';
-import { UtfallIcon } from '../utfall-icon/UtfallIcon';
+import { UtfallIcon } from '../../components/utfall-icon/UtfallIcon';
 import React, { useState } from 'react';
 import { PencilIcon } from '@navikt/aksel-icons';
 import { RedigeringSkjema } from './RedigeringSkjema';
@@ -15,7 +15,16 @@ interface SaksopplysningProps {
     behandlingId: string;
 }
 
-export const SaksopplysningTable = ({ vilkår, utfall, fom, tom, kilde, detaljer, fakta, behandlingId }: SaksopplysningProps) => {
+export const SaksopplysningTable = ({
+    vilkår,
+    utfall,
+    fom,
+    tom,
+    kilde,
+    detaljer,
+    fakta,
+    behandlingId,
+}: SaksopplysningProps) => {
     const [åpneRedigering, onÅpneRedigering] = useState<boolean>(false);
 
     const håndterLukkRedigering = () => {
@@ -71,7 +80,15 @@ export const SaksopplysningTable = ({ vilkår, utfall, fom, tom, kilde, detaljer
                     </Table.Row>
                 </Table.Body>
             </Table>
-            <>{åpneRedigering && <RedigeringSkjema behandlingId={behandlingId} vilkår={vilkår} håndterLukkRedigering={håndterLukkRedigering} />}</>
+            <>
+                {åpneRedigering && (
+                    <RedigeringSkjema
+                        behandlingId={behandlingId}
+                        vilkår={vilkår}
+                        håndterLukkRedigering={håndterLukkRedigering}
+                    />
+                )}
+            </>
         </>
     );
 };

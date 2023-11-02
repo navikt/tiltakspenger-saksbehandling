@@ -1,7 +1,7 @@
 import React from 'react';
 import { Heading } from '@navikt/ds-react';
 import { CalendarIcon, FileTextIcon, Buldings3Icon, ArrowsCirclepathIcon } from '@navikt/aksel-icons';
-import IconWithText from '../icon-with-text/IconWithText';
+import IconWithText from '../../components/icon-with-text/IconWithText';
 import { formatDate } from '../../utils/date';
 import styles from './SøknadDetails.module.css';
 import Søknad from '../../types/Søknad';

@@ -3,7 +3,7 @@ import { InternalHeader } from '@navikt/ds-react';
 import { Search } from '@navikt/ds-react';
 import { Saksbehandler } from '../../types/Saksbehandler';
 import styles from './Header.module.css';
-import Loaders from '../loaders/Loaders';
+import Loaders from '../../components/loaders/Loaders';
 
 interface HeaderProps {
     saksbehandler?: Saksbehandler;
