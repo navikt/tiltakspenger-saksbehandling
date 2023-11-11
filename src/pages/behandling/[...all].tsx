@@ -32,7 +32,7 @@ const BehandlingPage: NextPage = () => {
                 Førstegangsbehandling
             </Tag>
             <BehandlingKnapper behandlingid={valgtBehandling.behandlingId} tilstand={valgtBehandling.tilstand} />
-            <SøknadSummarySection søknad={valgtBehandling.søknad} />
+            <SøknadSummarySection søknad={valgtBehandling.søknad} registrerteTiltak={valgtBehandling.registrerteTiltak}/>
             <BehandlingTabs
                 onChange={(id) => router.push(`/behandling/${valgtBehandling?.behandlingId}/${id}`)}
                 defaultTab={'Inngangsvilkår'}

@@ -1,4 +1,4 @@
-import Søknad from './Søknad';
+import Søknad, {RegistrertTiltak} from './Søknad';
 
 interface Vilkår {
     lovreferanse: string;
@@ -28,6 +28,7 @@ export interface NyBehandling {
     fom: string;
     tom: string;
     søknad: Søknad;
+    registrerteTiltak: RegistrertTiltak[];
     saksopplysninger: SaksopplysningInnDTO[];
     personopplysninger: Personopplysninger;
     tilstand: string;

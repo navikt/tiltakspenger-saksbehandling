@@ -30,7 +30,7 @@ const SøkerPage: NextPage = () => {
             <Tag variant="info-filled" size="medium" className={styles.behandlingtag}>
                 Førstegangsbehandling
             </Tag>
-            <SøknadSummarySection søknad={valgtBehandling.søknad} />
+            <SøknadSummarySection søknad={valgtBehandling.søknad} registrerteTiltak={valgtBehandling.registrerteTiltak}/>
             <BehandlingTabs
                 onChange={(id) => router.push(`/soker/${søkerId}/${id}`)}
                 defaultTab={'Inngangsvilkår'}

@@ -8,6 +8,7 @@ export type RegistrertTiltak = {
     navn: string;
     periode: Periode;
     prosent: number;
+    antallDager: number;
     status: Tiltaksstatus;
 };
 
@@ -17,7 +18,6 @@ interface Søknad {
     tiltakstype: string;
     startdato: string;
     sluttdato: string;
-    antallDager: number;
 }
 
 export interface Vilkårsvurdering {
