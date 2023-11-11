@@ -8,7 +8,6 @@ export type RegistrertTiltak = {
     navn: string;
     periode: Periode;
     prosent: number;
-    antallDager: number;
     status: Tiltaksstatus;
 };
 
