@@ -15,8 +15,8 @@ interface Søknad {
     søknadsdato: string;
     arrangoernavn: string;
     tiltakstype: string;
-    startdato: string;
-    sluttdato: string;
+    deltakelseFom: string;
+    deltakelseTom: string;
 }
 
 export interface Vilkårsvurdering {

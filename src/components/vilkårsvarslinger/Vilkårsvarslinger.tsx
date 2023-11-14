@@ -26,7 +26,7 @@ function Vilkårsvarslinger({ behandling, fødselsdato }: VilkårsvarslingerProp
         registrerteTiltak,
         institusjonsopphold,
         alderVilkårsvurdering,
-        søknad: { startdato, sluttdato },
+        søknad: { deltakelseFom, deltakelseTom },
     } = behandling;
 
     const dagpengePerioder = statligeYtelser.finnDagpengeperioder();
@@ -48,7 +48,7 @@ function Vilkårsvarslinger({ behandling, fødselsdato }: VilkårsvarslingerProp
 
     const periodeBrukerIkkeHarFylt18År = alderVilkårsvurdering.finnPeriodeHvorBrukerIkkeHarFylt18År();
     const datoBrukerFyller18År = dayjs(fødselsdato).add(18, 'years');
-    const brukerErUnder18ÅrIHelePerioden = datoBrukerFyller18År.isAfter(dayjs(sluttdato));
+    const brukerErUnder18ÅrIHelePerioden = datoBrukerFyller18År.isAfter(dayjs(deltakelseTom));
 
     const visManglendeRegistrertTiltakMelding = !registrerteTiltak || registrerteTiltak.length === 0;
     const visMeldingOmAtBrukerFyller18ÅrIPerioden = !brukerErUnder18ÅrIHelePerioden && periodeBrukerIkkeHarFylt18År;
@@ -62,8 +62,8 @@ function Vilkårsvarslinger({ behandling, fødselsdato }: VilkårsvarslingerProp
             {visManglendeRegistrertTiltakMelding && (
                 <Alert variant="warning" style={{ marginTop: '1rem', paddingBottom: 0 }}>
                     <strong>
-                        Det er ikke registrert tiltak på bruker i perioden {formatDate(startdato)} -{' '}
-                        {formatDate(sluttdato)}
+                        Det er ikke registrert tiltak på bruker i perioden {formatDate(deltakelseFom)} -{' '}
+                        {formatDate(deltakelseTom)}
                     </strong>
                     <p>Søknaden trenger manuell behandling</p>
                 </Alert>
