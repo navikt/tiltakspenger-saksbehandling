@@ -15,7 +15,7 @@ enum Tiltaksstatus {
     GODKJENT_TILTAKSPLASS = 'Godkjent tiltaksplass',
     VENTELISTE = 'Venteliste',
 
-    VENTER_PA_OPPSTART = 'Ventet på oppstart',
+    VENTER_PA_OPPSTART = 'Venter på oppstart',
     HAR_SLUTTET = 'Har sluttet',
     AVBRUTT = 'Avbrutt',
     FEILREGISTRERT = 'Feilregistrert',
