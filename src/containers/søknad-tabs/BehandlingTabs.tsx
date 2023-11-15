@@ -2,16 +2,16 @@ import React from 'react';
 import { Tabs } from '@navikt/ds-react';
 import { FileTextIcon } from '@navikt/aksel-icons';
 import styles from './SøknadTabs.module.css';
-import { NyBehandling } from '../../types/NyBehandling';
+import { Behandling } from '../../types/Behandling';
 import { BankNoteIcon, CardIcon } from '@navikt/aksel-icons';
 import { InngangsvilkårTab } from './InngangsvilkårTab';
-import {MeldekortTab} from "./MeldekortTab";
+import { MeldekortTab } from './MeldekortTab';
 
 interface SøknadTabsProps {
     className?: string;
     defaultTab: string;
     onChange: (søknadId: string) => void;
-    behandling: NyBehandling;
+    behandling: Behandling;
 }
 
 const BehandlingTabs = ({ defaultTab, behandling }: SøknadTabsProps) => {

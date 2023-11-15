@@ -1,52 +1,67 @@
-import Søknad, { Barnetillegg, RegistrertTiltak } from './Søknad';
-import StatligeYtelser from './StatligeYtelser';
-import KommunaleYtelser from './KommunaleYtelser';
-import Pensjonsordninger from './Pensjonsordninger';
-import Lønnsinntekt from './Lønnsinntekt';
-import Institusjonsopphold from './Institusjonsopphold';
-import TiltakspengerYtelser from './TiltakspengerYtelser';
-import AlderVilkårsvurdering from './AlderVilkårsvurdering';
+import Søknad, { RegistrertTiltak } from './Søknad';
 
-export class IkkeKlarBehandling {
-    søknad: Søknad;
-    klarForBehandling: boolean;
-    constructor(ikkeKlarBehandlingData: any) {
-        this.søknad = ikkeKlarBehandlingData.søknad;
-        this.klarForBehandling = ikkeKlarBehandlingData.klarForBehandling;
-    }
+interface Vilkår {
+    lovreferanse: string;
+    tittel: string;
 }
 
-export class Behandling {
-    søknad: Søknad;
-    hash: string;
-    klarForBehandling: boolean;
-    registrerteTiltak: RegistrertTiltak[];
-    vurderingsperiode: {
-        fra: string;
-        til: string;
-    };
-    tiltakspengerYtelser: TiltakspengerYtelser;
-    statligeYtelser: StatligeYtelser;
-    kommunaleYtelser: KommunaleYtelser;
-    pensjonsordninger: Pensjonsordninger;
-    lønnsinntekt: Lønnsinntekt;
-    institusjonsopphold: Institusjonsopphold;
-    alderVilkårsvurdering: AlderVilkårsvurdering;
-    barnetillegg: Barnetillegg[];
+export interface Saksopplysning {
+    fom: string;
+    tom: string;
+    vilkår: Vilkår;
+    kilde: string;
+    detaljer: string;
+    typeSaksopplysning: string;
+}
 
-    constructor(behandlingData: any) {
-        this.søknad = behandlingData.søknad;
-        this.hash = behandlingData.hash;
-        this.klarForBehandling = behandlingData.klarForBehandling;
-        this.registrerteTiltak = behandlingData.registrerteTiltak;
-        this.vurderingsperiode = behandlingData.vurderingsperiode;
-        this.tiltakspengerYtelser = new TiltakspengerYtelser(behandlingData.tiltakspengerYtelser);
-        this.statligeYtelser = new StatligeYtelser(behandlingData.statligeYtelser);
-        this.kommunaleYtelser = new KommunaleYtelser(behandlingData.kommunaleYtelser);
-        this.pensjonsordninger = new Pensjonsordninger(behandlingData.pensjonsordninger);
-        this.lønnsinntekt = new Lønnsinntekt(behandlingData.lønnsinntekt);
-        this.institusjonsopphold = new Institusjonsopphold(behandlingData.institusjonsopphold);
-        this.alderVilkårsvurdering = new AlderVilkårsvurdering(behandlingData.alderVilkårsvurdering);
-        this.barnetillegg = behandlingData.barnetillegg;
-    }
+interface Vurdering {
+    fom: string;
+    tom: string;
+    vilkår: Vilkår;
+    kilde: string;
+    detaljer: string;
+    utfall: string;
+}
+
+export interface Behandling {
+    behandlingId: string;
+    fom: string;
+    tom: string;
+    søknad: Søknad;
+    registrerteTiltak: RegistrertTiltak[];
+    saksopplysninger: Kategori[];
+    personopplysninger: Personopplysninger;
+    tilstand: string;
+}
+
+export interface Personopplysninger {
+    ident: string;
+    fornavn: string;
+    etternavn: string;
+    skjerming: boolean;
+    strengtFortrolig: boolean;
+    fortrolig: boolean;
+}
+
+export interface Kategori {
+    navn: string;
+    saksopplysninger: SaksopplysningInnDTO[];
+}
+
+export interface SaksopplysningInnDTO {
+    fom: string;
+    tom: string;
+    kilde: string;
+    detaljer: string;
+    typeSaksopplysning: string;
+    vilkårTittel: string;
+    vilkårParagraf: string;
+    vilkårLedd: string;
+    fakta: FaktaDTO;
+    utfall: string;
+}
+
+export interface FaktaDTO {
+    harYtelse: string;
+    harIkkeYtelse: string;
 }

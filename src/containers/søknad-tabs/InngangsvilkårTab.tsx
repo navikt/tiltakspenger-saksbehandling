@@ -2,8 +2,7 @@ import { Accordion, Alert, VStack } from '@navikt/ds-react';
 import { SaksopplysningTable } from '../vilkår-accordions/SaksopplysningTable';
 import { SøknadLayout } from '../../layouts/soker/SøknadLayout';
 import React from 'react';
-import { FaktaDTO, SaksopplysningInnDTO } from '../../types/NyBehandling';
-import styles from './Accordion.module.css';
+import { FaktaDTO, Kategori } from '../../types/Behandling';
 
 interface InngangsvilkårTabProps {
     behandlingId: string;
