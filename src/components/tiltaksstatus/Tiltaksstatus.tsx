@@ -45,7 +45,7 @@ const iconRenderer = (tiltaksstatus: TiltaksstatusType) => {
 };
 
 const Tiltaksstatus = ({ tiltaksstatus }: TiltaksstatusProps) => {
-    return <IconWithText iconRenderer={() => iconRenderer(tiltaksstatus)} text={tiltaksstatus} />;
+    return <IconWithText iconRenderer={() => iconRenderer(tiltaksstatus)} text={tiltaksstatus.toString()} />;
 };
 
 export default Tiltaksstatus;
