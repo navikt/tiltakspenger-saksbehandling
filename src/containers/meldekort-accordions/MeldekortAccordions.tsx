@@ -1,6 +1,10 @@
 import styles from './meldekort.module.css';
 import {MeldekortUke} from "./MeldekortUke";
 
+interface Meldekort {
+
+}
+
 export const MeldekortAccordions = () => {
     return(
         <div className={styles.ukevisning}>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Tabs } from '@navikt/ds-react';
-import { FileTextIcon } from '@navikt/aksel-icons';
+import {ChevronRightIcon, FileTextIcon} from '@navikt/aksel-icons';
 import styles from './SøknadTabs.module.css';
 import { Behandling } from '../../types/Behandling';
 import { BankNoteIcon, CardIcon } from '@navikt/aksel-icons';
@@ -16,6 +16,8 @@ interface SøknadTabsProps {
 
 const BehandlingTabs = ({ defaultTab, behandling }: SøknadTabsProps) => {
     return (
+        <div className={styles.tabsHistorikkDiv}>
+        <div className={styles.tabsColumn}>
         <Tabs defaultValue={defaultTab} className={styles.søknadTabs}>
             <Tabs.List>
                 <Tabs.Tab
@@ -52,6 +54,10 @@ const BehandlingTabs = ({ defaultTab, behandling }: SøknadTabsProps) => {
             </Tabs.Panel>
             <Tabs.Panel value={'Utbetaling'}>Utbetaling</Tabs.Panel>
         </Tabs>
+        </div>
+        <div className={styles.historikkColumn}>
+            <span> <ChevronRightIcon/>  &nbsp; Historikk </span></div>
+        </div>
     );
 };
 
