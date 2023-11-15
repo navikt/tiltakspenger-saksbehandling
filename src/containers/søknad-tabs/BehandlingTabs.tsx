@@ -5,6 +5,7 @@ import styles from './SøknadTabs.module.css';
 import { NyBehandling } from '../../types/NyBehandling';
 import { BankNoteIcon, CardIcon } from '@navikt/aksel-icons';
 import { InngangsvilkårTab } from './InngangsvilkårTab';
+import {MeldekortTab} from "./MeldekortTab";
 
 interface SøknadTabsProps {
     className?: string;
@@ -43,7 +44,9 @@ const BehandlingTabs = ({ defaultTab, behandling }: SøknadTabsProps) => {
             <Tabs.Panel value={'Inngangsvilkår'}>
                 <InngangsvilkårTab behandlingId={behandling.behandlingId} saksopplysninger={behandling.saksopplysninger} />
             </Tabs.Panel>
-            <Tabs.Panel value={'Meldekort'}>Meldekort</Tabs.Panel>
+            <Tabs.Panel value={'Meldekort'}>
+                <MeldekortTab></MeldekortTab>
+            </Tabs.Panel>
             <Tabs.Panel value={'Utbetaling'}>Utbetaling</Tabs.Panel>
         </Tabs>
     );
