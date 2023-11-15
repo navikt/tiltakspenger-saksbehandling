@@ -45,7 +45,9 @@ const iconRenderer = (tiltaksstatus: TiltaksstatusType) => {
 };
 
 const Tiltaksstatus = ({ tiltaksstatus }: TiltaksstatusProps) => {
-    return <IconWithText iconRenderer={() => iconRenderer(tiltaksstatus)} text={TiltaksstatusType[tiltaksstatus]} />;
+    return <IconWithText iconRenderer={() => iconRenderer(tiltaksstatus)} text={
+        TiltaksstatusType[tiltaksstatus as unknown as keyof typeof TiltaksstatusType] //TODO: Typescriptproblem
+    } />;
 };
 
 export default Tiltaksstatus;
