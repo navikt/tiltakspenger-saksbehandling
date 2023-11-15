@@ -6,7 +6,7 @@ import { FaktaDTO, Kategori } from '../../types/Behandling';
 
 interface InngangsvilkårTabProps {
     behandlingId: string;
-    vilkårskategorier: Kategori[];
+    kategoriserteSaksopplysninger: Kategori[];
 }
 
 const velgFaktaTekst = (typeSaksopplysning: string, fakta: FaktaDTO) => {
@@ -14,7 +14,7 @@ const velgFaktaTekst = (typeSaksopplysning: string, fakta: FaktaDTO) => {
     if (typeSaksopplysning === 'HAR_IKKE_YTELSE') return fakta.harIkkeYtelse;
     return 'Ikke innhentet';
 };
-export const InngangsvilkårTab = ({ behandlingId, vilkårskategorier }: InngangsvilkårTabProps) => {
+export const InngangsvilkårTab = ({ behandlingId, kategoriserteSaksopplysninger }: InngangsvilkårTabProps) => {
     return (
         <SøknadLayout>
             <Alert variant="info" style={{ marginBottom: '1em' }}>
@@ -22,10 +22,10 @@ export const InngangsvilkårTab = ({ behandlingId, vilkårskategorier }: Inngang
             </Alert>
             <Accordion indent={false}>
                 <VStack>
-                    {vilkårskategorier.map((kategori) => {
+                    {kategoriserteSaksopplysninger.map((kategori) => {
                         return (
-                            <Accordion.Item key={kategori.navn} style={{ background: '#FFFFFF' }}>
-                                <Accordion.Header>{kategori.navn}</Accordion.Header>
+                            <Accordion.Item key={kategori.kategoriTittel} style={{ background: '#FFFFFF' }}>
+                                <Accordion.Header>{kategori.kategoriTittel}</Accordion.Header>
                                 <Accordion.Content>
                                     {kategori.saksopplysninger.map((saksopplysning) => (
                                         <SaksopplysningTable
