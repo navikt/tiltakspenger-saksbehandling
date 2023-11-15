@@ -14,15 +14,6 @@ export interface Saksopplysning {
     typeSaksopplysning: string;
 }
 
-interface Vurdering {
-    fom: string;
-    tom: string;
-    vilkår: Vilkår;
-    kilde: string;
-    detaljer: string;
-    utfall: string;
-}
-
 export interface Behandling {
     behandlingId: string;
     fom: string;
