@@ -19,7 +19,11 @@ export const MeldekortUke = ({ukesnummer, fom, tom} : MeldekortUkeProps) => {
 
     const [ikon, setIkon] = useState<React.ReactElement>();
     function velgIkon(deltattEllerFravær: String){
-        switch(deltattEllerFravær) {
+        const selectElement = document.getElementById('deltattEllerFravær');
+        var val = selectElement?.nodeValue;
+
+        console.log("select value: ", val);
+        switch(val) {
             case 'Deltatt' :  return <CheckmarkCircleFillIcon />;
             case 'Ikke_deltatt' : return <XMarkOctagonFillIcon />;
             case 'Lønn' : return <XMarkOctagonFillIcon />;
@@ -33,14 +37,14 @@ export const MeldekortUke = ({ukesnummer, fom, tom} : MeldekortUkeProps) => {
     var ukedagListe = ukedager.map((ukedag, index) => {
             return (
                 <Table.Row key={index}>
-                    <Table.DataCell>{ikon}</Table.DataCell>
+                    <Table.DataCell>{velgIkon("Deltatt")}</Table.DataCell>
                     <Table.DataCell>{ukedag} {fom++}</Table.DataCell>
                     <Table.DataCell>
                         <Select
                             label="Deltatt Eller Fravær"
                             id="deltattEllerFravær"
                             size="small"
-                            onChange={e=> velgIkon(e.target.value)}
+                            //onChange={e=> velgIkon(e.target.value)}
                             hideLabel
                         >
                             <option value="Deltatt">Deltatt i tiltaket</option>
