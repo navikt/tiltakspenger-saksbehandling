@@ -8,7 +8,7 @@ interface SaksopplysningProps {
     behandlingId: string;
 }
 
-export const SaksopplysningTable = ({ saksopplysninger, behandlingId }: SaksopplysningProps) => {
+export const SaksopplysningTabell = ({ saksopplysninger, behandlingId }: SaksopplysningProps) => {
     const velgFaktaTekst = (typeSaksopplysning: string, fakta: FaktaDTO) => {
         if (typeSaksopplysning === 'HAR_YTELSE') return fakta.harYtelse;
         if (typeSaksopplysning === 'HAR_IKKE_YTELSE') return fakta.harIkkeYtelse;

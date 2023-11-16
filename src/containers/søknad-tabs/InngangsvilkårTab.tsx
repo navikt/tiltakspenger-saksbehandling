@@ -1,5 +1,5 @@
 import { Accordion, Alert, HStack, VStack } from '@navikt/ds-react';
-import { SaksopplysningTable } from '../vilkår-accordions/SaksopplysningTable';
+import { SaksopplysningTabell } from '../saksopplysning-tabell/SaksopplysningTabell';
 import { SøknadLayout } from '../../layouts/soker/SøknadLayout';
 import React from 'react';
 import { Kategori } from '../../types/Behandling';
@@ -28,7 +28,7 @@ export const InngangsvilkårTab = ({ behandlingId, kategoriserteSaksopplysninger
                                     </HStack>
                                 </Accordion.Header>
                                 <Accordion.Content>
-                                    <SaksopplysningTable
+                                    <SaksopplysningTabell
                                         saksopplysninger={kategori.saksopplysninger}
                                         behandlingId={behandlingId}
                                     />
