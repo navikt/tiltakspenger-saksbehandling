@@ -1,19 +1,15 @@
-import { Accordion, Alert, VStack } from '@navikt/ds-react';
+import { Accordion, Alert, HStack, VStack } from '@navikt/ds-react';
 import { SaksopplysningTable } from '../vilkår-accordions/SaksopplysningTable';
 import { SøknadLayout } from '../../layouts/soker/SøknadLayout';
 import React from 'react';
-import { FaktaDTO, Kategori } from '../../types/Behandling';
+import { Kategori } from '../../types/Behandling';
+import { UtfallIcon } from '../../components/utfall-icon/UtfallIcon';
 
 interface InngangsvilkårTabProps {
     behandlingId: string;
     kategoriserteSaksopplysninger: Kategori[];
 }
 
-const velgFaktaTekst = (typeSaksopplysning: string, fakta: FaktaDTO) => {
-    if (typeSaksopplysning === 'HAR_YTELSE') return fakta.harYtelse;
-    if (typeSaksopplysning === 'HAR_IKKE_YTELSE') return fakta.harIkkeYtelse;
-    return 'Ikke innhentet';
-};
 export const InngangsvilkårTab = ({ behandlingId, kategoriserteSaksopplysninger }: InngangsvilkårTabProps) => {
     return (
         <SøknadLayout>
@@ -25,24 +21,17 @@ export const InngangsvilkårTab = ({ behandlingId, kategoriserteSaksopplysninger
                     {kategoriserteSaksopplysninger.map((kategori) => {
                         return (
                             <Accordion.Item key={kategori.kategoriTittel} style={{ background: '#FFFFFF' }}>
-                                <Accordion.Header>{kategori.kategoriTittel}</Accordion.Header>
+                                <Accordion.Header>
+                                    <HStack align={'center'} gap={'2'}>
+                                        <UtfallIcon utfall={kategori.utfall} />
+                                        {kategori.kategoriTittel}
+                                    </HStack>
+                                </Accordion.Header>
                                 <Accordion.Content>
-                                    {kategori.saksopplysninger.map((saksopplysning) => (
-                                        <SaksopplysningTable
-                                            key={saksopplysning.vilkårTittel}
-                                            vilkår={saksopplysning.vilkårTittel}
-                                            utfall={saksopplysning.utfall}
-                                            fom={saksopplysning.fom}
-                                            tom={saksopplysning.tom}
-                                            kilde={saksopplysning.kilde}
-                                            detaljer={saksopplysning.detaljer}
-                                            fakta={velgFaktaTekst(
-                                                saksopplysning.typeSaksopplysning,
-                                                saksopplysning.fakta
-                                            )}
-                                            behandlingId={behandlingId}
-                                        />
-                                    ))}
+                                    <SaksopplysningTable
+                                        saksopplysninger={kategori.saksopplysninger}
+                                        behandlingId={behandlingId}
+                                    />
                                 </Accordion.Content>
                             </Accordion.Item>
                         );
