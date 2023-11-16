@@ -2,7 +2,7 @@ import React from 'react';
 import { Tag } from '@navikt/ds-react';
 import { PersonCircleIcon } from '@navikt/aksel-icons';
 import styles from './PersonaliaHeader.module.css';
-import { Personopplysninger } from '../../types/NyBehandling';
+import { Personopplysninger } from '../../types/Behandling';
 
 interface PersonaliaHeaderProps {
     personopplysninger: Personopplysninger;

@@ -1,21 +1,16 @@
-import { Accordion, Alert, VStack } from '@navikt/ds-react';
+import { Accordion, Alert, HStack, VStack } from '@navikt/ds-react';
 import { SaksopplysningTable } from '../vilkår-accordions/SaksopplysningTable';
 import { SøknadLayout } from '../../layouts/soker/SøknadLayout';
 import React from 'react';
-import { FaktaDTO, SaksopplysningInnDTO } from '../../types/NyBehandling';
-import styles from './Accordion.module.css';
+import { Kategori } from '../../types/Behandling';
+import { UtfallIcon } from '../../components/utfall-icon/UtfallIcon';
 
 interface InngangsvilkårTabProps {
     behandlingId: string;
-    saksopplysninger: SaksopplysningInnDTO[];
+    kategoriserteSaksopplysninger: Kategori[];
 }
 
-const velgFaktaTekst = (typeSaksopplysning: string, fakta: FaktaDTO) => {
-    if (typeSaksopplysning === 'HAR_YTELSE') return fakta.harYtelse;
-    if (typeSaksopplysning === 'HAR_IKKE_YTELSE') return fakta.harIkkeYtelse;
-    return 'Ikke innhentet';
-};
-export const InngangsvilkårTab = ({ behandlingId, saksopplysninger }: InngangsvilkårTabProps) => {
+export const InngangsvilkårTab = ({ behandlingId, kategoriserteSaksopplysninger }: InngangsvilkårTabProps) => {
     return (
         <SøknadLayout>
             <Alert variant="info" style={{ marginBottom: '1em' }}>
@@ -23,19 +18,18 @@ export const InngangsvilkårTab = ({ behandlingId, saksopplysninger }: Inngangsv
             </Alert>
             <Accordion indent={false}>
                 <VStack>
-                    {saksopplysninger.map((saksopplysning) => {
+                    {kategoriserteSaksopplysninger.map((kategori) => {
                         return (
-                            <Accordion.Item key={saksopplysning.vilkårTittel} style={{ background: '#FFFFFF' }}>
-                                <Accordion.Header>{saksopplysning.vilkårTittel}</Accordion.Header>
+                            <Accordion.Item key={kategori.kategoriTittel} style={{ background: '#FFFFFF' }}>
+                                <Accordion.Header>
+                                    <HStack align={'center'} gap={'2'}>
+                                        <UtfallIcon utfall={kategori.utfall} />
+                                        {kategori.kategoriTittel}
+                                    </HStack>
+                                </Accordion.Header>
                                 <Accordion.Content>
                                     <SaksopplysningTable
-                                        vilkår={saksopplysning.vilkårTittel}
-                                        utfall={saksopplysning.utfall}
-                                        fom={saksopplysning.fom}
-                                        tom={saksopplysning.tom}
-                                        kilde={saksopplysning.kilde}
-                                        detaljer={saksopplysning.detaljer}
-                                        fakta={velgFaktaTekst(saksopplysning.typeSaksopplysning, saksopplysning.fakta)}
+                                        saksopplysninger={kategori.saksopplysninger}
                                         behandlingId={behandlingId}
                                     />
                                 </Accordion.Content>

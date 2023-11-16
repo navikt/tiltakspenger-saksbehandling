@@ -1,20 +1,23 @@
 import React from 'react';
 import { Tabs } from '@navikt/ds-react';
-import { FileTextIcon } from '@navikt/aksel-icons';
+import {ChevronRightIcon, FileTextIcon} from '@navikt/aksel-icons';
 import styles from './SøknadTabs.module.css';
-import { NyBehandling } from '../../types/NyBehandling';
+import { Behandling } from '../../types/Behandling';
 import { BankNoteIcon, CardIcon } from '@navikt/aksel-icons';
 import { InngangsvilkårTab } from './InngangsvilkårTab';
+import { MeldekortTab } from './MeldekortTab';
 
 interface SøknadTabsProps {
     className?: string;
     defaultTab: string;
     onChange: (søknadId: string) => void;
-    behandling: NyBehandling;
+    behandling: Behandling;
 }
 
 const BehandlingTabs = ({ defaultTab, behandling }: SøknadTabsProps) => {
     return (
+        <div className={styles.tabsHistorikkDiv}>
+        <div className={styles.tabsColumn}>
         <Tabs defaultValue={defaultTab} className={styles.søknadTabs}>
             <Tabs.List>
                 <Tabs.Tab
@@ -41,11 +44,20 @@ const BehandlingTabs = ({ defaultTab, behandling }: SøknadTabsProps) => {
                 />
             </Tabs.List>
             <Tabs.Panel value={'Inngangsvilkår'}>
-                <InngangsvilkårTab behandlingId={behandling.behandlingId} saksopplysninger={behandling.saksopplysninger} />
+                <InngangsvilkårTab
+                    behandlingId={behandling.behandlingId}
+                    kategoriserteSaksopplysninger={behandling.saksopplysninger}
+                />
             </Tabs.Panel>
-            <Tabs.Panel value={'Meldekort'}>Meldekort</Tabs.Panel>
+            <Tabs.Panel value={'Meldekort'}>
+                <MeldekortTab></MeldekortTab>
+            </Tabs.Panel>
             <Tabs.Panel value={'Utbetaling'}>Utbetaling</Tabs.Panel>
         </Tabs>
+        </div>
+        <div className={styles.historikkColumn}>
+            <span> <ChevronRightIcon/>  &nbsp; Historikk </span></div>
+        </div>
     );
 };
 
