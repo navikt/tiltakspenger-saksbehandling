@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { RedigeringSkjema } from './RedigeringSkjema';
 import { FaktaDTO, SaksopplysningInnDTO } from '../../types/Behandling';
 import { PencilIcon } from '@navikt/aksel-icons';
+import { Saksopplysning } from './Saksopplysning';
 
 interface SaksopplysningProps {
     saksopplysninger: SaksopplysningInnDTO[];
@@ -11,18 +12,11 @@ interface SaksopplysningProps {
 }
 
 export const SaksopplysningTable = ({ saksopplysninger, behandlingId }: SaksopplysningProps) => {
-    const [åpneRedigering, onÅpneRedigering] = useState<boolean>(false);
-
-    const håndterLukkRedigering = () => {
-        onÅpneRedigering(false);
-    };
-
     const velgFaktaTekst = (typeSaksopplysning: string, fakta: FaktaDTO) => {
         if (typeSaksopplysning === 'HAR_YTELSE') return fakta.harYtelse;
         if (typeSaksopplysning === 'HAR_IKKE_YTELSE') return fakta.harIkkeYtelse;
         return 'Ikke innhentet';
     };
-
     return (
         <>
             <Table>
@@ -39,61 +33,17 @@ export const SaksopplysningTable = ({ saksopplysninger, behandlingId }: Saksoppl
                 </Table.Header>
                 <Table.Body>
                     {saksopplysninger.map((saksopplysning) => (
-                        <>
-                            <Table.Row key={saksopplysning.vilkårTittel}>
-                                <Table.DataCell>
-                                    {
-                                        <div style={{ display: 'flex' }}>
-                                            <UtfallIcon utfall={saksopplysning.utfall} />
-                                        </div>
-                                    }
-                                </Table.DataCell>
-                                <Table.HeaderCell>{saksopplysning.vilkårTittel}</Table.HeaderCell>
-                                <Table.DataCell>
-                                    {
-                                        <div style={{ display: 'flex' }}>
-                                            <BodyShort>
-                                                {velgFaktaTekst(
-                                                    saksopplysning.typeSaksopplysning,
-                                                    saksopplysning.fakta
-                                                )}
-                                            </BodyShort>
-                                        </div>
-                                    }
-                                </Table.DataCell>
-                                <Table.DataCell>
-                                    <BodyShort>
-                                        {saksopplysning.fom && saksopplysning.tom
-                                            ? `${saksopplysning.fom} - ${saksopplysning.tom}`
-                                            : '-'}
-                                    </BodyShort>
-                                </Table.DataCell>
-                                <Table.DataCell>
-                                    <BodyShort>{saksopplysning.kilde ? saksopplysning.kilde : '-'}</BodyShort>
-                                </Table.DataCell>
-                                <Table.DataCell>
-                                    <BodyShort>{saksopplysning.detaljer ? saksopplysning.detaljer : '-'}</BodyShort>
-                                </Table.DataCell>
-                                <Table.DataCell>
-                                    <Button
-                                        onClick={() => onÅpneRedigering(!åpneRedigering)}
-                                        variant="tertiary"
-                                        iconPosition="left"
-                                        icon={<PencilIcon />}
-                                        aria-label="hidden"
-                                    />
-                                </Table.DataCell>
-                            </Table.Row>
-                            {åpneRedigering && (
-                                <div style={{ width: '100%' }}>
-                                    <RedigeringSkjema
-                                        behandlingId={behandlingId}
-                                        vilkår={saksopplysning.vilkårTittel}
-                                        håndterLukkRedigering={håndterLukkRedigering}
-                                    />
-                                </div>
-                            )}
-                        </>
+                        <Saksopplysning
+                            key={saksopplysning.vilkårTittel}
+                            vilkår={saksopplysning.vilkårTittel}
+                            utfall={saksopplysning.utfall}
+                            fom={saksopplysning.fom}
+                            tom={saksopplysning.tom}
+                            kilde={saksopplysning.kilde}
+                            behandlingId={behandlingId}
+                            detaljer={saksopplysning.detaljer}
+                            fakta={velgFaktaTekst(saksopplysning.utfall, saksopplysning.fakta)}
+                        />
                     ))}
                 </Table.Body>
             </Table>
