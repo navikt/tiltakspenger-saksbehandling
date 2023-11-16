@@ -18,13 +18,13 @@ interface MeldekortUkeProps {
 
 export const MeldekortUke = ({ ukesnummer, fom, tom, meldekortUke }: MeldekortUkeProps) => {
     const meldekortUker: MeldekortDag[] = [
-        { dag: 'Mandag', dato: new Date(13, 11, 2023), status: MeldekortStatus.DELTATT },
-        { dag: 'Tirsdag', dato: new Date(14, 11, 2023), status: MeldekortStatus.IKKE_DELTATT },
-        { dag: 'Onsdag', dato: new Date(15, 11, 2023), status: MeldekortStatus.FRAVÆR_SYK },
-        { dag: 'Torsdag', dato: new Date(16, 11, 2023), status: MeldekortStatus.FRAVÆR_SYKT_BARN },
-        { dag: 'Fredag', dato: new Date(17, 11, 2023), status: MeldekortStatus.DELTATT },
-        { dag: 'Lørdag', dato: new Date(18, 11, 2023), status: MeldekortStatus.LØNN_FOR_TID_I_ARBEID },
-        { dag: 'Søndag', dato: new Date(19, 11, 2023), status: MeldekortStatus.DELTATT },
+        { dag: 'Mandag', dato: new Date('2023-11-13'), status: MeldekortStatus.DELTATT },
+        { dag: 'Tirsdag', dato: new Date('2023-11-14'), status: MeldekortStatus.IKKE_DELTATT },
+        { dag: 'Onsdag', dato: new Date('2023-11-15'), status: MeldekortStatus.FRAVÆR_SYK },
+        { dag: 'Torsdag', dato: new Date('2023-11-16'), status: MeldekortStatus.FRAVÆR_SYKT_BARN },
+        { dag: 'Fredag', dato: new Date('2023-11-17'), status: MeldekortStatus.DELTATT },
+        { dag: 'Lørdag', dato: new Date('2023-11-18'), status: MeldekortStatus.LØNN_FOR_TID_I_ARBEID },
+        { dag: 'Søndag', dato: new Date('2023-11-19'), status: MeldekortStatus.DELTATT },
     ];
 
     function velgIkon(deltattEllerFravær: String) {
