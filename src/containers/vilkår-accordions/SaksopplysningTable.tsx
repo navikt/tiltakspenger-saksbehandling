@@ -1,9 +1,6 @@
-import { BodyShort, Button, Table } from '@navikt/ds-react';
-import { UtfallIcon } from '../../components/utfall-icon/UtfallIcon';
-import React, { useState } from 'react';
-import { RedigeringSkjema } from './RedigeringSkjema';
+import { Table } from '@navikt/ds-react';
+import React from 'react';
 import { FaktaDTO, SaksopplysningInnDTO } from '../../types/Behandling';
-import { PencilIcon } from '@navikt/aksel-icons';
 import { Saksopplysning } from './Saksopplysning';
 
 interface SaksopplysningProps {
@@ -19,16 +16,16 @@ export const SaksopplysningTable = ({ saksopplysninger, behandlingId }: Saksoppl
     };
     return (
         <>
-            <Table>
+            <Table size="small" style={{ tableLayout: 'fixed', width: '100%' }}>
                 <Table.Header>
                     <Table.Row>
-                        <Table.ColumnHeader />
-                        <Table.ColumnHeader>Vilkår</Table.ColumnHeader>
+                        <Table.ColumnHeader style={{ width: '5%' }} />
+                        <Table.ColumnHeader style={{ width: '25%' }}>Vilkår</Table.ColumnHeader>
                         <Table.ColumnHeader>Fakta</Table.ColumnHeader>
                         <Table.ColumnHeader>Periode</Table.ColumnHeader>
-                        <Table.ColumnHeader>Kilde</Table.ColumnHeader>
+                        <Table.ColumnHeader style={{ width: '10%' }}>Kilde</Table.ColumnHeader>
                         <Table.ColumnHeader>Detaljer</Table.ColumnHeader>
-                        <Table.ColumnHeader />
+                        <Table.ColumnHeader style={{ width: '5%' }} />
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
@@ -42,7 +39,7 @@ export const SaksopplysningTable = ({ saksopplysninger, behandlingId }: Saksoppl
                             kilde={saksopplysning.kilde}
                             behandlingId={behandlingId}
                             detaljer={saksopplysning.detaljer}
-                            fakta={velgFaktaTekst(saksopplysning.utfall, saksopplysning.fakta)}
+                            fakta={velgFaktaTekst(saksopplysning.typeSaksopplysning, saksopplysning.fakta)}
                         />
                     ))}
                 </Table.Body>

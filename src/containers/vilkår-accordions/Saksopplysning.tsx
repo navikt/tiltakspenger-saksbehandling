@@ -2,7 +2,6 @@ import { PencilIcon } from '@navikt/aksel-icons';
 import { Table, BodyShort, Button } from '@navikt/ds-react';
 import { UtfallIcon } from '../../components/utfall-icon/UtfallIcon';
 import { RedigeringSkjema } from './RedigeringSkjema';
-import { FaktaDTO } from '../../types/Behandling';
 import { useState } from 'react';
 
 interface SaksopplysningProps {
@@ -36,11 +35,11 @@ export const Saksopplysning = ({
         <>
             <Table.Row key={vilkår}>
                 <Table.DataCell>
-                    <div style={{ display: 'flex' }}>
-                        <UtfallIcon utfall={utfall} />
-                    </div>
+                    <UtfallIcon utfall={utfall} />
                 </Table.DataCell>
-                <Table.HeaderCell>{vilkår}</Table.HeaderCell>
+                <Table.DataCell>
+                    <BodyShort>{vilkår}</BodyShort>
+                </Table.DataCell>
                 <Table.DataCell>
                     <BodyShort>{fakta}</BodyShort>
                 </Table.DataCell>
@@ -63,14 +62,15 @@ export const Saksopplysning = ({
                     />
                 </Table.DataCell>
             </Table.Row>
+
             {åpneRedigering && (
-                <div>
+                <Table.DataCell colSpan={7} style={{ padding: '0' }}>
                     <RedigeringSkjema
                         behandlingId={behandlingId}
                         vilkår={vilkår}
                         håndterLukkRedigering={håndterLukkRedigering}
                     />
-                </div>
+                </Table.DataCell>
             )}
         </>
     );

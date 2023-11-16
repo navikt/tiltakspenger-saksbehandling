@@ -1,7 +1,7 @@
 import { RadioGroup, Radio, DatePicker, Select, Button, useRangeDatepicker, VStack, HStack } from '@navikt/ds-react';
 import { FormEvent, useState } from 'react';
-import {useSWRConfig} from "swr";
-import toast from "react-hot-toast";
+import { useSWRConfig } from 'swr';
+import toast from 'react-hot-toast';
 
 interface RedigeringSkjemaProps {
     vilkår: string;
@@ -15,7 +15,7 @@ export const RedigeringSkjema = ({ håndterLukkRedigering, vilkår, behandlingId
     const [harYtelse, setHarYtelse] = useState<boolean>();
     const [begrunnelse, setBegrunnelse] = useState<string>('');
 
-    const mutator = useSWRConfig().mutate
+    const mutator = useSWRConfig().mutate;
 
     const håndterLagreSaksopplysning = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -32,8 +32,8 @@ export const RedigeringSkjema = ({ håndterLukkRedigering, vilkår, behandlingId
             }),
         }).then(() => {
             mutator(`/api/behandling/${behandlingId}`).then(() => {
-                toast("Saksopplysning endret")
-            })
+                toast('Saksopplysning endret');
+            });
         });
     };
 
