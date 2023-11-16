@@ -23,7 +23,7 @@ export const InngangsvilkårTab = ({ behandlingId, kategoriserteSaksopplysninger
                             <Accordion.Item key={kategori.kategoriTittel} style={{ background: '#FFFFFF' }}>
                                 <Accordion.Header>
                                     <HStack align={'center'} gap={'2'}>
-                                        <UtfallIcon utfall={kategori.utfall} />
+                                        <UtfallIcon utfall={kategori.samletUtfall} />
                                         {kategori.kategoriTittel}
                                     </HStack>
                                 </Accordion.Header>

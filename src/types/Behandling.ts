@@ -37,7 +37,7 @@ export interface Personopplysninger {
 export interface Kategori {
     kategoriTittel: string;
     saksopplysninger: SaksopplysningInnDTO[];
-    utfall: string;
+    samletUtfall: string;
 }
 
 export interface SaksopplysningInnDTO {
