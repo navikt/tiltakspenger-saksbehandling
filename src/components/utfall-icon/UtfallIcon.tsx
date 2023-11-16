@@ -10,5 +10,5 @@ export const UtfallIcon = ({ utfall }: UtfallIconProps) => {
     if (utfall === 'IKKE_OPPFYLT') return <XMarkOctagonFillIcon width="1.5em" height="1.5em" color="#C30000" />;
     if (utfall === 'KREVER_MANUELL_VURDERING')
         return <InformationSquareFillIcon width="1.5em" height="1.5em" color="#236B7D" />;
-    return <InformationSquareFillIcon />;
+    return <InformationSquareFillIcon width="1.5em" height="1.5em" color="#236B7D" />;
 };
