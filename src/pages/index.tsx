@@ -39,7 +39,7 @@ const HomePage: NextPage = () => {
     };
 
     const taBehandlingKnappDeaktivert = (saksbehandlerForBehandling?: string) => {
-        return !saksbehandlerForBehandling;
+        return !!saksbehandlerForBehandling;
     }
 
     return (
