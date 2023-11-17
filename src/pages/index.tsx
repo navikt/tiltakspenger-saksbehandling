@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import useSWR, {useSWRConfig} from 'swr';
 import { fetcher, FetcherError } from '../utils/http';
 import {Button, Link, Table} from '@navikt/ds-react';
+import useSaksbehandler from "../core/useSaksbehandler";
 
 interface Behandling {
     id: string;
@@ -15,20 +16,20 @@ interface Behandling {
 
 const HomePage: NextPage = () => {
     const [behandlinger, setBehandlinger] = useState<Behandling[]>([]);
+    const { saksbehandler, isSaksbehandlerLoading } = useSaksbehandler();
     const mutator = useSWRConfig().mutate;
     const { data, isLoading } = useSWR<Behandling[]>(`/api/behandlinger`, fetcher, {
         shouldRetryOnError: false,
         revalidateOnFocus: false,
         revalidateOnReconnect: false,
         onSuccess: (data) => {
-            console.log(data);
             setBehandlinger(data);
         },
         onError: (error: FetcherError) => toast.error(`[${error.status}]: ${error.info}`),
     });
 
     const taBehandling = async (behandlingid: string) => {
-        const res = fetch(`/api/behandling/ta_behandling/${behandlingid}`, {
+        const res = fetch(`/api/behandling/startbehandling/${behandlingid}`, {
             method: 'POST',
         }).then(() => {
             mutator(`/api/behandlinger`).then(() => {
@@ -37,8 +38,8 @@ const HomePage: NextPage = () => {
         });
     };
 
-    const taBehandlingKnappDeaktivert = () => {
-        return false //TODO
+    const taBehandlingKnappDeaktivert = (saksbehandlerForBehandling?: string) => {
+        return saksbehandlerForBehandling === saksbehandler?.navIdent;
     }
 
     return (
@@ -54,21 +55,21 @@ const HomePage: NextPage = () => {
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {behandlinger.map(({ id, ident, saksbehandler, status }) => {
+                    {behandlinger.map((behandling) => {
                         return (
-                            <Table.Row shadeOnHover={false} key={id}>
-                                <Table.DataCell>{ident}</Table.DataCell>
+                            <Table.Row shadeOnHover={false} key={behandling.id}>
+                                <Table.DataCell>{behandling.ident}</Table.DataCell>
                                 <Table.DataCell>
-                                    <Link href={`/behandling/${id}`}>{id}</Link>
+                                    {(behandling.saksbehandler === saksbehandler?.navIdent ) ? <Link href={`/behandling/${behandling.id}`}>{behandling.id}</Link> : behandling.id}
                                 </Table.DataCell>
-                                <Table.DataCell>{status}</Table.DataCell>
-                                <Table.DataCell>{saksbehandler}</Table.DataCell>
+                                <Table.DataCell>{behandling.status}</Table.DataCell>
+                                <Table.DataCell>{behandling.saksbehandler}</Table.DataCell>
                                 <Table.DataCell>
                                     <Button
                                         size="small"
                                         variant="primary"
-                                        onClick={() => taBehandling(id)}
-                                        disabled={taBehandlingKnappDeaktivert()}
+                                        onClick={() => taBehandling(behandling.id)}
+                                        disabled={taBehandlingKnappDeaktivert(behandling.saksbehandler)}
                                     >
                                         Ta behandling
                                     </Button>

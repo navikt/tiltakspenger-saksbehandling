@@ -2,6 +2,7 @@ import { Button, HStack } from '@navikt/ds-react';
 import styles from './BehandlingSkjema.module.css';
 import toast from 'react-hot-toast';
 import { useSWRConfig } from 'swr';
+import {useRouter} from "next/router";
 
 interface behandlingKnapperProps {
     behandlingid: string;
@@ -10,6 +11,7 @@ interface behandlingKnapperProps {
 
 export const BehandlingKnapper = ({ behandlingid, tilstand }: behandlingKnapperProps) => {
     const mutator = useSWRConfig().mutate;
+    const router = useRouter()
 
     const håndterRefreshSaksopplysninger = () => {
         const res = fetch(`/api/behandling/oppdater/${behandlingid}`, {
@@ -51,6 +53,15 @@ export const BehandlingKnapper = ({ behandlingid, tilstand }: behandlingKnapperP
         });
     };
 
+    const håndterAvbrytBehandling = () => {
+        const res = fetch(`/api/behandling/avbrytbehandling/${behandlingid}`, {
+            method: 'POST',
+        }).then(() => {
+            router.push('/');
+            toast('Behandling avbrutt');
+        });
+    };
+
     return (
         <HStack justify="end" gap="3" align="end" className={styles.behandlingSkjema}>
             <>
@@ -70,6 +81,9 @@ export const BehandlingKnapper = ({ behandlingid, tilstand }: behandlingKnapperP
                     </>
                 ) : (
                     <>
+                        <Button type="submit" size="small" onClick={() => håndterAvbrytBehandling()}>
+                            Avbryt behandling{' '}
+                        </Button>
                         <Button type="submit" size="small" onClick={() => håndterRefreshSaksopplysninger()}>
                             Oppdater saksopplysninger{' '}
                         </Button>
