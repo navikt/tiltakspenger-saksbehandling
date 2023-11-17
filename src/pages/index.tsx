@@ -39,14 +39,17 @@ const HomePage: NextPage = () => {
         });
     };
 
-    const taBehandlingKnappDeaktivert = (saksbehandlerForBehandling?: string, beslutterForBehandling?: string) => {
-        if (!!saksbehandlerForBehandling) {
-            if (!!beslutterForBehandling) {
+    const taBehandlingKnappDeaktivert = (type: string, saksbehandlerForBehandling?: string, beslutterForBehandling?: string) => {
+        switch (type) {
+            case "Klar til beslutning" :
+                return saksbehandler?.navIdent == saksbehandlerForBehandling
+
+            case "Klar til behandling" :
+                return false
+
+            default :
                 return true
-            }
-            return saksbehandler?.navIdent == saksbehandlerForBehandling
         }
-        return false;
     }
 
     const behandlingLinkAktivert = (saksbehandlerForBehandling?: string, beslutterForBehandling?: string) => {
