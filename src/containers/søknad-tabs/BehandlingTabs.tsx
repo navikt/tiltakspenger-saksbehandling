@@ -5,7 +5,6 @@ import styles from './SøknadTabs.module.css';
 import { Behandling } from '../../types/Behandling';
 import { BankNoteIcon, CardIcon } from '@navikt/aksel-icons';
 import { InngangsvilkårTab } from './InngangsvilkårTab';
-import { MeldekortTab } from './MeldekortTab';
 import { MeldekortSide } from '../../pages/meldekort/MeldekortSide';
 
 interface SøknadTabsProps {

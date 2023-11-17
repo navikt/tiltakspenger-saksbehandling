@@ -3,7 +3,7 @@ import { MeldekortUke } from '../../components/MeldekortUkesvisning/MeldekortUke
 import { MeldekortBeregningsvisning } from '../../components/MeldekortBeregnigsvisning/MeldekortBeregningsVisning';
 import {PencilWritingIcon} from "@navikt/aksel-icons";
 import {Button} from "@navikt/ds-react";
-import {useState} from "react";
+import React, {useState} from "react";
 
 interface MeldekortSideProps extends React.PropsWithChildren {
     title?: string;
