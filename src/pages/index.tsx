@@ -28,7 +28,7 @@ const HomePage: NextPage = () => {
     });
 
     const taBehandling = async (behandlingid: string) => {
-        const res = fetch(`/api/behandlinger/ta_behandling/${behandlingid}`, {
+        const res = fetch(`/api/behandling/ta_behandling/${behandlingid}`, {
             method: 'POST',
         }).then(() => {
             mutator(`/api/behandlinger`).then(() => {
