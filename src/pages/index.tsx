@@ -85,7 +85,7 @@ const HomePage: NextPage = () => {
                                         size="small"
                                         variant="primary"
                                         onClick={() => taBehandling(behandling.id)}
-                                        disabled={taBehandlingKnappDeaktivert(behandling.saksbehandler, behandling.beslutter)}
+                                        disabled={taBehandlingKnappDeaktivert(behandling.status, behandling.saksbehandler, behandling.beslutter)}
                                     >
                                         Ta behandling
                                     </Button>
