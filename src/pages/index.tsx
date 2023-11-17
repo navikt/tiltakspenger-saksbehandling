@@ -39,12 +39,18 @@ const HomePage: NextPage = () => {
         });
     };
 
-    const taBehandlingKnappDeaktivert = (saksbehandlerForBehandling?: string) => {
-        return !!saksbehandlerForBehandling;
+    const taBehandlingKnappDeaktivert = (saksbehandlerForBehandling?: string, beslutterForBehandling?: string) => {
+        if (!!saksbehandlerForBehandling) {
+            if (!!beslutterForBehandling) {
+                return true
+            }
+            return saksbehandler?.navIdent == saksbehandlerForBehandling
+        }
+        return false;
     }
 
-    const behandlingLinkDeaktivert = (saksbehandlerForBehandling?: string, beslutterForBehandling?: string) => {
-        return !!saksbehandlerForBehandling;
+    const behandlingLinkAktivert = (saksbehandlerForBehandling?: string, beslutterForBehandling?: string) => {
+        return (saksbehandler?.navIdent == saksbehandlerForBehandling || saksbehandler?.navIdent == beslutterForBehandling)
     }
 
     return (
@@ -66,7 +72,7 @@ const HomePage: NextPage = () => {
                             <Table.Row shadeOnHover={false} key={behandling.id}>
                                 <Table.DataCell>{behandling.ident}</Table.DataCell>
                                 <Table.DataCell>
-                                    {(behandling.saksbehandler === saksbehandler?.navIdent ) ? <Link href={`/behandling/${behandling.id}`}>{behandling.id}</Link> : behandling.id}
+                                    {behandlingLinkAktivert(behandling.saksbehandler, behandling.beslutter)  ? <Link href={`/behandling/${behandling.id}`}>{behandling.id}</Link> : behandling.id}
                                 </Table.DataCell>
                                 <Table.DataCell>{behandling.status}</Table.DataCell>
                                 <Table.DataCell>{behandling.saksbehandler}</Table.DataCell>
@@ -76,7 +82,7 @@ const HomePage: NextPage = () => {
                                         size="small"
                                         variant="primary"
                                         onClick={() => taBehandling(behandling.id)}
-                                        disabled={taBehandlingKnappDeaktivert(behandling.saksbehandler)}
+                                        disabled={taBehandlingKnappDeaktivert(behandling.saksbehandler, behandling.beslutter)}
                                     >
                                         Ta behandling
                                     </Button>
