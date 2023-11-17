@@ -13,6 +13,10 @@ interface SaksopplysningProps {
     detaljer: string;
     fakta: string;
     behandlingId: string;
+    behandlingsperiode: {
+        fom: string;
+        tom: string;
+    };
 }
 
 export const Saksopplysning = ({
@@ -24,6 +28,7 @@ export const Saksopplysning = ({
     detaljer,
     fakta,
     behandlingId,
+    behandlingsperiode,
 }: SaksopplysningProps) => {
     const [åpneRedigering, onÅpneRedigering] = useState<boolean>(false);
 
@@ -62,15 +67,18 @@ export const Saksopplysning = ({
                     />
                 </Table.DataCell>
             </Table.Row>
-
             {åpneRedigering && (
-                <Table.DataCell colSpan={7} style={{ padding: '0' }}>
-                    <RedigeringSkjema
-                        behandlingId={behandlingId}
-                        vilkår={vilkår}
-                        håndterLukkRedigering={håndterLukkRedigering}
-                    />
-                </Table.DataCell>
+                <Table.Row>
+                    <Table.DataCell colSpan={7} style={{ padding: '0' }}>
+                        <RedigeringSkjema
+                            behandlingId={behandlingId}
+                            vilkår={vilkår}
+                            håndterLukkRedigering={håndterLukkRedigering}
+                            behandlingsperiode={behandlingsperiode}
+                            vilkårsperiode={{ fom: fom, tom: tom }}
+                        />
+                    </Table.DataCell>
+                </Table.Row>
             )}
         </>
     );

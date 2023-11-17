@@ -47,6 +47,7 @@ const BehandlingTabs = ({ defaultTab, behandling }: SøknadTabsProps) => {
                 <InngangsvilkårTab
                     behandlingId={behandling.behandlingId}
                     kategoriserteSaksopplysninger={behandling.saksopplysninger}
+                    behandlingsperiode={{ fom: behandling.fom, tom: behandling.tom}}
                 />
             </Tabs.Panel>
             <Tabs.Panel value={'Meldekort'}>
