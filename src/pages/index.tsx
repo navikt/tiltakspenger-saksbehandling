@@ -12,6 +12,7 @@ interface Behandling {
     ident: string;
     status: string;
     saksbehandler?: string;
+    beslutter?: string;
 }
 
 const HomePage: NextPage = () => {
@@ -42,6 +43,10 @@ const HomePage: NextPage = () => {
         return !!saksbehandlerForBehandling;
     }
 
+    const behandlingLinkDeaktivert = (saksbehandlerForBehandling?: string, beslutterForBehandling?: string) => {
+        return !!saksbehandlerForBehandling;
+    }
+
     return (
         <div style={{ paddingLeft: '1rem' }}>
             <Table zebraStripes>
@@ -51,6 +56,7 @@ const HomePage: NextPage = () => {
                         <Table.HeaderCell scope="col">ID</Table.HeaderCell>
                         <Table.HeaderCell scope="col">Status</Table.HeaderCell>
                         <Table.HeaderCell scope="col">Saksbehandler</Table.HeaderCell>
+                        <Table.HeaderCell scope="col">Beslutter</Table.HeaderCell>
                         <Table.HeaderCell scope="col"></Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
@@ -64,6 +70,7 @@ const HomePage: NextPage = () => {
                                 </Table.DataCell>
                                 <Table.DataCell>{behandling.status}</Table.DataCell>
                                 <Table.DataCell>{behandling.saksbehandler}</Table.DataCell>
+                                <Table.DataCell>{behandling.beslutter}</Table.DataCell>
                                 <Table.DataCell>
                                     <Button
                                         size="small"
