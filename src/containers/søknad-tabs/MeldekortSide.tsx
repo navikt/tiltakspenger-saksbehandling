@@ -1,6 +1,6 @@
 import styles from './meldekort.module.css';
-import { MeldekortUke } from '../../components/MeldekortUkesvisning/MeldekortUke';
-import { MeldekortBeregningsvisning } from '../../components/MeldekortBeregnigsvisning/MeldekortBeregningsVisning';
+import { MeldekortUke } from '../meldekort-side/MeldekortUke';
+import { MeldekortBeregningsvisning } from '../meldekort-side/MeldekortBeregningsVisning';
 import {PencilWritingIcon} from "@navikt/aksel-icons";
 import {Button} from "@navikt/ds-react";
 import React, {useState} from "react";

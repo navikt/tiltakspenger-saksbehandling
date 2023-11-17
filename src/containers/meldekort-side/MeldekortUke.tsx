@@ -2,7 +2,6 @@ import { Select, Table } from '@navikt/ds-react';
 import {
     CheckmarkCircleFillIcon,
     ExclamationmarkTriangleFillIcon,
-    ParasolBeachFillIcon,
     XMarkOctagonFillIcon,
 } from '@navikt/aksel-icons';
 import { MeldekortDag, MeldekortStatus } from '../../types/MeldekortTypes';
