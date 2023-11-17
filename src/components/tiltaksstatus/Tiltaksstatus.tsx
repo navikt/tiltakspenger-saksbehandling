@@ -13,23 +13,20 @@ const iconRenderer = (tiltaksstatus: TiltaksstatusType) => {
         case TiltaksstatusType.TAKKET_JA_TIL_TILBUD:
         case TiltaksstatusType.GJENNOMFØRES:
         case TiltaksstatusType.FULLFØRT:
-
         case TiltaksstatusType.DELTAR:
         case TiltaksstatusType.VENTER_PA_OPPSTART:
         case TiltaksstatusType.PABEGYNT_REGISTRERING:
         case TiltaksstatusType.SOKT_INN:
         case TiltaksstatusType.VURDERES:
-
-            return <CheckmarkCircleFillIcon />;
+            return <CheckmarkCircleFillIcon width="1.5em" height="1.5em" color="#007C2E" />;
         case TiltaksstatusType.AKTUELL:
         case TiltaksstatusType.VENTELISTE:
         case TiltaksstatusType.INFORMASJONSMØTE:
         case TiltaksstatusType.DELTAKELSE_AVBRUTT:
         case TiltaksstatusType.GJENNOMFØRING_AVBRUTT:
-
         case TiltaksstatusType.AVBRUTT:
         case TiltaksstatusType.HAR_SLUTTET:
-            return <InformationSquareFillIcon />;
+            return <InformationSquareFillIcon width="1.5em" height="1.5em" color="#236B7D" />;
         case TiltaksstatusType.IKKE_MØTT:
         case TiltaksstatusType.IKKE_AKTUELL:
         case TiltaksstatusType.FÅTT_AVSLAG:
@@ -37,17 +34,21 @@ const iconRenderer = (tiltaksstatus: TiltaksstatusType) => {
         case TiltaksstatusType.TAKKET_NEI_TIL_TILBUD:
 
         case TiltaksstatusType.FEILREGISTRERT:
-
-            return <XMarkOctagonFillIcon />;
+            return <XMarkOctagonFillIcon width="1.5em" height="1.5em" color="#C30000" />;
         default:
-            return <InformationSquareFillIcon />;
+            return <InformationSquareFillIcon width="1.5em" height="1.5em" color="#236B7D" />;
     }
 };
 
 const Tiltaksstatus = ({ tiltaksstatus }: TiltaksstatusProps) => {
-    return <IconWithText iconRenderer={() => iconRenderer(tiltaksstatus)} text={
-        TiltaksstatusType[tiltaksstatus as unknown as keyof typeof TiltaksstatusType] //TODO: Typescriptproblem
-    } />;
+    return (
+        <IconWithText
+            iconRenderer={() => iconRenderer(tiltaksstatus)}
+            text={
+                TiltaksstatusType[tiltaksstatus as unknown as keyof typeof TiltaksstatusType] //TODO: Typescriptproblem
+            }
+        />
+    );
 };
 
 export default Tiltaksstatus;
