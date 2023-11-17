@@ -1,5 +1,13 @@
 .ukevisning {
     display: flex;
+    margin: 0.5rem;
+}
+
+.disableUkevisning {
+    display: flex;
+    margin: 0.5rem;
+    pointer-events: none;
+    opacity: 0.2;
 }
 
 .uke1 {

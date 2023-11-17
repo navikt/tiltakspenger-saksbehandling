@@ -1,13 +1,15 @@
 import { CheckmarkCircleFillIcon, ExclamationmarkTriangleFillIcon, XMarkOctagonFillIcon } from '@navikt/aksel-icons';
-import { BodyShort, Heading, Table } from '@navikt/ds-react';
+import { BodyShort, Table } from '@navikt/ds-react';
 
 export const MeldekortBeregningsvisning = () => {
     return (
-        <Table>
+        <Table style={{ tableLayout: 'fixed', width: '100%' }}>
             <Table.Row>
-                <Table.HeaderCell scope="col">Beregning</Table.HeaderCell>
-                <Table.HeaderCell scope="col"></Table.HeaderCell>
-                <Table.HeaderCell scope="col"></Table.HeaderCell>
+                <Table.HeaderCell style={{ width: '50%' }} scope="col">
+                    Beregning
+                </Table.HeaderCell>
+                <Table.HeaderCell style={{ width: '10%' }} scope="col"></Table.HeaderCell>
+                <Table.HeaderCell style={{ width: '40%' }} scope="col"></Table.HeaderCell>
             </Table.Row>
             <Table.Row>
                 <Table.DataCell>

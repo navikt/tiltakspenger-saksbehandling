@@ -23,8 +23,8 @@ export const MeldekortUke = ({ ukesnummer, fom, tom, meldekortUke }: MeldekortUk
         { dag: 'Onsdag', dato: new Date('2023-11-15'), status: MeldekortStatus.FRAVÆR_SYK },
         { dag: 'Torsdag', dato: new Date('2023-11-16'), status: MeldekortStatus.FRAVÆR_SYKT_BARN },
         { dag: 'Fredag', dato: new Date('2023-11-17'), status: MeldekortStatus.DELTATT },
-        { dag: 'Lørdag', dato: new Date('2023-11-18'), status: MeldekortStatus.LØNN_FOR_TID_I_ARBEID },
-        { dag: 'Søndag', dato: new Date('2023-11-19'), status: MeldekortStatus.DELTATT },
+        { dag: 'Lørdag', dato: new Date('2023-11-18'), status: MeldekortStatus.IKKE_DELTATT },
+        { dag: 'Søndag', dato: new Date('2023-11-19'), status: MeldekortStatus.IKKE_DELTATT },
     ];
 
     function velgIkon(deltattEllerFravær: String) {
@@ -54,7 +54,6 @@ export const MeldekortUke = ({ ukesnummer, fom, tom, meldekortUke }: MeldekortUk
                         label="Deltatt Eller Fravær"
                         id="deltattEllerFravær"
                         size="small"
-                        //onChange={e=> velgIkon(e.target.value)}
                         hideLabel
                     >
                         <option value="Deltatt">Deltatt i tiltaket</option>
@@ -69,7 +68,7 @@ export const MeldekortUke = ({ ukesnummer, fom, tom, meldekortUke }: MeldekortUk
     });
 
     return (
-        <Table size="small">
+        <Table size="small" aria-disabled="true">
             <Table.Header>
                 <Table.Row>
                     <Table.HeaderCell>Uke {ukesnummer}</Table.HeaderCell>
