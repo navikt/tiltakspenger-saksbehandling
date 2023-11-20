@@ -6,6 +6,7 @@ import { useState } from 'react';
 
 interface SaksopplysningProps {
     vilkår: string;
+    vilkårFlateTittel: string;
     utfall: string;
     fom: string;
     tom: string;
@@ -17,6 +18,7 @@ interface SaksopplysningProps {
 
 export const Saksopplysning = ({
     vilkår,
+    vilkårFlateTittel,
     utfall,
     fom,
     tom,
@@ -38,7 +40,7 @@ export const Saksopplysning = ({
                     <UtfallIcon utfall={utfall} />
                 </Table.DataCell>
                 <Table.DataCell>
-                    <BodyShort>{vilkår}</BodyShort>
+                    <BodyShort>{vilkårFlateTittel}</BodyShort>
                 </Table.DataCell>
                 <Table.DataCell>
                     <BodyShort>{fakta}</BodyShort>

@@ -33,6 +33,7 @@ export const SaksopplysningTabell = ({ saksopplysninger, behandlingId }: Saksopp
                         <Saksopplysning
                             key={saksopplysning.vilkårTittel}
                             vilkår={saksopplysning.vilkårTittel}
+                            vilkårFlateTittel={saksopplysning.vilkårFlateTittel}
                             utfall={saksopplysning.utfall}
                             fom={saksopplysning.fom}
                             tom={saksopplysning.tom}
