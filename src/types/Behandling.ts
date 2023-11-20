@@ -47,8 +47,7 @@ export interface SaksopplysningInnDTO {
     detaljer: string;
     typeSaksopplysning: string;
     vilkårTittel: string;
-    vilkårParagraf: string;
-    vilkårLedd: string;
+    vilkårFlateTittel: string;
     fakta: FaktaDTO;
     utfall: string;
 }

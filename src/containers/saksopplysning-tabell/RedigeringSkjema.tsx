@@ -1,19 +1,38 @@
-import { RadioGroup, Radio, DatePicker, Select, Button, useRangeDatepicker, VStack, HStack } from '@navikt/ds-react';
+import {
+    RadioGroup,
+    Radio,
+    DatePicker,
+    Select,
+    Button,
+    useRangeDatepicker,
+    VStack,
+    HStack,
+    Alert,
+} from '@navikt/ds-react';
 import { FormEvent, useState } from 'react';
 import { useSWRConfig } from 'swr';
 import toast from 'react-hot-toast';
+import { formatDate } from '../../utils/date';
 
 interface RedigeringSkjemaProps {
     vilkår: string;
     håndterLukkRedigering: () => void;
     behandlingId: string;
+    behandlingPeriodeFom: Date;
+    behandlingPeriodeTom: Date;
 }
 
-export const RedigeringSkjema = ({ håndterLukkRedigering, vilkår, behandlingId }: RedigeringSkjemaProps) => {
-    const [valgtFom, setFom] = useState<Date>();
-    const [valgtTom, setTom] = useState<Date>();
-    const [harYtelse, setHarYtelse] = useState<boolean>();
-    const [begrunnelse, setBegrunnelse] = useState<string>('');
+export const RedigeringSkjema = ({
+    håndterLukkRedigering,
+    vilkår,
+    behandlingPeriodeFom,
+    behandlingPeriodeTom,
+    behandlingId,
+}: RedigeringSkjemaProps) => {
+    const [valgtFom, settFom] = useState<Date>(behandlingPeriodeFom);
+    const [valgtTom, settTom] = useState<Date>(behandlingPeriodeTom);
+    const [harYtelse, settHarYtelse] = useState<boolean>(false);
+    const [begrunnelse, settBegrunnelse] = useState<string>('');
 
     const mutator = useSWRConfig().mutate;
 
@@ -21,11 +40,18 @@ export const RedigeringSkjema = ({ håndterLukkRedigering, vilkår, behandlingId
         event.preventDefault();
         håndterLukkRedigering();
 
+        if (!harYtelse) {
+            settFom(behandlingPeriodeFom);
+            settTom(behandlingPeriodeTom);
+        }
+
+        console.log(valgtFom?.);
+        console.log(valgtTom?.getUTCDate());
         const res = fetch(`/api/behandling/${behandlingId}`, {
             method: 'POST',
             body: JSON.stringify({
-                fom: valgtFom?.toISOString().split('T')[0],
-                tom: valgtTom?.toISOString().split('T')[0],
+                fom: formatDate(valgtFom),
+                tom: formatDate(valgtTom),
                 vilkår: vilkår,
                 begrunnelse: begrunnelse,
                 harYtelse: harYtelse,
@@ -38,11 +64,11 @@ export const RedigeringSkjema = ({ håndterLukkRedigering, vilkår, behandlingId
     };
 
     const { datepickerProps, toInputProps, fromInputProps } = useRangeDatepicker({
-        fromDate: new Date('Sep 12 2023'),
+        fromDate: new Date(),
         onRangeChange: (range) => {
             if (range) {
-                setFom(range.from);
-                setTom(range.to);
+                settFom(range.from);
+                settTom(range.to);
             }
         },
     });
@@ -58,20 +84,29 @@ export const RedigeringSkjema = ({ håndterLukkRedigering, vilkår, behandlingId
             onSubmit={(e) => håndterLagreSaksopplysning(e)}
         >
             <VStack gap="5">
-                <RadioGroup legend="Endre vilkår" onChange={(value: boolean) => setHarYtelse(value)}>
+                {!harYtelse && (
+                    <Alert variant="info">{`Mottar ikke ${vilkår.toLowerCase()} i perioden ${behandlingPeriodeFom.toLocaleDateString()} til ${behandlingPeriodeTom.toLocaleDateString()}`}</Alert>
+                )}
+                <RadioGroup
+                    legend="Endre vilkår"
+                    defaultValue={false}
+                    onChange={(value: boolean) => settHarYtelse(value)}
+                >
                     <Radio value={false}>Mottar ikke</Radio>
                     <Radio value={true}>Mottar</Radio>
                 </RadioGroup>
-                <DatePicker {...datepickerProps}>
-                    <HStack gap="5">
-                        <DatePicker.Input {...fromInputProps} label="Fra" />
-                        <DatePicker.Input {...toInputProps} label="Til" />
-                    </HStack>
-                </DatePicker>
+                {harYtelse && (
+                    <DatePicker {...datepickerProps}>
+                        <HStack gap="5">
+                            <DatePicker.Input {...fromInputProps} label="Fra" />
+                            <DatePicker.Input {...toInputProps} label="Til" />
+                        </HStack>
+                    </DatePicker>
+                )}
                 <Select
                     label="Begrunnelse for endring"
                     style={{ width: '415px' }}
-                    onChange={(e) => setBegrunnelse(e.target.value)}
+                    onChange={(e) => settBegrunnelse(e.target.value)}
                 >
                     <option value="">Velg grunn</option>
                     <option value="Feil i innhentet data">Feil i innhentet data</option>
