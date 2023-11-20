@@ -18,7 +18,8 @@ export const BehandlingKnapper = ({ behandlingid, tilstand }: behandlingKnapperP
             method: 'POST',
         }).then(() => {
             mutator(`/api/behandling/${behandlingid}`).then(() => {
-                toast('Startet refresh av saksopplysninger');
+                router.push(`/behandling/${behandlingid}`);
+                toast('Saksopplysninger er oppdatert');
             });
         });
     };
