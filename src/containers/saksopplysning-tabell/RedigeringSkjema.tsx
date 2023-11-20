@@ -1,5 +1,4 @@
 import { RadioGroup, Radio, Select, Button, VStack, HStack } from '@navikt/ds-react';
-import { useState } from 'react';
 import { useSWRConfig } from 'swr';
 import toast from 'react-hot-toast';
 import {Controller, FormProvider, useForm} from 'react-hook-form';
@@ -29,7 +28,7 @@ interface SkjemaFelter {
     begrunnelse: string;
 }
 
-export function påkrevdPeriodeValidator(periode: {
+function påkrevdPeriodeValidator(periode: {
     fom: Date;
     tom: Date;
 }) {
@@ -38,7 +37,7 @@ export function påkrevdPeriodeValidator(periode: {
     }
 }
 
-export function gyldigPeriodeValidator(periode: {
+function gyldigPeriodeValidator(periode: {
     fom: Date;
     tom: Date;
 }) {
@@ -60,8 +59,6 @@ export const RedigeringSkjema = ({ håndterLukkRedigering, vilkår, vilkårsperi
             }
         }
     })
-
-    const [begrunnelse, setBegrunnelse] = useState<string>('');
 
     const mutator = useSWRConfig().mutate;
 
