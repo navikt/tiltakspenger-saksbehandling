@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useSWRConfig } from 'swr';
 import toast from 'react-hot-toast';
 import {Controller, FormProvider, useForm} from 'react-hook-form';
-import Periodespørsmål from "./PeriodeSkjema";
+import PeriodeSkjema from "./PeriodeSkjema";
 import dayjs from "dayjs";
 
 interface RedigeringSkjemaProps {
@@ -112,7 +112,7 @@ export const RedigeringSkjema = ({ håndterLukkRedigering, vilkår, vilkårsperi
                             )
                         }}
                     />
-                    <Periodespørsmål
+                    <PeriodeSkjema
                         name="periode"
                         validate={[
                             gyldigPeriodeValidator,
@@ -133,7 +133,7 @@ export const RedigeringSkjema = ({ håndterLukkRedigering, vilkår, vilkårsperi
                                     label="Begrunnelse for endring"
                                     style={{ width: '415px' }}
                                     onChange={(e) => onChange(e.target.value)}
-                                    error={errors.begrunnelse && "Begrunnelser mangler"}
+                                    error={errors.begrunnelse && "Begrunnelse mangler"}
                                 >
                                     <option value="">Velg grunn</option>
                                     <option value="Feil i innhentet data">Feil i innhentet data</option>
