@@ -7,9 +7,10 @@ import {useRouter} from "next/router";
 interface behandlingKnapperProps {
     behandlingid: string;
     tilstand: string;
+    lesevisning: boolean;
 }
 
-export const BehandlingKnapper = ({ behandlingid, tilstand }: behandlingKnapperProps) => {
+export const BehandlingKnapper = ({ behandlingid, tilstand, lesevisning }: behandlingKnapperProps) => {
     const mutator = useSWRConfig().mutate;
     const router = useRouter()
 
@@ -73,22 +74,23 @@ export const BehandlingKnapper = ({ behandlingid, tilstand }: behandlingKnapperP
                             size="small"
                             variant="secondary"
                             onClick={() => håndterSendTilbake()}
+                            disabled={lesevisning}
                         >
                             Send tilbake
                         </Button>
-                        <Button type="submit" size="small" onClick={() => håndterGodkjenn()}>
+                        <Button type="submit" size="small" onClick={() => håndterGodkjenn()} disabled={lesevisning}>
                             Godkjenn vedtaket
                         </Button>
                     </>
                 ) : (
                     <>
-                        <Button type="submit" size="small" onClick={() => håndterAvbrytBehandling()}>
+                        <Button type="submit" size="small" onClick={() => håndterAvbrytBehandling()} disabled={lesevisning}>
                             Avbryt behandling{' '}
                         </Button>
-                        <Button type="submit" size="small" onClick={() => håndterRefreshSaksopplysninger()}>
+                        <Button type="submit" size="small" onClick={() => håndterRefreshSaksopplysninger()} disabled={lesevisning}>
                             Oppdater saksopplysninger{' '}
                         </Button>
-                        <Button type="submit" size="small" onClick={() => håndterSendTilBeslutter()}>
+                        <Button type="submit" size="small" onClick={() => håndterSendTilBeslutter()} disabled={lesevisning}>
                             Send til beslutter{' '}
                         </Button>
                     </>

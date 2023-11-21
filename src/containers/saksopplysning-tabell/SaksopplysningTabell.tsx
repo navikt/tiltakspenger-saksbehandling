@@ -10,9 +10,10 @@ interface SaksopplysningProps {
         fom: string;
         tom: string;
     };
+    lesevisning: boolean;
 }
 
-export const SaksopplysningTabell = ({ saksopplysninger, behandlingId, behandlingsperiode }: SaksopplysningProps) => {
+export const SaksopplysningTabell = ({ saksopplysninger, behandlingId, behandlingsperiode, lesevisning }: SaksopplysningProps) => {
     const velgFaktaTekst = (typeSaksopplysning: string, fakta: FaktaDTO) => {
         if (typeSaksopplysning === 'HAR_YTELSE') return fakta.harYtelse;
         if (typeSaksopplysning === 'HAR_IKKE_YTELSE') return fakta.harIkkeYtelse;
@@ -46,6 +47,7 @@ export const SaksopplysningTabell = ({ saksopplysninger, behandlingId, behandlin
                             detaljer={saksopplysning.detaljer}
                             fakta={velgFaktaTekst(saksopplysning.typeSaksopplysning, saksopplysning.fakta)}
                             behandlingsperiode={behandlingsperiode}
+                            lesevisning={lesevisning}
                         />
                     ))}
                 </Table.Body>

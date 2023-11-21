@@ -1,18 +1,19 @@
-import React, { FormEvent } from 'react';
+import React, {FormEvent, useContext} from 'react';
 import { InternalHeader } from '@navikt/ds-react';
 import { Search } from '@navikt/ds-react';
 import { Saksbehandler } from '../../types/Saksbehandler';
 import styles from './Header.module.css';
 import Loaders from '../../components/loaders/Loaders';
+import {SaksbehandlerContext} from "../../pages/_app";
 
 interface HeaderProps {
-    saksbehandler?: Saksbehandler;
     onSearch: (searchQuery: string) => void;
     isSearchLoading: boolean;
 }
 
-const Header = ({ saksbehandler, onSearch, isSearchLoading }: HeaderProps) => {
+const Header = ({ onSearch, isSearchLoading }: HeaderProps) => {
     const [search, setSearch] = React.useState('');
+    const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
 
     async function searchHandler(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -40,8 +41,8 @@ const Header = ({ saksbehandler, onSearch, isSearchLoading }: HeaderProps) => {
                         </Search>
                     </form>
                 </div>
-                {saksbehandler ? (
-                    <InternalHeader.User className={styles.header__user} name={saksbehandler.navIdent} />
+                {innloggetSaksbehandler ? (
+                    <InternalHeader.User className={styles.header__user} name={innloggetSaksbehandler.navIdent} />
                 ) : (
                     <Loaders.User />
                 )}

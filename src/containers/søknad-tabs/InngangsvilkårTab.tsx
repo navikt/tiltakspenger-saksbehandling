@@ -12,9 +12,10 @@ interface InngangsvilkårTabProps {
         fom: string;
         tom: string;
     };
+    lesevisning: boolean;
 }
 
-export const InngangsvilkårTab = ({ behandlingId, kategoriserteSaksopplysninger, behandlingsperiode }: InngangsvilkårTabProps) => {
+export const InngangsvilkårTab = ({ behandlingId, kategoriserteSaksopplysninger, behandlingsperiode, lesevisning }: InngangsvilkårTabProps) => {
     return (
         <SøknadLayout>
             <Alert variant="info" style={{ marginBottom: '1em' }}>
@@ -36,7 +37,7 @@ export const InngangsvilkårTab = ({ behandlingId, kategoriserteSaksopplysninger
                                         saksopplysninger={kategori.saksopplysninger}
                                         behandlingId={behandlingId}
                                         behandlingsperiode={behandlingsperiode}
-
+                                        lesevisning = {lesevisning}
                                     />
                                 </Accordion.Content>
                             </Accordion.Item>

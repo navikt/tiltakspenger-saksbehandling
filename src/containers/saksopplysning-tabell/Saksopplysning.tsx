@@ -18,6 +18,7 @@ interface SaksopplysningProps {
         fom: string;
         tom: string;
     };
+    lesevisning: boolean;
 }
 
 export const Saksopplysning = ({
@@ -31,6 +32,7 @@ export const Saksopplysning = ({
     fakta,
     behandlingId,
     behandlingsperiode,
+    lesevisning,
 }: SaksopplysningProps) => {
     const [åpneRedigering, onÅpneRedigering] = useState<boolean>(false);
 
@@ -60,16 +62,18 @@ export const Saksopplysning = ({
                     <BodyShort>{detaljer ? detaljer : '-'}</BodyShort>
                 </Table.DataCell>
                 <Table.DataCell>
-                    <Button
-                        onClick={() => onÅpneRedigering(!åpneRedigering)}
-                        variant="tertiary"
-                        iconPosition="left"
-                        icon={<PencilIcon />}
-                        aria-label="hidden"
-                    />
+                    {!lesevisning && (
+                        <Button
+                            onClick={() => onÅpneRedigering(!åpneRedigering)}
+                            variant="tertiary"
+                            iconPosition="left"
+                            icon={<PencilIcon />}
+                            aria-label="hidden"
+                        />
+                    )}
                 </Table.DataCell>
             </Table.Row>
-            {åpneRedigering && (
+            {åpneRedigering && !lesevisning && (
                 <Table.Row>
                     <Table.DataCell colSpan={7} style={{ padding: '0' }}>
                         <RedigeringSkjema

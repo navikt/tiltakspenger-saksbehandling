@@ -12,9 +12,11 @@ interface SøknadTabsProps {
     defaultTab: string;
     onChange: (søknadId: string) => void;
     behandling: Behandling;
+    lesevisning: boolean;
+
 }
 
-const BehandlingTabs = ({ defaultTab, behandling }: SøknadTabsProps) => {
+const BehandlingTabs = ({ defaultTab, behandling, lesevisning }: SøknadTabsProps) => {
     return (
         <div className={styles.tabsHistorikkDiv}>
             <div className={styles.tabsColumn}>
@@ -48,6 +50,7 @@ const BehandlingTabs = ({ defaultTab, behandling }: SøknadTabsProps) => {
                             behandlingId={behandling.behandlingId}
                             kategoriserteSaksopplysninger={behandling.saksopplysninger}
                             behandlingsperiode={{ fom: behandling.fom, tom: behandling.tom}}
+                            lesevisning={lesevisning}
                         />
                     </Tabs.Panel>
                     <Tabs.Panel value={'Meldekort'}>

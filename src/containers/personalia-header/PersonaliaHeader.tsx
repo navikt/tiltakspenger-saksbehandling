@@ -6,9 +6,10 @@ import { Personopplysninger } from '../../types/Behandling';
 
 interface PersonaliaHeaderProps {
     personopplysninger: Personopplysninger;
+    lesevisning: boolean;
 }
 
-const PersonaliaHeader = ({ personopplysninger }: PersonaliaHeaderProps) => {
+const PersonaliaHeader = ({ personopplysninger, lesevisning }: PersonaliaHeaderProps) => {
     const { fornavn, etternavn, ident, skjerming, strengtFortrolig, fortrolig } = personopplysninger;
     return (
         <div className={styles.personaliaHeader}>
@@ -32,6 +33,11 @@ const PersonaliaHeader = ({ personopplysninger }: PersonaliaHeaderProps) => {
             {skjerming && (
                 <Tag variant="error" className={styles.personaliaHeader__tag}>
                     Søker er skjermet
+                </Tag>
+            )}
+            {lesevisning && (
+                <Tag variant="error" className={styles.personaliaHeader__lesevisning}>
+                    Lesevisning
                 </Tag>
             )}
         </div>
