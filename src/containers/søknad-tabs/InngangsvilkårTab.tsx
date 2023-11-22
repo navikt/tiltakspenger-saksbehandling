@@ -4,6 +4,7 @@ import { SøknadLayout } from '../../layouts/soker/SøknadLayout';
 import React from 'react';
 import { Kategori } from '../../types/Behandling';
 import { UtfallIcon } from '../../components/utfall-icon/UtfallIcon';
+import {Lesevisning} from "../../utils/avklarLesevisning";
 
 interface InngangsvilkårTabProps {
     behandlingId: string;
@@ -12,7 +13,7 @@ interface InngangsvilkårTabProps {
         fom: string;
         tom: string;
     };
-    lesevisning: boolean;
+    lesevisning: Lesevisning;
 }
 
 export const InngangsvilkårTab = ({ behandlingId, kategoriserteSaksopplysninger, behandlingsperiode, lesevisning }: InngangsvilkårTabProps) => {

@@ -13,6 +13,7 @@ import { BehandlingKnapper } from '../../containers/behandling-knapper/Behandlin
 import { Tag } from '@navikt/ds-react';
 import styles from './Soker.module.css';
 import {SaksbehandlerContext} from "../_app";
+import {avklarLesevisning} from "../../utils/avklarLesevisning";
 
 export const søknadIdAtom = atom('');
 
@@ -22,13 +23,18 @@ const BehandlingPage: NextPage = () => {
 
     const { valgtBehandling, isLoading } = useBehandling(behandlingId);
     const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
-    const lesevisning = innloggetSaksbehandler?.navIdent !== valgtBehandling?.saksbehandler;
 
     if (isLoading || !valgtBehandling) {
         return <Loaders.Page />;
     }
 
-    console.log("Draw")
+    const girInnvilget = !valgtBehandling.saksopplysninger.find(
+        (saksopplysning) => saksopplysning.samletUtfall !== "OPPFYLT"
+    )
+
+    const lesevisning = avklarLesevisning(innloggetSaksbehandler!!, valgtBehandling.saksbehandler, valgtBehandling.beslutter, valgtBehandling.tilstand, girInnvilget)
+
+    console.log(valgtBehandling)
 
     return (
         <SøkerLayout>

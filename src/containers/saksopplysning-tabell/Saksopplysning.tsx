@@ -3,6 +3,8 @@ import { Table, BodyShort, Button } from '@navikt/ds-react';
 import { UtfallIcon } from '../../components/utfall-icon/UtfallIcon';
 import { RedigeringSkjema } from './RedigeringSkjema';
 import { useState } from 'react';
+import {Lesevisning} from "../../utils/avklarLesevisning";
+
 
 interface SaksopplysningProps {
     vilkår: string;
@@ -18,7 +20,7 @@ interface SaksopplysningProps {
         fom: string;
         tom: string;
     };
-    lesevisning: boolean;
+    lesevisning: Lesevisning;
 }
 
 export const Saksopplysning = ({
@@ -62,7 +64,7 @@ export const Saksopplysning = ({
                     <BodyShort>{detaljer ? detaljer : '-'}</BodyShort>
                 </Table.DataCell>
                 <Table.DataCell>
-                    {!lesevisning && (
+                    {lesevisning.kanEndre && (
                         <Button
                             onClick={() => onÅpneRedigering(!åpneRedigering)}
                             variant="tertiary"
@@ -73,7 +75,7 @@ export const Saksopplysning = ({
                     )}
                 </Table.DataCell>
             </Table.Row>
-            {åpneRedigering && !lesevisning && (
+            {åpneRedigering && lesevisning.kanEndre && (
                 <Table.Row>
                     <Table.DataCell colSpan={7} style={{ padding: '0' }}>
                         <RedigeringSkjema

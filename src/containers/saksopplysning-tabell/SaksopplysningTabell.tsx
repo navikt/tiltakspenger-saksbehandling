@@ -2,6 +2,7 @@ import { Table } from '@navikt/ds-react';
 import React from 'react';
 import { FaktaDTO, SaksopplysningInnDTO } from '../../types/Behandling';
 import { Saksopplysning } from './Saksopplysning';
+import {Lesevisning} from "../../utils/avklarLesevisning";
 
 interface SaksopplysningProps {
     saksopplysninger: SaksopplysningInnDTO[];
@@ -10,7 +11,7 @@ interface SaksopplysningProps {
         fom: string;
         tom: string;
     };
-    lesevisning: boolean;
+    lesevisning: Lesevisning;
 }
 
 export const SaksopplysningTabell = ({ saksopplysninger, behandlingId, behandlingsperiode, lesevisning }: SaksopplysningProps) => {

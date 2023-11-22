@@ -6,14 +6,14 @@ import { Behandling } from '../../types/Behandling';
 import { BankNoteIcon, CardIcon } from '@navikt/aksel-icons';
 import { InngangsvilkårTab } from './InngangsvilkårTab';
 import { MeldekortSide } from '../../containers/søknad-tabs/MeldekortSide';
+import {Lesevisning} from "../../utils/avklarLesevisning";
 
 interface SøknadTabsProps {
     className?: string;
     defaultTab: string;
     onChange: (søknadId: string) => void;
     behandling: Behandling;
-    lesevisning: boolean;
-
+    lesevisning: Lesevisning;
 }
 
 const BehandlingTabs = ({ defaultTab, behandling, lesevisning }: SøknadTabsProps) => {
