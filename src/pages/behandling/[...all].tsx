@@ -34,8 +34,6 @@ const BehandlingPage: NextPage = () => {
 
     const lesevisning = avklarLesevisning(innloggetSaksbehandler!!, valgtBehandling.saksbehandler, valgtBehandling.beslutter, valgtBehandling.tilstand, girInnvilget)
 
-    console.log(valgtBehandling)
-
     return (
         <SøkerLayout>
             <PersonaliaHeader personopplysninger={valgtBehandling.personopplysninger} lesevisning={lesevisning}/>
