@@ -37,7 +37,7 @@ const PersonaliaHeader = ({ personopplysninger, lesevisning }: PersonaliaHeaderP
                 </Tag>
             )}
             {!lesevisning.kanEndre && (
-                <Tag variant="error" className={styles.personaliaHeader__lesevisning}>
+                <Tag variant="neutral" className={styles.personaliaHeader__lesevisning}>
                     Lesevisning - Saksopplysninger kan ikke endres
                 </Tag>
             )}
