@@ -6,15 +6,17 @@ import { Behandling } from '../../types/Behandling';
 import { BankNoteIcon, CardIcon } from '@navikt/aksel-icons';
 import { InngangsvilkårTab } from './InngangsvilkårTab';
 import { MeldekortSide } from '../../containers/søknad-tabs/MeldekortSide';
+import {Lesevisning} from "../../utils/avklarLesevisning";
 
 interface SøknadTabsProps {
     className?: string;
     defaultTab: string;
     onChange: (søknadId: string) => void;
     behandling: Behandling;
+    lesevisning: Lesevisning;
 }
 
-const BehandlingTabs = ({ defaultTab, behandling }: SøknadTabsProps) => {
+const BehandlingTabs = ({ defaultTab, behandling, lesevisning }: SøknadTabsProps) => {
     return (
         <div className={styles.tabsHistorikkDiv}>
             <div className={styles.tabsColumn}>
@@ -48,6 +50,7 @@ const BehandlingTabs = ({ defaultTab, behandling }: SøknadTabsProps) => {
                             behandlingId={behandling.behandlingId}
                             kategoriserteSaksopplysninger={behandling.saksopplysninger}
                             behandlingsperiode={{ fom: behandling.fom, tom: behandling.tom}}
+                            lesevisning={lesevisning}
                         />
                     </Tabs.Panel>
                     <Tabs.Panel value={'Meldekort'}>

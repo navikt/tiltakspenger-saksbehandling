@@ -3,13 +3,15 @@ import styles from './BehandlingSkjema.module.css';
 import toast from 'react-hot-toast';
 import { useSWRConfig } from 'swr';
 import {useRouter} from "next/router";
+import {Lesevisning} from "../../utils/avklarLesevisning";
 
 interface behandlingKnapperProps {
     behandlingid: string;
     tilstand: string;
+    lesevisning: Lesevisning;
 }
 
-export const BehandlingKnapper = ({ behandlingid, tilstand }: behandlingKnapperProps) => {
+export const BehandlingKnapper = ({ behandlingid, tilstand, lesevisning }: behandlingKnapperProps) => {
     const mutator = useSWRConfig().mutate;
     const router = useRouter()
 
@@ -68,29 +70,29 @@ export const BehandlingKnapper = ({ behandlingid, tilstand }: behandlingKnapperP
             <>
                 {tilstand == 'tilBeslutter' ? (
                     <>
-                        <Button
+                        {lesevisning.knappSendTilbake && <Button
                             type="submit"
                             size="small"
                             variant="secondary"
                             onClick={() => håndterSendTilbake()}
                         >
                             Send tilbake
-                        </Button>
-                        <Button type="submit" size="small" onClick={() => håndterGodkjenn()}>
+                        </Button>}
+                        {lesevisning.knappGodkjennVis && <Button type="submit" size="small" onClick={() => håndterGodkjenn()} disabled={!lesevisning.knappGodkjennTillatt}>
                             Godkjenn vedtaket
-                        </Button>
+                        </Button>}
                     </>
                 ) : (
                     <>
-                        <Button type="submit" size="small" onClick={() => håndterAvbrytBehandling()}>
+                        {lesevisning.knappAvbrytBehandling && <Button type="submit" size="small" onClick={() => håndterAvbrytBehandling()}>
                             Avbryt behandling{' '}
-                        </Button>
-                        <Button type="submit" size="small" onClick={() => håndterRefreshSaksopplysninger()}>
+                        </Button>}
+                        {lesevisning.knappOppdater && <Button type="submit" size="small" onClick={() => håndterRefreshSaksopplysninger()}>
                             Oppdater saksopplysninger{' '}
-                        </Button>
-                        <Button type="submit" size="small" onClick={() => håndterSendTilBeslutter()}>
+                        </Button>}
+                        {lesevisning.knappSendTilBeslutter && <Button type="submit" size="small" onClick={() => håndterSendTilBeslutter()}>
                             Send til beslutter{' '}
-                        </Button>
+                        </Button>}
                     </>
 
                 )}

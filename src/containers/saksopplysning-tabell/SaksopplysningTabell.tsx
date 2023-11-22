@@ -2,6 +2,7 @@ import { Table } from '@navikt/ds-react';
 import React from 'react';
 import { FaktaDTO, SaksopplysningInnDTO } from '../../types/Behandling';
 import { Saksopplysning } from './Saksopplysning';
+import {Lesevisning} from "../../utils/avklarLesevisning";
 
 interface SaksopplysningProps {
     saksopplysninger: SaksopplysningInnDTO[];
@@ -10,9 +11,10 @@ interface SaksopplysningProps {
         fom: string;
         tom: string;
     };
+    lesevisning: Lesevisning;
 }
 
-export const SaksopplysningTabell = ({ saksopplysninger, behandlingId, behandlingsperiode }: SaksopplysningProps) => {
+export const SaksopplysningTabell = ({ saksopplysninger, behandlingId, behandlingsperiode, lesevisning }: SaksopplysningProps) => {
     const velgFaktaTekst = (typeSaksopplysning: string, fakta: FaktaDTO) => {
         if (typeSaksopplysning === 'HAR_YTELSE') return fakta.harYtelse;
         if (typeSaksopplysning === 'HAR_IKKE_YTELSE') return fakta.harIkkeYtelse;
@@ -46,6 +48,7 @@ export const SaksopplysningTabell = ({ saksopplysninger, behandlingId, behandlin
                             detaljer={saksopplysning.detaljer}
                             fakta={velgFaktaTekst(saksopplysning.typeSaksopplysning, saksopplysning.fakta)}
                             behandlingsperiode={behandlingsperiode}
+                            lesevisning={lesevisning}
                         />
                     ))}
                 </Table.Body>

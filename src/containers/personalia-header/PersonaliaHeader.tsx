@@ -3,12 +3,14 @@ import { Tag } from '@navikt/ds-react';
 import { PersonCircleIcon } from '@navikt/aksel-icons';
 import styles from './PersonaliaHeader.module.css';
 import { Personopplysninger } from '../../types/Behandling';
+import {Lesevisning} from "../../utils/avklarLesevisning";
 
 interface PersonaliaHeaderProps {
     personopplysninger: Personopplysninger;
+    lesevisning: Lesevisning;
 }
 
-const PersonaliaHeader = ({ personopplysninger }: PersonaliaHeaderProps) => {
+const PersonaliaHeader = ({ personopplysninger, lesevisning }: PersonaliaHeaderProps) => {
     const { fornavn, etternavn, ident, skjerming, strengtFortrolig, fortrolig } = personopplysninger;
     return (
         <div className={styles.personaliaHeader}>
@@ -32,6 +34,11 @@ const PersonaliaHeader = ({ personopplysninger }: PersonaliaHeaderProps) => {
             {skjerming && (
                 <Tag variant="error" className={styles.personaliaHeader__tag}>
                     Søker er skjermet
+                </Tag>
+            )}
+            {!lesevisning.kanEndre && (
+                <Tag variant="error" className={styles.personaliaHeader__lesevisning}>
+                    Lesevisning - Saksopplysninger kan ikke endres
                 </Tag>
             )}
         </div>

@@ -1,11 +1,11 @@
-import React, {FormEvent, useState} from 'react';
+import React, {FormEvent, useContext, useState} from 'react';
 import type { NextPage } from 'next';
 import { pageWithAuthentication } from '../utils/pageWithAuthentication';
 import toast from 'react-hot-toast';
 import useSWR, {useSWRConfig} from 'swr';
 import { fetcher, FetcherError } from '../utils/http';
 import {Button, Link, Table} from '@navikt/ds-react';
-import useSaksbehandler from "../core/useSaksbehandler";
+import {SaksbehandlerContext} from "./_app";
 
 interface Behandling {
     id: string;
@@ -17,7 +17,7 @@ interface Behandling {
 
 const HomePage: NextPage = () => {
     const [behandlinger, setBehandlinger] = useState<Behandling[]>([]);
-    const { saksbehandler, isSaksbehandlerLoading } = useSaksbehandler();
+    const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
     const mutator = useSWRConfig().mutate;
     const { data, isLoading } = useSWR<Behandling[]>(`/api/behandlinger`, fetcher, {
         shouldRetryOnError: false,
@@ -42,7 +42,7 @@ const HomePage: NextPage = () => {
     const taBehandlingKnappDeaktivert = (type: string, saksbehandlerForBehandling?: string, beslutterForBehandling?: string) => {
         switch (type) {
             case "Klar til beslutning" :
-                return saksbehandler?.navIdent == saksbehandlerForBehandling
+                return innloggetSaksbehandler?.navIdent == saksbehandlerForBehandling
 
             case "Klar til behandling" :
                 return false
@@ -53,7 +53,7 @@ const HomePage: NextPage = () => {
     }
 
     const behandlingLinkAktivert = (saksbehandlerForBehandling?: string, beslutterForBehandling?: string) => {
-        return (saksbehandler?.navIdent == saksbehandlerForBehandling || saksbehandler?.navIdent == beslutterForBehandling)
+        return (innloggetSaksbehandler?.navIdent == saksbehandlerForBehandling || innloggetSaksbehandler?.navIdent == beslutterForBehandling)
     }
 
     return (

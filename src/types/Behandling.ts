@@ -16,6 +16,8 @@ export interface Saksopplysning {
 
 export interface Behandling {
     behandlingId: string;
+    saksbehandler: string;
+    beslutter: string;
     fom: string;
     tom: string;
     søknad: Søknad;
