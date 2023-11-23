@@ -68,43 +68,55 @@ export const BehandlingKnapper = ({ behandlingid, tilstand, status, lesevisning 
 
     return (
         <HStack justify="end" gap="3" align="end" className={styles.behandlingSkjema}>
-            <>
-                {tilstand == 'tilBeslutter' ? (
-                    <>
-                        {lesevisning.knappSendTilbake && <Button
-                            type="submit"
-                            size="small"
-                            variant="secondary"
-                            onClick={() => håndterSendTilbake()}
-                        >
-                            Send tilbake
-                        </Button>}
-                        {lesevisning.knappGodkjennVis && <Button type="submit" size="small" onClick={() => håndterGodkjenn()} disabled={!lesevisning.knappGodkjennTillatt}>
-                            Godkjenn vedtaket
-                        </Button>}
-                    </>
-                ) : (
-                    <div className={styles.rad}>
-                        <div className={styles.tagBox}>
-                            <Tag variant="alt1" className={styles.tilstandTag} >
-                                {status}
-                            </Tag>
+            <div className={styles.rad}>
+                <div className={styles.tagBox}>
+                    <Tag variant="alt1" className={styles.tilstandTag}>
+                        {status}
+                    </Tag>
+                </div>
+                <div className={styles.knappeBox}>
+                    {lesevisning.knappSendTilbake &&
+                        <div className={styles.knapp}>
+                            <Button
+                                type="submit"
+                                size="small"
+                                variant="secondary"
+                                onClick={() => håndterSendTilbake()}
+                            >
+                                Send tilbake
+                            </Button>
                         </div>
-                        <div className={styles.knappeBox}>
-                            {lesevisning.knappAvbrytBehandling && <div className={styles.knapp}><Button type="submit" size="small" onClick={() => håndterAvbrytBehandling()}>
+                    }
+                    {lesevisning.knappGodkjennVis &&
+                        <div className={styles.knapp}>
+                            <Button type="submit" size="small" onClick={() => håndterGodkjenn()} disabled={!lesevisning.knappGodkjennTillatt}>
+                                Godkjenn vedtaket
+                            </Button>
+                        </div>
+                    }
+                    {lesevisning.knappAvbrytBehandling &&
+                        <div className={styles.knapp}>
+                            <Button type="submit" size="small" onClick={() => håndterAvbrytBehandling()}>
                                 Avbryt behandling{' '}
-                            </Button></div>}
-                            {lesevisning.knappOppdater && <div className={styles.knapp}><Button type="submit" size="small" onClick={() => håndterRefreshSaksopplysninger()}>
-                                Oppdater saksopplysninger{' '}
-                            </Button></div>}
-                            {lesevisning.knappSendTilBeslutter && <div className={styles.knapp}><Button type="submit" size="small" onClick={() => håndterSendTilBeslutter()}>
-                                Send til beslutter{' '}
-                            </Button></div>}
+                            </Button>
                         </div>
-                    </div>
-
-                )}
-            </>
+                    }
+                    {lesevisning.knappOppdater &&
+                        <div className={styles.knapp}>
+                            <Button type="submit" size="small" onClick={() => håndterRefreshSaksopplysninger()}>
+                        Oppdater saksopplysninger{' '}
+                    </Button>
+                        </div>
+                    }
+                    {lesevisning.knappSendTilBeslutter &&
+                        <div className={styles.knapp}>
+                            <Button type="submit" size="small" onClick={() => håndterSendTilBeslutter()}>
+                                Send til beslutter{' '}
+                            </Button>
+                        </div>
+                    }
+                </div>
+            </div>
         </HStack>
     );
 };
