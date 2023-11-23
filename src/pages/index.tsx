@@ -43,11 +43,11 @@ const HomePage: NextPage = () => {
         switch (type) {
             case "Klar til beslutning" :
                 return innloggetSaksbehandler?.roller.includes("BESLUTTER")
-                    && !!beslutterForBehandling
+                    && !beslutterForBehandling
                     && innloggetSaksbehandler?.navIdent != saksbehandlerForBehandling
             case "Klar til behandling" :
                 return innloggetSaksbehandler?.roller.includes("SAKSBEHANDLER")
-                    && !!saksbehandlerForBehandling
+                    && !saksbehandlerForBehandling
             default :
                 return false
         }
