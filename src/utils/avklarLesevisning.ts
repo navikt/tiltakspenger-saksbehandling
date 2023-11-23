@@ -1,5 +1,4 @@
 import {Saksbehandler} from "../types/Saksbehandler";
-import {red} from "next/dist/lib/picocolors";
 
 export interface Lesevisning {
     kanEndre: boolean;
@@ -19,14 +18,18 @@ export const avklarLesevisning = (
     girInnvilget: boolean
 ): Lesevisning => {
     const redigerbarTilstand = (tilstand === "opprettet" || tilstand === "vilkårsvurdert");
-    console.log(redigerbarTilstand);
+    const erAdministrator = innloggetSaksbehandler.roller.includes("ADMINISTRATOR");
+    const kanBeslutte =
+        innloggetSaksbehandler.navIdent === beslutterPåSaken &&
+        innloggetSaksbehandler.roller.includes("BESLUTTER");
+    console.log("Roller: " + innloggetSaksbehandler.roller)
     return {
         kanEndre: redigerbarTilstand && innloggetSaksbehandler.navIdent === saksbehandlerPåSaken,
-        knappAvbrytBehandling: redigerbarTilstand && innloggetSaksbehandler.navIdent === saksbehandlerPåSaken,
+        knappAvbrytBehandling: redigerbarTilstand && (innloggetSaksbehandler.navIdent === saksbehandlerPåSaken || erAdministrator),
         knappOppdater: (redigerbarTilstand || (tilstand === "tilBeslutter")) && innloggetSaksbehandler.navIdent === saksbehandlerPåSaken, //Om det også skal være i "tilBeslutter" avhengig av avklaring
         knappSendTilBeslutter: redigerbarTilstand && innloggetSaksbehandler.navIdent === saksbehandlerPåSaken,
-        knappGodkjennVis: tilstand === "tilBeslutter",
-        knappGodkjennTillatt: tilstand === "tilBeslutter" && girInnvilget && innloggetSaksbehandler.navIdent === beslutterPåSaken,
-        knappSendTilbake: tilstand === "tilBeslutter" && innloggetSaksbehandler.navIdent === beslutterPåSaken,
+        knappGodkjennVis: tilstand === "tilBeslutter" && kanBeslutte,
+        knappGodkjennTillatt: tilstand === "tilBeslutter" && girInnvilget && kanBeslutte, //Skal drift eller admin kunne "lage" avslag?
+        knappSendTilbake: tilstand === "tilBeslutter" && (kanBeslutte || erAdministrator),
     }
 }
