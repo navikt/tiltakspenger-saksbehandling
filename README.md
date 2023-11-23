@@ -48,6 +48,25 @@ Etter man har gjort det skal verdikjeden kunne kjøres opp med `docker-compose u
 
 ---
 
+Hvis man vil teste rollene må man fjerne groups-claimet fra `docker-compose.yml` og legge til følgende i `.env.local`
+
+
+
+Dette kan pastes inn i mock oauth2-wonderwallen for å gi roller (saksbehandler, beslutter, administrator hhv.):
+```
+{
+    "groups": [
+        "1b3a2c4d-d620-4fcf-a29b-a6cdadf29680", 
+        "79985315-b2de-40b8-a740-9510796993c6",
+        "cbe715d0-6f67-46bf-86b4-688c4419b747"
+    ]
+}
+```
+
+Da må man kjøre opp docker-compose uten roller med
+```./up-uten.roller.sh```
+
+
 ## E2E tester
 
 Testene ligger i repoet [her](https://github.com/navikt/tiltakspenger-e2e-tests). Kan kjøres opp lokalt eller trigges manuelt via workflow dispatch.

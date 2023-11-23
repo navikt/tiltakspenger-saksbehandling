@@ -42,7 +42,7 @@ const HomePage: NextPage = () => {
     const taBehandlingKnappDeaktivert = (type: string, saksbehandlerForBehandling?: string, beslutterForBehandling?: string) => {
         switch (type) {
             case "Klar til beslutning" :
-                return innloggetSaksbehandler?.navIdent == saksbehandlerForBehandling
+                return innloggetSaksbehandler?.navIdent === saksbehandlerForBehandling && innloggetSaksbehandler?.roller.includes("BESLUTTER")
 
             case "Klar til behandling" :
                 return false
@@ -53,7 +53,8 @@ const HomePage: NextPage = () => {
     }
 
     const behandlingLinkAktivert = (saksbehandlerForBehandling?: string, beslutterForBehandling?: string) => {
-        return (innloggetSaksbehandler?.navIdent == saksbehandlerForBehandling || innloggetSaksbehandler?.navIdent == beslutterForBehandling)
+        return (innloggetSaksbehandler?.navIdent == saksbehandlerForBehandling || innloggetSaksbehandler?.navIdent == beslutterForBehandling) ||
+            innloggetSaksbehandler?.roller.includes("ADMINISTRATOR")
     }
 
     return (
