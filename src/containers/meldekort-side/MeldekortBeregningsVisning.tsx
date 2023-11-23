@@ -1,7 +1,11 @@
 import { CheckmarkCircleFillIcon, ExclamationmarkTriangleFillIcon, XMarkOctagonFillIcon } from '@navikt/aksel-icons';
 import { BodyShort, Table } from '@navikt/ds-react';
 
-export const MeldekortBeregningsvisning = () => {
+interface MeldekortBeregningsvisningProps {
+    antallDagerIkkeDeltatt: number;
+}
+
+export const MeldekortBeregningsvisning = ({ antallDagerIkkeDeltatt }: MeldekortBeregningsvisningProps) => {
     return (
         <Table style={{ tableLayout: 'fixed', width: '100%' }}>
             <Table.Row>
@@ -65,7 +69,7 @@ export const MeldekortBeregningsvisning = () => {
                 </Table.DataCell>
                 <Table.DataCell>
                     <BodyShort style={{ marginBottom: '0.5rem' }}>5</BodyShort>
-                    <BodyShort style={{ marginBottom: '0.5rem' }}>0</BodyShort>
+                    <BodyShort style={{ marginBottom: '0.5rem' }}>{antallDagerIkkeDeltatt.toString()}</BodyShort>
                     <BodyShort style={{ marginBottom: '0.5rem' }}>0</BodyShort>
                     <BodyShort style={{ marginBottom: '0.5rem' }}>6</BodyShort>
                     <BodyShort style={{ marginBottom: '0.5rem' }}>0</BodyShort>

@@ -1,32 +1,19 @@
 import { Select, Table } from '@navikt/ds-react';
-import {
-    CheckmarkCircleFillIcon,
-    ExclamationmarkTriangleFillIcon,
-    XMarkOctagonFillIcon,
-} from '@navikt/aksel-icons';
+import { CheckmarkCircleFillIcon, ExclamationmarkTriangleFillIcon, XMarkOctagonFillIcon } from '@navikt/aksel-icons';
 import { MeldekortDag, MeldekortStatus } from '../../types/MeldekortTypes';
 
 import React, { useState } from 'react';
 
 interface MeldekortUkeProps {
-    meldekortUke?: MeldekortDag[];
+    meldekortUke: MeldekortDag[];
     ukesnummer: number;
     fom: number;
     tom: number;
+    handleOppdaterMeldekort: (arg1: number, arg2: string) => void;
 }
 
-export const MeldekortUke = ({ ukesnummer, fom, tom, meldekortUke }: MeldekortUkeProps) => {
-    const meldekortUker: MeldekortDag[] = [
-        { dag: 'Mandag', dato: new Date('2023-11-13'), status: MeldekortStatus.DELTATT },
-        { dag: 'Tirsdag', dato: new Date('2023-11-14'), status: MeldekortStatus.IKKE_DELTATT },
-        { dag: 'Onsdag', dato: new Date('2023-11-15'), status: MeldekortStatus.FRAVÆR_SYK },
-        { dag: 'Torsdag', dato: new Date('2023-11-16'), status: MeldekortStatus.FRAVÆR_SYKT_BARN },
-        { dag: 'Fredag', dato: new Date('2023-11-17'), status: MeldekortStatus.DELTATT },
-        { dag: 'Lørdag', dato: new Date('2023-11-18'), status: MeldekortStatus.IKKE_DELTATT },
-        { dag: 'Søndag', dato: new Date('2023-11-19'), status: MeldekortStatus.IKKE_DELTATT },
-    ];
-
-    function velgIkon(deltattEllerFravær: String) {
+export const MeldekortUke = ({ ukesnummer, fom, tom, meldekortUke, handleOppdaterMeldekort }: MeldekortUkeProps) => {
+    function velgIkon(deltattEllerFravær: MeldekortStatus) {
         switch (deltattEllerFravær) {
             case MeldekortStatus.DELTATT:
                 return <CheckmarkCircleFillIcon style={{ color: 'green' }} />;
@@ -41,7 +28,7 @@ export const MeldekortUke = ({ ukesnummer, fom, tom, meldekortUke }: MeldekortUk
                 return <ExclamationmarkTriangleFillIcon style={{ color: 'orange' }} />;
         }
     }
-    var ukedagListe = meldekortUker.map((ukedag, index) => {
+    var ukedagListe = meldekortUke.map((ukedag, index) => {
         return (
             <Table.Row key={index}>
                 <Table.DataCell>{velgIkon(ukedag.status)}</Table.DataCell>
@@ -54,12 +41,14 @@ export const MeldekortUke = ({ ukesnummer, fom, tom, meldekortUke }: MeldekortUk
                         id="deltattEllerFravær"
                         size="small"
                         hideLabel
+                        onChange={(e) => handleOppdaterMeldekort(index, e.target.value)}
                     >
-                        <option value="Deltatt">Deltatt i tiltaket</option>
-                        <option value="Ikke_deltatt">Ikke deltatt i tiltaket</option>
-                        <option value="Lønn">Lønn for tid i tiltaket</option>
-                        <option value="sykefravær">Fravær syk</option>
-                        <option value="velferdPermisjon">Fravær velferd</option>
+                        <option value={MeldekortStatus.DELTATT}>Deltatt i tiltaket</option>
+                        <option value={MeldekortStatus.IKKE_DELTATT}>Ikke deltatt i tiltaket</option>
+                        <option value={MeldekortStatus.LØNN_FOR_TID_I_ARBEID}>Lønn for tid i arbeid</option>
+                        <option value={MeldekortStatus.FRAVÆR_SYK}>Fravær syk</option>
+                        <option value={MeldekortStatus.FRAVÆR_SYKT_BARN}>Fravær sykt barn</option>
+                        <option value={MeldekortStatus.FRAVÆR_VELFERD}>Fravær velferd</option>
                     </Select>
                 </Table.DataCell>
             </Table.Row>
