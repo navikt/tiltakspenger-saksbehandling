@@ -30,6 +30,6 @@ export const avklarLesevisning = (
         knappSendTilBeslutter: redigerbarTilstand && innloggetSaksbehandler.navIdent === saksbehandlerPåSaken,
         knappGodkjennVis: tilstand === "tilBeslutter" && kanBeslutte,
         knappGodkjennTillatt: tilstand === "tilBeslutter" && girInnvilget && kanBeslutte, //Skal drift eller admin kunne "lage" avslag?
-        knappSendTilbake: tilstand === "tilBeslutter" && (kanBeslutte || erAdministrator),
+        knappSendTilbake: tilstand === "tilBeslutter" && (kanBeslutte || (erAdministrator && !!beslutterPåSaken))
     }
 }
