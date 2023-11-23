@@ -16,11 +16,35 @@ interface InngangsvilkårTabProps {
     lesevisning: Lesevisning;
 }
 
+interface Utfall {
+    variant: "success" | "error" | "info";
+    tekst: string;
+}
+
+const samletUtfall = (sakskategorier: Kategori[]): Utfall => {
+    if (!!sakskategorier.find(kategori => kategori.samletUtfall === "KREVER_MANUELL_VURDERING")) {
+        return {
+            variant: "info",
+            tekst: "Krever manuell saksbehandling"
+        }
+    }
+    if (!!sakskategorier.find(kategori => kategori.samletUtfall === "IKKE_OPPFYLT")) {
+        return {
+            variant: "error",
+            tekst: "Vilkår for tiltakspenger er ikke oppfylt for perioden"
+        }
+    }
+    return {
+        variant: "success",
+        tekst: "Vilkår for tiltakspenger er oppfylt for perioden"
+    }
+}
+
 export const InngangsvilkårTab = ({ behandlingId, kategoriserteSaksopplysninger, behandlingsperiode, lesevisning }: InngangsvilkårTabProps) => {
     return (
         <SøknadLayout>
-            <Alert variant="info" style={{ marginBottom: '1em' }}>
-                Det er noe greier her
+            <Alert variant={samletUtfall(kategoriserteSaksopplysninger).variant} style={{ marginBottom: '1em' }}>
+                {samletUtfall(kategoriserteSaksopplysninger).tekst}
             </Alert>
             <Accordion indent={false}>
                 <VStack>
