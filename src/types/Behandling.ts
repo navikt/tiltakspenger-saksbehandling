@@ -25,6 +25,7 @@ export interface Behandling {
     saksopplysninger: Kategori[];
     personopplysninger: Personopplysninger;
     tilstand: string;
+    status: string;
 }
 
 export interface Personopplysninger {

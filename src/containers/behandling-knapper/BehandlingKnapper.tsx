@@ -1,17 +1,18 @@
-import { Button, HStack } from '@navikt/ds-react';
+import {Button, HStack, Tag} from '@navikt/ds-react';
 import styles from './BehandlingSkjema.module.css';
 import toast from 'react-hot-toast';
 import { useSWRConfig } from 'swr';
 import {useRouter} from "next/router";
 import {Lesevisning} from "../../utils/avklarLesevisning";
 
-interface behandlingKnapperProps {
+interface BehandlingKnapperProps {
     behandlingid: string;
     tilstand: string;
+    status: string;
     lesevisning: Lesevisning;
 }
 
-export const BehandlingKnapper = ({ behandlingid, tilstand, lesevisning }: behandlingKnapperProps) => {
+export const BehandlingKnapper = ({ behandlingid, tilstand, status, lesevisning }: BehandlingKnapperProps) => {
     const mutator = useSWRConfig().mutate;
     const router = useRouter()
 
@@ -83,17 +84,24 @@ export const BehandlingKnapper = ({ behandlingid, tilstand, lesevisning }: behan
                         </Button>}
                     </>
                 ) : (
-                    <>
-                        {lesevisning.knappAvbrytBehandling && <Button type="submit" size="small" onClick={() => håndterAvbrytBehandling()}>
-                            Avbryt behandling{' '}
-                        </Button>}
-                        {lesevisning.knappOppdater && <Button type="submit" size="small" onClick={() => håndterRefreshSaksopplysninger()}>
-                            Oppdater saksopplysninger{' '}
-                        </Button>}
-                        {lesevisning.knappSendTilBeslutter && <Button type="submit" size="small" onClick={() => håndterSendTilBeslutter()}>
-                            Send til beslutter{' '}
-                        </Button>}
-                    </>
+                    <div className={styles.rad}>
+                        <div className={styles.tagBox}>
+                            <Tag variant="alt1" className={styles.tilstandTag} >
+                                {status}
+                            </Tag>
+                        </div>
+                        <div className={styles.knappeBox}>
+                            {lesevisning.knappAvbrytBehandling && <div className={styles.knapp}><Button type="submit" size="small" onClick={() => håndterAvbrytBehandling()}>
+                                Avbryt behandling{' '}
+                            </Button></div>}
+                            {lesevisning.knappOppdater && <div className={styles.knapp}><Button type="submit" size="small" onClick={() => håndterRefreshSaksopplysninger()}>
+                                Oppdater saksopplysninger{' '}
+                            </Button></div>}
+                            {lesevisning.knappSendTilBeslutter && <div className={styles.knapp}><Button type="submit" size="small" onClick={() => håndterSendTilBeslutter()}>
+                                Send til beslutter{' '}
+                            </Button></div>}
+                        </div>
+                    </div>
 
                 )}
             </>
