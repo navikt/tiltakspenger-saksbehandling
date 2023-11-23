@@ -25,7 +25,7 @@ export const avklarLesevisning = (
     console.log("Roller: " + innloggetSaksbehandler.roller)
     return {
         kanEndre: redigerbarTilstand && innloggetSaksbehandler.navIdent === saksbehandlerPåSaken,
-        knappAvbrytBehandling: redigerbarTilstand && (innloggetSaksbehandler.navIdent === saksbehandlerPåSaken || erAdministrator),
+        knappAvbrytBehandling: redigerbarTilstand && (innloggetSaksbehandler.navIdent === saksbehandlerPåSaken || (erAdministrator && !!saksbehandlerPåSaken)),
         knappOppdater: (redigerbarTilstand || (tilstand === "tilBeslutter")) && innloggetSaksbehandler.navIdent === saksbehandlerPåSaken, //Om det også skal være i "tilBeslutter" avhengig av avklaring
         knappSendTilBeslutter: redigerbarTilstand && innloggetSaksbehandler.navIdent === saksbehandlerPåSaken,
         knappGodkjennVis: tilstand === "tilBeslutter" && kanBeslutte,
