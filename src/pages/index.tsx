@@ -39,16 +39,17 @@ const HomePage: NextPage = () => {
         });
     };
 
-    const taBehandlingKnappDeaktivert = (type: string, saksbehandlerForBehandling?: string, beslutterForBehandling?: string) => {
+    const skalKunneTaBehandling = (type: string, saksbehandlerForBehandling?: string, beslutterForBehandling?: string) => {
         switch (type) {
             case "Klar til beslutning" :
-                return innloggetSaksbehandler?.navIdent === saksbehandlerForBehandling && innloggetSaksbehandler?.roller.includes("BESLUTTER")
-
+                return innloggetSaksbehandler?.roller.includes("BESLUTTER")
+                    && !!beslutterForBehandling
+                    && innloggetSaksbehandler?.navIdent != saksbehandlerForBehandling
             case "Klar til behandling" :
-                return false
-
+                return innloggetSaksbehandler?.roller.includes("SAKSBEHANDLER")
+                    && !!saksbehandlerForBehandling
             default :
-                return true
+                return false
         }
     }
 
@@ -86,7 +87,7 @@ const HomePage: NextPage = () => {
                                         size="small"
                                         variant="primary"
                                         onClick={() => taBehandling(behandling.id)}
-                                        disabled={taBehandlingKnappDeaktivert(behandling.status, behandling.saksbehandler, behandling.beslutter)}
+                                        disabled={!skalKunneTaBehandling(behandling.status, behandling.saksbehandler, behandling.beslutter)}
                                     >
                                         Ta behandling
                                     </Button>
