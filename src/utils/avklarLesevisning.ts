@@ -8,6 +8,7 @@ export interface Lesevisning {
     knappGodkjennVis: boolean;
     knappGodkjennTillatt: boolean
     knappSendTilbake: boolean;
+    kanIkkeGodkjennes: boolean;
 }
 
 export const avklarLesevisning = (
@@ -30,6 +31,7 @@ export const avklarLesevisning = (
         knappSendTilBeslutter: redigerbarTilstand && innloggetSaksbehandler.navIdent === saksbehandlerPåSaken,
         knappGodkjennVis: tilstand === "tilBeslutter" && kanBeslutte,
         knappGodkjennTillatt: tilstand === "tilBeslutter" && girInnvilget && kanBeslutte, //Skal drift eller admin kunne "lage" avslag?
-        knappSendTilbake: tilstand === "tilBeslutter" && (kanBeslutte || (erAdministrator && !!beslutterPåSaken))
+        knappSendTilbake: tilstand === "tilBeslutter" && (kanBeslutte || (erAdministrator && !!beslutterPåSaken)),
+        kanIkkeGodkjennes: !girInnvilget,
     }
 }

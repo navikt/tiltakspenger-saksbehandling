@@ -110,7 +110,7 @@ export const BehandlingKnapper = ({ behandlingid, tilstand, status, lesevisning 
                     }
                     {lesevisning.knappSendTilBeslutter &&
                         <div className={styles.knapp}>
-                            <Button type="submit" size="small" onClick={() => håndterSendTilBeslutter()}>
+                            <Button type="submit" size="small" onClick={() => håndterSendTilBeslutter()} disabled={lesevisning.kanIkkeGodkjennes}>
                                 Send til beslutter{' '}
                             </Button>
                         </div>

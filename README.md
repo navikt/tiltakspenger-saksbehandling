@@ -48,8 +48,7 @@ Etter man har gjort det skal verdikjeden kunne kjøres opp med `docker-compose u
 
 ---
 
-Hvis man vil teste rollene må man fjerne groups-claimet fra `docker-compose.yml` og legge til følgende i `.env.local`
-
+Man kan teste rollene lokalt ved å legge rollene inn som optional claims i mock-oauth2-server.
 
 
 Dette kan pastes inn i mock oauth2-wonderwallen for å gi roller (saksbehandler, beslutter, administrator hhv.):
