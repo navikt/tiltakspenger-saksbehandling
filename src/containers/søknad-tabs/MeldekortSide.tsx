@@ -3,7 +3,7 @@ import { MeldekortUke } from '../meldekort-side/MeldekortUke';
 import { MeldekortBeregningsvisning } from '../meldekort-side/MeldekortBeregningsVisning';
 import { PencilWritingIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MeldekortDag, MeldekortStatus } from '../../types/MeldekortTypes';
 
 interface MeldekortSideProps extends React.PropsWithChildren {
@@ -30,35 +30,36 @@ export const MeldekortSide = ({}: MeldekortSideProps) => {
         { dag: 'Lørdag', dato: new Date('2023-11-25'), status: MeldekortStatus.IKKE_DELTATT },
         { dag: 'Søndag', dato: new Date('2023-11-26'), status: MeldekortStatus.IKKE_DELTATT },
     ];
+
     const [oppdatertMeldekort1, setOppdaterMeldekort1] = useState([...meldekortUke1]);
     const [oppdatertMeldekort2, setOppdaterMeldekort2] = useState([...meldekortUke2]);
+    const [antallDagerIkkeDeltatt, settAntallDagerIkkeDeltatt] = useState<number>(0);
 
-    const handleOppdaterMeldekort1 = (index: number, nyStatus: any) => {
-        console.log('nyStatus', nyStatus);
-        console.log('index', index);
-        const oppdatertMeldekortUkerKopi = [...meldekortUke1];
+    useEffect(() => {
+        beregnAntallDagerIkkeDeltatt(oppdatertMeldekort1, oppdatertMeldekort2);
+    });
+
+    const handleOppdaterMeldekort1 = (index: number, nyStatus: MeldekortStatus) => {
+        const oppdatertMeldekortUkerKopi = [...oppdatertMeldekort1];
         oppdatertMeldekortUkerKopi[index].status = nyStatus;
         setOppdaterMeldekort1(oppdatertMeldekortUkerKopi);
+        beregnAntallDagerIkkeDeltatt(oppdatertMeldekort1, oppdatertMeldekort2);
     };
-    const handleOppdaterMeldekort2 = (index: number, nyStatus: any) => {
-        const oppdatertMeldekortUkerKopi = [...meldekortUke2];
+    const handleOppdaterMeldekort2 = (index: number, nyStatus: MeldekortStatus) => {
+        const oppdatertMeldekortUkerKopi = [...oppdatertMeldekort2];
         oppdatertMeldekortUkerKopi[index].status = nyStatus;
         setOppdaterMeldekort2(oppdatertMeldekortUkerKopi);
+        beregnAntallDagerIkkeDeltatt(oppdatertMeldekort1, oppdatertMeldekort2);
     };
-    const beregnAntallDagerIkkeDeltatt = (meldekortUke1, meldekortUke2) => {
-        const antallUke1 = meldekortUke1.reduce((countMap: { [x: string]: any }, meldekort: { status: any }) => {
-            const status = meldekort.status;
-            countMap[status] = (countMap[status] || 0) + 1;
-            return countMap;
-        });
+    const beregnAntallDagerIkkeDeltatt = (meldekortUke1: MeldekortDag[], meldekortUke2: MeldekortDag[]) => {
+        const antallDager1 = meldekortUke1.filter(
+            (dag: MeldekortDag) => dag.status === MeldekortStatus.IKKE_DELTATT
+        ).length;
+        const antallDager2 = meldekortUke2.filter(
+            (dag: MeldekortDag) => dag.status === MeldekortStatus.IKKE_DELTATT
+        ).length;
 
-        const antallUke2 = meldekortUke2.reduce((countMap: { [x: string]: any }, meldekort: { status: any }) => {
-            const status = meldekort.status;
-            countMap[status] = (countMap[status] || 0) + 1;
-            return countMap;
-        });
-        console.log('antalluke1', antallUke1);
-        return antallUke1 + antallUke2;
+        settAntallDagerIkkeDeltatt(antallDager1 + antallDager2);
     };
 
     const godkjennMeldekort = () => {
@@ -75,7 +76,7 @@ export const MeldekortSide = ({}: MeldekortSideProps) => {
                         fom={1}
                         tom={7}
                         handleOppdaterMeldekort={handleOppdaterMeldekort1}
-                    ></MeldekortUke>
+                    />
                 </div>
                 <div className={styles.uke2}>
                     <MeldekortUke
@@ -84,7 +85,7 @@ export const MeldekortSide = ({}: MeldekortSideProps) => {
                         fom={8}
                         tom={14}
                         handleOppdaterMeldekort={handleOppdaterMeldekort2}
-                    ></MeldekortUke>
+                    />
                 </div>
             </div>
 
