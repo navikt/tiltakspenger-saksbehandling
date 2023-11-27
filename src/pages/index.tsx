@@ -5,30 +5,32 @@ import toast from 'react-hot-toast';
 import useSWR, {useSWRConfig} from 'swr';
 import { fetcher, FetcherError } from '../utils/http';
 import {Button, Link, Table} from '@navikt/ds-react';
+import useSaksbehandler from "../core/useSaksbehandler";
 
 interface Behandling {
     id: string;
     ident: string;
     status: string;
     saksbehandler?: string;
+    beslutter?: string;
 }
 
 const HomePage: NextPage = () => {
     const [behandlinger, setBehandlinger] = useState<Behandling[]>([]);
+    const { saksbehandler, isSaksbehandlerLoading } = useSaksbehandler();
     const mutator = useSWRConfig().mutate;
     const { data, isLoading } = useSWR<Behandling[]>(`/api/behandlinger`, fetcher, {
         shouldRetryOnError: false,
         revalidateOnFocus: false,
         revalidateOnReconnect: false,
         onSuccess: (data) => {
-            console.log(data);
             setBehandlinger(data);
         },
         onError: (error: FetcherError) => toast.error(`[${error.status}]: ${error.info}`),
     });
 
     const taBehandling = async (behandlingid: string) => {
-        const res = fetch(`/api/behandling/ta_behandling/${behandlingid}`, {
+        const res = fetch(`/api/behandling/startbehandling/${behandlingid}`, {
             method: 'POST',
         }).then(() => {
             mutator(`/api/behandlinger`).then(() => {
@@ -37,8 +39,21 @@ const HomePage: NextPage = () => {
         });
     };
 
-    const taBehandlingKnappDeaktivert = () => {
-        return false //TODO
+    const taBehandlingKnappDeaktivert = (type: string, saksbehandlerForBehandling?: string, beslutterForBehandling?: string) => {
+        switch (type) {
+            case "Klar til beslutning" :
+                return saksbehandler?.navIdent == saksbehandlerForBehandling
+
+            case "Klar til behandling" :
+                return false
+
+            default :
+                return true
+        }
+    }
+
+    const behandlingLinkAktivert = (saksbehandlerForBehandling?: string, beslutterForBehandling?: string) => {
+        return (saksbehandler?.navIdent == saksbehandlerForBehandling || saksbehandler?.navIdent == beslutterForBehandling)
     }
 
     return (
@@ -50,25 +65,27 @@ const HomePage: NextPage = () => {
                         <Table.HeaderCell scope="col">ID</Table.HeaderCell>
                         <Table.HeaderCell scope="col">Status</Table.HeaderCell>
                         <Table.HeaderCell scope="col">Saksbehandler</Table.HeaderCell>
+                        <Table.HeaderCell scope="col">Beslutter</Table.HeaderCell>
                         <Table.HeaderCell scope="col"></Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {behandlinger.map(({ id, ident, saksbehandler, status }) => {
+                    {behandlinger.map((behandling) => {
                         return (
-                            <Table.Row shadeOnHover={false} key={id}>
-                                <Table.DataCell>{ident}</Table.DataCell>
+                            <Table.Row shadeOnHover={false} key={behandling.id}>
+                                <Table.DataCell>{behandling.ident}</Table.DataCell>
                                 <Table.DataCell>
-                                    <Link href={`/behandling/${id}`}>{id}</Link>
+                                    {behandlingLinkAktivert(behandling.saksbehandler, behandling.beslutter)  ? <Link href={`/behandling/${behandling.id}`}>{behandling.id}</Link> : behandling.id}
                                 </Table.DataCell>
-                                <Table.DataCell>{status}</Table.DataCell>
-                                <Table.DataCell>{saksbehandler}</Table.DataCell>
+                                <Table.DataCell>{behandling.status}</Table.DataCell>
+                                <Table.DataCell>{behandling.saksbehandler}</Table.DataCell>
+                                <Table.DataCell>{behandling.beslutter}</Table.DataCell>
                                 <Table.DataCell>
                                     <Button
                                         size="small"
                                         variant="primary"
-                                        onClick={() => taBehandling(id)}
-                                        disabled={taBehandlingKnappDeaktivert()}
+                                        onClick={() => taBehandling(behandling.id)}
+                                        disabled={taBehandlingKnappDeaktivert(behandling.status, behandling.saksbehandler, behandling.beslutter)}
                                     >
                                         Ta behandling
                                     </Button>

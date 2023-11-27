@@ -8,15 +8,16 @@ import { UtfallIcon } from '../../components/utfall-icon/UtfallIcon';
 interface InngangsvilkårTabProps {
     behandlingId: string;
     kategoriserteSaksopplysninger: Kategori[];
-    periodeFom: string;
-    periodeTom: string;
+    behandlingsperiode: {
+        fom: string;
+        tom: string;
+    };
 }
 
 export const InngangsvilkårTab = ({
     behandlingId,
     kategoriserteSaksopplysninger,
-    periodeFom,
-    periodeTom,
+    behandlingsperiode,
 }: InngangsvilkårTabProps) => {
     return (
         <SøknadLayout>
@@ -38,8 +39,7 @@ export const InngangsvilkårTab = ({
                                     <SaksopplysningTabell
                                         saksopplysninger={kategori.saksopplysninger}
                                         behandlingId={behandlingId}
-                                        periodeFom={periodeFom}
-                                        periodeTom={periodeTom}
+                                        behandlingsperiode={behandlingsperiode}
                                     />
                                 </Accordion.Content>
                             </Accordion.Item>

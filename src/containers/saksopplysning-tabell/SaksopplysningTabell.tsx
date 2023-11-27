@@ -6,16 +6,13 @@ import { Saksopplysning } from './Saksopplysning';
 interface SaksopplysningProps {
     saksopplysninger: SaksopplysningInnDTO[];
     behandlingId: string;
-    periodeFom: string;
-    periodeTom: string;
+    behandlingsperiode: {
+        fom: string;
+        tom: string;
+    };
 }
 
-export const SaksopplysningTabell = ({
-    saksopplysninger,
-    behandlingId,
-    periodeFom,
-    periodeTom,
-}: SaksopplysningProps) => {
+export const SaksopplysningTabell = ({ saksopplysninger, behandlingId, behandlingsperiode }: SaksopplysningProps) => {
     const velgFaktaTekst = (typeSaksopplysning: string, fakta: FaktaDTO) => {
         if (typeSaksopplysning === 'HAR_YTELSE') return fakta.harYtelse;
         if (typeSaksopplysning === 'HAR_IKKE_YTELSE') return fakta.harIkkeYtelse;
@@ -40,7 +37,7 @@ export const SaksopplysningTabell = ({
                         <Saksopplysning
                             key={saksopplysning.vilkårTittel}
                             vilkår={saksopplysning.vilkårTittel}
-                            vilkårTittel={saksopplysning.vilkårFlateTittel}
+                            vilkårFlateTittel={saksopplysning.vilkårFlateTittel}
                             utfall={saksopplysning.utfall}
                             fom={saksopplysning.fom}
                             tom={saksopplysning.tom}
@@ -48,8 +45,7 @@ export const SaksopplysningTabell = ({
                             behandlingId={behandlingId}
                             detaljer={saksopplysning.detaljer}
                             fakta={velgFaktaTekst(saksopplysning.typeSaksopplysning, saksopplysning.fakta)}
-                            behandlingsPeriodeFom={periodeFom}
-                            behandlingsPeriodeTom={periodeTom}
+                            behandlingsperiode={behandlingsperiode}
                         />
                     ))}
                 </Table.Body>
