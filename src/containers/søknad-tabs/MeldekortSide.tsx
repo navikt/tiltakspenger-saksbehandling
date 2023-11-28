@@ -33,7 +33,9 @@ export const MeldekortSide = ({}: MeldekortSideProps) => {
     const [antallDagerIkkeDeltatt, settAntallDagerIkkeDeltatt] = useState<number>(0);
 
     useEffect(() => {
-        beregnAntallDagerIkkeDeltatt(meldekortUker);
+        settAntallDagerIkkeDeltatt(
+            oppdatertMeldekortUker.filter((dag: MeldekortDag) => dag.status === MeldekortStatus.IKKE_DELTATT).length
+        );
     });
 
     const handleOppdaterMeldekort = (index: number, nyStatus: MeldekortStatus, ukeNr: number) => {
@@ -44,15 +46,6 @@ export const MeldekortSide = ({}: MeldekortSideProps) => {
             oppdatertMeldekortUkerKopi[index].status = nyStatus;
         }
         setOppdaterMeldekortUker(oppdatertMeldekortUkerKopi);
-        beregnAntallDagerIkkeDeltatt(meldekortUker);
-    };
-
-    const beregnAntallDagerIkkeDeltatt = (meldekortUker: MeldekortDag[]) => {
-        const antallDager1 = meldekortUker.filter(
-            (dag: MeldekortDag) => dag.status === MeldekortStatus.IKKE_DELTATT
-        ).length;
-
-        settAntallDagerIkkeDeltatt(antallDager1);
     };
 
     const godkjennMeldekort = () => {
