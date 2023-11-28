@@ -4,3 +4,8 @@
     justify-self: center;
     grid-area: behandlingtag;
 }
+
+.HistoryColumn {
+    border-top: 1px solid #dfdfdf;
+    grid-area: history;
+}

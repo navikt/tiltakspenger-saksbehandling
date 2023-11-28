@@ -1,5 +1,5 @@
 import React from 'react';
-import { Heading } from '@navikt/ds-react';
+import {BodyShort, Heading } from '@navikt/ds-react';
 import { RegistrertTiltak } from '../../types/Søknad';
 import { formatDate, formatPeriode } from '../../utils/date';
 import { Periode, ÅpenPeriode } from '../../types/Periode';
@@ -31,14 +31,12 @@ const RegistrertTiltakDetails = ({ registrertTiltak }: RegistrertTiltakDetailsPr
     const { arrangør, periode, prosent, status, navn, dagerIUken } = registrertTiltak;
     return (
         <div className={styles.registrertTiltakDetails}>
-            <Heading size="xsmall" level="3">
-                {navn}
-            </Heading>
-            <p className={styles.registrertTiltakDetails__field}>{arrangør}</p>
-            <p className={styles.registrertTiltakDetails__field}>{renderPeriode(periode)}</p>
-            <p className={styles.registrertTiltakDetails__field}>
+            <BodyShort size="small" className={styles.registrertTiltakDetails__field} spacing> {`Variant: ${navn}`} </BodyShort>
+            <BodyShort size="small" className={styles.registrertTiltakDetails__field} spacing> {`Arrangør: ${arrangør}`}</BodyShort>
+            <BodyShort size="small" className={styles.registrertTiltakDetails__field} spacing>{renderPeriode(periode)}</BodyShort>
+            <BodyShort size="small" className={styles.registrertTiltakDetails__field} spacing>
                 {prosent}%{!!dagerIUken ? ` - ${formatDagerIUken(dagerIUken)}` : ''}
-            </p>
+            </BodyShort>
             <div style={{ marginTop: '1rem' }}>
                 <Tiltaksstatus tiltaksstatus={status} />
             </div>

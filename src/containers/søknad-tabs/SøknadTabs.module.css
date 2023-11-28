@@ -1,22 +1,6 @@
 
-.søknadTabs {
-    border-top: 1px solid #cfcfcf;
+.tabsHistorikkDiv {
+    border-top: 1px solid #dfdfdf;
     grid-area: soknad;
 }
 
-.tabsHistorikkDiv {
-    display: flex;
-}
-
-.tabsColumn {
-    width: 80%
-}
-
-.historikkColumn {
-    flex: 1;
-    margin-left: 0.5rem;
-    border-left: 1px solid #cfcfcf;
-    border-top: 1px solid #cfcfcf;
-    grid-area: history;
-    min-height: calc(100vh - 7.5rem);
-}

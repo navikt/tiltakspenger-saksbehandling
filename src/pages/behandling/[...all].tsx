@@ -14,6 +14,7 @@ import { Tag } from '@navikt/ds-react';
 import styles from './Soker.module.css';
 import {SaksbehandlerContext} from "../_app";
 import {avklarLesevisning} from "../../utils/avklarLesevisning";
+import {Historikk} from "../../containers/historikk/historikk";
 
 export const søknadIdAtom = atom('');
 
@@ -48,6 +49,7 @@ const BehandlingPage: NextPage = () => {
                 behandling={valgtBehandling}
                 lesevisning={lesevisning}
             />
+            <Historikk/>
         </SøkerLayout>
     );
 };
