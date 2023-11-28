@@ -19,8 +19,7 @@ interface SøknadTabsProps {
 const BehandlingTabs = ({ defaultTab, behandling, lesevisning }: SøknadTabsProps) => {
     return (
         <div className={styles.tabsHistorikkDiv}>
-            <div className={styles.tabsColumn}>
-                <Tabs defaultValue={defaultTab} className={styles.søknadTabs}>
+                <Tabs defaultValue={defaultTab}>
                     <Tabs.List>
                         <Tabs.Tab
                             key={'Inngangsvilkår'}
@@ -49,7 +48,7 @@ const BehandlingTabs = ({ defaultTab, behandling, lesevisning }: SøknadTabsProp
                         <InngangsvilkårTab
                             behandlingId={behandling.behandlingId}
                             kategoriserteSaksopplysninger={behandling.saksopplysninger}
-                            behandlingsperiode={{ fom: behandling.fom, tom: behandling.tom}}
+                            behandlingsperiode={{fom: behandling.fom, tom: behandling.tom}}
                             lesevisning={lesevisning}
                         />
                     </Tabs.Panel>
@@ -58,13 +57,6 @@ const BehandlingTabs = ({ defaultTab, behandling, lesevisning }: SøknadTabsProp
                     </Tabs.Panel>
                     <Tabs.Panel value={'Utbetaling'}>Utbetaling</Tabs.Panel>
                 </Tabs>
-            </div>
-            <div className={styles.historikkColumn}>
-                <span>
-                    {' '}
-                    <ChevronRightIcon /> &nbsp; Historikk{' '}
-                </span>
-            </div>
         </div>
     );
 };

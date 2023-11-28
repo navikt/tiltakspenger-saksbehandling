@@ -44,8 +44,8 @@ const Tiltaksstatus = ({ tiltaksstatus }: TiltaksstatusProps) => {
     return (
         <IconWithText
             iconRenderer={() => iconRenderer(tiltaksstatus)}
-            text={
-                TiltaksstatusType[tiltaksstatus as unknown as keyof typeof TiltaksstatusType] //TODO: Typescriptproblem
+            text={` Status:
+                ${TiltaksstatusType[tiltaksstatus as unknown as keyof typeof TiltaksstatusType] } `//TODO: Typescriptproblem
             }
         />
     );
