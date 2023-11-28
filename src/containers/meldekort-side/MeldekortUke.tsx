@@ -7,10 +7,11 @@ interface MeldekortUkeProps {
     ukesnummer: number;
     fom: number;
     tom: number;
-    handleOppdaterMeldekort: (index: number, status: MeldekortStatus) => void;
+    handleOppdaterMeldekort: (index: number, status: MeldekortStatus, ukeNr: number) => void;
+    ukeNr: number;
 }
 
-export const MeldekortUke = ({ ukesnummer, meldekortUke, handleOppdaterMeldekort }: MeldekortUkeProps) => {
+export const MeldekortUke = ({ ukesnummer, meldekortUke, handleOppdaterMeldekort, ukeNr }: MeldekortUkeProps) => {
     function velgIkon(deltattEllerFravær: MeldekortStatus) {
         switch (deltattEllerFravær) {
             case MeldekortStatus.DELTATT:
@@ -48,10 +49,11 @@ export const MeldekortUke = ({ ukesnummer, meldekortUke, handleOppdaterMeldekort
 
     function oppdaterMeldekort(index: number, status: string) {
         const meldekortStatus = velgStatus(status);
-        handleOppdaterMeldekort(index, meldekortStatus);
+        handleOppdaterMeldekort(index, meldekortStatus, ukeNr);
     }
 
     var ukedagListe = meldekortUke.map((ukedag, index) => {
+        console.log('meldekortUke', meldekortUke);
         return (
             <Table.Row key={index}>
                 <Table.DataCell>{velgIkon(ukedag.status)}</Table.DataCell>

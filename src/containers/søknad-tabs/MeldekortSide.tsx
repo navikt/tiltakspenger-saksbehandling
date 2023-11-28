@@ -12,7 +12,7 @@ interface MeldekortSideProps extends React.PropsWithChildren {
 
 export const MeldekortSide = ({}: MeldekortSideProps) => {
     const [disableUkeVisning, setDisableUkeVisning] = useState<boolean>(false);
-    const meldekortUke1: MeldekortDag[] = [
+    const meldekortUker: MeldekortDag[] = [
         { dag: 'Mandag', dato: new Date('2023-11-13'), status: MeldekortStatus.IKKE_DELTATT },
         { dag: 'Tirsdag', dato: new Date('2023-11-14'), status: MeldekortStatus.IKKE_DELTATT },
         { dag: 'Onsdag', dato: new Date('2023-11-15'), status: MeldekortStatus.FRAVÆR_SYKT_BARN },
@@ -20,8 +20,6 @@ export const MeldekortSide = ({}: MeldekortSideProps) => {
         { dag: 'Fredag', dato: new Date('2023-11-17'), status: MeldekortStatus.DELTATT },
         { dag: 'Lørdag', dato: new Date('2023-11-18'), status: MeldekortStatus.IKKE_DELTATT },
         { dag: 'Søndag', dato: new Date('2023-11-19'), status: MeldekortStatus.IKKE_DELTATT },
-    ];
-    const meldekortUke2: MeldekortDag[] = [
         { dag: 'Mandag', dato: new Date('2023-11-20'), status: MeldekortStatus.DELTATT },
         { dag: 'Tirsdag', dato: new Date('2023-11-21'), status: MeldekortStatus.LØNN_FOR_TID_I_ARBEID },
         { dag: 'Onsdag', dato: new Date('2023-11-22'), status: MeldekortStatus.FRAVÆR_SYK },
@@ -31,35 +29,30 @@ export const MeldekortSide = ({}: MeldekortSideProps) => {
         { dag: 'Søndag', dato: new Date('2023-11-26'), status: MeldekortStatus.IKKE_DELTATT },
     ];
 
-    const [oppdatertMeldekort1, setOppdaterMeldekort1] = useState([...meldekortUke1]);
-    const [oppdatertMeldekort2, setOppdaterMeldekort2] = useState([...meldekortUke2]);
+    const [oppdatertMeldekortUker, setOppdaterMeldekortUker] = useState([...meldekortUker]);
     const [antallDagerIkkeDeltatt, settAntallDagerIkkeDeltatt] = useState<number>(0);
 
     useEffect(() => {
-        beregnAntallDagerIkkeDeltatt(oppdatertMeldekort1, oppdatertMeldekort2);
+        beregnAntallDagerIkkeDeltatt(meldekortUker);
     });
 
-    const handleOppdaterMeldekort1 = (index: number, nyStatus: MeldekortStatus) => {
-        const oppdatertMeldekortUkerKopi = [...oppdatertMeldekort1];
-        oppdatertMeldekortUkerKopi[index].status = nyStatus;
-        setOppdaterMeldekort1(oppdatertMeldekortUkerKopi);
-        beregnAntallDagerIkkeDeltatt(oppdatertMeldekort1, oppdatertMeldekort2);
+    const handleOppdaterMeldekort = (index: number, nyStatus: MeldekortStatus, ukeNr: number) => {
+        const oppdatertMeldekortUkerKopi = [...oppdatertMeldekortUker];
+        if (ukeNr == 2) {
+            oppdatertMeldekortUkerKopi[index + 7].status = nyStatus;
+        } else {
+            oppdatertMeldekortUkerKopi[index].status = nyStatus;
+        }
+        setOppdaterMeldekortUker(oppdatertMeldekortUkerKopi);
+        beregnAntallDagerIkkeDeltatt(meldekortUker);
     };
-    const handleOppdaterMeldekort2 = (index: number, nyStatus: MeldekortStatus) => {
-        const oppdatertMeldekortUkerKopi = [...oppdatertMeldekort2];
-        oppdatertMeldekortUkerKopi[index].status = nyStatus;
-        setOppdaterMeldekort2(oppdatertMeldekortUkerKopi);
-        beregnAntallDagerIkkeDeltatt(oppdatertMeldekort1, oppdatertMeldekort2);
-    };
-    const beregnAntallDagerIkkeDeltatt = (meldekortUke1: MeldekortDag[], meldekortUke2: MeldekortDag[]) => {
-        const antallDager1 = meldekortUke1.filter(
-            (dag: MeldekortDag) => dag.status === MeldekortStatus.IKKE_DELTATT
-        ).length;
-        const antallDager2 = meldekortUke2.filter(
+
+    const beregnAntallDagerIkkeDeltatt = (meldekortUker: MeldekortDag[]) => {
+        const antallDager1 = meldekortUker.filter(
             (dag: MeldekortDag) => dag.status === MeldekortStatus.IKKE_DELTATT
         ).length;
 
-        settAntallDagerIkkeDeltatt(antallDager1 + antallDager2);
+        settAntallDagerIkkeDeltatt(antallDager1);
     };
 
     const godkjennMeldekort = () => {
@@ -71,20 +64,22 @@ export const MeldekortSide = ({}: MeldekortSideProps) => {
             <div className={disableUkeVisning ? styles.disableUkevisning : styles.ukevisning}>
                 <div className={styles.uke1}>
                     <MeldekortUke
-                        meldekortUke={oppdatertMeldekort1}
+                        meldekortUke={oppdatertMeldekortUker.slice(0, 7)}
                         ukesnummer={1}
                         fom={1}
                         tom={7}
-                        handleOppdaterMeldekort={handleOppdaterMeldekort1}
+                        ukeNr={1}
+                        handleOppdaterMeldekort={handleOppdaterMeldekort}
                     />
                 </div>
                 <div className={styles.uke2}>
                     <MeldekortUke
-                        meldekortUke={oppdatertMeldekort2}
+                        meldekortUke={oppdatertMeldekortUker.slice(7, 14)}
                         ukesnummer={2}
                         fom={8}
                         tom={14}
-                        handleOppdaterMeldekort={handleOppdaterMeldekort2}
+                        ukeNr={2}
+                        handleOppdaterMeldekort={handleOppdaterMeldekort}
                     />
                 </div>
             </div>
