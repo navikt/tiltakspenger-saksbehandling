@@ -30,12 +30,31 @@ export const MeldekortSide = ({}: MeldekortSideProps) => {
     ];
 
     const [oppdatertMeldekortUker, setOppdaterMeldekortUker] = useState([...meldekortUker]);
-    const [antallDagerIkkeDeltatt, settAntallDagerIkkeDeltatt] = useState<number>(0);
+    const [antallDagerIkkeDeltatt, setAntallDagerIkkeDeltatt] = useState<number>(
+        meldekortUker.filter((dag: MeldekortDag) => dag.status === MeldekortStatus.IKKE_DELTATT).length
+    );
+    const [antallDagerDeltatt, setAntallDagerDeltatt] = useState<number>(
+        meldekortUker.filter((dag: MeldekortDag) => dag.status === MeldekortStatus.DELTATT).length
+    );
+    const [antallDagerSyk, setAntallDagerSyk] = useState<number>(
+        meldekortUker.filter((dag: MeldekortDag) => dag.status === MeldekortStatus.FRAVÆR_SYK).length
+    );
+    const [antallDagerSyktBarn, setAntallDagerSyktBarn] = useState<number>(
+        meldekortUker.filter((dag: MeldekortDag) => dag.status === MeldekortStatus.FRAVÆR_SYKT_BARN).length
+    );
+    const [antallDagerVelferd, setAntallDagerVelferd] = useState<number>(
+        meldekortUker.filter((dag: MeldekortDag) => dag.status === MeldekortStatus.FRAVÆR_VELFERD).length
+    );
+    const [antallDager100prosent, setAntallDager100prosent] = useState<number>(0);
+    const [antallDager75prosent, setAntallDager75prosent] = useState<number>(0);
+    const [sumAntallDager100prosent, setSumAntallDager100prosent] = useState<number>(0);
+    const [sumAntallDager75prosent, setSumAntallDager75prosent] = useState<number>(0);
+    const egenMeldingsdager = 3;
+    const dagsats = 268;
 
     useEffect(() => {
-        settAntallDagerIkkeDeltatt(
-            oppdatertMeldekortUker.filter((dag: MeldekortDag) => dag.status === MeldekortStatus.IKKE_DELTATT).length
-        );
+        finnAntallDagerMedRiktigUtbetalingsprosent();
+        beregnRiktigSum();
     });
 
     const handleOppdaterMeldekort = (index: number, nyStatus: MeldekortStatus, ukeNr: number) => {
@@ -46,6 +65,33 @@ export const MeldekortSide = ({}: MeldekortSideProps) => {
             oppdatertMeldekortUkerKopi[index].status = nyStatus;
         }
         setOppdaterMeldekortUker(oppdatertMeldekortUkerKopi);
+        setAntallDagerIkkeDeltatt(finnAntallDager(MeldekortStatus.IKKE_DELTATT));
+        setAntallDagerDeltatt(finnAntallDager(MeldekortStatus.DELTATT));
+        setAntallDagerSyk(finnAntallDager(MeldekortStatus.FRAVÆR_SYK));
+        setAntallDagerSyktBarn(finnAntallDager(MeldekortStatus.FRAVÆR_SYKT_BARN));
+        setAntallDagerVelferd(finnAntallDager(MeldekortStatus.FRAVÆR_VELFERD));
+        finnAntallDagerMedRiktigUtbetalingsprosent();
+        beregnRiktigSum();
+    };
+
+    const finnAntallDager = (meldekortStatus: MeldekortStatus) => {
+        return oppdatertMeldekortUker.filter((dag: MeldekortDag) => dag.status === meldekortStatus).length;
+    };
+
+    const finnAntallDagerMedRiktigUtbetalingsprosent = () => {
+        const sykedager = antallDagerSyk + antallDagerSyktBarn;
+        if (sykedager > egenMeldingsdager) {
+            setAntallDager100prosent(antallDagerDeltatt + egenMeldingsdager + antallDagerVelferd);
+            setAntallDager75prosent(sykedager - egenMeldingsdager);
+        } else {
+            setAntallDager75prosent(0);
+            setAntallDager100prosent(sykedager + antallDagerDeltatt + antallDagerVelferd);
+        }
+    };
+
+    const beregnRiktigSum = () => {
+        setSumAntallDager100prosent(antallDager100prosent * dagsats);
+        setSumAntallDager75prosent(antallDager75prosent * dagsats * 0.75);
     };
 
     const godkjennMeldekort = () => {
@@ -77,7 +123,17 @@ export const MeldekortSide = ({}: MeldekortSideProps) => {
                 </div>
             </div>
 
-            <MeldekortBeregningsvisning antallDagerIkkeDeltatt={antallDagerIkkeDeltatt} />
+            <MeldekortBeregningsvisning
+                antallDagerIkkeDeltatt={antallDagerIkkeDeltatt}
+                antallDagerDeltatt={antallDagerDeltatt}
+                antallDagerSyk={antallDagerSyk}
+                antallDagerSyktBarn={antallDagerSyktBarn}
+                antallDagerVelferd={antallDagerVelferd}
+                antallDager100prosent={antallDager100prosent}
+                antallDager75prosent={antallDager75prosent}
+                sumAntallDager100prosent={sumAntallDager100prosent}
+                sumAntallDager75prosent={sumAntallDager75prosent}
+            />
 
             <div style={{ marginTop: '2rem', justifyItems: 'center', alignItems: 'center' }}>
                 <Button
