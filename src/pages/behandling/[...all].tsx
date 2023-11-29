@@ -52,7 +52,7 @@ const BehandlingPage: NextPage = () => {
                 lesevisning={lesevisning}
             />
             <Historikk/>
-            <BegrunnelseModal behandlingid={valgtBehandling.behandlingId} ref={modalRef}/>
+            <BegrunnelseModal behandlingid={valgtBehandling.behandlingId} modalRef={modalRef}/>
         </SøkerLayout>
     );
 };
