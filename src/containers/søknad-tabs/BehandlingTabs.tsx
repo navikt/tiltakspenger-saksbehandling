@@ -1,12 +1,14 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Tabs } from '@navikt/ds-react';
-import { ChevronRightIcon, FileTextIcon } from '@navikt/aksel-icons';
+import { FileTextIcon } from '@navikt/aksel-icons';
 import styles from './SøknadTabs.module.css';
 import { Behandling } from '../../types/Behandling';
 import { BankNoteIcon, CardIcon } from '@navikt/aksel-icons';
 import { InngangsvilkårTab } from './InngangsvilkårTab';
 import { MeldekortSide } from '../../containers/søknad-tabs/MeldekortSide';
 import {Lesevisning} from "../../utils/avklarLesevisning";
+import SøknadSummarySection from "../søknad-summary-section/SøknadSummarySection";
+import {Historikk} from "../historikk/historikk";
 
 interface SøknadTabsProps {
     className?: string;
@@ -14,9 +16,11 @@ interface SøknadTabsProps {
     onChange: (søknadId: string) => void;
     behandling: Behandling;
     lesevisning: Lesevisning;
+    sendTabCallback: (tab: string) => void;
 }
 
-const BehandlingTabs = ({ defaultTab, behandling, lesevisning }: SøknadTabsProps) => {
+
+const BehandlingTabs = ({ defaultTab, behandling, lesevisning, sendTabCallback }: SøknadTabsProps) => {
     return (
         <div className={styles.tabsHistorikkDiv}>
                 <Tabs defaultValue={defaultTab}>
@@ -26,14 +30,14 @@ const BehandlingTabs = ({ defaultTab, behandling, lesevisning }: SøknadTabsProp
                             value={'Inngangsvilkår'}
                             label={'Inngangsvilkår'}
                             icon={<FileTextIcon />}
-                            onClick={() => {}}
+                            onClick={() => {sendTabCallback('Inngangsvilkår')}}
                         />
                         <Tabs.Tab
                             key={'Meldekort'}
                             value={'Meldekort'}
                             label={'Meldekort'}
                             icon={<CardIcon />}
-                            onClick={() => {}}
+                            onClick={() => {sendTabCallback('Meldekort')}}
                         />
 
                         <Tabs.Tab
@@ -41,7 +45,7 @@ const BehandlingTabs = ({ defaultTab, behandling, lesevisning }: SøknadTabsProp
                             value={'Utbetaling'}
                             label={'Utbetaling'}
                             icon={<BankNoteIcon />}
-                            onClick={() => {}}
+                            onClick={() => {sendTabCallback('Utbetaling')}}
                         />
                     </Tabs.List>
                     <Tabs.Panel value={'Inngangsvilkår'}>
