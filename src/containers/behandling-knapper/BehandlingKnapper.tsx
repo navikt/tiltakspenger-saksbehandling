@@ -4,17 +4,19 @@ import toast from 'react-hot-toast';
 import { useSWRConfig } from 'swr';
 import {useRouter} from "next/router";
 import {Lesevisning} from "../../utils/avklarLesevisning";
+import {RefObject, useRef} from "react";
 
 interface BehandlingKnapperProps {
     behandlingid: string;
     tilstand: string;
     status: string;
     lesevisning: Lesevisning;
+    modalRef: RefObject<HTMLDialogElement>;
 }
 
-export const BehandlingKnapper = ({ behandlingid, tilstand, status, lesevisning }: BehandlingKnapperProps) => {
+export const BehandlingKnapper = ({ behandlingid, tilstand, status, lesevisning, modalRef }: BehandlingKnapperProps) => {
     const mutator = useSWRConfig().mutate;
-    const router = useRouter()
+    const router = useRouter();
 
     const håndterRefreshSaksopplysninger = () => {
         const res = fetch(`/api/behandling/oppdater/${behandlingid}`, {
@@ -47,14 +49,8 @@ export const BehandlingKnapper = ({ behandlingid, tilstand, status, lesevisning 
         });
     };
 
-    const håndterSendTilbake = () => {
-        const res = fetch(`/api/behandling/sendtilbake/${behandlingid}`, {
-            method: 'POST',
-        }).then(() => {
-            mutator(`/api/behandling/${behandlingid}`).then(() => {
-                toast('Behandling sendt tilbake til saksbehandler');
-            });
-        });
+    const åpneSendTilbakeModal = () => {
+        modalRef.current?.showModal();
     };
 
     const håndterAvbrytBehandling = () => {
@@ -81,7 +77,7 @@ export const BehandlingKnapper = ({ behandlingid, tilstand, status, lesevisning 
                                 type="submit"
                                 size="small"
                                 variant="secondary"
-                                onClick={() => håndterSendTilbake()}
+                                onClick={() => åpneSendTilbakeModal()}
                             >
                                 Send tilbake
                             </Button>

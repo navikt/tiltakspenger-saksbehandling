@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import { Tabs } from '@navikt/ds-react';
 import { FileTextIcon } from '@navikt/aksel-icons';
 import styles from './SøknadTabs.module.css';
@@ -7,8 +7,6 @@ import { BankNoteIcon, CardIcon } from '@navikt/aksel-icons';
 import { InngangsvilkårTab } from './InngangsvilkårTab';
 import { MeldekortSide } from '../../containers/søknad-tabs/MeldekortSide';
 import {Lesevisning} from "../../utils/avklarLesevisning";
-import SøknadSummarySection from "../søknad-summary-section/SøknadSummarySection";
-import {Historikk} from "../historikk/historikk";
 
 interface SøknadTabsProps {
     className?: string;
@@ -18,7 +16,6 @@ interface SøknadTabsProps {
     lesevisning: Lesevisning;
     sendTabCallback?: (tab: string) => void;
 }
-
 
 const BehandlingTabs = ({ defaultTab, behandling, lesevisning, sendTabCallback }: SøknadTabsProps) => {
     return (

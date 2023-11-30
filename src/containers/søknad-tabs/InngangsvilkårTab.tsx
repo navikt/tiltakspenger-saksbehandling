@@ -17,7 +17,7 @@ interface InngangsvilkårTabProps {
 }
 
 interface Utfall {
-    variant: "success" | "error" | "info";
+    variant: "success" | "error" | "warning";
     tekst: string;
     altTekst?: string;
 }
@@ -25,7 +25,7 @@ interface Utfall {
 const samletUtfall = (sakskategorier: Kategori[]): Utfall => {
     if (!!sakskategorier.find(kategori => kategori.samletUtfall === "KREVER_MANUELL_VURDERING")) {
         return {
-            variant: "info",
+            variant: "warning",
             tekst: "Krever manuell saksbehandling"
         }
     }

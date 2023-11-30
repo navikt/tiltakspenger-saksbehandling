@@ -10,6 +10,9 @@ import {SaksbehandlerContext} from "./_app";
 interface Behandling {
     id: string;
     ident: string;
+    typeBehandling: string;
+    fom: string;
+    tom: string;
     status: string;
     saksbehandler?: string;
     beslutter?: string;
@@ -64,7 +67,8 @@ const HomePage: NextPage = () => {
                 <Table.Header>
                     <Table.Row>
                         <Table.HeaderCell scope="col">Ident</Table.HeaderCell>
-                        <Table.HeaderCell scope="col">ID</Table.HeaderCell>
+                        <Table.HeaderCell scope="col">Type</Table.HeaderCell>
+                        <Table.HeaderCell scope="col">Periode</Table.HeaderCell>
                         <Table.HeaderCell scope="col">Status</Table.HeaderCell>
                         <Table.HeaderCell scope="col">Saksbehandler</Table.HeaderCell>
                         <Table.HeaderCell scope="col">Beslutter</Table.HeaderCell>
@@ -77,8 +81,9 @@ const HomePage: NextPage = () => {
                             <Table.Row shadeOnHover={false} key={behandling.id}>
                                 <Table.DataCell>{behandling.ident}</Table.DataCell>
                                 <Table.DataCell>
-                                    {behandlingLinkAktivert(behandling.saksbehandler, behandling.beslutter)  ? <Link href={`/behandling/${behandling.id}`}>{behandling.id}</Link> : behandling.id}
+                                    {behandlingLinkAktivert(behandling.saksbehandler, behandling.beslutter)  ? <Link href={`/behandling/${behandling.id}`}>{behandling.typeBehandling}</Link> : behandling.typeBehandling}
                                 </Table.DataCell>
+                                <Table.DataCell>{`${behandling.fom} - ${behandling.tom}`}</Table.DataCell>
                                 <Table.DataCell>{behandling.status}</Table.DataCell>
                                 <Table.DataCell>{behandling.saksbehandler}</Table.DataCell>
                                 <Table.DataCell>{behandling.beslutter}</Table.DataCell>
