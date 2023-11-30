@@ -1,4 +1,4 @@
-import React, {useContext, useRef} from 'react';
+import React, {useContext, useRef, useState} from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { atom } from 'jotai';
@@ -16,6 +16,8 @@ import {SaksbehandlerContext} from "../_app";
 import {avklarLesevisning} from "../../utils/avklarLesevisning";
 import {Historikk} from "../../containers/historikk/historikk";
 import BegrunnelseModal from "../../containers/begrunnelse-modal/BegrunnelseModal";
+import {Detaljer} from "../../containers/meldekort-detaljer/meldekort-detaljer";
+import {MeldekortListe} from "../../containers/meldekort-liste/meldekort-liste";
 
 export const søknadIdAtom = atom('');
 
@@ -26,6 +28,7 @@ const BehandlingPage: NextPage = () => {
 
     const { valgtBehandling, isLoading } = useBehandling(behandlingId);
     const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
+    const [ valgtTab, setValgtTab] = useState<string>('Inngangsvilkår');
 
     if (isLoading || !valgtBehandling) {
         return <Loaders.Page />;
@@ -37,6 +40,10 @@ const BehandlingPage: NextPage = () => {
 
     const lesevisning = avklarLesevisning(innloggetSaksbehandler!!, valgtBehandling.saksbehandler, valgtBehandling.beslutter, valgtBehandling.tilstand, girInnvilget)
 
+    const setTab = (valgtTab: string) => {
+        setValgtTab(valgtTab);
+    }
+
     return (
         <SøkerLayout>
             <PersonaliaHeader personopplysninger={valgtBehandling.personopplysninger} lesevisning={lesevisning}/>
@@ -44,14 +51,52 @@ const BehandlingPage: NextPage = () => {
                 Førstegangsbehandling
             </Tag>
             <BehandlingKnapper behandlingid={valgtBehandling.behandlingId} tilstand={valgtBehandling.tilstand} status={valgtBehandling.status} lesevisning={lesevisning} modalRef={modalRef}/>
-            <SøknadSummarySection søknad={valgtBehandling.søknad} registrerteTiltak={valgtBehandling.registrerteTiltak}/>
-            <BehandlingTabs
-                onChange={(id) => router.push(`/behandling/${valgtBehandling?.behandlingId}/${id}`)}
-                defaultTab={'Inngangsvilkår'}
-                behandling={valgtBehandling}
-                lesevisning={lesevisning}
-            />
-            <Historikk/>
+
+            {valgtTab === 'Inngangsvilkår' && (
+                <>
+                    <SøknadSummarySection søknad={valgtBehandling.søknad}
+                                          registrerteTiltak={valgtBehandling.registrerteTiltak}/>
+
+                    <BehandlingTabs
+                        onChange={(id) => router.push(`/behandling/${valgtBehandling?.behandlingId}/${id}`)}
+                        defaultTab={'Inngangsvilkår'}
+                        behandling={valgtBehandling}
+                        lesevisning={lesevisning}
+                        sendTabCallback={setTab}
+                    />
+                    <Historikk/>
+                </>
+            )}
+
+            {valgtTab === 'Meldekort' && (
+                <>
+                    <MeldekortListe />
+                    <BehandlingTabs
+                        onChange={(id) => router.push(`/behandling/${valgtBehandling?.behandlingId}/${id}`)}
+                        defaultTab={'Meldekort'}
+                        behandling={valgtBehandling}
+                        lesevisning={lesevisning}
+                        sendTabCallback={setTab}
+                    />
+                    <Detaljer/>
+                </>
+            )}
+
+            {valgtTab === 'Utbetaling' && (
+               <>
+                   <SøknadSummarySection søknad={valgtBehandling.søknad}
+                                         registrerteTiltak={valgtBehandling.registrerteTiltak}/>
+                   <BehandlingTabs
+                       onChange={(id) => router.push(`/behandling/${valgtBehandling?.behandlingId}/${id}`)}
+                       defaultTab={'Utbetaling'}
+                       behandling={valgtBehandling}
+                       lesevisning={lesevisning}
+                       sendTabCallback={setTab}
+                   />
+                   <Historikk/>
+               </>
+            )}
+
             <BegrunnelseModal behandlingid={valgtBehandling.behandlingId} modalRef={modalRef}/>
         </SøkerLayout>
     );

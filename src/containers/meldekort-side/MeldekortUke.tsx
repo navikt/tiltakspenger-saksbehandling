@@ -1,6 +1,12 @@
-import { Select, Table } from '@navikt/ds-react';
-import { CheckmarkCircleFillIcon, ExclamationmarkTriangleFillIcon, XMarkOctagonFillIcon } from '@navikt/aksel-icons';
+import {BodyShort, Heading, Select, Table} from '@navikt/ds-react';
+import {
+    CheckmarkCircleFillIcon,
+    ExclamationmarkTriangleFillIcon,
+    XMarkOctagonFillIcon,
+} from '@navikt/aksel-icons';
 import { MeldekortDag, MeldekortStatus } from '../../types/MeldekortTypes';
+import React from 'react';
+import Divider from "../../components/divider/Divider";
 
 interface MeldekortUkeProps {
     meldekortUke: MeldekortDag[];
@@ -53,44 +59,42 @@ export const MeldekortUke = ({ ukesnummer, meldekortUke, handleOppdaterMeldekort
     }
 
     var ukedagListe = meldekortUke.map((ukedag, index) => {
-        console.log('meldekortUke', meldekortUke);
         return (
-            <Table.Row key={index}>
-                <Table.DataCell>{velgIkon(ukedag.status)}</Table.DataCell>
-                <Table.DataCell>
-                    {ukedag.dag} {ukedag.dato.getDate()}
-                </Table.DataCell>
-                <Table.DataCell>
-                    <Select
-                        label="Deltatt Eller Fravær"
-                        id="deltattEllerFravær"
-                        size="small"
-                        hideLabel
-                        defaultValue={ukedag.status}
-                        onChange={(e) => oppdaterMeldekort(index, e.target.value)}
-                    >
-                        <option value={MeldekortStatus.DELTATT}>Deltatt i tiltaket</option>
-                        <option value={MeldekortStatus.IKKE_DELTATT}>Ikke deltatt i tiltaket</option>
-                        <option value={MeldekortStatus.LØNN_FOR_TID_I_ARBEID}>Lønn for tid i arbeid</option>
-                        <option value={MeldekortStatus.FRAVÆR_SYK}>Fravær syk</option>
-                        <option value={MeldekortStatus.FRAVÆR_SYKT_BARN}>Fravær sykt barn</option>
-                        <option value={MeldekortStatus.FRAVÆR_VELFERD}>Fravær velferd</option>
-                    </Select>
-                </Table.DataCell>
-            </Table.Row>
+            <>
+                <div style={{display:'flex', width:'100%', padding:'0.5rem', alignItems:'center'}}>
+                    <div style={{width:'8%'}}>{velgIkon(ukedag.status)}</div>
+                    <div style={{width:'30%'}}><BodyShort size="small">{ukedag.dag} {ukedag.dato.getDate()}</BodyShort></div>
+                    <div style={{width:'62%'}}>
+                        <Select
+                            label="Deltatt Eller Fravær"
+                            id="deltattEllerFravær"
+                            size="small"
+                            hideLabel
+                            defaultValue={ukedag.status}
+                            onChange={(e) => oppdaterMeldekort(index, e.target.value)}
+                        >
+                            <option value={MeldekortStatus.DELTATT}>Deltatt i tiltaket</option>
+                            <option value={MeldekortStatus.IKKE_DELTATT}>Ikke deltatt i tiltaket</option>
+                            <option value={MeldekortStatus.LØNN_FOR_TID_I_ARBEID}>Lønn for tid i arbeid</option>
+                            <option value={MeldekortStatus.FRAVÆR_SYK}>Fravær syk</option>
+                            <option value={MeldekortStatus.FRAVÆR_SYKT_BARN}>Fravær sykt barn</option>
+                            <option value={MeldekortStatus.FRAVÆR_VELFERD}>Fravær velferd</option>
+                        </Select>
+                    </div>
+                </div>
+                <Divider />
+            </>
+
         );
     });
 
     return (
-        <Table size="small" aria-disabled="true">
-            <Table.Header>
-                <Table.Row>
-                    <Table.HeaderCell>Uke {ukesnummer}</Table.HeaderCell>
-                    <Table.HeaderCell></Table.HeaderCell>
-                    <Table.HeaderCell></Table.HeaderCell>
-                </Table.Row>
-            </Table.Header>
-            <Table.Body>{ukedagListe}</Table.Body>
-        </Table>
+        <div style={{padding:'1rem'}}>
+            <div style={{marginBottom:'1.5rem', marginLeft:'1rem'}}>
+                <Heading size="small">Uke {ukesnummer} - Jan 2024</Heading>
+            </div>
+            <Divider />
+            {ukedagListe}
+        </div>
     );
 };
