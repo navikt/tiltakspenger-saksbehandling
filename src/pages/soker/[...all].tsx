@@ -50,7 +50,7 @@ const SøkerPage: NextPage = () => {
                 behandling={valgtBehandling}
                 lesevisning={lesevisning}
             />
-            <BegrunnelseModal behandlingid={valgtBehandling.behandlingId} ref={modalRef}/>
+            <BegrunnelseModal behandlingid={valgtBehandling.behandlingId} modalRef={modalRef}/>
         </SøkerLayout>
     );
 };
