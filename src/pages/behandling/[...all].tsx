@@ -50,55 +50,50 @@ const BehandlingPage: NextPage = () => {
             </Tag>
             <BehandlingKnapper behandlingid={valgtBehandling.behandlingId} tilstand={valgtBehandling.tilstand} status={valgtBehandling.status} lesevisning={lesevisning}/>
 
-            {valgtTab === 'Inngangsvilkår' &&
-                (
-                    <>
-                        <SøknadSummarySection søknad={valgtBehandling.søknad}
-                                              registrerteTiltak={valgtBehandling.registrerteTiltak}/>
+            {valgtTab === 'Inngangsvilkår' && (
+                <>
+                    <SøknadSummarySection søknad={valgtBehandling.søknad}
+                                          registrerteTiltak={valgtBehandling.registrerteTiltak}/>
 
-                        <BehandlingTabs
-                            onChange={(id) => router.push(`/behandling/${valgtBehandling?.behandlingId}/${id}`)}
-                            defaultTab={'Inngangsvilkår'}
-                            behandling={valgtBehandling}
-                            lesevisning={lesevisning}
-                            sendTabCallback={setTab}
-                        />
-                        <Historikk/>
-                    </>
-                )
-            }
+                    <BehandlingTabs
+                        onChange={(id) => router.push(`/behandling/${valgtBehandling?.behandlingId}/${id}`)}
+                        defaultTab={'Inngangsvilkår'}
+                        behandling={valgtBehandling}
+                        lesevisning={lesevisning}
+                        sendTabCallback={setTab}
+                    />
+                    <Historikk/>
+                </>
+            )}
 
             {valgtTab === 'Meldekort' && (
-                    <>
-                        <MeldekortListe />
-                        <BehandlingTabs
-                            onChange={(id) => router.push(`/behandling/${valgtBehandling?.behandlingId}/${id}`)}
-                            defaultTab={'Meldekort'}
-                            behandling={valgtBehandling}
-                            lesevisning={lesevisning}
-                            sendTabCallback={setTab}
-                        />
-                        <Detaljer/>
-                    </>
-          )
-            }
+                <>
+                    <MeldekortListe />
+                    <BehandlingTabs
+                        onChange={(id) => router.push(`/behandling/${valgtBehandling?.behandlingId}/${id}`)}
+                        defaultTab={'Meldekort'}
+                        behandling={valgtBehandling}
+                        lesevisning={lesevisning}
+                        sendTabCallback={setTab}
+                    />
+                    <Detaljer/>
+                </>
+            )}
 
-            {valgtTab === 'Utbetaling' ?
-                (
-                    <>
-                        <SøknadSummarySection søknad={valgtBehandling.søknad}
-                                              registrerteTiltak={valgtBehandling.registrerteTiltak}/>
-                        <BehandlingTabs
-                            onChange={(id) => router.push(`/behandling/${valgtBehandling?.behandlingId}/${id}`)}
-                            defaultTab={'Utbetaling'}
-                            behandling={valgtBehandling}
-                            lesevisning={lesevisning}
-                            sendTabCallback={setTab}
-                        />
-                        <Detaljer/>
-                    </>
-                ) : null
-            }
+            {valgtTab === 'Utbetaling' && (
+               <>
+                   <SøknadSummarySection søknad={valgtBehandling.søknad}
+                                         registrerteTiltak={valgtBehandling.registrerteTiltak}/>
+                   <BehandlingTabs
+                       onChange={(id) => router.push(`/behandling/${valgtBehandling?.behandlingId}/${id}`)}
+                       defaultTab={'Utbetaling'}
+                       behandling={valgtBehandling}
+                       lesevisning={lesevisning}
+                       sendTabCallback={setTab}
+                   />
+                   <Historikk/>
+               </>
+            )}
         </SøkerLayout>
     );
 };

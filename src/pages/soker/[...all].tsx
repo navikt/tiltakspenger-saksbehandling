@@ -47,6 +47,7 @@ const SøkerPage: NextPage = () => {
                 defaultTab={'Inngangsvilkår'}
                 behandling={valgtBehandling}
                 lesevisning={lesevisning}
+
             />
         </SøkerLayout>
     );

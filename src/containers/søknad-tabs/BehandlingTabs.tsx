@@ -16,7 +16,7 @@ interface SøknadTabsProps {
     onChange: (søknadId: string) => void;
     behandling: Behandling;
     lesevisning: Lesevisning;
-    sendTabCallback: (tab: string) => void;
+    sendTabCallback?: (tab: string) => void;
 }
 
 
@@ -30,14 +30,14 @@ const BehandlingTabs = ({ defaultTab, behandling, lesevisning, sendTabCallback }
                             value={'Inngangsvilkår'}
                             label={'Inngangsvilkår'}
                             icon={<FileTextIcon />}
-                            onClick={() => {sendTabCallback('Inngangsvilkår')}}
+                            onClick={() => {sendTabCallback && sendTabCallback('Inngangsvilkår')}}
                         />
                         <Tabs.Tab
                             key={'Meldekort'}
                             value={'Meldekort'}
                             label={'Meldekort'}
                             icon={<CardIcon />}
-                            onClick={() => {sendTabCallback('Meldekort')}}
+                            onClick={() => {sendTabCallback && sendTabCallback('Meldekort')}}
                         />
 
                         <Tabs.Tab
@@ -45,7 +45,7 @@ const BehandlingTabs = ({ defaultTab, behandling, lesevisning, sendTabCallback }
                             value={'Utbetaling'}
                             label={'Utbetaling'}
                             icon={<BankNoteIcon />}
-                            onClick={() => {sendTabCallback('Utbetaling')}}
+                            onClick={() => {sendTabCallback && sendTabCallback('Utbetaling')}}
                         />
                     </Tabs.List>
                     <Tabs.Panel value={'Inngangsvilkår'}>

@@ -26,9 +26,7 @@ export const MeldekortSide = ({}: MeldekortSideProps) => {
                     <MeldekortUke ukesnummer={2} fom={8} tom={14}></MeldekortUke>
                 </div>
             </div>
-
             <MeldekortBeregningsvisning />
-
             <div style={{ marginTop: '2rem', justifyItems: 'center', alignItems: 'center'}}>
                 <Button icon={<PencilWritingIcon />} variant="tertiary" size="small" onClick={()=> setDisableUkeVisning(false)}>
                     Endre meldekortperiode
