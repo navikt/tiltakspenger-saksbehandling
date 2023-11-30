@@ -5,7 +5,6 @@ import {
     XMarkOctagonFillIcon,
 } from '@navikt/aksel-icons';
 import { MeldekortDag, MeldekortStatus } from '../../types/MeldekortTypes';
-
 import React from 'react';
 import Divider from "../../components/divider/Divider";
 
@@ -85,6 +84,7 @@ export const MeldekortUke = ({ ukesnummer, meldekortUke, handleOppdaterMeldekort
                 </div>
                 <Divider />
             </>
+
         );
     });
 

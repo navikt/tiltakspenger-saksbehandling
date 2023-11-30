@@ -96,6 +96,7 @@ const BehandlingPage: NextPage = () => {
                    <Historikk/>
                </>
             )}
+
             <BegrunnelseModal behandlingid={valgtBehandling.behandlingId} modalRef={modalRef}/>
         </SøkerLayout>
     );
