@@ -15,3 +15,23 @@
     display: flex;
     align-items: center;
 }
+
+.historikkRow {
+    border-bottom: 1px solid #cfcfcf;
+    padding: 0.7rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.historikkRow:nth-child(even) {
+    background-color: #f7f7f7;
+}
+
+.historikkDato {
+    margin-right: 1rem;
+    font-weight: bold;
+}
+
+.historikkTekst {
+    margin-right: 1rem;
+}

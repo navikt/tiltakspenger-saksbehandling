@@ -51,7 +51,7 @@ const BehandlingPage: NextPage = () => {
                 behandling={valgtBehandling}
                 lesevisning={lesevisning}
             />
-            <Historikk/>
+            <Historikk endringslogg={valgtBehandling.endringslogg}/>
             <BegrunnelseModal behandlingid={valgtBehandling.behandlingId} modalRef={modalRef}/>
         </SøkerLayout>
     );
