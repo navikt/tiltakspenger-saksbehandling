@@ -5,9 +5,11 @@ import { Controller, FormProvider, useForm } from 'react-hook-form';
 import PeriodeSkjema from './PeriodeSkjema';
 import dayjs from 'dayjs';
 import { useState } from 'react';
+import { formatDate } from '../../utils/date';
 
 interface RedigeringSkjemaProps {
     vilkår: string;
+    vilkårFlateTittel: string;
     håndterLukkRedigering: () => void;
     behandlingId: string;
     behandlingsperiode: {
@@ -47,6 +49,7 @@ function gyldigPeriodeValidator(periode: { fom: Date; tom: Date }) {
 export const RedigeringSkjema = ({
     håndterLukkRedigering,
     vilkår,
+    vilkårFlateTittel,
     vilkårsperiode,
     behandlingId,
     behandlingsperiode,
@@ -73,12 +76,11 @@ export const RedigeringSkjema = ({
     const håndterLagreSaksopplysning = () => {
         håndterLukkRedigering();
         const skjemaFelter = formMethods.getValues();
-
         const res = fetch(`/api/behandling/${behandlingId}`, {
             method: 'POST',
             body: JSON.stringify({
-                fom: skjemaFelter.periode?.fom.toISOString().split('T')[0],
-                tom: skjemaFelter.periode?.tom.toISOString().split('T')[0],
+                fom: harYtelse ? skjemaFelter.periode?.fom.toISOString().split('T')[0] : behandlingsperiode.fom,
+                tom: harYtelse ? skjemaFelter.periode?.tom.toISOString().split('T')[0] : behandlingsperiode.tom,
                 vilkår: vilkår,
                 begrunnelse: skjemaFelter.begrunnelse,
                 harYtelse: skjemaFelter.harYtelse,
@@ -102,11 +104,6 @@ export const RedigeringSkjema = ({
                 }}
             >
                 <VStack gap="5">
-                    {!harYtelse && (
-                        <Alert variant="info">{`Mottar ikke ${vilkår.toLowerCase()} i perioden ${
-                            vilkårsperiode.fom
-                        } til ${vilkårsperiode.tom}`}</Alert>
-                    )}
                     <Controller
                         name={'harYtelse'}
                         control={formMethods.control}
@@ -119,22 +116,26 @@ export const RedigeringSkjema = ({
                                     error={errors.harYtelse && 'Vilkår mangler'}
                                     defaultValue={false}
                                 >
-                                    <Radio value={false}>Mottar ikke</Radio>
-                                    <Radio value={true}>Mottar</Radio>
+                                    <Radio
+                                        value={false}
+                                    >{`Mottar ikke ${vilkårFlateTittel.toLowerCase()} i perioden ${formatDate(
+                                        vilkårsperiode.fom
+                                    )} til ${formatDate(vilkårsperiode.tom)}`}</Radio>
+                                    <Radio value={true}>{`Mottar ${vilkårFlateTittel.toLowerCase()}`}</Radio>
                                 </RadioGroup>
                             );
                         }}
                     />
-                    {harYtelse && (
-                        <PeriodeSkjema
-                            name="periode"
-                            validate={[gyldigPeriodeValidator, påkrevdPeriodeValidator]}
-                            minDate={new Date(behandlingsperiode.fom)}
-                            maxDate={new Date(behandlingsperiode.tom)}
-                            defaultFra={new Date(vilkårsperiode.fom)}
-                            defaultTil={new Date(vilkårsperiode.tom)}
-                        />
-                    )}
+                    <PeriodeSkjema
+                        name="periode"
+                        validate={[gyldigPeriodeValidator, påkrevdPeriodeValidator]}
+                        minDate={new Date(behandlingsperiode.fom)}
+                        maxDate={new Date(behandlingsperiode.tom)}
+                        defaultFra={new Date(vilkårsperiode.fom)}
+                        defaultTil={new Date(vilkårsperiode.tom)}
+                        disabledFra={!harYtelse}
+                        disabledTil={!harYtelse}
+                    />
                     <Controller
                         name={'begrunnelse'}
                         control={formMethods.control}

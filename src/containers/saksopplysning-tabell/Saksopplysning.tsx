@@ -81,6 +81,7 @@ export const Saksopplysning = ({
                         <RedigeringSkjema
                             behandlingId={behandlingId}
                             vilkår={vilkår}
+                            vilkårFlateTittel={vilkårFlateTittel}
                             håndterLukkRedigering={håndterLukkRedigering}
                             behandlingsperiode={behandlingsperiode}
                             vilkårsperiode={{ fom: fom, tom: tom }}
