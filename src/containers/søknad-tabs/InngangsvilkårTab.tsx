@@ -4,6 +4,7 @@ import { SøknadLayout } from '../../layouts/soker/SøknadLayout';
 import React from 'react';
 import { Kategori } from '../../types/Behandling';
 import { UtfallIcon } from '../../components/utfall-icon/UtfallIcon';
+import { Lesevisning } from '../../utils/avklarLesevisning';
 
 interface InngangsvilkårTabProps {
     behandlingId: string;
@@ -12,17 +13,52 @@ interface InngangsvilkårTabProps {
         fom: string;
         tom: string;
     };
+    lesevisning: Lesevisning;
 }
+
+interface Utfall {
+    variant: 'success' | 'error' | 'warning';
+    tekst: string;
+    altTekst?: string;
+}
+
+const samletUtfall = (sakskategorier: Kategori[]): Utfall => {
+    if (!!sakskategorier.find((kategori) => kategori.samletUtfall === 'KREVER_MANUELL_VURDERING')) {
+        return {
+            variant: 'warning',
+            tekst: 'Krever manuell saksbehandling',
+        };
+    }
+    if (!!sakskategorier.find((kategori) => kategori.samletUtfall === 'IKKE_OPPFYLT')) {
+        return {
+            variant: 'error',
+            tekst: 'Vilkår for tiltakspenger er ikke oppfylt for perioden.',
+            altTekst: 'Søknaden kan ikke behandles videre i denne løsningen.',
+        };
+    }
+    return {
+        variant: 'success',
+        tekst: 'Vilkår for tiltakspenger er oppfylt for perioden',
+    };
+};
 
 export const InngangsvilkårTab = ({
     behandlingId,
     kategoriserteSaksopplysninger,
     behandlingsperiode,
+    lesevisning,
 }: InngangsvilkårTabProps) => {
+    const utfall = samletUtfall(kategoriserteSaksopplysninger);
     return (
         <SøknadLayout>
-            <Alert variant="info" style={{ marginBottom: '1em' }}>
-                Det er noe greier her
+            <Alert variant={utfall.variant} style={{ marginBottom: '1em' }}>
+                <strong>{utfall.tekst}</strong>
+                {utfall && (
+                    <>
+                        <br />
+                        {utfall.altTekst}
+                    </>
+                )}
             </Alert>
             <Accordion indent={false}>
                 <VStack>
@@ -40,6 +76,7 @@ export const InngangsvilkårTab = ({
                                         saksopplysninger={kategori.saksopplysninger}
                                         behandlingId={behandlingId}
                                         behandlingsperiode={behandlingsperiode}
+                                        lesevisning={lesevisning}
                                     />
                                 </Accordion.Content>
                             </Accordion.Item>

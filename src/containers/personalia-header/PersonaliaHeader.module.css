@@ -28,3 +28,9 @@
     top: -4px;
     margin-left: 2rem;
 }
+
+.personaliaHeader__lesevisning {
+    position: relative;
+    float: right;
+    top: -4px;
+}

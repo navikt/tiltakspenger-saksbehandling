@@ -16,6 +16,8 @@ export interface Saksopplysning {
 
 export interface Behandling {
     behandlingId: string;
+    saksbehandler: string;
+    beslutter: string;
     fom: string;
     tom: string;
     søknad: Søknad;
@@ -23,6 +25,7 @@ export interface Behandling {
     saksopplysninger: Kategori[];
     personopplysninger: Personopplysninger;
     tilstand: string;
+    status: string;
 }
 
 export interface Personopplysninger {

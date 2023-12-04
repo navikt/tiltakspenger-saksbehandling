@@ -1,15 +1,18 @@
-import React, {FormEvent, useState} from 'react';
+import React, {FormEvent, useContext, useState} from 'react';
 import type { NextPage } from 'next';
 import { pageWithAuthentication } from '../utils/pageWithAuthentication';
 import toast from 'react-hot-toast';
 import useSWR, {useSWRConfig} from 'swr';
 import { fetcher, FetcherError } from '../utils/http';
 import {Button, Link, Table} from '@navikt/ds-react';
-import useSaksbehandler from "../core/useSaksbehandler";
+import {SaksbehandlerContext} from "./_app";
 
 interface Behandling {
     id: string;
     ident: string;
+    typeBehandling: string;
+    fom: string;
+    tom: string;
     status: string;
     saksbehandler?: string;
     beslutter?: string;
@@ -17,7 +20,7 @@ interface Behandling {
 
 const HomePage: NextPage = () => {
     const [behandlinger, setBehandlinger] = useState<Behandling[]>([]);
-    const { saksbehandler, isSaksbehandlerLoading } = useSaksbehandler();
+    const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
     const mutator = useSWRConfig().mutate;
     const { data, isLoading } = useSWR<Behandling[]>(`/api/behandlinger`, fetcher, {
         shouldRetryOnError: false,
@@ -39,21 +42,23 @@ const HomePage: NextPage = () => {
         });
     };
 
-    const taBehandlingKnappDeaktivert = (type: string, saksbehandlerForBehandling?: string, beslutterForBehandling?: string) => {
+    const skalKunneTaBehandling = (type: string, saksbehandlerForBehandling?: string, beslutterForBehandling?: string) => {
         switch (type) {
             case "Klar til beslutning" :
-                return saksbehandler?.navIdent == saksbehandlerForBehandling
-
+                return innloggetSaksbehandler?.roller.includes("BESLUTTER")
+                    && !beslutterForBehandling
+                    && innloggetSaksbehandler?.navIdent != saksbehandlerForBehandling
             case "Klar til behandling" :
-                return false
-
+                return innloggetSaksbehandler?.roller.includes("SAKSBEHANDLER")
+                    && !saksbehandlerForBehandling
             default :
-                return true
+                return false
         }
     }
 
     const behandlingLinkAktivert = (saksbehandlerForBehandling?: string, beslutterForBehandling?: string) => {
-        return (saksbehandler?.navIdent == saksbehandlerForBehandling || saksbehandler?.navIdent == beslutterForBehandling)
+        return (innloggetSaksbehandler?.navIdent == saksbehandlerForBehandling || innloggetSaksbehandler?.navIdent == beslutterForBehandling) ||
+            innloggetSaksbehandler?.roller.includes("ADMINISTRATOR")
     }
 
     return (
@@ -62,7 +67,8 @@ const HomePage: NextPage = () => {
                 <Table.Header>
                     <Table.Row>
                         <Table.HeaderCell scope="col">Ident</Table.HeaderCell>
-                        <Table.HeaderCell scope="col">ID</Table.HeaderCell>
+                        <Table.HeaderCell scope="col">Type</Table.HeaderCell>
+                        <Table.HeaderCell scope="col">Periode</Table.HeaderCell>
                         <Table.HeaderCell scope="col">Status</Table.HeaderCell>
                         <Table.HeaderCell scope="col">Saksbehandler</Table.HeaderCell>
                         <Table.HeaderCell scope="col">Beslutter</Table.HeaderCell>
@@ -75,8 +81,9 @@ const HomePage: NextPage = () => {
                             <Table.Row shadeOnHover={false} key={behandling.id}>
                                 <Table.DataCell>{behandling.ident}</Table.DataCell>
                                 <Table.DataCell>
-                                    {behandlingLinkAktivert(behandling.saksbehandler, behandling.beslutter)  ? <Link href={`/behandling/${behandling.id}`}>{behandling.id}</Link> : behandling.id}
+                                    {behandlingLinkAktivert(behandling.saksbehandler, behandling.beslutter)  ? <Link href={`/behandling/${behandling.id}`}>{behandling.typeBehandling}</Link> : behandling.typeBehandling}
                                 </Table.DataCell>
+                                <Table.DataCell>{`${behandling.fom} - ${behandling.tom}`}</Table.DataCell>
                                 <Table.DataCell>{behandling.status}</Table.DataCell>
                                 <Table.DataCell>{behandling.saksbehandler}</Table.DataCell>
                                 <Table.DataCell>{behandling.beslutter}</Table.DataCell>
@@ -85,7 +92,7 @@ const HomePage: NextPage = () => {
                                         size="small"
                                         variant="primary"
                                         onClick={() => taBehandling(behandling.id)}
-                                        disabled={taBehandlingKnappDeaktivert(behandling.status, behandling.saksbehandler, behandling.beslutter)}
+                                        disabled={!skalKunneTaBehandling(behandling.status, behandling.saksbehandler, behandling.beslutter)}
                                     >
                                         Ta behandling
                                     </Button>

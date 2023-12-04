@@ -25,7 +25,7 @@ jobs:
     name: Build and push
     runs-on: ubuntu-latest
     permissions:
-      packages: 'write'
+      packages: write
     steps:
       - name: Checkout
         uses: actions/checkout@v3

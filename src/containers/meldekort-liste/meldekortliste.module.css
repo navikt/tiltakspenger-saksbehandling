@@ -1,14 +1,11 @@
-.søknadSummarySection {
+.meldekortListeHeading {
+
+    padding: 0.7rem;
+}
+
+.MeldekortListeSection {
     border-right: 1px solid #cfcfcf;
     border-top: 1px solid #cfcfcf;
     grid-area: summary;
     min-height: calc(100vh - 7.5rem);
-}
-
-.registrerteTiltakSection {
-    padding: 0.5rem;
-}
-
-.registrerteTiltakHeading {
-    margin-bottom: 1rem;
 }

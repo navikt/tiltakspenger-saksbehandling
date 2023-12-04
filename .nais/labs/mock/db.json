@@ -3,7 +3,7 @@
         "navIdent": "Z12345",
         "brukernavn": "test",
         "epost": "test@testesen.no",
-        "roller": ["SAKSBEHANDLER"]
+        "roller": ["SAKSBEHANDLER", "BESLUTTER"]
     },
     "soker": { "id": "soker_01GM5VXJWHW6641HDPYVDK0K3G" },
     "soknader": {
