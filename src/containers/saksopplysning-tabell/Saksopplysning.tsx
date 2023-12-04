@@ -3,8 +3,8 @@ import { Table, BodyShort, Button } from '@navikt/ds-react';
 import { UtfallIcon } from '../../components/utfall-icon/UtfallIcon';
 import { RedigeringSkjema } from './RedigeringSkjema';
 import { useState } from 'react';
-import {Lesevisning} from "../../utils/avklarLesevisning";
-
+import { Lesevisning } from '../../utils/avklarLesevisning';
+import { formatPeriode } from '../../utils/date';
 
 interface SaksopplysningProps {
     vilkår: string;
@@ -55,7 +55,7 @@ export const Saksopplysning = ({
                     <BodyShort>{fakta}</BodyShort>
                 </Table.DataCell>
                 <Table.DataCell>
-                    <BodyShort>{fom && tom ? `${fom} - ${tom}` : '-'}</BodyShort>
+                    <BodyShort>{fom && tom ? formatPeriode({ fra: fom, til: tom }) : '-'}</BodyShort>
                 </Table.DataCell>
                 <Table.DataCell>
                     <BodyShort>{kilde ? kilde : '-'}</BodyShort>
