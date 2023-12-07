@@ -38,8 +38,7 @@ const Header = ({ onSearch, isSearchLoading }: HeaderProps) => {
                                 const searchTerm = value.trim();
                                 setSearch(searchTerm)
                                 if (!searchTerm) {
-                                    onSearch(value.trim());
-                                    router.back();
+                                    router.push('/');
                                 }
                             }}
                             value={search}
