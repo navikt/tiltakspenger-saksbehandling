@@ -1,57 +1,71 @@
-import React, {useContext, useRef} from 'react';
+import React, {useContext, useState} from 'react';
 import { NextPage } from 'next';
-import { useRouter } from 'next/router';
-import { atom } from 'jotai';
-import SøknadSummarySection from '../../containers/søknad-summary-section/SøknadSummarySection';
-import PersonaliaHeader from '../../containers/personalia-header/PersonaliaHeader';
-import BehandlingTabs from '../../containers/søknad-tabs/BehandlingTabs';
-import { SøkerLayout } from '../../layouts/soker/SøkerLayout';
-import Loaders from '../../components/loaders/Loaders';
 import { pageWithAuthentication } from '../../utils/pageWithAuthentication';
-import { useBehandling } from '../../core/useBehandling';
-import { Tag } from '@navikt/ds-react';
-import styles from './Soker.module.css';
-import {BehandlingKnapper} from "../../containers/behandling-knapper/BehandlingKnapper";
-import {avklarLesevisning} from "../../utils/avklarLesevisning";
+import { Link, Table } from '@navikt/ds-react';
 import {SaksbehandlerContext} from "../_app";
-import BegrunnelseModal from "../../containers/begrunnelse-modal/BegrunnelseModal";
+import {useRouter} from "next/router";
+import useSWR from "swr";
+import {fetcher, FetcherError} from "../../utils/http";
+import toast from "react-hot-toast";
+import Loaders from "../../components/loaders/Loaders";
+import {BehandlingForBenk} from "../../types/Behandling";
 
-export const søknadIdAtom = atom('');
 
 const SøkerPage: NextPage = () => {
     const router = useRouter();
-    const [søkerId, søknadId] = router.query.all as string[];
-    const modalRef = useRef<HTMLDialogElement>(null);
+    const [søkerId] = router.query.all as string[];
 
-    const { valgtBehandling, isLoading } = useBehandling('beh_01H27W28VJSRPR1ESE5ASR04N8'); // todo: gjørnome
     const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
 
-    if (isLoading || !valgtBehandling) {
+    const [behandlingerForIdent, setBehandlinger] = useState<BehandlingForBenk[]>([]);
+    const { isLoading } = useSWR<BehandlingForBenk[]>(`/api/behandlinger/hentForIdent/${søkerId}`, fetcher, {
+        shouldRetryOnError: false,
+        revalidateOnFocus: false,
+        revalidateOnReconnect: false,
+        onSuccess: (data) => {
+            console.log(data);
+            setBehandlinger(data);
+        },
+        onError: (error: FetcherError) => toast.error(`[${error.status}]: ${error.info}`),
+    });
+
+    if (isLoading) {
         return <Loaders.Page />;
     }
 
-    const girInnvilget = !valgtBehandling.saksopplysninger.find(
-        (saksopplysning) => saksopplysning.samletUtfall !== "OPPFYLT"
-    )
-
-    const lesevisning = avklarLesevisning(innloggetSaksbehandler!!, valgtBehandling.saksbehandler, valgtBehandling.beslutter, valgtBehandling.tilstand, girInnvilget)
-
+    const behandlingLinkAktivert = (saksbehandlerForBehandling?: string, beslutterForBehandling?: string) => {
+        return (innloggetSaksbehandler?.navIdent == saksbehandlerForBehandling || innloggetSaksbehandler?.navIdent == beslutterForBehandling) ||
+            innloggetSaksbehandler?.roller.includes("ADMINISTRATOR")
+    }
     return (
-        <SøkerLayout>
-            <PersonaliaHeader personopplysninger={valgtBehandling.personopplysninger} lesevisning={lesevisning}/>
-            <Tag variant="info-filled" size="medium" className={styles.behandlingtag}>
-                Førstegangsbehandling
-            </Tag>
-            <BehandlingKnapper behandlingid={valgtBehandling.behandlingId} tilstand={valgtBehandling.tilstand} status={valgtBehandling.status} lesevisning={lesevisning} modalRef={modalRef}/>
-            <SøknadSummarySection søknad={valgtBehandling.søknad} registrerteTiltak={valgtBehandling.registrerteTiltak}/>
-            <BehandlingTabs
-                onChange={(id) => router.push(`/behandling/${valgtBehandling?.behandlingId}/${id}`)}
-                defaultTab={'Inngangsvilkår'}
-                behandling={valgtBehandling}
-                lesevisning={lesevisning}
-            />
-            <BegrunnelseModal behandlingid={valgtBehandling.behandlingId} modalRef={modalRef}/>
-        </SøkerLayout>
+        <div style={{ paddingLeft: '1rem' }}>
+            <Table zebraStripes>
+                <Table.Header>
+                    <Table.Row>
+                        <Table.HeaderCell scope="col">Type</Table.HeaderCell>
+                        <Table.HeaderCell scope="col">Periode</Table.HeaderCell>
+                        <Table.HeaderCell scope="col">Status</Table.HeaderCell>
+                        <Table.HeaderCell scope="col">Saksbehandler</Table.HeaderCell>
+                        <Table.HeaderCell scope="col">Beslutter</Table.HeaderCell>
+                    </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                    {behandlingerForIdent?.map((behandling) => {
+                        return (
+                            <Table.Row shadeOnHover={false} key={behandling.id}>
+                                <Table.DataCell>
+                                    {behandlingLinkAktivert(behandling.saksbehandler, behandling.beslutter)  ? <Link href={`/behandling/${behandling.id}`}>{behandling.typeBehandling}</Link> : behandling.typeBehandling}
+                                </Table.DataCell>
+                                <Table.DataCell>{`${behandling.fom} - ${behandling.tom}`}</Table.DataCell>
+                                <Table.DataCell>{behandling.status}</Table.DataCell>
+                                <Table.DataCell>{behandling.saksbehandler}</Table.DataCell>
+                                <Table.DataCell>{behandling.beslutter}</Table.DataCell>
+                            </Table.Row>
+                        );
+                    })}
+                </Table.Body>
+            </Table>
+        </div>
     );
 };
 

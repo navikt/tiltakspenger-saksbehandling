@@ -1,12 +1,8 @@
-import { useEffect, useState } from 'react';
-import useSWR from 'swr';
-import { Behandling } from '../types/Behandling';
-import Søker, {SøkerIdent, SøkerResponse} from '../types/Søker';
-import { fetcher, FetcherError, fetchSøker } from '../utils/http';
+import { FetcherError, fetchSøker } from '../utils/http';
 import toast from 'react-hot-toast';
-import { Saksbehandler } from '../types/Saksbehandler';
 import useSWRMutation from 'swr/mutation';
 import { useRouter } from 'next/router';
+import {SøkerIdent, SøkerResponse} from "../types/Søker";
 
 function useSokOppPerson(navigateToSoker: boolean = true) {
     const router = useRouter();

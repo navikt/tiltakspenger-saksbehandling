@@ -1,10 +1,10 @@
 import React, {FormEvent, useContext} from 'react';
 import { InternalHeader } from '@navikt/ds-react';
 import { Search } from '@navikt/ds-react';
-import { Saksbehandler } from '../../types/Saksbehandler';
 import styles from './Header.module.css';
 import Loaders from '../../components/loaders/Loaders';
 import {SaksbehandlerContext} from "../../pages/_app";
+import {useRouter} from "next/router";
 
 interface HeaderProps {
     onSearch: (searchQuery: string) => void;
@@ -12,6 +12,7 @@ interface HeaderProps {
 }
 
 const Header = ({ onSearch, isSearchLoading }: HeaderProps) => {
+    const router = useRouter();
     const [search, setSearch] = React.useState('');
     const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
 
@@ -33,7 +34,14 @@ const Header = ({ onSearch, isSearchLoading }: HeaderProps) => {
                             data-testid="nav-search-input"
                             label={''}
                             placeholder="Søk på fødselsnummer"
-                            onChange={(value) => setSearch(value.trim())}
+                            onChange={(value) => {
+                                const searchTerm = value.trim();
+                                setSearch(searchTerm)
+                                if (!searchTerm) {
+                                    onSearch(value.trim());
+                                    router.back();
+                                }
+                            }}
                             value={search}
                             autoComplete="off"
                         >
