@@ -4,7 +4,7 @@ import { SøknadLayout } from '../../layouts/soker/SøknadLayout';
 import React from 'react';
 import { Kategori } from '../../types/Behandling';
 import { UtfallIcon } from '../../components/utfall-icon/UtfallIcon';
-import {Lesevisning} from "../../utils/avklarLesevisning";
+import { Lesevisning } from '../../utils/avklarLesevisning';
 
 interface InngangsvilkårTabProps {
     behandlingId: string;
@@ -17,38 +17,48 @@ interface InngangsvilkårTabProps {
 }
 
 interface Utfall {
-    variant: "success" | "error" | "warning";
+    variant: 'success' | 'error' | 'warning';
     tekst: string;
     altTekst?: string;
 }
 
 const samletUtfall = (sakskategorier: Kategori[]): Utfall => {
-    if (!!sakskategorier.find(kategori => kategori.samletUtfall === "KREVER_MANUELL_VURDERING")) {
+    if (!!sakskategorier.find((kategori) => kategori.samletUtfall === 'KREVER_MANUELL_VURDERING')) {
         return {
-            variant: "warning",
-            tekst: "Krever manuell saksbehandling"
-        }
+            variant: 'warning',
+            tekst: 'Krever manuell saksbehandling',
+        };
     }
-    if (!!sakskategorier.find(kategori => kategori.samletUtfall === "IKKE_OPPFYLT")) {
+    if (!!sakskategorier.find((kategori) => kategori.samletUtfall === 'IKKE_OPPFYLT')) {
         return {
-            variant: "error",
-            tekst: "Vilkår for tiltakspenger er ikke oppfylt for perioden.",
-            altTekst: "Søknaden kan ikke behandles videre i denne løsningen."
-        }
+            variant: 'error',
+            tekst: 'Vilkår for tiltakspenger er ikke oppfylt for perioden.',
+            altTekst: 'Søknaden kan ikke behandles videre i denne løsningen.',
+        };
     }
     return {
-        variant: "success",
-        tekst: "Vilkår for tiltakspenger er oppfylt for perioden"
-    }
-}
+        variant: 'success',
+        tekst: 'Vilkår for tiltakspenger er oppfylt for perioden',
+    };
+};
 
-export const InngangsvilkårTab = ({ behandlingId, kategoriserteSaksopplysninger, behandlingsperiode, lesevisning }: InngangsvilkårTabProps) => {
-    const utfall = samletUtfall(kategoriserteSaksopplysninger)
+export const InngangsvilkårTab = ({
+    behandlingId,
+    kategoriserteSaksopplysninger,
+    behandlingsperiode,
+    lesevisning,
+}: InngangsvilkårTabProps) => {
+    const utfall = samletUtfall(kategoriserteSaksopplysninger);
     return (
         <SøknadLayout>
             <Alert variant={utfall.variant} style={{ marginBottom: '1em' }}>
                 <strong>{utfall.tekst}</strong>
-                {utfall && <><br/>{utfall.altTekst}</>}
+                {utfall && (
+                    <>
+                        <br />
+                        {utfall.altTekst}
+                    </>
+                )}
             </Alert>
             <Accordion indent={false}>
                 <VStack>
@@ -66,7 +76,7 @@ export const InngangsvilkårTab = ({ behandlingId, kategoriserteSaksopplysninger
                                         saksopplysninger={kategori.saksopplysninger}
                                         behandlingId={behandlingId}
                                         behandlingsperiode={behandlingsperiode}
-                                        lesevisning = {lesevisning}
+                                        lesevisning={lesevisning}
                                     />
                                 </Accordion.Content>
                             </Accordion.Item>

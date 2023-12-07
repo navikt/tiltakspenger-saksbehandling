@@ -1,6 +1,6 @@
 import React from 'react';
 import { Controller, get, useFormContext } from 'react-hook-form';
-import Periodevelger from "./PeriodeVelger";
+import Periodevelger from './PeriodeVelger';
 
 export type ValidatorFunction = (value: any) => string | undefined;
 
@@ -29,15 +29,15 @@ function setupValidation(validate?: ValidatorFunction | ValidatorFunction[]) {
 }
 
 export default function PeriodeSkjema({
-                                            name,
-                                            validate,
-                                            minDate,
-                                            maxDate,
-                                            disabledTil,
-                                            disabledFra,
-                                            defaultFra,
-                                            defaultTil
-                                        }: PeriodeSkjemaProps) {
+    name,
+    validate,
+    minDate,
+    maxDate,
+    disabledTil,
+    disabledFra,
+    defaultFra,
+    defaultTil,
+}: PeriodeSkjemaProps) {
     const { control, formState, getValues } = useFormContext();
     const errorMessage = get(formState.errors, name)?.message;
     return (
@@ -64,7 +64,7 @@ export default function PeriodeSkjema({
                             }}
                             defaultSelected={{
                                 fom: defaultFra,
-                                tom: defaultTil
+                                tom: defaultTil,
                             }}
                             errorMessage={errorMessage}
                             minDate={minDate}
@@ -72,7 +72,7 @@ export default function PeriodeSkjema({
                             disabledFra={disabledFra}
                             disabledTil={disabledTil}
                         />
-                    )
+                    );
                 }}
             />
         </div>
