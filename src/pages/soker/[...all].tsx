@@ -17,14 +17,12 @@ const SøkerPage: NextPage = () => {
 
     const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
 
-    const [behandlingerForIdent, setBehandlinger] = useState<BehandlingForBenk[]>([]);
-    const { isLoading } = useSWR<BehandlingForBenk[]>(`/api/behandlinger/hentForIdent/${søkerId}`, fetcher, {
+    const { data, isLoading } = useSWR<BehandlingForBenk[]>(`/api/behandlinger/hentForIdent/${søkerId}`, fetcher, {
         shouldRetryOnError: false,
         revalidateOnFocus: false,
         revalidateOnReconnect: false,
         onSuccess: (data) => {
             console.log(data);
-            setBehandlinger(data);
         },
         onError: (error: FetcherError) => toast.error(`[${error.status}]: ${error.info}`),
     });
@@ -32,6 +30,8 @@ const SøkerPage: NextPage = () => {
     if (isLoading) {
         return <Loaders.Page />;
     }
+
+    const behandlingerForIdent = data;
 
     const behandlingLinkAktivert = (saksbehandlerForBehandling?: string, beslutterForBehandling?: string) => {
         return (innloggetSaksbehandler?.navIdent == saksbehandlerForBehandling || innloggetSaksbehandler?.navIdent == beslutterForBehandling) ||
