@@ -107,13 +107,11 @@ export const RedigeringSkjema = ({
                     <Controller
                         name={'harYtelse'}
                         control={formMethods.control}
-                        rules={{ required: true }}
-                        render={({ field: { onChange }, formState: { errors } }) => {
+                        render={({ field: { onChange } }) => {
                             return (
                                 <RadioGroup
                                     legend="Endre vilkår"
                                     onChange={(value) => håndterHarYtelse(value, onChange)}
-                                    error={errors.harYtelse && 'Vilkår mangler'}
                                     defaultValue={false}
                                 >
                                     <Radio
