@@ -1,4 +1,4 @@
-import { RadioGroup, Radio, Select, Button, VStack, HStack, Alert } from '@navikt/ds-react';
+import { RadioGroup, Radio, Select, Button, VStack, HStack } from '@navikt/ds-react';
 import { useSWRConfig } from 'swr';
 import toast from 'react-hot-toast';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
@@ -66,7 +66,7 @@ export const RedigeringSkjema = ({
         },
     });
 
-    const håndterHarYtelse = (harYtelseSvar: boolean, onChange: (e: boolean) => void) => {
+    const håndterHarYtelse = (harYtelseSvar: boolean, onChange: (value: boolean) => void) => {
         onChange(harYtelseSvar);
         settHarYtelse(harYtelseSvar);
     };
