@@ -1,14 +1,29 @@
 version: '3.8'
 services:
-  postgres:
+  postgresVedtak:
     image: postgres:14
     restart: always
     environment:
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: test
+      POSTGRES_DB: vedtak
     ports:
       - 5432:5432
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - postgres-vedtak-data:/var/lib/postgresql/data
+
+  postgresMeldekort:
+    image: postgres:14
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: meldekort
+    ports:
+      - 5431:5432
+    volumes:
+      - postgres-meldekort-data:/var/lib/postgresql/data
+
 
   authserver:
     image: ghcr.io/navikt/mock-oauth2-server:0.5.5
@@ -64,7 +79,7 @@ services:
       context: ../tiltakspenger-vedtak
       dockerfile: Dockerfile
     depends_on:
-      - postgres
+      - postgresVedtak
       - kafka
       - authserver
     ports:
@@ -77,15 +92,17 @@ services:
 #      retries: 5
     environment:
       # Postgres env
-      DB_HOST: postgres
+      DB_HOST: postgresVedtak
       DB_PORT: 5432
       DB_USERNAME: postgres
       DB_PASSWORD: test
-      DB_DATABASE: postgres
+      DB_DATABASE: vedtak
       # Authserver env
       AZURE_APP_CLIENT_ID: tiltakspenger-vedtak
       AZURE_OPENID_CONFIG_ISSUER: http://host.docker.internal:6969/azure
       AZURE_OPENID_CONFIG_JWKS_URI: http://host.docker.internal:6969/azure/jwks
+      AZURE_APP_CLIENT_SECRET: secret
+      AZURE_APP_WELL_KNOWN_URL: http://host.docker.internal:6969/well-known
       # Kafka env
       KAFKA_BROKERS: "BROKER://kafka:9092,PLAINTEXT://kafka:9092"
       KAFKA_TRUSTSTORE_PATH: ""
@@ -119,4 +136,5 @@ services:
     restart: on-failure
 
 volumes:
-  postgres-data:
+  postgres-vedtak-data: #
+  postgres-meldekort-data: #
