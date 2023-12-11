@@ -1,14 +1,14 @@
-import React, {useContext, useState} from 'react';
+import React, { useContext } from 'react';
 import { NextPage } from 'next';
 import { pageWithAuthentication } from '../../utils/pageWithAuthentication';
 import { Link, Table } from '@navikt/ds-react';
-import {SaksbehandlerContext} from "../_app";
-import {useRouter} from "next/router";
+import { SaksbehandlerContext } from "../_app";
+import { useRouter } from "next/router";
 import useSWR from "swr";
-import {fetcher, FetcherError} from "../../utils/http";
+import { fetcher, FetcherError } from "../../utils/http";
 import toast from "react-hot-toast";
 import Loaders from "../../components/loaders/Loaders";
-import {BehandlingForBenk} from "../../types/Behandling";
+import { BehandlingForBenk } from "../../types/Behandling";
 
 
 const SøkerPage: NextPage = () => {
