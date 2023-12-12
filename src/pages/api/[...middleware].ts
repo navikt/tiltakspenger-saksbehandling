@@ -3,11 +3,19 @@ import { getToken } from '../../utils/auth';
 import SimpleResponse from '../../types/SimpleResponse';
 import logger from '../../utils/serverLogger';
 
-const backendUrl = process.env.TILTAKSPENGER_VEDTAK_URL || '';
+const vedtakBackendUrl = process.env.TILTAKSPENGER_VEDTAK_URL || '';
+const meldekortBackendUrl = process.env.TILTAKSPENGER_MELDEKORT_URL || '';
 
 function getUrl(req: NextApiRequest): string {
-    const path = req?.url?.replace('/api', '');
-    return `${backendUrl}${path}`;
+    const urlTil = req?.url;
+
+    if (urlTil === '/meldekortapi') {
+        const meldekortPath = req?.url?.replace('/meldekortapi', '');
+        return `${meldekortBackendUrl}${meldekortPath}`;
+    } else {
+        const vedtakPath = req?.url?.replace('/api', '');
+        return `${vedtakBackendUrl}${vedtakPath}`;
+    }
 }
 
 async function makeApiRequest(request: NextApiRequest, oboToken: string): Promise<Response> {
