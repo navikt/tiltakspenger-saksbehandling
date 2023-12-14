@@ -3,6 +3,7 @@ enum Tiltaksstatus {
     FÅTT_AVSLAG = 'Fått avslag',
     DELTAKELSE_AVBRUTT = 'Deltakelse avbrutt',
     FULLFØRT = 'Fullført',
+    DELTAR = 'Deltar',
     GJENNOMFØRES = 'Gjennomføres',
     GJENNOMFØRING_AVBRUTT = 'Gjennomføring avbrutt',
     GJENNOMFØRING_AVLYST = 'Gjennomføring avlyst',
@@ -13,6 +14,14 @@ enum Tiltaksstatus {
     TAKKET_NEI_TIL_TILBUD = 'Takket nei til tilbud',
     GODKJENT_TILTAKSPLASS = 'Godkjent tiltaksplass',
     VENTELISTE = 'Venteliste',
+
+    VENTER_PA_OPPSTART = 'Venter på oppstart',
+    HAR_SLUTTET = 'Har sluttet',
+    AVBRUTT = 'Avbrutt',
+    FEILREGISTRERT = 'Feilregistrert',
+    PABEGYNT_REGISTRERING = 'Påbegynt registrering',
+    SOKT_INN = 'Søkt inn',
+    VURDERES = 'Vurderes',
 }
 
 export default Tiltaksstatus;

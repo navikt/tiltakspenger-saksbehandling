@@ -7,9 +7,6 @@ interface SøknadLayoutProps extends React.PropsWithChildren {
 
 export const SøknadLayout = ({ children, title = 'Søknad' }: SøknadLayoutProps) => (
     <main className={styles.soknadLayout}>
-        <Heading level="1" size="small" className={styles.soknadLayout__title}>
-            Søknad
-        </Heading>
         {children}
     </main>
 );

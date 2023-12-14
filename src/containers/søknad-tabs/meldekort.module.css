@@ -1,0 +1,24 @@
+.ukevisning {
+    display: flex;
+    margin: 1rem;
+}
+
+.disableUkevisning {
+    display: flex;
+    margin: 1rem;
+    pointer-events: none;
+    opacity: 0.2;
+}
+
+.uke1 {
+    width: 50%;
+    background-color: #F0F0F0;
+    margin-right: 0.4rem;
+}
+
+.uke2 {
+    width: 50%;
+    background-color: #F0F0F0;
+    margin-left: 0.4rem;
+}
+
