@@ -117,8 +117,8 @@ export const RedigeringSkjema = ({
                                     <Radio
                                         value={false}
                                     >{`Mottar ikke ${vilkårFlateTittel.toLowerCase()} i perioden ${formatDate(
-                                        vilkårsperiode.fom
-                                    )} til ${formatDate(vilkårsperiode.tom)}`}</Radio>
+                                        behandlingsperiode.fom
+                                    )} til ${formatDate(behandlingsperiode.tom)}`}</Radio>
                                     <Radio value={true}>{`Mottar ${vilkårFlateTittel.toLowerCase()}`}</Radio>
                                 </RadioGroup>
                             );
