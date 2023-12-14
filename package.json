@@ -10,24 +10,23 @@
         "test:ci": "jest --ci"
     },
     "dependencies": {
-        "@navikt/aksel-icons": "5.3.4",
-        "@navikt/ds-css": "5.4.0",
-        "@navikt/ds-css-internal": "^3.4.3",
-        "@navikt/ds-icons": "3.4.3",
-        "@navikt/ds-react": "5.4.1",
-        "@navikt/ds-react-internal": "^3.4.3",
+        "@navikt/aksel-icons": "^5.7.0",
+        "@navikt/ds-css": "^5.10.0",
+        "@navikt/ds-react": "^5.10.0",
+        "@navikt/ds-tokens": "5.10.0",
         "@navikt/next-auth-wonderwall": "^1.5.0",
-        "dayjs": "^1.11.6",
+        "dayjs": "^1.11.9",
         "framer-motion": "^9.1.7",
         "jotai": "^1.13.1",
-        "next": "^13.4.19",
+        "next": "^13.5.4",
         "pino": "^8.7.0",
         "react": "18.2.0",
         "react-content-loader": "^6.2.0",
         "react-dom": "18.2.0",
         "react-error-boundary": "^3.1.4",
         "react-hot-toast": "^2.4.0",
-        "swr": "^2.0.3"
+        "swr": "^2.2.2",
+        "react-hook-form": "7.48.2"
     },
     "devDependencies": {
         "@testing-library/jest-dom": "^5.16.5",

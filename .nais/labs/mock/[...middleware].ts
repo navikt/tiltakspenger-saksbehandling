@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import logger from '../../utils/serverLogger';
+import logger from '../../../src/utils/serverLogger';
 
 const backendUrl = process.env.TILTAKSPENGER_VEDTAK_URL || '';
 
