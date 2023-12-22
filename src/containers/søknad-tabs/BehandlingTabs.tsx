@@ -60,7 +60,7 @@ const BehandlingTabs = ({ defaultTab, behandling, lesevisning, sendTabCallback }
                     />
                 </Tabs.Panel>
                 <Tabs.Panel value={'Meldekort'}>
-                    <MeldekortSide />
+                    <MeldekortSide behandlingId={behandling.behandlingId} />
                 </Tabs.Panel>
                 <Tabs.Panel value={'Utbetaling'}>Utbetaling</Tabs.Panel>
             </Tabs>

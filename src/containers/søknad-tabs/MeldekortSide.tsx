@@ -5,12 +5,14 @@ import { PencilWritingIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
 import { MeldekortDag, MeldekortStatus } from '../../types/MeldekortTypes';
+import {useMeldekort} from "../../core/useMeldekort";
 
 interface MeldekortSideProps extends React.PropsWithChildren {
     title?: string;
+    behandlingId: string;
 }
 
-export const MeldekortSide = ({}: MeldekortSideProps) => {
+export const MeldekortSide = ({behandlingId}: MeldekortSideProps) => {
     const [disableUkeVisning, setDisableUkeVisning] = useState<boolean>(false);
     const meldekortUker: MeldekortDag[] = [
         { dag: 'Mandag', dato: new Date('2023-11-13'), status: MeldekortStatus.IKKE_DELTATT },
@@ -57,6 +59,20 @@ export const MeldekortSide = ({}: MeldekortSideProps) => {
         beregnRiktigSum();
     });
 
+    const { meldekortliste, isLoading } = useMeldekort(behandlingId);
+
+    console.log("meldekortliste", meldekortliste)
+
+    const wipKallTilMeldekort = (dagIndex: number) => {
+        const res = fetch(`/api/meldekort/opprett`, {
+            method: 'POST',
+        }).then(() => {
+            console.log(res)
+        });
+    }
+
+
+
     const handleOppdaterMeldekort = (index: number, nyStatus: MeldekortStatus, ukeNr: number) => {
         const oppdatertMeldekortUkerKopi = [...oppdatertMeldekortUker];
         if (ukeNr == 2) {
@@ -72,6 +88,7 @@ export const MeldekortSide = ({}: MeldekortSideProps) => {
         setAntallDagerVelferd(finnAntallDager(MeldekortStatus.FRAVÆR_VELFERD));
         finnAntallDagerMedRiktigUtbetalingsprosent();
         beregnRiktigSum();
+        wipKallTilMeldekort(0);
     };
 
     const finnAntallDager = (meldekortStatus: MeldekortStatus) => {
