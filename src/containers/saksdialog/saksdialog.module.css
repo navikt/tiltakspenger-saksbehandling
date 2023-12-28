@@ -17,21 +17,27 @@
 }
 
 .historikkRow {
+    display: flex;
     border-bottom: 1px solid #cfcfcf;
     padding: 0.7rem;
+}
+
+.historikkContent {
     display: flex;
     flex-direction: column;
+    padding-left: 1rem;
 }
 
-.historikkRow:nth-child(even) {
-    background-color: #f7f7f7;
-}
-
-.historikkDato {
+.historikkType {
     margin-right: 1rem;
     font-weight: bold;
 }
 
 .historikkTekst {
     margin-right: 1rem;
+}
+
+.historikkSignatur {
+    margin-right: 1rem;
+    font-style: italic;
 }

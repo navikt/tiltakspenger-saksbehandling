@@ -14,8 +14,8 @@ import { Tag } from '@navikt/ds-react';
 import styles from './Soker.module.css';
 import {SaksbehandlerContext} from "../_app";
 import {avklarLesevisning} from "../../utils/avklarLesevisning";
-import {Historikk} from "../../containers/historikk/historikk";
 import BegrunnelseModal from "../../containers/begrunnelse-modal/BegrunnelseModal";
+import {Saksdialog} from "../../containers/saksdialog/Saksdialog";
 
 export const søknadIdAtom = atom('');
 
@@ -51,7 +51,7 @@ const BehandlingPage: NextPage = () => {
                 behandling={valgtBehandling}
                 lesevisning={lesevisning}
             />
-            <Historikk endringslogg={valgtBehandling.endringslogg}/>
+            <Saksdialog endringslogg={valgtBehandling.endringslogg}/>
             <BegrunnelseModal behandlingid={valgtBehandling.behandlingId} modalRef={modalRef}/>
         </SøkerLayout>
     );
