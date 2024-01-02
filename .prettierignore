@@ -5,3 +5,4 @@ coverage
 .prettierignore
 public/
 .gitignore
+.nais
