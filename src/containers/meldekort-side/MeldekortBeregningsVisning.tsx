@@ -1,7 +1,29 @@
 import { CheckmarkCircleFillIcon, ExclamationmarkTriangleFillIcon, XMarkOctagonFillIcon } from '@navikt/aksel-icons';
 import { BodyShort, Table } from '@navikt/ds-react';
 
-export const MeldekortBeregningsvisning = () => {
+interface MeldekortBeregningsvisningProps {
+    antallDagerIkkeDeltatt: number;
+    antallDagerDeltatt: number;
+    antallDagerSyk: number;
+    antallDagerVelferd: number;
+    antallDagerSyktBarn: number;
+    antallDager100prosent: number;
+    antallDager75prosent: number;
+    sumAntallDager100prosent: number;
+    sumAntallDager75prosent: number;
+}
+
+export const MeldekortBeregningsvisning = ({
+    antallDagerIkkeDeltatt,
+    antallDagerDeltatt,
+    antallDagerSyk,
+    antallDagerSyktBarn,
+    antallDagerVelferd,
+    antallDager100prosent,
+    antallDager75prosent,
+    sumAntallDager100prosent,
+    sumAntallDager75prosent,
+}: MeldekortBeregningsvisningProps) => {
     return (
         <Table style={{ tableLayout: 'fixed', width: '100%' }}>
             <Table.Row>
@@ -64,13 +86,13 @@ export const MeldekortBeregningsvisning = () => {
                     <BodyShort style={{ marginBottom: '0.5rem' }}>Antall dager med 100% utbetaling</BodyShort>
                 </Table.DataCell>
                 <Table.DataCell>
-                    <BodyShort style={{ marginBottom: '0.5rem' }}>5</BodyShort>
-                    <BodyShort style={{ marginBottom: '0.5rem' }}>0</BodyShort>
-                    <BodyShort style={{ marginBottom: '0.5rem' }}>0</BodyShort>
-                    <BodyShort style={{ marginBottom: '0.5rem' }}>6</BodyShort>
-                    <BodyShort style={{ marginBottom: '0.5rem' }}>0</BodyShort>
-                    <BodyShort style={{ marginBottom: '0.5rem' }}>2</BodyShort>
-                    <BodyShort style={{ marginBottom: '0.5rem' }}>2</BodyShort>
+                    <BodyShort style={{ marginBottom: '0.5rem' }}>{antallDagerDeltatt.toString()}</BodyShort>
+                    <BodyShort style={{ marginBottom: '0.5rem' }}>{antallDagerIkkeDeltatt.toString()}</BodyShort>
+                    <BodyShort style={{ marginBottom: '0.5rem' }}>{antallDagerSyk.toString()}</BodyShort>
+                    <BodyShort style={{ marginBottom: '0.5rem' }}>{antallDagerSyktBarn.toString()}</BodyShort>
+                    <BodyShort style={{ marginBottom: '0.5rem' }}>{antallDagerVelferd.toString()}</BodyShort>
+                    <BodyShort style={{ marginBottom: '0.5rem' }}>{antallDager75prosent.toString()}</BodyShort>
+                    <BodyShort style={{ marginBottom: '0.5rem' }}>{antallDager100prosent.toString()}</BodyShort>
                 </Table.DataCell>
                 <Table.DataCell align="right">
                     <div>
@@ -79,8 +101,10 @@ export const MeldekortBeregningsvisning = () => {
                         <BodyShort style={{ marginBottom: '0.5rem' }}>&nbsp;</BodyShort>
                         <BodyShort style={{ marginBottom: '0.5rem' }}>&nbsp;</BodyShort>
                         <BodyShort style={{ marginBottom: '0.5rem' }}>&nbsp;</BodyShort>
-                        <BodyShort style={{ marginBottom: '0.5rem' }}>405,-</BodyShort>
-                        <BodyShort style={{ marginBottom: '0.5rem' }}>2144,-</BodyShort>
+                        <BodyShort style={{ marginBottom: '0.5rem' }}>{sumAntallDager75prosent.toString()},-</BodyShort>
+                        <BodyShort style={{ marginBottom: '0.5rem' }}>
+                            {sumAntallDager100prosent.toString()},-
+                        </BodyShort>
                     </div>
                 </Table.DataCell>
             </Table.Row>
@@ -88,7 +112,7 @@ export const MeldekortBeregningsvisning = () => {
                 <Table.HeaderCell>Beløp til utbetaling</Table.HeaderCell>
                 <Table.DataCell />
                 <Table.DataCell align="right">
-                    <BodyShort>2569,-</BodyShort>
+                    <BodyShort>{(sumAntallDager100prosent + sumAntallDager75prosent).toString()},-</BodyShort>
                 </Table.DataCell>
             </Table.Row>
         </Table>

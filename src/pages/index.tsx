@@ -6,23 +6,13 @@ import useSWR, {useSWRConfig} from 'swr';
 import { fetcher, FetcherError } from '../utils/http';
 import {Button, Link, Table} from '@navikt/ds-react';
 import {SaksbehandlerContext} from "./_app";
-
-interface Behandling {
-    id: string;
-    ident: string;
-    typeBehandling: string;
-    fom: string;
-    tom: string;
-    status: string;
-    saksbehandler?: string;
-    beslutter?: string;
-}
+import {BehandlingForBenk} from "../types/Behandling";
 
 const HomePage: NextPage = () => {
-    const [behandlinger, setBehandlinger] = useState<Behandling[]>([]);
+    const [behandlinger, setBehandlinger] = useState<BehandlingForBenk[]>([]);
     const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
     const mutator = useSWRConfig().mutate;
-    const { data, isLoading } = useSWR<Behandling[]>(`/api/behandlinger`, fetcher, {
+    const { data, isLoading } = useSWR<BehandlingForBenk[]>(`/api/behandlinger`, fetcher, {
         shouldRetryOnError: false,
         revalidateOnFocus: false,
         revalidateOnReconnect: false,

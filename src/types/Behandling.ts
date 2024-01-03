@@ -36,6 +36,17 @@ export interface Endring {
     endretTidspunkt: string;
 }
 
+export interface BehandlingForBenk {
+    id: string;
+    ident: string;
+    typeBehandling: string;
+    fom: string;
+    tom: string;
+    status: string;
+    saksbehandler?: string;
+    beslutter?: string;
+}
+
 export interface Personopplysninger {
     ident: string;
     fornavn: string;
