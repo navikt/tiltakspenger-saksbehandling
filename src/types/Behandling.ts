@@ -26,6 +26,14 @@ export interface Behandling {
     personopplysninger: Personopplysninger;
     tilstand: string;
     status: string;
+    endringslogg: Endring[];
+}
+
+export interface Endring {
+    type: string;
+    begrunnelse: string;
+    endretAv: string;
+    endretTidspunkt: string;
 }
 
 export interface BehandlingForBenk {

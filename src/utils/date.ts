@@ -9,6 +9,10 @@ export function formatDate(dateString: string) {
     return dayjs(dateString).format('DD.MM.YYYY');
 }
 
+export function formatDateTime(dateString: string) {
+    return dayjs(dateString).format('DD.MM.YYYY HH:mm');
+}
+
 export function formatPeriode({ fra, til }: Periode) {
     return `${formatDate(fra)} - ${formatDate(til)}`;
 }

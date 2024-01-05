@@ -14,8 +14,8 @@ import { Tag } from '@navikt/ds-react';
 import styles from './Soker.module.css';
 import {SaksbehandlerContext} from "../_app";
 import {avklarLesevisning} from "../../utils/avklarLesevisning";
-import {Historikk} from "../../containers/historikk/historikk";
 import BegrunnelseModal from "../../containers/begrunnelse-modal/BegrunnelseModal";
+import {Saksdialog} from "../../containers/saksdialog/Saksdialog";
 import {Detaljer} from "../../containers/meldekort-detaljer/meldekort-detaljer";
 import {MeldekortListe} from "../../containers/meldekort-liste/meldekort-liste";
 
@@ -64,7 +64,6 @@ const BehandlingPage: NextPage = () => {
                         lesevisning={lesevisning}
                         sendTabCallback={setTab}
                     />
-                    <Historikk/>
                 </>
             )}
 
@@ -93,10 +92,9 @@ const BehandlingPage: NextPage = () => {
                        lesevisning={lesevisning}
                        sendTabCallback={setTab}
                    />
-                   <Historikk/>
                </>
             )}
-
+            <Saksdialog endringslogg={valgtBehandling.endringslogg}/>
             <BegrunnelseModal behandlingid={valgtBehandling.behandlingId} modalRef={modalRef}/>
         </SøkerLayout>
     );
