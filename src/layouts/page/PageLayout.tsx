@@ -4,15 +4,15 @@ import useSokOppPerson from '../../core/useSokOppPerson';
 interface PageLayoutProps extends React.PropsWithChildren {}
 
 export function PageLayout({ children }: PageLayoutProps) {
-    const { trigger, isSokerMutating } = useSokOppPerson();
+  const { trigger, isSokerMutating } = useSokOppPerson();
 
-    return (
-        <>
-            <Header
-                isSearchLoading={isSokerMutating}
-                onSearch={(searchString) => trigger({ ident: searchString })}
-            />
-            <main>{children}</main>
-        </>
-    );
+  return (
+    <>
+      <Header
+        isSearchLoading={isSokerMutating}
+        onSearch={(searchString) => trigger({ ident: searchString })}
+      />
+      <main>{children}</main>
+    </>
+  );
 }

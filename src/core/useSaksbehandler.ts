@@ -4,15 +4,12 @@ import { Saksbehandler } from '../types/Saksbehandler';
 import useSWRImmutable from 'swr/immutable';
 
 function useSaksbehandler() {
-    const { data: saksbehandler, isLoading: isSaksbehandlerLoading } = useSWRImmutable<Saksbehandler>(
-        '/api/saksbehandler',
-        fetcher,
-        {
-            onError: (error) => toast.error(`[${error.status}]: ${error.info}`),
-        }
-    );
+  const { data: saksbehandler, isLoading: isSaksbehandlerLoading } =
+    useSWRImmutable<Saksbehandler>('/api/saksbehandler', fetcher, {
+      onError: (error) => toast.error(`[${error.status}]: ${error.info}`),
+    });
 
-    return { saksbehandler, isSaksbehandlerLoading };
+  return { saksbehandler, isSaksbehandlerLoading };
 }
 
 export default useSaksbehandler;

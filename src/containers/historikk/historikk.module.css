@@ -1,17 +1,17 @@
 .historikkColumn {
-    border-left: 1px solid #cfcfcf;
-    border-top: 1px solid #cfcfcf;
-    grid-area: history;
+  border-left: 1px solid #cfcfcf;
+  border-top: 1px solid #cfcfcf;
+  grid-area: history;
 }
 
 .historikkHeading {
-    border-bottom: 1px solid #cfcfcf;
-    padding: 0.7rem;
-    display: flex;
-    align-items: center;
+  border-bottom: 1px solid #cfcfcf;
+  padding: 0.7rem;
+  display: flex;
+  align-items: center;
 }
 
 .historikkHeadingSpan {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
