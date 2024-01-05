@@ -6,3 +6,6 @@ coverage
 public/
 .gitignore
 .nais
+*.yml
+*.yaml
+package-lock.json
