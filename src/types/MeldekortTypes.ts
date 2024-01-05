@@ -4,6 +4,13 @@ export type MeldekortListe = {
     meldekort: Meldekort[];
 };
 
+export type MeldekortUtenDager = {
+    id: string;
+    fom: Date;
+    tom: Date;
+    status: string;
+};
+
 export type Meldekort = {
     id: string;
     fom: Date;

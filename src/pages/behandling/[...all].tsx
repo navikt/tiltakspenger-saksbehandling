@@ -70,7 +70,7 @@ const BehandlingPage: NextPage = () => {
 
             {valgtTab === 'Meldekort' && (
                 <>
-                    <MeldekortListe />
+                    <MeldekortListe behandlingId={valgtBehandling.behandlingId}/>
                     <BehandlingTabs
                         onChange={(id) => router.push(`/behandling/${valgtBehandling?.behandlingId}/${id}`)}
                         defaultTab={'Meldekort'}
