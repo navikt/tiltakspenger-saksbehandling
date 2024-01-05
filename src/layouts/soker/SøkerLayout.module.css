@@ -1,9 +1,9 @@
 .sokerLayout {
-    display: grid;
-    grid-template-columns:15% 70% 15%;
-    grid-template-rows: auto;
-    grid-template-areas:
-        "personalia personalia personalia"
-        "behandlingtag behandlingbanner behandlingbanner"
-        "summary soknad history";
+  display: grid;
+  grid-template-columns: 15% 70% 15%;
+  grid-template-rows: auto;
+  grid-template-areas:
+    'personalia personalia personalia'
+    'behandlingtag behandlingbanner behandlingbanner'
+    'summary soknad history';
 }

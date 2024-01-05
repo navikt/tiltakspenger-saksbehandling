@@ -1,11 +1,11 @@
 .behandlingtag {
-    padding: 0.5em;
-    align-self: center;
-    justify-self: center;
-    grid-area: behandlingtag;
+  padding: 0.5em;
+  align-self: center;
+  justify-self: center;
+  grid-area: behandlingtag;
 }
 
 .HistoryColumn {
-    border-top: 1px solid #dfdfdf;
-    grid-area: history;
+  border-top: 1px solid #dfdfdf;
+  grid-area: history;
 }

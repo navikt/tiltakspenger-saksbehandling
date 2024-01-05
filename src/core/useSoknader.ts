@@ -6,7 +6,7 @@ import { fetcher, FetcherError } from '../utils/http';
 import toast from 'react-hot-toast';
 
 function useSoknader(søkerId: string, søknadId?: string) {
-/*  Komponent ikke i bruk
+  /*  Komponent ikke i bruk
 
     const [isLoading, setIsLoading] = useState(true);
     const [valgtBehandling, setValgBehandling] = useState<Behandling>();

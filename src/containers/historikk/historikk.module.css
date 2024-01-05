@@ -1,17 +1,17 @@
-.detaljerColumn {
+.historikkColumn {
   border-left: 1px solid #cfcfcf;
   border-top: 1px solid #cfcfcf;
   grid-area: history;
 }
 
-.detaljerHeading {
+.historikkHeading {
   border-bottom: 1px solid #cfcfcf;
   padding: 0.7rem;
   display: flex;
   align-items: center;
 }
 
-.detaljerHeadingSpan {
+.historikkHeadingSpan {
   display: flex;
   align-items: center;
 }

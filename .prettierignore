@@ -2,3 +2,10 @@ build
 coverage
 .next
 *.md
+.prettierignore
+public/
+.gitignore
+.nais
+*.yml
+*.yaml
+package-lock.json
