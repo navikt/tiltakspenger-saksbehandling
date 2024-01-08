@@ -1,12 +1,12 @@
 import React from 'react';
-import { BodyShort, Heading } from '@navikt/ds-react';
+import { BodyShort } from '@navikt/ds-react';
 import { RegistrertTiltak } from '../../types/Søknad';
 import { formatDate, formatPeriode } from '../../utils/date';
 import { Periode, ÅpenPeriode } from '../../types/Periode';
 import Tiltaksstatus from '../../components/tiltaksstatus/Tiltaksstatus';
 import styles from './RegistrertTiltakDetails.module.css';
 
-interface RegistrertTiltakDetailsProps {
+interface RegistrertTiltakDetaljerProps {
   registrertTiltak: RegistrertTiltak;
 }
 
@@ -27,9 +27,9 @@ function renderPeriode(periode?: ÅpenPeriode) {
   return formatDate(periode.fra);
 }
 
-const RegistrertTiltakDetails = ({
+const RegistrertTiltakDetaljer = ({
   registrertTiltak,
-}: RegistrertTiltakDetailsProps) => {
+}: RegistrertTiltakDetaljerProps) => {
   const { arrangør, periode, prosent, status, navn, dagerIUken } =
     registrertTiltak;
   return (
@@ -71,4 +71,4 @@ const RegistrertTiltakDetails = ({
   );
 };
 
-export default RegistrertTiltakDetails;
+export default RegistrertTiltakDetaljer;

@@ -2,15 +2,15 @@ import React from 'react';
 import { Alert } from '@navikt/ds-react';
 
 interface ErrorMessageProps {
-  errorMessage: string;
+  feilmelding: string;
 }
 
-const ErrorMessage = ({ errorMessage }: ErrorMessageProps) => {
+const Feilmelding = ({ feilmelding: feilmelding }: ErrorMessageProps) => {
   return (
     <Alert data-testid="nav-search-error" variant="error" fullWidth>
-      {errorMessage}
+      {feilmelding}
     </Alert>
   );
 };
 
-export default ErrorMessage;
+export default Feilmelding;

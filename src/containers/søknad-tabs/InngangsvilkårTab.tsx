@@ -3,7 +3,7 @@ import { SaksopplysningTabell } from '../saksopplysning-tabell/SaksopplysningTab
 import { SøknadLayout } from '../../layouts/soker/SøknadLayout';
 import React from 'react';
 import { Kategori } from '../../types/Behandling';
-import { UtfallIcon } from '../../components/utfall-icon/UtfallIcon';
+import { UtfallIkon } from '../../components/utfall-ikon/UtfallIkon';
 import { Lesevisning } from '../../utils/avklarLesevisning';
 
 interface InngangsvilkårTabProps {
@@ -78,7 +78,7 @@ export const InngangsvilkårTab = ({
               >
                 <Accordion.Header>
                   <HStack align={'center'} gap={'2'}>
-                    <UtfallIcon utfall={kategori.samletUtfall} />
+                    <UtfallIkon utfall={kategori.samletUtfall} />
                     {kategori.kategoriTittel}
                   </HStack>
                 </Accordion.Header>

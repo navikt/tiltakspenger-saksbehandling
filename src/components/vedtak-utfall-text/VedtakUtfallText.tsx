@@ -1,7 +1,7 @@
 import React from 'react';
-import IconWithText from '../icon-with-text/IconWithText';
+import IkonMedTekst from '../ikon-med-tekst/IkonMedTekst';
 import { Utfall } from '../../types/Utfall';
-import { UtfallIcon } from '../utfall-icon/UtfallIcon';
+import { UtfallIkon } from '../utfall-ikon/UtfallIkon';
 
 interface VedtakUtfallText {
   utfall: Utfall;
@@ -23,8 +23,8 @@ const VedtakUtfallText = ({ utfall, getUtfallText }: VedtakUtfallText) => {
   const utfallText = getUtfallText
     ? getUtfallText(utfall)
     : getDefaultUtfallText(utfall);
-  const utfallIconRenderer = () => <UtfallIcon utfall={utfall} />;
-  return <IconWithText iconRenderer={utfallIconRenderer} text={utfallText} />;
+  const utfallIconRenderer = () => <UtfallIkon utfall={utfall} />;
+  return <IkonMedTekst iconRenderer={utfallIconRenderer} text={utfallText} />;
 };
 
 export default VedtakUtfallText;

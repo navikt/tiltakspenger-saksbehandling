@@ -6,11 +6,11 @@ import {
   ExclamationmarkTriangleFillIcon,
 } from '@navikt/aksel-icons';
 
-interface UtfallIconProps {
+interface UtfallIkonProps {
   utfall: string;
 }
 
-export const UtfallIcon = ({ utfall }: UtfallIconProps) => {
+export const UtfallIkon = ({ utfall }: UtfallIkonProps) => {
   if (utfall === 'OPPFYLT')
     return (
       <CheckmarkCircleFillIcon

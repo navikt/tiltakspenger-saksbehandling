@@ -6,7 +6,7 @@ import {
   Buldings3Icon,
   ArrowsSquarepathIcon,
 } from '@navikt/aksel-icons';
-import IconWithText from '../../components/icon-with-text/IconWithText';
+import IkonMedTekst from '../../components/ikon-med-tekst/IkonMedTekst';
 import { formatDate } from '../../utils/date';
 import styles from './SøknadDetails.module.css';
 import Søknad from '../../types/Søknad';
@@ -36,14 +36,14 @@ const SøknadDetails = ({
         </Heading>
         <div className={styles.søknadDetails}>
           <BodyShort size="small">
-            <IconWithText
+            <IkonMedTekst
               iconRenderer={() => <FileTextIcon />}
               text={`Søknadsdato: ${formatDate(søknadsdato)}`}
             />
           </BodyShort>
           {deltakelseFom && (
             <BodyShort size="small">
-              <IconWithText
+              <IkonMedTekst
                 iconRenderer={() => <CalendarIcon />}
                 text={`${formatDate(deltakelseFom)}${
                   !!deltakelseTom ? ` - ${formatDate(deltakelseTom)}` : ''
@@ -52,7 +52,7 @@ const SøknadDetails = ({
             </BodyShort>
           )}
           <BodyShort size="small">
-            <IconWithText
+            <IkonMedTekst
               iconRenderer={() => <Buldings3Icon />}
               text={`${tiltakstype} - ${
                 arrangoernavn ? ` - ${arrangoernavn}` : ''
@@ -60,7 +60,7 @@ const SøknadDetails = ({
             />
           </BodyShort>
           <BodyShort size="small">
-            <IconWithText
+            <IkonMedTekst
               iconRenderer={() => <ArrowsSquarepathIcon />}
               text={`x dager i uken `}
             />
