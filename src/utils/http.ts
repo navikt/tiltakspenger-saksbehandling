@@ -1,31 +1,34 @@
 import { SøkerIdent } from '../types/Søker';
 
 export class FetcherError extends Error {
-    info: { [key: string]: any } | undefined;
-    status: number | undefined;
+  info: { [key: string]: any } | undefined;
+  status: number | undefined;
 }
 
 export const fetcher = async (url: string) => {
-    const res = await fetch(url);
-    await throwErrorIfFatal(res);
-    return res.json();
+  const res = await fetch(url);
+  await throwErrorIfFatal(res);
+  return res.json();
 };
 
-export async function fetchSøker<R>(url: string, { arg }: { arg: SøkerIdent }): Promise<R> {
-    const res = await fetch(url, {
-        method: 'POST',
-        body: JSON.stringify(arg),
-    });
-    await throwErrorIfFatal(res);
-    return res.json();
+export async function fetchSøker<R>(
+  url: string,
+  { arg }: { arg: SøkerIdent }
+): Promise<R> {
+  const res = await fetch(url, {
+    method: 'POST',
+    body: JSON.stringify(arg),
+  });
+  await throwErrorIfFatal(res);
+  return res.json();
 }
 
 const throwErrorIfFatal = async (res: Response) => {
-    if (!res.ok) {
-        const error = new FetcherError('En feil har oppstått');
-        const errorMessage = await res.json();
-        error.info = errorMessage.error;
-        error.status = res.status;
-        throw error;
-    }
+  if (!res.ok) {
+    const error = new FetcherError('En feil har oppstått');
+    const errorMessage = await res.json();
+    error.info = errorMessage.error;
+    error.status = res.status;
+    throw error;
+  }
 };

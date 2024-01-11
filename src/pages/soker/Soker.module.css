@@ -1,6 +1,6 @@
 .behandlingtag {
-    padding: 0.5em;
-    align-self: center;
-    justify-self: center;
-    grid-area: behandlingtag;
+  padding: 0.5em;
+  align-self: center;
+  justify-self: center;
+  grid-area: behandlingtag;
 }

@@ -1,9 +1,9 @@
 .iconWithText__icon {
-    display: inline;
-    margin-right: 0.3rem;
+  display: inline;
+  margin-right: 0.3rem;
 }
 
 .iconWithText__text {
-    position: relative;
-    top: -2px;
+  position: relative;
+  top: -2px;
 }
