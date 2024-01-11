@@ -62,10 +62,40 @@ export const MeldekortUke = ({
     }
   }
 
-  function oppdaterMeldekort(index: number, status: string) {
-    const meldekortStatus = velgStatus(status);
-    handleOppdaterMeldekort(index, meldekortStatus, ukeNr);
-  }
+    function oppdaterMeldekort(index: number, status: string) {
+        const meldekortStatus = velgStatus(status);
+        handleOppdaterMeldekort(index, meldekortStatus, ukeNr);
+    }
+
+    var ukedagListe = meldekortUke.map((ukedag, index) => {
+        return (
+            <>
+                <div style={{display:'flex', width:'100%', padding:'0.5rem', alignItems:'center'}}>
+                    <div style={{width:'8%'}}>{velgIkon(ukedag.status)}</div>
+                    <div style={{width:'30%'}}><BodyShort size="small">{ukedag.dato.getDate()}</BodyShort></div>
+                    <div style={{width:'62%'}}>
+                        <Select
+                            label="Deltatt Eller Fravær"
+                            id="deltattEllerFravær"
+                            size="small"
+                            hideLabel
+                            defaultValue={ukedag.status}
+                            onChange={(e) => oppdaterMeldekort(index, e.target.value)}
+                        >
+                            <option value={MeldekortStatus.DELTATT}>Deltatt i tiltaket</option>
+                            <option value={MeldekortStatus.IKKE_DELTATT}>Ikke deltatt i tiltaket</option>
+                            <option value={MeldekortStatus.LØNN_FOR_TID_I_ARBEID}>Lønn for tid i arbeid</option>
+                            <option value={MeldekortStatus.FRAVÆR_SYK}>Fravær syk</option>
+                            <option value={MeldekortStatus.FRAVÆR_SYKT_BARN}>Fravær sykt barn</option>
+                            <option value={MeldekortStatus.FRAVÆR_VELFERD}>Fravær velferd</option>
+                        </Select>
+                    </div>
+                </div>
+                <Divider />
+            </>
+
+        );
+    });
 
   var ukedagListe = meldekortUke.map((ukedag, index) => {
     return (

@@ -1,5 +1,9 @@
 import dayjs from 'dayjs';
 import { Periode, ÅpenPeriode } from '../types/Periode';
+import weekOfYear from 'dayjs/plugin/weekOfYear';
+import 'dayjs/locale/nb';
+
+dayjs.extend(weekOfYear);
 
 export function formatDateShort(dateString: string) {
   return dayjs(dateString).format('DD.MM.YY');
@@ -20,4 +24,12 @@ export function formatPeriode({ fra, til }: Periode) {
 export function formatÅpenPeriode({ fra, til }: ÅpenPeriode) {
   if (til) return formatPeriode({ fra, til } as Periode);
   return `${formatDate(fra)} - `;
+}
+
+export function formatDateTimestamp(dateString: Date) {
+    return formatDate(dateString.toISOString().split('T')[0]);
+}
+
+export function getWeekNumber(date: Date) {
+    return dayjs(date).week();
 }
