@@ -73,7 +73,6 @@ const BehandlingPage: NextPage = () => {
             søknad={valgtBehandling.søknad}
             registrerteTiltak={valgtBehandling.registrerteTiltak}
           />
-
           <BehandlingTabs
             onChange={(id) =>
               router.push(`/behandling/${valgtBehandling?.behandlingId}/${id}`)
@@ -83,6 +82,7 @@ const BehandlingPage: NextPage = () => {
             lesevisning={lesevisning}
             sendTabCallback={setTab}
           />
+          <Saksdialog endringslogg={valgtBehandling.endringslogg} />
         </>
       )}
 
@@ -119,7 +119,6 @@ const BehandlingPage: NextPage = () => {
           />
         </>
       )}
-      <Saksdialog endringslogg={valgtBehandling.endringslogg} />
       <BegrunnelseModal
         behandlingid={valgtBehandling.behandlingId}
         modalRef={modalRef}
