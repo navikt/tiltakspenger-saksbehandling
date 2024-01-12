@@ -15,14 +15,13 @@ export type Meldekort = {
     id: string;
     fom: Date;
     tom: Date;
-    antallDagerPåTiltaket: number,
+    antallDagerPåTiltaket: number;
     tiltak: Tiltak[];
     meldekortDager: MeldekortDag[];
 };
 
 export type MeldekortDag = {
     dato: Date;
-    dag: string;
     tiltak: Tiltak;
     status: MeldekortStatus;
 };

@@ -5,7 +5,6 @@ import { PencilWritingIcon } from '@navikt/aksel-icons';
 import { Button } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
 import { MeldekortDag, MeldekortStatus } from '../../types/MeldekortTypes';
-import {Periode} from "../../types/Periode";
 
 interface MeldekortSideProps extends React.PropsWithChildren {
   title?: string;
@@ -15,8 +14,7 @@ export const MeldekortSide = ({}: MeldekortSideProps) => {
   const [disableUkeVisning, setDisableUkeVisning] = useState<boolean>(false);
   const meldekortUker: MeldekortDag[] = [
     {
-      dag: 'Mandag',
-      dato: new Date('2023-11-13'),
+      dato: new Date('2023-12-04'),
       tiltak: {
         id: '123',
         periode: {
@@ -30,8 +28,7 @@ export const MeldekortSide = ({}: MeldekortSideProps) => {
       status: MeldekortStatus.IKKE_DELTATT,
     },
     {
-      dag: 'Tirsdag',
-      dato: new Date('2023-11-14'),
+      dato: new Date('2023-12-05'),
       tiltak: {
         id: '123',
         periode: {
@@ -45,8 +42,7 @@ export const MeldekortSide = ({}: MeldekortSideProps) => {
       status: MeldekortStatus.IKKE_DELTATT,
     },
     {
-      dag: 'Onsdag',
-      dato: new Date('2023-11-15'),
+      dato: new Date('2023-12-06'),
       tiltak: {
         id: '123',
         periode: {
@@ -60,8 +56,7 @@ export const MeldekortSide = ({}: MeldekortSideProps) => {
       status: MeldekortStatus.FRAVÆR_SYKT_BARN,
     },
     {
-      dag: 'Torsdag',
-      dato: new Date('2023-11-16'),
+      dato: new Date('2023-12-07'),
       tiltak: {
         id: '123',
         periode: {
@@ -75,8 +70,7 @@ export const MeldekortSide = ({}: MeldekortSideProps) => {
       status: MeldekortStatus.FRAVÆR_SYKT_BARN,
     },
     {
-      dag: 'Fredag',
-      dato: new Date('2023-11-17'),
+      dato: new Date('2023-12-08'),
       tiltak: {
         id: '123',
         periode: {
@@ -90,8 +84,7 @@ export const MeldekortSide = ({}: MeldekortSideProps) => {
       status: MeldekortStatus.DELTATT,
     },
     {
-      dag: 'Lørdag',
-      dato: new Date('2023-11-18'),
+      dato: new Date('2023-12-09'),
       tiltak: {
         id: '123',
         periode: {
@@ -105,8 +98,7 @@ export const MeldekortSide = ({}: MeldekortSideProps) => {
       status: MeldekortStatus.IKKE_DELTATT,
     },
     {
-      dag: 'Søndag',
-      dato: new Date('2023-11-19'),
+      dato: new Date('2023-12-10'),
       tiltak: {
         id: '123',
         periode: {
@@ -120,8 +112,7 @@ export const MeldekortSide = ({}: MeldekortSideProps) => {
       status: MeldekortStatus.IKKE_DELTATT,
     },
     {
-      dag: 'Mandag',
-      dato: new Date('2023-11-20'),
+      dato: new Date('2023-12-11'),
       tiltak: {
         id: '123',
         periode: {
@@ -135,8 +126,7 @@ export const MeldekortSide = ({}: MeldekortSideProps) => {
       status: MeldekortStatus.DELTATT,
     },
     {
-      dag: 'Tirsdag',
-      dato: new Date('2023-11-21'),
+      dato: new Date('2023-12-12'),
       tiltak: {
         id: '123',
         periode: {
@@ -150,8 +140,7 @@ export const MeldekortSide = ({}: MeldekortSideProps) => {
       status: MeldekortStatus.LØNN_FOR_TID_I_ARBEID,
     },
     {
-      dag: 'Onsdag',
-      dato: new Date('2023-11-22'),
+      dato: new Date('2023-12-13'),
       tiltak: {
         id: '123',
         periode: {
@@ -165,8 +154,7 @@ export const MeldekortSide = ({}: MeldekortSideProps) => {
       status: MeldekortStatus.FRAVÆR_SYK,
     },
     {
-      dag: 'Torsdag',
-      dato: new Date('2023-11-23'),
+      dato: new Date('2023-12-14'),
       tiltak: {
         id: '123',
         periode: {
@@ -180,8 +168,7 @@ export const MeldekortSide = ({}: MeldekortSideProps) => {
       status: MeldekortStatus.DELTATT,
     },
     {
-      dag: 'Fredag',
-      dato: new Date('2023-11-24'),
+      dato: new Date('2023-12-15'),
       tiltak: {
         id: '123',
         periode: {
@@ -195,8 +182,7 @@ export const MeldekortSide = ({}: MeldekortSideProps) => {
       status: MeldekortStatus.DELTATT,
     },
     {
-      dag: 'Lørdag',
-      dato: new Date('2023-11-25'),
+      dato: new Date('2023-12-16'),
       tiltak: {
         id: '123',
         periode: {
@@ -210,8 +196,7 @@ export const MeldekortSide = ({}: MeldekortSideProps) => {
       status: MeldekortStatus.IKKE_DELTATT,
     },
     {
-      dag: 'Søndag',
-      dato: new Date('2023-11-26'),
+      dato: new Date('2023-12-17'),
       tiltak: {
         id: '123',
         periode: {

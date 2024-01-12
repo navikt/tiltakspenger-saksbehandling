@@ -1,9 +1,12 @@
 import dayjs from 'dayjs';
 import { Periode, ÅpenPeriode } from '../types/Periode';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
+import weekday from 'dayjs/plugin/weekday';
 import 'dayjs/locale/nb';
 
-dayjs.extend(weekOfYear);
+dayjs.extend(weekday)
+dayjs.extend(weekOfYear)
+dayjs.locale('nb');
 
 export function formatDateShort(dateString: string) {
   return dayjs(dateString).format('DD.MM.YY');
@@ -26,8 +29,13 @@ export function formatÅpenPeriode({ fra, til }: ÅpenPeriode) {
   return `${formatDate(fra)} - `;
 }
 
-export function formatDateTimestamp(dateString: Date) {
-    return formatDate(dateString.toISOString().split('T')[0]);
+export function parseDateTimestamp(dateString: Date) {
+    return dayjs(dateString.toISOString().split('T')[0]).format('DD.MM.YYYY');
+}
+
+export function getDayOfWeek(date: Date) {
+    const ukedager = ['Mandag','Tirsdag','Onsdag','Torsdag','Fredag','Lørdag','Søndag'];
+    return ukedager[dayjs(date).weekday()];
 }
 
 export function getWeekNumber(date: Date) {
