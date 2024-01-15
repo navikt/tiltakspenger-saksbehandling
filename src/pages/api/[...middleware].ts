@@ -9,13 +9,13 @@ const meldekortBackendUrl = process.env.TILTAKSPENGER_MELDEKORT_URL || '';
 function getUrl(req: NextApiRequest): string {
   const urlTil = req?.url;
 
-    if (urlTil?.startsWith('/api/meldekort')) {
-        const meldekortPath = req?.url?.replace('/api', '');
-        return `${meldekortBackendUrl}${meldekortPath}`;
-    } else {
-        const vedtakPath = req?.url?.replace('/api', '');
-        return `${vedtakBackendUrl}${vedtakPath}`;
-    }
+  if (urlTil?.startsWith('/api/meldekort')) {
+      const meldekortPath = req?.url?.replace('/api', '');
+      return `${meldekortBackendUrl}${meldekortPath}`;
+  } else {
+      const vedtakPath = req?.url?.replace('/api', '');
+      return `${vedtakBackendUrl}${vedtakPath}`;
+  }
 }
 
 async function makeApiRequest(

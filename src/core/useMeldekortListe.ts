@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import {MeldekortUtenDager} from "../types/MeldekortTypes";
 
 //TODO: Bruk vedtakId isf. behandlingId
-export function useMeldekort(behandlingId: string) {
+export function useMeldekortListe(behandlingId: string) {
     const [meldekortliste, setMeldekortliste] = useState<MeldekortUtenDager[]>();
     const [fantGrunnlag, setFantGrunnlag]  = useState<Boolean>(true);
     const { data, isLoading } = useSWR<MeldekortUtenDager[]>(`/api/meldekort/hentAlleForBehandling/${behandlingId}`, fetcher, {
@@ -13,7 +13,6 @@ export function useMeldekort(behandlingId: string) {
         revalidateOnFocus: false,
         revalidateOnReconnect: false,
         onSuccess: (data) => {
-            console.log(data);
             setMeldekortliste(data);
         },
         onError: (error: FetcherError) => {

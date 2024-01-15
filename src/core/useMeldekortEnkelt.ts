@@ -13,7 +13,6 @@ export function useMeldekortEnkelt(meldekortId: string) {
         revalidateOnFocus: false,
         revalidateOnReconnect: false,
         onSuccess: (data) => {
-            console.log(data);
             setMeldekort(data);
             setIsLoading(false);
         },

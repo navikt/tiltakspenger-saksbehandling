@@ -16,7 +16,7 @@ import { avklarLesevisning } from '../../utils/avklarLesevisning';
 import BegrunnelseModal from '../../containers/begrunnelse-modal/BegrunnelseModal';
 import { Saksdialog } from '../../containers/saksdialog/Saksdialog';
 import { Detaljer } from '../../containers/meldekort-detaljer/meldekort-detaljer';
-import { MeldekortListe } from '../../containers/meldekort-liste/meldekort-liste';
+import { MeldekortMeny } from '../../containers/meldekort-meny/meldekort-meny';
 
 const BehandlingPage: NextPage = () => {
   const router = useRouter();
@@ -85,7 +85,7 @@ const BehandlingPage: NextPage = () => {
 
       {valgtTab === 'Meldekort' && (
         <>
-          <MeldekortListe behandlingId={valgtBehandling.behandlingId}/>
+          <MeldekortMeny behandlingId={valgtBehandling.behandlingId}/>
           <BehandlingTabs
             onChange={(id) =>
               router.push(`/behandling/${valgtBehandling?.behandlingId}/${id}`)
