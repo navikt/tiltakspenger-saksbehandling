@@ -1,7 +1,6 @@
 import React, { useContext, useRef, useState } from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { atom } from 'jotai';
 import SøknadSummarySection from '../../containers/søknad-summary-section/SøknadSummarySection';
 import PersonaliaHeader from '../../containers/personalia-header/PersonaliaHeader';
 import BehandlingTabs from '../../containers/søknad-tabs/BehandlingTabs';
@@ -17,9 +16,7 @@ import { avklarLesevisning } from '../../utils/avklarLesevisning';
 import BegrunnelseModal from '../../containers/begrunnelse-modal/BegrunnelseModal';
 import { Saksdialog } from '../../containers/saksdialog/Saksdialog';
 import { Detaljer } from '../../containers/meldekort-detaljer/meldekort-detaljer';
-import { MeldekortListe } from '../../containers/meldekort-liste/meldekort-liste';
-
-export const søknadIdAtom = atom('');
+import { MeldekortMeny } from '../../containers/meldekort-meny/meldekort-meny';
 
 const BehandlingPage: NextPage = () => {
   const router = useRouter();
@@ -88,7 +85,7 @@ const BehandlingPage: NextPage = () => {
 
       {valgtTab === 'Meldekort' && (
         <>
-          <MeldekortListe />
+          <MeldekortMeny behandlingId={valgtBehandling.behandlingId}/>
           <BehandlingTabs
             onChange={(id) =>
               router.push(`/behandling/${valgtBehandling?.behandlingId}/${id}`)

@@ -7,6 +7,7 @@ import {
 import { MeldekortDag, MeldekortStatus } from '../../types/MeldekortTypes';
 import React from 'react';
 import Divider from '../../components/divider/Divider';
+import {getDayOfWeek} from "../../utils/date";
 
 interface MeldekortUkeProps {
   meldekortUke: MeldekortDag[];
@@ -81,7 +82,7 @@ export const MeldekortUke = ({
           <div style={{ width: '8%' }}>{velgIkon(ukedag.status)}</div>
           <div style={{ width: '30%' }}>
             <BodyShort size="small">
-              {ukedag.dag} {ukedag.dato.getDate()}
+              {`${getDayOfWeek(ukedag.dato)} ${ukedag.dato.getDate()}`}
             </BodyShort>
           </div>
           <div style={{ width: '62%' }}>
