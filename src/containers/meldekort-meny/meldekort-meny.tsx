@@ -2,7 +2,7 @@ import { CardIcon } from '@navikt/aksel-icons';
 import { Detail, Heading, Label } from '@navikt/ds-react';
 import React from 'react';
 import Divider from '../../components/divider/Divider';
-import styles from './meldekortliste.module.css';
+import styles from './meldekortmeny.module.css';
 import { useMeldekortListe } from '../../core/useMeldekortListe';
 import { parseDateTimestamp, getWeekNumber } from '../../utils/date';
 import { MeldekortUtenDager } from '../../types/MeldekortTypes';
