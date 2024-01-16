@@ -6,8 +6,8 @@ import {
   InformationIcon,
   PersonCircleIcon,
 } from '@navikt/aksel-icons';
-import DetaljeListeelement from '../../components/detalje-listeelement/IconWithLabelAndDetails';
 import React from 'react';
+import DetaljeListeelement from '../../components/detalje-listeelement/DetaljeListeelement';
 
 export const Detaljer = () => {
   return (

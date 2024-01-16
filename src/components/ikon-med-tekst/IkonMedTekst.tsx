@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './IconWithText.module.css';
+import styles from './IkonMedTekst.module.css';
 
 interface IkonMedTekstProps {
   iconRenderer: () => React.ReactNode;
