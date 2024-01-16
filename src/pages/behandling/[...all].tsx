@@ -16,7 +16,7 @@ import { avklarLesevisning } from '../../utils/avklarLesevisning';
 import BegrunnelseModal from '../../containers/begrunnelse-modal/BegrunnelseModal';
 import { Saksdialog } from '../../containers/saksdialog/Saksdialog';
 import { Detaljer } from '../../containers/meldekort-detaljer/meldekort-detaljer';
-import { MeldekortListe } from '../../containers/meldekort-liste/meldekort-liste';
+import { MeldekortMeny } from '../../containers/meldekort-meny/meldekort-meny';
 
 const BehandlingPage: NextPage = () => {
   const router = useRouter();
@@ -70,7 +70,6 @@ const BehandlingPage: NextPage = () => {
             søknad={valgtBehandling.søknad}
             registrerteTiltak={valgtBehandling.registrerteTiltak}
           />
-
           <BehandlingTabs
             onChange={(id) =>
               router.push(`/behandling/${valgtBehandling?.behandlingId}/${id}`)
@@ -80,12 +79,13 @@ const BehandlingPage: NextPage = () => {
             lesevisning={lesevisning}
             sendTabCallback={setTab}
           />
+          <Saksdialog endringslogg={valgtBehandling.endringslogg} />
         </>
       )}
 
       {valgtTab === 'Meldekort' && (
         <>
-          <MeldekortListe />
+          <MeldekortMeny behandlingId={valgtBehandling.behandlingId} />
           <BehandlingTabs
             onChange={(id) =>
               router.push(`/behandling/${valgtBehandling?.behandlingId}/${id}`)
@@ -116,7 +116,6 @@ const BehandlingPage: NextPage = () => {
           />
         </>
       )}
-      <Saksdialog endringslogg={valgtBehandling.endringslogg} />
       <BegrunnelseModal
         behandlingid={valgtBehandling.behandlingId}
         modalRef={modalRef}
