@@ -29,7 +29,7 @@ services:
     environment:
       TZ: Europe/Oslo
       SERVER_PORT: 6969
-      JSON_CONFIG: "{\"interactiveLogin\":true,\"tokenCallbacks\":[{\"issuerId\":\"azure\",\"tokenExpiry\":3600,\"requestMappings\":[{\"requestParam\":\"grant_type\",\"claims\":{\"aud\":[\"tiltakspenger-vedtak\"],\"NAVident\":\"Z123456\",\"preferred_username\":\"test.testesen@nav.no\",\"name\":\"Test Testesen\",\"groups\":[\"1b3a2c4d-d620-4fcf-a29b-a6cdadf29680\",\"79985315-b2de-40b8-a740-9510796993c6\",\"cbe715d0-6f67-46bf-86b4-688c4419b747\"]}}]}]}"
+      JSON_CONFIG: "{\"interactiveLogin\":true,\"tokenCallbacks\":[{\"issuerId\":\"azure\",\"tokenExpiry\":3600,\"requestMappings\":[{\"requestParam\":\"grant_type\",\"claims\":{\"aud\":[\"tiltakspenger-vedtak\"],\"NAVident\":\"Z123456\",\"preferred_username\":\"test.testesen@nav.no\",\"name\":\"Test Testesen\",\"groups\":[\"1b3a2c4d-d620-4fcf-a29b-a6cdadf29680\"]}}]}]}"
     ports:
       - 6969:6969
 
