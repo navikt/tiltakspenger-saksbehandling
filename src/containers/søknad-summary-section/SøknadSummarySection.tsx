@@ -2,7 +2,7 @@ import React from 'react';
 import SøknadDetails from '../søknad-details/SøknadDetails';
 import styles from './SøknadSummarySection.module.css';
 import Søknad, { RegistrertTiltak } from '../../types/Søknad';
-import RegistrertTiltakDetails from '../registrert-tiltak-details/RegistrertTiltakDetails';
+import RegistrertTiltakDetaljer from '../registrert-tiltak-detaljer/RegistrertTiltakDetaljer';
 import { Heading } from '@navikt/ds-react';
 
 interface SøknadSummarySectionProps {
@@ -28,7 +28,7 @@ const SøknadSummarySection = ({
           </Heading>
           {registrerteTiltak.map((registrertTiltak, index) => {
             return (
-              <RegistrertTiltakDetails
+              <RegistrertTiltakDetaljer
                 key={index}
                 registrertTiltak={registrertTiltak}
               />

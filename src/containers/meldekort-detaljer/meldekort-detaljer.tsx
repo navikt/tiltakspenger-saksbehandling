@@ -6,8 +6,8 @@ import {
   InformationIcon,
   PersonCircleIcon,
 } from '@navikt/aksel-icons';
-import IconWithLabelAndDetails from '../../components/icon-with-label-details/IconWithLabelAndDetails';
 import React from 'react';
+import DetaljeListeelement from '../../components/detalje-listeelement/DetaljeListeelement';
 
 export const Detaljer = () => {
   return (
@@ -17,17 +17,17 @@ export const Detaljer = () => {
           <ChevronRightIcon /> &nbsp; Detaljer{' '}
         </span>
       </Heading>
-      <IconWithLabelAndDetails
+      <DetaljeListeelement
         iconRenderer={() => <BagdeIcon />}
         label="Meldekort type"
         discription="Elektronisk"
       />
-      <IconWithLabelAndDetails
+      <DetaljeListeelement
         iconRenderer={() => <InformationIcon />}
         label="Status"
         discription="Må gåes opp"
       />
-      <IconWithLabelAndDetails
+      <DetaljeListeelement
         iconRenderer={() => <PersonCircleIcon />}
         label="Signatur"
         discription="Z8834556612"
