@@ -1,6 +1,6 @@
 import { PencilIcon } from '@navikt/aksel-icons';
 import { Table, BodyShort, Button } from '@navikt/ds-react';
-import { UtfallIcon } from '../../components/utfall-icon/UtfallIcon';
+import { UtfallIkon } from '../../components/utfall-ikon/UtfallIkon';
 import { RedigeringSkjema } from './RedigeringSkjema';
 import { useState } from 'react';
 import { Lesevisning } from '../../utils/avklarLesevisning';
@@ -46,7 +46,7 @@ export const Saksopplysning = ({
     <>
       <Table.Row key={vilkår}>
         <Table.DataCell>
-          <UtfallIcon utfall={utfall} />
+          <UtfallIkon utfall={utfall} />
         </Table.DataCell>
         <Table.DataCell>
           <BodyShort>{vilkårFlateTittel}</BodyShort>

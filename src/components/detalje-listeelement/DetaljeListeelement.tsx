@@ -1,17 +1,17 @@
-import { BodyShort, Detail, Label } from '@navikt/ds-react';
+import { BodyShort, Label } from '@navikt/ds-react';
 import React from 'react';
 
-interface LabelWithIconAndDiscriptionProps {
+interface DetaljeListeelementProps {
   iconRenderer: () => React.ReactNode;
   label: string;
   discription: string;
 }
 
-export const IconWithLabelAndDetails = ({
+export const DetaljeListeelement = ({
   iconRenderer,
   label,
   discription,
-}: LabelWithIconAndDiscriptionProps) => {
+}: DetaljeListeelementProps) => {
   return (
     <div style={{ margin: '1rem' }}>
       <span style={{ display: 'flex', alignItems: 'center' }}>
@@ -27,4 +27,4 @@ export const IconWithLabelAndDetails = ({
   );
 };
 
-export default IconWithLabelAndDetails;
+export default DetaljeListeelement;

@@ -5,7 +5,7 @@ import {
   CheckmarkCircleFillIcon,
 } from '@navikt/aksel-icons';
 import TiltaksstatusType from '../../types/Tiltaksstatus';
-import IconWithText from '../icon-with-text/IconWithText';
+import IkonMedTekst from '../ikon-med-tekst/IkonMedTekst';
 
 interface TiltaksstatusProps {
   tiltaksstatus: TiltaksstatusType;
@@ -62,7 +62,7 @@ const iconRenderer = (tiltaksstatus: TiltaksstatusType) => {
 
 const Tiltaksstatus = ({ tiltaksstatus }: TiltaksstatusProps) => {
   return (
-    <IconWithText
+    <IkonMedTekst
       iconRenderer={() => iconRenderer(tiltaksstatus)}
       text={
         ` Status:
