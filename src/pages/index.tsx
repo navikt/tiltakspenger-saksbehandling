@@ -7,8 +7,10 @@ import { fetcher, FetcherError } from '../utils/http';
 import { Button, Link, Table } from '@navikt/ds-react';
 import { SaksbehandlerContext } from './_app';
 import { BehandlingForBenk } from '../types/Behandling';
+import { useRouter } from 'next/router';
 
 const HomePage: NextPage = () => {
+  const router = useRouter();
   const [behandlinger, setBehandlinger] = useState<BehandlingForBenk[]>([]);
   const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
   const mutator = useSWRConfig().mutate;
@@ -34,7 +36,9 @@ const HomePage: NextPage = () => {
       mutator(`/api/behandlinger`).then(() => {
         toast('Behandling tatt');
       });
-    });
+    }).then (() => {
+      router.push(`/behandling/${behandlingid}`);
+    })
   };
 
   const skalKunneTaBehandling = (
