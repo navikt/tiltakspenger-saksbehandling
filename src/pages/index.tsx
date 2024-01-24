@@ -1,39 +1,17 @@
-import React, { FormEvent, useContext, useState } from 'react';
-import type { NextPage } from 'next';
+import React, { useContext } from 'react';
 import { pageWithAuthentication } from '../utils/pageWithAuthentication';
-import toast from 'react-hot-toast';
-import useSWR, { useSWRConfig } from 'swr';
-import { fetcher, FetcherError } from '../utils/http';
-import { Button, Link, Table } from '@navikt/ds-react';
+import { Button, Link, Loader, Table } from '@navikt/ds-react';
 import { SaksbehandlerContext } from './_app';
-import { BehandlingForBenk } from '../types/Behandling';
+import { useHentBehandlinger } from '../hooks/useHentBehandlinger';
+import { NextPage } from 'next';
 
-const HomePage: NextPage = () => {
-  const [behandlinger, setBehandlinger] = useState<BehandlingForBenk[]>([]);
+const Benken: NextPage = () => {
   const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
-  const mutator = useSWRConfig().mutate;
-  const { data, isLoading } = useSWR<BehandlingForBenk[]>(
-    `/api/behandlinger`,
-    fetcher,
-    {
-      shouldRetryOnError: false,
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-      onSuccess: (data) => {
-        setBehandlinger(data);
-      },
-      onError: (error: FetcherError) =>
-        toast.error(`[${error.status}]: ${error.info}`),
-    }
-  );
+  const { behandlinger, isLoading } = useHentBehandlinger();
 
   const taBehandling = async (behandlingid: string) => {
-    const res = fetch(`/api/behandling/startbehandling/${behandlingid}`, {
+    fetch(`/api/behandling/startbehandling/${behandlingid}`, {
       method: 'POST',
-    }).then(() => {
-      mutator(`/api/behandlinger`).then(() => {
-        toast('Behandling tatt');
-      });
     });
   };
 
@@ -69,6 +47,10 @@ const HomePage: NextPage = () => {
       innloggetSaksbehandler?.roller.includes('ADMINISTRATOR')
     );
   };
+
+  if (isLoading || !behandlinger) {
+    return <Loader />;
+  }
 
   return (
     <div style={{ paddingLeft: '1rem' }}>
@@ -130,6 +112,6 @@ const HomePage: NextPage = () => {
   );
 };
 
-export default HomePage;
+export default Benken;
 
 export const getServerSideProps = pageWithAuthentication();

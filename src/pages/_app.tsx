@@ -1,13 +1,21 @@
 import '@navikt/ds-css';
-import React, { Dispatch, useState, SetStateAction, useEffect } from 'react';
+import React, {
+  Dispatch,
+  useState,
+  SetStateAction,
+  useEffect,
+  ReactElement,
+  ReactNode,
+} from 'react';
 import { AppProps } from 'next/app';
 import { createContext } from 'react';
 import Head from 'next/head';
-import { PageLayout } from '../layouts/page/PageLayout';
-import CustomToaster from '../components/toaster/Toaster';
 import { Saksbehandler } from '../types/Saksbehandler';
-import useSaksbehandler from '../core/useSaksbehandler';
-import Loaders from '../components/loaders/Loaders';
+import useSaksbehandler from '../hooks/useSaksbehandler';
+import { HovedLayout } from '../components/layout/HovedLayout';
+import { Loader } from '@navikt/ds-react';
+import { NextPage } from 'next';
+import { Behandling } from '../types/Behandling';
 
 interface SaksbehandlerContextType {
   innloggetSaksbehandler: Saksbehandler;
@@ -15,15 +23,26 @@ interface SaksbehandlerContextType {
     SetStateAction<undefined | Saksbehandler>
   >;
 }
+// Dette trenger vi for å løse nøstede layouts så alle sidene får
+// personalia header og tabsene uten å måtte rendre de på nytt.
+export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+  getLayout?: (page: ReactElement) => ReactNode;
+};
+
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout;
+};
+
 export const SaksbehandlerContext = createContext<
   Partial<SaksbehandlerContextType>
 >({});
 
-export default function MyApp({ Component, pageProps }: AppProps) {
+export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const [innloggetSaksbehandler, setInnloggetSaksbehandler] = useState<
     Saksbehandler | undefined
   >();
   const { saksbehandler, isSaksbehandlerLoading } = useSaksbehandler();
+  const getLayout = Component.getLayout ?? ((page) => page);
 
   useEffect(() => {
     setInnloggetSaksbehandler!(saksbehandler);
@@ -38,14 +57,11 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         value={{ innloggetSaksbehandler, setInnloggetSaksbehandler }}
       >
         {isSaksbehandlerLoading ? (
-          <Loaders.Page />
+          <Loader />
         ) : (
-          <PageLayout>
-            <Component {...pageProps} />
-          </PageLayout>
+          <HovedLayout>{getLayout(<Component {...pageProps} />)}</HovedLayout>
         )}
       </SaksbehandlerContext.Provider>
-      <CustomToaster />
     </>
   );
 }
