@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
 import { NextPage } from 'next';
 import { pageWithAuthentication } from '../../utils/pageWithAuthentication';
-import { Link, Table } from '@navikt/ds-react';
+import {Button, Link, Table} from '@navikt/ds-react';
 import { SaksbehandlerContext } from "../_app";
 import { useRouter } from "next/router";
-import useSWR from "swr";
+import useSWR, {useSWRConfig} from "swr";
 import { fetcher, FetcherError } from "../../utils/http";
 import toast from "react-hot-toast";
 import Loaders from "../../components/loaders/Loaders";
@@ -14,7 +14,7 @@ import { BehandlingForBenk } from "../../types/Behandling";
 const SøkerPage: NextPage = () => {
     const router = useRouter();
     const [søkerId] = router.query.all as string[];
-
+    const mutator = useSWRConfig().mutate;
     const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
 
     const { data, isLoading } = useSWR<BehandlingForBenk[]>(`/api/behandlinger/hentForIdent/${søkerId}`, fetcher, {
@@ -30,6 +30,40 @@ const SøkerPage: NextPage = () => {
     if (isLoading) {
         return <Loaders.Page />;
     }
+
+    const taBehandling = async (behandlingid: string) => {
+        const res = fetch(`/api/behandling/startbehandling/${behandlingid}`, {
+            method: 'POST',
+        }).then(() => {
+            mutator(`/api/behandlinger`).then(() => {
+                toast('Behandling tatt');
+            });
+        }).then (() => {
+            router.push(`/behandling/${behandlingid}`);
+        })
+    };
+
+    const skalKunneTaBehandling = (
+        type: string,
+        saksbehandlerForBehandling?: string,
+        beslutterForBehandling?: string
+    ) => {
+        switch (type) {
+            case 'Klar til beslutning':
+                return (
+                    innloggetSaksbehandler?.roller.includes('BESLUTTER') &&
+                    !beslutterForBehandling &&
+                    innloggetSaksbehandler?.navIdent != saksbehandlerForBehandling
+                );
+            case 'Klar til behandling':
+                return (
+                    innloggetSaksbehandler?.roller.includes('SAKSBEHANDLER') &&
+                    !saksbehandlerForBehandling
+                );
+            default:
+                return false;
+        }
+    };
 
     const behandlingerForIdent = data;
 
@@ -47,6 +81,7 @@ const SøkerPage: NextPage = () => {
                         <Table.HeaderCell scope="col">Status</Table.HeaderCell>
                         <Table.HeaderCell scope="col">Saksbehandler</Table.HeaderCell>
                         <Table.HeaderCell scope="col">Beslutter</Table.HeaderCell>
+                        <Table.HeaderCell scope="col"></Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
@@ -60,6 +95,22 @@ const SøkerPage: NextPage = () => {
                                 <Table.DataCell>{behandling.status}</Table.DataCell>
                                 <Table.DataCell>{behandling.saksbehandler}</Table.DataCell>
                                 <Table.DataCell>{behandling.beslutter}</Table.DataCell>
+                                <Table.DataCell>
+                                    <Button
+                                        size="small"
+                                        variant="primary"
+                                        onClick={() => taBehandling(behandling.id)}
+                                        disabled={
+                                            !skalKunneTaBehandling(
+                                                behandling.status,
+                                                behandling.saksbehandler,
+                                                behandling.beslutter
+                                            )
+                                        }
+                                    >
+                                        Ta behandling
+                                    </Button>
+                                </Table.DataCell>
                             </Table.Row>
                         );
                     })}
