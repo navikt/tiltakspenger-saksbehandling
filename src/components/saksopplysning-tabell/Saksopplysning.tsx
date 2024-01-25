@@ -66,7 +66,7 @@ export const Saksopplysning = ({
           <BodyShort>{detaljer ? detaljer : '-'}</BodyShort>
         </Table.DataCell>
         <Table.DataCell>
-          {
+          {lesevisning.kanEndre && (
             <Button
               onClick={() => onÅpneRedigering(!åpneRedigering)}
               variant="tertiary"
@@ -74,10 +74,10 @@ export const Saksopplysning = ({
               icon={<PencilIcon />}
               aria-label="hidden"
             />
-          }
+          )}
         </Table.DataCell>
       </Table.Row>
-      {åpneRedigering && (
+      {åpneRedigering && lesevisning.kanEndre && (
         <Table.Row>
           <Table.DataCell colSpan={7} style={{ padding: '0' }}>
             <RedigeringSkjema

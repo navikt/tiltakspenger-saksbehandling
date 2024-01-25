@@ -1,16 +1,27 @@
 import React from 'react';
-import { Tag } from '@navikt/ds-react';
+import { Button, Tag } from '@navikt/ds-react';
 import { PersonCircleIcon } from '@navikt/aksel-icons';
 import styles from './PersonaliaHeader.module.css';
-import { Personopplysninger } from '../../types/Behandling';
+import { Behandling } from '../../types/Behandling';
+import { Lesevisning } from '../../utils/avklarLesevisning';
+import router from 'next/router';
 
 interface PersonaliaHeaderProps {
-  personopplysninger: Personopplysninger;
+  valgtBehandling: Behandling;
 }
 
-const PersonaliaHeader = ({ personopplysninger }: PersonaliaHeaderProps) => {
+const PersonaliaHeader = ({ valgtBehandling }: PersonaliaHeaderProps) => {
   const { fornavn, etternavn, ident, skjerming, strengtFortrolig, fortrolig } =
-    personopplysninger;
+    valgtBehandling.personopplysninger;
+
+  const håndterAvbrytBehandling = () => {
+    fetch(`/api/behandling/avbrytbehandling/${valgtBehandling.behandlingId}`, {
+      method: 'POST',
+    }).then(() => {
+      router.push('/');
+    });
+  };
+
   return (
     <div className={styles.personaliaHeader}>
       <PersonCircleIcon className={styles.personIcon} />
@@ -35,8 +46,19 @@ const PersonaliaHeader = ({ personopplysninger }: PersonaliaHeaderProps) => {
           Søker er skjermet
         </Tag>
       )}
+      <Button
+        type="submit"
+        size="small"
+        onClick={() => håndterAvbrytBehandling()}
+        className={styles.behandlingTag}
+      >
+        Avbryt behandling{' '}
+      </Button>
       <Tag variant="info-filled" size="medium" className={styles.behandlingTag}>
         Førstegangsbehandling
+      </Tag>
+      <Tag variant="alt1" className={styles.behandlingTag}>
+        {valgtBehandling.status}
       </Tag>
     </div>
   );

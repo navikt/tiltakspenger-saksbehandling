@@ -109,10 +109,7 @@ export const RedigeringSkjema = ({
   return (
     <FormProvider {...formMethods}>
       <form
-        onSubmit={formMethods.handleSubmit(
-          håndterLagreSaksopplysning,
-          (errors) => console.log(errors)
-        )}
+        onSubmit={formMethods.handleSubmit(håndterLagreSaksopplysning)}
         style={{
           background: '#F2F3F5',
           width: '100%',

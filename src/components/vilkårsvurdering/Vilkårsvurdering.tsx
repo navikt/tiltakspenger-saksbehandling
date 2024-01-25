@@ -4,6 +4,8 @@ import { UtfallIkon } from '../utfall-ikon/UtfallIkon';
 import { samletUtfall } from '../../utils/samletUtfall';
 import { Behandling } from '../../types/Behandling';
 import { Lesevisning } from '../../utils/avklarLesevisning';
+import { BehandlingKnapper } from '../behandling-knapper/BehandlingKnapper';
+import { useRef } from 'react';
 
 interface VilkårsvurderingProps {
   utfall: samletUtfall;
@@ -16,6 +18,8 @@ export const Vilkårsvurdering = ({
   valgtBehandling,
   lesevisning,
 }: VilkårsvurderingProps) => {
+  const modalRef = useRef<HTMLDialogElement>(null);
+
   return (
     <VStack gap="5" style={{ padding: '1em' }}>
       <Alert variant={utfall.variant}>
@@ -57,6 +61,12 @@ export const Vilkårsvurdering = ({
           })}
         </VStack>
       </Accordion>
+      <BehandlingKnapper
+        behandlingid={valgtBehandling.behandlingId}
+        status={valgtBehandling.status}
+        lesevisning={lesevisning}
+        modalRef={modalRef}
+      />
     </VStack>
   );
 };

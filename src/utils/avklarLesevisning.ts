@@ -25,7 +25,6 @@ export const avklarLesevisning = (
   const kanBeslutte =
     innloggetSaksbehandler.navIdent === beslutterPåSaken &&
     innloggetSaksbehandler.roller.includes('BESLUTTER');
-  console.log('Roller: ' + innloggetSaksbehandler.roller);
   return {
     kanEndre:
       redigerbarTilstand &&

@@ -1,13 +1,13 @@
 import { fetcher } from '../utils/http';
-import toast from 'react-hot-toast';
 import { Saksbehandler } from '../types/Saksbehandler';
 import useSWRImmutable from 'swr/immutable';
 
 export default function useSaksbehandler() {
-  const { data: saksbehandler, isLoading: isSaksbehandlerLoading } =
-    useSWRImmutable<Saksbehandler>('/api/saksbehandler', fetcher, {
-      onError: (error) => toast.error(`[${error.status}]: ${error.info}`),
-    });
+  const {
+    data: saksbehandler,
+    isLoading: isSaksbehandlerLoading,
+    error,
+  } = useSWRImmutable<Saksbehandler>('/api/saksbehandler', fetcher);
 
-  return { saksbehandler, isSaksbehandlerLoading };
+  return { saksbehandler, isSaksbehandlerLoading, error };
 }

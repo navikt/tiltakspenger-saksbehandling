@@ -1,18 +1,27 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { pageWithAuthentication } from '../utils/pageWithAuthentication';
 import { Button, Link, Loader, Table } from '@navikt/ds-react';
 import { SaksbehandlerContext } from './_app';
 import { useHentBehandlinger } from '../hooks/useHentBehandlinger';
 import { NextPage } from 'next';
+import router from 'next/router';
+import { useSWRConfig } from 'swr';
 
 const Benken: NextPage = () => {
+  const mutator = useSWRConfig().mutate;
   const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
   const { behandlinger, isLoading } = useHentBehandlinger();
 
   const taBehandling = async (behandlingid: string) => {
     fetch(`/api/behandling/startbehandling/${behandlingid}`, {
       method: 'POST',
-    });
+    })
+      .then(() => {
+        mutator(`/api/behandlinger`);
+      })
+      .then(() => {
+        router.push(`/behandling/${behandlingid}`);
+      });
   };
 
   const skalKunneTaBehandling = (
