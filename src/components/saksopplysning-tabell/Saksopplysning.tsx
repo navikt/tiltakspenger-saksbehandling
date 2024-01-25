@@ -4,7 +4,7 @@ import { RedigeringSkjema } from './RedigeringSkjema';
 import { useState } from 'react';
 import { Lesevisning } from '../../utils/avklarLesevisning';
 import { formatPeriode } from '../../utils/date';
-import { UtfallIkon } from '../utfallIkon/UtfallIkon';
+import { UtfallIkon } from '../utfall-ikon/UtfallIkon';
 
 interface SaksopplysningProps {
   vilkår: string;
@@ -66,7 +66,7 @@ export const Saksopplysning = ({
           <BodyShort>{detaljer ? detaljer : '-'}</BodyShort>
         </Table.DataCell>
         <Table.DataCell>
-          {lesevisning.kanEndre && (
+          {
             <Button
               onClick={() => onÅpneRedigering(!åpneRedigering)}
               variant="tertiary"
@@ -74,10 +74,10 @@ export const Saksopplysning = ({
               icon={<PencilIcon />}
               aria-label="hidden"
             />
-          )}
+          }
         </Table.DataCell>
       </Table.Row>
-      {åpneRedigering && lesevisning.kanEndre && (
+      {åpneRedigering && (
         <Table.Row>
           <Table.DataCell colSpan={7} style={{ padding: '0' }}>
             <RedigeringSkjema

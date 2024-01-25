@@ -1,5 +1,5 @@
 import { pageWithAuthentication } from '../../../utils/pageWithAuthentication';
-import { Accordion, Alert, HStack, Loader, VStack } from '@navikt/ds-react';
+import { Loader } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import { useHentBehandling } from '../../../hooks/useHentBehandling';
 import { BehandlingLayout } from '../../../components/layout/BehandlingLayout';
@@ -7,9 +7,10 @@ import { SaksbehandlingLayout } from '../../../components/layout/SaksbehandlingL
 import { ReactElement, useContext } from 'react';
 import { NextPageWithLayout, SaksbehandlerContext } from '../../_app';
 import { avklarLesevisning } from '../../../utils/avklarLesevisning';
-import { SaksopplysningTabell } from '../../../components/saksopplysning-tabell/SaksopplysningTabell';
-import { UtfallIkon } from '../../../components/utfallIkon/UtfallIkon';
 import { samletUtfall } from '../../../utils/samletUtfall';
+import { Vilkårsvurdering } from '../../../components/vilkårsvurdering/Vilkårsvurdering';
+import SøknadOppsummering from '../../../components/søknad-oppsummering/SøknadOppsummering';
+import { Saksdialog } from '../../../components/saksdialog/Saksdialog';
 
 const Behandling: NextPageWithLayout = () => {
   const router = useRouter();
@@ -32,53 +33,19 @@ const Behandling: NextPageWithLayout = () => {
     valgtBehandling.tilstand,
     girInnvilget
   );
-  const utfall = samletUtfall(valgtBehandling?.saksopplysninger);
 
   return (
     <>
-      <p>venstre kolonne</p>
-      <VStack>
-        <Alert variant={utfall.variant} style={{ marginBottom: '1em' }}>
-          <strong>{utfall.tekst}</strong>
-          {utfall && (
-            <>
-              <br />
-              {utfall.altTekst}
-            </>
-          )}
-        </Alert>
-        <Accordion indent={false}>
-          <VStack>
-            {valgtBehandling.saksopplysninger.map((kategori) => {
-              return (
-                <Accordion.Item
-                  key={kategori.kategoriTittel}
-                  style={{ background: '#FFFFFF' }}
-                >
-                  <Accordion.Header>
-                    <HStack align={'center'} gap={'2'}>
-                      <UtfallIkon utfall={kategori.samletUtfall} />
-                      {kategori.kategoriTittel}
-                    </HStack>
-                  </Accordion.Header>
-                  <Accordion.Content>
-                    <SaksopplysningTabell
-                      saksopplysninger={kategori.saksopplysninger}
-                      behandlingId={behandlingId}
-                      behandlingsperiode={{
-                        fom: valgtBehandling.fom,
-                        tom: valgtBehandling.tom,
-                      }}
-                      lesevisning={lesevisning}
-                    />
-                  </Accordion.Content>
-                </Accordion.Item>
-              );
-            })}
-          </VStack>
-        </Accordion>
-      </VStack>
-      <p>høyre kolonne</p>
+      <SøknadOppsummering
+        søknad={valgtBehandling.søknad}
+        registrerteTiltak={valgtBehandling.registrerteTiltak}
+      />
+      <Vilkårsvurdering
+        utfall={samletUtfall(valgtBehandling?.saksopplysninger)}
+        valgtBehandling={valgtBehandling}
+        lesevisning={lesevisning}
+      />
+      <Saksdialog endringslogg={valgtBehandling.endringslogg} />
     </>
   );
 };

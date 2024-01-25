@@ -1,12 +1,12 @@
 import { Kategori } from '../types/Behandling';
 
-interface Utfall {
+export interface samletUtfall {
   variant: 'success' | 'error' | 'warning';
   tekst: string;
   altTekst?: string;
 }
 
-export const samletUtfall = (sakskategorier: Kategori[]): Utfall => {
+export const samletUtfall = (sakskategorier: Kategori[]): samletUtfall => {
   if (
     !!sakskategorier.find(
       (kategori) => kategori.samletUtfall === 'KREVER_MANUELL_VURDERING'

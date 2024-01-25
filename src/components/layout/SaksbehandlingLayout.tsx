@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
 import PersonaliaHeader from '../header/PersonaliaHeader';
-import { SaksbehandlingTabs } from '../saksbehandlingTabs/SaksbehandlingTabs';
+import { SaksbehandlingTabs } from '../saksbehandling-tabs/SaksbehandlingTabs';
 import { Loader } from '@navikt/ds-react';
 
 export const SaksbehandlingLayout = ({ children }: React.PropsWithChildren) => {
