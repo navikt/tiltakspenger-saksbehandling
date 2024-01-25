@@ -43,6 +43,7 @@ const Header = ({ onSearch, isSearchLoading }: HeaderProps) => {
               }}
               value={search}
               autoComplete="off"
+              htmlSize="21"
             >
               <Search.Button loading={isSearchLoading} />
             </Search>
