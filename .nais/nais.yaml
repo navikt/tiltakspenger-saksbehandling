@@ -31,8 +31,6 @@ spec:
     sidecar:
       enabled: true
       autoLogin: true
-      openid.provider: "azure"
-      errorPath: ""
     application:
       enabled: true
       tenant: {{ tenant }}

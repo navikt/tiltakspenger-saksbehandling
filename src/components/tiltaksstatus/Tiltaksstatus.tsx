@@ -63,6 +63,10 @@ const iconRenderer = (tiltaksstatus: TiltaksstatusType) => {
 const Tiltaksstatus = ({ tiltaksstatus }: TiltaksstatusProps) => {
   return (
     <IkonMedTekst
+<<<<<<< HEAD
+=======
+      iconRenderer={() => iconRenderer(tiltaksstatus)}
+>>>>>>> main
       text={
         ` Status:
       ${

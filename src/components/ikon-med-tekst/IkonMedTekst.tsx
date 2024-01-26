@@ -9,7 +9,7 @@ interface IkonMedTekstProps {
 }
 
 const IkonMedTekst = ({ className, iconRenderer, text }: IkonMedTekstProps) => (
-  <HStack className={className} align="center" gap="3">
+  <HStack className={className} align="center" gap="3" wrap={false}>
     <HStack className={styles.ikonMedTekst__icon}>{iconRenderer()}</HStack>
     <BodyShort>{text}</BodyShort>
   </HStack>

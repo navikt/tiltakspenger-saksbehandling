@@ -50,7 +50,7 @@ export const BehandlingKnapper = ({
   };
 
   return (
-    <HStack justify="end" gap="3" align="end">
+    <HStack justify="start" gap="3" align="end">
       {lesevisning.knappSendTilbake && (
         <Button
           type="submit"

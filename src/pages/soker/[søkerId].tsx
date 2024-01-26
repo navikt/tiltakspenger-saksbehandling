@@ -1,17 +1,28 @@
-import React, { useContext, useEffect } from 'react';
-import { pageWithAuthentication } from '../utils/pageWithAuthentication';
-import { Button, Link, Loader, Table } from '@navikt/ds-react';
-import { SaksbehandlerContext } from './_app';
-import { useHentBehandlinger } from '../hooks/useHentBehandlinger';
+import React, { useContext } from 'react';
 import { NextPage } from 'next';
+import { pageWithAuthentication } from '../../utils/pageWithAuthentication';
+import { Button, Link, Loader, Table } from '@navikt/ds-react';
+import { SaksbehandlerContext } from '../_app';
 import { useRouter } from 'next/router';
-import { useSWRConfig } from 'swr';
+import useSWR, { useSWRConfig } from 'swr';
+import { fetcher } from '../../utils/http';
+import { BehandlingForBenk } from '../../types/Behandling';
 
-const Benken: NextPage = () => {
+const SøkerPage: NextPage = () => {
   const router = useRouter();
+  const søkerId = router.query.søkerId as string;
   const mutator = useSWRConfig().mutate;
   const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
-  const { behandlinger, isLoading } = useHentBehandlinger();
+
+  const { data, isLoading } = useSWR<BehandlingForBenk[]>(
+    `/api/behandlinger/hentForIdent/${søkerId}`,
+    fetcher,
+    {}
+  );
+
+  if (isLoading) {
+    return <Loader />;
+  }
 
   const taBehandling = async (behandlingid: string) => {
     fetch(`/api/behandling/startbehandling/${behandlingid}`, {
@@ -47,6 +58,8 @@ const Benken: NextPage = () => {
     }
   };
 
+  const behandlingerForIdent = data;
+
   const behandlingLinkAktivert = (
     saksbehandlerForBehandling?: string,
     beslutterForBehandling?: string
@@ -57,17 +70,11 @@ const Benken: NextPage = () => {
       innloggetSaksbehandler?.roller.includes('ADMINISTRATOR')
     );
   };
-
-  if (isLoading || !behandlinger) {
-    return <Loader />;
-  }
-
   return (
     <div style={{ paddingLeft: '1rem' }}>
       <Table zebraStripes>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell scope="col">Ident</Table.HeaderCell>
             <Table.HeaderCell scope="col">Type</Table.HeaderCell>
             <Table.HeaderCell scope="col">Periode</Table.HeaderCell>
             <Table.HeaderCell scope="col">Status</Table.HeaderCell>
@@ -77,10 +84,9 @@ const Benken: NextPage = () => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {behandlinger.map((behandling) => {
+          {behandlingerForIdent?.map((behandling) => {
             return (
               <Table.Row shadeOnHover={false} key={behandling.id}>
-                <Table.DataCell>{behandling.ident}</Table.DataCell>
                 <Table.DataCell>
                   {behandlingLinkAktivert(
                     behandling.saksbehandler,
@@ -122,6 +128,6 @@ const Benken: NextPage = () => {
   );
 };
 
-export default Benken;
+export default SøkerPage;
 
 export const getServerSideProps = pageWithAuthentication();

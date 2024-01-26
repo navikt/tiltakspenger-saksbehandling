@@ -35,35 +35,20 @@ const SøknadDetaljer = ({
         </Heading>
         <div className={styles.søknadDetaljer}>
           <BodyShort size="small">
-            <IkonMedTekst
-              text={`Søknadsdato: ${formatDate(søknadsdato)}`}
-              iconRenderer={() => <FileTextIcon />}
-            />
+            Søknadsdato: ${formatDate(søknadsdato)}
           </BodyShort>
+
           {deltakelseFom && (
             <BodyShort size="small">
-              <IkonMedTekst
-                text={`${formatDate(deltakelseFom)}${
-                  !!deltakelseTom ? ` - ${formatDate(deltakelseTom)}` : ''
-                }`}
-                iconRenderer={() => <CalendarIcon />}
-              />
+              {`${formatDate(deltakelseFom)}${
+                !!deltakelseTom ? ` - ${formatDate(deltakelseTom)}` : ''
+              }`}
             </BodyShort>
           )}
           <BodyShort size="small">
-            <IkonMedTekst
-              text={`${tiltakstype} - ${
-                arrangoernavn ? ` - ${arrangoernavn}` : ''
-              }`}
-              iconRenderer={() => <Buldings3Icon />}
-            />
+            {`${tiltakstype} - ${arrangoernavn ? ` - ${arrangoernavn}` : ''}`}
           </BodyShort>
-          <BodyShort size="small">
-            <IkonMedTekst
-              text={`x dager i uken `}
-              iconRenderer={() => <ArrowsSquarepathIcon />}
-            />
-          </BodyShort>
+          <BodyShort size="small">x dager i uken</BodyShort>
         </div>
       </div>
     </>
