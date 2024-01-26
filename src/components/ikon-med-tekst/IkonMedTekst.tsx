@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './IkonMedTekst.module.css';
+import { BodyShort, HStack } from '@navikt/ds-react';
 
 interface IkonMedTekstProps {
   iconRenderer: () => React.ReactNode;
@@ -8,10 +9,10 @@ interface IkonMedTekstProps {
 }
 
 const IkonMedTekst = ({ className, iconRenderer, text }: IkonMedTekstProps) => (
-  <span className={className}>
-    <div className={styles.ikonMedTekst__ikon}>{iconRenderer()}</div>
-    <span className={styles.ikonMedTekst__tekst}>{text}</span>
-  </span>
+  <HStack className={className} align="center" gap="3">
+    <HStack className={styles.ikonMedTekst__icon}>{iconRenderer()}</HStack>
+    <BodyShort>{text}</BodyShort>
+  </HStack>
 );
 
 export default IkonMedTekst;

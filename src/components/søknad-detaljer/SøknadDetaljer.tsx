@@ -36,32 +36,32 @@ const SøknadDetaljer = ({
         <div className={styles.søknadDetaljer}>
           <BodyShort size="small">
             <IkonMedTekst
-              iconRenderer={() => <FileTextIcon />}
               text={`Søknadsdato: ${formatDate(søknadsdato)}`}
+              iconRenderer={() => <FileTextIcon />}
             />
           </BodyShort>
           {deltakelseFom && (
             <BodyShort size="small">
               <IkonMedTekst
-                iconRenderer={() => <CalendarIcon />}
                 text={`${formatDate(deltakelseFom)}${
                   !!deltakelseTom ? ` - ${formatDate(deltakelseTom)}` : ''
                 }`}
+                iconRenderer={() => <CalendarIcon />}
               />
             </BodyShort>
           )}
           <BodyShort size="small">
             <IkonMedTekst
-              iconRenderer={() => <Buldings3Icon />}
               text={`${tiltakstype} - ${
                 arrangoernavn ? ` - ${arrangoernavn}` : ''
               }`}
+              iconRenderer={() => <Buldings3Icon />}
             />
           </BodyShort>
           <BodyShort size="small">
             <IkonMedTekst
-              iconRenderer={() => <ArrowsSquarepathIcon />}
               text={`x dager i uken `}
+              iconRenderer={() => <ArrowsSquarepathIcon />}
             />
           </BodyShort>
         </div>

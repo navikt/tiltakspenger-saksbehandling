@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router';
 import { SaksbehandlingLayout } from '../../../../components/layout/SaksbehandlingLayout';
 import { BehandlingLayout } from '../../../../components/layout/BehandlingLayout';
 import { ReactElement } from 'react';

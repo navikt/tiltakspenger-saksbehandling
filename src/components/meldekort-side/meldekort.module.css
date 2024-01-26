@@ -1,0 +1,19 @@
+.ukevisning {
+  display: flex;
+  width: 100%;
+}
+
+.disableUkevisning {
+  display: flex;
+  margin: 1rem;
+  pointer-events: none;
+  opacity: 0.2;
+  width: 100%;
+}
+
+.MeldekortUke {
+  background-color: rgba(247, 247, 247, 1);
+  width: 47%;
+  padding: 1em;
+}
+

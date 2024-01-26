@@ -7,7 +7,6 @@ import {
   HStack,
 } from '@navikt/ds-react';
 import { useSWRConfig } from 'swr';
-import toast from 'react-hot-toast';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import PeriodeSkjema from './PeriodeSkjema';
 import dayjs from 'dayjs';
@@ -86,7 +85,7 @@ export const RedigeringSkjema = ({
   const håndterLagreSaksopplysning = () => {
     håndterLukkRedigering();
     const skjemaFelter = formMethods.getValues();
-    const res = fetch(`/api/behandling/${behandlingId}`, {
+    fetch(`/api/behandling/${behandlingId}`, {
       method: 'POST',
       body: JSON.stringify({
         fom: harYtelse
@@ -100,9 +99,7 @@ export const RedigeringSkjema = ({
         harYtelse: skjemaFelter.harYtelse,
       }),
     }).then(() => {
-      mutator(`/api/behandling/${behandlingId}`).then(() => {
-        toast('Saksopplysning endret');
-      });
+      mutator(`/api/behandling/${behandlingId}`);
     });
   };
 

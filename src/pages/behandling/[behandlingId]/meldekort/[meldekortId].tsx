@@ -3,9 +3,21 @@ import { SaksbehandlingLayout } from '../../../../components/layout/Saksbehandli
 import { BehandlingLayout } from '../../../../components/layout/BehandlingLayout';
 import { ReactElement } from 'react';
 import { NextPageWithLayout } from '../../../_app';
+import { MeldekortMeny } from '../../../../components/meldekort-meny/MeldekortMeny';
+import { MeldekortSide } from '../../../../components/meldekort-side/MeldekortSide';
+import { MeldekortDetaljer } from '../../../../components/meldekort-detaljer/meldekort-detaljer';
 
 const Meldekort: NextPageWithLayout = () => {
-  return <p>hei hei Meldekort</p>;
+  const router = useRouter();
+  const behandlingId = router.query.behandlingId as string;
+
+  return (
+    <>
+      <MeldekortMeny behandlingId={behandlingId} />
+      <MeldekortSide />
+      <MeldekortDetaljer />
+    </>
+  );
 };
 
 Meldekort.getLayout = function getLayout(page: ReactElement) {

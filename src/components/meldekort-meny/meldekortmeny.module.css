@@ -1,0 +1,10 @@
+.meldekortListeHeading {
+  padding: 0.7rem;
+  border-bottom: 1px solid #cfcfcf;
+}
+
+.MeldekortListeSection {
+  border-right: 1px solid #cfcfcf;
+  grid-area: venstrekolonne;
+  min-height: calc(100vh - 7.5rem);
+}

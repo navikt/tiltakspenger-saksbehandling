@@ -63,15 +63,15 @@ const iconRenderer = (tiltaksstatus: TiltaksstatusType) => {
 const Tiltaksstatus = ({ tiltaksstatus }: TiltaksstatusProps) => {
   return (
     <IkonMedTekst
-      iconRenderer={() => iconRenderer(tiltaksstatus)}
       text={
         ` Status:
-                ${
-                  TiltaksstatusType[
-                    tiltaksstatus as unknown as keyof typeof TiltaksstatusType
-                  ]
-                } ` //TODO: Typescriptproblem
+      ${
+        TiltaksstatusType[
+          tiltaksstatus as unknown as keyof typeof TiltaksstatusType
+        ]
+      } ` //TODO: Typescriptproblem
       }
+      iconRenderer={() => iconRenderer(tiltaksstatus)}
     />
   );
 };
