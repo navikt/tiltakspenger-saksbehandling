@@ -1,5 +1,4 @@
 import Personalia from './Personalia';
-import { Behandling } from './Behandling';
 
 export interface SøkerIdent {
   ident: string;
