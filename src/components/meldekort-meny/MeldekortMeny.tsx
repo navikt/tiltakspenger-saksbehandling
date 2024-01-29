@@ -1,7 +1,7 @@
 import { CardIcon } from '@navikt/aksel-icons';
 import { Detail, Heading, Label } from '@navikt/ds-react';
 import React from 'react';
-import styles from './meldekortmeny.module.css';
+import styles from './MeldekortMeny.module.css';
 import { useHentMeldekortListe } from '../../hooks/useHentMeldekortListe';
 import { getWeekNumber, formatPeriode } from '../../utils/date';
 import { MeldekortUtenDager } from '../../types/MeldekortTypes';
@@ -19,17 +19,18 @@ export const MeldekortMeny = ({ behandlingId }: MeldekortmenyProps) => {
   const { meldekortliste } = useHentMeldekortListe(behandlingId);
 
   return (
-    <div className={styles.MeldekortListeSection}>
-      <Heading size="xsmall" level="1" className={styles.meldekortListeHeading}>
-        <IkonMedTekst text={'Meldekort'} iconRenderer={() => <CardIcon />} />
+    <div className={styles.section}>
+      <Heading size="xsmall" level="1" className={styles.heading}>
+        <IkonMedTekst
+          text={'Meldekort'}
+          iconRenderer={() => <CardIcon stroke="#22262A" />}
+          weight="semibold"
+        />
       </Heading>
-      <div style={{ margin: '0.2rem 1rem' }}>
+      <div className={styles.body}>
         {meldekortliste?.map((meldekortUtenDager: MeldekortUtenDager) => {
           return (
-            <div
-              key={meldekortUtenDager.id}
-              style={{ marginLeft: '1rem', padding: '0.3rem' }}
-            >
+            <div key={meldekortUtenDager.id} className={styles.listeelement}>
               <Label size="small">
                 {meldekortUkeNummer(
                   meldekortUtenDager.fom,

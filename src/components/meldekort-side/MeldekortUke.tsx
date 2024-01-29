@@ -11,7 +11,7 @@ import {
 } from '../../types/MeldekortTypes';
 import React from 'react';
 import { getDayOfWeek } from '../../utils/date';
-import styles from './meldekort.module.css';
+import styles from './Meldekort.module.css';
 import IkonMedTekst from '../ikon-med-tekst/IkonMedTekst';
 import { velgMeldekortdagStatus } from '../../utils/meldekort';
 

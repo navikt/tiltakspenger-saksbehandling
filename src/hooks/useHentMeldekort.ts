@@ -2,8 +2,7 @@ import useSWR from 'swr';
 import { fetcher } from '../utils/http';
 import { Meldekort } from '../types/MeldekortTypes';
 
-//TODO: Bruk vedtakId isf. behandlingId
-export function useHentMeldekortEnkelt(meldekortId: string) {
+export function useHentMeldekort(meldekortId: string) {
   const {
     data: meldekort,
     isLoading,

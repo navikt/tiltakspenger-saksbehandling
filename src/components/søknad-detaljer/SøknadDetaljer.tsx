@@ -35,7 +35,7 @@ const SøknadDetaljer = ({
         </Heading>
         <div className={styles.søknadDetaljer}>
           <BodyShort size="small">
-            Søknadsdato: ${formatDate(søknadsdato)}
+            Søknadsdato: {formatDate(søknadsdato)}
           </BodyShort>
 
           {deltakelseFom && (

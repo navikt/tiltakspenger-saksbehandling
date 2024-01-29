@@ -65,9 +65,9 @@ const RegistrertTiltakDetaljer = ({
         {prosent}%{!!dagerIUken ? ` - ${formatDagerIUken(dagerIUken)}` : ''}
       </BodyShort>
       <div style={{ marginTop: '1rem' }}></div>
+      <Tiltaksstatus tiltaksstatus={status} />
     </div>
   );
-  //<Tiltaksstatus tiltaksstatus={status} />
 };
 
 export default RegistrertTiltakDetaljer;
