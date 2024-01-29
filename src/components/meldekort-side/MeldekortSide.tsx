@@ -1,4 +1,4 @@
-import styles from './meldekort.module.css';
+import styles from './Meldekort.module.css';
 import { MeldekortUke } from '../meldekort-side/MeldekortUke';
 import { MeldekortBeregningsvisning } from '../meldekort-beregning-visning/MeldekortBeregningsVisning';
 import { HStack, Spacer, VStack } from '@navikt/ds-react';

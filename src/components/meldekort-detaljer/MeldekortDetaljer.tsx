@@ -1,4 +1,4 @@
-import styles from './detaljer.module.css';
+import styles from './Detaljer.module.css';
 import { Heading } from '@navikt/ds-react';
 import {
   BagdeIcon,

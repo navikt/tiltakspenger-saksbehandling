@@ -5,7 +5,7 @@ import { ReactElement } from 'react';
 import { NextPageWithLayout } from '../../../_app';
 import { MeldekortMeny } from '../../../../components/meldekort-meny/MeldekortMeny';
 import { MeldekortSide } from '../../../../components/meldekort-side/MeldekortSide';
-import { MeldekortDetaljer } from '../../../../components/meldekort-detaljer/meldekort-detaljer';
+import { MeldekortDetaljer } from '../../../../components/meldekort-detaljer/MeldekortDetaljer';
 
 const Meldekort: NextPageWithLayout = () => {
   const router = useRouter();
