@@ -6,6 +6,7 @@ import { Behandling } from '../../types/Behandling';
 import { Lesevisning } from '../../utils/avklarLesevisning';
 import { BehandlingKnapper } from '../behandling-knapper/BehandlingKnapper';
 import { useRef } from 'react';
+import BegrunnelseModal from '../begrunnelse-modal/BegrunnelseModal';
 
 interface VilkårsvurderingProps {
   utfall: samletUtfall;
@@ -65,6 +66,10 @@ export const Vilkårsvurdering = ({
         behandlingid={valgtBehandling.behandlingId}
         status={valgtBehandling.status}
         lesevisning={lesevisning}
+        modalRef={modalRef}
+      />
+      <BegrunnelseModal
+        behandlingid={valgtBehandling.behandlingId}
         modalRef={modalRef}
       />
     </VStack>
