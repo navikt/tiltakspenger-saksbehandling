@@ -31,24 +31,16 @@ export const MeldekortSide = () => {
         <MeldekortUke
           meldekortUke={meldekort.meldekortDager.slice(0, 7)}
           ukesnummer={1}
-          fom={1}
-          tom={7}
-          ukeNr={1}
-          handleOppdaterMeldekort={() => console.log("knapptrykk uke 1")}
+          handleOppdaterMeldekort={() => console.log('knapptrykk uke 1')}
         />
         <Spacer />
         <MeldekortUke
           meldekortUke={meldekort.meldekortDager.slice(7, 14)}
           ukesnummer={2}
-          fom={8}
-          tom={14}
-          ukeNr={2}
-          handleOppdaterMeldekort={() => console.log("knapptrykk uke 2")}
+          handleOppdaterMeldekort={() => console.log('knapptrykk uke 2')}
         />
       </HStack>
-      <MeldekortBeregningsvisning
-        meldekort={meldekort}
-      />
+      <MeldekortBeregningsvisning meldekort={meldekort} />
       <MeldekortKnapper
         håndterEndreMeldekort={() => setDisableUkeVisning(!disableUkeVisning)}
         håndterGodkjennMeldekort={godkjennMeldekort}
