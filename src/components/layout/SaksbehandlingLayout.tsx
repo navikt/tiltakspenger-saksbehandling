@@ -19,7 +19,6 @@ export const SaksbehandlingLayout = ({ children }: React.PropsWithChildren) => {
       <PersonaliaHeader valgtBehandling={valgtBehandling} />
       <SaksbehandlingTabs
         behandlingId={valgtBehandling.behandlingId}
-        meldekortId={'a6a0712b-aeea-419f-aec9-26b5f239a717'}
       />
       {children}
     </>

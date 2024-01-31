@@ -14,6 +14,8 @@ export function velgMeldekortdagStatus(status: string) {
       return MeldekortStatus.FRAVÆR_SYKT_BARN;
     case 'Fravær velferd':
       return MeldekortStatus.FRAVÆR_VELFERD;
+    case 'Ikke utfylt':
+      return MeldekortStatus.IKKE_UTFYLT;
     default:
       return MeldekortStatus.IKKE_DELTATT;
   }

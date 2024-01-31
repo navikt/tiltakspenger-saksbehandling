@@ -64,7 +64,7 @@ export const MeldekortUke = ({
         style={{ borderBottom: '1px solid #cfcfcf', paddingBottom: '0.5em' }}
       >
         <IkonMedTekst
-          text={`${getDayOfWeek(ukedag.dato)} ${ukedag.dato.getDate()}`}
+          text={`${getDayOfWeek(ukedag.dato)} ${ukedag.dato}`}
           iconRenderer={() => velgIkon(ukedag.status)}
         />
         <Select
@@ -72,11 +72,11 @@ export const MeldekortUke = ({
           id="deltattEllerFravær"
           size="small"
           hideLabel
-          defaultValue={ukedag.status}
+          value={ukedag.status}
           onChange={(e) => oppdaterMeldekort(index, e.target.value)}
         >
           {MeldekortStatusTekster.map((meldekortStatus) => (
-            <option
+            < option
               key={meldekortStatus.tekst}
               value={velgMeldekortdagStatus(meldekortStatus.tekst)}
             >
@@ -84,7 +84,7 @@ export const MeldekortUke = ({
             </option>
           ))}
         </Select>
-      </HGrid>
+      </HGrid >
     );
   });
 
