@@ -1,17 +1,21 @@
 import { BodyShort, Table } from '@navikt/ds-react';
-import { Meldekort, MeldekortDag, MeldekortStatus, MeldekortStatusTekster } from '../../types/MeldekortTypes';
+import {
+  Meldekort,
+  MeldekortDag,
+  MeldekortStatus,
+  MeldekortStatusTekster,
+} from '../../types/MeldekortTypes';
 import { velgMeldekortdagStatus } from '../../utils/meldekort';
 import { velgIkon } from '../meldekort-side/MeldekortUke';
 import { useEffect, useState } from 'react';
 
 interface MeldekortBeregningsvisningProps {
-  meldekort: Meldekort
+  meldekort: Meldekort;
 }
 
 export const MeldekortBeregningsvisning = ({
-  meldekort
+  meldekort,
 }: MeldekortBeregningsvisningProps) => {
-
   const [antallDager100prosent, setAntallDager100prosent] = useState<number>(0);
   const [antallDager75prosent, setAntallDager75prosent] = useState<number>(0);
   const [sumAntallDager100prosent, setSumAntallDager100prosent] =
@@ -20,7 +24,6 @@ export const MeldekortBeregningsvisning = ({
     useState<number>(0);
   const egenMeldingsdager = 3;
   const dagsats = 268;
-
 
   useEffect(() => {
     finnAntallDagerMedRiktigUtbetalingsprosent();
@@ -79,20 +82,19 @@ export const MeldekortBeregningsvisning = ({
     setSumAntallDager75prosent(antallDager75prosent * dagsats * 0.75);
   };
 
-  const tellinger =
-    [
-      antallDagerDeltatt,
-      antallDagerIkkeDeltatt,
-      antallDagerSyk,
-      antallDagerSyktBarn,
-      antallDagerVelferd,
-      antallDager100prosent,
-      antallDager75prosent,
-    ]
-  const sumAntallDager = [sumAntallDager75prosent, sumAntallDager100prosent]
+  const tellinger = [
+    antallDagerDeltatt,
+    antallDagerIkkeDeltatt,
+    antallDagerSyk,
+    antallDagerSyktBarn,
+    antallDagerVelferd,
+    antallDager100prosent,
+    antallDager75prosent,
+  ];
+  const sumAntallDager = [sumAntallDager75prosent, sumAntallDager100prosent];
 
   return (
-    <Table size="small" >
+    <Table size="small">
       <Table.Header>
         <Table.Row>
           <Table.ColumnHeader style={{ width: '50%' }} scope="col">
@@ -153,6 +155,6 @@ export const MeldekortBeregningsvisning = ({
           </Table.DataCell>
         </Table.Row>
       </Table.Body>
-    </Table >
+    </Table>
   );
 };

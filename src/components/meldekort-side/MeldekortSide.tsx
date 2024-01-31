@@ -9,9 +9,9 @@ import { useHentMeldekort } from '../../hooks/useHentMeldekort';
 
 export const MeldekortSide = () => {
   const [disableUkeVisning, setDisableUkeVisning] = useState<boolean>(false);
-  const router = useRouter()
-  const meldekortId = router.query.meldekortId as string
-  const { meldekort, isLoading } = useHentMeldekort(meldekortId)
+  const router = useRouter();
+  const meldekortId = router.query.meldekortId as string;
+  const { meldekort, isLoading } = useHentMeldekort(meldekortId);
 
   if (isLoading || !meldekort) {
     return <Loader />;
