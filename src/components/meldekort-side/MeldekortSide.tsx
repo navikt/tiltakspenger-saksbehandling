@@ -3,15 +3,22 @@ import { MeldekortUke } from '../meldekort-side/MeldekortUke';
 import { MeldekortBeregningsvisning } from '../meldekort-beregning-visning/MeldekortBeregningsVisning';
 import { HStack, Spacer, VStack } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
-import { MeldekortDag, MeldekortStatus } from '../../types/MeldekortTypes';
+import {
+  Meldekort,
+  MeldekortDag,
+  MeldekortStatus,
+} from '../../types/MeldekortTypes';
 import { MeldekortKnapper } from './MeldekortKnapper';
 
 interface MeldekortSideProps extends React.PropsWithChildren {
-  title?: string;
+  meldekort: Meldekort;
 }
 
-export const MeldekortSide = ({}: MeldekortSideProps) => {
+export const MeldekortSide = ({ meldekort }: MeldekortSideProps) => {
   const [disableUkeVisning, setDisableUkeVisning] = useState<boolean>(false);
+
+  console.log('meldekort:', meldekort);
+
   const meldekortUker: MeldekortDag[] = [
     {
       dato: new Date('2023-12-04'),
