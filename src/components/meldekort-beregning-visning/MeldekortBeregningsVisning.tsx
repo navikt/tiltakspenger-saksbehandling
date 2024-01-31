@@ -112,13 +112,10 @@ export const MeldekortBeregningsvisning = ({
       </Table.Header>
       <Table.Body>
         {MeldekortStatusTekster.map((meldekortStatus, i) => (
-          <Table.Row
-            key={meldekortStatus.tekst}
-            style={{ borderBottom: 'none' }}
-          >
+          <Table.Row key={meldekortStatus} style={{ borderBottom: 'none' }}>
             <Table.DataCell>
-              {velgIkon(velgMeldekortdagStatus(meldekortStatus.tekst))}
-              {meldekortStatus.tekst}
+              {velgIkon(velgMeldekortdagStatus(meldekortStatus))}
+              {meldekortStatus}
             </Table.DataCell>
             <Table.DataCell>{tellinger[i]}</Table.DataCell>
             <Table.DataCell>{i > 3 && sumAntallDager[i]}</Table.DataCell>
