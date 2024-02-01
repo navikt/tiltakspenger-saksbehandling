@@ -30,7 +30,7 @@
     "react-hook-form": "7.48.2"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/jest-dom": "^6.4.1",
     "@testing-library/react": "^14.1.2",
     "@types/node": "20.11.7",
     "@types/react": "18.2.48",
