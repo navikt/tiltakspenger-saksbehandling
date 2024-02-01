@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import { useHentMeldekort } from '../../hooks/useHentMeldekort';
 
 export const MeldekortSide = () => {
-  const [disableUkeVisning, setDisableUkeVisning] = useState<boolean>(false);
+  const [disableUkeVisning, setDisableUkeVisning] = useState<boolean>(true);
   const router = useRouter();
   const meldekortId = router.query.meldekortId as string;
   const { meldekort, isLoading } = useHentMeldekort(meldekortId);
@@ -22,11 +22,9 @@ export const MeldekortSide = () => {
   };
 
   return (
-    <VStack gap="5" style={{ margin: '1em' }}>
+    <VStack gap="5" className={styles.ukevisning}>
       <HStack
-        className={
-          disableUkeVisning ? styles.disableUkevisning : styles.ukevisning
-        }
+      className={disableUkeVisning? styles.disableUkevisning : ''}
       >
         <MeldekortUke
           meldekortUke={meldekort.meldekortDager.slice(0, 7)}

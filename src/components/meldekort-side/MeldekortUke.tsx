@@ -23,16 +23,17 @@ interface MeldekortUkeProps {
 export const velgIkon = (deltattEllerFravær: MeldekortStatus) => {
   switch (deltattEllerFravær) {
     case MeldekortStatus.Deltatt:
-      return <CheckmarkCircleFillIcon style={{ color: 'green' }} />;
+      return <CheckmarkCircleFillIcon color='green' />;
 
     case MeldekortStatus.IkkeDeltatt:
     case MeldekortStatus.Lønn:
-      return <XMarkOctagonFillIcon style={{ color: 'red' }} />;
+      return <XMarkOctagonFillIcon color='red'/>;
 
     case MeldekortStatus.FraværSyk:
     case MeldekortStatus.FraværSyktBarn:
     case MeldekortStatus.FraværVelferd:
-      return <ExclamationmarkTriangleFillIcon style={{ color: 'orange' }} />;
+    case MeldekortStatus.IkkeUtfylt:
+      return <ExclamationmarkTriangleFillIcon color='orange'/>;
   }
 };
 
@@ -42,10 +43,10 @@ export const MeldekortUke = ({
   handleOppdaterMeldekort,
 }: MeldekortUkeProps) => {
   return (
-    <VStack gap="2" className={styles.MeldekortUke}>
+    <VStack className={styles.meldekortUke}>
       <Heading
         size="small"
-        style={{ borderBottom: '1px solid #cfcfcf', paddingBottom: '0.5em' }}
+        className={styles.heading}
       >
         Uke
       </Heading>

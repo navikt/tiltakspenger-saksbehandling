@@ -8,6 +8,7 @@ import { velgMeldekortdagStatus } from '../../utils/meldekort';
 import IkonMedTekst from '../ikon-med-tekst/IkonMedTekst';
 import { velgIkon } from './MeldekortUke';
 import { useState } from 'react';
+import styles from './Meldekort.module.css';
 
 interface MeldekortUkeDagProps {
   meldekortDag: MeldekortDag;
@@ -22,7 +23,7 @@ export const MeldekortUkeDag = ({ meldekortDag }: MeldekortUkeDagProps) => {
       key={meldekortDag.dato.toString()}
       columns={2}
       align="center"
-      style={{ borderBottom: '1px solid #cfcfcf', paddingBottom: '0.5em' }}
+      className={styles.meldekortUkeDag}
     >
       <IkonMedTekst
         text={`${getDayOfWeek(meldekortDag.dato)} ${meldekortDag.dato}`}

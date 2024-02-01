@@ -3,7 +3,7 @@
   border-right: 1px solid #cfcfcf;
   grid-area: venstrekolonne;
   min-height: calc(100vh - 7.5rem);
-  margin: 0.2rem 1rem 
+  padding: 0.2rem 1rem 
 }
 .heading {
   padding: 0.7rem 0;
@@ -16,5 +16,5 @@
 
 .listeelement {
   border-bottom: 1px solid #cfcfcf;
-  padding: 0.3rem;
+  padding: 0.3rem 0;
 }
