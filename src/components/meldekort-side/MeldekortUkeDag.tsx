@@ -1,6 +1,8 @@
 import { HGrid, Select } from '@navikt/ds-react';
 import {
   MeldekortDag,
+  MeldekortDagDTO,
+  MeldekortStatus,
   MeldekortStatusTekster,
 } from '../../types/MeldekortTypes';
 import { getDayOfWeek } from '../../utils/date';
@@ -12,11 +14,26 @@ import styles from './Meldekort.module.css';
 
 interface MeldekortUkeDagProps {
   meldekortDag: MeldekortDag;
-  håndterOppdaterMeldekortdag: () => void;
+  meldekortId: string;
+  oppdaterMeldekortdag: (meldekortDagDTO: MeldekortDagDTO) => void;
 }
 
-export const MeldekortUkeDag = ({ meldekortDag }: MeldekortUkeDagProps) => {
-  const [status, setStatus] = useState<string>(meldekortDag.status.toString());
+export const MeldekortUkeDag = ({
+  meldekortId,
+  meldekortDag,
+  oppdaterMeldekortdag,
+}: MeldekortUkeDagProps) => {
+  const [status, setStatus] = useState<MeldekortStatus>(meldekortDag.status);
+
+  const håndterOppdaterMeldekortdag = (status: string) => {
+    setStatus(status as MeldekortStatus);
+    oppdaterMeldekortdag({
+      meldekortId: meldekortId,
+      tiltakId: '80cf0d70-cfa0-49f9-8b6c-1674f51577da',
+      dato: meldekortDag.dato,
+      status: status as MeldekortStatus,
+    });
+  };
 
   return (
     <HGrid
@@ -35,12 +52,12 @@ export const MeldekortUkeDag = ({ meldekortDag }: MeldekortUkeDagProps) => {
         size="small"
         hideLabel
         value={status}
-        onChange={(e) => setStatus(e.target.value)}
+        onChange={(e) => håndterOppdaterMeldekortdag(e.target.value)}
       >
         {MeldekortStatusTekster.map((meldekortStatus) => (
           <option
             key={meldekortStatus}
-            value={velgMeldekortdagStatus(meldekortStatus).toString()}
+            value={velgMeldekortdagStatus(meldekortStatus)}
           >
             {meldekortStatus}
           </option>

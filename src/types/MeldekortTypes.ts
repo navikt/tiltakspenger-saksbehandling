@@ -34,6 +34,13 @@ export type Tiltak = {
   antDagerIUken: number;
 };
 
+export type MeldekortDagDTO = {
+  meldekortId: string;
+  tiltakId: string;
+  dato: Date;
+  status: MeldekortStatus;
+}
+
 export enum MeldekortStatus {
   IkkeUtfylt = 'IKKE_UTFYLT',
   Deltatt = 'DELTATT',

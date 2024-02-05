@@ -8,7 +8,6 @@ const meldekortBackendUrl = process.env.TILTAKSPENGER_MELDEKORT_URL || '';
 
 function getUrl(req: NextApiRequest): string {
   const urlTil = req?.url;
-
   if (urlTil?.startsWith('/api/meldekort')) {
       const meldekortPath = req?.url?.replace('/api', '');
       return `${meldekortBackendUrl}${meldekortPath}`;
