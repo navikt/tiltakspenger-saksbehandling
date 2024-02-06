@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { MeldekortKnapper } from './MeldekortKnapper';
 import { useRouter } from 'next/router';
 import { useHentMeldekort } from '../../hooks/useHentMeldekort';
+import { getWeekNumber } from '../../utils/date';
 
 export const MeldekortSide = () => {
   const [disableUkeVisning, setDisableUkeVisning] = useState<boolean>(true);
@@ -14,9 +15,13 @@ export const MeldekortSide = () => {
   const meldekortId = router.query.meldekortId as string;
   const { meldekort, isLoading } = useHentMeldekort(meldekortId);
 
+  
   if (isLoading || !meldekort) {
     return <Loader />;
   }
+  
+  const uke1 = meldekort.meldekortDager.slice(0, 7)
+  const uke2 = meldekort.meldekortDager.slice(7, 14)
 
   const godkjennMeldekort = () => {
     setDisableUkeVisning(true);
@@ -28,14 +33,14 @@ export const MeldekortSide = () => {
       className={disableUkeVisning? styles.disableUkevisning : ''}
       >
         <MeldekortUke
-          meldekortUke={meldekort.meldekortDager.slice(0, 7)}
-          ukesnummer={1}
+          meldekortUke={uke1}
+          ukesnummer={getWeekNumber(uke1[0].dato)}
           meldekortId={meldekortId}
         />
         <Spacer />
         <MeldekortUke
-          meldekortUke={meldekort.meldekortDager.slice(7, 14)}
-          ukesnummer={2}
+          meldekortUke={uke2}
+          ukesnummer={getWeekNumber(uke2[1].dato)}
           meldekortId={meldekortId}
         />
       </HStack>
