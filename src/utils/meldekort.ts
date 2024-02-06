@@ -2,8 +2,6 @@ import { MeldekortStatus } from '../types/MeldekortTypes';
 
 export function velgMeldekortdagStatus(status: string) {
   switch (status) {
-    case 'Ikke utfylt':
-      return MeldekortStatus.IkkeUtfylt;
     case 'Deltatt':
       return MeldekortStatus.Deltatt;
     case 'Ikke deltatt':

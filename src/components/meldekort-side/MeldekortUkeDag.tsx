@@ -25,6 +25,7 @@ export const MeldekortUkeDag = ({
   const { mutate } = useHentMeldekort(meldekortId);
 
   const oppdaterMeldekortdag = (status: string) => {
+    if (status === '') return;
     setStatus(status as MeldekortStatus);
     fetch(`/api/meldekort/oppdaterDag`, {
       method: 'POST',
@@ -58,6 +59,7 @@ export const MeldekortUkeDag = ({
         value={status}
         onChange={(e) => oppdaterMeldekortdag(e.target.value)}
       >
+        <option value="">Ikke utfylt</option>
         {MeldekortStatusTekster.map((meldekortStatus) => (
           <option
             key={meldekortStatus}

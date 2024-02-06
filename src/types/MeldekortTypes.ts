@@ -55,7 +55,6 @@ export const MeldekortStatusTekster = [
   'Deltatt',
   'Ikke deltatt',
   'Lønn for tid i arbeid',
-  'Ikke utfylt',
   'Fravær syk',
   'Fravær sykt barn',
   'Fravær velferd',
