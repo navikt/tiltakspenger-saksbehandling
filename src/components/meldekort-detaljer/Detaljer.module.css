@@ -6,7 +6,7 @@
 
 .detaljerHeading {
   border-bottom: 1px solid #cfcfcf;
-  padding: 0.7rem;
+  padding: 0.7rem 1rem;
   display: flex;
   align-items: center;
 }

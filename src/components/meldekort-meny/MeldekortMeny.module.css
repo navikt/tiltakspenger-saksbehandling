@@ -2,16 +2,18 @@
 .section {
   border-right: 1px solid #cfcfcf;
   grid-area: venstrekolonne;
-  min-height: calc(100vh - 7.5rem);
-  padding: 0.2rem 1rem 
 }
 .heading {
-  padding: 0.7rem 0;
+  padding: 0.7rem 1rem;
   border-bottom: 1px solid #cfcfcf;
 }
 
 .tekst {
   font-weight: bold;
+}
+
+.meldekortliste {
+  padding: 1rem;
 }
 
 .listeelement {
