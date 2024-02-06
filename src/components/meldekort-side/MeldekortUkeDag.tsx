@@ -1,7 +1,6 @@
 import { HGrid, Select } from '@navikt/ds-react';
 import {
   MeldekortDag,
-  MeldekortDagDTO,
   MeldekortStatus,
   MeldekortStatusTekster,
 } from '../../types/MeldekortTypes';
@@ -11,28 +10,31 @@ import IkonMedTekst from '../ikon-med-tekst/IkonMedTekst';
 import { velgIkon } from './MeldekortUke';
 import { useState } from 'react';
 import styles from './Meldekort.module.css';
+import { useHentMeldekort } from '../../hooks/useHentMeldekort';
 
 interface MeldekortUkeDagProps {
   meldekortDag: MeldekortDag;
   meldekortId: string;
-  oppdaterMeldekortdag: (meldekortDagDTO: MeldekortDagDTO) => void;
 }
 
 export const MeldekortUkeDag = ({
   meldekortId,
   meldekortDag,
-  oppdaterMeldekortdag,
 }: MeldekortUkeDagProps) => {
   const [status, setStatus] = useState<MeldekortStatus>(meldekortDag.status);
+  const { mutate } = useHentMeldekort(meldekortId);
 
-  const håndterOppdaterMeldekortdag = (status: string) => {
+  const oppdaterMeldekortdag = (status: string) => {
     setStatus(status as MeldekortStatus);
-    oppdaterMeldekortdag({
-      meldekortId: meldekortId,
-      tiltakId: '80cf0d70-cfa0-49f9-8b6c-1674f51577da',
-      dato: meldekortDag.dato,
-      status: status as MeldekortStatus,
+    fetch(`/api/meldekort/oppdaterDag`, {
+      method: 'POST',
+      body: JSON.stringify({
+        meldekortId: meldekortId,
+        dato: meldekortDag.dato,
+        status: status as MeldekortStatus,
+      }),
     });
+    mutate();
   };
 
   return (
@@ -52,7 +54,7 @@ export const MeldekortUkeDag = ({
         size="small"
         hideLabel
         value={status}
-        onChange={(e) => håndterOppdaterMeldekortdag(e.target.value)}
+        onChange={(e) => oppdaterMeldekortdag(e.target.value)}
       >
         {MeldekortStatusTekster.map((meldekortStatus) => (
           <option

@@ -4,7 +4,7 @@ import {
   ExclamationmarkTriangleFillIcon,
   XMarkOctagonFillIcon,
 } from '@navikt/aksel-icons';
-import { MeldekortDag, MeldekortDagDTO, MeldekortStatus } from '../../types/MeldekortTypes';
+import { MeldekortDag, MeldekortStatus } from '../../types/MeldekortTypes';
 import React from 'react';
 import styles from './Meldekort.module.css';
 
@@ -14,9 +14,6 @@ interface MeldekortUkeProps {
   meldekortUke: MeldekortDag[];
   ukesnummer: number;
   meldekortId: string,
-  handleOppdaterMeldekort: (
-    meldekortDagDTO: MeldekortDagDTO
-  ) => void;
 }
 
 export const velgIkon = (deltattEllerFravær: MeldekortStatus) => {
@@ -40,7 +37,6 @@ export const MeldekortUke = ({
   meldekortUke,
   ukesnummer,
   meldekortId,
-  handleOppdaterMeldekort,
 }: MeldekortUkeProps) => {
   return (
     <VStack className={styles.meldekortUke}>
@@ -55,7 +51,6 @@ export const MeldekortUke = ({
           key={ukedag.dato.toString()}
           meldekortDag={ukedag}
           meldekortId={meldekortId}
-          oppdaterMeldekortdag={(meldekortDagDTO) => handleOppdaterMeldekort(meldekortDagDTO)}
         />
       ))}
     </VStack>
