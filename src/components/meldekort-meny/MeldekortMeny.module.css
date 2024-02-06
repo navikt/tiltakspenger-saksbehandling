@@ -18,5 +18,10 @@
 
 .listeelement {
   border-bottom: 1px solid #cfcfcf;
-  padding: 0.3rem 0;
+  padding: 0.3rem;
+}
+
+.listeelement:hover {
+  background-color: rgba(247, 247, 247, 1);
+  cursor: pointer;
 }
