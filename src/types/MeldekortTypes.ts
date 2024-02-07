@@ -34,22 +34,28 @@ export type Tiltak = {
   antDagerIUken: number;
 };
 
+export type MeldekortDagDTO = {
+  meldekortId: string;
+  tiltakId: string;
+  dato: Date;
+  status: MeldekortStatus;
+}
+
 export enum MeldekortStatus {
-  IKKE_UTFYLT = 'Ikke utfylt',
-  DELTATT = 'Deltatt',
-  IKKE_DELTATT = 'Ikke deltatt',
-  FRAVÆR_SYK = 'Fravær syk',
-  FRAVÆR_SYKT_BARN = 'Fravær sykt barn',
-  FRAVÆR_VELFERD = 'Fravær velferd',
-  LØNN_FOR_TID_I_ARBEID = 'Lønn for tid i arbeid',
+  IkkeUtfylt = 'IKKE_UTFYLT',
+  Deltatt = 'DELTATT',
+  IkkeDeltatt = 'IKKE_DELTATT',
+  FraværSyk = 'FRAVÆR_SYK',
+  FraværSyktBarn = 'FRAVÆR_SYKT_BARN',
+  FraværVelferd = 'FRAVÆR_VELFERD',
+  Lønn = 'LØNN_FOR_TID_I_ARBEID',
 }
 
 export const MeldekortStatusTekster = [
-  { tekst: 'Deltatt' },
-  { tekst: 'Ikke deltatt' },
-  { tekst: 'Lønn for tid i arbeid' },
-  { tekst: 'Ikke utfylt' },
-  { tekst: 'Fravær syk' },
-  { tekst: 'Fravær sykt barn' },
-  { tekst: 'Fravær velferd' },
+  'Deltatt',
+  'Ikke deltatt',
+  'Lønn for tid i arbeid',
+  'Fravær syk',
+  'Fravær sykt barn',
+  'Fravær velferd',
 ];

@@ -1,19 +1,25 @@
 .ukevisning {
-  display: flex;
-  width: 100%;
+  margin: 1em;
 }
 
 .disableUkevisning {
-  display: flex;
-  margin: 1rem;
   pointer-events: none;
-  opacity: 0.2;
-  width: 100%;
+  opacity: 0.65;
 }
 
-.MeldekortUke {
+.meldekortUke {
   background-color: rgba(247, 247, 247, 1);
   width: 47%;
   padding: 1em;
+}
+
+.meldekortUkeDag {
+  padding: 1em 0;
+  border-bottom: 1px solid #cfcfcf;
+}
+
+.heading {
+  padding-bottom: 1em;
+  border-bottom: 1px solid #cfcfcf;
 }
 

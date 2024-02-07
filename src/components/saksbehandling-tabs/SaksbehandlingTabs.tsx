@@ -1,19 +1,20 @@
 import { FileTextIcon } from '@navikt/aksel-icons';
 import { Tabs } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
+import { useHentMeldekortListe } from '../../hooks/useHentMeldekortListe';
 
 interface SaksbehandlingTabsProps {
   behandlingId: string;
-  meldekortId?: string;
   utbetalingId?: string;
 }
 
 export const SaksbehandlingTabs = ({
   behandlingId,
-  meldekortId,
   utbetalingId,
 }: SaksbehandlingTabsProps) => {
   const router = useRouter();
+  const { meldekortliste } = useHentMeldekortListe(behandlingId)
+
   return (
     <Tabs>
       <Tabs.List>
@@ -32,7 +33,8 @@ export const SaksbehandlingTabs = ({
           label={'Meldekort'}
           icon={<FileTextIcon />}
           onClick={() => {
-            router.push(`/behandling/${behandlingId}/meldekort/${meldekortId}`);
+            meldekortliste &&
+              router.push(`/behandling/${behandlingId}/meldekort/${meldekortliste[0].id}`);
           }}
         />
         <Tabs.Tab

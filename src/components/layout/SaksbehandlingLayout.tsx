@@ -3,7 +3,6 @@ import { useHentBehandling } from '../../hooks/useHentBehandling';
 import PersonaliaHeader from '../header/PersonaliaHeader';
 import { SaksbehandlingTabs } from '../saksbehandling-tabs/SaksbehandlingTabs';
 import { Loader } from '@navikt/ds-react';
-import { avklarLesevisning } from '../../utils/avklarLesevisning';
 
 export const SaksbehandlingLayout = ({ children }: React.PropsWithChildren) => {
   const router = useRouter();
@@ -17,10 +16,7 @@ export const SaksbehandlingLayout = ({ children }: React.PropsWithChildren) => {
   return (
     <>
       <PersonaliaHeader valgtBehandling={valgtBehandling} />
-      <SaksbehandlingTabs
-        behandlingId={valgtBehandling.behandlingId}
-        meldekortId={'a6a0712b-aeea-419f-aec9-26b5f239a717'}
-      />
+      <SaksbehandlingTabs behandlingId={valgtBehandling.behandlingId} />
       {children}
     </>
   );

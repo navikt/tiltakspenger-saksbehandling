@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { pageWithAuthentication } from '../utils/pageWithAuthentication';
 import { Button, Link, Loader, Table } from '@navikt/ds-react';
 import { SaksbehandlerContext } from './_app';
