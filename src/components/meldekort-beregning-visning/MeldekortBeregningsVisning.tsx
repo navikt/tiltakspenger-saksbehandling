@@ -32,47 +32,47 @@ export const MeldekortBeregningsvisning = ({
 
   const finnAntallDager = (meldekortStatus: MeldekortStatus) => {
     return meldekort.meldekortDager.filter(
-      (dag: MeldekortDag) => dag.status === meldekortStatus
+      (dag: MeldekortDag) => dag.status === meldekortStatus,
     ).length;
   };
 
   const [antallDagerIkkeDeltatt, setAntallDagerIkkeDeltatt] = useState<number>(
     meldekort.meldekortDager.filter(
-      (dag: MeldekortDag) => dag.status === MeldekortStatus.IKKE_DELTATT
-    ).length
+      (dag: MeldekortDag) => dag.status === MeldekortStatus.IkkeDeltatt,
+    ).length,
   );
   const [antallDagerDeltatt, setAntallDagerDeltatt] = useState<number>(
     meldekort.meldekortDager.filter(
-      (dag: MeldekortDag) => dag.status === MeldekortStatus.DELTATT
-    ).length
+      (dag: MeldekortDag) => dag.status === MeldekortStatus.Deltatt,
+    ).length,
   );
   const [antallDagerSyk, setAntallDagerSyk] = useState<number>(
     meldekort.meldekortDager.filter(
-      (dag: MeldekortDag) => dag.status === MeldekortStatus.FRAVÆR_SYK
-    ).length
+      (dag: MeldekortDag) => dag.status === MeldekortStatus.FraværSyk,
+    ).length,
   );
   const [antallDagerSyktBarn, setAntallDagerSyktBarn] = useState<number>(
     meldekort.meldekortDager.filter(
-      (dag: MeldekortDag) => dag.status === MeldekortStatus.FRAVÆR_SYKT_BARN
-    ).length
+      (dag: MeldekortDag) => dag.status === MeldekortStatus.FraværSyktBarn,
+    ).length,
   );
   const [antallDagerVelferd, setAntallDagerVelferd] = useState<number>(
     meldekort.meldekortDager.filter(
-      (dag: MeldekortDag) => dag.status === MeldekortStatus.FRAVÆR_VELFERD
-    ).length
+      (dag: MeldekortDag) => dag.status === MeldekortStatus.FraværVelferd,
+    ).length,
   );
 
   const finnAntallDagerMedRiktigUtbetalingsprosent = () => {
     const sykedager = antallDagerSyk + antallDagerSyktBarn;
     if (sykedager > egenMeldingsdager) {
       setAntallDager100prosent(
-        antallDagerDeltatt + egenMeldingsdager + antallDagerVelferd
+        antallDagerDeltatt + egenMeldingsdager + antallDagerVelferd,
       );
       setAntallDager75prosent(sykedager - egenMeldingsdager);
     } else {
       setAntallDager75prosent(0);
       setAntallDager100prosent(
-        sykedager + antallDagerDeltatt + antallDagerVelferd
+        sykedager + antallDagerDeltatt + antallDagerVelferd,
       );
     }
   };
