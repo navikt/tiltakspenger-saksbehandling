@@ -24,15 +24,15 @@ export const MeldekortUkeDag = ({
   const [status, setStatus] = useState<MeldekortStatus>(meldekortDag.status);
   const { mutate } = useHentMeldekort(meldekortId);
 
-  const oppdaterMeldekortdag = (status: string) => {
-    if (status === '') return;
-    setStatus(status as MeldekortStatus);
+  const oppdaterMeldekortdag = (dagStatus: string) => {
+    if (dagStatus === '') return;
+    setStatus(dagStatus as MeldekortStatus);
     fetch(`/api/meldekort/oppdaterDag`, {
       method: 'POST',
       body: JSON.stringify({
         meldekortId: meldekortId,
         dato: meldekortDag.dato,
-        status: status as MeldekortStatus,
+        status: dagStatus as MeldekortStatus,
       }),
     });
     mutate();
@@ -47,7 +47,7 @@ export const MeldekortUkeDag = ({
     >
       <IkonMedTekst
         text={`${getDayOfWeek(meldekortDag.dato)} ${formatDate(
-          meldekortDag.dato.toString()
+          meldekortDag.dato.toString(),
         )}`}
         iconRenderer={() => velgIkon(meldekortDag.status)}
       />
