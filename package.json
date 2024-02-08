@@ -21,7 +21,7 @@
     "@navikt/next-auth-wonderwall": "^1.5.0",
     "dayjs": "^1.11.9",
     "next": "^13.5.4",
-    "pino": "^8.17.2",
+    "pino": "^8.18.0",
     "react": "18.2.0",
     "react-content-loader": "^6.2.1",
     "react-dom": "18.2.0",
