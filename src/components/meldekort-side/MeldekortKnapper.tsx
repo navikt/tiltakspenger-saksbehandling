@@ -19,7 +19,7 @@ export const MeldekortKnapper = ({
     >
       Endre meldekortperiode
     </Button>
-    <Button size="small" onClick={() => håndterGodkjennMeldekort}>
+    <Button size="small" onClick={håndterGodkjennMeldekort}>
       Godkjenn meldekortperiode
     </Button>
   </HStack>
