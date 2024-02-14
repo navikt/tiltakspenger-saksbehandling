@@ -1,21 +1,14 @@
-import styles from './Detaljer.module.css';
-import { Heading } from '@navikt/ds-react';
 import {
   BagdeIcon,
-  ChevronRightIcon,
   InformationIcon,
   PersonCircleIcon,
 } from '@navikt/aksel-icons';
 import React from 'react';
 import DetaljeListeelement from './detalje-listeelement/DetaljeListeelement';
+import { Skuff } from '../skuff/Skuff';
 
 export const MeldekortDetaljer = () => (
-  <div className={styles.detaljerColumn}>
-    <Heading size="xsmall" level="1" className={styles.detaljerHeading}>
-      <span className={styles.detaljerHeadingSpan}>
-        <ChevronRightIcon /> &nbsp; Detaljer{' '}
-      </span>
-    </Heading>
+  <Skuff venstreOrientert={false} headerTekst="Detaljer">
     <DetaljeListeelement
       iconRenderer={() => <BagdeIcon />}
       label="Meldekort type"
@@ -31,5 +24,5 @@ export const MeldekortDetaljer = () => (
       label="Signatur"
       discription="Z8834556612"
     />
-  </div>
+  </Skuff>
 );

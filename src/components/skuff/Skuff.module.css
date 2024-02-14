@@ -1,0 +1,29 @@
+.SkuffHøyre {
+    grid-area: høyrekolonne;
+    border-left: 1px solid #cfcfcf;
+    width: 15%;
+}
+
+.SkuffVenstre {
+    grid-area: venstrekolonne;
+    border-right: 1px solid #cfcfcf;
+    width: 15%;
+}
+
+.lukketSkuff {
+    border-left: 1px solid #cfcfcf;
+}
+
+.heading {
+    padding: 0.7rem 1rem;
+    border-bottom: 1px solid #cfcfcf;
+  }
+
+.heading:hover {
+    background-color: rgba(247, 247, 247, 1);
+    cursor: pointer;
+}
+
+.heading:hover > button {
+    background-color: rgba(204, 225, 255, 1);
+}
