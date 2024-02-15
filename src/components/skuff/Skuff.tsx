@@ -15,23 +15,38 @@ export const Skuff = ({
 }: SkuffProps) => {
   const [åpen, settÅpen] = useState<Boolean>(true);
 
+  const venstreOrientertSkuff = () => (
+    <HStack className={styles.heading} onClick={() => settÅpen(!åpen)}>
+      <Heading size="xsmall" level="3">
+        {headerTekst}
+      </Heading>
+      <Spacer />
+      <Button
+        variant="tertiary"
+        size="xsmall"
+        icon={<ChevronLeftIcon title="åpne/lukk sidepanel" />}
+      />
+    </HStack>
+  );
+
+  const høyreOrientertSkuff = () => (
+    <HStack className={styles.heading} gap="2" onClick={() => settÅpen(!åpen)}>
+      <Button
+        variant="tertiary"
+        size="xsmall"
+        icon={<ChevronRightIcon title="åpne/lukk sidepanel" />}
+      />
+      <Heading size="xsmall" level="3">
+        {headerTekst}
+      </Heading>
+    </HStack>
+  );
+
   return (
     <>
       {åpen ? (
-        <VStack
-          className={venstreOrientert ? styles.SkuffVenstre : styles.SkuffHøyre}
-        >
-          <HStack className={styles.heading} onClick={() => settÅpen(!åpen)}>
-            <Heading size="xsmall" level="3">
-              {headerTekst}
-            </Heading>
-            <Spacer />
-            <Button
-              variant="tertiary"
-              size="xsmall"
-              icon={<ChevronLeftIcon title="åpne/lukk sidepanel" />}
-            />
-          </HStack>
+        <VStack className={styles.skuff}>
+          {venstreOrientert ? venstreOrientertSkuff() : høyreOrientertSkuff()}
           {children}
         </VStack>
       ) : (
@@ -39,7 +54,13 @@ export const Skuff = ({
           <Button
             variant="tertiary"
             size="xsmall"
-            icon={<ChevronRightIcon title="åpne/lukk sidepanel" />}
+            icon={
+              venstreOrientert ? (
+                <ChevronRightIcon title="åpne/lukk sidepanel" />
+              ) : (
+                <ChevronLeftIcon title="åpne/lukk sidepanel" />
+              )
+            }
             onClick={() => settÅpen(!åpen)}
           />
         </VStack>

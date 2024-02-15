@@ -1,17 +1,13 @@
-.SkuffHøyre {
-    grid-area: høyrekolonne;
+.skuff {
     border-left: 1px solid #cfcfcf;
-    width: 15%;
-}
-
-.SkuffVenstre {
-    grid-area: venstrekolonne;
     border-right: 1px solid #cfcfcf;
     width: 15%;
 }
 
 .lukketSkuff {
     border-left: 1px solid #cfcfcf;
+    border-right: 1px solid #cfcfcf;
+    padding: 0.7rem;
 }
 
 .heading {
