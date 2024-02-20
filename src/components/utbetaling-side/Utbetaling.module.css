@@ -1,0 +1,25 @@
+.ukevisning {
+  margin: 1em;
+}
+
+.disableUkevisning {
+  pointer-events: none;
+  opacity: 0.65;
+}
+
+.meldekortUke {
+  background-color: rgba(247, 247, 247, 1);
+  width: 47%;
+  padding: 1em;
+}
+
+.meldekortUkeDag {
+  padding: 1em 0;
+  border-bottom: 1px solid #cfcfcf;
+}
+
+.heading {
+  padding-bottom: 1em;
+  border-bottom: 1px solid #cfcfcf;
+}
+

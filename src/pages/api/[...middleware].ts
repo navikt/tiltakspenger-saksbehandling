@@ -5,12 +5,16 @@ import logger from '../../utils/serverLogger';
 
 const vedtakBackendUrl = process.env.TILTAKSPENGER_VEDTAK_URL || '';
 const meldekortBackendUrl = process.env.TILTAKSPENGER_MELDEKORT_URL || '';
+const utbetalingBackendUrl = process.env.TILTAKSPENGER_UTBETALING_URL || '';
 
 function getUrl(req: NextApiRequest): string {
   const urlTil = req?.url;
   if (urlTil?.startsWith('/api/meldekort')) {
       const meldekortPath = req?.url?.replace('/api', '');
       return `${meldekortBackendUrl}${meldekortPath}`;
+  } else if (urlTil?.startsWith('/api/utbetaling')) {
+      const utbetalingPath = req?.url?.replace('/api', '');
+      return `${utbetalingBackendUrl}${utbetalingPath}`;
   } else {
       const vedtakPath = req?.url?.replace('/api', '');
       return `${vedtakBackendUrl}${vedtakPath}`;

@@ -2,10 +2,24 @@ import { SaksbehandlingLayout } from '../../../../components/layout/Saksbehandli
 import { BehandlingLayout } from '../../../../components/layout/BehandlingLayout';
 import { ReactElement } from 'react';
 import { NextPageWithLayout } from '../../../_app';
+import {useRouter} from "next/router";
+import {UtbetalingMeny} from "../../../../components/utbetaling-meny/UtbetalingMeny";
+import {UtbetalingDetaljer} from "../../../../components/utbetaling-detaljer/UtbetalingDetaljer";
+import {UtbetalingSide} from "../../../../components/utbetaling-side/UtbetalingSide";
 
 const Utbetaling: NextPageWithLayout = () => {
-  return <p>Utbetaling</p>;
+    const router = useRouter();
+    const behandlingId = router.query.behandlingId as string;
+
+    return (
+        <>
+            <UtbetalingMeny behandlingId={behandlingId} />
+            <UtbetalingSide />
+            <UtbetalingDetaljer />
+        </>
+    );
 };
+
 
 Utbetaling.getLayout = function getLayout(page: ReactElement) {
   return (
