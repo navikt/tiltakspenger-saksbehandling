@@ -1,27 +1,38 @@
-import { HGrid, Select } from '@navikt/ds-react';
-import {
-  MeldekortStatus,
-  MeldekortStatusTekster,
-} from '../../types/MeldekortTypes';
-import { formatDate, getDayOfWeek } from '../../utils/date';
-import { velgMeldekortdagStatus } from '../../utils/meldekort';
-import IkonMedTekst from '../ikon-med-tekst/IkonMedTekst';
-import { velgIkon } from './UtbetalingUkeVisning';
-import { useState } from 'react';
-import styles from './Utbetaling.module.css';
-import { useHentMeldekort } from '../../hooks/useHentMeldekort';
-import {UtbetalingsDagDTO} from "../../types/Utbetaling";
+import {Table} from '@navikt/ds-react';
+import React from 'react';
+import {UtbetalingsDagDTO, UtbetalingsDagStatus} from "../../types/Utbetaling";
+import {formatDate, getDayOfWeek} from "../../utils/date";
 
-interface UtbetalingUkeDagProps {
-  utbetalingDag: UtbetalingsDagDTO;
-  utbetalingId: string;
+interface UtbetalingUkeProps {
+  utbetalingUke: UtbetalingsDagDTO[];
+}
+
+function hentProsentUtbetaling(status: UtbetalingsDagStatus) {
+  switch(status) {
+    case UtbetalingsDagStatus.FullUtbetaling:
+      return '100 %';
+    case UtbetalingsDagStatus.DelvisUtbetaling:
+      return '75 %';
+    case UtbetalingsDagStatus.IngenUtbetaling:
+      return '-';
+  }
 }
 
 export const UtbetalingUkeDag = ({
-  utbetalingId,
-  utbetalingDag,
-}: UtbetalingUkeDagProps) => {
-return(
-    <div></div>
-);
+  utbetalingUke,
+}: UtbetalingUkeProps) => {
+  return (
+      <>
+        {utbetalingUke.map((dag, i) => {
+          return (
+              <Table.Row key={i} style={{padding:'0rem'}}>
+                <Table.DataCell style={{margin: '1rem'}} scope="row">{getDayOfWeek(dag.dato)}</Table.DataCell>
+                <Table.DataCell scope="row">{formatDate(dag.dato.toString())}</Table.DataCell>
+                <Table.DataCell scope="row">{hentProsentUtbetaling(dag.status)}</Table.DataCell>
+                <Table.DataCell scope="row">{dag.beløp === 0 ? '-': dag.beløp}</Table.DataCell>
+              </Table.Row>
+          );
+        })}
+      </>
+  );
 };

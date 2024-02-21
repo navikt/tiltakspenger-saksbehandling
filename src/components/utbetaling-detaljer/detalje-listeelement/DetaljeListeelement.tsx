@@ -2,7 +2,7 @@ import { BodyShort, Label } from '@navikt/ds-react';
 import React from 'react';
 
 interface DetaljeListeelementProps {
-  iconRenderer: () => React.ReactNode;
+  iconRenderer?: () => React.ReactNode;
   label: string;
   discription: string;
 }
@@ -15,7 +15,7 @@ export const DetaljeListeelement = ({
   return (
     <div style={{ margin: '1rem' }}>
       <span style={{ display: 'flex', alignItems: 'center' }}>
-        {iconRenderer()}
+        {iconRenderer ? iconRenderer() : ''}
         <Label size="small" style={{ paddingLeft: '0.5rem' }}>
           {label}
         </Label>

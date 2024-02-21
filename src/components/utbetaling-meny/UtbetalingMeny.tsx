@@ -20,7 +20,7 @@ export const UtbetalingMeny = ({ behandlingId }: UtbetalingmenyProps) => {
   const { utbetalingListe } = useHentUtbetalingListe(behandlingId);
   const router = useRouter()
 
-    const utbetalingListet : UtbetalingListe[] = [
+    /*utbetalingListe : UtbetalingListe[] = [
         {
             id: '123',
             fom: new Date('2024-01-01'),
@@ -33,7 +33,7 @@ export const UtbetalingMeny = ({ behandlingId }: UtbetalingmenyProps) => {
             tom: new Date('2023-01-16'),
             beløp: 2459,
         }
-    ]
+    ]*/
 
   return (
     <VStack className={styles.section}>
@@ -45,7 +45,7 @@ export const UtbetalingMeny = ({ behandlingId }: UtbetalingmenyProps) => {
         />
       </Heading>
       <div className={styles.utbetalingliste}>
-        {utbetalingListet?.map((utbetaling: UtbetalingListe) => {
+        {utbetalingListe?.map((utbetaling: UtbetalingListe) => {
           return (
             <div key={utbetaling.id}
                  className={styles.listeelement}
@@ -63,7 +63,7 @@ export const UtbetalingMeny = ({ behandlingId }: UtbetalingmenyProps) => {
                   til: utbetaling.tom.toString(),
                 })}
               </Detail>
-                <Detail>Utbetalt: {utbetaling.beløp.toString()}</Detail>
+              <Detail>Utbetalt: {utbetaling.beløp.toString()}</Detail>
             </div>
           );
         })}
