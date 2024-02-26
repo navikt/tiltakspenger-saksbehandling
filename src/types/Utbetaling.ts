@@ -1,5 +1,3 @@
-
-
 export type UtbetalingListe = {
     id: string;
     fom: Date;

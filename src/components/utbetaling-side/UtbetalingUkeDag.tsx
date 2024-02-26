@@ -1,38 +1,41 @@
-import {Table} from '@navikt/ds-react';
+import {Detail, HGrid} from '@navikt/ds-react';
 import React from 'react';
 import {UtbetalingsDagDTO, UtbetalingsDagStatus} from "../../types/Utbetaling";
 import {formatDate, getDayOfWeek} from "../../utils/date";
+import styles from "./Utbetaling.module.css";
 
 interface UtbetalingUkeProps {
   utbetalingUke: UtbetalingsDagDTO[];
 }
 
 function hentProsentUtbetaling(status: UtbetalingsDagStatus) {
-  switch(status) {
-    case UtbetalingsDagStatus.FullUtbetaling:
-      return '100 %';
-    case UtbetalingsDagStatus.DelvisUtbetaling:
-      return '75 %';
-    case UtbetalingsDagStatus.IngenUtbetaling:
-      return '-';
-  }
+   switch(status) {
+      case UtbetalingsDagStatus.FullUtbetaling:
+         return '100 %';
+      case UtbetalingsDagStatus.DelvisUtbetaling:
+         return '75 %';
+      case UtbetalingsDagStatus.IngenUtbetaling:
+         return '-';
+   }
 }
 
 export const UtbetalingUkeDag = ({
   utbetalingUke,
 }: UtbetalingUkeProps) => {
   return (
-      <>
-        {utbetalingUke.map((dag, i) => {
-          return (
-              <Table.Row key={i} style={{padding:'0rem'}}>
-                <Table.DataCell style={{margin: '1rem'}} scope="row">{getDayOfWeek(dag.dato)}</Table.DataCell>
-                <Table.DataCell scope="row">{formatDate(dag.dato.toString())}</Table.DataCell>
-                <Table.DataCell scope="row">{hentProsentUtbetaling(dag.status)}</Table.DataCell>
-                <Table.DataCell scope="row">{dag.beløp === 0 ? '-': dag.beløp}</Table.DataCell>
-              </Table.Row>
-          );
-        })}
-      </>
+      <div className={styles.utbetalingDagliste}>
+          {utbetalingUke.map((dag, i) => {
+              return (
+                  <div key={i} className={styles.utbetalingDagListeGrid}>
+                      <HGrid gap="12" columns={4}>
+                        <Detail truncate>{getDayOfWeek(dag.dato)}</Detail>
+                        <Detail truncate>{formatDate(dag.dato.toString())}</Detail>
+                        <Detail truncate>{hentProsentUtbetaling(dag.status)}</Detail>
+                        <Detail truncate>{dag.beløp}</Detail>
+                      </HGrid>
+                  </div>
+              )
+          })}
+      </div>
   );
 };

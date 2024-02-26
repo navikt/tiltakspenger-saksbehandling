@@ -4,32 +4,12 @@ import { ChevronRightIcon } from '@navikt/aksel-icons';
 import React from 'react';
 import DetaljeListeelement from './detalje-listeelement/DetaljeListeelement';
 import {useRouter} from "next/router";
-import {UtbetalingsDagStatus} from "../../types/Utbetaling";
 import {useHentUtbetalingVedtak} from "../../hooks/useHentUtbetalingVedtak";
 
 export const UtbetalingDetaljer = () => {
     const router = useRouter();
     const utbetalingVedtakId = router.query.utbetalingId as string;
     const { utbetalingVedtak } = useHentUtbetalingVedtak(utbetalingVedtakId);
-
-    /*const utbetalingsDagDTO = [
-        {
-            beløp: 7580,
-            dato: new Date('2024-01-01'),
-            tiltakType: 'String',
-            status: UtbetalingsDagStatus.FullUtbetaling
-        }]
-
-    const utbetalingVedtak = {
-        id: '123',
-        fom: new Date('2024-01-01'),
-        tom: new Date('2023-01-14'),
-        sats:  285,
-        satsBarnetillegg: 53,
-        antallBarn: 4,
-        totalbeløp: 7580,
-        vedtakDager: utbetalingsDagDTO
-    }*/
 
     return (
         <div className={styles.detaljerColumn}>

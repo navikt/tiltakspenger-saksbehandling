@@ -1,7 +1,7 @@
 import styles from './Meldekort.module.css';
 import { MeldekortUke } from '../meldekort-side/MeldekortUke';
 import { MeldekortBeregningsvisning } from '../meldekort-beregning-visning/MeldekortBeregningsVisning';
-import { HStack, Loader, Spacer, VStack } from '@navikt/ds-react';
+import {BodyLong, HStack, Loader, Spacer, VStack} from '@navikt/ds-react';
 import {useContext, useState} from 'react';
 import { MeldekortKnapper } from './MeldekortKnapper';
 import { useRouter } from 'next/router';
@@ -17,11 +17,14 @@ export const MeldekortSide = () => {
   const meldekortId = router.query.meldekortId as string;
   const { meldekort, isLoading } = useHentMeldekort(meldekortId);
 
-  
-  if (isLoading || !meldekort) {
+  if (isLoading) {
     return <Loader />;
+  } else if( !meldekort) {
+    return <BodyLong style={{padding: '1rem', margin:'0.5rem'}}>
+              Det er ingen meldekort til å vise
+           </BodyLong>;
   }
-  
+
   const uke1 = meldekort.meldekortDager.slice(0, 7)
   const uke2 = meldekort.meldekortDager.slice(7, 14)
 
@@ -36,7 +39,7 @@ export const MeldekortSide = () => {
   return (
     <VStack gap="5" className={styles.ukevisning}>
       <HStack
-      className={disableUkeVisning? styles.disableUkevisning : ''}
+        className={disableUkeVisning? styles.disableUkevisning : ''}
       >
         <MeldekortUke
           meldekortUke={uke1}
