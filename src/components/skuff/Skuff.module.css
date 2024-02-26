@@ -5,9 +5,18 @@
 }
 
 .lukketSkuff {
+    width: 50px;
     border-left: 1px solid #cfcfcf;
     border-right: 1px solid #cfcfcf;
-    padding: 0.7rem;
+}
+
+.lukketSkuff:hover {
+    background-color: rgba(247, 247, 247, 1);
+    cursor: pointer;
+}
+
+.lukketSkuff:hover button {
+    background-color: rgba(204, 225, 255, 1);
 }
 
 .heading {
@@ -22,4 +31,14 @@
 
 .heading:hover > button {
     background-color: rgba(204, 225, 255, 1);
+}
+
+.lukketKnapp {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #cfcfcf;
+    margin-bottom: 24px;
+}
+
+.lukketHeading {
+    transform: rotate(90deg);
 }

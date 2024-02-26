@@ -50,19 +50,23 @@ export const Skuff = ({
           {children}
         </VStack>
       ) : (
-        <VStack className={styles.lukketSkuff}>
-          <Button
-            variant="tertiary"
-            size="xsmall"
-            icon={
-              venstreOrientert ? (
-                <ChevronRightIcon title="åpne/lukk sidepanel" />
-              ) : (
-                <ChevronLeftIcon title="åpne/lukk sidepanel" />
-              )
-            }
-            onClick={() => settÅpen(!åpen)}
-          />
+        <VStack className={styles.lukketSkuff} onClick={() => settÅpen(!åpen)}>
+          <HStack justify="center" className={styles.lukketKnapp}>
+            <Button
+              variant="tertiary"
+              size="xsmall"
+              icon={
+                venstreOrientert ? (
+                  <ChevronRightIcon title="åpne/lukk sidepanel" />
+                ) : (
+                  <ChevronLeftIcon title="åpne/lukk sidepanel" />
+                )
+              }
+            />
+          </HStack>
+          <Heading size="xsmall" level="3" className={styles.lukketHeading}>
+            {headerTekst}
+          </Heading>
         </VStack>
       )}
     </>
