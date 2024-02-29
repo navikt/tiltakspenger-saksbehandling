@@ -1,13 +1,7 @@
-import { BodyShort, Table } from '@navikt/ds-react';
-import {
-  Meldekort,
-  MeldekortDag,
-  MeldekortStatus,
-  MeldekortStatusTekster,
-} from '../../types/MeldekortTypes';
-import { velgMeldekortdagStatus } from '../../utils/meldekort';
-import { velgIkon } from '../meldekort-side/MeldekortUke';
-import { useEffect, useState } from 'react';
+import {BodyShort, Table} from '@navikt/ds-react';
+import {Meldekort, MeldekortStatus,} from '../../types/MeldekortTypes';
+import {velgIkon} from '../meldekort-side/MeldekortUke';
+import {useHentMeldekortBeregning} from "../../hooks/useHentMeldekortBeregning";
 
 interface MeldekortBeregningsvisningProps {
   meldekort: Meldekort;
@@ -16,82 +10,7 @@ interface MeldekortBeregningsvisningProps {
 export const MeldekortBeregningsvisning = ({
   meldekort,
 }: MeldekortBeregningsvisningProps) => {
-  const [antallDager100prosent, setAntallDager100prosent] = useState<number>(0);
-  const [antallDager75prosent, setAntallDager75prosent] = useState<number>(0);
-  const [sumAntallDager100prosent, setSumAntallDager100prosent] =
-    useState<number>(0);
-  const [sumAntallDager75prosent, setSumAntallDager75prosent] =
-    useState<number>(0);
-  const egenMeldingsdager = 3;
-  const dagsats = 268;
-
-  useEffect(() => {
-    finnAntallDagerMedRiktigUtbetalingsprosent();
-    beregnRiktigSum();
-  });
-
-  const finnAntallDager = (meldekortStatus: MeldekortStatus) => {
-    return meldekort.meldekortDager.filter(
-      (dag: MeldekortDag) => dag.status === meldekortStatus,
-    ).length;
-  };
-
-  const [antallDagerIkkeDeltatt, setAntallDagerIkkeDeltatt] = useState<number>(
-    meldekort.meldekortDager.filter(
-      (dag: MeldekortDag) => dag.status === MeldekortStatus.IkkeDeltatt,
-    ).length,
-  );
-  const [antallDagerDeltatt, setAntallDagerDeltatt] = useState<number>(
-    meldekort.meldekortDager.filter(
-      (dag: MeldekortDag) => dag.status === MeldekortStatus.Deltatt,
-    ).length,
-  );
-  const [antallDagerSyk, setAntallDagerSyk] = useState<number>(
-    meldekort.meldekortDager.filter(
-      (dag: MeldekortDag) => dag.status === MeldekortStatus.FraværSyk,
-    ).length,
-  );
-  const [antallDagerSyktBarn, setAntallDagerSyktBarn] = useState<number>(
-    meldekort.meldekortDager.filter(
-      (dag: MeldekortDag) => dag.status === MeldekortStatus.FraværSyktBarn,
-    ).length,
-  );
-  const [antallDagerVelferd, setAntallDagerVelferd] = useState<number>(
-    meldekort.meldekortDager.filter(
-      (dag: MeldekortDag) => dag.status === MeldekortStatus.FraværVelferd,
-    ).length,
-  );
-
-  const finnAntallDagerMedRiktigUtbetalingsprosent = () => {
-    const sykedager = antallDagerSyk + antallDagerSyktBarn;
-    if (sykedager > egenMeldingsdager) {
-      setAntallDager100prosent(
-        antallDagerDeltatt + egenMeldingsdager + antallDagerVelferd,
-      );
-      setAntallDager75prosent(sykedager - egenMeldingsdager);
-    } else {
-      setAntallDager75prosent(0);
-      setAntallDager100prosent(
-        sykedager + antallDagerDeltatt + antallDagerVelferd,
-      );
-    }
-  };
-
-  const beregnRiktigSum = () => {
-    setSumAntallDager100prosent(antallDager100prosent * dagsats);
-    setSumAntallDager75prosent(antallDager75prosent * dagsats * 0.75);
-  };
-
-  const tellinger = [
-    antallDagerDeltatt,
-    antallDagerIkkeDeltatt,
-    antallDagerSyk,
-    antallDagerSyktBarn,
-    antallDagerVelferd,
-    antallDager100prosent,
-    antallDager75prosent,
-  ];
-  const sumAntallDager = [sumAntallDager75prosent, sumAntallDager100prosent];
+  const meldekortBeregningData = useHentMeldekortBeregning(meldekort.id)
 
   return (
     <Table size="small">
@@ -111,42 +30,67 @@ export const MeldekortBeregningsvisning = ({
         </Table.Row>
       </Table.Header>
       <Table.Body>
-        {MeldekortStatusTekster.map((meldekortStatus, i) => (
-          <Table.Row key={meldekortStatus} style={{ borderBottom: 'none' }}>
+          <Table.Row style={{ borderBottom: 'none' }}>
             <Table.DataCell>
-              {velgIkon(velgMeldekortdagStatus(meldekortStatus))}
-              {meldekortStatus}
+              {velgIkon(MeldekortStatus.Deltatt)} Deltatt i tiltak
             </Table.DataCell>
-            <Table.DataCell>{tellinger[i]}</Table.DataCell>
-            <Table.DataCell>{i > 3 && sumAntallDager[i]}</Table.DataCell>
+            <Table.DataCell>{meldekortBeregningData.meldekortBeregning?.antallDeltatt}</Table.DataCell>
+            <Table.DataCell></Table.DataCell>
           </Table.Row>
-        ))}
+        <Table.Row style={{ borderBottom: 'none' }}>
+          <Table.DataCell>
+            {velgIkon(MeldekortStatus.IkkeDeltatt)} Ikke deltatt i tiltaket
+          </Table.DataCell>
+          <Table.DataCell>{meldekortBeregningData.meldekortBeregning?.antallIkkeDeltatt}</Table.DataCell>
+          <Table.DataCell></Table.DataCell>
+        </Table.Row>
+        <Table.Row style={{ borderBottom: 'none' }}>
+          <Table.DataCell>
+            {velgIkon(MeldekortStatus.FraværSyk)} Fravær - Syk
+          </Table.DataCell>
+          <Table.DataCell>{meldekortBeregningData.meldekortBeregning?.antallSykDager}</Table.DataCell>
+          <Table.DataCell></Table.DataCell>
+        </Table.Row>
+        <Table.Row style={{ borderBottom: 'none' }}>
+          <Table.DataCell>
+            {velgIkon(MeldekortStatus.FraværSyktBarn)} Fravær - Sykt barn
+          </Table.DataCell>
+          <Table.DataCell>{meldekortBeregningData.meldekortBeregning?.antallSykBarnDager}</Table.DataCell>
+          <Table.DataCell></Table.DataCell>
+        </Table.Row>
+        <Table.Row style={{ borderBottom: 'none' }}>
+          <Table.DataCell>
+            {velgIkon(MeldekortStatus.FraværVelferd)} Fravær - Velferd
+          </Table.DataCell>
+          <Table.DataCell>{meldekortBeregningData.meldekortBeregning?.antallVelferd}</Table.DataCell>
+          <Table.DataCell></Table.DataCell>
+        </Table.Row>
         <Table.Row>
-          <Table.HeaderCell>Antall dager med 75% utbetaling</Table.HeaderCell>
-          <Table.DataCell>{tellinger[5]}</Table.DataCell>
+          <Table.DataCell>Antall dager med 75% utbetaling</Table.DataCell>
+          <Table.DataCell> {meldekortBeregningData.meldekortBeregning?.antallDelvisUtbetaling}</Table.DataCell>
           <Table.DataCell align="right">
             <BodyShort>
-              {sumAntallDager[0].toString()}
+              {meldekortBeregningData.meldekortBeregning?.sumDelvis}
               ,-
             </BodyShort>
           </Table.DataCell>
         </Table.Row>
         <Table.Row>
-          <Table.HeaderCell>Antall dager med 100% utbetaling</Table.HeaderCell>
-          <Table.DataCell>{tellinger[6]}</Table.DataCell>
+          <Table.DataCell>Antall dager med 100% utbetaling</Table.DataCell>
+          <Table.DataCell> {meldekortBeregningData.meldekortBeregning?.antallFullUtbetaling}</Table.DataCell>
           <Table.DataCell align="right">
             <BodyShort>
-              {sumAntallDager[1].toString()}
+              {meldekortBeregningData.meldekortBeregning?.sumFull}
               ,-
             </BodyShort>
           </Table.DataCell>
         </Table.Row>
         <Table.Row>
-          <Table.HeaderCell>Beløp til utbetaling</Table.HeaderCell>
+          <Table.DataCell>Beløp til utbetaling</Table.DataCell>
           <Table.DataCell />
           <Table.DataCell align="right">
             <BodyShort>
-              {(sumAntallDager[0] + sumAntallDager[1]).toString()}
+              {meldekortBeregningData.meldekortBeregning?.sumTotal}
               ,-
             </BodyShort>
           </Table.DataCell>

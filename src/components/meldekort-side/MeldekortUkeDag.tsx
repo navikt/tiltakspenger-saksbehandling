@@ -10,7 +10,7 @@ import IkonMedTekst from '../ikon-med-tekst/IkonMedTekst';
 import { velgIkon } from './MeldekortUke';
 import { useState } from 'react';
 import styles from './Meldekort.module.css';
-import { useHentMeldekort } from '../../hooks/useHentMeldekort';
+import {useSWRConfig} from "swr";
 
 interface MeldekortUkeDagProps {
   meldekortDag: MeldekortDag;
@@ -22,7 +22,7 @@ export const MeldekortUkeDag = ({
   meldekortDag,
 }: MeldekortUkeDagProps) => {
   const [status, setStatus] = useState<MeldekortStatus>(meldekortDag.status);
-  const { mutate } = useHentMeldekort(meldekortId);
+  const mutator = useSWRConfig().mutate;
 
   const oppdaterMeldekortdag = (dagStatus: string) => {
     if (dagStatus === '') return;
@@ -34,8 +34,10 @@ export const MeldekortUkeDag = ({
         dato: meldekortDag.dato,
         status: dagStatus as MeldekortStatus,
       }),
-    });
-    mutate();
+    }).then(() => {
+        mutator(`/api/hentBeregning/${meldekortId}`);
+      }
+    );
   };
 
   return (

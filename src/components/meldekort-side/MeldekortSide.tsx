@@ -1,27 +1,25 @@
 import styles from './Meldekort.module.css';
-import { MeldekortUke } from '../meldekort-side/MeldekortUke';
-import { MeldekortBeregningsvisning } from '../meldekort-beregning-visning/MeldekortBeregningsVisning';
-import { HStack, Loader, Spacer, VStack } from '@navikt/ds-react';
+import {MeldekortUke} from '../meldekort-side/MeldekortUke';
+import {MeldekortBeregningsvisning} from '../meldekort-beregning-visning/MeldekortBeregningsVisning';
+import {HStack, Loader, Spacer, VStack} from '@navikt/ds-react';
 import {useContext, useState} from 'react';
-import { MeldekortKnapper } from './MeldekortKnapper';
-import { useRouter } from 'next/router';
-import { useHentMeldekort } from '../../hooks/useHentMeldekort';
-import { getWeekNumber } from '../../utils/date';
+import {MeldekortKnapper} from './MeldekortKnapper';
+import {useRouter} from 'next/router';
+import {useHentMeldekort} from '../../hooks/useHentMeldekort';
+import {getWeekNumber} from '../../utils/date';
 import {SaksbehandlerContext} from "../../pages/_app";
 
 export const MeldekortSide = () => {
   const [disableUkeVisning, setDisableUkeVisning] = useState<boolean>(true);
   const router = useRouter();
   const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
-
   const meldekortId = router.query.meldekortId as string;
   const { meldekort, isLoading } = useHentMeldekort(meldekortId);
 
-  
   if (isLoading || !meldekort) {
     return <Loader />;
   }
-  
+
   const uke1 = meldekort.meldekortDager.slice(0, 7)
   const uke2 = meldekort.meldekortDager.slice(7, 14)
 
@@ -50,7 +48,9 @@ export const MeldekortSide = () => {
           meldekortId={meldekortId}
         />
       </HStack>
-      <MeldekortBeregningsvisning meldekort={meldekort} />
+      <MeldekortBeregningsvisning
+          meldekort={meldekort}
+      />
       <MeldekortKnapper
         håndterEndreMeldekort={() => setDisableUkeVisning(!disableUkeVisning)}
         håndterGodkjennMeldekort={godkjennMeldekort}

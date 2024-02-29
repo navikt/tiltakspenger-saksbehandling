@@ -13,7 +13,7 @@ import { MeldekortUkeDag } from './MeldekortUkeDag';
 interface MeldekortUkeProps {
   meldekortUke: MeldekortDag[];
   ukesnummer: number;
-  meldekortId: string,
+  meldekortId: string;
 }
 
 export const velgIkon = (deltattEllerFravær: MeldekortStatus) => {
