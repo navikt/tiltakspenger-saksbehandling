@@ -1,28 +1,23 @@
 import styles from './Meldekort.module.css';
-import { MeldekortUke } from '../meldekort-side/MeldekortUke';
+import { MeldekortUke } from './MeldekortUke';
 import { MeldekortBeregningsvisning } from '../meldekort-beregning-visning/MeldekortBeregningsVisning';
-import {BodyLong, HStack, Loader, Spacer, VStack} from '@navikt/ds-react';
+import { HStack, Loader, VStack } from '@navikt/ds-react';
 import {useContext, useState} from 'react';
-import { MeldekortKnapper } from './MeldekortKnapper';
-import { useRouter } from 'next/router';
-import { useHentMeldekort } from '../../hooks/useHentMeldekort';
-import { getWeekNumber } from '../../utils/date';
+import {MeldekortKnapper} from './MeldekortKnapper';
+import {useRouter} from 'next/router';
+import {useHentMeldekort} from '../../hooks/useHentMeldekort';
+import {getWeekNumber} from '../../utils/date';
 import {SaksbehandlerContext} from "../../pages/_app";
 
 export const MeldekortSide = () => {
   const [disableUkeVisning, setDisableUkeVisning] = useState<boolean>(true);
-  const router = useRouter();
   const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
-
+  const router = useRouter();
   const meldekortId = router.query.meldekortId as string;
   const { meldekort, isLoading } = useHentMeldekort(meldekortId);
 
-  if (isLoading) {
+  if (isLoading || !meldekort) {
     return <Loader />;
-  } else if( !meldekort) {
-    return <BodyLong style={{padding: '1rem', margin:'0.5rem'}}>
-              Det er ingen meldekort til å vise
-           </BodyLong>;
   }
 
   const uke1 = meldekort.meldekortDager.slice(0, 7)
@@ -46,7 +41,6 @@ export const MeldekortSide = () => {
           ukesnummer={getWeekNumber(uke1[0].dato)}
           meldekortId={meldekortId}
         />
-        <Spacer />
         <MeldekortUke
           meldekortUke={uke2}
           ukesnummer={getWeekNumber(uke2[1].dato)}
