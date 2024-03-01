@@ -32,7 +32,10 @@ export const MeldekortMeny = ({ behandlingId }: MeldekortmenyProps) => {
       <div className={styles.meldekortliste}>
         {meldekortliste?.map((meldekort: MeldekortUtenDager) => {
           return (
-            <div key={meldekort.id} className={styles.listeelement} onClick={() => router.push(`/behandling/${behandlingId}/meldekort/${meldekort.id}`)}>
+            <div key={meldekort.id}
+                 className={styles.listeelement}
+                 onClick={() => router.push(`/behandling/${behandlingId}/meldekort/${meldekort.id}`)}
+            >
               <Label size="small">
                 {meldekortUkeNummer(
                   meldekort.fom,

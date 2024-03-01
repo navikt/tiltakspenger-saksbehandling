@@ -1,7 +1,7 @@
 import styles from './Meldekort.module.css';
-import {MeldekortUke} from '../meldekort-side/MeldekortUke';
-import {MeldekortBeregningsvisning} from '../meldekort-beregning-visning/MeldekortBeregningsVisning';
-import {HStack, Loader, Spacer, VStack} from '@navikt/ds-react';
+import { MeldekortUke } from './MeldekortUke';
+import { MeldekortBeregningsvisning } from '../meldekort-beregning-visning/MeldekortBeregningsVisning';
+import { HStack, Loader, VStack } from '@navikt/ds-react';
 import {useContext, useState} from 'react';
 import {MeldekortKnapper} from './MeldekortKnapper';
 import {useRouter} from 'next/router';
@@ -34,7 +34,7 @@ export const MeldekortSide = () => {
   return (
     <VStack gap="5" className={styles.ukevisning}>
       <HStack
-      className={disableUkeVisning? styles.disableUkevisning : ''}
+        className={disableUkeVisning? styles.disableUkevisning : ''}
       >
         <MeldekortUke
           meldekortUke={uke1}
@@ -47,9 +47,7 @@ export const MeldekortSide = () => {
           meldekortId={meldekortId}
         />
       </HStack>
-      <MeldekortBeregningsvisning
-          meldekort={meldekort}
-      />
+      <MeldekortBeregningsvisning meldekort={meldekort} />
       <MeldekortKnapper
         håndterEndreMeldekort={() => setDisableUkeVisning(!disableUkeVisning)}
         håndterGodkjennMeldekort={godkjennMeldekort}
