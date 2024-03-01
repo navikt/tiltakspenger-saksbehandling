@@ -2,7 +2,6 @@ import {BodyShort, Table} from '@navikt/ds-react';
 import {Meldekort, MeldekortStatus,} from '../../types/MeldekortTypes';
 import {velgIkon} from '../meldekort-side/MeldekortUke';
 import {useHentMeldekortBeregning} from "../../hooks/useHentMeldekortBeregning";
-import {useEffect} from "react";
 
 interface MeldekortBeregningsvisningProps {
   meldekort: Meldekort;
@@ -12,15 +11,9 @@ interface MeldekortBeregningsvisningProps {
 
 export const MeldekortBeregningsvisning = ({
     meldekort,
-    meldekortStatusEndret,
-    handleMeldekortStatusEndret
 }: MeldekortBeregningsvisningProps) => {
   const {meldekortBeregning, mutate }= useHentMeldekortBeregning(meldekort.id)
 
-  useEffect(()=>{
-    mutate();
-    handleMeldekortStatusEndret(false)
-  },[meldekortStatusEndret,handleMeldekortStatusEndret]);
 
   return (
     <Table size="small" style={{backgroundColor: 'rgba(247, 247, 247, 1)'}}>

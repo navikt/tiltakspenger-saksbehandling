@@ -10,7 +10,7 @@ import IkonMedTekst from '../ikon-med-tekst/IkonMedTekst';
 import { velgIkon } from './MeldekortUke';
 import {useState} from 'react';
 import styles from './Meldekort.module.css';
-import {useHentMeldekort} from "../../hooks/useHentMeldekort";
+import {useHentMeldekortBeregning} from "../../hooks/useHentMeldekortBeregning";
 
 interface MeldekortUkeDagProps {
   meldekortDag: MeldekortDag;
@@ -24,7 +24,7 @@ export const MeldekortUkeDag = ({
   handleMeldekortStatusEndret,
 }: MeldekortUkeDagProps) => {
   const [status, setStatus] = useState<MeldekortStatus>(meldekortDag.status);
-  const { mutate } = useHentMeldekort(meldekortId);
+  const { mutate } = useHentMeldekortBeregning(meldekortId);
 
   const oppdaterMeldekortdag = (dagStatus: string) => {
     if (dagStatus === '') return;
@@ -37,8 +37,10 @@ export const MeldekortUkeDag = ({
         dato: meldekortDag.dato,
         status: dagStatus as MeldekortStatus,
       }),
-    });
-    mutate();
+    }).then(() => {
+          mutate();
+        }
+    );
   };
 
   return (
