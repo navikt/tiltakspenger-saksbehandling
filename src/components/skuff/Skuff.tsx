@@ -1,4 +1,4 @@
-import { Button, HStack, Heading, Spacer, VStack } from '@navikt/ds-react';
+import { Box, Button, HStack, Heading, Spacer, VStack } from '@navikt/ds-react';
 import styles from './Skuff.module.css';
 import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';
@@ -16,58 +16,56 @@ export const Skuff = ({
   const [åpen, settÅpen] = useState<Boolean>(true);
 
   const venstreOrientertSkuff = () => (
-    <HStack className={styles.heading} onClick={() => settÅpen(!åpen)}>
+    <>
       <Heading size="xsmall" level="3">
         {headerTekst}
       </Heading>
       <Spacer />
-      <Button
-        variant="tertiary"
-        size="xsmall"
-        icon={<ChevronLeftIcon title="åpne/lukk sidepanel" />}
-      />
-    </HStack>
+      <ChevronLeftIcon title="lukk sidepanel" />
+    </>
   );
 
   const høyreOrientertSkuff = () => (
-    <HStack className={styles.heading} gap="2" onClick={() => settÅpen(!åpen)}>
-      <Button
-        variant="tertiary"
-        size="xsmall"
-        icon={<ChevronRightIcon title="åpne/lukk sidepanel" />}
-      />
+    <>
+      <ChevronRightIcon title="lukk sidepanel" className={styles.spacing} />
       <Heading size="xsmall" level="3">
         {headerTekst}
       </Heading>
-    </HStack>
+    </>
   );
 
   return (
     <>
       {åpen ? (
         <VStack className={styles.skuff}>
-          {venstreOrientert ? venstreOrientertSkuff() : høyreOrientertSkuff()}
+          <Box
+            as="button"
+            aria-expanded="true"
+            className={styles.heading}
+            onClick={() => settÅpen(!åpen)}
+          >
+            {venstreOrientert ? venstreOrientertSkuff() : høyreOrientertSkuff()}
+          </Box>
           {children}
         </VStack>
       ) : (
-        <VStack className={styles.lukketSkuff} onClick={() => settÅpen(!åpen)}>
+        <Box
+          className={styles.lukketSkuff}
+          onClick={() => settÅpen(!åpen)}
+          as="button"
+          aria-expanded="false"
+        >
           <HStack justify="center" className={styles.lukketKnapp}>
-            <Button
-              variant="tertiary"
-              size="xsmall"
-              icon={
-                venstreOrientert ? (
-                  <ChevronRightIcon title="åpne/lukk sidepanel" />
-                ) : (
-                  <ChevronLeftIcon title="åpne/lukk sidepanel" />
-                )
-              }
-            />
+            {venstreOrientert ? (
+              <ChevronRightIcon title="åpne sidepanel" />
+            ) : (
+              <ChevronLeftIcon title="åpne sidepanel" />
+            )}
           </HStack>
           <Heading size="xsmall" level="3" className={styles.lukketHeading}>
             {headerTekst}
           </Heading>
-        </VStack>
+        </Box>
       )}
     </>
   );
