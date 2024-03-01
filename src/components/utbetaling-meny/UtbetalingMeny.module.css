@@ -1,0 +1,31 @@
+.utbetalingSide {
+  margin: 1em;
+  width: 100%;
+}
+
+.section {
+  border-right: 1px solid #cfcfcf;
+  grid-area: venstrekolonne;
+}
+.heading {
+  padding: 0.7rem 1rem;
+  border-bottom: 1px solid #cfcfcf;
+}
+
+.tekst {
+  font-weight: bold;
+}
+
+.utbetalingliste {
+  padding: 1rem;
+}
+
+.listeelement {
+  border-bottom: 1px solid #cfcfcf;
+  padding: 0.3rem;
+}
+
+.listeelement:hover {
+  background-color: rgba(247, 247, 247, 1);
+  cursor: pointer;
+}

@@ -1,11 +1,9 @@
-import { CardIcon } from '@navikt/aksel-icons';
-import { Detail, Heading, Label, VStack } from '@navikt/ds-react';
+import { Detail, Label } from '@navikt/ds-react';
 import React from 'react';
 import styles from './MeldekortMeny.module.css';
 import { useHentMeldekortListe } from '../../hooks/useHentMeldekortListe';
 import { getWeekNumber, formatPeriode } from '../../utils/date';
 import { MeldekortUtenDager } from '../../types/MeldekortTypes';
-import IkonMedTekst from '../ikon-med-tekst/IkonMedTekst';
 import { useRouter } from 'next/router';
 import { Skuff } from '../skuff/Skuff';
 
