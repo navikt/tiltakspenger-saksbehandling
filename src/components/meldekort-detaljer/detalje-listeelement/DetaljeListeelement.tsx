@@ -1,5 +1,6 @@
 import { BodyShort, Label } from '@navikt/ds-react';
 import React from 'react';
+import styles from './DetaljeListeelement.module.css';
 
 interface DetaljeListeelementProps {
   iconRenderer: () => React.ReactNode;
@@ -13,7 +14,7 @@ export const DetaljeListeelement = ({
   discription,
 }: DetaljeListeelementProps) => {
   return (
-    <div style={{ margin: '1rem' }}>
+    <div className={styles.detaljeListeelement}>
       <span style={{ display: 'flex', alignItems: 'center' }}>
         {iconRenderer()}
         <Label size="small" style={{ paddingLeft: '0.5rem' }}>
