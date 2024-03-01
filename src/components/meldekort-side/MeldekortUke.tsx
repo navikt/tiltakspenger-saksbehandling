@@ -7,14 +7,12 @@ import {
 import { MeldekortDag, MeldekortStatus } from '../../types/MeldekortTypes';
 import React from 'react';
 import styles from './Meldekort.module.css';
-
 import { MeldekortUkeDag } from './MeldekortUkeDag';
 
 interface MeldekortUkeProps {
   meldekortUke: MeldekortDag[];
   ukesnummer: number;
   meldekortId: string;
-  handleMeldekortStatusEndret: (v: any) => void;
 }
 
 export const velgIkon = (deltattEllerFravær: MeldekortStatus) => {
@@ -38,7 +36,6 @@ export const MeldekortUke = ({
   meldekortUke,
   ukesnummer,
   meldekortId,
-  handleMeldekortStatusEndret
 }: MeldekortUkeProps) => {
   return (
     <VStack className={styles.meldekortUke}>
@@ -53,7 +50,6 @@ export const MeldekortUke = ({
           key={ukedag.dato.toString()}
           meldekortDag={ukedag}
           meldekortId={meldekortId}
-          handleMeldekortStatusEndret={handleMeldekortStatusEndret}
         />
       ))}
     </VStack>

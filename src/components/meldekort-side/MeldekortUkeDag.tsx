@@ -15,13 +15,11 @@ import {useHentMeldekortBeregning} from "../../hooks/useHentMeldekortBeregning";
 interface MeldekortUkeDagProps {
   meldekortDag: MeldekortDag;
   meldekortId: string;
-  handleMeldekortStatusEndret: (v: any) => void;
 }
 
 export const MeldekortUkeDag = ({
   meldekortId,
   meldekortDag,
-  handleMeldekortStatusEndret,
 }: MeldekortUkeDagProps) => {
   const [status, setStatus] = useState<MeldekortStatus>(meldekortDag.status);
   const { mutate } = useHentMeldekortBeregning(meldekortId);
@@ -29,18 +27,16 @@ export const MeldekortUkeDag = ({
   const oppdaterMeldekortdag = (dagStatus: string) => {
     if (dagStatus === '') return;
     setStatus(dagStatus as MeldekortStatus);
-    handleMeldekortStatusEndret(true);
     fetch(`/api/meldekort/oppdaterDag`, {
       method: 'POST',
       body: JSON.stringify({
-        meldekortId: meldekortId,
-        dato: meldekortDag.dato,
-        status: dagStatus as MeldekortStatus,
+      meldekortId: meldekortId,
+      dato: meldekortDag.dato,
+      status: dagStatus as MeldekortStatus,
       }),
     }).then(() => {
           mutate();
-        }
-    );
+    });
   };
 
   return (

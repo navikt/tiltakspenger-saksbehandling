@@ -3,7 +3,7 @@ import {fetcher} from "../utils/http";
 import {MeldekortBeregningDTO} from "../types/MeldekortTypes";
 
 export function useHentMeldekortBeregning(meldekortId?: string) {
-    let {
+    const {
         data: meldekortBeregning,
         mutate,
         isLoading,

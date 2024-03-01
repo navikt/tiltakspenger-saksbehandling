@@ -11,7 +11,6 @@ import {SaksbehandlerContext} from "../../pages/_app";
 
 export const MeldekortSide = () => {
   const [disableUkeVisning, setDisableUkeVisning] = useState<boolean>(true);
-  const [meldekortStatusEndret, setMeldekortStatusEndret] = useState<boolean>(false);
   const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
   const router = useRouter();
   const meldekortId = router.query.meldekortId as string;
@@ -23,8 +22,6 @@ export const MeldekortSide = () => {
 
   const uke1 = meldekort.meldekortDager.slice(0, 7)
   const uke2 = meldekort.meldekortDager.slice(7, 14)
-
-  const handleMeldekortStatusEndret = (value: boolean) =>  setMeldekortStatusEndret(value);
 
   const godkjennMeldekort = () => {
     fetch(`/api/meldekort/godkjenn/${meldekortId}`, {
@@ -43,19 +40,15 @@ export const MeldekortSide = () => {
           meldekortUke={uke1}
           ukesnummer={getWeekNumber(uke1[0].dato)}
           meldekortId={meldekortId}
-          handleMeldekortStatusEndret = {handleMeldekortStatusEndret}
         />
         <MeldekortUke
           meldekortUke={uke2}
           ukesnummer={getWeekNumber(uke2[1].dato)}
           meldekortId={meldekortId}
-          handleMeldekortStatusEndret = {handleMeldekortStatusEndret}
         />
       </HStack>
       <MeldekortBeregningsvisning
           meldekort={meldekort}
-          meldekortStatusEndret = {meldekortStatusEndret}
-          handleMeldekortStatusEndret = {handleMeldekortStatusEndret}
       />
       <MeldekortKnapper
         håndterEndreMeldekort={() => setDisableUkeVisning(!disableUkeVisning)}

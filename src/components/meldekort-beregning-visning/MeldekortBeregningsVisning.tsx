@@ -5,15 +5,12 @@ import {useHentMeldekortBeregning} from "../../hooks/useHentMeldekortBeregning";
 
 interface MeldekortBeregningsvisningProps {
   meldekort: Meldekort;
-  meldekortStatusEndret: boolean;
-  handleMeldekortStatusEndret: (v: any) => void;
 }
 
 export const MeldekortBeregningsvisning = ({
     meldekort,
 }: MeldekortBeregningsvisningProps) => {
-  const {meldekortBeregning, mutate }= useHentMeldekortBeregning(meldekort.id)
-
+  const {meldekortBeregning } = useHentMeldekortBeregning(meldekort.id)
 
   return (
     <Table size="small" style={{backgroundColor: 'rgba(247, 247, 247, 1)'}}>
