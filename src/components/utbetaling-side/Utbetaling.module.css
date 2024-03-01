@@ -1,0 +1,26 @@
+.heading {
+  padding-bottom: 1em;
+  border-bottom: 1px solid #cfcfcf;
+}
+
+.section {
+  border-right: 1px solid #cfcfcf;
+  grid-area: venstrekolonne;
+}
+
+.utbetalingDagliste {
+  padding: 0.5rem;
+  background-color: #f2f2f2;
+  margin: 0.1rem 0.7rem;
+}
+
+.utbetalingDagListeGrid {
+  border-bottom: 1px solid #cfcfcf;
+  padding: 0.5rem;
+}
+
+.utbetalingDagListeHeading {
+  border-bottom: 1px solid #cfcfcf;
+  padding: 0.7rem;
+  margin: 0 0.5rem;
+}
