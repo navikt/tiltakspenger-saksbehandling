@@ -9,8 +9,9 @@
 
 .meldekortUke {
   background-color: rgba(247, 247, 247, 1);
-  width: 47%;
+  width: 49%;
   padding: 1em;
+  margin: 0 0.3rem;
 }
 
 .meldekortUkeDag {

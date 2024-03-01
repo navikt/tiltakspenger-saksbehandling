@@ -8,25 +8,28 @@ import { formatDate, getDayOfWeek } from '../../utils/date';
 import { velgMeldekortdagStatus } from '../../utils/meldekort';
 import IkonMedTekst from '../ikon-med-tekst/IkonMedTekst';
 import { velgIkon } from './MeldekortUke';
-import { useState } from 'react';
+import {useState} from 'react';
 import styles from './Meldekort.module.css';
-import {useSWRConfig} from "swr";
+import {useHentMeldekort} from "../../hooks/useHentMeldekort";
 
 interface MeldekortUkeDagProps {
   meldekortDag: MeldekortDag;
   meldekortId: string;
+  handleMeldekortStatusEndret: (v: any) => void;
 }
 
 export const MeldekortUkeDag = ({
   meldekortId,
   meldekortDag,
+  handleMeldekortStatusEndret,
 }: MeldekortUkeDagProps) => {
   const [status, setStatus] = useState<MeldekortStatus>(meldekortDag.status);
-  const mutator = useSWRConfig().mutate;
+  const { mutate } = useHentMeldekort(meldekortId);
 
   const oppdaterMeldekortdag = (dagStatus: string) => {
     if (dagStatus === '') return;
     setStatus(dagStatus as MeldekortStatus);
+    handleMeldekortStatusEndret(true);
     fetch(`/api/meldekort/oppdaterDag`, {
       method: 'POST',
       body: JSON.stringify({
@@ -34,10 +37,8 @@ export const MeldekortUkeDag = ({
         dato: meldekortDag.dato,
         status: dagStatus as MeldekortStatus,
       }),
-    }).then(() => {
-        mutator(`/api/hentBeregning/${meldekortId}`);
-      }
-    );
+    });
+    mutate();
   };
 
   return (
@@ -48,10 +49,8 @@ export const MeldekortUkeDag = ({
       className={styles.meldekortUkeDag}
     >
       <IkonMedTekst
-        text={`${getDayOfWeek(meldekortDag.dato)} ${formatDate(
-          meldekortDag.dato.toString(),
-        )}`}
-        iconRenderer={() => velgIkon(meldekortDag.status)}
+        text={`${getDayOfWeek(meldekortDag.dato)} ${formatDate(meldekortDag.dato.toString(),)}`}
+        iconRenderer={() => velgIkon(status)}
       />
       <Select
         label="Deltatt Eller Fravær"
