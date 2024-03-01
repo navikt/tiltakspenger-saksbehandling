@@ -20,19 +20,19 @@ export const UtbetalingDetaljer = () => {
             </Heading>
             <DetaljeListeelement
                 label="Tiltakspenger sats"
-                discription="285"
+                discription={utbetalingVedtak?.sats.toString() ?? 'Fant ikke sats'}
             />
             <DetaljeListeelement
                 label="Barnetillegg sats"
-                discription="55"
+                discription={utbetalingVedtak?.satsBarnetillegg.toString() ?? 'Fant ikke sats'}
             />
             <DetaljeListeelement
                 label="Redusert tiltakspenger sats"
-                discription="214"
+                discription={utbetalingVedtak?.satsDelvis.toString() ?? 'Fant ikke sats'}
             />
             <DetaljeListeelement
                 label="Redusert barnetillegg sats"
-                discription="42"
+                discription={utbetalingVedtak?.satsBarnetilleggDelvis.toString() ?? 'Fant ikke sats'}
             />
             {utbetalingVedtak && (
                 <DetaljeListeelement
