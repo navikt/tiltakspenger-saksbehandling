@@ -59,3 +59,17 @@ export const MeldekortStatusTekster = [
   'Fravær sykt barn',
   'Fravær velferd',
 ];
+
+export type MeldekortBeregningDTO = {
+    antallDeltatt: number;
+    antallIkkeDeltatt: number;
+    antallSykDager: number;
+    antallSykBarnDager: number;
+    antallVelferd: number;
+    antallFullUtbetaling: number;
+    antallDelvisUtbetaling: number;
+    antallIngenUtbetaling: number;
+    sumDelvis: number;
+    sumFull: number;
+    sumTotal: number;
+}

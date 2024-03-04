@@ -1,7 +1,7 @@
 import styles from './Meldekort.module.css';
-import { MeldekortUke } from '../meldekort-side/MeldekortUke';
+import { MeldekortUke } from './MeldekortUke';
 import { MeldekortBeregningsvisning } from '../meldekort-beregning-visning/MeldekortBeregningsVisning';
-import { BodyLong, HStack, Loader, Spacer, VStack } from '@navikt/ds-react';
+import { BodyLong, HStack, Loader, VStack } from '@navikt/ds-react';
 import { useContext, useState } from 'react';
 import { MeldekortKnapper } from './MeldekortKnapper';
 import { useRouter } from 'next/router';
@@ -11,13 +11,12 @@ import { SaksbehandlerContext } from '../../pages/_app';
 
 export const MeldekortSide = () => {
   const [disableUkeVisning, setDisableUkeVisning] = useState<boolean>(true);
-  const router = useRouter();
   const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
-
+  const router = useRouter();
   const meldekortId = router.query.meldekortId as string;
   const { meldekort, isLoading } = useHentMeldekort(meldekortId);
 
-  if (isLoading) {
+  if (isLoading || !meldekort) {
     return <Loader />;
   } else if (!meldekort) {
     return (
@@ -46,7 +45,6 @@ export const MeldekortSide = () => {
           ukesnummer={getWeekNumber(uke1[0].dato)}
           meldekortId={meldekortId}
         />
-        <Spacer />
         <MeldekortUke
           meldekortUke={uke2}
           ukesnummer={getWeekNumber(uke2[1].dato)}

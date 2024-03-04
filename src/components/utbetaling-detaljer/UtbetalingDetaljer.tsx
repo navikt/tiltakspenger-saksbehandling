@@ -11,15 +11,28 @@ export const UtbetalingDetaljer = () => {
 
   return (
     <Skuff venstreOrientert={false} headerTekst="Detaljer">
-      <DetaljeListeelement label="Tiltakspenger sats" description="285" />
-      <DetaljeListeelement label="Barnetillegg sats" description="55" />
+      <DetaljeListeelement
+        label="Tiltakspenger sats"
+        description={utbetalingVedtak?.sats.toString() ?? 'Fant ikke sats'}
+      />
+      <DetaljeListeelement
+        label="Barnetillegg sats"
+        description={
+          utbetalingVedtak?.satsBarnetillegg.toString() ?? 'Fant ikke sats'
+        }
+      />
       <DetaljeListeelement
         label="Redusert tiltakspenger sats"
-        description="214"
+        description={
+          utbetalingVedtak?.satsDelvis.toString() ?? 'Fant ikke sats'
+        }
       />
       <DetaljeListeelement
         label="Redusert barnetillegg sats"
-        description="42"
+        description={
+          utbetalingVedtak?.satsBarnetilleggDelvis.toString() ??
+          'Fant ikke sats'
+        }
       />
       {utbetalingVedtak && (
         <DetaljeListeelement

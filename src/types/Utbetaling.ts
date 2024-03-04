@@ -10,7 +10,9 @@ export type UtbetalingVedtak = {
     fom: Date,
     tom: Date,
     sats: number,
+    satsDelvis: number,
     satsBarnetillegg: number,
+    satsBarnetilleggDelvis: number,
     antallBarn: number,
     totalbeløp: number,
     vedtakDager: UtbetalingsDagDTO[];

@@ -8,9 +8,9 @@ import { formatDate, getDayOfWeek } from '../../utils/date';
 import { velgMeldekortdagStatus } from '../../utils/meldekort';
 import IkonMedTekst from '../ikon-med-tekst/IkonMedTekst';
 import { velgIkon } from './MeldekortUke';
-import { useState } from 'react';
+import {useState} from 'react';
 import styles from './Meldekort.module.css';
-import { useHentMeldekort } from '../../hooks/useHentMeldekort';
+import {useHentMeldekortBeregning} from "../../hooks/useHentMeldekortBeregning";
 
 interface MeldekortUkeDagProps {
   meldekortDag: MeldekortDag;
@@ -22,7 +22,7 @@ export const MeldekortUkeDag = ({
   meldekortDag,
 }: MeldekortUkeDagProps) => {
   const [status, setStatus] = useState<MeldekortStatus>(meldekortDag.status);
-  const { mutate } = useHentMeldekort(meldekortId);
+  const { mutate } = useHentMeldekortBeregning(meldekortId);
 
   const oppdaterMeldekortdag = (dagStatus: string) => {
     if (dagStatus === '') return;
@@ -30,12 +30,13 @@ export const MeldekortUkeDag = ({
     fetch(`/api/meldekort/oppdaterDag`, {
       method: 'POST',
       body: JSON.stringify({
-        meldekortId: meldekortId,
-        dato: meldekortDag.dato,
-        status: dagStatus as MeldekortStatus,
+      meldekortId: meldekortId,
+      dato: meldekortDag.dato,
+      status: dagStatus as MeldekortStatus,
       }),
+    }).then(() => {
+          mutate();
     });
-    mutate();
   };
 
   return (
@@ -46,10 +47,8 @@ export const MeldekortUkeDag = ({
       className={styles.meldekortUkeDag}
     >
       <IkonMedTekst
-        text={`${getDayOfWeek(meldekortDag.dato)} ${formatDate(
-          meldekortDag.dato.toString(),
-        )}`}
-        iconRenderer={() => velgIkon(meldekortDag.status)}
+        text={`${getDayOfWeek(meldekortDag.dato)} ${formatDate(meldekortDag.dato.toString(),)}`}
+        iconRenderer={() => velgIkon(status)}
       />
       <Select
         label="Deltatt Eller Fravær"

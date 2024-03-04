@@ -9,8 +9,9 @@ export function useHentMeldekort(meldekortId?: string) {
     isLoading,
     error,
   } = useSWR<Meldekort>(
-    meldekortId ? `/api/meldekort/hentMeldekort/${meldekortId}` : null,
+    meldekortId && `/api/meldekort/hentMeldekort/${meldekortId}`,
     fetcher
   );
+
   return { meldekort, isLoading, error, mutate };
 }

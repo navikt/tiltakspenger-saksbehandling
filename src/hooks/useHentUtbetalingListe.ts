@@ -11,5 +11,6 @@ export function useHentUtbetalingListe(behandlingId: string) {
         `/api/utbetaling/hentAlleForBehandling/${behandlingId}`,
         fetcher
     );
+
     return { utbetalingListe, isLoading, error };
 }
