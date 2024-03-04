@@ -1,13 +1,13 @@
 import styles from './Meldekort.module.css';
 import { MeldekortUke } from './MeldekortUke';
 import { MeldekortBeregningsvisning } from '../meldekort-beregning-visning/MeldekortBeregningsVisning';
-import { HStack, Loader, VStack } from '@navikt/ds-react';
-import {useContext, useState} from 'react';
-import {MeldekortKnapper} from './MeldekortKnapper';
-import {useRouter} from 'next/router';
-import {useHentMeldekort} from '../../hooks/useHentMeldekort';
-import {getWeekNumber} from '../../utils/date';
-import {SaksbehandlerContext} from "../../pages/_app";
+import { BodyLong, HStack, Loader, VStack } from '@navikt/ds-react';
+import { useContext, useState } from 'react';
+import { MeldekortKnapper } from './MeldekortKnapper';
+import { useRouter } from 'next/router';
+import { useHentMeldekort } from '../../hooks/useHentMeldekort';
+import { getWeekNumber } from '../../utils/date';
+import { SaksbehandlerContext } from '../../pages/_app';
 
 export const MeldekortSide = () => {
   const [disableUkeVisning, setDisableUkeVisning] = useState<boolean>(true);
@@ -18,10 +18,16 @@ export const MeldekortSide = () => {
 
   if (isLoading || !meldekort) {
     return <Loader />;
+  } else if (!meldekort) {
+    return (
+      <VStack className={styles.ukevisning}>
+        <BodyLong>Det er ingen meldekort å vise</BodyLong>
+      </VStack>
+    );
   }
 
-  const uke1 = meldekort.meldekortDager.slice(0, 7)
-  const uke2 = meldekort.meldekortDager.slice(7, 14)
+  const uke1 = meldekort.meldekortDager.slice(0, 7);
+  const uke2 = meldekort.meldekortDager.slice(7, 14);
 
   const godkjennMeldekort = () => {
     fetch(`/api/meldekort/godkjenn/${meldekortId}`, {
@@ -33,9 +39,7 @@ export const MeldekortSide = () => {
 
   return (
     <VStack gap="5" className={styles.ukevisning}>
-      <HStack
-        className={disableUkeVisning? styles.disableUkevisning : ''}
-      >
+      <HStack className={disableUkeVisning ? styles.disableUkevisning : ''}>
         <MeldekortUke
           meldekortUke={uke1}
           ukesnummer={getWeekNumber(uke1[0].dato)}

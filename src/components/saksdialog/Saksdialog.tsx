@@ -1,9 +1,7 @@
-import styles from './Saksdialog.module.css';
-import { ChevronRightIcon } from '@navikt/aksel-icons';
 import React from 'react';
-import { Heading } from '@navikt/ds-react';
 import { Endring } from '../../types/Behandling';
 import { SaksdialogElement } from './SaksdialogElement';
+import { Skuff } from '../skuff/Skuff';
 
 interface HistorikkProps {
   endringslogg: Endring[];
@@ -11,15 +9,10 @@ interface HistorikkProps {
 
 export const Saksdialog = ({ endringslogg }: HistorikkProps) => {
   return (
-    <div className={styles.historikkColumn}>
-      <Heading size="xsmall" level="1" className={styles.historikkHeading}>
-        <span className={styles.historikkHeadingSpan}>
-          <ChevronRightIcon /> &nbsp; Saksdialog{' '}
-        </span>
-      </Heading>
+    <Skuff venstreOrientert={false} headerTekst="Saksdialog">
       {endringslogg.map((endring, index) => (
         <SaksdialogElement endring={endring} key={index} />
       ))}
-    </div>
+    </Skuff>
   );
 };

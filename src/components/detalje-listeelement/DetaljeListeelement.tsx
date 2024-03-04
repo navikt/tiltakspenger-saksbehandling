@@ -1,27 +1,28 @@
 import { BodyShort, Label } from '@navikt/ds-react';
 import React from 'react';
+import styles from './DetaljeListeelement.module.css';
 
 interface DetaljeListeelementProps {
-  iconRenderer: () => React.ReactNode;
+  iconRenderer?: () => React.ReactNode;
   label: string;
-  discription: string;
+  description: string;
 }
 
 export const DetaljeListeelement = ({
   iconRenderer,
   label,
-  discription,
+  description,
 }: DetaljeListeelementProps) => {
   return (
-    <div style={{ margin: '1rem' }}>
+    <div className={styles.detaljeListeelement}>
       <span style={{ display: 'flex', alignItems: 'center' }}>
-        {iconRenderer()}
+        {iconRenderer && iconRenderer()}
         <Label size="small" style={{ paddingLeft: '0.5rem' }}>
           {label}
         </Label>
       </span>
       <BodyShort size="small" style={{ marginLeft: '1.6rem' }}>
-        {discription}
+        {description}
       </BodyShort>
     </div>
   );

@@ -7,6 +7,7 @@ import { Lesevisning } from '../../utils/avklarLesevisning';
 import { BehandlingKnapper } from '../behandling-knapper/BehandlingKnapper';
 import { useRef } from 'react';
 import BegrunnelseModal from '../begrunnelse-modal/BegrunnelseModal';
+import styles from './Vilkårsvurdering.module.css';
 
 interface VilkårsvurderingProps {
   utfall: samletUtfall;
@@ -22,7 +23,7 @@ export const Vilkårsvurdering = ({
   const modalRef = useRef<HTMLDialogElement>(null);
 
   return (
-    <VStack gap="5" style={{ padding: '1em' }}>
+    <VStack gap="5" className={styles.vilkårsvurdering}>
       <Alert variant={utfall.variant}>
         {utfall.tekst}
         {utfall.altTekst && (

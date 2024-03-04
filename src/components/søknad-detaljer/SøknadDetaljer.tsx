@@ -1,12 +1,5 @@
 import React from 'react';
-import { BodyShort, Heading } from '@navikt/ds-react';
-import {
-  CalendarIcon,
-  FileTextIcon,
-  Buldings3Icon,
-  ArrowsSquarepathIcon,
-} from '@navikt/aksel-icons';
-import IkonMedTekst from '../../components/ikon-med-tekst/IkonMedTekst';
+import { BodyShort, Heading, VStack } from '@navikt/ds-react';
 import { formatDate } from '../../utils/date';
 import styles from './SøknadDetaljer.module.css';
 import Søknad from '../../types/Søknad';
@@ -25,33 +18,24 @@ const SøknadDetaljer = ({
   },
 }: SøknadDetaljerProps) => {
   return (
-    <>
-      <Heading size="xsmall" level="1" className={styles.oppsummeringHeading}>
-        Oppsummering
+    <VStack gap="3">
+      <Heading className={styles.søknadHeading} size="xsmall" level="4">
+        Søknad
       </Heading>
-      <div className={styles.søknadOppsummering}>
-        <Heading className={styles.søknadHeading} size="xsmall" level="2">
-          Søknad
-        </Heading>
-        <div className={styles.søknadDetaljer}>
-          <BodyShort size="small">
-            Søknadsdato: {formatDate(søknadsdato)}
-          </BodyShort>
+      <BodyShort size="small">Søknadsdato: {formatDate(søknadsdato)}</BodyShort>
 
-          {deltakelseFom && (
-            <BodyShort size="small">
-              {`${formatDate(deltakelseFom)}${
-                !!deltakelseTom ? ` - ${formatDate(deltakelseTom)}` : ''
-              }`}
-            </BodyShort>
-          )}
-          <BodyShort size="small">
-            {`${tiltakstype} - ${arrangoernavn ? ` - ${arrangoernavn}` : ''}`}
-          </BodyShort>
-          <BodyShort size="small">x dager i uken</BodyShort>
-        </div>
-      </div>
-    </>
+      {deltakelseFom && (
+        <BodyShort size="small">
+          {`${formatDate(deltakelseFom)}${
+            !!deltakelseTom ? ` - ${formatDate(deltakelseTom)}` : ''
+          }`}
+        </BodyShort>
+      )}
+      <BodyShort size="small">
+        {`${tiltakstype} - ${arrangoernavn ? ` - ${arrangoernavn}` : ''}`}
+      </BodyShort>
+      <BodyShort size="small">x dager i uken</BodyShort>
+    </VStack>
   );
 };
 

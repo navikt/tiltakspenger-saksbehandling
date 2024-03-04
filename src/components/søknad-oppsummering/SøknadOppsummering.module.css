@@ -1,13 +1,7 @@
 .søknadOppsummering {
-  border-right: 1px solid #cfcfcf;
-  grid-area: venstrekolonne;
-  min-height: calc(100vh - 7.5rem);
-}
-
-.registrerteTiltakSection {
-  padding: 0.5rem;
+ padding: 0 0.7rem;
 }
 
 .registrerteTiltakHeading {
-  margin-bottom: 1rem;
+  margin-top: 1rem;
 }

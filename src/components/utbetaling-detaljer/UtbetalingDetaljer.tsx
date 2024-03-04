@@ -1,45 +1,45 @@
-import styles from './Detaljer.module.css';
-import { Heading } from '@navikt/ds-react';
-import { ChevronRightIcon } from '@navikt/aksel-icons';
 import React from 'react';
-import DetaljeListeelement from './detalje-listeelement/DetaljeListeelement';
-import {useRouter} from "next/router";
-import {useHentUtbetalingVedtak} from "../../hooks/useHentUtbetalingVedtak";
+import { useRouter } from 'next/router';
+import { useHentUtbetalingVedtak } from '../../hooks/useHentUtbetalingVedtak';
+import { Skuff } from '../skuff/Skuff';
+import DetaljeListeelement from '../detalje-listeelement/DetaljeListeelement';
 
 export const UtbetalingDetaljer = () => {
-    const router = useRouter();
-    const utbetalingVedtakId = router.query.utbetalingId as string;
-    const { utbetalingVedtak } = useHentUtbetalingVedtak(utbetalingVedtakId);
+  const router = useRouter();
+  const utbetalingVedtakId = router.query.utbetalingId as string;
+  const { utbetalingVedtak } = useHentUtbetalingVedtak(utbetalingVedtakId);
 
-    return (
-        <div className={styles.detaljerColumn}>
-            <Heading size="xsmall" level="1" className={styles.detaljerHeading}>
-            <span className={styles.detaljerHeadingSpan}>
-            <ChevronRightIcon/> &nbsp; Detaljer{' '}
-            </span>
-            </Heading>
-            <DetaljeListeelement
-                label="Tiltakspenger sats"
-                discription={utbetalingVedtak?.sats.toString() ?? 'Fant ikke sats'}
-            />
-            <DetaljeListeelement
-                label="Barnetillegg sats"
-                discription={utbetalingVedtak?.satsBarnetillegg.toString() ?? 'Fant ikke sats'}
-            />
-            <DetaljeListeelement
-                label="Redusert tiltakspenger sats"
-                discription={utbetalingVedtak?.satsDelvis.toString() ?? 'Fant ikke sats'}
-            />
-            <DetaljeListeelement
-                label="Redusert barnetillegg sats"
-                discription={utbetalingVedtak?.satsBarnetilleggDelvis.toString() ?? 'Fant ikke sats'}
-            />
-            {utbetalingVedtak && (
-                <DetaljeListeelement
-                    label="Antall barn"
-                    discription={utbetalingVedtak?.antallBarn.toString()}
-                />
-            )}
-        </div>
-    );
-}
+  return (
+    <Skuff venstreOrientert={false} headerTekst="Detaljer">
+      <DetaljeListeelement
+        label="Tiltakspenger sats"
+        description={utbetalingVedtak?.sats.toString() ?? 'Fant ikke sats'}
+      />
+      <DetaljeListeelement
+        label="Barnetillegg sats"
+        description={
+          utbetalingVedtak?.satsBarnetillegg.toString() ?? 'Fant ikke sats'
+        }
+      />
+      <DetaljeListeelement
+        label="Redusert tiltakspenger sats"
+        description={
+          utbetalingVedtak?.satsDelvis.toString() ?? 'Fant ikke sats'
+        }
+      />
+      <DetaljeListeelement
+        label="Redusert barnetillegg sats"
+        description={
+          utbetalingVedtak?.satsBarnetilleggDelvis.toString() ??
+          'Fant ikke sats'
+        }
+      />
+      {utbetalingVedtak && (
+        <DetaljeListeelement
+          label="Antall barn"
+          description={utbetalingVedtak?.antallBarn.toString()}
+        />
+      )}
+    </Skuff>
+  );
+};
