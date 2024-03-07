@@ -1,5 +1,5 @@
 export enum Utfall {
-  Oppfylt = 'Oppfylt',
-  IkkeOppfylt = 'IkkeOppfylt',
-  KreverManuellVurdering = 'KreverManuellVurdering',
+  OPPFYLT = 'OPPFYLT',
+  IKKE_OPPFYLT = 'IKKE_OPPFYLT',
+  KREVER_MANUELL_VURDERING = 'KREVER_MANUELL_VURDERING'
 }

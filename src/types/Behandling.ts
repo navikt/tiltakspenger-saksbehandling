@@ -1,4 +1,5 @@
 import Søknad, { RegistrertTiltak } from './Søknad';
+import {Utfall} from "./Utfall";
 
 interface Vilkår {
   lovreferanse: string;
@@ -27,6 +28,7 @@ export interface Behandling {
   tilstand: string;
   status: string;
   endringslogg: Endring[];
+  samletUtfall: Utfall
 }
 
 export interface Endring {
