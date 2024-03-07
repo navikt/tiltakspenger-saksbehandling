@@ -5,38 +5,34 @@ import { useState } from 'react';
 import { Lesevisning } from '../../utils/avklarLesevisning';
 import { formatPeriode } from '../../utils/date';
 import { UtfallIkon } from '../utfall-ikon/UtfallIkon';
+import { FaktaDTO, SaksopplysningInnDTO } from '../../types/Behandling';
 
 interface SaksopplysningProps {
-  vilkår: string;
-  vilkårFlateTittel: string;
-  utfall: string;
-  fom: string;
-  tom: string;
-  kilde: string;
-  detaljer: string;
-  fakta: string;
   behandlingId: string;
   behandlingsperiode: {
     fom: string;
     tom: string;
   };
   lesevisning: Lesevisning;
+  saksopplysningDTO: SaksopplysningInnDTO;
 }
 
 export const Saksopplysning = ({
-  vilkår,
-  vilkårFlateTittel,
-  utfall,
-  fom,
-  tom,
-  kilde,
-  detaljer,
-  fakta,
+  saksopplysningDTO,
   behandlingId,
   behandlingsperiode,
   lesevisning,
 }: SaksopplysningProps) => {
   const [åpneRedigering, onÅpneRedigering] = useState<boolean>(false);
+
+  const { vilkårTittel, vilkårFlateTittel, utfall, fom, tom, kilde, detaljer } =
+    saksopplysningDTO;
+
+  const velgFaktaTekst = (typeSaksopplysning: string, fakta: FaktaDTO) => {
+    if (typeSaksopplysning === 'HAR_YTELSE') return fakta.harYtelse;
+    if (typeSaksopplysning === 'HAR_IKKE_YTELSE') return fakta.harIkkeYtelse;
+    return 'Ikke innhentet';
+  };
 
   const håndterLukkRedigering = () => {
     onÅpneRedigering(false);
@@ -44,7 +40,7 @@ export const Saksopplysning = ({
 
   return (
     <>
-      <Table.Row key={vilkår}>
+      <Table.Row key={vilkårTittel}>
         <Table.DataCell>
           <UtfallIkon utfall={utfall} />
         </Table.DataCell>
@@ -52,7 +48,12 @@ export const Saksopplysning = ({
           <BodyShort>{vilkårFlateTittel}</BodyShort>
         </Table.DataCell>
         <Table.DataCell>
-          <BodyShort>{fakta}</BodyShort>
+          <BodyShort>
+            {velgFaktaTekst(
+              saksopplysningDTO.typeSaksopplysning,
+              saksopplysningDTO.fakta,
+            )}
+          </BodyShort>
         </Table.DataCell>
         <Table.DataCell>
           <BodyShort>
@@ -81,8 +82,9 @@ export const Saksopplysning = ({
         <Table.Row>
           <Table.DataCell colSpan={7} style={{ padding: '0' }}>
             <RedigeringSkjema
+              fakta={saksopplysningDTO.fakta}
               behandlingId={behandlingId}
-              vilkår={vilkår}
+              vilkårTittel={vilkårTittel}
               vilkårFlateTittel={vilkårFlateTittel}
               håndterLukkRedigering={håndterLukkRedigering}
               behandlingsperiode={behandlingsperiode}
