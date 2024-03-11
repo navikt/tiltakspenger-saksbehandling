@@ -12,9 +12,10 @@ import PeriodeSkjema from './PeriodeSkjema';
 import dayjs from 'dayjs';
 import { useState } from 'react';
 import { formatDate } from '../../utils/date';
+import { FaktaDTO } from '../../types/Behandling';
 
 interface RedigeringSkjemaProps {
-  vilkår: string;
+  vilkårTittel: string;
   vilkårFlateTittel: string;
   håndterLukkRedigering: () => void;
   behandlingId: string;
@@ -26,6 +27,7 @@ interface RedigeringSkjemaProps {
     fom: string;
     tom: string;
   };
+  fakta: FaktaDTO;
 }
 
 interface SkjemaFelter {
@@ -54,11 +56,11 @@ function gyldigPeriodeValidator(periode: { fom: Date; tom: Date }) {
 
 export const RedigeringSkjema = ({
   håndterLukkRedigering,
-  vilkår,
-  vilkårFlateTittel,
+  vilkårTittel,
   vilkårsperiode,
   behandlingId,
   behandlingsperiode,
+  fakta,
 }: RedigeringSkjemaProps) => {
   const [harYtelse, settHarYtelse] = useState<boolean>(false);
 
@@ -74,7 +76,7 @@ export const RedigeringSkjema = ({
 
   const håndterHarYtelse = (
     harYtelseSvar: boolean,
-    onChange: (value: boolean) => void
+    onChange: (value: boolean) => void,
   ) => {
     onChange(harYtelseSvar);
     settHarYtelse(harYtelseSvar);
@@ -94,7 +96,7 @@ export const RedigeringSkjema = ({
         tom: harYtelse
           ? skjemaFelter.periode?.tom.toISOString().split('T')[0]
           : behandlingsperiode.tom,
-        vilkår: vilkår,
+        vilkår: vilkårTittel,
         begrunnelse: skjemaFelter.begrunnelse,
         harYtelse: skjemaFelter.harYtelse,
       }),
@@ -127,12 +129,10 @@ export const RedigeringSkjema = ({
                 >
                   <Radio
                     value={false}
-                  >{`Mottar ikke ${vilkårFlateTittel.toLowerCase()} i perioden ${formatDate(
-                    behandlingsperiode.fom
+                  >{`${fakta.harIkkeYtelse} i perioden ${formatDate(
+                    behandlingsperiode.fom,
                   )} til ${formatDate(behandlingsperiode.tom)}`}</Radio>
-                  <Radio
-                    value={true}
-                  >{`Mottar ${vilkårFlateTittel.toLowerCase()}`}</Radio>
+                  <Radio value={true}>{`${fakta.harYtelse}`}</Radio>
                 </RadioGroup>
               );
             }}

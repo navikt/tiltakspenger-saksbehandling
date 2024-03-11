@@ -20,11 +20,6 @@ export const SaksopplysningTabell = ({
   behandlingsperiode,
   lesevisning,
 }: SaksopplysningProps) => {
-  const velgFaktaTekst = (typeSaksopplysning: string, fakta: FaktaDTO) => {
-    if (typeSaksopplysning === 'HAR_YTELSE') return fakta.harYtelse;
-    if (typeSaksopplysning === 'HAR_IKKE_YTELSE') return fakta.harIkkeYtelse;
-    return 'Ikke innhentet';
-  };
   return (
     <>
       <Table size="small" style={{ tableLayout: 'fixed', width: '100%' }}>
@@ -47,18 +42,8 @@ export const SaksopplysningTabell = ({
           {saksopplysninger.map((saksopplysning) => (
             <Saksopplysning
               key={saksopplysning.vilkårTittel}
-              vilkår={saksopplysning.vilkårTittel}
-              vilkårFlateTittel={saksopplysning.vilkårFlateTittel}
-              utfall={saksopplysning.utfall}
-              fom={saksopplysning.fom}
-              tom={saksopplysning.tom}
-              kilde={saksopplysning.kilde}
+              saksopplysningDTO={saksopplysning}
               behandlingId={behandlingId}
-              detaljer={saksopplysning.detaljer}
-              fakta={velgFaktaTekst(
-                saksopplysning.typeSaksopplysning,
-                saksopplysning.fakta
-              )}
               behandlingsperiode={behandlingsperiode}
               lesevisning={lesevisning}
             />
