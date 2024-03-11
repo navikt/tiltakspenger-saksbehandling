@@ -1,22 +1,20 @@
 import { Accordion, Alert, HStack, VStack } from '@navikt/ds-react';
 import { SaksopplysningTabell } from '../saksopplysning-tabell/SaksopplysningTabell';
 import { UtfallIkon } from '../utfall-ikon/UtfallIkon';
-import { samletUtfall } from '../../utils/samletUtfall';
 import { Behandling } from '../../types/Behandling';
 import { Lesevisning } from '../../utils/avklarLesevisning';
 import { BehandlingKnapper } from '../behandling-knapper/BehandlingKnapper';
 import { useRef } from 'react';
 import BegrunnelseModal from '../begrunnelse-modal/BegrunnelseModal';
 import styles from './Vilkårsvurdering.module.css';
+import UtfallAlert from "./UtfallAlert";
 
 interface VilkårsvurderingProps {
-  utfall: samletUtfall;
   valgtBehandling: Behandling;
   lesevisning: Lesevisning;
 }
 
 export const Vilkårsvurdering = ({
-  utfall,
   valgtBehandling,
   lesevisning,
 }: VilkårsvurderingProps) => {
@@ -24,15 +22,7 @@ export const Vilkårsvurdering = ({
 
   return (
     <VStack gap="5" className={styles.vilkårsvurdering}>
-      <Alert variant={utfall.variant}>
-        {utfall.tekst}
-        {utfall.altTekst && (
-          <>
-            <br />
-            {utfall.altTekst}
-          </>
-        )}
-      </Alert>
+      <UtfallAlert utfall={valgtBehandling.samletUtfall}/>
       <Accordion indent={false}>
         <VStack>
           {valgtBehandling.saksopplysninger.map((kategori) => {

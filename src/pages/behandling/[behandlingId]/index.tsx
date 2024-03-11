@@ -7,7 +7,6 @@ import { SaksbehandlingLayout } from '../../../components/layout/SaksbehandlingL
 import { ReactElement, useContext } from 'react';
 import { NextPageWithLayout, SaksbehandlerContext } from '../../_app';
 import { avklarLesevisning } from '../../../utils/avklarLesevisning';
-import { samletUtfall } from '../../../utils/samletUtfall';
 import { Vilkårsvurdering } from '../../../components/vilkårsvurdering/Vilkårsvurdering';
 import SøknadOppsummering from '../../../components/søknad-oppsummering/SøknadOppsummering';
 import { Saksdialog } from '../../../components/saksdialog/Saksdialog';
@@ -41,7 +40,6 @@ const Behandling: NextPageWithLayout = () => {
         registrerteTiltak={valgtBehandling.registrerteTiltak}
       />
       <Vilkårsvurdering
-        utfall={samletUtfall(valgtBehandling?.saksopplysninger)}
         valgtBehandling={valgtBehandling}
         lesevisning={lesevisning}
       />
