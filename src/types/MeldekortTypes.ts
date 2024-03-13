@@ -42,6 +42,7 @@ export type MeldekortDagDTO = {
 }
 
 export enum MeldekortStatus {
+  Sperret = 'SPERRET',
   IkkeUtfylt = 'IKKE_UTFYLT',
   Deltatt = 'DELTATT',
   IkkeDeltatt = 'IKKE_DELTATT',

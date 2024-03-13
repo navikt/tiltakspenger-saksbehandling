@@ -50,13 +50,13 @@ export const MeldekortUkeDag = ({
         text={`${getDayOfWeek(meldekortDag.dato)} ${formatDate(meldekortDag.dato.toString(),)}`}
         iconRenderer={() => velgIkon(status)}
       />
-      <Select
-        label="Deltatt Eller Fravær"
-        id="deltattEllerFravær"
-        size="small"
-        hideLabel
-        value={status}
-        onChange={(e) => oppdaterMeldekortdag(e.target.value)}
+      {(status != MeldekortStatus.Sperret) ? <Select
+          label="Deltatt Eller Fravær"
+          id="deltattEllerFravær"
+          size="small"
+          hideLabel
+          value={status}
+          onChange={(e) => oppdaterMeldekortdag(e.target.value)}
       >
         <option value="">Ikke utfylt</option>
         {MeldekortStatusTekster.map((meldekortStatus) => (
@@ -67,7 +67,7 @@ export const MeldekortUkeDag = ({
             {meldekortStatus}
           </option>
         ))}
-      </Select>
+      </Select> : "Ikke rett på tiltakspenger"}
     </HGrid>
   );
 };

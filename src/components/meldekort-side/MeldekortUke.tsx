@@ -3,6 +3,7 @@ import {
   CheckmarkCircleFillIcon,
   ExclamationmarkTriangleFillIcon,
   XMarkOctagonFillIcon,
+  CircleSlashIcon,
 } from '@navikt/aksel-icons';
 import { MeldekortDag, MeldekortStatus } from '../../types/MeldekortTypes';
 import React from 'react';
@@ -17,6 +18,8 @@ interface MeldekortUkeProps {
 
 export const velgIkon = (deltattEllerFravær: MeldekortStatus) => {
   switch (deltattEllerFravær) {
+    case MeldekortStatus.Sperret:
+      return <CircleSlashIcon color='black' />;
     case MeldekortStatus.Deltatt:
       return <CheckmarkCircleFillIcon color='green' />;
 
