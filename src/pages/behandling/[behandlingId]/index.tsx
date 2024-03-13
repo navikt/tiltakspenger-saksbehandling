@@ -21,9 +21,7 @@ const Behandling: NextPageWithLayout = () => {
     return <Loader />;
   }
 
-  const girInnvilget = !valgtBehandling.saksopplysninger.find(
-    (saksopplysning) => saksopplysning.samletUtfall !== 'OPPFYLT'
-  );
+  const girInnvilget = valgtBehandling.samletUtfall === 'OPPFYLT';
 
   const lesevisning = avklarLesevisning(
     innloggetSaksbehandler!!,
