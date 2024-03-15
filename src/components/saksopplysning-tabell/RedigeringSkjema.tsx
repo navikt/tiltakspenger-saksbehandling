@@ -11,7 +11,7 @@ import { Controller, FormProvider, useForm } from 'react-hook-form';
 import PeriodeSkjema from './PeriodeSkjema';
 import dayjs from 'dayjs';
 import { useState } from 'react';
-import { formatDate } from '../../utils/date';
+import {dateToISO, formatDate} from '../../utils/date';
 import { FaktaDTO } from '../../types/Behandling';
 
 interface RedigeringSkjemaProps {
@@ -91,10 +91,10 @@ export const RedigeringSkjema = ({
       method: 'POST',
       body: JSON.stringify({
         fom: harYtelse
-          ? skjemaFelter.periode?.fom.toISOString().split('T')[0]
+          ? dateToISO(skjemaFelter.periode?.fom)
           : behandlingsperiode.fom,
         tom: harYtelse
-          ? skjemaFelter.periode?.tom.toISOString().split('T')[0]
+          ? dateToISO(skjemaFelter.periode?.tom)
           : behandlingsperiode.tom,
         vilkår: vilkårTittel,
         begrunnelse: skjemaFelter.begrunnelse,

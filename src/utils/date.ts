@@ -8,6 +8,10 @@ dayjs.extend(weekday)
 dayjs.extend(weekOfYear)
 dayjs.locale('nb');
 
+
+export function dateToISO(date: Date) {
+    return dayjs(date).format('YYYY-MM-DD');
+}
 export function formatDateShort(dateString: string) {
   return dayjs(dateString).format('DD.MM.YY');
 }
