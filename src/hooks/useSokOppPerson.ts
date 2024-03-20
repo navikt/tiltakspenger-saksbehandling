@@ -11,7 +11,7 @@ function useSokOppPerson(navigateToSoker: boolean = true) {
     '/api/soker',
     SøkerIdent
   >('/api/soker', fetchSøker, {
-    onSuccess: (data) => navigateToSoker && router.push(`/soker/${data.id}`),
+    onSuccess: (data) => navigateToSoker && router.push(`/saker/${data.id}`),
   });
 
   return { trigger, isSokerMutating };

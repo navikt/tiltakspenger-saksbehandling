@@ -49,6 +49,11 @@ export interface BehandlingForBenk {
   beslutter?: string;
 }
 
+export interface Sak {
+  id: string;
+  ident: string;
+}
+
 export interface Personopplysninger {
   ident: string;
   fornavn: string;
