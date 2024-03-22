@@ -1,18 +1,15 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { NextPage } from 'next';
 import { pageWithAuthentication } from '../../utils/pageWithAuthentication';
-import { Button, Link, Loader, Table } from '@navikt/ds-react';
-import { SaksbehandlerContext } from '../_app';
+import { Link, Loader, Table } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
-import useSWR, { useSWRConfig } from 'swr';
+import useSWR from 'swr';
 import { fetcher } from '../../utils/http';
 import { Sak } from '../../types/Behandling';
 
 const SakerPage: NextPage = () => {
   const router = useRouter();
   const søkerId = router.query.søkerId as string;
-  const mutator = useSWRConfig().mutate;
-  const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
 
   const { data, isLoading } = useSWR<Sak[]>(
     `/api/sak/hentForSokerId/${søkerId}`,
@@ -23,18 +20,6 @@ const SakerPage: NextPage = () => {
   if (isLoading) {
     return <Loader />;
   }
-
-  const taBehandling = async (behandlingid: string) => {
-    fetch(`/api/behandling/startbehandling/${behandlingid}`, {
-      method: 'POST',
-    })
-      .then(() => {
-        mutator(`/api/behandlinger`);
-      })
-      .then(() => {
-        router.push(`/behandling/${behandlingid}`);
-      });
-  };
 
   const sakerForIdent = data;
 
