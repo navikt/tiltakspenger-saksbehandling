@@ -50,7 +50,7 @@ export interface BehandlingForBenk {
 }
 
 export interface Sak {
-  id: string;
+  saksnummer: string;
   ident: string;
 }
 

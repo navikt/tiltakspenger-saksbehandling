@@ -44,16 +44,18 @@ const SakerPage: NextPage = () => {
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell scope="col">Saksnummer</Table.HeaderCell>
+            <Table.HeaderCell scope="col">Fødselsnummer</Table.HeaderCell>
             <Table.HeaderCell scope="col"></Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
           {sakerForIdent?.map((sak) => {
             return (
-              <Table.Row shadeOnHover={false} key={sak.id}>
-                <Table.DataCell>{sak.id}</Table.DataCell>
+              <Table.Row shadeOnHover={false} key={sak.saksnummer}>
+                <Table.DataCell>{sak.saksnummer}</Table.DataCell>
+                <Table.DataCell>{sak.ident}</Table.DataCell>
                 <Table.DataCell>
-                  <Link href={`/sak/${sak.id}`}>Se sak</Link>
+                  <Link href={`/sak/${sak.saksnummer}`}>Se sak</Link>
                 </Table.DataCell>
               </Table.Row>
             );
