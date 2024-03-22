@@ -28,8 +28,17 @@ export interface Behandling {
   tilstand: string;
   status: string;
   endringslogg: Endring[];
-  samletUtfall: Utfall
+  samletUtfall: Utfall;
+  utfallsperioder: Utfallsperiode[]
 }
+
+export interface Utfallsperiode {
+    fom: string;
+    tom: string;
+    antallBarn: number;
+    utfall: string;
+}
+
 
 export interface Endring {
   type: string;

@@ -13,6 +13,7 @@ interface AlertProps {
 }
 
 const UtfallAlert = ({utfall}: UtfallAlertProps) => {
+    console.log(utfall)
     const {variant, tekst, altTekst} = utledAlertProps(utfall)
     return(
         <Alert variant={variant}>
