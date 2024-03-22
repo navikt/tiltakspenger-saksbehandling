@@ -4,9 +4,10 @@ import {
   pageWithAuthentication,
   redirectToLogin,
 } from '../../utils/pageWithAuthentication';
-import { Button } from '@navikt/ds-react';
+import { Button, Heading } from '@navikt/ds-react';
 import { getOnBehalfOfToken } from '../../utils/auth';
 import { Sak } from '../../types/Behandling';
+import styles from './Sak.module.css';
 
 interface SakProps {
   saksnummer: string;
@@ -15,10 +16,14 @@ interface SakProps {
 
 const SakPage: NextPage<SakProps> = ({ saksnummer, ident }: SakProps) => {
   return (
-    <div>
-      <div> Saksnummer: {saksnummer}</div>
-      <div> Fødselsnummer: {ident}</div>
-      <Button>Revurder</Button>
+    <div className={styles.saksside}>
+      <div className={styles.saksinfo}>
+        <Heading size="medium">Saksnummer: {saksnummer}</Heading>
+        <Heading size="small">Fødselsnummer: {ident}</Heading>
+      </div>
+      <div>
+        <Button className={styles.revurderknapp}>Revurder</Button>
+      </div>
     </div>
   );
 };
