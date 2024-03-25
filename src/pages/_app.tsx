@@ -15,7 +15,6 @@ import useSaksbehandler from '../hooks/useSaksbehandler';
 import { HovedLayout } from '../components/layout/HovedLayout';
 import { Loader } from '@navikt/ds-react';
 import { NextPage } from 'next';
-import { Behandling } from '../types/Behandling';
 
 interface SaksbehandlerContextType {
   innloggetSaksbehandler: Saksbehandler;

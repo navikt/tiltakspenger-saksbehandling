@@ -58,6 +58,11 @@ export interface BehandlingForBenk {
   beslutter?: string;
 }
 
+export interface Sak {
+  saksnummer: string;
+  ident: string;
+}
+
 export interface Personopplysninger {
   ident: string;
   fornavn: string;

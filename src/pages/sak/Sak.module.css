@@ -1,0 +1,12 @@
+.saksside {
+    display: flex;
+    margin: 2rem;
+}
+
+.saksinfo {
+    display: block;
+}
+
+.revurderknapp {
+    margin-left: 2rem;
+}
