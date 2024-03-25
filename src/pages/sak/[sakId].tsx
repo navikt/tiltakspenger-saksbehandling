@@ -15,6 +15,14 @@ interface SakProps {
 }
 
 const SakPage: NextPage<SakProps> = ({ saksnummer, ident }: SakProps) => {
+  async function opprettRevurdering() {
+    const response = await fetch(
+      `/api/behandling/opprettrevurdering/${saksnummer}`,
+      { method: 'POST' },
+    );
+    await response.json();
+  }
+
   return (
     <div className={styles.saksside}>
       <div className={styles.saksinfo}>
@@ -22,7 +30,9 @@ const SakPage: NextPage<SakProps> = ({ saksnummer, ident }: SakProps) => {
         <Heading size="small">Fødselsnummer: {ident}</Heading>
       </div>
       <div>
-        <Button className={styles.revurderknapp}>Revurder</Button>
+        <Button className={styles.revurderknapp} onClick={opprettRevurdering}>
+          Revurder
+        </Button>
       </div>
     </div>
   );
