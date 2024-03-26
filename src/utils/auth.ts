@@ -36,7 +36,7 @@ async function makeOnBehalfOfGrant(body: URLSearchParams) {
   });
 }
 
-async function getOnBehalfOfToken(
+export async function getOnBehalfOfToken(
   token: string,
   scope: string
 ): Promise<SimpleResponse | string> {
