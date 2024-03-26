@@ -62,6 +62,13 @@ export interface Kategori {
   kategoriTittel: string;
   saksopplysninger: SaksopplysningInnDTO[];
   samletUtfall: string;
+  kategoriLovreferanse: LovreferenseDTO[];
+}
+
+export interface LovreferenseDTO {
+  lovverk: string;
+  paragraf: string;
+  beskrivelse: string;
 }
 
 export interface SaksopplysningInnDTO {
@@ -74,6 +81,7 @@ export interface SaksopplysningInnDTO {
   vilkårFlateTittel: string;
   fakta: FaktaDTO;
   utfall: string;
+  vilkårLovReferense: LovreferenseDTO[];
 }
 
 export interface FaktaDTO {

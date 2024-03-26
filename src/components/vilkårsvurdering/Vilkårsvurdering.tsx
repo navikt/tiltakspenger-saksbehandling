@@ -1,7 +1,7 @@
-import { Accordion, Alert, HStack, VStack } from '@navikt/ds-react';
+import { Accordion, Link, HStack, VStack, BodyShort } from '@navikt/ds-react';
 import { SaksopplysningTabell } from '../saksopplysning-tabell/SaksopplysningTabell';
 import { UtfallIkon } from '../utfall-ikon/UtfallIkon';
-import { Behandling } from '../../types/Behandling';
+import {Behandling} from '../../types/Behandling';
 import { Lesevisning } from '../../utils/avklarLesevisning';
 import { BehandlingKnapper } from '../behandling-knapper/BehandlingKnapper';
 import { useRef } from 'react';
@@ -19,6 +19,13 @@ export const Vilkårsvurdering = ({
   lesevisning,
 }: VilkårsvurderingProps) => {
   const modalRef = useRef<HTMLDialogElement>(null);
+
+    const hentLovDataURLen = (lovverk: string, paragraf: string) => {
+        if (lovverk == 'Tiltakspengeforskriften') return `https://lovdata.no/dokument/SF/forskrift/2013-11-04-1286/${paragraf}`;
+        if (lovverk == 'Arbeidsmarkedsloven') return `https://lovdata.no/dokument/NL/lov/2004-12-10-76/${paragraf}`;
+        if (lovverk == 'Rundskriv om tiltakspenger' && paragraf == '§8') return `https://lovdata.no/nav/rundskriv/r76-13-02/${paragraf}#KAPITTEL_3-7`;
+        return 'https://lovdata.no/dokument/SF/forskrift/2013-11-04-1286/';
+    }
 
   return (
     <VStack gap="5" className={styles.vilkårsvurdering}>
@@ -38,6 +45,23 @@ export const Vilkårsvurdering = ({
                   </HStack>
                 </Accordion.Header>
                 <Accordion.Content>
+                    {
+                        kategori.kategoriLovreferanse.map((lov, index: number) => {
+                            return (
+                                <BodyShort key={index}>
+                                    <Link
+                                        key={index}
+                                        href={hentLovDataURLen(lov.lovverk, lov.paragraf)}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        style={{ marginBottom: '0.5em'}}
+                                    >
+                                        {lov.lovverk} {lov.paragraf} {lov.beskrivelse}
+                                    </Link>
+                                </BodyShort>
+                            )
+                        })
+                    }
                   <SaksopplysningTabell
                     saksopplysninger={kategori.saksopplysninger}
                     behandlingId={valgtBehandling.behandlingId}
