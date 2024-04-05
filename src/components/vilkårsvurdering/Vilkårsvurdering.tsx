@@ -1,10 +1,10 @@
-import {Accordion, HStack, Timeline, VStack} from '@navikt/ds-react';
-import { SaksopplysningTabell } from '../saksopplysning-tabell/SaksopplysningTabell';
-import { UtfallIkon } from '../utfall-ikon/UtfallIkon';
-import { Behandling } from '../../types/Behandling';
-import { Lesevisning } from '../../utils/avklarLesevisning';
-import { BehandlingKnapper } from '../behandling-knapper/BehandlingKnapper';
-import React, { useRef } from 'react';
+import {Accordion, BodyShort, HStack, Link, Timeline, VStack} from '@navikt/ds-react';
+import {SaksopplysningTabell} from '../saksopplysning-tabell/SaksopplysningTabell';
+import {UtfallIkon} from '../utfall-ikon/UtfallIkon';
+import {Behandling, LovreferenseDTO, SaksopplysningInnDTO} from '../../types/Behandling';
+import {Lesevisning} from '../../utils/avklarLesevisning';
+import {BehandlingKnapper} from '../behandling-knapper/BehandlingKnapper';
+import React, {useRef} from 'react';
 import BegrunnelseModal from '../begrunnelse-modal/BegrunnelseModal';
 import styles from './Vilkårsvurdering.module.css';
 import UtfallAlert from "./UtfallAlert";
@@ -42,7 +42,25 @@ export const Vilkårsvurdering = ({
   lesevisning,
 }: VilkårsvurderingProps) => {
   const modalRef = useRef<HTMLDialogElement>(null);
-  console.log("utfallsperioder", valgtBehandling.utfallsperioder)
+
+    const hentLovDataURLen = (lovverk: string, paragraf: string) => {
+        if (lovverk == 'Tiltakspengeforskriften') return `https://lovdata.no/dokument/SF/forskrift/2013-11-04-1286/${paragraf}`;
+        if (lovverk == 'Arbeidsmarkedsloven') return `https://lovdata.no/dokument/NL/lov/2004-12-10-76/${paragraf}`;
+        if (lovverk == 'Rundskriv om tiltakspenger' && paragraf == '§8') return `https://lovdata.no/nav/rundskriv/r76-13-02/§8#KAPITTEL_3-7`;
+        return 'https://lovdata.no/dokument/SF/forskrift/2013-11-04-1286/';
+    }
+    
+    function lagDistinktLovReferenseListe(saksopplysningListe: SaksopplysningInnDTO[]): LovreferenseDTO[] {
+        const LovReferenseListe =
+            saksopplysningListe.flatMap(
+                (dto) => {
+                    return dto.vilkårLovReferense.map(lovreferense => lovreferense)
+                }
+            )
+        let LovReferenseDistinctSet = new Set(LovReferenseListe.map(e => JSON.stringify(e)));
+        return Array.from(LovReferenseDistinctSet).map(e => JSON.parse(e));
+    }
+
   return (
     <VStack gap="5" className={styles.vilkårsvurdering}>
         {valgtBehandling.utfallsperioder && valgtBehandling.utfallsperioder.length != 0 && (<Timeline>
@@ -95,6 +113,24 @@ export const Vilkårsvurdering = ({
                   </HStack>
                 </Accordion.Header>
                 <Accordion.Content>
+                    {
+                        lagDistinktLovReferenseListe(kategori.saksopplysninger)
+                            .map((lovreferense, index: number) => {
+                                return (
+                                    <BodyShort key={index}>
+                                        <Link
+                                            key={index}
+                                            href={hentLovDataURLen(lovreferense.lovverk, lovreferense.paragraf)}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            style={{ marginBottom: '0.5em'}}
+                                        >
+                                            {lovreferense.lovverk} {lovreferense.paragraf} {lovreferense.beskrivelse}
+                                        </Link>
+                                    </BodyShort>
+                                )
+                            })
+                    }
                   <SaksopplysningTabell
                     saksopplysninger={kategori.saksopplysninger}
                     behandlingId={valgtBehandling.behandlingId}

@@ -35,6 +35,7 @@ export const SaksopplysningTabell = ({
               Kilde
             </Table.ColumnHeader>
             <Table.ColumnHeader>Detaljer</Table.ColumnHeader>
+            <Table.ColumnHeader>Lovdata</Table.ColumnHeader>
             <Table.ColumnHeader style={{ width: '5%' }} />
           </Table.Row>
         </Table.Header>
