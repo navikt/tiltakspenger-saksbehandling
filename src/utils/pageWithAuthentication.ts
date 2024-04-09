@@ -5,7 +5,7 @@ import {
 } from '@navikt/next-auth-wonderwall';
 
 export async function validateAuthorizationHeader(
-  authorizationHeader: string | undefined
+  authorizationHeader: string | undefined,
 ) {
   if (!authorizationHeader) {
     throw new Error('Mangler authorization header');
@@ -35,7 +35,7 @@ export function redirectToLogin(context: GetServerSidePropsContext) {
 }
 
 export function pageWithAuthentication(
-  getServerSideProps: GetServerSideProps = defaultGetServerSideProps
+  getServerSideProps: GetServerSideProps = defaultGetServerSideProps,
 ) {
   return async (context: GetServerSidePropsContext) => {
     try {
@@ -45,7 +45,9 @@ export function pageWithAuthentication(
       }
       await validateAuthorizationHeader(authorizationHeader);
     } catch (error) {
-      console.error(`Bruker har ikke tilgang: ${(error as Error).message}`);
+      console.error(
+        `Bruker har ikke tilgang, feilet på validering: ${JSON.stringify(error)}`,
+      );
       return redirectToLogin(context);
     }
     return getServerSideProps(context);

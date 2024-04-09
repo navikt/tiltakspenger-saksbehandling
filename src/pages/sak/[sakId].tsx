@@ -51,7 +51,9 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
       scope!!,
     );
   } catch (error) {
-    console.error(`Bruker har ikke tilgang: ${(error as Error).message}`);
+    console.error(
+      `Bruker har ikke tilgang, feilet på tokenveksling: ${JSON.stringify(error)}`,
+    );
     return redirectToLogin(context);
   }
 
