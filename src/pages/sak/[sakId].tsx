@@ -42,7 +42,7 @@ export default SakPage;
 
 export const getServerSideProps = pageWithAuthentication(async (context) => {
   const backendUrl = process.env.TILTAKSPENGER_VEDTAK_URL;
-  const scope = process.env.SCOPE;
+  const scope = `api://${process.env.SCOPE}/.default`;
 
   let token = null;
   try {
