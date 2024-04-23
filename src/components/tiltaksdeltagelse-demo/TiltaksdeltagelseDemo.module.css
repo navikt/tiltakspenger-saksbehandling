@@ -1,0 +1,30 @@
+.tiltaksdeltagelse {
+    padding: 1rem;
+}
+
+.tiltakCardWrapper {
+    margin-top: 1rem;
+}
+
+.tiltakCard {
+    border: 1px solid #78706A;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    position: relative;
+    max-width: 800px
+}
+
+.tiltakCard__ingress {
+    margin-top: 1rem;
+}
+
+.tiltakCard__deltagelseSection {
+    margin-top: 1rem;
+}
+
+.tiltakCard__iconButton {
+    position: absolute;
+    right: 4px;
+}
