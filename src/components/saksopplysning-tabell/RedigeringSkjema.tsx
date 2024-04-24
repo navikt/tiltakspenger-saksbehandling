@@ -8,11 +8,14 @@ import {
 } from '@navikt/ds-react';
 import { useSWRConfig } from 'swr';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
-import PeriodeSkjema from './PeriodeSkjema';
-import dayjs from 'dayjs';
+import Periodefelt from './Periodefelt';
 import { useState } from 'react';
-import {dateToISO, formatDate} from '../../utils/date';
+import { dateToISO, formatDate } from '../../utils/date';
 import { FaktaDTO } from '../../types/Behandling';
+import {
+  gyldigPeriodeValidator,
+  påkrevdPeriodeValidator,
+} from '../../utils/validation';
 
 interface RedigeringSkjemaProps {
   vilkårTittel: string;
@@ -37,21 +40,6 @@ interface SkjemaFelter {
   };
   harYtelse: string;
   begrunnelse: string;
-}
-
-function påkrevdPeriodeValidator(periode: { fom: Date; tom: Date }) {
-  if (!periode?.fom || !periode?.tom) {
-    return 'Fra og til må fylles ut';
-  }
-}
-
-function gyldigPeriodeValidator(periode: { fom: Date; tom: Date }) {
-  const fraDato = dayjs(periode?.fom);
-  const tilDato = dayjs(periode?.tom);
-
-  if (fraDato.isAfter(tilDato)) {
-    return 'Fra-dato kan ikke være etter til-dato';
-  }
 }
 
 export const RedigeringSkjema = ({
@@ -137,7 +125,7 @@ export const RedigeringSkjema = ({
               );
             }}
           />
-          <PeriodeSkjema
+          <Periodefelt
             name="periode"
             validate={[gyldigPeriodeValidator, påkrevdPeriodeValidator]}
             minDate={new Date(behandlingsperiode.fom)}
