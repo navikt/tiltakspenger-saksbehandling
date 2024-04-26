@@ -1,0 +1,49 @@
+.tiltaksdeltagelse {
+    padding: 1rem;
+}
+
+.tiltakCardWrapper {
+    margin-top: 1rem;
+}
+
+.tiltakCard {
+    border: 1px solid #78706A;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    position: relative;
+}
+
+.tiltakCard__ingress {
+    margin-top: 1rem;
+}
+
+.tiltakCard__deltagelseSection {
+    margin-top: 1rem;
+}
+
+.tiltakCard__iconButton {
+    position: absolute;
+    right: 4px;
+}
+
+.tiltakCard__form {
+    background-color: #F2F3F5;
+    padding: 1.5rem;
+}
+
+.tiltakCard__form__fieldset {
+    border: 0;
+    padding: 0;
+    margin: 0;
+}
+
+.tiltakCard__form__antallDagerSelectBox {
+    margin-top: 1rem;
+}
+
+
+.tiltakCard__form__buttonSection {
+    margin-top: 1rem;
+}

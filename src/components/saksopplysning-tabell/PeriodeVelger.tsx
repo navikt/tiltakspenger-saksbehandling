@@ -26,6 +26,7 @@ interface PeriodevelgerProps {
   maxDate?: Date;
   disabledFra?: boolean;
   disabledTil?: boolean;
+  size?: 'small' | 'medium';
 }
 
 export default function Periodevelger({
@@ -38,6 +39,7 @@ export default function Periodevelger({
   maxDate,
   disabledFra,
   disabledTil,
+  size,
 }: PeriodevelgerProps) {
   const [rangeError, setRangeError] = useState<RangeError>({});
   const fromDatePicker = useDatepicker({
@@ -91,6 +93,7 @@ export default function Periodevelger({
             disabled={disabledFra}
             aria-label={`${id}.fra`}
             autoComplete="off"
+            size={size || 'medium'}
           />
         </DatePicker>
         <DatePicker {...toDatePicker.datepickerProps} id={`${id}`}>
@@ -101,6 +104,7 @@ export default function Periodevelger({
             disabled={disabledTil}
             aria-label={`${id}.til`}
             autoComplete="off"
+            size={size || 'medium'}
           />
         </DatePicker>
       </HStack>
