@@ -1,8 +1,9 @@
 import { Button, HStack } from '@navikt/ds-react';
-import { useSWRConfig } from 'swr';
+import useSWRMutation from 'swr/mutation';
 import { useRouter } from 'next/router';
 import { Lesevisning } from '../../utils/avklarLesevisning';
 import { RefObject } from 'react';
+import { useSWRConfig } from 'swr';
 
 interface BehandlingKnapperProps {
   behandlingid: string;
@@ -11,39 +12,38 @@ interface BehandlingKnapperProps {
   modalRef: RefObject<HTMLDialogElement>;
 }
 
+async function oppdaterBehandling(url: string, { arg }: { arg?: string }) {
+  await fetch(url, {
+    method: 'POST',
+  });
+}
+
 export const BehandlingKnapper = ({
   behandlingid,
   lesevisning,
   modalRef,
 }: BehandlingKnapperProps) => {
-  const mutator = useSWRConfig().mutate;
   const router = useRouter();
+  const { mutate } = useSWRConfig();
 
-  const håndterRefreshSaksopplysninger = () => {
-    fetch(`/api/behandling/oppdater/${behandlingid}`, {
-      method: 'POST',
-    }).then(() => {
-      mutator(`/api/behandling/${behandlingid}`).then(() => {
-        router.push(`/behandling/${behandlingid}`);
-      });
-    });
-  };
+  const { trigger: sendTilBeslutter, isMutating: oppdatererBeslutter } =
+    useSWRMutation(
+      `/api/behandling/beslutter/${behandlingid}`,
+      oppdaterBehandling,
+    );
+  const {
+    trigger: oppdaterSaksopplysninger,
+    isMutating: oppdatererSaksopplysninger,
+  } = useSWRMutation(
+    `/api/behandling/oppdater/${behandlingid}`,
+    oppdaterBehandling,
+  );
 
-  const håndterSendTilBeslutter = () => {
-    fetch(`/api/behandling/beslutter/${behandlingid}`, {
-      method: 'POST',
-    }).then(() => {
-      mutator(`/api/behandling/${behandlingid}`);
-    });
-  };
-
-  const håndterGodkjenn = () => {
-    fetch(`/api/behandling/godkjenn/${behandlingid}`, {
-      method: 'POST',
-    }).then(() => {
-      mutator(`/api/behandling/${behandlingid}`);
-    });
-  };
+  const { trigger: godkjennBehandling, isMutating: godkjennerBehandling } =
+    useSWRMutation(
+      `/api/behandling/godkjenn/${behandlingid}`,
+      oppdaterBehandling,
+    );
 
   const åpneSendTilbakeModal = () => {
     modalRef.current?.showModal();
@@ -65,7 +65,11 @@ export const BehandlingKnapper = ({
         <Button
           type="submit"
           size="small"
-          onClick={() => håndterGodkjenn()}
+          loading={godkjennerBehandling}
+          onClick={() => {
+            godkjennBehandling();
+            mutate(`/api/behandling/${behandlingid}`);
+          }}
           disabled={!lesevisning.knappGodkjennTillatt}
         >
           Godkjenn vedtaket
@@ -75,7 +79,11 @@ export const BehandlingKnapper = ({
         <Button
           type="submit"
           size="small"
-          onClick={() => håndterRefreshSaksopplysninger()}
+          loading={oppdatererSaksopplysninger}
+          onClick={() => {
+            oppdaterSaksopplysninger();
+            router.push(`/behandling/${behandlingid}`);
+          }}
         >
           Oppdater saksopplysninger
         </Button>
@@ -84,7 +92,11 @@ export const BehandlingKnapper = ({
         <Button
           type="submit"
           size="small"
-          onClick={() => håndterSendTilBeslutter()}
+          loading={oppdatererBeslutter}
+          onClick={() => {
+            sendTilBeslutter();
+            mutate(`/api/behandling/${behandlingid}`);
+          }}
           disabled={lesevisning.kanIkkeGodkjennes}
         >
           Send til beslutter
