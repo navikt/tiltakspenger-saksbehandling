@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { Lesevisning } from '../../utils/avklarLesevisning';
 import { RefObject } from 'react';
 import { useSWRConfig } from 'swr';
+import Varsel from '../varsel/Varsel';
 
 interface BehandlingKnapperProps {
   behandlingid: string;
@@ -50,58 +51,61 @@ export const BehandlingKnapper = ({
   };
 
   return (
-    <HStack justify="start" gap="3" align="end">
-      {lesevisning.knappSendTilbake && (
-        <Button
-          type="submit"
-          size="small"
-          variant="secondary"
-          onClick={() => åpneSendTilbakeModal()}
-        >
-          Send tilbake
-        </Button>
-      )}
-      {lesevisning.knappGodkjennVis && (
-        <Button
-          type="submit"
-          size="small"
-          loading={godkjennerBehandling}
-          onClick={() => {
-            godkjennBehandling();
-            mutate(`/api/behandling/${behandlingid}`);
-          }}
-          disabled={!lesevisning.knappGodkjennTillatt}
-        >
-          Godkjenn vedtaket
-        </Button>
-      )}
-      {lesevisning.knappOppdater && (
-        <Button
-          type="submit"
-          size="small"
-          loading={oppdatererSaksopplysninger}
-          onClick={() => {
-            oppdaterSaksopplysninger();
-            router.push(`/behandling/${behandlingid}`);
-          }}
-        >
-          Oppdater saksopplysninger
-        </Button>
-      )}
-      {lesevisning.knappSendTilBeslutter && (
-        <Button
-          type="submit"
-          size="small"
-          loading={oppdatererBeslutter}
-          onClick={() => {
-            sendTilBeslutter();
-            mutate(`/api/behandling/${behandlingid}`);
-          }}
-          disabled={lesevisning.kanIkkeGodkjennes}
-        >
-          Send til beslutter
-        </Button>
-      )}
-    </HStack>
+    <>
+      <HStack justify="start" gap="3" align="end">
+        {lesevisning.knappSendTilbake && (
+          <Button
+            type="submit"
+            size="small"
+            variant="secondary"
+            onClick={() => åpneSendTilbakeModal()}
+          >
+            Send tilbake
+          </Button>
+        )}
+        {lesevisning.knappGodkjennVis && (
+          <Button
+            type="submit"
+            size="small"
+            loading={godkjennerBehandling}
+            onClick={() => {
+              godkjennBehandling();
+              mutate(`/api/behandling/${behandlingid}`);
+            }}
+            disabled={!lesevisning.knappGodkjennTillatt}
+          >
+            Godkjenn vedtaket
+          </Button>
+        )}
+        {lesevisning.knappOppdater && (
+          <Button
+            type="submit"
+            size="small"
+            loading={oppdatererSaksopplysninger}
+            onClick={() => {
+              oppdaterSaksopplysninger();
+              router.push(`/behandling/${behandlingid}`);
+            }}
+          >
+            Oppdater saksopplysninger
+          </Button>
+        )}
+        {lesevisning.knappSendTilBeslutter && (
+          <Button
+            type="submit"
+            size="small"
+            loading={oppdatererBeslutter}
+            onClick={() => {
+              sendTilBeslutter();
+              mutate(`/api/behandling/${behandlingid}`);
+            }}
+            disabled={lesevisning.kanIkkeGodkjennes}
+          >
+            Send til beslutter
+          </Button>
+        )}
+        <Varsel variant="success" melding="Behandlingen er oppdatert" />
+      </HStack>
+    </>
   );
 };
