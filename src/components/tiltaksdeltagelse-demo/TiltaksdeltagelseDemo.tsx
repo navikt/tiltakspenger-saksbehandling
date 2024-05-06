@@ -2,39 +2,32 @@ import React from 'react';
 import { Heading } from '@navikt/ds-react';
 import styles from './TiltaksdeltagelseDemo.module.css';
 import TiltakCard from './TiltakCard';
-import { Tiltaksdeltagelse } from './types';
+import { TiltaksdeltagelseDTO } from './types';
+import { formatPeriode } from '../../utils/date';
 
-const tiltaksdeltagelserDefault: Tiltaksdeltagelse[] = [
-  {
-    periode: { fra: '2026-01-01', til: '2026-01-31' },
-    antallDagerIUken: 5,
-    status: 'Gjennomføres',
-  },
-  {
-    periode: { fra: '2026-02-01', til: '2026-05-01' },
-    antallDagerIUken: 3,
-    status: 'Gjennomføres',
-  },
-];
+interface TiltaksdeltagelseDemoProps {
+  tiltaksdeltagelser: TiltaksdeltagelseDTO[];
+}
 
-const TiltaksdeltagelseDemo = () => {
-  const [tiltaksdeltagelser, setTiltaksdeltagelser] = React.useState(
-    tiltaksdeltagelserDefault,
-  );
-
+const TiltaksdeltagelseDemo = ({
+  tiltaksdeltagelser,
+}: TiltaksdeltagelseDemoProps) => {
   return (
     <div className={styles.tiltaksdeltagelse}>
       <Heading size="large">Visning av tiltaksdeltagelse</Heading>
       <div className={styles.tiltakCardWrapper}>
-        <TiltakCard
-          tittel="Tiltakstype - Testarrangør"
-          periode={{ fra: '2026-01-01', til: '2026-05-01' }}
-          status="Gjennomføres"
-          deltagelser={tiltaksdeltagelser}
-          onAddTiltaksdeltagelse={(nyTiltaksdeltagelse) => {
-            setTiltaksdeltagelser([...tiltaksdeltagelser, nyTiltaksdeltagelse]);
-          }}
-        />
+        {tiltaksdeltagelser.map((tiltaksdeltagelse) => {
+          return (
+            <TiltakCard
+              tittel={tiltaksdeltagelse.tiltaksvariant}
+              periode={tiltaksdeltagelse.periode}
+              status={tiltaksdeltagelse.status}
+              deltagelsesperioder={tiltaksdeltagelse.deltagelsesperioder}
+              onAddTiltaksdeltagelse={() => {}}
+              key={formatPeriode(tiltaksdeltagelse.periode)}
+            />
+          );
+        })}
       </div>
     </div>
   );
