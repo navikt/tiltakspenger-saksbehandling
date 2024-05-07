@@ -22,6 +22,8 @@ const TiltaksdeltagelseDemo = ({
               tittel={tiltaksdeltagelse.tiltaksvariant}
               periode={tiltaksdeltagelse.periode}
               status={tiltaksdeltagelse.status}
+              harSøkt={tiltaksdeltagelse.harSøkt}
+              girRett={tiltaksdeltagelse.girRett}
               deltagelsesperioder={tiltaksdeltagelse.deltagelsesperioder}
               onAddTiltaksdeltagelse={() => {}}
               key={formatPeriode(tiltaksdeltagelse.periode)}

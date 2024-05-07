@@ -13,6 +13,8 @@ interface TiltakCardProps {
   periode: Periode;
   status: string;
   deltagelsesperioder: Deltagelsesperiode[];
+  harSøkt: boolean;
+  girRett: boolean;
   onAddTiltaksdeltagelse: (nyTiltaksdeltagelse: Deltagelsesperiode) => void;
 }
 
@@ -20,6 +22,8 @@ const TiltakCard = ({
   tittel,
   periode,
   status,
+  harSøkt,
+  girRett,
   deltagelsesperioder,
   onAddTiltaksdeltagelse,
 }: TiltakCardProps) => {
@@ -36,6 +40,14 @@ const TiltakCard = ({
           <BodyShort>
             <b>Status: </b>
             {status}
+          </BodyShort>
+          <BodyShort>
+            <b>Har søkt: </b>
+            {harSøkt ? 'Ja' : 'Nei'}
+          </BodyShort>
+          <BodyShort>
+            <b>Gir rett: </b>
+            {girRett ? 'Ja' : 'Nei'}
           </BodyShort>
         </div>
         <div className={styles.tiltakCard__deltagelseSection}>
