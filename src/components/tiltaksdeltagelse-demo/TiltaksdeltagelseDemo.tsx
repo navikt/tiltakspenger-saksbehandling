@@ -4,6 +4,8 @@ import styles from './TiltaksdeltagelseDemo.module.css';
 import TiltakCard from './TiltakCard';
 import { TiltaksdeltagelseDTO } from './types';
 import { formatPeriode } from '../../utils/date';
+import TiltaksdeltagelseVilkårsvurdering from '../tiltaksdeltagelse-vilkårsvurdering/TiltaksdeltagelseVilkårsvurdering';
+import { Utfall } from '../../types/Utfall';
 
 interface TiltaksdeltagelseDemoProps {
   tiltaksdeltagelser: TiltaksdeltagelseDTO[];
@@ -15,6 +17,10 @@ const TiltaksdeltagelseDemo = ({
   return (
     <div className={styles.tiltaksdeltagelse}>
       <Heading size="large">Visning av tiltaksdeltagelse</Heading>
+      <TiltaksdeltagelseVilkårsvurdering
+        samletUtfall={Utfall.OPPFYLT}
+        tiltaksdeltagelser={tiltaksdeltagelser}
+      />
       <div className={styles.tiltakCardWrapper}>
         {tiltaksdeltagelser.map((tiltaksdeltagelse) => {
           return (

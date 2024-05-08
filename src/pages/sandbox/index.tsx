@@ -11,11 +11,7 @@ interface SandboxPageProps {
 }
 
 const SandboxPage = ({ tiltaksdeltagelser }: SandboxPageProps) => {
-  return (
-    <TiltaksdeltagelseDemo
-      tiltaksdeltagelser={tiltaksdeltagelser}
-    ></TiltaksdeltagelseDemo>
-  );
+  return <TiltaksdeltagelseDemo tiltaksdeltagelser={tiltaksdeltagelser} />;
 };
 
 export default SandboxPage;
