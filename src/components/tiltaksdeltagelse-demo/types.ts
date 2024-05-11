@@ -5,6 +5,7 @@ export interface TiltaksdeltagelseDTO {
   tiltaksvariant: string;
   status: string;
   periode: Periode;
+  antallDager: number;
   harSøkt: boolean;
   girRett: boolean;
   kilde: string;
