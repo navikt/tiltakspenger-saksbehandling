@@ -4,7 +4,7 @@ import { BodyShort, Button, Heading } from '@navikt/ds-react';
 import { dateToISO, formatPeriode } from '../../utils/date';
 import { PencilIcon } from '@navikt/aksel-icons';
 import { Periode } from '../../types/Periode';
-import { Tiltaksdeltagelse } from './types';
+import { Deltagelsesperiode } from './types';
 import TiltaksdeltagelseTable from './TiltaksdeltagelseTable';
 import TiltaksdeltagelseForm from './TiltaksdeltagelseForm';
 
@@ -12,15 +12,19 @@ interface TiltakCardProps {
   tittel: string;
   periode: Periode;
   status: string;
-  deltagelser: Tiltaksdeltagelse[];
-  onAddTiltaksdeltagelse: (nyTiltaksdeltagelse: Tiltaksdeltagelse) => void;
+  deltagelsesperioder: Deltagelsesperiode[];
+  harSøkt: boolean;
+  girRett: boolean;
+  onAddTiltaksdeltagelse: (nyTiltaksdeltagelse: Deltagelsesperiode) => void;
 }
 
 const TiltakCard = ({
   tittel,
   periode,
   status,
-  deltagelser,
+  harSøkt,
+  girRett,
+  deltagelsesperioder,
   onAddTiltaksdeltagelse,
 }: TiltakCardProps) => {
   const [editMode, setEditMode] = React.useState(false);
@@ -37,9 +41,17 @@ const TiltakCard = ({
             <b>Status: </b>
             {status}
           </BodyShort>
+          <BodyShort>
+            <b>Har søkt: </b>
+            {harSøkt ? 'Ja' : 'Nei'}
+          </BodyShort>
+          <BodyShort>
+            <b>Gir rett: </b>
+            {girRett ? 'Ja' : 'Nei'}
+          </BodyShort>
         </div>
         <div className={styles.tiltakCard__deltagelseSection}>
-          <TiltaksdeltagelseTable deltagelser={deltagelser} />
+          <TiltaksdeltagelseTable deltagelsesperioder={deltagelsesperioder} />
         </div>
         <Button
           icon={<PencilIcon title="Rediger" />}
@@ -58,7 +70,7 @@ const TiltakCard = ({
                   fra: dateToISO(data.periode.fom),
                   til: dateToISO(data.periode.tom),
                 },
-                antallDagerIUken: +data.antallDagerIUken,
+                antallDager: +data.antallDagerIUken,
                 // TODO: Hvordan sette denne?
                 status: 'Gjennomføres',
               });
