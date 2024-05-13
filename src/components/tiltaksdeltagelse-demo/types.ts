@@ -16,3 +16,22 @@ export interface Deltagelsesperiode {
   antallDager: number;
   status: String;
 }
+
+export const tiltaksdeltagelseDTO = [
+  {
+    deltagelsesperioder: [
+      {
+        periode: { fra: '01.01.2024', til: '01.05.2024' },
+        antallDager: 3,
+        status: 'Deltar',
+      },
+    ],
+    tiltaksvariant: 'Gruppe AMO',
+    status: 'Deltar',
+    periode: { fra: '01.01.2024', til: '01.05.2024' },
+    antallDager: 3,
+    harSøkt: true,
+    girRett: true,
+    kilde: 'KOMET',
+  },
+];
