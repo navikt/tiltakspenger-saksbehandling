@@ -19,7 +19,7 @@ const TiltaksdeltagelseTable = ({
         </Table.Row>
       </Table.Header>
       <Table.Body>
-        {deltagelsesperioder.map(({ periode, antallDager, status }) => {
+        {deltagelsesperioder.map(({ periode, antallDager }) => {
           const formattertPeriode = formatPeriode(periode);
           return (
             <Table.Row key={formattertPeriode}>

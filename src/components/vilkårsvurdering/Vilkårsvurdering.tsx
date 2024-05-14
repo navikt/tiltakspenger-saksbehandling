@@ -20,8 +20,7 @@ import BegrunnelseModal from '../begrunnelse-modal/BegrunnelseModal';
 import styles from './Vilkårsvurdering.module.css';
 import UtfallAlert from './UtfallAlert';
 import { PersonCircleIcon } from '@navikt/aksel-icons';
-import TiltaksdeltagelseVilkårsvurdering from '../tiltaksdeltagelse-vilkårsvurdering/TiltaksdeltagelseVilkårsvurdering';
-import { tiltaksdeltagelseDTO } from '../tiltaksdeltagelse-demo/types';
+import VilkårsvurderingAvTiltaksdeltagelse from '../vilkårsvurdering-av-tiltaksdeltagelse/VilkårsvurderingAvTiltaksdeltagelse';
 import { Utfall } from '../../types/Utfall';
 
 interface VilkårsvurderingProps {
@@ -104,9 +103,9 @@ export const Vilkårsvurdering = ({
         )}
 
       <UtfallAlert utfall={valgtBehandling.samletUtfall} />
-      <TiltaksdeltagelseVilkårsvurdering
+      <VilkårsvurderingAvTiltaksdeltagelse
         samletUtfall={Utfall.OPPFYLT}
-        tiltaksdeltagelser={tiltaksdeltagelseDTO}
+        registrerteTiltak={valgtBehandling.registrerteTiltak}
       />
       <Accordion indent={false}>
         <VStack>

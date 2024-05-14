@@ -8,19 +8,19 @@ import {
   Link,
 } from '@navikt/ds-react';
 import { formatPeriode } from '../../utils/date';
-import { TiltaksdeltagelseDTO } from './types';
-import TiltaksdeltagelseTable from './TiltaksdeltagelseTable';
+import TiltaksdeltagelseTable from '../tiltaksdeltagelse-demo/TiltaksdeltagelseTable';
 import { PencilIcon } from '@navikt/aksel-icons';
-import styles from './TiltaksdeltagelseDemo.module.css';
-import TiltaksdeltagelseForm from './TiltaksdeltagelseForm';
+import TiltaksdeltagelseForm from '../tiltaksdeltagelse-demo/TiltaksdeltagelseForm';
+import { RegistrertTiltak } from '../../types/Søknad';
+import styles from './../tiltaksdeltagelse-demo/TiltaksdeltagelseDemo.module.css';
 
-interface StønadsdagerVilkårsvurderingProps {
-  tiltaksdeltagelser: TiltaksdeltagelseDTO[];
+interface VilkårsvurderingAvStønadsdagerProps {
+  registrerteTiltak: RegistrertTiltak[];
 }
 
-const StønadsdagerVilkårsvurdering = ({
-  tiltaksdeltagelser,
-}: StønadsdagerVilkårsvurderingProps) => {
+const VilkårsvurderingAvStønadsdager = ({
+  registrerteTiltak,
+}: VilkårsvurderingAvStønadsdagerProps) => {
   const [editMode, setEditMode] = React.useState(false);
   return (
     <div className={styles.container}>
@@ -41,36 +41,41 @@ const StønadsdagerVilkårsvurdering = ({
           </HStack>
         </ExpansionCard.Header>
         <ExpansionCard.Content>
-          {tiltaksdeltagelser.map(
-            ({
-              tiltaksvariant,
-              antallDager,
-              periode,
-              kilde,
-              deltagelsesperioder,
-            }) => {
+          {registrerteTiltak.map(
+            ({ navn, dagerIUken, arrangør, periode, kilde }) => {
               return (
-                <div key={formatPeriode(periode)}>
+                <div key={formatPeriode(periode)} style={{ marginTop: '1rem' }}>
                   <Box
                     background="surface-subtle"
                     padding="2"
                     style={{ position: 'relative' }}
                   >
                     <BodyShort size="medium" spacing>
-                      <b>Tiltaksvariant:</b> {tiltaksvariant}
+                      <b>Tiltaksvariant:</b> {navn}
+                    </BodyShort>
+                    <BodyShort size="medium" spacing>
+                      <b>Arrangør:</b> {arrangør}
                     </BodyShort>
                     <BodyShort size="medium" spacing>
                       <b>Tiltaksperiode:</b> {formatPeriode(periode)}
                     </BodyShort>
                     <BodyShort size="medium" spacing>
-                      <b>Antall dager registrert på tiltaket:</b> {antallDager}
+                      <b>Antall dager registrert på tiltaket:</b> {dagerIUken}
                     </BodyShort>
                     <BodyShort size="medium" spacing>
                       <b>Kilde:</b> {kilde}
                     </BodyShort>
-                    <TiltaksdeltagelseTable
-                      deltagelsesperioder={deltagelsesperioder}
-                    />
+                    {
+                      <TiltaksdeltagelseTable
+                        deltagelsesperioder={[
+                          {
+                            periode: periode,
+                            antallDager: dagerIUken,
+                            status: 'test',
+                          },
+                        ]}
+                      />
+                    }
                     <div style={{ position: 'absolute', right: 0, top: 0 }}>
                       <Button
                         icon={<PencilIcon title="Rediger" />}
@@ -105,4 +110,4 @@ const StønadsdagerVilkårsvurdering = ({
   );
 };
 
-export default StønadsdagerVilkårsvurdering;
+export default VilkårsvurderingAvStønadsdager;
