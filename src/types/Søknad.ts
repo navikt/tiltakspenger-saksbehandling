@@ -11,6 +11,7 @@ export type RegistrertTiltak = {
   girRett: boolean;
   harSøkt: boolean;
   kilde: string;
+  vilkårOppfylt: boolean;
 };
 
 interface Søknad {

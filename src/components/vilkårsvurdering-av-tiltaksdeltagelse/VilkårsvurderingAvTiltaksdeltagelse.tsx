@@ -42,7 +42,16 @@ const VilkårsvurderingAvTiltaksdeltagelse = ({
       </ExpansionCard.Header>
       <ExpansionCard.Content>
         {registrerteTiltak.map(
-          ({ periode, status, arrangør, navn, harSøkt, girRett, kilde }) => {
+          ({
+            periode,
+            status,
+            arrangør,
+            navn,
+            harSøkt,
+            girRett,
+            kilde,
+            vilkårOppfylt,
+          }) => {
             return (
               <Box
                 background="surface-subtle"
@@ -68,8 +77,11 @@ const VilkårsvurderingAvTiltaksdeltagelse = ({
                 <BodyShort size="medium" spacing>
                   <b>Gir rett til tiltakspenger:</b> {girRett ? 'Ja' : 'Nei'}
                 </BodyShort>
-                <BodyShort size="medium">
+                <BodyShort size="medium" spacing>
                   <b>Kilde:</b> {kilde}
+                </BodyShort>
+                <BodyShort size="medium">
+                  <b>Vilkår oppfylt:</b> {vilkårOppfylt ? 'Ja' : 'Nei'}
                 </BodyShort>
               </Box>
             );
