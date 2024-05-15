@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table } from '@navikt/ds-react';
 import { formatPeriode } from '../../utils/date';
-import { Deltagelsesperiode } from './types';
+import { Deltagelsesperiode } from '../../types/Deltagelsesperiode';
 
 interface TiltaksdeltagelseTableProps {
   deltagelsesperioder: Deltagelsesperiode[];

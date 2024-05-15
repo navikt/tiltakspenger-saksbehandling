@@ -1,4 +1,4 @@
-import { Periode } from '../../types/Periode';
+import { Periode } from './Periode';
 
 export interface Deltagelsesperiode {
   periode: Periode;

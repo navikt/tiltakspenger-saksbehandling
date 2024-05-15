@@ -8,11 +8,11 @@ import {
   Link,
 } from '@navikt/ds-react';
 import { formatPeriode } from '../../utils/date';
-import TiltaksdeltagelseTable from '../tiltaksdeltagelse-demo/TiltaksdeltagelseTable';
+import TiltaksdeltagelseTable from '../tiltaksdeltagelse-table/TiltaksdeltagelseTable';
 import { PencilIcon } from '@navikt/aksel-icons';
-import TiltaksdeltagelseForm from '../tiltaksdeltagelse-demo/TiltaksdeltagelseForm';
+import TiltaksdeltagelseForm from '../tiltaksdeltagelse-form/TiltaksdeltagelseForm';
 import { RegistrertTiltak } from '../../types/Søknad';
-import styles from './../tiltaksdeltagelse-demo/TiltaksdeltagelseDemo.module.css';
+import styles from './VilkårsvurderingAvStønadsdager.module.css';
 
 interface VilkårsvurderingAvStønadsdagerProps {
   registrerteTiltak: RegistrertTiltak[];
