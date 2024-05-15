@@ -8,6 +8,9 @@ export type RegistrertTiltak = {
   periode: Periode;
   prosent: number;
   status: Tiltaksstatus;
+  girRett: boolean;
+  harSøkt: boolean;
+  kilde: string;
 };
 
 interface Søknad {

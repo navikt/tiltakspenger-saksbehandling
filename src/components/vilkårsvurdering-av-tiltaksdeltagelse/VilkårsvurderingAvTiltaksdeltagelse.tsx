@@ -2,18 +2,18 @@ import React from 'react';
 import { CheckmarkCircleFillIcon } from '@navikt/aksel-icons';
 import { BodyShort, Box, ExpansionCard, HStack, Link } from '@navikt/ds-react';
 import { Utfall } from '../../types/Utfall';
-import { TiltaksdeltagelseDTO } from '../tiltaksdeltagelse-demo/types';
 import { formatPeriode } from '../../utils/date';
+import { RegistrertTiltak } from '../../types/Søknad';
 
-interface TiltaksdeltagelseVilkårsvurderingProps {
+interface VilkårsvurderingAvTiltaksdeltagelseProps {
   samletUtfall: Utfall;
-  tiltaksdeltagelser: TiltaksdeltagelseDTO[];
+  registrerteTiltak: RegistrertTiltak[];
 }
 
-const TiltaksdeltagelseVilkårsvurdering = ({
+const VilkårsvurderingAvTiltaksdeltagelse = ({
   samletUtfall,
-  tiltaksdeltagelser,
-}: TiltaksdeltagelseVilkårsvurderingProps) => {
+  registrerteTiltak,
+}: VilkårsvurderingAvTiltaksdeltagelseProps) => {
   return (
     <ExpansionCard aria-label="Vilkårsvurdering av tiltaksdeltagelse">
       <ExpansionCard.Header>
@@ -41,12 +41,20 @@ const TiltaksdeltagelseVilkårsvurdering = ({
         </HStack>
       </ExpansionCard.Header>
       <ExpansionCard.Content>
-        {tiltaksdeltagelser.map(
-          ({ tiltaksvariant, harSøkt, girRett, periode, status, kilde }) => {
+        {registrerteTiltak.map(
+          ({ periode, status, arrangør, navn, harSøkt, girRett, kilde }) => {
             return (
-              <Box background="surface-subtle" padding="2" key={tiltaksvariant}>
+              <Box
+                background="surface-subtle"
+                padding="2"
+                key={arrangør}
+                style={{ marginTop: '1rem' }}
+              >
                 <BodyShort size="medium" spacing>
-                  <b>Tiltaksvariant:</b> {tiltaksvariant}
+                  <b>Tiltaksvariant:</b> {navn}
+                </BodyShort>
+                <BodyShort size="medium" spacing>
+                  <b>Arrangør:</b> {arrangør}
                 </BodyShort>
                 <BodyShort size="medium" spacing>
                   <b>Tiltaksperiode:</b> {formatPeriode(periode)}
@@ -72,4 +80,4 @@ const TiltaksdeltagelseVilkårsvurdering = ({
   );
 };
 
-export default TiltaksdeltagelseVilkårsvurdering;
+export default VilkårsvurderingAvTiltaksdeltagelse;

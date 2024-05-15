@@ -1,12 +1,12 @@
 import React from 'react';
-import styles from './TiltaksdeltagelseDemo.module.css';
 import { BodyShort, Button, Heading } from '@navikt/ds-react';
 import { dateToISO, formatPeriode } from '../../utils/date';
 import { PencilIcon } from '@navikt/aksel-icons';
 import { Periode } from '../../types/Periode';
-import { Deltagelsesperiode } from './types';
-import TiltaksdeltagelseTable from './TiltaksdeltagelseTable';
-import TiltaksdeltagelseForm from './TiltaksdeltagelseForm';
+import TiltaksdeltagelseTable from '../tiltaksdeltagelse-table/TiltaksdeltagelseTable';
+import TiltaksdeltagelseForm from '../tiltaksdeltagelse-form/TiltaksdeltagelseForm';
+import { Deltagelsesperiode } from '../../types/Deltagelsesperiode';
+import styles from './TiltakCard.module.css';
 
 interface TiltakCardProps {
   tittel: string;

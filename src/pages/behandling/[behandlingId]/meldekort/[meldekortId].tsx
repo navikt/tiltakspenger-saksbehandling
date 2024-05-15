@@ -6,6 +6,7 @@ import { NextPageWithLayout } from '../../../_app';
 import { MeldekortMeny } from '../../../../components/meldekort-meny/MeldekortMeny';
 import { MeldekortSide } from '../../../../components/meldekort-side/MeldekortSide';
 import { MeldekortDetaljer } from '../../../../components/meldekort-detaljer/MeldekortDetaljer';
+import { pageWithAuthentication } from '../../../../utils/pageWithAuthentication';
 
 const Meldekort: NextPageWithLayout = () => {
   const router = useRouter();
@@ -27,5 +28,7 @@ Meldekort.getLayout = function getLayout(page: ReactElement) {
     </SaksbehandlingLayout>
   );
 };
+
+export const getServerSideProps = pageWithAuthentication();
 
 export default Meldekort;

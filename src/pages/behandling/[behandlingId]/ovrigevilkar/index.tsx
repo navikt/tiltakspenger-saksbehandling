@@ -4,20 +4,16 @@ import { useRouter } from 'next/router';
 import { useHentBehandling } from '../../../../hooks/useHentBehandling';
 import { BehandlingLayout } from '../../../../components/layout/BehandlingLayout';
 import { SaksbehandlingLayout } from '../../../../components/layout/SaksbehandlingLayout';
-import { ReactElement, useContext } from 'react';
-import { NextPageWithLayout, SaksbehandlerContext } from '../../../_app';
-import { avklarLesevisning } from '../../../../utils/avklarLesevisning';
-import { Vilkårsvurdering } from '../../../../components/vilkårsvurdering/Vilkårsvurdering';
+import { ReactElement } from 'react';
+import { NextPageWithLayout } from '../../../_app';
 import SøknadOppsummering from '../../../../components/søknad-oppsummering/SøknadOppsummering';
 import { Saksdialog } from '../../../../components/saksdialog/Saksdialog';
-import StønadsdagerVilkårsvurdering from '../../../../components/tiltaksdeltagelse-demo/StønadsdagerVilkårsvurdering';
-import { tiltaksdeltagelseDTO } from '../../../../components/tiltaksdeltagelse-demo/types';
+import VilkårsvurderingAvStønadsdager from '../../../../components/vilkårsvurdering-av-stønadsdager/VilkårsvurderingAvStønadsdager';
 
 const Behandling: NextPageWithLayout = () => {
   const router = useRouter();
   const behandlingId = router.query.behandlingId as string;
   const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
-  const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
 
   if (isLoading || !valgtBehandling) {
     return <Loader />;
@@ -29,7 +25,9 @@ const Behandling: NextPageWithLayout = () => {
         søknad={valgtBehandling.søknad}
         registrerteTiltak={valgtBehandling.registrerteTiltak}
       />
-      <StønadsdagerVilkårsvurdering tiltaksdeltagelser={tiltaksdeltagelseDTO} />
+      <VilkårsvurderingAvStønadsdager
+        registrerteTiltak={valgtBehandling.registrerteTiltak}
+      />
       <Saksdialog endringslogg={valgtBehandling.endringslogg} />
     </>
   );
