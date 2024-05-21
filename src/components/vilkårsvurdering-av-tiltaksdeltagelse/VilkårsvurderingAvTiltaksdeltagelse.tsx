@@ -50,7 +50,8 @@ const VilkårsvurderingAvTiltaksdeltagelse = ({
             harSøkt,
             girRett,
             kilde,
-            vilkårOppfylt,
+            deltagelseUtfall,
+            begrunnelse,
           }) => {
             return (
               <Box
@@ -80,8 +81,11 @@ const VilkårsvurderingAvTiltaksdeltagelse = ({
                 <BodyShort size="medium" spacing>
                   <b>Kilde:</b> {kilde}
                 </BodyShort>
+                <BodyShort size="medium" spacing>
+                  <b>Vilkår oppfylt:</b> {deltagelseUtfall}
+                </BodyShort>
                 <BodyShort size="medium">
-                  <b>Vilkår oppfylt:</b> {vilkårOppfylt ? 'Ja' : 'Nei'}
+                  <b>Begrunnelse:</b> {begrunnelse}
                 </BodyShort>
               </Box>
             );

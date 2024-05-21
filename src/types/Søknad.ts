@@ -1,5 +1,6 @@
 import { Periode } from './Periode';
 import Tiltaksstatus from './Tiltaksstatus';
+import { Utfall } from './Utfall';
 
 export type RegistrertTiltak = {
   arrangør: string;
@@ -11,7 +12,8 @@ export type RegistrertTiltak = {
   girRett: boolean;
   harSøkt: boolean;
   kilde: string;
-  vilkårOppfylt: boolean;
+  deltagelseUtfall: Utfall;
+  begrunnelse: string;
 };
 
 interface Søknad {
