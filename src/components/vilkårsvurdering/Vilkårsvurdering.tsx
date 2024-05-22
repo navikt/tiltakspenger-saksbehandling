@@ -104,7 +104,6 @@ export const Vilkårsvurdering = ({
 
       <UtfallAlert utfall={valgtBehandling.samletUtfall} />
       <VilkårsvurderingAvTiltaksdeltagelse
-        samletUtfall={Utfall.OPPFYLT}
         registrerteTiltak={valgtBehandling.registrerteTiltak}
       />
       <Accordion indent={false}>
