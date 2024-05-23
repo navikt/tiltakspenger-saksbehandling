@@ -82,12 +82,14 @@ const VilkårsvurderingAvTiltaksdeltagelse = ({
                     <BodyShort size="medium" spacing>
                       <b>Kilde:</b> {kilde}
                     </BodyShort>
-                    <BodyShort size="medium" spacing>
+                    <BodyShort size="medium" spacing={!!begrunnelse}>
                       <b>Vilkår oppfylt:</b> {deltagelseUtfall}
                     </BodyShort>
-                    <BodyShort size="medium">
-                      <b>Begrunnelse:</b> {begrunnelse}
-                    </BodyShort>
+                    {begrunnelse && (
+                      <BodyShort size="medium">
+                        <b>Begrunnelse:</b> {begrunnelse}
+                      </BodyShort>
+                    )}
                   </VStack>
                 </HStack>
               );
