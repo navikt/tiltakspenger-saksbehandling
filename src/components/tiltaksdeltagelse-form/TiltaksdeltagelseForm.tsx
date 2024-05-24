@@ -20,11 +20,15 @@ interface TiltaksdeltagelseFormFelter {
 interface TiltaksdeltagelseFormProps {
   onSubmit: SubmitHandler<TiltaksdeltagelseFormFelter>;
   onCancel: () => void;
+  minDate: Date;
+  maxDate: Date;
 }
 
 const TiltaksdeltagelseForm = ({
   onSubmit,
   onCancel,
+  minDate,
+  maxDate,
 }: TiltaksdeltagelseFormProps) => {
   const formMethods = useForm<TiltaksdeltagelseFormFelter>({
     mode: 'onSubmit',
@@ -41,6 +45,8 @@ const TiltaksdeltagelseForm = ({
           <Periodefelt
             size="small"
             name="periode"
+            minDate={minDate}
+            maxDate={maxDate}
             validate={[gyldigPeriodeValidator, påkrevdPeriodeValidator]}
           />
           <Flervalgsfelt

@@ -6,6 +6,7 @@ import { PencilIcon } from '@navikt/aksel-icons';
 import TiltaksdeltagelseForm from '../tiltaksdeltagelse-form/TiltaksdeltagelseForm';
 import { RegistrertTiltak } from '../../types/Søknad';
 import styles from './VilkårsvurderingAvStønadsdager.module.css';
+import dayjs from 'dayjs';
 
 interface VilkårsvurderingAvStønadsdagerProps {
   registrertTiltak: RegistrertTiltak;
@@ -69,6 +70,8 @@ const VilkårsvurderingAvStønadsdager = ({
               onCancel={() => {
                 setEditMode(false);
               }}
+              minDate={dayjs(periode.fra).toDate()}
+              maxDate={dayjs(periode.til).toDate()}
             />
           </div>
         )}
