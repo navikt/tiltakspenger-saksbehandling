@@ -73,7 +73,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Deploy frontend
-        uses: nais/deploy/actions/deploy@v1
+        uses: nais/deploy/actions/deploy@v2
         env:
           DEPLOY_SERVER: deploy.nais.io:443
           APIKEY: ${{ secrets.NAIS_DEPLOY_KEY }}
@@ -82,7 +82,7 @@ jobs:
           VAR: image=${{ env.IMAGE }}-labs-frontend,name=${{ github.event.repository.name }}
           VARS: .nais/labs/vars/frontend.yaml
       - name: Deploy backend
-        uses: nais/deploy/actions/deploy@v1
+        uses: nais/deploy/actions/deploy@v2
         env:
           DEPLOY_SERVER: deploy.nais.io:443
           APIKEY: ${{ secrets.NAIS_DEPLOY_KEY }}
