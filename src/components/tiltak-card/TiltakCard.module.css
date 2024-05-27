@@ -1,11 +1,3 @@
-.tiltaksdeltagelse {
-    padding: 1rem;
-}
-
-.tiltakCardWrapper {
-    margin-top: 1rem;
-}
-
 .tiltakCard {
     border: 1px solid #78706A;
     border-radius: 4px;
@@ -36,7 +28,7 @@
 .tiltakCard__form__fieldset {
     border: 0;
     padding: 0;
-    margin: 0;
+    margin-top: 1rem;
 }
 
 .tiltakCard__form__antallDagerSelectBox {

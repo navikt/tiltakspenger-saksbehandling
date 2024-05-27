@@ -1,5 +1,6 @@
 import { Periode } from './Periode';
 import Tiltaksstatus from './Tiltaksstatus';
+import { Utfall } from './Utfall';
 
 export type RegistrertTiltak = {
   arrangør: string;
@@ -8,6 +9,11 @@ export type RegistrertTiltak = {
   periode: Periode;
   prosent: number;
   status: Tiltaksstatus;
+  girRett: boolean;
+  harSøkt: boolean;
+  kilde: string;
+  deltagelseUtfall: Utfall;
+  begrunnelse: string;
 };
 
 interface Søknad {
