@@ -24,7 +24,7 @@ export const BehandlingKnapper = ({
       method: 'POST',
     }).then(() => {
       mutator(`/api/behandling/${behandlingid}`).then(() => {
-        router.push(`/behandling/${behandlingid}`);
+        router.push(`/behandling/${behandlingid}/inngangsvilkar`);
       });
     });
   };
