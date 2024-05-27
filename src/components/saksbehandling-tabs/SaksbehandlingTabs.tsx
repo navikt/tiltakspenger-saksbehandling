@@ -13,10 +13,10 @@ export const SaksbehandlingTabs = ({
   utbetalingId,
 }: SaksbehandlingTabsProps) => {
   const router = useRouter();
-  const { meldekortliste } = useHentMeldekortListe(behandlingId)
+  const { meldekortliste } = useHentMeldekortListe(behandlingId);
 
   return (
-    <Tabs>
+    <Tabs defaultValue="Inngangsvilkår">
       <Tabs.List>
         <Tabs.Tab
           key={'Inngangsvilkår'}
@@ -24,7 +24,16 @@ export const SaksbehandlingTabs = ({
           label={'Inngangsvilkår'}
           icon={<FileTextIcon />}
           onClick={() => {
-            router.push(`/behandling/${behandlingId}`);
+            router.push(`/behandling/${behandlingId}/inngangsvilkar`);
+          }}
+        />
+        <Tabs.Tab
+          key={'Øvrigevilkår'}
+          value={'Øvrige vilkår'}
+          label={'Øvrige vilkår'}
+          icon={<FileTextIcon />}
+          onClick={() => {
+            router.push(`/behandling/${behandlingId}/ovrigevilkar`);
           }}
         />
         <Tabs.Tab
@@ -34,7 +43,9 @@ export const SaksbehandlingTabs = ({
           icon={<FileTextIcon />}
           onClick={() => {
             meldekortliste &&
-              router.push(`/behandling/${behandlingId}/meldekort/${meldekortliste[0].id}`);
+              router.push(
+                `/behandling/${behandlingId}/meldekort/${meldekortliste[0].id}`,
+              );
           }}
         />
         <Tabs.Tab
@@ -44,7 +55,7 @@ export const SaksbehandlingTabs = ({
           icon={<FileTextIcon />}
           onClick={() => {
             router.push(
-              `/behandling/${behandlingId}/utbetaling/${utbetalingId}`
+              `/behandling/${behandlingId}/utbetaling/${utbetalingId}`,
             );
           }}
         />

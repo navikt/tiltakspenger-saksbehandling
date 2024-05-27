@@ -21,14 +21,14 @@ const Benken: NextPage = () => {
         mutator(`/api/behandlinger`);
       })
       .then(() => {
-        router.push(`/behandling/${behandlingid}`);
+        router.push(`/behandling/${behandlingid}/inngangsvilkar`);
       });
   };
 
   const skalKunneTaBehandling = (
     type: string,
     saksbehandlerForBehandling?: string,
-    beslutterForBehandling?: string
+    beslutterForBehandling?: string,
   ) => {
     switch (type) {
       case 'Klar til beslutning':
@@ -49,7 +49,7 @@ const Benken: NextPage = () => {
 
   const behandlingLinkAktivert = (
     saksbehandlerForBehandling?: string,
-    beslutterForBehandling?: string
+    beslutterForBehandling?: string,
   ) => {
     return (
       innloggetSaksbehandler?.navIdent == saksbehandlerForBehandling ||
@@ -84,9 +84,9 @@ const Benken: NextPage = () => {
                 <Table.DataCell>
                   {behandlingLinkAktivert(
                     behandling.saksbehandler,
-                    behandling.beslutter
+                    behandling.beslutter,
                   ) ? (
-                    <Link href={`/behandling/${behandling.id}`}>
+                    <Link href={`/behandling/${behandling.id}/inngangsvilkar`}>
                       {behandling.typeBehandling}
                     </Link>
                   ) : (
@@ -106,7 +106,7 @@ const Benken: NextPage = () => {
                       !skalKunneTaBehandling(
                         behandling.status,
                         behandling.saksbehandler,
-                        behandling.beslutter
+                        behandling.beslutter,
                       )
                     }
                   >

@@ -1,5 +1,5 @@
+import React from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
-import styles from './TiltaksdeltagelseDemo.module.css';
 import Periodefelt from '../saksopplysning-tabell/Periodefelt';
 import {
   gyldigPeriodeValidator,
@@ -7,7 +7,7 @@ import {
 } from '../../utils/validation';
 import Flervalgsfelt from '../flervalgsfelt/Flervalgsfelt';
 import { Button } from '@navikt/ds-react';
-import React from 'react';
+import styles from './../tiltak-card/TiltakCard.module.css';
 
 interface TiltaksdeltagelseFormFelter {
   periode: {
@@ -20,11 +20,15 @@ interface TiltaksdeltagelseFormFelter {
 interface TiltaksdeltagelseFormProps {
   onSubmit: SubmitHandler<TiltaksdeltagelseFormFelter>;
   onCancel: () => void;
+  minDate: Date;
+  maxDate: Date;
 }
 
 const TiltaksdeltagelseForm = ({
   onSubmit,
   onCancel,
+  minDate,
+  maxDate,
 }: TiltaksdeltagelseFormProps) => {
   const formMethods = useForm<TiltaksdeltagelseFormFelter>({
     mode: 'onSubmit',
@@ -41,6 +45,8 @@ const TiltaksdeltagelseForm = ({
           <Periodefelt
             size="small"
             name="periode"
+            minDate={minDate}
+            maxDate={maxDate}
             validate={[gyldigPeriodeValidator, påkrevdPeriodeValidator]}
           />
           <Flervalgsfelt
