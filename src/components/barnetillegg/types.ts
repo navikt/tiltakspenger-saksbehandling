@@ -1,4 +1,4 @@
-interface Barnetillegg {
+export interface Barnetillegg {
   navn: string;
   fnr: string;
   fdato: string;
@@ -8,7 +8,7 @@ interface Barnetillegg {
   opplysninger: barnOpplysning[];
 }
 
-interface barnOpplysning {
+export interface barnOpplysning {
   fakta: string;
   periode: string;
   kilde: string;
