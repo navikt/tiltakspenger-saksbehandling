@@ -10,7 +10,7 @@ import styles from './Barnetillegg.module.css';
 import { PencilIcon } from '@navikt/aksel-icons';
 import { UtfallIkon } from '../utfall-ikon/UtfallIkon';
 
-const barn: Barnetillegg[] = [
+const barn = [
   {
     navn: 'Ole Duck',
     fnr: '01010847205',
