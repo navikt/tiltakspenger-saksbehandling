@@ -28,15 +28,6 @@ export const SaksbehandlingTabs = ({
           }}
         />
         <Tabs.Tab
-          key={'Øvrigevilkår'}
-          value={'Øvrige vilkår'}
-          label={'Øvrige vilkår'}
-          icon={<FileTextIcon />}
-          onClick={() => {
-            router.push(`/behandling/${behandlingId}/ovrigevilkar`);
-          }}
-        />
-        <Tabs.Tab
           key={'Meldekort'}
           value={'Meldekort'}
           label={'Meldekort'}
