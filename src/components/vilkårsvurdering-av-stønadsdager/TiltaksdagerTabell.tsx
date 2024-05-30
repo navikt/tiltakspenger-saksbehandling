@@ -1,15 +1,16 @@
 import React, { useRef } from 'react';
 import { Button, Table } from '@navikt/ds-react';
-import { AntallDagerSaksopplysning } from '../../types/Søknad';
+import {
+  AntallDagerSaksopplysning,
+  RegistrertTiltak,
+} from '../../types/Søknad';
 import { formatPeriode } from '../../utils/date';
 import styles from './TiltaksdagerTabell.module.css';
 import EndreAntallDagerModal from './EndreAntallDagerModal';
-import { Periode } from '../../types/Periode';
 import dayjs from 'dayjs';
 
 interface TiltaksdagerTabellProps {
-  antallDagerSaksopplysninger: AntallDagerSaksopplysning[];
-  tiltaksperiode: Periode;
+  tiltak: RegistrertTiltak;
 }
 
 function renderAntallDagerSaksopplysningRad({
@@ -28,7 +29,7 @@ function renderAntallDagerSaksopplysningRad({
 }
 
 const TiltaksdagerTabell = (props: TiltaksdagerTabellProps) => {
-  const { antallDagerSaksopplysninger, tiltaksperiode } = props;
+  const { antallDagerSaksopplysninger, periode } = props.tiltak;
   const ref = useRef(null);
   return (
     <div className={styles.tiltaksdagerTabell__container}>
@@ -41,7 +42,9 @@ const TiltaksdagerTabell = (props: TiltaksdagerTabellProps) => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {antallDagerSaksopplysninger.map(renderAntallDagerSaksopplysningRad)}
+          {antallDagerSaksopplysninger.avklartAntallDager.map(
+            renderAntallDagerSaksopplysningRad,
+          )}
         </Table.Body>
       </Table>
       <Button
@@ -55,8 +58,9 @@ const TiltaksdagerTabell = (props: TiltaksdagerTabellProps) => {
       </Button>
       <EndreAntallDagerModal
         ref={ref}
-        minDate={dayjs(tiltaksperiode.fra).toDate()}
-        maxDate={dayjs(tiltaksperiode.til).toDate()}
+        minDate={dayjs(periode.fra).toDate()}
+        maxDate={dayjs(periode.til).toDate()}
+        tiltakId={props.tiltak.id}
       />
     </div>
   );

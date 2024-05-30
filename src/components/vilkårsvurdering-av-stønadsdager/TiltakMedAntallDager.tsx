@@ -9,16 +9,9 @@ interface TiltakMedAntallDagerProps {
 }
 
 const TiltakMedAntallDager = ({ tiltak }: TiltakMedAntallDagerProps) => {
-  const {
-    periode,
-    antallDagerSaksopplysninger: { avklartAntallDager },
-  } = tiltak;
   return (
     <div className={styles.tiltakMedAntallDager}>
-      <TiltaksdagerTabell
-        tiltaksperiode={periode}
-        antallDagerSaksopplysninger={avklartAntallDager}
-      />
+      <TiltaksdagerTabell tiltak={tiltak} />
       <div className={styles.verticalLine}></div>
       <TiltaksdataFraRegister tiltak={tiltak} />
     </div>

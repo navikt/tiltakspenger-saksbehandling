@@ -3,6 +3,7 @@ import Tiltaksstatus from './Tiltaksstatus';
 import { Utfall } from './Utfall';
 
 export type RegistrertTiltak = {
+  id: string;
   arrangør: string;
   antallDagerSaksopplysninger: AntallDagerSaksopplysninger;
   navn: string;

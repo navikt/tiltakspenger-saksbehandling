@@ -8,34 +8,76 @@ import {
   påkrevdPeriodeValidator,
 } from '../../utils/validation';
 import Flervalgsfelt from '../flervalgsfelt/Flervalgsfelt';
+import { AntallDagerSaksopplysning } from '../../types/Søknad';
+import { useRouter } from 'next/router';
+import dayjs from 'dayjs';
+import { dateToISO } from '../../utils/date';
 
 interface SkjemaFelter {
   periode: Periode;
-  antallDagerPerUke: number;
+  antallDager: number;
 }
 
 interface EndreAntallDagerModalProps {
   minDate: Date;
   maxDate: Date;
+  tiltakId: string;
+}
+
+async function oppdaterAntallDager(
+  antallDager: AntallDagerSaksopplysning,
+  behandlingId: string,
+  tiltakId: string,
+) {
+  const response = await fetch(
+    `/api/behandling/${behandlingId}/antalldager/${tiltakId}`,
+    {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(antallDager),
+    },
+  );
+  if (!response.ok) {
+    throw new Error(
+      `Noe gikk galt ved lagring av antall dager: ${response.statusText}`,
+    );
+  }
+  return response;
 }
 
 const EndreAntallDagerModal = forwardRef<
   HTMLDialogElement,
   EndreAntallDagerModalProps
->(({ minDate, maxDate }, ref) => {
+>(({ minDate, maxDate, tiltakId }, ref) => {
+  const router = useRouter();
+  const behandlingId = router.query.behandlingId as string;
   const formMethods = useForm<SkjemaFelter>({
     mode: 'onSubmit',
     defaultValues: {},
   });
 
+  async function onSubmit() {
+    const data = formMethods.getValues();
+    await oppdaterAntallDager(
+      {
+        antallDager: +data.antallDager,
+        periode: {
+          fra: dateToISO(dayjs(data.periode.fra).toDate()),
+          til: dateToISO(dayjs(data.periode.til).toDate()),
+        },
+        kilde: 'SAKSB',
+      },
+      behandlingId,
+      tiltakId,
+    );
+  }
+
   return (
     <div className="py-16">
       <FormProvider {...formMethods}>
-        <form
-          onSubmit={formMethods.handleSubmit(() =>
-            console.log('Her skal vi lagre'),
-          )}
-        >
+        <form onSubmit={formMethods.handleSubmit(() => onSubmit())}>
           <Modal ref={ref} header={{ heading: 'Endre antall tiltaksdager' }}>
             <Modal.Body>
               <VStack gap="4">
@@ -53,7 +95,7 @@ const EndreAntallDagerModal = forwardRef<
                   />
                   <Flervalgsfelt
                     label="Antall dager per uke"
-                    name="antallDagerPerUke"
+                    name="antallDager"
                   >
                     <option value=""></option>
                     <option value="1">1</option>
