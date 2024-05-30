@@ -1,11 +1,15 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Button, Table } from '@navikt/ds-react';
 import { AntallDagerSaksopplysning } from '../../types/Søknad';
 import { formatPeriode } from '../../utils/date';
 import styles from './TiltaksdagerTabell.module.css';
+import EndreAntallDagerModal from './EndreAntallDagerModal';
+import { Periode } from '../../types/Periode';
+import dayjs from 'dayjs';
 
 interface TiltaksdagerTabellProps {
   antallDagerSaksopplysninger: AntallDagerSaksopplysning[];
+  tiltaksperiode: Periode;
 }
 
 function renderAntallDagerSaksopplysningRad({
@@ -23,9 +27,9 @@ function renderAntallDagerSaksopplysningRad({
   );
 }
 
-const TiltaksdagerTabell = ({
-  antallDagerSaksopplysninger,
-}: TiltaksdagerTabellProps) => {
+const TiltaksdagerTabell = (props: TiltaksdagerTabellProps) => {
+  const { antallDagerSaksopplysninger, tiltaksperiode } = props;
+  const ref = useRef(null);
   return (
     <div className={styles.tiltaksdagerTabell__container}>
       <Table>
@@ -45,10 +49,15 @@ const TiltaksdagerTabell = ({
         variant="secondary"
         type="button"
         size="small"
-        onClick={() => {}}
+        onClick={() => (ref as any).current?.showModal()}
       >
         Endre antall dager per uke
       </Button>
+      <EndreAntallDagerModal
+        ref={ref}
+        minDate={dayjs(tiltaksperiode.fra).toDate()}
+        maxDate={dayjs(tiltaksperiode.til).toDate()}
+      />
     </div>
   );
 };
