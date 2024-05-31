@@ -1,7 +1,6 @@
 import React, { forwardRef } from 'react';
 import { BodyLong, Button, HStack, Modal, VStack } from '@navikt/ds-react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { Periode } from '../../types/Periode';
 import Periodefelt from '../saksopplysning-tabell/Periodefelt';
 import {
   gyldigPeriodeValidator,
@@ -10,11 +9,13 @@ import {
 import Flervalgsfelt from '../flervalgsfelt/Flervalgsfelt';
 import { AntallDagerSaksopplysning } from '../../types/Søknad';
 import { useRouter } from 'next/router';
-import dayjs from 'dayjs';
 import { dateToISO } from '../../utils/date';
 
 interface SkjemaFelter {
-  periode: Periode;
+  periode: {
+    fom: Date;
+    tom: Date;
+  };
   antallDager: number;
 }
 
@@ -60,12 +61,14 @@ const EndreAntallDagerModal = forwardRef<
 
   async function onSubmit() {
     const data = formMethods.getValues();
+    const fra = dateToISO(data.periode.fom);
+    const til = dateToISO(data.periode.tom);
     await oppdaterAntallDager(
       {
         antallDager: +data.antallDager,
         periode: {
-          fra: dateToISO(dayjs(data.periode.fra).toDate()),
-          til: dateToISO(dayjs(data.periode.til).toDate()),
+          fra,
+          til,
         },
         kilde: 'SAKSB',
       },
