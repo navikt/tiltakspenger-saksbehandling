@@ -30,8 +30,7 @@ function renderPeriode(periode?: ÅpenPeriode) {
 const RegistrertTiltakDetaljer = ({
   registrertTiltak,
 }: RegistrertTiltakDetaljerProps) => {
-  const { arrangør, periode, prosent, status, navn, dagerIUken } =
-    registrertTiltak;
+  const { arrangør, periode, status, navn } = registrertTiltak;
   return (
     <div className={styles.registrertTiltakDetails}>
       <BodyShort
@@ -56,13 +55,6 @@ const RegistrertTiltakDetaljer = ({
         spacing
       >
         {renderPeriode(periode)}
-      </BodyShort>
-      <BodyShort
-        size="small"
-        className={styles.registrertTiltakDetails__field}
-        spacing
-      >
-        {prosent}%{!!dagerIUken ? ` - ${formatDagerIUken(dagerIUken)}` : ''}
       </BodyShort>
       <div style={{ marginTop: '1rem' }}></div>
       <Tiltaksstatus tiltaksstatus={status} />
