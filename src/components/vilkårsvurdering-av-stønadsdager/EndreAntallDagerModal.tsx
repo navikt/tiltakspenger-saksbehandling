@@ -1,5 +1,12 @@
-import React, { forwardRef } from 'react';
-import { BodyLong, Button, HStack, Modal, VStack } from '@navikt/ds-react';
+import React, { forwardRef, useState } from 'react';
+import {
+  BodyLong,
+  BodyShort,
+  Button,
+  HStack,
+  Modal,
+  VStack,
+} from '@navikt/ds-react';
 import { FormProvider, useForm } from 'react-hook-form';
 import Periodefelt from '../saksopplysning-tabell/Periodefelt';
 import {
@@ -10,6 +17,7 @@ import Flervalgsfelt from '../flervalgsfelt/Flervalgsfelt';
 import { AntallDagerSaksopplysning } from '../../types/Søknad';
 import { useRouter } from 'next/router';
 import { dateToISO } from '../../utils/date';
+import { useSWRConfig } from 'swr';
 
 interface SkjemaFelter {
   periode: {
@@ -52,8 +60,12 @@ const EndreAntallDagerModal = forwardRef<
   HTMLDialogElement,
   EndreAntallDagerModalProps
 >(({ minDate, maxDate, tiltakId }, ref) => {
+  const [feilmelding, setFeilmelding] = useState(null);
   const router = useRouter();
+
   const behandlingId = router.query.behandlingId as string;
+  const mutator = useSWRConfig().mutate;
+
   const formMethods = useForm<SkjemaFelter>({
     mode: 'onSubmit',
     defaultValues: {},
@@ -63,18 +75,27 @@ const EndreAntallDagerModal = forwardRef<
     const data = formMethods.getValues();
     const fra = dateToISO(data.periode.fom);
     const til = dateToISO(data.periode.tom);
-    await oppdaterAntallDager(
-      {
-        antallDager: +data.antallDager,
-        periode: {
-          fra,
-          til,
+
+    try {
+      setFeilmelding(null);
+      await oppdaterAntallDager(
+        {
+          antallDager: +data.antallDager,
+          periode: {
+            fra,
+            til,
+          },
+          kilde: 'SAKSB',
         },
-        kilde: 'SAKSB',
-      },
-      behandlingId,
-      tiltakId,
-    );
+        behandlingId,
+        tiltakId,
+      );
+      (ref as any).current?.close();
+
+      await mutator(`/api/behandling/${behandlingId}`);
+    } catch (e: any) {
+      setFeilmelding(e.message);
+    }
   }
 
   return (
@@ -119,6 +140,9 @@ const EndreAntallDagerModal = forwardRef<
               >
                 Avbryt
               </Button>
+              {feilmelding && (
+                <BodyShort size={'small'}>{feilmelding}</BodyShort>
+              )}
             </Modal.Footer>
           </Modal>
         </form>
