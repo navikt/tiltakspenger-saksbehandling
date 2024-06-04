@@ -10,28 +10,28 @@ const utbetalingBackendUrl = process.env.TILTAKSPENGER_UTBETALING_URL || '';
 function getUrl(req: NextApiRequest): string {
   const urlTil = req?.url;
   if (urlTil?.startsWith('/api/meldekort')) {
-      const meldekortPath = req?.url?.replace('/api', '');
-      return `${meldekortBackendUrl}${meldekortPath}`;
+    const meldekortPath = req?.url?.replace('/api', '');
+    return `${meldekortBackendUrl}${meldekortPath}`;
   } else if (urlTil?.startsWith('/api/utbetaling')) {
-      const utbetalingPath = req?.url?.replace('/api', '');
-      return `${utbetalingBackendUrl}${utbetalingPath}`;
+    const utbetalingPath = req?.url?.replace('/api', '');
+    return `${utbetalingBackendUrl}${utbetalingPath}`;
   } else {
-      const vedtakPath = req?.url?.replace('/api', '');
-      return `${vedtakBackendUrl}${vedtakPath}`;
+    const vedtakPath = req?.url?.replace('/api', '');
+    return `${vedtakBackendUrl}${vedtakPath}`;
   }
 }
 
 async function makeApiRequest(
   request: NextApiRequest,
-  oboToken: string
+  oboToken: string,
 ): Promise<Response> {
   const url = getUrl(request);
   logger.info(`Making request to ${url}`);
   return await fetch(url, {
     method: request.method,
-    body: request.method === 'GET' ? undefined : request.body,
+    body: request.method === 'GET' ? undefined : JSON.stringify(request.body),
     headers: {
-      'content-type': 'application/json',
+      'Content-Type': 'application/json',
       authorization: `Bearer ${oboToken}`,
     },
   });
@@ -39,7 +39,7 @@ async function makeApiRequest(
 
 export async function middleware(
   request: NextApiRequest,
-  response: NextApiResponse
+  response: NextApiResponse,
 ): Promise<void> {
   let oboToken = null;
   try {

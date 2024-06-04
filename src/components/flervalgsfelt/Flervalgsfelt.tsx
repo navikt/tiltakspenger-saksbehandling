@@ -5,7 +5,7 @@ import { ValidatorFunction } from '../saksopplysning-tabell/Periodefelt';
 import { setupValidation } from '../../utils/validation';
 
 interface FlervalgsfeltProps {
-  className: string;
+  className?: string;
   label: string;
   size?: 'small' | 'medium';
   name: string;
