@@ -1,13 +1,31 @@
-import React from 'react';
-import { Button, Heading, VStack } from '@navikt/ds-react';
+import React, { useState } from 'react';
+import { BodyShort, Button, Heading, VStack } from '@navikt/ds-react';
 import styles from './TiltaksdataFraRegister.module.css';
 import {
+  AntallDagerSaksopplysning,
   AntallDagerSaksopplysninger,
   RegistrertTiltak,
 } from '../../types/Søknad';
+import { useRouter } from 'next/router';
+import { useSWRConfig } from 'swr';
 
 interface TiltaksdataFraRegisterProps {
   tiltak: RegistrertTiltak;
+}
+
+async function tilbakestillAntallDager(behandlingId: string, tiltakId: string) {
+  const response = await fetch(
+    `/api/behandling/${behandlingId}/antalldager/${tiltakId}`,
+    {
+      method: 'DELETE',
+    },
+  );
+  if (!response.ok) {
+    throw new Error(
+      `Noe gikk galt ved lagring av antall dager: ${response.statusText}`,
+    );
+  }
+  return response;
 }
 
 function utledAntallDagerFraRegister({
@@ -24,9 +42,15 @@ function utledAntallDagerFraRegister({
 }
 
 const TiltaksdataFraRegister = ({
-  tiltak: { navn, kilde, arrangør, antallDagerSaksopplysninger },
+  tiltak: { id: tiltakId, navn, kilde, arrangør, antallDagerSaksopplysninger },
 }: TiltaksdataFraRegisterProps) => {
+  const [feilmelding, setFeilmelding] = useState('');
+  const mutator = useSWRConfig().mutate;
+
+  const router = useRouter();
   const antallDager = utledAntallDagerFraRegister(antallDagerSaksopplysninger);
+  const behandlingId = router.query.behandlingId as string;
+
   return (
     <div className={styles.tiltaksdataFraRegister__container}>
       <Heading size="small">Registerdata</Heading>
@@ -45,10 +69,19 @@ const TiltaksdataFraRegister = ({
         variant="secondary"
         type="button"
         size="small"
-        onClick={() => {}}
+        onClick={async () => {
+          try {
+            setFeilmelding('');
+            await tilbakestillAntallDager(behandlingId, tiltakId);
+            await mutator(`/api/behandling/${behandlingId}`);
+          } catch (e: any) {
+            setFeilmelding('Noe gikk galt ved tilbakestilling av antall dager');
+          }
+        }}
       >
         Tilbakestill til registerdata
       </Button>
+      {feilmelding && <BodyShort size="small">{feilmelding}</BodyShort>}
     </div>
   );
 };
