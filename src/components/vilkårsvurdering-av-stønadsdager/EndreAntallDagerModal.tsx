@@ -62,13 +62,20 @@ const EndreAntallDagerModal = forwardRef<
 >(({ minDate, maxDate, tiltakId }, ref) => {
   const [feilmelding, setFeilmelding] = useState(null);
   const router = useRouter();
+  const [unmountModal, setUnmountModal] = useState(false);
 
   const behandlingId = router.query.behandlingId as string;
   const mutator = useSWRConfig().mutate;
 
   const formMethods = useForm<SkjemaFelter>({
     mode: 'onSubmit',
-    defaultValues: {},
+    defaultValues: {
+      periode: {
+        fom: null,
+        tom: null,
+      } as any,
+      antallDager: 0,
+    },
   });
 
   async function onSubmit() {
@@ -78,6 +85,7 @@ const EndreAntallDagerModal = forwardRef<
 
     try {
       setFeilmelding(null);
+      formMethods.reset();
       await oppdaterAntallDager(
         {
           antallDager: +data.antallDager,
@@ -91,8 +99,9 @@ const EndreAntallDagerModal = forwardRef<
         tiltakId,
       );
       (ref as any).current?.close();
-
+      setUnmountModal(true);
       await mutator(`/api/behandling/${behandlingId}`);
+      setUnmountModal(false);
     } catch (e: any) {
       setFeilmelding(e.message);
     }
@@ -101,42 +110,49 @@ const EndreAntallDagerModal = forwardRef<
   return (
     <div className="py-16">
       <FormProvider {...formMethods}>
-        <form onSubmit={formMethods.handleSubmit(() => onSubmit())}>
+        <form onSubmit={formMethods.handleSubmit(onSubmit)}>
           <Modal ref={ref} header={{ heading: 'Endre antall tiltaksdager' }}>
-            <Modal.Body>
-              <VStack gap="4">
-                <BodyLong>
-                  Dagene du setter per uke blir gjeldende for perioden du
-                  setter. Gjenstår det perioder i vedtaket, får disse de
-                  gjenstående dagene hentet fra Arena.
-                </BodyLong>
-                <HStack gap="4">
-                  <Periodefelt
-                    name="periode"
-                    validate={[gyldigPeriodeValidator, påkrevdPeriodeValidator]}
-                    minDate={minDate}
-                    maxDate={maxDate}
-                  />
-                  <Flervalgsfelt
-                    label="Antall dager per uke"
-                    name="antallDager"
-                  >
-                    <option value=""></option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                  </Flervalgsfelt>
-                </HStack>
-              </VStack>
-            </Modal.Body>
+            {!unmountModal && (
+              <Modal.Body>
+                <VStack gap="4">
+                  <BodyLong>
+                    Dagene du setter per uke blir gjeldende for perioden du
+                    setter. Gjenstår det perioder i vedtaket, får disse de
+                    gjenstående dagene hentet fra Arena.
+                  </BodyLong>
+                  <HStack gap="4">
+                    <Periodefelt
+                      name="periode"
+                      validate={[
+                        gyldigPeriodeValidator,
+                        påkrevdPeriodeValidator,
+                      ]}
+                      minDate={minDate}
+                      maxDate={maxDate}
+                    />
+                    <Flervalgsfelt
+                      label="Antall dager per uke"
+                      name="antallDager"
+                    >
+                      <option value=""></option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                    </Flervalgsfelt>
+                  </HStack>
+                </VStack>
+              </Modal.Body>
+            )}
             <Modal.Footer>
               <Button type="submit">Endre antall dager</Button>
               <Button
                 variant="secondary"
                 type="button"
-                onClick={() => (ref as any).current?.close()}
+                onClick={() => {
+                  (ref as any).current?.close();
+                }}
               >
                 Avbryt
               </Button>
