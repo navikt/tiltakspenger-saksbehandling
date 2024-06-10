@@ -6,7 +6,6 @@ import { BehandlingLayout } from '../../../../components/layout/BehandlingLayout
 import { SaksbehandlingLayout } from '../../../../components/layout/SaksbehandlingLayout';
 import { ReactElement } from 'react';
 import { NextPageWithLayout } from '../../../_app';
-import SøknadOppsummering from '../../../../components/søknad-oppsummering/SøknadOppsummering';
 import { Saksdialog } from '../../../../components/saksdialog/Saksdialog';
 import Barnetillegg from '../../../../components/barnetillegg/Barnetillegg';
 
@@ -21,10 +20,7 @@ const Behandling: NextPageWithLayout = () => {
 
   return (
     <>
-      <SøknadOppsummering
-        søknad={valgtBehandling.søknad}
-        registrerteTiltak={valgtBehandling.registrerteTiltak}
-      />
+      <div>Søknadsoppsummering TODO!</div>
       <Barnetillegg />
       <Saksdialog endringslogg={valgtBehandling.endringslogg} />
     </>

@@ -4,12 +4,12 @@ import { ReactElement } from 'react';
 import { Behandlingssteg } from '../../types/Behandlingssteg';
 import Alder from '../../steg/Alder';
 import styles from './BehandlingSteg.module.css';
-import VilkårsvurderingAvTiltaksdeltagelse from '../vilkårsvurdering-av-tiltaksdeltagelse/VilkårsvurderingAvTiltaksdeltagelse';
 import { AndreYtelser } from '../../steg/AndreYtelser';
-import VilkårsvurderingAvStønadsdager from '../vilkårsvurdering-av-stønadsdager/VilkårsvurderingAvStønadsdager';
 import KVPogIntro from '../../steg/KVPogIntro';
 import Søknadstidspunkt from '../../steg/Søknadstidspunkt';
 import Institusjonsopphold from '../../steg/Institusjonsopphold';
+import VilkårsvurderingAvTiltaksdeltagelse from '../tiltak/vilkårsvurdering-av-tiltaksdeltagelse/VilkårsvurderingAvTiltaksdeltagelse';
+import VilkårsvurderingAvStønadsdager from '../tiltak/vilkårsvurdering-av-stønadsdager/VilkårsvurderingAvStønadsdager';
 
 const BehandlingSteg = () => {
   const router = useRouter();
