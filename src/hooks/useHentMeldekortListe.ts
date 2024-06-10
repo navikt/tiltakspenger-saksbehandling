@@ -10,7 +10,12 @@ export function useHentMeldekortListe(behandlingId: string) {
     error,
   } = useSWR<MeldekortUtenDager[]>(
     `/api/meldekort/hentAlleForBehandling/${behandlingId}`,
-    fetcher
+    fetcher,
+    {
+      revalidateIfStale: false,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+    },
   );
   return { meldekortliste, isLoading, error };
 }

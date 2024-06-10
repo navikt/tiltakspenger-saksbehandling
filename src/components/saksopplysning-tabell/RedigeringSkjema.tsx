@@ -98,9 +98,7 @@ export const RedigeringSkjema = ({
       <form
         onSubmit={formMethods.handleSubmit(håndterLagreSaksopplysning)}
         style={{
-          background: '#F2F3F5',
-          width: '100%',
-          height: '100%',
+          background: '#E6F0FF',
           padding: '1rem',
         }}
       >
@@ -111,7 +109,7 @@ export const RedigeringSkjema = ({
             render={({ field: { onChange } }) => {
               return (
                 <RadioGroup
-                  legend="Endre vilkår"
+                  legend="Legg til ny saksopplysning"
                   onChange={(value) => håndterHarYtelse(value, onChange)}
                   defaultValue={false}
                 >

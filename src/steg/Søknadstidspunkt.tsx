@@ -15,6 +15,7 @@ import { UtfallIkon } from '../components/utfall-ikon/UtfallIkon';
 import { RedigeringSkjema } from '../components/saksopplysning-tabell/RedigeringSkjema';
 import { PencilIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';
+import { Utfall } from '../types/Utfall';
 
 const Alder = () => {
   const router = useRouter();
@@ -26,18 +27,12 @@ const Alder = () => {
     return <Loader />;
   }
 
-  const saksopplysning = valgtBehandling.saksopplysninger.find(
-    (kategori) => kategori.kategoriTittel == 'Alder',
-  )?.saksopplysninger[0];
-
-  if (!saksopplysning) return <Loader />;
-
   return (
     <>
       <HStack gap="3" align="center" style={{ marginBottom: '0.5em' }}>
-        <UtfallIkon utfall={saksopplysning.utfall} />
+        <UtfallIkon utfall={Utfall.KREVER_MANUELL_VURDERING} />
         <Heading size="medium" level="3">
-          Alder
+          Søknadstidspunkt
         </Heading>
       </HStack>
       <Link
@@ -45,7 +40,7 @@ const Alder = () => {
         target="_blank"
         style={{ marginBottom: '1em' }}
       >
-        Tiltakspengeforskriften § 3 Tiltakspenger og barnetillegg
+        Tiltakspengeforskriften §11 Frist for framsetting av krav
       </Link>
       <HStack
         style={{
@@ -60,21 +55,13 @@ const Alder = () => {
           }}
         >
           <BodyShort size="medium" spacing>
-            <b>Er søker over 18 år?</b>{' '}
-            {velgFaktaTekst(
-              saksopplysning.typeSaksopplysning,
-              saksopplysning.fakta,
-            )}
+            <b>Har bruker søkt innenfor fristen?</b> ?
           </BodyShort>
           <BodyShort size="medium" spacing>
-            <b>Periode:</b>{' '}
-            {formatPeriode({
-              fra: saksopplysning.fom,
-              til: saksopplysning.tom,
-            })}
+            <b>Periode:</b>?
           </BodyShort>
           <BodyShort size="medium" spacing>
-            <b>Kilde:</b> {saksopplysning.kilde}
+            <b>Kilde:</b> ?
           </BodyShort>
         </VStack>
         <VStack
@@ -88,10 +75,10 @@ const Alder = () => {
             Registerdata
           </BodyShort>
           <BodyShort size="medium" spacing>
-            Fødselsdato:
+            Søknadsdato: <b>{valgtBehandling.søknad.søknadsdato}</b>
           </BodyShort>
-          <BodyShort size="medium" spacing>
-            Alder:
+          <BodyShort size="medium" style={{ marginBottom: '2em' }} spacing>
+            Tiltak: <b>{valgtBehandling.registrerteTiltak[0].navn}</b>
           </BodyShort>
 
           <HStack justify="end">
@@ -121,7 +108,10 @@ const Alder = () => {
             fom: valgtBehandling.søknad.deltakelseFom,
             tom: valgtBehandling.søknad.deltakelseTom,
           }}
-          fakta={saksopplysning.fakta}
+          fakta={{
+            harIkkeYtelse: 'Bruker har søkt innenfor fristen',
+            harYtelse: 'Bruker har ikke søkt innenfor fristen',
+          }}
         />
       )}
     </>

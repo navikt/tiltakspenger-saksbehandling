@@ -2,5 +2,11 @@
     border-left: 1px solid #cfcfcf;
     border-right: 1px solid #cfcfcf;
     width: 15%;
-    padding: 1em 0 0 1em;
+    padding: 1em 1em 1em 1em;
+}
+
+.aktivtSteg {
+    font-weight: 900;
+    text-decoration-thickness: 3px;
+    color: #00459C;
 }

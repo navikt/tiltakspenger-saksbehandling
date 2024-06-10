@@ -1,24 +1,44 @@
 import React from 'react';
-import { BodyShort, Box, Button } from '@navikt/ds-react';
+import {
+  BodyShort,
+  Box,
+  Button,
+  HStack,
+  Heading,
+  Link,
+  Loader,
+} from '@navikt/ds-react';
 import { formatPeriode } from '../../utils/date';
 import TiltaksdeltagelseTable from '../tiltaksdeltagelse-table/TiltaksdeltagelseTable';
 import { PencilIcon } from '@navikt/aksel-icons';
 import TiltaksdeltagelseForm from '../tiltaksdeltagelse-form/TiltaksdeltagelseForm';
-import { RegistrertTiltak } from '../../types/Søknad';
 import styles from './VilkårsvurderingAvStønadsdager.module.css';
 import dayjs from 'dayjs';
+import router from 'next/router';
+import { useHentBehandling } from '../../hooks/useHentBehandling';
+import { UtfallIkon } from '../utfall-ikon/UtfallIkon';
 
-interface VilkårsvurderingAvStønadsdagerProps {
-  registrertTiltak: RegistrertTiltak;
-}
-
-const VilkårsvurderingAvStønadsdager = ({
-  registrertTiltak,
-}: VilkårsvurderingAvStønadsdagerProps) => {
+const VilkårsvurderingAvStønadsdager = () => {
   const [editMode, setEditMode] = React.useState(false);
-  const { periode, navn, arrangør, dagerIUken, kilde } = registrertTiltak;
+  const behandlingId = router.query.behandlingId as string;
+  const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
+
+  if (isLoading || !valgtBehandling) {
+    return <Loader />;
+  }
+  const { periode, navn, arrangør, dagerIUken, kilde } =
+    valgtBehandling.registrerteTiltak[0];
+
   return (
     <div key={formatPeriode(periode)} style={{ marginTop: '1rem' }}>
+      <HStack gap="3" align="center" style={{ marginBottom: '0.5em' }}>
+        <UtfallIkon
+          utfall={valgtBehandling.registrerteTiltak[0].deltagelseUtfall}
+        />
+        <Heading size="medium" level="3">
+          Tiltaksdeltagelse
+        </Heading>
+      </HStack>
       <Box
         background="surface-subtle"
         padding="2"

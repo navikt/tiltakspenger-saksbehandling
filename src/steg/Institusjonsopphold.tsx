@@ -9,8 +9,6 @@ import {
 } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import { useHentBehandling } from '../hooks/useHentBehandling';
-import { velgFaktaTekst } from '../utils/velgFaktaTekst';
-import { formatPeriode } from '../utils/date';
 import { UtfallIkon } from '../components/utfall-ikon/UtfallIkon';
 import { RedigeringSkjema } from '../components/saksopplysning-tabell/RedigeringSkjema';
 import { PencilIcon } from '@navikt/aksel-icons';
@@ -37,7 +35,7 @@ const Alder = () => {
       <HStack gap="3" align="center" style={{ marginBottom: '0.5em' }}>
         <UtfallIkon utfall={saksopplysning.utfall} />
         <Heading size="medium" level="3">
-          Alder
+          Institusjonsopphold
         </Heading>
       </HStack>
       <Link
@@ -45,7 +43,7 @@ const Alder = () => {
         target="_blank"
         style={{ marginBottom: '1em' }}
       >
-        Tiltakspengeforskriften § 3 Tiltakspenger og barnetillegg
+        Tiltakspengeforskriften § 9 Opphold i institusjon
       </Link>
       <HStack
         style={{
@@ -60,21 +58,13 @@ const Alder = () => {
           }}
         >
           <BodyShort size="medium" spacing>
-            <b>Er søker over 18 år?</b>{' '}
-            {velgFaktaTekst(
-              saksopplysning.typeSaksopplysning,
-              saksopplysning.fakta,
-            )}
+            <b>Har søker opphold i institusjon ?</b> ?
           </BodyShort>
           <BodyShort size="medium" spacing>
-            <b>Periode:</b>{' '}
-            {formatPeriode({
-              fra: saksopplysning.fom,
-              til: saksopplysning.tom,
-            })}
+            <b>Periode:</b> ?
           </BodyShort>
           <BodyShort size="medium" spacing>
-            <b>Kilde:</b> {saksopplysning.kilde}
+            <b>Kilde:</b> ?
           </BodyShort>
         </VStack>
         <VStack
@@ -88,10 +78,10 @@ const Alder = () => {
             Registerdata
           </BodyShort>
           <BodyShort size="medium" spacing>
-            Fødselsdato:
+            Svar i søknad: ?
           </BodyShort>
           <BodyShort size="medium" spacing>
-            Alder:
+            Periode:
           </BodyShort>
 
           <HStack justify="end">
@@ -109,8 +99,8 @@ const Alder = () => {
       </HStack>
       {åpenRedigering && (
         <RedigeringSkjema
-          vilkårTittel={'ALDER'}
-          vilkårFlateTittel={'Alder'}
+          vilkårTittel={'INSTITUSJONSOPPHOLD'}
+          vilkårFlateTittel={'Institusjonsopphold'}
           håndterLukkRedigering={() => håndterÅpenRedigering(false)}
           behandlingId={valgtBehandling.behandlingId}
           behandlingsperiode={{

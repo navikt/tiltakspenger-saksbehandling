@@ -27,7 +27,7 @@ export const SaksopplysningTabell = ({
           <Table.Row>
             <Table.ColumnHeader style={{ width: '5%' }} />
             <Table.ColumnHeader style={{ width: '25%' }}>
-              Vilkår
+              Ytelse
             </Table.ColumnHeader>
             <Table.ColumnHeader>Fakta</Table.ColumnHeader>
             <Table.ColumnHeader>Periode</Table.ColumnHeader>
@@ -35,7 +35,9 @@ export const SaksopplysningTabell = ({
               Kilde
             </Table.ColumnHeader>
             <Table.ColumnHeader>Detaljer</Table.ColumnHeader>
-            <Table.ColumnHeader>Lovdata</Table.ColumnHeader>
+            <Table.ColumnHeader style={{ width: '10%' }}>
+              Lovdata
+            </Table.ColumnHeader>
             <Table.ColumnHeader style={{ width: '5%' }} />
           </Table.Row>
         </Table.Header>

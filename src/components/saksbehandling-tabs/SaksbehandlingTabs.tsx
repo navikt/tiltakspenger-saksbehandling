@@ -2,6 +2,7 @@ import { FileTextIcon } from '@navikt/aksel-icons';
 import { Tabs } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import { useHentMeldekortListe } from '../../hooks/useHentMeldekortListe';
+import { useHentBehandling } from '../../hooks/useHentBehandling';
 
 interface SaksbehandlingTabsProps {
   behandlingId: string;
@@ -13,7 +14,7 @@ export const SaksbehandlingTabs = ({
   utbetalingId,
 }: SaksbehandlingTabsProps) => {
   const router = useRouter();
-  const { meldekortliste } = useHentMeldekortListe(behandlingId);
+  const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
 
   return (
     <Tabs defaultValue="Inngangsvilkår">
@@ -24,7 +25,7 @@ export const SaksbehandlingTabs = ({
           label={'Inngangsvilkår'}
           icon={<FileTextIcon />}
           onClick={() => {
-            router.push(`/behandling/${behandlingId}/inngangsvilkar`);
+            router.push(`/behandling/${behandlingId}/inngangsvilkar/alder`);
           }}
         />
         <Tabs.Tab
@@ -36,6 +37,7 @@ export const SaksbehandlingTabs = ({
             router.push(`/behandling/${behandlingId}/barnetillegg`);
           }}
         />
+        {/*
         <Tabs.Tab
           key={'Meldekort'}
           value={'Meldekort'}
@@ -59,6 +61,7 @@ export const SaksbehandlingTabs = ({
             );
           }}
         />
+            */}
       </Tabs.List>
     </Tabs>
   );
