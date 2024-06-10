@@ -25,9 +25,7 @@ const Behandling: NextPageWithLayout = () => {
         søknad={valgtBehandling.søknad}
         registrerteTiltak={valgtBehandling.registrerteTiltak}
       />
-      <VilkårsvurderingAvStønadsdager
-        tiltak={valgtBehandling.registrerteTiltak}
-      />
+      <VilkårsvurderingAvStønadsdager />
       <Saksdialog endringslogg={valgtBehandling.endringslogg} />
     </>
   );

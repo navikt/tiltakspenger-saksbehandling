@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { BodyShort, Button, Heading, VStack } from '@navikt/ds-react';
 import styles from './TiltaksdataFraRegister.module.css';
 import {
-  AntallDagerSaksopplysning,
   AntallDagerSaksopplysninger,
   RegistrertTiltak,
 } from '../../types/Søknad';
