@@ -2,6 +2,9 @@ let isDevelopment = process.env.NODE_ENV == 'development';
 
 /** @type {import('next').NextConfig} */
 module.exports = {
+  experimental: {
+    optimizePackageImports: ['@navikt/ds-react', '@navikt/aksel-icons'],
+  },
   output: 'standalone',
   async rewrites() {
     return [
