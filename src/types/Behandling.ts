@@ -1,5 +1,6 @@
+import { Periode } from './Periode';
 import Søknad, { RegistrertTiltak } from './Søknad';
-import {Utfall} from "./Utfall";
+import { Utfall } from './Utfall';
 
 interface Vilkår {
   lovreferanse: string;
@@ -19,26 +20,25 @@ export interface Behandling {
   behandlingId: string;
   saksbehandler: string;
   beslutter: string;
-  fom: string;
-  tom: string;
-  søknad: Søknad;
+  vurderingsperiode: Periode;
+  søknadsdato: Date;
   registrerteTiltak: RegistrertTiltak[];
-  saksopplysninger: Kategori[];
+  alderssaksopplysning: Aldersaksopplysning;
+  ytelsessaksopplysninger: Ytelsessaksopplysninger;
   personopplysninger: Personopplysninger;
-  tilstand: string;
+  behandlingsteg: string;
   status: string;
   endringslogg: Endring[];
   samletUtfall: Utfall;
-  utfallsperioder: Utfallsperiode[]
+  utfallsperioder: Utfallsperiode[];
 }
 
 export interface Utfallsperiode {
-    fom: string;
-    tom: string;
-    antallBarn: number;
-    utfall: string;
+  fom: string;
+  tom: string;
+  antallBarn: number;
+  utfall: string;
 }
-
 
 export interface Endring {
   type: string;
@@ -72,33 +72,34 @@ export interface Personopplysninger {
   fortrolig: boolean;
 }
 
-export interface Kategori {
-  kategoriTittel: string;
+export interface Ytelsessaksopplysninger {
+  vilkår: string;
   saksopplysninger: SaksopplysningInnDTO[];
   samletUtfall: string;
-  kategoriLovreferanse: LovreferenseDTO[];
+  lovreferanse: LovreferanseDTO;
 }
 
-export interface LovreferenseDTO {
+export interface LovreferanseDTO {
   lovverk: string;
   paragraf: string;
   beskrivelse: string;
 }
 
 export interface SaksopplysningInnDTO {
-  fom: string;
-  tom: string;
+  periode: Periode;
   kilde: string;
   detaljer: string;
-  typeSaksopplysning: string;
-  vilkårTittel: string;
-  vilkårFlateTittel: string;
-  fakta: FaktaDTO;
+  saksopplysning: string;
+  saksopplysningTittel: string;
   utfall: string;
-  vilkårLovReferense: LovreferenseDTO[];
 }
 
-export interface FaktaDTO {
-  harYtelse: string;
-  harIkkeYtelse: string;
+export interface Aldersaksopplysning {
+  periode: Periode;
+  kilde: string;
+  detaljer: string;
+  vilkår: string;
+  vilkårTittel: string;
+  utfall: string;
+  vilkårLovReferanse: LovreferanseDTO[];
 }

@@ -5,15 +5,12 @@ import { useState } from 'react';
 import { Lesevisning } from '../../utils/avklarLesevisning';
 import { formatPeriode } from '../../utils/date';
 import { UtfallIkon } from '../utfall-ikon/UtfallIkon';
-import { FaktaDTO, SaksopplysningInnDTO } from '../../types/Behandling';
-import { velgFaktaTekst } from '../../utils/velgFaktaTekst';
+import { SaksopplysningInnDTO } from '../../types/Behandling';
+import { Periode } from '../../types/Periode';
 
 interface SaksopplysningProps {
   behandlingId: string;
-  behandlingsperiode: {
-    fom: string;
-    tom: string;
-  };
+  vurderingsperiode: Periode;
   lesevisning: Lesevisning;
   saksopplysningDTO: SaksopplysningInnDTO;
 }
@@ -21,20 +18,18 @@ interface SaksopplysningProps {
 export const Saksopplysning = ({
   saksopplysningDTO,
   behandlingId,
-  behandlingsperiode,
+  vurderingsperiode,
   lesevisning,
 }: SaksopplysningProps) => {
   const [åpneRedigering, onÅpneRedigering] = useState<boolean>(false);
 
   const {
-    vilkårTittel,
-    vilkårFlateTittel,
+    saksopplysning,
+    saksopplysningTittel,
     utfall,
-    fom,
-    tom,
+    periode,
     kilde,
     detaljer,
-    vilkårLovReferense,
   } = saksopplysningDTO;
 
   const hentLovDataURLen = (lovverk: string, paragraf: string) => {
@@ -53,24 +48,21 @@ export const Saksopplysning = ({
 
   return (
     <>
-      <Table.Row key={vilkårTittel}>
+      <Table.Row key={saksopplysning}>
         <Table.DataCell>
           <UtfallIkon utfall={utfall} />
         </Table.DataCell>
         <Table.DataCell>
-          <BodyShort>{vilkårFlateTittel}</BodyShort>
+          <BodyShort>{saksopplysningTittel}</BodyShort>
+        </Table.DataCell>
+        <Table.DataCell>
+          <BodyShort>fakta</BodyShort>
         </Table.DataCell>
         <Table.DataCell>
           <BodyShort>
-            {velgFaktaTekst(
-              saksopplysningDTO.typeSaksopplysning,
-              saksopplysningDTO.fakta,
-            )}
-          </BodyShort>
-        </Table.DataCell>
-        <Table.DataCell>
-          <BodyShort>
-            {fom && tom ? formatPeriode({ fra: fom, til: tom }) : '-'}
+            {periode
+              ? formatPeriode({ fra: periode.fra, til: periode.til })
+              : '-'}
           </BodyShort>
         </Table.DataCell>
         <Table.DataCell>
@@ -78,22 +70,6 @@ export const Saksopplysning = ({
         </Table.DataCell>
         <Table.DataCell>
           <BodyShort>{detaljer ? detaljer : '-'}</BodyShort>
-        </Table.DataCell>
-        <Table.DataCell>
-          {vilkårLovReferense.map((lov, index) => {
-            return (
-              <BodyShort key={index}>
-                <Link
-                  href={hentLovDataURLen(lov.lovverk, lov.paragraf)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ marginBottom: '0.5em' }}
-                >
-                  {lov.paragraf}
-                </Link>
-              </BodyShort>
-            );
-          })}
         </Table.DataCell>
         <Table.DataCell>
           {lesevisning.kanEndre && (
@@ -111,13 +87,11 @@ export const Saksopplysning = ({
         <Table.Row>
           <Table.DataCell colSpan={8} style={{ padding: '0' }}>
             <RedigeringSkjema
-              fakta={saksopplysningDTO.fakta}
               behandlingId={behandlingId}
-              vilkårTittel={vilkårTittel}
-              vilkårFlateTittel={vilkårFlateTittel}
+              saksopplysning={saksopplysning}
+              saksopplysningTittel={saksopplysningTittel}
               håndterLukkRedigering={håndterLukkRedigering}
-              behandlingsperiode={behandlingsperiode}
-              vilkårsperiode={{ fom: fom, tom: tom }}
+              vurderingsperiode={vurderingsperiode}
             />
           </Table.DataCell>
         </Table.Row>

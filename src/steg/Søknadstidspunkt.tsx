@@ -9,8 +9,7 @@ import {
 } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import { useHentBehandling } from '../hooks/useHentBehandling';
-import { velgFaktaTekst } from '../utils/velgFaktaTekst';
-import { formatPeriode } from '../utils/date';
+import { formatDateObject } from '../utils/date';
 import { UtfallIkon } from '../components/utfall-ikon/UtfallIkon';
 import { RedigeringSkjema } from '../components/saksopplysning-tabell/RedigeringSkjema';
 import { PencilIcon } from '@navikt/aksel-icons';
@@ -75,7 +74,7 @@ const Alder = () => {
             Registerdata
           </BodyShort>
           <BodyShort size="medium" spacing>
-            Søknadsdato: <b>{valgtBehandling.søknad.søknadsdato}</b>
+            Søknadsdato: <b>{formatDateObject(valgtBehandling.søknadsdato)}</b>
           </BodyShort>
           <BodyShort size="medium" style={{ marginBottom: '2em' }} spacing>
             Tiltak: <b>{valgtBehandling.registrerteTiltak[0].navn}</b>
@@ -96,22 +95,11 @@ const Alder = () => {
       </HStack>
       {åpenRedigering && (
         <RedigeringSkjema
-          vilkårTittel={'ALDER'}
-          vilkårFlateTittel={'Alder'}
+          saksopplysning={'SØKNADSTIDSPUNKT'}
+          saksopplysningTittel={'Søknadstidspunkt'}
           håndterLukkRedigering={() => håndterÅpenRedigering(false)}
           behandlingId={valgtBehandling.behandlingId}
-          behandlingsperiode={{
-            fom: valgtBehandling.fom,
-            tom: valgtBehandling.tom,
-          }}
-          vilkårsperiode={{
-            fom: valgtBehandling.søknad.deltakelseFom,
-            tom: valgtBehandling.søknad.deltakelseTom,
-          }}
-          fakta={{
-            harIkkeYtelse: 'Bruker har søkt innenfor fristen',
-            harYtelse: 'Bruker har ikke søkt innenfor fristen',
-          }}
+          vurderingsperiode={valgtBehandling.vurderingsperiode}
         />
       )}
     </>

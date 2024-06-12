@@ -1,23 +1,21 @@
 import { Table } from '@navikt/ds-react';
 import React from 'react';
-import { FaktaDTO, SaksopplysningInnDTO } from '../../types/Behandling';
+import { SaksopplysningInnDTO } from '../../types/Behandling';
 import { Saksopplysning } from './Saksopplysning';
 import { Lesevisning } from '../../utils/avklarLesevisning';
+import { Periode } from '../../types/Periode';
 
 interface SaksopplysningProps {
   saksopplysninger: SaksopplysningInnDTO[];
   behandlingId: string;
-  behandlingsperiode: {
-    fom: string;
-    tom: string;
-  };
+  vurderingsperiode: Periode;
   lesevisning: Lesevisning;
 }
 
 export const SaksopplysningTabell = ({
   saksopplysninger,
   behandlingId,
-  behandlingsperiode,
+  vurderingsperiode,
   lesevisning,
 }: SaksopplysningProps) => {
   return (
@@ -44,10 +42,10 @@ export const SaksopplysningTabell = ({
         <Table.Body>
           {saksopplysninger.map((saksopplysning) => (
             <Saksopplysning
-              key={saksopplysning.vilkårTittel}
+              key={saksopplysning.saksopplysning}
               saksopplysningDTO={saksopplysning}
               behandlingId={behandlingId}
-              behandlingsperiode={behandlingsperiode}
+              vurderingsperiode={vurderingsperiode}
               lesevisning={lesevisning}
             />
           ))}

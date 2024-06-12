@@ -5,9 +5,7 @@ import { Behandlingssteg } from '../../types/Behandlingssteg';
 import Alder from '../../steg/Alder';
 import styles from './BehandlingSteg.module.css';
 import { AndreYtelser } from '../../steg/AndreYtelser';
-import KVPogIntro from '../../steg/KVPogIntro';
 import Søknadstidspunkt from '../../steg/Søknadstidspunkt';
-import Institusjonsopphold from '../../steg/Institusjonsopphold';
 import VilkårsvurderingAvTiltaksdeltagelse from '../tiltak/vilkårsvurdering-av-tiltaksdeltagelse/VilkårsvurderingAvTiltaksdeltagelse';
 import VilkårsvurderingAvStønadsdager from '../tiltak/vilkårsvurdering-av-stønadsdager/VilkårsvurderingAvStønadsdager';
 
@@ -24,9 +22,9 @@ const BehandlingSteg = () => {
       case Behandlingssteg.TILTAKSDELTAGELSE:
         return <VilkårsvurderingAvTiltaksdeltagelse />;
       case Behandlingssteg.KVPINTRO:
-        return <KVPogIntro />;
+        return <p>KVPINTRO</p>;
       case Behandlingssteg.INSTITUSJONSOPPHOLD:
-        return <Institusjonsopphold />;
+        return <p>Institusjonsopphold</p>;
       case Behandlingssteg.ANDREYTELSER:
         return <AndreYtelser />;
       case Behandlingssteg.STØNADSDAGER:

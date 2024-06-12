@@ -1,4 +1,4 @@
-import { VStack, Loader, HStack, Heading, Link } from '@navikt/ds-react';
+import { Loader, HStack, Heading, Link } from '@navikt/ds-react';
 import { SaksopplysningTabell } from '../components/saksopplysning-tabell/SaksopplysningTabell';
 import { useRouter } from 'next/router';
 import { useContext } from 'react';
@@ -17,9 +17,7 @@ export const AndreYtelser = () => {
     return <Loader />;
   }
 
-  const andreYtelser = valgtBehandling.saksopplysninger.find(
-    (kategori) => kategori.kategoriTittel == 'Utbetalinger',
-  );
+  const andreYtelser = valgtBehandling.ytelsessaksopplysninger;
 
   const girInnvilget = valgtBehandling.samletUtfall === 'OPPFYLT';
 
@@ -27,7 +25,7 @@ export const AndreYtelser = () => {
     innloggetSaksbehandler!!,
     valgtBehandling.saksbehandler,
     valgtBehandling.beslutter,
-    valgtBehandling.tilstand,
+    valgtBehandling.behandlingsteg,
     girInnvilget,
   );
 
@@ -50,10 +48,7 @@ export const AndreYtelser = () => {
       <SaksopplysningTabell
         saksopplysninger={andreYtelser.saksopplysninger}
         behandlingId={valgtBehandling.behandlingId}
-        behandlingsperiode={{
-          fom: valgtBehandling.fom,
-          tom: valgtBehandling.tom,
-        }}
+        vurderingsperiode={valgtBehandling.vurderingsperiode}
         lesevisning={lesevisning}
       />
     </>

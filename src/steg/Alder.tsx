@@ -9,7 +9,6 @@ import {
 } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import { useHentBehandling } from '../hooks/useHentBehandling';
-import { velgFaktaTekst } from '../utils/velgFaktaTekst';
 import { formatPeriode } from '../utils/date';
 import { UtfallIkon } from '../components/utfall-ikon/UtfallIkon';
 import { RedigeringSkjema } from '../components/saksopplysning-tabell/RedigeringSkjema';
@@ -26,18 +25,18 @@ const Alder = () => {
     return <Loader />;
   }
 
-  const saksopplysning = valgtBehandling.saksopplysninger.find(
-    (kategori) => kategori.kategoriTittel == 'Alder',
-  )?.saksopplysninger[0];
+  const saksopplysning = valgtBehandling.alderssaksopplysning;
 
   if (!saksopplysning) return <Loader />;
+
+  console.log(saksopplysning);
 
   return (
     <>
       <HStack gap="3" align="center" style={{ marginBottom: '0.5em' }}>
         <UtfallIkon utfall={saksopplysning.utfall} />
         <Heading size="medium" level="3">
-          Alder
+          {saksopplysning.vilkårTittel}
         </Heading>
       </HStack>
       <Link
@@ -60,18 +59,16 @@ const Alder = () => {
           }}
         >
           <BodyShort size="medium" spacing>
-            <b>Er søker over 18 år?</b>{' '}
-            {velgFaktaTekst(
-              saksopplysning.typeSaksopplysning,
-              saksopplysning.fakta,
-            )}
+            <b>Er søker over 18 år?</b> {saksopplysning.utfall}
           </BodyShort>
           <BodyShort size="medium" spacing>
             <b>Periode:</b>{' '}
-            {formatPeriode({
-              fra: saksopplysning.fom,
-              til: saksopplysning.tom,
-            })}
+            {saksopplysning.periode
+              ? formatPeriode({
+                  fra: saksopplysning.periode.fra,
+                  til: saksopplysning.periode.til,
+                })
+              : '-'}
           </BodyShort>
           <BodyShort size="medium" spacing>
             <b>Kilde:</b> {saksopplysning.kilde}
@@ -109,19 +106,11 @@ const Alder = () => {
       </HStack>
       {åpenRedigering && (
         <RedigeringSkjema
-          vilkårTittel={'ALDER'}
-          vilkårFlateTittel={'Alder'}
+          saksopplysning={saksopplysning.vilkår}
+          saksopplysningTittel={saksopplysning.vilkårTittel}
           håndterLukkRedigering={() => håndterÅpenRedigering(false)}
           behandlingId={valgtBehandling.behandlingId}
-          behandlingsperiode={{
-            fom: valgtBehandling.fom,
-            tom: valgtBehandling.tom,
-          }}
-          vilkårsperiode={{
-            fom: valgtBehandling.søknad.deltakelseFom,
-            tom: valgtBehandling.søknad.deltakelseTom,
-          }}
-          fakta={saksopplysning.fakta}
+          vurderingsperiode={valgtBehandling.vurderingsperiode}
         />
       )}
     </>
