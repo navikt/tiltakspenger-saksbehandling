@@ -1,4 +1,4 @@
-import { Loader, HStack, Heading, Link } from '@navikt/ds-react';
+import { Loader, HStack, BodyShort } from '@navikt/ds-react';
 import { SaksopplysningTabell } from '../saksopplysning-tabell/SaksopplysningTabell';
 import { useRouter } from 'next/router';
 import { useContext } from 'react';
@@ -6,6 +6,8 @@ import { useHentBehandling } from '../../hooks/useHentBehandling';
 import { SaksbehandlerContext } from '../../pages/_app';
 import { avklarLesevisning } from '../../utils/avklarLesevisning';
 import { UtfallIkon } from '../utfall-ikon/UtfallIkon';
+import StegHeader from './StegHeader';
+import { finnUtfallTekst } from '../../utils/tekstformateringUtils';
 
 export const AndreYtelser = () => {
   const router = useRouter();
@@ -32,21 +34,28 @@ export const AndreYtelser = () => {
   if (!andreYtelser) return <Loader />;
   return (
     <>
-      <HStack gap="3" align="center" style={{ marginBottom: '0.5em' }}>
+      <StegHeader
+        headertekst={'Forholdet til andre ytelser'}
+        lovdatatekst={andreYtelser.vilkårLovreferanse.beskrivelse}
+        paragraf={andreYtelser.vilkårLovreferanse.paragraf}
+        lovdatalenke={
+          'https://lovdata.no/dokument/SF/forskrift/2013-11-04-1286'
+        }
+      />
+      <HStack gap="3" align="center" style={{ marginBottom: '1em' }}>
         <UtfallIkon utfall={andreYtelser.samletUtfall} />
-        <Heading size="medium" level="3">
-          Andre ytelser
-        </Heading>
+        <BodyShort>
+          {`Vilkåret er ${finnUtfallTekst(andreYtelser.samletUtfall)} for hele eller deler av perioden`}
+        </BodyShort>
       </HStack>
-      <Link
-        href="https://lovdata.no/dokument/SF/forskrift/2013-11-04-1286"
-        target="_blank"
-        style={{ marginBottom: '1em' }}
-      >
-        Tiltakspengeforskriften § 7 Forholdet til andre ytelser
-      </Link>
       <SaksopplysningTabell
-        saksopplysninger={andreYtelser.saksopplysninger}
+        saksopplysninger={andreYtelser.saksopplysninger.filter(
+          (saksopplysning) =>
+            saksopplysning.saksopplysningTittel !=
+              'Kvalifiseringsprogrammet(KVP)' &&
+            saksopplysning.saksopplysningTittel != 'Introduksjonsprogrammet' &&
+            saksopplysning.saksopplysningTittel != 'Institusjonsopphold',
+        )}
         behandlingId={valgtBehandling.behandlingId}
         vurderingsperiode={valgtBehandling.vurderingsperiode}
         lesevisning={lesevisning}

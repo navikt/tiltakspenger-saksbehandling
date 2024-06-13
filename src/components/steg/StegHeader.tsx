@@ -5,12 +5,14 @@ interface StegHeaderProps {
   headertekst: string;
   lovdatatekst: string;
   lovdatalenke: string;
+  paragraf: string;
 }
 
 const StegHeader = ({
   headertekst,
   lovdatatekst,
   lovdatalenke,
+  paragraf,
 }: StegHeaderProps) => {
   return (
     <>
@@ -18,7 +20,7 @@ const StegHeader = ({
         {headertekst}
       </Heading>
       <Link href={lovdatalenke} target="_blank" style={{ marginBottom: '1em' }}>
-        {lovdatatekst}
+        {`Tiltakspengeforskriften ${paragraf} ${lovdatatekst}`}
       </Link>
     </>
   );

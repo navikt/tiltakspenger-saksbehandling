@@ -1,121 +1,59 @@
-import {
-  BodyShort,
-  Button,
-  HStack,
-  Heading,
-  Link,
-  Loader,
-  VStack,
-} from '@navikt/ds-react';
+import { BodyShort, HStack, Loader } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
 import { UtfallIkon } from '../utfall-ikon/UtfallIkon';
-import { RedigeringSkjema } from '../saksopplysning-tabell/RedigeringSkjema';
-import { PencilIcon } from '@navikt/aksel-icons';
-import { useState } from 'react';
+import StegHeader from './StegHeader';
+import StegKort from './StegKort';
+import { finnUtfallTekst } from '../../utils/tekstformateringUtils';
+import { formatDateObject } from '../../utils/date';
 
-const Alder = () => {
+const Institusjonsopphold = () => {
   const router = useRouter();
   const behandlingId = router.query.behandlingId as string;
   const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
-  const [åpenRedigering, håndterÅpenRedigering] = useState<boolean>(false);
 
   if (isLoading || !valgtBehandling) {
     return <Loader />;
   }
 
-  const saksopplysning = valgtBehandling.saksopplysninger.find(
-    (kategori) => kategori.kategoriTittel == 'Alder',
-  )?.saksopplysninger[0];
+  const saksopplysning =
+    valgtBehandling.ytelsessaksopplysninger.saksopplysninger.find(
+      (saksopplysning) =>
+        saksopplysning.saksopplysningTittel == 'Institusjonsopphold',
+    );
 
   if (!saksopplysning) return <Loader />;
 
   return (
     <>
-      <HStack gap="3" align="center" style={{ marginBottom: '0.5em' }}>
+      <StegHeader
+        headertekst={saksopplysning.saksopplysningTittel}
+        lovdatatekst="Opphold i institusjon, fengsel mv."
+        lovdatalenke={
+          'https://lovdata.no/dokument/SF/forskrift/2013-11-04-1286'
+        }
+        paragraf={'§9'}
+      />
+      <HStack gap="3" align="center" style={{ marginBottom: '1em' }}>
         <UtfallIkon utfall={saksopplysning.utfall} />
-        <Heading size="medium" level="3">
-          Institusjonsopphold
-        </Heading>
+        <BodyShort>
+          {`Vilkåret er ${finnUtfallTekst(saksopplysning.utfall)} for hele eller deler av perioden`}
+        </BodyShort>
       </HStack>
-      <Link
-        href="https://lovdata.no/dokument/SF/forskrift/2013-11-04-1286"
-        target="_blank"
-        style={{ marginBottom: '1em' }}
-      >
-        Tiltakspengeforskriften § 9 Opphold i institusjon
-      </Link>
-      <HStack
-        style={{
-          border: '3px #005B82 solid',
-          borderRadius: '4px',
-          padding: '1em',
-        }}
-      >
-        <VStack
-          style={{
-            width: '50%',
-          }}
-        >
-          <BodyShort size="medium" spacing>
-            <b>Har søker opphold i institusjon ?</b> ?
-          </BodyShort>
-          <BodyShort size="medium" spacing>
-            <b>Periode:</b> ?
-          </BodyShort>
-          <BodyShort size="medium" spacing>
-            <b>Kilde:</b> ?
-          </BodyShort>
-        </VStack>
-        <VStack
-          style={{
-            borderLeft: '3px #004367 solid',
-            paddingLeft: '2em',
-            width: '50%',
-          }}
-        >
-          <BodyShort size="large" weight="semibold" spacing>
-            Registerdata
-          </BodyShort>
-          <BodyShort size="medium" spacing>
-            Svar i søknad: ?
-          </BodyShort>
-          <BodyShort size="medium" spacing>
-            Periode:
-          </BodyShort>
-
-          <HStack justify="end">
-            <Button
-              variant="secondary"
-              size="small"
-              iconPosition="right"
-              icon={<PencilIcon />}
-              onClick={() => håndterÅpenRedigering(!åpenRedigering)}
-            >
-              Legg til saksopplysning
-            </Button>
-          </HStack>
-        </VStack>
-      </HStack>
-      {åpenRedigering && (
-        <RedigeringSkjema
-          vilkårTittel={'INSTITUSJONSOPPHOLD'}
-          vilkårFlateTittel={'Institusjonsopphold'}
-          håndterLukkRedigering={() => håndterÅpenRedigering(false)}
-          behandlingId={valgtBehandling.behandlingId}
-          behandlingsperiode={{
-            fom: valgtBehandling.fom,
-            tom: valgtBehandling.tom,
-          }}
-          vilkårsperiode={{
-            fom: valgtBehandling.søknad.deltakelseFom,
-            tom: valgtBehandling.søknad.deltakelseTom,
-          }}
-          fakta={saksopplysning.fakta}
-        />
-      )}
+      <StegKort
+        editerbar={false}
+        behandlingId={valgtBehandling.behandlingId}
+        vurderingsperiode={valgtBehandling.vurderingsperiode}
+        saksopplysningsperiode={saksopplysning.periode}
+        kilde={saksopplysning.kilde}
+        utfall={saksopplysning.utfall}
+        vilkår={valgtBehandling.ytelsessaksopplysninger.vilkår}
+        vilkårTittel={'Institusjonsopphold'}
+        grunnlag={saksopplysning.utfall === 'OPPFYLT' ? 'Nei' : 'Ja'}
+        grunnlagHeader={'Oppholder seg på institusjon'}
+      />
     </>
   );
 };
 
-export default Alder;
+export default Institusjonsopphold;

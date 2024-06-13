@@ -16,7 +16,7 @@ interface StegKortProps {
   utfall: string;
   vilkår: string;
   vilkårTittel: string;
-  grunnlag: Date;
+  grunnlag: string;
   grunnlagHeader: string;
 }
 
@@ -66,7 +66,7 @@ const StegKort = ({
                 <Table.DataCell>
                   {formatPeriode(saksopplysningsperiode)}
                 </Table.DataCell>
-                <Table.DataCell>{formatDateObject(grunnlag)}</Table.DataCell>
+                <Table.DataCell>{grunnlag}</Table.DataCell>
                 <Table.DataCell>{kilde}</Table.DataCell>
                 <Table.DataCell>
                   <UtfallIkon utfall={utfall} />
@@ -86,10 +86,10 @@ const StegKort = ({
             Registerdata
           </BodyShort>
           <BodyShort size="medium" spacing>
-            Fødselsdato: <b>{formatDateObject(grunnlag)}</b>
+            {`${grunnlagHeader}:`} <b>{grunnlag}</b>
           </BodyShort>
           <BodyShort size="medium" spacing>
-            Alder: <b>{kilde}</b>
+            Kilde: <b>{kilde}</b>
           </BodyShort>
           <HStack justify="end">
             {editerbar && (

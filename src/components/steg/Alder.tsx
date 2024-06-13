@@ -5,6 +5,7 @@ import { UtfallIkon } from '../utfall-ikon/UtfallIkon';
 import StegHeader from './StegHeader';
 import StegKort from './StegKort';
 import { finnUtfallTekst } from '../../utils/tekstformateringUtils';
+import { formatDateObject } from '../../utils/date';
 
 const Alder = () => {
   const router = useRouter();
@@ -23,11 +24,11 @@ const Alder = () => {
     <>
       <StegHeader
         headertekst={saksopplysning.vilkårTittel}
-        lovdatatekst="
-Tiltakspengeforskriften § 3 Tiltakspenger og barnetillegg"
+        lovdatatekst={'Tiltakspenger og barnetillegg'}
         lovdatalenke={
           'https://lovdata.no/dokument/SF/forskrift/2013-11-04-1286'
         }
+        paragraf={'§3'}
       />
       <HStack gap="3" align="center" style={{ marginBottom: '1em' }}>
         <UtfallIkon utfall={saksopplysning.utfall} />
@@ -44,7 +45,7 @@ Tiltakspengeforskriften § 3 Tiltakspenger og barnetillegg"
         utfall={saksopplysning.utfall}
         vilkår={saksopplysning.vilkår}
         vilkårTittel={saksopplysning.vilkårTittel}
-        grunnlag={saksopplysning.grunnlag}
+        grunnlag={formatDateObject(saksopplysning.grunnlag)}
         grunnlagHeader={'Fødselsdato'}
       />
     </>

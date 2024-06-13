@@ -1,107 +1,53 @@
-import {
-  BodyShort,
-  Button,
-  HStack,
-  Heading,
-  Link,
-  Loader,
-  VStack,
-} from '@navikt/ds-react';
+import { BodyShort, HStack, Loader } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
-import { formatDateObject } from '../../utils/date';
-import { UtfallIkon } from '../utfall-ikon/UtfallIkon';
-import { RedigeringSkjema } from '../saksopplysning-tabell/RedigeringSkjema';
-import { PencilIcon } from '@navikt/aksel-icons';
-import { useState } from 'react';
+import StegHeader from './StegHeader';
+import StegKort from './StegKort';
 import { Utfall } from '../../types/Utfall';
+import { finnUtfallTekst } from '../../utils/tekstformateringUtils';
+import { UtfallIkon } from '../utfall-ikon/UtfallIkon';
+import { formatDateObject } from '../../utils/date';
 
 const Alder = () => {
   const router = useRouter();
   const behandlingId = router.query.behandlingId as string;
   const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
-  const [åpenRedigering, håndterÅpenRedigering] = useState<boolean>(false);
 
   if (isLoading || !valgtBehandling) {
     return <Loader />;
   }
 
+  //Mocket ut data ettersom dette jobbes med parallellt
   return (
     <>
-      <HStack gap="3" align="center" style={{ marginBottom: '0.5em' }}>
+      <StegHeader
+        headertekst={'Krav fremmet innen frist'}
+        lovdatatekst={
+          'Utbetaling, frist for framsetting av krav og rett til etterbetaling'
+        }
+        lovdatalenke={
+          'https://lovdata.no/dokument/SF/forskrift/2013-11-04-1286'
+        }
+        paragraf={'§11'}
+      />
+      <HStack gap="3" align="center" style={{ marginBottom: '1em' }}>
         <UtfallIkon utfall={Utfall.KREVER_MANUELL_VURDERING} />
-        <Heading size="medium" level="3">
-          Søknadstidspunkt
-        </Heading>
+        <BodyShort>
+          {`Vilkåret er ${finnUtfallTekst(Utfall.KREVER_MANUELL_VURDERING)} for hele eller deler av perioden`}
+        </BodyShort>
       </HStack>
-      <Link
-        href="https://lovdata.no/dokument/SF/forskrift/2013-11-04-1286"
-        target="_blank"
-        style={{ marginBottom: '1em' }}
-      >
-        Tiltakspengeforskriften §11 Frist for framsetting av krav
-      </Link>
-      <HStack
-        style={{
-          border: '3px #005B82 solid',
-          borderRadius: '4px',
-          padding: '1em',
-        }}
-      >
-        <VStack
-          style={{
-            width: '50%',
-          }}
-        >
-          <BodyShort size="medium" spacing>
-            <b>Har bruker søkt innenfor fristen?</b> ?
-          </BodyShort>
-          <BodyShort size="medium" spacing>
-            <b>Periode:</b>?
-          </BodyShort>
-          <BodyShort size="medium" spacing>
-            <b>Kilde:</b> ?
-          </BodyShort>
-        </VStack>
-        <VStack
-          style={{
-            borderLeft: '3px #004367 solid',
-            paddingLeft: '2em',
-            width: '50%',
-          }}
-        >
-          <BodyShort size="large" weight="semibold" spacing>
-            Registerdata
-          </BodyShort>
-          <BodyShort size="medium" spacing>
-            Søknadsdato: <b>{formatDateObject(valgtBehandling.søknadsdato)}</b>
-          </BodyShort>
-          <BodyShort size="medium" style={{ marginBottom: '2em' }} spacing>
-            Tiltak: <b>{valgtBehandling.registrerteTiltak[0].navn}</b>
-          </BodyShort>
-
-          <HStack justify="end">
-            <Button
-              variant="secondary"
-              size="small"
-              iconPosition="right"
-              icon={<PencilIcon />}
-              onClick={() => håndterÅpenRedigering(!åpenRedigering)}
-            >
-              Legg til saksopplysning
-            </Button>
-          </HStack>
-        </VStack>
-      </HStack>
-      {åpenRedigering && (
-        <RedigeringSkjema
-          saksopplysning={'SØKNADSTIDSPUNKT'}
-          saksopplysningTittel={'Søknadstidspunkt'}
-          håndterLukkRedigering={() => håndterÅpenRedigering(false)}
-          behandlingId={valgtBehandling.behandlingId}
-          vurderingsperiode={valgtBehandling.vurderingsperiode}
-        />
-      )}
+      <StegKort
+        editerbar={true}
+        behandlingId={valgtBehandling.behandlingId}
+        vurderingsperiode={valgtBehandling.vurderingsperiode}
+        saksopplysningsperiode={valgtBehandling.vurderingsperiode}
+        kilde={'Søknad'}
+        utfall={Utfall.OPPFYLT}
+        vilkår={'SØKNADSFRIST'}
+        vilkårTittel={'Krav fremmet innen frist'}
+        grunnlag={formatDateObject(valgtBehandling.søknadsdato)}
+        grunnlagHeader={'Søknadsdato'}
+      />
     </>
   );
 };

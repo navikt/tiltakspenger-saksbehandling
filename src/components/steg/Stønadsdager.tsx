@@ -1,15 +1,8 @@
 import React from 'react';
-import styles from './VilkårsvurderingAvStønadsdager.module.css';
-import VilkårsvurderingAvStønadsdagerHeading from './VilkårsvurderingAvStønadsdagerHeading';
-import TiltakMedAntallDager from './TiltakMedAntallDager';
+import VilkårsvurderingAvStønadsdagerHeading from '../tiltak/vilkårsvurdering-av-stønadsdager/VilkårsvurderingAvStønadsdagerHeading';
 import { Heading, Loader, VStack } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
-import { RegistrertTiltak } from '../../../types/Søknad';
-import { useHentBehandling } from '../../../hooks/useHentBehandling';
-
-function renderTiltakMedAntallDager(tiltak: RegistrertTiltak) {
-  return <TiltakMedAntallDager tiltak={tiltak} key={tiltak.arrangør} />;
-}
+import { useHentBehandling } from '../../hooks/useHentBehandling';
 
 const VilkårsvurderingAvStønadsdager = () => {
   const router = useRouter();
@@ -21,13 +14,12 @@ const VilkårsvurderingAvStønadsdager = () => {
   }
 
   return (
-    <div className={styles.container}>
+    <div>
       <VilkårsvurderingAvStønadsdagerHeading />
       <VStack gap="4">
         <Heading size={'small'} style={{ marginTop: '1rem' }}>
           Hvor mange dager skal bruker delta på tiltak?
         </Heading>
-        {valgtBehandling.registrerteTiltak.map(renderTiltakMedAntallDager)}
       </VStack>
     </div>
   );

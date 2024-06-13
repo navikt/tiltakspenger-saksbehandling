@@ -5,10 +5,8 @@ import { Utfall } from './Utfall';
 export type RegistrertTiltak = {
   id: string;
   arrangør: string;
-  antallDagerSaksopplysninger: AntallDagerSaksopplysninger;
   navn: string;
   periode: Periode;
-  prosent: number;
   status: Tiltaksstatus;
   girRett: boolean;
   harSøkt: boolean;
