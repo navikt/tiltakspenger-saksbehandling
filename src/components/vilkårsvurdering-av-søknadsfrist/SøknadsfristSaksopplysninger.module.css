@@ -1,0 +1,16 @@
+.søknadsfristSaksopplysninger__container {
+    display: flex;
+    width: 50%;
+    flex-direction: column;
+}
+
+.søknadsfristSaksopplysninger__dataGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-top: 0.5rem;
+}
+
+.søknadsfristSaksopplysninger__tilbakestillKnapp {
+    margin-top: 2rem;
+    align-self: end;
+}

@@ -22,6 +22,8 @@ import UtfallAlert from './UtfallAlert';
 import { PersonCircleIcon } from '@navikt/aksel-icons';
 import VilkårsvurderingAvTiltaksdeltagelse from '../vilkårsvurdering-av-tiltaksdeltagelse/VilkårsvurderingAvTiltaksdeltagelse';
 import { Utfall } from '../../types/Utfall';
+import VilkårsvurderingAvSøknadsfrist from '../vilkårsvurdering-av-søknadsfrist/VilkårsvurderingAvSøknadsfrist';
+import dayjs from 'dayjs';
 
 interface VilkårsvurderingProps {
   valgtBehandling: Behandling;
@@ -103,6 +105,20 @@ export const Vilkårsvurdering = ({
         )}
 
       <UtfallAlert utfall={valgtBehandling.samletUtfall} />
+      <VilkårsvurderingAvSøknadsfrist
+        opprinneligSøknadstidspunkt={dayjs().toDate()}
+        søknadstidspunktFraSaksbehandler={dayjs().toDate()}
+        vurderinger={[
+          {
+            periode: {
+              fra: dayjs().toDate() as any,
+              til: dayjs().toDate() as any,
+            },
+            utfall: Utfall.OPPFYLT,
+          },
+        ]}
+        samletUtfall={Utfall.OPPFYLT}
+      />
       <VilkårsvurderingAvTiltaksdeltagelse
         registrerteTiltak={valgtBehandling.registrerteTiltak}
       />

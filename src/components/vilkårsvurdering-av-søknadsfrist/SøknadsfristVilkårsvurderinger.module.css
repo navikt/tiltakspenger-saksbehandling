@@ -1,0 +1,20 @@
+.søknadsfristVilkårsvurderinger__container {
+    display: flex;
+    width: 50%;
+    flex-direction: column;
+}
+
+.søknadsfristVilkårsvurderinger__endreKnapp {
+    align-self: end;
+    margin-top: 1rem;
+}
+
+.søknadsfristVurderingRad {
+    position: relative;
+}
+
+.søknadsfristVurderingRad__utfallIkon {
+    position: absolute;
+    right: 8px;
+    top: 10px;
+}

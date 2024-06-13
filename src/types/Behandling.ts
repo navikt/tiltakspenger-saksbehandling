@@ -1,5 +1,5 @@
 import Søknad, { RegistrertTiltak } from './Søknad';
-import {Utfall} from "./Utfall";
+import { Utfall } from './Utfall';
 
 interface Vilkår {
   lovreferanse: string;
@@ -29,16 +29,15 @@ export interface Behandling {
   status: string;
   endringslogg: Endring[];
   samletUtfall: Utfall;
-  utfallsperioder: Utfallsperiode[]
+  utfallsperioder: Utfallsperiode[];
 }
 
 export interface Utfallsperiode {
-    fom: string;
-    tom: string;
-    antallBarn: number;
-    utfall: string;
+  fom: string;
+  tom: string;
+  antallBarn: number;
+  utfall: string;
 }
-
 
 export interface Endring {
   type: string;
