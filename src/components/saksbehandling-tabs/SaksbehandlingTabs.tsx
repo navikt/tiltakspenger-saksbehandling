@@ -14,7 +14,9 @@ export const SaksbehandlingTabs = ({
   utbetalingId,
 }: SaksbehandlingTabsProps) => {
   const router = useRouter();
-  const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
+  const { valgtBehandling } = useHentBehandling(behandlingId);
+  const iverksatt = valgtBehandling?.behandlingsteg === 'iverksatt';
+  const { meldekortliste } = useHentMeldekortListe(iverksatt, behandlingId);
 
   return (
     <Tabs defaultValue="Inngangsvilkår">
@@ -37,31 +39,33 @@ export const SaksbehandlingTabs = ({
             router.push(`/behandling/${behandlingId}/barnetillegg`);
           }}
         />
-        {/*
-        <Tabs.Tab
-          key={'Meldekort'}
-          value={'Meldekort'}
-          label={'Meldekort'}
-          icon={<FileTextIcon />}
-          onClick={() => {
-            meldekortliste &&
-              router.push(
-                `/behandling/${behandlingId}/meldekort/${meldekortliste[0].id}`,
-              );
-          }}
-        />
-        <Tabs.Tab
-          key={'Utbetaling'}
-          value={'Utbetaling'}
-          label={'Utbetaling'}
-          icon={<FileTextIcon />}
-          onClick={() => {
-            router.push(
-              `/behandling/${behandlingId}/utbetaling/${utbetalingId}`,
-            );
-          }}
-        />
-            */}
+        {iverksatt && (
+          <>
+            <Tabs.Tab
+              key={'Meldekort'}
+              value={'Meldekort'}
+              label={'Meldekort'}
+              icon={<FileTextIcon />}
+              onClick={() => {
+                meldekortliste &&
+                  router.push(
+                    `/behandling/${behandlingId}/meldekort/${meldekortliste[0].id}`,
+                  );
+              }}
+            />
+            <Tabs.Tab
+              key={'Utbetaling'}
+              value={'Utbetaling'}
+              label={'Utbetaling'}
+              icon={<FileTextIcon />}
+              onClick={() => {
+                router.push(
+                  `/behandling/${behandlingId}/utbetaling/${utbetalingId}`,
+                );
+              }}
+            />
+          </>
+        )}
       </Tabs.List>
     </Tabs>
   );

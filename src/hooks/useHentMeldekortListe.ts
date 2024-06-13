@@ -3,13 +3,17 @@ import { fetcher } from '../utils/http';
 import { MeldekortUtenDager } from '../types/MeldekortTypes';
 
 //TODO: Bruk vedtakId isf. behandlingId
-export function useHentMeldekortListe(behandlingId: string) {
+export function useHentMeldekortListe(
+  iverksatt: boolean,
+  behandlingId: string,
+) {
   const {
     data: meldekortliste,
     isLoading,
     error,
   } = useSWR<MeldekortUtenDager[]>(
-    `/api/meldekort/hentAlleForBehandling/${behandlingId}`,
+    () =>
+      iverksatt ? `/api/meldekort/hentAlleForBehandling/${behandlingId}` : null,
     fetcher,
     {
       revalidateIfStale: false,
