@@ -17,6 +17,9 @@ const PersonaliaHeader = ({ valgtBehandling }: PersonaliaHeaderProps) => {
   const håndterAvbrytBehandling = () => {
     fetch(`/api/behandling/avbrytbehandling/${valgtBehandling.behandlingId}`, {
       method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
     }).then(() => {
       router.push('/');
     });

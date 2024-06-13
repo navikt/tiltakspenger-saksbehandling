@@ -29,6 +29,9 @@ export const MeldekortUkeDag = ({
     setStatus(dagStatus as MeldekortStatus);
     fetch(`/api/meldekort/oppdaterDag`, {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({
       meldekortId: meldekortId,
       dato: meldekortDag.dato,

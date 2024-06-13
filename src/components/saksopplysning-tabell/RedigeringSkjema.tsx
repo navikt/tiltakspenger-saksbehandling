@@ -77,6 +77,9 @@ export const RedigeringSkjema = ({
     const skjemaFelter = formMethods.getValues();
     fetch(`/api/behandling/${behandlingId}`, {
       method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
       body: JSON.stringify({
         fom: harYtelse
           ? dateToISO(skjemaFelter.periode?.fom)

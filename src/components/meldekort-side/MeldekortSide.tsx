@@ -32,6 +32,9 @@ export const MeldekortSide = () => {
   const godkjennMeldekort = () => {
     fetch(`/api/meldekort/godkjenn/${meldekortId}`, {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({ saksbehandler: innloggetSaksbehandler?.navIdent }),
     });
     setDisableUkeVisning(true);
