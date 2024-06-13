@@ -8,11 +8,11 @@ import {
   VStack,
 } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
-import { useHentBehandling } from '../hooks/useHentBehandling';
-import { velgFaktaTekst } from '../utils/velgFaktaTekst';
-import { formatPeriode } from '../utils/date';
-import { UtfallIkon } from '../components/utfall-ikon/UtfallIkon';
-import { RedigeringSkjema } from '../components/saksopplysning-tabell/RedigeringSkjema';
+import { useHentBehandling } from '../../hooks/useHentBehandling';
+import { velgFaktaTekst } from '../../utils/velgFaktaTekst';
+import { formatPeriode } from '../../utils/date';
+import { UtfallIkon } from '../utfall-ikon/UtfallIkon';
+import { RedigeringSkjema } from '../saksopplysning-tabell/RedigeringSkjema';
 import { PencilIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';
 

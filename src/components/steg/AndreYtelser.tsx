@@ -1,11 +1,11 @@
 import { Loader, HStack, Heading, Link } from '@navikt/ds-react';
-import { SaksopplysningTabell } from '../components/saksopplysning-tabell/SaksopplysningTabell';
+import { SaksopplysningTabell } from '../saksopplysning-tabell/SaksopplysningTabell';
 import { useRouter } from 'next/router';
 import { useContext } from 'react';
-import { useHentBehandling } from '../hooks/useHentBehandling';
-import { SaksbehandlerContext } from '../pages/_app';
-import { avklarLesevisning } from '../utils/avklarLesevisning';
-import { UtfallIkon } from '../components/utfall-ikon/UtfallIkon';
+import { useHentBehandling } from '../../hooks/useHentBehandling';
+import { SaksbehandlerContext } from '../../pages/_app';
+import { avklarLesevisning } from '../../utils/avklarLesevisning';
+import { UtfallIkon } from '../utfall-ikon/UtfallIkon';
 
 export const AndreYtelser = () => {
   const router = useRouter();

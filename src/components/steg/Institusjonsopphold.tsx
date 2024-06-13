@@ -8,10 +8,9 @@ import {
   VStack,
 } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
-import { useHentBehandling } from '../hooks/useHentBehandling';
-import { formatPeriode } from '../utils/date';
-import { UtfallIkon } from '../components/utfall-ikon/UtfallIkon';
-import { RedigeringSkjema } from '../components/saksopplysning-tabell/RedigeringSkjema';
+import { useHentBehandling } from '../../hooks/useHentBehandling';
+import { UtfallIkon } from '../utfall-ikon/UtfallIkon';
+import { RedigeringSkjema } from '../saksopplysning-tabell/RedigeringSkjema';
 import { PencilIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';
 
@@ -25,18 +24,18 @@ const Alder = () => {
     return <Loader />;
   }
 
-  const saksopplysning = valgtBehandling.alderssaksopplysning;
+  const saksopplysning = valgtBehandling.saksopplysninger.find(
+    (kategori) => kategori.kategoriTittel == 'Alder',
+  )?.saksopplysninger[0];
 
   if (!saksopplysning) return <Loader />;
-
-  console.log(saksopplysning);
 
   return (
     <>
       <HStack gap="3" align="center" style={{ marginBottom: '0.5em' }}>
         <UtfallIkon utfall={saksopplysning.utfall} />
         <Heading size="medium" level="3">
-          {saksopplysning.vilkårTittel}
+          Institusjonsopphold
         </Heading>
       </HStack>
       <Link
@@ -44,7 +43,7 @@ const Alder = () => {
         target="_blank"
         style={{ marginBottom: '1em' }}
       >
-        Tiltakspengeforskriften § 3 Tiltakspenger og barnetillegg
+        Tiltakspengeforskriften § 9 Opphold i institusjon
       </Link>
       <HStack
         style={{
@@ -59,19 +58,13 @@ const Alder = () => {
           }}
         >
           <BodyShort size="medium" spacing>
-            <b>Er søker over 18 år?</b> {saksopplysning.utfall}
+            <b>Har søker opphold i institusjon ?</b> ?
           </BodyShort>
           <BodyShort size="medium" spacing>
-            <b>Periode:</b>{' '}
-            {saksopplysning.periode
-              ? formatPeriode({
-                  fra: saksopplysning.periode.fra,
-                  til: saksopplysning.periode.til,
-                })
-              : '-'}
+            <b>Periode:</b> ?
           </BodyShort>
           <BodyShort size="medium" spacing>
-            <b>Kilde:</b> {saksopplysning.kilde}
+            <b>Kilde:</b> ?
           </BodyShort>
         </VStack>
         <VStack
@@ -85,10 +78,10 @@ const Alder = () => {
             Registerdata
           </BodyShort>
           <BodyShort size="medium" spacing>
-            Fødselsdato:
+            Svar i søknad: ?
           </BodyShort>
           <BodyShort size="medium" spacing>
-            Alder:
+            Periode:
           </BodyShort>
 
           <HStack justify="end">
@@ -106,11 +99,19 @@ const Alder = () => {
       </HStack>
       {åpenRedigering && (
         <RedigeringSkjema
-          saksopplysning={saksopplysning.vilkår}
-          saksopplysningTittel={saksopplysning.vilkårTittel}
+          vilkårTittel={'INSTITUSJONSOPPHOLD'}
+          vilkårFlateTittel={'Institusjonsopphold'}
           håndterLukkRedigering={() => håndterÅpenRedigering(false)}
           behandlingId={valgtBehandling.behandlingId}
-          vurderingsperiode={valgtBehandling.vurderingsperiode}
+          behandlingsperiode={{
+            fom: valgtBehandling.fom,
+            tom: valgtBehandling.tom,
+          }}
+          vilkårsperiode={{
+            fom: valgtBehandling.søknad.deltakelseFom,
+            tom: valgtBehandling.søknad.deltakelseTom,
+          }}
+          fakta={saksopplysning.fakta}
         />
       )}
     </>

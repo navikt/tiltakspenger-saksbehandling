@@ -2,10 +2,10 @@ import { VStack } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import { ReactElement } from 'react';
 import { Behandlingssteg } from '../../types/Behandlingssteg';
-import Alder from '../../steg/Alder';
+import Alder from '../steg/Alder';
 import styles from './BehandlingSteg.module.css';
-import { AndreYtelser } from '../../steg/AndreYtelser';
-import Søknadstidspunkt from '../../steg/Søknadstidspunkt';
+import { AndreYtelser } from '../steg/AndreYtelser';
+import Søknadstidspunkt from '../steg/Søknadstidspunkt';
 import VilkårsvurderingAvTiltaksdeltagelse from '../tiltak/vilkårsvurdering-av-tiltaksdeltagelse/VilkårsvurderingAvTiltaksdeltagelse';
 import VilkårsvurderingAvStønadsdager from '../tiltak/vilkårsvurdering-av-stønadsdager/VilkårsvurderingAvStønadsdager';
 
