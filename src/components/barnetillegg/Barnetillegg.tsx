@@ -49,44 +49,6 @@ const barn = [
       },
     ],
   },
-  {
-    navn: 'Dole Duck',
-    fnr: '01010894568',
-    fdato: '01.01.2008',
-    alder: '16',
-    bosatt: 'Norge',
-    opphold: 'Innenfor Norge/EØS',
-    opplysninger: [
-      {
-        fakta: 'Barnet er under 18 år',
-        periode: '12.01.2024 - 22.05.2024',
-        kilde: 'PDL',
-        detaljer: '',
-        utfall: 'OPPFYLT',
-      },
-      {
-        fakta: 'Barnet forsørges av søker',
-        periode: '12.01.2024 - 22.05.2024',
-        kilde: 'PDL',
-        detaljer: '',
-        utfall: 'OPPFYLT',
-      },
-      {
-        fakta: 'Barnet oppholder seg i Norge',
-        periode: '12.01.2024 - 22.05.2024',
-        kilde: 'PDL',
-        detaljer: '',
-        utfall: 'OPPFYLT',
-      },
-      {
-        fakta: 'Barnet har ikke vært utenfor EØS over 90 dager',
-        periode: '12.01.2024 - 22.05.2024',
-        kilde: 'PDL',
-        detaljer: '',
-        utfall: 'OPPFYLT',
-      },
-    ],
-  },
 ];
 
 const Barnetillegg = () => (
