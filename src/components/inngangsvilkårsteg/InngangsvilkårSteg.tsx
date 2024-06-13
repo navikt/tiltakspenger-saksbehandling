@@ -1,16 +1,18 @@
 import { List, VStack } from '@navikt/ds-react';
-import { CheckmarkCircleFillIcon } from '@navikt/aksel-icons';
+import { CheckmarkCircleFillIcon, TasklistIcon } from '@navikt/aksel-icons';
 import Link from 'next/link';
 import styles from './InngangsvilkårSteg.module.css';
 import { useRouter } from 'next/router';
+import ListItem from '@navikt/ds-react/esm/list/ListItem';
 
 const vilkår = [
-  { tittel: 'Alder', url: 'alder' },
   { tittel: 'Søknadstidspunkt', url: 'soknadstidspunkt' },
   { tittel: 'Tiltaksdeltagelse', url: 'tiltaksdeltagelse' },
-  { tittel: 'KVP og Intro', url: 'kvpintro' },
-  { tittel: 'Institusjonsopphold', url: 'institusjonsopphold' },
+  { tittel: 'Alder', url: 'alder' },
   { tittel: 'Andre ytelser', url: 'andreytelser' },
+  { tittel: 'Kvalifiseringsprogrammet', url: 'kvp' },
+  { tittel: 'Introduksjonsprogrammet', url: 'intro' },
+  { tittel: 'Institusjonsopphold', url: 'institusjonsopphold' },
 ];
 
 const InngangsvilkårSteg = () => {
@@ -40,6 +42,19 @@ const InngangsvilkårSteg = () => {
             </Link>
           </List.Item>
         ))}
+        <List.Item
+          key={'oppsummering'}
+          icon={<TasklistIcon title="a11y-title" fontSize="1.5rem" />}
+        >
+          <Link
+            className={
+              behandlingsteg === 'oppsummering' ? styles.aktivtSteg : ''
+            }
+            href={`/behandling/${behandlingId}/inngangsvilkar/oppsummering`}
+          >
+            Oppsummering
+          </Link>
+        </List.Item>
       </List>
       <List title="Beregning">
         <List.Item

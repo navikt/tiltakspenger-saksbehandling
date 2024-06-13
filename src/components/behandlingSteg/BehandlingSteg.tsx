@@ -6,8 +6,12 @@ import Alder from '../steg/Alder';
 import styles from './BehandlingSteg.module.css';
 import { AndreYtelser } from '../steg/AndreYtelser';
 import Søknadstidspunkt from '../steg/Søknadstidspunkt';
-import VilkårsvurderingAvTiltaksdeltagelse from '../tiltak/vilkårsvurdering-av-tiltaksdeltagelse/VilkårsvurderingAvTiltaksdeltagelse';
-import VilkårsvurderingAvStønadsdager from '../tiltak/vilkårsvurdering-av-stønadsdager/VilkårsvurderingAvStønadsdager';
+import Tiltaksdeltagelse from '../steg/Tiltaksdeltagelse';
+import Stønadsdager from '../steg/Stønadsdager';
+import Kvalifiseringsprogrammet from '../steg/Kvalifiseringsprogrammet';
+import Institusjonsopphold from '../steg/Institusjonsopphold';
+import Introduksjonsprogrammet from '../steg/Introduksjonsprogrammet';
+import Oppsummering from '../steg/Oppsummering';
 
 const BehandlingSteg = () => {
   const router = useRouter();
@@ -20,15 +24,19 @@ const BehandlingSteg = () => {
       case Behandlingssteg.SØKNADSTIDSPUNKT:
         return <Søknadstidspunkt />;
       case Behandlingssteg.TILTAKSDELTAGELSE:
-        return <VilkårsvurderingAvTiltaksdeltagelse />;
-      case Behandlingssteg.KVPINTRO:
-        return <p>KVPINTRO</p>;
+        return <Tiltaksdeltagelse />;
+      case Behandlingssteg.KVP:
+        return <Kvalifiseringsprogrammet />;
+      case Behandlingssteg.INTROPROGRAMMET:
+        return <Introduksjonsprogrammet />;
       case Behandlingssteg.INSTITUSJONSOPPHOLD:
-        return <p>Institusjonsopphold</p>;
+        return <Institusjonsopphold />;
       case Behandlingssteg.ANDREYTELSER:
         return <AndreYtelser />;
       case Behandlingssteg.STØNADSDAGER:
-        return <VilkårsvurderingAvStønadsdager />;
+        return <Stønadsdager />;
+      case Behandlingssteg.OPPSUMMERING:
+        return <Oppsummering />;
       default:
         return <Alder />;
     }
