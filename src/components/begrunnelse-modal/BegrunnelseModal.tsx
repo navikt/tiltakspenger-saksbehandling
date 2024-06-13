@@ -36,6 +36,9 @@ const BegrunnelseModal = ({
     }
     const res = fetch(`/api/behandling/sendtilbake/${behandlingid}`, {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({ begrunnelse: begrunnelse }),
     }).then(() => {
       mutator(`/api/behandling/${behandlingid}`);

@@ -27,6 +27,9 @@ const SøkerPage: NextPage = () => {
   const taBehandling = async (behandlingid: string) => {
     fetch(`/api/behandling/startbehandling/${behandlingid}`, {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
     })
       .then(() => {
         mutator(`/api/behandlinger`);

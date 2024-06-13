@@ -22,6 +22,9 @@ export const BehandlingKnapper = ({
   const håndterRefreshSaksopplysninger = () => {
     fetch(`/api/behandling/oppdater/${behandlingid}`, {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
     }).then(() => {
       mutator(`/api/behandling/${behandlingid}`).then(() => {
         router.push(`/behandling/${behandlingid}/inngangsvilkar/alder`);
@@ -40,6 +43,9 @@ export const BehandlingKnapper = ({
   const håndterGodkjenn = () => {
     fetch(`/api/behandling/godkjenn/${behandlingid}`, {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
     }).then(() => {
       mutator(`/api/behandling/${behandlingid}`);
     });
