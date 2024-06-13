@@ -102,4 +102,5 @@ export interface Aldersaksopplysning {
   vilkårTittel: string;
   utfall: string;
   vilkårLovReferanse: LovreferanseDTO[];
+  grunnlag: Date;
 }

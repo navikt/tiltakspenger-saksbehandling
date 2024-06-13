@@ -2,9 +2,9 @@ import { BodyShort, HStack, Loader } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
 import { UtfallIkon } from '../utfall-ikon/UtfallIkon';
-import { Utfall } from '../../types/Utfall';
 import StegHeader from './StegHeader';
 import StegKort from './StegKort';
+import { finnUtfallTekst } from '../../utils/tekstformateringUtils';
 
 const Alder = () => {
   const router = useRouter();
@@ -18,19 +18,6 @@ const Alder = () => {
   const saksopplysning = valgtBehandling.alderssaksopplysning;
 
   if (!saksopplysning) return <Loader />;
-
-  const finnUtfallTekst = (utfall: string) => {
-    switch (utfall) {
-      case Utfall.IKKE_OPPFYLT:
-        return 'ikke oppfylt';
-      case Utfall.OPPFYLT:
-        return 'oppfylt';
-      case Utfall.KREVER_MANUELL_VURDERING:
-        return 'uavklart';
-      default:
-        return 'uavklart';
-    }
-  };
 
   return (
     <>
@@ -49,6 +36,7 @@ Tiltakspengeforskriften § 3 Tiltakspenger og barnetillegg"
         </BodyShort>
       </HStack>
       <StegKort
+        editerbar={false}
         behandlingId={valgtBehandling.behandlingId}
         vurderingsperiode={valgtBehandling.vurderingsperiode}
         saksopplysningsperiode={saksopplysning.periode}
@@ -56,6 +44,8 @@ Tiltakspengeforskriften § 3 Tiltakspenger og barnetillegg"
         utfall={saksopplysning.utfall}
         vilkår={saksopplysning.vilkår}
         vilkårTittel={saksopplysning.vilkårTittel}
+        grunnlag={saksopplysning.grunnlag}
+        grunnlagHeader={'Fødselsdato'}
       />
     </>
   );

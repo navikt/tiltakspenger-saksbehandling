@@ -1,11 +1,14 @@
 import { PencilIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, HStack, VStack } from '@navikt/ds-react';
-import { formatPeriode } from '../../utils/date';
+import { BodyShort, Button, HStack, Table, VStack } from '@navikt/ds-react';
+import { formatDateObject, formatPeriode } from '../../utils/date';
 import { RedigeringSkjema } from '../saksopplysning-tabell/RedigeringSkjema';
 import { useState } from 'react';
 import { Periode } from '../../types/Periode';
+import { finnUtfallTekst } from '../../utils/tekstformateringUtils';
+import { UtfallIkon } from '../utfall-ikon/UtfallIkon';
 
 interface StegKortProps {
+  editerbar: boolean;
   behandlingId: string;
   vurderingsperiode: Periode;
   saksopplysningsperiode: Periode;
@@ -13,9 +16,12 @@ interface StegKortProps {
   utfall: string;
   vilkår: string;
   vilkårTittel: string;
+  grunnlag: Date;
+  grunnlagHeader: string;
 }
 
 const StegKort = ({
+  editerbar,
   behandlingId,
   vurderingsperiode,
   saksopplysningsperiode,
@@ -23,6 +29,8 @@ const StegKort = ({
   utfall,
   vilkår,
   vilkårTittel,
+  grunnlag,
+  grunnlagHeader,
 }: StegKortProps) => {
   const [åpenRedigering, settÅpenRedigering] = useState<boolean>(false);
 
@@ -39,23 +47,33 @@ const StegKort = ({
         <VStack
           style={{
             width: '50%',
+            paddingRight: '1em',
           }}
         >
-          <BodyShort size="medium" spacing>
-            <b>Er søker over 18 år?</b> {utfall}
-          </BodyShort>
-          <BodyShort size="medium" spacing>
-            <b>Periode:</b>{' '}
-            {saksopplysningsperiode
-              ? formatPeriode({
-                  fra: saksopplysningsperiode.fra,
-                  til: saksopplysningsperiode.til,
-                })
-              : '-'}
-          </BodyShort>
-          <BodyShort size="medium" spacing>
-            <b>Kilde:</b> {kilde}
-          </BodyShort>
+          <Table>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell scope="col">Periode</Table.HeaderCell>
+                <Table.HeaderCell scope="col">
+                  {grunnlagHeader}
+                </Table.HeaderCell>
+                <Table.HeaderCell scope="col">Kilde</Table.HeaderCell>
+                <Table.HeaderCell scope="col">Vilkår oppfylt</Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              <Table.Row key="ye">
+                <Table.DataCell>
+                  {formatPeriode(saksopplysningsperiode)}
+                </Table.DataCell>
+                <Table.DataCell>{formatDateObject(grunnlag)}</Table.DataCell>
+                <Table.DataCell>{kilde}</Table.DataCell>
+                <Table.DataCell>
+                  <UtfallIkon utfall={utfall} />
+                </Table.DataCell>
+              </Table.Row>
+            </Table.Body>
+          </Table>
         </VStack>
         <VStack
           style={{
@@ -68,21 +86,23 @@ const StegKort = ({
             Registerdata
           </BodyShort>
           <BodyShort size="medium" spacing>
-            Fødselsdato:
+            Fødselsdato: <b>{formatDateObject(grunnlag)}</b>
           </BodyShort>
           <BodyShort size="medium" spacing>
-            Alder:
+            Alder: <b>{kilde}</b>
           </BodyShort>
           <HStack justify="end">
-            <Button
-              variant="secondary"
-              size="small"
-              iconPosition="right"
-              icon={<PencilIcon />}
-              onClick={() => settÅpenRedigering(!åpenRedigering)}
-            >
-              Legg til saksopplysning
-            </Button>
+            {editerbar && (
+              <Button
+                variant="secondary"
+                size="small"
+                iconPosition="right"
+                icon={<PencilIcon />}
+                onClick={() => settÅpenRedigering(!åpenRedigering)}
+              >
+                Legg til saksopplysning
+              </Button>
+            )}
           </HStack>
         </VStack>
       </HStack>
