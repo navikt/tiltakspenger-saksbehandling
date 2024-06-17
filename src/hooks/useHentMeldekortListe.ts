@@ -2,7 +2,6 @@ import useSWR from 'swr';
 import { fetcher } from '../utils/http';
 import { MeldekortUtenDager } from '../types/MeldekortTypes';
 
-//TODO: Bruk vedtakId isf. behandlingId
 export function useHentMeldekortListe(
   iverksatt: boolean,
   behandlingId: string,
