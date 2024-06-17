@@ -3,6 +3,7 @@ import VilkårsvurderingAvStønadsdagerHeading from '../tiltak/vilkårsvurdering
 import { Heading, Loader, VStack } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
+import TiltakMedAntallDager from '../tiltak/vilkårsvurdering-av-stønadsdager/TiltakMedAntallDager';
 
 const VilkårsvurderingAvStønadsdager = () => {
   const router = useRouter();
@@ -13,6 +14,8 @@ const VilkårsvurderingAvStønadsdager = () => {
     return <Loader />;
   }
 
+  const stønadsDager = valgtBehandling.stønadsdager;
+
   return (
     <div>
       <VilkårsvurderingAvStønadsdagerHeading />
@@ -20,6 +23,13 @@ const VilkårsvurderingAvStønadsdager = () => {
         <Heading size={'small'} style={{ marginTop: '1rem' }}>
           Hvor mange dager skal bruker delta på tiltak?
         </Heading>
+        {stønadsDager.antallDagerSaksopplysninger.map(
+          (stønadsdagerSaksopplysning) => (
+            <TiltakMedAntallDager
+              stønadsdagerSaksopplysning={stønadsdagerSaksopplysning}
+            />
+          ),
+        )}
       </VStack>
     </div>
   );

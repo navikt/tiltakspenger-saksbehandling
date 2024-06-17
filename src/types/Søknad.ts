@@ -15,18 +15,6 @@ export type RegistrertTiltak = {
   begrunnelse: string;
 };
 
-export interface AntallDagerSaksopplysninger {
-  antallDagerSaksopplysningerFraSBH: AntallDagerSaksopplysning[];
-  antallDagerSaksopplysningerFraRegister: AntallDagerSaksopplysning[];
-  avklartAntallDager: AntallDagerSaksopplysning[];
-}
-
-export interface AntallDagerSaksopplysning {
-  antallDager: number;
-  kilde: string;
-  periode: Periode;
-}
-
 interface Søknad {
   søknadsdato: string;
   arrangoernavn: string;

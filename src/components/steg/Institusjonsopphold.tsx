@@ -5,7 +5,6 @@ import { UtfallIkon } from '../utfall-ikon/UtfallIkon';
 import StegHeader from './StegHeader';
 import StegKort from './StegKort';
 import { finnUtfallTekst } from '../../utils/tekstformateringUtils';
-import { formatDateObject } from '../../utils/date';
 
 const Institusjonsopphold = () => {
   const router = useRouter();

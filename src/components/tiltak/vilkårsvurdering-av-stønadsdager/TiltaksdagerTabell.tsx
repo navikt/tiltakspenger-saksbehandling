@@ -1,23 +1,18 @@
 import React, { useRef } from 'react';
 import { Button, Table } from '@navikt/ds-react';
 import styles from './TiltaksdagerTabell.module.css';
-import EndreAntallDagerModal from './EndreAntallDagerModal';
-import dayjs from 'dayjs';
-import {
-  AntallDagerSaksopplysning,
-  RegistrertTiltak,
-} from '../../../types/Søknad';
 import { formatPeriode } from '../../../utils/date';
+import { Stønadsdager } from '../../../types/Behandling';
 
-interface TiltaksdagerTabellProps {
-  tiltak: RegistrertTiltak;
+interface StønadsdagerTabellProps {
+  stønadsdager: Stønadsdager[];
 }
 
 function renderAntallDagerSaksopplysningRad({
   periode,
   antallDager,
   kilde,
-}: AntallDagerSaksopplysning) {
+}: Stønadsdager) {
   const formattertPeriode = formatPeriode(periode);
   return (
     <Table.Row key={formattertPeriode}>
@@ -28,8 +23,7 @@ function renderAntallDagerSaksopplysningRad({
   );
 }
 
-const TiltaksdagerTabell = (props: TiltaksdagerTabellProps) => {
-  const { antallDagerSaksopplysninger, periode } = props.tiltak;
+const TiltaksdagerTabell = ({ stønadsdager }: StønadsdagerTabellProps) => {
   const ref = useRef(null);
   return (
     <div className={styles.tiltaksdagerTabell__container}>
@@ -42,9 +36,7 @@ const TiltaksdagerTabell = (props: TiltaksdagerTabellProps) => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {antallDagerSaksopplysninger.avklartAntallDager.map(
-            renderAntallDagerSaksopplysningRad,
-          )}
+          {stønadsdager.map((stø) => renderAntallDagerSaksopplysningRad(stø))}
         </Table.Body>
       </Table>
       <Button
@@ -56,12 +48,12 @@ const TiltaksdagerTabell = (props: TiltaksdagerTabellProps) => {
       >
         Endre antall dager per uke
       </Button>
-      <EndreAntallDagerModal
-        ref={ref}
-        minDate={dayjs(periode.fra).toDate()}
-        maxDate={dayjs(periode.til).toDate()}
-        tiltakId={props.tiltak.id}
-      />
+      {/*<EndreAntallDagerModal*/}
+      {/*  ref={ref}*/}
+      {/*  minDate={dayjs(periode.fra).toDate()}*/}
+      {/*  maxDate={dayjs(periode.til).toDate()}*/}
+      {/*  tiltakId={props.tiltak.id}*/}
+      {/*/>*/}
     </div>
   );
 };

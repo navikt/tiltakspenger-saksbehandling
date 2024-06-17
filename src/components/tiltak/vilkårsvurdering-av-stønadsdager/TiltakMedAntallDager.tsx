@@ -1,19 +1,27 @@
 import React from 'react';
-import { RegistrertTiltak } from '../../types/Søknad';
 import styles from './TiltakMedAntallDager.module.css';
 import TiltaksdagerTabell from './TiltaksdagerTabell';
 import TiltaksdataFraRegister from './TiltaksdataFraRegister';
+import { StønadsdagerSaksopplysning } from '../../../types/Behandling';
 
 interface TiltakMedAntallDagerProps {
-  tiltak: RegistrertTiltak;
+  stønadsdagerSaksopplysning: StønadsdagerSaksopplysning;
 }
 
-const TiltakMedAntallDager = ({ tiltak }: TiltakMedAntallDagerProps) => {
+const TiltakMedAntallDager = ({
+  stønadsdagerSaksopplysning,
+}: TiltakMedAntallDagerProps) => {
   return (
     <div className={styles.tiltakMedAntallDager}>
-      <TiltaksdagerTabell tiltak={tiltak} />
+      <TiltaksdagerTabell
+        stønadsdager={stønadsdagerSaksopplysning.avklartAntallDager}
+      />
       <div className={styles.verticalLine}></div>
-      <TiltaksdataFraRegister tiltak={tiltak} />
+      <TiltaksdataFraRegister
+        tiltak={
+          stønadsdagerSaksopplysning.antallDagerSaksopplysningerFraRegister
+        }
+      />
     </div>
   );
 };
