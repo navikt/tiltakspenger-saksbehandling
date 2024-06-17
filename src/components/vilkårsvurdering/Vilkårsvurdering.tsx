@@ -21,8 +21,7 @@ import styles from './Vilkårsvurdering.module.css';
 import UtfallAlert from './UtfallAlert';
 import { PersonCircleIcon } from '@navikt/aksel-icons';
 import VilkårsvurderingAvTiltaksdeltagelse from '../vilkårsvurdering-av-tiltaksdeltagelse/VilkårsvurderingAvTiltaksdeltagelse';
-import VilkårsvurderingAvSøknadsfrist from '../vilkårsvurdering-av-søknadsfrist/VilkårsvurderingAvSøknadsfrist';
-import { toDate } from '../../utils/date';
+import VilkårsvurderingAvFristForFramsettingAvKrav from '../vilkårsvurdering-av-frist-for-framsetting-av-krav/VilkårsvurderingAvFristForFramsettingAvKrav';
 
 interface VilkårsvurderingProps {
   valgtBehandling: Behandling;
@@ -59,16 +58,11 @@ export const Vilkårsvurdering = ({
 
   const {
     kravdatoSaksopplysninger: {
-      søknadstidspunktFraSaksbehandler,
-      opprinneligSøknadstidspunkt,
+      kravdatoFraSaksbehandler,
+      opprinneligKravdato,
       vurderinger,
     },
   } = valgtBehandling;
-
-  const opprinneligSøknadstidspunktDate = toDate(opprinneligSøknadstidspunkt);
-  const søknadstidspunktFraSaksbehandlerDate = søknadstidspunktFraSaksbehandler
-    ? toDate(søknadstidspunktFraSaksbehandler)
-    : null;
 
   const hentLovDataURLen = (lovverk: string, paragraf: string) => {
     if (lovverk == 'Tiltakspengeforskriften')
@@ -117,9 +111,9 @@ export const Vilkårsvurdering = ({
         )}
 
       <UtfallAlert utfall={valgtBehandling.samletUtfall} />
-      <VilkårsvurderingAvSøknadsfrist
-        opprinneligSøknadstidspunkt={opprinneligSøknadstidspunktDate}
-        søknadstidspunktFraSaksbehandler={søknadstidspunktFraSaksbehandlerDate}
+      <VilkårsvurderingAvFristForFramsettingAvKrav
+        opprinneligKravdato={opprinneligKravdato}
+        kravdatoFraSaksbehandler={kravdatoFraSaksbehandler}
         vurderinger={vurderinger}
       />
       <VilkårsvurderingAvTiltaksdeltagelse

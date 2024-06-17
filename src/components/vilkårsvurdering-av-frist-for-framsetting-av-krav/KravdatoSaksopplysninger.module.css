@@ -1,16 +1,16 @@
-.søknadsfristSaksopplysninger__container {
+.kravdatoSaksopplysninger__container {
     display: flex;
     width: 50%;
     flex-direction: column;
 }
 
-.søknadsfristSaksopplysninger__dataGrid {
+.kravdatoSaksopplysninger__dataGrid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     margin-top: 0.5rem;
 }
 
-.søknadsfristSaksopplysninger__tilbakestillKnapp {
+.kravdatoSaksopplysninger__tilbakestillKnapp {
     /* todo: kommenter ut denne linja når man skal støtte at saksbehandler endrer manuelt */
     display: none;
     margin-top: 2rem;

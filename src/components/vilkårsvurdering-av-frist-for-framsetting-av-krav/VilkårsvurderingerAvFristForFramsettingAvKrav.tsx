@@ -1,77 +1,84 @@
 import React, { useRef } from 'react';
 import { Button, Table } from '@navikt/ds-react';
-import { formatDate, formatPeriode } from '../../utils/date';
+import { formatDate, formatPeriode, toDate } from '../../utils/date';
 import { Utfall } from '../../types/Utfall';
 import { Vurdering } from '../../types/Vurdering';
 import { UtfallIkon } from '../utfall-ikon/UtfallIkon';
-import styles from './SøknadsfristVilkårsvurderinger.module.css';
+import { KravdatoSaksopplysning } from '../../types/Behandling';
+import styles from './VilkårsvurderingerAvFristForFramsettingAvKrav.module.css';
 
-interface SøknadsfristVilkårsvurderingerProps {
+interface VilkårsvurderingerAvFristForFramsettingAvKravProps {
   vurderinger: Vurdering[];
-  kravdato: Date;
-  kravdatoKilde: string;
+  kravdatoSaksopplysning: KravdatoSaksopplysning;
 }
 
-interface SøknadsfristVurderingRadProps {
+interface VilkårsvurderingAvFristForFramsettingAvKravRadProps {
   vurdering: Vurdering;
   kravdato: Date;
-  kravdatoKilde: string;
 }
 
-const SøknadsfristVurderingRad = ({
+const VilkårsvurderingAvFristForFramsettingAvKravRad = ({
   vurdering: { utfall, periode },
-  kravdatoKilde,
   kravdato,
-}: SøknadsfristVurderingRadProps) => {
+}: VilkårsvurderingAvFristForFramsettingAvKravRadProps) => {
   const formattertPeriode = formatPeriode(periode);
   return (
     <Table.Row
-      className={styles.søknadsfristVurderingRad}
+      className={
+        styles.vilkårsvurderingerAvFristForFramsettingAvKravVurderingRad
+      }
       key={formattertPeriode}
     >
       <Table.DataCell>{formattertPeriode}</Table.DataCell>
       <Table.DataCell>{formatDate(kravdato.toDateString())}</Table.DataCell>
-      <Table.DataCell>{kravdatoKilde}</Table.DataCell>
       <Table.DataCell>
         {utfall === Utfall.OPPFYLT ? 'Ja' : 'Nei'}
       </Table.DataCell>
-      <div className={styles.søknadsfristVurderingRad__utfallIkon}>
+      <div
+        className={
+          styles.vilkårsvurderingerAvFristForFramsettingAvKravVurderingRad__utfallIkon
+        }
+      >
         <UtfallIkon utfall={utfall} />
       </div>
     </Table.Row>
   );
 };
 
-const SøknadsfristVilkårsvurderinger = ({
+const VilkårsvurderingerAvFristForFramsettingAvKrav = ({
   vurderinger,
-  kravdato,
-  kravdatoKilde,
-}: SøknadsfristVilkårsvurderingerProps) => {
+  kravdatoSaksopplysning: { verdi, kilde },
+}: VilkårsvurderingerAvFristForFramsettingAvKravProps) => {
   const ref = useRef(null);
+  const kravdato = React.useMemo(() => toDate(verdi), [verdi]);
   return (
-    <div className={styles.søknadsfristVilkårsvurderinger__container}>
+    <div
+      className={
+        styles.vilkårsvurderingerAvFristForFramsettingAvKrav__container
+      }
+    >
       <Table>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>Periode</Table.HeaderCell>
             <Table.HeaderCell>Kravdato</Table.HeaderCell>
-            <Table.HeaderCell>Kilde</Table.HeaderCell>
-            <Table.HeaderCell>Gir rett på tiltakspenger</Table.HeaderCell>
+            <Table.HeaderCell>Vilkår oppfylt</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
           {vurderinger.map((vurdering) => (
-            <SøknadsfristVurderingRad
+            <VilkårsvurderingAvFristForFramsettingAvKravRad
               vurdering={vurdering}
               kravdato={kravdato}
-              kravdatoKilde={kravdatoKilde}
               key={formatPeriode(vurdering.periode)}
             />
           ))}
         </Table.Body>
       </Table>
       <Button
-        className={styles.søknadsfristVilkårsvurderinger__endreKnapp}
+        className={
+          styles.vilkårsvurderingerAvFristForFramsettingAvKrav__endreKnapp
+        }
         variant="secondary"
         type="button"
         size="small"
@@ -83,4 +90,4 @@ const SøknadsfristVilkårsvurderinger = ({
   );
 };
 
-export default SøknadsfristVilkårsvurderinger;
+export default VilkårsvurderingerAvFristForFramsettingAvKrav;

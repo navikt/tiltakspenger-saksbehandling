@@ -1,29 +1,30 @@
 import React from 'react';
 import { Button, Heading, VStack } from '@navikt/ds-react';
-import styles from './SøknadsfristSaksopplysninger.module.css';
 import { formatDate } from '../../utils/date';
+import { KravdatoSaksopplysning } from '../../types/Behandling';
+import styles from './KravdatoSaksopplysninger.module.css';
 
-interface SøknadsfristSaksopplysningerProps {
-  opprinneligSøknadstidspunkt: Date;
+interface KravdatoSaksopplysningerProps {
+  kravdatoSaksopplysning: KravdatoSaksopplysning;
   visTilbakestillKnapp: boolean;
 }
 
-const SøknadsfristSaksopplysninger = ({
-  opprinneligSøknadstidspunkt,
+const KravdatoSaksopplysninger = ({
+  kravdatoSaksopplysning,
   visTilbakestillKnapp,
-}: SøknadsfristSaksopplysningerProps) => {
+}: KravdatoSaksopplysningerProps) => {
   return (
-    <div className={styles.søknadsfristSaksopplysninger__container}>
+    <div className={styles.kravdatoSaksopplysninger__container}>
       <Heading size="small">Fra søknad</Heading>
-      <VStack gap="1" className={styles.søknadsfristSaksopplysninger__dataGrid}>
+      <VStack gap="1" className={styles.kravdatoSaksopplysninger__dataGrid}>
         <span>Kravdato:</span>
-        <span>{formatDate(opprinneligSøknadstidspunkt.toDateString())}</span>
+        <span>{formatDate(kravdatoSaksopplysning.verdi)}</span>
         <span>Kilde:</span>
         <span>Søknad</span>
       </VStack>
       {visTilbakestillKnapp && (
         <Button
-          className={styles.søknadsfristSaksopplysninger__tilbakestillKnapp}
+          className={styles.kravdatoSaksopplysninger__tilbakestillKnapp}
           variant="secondary"
           type="button"
           size="small"
@@ -38,4 +39,4 @@ const SøknadsfristSaksopplysninger = ({
   );
 };
 
-export default SøknadsfristSaksopplysninger;
+export default KravdatoSaksopplysninger;

@@ -1,21 +1,21 @@
-.søknadsfristVilkårsvurderinger__container {
+.vilkårsvurderingerAvFristForFramsettingAvKrav__container {
     display: flex;
     width: 50%;
     flex-direction: column;
 }
 
-.søknadsfristVilkårsvurderinger__endreKnapp {
+.vilkårsvurderingerAvFristForFramsettingAvKrav__endreKnapp {
     /* todo: kommenter ut denne linja når man skal støtte at saksbehandler endrer manuelt */
     display: none;
     align-self: end;
     margin-top: 1rem;
 }
 
-.søknadsfristVurderingRad {
+.vilkårsvurderingerAvFristForFramsettingAvKravVurderingRad {
     position: relative;
 }
 
-.søknadsfristVurderingRad__utfallIkon {
+.vilkårsvurderingerAvFristForFramsettingAvKravVurderingRad__utfallIkon {
     position: absolute;
     right: 8px;
     top: 10px;

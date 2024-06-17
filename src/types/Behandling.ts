@@ -35,9 +35,14 @@ export interface Behandling {
 }
 
 interface KravdatoSaksopplysninger {
-  opprinneligSøknadstidspunkt: string;
-  søknadstidspunktFraSaksbehandler: string;
+  opprinneligKravdato: KravdatoSaksopplysning;
+  kravdatoFraSaksbehandler: KravdatoSaksopplysning;
   vurderinger: Vurdering[];
+}
+
+export interface KravdatoSaksopplysning {
+  verdi: string;
+  kilde: string;
 }
 
 export interface Utfallsperiode {
