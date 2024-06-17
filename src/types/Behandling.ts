@@ -1,5 +1,5 @@
 import { Periode } from './Periode';
-import Søknad, { AntallDagerSaksopplysning, RegistrertTiltak } from './Søknad';
+import { RegistrertTiltak } from './Søknad';
 import { Utfall } from './Utfall';
 
 interface Vilkår {
@@ -23,7 +23,7 @@ export interface Behandling {
   vurderingsperiode: Periode;
   søknadsdato: Date;
   tiltaksdeltagelsesaksopplysninger: TiltaksdeltagelsesaksopplysningerDTO;
-  stønadsdager: StønadsdagerDTO[];
+  stønadsdager: StønadsdagerDTO;
   alderssaksopplysning: Aldersaksopplysning;
   ytelsessaksopplysninger: Ytelsessaksopplysninger;
   personopplysninger: Personopplysninger;
@@ -87,10 +87,22 @@ export interface TiltaksdeltagelsesaksopplysningerDTO {
 }
 
 export interface StønadsdagerDTO {
+  vilkår: string;
+  vilkårLovreferanse: LovreferanseDTO;
+  antallDagerSaksopplysninger: StønadsdagerSaksopplysning[];
+}
+
+export interface StønadsdagerSaksopplysning {
   tiltak: string;
   arrangør: string;
+  avklartAntallDager: Stønadsdager[];
+  antallDagerSaksopplysningerFraRegister: Stønadsdager[];
+}
+
+export interface Stønadsdager {
+  periode: Periode;
+  antallDager: number;
   kilde: string;
-  saksopplysninger: AntallDagerSaksopplysning;
 }
 
 export interface LovreferanseDTO {
