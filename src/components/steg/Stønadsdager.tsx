@@ -23,13 +23,12 @@ const VilkårsvurderingAvStønadsdager = () => {
         <Heading size={'small'} style={{ marginTop: '1rem' }}>
           Hvor mange dager skal bruker delta på tiltak?
         </Heading>
-        {stønadsDager.antallDagerSaksopplysninger.map(
-          (stønadsdagerSaksopplysning) => (
-            <TiltakMedAntallDager
-              stønadsdagerSaksopplysning={stønadsdagerSaksopplysning}
-            />
-          ),
-        )}
+        {stønadsDager.map((stønadsdagerSaksopplysning) => (
+          <TiltakMedAntallDager
+            key={stønadsdagerSaksopplysning.tiltak}
+            stønadsdagerSaksopplysning={stønadsdagerSaksopplysning}
+          />
+        ))}
       </VStack>
     </div>
   );

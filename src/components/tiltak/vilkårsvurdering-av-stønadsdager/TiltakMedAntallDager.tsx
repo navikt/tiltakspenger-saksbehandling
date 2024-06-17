@@ -18,9 +18,7 @@ const TiltakMedAntallDager = ({
       />
       <div className={styles.verticalLine}></div>
       <TiltaksdataFraRegister
-        tiltak={
-          stønadsdagerSaksopplysning.antallDagerSaksopplysningerFraRegister
-        }
+        antallDagerSaksopplysning={stønadsdagerSaksopplysning}
       />
     </div>
   );

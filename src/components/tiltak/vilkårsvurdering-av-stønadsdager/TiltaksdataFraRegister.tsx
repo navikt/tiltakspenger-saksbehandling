@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { BodyShort, Button, Heading, VStack } from '@navikt/ds-react';
 import styles from './TiltaksdataFraRegister.module.css';
-import {
-  AntallDagerSaksopplysninger,
-  RegistrertTiltak,
-} from '../../types/Søknad';
 import { useRouter } from 'next/router';
 import { useSWRConfig } from 'swr';
+import {
+  Stønadsdager,
+  StønadsdagerSaksopplysning,
+} from '../../../types/Behandling';
 
 interface TiltaksdataFraRegisterProps {
-  tiltak: RegistrertTiltak;
+  antallDagerSaksopplysning: StønadsdagerSaksopplysning;
 }
 
 async function tilbakestillAntallDager(behandlingId: string, tiltakId: string) {
@@ -27,27 +27,18 @@ async function tilbakestillAntallDager(behandlingId: string, tiltakId: string) {
   return response;
 }
 
-function utledAntallDagerFraRegister({
-  antallDagerSaksopplysningerFraRegister,
-}: AntallDagerSaksopplysninger) {
-  if (
-    !antallDagerSaksopplysningerFraRegister ||
-    antallDagerSaksopplysningerFraRegister.length === 0
-  ) {
-    return 'Mangler data fra register';
-  }
-  const [antallDagerSaksopplysning] = antallDagerSaksopplysningerFraRegister;
-  return antallDagerSaksopplysning.antallDager;
-}
-
 const TiltaksdataFraRegister = ({
-  tiltak: { id: tiltakId, navn, kilde, arrangør, antallDagerSaksopplysninger },
+  antallDagerSaksopplysning: {
+    tiltak,
+    arrangør,
+    tiltakId,
+    antallDagerSaksopplysningerFraRegister: { antallDager, kilde },
+  },
 }: TiltaksdataFraRegisterProps) => {
   const [feilmelding, setFeilmelding] = useState('');
   const mutator = useSWRConfig().mutate;
 
   const router = useRouter();
-  const antallDager = utledAntallDagerFraRegister(antallDagerSaksopplysninger);
   const behandlingId = router.query.behandlingId as string;
 
   return (
@@ -55,11 +46,11 @@ const TiltaksdataFraRegister = ({
       <Heading size="small">Registerdata</Heading>
       <VStack gap="1" className={styles.tiltaksdataFraRegister__dataGrid}>
         <span>Tiltaksvariant:</span>
-        <span>{navn}</span>
+        <span>{tiltak}</span>
         <span>Arrangør:</span>
         <span>{arrangør}</span>
         <span>Antall dager per uke:</span>
-        <span>{antallDager}</span>
+        <span>{antallDager ? antallDager : 'Mangler registerdata'}</span>
         <span>Kilde:</span>
         <span>{kilde}</span>
       </VStack>

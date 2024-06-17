@@ -23,7 +23,7 @@ export interface Behandling {
   vurderingsperiode: Periode;
   søknadsdato: Date;
   tiltaksdeltagelsesaksopplysninger: TiltaksdeltagelsesaksopplysningerDTO;
-  stønadsdager: StønadsdagerDTO;
+  stønadsdager: StønadsdagerSaksopplysning[];
   alderssaksopplysning: Aldersaksopplysning;
   ytelsessaksopplysninger: Ytelsessaksopplysninger;
   personopplysninger: Personopplysninger;
@@ -86,17 +86,12 @@ export interface TiltaksdeltagelsesaksopplysningerDTO {
   vilkårLovreferanse: LovreferanseDTO;
 }
 
-export interface StønadsdagerDTO {
-  vilkår: string;
-  vilkårLovreferanse: LovreferanseDTO;
-  antallDagerSaksopplysninger: StønadsdagerSaksopplysning[];
-}
-
 export interface StønadsdagerSaksopplysning {
+  tiltakId: string;
   tiltak: string;
   arrangør: string;
   avklartAntallDager: Stønadsdager[];
-  antallDagerSaksopplysningerFraRegister: Stønadsdager[];
+  antallDagerSaksopplysningerFraRegister: Stønadsdager;
 }
 
 export interface Stønadsdager {
