@@ -4,7 +4,6 @@ import styles from './TiltaksdataFraRegister.module.css';
 import { useRouter } from 'next/router';
 import { useSWRConfig } from 'swr';
 import {
-  Stønadsdager,
   StønadsdagerSaksopplysning,
 } from '../../../types/Behandling';
 

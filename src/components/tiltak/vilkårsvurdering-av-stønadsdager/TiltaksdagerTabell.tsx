@@ -1,11 +1,15 @@
 import React, { useRef } from 'react';
 import { Button, Table } from '@navikt/ds-react';
 import styles from './TiltaksdagerTabell.module.css';
-import { formatPeriode } from '../../../utils/date';
-import { Stønadsdager } from '../../../types/Behandling';
+import { formatDateShort, formatPeriode } from '../../../utils/date';
+import { Stønadsdager, StønadsdagerSaksopplysning } from '../../../types/Behandling';
+import EndreAntallDagerModal from './EndreAntallDagerModal';
+import { useHentBehandling } from '../../../hooks/useHentBehandling';
+import { useRouter } from 'next/router';
+import dayjs from 'dayjs';
 
 interface StønadsdagerTabellProps {
-  stønadsdager: Stønadsdager[];
+  stønadsdager: StønadsdagerSaksopplysning;
 }
 
 function renderAntallDagerSaksopplysningRad({
@@ -24,9 +28,12 @@ function renderAntallDagerSaksopplysningRad({
 }
 
 const TiltaksdagerTabell = ({ stønadsdager }: StønadsdagerTabellProps) => {
-  const ref = useRef(null);
-  return (
-    <div className={styles.tiltaksdagerTabell__container}>
+  const ref = useRef(null);  
+  const router = useRouter();
+  const behandlingId = router.query.behandlingId as string;
+  const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);  return (
+  
+  <div className={styles.tiltaksdagerTabell__container}>
       <Table>
         <Table.Header>
           <Table.Row>
@@ -36,7 +43,7 @@ const TiltaksdagerTabell = ({ stønadsdager }: StønadsdagerTabellProps) => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {stønadsdager.map((stø) => renderAntallDagerSaksopplysningRad(stø))}
+          {stønadsdager.avklartAntallDager.map((stø) => renderAntallDagerSaksopplysningRad(stø))}
         </Table.Body>
       </Table>
       <Button
@@ -48,12 +55,12 @@ const TiltaksdagerTabell = ({ stønadsdager }: StønadsdagerTabellProps) => {
       >
         Endre antall dager per uke
       </Button>
-      {/*<EndreAntallDagerModal*/}
-      {/*  ref={ref}*/}
-      {/*  minDate={dayjs(periode.fra).toDate()}*/}
-      {/*  maxDate={dayjs(periode.til).toDate()}*/}
-      {/*  tiltakId={props.tiltak.id}*/}
-      {/*/>*/}
+      <EndreAntallDagerModal
+       ref={ref}
+       minDate={dayjs(valgtBehandling?.vurderingsperiode.fra).toDate()}
+       maxDate={dayjs(valgtBehandling?.vurderingsperiode.til).toDate()}
+      tiltakId={stønadsdager.tiltakId}
+      />
     </div>
   );
 };

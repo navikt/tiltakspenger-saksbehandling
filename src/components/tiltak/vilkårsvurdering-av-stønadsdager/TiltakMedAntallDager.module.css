@@ -4,6 +4,7 @@
     padding: 1rem;
     display: flex;
     flex-direction: row;
+    background-color: #FFFFFF;
 }
 
 .verticalLine {

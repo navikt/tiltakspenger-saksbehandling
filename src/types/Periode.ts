@@ -1,6 +1,6 @@
 export type Periode = {
-  fra: string;
-  til: string;
+  fra: Date;
+  til: Date;
 };
 
 export type ÅpenPeriode = {

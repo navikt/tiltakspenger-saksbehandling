@@ -14,7 +14,7 @@ const TiltakMedAntallDager = ({
   return (
     <div className={styles.tiltakMedAntallDager}>
       <TiltaksdagerTabell
-        stønadsdager={stønadsdagerSaksopplysning.avklartAntallDager}
+        stønadsdager={stønadsdagerSaksopplysning}
       />
       <div className={styles.verticalLine}></div>
       <TiltaksdataFraRegister

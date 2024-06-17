@@ -9,7 +9,6 @@ import {
 } from '@navikt/ds-react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useSWRConfig } from 'swr';
-import { AntallDagerSaksopplysning } from '../../../types/Søknad';
 import { useRouter } from 'next/router';
 import { dateToISO } from '../../../utils/date';
 import Periodefelt from '../../saksopplysning-tabell/Periodefelt';
@@ -18,6 +17,7 @@ import {
   påkrevdPeriodeValidator,
 } from '../../../utils/validation';
 import Flervalgsfelt from '../../flervalgsfelt/Flervalgsfelt';
+import { Stønadsdager } from '../../../types/Behandling';
 
 interface SkjemaFelter {
   periode: {
@@ -34,7 +34,7 @@ interface EndreAntallDagerModalProps {
 }
 
 async function oppdaterAntallDager(
-  antallDager: AntallDagerSaksopplysning,
+  antallDager: Stønadsdager,
   behandlingId: string,
   tiltakId: string,
 ) {
@@ -88,7 +88,7 @@ const EndreAntallDagerModal = forwardRef<
       formMethods.reset();
       await oppdaterAntallDager(
         {
-          antallDager: +data.antallDager,
+          antallDager: data.antallDager,
           periode: {
             fra,
             til,
