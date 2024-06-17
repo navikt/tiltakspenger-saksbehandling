@@ -21,9 +21,8 @@ import styles from './Vilkårsvurdering.module.css';
 import UtfallAlert from './UtfallAlert';
 import { PersonCircleIcon } from '@navikt/aksel-icons';
 import VilkårsvurderingAvTiltaksdeltagelse from '../vilkårsvurdering-av-tiltaksdeltagelse/VilkårsvurderingAvTiltaksdeltagelse';
-import { Utfall } from '../../types/Utfall';
 import VilkårsvurderingAvSøknadsfrist from '../vilkårsvurdering-av-søknadsfrist/VilkårsvurderingAvSøknadsfrist';
-import dayjs from 'dayjs';
+import { toDate } from '../../utils/date';
 
 interface VilkårsvurderingProps {
   valgtBehandling: Behandling;
@@ -57,6 +56,19 @@ export const Vilkårsvurdering = ({
   lesevisning,
 }: VilkårsvurderingProps) => {
   const modalRef = useRef<HTMLDialogElement>(null);
+
+  const {
+    kravdatoSaksopplysninger: {
+      søknadstidspunktFraSaksbehandler,
+      opprinneligSøknadstidspunkt,
+      vurderinger,
+    },
+  } = valgtBehandling;
+
+  const opprinneligSøknadstidspunktDate = toDate(opprinneligSøknadstidspunkt);
+  const søknadstidspunktFraSaksbehandlerDate = søknadstidspunktFraSaksbehandler
+    ? toDate(søknadstidspunktFraSaksbehandler)
+    : null;
 
   const hentLovDataURLen = (lovverk: string, paragraf: string) => {
     if (lovverk == 'Tiltakspengeforskriften')
@@ -106,18 +118,9 @@ export const Vilkårsvurdering = ({
 
       <UtfallAlert utfall={valgtBehandling.samletUtfall} />
       <VilkårsvurderingAvSøknadsfrist
-        opprinneligSøknadstidspunkt={dayjs().toDate()}
-        søknadstidspunktFraSaksbehandler={dayjs().toDate()}
-        vurderinger={[
-          {
-            periode: {
-              fra: dayjs().toDate() as any,
-              til: dayjs().toDate() as any,
-            },
-            utfall: Utfall.OPPFYLT,
-          },
-        ]}
-        samletUtfall={Utfall.OPPFYLT}
+        opprinneligSøknadstidspunkt={opprinneligSøknadstidspunktDate}
+        søknadstidspunktFraSaksbehandler={søknadstidspunktFraSaksbehandlerDate}
+        vurderinger={vurderinger}
       />
       <VilkårsvurderingAvTiltaksdeltagelse
         registrerteTiltak={valgtBehandling.registrerteTiltak}

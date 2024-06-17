@@ -10,9 +10,8 @@ import styles from './VilkårsvurderingAvSøknadsfrist.module.css';
 
 interface SøknadsfristData {
   opprinneligSøknadstidspunkt: Date;
-  søknadstidspunktFraSaksbehandler: Date;
+  søknadstidspunktFraSaksbehandler: Date | null;
   vurderinger: Vurdering[];
-  samletUtfall: Utfall;
 }
 
 function inneholderOppfyltePerioder(vurderinger: Vurdering[]) {
@@ -30,7 +29,6 @@ const VilkårsvurderingAvSøknadsfrist = ({
     } else {
       return Utfall.IKKE_OPPFYLT;
     }
-    // TODO: Finne ut av statehåndtering, siden 'vurderinger' er en Array (useMemo trigges ikke hvis kun innholdet endres)
   }, vurderinger);
   return (
     <VStack gap="4">
@@ -43,7 +41,6 @@ const VilkårsvurderingAvSøknadsfrist = ({
             søknadstidspunktFraSaksbehandler || opprinneligSøknadstidspunkt
           }
           kravdatoKilde={
-            // TODO: Finne ut av om kilden bør sendes fra backend, eller om det i dette tilfellet er greit å hardkode i front
             søknadstidspunktFraSaksbehandler ? 'Saksbehandler' : 'Søknad'
           }
         />
