@@ -11,6 +11,8 @@
 }
 
 .søknadsfristSaksopplysninger__tilbakestillKnapp {
+    /* todo: kommenter ut denne linja når man skal støtte at saksbehandler endrer manuelt */
+    display: none;
     margin-top: 2rem;
     align-self: end;
 }

@@ -5,6 +5,8 @@
 }
 
 .søknadsfristVilkårsvurderinger__endreKnapp {
+    /* todo: kommenter ut denne linja når man skal støtte at saksbehandler endrer manuelt */
+    display: none;
     align-self: end;
     margin-top: 1rem;
 }
