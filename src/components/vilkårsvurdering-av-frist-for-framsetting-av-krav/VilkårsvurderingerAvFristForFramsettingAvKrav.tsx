@@ -23,22 +23,13 @@ const VilkårsvurderingAvFristForFramsettingAvKravRad = ({
 }: VilkårsvurderingAvFristForFramsettingAvKravRadProps) => {
   const formattertPeriode = formatPeriode(periode);
   return (
-    <Table.Row
-      className={
-        styles.vilkårsvurderingerAvFristForFramsettingAvKravVurderingRad
-      }
-      key={formattertPeriode}
-    >
+    <Table.Row className={styles.vurderingRad} key={formattertPeriode}>
       <Table.DataCell>{formattertPeriode}</Table.DataCell>
       <Table.DataCell>{formatDate(kravdato.toDateString())}</Table.DataCell>
       <Table.DataCell>
         {utfall === Utfall.OPPFYLT ? 'Ja' : 'Nei'}
       </Table.DataCell>
-      <div
-        className={
-          styles.vilkårsvurderingerAvFristForFramsettingAvKravVurderingRad__utfallIkon
-        }
-      >
+      <div className={styles.vurderingRad__utfallIkon}>
         <UtfallIkon utfall={utfall} />
       </div>
     </Table.Row>
@@ -52,11 +43,7 @@ const VilkårsvurderingerAvFristForFramsettingAvKrav = ({
   const ref = useRef(null);
   const kravdato = React.useMemo(() => toDate(verdi), [verdi]);
   return (
-    <div
-      className={
-        styles.vilkårsvurderingerAvFristForFramsettingAvKrav__container
-      }
-    >
+    <div className={styles.container}>
       <Table>
         <Table.Header>
           <Table.Row>
@@ -76,9 +63,7 @@ const VilkårsvurderingerAvFristForFramsettingAvKrav = ({
         </Table.Body>
       </Table>
       <Button
-        className={
-          styles.vilkårsvurderingerAvFristForFramsettingAvKrav__endreKnapp
-        }
+        className={styles.endreKnapp}
         variant="secondary"
         type="button"
         size="small"

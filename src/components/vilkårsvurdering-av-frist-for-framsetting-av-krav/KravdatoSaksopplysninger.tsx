@@ -14,9 +14,9 @@ const KravdatoSaksopplysninger = ({
   visTilbakestillKnapp,
 }: KravdatoSaksopplysningerProps) => {
   return (
-    <div className={styles.kravdatoSaksopplysninger__container}>
+    <div className={styles.container}>
       <Heading size="small">Fra søknad</Heading>
-      <VStack gap="1" className={styles.kravdatoSaksopplysninger__dataGrid}>
+      <VStack gap="1" className={styles.dataGrid}>
         <span>Kravdato:</span>
         <span>{formatDate(kravdatoSaksopplysning.verdi)}</span>
         <span>Kilde:</span>
@@ -24,7 +24,7 @@ const KravdatoSaksopplysninger = ({
       </VStack>
       {visTilbakestillKnapp && (
         <Button
-          className={styles.kravdatoSaksopplysninger__tilbakestillKnapp}
+          className={styles.tilbakestillKnapp}
           variant="secondary"
           type="button"
           size="small"

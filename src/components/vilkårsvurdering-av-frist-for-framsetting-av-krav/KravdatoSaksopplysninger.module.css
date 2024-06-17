@@ -1,16 +1,16 @@
-.kravdatoSaksopplysninger__container {
+.container {
     display: flex;
     width: 50%;
     flex-direction: column;
 }
 
-.kravdatoSaksopplysninger__dataGrid {
+.dataGrid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     margin-top: 0.5rem;
 }
 
-.kravdatoSaksopplysninger__tilbakestillKnapp {
+.tilbakestillKnapp {
     /* todo: kommenter ut denne linja når man skal støtte at saksbehandler endrer manuelt */
     display: none;
     margin-top: 2rem;

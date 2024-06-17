@@ -41,7 +41,7 @@ const VilkårsvurderingAvFristForFramsettingAvKrav = ({
     <VStack gap="4">
       <VilkårsvurderingAvFristForFramsettingAvKravHeading />
       <UtfallstekstMedIkon utfall={samletUtfall} />
-      <div className={styles.vilkårsvurderingAvFristForFramsettingAvKrav}>
+      <div className={styles.container}>
         <VilkårsvurderingerAvFristForFramsettingAvKrav
           vurderinger={vurderinger}
           kravdatoSaksopplysning={gjeldendeKravdato}
