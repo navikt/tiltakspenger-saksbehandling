@@ -1,11 +1,10 @@
-import { BodyShort, HStack, Loader } from '@navikt/ds-react';
+import { Loader } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
-import { UtfallIkon } from '../utfall-ikon/UtfallIkon';
 import StegHeader from './StegHeader';
 import StegKort from './StegKort';
-import { finnUtfallTekst } from '../../utils/tekstformateringUtils';
 import { formatDateObject } from '../../utils/date';
+import UtfallstekstMedIkon from './UtfallstekstMedIkon';
 
 const Alder = () => {
   const router = useRouter();
@@ -30,12 +29,7 @@ const Alder = () => {
         }
         paragraf={'§3'}
       />
-      <HStack gap="3" align="center" style={{ marginBottom: '1em' }}>
-        <UtfallIkon utfall={saksopplysning.utfall} />
-        <BodyShort>
-          {`Vilkåret er ${finnUtfallTekst(saksopplysning.utfall)} for hele eller deler av perioden`}
-        </BodyShort>
-      </HStack>
+      <UtfallstekstMedIkon utfall={saksopplysning.utfall} />
       <StegKort
         editerbar={false}
         behandlingId={valgtBehandling.behandlingId}

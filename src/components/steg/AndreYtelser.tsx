@@ -1,13 +1,12 @@
-import { Loader, HStack, BodyShort } from '@navikt/ds-react';
+import { Loader } from '@navikt/ds-react';
 import { SaksopplysningTabell } from '../saksopplysning-tabell/SaksopplysningTabell';
 import { useRouter } from 'next/router';
 import { useContext } from 'react';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
 import { SaksbehandlerContext } from '../../pages/_app';
 import { avklarLesevisning } from '../../utils/avklarLesevisning';
-import { UtfallIkon } from '../utfall-ikon/UtfallIkon';
 import StegHeader from './StegHeader';
-import { finnUtfallTekst } from '../../utils/tekstformateringUtils';
+import UtfallstekstMedIkon from './UtfallstekstMedIkon';
 
 export const AndreYtelser = () => {
   const router = useRouter();
@@ -42,12 +41,7 @@ export const AndreYtelser = () => {
           'https://lovdata.no/dokument/SF/forskrift/2013-11-04-1286'
         }
       />
-      <HStack gap="3" align="center" style={{ marginBottom: '1em' }}>
-        <UtfallIkon utfall={andreYtelser.samletUtfall} />
-        <BodyShort>
-          {`Vilkåret er ${finnUtfallTekst(andreYtelser.samletUtfall)} for hele eller deler av perioden`}
-        </BodyShort>
-      </HStack>
+      <UtfallstekstMedIkon utfall={andreYtelser.samletUtfall} />
       <SaksopplysningTabell
         saksopplysninger={andreYtelser.saksopplysninger.filter(
           (saksopplysning) =>
