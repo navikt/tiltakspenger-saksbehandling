@@ -1,6 +1,7 @@
 import { Periode } from './Periode';
 import { RegistrertTiltak } from './Søknad';
 import { Utfall } from './Utfall';
+import { Vurdering } from './Vurdering';
 
 interface Vilkår {
   lovreferanse: string;
@@ -32,6 +33,18 @@ export interface Behandling {
   endringslogg: Endring[];
   samletUtfall: Utfall;
   utfallsperioder: Utfallsperiode[];
+  kravdatoSaksopplysninger: KravdatoSaksopplysninger;
+}
+
+interface KravdatoSaksopplysninger {
+  opprinneligKravdato: KravdatoSaksopplysning;
+  kravdatoFraSaksbehandler: KravdatoSaksopplysning;
+  vurderinger: Vurdering[];
+}
+
+export interface KravdatoSaksopplysning {
+  verdi: string;
+  kilde: string;
 }
 
 export interface Utfallsperiode {
