@@ -3,10 +3,9 @@ import { CheckmarkCircleFillIcon, TasklistIcon } from '@navikt/aksel-icons';
 import Link from 'next/link';
 import styles from './InngangsvilkårSteg.module.css';
 import { useRouter } from 'next/router';
-import ListItem from '@navikt/ds-react/esm/list/ListItem';
 
 const vilkår = [
-  { tittel: 'Søknadstidspunkt', url: 'soknadstidspunkt' },
+  { tittel: 'Frist for framsetting av krav', url: 'kravfrist' },
   { tittel: 'Tiltaksdeltagelse', url: 'tiltaksdeltagelse' },
   { tittel: 'Alder', url: 'alder' },
   { tittel: 'Andre ytelser', url: 'andreytelser' },

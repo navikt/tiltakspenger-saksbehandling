@@ -18,7 +18,7 @@ const KravdatoSaksopplysninger = ({
       <Heading size="small">Fra søknad</Heading>
       <VStack gap="1" className={styles.dataGrid}>
         <BodyShort>Kravdato:</BodyShort>
-        <BodyShort>{formatDate(kravdatoSaksopplysning.verdi)}</BodyShort>
+        <BodyShort>{formatDate(kravdatoSaksopplysning.kravdato)}</BodyShort>
         <BodyShort>Kilde:</BodyShort>
         <BodyShort>Søknad</BodyShort>
       </VStack>

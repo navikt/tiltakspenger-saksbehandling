@@ -1,6 +1,6 @@
 export enum Behandlingssteg {
   ALDER = 'alder',
-  SØKNADSTIDSPUNKT = 'soknadstidspunkt',
+  KRAVFRIST = 'kravfrist',
   TILTAKSDELTAGELSE = 'tiltaksdeltagelse',
   KVP = 'kvp',
   INTROPROGRAMMET = 'intro',

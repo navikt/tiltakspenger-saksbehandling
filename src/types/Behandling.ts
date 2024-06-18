@@ -37,13 +37,15 @@ export interface Behandling {
 }
 
 interface KravdatoSaksopplysninger {
+  samletUtfall: Utfall;
   opprinneligKravdato: KravdatoSaksopplysning;
   kravdatoFraSaksbehandler: KravdatoSaksopplysning;
   vurderinger: Vurdering[];
+  lovreferanse: LovreferanseDTO;
 }
 
 export interface KravdatoSaksopplysning {
-  verdi: string;
+  kravdato: string;
   kilde: string;
 }
 
@@ -51,7 +53,7 @@ export interface Utfallsperiode {
   fom: string;
   tom: string;
   antallBarn: number;
-  utfall: string;
+  utfall: Utfall;
 }
 
 export interface Endring {
@@ -89,7 +91,7 @@ export interface Personopplysninger {
 export interface Ytelsessaksopplysninger {
   vilkår: string;
   saksopplysninger: SaksopplysningInnDTO[];
-  samletUtfall: string;
+  samletUtfall: Utfall;
   vilkårLovreferanse: LovreferanseDTO;
 }
 
@@ -125,7 +127,7 @@ export interface SaksopplysningInnDTO {
   detaljer: string;
   saksopplysning: string;
   saksopplysningTittel: string;
-  utfall: string;
+  utfall: Utfall;
 }
 
 export interface Aldersaksopplysning {
@@ -134,7 +136,7 @@ export interface Aldersaksopplysning {
   detaljer: string;
   vilkår: string;
   vilkårTittel: string;
-  utfall: string;
+  utfall: Utfall;
   vilkårLovreferanse: LovreferanseDTO[];
   grunnlag: Date;
 }

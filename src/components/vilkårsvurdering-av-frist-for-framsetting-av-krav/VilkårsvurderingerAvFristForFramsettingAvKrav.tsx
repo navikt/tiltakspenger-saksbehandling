@@ -38,10 +38,10 @@ const VilkårsvurderingAvFristForFramsettingAvKravRad = ({
 
 const VilkårsvurderingerAvFristForFramsettingAvKrav = ({
   vurderinger,
-  kravdatoSaksopplysning: { verdi, kilde },
+  kravdatoSaksopplysning: { kravdato, kilde },
 }: VilkårsvurderingerAvFristForFramsettingAvKravProps) => {
   const ref = useRef(null);
-  const kravdato = React.useMemo(() => toDate(verdi), [verdi]);
+  const kravdatoopplysning = React.useMemo(() => toDate(kravdato), [kravdato]);
   return (
     <div className={styles.container}>
       <Table>
@@ -56,7 +56,7 @@ const VilkårsvurderingerAvFristForFramsettingAvKrav = ({
           {vurderinger.map((vurdering) => (
             <VilkårsvurderingAvFristForFramsettingAvKravRad
               vurdering={vurdering}
-              kravdato={kravdato}
+              kravdato={kravdatoopplysning}
               key={formatPeriode(vurdering.periode)}
             />
           ))}
