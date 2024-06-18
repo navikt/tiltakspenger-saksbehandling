@@ -1,9 +1,12 @@
 import { List, VStack } from '@navikt/ds-react';
-import { CheckmarkCircleFillIcon, TasklistIcon } from '@navikt/aksel-icons';
+import {
+  CheckmarkCircleFillIcon,
+  PuzzlePieceIcon,
+  TasklistIcon,
+} from '@navikt/aksel-icons';
 import Link from 'next/link';
-import styles from './InngangsvilkårSteg.module.css';
+import styles from './InngangsvilkårSidemeny.module.css';
 import { useRouter } from 'next/router';
-import ListItem from '@navikt/ds-react/esm/list/ListItem';
 
 const vilkår = [
   { tittel: 'Søknadstidspunkt', url: 'soknadstidspunkt' },
@@ -15,7 +18,7 @@ const vilkår = [
   { tittel: 'Institusjonsopphold', url: 'institusjonsopphold' },
 ];
 
-const InngangsvilkårSteg = () => {
+const InngangsvilkårSidemeny = () => {
   const router = useRouter();
   const behandlingId = router.query.behandlingId as string;
   const behandlingsteg = router.query.behandlingsteg as string;
@@ -26,13 +29,7 @@ const InngangsvilkårSteg = () => {
         {vilkår.map((vilkår) => (
           <List.Item
             key={vilkår.url}
-            icon={
-              <CheckmarkCircleFillIcon
-                width="1.5em"
-                height="1.5em"
-                color="var(--a-icon-success)"
-              />
-            }
+            icon={<PuzzlePieceIcon width="1.5em" height="1.5em" />}
           >
             <Link
               className={behandlingsteg === vilkår.url ? styles.aktivtSteg : ''}
@@ -57,15 +54,7 @@ const InngangsvilkårSteg = () => {
         </List.Item>
       </List>
       <List title="Beregning">
-        <List.Item
-          icon={
-            <CheckmarkCircleFillIcon
-              width="1.5em"
-              height="1.5em"
-              color="var(--a-icon-success)"
-            />
-          }
-        >
+        <List.Item icon={<PuzzlePieceIcon width="1.5em" height="1.5em" />}>
           <Link
             className={
               behandlingsteg === 'stonadsdager' ? styles.aktivtSteg : ''
@@ -80,4 +69,4 @@ const InngangsvilkårSteg = () => {
   );
 };
 
-export default InngangsvilkårSteg;
+export default InngangsvilkårSidemeny;
