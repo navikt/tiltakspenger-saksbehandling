@@ -23,7 +23,7 @@ const Alder = () => {
   return (
     <>
       <StegHeader
-        headertekst={saksopplysning.vilkårTittel}
+        headertekst={'Alder'}
         lovdatatekst={'Tiltakspenger og barnetillegg'}
         lovdatalenke={
           'https://lovdata.no/dokument/SF/forskrift/2013-11-04-1286'

@@ -24,7 +24,7 @@ const Introduksjonsprogrammet = () => {
   return (
     <>
       <StegHeader
-        headertekst={intro.saksopplysningTittel}
+        headertekst={'Introduksjonsprogrammet'}
         lovdatatekst={
           valgtBehandling.ytelsessaksopplysninger.vilkårLovreferanse.beskrivelse
         }

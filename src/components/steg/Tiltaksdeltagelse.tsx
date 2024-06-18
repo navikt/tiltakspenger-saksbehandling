@@ -20,7 +20,7 @@ const VilkårsvurderingAvTiltaksdeltagelse = () => {
   return (
     <>
       <StegHeader
-        headertekst={tiltak.vilkår}
+        headertekst={'Tiltaksdeltagelse'}
         lovdatatekst={tiltak.vilkårLovreferanse.beskrivelse}
         lovdatalenke={
           'https://lovdata.no/dokument/SF/forskrift/2013-11-04-1286'

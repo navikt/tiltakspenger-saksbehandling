@@ -24,7 +24,7 @@ const Kvalifiseringsprogrammet = () => {
   return (
     <>
       <StegHeader
-        headertekst={KVP.saksopplysningTittel}
+        headertekst={'Kvalifiseringsprogrammet'}
         lovdatatekst={
           valgtBehandling.ytelsessaksopplysninger.vilkårLovreferanse.beskrivelse
         }

@@ -26,7 +26,7 @@ const Institusjonsopphold = () => {
   return (
     <>
       <StegHeader
-        headertekst={saksopplysning.saksopplysningTittel}
+        headertekst={'Institusjonsopphold'}
         lovdatatekst="Opphold i institusjon, fengsel mv."
         lovdatalenke={
           'https://lovdata.no/dokument/SF/forskrift/2013-11-04-1286'
