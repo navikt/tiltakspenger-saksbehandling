@@ -1,4 +1,4 @@
-import { Loader } from '@navikt/ds-react';
+import { Loader, VStack } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
 import StegHeader from './StegHeader';
@@ -20,7 +20,7 @@ const Introduksjonsprogrammet = () => {
   );
   if (!intro) return <Loader />;
   return (
-    <>
+    <VStack gap="4">
       <StegHeader
         headertekst={intro.saksopplysningTittel}
         lovdatatekst={
@@ -46,7 +46,7 @@ const Introduksjonsprogrammet = () => {
         grunnlag={intro.utfall === 'OPPFYLT' ? 'Nei' : 'Ja'}
         grunnlagHeader={'Deltar'}
       />
-    </>
+    </VStack>
   );
 };
 

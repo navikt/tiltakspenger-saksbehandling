@@ -1,4 +1,4 @@
-import { Loader } from '@navikt/ds-react';
+import { Loader, VStack } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
 import StegHeader from './StegHeader';
@@ -20,7 +20,7 @@ const Alder = () => {
   if (!saksopplysning) return <Loader />;
 
   return (
-    <>
+    <VStack gap="4">
       <StegHeader
         headertekst={saksopplysning.vilkårTittel}
         lovdatatekst={'Tiltakspenger og barnetillegg'}
@@ -42,7 +42,7 @@ const Alder = () => {
         grunnlag={formatDateObject(saksopplysning.grunnlag)}
         grunnlagHeader={'Fødselsdato'}
       />
-    </>
+    </VStack>
   );
 };
 

@@ -1,4 +1,4 @@
-import { Loader } from '@navikt/ds-react';
+import { Loader, VStack } from '@navikt/ds-react';
 import { SaksopplysningTabell } from '../saksopplysning-tabell/SaksopplysningTabell';
 import { useRouter } from 'next/router';
 import { useContext } from 'react';
@@ -32,7 +32,7 @@ export const AndreYtelser = () => {
 
   if (!andreYtelser) return <Loader />;
   return (
-    <>
+    <VStack gap="4">
       <StegHeader
         headertekst={'Forholdet til andre ytelser'}
         lovdatatekst={andreYtelser.vilkårLovreferanse.beskrivelse}
@@ -54,6 +54,6 @@ export const AndreYtelser = () => {
         vurderingsperiode={valgtBehandling.vurderingsperiode}
         lesevisning={lesevisning}
       />
-    </>
+    </VStack>
   );
 };

@@ -1,4 +1,4 @@
-import { Loader } from '@navikt/ds-react';
+import { Loader, VStack } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
 import StegHeader from './StegHeader';
@@ -20,7 +20,7 @@ const Kvalifiseringsprogrammet = () => {
   );
   if (!KVP) return <Loader />;
   return (
-    <>
+    <VStack gap="4">
       <StegHeader
         headertekst={KVP.saksopplysningTittel}
         lovdatatekst={
@@ -46,7 +46,7 @@ const Kvalifiseringsprogrammet = () => {
         grunnlag={KVP.utfall == 'OPPFYLT' ? 'Nei' : 'Ja'}
         grunnlagHeader={'Deltar'}
       />
-    </>
+    </VStack>
   );
 };
 

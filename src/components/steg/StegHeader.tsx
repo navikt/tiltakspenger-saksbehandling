@@ -19,7 +19,7 @@ const StegHeader = ({
       <Heading size="medium" level="3">
         {headertekst}
       </Heading>
-      <Link href={lovdatalenke} target="_blank" style={{ marginBottom: '1em' }}>
+      <Link href={lovdatalenke} target="_blank">
         {`Tiltakspengeforskriften ${paragraf} ${lovdatatekst}`}
       </Link>
     </>
