@@ -21,7 +21,7 @@ import styles from './Vilkårsvurdering.module.css';
 import UtfallAlert from './UtfallAlert';
 import { PersonCircleIcon } from '@navikt/aksel-icons';
 import VilkårsvurderingAvTiltaksdeltagelse from '../vilkårsvurdering-av-tiltaksdeltagelse/VilkårsvurderingAvTiltaksdeltagelse';
-import { Utfall } from '../../types/Utfall';
+import VilkårsvurderingAvFristForFramsettingAvKrav from '../vilkårsvurdering-av-frist-for-framsetting-av-krav/VilkårsvurderingAvFristForFramsettingAvKrav';
 
 interface VilkårsvurderingProps {
   valgtBehandling: Behandling;
@@ -55,6 +55,14 @@ export const Vilkårsvurdering = ({
   lesevisning,
 }: VilkårsvurderingProps) => {
   const modalRef = useRef<HTMLDialogElement>(null);
+
+  const {
+    kravdatoSaksopplysninger: {
+      kravdatoFraSaksbehandler,
+      opprinneligKravdato,
+      vurderinger,
+    },
+  } = valgtBehandling;
 
   const hentLovDataURLen = (lovverk: string, paragraf: string) => {
     if (lovverk == 'Tiltakspengeforskriften')
@@ -103,6 +111,11 @@ export const Vilkårsvurdering = ({
         )}
 
       <UtfallAlert utfall={valgtBehandling.samletUtfall} />
+      <VilkårsvurderingAvFristForFramsettingAvKrav
+        opprinneligKravdato={opprinneligKravdato}
+        kravdatoFraSaksbehandler={kravdatoFraSaksbehandler}
+        vurderinger={vurderinger}
+      />
       <VilkårsvurderingAvTiltaksdeltagelse
         registrerteTiltak={valgtBehandling.registrerteTiltak}
       />
