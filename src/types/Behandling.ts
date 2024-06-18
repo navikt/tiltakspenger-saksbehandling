@@ -35,8 +35,8 @@ export interface Behandling {
 }
 
 export interface Utfallsperiode {
-  fom: string;
-  tom: string;
+  fom: Date;
+  tom: Date;
   antallBarn: number;
   utfall: string;
 }

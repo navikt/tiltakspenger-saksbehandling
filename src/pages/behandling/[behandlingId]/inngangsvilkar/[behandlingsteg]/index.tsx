@@ -7,7 +7,7 @@ import { SaksbehandlingLayout } from '../../../../../components/layout/Saksbehan
 import { ReactElement } from 'react';
 import { NextPageWithLayout } from '../../../../_app';
 import { Saksdialog } from '../../../../../components/saksdialog/Saksdialog';
-import InngangsvilkårSteg from '../../../../../components/inngangsvilkårsteg/InngangsvilkårSteg';
+import InngangsvilkårSidemeny from '../../../../../components/inngangsvilkårSidemeny/InngangsvilkårSidemeny';
 import BehandlingSteg from '../../../../../components/behandlingSteg/BehandlingSteg';
 
 const Behandling: NextPageWithLayout = () => {
@@ -21,7 +21,7 @@ const Behandling: NextPageWithLayout = () => {
 
   return (
     <>
-      <InngangsvilkårSteg />
+      <InngangsvilkårSidemeny />
       <BehandlingSteg />
       <Saksdialog endringslogg={valgtBehandling.endringslogg} />
     </>

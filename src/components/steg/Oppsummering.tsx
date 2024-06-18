@@ -1,11 +1,4 @@
-import {
-  BodyShort,
-  Loader,
-  Heading,
-  Spacer,
-  VStack,
-  List,
-} from '@navikt/ds-react';
+import { BodyShort, Loader, Heading, VStack, List } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
 import { formatPeriode } from '../../utils/date';
@@ -13,7 +6,6 @@ import { BehandlingKnapper } from '../behandling-knapper/BehandlingKnapper';
 import { avklarLesevisning } from '../../utils/avklarLesevisning';
 import { useContext, useRef } from 'react';
 import { SaksbehandlerContext } from '../../pages/_app';
-import { Utfall } from '../../types/Utfall';
 
 const Oppsummering = () => {
   const router = useRouter();
@@ -57,8 +49,8 @@ const Oppsummering = () => {
     <VStack gap="10">
       <Heading size="medium">Oppsummering</Heading>
       <List style={{ background: '#FFFFFF', padding: '1em' }}>
-        {valgtBehandling.utfallsperioder.map((periode) => (
-          <List.Item key={periode.fom}>
+        {valgtBehandling.utfallsperioder.map((periode, i) => (
+          <List.Item key={periode.fom.toDateString() + i}>
             <BodyShort>{`${finnUtfallsperiodetekst(periode.utfall)} for perioden ${formatPeriode({ fra: periode.fom, til: periode.tom })}`}</BodyShort>
           </List.Item>
         ))}
