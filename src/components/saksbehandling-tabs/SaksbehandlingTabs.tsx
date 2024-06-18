@@ -27,7 +27,7 @@ export const SaksbehandlingTabs = ({
           label={'Inngangsvilkår'}
           icon={<FileTextIcon />}
           onClick={() => {
-            router.push(`/behandling/${behandlingId}/inngangsvilkar/alder`);
+            router.push(`/behandling/${behandlingId}/inngangsvilkar/kravfrist`);
           }}
         />
         <Tabs.Tab
