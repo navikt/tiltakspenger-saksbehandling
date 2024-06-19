@@ -51,7 +51,7 @@ const Oppsummering = () => {
       <List style={{ background: '#FFFFFF', padding: '1em' }}>
         {valgtBehandling.utfallsperioder.map((periode, i) => (
           <List.Item key={periode.fom.toDateString() + i}>
-            <BodyShort>{`${finnUtfallsperiodetekst(periode.utfall)} for perioden ${formatPeriode({ fra: periode.fom, til: periode.tom })}`}</BodyShort>
+            <BodyShort>{`${finnUtfallsperiodetekst(periode.utfall)} for perioden `}</BodyShort>
           </List.Item>
         ))}
       </List>

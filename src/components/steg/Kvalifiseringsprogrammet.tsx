@@ -1,11 +1,9 @@
-import { BodyShort, HStack, Loader } from '@navikt/ds-react';
+import { Loader, VStack } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
 import StegHeader from './StegHeader';
 import StegKort from './StegKort';
-import { Utfall } from '../../types/Utfall';
-import { finnUtfallTekst } from '../../utils/tekstformateringUtils';
-import { UtfallIkon } from '../utfall-ikon/UtfallIkon';
+import UtfallstekstMedIkon from './UtfallstekstMedIkon';
 
 const Kvalifiseringsprogrammet = () => {
   const router = useRouter();
@@ -22,7 +20,7 @@ const Kvalifiseringsprogrammet = () => {
   );
   if (!KVP) return <Loader />;
   return (
-    <>
+    <VStack gap="4">
       <StegHeader
         headertekst={'Kvalifiseringsprogrammet'}
         lovdatatekst={
@@ -35,12 +33,7 @@ const Kvalifiseringsprogrammet = () => {
           'https://lovdata.no/dokument/SF/forskrift/2013-11-04-1286'
         }
       />
-      <HStack gap="3" align="center" style={{ marginBottom: '1em' }}>
-        <UtfallIkon utfall={KVP.utfall} />
-        <BodyShort>
-          {`Vilkåret er ${finnUtfallTekst(Utfall.KREVER_MANUELL_VURDERING)} for hele eller deler av perioden`}
-        </BodyShort>
-      </HStack>
+      <UtfallstekstMedIkon utfall={KVP.utfall} />
       <StegKort
         editerbar={true}
         behandlingId={valgtBehandling.behandlingId}
@@ -53,7 +46,7 @@ const Kvalifiseringsprogrammet = () => {
         grunnlag={KVP.utfall == 'OPPFYLT' ? 'Nei' : 'Ja'}
         grunnlagHeader={'Deltar'}
       />
-    </>
+    </VStack>
   );
 };
 

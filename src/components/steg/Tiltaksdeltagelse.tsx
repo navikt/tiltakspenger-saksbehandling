@@ -1,11 +1,11 @@
 import React from 'react';
-import { BodyShort, HStack, Loader } from '@navikt/ds-react';
+import { Loader, VStack } from '@navikt/ds-react';
 import router from 'next/router';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
-import { UtfallIkon } from '../utfall-ikon/UtfallIkon';
 import StegHeader from './StegHeader';
-import { finnUtfallTekst } from '../../utils/tekstformateringUtils';
 import StegKort from './StegKort';
+import UtfallstekstMedIkon from './UtfallstekstMedIkon';
+import { Utfall } from '../../types/Utfall';
 
 const VilkårsvurderingAvTiltaksdeltagelse = () => {
   const behandlingId = router.query.behandlingId as string;
@@ -18,7 +18,7 @@ const VilkårsvurderingAvTiltaksdeltagelse = () => {
   const tiltak = valgtBehandling.tiltaksdeltagelsesaksopplysninger;
 
   return (
-    <>
+    <VStack gap="4">
       <StegHeader
         headertekst={'Tiltaksdeltagelse'}
         lovdatatekst={tiltak.vilkårLovreferanse.beskrivelse}
@@ -27,12 +27,7 @@ const VilkårsvurderingAvTiltaksdeltagelse = () => {
         }
         paragraf={tiltak.vilkårLovreferanse.paragraf}
       />
-      <HStack gap="3" align="center" style={{ marginBottom: '1em' }}>
-        <UtfallIkon utfall={tiltak.saksopplysninger[0].deltagelseUtfall} />
-        <BodyShort>
-          {`Vilkåret er ${finnUtfallTekst(tiltak.saksopplysninger[0].deltagelseUtfall)} for hele eller deler av perioden`}
-        </BodyShort>
-      </HStack>
+      <UtfallstekstMedIkon utfall={Utfall.KREVER_MANUELL_VURDERING} />
       {tiltak.saksopplysninger.map(
         ({ periode, navn, girRett, kilde, deltagelseUtfall }, i) => {
           return (
@@ -52,7 +47,7 @@ const VilkårsvurderingAvTiltaksdeltagelse = () => {
           );
         },
       )}
-    </>
+    </VStack>
   );
 };
 

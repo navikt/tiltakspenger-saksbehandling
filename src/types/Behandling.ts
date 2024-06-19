@@ -1,6 +1,7 @@
 import { Periode } from './Periode';
 import { RegistrertTiltak } from './Søknad';
 import { Utfall } from './Utfall';
+import { Vurdering } from './Vurdering';
 
 interface Vilkår {
   lovreferanse: string;
@@ -32,13 +33,27 @@ export interface Behandling {
   endringslogg: Endring[];
   samletUtfall: Utfall;
   utfallsperioder: Utfallsperiode[];
+  kravdatoSaksopplysninger: KravdatoSaksopplysninger;
+}
+
+interface KravdatoSaksopplysninger {
+  samletUtfall: Utfall;
+  opprinneligKravdato: KravdatoSaksopplysning;
+  kravdatoFraSaksbehandler: KravdatoSaksopplysning;
+  vurderinger: Vurdering[];
+  lovreferanse: LovreferanseDTO;
+}
+
+export interface KravdatoSaksopplysning {
+  kravdato: string;
+  kilde: string;
 }
 
 export interface Utfallsperiode {
   fom: Date;
   tom: Date;
   antallBarn: number;
-  utfall: string;
+  utfall: Utfall;
 }
 
 export interface Endring {
@@ -76,7 +91,7 @@ export interface Personopplysninger {
 export interface Ytelsessaksopplysninger {
   vilkår: string;
   saksopplysninger: SaksopplysningInnDTO[];
-  samletUtfall: string;
+  samletUtfall: Utfall;
   vilkårLovreferanse: LovreferanseDTO;
 }
 
@@ -112,7 +127,7 @@ export interface SaksopplysningInnDTO {
   detaljer: string;
   saksopplysning: string;
   saksopplysningTittel: string;
-  utfall: string;
+  utfall: Utfall;
 }
 
 export interface Aldersaksopplysning {
@@ -121,7 +136,7 @@ export interface Aldersaksopplysning {
   detaljer: string;
   vilkår: string;
   vilkårTittel: string;
-  utfall: string;
+  utfall: Utfall;
   vilkårLovreferanse: LovreferanseDTO[];
   grunnlag: Date;
 }

@@ -17,7 +17,7 @@ const VilkårsvurderingAvStønadsdager = () => {
   const stønadsDager = valgtBehandling.stønadsdager;
 
   return (
-    <div>
+    <>
       <VilkårsvurderingAvStønadsdagerHeading />
       <VStack gap="4">
         <Heading size={'small'} style={{ marginTop: '1rem' }}>
@@ -30,7 +30,7 @@ const VilkårsvurderingAvStønadsdager = () => {
           />
         ))}
       </VStack>
-    </div>
+    </>
   );
 };
 

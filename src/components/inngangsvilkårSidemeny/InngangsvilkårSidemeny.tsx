@@ -9,7 +9,7 @@ import styles from './InngangsvilkårSidemeny.module.css';
 import { useRouter } from 'next/router';
 
 const vilkår = [
-  { tittel: 'Søknadstidspunkt', url: 'soknadstidspunkt' },
+  { tittel: 'Frist for framsetting av krav', url: 'kravfrist' },
   { tittel: 'Tiltaksdeltagelse', url: 'tiltaksdeltagelse' },
   { tittel: 'Alder', url: 'alder' },
   { tittel: 'Andre ytelser', url: 'andreytelser' },

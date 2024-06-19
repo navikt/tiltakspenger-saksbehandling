@@ -1,0 +1,18 @@
+.container {
+    display: flex;
+    width: 50%;
+    flex-direction: column;
+}
+
+.dataGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-top: 0.5rem;
+}
+
+.tilbakestillKnapp {
+    /* todo: kommenter ut denne linja når man skal støtte at saksbehandler endrer manuelt */
+    display: none;
+    margin-top: 2rem;
+    align-self: end;
+}

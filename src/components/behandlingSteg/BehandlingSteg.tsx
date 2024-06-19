@@ -5,13 +5,14 @@ import { Behandlingssteg } from '../../types/Behandlingssteg';
 import Alder from '../steg/Alder';
 import styles from './BehandlingSteg.module.css';
 import { AndreYtelser } from '../steg/AndreYtelser';
-import Søknadstidspunkt from '../steg/Søknadstidspunkt';
+import Søknadstidspunkt from '../steg/FristForFramsettingAvKrav';
 import Tiltaksdeltagelse from '../steg/Tiltaksdeltagelse';
 import Stønadsdager from '../steg/Stønadsdager';
 import Kvalifiseringsprogrammet from '../steg/Kvalifiseringsprogrammet';
 import Institusjonsopphold from '../steg/Institusjonsopphold';
 import Introduksjonsprogrammet from '../steg/Introduksjonsprogrammet';
 import Oppsummering from '../steg/Oppsummering';
+import FristForFramsettingAvKrav from '../steg/FristForFramsettingAvKrav';
 
 const BehandlingSteg = () => {
   const router = useRouter();
@@ -21,8 +22,8 @@ const BehandlingSteg = () => {
     switch (route) {
       case Behandlingssteg.ALDER:
         return <Alder />;
-      case Behandlingssteg.SØKNADSTIDSPUNKT:
-        return <Søknadstidspunkt />;
+      case Behandlingssteg.KRAVFRIST:
+        return <FristForFramsettingAvKrav />;
       case Behandlingssteg.TILTAKSDELTAGELSE:
         return <Tiltaksdeltagelse />;
       case Behandlingssteg.KVP:

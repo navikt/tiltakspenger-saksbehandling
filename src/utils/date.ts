@@ -48,3 +48,7 @@ export function getDayOfWeek(date: Date) {
 export function getWeekNumber(date: Date) {
   return dayjs(date).week();
 }
+
+export function toDate(dateString: string) {
+  return dayjs(dateString).toDate();
+}
