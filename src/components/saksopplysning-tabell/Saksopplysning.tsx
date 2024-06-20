@@ -3,7 +3,7 @@ import { Table, BodyShort, Button } from '@navikt/ds-react';
 import { RedigeringSkjema } from './RedigeringSkjema';
 import { useState } from 'react';
 import { Lesevisning } from '../../utils/avklarLesevisning';
-import { formatPeriode } from '../../utils/date';
+import { periodeTilFormatertDatotekst } from '../../utils/date';
 import { UtfallIkon } from '../utfall-ikon/UtfallIkon';
 import { SaksopplysningInnDTO } from '../../types/Behandling';
 import { Periode } from '../../types/Periode';
@@ -55,7 +55,10 @@ export const Saksopplysning = ({
         <Table.DataCell>
           <BodyShort>
             {periode
-              ? formatPeriode({ fra: periode.fra, til: periode.til })
+              ? periodeTilFormatertDatotekst({
+                  fra: periode.fra,
+                  til: periode.til,
+                })
               : '-'}
           </BodyShort>
         </Table.DataCell>

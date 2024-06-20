@@ -5,7 +5,6 @@ import { Behandlingssteg } from '../../types/Behandlingssteg';
 import Alder from '../steg/Alder';
 import styles from './BehandlingSteg.module.css';
 import { AndreYtelser } from '../steg/AndreYtelser';
-import Søknadstidspunkt from '../steg/FristForFramsettingAvKrav';
 import Tiltaksdeltagelse from '../steg/Tiltaksdeltagelse';
 import Stønadsdager from '../steg/Stønadsdager';
 import Kvalifiseringsprogrammet from '../steg/Kvalifiseringsprogrammet';

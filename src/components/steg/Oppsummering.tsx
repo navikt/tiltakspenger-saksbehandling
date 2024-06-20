@@ -1,7 +1,6 @@
 import { BodyShort, Loader, Heading, VStack, List } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
-import { formatPeriode } from '../../utils/date';
 import { BehandlingKnapper } from '../behandling-knapper/BehandlingKnapper';
 import { avklarLesevisning } from '../../utils/avklarLesevisning';
 import { useContext, useRef } from 'react';

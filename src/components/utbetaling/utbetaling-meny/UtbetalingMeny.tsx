@@ -1,7 +1,10 @@
 import { Detail, Label } from '@navikt/ds-react';
 import React from 'react';
 import styles from './UtbetalingMeny.module.css';
-import { getWeekNumber, formatPeriode } from '../../../utils/date';
+import {
+  ukenummerFraDate,
+  periodeTilFormatertDatotekst,
+} from '../../../utils/date';
 import { useRouter } from 'next/router';
 import { useHentUtbetalingListe } from '../../../hooks/useHentUtbetalingListe';
 import { UtbetalingListe } from '../../../types/Utbetaling';
@@ -12,7 +15,7 @@ interface UtbetalingmenyProps {
 }
 
 const utbetalingUkeNummer = (fom: Date, tom: Date): string => {
-  return `Uke ${getWeekNumber(fom)} / ${getWeekNumber(tom)}`;
+  return `Uke ${ukenummerFraDate(fom)} / ${ukenummerFraDate(tom)}`;
 };
 
 export const UtbetalingMeny = ({ behandlingId }: UtbetalingmenyProps) => {
@@ -37,9 +40,9 @@ export const UtbetalingMeny = ({ behandlingId }: UtbetalingmenyProps) => {
                 {utbetalingUkeNummer(utbetaling.fom, utbetaling.tom)}
               </Label>
               <Detail>
-                {formatPeriode({
-                  fra: utbetaling.fom.toString(),
-                  til: utbetaling.tom.toString(),
+                {periodeTilFormatertDatotekst({
+                  fra: utbetaling.fom,
+                  til: utbetaling.tom,
                 })}
               </Detail>
               <Detail>Utbetalt: {utbetaling.beløp.toString()}</Detail>

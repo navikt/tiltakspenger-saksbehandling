@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
 import StegHeader from './StegHeader';
 import StegKort from './StegKort';
-import { formatDateObject } from '../../utils/date';
+import { dateTilFormatertTekst } from '../../utils/date';
 import UtfallstekstMedIkon from './UtfallstekstMedIkon';
 
 const Alder = () => {
@@ -39,7 +39,7 @@ const Alder = () => {
         utfall={saksopplysning.utfall}
         vilkår={saksopplysning.vilkår}
         vilkårTittel={saksopplysning.vilkårTittel}
-        grunnlag={formatDateObject(saksopplysning.grunnlag)}
+        grunnlag={dateTilFormatertTekst(saksopplysning.grunnlag)}
         grunnlagHeader={'Fødselsdato'}
       />
     </VStack>

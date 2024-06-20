@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { Button, Table } from '@navikt/ds-react';
 import styles from './TiltaksdagerTabell.module.css';
-import { formatPeriode } from '../../../utils/date';
+import { periodeTilFormatertDatotekst } from '../../../utils/date';
 import {
   Stønadsdager,
   StønadsdagerSaksopplysning,
@@ -20,7 +20,7 @@ function renderAntallDagerSaksopplysningRad({
   antallDager,
   kilde,
 }: Stønadsdager) {
-  const formattertPeriode = formatPeriode(periode);
+  const formattertPeriode = periodeTilFormatertDatotekst(periode);
   return (
     <Table.Row key={formattertPeriode}>
       <Table.DataCell>{formattertPeriode}</Table.DataCell>

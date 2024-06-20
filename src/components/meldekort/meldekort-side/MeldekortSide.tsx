@@ -6,7 +6,7 @@ import { useContext, useState } from 'react';
 import { MeldekortKnapper } from './MeldekortKnapper';
 import { useRouter } from 'next/router';
 import { useHentMeldekort } from '../../../hooks/useHentMeldekort';
-import { getWeekNumber } from '../../../utils/date';
+import { ukenummerFraDate } from '../../../utils/date';
 import { SaksbehandlerContext } from '../../../pages/_app';
 
 export const MeldekortSide = () => {
@@ -45,12 +45,12 @@ export const MeldekortSide = () => {
       <HStack className={disableUkeVisning ? styles.disableUkevisning : ''}>
         <MeldekortUke
           meldekortUke={uke1}
-          ukesnummer={getWeekNumber(uke1[0].dato)}
+          ukesnummer={ukenummerFraDate(uke1[0].dato)}
           meldekortId={meldekortId}
         />
         <MeldekortUke
           meldekortUke={uke2}
-          ukesnummer={getWeekNumber(uke2[1].dato)}
+          ukesnummer={ukenummerFraDate(uke2[1].dato)}
           meldekortId={meldekortId}
         />
       </HStack>

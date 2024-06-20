@@ -10,7 +10,6 @@ import {
 import { FormProvider, useForm } from 'react-hook-form';
 import { useSWRConfig } from 'swr';
 import { useRouter } from 'next/router';
-import { dateToISO } from '../../../utils/date';
 import Periodefelt from '../../saksopplysning-tabell/Periodefelt';
 import {
   gyldigPeriodeValidator,
@@ -80,8 +79,8 @@ const EndreAntallDagerModal = forwardRef<
 
   async function onSubmit() {
     const data = formMethods.getValues();
-    const fra = dateToISO(data.periode.fom);
-    const til = dateToISO(data.periode.tom);
+    const fra = data.periode.fom;
+    const til = data.periode.tom;
 
     try {
       setFeilmelding(null);

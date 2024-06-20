@@ -4,7 +4,7 @@ import {
   MeldekortStatus,
   MeldekortStatusTekster,
 } from '../../../types/MeldekortTypes';
-import { formatDate, getDayOfWeek } from '../../../utils/date';
+import { formaterDatotekst, ukedagFraDate } from '../../../utils/date';
 import { velgMeldekortdagStatus } from '../../../utils/meldekort';
 import IkonMedTekst from '../../ikon-med-tekst/IkonMedTekst';
 import { velgIkon } from './MeldekortUke';
@@ -50,7 +50,7 @@ export const MeldekortUkeDag = ({
       className={styles.meldekortUkeDag}
     >
       <IkonMedTekst
-        text={`${getDayOfWeek(meldekortDag.dato)} ${formatDate(meldekortDag.dato.toString())}`}
+        text={`${ukedagFraDate(meldekortDag.dato)} ${formaterDatotekst(meldekortDag.dato.toString())}`}
         iconRenderer={() => velgIkon(status)}
       />
       {status != MeldekortStatus.Sperret ? (

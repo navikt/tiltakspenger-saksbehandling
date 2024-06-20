@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table } from '@navikt/ds-react';
 import { Deltagelsesperiode } from '../../../types/Deltagelsesperiode';
-import { formatPeriode } from '../../../utils/date';
+import { periodeTilFormatertDatotekst } from '../../../utils/date';
 
 interface TiltaksdeltagelseTableProps {
   deltagelsesperioder: Deltagelsesperiode[];
@@ -20,7 +20,7 @@ const TiltaksdeltagelseTable = ({
       </Table.Header>
       <Table.Body>
         {deltagelsesperioder.map(({ periode, antallDager }) => {
-          const formattertPeriode = formatPeriode(periode);
+          const formattertPeriode = periodeTilFormatertDatotekst(periode);
           return (
             <Table.Row key={formattertPeriode}>
               <Table.DataCell>{formattertPeriode}</Table.DataCell>

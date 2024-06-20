@@ -10,7 +10,7 @@ import { useSWRConfig } from 'swr';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import Periodefelt from './Periodefelt';
 import { useState } from 'react';
-import { dateToISO, formatDate } from '../../utils/date';
+import { dateTilFormatertTekst, dateTilISOTekst } from '../../utils/date';
 import {
   gyldigPeriodeValidator,
   påkrevdPeriodeValidator,
@@ -69,14 +69,14 @@ export const RedigeringSkjema = ({
     fetch(`/api/behandling/${behandlingId}`, {
       method: 'POST',
       headers: {
-          'Content-Type': 'application/json',
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         fra: harYtelse
-          ? dateToISO(skjemaFelter.periode?.fra)
+          ? dateTilISOTekst(skjemaFelter.periode?.fra)
           : vurderingsperiode.fra,
         til: harYtelse
-          ? dateToISO(skjemaFelter.periode?.til)
+          ? dateTilISOTekst(skjemaFelter.periode?.til)
           : vurderingsperiode.til,
         vilkår: saksopplysning, //TODO endre navnet på denne i backend
         begrunnelse: skjemaFelter.begrunnelse,
@@ -109,9 +109,9 @@ export const RedigeringSkjema = ({
                 >
                   <Radio
                     value={false}
-                  >{`Søker mottar ikke ${saksopplysningTittel} i perioden ${formatDate(
+                  >{`Søker mottar ikke ${saksopplysningTittel} i perioden ${dateTilFormatertTekst(
                     vurderingsperiode.fra,
-                  )} til ${formatDate(vurderingsperiode.til)}`}</Radio>
+                  )} til ${dateTilFormatertTekst(vurderingsperiode.til)}`}</Radio>
                   <Radio
                     value={true}
                   >{`Søker mottar ${saksopplysningTittel} i hele eller deler av perioden`}</Radio>
