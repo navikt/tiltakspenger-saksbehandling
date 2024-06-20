@@ -5,7 +5,7 @@ import VilkårsvurderingAvFristForFramsettingAvKravHeading from './Vilkårsvurde
 import VilkårsvurderingerAvFristForFramsettingAvKrav from './VilkårsvurderingerAvFristForFramsettingAvKrav';
 import KravdatoSaksopplysninger from './KravdatoSaksopplysninger';
 import { Vurdering } from '../../types/Vurdering';
-import UtfallstekstMedIkon from '../utfallstekst-med-ikon/UtfallstekstMedIkon';
+import UtfallstekstMedIkon from '../steg/UtfallstekstMedIkon';
 import { KravdatoSaksopplysning } from '../../types/Behandling';
 import styles from './VilkårsvurderingAvFristForFramsettingAvKrav.module.css';
 

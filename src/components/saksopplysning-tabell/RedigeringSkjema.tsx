@@ -10,33 +10,25 @@ import { useSWRConfig } from 'swr';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import Periodefelt from './Periodefelt';
 import { useState } from 'react';
-import { dateToISO, formatDate } from '../../utils/date';
-import { FaktaDTO } from '../../types/Behandling';
+import { dateTilFormatertTekst, dateTilISOTekst } from '../../utils/date';
 import {
   gyldigPeriodeValidator,
   påkrevdPeriodeValidator,
 } from '../../utils/validation';
+import { Periode } from '../../types/Periode';
 
 interface RedigeringSkjemaProps {
-  vilkårTittel: string;
-  vilkårFlateTittel: string;
+  saksopplysning: string;
+  saksopplysningTittel: string;
   håndterLukkRedigering: () => void;
   behandlingId: string;
-  behandlingsperiode: {
-    fom: string;
-    tom: string;
-  };
-  vilkårsperiode: {
-    fom: string;
-    tom: string;
-  };
-  fakta: FaktaDTO;
+  vurderingsperiode: Periode;
 }
 
 interface SkjemaFelter {
   periode: {
-    fom: Date;
-    tom: Date;
+    fra: Date;
+    til: Date;
   };
   harYtelse: string;
   begrunnelse: string;
@@ -44,11 +36,10 @@ interface SkjemaFelter {
 
 export const RedigeringSkjema = ({
   håndterLukkRedigering,
-  vilkårTittel,
-  vilkårsperiode,
+  saksopplysning,
+  saksopplysningTittel,
   behandlingId,
-  behandlingsperiode,
-  fakta,
+  vurderingsperiode,
 }: RedigeringSkjemaProps) => {
   const [harYtelse, settHarYtelse] = useState<boolean>(false);
 
@@ -56,8 +47,8 @@ export const RedigeringSkjema = ({
     mode: 'onSubmit',
     defaultValues: {
       periode: {
-        fom: new Date(vilkårsperiode.fom),
-        tom: new Date(vilkårsperiode.tom),
+        fra: new Date(vurderingsperiode.fra),
+        til: new Date(vurderingsperiode.til),
       },
     },
   });
@@ -78,16 +69,16 @@ export const RedigeringSkjema = ({
     fetch(`/api/behandling/${behandlingId}`, {
       method: 'POST',
       headers: {
-          'Content-Type': 'application/json',
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        fom: harYtelse
-          ? dateToISO(skjemaFelter.periode?.fom)
-          : behandlingsperiode.fom,
-        tom: harYtelse
-          ? dateToISO(skjemaFelter.periode?.tom)
-          : behandlingsperiode.tom,
-        vilkår: vilkårTittel,
+        fra: harYtelse
+          ? dateTilISOTekst(skjemaFelter.periode?.fra)
+          : vurderingsperiode.fra,
+        til: harYtelse
+          ? dateTilISOTekst(skjemaFelter.periode?.til)
+          : vurderingsperiode.til,
+        vilkår: saksopplysning, //TODO endre navnet på denne i backend
         begrunnelse: skjemaFelter.begrunnelse,
         harYtelse: skjemaFelter.harYtelse,
       }),
@@ -101,9 +92,7 @@ export const RedigeringSkjema = ({
       <form
         onSubmit={formMethods.handleSubmit(håndterLagreSaksopplysning)}
         style={{
-          background: '#F2F3F5',
-          width: '100%',
-          height: '100%',
+          background: '#E6F0FF',
           padding: '1rem',
         }}
       >
@@ -114,16 +103,18 @@ export const RedigeringSkjema = ({
             render={({ field: { onChange } }) => {
               return (
                 <RadioGroup
-                  legend="Endre vilkår"
+                  legend="Legg til ny saksopplysning"
                   onChange={(value) => håndterHarYtelse(value, onChange)}
                   defaultValue={false}
                 >
                   <Radio
                     value={false}
-                  >{`${fakta.harIkkeYtelse} i perioden ${formatDate(
-                    behandlingsperiode.fom,
-                  )} til ${formatDate(behandlingsperiode.tom)}`}</Radio>
-                  <Radio value={true}>{`${fakta.harYtelse}`}</Radio>
+                  >{`Søker mottar ikke ${saksopplysningTittel} i perioden ${dateTilFormatertTekst(
+                    vurderingsperiode.fra,
+                  )} til ${dateTilFormatertTekst(vurderingsperiode.til)}`}</Radio>
+                  <Radio
+                    value={true}
+                  >{`Søker mottar ${saksopplysningTittel} i hele eller deler av perioden`}</Radio>
                 </RadioGroup>
               );
             }}
@@ -131,10 +122,10 @@ export const RedigeringSkjema = ({
           <Periodefelt
             name="periode"
             validate={[gyldigPeriodeValidator, påkrevdPeriodeValidator]}
-            minDate={new Date(behandlingsperiode.fom)}
-            maxDate={new Date(behandlingsperiode.tom)}
-            defaultFra={new Date(vilkårsperiode.fom)}
-            defaultTil={new Date(vilkårsperiode.tom)}
+            minDate={new Date(vurderingsperiode.fra)}
+            maxDate={new Date(vurderingsperiode.til)}
+            defaultFra={new Date(vurderingsperiode.fra)}
+            defaultTil={new Date(vurderingsperiode.til)}
             disabledFra={!harYtelse}
             disabledTil={!harYtelse}
           />

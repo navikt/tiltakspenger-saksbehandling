@@ -1,6 +1,10 @@
 import React, { useRef } from 'react';
 import { Button, Table } from '@navikt/ds-react';
-import { formatDate, formatPeriode, toDate } from '../../utils/date';
+import {
+  formaterDatotekst,
+  periodeTilFormatertDatotekst,
+  tekstTilDate,
+} from '../../utils/date';
 import { Utfall } from '../../types/Utfall';
 import { Vurdering } from '../../types/Vurdering';
 import { UtfallIkon } from '../utfall-ikon/UtfallIkon';
@@ -21,11 +25,13 @@ const VilkårsvurderingAvFristForFramsettingAvKravRad = ({
   vurdering: { utfall, periode },
   kravdato,
 }: VilkårsvurderingAvFristForFramsettingAvKravRadProps) => {
-  const formattertPeriode = formatPeriode(periode);
+  const formattertPeriode = periodeTilFormatertDatotekst(periode);
   return (
     <Table.Row className={styles.vurderingRad} key={formattertPeriode}>
       <Table.DataCell>{formattertPeriode}</Table.DataCell>
-      <Table.DataCell>{formatDate(kravdato.toDateString())}</Table.DataCell>
+      <Table.DataCell>
+        {formaterDatotekst(kravdato.toDateString())}
+      </Table.DataCell>
       <Table.DataCell>
         {utfall === Utfall.OPPFYLT ? 'Ja' : 'Nei'}
       </Table.DataCell>
@@ -38,10 +44,13 @@ const VilkårsvurderingAvFristForFramsettingAvKravRad = ({
 
 const VilkårsvurderingerAvFristForFramsettingAvKrav = ({
   vurderinger,
-  kravdatoSaksopplysning: { verdi, kilde },
+  kravdatoSaksopplysning: { kravdato, kilde },
 }: VilkårsvurderingerAvFristForFramsettingAvKravProps) => {
   const ref = useRef(null);
-  const kravdato = React.useMemo(() => toDate(verdi), [verdi]);
+  const kravdatoopplysning = React.useMemo(
+    () => tekstTilDate(kravdato),
+    [kravdato],
+  );
   return (
     <div className={styles.container}>
       <Table>
@@ -56,8 +65,8 @@ const VilkårsvurderingerAvFristForFramsettingAvKrav = ({
           {vurderinger.map((vurdering) => (
             <VilkårsvurderingAvFristForFramsettingAvKravRad
               vurdering={vurdering}
-              kravdato={kravdato}
-              key={formatPeriode(vurdering.periode)}
+              kravdato={kravdatoopplysning}
+              key={periodeTilFormatertDatotekst(vurdering.periode)}
             />
           ))}
         </Table.Body>

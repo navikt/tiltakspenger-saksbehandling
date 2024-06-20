@@ -3,9 +3,9 @@ import { SaksbehandlingLayout } from '../../../../components/layout/Saksbehandli
 import { BehandlingLayout } from '../../../../components/layout/BehandlingLayout';
 import { ReactElement } from 'react';
 import { NextPageWithLayout } from '../../../_app';
-import { MeldekortMeny } from '../../../../components/meldekort-meny/MeldekortMeny';
-import { MeldekortSide } from '../../../../components/meldekort-side/MeldekortSide';
-import { MeldekortDetaljer } from '../../../../components/meldekort-detaljer/MeldekortDetaljer';
+import { MeldekortMeny } from '../../../../components/meldekort/meldekort-meny/MeldekortMeny';
+import { MeldekortSide } from '../../../../components/meldekort/meldekort-side/MeldekortSide';
+import { MeldekortDetaljer } from '../../../../components/meldekort/meldekort-detaljer/MeldekortDetaljer';
 import { pageWithAuthentication } from '../../../../utils/pageWithAuthentication';
 
 const Meldekort: NextPageWithLayout = () => {

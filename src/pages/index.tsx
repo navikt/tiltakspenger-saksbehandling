@@ -24,7 +24,7 @@ const Benken: NextPage = () => {
         mutator(`/api/behandlinger`);
       })
       .then(() => {
-        router.push(`/behandling/${behandlingid}/inngangsvilkar`);
+        router.push(`/behandling/${behandlingid}/inngangsvilkar/kravfrist`);
       });
   };
 
@@ -89,7 +89,9 @@ const Benken: NextPage = () => {
                     behandling.saksbehandler,
                     behandling.beslutter,
                   ) ? (
-                    <Link href={`/behandling/${behandling.id}/inngangsvilkar`}>
+                    <Link
+                      href={`/behandling/${behandling.id}/inngangsvilkar/kravfrist`}
+                    >
                       {behandling.typeBehandling}
                     </Link>
                   ) : (

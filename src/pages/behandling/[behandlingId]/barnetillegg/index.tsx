@@ -1,14 +1,15 @@
 import { pageWithAuthentication } from '../../../../utils/pageWithAuthentication';
-import { Loader } from '@navikt/ds-react';
+import { VStack, Loader, List } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import { useHentBehandling } from '../../../../hooks/useHentBehandling';
 import { BehandlingLayout } from '../../../../components/layout/BehandlingLayout';
 import { SaksbehandlingLayout } from '../../../../components/layout/SaksbehandlingLayout';
 import { ReactElement } from 'react';
 import { NextPageWithLayout } from '../../../_app';
-import SøknadOppsummering from '../../../../components/søknad-oppsummering/SøknadOppsummering';
 import { Saksdialog } from '../../../../components/saksdialog/Saksdialog';
 import Barnetillegg from '../../../../components/barnetillegg/Barnetillegg';
+import { Skuff } from '../../../../components/skuff/Skuff';
+import Link from 'next/link';
 
 const Behandling: NextPageWithLayout = () => {
   const router = useRouter();
@@ -21,10 +22,15 @@ const Behandling: NextPageWithLayout = () => {
 
   return (
     <>
-      <SøknadOppsummering
-        søknad={valgtBehandling.søknad}
-        registrerteTiltak={valgtBehandling.registrerteTiltak}
-      />
+      <Skuff venstreOrientert headerTekst={'Barn'}>
+        <VStack style={{ padding: '1em' }}>
+          <List>
+            <List.Item>
+              <Link href="/">Ole Duck</Link>
+            </List.Item>
+          </List>
+        </VStack>
+      </Skuff>
       <Barnetillegg />
       <Saksdialog endringslogg={valgtBehandling.endringslogg} />
     </>

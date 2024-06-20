@@ -1,6 +1,6 @@
 import React from 'react';
 import { BodyShort, Button, Heading, VStack } from '@navikt/ds-react';
-import { formatDate } from '../../utils/date';
+import { formaterDatotekst } from '../../utils/date';
 import { KravdatoSaksopplysning } from '../../types/Behandling';
 import styles from './KravdatoSaksopplysninger.module.css';
 
@@ -18,7 +18,9 @@ const KravdatoSaksopplysninger = ({
       <Heading size="small">Fra søknad</Heading>
       <VStack gap="1" className={styles.dataGrid}>
         <BodyShort>Kravdato:</BodyShort>
-        <BodyShort>{formatDate(kravdatoSaksopplysning.verdi)}</BodyShort>
+        <BodyShort>
+          {formaterDatotekst(kravdatoSaksopplysning.kravdato)}
+        </BodyShort>
         <BodyShort>Kilde:</BodyShort>
         <BodyShort>Søknad</BodyShort>
       </VStack>

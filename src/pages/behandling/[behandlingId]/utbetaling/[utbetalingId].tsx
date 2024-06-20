@@ -3,9 +3,9 @@ import { BehandlingLayout } from '../../../../components/layout/BehandlingLayout
 import { ReactElement } from 'react';
 import { NextPageWithLayout } from '../../../_app';
 import { useRouter } from 'next/router';
-import { UtbetalingMeny } from '../../../../components/utbetaling-meny/UtbetalingMeny';
-import { UtbetalingDetaljer } from '../../../../components/utbetaling-detaljer/UtbetalingDetaljer';
-import { UtbetalingSide } from '../../../../components/utbetaling-side/UtbetalingSide';
+import { UtbetalingMeny } from '../../../../components/utbetaling/utbetaling-meny/UtbetalingMeny';
+import { UtbetalingDetaljer } from '../../../../components/utbetaling/utbetaling-detaljer/UtbetalingDetaljer';
+import { UtbetalingSide } from '../../../../components/utbetaling/utbetaling-side/UtbetalingSide';
 import { pageWithAuthentication } from '../../../../utils/pageWithAuthentication';
 
 const Utbetaling: NextPageWithLayout = () => {
