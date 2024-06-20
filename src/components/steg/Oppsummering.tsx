@@ -6,6 +6,7 @@ import { avklarLesevisning } from '../../utils/avklarLesevisning';
 import { useContext, useRef } from 'react';
 import { SaksbehandlerContext } from '../../pages/_app';
 import { dateTilFormatertTekst } from '../../utils/date';
+import BegrunnelseModal from '../begrunnelse-modal/BegrunnelseModal';
 
 const Oppsummering = () => {
   const router = useRouter();
@@ -59,6 +60,10 @@ const Oppsummering = () => {
         behandlingid={valgtBehandling.behandlingId}
         status={valgtBehandling.status}
         lesevisning={lesevisning}
+        modalRef={modalRef}
+      />
+      <BegrunnelseModal
+        behandlingid={valgtBehandling.behandlingId}
         modalRef={modalRef}
       />
     </VStack>

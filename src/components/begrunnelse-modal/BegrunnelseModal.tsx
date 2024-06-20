@@ -34,7 +34,7 @@ const BegrunnelseModal = ({
       setError('Du må velge en begrunnelse');
       return;
     }
-    const res = fetch(`/api/behandling/sendtilbake/${behandlingid}`, {
+    fetch(`/api/behandling/sendtilbake/${behandlingid}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
