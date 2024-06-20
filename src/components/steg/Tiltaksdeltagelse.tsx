@@ -27,7 +27,7 @@ const VilkårsvurderingAvTiltaksdeltagelse = () => {
         }
         paragraf={tiltak.vilkårLovreferanse.paragraf}
       />
-      <UtfallstekstMedIkon utfall={Utfall.KREVER_MANUELL_VURDERING} />
+      lol i teksten -hilsen John
       {tiltak.saksopplysninger.map(
         ({ periode, navn, girRett, kilde, deltagelseUtfall }, i) => {
           return (
