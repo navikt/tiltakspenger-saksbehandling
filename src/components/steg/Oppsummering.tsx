@@ -5,6 +5,7 @@ import { BehandlingKnapper } from '../behandling-knapper/BehandlingKnapper';
 import { avklarLesevisning } from '../../utils/avklarLesevisning';
 import { useContext, useRef } from 'react';
 import { SaksbehandlerContext } from '../../pages/_app';
+import { dateTilFormatertTekst } from '../../utils/date';
 
 const Oppsummering = () => {
   const router = useRouter();
@@ -49,7 +50,7 @@ const Oppsummering = () => {
       <Heading size="medium">Oppsummering</Heading>
       <List style={{ background: '#FFFFFF', padding: '1em' }}>
         {valgtBehandling.utfallsperioder.map((periode, i) => (
-          <List.Item key={periode.fom.toDateString() + i}>
+          <List.Item key={dateTilFormatertTekst(periode.fom) + i}>
             <BodyShort>{`${finnUtfallsperiodetekst(periode.utfall)} for perioden `}</BodyShort>
           </List.Item>
         ))}
