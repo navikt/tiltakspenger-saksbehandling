@@ -1,7 +1,10 @@
 import React, { useRef } from 'react';
-import { Button, Table } from '@navikt/ds-react';
+import { Button, Loader, Table } from '@navikt/ds-react';
 import styles from './TiltaksdagerTabell.module.css';
-import { periodeTilFormatertDatotekst } from '../../../utils/date';
+import {
+  periodeTilFormatertDatotekst,
+  tekstTilDate,
+} from '../../../utils/date';
 import {
   Stønadsdager,
   StønadsdagerSaksopplysning,
@@ -9,7 +12,6 @@ import {
 import EndreAntallDagerModal from './EndreAntallDagerModal';
 import { useHentBehandling } from '../../../hooks/useHentBehandling';
 import { useRouter } from 'next/router';
-import dayjs from 'dayjs';
 
 interface StønadsdagerTabellProps {
   stønadsdager: StønadsdagerSaksopplysning;
@@ -29,12 +31,14 @@ function renderAntallDagerSaksopplysningRad({
     </Table.Row>
   );
 }
-
 const TiltaksdagerTabell = ({ stønadsdager }: StønadsdagerTabellProps) => {
   const ref = useRef(null);
   const router = useRouter();
   const behandlingId = router.query.behandlingId as string;
   const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
+
+  if (isLoading || !valgtBehandling) return <Loader />;
+
   return (
     <div className={styles.tiltaksdagerTabell__container}>
       <Table>
@@ -62,8 +66,8 @@ const TiltaksdagerTabell = ({ stønadsdager }: StønadsdagerTabellProps) => {
       </Button>
       <EndreAntallDagerModal
         ref={ref}
-        minDate={dayjs(valgtBehandling?.vurderingsperiode.fra).toDate()}
-        maxDate={dayjs(valgtBehandling?.vurderingsperiode.til).toDate()}
+        minDate={new Date(valgtBehandling.vurderingsperiode.fra)}
+        maxDate={new Date(valgtBehandling.vurderingsperiode.til)}
         tiltakId={stønadsdager.tiltakId}
       />
     </div>

@@ -1,4 +1,4 @@
 export type Periode = {
-  fra: Date;
-  til: Date;
+  fra: string;
+  til: string;
 };

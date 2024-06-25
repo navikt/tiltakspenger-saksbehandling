@@ -24,8 +24,7 @@ interface PeriodevelgerProps {
   id?: string;
   minDate?: Date;
   maxDate?: Date;
-  disabledFra?: boolean;
-  disabledTil?: boolean;
+  disabled?: boolean;
   size?: 'small' | 'medium';
 }
 
@@ -37,8 +36,7 @@ export default function Periodevelger({
   id,
   minDate,
   maxDate,
-  disabledFra,
-  disabledTil,
+  disabled,
   size,
 }: PeriodevelgerProps) {
   const [rangeError, setRangeError] = useState<RangeError>({});
@@ -90,7 +88,7 @@ export default function Periodevelger({
             {...fromDatePicker.inputProps}
             label="Fra"
             error={!!computedError}
-            disabled={disabledFra}
+            disabled={disabled}
             aria-label={`${id}.fra`}
             autoComplete="off"
             size={size || 'medium'}
@@ -101,7 +99,7 @@ export default function Periodevelger({
             {...toDatePicker.inputProps}
             label="Til"
             error={!!computedError}
-            disabled={disabledTil}
+            disabled={disabled}
             aria-label={`${id}.til`}
             autoComplete="off"
             size={size || 'medium'}

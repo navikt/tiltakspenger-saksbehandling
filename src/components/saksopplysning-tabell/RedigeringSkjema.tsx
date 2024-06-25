@@ -7,15 +7,16 @@ import {
   HStack,
 } from '@navikt/ds-react';
 import { useSWRConfig } from 'swr';
-import { Controller, FormProvider, useForm } from 'react-hook-form';
-import Periodefelt from './Periodefelt';
+import { Controller, FormProvider, get, useForm } from 'react-hook-form';
 import { useState } from 'react';
 import { dateTilFormatertTekst, dateTilISOTekst } from '../../utils/date';
 import {
   gyldigPeriodeValidator,
   påkrevdPeriodeValidator,
+  setupValidation,
 } from '../../utils/validation';
 import { Periode } from '../../types/Periode';
+import Periodevelger from './PeriodeVelger';
 
 interface RedigeringSkjemaProps {
   saksopplysning: string;
@@ -119,15 +120,45 @@ export const RedigeringSkjema = ({
               );
             }}
           />
-          <Periodefelt
+          <Controller
             name="periode"
-            validate={[gyldigPeriodeValidator, påkrevdPeriodeValidator]}
-            minDate={new Date(vurderingsperiode.fra)}
-            maxDate={new Date(vurderingsperiode.til)}
-            defaultFra={new Date(vurderingsperiode.fra)}
-            defaultTil={new Date(vurderingsperiode.til)}
-            disabledFra={!harYtelse}
-            disabledTil={!harYtelse}
+            control={formMethods.control}
+            rules={{
+              validate: setupValidation([
+                gyldigPeriodeValidator,
+                påkrevdPeriodeValidator,
+              ]),
+            }}
+            render={({ field: { onChange } }) => {
+              return (
+                <Periodevelger
+                  id={'periode'}
+                  onFromChange={(date) => {
+                    onChange({
+                      fom: date || '',
+                      tom: formMethods.getValues(),
+                    });
+                  }}
+                  onToChange={(date) => {
+                    onChange({
+                      fom: formMethods.getValues(),
+                      tom: date || '',
+                    });
+                  }}
+                  defaultSelected={{
+                    fom: vurderingsperiode.fra,
+                    tom: vurderingsperiode.til,
+                  }}
+                  errorMessage={
+                    get(formMethods.formState.errors, 'periode')?.message
+                  }
+                  minDate={vurderingsperiode.fra}
+                  maxDate={vurderingsperiode.til}
+                  disabled={!harYtelse}
+                  size="small"
+                />
+              );
+            }}
           />
           <Controller
             name={'begrunnelse'}

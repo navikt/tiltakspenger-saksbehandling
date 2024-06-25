@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
-import { ValidatorFunction } from '../components/saksopplysning-tabell/Periodefelt';
+
+export type ValidatorFunction = (value: any) => string | undefined;
 
 export function påkrevdPeriodeValidator(periode: { fom: Date; tom: Date }) {
   if (!periode?.fom || !periode?.tom) {
