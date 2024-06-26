@@ -29,7 +29,7 @@ const Alder = () => {
         }
         paragraf={'§3'}
       />
-      <UtfallstekstMedIkon samletUtfall={saksopplysning.utfall} />
+      <UtfallstekstMedIkon utfall={saksopplysning.utfall} />
       <StegKort
         editerbar={false}
         behandlingId={valgtBehandling.behandlingId}

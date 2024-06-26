@@ -41,7 +41,7 @@ export const AndreYtelser = () => {
           'https://lovdata.no/dokument/SF/forskrift/2013-11-04-1286'
         }
       />
-      <UtfallstekstMedIkon samletUtfall={andreYtelser.samletUtfall} />
+      <UtfallstekstMedIkon utfall={andreYtelser.samletUtfall} />
       <SaksopplysningTabell
         saksopplysninger={andreYtelser.saksopplysninger.filter(
           (saksopplysning) =>
