@@ -32,7 +32,7 @@ const Institusjonsopphold = () => {
         }
         paragraf={'§9'}
       />
-      <UtfallstekstMedIkon utfall={saksopplysning.utfall} />
+      <UtfallstekstMedIkon samletUtfall={saksopplysning.utfall} />
       <StegKort
         editerbar={false}
         behandlingId={valgtBehandling.behandlingId}

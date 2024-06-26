@@ -40,7 +40,7 @@ const VilkårsvurderingAvFristForFramsettingAvKrav = ({
   return (
     <VStack gap="4">
       <VilkårsvurderingAvFristForFramsettingAvKravHeading />
-      <UtfallstekstMedIkon utfall={samletUtfall} />
+      <UtfallstekstMedIkon samletUtfall={samletUtfall} />
       <div className={styles.container}>
         <VilkårsvurderingerAvFristForFramsettingAvKrav
           vurderinger={vurderinger}

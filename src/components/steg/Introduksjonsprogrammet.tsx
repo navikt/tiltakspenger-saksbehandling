@@ -33,7 +33,7 @@ const Introduksjonsprogrammet = () => {
           'https://lovdata.no/dokument/SF/forskrift/2013-11-04-1286'
         }
       />
-      <UtfallstekstMedIkon utfall={intro.utfall} />
+      <UtfallstekstMedIkon samletUtfall={intro.utfall} />
       <StegKort
         editerbar={true}
         behandlingId={valgtBehandling.behandlingId}
