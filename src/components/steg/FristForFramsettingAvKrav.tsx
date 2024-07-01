@@ -30,7 +30,7 @@ const FristForFramsettingAvKrav = () => {
         }
         paragraf={saksopplysning.lovreferanse.paragraf}
       />
-      <UtfallstekstMedIkon utfall={saksopplysning.samletUtfall} />
+      <UtfallstekstMedIkon samletUtfall={saksopplysning.samletUtfall} />
       <div className={styles.container}>
         <VilkårsvurderingerAvFristForFramsettingAvKrav
           vurderinger={saksopplysning.vurderinger}
