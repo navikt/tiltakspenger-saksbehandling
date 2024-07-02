@@ -25,7 +25,7 @@ export function formaterDatotekstMedTidspunkt(dateString: string) {
 }
 
 export function periodeTilFormatertDatotekst({ fra, til }: Periode) {
-  return `${dateTilFormatertTekst(fra)} - ${dateTilFormatertTekst(til)}`;
+  return `${formaterDatotekst(fra)} - ${formaterDatotekst(til)}`;
 }
 
 export function ukedagFraDate(date: Date) {
