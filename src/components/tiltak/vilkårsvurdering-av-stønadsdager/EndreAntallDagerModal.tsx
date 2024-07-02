@@ -1,4 +1,4 @@
-import React, { forwardRef, useState } from 'react';
+import React, { RefObject, useState } from 'react';
 import {
   BodyLong,
   BodyShort,
@@ -8,7 +8,12 @@ import {
   Select,
   VStack,
 } from '@navikt/ds-react';
-import { Controller, FormProvider, get, useForm } from 'react-hook-form';
+import {
+  Controller,
+  FieldErrors,
+  SubmitHandler,
+  useForm,
+} from 'react-hook-form';
 import { useSWRConfig } from 'swr';
 import { useRouter } from 'next/router';
 import {
@@ -19,15 +24,16 @@ import {
 import { Stønadsdager } from '../../../types/Behandling';
 import Periodevelger from '../../saksopplysning-tabell/PeriodeVelger';
 
-interface SkjemaFelter {
-  periode: { fom: Date; tom: Date };
+interface Skjemafelter {
+  periode: { fra: string | undefined; til: string | undefined };
   antallDager: number;
 }
 
 interface EndreAntallDagerModalProps {
-  minDate: Date;
-  maxDate: Date;
+  minDate: string;
+  maxDate: string;
   tiltakId: string;
+  modalRef: RefObject<HTMLDialogElement>;
 }
 
 async function oppdaterAntallDager(
@@ -53,27 +59,37 @@ async function oppdaterAntallDager(
   return response;
 }
 
-const EndreAntallDagerModal = forwardRef<
-  HTMLDialogElement,
-  EndreAntallDagerModalProps
->(({ minDate, maxDate, tiltakId }, ref) => {
+const EndreAntallDagerModal = ({
+  minDate,
+  maxDate,
+  tiltakId,
+  modalRef,
+}: EndreAntallDagerModalProps) => {
   const [feilmelding, setFeilmelding] = useState(null);
   const router = useRouter();
 
   const behandlingId = router.query.behandlingId as string;
   const mutator = useSWRConfig().mutate;
 
-  const formMethods = useForm<SkjemaFelter>({
-    mode: 'onSubmit',
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+    getValues,
+  } = useForm({
     defaultValues: {
-      periode: { fom: minDate, tom: maxDate },
+      periode: { fra: minDate, til: maxDate },
       antallDager: 0,
     },
   });
 
-  async function onSubmit() {
-    const data = formMethods.getValues();
+  const onInvalid = (errors: FieldErrors) => console.error(errors);
 
+  console.log('verdier i modal: ', getValues());
+
+  const onSubmit: SubmitHandler<Skjemafelter> = (data) => {
+    console.log('sendt data: ', data);
+    /*
     try {
       setFeilmelding(null);
       formMethods.reset();
@@ -83,125 +99,108 @@ const EndreAntallDagerModal = forwardRef<
           periode: {
             fra: data.periode.fom,
             til: data.periode.tom,
-          },
-          kilde: 'SAKSB',
-        },
-        behandlingId,
-        tiltakId,
-      );
-      (ref as any).current?.close();
-      await mutator(`/api/behandling/${behandlingId}`);
-    } catch (e: any) {
-      setFeilmelding(e.message);
-    }
-  }
+            },
+            kilde: 'SAKSB',
+            },
+            behandlingId,
+            tiltakId,
+            );
+            (ref as any).current?.close();
+            await mutator(`/api/behandling/${behandlingId}`);
+            } catch (e: any) {
+              setFeilmelding(e.message);
+              }*/
+  };
 
   return (
-    <div className="py-16">
-      <FormProvider {...formMethods}>
-        <form onSubmit={formMethods.handleSubmit(onSubmit)}>
-          <Modal ref={ref} header={{ heading: 'Endre antall tiltaksdager' }}>
-            <Modal.Body>
-              <VStack gap="4">
-                <BodyLong>
-                  Dagene du setter per uke blir gjeldende for perioden du
-                  setter. Gjenstår det perioder i vedtaket, får disse de
-                  gjenstående dagene hentet fra Arena.
-                </BodyLong>
-                <HStack gap="4">
-                  <Controller
-                    name="periode"
-                    control={formMethods.control}
-                    rules={{
-                      validate: setupValidation([
-                        gyldigPeriodeValidator,
-                        påkrevdPeriodeValidator,
-                      ]),
-                    }}
-                    render={({ field: { onChange } }) => {
-                      return (
-                        <Periodevelger
-                          id={'periode'}
-                          onFromChange={(date) => {
-                            onChange({
-                              fom: date || '',
-                              tom: formMethods.getValues().periode.fom,
-                            });
-                          }}
-                          onToChange={(date) => {
-                            onChange({
-                              fom: formMethods.getValues().periode.tom,
-                              tom: date || '',
-                            });
-                          }}
-                          errorMessage={
-                            get(formMethods.formState.errors, 'periode')
-                              ?.message
-                          }
-                          minDate={minDate}
-                          maxDate={maxDate}
-                          size="small"
-                        />
-                      );
-                    }}
-                  />
-                  <Controller
-                    name={'antallDager'}
-                    control={formMethods.control}
-                    rules={{
-                      validate: setupValidation((valgtVerdi) => {
-                        if (!valgtVerdi) {
-                          return 'Det er påkrevd å oppgi antall dager i uken.';
-                        }
-                      }),
-                    }}
-                    render={({ field }) => {
-                      return (
-                        <Select
-                          label="Antall dager"
-                          size="small"
-                          error={
-                            get(formMethods.formState.errors, 'antallDager')
-                              ?.message
-                          }
-                          {...field}
-                        >
-                          <option value=""></option>
-                          <option value="1">1</option>
-                          <option value="2">2</option>
-                          <option value="3">3</option>
-                          <option value="4">4</option>
-                          <option value="5">5</option>
-                        </Select>
-                      );
-                    }}
-                  />
-                </HStack>
-              </VStack>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button type="submit">Endre antall dager</Button>
-              <Button
-                variant="secondary"
-                type="button"
-                onClick={() => {
-                  (ref as any).current?.close();
+    <form onSubmit={handleSubmit(onSubmit, onInvalid)}>
+      <Modal ref={modalRef} header={{ heading: 'Endre antall tiltaksdager' }}>
+        <Modal.Body>
+          <VStack gap="4">
+            <BodyLong>
+              Dagene du setter per uke blir gjeldende for perioden du setter.
+              Gjenstår det perioder i vedtaket, får disse de gjenstående dagene
+              hentet fra Arena.
+            </BodyLong>
+            <HStack gap="4">
+              <Controller
+                name="periode"
+                control={control}
+                render={({ field: { onChange, value, ref } }) => {
+                  return (
+                    <Periodevelger
+                      onFraChange={(dato: Date | undefined) => {
+                        onChange({
+                          fra: dato || '',
+                          til: value.til,
+                        });
+                      }}
+                      onTilChange={(dato: Date | undefined) => {
+                        onChange(
+                          onChange({
+                            fra: value.fra,
+                            til: dato || '',
+                          }),
+                        );
+                      }}
+                      error={errors.antallDager}
+                      minDato={minDate}
+                      maxDato={maxDate}
+                      disabled={false}
+                      inputref={ref}
+                    />
+                  );
                 }}
-              >
-                Avbryt
-              </Button>
-              {feilmelding && (
-                <BodyShort size={'small'}>{feilmelding}</BodyShort>
-              )}
-            </Modal.Footer>
-          </Modal>
-        </form>
-      </FormProvider>
-    </div>
+              />
+              <Controller
+                name={'antallDager'}
+                control={control}
+                rules={{
+                  validate: setupValidation((valgtVerdi) => {
+                    if (!valgtVerdi) {
+                      return 'Det er påkrevd å oppgi antall dager i uken.';
+                    }
+                  }),
+                }}
+                render={({ field }) => {
+                  return (
+                    <Select
+                      label="Antall dager"
+                      size="small"
+                      error={!!errors.antallDager}
+                      {...field}
+                    >
+                      <option value=""></option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                    </Select>
+                  );
+                }}
+              />
+            </HStack>
+          </VStack>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button type="submit" value="submit">
+            Endre antall dager
+          </Button>
+          <Button
+            variant="secondary"
+            type="button"
+            onClick={() => {
+              modalRef.current?.close();
+            }}
+          >
+            Avbryt
+          </Button>
+          {feilmelding && <BodyShort size={'small'}>{feilmelding}</BodyShort>}
+        </Modal.Footer>
+      </Modal>
+    </form>
   );
-});
-
-// Fikser linting-feil pga. manglende displayName
-EndreAntallDagerModal.displayName = 'EndreAntallDagerModal';
+};
 
 export default EndreAntallDagerModal;

@@ -1,10 +1,7 @@
 import React, { useRef } from 'react';
 import { Button, Loader, Table } from '@navikt/ds-react';
 import styles from './TiltaksdagerTabell.module.css';
-import {
-  periodeTilFormatertDatotekst,
-  tekstTilDate,
-} from '../../../utils/date';
+import { periodeTilFormatertDatotekst } from '../../../utils/date';
 import {
   Stønadsdager,
   StønadsdagerSaksopplysning,
@@ -65,9 +62,9 @@ const TiltaksdagerTabell = ({ stønadsdager }: StønadsdagerTabellProps) => {
         Endre antall dager per uke
       </Button>
       <EndreAntallDagerModal
-        ref={ref}
-        minDate={new Date(valgtBehandling.vurderingsperiode.fra)}
-        maxDate={new Date(valgtBehandling.vurderingsperiode.til)}
+        modalRef={ref}
+        minDate={valgtBehandling.vurderingsperiode.fra}
+        maxDate={valgtBehandling.vurderingsperiode.til}
         tiltakId={stønadsdager.tiltakId}
       />
     </div>
