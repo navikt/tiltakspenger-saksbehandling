@@ -6,15 +6,37 @@ import UtfallstekstMedIkon from './UtfallstekstMedIkon';
 import { useHentKvp } from '../../hooks/useHentKvp';
 import { Deltagelse } from '../../types/Kvp';
 import { nyPeriodeTilPeriode } from '../../utils/date';
+import { SkjemaFelter } from './OppdaterSaksopplysningForm';
 
 const Kvalifiseringsprogrammet = () => {
   const router = useRouter();
   const behandlingId = router.query.behandlingId as string;
-  const { kvp, isLoading } = useHentKvp(behandlingId);
+  const { kvp, isLoading, mutate } = useHentKvp(behandlingId);
 
   if (isLoading || !kvp) {
     return <Loader />;
   }
+
+  const håndterLagreKvpSaksopplysning = (data: SkjemaFelter) => {
+    const deltakelseMedPeriode = {
+      periode: { fraOgMed: data.periode.fra, tilOgMed: data.periode.til },
+      deltar: data.valgtVerdi,
+    };
+    const årsakTilEndring = data.begrunnelse;
+
+    fetch(`/api/behandling/${behandlingId}/vilkar/kvp`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        ytelseForPeriode: [deltakelseMedPeriode],
+        årsakTilEndring: årsakTilEndring,
+      }),
+    }).then(() => {
+      mutate;
+    });
+  };
 
   const deltagelse = kvp.avklartSaksopplysning.periodeMedDeltagelse.deltagelse;
   const vurderingsPeriode = nyPeriodeTilPeriode(kvp.vurderingsperiode);
@@ -34,13 +56,14 @@ const Kvalifiseringsprogrammet = () => {
       />
       <UtfallstekstMedIkon samletUtfall={kvp.samletUtfall} />
       <StegKort
+        håndterLagreSaksopplysning={(data: SkjemaFelter) =>
+          håndterLagreKvpSaksopplysning(data)
+        }
         editerbar={true}
-        behandlingId={behandlingId}
         vurderingsperiode={vurderingsPeriode}
         saksopplysningsperiode={saksopplysningsPeriode}
         kilde={kvp.avklartSaksopplysning.kilde}
         utfall={kvp.samletUtfall}
-        vilkår={'Kvalifiseringsprogrammet'}
         vilkårTittel={'Kvalifiseringsprogrammet'}
         grunnlag={deltagelseTekst(deltagelse)}
         grunnlagHeader={'Deltar'}

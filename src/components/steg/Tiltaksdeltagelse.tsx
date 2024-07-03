@@ -4,8 +4,7 @@ import router from 'next/router';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
 import StegHeader from './StegHeader';
 import StegKort from './StegKort';
-import UtfallstekstMedIkon from './UtfallstekstMedIkon';
-import { Utfall } from '../../types/Utfall';
+import { SkjemaFelter } from './OppdaterSaksopplysningForm';
 
 const VilkårsvurderingAvTiltaksdeltagelse = () => {
   const behandlingId = router.query.behandlingId as string;
@@ -16,6 +15,10 @@ const VilkårsvurderingAvTiltaksdeltagelse = () => {
   }
 
   const tiltak = valgtBehandling.tiltaksdeltagelsesaksopplysninger;
+
+  const håndterLagreSaksopplysning = (data: SkjemaFelter) => {
+    console.log('tiltaksdeltakelse');
+  };
 
   return (
     <VStack gap="4">
@@ -32,14 +35,15 @@ const VilkårsvurderingAvTiltaksdeltagelse = () => {
         ({ periode, navn, girRett, kilde, deltagelseUtfall }, i) => {
           return (
             <StegKort
+              håndterLagreSaksopplysning={(data: SkjemaFelter) =>
+                håndterLagreSaksopplysning(data)
+              }
               key={navn}
               editerbar={false}
-              behandlingId={valgtBehandling.behandlingId}
               vurderingsperiode={valgtBehandling.vurderingsperiode}
               saksopplysningsperiode={periode}
               kilde={kilde}
               utfall={deltagelseUtfall}
-              vilkår={tiltak.vilkår}
               vilkårTittel={tiltak.vilkår}
               grunnlag={girRett ? 'Ja' : 'nei'}
               grunnlagHeader={'Gir rett til tiltakspenger'}

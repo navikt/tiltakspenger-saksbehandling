@@ -55,6 +55,11 @@ interface PeriodeMedDeltagelse {
   deltagelse: Deltagelse;
 }
 
+export interface DeltakelseMedPeriode {
+  periode: NyPeriode;
+  deltakelse: boolean;
+}
+
 export enum Deltagelse {
   DELTAR = 'DELTAR',
   DELTAR_IKKE = 'DELTAR_IKKE',

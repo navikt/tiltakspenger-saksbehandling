@@ -49,10 +49,7 @@ export function tekstTilDate(dateString: string) {
   return dayjs(dateString).toDate();
 }
 
-export const nyPeriodeTilPeriode = (periode: NyPeriode) => {
-  console.log(periode);
-  return {
-    fra: periode.fraOgMed,
-    til: periode.tilOgMed,
-  };
-};
+export const nyPeriodeTilPeriode = (periode: NyPeriode) => ({
+  fra: periode.fraOgMed,
+  til: periode.tilOgMed,
+});
