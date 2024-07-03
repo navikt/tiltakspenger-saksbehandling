@@ -1,53 +1,84 @@
 import { Loader, VStack } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
-import { useHentBehandling } from '../../hooks/useHentBehandling';
 import StegHeader from './StegHeader';
 import StegKort from './StegKort';
 import UtfallstekstMedIkon from './UtfallstekstMedIkon';
+import { useHentKvp } from '../../hooks/useHentKvp';
+import { Deltagelse } from '../../types/Kvp';
+import { nyPeriodeTilPeriode } from '../../utils/date';
+import { SkjemaFelter } from './OppdaterSaksopplysningForm';
 
 const Kvalifiseringsprogrammet = () => {
   const router = useRouter();
   const behandlingId = router.query.behandlingId as string;
-  const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
+  const { kvp, isLoading, mutate } = useHentKvp(behandlingId);
 
-  if (isLoading || !valgtBehandling) {
+  if (isLoading || !kvp) {
     return <Loader />;
   }
 
-  const KVP = valgtBehandling.ytelsessaksopplysninger.saksopplysninger.find(
-    (saksopplysning) =>
-      saksopplysning.saksopplysningTittel == 'Kvalifiseringsprogrammet(KVP)',
+  const håndterLagreKvpSaksopplysning = (data: SkjemaFelter) => {
+    const deltakelseMedPeriode = {
+      periode: { fraOgMed: data.periode.fra, tilOgMed: data.periode.til },
+      deltar: data.valgtVerdi,
+    };
+    const årsakTilEndring = data.begrunnelse;
+
+    fetch(`/api/behandling/${behandlingId}/vilkar/kvp`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        ytelseForPeriode: [deltakelseMedPeriode],
+        årsakTilEndring: årsakTilEndring,
+      }),
+    }).then(() => {
+      mutate;
+    });
+  };
+
+  const deltagelse = kvp.avklartSaksopplysning.periodeMedDeltagelse.deltagelse;
+  const vurderingsPeriode = nyPeriodeTilPeriode(kvp.vurderingsperiode);
+  const saksopplysningsPeriode = nyPeriodeTilPeriode(
+    kvp.avklartSaksopplysning.periodeMedDeltagelse.periode ??
+      kvp.søknadSaksopplysning.periodeMedDeltagelse.periode,
   );
-  if (!KVP) return <Loader />;
   return (
     <VStack gap="4">
       <StegHeader
         headertekst={'Kvalifiseringsprogrammet'}
-        lovdatatekst={
-          valgtBehandling.ytelsessaksopplysninger.vilkårLovreferanse.beskrivelse
-        }
-        paragraf={
-          valgtBehandling.ytelsessaksopplysninger.vilkårLovreferanse.paragraf
-        }
+        lovdatatekst={kvp.vilkårLovreferanse.beskrivelse}
+        paragraf={kvp.vilkårLovreferanse.paragraf}
         lovdatalenke={
           'https://lovdata.no/dokument/SF/forskrift/2013-11-04-1286'
         }
       />
-      <UtfallstekstMedIkon utfall={KVP.utfall} />
+      <UtfallstekstMedIkon samletUtfall={kvp.samletUtfall} />
       <StegKort
+        håndterLagreSaksopplysning={(data: SkjemaFelter) =>
+          håndterLagreKvpSaksopplysning(data)
+        }
         editerbar={true}
-        behandlingId={valgtBehandling.behandlingId}
-        vurderingsperiode={valgtBehandling.vurderingsperiode}
-        saksopplysningsperiode={valgtBehandling.vurderingsperiode}
-        kilde={KVP.kilde}
-        utfall={KVP.utfall}
-        vilkår={KVP.saksopplysning}
-        vilkårTittel={KVP.saksopplysningTittel}
-        grunnlag={KVP.utfall == 'OPPFYLT' ? 'Nei' : 'Ja'}
+        vurderingsperiode={vurderingsPeriode}
+        saksopplysningsperiode={saksopplysningsPeriode}
+        kilde={kvp.avklartSaksopplysning.kilde}
+        utfall={kvp.samletUtfall}
+        vilkårTittel={'Kvalifiseringsprogrammet'}
+        grunnlag={deltagelseTekst(deltagelse)}
         grunnlagHeader={'Deltar'}
       />
     </VStack>
   );
+};
+
+const deltagelseTekst = (deltagelse: Deltagelse): string => {
+  switch (deltagelse) {
+    case Deltagelse.DELTAR:
+      return 'Ja';
+    case Deltagelse.DELTAR_IKKE:
+      return 'Nei';
+  }
 };
 
 export default Kvalifiseringsprogrammet;

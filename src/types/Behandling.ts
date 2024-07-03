@@ -41,7 +41,7 @@ interface KravdatoSaksopplysninger {
   opprinneligKravdato: KravdatoSaksopplysning;
   kravdatoFraSaksbehandler: KravdatoSaksopplysning;
   vurderinger: Vurdering[];
-  lovreferanse: LovreferanseDTO;
+  lovreferanse: Lovreferanse;
 }
 
 export interface KravdatoSaksopplysning {
@@ -92,13 +92,13 @@ export interface Ytelsessaksopplysninger {
   vilkår: string;
   saksopplysninger: SaksopplysningInnDTO[];
   samletUtfall: Utfall;
-  vilkårLovreferanse: LovreferanseDTO;
+  vilkårLovreferanse: Lovreferanse;
 }
 
 export interface TiltaksdeltagelsesaksopplysningerDTO {
   vilkår: string;
   saksopplysninger: RegistrertTiltak[];
-  vilkårLovreferanse: LovreferanseDTO;
+  vilkårLovreferanse: Lovreferanse;
 }
 
 export interface StønadsdagerSaksopplysning {
@@ -115,7 +115,7 @@ export interface Stønadsdager {
   kilde: string;
 }
 
-export interface LovreferanseDTO {
+export interface Lovreferanse {
   lovverk: string;
   paragraf: string;
   beskrivelse: string;
@@ -137,6 +137,6 @@ export interface Aldersaksopplysning {
   vilkår: string;
   vilkårTittel: string;
   utfall: Utfall;
-  vilkårLovreferanse: LovreferanseDTO[];
+  vilkårLovreferanse: Lovreferanse[];
   grunnlag: Date;
 }

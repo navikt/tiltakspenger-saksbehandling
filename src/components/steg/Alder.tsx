@@ -5,6 +5,7 @@ import StegHeader from './StegHeader';
 import StegKort from './StegKort';
 import { dateTilFormatertTekst } from '../../utils/date';
 import UtfallstekstMedIkon from './UtfallstekstMedIkon';
+import { SkjemaFelter } from './OppdaterSaksopplysningForm';
 
 const Alder = () => {
   const router = useRouter();
@@ -16,6 +17,10 @@ const Alder = () => {
   }
 
   const saksopplysning = valgtBehandling.alderssaksopplysning;
+
+  const håndterLagreSaksopplysning = (data: SkjemaFelter) => {
+    console.log('alder');
+  };
 
   if (!saksopplysning) return <Loader />;
 
@@ -29,15 +34,16 @@ const Alder = () => {
         }
         paragraf={'§3'}
       />
-      <UtfallstekstMedIkon utfall={saksopplysning.utfall} />
+      <UtfallstekstMedIkon samletUtfall={saksopplysning.utfall} />
       <StegKort
         editerbar={false}
-        behandlingId={valgtBehandling.behandlingId}
+        håndterLagreSaksopplysning={(data: SkjemaFelter) =>
+          håndterLagreSaksopplysning(data)
+        }
         vurderingsperiode={valgtBehandling.vurderingsperiode}
         saksopplysningsperiode={saksopplysning.periode}
         kilde={saksopplysning.kilde}
         utfall={saksopplysning.utfall}
-        vilkår={saksopplysning.vilkår}
         vilkårTittel={saksopplysning.vilkårTittel}
         grunnlag={dateTilFormatertTekst(saksopplysning.grunnlag)}
         grunnlagHeader={'Fødselsdato'}

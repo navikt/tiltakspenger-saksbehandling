@@ -1,22 +1,21 @@
 import { PencilIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, HStack, Table, VStack } from '@navikt/ds-react';
-import {
-  dateTilFormatertTekst,
-  periodeTilFormatertDatotekst,
-} from '../../utils/date';
-import { RedigeringSkjema } from '../saksopplysning-tabell/RedigeringSkjema';
+import { periodeTilFormatertDatotekst } from '../../utils/date';
 import { useState } from 'react';
 import { Periode } from '../../types/Periode';
 import { UtfallIkon } from '../utfall-ikon/UtfallIkon';
+import {
+  OppdaterSaksopplysningFormSkjema,
+  SkjemaFelter,
+} from './OppdaterSaksopplysningForm';
 
 interface StegKortProps {
+  håndterLagreSaksopplysning: (data: SkjemaFelter) => void;
   editerbar: boolean;
-  behandlingId: string;
   vurderingsperiode: Periode;
   saksopplysningsperiode: Periode;
   kilde: string;
   utfall: string;
-  vilkår: string;
   vilkårTittel: string;
   grunnlag: string;
   grunnlagHeader: string;
@@ -24,12 +23,11 @@ interface StegKortProps {
 
 const StegKort = ({
   editerbar,
-  behandlingId,
+  håndterLagreSaksopplysning,
   vurderingsperiode,
   saksopplysningsperiode,
   kilde,
   utfall,
-  vilkår,
   vilkårTittel,
   grunnlag,
   grunnlagHeader,
@@ -108,12 +106,13 @@ const StegKort = ({
           </HStack>
         </VStack>
       </HStack>
-      {åpenRedigering && (
-        <RedigeringSkjema
-          saksopplysning={vilkår}
-          saksopplysningTittel={vilkårTittel}
+      {åpenRedigering && editerbar && (
+        <OppdaterSaksopplysningFormSkjema
           håndterLukkRedigering={() => settÅpenRedigering(false)}
-          behandlingId={behandlingId}
+          håndterLagreSaksopplysning={(data: SkjemaFelter) =>
+            håndterLagreSaksopplysning(data)
+          }
+          saksopplysningTittel={vilkårTittel}
           vurderingsperiode={vurderingsperiode}
         />
       )}

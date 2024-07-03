@@ -4,11 +4,15 @@ import { useHentBehandling } from '../../hooks/useHentBehandling';
 import StegHeader from './StegHeader';
 import StegKort from './StegKort';
 import UtfallstekstMedIkon from './UtfallstekstMedIkon';
+import { SkjemaFelter } from './OppdaterSaksopplysningForm';
+import { useSWRConfig } from 'swr';
+import { dateTilISOTekst } from '../../utils/date';
 
 const Introduksjonsprogrammet = () => {
   const router = useRouter();
   const behandlingId = router.query.behandlingId as string;
   const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
+  const mutator = useSWRConfig().mutate;
 
   if (isLoading || !valgtBehandling) {
     return <Loader />;
@@ -18,7 +22,31 @@ const Introduksjonsprogrammet = () => {
     (saksopplysning) =>
       saksopplysning.saksopplysningTittel == 'Introduksjonsprogrammet',
   );
+
   if (!intro) return <Loader />;
+
+  const håndterLagreSaksopplysning = (data: SkjemaFelter) => {
+    fetch(`/api/behandling/${behandlingId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        fra: data.valgtVerdi
+          ? dateTilISOTekst(data.periode?.fra)
+          : valgtBehandling.vurderingsperiode.fra,
+        til: data.valgtVerdi
+          ? dateTilISOTekst(data.periode?.til)
+          : valgtBehandling.vurderingsperiode.til,
+        vilkår: 'INTROPROGRAMMET',
+        begrunnelse: data.begrunnelse,
+        harYtelse: data.valgtVerdi,
+      }),
+    }).then(() => {
+      mutator(`/api/behandling/${behandlingId}`);
+    });
+  };
+
   return (
     <VStack gap="4">
       <StegHeader
@@ -33,15 +61,16 @@ const Introduksjonsprogrammet = () => {
           'https://lovdata.no/dokument/SF/forskrift/2013-11-04-1286'
         }
       />
-      <UtfallstekstMedIkon utfall={intro.utfall} />
+      <UtfallstekstMedIkon samletUtfall={intro.utfall} />
       <StegKort
+        håndterLagreSaksopplysning={(data: SkjemaFelter) =>
+          håndterLagreSaksopplysning(data)
+        }
         editerbar={true}
-        behandlingId={valgtBehandling.behandlingId}
         vurderingsperiode={valgtBehandling.vurderingsperiode}
         saksopplysningsperiode={valgtBehandling.vurderingsperiode}
         kilde={intro.kilde}
         utfall={intro.utfall}
-        vilkår={intro.saksopplysning}
         vilkårTittel={intro.saksopplysningTittel}
         grunnlag={intro.utfall === 'OPPFYLT' ? 'Nei' : 'Ja'}
         grunnlagHeader={'Deltar'}
