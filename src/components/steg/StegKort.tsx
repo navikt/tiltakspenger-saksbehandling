@@ -1,9 +1,6 @@
 import { PencilIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, HStack, Table, VStack } from '@navikt/ds-react';
-import {
-  dateTilFormatertTekst,
-  periodeTilFormatertDatotekst,
-} from '../../utils/date';
+import { periodeTilFormatertDatotekst } from '../../utils/date';
 import { RedigeringSkjema } from '../saksopplysning-tabell/RedigeringSkjema';
 import { useState } from 'react';
 import { Periode } from '../../types/Periode';

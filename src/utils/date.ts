@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { Periode } from '../types/Periode';
+import { NyPeriode, Periode } from '../types/Periode';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 import weekday from 'dayjs/plugin/weekday';
 import 'dayjs/locale/nb';
@@ -48,3 +48,11 @@ export function ukenummerFraDate(date: Date) {
 export function tekstTilDate(dateString: string) {
   return dayjs(dateString).toDate();
 }
+
+export const nyPeriodeTilPeriode = (periode: NyPeriode) => {
+  console.log(periode);
+  return {
+    fra: periode.fraOgMed,
+    til: periode.tilOgMed,
+  };
+};

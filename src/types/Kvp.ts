@@ -5,12 +5,11 @@ export interface KvpVilkår {
   søknadSaksopplysning: KvpSaksopplysning;
   avklartSaksopplysning: KvpSaksopplysning;
   vilkårLovreferanse: Lovreferanse;
-  vurderingsPeriode: Periode;
+  vurderingsperiode: NyPeriode;
   samletUtfall: SamletUtfall;
 }
 
 interface KvpSaksopplysning {
-  periode: Periode;
   periodeMedDeltagelse: PeriodeMedDeltagelse;
   årsakTilEndring?: ÅrsakTilEndring;
   kilde: Kilde;

@@ -5,6 +5,7 @@ import StegKort from './StegKort';
 import UtfallstekstMedIkon from './UtfallstekstMedIkon';
 import { useHentKvp } from '../../hooks/useHentKvp';
 import { Deltagelse } from '../../types/Kvp';
+import { nyPeriodeTilPeriode } from '../../utils/date';
 
 const Kvalifiseringsprogrammet = () => {
   const router = useRouter();
@@ -15,13 +16,12 @@ const Kvalifiseringsprogrammet = () => {
     return <Loader />;
   }
 
-  const vurderingsperiode = {
-    fra: new Date('2024-05-10'),
-    til: new Date('2024-10-10'),
-  };
-  const utfall = kvp.samletUtfall;
   const deltagelse = kvp.avklartSaksopplysning.periodeMedDeltagelse.deltagelse;
-
+  const vurderingsPeriode = nyPeriodeTilPeriode(kvp.vurderingsperiode);
+  const saksopplysningsPeriode = nyPeriodeTilPeriode(
+    kvp.avklartSaksopplysning.periodeMedDeltagelse.periode ??
+      kvp.søknadSaksopplysning.periodeMedDeltagelse.periode,
+  );
   return (
     <VStack gap="4">
       <StegHeader
@@ -32,14 +32,14 @@ const Kvalifiseringsprogrammet = () => {
           'https://lovdata.no/dokument/SF/forskrift/2013-11-04-1286'
         }
       />
-      <UtfallstekstMedIkon samletUtfall={utfall} />
+      <UtfallstekstMedIkon samletUtfall={kvp.samletUtfall} />
       <StegKort
         editerbar={true}
         behandlingId={behandlingId}
-        vurderingsperiode={vurderingsperiode}
-        saksopplysningsperiode={vurderingsperiode}
+        vurderingsperiode={vurderingsPeriode}
+        saksopplysningsperiode={saksopplysningsPeriode}
         kilde={kvp.avklartSaksopplysning.kilde}
-        utfall={utfall}
+        utfall={kvp.samletUtfall}
         vilkår={'Kvalifiseringsprogrammet'}
         vilkårTittel={'Kvalifiseringsprogrammet'}
         grunnlag={deltagelseTekst(deltagelse)}
@@ -56,6 +56,6 @@ const deltagelseTekst = (deltagelse: Deltagelse): string => {
     case Deltagelse.DELTAR_IKKE:
       return 'Nei';
   }
-}
+};
 
 export default Kvalifiseringsprogrammet;
