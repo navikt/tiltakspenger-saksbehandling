@@ -47,7 +47,7 @@ const VilkårsvurderingAvStønadsdager = () => {
       <StegHeader
         headertekst="Stønadsdager"
         lovdatatekst="Stønadsdager"
-        paragraf="§6"
+        paragraf="§6-1"
         lovdatalenke={
           'https://lovdata.no/dokument/SF/forskrift/2013-11-04-1286'
         }
