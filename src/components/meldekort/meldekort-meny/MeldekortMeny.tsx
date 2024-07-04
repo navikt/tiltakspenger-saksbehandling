@@ -14,8 +14,8 @@ interface MeldekortmenyProps {
   behandlingId: string;
 }
 
-const meldekortUkeNummer = (fom: Date, tom: Date): string => {
-  return `Uke ${ukenummerFraDate(fom)} / ${ukenummerFraDate(tom)}`;
+const meldekortUkeNummer = (fom: string, tom: string): string => {
+  return `Uke ${ukenummerFraDate(new Date(fom))} / ${ukenummerFraDate(new Date(tom))}`;
 };
 
 export const MeldekortMeny = ({ behandlingId }: MeldekortmenyProps) => {

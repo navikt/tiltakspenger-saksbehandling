@@ -6,8 +6,8 @@ export type MeldekortListe = {
 
 export type MeldekortUtenDager = {
   id: string;
-  fom: Date;
-  tom: Date;
+  fom: string;
+  tom: string;
   status: string;
 };
 
@@ -39,7 +39,7 @@ export type MeldekortDagDTO = {
   tiltakId: string;
   dato: Date;
   status: MeldekortStatus;
-}
+};
 
 export enum MeldekortStatus {
   Sperret = 'SPERRET',
@@ -62,15 +62,15 @@ export const MeldekortStatusTekster = [
 ];
 
 export type MeldekortBeregningDTO = {
-    antallDeltatt: number;
-    antallIkkeDeltatt: number;
-    antallSykDager: number;
-    antallSykBarnDager: number;
-    antallVelferd: number;
-    antallFullUtbetaling: number;
-    antallDelvisUtbetaling: number;
-    antallIngenUtbetaling: number;
-    sumDelvis: number;
-    sumFull: number;
-    sumTotal: number;
-}
+  antallDeltatt: number;
+  antallIkkeDeltatt: number;
+  antallSykDager: number;
+  antallSykBarnDager: number;
+  antallVelferd: number;
+  antallFullUtbetaling: number;
+  antallDelvisUtbetaling: number;
+  antallIngenUtbetaling: number;
+  sumDelvis: number;
+  sumFull: number;
+  sumTotal: number;
+};

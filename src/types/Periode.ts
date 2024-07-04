@@ -1,9 +1,9 @@
 export type Periode = {
-  fra: Date;
-  til: Date;
+  fra: string;
+  til: string;
 };
 
 export type NyPeriode = {
-  fraOgMed: Date;
-  tilOgMed: Date;
+  fraOgMed: string;
+  tilOgMed: string;
 };

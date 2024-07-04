@@ -51,6 +51,7 @@ const BegrunnelseModal = ({
       ref={modalRef}
       width="medium"
       className={styles.modal}
+      aria-label="Legg til begrunnelse"
       onClose={() => {
         setError('');
         setBegrunnelse('');

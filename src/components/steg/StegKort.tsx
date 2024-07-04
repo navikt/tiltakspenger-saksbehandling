@@ -15,7 +15,7 @@ interface StegKortProps {
   vurderingsperiode: Periode;
   saksopplysningsperiode: Periode;
   kilde: string;
-  utfall: string;
+  utfall: string | null;
   vilkårTittel: string;
   grunnlag: string;
   grunnlagHeader: string;
@@ -58,7 +58,11 @@ const StegKort = ({
                   {grunnlagHeader}
                 </Table.HeaderCell>
                 <Table.HeaderCell scope="col">Kilde</Table.HeaderCell>
-                <Table.HeaderCell scope="col">Vilkår oppfylt</Table.HeaderCell>
+                {utfall && (
+                  <Table.HeaderCell scope="col">
+                    Vilkår oppfylt
+                  </Table.HeaderCell>
+                )}
               </Table.Row>
             </Table.Header>
             <Table.Body>
@@ -68,9 +72,11 @@ const StegKort = ({
                 </Table.DataCell>
                 <Table.DataCell>{grunnlag}</Table.DataCell>
                 <Table.DataCell>{kilde}</Table.DataCell>
-                <Table.DataCell>
-                  <UtfallIkon utfall={utfall} />
-                </Table.DataCell>
+                {utfall && (
+                  <Table.DataCell>
+                    <UtfallIkon utfall={utfall} />
+                  </Table.DataCell>
+                )}
               </Table.Row>
             </Table.Body>
           </Table>
