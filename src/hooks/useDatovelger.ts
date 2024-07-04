@@ -11,7 +11,8 @@ export const useDatovelger = (
       if (!date) return;
       onDatoChange(date);
     },
-    fromDate: new Date(minDato),
-    toDate: new Date(maxDato),
+    fromDate: minDato,
+    toDate: maxDato,
+    defaultSelected: fraDato ? minDato : maxDato,
     defaultMonth: fraDato ? minDato : maxDato,
   });

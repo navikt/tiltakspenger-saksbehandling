@@ -18,8 +18,6 @@ export default function Periodevelger({
   onTilChange,
   minDato,
   maxDato,
-  valgtFraDato,
-  valgtTilDato,
   disabled,
   error,
 }: PeriodevelgerProps) {
@@ -37,9 +35,11 @@ export default function Periodevelger({
   );
 
   useEffect(() => {
-    fraDatovelger.setSelected(valgtFraDato);
-    tilDatovelger.setSelected(valgtTilDato);
-  }, [valgtFraDato, valgtTilDato, fraDatovelger, tilDatovelger]);
+    if (disabled) {
+      fraDatovelger.reset();
+      tilDatovelger.reset();
+    }
+  });
 
   return (
     <VStack>

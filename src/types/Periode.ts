@@ -4,6 +4,6 @@ export type Periode = {
 };
 
 export type NyPeriode = {
-  fraOgMed: Date;
-  tilOgMed: Date;
+  fraOgMed: string;
+  tilOgMed: string;
 };

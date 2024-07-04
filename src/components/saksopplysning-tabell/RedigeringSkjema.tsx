@@ -30,7 +30,7 @@ interface RedigeringSkjemaProps {
 
 interface SkjemaFelter {
   periode: { fra: Date; til: Date };
-  harYtelse: boolean;
+  valgtVerdi: boolean;
   begrunnelse: string;
 }
 
@@ -59,7 +59,7 @@ export const RedigeringSkjema = ({
     },
   });
 
-  const watchHarYtelse = watch('harYtelse');
+  const watchvalgtVerdi = watch('valgtVerdi');
 
   const onSubmit: SubmitHandler<SkjemaFelter> = (data) => {
     håndterLukkRedigering();
@@ -72,11 +72,11 @@ export const RedigeringSkjema = ({
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        fra: watchHarYtelse ? valgtFra : vurderingsperiode.fra,
-        til: watchHarYtelse ? valgtTil : vurderingsperiode.til,
+        fra: watchvalgtVerdi ? valgtFra : vurderingsperiode.fra,
+        til: watchvalgtVerdi ? valgtTil : vurderingsperiode.til,
         vilkår: saksopplysning,
         begrunnelse: data.begrunnelse,
-        harYtelse: data.harYtelse,
+        valgtVerdi: data.valgtVerdi,
       }),
     }).then(() => {
       mutator(`/api/behandling/${behandlingId}`);
@@ -93,7 +93,7 @@ export const RedigeringSkjema = ({
     >
       <VStack gap="5" align="start">
         <Controller
-          name={'harYtelse'}
+          name={'valgtVerdi'}
           control={control}
           render={({ field: { onChange } }) => {
             return (
@@ -142,7 +142,7 @@ export const RedigeringSkjema = ({
               maxDato={vurderingsperiode.til}
               valgtFraDato={value.fra}
               valgtTilDato={value.til}
-              disabled={!watchHarYtelse}
+              disabled={!watchvalgtVerdi}
               error={errors.periode?.message ?? ''}
             />
           )}

@@ -5,13 +5,15 @@ import StegKort from './StegKort';
 import UtfallstekstMedIkon from './UtfallstekstMedIkon';
 import { useHentKvp } from '../../hooks/useHentKvp';
 import { Deltagelse } from '../../types/Kvp';
-import { nyPeriodeTilPeriode } from '../../utils/date';
+import { dateTilISOTekst, nyPeriodeTilPeriode } from '../../utils/date';
 import { SkjemaFelter } from './OppdaterSaksopplysningForm';
+import { useSWRConfig } from 'swr';
 
 const Kvalifiseringsprogrammet = () => {
   const router = useRouter();
   const behandlingId = router.query.behandlingId as string;
-  const { kvp, isLoading, mutate } = useHentKvp(behandlingId);
+  const { kvp, isLoading } = useHentKvp(behandlingId);
+  const mutator = useSWRConfig().mutate;
 
   if (isLoading || !kvp) {
     return <Loader />;
@@ -19,9 +21,15 @@ const Kvalifiseringsprogrammet = () => {
 
   const håndterLagreKvpSaksopplysning = (data: SkjemaFelter) => {
     const deltakelseMedPeriode = {
-      periode: { fraOgMed: data.periode.fra, tilOgMed: data.periode.til },
+      periode: data.valgtVerdi
+        ? {
+            fraOgMed: dateTilISOTekst(data.periode.fra),
+            tilOgMed: dateTilISOTekst(data.periode.til),
+          }
+        : vurderingsPeriode,
       deltar: data.valgtVerdi,
     };
+
     const årsakTilEndring = data.begrunnelse;
 
     fetch(`/api/behandling/${behandlingId}/vilkar/kvp`, {
@@ -33,9 +41,15 @@ const Kvalifiseringsprogrammet = () => {
         ytelseForPeriode: [deltakelseMedPeriode],
         årsakTilEndring: årsakTilEndring,
       }),
-    }).then(() => {
-      mutate;
-    });
+    })
+      .then(() => {
+        mutator(`/api/behandling/${behandlingId}/vilkar/kvp`);
+      })
+      .catch((error) => {
+        throw new Error(
+          `Noe gikk galt ved lagring av antall dager: ${error.message}`,
+        );
+      });
   };
 
   const deltagelse = kvp.avklartSaksopplysning.periodeMedDeltagelse.deltagelse;
