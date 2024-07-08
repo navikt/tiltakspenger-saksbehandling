@@ -12,6 +12,7 @@ import Institusjonsopphold from '../steg/Institusjonsopphold';
 import Introduksjonsprogrammet from '../steg/Introduksjonsprogrammet';
 import Oppsummering from '../steg/Oppsummering';
 import FristForFramsettingAvKrav from '../steg/FristForFramsettingAvKrav';
+import { AndreYtelserMinimalistisk } from '../steg/AndreYtelserMinimalistisk';
 
 const BehandlingSteg = () => {
   const router = useRouter();
@@ -32,7 +33,7 @@ const BehandlingSteg = () => {
       case Behandlingssteg.INSTITUSJONSOPPHOLD:
         return <Institusjonsopphold />;
       case Behandlingssteg.ANDREYTELSER:
-        return <AndreYtelser />;
+        return <AndreYtelserMinimalistisk />;
       case Behandlingssteg.STØNADSDAGER:
         return <Stønadsdager />;
       case Behandlingssteg.OPPSUMMERING:
