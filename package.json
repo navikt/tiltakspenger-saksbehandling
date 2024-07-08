@@ -26,7 +26,8 @@
     "react-dom": "^18.3.1",
     "react-error-boundary": "^4.0.13",
     "react-hook-form": "7.52.0",
-    "swr": "^2.2.5"
+    "swr": "^2.2.5",
+    "typescript": "5.5.3"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.4.6",
@@ -40,8 +41,7 @@
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "pino-pretty": "^11.2.1",
-    "prettier": "^3.3.2",
-    "typescript": "5.5.3"
+    "prettier": "^3.3.2"
   },
   "author": "NAV",
   "license": "MIT"
