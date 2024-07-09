@@ -23,10 +23,13 @@ const Kvalifiseringsprogrammet = () => {
     const deltakelseMedPeriode = {
       periode: data.valgtVerdi
         ? {
-            fraOgMed: dateTilISOTekst(data.periode.fra),
-            tilOgMed: dateTilISOTekst(data.periode.til),
-          }
-        : vurderingsPeriode,
+          fraOgMed: dateTilISOTekst(data.periode.fra),
+          tilOgMed: dateTilISOTekst(data.periode.til),
+        }
+        : {
+          fraOgMed: vurderingsPeriode.fra,
+          tilOgMed: vurderingsPeriode.til,
+        },
       deltar: data.valgtVerdi,
     };
 
@@ -56,7 +59,7 @@ const Kvalifiseringsprogrammet = () => {
   const vurderingsPeriode = nyPeriodeTilPeriode(kvp.vurderingsperiode);
   const saksopplysningsPeriode = nyPeriodeTilPeriode(
     kvp.avklartSaksopplysning.periodeMedDeltagelse.periode ??
-      kvp.søknadSaksopplysning.periodeMedDeltagelse.periode,
+    kvp.søknadSaksopplysning.periodeMedDeltagelse.periode,
   );
   return (
     <VStack gap="4">
