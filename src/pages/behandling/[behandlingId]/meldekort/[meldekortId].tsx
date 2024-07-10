@@ -6,7 +6,7 @@ import { NextPageWithLayout } from '../../../_app';
 import { MeldekortMeny } from '../../../../components/meldekort/meldekort-meny/MeldekortMeny';
 import { MeldekortSide } from '../../../../components/meldekort/meldekort-side/MeldekortSide';
 import { MeldekortDetaljer } from '../../../../components/meldekort/meldekort-detaljer/MeldekortDetaljer';
-import { pageWithAuthentication } from '../../../../utils/pageWithAuthentication';
+import { pageWithAuthentication } from '../../../../auth/pageWithAuthentication';
 
 const Meldekort: NextPageWithLayout = () => {
   const router = useRouter();
