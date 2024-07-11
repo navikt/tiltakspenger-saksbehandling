@@ -20,7 +20,8 @@ export function pageWithAuthentication(
   getServerSideProps: GetServerSideProps = defaultGetServerSideProps,
 ) {
   return async (context: GetServerSidePropsContext) => {
-    const token = getToken(context.req);
+    const token = context.req.headers.authorization!.replace('Bearer ', '');
+
     if (token == null) {
       return {
         redirect: {
