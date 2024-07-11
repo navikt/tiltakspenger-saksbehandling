@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { logger } from '@navikt/next-logger';
-import { getToken, requestOboToken } from '@navikt/oasis';
+import { getToken } from '../../utils/auth';
+import SimpleResponse from '../../types/SimpleResponse';
+import logger from '../../utils/serverLogger';
 
 const vedtakBackendUrl = process.env.TILTAKSPENGER_VEDTAK_URL || '';
 const meldekortBackendUrl = process.env.TILTAKSPENGER_MELDEKORT_URL || '';
@@ -40,22 +41,19 @@ export async function middleware(
   request: NextApiRequest,
   response: NextApiResponse,
 ): Promise<void> {
-  const scope = `api://${process.env.SCOPE}/.default`;
-  const token = await getToken(request);
-  if (token == null) {
-    logger.error('Fant ikke token');
-    response.status(500).json({ message: 'Bruker har ikke tilgang' });
-    return;
+  let oboToken = null;
+  try {
+    oboToken = await getToken(request);
+  } catch (error: any) {
+    const simpleResponse = error as SimpleResponse;
+    logger.error('Bruker har ikke tilgang, kall mot Azure feilet', error);
+    response
+      .status(simpleResponse.status)
+      .json({ message: 'Bruker har ikke tilgang' });
   }
-
-  const obo = await requestOboToken(token, scope);
-  if (!obo.ok) {
-    throw new Error(
-      `Kunne ikke gjøre on-behalf-of-utveksling for saksbehandlertoken`,
-    );
-  } else {
+  if (oboToken) {
     try {
-      const res = await makeApiRequest(request, obo.token);
+      const res = await makeApiRequest(request, oboToken as string);
       if (res.ok) {
         const body = await res.json();
         response.status(res.status).json(body);
