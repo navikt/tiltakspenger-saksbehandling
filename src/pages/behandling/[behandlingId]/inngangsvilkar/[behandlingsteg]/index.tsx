@@ -1,4 +1,4 @@
-import { pageWithAuthentication } from '../../../../../utils/pageWithAuthentication';
+import { pageWithAuthentication } from '../../../../../auth/pageWithAuthentication';
 import { Loader } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import { useHentBehandling } from '../../../../../hooks/useHentBehandling';

@@ -1,6 +1,6 @@
 import React from 'react';
 import { NextPage } from 'next';
-import { pageWithAuthentication } from '../../utils/pageWithAuthentication';
+import { pageWithAuthentication } from '../../auth/pageWithAuthentication';
 import { Link, Loader, Table } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
