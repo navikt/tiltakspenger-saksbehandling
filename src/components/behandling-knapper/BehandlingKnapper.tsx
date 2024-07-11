@@ -4,7 +4,6 @@ import { useRouter } from 'next/router';
 import { Lesevisning } from '../../utils/avklarLesevisning';
 import { RefObject } from 'react';
 import { useSWRConfig } from 'swr';
-import Varsel from '../varsel/Varsel';
 
 interface BehandlingKnapperProps {
   behandlingid: string;
@@ -13,19 +12,19 @@ interface BehandlingKnapperProps {
   modalRef: RefObject<HTMLDialogElement>;
 }
 
-async function oppdaterBehandling(url: string, { arg }: { arg?: string }) {
-  await fetch(url, {
-    method: 'POST',
-  });
-}
-
 export const BehandlingKnapper = ({
   behandlingid,
   lesevisning,
   modalRef,
 }: BehandlingKnapperProps) => {
   const router = useRouter();
-  const { mutate } = useSWRConfig();
+  const mutator = useSWRConfig().mutate;
+
+  async function oppdaterBehandling(url: string, { arg }: { arg?: string }) {
+    await fetch(url, {
+      method: 'POST',
+    }).then(() => mutator(`/api/behandling/${behandlingid}`));
+  }
 
   const { trigger: sendTilBeslutter, isMutating: oppdatererBeslutter } =
     useSWRMutation(
@@ -70,7 +69,6 @@ export const BehandlingKnapper = ({
             loading={godkjennerBehandling}
             onClick={() => {
               godkjennBehandling();
-              mutate(`/api/behandling/${behandlingid}`);
             }}
             disabled={!lesevisning.knappGodkjennTillatt}
           >
@@ -84,7 +82,6 @@ export const BehandlingKnapper = ({
             loading={oppdatererSaksopplysninger}
             onClick={() => {
               oppdaterSaksopplysninger();
-              router.push(`/behandling/${behandlingid}`);
             }}
           >
             Oppdater saksopplysninger
@@ -97,14 +94,12 @@ export const BehandlingKnapper = ({
             loading={oppdatererBeslutter}
             onClick={() => {
               sendTilBeslutter();
-              mutate(`/api/behandling/${behandlingid}`);
             }}
             disabled={lesevisning.kanIkkeGodkjennes}
           >
             Send til beslutter
           </Button>
         )}
-        <Varsel variant="success" melding="Behandlingen er oppdatert" />
       </HStack>
     </>
   );
