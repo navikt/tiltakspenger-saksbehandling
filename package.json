@@ -19,7 +19,6 @@
     "@navikt/ds-react": "^6.13.0",
     "@navikt/ds-tokens": "^6.13.0",
     "@navikt/next-logger": "^1.25.0",
-    "@navikt/oasis": "^3.3.0",
     "dayjs": "^1.11.11",
     "next": "^14.2.5",
     "pino": "^9.2.0",
