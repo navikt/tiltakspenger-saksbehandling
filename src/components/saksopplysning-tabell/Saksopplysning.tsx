@@ -1,18 +1,16 @@
 import { PencilIcon } from '@navikt/aksel-icons';
-import { Table, BodyShort, Button, Link } from '@navikt/ds-react';
+import { Table, BodyShort, Button } from '@navikt/ds-react';
 import { RedigeringSkjema } from './RedigeringSkjema';
 import { useState } from 'react';
 import { Lesevisning } from '../../utils/avklarLesevisning';
-import { formatPeriode } from '../../utils/date';
+import { periodeTilFormatertDatotekst } from '../../utils/date';
 import { UtfallIkon } from '../utfall-ikon/UtfallIkon';
-import { FaktaDTO, SaksopplysningInnDTO } from '../../types/Behandling';
+import { SaksopplysningInnDTO } from '../../types/Behandling';
+import { Periode } from '../../types/Periode';
 
 interface SaksopplysningProps {
   behandlingId: string;
-  behandlingsperiode: {
-    fom: string;
-    tom: string;
-  };
+  vurderingsperiode: Periode;
   lesevisning: Lesevisning;
   saksopplysningDTO: SaksopplysningInnDTO;
 }
@@ -20,26 +18,19 @@ interface SaksopplysningProps {
 export const Saksopplysning = ({
   saksopplysningDTO,
   behandlingId,
-  behandlingsperiode,
+  vurderingsperiode,
   lesevisning,
 }: SaksopplysningProps) => {
   const [åpneRedigering, onÅpneRedigering] = useState<boolean>(false);
 
-  const { vilkårTittel, vilkårFlateTittel, utfall, fom, tom, kilde, detaljer, vilkårLovReferense } =
-    saksopplysningDTO;
-
-  const velgFaktaTekst = (typeSaksopplysning: string, fakta: FaktaDTO) => {
-    if (typeSaksopplysning === 'HAR_YTELSE') return fakta.harYtelse;
-    if (typeSaksopplysning === 'HAR_IKKE_YTELSE') return fakta.harIkkeYtelse;
-    return 'Ikke innhentet';
-  };
-
-  const hentLovDataURLen = (lovverk: string, paragraf: string) => {
-    if (lovverk == 'Tiltakspengeforskriften') return `https://lovdata.no/dokument/SF/forskrift/2013-11-04-1286/${paragraf}`;
-    if (lovverk == 'Arbeidsmarkedsloven') return `https://lovdata.no/dokument/NL/lov/2004-12-10-76/${paragraf}`;
-    if (lovverk == 'Rundskriv om tiltakspenger' && paragraf == '§8') return `https://lovdata.no/nav/rundskriv/r76-13-02/${paragraf}#KAPITTEL_3-7`;
-    return 'https://lovdata.no/dokument/SF/forskrift/2013-11-04-1286/';
-  }
+  const {
+    saksopplysning,
+    saksopplysningTittel,
+    utfall,
+    periode,
+    kilde,
+    detaljer,
+  } = saksopplysningDTO;
 
   const håndterLukkRedigering = () => {
     onÅpneRedigering(false);
@@ -47,24 +38,28 @@ export const Saksopplysning = ({
 
   return (
     <>
-      <Table.Row key={vilkårTittel}>
+      <Table.Row key={saksopplysning}>
         <Table.DataCell>
           <UtfallIkon utfall={utfall} />
         </Table.DataCell>
         <Table.DataCell>
-          <BodyShort>{vilkårFlateTittel}</BodyShort>
+          <BodyShort>{saksopplysningTittel}</BodyShort>
         </Table.DataCell>
         <Table.DataCell>
           <BodyShort>
-            {velgFaktaTekst(
-              saksopplysningDTO.typeSaksopplysning,
-              saksopplysningDTO.fakta,
-            )}
+            {utfall === 'OPPFYLT'
+              ? 'Søker mottar ikke ytelsen'
+              : 'Søker mottar ytelsen'}
           </BodyShort>
         </Table.DataCell>
         <Table.DataCell>
           <BodyShort>
-            {fom && tom ? formatPeriode({ fra: fom, til: tom }) : '-'}
+            {periode
+              ? periodeTilFormatertDatotekst({
+                  fra: periode.fra,
+                  til: periode.til,
+                })
+              : '-'}
           </BodyShort>
         </Table.DataCell>
         <Table.DataCell>
@@ -72,24 +67,6 @@ export const Saksopplysning = ({
         </Table.DataCell>
         <Table.DataCell>
           <BodyShort>{detaljer ? detaljer : '-'}</BodyShort>
-        </Table.DataCell>
-        <Table.DataCell>
-          {
-            vilkårLovReferense.map((lov,index) => {
-              return(
-                <BodyShort key={index}>
-                  <Link
-                      href={hentLovDataURLen(lov.lovverk, lov.paragraf)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ marginBottom: '0.5em'}}
-                  >
-                    {lov.paragraf}
-                  </Link>
-                </BodyShort>
-              )
-            })
-          }
         </Table.DataCell>
         <Table.DataCell>
           {lesevisning.kanEndre && (
@@ -105,15 +82,13 @@ export const Saksopplysning = ({
       </Table.Row>
       {åpneRedigering && lesevisning.kanEndre && (
         <Table.Row>
-          <Table.DataCell colSpan={7} style={{ padding: '0' }}>
+          <Table.DataCell colSpan={8} style={{ padding: '0' }}>
             <RedigeringSkjema
-              fakta={saksopplysningDTO.fakta}
               behandlingId={behandlingId}
-              vilkårTittel={vilkårTittel}
-              vilkårFlateTittel={vilkårFlateTittel}
+              saksopplysning={saksopplysning}
+              saksopplysningTittel={saksopplysningTittel}
               håndterLukkRedigering={håndterLukkRedigering}
-              behandlingsperiode={behandlingsperiode}
-              vilkårsperiode={{ fom: fom, tom: tom }}
+              vurderingsperiode={vurderingsperiode}
             />
           </Table.DataCell>
         </Table.Row>

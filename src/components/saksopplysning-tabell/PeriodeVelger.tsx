@@ -1,114 +1,75 @@
-import {
-  ErrorMessage,
-  DatePicker,
-  useDatepicker,
-  HStack,
-} from '@navikt/ds-react';
-import React, { useState } from 'react';
-
-export interface PeriodevelgerPeriode {
-  fom?: Date;
-  tom?: Date;
-}
-
-export interface RangeError {
-  from?: string;
-  to?: string;
-}
+import { DatePicker, ErrorMessage, HStack, VStack } from '@navikt/ds-react';
+import React, { useEffect } from 'react';
+import { useDatovelger } from '../../hooks/useDatovelger';
 
 interface PeriodevelgerProps {
-  onFromChange: (date: Date | undefined) => void;
-  onToChange: (date: Date | undefined) => void;
-  defaultSelected?: PeriodevelgerPeriode | null;
-  errorMessage?: string;
-  id?: string;
-  minDate?: Date;
-  maxDate?: Date;
-  disabledFra?: boolean;
-  disabledTil?: boolean;
-  size?: 'small' | 'medium';
+  onFraChange: (dato: Date) => void;
+  onTilChange: (dato: Date) => void;
+  minDato: string;
+  maxDato: string;
+  valgtFraDato: Date;
+  valgtTilDato: Date;
+  disabled: boolean;
+  error: string;
 }
 
 export default function Periodevelger({
-  onFromChange,
-  onToChange,
-  defaultSelected,
-  errorMessage,
-  id,
-  minDate,
-  maxDate,
-  disabledFra,
-  disabledTil,
-  size,
+  onFraChange,
+  onTilChange,
+  minDato,
+  maxDato,
+  disabled,
+  error,
 }: PeriodevelgerProps) {
-  const [rangeError, setRangeError] = useState<RangeError>({});
-  const fromDatePicker = useDatepicker({
-    onDateChange: (date) => {
-      onFromChange(date);
-    },
-    defaultSelected: defaultSelected?.fom,
-    fromDate: minDate,
-    toDate: maxDate,
-    defaultMonth: minDate ?? maxDate,
-    onValidate: (validation) => {
-      if (validation.isBefore || validation.isAfter) {
-        setRangeError({
-          from: 'Fra-dato kan ikke være utenfor behandlingsperioden',
-        });
-      } else {
-        setRangeError({ ...rangeError, from: undefined });
-      }
-    },
-  });
+  const fraDatovelger = useDatovelger(
+    onFraChange,
+    new Date(minDato),
+    new Date(maxDato),
+    true,
+  );
+  const tilDatovelger = useDatovelger(
+    onTilChange,
+    new Date(minDato),
+    new Date(maxDato),
+    false,
+  );
 
-  const toDatePicker = useDatepicker({
-    onDateChange: (date) => {
-      onToChange(date);
-    },
-    defaultSelected: defaultSelected?.tom,
-    fromDate: minDate,
-    toDate: maxDate,
-    defaultMonth: maxDate ?? minDate,
-    onValidate: (validation) => {
-      if (validation.isBefore || validation.isAfter) {
-        setRangeError({
-          to: 'Til-dato kan ikke være utenfor behandlingsperioden',
-        });
-      } else {
-        setRangeError({ ...rangeError, to: undefined });
-      }
-    },
+  useEffect(() => {
+    if (disabled) {
+      fraDatovelger.reset();
+      tilDatovelger.reset();
+    }
   });
-
-  const computedError = rangeError?.from || rangeError?.to || errorMessage;
 
   return (
-    <>
+    <VStack>
       <HStack gap="5">
-        <DatePicker {...fromDatePicker.datepickerProps} id={`${id}`}>
+        <DatePicker
+          {...fraDatovelger.datepickerProps}
+          aria-label="Velg fra-dato"
+          dropdownCaption
+        >
           <DatePicker.Input
-            {...fromDatePicker.inputProps}
+            {...fraDatovelger.inputProps}
             label="Fra"
-            error={!!computedError}
-            disabled={disabledFra}
-            aria-label={`${id}.fra`}
             autoComplete="off"
-            size={size || 'medium'}
+            disabled={disabled}
           />
         </DatePicker>
-        <DatePicker {...toDatePicker.datepickerProps} id={`${id}`}>
+        <DatePicker
+          {...tilDatovelger.datepickerProps}
+          aria-label="Velg til-dato"
+          dropdownCaption
+        >
           <DatePicker.Input
-            {...toDatePicker.inputProps}
+            {...tilDatovelger.inputProps}
             label="Til"
-            error={!!computedError}
-            disabled={disabledTil}
-            aria-label={`${id}.til`}
             autoComplete="off"
-            size={size || 'medium'}
+            disabled={disabled}
           />
         </DatePicker>
       </HStack>
-      {computedError ? <ErrorMessage>{`• ${computedError}`}</ErrorMessage> : ''}
-    </>
+      {error && <ErrorMessage>{`• ${error}`}</ErrorMessage>}
+    </VStack>
   );
 }

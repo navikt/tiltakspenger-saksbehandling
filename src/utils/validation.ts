@@ -1,15 +1,16 @@
 import dayjs from 'dayjs';
-import { ValidatorFunction } from '../components/saksopplysning-tabell/Periodefelt';
 
-export function påkrevdPeriodeValidator(periode: { fom: Date; tom: Date }) {
-  if (!periode?.fom || !periode?.tom) {
+export type ValidatorFunction = (value: any) => string | undefined;
+
+export function påkrevdPeriodeValidator(periode: { fra: Date; til: Date }) {
+  if (!periode?.fra || !periode?.til) {
     return 'Fra og til må fylles ut';
   }
 }
 
-export function gyldigPeriodeValidator(periode: { fom: Date; tom: Date }) {
-  const fraDato = dayjs(periode?.fom);
-  const tilDato = dayjs(periode?.tom);
+export function gyldigPeriodeValidator(periode: { fra: Date; til: Date }) {
+  const fraDato = dayjs(periode?.fra);
+  const tilDato = dayjs(periode?.til);
 
   if (fraDato.isAfter(tilDato)) {
     return 'Fra-dato kan ikke være etter til-dato';

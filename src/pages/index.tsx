@@ -16,19 +16,22 @@ const Benken: NextPage = () => {
   const taBehandling = async (behandlingid: string) => {
     fetch(`/api/behandling/startbehandling/${behandlingid}`, {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
     })
       .then(() => {
         mutator(`/api/behandlinger`);
       })
       .then(() => {
-        router.push(`/behandling/${behandlingid}`);
+        router.push(`/behandling/${behandlingid}/inngangsvilkar/kravfrist`);
       });
   };
 
   const skalKunneTaBehandling = (
     type: string,
     saksbehandlerForBehandling?: string,
-    beslutterForBehandling?: string
+    beslutterForBehandling?: string,
   ) => {
     switch (type) {
       case 'Klar til beslutning':
@@ -49,7 +52,7 @@ const Benken: NextPage = () => {
 
   const behandlingLinkAktivert = (
     saksbehandlerForBehandling?: string,
-    beslutterForBehandling?: string
+    beslutterForBehandling?: string,
   ) => {
     return (
       innloggetSaksbehandler?.navIdent == saksbehandlerForBehandling ||
@@ -84,9 +87,11 @@ const Benken: NextPage = () => {
                 <Table.DataCell>
                   {behandlingLinkAktivert(
                     behandling.saksbehandler,
-                    behandling.beslutter
+                    behandling.beslutter,
                   ) ? (
-                    <Link href={`/behandling/${behandling.id}`}>
+                    <Link
+                      href={`/behandling/${behandling.id}/inngangsvilkar/kravfrist`}
+                    >
                       {behandling.typeBehandling}
                     </Link>
                   ) : (
@@ -106,7 +111,7 @@ const Benken: NextPage = () => {
                       !skalKunneTaBehandling(
                         behandling.status,
                         behandling.saksbehandler,
-                        behandling.beslutter
+                        behandling.beslutter,
                       )
                     }
                   >

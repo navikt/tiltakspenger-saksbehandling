@@ -7,86 +7,76 @@ import {
   HStack,
 } from '@navikt/ds-react';
 import { useSWRConfig } from 'swr';
-import { Controller, FormProvider, useForm } from 'react-hook-form';
-import Periodefelt from './Periodefelt';
-import { useState } from 'react';
-import { dateToISO, formatDate } from '../../utils/date';
-import { FaktaDTO } from '../../types/Behandling';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import {
+  dateTilISOTekst,
+  periodeTilFormatertDatotekst,
+} from '../../utils/date';
 import {
   gyldigPeriodeValidator,
   påkrevdPeriodeValidator,
+  setupValidation,
 } from '../../utils/validation';
+import { Periode } from '../../types/Periode';
+import Periodevelger from './PeriodeVelger';
 
 interface RedigeringSkjemaProps {
-  vilkårTittel: string;
-  vilkårFlateTittel: string;
   håndterLukkRedigering: () => void;
+  saksopplysning: string;
+  saksopplysningTittel: string;
   behandlingId: string;
-  behandlingsperiode: {
-    fom: string;
-    tom: string;
-  };
-  vilkårsperiode: {
-    fom: string;
-    tom: string;
-  };
-  fakta: FaktaDTO;
+  vurderingsperiode: Periode;
 }
 
 interface SkjemaFelter {
-  periode: {
-    fom: Date;
-    tom: Date;
-  };
-  harYtelse: string;
+  periode: { fra: Date; til: Date };
+  valgtVerdi: boolean;
   begrunnelse: string;
 }
 
 export const RedigeringSkjema = ({
   håndterLukkRedigering,
-  vilkårTittel,
-  vilkårsperiode,
+  saksopplysning,
+  saksopplysningTittel,
   behandlingId,
-  behandlingsperiode,
-  fakta,
+  vurderingsperiode,
 }: RedigeringSkjemaProps) => {
-  const [harYtelse, settHarYtelse] = useState<boolean>(false);
+  const mutator = useSWRConfig().mutate;
 
-  const formMethods = useForm<SkjemaFelter>({
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+    watch,
+    resetField,
+  } = useForm<SkjemaFelter>({
     mode: 'onSubmit',
     defaultValues: {
       periode: {
-        fom: new Date(vilkårsperiode.fom),
-        tom: new Date(vilkårsperiode.tom),
+        fra: new Date(vurderingsperiode.fra),
+        til: new Date(vurderingsperiode.til),
       },
     },
   });
 
-  const håndterHarYtelse = (
-    harYtelseSvar: boolean,
-    onChange: (value: boolean) => void,
-  ) => {
-    onChange(harYtelseSvar);
-    settHarYtelse(harYtelseSvar);
-  };
+  const watchvalgtVerdi = watch('valgtVerdi');
 
-  const mutator = useSWRConfig().mutate;
-
-  const håndterLagreSaksopplysning = () => {
+  const onSubmit: SubmitHandler<SkjemaFelter> = (data) => {
     håndterLukkRedigering();
-    const skjemaFelter = formMethods.getValues();
+    const valgtFra = dateTilISOTekst(data.periode.fra);
+    const valgtTil = dateTilISOTekst(data.periode.til);
+
     fetch(`/api/behandling/${behandlingId}`, {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({
-        fom: harYtelse
-          ? dateToISO(skjemaFelter.periode?.fom)
-          : behandlingsperiode.fom,
-        tom: harYtelse
-          ? dateToISO(skjemaFelter.periode?.tom)
-          : behandlingsperiode.tom,
-        vilkår: vilkårTittel,
-        begrunnelse: skjemaFelter.begrunnelse,
-        harYtelse: skjemaFelter.harYtelse,
+        fra: watchvalgtVerdi ? valgtFra : vurderingsperiode.fra,
+        til: watchvalgtVerdi ? valgtTil : vurderingsperiode.til,
+        vilkår: saksopplysning,
+        begrunnelse: data.begrunnelse,
+        valgtVerdi: data.valgtVerdi,
       }),
     }).then(() => {
       mutator(`/api/behandling/${behandlingId}`);
@@ -94,83 +84,102 @@ export const RedigeringSkjema = ({
   };
 
   return (
-    <FormProvider {...formMethods}>
-      <form
-        onSubmit={formMethods.handleSubmit(håndterLagreSaksopplysning)}
-        style={{
-          background: '#F2F3F5',
-          width: '100%',
-          height: '100%',
-          padding: '1rem',
-        }}
-      >
-        <VStack gap="5">
-          <Controller
-            name={'harYtelse'}
-            control={formMethods.control}
-            render={({ field: { onChange } }) => {
-              return (
-                <RadioGroup
-                  legend="Endre vilkår"
-                  onChange={(value) => håndterHarYtelse(value, onChange)}
-                  defaultValue={false}
-                >
-                  <Radio
-                    value={false}
-                  >{`${fakta.harIkkeYtelse} i perioden ${formatDate(
-                    behandlingsperiode.fom,
-                  )} til ${formatDate(behandlingsperiode.tom)}`}</Radio>
-                  <Radio value={true}>{`${fakta.harYtelse}`}</Radio>
-                </RadioGroup>
-              );
-            }}
-          />
-          <Periodefelt
-            name="periode"
-            validate={[gyldigPeriodeValidator, påkrevdPeriodeValidator]}
-            minDate={new Date(behandlingsperiode.fom)}
-            maxDate={new Date(behandlingsperiode.tom)}
-            defaultFra={new Date(vilkårsperiode.fom)}
-            defaultTil={new Date(vilkårsperiode.tom)}
-            disabledFra={!harYtelse}
-            disabledTil={!harYtelse}
-          />
-          <Controller
-            name={'begrunnelse'}
-            control={formMethods.control}
-            rules={{ required: true }}
-            render={({ field: { onChange }, formState: { errors } }) => {
-              return (
-                <Select
-                  label="Begrunnelse for endring"
-                  style={{ width: '415px' }}
-                  onChange={(e) => onChange(e.target.value)}
-                  error={errors.begrunnelse && 'Begrunnelse mangler'}
-                >
-                  <option value="">Velg grunn</option>
-                  <option value="Feil i innhentet data">
-                    Feil i innhentet data
-                  </option>
-                  <option value="Endring etter søknadstidspunkt">
-                    Endring etter søknadstidspunkt
-                  </option>
-                </Select>
-              );
-            }}
-          />
-          <HStack>
-            <Button
-              type="button"
-              onClick={() => håndterLukkRedigering()}
-              variant="tertiary"
-              style={{ marginRight: '2rem' }}
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      style={{
+        background: '#E6F0FF',
+        padding: '1rem',
+      }}
+    >
+      <VStack gap="5" align="start">
+        <Controller
+          name={'valgtVerdi'}
+          control={control}
+          render={({ field: { onChange } }) => {
+            return (
+              <RadioGroup
+                legend="Legg til ny saksopplysning"
+                onChange={(value) => {
+                  if (!value) resetField('periode');
+                  onChange(value);
+                }}
+                defaultValue={false}
+              >
+                <Radio
+                  value={false}
+                >{`Søker mottar ikke ${saksopplysningTittel} i perioden ${periodeTilFormatertDatotekst(vurderingsperiode)}`}</Radio>
+                <Radio
+                  value={true}
+                >{`Søker mottar ${saksopplysningTittel} i hele eller deler av perioden`}</Radio>
+              </RadioGroup>
+            );
+          }}
+        />
+        <Controller
+          name="periode"
+          control={control}
+          rules={{
+            validate: setupValidation([
+              gyldigPeriodeValidator,
+              påkrevdPeriodeValidator,
+            ]),
+          }}
+          render={({ field: { onChange, value } }) => (
+            <Periodevelger
+              onFraChange={(dato: Date) => {
+                onChange({
+                  fra: dato,
+                  til: value.til,
+                });
+              }}
+              onTilChange={(dato: Date) => {
+                onChange({
+                  fra: value.fra,
+                  til: dato,
+                });
+              }}
+              minDato={vurderingsperiode.fra}
+              maxDato={vurderingsperiode.til}
+              valgtFraDato={value.fra}
+              valgtTilDato={value.til}
+              disabled={!watchvalgtVerdi}
+              error={errors.periode?.message ?? ''}
+            />
+          )}
+        />
+        <Controller
+          name={'begrunnelse'}
+          control={control}
+          rules={{ required: true }}
+          render={({ field: { onChange } }) => (
+            <Select
+              label="Begrunnelse for endring"
+              onChange={onChange}
+              error={errors.begrunnelse && 'Begrunnelse mangler'}
             >
-              Avbryt
-            </Button>
-            <Button type="submit">Lagre endring</Button>
-          </HStack>
-        </VStack>
-      </form>
-    </FormProvider>
+              <option value="">Velg grunn</option>
+              <option value="Feil i innhentet data">
+                Feil i innhentet data
+              </option>
+              <option value="Endring etter søknadstidspunkt">
+                Endring etter søknadstidspunkt
+              </option>
+            </Select>
+          )}
+        />
+        <HStack gap="4">
+          <Button
+            type="button"
+            onClick={() => håndterLukkRedigering()}
+            variant="tertiary"
+          >
+            Avbryt
+          </Button>
+          <Button type="submit" value="submit">
+            Lagre endring
+          </Button>
+        </HStack>
+      </VStack>
+    </form>
   );
 };

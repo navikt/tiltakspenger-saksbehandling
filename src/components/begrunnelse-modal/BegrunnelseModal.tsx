@@ -34,8 +34,11 @@ const BegrunnelseModal = ({
       setError('Du må velge en begrunnelse');
       return;
     }
-    const res = fetch(`/api/behandling/sendtilbake/${behandlingid}`, {
+    fetch(`/api/behandling/sendtilbake/${behandlingid}`, {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({ begrunnelse: begrunnelse }),
     }).then(() => {
       mutator(`/api/behandling/${behandlingid}`);
@@ -48,6 +51,7 @@ const BegrunnelseModal = ({
       ref={modalRef}
       width="medium"
       className={styles.modal}
+      aria-label="Legg til begrunnelse"
       onClose={() => {
         setError('');
         setBegrunnelse('');

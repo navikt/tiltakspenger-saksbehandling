@@ -3,7 +3,7 @@ export type Periode = {
   til: string;
 };
 
-export type ÅpenPeriode = {
-  fra: string;
-  til?: string;
+export type NyPeriode = {
+  fraOgMed: string;
+  tilOgMed: string;
 };

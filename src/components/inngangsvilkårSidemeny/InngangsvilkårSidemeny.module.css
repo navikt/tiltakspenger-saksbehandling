@@ -1,0 +1,12 @@
+.inngangsvilkårSteg {
+    border-left: 1px solid #cfcfcf;
+    border-right: 1px solid #cfcfcf;
+    width: 25%;
+    padding: 1em 1em 1em 1em;
+}
+
+.aktivtSteg {
+    font-weight: 900;
+    text-decoration-thickness: 3px;
+    color: #00459C;
+}

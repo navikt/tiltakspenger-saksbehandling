@@ -1,6 +1,6 @@
 import styles from './Saksdialog.module.css';
 import { InformationSquareFillIcon } from '@navikt/aksel-icons';
-import { formatDateTime } from '../../utils/date';
+import { formaterDatotekstMedTidspunkt } from '../../utils/date';
 import React from 'react';
 import { Endring } from '../../types/Behandling';
 
@@ -21,7 +21,7 @@ export const SaksdialogElement = ({ endring }: SaksdialogElementProps) => {
         <span className={styles.historikkType}>{endring.type}</span>
         <span className={styles.historikkTekst}>{endring.begrunnelse}</span>
         <span className={styles.historikkSignatur}>
-          {`${formatDateTime(endring.endretTidspunkt)} - ${endring.endretAv}`}
+          {`${formaterDatotekstMedTidspunkt(endring.endretTidspunkt)} - ${endring.endretAv}`}
         </span>
       </div>
     </div>

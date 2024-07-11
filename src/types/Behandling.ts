@@ -1,5 +1,7 @@
-import Søknad, { RegistrertTiltak } from './Søknad';
-import {Utfall} from "./Utfall";
+import { Periode } from './Periode';
+import { RegistrertTiltak } from './Søknad';
+import { Utfall } from './Utfall';
+import { Vurdering } from './Vurdering';
 
 interface Vilkår {
   lovreferanse: string;
@@ -19,26 +21,40 @@ export interface Behandling {
   behandlingId: string;
   saksbehandler: string;
   beslutter: string;
-  fom: string;
-  tom: string;
-  søknad: Søknad;
-  registrerteTiltak: RegistrertTiltak[];
-  saksopplysninger: Kategori[];
+  vurderingsperiode: Periode;
+  søknadsdato: Date;
+  tiltaksdeltagelsesaksopplysninger: TiltaksdeltagelsesaksopplysningerDTO;
+  stønadsdager: StønadsdagerSaksopplysning[];
+  alderssaksopplysning: Aldersaksopplysning;
+  ytelsessaksopplysninger: Ytelsessaksopplysninger;
   personopplysninger: Personopplysninger;
-  tilstand: string;
+  behandlingsteg: string;
   status: string;
   endringslogg: Endring[];
   samletUtfall: Utfall;
-  utfallsperioder: Utfallsperiode[]
+  utfallsperioder: Utfallsperiode[];
+  kravdatoSaksopplysninger: KravdatoSaksopplysninger;
+}
+
+interface KravdatoSaksopplysninger {
+  samletUtfall: Utfall;
+  opprinneligKravdato: KravdatoSaksopplysning;
+  kravdatoFraSaksbehandler: KravdatoSaksopplysning;
+  vurderinger: Vurdering[];
+  lovreferanse: Lovreferanse;
+}
+
+export interface KravdatoSaksopplysning {
+  kravdato: string;
+  kilde: string;
 }
 
 export interface Utfallsperiode {
-    fom: string;
-    tom: string;
-    antallBarn: number;
-    utfall: string;
+  fom: Date;
+  tom: Date;
+  antallBarn: number;
+  utfall: Utfall;
 }
-
 
 export interface Endring {
   type: string;
@@ -72,33 +88,55 @@ export interface Personopplysninger {
   fortrolig: boolean;
 }
 
-export interface Kategori {
-  kategoriTittel: string;
+export interface Ytelsessaksopplysninger {
+  vilkår: string;
   saksopplysninger: SaksopplysningInnDTO[];
-  samletUtfall: string;
-  kategoriLovreferanse: LovreferenseDTO[];
+  samletUtfall: Utfall;
+  vilkårLovreferanse: Lovreferanse;
 }
 
-export interface LovreferenseDTO {
+export interface TiltaksdeltagelsesaksopplysningerDTO {
+  vilkår: string;
+  saksopplysninger: RegistrertTiltak[];
+  vilkårLovreferanse: Lovreferanse;
+}
+
+export interface StønadsdagerSaksopplysning {
+  tiltakId: string;
+  tiltak: string;
+  arrangør: string;
+  avklartAntallDager: Stønadsdager[];
+  antallDagerSaksopplysningerFraRegister: Stønadsdager;
+}
+
+export interface Stønadsdager {
+  periode: Periode;
+  antallDager: number;
+  kilde: string;
+}
+
+export interface Lovreferanse {
   lovverk: string;
   paragraf: string;
   beskrivelse: string;
 }
 
 export interface SaksopplysningInnDTO {
-  fom: string;
-  tom: string;
+  periode: Periode;
   kilde: string;
   detaljer: string;
-  typeSaksopplysning: string;
-  vilkårTittel: string;
-  vilkårFlateTittel: string;
-  fakta: FaktaDTO;
-  utfall: string;
-  vilkårLovReferense: LovreferenseDTO[];
+  saksopplysning: string;
+  saksopplysningTittel: string;
+  utfall: Utfall;
 }
 
-export interface FaktaDTO {
-  harYtelse: string;
-  harIkkeYtelse: string;
+export interface Aldersaksopplysning {
+  periode: Periode;
+  kilde: string;
+  detaljer: string;
+  vilkår: string;
+  vilkårTittel: string;
+  utfall: Utfall;
+  vilkårLovreferanse: Lovreferanse[];
+  grunnlag: Date;
 }

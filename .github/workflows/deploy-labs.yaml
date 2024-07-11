@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: "16.x"
+          node-version: "18.x"
       - run: npm ci
       - run: npm run test:ci
 
@@ -29,7 +29,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v3
         with:
-          node-version: '16.x'
+          node-version: '18.x'
 
       - name: Set up Docker Buildx
         if: github.ref == 'refs/heads/main'
@@ -73,7 +73,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Deploy frontend
-        uses: nais/deploy/actions/deploy@v1
+        uses: nais/deploy/actions/deploy@v2
         env:
           DEPLOY_SERVER: deploy.nais.io:443
           APIKEY: ${{ secrets.NAIS_DEPLOY_KEY }}
@@ -82,7 +82,7 @@ jobs:
           VAR: image=${{ env.IMAGE }}-labs-frontend,name=${{ github.event.repository.name }}
           VARS: .nais/labs/vars/frontend.yaml
       - name: Deploy backend
-        uses: nais/deploy/actions/deploy@v1
+        uses: nais/deploy/actions/deploy@v2
         env:
           DEPLOY_SERVER: deploy.nais.io:443
           APIKEY: ${{ secrets.NAIS_DEPLOY_KEY }}
