@@ -1,11 +1,11 @@
 import { Alert, Heading, Loader, Radio, RadioGroup, VStack } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import { useContext, useState } from 'react';
-import { useHentBehandling } from '../../hooks/useHentBehandling';
 import { SaksbehandlerContext } from '../../pages/_app';
 import StegHeader from './StegHeader';
 import UtfallstekstMedIkon from './UtfallstekstMedIkon';
 import { Utfall } from '../../types/Utfall';
+import { useHentLivsopphold } from '../../hooks/useHentLivsopphold';
 
 const radioknapp = {
     ja: "ja",
@@ -30,31 +30,30 @@ export const AndreYtelserMinimalistisk = () => {
     const [radioButtonValg, setRadioButtonValg] = useState<string | undefined>()
     const router = useRouter();
     const behandlingId = router.query.behandlingId as string;
-    const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
+    const { livsopphold, isLoading } = useHentLivsopphold(behandlingId);
+
     const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
 
-    if (isLoading || !valgtBehandling) {
+    if (isLoading || !livsopphold) {
         return <Loader />;
     }
-
-    const andreYtelser = valgtBehandling.ytelsessaksopplysninger;
 
     const handleRadioButtonChange = (val: string) => {
         setRadioButtonValg(val)
     }
 
-    if (!andreYtelser) return <Loader />;
+
     return (
         <VStack gap="4">
             <StegHeader
                 headertekst={'Forholdet til andre ytelser'}
-                lovdatatekst={andreYtelser.vilkårLovreferanse.beskrivelse}
-                paragraf={andreYtelser.vilkårLovreferanse.paragraf}
+                lovdatatekst={livsopphold.vilkårLovreferanse.beskrivelse}
+                paragraf={livsopphold.vilkårLovreferanse.paragraf}
                 lovdatalenke={
                     'https://lovdata.no/dokument/SF/forskrift/2013-11-04-1286'
                 }
             />
-            <UtfallstekstMedIkon samletUtfall={andreYtelser.samletUtfall} />
+            <UtfallstekstMedIkon samletUtfall={livsopphold.samletUtfall} />
             <RadioGroup
                 legend="Har bruker andre ytelser til livsopphold i vurderingperioden?."
                 onChange={handleRadioButtonChange}
