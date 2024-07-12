@@ -66,7 +66,7 @@ const Introduksjonsprogrammet = () => {
         håndterLagreSaksopplysning={(data: SkjemaFelter) =>
           håndterLagreSaksopplysning(data)
         }
-        editerbar={true}
+        editerbar={false}
         vurderingsperiode={valgtBehandling.vurderingsperiode}
         saksopplysningsperiode={valgtBehandling.vurderingsperiode}
         kilde={intro.kilde}

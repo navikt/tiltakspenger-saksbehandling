@@ -64,7 +64,7 @@ const Institusjonsopphold = () => {
         håndterLagreSaksopplysning={(data: SkjemaFelter) =>
           håndterLagreSaksopplysning(data)
         }
-        editerbar={true}
+        editerbar={false}
         vurderingsperiode={valgtBehandling.vurderingsperiode}
         saksopplysningsperiode={saksopplysning.periode}
         kilde={saksopplysning.kilde}
