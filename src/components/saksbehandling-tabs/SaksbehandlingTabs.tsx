@@ -3,20 +3,20 @@ import { Tabs } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import { useHentMeldekortListe } from '../../hooks/useHentMeldekortListe';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
+import { useHentUtbetalingListe } from '../../hooks/useHentUtbetalingListe';
 
 interface SaksbehandlingTabsProps {
   behandlingId: string;
-  utbetalingId?: string;
 }
 
 export const SaksbehandlingTabs = ({
   behandlingId,
-  utbetalingId,
 }: SaksbehandlingTabsProps) => {
   const router = useRouter();
   const { valgtBehandling } = useHentBehandling(behandlingId);
   const iverksatt = valgtBehandling?.behandlingsteg === 'iverksatt';
   const { meldekortliste } = useHentMeldekortListe(iverksatt, behandlingId);
+  const { utbetalingliste } = useHentUtbetalingListe(iverksatt, behandlingId);
 
   return (
     <Tabs defaultValue="Inngangsvilkår">
@@ -60,7 +60,7 @@ export const SaksbehandlingTabs = ({
               icon={<FileTextIcon />}
               onClick={() => {
                 router.push(
-                  `/behandling/${behandlingId}/utbetaling/${utbetalingId}`,
+                  `/behandling/${behandlingId}/utbetaling/${utbetalingliste[0].id}`,
                 );
               }}
             />
