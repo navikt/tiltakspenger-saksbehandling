@@ -25,13 +25,18 @@ Opprett en `.env.local` på roten av `tiltakspenger-saksbehandler`, med følgend
 
 ```
 TILTAKSPENGER_VEDTAK_URL=http://localhost:8080
-TILTAKSPENGER_MELDEKORT_URL=http://localhost:8081
-TILTAKSPENGER_UTBETALING_URL=http://localhost:8083
+TILTAKSPENGER_MELDEKORT_URL= http://localhost:8081
+TILTAKSPENGER_UTBETALING_URL= http://localhost:8083
+VEDTAK_SCOPE=tiltakspenger-vedtak
+MELDEKORT_SCOPE=tiltakspenger-meldekort-api
+UTBETALING_SCOPE=tiltakspenger-utbetaling
 AZURE_APP_CLIENT_ID=tiltakspenger-vedtak
 AZURE_APP_CLIENT_SECRET=secret
 AZURE_APP_WELL_KNOWN_URL=http://host.docker.internal:6969/azure/.well-known/openid-configuration
-AUTH_PROVIDER_URL=http://host.docker.internal:6969/azure/token
-SCOPE=tiltakspenger-vedtak
+AZURE_OPENID_CONFIG_ISSUER="http://host.docker.internal:6969/azure"
+AZURE_OPENID_CONFIG_JWKS_URI=http://host.docker.internal:6969/azure/jwks
+AZURE_OPENID_CONFIG_TOKEN_ENDPOINT=http://host.docker.internal:6969/azure/token
+AZURE_APP_JWK= * Se JWK i wonderwallconfig *
 ```
 
 Det er lagd et docker-compose oppsett i `docker-compose.yml` som mocker ut Azure ved hjelp av bl.a. [mock-oauth2-server](https://github.com/navikt/mock-oauth2-server)
