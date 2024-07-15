@@ -30,6 +30,7 @@ export const SaksbehandlingTabs = ({
             router.push(`/behandling/${behandlingId}/inngangsvilkar/kravfrist`);
           }}
         />
+        {/*
         <Tabs.Tab
           key={'Barnetillegg'}
           value={'Barnetillegg'}
@@ -38,7 +39,7 @@ export const SaksbehandlingTabs = ({
           onClick={() => {
             router.push(`/behandling/${behandlingId}/barnetillegg`);
           }}
-        />
+        />*/}
         {iverksatt && (
           <>
             <Tabs.Tab
