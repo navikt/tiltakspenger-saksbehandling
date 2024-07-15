@@ -6,8 +6,6 @@ import {
   NextApiResponse,
 } from 'next';
 import { logger } from '@navikt/next-logger';
-import { IncomingHttpHeaders } from 'http';
-import { TokenPayload } from '../types/Auth';
 
 /**
  * Inspirert av løsningen til sykepenger: https://github.com/navikt/sykmeldinger/pull/548/files
@@ -81,34 +79,4 @@ export function withAuthenticatedApi(handler: ApiHandler): ApiHandler {
 
     return handler(req, res, ...rest);
   };
-}
-
-/**
- * Lager HTTP context som sendes gjennom resolver og servicer, både for prefetching og HTTP-fetching.
- */
-export function createRequestContext(
-  requestId: string | undefined,
-  token: string | undefined,
-) {
-  if (!token) {
-    logger.warn('User is missing authorization bearer token');
-    return null;
-  }
-  const accessToken = token.replace('Bearer ', '');
-  const jwtPayload = accessToken.split('.')[1];
-  return {
-    accessToken,
-    payload: JSON.parse(Buffer.from(jwtPayload, 'base64').toString()),
-    requestId: requestId ?? 'not set',
-    sessionId: 'unused',
-  };
-}
-
-export function parseAuthHeader(
-  headers: IncomingHttpHeaders,
-): TokenPayload | null {
-  if (!headers.authorization) return null;
-  const accessToken = headers.authorization.replace('Bearer ', '');
-  const jwtPayload = accessToken.split('.')[1];
-  return JSON.parse(Buffer.from(jwtPayload, 'base64').toString());
 }
