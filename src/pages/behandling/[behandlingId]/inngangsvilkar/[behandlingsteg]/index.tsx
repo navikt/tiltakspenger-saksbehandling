@@ -1,4 +1,3 @@
-import { pageWithAuthentication } from '../../../../../utils/pageWithAuthentication';
 import { Loader } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import { useHentBehandling } from '../../../../../hooks/useHentBehandling';
@@ -9,6 +8,7 @@ import { NextPageWithLayout } from '../../../../_app';
 import { Saksdialog } from '../../../../../components/saksdialog/Saksdialog';
 import InngangsvilkårSidemeny from '../../../../../components/inngangsvilkårSidemeny/InngangsvilkårSidemeny';
 import BehandlingSteg from '../../../../../components/behandlingSteg/BehandlingSteg';
+import { pageWithAuthentication } from '../../../../../auth/pageWithAuthentication';
 
 const Behandling: NextPageWithLayout = () => {
   const router = useRouter();

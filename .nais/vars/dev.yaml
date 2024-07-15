@@ -14,13 +14,7 @@ envs:
     value: http://tiltakspenger-utbetaling
   - name: AUTH_PROVIDER_URL
     value: https://login.microsoftonline.com/966ac572-f5b7-4bbe-aa88-c76419c0f851/oauth2/v2.0/token
-<<<<<<< HEAD
   - name: VEDTAK_SCOPE
-=======
-  - name: AZURE_OPENID_CONFIG_ISSUER
-    value: https://login.microsoftonline.com/966ac572-f5b7-4bbe-aa88-c76419c0f851
-  - name: SCOPE
->>>>>>> main
     value: eafda703-c821-44de-990c-950dec1ad22f
   - name: MELDEKORT_SCOPE
     value: api://dev-gcp.tpts.tiltakspenger-meldekort-api/.default

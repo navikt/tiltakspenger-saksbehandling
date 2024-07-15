@@ -1,4 +1,3 @@
-import { pageWithAuthentication } from '../../../../utils/pageWithAuthentication';
 import { VStack, Loader, List } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import { useHentBehandling } from '../../../../hooks/useHentBehandling';
@@ -10,6 +9,7 @@ import { Saksdialog } from '../../../../components/saksdialog/Saksdialog';
 import Barnetillegg from '../../../../components/barnetillegg/Barnetillegg';
 import { Skuff } from '../../../../components/skuff/Skuff';
 import Link from 'next/link';
+import { pageWithAuthentication } from '../../../../auth/pageWithAuthentication';
 
 const Behandling: NextPageWithLayout = () => {
   const router = useRouter();
