@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { pageWithAuthentication } from '../auth/pageWithAuthentication';
+import { pageWithAuthentication } from '../utils/pageWithAuthentication';
 import { Button, Link, Loader, Table } from '@navikt/ds-react';
 import { SaksbehandlerContext } from './_app';
 import { useHentBehandlinger } from '../hooks/useHentBehandlinger';

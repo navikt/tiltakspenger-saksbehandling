@@ -48,6 +48,7 @@ export const OppdaterSaksopplysningFormSkjema = ({
         fra: new Date(vurderingsperiode.fra),
         til: new Date(vurderingsperiode.til),
       },
+      valgtVerdi: false,
     },
   });
   const watchHarYtelse = watch('valgtVerdi');

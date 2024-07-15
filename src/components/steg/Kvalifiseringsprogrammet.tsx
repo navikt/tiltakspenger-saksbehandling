@@ -26,7 +26,10 @@ const Kvalifiseringsprogrammet = () => {
             fraOgMed: dateTilISOTekst(data.periode.fra),
             tilOgMed: dateTilISOTekst(data.periode.til),
           }
-        : vurderingsPeriode,
+        : {
+            fraOgMed: vurderingsPeriode.fra,
+            tilOgMed: vurderingsPeriode.til,
+          },
       deltar: data.valgtVerdi,
     };
 
@@ -73,7 +76,7 @@ const Kvalifiseringsprogrammet = () => {
         håndterLagreSaksopplysning={(data: SkjemaFelter) =>
           håndterLagreKvpSaksopplysning(data)
         }
-        editerbar={true}
+        editerbar={false}
         vurderingsperiode={vurderingsPeriode}
         saksopplysningsperiode={saksopplysningsPeriode}
         kilde={kvp.avklartSaksopplysning.kilde}
