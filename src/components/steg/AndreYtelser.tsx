@@ -1,10 +1,7 @@
 import { Loader, VStack } from '@navikt/ds-react';
 import { SaksopplysningTabell } from '../saksopplysning-tabell/SaksopplysningTabell';
 import { useRouter } from 'next/router';
-import { useContext } from 'react';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
-import { SaksbehandlerContext } from '../../pages/_app';
-import { avklarLesevisning } from '../../utils/avklarLesevisning';
 import StegHeader from './StegHeader';
 import UtfallstekstMedIkon from './UtfallstekstMedIkon';
 
@@ -12,23 +9,12 @@ export const AndreYtelser = () => {
   const router = useRouter();
   const behandlingId = router.query.behandlingId as string;
   const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
-  const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
 
   if (isLoading || !valgtBehandling) {
     return <Loader />;
   }
 
   const andreYtelser = valgtBehandling.ytelsessaksopplysninger;
-
-  const girInnvilget = valgtBehandling.samletUtfall === 'OPPFYLT';
-
-  const lesevisning = avklarLesevisning(
-    innloggetSaksbehandler!!,
-    valgtBehandling.saksbehandler,
-    valgtBehandling.beslutter,
-    valgtBehandling.behandlingsteg,
-    girInnvilget,
-  );
 
   if (!andreYtelser) return <Loader />;
   return (
@@ -52,7 +38,6 @@ export const AndreYtelser = () => {
         )}
         behandlingId={valgtBehandling.behandlingId}
         vurderingsperiode={valgtBehandling.vurderingsperiode}
-        lesevisning={lesevisning}
       />
     </VStack>
   );

@@ -3,7 +3,6 @@ import { Button, Tag } from '@navikt/ds-react';
 import { PersonCircleIcon } from '@navikt/aksel-icons';
 import styles from './PersonaliaHeader.module.css';
 import { Behandling } from '../../types/Behandling';
-import { Lesevisning } from '../../utils/avklarLesevisning';
 import router from 'next/router';
 
 interface PersonaliaHeaderProps {
@@ -17,9 +16,9 @@ const PersonaliaHeader = ({ valgtBehandling }: PersonaliaHeaderProps) => {
   const håndterAvbrytBehandling = () => {
     fetch(`/api/behandling/avbrytbehandling/${valgtBehandling.behandlingId}`, {
       method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
+      headers: {
+        'Content-Type': 'application/json',
+      },
     }).then(() => {
       router.push('/');
     });

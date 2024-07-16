@@ -2,7 +2,6 @@ import { PencilIcon } from '@navikt/aksel-icons';
 import { Table, BodyShort, Button } from '@navikt/ds-react';
 import { RedigeringSkjema } from './RedigeringSkjema';
 import { useState } from 'react';
-import { Lesevisning } from '../../utils/avklarLesevisning';
 import { periodeTilFormatertDatotekst } from '../../utils/date';
 import { UtfallIkon } from '../utfall-ikon/UtfallIkon';
 import { SaksopplysningInnDTO } from '../../types/Behandling';
@@ -11,7 +10,6 @@ import { Periode } from '../../types/Periode';
 interface SaksopplysningProps {
   behandlingId: string;
   vurderingsperiode: Periode;
-  lesevisning: Lesevisning;
   saksopplysningDTO: SaksopplysningInnDTO;
 }
 
@@ -19,7 +17,6 @@ export const Saksopplysning = ({
   saksopplysningDTO,
   behandlingId,
   vurderingsperiode,
-  lesevisning,
 }: SaksopplysningProps) => {
   const [åpneRedigering, onÅpneRedigering] = useState<boolean>(false);
 
@@ -69,18 +66,16 @@ export const Saksopplysning = ({
           <BodyShort>{detaljer ? detaljer : '-'}</BodyShort>
         </Table.DataCell>
         <Table.DataCell>
-          {lesevisning.kanEndre && (
-            <Button
-              onClick={() => onÅpneRedigering(!åpneRedigering)}
-              variant="tertiary"
-              iconPosition="left"
-              icon={<PencilIcon />}
-              aria-label="hidden"
-            />
-          )}
+          <Button
+            onClick={() => onÅpneRedigering(!åpneRedigering)}
+            variant="tertiary"
+            iconPosition="left"
+            icon={<PencilIcon />}
+            aria-label="hidden"
+          />
         </Table.DataCell>
       </Table.Row>
-      {åpneRedigering && lesevisning.kanEndre && (
+      {åpneRedigering && (
         <Table.Row>
           <Table.DataCell colSpan={8} style={{ padding: '0' }}>
             <RedigeringSkjema
