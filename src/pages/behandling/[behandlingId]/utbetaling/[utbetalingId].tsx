@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import { UtbetalingMeny } from '../../../../components/utbetaling/utbetaling-meny/UtbetalingMeny';
 import { UtbetalingDetaljer } from '../../../../components/utbetaling/utbetaling-detaljer/UtbetalingDetaljer';
 import { UtbetalingSide } from '../../../../components/utbetaling/utbetaling-side/UtbetalingSide';
-import { pageWithAuthentication } from '../../../../utils/pageWithAuthentication';
+import { pageWithAuthentication } from '../../../../auth/pageWithAuthentication';
 
 const Utbetaling: NextPageWithLayout = () => {
   const router = useRouter();

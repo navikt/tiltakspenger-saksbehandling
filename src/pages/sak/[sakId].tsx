@@ -1,13 +1,9 @@
 import React from 'react';
 import { NextPage } from 'next';
-import {
-  pageWithAuthentication,
-  redirectToLogin,
-} from '../../utils/pageWithAuthentication';
 import { Button, Heading } from '@navikt/ds-react';
-import { getOnBehalfOfToken } from '../../utils/auth';
 import { Sak } from '../../types/Behandling';
 import styles from './Sak.module.css';
+import { pageWithAuthentication } from '../../auth/pageWithAuthentication';
 
 interface SakProps {
   saksnummer: string;
@@ -41,34 +37,13 @@ const SakPage: NextPage<SakProps> = ({ saksnummer, ident }: SakProps) => {
 export default SakPage;
 
 export const getServerSideProps = pageWithAuthentication(async (context) => {
-  const backendUrl = process.env.TILTAKSPENGER_VEDTAK_URL;
-  const scope = `api://${process.env.SCOPE}/.default`;
-
-  let token = null;
-  try {
-    token = await getOnBehalfOfToken(
-      context.req.headers.authorization!!.replace('Bearer ', ''),
-      scope!!,
-    );
-  } catch (error) {
-    console.error(
-      `Bruker har ikke tilgang, feilet på tokenveksling: ${JSON.stringify(error)}`,
-    );
-    return redirectToLogin(context);
-  }
-
   const sakResponse: Response = await fetch(
-    `${backendUrl}/sak/${context.params!.sakId}`,
+    `api/sak/${context.params!.sakId}`,
     {
       method: 'GET',
-      headers: {
-        'content-type': 'application/json',
-        authorization: `Bearer ${token}`,
-      },
     },
   );
   const sak: Sak = await sakResponse.json();
-
   return {
     props: {
       ...sak,

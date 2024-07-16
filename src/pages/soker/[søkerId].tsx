@@ -1,12 +1,12 @@
 import React, { useContext } from 'react';
 import { NextPage } from 'next';
-import { pageWithAuthentication } from '../../utils/pageWithAuthentication';
 import { Button, Link, Loader, Table } from '@navikt/ds-react';
 import { SaksbehandlerContext } from '../_app';
 import { useRouter } from 'next/router';
 import useSWR, { useSWRConfig } from 'swr';
 import { fetcher } from '../../utils/http';
 import { BehandlingForBenk } from '../../types/Behandling';
+import { pageWithAuthentication } from '../../auth/pageWithAuthentication';
 
 const SøkerPage: NextPage = () => {
   const router = useRouter();
@@ -17,7 +17,7 @@ const SøkerPage: NextPage = () => {
   const { data, isLoading } = useSWR<BehandlingForBenk[]>(
     `/api/behandlinger/hentForIdent/${søkerId}`,
     fetcher,
-    {}
+    {},
   );
 
   if (isLoading) {
@@ -42,7 +42,7 @@ const SøkerPage: NextPage = () => {
   const skalKunneTaBehandling = (
     type: string,
     saksbehandlerForBehandling?: string,
-    beslutterForBehandling?: string
+    beslutterForBehandling?: string,
   ) => {
     switch (type) {
       case 'Klar til beslutning':
@@ -65,7 +65,7 @@ const SøkerPage: NextPage = () => {
 
   const behandlingLinkAktivert = (
     saksbehandlerForBehandling?: string,
-    beslutterForBehandling?: string
+    beslutterForBehandling?: string,
   ) => {
     return (
       innloggetSaksbehandler?.navIdent == saksbehandlerForBehandling ||
@@ -93,7 +93,7 @@ const SøkerPage: NextPage = () => {
                 <Table.DataCell>
                   {behandlingLinkAktivert(
                     behandling.saksbehandler,
-                    behandling.beslutter
+                    behandling.beslutter,
                   ) ? (
                     <Link href={`/behandling/${behandling.id}`}>
                       {behandling.typeBehandling}
@@ -115,7 +115,7 @@ const SøkerPage: NextPage = () => {
                       !skalKunneTaBehandling(
                         behandling.status,
                         behandling.saksbehandler,
-                        behandling.beslutter
+                        behandling.beslutter,
                       )
                     }
                   >
