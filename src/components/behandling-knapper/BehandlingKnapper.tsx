@@ -46,13 +46,6 @@ export const BehandlingKnapper = ({
       `/api/behandling/beslutter/${behandlingid}`,
       oppdaterBehandling,
     );
-  const {
-    trigger: oppdaterSaksopplysninger,
-    isMutating: oppdatererSaksopplysninger,
-  } = useSWRMutation(
-    `/api/behandling/oppdater/${behandlingid}`,
-    oppdaterBehandling,
-  );
 
   const { trigger: godkjennBehandling, isMutating: godkjennerBehandling } =
     useSWRMutation(
@@ -89,16 +82,6 @@ export const BehandlingKnapper = ({
             Godkjenn vedtaket
           </Button>
         )}
-        <Button
-          type="submit"
-          size="small"
-          loading={oppdatererSaksopplysninger}
-          onClick={() => {
-            oppdaterSaksopplysninger();
-          }}
-        >
-          Oppdater saksopplysninger
-        </Button>
         {kanSaksbehandle && (
           <Button
             type="submit"
