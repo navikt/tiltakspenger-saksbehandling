@@ -21,7 +21,7 @@ const vilkår = [
 const InngangsvilkårSidemeny = () => {
   const router = useRouter();
   const behandlingId = router.query.behandlingId as string;
-  const behandlingsteg = router.query.behandlingsteg as string;
+  const vilkårsteg = router.query.vilkårsteg as string;
 
   return (
     <VStack className={styles.inngangsvilkårSteg}>
@@ -32,7 +32,7 @@ const InngangsvilkårSidemeny = () => {
             icon={<PuzzlePieceIcon width="1.5em" height="1.5em" />}
           >
             <Link
-              className={behandlingsteg === vilkår.url ? styles.aktivtSteg : ''}
+              className={vilkårsteg === vilkår.url ? styles.aktivtSteg : ''}
               href={`/behandling/${behandlingId}/inngangsvilkar/${vilkår.url}`}
             >
               {vilkår.tittel}
@@ -44,9 +44,7 @@ const InngangsvilkårSidemeny = () => {
           icon={<TasklistIcon title="a11y-title" fontSize="1.5rem" />}
         >
           <Link
-            className={
-              behandlingsteg === 'oppsummering' ? styles.aktivtSteg : ''
-            }
+            className={vilkårsteg === 'oppsummering' ? styles.aktivtSteg : ''}
             href={`/behandling/${behandlingId}/inngangsvilkar/oppsummering`}
           >
             Oppsummering
@@ -56,9 +54,7 @@ const InngangsvilkårSidemeny = () => {
       <List title="Beregning">
         <List.Item icon={<PuzzlePieceIcon width="1.5em" height="1.5em" />}>
           <Link
-            className={
-              behandlingsteg === 'stonadsdager' ? styles.aktivtSteg : ''
-            }
+            className={vilkårsteg === 'stonadsdager' ? styles.aktivtSteg : ''}
             href={`/behandling/${behandlingId}/inngangsvilkar/stonadsdager`}
           >
             Stønadsdager
