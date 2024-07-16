@@ -1,4 +1,4 @@
-export enum Behandlingssteg {
+export enum Vilkår {
   ALDER = 'alder',
   KRAVFRIST = 'kravfrist',
   TILTAKSDELTAGELSE = 'tiltaksdeltagelse',

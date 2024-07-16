@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
-import { pageWithAuthentication } from '../utils/pageWithAuthentication';
 import { Button, Link, Loader, Table } from '@navikt/ds-react';
 import { SaksbehandlerContext } from './_app';
 import { useHentBehandlinger } from '../hooks/useHentBehandlinger';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useSWRConfig } from 'swr';
+import { pageWithAuthentication } from '../auth/pageWithAuthentication';
 
 const Benken: NextPage = () => {
   const router = useRouter();

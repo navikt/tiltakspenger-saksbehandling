@@ -19,13 +19,13 @@ const utbetalingUkeNummer = (fom: string, tom: string): string => {
 };
 
 export const UtbetalingMeny = ({ behandlingId }: UtbetalingmenyProps) => {
-  const { utbetalingListe } = useHentUtbetalingListe(behandlingId);
+  const { utbetalingliste } = useHentUtbetalingListe(true, behandlingId);
   const router = useRouter();
 
   return (
     <Skuff venstreOrientert headerTekst="Utbetalinger">
       <div className={styles.utbetalingliste}>
-        {utbetalingListe?.map((utbetaling: UtbetalingListe) => {
+        {utbetalingliste?.map((utbetaling: UtbetalingListe) => {
           return (
             <div
               key={utbetaling.id}

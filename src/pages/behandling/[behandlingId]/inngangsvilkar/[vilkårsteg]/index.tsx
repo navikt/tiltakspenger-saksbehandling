@@ -1,4 +1,3 @@
-import { pageWithAuthentication } from '../../../../../utils/pageWithAuthentication';
 import { Loader } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import { useHentBehandling } from '../../../../../hooks/useHentBehandling';
@@ -7,8 +6,9 @@ import { SaksbehandlingLayout } from '../../../../../components/layout/Saksbehan
 import { ReactElement } from 'react';
 import { NextPageWithLayout } from '../../../../_app';
 import { Saksdialog } from '../../../../../components/saksdialog/Saksdialog';
-import InngangsvilkårSidemeny from '../../../../../components/inngangsvilkårSidemeny/InngangsvilkårSidemeny';
-import BehandlingSteg from '../../../../../components/behandlingSteg/BehandlingSteg';
+import { pageWithAuthentication } from '../../../../../auth/pageWithAuthentication';
+import InngangsvilkårSidemeny from '../../../../../components/inngangsvilkår-sidemeny/InngangsvilkårSidemeny';
+import Vilkårsteg from '../../../../../components/vilkårsteg/Vilkårsteg';
 
 const Behandling: NextPageWithLayout = () => {
   const router = useRouter();
@@ -22,7 +22,7 @@ const Behandling: NextPageWithLayout = () => {
   return (
     <>
       <InngangsvilkårSidemeny />
-      <BehandlingSteg />
+      <Vilkårsteg />
       <Saksdialog endringslogg={valgtBehandling.endringslogg} />
     </>
   );
