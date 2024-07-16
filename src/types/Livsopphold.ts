@@ -4,7 +4,7 @@ import { NyPeriode } from './Periode';
 
 export interface LivsoppholdVilkår {
     avklartSaksopplysning: LivsoppholdSaksopplysning;
-    vurderingsperiode: NyPeriode;
+    vurderingsPeriode: NyPeriode;
     vilkårLovreferanse: Lovreferanse;
     samletUtfall: SamletUtfall;
 }

@@ -1,36 +1,37 @@
-import { Alert, Heading, Loader, Radio, RadioGroup, VStack } from '@navikt/ds-react';
+import { Alert, Button, Heading, Loader, Radio, RadioGroup, VStack } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { SaksbehandlerContext } from '../../pages/_app';
 import StegHeader from './StegHeader';
 import UtfallstekstMedIkon from './UtfallstekstMedIkon';
-import { Utfall } from '../../types/Utfall';
 import { useHentLivsopphold } from '../../hooks/useHentLivsopphold';
+import { useSWRConfig } from 'swr';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 
-const radioknapp = {
-    ja: "ja",
-    nei: "nei",
-    ikkeSatt: undefined,
-}
-
-const velgRadioknappBasertPåUtfall = (utfall: Utfall): string | undefined => {
-    switch (utfall) {
-        case 'OPPFYLT':
-            return radioknapp.ja;
-        case 'IKKE_OPPFYLT':
-            return radioknapp.nei;
-        case 'KREVER_MANUELL_VURDERING':
-            return radioknapp.ikkeSatt;
-        default:
-            return radioknapp.ikkeSatt;
-    }
+export interface SkjemaFelter {
+    valgtVerdi: boolean;
 }
 
 export const AndreYtelserMinimalistisk = () => {
-    const [radioButtonValg, setRadioButtonValg] = useState<string | undefined>()
     const router = useRouter();
     const behandlingId = router.query.behandlingId as string;
     const { livsopphold, isLoading } = useHentLivsopphold(behandlingId);
+    const mutator = useSWRConfig().mutate;
+
+    const {
+        handleSubmit,
+        control,
+        formState: { errors },
+        watch,
+        resetField,
+    } = useForm<SkjemaFelter>({
+        mode: 'onSubmit',
+        defaultValues: {
+            valgtVerdi: undefined,
+        },
+    });
+
+    const watchHarLivsoppholdytelser = watch('valgtVerdi');
 
     const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
 
@@ -38,10 +39,38 @@ export const AndreYtelserMinimalistisk = () => {
         return <Loader />;
     }
 
-    const handleRadioButtonChange = (val: string) => {
-        setRadioButtonValg(val)
-    }
+    const håndterLagreLivsoppholdSaksopplysning = (harYtelser: boolean) => {
+        if (harYtelser) {
+            return
+        }
 
+        fetch(`/api/behandling/${behandlingId}/vilkar/livsopphold`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                ytelseForPeriode: [
+                    {
+                        periode: livsopphold.vurderingsPeriode,
+                        deltar: harYtelser,
+                    }
+                ],
+            }),
+        })
+            .then(() => {
+                mutator(`/api/behandling/${behandlingId}/vilkar/livsopphold`);
+            })
+            .catch((error) => {
+                throw new Error(
+                    `Noe gikk galt ved lagring av antall dager: ${error.message}`,
+                );
+            });
+    };
+
+    const onSubmit: SubmitHandler<SkjemaFelter> = (data) => {
+        håndterLagreLivsoppholdSaksopplysning(data.valgtVerdi)
+    };
 
     return (
         <VStack gap="4">
@@ -54,23 +83,46 @@ export const AndreYtelserMinimalistisk = () => {
                 }
             />
             <UtfallstekstMedIkon samletUtfall={livsopphold.samletUtfall} />
-            <RadioGroup
-                legend="Har bruker andre ytelser til livsopphold i vurderingperioden?."
-                onChange={handleRadioButtonChange}
-                defaultValue={radioButtonValg}
+            <form
+                onSubmit={handleSubmit(onSubmit)}
+                style={{
+                    background: '#E6F0FF',
+                    padding: '1rem',
+                }}
             >
-                <Radio value={radioknapp.ja}>Ja</Radio>
-                <Radio value={radioknapp.nei}>Nei</Radio>
-            </RadioGroup>
+                <Controller
+                    name={'valgtVerdi'}
+                    control={control}
+                    render={({ field: { onChange } }) => {
+                        return (
+                            <RadioGroup
+                                legend="Har bruker andre ytelser til livsopphold i vurderingperioden?"
+                                onChange={onChange}
+                                defaultValue={undefined}
+                            >
+                                <Radio
+                                    value={true}
+                                >{`Ja`}</Radio>
+                                <Radio
+                                    value={false}
+                                >{`Nei`}</Radio>
+                            </RadioGroup>
+                        );
+                    }}
+                />
+                <Button type="submit" value="submit">
+                    Lagre endring
+                </Button>
 
-            {radioButtonValg === radioknapp.ja && (
-                <Alert variant="error">
-                    <Heading spacing size="small" level="3">
-                        Fører til avslag
-                    </Heading>
-                    Denne vurderingen fører til et avslag. Det støttes ikke i denne løsningen.
-                </Alert>
-            )}
+                {watchHarLivsoppholdytelser && (
+                    <Alert variant="error">
+                        <Heading spacing size="small" level="3">
+                            Fører til avslag
+                        </Heading>
+                        Denne vurderingen fører til et avslag. Det støttes ikke i denne løsningen.
+                    </Alert>
+                )}
+            </form>
         </VStack >
     );
 };
