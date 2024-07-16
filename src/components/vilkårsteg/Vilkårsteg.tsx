@@ -1,9 +1,9 @@
 import { VStack } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import { ReactElement } from 'react';
-import { Behandlingssteg } from '../../types/Behandlingssteg';
+import { Vilkår } from '../../types/Vilkår';
 import Alder from '../steg/Alder';
-import styles from './BehandlingSteg.module.css';
+import styles from './Vilkårsteg.module.css';
 import { AndreYtelser } from '../steg/AndreYtelser';
 import Tiltaksdeltagelse from '../steg/Tiltaksdeltagelse';
 import Stønadsdager from '../steg/Stønadsdager';
@@ -13,29 +13,29 @@ import Introduksjonsprogrammet from '../steg/Introduksjonsprogrammet';
 import Oppsummering from '../steg/Oppsummering';
 import FristForFramsettingAvKrav from '../steg/FristForFramsettingAvKrav';
 
-const BehandlingSteg = () => {
+const Vilkårsteg = () => {
   const router = useRouter();
-  const behandlingsteg = router.query.behandlingsteg as string;
+  const vilkårsteg = router.query.vilkårsteg as string;
 
   function utledStegFraRoute(route: string | undefined): ReactElement {
     switch (route) {
-      case Behandlingssteg.ALDER:
+      case Vilkår.ALDER:
         return <Alder />;
-      case Behandlingssteg.KRAVFRIST:
+      case Vilkår.KRAVFRIST:
         return <FristForFramsettingAvKrav />;
-      case Behandlingssteg.TILTAKSDELTAGELSE:
+      case Vilkår.TILTAKSDELTAGELSE:
         return <Tiltaksdeltagelse />;
-      case Behandlingssteg.KVP:
+      case Vilkår.KVP:
         return <Kvalifiseringsprogrammet />;
-      case Behandlingssteg.INTROPROGRAMMET:
+      case Vilkår.INTROPROGRAMMET:
         return <Introduksjonsprogrammet />;
-      case Behandlingssteg.INSTITUSJONSOPPHOLD:
+      case Vilkår.INSTITUSJONSOPPHOLD:
         return <Institusjonsopphold />;
-      case Behandlingssteg.ANDREYTELSER:
+      case Vilkår.ANDREYTELSER:
         return <AndreYtelser />;
-      case Behandlingssteg.STØNADSDAGER:
+      case Vilkår.STØNADSDAGER:
         return <Stønadsdager />;
-      case Behandlingssteg.OPPSUMMERING:
+      case Vilkår.OPPSUMMERING:
         return <Oppsummering />;
       default:
         return <Alder />;
@@ -44,9 +44,9 @@ const BehandlingSteg = () => {
 
   return (
     <VStack className={styles.behandlingsteg}>
-      {utledStegFraRoute(behandlingsteg)}
+      {utledStegFraRoute(vilkårsteg)}
     </VStack>
   );
 };
 
-export default BehandlingSteg;
+export default Vilkårsteg;

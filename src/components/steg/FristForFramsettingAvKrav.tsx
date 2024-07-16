@@ -3,8 +3,8 @@ import { Loader, VStack } from '@navikt/ds-react';
 import UtfallstekstMedIkon from './UtfallstekstMedIkon';
 import styles from './Steg.module.css';
 import StegHeader from './StegHeader';
-import VilkårsvurderingerAvFristForFramsettingAvKrav from '../vilkårsvurdering-av-frist-for-framsetting-av-krav/VilkårsvurderingerAvFristForFramsettingAvKrav';
-import KravdatoSaksopplysninger from '../vilkårsvurdering-av-frist-for-framsetting-av-krav/KravdatoSaksopplysninger';
+import VilkårsvurderingerAvFristForFramsettingAvKrav from '../kravfrist/VilkårsvurderingerAvFristForFramsettingAvKrav';
+import KravdatoSaksopplysninger from '../kravfrist/KravdatoSaksopplysninger';
 import { useRouter } from 'next/router';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
 
