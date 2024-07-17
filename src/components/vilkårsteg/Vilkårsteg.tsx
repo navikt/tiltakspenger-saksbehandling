@@ -4,7 +4,6 @@ import { ReactElement } from 'react';
 import { Vilkår } from '../../types/Vilkår';
 import Alder from '../steg/Alder';
 import styles from './Vilkårsteg.module.css';
-import { AndreYtelser } from '../steg/AndreYtelser';
 import Tiltaksdeltagelse from '../steg/Tiltaksdeltagelse';
 import Stønadsdager from '../steg/Stønadsdager';
 import Kvalifiseringsprogrammet from '../steg/Kvalifiseringsprogrammet';
@@ -12,6 +11,7 @@ import Institusjonsopphold from '../steg/Institusjonsopphold';
 import Introduksjonsprogrammet from '../steg/Introduksjonsprogrammet';
 import Oppsummering from '../steg/Oppsummering';
 import FristForFramsettingAvKrav from '../steg/FristForFramsettingAvKrav';
+import { AndreYtelser } from '../steg/AndreYtelser';
 
 const Vilkårsteg = () => {
   const router = useRouter();
