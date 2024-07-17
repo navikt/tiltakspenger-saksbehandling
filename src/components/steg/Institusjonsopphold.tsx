@@ -1,53 +1,23 @@
 import { Loader, VStack } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
-import { useHentBehandling } from '../../hooks/useHentBehandling';
 import StegHeader from './StegHeader';
 import StegKort from './StegKort';
 import UtfallstekstMedIkon from './UtfallstekstMedIkon';
-import { dateTilISOTekst } from '../../utils/date';
+import { nyPeriodeTilPeriode } from '../../utils/date';
 import { SkjemaFelter } from './OppdaterSaksopplysningForm';
 import { useSWRConfig } from 'swr';
+import { useHentInstitusjonsopphold } from '../../hooks/useHentInstitusjonsopphold';
 
 const Institusjonsopphold = () => {
   const router = useRouter();
   const behandlingId = router.query.behandlingId as string;
-  const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
+  const { institusjonsopphold, isLoading } =
+    useHentInstitusjonsopphold(behandlingId);
   const mutator = useSWRConfig().mutate;
 
-  if (isLoading || !valgtBehandling) {
+  if (isLoading || !institusjonsopphold) {
     return <Loader />;
   }
-
-  const saksopplysning =
-    valgtBehandling.ytelsessaksopplysninger.saksopplysninger.find(
-      (saksopplysning) =>
-        saksopplysning.saksopplysningTittel == 'Institusjonsopphold',
-    );
-
-  if (!saksopplysning) return <Loader />;
-
-  const håndterLagreSaksopplysning = (data: SkjemaFelter) => {
-    console.log(data);
-    fetch(`/api/behandling/${behandlingId}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        fra: data.valgtVerdi
-          ? dateTilISOTekst(data.periode.fra)
-          : valgtBehandling.vurderingsperiode.fra,
-        til: data.valgtVerdi
-          ? dateTilISOTekst(data.periode.til)
-          : valgtBehandling.vurderingsperiode.til,
-        vilkår: saksopplysning.saksopplysning,
-        begrunnelse: data.begrunnelse,
-        harYtelse: data.valgtVerdi,
-      }),
-    }).then(() => {
-      mutator(`/api/behandling/${behandlingId}`);
-    });
-  };
 
   return (
     <VStack gap="4">
@@ -59,18 +29,22 @@ const Institusjonsopphold = () => {
         }
         paragraf={'§9'}
       />
-      <UtfallstekstMedIkon samletUtfall={saksopplysning.utfall} />
+      <UtfallstekstMedIkon samletUtfall={institusjonsopphold.samletUtfall} />
       <StegKort
-        håndterLagreSaksopplysning={(data: SkjemaFelter) =>
-          håndterLagreSaksopplysning(data)
+        håndterLagreSaksopplysning={
+          (data: SkjemaFelter) => () => {} /*TODO når vi skal lagre*/
         }
         editerbar={false}
-        vurderingsperiode={valgtBehandling.vurderingsperiode}
-        saksopplysningsperiode={saksopplysning.periode}
-        kilde={saksopplysning.kilde}
-        utfall={saksopplysning.utfall}
+        vurderingsperiode={nyPeriodeTilPeriode(
+          institusjonsopphold.vurderingsperiode,
+        )}
+        saksopplysningsperiode={nyPeriodeTilPeriode(
+          institusjonsopphold.søknadSaksopplysning.periodeMedOpphold.periode,
+        )}
+        kilde={institusjonsopphold.søknadSaksopplysning.kilde}
+        utfall={institusjonsopphold.samletUtfall}
         vilkårTittel={'Institusjonsopphold'}
-        grunnlag={saksopplysning.utfall === 'OPPFYLT' ? 'Nei' : 'Ja'}
+        grunnlag={institusjonsopphold.samletUtfall === 'OPPFYLT' ? 'Nei' : 'Ja'}
         grunnlagHeader={'Oppholder seg på institusjon'}
       />
     </VStack>
