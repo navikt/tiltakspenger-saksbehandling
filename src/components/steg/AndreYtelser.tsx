@@ -80,6 +80,7 @@ export const AndreYtelser = () => {
           'https://lovdata.no/dokument/SF/forskrift/2013-11-04-1286'
         }
       />
+
       {!watchHarLivsoppholdytelser && (
         <UtfallstekstMedIkon samletUtfall={livsopphold.samletUtfall} />
       )}

@@ -1,24 +1,39 @@
 import { Button, HStack } from '@navikt/ds-react';
 import useSWRMutation from 'swr/mutation';
-import { useRouter } from 'next/router';
-import { Lesevisning } from '../../utils/avklarLesevisning';
-import { RefObject } from 'react';
+import { RefObject, useContext } from 'react';
 import { useSWRConfig } from 'swr';
+import { SaksbehandlerContext } from '../../pages/_app';
+import { useHentBehandling } from '../../hooks/useHentBehandling';
+import {
+  kanBeslutteForBehandling,
+  kanSaksbehandleForBehandling,
+} from '../../utils/tilganger';
 
 interface BehandlingKnapperProps {
   behandlingid: string;
   status: string;
-  lesevisning: Lesevisning;
   modalRef: RefObject<HTMLDialogElement>;
 }
 
 export const BehandlingKnapper = ({
   behandlingid,
-  lesevisning,
   modalRef,
 }: BehandlingKnapperProps) => {
-  const router = useRouter();
   const mutator = useSWRConfig().mutate;
+  const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
+  const { valgtBehandling } = useHentBehandling(behandlingid);
+
+  const kanBeslutte = kanBeslutteForBehandling(
+    valgtBehandling.beslutter,
+    innloggetSaksbehandler,
+    valgtBehandling.behandlingsteg,
+  );
+
+  const kanSaksbehandle = kanSaksbehandleForBehandling(
+    valgtBehandling.saksbehandler,
+    innloggetSaksbehandler,
+    valgtBehandling.behandlingsteg,
+  );
 
   async function oppdaterBehandling(url: string, { arg }: { arg?: string }) {
     await fetch(url, {
@@ -31,13 +46,6 @@ export const BehandlingKnapper = ({
       `/api/behandling/beslutter/${behandlingid}`,
       oppdaterBehandling,
     );
-  const {
-    trigger: oppdaterSaksopplysninger,
-    isMutating: oppdatererSaksopplysninger,
-  } = useSWRMutation(
-    `/api/behandling/oppdater/${behandlingid}`,
-    oppdaterBehandling,
-  );
 
   const { trigger: godkjennBehandling, isMutating: godkjennerBehandling } =
     useSWRMutation(
@@ -52,7 +60,7 @@ export const BehandlingKnapper = ({
   return (
     <>
       <HStack justify="start" gap="3" align="end">
-        {lesevisning.knappSendTilbake && (
+        {kanBeslutte && (
           <Button
             type="submit"
             size="small"
@@ -62,7 +70,7 @@ export const BehandlingKnapper = ({
             Send tilbake
           </Button>
         )}
-        {lesevisning.knappGodkjennVis && (
+        {kanBeslutte && (
           <Button
             type="submit"
             size="small"
@@ -70,24 +78,11 @@ export const BehandlingKnapper = ({
             onClick={() => {
               godkjennBehandling();
             }}
-            disabled={!lesevisning.knappGodkjennTillatt}
           >
             Godkjenn vedtaket
           </Button>
         )}
-        {lesevisning.knappOppdater && (
-          <Button
-            type="submit"
-            size="small"
-            loading={oppdatererSaksopplysninger}
-            onClick={() => {
-              oppdaterSaksopplysninger();
-            }}
-          >
-            Oppdater saksopplysninger
-          </Button>
-        )}
-        {lesevisning.knappSendTilBeslutter && (
+        {kanSaksbehandle && (
           <Button
             type="submit"
             size="small"
@@ -95,7 +90,6 @@ export const BehandlingKnapper = ({
             onClick={() => {
               sendTilBeslutter();
             }}
-            disabled={lesevisning.kanIkkeGodkjennes}
           >
             Send til beslutter
           </Button>
