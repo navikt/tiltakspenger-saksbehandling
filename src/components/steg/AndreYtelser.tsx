@@ -49,12 +49,11 @@ export const AndreYtelser = () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        ytelseForPeriode: [
-          {
-            periode: livsopphold.vurderingsPeriode,
-            deltar: harYtelser,
-          },
-        ],
+        ytelseForPeriode:
+        {
+          periode: livsopphold.vurderingsPeriode,
+          harYtelse: harYtelser,
+        },
       }),
     })
       .then(() => {

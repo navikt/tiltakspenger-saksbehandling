@@ -1,6 +1,7 @@
 import { Lovreferanse } from './Behandling';
 import { SamletUtfall } from './Kvp';
 import { NyPeriode } from './Periode';
+import { Saksbehandler } from './Saksbehandler';
 
 export interface LivsoppholdVilkår {
     avklartSaksopplysning: LivsoppholdSaksopplysning;
@@ -10,21 +11,14 @@ export interface LivsoppholdVilkår {
 }
 
 interface LivsoppholdSaksopplysning {
-    periodeMedDeltagelse: PeriodeMedDeltagelse;
+    harLivsoppholdYtelser: Boolean;
+    vurderingsPeriode: NyPeriode;
+    saksbehandler?: Saksbehandler;
     årsakTilEndring?: ÅrsakTilEndring;
+    tidspunkt: string;
 }
 
 enum ÅrsakTilEndring {
     FEIL_I_INNHENTET_DATA = 'FEIL_I_INNHENTET_DATA',
     ENDRING_ETTER_SØKNADSTIDSPUNKT = 'ENDRING_ETTER_SØKNADSTIDSPUNKT',
-}
-
-interface PeriodeMedDeltagelse {
-    periode: NyPeriode;
-    deltagelse: Deltagelse;
-}
-
-enum Deltagelse {
-    DELTAR = 'DELTAR',
-    DELTAR_IKKE = 'DELTAR_IKKE',
 }
