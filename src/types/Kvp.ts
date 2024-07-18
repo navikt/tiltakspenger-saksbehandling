@@ -50,14 +50,9 @@ enum Rolle {
   ADMINISTRATOR = 'ADMINISTRATOR', // Saksbehandlers administrator (superbruker)
 }
 
-interface PeriodeMedDeltagelse {
+export interface PeriodeMedDeltagelse {
   periode: NyPeriode;
   deltagelse: Deltagelse;
-}
-
-export interface DeltakelseMedPeriode {
-  periode: NyPeriode;
-  deltakelse: boolean;
 }
 
 export enum Deltagelse {
