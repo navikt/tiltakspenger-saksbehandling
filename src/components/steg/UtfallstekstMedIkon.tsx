@@ -2,7 +2,7 @@ import React from 'react';
 import { Utfall } from '../../types/Utfall';
 import { UtfallIkon } from '../utfall-ikon/UtfallIkon';
 import IkonMedTekst from '../ikon-med-tekst/IkonMedTekst';
-import { SamletUtfall } from '../../types/Kvp';
+import { SamletUtfall } from '../../types/Behandling';
 
 interface UtfallstekstMedIkonProps {
   samletUtfall: SamletUtfall | Utfall;

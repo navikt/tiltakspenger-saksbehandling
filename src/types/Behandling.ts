@@ -140,3 +140,15 @@ export interface Aldersaksopplysning {
   vilkårLovreferanse: Lovreferanse[];
   grunnlag: Date;
 }
+
+export enum ÅrsakTilEndring {
+  FEIL_I_INNHENTET_DATA = 'FEIL_I_INNHENTET_DATA',
+  ENDRING_ETTER_SØKNADSTIDSPUNKT = 'ENDRING_ETTER_SØKNADSTIDSPUNKT',
+}
+
+export enum SamletUtfall {
+  OPPFYLT = 'OPPFYLT',
+  DELVIS_OPPFYLT = 'DELVIS_OPPFYLT',
+  IKKE_OPPFYLT = 'IKKE_OPPFYLT',
+  UAVKLART = 'UAVKLART',
+}
