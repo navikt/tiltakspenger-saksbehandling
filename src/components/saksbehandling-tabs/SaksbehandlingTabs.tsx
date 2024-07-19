@@ -1,4 +1,4 @@
-import { FileTextIcon } from '@navikt/aksel-icons';
+import { FileTextIcon, TasklistIcon } from '@navikt/aksel-icons';
 import { Tabs } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import { useHentMeldekortListe } from '../../hooks/useHentMeldekortListe';
@@ -40,6 +40,15 @@ export const SaksbehandlingTabs = ({
             router.push(`/behandling/${behandlingId}/barnetillegg`);
           }}
         />*/}
+        <Tabs.Tab
+          key={'Oppsummering'}
+          value={'Oppsummering'}
+          label={'Oppsummering'}
+          icon={<TasklistIcon />}
+          onClick={() => {
+            router.push(`/behandling/${behandlingId}/oppsummering`);
+          }}
+        />
         {iverksatt && (
           <>
             <Tabs.Tab

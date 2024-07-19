@@ -1,9 +1,5 @@
 import { List, VStack } from '@navikt/ds-react';
-import {
-  CheckmarkCircleFillIcon,
-  PuzzlePieceIcon,
-  TasklistIcon,
-} from '@navikt/aksel-icons';
+import { PuzzlePieceIcon } from '@navikt/aksel-icons';
 import Link from 'next/link';
 import styles from './InngangsvilkårSidemeny.module.css';
 import { useRouter } from 'next/router';
@@ -39,17 +35,6 @@ const InngangsvilkårSidemeny = () => {
             </Link>
           </List.Item>
         ))}
-        <List.Item
-          key={'oppsummering'}
-          icon={<TasklistIcon title="a11y-title" fontSize="1.5rem" />}
-        >
-          <Link
-            className={vilkårsteg === 'oppsummering' ? styles.aktivtSteg : ''}
-            href={`/behandling/${behandlingId}/inngangsvilkar/oppsummering`}
-          >
-            Oppsummering
-          </Link>
-        </List.Item>
       </List>
       <List title="Beregning">
         <List.Item icon={<PuzzlePieceIcon width="1.5em" height="1.5em" />}>
