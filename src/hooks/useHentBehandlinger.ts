@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import { BehandlingForBenk } from '../types/Behandling';
+import { BehandlingForBenk } from '../types/BehandlingTypes';
 import { fetcher } from '../utils/http';
 
 export function useHentBehandlinger() {

@@ -26,13 +26,13 @@ export const BehandlingKnapper = ({
   const kanBeslutte = kanBeslutteForBehandling(
     valgtBehandling.beslutter,
     innloggetSaksbehandler,
-    valgtBehandling.behandlingsteg,
+    valgtBehandling.behandlingTilstand,
   );
 
   const kanSaksbehandle = kanSaksbehandleForBehandling(
     valgtBehandling.saksbehandler,
     innloggetSaksbehandler,
-    valgtBehandling.behandlingsteg,
+    valgtBehandling.behandlingTilstand,
   );
 
   async function oppdaterBehandling(url: string, { arg }: { arg?: string }) {

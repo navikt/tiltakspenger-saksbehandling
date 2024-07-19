@@ -2,7 +2,7 @@ import styles from './Saksdialog.module.css';
 import { InformationSquareFillIcon } from '@navikt/aksel-icons';
 import { formaterDatotekstMedTidspunkt } from '../../utils/date';
 import React from 'react';
-import { Endring } from '../../types/Behandling';
+import { Endring } from '../../types/BehandlingTypes';
 
 interface SaksdialogElementProps {
   endring: Endring;

@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Tag } from '@navikt/ds-react';
 import { PersonCircleIcon } from '@navikt/aksel-icons';
 import styles from './PersonaliaHeader.module.css';
-import { Behandling } from '../../types/Behandling';
+import { Behandling } from '../../types/BehandlingTypes';
 import router from 'next/router';
 
 interface PersonaliaHeaderProps {

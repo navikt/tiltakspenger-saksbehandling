@@ -1,4 +1,4 @@
-import { Lovreferanse, ÅrsakTilEndring, SamletUtfall } from './Behandling';
+import { Lovreferanse, ÅrsakTilEndring, SamletUtfall } from './BehandlingTypes';
 import { NyPeriode } from './Periode';
 
 export interface InstitusjonsoppholdVilkår {
@@ -19,7 +19,6 @@ enum Kilde {
   SØKNAD = 'SØKNAD',
   SAKSBEHANDLER = 'SAKSBEHANDLER',
 }
-
 
 interface PeriodeMedOpphold {
   periode: NyPeriode;

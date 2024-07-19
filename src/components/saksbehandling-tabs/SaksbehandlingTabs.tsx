@@ -14,7 +14,7 @@ export const SaksbehandlingTabs = ({
 }: SaksbehandlingTabsProps) => {
   const router = useRouter();
   const { valgtBehandling } = useHentBehandling(behandlingId);
-  const iverksatt = valgtBehandling?.behandlingsteg === 'iverksatt';
+  const iverksatt = valgtBehandling?.behandlingTilstand === 'iverksatt';
   const { meldekortliste } = useHentMeldekortListe(iverksatt, behandlingId);
   const { utbetalingliste } = useHentUtbetalingListe(iverksatt, behandlingId);
 

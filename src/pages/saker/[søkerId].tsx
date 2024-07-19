@@ -4,7 +4,7 @@ import { Link, Loader, Table } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import { fetcher } from '../../utils/http';
-import { Sak } from '../../types/Behandling';
+import { Sak } from '../../types/BehandlingTypes';
 import { pageWithAuthentication } from '../../auth/pageWithAuthentication';
 
 const SakerPage: NextPage = () => {

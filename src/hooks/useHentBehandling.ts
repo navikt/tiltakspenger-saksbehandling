@@ -1,6 +1,6 @@
 import useSWR from 'swr';
 import { fetcher } from '../utils/http';
-import { Behandling } from '../types/Behandling';
+import { Behandling } from '../types/BehandlingTypes';
 
 export function useHentBehandling(behandlingId: string) {
   const {

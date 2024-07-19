@@ -2,16 +2,16 @@ import { VStack } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import { ReactElement } from 'react';
 import { Vilkår } from '../../types/Vilkår';
-import Alder from '../steg/Alder';
+import Alder from '../vilkår/Alder';
 import styles from './Vilkårsteg.module.css';
-import Tiltaksdeltagelse from '../steg/Tiltaksdeltagelse';
-import Stønadsdager from '../steg/Stønadsdager';
-import Kvalifiseringsprogrammet from '../steg/Kvalifiseringsprogrammet';
-import Institusjonsopphold from '../steg/Institusjonsopphold';
-import Introduksjonsprogrammet from '../steg/Introduksjonsprogrammet';
-import Oppsummering from '../steg/Oppsummering';
-import FristForFramsettingAvKrav from '../steg/FristForFramsettingAvKrav';
-import { AndreYtelser } from '../steg/AndreYtelser';
+import Tiltaksdeltagelse from '../vilkår/Tiltaksdeltagelse';
+import Stønadsdager from '../vilkår/Stønadsdager';
+import Kvalifiseringsprogrammet from '../vilkår/Kvalifiseringsprogrammet';
+import Institusjonsopphold from '../vilkår/Institusjonsopphold';
+import Introduksjonsprogrammet from '../vilkår/Introduksjonsprogrammet';
+import Oppsummering from '../vilkår/Oppsummering';
+import FristForFramsettingAvKrav from '../vilkår/FristForFramsettingAvKrav';
+import { AndreYtelser } from '../vilkår/AndreYtelser';
 
 const Vilkårsteg = () => {
   const router = useRouter();

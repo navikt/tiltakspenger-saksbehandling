@@ -1,5 +1,5 @@
 import React from 'react';
-import { Endring } from '../../types/Behandling';
+import { Endring } from '../../types/BehandlingTypes';
 import { SaksdialogElement } from './SaksdialogElement';
 import { Skuff } from '../skuff/Skuff';
 

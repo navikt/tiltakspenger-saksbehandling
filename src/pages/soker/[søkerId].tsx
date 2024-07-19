@@ -5,7 +5,7 @@ import { SaksbehandlerContext } from '../_app';
 import { useRouter } from 'next/router';
 import useSWR, { useSWRConfig } from 'swr';
 import { fetcher } from '../../utils/http';
-import { BehandlingForBenk } from '../../types/Behandling';
+import { BehandlingForBenk } from '../../types/BehandlingTypes';
 import { pageWithAuthentication } from '../../auth/pageWithAuthentication';
 
 const SøkerPage: NextPage = () => {
