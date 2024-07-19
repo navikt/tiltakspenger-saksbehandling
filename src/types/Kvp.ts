@@ -20,14 +20,9 @@ enum Kilde {
   SAKSBEHANDLER = 'SAKSBEHANDLER',
 }
 
-interface PeriodeMedDeltagelse {
+export interface PeriodeMedDeltagelse {
   periode: NyPeriode;
   deltagelse: Deltagelse;
-}
-
-export interface DeltakelseMedPeriode {
-  periode: NyPeriode;
-  deltakelse: boolean;
 }
 
 export enum Deltagelse {
