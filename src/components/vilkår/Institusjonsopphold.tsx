@@ -3,8 +3,6 @@ import { useRouter } from 'next/router';
 import StegHeader from './VilkårHeader';
 import StegKort from './VilkårKort';
 import UtfallstekstMedIkon from './UtfallstekstMedIkon';
-import { nyPeriodeTilPeriode } from '../../utils/date';
-import { useSWRConfig } from 'swr';
 import { useHentInstitusjonsopphold } from '../../hooks/vilkår/useHentInstitusjonsopphold';
 
 const Institusjonsopphold = () => {
@@ -12,7 +10,6 @@ const Institusjonsopphold = () => {
   const behandlingId = router.query.behandlingId as string;
   const { institusjonsopphold, isLoading } =
     useHentInstitusjonsopphold(behandlingId);
-  const mutator = useSWRConfig().mutate;
 
   if (isLoading || !institusjonsopphold) {
     return <Loader />;
@@ -32,12 +29,10 @@ const Institusjonsopphold = () => {
       <StegKort
         håndterLagreSaksopplysning={() => console.log()}
         editerbar={false}
-        vurderingsperiode={nyPeriodeTilPeriode(
-          institusjonsopphold.vurderingsperiode,
-        )}
-        saksopplysningsperiode={nyPeriodeTilPeriode(
-          institusjonsopphold.søknadSaksopplysning.periodeMedOpphold.periode,
-        )}
+        vurderingsperiode={institusjonsopphold.vurderingsperiode}
+        saksopplysningsperiode={
+          institusjonsopphold.søknadSaksopplysning.periodeMedOpphold.periode
+        }
         kilde={institusjonsopphold.søknadSaksopplysning.kilde}
         utfall={institusjonsopphold.samletUtfall}
         vilkårTittel={'Institusjonsopphold'}

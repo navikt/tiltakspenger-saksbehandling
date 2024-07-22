@@ -40,7 +40,7 @@ const Vilkårsteg = () => {
   }
 
   return (
-    <VStack className={styles.behandlingsteg}>
+    <VStack className={styles.vilkårsteg}>
       {utledStegFraRoute(vilkårsteg)}
     </VStack>
   );

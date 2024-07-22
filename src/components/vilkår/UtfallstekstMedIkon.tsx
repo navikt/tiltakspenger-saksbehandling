@@ -24,7 +24,7 @@ function lagUtfallstekst(samletUtfall: SamletUtfall | Utfall) {
 }
 
 const UtfallstekstMedIkon = ({ samletUtfall }: UtfallstekstMedIkonProps) => {
-  let utfallstekst = lagUtfallstekst(samletUtfall);
+  const utfallstekst = lagUtfallstekst(samletUtfall);
   return (
     <IkonMedTekst
       iconRenderer={() => <UtfallIkon utfall={samletUtfall} />}
