@@ -1,3 +1,4 @@
+import { AlderVilkår } from './AlderTypes';
 import { InstitusjonsoppholdVilkår } from './InstitusjonsoppholdTypes';
 import { IntroVilkår } from './IntroduksjonsprogrammetTypes';
 import { KvpVilkår } from './KvpTypes';
@@ -53,6 +54,7 @@ interface KravdatoSaksopplysninger {
 }
 
 interface VilkårsettDTO {
+  alderVilkår: AlderVilkår;
   kvpVilkår: KvpVilkår;
   introVilkår: IntroVilkår;
   institusjonsoppholdVilkår: InstitusjonsoppholdVilkår;

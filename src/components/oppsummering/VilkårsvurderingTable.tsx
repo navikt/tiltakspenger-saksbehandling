@@ -2,13 +2,18 @@ import { Table } from '@navikt/ds-react';
 import router from 'next/router';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
 import UtfallstekstMedIkon from '../vilkår/UtfallstekstMedIkon';
-import { periodeTilFormatertDatotekst } from '../../utils/date';
+import {
+  dateTilFormatertTekst,
+  formaterDatotekst,
+  periodeTilFormatertDatotekst,
+} from '../../utils/date';
 import { lagFaktumTekst } from '../../types/FaktumTypes';
 
-const VilkårsVurderingTable = () => {
+const VilkårsvurderingTable = () => {
   const behandlingId = router.query.behandlingId as string;
   const { valgtBehandling } = useHentBehandling(behandlingId);
 
+  const alder = valgtBehandling.vilkårsett.alderVilkår;
   const kvp = valgtBehandling.vilkårsett.kvpVilkår;
   const institusjonsopphold =
     valgtBehandling.vilkårsett.institusjonsoppholdVilkår;
@@ -26,6 +31,20 @@ const VilkårsVurderingTable = () => {
         </Table.Row>
       </Table.Header>
       <Table.Body>
+        <Table.Row>
+          <Table.HeaderCell>
+            Alder {alder.vilkårLovreferanse.paragraf}
+          </Table.HeaderCell>
+          <Table.DataCell>
+            {<UtfallstekstMedIkon samletUtfall={alder.samletUtfall} />}
+          </Table.DataCell>
+          <Table.DataCell>
+            {periodeTilFormatertDatotekst(alder.vurderingsperiode)}
+          </Table.DataCell>
+          <Table.DataCell>
+            {`Søker er født ${formaterDatotekst(alder.avklartSaksopplysning.fødselsdato)}`}
+          </Table.DataCell>
+        </Table.Row>
         <Table.Row>
           <Table.HeaderCell>
             Andre livsopphold {livsopphold.vilkårLovreferanse.paragraf}
