@@ -1,15 +1,14 @@
 import { Loader } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
-import { Saksdialog } from '../../../components/saksdialog/Saksdialog';
 import Oppsummering from '../../../components/oppsummering/Oppsummering';
 import { NextPageWithLayout } from '../../_app';
 import { ReactElement } from 'react';
 import { pageWithAuthentication } from '../../../auth/pageWithAuthentication';
-import InngangsvilkårSidemeny from '../../../components/inngangsvilkår-sidemeny/InngangsvilkårSidemeny';
 import { BehandlingLayout } from '../../../components/layout/BehandlingLayout';
 import { SaksbehandlingLayout } from '../../../components/layout/SaksbehandlingLayout';
 import { useHentBehandling } from '../../../hooks/useHentBehandling';
 import { Skuff } from '../../../components/skuff/Skuff';
+import Behandlingdetaljer from '../../../components/behandlingdetaljer/Behandlingdetaljer';
 
 const Behandling: NextPageWithLayout = () => {
   const router = useRouter();
@@ -22,9 +21,10 @@ const Behandling: NextPageWithLayout = () => {
 
   return (
     <>
-      <Skuff venstreOrientert headerTekst={'Detaljer'} />
+      <Skuff venstreOrientert headerTekst={'Detaljer'}>
+        <Behandlingdetaljer />
+      </Skuff>
       <Oppsummering />
-      <Saksdialog endringslogg={valgtBehandling.endringslogg} />
     </>
   );
 };
