@@ -30,6 +30,7 @@ const VilkårsvurderingTable = () => {
         </Table.Row>
       </Table.Header>
       <Table.Body>
+        {/* Aldersvilkår */}
         <Table.Row>
           <Table.HeaderCell>
             Alder {alder.vilkårLovreferanse.paragraf}
@@ -44,6 +45,7 @@ const VilkårsvurderingTable = () => {
             {`Søker er født ${formaterDatotekst(alder.avklartSaksopplysning.fødselsdato)}`}
           </Table.DataCell>
         </Table.Row>
+        {/* Andre livsopphold */}
         <Table.Row>
           <Table.HeaderCell>
             Andre livsopphold {livsopphold.vilkårLovreferanse.paragraf}
@@ -60,6 +62,7 @@ const VilkårsvurderingTable = () => {
               : 'Søker har ikke andre livsopphold'}
           </Table.DataCell>
         </Table.Row>
+        {/* KVP */}
         <Table.Row>
           <Table.HeaderCell>
             Kvalifiseringsprogrammet {kvp.vilkårLovreferanse.paragraf}
@@ -78,6 +81,7 @@ const VilkårsvurderingTable = () => {
             )}
           </Table.DataCell>
         </Table.Row>
+        {/* Introduksjonsprogrammet */}
         <Table.Row>
           <Table.HeaderCell>
             Introduksjonsprogrammet {intro.vilkårLovreferanse.paragraf}
@@ -96,6 +100,7 @@ const VilkårsvurderingTable = () => {
             )}
           </Table.DataCell>
         </Table.Row>
+        {/* Institusjonsopphold */}
         <Table.Row>
           <Table.HeaderCell>
             Institusjonsopphold{' '}
