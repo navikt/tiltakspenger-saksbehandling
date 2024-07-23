@@ -85,9 +85,7 @@ const Benken: NextPage = () => {
                   behandling.saksbehandler,
                   behandling.beslutter,
                 ) ? (
-                  <Link
-                    href={`/behandling/${behandling.id}/inngangsvilkar/kravfrist`}
-                  >
+                  <Link href={`/behandling/${behandling.id}/oppsummering`}>
                     {behandling.typeBehandling}
                   </Link>
                 ) : (

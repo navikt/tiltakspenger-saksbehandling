@@ -39,10 +39,10 @@ export interface Behandling {
 }
 
 export enum BehandlingTilstand {
-  IVERKSATT = 'iverksatt',
-  TIL_BESLUTTER = 'tilBeslutter',
-  VILKÅRSVURDERT = 'vilkårsvurdert',
-  OPPRETTET = 'opprettet',
+  IVERKSATT = 'IVERKSATT',
+  TIL_BESLUTTER = 'TIL_BESLUTTER',
+  VILKÅRSVURDERT = 'VILKÅRSVURDERT',
+  OPPRETTET = 'OPPRETTET',
 }
 
 interface KravdatoSaksopplysninger {

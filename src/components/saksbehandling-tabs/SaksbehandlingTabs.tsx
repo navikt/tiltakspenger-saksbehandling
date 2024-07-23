@@ -25,7 +25,7 @@ export const SaksbehandlingTabs = ({
   return (
     <Tabs defaultValue="Inngangsvilkår">
       <Tabs.List>
-        {(!tilBeslutter || iverksatt) && (
+        {!tilBeslutter && !iverksatt && (
           <Tabs.Tab
             key={'Inngangsvilkår'}
             value={'Inngangsvilkår'}
