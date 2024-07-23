@@ -1,6 +1,3 @@
-import { Loader } from '@navikt/ds-react';
-import { useRouter } from 'next/router';
-import { useHentBehandling } from '../../../../../hooks/useHentBehandling';
 import { BehandlingLayout } from '../../../../../components/layout/BehandlingLayout';
 import { SaksbehandlingLayout } from '../../../../../components/layout/SaksbehandlingLayout';
 import { ReactElement } from 'react';
@@ -11,19 +8,11 @@ import InngangsvilkårSidemeny from '../../../../../components/inngangsvilkår-s
 import Vilkårsteg from '../../../../../components/vilkårsteg/Vilkårsteg';
 
 const Behandling: NextPageWithLayout = () => {
-  const router = useRouter();
-  const behandlingId = router.query.behandlingId as string;
-  const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
-
-  if (isLoading || !valgtBehandling) {
-    return <Loader />;
-  }
-
   return (
     <>
       <InngangsvilkårSidemeny />
       <Vilkårsteg />
-      <Saksdialog endringslogg={valgtBehandling.endringslogg} />
+      <Saksdialog />
     </>
   );
 };

@@ -1,12 +1,12 @@
 import { Lovreferanse, SamletUtfall } from './BehandlingTypes';
 import { PeriodeMedDeltagelse } from './KvpTypes';
-import { NyPeriode } from './Periode';
+import { Periode } from './Periode';
 
 export interface IntroVilkår {
   søknadSaksopplysning: IntroSaksopplysning;
   avklartSaksopplysning: IntroSaksopplysning;
   vilkårLovreferanse: Lovreferanse;
-  vurderingsperiode: NyPeriode;
+  vurderingsperiode: Periode;
   samletUtfall: SamletUtfall;
 }
 

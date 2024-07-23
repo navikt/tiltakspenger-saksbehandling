@@ -28,7 +28,7 @@ const Kvalifiseringsprogrammet = () => {
           }
         : {
             fraOgMed: intro.vurderingsperiode.fraOgMed,
-            tilOgMed: intro.vurderingsperiode.tiOgMed,
+            tilOgMed: intro.vurderingsperiode.tilOgMed,
           },
       deltar: data.valgtVerdi,
     };

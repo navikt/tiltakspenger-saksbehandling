@@ -1,17 +1,17 @@
 import { Lovreferanse, SamletUtfall } from './BehandlingTypes';
-import { NyPeriode } from './Periode';
+import { Periode } from './Periode';
 import { Saksbehandler } from './Saksbehandler';
 
 export interface LivsoppholdVilkår {
   avklartSaksopplysning: LivsoppholdSaksopplysning;
-  vurderingsPeriode: NyPeriode;
+  vurderingsPeriode: Periode;
   vilkårLovreferanse: Lovreferanse;
   samletUtfall: SamletUtfall;
 }
 
 interface LivsoppholdSaksopplysning {
   harLivsoppholdYtelser: Boolean;
-  vurderingsPeriode: NyPeriode;
+  vurderingsPeriode: Periode;
   saksbehandler?: Saksbehandler;
   årsakTilEndring?: ÅrsakTilEndring;
   tidspunkt: string;

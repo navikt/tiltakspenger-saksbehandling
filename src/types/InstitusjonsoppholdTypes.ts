@@ -1,11 +1,11 @@
 import { Lovreferanse, ÅrsakTilEndring, SamletUtfall } from './BehandlingTypes';
-import { NyPeriode } from './Periode';
+import { Periode } from './Periode';
 
 export interface InstitusjonsoppholdVilkår {
   søknadSaksopplysning: InstitusjonsoppholdSaksopplysning;
   avklartSaksopplysning: InstitusjonsoppholdSaksopplysning;
   vilkårLovreferanse: Lovreferanse;
-  vurderingsperiode: NyPeriode;
+  vurderingsperiode: Periode;
   samletUtfall: SamletUtfall;
 }
 
@@ -21,12 +21,12 @@ enum Kilde {
 }
 
 interface PeriodeMedOpphold {
-  periode: NyPeriode;
+  periode: Periode;
   opphold: Opphold;
 }
 
 export interface OppholdMedPeriode {
-  periode: NyPeriode;
+  periode: Periode;
   opphold: boolean;
 }
 

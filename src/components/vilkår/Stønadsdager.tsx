@@ -21,7 +21,10 @@ const VilkårsvurderingAvStønadsdager = () => {
 
   const håndterEndreAntallDager = (data: SkjemaFelter, tiltakId: string) => {
     const antallDager = {
-      periode: { fraOgMed: data.periode.fra, tilOgMed: data.periode.til },
+      periode: {
+        fraOgMed: data.periode.fraOgMed,
+        tilOgMed: data.periode.tilOgMed,
+      },
       antallDager: data.valgtVerdi,
     };
 
