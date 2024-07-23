@@ -4,7 +4,6 @@ import StegHeader from './VilkårHeader';
 import StegKort from './VilkårKort';
 import UtfallstekstMedIkon from './UtfallstekstMedIkon';
 import { useHentAlder } from '../../hooks/vilkår/useHentAlder';
-import { nyPeriodeTilPeriode } from '../../utils/date';
 
 const Alder = () => {
   const router = useRouter();
@@ -15,7 +14,7 @@ const Alder = () => {
     return <Loader />;
   }
 
-  const vurderingsperiode = nyPeriodeTilPeriode(alderVilkår.vurderingsperiode)
+  const vurderingsperiode = alderVilkår.vurderingsperiode;
 
   return (
     <VStack gap="4">

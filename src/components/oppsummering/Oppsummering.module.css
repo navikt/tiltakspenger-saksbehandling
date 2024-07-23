@@ -1,0 +1,12 @@
+.wrapper {
+    width: 100%;
+    padding: 1em;
+    background-color: #F5F5F5;
+}
+
+.vurdering {
+    background-color: #FFFFFF;
+    border: 2px #9099A5 solid;
+    border-radius: 4px;
+    padding: 1rem;
+}

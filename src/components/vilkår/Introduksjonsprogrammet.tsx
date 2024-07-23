@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import StegHeader from './VilkårHeader';
 import StegKort from './VilkårKort';
 import UtfallstekstMedIkon from './UtfallstekstMedIkon';
-import { dateTilISOTekst, nyPeriodeTilPeriode } from '../../utils/date';
+import { dateTilISOTekst } from '../../utils/date';
 import { SkjemaFelter } from './OppdaterSaksopplysningForm';
 import { useSWRConfig } from 'swr';
 import { useHentIntroduksjonsprogrammet } from '../../hooks/vilkår/useHentIntroduksjonsprogrammet';
@@ -23,12 +23,12 @@ const Kvalifiseringsprogrammet = () => {
     const deltakelseMedPeriode = {
       periode: data.valgtVerdi
         ? {
-            fraOgMed: dateTilISOTekst(data.periode.fra),
-            tilOgMed: dateTilISOTekst(data.periode.til),
+            fraOgMed: dateTilISOTekst(data.periode.fraOgMed),
+            tilOgMed: dateTilISOTekst(data.periode.tilOgMed),
           }
         : {
-            fraOgMed: vurderingsPeriode.fra,
-            tilOgMed: vurderingsPeriode.til,
+            fraOgMed: intro.vurderingsperiode.fraOgMed,
+            tilOgMed: intro.vurderingsperiode.tilOgMed,
           },
       deltar: data.valgtVerdi,
     };
@@ -57,11 +57,9 @@ const Kvalifiseringsprogrammet = () => {
 
   const deltagelse =
     intro.avklartSaksopplysning.periodeMedDeltagelse.deltagelse;
-  const vurderingsPeriode = nyPeriodeTilPeriode(intro.vurderingsperiode);
-  const saksopplysningsPeriode = nyPeriodeTilPeriode(
+  const saksopplysningsPeriode =
     intro.avklartSaksopplysning.periodeMedDeltagelse.periode ??
-      intro.søknadSaksopplysning.periodeMedDeltagelse.periode,
-  );
+    intro.søknadSaksopplysning.periodeMedDeltagelse.periode;
   return (
     <VStack gap="4">
       <StegHeader
@@ -78,7 +76,7 @@ const Kvalifiseringsprogrammet = () => {
           håndterLagreIntroSaksopplysning(data)
         }
         editerbar={false}
-        vurderingsperiode={vurderingsPeriode}
+        vurderingsperiode={intro.vurderingsperiode}
         saksopplysningsperiode={saksopplysningsPeriode}
         kilde={intro.avklartSaksopplysning.kilde}
         utfall={intro.samletUtfall}

@@ -1,4 +1,8 @@
+import { AlderVilkår } from './AlderTypes';
+import { InstitusjonsoppholdVilkår } from './InstitusjonsoppholdTypes';
+import { IntroVilkår } from './IntroduksjonsprogrammetTypes';
 import { KvpVilkår } from './KvpTypes';
+import { LivsoppholdVilkår } from './LivsoppholdTypes';
 import { Periode } from './Periode';
 import Tiltaksstatus from './Tiltaksstatus';
 import { Utfall } from './Utfall';
@@ -34,6 +38,13 @@ export interface Behandling {
   vilkårsett: VilkårsettDTO;
 }
 
+export enum BehandlingTilstand {
+  IVERKSATT = 'IVERKSATT',
+  TIL_BESLUTTER = 'TIL_BESLUTTER',
+  VILKÅRSVURDERT = 'VILKÅRSVURDERT',
+  OPPRETTET = 'OPPRETTET',
+}
+
 interface KravdatoSaksopplysninger {
   samletUtfall: Utfall;
   opprinneligKravdato: KravdatoSaksopplysning;
@@ -43,7 +54,11 @@ interface KravdatoSaksopplysninger {
 }
 
 interface VilkårsettDTO {
+  alderVilkår: AlderVilkår;
   kvpVilkår: KvpVilkår;
+  introVilkår: IntroVilkår;
+  institusjonsoppholdVilkår: InstitusjonsoppholdVilkår;
+  livsoppholdVilkår: LivsoppholdVilkår;
 }
 
 export interface KravdatoSaksopplysning {
@@ -65,6 +80,7 @@ export interface BehandlingForBenk {
   fom: string;
   tom: string;
   status: string;
+  tilstand: BehandlingTilstand;
   saksbehandler?: string;
   beslutter?: string;
 }

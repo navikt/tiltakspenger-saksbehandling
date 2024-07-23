@@ -9,7 +9,6 @@ import Stønadsdager from '../vilkår/Stønadsdager';
 import Kvalifiseringsprogrammet from '../vilkår/Kvalifiseringsprogrammet';
 import Institusjonsopphold from '../vilkår/Institusjonsopphold';
 import Introduksjonsprogrammet from '../vilkår/Introduksjonsprogrammet';
-import Oppsummering from '../vilkår/Oppsummering';
 import FristForFramsettingAvKrav from '../vilkår/FristForFramsettingAvKrav';
 import { AndreYtelser } from '../vilkår/AndreYtelser';
 
@@ -19,10 +18,10 @@ const Vilkårsteg = () => {
 
   function utledStegFraRoute(route: string | undefined): ReactElement {
     switch (route) {
-      case Vilkår.ALDER:
-        return <Alder />;
       case Vilkår.KRAVFRIST:
         return <FristForFramsettingAvKrav />;
+      case Vilkår.ALDER:
+        return <Alder />;
       case Vilkår.TILTAKSDELTAGELSE:
         return <Tiltaksdeltagelse />;
       case Vilkår.KVP:
@@ -35,15 +34,13 @@ const Vilkårsteg = () => {
         return <AndreYtelser />;
       case Vilkår.STØNADSDAGER:
         return <Stønadsdager />;
-      case Vilkår.OPPSUMMERING:
-        return <Oppsummering />;
       default:
-        return <Alder />;
+        return <FristForFramsettingAvKrav />;
     }
   }
 
   return (
-    <VStack className={styles.behandlingsteg}>
+    <VStack className={styles.vilkårsteg}>
       {utledStegFraRoute(vilkårsteg)}
     </VStack>
   );

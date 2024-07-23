@@ -24,7 +24,7 @@ interface OppdaterSaksopplysningFormProps {
 }
 
 export interface SkjemaFelter {
-  periode: { fra: Date; til: Date };
+  periode: { fraOgMed: Date; tilOgMed: Date };
   valgtVerdi: boolean;
   begrunnelse: string;
 }
@@ -45,8 +45,8 @@ export const OppdaterSaksopplysningFormSkjema = ({
     mode: 'onSubmit',
     defaultValues: {
       periode: {
-        fra: new Date(vurderingsperiode.fra),
-        til: new Date(vurderingsperiode.til),
+        fraOgMed: new Date(vurderingsperiode.fraOgMed),
+        tilOgMed: new Date(vurderingsperiode.tilOgMed),
       },
       valgtVerdi: false,
     },
@@ -82,7 +82,7 @@ export const OppdaterSaksopplysningFormSkjema = ({
               >
                 <Radio
                   value={false}
-                >{`Søker mottar ikke ${saksopplysningTittel} i perioden ${periodeTilFormatertDatotekst(vurderingsperiode)}`}</Radio>
+                >{`Søker mottar ikke ${saksopplysningTittel} i perioden ${vurderingsperiode}`}</Radio>
                 <Radio
                   value={true}
                 >{`Søker mottar ${saksopplysningTittel} i hele eller deler av perioden`}</Radio>
@@ -103,20 +103,20 @@ export const OppdaterSaksopplysningFormSkjema = ({
             <Periodevelger
               onFraChange={(dato: Date) => {
                 onChange({
-                  fra: dato,
-                  til: value.til,
+                  fraOgMed: dato,
+                  tilOgMed: value.tilOgMed,
                 });
               }}
               onTilChange={(dato: Date) => {
                 onChange({
-                  fra: value.fra,
-                  til: dato,
+                  fraOgMed: value.fraOgMed,
+                  tilOgMed: dato,
                 });
               }}
-              minDato={vurderingsperiode.fra}
-              maxDato={vurderingsperiode.til}
-              valgtFraDato={value.fra}
-              valgtTilDato={value.til}
+              minDato={vurderingsperiode.fraOgMed}
+              maxDato={vurderingsperiode.tilOgMed}
+              valgtFraDato={value.fraOgMed}
+              valgtTilDato={value.tilOgMed}
               disabled={!watchHarYtelse}
               error={errors.periode?.message ?? ''}
             />

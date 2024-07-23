@@ -4,7 +4,7 @@ import StegHeader from './VilkårHeader';
 import StegKort from './VilkårKort';
 import UtfallstekstMedIkon from './UtfallstekstMedIkon';
 import { Deltagelse } from '../../types/KvpTypes';
-import { dateTilISOTekst, nyPeriodeTilPeriode } from '../../utils/date';
+import { dateTilISOTekst } from '../../utils/date';
 import { SkjemaFelter } from './OppdaterSaksopplysningForm';
 import { useSWRConfig } from 'swr';
 import { useHentKvp } from '../../hooks/vilkår/useHentKvp';
@@ -23,12 +23,12 @@ const Kvalifiseringsprogrammet = () => {
     const deltakelseMedPeriode = {
       periode: data.valgtVerdi
         ? {
-            fraOgMed: dateTilISOTekst(data.periode.fra),
-            tilOgMed: dateTilISOTekst(data.periode.til),
+            fraOgMed: dateTilISOTekst(data.periode.fraOgMed),
+            tilOgMed: dateTilISOTekst(data.periode.tilOgMed),
           }
         : {
-            fraOgMed: vurderingsPeriode.fra,
-            tilOgMed: vurderingsPeriode.til,
+            fraOgMed: kvp.vurderingsperiode.fraOgMed,
+            tilOgMed: kvp.vurderingsperiode.tilOgMed,
           },
       deltar: data.valgtVerdi,
     };
@@ -56,11 +56,10 @@ const Kvalifiseringsprogrammet = () => {
   };
 
   const deltagelse = kvp.avklartSaksopplysning.periodeMedDeltagelse.deltagelse;
-  const vurderingsPeriode = nyPeriodeTilPeriode(kvp.vurderingsperiode);
-  const saksopplysningsPeriode = nyPeriodeTilPeriode(
+  const saksopplysningsPeriode =
     kvp.avklartSaksopplysning.periodeMedDeltagelse.periode ??
-      kvp.søknadSaksopplysning.periodeMedDeltagelse.periode,
-  );
+    kvp.søknadSaksopplysning.periodeMedDeltagelse.periode;
+
   return (
     <VStack gap="4">
       <StegHeader
@@ -77,7 +76,7 @@ const Kvalifiseringsprogrammet = () => {
           håndterLagreKvpSaksopplysning(data)
         }
         editerbar={false}
-        vurderingsperiode={vurderingsPeriode}
+        vurderingsperiode={kvp.vurderingsperiode}
         saksopplysningsperiode={saksopplysningsPeriode}
         kilde={kvp.avklartSaksopplysning.kilde}
         utfall={kvp.samletUtfall}

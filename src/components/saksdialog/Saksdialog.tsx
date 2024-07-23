@@ -1,16 +1,17 @@
 import React from 'react';
-import { Endring } from '../../types/BehandlingTypes';
 import { SaksdialogElement } from './SaksdialogElement';
 import { Skuff } from '../skuff/Skuff';
+import { useRouter } from 'next/router';
+import { useHentBehandling } from '../../hooks/useHentBehandling';
 
-interface HistorikkProps {
-  endringslogg: Endring[];
-}
+export const Saksdialog = () => {
+  const router = useRouter();
+  const behandlingId = router.query.behandlingId as string;
+  const { valgtBehandling } = useHentBehandling(behandlingId);
 
-export const Saksdialog = ({ endringslogg }: HistorikkProps) => {
   return (
     <Skuff venstreOrientert={false} headerTekst="Saksdialog">
-      {endringslogg.map((endring, index) => (
+      {valgtBehandling.endringslogg.map((endring, index) => (
         <SaksdialogElement endring={endring} key={index} />
       ))}
     </Skuff>

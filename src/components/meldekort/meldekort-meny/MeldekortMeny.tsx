@@ -41,8 +41,8 @@ export const MeldekortMeny = ({ behandlingId }: MeldekortmenyProps) => {
               </Label>
               <Detail>
                 {periodeTilFormatertDatotekst({
-                  fra: meldekort.fom,
-                  til: meldekort.tom,
+                  fraOgMed: meldekort.fom,
+                  tilOgMed: meldekort.tom,
                 })}
               </Detail>
             </div>

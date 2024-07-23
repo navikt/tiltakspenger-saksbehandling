@@ -1,7 +1,7 @@
 import { Button, Modal, Select } from '@navikt/ds-react';
 import { RefObject, useState } from 'react';
-import { useSWRConfig } from 'swr';
 import styles from './BegrunnelseModal.module.css';
+import { useRouter } from 'next/router';
 
 interface BegrunnelseModalProps {
   behandlingid: string;
@@ -21,7 +21,7 @@ const BegrunnelseModal = ({
   behandlingid,
   modalRef,
 }: BegrunnelseModalProps) => {
-  const mutator = useSWRConfig().mutate;
+  const router = useRouter();
   const [begrunnelse, setBegrunnelse] = useState<string>('');
   const [error, setError] = useState<string>('');
 
@@ -41,7 +41,7 @@ const BegrunnelseModal = ({
       },
       body: JSON.stringify({ begrunnelse: begrunnelse }),
     }).then(() => {
-      mutator(`/api/behandling/${behandlingid}`);
+      router.push('/');
       lukkModal();
     });
   };

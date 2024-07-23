@@ -41,8 +41,8 @@ export const UtbetalingMeny = ({ behandlingId }: UtbetalingmenyProps) => {
               </Label>
               <Detail>
                 {periodeTilFormatertDatotekst({
-                  fra: utbetaling.fom,
-                  til: utbetaling.tom,
+                  fraOgMed: utbetaling.fom,
+                  tilOgMed: utbetaling.tom,
                 })}
               </Detail>
               <Detail>Utbetalt: {utbetaling.beløp.toString()}</Detail>

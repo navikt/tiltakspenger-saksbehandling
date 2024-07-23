@@ -1,9 +1,10 @@
-import { FileTextIcon } from '@navikt/aksel-icons';
+import { FileTextIcon, TasklistIcon } from '@navikt/aksel-icons';
 import { Tabs } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import { useHentMeldekortListe } from '../../hooks/useHentMeldekortListe';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
 import { useHentUtbetalingListe } from '../../hooks/useHentUtbetalingListe';
+import { BehandlingTilstand } from '../../types/BehandlingTypes';
 
 interface SaksbehandlingTabsProps {
   behandlingId: string;
@@ -14,22 +15,29 @@ export const SaksbehandlingTabs = ({
 }: SaksbehandlingTabsProps) => {
   const router = useRouter();
   const { valgtBehandling } = useHentBehandling(behandlingId);
-  const iverksatt = valgtBehandling?.behandlingTilstand === 'iverksatt';
+  const tilBeslutter =
+    valgtBehandling?.behandlingTilstand === BehandlingTilstand.TIL_BESLUTTER;
+  const iverksatt =
+    valgtBehandling?.behandlingTilstand === BehandlingTilstand.IVERKSATT;
   const { meldekortliste } = useHentMeldekortListe(iverksatt, behandlingId);
   const { utbetalingliste } = useHentUtbetalingListe(iverksatt, behandlingId);
 
   return (
     <Tabs defaultValue="Inngangsvilkår">
       <Tabs.List>
-        <Tabs.Tab
-          key={'Inngangsvilkår'}
-          value={'Inngangsvilkår'}
-          label={'Inngangsvilkår'}
-          icon={<FileTextIcon />}
-          onClick={() => {
-            router.push(`/behandling/${behandlingId}/inngangsvilkar/kravfrist`);
-          }}
-        />
+        {!tilBeslutter && !iverksatt && (
+          <Tabs.Tab
+            key={'Inngangsvilkår'}
+            value={'Inngangsvilkår'}
+            label={'Inngangsvilkår'}
+            icon={<FileTextIcon />}
+            onClick={() => {
+              router.push(
+                `/behandling/${behandlingId}/inngangsvilkar/kravfrist`,
+              );
+            }}
+          />
+        )}
         {/*
         <Tabs.Tab
           key={'Barnetillegg'}
@@ -40,6 +48,15 @@ export const SaksbehandlingTabs = ({
             router.push(`/behandling/${behandlingId}/barnetillegg`);
           }}
         />*/}
+        <Tabs.Tab
+          key={'Oppsummering'}
+          value={'Oppsummering'}
+          label={'Oppsummering'}
+          icon={<TasklistIcon />}
+          onClick={() => {
+            router.push(`/behandling/${behandlingId}/oppsummering`);
+          }}
+        />
         {iverksatt && (
           <>
             <Tabs.Tab
