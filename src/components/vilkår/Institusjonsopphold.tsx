@@ -1,7 +1,7 @@
 import { Loader, VStack } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
-import StegHeader from './VilkårHeader';
-import StegKort from './VilkårKort';
+import VilkårHeader from './VilkårHeader';
+import VilkårKort from './VilkårKort';
 import UtfallstekstMedIkon from './UtfallstekstMedIkon';
 import { useHentInstitusjonsopphold } from '../../hooks/vilkår/useHentInstitusjonsopphold';
 
@@ -17,7 +17,7 @@ const Institusjonsopphold = () => {
 
   return (
     <VStack gap="4">
-      <StegHeader
+      <VilkårHeader
         headertekst={'Institusjonsopphold'}
         lovdatatekst="Opphold i institusjon, fengsel mv."
         lovdatalenke={
@@ -26,10 +26,7 @@ const Institusjonsopphold = () => {
         paragraf={'§9'}
       />
       <UtfallstekstMedIkon samletUtfall={institusjonsopphold.samletUtfall} />
-      <StegKort
-        håndterLagreSaksopplysning={() => console.log()}
-        editerbar={false}
-        vurderingsperiode={institusjonsopphold.vurderingsperiode}
+      <VilkårKort
         saksopplysningsperiode={
           institusjonsopphold.søknadSaksopplysning.periodeMedOpphold.periode
         }
@@ -37,7 +34,7 @@ const Institusjonsopphold = () => {
         utfall={institusjonsopphold.samletUtfall}
         vilkårTittel={'Institusjonsopphold'}
         grunnlag={institusjonsopphold.samletUtfall === 'OPPFYLT' ? 'Nei' : 'Ja'}
-        grunnlagHeader={'Oppholder seg på institusjon'}
+        grunnlagHeader={'Opphold'}
       />
     </VStack>
   );

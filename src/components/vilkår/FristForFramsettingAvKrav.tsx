@@ -1,12 +1,11 @@
 import React from 'react';
 import { Loader, VStack } from '@navikt/ds-react';
 import UtfallstekstMedIkon from './UtfallstekstMedIkon';
-import styles from './Steg.module.css';
-import StegHeader from './VilkårHeader';
+import VilkårHeader from './VilkårHeader';
 import { useRouter } from 'next/router';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
-import VilkårsvurderingerAvFristForFramsettingAvKrav from './kravfrist/VilkårsvurderingerAvFristForFramsettingAvKrav';
-import KravdatoSaksopplysninger from './kravfrist/KravdatoSaksopplysninger';
+import VilkårKort from './VilkårKort';
+import { formaterDatotekst } from '../../utils/date';
 
 const FristForFramsettingAvKrav = () => {
   const router = useRouter();
@@ -22,7 +21,7 @@ const FristForFramsettingAvKrav = () => {
 
   return (
     <VStack gap="4">
-      <StegHeader
+      <VilkårHeader
         headertekst={'Frist for framsetting av krav'}
         lovdatatekst={saksopplysning.lovreferanse.beskrivelse}
         lovdatalenke={
@@ -31,21 +30,16 @@ const FristForFramsettingAvKrav = () => {
         paragraf={saksopplysning.lovreferanse.paragraf}
       />
       <UtfallstekstMedIkon samletUtfall={saksopplysning.samletUtfall} />
-      <div className={styles.container}>
-        <VilkårsvurderingerAvFristForFramsettingAvKrav
-          vurderinger={saksopplysning.vurderinger}
-          kravdatoSaksopplysning={
-            saksopplysning.kravdatoFraSaksbehandler
-              ? saksopplysning.kravdatoFraSaksbehandler
-              : saksopplysning.opprinneligKravdato
-          }
-        />
-        <div className={styles.verticalLine}></div>
-        <KravdatoSaksopplysninger
-          kravdatoSaksopplysning={saksopplysning.opprinneligKravdato}
-          visTilbakestillKnapp={!!saksopplysning.kravdatoFraSaksbehandler}
-        />
-      </div>
+      <VilkårKort
+        saksopplysningsperiode={valgtBehandling.vurderingsperiode}
+        kilde={saksopplysning.opprinneligKravdato.kilde}
+        utfall={saksopplysning.samletUtfall}
+        vilkårTittel={'Frist for framsetting av krav'}
+        grunnlag={formaterDatotekst(
+          saksopplysning.opprinneligKravdato.kravdato,
+        )}
+        grunnlagHeader={'Kravdato'}
+      />
     </VStack>
   );
 };

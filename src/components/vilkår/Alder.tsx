@@ -1,9 +1,10 @@
 import { Loader, VStack } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
-import StegHeader from './VilkårHeader';
-import StegKort from './VilkårKort';
+import VilkårHeader from './VilkårHeader';
+import VilkårKort from './VilkårKort';
 import UtfallstekstMedIkon from './UtfallstekstMedIkon';
 import { useHentAlder } from '../../hooks/vilkår/useHentAlder';
+import { formaterDatotekst } from '../../utils/date';
 
 const Alder = () => {
   const router = useRouter();
@@ -18,24 +19,23 @@ const Alder = () => {
 
   return (
     <VStack gap="4">
-      <StegHeader
-        headertekst={alderVilkår.vilkårLovreferanse.beskrivelse}
-        lovdatatekst={alderVilkår.vilkårLovreferanse.lovverk}
+      <VilkårHeader
+        headertekst={'Alder'}
+        lovdatatekst={alderVilkår.vilkårLovreferanse.beskrivelse}
         lovdatalenke={
           'https://lovdata.no/dokument/SF/forskrift/2013-11-04-1286'
         }
         paragraf={alderVilkår.vilkårLovreferanse.paragraf}
       />
       <UtfallstekstMedIkon samletUtfall={alderVilkår.samletUtfall} />
-      <StegKort
-        editerbar={false}
-        håndterLagreSaksopplysning={() => console.log()}
-        vurderingsperiode={vurderingsperiode}
+      <VilkårKort
         saksopplysningsperiode={vurderingsperiode}
         kilde={alderVilkår.avklartSaksopplysning.kilde}
         utfall={alderVilkår.samletUtfall}
         vilkårTittel={'Alder'}
-        grunnlag={alderVilkår.avklartSaksopplysning.fødselsdato}
+        grunnlag={formaterDatotekst(
+          alderVilkår.avklartSaksopplysning.fødselsdato,
+        )}
         grunnlagHeader={'Fødselsdato'}
       />
     </VStack>

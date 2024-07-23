@@ -1,0 +1,21 @@
+.container {
+    background: #FFFFFF;
+    border: 2px #9099A5 solid;
+    border-radius: 4px;
+    padding: 1rem;
+}
+
+.avklartSaksopplysning {
+    width: 50%;
+    padding-right: 1rem;
+}
+
+.registerdata {
+    border-left: 1px #000000 solid;
+    padding-left: 2rem;
+    width: 50%;
+}
+
+.marginTop {
+    margin-top: 1rem;
+}

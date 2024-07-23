@@ -8,12 +8,12 @@ import {
   VStack,
 } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
-import StegHeader from './VilkårHeader';
+import VilkårHeader from './VilkårHeader';
 import UtfallstekstMedIkon from './UtfallstekstMedIkon';
 import { useHentLivsopphold } from '../../hooks/vilkår/useHentLivsopphold';
 import { useSWRConfig } from 'swr';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import styles from './Steg.module.css';
+import styles from './Vilkår.module.css';
 
 export interface SkjemaFelter {
   harAndreYtelser: boolean;
@@ -71,7 +71,7 @@ export const AndreYtelser = () => {
 
   return (
     <VStack gap="4">
-      <StegHeader
+      <VilkårHeader
         headertekst={'Forholdet til andre ytelser'}
         lovdatatekst={livsopphold.vilkårLovreferanse.beskrivelse}
         paragraf={livsopphold.vilkårLovreferanse.paragraf}
@@ -92,7 +92,7 @@ export const AndreYtelser = () => {
           løsningen enda.
         </Alert>
       )}
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form className={styles.container} onSubmit={handleSubmit(onSubmit)}>
         <Controller
           name={'harAndreYtelser'}
           control={control}
@@ -112,10 +112,11 @@ export const AndreYtelser = () => {
         <Button
           type="submit"
           value="submit"
+          size="small"
           className={styles.marginTop}
           disabled={watchHarLivsoppholdytelser}
         >
-          Lagre endring
+          Lagre
         </Button>
       </form>
     </VStack>

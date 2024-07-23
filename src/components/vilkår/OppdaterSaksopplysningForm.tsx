@@ -14,7 +14,6 @@ import {
 } from '../../utils/validation';
 import { Periode } from '../../types/Periode';
 import Periodevelger from './PeriodeVelger';
-import { periodeTilFormatertDatotekst } from '../../utils/date';
 
 interface OppdaterSaksopplysningFormProps {
   håndterLagreSaksopplysning: (data: SkjemaFelter) => void;

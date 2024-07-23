@@ -2,9 +2,9 @@ import React from 'react';
 import { Loader, VStack } from '@navikt/ds-react';
 import router from 'next/router';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
-import StegHeader from './VilkårHeader';
-import StegKort from './VilkårKort';
-import { SkjemaFelter } from './OppdaterSaksopplysningForm';
+import VilkårHeader from './VilkårHeader';
+import VilkårKort from './VilkårKort';
+import UtfallstekstMedIkon from './UtfallstekstMedIkon';
 
 const VilkårsvurderingAvTiltaksdeltagelse = () => {
   const behandlingId = router.query.behandlingId as string;
@@ -16,13 +16,9 @@ const VilkårsvurderingAvTiltaksdeltagelse = () => {
 
   const tiltak = valgtBehandling.tiltaksdeltagelsesaksopplysninger;
 
-  const håndterLagreSaksopplysning = (data: SkjemaFelter) => {
-    console.log('tiltaksdeltakelse');
-  };
-
   return (
     <VStack gap="4">
-      <StegHeader
+      <VilkårHeader
         headertekst={'Tiltaksdeltagelse'}
         lovdatatekst={tiltak.vilkårLovreferanse.beskrivelse}
         lovdatalenke={
@@ -30,24 +26,21 @@ const VilkårsvurderingAvTiltaksdeltagelse = () => {
         }
         paragraf={tiltak.vilkårLovreferanse.paragraf}
       />
-      lol i teksten -hilsen John
       {tiltak.saksopplysninger.map(
-        ({ periode, navn, girRett, kilde, deltagelseUtfall }, i) => {
+        ({ periode, navn, girRett, kilde, deltagelseUtfall }) => {
           return (
-            <StegKort
-              håndterLagreSaksopplysning={(data: SkjemaFelter) =>
-                håndterLagreSaksopplysning(data)
-              }
-              key={navn}
-              editerbar={false}
-              vurderingsperiode={valgtBehandling.vurderingsperiode}
-              saksopplysningsperiode={periode}
-              kilde={kilde}
-              utfall={deltagelseUtfall}
-              vilkårTittel={tiltak.vilkår}
-              grunnlag={girRett ? 'Ja' : 'nei'}
-              grunnlagHeader={'Gir rett til tiltakspenger'}
-            />
+            <>
+              <UtfallstekstMedIkon samletUtfall={deltagelseUtfall} />
+              <VilkårKort
+                key={navn}
+                saksopplysningsperiode={periode}
+                kilde={kilde}
+                utfall={deltagelseUtfall}
+                vilkårTittel={tiltak.vilkår}
+                grunnlag={girRett ? 'Ja' : 'nei'}
+                grunnlagHeader={'Gir rett'}
+              />
+            </>
           );
         },
       )}

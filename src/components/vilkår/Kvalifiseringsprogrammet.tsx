@@ -1,59 +1,19 @@
 import { Loader, VStack } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
-import StegHeader from './VilkårHeader';
-import StegKort from './VilkårKort';
+import VilkårHeader from './VilkårHeader';
+import VilkårKort from './VilkårKort';
 import UtfallstekstMedIkon from './UtfallstekstMedIkon';
 import { Deltagelse } from '../../types/KvpTypes';
-import { dateTilISOTekst } from '../../utils/date';
-import { SkjemaFelter } from './OppdaterSaksopplysningForm';
-import { useSWRConfig } from 'swr';
 import { useHentKvp } from '../../hooks/vilkår/useHentKvp';
 
 const Kvalifiseringsprogrammet = () => {
   const router = useRouter();
   const behandlingId = router.query.behandlingId as string;
   const { kvp, isLoading } = useHentKvp(behandlingId);
-  const mutator = useSWRConfig().mutate;
 
   if (isLoading || !kvp) {
     return <Loader />;
   }
-
-  const håndterLagreKvpSaksopplysning = (data: SkjemaFelter) => {
-    const deltakelseMedPeriode = {
-      periode: data.valgtVerdi
-        ? {
-            fraOgMed: dateTilISOTekst(data.periode.fraOgMed),
-            tilOgMed: dateTilISOTekst(data.periode.tilOgMed),
-          }
-        : {
-            fraOgMed: kvp.vurderingsperiode.fraOgMed,
-            tilOgMed: kvp.vurderingsperiode.tilOgMed,
-          },
-      deltar: data.valgtVerdi,
-    };
-
-    const årsakTilEndring = data.begrunnelse;
-
-    fetch(`/api/behandling/${behandlingId}/vilkar/kvp`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        ytelseForPeriode: [deltakelseMedPeriode],
-        årsakTilEndring: årsakTilEndring,
-      }),
-    })
-      .then(() => {
-        mutator(`/api/behandling/${behandlingId}/vilkar/kvp`);
-      })
-      .catch((error) => {
-        throw new Error(
-          `Noe gikk galt ved lagring av antall dager: ${error.message}`,
-        );
-      });
-  };
 
   const deltagelse = kvp.avklartSaksopplysning.periodeMedDeltagelse.deltagelse;
   const saksopplysningsPeriode =
@@ -62,7 +22,7 @@ const Kvalifiseringsprogrammet = () => {
 
   return (
     <VStack gap="4">
-      <StegHeader
+      <VilkårHeader
         headertekst={'Kvalifiseringsprogrammet'}
         lovdatatekst={kvp.vilkårLovreferanse.beskrivelse}
         paragraf={kvp.vilkårLovreferanse.paragraf}
@@ -71,12 +31,7 @@ const Kvalifiseringsprogrammet = () => {
         }
       />
       <UtfallstekstMedIkon samletUtfall={kvp.samletUtfall} />
-      <StegKort
-        håndterLagreSaksopplysning={(data: SkjemaFelter) =>
-          håndterLagreKvpSaksopplysning(data)
-        }
-        editerbar={false}
-        vurderingsperiode={kvp.vurderingsperiode}
+      <VilkårKort
         saksopplysningsperiode={saksopplysningsPeriode}
         kilde={kvp.avklartSaksopplysning.kilde}
         utfall={kvp.samletUtfall}

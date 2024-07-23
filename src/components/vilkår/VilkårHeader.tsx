@@ -1,19 +1,19 @@
 import { Heading } from '@navikt/ds-react';
 import Link from 'next/link';
 
-interface StegHeaderProps {
+interface VilkårHeaderProps {
   headertekst: string;
   lovdatatekst: string;
   lovdatalenke: string;
   paragraf: string;
 }
 
-const StegHeader = ({
+const VilkårHeader = ({
   headertekst,
   lovdatatekst,
   lovdatalenke,
   paragraf,
-}: StegHeaderProps) => {
+}: VilkårHeaderProps) => {
   return (
     <>
       <Heading size="medium" level="3">
@@ -26,4 +26,4 @@ const StegHeader = ({
   );
 };
 
-export default StegHeader;
+export default VilkårHeader;
