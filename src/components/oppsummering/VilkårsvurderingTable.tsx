@@ -3,11 +3,10 @@ import router from 'next/router';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
 import UtfallstekstMedIkon from '../vilkår/UtfallstekstMedIkon';
 import {
-  dateTilFormatertTekst,
   formaterDatotekst,
   periodeTilFormatertDatotekst,
 } from '../../utils/date';
-import { lagFaktumTekst } from '../../types/FaktumTypes';
+import { lagFaktumTekst } from '../../utils/tekstformateringUtils';
 
 const VilkårsvurderingTable = () => {
   const behandlingId = router.query.behandlingId as string;

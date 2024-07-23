@@ -2,12 +2,15 @@ import { VStack, BodyShort } from '@navikt/ds-react';
 import styles from './Behandlingdetaljer.module.css';
 import { useRouter } from 'next/router';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
-import { periodeTilFormatertDatotekst } from '../../utils/date';
+import {
+  formaterDatotekst,
+  periodeTilFormatertDatotekst,
+} from '../../utils/date';
 
 const Behandlingdetaljer = () => {
   const router = useRouter();
   const behandlingId = router.query.behandlingId as string;
-  const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
+  const { valgtBehandling } = useHentBehandling(behandlingId);
 
   return (
     <>
@@ -16,10 +19,10 @@ const Behandlingdetaljer = () => {
           <b>Søknadsdato</b>
         </BodyShort>
         <BodyShort>
-          {
+          {formaterDatotekst(
             valgtBehandling.kravdatoSaksopplysninger.opprinneligKravdato
-              .kravdato
-          }
+              .kravdato,
+          )}
         </BodyShort>
         <BodyShort>
           <b>Vurderingsperiode: </b>

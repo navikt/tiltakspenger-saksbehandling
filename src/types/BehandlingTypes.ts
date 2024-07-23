@@ -80,6 +80,7 @@ export interface BehandlingForBenk {
   fom: string;
   tom: string;
   status: string;
+  tilstand: BehandlingTilstand;
   saksbehandler?: string;
   beslutter?: string;
 }

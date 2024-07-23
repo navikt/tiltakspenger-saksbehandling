@@ -1,4 +1,4 @@
-import { Loader, Heading, VStack } from '@navikt/ds-react';
+import { Loader, Heading, VStack, Alert } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
 import { BehandlingKnapper } from '../behandling-knapper/BehandlingKnapper';
@@ -8,6 +8,8 @@ import styles from './Oppsummering.module.css';
 import IkonMedTekst from '../ikon-med-tekst/IkonMedTekst';
 import { UtfallIkon } from '../utfall-ikon/UtfallIkon';
 import VilkårsvurderingTable from './VilkårsvurderingTable';
+import { BehandlingTilstand } from '../../types/BehandlingTypes';
+import { finnUtfallsperiodetekst } from '../../utils/tekstformateringUtils';
 
 const Oppsummering = () => {
   const router = useRouter();
@@ -19,18 +21,13 @@ const Oppsummering = () => {
     return <Loader />;
   }
 
-  const finnUtfallsperiodetekst = (utfall: string) => {
-    switch (utfall) {
-      case 'OPPFYLT':
-        return 'Søker har oppfylt vilkårene for hele vurderingsperioden';
-      case 'IKKE_OPPFYLT':
-        return 'Søker har ikke oppfylt vilkårene for vurderingsperioden';
-      case 'KREVER_MANUELL_VURDERING':
-        return 'Totalvurdering er uavklart';
-      default:
-        return 'Totalvurdering er uavklart ';
-    }
-  };
+  const returBegrunnelse = valgtBehandling.endringslogg.findLast(
+    (endring) => endring.type === 'Sendt i retur',
+  )?.begrunnelse;
+
+  const visBegrunnelse =
+    valgtBehandling.behandlingTilstand === BehandlingTilstand.VILKÅRSVURDERT &&
+    returBegrunnelse;
 
   return (
     <VStack gap="6" className={styles.wrapper}>
@@ -41,6 +38,13 @@ const Oppsummering = () => {
         )}
         text={finnUtfallsperiodetekst(valgtBehandling.samletUtfall)}
       />
+      {visBegrunnelse && (
+        <Alert size="small" role="status" variant="warning">
+          {`Beslutter har sendt behandlingen i retur med begrunnelsen: "${
+            returBegrunnelse
+          }"`}
+        </Alert>
+      )}
       <VStack gap="4" className={styles.vurdering}>
         <Heading size="small">Vilkårsvurdering</Heading>
         <VilkårsvurderingTable />

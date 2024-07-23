@@ -10,6 +10,7 @@ import {
   behandlingLinkAktivert,
   skalKunneTaBehandling,
 } from '../utils/tilganger';
+import { BehandlingTilstand } from '../types/BehandlingTypes';
 
 const Benken: NextPage = () => {
   const router = useRouter();
@@ -17,7 +18,25 @@ const Benken: NextPage = () => {
   const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
   const { behandlinger, isLoading } = useHentBehandlinger();
 
-  const taBehandling = async (behandlingid: string) => {
+  const finnBehandlingurlForTilstand = (
+    behandlingid: string,
+    tilstand: string,
+  ) => {
+    switch (tilstand) {
+      case BehandlingTilstand.OPPRETTET:
+        return `/behandling/${behandlingid}/inngangsvilkar/kravfrist`;
+      case BehandlingTilstand.VILKÅRSVURDERT:
+        return `/behandling/${behandlingid}/inngangsvilkar/kravfrist`;
+      case BehandlingTilstand.TIL_BESLUTTER:
+        return `/behandling/${behandlingid}/oppsummering`;
+      case BehandlingTilstand.IVERKSATT:
+        return `/behandling/${behandlingid}/oppsummering`;
+      default:
+        return `/behandling/${behandlingid}/oppsummering`;
+    }
+  };
+
+  const taBehandling = async (behandlingid: string, tilstand: string) => {
     fetch(`/api/behandling/startbehandling/${behandlingid}`, {
       method: 'POST',
       headers: {
@@ -34,7 +53,7 @@ const Benken: NextPage = () => {
         );
       })
       .then(() => {
-        router.push(`/behandling/${behandlingid}/inngangsvilkar/kravfrist`);
+        router.push(finnBehandlingurlForTilstand(behandlingid, tilstand));
       });
   };
 
@@ -83,7 +102,9 @@ const Benken: NextPage = () => {
                 <Button
                   size="small"
                   variant="primary"
-                  onClick={() => taBehandling(behandling.id)}
+                  onClick={() =>
+                    taBehandling(behandling.id, behandling.tilstand)
+                  }
                   disabled={
                     !skalKunneTaBehandling(
                       behandling.status,
