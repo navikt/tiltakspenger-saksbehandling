@@ -9,3 +9,7 @@
   border-top: 1px solid #dfdfdf;
   grid-area: history;
 }
+
+.behandlingLayout {
+  min-height: 100vh;
+}

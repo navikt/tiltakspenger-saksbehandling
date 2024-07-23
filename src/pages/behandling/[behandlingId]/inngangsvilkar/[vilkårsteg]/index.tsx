@@ -1,4 +1,3 @@
-import { BehandlingLayout } from '../../../../../components/layout/BehandlingLayout';
 import { SaksbehandlingLayout } from '../../../../../components/layout/SaksbehandlingLayout';
 import { ReactElement } from 'react';
 import { NextPageWithLayout } from '../../../../_app';
@@ -6,23 +5,28 @@ import { Saksdialog } from '../../../../../components/saksdialog/Saksdialog';
 import { pageWithAuthentication } from '../../../../../auth/pageWithAuthentication';
 import InngangsvilkårSidemeny from '../../../../../components/inngangsvilkår-sidemeny/InngangsvilkårSidemeny';
 import Vilkårsteg from '../../../../../components/vilkårsteg/Vilkårsteg';
+import { HStack } from '@navikt/ds-react';
+import styles from '../../../Behandling.module.css';
 
 const Behandling: NextPageWithLayout = () => {
   return (
-    <>
+    <HStack
+      wrap={false}
+      className={styles.behandlingLayout}
+      role="tabpanel"
+      aria-labelledby="inngangsvilkår-tab"
+      id="inngangsvilkår-panel"
+      tabIndex={0}
+    >
       <InngangsvilkårSidemeny />
       <Vilkårsteg />
       <Saksdialog />
-    </>
+    </HStack>
   );
 };
 
 Behandling.getLayout = function getLayout(page: ReactElement) {
-  return (
-    <SaksbehandlingLayout>
-      <BehandlingLayout>{page}</BehandlingLayout>
-    </SaksbehandlingLayout>
-  );
+  return <SaksbehandlingLayout>{page}</SaksbehandlingLayout>;
 };
 
 export const getServerSideProps = pageWithAuthentication();
