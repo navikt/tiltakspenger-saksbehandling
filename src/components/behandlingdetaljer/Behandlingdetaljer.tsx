@@ -37,8 +37,8 @@ const Behandlingdetaljer = () => {
         </BodyShort>
         <BodyShort>
           {
-            valgtBehandling.tiltaksdeltagelsesaksopplysninger
-              .saksopplysninger[0].navn
+            valgtBehandling.tiltaksdeltagelsesaksopplysning.saksopplysninger
+              .navn
           }
         </BodyShort>
         <BodyShort>

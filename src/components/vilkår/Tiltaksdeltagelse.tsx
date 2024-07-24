@@ -13,8 +13,9 @@ const VilkårsvurderingAvTiltaksdeltagelse = () => {
   if (isLoading || !valgtBehandling) {
     return <Loader />;
   }
-
-  const tiltak = valgtBehandling.tiltaksdeltagelsesaksopplysninger;
+  const tiltak = valgtBehandling.tiltaksdeltagelsesaksopplysning;
+  const { deltagelseUtfall, navn, periode, kilde, girRett } =
+    tiltak.saksopplysninger;
 
   return (
     <VStack gap="4">
@@ -26,24 +27,17 @@ const VilkårsvurderingAvTiltaksdeltagelse = () => {
         }
         paragraf={tiltak.vilkårLovreferanse.paragraf}
       />
-      {tiltak.saksopplysninger.map(
-        ({ periode, navn, girRett, kilde, deltagelseUtfall }) => {
-          return (
-            <>
-              <UtfallstekstMedIkon samletUtfall={deltagelseUtfall} />
-              <VilkårKort
-                key={navn}
-                saksopplysningsperiode={periode}
-                kilde={kilde}
-                utfall={deltagelseUtfall}
-                vilkårTittel={tiltak.vilkår}
-                grunnlag={girRett ? 'Ja' : 'nei'}
-                grunnlagHeader={'Gir rett'}
-              />
-            </>
-          );
-        },
-      )}
+
+      <UtfallstekstMedIkon samletUtfall={deltagelseUtfall} />
+      <VilkårKort
+        key={navn}
+        saksopplysningsperiode={periode}
+        kilde={kilde}
+        utfall={deltagelseUtfall}
+        vilkårTittel={valgtBehandling.tiltaksdeltagelsesaksopplysning.vilkår}
+        grunnlag={girRett ? 'Ja' : 'nei'}
+        grunnlagHeader={'Gir rett'}
+      />
     </VStack>
   );
 };

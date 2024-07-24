@@ -13,7 +13,8 @@ const VilkårsvurderingAvStønadsdager = () => {
     return <Loader />;
   }
 
-  const stønadsDager = valgtBehandling.stønadsdager;
+  const { periode, kilde, antallDager } =
+    valgtBehandling.stønadsdager.antallDagerSaksopplysningFraRegister;
 
   return (
     <VStack gap="4">
@@ -26,13 +27,11 @@ const VilkårsvurderingAvStønadsdager = () => {
         }
       />
       <VilkårKort
-        saksopplysningsperiode={
-          stønadsDager[0].antallDagerSaksopplysningerFraRegister.periode
-        }
-        kilde={stønadsDager[0].antallDagerSaksopplysningerFraRegister.kilde}
+        saksopplysningsperiode={periode}
+        kilde={kilde}
         utfall={null}
         vilkårTittel={'Stønadsdager'}
-        grunnlag={stønadsDager[0].antallDagerSaksopplysningerFraRegister.antallDager.toString()}
+        grunnlag={antallDager.toString()}
         grunnlagHeader={'Antall dager'}
       />
     </VStack>

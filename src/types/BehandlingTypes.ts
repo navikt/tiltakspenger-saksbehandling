@@ -6,21 +6,6 @@ import { LivsoppholdVilkår } from './LivsoppholdTypes';
 import { Periode } from './Periode';
 import Tiltaksstatus from './Tiltaksstatus';
 import { Utfall } from './Utfall';
-import { Vurdering } from './Vurdering';
-
-interface Vilkår {
-  lovreferanse: string;
-  tittel: string;
-}
-
-export interface Saksopplysning {
-  fom: string;
-  tom: string;
-  vilkår: Vilkår;
-  kilde: string;
-  detaljer: string;
-  typeSaksopplysning: string;
-}
 
 export interface Behandling {
   behandlingId: string;
@@ -32,9 +17,8 @@ export interface Behandling {
   status: string;
   endringslogg: Endring[];
   samletUtfall: Utfall;
-  stønadsdager: StønadsdagerSaksopplysning[];
-  tiltaksdeltagelsesaksopplysninger: TiltaksdeltagelsesaksopplysningerDTO;
-  kravdatoSaksopplysninger: KravdatoSaksopplysninger;
+  stønadsdager: StønadsdagerSaksopplysning;
+  tiltaksdeltagelsesaksopplysning: TiltaksdeltagelsesaksopplysningDTO;
   vilkårsett: VilkårsettDTO;
 }
 
@@ -45,25 +29,12 @@ export enum BehandlingTilstand {
   OPPRETTET = 'OPPRETTET',
 }
 
-interface KravdatoSaksopplysninger {
-  samletUtfall: Utfall;
-  opprinneligKravdato: KravdatoSaksopplysning;
-  kravdatoFraSaksbehandler: KravdatoSaksopplysning;
-  vurderinger: Vurdering[];
-  lovreferanse: Lovreferanse;
-}
-
 interface VilkårsettDTO {
   alderVilkår: AlderVilkår;
   kvpVilkår: KvpVilkår;
   introVilkår: IntroVilkår;
   institusjonsoppholdVilkår: InstitusjonsoppholdVilkår;
   livsoppholdVilkår: LivsoppholdVilkår;
-}
-
-export interface KravdatoSaksopplysning {
-  kravdato: string;
-  kilde: string;
 }
 
 export interface Endring {
@@ -85,11 +56,6 @@ export interface BehandlingForBenk {
   beslutter?: string;
 }
 
-export interface Sak {
-  saksnummer: string;
-  ident: string;
-}
-
 export interface Personopplysninger {
   ident: string;
   fornavn: string;
@@ -99,18 +65,16 @@ export interface Personopplysninger {
   fortrolig: boolean;
 }
 
-export interface TiltaksdeltagelsesaksopplysningerDTO {
+export interface TiltaksdeltagelsesaksopplysningDTO {
   vilkår: string;
-  saksopplysninger: RegistrertTiltak[];
+  saksopplysninger: RegistrertTiltak;
   vilkårLovreferanse: Lovreferanse;
 }
 
 export interface StønadsdagerSaksopplysning {
   tiltakId: string;
   tiltak: string;
-  arrangør: string;
-  avklartAntallDager: Stønadsdager[];
-  antallDagerSaksopplysningerFraRegister: Stønadsdager;
+  antallDagerSaksopplysningFraRegister: Stønadsdager;
 }
 
 export interface Stønadsdager {
@@ -127,24 +91,13 @@ export interface Lovreferanse {
 
 export type RegistrertTiltak = {
   id: string;
-  arrangør: string;
   navn: string;
   periode: Periode;
   status: Tiltaksstatus;
   girRett: boolean;
-  harSøkt: boolean;
   kilde: string;
   deltagelseUtfall: Utfall;
-  begrunnelse: string;
 };
-export interface SaksopplysningInnDTO {
-  periode: Periode;
-  kilde: string;
-  detaljer: string;
-  saksopplysning: string;
-  saksopplysningTittel: string;
-  utfall: Utfall;
-}
 
 export enum ÅrsakTilEndring {
   FEIL_I_INNHENTET_DATA = 'FEIL_I_INNHENTET_DATA',
