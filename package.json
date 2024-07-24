@@ -25,7 +25,7 @@
     "react-error-boundary": "^4.0.13",
     "react-hook-form": "7.52.1",
     "swr": "^2.2.5",
-    "typescript": "5.5.3"
+    "typescript": "5.5.4"
   },
   "devDependencies": {
     "@types/node": "20.14.11",
