@@ -1,13 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Loader, VStack } from '@navikt/ds-react';
-import { useRouter } from 'next/router';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
 import VilkårKort from './VilkårKort';
 import VilkårHeader from './VilkårHeader';
+import { BehandlingContext } from '../layout/SaksbehandlingLayout';
 
 const VilkårsvurderingAvStønadsdager = () => {
-  const router = useRouter();
-  const behandlingId = router.query.behandlingId as string;
+  const { behandlingId } = useContext(BehandlingContext);
   const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
 
   if (isLoading || !valgtBehandling) {

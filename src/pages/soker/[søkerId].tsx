@@ -2,14 +2,13 @@ import React, { useContext } from 'react';
 import { NextPage } from 'next';
 import { Button, Link, Loader, Table } from '@navikt/ds-react';
 import { SaksbehandlerContext } from '../_app';
-import { useRouter } from 'next/router';
+import router from 'next/router';
 import useSWR, { useSWRConfig } from 'swr';
 import { fetcher } from '../../utils/http';
 import { BehandlingForBenk } from '../../types/BehandlingTypes';
 import { pageWithAuthentication } from '../../auth/pageWithAuthentication';
 
 const SøkerPage: NextPage = () => {
-  const router = useRouter();
   const søkerId = router.query.søkerId as string;
   const mutator = useSWRConfig().mutate;
   const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);

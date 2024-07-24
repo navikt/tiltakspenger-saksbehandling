@@ -2,7 +2,9 @@ import { List, VStack } from '@navikt/ds-react';
 import { PuzzlePieceIcon } from '@navikt/aksel-icons';
 import Link from 'next/link';
 import styles from './InngangsvilkårSidemeny.module.css';
-import { useRouter } from 'next/router';
+import router from 'next/router';
+import { useContext } from 'react';
+import { BehandlingContext } from '../layout/SaksbehandlingLayout';
 
 const vilkår = [
   { tittel: 'Frist for framsetting av krav', url: 'kravfrist' },
@@ -15,8 +17,7 @@ const vilkår = [
 ];
 
 const InngangsvilkårSidemeny = () => {
-  const router = useRouter();
-  const behandlingId = router.query.behandlingId as string;
+  const behandlingId = useContext(BehandlingContext);
   const vilkårsteg = router.query.vilkårsteg as string;
 
   return (

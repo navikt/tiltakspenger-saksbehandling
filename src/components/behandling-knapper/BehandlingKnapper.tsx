@@ -1,4 +1,4 @@
-import { Button, HStack } from '@navikt/ds-react';
+import { Button, HStack, Loader } from '@navikt/ds-react';
 import useSWRMutation from 'swr/mutation';
 import { RefObject, useContext } from 'react';
 import { useSWRConfig } from 'swr';
@@ -8,20 +8,17 @@ import {
   kanBeslutteForBehandling,
   kanSaksbehandleForBehandling,
 } from '../../utils/tilganger';
+import { BehandlingContext } from '../layout/SaksbehandlingLayout';
 
 interface BehandlingKnapperProps {
-  behandlingid: string;
-  status: string;
   modalRef: RefObject<HTMLDialogElement>;
 }
 
-export const BehandlingKnapper = ({
-  behandlingid,
-  modalRef,
-}: BehandlingKnapperProps) => {
+export const BehandlingKnapper = ({ modalRef }: BehandlingKnapperProps) => {
   const mutator = useSWRConfig().mutate;
+  const { behandlingId } = useContext(BehandlingContext);
   const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
-  const { valgtBehandling } = useHentBehandling(behandlingid);
+  const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
 
   const kanBeslutte = kanBeslutteForBehandling(
     valgtBehandling.beslutter,
@@ -38,21 +35,24 @@ export const BehandlingKnapper = ({
   async function oppdaterBehandling(url: string, { arg }: { arg?: string }) {
     await fetch(url, {
       method: 'POST',
-    }).then(() => mutator(`/api/behandling/${behandlingid}`));
+    }).then(() => mutator(`/api/behandling/${behandlingId}`));
   }
 
   const { trigger: sendTilBeslutter, isMutating: oppdatererBeslutter } =
     useSWRMutation(
-      `/api/behandling/beslutter/${behandlingid}`,
+      `/api/behandling/beslutter/${behandlingId}`,
       oppdaterBehandling,
     );
 
   const { trigger: godkjennBehandling, isMutating: godkjennerBehandling } =
     useSWRMutation(
-      `/api/behandling/godkjenn/${behandlingid}`,
+      `/api/behandling/godkjenn/${behandlingId}`,
       oppdaterBehandling,
     );
 
+  if (isLoading || !valgtBehandling) {
+    return <Loader />;
+  }
   const åpneSendTilbakeModal = () => {
     modalRef.current?.showModal();
   };

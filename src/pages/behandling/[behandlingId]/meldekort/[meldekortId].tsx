@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router';
 import { SaksbehandlingLayout } from '../../../../components/layout/SaksbehandlingLayout';
 import { ReactElement } from 'react';
 import { NextPageWithLayout } from '../../../_app';
@@ -10,9 +9,6 @@ import styles from '../../Behandling.module.css';
 import { HStack } from '@navikt/ds-react';
 
 const Meldekort: NextPageWithLayout = () => {
-  const router = useRouter();
-  const behandlingId = router.query.behandlingId as string;
-
   return (
     <HStack
       wrap={false}
@@ -22,7 +18,7 @@ const Meldekort: NextPageWithLayout = () => {
       id="meldekort-panel"
       tabIndex={2}
     >
-      <MeldekortMeny behandlingId={behandlingId} />
+      <MeldekortMeny />
       <MeldekortSide />
       <MeldekortDetaljer />
     </HStack>

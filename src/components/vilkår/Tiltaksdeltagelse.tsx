@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Loader, VStack } from '@navikt/ds-react';
-import router from 'next/router';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
 import VilkårHeader from './VilkårHeader';
 import VilkårKort from './VilkårKort';
 import UtfallstekstMedIkon from './UtfallstekstMedIkon';
+import { BehandlingContext } from '../layout/SaksbehandlingLayout';
 
 const VilkårsvurderingAvTiltaksdeltagelse = () => {
-  const behandlingId = router.query.behandlingId as string;
+  const { behandlingId } = useContext(BehandlingContext);
   const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
 
   if (isLoading || !valgtBehandling) {

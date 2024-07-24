@@ -1,5 +1,4 @@
-import { Table } from '@navikt/ds-react';
-import router from 'next/router';
+import { Loader, Table } from '@navikt/ds-react';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
 import UtfallstekstMedIkon from '../vilkår/UtfallstekstMedIkon';
 import {
@@ -7,10 +6,16 @@ import {
   periodeTilFormatertDatotekst,
 } from '../../utils/date';
 import { lagFaktumTekst } from '../../utils/tekstformateringUtils';
+import { useContext } from 'react';
+import { BehandlingContext } from '../layout/SaksbehandlingLayout';
 
 const VilkårsvurderingTable = () => {
-  const behandlingId = router.query.behandlingId as string;
-  const { valgtBehandling } = useHentBehandling(behandlingId);
+  const { behandlingId } = useContext(BehandlingContext);
+  const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
+
+  if (isLoading || !valgtBehandling) {
+    return <Loader />;
+  }
 
   const alder = valgtBehandling.vilkårsett.alderVilkår;
   const kvp = valgtBehandling.vilkårsett.kvpVilkår;

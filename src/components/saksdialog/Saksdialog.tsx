@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { SaksdialogElement } from './SaksdialogElement';
 import { Skuff } from '../skuff/Skuff';
-import { useRouter } from 'next/router';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
+import { BehandlingContext } from '../layout/SaksbehandlingLayout';
+import { Loader } from '@navikt/ds-react';
 
 export const Saksdialog = () => {
-  const router = useRouter();
-  const behandlingId = router.query.behandlingId as string;
-  const { valgtBehandling } = useHentBehandling(behandlingId);
+  const { behandlingId } = useContext(BehandlingContext);
+  const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
+
+  if (isLoading || !valgtBehandling) {
+    return <Loader />;
+  }
 
   return (
     <Skuff venstreOrientert={false} headerTekst="Saksdialog">

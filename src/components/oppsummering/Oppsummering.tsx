@@ -2,7 +2,7 @@ import { Loader, Heading, VStack, Alert } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
 import { BehandlingKnapper } from '../behandling-knapper/BehandlingKnapper';
-import { useRef } from 'react';
+import { useContext, useRef } from 'react';
 import BegrunnelseModal from '../begrunnelse-modal/BegrunnelseModal';
 import styles from './Oppsummering.module.css';
 import IkonMedTekst from '../ikon-med-tekst/IkonMedTekst';
@@ -10,10 +10,10 @@ import { UtfallIkon } from '../utfall-ikon/UtfallIkon';
 import VilkårsvurderingTable from './VilkårsvurderingTable';
 import { BehandlingTilstand } from '../../types/BehandlingTypes';
 import { finnUtfallsperiodetekst } from '../../utils/tekstformateringUtils';
+import { BehandlingContext } from '../layout/SaksbehandlingLayout';
 
 const Oppsummering = () => {
-  const router = useRouter();
-  const behandlingId = router.query.behandlingId as string;
+  const { behandlingId } = useContext(BehandlingContext);
   const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
   const modalRef = useRef(null);
 
@@ -49,15 +49,8 @@ const Oppsummering = () => {
         <Heading size="small">Vilkårsvurdering</Heading>
         <VilkårsvurderingTable />
       </VStack>
-      <BehandlingKnapper
-        behandlingid={valgtBehandling.behandlingId}
-        status={valgtBehandling.status}
-        modalRef={modalRef}
-      />
-      <BegrunnelseModal
-        behandlingid={valgtBehandling.behandlingId}
-        modalRef={modalRef}
-      />
+      <BehandlingKnapper modalRef={modalRef} />
+      <BegrunnelseModal modalRef={modalRef} />
     </VStack>
   );
 };

@@ -1,15 +1,18 @@
-import React from 'react';
-import { Button, Tag } from '@navikt/ds-react';
+import React, { useContext } from 'react';
+import { Button, Loader, Tag } from '@navikt/ds-react';
 import { PersonCircleIcon } from '@navikt/aksel-icons';
 import styles from './PersonaliaHeader.module.css';
-import { Behandling } from '../../types/BehandlingTypes';
 import router from 'next/router';
+import { useHentBehandling } from '../../hooks/useHentBehandling';
+import { BehandlingContext } from '../layout/SaksbehandlingLayout';
 
-interface PersonaliaHeaderProps {
-  valgtBehandling: Behandling;
-}
+const PersonaliaHeader = () => {
+  const { behandlingId } = useContext(BehandlingContext);
+  const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
 
-const PersonaliaHeader = ({ valgtBehandling }: PersonaliaHeaderProps) => {
+  if (isLoading || !valgtBehandling) {
+    return <Loader />;
+  }
   const { fornavn, etternavn, ident, skjerming, strengtFortrolig, fortrolig } =
     valgtBehandling.personopplysninger;
 

@@ -1,14 +1,14 @@
 import { Loader, VStack } from '@navikt/ds-react';
-import { useRouter } from 'next/router';
 import VilkårHeader from './VilkårHeader';
 import VilkårKort from './VilkårKort';
 import UtfallstekstMedIkon from './UtfallstekstMedIkon';
 import { useHentAlder } from '../../hooks/vilkår/useHentAlder';
 import { formaterDatotekst } from '../../utils/date';
+import { useContext } from 'react';
+import { BehandlingContext } from '../layout/SaksbehandlingLayout';
 
 const Alder = () => {
-  const router = useRouter();
-  const behandlingId = router.query.behandlingId as string;
+  const { behandlingId } = useContext(BehandlingContext);
   const { alderVilkår, isLoading } = useHentAlder(behandlingId);
 
   if (isLoading || !alderVilkår) {

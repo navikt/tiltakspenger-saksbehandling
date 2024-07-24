@@ -1,23 +1,20 @@
 import { FileTextIcon, TasklistIcon } from '@navikt/aksel-icons';
-import { Tabs } from '@navikt/ds-react';
+import { Loader, Tabs } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import { useHentMeldekortListe } from '../../hooks/useHentMeldekortListe';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
 import { useHentUtbetalingListe } from '../../hooks/useHentUtbetalingListe';
 import { BehandlingTilstand } from '../../types/BehandlingTypes';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { BehandlingContext } from '../layout/SaksbehandlingLayout';
 
-interface SaksbehandlingTabsProps {
-  behandlingId: string;
-}
-
-export const SaksbehandlingTabs = ({
-  behandlingId,
-}: SaksbehandlingTabsProps) => {
+export const SaksbehandlingTabs = () => {
   const router = useRouter();
   const aktivTab = router.route.split('/')[3];
 
-  const { valgtBehandling } = useHentBehandling(behandlingId);
+  const { behandlingId } = useContext(BehandlingContext);
+  const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
+
   const tilBeslutter =
     valgtBehandling?.behandlingTilstand === BehandlingTilstand.TIL_BESLUTTER;
   const iverksatt =
@@ -27,6 +24,10 @@ export const SaksbehandlingTabs = ({
   const { utbetalingliste } = useHentUtbetalingListe(iverksatt, behandlingId);
 
   const [value, setValue] = useState(aktivTab);
+
+  if (isLoading || !valgtBehandling) {
+    return <Loader />;
+  }
 
   return (
     <Tabs value={value} onChange={setValue}>

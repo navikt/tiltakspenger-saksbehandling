@@ -7,21 +7,21 @@ import {
   RadioGroup,
   VStack,
 } from '@navikt/ds-react';
-import { useRouter } from 'next/router';
 import VilkårHeader from './VilkårHeader';
 import UtfallstekstMedIkon from './UtfallstekstMedIkon';
 import { useHentLivsopphold } from '../../hooks/vilkår/useHentLivsopphold';
 import { useSWRConfig } from 'swr';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import styles from './Vilkår.module.css';
+import { useContext } from 'react';
+import { BehandlingContext } from '../layout/SaksbehandlingLayout';
 
 export interface SkjemaFelter {
   harAndreYtelser: boolean;
 }
 
 export const AndreYtelser = () => {
-  const router = useRouter();
-  const behandlingId = router.query.behandlingId as string;
+  const { behandlingId } = useContext(BehandlingContext);
   const { livsopphold, isLoading } = useHentLivsopphold(behandlingId);
   const mutator = useSWRConfig().mutate;
 

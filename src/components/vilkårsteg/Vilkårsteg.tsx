@@ -1,5 +1,5 @@
 import { VStack } from '@navikt/ds-react';
-import { useRouter } from 'next/router';
+import router from 'next/router';
 import { ReactElement } from 'react';
 import { Vilkår } from '../../types/Vilkår';
 import Alder from '../vilkår/Alder';
@@ -13,7 +13,6 @@ import FristForFramsettingAvKrav from '../vilkår/FristForFramsettingAvKrav';
 import { AndreYtelser } from '../vilkår/AndreYtelser';
 
 const Vilkårsteg = () => {
-  const router = useRouter();
   const vilkårsteg = router.query.vilkårsteg as string;
 
   function utledStegFraRoute(route: string | undefined): ReactElement {

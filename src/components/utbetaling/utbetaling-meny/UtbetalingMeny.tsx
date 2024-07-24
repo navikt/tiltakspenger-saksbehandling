@@ -1,5 +1,5 @@
 import { Detail, Label } from '@navikt/ds-react';
-import React from 'react';
+import React, { useContext } from 'react';
 import styles from './UtbetalingMeny.module.css';
 import {
   ukenummerFraDate,
@@ -9,16 +9,14 @@ import { useRouter } from 'next/router';
 import { useHentUtbetalingListe } from '../../../hooks/useHentUtbetalingListe';
 import { UtbetalingListe } from '../../../types/Utbetaling';
 import { Skuff } from '../../skuff/Skuff';
-
-interface UtbetalingmenyProps {
-  behandlingId: string;
-}
+import { BehandlingContext } from '../../layout/SaksbehandlingLayout';
 
 const utbetalingUkeNummer = (fom: string, tom: string): string => {
   return `Uke ${ukenummerFraDate(new Date(fom))} / ${ukenummerFraDate(new Date(tom))}`;
 };
 
-export const UtbetalingMeny = ({ behandlingId }: UtbetalingmenyProps) => {
+export const UtbetalingMeny = () => {
+  const { behandlingId } = useContext(BehandlingContext);
   const { utbetalingliste } = useHentUtbetalingListe(true, behandlingId);
   const router = useRouter();
 

@@ -1,14 +1,14 @@
 import { Loader, VStack } from '@navikt/ds-react';
-import { useRouter } from 'next/router';
 import VilkårHeader from './VilkårHeader';
 import UtfallstekstMedIkon from './UtfallstekstMedIkon';
 import { useHentIntroduksjonsprogrammet } from '../../hooks/vilkår/useHentIntroduksjonsprogrammet';
 import { Deltagelse } from '../../types/KvpTypes';
 import VilkårKort from './VilkårKort';
+import { useContext } from 'react';
+import { BehandlingContext } from '../layout/SaksbehandlingLayout';
 
 const Kvalifiseringsprogrammet = () => {
-  const router = useRouter();
-  const behandlingId = router.query.behandlingId as string;
+  const { behandlingId } = useContext(BehandlingContext);
   const { intro, isLoading } = useHentIntroduksjonsprogrammet(behandlingId);
 
   if (isLoading || !intro) {

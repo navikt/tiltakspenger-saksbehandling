@@ -1,4 +1,4 @@
-import { Box, Button, HStack, Heading, Spacer, VStack } from '@navikt/ds-react';
+import { Box, HStack, Heading, Spacer, VStack } from '@navikt/ds-react';
 import styles from './Skuff.module.css';
 import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';

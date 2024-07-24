@@ -1,10 +1,10 @@
 import { Button, Modal, Select } from '@navikt/ds-react';
-import { RefObject, useState } from 'react';
+import { RefObject, useContext, useState } from 'react';
 import styles from './BegrunnelseModal.module.css';
 import { useRouter } from 'next/router';
+import { BehandlingContext } from '../layout/SaksbehandlingLayout';
 
 interface BegrunnelseModalProps {
-  behandlingid: string;
   modalRef: RefObject<HTMLDialogElement>;
 }
 
@@ -17,11 +17,9 @@ const begrunnelseAlternativer = [
   'Returneres etter ønske av saksbehandler',
 ];
 
-const BegrunnelseModal = ({
-  behandlingid,
-  modalRef,
-}: BegrunnelseModalProps) => {
+const BegrunnelseModal = ({ modalRef }: BegrunnelseModalProps) => {
   const router = useRouter();
+  const { behandlingId } = useContext(BehandlingContext);
   const [begrunnelse, setBegrunnelse] = useState<string>('');
   const [error, setError] = useState<string>('');
 
@@ -34,7 +32,7 @@ const BegrunnelseModal = ({
       setError('Du må velge en begrunnelse');
       return;
     }
-    fetch(`/api/behandling/sendtilbake/${behandlingid}`, {
+    fetch(`/api/behandling/sendtilbake/${behandlingId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

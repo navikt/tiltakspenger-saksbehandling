@@ -1,13 +1,13 @@
 import { Loader, VStack } from '@navikt/ds-react';
-import { useRouter } from 'next/router';
 import VilkårHeader from './VilkårHeader';
 import VilkårKort from './VilkårKort';
 import UtfallstekstMedIkon from './UtfallstekstMedIkon';
 import { useHentInstitusjonsopphold } from '../../hooks/vilkår/useHentInstitusjonsopphold';
+import { useContext } from 'react';
+import { BehandlingContext } from '../layout/SaksbehandlingLayout';
 
 const Institusjonsopphold = () => {
-  const router = useRouter();
-  const behandlingId = router.query.behandlingId as string;
+  const { behandlingId } = useContext(BehandlingContext);
   const { institusjonsopphold, isLoading } =
     useHentInstitusjonsopphold(behandlingId);
 

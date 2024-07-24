@@ -1,17 +1,20 @@
-import { VStack, BodyShort } from '@navikt/ds-react';
+import { VStack, BodyShort, Loader } from '@navikt/ds-react';
 import styles from './Behandlingdetaljer.module.css';
-import { useRouter } from 'next/router';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
 import {
   formaterDatotekst,
   periodeTilFormatertDatotekst,
 } from '../../utils/date';
+import { useContext } from 'react';
+import { BehandlingContext } from '../layout/SaksbehandlingLayout';
 
 const Behandlingdetaljer = () => {
-  const router = useRouter();
-  const behandlingId = router.query.behandlingId as string;
-  const { valgtBehandling } = useHentBehandling(behandlingId);
+  const { behandlingId } = useContext(BehandlingContext);
+  const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
 
+  if (isLoading || !valgtBehandling) {
+    return <Loader />;
+  }
   return (
     <>
       <VStack gap="3" className={styles.wrapper}>
