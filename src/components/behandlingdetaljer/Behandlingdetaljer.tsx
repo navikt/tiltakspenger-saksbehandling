@@ -7,12 +7,14 @@ import {
 } from '../../utils/date';
 import { useContext } from 'react';
 import { BehandlingContext } from '../layout/SaksbehandlingLayout';
+import { useHentKravfrist } from '../../hooks/vilkår/useHentKravfrist';
 
 const Behandlingdetaljer = () => {
   const { behandlingId } = useContext(BehandlingContext);
   const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
+  const { kravfristVilkår } = useHentKravfrist(behandlingId);
 
-  if (isLoading || !valgtBehandling) {
+  if (isLoading || !valgtBehandling || !kravfristVilkår) {
     return <Loader />;
   }
   return (
@@ -22,10 +24,7 @@ const Behandlingdetaljer = () => {
           <b>Søknadsdato</b>
         </BodyShort>
         <BodyShort>
-          {formaterDatotekst(
-            valgtBehandling.kravdatoSaksopplysninger.opprinneligKravdato
-              .kravdato,
-          )}
+          {formaterDatotekst(kravfristVilkår.avklartSaksopplysning.kravdato)}
         </BodyShort>
         <BodyShort>
           <b>Vurderingsperiode: </b>

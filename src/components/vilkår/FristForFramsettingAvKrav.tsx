@@ -2,40 +2,37 @@ import React, { useContext } from 'react';
 import { Loader, VStack } from '@navikt/ds-react';
 import UtfallstekstMedIkon from './UtfallstekstMedIkon';
 import VilkårHeader from './VilkårHeader';
-import { useHentBehandling } from '../../hooks/useHentBehandling';
 import VilkårKort from './VilkårKort';
 import { formaterDatotekst } from '../../utils/date';
 import { BehandlingContext } from '../layout/SaksbehandlingLayout';
+import { useHentKravfrist } from '../../hooks/vilkår/useHentKravfrist';
 
 const FristForFramsettingAvKrav = () => {
   const { behandlingId } = useContext(BehandlingContext);
-  const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
+  const { kravfristVilkår, isLoading } = useHentKravfrist(behandlingId);
 
-  if (isLoading || !valgtBehandling) {
+  if (isLoading || !kravfristVilkår) {
     return <Loader />;
   }
-  const saksopplysning = valgtBehandling.kravdatoSaksopplysninger;
-
-  if (!saksopplysning) return <Loader />;
 
   return (
     <VStack gap="4">
       <VilkårHeader
         headertekst={'Frist for framsetting av krav'}
-        lovdatatekst={saksopplysning.lovreferanse.beskrivelse}
+        lovdatatekst={kravfristVilkår.vilkårLovreferanse.beskrivelse}
         lovdatalenke={
           'https://lovdata.no/dokument/SF/forskrift/2013-11-04-1286'
         }
-        paragraf={saksopplysning.lovreferanse.paragraf}
+        paragraf={kravfristVilkår.vilkårLovreferanse.paragraf}
       />
-      <UtfallstekstMedIkon samletUtfall={saksopplysning.samletUtfall} />
+      <UtfallstekstMedIkon samletUtfall={kravfristVilkår.samletUtfall} />
       <VilkårKort
-        saksopplysningsperiode={valgtBehandling.vurderingsperiode}
-        kilde={saksopplysning.opprinneligKravdato.kilde}
-        utfall={saksopplysning.samletUtfall}
+        saksopplysningsperiode={kravfristVilkår.utfallperiode}
+        kilde={kravfristVilkår.avklartSaksopplysning.kilde}
+        utfall={kravfristVilkår.samletUtfall}
         vilkårTittel={'Frist for framsetting av krav'}
         grunnlag={formaterDatotekst(
-          saksopplysning.opprinneligKravdato.kravdato,
+          kravfristVilkår.avklartSaksopplysning.kravdato,
         )}
         grunnlagHeader={'Kravdato'}
       />

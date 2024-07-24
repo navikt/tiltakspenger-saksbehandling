@@ -15,8 +15,6 @@ const Alder = () => {
     return <Loader />;
   }
 
-  const vurderingsperiode = alderVilkår.vurderingsperiode;
-
   return (
     <VStack gap="4">
       <VilkårHeader
@@ -29,7 +27,7 @@ const Alder = () => {
       />
       <UtfallstekstMedIkon samletUtfall={alderVilkår.samletUtfall} />
       <VilkårKort
-        saksopplysningsperiode={vurderingsperiode}
+        saksopplysningsperiode={alderVilkår.utfallperiode}
         kilde={alderVilkår.avklartSaksopplysning.kilde}
         utfall={alderVilkår.samletUtfall}
         vilkårTittel={'Alder'}

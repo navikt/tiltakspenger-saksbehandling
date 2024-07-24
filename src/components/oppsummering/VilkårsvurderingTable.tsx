@@ -44,7 +44,7 @@ const VilkårsvurderingTable = () => {
             {<UtfallstekstMedIkon samletUtfall={alder.samletUtfall} />}
           </Table.DataCell>
           <Table.DataCell>
-            {periodeTilFormatertDatotekst(alder.vurderingsperiode)}
+            {periodeTilFormatertDatotekst(alder.utfallperiode)}
           </Table.DataCell>
           <Table.DataCell>
             {`Søker er født ${formaterDatotekst(alder.avklartSaksopplysning.fødselsdato)}`}

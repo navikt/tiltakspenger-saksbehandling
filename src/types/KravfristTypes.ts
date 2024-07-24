@@ -1,16 +1,16 @@
 import { Lovreferanse, SamletUtfall } from './BehandlingTypes';
 import { Periode } from './Periode';
 
-export interface AlderVilkår {
-  søknadSaksopplysning: AlderSaksopplysning;
-  avklartSaksopplysning: AlderSaksopplysning;
+export interface KravfristVilkår {
+  søknadSaksopplysning: KravfristSaksopplysning;
+  avklartSaksopplysning: KravfristSaksopplysning;
   vilkårLovreferanse: Lovreferanse;
   utfallperiode: Periode;
   samletUtfall: SamletUtfall;
 }
 
-interface AlderSaksopplysning {
-  fødselsdato: string;
+interface KravfristSaksopplysning {
+  kravdato: string;
   årsakTilEndring?: ÅrsakTilEndring;
   kilde: Kilde;
 }

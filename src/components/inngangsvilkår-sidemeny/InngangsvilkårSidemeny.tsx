@@ -17,7 +17,7 @@ const vilkår = [
 ];
 
 const InngangsvilkårSidemeny = () => {
-  const behandlingId = useContext(BehandlingContext);
+  const { behandlingId } = useContext(BehandlingContext);
   const vilkårsteg = router.query.vilkårsteg as string;
 
   return (

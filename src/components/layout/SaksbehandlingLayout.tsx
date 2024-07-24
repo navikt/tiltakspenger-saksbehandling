@@ -17,7 +17,7 @@ export const SaksbehandlingLayout = ({ children }: React.PropsWithChildren) => {
   const router = useRouter();
   const behandlingId = router.query.behandlingId as string;
   const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
-  const [id, settId] = useState<string>('');
+  const [id, settId] = useState<string>(undefined);
 
   useEffect(() => {
     if (valgtBehandling) {
@@ -25,7 +25,7 @@ export const SaksbehandlingLayout = ({ children }: React.PropsWithChildren) => {
     }
   }, [valgtBehandling]);
 
-  if (isLoading || !valgtBehandling) {
+  if (isLoading || !valgtBehandling || !id) {
     return <Loader />;
   }
 
