@@ -59,10 +59,10 @@ const PersonaliaHeader = () => {
       >
         Avbryt behandling{' '}
       </Button>
-      <Tag variant="info-filled" size="medium" className={styles.behandlingTag}>
+      <Tag variant="alt2-filled" size="medium" className={styles.behandlingTag}>
         Førstegangsbehandling
       </Tag>
-      <Tag variant="alt1" className={styles.behandlingTag}>
+      <Tag variant="alt3-filled" className={styles.behandlingTag}>
         {valgtBehandling.status}
       </Tag>
     </div>

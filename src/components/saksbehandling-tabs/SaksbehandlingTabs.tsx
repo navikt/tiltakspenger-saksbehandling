@@ -1,4 +1,3 @@
-import { FileTextIcon, TasklistIcon } from '@navikt/aksel-icons';
 import { Loader, Tabs } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import { useHentMeldekortListe } from '../../hooks/useHentMeldekortListe';
@@ -38,7 +37,6 @@ export const SaksbehandlingTabs = () => {
             label={'Inngangsvilkår'}
             id="inngangsvilkår-tab"
             aria-controls="inngangsvilkår-panel"
-            icon={<FileTextIcon />}
             onClick={() => {
               router.push(
                 `/behandling/${behandlingId}/inngangsvilkar/kravfrist`,
@@ -51,7 +49,6 @@ export const SaksbehandlingTabs = () => {
           label={'Oppsummering'}
           id="oppsummering-tab"
           aria-controls="oppsummering-panel"
-          icon={<TasklistIcon />}
           onClick={() => {
             router.push(`/behandling/${behandlingId}/oppsummering`);
           }}
@@ -63,7 +60,6 @@ export const SaksbehandlingTabs = () => {
               label={'Meldekort'}
               id="meldekort-tab"
               aria-controls="meldekort-panel"
-              icon={<FileTextIcon />}
               onClick={() => {
                 meldekortliste &&
                   router.push(
@@ -76,7 +72,6 @@ export const SaksbehandlingTabs = () => {
               label={'Utbetaling'}
               id="utbetaling-tab"
               aria-controls="utbetaling-panel"
-              icon={<FileTextIcon />}
               onClick={() => {
                 router.push(
                   `/behandling/${behandlingId}/utbetaling/${utbetalingliste[0].id}`,

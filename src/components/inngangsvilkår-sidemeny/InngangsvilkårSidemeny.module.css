@@ -1,12 +1,26 @@
-.inngangsvilkårSteg {
+.inngangsvilkårSidemeny {
     border-left: 1px solid #cfcfcf;
     border-right: 1px solid #cfcfcf;
-    width: 25%;
-    padding: 1em 1em 1em 1em;
+    min-width: 320px;
+}
+
+.vilkår {
+    width: 100%;
+    border-bottom: 1px solid #cfcfcf;
+    align-items: center;
+    padding: 0.6rem 1rem;
 }
 
 .aktivtSteg {
+    background-color: #CCE1FF;
+}
+
+.vilkårlenke {
+    flex-basis:auto;
+    flex-grow: 5;
+}
+
+
+.aktivtSteg p:nth-of-type(2) {
     font-weight: 900;
-    text-decoration-thickness: 3px;
-    color: #00459C;
 }

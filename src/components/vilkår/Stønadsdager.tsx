@@ -14,7 +14,7 @@ const VilkårsvurderingAvStønadsdager = () => {
   }
 
   const { periode, kilde, antallDager } =
-    valgtBehandling.stønadsdager.antallDagerSaksopplysningFraRegister;
+    valgtBehandling.stønadsdager[0].antallDagerSaksopplysningFraRegister;
 
   return (
     <VStack gap="4">

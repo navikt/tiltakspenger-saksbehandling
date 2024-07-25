@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   XMarkOctagonFillIcon,
-  InformationSquareFillIcon,
   CheckmarkCircleFillIcon,
   ExclamationmarkTriangleFillIcon,
 } from '@navikt/aksel-icons';
@@ -36,10 +35,10 @@ export const UtfallIkon = ({ utfall }: UtfallIkonProps) => {
       />
     );
   return (
-    <InformationSquareFillIcon
+    <ExclamationmarkTriangleFillIcon
       width="1.5em"
       height="1.5em"
-      color="var(--a-icon-info)"
+      color="var(--a-icon-warning)"
     />
   );
 };

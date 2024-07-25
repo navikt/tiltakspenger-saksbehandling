@@ -4,7 +4,6 @@ import { NextPageWithLayout } from '../../_app';
 import { ReactElement } from 'react';
 import { pageWithAuthentication } from '../../../auth/pageWithAuthentication';
 import { SaksbehandlingLayout } from '../../../components/layout/SaksbehandlingLayout';
-import { Skuff } from '../../../components/skuff/Skuff';
 import Behandlingdetaljer from '../../../components/behandlingdetaljer/Behandlingdetaljer';
 import styles from '../Behandling.module.css';
 
@@ -17,9 +16,7 @@ const Behandling: NextPageWithLayout = () => (
     id="meldekort-panel"
     tabIndex={1}
   >
-    <Skuff venstreOrientert headerTekst={'Detaljer'}>
-      <Behandlingdetaljer />
-    </Skuff>
+    <Behandlingdetaljer />
     <Oppsummering />
   </HStack>
 );

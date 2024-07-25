@@ -1,7 +1,6 @@
 import { SaksbehandlingLayout } from '../../../../../components/layout/SaksbehandlingLayout';
 import { ReactElement } from 'react';
 import { NextPageWithLayout } from '../../../../_app';
-import { Saksdialog } from '../../../../../components/saksdialog/Saksdialog';
 import { pageWithAuthentication } from '../../../../../auth/pageWithAuthentication';
 import InngangsvilkårSidemeny from '../../../../../components/inngangsvilkår-sidemeny/InngangsvilkårSidemeny';
 import Vilkårsteg from '../../../../../components/vilkårsteg/Vilkårsteg';
@@ -20,7 +19,6 @@ const Behandling: NextPageWithLayout = () => {
     >
       <InngangsvilkårSidemeny />
       <Vilkårsteg />
-      <Saksdialog />
     </HStack>
   );
 };
