@@ -1,6 +1,7 @@
 import { AlderVilkår } from './AlderTypes';
 import { InstitusjonsoppholdVilkår } from './InstitusjonsoppholdTypes';
 import { IntroVilkår } from './IntroduksjonsprogrammetTypes';
+import { KravfristVilkår } from './KravfristTypes';
 import { KvpVilkår } from './KvpTypes';
 import { LivsoppholdVilkår } from './LivsoppholdTypes';
 import { Periode } from './Periode';
@@ -17,7 +18,7 @@ export interface Behandling {
   status: string;
   endringslogg: Endring[];
   samletUtfall: Utfall;
-  stønadsdager: StønadsdagerSaksopplysning;
+  stønadsdager: StønadsdagerSaksopplysning[];
   tiltaksdeltagelsesaksopplysning: TiltaksdeltagelsesaksopplysningDTO;
   vilkårsett: VilkårsettDTO;
 }
@@ -35,6 +36,7 @@ interface VilkårsettDTO {
   introVilkår: IntroVilkår;
   institusjonsoppholdVilkår: InstitusjonsoppholdVilkår;
   livsoppholdVilkår: LivsoppholdVilkår;
+  kravfristVilkår: KravfristVilkår;
 }
 
 export interface Endring {

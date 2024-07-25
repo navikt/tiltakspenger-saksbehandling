@@ -17,6 +17,7 @@ const VilkårsvurderingTable = () => {
     return <Loader />;
   }
 
+  const kravfrist = valgtBehandling.vilkårsett.kravfristVilkår;
   const alder = valgtBehandling.vilkårsett.alderVilkår;
   const kvp = valgtBehandling.vilkårsett.kvpVilkår;
   const institusjonsopphold =
@@ -35,6 +36,22 @@ const VilkårsvurderingTable = () => {
         </Table.Row>
       </Table.Header>
       <Table.Body>
+        {/* Frist for framsetting av krav */}
+        <Table.Row>
+          <Table.HeaderCell>
+            Frist for framsetting av krav{' '}
+            {kravfrist.vilkårLovreferanse.paragraf}
+          </Table.HeaderCell>
+          <Table.DataCell>
+            {<UtfallstekstMedIkon samletUtfall={kravfrist.samletUtfall} />}
+          </Table.DataCell>
+          <Table.DataCell>
+            {periodeTilFormatertDatotekst(kravfrist.utfallperiode)}
+          </Table.DataCell>
+          <Table.DataCell>
+            {`Kravdato er ${formaterDatotekst(kravfrist.avklartSaksopplysning.kravdato)}`}
+          </Table.DataCell>
+        </Table.Row>
         {/* Aldersvilkår */}
         <Table.Row>
           <Table.HeaderCell>
