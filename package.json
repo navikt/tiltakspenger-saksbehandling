@@ -19,7 +19,7 @@
     "@navikt/oasis": "^3.3.0",
     "dayjs": "^1.11.12",
     "next": "^14.2.5",
-    "pino": "^9.3.1",
+    "pino": "^9.3.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-error-boundary": "^4.0.13",
