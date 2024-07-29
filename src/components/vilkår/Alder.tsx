@@ -31,10 +31,14 @@ const Alder = () => {
         kilde={alderVilkår.avklartSaksopplysning.kilde}
         utfall={alderVilkår.samletUtfall}
         vilkårTittel={'Alder'}
-        grunnlag={formaterDatotekst(
-          alderVilkår.avklartSaksopplysning.fødselsdato,
-        )}
-        grunnlagHeader={'Fødselsdato'}
+        grunnlag={[
+          {
+            header: 'Fødselsfato',
+            data: formaterDatotekst(
+              alderVilkår.avklartSaksopplysning.fødselsdato,
+            ),
+          },
+        ]}
       />
     </VStack>
   );

@@ -5,6 +5,7 @@ import { KravfristVilkår } from './KravfristTypes';
 import { KvpVilkår } from './KvpTypes';
 import { LivsoppholdVilkår } from './LivsoppholdTypes';
 import { Periode } from './Periode';
+import { TiltakDeltagelseVilkår } from './TiltakDeltagelseTypes';
 import Tiltaksstatus from './Tiltaksstatus';
 import { Utfall } from './Utfall';
 
@@ -32,6 +33,7 @@ export enum BehandlingTilstand {
 
 interface VilkårsettDTO {
   alderVilkår: AlderVilkår;
+  tiltakDeltagelseVilkår: TiltakDeltagelseVilkår;
   kvpVilkår: KvpVilkår;
   introVilkår: IntroVilkår;
   institusjonsoppholdVilkår: InstitusjonsoppholdVilkår;

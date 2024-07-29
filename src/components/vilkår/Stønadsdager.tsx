@@ -1,20 +1,11 @@
 import React, { useContext } from 'react';
-import { Loader, VStack } from '@navikt/ds-react';
-import { useHentBehandling } from '../../hooks/useHentBehandling';
+import { VStack } from '@navikt/ds-react';
 import VilkårKort from './VilkårKort';
 import VilkårHeader from './VilkårHeader';
 import { BehandlingContext } from '../layout/SaksbehandlingLayout';
 
 const VilkårsvurderingAvStønadsdager = () => {
   const { behandlingId } = useContext(BehandlingContext);
-  const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
-
-  if (isLoading || !valgtBehandling) {
-    return <Loader />;
-  }
-
-  const { periode, kilde, antallDager } =
-    valgtBehandling.stønadsdager[0].antallDagerSaksopplysningFraRegister;
 
   return (
     <VStack gap="4">
@@ -26,14 +17,15 @@ const VilkårsvurderingAvStønadsdager = () => {
           'https://lovdata.no/dokument/SF/forskrift/2013-11-04-1286'
         }
       />
+      {/*
       <VilkårKort
-        saksopplysningsperiode={periode}
-        kilde={kilde}
+        saksopplysningsperiode={}
+        kilde={}
         utfall={null}
         vilkårTittel={'Stønadsdager'}
-        grunnlag={antallDager.toString()}
-        grunnlagHeader={'Antall dager'}
+        grunnlag={[{ header: 'Antall dager', data: 'x' }]}
       />
+*/}
     </VStack>
   );
 };

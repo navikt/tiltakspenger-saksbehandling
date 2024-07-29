@@ -33,8 +33,12 @@ const Institusjonsopphold = () => {
         kilde={institusjonsopphold.søknadSaksopplysning.kilde}
         utfall={institusjonsopphold.samletUtfall}
         vilkårTittel={'Institusjonsopphold'}
-        grunnlag={institusjonsopphold.samletUtfall === 'OPPFYLT' ? 'Nei' : 'Ja'}
-        grunnlagHeader={'Opphold'}
+        grunnlag={[
+          {
+            header: 'Opphold',
+            data: institusjonsopphold.samletUtfall === 'OPPFYLT' ? 'Nei' : 'Ja',
+          },
+        ]}
       />
     </VStack>
   );

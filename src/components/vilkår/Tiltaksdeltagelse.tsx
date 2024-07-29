@@ -1,42 +1,43 @@
 import React, { useContext } from 'react';
 import { Loader, VStack } from '@navikt/ds-react';
-import { useHentBehandling } from '../../hooks/useHentBehandling';
 import VilkårHeader from './VilkårHeader';
 import VilkårKort from './VilkårKort';
 import UtfallstekstMedIkon from './UtfallstekstMedIkon';
 import { BehandlingContext } from '../layout/SaksbehandlingLayout';
+import { useHentTiltakDeltagelse } from '../../hooks/vilkår/useHentTiltaksdeltagelse';
 
 const VilkårsvurderingAvTiltaksdeltagelse = () => {
   const { behandlingId } = useContext(BehandlingContext);
-  const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
+  const { tiltakDeltagelse, isLoading } = useHentTiltakDeltagelse(behandlingId);
 
-  if (isLoading || !valgtBehandling) {
+  if (isLoading || !tiltakDeltagelse) {
     return <Loader />;
   }
-  const tiltak = valgtBehandling.tiltaksdeltagelsesaksopplysning;
-  const { deltagelseUtfall, navn, periode, kilde, girRett } =
-    tiltak.saksopplysninger;
+  const { status, tiltakNavn, deltagelsePeriode, kilde } =
+    tiltakDeltagelse.registerSaksopplysning;
 
   return (
     <VStack gap="4">
       <VilkårHeader
         headertekst={'Tiltaksdeltagelse'}
-        lovdatatekst={tiltak.vilkårLovreferanse.beskrivelse}
+        lovdatatekst={tiltakDeltagelse.vilkårLovreferanse.beskrivelse}
         lovdatalenke={
           'https://lovdata.no/dokument/SF/forskrift/2013-11-04-1286'
         }
-        paragraf={tiltak.vilkårLovreferanse.paragraf}
+        paragraf={tiltakDeltagelse.vilkårLovreferanse.paragraf}
       />
 
-      <UtfallstekstMedIkon samletUtfall={deltagelseUtfall} />
+      <UtfallstekstMedIkon samletUtfall={tiltakDeltagelse.samletUtfall} />
       <VilkårKort
-        key={navn}
-        saksopplysningsperiode={periode}
+        key={tiltakNavn}
+        saksopplysningsperiode={deltagelsePeriode}
         kilde={kilde}
-        utfall={deltagelseUtfall}
-        vilkårTittel={valgtBehandling.tiltaksdeltagelsesaksopplysning.vilkår}
-        grunnlag={girRett ? 'Ja' : 'nei'}
-        grunnlagHeader={'Gir rett'}
+        utfall={tiltakDeltagelse.samletUtfall}
+        vilkårTittel={'Tiltaksdeltagelse'}
+        grunnlag={[
+          { header: 'Type tiltak', data: tiltakNavn },
+          { header: 'Siste status', data: status },
+        ]}
       />
     </VStack>
   );

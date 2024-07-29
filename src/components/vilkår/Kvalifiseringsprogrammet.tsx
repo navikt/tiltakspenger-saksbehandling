@@ -36,8 +36,7 @@ const Kvalifiseringsprogrammet = () => {
         kilde={kvp.avklartSaksopplysning.kilde}
         utfall={kvp.samletUtfall}
         vilkårTittel={'Kvalifiseringsprogrammet'}
-        grunnlag={deltagelseTekst(deltagelse)}
-        grunnlagHeader={'Deltar'}
+        grunnlag={[{ header: 'Deltar', data: deltagelseTekst(deltagelse) }]}
       />
     </VStack>
   );

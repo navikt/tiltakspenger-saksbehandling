@@ -31,10 +31,14 @@ const FristForFramsettingAvKrav = () => {
         kilde={kravfristVilkår.avklartSaksopplysning.kilde}
         utfall={kravfristVilkår.samletUtfall}
         vilkårTittel={'Frist for framsetting av krav'}
-        grunnlag={formaterDatotekst(
-          kravfristVilkår.avklartSaksopplysning.kravdato,
-        )}
-        grunnlagHeader={'Kravdato'}
+        grunnlag={[
+          {
+            header: 'Kravdato',
+            data: formaterDatotekst(
+              kravfristVilkår.avklartSaksopplysning.kravdato,
+            ),
+          },
+        ]}
       />
     </VStack>
   );

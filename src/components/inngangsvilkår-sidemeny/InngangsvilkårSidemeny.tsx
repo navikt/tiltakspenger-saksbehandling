@@ -28,7 +28,7 @@ const InngangsvilkårSidemeny = () => {
       tittel: 'Tiltaksdeltagelse',
       url: 'tiltaksdeltagelse',
       paragraf: '§7',
-      utfall: '',
+      utfall: valgtBehandling.vilkårsett.tiltakDeltagelseVilkår.samletUtfall,
     },
     {
       tittel: 'Over 18 år',
