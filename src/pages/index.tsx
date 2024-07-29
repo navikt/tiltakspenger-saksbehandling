@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Button, Link, Loader, Table } from '@navikt/ds-react';
 import { SaksbehandlerContext } from './_app';
-import { useHentBehandlinger } from '../hooks/useHentBehandlinger';
+import { useHentOppgaver } from '../hooks/useHentOppgaver';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useSWRConfig } from 'swr';
@@ -10,31 +10,30 @@ import {
   behandlingLinkAktivert,
   skalKunneTaBehandling,
 } from '../utils/tilganger';
-import { BehandlingTilstand } from '../types/BehandlingTypes';
+import { BehandlingStatus } from '../types/BehandlingTypes';
 
 const Benken: NextPage = () => {
   const router = useRouter();
   const mutator = useSWRConfig().mutate;
   const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
-  const { behandlinger, isLoading } = useHentBehandlinger();
+  const { oppgaver, isLoading } = useHentOppgaver();
 
   const finnBehandlingurlForTilstand = (
     behandlingid: string,
     tilstand: string,
   ) => {
     switch (tilstand) {
-      case BehandlingTilstand.OPPRETTET:
+      case BehandlingStatus.KLAR_TIL_BEHANDLING &&
+        BehandlingStatus.UNDER_BEHANDLING:
         return `/behandling/${behandlingid}/inngangsvilkar/kravfrist`;
-      case BehandlingTilstand.VILKÅRSVURDERT:
-        return `/behandling/${behandlingid}/inngangsvilkar/kravfrist`;
-      case BehandlingTilstand.TIL_BESLUTTER:
-        return `/behandling/${behandlingid}/oppsummering`;
-      case BehandlingTilstand.IVERKSATT:
-        return `/behandling/${behandlingid}/oppsummering`;
+      case BehandlingStatus.SØKNAD:
+        return '/';
       default:
         return `/behandling/${behandlingid}/oppsummering`;
     }
   };
+
+  const opprettBehandling = 
 
   const taBehandling = async (behandlingid: string, tilstand: string) => {
     fetch(`/api/behandling/startbehandling/${behandlingid}`, {
@@ -57,7 +56,7 @@ const Benken: NextPage = () => {
       });
   };
 
-  if (isLoading || !behandlinger) {
+  if (isLoading || !oppgaver) {
     return <Loader />;
   }
 
@@ -75,7 +74,7 @@ const Benken: NextPage = () => {
         </Table.Row>
       </Table.Header>
       <Table.Body>
-        {behandlinger.map((behandling) => {
+        {oppgaver.map((behandling) => {
           return (
             <Table.Row shadeOnHover={false} key={behandling.id}>
               <Table.DataCell>{behandling.ident}</Table.DataCell>
