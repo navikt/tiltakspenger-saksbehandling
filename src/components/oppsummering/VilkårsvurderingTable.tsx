@@ -18,6 +18,7 @@ const VilkårsvurderingTable = () => {
   }
 
   const kravfrist = valgtBehandling.vilkårsett.kravfristVilkår;
+  const tiltakDeltagelse = valgtBehandling.vilkårsett.tiltakDeltagelseVilkår;
   const alder = valgtBehandling.vilkårsett.alderVilkår;
   const kvp = valgtBehandling.vilkårsett.kvpVilkår;
   const institusjonsopphold =
@@ -50,6 +51,25 @@ const VilkårsvurderingTable = () => {
           </Table.DataCell>
           <Table.DataCell>
             {`Kravdato er ${formaterDatotekst(kravfrist.avklartSaksopplysning.kravdato)}`}
+          </Table.DataCell>
+        </Table.Row>
+        {/* Tiltaksdeltagelse */}
+        <Table.Row>
+          <Table.HeaderCell>
+            Tiltaksdeltagelse {tiltakDeltagelse.vilkårLovreferanse.paragraf}
+          </Table.HeaderCell>
+          <Table.DataCell>
+            {
+              <UtfallstekstMedIkon
+                samletUtfall={tiltakDeltagelse.samletUtfall}
+              />
+            }
+          </Table.DataCell>
+          <Table.DataCell>
+            {periodeTilFormatertDatotekst(tiltakDeltagelse.utfallperiode)}
+          </Table.DataCell>
+          <Table.DataCell>
+            {`Tiltakstatus er ${tiltakDeltagelse.registerSaksopplysning.status}`}
           </Table.DataCell>
         </Table.Row>
         {/* Aldersvilkår */}
