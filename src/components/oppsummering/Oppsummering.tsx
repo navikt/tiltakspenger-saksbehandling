@@ -8,7 +8,7 @@ import styles from './Oppsummering.module.css';
 import IkonMedTekst from '../ikon-med-tekst/IkonMedTekst';
 import { UtfallIkon } from '../utfall-ikon/UtfallIkon';
 import VilkårsvurderingTable from './VilkårsvurderingTable';
-import { BehandlingTilstand } from '../../types/BehandlingTypes';
+import { BehandlingStatus } from '../../types/BehandlingTypes';
 import { finnUtfallsperiodetekst } from '../../utils/tekstformateringUtils';
 import { BehandlingContext } from '../layout/SaksbehandlingLayout';
 
@@ -26,7 +26,7 @@ const Oppsummering = () => {
   )?.begrunnelse;
 
   const visBegrunnelse =
-    valgtBehandling.behandlingTilstand === BehandlingTilstand.VILKÅRSVURDERT &&
+    valgtBehandling.behandlingTilstand === BehandlingStatus.UNDER_BEHANDLING &&
     returBegrunnelse;
 
   return (
