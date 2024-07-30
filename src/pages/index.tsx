@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Button, Link, Loader, Table } from '@navikt/ds-react';
 import { SaksbehandlerContext } from './_app';
-import { useHentOppgaver } from '../hooks/useHentOppgaver';
+import { useHentSøknaderOgBehandlinger } from '../hooks/useHentSøknaderOgBehandlinger';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useSWRConfig } from 'swr';
@@ -10,13 +10,25 @@ import {
   behandlingLinkAktivert,
   skalKunneTaBehandling,
 } from '../utils/tilganger';
-import { BehandlingStatus } from '../types/BehandlingTypes';
+import {
+  BehandlingForBenk,
+  BehandlingStatus,
+  TypeBehandling,
+} from '../types/BehandlingTypes';
+import { useOpprettBehandling } from '../hooks/useOpprettBehandling';
+import { periodeTilFormatertDatotekst } from '../utils/date';
+import { finnStatusTekst } from '../utils/tekstformateringUtils';
 
 const Benken: NextPage = () => {
   const router = useRouter();
   const mutator = useSWRConfig().mutate;
   const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
-  const { oppgaver, isLoading } = useHentOppgaver();
+  const { SøknaderOgBehandlinger, isLoading } = useHentSøknaderOgBehandlinger();
+  const { isBehandlingMutating, onOpprettBehandling } = useOpprettBehandling();
+
+  if (isLoading || !SøknaderOgBehandlinger) {
+    return <Loader />;
+  }
 
   const finnBehandlingurlForTilstand = (
     behandlingid: string,
@@ -32,8 +44,6 @@ const Benken: NextPage = () => {
         return `/behandling/${behandlingid}/oppsummering`;
     }
   };
-
-  const opprettBehandling = 
 
   const taBehandling = async (behandlingid: string, tilstand: string) => {
     fetch(`/api/behandling/startbehandling/${behandlingid}`, {
@@ -56,9 +66,45 @@ const Benken: NextPage = () => {
       });
   };
 
-  if (isLoading || !oppgaver) {
-    return <Loader />;
-  }
+  const knappForBehandlingType = (behandling: BehandlingForBenk) => {
+    return (
+      <>
+        {behandling.typeBehandling == TypeBehandling.SØKNAD ? (
+          <Button
+            size="small"
+            variant="primary"
+            onClick={() => onOpprettBehandling(behandling.id)}
+            disabled={
+              !skalKunneTaBehandling(
+                behandling.status,
+                innloggetSaksbehandler,
+                behandling.saksbehandler,
+                behandling.beslutter,
+              )
+            }
+          >
+            Start behandling
+          </Button>
+        ) : (
+          <Button
+            size="small"
+            variant="primary"
+            onClick={() => taBehandling(behandling.id, behandling.status)}
+            disabled={
+              !skalKunneTaBehandling(
+                behandling.status,
+                innloggetSaksbehandler,
+                behandling.saksbehandler,
+                behandling.beslutter,
+              )
+            }
+          >
+            Ta behandling
+          </Button>
+        )}
+      </>
+    );
+  };
 
   return (
     <Table zebraStripes>
@@ -74,45 +120,23 @@ const Benken: NextPage = () => {
         </Table.Row>
       </Table.Header>
       <Table.Body>
-        {oppgaver.map((behandling) => {
+        {SøknaderOgBehandlinger.map((behandling) => {
           return (
             <Table.Row shadeOnHover={false} key={behandling.id}>
               <Table.DataCell>{behandling.ident}</Table.DataCell>
+              <Table.DataCell>{behandling.typeBehandling}</Table.DataCell>
               <Table.DataCell>
-                {behandlingLinkAktivert(
-                  innloggetSaksbehandler,
-                  behandling.saksbehandler,
-                  behandling.beslutter,
-                ) ? (
-                  <Link href={`/behandling/${behandling.id}/oppsummering`}>
-                    {behandling.typeBehandling}
-                  </Link>
-                ) : (
-                  behandling.typeBehandling
-                )}
+                {behandling.periode
+                  ? `${periodeTilFormatertDatotekst(behandling.periode)}`
+                  : '-'}
               </Table.DataCell>
-              <Table.DataCell>{`${behandling.fom} - ${behandling.tom}`}</Table.DataCell>
-              <Table.DataCell>{behandling.status}</Table.DataCell>
+              <Table.DataCell>
+                {finnStatusTekst(behandling.status)}
+              </Table.DataCell>
               <Table.DataCell>{behandling.saksbehandler}</Table.DataCell>
               <Table.DataCell>{behandling.beslutter}</Table.DataCell>
               <Table.DataCell>
-                <Button
-                  size="small"
-                  variant="primary"
-                  onClick={() =>
-                    taBehandling(behandling.id, behandling.tilstand)
-                  }
-                  disabled={
-                    !skalKunneTaBehandling(
-                      behandling.status,
-                      innloggetSaksbehandler,
-                      behandling.saksbehandler,
-                      behandling.beslutter,
-                    )
-                  }
-                >
-                  Ta behandling
-                </Button>
+                {knappForBehandlingType(behandling)}
               </Table.DataCell>
             </Table.Row>
           );

@@ -2,26 +2,11 @@ import { startBehandling } from '../utils/http';
 import useSWRMutation from 'swr/mutation';
 import { useRouter } from 'next/router';
 
-function useOpprettBehandling(søknadId: string) {
+export function useOpprettBehandling() {
   const router = useRouter();
-  const { trigger, isMutating: isSokerMutating } = useSWRMutation(`/api/behandling/startbehandling/${søknadId}`, startBehandling, {
-    onSuccess: (data) => router.push(`/behandling/${data.}/inngangsvilkar/kravfrist`),
+  const { trigger: onOpprettBehandling, isMutating: isBehandlingMutating } = useSWRMutation(`/api/behandling/startbehandling`, startBehandling, {
+    onSuccess: (behandlingId) => router.push(`/behandling/${behandlingId}/inngangsvilkar/kravfrist`),
   });
 
-
-  async function oppdaterBehandling(url: string, { arg }: { arg?: string }) {
-    await fetch(url, {
-      method: 'POST',
-    }).then(() => mutator(`/api/behandling/${behandlingId}`));
-  }
-
-  const { trigger: godkjennBehandling, isMutating: godkjennerBehandling } =
-    useSWRMutation(
-      `/api/behandling/godkjenn/${behandlingId}`,
-      oppdaterBehandling,
-    );
-
-  return { trigger, isSokerMutating };
+  return { onOpprettBehandling, isBehandlingMutating };
 }
-
-export default useOpprettBehandling;

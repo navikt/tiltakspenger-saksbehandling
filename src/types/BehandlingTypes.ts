@@ -50,11 +50,6 @@ export interface Endring {
   endretTidspunkt: string;
 }
 
-export interface OppgaverForBenk {
-  behandling: BehandlingForBenk[],
-  søknad: BehandlingForBenk[],
-}
-
 export interface BehandlingForBenk {
   periode: Periode,
   status: BehandlingStatus,

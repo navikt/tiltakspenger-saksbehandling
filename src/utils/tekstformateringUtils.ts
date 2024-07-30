@@ -1,3 +1,4 @@
+import { BehandlingStatus } from '../types/BehandlingTypes';
 import { Opphold } from '../types/InstitusjonsoppholdTypes';
 import { Deltagelse } from '../types/KvpTypes';
 import { Utfall } from '../types/Utfall';
@@ -42,3 +43,16 @@ export const lagFaktumTekst = (faktum: Deltagelse | Opphold) => {
       return 'Vilkåret er uavklart';
   }
 };
+
+
+export const finnStatusTekst = (status: string) => {
+  switch (status) {
+    case BehandlingStatus.INNVILGET : return 'Innvilget'
+    case BehandlingStatus.KLAR_TIL_BEHANDLING : return 'Klar til behandling'
+    case BehandlingStatus.KLAR_TIL_BESLUTNING : return 'Klar til beslutning'
+    case BehandlingStatus.SØKNAD : return 'Søknad'
+    case BehandlingStatus.UNDER_BEHANDLING : return 'Under behandling'
+    case BehandlingStatus.UNDER_BESLUTNING : return 'Under beslutning'
+  }
+
+}

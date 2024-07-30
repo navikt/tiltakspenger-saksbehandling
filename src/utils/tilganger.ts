@@ -1,3 +1,4 @@
+import { BehandlingStatus, TypeBehandling } from '../types/BehandlingTypes';
 import { Saksbehandler } from '../types/Saksbehandler';
 
 export const kanBeslutteForBehandling = (
@@ -26,19 +27,19 @@ export const kanSaksbehandleForBehandling = (
 };
 
 export const skalKunneTaBehandling = (
-  type: string,
+  status: string,
   innloggetSaksbehandler,
   saksbehandlerForBehandling?: string,
   beslutterForBehandling?: string,
 ) => {
-  switch (type) {
-    case 'Klar til beslutning':
+  switch (status) {
+    case BehandlingStatus.KLAR_TIL_BESLUTNING:
       return (
         innloggetSaksbehandler.roller.includes('BESLUTTER') &&
         !beslutterForBehandling &&
         innloggetSaksbehandler.navIdent != saksbehandlerForBehandling
       );
-    case 'Klar til behandling':
+    case BehandlingStatus.KLAR_TIL_BEHANDLING:
       return (
         innloggetSaksbehandler.roller.includes('SAKSBEHANDLER') &&
         !saksbehandlerForBehandling

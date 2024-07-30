@@ -20,9 +20,7 @@ export const fetcher = async (url: string) => {
 export async function startBehandling(url, {arg}: {arg: string}) {
     await fetch(url, {
       method: 'POST',
-      headers: {
-        Authorization: `Bearer ${arg}`
-      }
+      body: JSON.stringify(arg),
     })
   }
 
