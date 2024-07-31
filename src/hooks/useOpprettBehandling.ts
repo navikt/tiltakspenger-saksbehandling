@@ -1,14 +1,19 @@
-import { mutateBehandling } from '../utils/http';
+import { FetcherError, mutateBehandling } from '../utils/http';
 import useSWRMutation from 'swr/mutation';
-import { useRouter } from 'next/router';
+import router from 'next/router';
+import { BehandlingIdResponse } from '../types/Søker';
 
 export function useOpprettBehandling() {
-  const router = useRouter();
-  const { trigger: onOpprettBehandling, isMutating: isBehandlingMutating } =
-    useSWRMutation(`/api/behandling/startbehandling`, mutateBehandling, {
-      onSuccess: (behandlingId) =>
-        router.push(`/behandling/${behandlingId}/inngangsvilkar/kravfrist`),
+  const { trigger: onOpprettBehandling, isMutating: isSøknadMutating } =
+    useSWRMutation<
+      BehandlingIdResponse,
+      FetcherError,
+      '/api/behandling/startbehandling',
+      { id: string }
+    >('/api/behandling/startbehandling', mutateBehandling, {
+      onSuccess: (data) =>
+        router.push(`/behandling/${data.id}/inngangsvilkar/kravfrist`),
     });
 
-  return { onOpprettBehandling, isBehandlingMutating };
+  return { onOpprettBehandling, isSøknadMutating };
 }

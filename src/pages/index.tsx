@@ -4,45 +4,24 @@ import { SaksbehandlerContext } from './_app';
 import { useHentSøknaderOgBehandlinger } from '../hooks/useHentSøknaderOgBehandlinger';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useSWRConfig } from 'swr';
 import { pageWithAuthentication } from '../auth/pageWithAuthentication';
-import {
-  kanSaksbehandleForBehandling,
-  skalKunneTaBehandling,
-} from '../utils/tilganger';
+import { skalKunneTaBehandling } from '../utils/tilganger';
 import { BehandlingForBenk, TypeBehandling } from '../types/BehandlingTypes';
 import { useOpprettBehandling } from '../hooks/useOpprettBehandling';
 import { periodeTilFormatertDatotekst } from '../utils/date';
 import { finnStatusTekst } from '../utils/tekstformateringUtils';
+import { useTaBehandling } from '../hooks/useTaBehandling';
 
 const Benken: NextPage = () => {
   const router = useRouter();
-  const mutator = useSWRConfig().mutate;
   const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
   const { SøknaderOgBehandlinger, isLoading } = useHentSøknaderOgBehandlinger();
-  const { isBehandlingMutating, onOpprettBehandling } = useOpprettBehandling();
+  const { isSøknadMutating, onOpprettBehandling } = useOpprettBehandling();
+  const { isBehandlingMutating, onTaBehandling } = useTaBehandling();
 
   if (isLoading || !SøknaderOgBehandlinger) {
     return <Loader />;
   }
-
-  const taBehandling = async (behandlingid: string, tilstand: string) => {
-    fetch(`/api/behandling/startbehandling/${behandlingid}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error(res.status.toString() + res.statusText);
-        mutator(`/api/behandlinger`);
-      })
-      .catch((error) => {
-        throw new Error(
-          `Noe gikk galt ved setting av saksbehandler på behandlingen: ${error.message}`,
-        );
-      });
-  };
 
   const knappForBehandlingType = (behandling: BehandlingForBenk) => {
     if (behandling.typeBehandling === TypeBehandling.SØKNAD)
@@ -50,7 +29,8 @@ const Benken: NextPage = () => {
         <Button
           size="small"
           variant="primary"
-          onClick={() => onOpprettBehandling(behandling.id)}
+          loading={isSøknadMutating}
+          onClick={() => onOpprettBehandling({ id: behandling.id })}
         >
           Start behandling
         </Button>
@@ -66,7 +46,8 @@ const Benken: NextPage = () => {
         <Button
           size="small"
           variant="primary"
-          onClick={() => taBehandling(behandling.id, behandling.status)}
+          loading={isBehandlingMutating}
+          onClick={() => onTaBehandling({ id: behandling.id })}
           disabled={
             !skalKunneTaBehandling(
               behandling.status,

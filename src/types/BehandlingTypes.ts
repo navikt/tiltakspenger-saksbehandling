@@ -26,7 +26,7 @@ export interface Behandling {
 
 export enum BehandlingStatus {
   SØKNAD = 'SØKNAD',
-  KLAR_TIL_BEHANDLING = ' KLAR_TIL_BEHANDLING',
+  KLAR_TIL_BEHANDLING = 'KLAR_TIL_BEHANDLING',
   UNDER_BEHANDLING = 'UNDER_BEHANDLING',
   KLAR_TIL_BESLUTNING = 'KLAR_TIL_BESLUTNING',
   UNDER_BESLUTNING = 'UNDER_BESLUTNING',
@@ -51,16 +51,16 @@ export interface Endring {
 }
 
 export interface BehandlingForBenk {
-  periode: Periode,
-  status: BehandlingStatus,
+  periode: Periode;
+  status: BehandlingStatus;
   // underkjent: Boolean, IKKE IMPLEMENTERT ENDA??
-  typeBehandling: TypeBehandling,
-  ident: string,
-  saksnummer: string,
-  id: string,
-  saksbehandler: string,
-  beslutter: string,
-  sakId: string,
+  typeBehandling: TypeBehandling;
+  ident: string;
+  saksnummer: string;
+  id: string;
+  saksbehandler: string;
+  beslutter: string;
+  sakId: string;
 }
 
 export interface Personopplysninger {
@@ -120,5 +120,5 @@ export enum SamletUtfall {
 
 export enum TypeBehandling {
   SØKNAD = 'Søknad',
-  FØRSTEGANGSBEHANDLING = "Førstegangsbehandling",
+  FØRSTEGANGSBEHANDLING = 'Førstegangsbehandling',
 }
