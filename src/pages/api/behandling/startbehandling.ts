@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getToken, requestOboToken } from '@navikt/oasis';
-import { withAuthenticatedApi } from '../../../../auth/pageWithAuthentication';
-import { makeApiRequest } from '../../../../utils/http';
+import { withAuthenticatedApi } from '../../../auth/pageWithAuthentication';
+import { makeApiRequest } from '../../../utils/http';
 
 async function handler(
   req: NextApiRequest,

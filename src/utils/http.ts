@@ -1,6 +1,7 @@
 import { logger } from '@navikt/next-logger';
 import { NextApiRequest } from 'next';
-import { SøkerIdent } from '../types/Søker';
+import { BehandlingIdResponse, SøkerIdent } from '../types/Søker';
+import { Behandling } from '../types/BehandlingTypes';
 
 const vedtakBackendUrl = process.env.TILTAKSPENGER_VEDTAK_URL || '';
 const meldekortBackendUrl = process.env.TILTAKSPENGER_MELDEKORT_URL || '';
@@ -17,6 +18,18 @@ export const fetcher = async (url: string) => {
   return res.json();
 };
 
+export async function mutateBehandling<R>(
+  url,
+  { arg }: { arg: { id: string } },
+): Promise<R> {
+  const res = await fetch(url, {
+    method: 'POST',
+    body: JSON.stringify(arg),
+  });
+  await throwErrorIfFatal(res);
+  return res.json();
+}
+
 export async function fetchSøker<R>(
   url: string,
   { arg }: { arg: SøkerIdent },
@@ -29,7 +42,7 @@ export async function fetchSøker<R>(
   return res.json();
 }
 
-const throwErrorIfFatal = async (res: Response) => {
+export const throwErrorIfFatal = async (res: Response) => {
   if (!res.ok) {
     const error = new FetcherError('En feil har oppstått');
     const errorMessage = await res.json();
@@ -61,7 +74,7 @@ export async function makeApiRequest(
   try {
     return await fetch(url, {
       method: request.method,
-      body: request.method === 'GET' ? undefined : JSON.stringify(request.body),
+      body: request.method === 'GET' ? undefined : request.body,
       headers: {
         'Content-Type': 'application/json',
         authorization: `Bearer ${oboToken}`,

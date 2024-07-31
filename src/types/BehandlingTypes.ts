@@ -24,11 +24,13 @@ export interface Behandling {
   vilkårsett: VilkårsettDTO;
 }
 
-export enum BehandlingTilstand {
-  IVERKSATT = 'IVERKSATT',
-  TIL_BESLUTTER = 'TIL_BESLUTTER',
-  VILKÅRSVURDERT = 'VILKÅRSVURDERT',
-  OPPRETTET = 'OPPRETTET',
+export enum BehandlingStatus {
+  SØKNAD = 'SØKNAD',
+  KLAR_TIL_BEHANDLING = 'KLAR_TIL_BEHANDLING',
+  UNDER_BEHANDLING = 'UNDER_BEHANDLING',
+  KLAR_TIL_BESLUTNING = 'KLAR_TIL_BESLUTNING',
+  UNDER_BESLUTNING = 'UNDER_BESLUTNING',
+  INNVILGET = 'INNVILGET',
 }
 
 interface VilkårsettDTO {
@@ -49,15 +51,16 @@ export interface Endring {
 }
 
 export interface BehandlingForBenk {
-  id: string;
+  periode: Periode;
+  status: BehandlingStatus;
+  // underkjent: Boolean, IKKE IMPLEMENTERT ENDA??
+  typeBehandling: TypeBehandling;
   ident: string;
-  typeBehandling: string;
-  fom: string;
-  tom: string;
-  status: string;
-  tilstand: BehandlingTilstand;
-  saksbehandler?: string;
-  beslutter?: string;
+  saksnummer: string;
+  id: string;
+  saksbehandler: string;
+  beslutter: string;
+  sakId: string;
 }
 
 export interface Personopplysninger {
@@ -113,4 +116,9 @@ export enum SamletUtfall {
   DELVIS_OPPFYLT = 'DELVIS_OPPFYLT',
   IKKE_OPPFYLT = 'IKKE_OPPFYLT',
   UAVKLART = 'UAVKLART',
+}
+
+export enum TypeBehandling {
+  SØKNAD = 'Søknad',
+  FØRSTEGANGSBEHANDLING = 'Førstegangsbehandling',
 }

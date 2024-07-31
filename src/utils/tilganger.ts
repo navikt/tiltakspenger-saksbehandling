@@ -1,61 +1,47 @@
+import { BehandlingStatus } from '../types/BehandlingTypes';
 import { Saksbehandler } from '../types/Saksbehandler';
 
 export const kanBeslutteForBehandling = (
-  beslutterForBehandling: string,
+  status: string,
   innloggetSaksbehandler: Saksbehandler,
-  behandlingTilstand: string,
+  beslutterForBehandling: string,
 ) => {
   return (
     innloggetSaksbehandler.roller.includes('BESLUTTER') &&
     beslutterForBehandling &&
-    behandlingTilstand === 'tilBeslutter'
+    status === BehandlingStatus.KLAR_TIL_BESLUTNING
   );
 };
 
 export const kanSaksbehandleForBehandling = (
-  saksbehandlerForBehandling: string,
+  status: string,
   innloggetSaksbehandler: Saksbehandler,
-  behandlingTilstand: string,
+  saksbehandlerForBehandling: string,
 ) => {
   return (
     innloggetSaksbehandler.roller.includes('SAKSBEHANDLER') &&
     innloggetSaksbehandler.navIdent == saksbehandlerForBehandling &&
-    behandlingTilstand !== 'tilBeslutter' &&
-    behandlingTilstand !== 'iverksatt'
+    status !== BehandlingStatus.KLAR_TIL_BESLUTNING &&
+    status !== BehandlingStatus.INNVILGET
   );
 };
 
 export const skalKunneTaBehandling = (
-  type: string,
+  status: string,
   innloggetSaksbehandler,
   saksbehandlerForBehandling?: string,
-  beslutterForBehandling?: string,
 ) => {
-  switch (type) {
-    case 'Klar til beslutning':
+  switch (status) {
+    case BehandlingStatus.KLAR_TIL_BESLUTNING ||
+      BehandlingStatus.UNDER_BESLUTNING:
       return (
         innloggetSaksbehandler.roller.includes('BESLUTTER') &&
-        !beslutterForBehandling &&
         innloggetSaksbehandler.navIdent != saksbehandlerForBehandling
       );
-    case 'Klar til behandling':
-      return (
-        innloggetSaksbehandler.roller.includes('SAKSBEHANDLER') &&
-        !saksbehandlerForBehandling
-      );
+    case BehandlingStatus.KLAR_TIL_BEHANDLING ||
+      BehandlingStatus.UNDER_BEHANDLING:
+      return innloggetSaksbehandler.roller.includes('SAKSBEHANDLER');
     default:
       return false;
   }
-};
-
-export const behandlingLinkAktivert = (
-  innloggetSaksbehandler: Saksbehandler,
-  saksbehandlerForBehandling?: string,
-  beslutterForBehandling?: string,
-) => {
-  return (
-    innloggetSaksbehandler?.navIdent == saksbehandlerForBehandling ||
-    innloggetSaksbehandler?.navIdent == beslutterForBehandling ||
-    innloggetSaksbehandler.roller.includes('ADMINISTRATOR')
-  );
 };

@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useHentMeldekortListe } from '../../hooks/useHentMeldekortListe';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
 import { useHentUtbetalingListe } from '../../hooks/useHentUtbetalingListe';
-import { BehandlingTilstand } from '../../types/BehandlingTypes';
+import { BehandlingStatus } from '../../types/BehandlingTypes';
 import { useContext, useState } from 'react';
 import { BehandlingContext } from '../layout/SaksbehandlingLayout';
 
@@ -15,9 +15,10 @@ export const SaksbehandlingTabs = () => {
   const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
 
   const tilBeslutter =
-    valgtBehandling?.behandlingTilstand === BehandlingTilstand.TIL_BESLUTTER;
+    valgtBehandling?.behandlingTilstand ===
+    BehandlingStatus.KLAR_TIL_BESLUTNING;
   const iverksatt =
-    valgtBehandling?.behandlingTilstand === BehandlingTilstand.IVERKSATT;
+    valgtBehandling?.behandlingTilstand === BehandlingStatus.INNVILGET;
 
   const { meldekortliste } = useHentMeldekortListe(iverksatt, behandlingId);
   const { utbetalingliste } = useHentUtbetalingListe(iverksatt, behandlingId);

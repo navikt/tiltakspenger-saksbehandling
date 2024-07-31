@@ -46,7 +46,7 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   useEffect(() => {
     setInnloggetSaksbehandler!(saksbehandler);
   }, [saksbehandler]);
-
+  if (!innloggetSaksbehandler) return <Loader />;
   return (
     <>
       <Head>
