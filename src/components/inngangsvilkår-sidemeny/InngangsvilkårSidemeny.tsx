@@ -6,6 +6,7 @@ import { useContext } from 'react';
 import { BehandlingContext } from '../layout/SaksbehandlingLayout';
 import { UtfallIkon } from '../utfall-ikon/UtfallIkon';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
+import { SamletUtfall } from '../../types/BehandlingTypes';
 
 const InngangsvilkårSidemeny = () => {
   const { behandlingId } = useContext(BehandlingContext);
@@ -40,7 +41,9 @@ const InngangsvilkårSidemeny = () => {
       tittel: 'Andre ytelser til livsopphold',
       url: 'andreytelser',
       paragraf: '§7',
-      utfall: vilkårsett.livsoppholdVilkår.samletUtfall,
+      utfall:
+        !vilkårsett.livsoppholdVilkår.harLivsoppholdYtelser &&
+        SamletUtfall.OPPFYLT,
     },
     {
       tittel: 'Kvalifiseringsprogrammet',

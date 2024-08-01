@@ -10,11 +10,11 @@ import {
 import VilkårHeader from './VilkårHeader';
 import UtfallstekstMedIkon from './UtfallstekstMedIkon';
 import { useHentLivsopphold } from '../../hooks/vilkår/useHentLivsopphold';
-import { useSWRConfig } from 'swr';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import styles from './Vilkår.module.css';
 import { useContext } from 'react';
 import { BehandlingContext } from '../layout/SaksbehandlingLayout';
+import { useLagreLivsoppholdSaksopplysning } from '../../hooks/vilkår/useLagreLivsoppholdSaksopplysning';
 
 export interface SkjemaFelter {
   harAndreYtelser: boolean;
@@ -23,7 +23,8 @@ export interface SkjemaFelter {
 export const AndreYtelser = () => {
   const { behandlingId } = useContext(BehandlingContext);
   const { livsopphold, isLoading } = useHentLivsopphold(behandlingId);
-  const mutator = useSWRConfig().mutate;
+  const { onLagreLivsopphold, isLivsoppholdMutating } =
+    useLagreLivsoppholdSaksopplysning(behandlingId);
 
   const { handleSubmit, control, watch } = useForm<SkjemaFelter>({
     mode: 'onSubmit',
@@ -39,30 +40,14 @@ export const AndreYtelser = () => {
   }
 
   const håndterLagreLivsoppholdSaksopplysning = (harYtelser: boolean) => {
-    if (harYtelser) {
-      return;
-    }
+    if (harYtelser) return;
 
-    fetch(`/api/behandling/${behandlingId}/vilkar/livsopphold`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+    onLagreLivsopphold({
+      ytelseForPeriode: {
+        periode: livsopphold.vurderingsPeriode,
+        harYtelse: harYtelser,
       },
-      body: JSON.stringify({
-        ytelseForPeriode: {
-          periode: livsopphold.vurderingsPeriode,
-          harYtelse: harYtelser,
-        },
-      }),
-    })
-      .then(() => {
-        mutator(`/api/behandling/${behandlingId}/vilkar/livsopphold`);
-      })
-      .catch((error) => {
-        throw new Error(
-          `Noe gikk galt ved lagring av antall dager: ${error.message}`,
-        );
-      });
+    });
   };
 
   const onSubmit: SubmitHandler<SkjemaFelter> = (data) => {
@@ -113,6 +98,7 @@ export const AndreYtelser = () => {
           type="submit"
           value="submit"
           size="small"
+          loading={isLivsoppholdMutating}
           className={styles.marginTop}
           disabled={watchHarLivsoppholdytelser}
         >

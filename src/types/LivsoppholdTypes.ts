@@ -3,18 +3,20 @@ import { Periode } from './Periode';
 import { Saksbehandler } from './Saksbehandler';
 
 export interface LivsoppholdVilkår {
-  avklartSaksopplysning: LivsoppholdSaksopplysning;
-  vurderingsPeriode: Periode;
-  vilkårLovreferanse: Lovreferanse;
-  samletUtfall: SamletUtfall;
-}
-
-interface LivsoppholdSaksopplysning {
   harLivsoppholdYtelser: Boolean;
   vurderingsPeriode: Periode;
   saksbehandler?: Saksbehandler;
-  årsakTilEndring?: ÅrsakTilEndring;
+  vilkårLovreferanse: Lovreferanse;
   tidspunkt: string;
+  årsakTilEndringLivsopphold?: ÅrsakTilEndring;
+  samletUtfall: SamletUtfall;
+}
+
+export interface LivsoppholdSaksopplysningBody {
+  ytelseForPeriode: {
+    periode: Periode;
+    harYtelse: boolean;
+  };
 }
 
 enum ÅrsakTilEndring {
