@@ -1,11 +1,9 @@
 import { Loader, Tabs } from '@navikt/ds-react';
 import router from 'next/router';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
-import { useHentUtbetalingListe } from '../../hooks/useHentUtbetalingListe';
 import { BehandlingStatus } from '../../types/BehandlingTypes';
 import { useContext, useState } from 'react';
 import { BehandlingContext } from '../layout/SaksbehandlingLayout';
-import { useHentMeldekortListe } from '../../hooks/useHentMeldekortListe';
 
 export const SaksbehandlingTabs = () => {
   const aktivTab = router.route.split('/')[3];
@@ -13,20 +11,15 @@ export const SaksbehandlingTabs = () => {
   const { behandlingId, meldekortId, utbetalingId } =
     useContext(BehandlingContext);
   const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
-
-  const tilBeslutter =
-    valgtBehandling.behandlingTilstand === BehandlingStatus.KLAR_TIL_BESLUTNING;
-  const iverksatt =
-    valgtBehandling.behandlingTilstand === BehandlingStatus.INNVILGET;
-
-  const { meldekortliste } = useHentMeldekortListe(iverksatt, behandlingId);
-  const { utbetalingliste } = useHentUtbetalingListe(iverksatt, behandlingId);
-
   const [value, setValue] = useState(aktivTab);
 
   if (isLoading || !valgtBehandling) {
     return <Loader />;
   }
+  const tilBeslutter =
+    valgtBehandling.behandlingTilstand === BehandlingStatus.KLAR_TIL_BESLUTNING;
+  const iverksatt =
+    valgtBehandling.behandlingTilstand === BehandlingStatus.INNVILGET;
 
   return (
     <Tabs value={value} onChange={setValue}>

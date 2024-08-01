@@ -29,7 +29,8 @@ export const SaksbehandlingLayout = ({ children }: React.PropsWithChildren) => {
   const [utbetalingId, settUtbetalingId] = useState<string>(null);
 
   const iverksatt =
-    valgtBehandling.behandlingTilstand === BehandlingStatus.INNVILGET;
+    valgtBehandling?.behandlingTilstand === BehandlingStatus.INNVILGET;
+
   const { meldekortliste } = useHentMeldekortListe(iverksatt, behandlingId);
   const { utbetalingliste } = useHentUtbetalingListe(iverksatt, behandlingId);
 
@@ -37,21 +38,15 @@ export const SaksbehandlingLayout = ({ children }: React.PropsWithChildren) => {
     if (valgtBehandling) {
       settBehId(valgtBehandling.behandlingId);
     }
-    if (iverksatt) {
+    if (iverksatt && meldekortliste && utbetalingliste) {
       settMeldekortId(meldekortliste[0].id);
       settUtbetalingId(utbetalingliste[0].id);
     }
   }, [iverksatt, meldekortliste, utbetalingliste, valgtBehandling]);
 
-  if (
-    isLoading ||
-    !valgtBehandling ||
-    !behId ||
-    (iverksatt && (!meldekortId || !utbetalingId))
-  ) {
+  if (isLoading || !valgtBehandling || !behId) {
     return <Loader />;
   }
-
   return (
     <BehandlingContext.Provider
       value={{

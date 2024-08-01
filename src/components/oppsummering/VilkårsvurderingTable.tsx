@@ -8,6 +8,7 @@ import {
 import { lagFaktumTekst } from '../../utils/tekstformateringUtils';
 import { useContext } from 'react';
 import { BehandlingContext } from '../layout/SaksbehandlingLayout';
+import { SamletUtfall } from '../../types/BehandlingTypes';
 
 const VilkårsvurderingTable = () => {
   const { behandlingId } = useContext(BehandlingContext);
@@ -93,13 +94,19 @@ const VilkårsvurderingTable = () => {
             Andre livsopphold {livsopphold.vilkårLovreferanse.paragraf}
           </Table.HeaderCell>
           <Table.DataCell>
-            {<UtfallstekstMedIkon samletUtfall={livsopphold.samletUtfall} />}
+            {
+              <UtfallstekstMedIkon
+                samletUtfall={
+                  !livsopphold.harLivsoppholdYtelser && SamletUtfall.OPPFYLT
+                }
+              />
+            }
           </Table.DataCell>
           <Table.DataCell>
             {periodeTilFormatertDatotekst(livsopphold.vurderingsPeriode)}
           </Table.DataCell>
           <Table.DataCell>
-            {livsopphold.avklartSaksopplysning.harLivsoppholdYtelser
+            {livsopphold.harLivsoppholdYtelser
               ? 'Søker har andre livsopphold'
               : 'Søker har ikke andre livsopphold'}
           </Table.DataCell>
