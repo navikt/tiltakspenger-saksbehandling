@@ -3,7 +3,6 @@ import { ReactElement } from 'react';
 import { NextPageWithLayout } from '../../../_app';
 import { MeldekortMeny } from '../../../../components/meldekort/meldekort-meny/MeldekortMeny';
 import { MeldekortSide } from '../../../../components/meldekort/meldekort-side/MeldekortSide';
-import { MeldekortDetaljer } from '../../../../components/meldekort/meldekort-detaljer/MeldekortDetaljer';
 import { pageWithAuthentication } from '../../../../auth/pageWithAuthentication';
 import styles from '../../Behandling.module.css';
 import { HStack } from '@navikt/ds-react';
@@ -20,7 +19,6 @@ const Meldekort: NextPageWithLayout = () => {
     >
       <MeldekortMeny />
       <MeldekortSide />
-      <MeldekortDetaljer />
     </HStack>
   );
 };

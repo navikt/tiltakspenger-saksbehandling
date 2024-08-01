@@ -1,19 +1,16 @@
 import { BodyShort, Table } from '@navikt/ds-react';
-import { Meldekort, MeldekortStatus } from '../../../types/MeldekortTypes';
+import { MeldekortStatus } from '../../../types/MeldekortTypes';
 import { velgIkon } from '../meldekort-side/MeldekortUke';
 import { useHentMeldekortBeregning } from '../../../hooks/useHentMeldekortBeregning';
+import router from 'next/router';
+import styles from './MeldekortBeregningsvisning.module.css';
 
-interface MeldekortBeregningsvisningProps {
-  meldekort: Meldekort;
-}
-
-export const MeldekortBeregningsvisning = ({
-  meldekort,
-}: MeldekortBeregningsvisningProps) => {
-  const { meldekortBeregning } = useHentMeldekortBeregning(meldekort.id);
+export const MeldekortBeregningsvisning = () => {
+  const meldekortId = router.query.meldekortId as string;
+  const { meldekortBeregning } = useHentMeldekortBeregning(meldekortId);
 
   return (
-    <Table size="small" style={{ backgroundColor: 'rgba(247, 247, 247, 1)' }}>
+    <Table className={styles.table}>
       <Table.Header>
         <Table.Row>
           <Table.ColumnHeader style={{ width: '50%' }} scope="col">
@@ -32,14 +29,14 @@ export const MeldekortBeregningsvisning = ({
         </Table.Row>
       </Table.Header>
       <Table.Body>
-        <Table.Row style={{ borderBottom: 'none' }}>
+        <Table.Row>
           <Table.DataCell>
             {velgIkon(MeldekortStatus.Deltatt)} Deltatt i tiltak
           </Table.DataCell>
           <Table.DataCell>{meldekortBeregning?.antallDeltatt}</Table.DataCell>
           <Table.DataCell></Table.DataCell>
         </Table.Row>
-        <Table.Row style={{ borderBottom: 'none' }}>
+        <Table.Row>
           <Table.DataCell>
             {velgIkon(MeldekortStatus.IkkeDeltatt)} Ikke deltatt i tiltaket
           </Table.DataCell>
@@ -48,14 +45,14 @@ export const MeldekortBeregningsvisning = ({
           </Table.DataCell>
           <Table.DataCell></Table.DataCell>
         </Table.Row>
-        <Table.Row style={{ borderBottom: 'none' }}>
+        <Table.Row>
           <Table.DataCell>
             {velgIkon(MeldekortStatus.FraværSyk)} Fravær - Syk
           </Table.DataCell>
           <Table.DataCell>{meldekortBeregning?.antallSykDager}</Table.DataCell>
           <Table.DataCell></Table.DataCell>
         </Table.Row>
-        <Table.Row style={{ borderBottom: 'none' }}>
+        <Table.Row>
           <Table.DataCell>
             {velgIkon(MeldekortStatus.FraværSyktBarn)} Fravær - Sykt barn
           </Table.DataCell>
@@ -64,7 +61,7 @@ export const MeldekortBeregningsvisning = ({
           </Table.DataCell>
           <Table.DataCell></Table.DataCell>
         </Table.Row>
-        <Table.Row style={{ borderBottom: 'none' }}>
+        <Table.Row>
           <Table.DataCell>
             {velgIkon(MeldekortStatus.FraværVelferd)} Fravær - Velferd
           </Table.DataCell>

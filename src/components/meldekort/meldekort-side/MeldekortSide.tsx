@@ -4,7 +4,7 @@ import { MeldekortBeregningsvisning } from '../meldekort-beregning-visning/Melde
 import { BodyLong, HStack, Loader, VStack } from '@navikt/ds-react';
 import { useContext, useState } from 'react';
 import { MeldekortKnapper } from './MeldekortKnapper';
-import { useRouter } from 'next/router';
+import router from 'next/router';
 import { useHentMeldekort } from '../../../hooks/useHentMeldekort';
 import { ukenummerFraDate } from '../../../utils/date';
 import { SaksbehandlerContext } from '../../../pages/_app';
@@ -12,7 +12,6 @@ import { SaksbehandlerContext } from '../../../pages/_app';
 export const MeldekortSide = () => {
   const [disableUkeVisning, setDisableUkeVisning] = useState<boolean>(true);
   const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
-  const router = useRouter();
   const meldekortId = router.query.meldekortId as string;
   const { meldekort, isLoading } = useHentMeldekort(meldekortId);
 
@@ -21,7 +20,7 @@ export const MeldekortSide = () => {
   } else if (!meldekort) {
     return (
       <VStack className={styles.ukevisning}>
-        <BodyLong>Det er ingen meldekort å vise</BodyLong>
+        <BodyLong>Meldekort har ikke blitt opprettet enda</BodyLong>
       </VStack>
     );
   }
@@ -35,13 +34,13 @@ export const MeldekortSide = () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ saksbehandler: innloggetSaksbehandler?.navIdent }),
+      body: JSON.stringify({ saksbehandler: innloggetSaksbehandler.navIdent }),
     });
     setDisableUkeVisning(true);
   };
 
   return (
-    <VStack gap="5" className={styles.ukevisning}>
+    <VStack gap="5" className={styles.wrapper}>
       <HStack className={disableUkeVisning ? styles.disableUkevisning : ''}>
         <MeldekortUke
           meldekortUke={uke1}
@@ -54,7 +53,7 @@ export const MeldekortSide = () => {
           meldekortId={meldekortId}
         />
       </HStack>
-      <MeldekortBeregningsvisning meldekort={meldekort} />
+      <MeldekortBeregningsvisning />
       <MeldekortKnapper
         håndterEndreMeldekort={() => setDisableUkeVisning(!disableUkeVisning)}
         håndterGodkjennMeldekort={godkjennMeldekort}

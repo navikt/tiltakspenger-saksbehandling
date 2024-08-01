@@ -1,6 +1,7 @@
-.ukevisning {
-  margin: 1em;
+.wrapper {
+  padding: 1rem;
   width: 100%;
+  background-color: #F5F5F5;
 }
 
 .disableUkevisning {
@@ -9,7 +10,6 @@
 }
 
 .meldekortUke {
-  background-color: rgba(247, 247, 247, 1);
   width: 49%;
   padding: 1em;
   margin: 0 0.3rem;

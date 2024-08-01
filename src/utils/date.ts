@@ -48,3 +48,7 @@ export function ukenummerFraDate(date: Date) {
 export function tekstTilDate(dateString: string) {
   return dayjs(dateString).toDate();
 }
+
+export const meldekortUkeNummer = (fom: string, tom: string): string => {
+  return `Uke ${ukenummerFraDate(new Date(fom))} / ${ukenummerFraDate(new Date(tom))}`;
+};

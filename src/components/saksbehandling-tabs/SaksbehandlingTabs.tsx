@@ -1,24 +1,23 @@
 import { Loader, Tabs } from '@navikt/ds-react';
-import { useRouter } from 'next/router';
-import { useHentMeldekortListe } from '../../hooks/useHentMeldekortListe';
+import router from 'next/router';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
 import { useHentUtbetalingListe } from '../../hooks/useHentUtbetalingListe';
 import { BehandlingStatus } from '../../types/BehandlingTypes';
 import { useContext, useState } from 'react';
 import { BehandlingContext } from '../layout/SaksbehandlingLayout';
+import { useHentMeldekortListe } from '../../hooks/useHentMeldekortListe';
 
 export const SaksbehandlingTabs = () => {
-  const router = useRouter();
   const aktivTab = router.route.split('/')[3];
 
-  const { behandlingId } = useContext(BehandlingContext);
+  const { behandlingId, meldekortId, utbetalingId } =
+    useContext(BehandlingContext);
   const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
 
   const tilBeslutter =
-    valgtBehandling?.behandlingTilstand ===
-    BehandlingStatus.KLAR_TIL_BESLUTNING;
+    valgtBehandling.behandlingTilstand === BehandlingStatus.KLAR_TIL_BESLUTNING;
   const iverksatt =
-    valgtBehandling?.behandlingTilstand === BehandlingStatus.INNVILGET;
+    valgtBehandling.behandlingTilstand === BehandlingStatus.INNVILGET;
 
   const { meldekortliste } = useHentMeldekortListe(iverksatt, behandlingId);
   const { utbetalingliste } = useHentUtbetalingListe(iverksatt, behandlingId);
@@ -38,11 +37,11 @@ export const SaksbehandlingTabs = () => {
             label={'Inngangsvilkår'}
             id="inngangsvilkår-tab"
             aria-controls="inngangsvilkår-panel"
-            onClick={() => {
+            onClick={() =>
               router.push(
                 `/behandling/${behandlingId}/inngangsvilkar/kravfrist`,
-              );
-            }}
+              )
+            }
           />
         )}
         <Tabs.Tab
@@ -50,9 +49,9 @@ export const SaksbehandlingTabs = () => {
           label={'Oppsummering'}
           id="oppsummering-tab"
           aria-controls="oppsummering-panel"
-          onClick={() => {
-            router.push(`/behandling/${behandlingId}/oppsummering`);
-          }}
+          onClick={() =>
+            router.push(`/behandling/${behandlingId}/oppsummering`)
+          }
         />
         {iverksatt && (
           <>
@@ -61,12 +60,11 @@ export const SaksbehandlingTabs = () => {
               label={'Meldekort'}
               id="meldekort-tab"
               aria-controls="meldekort-panel"
-              onClick={() => {
-                meldekortliste &&
-                  router.push(
-                    `/behandling/${behandlingId}/meldekort/${meldekortliste[0].id}`,
-                  );
-              }}
+              onClick={() =>
+                router.push(
+                  `/behandling/${behandlingId}/meldekort/${meldekortId}`,
+                )
+              }
             />
             <Tabs.Tab
               value={'utbetaling'}
@@ -75,7 +73,7 @@ export const SaksbehandlingTabs = () => {
               aria-controls="utbetaling-panel"
               onClick={() => {
                 router.push(
-                  `/behandling/${behandlingId}/utbetaling/${utbetalingliste[0].id}`,
+                  `/behandling/${behandlingId}/utbetaling/${utbetalingId}`,
                 );
               }}
             />
