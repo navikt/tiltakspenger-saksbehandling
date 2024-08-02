@@ -3,6 +3,7 @@ import { VStack } from '@navikt/ds-react';
 import VilkårKort from './VilkårKort';
 import VilkårHeader from './VilkårHeader';
 import { BehandlingContext } from '../layout/SaksbehandlingLayout';
+import Varsel from '../varsel/Varsel';
 
 const VilkårsvurderingAvStønadsdager = () => {
   const { behandlingId } = useContext(BehandlingContext);
@@ -17,6 +18,7 @@ const VilkårsvurderingAvStønadsdager = () => {
           'https://lovdata.no/dokument/SF/forskrift/2013-11-04-1286'
         }
       />
+      <Varsel variant="warning" melding={`Mangler data på stønadsdager`} />
       {/*
       <VilkårKort
         saksopplysningsperiode={}

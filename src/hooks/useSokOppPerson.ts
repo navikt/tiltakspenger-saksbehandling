@@ -5,7 +5,11 @@ import { SøkerIdent, BehandlingIdResponse } from '../types/Søker';
 
 function useSokOppPerson(navigateToSoker: boolean = true) {
   const router = useRouter();
-  const { trigger, isMutating: isSokerMutating } = useSWRMutation<
+  const {
+    trigger,
+    isMutating: isSokerMutating,
+    error,
+  } = useSWRMutation<
     BehandlingIdResponse,
     FetcherError,
     '/api/soker',
@@ -14,7 +18,7 @@ function useSokOppPerson(navigateToSoker: boolean = true) {
     onSuccess: (data) => navigateToSoker && router.push(`/saker/${data.id}`),
   });
 
-  return { trigger, isSokerMutating };
+  return { trigger, isSokerMutating, error };
 }
 
 export default useSokOppPerson;

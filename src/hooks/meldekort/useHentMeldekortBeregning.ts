@@ -11,6 +11,10 @@ export function useHentMeldekortBeregning(meldekortId?: string) {
   } = useSWR<MeldekortBeregningDTO>(
     meldekortId && `/api/meldekort/hentBeregning/${meldekortId}`,
     fetcher,
+    {
+      shouldRetryOnError: false,
+      revalidateOnFocus: false,
+    },
   );
 
   return { meldekortBeregning, mutate, isLoading, error };

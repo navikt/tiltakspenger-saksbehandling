@@ -3,10 +3,19 @@ import { MeldekortStatus } from '../../../types/MeldekortTypes';
 import { velgIkon } from '../meldekort-side/MeldekortUke';
 import router from 'next/router';
 import { useHentMeldekortBeregning } from '../../../hooks/meldekort/useHentMeldekortBeregning';
+import Varsel from '../../varsel/Varsel';
 
 export const MeldekortBeregningsvisning = () => {
   const meldekortId = router.query.meldekortId as string;
-  const { meldekortBeregning } = useHentMeldekortBeregning(meldekortId);
+  const { meldekortBeregning, error } = useHentMeldekortBeregning(meldekortId);
+
+  if (error)
+    return (
+      <Varsel
+        variant="error"
+        melding={`Kunne ikke beregne meldekort (${error.status} ${error.info})`}
+      />
+    );
 
   return (
     <Table>

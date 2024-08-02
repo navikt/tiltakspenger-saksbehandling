@@ -11,15 +11,22 @@ import VilkårsvurderingTable from './VilkårsvurderingTable';
 import { BehandlingStatus } from '../../types/BehandlingTypes';
 import { finnUtfallsperiodetekst } from '../../utils/tekstformateringUtils';
 import { BehandlingContext } from '../layout/SaksbehandlingLayout';
+import Varsel from '../varsel/Varsel';
 
 const Oppsummering = () => {
   const { behandlingId } = useContext(BehandlingContext);
-  const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
+  const { valgtBehandling, isLoading, error } = useHentBehandling(behandlingId);
   const modalRef = useRef(null);
 
   if (isLoading || !valgtBehandling) {
     return <Loader />;
-  }
+  } else if (error)
+    return (
+      <Varsel
+        variant="error"
+        melding={`Kunne ikke hente oppsummering (${error.status} ${error.info})`}
+      />
+    );
 
   const returBegrunnelse = valgtBehandling.endringslogg.findLast(
     (endring) => endring.type === 'Sendt i retur',
@@ -32,12 +39,16 @@ const Oppsummering = () => {
   return (
     <VStack gap="6" className={styles.wrapper}>
       <Heading size="medium">Oppsummering</Heading>
+      {/*
+      // Benny: Tar inn denne igjen når vi har fikset utfallsperiodene i backend
+      
       <IkonMedTekst
         iconRenderer={() => (
           <UtfallIkon utfall={valgtBehandling.samletUtfall} />
         )}
         text={finnUtfallsperiodetekst(valgtBehandling.samletUtfall)}
       />
+      */}
       {visBegrunnelse && (
         <Alert size="small" role="status" variant="warning">
           {`Beslutter har sendt behandlingen i retur med begrunnelsen: "${

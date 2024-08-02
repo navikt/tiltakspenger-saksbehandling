@@ -15,6 +15,7 @@ import styles from './Vilkår.module.css';
 import { useContext } from 'react';
 import { BehandlingContext } from '../layout/SaksbehandlingLayout';
 import { useLagreLivsoppholdSaksopplysning } from '../../hooks/vilkår/useLagreLivsoppholdSaksopplysning';
+import Varsel from '../varsel/Varsel';
 
 export interface SkjemaFelter {
   harAndreYtelser: boolean;
@@ -22,7 +23,7 @@ export interface SkjemaFelter {
 
 export const AndreYtelser = () => {
   const { behandlingId } = useContext(BehandlingContext);
-  const { livsopphold, isLoading } = useHentLivsopphold(behandlingId);
+  const { livsopphold, isLoading, error } = useHentLivsopphold(behandlingId);
   const { onLagreLivsopphold, isLivsoppholdMutating } =
     useLagreLivsoppholdSaksopplysning(behandlingId);
 
@@ -37,7 +38,13 @@ export const AndreYtelser = () => {
 
   if (isLoading || !livsopphold) {
     return <Loader />;
-  }
+  } else if (error)
+    return (
+      <Varsel
+        variant="error"
+        melding={`Kunne ikke hente livsoppholdvilkår (${error.status} ${error.info})`}
+      />
+    );
 
   const håndterLagreLivsoppholdSaksopplysning = (harYtelser: boolean) => {
     if (harYtelser) return;

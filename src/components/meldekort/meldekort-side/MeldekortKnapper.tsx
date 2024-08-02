@@ -3,6 +3,7 @@ import { Button, HStack } from '@navikt/ds-react';
 import { useContext } from 'react';
 import { useGodkjennMeldekort } from '../../../hooks/meldekort/useGodkjennMeldekort';
 import { SaksbehandlerContext } from '../../../pages/_app';
+import Varsel from '../../varsel/Varsel';
 
 interface MeldekortKnapperProps {
   håndterEndreMeldekort: () => void;
@@ -14,11 +15,17 @@ export const MeldekortKnapper = ({
   meldekortId,
 }: MeldekortKnapperProps) => {
   const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
-  const { onGodkjennMeldekort, isMeldekortMutating } =
+  const { onGodkjennMeldekort, isMeldekortMutating, error } =
     useGodkjennMeldekort(meldekortId);
 
   return (
     <HStack gap="3">
+      {error && (
+        <Varsel
+          variant="error"
+          melding={`Kunne ikke godkjenne meldekortet (${error.status} ${error.info})`}
+        />
+      )}
       <Button
         icon={<PencilWritingIcon />}
         variant="tertiary"

@@ -15,11 +15,14 @@ export async function mutateMeldekortdag<R>(
 }
 
 export function useOppdaterMeldekortdag() {
-  const { trigger: onOppdaterDag, isMutating: isMeldekortdagMutating } =
-    useSWRMutation<any, FetcherError, any, MeldekortDagDTO>(
-      `/api/meldekort/oppdaterDag`,
-      mutateMeldekortdag,
-    );
+  const {
+    trigger: onOppdaterDag,
+    isMutating: isMeldekortdagMutating,
+    error,
+  } = useSWRMutation<any, FetcherError, any, MeldekortDagDTO>(
+    `/api/meldekort/oppdaterDag`,
+    mutateMeldekortdag,
+  );
 
-  return { onOppdaterDag, isMeldekortdagMutating };
+  return { onOppdaterDag, isMeldekortdagMutating, error };
 }

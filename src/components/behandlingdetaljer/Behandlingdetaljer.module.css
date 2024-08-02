@@ -2,4 +2,5 @@
     border-left: 1px solid #cfcfcf;
     border-right: 1px solid #cfcfcf;
     padding: 1em;
+    min-width: 320px;
 }

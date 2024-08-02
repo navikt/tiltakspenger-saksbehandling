@@ -15,11 +15,14 @@ export async function mutateMeldekort<R>(
 }
 
 export function useGodkjennMeldekort(meldekortId: string) {
-  const { trigger: onGodkjennMeldekort, isMutating: isMeldekortMutating } =
-    useSWRMutation<any, FetcherError, any, GodkjennDTO>(
-      `/api/meldekort/godkjenn/${meldekortId}`,
-      mutateMeldekort,
-    );
+  const {
+    trigger: onGodkjennMeldekort,
+    isMutating: isMeldekortMutating,
+    error,
+  } = useSWRMutation<any, FetcherError, any, GodkjennDTO>(
+    `/api/meldekort/godkjenn/${meldekortId}`,
+    mutateMeldekort,
+  );
 
-  return { onGodkjennMeldekort, isMeldekortMutating };
+  return { onGodkjennMeldekort, isMeldekortMutating, error };
 }

@@ -6,14 +6,21 @@ import VilkårKort from './VilkårKort';
 import { formaterDatotekst } from '../../utils/date';
 import { BehandlingContext } from '../layout/SaksbehandlingLayout';
 import { useHentKravfrist } from '../../hooks/vilkår/useHentKravfrist';
+import Varsel from '../varsel/Varsel';
 
 const FristForFramsettingAvKrav = () => {
   const { behandlingId } = useContext(BehandlingContext);
-  const { kravfristVilkår, isLoading } = useHentKravfrist(behandlingId);
+  const { kravfristVilkår, isLoading, error } = useHentKravfrist(behandlingId);
 
   if (isLoading || !kravfristVilkår) {
     return <Loader />;
-  }
+  } else if (error)
+    return (
+      <Varsel
+        variant="error"
+        melding={`Kunne ikke hente kravfristvilkår (${error.status} ${error.info})`}
+      />
+    );
 
   return (
     <VStack gap="4">

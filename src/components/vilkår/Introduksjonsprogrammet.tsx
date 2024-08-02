@@ -6,14 +6,23 @@ import { Deltagelse } from '../../types/KvpTypes';
 import VilkårKort from './VilkårKort';
 import { useContext } from 'react';
 import { BehandlingContext } from '../layout/SaksbehandlingLayout';
+import Varsel from '../varsel/Varsel';
 
 const Kvalifiseringsprogrammet = () => {
   const { behandlingId } = useContext(BehandlingContext);
-  const { intro, isLoading } = useHentIntroduksjonsprogrammet(behandlingId);
+  const { intro, isLoading, error } =
+    useHentIntroduksjonsprogrammet(behandlingId);
 
   if (isLoading || !intro) {
     return <Loader />;
-  }
+  } else if (error)
+    return (
+      <Varsel
+        variant="error"
+        melding={`Kunne ikke introduksjonsprogramvilkår (${error.status} ${error.info})`}
+      />
+    );
+
   const deltagelse =
     intro.avklartSaksopplysning.periodeMedDeltagelse.deltagelse;
   const saksopplysningsPeriode =
