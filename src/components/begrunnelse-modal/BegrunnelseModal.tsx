@@ -1,8 +1,8 @@
 import { Button, Modal, Select } from '@navikt/ds-react';
 import { RefObject, useContext, useState } from 'react';
 import styles from './BegrunnelseModal.module.css';
-import { useRouter } from 'next/router';
 import { BehandlingContext } from '../layout/SaksbehandlingLayout';
+import { useSendTilbakeBehandling } from '../../hooks/useSendTilbakeBehandling';
 
 interface BegrunnelseModalProps {
   modalRef: RefObject<HTMLDialogElement>;
@@ -18,10 +18,11 @@ const begrunnelseAlternativer = [
 ];
 
 const BegrunnelseModal = ({ modalRef }: BegrunnelseModalProps) => {
-  const router = useRouter();
   const { behandlingId } = useContext(BehandlingContext);
   const [begrunnelse, setBegrunnelse] = useState<string>('');
   const [error, setError] = useState<string>('');
+  const { sendTilbakeBehandling, senderTilbake, sendTilbakeBehandlingError } =
+    useSendTilbakeBehandling(behandlingId);
 
   const lukkModal = () => {
     modalRef.current?.close();
@@ -32,16 +33,12 @@ const BegrunnelseModal = ({ modalRef }: BegrunnelseModalProps) => {
       setError('Du må velge en begrunnelse');
       return;
     }
-    fetch(`/api/behandling/sendtilbake/${behandlingId}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ begrunnelse: begrunnelse }),
-    }).then(() => {
-      router.push('/');
-      lukkModal();
-    });
+    if (sendTilbakeBehandlingError) {
+      setError(
+        `Kunne ikke sende tilbake behandlingen (${sendTilbakeBehandlingError.status} ${sendTilbakeBehandlingError.info})`,
+      );
+    }
+    sendTilbakeBehandling();
   };
 
   return (
@@ -59,11 +56,6 @@ const BegrunnelseModal = ({ modalRef }: BegrunnelseModalProps) => {
         <Select
           label="Velg begrunnelse for retur av vedtaksforslag"
           onChange={(e) => {
-            if (e.target.value === '') {
-              setError('Du må velge en begrunnelse');
-            } else {
-              setError('');
-            }
             setBegrunnelse(e.target.value);
           }}
           value={begrunnelse}
@@ -84,6 +76,7 @@ const BegrunnelseModal = ({ modalRef }: BegrunnelseModalProps) => {
       <Modal.Footer>
         <div className={styles.footer}>
           <Button
+            loading={senderTilbake}
             onClick={() => håndterSendTilbakeMedBegrunnelse()}
             className={styles.knapp}
           >

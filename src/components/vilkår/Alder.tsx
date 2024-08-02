@@ -6,14 +6,21 @@ import { useHentAlder } from '../../hooks/vilkår/useHentAlder';
 import { formaterDatotekst } from '../../utils/date';
 import { useContext } from 'react';
 import { BehandlingContext } from '../layout/SaksbehandlingLayout';
+import Varsel from '../varsel/Varsel';
 
 const Alder = () => {
   const { behandlingId } = useContext(BehandlingContext);
-  const { alderVilkår, isLoading } = useHentAlder(behandlingId);
+  const { alderVilkår, isLoading, error } = useHentAlder(behandlingId);
 
   if (isLoading || !alderVilkår) {
     return <Loader />;
-  }
+  } else if (error)
+    return (
+      <Varsel
+        variant="error"
+        melding={`Kunne ikke hente aldervilkår (${error.status} ${error.info})`}
+      />
+    );
 
   return (
     <VStack gap="4">

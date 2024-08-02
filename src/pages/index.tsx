@@ -11,17 +11,25 @@ import { useOpprettBehandling } from '../hooks/useOpprettBehandling';
 import { periodeTilFormatertDatotekst } from '../utils/date';
 import { finnStatusTekst } from '../utils/tekstformateringUtils';
 import { useTaBehandling } from '../hooks/useTaBehandling';
+import Varsel from '../components/varsel/Varsel';
 
 const Benken: NextPage = () => {
   const router = useRouter();
   const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
-  const { SøknaderOgBehandlinger, isLoading } = useHentSøknaderOgBehandlinger();
+  const { SøknaderOgBehandlinger, isLoading, error } =
+    useHentSøknaderOgBehandlinger();
   const { isSøknadMutating, onOpprettBehandling } = useOpprettBehandling();
   const { isBehandlingMutating, onTaBehandling } = useTaBehandling();
 
   if (isLoading || !SøknaderOgBehandlinger) {
     return <Loader />;
-  }
+  } else if (error)
+    return (
+      <Varsel
+        variant="error"
+        melding={`Kunne ikke beregne meldekort (${error.status} ${error.info})`}
+      />
+    );
 
   const knappForBehandlingType = (behandling: BehandlingForBenk) => {
     if (behandling.typeBehandling === TypeBehandling.SØKNAD)

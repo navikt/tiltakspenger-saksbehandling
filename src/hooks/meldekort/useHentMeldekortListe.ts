@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import { fetcher } from '../../utils/http';
+import { fetcher, FetcherError } from '../../utils/http';
 import { MeldekortUtenDager } from '../../types/MeldekortTypes';
 
 export function useHentMeldekortListe(
@@ -10,7 +10,7 @@ export function useHentMeldekortListe(
     data: meldekortliste,
     isLoading,
     error,
-  } = useSWR<MeldekortUtenDager[]>(
+  } = useSWR<MeldekortUtenDager[], FetcherError>(
     () =>
       iverksatt ? `/api/meldekort/hentAlleForBehandling/${behandlingId}` : null,
     fetcher,

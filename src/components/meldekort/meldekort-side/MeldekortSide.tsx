@@ -1,24 +1,28 @@
 import styles from './Meldekort.module.css';
 import { MeldekortUke } from './MeldekortUke';
 import { MeldekortBeregningsvisning } from '../meldekort-beregning-visning/MeldekortBeregningsVisning';
-import { BodyLong, HStack, Loader, VStack } from '@navikt/ds-react';
+import { Alert, HStack, Loader, VStack } from '@navikt/ds-react';
 import { useState } from 'react';
 import { MeldekortKnapper } from './MeldekortKnapper';
 import router from 'next/router';
 import { ukenummerFraDate } from '../../../utils/date';
 import { useHentMeldekort } from '../../../hooks/meldekort/useHentMeldekort';
+import Varsel from '../../varsel/Varsel';
 
 export const MeldekortSide = () => {
   const [disableUkeVisning, setDisableUkeVisning] = useState<boolean>(true);
   const meldekortId = router.query.meldekortId as string;
-  const { meldekort, isLoading } = useHentMeldekort(meldekortId);
+  const { meldekort, isLoading, error } = useHentMeldekort(meldekortId);
 
-  if (isLoading || !meldekort) {
+  if (isLoading) {
     return <Loader />;
-  } else if (!meldekort) {
+  } else if (error) {
     return (
-      <VStack className={styles.ukevisning}>
-        <BodyLong>Meldekort har ikke blitt opprettet enda</BodyLong>
+      <VStack className={styles.wrapper}>
+        <Varsel
+          variant="error"
+          melding={`Kunne ikke hente meldekort (${error.status} ${error.info})`}
+        />
       </VStack>
     );
   }
@@ -28,7 +32,11 @@ export const MeldekortSide = () => {
 
   return (
     <VStack gap="5" className={styles.wrapper}>
-      <HStack className={disableUkeVisning ? styles.disableUkevisning : ''}>
+      <HStack
+        gap="9"
+        wrap={false}
+        className={disableUkeVisning ? styles.disableUkevisning : ''}
+      >
         <MeldekortUke
           meldekortUke={uke1}
           ukesnummer={ukenummerFraDate(uke1[0].dato)}

@@ -2,7 +2,6 @@ import { SaksbehandlingLayout } from '../../../../components/layout/Saksbehandli
 import { ReactElement } from 'react';
 import { NextPageWithLayout } from '../../../_app';
 import { UtbetalingMeny } from '../../../../components/utbetaling/utbetaling-meny/UtbetalingMeny';
-import { UtbetalingDetaljer } from '../../../../components/utbetaling/utbetaling-detaljer/UtbetalingDetaljer';
 import { UtbetalingSide } from '../../../../components/utbetaling/utbetaling-side/UtbetalingSide';
 import { pageWithAuthentication } from '../../../../auth/pageWithAuthentication';
 import { HStack } from '@navikt/ds-react';
@@ -19,7 +18,6 @@ const Utbetaling: NextPageWithLayout = () => (
   >
     <UtbetalingMeny />
     <UtbetalingSide />
-    <UtbetalingDetaljer />
   </HStack>
 );
 

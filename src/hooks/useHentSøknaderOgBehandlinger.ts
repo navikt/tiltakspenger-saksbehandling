@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import { fetcher } from '../utils/http';
+import { fetcher, FetcherError } from '../utils/http';
 import { BehandlingForBenk } from '../types/BehandlingTypes';
 
 export function useHentSøknaderOgBehandlinger() {
@@ -8,7 +8,10 @@ export function useHentSøknaderOgBehandlinger() {
     isLoading,
     error,
     mutate,
-  } = useSWR<BehandlingForBenk[]>(`/api/behandlinger`, fetcher);
+  } = useSWR<BehandlingForBenk[], FetcherError>(`/api/behandlinger`, fetcher, {
+    shouldRetryOnError: false,
+    revalidateOnFocus: false,
+  });
 
   return { SøknaderOgBehandlinger, isLoading, error, mutate };
 }

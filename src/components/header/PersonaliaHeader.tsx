@@ -5,27 +5,19 @@ import styles from './PersonaliaHeader.module.css';
 import router from 'next/router';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
 import { BehandlingContext } from '../layout/SaksbehandlingLayout';
+import { useTaAvBehandling } from '../../hooks/useTaAvBehandling';
 
 const PersonaliaHeader = () => {
   const { behandlingId } = useContext(BehandlingContext);
   const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
+  const { taAvBehandling, tarAvBehandling, taAvBehandlingError } =
+    useTaAvBehandling(behandlingId);
 
   if (isLoading || !valgtBehandling) {
     return <Loader />;
   }
   const { fornavn, etternavn, ident, skjerming, strengtFortrolig, fortrolig } =
     valgtBehandling.personopplysninger;
-
-  const håndterAvbrytBehandling = () => {
-    fetch(`/api/behandling/avbrytbehandling/${valgtBehandling.behandlingId}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }).then(() => {
-      router.push('/');
-    });
-  };
 
   return (
     <div className={styles.personaliaHeader}>
@@ -54,10 +46,11 @@ const PersonaliaHeader = () => {
       <Button
         type="submit"
         size="small"
-        onClick={() => håndterAvbrytBehandling()}
+        loading={tarAvBehandling}
+        onClick={() => taAvBehandling()}
         className={styles.behandlingTag}
       >
-        Avbryt behandling{' '}
+        Ta av behandling
       </Button>
       <Tag variant="alt2-filled" size="medium" className={styles.behandlingTag}>
         Førstegangsbehandling

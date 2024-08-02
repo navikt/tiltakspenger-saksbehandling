@@ -5,15 +5,22 @@ import UtfallstekstMedIkon from './UtfallstekstMedIkon';
 import { useHentInstitusjonsopphold } from '../../hooks/vilkår/useHentInstitusjonsopphold';
 import { useContext } from 'react';
 import { BehandlingContext } from '../layout/SaksbehandlingLayout';
+import Varsel from '../varsel/Varsel';
 
 const Institusjonsopphold = () => {
   const { behandlingId } = useContext(BehandlingContext);
-  const { institusjonsopphold, isLoading } =
+  const { institusjonsopphold, isLoading, error } =
     useHentInstitusjonsopphold(behandlingId);
 
   if (isLoading || !institusjonsopphold) {
     return <Loader />;
-  }
+  } else if (error)
+    return (
+      <Varsel
+        variant="error"
+        melding={`Kunne ikke hente institusjonsoppholdvilkår (${error.status} ${error.info})`}
+      />
+    );
 
   return (
     <VStack gap="4">

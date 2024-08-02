@@ -19,7 +19,7 @@ export const fetcher = async (url: string) => {
 
 export async function mutateBehandling<R>(
   url,
-  { arg }: { arg: { id: string } },
+  { arg }: { arg: { id: string } | { begrunnelse: string } | null },
 ): Promise<R> {
   const res = await fetch(url, {
     method: 'POST',

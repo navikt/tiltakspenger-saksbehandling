@@ -1,20 +1,22 @@
 import useSWRMutation from 'swr/mutation';
-import { useRouter } from 'next/router';
+import router from 'next/router';
 import { FetcherError, mutateBehandling } from '../utils/http';
 import { BehandlingIdResponse } from '../types/Søker';
 
 export function useTaBehandling() {
-  const router = useRouter();
-  const { trigger: onTaBehandling, isMutating: isBehandlingMutating } =
-    useSWRMutation<
-      BehandlingIdResponse,
-      FetcherError,
-      '/api/behandling/tabehandling',
-      { id: string }
-    >(`/api/behandling/tabehandling`, mutateBehandling, {
-      onSuccess: (data) =>
-        router.push(`/behandling/${data.id}/inngangsvilkar/kravfrist`),
-    });
+  const {
+    trigger: onTaBehandling,
+    isMutating: isBehandlingMutating,
+    error,
+  } = useSWRMutation<
+    BehandlingIdResponse,
+    FetcherError,
+    '/api/behandling/tabehandling',
+    { id: string }
+  >(`/api/behandling/tabehandling`, mutateBehandling, {
+    onSuccess: (data) =>
+      router.push(`/behandling/${data.id}/inngangsvilkar/kravfrist`),
+  });
 
-  return { onTaBehandling, isBehandlingMutating };
+  return { onTaBehandling, isBehandlingMutating, error };
 }

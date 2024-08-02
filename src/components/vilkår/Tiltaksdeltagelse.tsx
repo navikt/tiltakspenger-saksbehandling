@@ -5,14 +5,23 @@ import VilkårKort from './VilkårKort';
 import UtfallstekstMedIkon from './UtfallstekstMedIkon';
 import { BehandlingContext } from '../layout/SaksbehandlingLayout';
 import { useHentTiltakDeltagelse } from '../../hooks/vilkår/useHentTiltaksdeltagelse';
+import Varsel from '../varsel/Varsel';
 
 const VilkårsvurderingAvTiltaksdeltagelse = () => {
   const { behandlingId } = useContext(BehandlingContext);
-  const { tiltakDeltagelse, isLoading } = useHentTiltakDeltagelse(behandlingId);
+  const { tiltakDeltagelse, isLoading, error } =
+    useHentTiltakDeltagelse(behandlingId);
 
   if (isLoading || !tiltakDeltagelse) {
     return <Loader />;
-  }
+  } else if (error)
+    return (
+      <Varsel
+        variant="error"
+        melding={`Kunne ikke introduksjonsprogramvilkår (${error.status} ${error.info})`}
+      />
+    );
+
   const { status, tiltakNavn, deltagelsePeriode, kilde } =
     tiltakDeltagelse.registerSaksopplysning;
 

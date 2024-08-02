@@ -1,32 +1,26 @@
-import {
-  BodyLong,
-  BodyShort,
-  Detail,
-  HGrid,
-  Loader,
-  VStack,
-} from '@navikt/ds-react';
+import { BodyShort, Detail, HGrid, Loader, VStack } from '@navikt/ds-react';
 import React from 'react';
 import { useRouter } from 'next/router';
 import { useHentUtbetalingVedtak } from '../../../hooks/useHentUtbetalingVedtak';
 import styles from './Utbetaling.module.css';
 import { UtbetalingUkeDag } from './UtbetalingUkeDag';
+import Varsel from '../../varsel/Varsel';
 
 export const UtbetalingSide = () => {
   const router = useRouter();
   const utbetalingVedtakId = router.query.utbetalingId as string;
-  const { utbetalingVedtak, isLoading } =
+  const { utbetalingVedtak, isLoading, error } =
     useHentUtbetalingVedtak(utbetalingVedtakId);
 
   if (isLoading) {
     return <Loader />;
-  } else if (!utbetalingVedtak) {
+  } else if (error)
     return (
-      <VStack className={styles.utbetalingSide}>
-        <BodyLong>Ingen utbetalingsvedtak å vise</BodyLong>
-      </VStack>
+      <Varsel
+        variant="error"
+        melding={`Kunne ikke introduksjonsprogramvilkår (${error.status} ${error.info})`}
+      />
     );
-  }
 
   const uke1 = utbetalingVedtak.vedtakDager.slice(0, 7);
   const uke2 = utbetalingVedtak.vedtakDager.slice(7, 14);

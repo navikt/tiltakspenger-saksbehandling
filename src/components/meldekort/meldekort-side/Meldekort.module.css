@@ -1,5 +1,5 @@
 .wrapper {
-  padding: 1rem;
+  padding: 1.5rem;
   width: 100%;
   background-color: #F5F5F5;
 }
@@ -11,8 +11,6 @@
 
 .meldekortUke {
   width: 49%;
-  padding: 1em;
-  margin: 0 0.3rem;
 }
 
 .meldekortUkeDag {

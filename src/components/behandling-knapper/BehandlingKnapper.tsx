@@ -1,7 +1,5 @@
 import { Button, HStack, Loader } from '@navikt/ds-react';
-import useSWRMutation from 'swr/mutation';
 import { RefObject, useContext } from 'react';
-import { useSWRConfig } from 'swr';
 import { SaksbehandlerContext } from '../../pages/_app';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
 import {
@@ -9,46 +7,34 @@ import {
   kanSaksbehandleForBehandling,
 } from '../../utils/tilganger';
 import { BehandlingContext } from '../layout/SaksbehandlingLayout';
+import Varsel from '../varsel/Varsel';
+import { useGodkjennBehandling } from '../../hooks/useGodkjennBehandling';
+import { useSendTilBeslutter } from '../../hooks/useSendTilBeslutter';
 
 interface BehandlingKnapperProps {
   modalRef: RefObject<HTMLDialogElement>;
 }
 
 export const BehandlingKnapper = ({ modalRef }: BehandlingKnapperProps) => {
-  const mutator = useSWRConfig().mutate;
   const { behandlingId } = useContext(BehandlingContext);
   const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
   const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
+  const { godkjennBehandling, godkjennerBehandling, godkjennBehandlingError } =
+    useGodkjennBehandling(behandlingId);
+  const { sendTilBeslutter, senderTilBeslutter, sendTilBeslutterError } =
+    useSendTilBeslutter(behandlingId);
 
   const kanBeslutte = kanBeslutteForBehandling(
-    valgtBehandling.beslutter,
-    innloggetSaksbehandler,
     valgtBehandling.behandlingTilstand,
+    innloggetSaksbehandler,
+    valgtBehandling.beslutter,
   );
 
   const kanSaksbehandle = kanSaksbehandleForBehandling(
-    valgtBehandling.saksbehandler,
-    innloggetSaksbehandler,
     valgtBehandling.behandlingTilstand,
+    innloggetSaksbehandler,
+    valgtBehandling.saksbehandler,
   );
-
-  async function oppdaterBehandling(url: string, { arg }: { arg?: string }) {
-    await fetch(url, {
-      method: 'POST',
-    }).then(() => mutator(`/api/behandling/${behandlingId}`));
-  }
-
-  const { trigger: sendTilBeslutter, isMutating: oppdatererBeslutter } =
-    useSWRMutation(
-      `/api/behandling/beslutter/${behandlingId}`,
-      oppdaterBehandling,
-    );
-
-  const { trigger: godkjennBehandling, isMutating: godkjennerBehandling } =
-    useSWRMutation(
-      `/api/behandling/godkjenn/${behandlingId}`,
-      oppdaterBehandling,
-    );
 
   if (isLoading || !valgtBehandling) {
     return <Loader />;
@@ -59,6 +45,18 @@ export const BehandlingKnapper = ({ modalRef }: BehandlingKnapperProps) => {
 
   return (
     <>
+      {godkjennBehandlingError ? (
+        <Varsel
+          variant="error"
+          melding={`Kunne ikke godkjenne vedtaket (${godkjennBehandlingError.status} ${godkjennBehandlingError.info})`}
+        />
+      ) : null}
+      {sendTilBeslutterError ? (
+        <Varsel
+          variant="error"
+          melding={`Kunne ikke sende til beslutter (${sendTilBeslutterError.status} ${sendTilBeslutterError.info})`}
+        />
+      ) : null}
       <HStack justify="start" gap="3" align="end">
         {kanBeslutte && (
           <Button
@@ -86,7 +84,7 @@ export const BehandlingKnapper = ({ modalRef }: BehandlingKnapperProps) => {
           <Button
             type="submit"
             size="small"
-            loading={oppdatererBeslutter}
+            loading={senderTilBeslutter}
             onClick={() => {
               sendTilBeslutter();
             }}

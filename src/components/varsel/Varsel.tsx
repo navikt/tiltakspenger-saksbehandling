@@ -1,4 +1,5 @@
 import { Alert } from '@navikt/ds-react';
+import { useState } from 'react';
 import styles from './Varsel.module.css';
 
 interface VarselProps {
@@ -7,13 +8,19 @@ interface VarselProps {
 }
 
 const Varsel = ({ variant, melding }: VarselProps) => {
-  return (
+  const [vis, settVis] = useState<boolean>(true);
+  return vis ? (
     <div className={styles.varsel}>
-      <Alert size="small" role="status" variant={variant}>
+      <Alert
+        closeButton
+        role="status"
+        variant={variant}
+        onClick={() => settVis(false)}
+      >
         {melding}
       </Alert>
     </div>
-  );
+  ) : null;
 };
 
 export default Varsel;

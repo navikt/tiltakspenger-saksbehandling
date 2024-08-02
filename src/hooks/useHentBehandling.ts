@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import { fetcher } from '../utils/http';
+import { fetcher, FetcherError } from '../utils/http';
 import { Behandling } from '../types/BehandlingTypes';
 
 export function useHentBehandling(behandlingId: string) {
@@ -7,6 +7,13 @@ export function useHentBehandling(behandlingId: string) {
     data: valgtBehandling,
     isLoading,
     error,
-  } = useSWR<Behandling>(`/api/behandling/${behandlingId}`, fetcher);
+  } = useSWR<Behandling, FetcherError>(
+    `/api/behandling/${behandlingId}`,
+    fetcher,
+    {
+      shouldRetryOnError: false,
+      revalidateOnFocus: false,
+    },
+  );
   return { valgtBehandling, isLoading, error };
 }
