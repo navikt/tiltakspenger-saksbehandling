@@ -1,6 +1,21 @@
 import useSWR, { mutate } from 'swr';
-import { fetcher } from '../../utils/http';
-import { LivsoppholdVilkår } from '../../types/LivsoppholdTypes';
+import { fetcher, throwErrorIfFatal } from '../../utils/http';
+import {
+  LivsoppholdSaksopplysningBody,
+  LivsoppholdVilkår,
+} from '../../types/LivsoppholdTypes';
+
+export async function mutateLivsopphold<R>(
+  url,
+  { arg }: { arg: LivsoppholdSaksopplysningBody },
+): Promise<R> {
+  const res = await fetch(url, {
+    method: 'POST',
+    body: JSON.stringify(arg),
+  });
+  await throwErrorIfFatal(res);
+  return res.json();
+}
 
 export function useHentLivsopphold(behandlingId: string) {
   const {

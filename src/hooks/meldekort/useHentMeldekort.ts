@@ -1,6 +1,6 @@
 import useSWR from 'swr';
-import { fetcher } from '../utils/http';
-import { Meldekort } from '../types/MeldekortTypes';
+import { Meldekort } from '../../types/MeldekortTypes';
+import { fetcher } from '../../utils/http';
 
 export function useHentMeldekort(meldekortId?: string) {
   const {
@@ -10,7 +10,7 @@ export function useHentMeldekort(meldekortId?: string) {
     error,
   } = useSWR<Meldekort>(
     meldekortId && `/api/meldekort/hentMeldekort/${meldekortId}`,
-    fetcher
+    fetcher,
   );
 
   return { meldekort, isLoading, error, mutate };

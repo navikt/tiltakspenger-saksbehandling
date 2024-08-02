@@ -1,16 +1,15 @@
 import { BodyShort, Table } from '@navikt/ds-react';
 import { MeldekortStatus } from '../../../types/MeldekortTypes';
 import { velgIkon } from '../meldekort-side/MeldekortUke';
-import { useHentMeldekortBeregning } from '../../../hooks/useHentMeldekortBeregning';
 import router from 'next/router';
-import styles from './MeldekortBeregningsvisning.module.css';
+import { useHentMeldekortBeregning } from '../../../hooks/meldekort/useHentMeldekortBeregning';
 
 export const MeldekortBeregningsvisning = () => {
   const meldekortId = router.query.meldekortId as string;
   const { meldekortBeregning } = useHentMeldekortBeregning(meldekortId);
 
   return (
-    <Table className={styles.table}>
+    <Table>
       <Table.Header>
         <Table.Row>
           <Table.ColumnHeader style={{ width: '50%' }} scope="col">

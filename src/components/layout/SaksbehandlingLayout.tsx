@@ -5,8 +5,8 @@ import { SaksbehandlingTabs } from '../saksbehandling-tabs/SaksbehandlingTabs';
 import { Loader } from '@navikt/ds-react';
 import { createContext, useEffect, useState } from 'react';
 import { BehandlingStatus } from '../../types/BehandlingTypes';
-import { useHentMeldekortListe } from '../../hooks/useHentMeldekortListe';
 import { useHentUtbetalingListe } from '../../hooks/useHentUtbetalingListe';
+import { useHentMeldekortListe } from '../../hooks/meldekort/useHentMeldekortListe';
 
 interface BehandlingContextType {
   behandlingId: string;

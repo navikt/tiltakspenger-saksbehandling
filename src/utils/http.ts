@@ -1,8 +1,6 @@
 import { logger } from '@navikt/next-logger';
 import { NextApiRequest } from 'next';
-import { BehandlingIdResponse, SøkerIdent } from '../types/Søker';
-import { Behandling } from '../types/BehandlingTypes';
-import { LivsoppholdSaksopplysningBody } from '../types/LivsoppholdTypes';
+import { SøkerIdent } from '../types/Søker';
 
 const vedtakBackendUrl = process.env.TILTAKSPENGER_VEDTAK_URL || '';
 const meldekortBackendUrl = process.env.TILTAKSPENGER_MELDEKORT_URL || '';
@@ -22,18 +20,6 @@ export const fetcher = async (url: string) => {
 export async function mutateBehandling<R>(
   url,
   { arg }: { arg: { id: string } },
-): Promise<R> {
-  const res = await fetch(url, {
-    method: 'POST',
-    body: JSON.stringify(arg),
-  });
-  await throwErrorIfFatal(res);
-  return res.json();
-}
-
-export async function mutateLivsopphold<R>(
-  url,
-  { arg }: { arg: LivsoppholdSaksopplysningBody },
 ): Promise<R> {
   const res = await fetch(url, {
     method: 'POST',

@@ -34,9 +34,12 @@ export type Tiltak = {
   antDagerIUken: number;
 };
 
+export type GodkjennDTO = {
+  saksbehandler: string;
+};
+
 export type MeldekortDagDTO = {
   meldekortId: string;
-  tiltakId: string;
   dato: Date;
   status: MeldekortStatus;
 };

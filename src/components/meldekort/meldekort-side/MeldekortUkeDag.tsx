@@ -10,7 +10,8 @@ import IkonMedTekst from '../../ikon-med-tekst/IkonMedTekst';
 import { velgIkon } from './MeldekortUke';
 import { useState } from 'react';
 import styles from './Meldekort.module.css';
-import { useHentMeldekortBeregning } from '../../../hooks/useHentMeldekortBeregning';
+import { useOppdaterMeldekortdag } from '../../../hooks/meldekort/useOppdaterMeldekortdag';
+import { useHentMeldekortBeregning } from '../../../hooks/meldekort/useHentMeldekortBeregning';
 
 interface MeldekortUkeDagProps {
   meldekortDag: MeldekortDag;
@@ -23,23 +24,18 @@ export const MeldekortUkeDag = ({
 }: MeldekortUkeDagProps) => {
   const [status, setStatus] = useState<MeldekortStatus>(meldekortDag.status);
   const { mutate } = useHentMeldekortBeregning(meldekortId);
+  const { onOppdaterDag } = useOppdaterMeldekortdag();
 
   const oppdaterMeldekortdag = (dagStatus: string) => {
     if (dagStatus === '') return;
     setStatus(dagStatus as MeldekortStatus);
-    fetch(`/api/meldekort/oppdaterDag`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        meldekortId: meldekortId,
-        dato: meldekortDag.dato,
-        status: dagStatus as MeldekortStatus,
-      }),
-    }).then(() => {
+
+    onOppdaterDag({
+      meldekortId: meldekortId,
+      dato: meldekortDag.dato,
+      status: dagStatus as MeldekortStatus,
+    }),
       mutate();
-    });
   };
 
   return (

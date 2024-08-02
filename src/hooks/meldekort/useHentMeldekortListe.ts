@@ -1,6 +1,6 @@
 import useSWR from 'swr';
-import { fetcher } from '../utils/http';
-import { MeldekortUtenDager } from '../types/MeldekortTypes';
+import { fetcher } from '../../utils/http';
+import { MeldekortUtenDager } from '../../types/MeldekortTypes';
 
 export function useHentMeldekortListe(
   iverksatt: boolean,

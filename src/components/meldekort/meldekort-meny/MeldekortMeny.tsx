@@ -1,19 +1,24 @@
-import { BodyShort, Link, VStack } from '@navikt/ds-react';
+import { BodyShort, Link, Loader, VStack } from '@navikt/ds-react';
 import NextLink from 'next/link';
 import React, { useContext } from 'react';
 import styles from './MeldekortMeny.module.css';
-import { useHentMeldekortListe } from '../../../hooks/useHentMeldekortListe';
 import {
   periodeTilFormatertDatotekst,
   meldekortUkeNummer,
 } from '../../../utils/date';
 import router from 'next/router';
 import { BehandlingContext } from '../../layout/SaksbehandlingLayout';
+import { useHentMeldekortListe } from '../../../hooks/meldekort/useHentMeldekortListe';
 
 export const MeldekortMeny = () => {
   const { behandlingId } = useContext(BehandlingContext);
   const aktivMeldekortId = router.query.meldekortId as string;
-  const { meldekortliste } = useHentMeldekortListe(true, behandlingId);
+  const { meldekortliste, isLoading } = useHentMeldekortListe(
+    true,
+    behandlingId,
+  );
+
+  if (isLoading || !meldekortliste) return <Loader />;
 
   return (
     <VStack className={styles.meldekortliste}>

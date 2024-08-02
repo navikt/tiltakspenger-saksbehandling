@@ -2,16 +2,14 @@ import styles from './Meldekort.module.css';
 import { MeldekortUke } from './MeldekortUke';
 import { MeldekortBeregningsvisning } from '../meldekort-beregning-visning/MeldekortBeregningsVisning';
 import { BodyLong, HStack, Loader, VStack } from '@navikt/ds-react';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { MeldekortKnapper } from './MeldekortKnapper';
 import router from 'next/router';
-import { useHentMeldekort } from '../../../hooks/useHentMeldekort';
 import { ukenummerFraDate } from '../../../utils/date';
-import { SaksbehandlerContext } from '../../../pages/_app';
+import { useHentMeldekort } from '../../../hooks/meldekort/useHentMeldekort';
 
 export const MeldekortSide = () => {
   const [disableUkeVisning, setDisableUkeVisning] = useState<boolean>(true);
-  const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
   const meldekortId = router.query.meldekortId as string;
   const { meldekort, isLoading } = useHentMeldekort(meldekortId);
 
@@ -27,17 +25,6 @@ export const MeldekortSide = () => {
 
   const uke1 = meldekort.meldekortDager.slice(0, 7);
   const uke2 = meldekort.meldekortDager.slice(7, 14);
-
-  const godkjennMeldekort = () => {
-    fetch(`/api/meldekort/godkjenn/${meldekortId}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ saksbehandler: innloggetSaksbehandler.navIdent }),
-    });
-    setDisableUkeVisning(true);
-  };
 
   return (
     <VStack gap="5" className={styles.wrapper}>
@@ -55,8 +42,8 @@ export const MeldekortSide = () => {
       </HStack>
       <MeldekortBeregningsvisning />
       <MeldekortKnapper
+        meldekortId={meldekortId}
         håndterEndreMeldekort={() => setDisableUkeVisning(!disableUkeVisning)}
-        håndterGodkjennMeldekort={godkjennMeldekort}
       />
     </VStack>
   );
