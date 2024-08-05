@@ -1,13 +1,10 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { VStack } from '@navikt/ds-react';
 import VilkårKort from './VilkårKort';
 import VilkårHeader from './VilkårHeader';
-import { BehandlingContext } from '../layout/SaksbehandlingLayout';
 import Varsel from '../varsel/Varsel';
 
-const VilkårsvurderingAvStønadsdager = () => {
-  const { behandlingId } = useContext(BehandlingContext);
-
+const Stønadsdager = () => {
   return (
     <VStack gap="4">
       <VilkårHeader
@@ -19,7 +16,9 @@ const VilkårsvurderingAvStønadsdager = () => {
         }
       />
       <Varsel variant="warning" melding={`Mangler data på stønadsdager`} />
+
       {/*
+      // B: Legges inn når vi har fått på plass stønadsdager igjen
       <VilkårKort
         saksopplysningsperiode={}
         kilde={}
@@ -32,4 +31,4 @@ const VilkårsvurderingAvStønadsdager = () => {
   );
 };
 
-export default VilkårsvurderingAvStønadsdager;
+export default Stønadsdager;

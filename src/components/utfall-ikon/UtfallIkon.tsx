@@ -4,41 +4,45 @@ import {
   CheckmarkCircleFillIcon,
   ExclamationmarkTriangleFillIcon,
 } from '@navikt/aksel-icons';
+import { SamletUtfall } from '../../types/BehandlingTypes';
 
 interface UtfallIkonProps {
-  utfall: string;
+  utfall: SamletUtfall;
 }
 
 export const UtfallIkon = ({ utfall }: UtfallIkonProps) => {
-  if (utfall === 'OPPFYLT')
-    return (
-      <CheckmarkCircleFillIcon
-        width="1.5em"
-        height="1.5em"
-        color="var(--a-icon-success)"
-      />
-    );
-  if (utfall === 'IKKE_OPPFYLT')
-    return (
-      <XMarkOctagonFillIcon
-        width="1.5em"
-        height="1.5em"
-        color="var(--a-icon-danger)"
-      />
-    );
-  if (utfall === 'KREVER_MANUELL_VURDERING')
-    return (
-      <ExclamationmarkTriangleFillIcon
-        width="1.5em"
-        height="1.5em"
-        color="var(--a-icon-warning)"
-      />
-    );
-  return (
-    <ExclamationmarkTriangleFillIcon
-      width="1.5em"
-      height="1.5em"
-      color="var(--a-icon-warning)"
-    />
-  );
+  switch (utfall) {
+    case SamletUtfall.OPPFYLT || SamletUtfall.DELVIS_OPPFYLT:
+      return (
+        <CheckmarkCircleFillIcon
+          width="1.5em"
+          height="1.5em"
+          color="var(--a-icon-success)"
+        />
+      );
+    case SamletUtfall.IKKE_OPPFYLT:
+      return (
+        <XMarkOctagonFillIcon
+          width="1.5em"
+          height="1.5em"
+          color="var(--a-icon-danger)"
+        />
+      );
+    case SamletUtfall.UAVKLART:
+      return (
+        <ExclamationmarkTriangleFillIcon
+          width="1.5em"
+          height="1.5em"
+          color="var(--a-icon-warning)"
+        />
+      );
+    default:
+      return (
+        <ExclamationmarkTriangleFillIcon
+          width="1.5em"
+          height="1.5em"
+          color="var(--a-icon-warning)"
+        />
+      );
+  }
 };

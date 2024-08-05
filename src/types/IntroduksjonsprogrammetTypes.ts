@@ -6,7 +6,7 @@ export interface IntroVilkår {
   søknadSaksopplysning: IntroSaksopplysning;
   avklartSaksopplysning: IntroSaksopplysning;
   vilkårLovreferanse: Lovreferanse;
-  vurderingsperiode: Periode;
+  utfallperiode: Periode;
   samletUtfall: SamletUtfall;
 }
 

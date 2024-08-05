@@ -1,15 +1,16 @@
-import { BehandlingStatus } from '../types/BehandlingTypes';
+import { BehandlingStatus, SamletUtfall } from '../types/BehandlingTypes';
 import { Opphold } from '../types/InstitusjonsoppholdTypes';
 import { Deltagelse } from '../types/KvpTypes';
-import { Utfall } from '../types/Utfall';
 
-export const finnUtfallTekst = (utfall: string) => {
+export const finnUtfallTekst = (utfall: SamletUtfall) => {
   switch (utfall) {
-    case Utfall.IKKE_OPPFYLT:
+    case SamletUtfall.IKKE_OPPFYLT:
       return 'ikke oppfylt';
-    case Utfall.OPPFYLT:
+    case SamletUtfall.OPPFYLT:
       return 'oppfylt';
-    case Utfall.KREVER_MANUELL_VURDERING:
+    case SamletUtfall.DELVIS_OPPFYLT:
+      return 'delvis oppfylt';
+    case SamletUtfall.UAVKLART:
       return 'uavklart';
     default:
       return 'uavklart';
@@ -44,15 +45,19 @@ export const lagFaktumTekst = (faktum: Deltagelse | Opphold) => {
   }
 };
 
-
 export const finnStatusTekst = (status: string) => {
   switch (status) {
-    case BehandlingStatus.INNVILGET : return 'Innvilget'
-    case BehandlingStatus.KLAR_TIL_BEHANDLING : return 'Klar til behandling'
-    case BehandlingStatus.KLAR_TIL_BESLUTNING : return 'Klar til beslutning'
-    case BehandlingStatus.SØKNAD : return 'Søknad'
-    case BehandlingStatus.UNDER_BEHANDLING : return 'Under behandling'
-    case BehandlingStatus.UNDER_BESLUTNING : return 'Under beslutning'
+    case BehandlingStatus.INNVILGET:
+      return 'Innvilget';
+    case BehandlingStatus.KLAR_TIL_BEHANDLING:
+      return 'Klar til behandling';
+    case BehandlingStatus.KLAR_TIL_BESLUTNING:
+      return 'Klar til beslutning';
+    case BehandlingStatus.SØKNAD:
+      return 'Søknad';
+    case BehandlingStatus.UNDER_BEHANDLING:
+      return 'Under behandling';
+    case BehandlingStatus.UNDER_BESLUTNING:
+      return 'Under beslutning';
   }
-
-}
+};

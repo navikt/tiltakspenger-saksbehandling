@@ -8,7 +8,7 @@ import { useContext } from 'react';
 import { BehandlingContext } from '../layout/SaksbehandlingLayout';
 import Varsel from '../varsel/Varsel';
 
-const Kvalifiseringsprogrammet = () => {
+const Introduksjonsprogrammet = () => {
   const { behandlingId } = useContext(BehandlingContext);
   const { intro, isLoading, error } =
     useHentIntroduksjonsprogrammet(behandlingId);
@@ -25,9 +25,7 @@ const Kvalifiseringsprogrammet = () => {
 
   const deltagelse =
     intro.avklartSaksopplysning.periodeMedDeltagelse.deltagelse;
-  const saksopplysningsPeriode =
-    intro.avklartSaksopplysning.periodeMedDeltagelse.periode ??
-    intro.søknadSaksopplysning.periodeMedDeltagelse.periode;
+
   return (
     <VStack gap="4">
       <VilkårHeader
@@ -40,7 +38,7 @@ const Kvalifiseringsprogrammet = () => {
       />
       <UtfallstekstMedIkon samletUtfall={intro.samletUtfall} />
       <VilkårKort
-        saksopplysningsperiode={saksopplysningsPeriode}
+        saksopplysningsperiode={intro.utfallperiode}
         kilde={intro.avklartSaksopplysning.kilde}
         utfall={intro.samletUtfall}
         vilkårTittel={'Introduksjonsprogrammet'}
@@ -59,4 +57,4 @@ const deltagelseTekst = (deltagelse: Deltagelse): string => {
   }
 };
 
-export default Kvalifiseringsprogrammet;
+export default Introduksjonsprogrammet;

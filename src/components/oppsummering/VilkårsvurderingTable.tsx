@@ -94,19 +94,13 @@ const VilkårsvurderingTable = () => {
             Andre livsopphold {livsopphold.vilkårLovreferanse.paragraf}
           </Table.HeaderCell>
           <Table.DataCell>
-            {
-              <UtfallstekstMedIkon
-                samletUtfall={
-                  !livsopphold.harLivsoppholdYtelser && SamletUtfall.OPPFYLT
-                }
-              />
-            }
+            {<UtfallstekstMedIkon samletUtfall={livsopphold.samletUtfall} />}
           </Table.DataCell>
           <Table.DataCell>
-            {periodeTilFormatertDatotekst(livsopphold.vurderingsPeriode)}
+            {periodeTilFormatertDatotekst(livsopphold.utfallPeriode)}
           </Table.DataCell>
           <Table.DataCell>
-            {livsopphold.harLivsoppholdYtelser
+            {livsopphold.avklartSaksopplysning.harLivsoppholdYtelser
               ? 'Søker har andre livsopphold'
               : 'Søker har ikke andre livsopphold'}
           </Table.DataCell>

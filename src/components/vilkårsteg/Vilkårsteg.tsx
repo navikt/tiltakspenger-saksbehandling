@@ -10,7 +10,7 @@ import Kvalifiseringsprogrammet from '../vilkår/Kvalifiseringsprogrammet';
 import Institusjonsopphold from '../vilkår/Institusjonsopphold';
 import Introduksjonsprogrammet from '../vilkår/Introduksjonsprogrammet';
 import FristForFramsettingAvKrav from '../vilkår/FristForFramsettingAvKrav';
-import { AndreYtelser } from '../vilkår/AndreYtelser';
+import Livsopphold from '../vilkår/Livsopphold';
 
 const Vilkårsteg = () => {
   const vilkårsteg = router.query.vilkårsteg as string;
@@ -30,7 +30,7 @@ const Vilkårsteg = () => {
       case Vilkår.INSTITUSJONSOPPHOLD:
         return <Institusjonsopphold />;
       case Vilkår.ANDREYTELSER:
-        return <AndreYtelser />;
+        return <Livsopphold />;
       case Vilkår.STØNADSDAGER:
         return <Stønadsdager />;
       default:

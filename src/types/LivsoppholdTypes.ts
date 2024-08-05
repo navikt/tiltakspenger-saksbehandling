@@ -3,10 +3,15 @@ import { Periode } from './Periode';
 import { Saksbehandler } from './Saksbehandler';
 
 export interface LivsoppholdVilkår {
-  harLivsoppholdYtelser: Boolean;
-  vurderingsPeriode: Periode;
-  saksbehandler?: Saksbehandler;
+  avklartSaksopplysning: LivsoppholdSaksopplysning;
   vilkårLovreferanse: Lovreferanse;
+  utfallPeriode: Periode;
+  samletUtfall: SamletUtfall;
+}
+
+interface LivsoppholdSaksopplysning {
+  harLivsoppholdYtelser: Boolean;
+  saksbehandler?: Saksbehandler;
   tidspunkt: string;
   årsakTilEndringLivsopphold?: ÅrsakTilEndring;
   samletUtfall: SamletUtfall;

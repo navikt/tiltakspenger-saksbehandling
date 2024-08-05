@@ -5,7 +5,7 @@ export interface KvpVilkår {
   søknadSaksopplysning: KvpSaksopplysning;
   avklartSaksopplysning: KvpSaksopplysning;
   vilkårLovreferanse: Lovreferanse;
-  vurderingsperiode: Periode;
+  utfallperiode: Periode;
   samletUtfall: SamletUtfall;
 }
 

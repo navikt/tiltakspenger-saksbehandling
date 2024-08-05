@@ -5,7 +5,7 @@ export interface InstitusjonsoppholdVilkår {
   søknadSaksopplysning: InstitusjonsoppholdSaksopplysning;
   avklartSaksopplysning: InstitusjonsoppholdSaksopplysning;
   vilkårLovreferanse: Lovreferanse;
-  vurderingsperiode: Periode;
+  utfallperiode: Periode;
   samletUtfall: SamletUtfall;
 }
 
