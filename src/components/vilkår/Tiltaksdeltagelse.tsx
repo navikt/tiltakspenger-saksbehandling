@@ -7,7 +7,7 @@ import { BehandlingContext } from '../layout/SaksbehandlingLayout';
 import { useHentTiltakDeltagelse } from '../../hooks/vilkår/useHentTiltaksdeltagelse';
 import Varsel from '../varsel/Varsel';
 
-const VilkårsvurderingAvTiltaksdeltagelse = () => {
+const Tiltaksdeltagelse = () => {
   const { behandlingId } = useContext(BehandlingContext);
   const { tiltakDeltagelse, isLoading, error } =
     useHentTiltakDeltagelse(behandlingId);
@@ -22,8 +22,7 @@ const VilkårsvurderingAvTiltaksdeltagelse = () => {
       />
     );
 
-  const { status, tiltakNavn, deltagelsePeriode, kilde } =
-    tiltakDeltagelse.registerSaksopplysning;
+  const { status, tiltakNavn, kilde } = tiltakDeltagelse.registerSaksopplysning;
 
   return (
     <VStack gap="4">
@@ -39,7 +38,7 @@ const VilkårsvurderingAvTiltaksdeltagelse = () => {
       <UtfallstekstMedIkon samletUtfall={tiltakDeltagelse.samletUtfall} />
       <VilkårKort
         key={tiltakNavn}
-        saksopplysningsperiode={deltagelsePeriode}
+        saksopplysningsperiode={tiltakDeltagelse.utfallperiode}
         kilde={kilde}
         utfall={tiltakDeltagelse.samletUtfall}
         vilkårTittel={'Tiltaksdeltagelse'}
@@ -52,4 +51,4 @@ const VilkårsvurderingAvTiltaksdeltagelse = () => {
   );
 };
 
-export default VilkårsvurderingAvTiltaksdeltagelse;
+export default Tiltaksdeltagelse;

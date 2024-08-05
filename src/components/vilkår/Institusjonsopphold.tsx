@@ -34,9 +34,7 @@ const Institusjonsopphold = () => {
       />
       <UtfallstekstMedIkon samletUtfall={institusjonsopphold.samletUtfall} />
       <VilkårKort
-        saksopplysningsperiode={
-          institusjonsopphold.søknadSaksopplysning.periodeMedOpphold.periode
-        }
+        saksopplysningsperiode={institusjonsopphold.utfallperiode}
         kilde={institusjonsopphold.søknadSaksopplysning.kilde}
         utfall={institusjonsopphold.samletUtfall}
         vilkårTittel={'Institusjonsopphold'}

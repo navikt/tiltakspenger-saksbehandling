@@ -17,9 +17,8 @@ export const SaksbehandlingTabs = () => {
     return <Loader />;
   }
   const tilBeslutter =
-    valgtBehandling.behandlingTilstand === BehandlingStatus.KLAR_TIL_BESLUTNING;
-  const iverksatt =
-    valgtBehandling.behandlingTilstand === BehandlingStatus.INNVILGET;
+    valgtBehandling.status === BehandlingStatus.KLAR_TIL_BESLUTNING;
+  const iverksatt = valgtBehandling.status === BehandlingStatus.INNVILGET;
 
   return (
     <Tabs value={value} onChange={setValue}>

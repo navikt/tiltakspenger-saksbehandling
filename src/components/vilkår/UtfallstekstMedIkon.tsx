@@ -1,14 +1,13 @@
 import React from 'react';
-import { Utfall } from '../../types/Utfall';
 import { UtfallIkon } from '../utfall-ikon/UtfallIkon';
 import IkonMedTekst from '../ikon-med-tekst/IkonMedTekst';
 import { SamletUtfall } from '../../types/BehandlingTypes';
 
 interface UtfallstekstMedIkonProps {
-  samletUtfall: SamletUtfall | Utfall;
+  samletUtfall: SamletUtfall;
 }
 
-function lagUtfallstekst(samletUtfall: SamletUtfall | Utfall) {
+function lagUtfallstekst(samletUtfall: SamletUtfall) {
   switch (samletUtfall) {
     case SamletUtfall.OPPFYLT:
       return 'Vilkåret er oppfylt i hele perioden';

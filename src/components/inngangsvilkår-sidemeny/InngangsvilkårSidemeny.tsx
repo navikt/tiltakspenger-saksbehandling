@@ -29,7 +29,7 @@ const InngangsvilkårSidemeny = () => {
       tittel: 'Tiltaksdeltagelse',
       url: 'tiltaksdeltagelse',
       paragraf: '§7',
-      utfall: valgtBehandling.vilkårsett.tiltakDeltagelseVilkår.samletUtfall,
+      utfall: vilkårsett.tiltakDeltagelseVilkår.samletUtfall,
     },
     {
       tittel: 'Over 18 år',
@@ -41,9 +41,7 @@ const InngangsvilkårSidemeny = () => {
       tittel: 'Andre ytelser til livsopphold',
       url: 'andreytelser',
       paragraf: '§7',
-      utfall:
-        !vilkårsett.livsoppholdVilkår.harLivsoppholdYtelser &&
-        SamletUtfall.OPPFYLT,
+      utfall: vilkårsett.livsoppholdVilkår.samletUtfall,
     },
     {
       tittel: 'Kvalifiseringsprogrammet',
@@ -100,7 +98,7 @@ const InngangsvilkårSidemeny = () => {
         gap="5"
         className={`${styles.vilkår} ${vilkårsteg === 'stonadsdager' && styles.aktivtSteg}`}
       >
-        <UtfallIkon utfall={'OPPFYLT'} />
+        <UtfallIkon utfall={SamletUtfall.OPPFYLT} />
         <Link
           as={NextLink}
           underline={false}

@@ -28,8 +28,7 @@ export const SaksbehandlingLayout = ({ children }: React.PropsWithChildren) => {
   const [meldekortId, settMeldekortId] = useState<string>(null);
   const [utbetalingId, settUtbetalingId] = useState<string>(null);
 
-  const iverksatt =
-    valgtBehandling?.behandlingTilstand === BehandlingStatus.INNVILGET;
+  const iverksatt = valgtBehandling?.status === BehandlingStatus.INNVILGET;
 
   const { meldekortliste } = useHentMeldekortListe(iverksatt, behandlingId);
   const { utbetalingliste } = useHentUtbetalingListe(iverksatt, behandlingId);

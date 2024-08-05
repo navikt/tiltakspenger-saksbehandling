@@ -6,8 +6,6 @@ import { KvpVilkår } from './KvpTypes';
 import { LivsoppholdVilkår } from './LivsoppholdTypes';
 import { Periode } from './Periode';
 import { TiltakDeltagelseVilkår } from './TiltakDeltagelseTypes';
-import Tiltaksstatus from './Tiltaksstatus';
-import { Utfall } from './Utfall';
 
 export interface Behandling {
   behandlingId: string;
@@ -15,12 +13,8 @@ export interface Behandling {
   beslutter: string;
   vurderingsperiode: Periode;
   personopplysninger: Personopplysninger;
-  behandlingTilstand: string;
-  status: string;
+  status: BehandlingStatus;
   endringslogg: Endring[];
-  samletUtfall: Utfall;
-  stønadsdager: StønadsdagerSaksopplysning[];
-  tiltaksdeltagelsesaksopplysning: TiltaksdeltagelsesaksopplysningDTO;
   vilkårsett: VilkårsettDTO;
 }
 
@@ -72,39 +66,11 @@ export interface Personopplysninger {
   fortrolig: boolean;
 }
 
-export interface TiltaksdeltagelsesaksopplysningDTO {
-  vilkår: string;
-  saksopplysninger: RegistrertTiltak;
-  vilkårLovreferanse: Lovreferanse;
-}
-
-export interface StønadsdagerSaksopplysning {
-  tiltakId: string;
-  tiltak: string;
-  antallDagerSaksopplysningFraRegister: Stønadsdager;
-}
-
-export interface Stønadsdager {
-  periode: Periode;
-  antallDager: number;
-  kilde: string;
-}
-
 export interface Lovreferanse {
   lovverk: string;
   paragraf: string;
   beskrivelse: string;
 }
-
-export type RegistrertTiltak = {
-  id: string;
-  navn: string;
-  periode: Periode;
-  status: Tiltaksstatus;
-  girRett: boolean;
-  kilde: string;
-  deltagelseUtfall: Utfall;
-};
 
 export enum ÅrsakTilEndring {
   FEIL_I_INNHENTET_DATA = 'FEIL_I_INNHENTET_DATA',

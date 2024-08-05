@@ -25,13 +25,13 @@ export const BehandlingKnapper = ({ modalRef }: BehandlingKnapperProps) => {
     useSendTilBeslutter(behandlingId);
 
   const kanBeslutte = kanBeslutteForBehandling(
-    valgtBehandling.behandlingTilstand,
+    valgtBehandling.status,
     innloggetSaksbehandler,
     valgtBehandling.beslutter,
   );
 
   const kanSaksbehandle = kanSaksbehandleForBehandling(
-    valgtBehandling.behandlingTilstand,
+    valgtBehandling.status,
     innloggetSaksbehandler,
     valgtBehandling.saksbehandler,
   );

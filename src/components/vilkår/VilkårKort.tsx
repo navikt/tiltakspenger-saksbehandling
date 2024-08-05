@@ -3,6 +3,7 @@ import { periodeTilFormatertDatotekst } from '../../utils/date';
 import { Periode } from '../../types/Periode';
 import { UtfallIkon } from '../utfall-ikon/UtfallIkon';
 import styles from './Vilkår.module.css';
+import { SamletUtfall } from '../../types/BehandlingTypes';
 
 interface Grunnlag {
   header: string;
@@ -12,7 +13,7 @@ interface Grunnlag {
 interface VilkårKortProps {
   saksopplysningsperiode: Periode;
   kilde: string;
-  utfall: string | null;
+  utfall: SamletUtfall;
   vilkårTittel: string;
   grunnlag: Grunnlag[];
 }

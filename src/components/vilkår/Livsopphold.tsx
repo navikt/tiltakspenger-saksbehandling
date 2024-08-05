@@ -16,13 +16,15 @@ import { useContext } from 'react';
 import { BehandlingContext } from '../layout/SaksbehandlingLayout';
 import { useLagreLivsoppholdSaksopplysning } from '../../hooks/vilkår/useLagreLivsoppholdSaksopplysning';
 import Varsel from '../varsel/Varsel';
+import { useHentBehandling } from '../../hooks/useHentBehandling';
 
 export interface SkjemaFelter {
   harAndreYtelser: boolean;
 }
 
-export const AndreYtelser = () => {
+const Livsopphold = () => {
   const { behandlingId } = useContext(BehandlingContext);
+  const { valgtBehandling } = useHentBehandling(behandlingId);
   const { livsopphold, isLoading, error } = useHentLivsopphold(behandlingId);
   const { onLagreLivsopphold, isLivsoppholdMutating } =
     useLagreLivsoppholdSaksopplysning(behandlingId);
@@ -51,7 +53,7 @@ export const AndreYtelser = () => {
 
     onLagreLivsopphold({
       ytelseForPeriode: {
-        periode: livsopphold.vurderingsPeriode,
+        periode: valgtBehandling.vurderingsperiode,
         harYtelse: harYtelser,
       },
     });
@@ -115,3 +117,5 @@ export const AndreYtelser = () => {
     </VStack>
   );
 };
+
+export default Livsopphold;

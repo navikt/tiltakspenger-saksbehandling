@@ -23,9 +23,6 @@ const Kvalifiseringsprogrammet = () => {
     );
 
   const deltagelse = kvp.avklartSaksopplysning.periodeMedDeltagelse.deltagelse;
-  const saksopplysningsPeriode =
-    kvp.avklartSaksopplysning.periodeMedDeltagelse.periode ??
-    kvp.søknadSaksopplysning.periodeMedDeltagelse.periode;
 
   return (
     <VStack gap="4">
@@ -39,7 +36,7 @@ const Kvalifiseringsprogrammet = () => {
       />
       <UtfallstekstMedIkon samletUtfall={kvp.samletUtfall} />
       <VilkårKort
-        saksopplysningsperiode={saksopplysningsPeriode}
+        saksopplysningsperiode={kvp.utfallperiode}
         kilde={kvp.avklartSaksopplysning.kilde}
         utfall={kvp.samletUtfall}
         vilkårTittel={'Kvalifiseringsprogrammet'}
