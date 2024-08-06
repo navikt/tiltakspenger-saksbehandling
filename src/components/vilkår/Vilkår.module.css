@@ -5,7 +5,7 @@
     padding: 1rem;
 }
 
-.avklartSaksopplysning {
+.avklart_saksopplysning {
     width: 50%;
     padding-right: 1rem;
 }
@@ -16,6 +16,10 @@
     width: 50%;
 }
 
-.marginTop {
+.margin_top {
     margin-top: 1rem;
+}
+
+.utfall_datacell {
+    display: flex;
 }

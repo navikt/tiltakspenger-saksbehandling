@@ -26,7 +26,7 @@ const VilkårKort = ({
 }: VilkårKortProps) => (
   <>
     <HStack className={styles.container}>
-      <VStack className={styles.avklartSaksopplysning}>
+      <VStack className={styles.avklart_saksopplysning}>
         <Table>
           <Table.Header>
             <Table.Row>
@@ -54,7 +54,7 @@ const VilkårKort = ({
               ))}
               <Table.DataCell>{kilde}</Table.DataCell>
               {utfall && (
-                <Table.DataCell>
+                <Table.DataCell className={styles.utfall_datacell}>
                   <UtfallIkon utfall={utfall} />
                 </Table.DataCell>
               )}

@@ -5,12 +5,12 @@ import { Saksbehandler } from './Saksbehandler';
 export interface LivsoppholdVilkår {
   avklartSaksopplysning: LivsoppholdSaksopplysning;
   vilkårLovreferanse: Lovreferanse;
-  utfallPeriode: Periode;
+  utfallperiode: Periode;
   samletUtfall: SamletUtfall;
 }
 
 interface LivsoppholdSaksopplysning {
-  harLivsoppholdYtelser: Boolean;
+  harLivsoppholdYtelser: boolean;
   saksbehandler?: Saksbehandler;
   tidspunkt: string;
   årsakTilEndringLivsopphold?: ÅrsakTilEndring;

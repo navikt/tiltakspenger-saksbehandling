@@ -18,8 +18,10 @@ const Benken: NextPage = () => {
   const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
   const { SøknaderOgBehandlinger, isLoading, error } =
     useHentSøknaderOgBehandlinger();
-  const { isSøknadMutating, onOpprettBehandling } = useOpprettBehandling();
-  const { isBehandlingMutating, onTaBehandling } = useTaBehandling();
+  const { isSøknadMutating, onOpprettBehandling, opprettBehandlingError } =
+    useOpprettBehandling();
+  const { isBehandlingMutating, onTaBehandling, taBehandlingError } =
+    useTaBehandling();
 
   if (isLoading || !SøknaderOgBehandlinger) {
     return <Loader />;
@@ -83,6 +85,19 @@ const Benken: NextPage = () => {
 
   return (
     <Box style={{ padding: '1rem' }}>
+      {taBehandlingError &&
+        ((
+          <Varsel
+            variant={'error'}
+            melding={`Kunne ikke ta behandling (${taBehandlingError.status} ${taBehandlingError.info})`}
+          />
+        ) ||
+          (opprettBehandlingError && (
+            <Varsel
+              variant={'error'}
+              melding={`Kunne ikke opprette behandling (${opprettBehandlingError.status} ${opprettBehandlingError.info})`}
+            />
+          )))}
       <Table zebraStripes>
         <Table.Header>
           <Table.Row>

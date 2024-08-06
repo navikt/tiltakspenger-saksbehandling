@@ -7,7 +7,7 @@ export function useTaBehandling() {
   const {
     trigger: onTaBehandling,
     isMutating: isBehandlingMutating,
-    error,
+    error: taBehandlingError,
   } = useSWRMutation<
     BehandlingIdResponse,
     FetcherError,
@@ -18,5 +18,5 @@ export function useTaBehandling() {
       router.push(`/behandling/${data.id}/inngangsvilkar/kravfrist`),
   });
 
-  return { onTaBehandling, isBehandlingMutating, error };
+  return { onTaBehandling, isBehandlingMutating, taBehandlingError };
 }

@@ -30,6 +30,12 @@ export const finnUtfallsperiodetekst = (utfall: string) => {
   }
 };
 
+export const lagFaktumTekstAvLivsopphold = (harLivsoppholdYtelser: boolean) => {
+  return harLivsoppholdYtelser
+    ? 'Har andre ytelser til livsopphold'
+    : 'Har ikke andre ytelser til livsopphold';
+};
+
 export const lagFaktumTekst = (faktum: Deltagelse | Opphold) => {
   switch (faktum) {
     case Deltagelse.DELTAR_IKKE:

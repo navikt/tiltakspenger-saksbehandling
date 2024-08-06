@@ -5,10 +5,12 @@ import {
   formaterDatotekst,
   periodeTilFormatertDatotekst,
 } from '../../utils/date';
-import { lagFaktumTekst } from '../../utils/tekstformateringUtils';
+import {
+  lagFaktumTekst,
+  lagFaktumTekstAvLivsopphold,
+} from '../../utils/tekstformateringUtils';
 import { useContext } from 'react';
 import { BehandlingContext } from '../layout/SaksbehandlingLayout';
-import { SamletUtfall } from '../../types/BehandlingTypes';
 
 const VilkårsvurderingTable = () => {
   const { behandlingId } = useContext(BehandlingContext);
@@ -70,7 +72,7 @@ const VilkårsvurderingTable = () => {
             {periodeTilFormatertDatotekst(tiltakDeltagelse.utfallperiode)}
           </Table.DataCell>
           <Table.DataCell>
-            {`Tiltakstatus er ${tiltakDeltagelse.registerSaksopplysning.status}`}
+            {`Tiltakstatus er "${tiltakDeltagelse.registerSaksopplysning.status}"`}
           </Table.DataCell>
         </Table.Row>
         {/* Aldersvilkår */}
@@ -97,12 +99,14 @@ const VilkårsvurderingTable = () => {
             {<UtfallstekstMedIkon samletUtfall={livsopphold.samletUtfall} />}
           </Table.DataCell>
           <Table.DataCell>
-            {periodeTilFormatertDatotekst(livsopphold.utfallPeriode)}
+            {periodeTilFormatertDatotekst(livsopphold.utfallperiode)}
           </Table.DataCell>
           <Table.DataCell>
-            {livsopphold.avklartSaksopplysning.harLivsoppholdYtelser
-              ? 'Søker har andre livsopphold'
-              : 'Søker har ikke andre livsopphold'}
+            {livsopphold.avklartSaksopplysning
+              ? lagFaktumTekstAvLivsopphold(
+                  livsopphold.avklartSaksopplysning.harLivsoppholdYtelser,
+                )
+              : 'Vilkåret er uavklart'}
           </Table.DataCell>
         </Table.Row>
         {/* KVP */}

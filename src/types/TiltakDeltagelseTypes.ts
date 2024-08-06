@@ -16,6 +16,6 @@ interface TiltakDeltagelseSaksopplysning {
 }
 
 enum Kilde {
-  KOMET = 'KOMET',
-  ARENA = 'ARENA',
+  KOMET = 'Komet',
+  ARENA = 'Arena',
 }

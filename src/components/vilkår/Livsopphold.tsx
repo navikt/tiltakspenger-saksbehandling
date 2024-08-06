@@ -108,7 +108,7 @@ const Livsopphold = () => {
           value="submit"
           size="small"
           loading={isLivsoppholdMutating}
-          className={styles.marginTop}
+          className={styles.margin_top}
           disabled={watchHarLivsoppholdytelser}
         >
           Lagre

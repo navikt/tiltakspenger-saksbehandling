@@ -7,7 +7,7 @@ export function useOpprettBehandling() {
   const {
     trigger: onOpprettBehandling,
     isMutating: isSøknadMutating,
-    error,
+    error: opprettBehandlingError,
   } = useSWRMutation<
     BehandlingIdResponse,
     FetcherError,
@@ -18,5 +18,5 @@ export function useOpprettBehandling() {
       router.push(`/behandling/${data.id}/inngangsvilkar/kravfrist`),
   });
 
-  return { onOpprettBehandling, isSøknadMutating, error };
+  return { onOpprettBehandling, isSøknadMutating, opprettBehandlingError };
 }
