@@ -9,7 +9,7 @@ export const kanBeslutteForBehandling = (
   return (
     innloggetSaksbehandler.roller.includes('BESLUTTER') &&
     beslutterForBehandling &&
-    status === BehandlingStatus.KLAR_TIL_BESLUTNING
+    status === BehandlingStatus.UNDER_BESLUTNING
   );
 };
 
@@ -21,8 +21,7 @@ export const kanSaksbehandleForBehandling = (
   return (
     innloggetSaksbehandler.roller.includes('SAKSBEHANDLER') &&
     innloggetSaksbehandler.navIdent == saksbehandlerForBehandling &&
-    status !== BehandlingStatus.KLAR_TIL_BESLUTNING &&
-    status !== BehandlingStatus.INNVILGET
+    status === BehandlingStatus.UNDER_BEHANDLING
   );
 };
 

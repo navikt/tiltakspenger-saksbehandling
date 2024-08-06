@@ -2,6 +2,7 @@ import useSWRMutation from 'swr/mutation';
 
 import { LivsoppholdSaksopplysningBody } from '../../types/LivsoppholdTypes';
 import { FetcherError, throwErrorIfFatal } from '../../utils/http';
+import { mutate } from 'swr';
 
 export async function mutateLivsopphold<R>(
   url,
@@ -20,7 +21,7 @@ export function useLagreLivsoppholdSaksopplysning(behandlingId: string) {
     useSWRMutation<any, FetcherError, any, LivsoppholdSaksopplysningBody>(
       `/api/behandling/${behandlingId}/vilkar/livsopphold`,
       mutateLivsopphold,
+      { onSuccess: () => mutate(`/api/behandling/${behandlingId}`) },
     );
-
   return { onLagreLivsopphold, isLivsoppholdMutating };
 }
