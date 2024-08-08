@@ -8,8 +8,7 @@ import { BehandlingContext } from '../layout/SaksbehandlingLayout';
 export const SaksbehandlingTabs = () => {
   const aktivTab = router.route.split('/')[3];
 
-  const { behandlingId, meldekortId, utbetalingId } =
-    useContext(BehandlingContext);
+  const { behandlingId, meldekortId } = useContext(BehandlingContext);
   const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
   const [value, setValue] = useState(aktivTab);
 
@@ -58,6 +57,7 @@ export const SaksbehandlingTabs = () => {
                 )
               }
             />
+            {/*
             <Tabs.Tab
               value={'utbetaling'}
               label={'Utbetaling'}
@@ -69,6 +69,7 @@ export const SaksbehandlingTabs = () => {
                 );
               }}
             />
+            */}
           </>
         )}
       </Tabs.List>

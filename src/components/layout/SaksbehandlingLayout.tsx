@@ -5,7 +5,6 @@ import { SaksbehandlingTabs } from '../saksbehandling-tabs/SaksbehandlingTabs';
 import { Loader } from '@navikt/ds-react';
 import { createContext, useEffect, useState } from 'react';
 import { BehandlingStatus } from '../../types/BehandlingTypes';
-import { useHentUtbetalingListe } from '../../hooks/useHentUtbetalingListe';
 import { useHentMeldekortListe } from '../../hooks/meldekort/useHentMeldekortListe';
 
 interface BehandlingContextType {
@@ -26,22 +25,19 @@ export const SaksbehandlingLayout = ({ children }: React.PropsWithChildren) => {
 
   const [behId, settBehId] = useState<string>(null);
   const [meldekortId, settMeldekortId] = useState<string>(null);
-  const [utbetalingId, settUtbetalingId] = useState<string>(null);
 
   const iverksatt = valgtBehandling?.status === BehandlingStatus.INNVILGET;
 
   const { meldekortliste } = useHentMeldekortListe(iverksatt, behandlingId);
-  const { utbetalingliste } = useHentUtbetalingListe(iverksatt, behandlingId);
 
   useEffect(() => {
     if (valgtBehandling) {
       settBehId(valgtBehandling.behandlingId);
     }
-    if (iverksatt && meldekortliste && utbetalingliste) {
+    if (iverksatt && meldekortliste) {
       settMeldekortId(meldekortliste[0].id);
-      settUtbetalingId(utbetalingliste[0].id);
     }
-  }, [iverksatt, meldekortliste, utbetalingliste, valgtBehandling]);
+  }, [iverksatt, meldekortliste, valgtBehandling]);
 
   if (isLoading || !valgtBehandling || !behId) {
     return <Loader />;
@@ -51,7 +47,7 @@ export const SaksbehandlingLayout = ({ children }: React.PropsWithChildren) => {
       value={{
         behandlingId: behId,
         meldekortId: meldekortId,
-        utbetalingId: utbetalingId,
+        utbetalingId: null, // B: Venter til vi begynner med utbetalingssiden
       }}
     >
       <PersonaliaHeader />
