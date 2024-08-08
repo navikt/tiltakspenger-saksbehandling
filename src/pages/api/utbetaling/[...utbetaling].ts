@@ -8,10 +8,7 @@ async function handler(
   res: NextApiResponse,
 ): Promise<void> {
   const token = await getToken(req);
-  const obo = await requestOboToken(
-    token,
-    `api://${process.env.UTBETALING_SCOPE}/.default`,
-  );
+  const obo = await requestOboToken(token, process.env.UTBETALING_SCOPE);
   if (!obo.ok) {
     throw new Error(
       `Kunne ikke gjøre on-behalf-of-utveksling for saksbehandlertoken`,
