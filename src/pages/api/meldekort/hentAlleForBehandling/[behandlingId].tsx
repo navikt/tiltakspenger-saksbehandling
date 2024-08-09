@@ -13,10 +13,10 @@ async function handler(
   const obo = await requestOboToken(token, process.env.MELDEKORT_AUDIENCE);
   if (!obo.ok) {
     logger.error(
-      'Kunne ikke gjøre on-behalf-of-utveksling for saksbehandlertoken',
+      `Kunne ikke gjøre on-behalf-of-utveksling for saksbehandlertoken: ${obo.error}`,
     );
     throw new Error(
-      `Kunne ikke gjøre on-behalf-of-utveksling for saksbehandlertoken`,
+      `Kunne ikke gjøre on-behalf-of-utveksling for saksbehandlertoken: ${obo.error}`,
     );
   }
 
