@@ -12,7 +12,7 @@ async function handler(
   logger.info('Henter obo-token for tiltakspenger-meldekort-api');
   const obo = await requestOboToken(
     token,
-    `api://${process.env.MELDEKORT_AUDIENCE}/.default`,
+    process.env.MELDEKORT_SCOPE,
   );
   if (!obo.ok) {
     throw new Error(

@@ -10,7 +10,7 @@ async function handler(
 ): Promise<void> {
   const token = await getToken(req);
   logger.info('Henter obo-token for tiltakspenger-meldekort-api');
-  const obo = await requestOboToken(token, process.env.MELDEKORT_AUDIENCE);
+  const obo = await requestOboToken(token, process.env.MELDEKORT_SCOPE);
   if (!obo.ok) {
     const oboError = (obo as {ok: false; error: Error}).error
     logger.error(
