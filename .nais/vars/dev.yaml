@@ -20,3 +20,5 @@ envs:
     value: api://dev-gcp.tpts.tiltakspenger-meldekort-api/.default
   - name: UTBETALING_SCOPE
     value: api://dev-gcp.tpts.tiltakspenger-utbetaling/.default
+  - name: MELDEKORT_AUDIENCE
+    value: dev-gcp:tpts:tiltakspenger-meldekort-api

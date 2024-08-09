@@ -10,7 +10,7 @@ async function handler(
   const token = await getToken(req);
   const obo = await requestOboToken(
     token,
-    `api://${process.env.MELDEKORT_SCOPE}/.default`,
+    `api://${process.env.MELDEKORT_AUDIENCE}/.default`,
   );
   if (!obo.ok) {
     throw new Error(

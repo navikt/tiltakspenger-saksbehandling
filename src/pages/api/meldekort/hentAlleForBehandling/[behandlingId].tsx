@@ -10,7 +10,7 @@ async function handler(
 ): Promise<void> {
   const token = await getToken(req);
   logger.info('Henter obo-token for tiltakspenger-meldekort-api');
-  const obo = await requestOboToken(token, process.env.MELDEKORT_SCOPE);
+  const obo = await requestOboToken(token, process.env.MELDEKORT_AUDIENCE);
   if (!obo.ok) {
     logger.error(
       'Kunne ikke gjøre on-behalf-of-utveksling for saksbehandlertoken',
