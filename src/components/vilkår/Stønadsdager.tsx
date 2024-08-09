@@ -1,32 +1,41 @@
-import React from 'react';
-import { VStack } from '@navikt/ds-react';
+import React, { useContext } from 'react';
+import { Loader, VStack } from '@navikt/ds-react';
 import VilkårKort from './VilkårKort';
 import VilkårHeader from './VilkårHeader';
 import Varsel from '../varsel/Varsel';
+import { useHentStønadsdager } from '../../hooks/useHentStønadsdager';
+import { BehandlingContext } from '../layout/SaksbehandlingLayout';
 
 const Stønadsdager = () => {
+  const { behandlingId } = useContext(BehandlingContext);
+  const { stønadsdager, isLoading, error } = useHentStønadsdager(behandlingId);
+
+  if (isLoading || !stønadsdager) return <Loader />;
+  else if (error)
+    return (
+      <Varsel
+        variant="error"
+        melding={`Kunne ikke hente stønadsdager (${error.status} ${error.info})`}
+      />
+    );
+  const { antallDager, kilde, periode } = stønadsdager.registerSaksopplysning;
   return (
     <VStack gap="4">
       <VilkårHeader
         headertekst="Stønadsdager"
-        lovdatatekst="Stønadsdager"
-        paragraf="§6-1"
+        lovdatatekst={stønadsdager.lovreferanse.beskrivelse}
+        paragraf={stønadsdager.lovreferanse.paragraf}
         lovdatalenke={
           'https://lovdata.no/dokument/SF/forskrift/2013-11-04-1286'
         }
       />
-      <Varsel variant="warning" melding={`Mangler data på stønadsdager`} />
-
-      {/*
-      // B: Legges inn når vi har fått på plass stønadsdager igjen
       <VilkårKort
-        saksopplysningsperiode={}
-        kilde={}
+        saksopplysningsperiode={periode}
+        kilde={kilde}
         utfall={null}
         vilkårTittel={'Stønadsdager'}
-        grunnlag={[{ header: 'Antall dager', data: 'x' }]}
+        grunnlag={[{ header: 'Antall dager', data: antallDager.toString() }]}
       />
-*/}
     </VStack>
   );
 };
