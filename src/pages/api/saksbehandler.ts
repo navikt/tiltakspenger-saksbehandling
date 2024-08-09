@@ -9,6 +9,7 @@ async function handler(
   res: NextApiResponse,
 ): Promise<void> {
   const token = await getToken(req);
+  logger.info('Henter obo-token for tiltakspenger-vedtak');
   const obo = await requestOboToken(
     token,
     `api://${process.env.VEDTAK_SCOPE}/.default`,
