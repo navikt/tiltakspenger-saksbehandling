@@ -16,7 +16,7 @@ const InngangsvilkårSidemeny = () => {
   if (isLoading || !valgtBehandling) {
     return <Loader />;
   }
-  const vilkårsett = valgtBehandling.vilkårsett;
+  const vilkårsett = valgtBehandling.vilkårssett;
 
   const vilkår = [
     {

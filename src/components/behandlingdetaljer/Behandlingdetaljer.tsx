@@ -18,7 +18,7 @@ const Behandlingdetaljer = () => {
     return <Loader />;
   }
 
-  const { vurderingsperiode, vilkårsett, stønadsdager, saksbehandler } =
+  const { vurderingsperiode, vilkårssett, stønadsdager, saksbehandler } =
     valgtBehandling;
   return (
     <>
@@ -37,7 +37,7 @@ const Behandlingdetaljer = () => {
           <b>Tiltak</b>
         </BodyShort>
         <BodyShort>
-          {vilkårsett.tiltakDeltagelseVilkår.registerSaksopplysning.tiltakNavn}
+          {vilkårssett.tiltakDeltagelseVilkår.registerSaksopplysning.tiltakNavn}
         </BodyShort>
         <BodyShort>
           <b>Antall dager i uken</b>

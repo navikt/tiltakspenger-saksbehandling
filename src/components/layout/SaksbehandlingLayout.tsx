@@ -32,7 +32,7 @@ export const SaksbehandlingLayout = ({ children }: React.PropsWithChildren) => {
 
   useEffect(() => {
     if (valgtBehandling) {
-      settBehId(valgtBehandling.behandlingId);
+      settBehId(valgtBehandling.id);
     }
     if (iverksatt && meldekortliste) {
       settMeldekortId(meldekortliste[0].id);

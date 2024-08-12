@@ -24,13 +24,12 @@ const Oppsummering = () => {
       />
     );
 
-  const returBegrunnelse = valgtBehandling.endringslogg.findLast(
-    (endring) => endring.type === 'Sendt i retur',
-  )?.begrunnelse;
+  const retur = valgtBehandling.attesteringer.findLast(
+    (attestering) => attestering.begrunnelse,
+  );
 
   const visBegrunnelse =
-    valgtBehandling.status === BehandlingStatus.UNDER_BEHANDLING &&
-    returBegrunnelse;
+    valgtBehandling.status === BehandlingStatus.UNDER_BEHANDLING && retur;
 
   return (
     <VStack gap="6" className={styles.wrapper}>
@@ -38,7 +37,7 @@ const Oppsummering = () => {
       {visBegrunnelse && (
         <Alert size="small" role="status" variant="warning">
           {`Beslutter har sendt behandlingen i retur med begrunnelsen: "${
-            returBegrunnelse
+            retur.begrunnelse
           }"`}
         </Alert>
       )}
