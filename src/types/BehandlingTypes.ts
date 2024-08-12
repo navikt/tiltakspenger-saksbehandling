@@ -5,17 +5,18 @@ import { KravfristVilkår } from './KravfristTypes';
 import { KvpVilkår } from './KvpTypes';
 import { LivsoppholdVilkår } from './LivsoppholdTypes';
 import { Periode } from './Periode';
+import { Stønadsdager } from './StønadsdagerTypes';
 import { TiltakDeltagelseVilkår } from './TiltakDeltagelseTypes';
 
 export interface Behandling {
-  behandlingId: string;
+  id: string;
   saksbehandler: string;
   beslutter: string;
   vurderingsperiode: Periode;
-  personopplysninger: Personopplysninger;
   status: BehandlingStatus;
-  endringslogg: Endring[];
-  vilkårsett: VilkårsettDTO;
+  attesteringer: Attestering[];
+  vilkårssett: VilkårsettDTO;
+  stønadsdager: Stønadsdager;
 }
 
 export enum BehandlingStatus {
@@ -37,11 +38,16 @@ interface VilkårsettDTO {
   kravfristVilkår: KravfristVilkår;
 }
 
-export interface Endring {
-  type: string;
+export interface Attestering {
+  status: Attesteringsstatus;
   begrunnelse: string;
   endretAv: string;
   endretTidspunkt: string;
+}
+
+export enum Attesteringsstatus {
+  GODKJENT = 'Godkjent',
+  SENDT_TILBAKE = 'Sendt tilbake',
 }
 
 export interface BehandlingForBenk {
@@ -58,8 +64,9 @@ export interface BehandlingForBenk {
 }
 
 export interface Personopplysninger {
-  ident: string;
+  fnr: string;
   fornavn: string;
+  mellomnavn: string;
   etternavn: string;
   skjerming: boolean;
   strengtFortrolig: boolean;

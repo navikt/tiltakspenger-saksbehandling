@@ -2,31 +2,41 @@ import React, { useContext } from 'react';
 import { Button, Loader, Tag } from '@navikt/ds-react';
 import { PersonCircleIcon } from '@navikt/aksel-icons';
 import styles from './PersonaliaHeader.module.css';
-import router from 'next/router';
-import { useHentBehandling } from '../../hooks/useHentBehandling';
 import { BehandlingContext } from '../layout/SaksbehandlingLayout';
 import { useTaAvBehandling } from '../../hooks/useTaAvBehandling';
+import { useHentPersonopplysninger } from '../../hooks/useHentPersonopplysninger';
+import { useHentBehandling } from '../../hooks/useHentBehandling';
+import { finnStatusTekst } from '../../utils/tekstformateringUtils';
 
 const PersonaliaHeader = () => {
   const { behandlingId } = useContext(BehandlingContext);
-  const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
+  const { valgtBehandling } = useHentBehandling(behandlingId);
+  const { personopplysninger, isPersonopplysningerLoading } =
+    useHentPersonopplysninger(behandlingId);
   const { taAvBehandling, tarAvBehandling, taAvBehandlingError } =
     useTaAvBehandling(behandlingId);
 
-  if (isLoading || !valgtBehandling) {
+  if (isPersonopplysningerLoading || !personopplysninger) {
     return <Loader />;
   }
-  const { fornavn, etternavn, ident, skjerming, strengtFortrolig, fortrolig } =
-    valgtBehandling.personopplysninger;
+  const {
+    fornavn,
+    mellomnavn,
+    etternavn,
+    fnr,
+    skjerming,
+    strengtFortrolig,
+    fortrolig,
+  } = personopplysninger;
 
   return (
     <div className={styles.personaliaHeader}>
       <PersonCircleIcon className={styles.personIcon} />
       <span data-testid="nav-personalia-header-name" className={styles.name}>
-        {fornavn} {etternavn}
+        {fornavn} {mellomnavn} {etternavn}
       </span>
       <span data-testid="nav-personalia-header-ident" className={styles.ident}>
-        {ident}
+        {fnr}
       </span>
       {strengtFortrolig && (
         <Tag variant="error" className={styles.skjermingTag}>
@@ -52,11 +62,8 @@ const PersonaliaHeader = () => {
       >
         Ta av behandling
       </Button>
-      <Tag variant="alt2-filled" size="medium" className={styles.behandlingTag}>
-        Førstegangsbehandling
-      </Tag>
       <Tag variant="alt3-filled" className={styles.behandlingTag}>
-        {valgtBehandling.status}
+        {finnStatusTekst(valgtBehandling.status)}
       </Tag>
     </div>
   );

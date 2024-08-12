@@ -20,14 +20,14 @@ const VilkårsvurderingTable = () => {
     return <Loader />;
   }
 
-  const kravfrist = valgtBehandling.vilkårsett.kravfristVilkår;
-  const tiltakDeltagelse = valgtBehandling.vilkårsett.tiltakDeltagelseVilkår;
-  const alder = valgtBehandling.vilkårsett.alderVilkår;
-  const kvp = valgtBehandling.vilkårsett.kvpVilkår;
+  const kravfrist = valgtBehandling.vilkårssett.kravfristVilkår;
+  const tiltakDeltagelse = valgtBehandling.vilkårssett.tiltakDeltagelseVilkår;
+  const alder = valgtBehandling.vilkårssett.alderVilkår;
+  const kvp = valgtBehandling.vilkårssett.kvpVilkår;
   const institusjonsopphold =
-    valgtBehandling.vilkårsett.institusjonsoppholdVilkår;
-  const intro = valgtBehandling.vilkårsett.introVilkår;
-  const livsopphold = valgtBehandling.vilkårsett.livsoppholdVilkår;
+    valgtBehandling.vilkårssett.institusjonsoppholdVilkår;
+  const intro = valgtBehandling.vilkårssett.introVilkår;
+  const livsopphold = valgtBehandling.vilkårssett.livsoppholdVilkår;
 
   return (
     <Table>
