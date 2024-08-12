@@ -17,6 +17,9 @@ const Behandlingdetaljer = () => {
   if (isLoading || !valgtBehandling || !kravfristVilkår) {
     return <Loader />;
   }
+
+  const { vurderingsperiode, vilkårsett, stønadsdager, saksbehandler } =
+    valgtBehandling;
   return (
     <>
       <VStack gap="3" className={styles.wrapper}>
@@ -29,22 +32,21 @@ const Behandlingdetaljer = () => {
         <BodyShort>
           <b>Vurderingsperiode: </b>
         </BodyShort>
-        <BodyShort>
-          {periodeTilFormatertDatotekst(valgtBehandling.vurderingsperiode)}
-        </BodyShort>
+        <BodyShort>{periodeTilFormatertDatotekst(vurderingsperiode)}</BodyShort>
         <BodyShort>
           <b>Tiltak</b>
         </BodyShort>
         <BodyShort>
-          {
-            valgtBehandling.vilkårsett.tiltakDeltagelseVilkår
-              .registerSaksopplysning.tiltakNavn
-          }
+          {vilkårsett.tiltakDeltagelseVilkår.registerSaksopplysning.tiltakNavn}
         </BodyShort>
+        <BodyShort>
+          <b>Antall dager i uken</b>
+        </BodyShort>
+        <BodyShort>{stønadsdager.registerSaksopplysning.antallDager}</BodyShort>
         <BodyShort>
           <b>Vurdert av</b>
         </BodyShort>
-        <BodyShort>{valgtBehandling.saksbehandler}</BodyShort>
+        <BodyShort>{saksbehandler}</BodyShort>
       </VStack>
     </>
   );

@@ -18,7 +18,8 @@ const Stønadsdager = () => {
         melding={`Kunne ikke hente stønadsdager (${error.status} ${error.info})`}
       />
     );
-  const { antallDager, kilde, periode } = stønadsdager.registerSaksopplysning;
+  const { antallDager, kilde, periode, tiltakNavn } =
+    stønadsdager.registerSaksopplysning;
   return (
     <VStack gap="4">
       <VilkårHeader
@@ -34,7 +35,10 @@ const Stønadsdager = () => {
         kilde={kilde}
         utfall={null}
         vilkårTittel={'Stønadsdager'}
-        grunnlag={[{ header: 'Antall dager', data: antallDager.toString() }]}
+        grunnlag={[
+          { header: 'Tiltak', data: tiltakNavn },
+          { header: 'Antall dager', data: antallDager.toString() },
+        ]}
       />
     </VStack>
   );

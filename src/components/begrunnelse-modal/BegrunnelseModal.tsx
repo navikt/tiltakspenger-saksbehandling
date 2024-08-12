@@ -38,7 +38,7 @@ const BegrunnelseModal = ({ modalRef }: BegrunnelseModalProps) => {
         `Kunne ikke sende tilbake behandlingen (${sendTilbakeBehandlingError.status} ${sendTilbakeBehandlingError.info})`,
       );
     }
-    sendTilbakeBehandling();
+    sendTilbakeBehandling({ begrunnelse: begrunnelse });
   };
 
   return (
