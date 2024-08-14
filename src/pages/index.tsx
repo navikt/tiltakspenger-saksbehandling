@@ -36,19 +36,18 @@ const Oversikten: NextPage = () => {
       <Heading spacing size="medium" level="2">
         Oversikt over behandlinger og søknader
       </Heading>
-      {taBehandlingError &&
-        ((
-          <Varsel
-            variant={'error'}
-            melding={`Kunne ikke ta behandling (${taBehandlingError.status} ${taBehandlingError.info})`}
-          />
-        ) ||
-          (opprettBehandlingError && (
-            <Varsel
-              variant={'error'}
-              melding={`Kunne ikke opprette behandling (${opprettBehandlingError.status} ${opprettBehandlingError.info})`}
-            />
-          )))}
+      {taBehandlingError && (
+        <Varsel
+          variant={'error'}
+          melding={`Kunne ikke ta behandling (${taBehandlingError.status} ${taBehandlingError.info})`}
+        />
+      )}
+      {opprettBehandlingError && (
+        <Varsel
+          variant={'error'}
+          melding={`Kunne ikke opprette behandling (${opprettBehandlingError.status} ${opprettBehandlingError.info})`}
+        />
+      )}
       <Table zebraStripes>
         <Table.Header>
           <Table.Row>

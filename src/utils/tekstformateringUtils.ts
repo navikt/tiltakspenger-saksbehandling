@@ -32,8 +32,8 @@ export const finnUtfallsperiodetekst = (utfall: string) => {
 
 export const lagFaktumTekstAvLivsopphold = (harLivsoppholdYtelser: boolean) => {
   return harLivsoppholdYtelser
-    ? 'Har andre ytelser til livsopphold'
-    : 'Har ikke andre ytelser til livsopphold';
+    ? 'Søker har andre ytelser til livsopphold'
+    : 'Søker har ikke andre ytelser til livsopphold';
 };
 
 export const lagFaktumTekst = (faktum: Deltagelse | Opphold) => {

@@ -1,24 +1,23 @@
-import { BodyShort, Detail, HGrid, Loader, VStack } from '@navikt/ds-react';
+import { BodyShort, Heading, HStack, Loader, VStack } from '@navikt/ds-react';
 import React from 'react';
-import { useRouter } from 'next/router';
-import styles from './Utbetaling.module.css';
-import { UtbetalingUkeDag } from './UtbetalingUkeDag';
+import { Utbetalingsuke } from './Utbetalingsuke';
 import Varsel from '../../varsel/Varsel';
 import { useHentUtbetalingVedtak } from '../../../hooks/utbetaling/useHentUtbetalingVedtak';
+import router from 'next/router';
+import { utbetalingsukeHeading } from '../../../utils/date';
+import styles from './Utbetaling.module.css';
 
-export const UtbetalingSide = () => {
-  const router = useRouter();
+export const Utbetalingside = () => {
   const utbetalingVedtakId = router.query.utbetalingId as string;
   const { utbetalingVedtak, isLoading, error } =
     useHentUtbetalingVedtak(utbetalingVedtakId);
 
-  if (isLoading) {
-    return <Loader />;
-  } else if (error)
+  if (isLoading) return <Loader />;
+  else if (error)
     return (
       <Varsel
         variant="error"
-        melding={`Kunne ikke introduksjonsprogramvilkår (${error.status} ${error.info})`}
+        melding={`Kunne ikke hente utbetaling (${error.status} ${error.info})`}
       />
     );
 
@@ -26,27 +25,19 @@ export const UtbetalingSide = () => {
   const uke2 = utbetalingVedtak.vedtakDager.slice(7, 14);
 
   return (
-    <VStack gap="3" className={styles.utbetalingSide}>
-      <div className={styles.utbetalingDagListeHeading}>
-        <HGrid gap="12" columns={4} style={{ margin: '0 0.5rem' }}>
-          <BodyShort weight="semibold">Dag</BodyShort>
-          <BodyShort weight="semibold">Dato</BodyShort>
-          <BodyShort weight="semibold">Utbetaling</BodyShort>
-          <BodyShort weight="semibold">Beløp</BodyShort>
-        </HGrid>
-      </div>
-      <UtbetalingUkeDag utbetalingUke={uke1} />
-      <UtbetalingUkeDag utbetalingUke={uke2} />
-      <div className={styles.utbetalingDagliste}>
-        <div className={styles.utbetalingDagListeGrid}>
-          <HGrid gap="12" columns={4}>
-            <BodyShort weight="semibold">Total til utbetaling</BodyShort>
-            <span></span>
-            <span></span>
-            <Detail truncate>{utbetalingVedtak.totalbeløp}</Detail>
-          </HGrid>
-        </div>
-      </div>
+    <VStack gap="5" className={styles.utbetalingside}>
+      <Heading size="small" level="3">
+        {utbetalingsukeHeading(utbetalingVedtak.fom)}
+      </Heading>
+      <Utbetalingsuke utbetalingUke={uke1} />
+      <Heading size="small" level="3">
+        {utbetalingsukeHeading(utbetalingVedtak.tom)}
+      </Heading>
+      <Utbetalingsuke utbetalingUke={uke2} />
+      <HStack gap="10" className={styles.total_utbetaling}>
+        <BodyShort weight="semibold">Totalt utbetalt for perioden:</BodyShort>
+        <BodyShort weight="semibold">{utbetalingVedtak.totalbeløp},-</BodyShort>
+      </HStack>
     </VStack>
   );
 };

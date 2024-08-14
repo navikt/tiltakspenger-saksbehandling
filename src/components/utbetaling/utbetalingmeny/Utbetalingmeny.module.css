@@ -1,0 +1,16 @@
+.utbetalingliste {
+  border-left: 1px solid #cfcfcf;
+  border-right: 1px solid #cfcfcf;
+  min-width: 320px;
+}
+
+.listeelement {
+  width: 100%;
+  border-bottom: 1px solid #cfcfcf;
+  align-items: center;
+  padding: 0.6rem 1rem;
+}
+
+.aktivUtbetaling {
+  background-color: #CCE1FF;
+}

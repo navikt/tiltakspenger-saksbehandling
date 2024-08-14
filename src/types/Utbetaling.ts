@@ -7,8 +7,8 @@ export type UtbetalingListe = {
 
 export type UtbetalingVedtak = {
   id: String;
-  fom: Date;
-  tom: Date;
+  fom: string;
+  tom: string;
   sats: number;
   satsDelvis: number;
   satsBarnetillegg: number;
@@ -20,7 +20,7 @@ export type UtbetalingVedtak = {
 
 export type UtbetalingsDagDTO = {
   beløp: number;
-  dato: Date;
+  dato: string;
   tiltakType: String;
   status: UtbetalingsDagStatus;
 };

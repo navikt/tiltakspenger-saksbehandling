@@ -12,23 +12,23 @@ export function dateTilISOTekst(date: Date) {
   return dayjs(date).format('YYYY-MM-DD');
 }
 
-export function dateTilFormatertTekst(date: Date) {
-  return dayjs(date).format('DD.MM.YYYY');
-}
-
 export function formaterDatotekst(dateString: string) {
   return dayjs(dateString).format('DD.MM.YYYY');
-}
-
-export function formaterDatotekstMedTidspunkt(dateString: string) {
-  return dayjs(dateString).format('DD.MM.YYYY HH:mm');
 }
 
 export function periodeTilFormatertDatotekst({ fraOgMed, tilOgMed }: Periode) {
   return `${formaterDatotekst(fraOgMed)} - ${formaterDatotekst(tilOgMed)}`;
 }
 
-export function ukedagFraDate(date: Date) {
+export const ukenummerHeading = (fom: string, tom: string): string => {
+  return `Uke ${ukenummerFraDatotekst(fom)} / ${ukenummerFraDatotekst(tom)}`;
+};
+
+export const utbetalingsukeHeading = (dato: string): string => {
+  return `Uke ${ukenummerFraDatotekst(dato)} - ${månedFraDatotekst(dato)} ${dayjs(dato).year()} `;
+};
+
+export function ukedagFraDatotekst(date: string) {
   const ukedager = [
     'Mandag',
     'Tirsdag',
@@ -41,14 +41,24 @@ export function ukedagFraDate(date: Date) {
   return ukedager[dayjs(date).weekday()];
 }
 
-export function ukenummerFraDate(date: Date) {
+export function månedFraDatotekst(date: string) {
+  const måneder = [
+    'januar',
+    'februar',
+    'mars',
+    'april',
+    'mai',
+    'juni',
+    'juli',
+    'august',
+    'september',
+    'oktober',
+    'november',
+    'desember',
+  ];
+  return måneder[dayjs(date).month()];
+}
+
+export function ukenummerFraDatotekst(date: string) {
   return dayjs(date).week();
 }
-
-export function tekstTilDate(dateString: string) {
-  return dayjs(dateString).toDate();
-}
-
-export const meldekortUkeNummer = (fom: string, tom: string): string => {
-  return `Uke ${ukenummerFraDate(new Date(fom))} / ${ukenummerFraDate(new Date(tom))}`;
-};

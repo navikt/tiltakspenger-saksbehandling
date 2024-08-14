@@ -4,14 +4,14 @@ import { useHentBehandling } from '../../hooks/useHentBehandling';
 import { BehandlingStatus } from '../../types/BehandlingTypes';
 import { useContext, useState } from 'react';
 import { BehandlingContext } from '../layout/SaksbehandlingLayout';
-import saksbehandler from '../../pages/api/saksbehandler';
 import { SaksbehandlerContext } from '../../pages/_app';
 import { kanSaksbehandleForBehandling } from '../../utils/tilganger';
 
 export const Saksbehandlingstabs = () => {
   const aktivTab = router.route.split('/')[3];
   const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
-  const { behandlingId, meldekortId } = useContext(BehandlingContext);
+  const { behandlingId, meldekortId, utbetalingId } =
+    useContext(BehandlingContext);
   const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
   const [value, setValue] = useState(aktivTab);
 
@@ -65,7 +65,6 @@ export const Saksbehandlingstabs = () => {
                 )
               }
             />
-            {/*
             <Tabs.Tab
               value={'utbetaling'}
               label={'Utbetaling'}
@@ -77,7 +76,6 @@ export const Saksbehandlingstabs = () => {
                 );
               }}
             />
-            */}
           </>
         )}
       </Tabs.List>
