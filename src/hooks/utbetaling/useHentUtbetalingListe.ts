@@ -1,6 +1,6 @@
 import useSWR from 'swr';
-import { fetcher, FetcherError } from '../utils/http';
-import { UtbetalingListe } from '../types/Utbetaling';
+import { UtbetalingListe } from '../../types/Utbetaling';
+import { FetcherError, fetcher } from '../../utils/http';
 
 export function useHentUtbetalingListe(
   iverksatt: boolean,

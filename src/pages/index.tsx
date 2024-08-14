@@ -1,90 +1,40 @@
-import React, { useContext } from 'react';
-import { Box, Button, Loader, Table } from '@navikt/ds-react';
-import { SaksbehandlerContext } from './_app';
+import React from 'react';
+import { Box, Heading, Loader, Table } from '@navikt/ds-react';
 import { useHentSøknaderOgBehandlinger } from '../hooks/useHentSøknaderOgBehandlinger';
 import { NextPage } from 'next';
-import { useRouter } from 'next/router';
+import router from 'next/router';
 import { pageWithAuthentication } from '../auth/pageWithAuthentication';
-import { skalKunneTaBehandling } from '../utils/tilganger';
-import { BehandlingForBenk, TypeBehandling } from '../types/BehandlingTypes';
 import { useOpprettBehandling } from '../hooks/useOpprettBehandling';
 import { periodeTilFormatertDatotekst } from '../utils/date';
 import { finnStatusTekst } from '../utils/tekstformateringUtils';
 import { useTaBehandling } from '../hooks/useTaBehandling';
 import Varsel from '../components/varsel/Varsel';
+import {
+  benkknapp,
+  KnappForBehandlingType,
+} from '../components/behandlingsknapper/Benkknapp';
 
-const Benken: NextPage = () => {
-  const router = useRouter();
-  const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
+const Oversikten: NextPage = () => {
   const { SøknaderOgBehandlinger, isLoading, error } =
     useHentSøknaderOgBehandlinger();
-  const { isSøknadMutating, onOpprettBehandling, opprettBehandlingError } =
-    useOpprettBehandling();
-  const { isBehandlingMutating, onTaBehandling, taBehandlingError } =
-    useTaBehandling();
+  const { opprettBehandlingError } = useOpprettBehandling();
+  const { taBehandlingError } = useTaBehandling();
 
-  if (isLoading || !SøknaderOgBehandlinger) {
-    return <Loader />;
-  } else if (error)
+  if (isLoading || !SøknaderOgBehandlinger) return <Loader />;
+
+  if (error)
     return (
       <Varsel
         variant="error"
-        melding={`Kunne ikke beregne meldekort (${error.status} ${error.info})`}
+        melding={`Kunne ikke hente behandlinger (${error.status} ${error.info})`}
       />
     );
 
-  const knappForBehandlingType = (behandling: BehandlingForBenk) => {
-    if (behandling.typeBehandling === TypeBehandling.SØKNAD)
-      return (
-        <Button
-          size="small"
-          variant="primary"
-          loading={isSøknadMutating}
-          onClick={() => onOpprettBehandling({ id: behandling.id })}
-        >
-          Start behandling
-        </Button>
-      );
-    else if (
-      skalKunneTaBehandling(
-        behandling.status,
-        innloggetSaksbehandler,
-        behandling.saksbehandler,
-      )
-    )
-      return (
-        <Button
-          size="small"
-          variant="primary"
-          loading={isBehandlingMutating}
-          onClick={() => onTaBehandling({ id: behandling.id })}
-          disabled={
-            !skalKunneTaBehandling(
-              behandling.status,
-              innloggetSaksbehandler,
-              behandling.saksbehandler,
-            )
-          }
-        >
-          Ta behandling
-        </Button>
-      );
-    else
-      return (
-        <Button
-          size="small"
-          variant="secondary"
-          onClick={() =>
-            router.push(`/behandling/${behandling.id}/oppsummering`)
-          }
-        >
-          Se behandling
-        </Button>
-      );
-  };
-
   return (
     <Box style={{ padding: '1rem' }}>
+      <Heading spacing size="medium" level="2">
+        Oversikt over behandlinger og søknader
+      </Heading>
       {taBehandlingError &&
         ((
           <Varsel
@@ -101,42 +51,58 @@ const Benken: NextPage = () => {
       <Table zebraStripes>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell scope="col">Ident</Table.HeaderCell>
+            <Table.HeaderCell scope="col">Fødselsnummer</Table.HeaderCell>
             <Table.HeaderCell scope="col">Type</Table.HeaderCell>
             <Table.HeaderCell scope="col">Status</Table.HeaderCell>
             <Table.HeaderCell scope="col">Periode</Table.HeaderCell>
             <Table.HeaderCell scope="col">Saksbehandler</Table.HeaderCell>
             <Table.HeaderCell scope="col">Beslutter</Table.HeaderCell>
+            <Table.HeaderCell scope="col">Handlinger</Table.HeaderCell>
             <Table.HeaderCell scope="col"></Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {SøknaderOgBehandlinger.map((behandling) => {
-            return (
-              <Table.Row shadeOnHover={false} key={behandling.id}>
-                <Table.DataCell>{behandling.ident}</Table.DataCell>
-                <Table.DataCell>{behandling.typeBehandling}</Table.DataCell>
-                <Table.DataCell>
-                  {finnStatusTekst(behandling.status)}
-                </Table.DataCell>
-                <Table.DataCell>
-                  {behandling.periode &&
-                    `${periodeTilFormatertDatotekst(behandling.periode)}`}
-                </Table.DataCell>
-                <Table.DataCell>{behandling.saksbehandler}</Table.DataCell>
-                <Table.DataCell>{behandling.beslutter}</Table.DataCell>
-                <Table.DataCell>
-                  {knappForBehandlingType(behandling)}
-                </Table.DataCell>
-              </Table.Row>
-            );
-          })}
+          {SøknaderOgBehandlinger.map((behandling) => (
+            <Table.Row shadeOnHover={false} key={behandling.id}>
+              <Table.DataCell>{behandling.ident}</Table.DataCell>
+              <Table.DataCell>{behandling.typeBehandling}</Table.DataCell>
+              <Table.DataCell>
+                {finnStatusTekst(behandling.status)}
+              </Table.DataCell>
+              <Table.DataCell>
+                {behandling.periode &&
+                  `${periodeTilFormatertDatotekst(behandling.periode)}`}
+              </Table.DataCell>
+              <Table.DataCell>
+                {behandling.saksbehandler ?? 'Ikke tildelt'}
+              </Table.DataCell>
+              <Table.DataCell>
+                {behandling.beslutter ?? 'Ikke tildelt'}
+              </Table.DataCell>
+              <Table.DataCell scope="col">
+                <KnappForBehandlingType
+                  status={behandling.status}
+                  saksbehandler={behandling.saksbehandler}
+                  beslutter={behandling.beslutter}
+                  behandlingId={behandling.id}
+                />
+              </Table.DataCell>
+              <Table.DataCell>
+                {benkknapp(
+                  'secondary',
+                  () =>
+                    router.push(`/behandling/${behandling.id}/oppsummering`),
+                  'Se behandling',
+                )}
+              </Table.DataCell>
+            </Table.Row>
+          ))}
         </Table.Body>
       </Table>
     </Box>
   );
 };
 
-export default Benken;
+export default Oversikten;
 
 export const getServerSideProps = pageWithAuthentication();

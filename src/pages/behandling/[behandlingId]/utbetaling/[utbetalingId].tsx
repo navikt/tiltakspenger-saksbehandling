@@ -2,7 +2,7 @@ import { SaksbehandlingLayout } from '../../../../components/layout/Saksbehandli
 import { ReactElement } from 'react';
 import { NextPageWithLayout } from '../../../_app';
 import { UtbetalingMeny } from '../../../../components/utbetaling/utbetaling-meny/UtbetalingMeny';
-import { UtbetalingSide } from '../../../../components/utbetaling/utbetaling-side/UtbetalingSide';
+import { UtbetalingSide } from '../../../../components/utbetaling/utbetalingside/UtbetalingSide';
 import { pageWithAuthentication } from '../../../../auth/pageWithAuthentication';
 import { HStack } from '@navikt/ds-react';
 import styles from '../../Behandling.module.css';

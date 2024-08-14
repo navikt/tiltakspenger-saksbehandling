@@ -1,7 +1,6 @@
 import useSWRMutation from 'swr/mutation';
 import { FetcherError, mutateBehandling } from '../utils/http';
 import router from 'next/router';
-import { mutate } from 'swr';
 
 export function useSendTilbakeBehandling(behandlingId: string) {
   const {
@@ -14,7 +13,6 @@ export function useSendTilbakeBehandling(behandlingId: string) {
     {
       onSuccess: () => {
         router.push('/');
-        mutate(`/api/behandling/${behandlingId}`);
       },
     },
   );

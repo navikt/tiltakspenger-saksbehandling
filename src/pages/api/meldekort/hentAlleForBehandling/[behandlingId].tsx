@@ -12,7 +12,7 @@ async function handler(
   logger.info('Henter obo-token for tiltakspenger-meldekort-api');
   const obo = await requestOboToken(token, process.env.MELDEKORT_SCOPE);
   if (!obo.ok) {
-    const oboError = (obo as {ok: false; error: Error}).error
+    const oboError = (obo as { ok: false; error: Error }).error;
     logger.error(
       `Kunne ikke gjøre on-behalf-of-utveksling for saksbehandlertoken: ${oboError.message}`,
     );

@@ -1,6 +1,6 @@
 import useSWR from 'swr';
-import { fetcher, FetcherError } from '../utils/http';
-import { UtbetalingVedtak } from '../types/Utbetaling';
+import { UtbetalingVedtak } from '../../types/Utbetaling';
+import { FetcherError, fetcher } from '../../utils/http';
 
 export function useHentUtbetalingVedtak(utbetalingVedtakId?: string) {
   const {

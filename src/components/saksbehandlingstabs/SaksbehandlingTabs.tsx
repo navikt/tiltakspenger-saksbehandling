@@ -4,10 +4,13 @@ import { useHentBehandling } from '../../hooks/useHentBehandling';
 import { BehandlingStatus } from '../../types/BehandlingTypes';
 import { useContext, useState } from 'react';
 import { BehandlingContext } from '../layout/SaksbehandlingLayout';
+import saksbehandler from '../../pages/api/saksbehandler';
+import { SaksbehandlerContext } from '../../pages/_app';
+import { kanSaksbehandleForBehandling } from '../../utils/tilganger';
 
-export const SaksbehandlingTabs = () => {
+export const Saksbehandlingstabs = () => {
   const aktivTab = router.route.split('/')[3];
-
+  const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
   const { behandlingId, meldekortId } = useContext(BehandlingContext);
   const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
   const [value, setValue] = useState(aktivTab);
@@ -15,26 +18,31 @@ export const SaksbehandlingTabs = () => {
   if (isLoading || !valgtBehandling) {
     return <Loader />;
   }
-  const tilBeslutter =
-    valgtBehandling.status === BehandlingStatus.KLAR_TIL_BESLUTNING;
-  const iverksatt = valgtBehandling.status === BehandlingStatus.INNVILGET;
+  const underBehandling = (status: string) =>
+    status === BehandlingStatus.UNDER_BEHANDLING;
+  const iverksatt = (status: string) => status === BehandlingStatus.INNVILGET;
 
   return (
     <Tabs value={value} onChange={setValue}>
       <Tabs.List>
-        {(!tilBeslutter || !iverksatt) && (
-          <Tabs.Tab
-            value={'inngangsvilkar'}
-            label={'Inngangsvilkår'}
-            id="inngangsvilkår-tab"
-            aria-controls="inngangsvilkår-panel"
-            onClick={() =>
-              router.push(
-                `/behandling/${behandlingId}/inngangsvilkar/kravfrist`,
-              )
-            }
-          />
-        )}
+        {underBehandling(valgtBehandling.status) &&
+          kanSaksbehandleForBehandling(
+            valgtBehandling.status,
+            innloggetSaksbehandler,
+            valgtBehandling.saksbehandler,
+          ) && (
+            <Tabs.Tab
+              value={'inngangsvilkar'}
+              label={'Inngangsvilkår'}
+              id="inngangsvilkår-tab"
+              aria-controls="inngangsvilkår-panel"
+              onClick={() =>
+                router.push(
+                  `/behandling/${behandlingId}/inngangsvilkar/kravfrist`,
+                )
+              }
+            />
+          )}
         <Tabs.Tab
           value={'oppsummering'}
           label={'Oppsummering'}
@@ -44,7 +52,7 @@ export const SaksbehandlingTabs = () => {
             router.push(`/behandling/${behandlingId}/oppsummering`)
           }
         />
-        {iverksatt && (
+        {iverksatt(valgtBehandling.status) && (
           <>
             <Tabs.Tab
               value={'meldekort'}

@@ -1,7 +1,7 @@
 import { BodyShort, HStack, Table, VStack } from '@navikt/ds-react';
 import { periodeTilFormatertDatotekst } from '../../utils/date';
 import { Periode } from '../../types/Periode';
-import { UtfallIkon } from '../utfall-ikon/UtfallIkon';
+import { UtfallIkon } from '../utfallikon/UtfallIkon';
 import styles from './Vilkår.module.css';
 import { SamletUtfall } from '../../types/BehandlingTypes';
 

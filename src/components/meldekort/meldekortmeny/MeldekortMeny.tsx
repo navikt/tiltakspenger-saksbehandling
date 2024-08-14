@@ -13,12 +13,13 @@ import { useHentMeldekortListe } from '../../../hooks/meldekort/useHentMeldekort
 export const MeldekortMeny = () => {
   const { behandlingId } = useContext(BehandlingContext);
   const aktivMeldekortId = router.query.meldekortId as string;
-  const { meldekortliste, isLoading } = useHentMeldekortListe(
+  const { meldekortliste, isLoading, error } = useHentMeldekortListe(
     true,
     behandlingId,
   );
 
   if (isLoading || !meldekortliste) return <Loader />;
+  else if (error) return null;
 
   return (
     <VStack className={styles.meldekortliste}>

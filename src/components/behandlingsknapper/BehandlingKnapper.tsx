@@ -15,7 +15,7 @@ interface BehandlingKnapperProps {
   modalRef: RefObject<HTMLDialogElement>;
 }
 
-export const BehandlingKnapper = ({ modalRef }: BehandlingKnapperProps) => {
+export const Behandlingsknapper = ({ modalRef }: BehandlingKnapperProps) => {
   const { behandlingId } = useContext(BehandlingContext);
   const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
   const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
