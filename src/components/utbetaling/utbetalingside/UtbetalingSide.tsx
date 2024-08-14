@@ -1,10 +1,10 @@
 import { BodyShort, Detail, HGrid, Loader, VStack } from '@navikt/ds-react';
 import React from 'react';
 import { useRouter } from 'next/router';
-import { useHentUtbetalingVedtak } from '../../../hooks/useHentUtbetalingVedtak';
 import styles from './Utbetaling.module.css';
 import { UtbetalingUkeDag } from './UtbetalingUkeDag';
 import Varsel from '../../varsel/Varsel';
+import { useHentUtbetalingVedtak } from '../../../hooks/utbetaling/useHentUtbetalingVedtak';
 
 export const UtbetalingSide = () => {
   const router = useRouter();

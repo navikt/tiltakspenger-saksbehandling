@@ -1,5 +1,5 @@
 import React from 'react';
-import { UtfallIkon } from '../utfall-ikon/UtfallIkon';
+import { UtfallIkon } from '../utfallikon/UtfallIkon';
 import IkonMedTekst from '../ikon-med-tekst/IkonMedTekst';
 import { SamletUtfall } from '../../types/BehandlingTypes';
 

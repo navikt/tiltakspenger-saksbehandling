@@ -1,16 +1,15 @@
 import React from 'react';
-import { useRouter } from 'next/router';
-import { useHentUtbetalingVedtak } from '../../../hooks/useHentUtbetalingVedtak';
-import { Skuff } from '../../skuff/Skuff';
+import router from 'next/router';
 import DetaljeListeelement from '../../detalje-listeelement/DetaljeListeelement';
+import { VStack } from '@navikt/ds-react';
+import { useHentUtbetalingVedtak } from '../../../hooks/utbetaling/useHentUtbetalingVedtak';
 
 export const UtbetalingDetaljer = () => {
-  const router = useRouter();
   const utbetalingVedtakId = router.query.utbetalingId as string;
   const { utbetalingVedtak } = useHentUtbetalingVedtak(utbetalingVedtakId);
 
   return (
-    <Skuff venstreOrientert={false} headerTekst="Detaljer">
+    <VStack>
       <DetaljeListeelement
         label="Tiltakspenger sats"
         description={utbetalingVedtak?.sats.toString() ?? 'Fant ikke sats'}
@@ -40,6 +39,6 @@ export const UtbetalingDetaljer = () => {
           description={utbetalingVedtak?.antallBarn.toString()}
         />
       )}
-    </Skuff>
+    </VStack>
   );
 };

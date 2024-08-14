@@ -1,13 +1,13 @@
 import { Loader, Heading, VStack, Alert } from '@navikt/ds-react';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
-import { BehandlingKnapper } from '../behandling-knapper/BehandlingKnapper';
 import { useContext, useRef } from 'react';
-import BegrunnelseModal from '../begrunnelse-modal/BegrunnelseModal';
+import BegrunnelseModal from '../begrunnelsemodal/BegrunnelseModal';
 import styles from './Oppsummering.module.css';
 import VilkårsvurderingTable from './VilkårsvurderingTable';
 import { BehandlingStatus } from '../../types/BehandlingTypes';
 import { BehandlingContext } from '../layout/SaksbehandlingLayout';
 import Varsel from '../varsel/Varsel';
+import { Behandlingsknapper } from '../behandlingsknapper/BehandlingKnapper';
 
 const Oppsummering = () => {
   const { behandlingId } = useContext(BehandlingContext);
@@ -45,7 +45,7 @@ const Oppsummering = () => {
         <Heading size="small">Vilkårsvurdering</Heading>
         <VilkårsvurderingTable />
       </VStack>
-      <BehandlingKnapper modalRef={modalRef} />
+      <Behandlingsknapper modalRef={modalRef} />
       <BegrunnelseModal modalRef={modalRef} />
     </VStack>
   );

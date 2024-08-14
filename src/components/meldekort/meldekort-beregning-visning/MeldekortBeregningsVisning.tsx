@@ -1,6 +1,6 @@
 import { BodyShort, Table } from '@navikt/ds-react';
 import { MeldekortStatus } from '../../../types/MeldekortTypes';
-import { velgIkon } from '../meldekort-side/MeldekortUke';
+import { velgIkon } from '../meldekortside/MeldekortUke';
 import router from 'next/router';
 import { useHentMeldekortBeregning } from '../../../hooks/meldekort/useHentMeldekortBeregning';
 import Varsel from '../../varsel/Varsel';
