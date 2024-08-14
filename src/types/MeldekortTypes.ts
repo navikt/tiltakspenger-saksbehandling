@@ -13,15 +13,15 @@ export type MeldekortUtenDager = {
 
 export type Meldekort = {
   id: string;
-  fom: Date;
-  tom: Date;
+  fom: string;
+  tom: string;
   antallDagerPåTiltaket: number;
   tiltak: Tiltak[];
   meldekortDager: MeldekortDag[];
 };
 
 export type MeldekortDag = {
-  dato: Date;
+  dato: string;
   tiltak: Tiltak;
   status: MeldekortStatus;
 };
@@ -40,7 +40,7 @@ export type GodkjennDTO = {
 
 export type MeldekortDagDTO = {
   meldekortId: string;
-  dato: Date;
+  dato: string;
   status: MeldekortStatus;
 };
 
