@@ -34,9 +34,6 @@ const PersonaliaHeader = () => {
     fortrolig,
   } = personopplysninger;
 
-  console.log(
-    kanTaAvBehandling(status, innloggetSaksbehandler, saksbehandler, beslutter),
-  );
   return (
     <div className={styles.personaliaHeader}>
       <PersonCircleIcon className={styles.personIcon} />

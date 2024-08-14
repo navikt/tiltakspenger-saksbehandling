@@ -13,6 +13,7 @@ import {
   benkknapp,
   KnappForBehandlingType,
 } from '../components/behandlingsknapper/Benkknapp';
+import { BehandlingStatus } from '../types/BehandlingTypes';
 
 const Oversikten: NextPage = () => {
   const { SøknaderOgBehandlinger, isLoading, error } =
@@ -88,12 +89,13 @@ const Oversikten: NextPage = () => {
                 />
               </Table.DataCell>
               <Table.DataCell>
-                {benkknapp(
-                  'secondary',
-                  () =>
-                    router.push(`/behandling/${behandling.id}/oppsummering`),
-                  'Se behandling',
-                )}
+                {behandling.status !== BehandlingStatus.SØKNAD &&
+                  benkknapp(
+                    'secondary',
+                    () =>
+                      router.push(`/behandling/${behandling.id}/oppsummering`),
+                    'Se behandling',
+                  )}
               </Table.DataCell>
             </Table.Row>
           ))}
