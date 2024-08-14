@@ -7,18 +7,23 @@ import { useTaAvBehandling } from '../../hooks/useTaAvBehandling';
 import { useHentPersonopplysninger } from '../../hooks/useHentPersonopplysninger';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
 import { finnStatusTekst } from '../../utils/tekstformateringUtils';
+import { kanTaAvBehandling } from '../../utils/tilganger';
+import { SaksbehandlerContext } from '../../pages/_app';
 
 const PersonaliaHeader = () => {
   const { behandlingId } = useContext(BehandlingContext);
+  const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
   const { valgtBehandling } = useHentBehandling(behandlingId);
   const { personopplysninger, isPersonopplysningerLoading } =
     useHentPersonopplysninger(behandlingId);
-  const { taAvBehandling, tarAvBehandling, taAvBehandlingError } =
-    useTaAvBehandling(behandlingId);
+  const { taAvBehandling, tarAvBehandling } = useTaAvBehandling(behandlingId);
 
   if (isPersonopplysningerLoading || !personopplysninger) {
     return <Loader />;
   }
+
+  const { status, saksbehandler, beslutter } = valgtBehandling;
+
   const {
     fornavn,
     mellomnavn,
@@ -29,6 +34,9 @@ const PersonaliaHeader = () => {
     fortrolig,
   } = personopplysninger;
 
+  console.log(
+    kanTaAvBehandling(status, innloggetSaksbehandler, saksbehandler, beslutter),
+  );
   return (
     <div className={styles.personaliaHeader}>
       <PersonCircleIcon className={styles.personIcon} />
@@ -53,15 +61,22 @@ const PersonaliaHeader = () => {
           Søker er skjermet
         </Tag>
       )}
-      <Button
-        type="submit"
-        size="small"
-        loading={tarAvBehandling}
-        onClick={() => taAvBehandling()}
-        className={styles.behandlingTag}
-      >
-        Ta av behandling
-      </Button>
+      {kanTaAvBehandling(
+        status,
+        innloggetSaksbehandler,
+        saksbehandler,
+        beslutter,
+      ) && (
+        <Button
+          type="submit"
+          size="small"
+          loading={tarAvBehandling}
+          onClick={() => taAvBehandling()}
+          className={styles.behandlingTag}
+        >
+          Ta av behandling
+        </Button>
+      )}
       <Tag variant="alt3-filled" className={styles.behandlingTag}>
         {finnStatusTekst(valgtBehandling.status)}
       </Tag>

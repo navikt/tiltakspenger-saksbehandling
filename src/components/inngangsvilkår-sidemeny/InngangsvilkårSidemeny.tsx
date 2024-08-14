@@ -4,7 +4,7 @@ import styles from './InngangsvilkårSidemeny.module.css';
 import router from 'next/router';
 import { useContext } from 'react';
 import { BehandlingContext } from '../layout/SaksbehandlingLayout';
-import { UtfallIkon } from '../utfall-ikon/UtfallIkon';
+import { UtfallIkon } from '../utfallikon/UtfallIkon';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
 import { SamletUtfall } from '../../types/BehandlingTypes';
 

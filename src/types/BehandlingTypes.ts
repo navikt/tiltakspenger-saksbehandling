@@ -46,8 +46,8 @@ export interface Attestering {
 }
 
 export enum Attesteringsstatus {
-  GODKJENT = 'Godkjent',
-  SENDT_TILBAKE = 'Sendt tilbake',
+  GODKJENT = 'GODKJENT',
+  SENDT_TILBAKE = 'SENDT_TILBAKE',
 }
 
 export interface BehandlingForBenk {
@@ -94,4 +94,8 @@ export enum SamletUtfall {
 export enum TypeBehandling {
   SØKNAD = 'Søknad',
   FØRSTEGANGSBEHANDLING = 'Førstegangsbehandling',
+}
+
+export interface BehandlingIdResponse {
+  id: string;
 }
