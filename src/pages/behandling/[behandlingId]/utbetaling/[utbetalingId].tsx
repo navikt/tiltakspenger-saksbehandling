@@ -9,7 +9,7 @@ import { Box, HStack } from '@navikt/ds-react';
 import styles from '../../Behandling.module.css';
 import Varsel from '../../../../components/varsel/Varsel';
 import { Utbetalingmeny } from '../../../../components/utbetaling/utbetalingmeny/Utbetalingmeny';
-import { Utbetalingside } from '../../../../components/utbetaling/utbetalingside/Utbetalingside';
+import { Utbetalingsside } from '../../../../components/utbetaling/utbetalingside/Utbetalingsside';
 
 const Utbetaling: NextPageWithLayout = () => {
   const { utbetalingId } = useContext(BehandlingContext);
@@ -25,7 +25,7 @@ const Utbetaling: NextPageWithLayout = () => {
       {utbetalingId ? (
         <>
           <Utbetalingmeny />
-          <Utbetalingside />
+          <Utbetalingsside />
         </>
       ) : (
         <Box padding="5">

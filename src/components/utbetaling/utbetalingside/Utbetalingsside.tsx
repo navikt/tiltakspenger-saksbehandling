@@ -7,7 +7,7 @@ import router from 'next/router';
 import { utbetalingsukeHeading } from '../../../utils/date';
 import styles from './Utbetaling.module.css';
 
-export const Utbetalingside = () => {
+export const Utbetalingsside = () => {
   const utbetalingVedtakId = router.query.utbetalingId as string;
   const { utbetalingVedtak, isLoading, error } =
     useHentUtbetalingVedtak(utbetalingVedtakId);
