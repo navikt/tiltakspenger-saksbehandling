@@ -4,15 +4,15 @@ import {
   CheckmarkCircleFillIcon,
   ExclamationmarkTriangleFillIcon,
 } from '@navikt/aksel-icons';
-import { SamletUtfall } from '../../types/BehandlingTypes';
+import { Utfall } from '../../types/BehandlingTypes';
 
 interface UtfallIkonProps {
-  utfall: SamletUtfall;
+  utfall: Utfall;
 }
 
 export const UtfallIkon = ({ utfall }: UtfallIkonProps) => {
   switch (utfall) {
-    case SamletUtfall.OPPFYLT || SamletUtfall.DELVIS_OPPFYLT:
+    case Utfall.OPPFYLT || Utfall.DELVIS_OPPFYLT:
       return (
         <CheckmarkCircleFillIcon
           width="1.5em"
@@ -20,7 +20,7 @@ export const UtfallIkon = ({ utfall }: UtfallIkonProps) => {
           color="var(--a-icon-success)"
         />
       );
-    case SamletUtfall.IKKE_OPPFYLT:
+    case Utfall.IKKE_OPPFYLT:
       return (
         <XMarkOctagonFillIcon
           width="1.5em"
@@ -28,7 +28,7 @@ export const UtfallIkon = ({ utfall }: UtfallIkonProps) => {
           color="var(--a-icon-danger)"
         />
       );
-    case SamletUtfall.UAVKLART:
+    case Utfall.UAVKLART:
       return (
         <ExclamationmarkTriangleFillIcon
           width="1.5em"

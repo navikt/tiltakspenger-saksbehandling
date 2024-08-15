@@ -1,32 +1,32 @@
 import React from 'react';
 import { UtfallIkon } from '../utfallikon/UtfallIkon';
 import IkonMedTekst from '../ikon-med-tekst/IkonMedTekst';
-import { SamletUtfall } from '../../types/BehandlingTypes';
+import { Utfall } from '../../types/BehandlingTypes';
 
 interface UtfallstekstMedIkonProps {
-  samletUtfall: SamletUtfall;
+  utfall: Utfall;
 }
 
-function lagUtfallstekst(samletUtfall: SamletUtfall) {
-  switch (samletUtfall) {
-    case SamletUtfall.OPPFYLT:
+function lagUtfallstekst(utfall: string) {
+  switch (utfall) {
+    case Utfall.OPPFYLT:
       return 'Vilkåret er oppfylt i hele perioden';
-    case SamletUtfall.IKKE_OPPFYLT:
+    case Utfall.IKKE_OPPFYLT:
       return 'Vilkåret er ikke oppfylt';
-    case SamletUtfall.DELVIS_OPPFYLT:
+    case Utfall.DELVIS_OPPFYLT:
       return 'Vilkåret er delvis oppfylt';
-    case SamletUtfall.UAVKLART:
+    case Utfall.UAVKLART:
       return 'Vilkåret er uavklart';
     default:
       return 'Vilkåret er uavklart';
   }
 }
 
-const UtfallstekstMedIkon = ({ samletUtfall }: UtfallstekstMedIkonProps) => {
-  const utfallstekst = lagUtfallstekst(samletUtfall);
+const UtfallstekstMedIkon = ({ utfall }: UtfallstekstMedIkonProps) => {
+  const utfallstekst = lagUtfallstekst(utfall);
   return (
     <IkonMedTekst
-      iconRenderer={() => <UtfallIkon utfall={samletUtfall} />}
+      iconRenderer={() => <UtfallIkon utfall={utfall} />}
       text={utfallstekst}
     />
   );

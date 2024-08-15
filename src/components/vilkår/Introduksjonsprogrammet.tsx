@@ -36,7 +36,7 @@ const Introduksjonsprogrammet = () => {
           'https://lovdata.no/dokument/SF/forskrift/2013-11-04-1286'
         }
       />
-      <UtfallstekstMedIkon samletUtfall={intro.samletUtfall} />
+      <UtfallstekstMedIkon utfall={intro.samletUtfall} />
       <VilkårKort
         saksopplysningsperiode={intro.utfallperiode}
         kilde={intro.avklartSaksopplysning.kilde}

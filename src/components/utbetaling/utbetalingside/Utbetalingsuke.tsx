@@ -3,7 +3,7 @@ import React from 'react';
 import {
   UtbetalingsDagDTO,
   UtbetalingsDagStatus,
-} from '../../../types/Utbetaling';
+} from '../../../types/UtbetalingTypes';
 import { formaterDatotekst, ukedagFraDatotekst } from '../../../utils/date';
 import styles from './Utbetaling.module.css';
 

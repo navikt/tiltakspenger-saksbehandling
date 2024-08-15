@@ -32,7 +32,7 @@ const Institusjonsopphold = () => {
         }
         paragraf={'§9'}
       />
-      <UtfallstekstMedIkon samletUtfall={institusjonsopphold.samletUtfall} />
+      <UtfallstekstMedIkon utfall={institusjonsopphold.samletUtfall} />
       <VilkårKort
         saksopplysningsperiode={institusjonsopphold.utfallperiode}
         kilde={institusjonsopphold.søknadSaksopplysning.kilde}

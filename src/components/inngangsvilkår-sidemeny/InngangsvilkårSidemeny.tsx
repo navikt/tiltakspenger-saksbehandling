@@ -6,7 +6,7 @@ import { useContext } from 'react';
 import { BehandlingContext } from '../layout/SaksbehandlingLayout';
 import { UtfallIkon } from '../utfallikon/UtfallIkon';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
-import { SamletUtfall } from '../../types/BehandlingTypes';
+import { CalendarIcon } from '@navikt/aksel-icons';
 
 const InngangsvilkårSidemeny = () => {
   const { behandlingId } = useContext(BehandlingContext);
@@ -98,7 +98,7 @@ const InngangsvilkårSidemeny = () => {
         gap="5"
         className={`${styles.vilkår} ${vilkårsteg === 'stonadsdager' && styles.aktivtSteg}`}
       >
-        <UtfallIkon utfall={SamletUtfall.OPPFYLT} />
+        <CalendarIcon title="stønadsdager" fontSize="1.5rem" />
         <Link
           as={NextLink}
           underline={false}

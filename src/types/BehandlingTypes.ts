@@ -84,7 +84,7 @@ export enum ÅrsakTilEndring {
   ENDRING_ETTER_SØKNADSTIDSPUNKT = 'ENDRING_ETTER_SØKNADSTIDSPUNKT',
 }
 
-export enum SamletUtfall {
+export enum Utfall {
   OPPFYLT = 'OPPFYLT',
   DELVIS_OPPFYLT = 'DELVIS_OPPFYLT',
   IKKE_OPPFYLT = 'IKKE_OPPFYLT',

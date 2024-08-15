@@ -1,11 +1,11 @@
-import { Lovreferanse, SamletUtfall } from './BehandlingTypes';
+import { Lovreferanse, Utfall } from './BehandlingTypes';
 import { Periode } from './Periode';
 
 export interface TiltakDeltagelseVilkår {
   registerSaksopplysning: TiltakDeltagelseSaksopplysning;
   vilkårLovreferanse: Lovreferanse;
   utfallperiode: Periode;
-  samletUtfall: SamletUtfall;
+  samletUtfall: Utfall;
 }
 
 interface TiltakDeltagelseSaksopplysning {

@@ -32,7 +32,7 @@ const Alder = () => {
         }
         paragraf={alderVilkår.vilkårLovreferanse.paragraf}
       />
-      <UtfallstekstMedIkon samletUtfall={alderVilkår.samletUtfall} />
+      <UtfallstekstMedIkon utfall={alderVilkår.samletUtfall} />
       <VilkårKort
         saksopplysningsperiode={alderVilkår.utfallperiode}
         kilde={alderVilkår.avklartSaksopplysning.kilde}

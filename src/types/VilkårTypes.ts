@@ -9,3 +9,10 @@ export enum Vilkår {
   ANDREYTELSER = 'andreytelser',
   STØNADSDAGER = 'stonadsdager',
 }
+
+export enum Kilde {
+  SØKNAD = 'SØKNAD',
+  PDL = 'PDL',
+  KOMET = 'KOMET',
+  ARENA = 'ARENA',
+}

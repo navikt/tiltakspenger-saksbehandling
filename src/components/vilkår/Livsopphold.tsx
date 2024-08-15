@@ -75,7 +75,7 @@ const Livsopphold = () => {
       />
 
       {!watchHarLivsoppholdytelser && (
-        <UtfallstekstMedIkon samletUtfall={livsopphold.samletUtfall} />
+        <UtfallstekstMedIkon utfall={livsopphold.samletUtfall} />
       )}
       {watchHarLivsoppholdytelser && (
         <Alert variant="error">

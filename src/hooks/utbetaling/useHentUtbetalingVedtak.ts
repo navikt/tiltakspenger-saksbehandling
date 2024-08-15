@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import { UtbetalingVedtak } from '../../types/Utbetaling';
+import { UtbetalingVedtak } from '../../types/UtbetalingTypes';
 import { FetcherError, fetcher } from '../../utils/http';
 
 export function useHentUtbetalingVedtak(utbetalingVedtakId?: string) {

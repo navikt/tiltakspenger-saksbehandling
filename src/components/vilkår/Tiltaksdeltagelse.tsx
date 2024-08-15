@@ -35,7 +35,7 @@ const Tiltaksdeltagelse = () => {
         paragraf={tiltakDeltagelse.vilkårLovreferanse.paragraf}
       />
 
-      <UtfallstekstMedIkon samletUtfall={tiltakDeltagelse.samletUtfall} />
+      <UtfallstekstMedIkon utfall={tiltakDeltagelse.samletUtfall} />
       <VilkårKort
         key={tiltakNavn}
         saksopplysningsperiode={tiltakDeltagelse.utfallperiode}

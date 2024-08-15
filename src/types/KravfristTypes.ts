@@ -1,4 +1,4 @@
-import { Lovreferanse, SamletUtfall } from './BehandlingTypes';
+import { Lovreferanse, Utfall } from './BehandlingTypes';
 import { Periode } from './Periode';
 
 export interface KravfristVilkår {
@@ -6,7 +6,7 @@ export interface KravfristVilkår {
   avklartSaksopplysning: KravfristSaksopplysning;
   vilkårLovreferanse: Lovreferanse;
   utfallperiode: Periode;
-  samletUtfall: SamletUtfall;
+  samletUtfall: Utfall;
 }
 
 interface KravfristSaksopplysning {
