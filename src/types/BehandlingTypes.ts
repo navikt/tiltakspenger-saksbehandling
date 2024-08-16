@@ -54,7 +54,7 @@ export interface BehandlingForBenk {
   periode: Periode;
   status: BehandlingStatus;
   underkjent: boolean;
-  kravdato: string;
+  kravtidspunkt: string;
   typeBehandling: TypeBehandling;
   ident: string;
   saksnummer: string;

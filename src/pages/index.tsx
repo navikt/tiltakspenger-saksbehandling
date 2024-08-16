@@ -68,7 +68,7 @@ const Oversikten: NextPage = () => {
               <Table.DataCell>{behandling.ident}</Table.DataCell>
               <Table.DataCell>{behandling.typeBehandling}</Table.DataCell>
               <Table.DataCell>
-                {formaterTidspunkt(behandling.kravdato) ?? 'Ukjent'}
+                {formaterTidspunkt(behandling.kravtidspunkt) ?? 'Ukjent'}
               </Table.DataCell>
               <Table.DataCell>
                 {finnStatusTekst(behandling.status, behandling.underkjent)}
