@@ -66,5 +66,9 @@ export const finnStatusTekst = (status: string, underkjent: boolean) => {
       return underkjent ? 'Underkjent' : 'Under behandling';
     case BehandlingStatus.UNDER_BESLUTNING:
       return 'Under beslutning';
+    case BehandlingStatus.KAN_BEHANDLES:
+      return 'Kan behandles';
+    case BehandlingStatus.KAN_IKKE_BEHANDLES:
+      return 'Kan ikke behandles';
   }
 };
