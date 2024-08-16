@@ -52,18 +52,18 @@ export const lagFaktumTekst = (faktum: Deltagelse | Opphold) => {
   }
 };
 
-export const finnStatusTekst = (status: string) => {
+export const finnStatusTekst = (status: string, underkjent: boolean) => {
   switch (status) {
     case BehandlingStatus.INNVILGET:
       return 'Innvilget';
     case BehandlingStatus.KLAR_TIL_BEHANDLING:
-      return 'Klar til behandling';
+      return underkjent ? 'Underkjent' : 'Klar til behandling';
     case BehandlingStatus.KLAR_TIL_BESLUTNING:
       return 'Klar til beslutning';
     case BehandlingStatus.SØKNAD:
       return 'Søknad';
     case BehandlingStatus.UNDER_BEHANDLING:
-      return 'Under behandling';
+      return underkjent ? 'Underkjent' : 'Under behandling';
     case BehandlingStatus.UNDER_BESLUTNING:
       return 'Under beslutning';
   }

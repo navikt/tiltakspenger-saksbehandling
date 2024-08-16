@@ -12,6 +12,10 @@ export function dateTilISOTekst(date: Date) {
   return dayjs(date).format('YYYY-MM-DD');
 }
 
+export function formaterTidspunkt(dateString: string) {
+  return dayjs(dateString).format('DD.MM.YYYY kl. hh:mm');
+}
+
 export function formaterDatotekst(dateString: string) {
   return dayjs(dateString).format('DD.MM.YYYY');
 }

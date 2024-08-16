@@ -53,7 +53,8 @@ export enum Attesteringsstatus {
 export interface BehandlingForBenk {
   periode: Periode;
   status: BehandlingStatus;
-  // underkjent: Boolean, IKKE IMPLEMENTERT ENDA??
+  underkjent: boolean;
+  kravdato: string;
   typeBehandling: TypeBehandling;
   ident: string;
   saksnummer: string;
