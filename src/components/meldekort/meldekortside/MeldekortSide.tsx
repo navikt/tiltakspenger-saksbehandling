@@ -1,13 +1,13 @@
 import styles from './Meldekort.module.css';
 import { MeldekortUke } from './MeldekortUke';
 import { MeldekortBeregningsvisning } from '../meldekort-beregning-visning/MeldekortBeregningsVisning';
-import { Alert, HStack, Loader, VStack } from '@navikt/ds-react';
+import { HStack, Loader, VStack } from '@navikt/ds-react';
 import { useState } from 'react';
 import { MeldekortKnapper } from './MeldekortKnapper';
 import router from 'next/router';
-import { ukenummerFraDate } from '../../../utils/date';
 import { useHentMeldekort } from '../../../hooks/meldekort/useHentMeldekort';
 import Varsel from '../../varsel/Varsel';
+import { ukenummerFraDatotekst } from '../../../utils/date';
 
 export const MeldekortSide = () => {
   const [disableUkeVisning, setDisableUkeVisning] = useState<boolean>(true);
@@ -39,12 +39,12 @@ export const MeldekortSide = () => {
       >
         <MeldekortUke
           meldekortUke={uke1}
-          ukesnummer={ukenummerFraDate(uke1[0].dato)}
+          ukesnummer={ukenummerFraDatotekst(uke1[0].dato)}
           meldekortId={meldekortId}
         />
         <MeldekortUke
           meldekortUke={uke2}
-          ukesnummer={ukenummerFraDate(uke2[1].dato)}
+          ukesnummer={ukenummerFraDatotekst(uke2[1].dato)}
           meldekortId={meldekortId}
         />
       </HStack>

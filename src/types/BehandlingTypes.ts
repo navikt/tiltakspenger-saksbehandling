@@ -53,7 +53,8 @@ export enum Attesteringsstatus {
 export interface BehandlingForBenk {
   periode: Periode;
   status: BehandlingStatus;
-  // underkjent: Boolean, IKKE IMPLEMENTERT ENDA??
+  underkjent: boolean;
+  kravdato: string;
   typeBehandling: TypeBehandling;
   ident: string;
   saksnummer: string;
@@ -84,7 +85,7 @@ export enum ÅrsakTilEndring {
   ENDRING_ETTER_SØKNADSTIDSPUNKT = 'ENDRING_ETTER_SØKNADSTIDSPUNKT',
 }
 
-export enum SamletUtfall {
+export enum Utfall {
   OPPFYLT = 'OPPFYLT',
   DELVIS_OPPFYLT = 'DELVIS_OPPFYLT',
   IKKE_OPPFYLT = 'IKKE_OPPFYLT',

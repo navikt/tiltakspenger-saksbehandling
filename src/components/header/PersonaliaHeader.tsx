@@ -75,7 +75,8 @@ const PersonaliaHeader = () => {
         </Button>
       )}
       <Tag variant="alt3-filled" className={styles.behandlingTag}>
-        {finnStatusTekst(valgtBehandling.status)}
+        {/* B: Bør kanskje hente underkjentstatus inn på behandlingen også */}
+        {finnStatusTekst(valgtBehandling.status, false)}
       </Tag>
     </div>
   );

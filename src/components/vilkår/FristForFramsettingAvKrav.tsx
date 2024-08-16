@@ -32,7 +32,7 @@ const FristForFramsettingAvKrav = () => {
         }
         paragraf={kravfristVilkår.vilkårLovreferanse.paragraf}
       />
-      <UtfallstekstMedIkon samletUtfall={kravfristVilkår.samletUtfall} />
+      <UtfallstekstMedIkon utfall={kravfristVilkår.samletUtfall} />
       <VilkårKort
         saksopplysningsperiode={kravfristVilkår.utfallperiode}
         kilde={kravfristVilkår.avklartSaksopplysning.kilde}

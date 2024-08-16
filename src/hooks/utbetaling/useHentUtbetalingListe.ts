@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import { UtbetalingListe } from '../../types/Utbetaling';
+import { UtbetalingListe } from '../../types/UtbetalingTypes';
 import { FetcherError, fetcher } from '../../utils/http';
 
 export function useHentUtbetalingListe(

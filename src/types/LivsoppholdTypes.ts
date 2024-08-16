@@ -1,4 +1,4 @@
-import { Lovreferanse, SamletUtfall } from './BehandlingTypes';
+import { Lovreferanse, Utfall } from './BehandlingTypes';
 import { Periode } from './Periode';
 import { Saksbehandler } from './Saksbehandler';
 
@@ -6,7 +6,7 @@ export interface LivsoppholdVilkår {
   avklartSaksopplysning: LivsoppholdSaksopplysning;
   vilkårLovreferanse: Lovreferanse;
   utfallperiode: Periode;
-  samletUtfall: SamletUtfall;
+  samletUtfall: Utfall;
 }
 
 interface LivsoppholdSaksopplysning {
@@ -14,7 +14,7 @@ interface LivsoppholdSaksopplysning {
   saksbehandler?: Saksbehandler;
   tidspunkt: string;
   årsakTilEndringLivsopphold?: ÅrsakTilEndring;
-  samletUtfall: SamletUtfall;
+  samletUtfall: Utfall;
 }
 
 export interface LivsoppholdSaksopplysningBody {

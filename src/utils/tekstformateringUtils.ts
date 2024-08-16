@@ -1,32 +1,33 @@
-import { BehandlingStatus, SamletUtfall } from '../types/BehandlingTypes';
+import { BehandlingStatus, Utfall } from '../types/BehandlingTypes';
 import { Opphold } from '../types/InstitusjonsoppholdTypes';
 import { Deltagelse } from '../types/KvpTypes';
+import { Kilde } from '../types/VilkårTypes';
 
-export const finnUtfallTekst = (utfall: SamletUtfall) => {
-  switch (utfall) {
-    case SamletUtfall.IKKE_OPPFYLT:
-      return 'ikke oppfylt';
-    case SamletUtfall.OPPFYLT:
-      return 'oppfylt';
-    case SamletUtfall.DELVIS_OPPFYLT:
-      return 'delvis oppfylt';
-    case SamletUtfall.UAVKLART:
-      return 'uavklart';
-    default:
-      return 'uavklart';
+export const finnKildetekst = (kilde: string) => {
+  switch (kilde) {
+    case Kilde.SØKNAD:
+      return 'Søknad';
+    case Kilde.PDL:
+      return 'PDL';
+    case Kilde.KOMET:
+      return 'Komet';
+    case Kilde.ARENA:
+      return 'Arena';
   }
 };
 
-export const finnUtfallsperiodetekst = (utfall: string) => {
+export const finnUtfallTekst = (utfall: Utfall) => {
   switch (utfall) {
-    case 'OPPFYLT':
-      return 'Søker har oppfylt vilkårene for hele vurderingsperioden';
-    case 'IKKE_OPPFYLT':
-      return 'Søker har ikke oppfylt vilkårene for vurderingsperioden';
-    case 'KREVER_MANUELL_VURDERING':
-      return 'Totalvurdering er uavklart';
+    case Utfall.IKKE_OPPFYLT:
+      return 'ikke oppfylt';
+    case Utfall.OPPFYLT:
+      return 'oppfylt';
+    case Utfall.DELVIS_OPPFYLT:
+      return 'delvis oppfylt';
+    case Utfall.UAVKLART:
+      return 'uavklart';
     default:
-      return 'Totalvurdering er uavklart ';
+      return 'uavklart';
   }
 };
 
@@ -51,18 +52,18 @@ export const lagFaktumTekst = (faktum: Deltagelse | Opphold) => {
   }
 };
 
-export const finnStatusTekst = (status: string) => {
+export const finnStatusTekst = (status: string, underkjent: boolean) => {
   switch (status) {
     case BehandlingStatus.INNVILGET:
       return 'Innvilget';
     case BehandlingStatus.KLAR_TIL_BEHANDLING:
-      return 'Klar til behandling';
+      return underkjent ? 'Underkjent' : 'Klar til behandling';
     case BehandlingStatus.KLAR_TIL_BESLUTNING:
       return 'Klar til beslutning';
     case BehandlingStatus.SØKNAD:
       return 'Søknad';
     case BehandlingStatus.UNDER_BEHANDLING:
-      return 'Under behandling';
+      return underkjent ? 'Underkjent' : 'Under behandling';
     case BehandlingStatus.UNDER_BESLUTNING:
       return 'Under beslutning';
   }

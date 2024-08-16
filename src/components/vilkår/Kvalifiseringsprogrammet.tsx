@@ -34,7 +34,7 @@ const Kvalifiseringsprogrammet = () => {
           'https://lovdata.no/dokument/SF/forskrift/2013-11-04-1286'
         }
       />
-      <UtfallstekstMedIkon samletUtfall={kvp.samletUtfall} />
+      <UtfallstekstMedIkon utfall={kvp.samletUtfall} />
       <VilkårKort
         saksopplysningsperiode={kvp.utfallperiode}
         kilde={kvp.avklartSaksopplysning.kilde}

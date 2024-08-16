@@ -1,4 +1,4 @@
-import { Lovreferanse, ÅrsakTilEndring, SamletUtfall } from './BehandlingTypes';
+import { Lovreferanse, ÅrsakTilEndring, Utfall } from './BehandlingTypes';
 import { Periode } from './Periode';
 
 export interface KvpVilkår {
@@ -6,7 +6,7 @@ export interface KvpVilkår {
   avklartSaksopplysning: KvpSaksopplysning;
   vilkårLovreferanse: Lovreferanse;
   utfallperiode: Periode;
-  samletUtfall: SamletUtfall;
+  samletUtfall: Utfall;
 }
 
 interface KvpSaksopplysning {

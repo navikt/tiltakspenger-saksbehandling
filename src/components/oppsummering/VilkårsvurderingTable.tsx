@@ -47,7 +47,7 @@ const VilkårsvurderingTable = () => {
             {kravfrist.vilkårLovreferanse.paragraf}
           </Table.HeaderCell>
           <Table.DataCell>
-            {<UtfallstekstMedIkon samletUtfall={kravfrist.samletUtfall} />}
+            {<UtfallstekstMedIkon utfall={kravfrist.samletUtfall} />}
           </Table.DataCell>
           <Table.DataCell>
             {periodeTilFormatertDatotekst(kravfrist.utfallperiode)}
@@ -62,11 +62,7 @@ const VilkårsvurderingTable = () => {
             Tiltaksdeltagelse {tiltakDeltagelse.vilkårLovreferanse.paragraf}
           </Table.HeaderCell>
           <Table.DataCell>
-            {
-              <UtfallstekstMedIkon
-                samletUtfall={tiltakDeltagelse.samletUtfall}
-              />
-            }
+            {<UtfallstekstMedIkon utfall={tiltakDeltagelse.samletUtfall} />}
           </Table.DataCell>
           <Table.DataCell>
             {periodeTilFormatertDatotekst(tiltakDeltagelse.utfallperiode)}
@@ -81,7 +77,7 @@ const VilkårsvurderingTable = () => {
             Alder {alder.vilkårLovreferanse.paragraf}
           </Table.HeaderCell>
           <Table.DataCell>
-            {<UtfallstekstMedIkon samletUtfall={alder.samletUtfall} />}
+            {<UtfallstekstMedIkon utfall={alder.samletUtfall} />}
           </Table.DataCell>
           <Table.DataCell>
             {periodeTilFormatertDatotekst(alder.utfallperiode)}
@@ -96,7 +92,7 @@ const VilkårsvurderingTable = () => {
             Andre livsopphold {livsopphold.vilkårLovreferanse.paragraf}
           </Table.HeaderCell>
           <Table.DataCell>
-            {<UtfallstekstMedIkon samletUtfall={livsopphold.samletUtfall} />}
+            {<UtfallstekstMedIkon utfall={livsopphold.samletUtfall} />}
           </Table.DataCell>
           <Table.DataCell>
             {periodeTilFormatertDatotekst(livsopphold.utfallperiode)}
@@ -115,7 +111,7 @@ const VilkårsvurderingTable = () => {
             Kvalifiseringsprogrammet {kvp.vilkårLovreferanse.paragraf}
           </Table.HeaderCell>
           <Table.DataCell>
-            {<UtfallstekstMedIkon samletUtfall={kvp.samletUtfall} />}
+            {<UtfallstekstMedIkon utfall={kvp.samletUtfall} />}
           </Table.DataCell>
           <Table.DataCell>
             {periodeTilFormatertDatotekst(
@@ -134,7 +130,7 @@ const VilkårsvurderingTable = () => {
             Introduksjonsprogrammet {intro.vilkårLovreferanse.paragraf}
           </Table.HeaderCell>
           <Table.DataCell>
-            {<UtfallstekstMedIkon samletUtfall={intro.samletUtfall} />}
+            {<UtfallstekstMedIkon utfall={intro.samletUtfall} />}
           </Table.DataCell>
           <Table.DataCell>
             {periodeTilFormatertDatotekst(
@@ -154,11 +150,7 @@ const VilkårsvurderingTable = () => {
             {institusjonsopphold.vilkårLovreferanse.paragraf}
           </Table.HeaderCell>
           <Table.DataCell>
-            {
-              <UtfallstekstMedIkon
-                samletUtfall={institusjonsopphold.samletUtfall}
-              />
-            }
+            {<UtfallstekstMedIkon utfall={institusjonsopphold.samletUtfall} />}
           </Table.DataCell>
           <Table.DataCell>
             {periodeTilFormatertDatotekst(

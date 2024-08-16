@@ -1,4 +1,4 @@
-import { Lovreferanse, SamletUtfall } from './BehandlingTypes';
+import { Lovreferanse, Utfall } from './BehandlingTypes';
 import { PeriodeMedDeltagelse } from './KvpTypes';
 import { Periode } from './Periode';
 
@@ -7,7 +7,7 @@ export interface IntroVilkår {
   avklartSaksopplysning: IntroSaksopplysning;
   vilkårLovreferanse: Lovreferanse;
   utfallperiode: Periode;
-  samletUtfall: SamletUtfall;
+  samletUtfall: Utfall;
 }
 
 interface IntroSaksopplysning {

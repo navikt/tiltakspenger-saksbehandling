@@ -1,4 +1,4 @@
-import { Lovreferanse, SamletUtfall } from './BehandlingTypes';
+import { Lovreferanse } from './BehandlingTypes';
 import { Periode } from './Periode';
 
 export interface Stønadsdager {

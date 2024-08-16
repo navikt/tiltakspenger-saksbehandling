@@ -1,7 +1,7 @@
 import { VStack } from '@navikt/ds-react';
 import router from 'next/router';
 import { ReactElement } from 'react';
-import { Vilkår } from '../../types/Vilkår';
+import { Vilkår } from '../../types/VilkårTypes';
 import Alder from '../vilkår/Alder';
 import styles from './Vilkårsteg.module.css';
 import Tiltaksdeltagelse from '../vilkår/Tiltaksdeltagelse';

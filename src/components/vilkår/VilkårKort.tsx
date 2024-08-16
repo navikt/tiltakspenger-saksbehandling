@@ -3,7 +3,9 @@ import { periodeTilFormatertDatotekst } from '../../utils/date';
 import { Periode } from '../../types/Periode';
 import { UtfallIkon } from '../utfallikon/UtfallIkon';
 import styles from './Vilkår.module.css';
-import { SamletUtfall } from '../../types/BehandlingTypes';
+import { Utfall } from '../../types/BehandlingTypes';
+import { Kilde } from '../../types/VilkårTypes';
+import { finnKildetekst } from '../../utils/tekstformateringUtils';
 
 interface Grunnlag {
   header: string;
@@ -13,7 +15,7 @@ interface Grunnlag {
 interface VilkårKortProps {
   saksopplysningsperiode: Periode;
   kilde: string;
-  utfall: SamletUtfall;
+  utfall: Utfall;
   vilkårTittel: string;
   grunnlag: Grunnlag[];
 }
@@ -52,7 +54,7 @@ const VilkårKort = ({
                   {grunnlag.data}
                 </Table.DataCell>
               ))}
-              <Table.DataCell>{kilde}</Table.DataCell>
+              <Table.DataCell>{finnKildetekst(kilde)}</Table.DataCell>
               {utfall && (
                 <Table.DataCell className={styles.utfall_datacell}>
                   <UtfallIkon utfall={utfall} />
@@ -64,7 +66,7 @@ const VilkårKort = ({
       </VStack>
       <VStack className={styles.registerdata}>
         <BodyShort size="large" weight="semibold" spacing>
-          Registerdata
+          {kilde === Kilde.SØKNAD ? 'Søknadsdata' : 'Registerdata'}
         </BodyShort>
         {grunnlag.map((grunnlag) => (
           <BodyShort spacing key={`regdata${grunnlag.header}`}>
@@ -72,7 +74,7 @@ const VilkårKort = ({
           </BodyShort>
         ))}
         <BodyShort spacing>
-          Kilde: <b>{kilde}</b>
+          Kilde: <b>{finnKildetekst(kilde)}</b>
         </BodyShort>
       </VStack>
     </HStack>

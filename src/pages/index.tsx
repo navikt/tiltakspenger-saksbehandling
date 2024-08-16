@@ -5,7 +5,7 @@ import { NextPage } from 'next';
 import router from 'next/router';
 import { pageWithAuthentication } from '../auth/pageWithAuthentication';
 import { useOpprettBehandling } from '../hooks/useOpprettBehandling';
-import { periodeTilFormatertDatotekst } from '../utils/date';
+import { formaterTidspunkt, periodeTilFormatertDatotekst } from '../utils/date';
 import { finnStatusTekst } from '../utils/tekstformateringUtils';
 import { useTaBehandling } from '../hooks/useTaBehandling';
 import Varsel from '../components/varsel/Varsel';
@@ -53,6 +53,7 @@ const Oversikten: NextPage = () => {
           <Table.Row>
             <Table.HeaderCell scope="col">Fødselsnummer</Table.HeaderCell>
             <Table.HeaderCell scope="col">Type</Table.HeaderCell>
+            <Table.HeaderCell scope="col">Kravtidspunkt</Table.HeaderCell>
             <Table.HeaderCell scope="col">Status</Table.HeaderCell>
             <Table.HeaderCell scope="col">Periode</Table.HeaderCell>
             <Table.HeaderCell scope="col">Saksbehandler</Table.HeaderCell>
@@ -67,7 +68,10 @@ const Oversikten: NextPage = () => {
               <Table.DataCell>{behandling.ident}</Table.DataCell>
               <Table.DataCell>{behandling.typeBehandling}</Table.DataCell>
               <Table.DataCell>
-                {finnStatusTekst(behandling.status)}
+                {formaterTidspunkt(behandling.kravdato) ?? 'Ukjent'}
+              </Table.DataCell>
+              <Table.DataCell>
+                {finnStatusTekst(behandling.status, behandling.underkjent)}
               </Table.DataCell>
               <Table.DataCell>
                 {behandling.periode &&
