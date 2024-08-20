@@ -1,10 +1,12 @@
 import { BodyShort, Table } from '@navikt/ds-react';
-import { MeldekortStatus } from '../../../types/MeldekortTypes';
-import { velgIkon } from '../meldekortside/MeldekortUke';
+import { velgIkonForMeldekortStatus } from '../meldekortside/MeldekortUke';
 import router from 'next/router';
 import { useHentMeldekortBeregning } from '../../../hooks/meldekort/useHentMeldekortBeregning';
 import Varsel from '../../varsel/Varsel';
+import { MeldekortStatus, meldekortStatusTilTekst } from '../../../utils/meldekortStatus';
 
+// TODO Kew: Man skal muligens ikke beregne på samme måte som før etter John har vært på fære..!
+// Avventer derfor å fikse denne
 export const MeldekortBeregningsvisning = () => {
   const meldekortId = router.query.meldekortId as string;
   const { meldekortBeregning, error } = useHentMeldekortBeregning(meldekortId);
@@ -37,45 +39,16 @@ export const MeldekortBeregningsvisning = () => {
         </Table.Row>
       </Table.Header>
       <Table.Body>
-        <Table.Row>
-          <Table.DataCell>
-            {velgIkon(MeldekortStatus.Deltatt)} Deltatt i tiltak
-          </Table.DataCell>
-          <Table.DataCell>{meldekortBeregning?.antallDeltatt}</Table.DataCell>
-          <Table.DataCell></Table.DataCell>
-        </Table.Row>
-        <Table.Row>
-          <Table.DataCell>
-            {velgIkon(MeldekortStatus.IkkeDeltatt)} Ikke deltatt i tiltaket
-          </Table.DataCell>
-          <Table.DataCell>
-            {meldekortBeregning?.antallIkkeDeltatt}
-          </Table.DataCell>
-          <Table.DataCell></Table.DataCell>
-        </Table.Row>
-        <Table.Row>
-          <Table.DataCell>
-            {velgIkon(MeldekortStatus.FraværSyk)} Fravær - Syk
-          </Table.DataCell>
-          <Table.DataCell>{meldekortBeregning?.antallSykDager}</Table.DataCell>
-          <Table.DataCell></Table.DataCell>
-        </Table.Row>
-        <Table.Row>
-          <Table.DataCell>
-            {velgIkon(MeldekortStatus.FraværSyktBarn)} Fravær - Sykt barn
-          </Table.DataCell>
-          <Table.DataCell>
-            {meldekortBeregning?.antallSykBarnDager}
-          </Table.DataCell>
-          <Table.DataCell></Table.DataCell>
-        </Table.Row>
-        <Table.Row>
-          <Table.DataCell>
-            {velgIkon(MeldekortStatus.FraværVelferd)} Fravær - Velferd
-          </Table.DataCell>
-          <Table.DataCell>{meldekortBeregning?.antallVelferd}</Table.DataCell>
-          <Table.DataCell></Table.DataCell>
-        </Table.Row>
+        <Beregning meldekortStatus={MeldekortStatus.IkkeDeltatt} antall={meldekortBeregning?.antallIkkeDeltatt} />
+        <Beregning meldekortStatus={MeldekortStatus.FraværSyk} antall={meldekortBeregning?.antallSykDager} />
+        <Beregning meldekortStatus={MeldekortStatus.FraværSyktBarn} antall={meldekortBeregning?.antallSykBarnDager} />
+        <Beregning meldekortStatus={MeldekortStatus.DeltattUtenLønnITiltaket} antall={meldekortBeregning?.antallDeltatt} />
+
+        vvvv (Disse må ordnes på)
+        <Beregning meldekortStatus={MeldekortStatus.DeltattMedLønnITiltaket} antall={-1} />
+        <Beregning meldekortStatus={MeldekortStatus.FraværVelferdGodkjentAvNav} antall={-1} />
+        <Beregning meldekortStatus={MeldekortStatus.FraværVelferdIkkeGodkjentAvNav} antall={-1} />
+        ^^^^
         <Table.Row>
           <Table.DataCell>Antall dager med 75% utbetaling</Table.DataCell>
           <Table.DataCell>
@@ -107,3 +80,20 @@ export const MeldekortBeregningsvisning = () => {
     </Table>
   );
 };
+
+interface beregningProps {
+  meldekortStatus: MeldekortStatus;
+  antall: number;
+}
+
+const Beregning = ({ meldekortStatus, antall }: beregningProps) => {
+  return (
+    <Table.Row>
+      <Table.DataCell>
+        {velgIkonForMeldekortStatus(meldekortStatus)} {meldekortStatusTilTekst[meldekortStatus]}
+      </Table.DataCell>
+      <Table.DataCell>{antall}</Table.DataCell>
+      <Table.DataCell></Table.DataCell>
+    </Table.Row>
+  )
+}

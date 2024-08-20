@@ -1,3 +1,4 @@
+import { MeldekortStatus } from '../utils/meldekortStatus';
 import { Periode } from './Periode';
 
 export type MeldekortListe = {
@@ -43,26 +44,6 @@ export type MeldekortDagDTO = {
   dato: string;
   status: MeldekortStatus;
 };
-
-export enum MeldekortStatus {
-  Sperret = 'SPERRET',
-  IkkeUtfylt = 'IKKE_UTFYLT',
-  Deltatt = 'DELTATT',
-  IkkeDeltatt = 'IKKE_DELTATT',
-  FraværSyk = 'FRAVÆR_SYK',
-  FraværSyktBarn = 'FRAVÆR_SYKT_BARN',
-  FraværVelferd = 'FRAVÆR_VELFERD',
-  Lønn = 'LØNN_FOR_TID_I_ARBEID',
-}
-
-export const MeldekortStatusTekster = [
-  'Deltatt',
-  'Ikke deltatt',
-  'Lønn for tid i arbeid',
-  'Fravær syk',
-  'Fravær sykt barn',
-  'Fravær velferd',
-];
 
 export type MeldekortBeregningDTO = {
   antallDeltatt: number;
