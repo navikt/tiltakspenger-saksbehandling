@@ -6,7 +6,6 @@ import Varsel from '../../varsel/Varsel';
 import { MeldekortStatus, meldekortStatusTilTekst } from '../../../utils/meldekortStatus';
 
 // TODO Kew: Man skal muligens ikke beregne på samme måte som før etter John har vært på fære..!
-// Avventer derfor å fikse denne
 export const MeldekortBeregningsvisning = () => {
   const meldekortId = router.query.meldekortId as string;
   const { meldekortBeregning, error } = useHentMeldekortBeregning(meldekortId);
@@ -42,13 +41,10 @@ export const MeldekortBeregningsvisning = () => {
         <Beregning meldekortStatus={MeldekortStatus.IkkeDeltatt} antall={meldekortBeregning?.antallIkkeDeltatt} />
         <Beregning meldekortStatus={MeldekortStatus.FraværSyk} antall={meldekortBeregning?.antallSykDager} />
         <Beregning meldekortStatus={MeldekortStatus.FraværSyktBarn} antall={meldekortBeregning?.antallSykBarnDager} />
-        <Beregning meldekortStatus={MeldekortStatus.DeltattUtenLønnITiltaket} antall={meldekortBeregning?.antallDeltatt} />
-
-        vvvv (Disse må ordnes på)
-        <Beregning meldekortStatus={MeldekortStatus.DeltattMedLønnITiltaket} antall={-1} />
-        <Beregning meldekortStatus={MeldekortStatus.FraværVelferdGodkjentAvNav} antall={-1} />
-        <Beregning meldekortStatus={MeldekortStatus.FraværVelferdIkkeGodkjentAvNav} antall={-1} />
-        ^^^^
+        <Beregning meldekortStatus={MeldekortStatus.DeltattUtenLønnITiltaket} antall={meldekortBeregning?.antallDeltattUtenLønn} />
+        <Beregning meldekortStatus={MeldekortStatus.DeltattMedLønnITiltaket} antall={meldekortBeregning?.antallDeltattMedLønn} />
+        <Beregning meldekortStatus={MeldekortStatus.FraværVelferdGodkjentAvNav} antall={meldekortBeregning?.antallVelferdGodkjentAvNav} />
+        <Beregning meldekortStatus={MeldekortStatus.FraværVelferdIkkeGodkjentAvNav} antall={meldekortBeregning?.antallVelferdIkkeGodkjentAvNav} />
         <Table.Row>
           <Table.DataCell>Antall dager med 75% utbetaling</Table.DataCell>
           <Table.DataCell>

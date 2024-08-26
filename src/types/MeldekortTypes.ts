@@ -46,11 +46,13 @@ export type MeldekortDagDTO = {
 };
 
 export type MeldekortBeregningDTO = {
-  antallDeltatt: number;
+  antallDeltattUtenLønn: number;
+  antallDeltattMedLønn: number;
   antallIkkeDeltatt: number;
   antallSykDager: number;
   antallSykBarnDager: number;
-  antallVelferd: number;
+  antallVelferdGodkjentAvNav: number;
+  antallVelferdIkkeGodkjentAvNav: number;
   antallFullUtbetaling: number;
   antallDelvisUtbetaling: number;
   antallIngenUtbetaling: number;
