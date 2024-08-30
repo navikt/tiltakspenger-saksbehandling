@@ -62,7 +62,6 @@ const Livsopphold = () => {
   const onSubmit: SubmitHandler<SkjemaFelter> = (data) => {
     håndterLagreLivsoppholdSaksopplysning(data.harAndreYtelser);
   };
-
   return (
     <VStack gap="4">
       <VilkårHeader
@@ -95,7 +94,13 @@ const Livsopphold = () => {
               <RadioGroup
                 legend="Har bruker andre ytelser til livsopphold i vurderingsperioden?"
                 onChange={onChange}
-                defaultValue={undefined}
+                defaultValue={
+                  livsopphold.samletUtfall == 'UAVKLART'
+                    ? undefined
+                    : livsopphold.avklartSaksopplysning.harLivsoppholdYtelser
+                      ? true
+                      : false
+                }
               >
                 <Radio value={true}>{`Ja`}</Radio>
                 <Radio value={false}>{`Nei`}</Radio>
