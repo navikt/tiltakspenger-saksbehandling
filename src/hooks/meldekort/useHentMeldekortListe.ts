@@ -4,7 +4,7 @@ import { MeldekortUtenDager } from '../../types/MeldekortTypes';
 
 export function useHentMeldekortListe(
   iverksatt: boolean,
-  behandlingId: string,
+  sakId: string,
 ) {
   const {
     data: meldekortliste,
@@ -12,7 +12,7 @@ export function useHentMeldekortListe(
     error,
   } = useSWR<MeldekortUtenDager[], FetcherError>(
     () =>
-      iverksatt ? `/api/meldekort/hentAlleForBehandling/${behandlingId}` : null,
+      iverksatt ? `/api/vedtak/sak/${sakId}/meldekort` : null,
     fetcher,
     {
       revalidateIfStale: false,

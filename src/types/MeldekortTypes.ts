@@ -14,16 +14,14 @@ export type MeldekortUtenDager = {
 
 export type Meldekort = {
   id: string;
-  fom: string;
-  tom: string;
+  fraOgMed: string;
+  tilOgMed: string;
   antallDagerPåTiltaket: number;
-  tiltak: Tiltak[];
   meldekortDager: MeldekortDag[];
 };
 
 export type MeldekortDag = {
   dato: string;
-  tiltak: Tiltak;
   status: MeldekortStatus;
 };
 
@@ -36,27 +34,28 @@ export type Tiltak = {
 };
 
 export type GodkjennDTO = {
-  saksbehandler: string;
+  meldekortId: string;
+  meldekortDager: MeldekortDagDTO[];
 };
 
 export type MeldekortDagDTO = {
-  meldekortId: string;
   dato: string;
   status: MeldekortStatus;
 };
 
-export type MeldekortBeregningDTO = {
-  antallDeltattUtenLønn: number;
-  antallDeltattMedLønn: number;
-  antallIkkeDeltatt: number;
-  antallSykDager: number;
-  antallSykBarnDager: number;
-  antallVelferdGodkjentAvNav: number;
-  antallVelferdIkkeGodkjentAvNav: number;
-  antallFullUtbetaling: number;
-  antallDelvisUtbetaling: number;
-  antallIngenUtbetaling: number;
-  sumDelvis: number;
-  sumFull: number;
-  sumTotal: number;
-};
+
+//  export type MeldekortBeregningDTO = {
+//    antallDeltattUtenLønn: number;
+//    antallDeltattMedLønn: number;
+//    antallIkkeDeltatt: number;
+//    antallSykDager: number;
+//    antallSykBarnDager: number;
+//    antallVelferdGodkjentAvNav: number;
+//    antallVelferdIkkeGodkjentAvNav: number;
+//    antallFullUtbetaling: number;
+//    antallDelvisUtbetaling: number;
+//    antallIngenUtbetaling: number;
+//    sumDelvis: number;
+//    sumFull: number;
+//    sumTotal: number;
+//  };

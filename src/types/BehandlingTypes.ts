@@ -10,6 +10,7 @@ import { TiltakDeltagelseVilkår } from './TiltakDeltagelseTypes';
 
 export interface Behandling {
   id: string;
+  sakId: string;
   saksbehandler: string;
   beslutter: string;
   vurderingsperiode: Periode;

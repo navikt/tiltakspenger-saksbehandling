@@ -11,11 +11,11 @@ import { BehandlingContext } from '../../layout/SaksbehandlingLayout';
 import { useHentMeldekortListe } from '../../../hooks/meldekort/useHentMeldekortListe';
 
 export const MeldekortMeny = () => {
-  const { behandlingId } = useContext(BehandlingContext);
+  const { behandlingId, sakId } = useContext(BehandlingContext);
   const aktivMeldekortId = router.query.meldekortId as string;
   const { meldekortliste, isLoading, error } = useHentMeldekortListe(
     true,
-    behandlingId,
+    sakId,
   );
 
   if (isLoading || !meldekortliste) return <Loader />;

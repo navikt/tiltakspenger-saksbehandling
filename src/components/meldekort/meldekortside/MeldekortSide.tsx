@@ -9,10 +9,20 @@ import { useHentMeldekort } from '../../../hooks/meldekort/useHentMeldekort';
 import Varsel from '../../varsel/Varsel';
 import { ukenummerFraDatotekst } from '../../../utils/date';
 
+export type MeldekortDager = { [key: string]: string };
+
 export const MeldekortSide = () => {
   const [disableUkeVisning, setDisableUkeVisning] = useState<boolean>(true);
   const meldekortId = router.query.meldekortId as string;
   const { meldekort, isLoading, error } = useHentMeldekort(meldekortId);
+
+  const [meldekortDager, setMeldekortDager] = useState<MeldekortDager>({});
+  const oppdaterMeldekortDager = (dato, status) => {
+    setMeldekortDager((prevMap) => ({
+      ...prevMap,
+      [dato]: status,
+    }));
+  };
 
   if (isLoading) {
     return <Loader />;
@@ -38,11 +48,13 @@ export const MeldekortSide = () => {
         className={disableUkeVisning ? styles.disableUkevisning : ''}
       >
         <MeldekortUke
+          oppdaterMeldekortDager={oppdaterMeldekortDager}
           meldekortUke={uke1}
           ukesnummer={ukenummerFraDatotekst(uke1[0].dato)}
           meldekortId={meldekortId}
         />
         <MeldekortUke
+          oppdaterMeldekortDager={oppdaterMeldekortDager}
           meldekortUke={uke2}
           ukesnummer={ukenummerFraDatotekst(uke2[1].dato)}
           meldekortId={meldekortId}
@@ -50,6 +62,7 @@ export const MeldekortSide = () => {
       </HStack>
       <MeldekortBeregningsvisning />
       <MeldekortKnapper
+        meldekortDager={meldekortDager}
         meldekortId={meldekortId}
         håndterEndreMeldekort={() => setDisableUkeVisning(!disableUkeVisning)}
       />

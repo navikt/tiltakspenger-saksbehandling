@@ -12,12 +12,14 @@ interface BehandlingContextType {
   behandlingId: string;
   meldekortId: string;
   utbetalingId: string;
+  sakId: string;
 }
 
 export const BehandlingContext = createContext<BehandlingContextType>({
   behandlingId: undefined,
   meldekortId: undefined,
   utbetalingId: undefined,
+  sakId: undefined,
 });
 
 export const SaksbehandlingLayout = ({ children }: React.PropsWithChildren) => {
@@ -27,6 +29,7 @@ export const SaksbehandlingLayout = ({ children }: React.PropsWithChildren) => {
   const [behId, settBehId] = useState<string>(undefined);
   const [meldekortId, settMeldekortId] = useState<string>(undefined);
   const [utbetalingId, settUtbetalingId] = useState<string>(undefined);
+  const [sakenId, settSakenId] = useState<string>(undefined);
 
   const iverksatt = valgtBehandling?.status === BehandlingStatus.INNVILGET;
 
@@ -36,6 +39,7 @@ export const SaksbehandlingLayout = ({ children }: React.PropsWithChildren) => {
   useEffect(() => {
     if (valgtBehandling) {
       settBehId(valgtBehandling.id);
+      settSakenId(valgtBehandling.sakId);
     }
     if (iverksatt && meldekortliste) {
       settMeldekortId(meldekortliste[0].id);
@@ -54,6 +58,7 @@ export const SaksbehandlingLayout = ({ children }: React.PropsWithChildren) => {
         behandlingId: behId,
         meldekortId: meldekortId,
         utbetalingId: utbetalingId,
+        sakId: sakenId,
       }}
     >
       <PersonaliaHeader />
