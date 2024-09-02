@@ -24,11 +24,7 @@ Opprett en `.env.local` på roten av `tiltakspenger-saksbehandler`, med følgend
 
 ```
 TILTAKSPENGER_VEDTAK_URL=http://localhost:8080
-TILTAKSPENGER_MELDEKORT_URL= http://localhost:8081
-TILTAKSPENGER_UTBETALING_URL= http://localhost:8083
 VEDTAK_SCOPE=tiltakspenger-vedtak
-MELDEKORT_SCOPE=tiltakspenger-meldekort-api
-UTBETALING_SCOPE=tiltakspenger-utbetaling
 AZURE_APP_CLIENT_ID=tiltakspenger-vedtak
 AZURE_APP_CLIENT_SECRET=secret
 AZURE_APP_WELL_KNOWN_URL=http://host.docker.internal:6969/azure/.well-known/openid-configuration

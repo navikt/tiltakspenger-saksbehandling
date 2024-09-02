@@ -8,13 +8,7 @@ cluster: prod-gcp
 envs:
   - name: TILTAKSPENGER_VEDTAK_URL
     value: http://tiltakspenger-vedtak
-  - name: TILTAKSPENGER_MELDEKORT_URL
-    value: http://tiltakspenger-meldekort-api
-  - name: TILTAKSPENGER_UTBETALING_URL
-    value: http://tiltakspenger-utbetaling
   - name: AUTH_PROVIDER_URL
     value: https://login.microsoftonline.com/62366534-1ec3-4962-8869-9b5535279d0b/oauth2/v2.0/token
   - name: SCOPE
     value: 9dd72d44-f3f7-48d1-846b-94f317d10119
-  - name: MELDEKORT_AUDIENCE
-    value: prod-gcp:tpts:tiltakspenger-meldekort-api
