@@ -15,7 +15,10 @@ export async function mutateMeldekort<R>(
   return res.json();
 }
 
-export function useGodkjennMeldekort(meldekortId: string, meldekortDager: MeldekortDager) {
+export function useGodkjennMeldekort(
+  meldekortId: string,
+  meldekortDager: MeldekortDager,
+) {
   const {
     trigger: onGodkjennMeldekort,
     isMutating: isMeldekortMutating,

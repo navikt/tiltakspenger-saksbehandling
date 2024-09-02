@@ -38,7 +38,6 @@ export type MeldekortDagDTO = {
   status: MeldekortStatus;
 };
 
-
 //  export type MeldekortBeregningDTO = {
 //    antallDeltattUtenLønn: number;
 //    antallDeltattMedLønn: number;

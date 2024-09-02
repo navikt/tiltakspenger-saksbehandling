@@ -13,5 +13,9 @@ export function useSendMeldekortTilBeslutter(meldekortId: string) {
     { onSuccess: () => router.push('/') },
   );
 
-  return { sendMeldekortTilBeslutter, senderMeldekortTilBeslutter, sendMeldekortTilBeslutterError };
+  return {
+    sendMeldekortTilBeslutter,
+    senderMeldekortTilBeslutter,
+    sendMeldekortTilBeslutterError,
+  };
 }

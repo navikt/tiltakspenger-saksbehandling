@@ -6,7 +6,6 @@ import { velgIkonForMeldekortStatus } from './MeldekortUke';
 import { useState } from 'react';
 import styles from './Meldekort.module.css';
 import { useOppdaterMeldekortdag } from '../../../hooks/meldekort/useOppdaterMeldekortdag';
-import { useHentMeldekortBeregning } from '../../../hooks/meldekort/useHentMeldekortBeregning';
 import {
   MeldekortStatus,
   meldekortStatusTilTekst,
@@ -25,7 +24,7 @@ export const MeldekortUkeDag = ({
   oppdaterMeldekort,
 }: MeldekortUkeDagProps) => {
   const [status, setStatus] = useState<MeldekortStatus>(meldekortDag.status);
-  const { mutate } = useHentMeldekortBeregning(meldekortId);
+  //const { mutate } = useHentMeldekortBeregning(meldekortId);
   const { onOppdaterDag } = useOppdaterMeldekortdag();
 
   const oppdaterMeldekortdag = (dagStatus: string) => {

@@ -1,6 +1,5 @@
 import styles from './Meldekort.module.css';
 import { MeldekortUke } from './MeldekortUke';
-import { MeldekortBeregningsvisning } from '../meldekort-beregning-visning/MeldekortBeregningsVisning';
 import { HStack, Loader, VStack } from '@navikt/ds-react';
 import { useContext, useState } from 'react';
 import { MeldekortKnapper } from './MeldekortKnapper';
@@ -62,7 +61,7 @@ export const MeldekortSide = () => {
           meldekortId={meldekortId}
         />
       </HStack>
-      <MeldekortBeregningsvisning />
+      {/*<MeldekortBeregningsvisning />*/}
       <MeldekortKnapper
         meldekortDager={meldekortDager}
         meldekortId={meldekortId}

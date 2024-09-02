@@ -34,7 +34,7 @@ export const Utbetalingmeny = () => {
           >
             <VStack justify="center">
               <BodyShort>
-                <b>{ukenummerHeading(utbetaling.fom, utbetaling.tom)}</b>
+                <b>{ukenummerHeading({fraOgMed: utbetaling.fom, tilOgMed:utbetaling.tom})}</b>
               </BodyShort>
               <BodyShort>
                 {periodeTilFormatertDatotekst({

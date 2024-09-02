@@ -19,11 +19,14 @@ export const meldekortStatusTilTekst: Record<MeldekortStatus, string> = {
   [MeldekortStatus.IkkeDeltatt]: 'Ikke deltatt i tiltaket',
   [MeldekortStatus.FraværSyk]: 'Fravær - Syk',
   [MeldekortStatus.FraværSyktBarn]: 'Fravær - Sykt barn',
-  [MeldekortStatus.FraværVelferdGodkjentAvNav]: 'Fravær - Velferd. Godkjent av NAV',
-  [MeldekortStatus.FraværVelferdIkkeGodkjentAvNav]: 'Fravær - Velferd. Ikke godkjent av NAV'
+  [MeldekortStatus.FraværVelferdGodkjentAvNav]:
+    'Fravær - Velferd. Godkjent av NAV',
+  [MeldekortStatus.FraværVelferdIkkeGodkjentAvNav]:
+    'Fravær - Velferd. Ikke godkjent av NAV',
 };
 
 // Denne er kanskje ikke så frontendete.. BENNY! HALP!!
-export const tekstTilMeldekortStatus: Record<string, MeldekortStatus> = Object.fromEntries(
-  Object.entries(meldekortStatusTilTekst).map(([key, value]) => [value, key])
-) as Record<string, MeldekortStatus>;
+export const tekstTilMeldekortStatus: Record<string, MeldekortStatus> =
+  Object.fromEntries(
+    Object.entries(meldekortStatusTilTekst).map(([key, value]) => [value, key]),
+  ) as Record<string, MeldekortStatus>;
