@@ -21,7 +21,7 @@ export function useGodkjennMeldekort(meldekortId: string, meldekortDager: Meldek
     isMutating: isMeldekortMutating,
     error,
   } = useSWRMutation<any, FetcherError, any, GodkjennDTO>(
-    `/api/vedtak/meldekort/${meldekortId}/iverksett`,
+    `/api/meldekort/${meldekortId}/iverksett`,
     mutateMeldekort,
   );
 

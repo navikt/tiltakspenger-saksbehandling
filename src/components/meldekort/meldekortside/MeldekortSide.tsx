@@ -2,19 +2,21 @@ import styles from './Meldekort.module.css';
 import { MeldekortUke } from './MeldekortUke';
 import { MeldekortBeregningsvisning } from '../meldekort-beregning-visning/MeldekortBeregningsVisning';
 import { HStack, Loader, VStack } from '@navikt/ds-react';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { MeldekortKnapper } from './MeldekortKnapper';
 import router from 'next/router';
 import { useHentMeldekort } from '../../../hooks/meldekort/useHentMeldekort';
 import Varsel from '../../varsel/Varsel';
 import { ukenummerFraDatotekst } from '../../../utils/date';
+import { BehandlingContext } from '../../layout/SaksbehandlingLayout';
 
 export type MeldekortDager = { [key: string]: string };
 
 export const MeldekortSide = () => {
   const [disableUkeVisning, setDisableUkeVisning] = useState<boolean>(true);
   const meldekortId = router.query.meldekortId as string;
-  const { meldekort, isLoading, error } = useHentMeldekort(meldekortId);
+  const { sakId } = useContext(BehandlingContext);
+  const { meldekort, isLoading, error } = useHentMeldekort(meldekortId, sakId);
 
   const [meldekortDager, setMeldekortDager] = useState<MeldekortDager>({});
   const oppdaterMeldekortDager = (dato, status) => {

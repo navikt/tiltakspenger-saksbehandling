@@ -26,27 +26,27 @@ export const MeldekortMeny = () => {
       {meldekortliste.map((meldekort) => {
         return (
           <Link
-            key={meldekort.id}
+            key={meldekort.meldekortId}
             as={NextLink}
             variant="neutral"
             underline={false}
-            className={`${styles.listeelement} ${meldekort.id === aktivMeldekortId && styles.aktivtMeldekort}`}
+            className={`${styles.listeelement} ${meldekort.meldekortId === aktivMeldekortId && styles.aktivtMeldekort}`}
             onClick={() =>
               router.push(
-                `/behandling/${behandlingId}/meldekort/${meldekort.id}`,
+                `/behandling/${behandlingId}/meldekort/${meldekort.meldekortId}`,
               )
             }
-            href={`/behandling/${behandlingId}/meldekort/${meldekort.id}`}
+            href={`/behandling/${behandlingId}/meldekort/${meldekort.meldekortId}`}
           >
             <VStack justify="center">
               <BodyShort>
-                <b>{ukenummerHeading(meldekort.fom, meldekort.tom)}</b>
+                <b>{ukenummerHeading(meldekort.periode)}</b>
               </BodyShort>
               <BodyShort>
                 {' '}
                 {periodeTilFormatertDatotekst({
-                  fraOgMed: meldekort.fom,
-                  tilOgMed: meldekort.tom,
+                  fraOgMed: meldekort.periode.fraOgMed,
+                  tilOgMed: meldekort.periode.tilOgMed,
                 })}
               </BodyShort>
             </VStack>

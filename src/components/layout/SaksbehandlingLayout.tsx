@@ -33,7 +33,7 @@ export const SaksbehandlingLayout = ({ children }: React.PropsWithChildren) => {
 
   const iverksatt = valgtBehandling?.status === BehandlingStatus.INNVILGET;
 
-  const { meldekortliste } = useHentMeldekortListe(iverksatt, behandlingId);
+  const { meldekortliste } = useHentMeldekortListe(iverksatt, sakenId);
   const { utbetalingliste } = useHentUtbetalingListe(iverksatt, behandlingId);
 
   useEffect(() => {
@@ -42,14 +42,14 @@ export const SaksbehandlingLayout = ({ children }: React.PropsWithChildren) => {
       settSakenId(valgtBehandling.sakId);
     }
     if (iverksatt && meldekortliste) {
-      settMeldekortId(meldekortliste[0].id);
+      settMeldekortId(meldekortliste[0].meldekortId);
     }
     if (iverksatt && utbetalingliste) {
       settUtbetalingId(utbetalingliste[0].id);
     }
   }, [iverksatt, meldekortliste, utbetalingliste, valgtBehandling]);
 
-  if (isLoading || !valgtBehandling || !behId) {
+  if (isLoading || !valgtBehandling || !behId || !sakenId) {
     return <Loader />;
   }
   return (

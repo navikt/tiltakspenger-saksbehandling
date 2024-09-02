@@ -1,15 +1,10 @@
 import { MeldekortStatus } from '../utils/meldekortStatus';
 import { Periode } from './Periode';
 
-export type MeldekortListe = {
-  meldekort: Meldekort[];
-};
-
 export type MeldekortUtenDager = {
-  id: string;
-  fom: string;
-  tom: string;
-  status: string;
+  meldekortId: string;
+  periode: Periode;
+  erUtfylt: boolean;
 };
 
 export type Meldekort = {

@@ -12,7 +12,7 @@ export function useHentMeldekortListe(
     error,
   } = useSWR<MeldekortUtenDager[], FetcherError>(
     () =>
-      iverksatt ? `/api/vedtak/sak/${sakId}/meldekort` : null,
+      (iverksatt && sakId) ? `/api/sak/${sakId}/meldekort` : null,
     fetcher,
     {
       revalidateIfStale: false,

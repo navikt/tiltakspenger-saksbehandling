@@ -1,23 +1,22 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import { withAuthenticatedApi } from '../../../auth/pageWithAuthentication';
 import { getToken, requestOboToken } from '@navikt/oasis';
-import { makeApiRequest } from '../../../../utils/http';
-import { withAuthenticatedApi } from '../../../../auth/pageWithAuthentication';
-import { logger } from '@navikt/next-logger';
+import { makeApiRequest } from '../../../utils/http';
+import {logger} from "@navikt/next-logger";
 
 async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ): Promise<void> {
   const token = await getToken(req);
-  logger.info('Henter obo-token for tiltakspenger-meldekort-api');
-  const obo = await requestOboToken(token, process.env.MELDEKORT_SCOPE);
+  logger.info('Henter obo-token for tiltakspenger-vedtak');
+  const obo = await requestOboToken(
+    token,
+    `api://${process.env.VEDTAK_SCOPE}/.default`,
+  );
   if (!obo.ok) {
-    const oboError = (obo as { ok: false; error: Error }).error;
-    logger.error(
-      `Kunne ikke gjøre on-behalf-of-utveksling for saksbehandlertoken: ${oboError.message}`,
-    );
     throw new Error(
-      `Kunne ikke gjøre on-behalf-of-utveksling for saksbehandlertoken: ${oboError.message}`,
+      `Kunne ikke gjøre on-behalf-of-utveksling for saksbehandlertoken`,
     );
   }
 
