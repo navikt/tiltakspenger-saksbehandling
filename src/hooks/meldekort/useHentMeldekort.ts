@@ -2,14 +2,14 @@ import useSWR from 'swr';
 import { Meldekort } from '../../types/MeldekortTypes';
 import { fetcher, FetcherError } from '../../utils/http';
 
-export function useHentMeldekort(meldekortId?: string) {
+export function useHentMeldekort(meldekortId?: string, sakId?: string) {
   const {
     data: meldekort,
     mutate,
     isLoading,
     error,
   } = useSWR<Meldekort, FetcherError>(
-    meldekortId && `/api/meldekort/hentMeldekort/${meldekortId}`,
+    meldekortId && sakId && `/api/sak/${sakId}/meldekort/${meldekortId}`,
     fetcher,
     {
       shouldRetryOnError: false,

@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { withAuthenticatedApi } from '../../../auth/pageWithAuthentication';
 import { getToken, requestOboToken } from '@navikt/oasis';
 import { makeApiRequest } from '../../../utils/http';
-import {logger} from "@navikt/next-logger";
+import { logger } from '@navikt/next-logger';
 
 async function handler(
   req: NextApiRequest,

@@ -24,8 +24,8 @@ export function periodeTilFormatertDatotekst({ fraOgMed, tilOgMed }: Periode) {
   return `${formaterDatotekst(fraOgMed)} - ${formaterDatotekst(tilOgMed)}`;
 }
 
-export const ukenummerHeading = (fom: string, tom: string): string => {
-  return `Uke ${ukenummerFraDatotekst(fom)} / ${ukenummerFraDatotekst(tom)}`;
+export const ukenummerHeading = (periode: Periode): string => {
+  return `Uke ${ukenummerFraDatotekst(periode.fraOgMed)} / ${ukenummerFraDatotekst(periode.tilOgMed)}`;
 };
 
 export const utbetalingsukeHeading = (dato: string): string => {

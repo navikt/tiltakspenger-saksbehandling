@@ -1,26 +1,25 @@
 .inngangsvilkårSidemeny {
-    border-left: 1px solid #cfcfcf;
-    border-right: 1px solid #cfcfcf;
-    min-width: 320px;
+  border-left: 1px solid #cfcfcf;
+  border-right: 1px solid #cfcfcf;
+  min-width: 320px;
 }
 
 .vilkår {
-    width: 100%;
-    border-bottom: 1px solid #cfcfcf;
-    align-items: center;
-    padding: 0.6rem 1rem;
+  width: 100%;
+  border-bottom: 1px solid #cfcfcf;
+  align-items: center;
+  padding: 0.6rem 1rem;
 }
 
 .aktivtSteg {
-    background-color: #CCE1FF;
+  background-color: #cce1ff;
 }
 
 .vilkårlenke {
-    flex-basis:auto;
-    flex-grow: 5;
+  flex-basis: auto;
+  flex-grow: 5;
 }
 
-
 .aktivtSteg p:nth-of-type(2) {
-    font-weight: 900;
+  font-weight: 900;
 }
