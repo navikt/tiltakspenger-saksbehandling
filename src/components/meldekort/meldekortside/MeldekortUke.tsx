@@ -6,7 +6,7 @@ import {
   CircleSlashIcon,
 } from '@navikt/aksel-icons';
 import { MeldekortDag } from '../../../types/MeldekortTypes';
-import React, { useState } from 'react';
+import React from 'react';
 import styles from './Meldekort.module.css';
 import { MeldekortUkeDag } from './MeldekortUkeDag';
 import { MeldekortStatus } from '../../../utils/meldekortStatus';
@@ -15,7 +15,6 @@ interface MeldekortUkeProps {
   meldekortUke: MeldekortDag[];
   ukesnummer: number;
   meldekortId: string;
-  oppdaterMeldekortDager: (dato: string, status: string) => void;
 }
 
 export const velgIkonForMeldekortStatus = (
@@ -45,7 +44,6 @@ export const MeldekortUke = ({
   meldekortUke,
   ukesnummer,
   meldekortId,
-  oppdaterMeldekortDager,
 }: MeldekortUkeProps) => {
   return (
     <VStack className={styles.meldekortUke}>
@@ -54,7 +52,6 @@ export const MeldekortUke = ({
       </Heading>
       {meldekortUke.map((ukedag) => (
         <MeldekortUkeDag
-          oppdaterMeldekort={oppdaterMeldekortDager}
           key={ukedag.dato.toString()}
           meldekortDag={ukedag}
           meldekortId={meldekortId}

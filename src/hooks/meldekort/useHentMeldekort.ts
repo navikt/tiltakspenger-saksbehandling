@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import { Meldekort } from '../../types/MeldekortTypes';
+import { Meldekort, MeldekortDag } from '../../types/MeldekortTypes';
 import { fetcher, FetcherError } from '../../utils/http';
 
 export function useHentMeldekort(meldekortId?: string, sakId?: string) {

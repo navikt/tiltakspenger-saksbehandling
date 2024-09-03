@@ -17,13 +17,9 @@ export const MeldekortSide = () => {
   const { sakId } = useContext(BehandlingContext);
   const { meldekort, isLoading, error } = useHentMeldekort(meldekortId, sakId);
 
+  // TODO Benny&Kew: denne skal bort?
   const [meldekortDager, setMeldekortDager] = useState<MeldekortDager>({});
-  const oppdaterMeldekortDager = (dato, status) => {
-    setMeldekortDager((prevMap) => ({
-      ...prevMap,
-      [dato]: status,
-    }));
-  };
+
 
   if (isLoading) {
     return <Loader />;
@@ -49,19 +45,16 @@ export const MeldekortSide = () => {
         className={disableUkeVisning ? styles.disableUkevisning : ''}
       >
         <MeldekortUke
-          oppdaterMeldekortDager={oppdaterMeldekortDager}
           meldekortUke={uke1}
           ukesnummer={ukenummerFraDatotekst(uke1[0].dato)}
           meldekortId={meldekortId}
         />
         <MeldekortUke
-          oppdaterMeldekortDager={oppdaterMeldekortDager}
           meldekortUke={uke2}
           ukesnummer={ukenummerFraDatotekst(uke2[1].dato)}
           meldekortId={meldekortId}
         />
       </HStack>
-      {/*<MeldekortBeregningsvisning />*/}
       <MeldekortKnapper
         meldekortDager={meldekortDager}
         meldekortId={meldekortId}

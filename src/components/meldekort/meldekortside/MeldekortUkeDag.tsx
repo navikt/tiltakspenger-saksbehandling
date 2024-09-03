@@ -3,35 +3,48 @@ import { MeldekortDag } from '../../../types/MeldekortTypes';
 import { formaterDatotekst, ukedagFraDatotekst } from '../../../utils/date';
 import IkonMedTekst from '../../ikon-med-tekst/IkonMedTekst';
 import { velgIkonForMeldekortStatus } from './MeldekortUke';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import styles from './Meldekort.module.css';
-import { useOppdaterMeldekortdag } from '../../../hooks/meldekort/useOppdaterMeldekortdag';
 import {
   MeldekortStatus,
-  meldekortStatusTilTekst,
   tekstTilMeldekortStatus,
 } from '../../../utils/meldekortStatus';
+import { BehandlingContext } from '../../layout/SaksbehandlingLayout';
+import { useHentMeldekort } from '../../../hooks/meldekort/useHentMeldekort';
 
 interface MeldekortUkeDagProps {
   meldekortDag: MeldekortDag;
   meldekortId: string;
-  oppdaterMeldekort: (dato: string, status: string) => void;
 }
 
 export const MeldekortUkeDag = ({
   meldekortId,
   meldekortDag,
-  oppdaterMeldekort,
 }: MeldekortUkeDagProps) => {
+  const { sakId } = useContext(BehandlingContext);
+  const { meldekort, mutate } = useHentMeldekort(meldekortId, sakId);
+
   const [status, setStatus] = useState<MeldekortStatus>(meldekortDag.status);
-  //const { mutate } = useHentMeldekortBeregning(meldekortId);
-  const { onOppdaterDag } = useOppdaterMeldekortdag();
 
   const oppdaterMeldekortdag = (dagStatus: string) => {
     if (dagStatus === '') return;
     setStatus(dagStatus as MeldekortStatus);
 
-    oppdaterMeldekort(meldekortDag.dato, dagStatus);
+    const oppdaterteMeldekortDager = meldekort.meldekortDager.map(dag => {
+      if (dag.dato === meldekortDag.dato) {
+        return {
+          ...dag,
+          status: dagStatus as MeldekortStatus
+        }
+      } else {
+        return dag
+      }
+    })
+
+    mutate({
+      ...meldekort,
+      meldekortDager: oppdaterteMeldekortDager
+    })
   };
 
   return (
