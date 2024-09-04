@@ -10,23 +10,13 @@ export enum MeldekortStatus {
   FraværVelferdIkkeGodkjentAvNav = 'FRAVÆR_VELFERD_IKKE_GODKJENT_AV_NAV',
 }
 
-// Denne er kanskje ikke så frontendete.. BENNY! HALP!!
-export const meldekortStatusTilTekst: Record<MeldekortStatus, string> = {
-  [MeldekortStatus.Sperret]: 'sperret',
-  [MeldekortStatus.IkkeUtfylt]: 'Ikke utfylt',
-  [MeldekortStatus.DeltattUtenLønnITiltaket]: 'Deltatt uten lønn i tiltaket',
-  [MeldekortStatus.DeltattMedLønnITiltaket]: 'Deltatt med lønn i tiltaket',
-  [MeldekortStatus.IkkeDeltatt]: 'Ikke deltatt i tiltaket',
-  [MeldekortStatus.FraværSyk]: 'Fravær - Syk',
-  [MeldekortStatus.FraværSyktBarn]: 'Fravær - Sykt barn',
-  [MeldekortStatus.FraværVelferdGodkjentAvNav]:
-    'Fravær - Velferd. Godkjent av NAV',
-  [MeldekortStatus.FraværVelferdIkkeGodkjentAvNav]:
-    'Fravær - Velferd. Ikke godkjent av NAV',
-};
-
-// Denne er kanskje ikke så frontendete.. BENNY! HALP!!
-export const tekstTilMeldekortStatus: Record<string, MeldekortStatus> =
-  Object.fromEntries(
-    Object.entries(meldekortStatusTilTekst).map(([key, value]) => [value, key]),
-  ) as Record<string, MeldekortStatus>;
+export const MeldekortStatusTekster = [
+  'Deltatt med lønn i tiltaket',
+  'Deltatt uten lønn i tiltaket',
+  'Ikke deltatt i tiltaket',
+  'Lønn for tid i arbeid',
+  'Fravær - Syk',
+  'Fravær - Sykt barn',
+  'Fravær - Velferd. Godkjent av NAV',
+  'Fravær - Velferd. Ikke godkjent av NAV',
+];

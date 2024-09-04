@@ -17,10 +17,8 @@ interface MeldekortUkeProps {
   meldekortId: string;
 }
 
-export const velgIkonForMeldekortStatus = (
-  deltattEllerFravær: MeldekortStatus,
-) => {
-  switch (deltattEllerFravær) {
+export const velgIkonForMeldekortStatus = (status: MeldekortStatus) => {
+  switch (status) {
     case MeldekortStatus.Sperret:
       return <CircleSlashIcon color="black" />;
 

@@ -65,7 +65,7 @@ export const Saksbehandlingstabs = () => {
                 )
               }
             />
-            <Tabs.Tab
+            {/* <Tabs.Tab
               value={'utbetaling'}
               label={'Utbetaling'}
               id="utbetaling-tab"
@@ -75,7 +75,7 @@ export const Saksbehandlingstabs = () => {
                   `/behandling/${behandlingId}/utbetaling/${utbetalingId}`,
                 );
               }}
-            />
+            />*/}
           </>
         )}
       </Tabs.List>

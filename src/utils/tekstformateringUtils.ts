@@ -1,7 +1,9 @@
+import Meldekort from '../pages/behandling/[behandlingId]/meldekort/[meldekortId]';
 import { BehandlingStatus, Utfall } from '../types/BehandlingTypes';
 import { Opphold } from '../types/InstitusjonsoppholdTypes';
 import { Deltagelse } from '../types/KvpTypes';
 import { Kilde } from '../types/VilkårTypes';
+import { MeldekortStatus } from './meldekortStatus';
 
 export const finnKildetekst = (kilde: string) => {
   switch (kilde) {
@@ -70,5 +72,28 @@ export const finnStatusTekst = (status: string, underkjent: boolean) => {
       return 'Kan behandles';
     case BehandlingStatus.KAN_IKKE_BEHANDLES:
       return 'Kan ikke behandles';
+  }
+};
+
+export const finnMeldekortStatus = (status: string) => {
+  switch (status) {
+    case 'Sperret':
+      return MeldekortStatus.Sperret;
+    case 'Deltatt med lønn i tiltaket':
+      return MeldekortStatus.DeltattMedLønnITiltaket;
+    case 'Deltatt uten lønn i tiltaket':
+      return MeldekortStatus.DeltattUtenLønnITiltaket;
+    case 'Fravær - Syk':
+      return MeldekortStatus.FraværSyk;
+    case 'Fravær - Sykt barn':
+      return MeldekortStatus.FraværSyktBarn;
+    case 'Fravær - Velferd. Godkjent av NAV':
+      return MeldekortStatus.FraværVelferdGodkjentAvNav;
+    case 'Fravær - Velferd. Ikke godkjent av NAV':
+      return MeldekortStatus.FraværVelferdIkkeGodkjentAvNav;
+    case 'Ikke deltatt i tiltaket':
+      return MeldekortStatus.IkkeDeltatt;
+    case 'Ikke utfylt':
+      return MeldekortStatus.IkkeUtfylt;
   }
 };

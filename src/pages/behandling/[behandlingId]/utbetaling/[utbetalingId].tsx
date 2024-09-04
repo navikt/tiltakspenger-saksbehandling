@@ -24,8 +24,8 @@ const Utbetaling: NextPageWithLayout = () => {
     >
       {utbetalingId ? (
         <>
-          <Utbetalingmeny />
-          <Utbetalingsside />
+          {/*<Utbetalingmeny />
+          <Utbetalingsside />*/}
         </>
       ) : (
         <Box padding="5">

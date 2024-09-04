@@ -1,7 +1,6 @@
 import useSWRMutation from 'swr/mutation';
 import { FetcherError, throwErrorIfFatal } from '../../utils/http';
 import { GodkjennDTO } from '../../types/MeldekortTypes';
-import { MeldekortDager } from '../../components/meldekort/meldekortside/MeldekortSide';
 
 export async function mutateMeldekort<R>(
   url,
@@ -15,10 +14,7 @@ export async function mutateMeldekort<R>(
   return res.json();
 }
 
-export function useGodkjennMeldekort(
-  meldekortId: string,
-  meldekortDager: MeldekortDager,
-) {
+export function useGodkjennMeldekort(meldekortId: string) {
   const {
     trigger: onGodkjennMeldekort,
     isMutating: isMeldekortMutating,

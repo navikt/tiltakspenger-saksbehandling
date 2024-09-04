@@ -1,18 +1,24 @@
 import useSWR from 'swr';
-import { Meldekort, MeldekortDag } from '../../types/MeldekortTypes';
+import { Meldekort } from '../../types/MeldekortTypes';
 import { fetcher, FetcherError } from '../../utils/http';
 
-export function useHentMeldekort(meldekortId?: string, sakId?: string) {
+export function useHentMeldekort(
+  meldekortId: string,
+  sakId: string,
+  fetch: boolean = true,
+) {
   const {
     data: meldekort,
     mutate,
     isLoading,
     error,
   } = useSWR<Meldekort, FetcherError>(
-    meldekortId && sakId && `/api/sak/${sakId}/meldekort/${meldekortId}`,
+    meldekortId &&
+      sakId &&
+      fetch &&
+      `/api/sak/${sakId}/meldekort/${meldekortId}`,
     fetcher,
     {
-      shouldRetryOnError: false,
       revalidateOnFocus: false,
     },
   );

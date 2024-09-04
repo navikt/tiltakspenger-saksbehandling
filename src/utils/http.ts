@@ -1,5 +1,6 @@
 import { logger } from '@navikt/next-logger';
 import { NextApiRequest } from 'next';
+import { MeldekortDTO } from '../types/MeldekortTypes';
 
 const vedtakBackendUrl = process.env.TILTAKSPENGER_VEDTAK_URL || '';
 const meldekortBackendUrl = process.env.TILTAKSPENGER_MELDEKORT_URL || '';
@@ -19,6 +20,18 @@ export const fetcher = async (url: string) => {
 export async function mutateBehandling<R>(
   url,
   { arg }: { arg: { id: string } | { begrunnelse: string } | null },
+): Promise<R> {
+  const res = await fetch(url, {
+    method: 'POST',
+    body: JSON.stringify(arg),
+  });
+  await throwErrorIfFatal(res);
+  return res.json();
+}
+
+export async function mutateMeldekort<R>(
+  url,
+  { arg }: { arg: MeldekortDTO },
 ): Promise<R> {
   const res = await fetch(url, {
     method: 'POST',

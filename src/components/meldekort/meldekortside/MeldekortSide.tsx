@@ -9,17 +9,11 @@ import Varsel from '../../varsel/Varsel';
 import { ukenummerFraDatotekst } from '../../../utils/date';
 import { BehandlingContext } from '../../layout/SaksbehandlingLayout';
 
-export type MeldekortDager = { [key: string]: string };
-
 export const MeldekortSide = () => {
   const [disableUkeVisning, setDisableUkeVisning] = useState<boolean>(true);
   const meldekortId = router.query.meldekortId as string;
   const { sakId } = useContext(BehandlingContext);
   const { meldekort, isLoading, error } = useHentMeldekort(meldekortId, sakId);
-
-  // TODO Benny&Kew: denne skal bort?
-  const [meldekortDager, setMeldekortDager] = useState<MeldekortDager>({});
-
 
   if (isLoading) {
     return <Loader />;
@@ -56,8 +50,9 @@ export const MeldekortSide = () => {
         />
       </HStack>
       <MeldekortKnapper
-        meldekortDager={meldekortDager}
+        meldekortdager={meldekort.meldekortDager}
         meldekortId={meldekortId}
+        sakId={sakId}
         håndterEndreMeldekort={() => setDisableUkeVisning(!disableUkeVisning)}
       />
     </VStack>

@@ -32,7 +32,7 @@ const Meldekort: NextPageWithLayout = () => {
         <Box padding="5">
           <Varsel
             variant="error"
-            melding={`Kunne ikke hente meldekort for behandlingen)`}
+            melding={`Kunne ikke hente meldekort for behandlingen`}
           />
         </Box>
       )}

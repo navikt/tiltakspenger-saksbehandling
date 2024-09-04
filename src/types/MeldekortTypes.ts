@@ -28,14 +28,13 @@ export type Tiltak = {
   antDagerIUken: number;
 };
 
-export type GodkjennDTO = {
-  meldekortId: string;
-  meldekortDager: MeldekortDagDTO[];
+export type MeldekortDTO = {
+  dager: MeldekortDag[];
 };
 
-export type MeldekortDagDTO = {
-  dato: string;
-  status: MeldekortStatus;
+export type GodkjennDTO = {
+  meldekortId: string;
+  meldekortDager: MeldekortDag[];
 };
 
 //  export type MeldekortBeregningDTO = {
