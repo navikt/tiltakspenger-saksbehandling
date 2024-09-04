@@ -1,4 +1,3 @@
-import { MeldekortStatus } from '../utils/meldekortStatus';
 import { Periode } from './Periode';
 
 export type MeldekortUtenDager = {
@@ -36,6 +35,20 @@ export type GodkjennDTO = {
   meldekortId: string;
   meldekortDager: MeldekortDag[];
 };
+
+export enum MeldekortStatus {
+  Sperret = 'SPERRET',
+  IkkeUtfylt = 'IKKE_UTFYLT',
+  DeltattUtenLønnITiltaket = 'DELTATT_UTEN_LØNN_I_TILTAKET',
+  DeltattMedLønnITiltaket = 'DELTATT_MED_LØNN_I_TILTAKET',
+  IkkeDeltatt = 'IKKE_DELTATT',
+  FraværSyk = 'FRAVÆR_SYK',
+  FraværSyktBarn = 'FRAVÆR_SYKT_BARN',
+  FraværVelferdGodkjentAvNav = 'FRAVÆR_VELFERD_GODKJENT_AV_NAV',
+  FraværVelferdIkkeGodkjentAvNav = 'FRAVÆR_VELFERD_IKKE_GODKJENT_AV_NAV',
+}
+
+export const Meldekortstatuser = Object.values(MeldekortStatus);
 
 //  export type MeldekortBeregningDTO = {
 //    antallDeltattUtenLønn: number;

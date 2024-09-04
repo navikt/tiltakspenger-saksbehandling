@@ -1,17 +1,17 @@
 import { HGrid, Select } from '@navikt/ds-react';
-import { MeldekortDag } from '../../../types/MeldekortTypes';
+import {
+  MeldekortDag,
+  MeldekortStatus,
+  Meldekortstatuser,
+} from '../../../types/MeldekortTypes';
 import { formaterDatotekst, ukedagFraDatotekst } from '../../../utils/date';
 import IkonMedTekst from '../../ikon-med-tekst/IkonMedTekst';
 import { velgIkonForMeldekortStatus } from './MeldekortUke';
 import { useContext, useState } from 'react';
 import styles from './Meldekort.module.css';
-import {
-  MeldekortStatus,
-  MeldekortStatusTekster,
-} from '../../../utils/meldekortStatus';
 import { BehandlingContext } from '../../layout/SaksbehandlingLayout';
 import { useHentMeldekort } from '../../../hooks/meldekort/useHentMeldekort';
-import { finnMeldekortStatus } from '../../../utils/tekstformateringUtils';
+import { finnMeldekortStatusTekst } from '../../../utils/tekstformateringUtils';
 
 interface MeldekortUkeDagProps {
   meldekortDag: MeldekortDag;
@@ -34,7 +34,7 @@ export const MeldekortUkeDag = ({
       if (dag.dato === meldekortDag.dato) {
         return {
           ...dag,
-          status: finnMeldekortStatus(dagStatus),
+          status: dagStatus as MeldekortStatus,
         };
       } else {
         return dag;
@@ -59,9 +59,7 @@ export const MeldekortUkeDag = ({
     >
       <IkonMedTekst
         text={`${ukedagFraDatotekst(meldekortDag.dato)} ${formaterDatotekst(meldekortDag.dato.toString())}`}
-        iconRenderer={() =>
-          velgIkonForMeldekortStatus(finnMeldekortStatus(status))
-        }
+        iconRenderer={() => velgIkonForMeldekortStatus(status)}
       />
       {status != MeldekortStatus.Sperret ? (
         <Select
@@ -75,9 +73,9 @@ export const MeldekortUkeDag = ({
           }}
         >
           <option value={MeldekortStatus.IkkeUtfylt}>Ikke utfylt</option>
-          {MeldekortStatusTekster.map((meldekortStatus) => (
+          {Meldekortstatuser.map((meldekortStatus) => (
             <option key={meldekortStatus} value={meldekortStatus}>
-              {meldekortStatus}
+              {finnMeldekortStatusTekst(meldekortStatus)}
             </option>
           ))}
         </Select>

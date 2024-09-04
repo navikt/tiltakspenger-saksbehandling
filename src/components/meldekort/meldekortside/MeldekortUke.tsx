@@ -5,11 +5,10 @@ import {
   XMarkOctagonFillIcon,
   CircleSlashIcon,
 } from '@navikt/aksel-icons';
-import { MeldekortDag } from '../../../types/MeldekortTypes';
+import { MeldekortDag, MeldekortStatus } from '../../../types/MeldekortTypes';
 import React from 'react';
 import styles from './Meldekort.module.css';
 import { MeldekortUkeDag } from './MeldekortUkeDag';
-import { MeldekortStatus } from '../../../utils/meldekortStatus';
 
 interface MeldekortUkeProps {
   meldekortUke: MeldekortDag[];
@@ -17,7 +16,7 @@ interface MeldekortUkeProps {
   meldekortId: string;
 }
 
-export const velgIkonForMeldekortStatus = (status: MeldekortStatus) => {
+export const velgIkonForMeldekortStatus = (status: string) => {
   switch (status) {
     case MeldekortStatus.Sperret:
       return <CircleSlashIcon color="black" />;

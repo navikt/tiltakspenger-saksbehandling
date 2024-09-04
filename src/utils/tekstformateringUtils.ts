@@ -1,9 +1,8 @@
-import Meldekort from '../pages/behandling/[behandlingId]/meldekort/[meldekortId]';
 import { BehandlingStatus, Utfall } from '../types/BehandlingTypes';
 import { Opphold } from '../types/InstitusjonsoppholdTypes';
 import { Deltagelse } from '../types/KvpTypes';
+import { MeldekortStatus } from '../types/MeldekortTypes';
 import { Kilde } from '../types/VilkårTypes';
-import { MeldekortStatus } from './meldekortStatus';
 
 export const finnKildetekst = (kilde: string) => {
   switch (kilde) {
@@ -75,25 +74,25 @@ export const finnStatusTekst = (status: string, underkjent: boolean) => {
   }
 };
 
-export const finnMeldekortStatus = (status: string) => {
+export const finnMeldekortStatusTekst = (status: string) => {
   switch (status) {
-    case 'Sperret':
-      return MeldekortStatus.Sperret;
-    case 'Deltatt med lønn i tiltaket':
-      return MeldekortStatus.DeltattMedLønnITiltaket;
-    case 'Deltatt uten lønn i tiltaket':
-      return MeldekortStatus.DeltattUtenLønnITiltaket;
-    case 'Fravær - Syk':
-      return MeldekortStatus.FraværSyk;
-    case 'Fravær - Sykt barn':
-      return MeldekortStatus.FraværSyktBarn;
-    case 'Fravær - Velferd. Godkjent av NAV':
-      return MeldekortStatus.FraværVelferdGodkjentAvNav;
-    case 'Fravær - Velferd. Ikke godkjent av NAV':
-      return MeldekortStatus.FraværVelferdIkkeGodkjentAvNav;
-    case 'Ikke deltatt i tiltaket':
-      return MeldekortStatus.IkkeDeltatt;
-    case 'Ikke utfylt':
-      return MeldekortStatus.IkkeUtfylt;
+    case MeldekortStatus.Sperret:
+      return 'Sperret';
+    case MeldekortStatus.DeltattMedLønnITiltaket:
+      return 'Deltatt med lønn i tiltaket';
+    case MeldekortStatus.DeltattUtenLønnITiltaket:
+      return 'Deltatt uten lønn i tiltaket';
+    case MeldekortStatus.FraværSyk:
+      return 'Fravær - Syk';
+    case MeldekortStatus.FraværSyktBarn:
+      return 'Fravær - Sykt barn';
+    case MeldekortStatus.FraværVelferdGodkjentAvNav:
+      return 'Fravær - Velferd. Godkjent av NAV';
+    case MeldekortStatus.FraværVelferdIkkeGodkjentAvNav:
+      return 'Fravær - Velferd. Ikke godkjent av NAV';
+    case MeldekortStatus.IkkeDeltatt:
+      return 'Ikke deltatt i tiltaket';
+    case MeldekortStatus.IkkeUtfylt:
+      return 'Ikke utfylt';
   }
 };
