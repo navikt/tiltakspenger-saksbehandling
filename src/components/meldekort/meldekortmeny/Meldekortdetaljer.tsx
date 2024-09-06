@@ -8,13 +8,13 @@ import { periodeTilFormatertDatotekst } from '../../../utils/date';
 const Meldekortdetaljer = () => {
   const meldekortId = router.query.meldekortId as string;
   const sakId = router.query.sakId as string;
-  const { meldekort, isLoading, error } = useHentMeldekort(meldekortId, sakId);
+  const { meldekort, isLoading } = useHentMeldekort(meldekortId, sakId);
 
   if (isLoading || !meldekort) {
     return <Loader />;
   }
 
-  const { fraOgMed, tilOgMed, antallDagerPåTiltaket } = meldekort;
+  const { periode, saksbehandler, beslutter, tiltakstype } = meldekort;
 
   return (
     <>
@@ -23,16 +23,11 @@ const Meldekortdetaljer = () => {
         <BodyShort>
           <b>Periode: </b>
         </BodyShort>
+        <BodyShort>{periodeTilFormatertDatotekst(periode)}</BodyShort>
         <BodyShort>
-          {periodeTilFormatertDatotekst({
-            fraOgMed: fraOgMed,
-            tilOgMed: tilOgMed,
-          })}
+          <b>Tiltak</b>
         </BodyShort>
-        <BodyShort>
-          <b>Antall dager på tiltak</b>
-        </BodyShort>
-        <BodyShort>{antallDagerPåTiltaket}</BodyShort>
+        <BodyShort>{tiltakstype}</BodyShort>
       </VStack>
     </>
   );

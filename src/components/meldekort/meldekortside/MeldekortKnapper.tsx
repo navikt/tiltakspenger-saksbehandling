@@ -1,4 +1,3 @@
-import { PencilWritingIcon } from '@navikt/aksel-icons';
 import { Button, HStack } from '@navikt/ds-react';
 import Varsel from '../../varsel/Varsel';
 import { MeldekortDag } from '../../../types/MeldekortTypes';

@@ -31,11 +31,7 @@ export const MeldekortSide = () => {
   return (
     <VStack gap="5" className={styles.wrapper}>
       <Heading level="2" size="medium">
-        Meldekort{' '}
-        {ukenummerHeading({
-          fraOgMed: meldekort.fraOgMed,
-          tilOgMed: meldekort.tilOgMed,
-        })}
+        Meldekort {ukenummerHeading(meldekort.periode)}
       </Heading>
       <HStack gap="9" wrap={false}>
         <MeldekortUke

@@ -1,7 +1,7 @@
 import { BehandlingStatus, Utfall } from '../types/BehandlingTypes';
 import { Opphold } from '../types/InstitusjonsoppholdTypes';
 import { Deltagelse } from '../types/KvpTypes';
-import { MeldekortStatus } from '../types/MeldekortTypes';
+import { MeldekortdagStatus } from '../types/MeldekortTypes';
 import { Kilde } from '../types/VilkårTypes';
 
 export const finnKildetekst = (kilde: string) => {
@@ -76,23 +76,23 @@ export const finnStatusTekst = (status: string, underkjent: boolean) => {
 
 export const finnMeldekortStatusTekst = (status: string) => {
   switch (status) {
-    case MeldekortStatus.Sperret:
+    case MeldekortdagStatus.Sperret:
       return 'Sperret';
-    case MeldekortStatus.DeltattMedLønnITiltaket:
+    case MeldekortdagStatus.DeltattMedLønnITiltaket:
       return 'Deltatt med lønn i tiltaket';
-    case MeldekortStatus.DeltattUtenLønnITiltaket:
+    case MeldekortdagStatus.DeltattUtenLønnITiltaket:
       return 'Deltatt uten lønn i tiltaket';
-    case MeldekortStatus.FraværSyk:
+    case MeldekortdagStatus.FraværSyk:
       return 'Fravær - Syk';
-    case MeldekortStatus.FraværSyktBarn:
+    case MeldekortdagStatus.FraværSyktBarn:
       return 'Fravær - Sykt barn';
-    case MeldekortStatus.FraværVelferdGodkjentAvNav:
+    case MeldekortdagStatus.FraværVelferdGodkjentAvNav:
       return 'Fravær - Velferd. Godkjent av NAV';
-    case MeldekortStatus.FraværVelferdIkkeGodkjentAvNav:
+    case MeldekortdagStatus.FraværVelferdIkkeGodkjentAvNav:
       return 'Fravær - Velferd. Ikke godkjent av NAV';
-    case MeldekortStatus.IkkeDeltatt:
+    case MeldekortdagStatus.IkkeDeltatt:
       return 'Ikke deltatt i tiltaket';
-    case MeldekortStatus.IkkeUtfylt:
+    case MeldekortdagStatus.IkkeUtfylt:
       return 'Ikke utfylt';
   }
 };

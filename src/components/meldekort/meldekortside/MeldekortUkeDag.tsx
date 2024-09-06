@@ -1,7 +1,7 @@
 import { HGrid, Select } from '@navikt/ds-react';
 import {
   MeldekortDag,
-  MeldekortStatus,
+  MeldekortdagStatus,
   Meldekortstatuser,
 } from '../../../types/MeldekortTypes';
 import { formaterDatotekst, ukedagFraDatotekst } from '../../../utils/date';
@@ -27,14 +27,14 @@ export const MeldekortUkeDag = ({
   const [status, setStatus] = useState<string>(meldekortDag.status);
 
   const oppdaterMeldekortdag = (dagStatus: string) => {
-    if (dagStatus === MeldekortStatus.IkkeUtfylt) return;
+    if (dagStatus === MeldekortdagStatus.IkkeUtfylt) return;
     setStatus(dagStatus);
 
     const oppdaterteMeldekortDager = meldekort.meldekortDager.map((dag) => {
       if (dag.dato === meldekortDag.dato) {
         return {
           ...dag,
-          status: dagStatus as MeldekortStatus,
+          status: dagStatus as MeldekortdagStatus,
         };
       } else {
         return dag;
@@ -61,7 +61,7 @@ export const MeldekortUkeDag = ({
         text={`${ukedagFraDatotekst(meldekortDag.dato)} ${formaterDatotekst(meldekortDag.dato.toString())}`}
         iconRenderer={() => velgIkonForMeldekortStatus(status)}
       />
-      {status != MeldekortStatus.Sperret ? (
+      {status != MeldekortdagStatus.Sperret ? (
         <Select
           label="Deltatt Eller Fravær"
           id="deltattEllerFravær"
@@ -72,7 +72,7 @@ export const MeldekortUkeDag = ({
             oppdaterMeldekortdag(e.target.value);
           }}
         >
-          <option value={MeldekortStatus.IkkeUtfylt}>Ikke utfylt</option>
+          <option value={MeldekortdagStatus.IkkeUtfylt}>--</option>
           {Meldekortstatuser.map((meldekortStatus) => (
             <option key={meldekortStatus} value={meldekortStatus}>
               {finnMeldekortStatusTekst(meldekortStatus)}

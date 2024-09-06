@@ -5,7 +5,10 @@ import {
   XMarkOctagonFillIcon,
   CircleSlashIcon,
 } from '@navikt/aksel-icons';
-import { MeldekortDag, MeldekortStatus } from '../../../types/MeldekortTypes';
+import {
+  MeldekortDag,
+  MeldekortdagStatus,
+} from '../../../types/MeldekortTypes';
 import React from 'react';
 import styles from './Meldekort.module.css';
 import { MeldekortUkeDag } from './MeldekortUkeDag';
@@ -18,21 +21,21 @@ interface MeldekortUkeProps {
 
 export const velgIkonForMeldekortStatus = (status: string) => {
   switch (status) {
-    case MeldekortStatus.Sperret:
+    case MeldekortdagStatus.Sperret:
       return <CircleSlashIcon color="black" />;
 
-    case MeldekortStatus.DeltattUtenLønnITiltaket:
-    case MeldekortStatus.FraværVelferdGodkjentAvNav:
+    case MeldekortdagStatus.DeltattUtenLønnITiltaket:
+    case MeldekortdagStatus.FraværVelferdGodkjentAvNav:
       return <CheckmarkCircleFillIcon color="green" />;
 
-    case MeldekortStatus.IkkeDeltatt:
-    case MeldekortStatus.DeltattMedLønnITiltaket:
-    case MeldekortStatus.FraværVelferdIkkeGodkjentAvNav:
+    case MeldekortdagStatus.IkkeDeltatt:
+    case MeldekortdagStatus.DeltattMedLønnITiltaket:
+    case MeldekortdagStatus.FraværVelferdIkkeGodkjentAvNav:
       return <XMarkOctagonFillIcon color="red" />;
 
-    case MeldekortStatus.IkkeUtfylt:
-    case MeldekortStatus.FraværSyk:
-    case MeldekortStatus.FraværSyktBarn:
+    case MeldekortdagStatus.IkkeUtfylt:
+    case MeldekortdagStatus.FraværSyk:
+    case MeldekortdagStatus.FraværSyktBarn:
       return <ExclamationmarkTriangleFillIcon color="orange" />;
   }
 };

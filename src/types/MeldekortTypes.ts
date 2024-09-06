@@ -1,6 +1,6 @@
 import { Periode } from './Periode';
 
-export type MeldekortUtenDager = {
+export type Meldekortoppsummering = {
   meldekortId: string;
   periode: Periode;
   erUtfylt: boolean;
@@ -8,35 +8,50 @@ export type MeldekortUtenDager = {
 
 export type Meldekort = {
   id: string;
-  fraOgMed: string;
-  tilOgMed: string;
-  antallDagerPåTiltaket: number;
+  periode: Periode;
   meldekortDager: MeldekortDag[];
+  tiltakstype: Tiltakstype;
+  saksbehandler?: string;
+  beslutter?: string;
+  status: Meldekortstatus;
 };
+
+export enum Meldekortstatus {
+  KLAR_TIL_UTFYLLING,
+  KLAR_TIL_BESLUTNING,
+  GODKJENT,
+}
 
 export type MeldekortDag = {
   dato: string;
-  status: MeldekortStatus;
+  status: MeldekortdagStatus;
 };
 
-export type Tiltak = {
-  id: string;
-  periode: Periode;
-  typeBeskrivelse: string;
-  typeKode: string;
-  antDagerIUken: number;
-};
+export enum Tiltakstype {
+  ARBEIDSFORBEREDENDE_TRENING,
+  ARBEIDSRETTET_REHABILITERING,
+  ARBEIDSTRENING,
+  AVKLARING,
+  DIGITAL_JOBBKLUBB,
+  ENKELTPLASS_AMO,
+  ENKELTPLASS_VGS_OG_HØYERE_YRKESFAG,
+  FORSØK_OPPLÆRING_LENGRE_VARIGHET,
+  GRUPPE_AMO,
+  GRUPPE_VGS_OG_HØYERE_YRKESFAG,
+  HØYERE_UTDANNING,
+  INDIVIDUELL_JOBBSTØTTE,
+  INDIVIDUELL_KARRIERESTØTTE_UNG,
+  JOBBKLUBB,
+  OPPFØLGING,
+  UTVIDET_OPPFØLGING_I_NAV,
+  UTVIDET_OPPFØLGING_I_OPPLÆRING,
+}
 
 export type MeldekortDTO = {
   dager: MeldekortDag[];
 };
 
-export type GodkjennDTO = {
-  meldekortId: string;
-  meldekortDager: MeldekortDag[];
-};
-
-export enum MeldekortStatus {
+export enum MeldekortdagStatus {
   Sperret = 'SPERRET',
   IkkeUtfylt = 'IKKE_UTFYLT',
   DeltattUtenLønnITiltaket = 'DELTATT_UTEN_LØNN_I_TILTAKET',
@@ -48,7 +63,12 @@ export enum MeldekortStatus {
   FraværVelferdIkkeGodkjentAvNav = 'FRAVÆR_VELFERD_IKKE_GODKJENT_AV_NAV',
 }
 
-export const Meldekortstatuser = Object.values(MeldekortStatus);
+export const Meldekortstatuser = Object.values(MeldekortdagStatus).filter(
+  (status) =>
+    ![MeldekortdagStatus.Sperret, MeldekortdagStatus.IkkeUtfylt].includes(
+      status,
+    ),
+);
 
 //  export type MeldekortBeregningDTO = {
 //    antallDeltattUtenLønn: number;

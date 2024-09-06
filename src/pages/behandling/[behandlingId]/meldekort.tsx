@@ -85,7 +85,7 @@ const Meldekortoversikt: NextPageWithLayout = () => {
                       )
                     }
                   >
-                    Tildel meg
+                    Åpne
                   </Button>
                 </Table.DataCell>
               </Table.Row>
