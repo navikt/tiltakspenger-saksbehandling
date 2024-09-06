@@ -5,14 +5,12 @@ import { MeldekortDag } from '../../../types/MeldekortTypes';
 import { useSendMeldekortTilBeslutter } from '../../../hooks/meldekort/useSendMeldekortTilBeslutter';
 
 interface MeldekortKnapperProps {
-  håndterEndreMeldekort: () => void;
   meldekortdager: MeldekortDag[];
   meldekortId: string;
   sakId: string;
 }
 
 export const MeldekortKnapper = ({
-  håndterEndreMeldekort,
   meldekortdager,
   meldekortId,
   sakId,
@@ -28,15 +26,6 @@ export const MeldekortKnapper = ({
           melding={`Kunne ikke sende meldekortet til beslutter (${error.status} ${error.info})`}
         />
       )}
-      <Button
-        icon={<PencilWritingIcon />}
-        variant="tertiary"
-        size="small"
-        onClick={() => håndterEndreMeldekort()}
-      >
-        Endre meldekortperiode
-      </Button>
-
       <Button
         size="small"
         loading={senderMeldekortTilBeslutter}

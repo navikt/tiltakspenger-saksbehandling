@@ -13,3 +13,9 @@
 .behandlingLayout {
   min-height: 100vh;
 }
+
+.wrapper {
+  width: 100%;
+  padding: 1em;
+  background-color: #f5f5f5;
+}

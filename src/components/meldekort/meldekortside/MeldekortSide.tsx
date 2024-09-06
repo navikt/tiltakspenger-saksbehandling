@@ -1,18 +1,15 @@
 import styles from './Meldekort.module.css';
 import { MeldekortUke } from './MeldekortUke';
-import { HStack, Loader, VStack } from '@navikt/ds-react';
-import { useContext, useState } from 'react';
+import { Heading, HStack, Loader, VStack } from '@navikt/ds-react';
 import { MeldekortKnapper } from './MeldekortKnapper';
 import router from 'next/router';
 import { useHentMeldekort } from '../../../hooks/meldekort/useHentMeldekort';
 import Varsel from '../../varsel/Varsel';
-import { ukenummerFraDatotekst } from '../../../utils/date';
-import { BehandlingContext } from '../../layout/SaksbehandlingLayout';
+import { ukenummerFraDatotekst, ukenummerHeading } from '../../../utils/date';
 
 export const MeldekortSide = () => {
-  const [disableUkeVisning, setDisableUkeVisning] = useState<boolean>(true);
+  const sakId = router.query.sakId as string;
   const meldekortId = router.query.meldekortId as string;
-  const { sakId } = useContext(BehandlingContext);
   const { meldekort, isLoading, error } = useHentMeldekort(meldekortId, sakId);
 
   if (isLoading) {
@@ -33,11 +30,14 @@ export const MeldekortSide = () => {
 
   return (
     <VStack gap="5" className={styles.wrapper}>
-      <HStack
-        gap="9"
-        wrap={false}
-        className={disableUkeVisning ? styles.disableUkevisning : ''}
-      >
+      <Heading level="2" size="medium">
+        Meldekort{' '}
+        {ukenummerHeading({
+          fraOgMed: meldekort.fraOgMed,
+          tilOgMed: meldekort.tilOgMed,
+        })}
+      </Heading>
+      <HStack gap="9" wrap={false}>
         <MeldekortUke
           meldekortUke={uke1}
           ukesnummer={ukenummerFraDatotekst(uke1[0].dato)}
@@ -53,7 +53,6 @@ export const MeldekortSide = () => {
         meldekortdager={meldekort.meldekortDager}
         meldekortId={meldekortId}
         sakId={sakId}
-        håndterEndreMeldekort={() => setDisableUkeVisning(!disableUkeVisning)}
       />
     </VStack>
   );

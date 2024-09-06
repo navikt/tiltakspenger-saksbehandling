@@ -10,8 +10,7 @@ import { kanSaksbehandleForBehandling } from '../../utils/tilganger';
 export const Saksbehandlingstabs = () => {
   const aktivTab = router.route.split('/')[3];
   const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
-  const { behandlingId, meldekortId, utbetalingId } =
-    useContext(BehandlingContext);
+  const { behandlingId } = useContext(BehandlingContext);
   const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
   const [value, setValue] = useState(aktivTab);
 
@@ -60,9 +59,7 @@ export const Saksbehandlingstabs = () => {
               id="meldekort-tab"
               aria-controls="meldekort-panel"
               onClick={() =>
-                router.push(
-                  `/behandling/${behandlingId}/meldekort/${meldekortId}`,
-                )
+                router.push(`/behandling/${behandlingId}/meldekort`)
               }
             />
             {/* <Tabs.Tab
