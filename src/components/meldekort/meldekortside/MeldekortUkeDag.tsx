@@ -2,6 +2,7 @@ import { HGrid, Select } from '@navikt/ds-react';
 import {
   MeldekortDag,
   MeldekortdagStatus,
+  Meldekortstatus,
   Meldekortstatuser,
 } from '../../../types/MeldekortTypes';
 import { formaterDatotekst, ukedagFraDatotekst } from '../../../utils/date';
@@ -9,20 +10,20 @@ import IkonMedTekst from '../../ikon-med-tekst/IkonMedTekst';
 import { velgIkonForMeldekortStatus } from './MeldekortUke';
 import { useContext, useState } from 'react';
 import styles from './Meldekort.module.css';
-import { BehandlingContext } from '../../layout/SaksbehandlingLayout';
 import { useHentMeldekort } from '../../../hooks/meldekort/useHentMeldekort';
 import { finnMeldekortStatusTekst } from '../../../utils/tekstformateringUtils';
 
 interface MeldekortUkeDagProps {
   meldekortDag: MeldekortDag;
   meldekortId: string;
+  sakId: string;
 }
 
 export const MeldekortUkeDag = ({
   meldekortId,
   meldekortDag,
+  sakId,
 }: MeldekortUkeDagProps) => {
-  const { sakId } = useContext(BehandlingContext);
   const { meldekort, mutate } = useHentMeldekort(meldekortId, sakId);
   const [status, setStatus] = useState<string>(meldekortDag.status);
 
@@ -30,17 +31,18 @@ export const MeldekortUkeDag = ({
     if (dagStatus === MeldekortdagStatus.IkkeUtfylt) return;
     setStatus(dagStatus);
 
-    const oppdaterteMeldekortDager = meldekort.meldekortDager.map((dag) => {
-      if (dag.dato === meldekortDag.dato) {
-        return {
-          ...dag,
-          status: dagStatus as MeldekortdagStatus,
-        };
-      } else {
-        return dag;
-      }
-    });
-
+    const oppdaterteMeldekortDager =
+      meldekort &&
+      meldekort.meldekortDager.map((dag) => {
+        if (dag.dato === meldekortDag.dato) {
+          return {
+            ...dag,
+            status: dagStatus as MeldekortdagStatus,
+          };
+        } else {
+          return dag;
+        }
+      });
     mutate(
       {
         ...meldekort,
@@ -49,7 +51,6 @@ export const MeldekortUkeDag = ({
       { populateCache: true, revalidate: false },
     );
   };
-
   return (
     <HGrid
       key={meldekortDag.dato.toString()}
@@ -61,7 +62,9 @@ export const MeldekortUkeDag = ({
         text={`${ukedagFraDatotekst(meldekortDag.dato)} ${formaterDatotekst(meldekortDag.dato.toString())}`}
         iconRenderer={() => velgIkonForMeldekortStatus(status)}
       />
-      {status != MeldekortdagStatus.Sperret ? (
+      {meldekort.status == Meldekortstatus.GODKJENT ? (
+        <div>{finnMeldekortStatusTekst(meldekortDag.status)}</div>
+      ) : status != MeldekortdagStatus.Sperret ? (
         <Select
           label="Deltatt Eller Fravær"
           id="deltattEllerFravær"

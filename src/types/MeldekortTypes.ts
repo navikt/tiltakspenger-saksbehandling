@@ -17,9 +17,9 @@ export type Meldekort = {
 };
 
 export enum Meldekortstatus {
-  KLAR_TIL_UTFYLLING,
-  KLAR_TIL_BESLUTNING,
-  GODKJENT,
+  KLAR_TIL_UTFYLLING = 'KLAR_TIL_UTFYLLING',
+  KLAR_TIL_BESLUTNING = 'KLAR_TIL_BESLUTNING',
+  GODKJENT = 'GODKJENT',
 }
 
 export type MeldekortDag = {

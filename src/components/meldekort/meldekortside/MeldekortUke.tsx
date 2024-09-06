@@ -17,6 +17,7 @@ interface MeldekortUkeProps {
   meldekortUke: MeldekortDag[];
   ukesnummer: number;
   meldekortId: string;
+  sakId: string;
 }
 
 export const velgIkonForMeldekortStatus = (status: string) => {
@@ -44,6 +45,7 @@ export const MeldekortUke = ({
   meldekortUke,
   ukesnummer,
   meldekortId,
+  sakId,
 }: MeldekortUkeProps) => {
   return (
     <VStack className={styles.meldekortUke}>
@@ -55,6 +57,7 @@ export const MeldekortUke = ({
           key={ukedag.dato.toString()}
           meldekortDag={ukedag}
           meldekortId={meldekortId}
+          sakId={sakId}
         />
       ))}
     </VStack>

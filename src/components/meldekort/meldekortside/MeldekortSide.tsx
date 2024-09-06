@@ -12,7 +12,7 @@ export const MeldekortSide = () => {
   const meldekortId = router.query.meldekortId as string;
   const { meldekort, isLoading, error } = useHentMeldekort(meldekortId, sakId);
 
-  if (isLoading) {
+  if (isLoading && !meldekort) {
     return <Loader />;
   } else if (error) {
     return (
@@ -38,11 +38,13 @@ export const MeldekortSide = () => {
           meldekortUke={uke1}
           ukesnummer={ukenummerFraDatotekst(uke1[0].dato)}
           meldekortId={meldekortId}
+          sakId={sakId}
         />
         <MeldekortUke
           meldekortUke={uke2}
           ukesnummer={ukenummerFraDatotekst(uke2[1].dato)}
           meldekortId={meldekortId}
+          sakId={sakId}
         />
       </HStack>
       <MeldekortKnapper
