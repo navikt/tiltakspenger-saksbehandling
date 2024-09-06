@@ -1,13 +1,16 @@
 import { Periode } from './Periode';
 
-export type Meldekortoppsummering = {
+export type Meldekortsammendrag = {
   meldekortId: string;
   periode: Periode;
-  erUtfylt: boolean;
+  status: Meldekortstatus;
+  saksbehandler?: string;
+  beslutter?: string;
 };
 
 export type Meldekort = {
   id: string;
+  rammevedtakId: string;
   periode: Periode;
   meldekortDager: MeldekortDag[];
   tiltakstype: Tiltakstype;

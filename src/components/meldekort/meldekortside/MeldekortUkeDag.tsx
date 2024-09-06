@@ -1,4 +1,4 @@
-import { HGrid, Select } from '@navikt/ds-react';
+import { BodyShort, HGrid, Select } from '@navikt/ds-react';
 import {
   MeldekortDag,
   MeldekortdagStatus,
@@ -8,10 +8,10 @@ import {
 import { formaterDatotekst, ukedagFraDatotekst } from '../../../utils/date';
 import IkonMedTekst from '../../ikon-med-tekst/IkonMedTekst';
 import { velgIkonForMeldekortStatus } from './MeldekortUke';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import styles from './Meldekort.module.css';
 import { useHentMeldekort } from '../../../hooks/meldekort/useHentMeldekort';
-import { finnMeldekortStatusTekst } from '../../../utils/tekstformateringUtils';
+import { finnMeldekortdagStatusTekst } from '../../../utils/tekstformateringUtils';
 
 interface MeldekortUkeDagProps {
   meldekortDag: MeldekortDag;
@@ -62,28 +62,32 @@ export const MeldekortUkeDag = ({
         text={`${ukedagFraDatotekst(meldekortDag.dato)} ${formaterDatotekst(meldekortDag.dato.toString())}`}
         iconRenderer={() => velgIkonForMeldekortStatus(status)}
       />
-      {meldekort.status == Meldekortstatus.GODKJENT ? (
-        <div>{finnMeldekortStatusTekst(meldekortDag.status)}</div>
-      ) : status != MeldekortdagStatus.Sperret ? (
-        <Select
-          label="Deltatt Eller Fravær"
-          id="deltattEllerFravær"
-          size="small"
-          hideLabel
-          value={status}
-          onChange={(e) => {
-            oppdaterMeldekortdag(e.target.value);
-          }}
-        >
-          <option value={MeldekortdagStatus.IkkeUtfylt}>--</option>
-          {Meldekortstatuser.map((meldekortStatus) => (
-            <option key={meldekortStatus} value={meldekortStatus}>
-              {finnMeldekortStatusTekst(meldekortStatus)}
-            </option>
-          ))}
-        </Select>
+      {meldekort.status === Meldekortstatus.KLAR_TIL_UTFYLLING ? (
+        status != MeldekortdagStatus.Sperret ? (
+          <Select
+            label="Deltatt Eller Fravær"
+            id="deltattEllerFravær"
+            size="small"
+            hideLabel
+            value={status}
+            onChange={(e) => {
+              oppdaterMeldekortdag(e.target.value);
+            }}
+          >
+            <option value={MeldekortdagStatus.IkkeUtfylt}>--</option>
+            {Meldekortstatuser.map((meldekortStatus) => (
+              <option key={meldekortStatus} value={meldekortStatus}>
+                {finnMeldekortdagStatusTekst(meldekortStatus)}
+              </option>
+            ))}
+          </Select>
+        ) : (
+          <BodyShort>Ikke rett på tiltakspenger</BodyShort>
+        )
       ) : (
-        'Ikke rett på tiltakspenger'
+        <BodyShort>
+          {finnMeldekortdagStatusTekst(meldekortDag.status)}
+        </BodyShort>
       )}
     </HGrid>
   );

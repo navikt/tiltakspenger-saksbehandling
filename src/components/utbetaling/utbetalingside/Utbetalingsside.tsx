@@ -6,13 +6,17 @@ import { useHentUtbetalingVedtak } from '../../../hooks/utbetaling/useHentUtbeta
 import router from 'next/router';
 import { utbetalingsukeHeading } from '../../../utils/date';
 import styles from './Utbetaling.module.css';
+import { useHentMeldekort } from '../../../hooks/meldekort/useHentMeldekort';
 
 export const Utbetalingsside = () => {
-  const utbetalingVedtakId = router.query.utbetalingId as string;
-  const { utbetalingVedtak, isLoading, error } =
-    useHentUtbetalingVedtak(utbetalingVedtakId);
+  const sakId = router.query.sakId as string;
+  const meldekortId = router.query.meldekortId as string;
+  const { meldekort, isLoading, error } = useHentMeldekort(meldekortId, sakId);
+  const { utbetalingVedtak } = useHentUtbetalingVedtak(
+    'vedtak_01J73PQE54368YCGEN5F9XS11G',
+  );
 
-  if (isLoading) return <Loader />;
+  if (isLoading || !meldekort || !utbetalingVedtak) return <Loader />;
   else if (error)
     return (
       <Varsel

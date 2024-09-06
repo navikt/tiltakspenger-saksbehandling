@@ -6,6 +6,8 @@ import router from 'next/router';
 import { useHentMeldekort } from '../../../hooks/meldekort/useHentMeldekort';
 import Varsel from '../../varsel/Varsel';
 import { ukenummerFraDatotekst, ukenummerHeading } from '../../../utils/date';
+import { Meldekortstatus } from '../../../types/MeldekortTypes';
+import { Utbetalingsside } from '../../utbetaling/utbetalingside/Utbetalingsside';
 
 export const MeldekortSide = () => {
   const sakId = router.query.sakId as string;
@@ -47,6 +49,7 @@ export const MeldekortSide = () => {
           sakId={sakId}
         />
       </HStack>
+      {meldekort.status === Meldekortstatus.GODKJENT && <Utbetalingsside />}
       <MeldekortKnapper
         meldekortdager={meldekort.meldekortDager}
         meldekortId={meldekortId}

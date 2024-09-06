@@ -19,6 +19,7 @@ import { useHentMeldekortListe } from '../../../hooks/meldekort/useHentMeldekort
 import { periodeTilFormatertDatotekst } from '../../../utils/date';
 import { NextPageWithLayout } from '../../_app';
 import styles from '../Behandling.module.css';
+import { finnMeldekortstatusTekst } from '../../../utils/tekstformateringUtils';
 
 const Meldekortoversikt: NextPageWithLayout = () => {
   const { sakId } = useContext(BehandlingContext);
@@ -53,9 +54,8 @@ const Meldekortoversikt: NextPageWithLayout = () => {
         <Table zebraStripes>
           <Table.Header>
             <Table.Row>
-              <Table.HeaderCell scope="col">Id</Table.HeaderCell>
-              <Table.HeaderCell scope="col">Status</Table.HeaderCell>
               <Table.HeaderCell scope="col">Periode</Table.HeaderCell>
+              <Table.HeaderCell scope="col">Status</Table.HeaderCell>
               <Table.HeaderCell scope="col">Saksbehandler</Table.HeaderCell>
               <Table.HeaderCell scope="col">Beslutter</Table.HeaderCell>
               <Table.HeaderCell scope="col">Handlinger</Table.HeaderCell>
@@ -64,16 +64,17 @@ const Meldekortoversikt: NextPageWithLayout = () => {
           <Table.Body>
             {meldekortliste.map((meldekort) => (
               <Table.Row shadeOnHover={false} key={meldekort.meldekortId}>
-                <Table.DataCell>{meldekort.meldekortId}</Table.DataCell>
-                <Table.DataCell>
-                  {meldekort.erUtfylt ? 'Til beslutning' : 'Klar til utfylling'}
-                </Table.DataCell>
                 <Table.DataCell>
                   {meldekort.periode &&
                     `${periodeTilFormatertDatotekst(meldekort.periode)}`}
                 </Table.DataCell>
-                <Table.DataCell>-</Table.DataCell>
-                <Table.DataCell>-</Table.DataCell>
+                <Table.DataCell>
+                  {finnMeldekortstatusTekst(meldekort.status)}
+                </Table.DataCell>
+                <Table.DataCell>
+                  {meldekort.saksbehandler ?? '-'}
+                </Table.DataCell>
+                <Table.DataCell>{meldekort.beslutter ?? '-'}</Table.DataCell>
                 <Table.DataCell scope="col">
                   <Button
                     style={{ minWidth: '50%' }}

@@ -1,7 +1,7 @@
 import { BehandlingStatus, Utfall } from '../types/BehandlingTypes';
 import { Opphold } from '../types/InstitusjonsoppholdTypes';
 import { Deltagelse } from '../types/KvpTypes';
-import { MeldekortdagStatus } from '../types/MeldekortTypes';
+import { MeldekortdagStatus, Meldekortstatus } from '../types/MeldekortTypes';
 import { Kilde } from '../types/VilkårTypes';
 
 export const finnKildetekst = (kilde: string) => {
@@ -74,7 +74,7 @@ export const finnStatusTekst = (status: string, underkjent: boolean) => {
   }
 };
 
-export const finnMeldekortStatusTekst = (status: string) => {
+export const finnMeldekortdagStatusTekst = (status: string) => {
   switch (status) {
     case MeldekortdagStatus.Sperret:
       return 'Sperret';
@@ -94,5 +94,15 @@ export const finnMeldekortStatusTekst = (status: string) => {
       return 'Ikke deltatt i tiltaket';
     case MeldekortdagStatus.IkkeUtfylt:
       return 'Ikke utfylt';
+  }
+};
+export const finnMeldekortstatusTekst = (status: string) => {
+  switch (status) {
+    case Meldekortstatus.KLAR_TIL_UTFYLLING:
+      return 'Klar til utfylling';
+    case Meldekortstatus.KLAR_TIL_BESLUTNING:
+      return 'Klar til beslutning';
+    case Meldekortstatus.GODKJENT:
+      return 'Godkjent';
   }
 };

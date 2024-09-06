@@ -1,4 +1,4 @@
-import { VStack, BodyShort, Loader, Heading } from '@navikt/ds-react';
+import { VStack, BodyShort, Loader } from '@navikt/ds-react';
 import styles from './Meldekortdetaljer.module.css';
 
 import router from 'next/router';
@@ -19,7 +19,6 @@ const Meldekortdetaljer = () => {
   return (
     <>
       <VStack gap="3" className={styles.wrapper}>
-        <Heading size="small">Detaljer</Heading>
         <BodyShort>
           <b>Periode: </b>
         </BodyShort>
@@ -28,6 +27,14 @@ const Meldekortdetaljer = () => {
           <b>Tiltak</b>
         </BodyShort>
         <BodyShort>{tiltakstype}</BodyShort>
+        <BodyShort>
+          <b>Utfylt av: </b>
+        </BodyShort>
+        <BodyShort>{saksbehandler ?? '-'}</BodyShort>
+        <BodyShort>
+          <b>Godkjent av: </b>
+        </BodyShort>
+        <BodyShort>{beslutter ?? '-'}</BodyShort>
       </VStack>
     </>
   );
