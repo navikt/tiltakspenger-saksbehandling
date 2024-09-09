@@ -36,7 +36,12 @@ export const MeldekortKnapper = ({
           size="small"
           loading={senderMeldekortTilBeslutter}
           onClick={() => {
-            sendMeldekortTilBeslutter({ dager: meldekortdager });
+            sendMeldekortTilBeslutter({
+              dager: meldekortdager.map((dag) => ({
+                dato: dag.dato,
+                status: dag.status,
+              })),
+            });
           }}
         >
           Send til beslutter

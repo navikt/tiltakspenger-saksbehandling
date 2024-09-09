@@ -15,9 +15,9 @@ import { MeldekortUkeDag } from './MeldekortUkeDag';
 
 interface MeldekortUkeProps {
   meldekortUke: MeldekortDag[];
-  ukesnummer: number;
   meldekortId: string;
   sakId: string;
+  heading: string;
 }
 
 export const velgIkonForMeldekortStatus = (status: string) => {
@@ -43,14 +43,14 @@ export const velgIkonForMeldekortStatus = (status: string) => {
 
 export const MeldekortUke = ({
   meldekortUke,
-  ukesnummer,
+  heading,
   meldekortId,
   sakId,
 }: MeldekortUkeProps) => {
   return (
     <VStack className={styles.meldekortUke}>
       <Heading size="small" className={styles.heading}>
-        Uke {ukesnummer}
+        {heading}
       </Heading>
       {meldekortUke.map((ukedag) => (
         <MeldekortUkeDag

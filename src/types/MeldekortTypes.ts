@@ -17,6 +17,7 @@ export type Meldekort = {
   saksbehandler?: string;
   beslutter?: string;
   status: Meldekortstatus;
+  sats: Sats;
 };
 
 export enum Meldekortstatus {
@@ -28,7 +29,25 @@ export enum Meldekortstatus {
 export type MeldekortDag = {
   dato: string;
   status: MeldekortdagStatus;
+  reduksjonAvYtelsePåGrunnAvFravær?: ReduksjonAvYtelse;
 };
+
+export type MeldekortDagDTO = {
+  dato: string;
+  status: MeldekortdagStatus;
+};
+
+export type Sats = {
+  periode: Periode;
+  sats: number;
+  satsDelvis: number;
+};
+
+export enum ReduksjonAvYtelse {
+  INGEN_REDUKSJON = 'INGEN_REDUKSJON',
+  DELVIS_REDUKSJON = 'DELVIS_REDUKSJON',
+  YTELSEN_FALLER_BORT = 'YTELSEN_FALLER_BORT',
+}
 
 export enum Tiltakstype {
   ARBEIDSFORBEREDENDE_TRENING,
@@ -51,7 +70,7 @@ export enum Tiltakstype {
 }
 
 export type MeldekortDTO = {
-  dager: MeldekortDag[];
+  dager: MeldekortDagDTO[];
 };
 
 export enum MeldekortdagStatus {
@@ -72,19 +91,3 @@ export const Meldekortstatuser = Object.values(MeldekortdagStatus).filter(
       status,
     ),
 );
-
-//  export type MeldekortBeregningDTO = {
-//    antallDeltattUtenLønn: number;
-//    antallDeltattMedLønn: number;
-//    antallIkkeDeltatt: number;
-//    antallSykDager: number;
-//    antallSykBarnDager: number;
-//    antallVelferdGodkjentAvNav: number;
-//    antallVelferdIkkeGodkjentAvNav: number;
-//    antallFullUtbetaling: number;
-//    antallDelvisUtbetaling: number;
-//    antallIngenUtbetaling: number;
-//    sumDelvis: number;
-//    sumFull: number;
-//    sumTotal: number;
-//  };

@@ -1,6 +1,5 @@
 import useSWRMutation from 'swr/mutation';
 import { FetcherError, mutateMeldekort } from '../../utils/http';
-import router from 'next/router';
 import { MeldekortDTO } from '../../types/MeldekortTypes';
 
 export function useSendMeldekortTilBeslutter(
@@ -14,7 +13,6 @@ export function useSendMeldekortTilBeslutter(
   } = useSWRMutation<any, FetcherError, any, MeldekortDTO>(
     `/api/sak/${sakId}/meldekort/${meldekortId}`,
     mutateMeldekort,
-    { onSuccess: () => router.push('/') },
   );
 
   return {

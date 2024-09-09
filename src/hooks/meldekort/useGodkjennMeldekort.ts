@@ -22,7 +22,6 @@ export function useGodkjennMeldekort(meldekortId: string, sakId: string) {
   } = useSWRMutation<any, FetcherError, any, any>(
     `/api/sak/${sakId}/meldekort/${meldekortId}/iverksett`,
     mutateMeldekort,
-    { onSuccess: () => router.push('/') },
   );
 
   return { onGodkjennMeldekort, isMeldekortMutating, error };

@@ -1,7 +1,12 @@
 import { BehandlingStatus, Utfall } from '../types/BehandlingTypes';
 import { Opphold } from '../types/InstitusjonsoppholdTypes';
 import { Deltagelse } from '../types/KvpTypes';
-import { MeldekortdagStatus, Meldekortstatus } from '../types/MeldekortTypes';
+import {
+  MeldekortdagStatus,
+  Meldekortstatus,
+  ReduksjonAvYtelse,
+  Sats,
+} from '../types/MeldekortTypes';
 import { Kilde } from '../types/VilkårTypes';
 
 export const finnKildetekst = (kilde: string) => {
@@ -104,5 +109,27 @@ export const finnMeldekortstatusTekst = (status: string) => {
       return 'Klar til beslutning';
     case Meldekortstatus.GODKJENT:
       return 'Godkjent';
+  }
+};
+
+export const hentProsentUtbetaling = (reduksjon: string) => {
+  switch (reduksjon) {
+    case ReduksjonAvYtelse.INGEN_REDUKSJON:
+      return '100 %';
+    case ReduksjonAvYtelse.DELVIS_REDUKSJON:
+      return '75 %';
+    case ReduksjonAvYtelse.YTELSEN_FALLER_BORT:
+      return '-';
+  }
+};
+
+export const hentBeløp = (reduksjon: string, sats: Sats) => {
+  switch (reduksjon) {
+    case ReduksjonAvYtelse.INGEN_REDUKSJON:
+      return sats.sats;
+    case ReduksjonAvYtelse.DELVIS_REDUKSJON:
+      return sats.satsDelvis;
+    case ReduksjonAvYtelse.YTELSEN_FALLER_BORT:
+      return 0;
   }
 };

@@ -1,13 +1,14 @@
 import styles from './Meldekort.module.css';
 import { MeldekortUke } from './MeldekortUke';
-import { Heading, HStack, Loader, VStack } from '@navikt/ds-react';
+import { BodyShort, Heading, HStack, Loader, VStack } from '@navikt/ds-react';
 import { MeldekortKnapper } from './MeldekortKnapper';
 import router from 'next/router';
 import { useHentMeldekort } from '../../../hooks/meldekort/useHentMeldekort';
 import Varsel from '../../varsel/Varsel';
-import { ukenummerFraDatotekst, ukenummerHeading } from '../../../utils/date';
+import { meldekortHeading, ukeHeading } from '../../../utils/date';
 import { Meldekortstatus } from '../../../types/MeldekortTypes';
-import { Utbetalingsside } from '../../utbetaling/utbetalingside/Utbetalingsside';
+import { Utbetalingsuke } from '../../utbetaling/utbetalingside/Utbetalingsuke';
+import { hentBeløp } from '../../../utils/tekstformateringUtils';
 
 export const MeldekortSide = () => {
   const sakId = router.query.sakId as string;
@@ -30,26 +31,48 @@ export const MeldekortSide = () => {
   const uke1 = meldekort.meldekortDager.slice(0, 7);
   const uke2 = meldekort.meldekortDager.slice(7, 14);
 
+  const meldekortdagerbeløp = meldekort.meldekortDager.map((dag) =>
+    hentBeløp(dag.reduksjonAvYtelsePåGrunnAvFravær, meldekort.sats),
+  );
+  const totalsum = meldekortdagerbeløp.reduce((sum, beløp) => sum + beløp);
   return (
     <VStack gap="5" className={styles.wrapper}>
       <Heading level="2" size="medium">
-        Meldekort {ukenummerHeading(meldekort.periode)}
+        {meldekortHeading(meldekort.periode)}
       </Heading>
-      <HStack gap="9" wrap={false}>
-        <MeldekortUke
-          meldekortUke={uke1}
-          ukesnummer={ukenummerFraDatotekst(uke1[0].dato)}
-          meldekortId={meldekortId}
-          sakId={sakId}
-        />
-        <MeldekortUke
-          meldekortUke={uke2}
-          ukesnummer={ukenummerFraDatotekst(uke2[1].dato)}
-          meldekortId={meldekortId}
-          sakId={sakId}
-        />
-      </HStack>
-      {meldekort.status === Meldekortstatus.GODKJENT && <Utbetalingsside />}
+      {meldekort.status != Meldekortstatus.KLAR_TIL_UTFYLLING ? (
+        <>
+          <Heading size="small" level="3">
+            {ukeHeading(meldekort.periode.fraOgMed)}
+          </Heading>
+          <Utbetalingsuke utbetalingUke={uke1} />
+          <Heading size="small" level="3">
+            {ukeHeading(meldekort.periode.tilOgMed)}
+          </Heading>
+          <Utbetalingsuke utbetalingUke={uke2} />
+          <HStack gap="10" className={styles.total_utbetaling}>
+            <BodyShort weight="semibold">Totalt beløp for perioden:</BodyShort>
+            <BodyShort weight="semibold">{totalsum},-</BodyShort>
+          </HStack>
+        </>
+      ) : (
+        <>
+          <HStack gap="9" wrap={false}>
+            <MeldekortUke
+              meldekortUke={uke1}
+              heading={ukeHeading(meldekort.periode.fraOgMed)}
+              meldekortId={meldekortId}
+              sakId={sakId}
+            />
+            <MeldekortUke
+              meldekortUke={uke2}
+              heading={ukeHeading(meldekort.periode.tilOgMed)}
+              meldekortId={meldekortId}
+              sakId={sakId}
+            />
+          </HStack>
+        </>
+      )}
       <MeldekortKnapper
         meldekortdager={meldekort.meldekortDager}
         meldekortId={meldekortId}

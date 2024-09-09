@@ -24,11 +24,11 @@ export function periodeTilFormatertDatotekst({ fraOgMed, tilOgMed }: Periode) {
   return `${formaterDatotekst(fraOgMed)} - ${formaterDatotekst(tilOgMed)}`;
 }
 
-export const ukenummerHeading = (periode: Periode): string => {
-  return `Uke ${ukenummerFraDatotekst(periode.fraOgMed)} / ${ukenummerFraDatotekst(periode.tilOgMed)}`;
+export const meldekortHeading = (periode: Periode): string => {
+  return `Meldekort uke ${ukenummerFraDatotekst(periode.fraOgMed)} / ${ukenummerFraDatotekst(periode.tilOgMed)}`;
 };
 
-export const utbetalingsukeHeading = (dato: string): string => {
+export const ukeHeading = (dato: string): string => {
   return `Uke ${ukenummerFraDatotekst(dato)} - ${månedFraDatotekst(dato)} ${dayjs(dato).year()} `;
 };
 
