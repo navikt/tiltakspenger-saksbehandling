@@ -7,21 +7,18 @@ import { useTaBehandling } from '../../hooks/useTaBehandling';
 import { useContext } from 'react';
 import { SaksbehandlerContext } from '../../pages/_app';
 
-export const benkknapp = (
-  variant: 'primary' | 'secondary' | 'tertiary',
-  onClick: () => void,
-  tekst: string,
-) => (
-  <Button
-    style={{ minWidth: '50%' }}
-    size="small"
-    variant={variant}
-    onClick={onClick}
-  >
-    {tekst}
-  </Button>
-);
-
+const finnLenke = (behandlingId: string, status: BehandlingStatus) => {
+  switch (status) {
+    case BehandlingStatus.KLAR_TIL_BEHANDLING:
+    case BehandlingStatus.UNDER_BEHANDLING:
+      return `/behandling/${behandlingId}/inngangsvilkar/kravfrist`;
+    case BehandlingStatus.KLAR_TIL_BESLUTNING:
+    case BehandlingStatus.UNDER_BESLUTNING:
+      return `/behandling/${behandlingId}/oppsummering`;
+    default:
+      return '/';
+  }
+};
 interface KnappForBehandlingTypeProps {
   status: BehandlingStatus;
   saksbehandler: string;
@@ -37,65 +34,53 @@ export const KnappForBehandlingType = ({
 }: KnappForBehandlingTypeProps) => {
   const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
   const { onOpprettBehandling } = useOpprettBehandling();
-  const { onTaBehandling } = useTaBehandling();
-
-  const inngangsvilkårlenke = `/behandling/${behandlingId}/inngangsvilkar/kravfrist`;
-  const oppsummeringlenke = `/behandling/${behandlingId}/oppsummering`;
+  const { onTaBehandling } = useTaBehandling(finnLenke(behandlingId, status));
 
   switch (status) {
     case BehandlingStatus.SØKNAD:
-      return benkknapp(
-        'primary',
-        () => onOpprettBehandling({ id: behandlingId }),
-        'Opprett behandling',
+      return (
+        <Button
+          style={{ minWidth: '50%' }}
+          size="small"
+          variant={'primary'}
+          onClick={() => onOpprettBehandling({ id: behandlingId })}
+        >
+          Opprett behandling
+        </Button>
       );
     case BehandlingStatus.UNDER_BEHANDLING:
-      if (
-        eierBehandling(status, innloggetSaksbehandler, saksbehandler, beslutter)
-      ) {
-        return benkknapp(
-          'secondary',
-          () => router.push(inngangsvilkårlenke),
-          'Fortsett',
-        );
-      }
     case BehandlingStatus.UNDER_BESLUTNING:
       if (
         eierBehandling(status, innloggetSaksbehandler, saksbehandler, beslutter)
       ) {
-        return benkknapp(
-          'secondary',
-          () => router.push(oppsummeringlenke),
-          'Fortsett',
+        return (
+          <Button
+            style={{ minWidth: '50%' }}
+            size="small"
+            variant={'secondary'}
+            onClick={() => router.push(finnLenke(behandlingId, status))}
+          >
+            Fortsett
+          </Button>
         );
       }
     case BehandlingStatus.KLAR_TIL_BEHANDLING:
-      if (
-        skalKunneTaBehandling(status, innloggetSaksbehandler, saksbehandler)
-      ) {
-        return benkknapp(
-          'primary',
-          () => {
-            onTaBehandling({ id: behandlingId });
-            router.push(inngangsvilkårlenke);
-          },
-          'Tildel meg',
-        );
-      }
     case BehandlingStatus.KLAR_TIL_BESLUTNING:
       if (
         skalKunneTaBehandling(status, innloggetSaksbehandler, saksbehandler)
       ) {
-        return benkknapp(
-          'primary',
-          () => {
-            onTaBehandling({ id: behandlingId });
-            router.push(oppsummeringlenke);
-          },
-          'Tildel meg',
+        return (
+          <Button
+            style={{ minWidth: '50%' }}
+            size="small"
+            variant={'primary'}
+            onClick={() => onTaBehandling({ id: behandlingId })}
+          >
+            Tildel meg
+          </Button>
         );
       }
     default:
-      return <></>;
+      return null;
   }
 };

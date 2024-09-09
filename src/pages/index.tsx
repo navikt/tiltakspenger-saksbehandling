@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Heading, Loader, Table } from '@navikt/ds-react';
+import { Box, Button, Heading, Loader, Table } from '@navikt/ds-react';
 import { useHentSøknaderOgBehandlinger } from '../hooks/useHentSøknaderOgBehandlinger';
 import { NextPage } from 'next';
 import router from 'next/router';
@@ -7,19 +7,14 @@ import { pageWithAuthentication } from '../auth/pageWithAuthentication';
 import { useOpprettBehandling } from '../hooks/useOpprettBehandling';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '../utils/date';
 import { finnStatusTekst } from '../utils/tekstformateringUtils';
-import { useTaBehandling } from '../hooks/useTaBehandling';
 import Varsel from '../components/varsel/Varsel';
-import {
-  benkknapp,
-  KnappForBehandlingType,
-} from '../components/behandlingsknapper/Benkknapp';
+import { KnappForBehandlingType } from '../components/behandlingsknapper/Benkknapp';
 import { BehandlingStatus } from '../types/BehandlingTypes';
 
 const Oversikten: NextPage = () => {
   const { SøknaderOgBehandlinger, isLoading, error } =
     useHentSøknaderOgBehandlinger();
   const { opprettBehandlingError } = useOpprettBehandling();
-  const { taBehandlingError } = useTaBehandling();
 
   if (isLoading || !SøknaderOgBehandlinger) return <Loader />;
 
@@ -36,12 +31,6 @@ const Oversikten: NextPage = () => {
       <Heading spacing size="medium" level="2">
         Oversikt over behandlinger og søknader
       </Heading>
-      {taBehandlingError && (
-        <Varsel
-          variant={'error'}
-          melding={`Kunne ikke ta behandling (${taBehandlingError.status} ${taBehandlingError.info})`}
-        />
-      )}
       {opprettBehandlingError && (
         <Varsel
           variant={'error'}
@@ -92,13 +81,18 @@ const Oversikten: NextPage = () => {
                 />
               </Table.DataCell>
               <Table.DataCell>
-                {behandling.status !== BehandlingStatus.SØKNAD &&
-                  benkknapp(
-                    'secondary',
-                    () =>
-                      router.push(`/behandling/${behandling.id}/oppsummering`),
-                    'Se behandling',
-                  )}
+                {behandling.status !== BehandlingStatus.SØKNAD && (
+                  <Button
+                    style={{ minWidth: '50%' }}
+                    size="small"
+                    variant={'secondary'}
+                    onClick={() =>
+                      router.push(`/behandling/${behandling.id}/oppsummering`)
+                    }
+                  >
+                    Se behandling
+                  </Button>
+                )}
               </Table.DataCell>
             </Table.Row>
           ))}
