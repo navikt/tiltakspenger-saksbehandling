@@ -111,25 +111,3 @@ export const finnMeldekortstatusTekst = (status: string) => {
       return 'Godkjent';
   }
 };
-
-export const hentProsentUtbetaling = (reduksjon: string) => {
-  switch (reduksjon) {
-    case ReduksjonAvYtelse.INGEN_REDUKSJON:
-      return '100 %';
-    case ReduksjonAvYtelse.DELVIS_REDUKSJON:
-      return '75 %';
-    case ReduksjonAvYtelse.YTELSEN_FALLER_BORT:
-      return '-';
-  }
-};
-
-export const hentBeløp = (reduksjon: string, sats: Sats) => {
-  switch (reduksjon) {
-    case ReduksjonAvYtelse.INGEN_REDUKSJON:
-      return sats.sats;
-    case ReduksjonAvYtelse.DELVIS_REDUKSJON:
-      return sats.satsDelvis;
-    case ReduksjonAvYtelse.YTELSEN_FALLER_BORT:
-      return 0;
-  }
-};

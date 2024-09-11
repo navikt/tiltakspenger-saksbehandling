@@ -8,7 +8,6 @@ import Varsel from '../../varsel/Varsel';
 import { meldekortHeading, ukeHeading } from '../../../utils/date';
 import { Meldekortstatus } from '../../../types/MeldekortTypes';
 import { Utbetalingsuke } from '../../utbetaling/utbetalingside/Utbetalingsuke';
-import { hentBeløp } from '../../../utils/tekstformateringUtils';
 
 export const MeldekortSide = () => {
   const sakId = router.query.sakId as string;
@@ -31,10 +30,6 @@ export const MeldekortSide = () => {
   const uke1 = meldekort.meldekortDager.slice(0, 7);
   const uke2 = meldekort.meldekortDager.slice(7, 14);
 
-  const meldekortdagerbeløp = meldekort.meldekortDager.map((dag) =>
-    hentBeløp(dag.reduksjonAvYtelsePåGrunnAvFravær, meldekort.sats),
-  );
-  const totalsum = meldekortdagerbeløp.reduce((sum, beløp) => sum + beløp);
   return (
     <VStack gap="5" className={styles.wrapper}>
       <Heading level="2" size="medium">
@@ -52,7 +47,9 @@ export const MeldekortSide = () => {
           <Utbetalingsuke utbetalingUke={uke2} />
           <HStack gap="10" className={styles.total_utbetaling}>
             <BodyShort weight="semibold">Totalt beløp for perioden:</BodyShort>
-            <BodyShort weight="semibold">{totalsum},-</BodyShort>
+            <BodyShort weight="semibold">
+              {meldekort.totalbeløpTilUtbetaling},-
+            </BodyShort>
           </HStack>
         </>
       ) : (

@@ -17,7 +17,7 @@ export type Meldekort = {
   saksbehandler?: string;
   beslutter?: string;
   status: Meldekortstatus;
-  sats: Sats;
+  totalbeløpTilUtbetaling: number;
 };
 
 export enum Meldekortstatus {
@@ -30,6 +30,12 @@ export type MeldekortDag = {
   dato: string;
   status: MeldekortdagStatus;
   reduksjonAvYtelsePåGrunnAvFravær?: ReduksjonAvYtelse;
+  beregningsdag: Beregningsdag;
+};
+
+export type Beregningsdag = {
+  beløp: number;
+  prosent: number;
 };
 
 export type MeldekortDagDTO = {
