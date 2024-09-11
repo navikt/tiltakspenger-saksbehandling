@@ -3,7 +3,7 @@ import React, { useContext } from 'react';
 import styles from './Utbetalingmeny.module.css';
 import {
   periodeTilFormatertDatotekst,
-  ukenummerHeading,
+  meldekortHeading,
 } from '../../../utils/date';
 import NextLink from 'next/link';
 import router from 'next/router';
@@ -34,7 +34,12 @@ export const Utbetalingmeny = () => {
           >
             <VStack justify="center">
               <BodyShort>
-                <b>{ukenummerHeading({fraOgMed: utbetaling.fom, tilOgMed:utbetaling.tom})}</b>
+                <b>
+                  {meldekortHeading({
+                    fraOgMed: utbetaling.fom,
+                    tilOgMed: utbetaling.tom,
+                  })}
+                </b>
               </BodyShort>
               <BodyShort>
                 {periodeTilFormatertDatotekst({

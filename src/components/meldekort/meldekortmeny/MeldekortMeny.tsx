@@ -4,7 +4,7 @@ import React, { useContext } from 'react';
 import styles from './MeldekortMeny.module.css';
 import {
   periodeTilFormatertDatotekst,
-  ukenummerHeading,
+  meldekortHeading,
 } from '../../../utils/date';
 import router from 'next/router';
 import { BehandlingContext } from '../../layout/SaksbehandlingLayout';
@@ -40,7 +40,7 @@ export const MeldekortMeny = () => {
           >
             <VStack justify="center">
               <BodyShort>
-                <b>{ukenummerHeading(meldekort.periode)}</b>
+                <b>{meldekortHeading(meldekort.periode)}</b>
               </BodyShort>
               <BodyShort>
                 {' '}
