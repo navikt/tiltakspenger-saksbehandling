@@ -1,58 +1,62 @@
-import { PencilWritingIcon } from '@navikt/aksel-icons';
 import { Button, HStack } from '@navikt/ds-react';
-import { useContext } from 'react';
-import { useGodkjennMeldekort } from '../../../hooks/meldekort/useGodkjennMeldekort';
-import { SaksbehandlerContext } from '../../../pages/_app';
 import Varsel from '../../varsel/Varsel';
-import { MeldekortDager } from './MeldekortSide';
-import { MeldekortStatus } from '../../../utils/meldekortStatus';
-import { MeldekortDag, MeldekortDagDTO } from '../../../types/MeldekortTypes';
+import { MeldekortDag, Meldekortstatus } from '../../../types/MeldekortTypes';
+import { useSendMeldekortTilBeslutter } from '../../../hooks/meldekort/useSendMeldekortTilBeslutter';
+import { useHentMeldekort } from '../../../hooks/meldekort/useHentMeldekort';
+import { useGodkjennMeldekort } from '../../../hooks/meldekort/useGodkjennMeldekort';
 
 interface MeldekortKnapperProps {
-  håndterEndreMeldekort: () => void;
+  meldekortdager: MeldekortDag[];
   meldekortId: string;
-  meldekortDager: MeldekortDager;
+  sakId: string;
 }
 
 export const MeldekortKnapper = ({
-  håndterEndreMeldekort,
+  meldekortdager,
   meldekortId,
-  meldekortDager,
+  sakId,
 }: MeldekortKnapperProps) => {
-  const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
-  const { onGodkjennMeldekort, isMeldekortMutating, error } =
-    useGodkjennMeldekort(meldekortId, meldekortDager);
-
+  const { sendMeldekortTilBeslutter, senderMeldekortTilBeslutter, error } =
+    useSendMeldekortTilBeslutter(meldekortId, sakId);
+  const { meldekort } = useHentMeldekort(meldekortId, sakId);
+  const { onGodkjennMeldekort, isMeldekortMutating } = useGodkjennMeldekort(
+    meldekortId,
+    sakId,
+  );
   return (
     <HStack gap="3">
       {error && (
         <Varsel
           variant="error"
-          melding={`Kunne ikke godkjenne meldekortet (${error.status} ${error.info})`}
+          melding={`Kunne ikke sende meldekortet til beslutter (${error.status} ${error.info})`}
         />
       )}
-      <Button
-        icon={<PencilWritingIcon />}
-        variant="tertiary"
-        size="small"
-        onClick={() => håndterEndreMeldekort()}
-      >
-        Endre meldekortperiode
-      </Button>
-      <Button
-        size="small"
-        loading={isMeldekortMutating}
-        onClick={() =>
-          onGodkjennMeldekort({
-            meldekortId: meldekortId,
-            meldekortDager: Object.entries(meldekortDager).map(
-              ([dato, status]) => ({ dato, status: status as MeldekortStatus }),
-            ),
-          })
-        }
-      >
-        Godkjenn meldekortperiode
-      </Button>
+      {meldekort.status == Meldekortstatus.KLAR_TIL_UTFYLLING ? (
+        <Button
+          size="small"
+          loading={senderMeldekortTilBeslutter}
+          onClick={() => {
+            sendMeldekortTilBeslutter({
+              dager: meldekortdager.map((dag) => ({
+                dato: dag.dato,
+                status: dag.status,
+              })),
+            });
+          }}
+        >
+          Send til beslutter
+        </Button>
+      ) : meldekort.status == Meldekortstatus.KLAR_TIL_BESLUTNING ? (
+        <Button
+          size="small"
+          loading={isMeldekortMutating}
+          onClick={() => onGodkjennMeldekort()}
+        >
+          Godkjenn meldekort
+        </Button>
+      ) : (
+        <></>
+      )}
     </HStack>
   );
 };

@@ -1,39 +1,56 @@
-import { HGrid, Select } from '@navikt/ds-react';
-import { MeldekortDag } from '../../../types/MeldekortTypes';
+import { BodyShort, HGrid, Select } from '@navikt/ds-react';
+import {
+  MeldekortDag,
+  MeldekortdagStatus,
+  Meldekortstatus,
+  Meldekortstatuser,
+} from '../../../types/MeldekortTypes';
 import { formaterDatotekst, ukedagFraDatotekst } from '../../../utils/date';
 import IkonMedTekst from '../../ikon-med-tekst/IkonMedTekst';
 import { velgIkonForMeldekortStatus } from './MeldekortUke';
 import { useState } from 'react';
 import styles from './Meldekort.module.css';
-import { useOppdaterMeldekortdag } from '../../../hooks/meldekort/useOppdaterMeldekortdag';
-import {
-  MeldekortStatus,
-  meldekortStatusTilTekst,
-  tekstTilMeldekortStatus,
-} from '../../../utils/meldekortStatus';
+import { useHentMeldekort } from '../../../hooks/meldekort/useHentMeldekort';
+import { finnMeldekortdagStatusTekst } from '../../../utils/tekstformateringUtils';
 
 interface MeldekortUkeDagProps {
   meldekortDag: MeldekortDag;
   meldekortId: string;
-  oppdaterMeldekort: (dato: string, status: string) => void;
+  sakId: string;
 }
 
 export const MeldekortUkeDag = ({
   meldekortId,
   meldekortDag,
-  oppdaterMeldekort,
+  sakId,
 }: MeldekortUkeDagProps) => {
-  const [status, setStatus] = useState<MeldekortStatus>(meldekortDag.status);
-  //const { mutate } = useHentMeldekortBeregning(meldekortId);
-  const { onOppdaterDag } = useOppdaterMeldekortdag();
+  const { meldekort, mutate } = useHentMeldekort(meldekortId, sakId);
+  const [status, setStatus] = useState<string>(meldekortDag.status);
 
   const oppdaterMeldekortdag = (dagStatus: string) => {
-    if (dagStatus === '') return;
-    setStatus(dagStatus as MeldekortStatus);
+    if (dagStatus === MeldekortdagStatus.IkkeUtfylt) return;
+    setStatus(dagStatus);
 
-    oppdaterMeldekort(meldekortDag.dato, dagStatus);
+    const oppdaterteMeldekortDager =
+      meldekort &&
+      meldekort.meldekortDager.map((dag) => {
+        if (dag.dato === meldekortDag.dato) {
+          return {
+            ...dag,
+            status: dagStatus as MeldekortdagStatus,
+          };
+        } else {
+          return dag;
+        }
+      });
+    mutate(
+      {
+        ...meldekort,
+        meldekortDager: oppdaterteMeldekortDager,
+      },
+      { populateCache: true, revalidate: false },
+    );
   };
-
   return (
     <HGrid
       key={meldekortDag.dato.toString()}
@@ -45,28 +62,32 @@ export const MeldekortUkeDag = ({
         text={`${ukedagFraDatotekst(meldekortDag.dato)} ${formaterDatotekst(meldekortDag.dato.toString())}`}
         iconRenderer={() => velgIkonForMeldekortStatus(status)}
       />
-      {status != MeldekortStatus.Sperret ? (
-        <Select
-          label="Deltatt Eller Fravær"
-          id="deltattEllerFravær"
-          size="small"
-          hideLabel
-          value={status}
-          onChange={(e) => {
-            oppdaterMeldekortdag(e.target.value);
-          }}
-        >
-          {/* Denne er kanskje ikke så frontendete.. BENNY! HALP!! */}
-          {Object.entries(tekstTilMeldekortStatus)
-            .filter(([_, value]) => value !== MeldekortStatus.Sperret)
-            .map(([key, value]) => (
-              <option key={key} value={value}>
-                {key}
+      {meldekort.status === Meldekortstatus.KLAR_TIL_UTFYLLING ? (
+        status != MeldekortdagStatus.Sperret ? (
+          <Select
+            label="Deltatt Eller Fravær"
+            id="deltattEllerFravær"
+            size="small"
+            hideLabel
+            value={status}
+            onChange={(e) => {
+              oppdaterMeldekortdag(e.target.value);
+            }}
+          >
+            <option value={MeldekortdagStatus.IkkeUtfylt}>--</option>
+            {Meldekortstatuser.map((meldekortStatus) => (
+              <option key={meldekortStatus} value={meldekortStatus}>
+                {finnMeldekortdagStatusTekst(meldekortStatus)}
               </option>
             ))}
-        </Select>
+          </Select>
+        ) : (
+          <BodyShort>Ikke rett på tiltakspenger</BodyShort>
+        )
       ) : (
-        'Ikke rett på tiltakspenger'
+        <BodyShort>
+          {finnMeldekortdagStatusTekst(meldekortDag.status)}
+        </BodyShort>
       )}
     </HGrid>
   );

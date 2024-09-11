@@ -5,59 +5,59 @@ import {
   XMarkOctagonFillIcon,
   CircleSlashIcon,
 } from '@navikt/aksel-icons';
-import { MeldekortDag } from '../../../types/MeldekortTypes';
-import React, { useState } from 'react';
+import {
+  MeldekortDag,
+  MeldekortdagStatus,
+} from '../../../types/MeldekortTypes';
+import React from 'react';
 import styles from './Meldekort.module.css';
 import { MeldekortUkeDag } from './MeldekortUkeDag';
-import { MeldekortStatus } from '../../../utils/meldekortStatus';
 
 interface MeldekortUkeProps {
   meldekortUke: MeldekortDag[];
-  ukesnummer: number;
   meldekortId: string;
-  oppdaterMeldekortDager: (dato: string, status: string) => void;
+  sakId: string;
+  heading: string;
 }
 
-export const velgIkonForMeldekortStatus = (
-  deltattEllerFravær: MeldekortStatus,
-) => {
-  switch (deltattEllerFravær) {
-    case MeldekortStatus.Sperret:
+export const velgIkonForMeldekortStatus = (status: string) => {
+  switch (status) {
+    case MeldekortdagStatus.Sperret:
       return <CircleSlashIcon color="black" />;
 
-    case MeldekortStatus.DeltattUtenLønnITiltaket:
-    case MeldekortStatus.FraværVelferdGodkjentAvNav:
+    case MeldekortdagStatus.DeltattUtenLønnITiltaket:
+    case MeldekortdagStatus.FraværVelferdGodkjentAvNav:
       return <CheckmarkCircleFillIcon color="green" />;
 
-    case MeldekortStatus.IkkeDeltatt:
-    case MeldekortStatus.DeltattMedLønnITiltaket:
-    case MeldekortStatus.FraværVelferdIkkeGodkjentAvNav:
+    case MeldekortdagStatus.IkkeDeltatt:
+    case MeldekortdagStatus.DeltattMedLønnITiltaket:
+    case MeldekortdagStatus.FraværVelferdIkkeGodkjentAvNav:
       return <XMarkOctagonFillIcon color="red" />;
 
-    case MeldekortStatus.IkkeUtfylt:
-    case MeldekortStatus.FraværSyk:
-    case MeldekortStatus.FraværSyktBarn:
+    case MeldekortdagStatus.IkkeUtfylt:
+    case MeldekortdagStatus.FraværSyk:
+    case MeldekortdagStatus.FraværSyktBarn:
       return <ExclamationmarkTriangleFillIcon color="orange" />;
   }
 };
 
 export const MeldekortUke = ({
   meldekortUke,
-  ukesnummer,
+  heading,
   meldekortId,
-  oppdaterMeldekortDager,
+  sakId,
 }: MeldekortUkeProps) => {
   return (
     <VStack className={styles.meldekortUke}>
       <Heading size="small" className={styles.heading}>
-        Uke {ukesnummer}
+        {heading}
       </Heading>
       {meldekortUke.map((ukedag) => (
         <MeldekortUkeDag
-          oppdaterMeldekort={oppdaterMeldekortDager}
           key={ukedag.dato.toString()}
           meldekortDag={ukedag}
           meldekortId={meldekortId}
+          sakId={sakId}
         />
       ))}
     </VStack>

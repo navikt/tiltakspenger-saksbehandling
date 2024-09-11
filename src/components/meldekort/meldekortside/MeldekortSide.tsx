@@ -1,31 +1,20 @@
 import styles from './Meldekort.module.css';
 import { MeldekortUke } from './MeldekortUke';
-import { HStack, Loader, VStack } from '@navikt/ds-react';
-import { useContext, useState } from 'react';
+import { BodyShort, Heading, HStack, Loader, VStack } from '@navikt/ds-react';
 import { MeldekortKnapper } from './MeldekortKnapper';
 import router from 'next/router';
 import { useHentMeldekort } from '../../../hooks/meldekort/useHentMeldekort';
 import Varsel from '../../varsel/Varsel';
-import { ukenummerFraDatotekst } from '../../../utils/date';
-import { BehandlingContext } from '../../layout/SaksbehandlingLayout';
-
-export type MeldekortDager = { [key: string]: string };
+import { meldekortHeading, ukeHeading } from '../../../utils/date';
+import { Meldekortstatus } from '../../../types/MeldekortTypes';
+import { Utbetalingsuke } from '../../utbetaling/utbetalingside/Utbetalingsuke';
 
 export const MeldekortSide = () => {
-  const [disableUkeVisning, setDisableUkeVisning] = useState<boolean>(true);
+  const sakId = router.query.sakId as string;
   const meldekortId = router.query.meldekortId as string;
-  const { sakId } = useContext(BehandlingContext);
   const { meldekort, isLoading, error } = useHentMeldekort(meldekortId, sakId);
 
-  const [meldekortDager, setMeldekortDager] = useState<MeldekortDager>({});
-  const oppdaterMeldekortDager = (dato, status) => {
-    setMeldekortDager((prevMap) => ({
-      ...prevMap,
-      [dato]: status,
-    }));
-  };
-
-  if (isLoading) {
+  if (isLoading && !meldekort) {
     return <Loader />;
   } else if (error) {
     return (
@@ -43,29 +32,48 @@ export const MeldekortSide = () => {
 
   return (
     <VStack gap="5" className={styles.wrapper}>
-      <HStack
-        gap="9"
-        wrap={false}
-        className={disableUkeVisning ? styles.disableUkevisning : ''}
-      >
-        <MeldekortUke
-          oppdaterMeldekortDager={oppdaterMeldekortDager}
-          meldekortUke={uke1}
-          ukesnummer={ukenummerFraDatotekst(uke1[0].dato)}
-          meldekortId={meldekortId}
-        />
-        <MeldekortUke
-          oppdaterMeldekortDager={oppdaterMeldekortDager}
-          meldekortUke={uke2}
-          ukesnummer={ukenummerFraDatotekst(uke2[1].dato)}
-          meldekortId={meldekortId}
-        />
-      </HStack>
-      {/*<MeldekortBeregningsvisning />*/}
+      <Heading level="2" size="medium">
+        {meldekortHeading(meldekort.periode)}
+      </Heading>
+      {meldekort.status != Meldekortstatus.KLAR_TIL_UTFYLLING ? (
+        <>
+          <Heading size="small" level="3">
+            {ukeHeading(meldekort.periode.fraOgMed)}
+          </Heading>
+          <Utbetalingsuke utbetalingUke={uke1} />
+          <Heading size="small" level="3">
+            {ukeHeading(meldekort.periode.tilOgMed)}
+          </Heading>
+          <Utbetalingsuke utbetalingUke={uke2} />
+          <HStack gap="10" className={styles.total_utbetaling}>
+            <BodyShort weight="semibold">Totalt beløp for perioden:</BodyShort>
+            <BodyShort weight="semibold">
+              {meldekort.totalbeløpTilUtbetaling},-
+            </BodyShort>
+          </HStack>
+        </>
+      ) : (
+        <>
+          <HStack gap="9" wrap={false}>
+            <MeldekortUke
+              meldekortUke={uke1}
+              heading={ukeHeading(meldekort.periode.fraOgMed)}
+              meldekortId={meldekortId}
+              sakId={sakId}
+            />
+            <MeldekortUke
+              meldekortUke={uke2}
+              heading={ukeHeading(meldekort.periode.tilOgMed)}
+              meldekortId={meldekortId}
+              sakId={sakId}
+            />
+          </HStack>
+        </>
+      )}
       <MeldekortKnapper
-        meldekortDager={meldekortDager}
+        meldekortdager={meldekort.meldekortDager}
         meldekortId={meldekortId}
-        håndterEndreMeldekort={() => setDisableUkeVisning(!disableUkeVisning)}
+        sakId={sakId}
       />
     </VStack>
   );

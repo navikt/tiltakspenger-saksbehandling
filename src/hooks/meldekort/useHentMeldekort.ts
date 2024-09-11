@@ -2,7 +2,7 @@ import useSWR from 'swr';
 import { Meldekort } from '../../types/MeldekortTypes';
 import { fetcher, FetcherError } from '../../utils/http';
 
-export function useHentMeldekort(meldekortId?: string, sakId?: string) {
+export function useHentMeldekort(meldekortId: string, sakId: string) {
   const {
     data: meldekort,
     mutate,
@@ -12,7 +12,6 @@ export function useHentMeldekort(meldekortId?: string, sakId?: string) {
     meldekortId && sakId && `/api/sak/${sakId}/meldekort/${meldekortId}`,
     fetcher,
     {
-      shouldRetryOnError: false,
       revalidateOnFocus: false,
     },
   );

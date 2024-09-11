@@ -1,21 +1,23 @@
 import useSWRMutation from 'swr/mutation';
-import { FetcherError, mutateBehandling } from '../../utils/http';
-import router from 'next/router';
+import { FetcherError, mutateMeldekort } from '../../utils/http';
+import { MeldekortDTO } from '../../types/MeldekortTypes';
 
-export function useSendMeldekortTilBeslutter(meldekortId: string) {
+export function useSendMeldekortTilBeslutter(
+  meldekortId: string,
+  sakId: string,
+) {
   const {
     trigger: sendMeldekortTilBeslutter,
     isMutating: senderMeldekortTilBeslutter,
-    error: sendMeldekortTilBeslutterError,
-  } = useSWRMutation<any, FetcherError, any>(
-    `/api/vedtak/meldekort/${meldekortId}/beslutter`,
-    mutateBehandling,
-    { onSuccess: () => router.push('/') },
+    error,
+  } = useSWRMutation<any, FetcherError, any, MeldekortDTO>(
+    `/api/sak/${sakId}/meldekort/${meldekortId}`,
+    mutateMeldekort,
   );
 
   return {
     sendMeldekortTilBeslutter,
     senderMeldekortTilBeslutter,
-    sendMeldekortTilBeslutterError,
+    error,
   };
 }

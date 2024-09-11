@@ -1,15 +1,8 @@
-.utbetalingside {
-  padding: 1.5rem;
-  width: 100%;
-  background-color: #f5f5f5;
-}
-
 .utbetalingsuke {
   background-color: #ffffff;
   border: 1px #9099a5 solid;
   border-radius: 4px;
   padding: 1rem;
-  width: 70%;
 }
 
 .total_utbetaling {
