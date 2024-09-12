@@ -7,7 +7,7 @@ import { useHentMeldekort } from '../../../hooks/meldekort/useHentMeldekort';
 import Varsel from '../../varsel/Varsel';
 import { meldekortHeading, ukeHeading } from '../../../utils/date';
 import { Meldekortstatus } from '../../../types/MeldekortTypes';
-import { Utbetalingsuke } from '../../utbetaling/utbetalingside/Utbetalingsuke';
+import { Utbetalingsuke } from './Utbetalingsuke';
 
 export const MeldekortSide = () => {
   const sakId = router.query.sakId as string;
@@ -45,7 +45,7 @@ export const MeldekortSide = () => {
             {ukeHeading(meldekort.periode.tilOgMed)}
           </Heading>
           <Utbetalingsuke utbetalingUke={uke2} />
-          <HStack gap="10" className={styles.total_utbetaling}>
+          <HStack gap="10" className={styles.totalbeløp}>
             <BodyShort weight="semibold">Totalt beløp for perioden:</BodyShort>
             <BodyShort weight="semibold">
               {meldekort.totalbeløpTilUtbetaling},-

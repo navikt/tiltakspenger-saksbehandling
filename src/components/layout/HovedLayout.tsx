@@ -1,4 +1,4 @@
-import InternDekoratør from '../header/InternDekoratør';
+import InternDekoratør from '../interndekoratør/InternDekoratør';
 
 interface HovedLayoutProps extends React.PropsWithChildren {}
 

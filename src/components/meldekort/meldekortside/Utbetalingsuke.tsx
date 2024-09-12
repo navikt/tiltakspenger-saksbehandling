@@ -1,11 +1,8 @@
 import { Box, Table } from '@navikt/ds-react';
 import React from 'react';
 import { formaterDatotekst, ukedagFraDatotekst } from '../../../utils/date';
-import styles from './Utbetaling.module.css';
-import {
-  MeldekortDag,
-  MeldekortdagStatus,
-} from '../../../types/MeldekortTypes';
+import styles from './Meldekort.module.css';
+import { MeldekortDag } from '../../../types/MeldekortTypes';
 import { finnMeldekortdagStatusTekst } from '../../../utils/tekstformateringUtils';
 
 interface UtbetalingsukeProps {

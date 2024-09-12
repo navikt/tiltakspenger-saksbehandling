@@ -1,6 +1,6 @@
 import router from 'next/router';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
-import PersonaliaHeader from '../header/PersonaliaHeader';
+import PersonaliaHeader from '../personaliaheader/PersonaliaHeader';
 import { Saksbehandlingstabs } from '../saksbehandlingstabs/SaksbehandlingTabs';
 import { Loader } from '@navikt/ds-react';
 import { createContext, useEffect, useState } from 'react';

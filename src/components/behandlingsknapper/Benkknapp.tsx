@@ -19,6 +19,7 @@ const finnLenke = (behandlingId: string, status: BehandlingStatus) => {
       return '/';
   }
 };
+
 interface KnappForBehandlingTypeProps {
   status: BehandlingStatus;
   saksbehandler: string;

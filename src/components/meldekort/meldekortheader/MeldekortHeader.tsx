@@ -9,8 +9,8 @@ import {
 } from '@navikt/ds-react';
 import { CalendarIcon } from '@navikt/aksel-icons';
 import styles from './MeldekortHeader.module.css';
-import { finnMeldekortstatusTekst } from '../../utils/tekstformateringUtils';
-import { useHentMeldekort } from '../../hooks/meldekort/useHentMeldekort';
+import { finnMeldekortstatusTekst } from '../../../utils/tekstformateringUtils';
+import { useHentMeldekort } from '../../../hooks/meldekort/useHentMeldekort';
 import router from 'next/router';
 
 const MeldekortHeader = () => {

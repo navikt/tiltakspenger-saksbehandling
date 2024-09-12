@@ -62,17 +62,6 @@ export const Saksbehandlingstabs = () => {
                 router.push(`/behandling/${behandlingId}/meldekort`)
               }
             />
-            {/* <Tabs.Tab
-              value={'utbetaling'}
-              label={'Utbetaling'}
-              id="utbetaling-tab"
-              aria-controls="utbetaling-panel"
-              onClick={() => {
-                router.push(
-                  `/behandling/${behandlingId}/utbetaling/${utbetalingId}`,
-                );
-              }}
-            />*/}
           </>
         )}
       </Tabs.List>
