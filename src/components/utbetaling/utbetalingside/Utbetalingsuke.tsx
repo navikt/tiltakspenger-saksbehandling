@@ -2,7 +2,10 @@ import { Box, Table } from '@navikt/ds-react';
 import React from 'react';
 import { formaterDatotekst, ukedagFraDatotekst } from '../../../utils/date';
 import styles from './Utbetaling.module.css';
-import { MeldekortDag } from '../../../types/MeldekortTypes';
+import {
+  MeldekortDag,
+  MeldekortdagStatus,
+} from '../../../types/MeldekortTypes';
 import { finnMeldekortdagStatusTekst } from '../../../utils/tekstformateringUtils';
 
 interface UtbetalingsukeProps {
@@ -29,10 +32,11 @@ export const Utbetalingsuke = ({ utbetalingUke }: UtbetalingsukeProps) => (
             <Table.DataCell>
               {finnMeldekortdagStatusTekst(dag.status)}
             </Table.DataCell>
-            <Table.DataCell>{`${dag.beregningsdag.prosent}%`}</Table.DataCell>
             <Table.DataCell>
-              {dag.beregningsdag.beløp}
-              ,-
+              {dag.beregningsdag ? `${dag.beregningsdag.prosent}%` : '-'}
+            </Table.DataCell>
+            <Table.DataCell>
+              {dag.beregningsdag ? `${dag.beregningsdag.beløp},-` : '-'}
             </Table.DataCell>
           </Table.Row>
         ))}
