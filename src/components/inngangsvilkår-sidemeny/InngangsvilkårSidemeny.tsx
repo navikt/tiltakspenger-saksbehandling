@@ -3,7 +3,7 @@ import NextLink from 'next/link';
 import styles from './InngangsvilkårSidemeny.module.css';
 import router from 'next/router';
 import { useContext } from 'react';
-import { BehandlingContext } from '../layout/SaksbehandlingLayout';
+import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
 import { UtfallIkon } from '../utfallikon/UtfallIkon';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
 import { CalendarIcon } from '@navikt/aksel-icons';

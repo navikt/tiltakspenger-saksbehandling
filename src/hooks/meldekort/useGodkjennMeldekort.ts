@@ -1,6 +1,6 @@
 import useSWRMutation from 'swr/mutation';
 import { FetcherError, throwErrorIfFatal } from '../../utils/http';
-import router from 'next/router';
+import { mutate } from 'swr';
 
 export async function mutateMeldekort<R>(
   url,
@@ -22,6 +22,7 @@ export function useGodkjennMeldekort(meldekortId: string, sakId: string) {
   } = useSWRMutation<any, FetcherError, any, any>(
     `/api/sak/${sakId}/meldekort/${meldekortId}/iverksett`,
     mutateMeldekort,
+    { onSuccess: () => mutate(`/api/sak/${sakId}/meldekort/${meldekortId}`) },
   );
 
   return { onGodkjennMeldekort, isMeldekortMutating, error };

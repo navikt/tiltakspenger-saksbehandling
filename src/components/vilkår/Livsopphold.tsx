@@ -13,7 +13,7 @@ import { useHentLivsopphold } from '../../hooks/vilkår/useHentLivsopphold';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import styles from './Vilkår.module.css';
 import { useContext } from 'react';
-import { BehandlingContext } from '../layout/SaksbehandlingLayout';
+import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
 import { useLagreLivsoppholdSaksopplysning } from '../../hooks/vilkår/useLagreLivsoppholdSaksopplysning';
 import Varsel from '../varsel/Varsel';
 import { useHentBehandling } from '../../hooks/useHentBehandling';

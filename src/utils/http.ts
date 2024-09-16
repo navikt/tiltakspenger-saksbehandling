@@ -41,11 +41,23 @@ export async function mutateMeldekort<R>(
   return res.json();
 }
 
+export async function sakFetcher<R>(
+  url,
+  { arg }: { arg: { fnr: string } },
+): Promise<R> {
+  const res = await fetch(url, {
+    method: 'POST',
+    body: JSON.stringify(arg),
+  });
+  await throwErrorIfFatal(res);
+  return res.json();
+}
+
 export const throwErrorIfFatal = async (res: Response) => {
   if (!res.ok) {
-    const error = new FetcherError('En feil har oppstått');
-    const errorMessage = await res.json();
-    error.info = errorMessage.error;
+    const error = new FetcherError('Noe gikk galt ved henting av data');
+
+    error.info = await res.json;
     error.status = res.status;
     throw error;
   }

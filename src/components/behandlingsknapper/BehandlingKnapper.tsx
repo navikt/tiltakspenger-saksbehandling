@@ -6,7 +6,7 @@ import {
   kanBeslutteForBehandling,
   kanSaksbehandleForBehandling,
 } from '../../utils/tilganger';
-import { BehandlingContext } from '../layout/SaksbehandlingLayout';
+import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
 import Varsel from '../varsel/Varsel';
 import { useGodkjennBehandling } from '../../hooks/useGodkjennBehandling';
 import { useSendTilBeslutter } from '../../hooks/useSendTilBeslutter';

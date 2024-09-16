@@ -1,37 +1,9 @@
 .personaliaHeader {
-  background: #f8f8f8;
-  padding: 1rem 2rem 0.5rem 2rem;
-  min-height: 3rem;
+  padding: 1rem;
   border-bottom: 1px solid #cfcfcf;
-  grid-area: personalia;
 }
 
 .personIcon {
   height: 1.5rem;
   width: 1.5rem;
-}
-
-.name {
-  bottom: 5px;
-  position: relative;
-  margin-left: 0.5rem;
-}
-
-.ident {
-  bottom: 5px;
-  position: relative;
-  margin-left: 2rem;
-}
-
-.skjermingTag {
-  position: relative;
-  top: -4px;
-  margin-left: 2rem;
-}
-
-.behandlingTag {
-  position: relative;
-  float: right;
-  top: -4px;
-  margin-left: 0.5em;
 }

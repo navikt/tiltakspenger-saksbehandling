@@ -5,7 +5,7 @@ import UtfallstekstMedIkon from './UtfallstekstMedIkon';
 import { Deltagelse } from '../../types/KvpTypes';
 import { useHentKvp } from '../../hooks/vilkår/useHentKvp';
 import { useContext } from 'react';
-import { BehandlingContext } from '../layout/SaksbehandlingLayout';
+import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
 import Varsel from '../varsel/Varsel';
 
 const Kvalifiseringsprogrammet = () => {

@@ -6,7 +6,7 @@ import {
   periodeTilFormatertDatotekst,
 } from '../../utils/date';
 import { useContext } from 'react';
-import { BehandlingContext } from '../layout/SaksbehandlingLayout';
+import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
 import { useHentKravfrist } from '../../hooks/vilkår/useHentKravfrist';
 
 const Behandlingdetaljer = () => {

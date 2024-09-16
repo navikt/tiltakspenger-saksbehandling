@@ -13,7 +13,7 @@ export function dateTilISOTekst(date: Date) {
 }
 
 export function formaterTidspunkt(dateString: string) {
-  return dayjs(dateString).format('DD.MM.YYYY kl. hh:mm');
+  return dayjs(dateString).format('DD.MM.YYYY kl. HH:mm');
 }
 
 export function formaterDatotekst(dateString: string) {

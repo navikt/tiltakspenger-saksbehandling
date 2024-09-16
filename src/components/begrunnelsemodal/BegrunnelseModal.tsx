@@ -1,7 +1,7 @@
 import { Button, Modal, Select } from '@navikt/ds-react';
 import { RefObject, useContext, useState } from 'react';
 import styles from './BegrunnelseModal.module.css';
-import { BehandlingContext } from '../layout/SaksbehandlingLayout';
+import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
 import { useSendTilbakeBehandling } from '../../hooks/useSendTilbakeBehandling';
 
 interface BegrunnelseModalProps {

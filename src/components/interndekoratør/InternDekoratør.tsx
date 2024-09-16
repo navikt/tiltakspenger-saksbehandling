@@ -1,15 +1,40 @@
-import React, { useContext } from 'react';
-import { BodyShort, Dropdown, InternalHeader, Spacer } from '@navikt/ds-react';
+import React, { useContext, useState } from 'react';
+import {
+  BodyShort,
+  Dropdown,
+  InternalHeader,
+  Search,
+  Spacer,
+} from '@navikt/ds-react';
 import { Loader } from '@navikt/ds-react';
 import { SaksbehandlerContext } from '../../pages/_app';
 import { ExternalLinkIcon, LeaveIcon, MenuGridIcon } from '@navikt/aksel-icons';
+import { useHentSakForFNR } from '../../hooks/useHentSakForFNR';
 
 const InternDekoratør = () => {
   const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
+  const { søk } = useHentSakForFNR();
+  const [søketekst, settSøketekst] = useState<string>();
 
   return (
     <InternalHeader>
       <InternalHeader.Title href="/">NAV Tiltakspenger</InternalHeader.Title>
+      <form
+        role="search"
+        style={{ alignContent: 'center', marginLeft: '20px' }}
+        onSubmit={(e) => {
+          e.preventDefault();
+          søk({ fnr: søketekst });
+        }}
+      >
+        <Search
+          label="InternalHeader søk"
+          size="small"
+          variant="simple"
+          placeholder="Søk på fnr"
+          onChange={(e) => settSøketekst(e)}
+        />
+      </form>
       <Spacer />
       <Dropdown>
         <InternalHeader.Button as={Dropdown.Toggle}>
