@@ -10,7 +10,7 @@ import {
   lagFaktumTekstAvLivsopphold,
 } from '../../utils/tekstformateringUtils';
 import { useContext } from 'react';
-import { BehandlingContext } from '../layout/SaksbehandlingLayout';
+import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
 
 const VilkårsvurderingTable = () => {
   const { behandlingId } = useContext(BehandlingContext);

@@ -4,7 +4,7 @@ import UtfallstekstMedIkon from './UtfallstekstMedIkon';
 import VilkårHeader from './VilkårHeader';
 import VilkårKort from './VilkårKort';
 import { formaterDatotekst } from '../../utils/date';
-import { BehandlingContext } from '../layout/SaksbehandlingLayout';
+import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
 import { useHentKravfrist } from '../../hooks/vilkår/useHentKravfrist';
 import Varsel from '../varsel/Varsel';
 

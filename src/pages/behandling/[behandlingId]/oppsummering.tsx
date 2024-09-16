@@ -3,7 +3,7 @@ import Oppsummering from '../../../components/oppsummering/Oppsummering';
 import { NextPageWithLayout } from '../../_app';
 import { ReactElement } from 'react';
 import { pageWithAuthentication } from '../../../auth/pageWithAuthentication';
-import { SaksbehandlingLayout } from '../../../components/layout/SaksbehandlingLayout';
+import { FørstegangsbehandlingLayout } from '../../../components/layout/FørstegangsbehandlingLayout';
 import Behandlingdetaljer from '../../../components/behandlingdetaljer/Behandlingdetaljer';
 import styles from '../Behandling.module.css';
 
@@ -22,7 +22,7 @@ const Behandling: NextPageWithLayout = () => (
 );
 
 Behandling.getLayout = function getLayout(page: ReactElement) {
-  return <SaksbehandlingLayout>{page}</SaksbehandlingLayout>;
+  return <FørstegangsbehandlingLayout>{page}</FørstegangsbehandlingLayout>;
 };
 
 export const getServerSideProps = pageWithAuthentication();

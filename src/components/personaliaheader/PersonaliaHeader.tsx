@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Button, Loader, Tag } from '@navikt/ds-react';
 import { PersonCircleIcon } from '@navikt/aksel-icons';
 import styles from './PersonaliaHeader.module.css';
-import { BehandlingContext } from '../layout/SaksbehandlingLayout';
+import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
 import { useTaAvBehandling } from '../../hooks/useTaAvBehandling';
 import { useHentPersonopplysninger } from '../../hooks/useHentPersonopplysninger';
 import { useHentBehandling } from '../../hooks/useHentBehandling';

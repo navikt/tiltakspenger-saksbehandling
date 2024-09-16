@@ -3,7 +3,7 @@ import { Loader, VStack } from '@navikt/ds-react';
 import VilkårHeader from './VilkårHeader';
 import VilkårKort from './VilkårKort';
 import UtfallstekstMedIkon from './UtfallstekstMedIkon';
-import { BehandlingContext } from '../layout/SaksbehandlingLayout';
+import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
 import { useHentTiltakDeltagelse } from '../../hooks/vilkår/useHentTiltaksdeltagelse';
 import Varsel from '../varsel/Varsel';
 

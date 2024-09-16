@@ -2,13 +2,13 @@ import useSWR from 'swr';
 import { fetcher, FetcherError } from '../../utils/http';
 import { Meldekortsammendrag } from '../../types/MeldekortTypes';
 
-export function useHentMeldekortListe(iverksatt: boolean, sakId: string) {
+export function useHentMeldekortListe(sakId: string) {
   const {
     data: meldekortliste,
     isLoading,
     error,
   } = useSWR<Meldekortsammendrag[], FetcherError>(
-    () => (iverksatt && sakId ? `/api/sak/${sakId}/meldekort` : null),
+    () => `/api/sak/${sakId}/meldekort`,
     fetcher,
     {
       revalidateOnFocus: false,

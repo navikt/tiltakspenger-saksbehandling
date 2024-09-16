@@ -1,4 +1,4 @@
-import { SaksbehandlingLayout } from '../../../../../components/layout/SaksbehandlingLayout';
+import { FørstegangsbehandlingLayout } from '../../../../../components/layout/FørstegangsbehandlingLayout';
 import { ReactElement } from 'react';
 import { NextPageWithLayout } from '../../../../_app';
 import { pageWithAuthentication } from '../../../../../auth/pageWithAuthentication';
@@ -24,7 +24,7 @@ const Behandling: NextPageWithLayout = () => {
 };
 
 Behandling.getLayout = function getLayout(page: ReactElement) {
-  return <SaksbehandlingLayout>{page}</SaksbehandlingLayout>;
+  return <FørstegangsbehandlingLayout>{page}</FørstegangsbehandlingLayout>;
 };
 
 export const getServerSideProps = pageWithAuthentication();

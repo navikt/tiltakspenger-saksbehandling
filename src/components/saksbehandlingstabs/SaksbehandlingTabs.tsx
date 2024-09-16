@@ -3,7 +3,7 @@ import router from 'next/router';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
 import { BehandlingStatus } from '../../types/BehandlingTypes';
 import { useContext, useState } from 'react';
-import { BehandlingContext } from '../layout/SaksbehandlingLayout';
+import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
 import { SaksbehandlerContext } from '../../pages/_app';
 import { kanSaksbehandleForBehandling } from '../../utils/tilganger';
 

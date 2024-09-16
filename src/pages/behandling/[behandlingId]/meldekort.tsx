@@ -12,8 +12,8 @@ import { pageWithAuthentication } from '../../../auth/pageWithAuthentication';
 import Behandlingdetaljer from '../../../components/behandlingdetaljer/Behandlingdetaljer';
 import {
   BehandlingContext,
-  SaksbehandlingLayout,
-} from '../../../components/layout/SaksbehandlingLayout';
+  FørstegangsbehandlingLayout,
+} from '../../../components/layout/FørstegangsbehandlingLayout';
 import Varsel from '../../../components/varsel/Varsel';
 import { useHentMeldekortListe } from '../../../hooks/meldekort/useHentMeldekortListe';
 import { periodeTilFormatertDatotekst } from '../../../utils/date';
@@ -23,10 +23,7 @@ import { finnMeldekortstatusTekst } from '../../../utils/tekstformateringUtils';
 
 const Meldekortoversikt: NextPageWithLayout = () => {
   const { sakId } = useContext(BehandlingContext);
-  const { meldekortliste, isLoading, error } = useHentMeldekortListe(
-    true,
-    sakId,
-  );
+  const { meldekortliste, isLoading, error } = useHentMeldekortListe(sakId);
 
   if (isLoading || !meldekortliste) return <Loader />;
   if (error)
@@ -99,7 +96,7 @@ const Meldekortoversikt: NextPageWithLayout = () => {
 };
 
 Meldekortoversikt.getLayout = function getLayout(page: ReactElement) {
-  return <SaksbehandlingLayout>{page}</SaksbehandlingLayout>;
+  return <FørstegangsbehandlingLayout>{page}</FørstegangsbehandlingLayout>;
 };
 
 export default Meldekortoversikt;

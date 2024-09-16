@@ -5,7 +5,7 @@ import { useHentIntroduksjonsprogrammet } from '../../hooks/vilkår/useHentIntro
 import { Deltagelse } from '../../types/KvpTypes';
 import VilkårKort from './VilkårKort';
 import { useContext } from 'react';
-import { BehandlingContext } from '../layout/SaksbehandlingLayout';
+import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
 import Varsel from '../varsel/Varsel';
 
 const Introduksjonsprogrammet = () => {

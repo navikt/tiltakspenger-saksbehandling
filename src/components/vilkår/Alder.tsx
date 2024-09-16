@@ -5,7 +5,7 @@ import UtfallstekstMedIkon from './UtfallstekstMedIkon';
 import { useHentAlder } from '../../hooks/vilkår/useHentAlder';
 import { formaterDatotekst } from '../../utils/date';
 import { useContext } from 'react';
-import { BehandlingContext } from '../layout/SaksbehandlingLayout';
+import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
 import Varsel from '../varsel/Varsel';
 
 const Alder = () => {

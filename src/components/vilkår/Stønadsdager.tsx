@@ -4,7 +4,7 @@ import VilkårKort from './VilkårKort';
 import VilkårHeader from './VilkårHeader';
 import Varsel from '../varsel/Varsel';
 import { useHentStønadsdager } from '../../hooks/useHentStønadsdager';
-import { BehandlingContext } from '../layout/SaksbehandlingLayout';
+import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
 
 const Stønadsdager = () => {
   const { behandlingId } = useContext(BehandlingContext);

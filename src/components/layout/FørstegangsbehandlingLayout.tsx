@@ -15,7 +15,9 @@ export const BehandlingContext = createContext<BehandlingContextType>({
   sakId: undefined,
 });
 
-export const SaksbehandlingLayout = ({ children }: React.PropsWithChildren) => {
+export const FørstegangsbehandlingLayout = ({
+  children,
+}: React.PropsWithChildren) => {
   const behandlingId = router.query.behandlingId as string;
   const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
 
