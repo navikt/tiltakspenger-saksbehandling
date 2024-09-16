@@ -142,7 +142,7 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
       method: 'GET',
       headers: {
         'content-type': 'application/json',
-        authorization: `Bearer ${token}`,
+        authorization: `Bearer ${obo.token}`,
       },
     },
   );
