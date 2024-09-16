@@ -1,13 +1,14 @@
 import { VStack, BodyShort, Loader } from '@navikt/ds-react';
 import styles from './Meldekortdetaljer.module.css';
-
 import router from 'next/router';
 import { useHentMeldekort } from '../../../hooks/meldekort/useHentMeldekort';
 import { periodeTilFormatertDatotekst } from '../../../utils/date';
+import { useContext } from 'react';
+import { SakContext } from '../../layout/SakLayout';
 
 const Meldekortdetaljer = () => {
+  const { sakId } = useContext(SakContext);
   const meldekortId = router.query.meldekortId as string;
-  const sakId = router.query.sakId as string;
   const { meldekort, isLoading } = useHentMeldekort(meldekortId, sakId);
 
   if (isLoading || !meldekort) {

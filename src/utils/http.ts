@@ -55,9 +55,9 @@ export async function sakFetcher<R>(
 
 export const throwErrorIfFatal = async (res: Response) => {
   if (!res.ok) {
-    const error = new FetcherError('En feil har oppstått');
-    const errorMessage = await res.json();
-    error.info = errorMessage.error;
+    const error = new FetcherError('Noe gikk galt ved henting av data');
+
+    error.info = await res.json;
     error.status = res.status;
     throw error;
   }

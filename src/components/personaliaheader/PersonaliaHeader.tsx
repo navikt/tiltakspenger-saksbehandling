@@ -1,28 +1,23 @@
-import React, { useContext } from 'react';
-import { Button, Loader, Tag } from '@navikt/ds-react';
+import React, { PropsWithChildren, useContext } from 'react';
+import { BodyShort, HStack, Loader, Spacer, Tag } from '@navikt/ds-react';
 import { PersonCircleIcon } from '@navikt/aksel-icons';
 import styles from './PersonaliaHeader.module.css';
-import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
-import { useTaAvBehandling } from '../../hooks/useTaAvBehandling';
 import { useHentPersonopplysninger } from '../../hooks/useHentPersonopplysninger';
-import { useHentBehandling } from '../../hooks/useHentBehandling';
-import { finnStatusTekst } from '../../utils/tekstformateringUtils';
-import { kanTaAvBehandling } from '../../utils/tilganger';
-import { SaksbehandlerContext } from '../../pages/_app';
 
-const PersonaliaHeader = () => {
-  const { behandlingId } = useContext(BehandlingContext);
-  const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
-  const { valgtBehandling } = useHentBehandling(behandlingId);
+type PersonaliaHeaderProps = PropsWithChildren & {
+  behandlingId: string;
+};
+
+const PersonaliaHeader = ({
+  behandlingId,
+  children,
+}: PersonaliaHeaderProps) => {
   const { personopplysninger, isPersonopplysningerLoading } =
     useHentPersonopplysninger(behandlingId);
-  const { taAvBehandling, tarAvBehandling } = useTaAvBehandling(behandlingId);
 
   if (isPersonopplysningerLoading || !personopplysninger) {
     return <Loader />;
   }
-
-  const { status, saksbehandler, beslutter } = valgtBehandling;
 
   const {
     fornavn,
@@ -35,50 +30,20 @@ const PersonaliaHeader = () => {
   } = personopplysninger;
 
   return (
-    <div className={styles.personaliaHeader}>
+    <HStack gap="3" align="center" className={styles.personaliaHeader}>
       <PersonCircleIcon className={styles.personIcon} />
-      <span data-testid="nav-personalia-header-name" className={styles.name}>
+      <BodyShort>
         {fornavn} {mellomnavn} {etternavn}
-      </span>
-      <span data-testid="nav-personalia-header-ident" className={styles.ident}>
-        {fnr}
-      </span>
+      </BodyShort>
+      <BodyShort>{fnr}</BodyShort>
       {strengtFortrolig && (
-        <Tag variant="error" className={styles.skjermingTag}>
-          Søker har strengt fortrolig adresse
-        </Tag>
+        <Tag variant="error">Søker har strengt fortrolig adresse</Tag>
       )}
-      {fortrolig && (
-        <Tag variant="error" className={styles.skjermingTag}>
-          Søker har fortrolig adresse
-        </Tag>
-      )}
-      {skjerming && (
-        <Tag variant="error" className={styles.skjermingTag}>
-          Søker er skjermet
-        </Tag>
-      )}
-      {kanTaAvBehandling(
-        status,
-        innloggetSaksbehandler,
-        saksbehandler,
-        beslutter,
-      ) && (
-        <Button
-          type="submit"
-          size="small"
-          loading={tarAvBehandling}
-          onClick={() => taAvBehandling()}
-          className={styles.behandlingTag}
-        >
-          Ta av behandling
-        </Button>
-      )}
-      <Tag variant="alt3-filled" className={styles.behandlingTag}>
-        {/* B: Bør kanskje hente underkjentstatus inn på behandlingen også */}
-        {finnStatusTekst(valgtBehandling.status, false)}
-      </Tag>
-    </div>
+      {fortrolig && <Tag variant="error">Søker har fortrolig adresse</Tag>}
+      {skjerming && <Tag variant="error">Søker er skjermet</Tag>}
+      <Spacer />
+      {children}
+    </HStack>
   );
 };
 

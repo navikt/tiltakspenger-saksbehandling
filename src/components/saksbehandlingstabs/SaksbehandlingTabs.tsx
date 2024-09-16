@@ -19,8 +19,6 @@ export const Saksbehandlingstabs = () => {
   }
   const underBehandling = (status: string) =>
     status === BehandlingStatus.UNDER_BEHANDLING;
-  const iverksatt = (status: string) => status === BehandlingStatus.INNVILGET;
-
   return (
     <Tabs value={value} onChange={setValue}>
       <Tabs.List>
@@ -51,19 +49,6 @@ export const Saksbehandlingstabs = () => {
             router.push(`/behandling/${behandlingId}/oppsummering`)
           }
         />
-        {iverksatt(valgtBehandling.status) && (
-          <>
-            <Tabs.Tab
-              value={'meldekort'}
-              label={'Meldekort'}
-              id="meldekort-tab"
-              aria-controls="meldekort-panel"
-              onClick={() =>
-                router.push(`/behandling/${behandlingId}/meldekort`)
-              }
-            />
-          </>
-        )}
       </Tabs.List>
     </Tabs>
   );

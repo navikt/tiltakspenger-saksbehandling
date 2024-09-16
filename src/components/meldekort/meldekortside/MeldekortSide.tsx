@@ -8,9 +8,11 @@ import Varsel from '../../varsel/Varsel';
 import { meldekortHeading, ukeHeading } from '../../../utils/date';
 import { Meldekortstatus } from '../../../types/MeldekortTypes';
 import { Utbetalingsuke } from './Utbetalingsuke';
+import { useContext } from 'react';
+import { SakContext } from '../../layout/SakLayout';
 
 export const MeldekortSide = () => {
-  const sakId = router.query.sakId as string;
+  const { sakId } = useContext(SakContext);
   const meldekortId = router.query.meldekortId as string;
   const { meldekort, isLoading, error } = useHentMeldekort(meldekortId, sakId);
 

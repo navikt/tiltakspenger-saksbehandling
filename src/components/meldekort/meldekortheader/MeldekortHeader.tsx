@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   BodyShort,
   Button,
@@ -12,9 +12,10 @@ import styles from './MeldekortHeader.module.css';
 import { finnMeldekortstatusTekst } from '../../../utils/tekstformateringUtils';
 import { useHentMeldekort } from '../../../hooks/meldekort/useHentMeldekort';
 import router from 'next/router';
+import { SakContext } from '../../layout/SakLayout';
 
 const MeldekortHeader = () => {
-  const sakId = router.query.sakId as string;
+  const { sakId } = useContext(SakContext);
   const meldekortId = router.query.meldekortId as string;
   const { meldekort, isLoading } = useHentMeldekort(meldekortId, sakId);
 
