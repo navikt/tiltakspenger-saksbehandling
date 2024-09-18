@@ -18,6 +18,7 @@ export type Meldekort = {
   beslutter?: string;
   status: Meldekortstatus;
   totalbeløpTilUtbetaling: number;
+  sakPeriode: Periode
 };
 
 export enum Meldekortstatus {
