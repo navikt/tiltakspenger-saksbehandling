@@ -4,6 +4,8 @@ import { MeldekortDag, Meldekortstatus } from '../../../types/MeldekortTypes';
 import { useSendMeldekortTilBeslutter } from '../../../hooks/meldekort/useSendMeldekortTilBeslutter';
 import { useHentMeldekort } from '../../../hooks/meldekort/useHentMeldekort';
 import { useGodkjennMeldekort } from '../../../hooks/meldekort/useGodkjennMeldekort';
+import BekreftelseseModal from '../../bekreftelsesmodal/BekreftelsesModal';
+import { useRef } from 'react';
 
 interface MeldekortKnapperProps {
   meldekortdager: MeldekortDag[];
@@ -19,10 +21,19 @@ export const MeldekortKnapper = ({
   const { sendMeldekortTilBeslutter, senderMeldekortTilBeslutter, error } =
     useSendMeldekortTilBeslutter(meldekortId, sakId);
   const { meldekort } = useHentMeldekort(meldekortId, sakId);
-  const { onGodkjennMeldekort, isMeldekortMutating } = useGodkjennMeldekort(
-    meldekortId,
-    sakId,
-  );
+  const {
+    onGodkjennMeldekort,
+    isMeldekortMutating,
+    feilVedGodkjenning,
+    reset,
+  } = useGodkjennMeldekort(meldekortId, sakId);
+  const modalRef = useRef(null);
+
+  const lukkModal = () => {
+    modalRef.current.close();
+    reset();
+  };
+
   return (
     <HStack gap="3">
       {error && (
@@ -50,13 +61,32 @@ export const MeldekortKnapper = ({
         <Button
           size="small"
           loading={isMeldekortMutating}
-          onClick={() => onGodkjennMeldekort()}
+          onClick={() => modalRef.current?.showModal()}
         >
           Godkjenn meldekort
         </Button>
       ) : (
         <></>
       )}
+      <BekreftelseseModal
+        modalRef={modalRef}
+        tittel={'Godkjenn meldekortet'}
+        body={
+          'Er du sikker på at meldekortet er korrekt og ønsker å sende det til utbetaling?'
+        }
+        error={feilVedGodkjenning}
+        lukkModal={lukkModal}
+      >
+        <Button
+          variant="primary"
+          loading={isMeldekortMutating}
+          onClick={() => {
+            onGodkjennMeldekort();
+          }}
+        >
+          Godkjenn meldekort
+        </Button>
+      </BekreftelseseModal>
     </HStack>
   );
 };

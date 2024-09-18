@@ -18,12 +18,13 @@ export function useGodkjennMeldekort(meldekortId: string, sakId: string) {
   const {
     trigger: onGodkjennMeldekort,
     isMutating: isMeldekortMutating,
-    error,
+    error: feilVedGodkjenning,
+    reset
   } = useSWRMutation<any, FetcherError, any, any>(
     `/api/sak/${sakId}/meldekort/${meldekortId}/iverksett`,
     mutateMeldekort,
     { onSuccess: () => mutate(`/api/sak/${sakId}/meldekort/${meldekortId}`) },
   );
 
-  return { onGodkjennMeldekort, isMeldekortMutating, error };
+  return { onGodkjennMeldekort, isMeldekortMutating, feilVedGodkjenning , reset};
 }
