@@ -10,6 +10,8 @@ import Meldekortuke from './Meldekortuke';
 import Varsel from '../../varsel/Varsel';
 import styles from './Meldekort.module.css';
 import { ukeHeading } from '../../../utils/date';
+import { kanSaksbehandleForBehandling } from '../../../utils/tilganger';
+import { SaksbehandlerContext } from '../../../pages/_app';
 
 export interface Meldekortform {
   uke1: MeldekortDagDTO[];
@@ -19,9 +21,17 @@ export interface Meldekortform {
 const Meldekort = () => {
   const { sakId } = useContext(SakContext);
   const meldekortId = router.query.meldekortId as string;
+  const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
   const { meldekort, error, isLoading } = useHentMeldekort(meldekortId, sakId);
   const { sendMeldekortTilBeslutter, senderMeldekortTilBeslutter } =
     useSendMeldekortTilBeslutter(meldekortId, sakId);
+
+  //B: Må endre denne til å ta inn saksbehandler på meldekortet når vi har lagt til tildeling.
+  const kanSaksbehandle = kanSaksbehandleForBehandling(
+    meldekort.status,
+    innloggetSaksbehandler,
+    innloggetSaksbehandler.navIdent,
+  );
 
   const meldekortdager = meldekort.meldekortDager.map((dag) => ({
     dato: dag.dato,
@@ -79,14 +89,16 @@ const Meldekort = () => {
           ukeHeading={ukeHeading(meldekort.periode.tilOgMed)}
         />
       </HStack>
-      <Button
-        size="small"
-        loading={senderMeldekortTilBeslutter}
-        type="submit"
-        value="submit"
-      >
-        Send til beslutter
-      </Button>
+      {kanSaksbehandle && (
+        <Button
+          size="small"
+          loading={senderMeldekortTilBeslutter}
+          type="submit"
+          value="submit"
+        >
+          Send til beslutter
+        </Button>
+      )}
     </form>
   );
 };

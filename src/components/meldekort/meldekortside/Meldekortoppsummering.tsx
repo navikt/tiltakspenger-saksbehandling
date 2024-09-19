@@ -33,11 +33,12 @@ const Meldekortoppsummering = () => {
       </VStack>
     );
   }
-
+  //B: Må endre denne til å ta inn beslutter på meldekortet når vi har lagt til tildeling.
   const kanBeslutte = kanBeslutteForBehandling(
     meldekort.status,
     innloggetSaksbehandler,
     meldekort.saksbehandler,
+    innloggetSaksbehandler.navIdent,
   );
 
   const uke1 = meldekort.meldekortDager.slice(0, 7);

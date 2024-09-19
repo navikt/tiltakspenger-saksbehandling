@@ -6,9 +6,11 @@ export const kanBeslutteForBehandling = (
   status: string,
   innloggetSaksbehandler: Saksbehandler,
   saksbehandlerForBehandling: string,
+  beslutterForBehandling: string,
 ) => {
   return (
     innloggetSaksbehandler.isBeslutter &&
+    innloggetSaksbehandler.navIdent === beslutterForBehandling &&
     innloggetSaksbehandler.navIdent !== saksbehandlerForBehandling &&
     (status === BehandlingStatus.UNDER_BESLUTNING ||
       status === Meldekortstatus.KLAR_TIL_BESLUTNING)
@@ -23,7 +25,8 @@ export const kanSaksbehandleForBehandling = (
   return (
     innloggetSaksbehandler.isSaksbehandler &&
     innloggetSaksbehandler.navIdent === saksbehandlerForBehandling &&
-    status === BehandlingStatus.UNDER_BEHANDLING
+    (status === BehandlingStatus.UNDER_BEHANDLING ||
+      status === Meldekortstatus.KLAR_TIL_UTFYLLING)
   );
 };
 
