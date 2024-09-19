@@ -1,4 +1,4 @@
-import { Box, Table } from '@navikt/ds-react';
+import { Box, Heading, Table } from '@navikt/ds-react';
 import React from 'react';
 import { formaterDatotekst, ukedagFraDatotekst } from '../../../utils/date';
 import styles from './Meldekort.module.css';
@@ -7,10 +7,17 @@ import { finnMeldekortdagStatusTekst } from '../../../utils/tekstformateringUtil
 
 interface UtbetalingsukeProps {
   utbetalingUke: MeldekortDag[];
+  headingtekst: string;
 }
 
-export const Utbetalingsuke = ({ utbetalingUke }: UtbetalingsukeProps) => (
+export const Utbetalingsuke = ({
+  utbetalingUke,
+  headingtekst,
+}: UtbetalingsukeProps) => (
   <Box className={styles.utbetalingsuke}>
+    <Heading size="small" level="3">
+      {headingtekst}
+    </Heading>
     <Table>
       <Table.Header>
         <Table.Row>

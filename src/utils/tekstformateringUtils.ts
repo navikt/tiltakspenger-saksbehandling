@@ -22,20 +22,20 @@ export const finnKildetekst = (kilde: string) => {
   }
 };
 
-export const finnUtfallTekst = (utfall: Utfall) => {
+export function lagUtfallstekst(utfall: string) {
   switch (utfall) {
-    case Utfall.IKKE_OPPFYLT:
-      return 'ikke oppfylt';
     case Utfall.OPPFYLT:
-      return 'oppfylt';
+      return 'Vilkåret er oppfylt i hele perioden';
+    case Utfall.IKKE_OPPFYLT:
+      return 'Vilkåret er ikke oppfylt';
     case Utfall.DELVIS_OPPFYLT:
-      return 'delvis oppfylt';
+      return 'Vilkåret er delvis oppfylt';
     case Utfall.UAVKLART:
-      return 'uavklart';
+      return 'Vilkåret er uavklart';
     default:
-      return 'uavklart';
+      return 'Vilkåret er uavklart';
   }
-};
+}
 
 export const lagFaktumTekstAvLivsopphold = (harLivsoppholdYtelser: boolean) => {
   return harLivsoppholdYtelser

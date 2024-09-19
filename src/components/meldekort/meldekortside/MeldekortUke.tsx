@@ -1,65 +1,60 @@
-import { Heading, VStack } from '@navikt/ds-react';
-import {
-  CheckmarkCircleFillIcon,
-  ExclamationmarkTriangleFillIcon,
-  XMarkOctagonFillIcon,
-  CircleSlashIcon,
-} from '@navikt/aksel-icons';
+import { VStack, BodyShort, Select } from '@navikt/ds-react';
+import { Control, Controller } from 'react-hook-form';
 import {
   MeldekortDag,
   MeldekortdagStatus,
+  Meldekortstatuser,
 } from '../../../types/MeldekortTypes';
-import React from 'react';
-import styles from './Meldekort.module.css';
-import { MeldekortUkeDag } from './MeldekortUkeDag';
+import { ukedagFraDatotekst, formaterDatotekst } from '../../../utils/date';
+import { finnMeldekortdagStatusTekst } from '../../../utils/tekstformateringUtils';
+import IkonMedTekst from '../../ikon-med-tekst/IkonMedTekst';
+import { velgIkonForMeldekortStatus } from './MeldekortSide';
+import { Meldekortform } from './Meldekort';
 
-interface MeldekortUkeProps {
-  meldekortUke: MeldekortDag[];
-  meldekortId: string;
-  sakId: string;
-  heading: string;
+interface MeldekortukeProps {
+  meldekortdager: MeldekortDag[];
+  control: Control<Meldekortform, any>;
 }
 
-export const velgIkonForMeldekortStatus = (status: string) => {
-  switch (status) {
-    case MeldekortdagStatus.Sperret:
-      return <CircleSlashIcon color="black" />;
-
-    case MeldekortdagStatus.DeltattUtenLønnITiltaket:
-    case MeldekortdagStatus.FraværVelferdGodkjentAvNav:
-      return <CheckmarkCircleFillIcon color="green" />;
-
-    case MeldekortdagStatus.IkkeDeltatt:
-    case MeldekortdagStatus.DeltattMedLønnITiltaket:
-    case MeldekortdagStatus.FraværVelferdIkkeGodkjentAvNav:
-      return <XMarkOctagonFillIcon color="red" />;
-
-    case MeldekortdagStatus.IkkeUtfylt:
-    case MeldekortdagStatus.FraværSyk:
-    case MeldekortdagStatus.FraværSyktBarn:
-      return <ExclamationmarkTriangleFillIcon color="orange" />;
-  }
-};
-
-export const MeldekortUke = ({
-  meldekortUke,
-  heading,
-  meldekortId,
-  sakId,
-}: MeldekortUkeProps) => {
+const Meldekortuke = ({ meldekortdager, control }: MeldekortukeProps) => {
   return (
-    <VStack className={styles.meldekortUke}>
-      <Heading size="small" className={styles.heading}>
-        {heading}
-      </Heading>
-      {meldekortUke.map((ukedag) => (
-        <MeldekortUkeDag
-          key={ukedag.dato.toString()}
-          meldekortDag={ukedag}
-          meldekortId={meldekortId}
-          sakId={sakId}
-        />
+    <VStack gap="5">
+      {meldekortdager.map((dag, i) => (
+        <VStack gap="2" key={dag.dato}>
+          <IkonMedTekst
+            text={`${ukedagFraDatotekst(dag.dato)} ${formaterDatotekst(dag.dato.toString())}`}
+            iconRenderer={() => velgIkonForMeldekortStatus(dag.status)}
+          />
+          {dag.status === MeldekortdagStatus.Sperret ? (
+            <BodyShort>Ikke rett på tiltakspenger</BodyShort>
+          ) : (
+            <Controller
+              name={`meldekortdager.${i}.status`}
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { onChange, value } }) => (
+                <Select
+                  label="Velg status for dag"
+                  id={`meldekortdager.${i}.status`}
+                  size="small"
+                  hideLabel
+                  value={value}
+                  onChange={onChange}
+                >
+                  <option value={MeldekortdagStatus.IkkeUtfylt}>--</option>
+                  {Meldekortstatuser.map((meldekortStatus) => (
+                    <option key={meldekortStatus} value={meldekortStatus}>
+                      {finnMeldekortdagStatusTekst(meldekortStatus)}
+                    </option>
+                  ))}
+                </Select>
+              )}
+            />
+          )}
+        </VStack>
       ))}
     </VStack>
   );
 };
+
+export default Meldekortuke;

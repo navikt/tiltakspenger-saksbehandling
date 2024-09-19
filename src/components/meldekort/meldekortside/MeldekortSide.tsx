@@ -1,36 +1,50 @@
 import styles from './Meldekort.module.css';
-import { MeldekortUke } from './MeldekortUke';
-import { BodyShort, Heading, HStack, Loader, VStack } from '@navikt/ds-react';
-import { MeldekortKnapper } from './MeldekortKnapper';
+import { Heading, Loader, VStack } from '@navikt/ds-react';
 import router from 'next/router';
 import { useHentMeldekort } from '../../../hooks/meldekort/useHentMeldekort';
-import Varsel from '../../varsel/Varsel';
-import { meldekortHeading, ukeHeading } from '../../../utils/date';
-import { Meldekortstatus } from '../../../types/MeldekortTypes';
-import { Utbetalingsuke } from './Utbetalingsuke';
+import { meldekortHeading } from '../../../utils/date';
+import {
+  MeldekortdagStatus,
+  Meldekortstatus,
+} from '../../../types/MeldekortTypes';
 import { useContext } from 'react';
 import { SakContext } from '../../layout/SakLayout';
+import {
+  CircleSlashIcon,
+  CheckmarkCircleFillIcon,
+  XMarkOctagonFillIcon,
+  ExclamationmarkTriangleFillIcon,
+} from '@navikt/aksel-icons';
+import Meldekort from './Meldekort';
+import Meldekortoppsummering from './Meldekortoppsummering';
+
+export const velgIkonForMeldekortStatus = (status: string) => {
+  switch (status) {
+    case MeldekortdagStatus.Sperret:
+      return <CircleSlashIcon color="black" />;
+
+    case MeldekortdagStatus.DeltattUtenLønnITiltaket:
+    case MeldekortdagStatus.FraværVelferdGodkjentAvNav:
+      return <CheckmarkCircleFillIcon color="green" />;
+
+    case MeldekortdagStatus.IkkeDeltatt:
+    case MeldekortdagStatus.DeltattMedLønnITiltaket:
+    case MeldekortdagStatus.FraværVelferdIkkeGodkjentAvNav:
+      return <XMarkOctagonFillIcon color="red" />;
+
+    case MeldekortdagStatus.IkkeUtfylt:
+    case MeldekortdagStatus.FraværSyk:
+    case MeldekortdagStatus.FraværSyktBarn:
+      return <ExclamationmarkTriangleFillIcon color="orange" />;
+  }
+};
 
 export const MeldekortSide = () => {
   const { sakId } = useContext(SakContext);
   const meldekortId = router.query.meldekortId as string;
-  const { meldekort, isLoading, error } = useHentMeldekort(meldekortId, sakId);
+  const { meldekort, isLoading } = useHentMeldekort(meldekortId, sakId);
 
-  if (isLoading && !meldekort) {
-    return <Loader />;
-  } else if (error) {
-    return (
-      <VStack className={styles.wrapper}>
-        <Varsel
-          variant="error"
-          melding={`Kunne ikke hente meldekort (${error.status} ${error.info})`}
-        />
-      </VStack>
-    );
-  }
-
-  const uke1 = meldekort.meldekortDager.slice(0, 7);
-  const uke2 = meldekort.meldekortDager.slice(7, 14);
+  if (isLoading || !meldekort) return <Loader />;
 
   return (
     <VStack gap="5" className={styles.wrapper}>
@@ -38,45 +52,10 @@ export const MeldekortSide = () => {
         {meldekortHeading(meldekort.periode)}
       </Heading>
       {meldekort.status != Meldekortstatus.KLAR_TIL_UTFYLLING ? (
-        <>
-          <Heading size="small" level="3">
-            {ukeHeading(meldekort.periode.fraOgMed)}
-          </Heading>
-          <Utbetalingsuke utbetalingUke={uke1} />
-          <Heading size="small" level="3">
-            {ukeHeading(meldekort.periode.tilOgMed)}
-          </Heading>
-          <Utbetalingsuke utbetalingUke={uke2} />
-          <HStack gap="10" className={styles.totalbeløp}>
-            <BodyShort weight="semibold">Totalt beløp for perioden:</BodyShort>
-            <BodyShort weight="semibold">
-              {meldekort.totalbeløpTilUtbetaling},-
-            </BodyShort>
-          </HStack>
-        </>
+        <Meldekortoppsummering />
       ) : (
-        <>
-          <HStack gap="9" wrap={false}>
-            <MeldekortUke
-              meldekortUke={uke1}
-              heading={ukeHeading(meldekort.periode.fraOgMed)}
-              meldekortId={meldekortId}
-              sakId={sakId}
-            />
-            <MeldekortUke
-              meldekortUke={uke2}
-              heading={ukeHeading(meldekort.periode.tilOgMed)}
-              meldekortId={meldekortId}
-              sakId={sakId}
-            />
-          </HStack>
-        </>
+        <Meldekort />
       )}
-      <MeldekortKnapper
-        meldekortdager={meldekort.meldekortDager}
-        meldekortId={meldekortId}
-        sakId={sakId}
-      />
     </VStack>
   );
 };
