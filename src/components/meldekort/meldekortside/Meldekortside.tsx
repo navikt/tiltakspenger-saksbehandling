@@ -10,7 +10,7 @@ import { SakContext } from '../../layout/SakLayout';
 import Meldekort from './Meldekort';
 import Meldekortoppsummering from './Meldekortoppsummering';
 
-export const MeldekortSide = () => {
+export const Meldekortside = () => {
   const { sakId } = useContext(SakContext);
   const meldekortId = router.query.meldekortId as string;
   const { meldekort, isLoading } = useHentMeldekort(meldekortId, sakId);
