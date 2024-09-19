@@ -43,7 +43,9 @@ const Meldekortuke = ({
       <VStack gap="2" key={dag.dato}>
         <HStack align="center" gap="3" wrap={false}>
           {velgIkonForMeldekortStatus(watch(`uke${ukenummer}.${i}.status`))}
-          <BodyShort as={Label}>{meldekortdagHeading(dag.dato)}</BodyShort>
+          <BodyShort as={Label} id={`uke${ukenummer}.${i}.status`}>
+            {meldekortdagHeading(dag.dato)}
+          </BodyShort>
         </HStack>
         {dag.status === MeldekortdagStatus.Sperret ? (
           <BodyShort>Ikke rett på tiltakspenger</BodyShort>
