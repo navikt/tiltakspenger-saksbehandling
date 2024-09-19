@@ -6,7 +6,7 @@ import { SakContext } from '../../layout/SakLayout';
 import { MeldekortDagDTO } from '../../../types/MeldekortTypes';
 import { useSendMeldekortTilBeslutter } from '../../../hooks/meldekort/useSendMeldekortTilBeslutter';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import Meldekortuke from './Meldekortsuke';
+import Meldekortuke from './Meldekortuke';
 import Varsel from '../../varsel/Varsel';
 import styles from './Meldekort.module.css';
 import { ukeHeading } from '../../../utils/date';
