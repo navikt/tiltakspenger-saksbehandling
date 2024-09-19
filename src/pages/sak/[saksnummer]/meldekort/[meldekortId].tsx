@@ -1,7 +1,7 @@
 import { HStack, VStack } from '@navikt/ds-react';
 import { pageWithAuthentication } from '../../../../auth/pageWithAuthentication';
 import Meldekortdetaljer from '../../../../components/meldekort/meldekortdetaljer/Meldekortdetaljer';
-import { MeldekortSide } from '../../../../components/meldekort/meldekortside/MeldekortSide';
+import { MeldekortSide } from '../../../../components/meldekort/meldekortside/MeldekortsSide';
 import styles from '../../../behandling/Behandling.module.css';
 import MeldekortHeader from '../../../../components/meldekort/meldekortheader/MeldekortHeader';
 import { NextPageWithLayout } from '../../../_app';

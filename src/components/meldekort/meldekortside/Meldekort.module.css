@@ -9,7 +9,7 @@
 }
 
 .heading {
-  padding-bottom: 1em;
+  padding-bottom: 0.5rem;
   border-bottom: 1px solid #cfcfcf;
 }
 
@@ -20,8 +20,19 @@
   padding: 0.5rem;
 }
 
+.meldekort {
+  border: 1px #9099a5 solid;
+  border-radius: 4px;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  max-width: 1000px;
+}
+
+.meldekortuke {
+  padding: 1rem 5rem 1rem 2rem;
+}
+
 .utbetalingsuke {
-  background-color: #ffffff;
   border: 1px #9099a5 solid;
   border-radius: 4px;
   padding: 1rem;

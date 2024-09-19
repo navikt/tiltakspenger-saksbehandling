@@ -1,4 +1,4 @@
-import { Button, HStack, Loader } from '@navikt/ds-react';
+import { Button, HStack, Loader, Spacer, VStack } from '@navikt/ds-react';
 import router from 'next/router';
 import { useContext } from 'react';
 import { useHentMeldekort } from '../../../hooks/meldekort/useHentMeldekort';
@@ -7,15 +7,19 @@ import { MeldekortDagDTO } from '../../../types/MeldekortTypes';
 import { useSendMeldekortTilBeslutter } from '../../../hooks/meldekort/useSendMeldekortTilBeslutter';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import Meldekortuke from './Meldekortuke';
+import Varsel from '../../varsel/Varsel';
+import styles from './Meldekort.module.css';
+import { ukeHeading } from '../../../utils/date';
 
 export interface Meldekortform {
-  meldekortdager: MeldekortDagDTO[];
+  uke1: MeldekortDagDTO[];
+  uke2: MeldekortDagDTO[];
 }
 
 const Meldekort = () => {
   const { sakId } = useContext(SakContext);
   const meldekortId = router.query.meldekortId as string;
-  const { meldekort, isLoading } = useHentMeldekort(meldekortId, sakId);
+  const { meldekort, error, isLoading } = useHentMeldekort(meldekortId, sakId);
   const { sendMeldekortTilBeslutter, senderMeldekortTilBeslutter } =
     useSendMeldekortTilBeslutter(meldekortId, sakId);
 
@@ -27,28 +31,53 @@ const Meldekort = () => {
   const {
     handleSubmit,
     control,
+    getValues,
     formState: { errors },
+    watch,
   } = useForm<Meldekortform>({
     mode: 'onSubmit',
-    defaultValues: { meldekortdager: meldekortdager },
+    defaultValues: {
+      uke1: meldekortdager.slice(0, 7),
+      uke2: meldekortdager.slice(7, 14),
+    },
   });
 
   if (isLoading && !meldekort) {
     return <Loader />;
+  } else if (error) {
+    return (
+      <VStack className={styles.wrapper}>
+        <Varsel
+          variant="error"
+          melding={`Kunne ikke hente meldekort (${error.status} ${error.info})`}
+        />
+      </VStack>
+    );
   }
 
   const onSubmit: SubmitHandler<Meldekortform> = (data) => {
-    sendMeldekortTilBeslutter({ dager: data.meldekortdager });
+    const utfyltemeldekortdager = data.uke1.concat(data.uke2);
+    sendMeldekortTilBeslutter({ dager: utfyltemeldekortdager });
   };
-
-  const uke1 = meldekort.meldekortDager.slice(0, 7);
-  const uke2 = meldekort.meldekortDager.slice(7, 14);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <HStack>
-        <Meldekortuke meldekortdager={uke1} control={control} />
-        <Meldekortuke meldekortdager={uke2} control={control} />
+      <HStack className={styles.meldekort}>
+        <Meldekortuke
+          watch={watch}
+          ukenummer={1}
+          meldekortdager={getValues().uke1}
+          control={control}
+          ukeHeading={ukeHeading(meldekort.periode.fraOgMed)}
+        />
+        <Spacer />
+        <Meldekortuke
+          ukenummer={2}
+          watch={watch}
+          meldekortdager={getValues().uke2}
+          control={control}
+          ukeHeading={ukeHeading(meldekort.periode.tilOgMed)}
+        />
       </HStack>
       <Button
         size="small"

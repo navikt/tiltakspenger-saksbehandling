@@ -92,9 +92,9 @@ export const finnMeldekortdagStatusTekst = (status: string) => {
     case MeldekortdagStatus.FraværSyktBarn:
       return 'Fravær - Sykt barn';
     case MeldekortdagStatus.FraværVelferdGodkjentAvNav:
-      return 'Fravær - Velferd. Godkjent av NAV';
+      return 'Godkjent fravær - Velferd';
     case MeldekortdagStatus.FraværVelferdIkkeGodkjentAvNav:
-      return 'Fravær - Velferd. Ikke godkjent av NAV';
+      return 'Ikke godkjent fravær - Velferd';
     case MeldekortdagStatus.IkkeDeltatt:
       return 'Ikke deltatt i tiltaket';
     case MeldekortdagStatus.IkkeUtfylt:

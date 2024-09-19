@@ -27,7 +27,7 @@ export const Behandlingsknapper = ({ modalRef }: BehandlingKnapperProps) => {
   const kanBeslutte = kanBeslutteForBehandling(
     valgtBehandling.status,
     innloggetSaksbehandler,
-    valgtBehandling.beslutter,
+    valgtBehandling.saksbehandler,
   );
 
   const kanSaksbehandle = kanSaksbehandleForBehandling(
