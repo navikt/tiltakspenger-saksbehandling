@@ -1,4 +1,4 @@
-import { Loader, Heading, VStack, Alert } from '@navikt/ds-react';
+import { Loader, Heading, VStack, Alert, Button } from '@navikt/ds-react';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
 import { useContext, useRef } from 'react';
 import BegrunnelseModal from '../begrunnelsemodal/BegrunnelseModal';
@@ -8,11 +8,20 @@ import { BehandlingStatus } from '../../types/BehandlingTypes';
 import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
 import Varsel from '../varsel/Varsel';
 import { Behandlingsknapper } from '../behandlingsknapper/BehandlingKnapper';
+import BekreftelseseModal from '../bekreftelsesmodal/BekreftelsesModal';
+import { useGodkjennBehandling } from '../../hooks/useGodkjennBehandling';
 
 const Oppsummering = () => {
   const { behandlingId } = useContext(BehandlingContext);
   const { valgtBehandling, isLoading, error } = useHentBehandling(behandlingId);
-  const modalRef = useRef(null);
+  const {
+    godkjennBehandling,
+    godkjennerBehandling,
+    godkjennBehandlingError,
+    reset,
+  } = useGodkjennBehandling(behandlingId);
+  const sendTilbakeRef = useRef(null);
+  const godkjennRef = useRef(null);
 
   if (isLoading || !valgtBehandling) {
     return <Loader />;
@@ -23,6 +32,15 @@ const Oppsummering = () => {
         melding={`Kunne ikke hente oppsummering (${error.status} ${error.info})`}
       />
     );
+
+  const onGodkjennBehandling = () => {
+    godkjennBehandling().then(lukkModal);
+  };
+
+  const lukkModal = () => {
+    godkjennRef.current.close();
+    reset();
+  };
 
   const retur = valgtBehandling.attesteringer.findLast(
     (attestering) => attestering.begrunnelse,
@@ -45,8 +63,29 @@ const Oppsummering = () => {
         <Heading size="small">Vilkårsvurdering</Heading>
         <VilkårsvurderingTable />
       </VStack>
-      <Behandlingsknapper modalRef={modalRef} />
-      <BegrunnelseModal modalRef={modalRef} />
+      <Behandlingsknapper
+        sendTilbakeRef={sendTilbakeRef}
+        godkjennRef={godkjennRef}
+      />
+      <BegrunnelseModal modalRef={sendTilbakeRef} />
+      <BekreftelseseModal
+        modalRef={godkjennRef}
+        tittel={'Godkjenn og fatt vedtak'}
+        body={'Ønsker du å fatte vedtak på denne behandlingen?'}
+        lukkModal={lukkModal}
+        error={godkjennBehandlingError}
+      >
+        <Button
+          type="submit"
+          size="small"
+          loading={godkjennerBehandling}
+          onClick={() => {
+            onGodkjennBehandling();
+          }}
+        >
+          Godkjenn vedtaket
+        </Button>
+      </BekreftelseseModal>
     </VStack>
   );
 };
