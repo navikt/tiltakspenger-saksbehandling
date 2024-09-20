@@ -1,7 +1,8 @@
-import { Alert, BodyShort, Button, Modal } from '@navikt/ds-react';
+import { BodyShort, Button, Modal } from '@navikt/ds-react';
 import { ReactNode, RefObject } from 'react';
 import styles from './BekreftelsesModal.module.css';
 import { FetcherError } from '../../utils/http';
+import Varsel from '../varsel/Varsel';
 
 interface BekreftelsesModalProps {
   modalRef: RefObject<HTMLDialogElement>;
@@ -39,12 +40,8 @@ const BekreftelseseModal = ({
           Nei, avbryt
         </Button>
         {children}
+        {error && <Varsel variant="error" melding={`${error.message}`} />}
       </Modal.Footer>
-      {error && (
-        <Alert variant="error" style={{ margin: '1rem' }}>
-          {error.message}
-        </Alert>
-      )}
     </Modal>
   );
 };
