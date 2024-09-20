@@ -43,7 +43,7 @@ const Meldekortuke = ({
       <VStack gap="2" key={dag.dato}>
         <HStack align="center" gap="3" wrap={false}>
           {velgIkonForMeldekortStatus(watch(`uke${ukenummer}.${i}.status`))}
-          <BodyShort as={Label} id={`uke${ukenummer}.${i}.status`}>
+          <BodyShort as={Label} id={dag.dato}>
             {meldekortdagHeading(dag.dato)}
           </BodyShort>
         </HStack>
@@ -57,7 +57,7 @@ const Meldekortuke = ({
             render={({ field: { onChange, value } }) => (
               <Select
                 label="Velg status for dag"
-                id={`uke${ukenummer}.${i}.status`}
+                id={dag.dato}
                 size="small"
                 hideLabel
                 value={value}
