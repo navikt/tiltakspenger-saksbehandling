@@ -9,7 +9,8 @@ export function useSendMeldekortTilBeslutter(
   const {
     trigger: sendMeldekortTilBeslutter,
     isMutating: senderMeldekortTilBeslutter,
-    error,
+    error: feilVedSendingTilBeslutter,
+    reset,
   } = useSWRMutation<any, FetcherError, any, MeldekortDTO>(
     `/api/sak/${sakId}/meldekort/${meldekortId}`,
     mutateMeldekort,
@@ -18,6 +19,7 @@ export function useSendMeldekortTilBeslutter(
   return {
     sendMeldekortTilBeslutter,
     senderMeldekortTilBeslutter,
-    error,
+    feilVedSendingTilBeslutter,
+    reset,
   };
 }

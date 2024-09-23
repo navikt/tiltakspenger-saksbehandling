@@ -12,14 +12,18 @@ import { useGodkjennBehandling } from '../../hooks/useGodkjennBehandling';
 import { useSendTilBeslutter } from '../../hooks/useSendTilBeslutter';
 
 interface BehandlingKnapperProps {
-  modalRef: RefObject<HTMLDialogElement>;
+  sendTilbakeRef: RefObject<HTMLDialogElement>;
+  godkjennRef: RefObject<HTMLDialogElement>;
 }
 
-export const Behandlingsknapper = ({ modalRef }: BehandlingKnapperProps) => {
+export const Behandlingsknapper = ({
+  sendTilbakeRef,
+  godkjennRef,
+}: BehandlingKnapperProps) => {
   const { behandlingId } = useContext(BehandlingContext);
   const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
   const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
-  const { godkjennBehandling, godkjennerBehandling, godkjennBehandlingError } =
+  const { godkjennerBehandling, godkjennBehandlingError } =
     useGodkjennBehandling(behandlingId);
   const { sendTilBeslutter, senderTilBeslutter, sendTilBeslutterError } =
     useSendTilBeslutter(behandlingId);
@@ -41,7 +45,11 @@ export const Behandlingsknapper = ({ modalRef }: BehandlingKnapperProps) => {
     return <Loader />;
   }
   const åpneSendTilbakeModal = () => {
-    modalRef.current?.showModal();
+    sendTilbakeRef.current?.showModal();
+  };
+
+  const åpneGodkjennModal = () => {
+    godkjennRef.current.showModal();
   };
 
   return (
@@ -75,7 +83,7 @@ export const Behandlingsknapper = ({ modalRef }: BehandlingKnapperProps) => {
             size="small"
             loading={godkjennerBehandling}
             onClick={() => {
-              godkjennBehandling();
+              åpneGodkjennModal();
             }}
           >
             Godkjenn vedtaket
