@@ -1,17 +1,21 @@
 import { Button, HStack, Loader, Spacer, VStack } from '@navikt/ds-react';
 import router from 'next/router';
-import { useContext } from 'react';
+import { useContext, useRef } from 'react';
 import { useHentMeldekort } from '../../../hooks/meldekort/useHentMeldekort';
 import { SakContext } from '../../layout/SakLayout';
-import { MeldekortDagDTO } from '../../../types/MeldekortTypes';
+import {
+  MeldekortDagDTO,
+  MeldekortdagStatus,
+} from '../../../types/MeldekortTypes';
 import { useSendMeldekortTilBeslutter } from '../../../hooks/meldekort/useSendMeldekortTilBeslutter';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import Meldekortuke from './Meldekortuke';
 import Varsel from '../../varsel/Varsel';
 import styles from './Meldekort.module.css';
 import { ukeHeading } from '../../../utils/date';
 import { kanSaksbehandleForBehandling } from '../../../utils/tilganger';
 import { SaksbehandlerContext } from '../../../pages/_app';
+import BekreftelsesModal from '../../bekreftelsesmodal/BekreftelsesModal';
 
 export interface Meldekortform {
   uke1: MeldekortDagDTO[];
@@ -23,8 +27,19 @@ const Meldekort = () => {
   const meldekortId = router.query.meldekortId as string;
   const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
   const { meldekort, error, isLoading } = useHentMeldekort(meldekortId, sakId);
-  const { sendMeldekortTilBeslutter, senderMeldekortTilBeslutter } =
-    useSendMeldekortTilBeslutter(meldekortId, sakId);
+  const {
+    sendMeldekortTilBeslutter,
+    senderMeldekortTilBeslutter,
+    feilVedSendingTilBeslutter,
+    reset,
+  } = useSendMeldekortTilBeslutter(meldekortId, sakId);
+
+  const modalRef = useRef(null);
+
+  const lukkModal = () => {
+    modalRef.current.close();
+    reset();
+  };
 
   //B: Må endre denne til å ta inn saksbehandler på meldekortet når vi har lagt til tildeling.
   const kanSaksbehandle = kanSaksbehandleForBehandling(
@@ -35,16 +50,10 @@ const Meldekort = () => {
 
   const meldekortdager = meldekort.meldekortDager.map((dag) => ({
     dato: dag.dato,
-    status: dag.status,
+    status: dag.status === MeldekortdagStatus.IkkeUtfylt ? '' : dag.status,
   }));
 
-  const {
-    handleSubmit,
-    control,
-    getValues,
-    formState: { errors },
-    watch,
-  } = useForm<Meldekortform>({
+  const methods = useForm<Meldekortform>({
     mode: 'onSubmit',
     defaultValues: {
       uke1: meldekortdager.slice(0, 7),
@@ -65,41 +74,58 @@ const Meldekort = () => {
     );
   }
 
-  const onSubmit: SubmitHandler<Meldekortform> = (data) => {
-    const utfyltemeldekortdager = data.uke1.concat(data.uke2);
-    sendMeldekortTilBeslutter({ dager: utfyltemeldekortdager });
+  const onSubmit: SubmitHandler<Meldekortform> = () => {
+    modalRef.current?.showModal();
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <HStack className={styles.meldekort}>
-        <Meldekortuke
-          watch={watch}
-          ukenummer={1}
-          meldekortdager={getValues().uke1}
-          control={control}
-          ukeHeading={ukeHeading(meldekort.periode.fraOgMed)}
-        />
-        <Spacer />
-        <Meldekortuke
-          ukenummer={2}
-          watch={watch}
-          meldekortdager={getValues().uke2}
-          control={control}
-          ukeHeading={ukeHeading(meldekort.periode.tilOgMed)}
-        />
-      </HStack>
-      {kanSaksbehandle && (
-        <Button
-          size="small"
-          loading={senderMeldekortTilBeslutter}
-          type="submit"
-          value="submit"
-        >
-          Send til beslutter
-        </Button>
-      )}
-    </form>
+    <FormProvider {...methods}>
+      <form onSubmit={methods.handleSubmit(onSubmit)}>
+        <HStack className={styles.meldekort}>
+          <Meldekortuke
+            ukenummer={1}
+            meldekortdager={methods.getValues().uke1}
+            ukeHeading={ukeHeading(meldekort.periode.fraOgMed)}
+          />
+          <Spacer />
+          <Meldekortuke
+            ukenummer={2}
+            meldekortdager={methods.getValues().uke2}
+            ukeHeading={ukeHeading(meldekort.periode.tilOgMed)}
+          />
+        </HStack>
+        {kanSaksbehandle && (
+          <>
+            <Button type="submit" value="submit" size="small">
+              Send til beslutter
+            </Button>
+            <BekreftelsesModal
+              modalRef={modalRef}
+              tittel={'Send meldekort til beslutter'}
+              body={
+                'Er du sikker på at meldekortet er ferdig utfylt og klart til å sendes til beslutter?'
+              }
+              error={feilVedSendingTilBeslutter}
+              lukkModal={lukkModal}
+            >
+              <Button
+                size="small"
+                loading={senderMeldekortTilBeslutter}
+                onClick={() =>
+                  sendMeldekortTilBeslutter({
+                    dager: methods
+                      .getValues()
+                      .uke1.concat(methods.getValues().uke2),
+                  })
+                }
+              >
+                Send til beslutter
+              </Button>
+            </BekreftelsesModal>
+          </>
+        )}
+      </form>
+    </FormProvider>
   );
 };
 

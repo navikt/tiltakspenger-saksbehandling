@@ -2,7 +2,7 @@ import { HStack, BodyShort, Loader, VStack, Button } from '@navikt/ds-react';
 import { ukeHeading } from '../../../utils/date';
 import { Utbetalingsuke } from './Utbetalingsuke';
 import router from 'next/router';
-import { useContext } from 'react';
+import { useContext, useRef } from 'react';
 import { useHentMeldekort } from '../../../hooks/meldekort/useHentMeldekort';
 import { SakContext } from '../../layout/SakLayout';
 import Varsel from '../../varsel/Varsel';
@@ -10,16 +10,26 @@ import styles from './Meldekort.module.css';
 import { useGodkjennMeldekort } from '../../../hooks/meldekort/useGodkjennMeldekort';
 import { kanBeslutteForBehandling } from '../../../utils/tilganger';
 import { SaksbehandlerContext } from '../../../pages/_app';
+import BekreftelsesModal from '../../bekreftelsesmodal/BekreftelsesModal';
 
 const Meldekortoppsummering = () => {
   const { sakId } = useContext(SakContext);
   const meldekortId = router.query.meldekortId as string;
   const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
   const { meldekort, isLoading, error } = useHentMeldekort(meldekortId, sakId);
-  const { onGodkjennMeldekort, isMeldekortMutating } = useGodkjennMeldekort(
-    meldekortId,
-    sakId,
-  );
+  const {
+    onGodkjennMeldekort,
+    isMeldekortMutating,
+    reset,
+    feilVedGodkjenning,
+  } = useGodkjennMeldekort(meldekortId, sakId);
+
+  const modalRef = useRef(null);
+
+  const lukkModal = () => {
+    modalRef.current.close();
+    reset();
+  };
 
   if (isLoading && !meldekort) {
     return <Loader />;
@@ -61,13 +71,34 @@ const Meldekortoppsummering = () => {
         </BodyShort>
       </HStack>
       {kanBeslutte && (
-        <Button
-          size="small"
-          loading={isMeldekortMutating}
-          onClick={() => onGodkjennMeldekort()}
-        >
-          Godkjenn meldekort
-        </Button>
+        <>
+          <HStack justify="start" gap="3" align="end">
+            <Button
+              size="small"
+              loading={isMeldekortMutating}
+              onClick={() => modalRef.current?.showModal()}
+            >
+              Godkjenn meldekort
+            </Button>
+          </HStack>
+          <BekreftelsesModal
+            modalRef={modalRef}
+            tittel={'Godkjenn meldekortet'}
+            body={
+              'Er du sikker på at meldekortet er korrekt og ønsker å sende det til utbetaling?'
+            }
+            error={feilVedGodkjenning}
+            lukkModal={lukkModal}
+          >
+            <Button
+              size="small"
+              loading={isMeldekortMutating}
+              onClick={() => onGodkjennMeldekort()}
+            >
+              Godkjenn meldekort
+            </Button>
+          </BekreftelsesModal>
+        </>
       )}
     </>
   );
