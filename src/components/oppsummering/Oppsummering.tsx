@@ -8,7 +8,7 @@ import { BehandlingStatus } from '../../types/BehandlingTypes';
 import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
 import Varsel from '../varsel/Varsel';
 import { Behandlingsknapper } from '../behandlingsknapper/BehandlingKnapper';
-import BekreftelseseModal from '../bekreftelsesmodal/BekreftelsesModal';
+import BekreftelsesModal from '../bekreftelsesmodal/BekreftelsesModal';
 import { useGodkjennBehandling } from '../../hooks/useGodkjennBehandling';
 
 const Oppsummering = () => {
@@ -68,7 +68,7 @@ const Oppsummering = () => {
         godkjennRef={godkjennRef}
       />
       <BegrunnelseModal modalRef={sendTilbakeRef} />
-      <BekreftelseseModal
+      <BekreftelsesModal
         modalRef={godkjennRef}
         tittel={'Godkjenn og fatt vedtak'}
         body={'Ønsker du å fatte vedtak på denne behandlingen?'}
@@ -85,7 +85,7 @@ const Oppsummering = () => {
         >
           Godkjenn vedtaket
         </Button>
-      </BekreftelseseModal>
+      </BekreftelsesModal>
     </VStack>
   );
 };
