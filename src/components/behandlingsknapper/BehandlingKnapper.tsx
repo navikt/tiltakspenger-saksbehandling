@@ -31,6 +31,7 @@ export const Behandlingsknapper = ({
   const kanBeslutte = kanBeslutteForBehandling(
     valgtBehandling.status,
     innloggetSaksbehandler,
+    valgtBehandling.saksbehandler,
     valgtBehandling.beslutter,
   );
 

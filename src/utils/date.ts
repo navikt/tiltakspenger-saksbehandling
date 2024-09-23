@@ -32,7 +32,11 @@ export const ukeHeading = (dato: string): string => {
   return `Uke ${ukenummerFraDatotekst(dato)} - ${månedFraDatotekst(dato)} ${dayjs(dato).year()} `;
 };
 
-export function ukedagFraDatotekst(date: string) {
+export const meldekortdagHeading = (dato: string) => {
+  return `${ukedagFraDatotekst(dato)} ${formaterDatotekst(dato)}`;
+};
+
+export function ukedagFraDatotekst(dato: string) {
   const ukedager = [
     'Mandag',
     'Tirsdag',
@@ -42,10 +46,10 @@ export function ukedagFraDatotekst(date: string) {
     'Lørdag',
     'Søndag',
   ];
-  return ukedager[dayjs(date).weekday()];
+  return ukedager[dayjs(dato).weekday()];
 }
 
-export function månedFraDatotekst(date: string) {
+export function månedFraDatotekst(dato: string) {
   const måneder = [
     'januar',
     'februar',
@@ -60,9 +64,9 @@ export function månedFraDatotekst(date: string) {
     'november',
     'desember',
   ];
-  return måneder[dayjs(date).month()];
+  return måneder[dayjs(dato).month()];
 }
 
-export function ukenummerFraDatotekst(date: string) {
-  return dayjs(date).week();
+export function ukenummerFraDatotekst(dato: string) {
+  return dayjs(dato).week();
 }

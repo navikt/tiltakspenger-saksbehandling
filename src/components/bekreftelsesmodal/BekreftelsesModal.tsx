@@ -13,7 +13,7 @@ interface BekreftelsesModalProps {
   lukkModal: () => void;
 }
 
-const BekreftelseseModal = ({
+const BekreftelsesModal = ({
   modalRef,
   children,
   tittel,
@@ -46,4 +46,4 @@ const BekreftelseseModal = ({
   );
 };
 
-export default BekreftelseseModal;
+export default BekreftelsesModal;

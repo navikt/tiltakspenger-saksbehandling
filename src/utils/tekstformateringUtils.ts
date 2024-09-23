@@ -22,20 +22,20 @@ export const finnKildetekst = (kilde: string) => {
   }
 };
 
-export const finnUtfallTekst = (utfall: Utfall) => {
+export function lagUtfallstekst(utfall: string) {
   switch (utfall) {
-    case Utfall.IKKE_OPPFYLT:
-      return 'ikke oppfylt';
     case Utfall.OPPFYLT:
-      return 'oppfylt';
+      return 'Vilkåret er oppfylt i hele perioden';
+    case Utfall.IKKE_OPPFYLT:
+      return 'Vilkåret er ikke oppfylt';
     case Utfall.DELVIS_OPPFYLT:
-      return 'delvis oppfylt';
+      return 'Vilkåret er delvis oppfylt';
     case Utfall.UAVKLART:
-      return 'uavklart';
+      return 'Vilkåret er uavklart';
     default:
-      return 'uavklart';
+      return 'Vilkåret er uavklart';
   }
-};
+}
 
 export const lagFaktumTekstAvLivsopphold = (harLivsoppholdYtelser: boolean) => {
   return harLivsoppholdYtelser
@@ -92,9 +92,9 @@ export const finnMeldekortdagStatusTekst = (status: string) => {
     case MeldekortdagStatus.FraværSyktBarn:
       return 'Fravær - Sykt barn';
     case MeldekortdagStatus.FraværVelferdGodkjentAvNav:
-      return 'Fravær - Velferd. Godkjent av NAV';
+      return 'Godkjent fravær - Velferd';
     case MeldekortdagStatus.FraværVelferdIkkeGodkjentAvNav:
-      return 'Fravær - Velferd. Ikke godkjent av NAV';
+      return 'Ikke godkjent fravær - Velferd';
     case MeldekortdagStatus.IkkeDeltatt:
       return 'Ikke deltatt i tiltaket';
     case MeldekortdagStatus.IkkeUtfylt:
