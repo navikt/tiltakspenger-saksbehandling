@@ -8,7 +8,7 @@ export function useHentPersonopplysninger(sakId: string) {
     isLoading: isPersonopplysningerLoading,
     error,
   } = useSWR<Personopplysninger>(
-    `/api/behandling/${sakId}/personopplysninger`,
+    `/api/sak/${sakId}/personopplysninger`,
     fetcher,
   );
   return { personopplysninger, isPersonopplysningerLoading, error, mutate };
