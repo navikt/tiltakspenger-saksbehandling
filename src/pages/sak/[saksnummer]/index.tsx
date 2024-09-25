@@ -24,13 +24,12 @@ const Saksoversikt: NextPageWithLayout<Sak> = ({
   behandlingsoversikt,
   meldekortoversikt,
   saksnummer,
+  sakId,
   fnr,
 }: Sak) => {
-  const behandlingId = behandlingsoversikt[0].id;
-
   return (
     <>
-      <PersonaliaHeader behandlingId={behandlingId} />
+      <PersonaliaHeader sakId={sakId} />
       <Box style={{ padding: '1rem' }}>
         <Heading spacing size="medium" level="2">
           Saksoversikt

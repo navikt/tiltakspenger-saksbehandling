@@ -5,15 +5,12 @@ import styles from './PersonaliaHeader.module.css';
 import { useHentPersonopplysninger } from '../../hooks/useHentPersonopplysninger';
 
 type PersonaliaHeaderProps = PropsWithChildren & {
-  behandlingId: string;
+  sakId: string;
 };
 
-const PersonaliaHeader = ({
-  behandlingId,
-  children,
-}: PersonaliaHeaderProps) => {
+const PersonaliaHeader = ({ sakId, children }: PersonaliaHeaderProps) => {
   const { personopplysninger, isPersonopplysningerLoading } =
-    useHentPersonopplysninger(behandlingId);
+    useHentPersonopplysninger(sakId);
 
   if (isPersonopplysningerLoading || !personopplysninger) {
     return <Loader />;

@@ -49,7 +49,7 @@ export const FørstegangsbehandlingLayout = ({
         sakId: sakenId,
       }}
     >
-      <PersonaliaHeader behandlingId={behandlingId}>
+      <PersonaliaHeader sakId={sakenId}>
         <>
           {kanTaAvBehandling(
             status,
