@@ -56,7 +56,7 @@ const VilkårKort = ({
               ))}
               <Table.DataCell>{finnKildetekst(kilde)}</Table.DataCell>
               {utfall && (
-                <Table.DataCell className={styles.utfall_datacell}>
+                <Table.DataCell>
                   <UtfallIkon utfall={utfall} />
                 </Table.DataCell>
               )}
