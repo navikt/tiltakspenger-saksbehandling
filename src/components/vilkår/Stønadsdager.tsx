@@ -1,10 +1,11 @@
 import React, { useContext } from 'react';
-import { Loader, VStack } from '@navikt/ds-react';
+import { Button, HStack, Loader, VStack } from '@navikt/ds-react';
 import VilkårKort from './VilkårKort';
 import VilkårHeader from './VilkårHeader';
 import Varsel from '../varsel/Varsel';
 import { useHentStønadsdager } from '../../hooks/useHentStønadsdager';
 import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
+import router from 'next/router';
 
 const Stønadsdager = () => {
   const { behandlingId } = useContext(BehandlingContext);
@@ -40,6 +41,15 @@ const Stønadsdager = () => {
           { header: 'Antall dager', data: antallDager.toString() },
         ]}
       />
+      <HStack>
+        <Button
+          onClick={() =>
+            router.push(`/behandling/${behandlingId}/oppsummering`)
+          }
+        >
+          Gå til oppsummering
+        </Button>
+      </HStack>
     </VStack>
   );
 };

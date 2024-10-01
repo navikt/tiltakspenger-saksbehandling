@@ -2,12 +2,9 @@ import router from 'next/router';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
 import PersonaliaHeader from '../personaliaheader/PersonaliaHeader';
 import { Saksbehandlingstabs } from '../saksbehandlingstabs/SaksbehandlingTabs';
-import { Button, Loader, Tag } from '@navikt/ds-react';
-import { createContext, useContext, useEffect, useState } from 'react';
-import { kanTaAvBehandling } from '../../utils/tilganger';
-import { SaksbehandlerContext } from '../../pages/_app';
+import { Loader, Tag } from '@navikt/ds-react';
+import { createContext, useEffect, useState } from 'react';
 import { finnStatusTekst } from '../../utils/tekstformateringUtils';
-import { useTaAvBehandling } from '../../hooks/useTaAvBehandling';
 
 interface BehandlingContextType {
   behandlingId: string;
@@ -23,9 +20,7 @@ export const FørstegangsbehandlingLayout = ({
   children,
 }: React.PropsWithChildren) => {
   const behandlingId = router.query.behandlingId as string;
-  const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
   const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
-  const { taAvBehandling, tarAvBehandling } = useTaAvBehandling(behandlingId);
 
   const [behId, settBehId] = useState<string>(undefined);
   const [sakenId, settSakenId] = useState<string>(undefined);
@@ -40,7 +35,6 @@ export const FørstegangsbehandlingLayout = ({
   if (isLoading || !valgtBehandling || !behId) {
     return <Loader />;
   }
-  const { saksbehandler, beslutter, status } = valgtBehandling;
 
   return (
     <BehandlingContext.Provider
@@ -50,23 +44,6 @@ export const FørstegangsbehandlingLayout = ({
       }}
     >
       <PersonaliaHeader sakId={sakenId}>
-        <>
-          {kanTaAvBehandling(
-            status,
-            innloggetSaksbehandler,
-            saksbehandler,
-            beslutter,
-          ) && (
-            <Button
-              type="submit"
-              size="small"
-              loading={tarAvBehandling}
-              onClick={() => taAvBehandling()}
-            >
-              Ta av behandling
-            </Button>
-          )}
-        </>
         <Tag variant="alt3-filled">
           {finnStatusTekst(valgtBehandling.status, false)}
         </Tag>

@@ -61,27 +61,3 @@ export const skalKunneTaBehandling = (
       return false;
   }
 };
-
-export const kanTaAvBehandling = (
-  status: string,
-  innloggetSaksbehandler: Saksbehandler,
-  saksbehandlerForBehandling: string,
-  beslutterForBehandling?: string,
-) => {
-  switch (status) {
-    case BehandlingStatus.KLAR_TIL_BESLUTNING:
-    case BehandlingStatus.UNDER_BESLUTNING:
-      return (
-        innloggetSaksbehandler.isBeslutter &&
-        innloggetSaksbehandler.navIdent === beslutterForBehandling
-      );
-    case BehandlingStatus.KLAR_TIL_BEHANDLING:
-    case BehandlingStatus.UNDER_BEHANDLING:
-      return (
-        innloggetSaksbehandler.isSaksbehandler &&
-        innloggetSaksbehandler.navIdent === saksbehandlerForBehandling
-      );
-    default:
-      return false;
-  }
-};

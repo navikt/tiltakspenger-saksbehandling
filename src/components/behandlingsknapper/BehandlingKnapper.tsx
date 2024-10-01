@@ -67,7 +67,7 @@ export const Behandlingsknapper = ({
         />
       ) : null}
       <HStack justify="start" gap="3" align="end">
-        {kanBeslutte && (
+        {/*kanBeslutte && (
           <Button
             type="submit"
             size="small"
@@ -76,7 +76,7 @@ export const Behandlingsknapper = ({
           >
             Send tilbake
           </Button>
-        )}
+        )*/}
         {kanBeslutte && (
           <Button
             type="submit"
