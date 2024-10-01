@@ -22,19 +22,19 @@ const InngangsvilkårSidemeny = () => {
     {
       tittel: 'Krav fremmet innen frist',
       url: 'kravfrist',
-      paragraf: '§7',
+      paragraf: '§11',
       utfall: vilkårsett.kravfristVilkår.samletUtfall,
     },
     {
       tittel: 'Tiltaksdeltagelse',
       url: 'tiltaksdeltagelse',
-      paragraf: '§7',
+      paragraf: '§2',
       utfall: vilkårsett.tiltakDeltagelseVilkår.samletUtfall,
     },
     {
       tittel: 'Over 18 år',
       url: 'alder',
-      paragraf: '§7',
+      paragraf: '§3',
       utfall: vilkårsett.alderVilkår.samletUtfall,
     },
     {
@@ -58,7 +58,7 @@ const InngangsvilkårSidemeny = () => {
     {
       tittel: 'Opphold i institusjon',
       url: 'institusjonsopphold',
-      paragraf: '§7',
+      paragraf: '§9',
       utfall: vilkårsett.institusjonsoppholdVilkår.samletUtfall,
     },
   ];
