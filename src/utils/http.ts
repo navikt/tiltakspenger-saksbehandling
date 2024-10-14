@@ -7,7 +7,7 @@ const meldekortBackendUrl = process.env.TILTAKSPENGER_MELDEKORT_URL || '';
 const utbetalingBackendUrl = process.env.TILTAKSPENGER_UTBETALING_URL || '';
 
 export class FetcherError extends Error {
-  info: { [key: string]: any } | undefined;
+  info: { error: string } | undefined;
   status: number | undefined;
 }
 
@@ -57,11 +57,13 @@ export const throwErrorIfFatal = async (res: Response) => {
   if (!res.ok) {
     const error = new FetcherError('Noe gikk galt ved henting av data');
 
-    error.info = await res.json;
+    error.info = await res.json();
     error.status = res.status;
+    logger.error(error.info.error);
     throw error;
   }
 };
+
 function getUrl(req: NextApiRequest): string {
   const urlTil = req.url;
   if (urlTil.startsWith('/api/meldekort')) {
