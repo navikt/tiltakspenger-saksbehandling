@@ -1,6 +1,11 @@
+import saksbehandler from '../pages/api/saksbehandler';
 import { BehandlingStatus } from '../types/BehandlingTypes';
 import { Meldekortstatus } from '../types/MeldekortTypes';
-import { Saksbehandler } from '../types/Saksbehandler';
+import {
+  erBeslutter,
+  erSaksbehandler,
+  Saksbehandler,
+} from '../types/Saksbehandler';
 
 export const kanBeslutteForBehandling = (
   status: string,
@@ -9,7 +14,7 @@ export const kanBeslutteForBehandling = (
   beslutterForBehandling: string,
 ) => {
   return (
-    innloggetSaksbehandler.isBeslutter &&
+    erBeslutter(innloggetSaksbehandler) &&
     innloggetSaksbehandler.navIdent === beslutterForBehandling &&
     innloggetSaksbehandler.navIdent !== saksbehandlerForBehandling &&
     (status === BehandlingStatus.UNDER_BESLUTNING ||
@@ -23,7 +28,7 @@ export const kanSaksbehandleForBehandling = (
   saksbehandlerForBehandling: string,
 ) => {
   return (
-    innloggetSaksbehandler.isSaksbehandler &&
+    erSaksbehandler(innloggetSaksbehandler) &&
     innloggetSaksbehandler.navIdent === saksbehandlerForBehandling &&
     (status === BehandlingStatus.UNDER_BEHANDLING ||
       status === Meldekortstatus.KLAR_TIL_UTFYLLING)
@@ -52,11 +57,11 @@ export const skalKunneTaBehandling = (
   switch (status) {
     case BehandlingStatus.KLAR_TIL_BESLUTNING:
       return (
-        innloggetSaksbehandler.isBeslutter &&
+        erBeslutter(innloggetSaksbehandler) &&
         innloggetSaksbehandler.navIdent != saksbehandlerForBehandling
       );
     case BehandlingStatus.KLAR_TIL_BEHANDLING:
-      return innloggetSaksbehandler.isSaksbehandler;
+      return erSaksbehandler(innloggetSaksbehandler);
     default:
       return false;
   }

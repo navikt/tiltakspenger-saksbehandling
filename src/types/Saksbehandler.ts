@@ -3,7 +3,10 @@ export interface Saksbehandler {
   epost: string;
   navIdent: string;
   roller: string[];
-  isSaksbehandler: boolean;
-  isBeslutter: boolean;
-  isAdmin: boolean;
 }
+
+export const erSaksbehandler = (saksbehandler: Saksbehandler) =>
+  saksbehandler.roller.includes('SAKSBEHANDLER');
+
+export const erBeslutter = (saksbehandler: Saksbehandler) =>
+  saksbehandler.roller.includes('BESLUTTER');
