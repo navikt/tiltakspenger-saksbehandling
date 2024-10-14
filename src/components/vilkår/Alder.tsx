@@ -40,7 +40,7 @@ const Alder = () => {
         vilkårTittel={'Alder'}
         grunnlag={[
           {
-            header: 'Fødselsfato',
+            header: 'Fødselsdato',
             data: formaterDatotekst(
               alderVilkår.avklartSaksopplysning.fødselsdato,
             ),

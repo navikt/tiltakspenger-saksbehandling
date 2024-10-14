@@ -8,12 +8,14 @@
 .avklart_saksopplysning {
   width: 50%;
   padding-right: 1rem;
+  flex: 2;
 }
 
 .registerdata {
   border-left: 1px #000000 solid;
   padding-left: 2rem;
   width: 50%;
+  flex: 1;
 }
 
 .margin_top {
