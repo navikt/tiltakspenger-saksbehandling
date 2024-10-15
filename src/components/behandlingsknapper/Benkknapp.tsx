@@ -42,9 +42,14 @@ export const KnappForBehandlingType = ({
     finnLenke(behandlingId, status),
   );
 
-  if (taBehandlingError) settFeilmelding(taBehandlingError.info.error);
+  if (taBehandlingError)
+    settFeilmelding(
+      `Kunne ikke tildele behandling: ${taBehandlingError.info.error}`,
+    );
   if (opprettBehandlingError)
-    settFeilmelding(opprettBehandlingError.info.error);
+    settFeilmelding(
+      `Kunne ikke opprette behandling: ${opprettBehandlingError.info.error}`,
+    );
 
   switch (status) {
     case BehandlingStatus.SØKNAD:
