@@ -78,6 +78,7 @@ export enum Tiltakstype {
 
 export type MeldekortDTO = {
   dager: MeldekortDagDTO[];
+  navkontor: string;
 };
 
 export enum MeldekortdagStatus {

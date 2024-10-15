@@ -1,6 +1,7 @@
 .wrapper {
   padding: 1.5rem;
   width: 100%;
+  background-color: #f5f5f5;
 }
 
 .heading {
@@ -16,6 +17,7 @@
 }
 
 .meldekort {
+  background-color: #ffffff;
   border: 1px #9099a5 solid;
   border-radius: 4px;
   padding: 1rem;
@@ -27,7 +29,13 @@
   padding: 1rem 5rem 1rem 2rem;
 }
 
+.navkontor input {
+  width: 200px;
+  margin-bottom: 2.5rem;
+}
+
 .utbetalingsuke {
+  background-color: #ffffff;
   border: 1px #9099a5 solid;
   border-radius: 4px;
   padding: 1rem;

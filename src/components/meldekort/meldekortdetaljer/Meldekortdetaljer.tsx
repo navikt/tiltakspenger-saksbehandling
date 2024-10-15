@@ -22,11 +22,11 @@ const Meldekortdetaljer = () => {
     <>
       <VStack gap="3" className={styles.wrapper}>
         <BodyShort>
-          <b>Sakperiode: </b>
+          <b>Saksperiode: </b>
         </BodyShort>
         <BodyShort>{periodeTilFormatertDatotekst(sakPeriode)}</BodyShort>
         <BodyShort>
-          <b>Periode: </b>
+          <b>Meldekortperiode: </b>
         </BodyShort>
         <BodyShort>{periodeTilFormatertDatotekst(periode)}</BodyShort>
         <BodyShort>

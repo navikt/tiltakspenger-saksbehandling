@@ -1,12 +1,7 @@
 import { BehandlingStatus, Utfall } from '../types/BehandlingTypes';
 import { Opphold } from '../types/InstitusjonsoppholdTypes';
 import { Deltagelse } from '../types/KvpTypes';
-import {
-  MeldekortdagStatus,
-  Meldekortstatus,
-  ReduksjonAvYtelse,
-  Sats,
-} from '../types/MeldekortTypes';
+import { MeldekortdagStatus, Meldekortstatus } from '../types/MeldekortTypes';
 import { Kilde } from '../types/VilkårTypes';
 
 export const finnKildetekst = (kilde: string) => {
@@ -14,9 +9,9 @@ export const finnKildetekst = (kilde: string) => {
     case Kilde.SØKNAD:
       return 'Søknad';
     case Kilde.PDL:
-      return 'PDL';
+      return 'Folkeregisteret';
     case Kilde.KOMET:
-      return 'Komet';
+      return 'Tiltaksregister';
     case Kilde.ARENA:
       return 'Arena';
   }

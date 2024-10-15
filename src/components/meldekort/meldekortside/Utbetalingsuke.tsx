@@ -1,9 +1,10 @@
-import { Box, Heading, Table } from '@navikt/ds-react';
+import { BodyShort, Box, Heading, HStack, Table } from '@navikt/ds-react';
 import React from 'react';
 import { formaterDatotekst, ukedagFraDatotekst } from '../../../utils/date';
 import styles from './Meldekort.module.css';
 import { MeldekortDag } from '../../../types/MeldekortTypes';
 import { finnMeldekortdagStatusTekst } from '../../../utils/tekstformateringUtils';
+import { velgIkonForMeldekortStatus } from './Meldekortikoner';
 
 interface UtbetalingsukeProps {
   utbetalingUke: MeldekortDag[];
@@ -18,7 +19,7 @@ export const Utbetalingsuke = ({
     <Heading size="small" level="3">
       {headingtekst}
     </Heading>
-    <Table>
+    <Table size="small">
       <Table.Header>
         <Table.Row>
           <Table.HeaderCell>Dag</Table.HeaderCell>
@@ -34,7 +35,10 @@ export const Utbetalingsuke = ({
             <Table.DataCell>{ukedagFraDatotekst(dag.dato)}</Table.DataCell>
             <Table.DataCell>{formaterDatotekst(dag.dato)}</Table.DataCell>
             <Table.DataCell>
-              {finnMeldekortdagStatusTekst(dag.status)}
+              <HStack align="center" gap="3" wrap={false}>
+                {velgIkonForMeldekortStatus(dag.status)}
+                {finnMeldekortdagStatusTekst(dag.status)}
+              </HStack>
             </Table.DataCell>
             <Table.DataCell>
               {dag.beregningsdag ? `${dag.beregningsdag.prosent}%` : '-'}
