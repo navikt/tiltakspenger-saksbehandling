@@ -1,3 +1,7 @@
 .varsel {
   width: max-content;
 }
+
+.marginX {
+  margin: 0 1em;
+}

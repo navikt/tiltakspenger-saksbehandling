@@ -25,6 +25,7 @@ interface KnappForBehandlingTypeProps {
   saksbehandler: string;
   beslutter: string;
   behandlingId: string;
+  settFeilmelding: (string) => void;
 }
 
 export const KnappForBehandlingType = ({
@@ -32,10 +33,23 @@ export const KnappForBehandlingType = ({
   saksbehandler,
   beslutter,
   behandlingId,
+  settFeilmelding,
 }: KnappForBehandlingTypeProps) => {
   const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
-  const { onOpprettBehandling } = useOpprettBehandling();
-  const { onTaBehandling } = useTaBehandling(finnLenke(behandlingId, status));
+  const { onOpprettBehandling, opprettBehandlingError } =
+    useOpprettBehandling();
+  const { onTaBehandling, taBehandlingError } = useTaBehandling(
+    finnLenke(behandlingId, status),
+  );
+
+  if (taBehandlingError)
+    settFeilmelding(
+      `Kunne ikke tildele behandling: ${taBehandlingError.info.error}`,
+    );
+  if (opprettBehandlingError)
+    settFeilmelding(
+      `Kunne ikke opprette behandling: ${opprettBehandlingError.info.error}`,
+    );
 
   switch (status) {
     case BehandlingStatus.SØKNAD:

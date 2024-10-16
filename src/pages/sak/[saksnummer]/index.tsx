@@ -25,7 +25,6 @@ const Saksoversikt: NextPageWithLayout<Sak> = ({
   meldekortoversikt,
   saksnummer,
   sakId,
-  fnr,
 }: Sak) => {
   return (
     <>
@@ -77,6 +76,7 @@ const Saksoversikt: NextPageWithLayout<Sak> = ({
                       saksbehandler={behandling.saksbehandler}
                       beslutter={behandling.beslutter}
                       behandlingId={behandling.id}
+                      settFeilmelding={() => console.log('Noe gikk galt')}
                     />
                   </Table.DataCell>
                   <Table.DataCell>

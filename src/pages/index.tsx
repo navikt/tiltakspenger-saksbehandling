@@ -1,10 +1,9 @@
-import React from 'react';
-import { Box, Button, Heading, Loader, Table } from '@navikt/ds-react';
+import React, { useState } from 'react';
+import { Button, Heading, Loader, Table, VStack } from '@navikt/ds-react';
 import { useHentSøknaderOgBehandlinger } from '../hooks/useHentSøknaderOgBehandlinger';
 import { NextPage } from 'next';
 import router from 'next/router';
 import { pageWithAuthentication } from '../auth/pageWithAuthentication';
-import { useOpprettBehandling } from '../hooks/useOpprettBehandling';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '../utils/date';
 import { finnStatusTekst } from '../utils/tekstformateringUtils';
 import Varsel from '../components/varsel/Varsel';
@@ -12,9 +11,9 @@ import { KnappForBehandlingType } from '../components/behandlingsknapper/Benkkna
 import { BehandlingStatus } from '../types/BehandlingTypes';
 
 const Oversikten: NextPage = () => {
+  const [feilmelding, settFeilmelding] = useState<string>('');
   const { SøknaderOgBehandlinger, isLoading, error } =
     useHentSøknaderOgBehandlinger();
-  const { opprettBehandlingError } = useOpprettBehandling();
 
   if (isLoading || !SøknaderOgBehandlinger) return <Loader />;
 
@@ -22,21 +21,16 @@ const Oversikten: NextPage = () => {
     return (
       <Varsel
         variant="error"
-        melding={`Kunne ikke hente behandlinger (${error.status} ${error.info})`}
+        melding={`Kunne ikke hente behandlinger (${error.status} ${error.info.error})`}
       />
     );
 
   return (
-    <Box style={{ padding: '1rem' }}>
-      <Heading spacing size="medium" level="2">
+    <VStack gap="5" style={{ padding: '1rem' }}>
+      {feilmelding && <Varsel variant={'error'} melding={feilmelding} />}
+      <Heading size="medium" level="2">
         Oversikt over behandlinger og søknader
       </Heading>
-      {opprettBehandlingError && (
-        <Varsel
-          variant={'error'}
-          melding={`Kunne ikke opprette behandling (${opprettBehandlingError.status} ${opprettBehandlingError.info})`}
-        />
-      )}
       <Table>
         <Table.Header>
           <Table.Row>
@@ -78,6 +72,7 @@ const Oversikten: NextPage = () => {
                   saksbehandler={behandling.saksbehandler}
                   beslutter={behandling.beslutter}
                   behandlingId={behandling.id}
+                  settFeilmelding={settFeilmelding}
                 />
               </Table.DataCell>
               <Table.DataCell>
@@ -98,7 +93,7 @@ const Oversikten: NextPage = () => {
           ))}
         </Table.Body>
       </Table>
-    </Box>
+    </VStack>
   );
 };
 
