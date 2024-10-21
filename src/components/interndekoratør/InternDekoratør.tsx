@@ -17,7 +17,7 @@ const InternDekoratør = () => {
   const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
   const { søk, error } = useHentSakForFNR();
   const [søketekst, settSøketekst] = useState<string>();
-  console.log(error);
+
   return (
     <VStack gap="3">
       <InternalHeader>
@@ -109,7 +109,7 @@ const InternDekoratør = () => {
         )}
       </InternalHeader>
       {error && (
-        <Varsel melding={error.info.error ?? ''} variant="error" marginX />
+        <Varsel melding={error.message ?? ''} variant="error" marginX />
       )}
     </VStack>
   );

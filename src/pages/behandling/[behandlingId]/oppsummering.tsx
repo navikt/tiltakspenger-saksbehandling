@@ -12,8 +12,8 @@ const Behandling: NextPageWithLayout = () => (
     role="tabpanel"
     wrap={false}
     className={styles.behandlingLayout}
-    aria-labelledby="meldekort-tab"
-    id="meldekort-panel"
+    aria-labelledby="oppsummering-tab"
+    id="oppsummering-panel"
     tabIndex={1}
   >
     <Behandlingdetaljer />

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import { Button, Heading, Loader, Table, VStack } from '@navikt/ds-react';
 import { useHentSøknaderOgBehandlinger } from '../hooks/useHentSøknaderOgBehandlinger';
 import { NextPage } from 'next';
@@ -7,27 +7,28 @@ import { pageWithAuthentication } from '../auth/pageWithAuthentication';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '../utils/date';
 import { finnStatusTekst } from '../utils/tekstformateringUtils';
 import Varsel from '../components/varsel/Varsel';
-import { KnappForBehandlingType } from '../components/behandlingsknapper/Benkknapp';
 import { BehandlingStatus } from '../types/BehandlingTypes';
+import { useOpprettBehandling } from '../hooks/useOpprettBehandling';
+import { eierBehandling, skalKunneTaBehandling } from '../utils/tilganger';
+import { useTaBehandling } from '../hooks/useTaBehandling';
+import { SaksbehandlerContext } from './_app';
+import { knappForBehandlingType } from '../components/behandlingsknapper/Benkknapp';
 
 const Oversikten: NextPage = () => {
-  const [feilmelding, settFeilmelding] = useState<string>('');
+  const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
   const { SøknaderOgBehandlinger, isLoading, error } =
     useHentSøknaderOgBehandlinger();
+  const { opprettBehandlingError, onOpprettBehandling } =
+    useOpprettBehandling();
+  const { onTaBehandling, taBehandlingError } = useTaBehandling();
 
   if (isLoading || !SøknaderOgBehandlinger) return <Loader />;
 
-  if (error)
-    return (
-      <Varsel
-        variant="error"
-        melding={`Kunne ikke hente behandlinger (${error.status} ${error.info.error})`}
-      />
-    );
+  const errors = error || opprettBehandlingError || taBehandlingError;
 
   return (
     <VStack gap="5" style={{ padding: '1rem' }}>
-      {feilmelding && <Varsel variant={'error'} melding={feilmelding} />}
+      {errors && <Varsel variant={'error'} melding={errors.message} />}
       <Heading size="medium" level="2">
         Oversikt over behandlinger og søknader
       </Heading>
@@ -67,13 +68,23 @@ const Oversikten: NextPage = () => {
                 {behandling.beslutter ?? 'Ikke tildelt'}
               </Table.DataCell>
               <Table.DataCell scope="col">
-                <KnappForBehandlingType
-                  status={behandling.status}
-                  saksbehandler={behandling.saksbehandler}
-                  beslutter={behandling.beslutter}
-                  behandlingId={behandling.id}
-                  settFeilmelding={settFeilmelding}
-                />
+                {knappForBehandlingType(
+                  behandling.status,
+                  behandling.id,
+                  eierBehandling(
+                    behandling.status,
+                    innloggetSaksbehandler,
+                    behandling.saksbehandler,
+                    behandling.beslutter,
+                  ),
+                  skalKunneTaBehandling(
+                    behandling.status,
+                    innloggetSaksbehandler,
+                    behandling.saksbehandler,
+                  ),
+                  onOpprettBehandling,
+                  onTaBehandling,
+                )}
               </Table.DataCell>
               <Table.DataCell>
                 {behandling.status !== BehandlingStatus.SØKNAD && (

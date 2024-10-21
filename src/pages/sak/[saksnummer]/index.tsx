@@ -1,12 +1,12 @@
 import { Heading, Table, Button, Box } from '@navikt/ds-react';
 import router from 'next/router';
-import { ReactElement } from 'react';
+import { ReactElement, useContext } from 'react';
 import { pageWithAuthentication } from '../../../auth/pageWithAuthentication';
 import {
   formaterTidspunkt,
   periodeTilFormatertDatotekst,
 } from '../../../utils/date';
-import { NextPageWithLayout } from '../../_app';
+import { NextPageWithLayout, SaksbehandlerContext } from '../../_app';
 import {
   finnMeldekortstatusTekst,
   finnStatusTekst,
@@ -15,10 +15,16 @@ import { SakLayout } from '../../../components/layout/SakLayout';
 import { Sak } from '../../../types/SakTypes';
 import { logger } from '@navikt/next-logger';
 import { getToken, requestOboToken } from '@navikt/oasis';
-import { KnappForBehandlingType } from '../../../components/behandlingsknapper/Benkknapp';
 import { BehandlingStatus } from '../../../types/BehandlingTypes';
 import PersonaliaHeader from '../../../components/personaliaheader/PersonaliaHeader';
 import styles from './Sak.module.css';
+import { knappForBehandlingType } from '../../../components/behandlingsknapper/Benkknapp';
+import {
+  eierBehandling,
+  skalKunneTaBehandling,
+} from '../../../utils/tilganger';
+import { useOpprettBehandling } from '../../../hooks/useOpprettBehandling';
+import { useTaBehandling } from '../../../hooks/useTaBehandling';
 
 const Saksoversikt: NextPageWithLayout<Sak> = ({
   behandlingsoversikt,
@@ -26,6 +32,10 @@ const Saksoversikt: NextPageWithLayout<Sak> = ({
   saksnummer,
   sakId,
 }: Sak) => {
+  const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
+  const { onOpprettBehandling } = useOpprettBehandling();
+  const { onTaBehandling } = useTaBehandling();
+
   return (
     <>
       <PersonaliaHeader sakId={sakId} />
@@ -71,13 +81,23 @@ const Saksoversikt: NextPageWithLayout<Sak> = ({
                     {behandling.beslutter ?? 'Ikke tildelt'}
                   </Table.DataCell>
                   <Table.DataCell scope="col">
-                    <KnappForBehandlingType
-                      status={behandling.status}
-                      saksbehandler={behandling.saksbehandler}
-                      beslutter={behandling.beslutter}
-                      behandlingId={behandling.id}
-                      settFeilmelding={() => console.log('Noe gikk galt')}
-                    />
+                    {knappForBehandlingType(
+                      behandling.status,
+                      behandling.id,
+                      eierBehandling(
+                        behandling.status,
+                        innloggetSaksbehandler,
+                        behandling.saksbehandler,
+                        behandling.beslutter,
+                      ),
+                      skalKunneTaBehandling(
+                        behandling.status,
+                        innloggetSaksbehandler,
+                        behandling.saksbehandler,
+                      ),
+                      onOpprettBehandling,
+                      onTaBehandling,
+                    )}
                   </Table.DataCell>
                   <Table.DataCell>
                     {behandling.status !== BehandlingStatus.SØKNAD && (

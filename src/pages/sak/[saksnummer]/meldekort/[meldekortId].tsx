@@ -10,12 +10,17 @@ import PersonaliaHeader from '../../../../components/personaliaheader/Personalia
 import router from 'next/router';
 import { finnMeldekortstatusTekst } from '../../../../utils/tekstformateringUtils';
 import { useHentMeldekort } from '../../../../hooks/meldekort/useHentMeldekort';
+import Varsel from '../../../../components/varsel/Varsel';
 
 const Meldekort: NextPageWithLayout = () => {
   const { sakId, saknummer } = useContext(SakContext);
   const meldekortId = router.query.meldekortId as string;
-  const { meldekort, isLoading } = useHentMeldekort(meldekortId, sakId);
+  const { meldekort, error, isLoading } = useHentMeldekort(meldekortId, sakId);
 
+  if (error) {
+    console.log(error.message);
+    return <Varsel variant="error" melding={error.message} />;
+  }
   if (isLoading || !meldekort) return <Loader />;
   return (
     <VStack>

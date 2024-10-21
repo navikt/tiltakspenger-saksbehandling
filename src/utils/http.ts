@@ -1,13 +1,12 @@
 import { logger } from '@navikt/next-logger';
 import { NextApiRequest } from 'next';
 import { MeldekortDTO } from '../types/MeldekortTypes';
+import { finnFeilmelding } from './feilmeldinger';
 
 const vedtakBackendUrl = process.env.TILTAKSPENGER_VEDTAK_URL || '';
-const meldekortBackendUrl = process.env.TILTAKSPENGER_MELDEKORT_URL || '';
-const utbetalingBackendUrl = process.env.TILTAKSPENGER_UTBETALING_URL || '';
 
 export class FetcherError extends Error {
-  info: { error: string } | undefined;
+  info: { error: string };
   status: number | undefined;
 }
 
@@ -55,35 +54,31 @@ export async function sakFetcher<R>(
 
 export const throwErrorIfFatal = async (res: Response) => {
   if (!res.ok) {
-    const error = new FetcherError('Noe gikk galt ved henting av data');
+    const error = new FetcherError('Noe gikk galt');
 
     error.info = await res.json();
     error.status = res.status;
-    logger.error(error.info.error);
+    const feilmelding = error.info.error;
+
+    if (feilmelding.includes('kode')) {
+      error.message = finnFeilmelding(JSON.parse(feilmelding).kode);
+    } else error.message = error.message = feilmelding;
+
+    logger.error(error.message);
+
     throw error;
   }
 };
-
-function getUrl(req: NextApiRequest): string {
-  const urlTil = req.url;
-  if (urlTil.startsWith('/api/meldekort')) {
-    const meldekortPath = req.url.replace('/api', '');
-    return `${meldekortBackendUrl}${meldekortPath}`;
-  } else if (urlTil.startsWith('/api/utbetaling')) {
-    const utbetalingPath = req.url.replace('/api', '');
-    return `${utbetalingBackendUrl}${utbetalingPath}`;
-  } else {
-    const vedtakPath = req.url.replace('/api', '');
-    return `${vedtakBackendUrl}${vedtakPath}`;
-  }
-}
 
 export async function makeApiRequest(
   request: NextApiRequest,
   oboToken: string,
 ): Promise<Response> {
-  const url = getUrl(request);
+  const vedtakPath = request.url.replace('/api', '');
+  const url = `${vedtakBackendUrl}${vedtakPath}`;
+
   logger.info(`Sender request til ${url}`);
+
   try {
     return await fetch(url, {
       method: request.method,

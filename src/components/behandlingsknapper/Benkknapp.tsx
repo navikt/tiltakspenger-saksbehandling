@@ -1,56 +1,16 @@
 import { Button } from '@navikt/ds-react';
 import router from 'next/router';
 import { BehandlingStatus } from '../../types/BehandlingTypes';
-import { eierBehandling, skalKunneTaBehandling } from '../../utils/tilganger';
-import { useOpprettBehandling } from '../../hooks/useOpprettBehandling';
-import { useTaBehandling } from '../../hooks/useTaBehandling';
-import { useContext } from 'react';
-import { SaksbehandlerContext } from '../../pages/_app';
+import { finnLenke } from '../../hooks/useTaBehandling';
 
-const finnLenke = (behandlingId: string, status: BehandlingStatus) => {
-  switch (status) {
-    case BehandlingStatus.KLAR_TIL_BEHANDLING:
-    case BehandlingStatus.UNDER_BEHANDLING:
-      return `/behandling/${behandlingId}/inngangsvilkar/kravfrist`;
-    case BehandlingStatus.KLAR_TIL_BESLUTNING:
-    case BehandlingStatus.UNDER_BESLUTNING:
-      return `/behandling/${behandlingId}/oppsummering`;
-    default:
-      return '/';
-  }
-};
-
-interface KnappForBehandlingTypeProps {
-  status: BehandlingStatus;
-  saksbehandler: string;
-  beslutter: string;
-  behandlingId: string;
-  settFeilmelding: (string) => void;
-}
-
-export const KnappForBehandlingType = ({
-  status,
-  saksbehandler,
-  beslutter,
-  behandlingId,
-  settFeilmelding,
-}: KnappForBehandlingTypeProps) => {
-  const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
-  const { onOpprettBehandling, opprettBehandlingError } =
-    useOpprettBehandling();
-  const { onTaBehandling, taBehandlingError } = useTaBehandling(
-    finnLenke(behandlingId, status),
-  );
-
-  if (taBehandlingError)
-    settFeilmelding(
-      `Kunne ikke tildele behandling: ${taBehandlingError.info.error}`,
-    );
-  if (opprettBehandlingError)
-    settFeilmelding(
-      `Kunne ikke opprette behandling: ${opprettBehandlingError.info.error}`,
-    );
-
+export const knappForBehandlingType = (
+  status: BehandlingStatus,
+  behandlingId: string,
+  eierBehandling: boolean,
+  skalKunneTaBehandling: boolean,
+  onOpprettBehandling: ({ id }) => void,
+  onTaBehandling: ({ id }) => void,
+) => {
   switch (status) {
     case BehandlingStatus.SØKNAD:
       return (
@@ -65,9 +25,7 @@ export const KnappForBehandlingType = ({
       );
     case BehandlingStatus.UNDER_BEHANDLING:
     case BehandlingStatus.UNDER_BESLUTNING:
-      if (
-        eierBehandling(status, innloggetSaksbehandler, saksbehandler, beslutter)
-      ) {
+      if (eierBehandling) {
         return (
           <Button
             style={{ minWidth: '50%' }}
@@ -81,9 +39,7 @@ export const KnappForBehandlingType = ({
       }
     case BehandlingStatus.KLAR_TIL_BEHANDLING:
     case BehandlingStatus.KLAR_TIL_BESLUTNING:
-      if (
-        skalKunneTaBehandling(status, innloggetSaksbehandler, saksbehandler)
-      ) {
+      if (skalKunneTaBehandling) {
         return (
           <Button
             style={{ minWidth: '50%' }}
