@@ -10,7 +10,7 @@ interface BegrunnelseModalProps {
 
 const begrunnelseAlternativer = [
   'Vedtaksperioden som er foreslått er feil',
-  'Antall dager per uke er feil',
+  'Antall dager per meldeperiode er feil',
   'Feil i vilkåret om forholdet til andre ytelser',
   'Feil i vilkåret om tiltaksdeltagelse',
   'Se/endre vilkår om barnetillegg',

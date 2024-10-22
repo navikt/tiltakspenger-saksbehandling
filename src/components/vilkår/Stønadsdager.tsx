@@ -38,7 +38,10 @@ const Stønadsdager = () => {
         vilkårTittel={'Stønadsdager'}
         grunnlag={[
           { header: 'Tiltak', data: tiltakNavn },
-          { header: 'Antall dager i uken', data: antallDager.toString() },
+          {
+            header: 'Antall dager per meldeperiode',
+            data: antallDager.toString(),
+          },
         ]}
       />
       <HStack>

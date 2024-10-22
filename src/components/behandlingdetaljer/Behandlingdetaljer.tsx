@@ -40,7 +40,7 @@ const Behandlingdetaljer = () => {
           {vilkårssett.tiltakDeltagelseVilkår.registerSaksopplysning.tiltakNavn}
         </BodyShort>
         <BodyShort>
-          <b>Antall dager i uken</b>
+          <b>Antall dager per meldeperiode</b>
         </BodyShort>
         <BodyShort>{stønadsdager.registerSaksopplysning.antallDager}</BodyShort>
         <BodyShort>
