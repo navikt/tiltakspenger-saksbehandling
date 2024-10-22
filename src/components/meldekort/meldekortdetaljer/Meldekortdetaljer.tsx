@@ -15,16 +15,16 @@ const Meldekortdetaljer = () => {
     return <Loader />;
   }
 
-  const { periode, saksbehandler, beslutter, tiltakstype, sakPeriode } =
+  const { periode, saksbehandler, beslutter, tiltaksnavn, vedtaksPeriode } =
     meldekort;
 
   return (
     <>
       <VStack gap="3" className={styles.wrapper}>
         <BodyShort>
-          <b>Saksperiode: </b>
+          <b>Vedtaksperiode: </b>
         </BodyShort>
-        <BodyShort>{periodeTilFormatertDatotekst(sakPeriode)}</BodyShort>
+        <BodyShort>{periodeTilFormatertDatotekst(vedtaksPeriode)}</BodyShort>
         <BodyShort>
           <b>Meldekortperiode: </b>
         </BodyShort>
@@ -32,7 +32,7 @@ const Meldekortdetaljer = () => {
         <BodyShort>
           <b>Tiltak</b>
         </BodyShort>
-        <BodyShort>{tiltakstype}</BodyShort>
+        <BodyShort>{tiltaksnavn}</BodyShort>
         <BodyShort>
           <b>Utfylt av: </b>
         </BodyShort>
