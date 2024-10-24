@@ -11,7 +11,7 @@ export const finnKildetekst = (kilde: string) => {
     case Kilde.PDL:
       return 'Folkeregisteret';
     case Kilde.KOMET:
-      return 'Tiltaksregister';
+      return 'Komet';
     case Kilde.ARENA:
       return 'Arena';
   }

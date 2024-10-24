@@ -44,15 +44,6 @@ const Stønadsdager = () => {
           },
         ]}
       />
-      <HStack>
-        <Button
-          onClick={() =>
-            router.push(`/behandling/${behandlingId}/oppsummering`)
-          }
-        >
-          Gå til oppsummering
-        </Button>
-      </HStack>
     </VStack>
   );
 };

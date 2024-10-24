@@ -13,7 +13,7 @@ import { SaksbehandlerContext } from '../../../pages/_app';
 import BekreftelsesModal from '../../bekreftelsesmodal/BekreftelsesModal';
 
 const Meldekortoppsummering = () => {
-  const { sakId } = useContext(SakContext);
+  const { sakId, saknummer } = useContext(SakContext);
   const meldekortId = router.query.meldekortId as string;
   const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
   const { meldekort, isLoading, error } = useHentMeldekort(meldekortId, sakId);
@@ -22,7 +22,7 @@ const Meldekortoppsummering = () => {
     isMeldekortMutating,
     reset,
     feilVedGodkjenning,
-  } = useGodkjennMeldekort(meldekortId, sakId);
+  } = useGodkjennMeldekort(meldekortId, sakId, saknummer);
 
   const modalRef = useRef(null);
 
@@ -64,11 +64,17 @@ const Meldekortoppsummering = () => {
         utbetalingUke={uke2}
         headingtekst={ukeHeading(meldekort.periode.tilOgMed)}
       />
-      <HStack gap="10" className={styles.totalbeløp}>
+      <HStack gap="5" className={styles.totalbeløp}>
         <BodyShort weight="semibold">Totalt beløp for perioden:</BodyShort>
         <BodyShort weight="semibold">
           {meldekort.totalbeløpTilUtbetaling},-
         </BodyShort>
+      </HStack>
+      <HStack gap="5" className={styles.totalbeløp}>
+        <BodyShort weight="semibold">
+          Navkontor det skal utbetales fra:
+        </BodyShort>
+        <BodyShort weight="semibold">{meldekort.navkontor}</BodyShort>
       </HStack>
       {kanBeslutte && (
         <>

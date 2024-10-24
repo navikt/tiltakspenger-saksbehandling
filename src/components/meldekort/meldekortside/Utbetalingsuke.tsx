@@ -25,7 +25,7 @@ export const Utbetalingsuke = ({
           <Table.HeaderCell>Dag</Table.HeaderCell>
           <Table.HeaderCell>Dato</Table.HeaderCell>
           <Table.HeaderCell>Status</Table.HeaderCell>
-          <Table.HeaderCell>Gradering</Table.HeaderCell>
+          <Table.HeaderCell>Sats</Table.HeaderCell>
           <Table.HeaderCell>Beløp</Table.HeaderCell>
         </Table.Row>
       </Table.Header>

@@ -13,12 +13,15 @@ export type Meldekort = {
   rammevedtakId: string;
   periode: Periode;
   meldekortDager: MeldekortDag[];
-  tiltakstype: Tiltakstype;
+  tiltaksnavn: string;
   saksbehandler?: string;
   beslutter?: string;
   status: Meldekortstatus;
   totalbeløpTilUtbetaling: number;
-  sakPeriode: Periode;
+  vedtaksPeriode: Periode;
+  antallDager: number;
+  navkontor?: string;
+  forrigeNavkontor?: string;
 };
 
 export enum Meldekortstatus {
