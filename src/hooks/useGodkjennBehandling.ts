@@ -1,6 +1,5 @@
 import useSWRMutation from 'swr/mutation';
 import { FetcherError, mutateBehandling } from '../utils/http';
-import { mutate } from 'swr';
 import router from 'next/router';
 
 export function useGodkjennBehandling(behandlingId: string) {
@@ -14,7 +13,6 @@ export function useGodkjennBehandling(behandlingId: string) {
     mutateBehandling,
     {
       onSuccess: () => {
-        mutate(`/api/behandling/${behandlingId}`);
         router.push('/');
       },
     },

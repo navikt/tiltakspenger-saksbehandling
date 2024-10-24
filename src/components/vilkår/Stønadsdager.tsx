@@ -41,15 +41,6 @@ const Stønadsdager = () => {
           { header: 'Antall dager i uken', data: antallDager.toString() },
         ]}
       />
-      <HStack>
-        <Button
-          onClick={() =>
-            router.push(`/behandling/${behandlingId}/oppsummering`)
-          }
-        >
-          Gå til oppsummering
-        </Button>
-      </HStack>
     </VStack>
   );
 };
