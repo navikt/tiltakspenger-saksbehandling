@@ -64,11 +64,17 @@ const Meldekortoppsummering = () => {
         utbetalingUke={uke2}
         headingtekst={ukeHeading(meldekort.periode.tilOgMed)}
       />
-      <HStack gap="10" className={styles.totalbeløp}>
+      <HStack gap="5" className={styles.totalbeløp}>
         <BodyShort weight="semibold">Totalt beløp for perioden:</BodyShort>
         <BodyShort weight="semibold">
           {meldekort.totalbeløpTilUtbetaling},-
         </BodyShort>
+      </HStack>
+      <HStack gap="5" className={styles.totalbeløp}>
+        <BodyShort weight="semibold">
+          Navkontor det skal utbetales fra:
+        </BodyShort>
+        <BodyShort weight="semibold">{meldekort.navkontor}</BodyShort>
       </HStack>
       {kanBeslutte && (
         <>

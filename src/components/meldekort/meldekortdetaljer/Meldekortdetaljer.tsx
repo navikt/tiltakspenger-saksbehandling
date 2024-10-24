@@ -15,8 +15,15 @@ const Meldekortdetaljer = () => {
     return <Loader />;
   }
 
-  const { periode, saksbehandler, beslutter, tiltaksnavn, vedtaksPeriode } =
-    meldekort;
+  const {
+    periode,
+    saksbehandler,
+    beslutter,
+    tiltaksnavn,
+    vedtaksPeriode,
+    forrigeNavkontor,
+    antallDager,
+  } = meldekort;
 
   return (
     <>
@@ -34,13 +41,33 @@ const Meldekortdetaljer = () => {
         </BodyShort>
         <BodyShort>{tiltaksnavn}</BodyShort>
         <BodyShort>
-          <b>Utfylt av: </b>
+          <b>Antall dager per meldeperiode</b>
         </BodyShort>
-        <BodyShort>{saksbehandler ?? '-'}</BodyShort>
-        <BodyShort>
-          <b>Godkjent av: </b>
-        </BodyShort>
-        <BodyShort>{beslutter ?? '-'}</BodyShort>
+        <BodyShort>{antallDager}</BodyShort>
+        {forrigeNavkontor && (
+          <>
+            <BodyShort>
+              <b>Forrige meldekorts navkontor</b>
+            </BodyShort>
+            <BodyShort>{forrigeNavkontor}</BodyShort>
+          </>
+        )}
+        {saksbehandler && (
+          <>
+            <BodyShort>
+              <b>Utfylt av: </b>
+            </BodyShort>
+            <BodyShort>{saksbehandler}</BodyShort>
+          </>
+        )}
+        {beslutter && (
+          <>
+            <BodyShort>
+              <b>Godkjent av: </b>
+            </BodyShort>
+            <BodyShort>{beslutter}</BodyShort>
+          </>
+        )}
       </VStack>
     </>
   );

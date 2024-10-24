@@ -19,6 +19,9 @@ export type Meldekort = {
   status: Meldekortstatus;
   totalbeløpTilUtbetaling: number;
   vedtaksPeriode: Periode;
+  antallDager: number;
+  navkontor?: string;
+  forrigeNavkontor?: string;
 };
 
 export enum Meldekortstatus {
