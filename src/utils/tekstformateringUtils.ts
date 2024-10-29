@@ -77,7 +77,7 @@ export const finnStatusTekst = (status: string, underkjent: boolean) => {
 export const finnMeldekortdagStatusTekst = (status: string) => {
   switch (status) {
     case MeldekortdagStatus.Sperret:
-      return 'Sperret';
+      return 'Ikke rett på tiltakspenger';
     case MeldekortdagStatus.DeltattMedLønnITiltaket:
       return 'Deltatt med lønn i tiltaket';
     case MeldekortdagStatus.DeltattUtenLønnITiltaket:

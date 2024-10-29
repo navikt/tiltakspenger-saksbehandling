@@ -13,14 +13,19 @@ import { eierBehandling, skalKunneTaBehandling } from '../utils/tilganger';
 import { useTaBehandling } from '../hooks/useTaBehandling';
 import { SaksbehandlerContext } from './_app';
 import { knappForBehandlingType } from '../components/behandlingsknapper/Benkknapp';
+import { preload } from 'swr';
+import { fetcher } from '../utils/http';
+
+preload('/api/behandlinger', fetcher);
 
 const Oversikten: NextPage = () => {
   const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
   const { SøknaderOgBehandlinger, isLoading, error } =
     useHentSøknaderOgBehandlinger();
-  const { opprettBehandlingError, onOpprettBehandling } =
+  const { opprettBehandlingError, isSøknadMutating, onOpprettBehandling } =
     useOpprettBehandling();
-  const { onTaBehandling, taBehandlingError } = useTaBehandling();
+  const { onTaBehandling, isBehandlingMutating, taBehandlingError } =
+    useTaBehandling();
 
   if (isLoading || !SøknaderOgBehandlinger) return <Loader />;
 
@@ -84,6 +89,8 @@ const Oversikten: NextPage = () => {
                   ),
                   onOpprettBehandling,
                   onTaBehandling,
+                  isSøknadMutating,
+                  isBehandlingMutating,
                 )}
               </Table.DataCell>
               <Table.DataCell>

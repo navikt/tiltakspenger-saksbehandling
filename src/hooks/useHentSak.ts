@@ -7,9 +7,6 @@ export function useHentSak(saksnummer: string) {
     data: sak,
     isLoading,
     error,
-  } = useSWR<Sak, FetcherError>(`/api/sak/${saksnummer}`, fetcher, {
-    shouldRetryOnError: false,
-    revalidateOnFocus: false,
-  });
+  } = useSWR<Sak, FetcherError>(`/api/sak/${saksnummer}`, fetcher);
   return { sak, isLoading, error };
 }

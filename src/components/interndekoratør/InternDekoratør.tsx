@@ -21,7 +21,7 @@ const InternDekoratør = () => {
   return (
     <VStack gap="3">
       <InternalHeader>
-        <InternalHeader.Title href="/">NAV Tiltakspenger</InternalHeader.Title>
+        <InternalHeader.Title href="/">Tiltakspenger</InternalHeader.Title>
         <form
           role="search"
           style={{ alignContent: 'center', marginLeft: '20px' }}

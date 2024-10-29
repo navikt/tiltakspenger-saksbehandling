@@ -25,6 +25,8 @@ import {
 } from '../../../utils/tilganger';
 import { useOpprettBehandling } from '../../../hooks/useOpprettBehandling';
 import { useTaBehandling } from '../../../hooks/useTaBehandling';
+import { preload } from 'swr';
+import { fetcher } from '../../../utils/http';
 
 const Saksoversikt: NextPageWithLayout<Sak> = ({
   behandlingsoversikt,
@@ -32,9 +34,10 @@ const Saksoversikt: NextPageWithLayout<Sak> = ({
   saksnummer,
   sakId,
 }: Sak) => {
+  preload(`/api/sak/${sakId}/personopplysninger`, fetcher);
   const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
-  const { onOpprettBehandling } = useOpprettBehandling();
-  const { onTaBehandling } = useTaBehandling();
+  const { onOpprettBehandling, isSøknadMutating } = useOpprettBehandling();
+  const { onTaBehandling, isBehandlingMutating } = useTaBehandling();
 
   return (
     <>
@@ -97,6 +100,8 @@ const Saksoversikt: NextPageWithLayout<Sak> = ({
                       ),
                       onOpprettBehandling,
                       onTaBehandling,
+                      isSøknadMutating,
+                      isBehandlingMutating,
                     )}
                   </Table.DataCell>
                   <Table.DataCell>

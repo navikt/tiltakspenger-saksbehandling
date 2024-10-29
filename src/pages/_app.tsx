@@ -15,6 +15,7 @@ import useSaksbehandler from '../hooks/useSaksbehandler';
 import { HovedLayout } from '../components/layout/HovedLayout';
 import { Loader } from '@navikt/ds-react';
 import { NextPage } from 'next';
+import { SWRConfig } from 'swr';
 
 interface SaksbehandlerContextType {
   innloggetSaksbehandler: Saksbehandler;
@@ -58,7 +59,16 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         {isSaksbehandlerLoading ? (
           <Loader />
         ) : (
-          <HovedLayout>{getLayout(<Component {...pageProps} />)}</HovedLayout>
+          <SWRConfig
+            value={{
+              shouldRetryOnError: false,
+              revalidateOnFocus: false,
+              revalidateOnReconnect: true,
+            }}
+          >
+            {' '}
+            <HovedLayout>{getLayout(<Component {...pageProps} />)}</HovedLayout>
+          </SWRConfig>
         )}
       </SaksbehandlerContext.Provider>
     </>

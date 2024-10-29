@@ -10,6 +10,8 @@ export const knappForBehandlingType = (
   skalKunneTaBehandling: boolean,
   onOpprettBehandling: ({ id }) => void,
   onTaBehandling: ({ id }) => void,
+  opprettloading: boolean,
+  tildelLoading: boolean,
 ) => {
   switch (status) {
     case BehandlingStatus.SØKNAD:
@@ -18,6 +20,7 @@ export const knappForBehandlingType = (
           style={{ minWidth: '50%' }}
           size="small"
           variant={'primary'}
+          loading={opprettloading}
           onClick={() => onOpprettBehandling({ id: behandlingId })}
         >
           Opprett behandling
@@ -45,6 +48,7 @@ export const knappForBehandlingType = (
             style={{ minWidth: '50%' }}
             size="small"
             variant={'primary'}
+            loading={tildelLoading}
             onClick={() => onTaBehandling({ id: behandlingId })}
           >
             Tildel meg

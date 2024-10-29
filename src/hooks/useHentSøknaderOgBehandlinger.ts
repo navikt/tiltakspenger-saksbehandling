@@ -8,10 +8,7 @@ export function useHentSøknaderOgBehandlinger() {
     isLoading,
     error,
     mutate,
-  } = useSWR<BehandlingForBenk[], FetcherError>(`/api/behandlinger`, fetcher, {
-    shouldRetryOnError: false,
-    revalidateOnFocus: false,
-  });
+  } = useSWR<BehandlingForBenk[], FetcherError>(`/api/behandlinger`, fetcher);
 
   return { SøknaderOgBehandlinger, isLoading, error, mutate };
 }

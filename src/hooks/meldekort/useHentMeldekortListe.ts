@@ -10,9 +10,6 @@ export function useHentMeldekortListe(sakId: string) {
   } = useSWR<Meldekortsammendrag[], FetcherError>(
     () => `/api/sak/${sakId}/meldekort`,
     fetcher,
-    {
-      revalidateOnFocus: false,
-    },
   );
   return { meldekortliste, isLoading, error };
 }

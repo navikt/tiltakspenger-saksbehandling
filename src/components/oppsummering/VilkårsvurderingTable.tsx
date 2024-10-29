@@ -68,7 +68,7 @@ const VilkårsvurderingTable = () => {
             {periodeTilFormatertDatotekst(tiltakDeltagelse.utfallperiode)}
           </Table.DataCell>
           <Table.DataCell>
-            {`Tiltakstatus er "${tiltakDeltagelse.registerSaksopplysning.status}"`}
+            {`Tiltaksstatus er "${tiltakDeltagelse.registerSaksopplysning.status}"`}
           </Table.DataCell>
         </Table.Row>
         {/* Aldersvilkår */}

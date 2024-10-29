@@ -10,10 +10,6 @@ export function useHentBehandling(behandlingId: string) {
   } = useSWR<Behandling, FetcherError>(
     `/api/behandling/${behandlingId}`,
     fetcher,
-    {
-      shouldRetryOnError: false,
-      revalidateOnFocus: false,
-    },
   );
   return { valgtBehandling, isLoading, error };
 }

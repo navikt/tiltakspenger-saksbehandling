@@ -11,9 +11,6 @@ export function useHentMeldekort(meldekortId: string, sakId: string) {
   } = useSWR<Meldekort, FetcherError>(
     meldekortId && sakId && `/api/sak/${sakId}/meldekort/${meldekortId}`,
     fetcher,
-    {
-      revalidateOnFocus: false,
-    },
   );
 
   return { meldekort, isLoading, error, mutate };
