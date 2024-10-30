@@ -1,4 +1,4 @@
-import { Heading, Table, Button, Box } from '@navikt/ds-react';
+import { Heading, Table, Button, Box, CopyButton } from '@navikt/ds-react';
 import router from 'next/router';
 import { ReactElement, useContext } from 'react';
 import { pageWithAuthentication } from '../../../auth/pageWithAuthentication';
@@ -41,7 +41,10 @@ const Saksoversikt: NextPageWithLayout<Sak> = ({
 
   return (
     <>
-      <PersonaliaHeader sakId={sakId} />
+      <PersonaliaHeader sakId={sakId}>
+        <b>Saksnr:</b> {saksnummer}
+        <CopyButton copyText={saksnummer} variant="action" size="small" />
+      </PersonaliaHeader>
       <Box
         style={{ padding: '1rem', background: '#F5F5F5', height: '100vh' }}
         className=""

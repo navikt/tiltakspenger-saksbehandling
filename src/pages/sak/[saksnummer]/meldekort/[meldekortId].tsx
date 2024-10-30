@@ -1,4 +1,11 @@
-import { Button, HStack, Loader, Tag, VStack } from '@navikt/ds-react';
+import {
+  Button,
+  CopyButton,
+  HStack,
+  Loader,
+  Tag,
+  VStack,
+} from '@navikt/ds-react';
 import { pageWithAuthentication } from '../../../../auth/pageWithAuthentication';
 import Meldekortdetaljer from '../../../../components/meldekort/meldekortdetaljer/Meldekortdetaljer';
 import { Meldekortside } from '../../../../components/meldekort/meldekortside/Meldekortside';
@@ -25,6 +32,8 @@ const Meldekort: NextPageWithLayout = () => {
   return (
     <VStack>
       <PersonaliaHeader sakId={sakId}>
+        <b>Saksnr:</b> {saknummer}
+        <CopyButton copyText={saknummer} variant="action" size="small" />
         <Button
           type="submit"
           size="small"
