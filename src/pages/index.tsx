@@ -1,5 +1,13 @@
 import React, { useContext } from 'react';
-import { Button, Heading, Loader, Table, VStack } from '@navikt/ds-react';
+import {
+  Button,
+  CopyButton,
+  Heading,
+  HStack,
+  Loader,
+  Table,
+  VStack,
+} from '@navikt/ds-react';
 import { useHentSøknaderOgBehandlinger } from '../hooks/useHentSøknaderOgBehandlinger';
 import { NextPage } from 'next';
 import router from 'next/router';
@@ -16,9 +24,8 @@ import { knappForBehandlingType } from '../components/behandlingsknapper/Benkkna
 import { preload } from 'swr';
 import { fetcher } from '../utils/http';
 
-preload('/api/behandlinger', fetcher);
-
 const Oversikten: NextPage = () => {
+  preload('/api/behandlinger', fetcher);
   const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
   const { SøknaderOgBehandlinger, isLoading, error } =
     useHentSøknaderOgBehandlinger();
@@ -54,7 +61,16 @@ const Oversikten: NextPage = () => {
         <Table.Body>
           {SøknaderOgBehandlinger.map((behandling) => (
             <Table.Row shadeOnHover={false} key={behandling.id}>
-              <Table.DataCell>{behandling.ident}</Table.DataCell>
+              <Table.HeaderCell scope="row" style={{ wordBreak: 'unset' }}>
+                <HStack align="center">
+                  {behandling.ident}
+                  <CopyButton
+                    copyText={behandling.ident}
+                    variant="action"
+                    size="small"
+                  />
+                </HStack>
+              </Table.HeaderCell>
               <Table.DataCell>{behandling.typeBehandling}</Table.DataCell>
               <Table.DataCell>
                 {formaterTidspunkt(behandling.kravtidspunkt) ?? 'Ukjent'}

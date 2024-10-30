@@ -1,5 +1,12 @@
 import React, { PropsWithChildren, useContext } from 'react';
-import { BodyShort, HStack, Loader, Spacer, Tag } from '@navikt/ds-react';
+import {
+  BodyShort,
+  CopyButton,
+  HStack,
+  Loader,
+  Spacer,
+  Tag,
+} from '@navikt/ds-react';
 import { PersonCircleIcon } from '@navikt/aksel-icons';
 import styles from './PersonaliaHeader.module.css';
 import { useHentPersonopplysninger } from '../../hooks/useHentPersonopplysninger';
@@ -33,6 +40,7 @@ const PersonaliaHeader = ({ sakId, children }: PersonaliaHeaderProps) => {
         {fornavn} {mellomnavn} {etternavn}
       </BodyShort>
       <BodyShort>{fnr}</BodyShort>
+      <CopyButton copyText={fnr} variant="action" size="small" />
       {strengtFortrolig && (
         <Tag variant="error">Søker har strengt fortrolig adresse</Tag>
       )}
