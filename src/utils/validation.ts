@@ -2,9 +2,21 @@ import dayjs from 'dayjs';
 
 export type ValidatorFunction = (value: any) => string | undefined;
 
+const inneholderKunTall = (verdi: string) => /^\d+$/.test(verdi);
+
 export function påkrevdPeriodeValidator(periode: { fra: Date; til: Date }) {
   if (!periode?.fra || !periode?.til) {
     return 'Fra og til må fylles ut';
+  }
+}
+
+export function gyldigNavkontor(navkontor: string) {
+  if (!navkontor) {
+    return 'Navkontor må fylles ut';
+  } else if (navkontor.length != 4) {
+    return 'Navkontor må inneholde nøyaktig fire siffer';
+  } else if (!inneholderKunTall(navkontor)) {
+    return 'Navkontor kan kun inneholde siffer';
   }
 }
 

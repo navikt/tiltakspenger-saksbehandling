@@ -29,6 +29,7 @@ import { ukeHeading } from '../../../utils/date';
 import { kanSaksbehandleForBehandling } from '../../../utils/tilganger';
 import { SaksbehandlerContext } from '../../../pages/_app';
 import BekreftelsesModal from '../../bekreftelsesmodal/BekreftelsesModal';
+import { gyldigNavkontor, setupValidation } from '../../../utils/validation';
 
 export interface Meldekortform {
   uke1: MeldekortDagDTO[];
@@ -112,20 +113,29 @@ const Meldekort = () => {
           <Controller
             name="navkontor"
             control={methods.control}
-            rules={{ required: true }}
-            defaultValue=""
+            rules={{
+              validate: setupValidation([gyldigNavkontor]),
+            }}
             render={({ field: { onChange } }) => (
               <TextField
                 label="Fyll ut navkontor"
                 description="Hvilket navkontor skal utbetale tiltakspenger for bruker på dette meldekortet?"
+                defaultValue={meldekort.navkontor}
                 onChange={onChange}
+                inputMode="numeric"
+                error={methods.formState.errors.navkontor?.message ?? ''}
               />
             )}
           />
         </Box>
         {kanSaksbehandle && (
           <>
-            <Button type="submit" value="submit" size="small">
+            <Button
+              type="submit"
+              value="submit"
+              size="small"
+              style={{ marginTop: '2.5rem' }}
+            >
               Send til beslutter
             </Button>
             <BekreftelsesModal
