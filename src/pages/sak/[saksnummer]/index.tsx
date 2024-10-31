@@ -27,6 +27,7 @@ import { useOpprettBehandling } from '../../../hooks/useOpprettBehandling';
 import { useTaBehandling } from '../../../hooks/useTaBehandling';
 import { preload } from 'swr';
 import { fetcher } from '../../../utils/http';
+import { Meldekortstatus } from '../../../types/MeldekortTypes';
 
 const Saksoversikt: NextPageWithLayout<Sak> = ({
   behandlingsoversikt,
@@ -142,18 +143,21 @@ const Saksoversikt: NextPageWithLayout<Sak> = ({
                   <Table.DataCell>{meldekort.beslutter ?? '-'}</Table.DataCell>
                   <Table.DataCell scope="col">-</Table.DataCell>
                   <Table.DataCell>
-                    <Button
-                      style={{ minWidth: '50%' }}
-                      size="small"
-                      variant="secondary"
-                      onClick={() =>
-                        router.push(
-                          `/sak/${saksnummer}/meldekort/${meldekort.meldekortId}`,
-                        )
-                      }
-                    >
-                      Åpne
-                    </Button>
+                    {meldekort.status !==
+                      Meldekortstatus.IKKE_KLAR_TIL_UTFYLLING && (
+                      <Button
+                        style={{ minWidth: '50%' }}
+                        size="small"
+                        variant="secondary"
+                        onClick={() =>
+                          router.push(
+                            `/sak/${saksnummer}/meldekort/${meldekort.meldekortId}`,
+                          )
+                        }
+                      >
+                        Åpne
+                      </Button>
+                    )}
                   </Table.DataCell>
                 </Table.Row>
               ))}

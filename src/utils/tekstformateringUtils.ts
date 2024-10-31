@@ -98,6 +98,8 @@ export const finnMeldekortdagStatusTekst = (status: string) => {
 };
 export const finnMeldekortstatusTekst = (status: string) => {
   switch (status) {
+    case Meldekortstatus.IKKE_KLAR_TIL_UTFYLLING:
+      return 'Ikke klar til utfylling';
     case Meldekortstatus.KLAR_TIL_UTFYLLING:
       return 'Klar til utfylling';
     case Meldekortstatus.KLAR_TIL_BESLUTNING:

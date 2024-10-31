@@ -2,7 +2,7 @@ import router from 'next/router';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
 import PersonaliaHeader from '../personaliaheader/PersonaliaHeader';
 import { Saksbehandlingstabs } from '../saksbehandlingstabs/SaksbehandlingTabs';
-import { Loader, Tag } from '@navikt/ds-react';
+import { CopyButton, Loader, Tag } from '@navikt/ds-react';
 import { createContext, useEffect, useState } from 'react';
 import { finnStatusTekst } from '../../utils/tekstformateringUtils';
 
@@ -44,6 +44,12 @@ export const FørstegangsbehandlingLayout = ({
       }}
     >
       <PersonaliaHeader sakId={sakenId}>
+        <b>Saksnr:</b> {valgtBehandling.saksnummer}
+        <CopyButton
+          copyText={valgtBehandling.saksnummer}
+          variant="action"
+          size="small"
+        />
         <Tag variant="alt3-filled">
           {finnStatusTekst(valgtBehandling.status, false)}
         </Tag>
