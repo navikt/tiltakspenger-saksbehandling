@@ -73,6 +73,7 @@ const Meldekort = () => {
     defaultValues: {
       uke1: meldekortdager.slice(0, 7),
       uke2: meldekortdager.slice(7, 14),
+      navkontor: meldekort.navkontor,
     },
   });
 
