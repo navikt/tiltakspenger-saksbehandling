@@ -16,7 +16,6 @@ interface VilkårKortProps {
   saksopplysningsperiode: Periode;
   kilde: string;
   utfall: Utfall;
-  vilkårTittel: string;
   grunnlag: Grunnlag[];
 }
 

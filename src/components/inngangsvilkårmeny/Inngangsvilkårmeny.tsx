@@ -1,14 +1,15 @@
 import { BodyShort, VStack, Link, HStack, Loader } from '@navikt/ds-react';
 import NextLink from 'next/link';
-import styles from './InngangsvilkårSidemeny.module.css';
+import styles from './Inngangsvilkårmeny.module.css';
 import router from 'next/router';
 import { useContext } from 'react';
 import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
 import { UtfallIkon } from '../utfallikon/UtfallIkon';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
 import { CalendarIcon } from '@navikt/aksel-icons';
+import { vilkårTabs } from '../../utils/vilkår';
 
-const InngangsvilkårSidemeny = () => {
+const Inngangsvilkårmeny = () => {
   const { behandlingId } = useContext(BehandlingContext);
   const vilkårsteg = router.query.vilkårsteg as string;
   const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
@@ -16,55 +17,10 @@ const InngangsvilkårSidemeny = () => {
   if (isLoading || !valgtBehandling) {
     return <Loader />;
   }
-  const vilkårsett = valgtBehandling.vilkårssett;
-
-  const vilkår = [
-    {
-      tittel: 'Krav fremmet innen frist',
-      url: 'kravfrist',
-      paragraf: '§11',
-      utfall: vilkårsett.kravfristVilkår.samletUtfall,
-    },
-    {
-      tittel: 'Tiltaksdeltagelse',
-      url: 'tiltaksdeltagelse',
-      paragraf: '§2',
-      utfall: vilkårsett.tiltakDeltagelseVilkår.samletUtfall,
-    },
-    {
-      tittel: 'Over 18 år',
-      url: 'alder',
-      paragraf: '§3',
-      utfall: vilkårsett.alderVilkår.samletUtfall,
-    },
-    {
-      tittel: 'Andre ytelser til livsopphold',
-      url: 'andreytelser',
-      paragraf: '§7',
-      utfall: vilkårsett.livsoppholdVilkår.samletUtfall,
-    },
-    {
-      tittel: 'Kvalifiseringsprogrammet',
-      url: 'kvp',
-      paragraf: '§7',
-      utfall: vilkårsett.kvpVilkår.samletUtfall,
-    },
-    {
-      tittel: 'Introduksjonsprogrammet',
-      url: 'intro',
-      paragraf: '§7',
-      utfall: vilkårsett.introVilkår.samletUtfall,
-    },
-    {
-      tittel: 'Opphold i institusjon',
-      url: 'institusjonsopphold',
-      paragraf: '§9',
-      utfall: vilkårsett.institusjonsoppholdVilkår.samletUtfall,
-    },
-  ];
+  const vilkår = vilkårTabs(valgtBehandling.vilkårssett);
 
   return (
-    <VStack className={styles.inngangsvilkårSidemeny}>
+    <VStack className={styles.inngangsvilkårmeny}>
       {vilkår.map((vilkår) => (
         <HStack
           key={vilkår.url}
@@ -121,4 +77,4 @@ const InngangsvilkårSidemeny = () => {
   );
 };
 
-export default InngangsvilkårSidemeny;
+export default Inngangsvilkårmeny;

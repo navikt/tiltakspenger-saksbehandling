@@ -8,7 +8,6 @@ import {
   VStack,
 } from '@navikt/ds-react';
 import VilkårHeader from './VilkårHeader';
-import UtfallstekstMedIkon from './UtfallstekstMedIkon';
 import { useHentLivsopphold } from '../../hooks/vilkår/useHentLivsopphold';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import styles from './Vilkår.module.css';
@@ -17,12 +16,15 @@ import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
 import { useLagreLivsoppholdSaksopplysning } from '../../hooks/vilkår/useLagreLivsoppholdSaksopplysning';
 import Varsel from '../varsel/Varsel';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
+import { lagUtfallstekst } from '../../utils/tekstformateringUtils';
+import IkonMedTekst from '../ikon-med-tekst/IkonMedTekst';
+import { UtfallIkon } from '../utfallikon/UtfallIkon';
 
 export interface SkjemaFelter {
   harAndreYtelser: boolean;
 }
 
-const Livsopphold = () => {
+const AndreYtelser = () => {
   const { behandlingId } = useContext(BehandlingContext);
   const { valgtBehandling } = useHentBehandling(behandlingId);
   const { livsopphold, isLoading, error } = useHentLivsopphold(behandlingId);
@@ -68,13 +70,14 @@ const Livsopphold = () => {
         headertekst={'Forholdet til andre ytelser'}
         lovdatatekst={livsopphold.vilkårLovreferanse.beskrivelse}
         paragraf={livsopphold.vilkårLovreferanse.paragraf}
-        lovdatalenke={
-          'https://lovdata.no/dokument/SF/forskrift/2013-11-04-1286'
-        }
+        lovdatalenke={'https://lovdata.no/forskrift/2013-11-04-1286/§7'}
       />
 
       {!watchHarLivsoppholdytelser && (
-        <UtfallstekstMedIkon utfall={livsopphold.samletUtfall} />
+        <IkonMedTekst
+          iconRenderer={() => <UtfallIkon utfall={livsopphold.samletUtfall} />}
+          text={lagUtfallstekst(livsopphold.samletUtfall)}
+        />
       )}
       {watchHarLivsoppholdytelser && (
         <Alert variant="error">
@@ -123,4 +126,4 @@ const Livsopphold = () => {
   );
 };
 
-export default Livsopphold;
+export default AndreYtelser;

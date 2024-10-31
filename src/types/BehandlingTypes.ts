@@ -32,7 +32,7 @@ export enum BehandlingStatus {
   INNVILGET = 'INNVILGET',
 }
 
-interface VilkårsettDTO {
+export interface VilkårsettDTO {
   alderVilkår: AlderVilkår;
   tiltakDeltagelseVilkår: TiltakDeltagelseVilkår;
   kvpVilkår: KvpVilkår;
@@ -99,8 +99,4 @@ export enum Utfall {
 export enum TypeBehandling {
   SØKNAD = 'Søknad',
   FØRSTEGANGSBEHANDLING = 'Førstegangsbehandling',
-}
-
-export interface BehandlingIdResponse {
-  id: string;
 }

@@ -1,6 +1,5 @@
 import { Loader, Table } from '@navikt/ds-react';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
-import UtfallstekstMedIkon from '../vilkår/UtfallstekstMedIkon';
 import {
   formaterDatotekst,
   periodeTilFormatertDatotekst,
@@ -8,9 +7,12 @@ import {
 import {
   lagFaktumTekst,
   lagFaktumTekstAvLivsopphold,
+  lagUtfallstekst,
 } from '../../utils/tekstformateringUtils';
 import { useContext } from 'react';
 import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
+import IkonMedTekst from '../ikon-med-tekst/IkonMedTekst';
+import { UtfallIkon } from '../utfallikon/UtfallIkon';
 
 const VilkårsvurderingTable = () => {
   const { behandlingId } = useContext(BehandlingContext);
@@ -21,13 +23,13 @@ const VilkårsvurderingTable = () => {
   }
 
   const kravfrist = valgtBehandling.vilkårssett.kravfristVilkår;
-  const tiltakDeltagelse = valgtBehandling.vilkårssett.tiltakDeltagelseVilkår;
+  const tiltaksdeltagelse = valgtBehandling.vilkårssett.tiltakDeltagelseVilkår;
   const alder = valgtBehandling.vilkårssett.alderVilkår;
   const kvp = valgtBehandling.vilkårssett.kvpVilkår;
   const institusjonsopphold =
     valgtBehandling.vilkårssett.institusjonsoppholdVilkår;
   const intro = valgtBehandling.vilkårssett.introVilkår;
-  const livsopphold = valgtBehandling.vilkårssett.livsoppholdVilkår;
+  const andreYtelser = valgtBehandling.vilkårssett.livsoppholdVilkår;
 
   return (
     <Table>
@@ -47,7 +49,12 @@ const VilkårsvurderingTable = () => {
             {kravfrist.vilkårLovreferanse.paragraf}
           </Table.HeaderCell>
           <Table.DataCell>
-            {<UtfallstekstMedIkon utfall={kravfrist.samletUtfall} />}
+            <IkonMedTekst
+              iconRenderer={() => (
+                <UtfallIkon utfall={kravfrist.samletUtfall} />
+              )}
+              text={lagUtfallstekst(kravfrist.samletUtfall)}
+            />
           </Table.DataCell>
           <Table.DataCell>
             {periodeTilFormatertDatotekst(kravfrist.utfallperiode)}
@@ -59,16 +66,21 @@ const VilkårsvurderingTable = () => {
         {/* Tiltaksdeltagelse */}
         <Table.Row>
           <Table.HeaderCell>
-            Tiltaksdeltagelse {tiltakDeltagelse.vilkårLovreferanse.paragraf}
+            Tiltaksdeltagelse {tiltaksdeltagelse.vilkårLovreferanse.paragraf}
           </Table.HeaderCell>
           <Table.DataCell>
-            {<UtfallstekstMedIkon utfall={tiltakDeltagelse.samletUtfall} />}
+            <IkonMedTekst
+              iconRenderer={() => (
+                <UtfallIkon utfall={tiltaksdeltagelse.samletUtfall} />
+              )}
+              text={lagUtfallstekst(tiltaksdeltagelse.samletUtfall)}
+            />
           </Table.DataCell>
           <Table.DataCell>
-            {periodeTilFormatertDatotekst(tiltakDeltagelse.utfallperiode)}
+            {periodeTilFormatertDatotekst(tiltaksdeltagelse.utfallperiode)}
           </Table.DataCell>
           <Table.DataCell>
-            {`Tiltaksstatus er "${tiltakDeltagelse.registerSaksopplysning.status}"`}
+            {`Tiltaksstatus er "${tiltaksdeltagelse.registerSaksopplysning.status}"`}
           </Table.DataCell>
         </Table.Row>
         {/* Aldersvilkår */}
@@ -77,7 +89,10 @@ const VilkårsvurderingTable = () => {
             Alder {alder.vilkårLovreferanse.paragraf}
           </Table.HeaderCell>
           <Table.DataCell>
-            {<UtfallstekstMedIkon utfall={alder.samletUtfall} />}
+            <IkonMedTekst
+              iconRenderer={() => <UtfallIkon utfall={alder.samletUtfall} />}
+              text={lagUtfallstekst(alder.samletUtfall)}
+            />
           </Table.DataCell>
           <Table.DataCell>
             {periodeTilFormatertDatotekst(alder.utfallperiode)}
@@ -89,18 +104,23 @@ const VilkårsvurderingTable = () => {
         {/* Andre livsopphold */}
         <Table.Row>
           <Table.HeaderCell>
-            Andre livsopphold {livsopphold.vilkårLovreferanse.paragraf}
+            Andre livsopphold {andreYtelser.vilkårLovreferanse.paragraf}
           </Table.HeaderCell>
           <Table.DataCell>
-            {<UtfallstekstMedIkon utfall={livsopphold.samletUtfall} />}
+            <IkonMedTekst
+              iconRenderer={() => (
+                <UtfallIkon utfall={andreYtelser.samletUtfall} />
+              )}
+              text={lagUtfallstekst(andreYtelser.samletUtfall)}
+            />
           </Table.DataCell>
           <Table.DataCell>
-            {periodeTilFormatertDatotekst(livsopphold.utfallperiode)}
+            {periodeTilFormatertDatotekst(andreYtelser.utfallperiode)}
           </Table.DataCell>
           <Table.DataCell>
-            {livsopphold.avklartSaksopplysning
+            {andreYtelser.avklartSaksopplysning
               ? lagFaktumTekstAvLivsopphold(
-                  livsopphold.avklartSaksopplysning.harLivsoppholdYtelser,
+                  andreYtelser.avklartSaksopplysning.harLivsoppholdYtelser,
                 )
               : 'Vilkåret er uavklart'}
           </Table.DataCell>
@@ -111,7 +131,10 @@ const VilkårsvurderingTable = () => {
             Kvalifiseringsprogrammet {kvp.vilkårLovreferanse.paragraf}
           </Table.HeaderCell>
           <Table.DataCell>
-            {<UtfallstekstMedIkon utfall={kvp.samletUtfall} />}
+            <IkonMedTekst
+              iconRenderer={() => <UtfallIkon utfall={kvp.samletUtfall} />}
+              text={lagUtfallstekst(kvp.samletUtfall)}
+            />
           </Table.DataCell>
           <Table.DataCell>
             {periodeTilFormatertDatotekst(
@@ -130,7 +153,10 @@ const VilkårsvurderingTable = () => {
             Introduksjonsprogrammet {intro.vilkårLovreferanse.paragraf}
           </Table.HeaderCell>
           <Table.DataCell>
-            {<UtfallstekstMedIkon utfall={intro.samletUtfall} />}
+            <IkonMedTekst
+              iconRenderer={() => <UtfallIkon utfall={intro.samletUtfall} />}
+              text={lagUtfallstekst(intro.samletUtfall)}
+            />
           </Table.DataCell>
           <Table.DataCell>
             {periodeTilFormatertDatotekst(
@@ -150,7 +176,12 @@ const VilkårsvurderingTable = () => {
             {institusjonsopphold.vilkårLovreferanse.paragraf}
           </Table.HeaderCell>
           <Table.DataCell>
-            {<UtfallstekstMedIkon utfall={institusjonsopphold.samletUtfall} />}
+            <IkonMedTekst
+              iconRenderer={() => (
+                <UtfallIkon utfall={institusjonsopphold.samletUtfall} />
+              )}
+              text={lagUtfallstekst(institusjonsopphold.samletUtfall)}
+            />
           </Table.DataCell>
           <Table.DataCell>
             {periodeTilFormatertDatotekst(

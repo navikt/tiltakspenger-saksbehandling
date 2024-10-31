@@ -1,12 +1,14 @@
 import { Loader, VStack } from '@navikt/ds-react';
 import VilkårHeader from './VilkårHeader';
-import UtfallstekstMedIkon from './UtfallstekstMedIkon';
 import { useHentIntroduksjonsprogrammet } from '../../hooks/vilkår/useHentIntroduksjonsprogrammet';
 import { Deltagelse } from '../../types/KvpTypes';
 import VilkårKort from './VilkårKort';
 import { useContext } from 'react';
 import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
 import Varsel from '../varsel/Varsel';
+import IkonMedTekst from '../ikon-med-tekst/IkonMedTekst';
+import { lagUtfallstekst } from '../../utils/tekstformateringUtils';
+import { UtfallIkon } from '../utfallikon/UtfallIkon';
 
 const Introduksjonsprogrammet = () => {
   const { behandlingId } = useContext(BehandlingContext);
@@ -32,16 +34,16 @@ const Introduksjonsprogrammet = () => {
         headertekst={'Introduksjonsprogrammet'}
         lovdatatekst={intro.vilkårLovreferanse.beskrivelse}
         paragraf={intro.vilkårLovreferanse.paragraf}
-        lovdatalenke={
-          'https://lovdata.no/dokument/SF/forskrift/2013-11-04-1286'
-        }
+        lovdatalenke={'https://lovdata.no/forskrift/2013-11-04-1286/§7'}
       />
-      <UtfallstekstMedIkon utfall={intro.samletUtfall} />
+      <IkonMedTekst
+        iconRenderer={() => <UtfallIkon utfall={intro.samletUtfall} />}
+        text={lagUtfallstekst(intro.samletUtfall)}
+      />
       <VilkårKort
         saksopplysningsperiode={intro.utfallperiode}
         kilde={intro.avklartSaksopplysning.kilde}
         utfall={intro.samletUtfall}
-        vilkårTittel={'Introduksjonsprogrammet'}
         grunnlag={[{ header: 'Deltar', data: deltagelseTekst(deltagelse) }]}
       />
     </VStack>

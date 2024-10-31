@@ -108,3 +108,12 @@ export const finnMeldekortstatusTekst = (status: string) => {
       return 'Godkjent';
   }
 };
+
+export const deltagelseTekst = (deltagelse: Deltagelse): string => {
+  switch (deltagelse) {
+    case Deltagelse.DELTAR:
+      return 'Ja';
+    case Deltagelse.DELTAR_IKKE:
+      return 'Nei';
+  }
+};

@@ -1,12 +1,16 @@
 import { Loader, VStack } from '@navikt/ds-react';
 import VilkårHeader from './VilkårHeader';
 import VilkårKort from './VilkårKort';
-import UtfallstekstMedIkon from './UtfallstekstMedIkon';
-import { Deltagelse } from '../../types/KvpTypes';
 import { useHentKvp } from '../../hooks/vilkår/useHentKvp';
 import { useContext } from 'react';
 import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
 import Varsel from '../varsel/Varsel';
+import {
+  deltagelseTekst,
+  lagUtfallstekst,
+} from '../../utils/tekstformateringUtils';
+import IkonMedTekst from '../ikon-med-tekst/IkonMedTekst';
+import { UtfallIkon } from '../utfallikon/UtfallIkon';
 
 const Kvalifiseringsprogrammet = () => {
   const { behandlingId } = useContext(BehandlingContext);
@@ -30,29 +34,20 @@ const Kvalifiseringsprogrammet = () => {
         headertekst={'Kvalifiseringsprogrammet'}
         lovdatatekst={kvp.vilkårLovreferanse.beskrivelse}
         paragraf={kvp.vilkårLovreferanse.paragraf}
-        lovdatalenke={
-          'https://lovdata.no/dokument/SF/forskrift/2013-11-04-1286'
-        }
+        lovdatalenke={'https://lovdata.no/forskrift/2013-11-04-1286/§7'}
       />
-      <UtfallstekstMedIkon utfall={kvp.samletUtfall} />
+      <IkonMedTekst
+        iconRenderer={() => <UtfallIkon utfall={kvp.samletUtfall} />}
+        text={lagUtfallstekst(kvp.samletUtfall)}
+      />
       <VilkårKort
         saksopplysningsperiode={kvp.utfallperiode}
         kilde={kvp.avklartSaksopplysning.kilde}
         utfall={kvp.samletUtfall}
-        vilkårTittel={'Kvalifiseringsprogrammet'}
         grunnlag={[{ header: 'Deltar', data: deltagelseTekst(deltagelse) }]}
       />
     </VStack>
   );
-};
-
-const deltagelseTekst = (deltagelse: Deltagelse): string => {
-  switch (deltagelse) {
-    case Deltagelse.DELTAR:
-      return 'Ja';
-    case Deltagelse.DELTAR_IKKE:
-      return 'Nei';
-  }
 };
 
 export default Kvalifiseringsprogrammet;

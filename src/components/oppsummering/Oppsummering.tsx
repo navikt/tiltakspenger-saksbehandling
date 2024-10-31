@@ -63,10 +63,7 @@ const Oppsummering = () => {
         <Heading size="small">Vilkårsvurdering</Heading>
         <VilkårsvurderingTable />
       </VStack>
-      <Behandlingsknapper
-        sendTilbakeRef={sendTilbakeRef}
-        godkjennRef={godkjennRef}
-      />
+      <Behandlingsknapper godkjennRef={godkjennRef} />
       <BegrunnelseModal modalRef={sendTilbakeRef} />
       <BekreftelsesModal
         modalRef={godkjennRef}

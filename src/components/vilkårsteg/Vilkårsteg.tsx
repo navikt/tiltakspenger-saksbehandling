@@ -9,8 +9,8 @@ import Stønadsdager from '../vilkår/Stønadsdager';
 import Kvalifiseringsprogrammet from '../vilkår/Kvalifiseringsprogrammet';
 import Institusjonsopphold from '../vilkår/Institusjonsopphold';
 import Introduksjonsprogrammet from '../vilkår/Introduksjonsprogrammet';
-import FristForFramsettingAvKrav from '../vilkår/FristForFramsettingAvKrav';
-import Livsopphold from '../vilkår/Livsopphold';
+import AndreYtelser from '../vilkår/AndreYtelser';
+import KravFremmetInnenFrist from '../vilkår/KravFremmetInnenFrist';
 
 const Vilkårsteg = () => {
   const vilkårsteg = router.query.vilkårsteg as string;
@@ -18,7 +18,7 @@ const Vilkårsteg = () => {
   function utledStegFraRoute(route: string | undefined): ReactElement {
     switch (route) {
       case Vilkår.KRAVFRIST:
-        return <FristForFramsettingAvKrav />;
+        return <KravFremmetInnenFrist />;
       case Vilkår.ALDER:
         return <Alder />;
       case Vilkår.TILTAKSDELTAGELSE:
@@ -30,11 +30,11 @@ const Vilkårsteg = () => {
       case Vilkår.INSTITUSJONSOPPHOLD:
         return <Institusjonsopphold />;
       case Vilkår.ANDREYTELSER:
-        return <Livsopphold />;
+        return <AndreYtelser />;
       case Vilkår.STØNADSDAGER:
         return <Stønadsdager />;
       default:
-        return <FristForFramsettingAvKrav />;
+        return <KravFremmetInnenFrist />;
     }
   }
 

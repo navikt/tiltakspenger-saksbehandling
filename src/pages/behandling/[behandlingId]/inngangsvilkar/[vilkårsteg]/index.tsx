@@ -5,7 +5,7 @@ import {
 import { ReactElement, useContext } from 'react';
 import { NextPageWithLayout } from '../../../../_app';
 import { pageWithAuthentication } from '../../../../../auth/pageWithAuthentication';
-import InngangsvilkårSidemeny from '../../../../../components/inngangsvilkår-sidemeny/InngangsvilkårSidemeny';
+import Inngangsvilkårmeny from '../../../../../components/inngangsvilkårmeny/Inngangsvilkårmeny';
 import Vilkårsteg from '../../../../../components/vilkårsteg/Vilkårsteg';
 import { HStack } from '@navikt/ds-react';
 import styles from '../../../Behandling.module.css';
@@ -26,7 +26,7 @@ const Behandling: NextPageWithLayout = () => {
       id="inngangsvilkår-panel"
       tabIndex={0}
     >
-      <InngangsvilkårSidemeny />
+      <Inngangsvilkårmeny />
       <Vilkårsteg />
     </HStack>
   );

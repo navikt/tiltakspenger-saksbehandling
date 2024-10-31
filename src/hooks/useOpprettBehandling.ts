@@ -1,7 +1,6 @@
 import { FetcherError, mutateBehandling } from '../utils/http';
 import useSWRMutation from 'swr/mutation';
 import router from 'next/router';
-import { BehandlingIdResponse } from '../types/BehandlingTypes';
 
 export function useOpprettBehandling() {
   const {
@@ -9,7 +8,9 @@ export function useOpprettBehandling() {
     isMutating: isSøknadMutating,
     error: opprettBehandlingError,
   } = useSWRMutation<
-    BehandlingIdResponse,
+    {
+      id: string;
+    },
     FetcherError,
     '/api/behandling/startbehandling',
     { id: string }

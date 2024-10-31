@@ -12,14 +12,10 @@ import { useGodkjennBehandling } from '../../hooks/useGodkjennBehandling';
 import { useSendTilBeslutter } from '../../hooks/useSendTilBeslutter';
 
 interface BehandlingKnapperProps {
-  sendTilbakeRef: RefObject<HTMLDialogElement>;
   godkjennRef: RefObject<HTMLDialogElement>;
 }
 
-export const Behandlingsknapper = ({
-  sendTilbakeRef,
-  godkjennRef,
-}: BehandlingKnapperProps) => {
+export const Behandlingsknapper = ({ godkjennRef }: BehandlingKnapperProps) => {
   const { behandlingId } = useContext(BehandlingContext);
   const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
   const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
@@ -44,9 +40,6 @@ export const Behandlingsknapper = ({
   if (isLoading || !valgtBehandling) {
     return <Loader />;
   }
-  const åpneSendTilbakeModal = () => {
-    sendTilbakeRef.current?.showModal();
-  };
 
   const åpneGodkjennModal = () => {
     godkjennRef.current.showModal();
@@ -67,16 +60,6 @@ export const Behandlingsknapper = ({
         />
       ) : null}
       <HStack justify="start" gap="3" align="end">
-        {/*kanBeslutte && (
-          <Button
-            type="submit"
-            size="small"
-            variant="secondary"
-            onClick={() => åpneSendTilbakeModal()}
-          >
-            Send tilbake
-          </Button>
-        )*/}
         {kanBeslutte && (
           <Button
             type="submit"

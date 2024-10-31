@@ -1,11 +1,13 @@
 import { Loader, VStack } from '@navikt/ds-react';
 import VilkårHeader from './VilkårHeader';
 import VilkårKort from './VilkårKort';
-import UtfallstekstMedIkon from './UtfallstekstMedIkon';
 import { useHentInstitusjonsopphold } from '../../hooks/vilkår/useHentInstitusjonsopphold';
 import { useContext } from 'react';
 import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
 import Varsel from '../varsel/Varsel';
+import { lagUtfallstekst } from '../../utils/tekstformateringUtils';
+import IkonMedTekst from '../ikon-med-tekst/IkonMedTekst';
+import { UtfallIkon } from '../utfallikon/UtfallIkon';
 
 const Institusjonsopphold = () => {
   const { behandlingId } = useContext(BehandlingContext);
@@ -25,19 +27,21 @@ const Institusjonsopphold = () => {
   return (
     <VStack gap="4">
       <VilkårHeader
-        headertekst={'Institusjonsopphold'}
+        headertekst={'Opphold i institusjon'}
         lovdatatekst="Opphold i institusjon, fengsel mv."
-        lovdatalenke={
-          'https://lovdata.no/dokument/SF/forskrift/2013-11-04-1286'
-        }
+        lovdatalenke={'https://lovdata.no/forskrift/2013-11-04-1286/§9'}
         paragraf={'§9'}
       />
-      <UtfallstekstMedIkon utfall={institusjonsopphold.samletUtfall} />
+      <IkonMedTekst
+        iconRenderer={() => (
+          <UtfallIkon utfall={institusjonsopphold.samletUtfall} />
+        )}
+        text={lagUtfallstekst(institusjonsopphold.samletUtfall)}
+      />
       <VilkårKort
         saksopplysningsperiode={institusjonsopphold.utfallperiode}
         kilde={institusjonsopphold.søknadSaksopplysning.kilde}
         utfall={institusjonsopphold.samletUtfall}
-        vilkårTittel={'Institusjonsopphold'}
         grunnlag={[
           {
             header: 'Opphold',

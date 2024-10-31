@@ -1,12 +1,14 @@
 import { Loader, VStack } from '@navikt/ds-react';
 import VilkårHeader from './VilkårHeader';
 import VilkårKort from './VilkårKort';
-import UtfallstekstMedIkon from './UtfallstekstMedIkon';
 import { useHentAlder } from '../../hooks/vilkår/useHentAlder';
 import { formaterDatotekst } from '../../utils/date';
 import { useContext } from 'react';
 import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
 import Varsel from '../varsel/Varsel';
+import { lagUtfallstekst } from '../../utils/tekstformateringUtils';
+import { UtfallIkon } from '../utfallikon/UtfallIkon';
+import IkonMedTekst from '../ikon-med-tekst/IkonMedTekst';
 
 const Alder = () => {
   const { behandlingId } = useContext(BehandlingContext);
@@ -25,19 +27,19 @@ const Alder = () => {
   return (
     <VStack gap="4">
       <VilkårHeader
-        headertekst={'Alder'}
+        headertekst={'Over 18 år'}
         lovdatatekst={alderVilkår.vilkårLovreferanse.beskrivelse}
-        lovdatalenke={
-          'https://lovdata.no/dokument/SF/forskrift/2013-11-04-1286'
-        }
+        lovdatalenke={'https://lovdata.no/forskrift/2013-11-04-1286/§3'}
         paragraf={alderVilkår.vilkårLovreferanse.paragraf}
       />
-      <UtfallstekstMedIkon utfall={alderVilkår.samletUtfall} />
+      <IkonMedTekst
+        iconRenderer={() => <UtfallIkon utfall={alderVilkår.samletUtfall} />}
+        text={lagUtfallstekst(alderVilkår.samletUtfall)}
+      />
       <VilkårKort
         saksopplysningsperiode={alderVilkår.utfallperiode}
         kilde={alderVilkår.avklartSaksopplysning.kilde}
         utfall={alderVilkår.samletUtfall}
-        vilkårTittel={'Alder'}
         grunnlag={[
           {
             header: 'Fødselsdato',

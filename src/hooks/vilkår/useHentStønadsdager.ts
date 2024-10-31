@@ -1,6 +1,6 @@
 import useSWR, { mutate } from 'swr';
-import { fetcher } from '../utils/http';
-import { Stønadsdager } from '../types/StønadsdagerTypes';
+import { Stønadsdager } from '../../types/StønadsdagerTypes';
+import { fetcher } from '../../utils/http';
 
 export function useHentStønadsdager(behandlingId: string) {
   const {

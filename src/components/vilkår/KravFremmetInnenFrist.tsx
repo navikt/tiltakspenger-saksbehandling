@@ -1,14 +1,16 @@
 import React, { useContext } from 'react';
 import { Loader, VStack } from '@navikt/ds-react';
-import UtfallstekstMedIkon from './UtfallstekstMedIkon';
 import VilkårHeader from './VilkårHeader';
 import VilkårKort from './VilkårKort';
 import { formaterDatotekst } from '../../utils/date';
 import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
 import { useHentKravfrist } from '../../hooks/vilkår/useHentKravfrist';
 import Varsel from '../varsel/Varsel';
+import { lagUtfallstekst } from '../../utils/tekstformateringUtils';
+import IkonMedTekst from '../ikon-med-tekst/IkonMedTekst';
+import { UtfallIkon } from '../utfallikon/UtfallIkon';
 
-const FristForFramsettingAvKrav = () => {
+const KravFremmetInnenFrist = () => {
   const { behandlingId } = useContext(BehandlingContext);
   const { kravfristVilkår, isLoading, error } = useHentKravfrist(behandlingId);
 
@@ -25,19 +27,21 @@ const FristForFramsettingAvKrav = () => {
   return (
     <VStack gap="4">
       <VilkårHeader
-        headertekst={'Frist for framsetting av krav'}
+        headertekst={'Krav fremmet innen frist'}
         lovdatatekst={kravfristVilkår.vilkårLovreferanse.beskrivelse}
-        lovdatalenke={
-          'https://lovdata.no/dokument/SF/forskrift/2013-11-04-1286'
-        }
+        lovdatalenke={'https://lovdata.no/forskrift/2013-11-04-1286/§11'}
         paragraf={kravfristVilkår.vilkårLovreferanse.paragraf}
       />
-      <UtfallstekstMedIkon utfall={kravfristVilkår.samletUtfall} />
+      <IkonMedTekst
+        iconRenderer={() => (
+          <UtfallIkon utfall={kravfristVilkår.samletUtfall} />
+        )}
+        text={lagUtfallstekst(kravfristVilkår.samletUtfall)}
+      />
       <VilkårKort
         saksopplysningsperiode={kravfristVilkår.utfallperiode}
         kilde={kravfristVilkår.avklartSaksopplysning.kilde}
         utfall={kravfristVilkår.samletUtfall}
-        vilkårTittel={'Frist for framsetting av krav'}
         grunnlag={[
           {
             header: 'Kravdato',
@@ -51,4 +55,4 @@ const FristForFramsettingAvKrav = () => {
   );
 };
 
-export default FristForFramsettingAvKrav;
+export default KravFremmetInnenFrist;
