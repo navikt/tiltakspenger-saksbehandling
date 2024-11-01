@@ -174,13 +174,13 @@ Saksoversikt.getLayout = function getLayout(page: ReactElement) {
 };
 
 export const getServerSideProps = pageWithAuthentication(async (context) => {
-  const backendUrl = process.env.TILTAKSPENGER_VEDTAK_URL;
+  const backendUrl = process.env.TILTAKSPENGER_SAKSBEHANDLING_API_URL;
 
   const token = await getToken(context.req);
-  logger.info('Henter obo-token for tiltakspenger-vedtak');
+  logger.info('Henter obo-token for tiltakspenger-saksbehandling-api');
   const obo = await requestOboToken(
     token,
-    `api://${process.env.VEDTAK_SCOPE}/.default`,
+    `api://${process.env.SAKSBEHANDLING_API_SCOPE}/.default`,
   );
   if (!obo.ok) {
     throw new Error(

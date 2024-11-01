@@ -23,7 +23,7 @@ spec:
   accessPolicy:
     outbound:
       rules:
-        - application: tiltakspenger-vedtak
+        - application: tiltakspenger-saksbehandling-api
           namespace: tpts
           cluster: {{ cluster }}
   azure:

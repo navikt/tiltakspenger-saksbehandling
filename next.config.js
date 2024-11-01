@@ -6,14 +6,6 @@ module.exports = {
     optimizePackageImports: ['@navikt/ds-react', '@navikt/aksel-icons'],
   },
   output: 'standalone',
-  async rewrites() {
-    return [
-      {
-        source: '/saker/person',
-        destination: `http://tiltakspenger-vedtak/saker/person`,
-      },
-    ];
-  },
   async headers() {
     const ContentSecurityPolicy = `
           default-src 'self';

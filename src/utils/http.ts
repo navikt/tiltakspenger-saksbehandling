@@ -3,7 +3,7 @@ import { NextApiRequest } from 'next';
 import { MeldekortDTO } from '../types/MeldekortTypes';
 import { finnFeilmelding } from './feilmeldinger';
 
-const vedtakBackendUrl = process.env.TILTAKSPENGER_VEDTAK_URL || '';
+const backendUrl = process.env.TILTAKSPENGER_SAKSBEHANDLING_API_URL || '';
 
 export class FetcherError extends Error {
   info: { melding: string; kode: string };
@@ -70,8 +70,8 @@ export async function makeApiRequest(
   request: NextApiRequest,
   oboToken: string,
 ): Promise<Response> {
-  const vedtakPath = request.url.replace('/api', '');
-  const url = `${vedtakBackendUrl}${vedtakPath}`;
+  const path = request.url.replace('/api', '');
+  const url = `${backendUrl}${path}`;
 
   logger.info(`Sender request til ${url}`);
 

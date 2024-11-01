@@ -9,10 +9,10 @@ async function handler(
   res: NextApiResponse,
 ): Promise<void> {
   const token = await getToken(req);
-  logger.info('Henter obo-token for tiltakspenger-vedtak');
+  logger.info('Henter obo-token for tiltakspenger-saksbehandling-api');
   const obo = await requestOboToken(
     token,
-    `api://${process.env.VEDTAK_SCOPE}/.default`,
+    `api://${process.env.SAKSBEHANDLING_API_SCOPE}/.default`,
   );
   if (!obo.ok) {
     throw new Error(

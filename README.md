@@ -23,9 +23,9 @@ Legg til følgende i `/etc/hosts`
 Opprett en `.env.local` på roten av `tiltakspenger-saksbehandler`, med følgende innhold
 
 ```
-TILTAKSPENGER_VEDTAK_URL=http://localhost:8080
-VEDTAK_SCOPE=tiltakspenger-vedtak
-AZURE_APP_CLIENT_ID=tiltakspenger-vedtak
+TILTAKSPENGER_SAKSBEHANDLING_API_URL=http://localhost:8080
+SAKSBEHANDLING_API_SCOPE=tiltakspenger-saksbehandling-api
+AZURE_APP_CLIENT_ID=tiltakspenger-saksbehandling-api
 AZURE_APP_CLIENT_SECRET=secret
 AZURE_APP_WELL_KNOWN_URL=http://host.docker.internal:6969/azure/.well-known/openid-configuration
 AZURE_OPENID_CONFIG_ISSUER="http://host.docker.internal:6969/azure"
