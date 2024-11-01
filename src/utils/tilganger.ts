@@ -1,4 +1,3 @@
-import saksbehandler from '../pages/api/saksbehandler';
 import { BehandlingStatus } from '../types/BehandlingTypes';
 import { Meldekortstatus } from '../types/MeldekortTypes';
 import {
