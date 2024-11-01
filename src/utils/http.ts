@@ -6,7 +6,7 @@ import { finnFeilmelding } from './feilmeldinger';
 const vedtakBackendUrl = process.env.TILTAKSPENGER_VEDTAK_URL || '';
 
 export class FetcherError extends Error {
-  info: { error: string };
+  info: { melding: string; kode: string };
   status: number | undefined;
 }
 
@@ -55,14 +55,10 @@ export async function sakFetcher<R>(
 export const throwErrorIfFatal = async (res: Response) => {
   if (!res.ok) {
     const error = new FetcherError('Noe gikk galt');
-
     error.info = await res.json();
     error.status = res.status;
-    const feilmelding = error.info.error;
-
-    if (feilmelding.includes('kode')) {
-      error.message = finnFeilmelding(JSON.parse(feilmelding).kode);
-    } else error.message = error.message = feilmelding;
+    error.message =
+      finnFeilmelding(error.info.kode) ?? 'Noe har gått galt på serversiden';
 
     logger.error(error.message);
 

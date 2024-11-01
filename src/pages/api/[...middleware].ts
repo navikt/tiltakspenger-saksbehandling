@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { logger } from '@navikt/next-logger';
 import { getToken, requestOboToken } from '@navikt/oasis';
-import { makeApiRequest } from '../../utils/http';
+import { logger } from '@navikt/next-logger';
 import { withAuthenticatedApi } from '../../auth/pageWithAuthentication';
+import { makeApiRequest } from '../../utils/http';
 
 async function handler(
   req: NextApiRequest,
@@ -20,17 +20,12 @@ async function handler(
     );
   }
 
-  logger.info(`Henter saksbehandler`);
-
-  const response = await makeApiRequest(req, obo.token);
-  if (response.ok) {
+  try {
+    const response = await makeApiRequest(req, obo.token);
     const body = await response.json();
     res.status(response.status).json(body);
-  } else {
-    const error = await response.text();
-    res
-      .status(response.status)
-      .json({ error: !error ? response.statusText : error });
+  } catch (err) {
+    res.status(err.status).json(err.info);
   }
 }
 

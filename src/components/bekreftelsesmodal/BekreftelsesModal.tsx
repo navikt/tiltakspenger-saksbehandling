@@ -40,7 +40,7 @@ const BekreftelsesModal = ({
           Nei, avbryt
         </Button>
         {children}
-        {error && <Varsel variant="error" melding={`${error.message}`} />}
+        {error && <Varsel variant="error" melding={error.message} />}
       </Modal.Footer>
     </Modal>
   );
