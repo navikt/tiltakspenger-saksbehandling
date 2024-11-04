@@ -12,7 +12,7 @@ async function handler(
   logger.info('Henter obo-token for tiltakspenger-saksbehandling-api');
   const obo = await requestOboToken(
     token,
-    `api://${process.env.SAKSBEHANDLING_API_SCOPE}/.default`,
+    `${process.env.SAKSBEHANDLING_API_SCOPE}`,
   );
   if (!obo.ok) {
     throw new Error(
