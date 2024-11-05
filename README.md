@@ -24,6 +24,7 @@ Opprett en `.env.local` på roten av `tiltakspenger-saksbehandler`, med følgend
 
 ```
 TILTAKSPENGER_SAKSBEHANDLING_API_URL=http://localhost:8080
+WONDERWALL_ORIGIN=http://localhost:2222
 SAKSBEHANDLING_API_SCOPE=tiltakspenger-saksbehandling-api
 AZURE_APP_CLIENT_ID=tiltakspenger-saksbehandling-api
 AZURE_APP_CLIENT_SECRET=secret

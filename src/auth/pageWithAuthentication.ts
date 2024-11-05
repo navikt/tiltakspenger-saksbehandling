@@ -7,6 +7,8 @@ import {
 } from 'next';
 import { logger } from '@navikt/next-logger';
 
+const LOGIN_API_URL = `${process.env.WONDERWALL_ORIGIN || ''}/oauth2/login`
+
 /**
  * Inspirert av løsningen til sykepenger: https://github.com/navikt/sykmeldinger/pull/548/files
  */
@@ -32,7 +34,7 @@ export function pageWithAuthentication(
     if (token == null) {
       return {
         redirect: {
-          destination: `/oauth2/login?redirect=${context.resolvedUrl}`,
+          destination: `${LOGIN_API_URL}?redirect=${context.resolvedUrl}`,
           permanent: false,
         },
       };
@@ -48,7 +50,7 @@ export function pageWithAuthentication(
 
       return {
         redirect: {
-          destination: `/oauth2/login?redirect=${context.resolvedUrl}`,
+          destination: `${LOGIN_API_URL}?redirect=${context.resolvedUrl}`,
           permanent: false,
         },
       };
