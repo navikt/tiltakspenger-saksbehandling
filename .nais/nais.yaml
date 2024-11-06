@@ -11,8 +11,8 @@ spec:
   ingresses:
     - {{ ingress }}
   replicas:
-    min: 1
-    max: 1
+    min: {{ replicas }}
+    max: {{ replicas }}
   secureLogs:
     enabled: true
   env:

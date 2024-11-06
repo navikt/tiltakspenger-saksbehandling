@@ -12,3 +12,4 @@ envs:
     value: https://login.microsoftonline.com/966ac572-f5b7-4bbe-aa88-c76419c0f851/oauth2/v2.0/token
   - name: SAKSBEHANDLING_API_SCOPE
     value: api://dev-gcp.tpts.tiltakspenger-saksbehandling-api/.default
+replicas: 1
