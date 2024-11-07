@@ -35,7 +35,9 @@ spec:
       tenant: {{ tenant }}
       claims:
         groups:
-          - id: {{ ROLE_SAKSBEHANDLER }}
+        {{#each azure.groups}}
+           - id: {{this.id}}
+        {{/each}}
         extra:
           - "NAVident"
       {{#if replyUrls}}
