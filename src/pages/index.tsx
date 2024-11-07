@@ -34,7 +34,14 @@ const Oversikten: NextPage = () => {
   const { onTaBehandling, isBehandlingMutating, taBehandlingError } =
     useTaBehandling();
 
-  if (isLoading || !SøknaderOgBehandlinger) return <Loader />;
+  if (isLoading) return <Loader />;
+  else if (!SøknaderOgBehandlinger)
+    return (
+      <Varsel
+        variant="info"
+        melding={`Ingen søknader eller behandlinger i basen`}
+      />
+    );
 
   const errors = error || opprettBehandlingError || taBehandlingError;
 
