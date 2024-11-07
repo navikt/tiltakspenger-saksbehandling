@@ -1,5 +1,6 @@
 ingress:
   - https://tiltakspenger-saksbehandler.intern.nav.no
+  - https://tiltakspenger-saksbehandler.ansatt.nav.no
 replyURLs:
   - https://tiltakspenger-saksbehandler.intern.nav.no/oauth2/callback
 tenant: nav.no
