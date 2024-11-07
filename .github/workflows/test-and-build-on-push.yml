@@ -1,0 +1,20 @@
+name: Test/build on feature branch push
+
+on:
+  push:
+    branches-ignore:
+      - main
+
+jobs:
+  build:
+    name: Test and build
+    uses: ./.github/workflows/.test-and-build.yml
+    permissions:
+      contents: read
+      id-token: write
+    with:
+      buildImage: false
+    secrets:
+      NAIS_WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
+      READER_TOKEN: ${{ secrets.READER_TOKEN }}
+      SLACK_INCOMING_WEBHOOK_URL: ${{ secrets.SLACK_INCOMING_WEBHOOK_URL }}
