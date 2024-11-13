@@ -2,6 +2,7 @@ import useSWRMutation from 'swr/mutation';
 import { FetcherError, mutateBehandling } from '../utils/http';
 import { Behandling, BehandlingStatus } from '../types/BehandlingTypes';
 import router from 'next/router';
+import { mutate } from 'swr';
 
 export const finnLenke = (behandlingId: string, status: BehandlingStatus) => {
   switch (status) {
@@ -27,7 +28,10 @@ export function useTaBehandling() {
     '/api/behandling/tabehandling',
     { id: string }
   >(`/api/behandling/tabehandling`, mutateBehandling, {
-    onSuccess: (data) => router.push(finnLenke(data.id, data.status)),
+    onSuccess: (data) => {
+      mutate('/api/behandlinger');
+      router.push(finnLenke(data.id, data.status));
+    },
   });
 
   return { onTaBehandling, isBehandlingMutating, taBehandlingError };
