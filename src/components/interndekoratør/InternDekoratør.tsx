@@ -39,6 +39,9 @@ const InternDekoratør = () => {
           />
         </form>
         <Spacer />
+
+        {/*
+        ** B: Kommentert ut frem til vi har løst forskjellige url-er for prod og dev
         <Dropdown>
           <InternalHeader.Button as={Dropdown.Toggle}>
             <MenuGridIcon
@@ -82,6 +85,7 @@ const InternDekoratør = () => {
             </Dropdown.Menu.GroupedList>
           </Dropdown.Menu>
         </Dropdown>
+*/}
         {innloggetSaksbehandler ? (
           <Dropdown>
             <InternalHeader.UserButton

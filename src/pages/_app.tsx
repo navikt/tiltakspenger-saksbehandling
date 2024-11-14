@@ -66,7 +66,6 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
               revalidateOnReconnect: true,
             }}
           >
-            {' '}
             <HovedLayout>{getLayout(<Component {...pageProps} />)}</HovedLayout>
           </SWRConfig>
         )}

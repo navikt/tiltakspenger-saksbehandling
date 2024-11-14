@@ -55,10 +55,16 @@ export async function sakFetcher<R>(
 export const throwErrorIfFatal = async (res: Response) => {
   if (!res.ok) {
     const error = new FetcherError('Noe gikk galt');
-    error.info = await res.json();
-    error.status = res.status;
-    error.message =
-      finnFeilmelding(error.info.kode) ?? 'Noe har gått galt på serversiden';
+    try {
+      error.info = await res.json();
+      error.status = res.status || 500;
+      error.message =
+        finnFeilmelding(error.info.kode) ?? 'Noe har gått galt på serversiden';
+    } catch (e) {
+      error.status = 500;
+      error.message =
+        'Noe har gått galt på serversiden, kontakt utviklingsteamet.';
+    }
 
     logger.error(error.message);
 
