@@ -15,6 +15,7 @@ export function useGodkjennBehandling(behandlingId: string) {
     {
       onSuccess: () => {
         mutate('/api/behandlinger');
+        mutate(`/api/behandling/${behandlingId}`);
         router.push('/');
       },
     },

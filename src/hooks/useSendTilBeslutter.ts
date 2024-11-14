@@ -1,6 +1,7 @@
 import useSWRMutation from 'swr/mutation';
 import { FetcherError, mutateBehandling } from '../utils/http';
 import router from 'next/router';
+import { mutate } from 'swr';
 
 export function useSendTilBeslutter(behandlingId: string) {
   const {
@@ -10,7 +11,13 @@ export function useSendTilBeslutter(behandlingId: string) {
   } = useSWRMutation<any, FetcherError, any>(
     `/api/behandling/beslutter/${behandlingId}`,
     mutateBehandling,
-    { onSuccess: () => router.push('/') },
+    {
+      onSuccess: () => {
+        mutate(`/api/behandlinger`);
+        mutate(`/api/behandling/${behandlingId}`);
+        router.push('/');
+      },
+    },
   );
 
   return { sendTilBeslutter, senderTilBeslutter, sendTilBeslutterError };
