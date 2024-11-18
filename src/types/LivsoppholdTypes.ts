@@ -11,7 +11,6 @@ export interface LivsoppholdVilkår {
 
 interface LivsoppholdSaksopplysning {
   harLivsoppholdYtelser: boolean;
-  saksbehandler?: Saksbehandler;
   tidspunkt: string;
   årsakTilEndringLivsopphold?: ÅrsakTilEndring;
   samletUtfall: Utfall;
