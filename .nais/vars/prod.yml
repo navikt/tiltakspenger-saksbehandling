@@ -1,8 +1,8 @@
 ingress:
-  - https://tiltakspenger-saksbehandler.intern.nav.no
-  - https://tiltakspenger-saksbehandler.ansatt.nav.no
+  - https://tiltakspenger-saksbehandling.intern.nav.no
+  - https://tiltakspenger-saksbehandling.ansatt.nav.no
 replyURLs:
-  - https://tiltakspenger-saksbehandler.intern.nav.no/oauth2/callback
+  - https://tiltakspenger-saksbehandling.intern.nav.no/oauth2/callback
 tenant: nav.no
 azure:
   groups:

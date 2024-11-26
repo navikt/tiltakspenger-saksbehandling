@@ -1,4 +1,4 @@
-Tiltakspenger-saksbehandler
+Tiltakspenger-saksbehandling
 ================
 
 Frontend-koden for støtteverktøy til bruk i saksbehandling av Tiltakspenger.
@@ -20,7 +20,7 @@ Legg til følgende i `/etc/hosts`
 127.0.0.1 host.docker.internal
 ```
 
-Opprett en `.env.local` på roten av `tiltakspenger-saksbehandler`, med følgende innhold
+Opprett en `.env.local` på roten av `tiltakspenger-saksbehandling`, med følgende innhold
 
 ```
 TILTAKSPENGER_SAKSBEHANDLING_API_URL=http://localhost:8080
@@ -43,7 +43,7 @@ Se på [denne siden](https://confluence.adeo.no/display/POAO/Ny+Utvikler+i+Tilta
 
 ## Lenke til dev-miljø
 
-`tiltakspenger-saksbehandler` er i dag kjørt opp på [https://tiltakspenger-saksbehandler.ansatt.dev.nav.no/](https://tiltakspenger-saksbehandler.ansatt.dev.nav.no/). Denne versjonen deployes manuelt via en workflow dispatch.
+`tiltakspenger-saksbehandling` er i dag kjørt opp på [https://tiltakspenger-saksbehandling.ansatt.dev.nav.no/](https://tiltakspenger-saksbehandling.ansatt.dev.nav.no/). Denne versjonen deployes manuelt via en workflow dispatch.
 
 ## 📣 Henvendelser
 

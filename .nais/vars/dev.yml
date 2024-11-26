@@ -1,8 +1,8 @@
 ingress:
-  - https://tiltakspenger-saksbehandler.intern.dev.nav.no
-  - https://tiltakspenger-saksbehandler.ansatt.dev.nav.no
+  - https://tiltakspenger-saksbehandling.intern.dev.nav.no
+  - https://tiltakspenger-saksbehandling.ansatt.dev.nav.no
 replyURLs:
-  - https://tiltakspenger-saksbehandler.ansatt.dev.nav.no/oauth2/callback
+  - https://tiltakspenger-saksbehandling.ansatt.dev.nav.no/oauth2/callback
 tenant: trygdeetaten.no
 azure:
   groups:
