@@ -2,6 +2,7 @@ import { logger } from '@navikt/next-logger';
 import { NextApiRequest } from 'next';
 import { MeldekortDTO } from '../types/MeldekortTypes';
 import { finnFeilmelding } from './feilmeldinger';
+import { Periode } from '../types/Periode';
 
 const backendUrl = process.env.TILTAKSPENGER_SAKSBEHANDLING_API_URL || '';
 
@@ -20,6 +21,15 @@ export async function mutateBehandling<R>(
   url,
   { arg }: { arg: { id: string } | { begrunnelse: string } | null },
 ): Promise<R> {
+  const res = await fetch(url, {
+    method: 'POST',
+    body: JSON.stringify(arg),
+  });
+  await throwErrorIfFatal(res);
+  return res.json();
+}
+
+export async function mutateSak<R>(url, { arg }: { arg: Periode }): Promise<R> {
   const res = await fetch(url, {
     method: 'POST',
     body: JSON.stringify(arg),

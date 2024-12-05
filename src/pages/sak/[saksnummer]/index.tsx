@@ -1,6 +1,14 @@
-import { Heading, Table, Button, Box, CopyButton } from '@navikt/ds-react';
+import {
+  Heading,
+  Table,
+  Button,
+  Box,
+  CopyButton,
+  HStack,
+  Spacer,
+} from '@navikt/ds-react';
 import router from 'next/router';
-import { ReactElement, useContext } from 'react';
+import { ReactElement, useContext, useRef } from 'react';
 import { pageWithAuthentication } from '../../../auth/pageWithAuthentication';
 import {
   formaterTidspunkt,
@@ -28,6 +36,7 @@ import { useTaBehandling } from '../../../hooks/useTaBehandling';
 import { preload } from 'swr';
 import { fetcher } from '../../../utils/http';
 import { Meldekortstatus } from '../../../types/MeldekortTypes';
+import Revurderingsmodal from '../../../components/revurderingsmodal/Revurderingsmodal';
 
 const Saksoversikt: NextPageWithLayout<Sak> = ({
   behandlingsoversikt,
@@ -40,19 +49,32 @@ const Saksoversikt: NextPageWithLayout<Sak> = ({
   const { onOpprettBehandling, isSøknadMutating } = useOpprettBehandling();
   const { onTaBehandling, isBehandlingMutating } = useTaBehandling();
 
+  const modalRef = useRef(null);
+
+  const lukkModal = () => {
+    modalRef.current.close();
+  };
+
   return (
     <>
       <PersonaliaHeader sakId={sakId}>
         <b>Saksnr:</b> {saksnummer}
         <CopyButton copyText={saksnummer} variant="action" size="small" />
       </PersonaliaHeader>
-      <Box
-        style={{ padding: '1rem', background: '#F5F5F5', height: '100vh' }}
-        className=""
-      >
-        <Heading spacing size="medium" level="2">
-          Saksoversikt
-        </Heading>
+      <Box style={{ padding: '1rem', background: '#F5F5F5', height: '100vh' }}>
+        <HStack align="center" style={{ marginBottom: '1rem' }}>
+          <Heading spacing size="medium" level="2">
+            Saksoversikt
+          </Heading>
+          <Spacer />
+          <Button
+            size="small"
+            variant="secondary"
+            onClick={() => modalRef.current.showModal()}
+          >
+            Revurder
+          </Button>
+        </HStack>
         <Box className={styles.tabellwrapper}>
           <Table>
             <Table.Header>
@@ -164,6 +186,15 @@ const Saksoversikt: NextPageWithLayout<Sak> = ({
             </Table.Body>
           </Table>
         </Box>
+        <Revurderingsmodal
+          modalRef={modalRef}
+          lukkModal={() => lukkModal()}
+          saksperiode={
+            behandlingsoversikt.findLast(
+              (b) => b.status === BehandlingStatus.INNVILGET,
+            ).periode
+          }
+        />
       </Box>
     </>
   );
