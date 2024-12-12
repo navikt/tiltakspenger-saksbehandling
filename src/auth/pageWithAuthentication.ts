@@ -41,9 +41,9 @@ export function pageWithAuthentication(
     }
 
     const validationResult = await validateToken(token);
-    if (!validationResult.ok) {
+    if (validationResult.ok === false) {
       const error = new Error(
-        `Ugyldig JWT token funnet omdirigerer til innlogging.`,
+        `Ugyldig JWT token funnet omdirigerer til innlogging. Error: ${validationResult.error}, ErrorType: ${validationResult.errorType}`,
       );
 
       logger.error(error);

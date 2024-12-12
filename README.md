@@ -28,10 +28,10 @@ WONDERWALL_ORIGIN=http://localhost:2222
 SAKSBEHANDLING_API_SCOPE=tiltakspenger-saksbehandling-api
 AZURE_APP_CLIENT_ID=tiltakspenger-saksbehandling-api
 AZURE_APP_CLIENT_SECRET=secret
-AZURE_APP_WELL_KNOWN_URL=http://host.docker.internal:6969/azure/.well-known/openid-configuration
-AZURE_OPENID_CONFIG_ISSUER="http://host.docker.internal:6969/azure"
-AZURE_OPENID_CONFIG_JWKS_URI=http://host.docker.internal:6969/azure/jwks
-AZURE_OPENID_CONFIG_TOKEN_ENDPOINT=http://host.docker.internal:6969/azure/token
+AZURE_APP_WELL_KNOWN_URL=http://host.docker.internal:6969/azuread/.well-known/openid-configuration
+AZURE_OPENID_CONFIG_ISSUER="http://host.docker.internal:6969/azuread"
+AZURE_OPENID_CONFIG_JWKS_URI=http://host.docker.internal:6969/azuread/jwks
+AZURE_OPENID_CONFIG_TOKEN_ENDPOINT=http://host.docker.internal:6969/azuread/token
 AZURE_APP_JWK= * Se JWK i wonderwallconfig *
 ```
 
