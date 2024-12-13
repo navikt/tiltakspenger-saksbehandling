@@ -4,7 +4,10 @@ import { Behandling, BehandlingStatus } from '../types/BehandlingTypes';
 import router from 'next/router';
 import { mutate } from 'swr';
 
-export const finnLenke = (behandlingId: string, status: BehandlingStatus) => {
+export const finnBehandlingslenke = (
+  behandlingId: string,
+  status: BehandlingStatus,
+) => {
   switch (status) {
     case BehandlingStatus.KLAR_TIL_BEHANDLING:
     case BehandlingStatus.UNDER_BEHANDLING:
@@ -30,7 +33,7 @@ export function useTaBehandling() {
   >(`/api/behandling/tabehandling`, mutateBehandling, {
     onSuccess: (data) => {
       mutate('/api/behandlinger');
-      router.push(finnLenke(data.id, data.status));
+      router.push(finnBehandlingslenke(data.id, data.status));
     },
   });
 

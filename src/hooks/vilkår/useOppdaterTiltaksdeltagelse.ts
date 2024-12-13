@@ -14,8 +14,10 @@ export function useOppdaterTiltaksdeltagelse(
     `/api/sak/${sakId}/behandling/${behandlingId}/vilkar/tiltaksdeltagelse`,
     mutateVilkår,
     {
-      onSuccess: () =>
+      onSuccess: () => {
         mutate(`/api/behandling/${behandlingId}/vilkar/tiltakdeltagelse`),
+          mutate(`/api/behandling/${behandlingId}`);
+      },
     },
   );
   return { oppdaterTiltaksdeltagelse, isTiltaksdeltagelseMutating };
