@@ -12,14 +12,14 @@ import BekreftelsesModal from '../bekreftelsesmodal/BekreftelsesModal';
 import { useGodkjennBehandling } from '../../hooks/useGodkjennBehandling';
 
 const Oppsummering = () => {
-  const { behandlingId } = useContext(BehandlingContext);
+  const { behandlingId, sakId } = useContext(BehandlingContext);
   const { valgtBehandling, isLoading, error } = useHentBehandling(behandlingId);
   const {
     godkjennBehandling,
     godkjennerBehandling,
     godkjennBehandlingError,
     reset,
-  } = useGodkjennBehandling(behandlingId);
+  } = useGodkjennBehandling(behandlingId, sakId);
   const sendTilbakeRef = useRef(null);
   const godkjennRef = useRef(null);
 

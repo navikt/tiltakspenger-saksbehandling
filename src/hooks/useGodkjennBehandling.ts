@@ -3,14 +3,14 @@ import { FetcherError, mutateBehandling } from '../utils/http';
 import router from 'next/router';
 import { mutate } from 'swr';
 
-export function useGodkjennBehandling(behandlingId: string) {
+export function useGodkjennBehandling(behandlingId: string, sakId: string) {
   const {
     trigger: godkjennBehandling,
     isMutating: godkjennerBehandling,
     error: godkjennBehandlingError,
     reset,
   } = useSWRMutation<any, FetcherError, any, { id: string }>(
-    `/api/behandling/godkjenn/${behandlingId}`,
+    `/api/sak/${sakId}/behandling/${behandlingId}/iverksett`,
     mutateBehandling,
     {
       onSuccess: () => {
