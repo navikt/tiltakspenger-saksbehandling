@@ -13,7 +13,10 @@ import { NextPage } from 'next';
 import router from 'next/router';
 import { pageWithAuthentication } from '../auth/pageWithAuthentication';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '../utils/date';
-import { finnStatusTekst } from '../utils/tekstformateringUtils';
+import {
+  finnBehandlingstypeTekst,
+  finnStatusTekst,
+} from '../utils/tekstformateringUtils';
 import Varsel from '../components/varsel/Varsel';
 import { BehandlingStatus } from '../types/BehandlingTypes';
 import { useOpprettBehandling } from '../hooks/useOpprettBehandling';
@@ -70,15 +73,17 @@ const Oversikten: NextPage = () => {
             <Table.Row shadeOnHover={false} key={behandling.id}>
               <Table.HeaderCell scope="row" style={{ wordBreak: 'unset' }}>
                 <HStack align="center">
-                  {behandling.ident}
+                  {behandling.fnr}
                   <CopyButton
-                    copyText={behandling.ident}
+                    copyText={behandling.fnr}
                     variant="action"
                     size="small"
                   />
                 </HStack>
               </Table.HeaderCell>
-              <Table.DataCell>{behandling.typeBehandling}</Table.DataCell>
+              <Table.DataCell>
+                {finnBehandlingstypeTekst(behandling.typeBehandling)}
+              </Table.DataCell>
               <Table.DataCell>
                 {formaterTidspunkt(behandling.kravtidspunkt) ?? 'Ukjent'}
               </Table.DataCell>

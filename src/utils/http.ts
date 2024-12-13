@@ -3,6 +3,8 @@ import { NextApiRequest } from 'next';
 import { MeldekortDTO } from '../types/MeldekortTypes';
 import { finnFeilmelding } from './feilmeldinger';
 import { Periode } from '../types/Periode';
+import { tiltaksdeltagelseBody } from '../types/TiltakDeltagelseTypes';
+import { LivsoppholdSaksopplysningBody } from '../types/LivsoppholdTypes';
 
 const backendUrl = process.env.TILTAKSPENGER_SAKSBEHANDLING_API_URL || '';
 
@@ -29,7 +31,22 @@ export async function mutateBehandling<R>(
   return res.json();
 }
 
-export async function mutateSak<R>(url, { arg }: { arg: Periode }): Promise<R> {
+export async function mutateVilkår<R>(
+  url,
+  { arg }: { arg: LivsoppholdSaksopplysningBody | tiltaksdeltagelseBody },
+): Promise<R> {
+  const res = await fetch(url, {
+    method: 'POST',
+    body: JSON.stringify(arg),
+  });
+  await throwErrorIfFatal(res);
+  return res.json();
+}
+
+export async function mutateSak<R>(
+  url,
+  { arg }: { arg: { periode: Periode } },
+): Promise<R> {
   const res = await fetch(url, {
     method: 'POST',
     body: JSON.stringify(arg),

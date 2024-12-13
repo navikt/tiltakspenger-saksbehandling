@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useContext } from 'react';
+import React, { PropsWithChildren } from 'react';
 import {
   BodyShort,
   CopyButton,
@@ -13,9 +13,14 @@ import { useHentPersonopplysninger } from '../../hooks/useHentPersonopplysninger
 
 type PersonaliaHeaderProps = PropsWithChildren & {
   sakId: string;
+  saksnummer: string;
 };
 
-const PersonaliaHeader = ({ sakId, children }: PersonaliaHeaderProps) => {
+const PersonaliaHeader = ({
+  sakId,
+  saksnummer,
+  children,
+}: PersonaliaHeaderProps) => {
   const { personopplysninger, isPersonopplysningerLoading } =
     useHentPersonopplysninger(sakId);
 
@@ -47,6 +52,8 @@ const PersonaliaHeader = ({ sakId, children }: PersonaliaHeaderProps) => {
       {fortrolig && <Tag variant="error">Søker har fortrolig adresse</Tag>}
       {skjerming && <Tag variant="error">Søker er skjermet</Tag>}
       <Spacer />
+      <b>Saksnr:</b> {saksnummer}
+      <CopyButton copyText={saksnummer} variant="action" size="small" />
       {children}
     </HStack>
   );
