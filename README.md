@@ -26,7 +26,7 @@ Opprett en `.env.local` på roten av `tiltakspenger-saksbehandling`, med følgen
 TILTAKSPENGER_SAKSBEHANDLING_API_URL=http://localhost:8080
 WONDERWALL_ORIGIN=http://localhost:2222
 SAKSBEHANDLING_API_SCOPE=tiltakspenger-saksbehandling-api
-AZURE_APP_CLIENT_ID=tiltakspenger-saksbehandling-api
+AZURE_APP_CLIENT_ID=tiltakspenger-saksbehandling
 AZURE_APP_CLIENT_SECRET=secret
 AZURE_APP_WELL_KNOWN_URL=http://host.docker.internal:6969/azuread/.well-known/openid-configuration
 AZURE_OPENID_CONFIG_ISSUER="http://host.docker.internal:6969/azuread"
