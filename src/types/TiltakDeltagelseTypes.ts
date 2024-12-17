@@ -3,7 +3,8 @@ import { Periode } from './Periode';
 
 export interface TiltakDeltagelseVilkår {
   registerSaksopplysning: TiltakDeltagelseSaksopplysning;
-  saksbehandlerSaksopplysning: TiltakDeltagelseSaksopplysning;
+  saksbehandlerSaksopplysning?: TiltakDeltagelseSaksopplysning;
+  avklartSaksopplysning: TiltakDeltagelseSaksopplysning;
   vilkårLovreferanse: Lovreferanse;
   utfallperiode: Periode;
   samletUtfall: Utfall;
