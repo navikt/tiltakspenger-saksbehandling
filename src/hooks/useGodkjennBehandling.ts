@@ -2,21 +2,23 @@ import useSWRMutation from 'swr/mutation';
 import { FetcherError, mutateBehandling } from '../utils/http';
 import router from 'next/router';
 import { mutate } from 'swr';
+import { finnOversiktslenke } from './useSendTilBeslutter';
+import { Behandling } from '../types/BehandlingTypes';
 
-export function useGodkjennBehandling(behandlingId: string) {
+export function useGodkjennBehandling(behandlingId: string, sakId: string) {
   const {
     trigger: godkjennBehandling,
     isMutating: godkjennerBehandling,
     error: godkjennBehandlingError,
     reset,
-  } = useSWRMutation<any, FetcherError, any, { id: string }>(
-    `/api/behandling/godkjenn/${behandlingId}`,
+  } = useSWRMutation<Behandling, FetcherError, any, { id: string }>(
+    `/api/sak/${sakId}/behandling/${behandlingId}/iverksett`,
     mutateBehandling,
     {
-      onSuccess: () => {
+      onSuccess: (data) => {
         mutate('/api/behandlinger');
         mutate(`/api/behandling/${behandlingId}`);
-        router.push('/');
+        router.push(finnOversiktslenke(data.saksnummer, data.behandlingstype));
       },
     },
   );

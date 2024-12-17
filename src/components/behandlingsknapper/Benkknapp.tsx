@@ -1,7 +1,7 @@
 import { Button } from '@navikt/ds-react';
 import router from 'next/router';
 import { BehandlingStatus } from '../../types/BehandlingTypes';
-import { finnLenke } from '../../hooks/useTaBehandling';
+import { finnBehandlingslenke } from '../../hooks/useTaBehandling';
 
 export const knappForBehandlingType = (
   status: BehandlingStatus,
@@ -34,7 +34,9 @@ export const knappForBehandlingType = (
             style={{ minWidth: '50%' }}
             size="small"
             variant={'secondary'}
-            onClick={() => router.push(finnLenke(behandlingId, status))}
+            onClick={() =>
+              router.push(finnBehandlingslenke(behandlingId, status))
+            }
           >
             Fortsett
           </Button>

@@ -31,9 +31,7 @@ const Meldekort: NextPageWithLayout = () => {
   if (isLoading || !meldekort) return <Loader />;
   return (
     <VStack>
-      <PersonaliaHeader sakId={sakId}>
-        <b>Saksnr:</b> {saknummer}
-        <CopyButton copyText={saknummer} variant="action" size="small" />
+      <PersonaliaHeader sakId={sakId} saksnummer={saknummer}>
         <Button
           type="submit"
           size="small"

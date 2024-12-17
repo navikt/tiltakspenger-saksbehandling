@@ -1,7 +1,13 @@
-import { BehandlingStatus, Utfall } from '../types/BehandlingTypes';
+import {
+  BehandlingStatus,
+  TypeBehandling,
+  Utfall,
+  ÅrsakTilEndring,
+} from '../types/BehandlingTypes';
 import { Opphold } from '../types/InstitusjonsoppholdTypes';
 import { Deltagelse } from '../types/KvpTypes';
 import { MeldekortdagStatus, Meldekortstatus } from '../types/MeldekortTypes';
+import { DeltagelseStatus } from '../types/TiltakDeltagelseTypes';
 import { Kilde } from '../types/VilkårTypes';
 
 export const finnKildetekst = (kilde: string) => {
@@ -115,5 +121,38 @@ export const deltagelseTekst = (deltagelse: Deltagelse): string => {
       return 'Ja';
     case Deltagelse.DELTAR_IKKE:
       return 'Nei';
+  }
+};
+
+export const finnBehandlingstypeTekst = (
+  behandlingstype: TypeBehandling,
+): string => {
+  switch (behandlingstype) {
+    case TypeBehandling.FØRSTEGANGSBEHANDLING:
+      return 'Førstegangsbehandling';
+    case TypeBehandling.REVURDERING:
+      return 'Revurdering';
+    case TypeBehandling.SØKNAD:
+      'Søknad';
+    default:
+      return 'Søknad';
+  }
+};
+
+export const finnDeltagelsestatusTekst = (
+  deltagelsestatus: DeltagelseStatus,
+): string => {
+  switch (deltagelsestatus) {
+    case DeltagelseStatus.HarSluttet:
+      return 'Har sluttet';
+  }
+};
+
+export const finnÅrsaksTekst = (årsak: ÅrsakTilEndring): string => {
+  switch (årsak) {
+    case ÅrsakTilEndring.ENDRING_ETTER_SØKNADSTIDSPUNKT:
+      return 'Endring etter søknadstidspunkt';
+    case ÅrsakTilEndring.FEIL_I_INNHENTET_DATA:
+      return 'Feil i innhentet data';
   }
 };

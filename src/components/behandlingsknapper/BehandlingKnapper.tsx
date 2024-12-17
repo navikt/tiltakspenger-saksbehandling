@@ -16,11 +16,11 @@ interface BehandlingKnapperProps {
 }
 
 export const Behandlingsknapper = ({ godkjennRef }: BehandlingKnapperProps) => {
-  const { behandlingId } = useContext(BehandlingContext);
+  const { behandlingId, sakId } = useContext(BehandlingContext);
   const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
   const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
   const { godkjennerBehandling, godkjennBehandlingError } =
-    useGodkjennBehandling(behandlingId);
+    useGodkjennBehandling(behandlingId, sakId);
   const { sendTilBeslutter, senderTilBeslutter, sendTilBeslutterError } =
     useSendTilBeslutter(behandlingId);
 

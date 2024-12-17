@@ -15,6 +15,7 @@ export interface Behandling {
   saksbehandler: string;
   beslutter: string;
   vurderingsperiode: Periode;
+  behandlingstype: TypeBehandling;
   status: BehandlingStatus;
   attesteringer: Attestering[];
   vilkårssett: VilkårsettDTO;
@@ -60,7 +61,7 @@ export interface BehandlingForBenk {
   underkjent: boolean;
   kravtidspunkt: string;
   typeBehandling: TypeBehandling;
-  ident: string;
+  fnr: string;
   saksnummer: string;
   id: string;
   saksbehandler: string;
@@ -89,6 +90,8 @@ export enum ÅrsakTilEndring {
   ENDRING_ETTER_SØKNADSTIDSPUNKT = 'ENDRING_ETTER_SØKNADSTIDSPUNKT',
 }
 
+export const årsaker = Object.values(ÅrsakTilEndring);
+
 export enum Utfall {
   OPPFYLT = 'OPPFYLT',
   DELVIS_OPPFYLT = 'DELVIS_OPPFYLT',
@@ -97,6 +100,7 @@ export enum Utfall {
 }
 
 export enum TypeBehandling {
-  SØKNAD = 'Søknad',
-  FØRSTEGANGSBEHANDLING = 'Førstegangsbehandling',
+  SØKNAD = 'SØKNAD',
+  FØRSTEGANGSBEHANDLING = 'FØRSTEGANGSBEHANDLING',
+  REVURDERING = 'REVURDERING',
 }
