@@ -16,7 +16,7 @@ on:
         required: true
       READER_TOKEN:
         required: true
-      SLACK_INCOMING_WEBHOOK_URL:
+      SLACK_VARSEL_WEBHOOK_URL:
         required: true
 
 jobs:
@@ -62,4 +62,4 @@ jobs:
         env:
           BRANCH: ${{ github.ref }}
           AUTHOR: ${{ github.event.pusher.name }}
-          WEBHOOK_URL: ${{ secrets.SLACK_INCOMING_WEBHOOK_URL }}
+          WEBHOOK_URL: ${{ secrets.SLACK_VARSEL_WEBHOOK_URL }}
