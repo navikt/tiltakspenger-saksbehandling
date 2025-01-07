@@ -18,9 +18,9 @@ export interface RevurderingForm {
 const Saksside: NextPageWithLayout<Sak> = ({
   behandlingsoversikt,
   meldekortoversikt,
-  fnr,
   saksnummer,
   sakId,
+  førsteLovligeStansdato,
 }: Sak) => {
   preload(`/api/sak/${sakId}/personopplysninger`, fetcher);
   return (
@@ -31,6 +31,7 @@ const Saksside: NextPageWithLayout<Sak> = ({
         saksnummer={saksnummer}
         behandlingsoversikt={behandlingsoversikt}
         meldekortoversikt={meldekortoversikt}
+        førsteLovligeStansdato={førsteLovligeStansdato}
       />
     </>
   );

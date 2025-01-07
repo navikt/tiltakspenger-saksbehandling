@@ -5,6 +5,7 @@ import {
   periodeTilFormatertDatotekst,
 } from '../../utils/date';
 import {
+  finnDeltagelsestatusTekst,
   lagFaktumTekst,
   lagFaktumTekstAvLivsopphold,
   lagUtfallstekst,
@@ -80,7 +81,7 @@ const VilkårsvurderingTable = () => {
             {periodeTilFormatertDatotekst(tiltaksdeltagelse.utfallperiode)}
           </Table.DataCell>
           <Table.DataCell>
-            {`Tiltaksstatus er "${tiltaksdeltagelse.registerSaksopplysning.status}"`}
+            {`Tiltaksstatus er "${finnDeltagelsestatusTekst(tiltaksdeltagelse.avklartSaksopplysning.status)}"`}
           </Table.DataCell>
         </Table.Row>
         {/* Aldersvilkår */}

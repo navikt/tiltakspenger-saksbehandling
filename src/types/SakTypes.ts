@@ -7,4 +7,5 @@ export type Sak = {
   fnr: string;
   behandlingsoversikt: BehandlingForBenk[];
   meldekortoversikt: Meldekortsammendrag[];
+  førsteLovligeStansdato: string;
 };

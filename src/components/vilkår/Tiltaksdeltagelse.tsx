@@ -98,7 +98,7 @@ const Tiltaksdeltagelse = () => {
         utfall={tiltaksdeltagelse.samletUtfall}
         grunnlag={[
           { header: 'Type tiltak', data: tiltakNavn },
-          { header: 'Siste status', data: status },
+          { header: 'Siste status', data: finnDeltagelsestatusTekst(status) },
         ]}
       />
       {behandlingstype == TypeBehandling.REVURDERING && (

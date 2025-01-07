@@ -1,10 +1,7 @@
 import { VStack, BodyShort, Loader } from '@navikt/ds-react';
 import styles from './Behandlingdetaljer.module.css';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
-import {
-  formaterDatotekst,
-  periodeTilFormatertDatotekst,
-} from '../../utils/date';
+import { periodeTilFormatertDatotekst } from '../../utils/date';
 import { useContext } from 'react';
 import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
 import { useHentKravfrist } from '../../hooks/vilkår/useHentKravfrist';
@@ -23,12 +20,6 @@ const Behandlingdetaljer = () => {
   return (
     <>
       <VStack gap="3" className={styles.wrapper}>
-        <BodyShort>
-          <b>Søknadsdato</b>
-        </BodyShort>
-        <BodyShort>
-          {formaterDatotekst(kravfristVilkår.avklartSaksopplysning.kravdato)}
-        </BodyShort>
         <BodyShort>
           <b>Vurderingsperiode: </b>
         </BodyShort>

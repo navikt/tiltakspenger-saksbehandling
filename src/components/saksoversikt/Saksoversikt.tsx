@@ -43,12 +43,14 @@ import { RevurderingForm } from '../../pages/sak/[saksnummer]';
 interface SaksoversiktProps {
   behandlingsoversikt: BehandlingForBenk[];
   meldekortoversikt: Meldekortsammendrag[];
+  førsteLovligeStansdato: string;
   saksnummer: string;
   sakId: string;
 }
 
 export const Saksoversikt = ({
   behandlingsoversikt,
+  førsteLovligeStansdato,
   meldekortoversikt,
   saksnummer,
   sakId,
@@ -57,7 +59,7 @@ export const Saksoversikt = ({
   const { onOpprettBehandling, isSøknadMutating } = useOpprettBehandling();
   const { onTaBehandling, isBehandlingMutating } = useTaBehandling();
 
-  const fraOgMed = new Date(behandlingsoversikt[0].periode.fraOgMed);
+  const fraOgMed = new Date(førsteLovligeStansdato);
   const tilOgMed = new Date(behandlingsoversikt[0].periode.tilOgMed);
 
   const modalRef = useRef(null);

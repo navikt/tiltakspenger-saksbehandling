@@ -46,6 +46,8 @@ export const finnFeilmelding = (errorkode: string) => {
       return 'Finner ikke resursen handlingen ber om';
     case 'ikke_implementert':
       return 'Vi mangler en implementasjon for å gjennomføre denne handlingen';
+    case 'kan_ikke_stanse_utbetalt_dag':
+      return 'Kan ikke stanse utbetalt dag';
     default:
       'Noe gikk galt på serversiden. Ukjent feil';
   }

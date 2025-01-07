@@ -145,6 +145,26 @@ export const finnDeltagelsestatusTekst = (
   switch (deltagelsestatus) {
     case DeltagelseStatus.HarSluttet:
       return 'Har sluttet';
+    case DeltagelseStatus.VenterPåOppstart:
+      return 'Venter på oppstart';
+    case DeltagelseStatus.Deltar:
+      return 'Deltar';
+    case DeltagelseStatus.Avbrutt:
+      return 'Avbrutt';
+    case DeltagelseStatus.Fullført:
+      return 'Fullført';
+    case DeltagelseStatus.IkkeAktuell:
+      return 'Ikke aktuell';
+    case DeltagelseStatus.Feilregistrert:
+      return 'Feilregistrert';
+    case DeltagelseStatus.PåbegyntRegistrering:
+      return 'Påbegynt registrering';
+    case DeltagelseStatus.SøktInn:
+      return 'Søkt inn';
+    case DeltagelseStatus.Venteliste:
+      return 'Venteliste';
+    case DeltagelseStatus.Vurderes:
+      return 'Vurderes';
   }
 };
 
