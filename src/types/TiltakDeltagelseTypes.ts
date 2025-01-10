@@ -45,5 +45,4 @@ interface StatusForPeriode {
 
 export interface tiltaksdeltagelseBody {
   statusForPeriode: StatusForPeriode[];
-  årsakTilEndring: ÅrsakTilEndring;
 }

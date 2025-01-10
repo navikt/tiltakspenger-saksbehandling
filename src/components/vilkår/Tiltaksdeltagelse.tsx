@@ -29,7 +29,6 @@ import { useOppdaterTiltaksdeltagelse } from '../../hooks/vilkår/useOppdaterTil
 
 export interface StatusForm {
   status: DeltagelseStatus;
-  årsakTilEndring: ÅrsakTilEndring;
 }
 
 const Tiltaksdeltagelse = () => {
@@ -60,7 +59,6 @@ const Tiltaksdeltagelse = () => {
           status: getValues().status,
         },
       ],
-      årsakTilEndring: getValues().årsakTilEndring,
     });
   };
 
@@ -127,27 +125,6 @@ const Tiltaksdeltagelse = () => {
                     {deltagelsestatuser.map((status) => (
                       <option key={status} value={status}>
                         {finnDeltagelsestatusTekst(status)}
-                      </option>
-                    ))}
-                  </Select>
-                )}
-              />
-              <Controller
-                name="årsakTilEndring"
-                control={control}
-                rules={{
-                  validate: setupValidation([]),
-                }}
-                render={({ field: { onChange, value } }) => (
-                  <Select
-                    label="Årsak til endring"
-                    onChange={onChange}
-                    value={value}
-                  >
-                    <option value={''}>- Velg årsak til endring -</option>
-                    {årsaker.map((årsak) => (
-                      <option key={årsak} value={årsak}>
-                        {finnÅrsaksTekst(årsak)}
                       </option>
                     ))}
                   </Select>
