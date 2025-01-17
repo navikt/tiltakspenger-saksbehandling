@@ -1,12 +1,16 @@
-.tabellwrapper{
+.tabellwrapper {
     background-color: #ffffff;
     border: 1px #9099a5 solid;
     border-radius: 4px;
     padding: 1rem;
+
+    &:not(:last-child) {
+        margin-bottom: 1rem;
+    }
 }
 
-.wrapper{
+.wrapper {
     padding: 1rem;
     background: #F5F5F5;
-    height: 100vh; 
+    height: 100vh;
 }
