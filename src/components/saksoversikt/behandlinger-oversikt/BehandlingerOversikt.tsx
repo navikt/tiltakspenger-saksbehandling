@@ -1,5 +1,5 @@
 import { BehandlingForBenk, BehandlingStatus } from '../../../types/BehandlingTypes';
-import { Button, Heading, Table } from '@navikt/ds-react';
+import { Button, Table } from '@navikt/ds-react';
 import { finnBehandlingstypeTekst, finnStatusTekst } from '../../../utils/tekstformateringUtils';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '../../../utils/date';
 import { knappForBehandlingType } from '../../behandlingsknapper/Benkknapp';

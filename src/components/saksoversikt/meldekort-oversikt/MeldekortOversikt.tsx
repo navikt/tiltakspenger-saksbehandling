@@ -14,21 +14,16 @@ export const MeldekortOversikt = ({ meldekortsammendrag, saksnummer }: Props) =>
         <Table>
             <Table.Header>
                 <Table.Row>
-                    <Table.HeaderCell scope="col">Type</Table.HeaderCell>
-                    <Table.HeaderCell scope="col">Kravtidspunkt</Table.HeaderCell>
                     <Table.HeaderCell scope="col">Status</Table.HeaderCell>
                     <Table.HeaderCell scope="col">Periode</Table.HeaderCell>
                     <Table.HeaderCell scope="col">Saksbehandler</Table.HeaderCell>
                     <Table.HeaderCell scope="col">Beslutter</Table.HeaderCell>
-                    <Table.HeaderCell scope="col">Handlinger</Table.HeaderCell>
                     <Table.HeaderCell scope="col"></Table.HeaderCell>
                 </Table.Row>
             </Table.Header>
             <Table.Body>
                 {meldekortsammendrag.map((meldekort) => (
                     <Table.Row shadeOnHover={false} key={meldekort.meldekortId}>
-                        <Table.DataCell>Meldekort</Table.DataCell>
-                        <Table.DataCell>-</Table.DataCell>
                         <Table.DataCell>
                             {finnMeldekortstatusTekst(meldekort.status)}
                         </Table.DataCell>
@@ -38,7 +33,6 @@ export const MeldekortOversikt = ({ meldekortsammendrag, saksnummer }: Props) =>
                         </Table.DataCell>
                         <Table.DataCell>{meldekort.saksbehandler ?? '-'}</Table.DataCell>
                         <Table.DataCell>{meldekort.beslutter ?? '-'}</Table.DataCell>
-                        <Table.DataCell scope="col">-</Table.DataCell>
                         <Table.DataCell>
                             {meldekort.status !== Meldekortstatus.IKKE_KLAR_TIL_UTFYLLING && (
                                 <Button
