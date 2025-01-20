@@ -40,7 +40,7 @@ export const MeldekortOversikt = ({ meldeperioder, saksnummer }: Props) => {
                                     Meldeperiodestatus.IKKE_KLAR_TIL_UTFYLLING && (
                                     <Button
                                         as={Link}
-                                        href={`/sak/${saksnummer}/meldekort/${meldeperiode.hendelseId}`}
+                                        href={`/sak/${saksnummer}/meldeperiode/${encodeURIComponent(meldeperiode.meldeperiodeId)}`}
                                         style={{ minWidth: '50%' }}
                                         size="small"
                                         variant="secondary"

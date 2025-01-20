@@ -6,7 +6,7 @@ import {
 } from '../types/BehandlingTypes';
 import { Opphold } from '../types/InstitusjonsoppholdTypes';
 import { Deltagelse } from '../types/KvpTypes';
-import { MeldekortdagStatus, Meldekortstatus } from '../types/MeldekortTypes';
+import { MeldekortdagStatus, MeldekortBehandlingStatus } from '../types/MeldekortTypes';
 import { DeltagelseStatus } from '../types/TiltakDeltagelseTypes';
 import { Kilde } from '../types/VilkårTypes';
 
@@ -104,13 +104,13 @@ export const finnMeldekortdagStatusTekst = (status: string) => {
 };
 export const finnMeldekortstatusTekst = (status: string) => {
     switch (status) {
-        case Meldekortstatus.IKKE_KLAR_TIL_UTFYLLING:
+        case MeldekortBehandlingStatus.IKKE_KLAR_TIL_UTFYLLING:
             return 'Ikke klar til utfylling';
-        case Meldekortstatus.KLAR_TIL_UTFYLLING:
+        case MeldekortBehandlingStatus.KLAR_TIL_UTFYLLING:
             return 'Klar til utfylling';
-        case Meldekortstatus.KLAR_TIL_BESLUTNING:
+        case MeldekortBehandlingStatus.KLAR_TIL_BESLUTNING:
             return 'Klar til beslutning';
-        case Meldekortstatus.GODKJENT:
+        case MeldekortBehandlingStatus.GODKJENT:
             return 'Godkjent';
     }
 };

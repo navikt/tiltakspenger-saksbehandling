@@ -3,7 +3,7 @@ import { Periode } from './Periode';
 export type Meldekortsammendrag = {
     meldekortId: string;
     periode: Periode;
-    status: Meldekortstatus;
+    status: MeldekortBehandlingStatus;
     saksbehandler?: string;
     beslutter?: string;
 };
@@ -27,6 +27,57 @@ export type MeldeperiodeSammendrag = {
     status: Meldeperiodestatus;
 };
 
+export type MeldekortBehandling = {
+    id: string;
+    saksbehandler: string;
+    beslutter?: string;
+    status: MeldekortBehandlingStatus;
+    totalbeløpTilUtbetaling: number;
+    navkontor?: string;
+    forrigeNavkontor?: string;
+    dager: MeldekortDag[];
+};
+
+export enum BrukersMeldekortDagStatus {
+    DELTATT = 'DELTATT',
+    FRAVÆR_SYK = 'FRAVÆR_SYK',
+    FRAVÆR_SYKT_BARN = 'FRAVAeR_SYKT_BARN',
+    FRAVÆR_ANNET = 'FRAVÆR_ANNET',
+    IKKE_REGISTRERT = 'IKKE_REGISTRERT',
+}
+
+export type BrukersMeldekortDag = {
+    dato: string;
+    status: BrukersMeldekortDagStatus;
+};
+
+export type BrukersMeldekort = {
+    id: string;
+    mottatt: string;
+    dager: BrukersMeldekortDag[];
+};
+
+export type Meldeperiode = {
+    id: string;
+    hendelseId: string;
+    versjon: number;
+    periode: Periode;
+    opprettet: string;
+    status: Meldeperiodestatus;
+    antallDager: number;
+    girRett: Record<string, boolean>;
+    meldekortBehandling?: MeldekortBehandling;
+    brukersMeldekort?: BrukersMeldekort;
+};
+
+export type MeldeperiodeKjede = {
+    meldeperiodeId: string;
+    periode: Periode;
+    tiltaksnavn: string;
+    vedtaksPeriode: Periode;
+    meldeperioder: Meldeperiode[];
+};
+
 export type Meldekort = {
     id: string;
     rammevedtakId: string;
@@ -35,7 +86,7 @@ export type Meldekort = {
     tiltaksnavn: string;
     saksbehandler?: string;
     beslutter?: string;
-    status: Meldekortstatus;
+    status: MeldekortBehandlingStatus;
     totalbeløpTilUtbetaling: number;
     vedtaksPeriode: Periode;
     antallDager: number;
@@ -43,7 +94,7 @@ export type Meldekort = {
     forrigeNavkontor?: string;
 };
 
-export enum Meldekortstatus {
+export enum MeldekortBehandlingStatus {
     IKKE_KLAR_TIL_UTFYLLING = 'IKKE_KLAR_TIL_UTFYLLING',
     KLAR_TIL_UTFYLLING = 'KLAR_TIL_UTFYLLING',
     KLAR_TIL_BESLUTNING = 'KLAR_TIL_BESLUTNING',

@@ -1,9 +1,14 @@
 import { Box, Button, HStack, Loader, Spacer, TextField, VStack } from '@navikt/ds-react';
 import router from 'next/router';
 import { useContext, useRef } from 'react';
-import { useHentMeldekort } from '../../../hooks/meldekort/useHentMeldekort';
 import { SakContext } from '../../layout/SakLayout';
-import { MeldekortDagDTO, MeldekortdagStatus } from '../../../types/MeldekortTypes';
+import {
+    MeldekortBehandling,
+    MeldekortDagDTO,
+    MeldekortdagStatus,
+    Meldeperiode,
+    MeldeperiodeKjede,
+} from '../../../types/MeldekortTypes';
 import { useSendMeldekortTilBeslutter } from '../../../hooks/meldekort/useSendMeldekortTilBeslutter';
 import { Controller, FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import Meldekortuke from './Meldekortuke';
@@ -21,11 +26,15 @@ export interface Meldekortform {
     navkontor: string;
 }
 
-const Meldekort = () => {
+type Props = {
+    meldeperiodeKjede: MeldeperiodeKjede;
+    meldekortBehandling: MeldekortBehandling;
+};
+
+const Meldekort = ({ meldeperiodeKjede, meldekortBehandling }: Props) => {
     const { sakId } = useContext(SakContext);
-    const meldekortId = router.query.meldekortId as string;
+    const meldekortId = router.query.meldeperiodeId as string;
     const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
-    const { meldekort, error, isLoading } = useHentMeldekort(meldekortId, sakId);
     const {
         sendMeldekortTilBeslutter,
         senderMeldekortTilBeslutter,
@@ -42,12 +51,12 @@ const Meldekort = () => {
 
     //B: Må endre denne til å ta inn saksbehandler på meldekortet når vi har lagt til tildeling.
     const kanSaksbehandle = kanSaksbehandleForBehandling(
-        meldekort.status,
+        meldekortBehandling.status,
         innloggetSaksbehandler,
         innloggetSaksbehandler.navIdent,
     );
 
-    const meldekortdager = meldekort.meldekortDager.map((dag) => ({
+    const meldekortdager = meldekortBehandling.dager.map((dag) => ({
         dato: dag.dato,
         status: dag.status === MeldekortdagStatus.IkkeUtfylt ? '' : dag.status,
     }));
@@ -57,22 +66,9 @@ const Meldekort = () => {
         defaultValues: {
             uke1: meldekortdager.slice(0, 7),
             uke2: meldekortdager.slice(7, 14),
-            navkontor: meldekort.navkontor,
+            navkontor: meldekortBehandling.navkontor,
         },
     });
-
-    if (isLoading && !meldekort) {
-        return <Loader />;
-    } else if (error) {
-        return (
-            <VStack className={styles.wrapper}>
-                <Varsel
-                    variant="error"
-                    melding={`Kunne ikke hente meldekort (${error.status} ${error.info})`}
-                />
-            </VStack>
-        );
-    }
 
     const onSubmit: SubmitHandler<Meldekortform> = () => {
         modalRef.current?.showModal();
@@ -85,13 +81,13 @@ const Meldekort = () => {
                     <Meldekortuke
                         ukenummer={1}
                         meldekortdager={methods.getValues().uke1}
-                        ukeHeading={ukeHeading(meldekort.periode.fraOgMed)}
+                        ukeHeading={ukeHeading(meldeperiodeKjede.periode.fraOgMed)}
                     />
                     <Spacer />
                     <Meldekortuke
                         ukenummer={2}
                         meldekortdager={methods.getValues().uke2}
-                        ukeHeading={ukeHeading(meldekort.periode.tilOgMed)}
+                        ukeHeading={ukeHeading(meldeperiodeKjede.periode.tilOgMed)}
                     />
                 </HStack>
                 <Box className={styles.navkontor}>
@@ -105,7 +101,7 @@ const Meldekort = () => {
                             <TextField
                                 label="Fyll ut navkontor"
                                 description="Hvilket navkontor skal utbetale tiltakspenger for bruker på dette meldekortet?"
-                                defaultValue={meldekort.navkontor}
+                                defaultValue={meldekortBehandling.navkontor}
                                 onChange={onChange}
                                 inputMode="numeric"
                                 error={methods.formState.errors.navkontor?.message ?? ''}
