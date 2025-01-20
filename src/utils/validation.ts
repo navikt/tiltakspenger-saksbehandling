@@ -10,16 +10,6 @@ export function påkrevdPeriodeValidator(periode: { fra: Date; til: Date }) {
   }
 }
 
-export function gyldigNavkontor(navkontor: string) {
-  if (!navkontor) {
-    return 'Navkontor må fylles ut';
-  } else if (navkontor.length != 4) {
-    return 'Navkontor må inneholde nøyaktig fire siffer';
-  } else if (!inneholderKunTall(navkontor)) {
-    return 'Navkontor kan kun inneholde siffer';
-  }
-}
-
 export function gyldigPeriodeValidator(periode: { fra: Date; til: Date }) {
   const fraDato = dayjs(periode?.fra);
   const tilDato = dayjs(periode?.til);

@@ -74,7 +74,7 @@ const Meldekortoppsummering = () => {
         <BodyShort weight="semibold">
           Navkontor det skal utbetales fra:
         </BodyShort>
-        <BodyShort weight="semibold">{meldekort.navkontor}</BodyShort>
+        <BodyShort weight="semibold">{meldekort.navkontor.kontornummer} {meldekort.navkontor.kontornavn}</BodyShort>
       </HStack>
       {kanBeslutte && (
         <>

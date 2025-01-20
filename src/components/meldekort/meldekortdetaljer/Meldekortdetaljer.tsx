@@ -49,7 +49,7 @@ const Meldekortdetaljer = () => {
             <BodyShort>
               <b>Forrige meldekorts navkontor</b>
             </BodyShort>
-            <BodyShort>{forrigeNavkontor}</BodyShort>
+            <BodyShort>{forrigeNavkontor.kontornummer} {forrigeNavkontor.kontornavn}</BodyShort>
           </>
         )}
         {saksbehandler && (

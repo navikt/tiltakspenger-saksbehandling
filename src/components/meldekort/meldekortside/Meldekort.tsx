@@ -29,12 +29,10 @@ import { ukeHeading } from '../../../utils/date';
 import { kanSaksbehandleForBehandling } from '../../../utils/tilganger';
 import { SaksbehandlerContext } from '../../../pages/_app';
 import BekreftelsesModal from '../../bekreftelsesmodal/BekreftelsesModal';
-import { gyldigNavkontor, setupValidation } from '../../../utils/validation';
 
 export interface Meldekortform {
   uke1: MeldekortDagDTO[];
   uke2: MeldekortDagDTO[];
-  navkontor: string;
 }
 
 const Meldekort = () => {
@@ -73,7 +71,6 @@ const Meldekort = () => {
     defaultValues: {
       uke1: meldekortdager.slice(0, 7),
       uke2: meldekortdager.slice(7, 14),
-      navkontor: meldekort.navkontor,
     },
   });
 
@@ -110,25 +107,6 @@ const Meldekort = () => {
             ukeHeading={ukeHeading(meldekort.periode.tilOgMed)}
           />
         </HStack>
-        <Box className={styles.navkontor}>
-          <Controller
-            name="navkontor"
-            control={methods.control}
-            rules={{
-              validate: setupValidation([gyldigNavkontor]),
-            }}
-            render={({ field: { onChange } }) => (
-              <TextField
-                label="Fyll ut navkontor"
-                description="Hvilket navkontor skal utbetale tiltakspenger for bruker på dette meldekortet?"
-                defaultValue={meldekort.navkontor}
-                onChange={onChange}
-                inputMode="numeric"
-                error={methods.formState.errors.navkontor?.message ?? ''}
-              />
-            )}
-          />
-        </Box>
         {kanSaksbehandle && (
           <>
             <Button
@@ -156,7 +134,6 @@ const Meldekort = () => {
                     dager: methods
                       .getValues()
                       .uke1.concat(methods.getValues().uke2),
-                    navkontor: methods.getValues().navkontor,
                   })
                 }
               >
