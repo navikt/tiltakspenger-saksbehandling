@@ -12,79 +12,72 @@ import BekreftelsesModal from '../bekreftelsesmodal/BekreftelsesModal';
 import { useGodkjennBehandling } from '../../hooks/useGodkjennBehandling';
 
 const Oppsummering = () => {
-  const { behandlingId, sakId } = useContext(BehandlingContext);
-  const { valgtBehandling, isLoading, error } = useHentBehandling(behandlingId);
-  const {
-    godkjennBehandling,
-    godkjennerBehandling,
-    godkjennBehandlingError,
-    reset,
-  } = useGodkjennBehandling(behandlingId, sakId);
-  const sendTilbakeRef = useRef(null);
-  const godkjennRef = useRef(null);
+    const { behandlingId, sakId } = useContext(BehandlingContext);
+    const { valgtBehandling, isLoading, error } = useHentBehandling(behandlingId);
+    const { godkjennBehandling, godkjennerBehandling, godkjennBehandlingError, reset } =
+        useGodkjennBehandling(behandlingId, sakId);
+    const sendTilbakeRef = useRef(null);
+    const godkjennRef = useRef(null);
 
-  if (isLoading || !valgtBehandling) {
-    return <Loader />;
-  } else if (error)
+    if (isLoading || !valgtBehandling) {
+        return <Loader />;
+    } else if (error)
+        return (
+            <Varsel
+                variant="error"
+                melding={`Kunne ikke hente oppsummering (${error.status} ${error.info})`}
+            />
+        );
+
+    const onGodkjennBehandling = () => {
+        godkjennBehandling().then(lukkModal);
+    };
+
+    const lukkModal = () => {
+        godkjennRef.current.close();
+        reset();
+    };
+
+    const retur = valgtBehandling.attesteringer.findLast((attestering) => attestering.begrunnelse);
+
+    const visBegrunnelse = valgtBehandling.status === BehandlingStatus.UNDER_BEHANDLING && retur;
+
     return (
-      <Varsel
-        variant="error"
-        melding={`Kunne ikke hente oppsummering (${error.status} ${error.info})`}
-      />
+        <VStack gap="6" className={styles.wrapper}>
+            <Heading size="medium">Oppsummering</Heading>
+            {visBegrunnelse && (
+                <Alert size="small" role="status" variant="warning">
+                    {`Beslutter har sendt behandlingen i retur med begrunnelsen: "${
+                        retur.begrunnelse
+                    }"`}
+                </Alert>
+            )}
+            <VStack gap="4" className={styles.vurdering}>
+                <Heading size="small">Vilkårsvurdering</Heading>
+                <VilkårsvurderingTable />
+            </VStack>
+            <Behandlingsknapper godkjennRef={godkjennRef} />
+            <BegrunnelseModal modalRef={sendTilbakeRef} />
+            <BekreftelsesModal
+                modalRef={godkjennRef}
+                tittel={'Godkjenn og fatt vedtak'}
+                body={'Ønsker du å fatte vedtak på denne behandlingen?'}
+                lukkModal={lukkModal}
+                error={godkjennBehandlingError}
+            >
+                <Button
+                    type="submit"
+                    size="small"
+                    loading={godkjennerBehandling}
+                    onClick={() => {
+                        onGodkjennBehandling();
+                    }}
+                >
+                    Godkjenn vedtaket
+                </Button>
+            </BekreftelsesModal>
+        </VStack>
     );
-
-  const onGodkjennBehandling = () => {
-    godkjennBehandling().then(lukkModal);
-  };
-
-  const lukkModal = () => {
-    godkjennRef.current.close();
-    reset();
-  };
-
-  const retur = valgtBehandling.attesteringer.findLast(
-    (attestering) => attestering.begrunnelse,
-  );
-
-  const visBegrunnelse =
-    valgtBehandling.status === BehandlingStatus.UNDER_BEHANDLING && retur;
-
-  return (
-    <VStack gap="6" className={styles.wrapper}>
-      <Heading size="medium">Oppsummering</Heading>
-      {visBegrunnelse && (
-        <Alert size="small" role="status" variant="warning">
-          {`Beslutter har sendt behandlingen i retur med begrunnelsen: "${
-            retur.begrunnelse
-          }"`}
-        </Alert>
-      )}
-      <VStack gap="4" className={styles.vurdering}>
-        <Heading size="small">Vilkårsvurdering</Heading>
-        <VilkårsvurderingTable />
-      </VStack>
-      <Behandlingsknapper godkjennRef={godkjennRef} />
-      <BegrunnelseModal modalRef={sendTilbakeRef} />
-      <BekreftelsesModal
-        modalRef={godkjennRef}
-        tittel={'Godkjenn og fatt vedtak'}
-        body={'Ønsker du å fatte vedtak på denne behandlingen?'}
-        lukkModal={lukkModal}
-        error={godkjennBehandlingError}
-      >
-        <Button
-          type="submit"
-          size="small"
-          loading={godkjennerBehandling}
-          onClick={() => {
-            onGodkjennBehandling();
-          }}
-        >
-          Godkjenn vedtaket
-        </Button>
-      </BekreftelsesModal>
-    </VStack>
-  );
 };
 
 export default Oppsummering;

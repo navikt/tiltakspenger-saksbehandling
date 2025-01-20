@@ -11,70 +11,62 @@ import { fetcher } from '../../../utils/http';
 import { Saksoversikt } from '../../../components/saksoversikt/Saksoversikt';
 
 export interface RevurderingForm {
-  fraOgMed: Date;
-  tilOgMed: Date;
+    fraOgMed: Date;
+    tilOgMed: Date;
 }
 
 const Saksside: NextPageWithLayout<Sak> = ({
-  behandlingsoversikt,
-  meldekortoversikt,
-  saksnummer,
-  sakId,
-  førsteLovligeStansdato,
+    behandlingsoversikt,
+    meldekortoversikt,
+    saksnummer,
+    sakId,
+    førsteLovligeStansdato,
 }: Sak) => {
-  preload(`/api/sak/${sakId}/personopplysninger`, fetcher);
-  return (
-    <>
-      <PersonaliaHeader sakId={sakId} saksnummer={saksnummer} />
-      <Saksoversikt
-        sakId={sakId}
-        saksnummer={saksnummer}
-        behandlingsoversikt={behandlingsoversikt}
-        meldekortoversikt={meldekortoversikt}
-        førsteLovligeStansdato={førsteLovligeStansdato}
-      />
-    </>
-  );
+    preload(`/api/sak/${sakId}/personopplysninger`, fetcher);
+    return (
+        <>
+            <PersonaliaHeader sakId={sakId} saksnummer={saksnummer} />
+            <Saksoversikt
+                sakId={sakId}
+                saksnummer={saksnummer}
+                behandlingsoversikt={behandlingsoversikt}
+                meldekortoversikt={meldekortoversikt}
+                førsteLovligeStansdato={førsteLovligeStansdato}
+            />
+        </>
+    );
 };
 
 Saksside.getLayout = function getLayout(page: ReactElement) {
-  return <SakLayout>{page}</SakLayout>;
+    return <SakLayout>{page}</SakLayout>;
 };
 
 export const getServerSideProps = pageWithAuthentication(async (context) => {
-  const backendUrl = process.env.TILTAKSPENGER_SAKSBEHANDLING_API_URL;
+    const backendUrl = process.env.TILTAKSPENGER_SAKSBEHANDLING_API_URL;
 
-  const token = await getToken(context.req);
-  logger.info('Henter obo-token for tiltakspenger-saksbehandling-api');
-  const obo = await requestOboToken(
-    token,
-    `${process.env.SAKSBEHANDLING_API_SCOPE}`,
-  );
-  if (!obo.ok) {
-    throw new Error(
-      `Kunne ikke gjøre on-behalf-of-utveksling for saksbehandlertoken`,
-    );
-  }
+    const token = await getToken(context.req);
+    logger.info('Henter obo-token for tiltakspenger-saksbehandling-api');
+    const obo = await requestOboToken(token, `${process.env.SAKSBEHANDLING_API_SCOPE}`);
+    if (!obo.ok) {
+        throw new Error(`Kunne ikke gjøre on-behalf-of-utveksling for saksbehandlertoken`);
+    }
 
-  const sakResponse: Response = await fetch(
-    `${backendUrl}/sak/${context.params!.saksnummer}`,
-    {
-      method: 'GET',
-      headers: {
-        'content-type': 'application/json',
-        authorization: `Bearer ${obo.token}`,
-      },
-    },
-  );
-  const sak: Sak = await sakResponse.json();
+    const sakResponse: Response = await fetch(`${backendUrl}/sak/${context.params!.saksnummer}`, {
+        method: 'GET',
+        headers: {
+            'content-type': 'application/json',
+            authorization: `Bearer ${obo.token}`,
+        },
+    });
+    const sak: Sak = await sakResponse.json();
 
-  if (!sak) {
-    return {
-      notFound: true,
-    };
-  }
+    if (!sak) {
+        return {
+            notFound: true,
+        };
+    }
 
-  return { props: { ...sak } };
+    return { props: { ...sak } };
 });
 
 export default Saksside;

@@ -1,23 +1,20 @@
 import { getToken, validateToken } from '@navikt/oasis';
 import {
-  GetServerSidePropsContext,
-  GetServerSideProps,
-  NextApiRequest,
-  NextApiResponse,
+    GetServerSidePropsContext,
+    GetServerSideProps,
+    NextApiRequest,
+    NextApiResponse,
 } from 'next';
 import { logger } from '@navikt/next-logger';
 
-const LOGIN_API_URL = `${process.env.WONDERWALL_ORIGIN || ''}/oauth2/login`
+const LOGIN_API_URL = `${process.env.WONDERWALL_ORIGIN || ''}/oauth2/login`;
 
 /**
  * Inspirert av løsningen til sykepenger: https://github.com/navikt/sykmeldinger/pull/548/files
  */
 
 export const defaultGetServerSideProps = async () => ({ props: {} });
-type ApiHandler = (
-  req: NextApiRequest,
-  res: NextApiResponse,
-) => Promise<unknown> | unknown;
+type ApiHandler = (req: NextApiRequest, res: NextApiResponse) => Promise<unknown> | unknown;
 
 /**
  * Brukes for å autentisere Next.JS pages. Forutsetter at applikasjonen ligger bak
@@ -26,37 +23,37 @@ type ApiHandler = (
  */
 
 export function pageWithAuthentication(
-  getServerSideProps: GetServerSideProps = defaultGetServerSideProps,
+    getServerSideProps: GetServerSideProps = defaultGetServerSideProps,
 ) {
-  return async (context: GetServerSidePropsContext) => {
-    const token = getToken(context.req);
+    return async (context: GetServerSidePropsContext) => {
+        const token = getToken(context.req);
 
-    if (token == null) {
-      return {
-        redirect: {
-          destination: `${LOGIN_API_URL}?redirect=${context.resolvedUrl}`,
-          permanent: false,
-        },
-      };
-    }
+        if (token == null) {
+            return {
+                redirect: {
+                    destination: `${LOGIN_API_URL}?redirect=${context.resolvedUrl}`,
+                    permanent: false,
+                },
+            };
+        }
 
-    const validationResult = await validateToken(token);
-    if (validationResult.ok === false) {
-      const error = new Error(
-        `Ugyldig JWT token funnet omdirigerer til innlogging. Error: ${validationResult.error}, ErrorType: ${validationResult.errorType}`,
-      );
+        const validationResult = await validateToken(token);
+        if (validationResult.ok === false) {
+            const error = new Error(
+                `Ugyldig JWT token funnet omdirigerer til innlogging. Error: ${validationResult.error}, ErrorType: ${validationResult.errorType}`,
+            );
 
-      logger.error(error);
+            logger.error(error);
 
-      return {
-        redirect: {
-          destination: `${LOGIN_API_URL}?redirect=${context.resolvedUrl}`,
-          permanent: false,
-        },
-      };
-    }
-    return getServerSideProps(context);
-  };
+            return {
+                redirect: {
+                    destination: `${LOGIN_API_URL}?redirect=${context.resolvedUrl}`,
+                    permanent: false,
+                },
+            };
+        }
+        return getServerSideProps(context);
+    };
 }
 
 /**
@@ -64,21 +61,21 @@ export function pageWithAuthentication(
  * Wonderwall (https://doc.nais.io/security/auth/idporten/sidecar/).
  */
 export function withAuthenticatedApi(handler: ApiHandler): ApiHandler {
-  return async function withBearerTokenHandler(req, res, ...rest) {
-    const token = getToken(req);
-    if (token == null) {
-      res.status(401).json({ message: 'Ingen tilgang' });
-      return;
-    }
+    return async function withBearerTokenHandler(req, res, ...rest) {
+        const token = getToken(req);
+        if (token == null) {
+            res.status(401).json({ message: 'Ingen tilgang' });
+            return;
+        }
 
-    const validatedToken = await validateToken(token);
-    if (!validatedToken.ok) {
-      logger.error(`Ugyldig JWT token funnet for API ${req.url}`);
+        const validatedToken = await validateToken(token);
+        if (!validatedToken.ok) {
+            logger.error(`Ugyldig JWT token funnet for API ${req.url}`);
 
-      res.status(401).json({ message: 'Ingen tilgang' });
-      return;
-    }
+            res.status(401).json({ message: 'Ingen tilgang' });
+            return;
+        }
 
-    return handler(req, res, ...rest);
-  };
+        return handler(req, res, ...rest);
+    };
 }

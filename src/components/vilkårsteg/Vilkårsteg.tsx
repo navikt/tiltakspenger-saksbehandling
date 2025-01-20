@@ -13,36 +13,32 @@ import AndreYtelser from '../vilkår/AndreYtelser';
 import KravFremmetInnenFrist from '../vilkår/KravFremmetInnenFrist';
 
 const Vilkårsteg = () => {
-  const vilkårsteg = router.query.vilkårsteg as string;
+    const vilkårsteg = router.query.vilkårsteg as string;
 
-  function utledStegFraRoute(route: string | undefined): ReactElement {
-    switch (route) {
-      case Vilkår.KRAVFRIST:
-        return <KravFremmetInnenFrist />;
-      case Vilkår.ALDER:
-        return <Alder />;
-      case Vilkår.TILTAKSDELTAGELSE:
-        return <Tiltaksdeltagelse />;
-      case Vilkår.KVP:
-        return <Kvalifiseringsprogrammet />;
-      case Vilkår.INTROPROGRAMMET:
-        return <Introduksjonsprogrammet />;
-      case Vilkår.INSTITUSJONSOPPHOLD:
-        return <Institusjonsopphold />;
-      case Vilkår.ANDREYTELSER:
-        return <AndreYtelser />;
-      case Vilkår.STØNADSDAGER:
-        return <Stønadsdager />;
-      default:
-        return <KravFremmetInnenFrist />;
+    function utledStegFraRoute(route: string | undefined): ReactElement {
+        switch (route) {
+            case Vilkår.KRAVFRIST:
+                return <KravFremmetInnenFrist />;
+            case Vilkår.ALDER:
+                return <Alder />;
+            case Vilkår.TILTAKSDELTAGELSE:
+                return <Tiltaksdeltagelse />;
+            case Vilkår.KVP:
+                return <Kvalifiseringsprogrammet />;
+            case Vilkår.INTROPROGRAMMET:
+                return <Introduksjonsprogrammet />;
+            case Vilkår.INSTITUSJONSOPPHOLD:
+                return <Institusjonsopphold />;
+            case Vilkår.ANDREYTELSER:
+                return <AndreYtelser />;
+            case Vilkår.STØNADSDAGER:
+                return <Stønadsdager />;
+            default:
+                return <KravFremmetInnenFrist />;
+        }
     }
-  }
 
-  return (
-    <VStack className={styles.vilkårsteg}>
-      {utledStegFraRoute(vilkårsteg)}
-    </VStack>
-  );
+    return <VStack className={styles.vilkårsteg}>{utledStegFraRoute(vilkårsteg)}</VStack>;
 };
 
 export default Vilkårsteg;
