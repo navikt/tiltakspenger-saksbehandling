@@ -1,12 +1,5 @@
 import React, { useContext, useState } from 'react';
-import {
-  BodyShort,
-  Dropdown,
-  InternalHeader,
-  Search,
-  Spacer,
-  VStack,
-} from '@navikt/ds-react';
+import { BodyShort, Dropdown, InternalHeader, Search, Spacer, VStack } from '@navikt/ds-react';
 import { Loader } from '@navikt/ds-react';
 import { SaksbehandlerContext } from '../../pages/_app';
 import { ExternalLinkIcon, LeaveIcon, MenuGridIcon } from '@navikt/aksel-icons';
@@ -14,33 +7,33 @@ import { useHentSakForFNR } from '../../hooks/useHentSakForFNR';
 import Varsel from '../varsel/Varsel';
 
 const InternDekoratør = () => {
-  const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
-  const { søk, error } = useHentSakForFNR();
-  const [søketekst, settSøketekst] = useState<string>();
+    const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
+    const { søk, error } = useHentSakForFNR();
+    const [søketekst, settSøketekst] = useState<string>();
 
-  return (
-    <VStack gap="3">
-      <InternalHeader>
-        <InternalHeader.Title href="/">Tiltakspenger</InternalHeader.Title>
-        <form
-          role="search"
-          style={{ alignContent: 'center', marginLeft: '20px' }}
-          onSubmit={(e) => {
-            e.preventDefault();
-            søk({ fnr: søketekst });
-          }}
-        >
-          <Search
-            label="InternalHeader søk"
-            size="small"
-            variant="simple"
-            placeholder="Søk på fnr"
-            onChange={(e) => settSøketekst(e)}
-          />
-        </form>
-        <Spacer />
+    return (
+        <VStack gap="3">
+            <InternalHeader>
+                <InternalHeader.Title href="/">Tiltakspenger</InternalHeader.Title>
+                <form
+                    role="search"
+                    style={{ alignContent: 'center', marginLeft: '20px' }}
+                    onSubmit={(e) => {
+                        e.preventDefault();
+                        søk({ fnr: søketekst });
+                    }}
+                >
+                    <Search
+                        label="InternalHeader søk"
+                        size="small"
+                        variant="simple"
+                        placeholder="Søk på fnr"
+                        onChange={(e) => settSøketekst(e)}
+                    />
+                </form>
+                <Spacer />
 
-        {/*
+                {/*
         ** B: Kommentert ut frem til vi har løst forskjellige url-er for prod og dev
         <Dropdown>
           <InternalHeader.Button as={Dropdown.Toggle}>
@@ -86,37 +79,35 @@ const InternDekoratør = () => {
           </Dropdown.Menu>
         </Dropdown>
 */}
-        {innloggetSaksbehandler ? (
-          <Dropdown>
-            <InternalHeader.UserButton
-              as={Dropdown.Toggle}
-              name={innloggetSaksbehandler.navIdent}
-            />
-            <Dropdown.Menu>
-              <dl>
-                <BodyShort as="dt" size="small">
-                  {innloggetSaksbehandler.navIdent}
-                </BodyShort>
-              </dl>
-              <Dropdown.Menu.Divider />
-              <Dropdown.Menu.List>
-                <Dropdown.Menu.List.Item as="a" href={'/oauth2/logout'}>
-                  Logg ut
-                  <Spacer />
-                  <LeaveIcon aria-hidden fontSize="1.5rem" />
-                </Dropdown.Menu.List.Item>
-              </Dropdown.Menu.List>
-            </Dropdown.Menu>
-          </Dropdown>
-        ) : (
-          <Loader />
-        )}
-      </InternalHeader>
-      {error && (
-        <Varsel melding={error.message ?? ''} variant="error" marginX />
-      )}
-    </VStack>
-  );
+                {innloggetSaksbehandler ? (
+                    <Dropdown>
+                        <InternalHeader.UserButton
+                            as={Dropdown.Toggle}
+                            name={innloggetSaksbehandler.navIdent}
+                        />
+                        <Dropdown.Menu>
+                            <dl>
+                                <BodyShort as="dt" size="small">
+                                    {innloggetSaksbehandler.navIdent}
+                                </BodyShort>
+                            </dl>
+                            <Dropdown.Menu.Divider />
+                            <Dropdown.Menu.List>
+                                <Dropdown.Menu.List.Item as="a" href={'/oauth2/logout'}>
+                                    Logg ut
+                                    <Spacer />
+                                    <LeaveIcon aria-hidden fontSize="1.5rem" />
+                                </Dropdown.Menu.List.Item>
+                            </Dropdown.Menu.List>
+                        </Dropdown.Menu>
+                    </Dropdown>
+                ) : (
+                    <Loader />
+                )}
+            </InternalHeader>
+            {error && <Varsel melding={error.message ?? ''} variant="error" marginX />}
+        </VStack>
+    );
 };
 
 export default InternDekoratør;

@@ -9,64 +9,56 @@ dayjs.extend(weekOfYear);
 dayjs.locale('nb');
 
 export function dateTilISOTekst(date: Date) {
-  return dayjs(date).format('YYYY-MM-DD');
+    return dayjs(date).format('YYYY-MM-DD');
 }
 
 export function formaterTidspunkt(dateString: string) {
-  return dayjs(dateString).format('DD.MM.YYYY kl. HH:mm');
+    return dayjs(dateString).format('DD.MM.YYYY kl. HH:mm');
 }
 
 export function formaterDatotekst(dateString: string) {
-  return dayjs(dateString).format('DD.MM.YYYY');
+    return dayjs(dateString).format('DD.MM.YYYY');
 }
 
 export function periodeTilFormatertDatotekst({ fraOgMed, tilOgMed }: Periode) {
-  return `${formaterDatotekst(fraOgMed)} - ${formaterDatotekst(tilOgMed)}`;
+    return `${formaterDatotekst(fraOgMed)} - ${formaterDatotekst(tilOgMed)}`;
 }
 
 export const meldekortHeading = (periode: Periode): string => {
-  return `Meldekort uke ${ukenummerFraDatotekst(periode.fraOgMed)} / ${ukenummerFraDatotekst(periode.tilOgMed)}`;
+    return `Meldekort uke ${ukenummerFraDatotekst(periode.fraOgMed)} / ${ukenummerFraDatotekst(periode.tilOgMed)}`;
 };
 
 export const ukeHeading = (dato: string): string => {
-  return `Uke ${ukenummerFraDatotekst(dato)} - ${månedFraDatotekst(dato)} ${dayjs(dato).year()} `;
+    return `Uke ${ukenummerFraDatotekst(dato)} - ${månedFraDatotekst(dato)} ${dayjs(dato).year()} `;
 };
 
 export const meldekortdagHeading = (dato: string) => {
-  return `${ukedagFraDatotekst(dato)} ${formaterDatotekst(dato)}`;
+    return `${ukedagFraDatotekst(dato)} ${formaterDatotekst(dato)}`;
 };
 
 export function ukedagFraDatotekst(dato: string) {
-  const ukedager = [
-    'Mandag',
-    'Tirsdag',
-    'Onsdag',
-    'Torsdag',
-    'Fredag',
-    'Lørdag',
-    'Søndag',
-  ];
-  return ukedager[dayjs(dato).weekday()];
+    const ukedager = ['Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag', 'Søndag'];
+    return ukedager[dayjs(dato).weekday()];
 }
 
 export function månedFraDatotekst(dato: string) {
-  const måneder = [
-    'januar',
-    'februar',
-    'mars',
-    'april',
-    'mai',
-    'juni',
-    'juli',
-    'august',
-    'september',
-    'oktober',
-    'november',
-    'desember',
-  ];
-  return måneder[dayjs(dato).month()];
+    const måneder = [
+        'januar',
+        'februar',
+        'mars',
+        'april',
+        'mai',
+        'juni',
+        'juli',
+        'august',
+        'september',
+        'oktober',
+        'november',
+        'desember',
+    ];
+    return måneder[dayjs(dato).month()];
 }
 
 export function ukenummerFraDatotekst(dato: string) {
-  return dayjs(dato).week();
+    return dayjs(dato).week();
 }

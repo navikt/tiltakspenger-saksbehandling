@@ -3,13 +3,10 @@ import { fetcher } from '../utils/http';
 import { Personopplysninger } from '../types/BehandlingTypes';
 
 export function useHentPersonopplysninger(sakId: string) {
-  const {
-    data: personopplysninger,
-    isLoading: isPersonopplysningerLoading,
-    error,
-  } = useSWR<Personopplysninger>(
-    `/api/sak/${sakId}/personopplysninger`,
-    fetcher,
-  );
-  return { personopplysninger, isPersonopplysningerLoading, error, mutate };
+    const {
+        data: personopplysninger,
+        isLoading: isPersonopplysningerLoading,
+        error,
+    } = useSWR<Personopplysninger>(`/api/sak/${sakId}/personopplysninger`, fetcher);
+    return { personopplysninger, isPersonopplysningerLoading, error, mutate };
 }
