@@ -11,48 +11,44 @@ import IkonMedTekst from '../ikon-med-tekst/IkonMedTekst';
 import { UtfallIkon } from '../utfallikon/UtfallIkon';
 
 const KravFremmetInnenFrist = () => {
-  const { behandlingId } = useContext(BehandlingContext);
-  const { kravfristVilkår, isLoading, error } = useHentKravfrist(behandlingId);
+    const { behandlingId } = useContext(BehandlingContext);
+    const { kravfristVilkår, isLoading, error } = useHentKravfrist(behandlingId);
 
-  if (isLoading || !kravfristVilkår) {
-    return <Loader />;
-  } else if (error)
+    if (isLoading || !kravfristVilkår) {
+        return <Loader />;
+    } else if (error)
+        return (
+            <Varsel
+                variant="error"
+                melding={`Kunne ikke hente kravfristvilkår (${error.status} ${error.info})`}
+            />
+        );
+
     return (
-      <Varsel
-        variant="error"
-        melding={`Kunne ikke hente kravfristvilkår (${error.status} ${error.info})`}
-      />
+        <VStack gap="4">
+            <VilkårHeader
+                headertekst={'Krav fremmet innen frist'}
+                lovdatatekst={kravfristVilkår.vilkårLovreferanse.beskrivelse}
+                lovdatalenke={'https://lovdata.no/forskrift/2013-11-04-1286/§11'}
+                paragraf={kravfristVilkår.vilkårLovreferanse.paragraf}
+            />
+            <IkonMedTekst
+                iconRenderer={() => <UtfallIkon utfall={kravfristVilkår.samletUtfall} />}
+                text={lagUtfallstekst(kravfristVilkår.samletUtfall)}
+            />
+            <VilkårKort
+                saksopplysningsperiode={kravfristVilkår.utfallperiode}
+                kilde={kravfristVilkår.avklartSaksopplysning.kilde}
+                utfall={kravfristVilkår.samletUtfall}
+                grunnlag={[
+                    {
+                        header: 'Kravdato',
+                        data: formaterDatotekst(kravfristVilkår.avklartSaksopplysning.kravdato),
+                    },
+                ]}
+            />
+        </VStack>
     );
-
-  return (
-    <VStack gap="4">
-      <VilkårHeader
-        headertekst={'Krav fremmet innen frist'}
-        lovdatatekst={kravfristVilkår.vilkårLovreferanse.beskrivelse}
-        lovdatalenke={'https://lovdata.no/forskrift/2013-11-04-1286/§11'}
-        paragraf={kravfristVilkår.vilkårLovreferanse.paragraf}
-      />
-      <IkonMedTekst
-        iconRenderer={() => (
-          <UtfallIkon utfall={kravfristVilkår.samletUtfall} />
-        )}
-        text={lagUtfallstekst(kravfristVilkår.samletUtfall)}
-      />
-      <VilkårKort
-        saksopplysningsperiode={kravfristVilkår.utfallperiode}
-        kilde={kravfristVilkår.avklartSaksopplysning.kilde}
-        utfall={kravfristVilkår.samletUtfall}
-        grunnlag={[
-          {
-            header: 'Kravdato',
-            data: formaterDatotekst(
-              kravfristVilkår.avklartSaksopplysning.kravdato,
-            ),
-          },
-        ]}
-      />
-    </VStack>
-  );
 };
 
 export default KravFremmetInnenFrist;

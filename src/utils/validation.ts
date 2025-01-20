@@ -5,44 +5,41 @@ export type ValidatorFunction = (value: any) => string | undefined;
 const inneholderKunTall = (verdi: string) => /^\d+$/.test(verdi);
 
 export function påkrevdPeriodeValidator(periode: { fra: Date; til: Date }) {
-  if (!periode?.fra || !periode?.til) {
-    return 'Fra og til må fylles ut';
-  }
+    if (!periode?.fra || !periode?.til) {
+        return 'Fra og til må fylles ut';
+    }
 }
 
 export function gyldigNavkontor(navkontor: string) {
-  if (!navkontor) {
-    return 'Navkontor må fylles ut';
-  } else if (navkontor.length != 4) {
-    return 'Navkontor må inneholde nøyaktig fire siffer';
-  } else if (!inneholderKunTall(navkontor)) {
-    return 'Navkontor kan kun inneholde siffer';
-  }
+    if (!navkontor) {
+        return 'Navkontor må fylles ut';
+    } else if (navkontor.length != 4) {
+        return 'Navkontor må inneholde nøyaktig fire siffer';
+    } else if (!inneholderKunTall(navkontor)) {
+        return 'Navkontor kan kun inneholde siffer';
+    }
 }
 
 export function gyldigPeriodeValidator(periode: { fra: Date; til: Date }) {
-  const fraDato = dayjs(periode?.fra);
-  const tilDato = dayjs(periode?.til);
+    const fraDato = dayjs(periode?.fra);
+    const tilDato = dayjs(periode?.til);
 
-  if (fraDato.isAfter(tilDato)) {
-    return 'Fra-dato kan ikke være etter til-dato';
-  }
+    if (fraDato.isAfter(tilDato)) {
+        return 'Fra-dato kan ikke være etter til-dato';
+    }
 }
 
 export function validatorArrayAsObject(validate: ValidatorFunction[]) {
-  const validateObject: { [key: string]: ValidatorFunction } = {};
-  validate.forEach(
-    (validatorFunction, index) =>
-      (validateObject[`${index}`] = validatorFunction),
-  );
-  return validateObject;
+    const validateObject: { [key: string]: ValidatorFunction } = {};
+    validate.forEach(
+        (validatorFunction, index) => (validateObject[`${index}`] = validatorFunction),
+    );
+    return validateObject;
 }
 
-export function setupValidation(
-  validate?: ValidatorFunction | ValidatorFunction[],
-) {
-  if (Array.isArray(validate)) {
-    return validatorArrayAsObject(validate);
-  }
-  return validate;
+export function setupValidation(validate?: ValidatorFunction | ValidatorFunction[]) {
+    if (Array.isArray(validate)) {
+        return validatorArrayAsObject(validate);
+    }
+    return validate;
 }

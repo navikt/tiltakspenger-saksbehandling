@@ -3,11 +3,11 @@ import { Saksbehandler } from '../types/Saksbehandler';
 import useSWRImmutable from 'swr/immutable';
 
 export default function useSaksbehandler() {
-  const {
-    data: saksbehandler,
-    isLoading: isSaksbehandlerLoading,
-    error,
-  } = useSWRImmutable<Saksbehandler>('/api/saksbehandler', fetcher);
+    const {
+        data: saksbehandler,
+        isLoading: isSaksbehandlerLoading,
+        error,
+    } = useSWRImmutable<Saksbehandler>('/api/saksbehandler', fetcher);
 
-  return { saksbehandler, isSaksbehandlerLoading, error };
+    return { saksbehandler, isSaksbehandlerLoading, error };
 }

@@ -1,4 +1,4 @@
 export type Periode = {
-  fraOgMed: string;
-  tilOgMed: string;
+    fraOgMed: string;
+    tilOgMed: string;
 };

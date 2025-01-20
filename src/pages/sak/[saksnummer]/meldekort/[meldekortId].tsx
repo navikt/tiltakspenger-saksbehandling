@@ -1,11 +1,4 @@
-import {
-  Button,
-  CopyButton,
-  HStack,
-  Loader,
-  Tag,
-  VStack,
-} from '@navikt/ds-react';
+import { Button, CopyButton, HStack, Loader, Tag, VStack } from '@navikt/ds-react';
 import { pageWithAuthentication } from '../../../../auth/pageWithAuthentication';
 import Meldekortdetaljer from '../../../../components/meldekort/meldekortdetaljer/Meldekortdetaljer';
 import { Meldekortside } from '../../../../components/meldekort/meldekortside/Meldekortside';
@@ -20,39 +13,35 @@ import { useHentMeldekort } from '../../../../hooks/meldekort/useHentMeldekort';
 import Varsel from '../../../../components/varsel/Varsel';
 
 const Meldekort: NextPageWithLayout = () => {
-  const { sakId, saknummer } = useContext(SakContext);
-  const meldekortId = router.query.meldekortId as string;
-  const { meldekort, error, isLoading } = useHentMeldekort(meldekortId, sakId);
+    const { sakId, saknummer } = useContext(SakContext);
+    const meldekortId = router.query.meldekortId as string;
+    const { meldekort, error, isLoading } = useHentMeldekort(meldekortId, sakId);
 
-  if (error) {
-    console.log(error.message);
-    return <Varsel variant="error" melding={error.message} />;
-  }
-  if (isLoading || !meldekort) return <Loader />;
-  return (
-    <VStack>
-      <PersonaliaHeader sakId={sakId} saksnummer={saknummer}>
-        <Button
-          type="submit"
-          size="small"
-          onClick={() => router.push(`/sak/${saknummer}`)}
-        >
-          Tilbake til saksoversikt
-        </Button>
-        <Tag variant="alt3-filled" className={styles.behandlingTag}>
-          {finnMeldekortstatusTekst(meldekort.status)}
-        </Tag>
-      </PersonaliaHeader>
-      <HStack wrap={false} className={styles.behandlingLayout}>
-        <Meldekortdetaljer />
-        <Meldekortside />
-      </HStack>
-    </VStack>
-  );
+    if (error) {
+        console.log(error.message);
+        return <Varsel variant="error" melding={error.message} />;
+    }
+    if (isLoading || !meldekort) return <Loader />;
+    return (
+        <VStack>
+            <PersonaliaHeader sakId={sakId} saksnummer={saknummer}>
+                <Button type="submit" size="small" onClick={() => router.push(`/sak/${saknummer}`)}>
+                    Tilbake til saksoversikt
+                </Button>
+                <Tag variant="alt3-filled" className={styles.behandlingTag}>
+                    {finnMeldekortstatusTekst(meldekort.status)}
+                </Tag>
+            </PersonaliaHeader>
+            <HStack wrap={false} className={styles.behandlingLayout}>
+                <Meldekortdetaljer />
+                <Meldekortside />
+            </HStack>
+        </VStack>
+    );
 };
 
 Meldekort.getLayout = function getLayout(page: ReactElement) {
-  return <SakLayout>{page}</SakLayout>;
+    return <SakLayout>{page}</SakLayout>;
 };
 
 export const getServerSideProps = pageWithAuthentication();

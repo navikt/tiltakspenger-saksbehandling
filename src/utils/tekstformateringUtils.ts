@@ -1,8 +1,8 @@
 import {
-  BehandlingStatus,
-  TypeBehandling,
-  Utfall,
-  ÅrsakTilEndring,
+    BehandlingStatus,
+    TypeBehandling,
+    Utfall,
+    ÅrsakTilEndring,
 } from '../types/BehandlingTypes';
 import { Opphold } from '../types/InstitusjonsoppholdTypes';
 import { Deltagelse } from '../types/KvpTypes';
@@ -11,168 +11,164 @@ import { DeltagelseStatus } from '../types/TiltakDeltagelseTypes';
 import { Kilde } from '../types/VilkårTypes';
 
 export const finnKildetekst = (kilde: string) => {
-  switch (kilde) {
-    case Kilde.SØKNAD:
-      return 'Søknad';
-    case Kilde.PDL:
-      return 'Folkeregisteret';
-    case Kilde.KOMET:
-      return 'Komet';
-    case Kilde.ARENA:
-      return 'Arena';
-  }
+    switch (kilde) {
+        case Kilde.SØKNAD:
+            return 'Søknad';
+        case Kilde.PDL:
+            return 'Folkeregisteret';
+        case Kilde.KOMET:
+            return 'Komet';
+        case Kilde.ARENA:
+            return 'Arena';
+    }
 };
 
 export function lagUtfallstekst(utfall: string) {
-  switch (utfall) {
-    case Utfall.OPPFYLT:
-      return 'Vilkåret er oppfylt i hele perioden';
-    case Utfall.IKKE_OPPFYLT:
-      return 'Vilkåret er ikke oppfylt';
-    case Utfall.DELVIS_OPPFYLT:
-      return 'Vilkåret er delvis oppfylt';
-    case Utfall.UAVKLART:
-      return 'Vilkåret er uavklart';
-    default:
-      return 'Vilkåret er uavklart';
-  }
+    switch (utfall) {
+        case Utfall.OPPFYLT:
+            return 'Vilkåret er oppfylt i hele perioden';
+        case Utfall.IKKE_OPPFYLT:
+            return 'Vilkåret er ikke oppfylt';
+        case Utfall.DELVIS_OPPFYLT:
+            return 'Vilkåret er delvis oppfylt';
+        case Utfall.UAVKLART:
+            return 'Vilkåret er uavklart';
+        default:
+            return 'Vilkåret er uavklart';
+    }
 }
 
 export const lagFaktumTekstAvLivsopphold = (harLivsoppholdYtelser: boolean) => {
-  return harLivsoppholdYtelser
-    ? 'Søker har andre ytelser til livsopphold'
-    : 'Søker har ikke andre ytelser til livsopphold';
+    return harLivsoppholdYtelser
+        ? 'Søker har andre ytelser til livsopphold'
+        : 'Søker har ikke andre ytelser til livsopphold';
 };
 
 export const lagFaktumTekst = (faktum: Deltagelse | Opphold) => {
-  switch (faktum) {
-    case Deltagelse.DELTAR_IKKE:
-      return 'Søker deltar ikke';
-    case Deltagelse.DELTAR:
-      return 'Søker deltar';
-    case Opphold.IKKE_OPPHOLD:
-      return 'Søker oppholder seg ikke på institusjon';
-    case Opphold.OPPHOLD:
-      return 'Søker oppholder seg på institusjon';
-    default:
-      return 'Vilkåret er uavklart';
-  }
+    switch (faktum) {
+        case Deltagelse.DELTAR_IKKE:
+            return 'Søker deltar ikke';
+        case Deltagelse.DELTAR:
+            return 'Søker deltar';
+        case Opphold.IKKE_OPPHOLD:
+            return 'Søker oppholder seg ikke på institusjon';
+        case Opphold.OPPHOLD:
+            return 'Søker oppholder seg på institusjon';
+        default:
+            return 'Vilkåret er uavklart';
+    }
 };
 
 export const finnStatusTekst = (status: string, underkjent: boolean) => {
-  switch (status) {
-    case BehandlingStatus.VEDTATT:
-      return 'Vedtatt';
-    case BehandlingStatus.KLAR_TIL_BEHANDLING:
-      return underkjent ? 'Underkjent' : 'Klar til behandling';
-    case BehandlingStatus.KLAR_TIL_BESLUTNING:
-      return 'Klar til beslutning';
-    case BehandlingStatus.SØKNAD:
-      return 'Søknad';
-    case BehandlingStatus.UNDER_BEHANDLING:
-      return underkjent ? 'Underkjent' : 'Under behandling';
-    case BehandlingStatus.UNDER_BESLUTNING:
-      return 'Under beslutning';
-    case BehandlingStatus.KAN_BEHANDLES:
-      return 'Kan behandles';
-    case BehandlingStatus.KAN_IKKE_BEHANDLES:
-      return 'Kan ikke behandles';
-  }
+    switch (status) {
+        case BehandlingStatus.VEDTATT:
+            return 'Vedtatt';
+        case BehandlingStatus.KLAR_TIL_BEHANDLING:
+            return underkjent ? 'Underkjent' : 'Klar til behandling';
+        case BehandlingStatus.KLAR_TIL_BESLUTNING:
+            return 'Klar til beslutning';
+        case BehandlingStatus.SØKNAD:
+            return 'Søknad';
+        case BehandlingStatus.UNDER_BEHANDLING:
+            return underkjent ? 'Underkjent' : 'Under behandling';
+        case BehandlingStatus.UNDER_BESLUTNING:
+            return 'Under beslutning';
+        case BehandlingStatus.KAN_BEHANDLES:
+            return 'Kan behandles';
+        case BehandlingStatus.KAN_IKKE_BEHANDLES:
+            return 'Kan ikke behandles';
+    }
 };
 
 export const finnMeldekortdagStatusTekst = (status: string) => {
-  switch (status) {
-    case MeldekortdagStatus.Sperret:
-      return 'Ikke rett på tiltakspenger';
-    case MeldekortdagStatus.DeltattMedLønnITiltaket:
-      return 'Deltatt med lønn i tiltaket';
-    case MeldekortdagStatus.DeltattUtenLønnITiltaket:
-      return 'Deltatt uten lønn i tiltaket';
-    case MeldekortdagStatus.FraværSyk:
-      return 'Fravær - Syk';
-    case MeldekortdagStatus.FraværSyktBarn:
-      return 'Fravær - Sykt barn';
-    case MeldekortdagStatus.FraværVelferdGodkjentAvNav:
-      return 'Godkjent fravær - Velferd';
-    case MeldekortdagStatus.FraværVelferdIkkeGodkjentAvNav:
-      return 'Ikke godkjent fravær - Velferd';
-    case MeldekortdagStatus.IkkeDeltatt:
-      return 'Ikke deltatt i tiltaket';
-    case MeldekortdagStatus.IkkeUtfylt:
-      return 'Ikke utfylt';
-  }
+    switch (status) {
+        case MeldekortdagStatus.Sperret:
+            return 'Ikke rett på tiltakspenger';
+        case MeldekortdagStatus.DeltattMedLønnITiltaket:
+            return 'Deltatt med lønn i tiltaket';
+        case MeldekortdagStatus.DeltattUtenLønnITiltaket:
+            return 'Deltatt uten lønn i tiltaket';
+        case MeldekortdagStatus.FraværSyk:
+            return 'Fravær - Syk';
+        case MeldekortdagStatus.FraværSyktBarn:
+            return 'Fravær - Sykt barn';
+        case MeldekortdagStatus.FraværVelferdGodkjentAvNav:
+            return 'Godkjent fravær - Velferd';
+        case MeldekortdagStatus.FraværVelferdIkkeGodkjentAvNav:
+            return 'Ikke godkjent fravær - Velferd';
+        case MeldekortdagStatus.IkkeDeltatt:
+            return 'Ikke deltatt i tiltaket';
+        case MeldekortdagStatus.IkkeUtfylt:
+            return 'Ikke utfylt';
+    }
 };
 export const finnMeldekortstatusTekst = (status: string) => {
-  switch (status) {
-    case Meldekortstatus.IKKE_KLAR_TIL_UTFYLLING:
-      return 'Ikke klar til utfylling';
-    case Meldekortstatus.KLAR_TIL_UTFYLLING:
-      return 'Klar til utfylling';
-    case Meldekortstatus.KLAR_TIL_BESLUTNING:
-      return 'Klar til beslutning';
-    case Meldekortstatus.GODKJENT:
-      return 'Godkjent';
-  }
+    switch (status) {
+        case Meldekortstatus.IKKE_KLAR_TIL_UTFYLLING:
+            return 'Ikke klar til utfylling';
+        case Meldekortstatus.KLAR_TIL_UTFYLLING:
+            return 'Klar til utfylling';
+        case Meldekortstatus.KLAR_TIL_BESLUTNING:
+            return 'Klar til beslutning';
+        case Meldekortstatus.GODKJENT:
+            return 'Godkjent';
+    }
 };
 
 export const deltagelseTekst = (deltagelse: Deltagelse): string => {
-  switch (deltagelse) {
-    case Deltagelse.DELTAR:
-      return 'Ja';
-    case Deltagelse.DELTAR_IKKE:
-      return 'Nei';
-  }
+    switch (deltagelse) {
+        case Deltagelse.DELTAR:
+            return 'Ja';
+        case Deltagelse.DELTAR_IKKE:
+            return 'Nei';
+    }
 };
 
-export const finnBehandlingstypeTekst = (
-  behandlingstype: TypeBehandling,
-): string => {
-  switch (behandlingstype) {
-    case TypeBehandling.FØRSTEGANGSBEHANDLING:
-      return 'Førstegangsbehandling';
-    case TypeBehandling.REVURDERING:
-      return 'Revurdering';
-    case TypeBehandling.SØKNAD:
-      'Søknad';
-    default:
-      return 'Søknad';
-  }
+export const finnBehandlingstypeTekst = (behandlingstype: TypeBehandling): string => {
+    switch (behandlingstype) {
+        case TypeBehandling.FØRSTEGANGSBEHANDLING:
+            return 'Førstegangsbehandling';
+        case TypeBehandling.REVURDERING:
+            return 'Revurdering';
+        case TypeBehandling.SØKNAD:
+            'Søknad';
+        default:
+            return 'Søknad';
+    }
 };
 
-export const finnDeltagelsestatusTekst = (
-  deltagelsestatus: DeltagelseStatus,
-): string => {
-  switch (deltagelsestatus) {
-    case DeltagelseStatus.HarSluttet:
-      return 'Har sluttet';
-    case DeltagelseStatus.VenterPåOppstart:
-      return 'Venter på oppstart';
-    case DeltagelseStatus.Deltar:
-      return 'Deltar';
-    case DeltagelseStatus.Avbrutt:
-      return 'Avbrutt';
-    case DeltagelseStatus.Fullført:
-      return 'Fullført';
-    case DeltagelseStatus.IkkeAktuell:
-      return 'Ikke aktuell';
-    case DeltagelseStatus.Feilregistrert:
-      return 'Feilregistrert';
-    case DeltagelseStatus.PåbegyntRegistrering:
-      return 'Påbegynt registrering';
-    case DeltagelseStatus.SøktInn:
-      return 'Søkt inn';
-    case DeltagelseStatus.Venteliste:
-      return 'Venteliste';
-    case DeltagelseStatus.Vurderes:
-      return 'Vurderes';
-  }
+export const finnDeltagelsestatusTekst = (deltagelsestatus: DeltagelseStatus): string => {
+    switch (deltagelsestatus) {
+        case DeltagelseStatus.HarSluttet:
+            return 'Har sluttet';
+        case DeltagelseStatus.VenterPåOppstart:
+            return 'Venter på oppstart';
+        case DeltagelseStatus.Deltar:
+            return 'Deltar';
+        case DeltagelseStatus.Avbrutt:
+            return 'Avbrutt';
+        case DeltagelseStatus.Fullført:
+            return 'Fullført';
+        case DeltagelseStatus.IkkeAktuell:
+            return 'Ikke aktuell';
+        case DeltagelseStatus.Feilregistrert:
+            return 'Feilregistrert';
+        case DeltagelseStatus.PåbegyntRegistrering:
+            return 'Påbegynt registrering';
+        case DeltagelseStatus.SøktInn:
+            return 'Søkt inn';
+        case DeltagelseStatus.Venteliste:
+            return 'Venteliste';
+        case DeltagelseStatus.Vurderes:
+            return 'Vurderes';
+    }
 };
 
 export const finnÅrsaksTekst = (årsak: ÅrsakTilEndring): string => {
-  switch (årsak) {
-    case ÅrsakTilEndring.ENDRING_ETTER_SØKNADSTIDSPUNKT:
-      return 'Endring etter søknadstidspunkt';
-    case ÅrsakTilEndring.FEIL_I_INNHENTET_DATA:
-      return 'Feil i innhentet data';
-  }
+    switch (årsak) {
+        case ÅrsakTilEndring.ENDRING_ETTER_SØKNADSTIDSPUNKT:
+            return 'Endring etter søknadstidspunkt';
+        case ÅrsakTilEndring.FEIL_I_INNHENTET_DATA:
+            return 'Feil i innhentet data';
+    }
 };

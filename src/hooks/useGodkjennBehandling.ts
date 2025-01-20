@@ -6,27 +6,27 @@ import { finnOversiktslenke } from './useSendTilBeslutter';
 import { Behandling } from '../types/BehandlingTypes';
 
 export function useGodkjennBehandling(behandlingId: string, sakId: string) {
-  const {
-    trigger: godkjennBehandling,
-    isMutating: godkjennerBehandling,
-    error: godkjennBehandlingError,
-    reset,
-  } = useSWRMutation<Behandling, FetcherError, any, { id: string }>(
-    `/api/sak/${sakId}/behandling/${behandlingId}/iverksett`,
-    mutateBehandling,
-    {
-      onSuccess: (data) => {
-        mutate('/api/behandlinger');
-        mutate(`/api/behandling/${behandlingId}`);
-        router.push(finnOversiktslenke(data.saksnummer, data.behandlingstype));
-      },
-    },
-  );
+    const {
+        trigger: godkjennBehandling,
+        isMutating: godkjennerBehandling,
+        error: godkjennBehandlingError,
+        reset,
+    } = useSWRMutation<Behandling, FetcherError, any, { id: string }>(
+        `/api/sak/${sakId}/behandling/${behandlingId}/iverksett`,
+        mutateBehandling,
+        {
+            onSuccess: (data) => {
+                mutate('/api/behandlinger');
+                mutate(`/api/behandling/${behandlingId}`);
+                router.push(finnOversiktslenke(data.saksnummer, data.behandlingstype));
+            },
+        },
+    );
 
-  return {
-    godkjennBehandling,
-    godkjennerBehandling,
-    godkjennBehandlingError,
-    reset,
-  };
+    return {
+        godkjennBehandling,
+        godkjennerBehandling,
+        godkjennBehandlingError,
+        reset,
+    };
 }

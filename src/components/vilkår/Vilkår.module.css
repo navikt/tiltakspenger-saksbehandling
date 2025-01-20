@@ -1,24 +1,23 @@
 .container {
-  background: #ffffff;
-  border: 2px #9099a5 solid;
-  border-radius: 4px;
-  padding: 1rem;
+    background: #ffffff;
+    border: 2px #9099a5 solid;
+    border-radius: 4px;
+    padding: 1rem;
 }
 
 .avklart_saksopplysning {
-  width: 50%;
-  padding-right: 1rem;
-  flex: 2;
+    width: 50%;
+    padding-right: 1rem;
+    flex: 2;
 }
 
 .registerdata {
-  border-left: 1px #000000 solid;
-  padding-left: 2rem;
-  width: 50%;
-  flex: 1;
+    border-left: 1px #000000 solid;
+    padding-left: 2rem;
+    width: 50%;
+    flex: 1;
 }
 
 .margin_top {
-  margin-top: 1rem;
+    margin-top: 1rem;
 }
-
