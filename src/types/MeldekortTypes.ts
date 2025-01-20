@@ -20,8 +20,10 @@ export type Meldekort = {
   totalbeløpTilUtbetaling: number;
   vedtaksPeriode: Periode;
   antallDager: number;
-  navkontor?: Navkontor;
-  forrigeNavkontor?: Navkontor;
+  navkontor?: string;
+  navkontorNavn?: string,
+  forrigeNavkontor?: string,
+  forrigeNavkontorNavn?: string;
 };
 
 export enum Meldekortstatus {
@@ -29,11 +31,6 @@ export enum Meldekortstatus {
   KLAR_TIL_UTFYLLING = 'KLAR_TIL_UTFYLLING',
   KLAR_TIL_BESLUTNING = 'KLAR_TIL_BESLUTNING',
   GODKJENT = 'GODKJENT',
-}
-
-export type Navkontor = {
-  kontornummer: string,
-  kontornavn?: string,
 }
 
 export type MeldekortDag = {
