@@ -1,7 +1,7 @@
 import { Box, HStack, Heading, Spacer, Button, DatePicker } from '@navikt/ds-react';
 import { Controller, useForm } from 'react-hook-form';
 import { BehandlingForBenk } from '../../types/BehandlingTypes';
-import { Meldekortsammendrag } from '../../types/MeldekortTypes';
+import { MeldeperiodeSammendrag } from '../../types/MeldekortTypes';
 import { dateTilISOTekst } from '../../utils/date';
 import { setupValidation } from '../../utils/validation';
 import Datovelger from '../revurderingsmodal/Datovelger';
@@ -16,7 +16,7 @@ import styles from './Saksoversikt.module.css';
 
 interface SaksoversiktProps {
     behandlingsoversikt: BehandlingForBenk[];
-    meldekortoversikt: Meldekortsammendrag[];
+    meldeperioder: MeldeperiodeSammendrag[];
     førsteLovligeStansdato: string;
     saksnummer: string;
     sakId: string;
@@ -25,7 +25,7 @@ interface SaksoversiktProps {
 export const Saksoversikt = ({
     behandlingsoversikt,
     førsteLovligeStansdato,
-    meldekortoversikt,
+    meldeperioder,
     saksnummer,
     sakId,
 }: SaksoversiktProps) => {
@@ -82,10 +82,7 @@ export const Saksoversikt = ({
                 <Heading level={'3'} size={'small'}>
                     {'Meldekort'}
                 </Heading>
-                <MeldekortOversikt
-                    meldekortsammendrag={meldekortoversikt}
-                    saksnummer={saksnummer}
-                />
+                <MeldekortOversikt meldeperioder={meldeperioder} saksnummer={saksnummer} />
             </Box>
             <Spørsmålsmodal
                 modalRef={modalRef}
