@@ -13,6 +13,7 @@ import Varsel from '../../../../components/varsel/Varsel';
 import Link from 'next/link';
 
 import styles from '../../../behandling/Behandling.module.css';
+import { MeldeperioderProvider } from '../../../../hooks/meldekort/meldeperioder-context/MeldeperioderProvider';
 
 const Meldekort: NextPageWithLayout = () => {
     const { sakId, saknummer } = useContext(SakContext);
@@ -29,6 +30,9 @@ const Meldekort: NextPageWithLayout = () => {
         return <Loader />;
     }
 
+    // TODO: selector komponent for å velge blant flere instanser av meldeperioden
+    const valgtMeldeperiode = meldeperiodeKjede.meldeperioder[0];
+
     return (
         <VStack>
             <PersonaliaHeader sakId={sakId} saksnummer={saknummer}>
@@ -36,15 +40,17 @@ const Meldekort: NextPageWithLayout = () => {
                     Tilbake til saksoversikt
                 </Button>
                 <Tag variant="alt3-filled" className={styles.behandlingTag}>
-                    {finnMeldeperiodeStatusTekst[meldeperiodeKjede.meldeperioder[0].status]}
+                    {finnMeldeperiodeStatusTekst[valgtMeldeperiode.status]}
                 </Tag>
             </PersonaliaHeader>
             <HStack wrap={false} className={styles.behandlingLayout}>
-                <MeldekortDetaljer
-                    meldeperiode={meldeperiodeKjede.meldeperioder[0]}
+                <MeldeperioderProvider
                     meldeperiodeKjede={meldeperiodeKjede}
-                />
-                <Meldekortside meldeperiodeKjede={meldeperiodeKjede} />
+                    valgtMeldeperiode={valgtMeldeperiode}
+                >
+                    <MeldekortDetaljer />
+                    <Meldekortside />
+                </MeldeperioderProvider>
             </HStack>
         </VStack>
     );

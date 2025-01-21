@@ -5,32 +5,27 @@ import {
     BrukersMeldekortDagStatus,
     MeldekortBehandlingStatus,
     MeldeperiodeProps,
-    MeldeperiodeKjedeProps,
     MeldeperiodeStatus,
 } from '../../../types/MeldekortTypes';
 import { MeldekortBehandlingUtfylling } from './meldekort-behandling/MeldekortBehandlingUtfylling';
 import { MeldekortBehandlingOppsummering } from './meldekort-behandling/MeldekortBehandlingOppsummering';
 import { BrukersMeldekortVisning } from './BrukersMeldekort';
+import { MeldekortBehandlingOpprett } from './meldekort-behandling/MeldekortBehandlingOpprett';
+import { useMeldeperioder } from '../../../hooks/meldekort/meldeperioder-context/useMeldeperioder';
 
 import styles from './Meldekort.module.css';
-import { MeldekortBehandlingOpprett } from './meldekort-behandling/MeldekortBehandlingOpprett';
 
-type Props = {
-    meldeperiodeKjede: MeldeperiodeKjedeProps;
-};
+export const Meldekortside = () => {
+    const { meldeperiodeKjede, valgtMeldeperiode } = useMeldeperioder();
 
-export const Meldekortside = ({ meldeperiodeKjede }: Props) => {
-    // TODO: skal kunne velge element i kjeden
-    const meldeperiode = meldeperiodeKjede.meldeperioder[0];
-
-    const brukersMeldekort = meldeperiode.brukersMeldekort; // || brukersMeldekortDummy(meldeperiode);
+    const brukersMeldekort = valgtMeldeperiode.brukersMeldekort; // || brukersMeldekortDummy(meldeperiode);
 
     return (
         <VStack gap="5" className={styles.wrapper}>
             <HStack gap={'5'}>
                 {brukersMeldekort && (
                     <BrukersMeldekortVisning
-                        meldeperiode={meldeperiode}
+                        meldeperiode={valgtMeldeperiode}
                         brukersMeldekort={brukersMeldekort}
                     />
                 )}
@@ -38,15 +33,15 @@ export const Meldekortside = ({ meldeperiodeKjede }: Props) => {
                     <Heading level="2" size="medium">
                         {meldekortHeading(meldeperiodeKjede.periode)}
                     </Heading>
-                    {erBehandlet(meldeperiode) ? (
-                        <MeldekortBehandlingOppsummering meldeperiode={meldeperiode} />
-                    ) : kanBehandles(meldeperiode) ? (
+                    {erBehandlet(valgtMeldeperiode) ? (
+                        <MeldekortBehandlingOppsummering meldeperiode={valgtMeldeperiode} />
+                    ) : kanBehandles(valgtMeldeperiode) ? (
                         <MeldekortBehandlingUtfylling
                             meldeperiodeKjede={meldeperiodeKjede}
-                            meldekortBehandling={meldeperiode.meldekortBehandling}
+                            meldekortBehandling={valgtMeldeperiode.meldekortBehandling}
                         />
                     ) : (
-                        <MeldekortBehandlingOpprett meldeperiode={meldeperiode} />
+                        <MeldekortBehandlingOpprett meldeperiode={valgtMeldeperiode} />
                     )}
                 </VStack>
             </HStack>
