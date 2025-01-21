@@ -1,6 +1,5 @@
 import { Button, HStack, Loader, Tag, VStack } from '@navikt/ds-react';
 import { pageWithAuthentication } from '../../../../auth/pageWithAuthentication';
-import MeldekortDetaljer from '../../../../components/meldekort/meldekortdetaljer/MeldekortDetaljer';
 import { Meldekortside } from '../../../../components/meldekort/meldekortside/Meldekortside';
 import { NextPageWithLayout } from '../../../_app';
 import { SakContext, SakLayout } from '../../../../components/layout/SakLayout';
@@ -11,9 +10,10 @@ import { finnMeldeperiodeStatusTekst } from '../../../../utils/tekstformateringU
 import { useHentMeldeperiodeKjede } from '../../../../hooks/meldekort/useHentMeldeperiodeKjede';
 import Varsel from '../../../../components/varsel/Varsel';
 import Link from 'next/link';
+import { MeldeperioderProvider } from '../../../../hooks/meldekort/meldeperioder-context/MeldeperioderProvider';
+import { MeldekortDetaljer } from '../../../../components/meldekort/meldekortdetaljer/MeldekortDetaljer';
 
 import styles from '../../../behandling/Behandling.module.css';
-import { MeldeperioderProvider } from '../../../../hooks/meldekort/meldeperioder-context/MeldeperioderProvider';
 
 const Meldekort: NextPageWithLayout = () => {
     const { sakId, saknummer } = useContext(SakContext);

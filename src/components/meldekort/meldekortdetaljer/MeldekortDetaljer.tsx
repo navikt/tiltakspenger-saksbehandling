@@ -2,10 +2,11 @@ import { VStack, BodyShort } from '@navikt/ds-react';
 import { periodeTilFormatertDatotekst } from '../../../utils/date';
 import { MeldekortBehandlingDetaljer } from './MeldekortBehandlingDetaljer';
 import { useMeldeperioder } from '../../../hooks/meldekort/meldeperioder-context/useMeldeperioder';
+import { MeldekortBehandlingOpprett } from '../meldekortside/meldekort-behandling/MeldekortBehandlingOpprett';
 
 import styles from './Meldekortdetaljer.module.css';
 
-const MeldekortDetaljer = () => {
+export const MeldekortDetaljer = () => {
     const { meldeperiodeKjede, valgtMeldeperiode } = useMeldeperioder();
     const { vedtaksPeriode, periode, tiltaksnavn } = meldeperiodeKjede;
     const { antallDager, meldekortBehandling } = valgtMeldeperiode;
@@ -24,11 +25,11 @@ const MeldekortDetaljer = () => {
             <BodyShort weight={'semibold'}>Antall dager per meldeperiode</BodyShort>
             <BodyShort>{antallDager}</BodyShort>
 
-            {meldekortBehandling && (
+            {meldekortBehandling ? (
                 <MeldekortBehandlingDetaljer meldekortBehandling={meldekortBehandling} />
+            ) : (
+                <MeldekortBehandlingOpprett meldeperiode={valgtMeldeperiode} />
             )}
         </VStack>
     );
 };
-
-export default MeldekortDetaljer;

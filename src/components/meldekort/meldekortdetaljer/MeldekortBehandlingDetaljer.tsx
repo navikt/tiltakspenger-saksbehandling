@@ -6,7 +6,8 @@ type Props = {
 };
 
 export const MeldekortBehandlingDetaljer = ({ meldekortBehandling }: Props) => {
-    const { forrigeNavkontor, saksbehandler, beslutter } = meldekortBehandling;
+    const { forrigeNavkontor, forrigeNavkontorNavn, saksbehandler, beslutter } =
+        meldekortBehandling;
 
     return (
         <>
@@ -15,7 +16,7 @@ export const MeldekortBehandlingDetaljer = ({ meldekortBehandling }: Props) => {
                     <BodyShort>
                         <b>Forrige meldekorts navkontor</b>
                     </BodyShort>
-                    <BodyShort>{forrigeNavkontor}</BodyShort>
+                    <BodyShort>{forrigeNavkontorNavn || forrigeNavkontor}</BodyShort>
                 </>
             )}
             {saksbehandler && (

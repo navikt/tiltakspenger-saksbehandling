@@ -1,4 +1,4 @@
-import { Box, Button, HStack, Spacer, TextField } from '@navikt/ds-react';
+import { Button, HStack, Spacer } from '@navikt/ds-react';
 import router from 'next/router';
 import { useContext, useRef } from 'react';
 import { SakContext } from '../../../layout/SakLayout';
@@ -9,13 +9,12 @@ import {
     MeldeperiodeKjedeProps,
 } from '../../../../types/MeldekortTypes';
 import { useSendMeldekortTilBeslutter } from '../../../../hooks/meldekort/useSendMeldekortTilBeslutter';
-import { Controller, FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import Meldekortuke from '../Meldekortuke';
 import { ukeHeading } from '../../../../utils/date';
 import { kanSaksbehandleForBehandling } from '../../../../utils/tilganger';
 import { SaksbehandlerContext } from '../../../../pages/_app';
 import BekreftelsesModal from '../../../bekreftelsesmodal/BekreftelsesModal';
-import { setupValidation } from '../../../../utils/validation';
 
 import styles from '../Meldekort.module.css';
 
@@ -64,7 +63,6 @@ export const MeldekortBehandlingUtfylling = ({ meldeperiodeKjede, meldekortBehan
         defaultValues: {
             uke1: meldekortdager.slice(0, 7),
             uke2: meldekortdager.slice(7, 14),
-            navkontor: meldekortBehandling.navkontor,
         },
     });
 
@@ -88,25 +86,6 @@ export const MeldekortBehandlingUtfylling = ({ meldeperiodeKjede, meldekortBehan
                         ukeHeading={ukeHeading(meldeperiodeKjede.periode.tilOgMed)}
                     />
                 </HStack>
-                <Box className={styles.navkontor}>
-                    <Controller
-                        name="navkontor"
-                        control={methods.control}
-                        rules={{
-                            validate: setupValidation([gyldigNavkontor]),
-                        }}
-                        render={({ field: { onChange } }) => (
-                            <TextField
-                                label="Fyll ut navkontor"
-                                description="Hvilket navkontor skal utbetale tiltakspenger for bruker på dette meldekortet?"
-                                defaultValue={meldekortBehandling.navkontor}
-                                onChange={onChange}
-                                inputMode="numeric"
-                                error={methods.formState.errors.navkontor?.message ?? ''}
-                            />
-                        )}
-                    />
-                </Box>
                 {kanSaksbehandle && (
                     <>
                         <Button
