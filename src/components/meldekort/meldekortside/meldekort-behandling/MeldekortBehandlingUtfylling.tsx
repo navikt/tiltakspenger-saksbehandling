@@ -1,4 +1,4 @@
-import { Box, Button, HStack, Loader, Spacer, TextField, VStack } from '@navikt/ds-react';
+import { Box, Button, HStack, Spacer, TextField } from '@navikt/ds-react';
 import router from 'next/router';
 import { useContext, useRef } from 'react';
 import { SakContext } from '../../../layout/SakLayout';
@@ -6,24 +6,22 @@ import {
     MeldekortBehandlingProps,
     MeldekortDagDTO,
     MeldekortBehandlingDagStatus,
-    MeldeperiodeProps,
     MeldeperiodeKjedeProps,
 } from '../../../../types/MeldekortTypes';
 import { useSendMeldekortTilBeslutter } from '../../../../hooks/meldekort/useSendMeldekortTilBeslutter';
 import { Controller, FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import Meldekortuke from '../Meldekortuke';
-import Varsel from '../../../varsel/Varsel';
-import styles from '../Meldekort.module.css';
 import { ukeHeading } from '../../../../utils/date';
 import { kanSaksbehandleForBehandling } from '../../../../utils/tilganger';
 import { SaksbehandlerContext } from '../../../../pages/_app';
 import BekreftelsesModal from '../../../bekreftelsesmodal/BekreftelsesModal';
-import { gyldigNavkontor, setupValidation } from '../../../../utils/validation';
+import { setupValidation } from '../../../../utils/validation';
+
+import styles from '../Meldekort.module.css';
 
 export interface Meldekortform {
     uke1: MeldekortDagDTO[];
     uke2: MeldekortDagDTO[];
-    navkontor: string;
 }
 
 type Props = {
@@ -136,7 +134,6 @@ export const MeldekortBehandlingUtfylling = ({ meldeperiodeKjede, meldekortBehan
                                         dager: methods
                                             .getValues()
                                             .uke1.concat(methods.getValues().uke2),
-                                        navkontor: methods.getValues().navkontor,
                                     })
                                 }
                             >

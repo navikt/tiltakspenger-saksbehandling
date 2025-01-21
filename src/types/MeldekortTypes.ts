@@ -59,7 +59,9 @@ export type MeldekortBehandlingProps = {
     status: MeldekortBehandlingStatus;
     totalbeløpTilUtbetaling: number;
     navkontor?: string;
+    navkontorNavn?: string,
     forrigeNavkontor?: string;
+    forrigeNavkontorNavn?: string;
     dager: MeldekortBehandlingDagProps[];
 };
 
@@ -114,7 +116,6 @@ export type MeldekortDagDTO = {
 
 export type MeldekortDTO = {
     dager: MeldekortDagDTO[];
-    navkontor: string;
 };
 
 export const Meldekortstatuser = Object.values(MeldekortBehandlingDagStatus).filter(

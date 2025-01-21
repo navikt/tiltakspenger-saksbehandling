@@ -12,8 +12,6 @@ export const finnFeilmelding = (errorkode: string) => {
             return 'Beslutterrolle mangler for innlogget saksbehandler';
         case 'beslutter_og_saksbehandler_kan_ikke_være_lik':
             'Saksbehandler og beslutter kan ikke være samme person';
-        case 'ugyldig_kontornummer':
-            return 'Navkontoret forventes å være fire siffer';
         case 'må_være_beslutter_eller_saksbehandler':
             return 'Ingen tilgang. Har ikke påkrevd rolle for å kunne gjennomføre handlingen';
         case 'må_ha_beslutter_rolle':
