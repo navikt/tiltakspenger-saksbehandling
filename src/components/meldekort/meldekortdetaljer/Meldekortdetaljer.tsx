@@ -22,6 +22,7 @@ const Meldekortdetaljer = () => {
         tiltaksnavn,
         vedtaksPeriode,
         forrigeNavkontor,
+        forrigeNavkontorNavn,
         antallDager,
     } = meldekort;
 
@@ -49,7 +50,7 @@ const Meldekortdetaljer = () => {
                         <BodyShort>
                             <b>Forrige meldekorts navkontor</b>
                         </BodyShort>
-                        <BodyShort>{forrigeNavkontor}</BodyShort>
+                        <BodyShort>{forrigeNavkontor} {forrigeNavkontorNavn}</BodyShort>
                     </>
                 )}
                 {saksbehandler && (

@@ -21,7 +21,9 @@ export type Meldekort = {
     vedtaksPeriode: Periode;
     antallDager: number;
     navkontor?: string;
-    forrigeNavkontor?: string;
+    navkontorNavn?: string,
+    forrigeNavkontor?: string,
+    forrigeNavkontorNavn?: string;
 };
 
 export enum Meldekortstatus {
@@ -82,7 +84,6 @@ export enum Tiltakstype {
 
 export type MeldekortDTO = {
     dager: MeldekortDagDTO[];
-    navkontor: string;
 };
 
 export enum MeldekortdagStatus {

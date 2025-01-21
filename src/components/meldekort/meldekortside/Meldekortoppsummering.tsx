@@ -66,7 +66,7 @@ const Meldekortoppsummering = () => {
             </HStack>
             <HStack gap="5" className={styles.totalbeløp}>
                 <BodyShort weight="semibold">Navkontor det skal utbetales fra:</BodyShort>
-                <BodyShort weight="semibold">{meldekort.navkontor}</BodyShort>
+                <BodyShort weight="semibold">{meldekort.navkontor} {meldekort.navkontorNavn}</BodyShort>
             </HStack>
             {kanBeslutte && (
                 <>
