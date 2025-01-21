@@ -1,24 +1,24 @@
 import { Box, Button, HStack, Loader, Spacer, TextField, VStack } from '@navikt/ds-react';
 import router from 'next/router';
 import { useContext, useRef } from 'react';
-import { SakContext } from '../../layout/SakLayout';
+import { SakContext } from '../../../layout/SakLayout';
 import {
-    MeldekortBehandling,
+    MeldekortBehandlingProps,
     MeldekortDagDTO,
-    MeldekortdagStatus,
-    Meldeperiode,
-    MeldeperiodeKjede,
-} from '../../../types/MeldekortTypes';
-import { useSendMeldekortTilBeslutter } from '../../../hooks/meldekort/useSendMeldekortTilBeslutter';
+    MeldekortBehandlingDagStatus,
+    MeldeperiodeProps,
+    MeldeperiodeKjedeProps,
+} from '../../../../types/MeldekortTypes';
+import { useSendMeldekortTilBeslutter } from '../../../../hooks/meldekort/useSendMeldekortTilBeslutter';
 import { Controller, FormProvider, SubmitHandler, useForm } from 'react-hook-form';
-import Meldekortuke from './Meldekortuke';
-import Varsel from '../../varsel/Varsel';
-import styles from './Meldekort.module.css';
-import { ukeHeading } from '../../../utils/date';
-import { kanSaksbehandleForBehandling } from '../../../utils/tilganger';
-import { SaksbehandlerContext } from '../../../pages/_app';
-import BekreftelsesModal from '../../bekreftelsesmodal/BekreftelsesModal';
-import { gyldigNavkontor, setupValidation } from '../../../utils/validation';
+import Meldekortuke from '../Meldekortuke';
+import Varsel from '../../../varsel/Varsel';
+import styles from '../Meldekort.module.css';
+import { ukeHeading } from '../../../../utils/date';
+import { kanSaksbehandleForBehandling } from '../../../../utils/tilganger';
+import { SaksbehandlerContext } from '../../../../pages/_app';
+import BekreftelsesModal from '../../../bekreftelsesmodal/BekreftelsesModal';
+import { gyldigNavkontor, setupValidation } from '../../../../utils/validation';
 
 export interface Meldekortform {
     uke1: MeldekortDagDTO[];
@@ -27,11 +27,11 @@ export interface Meldekortform {
 }
 
 type Props = {
-    meldeperiodeKjede: MeldeperiodeKjede;
-    meldekortBehandling: MeldekortBehandling;
+    meldeperiodeKjede: MeldeperiodeKjedeProps;
+    meldekortBehandling: MeldekortBehandlingProps;
 };
 
-const Meldekort = ({ meldeperiodeKjede, meldekortBehandling }: Props) => {
+export const MeldekortBehandlingUtfylling = ({ meldeperiodeKjede, meldekortBehandling }: Props) => {
     const { sakId } = useContext(SakContext);
     const meldekortId = router.query.meldeperiodeId as string;
     const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
@@ -58,7 +58,7 @@ const Meldekort = ({ meldeperiodeKjede, meldekortBehandling }: Props) => {
 
     const meldekortdager = meldekortBehandling.dager.map((dag) => ({
         dato: dag.dato,
-        status: dag.status === MeldekortdagStatus.IkkeUtfylt ? '' : dag.status,
+        status: dag.status === MeldekortBehandlingDagStatus.IkkeUtfylt ? '' : dag.status,
     }));
 
     const methods = useForm<Meldekortform>({
@@ -149,5 +149,3 @@ const Meldekort = ({ meldeperiodeKjede, meldekortBehandling }: Props) => {
         </FormProvider>
     );
 };
-
-export default Meldekort;

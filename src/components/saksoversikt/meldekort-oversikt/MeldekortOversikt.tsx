@@ -1,11 +1,11 @@
-import { MeldeperiodeSammendrag, Meldeperiodestatus } from '../../../types/MeldekortTypes';
+import { MeldeperiodeSammendragProps, MeldeperiodeStatus } from '../../../types/MeldekortTypes';
 import { Button, Table } from '@navikt/ds-react';
-import { finnMeldekortstatusTekst } from '../../../utils/tekstformateringUtils';
+import { finnMeldeperiodeStatusTekst } from '../../../utils/tekstformateringUtils';
 import { periodeTilFormatertDatotekst } from '../../../utils/date';
 import Link from 'next/link';
 
 type Props = {
-    meldeperioder: MeldeperiodeSammendrag[];
+    meldeperioder: MeldeperiodeSammendragProps[];
     saksnummer: string;
 };
 
@@ -27,7 +27,7 @@ export const MeldekortOversikt = ({ meldeperioder, saksnummer }: Props) => {
                     .map((meldeperiode) => (
                         <Table.Row shadeOnHover={false} key={meldeperiode.hendelseId}>
                             <Table.DataCell>
-                                {finnMeldekortstatusTekst(meldeperiode.status)}
+                                {finnMeldeperiodeStatusTekst[meldeperiode.status]}
                             </Table.DataCell>
                             <Table.DataCell>
                                 {meldeperiode.periode &&
@@ -37,7 +37,7 @@ export const MeldekortOversikt = ({ meldeperioder, saksnummer }: Props) => {
                             <Table.DataCell>{meldeperiode.beslutter ?? '-'}</Table.DataCell>
                             <Table.DataCell>
                                 {meldeperiode.status !==
-                                    Meldeperiodestatus.IKKE_KLAR_TIL_UTFYLLING && (
+                                    MeldeperiodeStatus.IKKE_KLAR_TIL_UTFYLLING && (
                                     <Button
                                         as={Link}
                                         href={`/sak/${saksnummer}/meldeperiode/${encodeURIComponent(meldeperiode.meldeperiodeId)}`}

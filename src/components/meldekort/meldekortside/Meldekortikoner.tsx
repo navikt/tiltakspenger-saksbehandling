@@ -5,16 +5,19 @@ import {
     FirstAidKitFillIcon,
     NotePencilIcon,
 } from '@navikt/aksel-icons';
-import { BrukersMeldekortDagStatus, MeldekortdagStatus } from '../../../types/MeldekortTypes';
+import {
+    BrukersMeldekortDagStatus,
+    MeldekortBehandlingDagStatus,
+} from '../../../types/MeldekortTypes';
 
 export const velgIkonForMeldekortStatus = (status: string) => {
     switch (status) {
-        case MeldekortdagStatus.Sperret:
+        case MeldekortBehandlingDagStatus.Sperret:
         case BrukersMeldekortDagStatus.IKKE_REGISTRERT:
             return <CircleSlashIcon title="Sperret" color="black" width="1.2em" height="1.2em" />;
 
-        case MeldekortdagStatus.DeltattUtenLønnITiltaket:
-        case MeldekortdagStatus.FraværVelferdGodkjentAvNav:
+        case MeldekortBehandlingDagStatus.DeltattUtenLønnITiltaket:
+        case MeldekortBehandlingDagStatus.FraværVelferdGodkjentAvNav:
         case BrukersMeldekortDagStatus.DELTATT:
             return (
                 <CheckmarkCircleFillIcon
@@ -25,9 +28,9 @@ export const velgIkonForMeldekortStatus = (status: string) => {
                 />
             );
 
-        case MeldekortdagStatus.IkkeDeltatt:
-        case MeldekortdagStatus.DeltattMedLønnITiltaket:
-        case MeldekortdagStatus.FraværVelferdIkkeGodkjentAvNav:
+        case MeldekortBehandlingDagStatus.IkkeDeltatt:
+        case MeldekortBehandlingDagStatus.DeltattMedLønnITiltaket:
+        case MeldekortBehandlingDagStatus.FraværVelferdIkkeGodkjentAvNav:
         case BrukersMeldekortDagStatus.FRAVÆR_ANNET:
             return (
                 <MinusCircleFillIcon
@@ -38,8 +41,8 @@ export const velgIkonForMeldekortStatus = (status: string) => {
                 />
             );
 
-        case MeldekortdagStatus.FraværSyk:
-        case MeldekortdagStatus.FraværSyktBarn:
+        case MeldekortBehandlingDagStatus.FraværSyk:
+        case MeldekortBehandlingDagStatus.FraværSyktBarn:
         case BrukersMeldekortDagStatus.FRAVÆR_SYKT_BARN:
         case BrukersMeldekortDagStatus.FRAVÆR_SYK:
             return (
@@ -49,7 +52,7 @@ export const velgIkonForMeldekortStatus = (status: string) => {
                     fontSize="1.5rem"
                 />
             );
-        case MeldekortdagStatus.IkkeUtfylt:
+        case MeldekortBehandlingDagStatus.IkkeUtfylt:
             return (
                 <NotePencilIcon width="1.2em" height="1.2em" title="Ikke utfylt" color="black" />
             );

@@ -1,61 +1,52 @@
-import { Button, Heading, HStack, VStack } from '@navikt/ds-react';
+import { Heading, HStack, VStack } from '@navikt/ds-react';
 import { meldekortHeading } from '../../../utils/date';
 import {
-    BrukersMeldekort,
+    BrukersMeldekortProps,
     BrukersMeldekortDagStatus,
     MeldekortBehandlingStatus,
-    Meldeperiode,
-    MeldeperiodeKjede,
-    Meldeperiodestatus,
+    MeldeperiodeProps,
+    MeldeperiodeKjedeProps,
+    MeldeperiodeStatus,
 } from '../../../types/MeldekortTypes';
-import Meldekort from './Meldekort';
-import Meldekortoppsummering from './Meldekortoppsummering';
+import { MeldekortBehandlingUtfylling } from './meldekort-behandling/MeldekortBehandlingUtfylling';
+import { MeldekortBehandlingOppsummering } from './meldekort-behandling/MeldekortBehandlingOppsummering';
 import { BrukersMeldekortVisning } from './BrukersMeldekort';
-import { useState } from 'react';
 
 import styles from './Meldekort.module.css';
+import { MeldekortBehandlingOpprett } from './meldekort-behandling/MeldekortBehandlingOpprett';
 
 type Props = {
-    meldeperiodeKjede: MeldeperiodeKjede;
+    meldeperiodeKjede: MeldeperiodeKjedeProps;
 };
 
 export const Meldekortside = ({ meldeperiodeKjede }: Props) => {
-    const [startetBehandling, setStartetBehandling] = useState(false);
-
     // TODO: skal kunne velge element i kjeden
     const meldeperiode = meldeperiodeKjede.meldeperioder[0];
-    // const meldeperiode = startetBehandling
-    //     ? dummyMeldeperiodeMedUtfylling(meldeperiodeKjede.meldeperioder[0])
-    //     : dummyMeldeperiodeIkkebehandlet(meldeperiodeKjede.meldeperioder[0]);
 
     const brukersMeldekort = meldeperiode.brukersMeldekort; // || brukersMeldekortDummy(meldeperiode);
 
     return (
         <VStack gap="5" className={styles.wrapper}>
             <HStack gap={'5'}>
-                {brukersMeldekort ? (
+                {brukersMeldekort && (
                     <BrukersMeldekortVisning
                         meldeperiode={meldeperiode}
                         brukersMeldekort={brukersMeldekort}
                     />
-                ) : (
-                    <Heading size={'small'}>{'Ingen innmelding mottatt fra bruker'}</Heading>
                 )}
                 <VStack gap="5">
                     <Heading level="2" size="medium">
                         {meldekortHeading(meldeperiodeKjede.periode)}
                     </Heading>
                     {erBehandlet(meldeperiode) ? (
-                        <Meldekortoppsummering meldeperiode={meldeperiode} />
+                        <MeldekortBehandlingOppsummering meldeperiode={meldeperiode} />
                     ) : kanBehandles(meldeperiode) ? (
-                        <Meldekort
+                        <MeldekortBehandlingUtfylling
                             meldeperiodeKjede={meldeperiodeKjede}
                             meldekortBehandling={meldeperiode.meldekortBehandling}
                         />
                     ) : (
-                        <Button onClick={() => setStartetBehandling(true)}>
-                            {'Opprett behandling'}
-                        </Button>
+                        <MeldekortBehandlingOpprett meldeperiode={meldeperiode} />
                     )}
                 </VStack>
             </HStack>
@@ -63,14 +54,15 @@ export const Meldekortside = ({ meldeperiodeKjede }: Props) => {
     );
 };
 
-const kanBehandles = (meldeperiode: Meldeperiode) =>
-    meldeperiode.status === Meldeperiodestatus.KLAR_TIL_BEHANDLING;
+const kanBehandles = (meldeperiode: MeldeperiodeProps) =>
+    meldeperiode.status === MeldeperiodeStatus.KLAR_TIL_BEHANDLING ||
+    meldeperiode.status === MeldeperiodeStatus.VENTER_PÅ_UTFYLLING;
 
-const erBehandlet = (meldeperiode: Meldeperiode) =>
-    meldeperiode.status === Meldeperiodestatus.GODKJENT ||
-    meldeperiode.status === Meldeperiodestatus.KLAR_TIL_BESLUTNING;
+const erBehandlet = (meldeperiode: MeldeperiodeProps) =>
+    meldeperiode.status === MeldeperiodeStatus.GODKJENT ||
+    meldeperiode.status === MeldeperiodeStatus.KLAR_TIL_BESLUTNING;
 
-const brukersMeldekortDummy = (meldeperiode: Meldeperiode): BrukersMeldekort => ({
+const brukersMeldekortDummy = (meldeperiode: MeldeperiodeProps): BrukersMeldekortProps => ({
     id: 'asdf',
     mottatt: new Date().toLocaleDateString(),
     dager: [
@@ -91,16 +83,16 @@ const brukersMeldekortDummy = (meldeperiode: Meldeperiode): BrukersMeldekort => 
     ],
 });
 
-const dummyMeldeperiodeIkkebehandlet = (meldeperiode: Meldeperiode): Meldeperiode => ({
+const dummyMeldeperiodeIkkebehandlet = (meldeperiode: MeldeperiodeProps): MeldeperiodeProps => ({
     ...meldeperiode,
-    status: Meldeperiodestatus.VENTER_PÅ_UTFYLLING,
+    status: MeldeperiodeStatus.VENTER_PÅ_UTFYLLING,
     meldekortBehandling: undefined,
     brukersMeldekort: brukersMeldekortDummy(meldeperiode),
 });
 
-const dummyMeldeperiodeMedUtfylling = (meldeperiode: Meldeperiode): Meldeperiode => ({
+const dummyMeldeperiodeMedUtfylling = (meldeperiode: MeldeperiodeProps): MeldeperiodeProps => ({
     ...meldeperiode,
-    status: Meldeperiodestatus.KLAR_TIL_BEHANDLING,
+    status: MeldeperiodeStatus.KLAR_TIL_BEHANDLING,
     meldekortBehandling: {
         ...meldeperiode.meldekortBehandling,
         status: MeldekortBehandlingStatus.KLAR_TIL_UTFYLLING,

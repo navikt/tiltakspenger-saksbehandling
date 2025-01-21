@@ -1,13 +1,13 @@
 import { VStack, BodyShort } from '@navikt/ds-react';
 import { periodeTilFormatertDatotekst } from '../../../utils/date';
-import { Meldeperiode, MeldeperiodeKjede } from '../../../types/MeldekortTypes';
+import { MeldeperiodeProps, MeldeperiodeKjedeProps } from '../../../types/MeldekortTypes';
 import { MeldekortBehandlingDetaljer } from './MeldekortBehandlingDetaljer';
 
 import styles from './Meldekortdetaljer.module.css';
 
 type Props = {
-    meldeperiodeKjede: MeldeperiodeKjede;
-    meldeperiode: Meldeperiode;
+    meldeperiodeKjede: MeldeperiodeKjedeProps;
+    meldeperiode: MeldeperiodeProps;
 };
 
 const MeldekortDetaljer = ({ meldeperiode, meldeperiodeKjede }: Props) => {

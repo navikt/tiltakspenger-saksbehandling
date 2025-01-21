@@ -7,7 +7,7 @@ import { SakContext, SakLayout } from '../../../../components/layout/SakLayout';
 import { ReactElement, useContext } from 'react';
 import PersonaliaHeader from '../../../../components/personaliaheader/PersonaliaHeader';
 import router from 'next/router';
-import { finnMeldekortstatusTekst } from '../../../../utils/tekstformateringUtils';
+import { finnMeldeperiodeStatusTekst } from '../../../../utils/tekstformateringUtils';
 import { useHentMeldeperiodeKjede } from '../../../../hooks/meldekort/useHentMeldeperiodeKjede';
 import Varsel from '../../../../components/varsel/Varsel';
 import Link from 'next/link';
@@ -36,7 +36,7 @@ const Meldekort: NextPageWithLayout = () => {
                     Tilbake til saksoversikt
                 </Button>
                 <Tag variant="alt3-filled" className={styles.behandlingTag}>
-                    {finnMeldekortstatusTekst(meldeperiodeKjede.meldeperioder[0].status)}
+                    {finnMeldeperiodeStatusTekst[meldeperiodeKjede.meldeperioder[0].status]}
                 </Tag>
             </PersonaliaHeader>
             <HStack wrap={false} className={styles.behandlingLayout}>

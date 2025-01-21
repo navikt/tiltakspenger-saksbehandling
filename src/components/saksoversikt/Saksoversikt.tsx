@@ -1,7 +1,7 @@
 import { Box, HStack, Heading, Spacer, Button, DatePicker } from '@navikt/ds-react';
 import { Controller, useForm } from 'react-hook-form';
 import { BehandlingForBenk } from '../../types/BehandlingTypes';
-import { MeldeperiodeSammendrag } from '../../types/MeldekortTypes';
+import { MeldeperiodeSammendragProps } from '../../types/MeldekortTypes';
 import { dateTilISOTekst } from '../../utils/date';
 import { setupValidation } from '../../utils/validation';
 import Datovelger from '../revurderingsmodal/Datovelger';
@@ -16,7 +16,7 @@ import styles from './Saksoversikt.module.css';
 
 interface SaksoversiktProps {
     behandlingsoversikt: BehandlingForBenk[];
-    meldeperioder: MeldeperiodeSammendrag[];
+    meldeperioder: MeldeperiodeSammendragProps[];
     førsteLovligeStansdato: string;
     saksnummer: string;
     sakId: string;

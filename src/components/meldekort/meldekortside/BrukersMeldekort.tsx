@@ -1,4 +1,8 @@
-import { BrukersMeldekort, BrukersMeldekortDag, Meldeperiode } from '../../../types/MeldekortTypes';
+import {
+    BrukersMeldekortProps,
+    BrukersMeldekortDagProps,
+    MeldeperiodeProps,
+} from '../../../types/MeldekortTypes';
 import { Box, Heading, HStack, Spacer, Table, VStack } from '@navikt/ds-react';
 import { formaterDatotekst, ukedagFraDatotekst } from '../../../utils/date';
 import { velgIkonForMeldekortStatus } from './Meldekortikoner';
@@ -8,8 +12,8 @@ import React from 'react';
 import styles from './Meldekort.module.css';
 
 type Props = {
-    meldeperiode: Meldeperiode;
-    brukersMeldekort: BrukersMeldekort;
+    meldeperiode: MeldeperiodeProps;
+    brukersMeldekort: BrukersMeldekortProps;
 };
 
 export const BrukersMeldekortVisning = ({ meldeperiode, brukersMeldekort }: Props) => {
@@ -27,7 +31,7 @@ export const BrukersMeldekortVisning = ({ meldeperiode, brukersMeldekort }: Prop
     );
 };
 
-const Uke = ({ dager, heading }: { dager: BrukersMeldekortDag[]; heading: string }) => {
+const Uke = ({ dager, heading }: { dager: BrukersMeldekortDagProps[]; heading: string }) => {
     return (
         <Box className={styles.utbetalingsuke}>
             <Heading size="small" level="3">

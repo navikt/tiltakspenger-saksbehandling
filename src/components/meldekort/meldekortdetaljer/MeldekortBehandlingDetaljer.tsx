@@ -1,8 +1,8 @@
-import { MeldekortBehandling } from '../../../types/MeldekortTypes';
+import { MeldekortBehandlingProps } from '../../../types/MeldekortTypes';
 import { BodyShort } from '@navikt/ds-react';
 
 type Props = {
-    meldekortBehandling: MeldekortBehandling;
+    meldekortBehandling: MeldekortBehandlingProps;
 };
 
 export const MeldekortBehandlingDetaljer = ({ meldekortBehandling }: Props) => {

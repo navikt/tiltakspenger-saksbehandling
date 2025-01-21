@@ -1,21 +1,21 @@
 import { HStack, BodyShort, Button } from '@navikt/ds-react';
-import { ukeHeading } from '../../../utils/date';
-import { Utbetalingsuke } from './Utbetalingsuke';
+import { ukeHeading } from '../../../../utils/date';
+import { Utbetalingsuke } from '../Utbetalingsuke';
 import { useContext, useRef } from 'react';
-import { SakContext } from '../../layout/SakLayout';
-import { useGodkjennMeldekort } from '../../../hooks/meldekort/useGodkjennMeldekort';
-import { kanBeslutteForBehandling } from '../../../utils/tilganger';
-import { SaksbehandlerContext } from '../../../pages/_app';
-import BekreftelsesModal from '../../bekreftelsesmodal/BekreftelsesModal';
-import { Meldeperiode } from '../../../types/MeldekortTypes';
+import { SakContext } from '../../../layout/SakLayout';
+import { useGodkjennMeldekort } from '../../../../hooks/meldekort/useGodkjennMeldekort';
+import { kanBeslutteForBehandling } from '../../../../utils/tilganger';
+import { SaksbehandlerContext } from '../../../../pages/_app';
+import BekreftelsesModal from '../../../bekreftelsesmodal/BekreftelsesModal';
+import { MeldeperiodeProps } from '../../../../types/MeldekortTypes';
 
-import styles from './Meldekort.module.css';
+import styles from '../Meldekort.module.css';
 
 type Props = {
-    meldeperiode: Meldeperiode;
+    meldeperiode: MeldeperiodeProps;
 };
 
-const Meldekortoppsummering = ({ meldeperiode }: Props) => {
+export const MeldekortBehandlingOppsummering = ({ meldeperiode }: Props) => {
     const { sakId, saknummer } = useContext(SakContext);
     const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
     const { meldekortBehandling } = meldeperiode;
@@ -94,5 +94,3 @@ const Meldekortoppsummering = ({ meldeperiode }: Props) => {
         </>
     );
 };
-
-export default Meldekortoppsummering;
