@@ -23,16 +23,24 @@ export const Meldekortside = ({ meldeperiodeKjede }: Props) => {
     const [startetBehandling, setStartetBehandling] = useState(false);
 
     // TODO: skal kunne velge element i kjeden
-    // const meldeperiode = meldeperiodeKjede.meldeperioder[0];
-    const meldeperiode = startetBehandling
-        ? dummyMeldeperiodeMedUtfylling(meldeperiodeKjede.meldeperioder[0])
-        : dummyMeldeperiodeIkkebehandlet(meldeperiodeKjede.meldeperioder[0]);
+    const meldeperiode = meldeperiodeKjede.meldeperioder[0];
+    // const meldeperiode = startetBehandling
+    //     ? dummyMeldeperiodeMedUtfylling(meldeperiodeKjede.meldeperioder[0])
+    //     : dummyMeldeperiodeIkkebehandlet(meldeperiodeKjede.meldeperioder[0]);
 
-    const brukersMeldekort = meldeperiode.brukersMeldekort || brukersMeldekortDummy(meldeperiode);
+    const brukersMeldekort = meldeperiode.brukersMeldekort; // || brukersMeldekortDummy(meldeperiode);
 
     return (
         <VStack gap="5" className={styles.wrapper}>
             <HStack gap={'5'}>
+                {brukersMeldekort ? (
+                    <BrukersMeldekortVisning
+                        meldeperiode={meldeperiode}
+                        brukersMeldekort={brukersMeldekort}
+                    />
+                ) : (
+                    <Heading size={'small'}>{'Ingen innmelding mottatt fra bruker'}</Heading>
+                )}
                 <VStack gap="5">
                     <Heading level="2" size="medium">
                         {meldekortHeading(meldeperiodeKjede.periode)}
@@ -50,14 +58,6 @@ export const Meldekortside = ({ meldeperiodeKjede }: Props) => {
                         </Button>
                     )}
                 </VStack>
-                {brukersMeldekort ? (
-                    <BrukersMeldekortVisning
-                        meldeperiode={meldeperiode}
-                        brukersMeldekort={brukersMeldekort}
-                    />
-                ) : (
-                    <Heading size={'small'}>{'Ingen innmelding mottatt fra bruker'}</Heading>
-                )}
             </HStack>
         </VStack>
     );

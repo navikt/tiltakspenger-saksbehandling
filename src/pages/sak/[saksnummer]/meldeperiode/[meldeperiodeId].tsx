@@ -1,6 +1,6 @@
 import { Button, HStack, Loader, Tag, VStack } from '@navikt/ds-react';
 import { pageWithAuthentication } from '../../../../auth/pageWithAuthentication';
-import Meldekortdetaljer from '../../../../components/meldekort/meldekortdetaljer/Meldekortdetaljer';
+import MeldekortDetaljer from '../../../../components/meldekort/meldekortdetaljer/MeldekortDetaljer';
 import { Meldekortside } from '../../../../components/meldekort/meldekortside/Meldekortside';
 import { NextPageWithLayout } from '../../../_app';
 import { SakContext, SakLayout } from '../../../../components/layout/SakLayout';
@@ -40,7 +40,7 @@ const Meldekort: NextPageWithLayout = () => {
                 </Tag>
             </PersonaliaHeader>
             <HStack wrap={false} className={styles.behandlingLayout}>
-                <Meldekortdetaljer
+                <MeldekortDetaljer
                     meldeperiode={meldeperiodeKjede.meldeperioder[0]}
                     meldeperiodeKjede={meldeperiodeKjede}
                 />

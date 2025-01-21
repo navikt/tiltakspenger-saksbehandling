@@ -78,24 +78,8 @@ export type MeldeperiodeKjede = {
     meldeperioder: Meldeperiode[];
 };
 
-export type Meldekort = {
-    id: string;
-    rammevedtakId: string;
-    periode: Periode;
-    meldekortDager: MeldekortDag[];
-    tiltaksnavn: string;
-    saksbehandler?: string;
-    beslutter?: string;
-    status: MeldekortBehandlingStatus;
-    totalbeløpTilUtbetaling: number;
-    vedtaksPeriode: Periode;
-    antallDager: number;
-    navkontor?: string;
-    forrigeNavkontor?: string;
-};
-
 export enum MeldekortBehandlingStatus {
-    IKKE_KLAR_TIL_UTFYLLING = 'IKKE_KLAR_TIL_UTFYLLING',
+    IKKE_RETT_TIL_TILTAKSPENGER = 'IKKE_RETT_TIL_TILTAKSPENGER',
     KLAR_TIL_UTFYLLING = 'KLAR_TIL_UTFYLLING',
     KLAR_TIL_BESLUTNING = 'KLAR_TIL_BESLUTNING',
     GODKJENT = 'GODKJENT',
