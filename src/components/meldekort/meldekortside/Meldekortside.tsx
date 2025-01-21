@@ -1,8 +1,9 @@
-import { Heading, HStack, VStack } from '@navikt/ds-react';
+import { Button, Heading, HStack, VStack } from '@navikt/ds-react';
 import { meldekortHeading } from '../../../utils/date';
 import {
     BrukersMeldekort,
     BrukersMeldekortDagStatus,
+    MeldekortBehandlingStatus,
     Meldeperiode,
     MeldeperiodeKjede,
     Meldeperiodestatus,
@@ -10,6 +11,7 @@ import {
 import Meldekort from './Meldekort';
 import Meldekortoppsummering from './Meldekortoppsummering';
 import { BrukersMeldekortVisning } from './BrukersMeldekort';
+import { useState } from 'react';
 
 import styles from './Meldekort.module.css';
 
@@ -18,11 +20,15 @@ type Props = {
 };
 
 export const Meldekortside = ({ meldeperiodeKjede }: Props) => {
-    // TODO: skal kunne velge element i kjeden
-    const meldeperiode = meldeperiodeKjede.meldeperioder[0];
-    const brukersMeldekort = meldeperiode.brukersMeldekort || brukersMeldekortDummy(meldeperiode);
+    const [startetBehandling, setStartetBehandling] = useState(false);
 
-    console.log(brukersMeldekort);
+    // TODO: skal kunne velge element i kjeden
+    // const meldeperiode = meldeperiodeKjede.meldeperioder[0];
+    const meldeperiode = startetBehandling
+        ? dummyMeldeperiodeMedUtfylling(meldeperiodeKjede.meldeperioder[0])
+        : dummyMeldeperiodeIkkebehandlet(meldeperiodeKjede.meldeperioder[0]);
+
+    const brukersMeldekort = meldeperiode.brukersMeldekort || brukersMeldekortDummy(meldeperiode);
 
     return (
         <VStack gap="5" className={styles.wrapper}>
@@ -33,11 +39,15 @@ export const Meldekortside = ({ meldeperiodeKjede }: Props) => {
                     </Heading>
                     {erBehandlet(meldeperiode) ? (
                         <Meldekortoppsummering meldeperiode={meldeperiode} />
-                    ) : (
+                    ) : kanBehandles(meldeperiode) ? (
                         <Meldekort
                             meldeperiodeKjede={meldeperiodeKjede}
                             meldekortBehandling={meldeperiode.meldekortBehandling}
                         />
+                    ) : (
+                        <Button onClick={() => setStartetBehandling(true)}>
+                            {'Opprett behandling'}
+                        </Button>
                     )}
                 </VStack>
                 {brukersMeldekort ? (
@@ -52,6 +62,9 @@ export const Meldekortside = ({ meldeperiodeKjede }: Props) => {
         </VStack>
     );
 };
+
+const kanBehandles = (meldeperiode: Meldeperiode) =>
+    meldeperiode.status === Meldeperiodestatus.KLAR_TIL_BEHANDLING;
 
 const erBehandlet = (meldeperiode: Meldeperiode) =>
     meldeperiode.status === Meldeperiodestatus.GODKJENT ||
@@ -76,4 +89,21 @@ const brukersMeldekortDummy = (meldeperiode: Meldeperiode): BrukersMeldekort => 
         { dato: '2025-01-18', status: BrukersMeldekortDagStatus.IKKE_REGISTRERT },
         { dato: '2025-01-19', status: BrukersMeldekortDagStatus.IKKE_REGISTRERT },
     ],
+});
+
+const dummyMeldeperiodeIkkebehandlet = (meldeperiode: Meldeperiode): Meldeperiode => ({
+    ...meldeperiode,
+    status: Meldeperiodestatus.VENTER_PÅ_UTFYLLING,
+    meldekortBehandling: undefined,
+    brukersMeldekort: brukersMeldekortDummy(meldeperiode),
+});
+
+const dummyMeldeperiodeMedUtfylling = (meldeperiode: Meldeperiode): Meldeperiode => ({
+    ...meldeperiode,
+    status: Meldeperiodestatus.KLAR_TIL_BEHANDLING,
+    meldekortBehandling: {
+        ...meldeperiode.meldekortBehandling,
+        status: MeldekortBehandlingStatus.KLAR_TIL_UTFYLLING,
+    },
+    brukersMeldekort: brukersMeldekortDummy(meldeperiode),
 });
