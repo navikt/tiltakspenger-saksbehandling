@@ -5,15 +5,17 @@ import {
     FirstAidKitFillIcon,
     NotePencilIcon,
 } from '@navikt/aksel-icons';
-import { MeldekortdagStatus } from '../../../types/MeldekortTypes';
+import { BrukersMeldekortDagStatus, MeldekortdagStatus } from '../../../types/MeldekortTypes';
 
 export const velgIkonForMeldekortStatus = (status: string) => {
     switch (status) {
         case MeldekortdagStatus.Sperret:
+        case BrukersMeldekortDagStatus.IKKE_REGISTRERT:
             return <CircleSlashIcon title="Sperret" color="black" width="1.2em" height="1.2em" />;
 
         case MeldekortdagStatus.DeltattUtenLønnITiltaket:
         case MeldekortdagStatus.FraværVelferdGodkjentAvNav:
+        case BrukersMeldekortDagStatus.DELTATT:
             return (
                 <CheckmarkCircleFillIcon
                     width="1.2em"
@@ -26,6 +28,7 @@ export const velgIkonForMeldekortStatus = (status: string) => {
         case MeldekortdagStatus.IkkeDeltatt:
         case MeldekortdagStatus.DeltattMedLønnITiltaket:
         case MeldekortdagStatus.FraværVelferdIkkeGodkjentAvNav:
+        case BrukersMeldekortDagStatus.FRAVÆR_ANNET:
             return (
                 <MinusCircleFillIcon
                     width="1.2em"
@@ -37,6 +40,8 @@ export const velgIkonForMeldekortStatus = (status: string) => {
 
         case MeldekortdagStatus.FraværSyk:
         case MeldekortdagStatus.FraværSyktBarn:
+        case BrukersMeldekortDagStatus.FRAVÆR_SYKT_BARN:
+        case BrukersMeldekortDagStatus.FRAVÆR_SYK:
             return (
                 <FirstAidKitFillIcon
                     title="Redusert utbetaling"

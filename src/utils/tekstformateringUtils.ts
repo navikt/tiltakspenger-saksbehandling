@@ -6,7 +6,11 @@ import {
 } from '../types/BehandlingTypes';
 import { Opphold } from '../types/InstitusjonsoppholdTypes';
 import { Deltagelse } from '../types/KvpTypes';
-import { MeldekortdagStatus, MeldekortBehandlingStatus } from '../types/MeldekortTypes';
+import {
+    MeldekortdagStatus,
+    MeldekortBehandlingStatus,
+    BrukersMeldekortDagStatus,
+} from '../types/MeldekortTypes';
 import { DeltagelseStatus } from '../types/TiltakDeltagelseTypes';
 import { Kilde } from '../types/VilkårTypes';
 
@@ -87,10 +91,13 @@ export const finnMeldekortdagStatusTekst = (status: string) => {
         case MeldekortdagStatus.DeltattMedLønnITiltaket:
             return 'Deltatt med lønn i tiltaket';
         case MeldekortdagStatus.DeltattUtenLønnITiltaket:
+        case BrukersMeldekortDagStatus.DELTATT:
             return 'Deltatt uten lønn i tiltaket';
         case MeldekortdagStatus.FraværSyk:
+        case BrukersMeldekortDagStatus.FRAVÆR_SYK:
             return 'Fravær - Syk';
         case MeldekortdagStatus.FraværSyktBarn:
+        case BrukersMeldekortDagStatus.FRAVÆR_SYKT_BARN:
             return 'Fravær - Sykt barn';
         case MeldekortdagStatus.FraværVelferdGodkjentAvNav:
             return 'Godkjent fravær - Velferd';
@@ -99,7 +106,10 @@ export const finnMeldekortdagStatusTekst = (status: string) => {
         case MeldekortdagStatus.IkkeDeltatt:
             return 'Ikke deltatt i tiltaket';
         case MeldekortdagStatus.IkkeUtfylt:
+        case BrukersMeldekortDagStatus.IKKE_REGISTRERT:
             return 'Ikke utfylt';
+        case BrukersMeldekortDagStatus.FRAVÆR_ANNET:
+            return 'Annet fravær';
     }
 };
 export const finnMeldekortstatusTekst = (status: string) => {
