@@ -90,7 +90,8 @@ export const throwErrorIfFatal = async (res: Response) => {
       error.info = await res.json();
       error.status = res.status || 500;
       error.message =
-        finnFeilmelding(error.info.kode) ?? 'Noe har gått galt på serversiden';
+        finnFeilmelding(error.info.kode, error.info.melding) ??
+        'Noe har gått galt på serversidenn';
     } catch (e) {
       error.status = 500;
       error.message =
