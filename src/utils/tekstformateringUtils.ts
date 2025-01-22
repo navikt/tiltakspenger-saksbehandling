@@ -6,7 +6,11 @@ import {
 } from '../types/BehandlingTypes';
 import { Opphold } from '../types/InstitusjonsoppholdTypes';
 import { Deltagelse } from '../types/KvpTypes';
-import { MeldekortdagStatus, Meldekortstatus } from '../types/MeldekortTypes';
+import {
+    MeldekortBehandlingDagStatus,
+    BrukersMeldekortDagStatus,
+    MeldeperiodeStatus,
+} from '../types/MeldekortTypes';
 import { DeltagelseStatus } from '../types/TiltakDeltagelseTypes';
 import { Kilde } from '../types/VilkårTypes';
 
@@ -82,38 +86,41 @@ export const finnStatusTekst = (status: string, underkjent: boolean) => {
 
 export const finnMeldekortdagStatusTekst = (status: string) => {
     switch (status) {
-        case MeldekortdagStatus.Sperret:
+        case MeldekortBehandlingDagStatus.Sperret:
             return 'Ikke rett på tiltakspenger';
-        case MeldekortdagStatus.DeltattMedLønnITiltaket:
+        case MeldekortBehandlingDagStatus.DeltattMedLønnITiltaket:
             return 'Deltatt med lønn i tiltaket';
-        case MeldekortdagStatus.DeltattUtenLønnITiltaket:
+        case MeldekortBehandlingDagStatus.DeltattUtenLønnITiltaket:
+        case BrukersMeldekortDagStatus.DELTATT:
             return 'Deltatt uten lønn i tiltaket';
-        case MeldekortdagStatus.FraværSyk:
+        case MeldekortBehandlingDagStatus.FraværSyk:
+        case BrukersMeldekortDagStatus.FRAVÆR_SYK:
             return 'Fravær - Syk';
-        case MeldekortdagStatus.FraværSyktBarn:
+        case MeldekortBehandlingDagStatus.FraværSyktBarn:
+        case BrukersMeldekortDagStatus.FRAVÆR_SYKT_BARN:
             return 'Fravær - Sykt barn';
-        case MeldekortdagStatus.FraværVelferdGodkjentAvNav:
+        case MeldekortBehandlingDagStatus.FraværVelferdGodkjentAvNav:
             return 'Godkjent fravær - Velferd';
-        case MeldekortdagStatus.FraværVelferdIkkeGodkjentAvNav:
+        case MeldekortBehandlingDagStatus.FraværVelferdIkkeGodkjentAvNav:
             return 'Ikke godkjent fravær - Velferd';
-        case MeldekortdagStatus.IkkeDeltatt:
+        case MeldekortBehandlingDagStatus.IkkeDeltatt:
             return 'Ikke deltatt i tiltaket';
-        case MeldekortdagStatus.IkkeUtfylt:
+        case MeldekortBehandlingDagStatus.IkkeUtfylt:
+        case BrukersMeldekortDagStatus.IKKE_REGISTRERT:
             return 'Ikke utfylt';
+        case BrukersMeldekortDagStatus.FRAVÆR_ANNET:
+            return 'Annet fravær';
     }
 };
-export const finnMeldekortstatusTekst = (status: string) => {
-    switch (status) {
-        case Meldekortstatus.IKKE_KLAR_TIL_UTFYLLING:
-            return 'Ikke klar til utfylling';
-        case Meldekortstatus.KLAR_TIL_UTFYLLING:
-            return 'Klar til utfylling';
-        case Meldekortstatus.KLAR_TIL_BESLUTNING:
-            return 'Klar til beslutning';
-        case Meldekortstatus.GODKJENT:
-            return 'Godkjent';
-    }
-};
+
+export const finnMeldeperiodeStatusTekst: Record<MeldeperiodeStatus, string> = {
+    [MeldeperiodeStatus.IKKE_RETT_TIL_TILTAKSPENGER]: 'Ikke rett til tiltakspenger',
+    [MeldeperiodeStatus.IKKE_KLAR_TIL_UTFYLLING]: 'Ikke klar til utfylling',
+    [MeldeperiodeStatus.VENTER_PÅ_UTFYLLING]: 'Venter på utfylling',
+    [MeldeperiodeStatus.KLAR_TIL_BEHANDLING]: 'Klar til behandling',
+    [MeldeperiodeStatus.KLAR_TIL_BESLUTNING]: 'Klar til beslutning',
+    [MeldeperiodeStatus.GODKJENT]: 'Godkjent',
+} as const;
 
 export const deltagelseTekst = (deltagelse: Deltagelse): string => {
     switch (deltagelse) {

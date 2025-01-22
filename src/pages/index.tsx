@@ -15,6 +15,7 @@ import { SaksbehandlerContext } from './_app';
 import { knappForBehandlingType } from '../components/behandlingsknapper/Benkknapp';
 import { preload } from 'swr';
 import { fetcher } from '../utils/http';
+import Link from 'next/link';
 
 const Oversikten: NextPage = () => {
     preload('/api/behandlinger', fetcher);
@@ -104,9 +105,17 @@ const Oversikten: NextPage = () => {
                                 )}
                             </Table.DataCell>
                             <Table.DataCell>
+                                <Button
+                                    as={Link}
+                                    style={{ marginRight: '1rem' }}
+                                    size="small"
+                                    variant={'secondary'}
+                                    href={`/sak/${behandling.saksnummer}`}
+                                >
+                                    Se sak
+                                </Button>
                                 {behandling.status !== BehandlingStatus.SØKNAD && (
                                     <Button
-                                        style={{ minWidth: '50%' }}
                                         size="small"
                                         variant={'secondary'}
                                         onClick={() =>

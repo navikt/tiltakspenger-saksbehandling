@@ -1,32 +1,44 @@
-import styles from './Meldekort.module.css';
-import { Heading, Loader, VStack } from '@navikt/ds-react';
-import router from 'next/router';
-import { useHentMeldekort } from '../../../hooks/meldekort/useHentMeldekort';
+import { Heading, HStack, VStack } from '@navikt/ds-react';
 import { meldekortHeading } from '../../../utils/date';
-import { Meldekortstatus } from '../../../types/MeldekortTypes';
-import { useContext } from 'react';
-import { SakContext } from '../../layout/SakLayout';
+import { MeldekortBehandlingProps, MeldekortBehandlingStatus } from '../../../types/MeldekortTypes';
+import { MeldekortBehandlingUtfylling } from './meldekort-behandling/MeldekortBehandlingUtfylling';
+import { MeldekortBehandlingOppsummering } from './meldekort-behandling/MeldekortBehandlingOppsummering';
+import { BrukersMeldekortVisning } from './BrukersMeldekort';
+import { useMeldeperioder } from '../../../hooks/meldekort/meldeperioder-context/useMeldeperioder';
 
-import Meldekort from './Meldekort';
-import Meldekortoppsummering from './Meldekortoppsummering';
+import styles from './Meldekort.module.css';
 
 export const Meldekortside = () => {
-    const { sakId } = useContext(SakContext);
-    const meldekortId = router.query.meldekortId as string;
-    const { meldekort, isLoading } = useHentMeldekort(meldekortId, sakId);
+    const { meldeperiodeKjede, valgtMeldeperiode } = useMeldeperioder();
 
-    if (isLoading || !meldekort) return <Loader />;
+    const { brukersMeldekort, meldekortBehandling } = valgtMeldeperiode;
 
     return (
         <VStack gap="5" className={styles.wrapper}>
-            <Heading level="2" size="medium">
-                {meldekortHeading(meldekort.periode)}
-            </Heading>
-            {meldekort.status != Meldekortstatus.KLAR_TIL_UTFYLLING ? (
-                <Meldekortoppsummering />
-            ) : (
-                <Meldekort />
-            )}
+            <HStack gap={'5'}>
+                {brukersMeldekort && (
+                    <BrukersMeldekortVisning
+                        meldeperiode={valgtMeldeperiode}
+                        brukersMeldekort={brukersMeldekort}
+                    />
+                )}
+                <VStack gap="5">
+                    <Heading level="2" size="medium">
+                        {meldekortHeading(meldeperiodeKjede.periode)}
+                    </Heading>
+                    {meldekortBehandling &&
+                        (erUnderBehandling(meldekortBehandling) ? (
+                            <MeldekortBehandlingUtfylling
+                                meldekortBehandling={valgtMeldeperiode.meldekortBehandling}
+                            />
+                        ) : (
+                            <MeldekortBehandlingOppsummering meldeperiode={valgtMeldeperiode} />
+                        ))}
+                </VStack>
+            </HStack>
         </VStack>
     );
 };
+
+const erUnderBehandling = (meldekortBehandling: MeldekortBehandlingProps) =>
+    meldekortBehandling?.status === MeldekortBehandlingStatus.KLAR_TIL_UTFYLLING;

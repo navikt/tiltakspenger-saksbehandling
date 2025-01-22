@@ -17,7 +17,7 @@ export interface RevurderingForm {
 
 const Saksside: NextPageWithLayout<Sak> = ({
     behandlingsoversikt,
-    meldekortoversikt,
+    meldeperiodeoversikt,
     saksnummer,
     sakId,
     førsteLovligeStansdato,
@@ -30,7 +30,7 @@ const Saksside: NextPageWithLayout<Sak> = ({
                 sakId={sakId}
                 saksnummer={saksnummer}
                 behandlingsoversikt={behandlingsoversikt}
-                meldekortoversikt={meldekortoversikt}
+                meldeperioder={meldeperiodeoversikt}
                 førsteLovligeStansdato={førsteLovligeStansdato}
             />
         </>

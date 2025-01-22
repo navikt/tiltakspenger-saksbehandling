@@ -2,7 +2,7 @@ import { VStack, BodyShort, Select, HStack, Label, Heading } from '@navikt/ds-re
 import { Controller, useFormContext } from 'react-hook-form';
 import {
     MeldekortDagDTO,
-    MeldekortdagStatus,
+    MeldekortBehandlingDagStatus,
     Meldekortstatuser,
 } from '../../../types/MeldekortTypes';
 import { meldekortdagHeading } from '../../../utils/date';
@@ -34,7 +34,7 @@ const Meldekortuke = ({ ukenummer, ukeHeading, meldekortdager }: MeldekortukePro
                                 {meldekortdagHeading(dag.dato)}
                             </BodyShort>
                         </HStack>
-                        {dag.status === MeldekortdagStatus.Sperret ? (
+                        {dag.status === MeldekortBehandlingDagStatus.Sperret ? (
                             <BodyShort>Ikke rett på tiltakspenger</BodyShort>
                         ) : (
                             <Controller

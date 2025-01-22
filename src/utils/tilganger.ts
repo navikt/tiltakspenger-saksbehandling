@@ -1,5 +1,5 @@
 import { BehandlingStatus } from '../types/BehandlingTypes';
-import { Meldekortstatus } from '../types/MeldekortTypes';
+import { MeldekortBehandlingStatus } from '../types/MeldekortTypes';
 import { erBeslutter, erSaksbehandler, Saksbehandler } from '../types/Saksbehandler';
 
 export const kanBeslutteForBehandling = (
@@ -13,7 +13,7 @@ export const kanBeslutteForBehandling = (
         innloggetSaksbehandler.navIdent === beslutterForBehandling &&
         innloggetSaksbehandler.navIdent !== saksbehandlerForBehandling &&
         (status === BehandlingStatus.UNDER_BESLUTNING ||
-            status === Meldekortstatus.KLAR_TIL_BESLUTNING)
+            status === MeldekortBehandlingStatus.KLAR_TIL_BESLUTNING)
     );
 };
 
@@ -26,7 +26,7 @@ export const kanSaksbehandleForBehandling = (
         erSaksbehandler(innloggetSaksbehandler) &&
         innloggetSaksbehandler.navIdent === saksbehandlerForBehandling &&
         (status === BehandlingStatus.UNDER_BEHANDLING ||
-            status === Meldekortstatus.KLAR_TIL_UTFYLLING)
+            status === MeldekortBehandlingStatus.KLAR_TIL_UTFYLLING)
     );
 };
 
