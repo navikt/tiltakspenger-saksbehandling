@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { useHentSak } from '../../hooks/useHentSak';
 import router from 'next/router';
 import { Loader } from '@navikt/ds-react';
@@ -12,6 +12,7 @@ type TynnSak = {
     id?: string;
     saknummer?: string;
 };
+
 export const SakContext = createContext<Partial<SakContextType>>({
     sakId: '',
     saknummer: '',
@@ -37,4 +38,8 @@ export const SakLayout = ({ children }: React.PropsWithChildren) => {
             <main>{children}</main>
         </SakContext.Provider>
     );
+};
+
+export const useSak = () => {
+    return useContext(SakContext);
 };

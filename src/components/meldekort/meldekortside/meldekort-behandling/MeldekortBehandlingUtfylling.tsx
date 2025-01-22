@@ -15,6 +15,7 @@ import { ukeHeading } from '../../../../utils/date';
 import { kanSaksbehandleForBehandling } from '../../../../utils/tilganger';
 import { SaksbehandlerContext } from '../../../../pages/_app';
 import BekreftelsesModal from '../../../bekreftelsesmodal/BekreftelsesModal';
+import { useMeldeperioder } from '../../../../hooks/meldekort/meldeperioder-context/useMeldeperioder';
 
 import styles from '../Meldekort.module.css';
 
@@ -24,20 +25,20 @@ export interface Meldekortform {
 }
 
 type Props = {
-    meldeperiodeKjede: MeldeperiodeKjedeProps;
     meldekortBehandling: MeldekortBehandlingProps;
 };
 
-export const MeldekortBehandlingUtfylling = ({ meldeperiodeKjede, meldekortBehandling }: Props) => {
+export const MeldekortBehandlingUtfylling = ({ meldekortBehandling }: Props) => {
+    const { meldeperiodeKjede } = useMeldeperioder();
     const { sakId } = useContext(SakContext);
-    const meldekortId = router.query.meldeperiodeId as string;
+
     const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
     const {
         sendMeldekortTilBeslutter,
         senderMeldekortTilBeslutter,
         feilVedSendingTilBeslutter,
         reset,
-    } = useSendMeldekortTilBeslutter(meldekortId, sakId);
+    } = useSendMeldekortTilBeslutter(meldekortBehandling.id, sakId);
 
     const modalRef = useRef(null);
 
