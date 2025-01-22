@@ -3,6 +3,7 @@ import { MeldeperiodeProps } from '../../../../types/MeldekortTypes';
 import { useOpprettMeldekortBehandling } from '../../../../hooks/meldekort/useOpprettMeldekortBehandling';
 import { useSak } from '../../../layout/SakLayout';
 import Varsel from '../../../varsel/Varsel';
+import { useRouter } from 'next/router';
 
 import styles from './MeldekortBehandlingOpprett.module.css';
 
@@ -11,8 +12,13 @@ type Props = {
 };
 
 export const MeldekortBehandlingOpprett = ({ meldeperiode }: Props) => {
+    const router = useRouter();
     const { sakId } = useSak();
-    const { opprett, laster, feil } = useOpprettMeldekortBehandling(meldeperiode.hendelseId, sakId);
+    const { opprett, laster, feil } = useOpprettMeldekortBehandling({
+        hendelseId: meldeperiode.hendelseId,
+        sakId,
+        onSuccess: router.reload,
+    });
 
     return (
         <div>
@@ -22,7 +28,7 @@ export const MeldekortBehandlingOpprett = ({ meldeperiode }: Props) => {
                     opprett();
                 }}
                 disabled={laster}
-                icon={laster ? <Loader /> : undefined}
+                icon={laster && <Loader />}
                 className={styles.knapp}
             >
                 {'Opprett behandling'}

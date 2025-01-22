@@ -1,12 +1,10 @@
 import { Button, HStack, Spacer } from '@navikt/ds-react';
-import router from 'next/router';
 import { useContext, useRef } from 'react';
 import { SakContext } from '../../../layout/SakLayout';
 import {
     MeldekortBehandlingProps,
     MeldekortDagDTO,
     MeldekortBehandlingDagStatus,
-    MeldeperiodeKjedeProps,
 } from '../../../../types/MeldekortTypes';
 import { useSendMeldekortTilBeslutter } from '../../../../hooks/meldekort/useSendMeldekortTilBeslutter';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
@@ -16,6 +14,7 @@ import { kanSaksbehandleForBehandling } from '../../../../utils/tilganger';
 import { SaksbehandlerContext } from '../../../../pages/_app';
 import BekreftelsesModal from '../../../bekreftelsesmodal/BekreftelsesModal';
 import { useMeldeperioder } from '../../../../hooks/meldekort/meldeperioder-context/useMeldeperioder';
+import { useRouter } from 'next/router';
 
 import styles from '../Meldekort.module.css';
 
@@ -31,6 +30,7 @@ type Props = {
 export const MeldekortBehandlingUtfylling = ({ meldekortBehandling }: Props) => {
     const { meldeperiodeKjede } = useMeldeperioder();
     const { sakId } = useContext(SakContext);
+    const router = useRouter();
 
     const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
     const {
@@ -38,7 +38,14 @@ export const MeldekortBehandlingUtfylling = ({ meldekortBehandling }: Props) => 
         senderMeldekortTilBeslutter,
         feilVedSendingTilBeslutter,
         reset,
-    } = useSendMeldekortTilBeslutter(meldekortBehandling.id, sakId);
+    } = useSendMeldekortTilBeslutter({
+        meldekortId: meldekortBehandling.id,
+        sakId,
+        onSuccess: () => {
+            lukkModal();
+            router.reload();
+        },
+    });
 
     const modalRef = useRef(null);
 

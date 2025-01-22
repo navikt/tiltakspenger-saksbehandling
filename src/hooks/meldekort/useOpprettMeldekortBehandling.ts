@@ -9,14 +9,18 @@ const fetcher = async (url: string) => {
     return res.json();
 };
 
-export function useOpprettMeldekortBehandling(hendelseId: string, sakId: string) {
+type Props = {
+    hendelseId: string;
+    sakId: string;
+    onSuccess?: () => void;
+};
+
+export const useOpprettMeldekortBehandling = ({ hendelseId, sakId, onSuccess }: Props) => {
     const { trigger, isMutating, error } = useSWRMutation(
         `/api/sak/${sakId}/meldeperiode/${hendelseId}/opprettBehandling`,
         fetcher,
         {
-            onSuccess: () => {
-                window.location.reload();
-            },
+            onSuccess,
         },
     );
 
@@ -25,4 +29,4 @@ export function useOpprettMeldekortBehandling(hendelseId: string, sakId: string)
         laster: isMutating,
         feil: error,
     };
-}
+};

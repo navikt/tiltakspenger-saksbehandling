@@ -2,7 +2,13 @@ import useSWRMutation from 'swr/mutation';
 import { FetcherError, mutateMeldekort } from '../../utils/http';
 import { MeldekortDTO } from '../../types/MeldekortTypes';
 
-export function useSendMeldekortTilBeslutter(meldekortId: string, sakId: string) {
+type Props = {
+    meldekortId: string;
+    sakId: string;
+    onSuccess?: () => void;
+};
+
+export function useSendMeldekortTilBeslutter({ meldekortId, sakId, onSuccess }: Props) {
     const {
         trigger: sendMeldekortTilBeslutter,
         isMutating: senderMeldekortTilBeslutter,
@@ -11,6 +17,7 @@ export function useSendMeldekortTilBeslutter(meldekortId: string, sakId: string)
     } = useSWRMutation<any, FetcherError, any, MeldekortDTO>(
         `/api/sak/${sakId}/meldekort/${meldekortId}`,
         mutateMeldekort,
+        { onSuccess },
     );
 
     return {
