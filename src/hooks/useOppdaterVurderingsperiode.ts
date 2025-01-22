@@ -1,13 +1,13 @@
 import useSWRMutation from 'swr/mutation';
 import { FetcherError, mutateBehandling } from '../utils/http';
 import { Periode } from '../types/Periode';
-import { mutate } from 'swr';
 
 export function useOppdaterVurderingsperiode(behandlingId: string) {
   const {
     trigger: oppdaterVurderingsperiode,
     isMutating: oppdatererVurderingsperiode,
     error: oppdaterVurderingsperiodeError,
+    reset,
   } = useSWRMutation<
     {
       id: string;
@@ -15,15 +15,12 @@ export function useOppdaterVurderingsperiode(behandlingId: string) {
     FetcherError,
     any,
     { periode: Periode }
-  >(`/api/behandling/${behandlingId}/vurderingsperiode`, mutateBehandling, {
-    onSuccess: () => {
-      mutate(`/api/behandling/${behandlingId}`);
-    },
-  });
+  >(`/api/behandling/${behandlingId}/vurderingsperiode`, mutateBehandling);
 
   return {
     oppdaterVurderingsperiode,
     oppdatererVurderingsperiode,
     oppdaterVurderingsperiodeError,
+    reset,
   };
 }

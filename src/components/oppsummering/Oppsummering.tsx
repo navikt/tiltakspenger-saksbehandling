@@ -1,9 +1,8 @@
-import { Loader, Heading, VStack, Alert, Button } from '@navikt/ds-react';
+import { Loader, Heading, VStack, Button, BodyLong } from '@navikt/ds-react';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
 import { useContext, useRef } from 'react';
 import styles from './Oppsummering.module.css';
 import VilkårsvurderingTable from './VilkårsvurderingTable';
-import { BehandlingStatus } from '../../types/BehandlingTypes';
 import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
 import Varsel from '../varsel/Varsel';
 import { Behandlingsknapper } from '../behandlingsknapper/BehandlingKnapper';
@@ -20,6 +19,7 @@ const Oppsummering = () => {
     reset,
   } = useGodkjennBehandling(behandlingId, sakId);
   const godkjennRef = useRef(null);
+  const begrunnelseRef = useRef(null);
 
   if (isLoading || !valgtBehandling) {
     return <Loader />;
@@ -40,26 +40,21 @@ const Oppsummering = () => {
     reset();
   };
 
-  const retur = valgtBehandling.attesteringer.findLast(
-    (attestering) => attestering.begrunnelse,
-  );
-
-  const visBegrunnelse =
-    valgtBehandling.status === BehandlingStatus.UNDER_BEHANDLING && retur;
-
   return (
     <VStack gap="6" className={styles.wrapper}>
       <Heading size="medium">Oppsummering</Heading>
-      {visBegrunnelse && (
-        <Alert size="small" role="status" variant="warning">
-          {`Beslutter har sendt behandlingen i retur med begrunnelsen: "${
-            retur.begrunnelse
-          }"`}
-        </Alert>
-      )}
       <VStack gap="4" className={styles.vurdering}>
         <Heading size="small">Vilkårsvurdering</Heading>
         <VilkårsvurderingTable />
+      </VStack>
+      <VStack className={styles.vurdering}>
+        <Heading size="small">Begrunnelse</Heading>
+        <BodyLong>
+          {valgtBehandling.tilleggstekstBrev
+            ? valgtBehandling.tilleggstekstBrev.tekst
+            : 'Det er ikke lagt ved tilleggsbegrunnelse for flytting av perioden'}
+        </BodyLong>
+        <Button onClick={() => console.log()}>Legg til begrunnelse</Button>
       </VStack>
       <Behandlingsknapper godkjennRef={godkjennRef} />
       <BekreftelsesModal
