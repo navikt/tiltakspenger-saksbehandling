@@ -16,6 +16,7 @@ import { HovedLayout } from '../components/layout/HovedLayout';
 import { Loader } from '@navikt/ds-react';
 import { NextPage } from 'next';
 import { SWRConfig } from 'swr';
+import { FeatureTogglesProvider } from '../context/feature-toggles/FeatureTogglesProvider';
 
 interface SaksbehandlerContextType {
     innloggetSaksbehandler: Saksbehandler;
@@ -49,23 +50,25 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
             <Head>
                 <title>Tiltakspenger saksbehandler</title>
             </Head>
-            <SaksbehandlerContext.Provider
-                value={{ innloggetSaksbehandler, setInnloggetSaksbehandler }}
-            >
-                {isSaksbehandlerLoading ? (
-                    <Loader />
-                ) : (
-                    <SWRConfig
-                        value={{
-                            shouldRetryOnError: false,
-                            revalidateOnFocus: false,
-                            revalidateOnReconnect: true,
-                        }}
-                    >
-                        <HovedLayout>{getLayout(<Component {...pageProps} />)}</HovedLayout>
-                    </SWRConfig>
-                )}
-            </SaksbehandlerContext.Provider>
+            <FeatureTogglesProvider env={pageProps.env}>
+                <SaksbehandlerContext.Provider
+                    value={{ innloggetSaksbehandler, setInnloggetSaksbehandler }}
+                >
+                    {isSaksbehandlerLoading ? (
+                        <Loader />
+                    ) : (
+                        <SWRConfig
+                            value={{
+                                shouldRetryOnError: false,
+                                revalidateOnFocus: false,
+                                revalidateOnReconnect: true,
+                            }}
+                        >
+                            <HovedLayout>{getLayout(<Component {...pageProps} />)}</HovedLayout>
+                        </SWRConfig>
+                    )}
+                </SaksbehandlerContext.Provider>
+            </FeatureTogglesProvider>
         </>
     );
 }

@@ -13,7 +13,7 @@ const LOGIN_API_URL = `${process.env.WONDERWALL_ORIGIN || ''}/oauth2/login`;
  * Inspirert av løsningen til sykepenger: https://github.com/navikt/sykmeldinger/pull/548/files
  */
 
-export const defaultGetServerSideProps = async () => ({ props: {} });
+const defaultGetServerSideProps = async () => ({ props: {} });
 type ApiHandler = (req: NextApiRequest, res: NextApiResponse) => Promise<unknown> | unknown;
 
 /**
