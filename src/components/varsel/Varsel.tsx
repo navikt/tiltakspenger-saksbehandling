@@ -12,7 +12,7 @@ interface VarselProps {
     className?: string;
 }
 
-const Varsel = ({ variant, heading, melding, marginX = false }: VarselProps) => {
+const Varsel = ({ variant, heading, melding, marginX = false, className }: VarselProps) => {
     const [vis, settVis] = useState<boolean>(true);
     return vis ? (
         <div className={classNames(styles.varsel, marginX && styles.marginX, className)}>
