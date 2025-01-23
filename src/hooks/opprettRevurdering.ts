@@ -5,27 +5,27 @@ import { Periode } from '../types/Periode';
 import { mutate } from 'swr';
 
 export function useOpprettRevurdering(sakId: string, saksnummer: string) {
-  const {
-    trigger: opprettRevurdering,
-    isMutating: oppretterBehandling,
-    error: opprettRevurderingError,
-  } = useSWRMutation<
-    {
-      id: string;
-    },
-    FetcherError,
-    any,
-    { periode: Periode }
-  >(`/api/sak/${sakId}/revurdering`, mutateSak, {
-    onSuccess: (data) => {
-      mutate(`/api/sak/${saksnummer}`);
-      router.push(`/behandling/${data.id}/vurderingsperiode`);
-    },
-  });
+    const {
+        trigger: opprettRevurdering,
+        isMutating: oppretterBehandling,
+        error: opprettRevurderingError,
+    } = useSWRMutation<
+        {
+            id: string;
+        },
+        FetcherError,
+        any,
+        { periode: Periode }
+    >(`/api/sak/${sakId}/revurdering`, mutateSak, {
+        onSuccess: (data) => {
+            mutate(`/api/sak/${saksnummer}`);
+            router.push(`/behandling/${data.id}/vurderingsperiode`);
+        },
+    });
 
-  return {
-    opprettRevurdering,
-    oppretterBehandling,
-    opprettRevurderingError,
-  };
+    return {
+        opprettRevurdering,
+        oppretterBehandling,
+        opprettRevurderingError,
+    };
 }

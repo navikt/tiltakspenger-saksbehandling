@@ -1,6 +1,6 @@
 import {
-  BehandlingContext,
-  FørstegangsbehandlingLayout,
+    BehandlingContext,
+    FørstegangsbehandlingLayout,
 } from '../../../../../components/layout/FørstegangsbehandlingLayout';
 import { ReactElement, useContext } from 'react';
 import { NextPageWithLayout } from '../../../../_app';
@@ -13,27 +13,27 @@ import { fetcher } from '../../../../../utils/http';
 import { preload } from 'swr';
 
 const Behandling: NextPageWithLayout = () => {
-  const { behandlingId, sakId } = useContext(BehandlingContext);
-  preload(`/api/sak/${sakId}/personopplysninger`, fetcher);
-  preload(`/api/behandling/${behandlingId}`, fetcher);
+    const { behandlingId, sakId } = useContext(BehandlingContext);
+    preload(`/api/sak/${sakId}/personopplysninger`, fetcher);
+    preload(`/api/behandling/${behandlingId}`, fetcher);
 
-  return (
-    <HStack
-      wrap={false}
-      className={styles.behandlingLayout}
-      role="tabpanel"
-      aria-labelledby="inngangsvilkår-tab"
-      id="inngangsvilkår-panel"
-      tabIndex={1}
-    >
-      <Inngangsvilkårmeny />
-      <Vilkårsteg />
-    </HStack>
-  );
+    return (
+        <HStack
+            wrap={false}
+            className={styles.behandlingLayout}
+            role="tabpanel"
+            aria-labelledby="inngangsvilkår-tab"
+            id="inngangsvilkår-panel"
+            tabIndex={1}
+        >
+            <Inngangsvilkårmeny />
+            <Vilkårsteg />
+        </HStack>
+    );
 };
 
 Behandling.getLayout = function getLayout(page: ReactElement) {
-  return <FørstegangsbehandlingLayout>{page}</FørstegangsbehandlingLayout>;
+    return <FørstegangsbehandlingLayout>{page}</FørstegangsbehandlingLayout>;
 };
 
 export const getServerSideProps = pageWithAuthentication();
