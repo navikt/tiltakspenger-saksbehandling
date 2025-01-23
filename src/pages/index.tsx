@@ -105,25 +105,26 @@ const Oversikten: NextPage = () => {
                                 )}
                             </Table.DataCell>
                             <Table.DataCell>
-                                <Button
-                                    as={Link}
-                                    style={{ marginRight: '1rem' }}
-                                    size="small"
-                                    variant={'secondary'}
-                                    href={`/sak/${behandling.saksnummer}`}
-                                >
-                                    Se sak
-                                </Button>
                                 {behandling.status !== BehandlingStatus.SØKNAD && (
-                                    <Button
-                                        size="small"
-                                        variant={'secondary'}
-                                        onClick={() =>
-                                            router.push(`/behandling/${behandling.id}/oppsummering`)
-                                        }
-                                    >
-                                        Se behandling
-                                    </Button>
+                                    <>
+                                        <Button
+                                            as={Link}
+                                            style={{ marginRight: '1rem' }}
+                                            size="small"
+                                            variant={'secondary'}
+                                            href={`/sak/${behandling.saksnummer}`}
+                                        >
+                                            Se sak
+                                        </Button>
+                                        <Button
+                                            as={Link}
+                                            size="small"
+                                            variant={'secondary'}
+                                            href={`/behandling/${behandling.id}/oppsummering`}
+                                        >
+                                            Se behandling
+                                        </Button>
+                                    </>
                                 )}
                             </Table.DataCell>
                         </Table.Row>
