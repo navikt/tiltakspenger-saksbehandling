@@ -39,6 +39,8 @@ export enum Subsumsjon {
   TILTAKSDELTAGELSE = 'TILTAKSDELTAGELSE',
 }
 
+export const subsumsjoner = Object.values(Subsumsjon);
+
 export interface TilleggstekstBrev {
   subsumsjon: Subsumsjon;
   tekst: string;

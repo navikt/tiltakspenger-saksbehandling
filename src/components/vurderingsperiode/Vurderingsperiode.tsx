@@ -32,7 +32,7 @@ const Vurderingsperiode = () => {
         tilOgMed: dateTilISOTekst(getValues().tilOgMed),
       },
     }).then(() => {
-      settLåst(false);
+      settLåst(true);
       reset();
     });
   };

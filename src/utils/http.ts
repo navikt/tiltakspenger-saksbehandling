@@ -5,6 +5,7 @@ import { finnFeilmelding } from './feilmeldinger';
 import { Periode } from '../types/Periode';
 import { tiltaksdeltagelseBody } from '../types/TiltakDeltagelseTypes';
 import { LivsoppholdSaksopplysningBody } from '../types/LivsoppholdTypes';
+import { Subsumsjon } from '../types/BehandlingTypes';
 
 const backendUrl = process.env.TILTAKSPENGER_SAKSBEHANDLING_API_URL || '';
 
@@ -24,7 +25,7 @@ export async function mutateBehandling<R>(
   {
     arg,
   }: {
-    arg: { id: string } | { periode: Periode } | { begrunnelse: string } | null;
+    arg: { id: string } | { periode: Periode } | { subsumsjon: Subsumsjon }  | null;
   },
 ): Promise<R> {
   const res = await fetch(url, {
