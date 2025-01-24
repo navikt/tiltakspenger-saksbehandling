@@ -49,13 +49,13 @@ export const Behandlingsknapper = ({ godkjennRef }: BehandlingKnapperProps) => {
             {godkjennBehandlingError ? (
                 <Varsel
                     variant="error"
-                    melding={`Kunne ikke godkjenne vedtaket (${godkjennBehandlingError.status} ${godkjennBehandlingError.info})`}
+                    melding={`Kunne ikke godkjenne vedtaket - ${godkjennBehandlingError.message}`}
                 />
             ) : null}
             {sendTilBeslutterError ? (
                 <Varsel
                     variant="error"
-                    melding={`Kunne ikke sende til beslutter (${sendTilBeslutterError.status} ${sendTilBeslutterError.info})`}
+                    melding={`Kunne ikke sende til beslutter - ${sendTilBeslutterError.message}`}
                 />
             ) : null}
             <HStack justify="start" gap="3" align="end">

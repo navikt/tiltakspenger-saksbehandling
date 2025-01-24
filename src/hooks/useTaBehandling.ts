@@ -8,7 +8,7 @@ export const finnBehandlingslenke = (behandlingId: string, status: BehandlingSta
     switch (status) {
         case BehandlingStatus.KLAR_TIL_BEHANDLING:
         case BehandlingStatus.UNDER_BEHANDLING:
-            return `/behandling/${behandlingId}/inngangsvilkar/kravfrist`;
+            return `/behandling/${behandlingId}/vurderingsperiode`;
         case BehandlingStatus.KLAR_TIL_BESLUTNING:
         case BehandlingStatus.UNDER_BESLUTNING:
             return `/behandling/${behandlingId}/oppsummering`;

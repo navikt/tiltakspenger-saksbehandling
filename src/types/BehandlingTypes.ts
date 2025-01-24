@@ -20,6 +20,8 @@ export interface Behandling {
     attesteringer: Attestering[];
     vilkårssett: VilkårsettDTO;
     stønadsdager: Stønadsdager;
+    tilleggstekstBrev?: TilleggstekstBrev;
+    kreverBegrunnelse: boolean;
 }
 
 export enum BehandlingStatus {
@@ -31,6 +33,17 @@ export enum BehandlingStatus {
     KLAR_TIL_BESLUTNING = 'KLAR_TIL_BESLUTNING',
     UNDER_BESLUTNING = 'UNDER_BESLUTNING',
     VEDTATT = 'VEDTATT',
+}
+
+export enum Subsumsjon {
+    TILTAKSDELTAGELSE = 'TILTAKSDELTAGELSE',
+}
+
+export const subsumsjoner = Object.values(Subsumsjon);
+
+export interface TilleggstekstBrev {
+    subsumsjon: Subsumsjon;
+    tekst: string;
 }
 
 export interface VilkårsettDTO {

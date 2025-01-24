@@ -19,7 +19,7 @@ export function useOpprettRevurdering(sakId: string, saksnummer: string) {
     >(`/api/sak/${sakId}/revurdering`, mutateSak, {
         onSuccess: (data) => {
             mutate(`/api/sak/${saksnummer}`);
-            router.push(`/behandling/${data.id}/inngangsvilkar/tiltaksdeltagelse`);
+            router.push(`/behandling/${data.id}/vurderingsperiode`);
         },
     });
 

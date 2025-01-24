@@ -1,6 +1,5 @@
 import { BodyShort, Button, Modal } from '@navikt/ds-react';
 import { ReactNode, RefObject } from 'react';
-import styles from './BekreftelsesModal.module.css';
 import { FetcherError } from '../../utils/http';
 import Varsel from '../varsel/Varsel';
 
@@ -25,8 +24,7 @@ const BekreftelsesModal = ({
         <Modal
             ref={modalRef}
             width="medium"
-            className={styles.modal}
-            aria-label="Legg til bekreftelses"
+            aria-label="Bekreft handling"
             onClose={() => {
                 lukkModal();
             }}

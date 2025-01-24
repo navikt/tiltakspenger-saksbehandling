@@ -21,6 +21,13 @@ export const Saksbehandlingstabs = () => {
     return (
         <Tabs value={value} onChange={setValue}>
             <Tabs.List>
+                <Tabs.Tab
+                    value={'vurderingsperiode'}
+                    label={'Vurderingsperiode'}
+                    id="vurderingsperiode-tab"
+                    aria-controls="vurderingsperiode-panel"
+                    onClick={() => router.push(`/behandling/${behandlingId}/vurderingsperiode`)}
+                />
                 {underBehandling(valgtBehandling.status) &&
                     kanSaksbehandleForBehandling(
                         valgtBehandling.status,

@@ -15,7 +15,7 @@ export function useOpprettBehandling() {
         '/api/behandling/startbehandling',
         { id: string }
     >('/api/behandling/startbehandling', mutateBehandling, {
-        onSuccess: (data) => router.push(`/behandling/${data.id}/inngangsvilkar/kravfrist`),
+        onSuccess: (data) => router.push(`/behandling/${data.id}/vurderingsperiode`),
     });
 
     return { onOpprettBehandling, isSøknadMutating, opprettBehandlingError };

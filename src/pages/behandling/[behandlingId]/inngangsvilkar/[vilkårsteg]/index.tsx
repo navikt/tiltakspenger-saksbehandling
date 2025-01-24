@@ -24,7 +24,7 @@ const Behandling: NextPageWithLayout = () => {
             role="tabpanel"
             aria-labelledby="inngangsvilkår-tab"
             id="inngangsvilkår-panel"
-            tabIndex={0}
+            tabIndex={1}
         >
             <Inngangsvilkårmeny />
             <Vilkårsteg />

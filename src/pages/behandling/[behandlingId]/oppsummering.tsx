@@ -23,7 +23,7 @@ const Behandling: NextPageWithLayout = () => {
             className={styles.behandlingLayout}
             aria-labelledby="oppsummering-tab"
             id="oppsummering-panel"
-            tabIndex={1}
+            tabIndex={2}
         >
             <Behandlingdetaljer />
             <Oppsummering />

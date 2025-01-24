@@ -5,6 +5,7 @@ import { finnFeilmelding } from './feilmeldinger';
 import { Periode } from '../types/Periode';
 import { tiltaksdeltagelseBody } from '../types/TiltakDeltagelseTypes';
 import { LivsoppholdSaksopplysningBody } from '../types/LivsoppholdTypes';
+import { Subsumsjon } from '../types/BehandlingTypes';
 
 const backendUrl = process.env.TILTAKSPENGER_SAKSBEHANDLING_API_URL || '';
 
@@ -21,7 +22,11 @@ export const fetcher = async (url: string) => {
 
 export async function mutateBehandling<R>(
     url,
-    { arg }: { arg: { id: string } | { begrunnelse: string } | null },
+    {
+        arg,
+    }: {
+        arg: { id: string } | { periode: Periode } | { subsumsjon: Subsumsjon } | null;
+    },
 ): Promise<R> {
     const res = await fetch(url, {
         method: 'POST',
@@ -76,7 +81,9 @@ export const throwErrorIfFatal = async (res: Response) => {
         try {
             error.info = await res.json();
             error.status = res.status || 500;
-            error.message = finnFeilmelding(error.info.kode) ?? 'Noe har gått galt på serversiden';
+            error.message =
+                finnFeilmelding(error.info.kode, error.info.melding) ??
+                'Noe har gått galt på serversidenn';
         } catch (e) {
             error.status = 500;
             error.message = 'Noe har gått galt på serversiden, kontakt utviklingsteamet.';

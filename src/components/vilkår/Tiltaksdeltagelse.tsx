@@ -4,15 +4,11 @@ import VilkårHeader from './VilkårHeader';
 import VilkårKort from './VilkårKort';
 import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
 import Varsel from '../varsel/Varsel';
-import {
-    finnDeltagelsestatusTekst,
-    finnÅrsaksTekst,
-    lagUtfallstekst,
-} from '../../utils/tekstformateringUtils';
+import { finnDeltagelsestatusTekst, lagUtfallstekst } from '../../utils/tekstformateringUtils';
 import IkonMedTekst from '../ikon-med-tekst/IkonMedTekst';
 import { UtfallIkon } from '../utfallikon/UtfallIkon';
 import { useHentTiltaksdeltagelse } from '../../hooks/vilkår/useHentTiltaksdeltagelse';
-import { TypeBehandling, årsaker, ÅrsakTilEndring } from '../../types/BehandlingTypes';
+import { TypeBehandling } from '../../types/BehandlingTypes';
 import Spørsmålsmodal from '../revurderingsmodal/Spørsmålsmodal';
 import { periodeTilFormatertDatotekst } from '../../utils/date';
 import { Controller, useForm } from 'react-hook-form';
