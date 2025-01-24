@@ -13,7 +13,7 @@ const LOGIN_API_URL = `${process.env.WONDERWALL_ORIGIN || ''}/oauth2/login`;
  * Inspirert av løsningen til sykepenger: https://github.com/navikt/sykmeldinger/pull/548/files
  */
 
-const defaultProps = { env: process.env.NAIS_CLUSTER_NAME };
+const defaultProps = { deployEnv: process.env.NAIS_CLUSTER_NAME };
 const defaultGetServerSideProps: GetServerSideProps = async () => ({ props: defaultProps });
 type ApiHandler = (req: NextApiRequest, res: NextApiResponse) => Promise<unknown> | unknown;
 

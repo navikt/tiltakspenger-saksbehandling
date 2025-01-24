@@ -50,7 +50,7 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
             <Head>
                 <title>Tiltakspenger saksbehandler</title>
             </Head>
-            <FeatureTogglesProvider env={pageProps.env}>
+            <FeatureTogglesProvider deployEnv={pageProps.deployEnv}>
                 <SaksbehandlerContext.Provider
                     value={{ innloggetSaksbehandler, setInnloggetSaksbehandler }}
                 >
