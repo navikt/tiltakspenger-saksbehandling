@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { MeldeperiodeKjedeProps, MeldeperiodeProps } from '../../../types/MeldekortTypes';
+import { MeldeperiodeKjedeProps, MeldeperiodeProps } from '../../types/MeldekortTypes';
 
 export type MeldeperioderContextState = {
     meldeperiodeKjede: MeldeperiodeKjedeProps;

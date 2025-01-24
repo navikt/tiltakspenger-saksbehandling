@@ -10,7 +10,7 @@ import { finnMeldeperiodeStatusTekst } from '../../../../utils/tekstformateringU
 import { useHentMeldeperiodeKjede } from '../../../../hooks/meldekort/useHentMeldeperiodeKjede';
 import Varsel from '../../../../components/varsel/Varsel';
 import Link from 'next/link';
-import { MeldeperioderProvider } from '../../../../hooks/meldekort/meldeperioder-context/MeldeperioderProvider';
+import { MeldeperioderProvider } from '../../../../context/meldeperioder/MeldeperioderProvider';
 import { MeldekortDetaljer } from '../../../../components/meldekort/meldekortdetaljer/MeldekortDetaljer';
 
 import styles from '../../../behandling/Behandling.module.css';

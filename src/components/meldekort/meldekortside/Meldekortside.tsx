@@ -4,7 +4,7 @@ import { MeldekortBehandlingProps, MeldekortBehandlingStatus } from '../../../ty
 import { MeldekortBehandlingUtfylling } from './meldekort-behandling/MeldekortBehandlingUtfylling';
 import { MeldekortBehandlingOppsummering } from './meldekort-behandling/MeldekortBehandlingOppsummering';
 import { BrukersMeldekortVisning } from './BrukersMeldekort';
-import { useMeldeperioder } from '../../../hooks/meldekort/meldeperioder-context/useMeldeperioder';
+import { useMeldeperioder } from '../../../hooks/meldekort/useMeldeperioder';
 
 import styles from './Meldekort.module.css';
 

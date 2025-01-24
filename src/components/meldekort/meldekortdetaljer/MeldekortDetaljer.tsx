@@ -1,8 +1,9 @@
 import { VStack, BodyShort } from '@navikt/ds-react';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '../../../utils/date';
-import { useMeldeperioder } from '../../../hooks/meldekort/meldeperioder-context/useMeldeperioder';
+import { useMeldeperioder } from '../../../hooks/meldekort/useMeldeperioder';
 import { MeldekortBehandlingOpprett } from '../meldekortside/meldekort-behandling/MeldekortBehandlingOpprett';
 import { MeldekortBehandlingProps } from '../../../types/MeldekortTypes';
+import { useFeatureToggles } from '../../../hooks/useFeatureToggles';
 
 import styles from './MeldekortDetaljer.module.css';
 
@@ -10,6 +11,7 @@ export const MeldekortDetaljer = () => {
     const { meldeperiodeKjede, valgtMeldeperiode } = useMeldeperioder();
     const { vedtaksPeriode, periode, tiltaksnavn } = meldeperiodeKjede;
     const { antallDager, meldekortBehandling, brukersMeldekort } = valgtMeldeperiode;
+    const { brukersMeldekortToggle } = useFeatureToggles();
 
     return (
         <VStack gap="3" className={styles.wrapper}>
@@ -26,14 +28,16 @@ export const MeldekortDetaljer = () => {
                 header={'Antall dager per meldeperiode'}
                 tekst={antallDager.toString()}
             />
-            <MeldekortDetalj
-                header={'Meldekort mottatt fra bruker'}
-                tekst={
-                    brukersMeldekort?.mottatt
-                        ? formaterTidspunkt(brukersMeldekort.mottatt)
-                        : 'Ikke mottatt'
-                }
-            />
+            {brukersMeldekortToggle && (
+                <MeldekortDetalj
+                    header={'Meldekort mottatt fra bruker'}
+                    tekst={
+                        brukersMeldekort?.mottatt
+                            ? formaterTidspunkt(brukersMeldekort.mottatt)
+                            : 'Ikke mottatt'
+                    }
+                />
+            )}
 
             {meldekortBehandling ? (
                 <MeldekortBehandlingDetaljer {...meldekortBehandling} />

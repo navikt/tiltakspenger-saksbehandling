@@ -13,7 +13,7 @@ import { ukeHeading } from '../../../../utils/date';
 import { kanSaksbehandleForBehandling } from '../../../../utils/tilganger';
 import { SaksbehandlerContext } from '../../../../pages/_app';
 import BekreftelsesModal from '../../../bekreftelsesmodal/BekreftelsesModal';
-import { useMeldeperioder } from '../../../../hooks/meldekort/meldeperioder-context/useMeldeperioder';
+import { useMeldeperioder } from '../../../../hooks/meldekort/useMeldeperioder';
 import { useRouter } from 'next/router';
 
 import styles from '../Meldekort.module.css';
