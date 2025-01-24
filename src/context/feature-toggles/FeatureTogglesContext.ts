@@ -1,9 +1,12 @@
 import { createContext } from 'react';
 
-type FeatureTogglesContextState = {
-    brukersMeldekort: boolean;
-};
+type TogglesRecord = Record<`${string}Toggle`, boolean>;
 
-export const FeatureTogglesContext = createContext<FeatureTogglesContextState>({
-    brukersMeldekort: false,
-});
+const featureTogglesDefaultState = {
+    brukersMeldekortToggle: false,
+    revurderingStansToggle: false,
+} as const satisfies TogglesRecord;
+
+type FeatureTogglesState = Record<keyof typeof featureTogglesDefaultState, boolean>;
+
+export const FeatureTogglesContext = createContext<FeatureTogglesState>(featureTogglesDefaultState);

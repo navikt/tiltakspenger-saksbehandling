@@ -11,6 +11,7 @@ import { useOpprettRevurdering } from '../../hooks/opprettRevurdering';
 import { RevurderingForm } from '../../pages/sak/[saksnummer]';
 import { MeldekortOversikt } from './meldekort-oversikt/MeldekortOversikt';
 import { BehandlingerOversikt } from './behandlinger-oversikt/BehandlingerOversikt';
+import { useFeatureToggles } from '../../hooks/useFeatureToggles';
 
 import styles from './Saksoversikt.module.css';
 
@@ -35,6 +36,8 @@ export const Saksoversikt = ({
     const modalRef = useRef(null);
 
     const { opprettRevurdering } = useOpprettRevurdering(sakId, saksnummer);
+
+    const { revurderingStansToggle } = useFeatureToggles();
 
     const onSubmit = () => {
         opprettRevurdering({
@@ -64,13 +67,15 @@ export const Saksoversikt = ({
                     Saksoversikt
                 </Heading>
                 <Spacer />
-                <Button
-                    size="small"
-                    variant="secondary"
-                    onClick={() => modalRef.current.showModal()}
-                >
-                    Revurder
-                </Button>
+                {revurderingStansToggle && (
+                    <Button
+                        size="small"
+                        variant="secondary"
+                        onClick={() => modalRef.current.showModal()}
+                    >
+                        Revurder
+                    </Button>
+                )}
             </HStack>
             <Box className={styles.tabellwrapper}>
                 <Heading level={'3'} size={'small'}>

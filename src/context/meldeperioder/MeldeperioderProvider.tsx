@@ -7,7 +7,7 @@ import {
     MeldeperiodeKjedeProps,
     MeldeperiodeProps,
     MeldeperiodeStatus,
-} from '../../../types/MeldekortTypes';
+} from '../../types/MeldekortTypes';
 
 type Props = {
     meldeperiodeKjede: MeldeperiodeKjedeProps;

@@ -7,12 +7,13 @@ type Props = {
 };
 
 export const FeatureTogglesProvider = ({ env, children }: Props) => {
-    console.log(`Env: ${env}`);
+    const isProd = env === 'prod-gcp';
 
     return (
         <FeatureTogglesContext.Provider
             value={{
-                brukersMeldekort: env !== 'prod-gcp',
+                brukersMeldekortToggle: !isProd,
+                revurderingStansToggle: !isProd,
             }}
         >
             {children}

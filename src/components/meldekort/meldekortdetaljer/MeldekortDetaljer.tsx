@@ -1,9 +1,9 @@
 import { VStack, BodyShort } from '@navikt/ds-react';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '../../../utils/date';
-import { useMeldeperioder } from '../../../hooks/meldekort/meldeperioder-context/useMeldeperioder';
+import { useMeldeperioder } from '../../../hooks/useMeldeperioder';
 import { MeldekortBehandlingOpprett } from '../meldekortside/meldekort-behandling/MeldekortBehandlingOpprett';
 import { MeldekortBehandlingProps } from '../../../types/MeldekortTypes';
-import { useFeatureToggles } from '../../../context/feature-toggles/useFeatureToggles';
+import { useFeatureToggles } from '../../../hooks/useFeatureToggles';
 
 import styles from './MeldekortDetaljer.module.css';
 
@@ -11,7 +11,7 @@ export const MeldekortDetaljer = () => {
     const { meldeperiodeKjede, valgtMeldeperiode } = useMeldeperioder();
     const { vedtaksPeriode, periode, tiltaksnavn } = meldeperiodeKjede;
     const { antallDager, meldekortBehandling, brukersMeldekort } = valgtMeldeperiode;
-    const { brukersMeldekort: brukersMeldekortToggle } = useFeatureToggles();
+    const { brukersMeldekortToggle } = useFeatureToggles();
 
     return (
         <VStack gap="3" className={styles.wrapper}>
