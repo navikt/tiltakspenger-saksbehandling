@@ -15,6 +15,7 @@ export enum BrukersMeldekortDagStatus {
     FRAVÆR_SYKT_BARN = 'FRAVAeR_SYKT_BARN',
     FRAVÆR_ANNET = 'FRAVÆR_ANNET',
     IKKE_REGISTRERT = 'IKKE_REGISTRERT',
+    IKKE_RETT_TIL_TILTAKSPENGER = 'IKKE_RETT_TIL_TILTAKSPENGER',
 }
 
 export enum MeldekortBehandlingStatus {
@@ -59,7 +60,7 @@ export type MeldekortBehandlingProps = {
     status: MeldekortBehandlingStatus;
     totalbeløpTilUtbetaling: number;
     navkontor?: string;
-    navkontorNavn?: string,
+    navkontorNavn?: string;
     forrigeNavkontor?: string;
     forrigeNavkontorNavn?: string;
     dager: MeldekortBehandlingDagProps[];

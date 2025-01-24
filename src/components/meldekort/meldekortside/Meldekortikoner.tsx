@@ -13,7 +13,7 @@ import {
 export const velgIkonForMeldekortStatus = (status: string) => {
     switch (status) {
         case MeldekortBehandlingDagStatus.Sperret:
-        case BrukersMeldekortDagStatus.IKKE_REGISTRERT:
+        case BrukersMeldekortDagStatus.IKKE_RETT_TIL_TILTAKSPENGER:
             return <CircleSlashIcon title="Sperret" color="black" width="1.2em" height="1.2em" />;
 
         case MeldekortBehandlingDagStatus.DeltattUtenLønnITiltaket:
@@ -53,6 +53,7 @@ export const velgIkonForMeldekortStatus = (status: string) => {
                 />
             );
         case MeldekortBehandlingDagStatus.IkkeUtfylt:
+        case BrukersMeldekortDagStatus.IKKE_REGISTRERT:
             return (
                 <NotePencilIcon width="1.2em" height="1.2em" title="Ikke utfylt" color="black" />
             );
