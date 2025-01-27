@@ -10,14 +10,12 @@ import { useSendMeldekortTilBeslutter } from '../../../../hooks/meldekort/useSen
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import Meldekortuke from '../Meldekortuke';
 import { ukeHeading } from '../../../../utils/date';
-import { kanSaksbehandleMeldekort } from '../../../../utils/tilganger';
 import BekreftelsesModal from '../../../bekreftelsesmodal/BekreftelsesModal';
 import { useMeldeperioder } from '../../../../hooks/meldekort/useMeldeperioder';
 import { useRouter } from 'next/router';
-import { useSaksbehandler } from '../../../../hooks/useSaksbehandler';
+import { hentUtfylteMeldekortDager } from './hentUtfylteMeldekortDager';
 
 import styles from '../Meldekort.module.css';
-import { hentUtfylteMeldekortDager } from './hentUtfylteMeldekortDager';
 
 interface Meldekortform {
     uke1: MeldekortBehandlingDag[];
@@ -32,7 +30,6 @@ type Props = {
 export const MeldekortBehandlingUtfylling = ({ meldekortBehandling, brukersMeldekort }: Props) => {
     const { meldeperiodeKjede } = useMeldeperioder();
     const { sakId } = useSak();
-    const { innloggetSaksbehandler } = useSaksbehandler();
 
     const router = useRouter();
 
@@ -56,12 +53,6 @@ export const MeldekortBehandlingUtfylling = ({ meldekortBehandling, brukersMelde
         modalRef.current.close();
         reset();
     };
-
-    const kanSaksbehandle = kanSaksbehandleMeldekort(
-        meldekortBehandling.status,
-        innloggetSaksbehandler,
-        innloggetSaksbehandler.navIdent,
-    );
 
     const meldekortdager = hentUtfylteMeldekortDager(meldekortBehandling, brukersMeldekort);
 
@@ -93,41 +84,30 @@ export const MeldekortBehandlingUtfylling = ({ meldekortBehandling, brukersMelde
                         ukeHeading={ukeHeading(meldeperiodeKjede.periode.tilOgMed)}
                     />
                 </HStack>
-                {kanSaksbehandle && (
-                    <>
-                        <Button
-                            type="submit"
-                            value="submit"
-                            size="small"
-                            style={{ marginTop: '2.5rem' }}
-                        >
-                            Send til beslutter
-                        </Button>
-                        <BekreftelsesModal
-                            modalRef={modalRef}
-                            tittel={'Send meldekort til beslutter'}
-                            body={
-                                'Er du sikker på at meldekortet er ferdig utfylt og klart til å sendes til beslutter?'
-                            }
-                            error={feilVedSendingTilBeslutter}
-                            lukkModal={lukkModal}
-                        >
-                            <Button
-                                size="small"
-                                loading={senderMeldekortTilBeslutter}
-                                onClick={() =>
-                                    sendMeldekortTilBeslutter({
-                                        dager: methods
-                                            .getValues()
-                                            .uke1.concat(methods.getValues().uke2),
-                                    })
-                                }
-                            >
-                                Send til beslutter
-                            </Button>
-                        </BekreftelsesModal>
-                    </>
-                )}
+                <Button type="submit" value="submit" size="small" style={{ marginTop: '2.5rem' }}>
+                    Send til beslutter
+                </Button>
+                <BekreftelsesModal
+                    modalRef={modalRef}
+                    tittel={'Send meldekort til beslutter'}
+                    body={
+                        'Er du sikker på at meldekortet er ferdig utfylt og klart til å sendes til beslutter?'
+                    }
+                    error={feilVedSendingTilBeslutter}
+                    lukkModal={lukkModal}
+                >
+                    <Button
+                        size="small"
+                        loading={senderMeldekortTilBeslutter}
+                        onClick={() =>
+                            sendMeldekortTilBeslutter({
+                                dager: methods.getValues().uke1.concat(methods.getValues().uke2),
+                            })
+                        }
+                    >
+                        Send til beslutter
+                    </Button>
+                </BekreftelsesModal>
             </form>
         </FormProvider>
     );

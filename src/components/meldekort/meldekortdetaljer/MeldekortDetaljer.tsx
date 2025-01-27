@@ -66,8 +66,8 @@ const MeldekortBehandlingDetaljer = ({
                     }
                 />
             )}
-            {saksbehandler && <MeldekortDetalj header={'Behandlet av'} tekst={saksbehandler} />}
-            {beslutter && <MeldekortDetalj header={'Godkjent av'} tekst={beslutter} />}
+            {saksbehandler && <MeldekortDetalj header={'Behandler'} tekst={saksbehandler} />}
+            {beslutter && <MeldekortDetalj header={'Beslutter'} tekst={beslutter} />}
         </>
     );
 };

@@ -5,13 +5,21 @@ import { MeldekortBehandlingUtfylling } from './meldekort-behandling/MeldekortBe
 import { MeldekortBehandlingOppsummering } from './meldekort-behandling/MeldekortBehandlingOppsummering';
 import { BrukersMeldekortVisning } from './BrukersMeldekort';
 import { useMeldeperioder } from '../../../hooks/meldekort/useMeldeperioder';
+import { kanSaksbehandleMeldekort } from '../../../utils/tilganger';
+import { useSaksbehandler } from '../../../hooks/useSaksbehandler';
 
 import styles from './Meldekort.module.css';
 
 export const Meldekortside = () => {
+    const { innloggetSaksbehandler } = useSaksbehandler();
     const { meldeperiodeKjede, valgtMeldeperiode } = useMeldeperioder();
-
     const { brukersMeldekort, meldekortBehandling } = valgtMeldeperiode;
+
+    const kanSaksbehandle = kanSaksbehandleMeldekort(
+        meldekortBehandling.status,
+        innloggetSaksbehandler,
+        innloggetSaksbehandler.navIdent,
+    );
 
     return (
         <VStack gap={'5'} className={styles.wrapper}>
@@ -27,7 +35,7 @@ export const Meldekortside = () => {
                         {meldekortHeading(meldeperiodeKjede.periode)}
                     </Heading>
                     {meldekortBehandling &&
-                        (erUnderBehandling(meldekortBehandling) ? (
+                        (erUnderBehandling(meldekortBehandling) && kanSaksbehandle ? (
                             <MeldekortBehandlingUtfylling
                                 meldekortBehandling={meldekortBehandling}
                                 brukersMeldekort={brukersMeldekort}
