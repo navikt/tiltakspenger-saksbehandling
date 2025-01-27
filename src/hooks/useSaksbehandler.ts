@@ -1,13 +1,6 @@
-import { fetcher } from '../utils/http';
-import { Saksbehandler } from '../types/Saksbehandler';
-import useSWRImmutable from 'swr/immutable';
+import { SaksbehandlerContext } from '../context/saksbehandler/SaksbehandlerContext';
+import { useContext } from 'react';
 
-export default function useSaksbehandler() {
-    const {
-        data: saksbehandler,
-        isLoading: isSaksbehandlerLoading,
-        error,
-    } = useSWRImmutable<Saksbehandler>('/api/saksbehandler', fetcher);
-
-    return { saksbehandler, isSaksbehandlerLoading, error };
-}
+export const useSaksbehandler = () => {
+    return useContext(SaksbehandlerContext);
+};

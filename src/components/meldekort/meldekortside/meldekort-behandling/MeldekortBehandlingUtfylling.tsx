@@ -1,36 +1,38 @@
 import { Button, HStack, Spacer } from '@navikt/ds-react';
-import { useContext, useRef } from 'react';
+import { useRef } from 'react';
 import { useSak } from '../../../layout/SakLayout';
 import {
     MeldekortBehandlingProps,
     MeldekortDagDTO,
     MeldekortBehandlingDagStatus,
+    BrukersMeldekortProps,
 } from '../../../../types/MeldekortTypes';
 import { useSendMeldekortTilBeslutter } from '../../../../hooks/meldekort/useSendMeldekortTilBeslutter';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import Meldekortuke from '../Meldekortuke';
 import { ukeHeading } from '../../../../utils/date';
 import { kanSaksbehandleMeldekort } from '../../../../utils/tilganger';
-import { SaksbehandlerContext } from '../../../../pages/_app';
 import BekreftelsesModal from '../../../bekreftelsesmodal/BekreftelsesModal';
 import { useMeldeperioder } from '../../../../hooks/meldekort/useMeldeperioder';
 import { useRouter } from 'next/router';
+import { useSaksbehandler } from '../../../../hooks/useSaksbehandler';
 
 import styles from '../Meldekort.module.css';
 
-export interface Meldekortform {
+interface Meldekortform {
     uke1: MeldekortDagDTO[];
     uke2: MeldekortDagDTO[];
 }
 
 type Props = {
     meldekortBehandling: MeldekortBehandlingProps;
+    brukersMeldekort?: BrukersMeldekortProps;
 };
 
-export const MeldekortBehandlingUtfylling = ({ meldekortBehandling }: Props) => {
+export const MeldekortBehandlingUtfylling = ({ meldekortBehandling, brukersMeldekort }: Props) => {
     const { meldeperiodeKjede } = useMeldeperioder();
     const { sakId } = useSak();
-    const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
+    const { innloggetSaksbehandler } = useSaksbehandler();
 
     const router = useRouter();
 

@@ -6,7 +6,7 @@ import { knappForBehandlingType } from '../../behandlingsknapper/Benkknapp';
 import { eierBehandling, skalKunneTaBehandling } from '../../../utils/tilganger';
 import router from 'next/router';
 import { useContext } from 'react';
-import { SaksbehandlerContext } from '../../../pages/_app';
+import { SaksbehandlerContext } from '../../../context/saksbehandler/SaksbehandlerContext';
 import { useOpprettBehandling } from '../../../hooks/useOpprettBehandling';
 import { useTaBehandling } from '../../../hooks/useTaBehandling';
 

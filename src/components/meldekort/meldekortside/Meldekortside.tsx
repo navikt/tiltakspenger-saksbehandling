@@ -14,7 +14,7 @@ export const Meldekortside = () => {
     const { brukersMeldekort, meldekortBehandling } = valgtMeldeperiode;
 
     return (
-        <VStack gap="5" className={styles.wrapper}>
+        <VStack gap={'5'} className={styles.wrapper}>
             <HStack gap={'5'}>
                 {brukersMeldekort && (
                     <BrukersMeldekortVisning
@@ -22,14 +22,15 @@ export const Meldekortside = () => {
                         brukersMeldekort={brukersMeldekort}
                     />
                 )}
-                <VStack gap="5">
-                    <Heading level="2" size="medium">
+                <VStack gap={'5'}>
+                    <Heading level={'2'} size={'medium'}>
                         {meldekortHeading(meldeperiodeKjede.periode)}
                     </Heading>
                     {meldekortBehandling &&
                         (erUnderBehandling(meldekortBehandling) ? (
                             <MeldekortBehandlingUtfylling
-                                meldekortBehandling={valgtMeldeperiode.meldekortBehandling}
+                                meldekortBehandling={meldekortBehandling}
+                                brukersMeldekort={brukersMeldekort}
                             />
                         ) : (
                             <MeldekortBehandlingOppsummering meldeperiode={valgtMeldeperiode} />

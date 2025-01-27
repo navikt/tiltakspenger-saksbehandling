@@ -10,7 +10,7 @@ import { BehandlingStatus } from '../types/BehandlingTypes';
 import { useOpprettBehandling } from '../hooks/useOpprettBehandling';
 import { eierBehandling, skalKunneTaBehandling } from '../utils/tilganger';
 import { useTaBehandling } from '../hooks/useTaBehandling';
-import { SaksbehandlerContext } from './_app';
+import { SaksbehandlerContext } from '../context/saksbehandler/SaksbehandlerContext';
 import { knappForBehandlingType } from '../components/behandlingsknapper/Benkknapp';
 import { preload } from 'swr';
 import { fetcher } from '../utils/http';

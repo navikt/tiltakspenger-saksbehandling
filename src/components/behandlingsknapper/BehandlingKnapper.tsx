@@ -1,6 +1,6 @@
 import { Button, HStack, Loader } from '@navikt/ds-react';
 import { RefObject, useContext } from 'react';
-import { SaksbehandlerContext } from '../../pages/_app';
+import { SaksbehandlerContext } from '../../context/saksbehandler/SaksbehandlerContext';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
 import { kanBeslutteForBehandling, kanSaksbehandleForBehandling } from '../../utils/tilganger';
 import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
