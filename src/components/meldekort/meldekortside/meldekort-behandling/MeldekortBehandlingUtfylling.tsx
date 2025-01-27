@@ -3,8 +3,7 @@ import { useRef } from 'react';
 import { useSak } from '../../../layout/SakLayout';
 import {
     MeldekortBehandlingProps,
-    MeldekortDagDTO,
-    MeldekortBehandlingDagStatus,
+    MeldekortBehandlingDag,
     BrukersMeldekortProps,
 } from '../../../../types/MeldekortTypes';
 import { useSendMeldekortTilBeslutter } from '../../../../hooks/meldekort/useSendMeldekortTilBeslutter';
@@ -18,10 +17,11 @@ import { useRouter } from 'next/router';
 import { useSaksbehandler } from '../../../../hooks/useSaksbehandler';
 
 import styles from '../Meldekort.module.css';
+import { hentUtfylteMeldekortDager } from './hentUtfylteMeldekortDager';
 
 interface Meldekortform {
-    uke1: MeldekortDagDTO[];
-    uke2: MeldekortDagDTO[];
+    uke1: MeldekortBehandlingDag[];
+    uke2: MeldekortBehandlingDag[];
 }
 
 type Props = {
@@ -63,10 +63,7 @@ export const MeldekortBehandlingUtfylling = ({ meldekortBehandling, brukersMelde
         innloggetSaksbehandler.navIdent,
     );
 
-    const meldekortdager = meldekortBehandling.dager.map((dag) => ({
-        dato: dag.dato,
-        status: dag.status === MeldekortBehandlingDagStatus.IkkeUtfylt ? '' : dag.status,
-    }));
+    const meldekortdager = hentUtfylteMeldekortDager(meldekortBehandling, brukersMeldekort);
 
     const methods = useForm<Meldekortform>({
         mode: 'onSubmit',

@@ -1,7 +1,7 @@
 import { VStack, BodyShort, Select, HStack, Label, Heading } from '@navikt/ds-react';
 import { Controller, useFormContext } from 'react-hook-form';
 import {
-    MeldekortDagDTO,
+    MeldekortBehandlingDag,
     MeldekortBehandlingDagStatus,
     Meldekortstatuser,
 } from '../../../types/MeldekortTypes';
@@ -13,7 +13,7 @@ import { velgIkonForMeldekortStatus } from './Meldekortikoner';
 interface MeldekortukeProps {
     ukenummer: 1 | 2;
     ukeHeading: string;
-    meldekortdager: MeldekortDagDTO[];
+    meldekortdager: MeldekortBehandlingDag[];
 }
 
 const Meldekortuke = ({ ukenummer, ukeHeading, meldekortdager }: MeldekortukeProps) => {

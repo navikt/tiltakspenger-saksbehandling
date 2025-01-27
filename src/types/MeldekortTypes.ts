@@ -63,12 +63,15 @@ export type MeldekortBehandlingProps = {
     navkontorNavn?: string;
     forrigeNavkontor?: string;
     forrigeNavkontorNavn?: string;
-    dager: MeldekortBehandlingDagProps[];
+    dager: MeldekortBehandlingDagBeregnet[];
 };
 
-export type MeldekortBehandlingDagProps = {
+export type MeldekortBehandlingDag = {
     dato: string;
     status: MeldekortBehandlingDagStatus;
+};
+
+export type MeldekortBehandlingDagBeregnet = MeldekortBehandlingDag & {
     reduksjonAvYtelsePåGrunnAvFravær?: ReduksjonAvYtelse;
     beregningsdag: Beregningsdag;
 };
@@ -110,13 +113,8 @@ export type Beregningsdag = {
     prosent: number;
 };
 
-export type MeldekortDagDTO = {
-    dato: string;
-    status: string;
-};
-
 export type MeldekortDTO = {
-    dager: MeldekortDagDTO[];
+    dager: MeldekortBehandlingDag[];
 };
 
 export const Meldekortstatuser = Object.values(MeldekortBehandlingDagStatus).filter(
