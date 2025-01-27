@@ -1,6 +1,6 @@
 import { Button, HStack, Spacer } from '@navikt/ds-react';
 import { useContext, useRef } from 'react';
-import { SakContext } from '../../../layout/SakLayout';
+import { useSak } from '../../../layout/SakLayout';
 import {
     MeldekortBehandlingProps,
     MeldekortDagDTO,
@@ -10,7 +10,7 @@ import { useSendMeldekortTilBeslutter } from '../../../../hooks/meldekort/useSen
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import Meldekortuke from '../Meldekortuke';
 import { ukeHeading } from '../../../../utils/date';
-import { kanSaksbehandleForBehandling } from '../../../../utils/tilganger';
+import { kanSaksbehandleMeldekort } from '../../../../utils/tilganger';
 import { SaksbehandlerContext } from '../../../../pages/_app';
 import BekreftelsesModal from '../../../bekreftelsesmodal/BekreftelsesModal';
 import { useMeldeperioder } from '../../../../hooks/meldekort/useMeldeperioder';
@@ -29,10 +29,11 @@ type Props = {
 
 export const MeldekortBehandlingUtfylling = ({ meldekortBehandling }: Props) => {
     const { meldeperiodeKjede } = useMeldeperioder();
-    const { sakId } = useContext(SakContext);
+    const { sakId } = useSak();
+    const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
+
     const router = useRouter();
 
-    const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
     const {
         sendMeldekortTilBeslutter,
         senderMeldekortTilBeslutter,
@@ -54,8 +55,7 @@ export const MeldekortBehandlingUtfylling = ({ meldekortBehandling }: Props) => 
         reset();
     };
 
-    //B: Må endre denne til å ta inn saksbehandler på meldekortet når vi har lagt til tildeling.
-    const kanSaksbehandle = kanSaksbehandleForBehandling(
+    const kanSaksbehandle = kanSaksbehandleMeldekort(
         meldekortBehandling.status,
         innloggetSaksbehandler,
         innloggetSaksbehandler.navIdent,

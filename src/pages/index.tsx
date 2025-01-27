@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import { Button, CopyButton, Heading, HStack, Loader, Table, VStack } from '@navikt/ds-react';
 import { useHentSøknaderOgBehandlinger } from '../hooks/useHentSøknaderOgBehandlinger';
 import { NextPage } from 'next';
-import router from 'next/router';
 import { pageWithAuthentication } from '../auth/pageWithAuthentication';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '../utils/date';
 import { finnBehandlingstypeTekst, finnStatusTekst } from '../utils/tekstformateringUtils';
