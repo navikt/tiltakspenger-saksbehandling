@@ -30,9 +30,10 @@ export const MeldekortBehandling = ({
 }: Props) => {
     const { sakId } = useSak();
     const router = useRouter();
-    const dager = hentMeldekortBehandlingDager(meldekortBehandling, brukersMeldekort);
 
-    const [dagerUtfylt, setDagerUtfylt] = useState(dager);
+    const dagerDefault = hentMeldekortBehandlingDager(meldekortBehandling, brukersMeldekort);
+
+    const [dagerUtfylt, setDagerUtfylt] = useState(dagerDefault);
     const [errors, setErrors] = useState<string[]>([]);
 
     const uke1 = dagerUtfylt.slice(0, 7);
@@ -119,7 +120,7 @@ export const MeldekortBehandling = ({
                     loading={senderMeldekortTilBeslutter}
                     onClick={() =>
                         sendMeldekortTilBeslutter({
-                            dager: dager,
+                            dager: dagerUtfylt,
                         })
                     }
                 >
