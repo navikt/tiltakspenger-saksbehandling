@@ -1,5 +1,5 @@
 import { SaksbehandlerContext } from './SaksbehandlerContext';
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode } from 'react';
 import { Saksbehandler } from '../../types/Saksbehandler';
 import { Loader } from '@navikt/ds-react';
 import useSWRImmutable from 'swr/immutable';
@@ -11,18 +11,11 @@ type Props = {
 };
 
 export const SaksbehandlerProvider = ({ children }: Props) => {
-    const [innloggetSaksbehandler, setInnloggetSaksbehandler] = useState<Saksbehandler>();
     const {
         data: saksbehandler,
         isLoading: isSaksbehandlerLoading,
         error,
     } = useSWRImmutable<Saksbehandler>('/api/saksbehandler', fetcher);
-
-    useEffect(() => {
-        if (saksbehandler) {
-            setInnloggetSaksbehandler(saksbehandler);
-        }
-    }, [saksbehandler]);
 
     if (isSaksbehandlerLoading) {
         return <Loader />;
@@ -38,9 +31,7 @@ export const SaksbehandlerProvider = ({ children }: Props) => {
     }
 
     return (
-        <SaksbehandlerContext.Provider
-            value={{ innloggetSaksbehandler, setInnloggetSaksbehandler }}
-        >
+        <SaksbehandlerContext.Provider value={{ innloggetSaksbehandler: saksbehandler }}>
             {children}
         </SaksbehandlerContext.Provider>
     );
