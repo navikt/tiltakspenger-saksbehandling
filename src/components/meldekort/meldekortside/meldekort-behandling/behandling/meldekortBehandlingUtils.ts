@@ -3,17 +3,17 @@ import {
     BrukersMeldekortProps,
     MeldekortBehandlingDagStatus,
     MeldekortBehandlingProps,
-    MeldekortBehandlingDag,
-} from '../../../../types/MeldekortTypes';
+    MeldekortBehandlingDagProps,
+} from '../../../../../types/MeldekortTypes';
 
-export const hentUtfylteMeldekortDager = (
+export const hentMeldekortBehandlingDager = (
     meldekortBehandling: MeldekortBehandlingProps,
     brukersMeldekort?: BrukersMeldekortProps,
-): MeldekortBehandlingDag[] => {
+): MeldekortBehandlingDagProps[] => {
     if (brukersMeldekort) {
         return brukersMeldekort.dager.map((dag) => ({
             dato: dag.dato,
-            status: brukersMeldekortDagTilBehandlingsDag[dag.status],
+            status: brukersStatusTilBehandlingsStatus[dag.status],
         }));
     }
 
@@ -25,7 +25,7 @@ export const hentUtfylteMeldekortDager = (
     });
 };
 
-const brukersMeldekortDagTilBehandlingsDag: Record<
+const brukersStatusTilBehandlingsStatus: Record<
     BrukersMeldekortDagStatus,
     MeldekortBehandlingDagStatus
 > = {
@@ -37,3 +37,15 @@ const brukersMeldekortDagTilBehandlingsDag: Record<
     [BrukersMeldekortDagStatus.IKKE_REGISTRERT]: MeldekortBehandlingDagStatus.IkkeDeltatt,
     [BrukersMeldekortDagStatus.IKKE_RETT_TIL_TILTAKSPENGER]: MeldekortBehandlingDagStatus.Sperret,
 } as const;
+
+export const tellDagerMedDeltattEllerFravær = (dager: MeldekortBehandlingDagProps[]) =>
+    dager.filter((dag) => dagerMedDeltattEllerFravær.has(dag.status)).length;
+
+const dagerMedDeltattEllerFravær: ReadonlySet<MeldekortBehandlingDagStatus> = new Set([
+    MeldekortBehandlingDagStatus.DeltattUtenLønnITiltaket,
+    MeldekortBehandlingDagStatus.DeltattMedLønnITiltaket,
+    MeldekortBehandlingDagStatus.FraværSyk,
+    MeldekortBehandlingDagStatus.FraværSyktBarn,
+    MeldekortBehandlingDagStatus.FraværVelferdGodkjentAvNav,
+    MeldekortBehandlingDagStatus.FraværVelferdIkkeGodkjentAvNav,
+]);

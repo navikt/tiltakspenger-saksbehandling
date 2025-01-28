@@ -1,6 +1,5 @@
 import { logger } from '@navikt/next-logger';
 import { NextApiRequest } from 'next';
-import { MeldekortDTO } from '../types/MeldekortTypes';
 import { finnFeilmelding } from './feilmeldinger';
 import { Periode } from '../types/Periode';
 import { tiltaksdeltagelseBody } from '../types/TiltakDeltagelseTypes';
@@ -44,15 +43,6 @@ export async function mutateVilkår<R>(
 }
 
 export async function mutateSak<R>(url, { arg }: { arg: { periode: Periode } }): Promise<R> {
-    const res = await fetch(url, {
-        method: 'POST',
-        body: JSON.stringify(arg),
-    });
-    await throwErrorIfFatal(res);
-    return res.json();
-}
-
-export async function mutateMeldekort<R>(url, { arg }: { arg: MeldekortDTO }): Promise<R> {
     const res = await fetch(url, {
         method: 'POST',
         body: JSON.stringify(arg),

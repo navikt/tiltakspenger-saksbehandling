@@ -10,7 +10,9 @@ import {
     MeldekortBehandlingDagStatus,
 } from '../../../types/MeldekortTypes';
 
-export const velgIkonForMeldekortStatus = (status: string) => {
+export const velgIkonForMeldekortStatus = (
+    status: MeldekortBehandlingDagStatus | BrukersMeldekortDagStatus,
+) => {
     switch (status) {
         case MeldekortBehandlingDagStatus.Sperret:
         case BrukersMeldekortDagStatus.IKKE_RETT_TIL_TILTAKSPENGER:

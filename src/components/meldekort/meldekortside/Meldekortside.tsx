@@ -1,7 +1,7 @@
 import { Heading, HStack, VStack } from '@navikt/ds-react';
 import { meldekortHeading } from '../../../utils/date';
 import { MeldekortBehandlingProps, MeldekortBehandlingStatus } from '../../../types/MeldekortTypes';
-import { MeldekortBehandlingUtfylling } from './meldekort-behandling/MeldekortBehandlingUtfylling';
+import { MeldekortBehandling } from './meldekort-behandling/behandling/MeldekortBehandling';
 import { MeldekortBehandlingOppsummering } from './meldekort-behandling/MeldekortBehandlingOppsummering';
 import { BrukersMeldekortVisning } from './BrukersMeldekort';
 import { useMeldeperioder } from '../../../hooks/meldekort/useMeldeperioder';
@@ -30,20 +30,22 @@ export const Meldekortside = () => {
                         brukersMeldekort={brukersMeldekort}
                     />
                 )}
-                <VStack gap={'5'}>
-                    <Heading level={'2'} size={'medium'}>
-                        {meldekortHeading(meldeperiodeKjede.periode)}
-                    </Heading>
-                    {meldekortBehandling &&
-                        (erUnderBehandling(meldekortBehandling) && kanSaksbehandle ? (
-                            <MeldekortBehandlingUtfylling
+                {meldekortBehandling && (
+                    <VStack gap={'5'}>
+                        <Heading level={'2'} size={'medium'}>
+                            {meldekortHeading(meldeperiodeKjede.periode)}
+                        </Heading>
+                        {erUnderBehandling(meldekortBehandling) && kanSaksbehandle ? (
+                            <MeldekortBehandling
                                 meldekortBehandling={meldekortBehandling}
+                                maksAntallDager={valgtMeldeperiode.antallDager}
                                 brukersMeldekort={brukersMeldekort}
                             />
                         ) : (
                             <MeldekortBehandlingOppsummering meldeperiode={valgtMeldeperiode} />
-                        ))}
-                </VStack>
+                        )}
+                    </VStack>
+                )}
             </HStack>
         </VStack>
     );
