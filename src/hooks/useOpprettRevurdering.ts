@@ -1,8 +1,18 @@
 import useSWRMutation from 'swr/mutation';
-import { FetcherError, mutateSak } from '../utils/http';
+import { FetcherError, throwErrorIfFatal } from '../utils/http';
 import router from 'next/router';
-import { Periode } from '../types/Periode';
 import { mutate } from 'swr';
+
+type RevurderTilStansBody = { fraOgMed: string };
+
+async function mutateSak(url, { arg }: { arg: RevurderTilStansBody }) {
+    const res = await fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(arg),
+    });
+    await throwErrorIfFatal(res);
+    return res.json();
+}
 
 export function useOpprettRevurdering(sakId: string, saksnummer: string) {
     const {
@@ -15,7 +25,7 @@ export function useOpprettRevurdering(sakId: string, saksnummer: string) {
         },
         FetcherError,
         any,
-        { periode: Periode }
+        RevurderTilStansBody
     >(`/api/sak/${sakId}/revurdering`, mutateSak, {
         onSuccess: (data) => {
             mutate(`/api/sak/${saksnummer}`);
