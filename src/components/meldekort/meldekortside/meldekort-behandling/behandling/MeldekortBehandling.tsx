@@ -31,11 +31,11 @@ export const MeldekortBehandling = ({
 }: Props) => {
     const { sakId } = useSak();
     const router = useRouter();
-    const [valideringsFeil, setValideringsFeil] = useState<string>('');
+    const [valideringsFeil, setValideringsFeil] = useState('');
 
     const dagerDefault = hentMeldekortBehandlingDager(meldekortBehandling, brukersMeldekort);
 
-    const methods = useForm<MeldekortBehandlingForm>({
+    const formMethods = useForm<MeldekortBehandlingForm>({
         mode: 'onSubmit',
         defaultValues: {
             uke1: dagerDefault.slice(0, 7),
@@ -64,11 +64,8 @@ export const MeldekortBehandling = ({
         reset();
     };
 
-    const validerOgÅpneBekreftelse: SubmitHandler<MeldekortBehandlingForm> = (utfylteDager) => {
-        if (
-            tellDagerMedDeltattEllerFravær([...utfylteDager.uke1, ...utfylteDager.uke2]) >
-            maksAntallDager
-        ) {
+    const validerOgÅpneBekreftelse: SubmitHandler<MeldekortBehandlingForm> = (form) => {
+        if (tellDagerMedDeltattEllerFravær([...form.uke1, ...form.uke2]) > maksAntallDager) {
             setValideringsFeil(
                 `For mange dager utfylt - Maks ${maksAntallDager} dager med tiltak for denne perioden.`,
             );
@@ -76,16 +73,16 @@ export const MeldekortBehandling = ({
         }
 
         setValideringsFeil('');
-        modalRef.current?.showModal();
+        modalRef.current.showModal();
     };
 
     return (
-        <FormProvider {...methods}>
-            <form onSubmit={methods.handleSubmit(validerOgÅpneBekreftelse)}>
+        <FormProvider {...formMethods}>
+            <form onSubmit={formMethods.handleSubmit(validerOgÅpneBekreftelse)}>
                 <HStack className={styles.meldekort}>
-                    <MeldekortBehandlingUke dager={methods.getValues().uke1} ukenummer={1} />
+                    <MeldekortBehandlingUke dager={formMethods.getValues().uke1} ukenummer={1} />
                     <Spacer />
-                    <MeldekortBehandlingUke dager={methods.getValues().uke2} ukenummer={2} />
+                    <MeldekortBehandlingUke dager={formMethods.getValues().uke2} ukenummer={2} />
                 </HStack>
                 {valideringsFeil && (
                     <Alert variant={'error'}>
@@ -110,7 +107,9 @@ export const MeldekortBehandling = ({
                         loading={senderMeldekortTilBeslutter}
                         onClick={() =>
                             sendMeldekortTilBeslutter({
-                                dager: methods.getValues().uke1.concat(methods.getValues().uke2),
+                                dager: formMethods
+                                    .getValues()
+                                    .uke1.concat(formMethods.getValues().uke2),
                             })
                         }
                     >
