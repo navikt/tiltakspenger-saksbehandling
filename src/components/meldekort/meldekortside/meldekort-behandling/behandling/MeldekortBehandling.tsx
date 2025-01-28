@@ -1,5 +1,5 @@
 import { Alert, BodyShort, Button, HStack, Spacer } from '@navikt/ds-react';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useSak } from '../../../../layout/SakLayout';
 import {
     BrukersMeldekortProps,
@@ -39,22 +39,9 @@ export const MeldekortBehandling = ({
     const uke2 = dagerUtfylt.slice(7, 14);
 
     const settStatus = (dato: string, status: MeldekortBehandlingDagStatus) => {
+        setErrors([]);
         setDagerUtfylt(dagerUtfylt.map((dag) => (dag.dato === dato ? { dato, status } : dag)));
     };
-
-    useEffect(() => {
-        const _errors: string[] = [];
-        if (tellDagerMedDeltattEllerFravær(dagerUtfylt) > maksAntallDager) {
-            _errors.push(
-                `For mange dager med tiltak - Maks er ${maksAntallDager} dager for denne brukeren.`,
-            );
-        }
-        if (dagerUtfylt.some((dag) => dag.status === MeldekortBehandlingDagStatus.IkkeUtfylt)) {
-            _errors.push('Alle dager må fylles ut.');
-        }
-
-        setErrors(_errors);
-    }, [dagerUtfylt]);
 
     const {
         sendMeldekortTilBeslutter,
@@ -77,6 +64,24 @@ export const MeldekortBehandling = ({
         reset();
     };
 
+    const validerOgÅpneBekreftelse = () => {
+        const _errors: string[] = [];
+        if (tellDagerMedDeltattEllerFravær(dagerUtfylt) > maksAntallDager) {
+            _errors.push(
+                `For mange dager med tiltak - Maks er ${maksAntallDager} dager for denne brukeren.`,
+            );
+        }
+        if (dagerUtfylt.some((dag) => dag.status === MeldekortBehandlingDagStatus.IkkeUtfylt)) {
+            _errors.push('Alle dager må fylles ut.');
+        }
+
+        setErrors(_errors);
+
+        if (_errors.length === 0) {
+            modalRef.current?.showModal();
+        }
+    };
+
     return (
         <>
             <HStack className={styles.meldekort}>
@@ -96,7 +101,7 @@ export const MeldekortBehandling = ({
                 size={'small'}
                 style={{ marginTop: '2.5rem' }}
                 disabled={errors.length > 0}
-                onClick={() => modalRef.current?.showModal()}
+                onClick={() => validerOgÅpneBekreftelse()}
             >
                 Send til beslutter
             </Button>

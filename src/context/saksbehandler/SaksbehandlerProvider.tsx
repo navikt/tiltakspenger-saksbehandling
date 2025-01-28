@@ -13,11 +13,11 @@ type Props = {
 export const SaksbehandlerProvider = ({ children }: Props) => {
     const {
         data: saksbehandler,
-        isLoading: isSaksbehandlerLoading,
+        isLoading,
         error,
     } = useSWRImmutable<Saksbehandler>('/api/saksbehandler', fetcher);
 
-    if (isSaksbehandlerLoading) {
+    if (isLoading) {
         return <Loader />;
     }
 

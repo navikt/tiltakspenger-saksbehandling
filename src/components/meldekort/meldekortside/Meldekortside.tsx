@@ -15,12 +15,6 @@ export const Meldekortside = () => {
     const { meldeperiodeKjede, valgtMeldeperiode } = useMeldeperioder();
     const { brukersMeldekort, meldekortBehandling } = valgtMeldeperiode;
 
-    const kanSaksbehandle = kanSaksbehandleMeldekort(
-        meldekortBehandling.status,
-        innloggetSaksbehandler,
-        innloggetSaksbehandler.navIdent,
-    );
-
     return (
         <VStack gap={'5'} className={styles.wrapper}>
             <HStack gap={'5'}>
@@ -35,7 +29,12 @@ export const Meldekortside = () => {
                         <Heading level={'2'} size={'medium'}>
                             {meldekortHeading(meldeperiodeKjede.periode)}
                         </Heading>
-                        {erUnderBehandling(meldekortBehandling) && kanSaksbehandle ? (
+                        {erUnderBehandling(meldekortBehandling) &&
+                        kanSaksbehandleMeldekort(
+                            meldekortBehandling.status,
+                            innloggetSaksbehandler,
+                            innloggetSaksbehandler.navIdent,
+                        ) ? (
                             <MeldekortBehandling
                                 meldekortBehandling={meldekortBehandling}
                                 maksAntallDager={valgtMeldeperiode.antallDager}
