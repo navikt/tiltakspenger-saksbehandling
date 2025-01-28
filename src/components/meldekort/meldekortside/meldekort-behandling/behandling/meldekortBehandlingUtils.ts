@@ -49,3 +49,8 @@ const dagerMedDeltattEllerFravær: ReadonlySet<MeldekortBehandlingDagStatus> = n
     MeldekortBehandlingDagStatus.FraværVelferdGodkjentAvNav,
     MeldekortBehandlingDagStatus.FraværVelferdIkkeGodkjentAvNav,
 ]);
+
+export type MeldekortBehandlingForm = {
+    uke1: MeldekortBehandlingDagProps[];
+    uke2: MeldekortBehandlingDagProps[];
+};

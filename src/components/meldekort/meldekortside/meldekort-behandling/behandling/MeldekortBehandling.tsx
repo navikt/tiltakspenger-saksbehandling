@@ -3,7 +3,6 @@ import { useRef, useState } from 'react';
 import { useSak } from '../../../../layout/SakLayout';
 import {
     BrukersMeldekortProps,
-    MeldekortBehandlingDagStatus,
     MeldekortBehandlingProps,
 } from '../../../../../types/MeldekortTypes';
 import { useSendMeldekortTilBeslutter } from '../../../../../hooks/meldekort/useSendMeldekortTilBeslutter';
@@ -12,8 +11,10 @@ import BekreftelsesModal from '../../../../bekreftelsesmodal/BekreftelsesModal';
 import { useRouter } from 'next/router';
 import {
     hentMeldekortBehandlingDager,
+    MeldekortBehandlingForm,
     tellDagerMedDeltattEllerFravær,
 } from './meldekortBehandlingUtils';
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 
 import styles from '../../Meldekort.module.css';
 
@@ -30,19 +31,17 @@ export const MeldekortBehandling = ({
 }: Props) => {
     const { sakId } = useSak();
     const router = useRouter();
+    const [valideringsFeil, setValideringsFeil] = useState<string>('');
 
     const dagerDefault = hentMeldekortBehandlingDager(meldekortBehandling, brukersMeldekort);
 
-    const [dagerUtfylt, setDagerUtfylt] = useState(dagerDefault);
-    const [errors, setErrors] = useState<string[]>([]);
-
-    const uke1 = dagerUtfylt.slice(0, 7);
-    const uke2 = dagerUtfylt.slice(7, 14);
-
-    const settStatus = (dato: string, status: MeldekortBehandlingDagStatus) => {
-        setErrors([]);
-        setDagerUtfylt(dagerUtfylt.map((dag) => (dag.dato === dato ? { dato, status } : dag)));
-    };
+    const methods = useForm<MeldekortBehandlingForm>({
+        mode: 'onSubmit',
+        defaultValues: {
+            uke1: dagerDefault.slice(0, 7),
+            uke2: dagerDefault.slice(7, 14),
+        },
+    });
 
     const {
         sendMeldekortTilBeslutter,
@@ -65,68 +64,60 @@ export const MeldekortBehandling = ({
         reset();
     };
 
-    const validerOgÅpneBekreftelse = () => {
-        const _errors: string[] = [];
-        if (tellDagerMedDeltattEllerFravær(dagerUtfylt) > maksAntallDager) {
-            _errors.push(
-                `For mange dager med tiltak - Maks er ${maksAntallDager} dager for denne brukeren.`,
+    const validerOgÅpneBekreftelse: SubmitHandler<MeldekortBehandlingForm> = (utfylteDager) => {
+        if (
+            tellDagerMedDeltattEllerFravær([...utfylteDager.uke1, ...utfylteDager.uke2]) >
+            maksAntallDager
+        ) {
+            setValideringsFeil(
+                `For mange dager utfylt - Maks ${maksAntallDager} dager med tiltak for denne perioden.`,
             );
-        }
-        if (dagerUtfylt.some((dag) => dag.status === MeldekortBehandlingDagStatus.IkkeUtfylt)) {
-            _errors.push('Alle dager må fylles ut.');
+            return;
         }
 
-        setErrors(_errors);
-
-        if (_errors.length === 0) {
-            modalRef.current?.showModal();
-        }
+        setValideringsFeil('');
+        modalRef.current?.showModal();
     };
 
     return (
-        <>
-            <HStack className={styles.meldekort}>
-                <MeldekortBehandlingUke settStatus={settStatus} dager={uke1} />
-                <Spacer />
-                <MeldekortBehandlingUke settStatus={settStatus} dager={uke2} />
-            </HStack>
-            {errors.length > 0 && (
-                <Alert variant={'error'}>
-                    <BodyShort weight={'semibold'}>{'Feil i utfyllingen'}</BodyShort>
-                    {errors.map((error) => (
-                        <BodyShort key={error}>{error}</BodyShort>
-                    ))}
-                </Alert>
-            )}
-            <Button
-                size={'small'}
-                style={{ marginTop: '2.5rem' }}
-                disabled={errors.length > 0}
-                onClick={() => validerOgÅpneBekreftelse()}
-            >
-                Send til beslutter
-            </Button>
-            <BekreftelsesModal
-                modalRef={modalRef}
-                tittel={'Send meldekort til beslutter'}
-                body={
-                    'Er du sikker på at meldekortet er ferdig utfylt og klart til å sendes til beslutter?'
-                }
-                error={feilVedSendingTilBeslutter}
-                lukkModal={lukkModal}
-            >
-                <Button
-                    size="small"
-                    loading={senderMeldekortTilBeslutter}
-                    onClick={() =>
-                        sendMeldekortTilBeslutter({
-                            dager: dagerUtfylt,
-                        })
-                    }
-                >
+        <FormProvider {...methods}>
+            <form onSubmit={methods.handleSubmit(validerOgÅpneBekreftelse)}>
+                <HStack className={styles.meldekort}>
+                    <MeldekortBehandlingUke dager={methods.getValues().uke1} ukenummer={1} />
+                    <Spacer />
+                    <MeldekortBehandlingUke dager={methods.getValues().uke2} ukenummer={2} />
+                </HStack>
+                {valideringsFeil && (
+                    <Alert variant={'error'}>
+                        <BodyShort weight={'semibold'}>{'Feil i utfyllingen'}</BodyShort>
+                        <BodyShort>{valideringsFeil}</BodyShort>
+                    </Alert>
+                )}
+                <Button type="submit" value="submit" size="small" style={{ marginTop: '2.5rem' }}>
                     Send til beslutter
                 </Button>
-            </BekreftelsesModal>
-        </>
+                <BekreftelsesModal
+                    modalRef={modalRef}
+                    tittel={'Send meldekort til beslutter'}
+                    body={
+                        'Er du sikker på at meldekortet er ferdig utfylt og klart til å sendes til beslutter?'
+                    }
+                    error={feilVedSendingTilBeslutter}
+                    lukkModal={lukkModal}
+                >
+                    <Button
+                        size="small"
+                        loading={senderMeldekortTilBeslutter}
+                        onClick={() =>
+                            sendMeldekortTilBeslutter({
+                                dager: methods.getValues().uke1.concat(methods.getValues().uke2),
+                            })
+                        }
+                    >
+                        Send til beslutter
+                    </Button>
+                </BekreftelsesModal>
+            </form>
+        </FormProvider>
     );
 };

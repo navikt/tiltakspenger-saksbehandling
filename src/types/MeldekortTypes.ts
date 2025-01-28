@@ -116,10 +116,3 @@ export type Beregningsdag = {
 export type MeldekortDTO = {
     dager: MeldekortBehandlingDagProps[];
 };
-
-export const Meldekortstatuser = Object.values(MeldekortBehandlingDagStatus).filter(
-    (status) =>
-        ![MeldekortBehandlingDagStatus.Sperret, MeldekortBehandlingDagStatus.IkkeUtfylt].includes(
-            status,
-        ),
-);
