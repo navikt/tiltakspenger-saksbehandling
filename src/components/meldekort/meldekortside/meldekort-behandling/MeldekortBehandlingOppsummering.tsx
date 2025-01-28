@@ -5,7 +5,7 @@ import { useContext, useRef } from 'react';
 import { SakContext } from '../../../layout/SakLayout';
 import { useGodkjennMeldekort } from '../../../../hooks/meldekort/useGodkjennMeldekort';
 import { kanBeslutteForBehandling } from '../../../../utils/tilganger';
-import { SaksbehandlerContext } from '../../../../pages/_app';
+import { SaksbehandlerContext } from '../../../../context/saksbehandler/SaksbehandlerContext';
 import BekreftelsesModal from '../../../bekreftelsesmodal/BekreftelsesModal';
 import { MeldeperiodeProps } from '../../../../types/MeldekortTypes';
 

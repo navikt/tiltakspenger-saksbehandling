@@ -4,7 +4,7 @@ import { useHentBehandling } from '../../hooks/useHentBehandling';
 import { BehandlingStatus } from '../../types/BehandlingTypes';
 import { useContext, useState } from 'react';
 import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
-import { SaksbehandlerContext } from '../../pages/_app';
+import { SaksbehandlerContext } from '../../context/saksbehandler/SaksbehandlerContext';
 import { kanSaksbehandleForBehandling } from '../../utils/tilganger';
 
 export const Saksbehandlingstabs = () => {

@@ -105,7 +105,7 @@ export const finnMeldekortdagStatusTekst = (status: string) => {
         case MeldekortBehandlingDagStatus.FraværVelferdIkkeGodkjentAvNav:
             return 'Ikke godkjent fravær - Velferd';
         case MeldekortBehandlingDagStatus.IkkeDeltatt:
-            return 'Ikke deltatt i tiltaket';
+            return 'Ikke tiltak denne dagen';
         case MeldekortBehandlingDagStatus.IkkeUtfylt:
         case BrukersMeldekortDagStatus.IKKE_REGISTRERT:
             return 'Ikke utfylt';
@@ -139,7 +139,7 @@ export const finnBehandlingstypeTekst = (behandlingstype: TypeBehandling): strin
         case TypeBehandling.REVURDERING:
             return 'Revurdering';
         case TypeBehandling.SØKNAD:
-            'Søknad';
+            return 'Søknad';
         default:
             return 'Søknad';
     }

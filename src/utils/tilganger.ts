@@ -17,18 +17,28 @@ export const kanBeslutteForBehandling = (
     );
 };
 
+const kanBehandle = (innloggetSaksbehandler: Saksbehandler, saksbehandlerForBehandling: string) =>
+    erSaksbehandler(innloggetSaksbehandler) &&
+    innloggetSaksbehandler.navIdent === saksbehandlerForBehandling;
+
 export const kanSaksbehandleForBehandling = (
-    status: string,
+    status: BehandlingStatus,
     innloggetSaksbehandler: Saksbehandler,
     saksbehandlerForBehandling: string,
 ) => {
     return (
-        erSaksbehandler(innloggetSaksbehandler) &&
-        innloggetSaksbehandler.navIdent === saksbehandlerForBehandling &&
-        (status === BehandlingStatus.UNDER_BEHANDLING ||
-            status === MeldekortBehandlingStatus.KLAR_TIL_UTFYLLING)
+        kanBehandle(innloggetSaksbehandler, saksbehandlerForBehandling) &&
+        status === BehandlingStatus.UNDER_BEHANDLING
     );
 };
+
+export const kanSaksbehandleMeldekort = (
+    status: MeldekortBehandlingStatus,
+    innloggetSaksbehandler: Saksbehandler,
+    saksbehandlerForMeldekort: string,
+) =>
+    kanBehandle(innloggetSaksbehandler, saksbehandlerForMeldekort) &&
+    status === MeldekortBehandlingStatus.KLAR_TIL_UTFYLLING;
 
 export const eierBehandling = (
     status: string,

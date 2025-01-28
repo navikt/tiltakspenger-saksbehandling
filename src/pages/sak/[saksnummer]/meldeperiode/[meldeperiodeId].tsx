@@ -2,8 +2,8 @@ import { Button, HStack, Loader, Tag, VStack } from '@navikt/ds-react';
 import { pageWithAuthentication } from '../../../../auth/pageWithAuthentication';
 import { Meldekortside } from '../../../../components/meldekort/meldekortside/Meldekortside';
 import { NextPageWithLayout } from '../../../_app';
-import { SakContext, SakLayout } from '../../../../components/layout/SakLayout';
-import { ReactElement, useContext } from 'react';
+import { SakLayout, useSak } from '../../../../components/layout/SakLayout';
+import { ReactElement } from 'react';
 import PersonaliaHeader from '../../../../components/personaliaheader/PersonaliaHeader';
 import router from 'next/router';
 import { finnMeldeperiodeStatusTekst } from '../../../../utils/tekstformateringUtils';
@@ -16,7 +16,7 @@ import { MeldekortDetaljer } from '../../../../components/meldekort/meldekortdet
 import styles from '../../../behandling/Behandling.module.css';
 
 const Meldekort: NextPageWithLayout = () => {
-    const { sakId, saknummer } = useContext(SakContext);
+    const { sakId, saknummer } = useSak();
     const meldeperiodeId = router.query.meldeperiodeId as string;
 
     const { meldeperiodeKjede, error, isLoading } = useHentMeldeperiodeKjede(meldeperiodeId, sakId);

@@ -1,6 +1,15 @@
 import useSWRMutation from 'swr/mutation';
-import { FetcherError, mutateMeldekort } from '../../utils/http';
+import { FetcherError, throwErrorIfFatal } from '../../utils/http';
 import { MeldekortDTO } from '../../types/MeldekortTypes';
+
+const mutateMeldekort = async (url, { arg }: { arg: MeldekortDTO }): Promise<unknown> => {
+    const res = await fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(arg),
+    });
+    await throwErrorIfFatal(res);
+    return res.json();
+};
 
 type Props = {
     meldekortId: string;

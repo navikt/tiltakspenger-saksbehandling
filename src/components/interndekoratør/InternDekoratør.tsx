@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { BodyShort, Dropdown, InternalHeader, Search, Spacer, VStack } from '@navikt/ds-react';
 import { Loader } from '@navikt/ds-react';
-import { SaksbehandlerContext } from '../../pages/_app';
+import { SaksbehandlerContext } from '../../context/saksbehandler/SaksbehandlerContext';
 import { ExternalLinkIcon, LeaveIcon, MenuGridIcon } from '@navikt/aksel-icons';
 import { useHentSakForFNR } from '../../hooks/useHentSakForFNR';
 import Varsel from '../varsel/Varsel';
