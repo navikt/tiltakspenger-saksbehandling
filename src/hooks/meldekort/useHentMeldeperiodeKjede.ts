@@ -1,12 +1,12 @@
 import useSWR from 'swr';
-import { MeldeperiodeKjedeProps } from '../../types/MeldekortTypes';
+import { MeldeperiodeKjedeProps } from '../../types/Meldeperiode';
 import { fetcher, FetcherError } from '../../utils/http';
 
-export function useHentMeldeperiodeKjede(meldeperiodeId: string, sakId: string) {
+export function useHentMeldeperiodeKjede(meldeperiodeKjedeId: string, sakId: string) {
     const { data, mutate, isLoading, error } = useSWR<MeldeperiodeKjedeProps, FetcherError>(
-        meldeperiodeId &&
+        meldeperiodeKjedeId &&
             sakId &&
-            `/api/sak/${sakId}/meldeperiode/${encodeURIComponent(meldeperiodeId)}`,
+            `/api/sak/${sakId}/meldeperiode/${encodeURIComponent(meldeperiodeKjedeId)}`,
         fetcher,
     );
 

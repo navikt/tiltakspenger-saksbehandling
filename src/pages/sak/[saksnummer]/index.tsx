@@ -10,11 +10,6 @@ import { preload } from 'swr';
 import { fetcher } from '../../../utils/http';
 import { Saksoversikt } from '../../../components/saksoversikt/Saksoversikt';
 
-export interface RevurderingForm {
-    fraOgMed: Date;
-    tilOgMed: Date;
-}
-
 const Saksside: NextPageWithLayout<Sak> = ({
     behandlingsoversikt,
     meldeperiodeoversikt,

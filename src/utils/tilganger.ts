@@ -1,5 +1,5 @@
 import { BehandlingStatus } from '../types/BehandlingTypes';
-import { MeldekortBehandlingStatus } from '../types/MeldekortTypes';
+import { MeldekortBehandlingStatus } from '../types/MeldekortBehandling';
 import { erBeslutter, erSaksbehandler, Saksbehandler } from '../types/Saksbehandler';
 
 export const kanBeslutteForBehandling = (

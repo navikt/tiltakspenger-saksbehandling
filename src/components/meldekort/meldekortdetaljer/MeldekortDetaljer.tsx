@@ -2,7 +2,7 @@ import { VStack, BodyShort } from '@navikt/ds-react';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '../../../utils/date';
 import { useMeldeperioder } from '../../../hooks/meldekort/useMeldeperioder';
 import { MeldekortBehandlingOpprett } from '../meldekortside/meldekort-behandling/MeldekortBehandlingOpprett';
-import { MeldekortBehandlingProps } from '../../../types/MeldekortTypes';
+import { MeldekortBehandlingProps } from '../../../types/MeldekortBehandling';
 import { useFeatureToggles } from '../../../hooks/useFeatureToggles';
 
 import styles from './MeldekortDetaljer.module.css';
@@ -15,10 +15,12 @@ export const MeldekortDetaljer = () => {
 
     return (
         <VStack gap="3" className={styles.wrapper}>
-            <MeldekortDetalj
-                header={'Vedtaksperiode'}
-                tekst={periodeTilFormatertDatotekst(vedtaksPeriode)}
-            />
+            {vedtaksPeriode && (
+                <MeldekortDetalj
+                    header={'Vedtaksperiode'}
+                    tekst={periodeTilFormatertDatotekst(vedtaksPeriode)}
+                />
+            )}
             <MeldekortDetalj
                 header={'Meldekortperiode'}
                 tekst={periodeTilFormatertDatotekst(periode)}

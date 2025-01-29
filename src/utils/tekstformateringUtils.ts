@@ -9,10 +9,10 @@ import { Deltagelse } from '../types/KvpTypes';
 import {
     MeldekortBehandlingDagStatus,
     BrukersMeldekortDagStatus,
-    MeldeperiodeStatus,
-} from '../types/MeldekortTypes';
+} from '../types/MeldekortBehandling';
 import { DeltagelseStatus } from '../types/TiltakDeltagelseTypes';
 import { Kilde } from '../types/VilkårTypes';
+import { MeldeperiodeStatus } from '../types/Meldeperiode';
 
 export const finnKildetekst = (kilde: string) => {
     switch (kilde) {

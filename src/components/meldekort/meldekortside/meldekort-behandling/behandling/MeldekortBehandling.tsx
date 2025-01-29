@@ -4,7 +4,7 @@ import { useSak } from '../../../../layout/SakLayout';
 import {
     BrukersMeldekortProps,
     MeldekortBehandlingProps,
-} from '../../../../../types/MeldekortTypes';
+} from '../../../../../types/MeldekortBehandling';
 import { useSendMeldekortTilBeslutter } from '../../../../../hooks/meldekort/useSendMeldekortTilBeslutter';
 import { MeldekortBehandlingUke } from './MeldekortBehandlingUke';
 import BekreftelsesModal from '../../../../bekreftelsesmodal/BekreftelsesModal';

@@ -1,5 +1,5 @@
 import { Button, Loader } from '@navikt/ds-react';
-import { MeldeperiodeProps } from '../../../../types/MeldekortTypes';
+import { MeldeperiodeProps } from '../../../../types/Meldeperiode';
 import { useOpprettMeldekortBehandling } from '../../../../hooks/meldekort/useOpprettMeldekortBehandling';
 import { useSak } from '../../../layout/SakLayout';
 import Varsel from '../../../varsel/Varsel';

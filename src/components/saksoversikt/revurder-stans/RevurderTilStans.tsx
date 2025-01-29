@@ -13,17 +13,11 @@ interface RevurderingForm {
 
 type Props = {
     førsteLovligeStansdato: string;
-    sisteLovligeStansdato: string;
     sakId: string;
     saksnummer: string;
 };
 
-export const RevurderTilStans = ({
-    førsteLovligeStansdato,
-    sisteLovligeStansdato,
-    sakId,
-    saksnummer,
-}: Props) => {
+export const RevurderTilStans = ({ førsteLovligeStansdato, sakId, saksnummer }: Props) => {
     const modalRef = useRef(null);
     const fraOgMed = new Date(førsteLovligeStansdato);
 
@@ -70,7 +64,6 @@ export const RevurderTilStans = ({
                                     onDateChange={onChange}
                                     label="Stans fra og med"
                                     minDate={fraOgMed}
-                                    maxDate={new Date(sisteLovligeStansdato)}
                                     defaultSelected={value}
                                     errorMessage={errors.fraOgMed ? errors.fraOgMed.message : ''}
                                 />

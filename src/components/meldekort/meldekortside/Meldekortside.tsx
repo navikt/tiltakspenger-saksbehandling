@@ -1,6 +1,9 @@
 import { Heading, HStack, VStack } from '@navikt/ds-react';
 import { meldekortHeading } from '../../../utils/date';
-import { MeldekortBehandlingProps, MeldekortBehandlingStatus } from '../../../types/MeldekortTypes';
+import {
+    MeldekortBehandlingProps,
+    MeldekortBehandlingStatus,
+} from '../../../types/MeldekortBehandling';
 import { MeldekortBehandling } from './meldekort-behandling/behandling/MeldekortBehandling';
 import { MeldekortBehandlingOppsummering } from './meldekort-behandling/MeldekortBehandlingOppsummering';
 import { BrukersMeldekortVisning } from './BrukersMeldekort';

@@ -1,14 +1,3 @@
-import { Periode } from './Periode';
-
-export enum MeldeperiodeStatus {
-    IKKE_RETT_TIL_TILTAKSPENGER = 'IKKE_RETT_TIL_TILTAKSPENGER',
-    IKKE_KLAR_TIL_UTFYLLING = 'IKKE_KLAR_TIL_UTFYLLING',
-    VENTER_PÅ_UTFYLLING = 'VENTER_PÅ_UTFYLLING',
-    KLAR_TIL_BEHANDLING = 'KLAR_TIL_BEHANDLING',
-    KLAR_TIL_BESLUTNING = 'KLAR_TIL_BESLUTNING',
-    GODKJENT = 'GODKJENT',
-}
-
 export enum BrukersMeldekortDagStatus {
     DELTATT = 'DELTATT',
     FRAVÆR_SYK = 'FRAVÆR_SYK',
@@ -43,16 +32,6 @@ export enum ReduksjonAvYtelse {
     YTELSEN_FALLER_BORT = 'YTELSEN_FALLER_BORT',
 }
 
-export type MeldeperiodeSammendragProps = {
-    meldeperiodeId: string;
-    hendelseId: string;
-    hendelseVersjon: number;
-    periode: Periode;
-    saksbehandler?: string;
-    beslutter?: string;
-    status: MeldeperiodeStatus;
-};
-
 export type MeldekortBehandlingProps = {
     id: string;
     saksbehandler: string;
@@ -85,32 +64,11 @@ export type BrukersMeldekortProps = {
     dager: BrukersMeldekortDagProps[];
 };
 
-export type MeldeperiodeProps = {
-    id: string;
-    hendelseId: string;
-    versjon: number;
-    periode: Periode;
-    opprettet: string;
-    status: MeldeperiodeStatus;
-    antallDager: number;
-    girRett: Record<string, boolean>;
-    meldekortBehandling?: MeldekortBehandlingProps;
-    brukersMeldekort?: BrukersMeldekortProps;
-};
-
-export type MeldeperiodeKjedeProps = {
-    meldeperiodeId: string;
-    periode: Periode;
-    tiltaksnavn: string;
-    vedtaksPeriode: Periode;
-    meldeperioder: MeldeperiodeProps[];
-};
-
-export type Beregningsdag = {
+type Beregningsdag = {
     beløp: number;
     prosent: number;
 };
 
-export type MeldekortDTO = {
+export type MeldekortBehandlingDTO = {
     dager: MeldekortBehandlingDagProps[];
 };

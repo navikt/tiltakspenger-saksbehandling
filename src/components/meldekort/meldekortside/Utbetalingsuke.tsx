@@ -1,7 +1,7 @@
 import { Box, Heading, HStack, Table } from '@navikt/ds-react';
 import React from 'react';
 import { formaterDatotekst, ukedagFraDatotekst } from '../../../utils/date';
-import { MeldekortBehandlingDagBeregnet } from '../../../types/MeldekortTypes';
+import { MeldekortBehandlingDagBeregnet } from '../../../types/MeldekortBehandling';
 import { finnMeldekortdagStatusTekst } from '../../../utils/tekstformateringUtils';
 import { velgIkonForMeldekortStatus } from './Meldekortikoner';
 

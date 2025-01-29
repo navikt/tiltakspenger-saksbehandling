@@ -4,7 +4,7 @@ import {
     MeldekortBehandlingDagStatus,
     MeldekortBehandlingProps,
     MeldekortBehandlingDagProps,
-} from '../../../../../types/MeldekortTypes';
+} from '../../../../../types/MeldekortBehandling';
 
 export const hentMeldekortBehandlingDager = (
     meldekortBehandling: MeldekortBehandlingProps,

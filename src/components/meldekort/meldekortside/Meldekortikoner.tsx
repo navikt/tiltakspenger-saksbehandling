@@ -8,7 +8,7 @@ import {
 import {
     BrukersMeldekortDagStatus,
     MeldekortBehandlingDagStatus,
-} from '../../../types/MeldekortTypes';
+} from '../../../types/MeldekortBehandling';
 
 export const velgIkonForMeldekortStatus = (
     status: MeldekortBehandlingDagStatus | BrukersMeldekortDagStatus,

@@ -1,8 +1,8 @@
 import useSWRMutation from 'swr/mutation';
 import { FetcherError, throwErrorIfFatal } from '../../utils/http';
-import { MeldekortDTO } from '../../types/MeldekortTypes';
+import { MeldekortBehandlingDTO } from '../../types/MeldekortBehandling';
 
-const mutateMeldekort = async (url, { arg }: { arg: MeldekortDTO }): Promise<unknown> => {
+const mutateMeldekort = async (url, { arg }: { arg: MeldekortBehandlingDTO }): Promise<unknown> => {
     const res = await fetch(url, {
         method: 'POST',
         body: JSON.stringify(arg),
@@ -23,7 +23,7 @@ export function useSendMeldekortTilBeslutter({ meldekortId, sakId, onSuccess }: 
         isMutating: senderMeldekortTilBeslutter,
         error: feilVedSendingTilBeslutter,
         reset,
-    } = useSWRMutation<any, FetcherError, any, MeldekortDTO>(
+    } = useSWRMutation<any, FetcherError, any, MeldekortBehandlingDTO>(
         `/api/sak/${sakId}/meldekort/${meldekortId}`,
         mutateMeldekort,
         { onSuccess },

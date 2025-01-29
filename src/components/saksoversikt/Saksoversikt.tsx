@@ -1,6 +1,6 @@
 import { Box, HStack, Heading, Spacer } from '@navikt/ds-react';
 import { BehandlingForBenk } from '../../types/BehandlingTypes';
-import { MeldeperiodeSammendragProps } from '../../types/MeldekortTypes';
+import { MeldeperiodeProps } from '../../types/Meldeperiode';
 import { MeldekortOversikt } from './meldekort-oversikt/MeldekortOversikt';
 import { BehandlingerOversikt } from './behandlinger-oversikt/BehandlingerOversikt';
 import { useFeatureToggles } from '../../hooks/useFeatureToggles';
@@ -10,7 +10,7 @@ import styles from './Saksoversikt.module.css';
 
 interface SaksoversiktProps {
     behandlingsoversikt: BehandlingForBenk[];
-    meldeperioder: MeldeperiodeSammendragProps[];
+    meldeperioder: MeldeperiodeProps[];
     førsteLovligeStansdato: string;
     saksnummer: string;
     sakId: string;
@@ -37,7 +37,6 @@ export const Saksoversikt = ({
                         sakId={sakId}
                         saksnummer={saksnummer}
                         førsteLovligeStansdato={førsteLovligeStansdato}
-                        sisteLovligeStansdato={behandlingsoversikt[0].periode.tilOgMed}
                     />
                 )}
             </HStack>
