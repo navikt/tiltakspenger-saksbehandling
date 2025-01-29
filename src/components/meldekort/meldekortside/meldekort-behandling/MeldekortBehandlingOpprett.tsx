@@ -4,6 +4,8 @@ import { useOpprettMeldekortBehandling } from '../../../../hooks/meldekort/useOp
 import { useSak } from '../../../layout/SakLayout';
 import Varsel from '../../../varsel/Varsel';
 import { useHentMeldeperiodeKjede } from '../../../../hooks/meldekort/useHentMeldeperiodeKjede';
+import BekreftelsesModal from '../../../bekreftelsesmodal/BekreftelsesModal';
+import { useRef } from 'react';
 
 import styles from './MeldekortBehandlingOpprett.module.css';
 
@@ -20,20 +22,31 @@ export const MeldekortBehandlingOpprett = ({ meldeperiode }: Props) => {
         onSuccess: revalider,
     });
 
+    const modalRef = useRef(null);
+
     return (
         <div>
-            <Button
-                onClick={() => {
-                    console.log('Oppretter behandling');
-                    opprett();
-                }}
-                disabled={laster}
-                icon={laster && <Loader />}
-                className={styles.knapp}
-            >
-                {'Opprett behandling'}
+            <Button onClick={() => modalRef.current.showModal()} className={styles.knapp}>
+                {'Start behandling'}
             </Button>
             {feil && <Varsel variant={'error'} melding={feil} className={styles.varsel} />}
+            <BekreftelsesModal
+                modalRef={modalRef}
+                tittel={'Start behandling av meldekortet'}
+                body={'Vil du starte behandling av dette meldekortet?'}
+                error={feil}
+                lukkModal={() => modalRef.current.close()}
+            >
+                <Button
+                    icon={laster && <Loader />}
+                    onClick={() => {
+                        console.log('Oppretter behandling');
+                        opprett();
+                    }}
+                >
+                    {'Start behandling'}
+                </Button>
+            </BekreftelsesModal>
         </div>
     );
 };
