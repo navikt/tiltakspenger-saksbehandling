@@ -1,10 +1,8 @@
 import { Alert, BodyShort, Button, HStack, Spacer } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
 import { useSak } from '../../../../layout/SakLayout';
-import {
-    BrukersMeldekortProps,
-    MeldekortBehandlingProps,
-} from '../../../../../types/MeldekortBehandling';
+import { MeldekortBehandlingProps } from '../../../../../types/meldekort/MeldekortBehandling';
+import { BrukersMeldekortProps } from '../../../../../types/meldekort/BrukersMeldekort';
 import { useSendMeldekortTilBeslutter } from '../../../../../hooks/meldekort/useSendMeldekortTilBeslutter';
 import { MeldekortBehandlingUke } from './MeldekortBehandlingUke';
 import BekreftelsesModal from '../../../../bekreftelsesmodal/BekreftelsesModal';

@@ -2,7 +2,7 @@ import { BodyShort, Heading, HStack, Label, Select, VStack } from '@navikt/ds-re
 import {
     MeldekortBehandlingDagProps,
     MeldekortBehandlingDagStatus,
-} from '../../../../../types/MeldekortBehandling';
+} from '../../../../../types/meldekort/MeldekortBehandling';
 import { meldekortdagHeading, ukeHeading } from '../../../../../utils/date';
 import { velgIkonForMeldekortStatus } from '../../Meldekortikoner';
 import { finnMeldekortdagStatusTekst } from '../../../../../utils/tekstformateringUtils';

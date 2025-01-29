@@ -1,5 +1,5 @@
 import { BehandlingForBenk } from './BehandlingTypes';
-import { MeldeperiodeProps } from './Meldeperiode';
+import { MeldeperiodeProps } from './meldekort/Meldeperiode';
 
 export type Sak = {
     sakId: string;

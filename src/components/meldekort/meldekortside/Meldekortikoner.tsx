@@ -5,10 +5,8 @@ import {
     FirstAidKitFillIcon,
     NotePencilIcon,
 } from '@navikt/aksel-icons';
-import {
-    BrukersMeldekortDagStatus,
-    MeldekortBehandlingDagStatus,
-} from '../../../types/MeldekortBehandling';
+import { MeldekortBehandlingDagStatus } from '../../../types/meldekort/MeldekortBehandling';
+import { BrukersMeldekortDagStatus } from '../../../types/meldekort/BrukersMeldekort';
 
 export const velgIkonForMeldekortStatus = (
     status: MeldekortBehandlingDagStatus | BrukersMeldekortDagStatus,

@@ -1,6 +1,6 @@
 import { Box, HStack, Heading, Spacer } from '@navikt/ds-react';
 import { BehandlingForBenk } from '../../types/BehandlingTypes';
-import { MeldeperiodeProps } from '../../types/Meldeperiode';
+import { MeldeperiodeProps } from '../../types/meldekort/Meldeperiode';
 import { MeldekortOversikt } from './meldekort-oversikt/MeldekortOversikt';
 import { BehandlingerOversikt } from './behandlinger-oversikt/BehandlingerOversikt';
 import { useFeatureToggles } from '../../hooks/useFeatureToggles';

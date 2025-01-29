@@ -3,7 +3,7 @@ import { meldekortHeading } from '../../../utils/date';
 import {
     MeldekortBehandlingProps,
     MeldekortBehandlingStatus,
-} from '../../../types/MeldekortBehandling';
+} from '../../../types/meldekort/MeldekortBehandling';
 import { MeldekortBehandling } from './meldekort-behandling/behandling/MeldekortBehandling';
 import { MeldekortBehandlingOppsummering } from './meldekort-behandling/MeldekortBehandlingOppsummering';
 import { BrukersMeldekortVisning } from './BrukersMeldekort';

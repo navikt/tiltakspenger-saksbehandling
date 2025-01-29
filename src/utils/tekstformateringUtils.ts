@@ -6,13 +6,11 @@ import {
 } from '../types/BehandlingTypes';
 import { Opphold } from '../types/InstitusjonsoppholdTypes';
 import { Deltagelse } from '../types/KvpTypes';
-import {
-    MeldekortBehandlingDagStatus,
-    BrukersMeldekortDagStatus,
-} from '../types/MeldekortBehandling';
+import { MeldekortBehandlingDagStatus } from '../types/meldekort/MeldekortBehandling';
 import { DeltagelseStatus } from '../types/TiltakDeltagelseTypes';
 import { Kilde } from '../types/VilkårTypes';
-import { MeldeperiodeStatus } from '../types/Meldeperiode';
+import { MeldeperiodeStatus } from '../types/meldekort/Meldeperiode';
+import { BrukersMeldekortDagStatus } from '../types/meldekort/BrukersMeldekort';
 
 export const finnKildetekst = (kilde: string) => {
     switch (kilde) {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { MeldeperioderContext } from './MeldeperioderContext';
-import { MeldeperiodeKjedeProps, MeldeperiodeProps } from '../../types/Meldeperiode';
+import { MeldeperiodeKjedeProps, MeldeperiodeProps } from '../../types/meldekort/Meldeperiode';
 
 type Props = {
     meldeperiodeKjede: MeldeperiodeKjedeProps;

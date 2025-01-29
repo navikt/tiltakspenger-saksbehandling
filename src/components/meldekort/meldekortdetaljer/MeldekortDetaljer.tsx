@@ -2,7 +2,7 @@ import { VStack, BodyShort } from '@navikt/ds-react';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '../../../utils/date';
 import { useMeldeperioder } from '../../../hooks/meldekort/useMeldeperioder';
 import { MeldekortBehandlingOpprett } from '../meldekortside/meldekort-behandling/MeldekortBehandlingOpprett';
-import { MeldekortBehandlingProps } from '../../../types/MeldekortBehandling';
+import { MeldekortBehandlingProps } from '../../../types/meldekort/MeldekortBehandling';
 import { useFeatureToggles } from '../../../hooks/useFeatureToggles';
 
 import styles from './MeldekortDetaljer.module.css';

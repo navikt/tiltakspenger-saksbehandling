@@ -1,11 +1,4 @@
-export enum BrukersMeldekortDagStatus {
-    DELTATT = 'DELTATT',
-    FRAVÆR_SYK = 'FRAVÆR_SYK',
-    FRAVÆR_SYKT_BARN = 'FRAVAeR_SYKT_BARN',
-    FRAVÆR_ANNET = 'FRAVÆR_ANNET',
-    IKKE_REGISTRERT = 'IKKE_REGISTRERT',
-    IKKE_RETT_TIL_TILTAKSPENGER = 'IKKE_RETT_TIL_TILTAKSPENGER',
-}
+export type MeldekortBehandlingId = `meldekort_${string}`;
 
 export enum MeldekortBehandlingStatus {
     KLAR_TIL_UTFYLLING = 'KLAR_TIL_UTFYLLING',
@@ -33,7 +26,7 @@ export enum ReduksjonAvYtelse {
 }
 
 export type MeldekortBehandlingProps = {
-    id: string;
+    id: MeldekortBehandlingId;
     saksbehandler: string;
     beslutter?: string;
     status: MeldekortBehandlingStatus;
@@ -51,17 +44,6 @@ export type MeldekortBehandlingDagProps = {
 export type MeldekortBehandlingDagBeregnet = MeldekortBehandlingDagProps & {
     reduksjonAvYtelsePåGrunnAvFravær?: ReduksjonAvYtelse;
     beregningsdag: Beregningsdag;
-};
-
-export type BrukersMeldekortDagProps = {
-    dato: string;
-    status: BrukersMeldekortDagStatus;
-};
-
-export type BrukersMeldekortProps = {
-    id: string;
-    mottatt: string;
-    dager: BrukersMeldekortDagProps[];
 };
 
 type Beregningsdag = {

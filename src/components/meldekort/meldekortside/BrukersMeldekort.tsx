@@ -1,8 +1,8 @@
+import { MeldeperiodeProps } from '../../../types/meldekort/Meldeperiode';
 import {
-    BrukersMeldekortProps,
     BrukersMeldekortDagProps,
-} from '../../../types/MeldekortBehandling';
-import { MeldeperiodeProps } from '../../../types/Meldeperiode';
+    BrukersMeldekortProps,
+} from '../../../types/meldekort/BrukersMeldekort';
 import { Box, Heading, HStack, Table, VStack } from '@navikt/ds-react';
 import { formaterDatotekst, ukedagFraDatotekst } from '../../../utils/date';
 import { velgIkonForMeldekortStatus } from './Meldekortikoner';

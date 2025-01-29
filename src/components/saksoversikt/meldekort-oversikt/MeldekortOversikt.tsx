@@ -2,7 +2,7 @@ import { Button, Table } from '@navikt/ds-react';
 import { finnMeldeperiodeStatusTekst } from '../../../utils/tekstformateringUtils';
 import { periodeTilFormatertDatotekst } from '../../../utils/date';
 import Link from 'next/link';
-import { MeldeperiodeProps, MeldeperiodeStatus } from '../../../types/Meldeperiode';
+import { MeldeperiodeProps, MeldeperiodeStatus } from '../../../types/meldekort/Meldeperiode';
 
 type Props = {
     meldeperioder: MeldeperiodeProps[];

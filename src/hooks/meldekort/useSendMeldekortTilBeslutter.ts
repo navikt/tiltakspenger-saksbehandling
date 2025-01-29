@@ -1,6 +1,6 @@
 import useSWRMutation from 'swr/mutation';
 import { FetcherError, throwErrorIfFatal } from '../../utils/http';
-import { MeldekortBehandlingDTO } from '../../types/MeldekortBehandling';
+import { MeldekortBehandlingDTO } from '../../types/meldekort/MeldekortBehandling';
 
 const mutateMeldekort = async (url, { arg }: { arg: MeldekortBehandlingDTO }): Promise<unknown> => {
     const res = await fetch(url, {

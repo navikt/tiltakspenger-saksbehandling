@@ -1,5 +1,6 @@
-import { Periode } from './Periode';
-import { BrukersMeldekortProps, MeldekortBehandlingProps } from './MeldekortBehandling';
+import { Periode } from '../Periode';
+import { MeldekortBehandlingProps } from './MeldekortBehandling';
+import { BrukersMeldekortProps } from './BrukersMeldekort';
 
 type MeldeperiodeDato = `${number}-${number}-${number}`;
 

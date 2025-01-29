@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import { MeldeperiodeKjedeProps } from '../../types/Meldeperiode';
+import { MeldeperiodeKjedeProps } from '../../types/meldekort/Meldeperiode';
 import { fetcher, FetcherError } from '../../utils/http';
 
 export function useHentMeldeperiodeKjede(meldeperiodeKjedeId: string, sakId: string) {
