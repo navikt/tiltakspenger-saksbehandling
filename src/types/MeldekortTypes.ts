@@ -59,10 +59,8 @@ export type MeldekortBehandlingProps = {
     beslutter?: string;
     status: MeldekortBehandlingStatus;
     totalbeløpTilUtbetaling: number;
-    navkontor?: string;
+    navkontor: string;
     navkontorNavn?: string;
-    forrigeNavkontor?: string;
-    forrigeNavkontorNavn?: string;
     dager: MeldekortBehandlingDagBeregnet[];
 };
 

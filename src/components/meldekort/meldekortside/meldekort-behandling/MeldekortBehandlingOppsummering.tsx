@@ -58,9 +58,11 @@ export const MeldekortBehandlingOppsummering = ({ meldeperiode }: Props) => {
                 </BodyShort>
             </HStack>
             <HStack gap="5" className={styles.totalbeløp}>
-                <BodyShort weight="semibold">Navkontor det skal utbetales fra:</BodyShort>
+                <BodyShort weight="semibold">Nav-kontor det skal utbetales fra: </BodyShort>
                 <BodyShort weight="semibold">
-                    {meldekortBehandling.navkontorNavn || meldekortBehandling.navkontor}
+                    {meldekortBehandling.navkontorNavn
+                        ? `${meldekortBehandling.navkontorNavn} (${meldekortBehandling.navkontor})`
+                        : meldekortBehandling.navkontor}
                 </BodyShort>
             </HStack>
             {kanBeslutte && (

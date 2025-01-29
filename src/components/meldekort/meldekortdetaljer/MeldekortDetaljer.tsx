@@ -48,24 +48,9 @@ export const MeldekortDetaljer = () => {
     );
 };
 
-const MeldekortBehandlingDetaljer = ({
-    forrigeNavkontor,
-    forrigeNavkontorNavn,
-    saksbehandler,
-    beslutter,
-}: MeldekortBehandlingProps) => {
+const MeldekortBehandlingDetaljer = ({ saksbehandler, beslutter }: MeldekortBehandlingProps) => {
     return (
         <>
-            {forrigeNavkontor && (
-                <MeldekortDetalj
-                    header={'Forrige meldekorts Nav-kontor'}
-                    tekst={
-                        forrigeNavkontorNavn
-                            ? `${forrigeNavkontorNavn} (${forrigeNavkontor})`
-                            : forrigeNavkontor
-                    }
-                />
-            )}
             {saksbehandler && <MeldekortDetalj header={'Behandler'} tekst={saksbehandler} />}
             {beslutter && <MeldekortDetalj header={'Beslutter'} tekst={beslutter} />}
         </>
