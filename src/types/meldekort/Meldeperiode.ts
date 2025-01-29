@@ -37,3 +37,6 @@ export type MeldeperiodeKjedeProps = {
     vedtaksPeriode?: Periode;
     meldeperioder: MeldeperiodeProps[];
 };
+
+export type MeldeperiodeMedBehandlingProps = MeldeperiodeProps &
+    Required<Pick<MeldeperiodeProps, 'meldekortBehandling'>>;

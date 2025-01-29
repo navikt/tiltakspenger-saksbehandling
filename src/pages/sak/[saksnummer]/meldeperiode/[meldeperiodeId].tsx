@@ -19,14 +19,14 @@ const Meldekort: NextPageWithLayout = () => {
     const { sakId, saknummer } = useSak();
     const meldeperiodeId = router.query.meldeperiodeId as string;
 
-    const { meldeperiodeKjede, error, isLoading } = useHentMeldeperiodeKjede(meldeperiodeId, sakId);
+    const { meldeperiodeKjede, error, laster } = useHentMeldeperiodeKjede(meldeperiodeId, sakId);
 
     if (error) {
         console.error(error.message);
         return <Varsel variant="error" melding={error.message} />;
     }
 
-    if (isLoading || !meldeperiodeKjede) {
+    if (laster) {
         return <Loader />;
     }
 

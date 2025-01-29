@@ -3,7 +3,7 @@ import { MeldeperiodeProps } from '../../../../types/meldekort/Meldeperiode';
 import { useOpprettMeldekortBehandling } from '../../../../hooks/meldekort/useOpprettMeldekortBehandling';
 import { useSak } from '../../../layout/SakLayout';
 import Varsel from '../../../varsel/Varsel';
-import { useRouter } from 'next/router';
+import { useHentMeldeperiodeKjede } from '../../../../hooks/meldekort/useHentMeldeperiodeKjede';
 
 import styles from './MeldekortBehandlingOpprett.module.css';
 
@@ -12,12 +12,12 @@ type Props = {
 };
 
 export const MeldekortBehandlingOpprett = ({ meldeperiode }: Props) => {
-    const router = useRouter();
     const { sakId } = useSak();
+    const { revalider } = useHentMeldeperiodeKjede(meldeperiode.kjedeId, sakId);
     const { opprett, laster, feil } = useOpprettMeldekortBehandling({
         hendelseId: meldeperiode.hendelseId,
         sakId,
-        onSuccess: router.reload,
+        onSuccess: revalider,
     });
 
     return (

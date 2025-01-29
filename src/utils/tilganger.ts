@@ -1,5 +1,8 @@
 import { BehandlingStatus } from '../types/BehandlingTypes';
-import { MeldekortBehandlingStatus } from '../types/meldekort/MeldekortBehandling';
+import {
+    MeldekortBehandlingProps,
+    MeldekortBehandlingStatus,
+} from '../types/meldekort/MeldekortBehandling';
 import { erBeslutter, erSaksbehandler, Saksbehandler } from '../types/Saksbehandler';
 
 export const kanBeslutteForBehandling = (
@@ -33,12 +36,11 @@ export const kanSaksbehandleForBehandling = (
 };
 
 export const kanSaksbehandleMeldekort = (
-    status: MeldekortBehandlingStatus,
+    meldekortBehandling: MeldekortBehandlingProps,
     innloggetSaksbehandler: Saksbehandler,
-    saksbehandlerForMeldekort: string,
 ) =>
-    kanBehandle(innloggetSaksbehandler, saksbehandlerForMeldekort) &&
-    status === MeldekortBehandlingStatus.KLAR_TIL_UTFYLLING;
+    kanBehandle(innloggetSaksbehandler, meldekortBehandling.saksbehandler) &&
+    meldekortBehandling.status === MeldekortBehandlingStatus.KLAR_TIL_UTFYLLING;
 
 export const eierBehandling = (
     status: string,

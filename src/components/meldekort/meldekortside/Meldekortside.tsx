@@ -13,6 +13,11 @@ import { useSaksbehandler } from '../../../hooks/useSaksbehandler';
 
 import styles from './Meldekort.module.css';
 
+import {
+    MeldeperiodeMedBehandlingProps,
+    MeldeperiodeProps,
+} from '../../../types/meldekort/Meldeperiode';
+
 export const Meldekortside = () => {
     const { innloggetSaksbehandler } = useSaksbehandler();
     const { meldeperiodeKjede, valgtMeldeperiode } = useMeldeperioder();
@@ -27,22 +32,14 @@ export const Meldekortside = () => {
                         brukersMeldekort={brukersMeldekort}
                     />
                 )}
-                {meldekortBehandling && (
+                {harBehandling(valgtMeldeperiode) && (
                     <VStack gap={'5'}>
                         <Heading level={'2'} size={'medium'}>
                             {meldekortHeading(meldeperiodeKjede.periode)}
                         </Heading>
-                        {erUnderBehandling(meldekortBehandling) &&
-                        kanSaksbehandleMeldekort(
-                            meldekortBehandling.status,
-                            innloggetSaksbehandler,
-                            innloggetSaksbehandler.navIdent,
-                        ) ? (
-                            <MeldekortBehandling
-                                meldekortBehandling={meldekortBehandling}
-                                maksAntallDager={valgtMeldeperiode.antallDager}
-                                brukersMeldekort={brukersMeldekort}
-                            />
+                        {kanUtfylles(meldekortBehandling) &&
+                        kanSaksbehandleMeldekort(meldekortBehandling, innloggetSaksbehandler) ? (
+                            <MeldekortBehandling meldeperiode={valgtMeldeperiode} />
                         ) : (
                             <MeldekortBehandlingOppsummering meldeperiode={valgtMeldeperiode} />
                         )}
@@ -53,5 +50,9 @@ export const Meldekortside = () => {
     );
 };
 
-const erUnderBehandling = (meldekortBehandling: MeldekortBehandlingProps) =>
+const harBehandling = (
+    meldeperiode: MeldeperiodeProps,
+): meldeperiode is MeldeperiodeMedBehandlingProps => !!meldeperiode.meldekortBehandling;
+
+const kanUtfylles = (meldekortBehandling: MeldekortBehandlingProps) =>
     meldekortBehandling?.status === MeldekortBehandlingStatus.KLAR_TIL_UTFYLLING;

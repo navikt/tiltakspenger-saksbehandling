@@ -1,34 +1,29 @@
 import { Alert, BodyShort, Button, HStack, Spacer } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
 import { useSak } from '../../../../layout/SakLayout';
-import { MeldekortBehandlingProps } from '../../../../../types/meldekort/MeldekortBehandling';
-import { BrukersMeldekortProps } from '../../../../../types/meldekort/BrukersMeldekort';
 import { useSendMeldekortTilBeslutter } from '../../../../../hooks/meldekort/useSendMeldekortTilBeslutter';
 import { MeldekortBehandlingUke } from './MeldekortBehandlingUke';
 import BekreftelsesModal from '../../../../bekreftelsesmodal/BekreftelsesModal';
-import { useRouter } from 'next/router';
 import {
     hentMeldekortBehandlingDager,
     MeldekortBehandlingForm,
     tellDagerMedDeltattEllerFravær,
 } from './meldekortBehandlingUtils';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+import { useHentMeldeperiodeKjede } from '../../../../../hooks/meldekort/useHentMeldeperiodeKjede';
+import { MeldeperiodeMedBehandlingProps } from '../../../../../types/meldekort/Meldeperiode';
 
 import styles from '../../Meldekort.module.css';
 
 type Props = {
-    meldekortBehandling: MeldekortBehandlingProps;
-    maksAntallDager: number;
-    brukersMeldekort?: BrukersMeldekortProps;
+    meldeperiode: MeldeperiodeMedBehandlingProps;
 };
 
-export const MeldekortBehandling = ({
-    meldekortBehandling,
-    maksAntallDager,
-    brukersMeldekort,
-}: Props) => {
+export const MeldekortBehandling = ({ meldeperiode }: Props) => {
+    const { meldekortBehandling, brukersMeldekort, antallDager } = meldeperiode;
     const { sakId } = useSak();
-    const router = useRouter();
+    const { revalider } = useHentMeldeperiodeKjede(meldeperiode.kjedeId, sakId);
+
     const [valideringsFeil, setValideringsFeil] = useState('');
 
     const dagerDefault = hentMeldekortBehandlingDager(meldekortBehandling, brukersMeldekort);
@@ -51,7 +46,7 @@ export const MeldekortBehandling = ({
         sakId,
         onSuccess: () => {
             lukkModal();
-            router.reload();
+            revalider();
         },
     });
 
@@ -63,9 +58,9 @@ export const MeldekortBehandling = ({
     };
 
     const validerOgÅpneBekreftelse: SubmitHandler<MeldekortBehandlingForm> = (form) => {
-        if (tellDagerMedDeltattEllerFravær([...form.uke1, ...form.uke2]) > maksAntallDager) {
+        if (tellDagerMedDeltattEllerFravær([...form.uke1, ...form.uke2]) > antallDager) {
             setValideringsFeil(
-                `For mange dager utfylt - Maks ${maksAntallDager} dager med tiltak for denne perioden.`,
+                `For mange dager utfylt - Maks ${antallDager} dager med tiltak for denne perioden.`,
             );
             return;
         }
