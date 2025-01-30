@@ -1,6 +1,6 @@
 import { logger } from '@navikt/next-logger';
 import { NextApiRequest } from 'next';
-import { finnFeilmelding } from './feilmeldinger';
+import { finnFetchFeilmelding } from './feilmeldinger';
 import { Periode } from '../types/Periode';
 import { tiltaksdeltagelseBody } from '../types/TiltakDeltagelseTypes';
 import { LivsoppholdSaksopplysningBody } from '../types/LivsoppholdTypes';
@@ -66,7 +66,7 @@ export const throwErrorIfFatal = async (res: Response) => {
         try {
             error.info = await res.json();
             error.status = res.status || 500;
-            error.message = finnFeilmelding(error.info.kode) ?? 'Noe har gått galt på serversiden';
+            error.message = finnFetchFeilmelding(error);
         } catch (e) {
             error.status = 500;
             error.message = 'Noe har gått galt på serversiden, kontakt utviklingsteamet.';
