@@ -10,14 +10,14 @@ const fetcher = async (url: string) => {
 };
 
 type Props = {
-    hendelseId: string;
+    meldeperiodeId: string;
     sakId: string;
     onSuccess?: () => void;
 };
 
-export const useOpprettMeldekortBehandling = ({ hendelseId, sakId, onSuccess }: Props) => {
+export const useOpprettMeldekortBehandling = ({ meldeperiodeId, sakId, onSuccess }: Props) => {
     const { trigger, isMutating, error } = useSWRMutation(
-        `/api/sak/${sakId}/meldeperiode/${hendelseId}/opprettBehandling`,
+        `/api/sak/${sakId}/meldeperiode/${meldeperiodeId}/opprettBehandling`,
         fetcher,
         {
             onSuccess,

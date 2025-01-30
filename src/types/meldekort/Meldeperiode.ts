@@ -6,7 +6,7 @@ type MeldeperiodeDato = `${number}-${number}-${number}`;
 
 export type MeldeperiodeKjedeId = `${MeldeperiodeDato}/${MeldeperiodeDato}`;
 
-export type MeldeperiodeHendelseId = `hendelse_${string}`;
+export type MeldeperiodeId = `hendelse_${string}`;
 
 export enum MeldeperiodeStatus {
     IKKE_RETT_TIL_TILTAKSPENGER = 'IKKE_RETT_TIL_TILTAKSPENGER',
@@ -18,8 +18,8 @@ export enum MeldeperiodeStatus {
 }
 
 export type MeldeperiodeProps = {
+    id: MeldeperiodeId;
     kjedeId: MeldeperiodeKjedeId;
-    hendelseId: MeldeperiodeHendelseId;
     versjon: number;
     periode: Periode;
     opprettet: string;

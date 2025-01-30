@@ -28,7 +28,7 @@ export const MeldekortOversikt = ({ meldeperioder, saksnummer }: Props) => {
                         const { meldekortBehandling } = meldeperiode;
 
                         return (
-                            <Table.Row shadeOnHover={false} key={meldeperiode.hendelseId}>
+                            <Table.Row shadeOnHover={false} key={meldeperiode.id}>
                                 <Table.DataCell>
                                     {finnMeldeperiodeStatusTekst[meldeperiode.status]}
                                 </Table.DataCell>
