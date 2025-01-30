@@ -1,7 +1,7 @@
 import {
+    MeldekortBehandlingDagProps,
     MeldekortBehandlingDagStatus,
     MeldekortBehandlingProps,
-    MeldekortBehandlingDagProps,
 } from '../../../../../types/meldekort/MeldekortBehandling';
 import {
     BrukersMeldekortDagStatus,
@@ -13,9 +13,12 @@ export const hentMeldekortBehandlingDager = (
     brukersMeldekort?: BrukersMeldekortProps,
 ): MeldekortBehandlingDagProps[] => {
     if (brukersMeldekort) {
-        return brukersMeldekort.dager.map((dag) => ({
+        return brukersMeldekort.dager.map((dag, index) => ({
             dato: dag.dato,
-            status: brukersStatusTilBehandlingsStatus[dag.status],
+            status:
+                meldekortBehandling.dager[index].status === MeldekortBehandlingDagStatus.Sperret
+                    ? MeldekortBehandlingDagStatus.Sperret
+                    : brukersStatusTilBehandlingsStatus[dag.status],
         }));
     }
 
