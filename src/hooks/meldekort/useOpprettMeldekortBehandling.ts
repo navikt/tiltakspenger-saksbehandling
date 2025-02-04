@@ -1,5 +1,6 @@
 import useSWRMutation from 'swr/mutation';
 import { throwErrorIfFatal } from '../../utils/http';
+import { MeldeperiodeKjedeId } from '../../types/meldekort/Meldeperiode';
 
 const fetcher = async (url: string) => {
     const res = await fetch(url, {
@@ -10,14 +11,14 @@ const fetcher = async (url: string) => {
 };
 
 type Props = {
-    meldeperiodeId: string;
+    kjedeId: MeldeperiodeKjedeId;
     sakId: string;
     onSuccess?: () => void;
 };
 
-export const useOpprettMeldekortBehandling = ({ meldeperiodeId, sakId, onSuccess }: Props) => {
+export const useOpprettMeldekortBehandling = ({ kjedeId, sakId, onSuccess }: Props) => {
     const { trigger, isMutating, error } = useSWRMutation(
-        `/api/sak/${sakId}/meldeperiode/${meldeperiodeId}/opprettBehandling`,
+        `/api/sak/${sakId}/meldeperiode/${kjedeId}/opprettBehandling`,
         fetcher,
         {
             onSuccess,

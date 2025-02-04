@@ -16,7 +16,7 @@ export const MeldekortBehandlingOpprett = ({ meldeperiode }: Props) => {
     const { sakId } = useSak();
     const { revalider } = useHentMeldeperiodeKjede(meldeperiode.kjedeId, sakId);
     const { opprett, laster, feil } = useOpprettMeldekortBehandling({
-        meldeperiodeId: meldeperiode.id,
+        kjedeId: meldeperiode.kjedeId,
         sakId,
         onSuccess: revalider,
     });

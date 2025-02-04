@@ -7,12 +7,12 @@ import { useGodkjennMeldekort } from '../../../../hooks/meldekort/useGodkjennMel
 import { kanBeslutteForBehandling } from '../../../../utils/tilganger';
 import { SaksbehandlerContext } from '../../../../context/saksbehandler/SaksbehandlerContext';
 import BekreftelsesModal from '../../../bekreftelsesmodal/BekreftelsesModal';
-import { MeldeperiodeProps } from '../../../../types/meldekort/Meldeperiode';
+import { MeldeperiodeMedBehandlingProps } from '../../../../types/meldekort/Meldeperiode';
 
 import styles from '../Meldekort.module.css';
 
 type Props = {
-    meldeperiode: MeldeperiodeProps;
+    meldeperiode: MeldeperiodeMedBehandlingProps;
 };
 
 export const MeldekortBehandlingOppsummering = ({ meldeperiode }: Props) => {
