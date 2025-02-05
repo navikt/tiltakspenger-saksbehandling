@@ -4,7 +4,7 @@ import {
     BrukersMeldekortProps,
 } from '../../../types/meldekort/BrukersMeldekort';
 import { Box, Heading, HStack, Table, VStack } from '@navikt/ds-react';
-import { formaterDatotekst, ukedagFraDatotekst } from '../../../utils/date';
+import { formaterDatotekst, ukedagFraDatotekst, ukeHeading } from '../../../utils/date';
 import { velgIkonForMeldekortStatus } from './Meldekortikoner';
 import { finnMeldekortdagStatusTekst } from '../../../utils/tekstformateringUtils';
 import React from 'react';
@@ -25,17 +25,22 @@ export const BrukersMeldekortVisning = ({ meldeperiode, brukersMeldekort }: Prop
             <Heading level={'3'} size={'medium'}>
                 {'Innmelding fra bruker'}
             </Heading>
-            <Uke dager={uke1} heading={meldeperiode.periode.fraOgMed} />
-            <Uke dager={uke2} heading={meldeperiode.periode.tilOgMed} />
+            <Uke dager={uke1} meldeperiode={meldeperiode} />
+            <Uke dager={uke2} meldeperiode={meldeperiode} />
         </VStack>
     );
 };
 
-const Uke = ({ dager, heading }: { dager: BrukersMeldekortDagProps[]; heading: string }) => {
+type UkeProps = {
+    dager: BrukersMeldekortDagProps[];
+    meldeperiode: MeldeperiodeProps;
+};
+
+const Uke = ({ dager, meldeperiode }: UkeProps) => {
     return (
         <Box className={styles.utbetalingsuke}>
             <Heading size="small" level="3">
-                {heading}
+                {ukeHeading(dager[0].dato)}
             </Heading>
             <Table size="small">
                 <Table.Header>
@@ -46,18 +51,23 @@ const Uke = ({ dager, heading }: { dager: BrukersMeldekortDagProps[]; heading: s
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {dager.map((dag) => (
-                        <Table.Row key={dag.dato.toString()}>
-                            <Table.DataCell>{ukedagFraDatotekst(dag.dato)}</Table.DataCell>
-                            <Table.DataCell>{formaterDatotekst(dag.dato)}</Table.DataCell>
-                            <Table.DataCell>
-                                <HStack align="center" gap="3" wrap={false}>
-                                    {velgIkonForMeldekortStatus(dag.status)}
-                                    {finnMeldekortdagStatusTekst(dag.status)}
-                                </HStack>
-                            </Table.DataCell>
-                        </Table.Row>
-                    ))}
+                    {dager.map((dag) => {
+                        const { dato, status } = dag;
+                        const harRett = meldeperiode.girRett[dato];
+
+                        return (
+                            <Table.Row key={dato.toString()}>
+                                <Table.DataCell>{ukedagFraDatotekst(dato)}</Table.DataCell>
+                                <Table.DataCell>{formaterDatotekst(dato)}</Table.DataCell>
+                                <Table.DataCell>
+                                    <HStack align="center" gap="3" wrap={false}>
+                                        {velgIkonForMeldekortStatus(status)}
+                                        {`${finnMeldekortdagStatusTekst(status)}${harRett ? '' : ' (ikke rett)'}`}
+                                    </HStack>
+                                </Table.DataCell>
+                            </Table.Row>
+                        );
+                    })}
                 </Table.Body>
             </Table>
         </Box>

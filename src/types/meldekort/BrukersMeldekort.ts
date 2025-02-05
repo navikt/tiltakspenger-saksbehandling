@@ -6,7 +6,6 @@ export enum BrukersMeldekortDagStatus {
     FRAVÆR_SYKT_BARN = 'FRAVÆR_SYKT_BARN',
     FRAVÆR_ANNET = 'FRAVÆR_ANNET',
     IKKE_REGISTRERT = 'IKKE_REGISTRERT',
-    IKKE_RETT_TIL_TILTAKSPENGER = 'IKKE_RETT_TIL_TILTAKSPENGER',
 }
 
 export type BrukersMeldekortDagProps = {

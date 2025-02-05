@@ -1,3 +1,4 @@
+import React from 'react';
 import {
     CircleSlashIcon,
     CheckmarkCircleFillIcon,
@@ -13,7 +14,6 @@ export const velgIkonForMeldekortStatus = (
 ) => {
     switch (status) {
         case MeldekortBehandlingDagStatus.Sperret:
-        case BrukersMeldekortDagStatus.IKKE_RETT_TIL_TILTAKSPENGER:
             return <CircleSlashIcon title="Sperret" color="black" width="1.2em" height="1.2em" />;
 
         case MeldekortBehandlingDagStatus.DeltattUtenLønnITiltaket:

@@ -40,7 +40,6 @@ const brukersStatusTilBehandlingsStatus: Record<
     [BrukersMeldekortDagStatus.FRAVÆR_ANNET]:
         MeldekortBehandlingDagStatus.FraværVelferdGodkjentAvNav,
     [BrukersMeldekortDagStatus.IKKE_REGISTRERT]: MeldekortBehandlingDagStatus.IkkeDeltatt,
-    [BrukersMeldekortDagStatus.IKKE_RETT_TIL_TILTAKSPENGER]: MeldekortBehandlingDagStatus.Sperret,
 } as const;
 
 export const tellDagerMedDeltattEllerFravær = (dager: MeldekortBehandlingDagProps[]) =>
