@@ -18,7 +18,7 @@ type Props = {
 
 export const useOpprettMeldekortBehandling = ({ kjedeId, sakId, onSuccess }: Props) => {
     const { trigger, isMutating, error } = useSWRMutation(
-        `/api/sak/${sakId}/meldeperiode/${kjedeId}/opprettBehandling`,
+        `/api/sak/${encodeURIComponent(sakId)}/meldeperiode/${encodeURIComponent(kjedeId)}/opprettBehandling`,
         fetcher,
         {
             onSuccess,
