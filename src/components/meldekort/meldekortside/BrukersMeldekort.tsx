@@ -5,8 +5,8 @@ import {
 } from '../../../types/meldekort/BrukersMeldekort';
 import { Box, Heading, HStack, Table, VStack } from '@navikt/ds-react';
 import { formaterDatotekst, ukedagFraDatotekst, ukeHeading } from '../../../utils/date';
-import { velgIkonForMeldekortStatus } from './Meldekortikoner';
-import { finnMeldekortdagStatusTekst } from '../../../utils/tekstformateringUtils';
+import { ikonForBrukersMeldekortDagStatus } from './Meldekortikoner';
+import { brukersMeldekortDagStatusTekst } from '../../../utils/tekstformateringUtils';
 import React from 'react';
 
 import styles from './Meldekort.module.css';
@@ -61,8 +61,8 @@ const Uke = ({ dager, meldeperiode }: UkeProps) => {
                                 <Table.DataCell>{formaterDatotekst(dato)}</Table.DataCell>
                                 <Table.DataCell>
                                     <HStack align="center" gap="3" wrap={false}>
-                                        {velgIkonForMeldekortStatus(status)}
-                                        {`${finnMeldekortdagStatusTekst(status)}${harRett ? '' : ' (ikke rett)'}`}
+                                        {ikonForBrukersMeldekortDagStatus[status]}
+                                        {`${brukersMeldekortDagStatusTekst[status]}${harRett ? '' : ' (ikke rett)'}`}
                                     </HStack>
                                 </Table.DataCell>
                             </Table.Row>

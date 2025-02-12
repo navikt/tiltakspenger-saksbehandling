@@ -82,33 +82,25 @@ export const finnStatusTekst = (status: string, underkjent: boolean) => {
     }
 };
 
-export const finnMeldekortdagStatusTekst = (status: string) => {
-    switch (status) {
-        case MeldekortBehandlingDagStatus.Sperret:
-            return 'Ikke rett på tiltakspenger';
-        case MeldekortBehandlingDagStatus.DeltattMedLønnITiltaket:
-            return 'Deltatt med lønn i tiltaket';
-        case MeldekortBehandlingDagStatus.DeltattUtenLønnITiltaket:
-        case BrukersMeldekortDagStatus.DELTATT:
-            return 'Deltatt uten lønn i tiltaket';
-        case MeldekortBehandlingDagStatus.FraværSyk:
-        case BrukersMeldekortDagStatus.FRAVÆR_SYK:
-            return 'Fravær - Syk';
-        case MeldekortBehandlingDagStatus.FraværSyktBarn:
-        case BrukersMeldekortDagStatus.FRAVÆR_SYKT_BARN:
-            return 'Fravær - Sykt barn';
-        case MeldekortBehandlingDagStatus.FraværVelferdGodkjentAvNav:
-            return 'Godkjent fravær - Velferd';
-        case MeldekortBehandlingDagStatus.FraværVelferdIkkeGodkjentAvNav:
-            return 'Ikke godkjent fravær - Velferd';
-        case MeldekortBehandlingDagStatus.IkkeDeltatt:
-            return 'Ikke tiltak denne dagen';
-        case MeldekortBehandlingDagStatus.IkkeUtfylt:
-        case BrukersMeldekortDagStatus.IKKE_REGISTRERT:
-            return 'Ikke utfylt';
-        case BrukersMeldekortDagStatus.FRAVÆR_ANNET:
-            return 'Annet fravær';
-    }
+export const brukersMeldekortDagStatusTekst: Record<BrukersMeldekortDagStatus, string> = {
+    [BrukersMeldekortDagStatus.DELTATT]: 'Deltatt i tiltaket',
+    [BrukersMeldekortDagStatus.FRAVÆR_SYK]: 'Fravær - Syk',
+    [BrukersMeldekortDagStatus.FRAVÆR_SYKT_BARN]: 'Fravær - Sykt barn',
+    [BrukersMeldekortDagStatus.FRAVÆR_ANNET]: 'Godkjent fravær - Velferd',
+    [BrukersMeldekortDagStatus.IKKE_DELTATT]: 'Ikke godkjent fravær',
+    [BrukersMeldekortDagStatus.IKKE_REGISTRERT]: 'Ikke utfylt',
+};
+
+export const meldekortBehandlingDagStatusTekst: Record<MeldekortBehandlingDagStatus, string> = {
+    [MeldekortBehandlingDagStatus.Sperret]: 'Ikke rett på tiltakspenger',
+    [MeldekortBehandlingDagStatus.DeltattMedLønnITiltaket]: 'Deltatt med lønn i tiltaket',
+    [MeldekortBehandlingDagStatus.DeltattUtenLønnITiltaket]: 'Deltatt uten lønn i tiltaket',
+    [MeldekortBehandlingDagStatus.FraværSyk]: 'Fravær - Syk',
+    [MeldekortBehandlingDagStatus.FraværSyktBarn]: 'Fravær - Sykt barn',
+    [MeldekortBehandlingDagStatus.FraværVelferdGodkjentAvNav]: 'Godkjent fravær - Velferd',
+    [MeldekortBehandlingDagStatus.FraværVelferdIkkeGodkjentAvNav]: 'Ikke godkjent fravær - Velferd',
+    [MeldekortBehandlingDagStatus.IkkeDeltatt]: 'Ikke tiltak denne dagen',
+    [MeldekortBehandlingDagStatus.IkkeUtfylt]: 'Ikke utfylt',
 };
 
 export const finnMeldeperiodeStatusTekst: Record<MeldeperiodeStatus, string> = {

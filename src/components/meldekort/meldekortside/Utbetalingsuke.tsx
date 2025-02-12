@@ -2,8 +2,8 @@ import { Box, Heading, HStack, Table } from '@navikt/ds-react';
 import React from 'react';
 import { formaterDatotekst, ukedagFraDatotekst } from '../../../utils/date';
 import { MeldekortBehandlingDagBeregnet } from '../../../types/meldekort/MeldekortBehandling';
-import { finnMeldekortdagStatusTekst } from '../../../utils/tekstformateringUtils';
-import { velgIkonForMeldekortStatus } from './Meldekortikoner';
+import { meldekortBehandlingDagStatusTekst } from '../../../utils/tekstformateringUtils';
+import { ikonForMeldekortBehandlingDagStatus } from './Meldekortikoner';
 
 import styles from './Meldekort.module.css';
 
@@ -34,8 +34,8 @@ export const Utbetalingsuke = ({ utbetalingUke, headingtekst }: UtbetalingsukePr
                         <Table.DataCell>{formaterDatotekst(dag.dato)}</Table.DataCell>
                         <Table.DataCell>
                             <HStack align="center" gap="3" wrap={false}>
-                                {velgIkonForMeldekortStatus(dag.status)}
-                                {finnMeldekortdagStatusTekst(dag.status)}
+                                {ikonForMeldekortBehandlingDagStatus[dag.status]}
+                                {meldekortBehandlingDagStatusTekst[dag.status]}
                             </HStack>
                         </Table.DataCell>
                         <Table.DataCell>

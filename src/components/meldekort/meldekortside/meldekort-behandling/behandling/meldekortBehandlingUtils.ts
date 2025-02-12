@@ -39,6 +39,8 @@ const brukersStatusTilBehandlingsStatus: Record<
     [BrukersMeldekortDagStatus.FRAVÆR_SYKT_BARN]: MeldekortBehandlingDagStatus.FraværSyktBarn,
     [BrukersMeldekortDagStatus.FRAVÆR_ANNET]:
         MeldekortBehandlingDagStatus.FraværVelferdGodkjentAvNav,
+    [BrukersMeldekortDagStatus.IKKE_DELTATT]:
+        MeldekortBehandlingDagStatus.FraværVelferdIkkeGodkjentAvNav,
     [BrukersMeldekortDagStatus.IKKE_REGISTRERT]: MeldekortBehandlingDagStatus.IkkeDeltatt,
 } as const;
 

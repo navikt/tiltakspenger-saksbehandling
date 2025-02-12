@@ -4,8 +4,8 @@ import {
     MeldekortBehandlingDagStatus,
 } from '../../../../../types/meldekort/MeldekortBehandling';
 import { meldekortdagHeading, ukeHeading } from '../../../../../utils/date';
-import { velgIkonForMeldekortStatus } from '../../Meldekortikoner';
-import { finnMeldekortdagStatusTekst } from '../../../../../utils/tekstformateringUtils';
+import { ikonForMeldekortBehandlingDagStatus } from '../../Meldekortikoner';
+import { meldekortBehandlingDagStatusTekst } from '../../../../../utils/tekstformateringUtils';
 import { Controller, useFormContext } from 'react-hook-form';
 import { FieldPath } from 'react-hook-form/dist/types/path';
 import { MeldekortBehandlingForm } from './meldekortBehandlingUtils';
@@ -40,7 +40,7 @@ export const MeldekortBehandlingUke = ({ dager, ukenummer }: Props) => {
                 return (
                     <VStack gap={'2'} key={dato}>
                         <HStack align={'center'} gap={'3'} wrap={false}>
-                            {velgIkonForMeldekortStatus(valgtStatus)}
+                            {ikonForMeldekortBehandlingDagStatus[valgtStatus]}
                             <BodyShort as={Label}>{meldekortdagHeading(dato)}</BodyShort>
                         </HStack>
                         {status === MeldekortBehandlingDagStatus.Sperret ? (
@@ -66,7 +66,7 @@ export const MeldekortBehandlingUke = ({ dager, ukenummer }: Props) => {
                                         </option>
                                         {meldekortStatusValg.map((meldekortStatus) => (
                                             <option key={meldekortStatus} value={meldekortStatus}>
-                                                {finnMeldekortdagStatusTekst(meldekortStatus)}
+                                                {meldekortBehandlingDagStatusTekst[meldekortStatus]}
                                             </option>
                                         ))}
                                     </Select>

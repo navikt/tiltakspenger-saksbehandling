@@ -12,6 +12,8 @@ export enum MeldekortBehandlingDagStatus {
     IkkeUtfylt = 'IKKE_UTFYLT',
     DeltattUtenLønnITiltaket = 'DELTATT_UTEN_LØNN_I_TILTAKET',
     DeltattMedLønnITiltaket = 'DELTATT_MED_LØNN_I_TILTAKET',
+    // Denne er forvirrende, betyr her "ikke tiltak denne dagen", men i brukers meldekort betyr den "ikke godkjent fravær"
+    // Bør renames ett av stedene
     IkkeDeltatt = 'IKKE_DELTATT',
     FraværSyk = 'FRAVÆR_SYK',
     FraværSyktBarn = 'FRAVÆR_SYKT_BARN',
