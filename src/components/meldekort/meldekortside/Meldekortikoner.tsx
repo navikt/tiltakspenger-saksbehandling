@@ -31,7 +31,7 @@ const Ikoner = {
         <FirstAidKitFillIcon title="Redusert utbetaling" color="chocolate" fontSize="1.5rem" />
     ),
     notePencil: <NotePencilIcon width="1.2em" height="1.2em" title="Ikke utfylt" color="black" />,
-};
+} as const;
 
 export const ikonForBrukersMeldekortDagStatus: Record<
     BrukersMeldekortDagStatus,
@@ -43,7 +43,7 @@ export const ikonForBrukersMeldekortDagStatus: Record<
     [BrukersMeldekortDagStatus.FRAVÆR_SYKT_BARN]: Ikoner.firstAidKitFill,
     [BrukersMeldekortDagStatus.IKKE_REGISTRERT]: Ikoner.notePencil,
     [BrukersMeldekortDagStatus.IKKE_DELTATT]: Ikoner.circleSlash,
-};
+} as const;
 
 export const ikonForMeldekortBehandlingDagStatus: Record<
     MeldekortBehandlingDagStatus,
@@ -58,4 +58,4 @@ export const ikonForMeldekortBehandlingDagStatus: Record<
     [MeldekortBehandlingDagStatus.IkkeDeltatt]: Ikoner.minusCircleFill,
     [MeldekortBehandlingDagStatus.IkkeUtfylt]: Ikoner.notePencil,
     [MeldekortBehandlingDagStatus.Sperret]: Ikoner.circleSlash,
-};
+} as const;

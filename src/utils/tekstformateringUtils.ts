@@ -89,7 +89,7 @@ export const brukersMeldekortDagStatusTekst: Record<BrukersMeldekortDagStatus, s
     [BrukersMeldekortDagStatus.FRAVÆR_ANNET]: 'Godkjent fravær - Velferd',
     [BrukersMeldekortDagStatus.IKKE_DELTATT]: 'Ikke godkjent fravær',
     [BrukersMeldekortDagStatus.IKKE_REGISTRERT]: 'Ikke utfylt',
-};
+} as const;
 
 export const meldekortBehandlingDagStatusTekst: Record<MeldekortBehandlingDagStatus, string> = {
     [MeldekortBehandlingDagStatus.Sperret]: 'Ikke rett på tiltakspenger',
@@ -101,7 +101,7 @@ export const meldekortBehandlingDagStatusTekst: Record<MeldekortBehandlingDagSta
     [MeldekortBehandlingDagStatus.FraværVelferdIkkeGodkjentAvNav]: 'Ikke godkjent fravær - Velferd',
     [MeldekortBehandlingDagStatus.IkkeDeltatt]: 'Ikke tiltak denne dagen',
     [MeldekortBehandlingDagStatus.IkkeUtfylt]: 'Ikke utfylt',
-};
+} as const;
 
 export const finnMeldeperiodeStatusTekst: Record<MeldeperiodeStatus, string> = {
     [MeldeperiodeStatus.IKKE_RETT_TIL_TILTAKSPENGER]: 'Ikke rett til tiltakspenger',
