@@ -12,13 +12,13 @@ import { lagUtfallstekst } from '../../utils/tekstformateringUtils';
 import IkonMedTekst from '../ikon-med-tekst/IkonMedTekst';
 import { UtfallIkon } from '../utfallikon/UtfallIkon';
 
-export interface SkjemaFelter {
+type SkjemaFelter = {
     harAndreYtelser: boolean;
-}
+};
 
 const AndreYtelser = () => {
-    const { behandlingId } = useContext(BehandlingContext);
-    const { valgtBehandling } = useHentBehandling(behandlingId);
+    const { behandlingId } = useContext(BehandlingContext)!;
+    const valgtBehandling = useHentBehandling(behandlingId).valgtBehandling!;
     const { livsopphold, isLoading, error } = useHentLivsopphold(behandlingId);
     const { onLagreLivsopphold, isLivsoppholdMutating } =
         useLagreLivsoppholdSaksopplysning(behandlingId);
@@ -43,7 +43,9 @@ const AndreYtelser = () => {
         );
 
     const håndterLagreLivsoppholdSaksopplysning = (harYtelser: boolean) => {
-        if (harYtelser) return;
+        if (harYtelser) {
+            return;
+        }
 
         onLagreLivsopphold({
             ytelseForPeriode: {
@@ -92,8 +94,6 @@ const AndreYtelser = () => {
                                     livsopphold.samletUtfall == 'UAVKLART'
                                         ? undefined
                                         : livsopphold.avklartSaksopplysning.harLivsoppholdYtelser
-                                          ? true
-                                          : false
                                 }
                             >
                                 <Radio value={true}>{`Ja`}</Radio>

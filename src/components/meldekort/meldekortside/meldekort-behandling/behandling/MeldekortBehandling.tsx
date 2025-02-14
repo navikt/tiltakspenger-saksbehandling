@@ -26,6 +26,8 @@ export const MeldekortBehandling = ({ meldeperiode }: Props) => {
 
     const [valideringsFeil, setValideringsFeil] = useState('');
 
+    const modalRef = useRef<HTMLDialogElement>(null);
+
     const dagerDefault = hentMeldekortBehandlingDager(meldekortBehandling, brukersMeldekort);
 
     const formMethods = useForm<MeldekortBehandlingForm>({
@@ -50,10 +52,8 @@ export const MeldekortBehandling = ({ meldeperiode }: Props) => {
         },
     });
 
-    const modalRef = useRef(null);
-
     const lukkModal = () => {
-        modalRef.current.close();
+        modalRef.current?.close();
         reset();
     };
 
@@ -66,7 +66,7 @@ export const MeldekortBehandling = ({ meldeperiode }: Props) => {
         }
 
         setValideringsFeil('');
-        modalRef.current.showModal();
+        modalRef.current?.showModal();
     };
 
     return (

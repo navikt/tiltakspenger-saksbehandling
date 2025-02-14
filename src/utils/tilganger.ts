@@ -6,7 +6,7 @@ import {
 import { erBeslutter, erSaksbehandler, Saksbehandler } from '../types/Saksbehandler';
 
 export const kanBeslutteForBehandling = (
-    status: string,
+    status: BehandlingStatus | MeldekortBehandlingStatus,
     innloggetSaksbehandler: Saksbehandler,
     saksbehandlerForBehandling: string,
     beslutterForBehandling: string,
@@ -43,22 +43,24 @@ export const kanSaksbehandleMeldekort = (
     meldekortBehandling.status === MeldekortBehandlingStatus.KLAR_TIL_UTFYLLING;
 
 export const eierBehandling = (
-    status: string,
-    innloggetSaksbehandler,
+    status: BehandlingStatus,
+    innloggetSaksbehandler: Saksbehandler,
     saksbehandlerForBehandling: string,
     beslutterForBehandling: string,
-) => {
+): boolean => {
     switch (status) {
         case BehandlingStatus.UNDER_BEHANDLING:
             return innloggetSaksbehandler.navIdent == saksbehandlerForBehandling;
         case BehandlingStatus.UNDER_BESLUTNING:
             return innloggetSaksbehandler.navIdent == beslutterForBehandling;
+        default:
+            return false;
     }
 };
 
 export const skalKunneTaBehandling = (
-    status: string,
-    innloggetSaksbehandler,
+    status: BehandlingStatus,
+    innloggetSaksbehandler: Saksbehandler,
     saksbehandlerForBehandling?: string,
 ) => {
     switch (status) {

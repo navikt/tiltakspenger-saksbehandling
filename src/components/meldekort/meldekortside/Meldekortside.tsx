@@ -54,5 +54,7 @@ const harBehandling = (
     meldeperiode: MeldeperiodeProps,
 ): meldeperiode is MeldeperiodeMedBehandlingProps => !!meldeperiode.meldekortBehandling;
 
-const kanUtfylles = (meldekortBehandling: MeldekortBehandlingProps) =>
+const kanUtfylles = (
+    meldekortBehandling?: MeldekortBehandlingProps,
+): meldekortBehandling is MeldekortBehandlingProps =>
     meldekortBehandling?.status === MeldekortBehandlingStatus.KLAR_TIL_UTFYLLING;

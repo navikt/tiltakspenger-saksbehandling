@@ -8,5 +8,6 @@ export function useHentBehandling(behandlingId: string) {
         isLoading,
         error,
     } = useSWR<Behandling, FetcherError>(`/api/behandling/${behandlingId}`, fetcher);
+
     return { valgtBehandling, isLoading, error };
 }

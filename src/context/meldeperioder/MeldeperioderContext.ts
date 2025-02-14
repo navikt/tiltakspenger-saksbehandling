@@ -6,7 +6,6 @@ export type MeldeperioderContextState = {
     valgtMeldeperiode: MeldeperiodeProps;
 };
 
-export const MeldeperioderContext = createContext<MeldeperioderContextState>({
-    meldeperiodeKjede: undefined,
-    valgtMeldeperiode: undefined,
-});
+export const MeldeperioderContext = createContext<MeldeperioderContextState>(
+    {} as MeldeperioderContextState,
+);

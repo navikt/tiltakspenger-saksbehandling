@@ -1,20 +1,20 @@
 import { Button, HStack, Loader } from '@navikt/ds-react';
 import { RefObject, useContext } from 'react';
-import { SaksbehandlerContext } from '../../context/saksbehandler/SaksbehandlerContext';
 import { useHentBehandling } from '../../hooks/useHentBehandling';
 import { kanBeslutteForBehandling, kanSaksbehandleForBehandling } from '../../utils/tilganger';
 import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
 import Varsel from '../varsel/Varsel';
 import { useGodkjennBehandling } from '../../hooks/useGodkjennBehandling';
 import { useSendTilBeslutter } from '../../hooks/useSendTilBeslutter';
+import { useSaksbehandler } from '../../hooks/useSaksbehandler';
 
-interface BehandlingKnapperProps {
+type Props = {
     godkjennRef: RefObject<HTMLDialogElement>;
-}
+};
 
-export const Behandlingsknapper = ({ godkjennRef }: BehandlingKnapperProps) => {
+export const Behandlingsknapper = ({ godkjennRef }: Props) => {
     const { behandlingId, sakId } = useContext(BehandlingContext);
-    const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
+    const { innloggetSaksbehandler } = useSaksbehandler();
     const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
     const { godkjennerBehandling, godkjennBehandlingError } = useGodkjennBehandling(
         behandlingId,
@@ -22,6 +22,10 @@ export const Behandlingsknapper = ({ godkjennRef }: BehandlingKnapperProps) => {
     );
     const { sendTilBeslutter, senderTilBeslutter, sendTilBeslutterError } =
         useSendTilBeslutter(behandlingId);
+
+    if (isLoading || !valgtBehandling) {
+        return <Loader />;
+    }
 
     const kanBeslutte = kanBeslutteForBehandling(
         valgtBehandling.status,
@@ -36,12 +40,8 @@ export const Behandlingsknapper = ({ godkjennRef }: BehandlingKnapperProps) => {
         valgtBehandling.saksbehandler,
     );
 
-    if (isLoading || !valgtBehandling) {
-        return <Loader />;
-    }
-
     const åpneGodkjennModal = () => {
-        godkjennRef.current.showModal();
+        godkjennRef.current?.showModal();
     };
 
     return (
@@ -64,9 +64,7 @@ export const Behandlingsknapper = ({ godkjennRef }: BehandlingKnapperProps) => {
                         type="submit"
                         size="small"
                         loading={godkjennerBehandling}
-                        onClick={() => {
-                            åpneGodkjennModal();
-                        }}
+                        onClick={åpneGodkjennModal}
                     >
                         Godkjenn vedtaket
                     </Button>

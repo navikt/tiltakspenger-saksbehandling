@@ -18,7 +18,7 @@ type Props = {
 };
 
 export const RevurderTilStans = ({ førsteLovligeStansdato, sakId, saksnummer }: Props) => {
-    const modalRef = useRef(null);
+    const modalRef = useRef<HTMLDialogElement>(null);
     const fraOgMed = new Date(førsteLovligeStansdato);
 
     const { opprettRevurdering } = useOpprettRevurdering(sakId, saksnummer);
@@ -42,7 +42,7 @@ export const RevurderTilStans = ({ førsteLovligeStansdato, sakId, saksnummer }:
 
     return (
         <>
-            <Button size="small" variant="secondary" onClick={() => modalRef.current.showModal()}>
+            <Button size="small" variant="secondary" onClick={() => modalRef.current?.showModal()}>
                 Revurder til stans
             </Button>
             <Spørsmålsmodal

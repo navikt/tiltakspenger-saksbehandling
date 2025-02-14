@@ -16,12 +16,15 @@ const Oppsummering = () => {
     const { valgtBehandling, isLoading, error } = useHentBehandling(behandlingId);
     const { godkjennBehandling, godkjennerBehandling, godkjennBehandlingError, reset } =
         useGodkjennBehandling(behandlingId, sakId);
-    const sendTilbakeRef = useRef(null);
-    const godkjennRef = useRef(null);
+
+    const sendTilbakeRef = useRef<HTMLDialogElement>(null);
+    const godkjennRef = useRef<HTMLDialogElement>(null);
 
     if (isLoading || !valgtBehandling) {
         return <Loader />;
-    } else if (error)
+    }
+
+    if (error)
         return (
             <Varsel
                 variant="error"
@@ -34,7 +37,7 @@ const Oppsummering = () => {
     };
 
     const lukkModal = () => {
-        godkjennRef.current.close();
+        godkjennRef.current?.close();
         reset();
     };
 
