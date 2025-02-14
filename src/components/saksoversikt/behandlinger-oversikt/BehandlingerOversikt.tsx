@@ -2,23 +2,14 @@ import { BehandlingForBenk, BehandlingStatus } from '../../../types/BehandlingTy
 import { Button, Table } from '@navikt/ds-react';
 import { finnBehandlingstypeTekst, finnStatusTekst } from '../../../utils/tekstformateringUtils';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '../../../utils/date';
-import { knappForBehandlingType } from '../../behandlingsknapper/Benkknapp';
-import { eierBehandling, skalKunneTaBehandling } from '../../../utils/tilganger';
+import { BehandlingKnappForBenk } from '../../behandlingsknapper/BehandlingKnappForBenk';
 import router from 'next/router';
-import { useContext } from 'react';
-import { SaksbehandlerContext } from '../../../context/saksbehandler/SaksbehandlerContext';
-import { useOpprettBehandling } from '../../../hooks/useOpprettBehandling';
-import { useTaBehandling } from '../../../hooks/useTaBehandling';
 
 type Props = {
     behandlinger: BehandlingForBenk[];
 };
 
 export const BehandlingerOversikt = ({ behandlinger }: Props) => {
-    const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
-    const { onOpprettBehandling, isSøknadMutating } = useOpprettBehandling();
-    const { onTaBehandling, isBehandlingMutating } = useTaBehandling();
-
     return (
         <Table>
             <Table.Header>
@@ -54,25 +45,7 @@ export const BehandlingerOversikt = ({ behandlinger }: Props) => {
                         </Table.DataCell>
                         <Table.DataCell>{behandling.beslutter ?? 'Ikke tildelt'}</Table.DataCell>
                         <Table.DataCell scope="col">
-                            {knappForBehandlingType(
-                                behandling.status,
-                                behandling.id,
-                                eierBehandling(
-                                    behandling.status,
-                                    innloggetSaksbehandler,
-                                    behandling.saksbehandler,
-                                    behandling.beslutter,
-                                ),
-                                skalKunneTaBehandling(
-                                    behandling.status,
-                                    innloggetSaksbehandler,
-                                    behandling.saksbehandler,
-                                ),
-                                onOpprettBehandling,
-                                onTaBehandling,
-                                isSøknadMutating,
-                                isBehandlingMutating,
-                            )}
+                            <BehandlingKnappForBenk behandling={behandling} />
                         </Table.DataCell>
                         <Table.DataCell>
                             {behandling.status !== BehandlingStatus.SØKNAD && (

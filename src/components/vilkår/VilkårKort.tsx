@@ -15,7 +15,7 @@ interface Grunnlag {
 interface VilkårKortProps {
     saksopplysningsperiode: Periode;
     kilde: string;
-    utfall: Utfall;
+    utfall?: Utfall | null;
     grunnlag: Grunnlag[];
 }
 

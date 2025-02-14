@@ -4,12 +4,12 @@ import { useHentBehandling } from '../../hooks/useHentBehandling';
 import { BehandlingStatus } from '../../types/BehandlingTypes';
 import { useContext, useState } from 'react';
 import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
-import { SaksbehandlerContext } from '../../context/saksbehandler/SaksbehandlerContext';
 import { kanSaksbehandleForBehandling } from '../../utils/tilganger';
+import { useSaksbehandler } from '../../hooks/useSaksbehandler';
 
 export const Saksbehandlingstabs = () => {
     const aktivTab = router.route.split('/')[3];
-    const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
+    const { innloggetSaksbehandler } = useSaksbehandler();
     const { behandlingId } = useContext(BehandlingContext);
     const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
     const [value, setValue] = useState(aktivTab);
@@ -17,11 +17,13 @@ export const Saksbehandlingstabs = () => {
     if (isLoading || !valgtBehandling) {
         return <Loader />;
     }
-    const underBehandling = (status: string) => status === BehandlingStatus.UNDER_BEHANDLING;
+
+    const erUnderBehandling = (status: string) => status === BehandlingStatus.UNDER_BEHANDLING;
+
     return (
         <Tabs value={value} onChange={setValue}>
             <Tabs.List>
-                {underBehandling(valgtBehandling.status) &&
+                {erUnderBehandling(valgtBehandling.status) &&
                     kanSaksbehandleForBehandling(
                         valgtBehandling.status,
                         innloggetSaksbehandler,

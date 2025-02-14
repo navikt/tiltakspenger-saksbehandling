@@ -5,7 +5,7 @@ import { mutate } from 'swr';
 
 type RevurderTilStansBody = { fraOgMed: string };
 
-async function mutateSak(url, { arg }: { arg: RevurderTilStansBody }) {
+async function mutateSak(url: string, { arg }: { arg: RevurderTilStansBody }) {
     const res = await fetch(url, {
         method: 'POST',
         body: JSON.stringify(arg),

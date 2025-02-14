@@ -10,15 +10,21 @@ const Stønadsdager = () => {
     const { behandlingId } = useContext(BehandlingContext);
     const { stønadsdager, isLoading, error } = useHentStønadsdager(behandlingId);
 
-    if (isLoading || !stønadsdager) return <Loader />;
-    else if (error)
+    if (isLoading || !stønadsdager) {
+        return <Loader />;
+    }
+
+    if (error) {
         return (
             <Varsel
                 variant="error"
                 melding={`Kunne ikke hente stønadsdager (${error.status} ${error.info})`}
             />
         );
+    }
+
     const { antallDager, kilde, periode, tiltakNavn } = stønadsdager.registerSaksopplysning;
+
     return (
         <VStack gap="4">
             <VilkårHeader

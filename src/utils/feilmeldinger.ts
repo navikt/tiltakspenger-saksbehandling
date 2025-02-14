@@ -28,5 +28,7 @@ const feilmeldinger: Record<string, string> = {
 } as const;
 
 export const finnFetchFeilmelding = (error: FetcherError): string => {
-    return feilmeldinger[error.info.kode] ?? error.info.melding ?? feilmeldinger.server_feil;
+    return error.info
+        ? (feilmeldinger[error.info.kode] ?? error.info.melding)
+        : feilmeldinger.server_feil;
 };

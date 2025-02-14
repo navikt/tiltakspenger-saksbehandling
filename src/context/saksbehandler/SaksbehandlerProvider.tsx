@@ -21,7 +21,7 @@ export const SaksbehandlerProvider = ({ children }: Props) => {
         return <Loader />;
     }
 
-    if (error) {
+    if (error || !saksbehandler) {
         return (
             <Varsel
                 variant={'error'}

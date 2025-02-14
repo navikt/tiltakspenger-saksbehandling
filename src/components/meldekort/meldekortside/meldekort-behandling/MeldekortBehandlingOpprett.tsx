@@ -21,14 +21,14 @@ export const MeldekortBehandlingOpprett = ({ meldeperiode }: Props) => {
         onSuccess: revalider,
     });
 
-    const modalRef = useRef(null);
+    const modalRef = useRef<HTMLDialogElement>(null);
 
     return (
         <div>
             {meldeperiode.status === MeldeperiodeStatus.IKKE_RETT_TIL_TILTAKSPENGER ? (
                 <Alert variant={'info'}>{'Ikke rett til tiltakspenger for denne perioden'}</Alert>
             ) : (
-                <Button onClick={() => modalRef.current.showModal()} className={styles.knapp}>
+                <Button onClick={() => modalRef.current?.showModal()} className={styles.knapp}>
                     {'Start behandling'}
                 </Button>
             )}
@@ -38,7 +38,7 @@ export const MeldekortBehandlingOpprett = ({ meldeperiode }: Props) => {
                 tittel={'Start behandling av meldekortet'}
                 body={'Vil du starte behandling av dette meldekortet?'}
                 error={feil}
-                lukkModal={() => modalRef.current.close()}
+                lukkModal={() => modalRef.current?.close()}
             >
                 <Button
                     icon={laster && <Loader />}

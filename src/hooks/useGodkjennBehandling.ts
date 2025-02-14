@@ -11,7 +11,7 @@ export function useGodkjennBehandling(behandlingId: string, sakId: string) {
         isMutating: godkjennerBehandling,
         error: godkjennBehandlingError,
         reset,
-    } = useSWRMutation<Behandling, FetcherError, any, { id: string }>(
+    } = useSWRMutation<Behandling, FetcherError>(
         `/api/sak/${sakId}/behandling/${behandlingId}/iverksett`,
         mutateBehandling,
         {

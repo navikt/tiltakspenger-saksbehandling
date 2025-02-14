@@ -2,14 +2,14 @@ import React, { useContext, useState } from 'react';
 import { BodyShort, Dropdown, InternalHeader, Search, Spacer, VStack } from '@navikt/ds-react';
 import { Loader } from '@navikt/ds-react';
 import { SaksbehandlerContext } from '../../context/saksbehandler/SaksbehandlerContext';
-import { ExternalLinkIcon, LeaveIcon, MenuGridIcon } from '@navikt/aksel-icons';
+import { LeaveIcon } from '@navikt/aksel-icons';
 import { useHentSakForFNR } from '../../hooks/useHentSakForFNR';
 import Varsel from '../varsel/Varsel';
 
 const InternDekoratør = () => {
     const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
     const { søk, error } = useHentSakForFNR();
-    const [søketekst, settSøketekst] = useState<string>();
+    const [søketekst, settSøketekst] = useState<string>('');
 
     return (
         <VStack gap="3">

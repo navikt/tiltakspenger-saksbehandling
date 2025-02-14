@@ -23,15 +23,10 @@ const Meldekort: NextPageWithLayout = () => {
 
     if (error) {
         console.error(error.message);
-        return <Varsel variant="error" melding={error.message} />;
-    }
-
-    if (laster) {
-        return <Loader />;
     }
 
     // TODO: selector komponent for å velge blant flere instanser av meldeperioden
-    const valgtMeldeperiode = meldeperiodeKjede.meldeperioder[0];
+    const valgtMeldeperiode = meldeperiodeKjede?.meldeperioder[0];
 
     return (
         <VStack>
@@ -39,18 +34,31 @@ const Meldekort: NextPageWithLayout = () => {
                 <Button as={Link} href={`/sak/${saknummer}`} type="submit" size="small">
                     Tilbake til saksoversikt
                 </Button>
-                <Tag variant="alt3-filled" className={styles.behandlingTag}>
-                    {finnMeldeperiodeStatusTekst[valgtMeldeperiode.status]}
-                </Tag>
+                {valgtMeldeperiode && (
+                    <Tag variant="alt3-filled" className={styles.behandlingTag}>
+                        {finnMeldeperiodeStatusTekst[valgtMeldeperiode.status]}
+                    </Tag>
+                )}
             </PersonaliaHeader>
             <HStack wrap={false} className={styles.behandlingLayout}>
-                <MeldeperioderProvider
-                    meldeperiodeKjede={meldeperiodeKjede}
-                    valgtMeldeperiode={valgtMeldeperiode}
-                >
-                    <MeldekortDetaljer />
-                    <Meldekortside />
-                </MeldeperioderProvider>
+                {laster ? (
+                    <Loader />
+                ) : error ? (
+                    <Varsel variant="error" melding={error.message} />
+                ) : !valgtMeldeperiode ? (
+                    <Varsel
+                        variant="error"
+                        melding={`Fant ingen meldeperioder for ${meldeperiodeId}`}
+                    />
+                ) : (
+                    <MeldeperioderProvider
+                        meldeperiodeKjede={meldeperiodeKjede}
+                        valgtMeldeperiode={valgtMeldeperiode}
+                    >
+                        <MeldekortDetaljer />
+                        <Meldekortside />
+                    </MeldeperioderProvider>
+                )}
             </HStack>
         </VStack>
     );
