@@ -1,20 +1,21 @@
 import { Box, HStack, Heading, Spacer } from '@navikt/ds-react';
-import { BehandlingForBenk } from '../../types/BehandlingTypes';
+import { BehandlingForOversikt } from '../../types/BehandlingTypes';
 import { MeldeperiodeProps } from '../../types/meldekort/Meldeperiode';
 import { MeldekortOversikt } from './meldekort-oversikt/MeldekortOversikt';
 import { BehandlingerOversikt } from './behandlinger-oversikt/BehandlingerOversikt';
 import { useFeatureToggles } from '../../hooks/useFeatureToggles';
 import { RevurderTilStans } from './revurder-stans/RevurderTilStans';
+import { SakId } from '../../types/SakTypes';
 
 import styles from './Saksoversikt.module.css';
 
-interface SaksoversiktProps {
-    behandlingsoversikt: BehandlingForBenk[];
+type SaksoversiktProps = {
+    behandlingsoversikt: BehandlingForOversikt[];
     meldeperioder: MeldeperiodeProps[];
     førsteLovligeStansdato: string;
     saksnummer: string;
-    sakId: string;
-}
+    sakId: SakId;
+};
 
 export const Saksoversikt = ({
     behandlingsoversikt,

@@ -1,6 +1,5 @@
 import { logger } from '@navikt/next-logger';
 import { finnFetchFeilmelding } from './feilmeldinger';
-import { Periode } from '../types/Periode';
 import { tiltaksdeltagelseBody } from '../types/TiltakDeltagelseTypes';
 import { LivsoppholdSaksopplysningBody } from '../types/LivsoppholdTypes';
 
@@ -39,18 +38,6 @@ export async function mutateVilkår<R>(
     return res.json();
 }
 
-export async function mutateSak<R>(
-    url: string,
-    { arg }: { arg: { periode: Periode } },
-): Promise<R> {
-    const res = await fetch(url, {
-        method: 'POST',
-        body: JSON.stringify(arg),
-    });
-    await throwErrorIfFatal(res);
-    return res.json();
-}
-
 export async function sakFetcher<R>(url: string, { arg }: { arg: { fnr: string } }): Promise<R> {
     const res = await fetch(url, {
         method: 'POST',
@@ -72,7 +59,7 @@ export const throwErrorIfFatal = async (res: Response) => {
             error.message = 'Noe har gått galt på serversiden, kontakt utviklingsteamet.';
         }
 
-        logger.error(error.message);
+        logger.error('Fetcher error: ', error.message);
 
         throw error;
     }

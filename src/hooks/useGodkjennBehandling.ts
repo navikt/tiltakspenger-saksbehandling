@@ -4,8 +4,9 @@ import router from 'next/router';
 import { mutate } from 'swr';
 import { finnOversiktslenke } from './useSendTilBeslutter';
 import { Behandling } from '../types/BehandlingTypes';
+import { SakId } from '../types/SakTypes';
 
-export function useGodkjennBehandling(behandlingId: string, sakId: string) {
+export function useGodkjennBehandling(behandlingId: string, sakId: SakId) {
     const {
         trigger: godkjennBehandling,
         isMutating: godkjennerBehandling,

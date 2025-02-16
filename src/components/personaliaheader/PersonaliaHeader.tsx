@@ -3,9 +3,10 @@ import { BodyShort, CopyButton, HStack, Loader, Spacer, Tag } from '@navikt/ds-r
 import { PersonCircleIcon } from '@navikt/aksel-icons';
 import styles from './PersonaliaHeader.module.css';
 import { useHentPersonopplysninger } from '../../hooks/useHentPersonopplysninger';
+import { SakId } from '../../types/SakTypes';
 
 type PersonaliaHeaderProps = PropsWithChildren & {
-    sakId: string;
+    sakId: SakId;
     saksnummer: string;
 };
 

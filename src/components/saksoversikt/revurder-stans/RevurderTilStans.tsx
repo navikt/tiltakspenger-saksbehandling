@@ -6,6 +6,7 @@ import Datovelger from '../../revurderingsmodal/Datovelger';
 import { useRef } from 'react';
 import { dateTilISOTekst } from '../../../utils/date';
 import { useOpprettRevurdering } from '../../../hooks/useOpprettRevurdering';
+import { SakId } from '../../../types/SakTypes';
 
 interface RevurderingForm {
     fraOgMed: Date;
@@ -13,7 +14,7 @@ interface RevurderingForm {
 
 type Props = {
     førsteLovligeStansdato: string;
-    sakId: string;
+    sakId: SakId;
     saksnummer: string;
 };
 

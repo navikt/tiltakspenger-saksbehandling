@@ -2,6 +2,7 @@ import useSWRMutation from 'swr/mutation';
 import { FetcherError, throwErrorIfFatal } from '../utils/http';
 import router from 'next/router';
 import { mutate } from 'swr';
+import { SakId } from '../types/SakTypes';
 
 type RevurderTilStansBody = { fraOgMed: string };
 
@@ -14,7 +15,7 @@ async function mutateSak(url: string, { arg }: { arg: RevurderTilStansBody }) {
     return res.json();
 }
 
-export function useOpprettRevurdering(sakId: string, saksnummer: string) {
+export function useOpprettRevurdering(sakId: SakId, saksnummer: string) {
     const {
         trigger: opprettRevurdering,
         isMutating: oppretterBehandling,

@@ -4,16 +4,8 @@ import router from 'next/router';
 import { mutate } from 'swr';
 import { Behandling, TypeBehandling } from '../types/BehandlingTypes';
 
-export const finnOversiktslenke = (sakId: string, type: TypeBehandling) => {
-    switch (type) {
-        case TypeBehandling.FØRSTEGANGSBEHANDLING:
-        case TypeBehandling.SØKNAD:
-            return `/`;
-        case TypeBehandling.REVURDERING:
-            return `/sak/${sakId}`;
-        default:
-            return '/';
-    }
+export const finnOversiktslenke = (saksnummer: string, type: TypeBehandling) => {
+    return type === TypeBehandling.REVURDERING ? `/sak/${saksnummer}` : '/';
 };
 
 export function useSendTilBeslutter(behandlingId: string) {

@@ -1,12 +1,12 @@
-import { BehandlingForBenk, BehandlingStatus } from '../../../types/BehandlingTypes';
+import { BehandlingForOversikt } from '../../../types/BehandlingTypes';
 import { Button, Table } from '@navikt/ds-react';
 import { finnBehandlingstypeTekst, finnStatusTekst } from '../../../utils/tekstformateringUtils';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '../../../utils/date';
-import { BehandlingKnappForBenk } from '../../behandlingsknapper/BehandlingKnappForBenk';
+import { BehandlingKnappForOversikt } from '../../behandlingsknapper/BehandlingKnappForOversikt';
 import router from 'next/router';
 
 type Props = {
-    behandlinger: BehandlingForBenk[];
+    behandlinger: BehandlingForOversikt[];
 };
 
 export const BehandlingerOversikt = ({ behandlinger }: Props) => {
@@ -28,7 +28,7 @@ export const BehandlingerOversikt = ({ behandlinger }: Props) => {
                 {behandlinger.map((behandling) => (
                     <Table.Row shadeOnHover={false} key={behandling.id}>
                         <Table.DataCell>
-                            {finnBehandlingstypeTekst(behandling.typeBehandling)}
+                            {finnBehandlingstypeTekst[behandling.typeBehandling]}
                         </Table.DataCell>
                         <Table.DataCell>
                             {formaterTidspunkt(behandling.kravtidspunkt) ?? 'Ukjent'}
@@ -45,21 +45,19 @@ export const BehandlingerOversikt = ({ behandlinger }: Props) => {
                         </Table.DataCell>
                         <Table.DataCell>{behandling.beslutter ?? 'Ikke tildelt'}</Table.DataCell>
                         <Table.DataCell scope="col">
-                            <BehandlingKnappForBenk behandling={behandling} />
+                            <BehandlingKnappForOversikt behandling={behandling} />
                         </Table.DataCell>
                         <Table.DataCell>
-                            {behandling.status !== BehandlingStatus.SØKNAD && (
-                                <Button
-                                    style={{ minWidth: '50%' }}
-                                    size="small"
-                                    variant={'secondary'}
-                                    onClick={() =>
-                                        router.push(`/behandling/${behandling.id}/oppsummering`)
-                                    }
-                                >
-                                    Se behandling
-                                </Button>
-                            )}
+                            <Button
+                                style={{ minWidth: '50%' }}
+                                size="small"
+                                variant={'secondary'}
+                                onClick={() =>
+                                    router.push(`/behandling/${behandling.id}/oppsummering`)
+                                }
+                            >
+                                Se behandling
+                            </Button>
                         </Table.DataCell>
                     </Table.Row>
                 ))}

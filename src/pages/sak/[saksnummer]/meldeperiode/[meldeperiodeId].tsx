@@ -5,21 +5,27 @@ import { NextPageWithLayout } from '../../../_app';
 import { SakLayout, useSak } from '../../../../components/layout/SakLayout';
 import { ReactElement } from 'react';
 import PersonaliaHeader from '../../../../components/personaliaheader/PersonaliaHeader';
-import router from 'next/router';
 import { finnMeldeperiodeStatusTekst } from '../../../../utils/tekstformateringUtils';
 import { useHentMeldeperiodeKjede } from '../../../../hooks/meldekort/useHentMeldeperiodeKjede';
 import Varsel from '../../../../components/varsel/Varsel';
 import Link from 'next/link';
 import { MeldeperioderProvider } from '../../../../context/meldeperioder/MeldeperioderProvider';
 import { MeldekortDetaljer } from '../../../../components/meldekort/meldekortdetaljer/MeldekortDetaljer';
+import { MeldeperiodeKjedeId } from '../../../../types/meldekort/Meldeperiode';
 
 import styles from '../../../behandling/Behandling.module.css';
 
-const Meldekort: NextPageWithLayout = () => {
-    const { sakId, saknummer } = useSak();
-    const meldeperiodeId = router.query.meldeperiodeId as string;
+type Props = {
+    meldeperiodeKjedeId: MeldeperiodeKjedeId;
+};
 
-    const { meldeperiodeKjede, error, laster } = useHentMeldeperiodeKjede(meldeperiodeId, sakId);
+const Meldekort: NextPageWithLayout<Props> = ({ meldeperiodeKjedeId }) => {
+    const { sakId, saknummer } = useSak();
+
+    const { meldeperiodeKjede, error, laster } = useHentMeldeperiodeKjede(
+        meldeperiodeKjedeId,
+        sakId,
+    );
 
     if (error) {
         console.error(error.message);
@@ -48,7 +54,7 @@ const Meldekort: NextPageWithLayout = () => {
                 ) : !valgtMeldeperiode ? (
                     <Varsel
                         variant="error"
-                        melding={`Fant ingen meldeperioder for ${meldeperiodeId}`}
+                        melding={`Fant ingen meldeperioder for ${meldeperiodeKjedeId}`}
                     />
                 ) : (
                     <MeldeperioderProvider
@@ -68,6 +74,12 @@ Meldekort.getLayout = function getLayout(page: ReactElement) {
     return <SakLayout>{page}</SakLayout>;
 };
 
-export const getServerSideProps = pageWithAuthentication();
+export const getServerSideProps = pageWithAuthentication(async (context) => {
+    return {
+        props: {
+            meldeperiodeKjedeId: context.params!.meldeperiodeId,
+        },
+    };
+});
 
 export default Meldekort;

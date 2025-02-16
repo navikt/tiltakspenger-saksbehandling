@@ -1,6 +1,7 @@
 import useSWRMutation from 'swr/mutation';
 import { FetcherError, throwErrorIfFatal } from '../../utils/http';
 import { MeldekortBehandlingDTO } from '../../types/meldekort/MeldekortBehandling';
+import { SakId } from '../../types/SakTypes';
 
 const mutateMeldekort = async (
     url: string,
@@ -16,7 +17,7 @@ const mutateMeldekort = async (
 
 type Props = {
     meldekortId: string;
-    sakId: string;
+    sakId: SakId;
     onSuccess?: () => void;
 };
 

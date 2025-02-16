@@ -1,6 +1,8 @@
 import useSWRMutation from 'swr/mutation';
 import { FetcherError, throwErrorIfFatal } from '../../utils/http';
 import router from 'next/router';
+import { SakId } from '../../types/SakTypes';
+import { MeldekortBehandlingId } from '../../types/meldekort/MeldekortBehandling';
 
 export async function mutateMeldekort<R>(url: string, { arg }: { arg: any }): Promise<R> {
     const res = await fetch(url, {
@@ -11,7 +13,11 @@ export async function mutateMeldekort<R>(url: string, { arg }: { arg: any }): Pr
     return res.json();
 }
 
-export function useGodkjennMeldekort(meldekortId: string, sakId: string, saknummer: string) {
+export function useGodkjennMeldekort(
+    meldekortId: MeldekortBehandlingId,
+    sakId: SakId,
+    saksnummer: string,
+) {
     const {
         trigger: onGodkjennMeldekort,
         isMutating: isMeldekortMutating,
@@ -22,7 +28,7 @@ export function useGodkjennMeldekort(meldekortId: string, sakId: string, saknumm
         mutateMeldekort,
         {
             onSuccess: () => {
-                router.push(`/sak/${saknummer}`);
+                router.push(`/sak/${saksnummer}`);
             },
         },
     );

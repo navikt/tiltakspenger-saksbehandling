@@ -1,6 +1,7 @@
 import useSWRMutation from 'swr/mutation';
 import { throwErrorIfFatal } from '../../utils/http';
 import { MeldeperiodeKjedeId } from '../../types/meldekort/Meldeperiode';
+import { SakId } from '../../types/SakTypes';
 
 const fetcher = async (url: string) => {
     const res = await fetch(url, {
@@ -12,7 +13,7 @@ const fetcher = async (url: string) => {
 
 type Props = {
     kjedeId: MeldeperiodeKjedeId;
-    sakId: string;
+    sakId: SakId;
     onSuccess?: () => void;
 };
 

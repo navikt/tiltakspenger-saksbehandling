@@ -61,7 +61,7 @@ export const lagFaktumTekst = (faktum: Deltagelse | Opphold) => {
     }
 };
 
-export const finnStatusTekst = (status: string, underkjent: boolean) => {
+export const finnStatusTekst = (status: BehandlingStatus, underkjent: boolean) => {
     switch (status) {
         case BehandlingStatus.VEDTATT:
             return 'Vedtatt';
@@ -75,10 +75,6 @@ export const finnStatusTekst = (status: string, underkjent: boolean) => {
             return underkjent ? 'Underkjent' : 'Under behandling';
         case BehandlingStatus.UNDER_BESLUTNING:
             return 'Under beslutning';
-        case BehandlingStatus.KAN_BEHANDLES:
-            return 'Kan behandles';
-        case BehandlingStatus.KAN_IKKE_BEHANDLES:
-            return 'Kan ikke behandles';
     }
 };
 
@@ -121,17 +117,10 @@ export const deltagelseTekst = (deltagelse: Deltagelse): string => {
     }
 };
 
-export const finnBehandlingstypeTekst = (behandlingstype: TypeBehandling): string => {
-    switch (behandlingstype) {
-        case TypeBehandling.FØRSTEGANGSBEHANDLING:
-            return 'Førstegangsbehandling';
-        case TypeBehandling.REVURDERING:
-            return 'Revurdering';
-        case TypeBehandling.SØKNAD:
-            return 'Søknad';
-        default:
-            return 'Søknad';
-    }
+export const finnBehandlingstypeTekst: Record<TypeBehandling, string> = {
+    [TypeBehandling.FØRSTEGANGSBEHANDLING]: 'Førstegangsbehandling',
+    [TypeBehandling.REVURDERING]: 'Revurdering',
+    [TypeBehandling.SØKNAD]: 'Søknad',
 };
 
 export const finnDeltagelsestatusTekst = (deltagelsestatus: DeltagelseStatus): string => {

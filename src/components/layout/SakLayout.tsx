@@ -2,19 +2,20 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useHentSak } from '../../hooks/useHentSak';
 import router from 'next/router';
 import { Loader } from '@navikt/ds-react';
+import { SakId } from '../../types/SakTypes';
 
 interface SakContextType {
-    sakId: string;
+    sakId: SakId;
     saknummer: string;
 }
 
 type TynnSak = {
-    id: string;
+    id: SakId;
     saknummer: string;
 };
 
 export const SakContext = createContext<SakContextType>({
-    sakId: '',
+    sakId: 'sak_',
     saknummer: '',
 });
 

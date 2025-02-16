@@ -1,37 +1,32 @@
 import useSWRMutation from 'swr/mutation';
-import { FetcherError, mutateBehandling } from '../utils/http';
-import { Behandling, BehandlingStatus } from '../types/BehandlingTypes';
-import router from 'next/router';
+import { throwErrorIfFatal } from '../utils/http';
+import { Behandling, BehandlingId } from '../types/BehandlingTypes';
 import { mutate } from 'swr';
 
-export const finnBehandlingslenke = (behandlingId: string, status: BehandlingStatus) => {
-    switch (status) {
-        case BehandlingStatus.KLAR_TIL_BEHANDLING:
-        case BehandlingStatus.UNDER_BEHANDLING:
-            return `/behandling/${behandlingId}/inngangsvilkar/kravfrist`;
-        case BehandlingStatus.KLAR_TIL_BESLUTNING:
-        case BehandlingStatus.UNDER_BESLUTNING:
-            return `/behandling/${behandlingId}/oppsummering`;
-        default:
-            return '/';
-    }
-};
+type TaBehandlingResponse = Behandling;
 
 export function useTaBehandling() {
     const {
-        trigger: onTaBehandling,
+        trigger: taBehandling,
         isMutating: isBehandlingMutating,
         error: taBehandlingError,
-    } = useSWRMutation<Behandling, FetcherError, '/api/behandling/tabehandling', { id: string }>(
-        `/api/behandling/tabehandling`,
-        mutateBehandling,
-        {
-            onSuccess: (data) => {
-                mutate('/api/behandlinger');
-                router.push(finnBehandlingslenke(data.id, data.status));
-            },
+    } = useSWRMutation('/api/behandling/tabehandling', fetchTaBehandling, {
+        onSuccess: () => {
+            mutate('/api/behandlinger');
         },
-    );
+    });
 
-    return { onTaBehandling, isBehandlingMutating, taBehandlingError };
+    return { taBehandling, isBehandlingMutating, taBehandlingError };
 }
+
+const fetchTaBehandling = async (
+    url: string,
+    { arg }: { arg: { id: BehandlingId } },
+): Promise<TaBehandlingResponse> => {
+    const res = await fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(arg),
+    });
+    await throwErrorIfFatal(res);
+    return res.json();
+};

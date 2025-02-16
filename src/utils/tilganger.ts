@@ -1,4 +1,4 @@
-import { BehandlingStatus } from '../types/BehandlingTypes';
+import { BehandlingForOversikt, BehandlingStatus } from '../types/BehandlingTypes';
 import {
     MeldekortBehandlingProps,
     MeldekortBehandlingStatus,
@@ -43,31 +43,32 @@ export const kanSaksbehandleMeldekort = (
     meldekortBehandling.status === MeldekortBehandlingStatus.KLAR_TIL_UTFYLLING;
 
 export const eierBehandling = (
-    status: BehandlingStatus,
+    behandling: BehandlingForOversikt,
     innloggetSaksbehandler: Saksbehandler,
-    saksbehandlerForBehandling: string,
-    beslutterForBehandling: string,
 ): boolean => {
+    const { status, saksbehandler, beslutter } = behandling;
+
     switch (status) {
         case BehandlingStatus.UNDER_BEHANDLING:
-            return innloggetSaksbehandler.navIdent == saksbehandlerForBehandling;
+            return innloggetSaksbehandler.navIdent === saksbehandler;
         case BehandlingStatus.UNDER_BESLUTNING:
-            return innloggetSaksbehandler.navIdent == beslutterForBehandling;
+            return innloggetSaksbehandler.navIdent === beslutter;
         default:
             return false;
     }
 };
 
 export const skalKunneTaBehandling = (
-    status: BehandlingStatus,
+    behandling: BehandlingForOversikt,
     innloggetSaksbehandler: Saksbehandler,
-    saksbehandlerForBehandling?: string,
 ) => {
+    const { status, saksbehandler } = behandling;
+
     switch (status) {
         case BehandlingStatus.KLAR_TIL_BESLUTNING:
             return (
                 erBeslutter(innloggetSaksbehandler) &&
-                innloggetSaksbehandler.navIdent != saksbehandlerForBehandling
+                innloggetSaksbehandler.navIdent != saksbehandler
             );
         case BehandlingStatus.KLAR_TIL_BEHANDLING:
             return erSaksbehandler(innloggetSaksbehandler);
