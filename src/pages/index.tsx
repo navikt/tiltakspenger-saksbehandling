@@ -10,7 +10,7 @@ import { BehandlingKnappForOversikt } from '../components/behandlingsknapper/Beh
 import { preload } from 'swr';
 import { fetcher } from '../utils/http';
 import Link from 'next/link';
-import { StartSøknadBehandling } from '../components/behandlingsknapper/start-behandling/StartSøknadBehandling';
+import { SøknadStartBehandlingDeprecated } from '../components/behandlingsknapper/SøknadStartBehandlingDeprecated';
 
 const Oversikten: NextPage = () => {
     preload('/api/behandlinger', fetcher);
@@ -82,7 +82,9 @@ const Oversikten: NextPage = () => {
                             </Table.DataCell>
                             <Table.DataCell scope="col">
                                 {behandlingEllerSøknad.status === 'SØKNAD' ? (
-                                    <StartSøknadBehandling søknad={behandlingEllerSøknad} />
+                                    <SøknadStartBehandlingDeprecated
+                                        søknad={behandlingEllerSøknad}
+                                    />
                                 ) : (
                                     <BehandlingKnappForOversikt
                                         behandling={behandlingEllerSøknad}
