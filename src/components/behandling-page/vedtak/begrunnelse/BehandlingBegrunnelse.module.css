@@ -1,0 +1,28 @@
+.toppRad {
+    display: flex;
+    justify-content: space-between;
+}
+
+.header {
+    margin-bottom: 0.5rem;
+}
+
+.lovKnapper {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+
+    & span {
+        display: flex;
+    }
+
+    & svg {
+        width: 1.5rem;
+        height: 1.5rem;
+    }
+}
+
+.personinfoVarsel {
+    font-style: italic;
+    margin-top: 1rem;
+}

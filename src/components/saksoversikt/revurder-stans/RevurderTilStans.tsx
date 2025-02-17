@@ -2,7 +2,7 @@ import { Button, HStack } from '@navikt/ds-react';
 import Spørsmålsmodal from '../../revurderingsmodal/Spørsmålsmodal';
 import { Controller, useForm } from 'react-hook-form';
 import { setupValidation } from '../../../utils/validation';
-import Datovelger from '../../revurderingsmodal/Datovelger';
+import { Datovelger } from '../../revurderingsmodal/Datovelger';
 import { useRef } from 'react';
 import { dateTilISOTekst } from '../../../utils/date';
 import { useOpprettRevurdering } from '../../../hooks/useOpprettRevurdering';
@@ -66,7 +66,7 @@ export const RevurderTilStans = ({ førsteLovligeStansdato, sakId, saksnummer }:
                                     label="Stans fra og med"
                                     minDate={fraOgMed}
                                     defaultSelected={value}
-                                    errorMessage={errors.fraOgMed ? errors.fraOgMed.message : ''}
+                                    error={errors.fraOgMed ? errors.fraOgMed.message : ''}
                                 />
                             )}
                         />

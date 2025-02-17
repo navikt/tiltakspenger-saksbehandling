@@ -1,3 +1,22 @@
 .outer {
+    background-color: var(--a-gray-50);
     padding: 2rem;
+}
+
+.inner {
+    background-color: var(--a-white);
+    padding: 2rem;
+    border: solid 1px var(--a-gray-800);
+    max-width: 800px;
+}
+
+.header {
+    margin-bottom: 1rem;
+}
+
+.separator {
+    margin: 1.25rem 0;
+    border: none;
+    height: 1px;
+    background-color: var(--a-gray-500);
 }

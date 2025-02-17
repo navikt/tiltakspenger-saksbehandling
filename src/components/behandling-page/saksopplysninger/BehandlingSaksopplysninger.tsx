@@ -95,9 +95,8 @@ export const BehandlingSaksopplysninger = ({ behandling }: Props) => {
                 <OpplysningMedPeriode
                     navn={'Mottar sykepenger og fortsatt sykmeldt'}
                     periode={sykepenger}
-                    spacing={true}
                 />
-                <Opplysning navn={'Mottar pengestøtte'} verdi={'Tja?'} />
+                <Opplysning navn={'Mottar pengestøtte'} verdi={'Tja?'} spacing={true} />
                 {barnetillegg.length > 0 && (
                     <>
                         <BodyShort>{'Barn:'}</BodyShort>
@@ -124,10 +123,12 @@ export const BehandlingSaksopplysninger = ({ behandling }: Props) => {
                     verdi={antallVedlegg > 0 ? 'Ja' : 'Nei'}
                     spacing={true}
                 />
-                <Alert variant={'warning'} inline={true} size={'small'}>
-                    {'Sjekk vedlegg i '}
-                    <Link href={'#gosys.com'}>{'gosys'}</Link>
-                </Alert>
+                {antallVedlegg > 0 && (
+                    <Alert variant={'warning'} inline={true} size={'small'}>
+                        {'Sjekk vedlegg i '}
+                        <Link href={'#gosys.com'}>{'gosys'}</Link>
+                    </Alert>
+                )}
             </OpplysningerBlokk>
         </div>
     );

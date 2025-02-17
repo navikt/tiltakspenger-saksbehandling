@@ -1,0 +1,14 @@
+.resultat {
+    margin-top: 2rem;
+}
+
+.radioGroup > :global(.navds-radio-buttons) {
+    display: flex;
+    gap: 2rem;
+}
+
+.datovelgere {
+    margin-top: 1rem;
+    display: flex;
+    gap: 1rem;
+}

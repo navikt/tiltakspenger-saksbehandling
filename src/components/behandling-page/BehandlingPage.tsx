@@ -23,7 +23,7 @@ export const BehandlingPage = ({ behandling }: Props) => {
             </PersonaliaHeader>
             <div className={style.main}>
                 <BehandlingSaksopplysninger behandling={behandling} />
-                <BehandlingVedtak />
+                <BehandlingVedtak behandling={behandling} />
             </div>
         </BehandlingProvider>
     );

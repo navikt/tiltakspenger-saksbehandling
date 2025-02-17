@@ -1,24 +1,20 @@
 import { DatePicker, useDatepicker } from '@navikt/ds-react';
-import { useState } from 'react';
+import { ComponentProps } from 'react';
 
-interface DatovelgerProps {
+type Props = {
     onDateChange: (date: Date | undefined) => void;
-    errorMessage?: string;
     minDate?: Date;
     maxDate?: Date;
-    label: string;
     defaultSelected: Date;
-}
-export default function Datovelger({
+} & ComponentProps<typeof DatePicker.Input>;
+
+export const Datovelger = ({
     onDateChange,
-    errorMessage,
-    label,
     maxDate,
     minDate,
     defaultSelected,
-}: DatovelgerProps) {
-    const [dateError, setDateError] = useState<string>('');
-
+    ...inputPropsCustom
+}: Props) => {
     const { datepickerProps, inputProps } = useDatepicker({
         onDateChange,
         fromDate: minDate,
@@ -27,11 +23,9 @@ export default function Datovelger({
         defaultSelected: defaultSelected,
     });
 
-    const computedError = dateError || errorMessage;
-
     return (
         <DatePicker {...datepickerProps}>
-            <DatePicker.Input {...inputProps} label={label} error={computedError} />
+            <DatePicker.Input {...inputProps} {...inputPropsCustom} />
         </DatePicker>
     );
-}
+};
