@@ -34,7 +34,9 @@ export const BehandlingerOversikt = ({ behandlinger }: Props) => {
                             {finnBehandlingstypeTekst[behandling.typeBehandling]}
                         </Table.DataCell>
                         <Table.DataCell>
-                            {formaterTidspunkt(behandling.kravtidspunkt) ?? 'Ukjent'}
+                            {behandling.kravtidspunkt
+                                ? formaterTidspunkt(behandling.kravtidspunkt)
+                                : 'Ukjent'}
                         </Table.DataCell>
                         <Table.DataCell>
                             {finnBehandlingStatusTekst(behandling.status, behandling.underkjent)}
