@@ -3,14 +3,14 @@ import VilkårHeader from './VilkårHeader';
 import VilkårKort from './VilkårKort';
 import { useHentKvp } from '../../hooks/vilkår/useHentKvp';
 import { useContext } from 'react';
-import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
+import { BehandlingContextDeprecated } from '../layout/FørstegangsbehandlingLayout';
 import Varsel from '../varsel/Varsel';
 import { deltagelseTekst, lagUtfallstekst } from '../../utils/tekstformateringUtils';
 import IkonMedTekst from '../ikon-med-tekst/IkonMedTekst';
 import { UtfallIkon } from '../utfallikon/UtfallIkon';
 
 const Kvalifiseringsprogrammet = () => {
-    const { behandlingId } = useContext(BehandlingContext);
+    const { behandlingId } = useContext(BehandlingContextDeprecated);
     const { kvp, isLoading, error } = useHentKvp(behandlingId);
 
     if (isLoading || !kvp) {

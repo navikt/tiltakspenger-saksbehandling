@@ -3,14 +3,14 @@ import VilkårHeader from './VilkårHeader';
 import VilkårKort from './VilkårKort';
 import { useHentInstitusjonsopphold } from '../../hooks/vilkår/useHentInstitusjonsopphold';
 import { useContext } from 'react';
-import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
+import { BehandlingContextDeprecated } from '../layout/FørstegangsbehandlingLayout';
 import Varsel from '../varsel/Varsel';
 import { lagUtfallstekst } from '../../utils/tekstformateringUtils';
 import IkonMedTekst from '../ikon-med-tekst/IkonMedTekst';
 import { UtfallIkon } from '../utfallikon/UtfallIkon';
 
 const Institusjonsopphold = () => {
-    const { behandlingId } = useContext(BehandlingContext);
+    const { behandlingId } = useContext(BehandlingContextDeprecated);
     const { institusjonsopphold, isLoading, error } = useHentInstitusjonsopphold(behandlingId);
 
     if (isLoading || !institusjonsopphold) {

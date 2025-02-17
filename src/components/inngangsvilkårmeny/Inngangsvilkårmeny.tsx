@@ -3,14 +3,14 @@ import NextLink from 'next/link';
 import styles from './Inngangsvilkårmeny.module.css';
 import router from 'next/router';
 import { useContext } from 'react';
-import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
+import { BehandlingContextDeprecated } from '../layout/FørstegangsbehandlingLayout';
 import { UtfallIkon } from '../utfallikon/UtfallIkon';
 import { useHentBehandlingDeprecated } from '../../hooks/useHentBehandlingDeprecated';
 import { CalendarIcon } from '@navikt/aksel-icons';
 import { vilkårTabs } from '../../utils/vilkår';
 
 const Inngangsvilkårmeny = () => {
-    const { behandlingId } = useContext(BehandlingContext);
+    const { behandlingId } = useContext(BehandlingContextDeprecated);
     const vilkårsteg = router.query.vilkårsteg as string;
     const { valgtBehandling, isLoading } = useHentBehandlingDeprecated(behandlingId);
 

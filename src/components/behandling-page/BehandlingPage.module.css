@@ -1,0 +1,10 @@
+.main {
+    /*max-width: 1920px;*/
+    width: 100%;
+    height: 100vh;
+    margin: 0 auto;
+
+    display: grid;
+    grid-template-columns: 400px 1fr;
+    grid-template-areas: 'left main';
+}

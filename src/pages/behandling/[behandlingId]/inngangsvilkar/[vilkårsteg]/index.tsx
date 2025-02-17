@@ -1,5 +1,5 @@
 import {
-    BehandlingContext,
+    BehandlingContextDeprecated,
     FørstegangsbehandlingLayout,
 } from '../../../../../components/layout/FørstegangsbehandlingLayout';
 import { ReactElement, useContext } from 'react';
@@ -13,7 +13,7 @@ import { fetcher } from '../../../../../utils/http';
 import { preload } from 'swr';
 
 const Behandling: NextPageWithLayout = () => {
-    const { behandlingId, sakId } = useContext(BehandlingContext);
+    const { behandlingId, sakId } = useContext(BehandlingContextDeprecated);
     preload(`/api/sak/${sakId}/personopplysninger`, fetcher);
     preload(`/api/behandling/${behandlingId}`, fetcher);
 

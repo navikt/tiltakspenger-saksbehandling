@@ -1,10 +1,11 @@
-import { BehandlingId, SøknadForOversikt, SøknadId } from '../../types/BehandlingTypes';
+import { BehandlingId } from '../../types/BehandlingTypes';
 import Varsel from '../varsel/Varsel';
 import { Button } from '@navikt/ds-react';
 import router from 'next/router';
 import React from 'react';
 import useSWRMutation from 'swr/mutation';
 import { FetcherError, throwErrorIfFatal } from '../../utils/http';
+import { SøknadForOversiktProps, SøknadId } from '../../types/SøknadTypes';
 
 import style from './BehandlingKnapper.module.css';
 
@@ -12,7 +13,7 @@ type StartBehandlingArgs = { id: SøknadId };
 type StartBehandlingResponse = { id: BehandlingId };
 
 type Props = {
-    søknad: SøknadForOversikt;
+    søknad: SøknadForOversiktProps;
 };
 
 export const SøknadStartBehandlingDeprecated = ({ søknad }: Props) => {

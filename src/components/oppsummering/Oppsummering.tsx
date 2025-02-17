@@ -5,14 +5,14 @@ import BegrunnelseModal from '../begrunnelsemodal/BegrunnelseModal';
 import styles from './Oppsummering.module.css';
 import VilkårsvurderingTable from './VilkårsvurderingTable';
 import { BehandlingStatus } from '../../types/BehandlingTypes';
-import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
+import { BehandlingContextDeprecated } from '../layout/FørstegangsbehandlingLayout';
 import Varsel from '../varsel/Varsel';
 import { Behandlingsknapper } from '../behandlingsknapper/BehandlingKnapper';
 import BekreftelsesModal from '../bekreftelsesmodal/BekreftelsesModal';
 import { useGodkjennBehandling } from '../../hooks/useGodkjennBehandling';
 
 const Oppsummering = () => {
-    const { behandlingId, sakId } = useContext(BehandlingContext);
+    const { behandlingId, sakId } = useContext(BehandlingContextDeprecated);
     const { valgtBehandling, isLoading, error } = useHentBehandlingDeprecated(behandlingId);
     const { godkjennBehandling, godkjennerBehandling, godkjennBehandlingError, reset } =
         useGodkjennBehandling(behandlingId, sakId);

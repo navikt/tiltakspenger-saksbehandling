@@ -8,12 +8,12 @@ import {
     lagUtfallstekst,
 } from '../../utils/tekstformateringUtils';
 import { useContext } from 'react';
-import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
+import { BehandlingContextDeprecated } from '../layout/FørstegangsbehandlingLayout';
 import IkonMedTekst from '../ikon-med-tekst/IkonMedTekst';
 import { UtfallIkon } from '../utfallikon/UtfallIkon';
 
 const VilkårsvurderingTable = () => {
-    const { behandlingId } = useContext(BehandlingContext);
+    const { behandlingId } = useContext(BehandlingContextDeprecated);
     const { valgtBehandling, isLoading } = useHentBehandlingDeprecated(behandlingId);
 
     if (isLoading || !valgtBehandling) {

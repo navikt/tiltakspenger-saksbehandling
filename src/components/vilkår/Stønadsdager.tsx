@@ -3,11 +3,11 @@ import { Loader, VStack } from '@navikt/ds-react';
 import VilkårKort from './VilkårKort';
 import VilkårHeader from './VilkårHeader';
 import Varsel from '../varsel/Varsel';
-import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
+import { BehandlingContextDeprecated } from '../layout/FørstegangsbehandlingLayout';
 import { useHentStønadsdager } from '../../hooks/vilkår/useHentStønadsdager';
 
 const Stønadsdager = () => {
-    const { behandlingId } = useContext(BehandlingContext);
+    const { behandlingId } = useContext(BehandlingContextDeprecated);
     const { stønadsdager, isLoading, error } = useHentStønadsdager(behandlingId);
 
     if (isLoading || !stønadsdager) {

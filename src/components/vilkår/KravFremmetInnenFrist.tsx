@@ -3,7 +3,7 @@ import { Loader, VStack } from '@navikt/ds-react';
 import VilkårHeader from './VilkårHeader';
 import VilkårKort from './VilkårKort';
 import { formaterDatotekst } from '../../utils/date';
-import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
+import { BehandlingContextDeprecated } from '../layout/FørstegangsbehandlingLayout';
 import { useHentKravfrist } from '../../hooks/vilkår/useHentKravfrist';
 import Varsel from '../varsel/Varsel';
 import { lagUtfallstekst } from '../../utils/tekstformateringUtils';
@@ -11,7 +11,7 @@ import IkonMedTekst from '../ikon-med-tekst/IkonMedTekst';
 import { UtfallIkon } from '../utfallikon/UtfallIkon';
 
 const KravFremmetInnenFrist = () => {
-    const { behandlingId } = useContext(BehandlingContext);
+    const { behandlingId } = useContext(BehandlingContextDeprecated);
     const { kravfristVilkår, isLoading, error } = useHentKravfrist(behandlingId);
 
     if (isLoading || !kravfristVilkår) {

@@ -4,14 +4,14 @@ import VilkårKort from './VilkårKort';
 import { useHentAlder } from '../../hooks/vilkår/useHentAlder';
 import { formaterDatotekst } from '../../utils/date';
 import { useContext } from 'react';
-import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
+import { BehandlingContextDeprecated } from '../layout/FørstegangsbehandlingLayout';
 import Varsel from '../varsel/Varsel';
 import { lagUtfallstekst } from '../../utils/tekstformateringUtils';
 import { UtfallIkon } from '../utfallikon/UtfallIkon';
 import IkonMedTekst from '../ikon-med-tekst/IkonMedTekst';
 
 const Alder = () => {
-    const { behandlingId } = useContext(BehandlingContext);
+    const { behandlingId } = useContext(BehandlingContextDeprecated);
     const { alderVilkår, isLoading, error } = useHentAlder(behandlingId);
 
     if (isLoading || !alderVilkår) {

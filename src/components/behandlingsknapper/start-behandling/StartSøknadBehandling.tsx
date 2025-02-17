@@ -1,13 +1,13 @@
-import { SøknadForOversikt } from '../../../types/BehandlingTypes';
 import { useStartSøknadBehandling } from './useStartSøknadBehandling';
 import Varsel from '../../varsel/Varsel';
 import style from '../BehandlingKnapper.module.css';
 import { Button } from '@navikt/ds-react';
 import React from 'react';
 import router from 'next/router';
+import { SøknadForOversiktProps } from '../../../types/SøknadTypes';
 
 type Props = {
-    søknad: SøknadForOversikt;
+    søknad: SøknadForOversiktProps;
 };
 
 export const StartSøknadBehandling = ({ søknad }: Props) => {

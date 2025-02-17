@@ -1,0 +1,28 @@
+.saksopplysninger {
+    padding: 2rem;
+    background-color: var(--a-blue-50)
+}
+
+.oppdaterKnapp {
+    margin-bottom: 1rem;
+}
+
+.header {
+    font-weight: normal;
+    margin-bottom: 0.5rem;
+}
+
+.opplysning {
+    margin-bottom: 0.25rem;
+
+    &.spacing {
+        margin-bottom: 1rem;
+    }
+}
+
+.separator {
+    margin: 1.25rem 0;
+    border: none;
+    height: 1px;
+    background-color: var(--a-gray-500);
+}

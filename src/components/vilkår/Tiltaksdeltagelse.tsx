@@ -2,7 +2,7 @@ import React, { useContext, useRef } from 'react';
 import { Button, HStack, Loader, Select, VStack } from '@navikt/ds-react';
 import VilkårHeader from './VilkårHeader';
 import VilkårKort from './VilkårKort';
-import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
+import { BehandlingContextDeprecated } from '../layout/FørstegangsbehandlingLayout';
 import Varsel from '../varsel/Varsel';
 import { finnDeltagelsestatusTekst, lagUtfallstekst } from '../../utils/tekstformateringUtils';
 import IkonMedTekst from '../ikon-med-tekst/IkonMedTekst';
@@ -21,8 +21,9 @@ export interface StatusForm {
 }
 
 const Tiltaksdeltagelse = () => {
-    const { behandlingId, behandlingstype, sakId, behandlingsperiode } =
-        useContext(BehandlingContext);
+    const { behandlingId, behandlingstype, sakId, behandlingsperiode } = useContext(
+        BehandlingContextDeprecated,
+    );
     const { tiltaksdeltagelse, isLoading, error } = useHentTiltaksdeltagelse(behandlingId);
 
     const { oppdaterTiltaksdeltagelse } = useOppdaterTiltaksdeltagelse(behandlingId, sakId);

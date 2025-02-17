@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from '@navikt/ds-react';
-import { BehandlingForOversikt, BehandlingStatus } from '../../types/BehandlingTypes';
+import { BehandlingForOversiktProps, BehandlingStatus } from '../../types/BehandlingTypes';
 import { useTaBehandling } from '../../hooks/useTaBehandling';
 import { useSaksbehandler } from '../../hooks/useSaksbehandler';
 import { eierBehandling, skalKunneTaBehandling } from '../../utils/tilganger';
@@ -10,7 +10,7 @@ import router from 'next/router';
 import style from './BehandlingKnapper.module.css';
 
 type Props = {
-    behandling: BehandlingForOversikt;
+    behandling: BehandlingForOversiktProps;
 };
 
 export const BehandlingKnappForOversikt = ({ behandling }: Props) => {
@@ -65,7 +65,7 @@ export const BehandlingKnappForOversikt = ({ behandling }: Props) => {
     return null;
 };
 
-const finnBehandlingslenke = (behandling: BehandlingForOversikt) => {
+const finnBehandlingslenke = (behandling: BehandlingForOversiktProps) => {
     const { id, status, erDeprecatedBehandling } = behandling;
 
     switch (status) {

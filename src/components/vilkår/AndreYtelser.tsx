@@ -4,7 +4,7 @@ import { useHentLivsopphold } from '../../hooks/vilkår/useHentLivsopphold';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import styles from './Vilkår.module.css';
 import { useContext } from 'react';
-import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
+import { BehandlingContextDeprecated } from '../layout/FørstegangsbehandlingLayout';
 import { useLagreLivsoppholdSaksopplysning } from '../../hooks/vilkår/useLagreLivsoppholdSaksopplysning';
 import Varsel from '../varsel/Varsel';
 import { useHentBehandlingDeprecated } from '../../hooks/useHentBehandlingDeprecated';
@@ -17,7 +17,7 @@ type SkjemaFelter = {
 };
 
 const AndreYtelser = () => {
-    const { behandlingId } = useContext(BehandlingContext)!;
+    const { behandlingId } = useContext(BehandlingContextDeprecated)!;
     const valgtBehandling = useHentBehandlingDeprecated(behandlingId).valgtBehandling!;
     const { livsopphold, isLoading, error } = useHentLivsopphold(behandlingId);
     const { onLagreLivsopphold, isLivsoppholdMutating } =

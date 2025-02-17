@@ -62,3 +62,7 @@ export function månedFraDatotekst(dato: string) {
 export function ukenummerFraDatotekst(dato: string) {
     return dayjs(dato).week();
 }
+
+export const alderFraDato = (dato: string) => {
+    return dayjs().diff(dato, 'years');
+};

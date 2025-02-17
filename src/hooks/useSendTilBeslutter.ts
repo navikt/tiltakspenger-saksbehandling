@@ -2,7 +2,7 @@ import useSWRMutation from 'swr/mutation';
 import { FetcherError, mutateBehandling } from '../utils/http';
 import router from 'next/router';
 import { mutate } from 'swr';
-import { BehandlingDeprecated, TypeBehandling } from '../types/BehandlingTypes';
+import { BehandlingPropsDeprecated, TypeBehandling } from '../types/BehandlingTypes';
 
 export const finnOversiktslenke = (saksnummer: string, type: TypeBehandling) => {
     return type === TypeBehandling.REVURDERING ? `/sak/${saksnummer}` : '/';
@@ -13,7 +13,7 @@ export function useSendTilBeslutter(behandlingId: string) {
         trigger: sendTilBeslutter,
         isMutating: senderTilBeslutter,
         error: sendTilBeslutterError,
-    } = useSWRMutation<BehandlingDeprecated, FetcherError, any>(
+    } = useSWRMutation<BehandlingPropsDeprecated, FetcherError, any>(
         `/api/behandling/beslutter/${behandlingId}`,
         mutateBehandling,
         {

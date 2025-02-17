@@ -1,21 +1,37 @@
-import { pageWithAuthentication } from '../../../auth/pageWithAuthentication';
-import { BehandlingId } from '../../../types/BehandlingTypes';
-import { Loader } from '@navikt/ds-react';
 import React from 'react';
-import { useHentBehandling } from '../../../hooks/useHentBehandling';
+import { pageWithAuthentication } from '../../../auth/pageWithAuthentication';
+import { BehandlingId, BehandlingProps } from '../../../types/BehandlingTypes';
+import useSWR from 'swr';
+import { fetcher, FetcherError } from '../../../utils/http';
+import Varsel from '../../../components/varsel/Varsel';
+import { Loader } from '@navikt/ds-react';
+import { BehandlingPage } from '../../../components/behandling-page/BehandlingPage';
 
 type Props = {
     behandlingId: BehandlingId;
 };
 
 const Behandling = ({ behandlingId }: Props) => {
-    const { behandling, isLoading } = useHentBehandling(behandlingId);
+    const {
+        data: behandling,
+        isLoading,
+        error,
+    } = useSWR<BehandlingProps, FetcherError>(`/api/behandling/${behandlingId}`, fetcher);
+
+    if (error) {
+        return (
+            <Varsel
+                variant={'error'}
+                melding={`Kunne ikke hente behandling med id ${behandlingId} - [${error.status}] ${error.message}`}
+            />
+        );
+    }
 
     if (isLoading || !behandling) {
         return <Loader />;
     }
 
-    return <div>{`Førstegangsbehandling for ${behandlingId}`}</div>;
+    return <BehandlingPage behandling={behandling} />;
 };
 
 export const getServerSideProps = pageWithAuthentication(async (context) => {

@@ -1,7 +1,7 @@
 import { Button, Modal, Select } from '@navikt/ds-react';
 import { RefObject, useContext, useState } from 'react';
 import styles from './BegrunnelseModal.module.css';
-import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
+import { BehandlingContextDeprecated } from '../layout/FørstegangsbehandlingLayout';
 import { useSendTilbakeBehandling } from '../../hooks/useSendTilbakeBehandling';
 
 interface BegrunnelseModalProps {
@@ -18,7 +18,7 @@ const begrunnelseAlternativer = [
 ];
 
 const BegrunnelseModal = ({ modalRef }: BegrunnelseModalProps) => {
-    const { behandlingId } = useContext(BehandlingContext);
+    const { behandlingId } = useContext(BehandlingContextDeprecated);
     const [begrunnelse, setBegrunnelse] = useState<string>('');
     const [error, setError] = useState<string>('');
     const { sendTilbakeBehandling, senderTilbake, sendTilbakeBehandlingError } =

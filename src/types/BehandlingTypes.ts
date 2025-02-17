@@ -8,11 +8,11 @@ import { Periode } from './Periode';
 import { Stønadsdager } from './StønadsdagerTypes';
 import { TiltakDeltagelseVilkår, Tiltaksdeltagelse } from './TiltakDeltagelseTypes';
 import { SakId } from './SakTypes';
+import { SøknadForOversiktProps, SøknadForBehandlingProps } from './SøknadTypes';
 
 export type BehandlingId = `beh_${string}`;
-export type SøknadId = `soknad_${string}`;
 
-export type BehandlingV2 = {
+export type BehandlingProps = {
     id: BehandlingId;
     sakId: SakId;
     saksnummer: string;
@@ -22,17 +22,18 @@ export type BehandlingV2 = {
     behandlingstype: TypeBehandling;
     vurderingsperiode: Periode;
     attesteringer: Attestering[];
-    saksopplysninger: BehandlingSaksopplysninger;
+    saksopplysninger: BehandlingSaksopplysningerProps;
+    søknad: SøknadForBehandlingProps;
     fritekstTilVedtaksbrev: string | null;
     begrunnelseVilkårsvurdering: string | null;
 };
 
-export type BehandlingSaksopplysninger = {
+export type BehandlingSaksopplysningerProps = {
     fødselsdato: string;
     tiltaksdeltagelse: Tiltaksdeltagelse;
 };
 
-export type BehandlingDeprecated = {
+export type BehandlingPropsDeprecated = {
     id: BehandlingId;
     sakId: SakId;
     saksnummer: string;
@@ -46,10 +47,10 @@ export type BehandlingDeprecated = {
     stønadsdager: Stønadsdager;
 };
 
-export type BehandlingProps = BehandlingDeprecated | BehandlingV2;
+export type BehandlingDeprecatedOgNy = BehandlingPropsDeprecated | BehandlingProps;
 
 // TODO: revurdering og førstegangsbehandling bør ha separate typer
-export type BehandlingForOversikt = {
+export type BehandlingForOversiktProps = {
     id: BehandlingId;
     sakId: SakId;
     typeBehandling: Exclude<TypeBehandling, TypeBehandling.SØKNAD>;
@@ -64,22 +65,7 @@ export type BehandlingForOversikt = {
     erDeprecatedBehandling: boolean | null;
 };
 
-export type SøknadForOversikt = {
-    id: SøknadId;
-    sakId: SakId | null;
-    saksnummer: string | null;
-    typeBehandling: TypeBehandling.SØKNAD;
-    status: BehandlingStatus.SØKNAD;
-    underkjent: boolean;
-    kravtidspunkt: string;
-    fnr: string;
-    periode: null;
-    saksbehandler: null;
-    beslutter: null;
-    erDeprecatedBehandling: null;
-};
-
-export type BehandlingEllerSøknadForOversikt = BehandlingForOversikt | SøknadForOversikt;
+export type BehandlingEllerSøknadForOversikt = BehandlingForOversiktProps | SøknadForOversiktProps;
 
 export enum BehandlingStatus {
     SØKNAD = 'SØKNAD',

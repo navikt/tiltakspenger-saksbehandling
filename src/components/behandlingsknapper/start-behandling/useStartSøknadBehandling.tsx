@@ -1,10 +1,11 @@
 import useSWRMutation from 'swr/mutation';
 import { FetcherError, throwErrorIfFatal } from '../../../utils/http';
-import { BehandlingId, SøknadForOversikt } from '../../../types/BehandlingTypes';
+import { BehandlingId } from '../../../types/BehandlingTypes';
+import { SøknadForOversiktProps } from '../../../types/SøknadTypes';
 
 type StartBehandlingResponse = { id: BehandlingId };
 
-export const useStartSøknadBehandling = (søknad: SøknadForOversikt) => {
+export const useStartSøknadBehandling = (søknad: SøknadForOversiktProps) => {
     const {
         trigger: opprettBehandling,
         isMutating: opprettBehandlingIsLoading,

@@ -3,14 +3,14 @@ import router from 'next/router';
 import { useHentBehandlingDeprecated } from '../../hooks/useHentBehandlingDeprecated';
 import { BehandlingStatus } from '../../types/BehandlingTypes';
 import { useContext, useState } from 'react';
-import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
+import { BehandlingContextDeprecated } from '../layout/FørstegangsbehandlingLayout';
 import { kanSaksbehandleForBehandling } from '../../utils/tilganger';
 import { useSaksbehandler } from '../../hooks/useSaksbehandler';
 
 export const Saksbehandlingstabs = () => {
     const aktivTab = router.route.split('/')[3];
     const { innloggetSaksbehandler } = useSaksbehandler();
-    const { behandlingId } = useContext(BehandlingContext);
+    const { behandlingId } = useContext(BehandlingContextDeprecated);
     const { valgtBehandling, isLoading } = useHentBehandlingDeprecated(behandlingId);
     const [value, setValue] = useState(aktivTab);
 

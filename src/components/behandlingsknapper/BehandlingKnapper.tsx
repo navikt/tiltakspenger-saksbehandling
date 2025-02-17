@@ -2,7 +2,7 @@ import { Button, HStack, Loader } from '@navikt/ds-react';
 import { RefObject, useContext } from 'react';
 import { useHentBehandlingDeprecated } from '../../hooks/useHentBehandlingDeprecated';
 import { kanBeslutteForBehandling, kanSaksbehandleForBehandling } from '../../utils/tilganger';
-import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
+import { BehandlingContextDeprecated } from '../layout/FørstegangsbehandlingLayout';
 import Varsel from '../varsel/Varsel';
 import { useGodkjennBehandling } from '../../hooks/useGodkjennBehandling';
 import { useSendTilBeslutter } from '../../hooks/useSendTilBeslutter';
@@ -13,7 +13,7 @@ type Props = {
 };
 
 export const Behandlingsknapper = ({ godkjennRef }: Props) => {
-    const { behandlingId, sakId } = useContext(BehandlingContext);
+    const { behandlingId, sakId } = useContext(BehandlingContextDeprecated);
     const { innloggetSaksbehandler } = useSaksbehandler();
     const { valgtBehandling, isLoading } = useHentBehandlingDeprecated(behandlingId);
     const { godkjennerBehandling, godkjennBehandlingError } = useGodkjennBehandling(

@@ -16,7 +16,9 @@ type BehandlingContextType = {
     behandlingsperiode: Periode;
 };
 
-export const BehandlingContext = createContext<BehandlingContextType>({} as BehandlingContextType);
+export const BehandlingContextDeprecated = createContext<BehandlingContextType>(
+    {} as BehandlingContextType,
+);
 
 export const FørstegangsbehandlingLayout = ({ children }: React.PropsWithChildren) => {
     const behandlingId = router.query.behandlingId as string;
@@ -29,7 +31,7 @@ export const FørstegangsbehandlingLayout = ({ children }: React.PropsWithChildr
     const { id, sakId, behandlingstype, vurderingsperiode, saksnummer, status } = valgtBehandling;
 
     return (
-        <BehandlingContext.Provider
+        <BehandlingContextDeprecated.Provider
             value={{
                 behandlingId: id,
                 sakId: sakId,
@@ -42,6 +44,6 @@ export const FørstegangsbehandlingLayout = ({ children }: React.PropsWithChildr
             </PersonaliaHeader>
             <Saksbehandlingstabs />
             <main>{children}</main>
-        </BehandlingContext.Provider>
+        </BehandlingContextDeprecated.Provider>
     );
 };
