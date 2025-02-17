@@ -1,6 +1,6 @@
 import { Loader, Tabs } from '@navikt/ds-react';
 import router from 'next/router';
-import { useHentBehandling } from '../../hooks/useHentBehandling';
+import { useHentBehandlingDeprecated } from '../../hooks/useHentBehandlingDeprecated';
 import { BehandlingStatus } from '../../types/BehandlingTypes';
 import { useContext, useState } from 'react';
 import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
@@ -11,7 +11,7 @@ export const Saksbehandlingstabs = () => {
     const aktivTab = router.route.split('/')[3];
     const { innloggetSaksbehandler } = useSaksbehandler();
     const { behandlingId } = useContext(BehandlingContext);
-    const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
+    const { valgtBehandling, isLoading } = useHentBehandlingDeprecated(behandlingId);
     const [value, setValue] = useState(aktivTab);
 
     if (isLoading || !valgtBehandling) {

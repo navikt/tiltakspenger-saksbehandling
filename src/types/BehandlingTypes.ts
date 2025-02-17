@@ -46,7 +46,7 @@ export type BehandlingDeprecated = {
     stønadsdager: Stønadsdager;
 };
 
-export type Behandling = BehandlingDeprecated | BehandlingV2;
+export type BehandlingProps = BehandlingDeprecated | BehandlingV2;
 
 export type BehandlingForOversikt = {
     id: BehandlingId;
@@ -60,6 +60,7 @@ export type BehandlingForOversikt = {
     saksnummer: string;
     saksbehandler: string;
     beslutter: string | null;
+    erDeprecatedBehandling: boolean;
 };
 
 export type SøknadForOversikt = {

@@ -1,5 +1,5 @@
 import { Loader, Table } from '@navikt/ds-react';
-import { useHentBehandling } from '../../hooks/useHentBehandling';
+import { useHentBehandlingDeprecated } from '../../hooks/useHentBehandlingDeprecated';
 import { formaterDatotekst, periodeTilFormatertDatotekst } from '../../utils/date';
 import {
     finnDeltagelsestatusTekst,
@@ -14,7 +14,7 @@ import { UtfallIkon } from '../utfallikon/UtfallIkon';
 
 const VilkårsvurderingTable = () => {
     const { behandlingId } = useContext(BehandlingContext);
-    const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
+    const { valgtBehandling, isLoading } = useHentBehandlingDeprecated(behandlingId);
 
     if (isLoading || !valgtBehandling) {
         return <Loader />;

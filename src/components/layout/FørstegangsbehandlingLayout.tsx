@@ -1,5 +1,5 @@
 import router from 'next/router';
-import { useHentBehandling } from '../../hooks/useHentBehandling';
+import { useHentBehandlingDeprecated } from '../../hooks/useHentBehandlingDeprecated';
 import PersonaliaHeader from '../personaliaheader/PersonaliaHeader';
 import { Saksbehandlingstabs } from '../saksbehandlingstabs/SaksbehandlingTabs';
 import { Loader, Tag } from '@navikt/ds-react';
@@ -20,7 +20,7 @@ export const BehandlingContext = createContext<BehandlingContextType>({} as Beha
 
 export const FørstegangsbehandlingLayout = ({ children }: React.PropsWithChildren) => {
     const behandlingId = router.query.behandlingId as string;
-    const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
+    const { valgtBehandling, isLoading } = useHentBehandlingDeprecated(behandlingId);
 
     if (isLoading || !valgtBehandling) {
         return <Loader />;

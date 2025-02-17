@@ -7,7 +7,7 @@ import { useContext } from 'react';
 import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
 import { useLagreLivsoppholdSaksopplysning } from '../../hooks/vilkår/useLagreLivsoppholdSaksopplysning';
 import Varsel from '../varsel/Varsel';
-import { useHentBehandling } from '../../hooks/useHentBehandling';
+import { useHentBehandlingDeprecated } from '../../hooks/useHentBehandlingDeprecated';
 import { lagUtfallstekst } from '../../utils/tekstformateringUtils';
 import IkonMedTekst from '../ikon-med-tekst/IkonMedTekst';
 import { UtfallIkon } from '../utfallikon/UtfallIkon';
@@ -18,7 +18,7 @@ type SkjemaFelter = {
 
 const AndreYtelser = () => {
     const { behandlingId } = useContext(BehandlingContext)!;
-    const valgtBehandling = useHentBehandling(behandlingId).valgtBehandling!;
+    const valgtBehandling = useHentBehandlingDeprecated(behandlingId).valgtBehandling!;
     const { livsopphold, isLoading, error } = useHentLivsopphold(behandlingId);
     const { onLagreLivsopphold, isLivsoppholdMutating } =
         useLagreLivsoppholdSaksopplysning(behandlingId);

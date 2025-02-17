@@ -1,4 +1,4 @@
-import { Behandling, BehandlingForOversikt, BehandlingStatus } from '../types/BehandlingTypes';
+import { BehandlingProps, BehandlingForOversikt, BehandlingStatus } from '../types/BehandlingTypes';
 import {
     MeldekortBehandlingProps,
     MeldekortBehandlingStatus,
@@ -6,7 +6,7 @@ import {
 import { erBeslutter, erSaksbehandler, Saksbehandler } from '../types/Saksbehandler';
 
 export const kanBeslutteForBehandling = (
-    behandling: Behandling,
+    behandling: BehandlingProps,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     const { status, saksbehandler, beslutter } = behandling;
@@ -27,7 +27,7 @@ const kanBehandle = (
     innloggetSaksbehandler.navIdent === saksbehandlerForBehandling;
 
 export const kanSaksbehandleForBehandling = (
-    behandling: Behandling,
+    behandling: BehandlingProps,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     return (

@@ -1,6 +1,6 @@
 import { VStack, BodyShort, Loader } from '@navikt/ds-react';
 import styles from './Behandlingdetaljer.module.css';
-import { useHentBehandling } from '../../hooks/useHentBehandling';
+import { useHentBehandlingDeprecated } from '../../hooks/useHentBehandlingDeprecated';
 import { periodeTilFormatertDatotekst } from '../../utils/date';
 import { useContext } from 'react';
 import { BehandlingContext } from '../layout/FørstegangsbehandlingLayout';
@@ -8,7 +8,7 @@ import { useHentKravfrist } from '../../hooks/vilkår/useHentKravfrist';
 
 const Behandlingdetaljer = () => {
     const { behandlingId } = useContext(BehandlingContext);
-    const { valgtBehandling, isLoading } = useHentBehandling(behandlingId);
+    const { valgtBehandling, isLoading } = useHentBehandlingDeprecated(behandlingId);
     const { kravfristVilkår } = useHentKravfrist(behandlingId);
 
     if (isLoading || !valgtBehandling || !kravfristVilkår) {

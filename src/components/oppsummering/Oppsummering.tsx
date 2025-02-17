@@ -1,5 +1,5 @@
 import { Loader, Heading, VStack, Alert, Button } from '@navikt/ds-react';
-import { useHentBehandling } from '../../hooks/useHentBehandling';
+import { useHentBehandlingDeprecated } from '../../hooks/useHentBehandlingDeprecated';
 import { useContext, useRef } from 'react';
 import BegrunnelseModal from '../begrunnelsemodal/BegrunnelseModal';
 import styles from './Oppsummering.module.css';
@@ -13,7 +13,7 @@ import { useGodkjennBehandling } from '../../hooks/useGodkjennBehandling';
 
 const Oppsummering = () => {
     const { behandlingId, sakId } = useContext(BehandlingContext);
-    const { valgtBehandling, isLoading, error } = useHentBehandling(behandlingId);
+    const { valgtBehandling, isLoading, error } = useHentBehandlingDeprecated(behandlingId);
     const { godkjennBehandling, godkjennerBehandling, godkjennBehandlingError, reset } =
         useGodkjennBehandling(behandlingId, sakId);
 

@@ -1,13 +1,13 @@
 import useSWR from 'swr';
 import { fetcher, FetcherError } from '../utils/http';
-import { BehandlingDeprecated } from '../types/BehandlingTypes';
+import { BehandlingId, BehandlingProps } from '../types/BehandlingTypes';
 
-export function useHentBehandling(behandlingId: string) {
+export function useHentBehandling(behandlingId: BehandlingId) {
     const {
-        data: valgtBehandling,
+        data: behandling,
         isLoading,
         error,
-    } = useSWR<BehandlingDeprecated, FetcherError>(`/api/behandling/${behandlingId}`, fetcher);
+    } = useSWR<BehandlingProps, FetcherError>(`/api/behandling/${behandlingId}`, fetcher);
 
-    return { valgtBehandling, isLoading, error };
+    return { behandling, isLoading, error };
 }
