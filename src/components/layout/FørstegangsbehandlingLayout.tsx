@@ -4,7 +4,7 @@ import PersonaliaHeader from '../personaliaheader/PersonaliaHeader';
 import { Saksbehandlingstabs } from '../saksbehandlingstabs/SaksbehandlingTabs';
 import { Loader, Tag } from '@navikt/ds-react';
 import React, { createContext } from 'react';
-import { finnStatusTekst } from '../../utils/tekstformateringUtils';
+import { finnBehandlingStatusTekst } from '../../utils/tekstformateringUtils';
 import { BehandlingId, TypeBehandling } from '../../types/BehandlingTypes';
 import { Periode } from '../../types/Periode';
 import { SakId } from '../../types/SakTypes';
@@ -38,7 +38,7 @@ export const FørstegangsbehandlingLayout = ({ children }: React.PropsWithChildr
             }}
         >
             <PersonaliaHeader sakId={sakId} saksnummer={saksnummer}>
-                <Tag variant="alt3-filled">{finnStatusTekst(status, false)}</Tag>
+                <Tag variant="alt3-filled">{finnBehandlingStatusTekst(status, false)}</Tag>
             </PersonaliaHeader>
             <Saksbehandlingstabs />
             <main>{children}</main>

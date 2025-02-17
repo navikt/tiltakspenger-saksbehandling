@@ -6,25 +6,47 @@ import { KvpVilkår } from './KvpTypes';
 import { LivsoppholdVilkår } from './LivsoppholdTypes';
 import { Periode } from './Periode';
 import { Stønadsdager } from './StønadsdagerTypes';
-import { TiltakDeltagelseVilkår } from './TiltakDeltagelseTypes';
+import { TiltakDeltagelseVilkår, Tiltaksdeltagelse } from './TiltakDeltagelseTypes';
 import { SakId } from './SakTypes';
 
 export type BehandlingId = `beh_${string}`;
 export type SøknadId = `soknad_${string}`;
 
-export type Behandling = {
+export type BehandlingV2 = {
     id: BehandlingId;
     sakId: SakId;
     saksnummer: string;
-    saksbehandler: string;
-    beslutter: string;
-    vurderingsperiode: Periode;
-    behandlingstype: TypeBehandling;
     status: BehandlingStatus;
+    saksbehandler: string | null;
+    beslutter: string | null;
+    behandlingstype: TypeBehandling;
+    vurderingsperiode: Periode;
     attesteringer: Attestering[];
+    saksopplysninger: BehandlingSaksopplysninger;
+    fritekstTilVedtaksbrev: string | null;
+    begrunnelseVilkårsvurdering: string | null;
+};
+
+export type BehandlingSaksopplysninger = {
+    fødselsdato: string;
+    tiltaksdeltagelse: Tiltaksdeltagelse;
+};
+
+export type BehandlingDeprecated = {
+    id: BehandlingId;
+    sakId: SakId;
+    saksnummer: string;
+    status: BehandlingStatus;
+    saksbehandler: string | null;
+    beslutter: string | null;
+    behandlingstype: TypeBehandling;
+    vurderingsperiode: Periode;
     vilkårssett: VilkårsettDTO;
+    attesteringer: Attestering[];
     stønadsdager: Stønadsdager;
 };
+
+export type Behandling = BehandlingDeprecated | BehandlingV2;
 
 export type BehandlingForOversikt = {
     id: BehandlingId;
@@ -42,14 +64,14 @@ export type BehandlingForOversikt = {
 
 export type SøknadForOversikt = {
     id: SøknadId;
-    sakId: SakId;
+    sakId: SakId | null;
+    saksnummer: string | null;
     typeBehandling: TypeBehandling.SØKNAD;
     status: BehandlingStatus.SØKNAD;
     underkjent: boolean;
     kravtidspunkt: string;
     fnr: string;
     periode: null;
-    saksnummer: null;
     saksbehandler: null;
     beslutter: null;
 };

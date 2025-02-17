@@ -61,7 +61,7 @@ export const lagFaktumTekst = (faktum: Deltagelse | Opphold) => {
     }
 };
 
-export const finnStatusTekst = (status: BehandlingStatus, underkjent: boolean) => {
+export const finnBehandlingStatusTekst = (status: BehandlingStatus, underkjent: boolean) => {
     switch (status) {
         case BehandlingStatus.VEDTATT:
             return 'Vedtatt';

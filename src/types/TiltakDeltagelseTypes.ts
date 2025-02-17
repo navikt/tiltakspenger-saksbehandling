@@ -1,4 +1,4 @@
-import { Lovreferanse, Utfall, ÅrsakTilEndring } from './BehandlingTypes';
+import { Lovreferanse, Utfall } from './BehandlingTypes';
 import { Periode } from './Periode';
 
 export interface TiltakDeltagelseVilkår {
@@ -46,3 +46,19 @@ interface StatusForPeriode {
 export interface tiltaksdeltagelseBody {
     statusForPeriode: StatusForPeriode[];
 }
+
+export type TiltakId = `taks_${string}`;
+
+export type Tiltaksdeltagelse = {
+    id: TiltakId;
+    eksternDeltagelseId: string;
+    gjennomføringId: string | null;
+    typeNavn: string;
+    typeKode: string;
+    deltagelseFraOgMed: string | null;
+    deltagelseTilOgMed: string | null;
+    deltakelseStatus: string;
+    deltakelseProsent: number | null;
+    antallDagerPerUke: number | null;
+    kilde: string;
+};

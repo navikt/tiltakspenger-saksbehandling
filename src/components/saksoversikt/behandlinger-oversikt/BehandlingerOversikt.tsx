@@ -1,6 +1,9 @@
 import { BehandlingForOversikt } from '../../../types/BehandlingTypes';
 import { Button, Table } from '@navikt/ds-react';
-import { finnBehandlingstypeTekst, finnStatusTekst } from '../../../utils/tekstformateringUtils';
+import {
+    finnBehandlingstypeTekst,
+    finnBehandlingStatusTekst,
+} from '../../../utils/tekstformateringUtils';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '../../../utils/date';
 import { BehandlingKnappForOversikt } from '../../behandlingsknapper/BehandlingKnappForOversikt';
 import router from 'next/router';
@@ -34,7 +37,7 @@ export const BehandlingerOversikt = ({ behandlinger }: Props) => {
                             {formaterTidspunkt(behandling.kravtidspunkt) ?? 'Ukjent'}
                         </Table.DataCell>
                         <Table.DataCell>
-                            {finnStatusTekst(behandling.status, behandling.underkjent)}
+                            {finnBehandlingStatusTekst(behandling.status, behandling.underkjent)}
                         </Table.DataCell>
                         <Table.DataCell>
                             {behandling.periode &&

@@ -1,4 +1,6 @@
-export type MeldekortBehandlingId = `meldekort_${string}`;
+// Egentlig har denne samme prefix som BrukersMeldekortId (bare "meldekort_")
+// Typer den med en unik prefix for at typescript skal ikke skal se de som ekvivalente
+export type MeldekortBehandlingId = `meldekort_beh_${string}`;
 
 export enum MeldekortBehandlingStatus {
     KLAR_TIL_UTFYLLING = 'KLAR_TIL_UTFYLLING',

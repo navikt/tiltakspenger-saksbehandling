@@ -4,24 +4,27 @@ import { useHentSøknaderOgBehandlinger } from '../hooks/useHentSøknaderOgBehan
 import { NextPage } from 'next';
 import { pageWithAuthentication } from '../auth/pageWithAuthentication';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '../utils/date';
-import { finnBehandlingstypeTekst, finnStatusTekst } from '../utils/tekstformateringUtils';
+import {
+    finnBehandlingstypeTekst,
+    finnBehandlingStatusTekst,
+} from '../utils/tekstformateringUtils';
 import Varsel from '../components/varsel/Varsel';
 import { BehandlingKnappForOversikt } from '../components/behandlingsknapper/BehandlingKnappForOversikt';
 import { preload } from 'swr';
 import { fetcher } from '../utils/http';
 import Link from 'next/link';
-import { SøknadStartBehandlingDeprecated } from '../components/behandlingsknapper/SøknadStartBehandlingDeprecated';
+import { StartSøknadBehandling } from '../components/behandlingsknapper/start-behandling/StartSøknadBehandling';
 
 const Oversikten: NextPage = () => {
     preload('/api/behandlinger', fetcher);
 
-    const { SøknaderOgBehandlinger, isLoading, error } = useHentSøknaderOgBehandlinger();
+    const { søknaderOgBehandlinger, isLoading, error } = useHentSøknaderOgBehandlinger();
 
     if (isLoading) {
         return <Loader />;
     }
 
-    if (!SøknaderOgBehandlinger) {
+    if (!søknaderOgBehandlinger) {
         return <Varsel variant="info" melding={`Ingen søknader eller behandlinger i basen`} />;
     }
 
@@ -46,60 +49,58 @@ const Oversikten: NextPage = () => {
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {SøknaderOgBehandlinger.map((behandlingEllerSøknad) => (
-                        <Table.Row shadeOnHover={false} key={behandlingEllerSøknad.id}>
+                    {søknaderOgBehandlinger.map((søknadEllerBehandling) => (
+                        <Table.Row shadeOnHover={false} key={søknadEllerBehandling.id}>
                             <Table.HeaderCell scope="row" style={{ wordBreak: 'unset' }}>
                                 <HStack align="center">
-                                    {behandlingEllerSøknad.fnr}
+                                    {søknadEllerBehandling.fnr}
                                     <CopyButton
-                                        copyText={behandlingEllerSøknad.fnr}
+                                        copyText={søknadEllerBehandling.fnr}
                                         variant="action"
                                         size="small"
                                     />
                                 </HStack>
                             </Table.HeaderCell>
                             <Table.DataCell>
-                                {finnBehandlingstypeTekst[behandlingEllerSøknad.typeBehandling]}
+                                {finnBehandlingstypeTekst[søknadEllerBehandling.typeBehandling]}
                             </Table.DataCell>
                             <Table.DataCell>
-                                {formaterTidspunkt(behandlingEllerSøknad.kravtidspunkt) ?? 'Ukjent'}
+                                {formaterTidspunkt(søknadEllerBehandling.kravtidspunkt) ?? 'Ukjent'}
                             </Table.DataCell>
                             <Table.DataCell>
-                                {finnStatusTekst(
-                                    behandlingEllerSøknad.status,
-                                    behandlingEllerSøknad.underkjent,
+                                {finnBehandlingStatusTekst(
+                                    søknadEllerBehandling.status,
+                                    søknadEllerBehandling.underkjent,
                                 )}
                             </Table.DataCell>
                             <Table.DataCell>
-                                {behandlingEllerSøknad.periode &&
-                                    `${periodeTilFormatertDatotekst(behandlingEllerSøknad.periode)}`}
+                                {søknadEllerBehandling.periode &&
+                                    `${periodeTilFormatertDatotekst(søknadEllerBehandling.periode)}`}
                             </Table.DataCell>
                             <Table.DataCell>
-                                {behandlingEllerSøknad.saksbehandler ?? 'Ikke tildelt'}
+                                {søknadEllerBehandling.saksbehandler ?? 'Ikke tildelt'}
                             </Table.DataCell>
                             <Table.DataCell>
-                                {behandlingEllerSøknad.beslutter ?? 'Ikke tildelt'}
+                                {søknadEllerBehandling.beslutter ?? 'Ikke tildelt'}
                             </Table.DataCell>
                             <Table.DataCell scope="col">
-                                {behandlingEllerSøknad.status === 'SØKNAD' ? (
-                                    <SøknadStartBehandlingDeprecated
-                                        søknad={behandlingEllerSøknad}
-                                    />
+                                {søknadEllerBehandling.status === 'SØKNAD' ? (
+                                    <StartSøknadBehandling søknad={søknadEllerBehandling} />
                                 ) : (
                                     <BehandlingKnappForOversikt
-                                        behandling={behandlingEllerSøknad}
+                                        behandling={søknadEllerBehandling}
                                     />
                                 )}
                             </Table.DataCell>
                             <Table.DataCell>
-                                {behandlingEllerSøknad.status !== 'SØKNAD' && (
+                                {søknadEllerBehandling.status !== 'SØKNAD' && (
                                     <>
                                         <Button
                                             as={Link}
                                             style={{ marginRight: '1rem' }}
                                             size="small"
                                             variant={'secondary'}
-                                            href={`/sak/${behandlingEllerSøknad.saksnummer}`}
+                                            href={`/sak/${søknadEllerBehandling.saksnummer}`}
                                         >
                                             Se sak
                                         </Button>
@@ -107,7 +108,7 @@ const Oversikten: NextPage = () => {
                                             as={Link}
                                             size="small"
                                             variant={'secondary'}
-                                            href={`/behandling/${behandlingEllerSøknad.id}/oppsummering`}
+                                            href={`/behandling/${søknadEllerBehandling.id}/oppsummering`}
                                         >
                                             Se behandling
                                         </Button>

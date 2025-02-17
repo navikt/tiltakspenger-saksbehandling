@@ -4,11 +4,11 @@ import { BehandlingEllerSøknadForOversikt } from '../types/BehandlingTypes';
 
 export function useHentSøknaderOgBehandlinger() {
     const {
-        data: SøknaderOgBehandlinger,
+        data: søknaderOgBehandlinger,
         isLoading,
         error,
         mutate,
     } = useSWR<BehandlingEllerSøknadForOversikt[], FetcherError>(`/api/behandlinger`, fetcher);
 
-    return { SøknaderOgBehandlinger, isLoading, error, mutate };
+    return { søknaderOgBehandlinger, isLoading, error, mutate };
 }

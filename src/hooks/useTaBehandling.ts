@@ -1,9 +1,9 @@
 import useSWRMutation from 'swr/mutation';
 import { throwErrorIfFatal } from '../utils/http';
-import { Behandling, BehandlingId } from '../types/BehandlingTypes';
+import { BehandlingDeprecated, BehandlingId } from '../types/BehandlingTypes';
 import { mutate } from 'swr';
 
-type TaBehandlingResponse = Behandling;
+type TaBehandlingResponse = BehandlingDeprecated;
 
 export function useTaBehandling() {
     const {
