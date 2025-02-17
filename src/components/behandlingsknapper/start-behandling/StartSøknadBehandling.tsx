@@ -1,10 +1,11 @@
 import { useStartSøknadBehandling } from './useStartSøknadBehandling';
 import Varsel from '../../varsel/Varsel';
-import style from '../BehandlingKnapper.module.css';
 import { Button } from '@navikt/ds-react';
 import React from 'react';
 import router from 'next/router';
 import { SøknadForOversiktProps } from '../../../types/SøknadTypes';
+
+import style from '../BehandlingKnapper.module.css';
 
 type Props = {
     søknad: SøknadForOversiktProps;
@@ -23,7 +24,7 @@ export const StartSøknadBehandling = ({ søknad }: Props) => {
     };
 
     return (
-        <div>
+        <>
             {opprettBehandlingError && (
                 <Varsel
                     size={'small'}
@@ -34,14 +35,14 @@ export const StartSøknadBehandling = ({ søknad }: Props) => {
                 />
             )}
             <Button
-                className={style.knapp}
+                className={style.knappV2}
                 variant={'primary'}
                 size={'small'}
                 loading={opprettBehandlingIsLoading}
                 onClick={startBehandling}
             >
-                {'Opprett behandling (V2)'}
+                {'(V2)'}
             </Button>
-        </div>
+        </>
     );
 };
