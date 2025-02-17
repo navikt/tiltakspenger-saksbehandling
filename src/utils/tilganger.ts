@@ -1,4 +1,4 @@
-import { BehandlingForOversikt, BehandlingStatus } from '../types/BehandlingTypes';
+import { Behandling, BehandlingForOversikt, BehandlingStatus } from '../types/BehandlingTypes';
 import {
     MeldekortBehandlingProps,
     MeldekortBehandlingStatus,
@@ -6,36 +6,37 @@ import {
 import { erBeslutter, erSaksbehandler, Saksbehandler } from '../types/Saksbehandler';
 
 export const kanBeslutteForBehandling = (
-    status: BehandlingStatus | MeldekortBehandlingStatus,
+    behandling: Behandling,
     innloggetSaksbehandler: Saksbehandler,
-    saksbehandlerForBehandling: string,
-    beslutterForBehandling: string,
 ) => {
+    const { status, saksbehandler, beslutter } = behandling;
+
     return (
         erBeslutter(innloggetSaksbehandler) &&
-        innloggetSaksbehandler.navIdent === beslutterForBehandling &&
-        innloggetSaksbehandler.navIdent !== saksbehandlerForBehandling &&
-        (status === BehandlingStatus.UNDER_BESLUTNING ||
-            status === MeldekortBehandlingStatus.KLAR_TIL_BESLUTNING)
+        innloggetSaksbehandler.navIdent === beslutter &&
+        innloggetSaksbehandler.navIdent !== saksbehandler &&
+        status === BehandlingStatus.UNDER_BESLUTNING
     );
 };
 
-const kanBehandle = (innloggetSaksbehandler: Saksbehandler, saksbehandlerForBehandling: string) =>
+const kanBehandle = (
+    innloggetSaksbehandler: Saksbehandler,
+    saksbehandlerForBehandling?: string | null,
+) =>
     erSaksbehandler(innloggetSaksbehandler) &&
     innloggetSaksbehandler.navIdent === saksbehandlerForBehandling;
 
 export const kanSaksbehandleForBehandling = (
-    status: BehandlingStatus,
+    behandling: Behandling,
     innloggetSaksbehandler: Saksbehandler,
-    saksbehandlerForBehandling: string,
 ) => {
     return (
-        kanBehandle(innloggetSaksbehandler, saksbehandlerForBehandling) &&
-        status === BehandlingStatus.UNDER_BEHANDLING
+        kanBehandle(innloggetSaksbehandler, behandling.saksbehandler) &&
+        behandling.status === BehandlingStatus.UNDER_BEHANDLING
     );
 };
 
-export const kanSaksbehandleMeldekort = (
+export const kanSaksbehandleForMeldekort = (
     meldekortBehandling: MeldekortBehandlingProps,
     innloggetSaksbehandler: Saksbehandler,
 ) =>
@@ -56,6 +57,20 @@ export const eierBehandling = (
         default:
             return false;
     }
+};
+
+export const kanBeslutteForMeldekort = (
+    meldekort: MeldekortBehandlingProps,
+    innloggetSaksbehandler: Saksbehandler,
+) => {
+    const { status, saksbehandler, beslutter } = meldekort;
+
+    return (
+        erBeslutter(innloggetSaksbehandler) &&
+        innloggetSaksbehandler.navIdent === beslutter &&
+        innloggetSaksbehandler.navIdent !== saksbehandler &&
+        status === MeldekortBehandlingStatus.KLAR_TIL_BESLUTNING
+    );
 };
 
 export const skalKunneTaBehandling = (

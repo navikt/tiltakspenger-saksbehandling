@@ -27,18 +27,8 @@ export const Behandlingsknapper = ({ godkjennRef }: Props) => {
         return <Loader />;
     }
 
-    const kanBeslutte = kanBeslutteForBehandling(
-        valgtBehandling.status,
-        innloggetSaksbehandler,
-        valgtBehandling.saksbehandler,
-        valgtBehandling.beslutter,
-    );
-
-    const kanSaksbehandle = kanSaksbehandleForBehandling(
-        valgtBehandling.status,
-        innloggetSaksbehandler,
-        valgtBehandling.saksbehandler,
-    );
+    const kanSaksbehandle = kanSaksbehandleForBehandling(valgtBehandling, innloggetSaksbehandler);
+    const kanBeslutte = kanBeslutteForBehandling(valgtBehandling, innloggetSaksbehandler);
 
     const åpneGodkjennModal = () => {
         godkjennRef.current?.showModal();

@@ -4,7 +4,7 @@ import { Utbetalingsuke } from '../Utbetalingsuke';
 import { useRef } from 'react';
 import { useSak } from '../../../layout/SakLayout';
 import { useGodkjennMeldekort } from '../../../../hooks/meldekort/useGodkjennMeldekort';
-import { kanBeslutteForBehandling } from '../../../../utils/tilganger';
+import { kanBeslutteForMeldekort } from '../../../../utils/tilganger';
 import BekreftelsesModal from '../../../bekreftelsesmodal/BekreftelsesModal';
 import { MeldeperiodeMedBehandlingProps } from '../../../../types/meldekort/Meldeperiode';
 import { useSaksbehandler } from '../../../../hooks/useSaksbehandler';
@@ -31,12 +31,7 @@ export const MeldekortBehandlingOppsummering = ({ meldeperiode }: Props) => {
     };
 
     //B: Må endre denne til å ta inn beslutter på meldekortet når vi har lagt til tildeling.
-    const kanBeslutte = kanBeslutteForBehandling(
-        meldekortBehandling.status,
-        innloggetSaksbehandler,
-        meldekortBehandling.saksbehandler,
-        innloggetSaksbehandler.navIdent,
-    );
+    const kanBeslutte = kanBeslutteForMeldekort(meldekortBehandling, innloggetSaksbehandler);
 
     const uke1 = meldekortBehandling.dager.slice(0, 7);
     const uke2 = meldekortBehandling.dager.slice(7, 14);

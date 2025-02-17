@@ -24,11 +24,7 @@ export const Saksbehandlingstabs = () => {
         <Tabs value={value} onChange={setValue}>
             <Tabs.List>
                 {erUnderBehandling(valgtBehandling.status) &&
-                    kanSaksbehandleForBehandling(
-                        valgtBehandling.status,
-                        innloggetSaksbehandler,
-                        valgtBehandling.saksbehandler,
-                    ) && (
+                    kanSaksbehandleForBehandling(valgtBehandling, innloggetSaksbehandler) && (
                         <Tabs.Tab
                             value={'inngangsvilkar'}
                             label={'Inngangsvilkår'}

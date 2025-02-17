@@ -8,7 +8,7 @@ import { MeldekortBehandling } from './meldekort-behandling/behandling/Meldekort
 import { MeldekortBehandlingOppsummering } from './meldekort-behandling/MeldekortBehandlingOppsummering';
 import { BrukersMeldekortVisning } from './BrukersMeldekort';
 import { useMeldeperioder } from '../../../hooks/meldekort/useMeldeperioder';
-import { kanSaksbehandleMeldekort } from '../../../utils/tilganger';
+import { kanSaksbehandleForMeldekort } from '../../../utils/tilganger';
 import { useSaksbehandler } from '../../../hooks/useSaksbehandler';
 
 import styles from './Meldekort.module.css';
@@ -38,7 +38,7 @@ export const Meldekortside = () => {
                             {meldekortHeading(meldeperiodeKjede.periode)}
                         </Heading>
                         {kanUtfylles(meldekortBehandling) &&
-                        kanSaksbehandleMeldekort(meldekortBehandling, innloggetSaksbehandler) ? (
+                        kanSaksbehandleForMeldekort(meldekortBehandling, innloggetSaksbehandler) ? (
                             <MeldekortBehandling meldeperiode={valgtMeldeperiode} />
                         ) : (
                             <MeldekortBehandlingOppsummering meldeperiode={valgtMeldeperiode} />
