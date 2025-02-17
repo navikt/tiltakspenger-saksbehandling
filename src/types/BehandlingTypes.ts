@@ -48,19 +48,20 @@ export type BehandlingDeprecated = {
 
 export type BehandlingProps = BehandlingDeprecated | BehandlingV2;
 
+// TODO: revurdering og førstegangsbehandling bør ha separate typer
 export type BehandlingForOversikt = {
     id: BehandlingId;
     sakId: SakId;
     typeBehandling: Exclude<TypeBehandling, TypeBehandling.SØKNAD>;
     status: Exclude<BehandlingStatus, BehandlingStatus.SØKNAD>;
     underkjent: boolean;
-    kravtidspunkt: string;
+    kravtidspunkt: string | null;
     fnr: string;
     periode: Periode;
     saksnummer: string;
     saksbehandler: string;
     beslutter: string | null;
-    erDeprecatedBehandling: boolean;
+    erDeprecatedBehandling: boolean | null;
 };
 
 export type SøknadForOversikt = {
@@ -75,6 +76,7 @@ export type SøknadForOversikt = {
     periode: null;
     saksbehandler: null;
     beslutter: null;
+    erDeprecatedBehandling: null;
 };
 
 export type BehandlingEllerSøknadForOversikt = BehandlingForOversikt | SøknadForOversikt;

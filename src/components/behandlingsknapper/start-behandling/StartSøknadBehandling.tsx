@@ -17,7 +17,7 @@ export const StartSøknadBehandling = ({ søknad }: Props) => {
     const startBehandling = () => {
         opprettBehandling()
             .then((behandling) => {
-                router.push(`/behandling/${behandling.id}/førstegangsbehandling`);
+                router.push(`/behandling/${behandling.id}`);
             })
             .catch(() => ({}));
     };

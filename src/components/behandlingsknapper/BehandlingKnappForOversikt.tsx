@@ -32,7 +32,7 @@ export const BehandlingKnappForOversikt = ({ behandling }: Props) => {
                     size={'small'}
                     variant={'secondary'}
                     as={Link}
-                    href={finnBehandlingslenke(id, status)}
+                    href={finnBehandlingslenke(behandling)}
                 >
                     {'Fortsett'}
                 </Button>
@@ -51,13 +51,8 @@ export const BehandlingKnappForOversikt = ({ behandling }: Props) => {
                     variant={'primary'}
                     loading={isBehandlingMutating}
                     onClick={() =>
-                        taBehandling({ id }).then((oppdatertBehandling) => {
-                            router.push(
-                                finnBehandlingslenke(
-                                    oppdatertBehandling.id,
-                                    oppdatertBehandling.status,
-                                ),
-                            );
+                        taBehandling({ id }).then(() => {
+                            router.push(finnBehandlingslenke(behandling));
                         })
                     }
                 >
@@ -70,14 +65,18 @@ export const BehandlingKnappForOversikt = ({ behandling }: Props) => {
     return null;
 };
 
-const finnBehandlingslenke = (behandlingId: string, status: BehandlingStatus) => {
+const finnBehandlingslenke = (behandling: BehandlingForOversikt) => {
+    const { id, status, erDeprecatedBehandling } = behandling;
+
     switch (status) {
         case BehandlingStatus.KLAR_TIL_BEHANDLING:
         case BehandlingStatus.UNDER_BEHANDLING:
-            return `/behandling/${behandlingId}/inngangsvilkar/kravfrist`;
+            return erDeprecatedBehandling
+                ? `/behandling/${id}/inngangsvilkar/kravfrist`
+                : `/behandling/${id}`;
         case BehandlingStatus.KLAR_TIL_BESLUTNING:
         case BehandlingStatus.UNDER_BESLUTNING:
-            return `/behandling/${behandlingId}/oppsummering`;
+            return `/behandling/${id}/oppsummering`;
         default:
             return '/';
     }

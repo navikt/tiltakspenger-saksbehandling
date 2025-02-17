@@ -65,7 +65,9 @@ const Oversikten: NextPage = () => {
                                 {finnBehandlingstypeTekst[søknadEllerBehandling.typeBehandling]}
                             </Table.DataCell>
                             <Table.DataCell>
-                                {formaterTidspunkt(søknadEllerBehandling.kravtidspunkt) ?? 'Ukjent'}
+                                {søknadEllerBehandling.kravtidspunkt
+                                    ? formaterTidspunkt(søknadEllerBehandling.kravtidspunkt)
+                                    : 'Ukjent'}
                             </Table.DataCell>
                             <Table.DataCell>
                                 {finnBehandlingStatusTekst(
