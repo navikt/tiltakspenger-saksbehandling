@@ -36,13 +36,6 @@ export const kanSaksbehandleForBehandling = (
     );
 };
 
-export const kanSaksbehandleForMeldekort = (
-    meldekortBehandling: MeldekortBehandlingProps,
-    innloggetSaksbehandler: Saksbehandler,
-) =>
-    kanBehandle(innloggetSaksbehandler, meldekortBehandling.saksbehandler) &&
-    meldekortBehandling.status === MeldekortBehandlingStatus.KLAR_TIL_UTFYLLING;
-
 export const eierBehandling = (
     behandling: BehandlingForOversikt,
     innloggetSaksbehandler: Saksbehandler,
@@ -59,15 +52,21 @@ export const eierBehandling = (
     }
 };
 
+export const kanSaksbehandleForMeldekort = (
+    meldekortBehandling: MeldekortBehandlingProps,
+    innloggetSaksbehandler: Saksbehandler,
+) =>
+    kanBehandle(innloggetSaksbehandler, meldekortBehandling.saksbehandler) &&
+    meldekortBehandling.status === MeldekortBehandlingStatus.KLAR_TIL_UTFYLLING;
+
 export const kanBeslutteForMeldekort = (
     meldekort: MeldekortBehandlingProps,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
-    const { status, saksbehandler, beslutter } = meldekort;
+    const { status, saksbehandler } = meldekort;
 
     return (
         erBeslutter(innloggetSaksbehandler) &&
-        innloggetSaksbehandler.navIdent === beslutter &&
         innloggetSaksbehandler.navIdent !== saksbehandler &&
         status === MeldekortBehandlingStatus.KLAR_TIL_BESLUTNING
     );
