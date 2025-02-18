@@ -1,5 +1,5 @@
 import { Button, Textarea } from '@navikt/ds-react';
-import { EnvelopeClosedIcon } from '@navikt/aksel-icons';
+import { EnvelopeOpenIcon } from '@navikt/aksel-icons';
 
 import style from './BehandlingVedtaksBrev.module.css';
 
@@ -15,7 +15,7 @@ export const BehandlingVedtaksBrev = ({}: Props) => {
                 minRows={10}
             />
             <div className={style.knapper}>
-                <Button size={'small'} variant={'secondary'} icon={<EnvelopeClosedIcon />}>
+                <Button size={'small'} variant={'secondary'} icon={<EnvelopeOpenIcon />}>
                     {'Forhåndsvis brev'}
                 </Button>
                 <Button variant={'primary'}>{'Send til beslutter'}</Button>

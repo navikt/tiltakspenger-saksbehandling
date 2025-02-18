@@ -1,16 +1,14 @@
 import { Radio, RadioGroup } from '@navikt/ds-react';
 import { Datovelger } from '../../../revurderingsmodal/Datovelger';
+import { useBehandling } from '../../../../context/behandling/useBehandling';
 
 import style from './BehandlingResultat.module.css';
-import { BehandlingProps } from '../../../../types/BehandlingTypes';
 
-type Props = {
-    behandling: BehandlingProps;
-};
+export const BehandlingResultat = () => {
+    const { behandling } = useBehandling();
 
-export const BehandlingResultat = ({ behandling }: Props) => {
     const { deltagelseFraOgMed, deltagelseTilOgMed } =
-        behandling.saksopplysninger.tiltaksdeltagelse;
+        useBehandling().behandling.saksopplysninger.tiltaksdeltagelse;
     const { fraOgMed, tilOgMed } = behandling.søknad.tiltak;
 
     return (

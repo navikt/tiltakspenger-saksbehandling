@@ -1,4 +1,3 @@
-import { BehandlingProps } from '../../../types/BehandlingTypes';
 import { Heading } from '@navikt/ds-react';
 import { BehandlingBegrunnelse } from './begrunnelse/BehandlingBegrunnelse';
 import { BehandlingResultat } from './resultat/BehandlingResultat';
@@ -6,11 +5,7 @@ import { BehandlingVedtaksBrev } from './brev/BehandlingVedtaksBrev';
 
 import style from './BehandlingVedtak.module.css';
 
-type Props = {
-    behandling: BehandlingProps;
-};
-
-export const BehandlingVedtak = ({ behandling }: Props) => {
+export const BehandlingVedtak = () => {
     return (
         <div className={style.outer}>
             <div className={style.inner}>
@@ -18,7 +13,7 @@ export const BehandlingVedtak = ({ behandling }: Props) => {
                     {'Vedtak'}
                 </Heading>
                 <BehandlingBegrunnelse />
-                <BehandlingResultat behandling={behandling} />
+                <BehandlingResultat />
                 <hr className={style.separator} />
                 <BehandlingVedtaksBrev />
             </div>

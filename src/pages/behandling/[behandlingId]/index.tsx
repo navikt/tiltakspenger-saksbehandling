@@ -6,6 +6,7 @@ import { fetcher, FetcherError } from '../../../utils/http';
 import Varsel from '../../../components/varsel/Varsel';
 import { Loader } from '@navikt/ds-react';
 import { BehandlingPage } from '../../../components/behandling-page/BehandlingPage';
+import { BehandlingProvider } from '../../../context/behandling/BehandlingProvider';
 
 type Props = {
     behandlingId: BehandlingId;
@@ -31,7 +32,11 @@ const Behandling = ({ behandlingId }: Props) => {
         return <Loader />;
     }
 
-    return <BehandlingPage behandling={behandling} />;
+    return (
+        <BehandlingProvider behandling={behandling}>
+            <BehandlingPage />
+        </BehandlingProvider>
+    );
 };
 
 export const getServerSideProps = pageWithAuthentication(async (context) => {

@@ -1,19 +1,16 @@
 import { Alert, BodyShort, Button, Heading, Link } from '@navikt/ds-react';
-import { BehandlingProps } from '../../../types/BehandlingTypes';
 import { alderFraDato, formaterDatotekst, periodeTilFormatertDatotekst } from '../../../utils/date';
 import { Fragment, ReactNode } from 'react';
-
-import style from './BehandlingSaksopplysninger.module.css';
 import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
 import { classNames } from '../../../utils/classNames';
 import { Periode } from '../../../types/Periode';
+import { useBehandling } from '../../../context/behandling/useBehandling';
 
-type Props = {
-    behandling: BehandlingProps;
-};
+import style from './BehandlingSaksopplysninger.module.css';
 
-export const BehandlingSaksopplysninger = ({ behandling }: Props) => {
-    const { saksopplysninger, søknad } = behandling;
+export const BehandlingSaksopplysninger = () => {
+    const { saksopplysninger, søknad } = useBehandling().behandling;
+
     const { tiltaksdeltagelse, fødselsdato } = saksopplysninger;
     const {
         tidsstempelHosOss,
