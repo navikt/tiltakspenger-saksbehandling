@@ -3,9 +3,7 @@ import { EnvelopeOpenIcon } from '@navikt/aksel-icons';
 
 import style from './BehandlingVedtaksBrev.module.css';
 
-type Props = {};
-
-export const BehandlingVedtaksBrev = ({}: Props) => {
+export const BehandlingVedtaksBrev = () => {
     return (
         <>
             <Textarea

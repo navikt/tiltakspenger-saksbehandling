@@ -64,7 +64,9 @@ const Oversikten: NextPage = () => {
                             </Table.HeaderCell>
                             <Table.DataCell>
                                 {finnBehandlingstypeTekst[søknadEllerBehandling.typeBehandling]}
-                                {søknadEllerBehandling.erDeprecatedBehandling ? '' : ' (V2)'}
+                                {søknadEllerBehandling.erDeprecatedBehandling === false
+                                    ? ' (V2)'
+                                    : ''}
                             </Table.DataCell>
                             <Table.DataCell>
                                 {søknadEllerBehandling.kravtidspunkt

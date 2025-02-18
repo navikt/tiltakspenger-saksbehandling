@@ -1,6 +1,6 @@
 import {
-    BehandlingDeprecatedOgNy,
-    BehandlingForOversiktProps,
+    BehandlingDataDeprecatedOgNy,
+    BehandlingForOversiktData,
     BehandlingStatus,
 } from '../types/BehandlingTypes';
 import {
@@ -10,7 +10,7 @@ import {
 import { erBeslutter, erSaksbehandler, Saksbehandler } from '../types/Saksbehandler';
 
 export const kanBeslutteForBehandling = (
-    behandling: BehandlingDeprecatedOgNy,
+    behandling: BehandlingDataDeprecatedOgNy,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     const { status, saksbehandler, beslutter } = behandling;
@@ -31,7 +31,7 @@ const kanBehandle = (
     innloggetSaksbehandler.navIdent === saksbehandlerForBehandling;
 
 export const kanSaksbehandleForBehandling = (
-    behandling: BehandlingDeprecatedOgNy,
+    behandling: BehandlingDataDeprecatedOgNy,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     return (
@@ -41,7 +41,7 @@ export const kanSaksbehandleForBehandling = (
 };
 
 export const eierBehandling = (
-    behandling: BehandlingForOversiktProps,
+    behandling: BehandlingForOversiktData,
     innloggetSaksbehandler: Saksbehandler,
 ): boolean => {
     const { status, saksbehandler, beslutter } = behandling;
@@ -77,7 +77,7 @@ export const kanBeslutteForMeldekort = (
 };
 
 export const skalKunneTaBehandling = (
-    behandling: BehandlingForOversiktProps,
+    behandling: BehandlingForOversiktData,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     const { status, saksbehandler } = behandling;

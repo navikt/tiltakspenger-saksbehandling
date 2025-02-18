@@ -1,6 +1,6 @@
 import useSWR from 'swr';
 import { fetcher, FetcherError } from '../utils/http';
-import { BehandlingEllerSøknadForOversikt } from '../types/BehandlingTypes';
+import { BehandlingEllerSøknadForOversiktData } from '../types/BehandlingTypes';
 
 export function useHentSøknaderOgBehandlinger() {
     const {
@@ -8,7 +8,7 @@ export function useHentSøknaderOgBehandlinger() {
         isLoading,
         error,
         mutate,
-    } = useSWR<BehandlingEllerSøknadForOversikt[], FetcherError>(`/api/behandlinger`, fetcher);
+    } = useSWR<BehandlingEllerSøknadForOversiktData[], FetcherError>(`/api/behandlinger`, fetcher);
 
     return { søknaderOgBehandlinger, isLoading, error, mutate };
 }

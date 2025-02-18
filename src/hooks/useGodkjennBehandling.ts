@@ -3,7 +3,7 @@ import { FetcherError, mutateBehandling } from '../utils/http';
 import router from 'next/router';
 import { mutate } from 'swr';
 import { finnOversiktslenke } from './useSendTilBeslutter';
-import { BehandlingPropsDeprecated } from '../types/BehandlingTypes';
+import { BehandlingDataDeprecated } from '../types/BehandlingTypes';
 import { SakId } from '../types/SakTypes';
 
 export function useGodkjennBehandling(behandlingId: string, sakId: SakId) {
@@ -12,7 +12,7 @@ export function useGodkjennBehandling(behandlingId: string, sakId: SakId) {
         isMutating: godkjennerBehandling,
         error: godkjennBehandlingError,
         reset,
-    } = useSWRMutation<BehandlingPropsDeprecated, FetcherError>(
+    } = useSWRMutation<BehandlingDataDeprecated, FetcherError>(
         `/api/sak/${sakId}/behandling/${behandlingId}/iverksett`,
         mutateBehandling,
         {

@@ -1,4 +1,4 @@
-import { BehandlingForOversiktProps } from '../../../types/BehandlingTypes';
+import { BehandlingForOversiktData } from '../../../types/BehandlingTypes';
 import { Button, Table } from '@navikt/ds-react';
 import {
     finnBehandlingstypeTekst,
@@ -9,7 +9,7 @@ import { BehandlingKnappForOversikt } from '../../behandlingsknapper/BehandlingK
 import router from 'next/router';
 
 type Props = {
-    behandlinger: BehandlingForOversiktProps[];
+    behandlinger: BehandlingForOversiktData[];
 };
 
 export const BehandlingerOversikt = ({ behandlinger }: Props) => {

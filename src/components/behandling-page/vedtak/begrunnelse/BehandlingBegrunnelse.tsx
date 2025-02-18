@@ -1,24 +1,45 @@
-import { BodyLong, Button, Heading, Textarea } from '@navikt/ds-react';
+import { BodyLong, Button, Heading, Textarea, Tooltip } from '@navikt/ds-react';
+import { ParagraphIcon, TasklistIcon } from '@navikt/aksel-icons';
+import { useBehandling } from '../../../../context/behandling/BehandlingContext';
 
 import style from './BehandlingBegrunnelse.module.css';
-import { ParagraphIcon, TasklistIcon } from '@navikt/aksel-icons';
 
-type Props = {};
+const HEADING_ID = 'begrunnelse-heading';
 
-export const BehandlingBegrunnelse = ({}: Props) => {
+export const BehandlingBegrunnelse = () => {
+    const { behandling } = useBehandling();
+
+    const { begrunnelseVilkårsvurdering } = behandling;
+
     return (
         <div>
             <div className={style.toppRad}>
-                <Heading size={'xsmall'} level={'2'} className={style.header}>
+                <Heading size={'xsmall'} level={'2'} className={style.header} id={HEADING_ID}>
                     {'Begrunnelse vilkårsvurdering'}
                 </Heading>
                 <div className={style.lovKnapper}>
-                    <Button variant={'secondary'} size={'small'}>
-                        <TasklistIcon className={style.ikon} />
-                    </Button>
-                    <Button variant={'secondary'} size={'small'}>
-                        <ParagraphIcon className={style.ikon} />
-                    </Button>
+                    <Tooltip content={'Rundskriv om tiltakspenger'}>
+                        <Button
+                            variant={'secondary'}
+                            size={'small'}
+                            as={'a'}
+                            href={
+                                'https://lovdata.no/nav/rundskriv/r76-13-02?q=rundskriv%20om%20tiltakspenger'
+                            }
+                        >
+                            <TasklistIcon className={style.ikon} />
+                        </Button>
+                    </Tooltip>
+                    <Tooltip content={'Forskrift om tiltakspenger'}>
+                        <Button
+                            variant={'secondary'}
+                            size={'small'}
+                            as={'a'}
+                            href={'https://lovdata.no/nav/forskrift/2013-11-04-1286'}
+                        >
+                            <ParagraphIcon className={style.ikon} />
+                        </Button>
+                    </Tooltip>
                 </div>
             </div>
             <BodyLong size={'small'}>{'Vurder vilkårene for tiltakspenger og noter ned:'}</BodyLong>
@@ -29,7 +50,17 @@ export const BehandlingBegrunnelse = ({}: Props) => {
             <BodyLong size={'small'} className={style.personinfoVarsel}>
                 {'Ikke skriv personsensitiv informasjon'}
             </BodyLong>
-            <Textarea label={'Begrunnelse vilkårsvurdering'} hideLabel={true} minRows={10} />
+            <Textarea
+                label={''}
+                aria-describedby={HEADING_ID}
+                hideLabel={true}
+                minRows={10}
+                resize={'vertical'}
+                defaultValue={begrunnelseVilkårsvurdering ?? ''}
+                onChange={(event) => {
+                    console.log(event.target.value);
+                }}
+            />
         </div>
     );
 };

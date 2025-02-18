@@ -1,12 +1,12 @@
 import React from 'react';
 import { pageWithAuthentication } from '../../../auth/pageWithAuthentication';
-import { BehandlingId, BehandlingProps } from '../../../types/BehandlingTypes';
+import { BehandlingId, BehandlingData } from '../../../types/BehandlingTypes';
 import useSWR from 'swr';
 import { fetcher, FetcherError } from '../../../utils/http';
 import Varsel from '../../../components/varsel/Varsel';
 import { Loader } from '@navikt/ds-react';
 import { BehandlingPage } from '../../../components/behandling-page/BehandlingPage';
-import { BehandlingProvider } from '../../../context/behandling/BehandlingProvider';
+import { BehandlingProvider } from '../../../context/behandling/BehandlingContext';
 
 type Props = {
     behandlingId: BehandlingId;
@@ -17,7 +17,7 @@ const Behandling = ({ behandlingId }: Props) => {
         data: behandling,
         isLoading,
         error,
-    } = useSWR<BehandlingProps, FetcherError>(`/api/behandling/${behandlingId}`, fetcher);
+    } = useSWR<BehandlingData, FetcherError>(`/api/behandling/${behandlingId}`, fetcher);
 
     if (error) {
         return (

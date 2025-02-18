@@ -4,7 +4,7 @@ import PersonaliaHeader from '../personaliaheader/PersonaliaHeader';
 import { finnBehandlingStatusTekst } from '../../utils/tekstformateringUtils';
 import { BehandlingVedtak } from './vedtak/BehandlingVedtak';
 import { BehandlingSaksopplysninger } from './saksopplysninger/BehandlingSaksopplysninger';
-import { useBehandling } from '../../context/behandling/useBehandling';
+import { useBehandling } from '../../context/behandling/BehandlingContext';
 
 import style from './BehandlingPage.module.css';
 

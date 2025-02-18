@@ -1,10 +1,15 @@
 import { Radio, RadioGroup } from '@navikt/ds-react';
 import { Datovelger } from '../../../revurderingsmodal/Datovelger';
-import { useBehandling } from '../../../../context/behandling/useBehandling';
+import { useState } from 'react';
+import { classNames } from '../../../../utils/classNames';
+import { VedtakResultat } from '../../../../types/VedtakTyper';
+import { useBehandling } from '../../../../context/behandling/BehandlingContext';
 
 import style from './BehandlingResultat.module.css';
 
 export const BehandlingResultat = () => {
+    const [resultat, setResultat] = useState<VedtakResultat>();
+
     const { behandling } = useBehandling();
 
     const { deltagelseFraOgMed, deltagelseTilOgMed } =
@@ -13,11 +18,20 @@ export const BehandlingResultat = () => {
 
     return (
         <div className={style.resultat}>
-            <RadioGroup legend={'Resultat'} size={'small'} className={style.radioGroup}>
-                <Radio value={'innvilgelse'}>{'Innvilgelse'}</Radio>
-                <Radio value={'avslag'}>{'Avslag'}</Radio>
+            <RadioGroup
+                legend={'Resultat'}
+                size={'small'}
+                className={style.radioGroup}
+                onChange={(verdi: VedtakResultat) => {
+                    setResultat(verdi);
+                }}
+            >
+                <Radio value={'innvilget' satisfies VedtakResultat}>{'Innvilgelse'}</Radio>
+                <Radio value={'avslag' satisfies VedtakResultat}>{'Avslag'}</Radio>
             </RadioGroup>
-            <div className={style.datovelgere}>
+            <div
+                className={classNames(style.datovelgere, resultat !== 'innvilget' && style.skjult)}
+            >
                 <Datovelger
                     onDateChange={() => console.log('Endre fra dato')}
                     label={'Innvilgelse f.o.m'}

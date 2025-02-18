@@ -12,7 +12,7 @@ import { SøknadForOversiktProps, SøknadForBehandlingProps } from './SøknadTyp
 
 export type BehandlingId = `beh_${string}`;
 
-export type BehandlingProps = {
+export type BehandlingData = {
     id: BehandlingId;
     sakId: SakId;
     saksnummer: string;
@@ -22,18 +22,18 @@ export type BehandlingProps = {
     behandlingstype: TypeBehandling;
     vurderingsperiode: Periode;
     attesteringer: Attestering[];
-    saksopplysninger: BehandlingSaksopplysningerProps;
+    saksopplysninger: BehandlingSaksopplysningerData;
     søknad: SøknadForBehandlingProps;
-    fritekstTilVedtaksbrev: string | null;
     begrunnelseVilkårsvurdering: string | null;
+    fritekstTilVedtaksbrev: string | null;
 };
 
-export type BehandlingSaksopplysningerProps = {
+export type BehandlingSaksopplysningerData = {
     fødselsdato: string;
     tiltaksdeltagelse: Tiltaksdeltagelse;
 };
 
-export type BehandlingPropsDeprecated = {
+export type BehandlingDataDeprecated = {
     id: BehandlingId;
     sakId: SakId;
     saksnummer: string;
@@ -47,10 +47,10 @@ export type BehandlingPropsDeprecated = {
     stønadsdager: Stønadsdager;
 };
 
-export type BehandlingDeprecatedOgNy = BehandlingPropsDeprecated | BehandlingProps;
+export type BehandlingDataDeprecatedOgNy = BehandlingDataDeprecated | BehandlingData;
 
 // TODO: revurdering og førstegangsbehandling bør ha separate typer
-export type BehandlingForOversiktProps = {
+export type BehandlingForOversiktData = {
     id: BehandlingId;
     sakId: SakId;
     typeBehandling: Exclude<TypeBehandling, TypeBehandling.SØKNAD>;
@@ -65,7 +65,9 @@ export type BehandlingForOversiktProps = {
     erDeprecatedBehandling: boolean | null;
 };
 
-export type BehandlingEllerSøknadForOversikt = BehandlingForOversiktProps | SøknadForOversiktProps;
+export type BehandlingEllerSøknadForOversiktData =
+    | BehandlingForOversiktData
+    | SøknadForOversiktProps;
 
 export enum BehandlingStatus {
     SØKNAD = 'SØKNAD',
