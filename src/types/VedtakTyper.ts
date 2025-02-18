@@ -6,22 +6,28 @@ type VedtakFellesData = {
     begrunnelseVilkårsvurdering: string;
     fritekstTilVedtaksbrev: string;
     resultat?: VedtakResultat;
-    innvilgetPeriode: Periode;
+    innvilgelsesPeriode: Periode;
 };
 
 export type VedtakInnvilgetResultat = {
     resultat: 'innvilget';
-    innvilgetPeriode: Periode;
+    innvilgelsesPeriode: Periode;
 };
 
 export type VedtakAvslagResultat = {
     resultat: 'avslag';
 };
 
-type VedtakUtenResultat = VedtakFellesData & {
+export type VedtakUtenResultat = VedtakFellesData & {
     resultat?: undefined;
 };
 
-type VedtakMedResultat = VedtakFellesData & (VedtakInnvilgetResultat | VedtakAvslagResultat);
+export type VedtakMedResultat = VedtakFellesData & (VedtakInnvilgetResultat | VedtakAvslagResultat);
 
 export type VedtakData = VedtakUtenResultat | VedtakMedResultat;
+
+export type VedtakTilBeslutterDTO = {
+    fritekstTilVedtaksbrev: string;
+    begrunnelseVilkårsvurdering: string;
+    innvilgelsesperiode: Periode;
+};

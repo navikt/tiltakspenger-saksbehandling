@@ -9,12 +9,12 @@ import { dateTilISOTekst } from '../../../../utils/date';
 import style from './BehandlingResultat.module.css';
 
 export const BehandlingResultat = () => {
-    const { behandling, vedtakUnderBehandling, setResultat, oppdaterInnvilgetPeriode } =
+    const { behandling, vedtakUnderBehandling, setResultat, oppdaterInnvilgelsesPeriode } =
         useBehandling();
 
     const initiellTiltaksPeriode = hentTiltaksPeriode(behandling);
 
-    const { resultat, innvilgetPeriode } = vedtakUnderBehandling;
+    const { resultat, innvilgelsesPeriode } = vedtakUnderBehandling;
 
     return (
         <div className={style.resultat}>
@@ -23,7 +23,7 @@ export const BehandlingResultat = () => {
                 size={'small'}
                 className={style.radioGroup}
                 onChange={(valgtResultat: VedtakResultat) => {
-                    setResultat({ resultat: valgtResultat, innvilgetPeriode });
+                    setResultat({ resultat: valgtResultat, innvilgelsesPeriode });
                 }}
             >
                 <Radio value={'innvilget' satisfies VedtakResultat}>{'Innvilgelse'}</Radio>
@@ -38,7 +38,7 @@ export const BehandlingResultat = () => {
                     defaultSelected={new Date(initiellTiltaksPeriode.fraOgMed)}
                     onDateChange={(valgtDato) => {
                         if (valgtDato) {
-                            oppdaterInnvilgetPeriode({
+                            oppdaterInnvilgelsesPeriode({
                                 fraOgMed: dateTilISOTekst(valgtDato),
                             });
                         }
@@ -50,7 +50,7 @@ export const BehandlingResultat = () => {
                     defaultSelected={new Date(initiellTiltaksPeriode.tilOgMed)}
                     onDateChange={(valgtDato) => {
                         if (valgtDato) {
-                            oppdaterInnvilgetPeriode({
+                            oppdaterInnvilgelsesPeriode({
                                 tilOgMed: dateTilISOTekst(valgtDato),
                             });
                         }

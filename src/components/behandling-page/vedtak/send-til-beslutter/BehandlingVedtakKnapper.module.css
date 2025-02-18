@@ -1,3 +1,7 @@
+.varsel {
+    margin-top: 1rem;
+}
+
 .knapper {
     display: flex;
     justify-content: space-between;

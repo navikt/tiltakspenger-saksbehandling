@@ -10,7 +10,7 @@ export type BehandlingContextState = {
     setBegrunnelse: (begrunnelse: string) => void;
     setBrevTekst: (brevTekst: string) => void;
     setResultat: (resultat: VedtakInnvilgetResultat | VedtakAvslagResultat) => void;
-    oppdaterInnvilgetPeriode: (periode: Partial<Periode>) => void;
+    oppdaterInnvilgelsesPeriode: (periode: Partial<Periode>) => void;
 };
 
 const BehandlingContext = createContext({} as BehandlingContextState);
@@ -24,7 +24,7 @@ export const BehandlingProvider = ({ behandling, children }: ProviderProps) => {
     const defaultVedtak: VedtakData = {
         begrunnelseVilkårsvurdering: behandling.begrunnelseVilkårsvurdering ?? '',
         fritekstTilVedtaksbrev: behandling.fritekstTilVedtaksbrev ?? '',
-        innvilgetPeriode: hentTiltaksPeriode(behandling),
+        innvilgelsesPeriode: hentTiltaksPeriode(behandling),
         resultat: undefined,
     };
 
@@ -51,12 +51,12 @@ export const BehandlingProvider = ({ behandling, children }: ProviderProps) => {
         [vedtak],
     );
 
-    const oppdaterInnvilgetPeriode: BehandlingContextState['oppdaterInnvilgetPeriode'] =
+    const oppdaterInnvilgetPeriode: BehandlingContextState['oppdaterInnvilgelsesPeriode'] =
         useCallback(
             (periode) => {
                 setvedtak({
                     ...vedtak,
-                    innvilgetPeriode: { ...vedtak.innvilgetPeriode, ...periode },
+                    innvilgelsesPeriode: { ...vedtak.innvilgelsesPeriode, ...periode },
                 });
             },
             [vedtak],
@@ -70,7 +70,7 @@ export const BehandlingProvider = ({ behandling, children }: ProviderProps) => {
                 setBegrunnelse,
                 setBrevTekst,
                 setResultat,
-                oppdaterInnvilgetPeriode,
+                oppdaterInnvilgelsesPeriode: oppdaterInnvilgetPeriode,
             }}
         >
             {children}
