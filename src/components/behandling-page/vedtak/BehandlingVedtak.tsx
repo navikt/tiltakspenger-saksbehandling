@@ -2,6 +2,8 @@ import { Heading } from '@navikt/ds-react';
 import { BehandlingBegrunnelse } from './begrunnelse/BehandlingBegrunnelse';
 import { BehandlingResultat } from './resultat/BehandlingResultat';
 import { BehandlingVedtaksBrev } from './brev/BehandlingVedtaksBrev';
+import { BehandlingVedtakKnapper } from './send-til-beslutter/BehandlingVedtakKnapper';
+import { Separator } from '../../separator/Separator';
 
 import style from './BehandlingVedtak.module.css';
 
@@ -14,8 +16,9 @@ export const BehandlingVedtak = () => {
                 </Heading>
                 <BehandlingBegrunnelse />
                 <BehandlingResultat />
-                <hr className={style.separator} />
+                <Separator />
                 <BehandlingVedtaksBrev />
+                <BehandlingVedtakKnapper />
             </div>
         </div>
     );

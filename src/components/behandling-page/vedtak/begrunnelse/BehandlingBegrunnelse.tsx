@@ -7,7 +7,7 @@ import style from './BehandlingBegrunnelse.module.css';
 const HEADING_ID = 'begrunnelse-heading';
 
 export const BehandlingBegrunnelse = () => {
-    const { behandling } = useBehandling();
+    const { behandling, setBegrunnelse } = useBehandling();
 
     const { begrunnelseVilkårsvurdering } = behandling;
 
@@ -17,6 +17,7 @@ export const BehandlingBegrunnelse = () => {
                 <Heading size={'xsmall'} level={'2'} className={style.header} id={HEADING_ID}>
                     {'Begrunnelse vilkårsvurdering'}
                 </Heading>
+
                 <div className={style.lovKnapper}>
                     <Tooltip content={'Rundskriv om tiltakspenger'}>
                         <Button
@@ -26,6 +27,7 @@ export const BehandlingBegrunnelse = () => {
                             href={
                                 'https://lovdata.no/nav/rundskriv/r76-13-02?q=rundskriv%20om%20tiltakspenger'
                             }
+                            target={'_blank'}
                         >
                             <TasklistIcon className={style.ikon} />
                         </Button>
@@ -36,20 +38,24 @@ export const BehandlingBegrunnelse = () => {
                             size={'small'}
                             as={'a'}
                             href={'https://lovdata.no/nav/forskrift/2013-11-04-1286'}
+                            target={'_blank'}
                         >
                             <ParagraphIcon className={style.ikon} />
                         </Button>
                     </Tooltip>
                 </div>
             </div>
+
             <BodyLong size={'small'}>{'Vurder vilkårene for tiltakspenger og noter ned:'}</BodyLong>
             <BodyLong as={'ul'} size={'small'}>
                 <li>{'Hvordan du fant informasjonen'}</li>
                 <li>{'Hvordan du vurderte informasjonen opp mot vilkårene'}</li>
             </BodyLong>
+
             <BodyLong size={'small'} className={style.personinfoVarsel}>
                 {'Ikke skriv personsensitiv informasjon'}
             </BodyLong>
+
             <Textarea
                 label={''}
                 aria-describedby={HEADING_ID}
@@ -58,7 +64,7 @@ export const BehandlingBegrunnelse = () => {
                 resize={'vertical'}
                 defaultValue={begrunnelseVilkårsvurdering ?? ''}
                 onChange={(event) => {
-                    console.log(event.target.value);
+                    setBegrunnelse(event.target.value);
                 }}
             />
         </div>

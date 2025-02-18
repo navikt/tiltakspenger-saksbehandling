@@ -1,10 +1,16 @@
 import { BehandlingData } from '../../types/BehandlingTypes';
-import { createContext, ReactNode, useContext, useState } from 'react';
+import { createContext, ReactNode, useCallback, useContext, useState } from 'react';
 import { VedtakAvslagResultat, VedtakData, VedtakInnvilgetResultat } from '../../types/VedtakTyper';
+import { hentTiltaksPeriode } from '../../utils/vilkår';
+import { Periode } from '../../types/Periode';
 
 export type BehandlingContextState = {
     behandling: BehandlingData;
-    vedtak: VedtakData;
+    vedtakUnderBehandling: VedtakData;
+    setBegrunnelse: (begrunnelse: string) => void;
+    setBrevTekst: (brevTekst: string) => void;
+    setResultat: (resultat: VedtakInnvilgetResultat | VedtakAvslagResultat) => void;
+    oppdaterInnvilgetPeriode: (periode: Partial<Periode>) => void;
 };
 
 const BehandlingContext = createContext({} as BehandlingContextState);
@@ -18,21 +24,55 @@ export const BehandlingProvider = ({ behandling, children }: ProviderProps) => {
     const defaultVedtak: VedtakData = {
         begrunnelseVilkårsvurdering: behandling.begrunnelseVilkårsvurdering ?? '',
         fritekstTilVedtaksbrev: behandling.fritekstTilVedtaksbrev ?? '',
+        innvilgetPeriode: hentTiltaksPeriode(behandling),
         resultat: undefined,
     };
 
-    const [vedtak, setVedtak] = useState<VedtakData>(defaultVedtak);
+    const [vedtak, setvedtak] = useState<VedtakData>(defaultVedtak);
 
-    const setBegrunnelse = (begrunnelse: string) => {
-        setVedtak({ ...vedtak, begrunnelseVilkårsvurdering: begrunnelse });
-    };
+    const setBegrunnelse: BehandlingContextState['setBegrunnelse'] = useCallback(
+        (begrunnelse) => {
+            setvedtak({ ...vedtak, begrunnelseVilkårsvurdering: begrunnelse });
+        },
+        [vedtak],
+    );
 
-    const setResultat = (resultat: VedtakInnvilgetResultat | VedtakAvslagResultat) => {
-        setVedtak({ ...vedtak, ...resultat });
-    };
+    const setBrevTekst: BehandlingContextState['setBrevTekst'] = useCallback(
+        (brevTekst) => {
+            setvedtak({ ...vedtak, fritekstTilVedtaksbrev: brevTekst });
+        },
+        [vedtak],
+    );
+
+    const setResultat: BehandlingContextState['setResultat'] = useCallback(
+        (resultat) => {
+            setvedtak({ ...vedtak, ...resultat });
+        },
+        [vedtak],
+    );
+
+    const oppdaterInnvilgetPeriode: BehandlingContextState['oppdaterInnvilgetPeriode'] =
+        useCallback(
+            (periode) => {
+                setvedtak({
+                    ...vedtak,
+                    innvilgetPeriode: { ...vedtak.innvilgetPeriode, ...periode },
+                });
+            },
+            [vedtak],
+        );
 
     return (
-        <BehandlingContext.Provider value={{ behandling, vedtak }}>
+        <BehandlingContext.Provider
+            value={{
+                behandling,
+                vedtakUnderBehandling: vedtak,
+                setBegrunnelse,
+                setBrevTekst,
+                setResultat,
+                oppdaterInnvilgetPeriode,
+            }}
+        >
             {children}
         </BehandlingContext.Provider>
     );

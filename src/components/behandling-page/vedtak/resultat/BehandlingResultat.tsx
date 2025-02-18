@@ -1,20 +1,20 @@
 import { Radio, RadioGroup } from '@navikt/ds-react';
 import { Datovelger } from '../../../revurderingsmodal/Datovelger';
-import { useState } from 'react';
 import { classNames } from '../../../../utils/classNames';
 import { VedtakResultat } from '../../../../types/VedtakTyper';
 import { useBehandling } from '../../../../context/behandling/BehandlingContext';
+import { hentTiltaksPeriode } from '../../../../utils/vilkår';
+import { dateTilISOTekst } from '../../../../utils/date';
 
 import style from './BehandlingResultat.module.css';
 
 export const BehandlingResultat = () => {
-    const [resultat, setResultat] = useState<VedtakResultat>();
+    const { behandling, vedtakUnderBehandling, setResultat, oppdaterInnvilgetPeriode } =
+        useBehandling();
 
-    const { behandling } = useBehandling();
+    const initiellTiltaksPeriode = hentTiltaksPeriode(behandling);
 
-    const { deltagelseFraOgMed, deltagelseTilOgMed } =
-        useBehandling().behandling.saksopplysninger.tiltaksdeltagelse;
-    const { fraOgMed, tilOgMed } = behandling.søknad.tiltak;
+    const { resultat, innvilgetPeriode } = vedtakUnderBehandling;
 
     return (
         <div className={style.resultat}>
@@ -22,8 +22,8 @@ export const BehandlingResultat = () => {
                 legend={'Resultat'}
                 size={'small'}
                 className={style.radioGroup}
-                onChange={(verdi: VedtakResultat) => {
-                    setResultat(verdi);
+                onChange={(valgtResultat: VedtakResultat) => {
+                    setResultat({ resultat: valgtResultat, innvilgetPeriode });
                 }}
             >
                 <Radio value={'innvilget' satisfies VedtakResultat}>{'Innvilgelse'}</Radio>
@@ -33,16 +33,28 @@ export const BehandlingResultat = () => {
                 className={classNames(style.datovelgere, resultat !== 'innvilget' && style.skjult)}
             >
                 <Datovelger
-                    onDateChange={() => console.log('Endre fra dato')}
                     label={'Innvilgelse f.o.m'}
-                    defaultSelected={new Date(deltagelseFraOgMed ?? fraOgMed)}
                     size={'small'}
+                    defaultSelected={new Date(initiellTiltaksPeriode.fraOgMed)}
+                    onDateChange={(valgtDato) => {
+                        if (valgtDato) {
+                            oppdaterInnvilgetPeriode({
+                                fraOgMed: dateTilISOTekst(valgtDato),
+                            });
+                        }
+                    }}
                 />
                 <Datovelger
-                    onDateChange={() => console.log('Endre til dato')}
                     label={'Innvilgelse t.o.m'}
-                    defaultSelected={new Date(deltagelseTilOgMed ?? tilOgMed)}
                     size={'small'}
+                    defaultSelected={new Date(initiellTiltaksPeriode.tilOgMed)}
+                    onDateChange={(valgtDato) => {
+                        if (valgtDato) {
+                            oppdaterInnvilgetPeriode({
+                                tilOgMed: dateTilISOTekst(valgtDato),
+                            });
+                        }
+                    }}
                 />
             </div>
         </div>

@@ -5,6 +5,7 @@ import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
 import { classNames } from '../../../utils/classNames';
 import { Periode } from '../../../types/Periode';
 import { useBehandling } from '../../../context/behandling/BehandlingContext';
+import { Separator } from '../../separator/Separator';
 
 import style from './BehandlingSaksopplysninger.module.css';
 
@@ -61,14 +62,14 @@ export const BehandlingSaksopplysninger = () => {
                 )}
             </OpplysningerBlokk>
 
-            <hr className={style.separator} />
+            <Separator />
 
             <OpplysningerBlokk header={'Alder'}>
                 <BodyShort weight={'semibold'}>{`${alderFraDato(fødselsdato)} år`}</BodyShort>
                 <Opplysning navn={'Fødselsdato'} verdi={fødselsdato} />
             </OpplysningerBlokk>
 
-            <hr className={style.separator} />
+            <Separator />
 
             <OpplysningerBlokk header={'Fra søknad'}>
                 <Opplysning

@@ -1,4 +1,5 @@
-import { VilkårsettDTO } from '../types/BehandlingTypes';
+import { BehandlingData, VilkårsettDTO } from '../types/BehandlingTypes';
+import { Periode } from '../types/Periode';
 
 export const vilkårTabs = (vilkårsett: VilkårsettDTO) => [
     {
@@ -44,3 +45,14 @@ export const vilkårTabs = (vilkårsett: VilkårsettDTO) => [
         utfall: vilkårsett.institusjonsoppholdVilkår.samletUtfall,
     },
 ];
+
+export const hentTiltaksPeriode = (behandling: BehandlingData): Periode => {
+    return {
+        fraOgMed:
+            behandling.saksopplysninger.tiltaksdeltagelse.deltagelseFraOgMed ??
+            behandling.søknad.tiltak.fraOgMed,
+        tilOgMed:
+            behandling.saksopplysninger.tiltaksdeltagelse.deltagelseTilOgMed ??
+            behandling.søknad.tiltak.tilOgMed,
+    };
+};

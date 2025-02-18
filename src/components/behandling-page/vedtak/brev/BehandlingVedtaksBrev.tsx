@@ -1,23 +1,21 @@
-import { Button, Textarea } from '@navikt/ds-react';
-import { EnvelopeOpenIcon } from '@navikt/aksel-icons';
-
-import style from './BehandlingVedtaksBrev.module.css';
+import { Textarea } from '@navikt/ds-react';
+import { useBehandling } from '../../../../context/behandling/BehandlingContext';
 
 export const BehandlingVedtaksBrev = () => {
+    const { setBrevTekst, behandling } = useBehandling();
+    const { fritekstTilVedtaksbrev } = behandling;
+
     return (
-        <>
-            <Textarea
-                label={'Tekst til vedtaksbrev'}
-                description={'Teksten vises i vedtaksbrevet til bruker.'}
-                size={'small'}
-                minRows={10}
-            />
-            <div className={style.knapper}>
-                <Button size={'small'} variant={'secondary'} icon={<EnvelopeOpenIcon />}>
-                    {'Forhåndsvis brev'}
-                </Button>
-                <Button variant={'primary'}>{'Send til beslutter'}</Button>
-            </div>
-        </>
+        <Textarea
+            label={'Tekst til vedtaksbrev'}
+            description={'Teksten vises i vedtaksbrevet til bruker.'}
+            size={'small'}
+            minRows={10}
+            resize={'vertical'}
+            defaultValue={fritekstTilVedtaksbrev ?? ''}
+            onChange={(event) => {
+                setBrevTekst(event.target.value);
+            }}
+        />
     );
 };

@@ -1,10 +1,12 @@
 import { Periode } from './Periode';
 
-export type VedtakResultat = 'innvilget' | 'avslag' | undefined;
+export type VedtakResultat = 'innvilget' | 'avslag';
 
 type VedtakFellesData = {
     begrunnelseVilkårsvurdering: string;
     fritekstTilVedtaksbrev: string;
+    resultat?: VedtakResultat;
+    innvilgetPeriode: Periode;
 };
 
 export type VedtakInnvilgetResultat = {
@@ -17,7 +19,7 @@ export type VedtakAvslagResultat = {
 };
 
 type VedtakUtenResultat = VedtakFellesData & {
-    resultat: undefined;
+    resultat?: undefined;
 };
 
 type VedtakMedResultat = VedtakFellesData & (VedtakInnvilgetResultat | VedtakAvslagResultat);
