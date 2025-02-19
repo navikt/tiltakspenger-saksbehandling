@@ -1,16 +1,19 @@
-import { Alert, BodyShort, Button, Heading, Link } from '@navikt/ds-react';
+import { Alert, BodyShort, Heading, Link } from '@navikt/ds-react';
 import { alderFraDato, formaterDatotekst, periodeTilFormatertDatotekst } from '../../../utils/date';
 import { Fragment, ReactNode } from 'react';
-import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
 import { classNames } from '../../../utils/classNames';
 import { Periode } from '../../../types/Periode';
 import { useBehandling } from '../BehandlingContext';
 import { Separator } from '../../separator/Separator';
+import { SaksbehandlerRolle } from '../../../types/Saksbehandler';
+import { BehandlingOppdaterSaksopplysninger } from './oppdater-saksopplysninger/BehandlingOppdaterSaksopplysninger';
 
 import style from './BehandlingSaksopplysninger.module.css';
 
 export const BehandlingSaksopplysninger = () => {
-    const { saksopplysninger, søknad } = useBehandling().behandling;
+    const { behandling, rolleForBehandling } = useBehandling();
+
+    const { saksopplysninger, søknad } = behandling;
 
     const { tiltaksdeltagelse, fødselsdato } = saksopplysninger;
     const {
@@ -37,14 +40,9 @@ export const BehandlingSaksopplysninger = () => {
     return (
         <div className={style.saksopplysninger}>
             <OpplysningerBlokk header={'Tiltak registrert på bruker'}>
-                <Button
-                    variant={'tertiary'}
-                    size={'xsmall'}
-                    className={style.oppdaterKnapp}
-                    icon={<ArrowCirclepathIcon />}
-                >
-                    {'Hent oppdaterte opplysninger om tiltak'}
-                </Button>
+                {rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER && (
+                    <BehandlingOppdaterSaksopplysninger />
+                )}
                 <Opplysning navn={'Type'} verdi={typeNavn} />
                 {deltagelseFraOgMed && deltagelseTilOgMed && (
                     <Opplysning

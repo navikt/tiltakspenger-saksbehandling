@@ -17,6 +17,8 @@ export const BehandlingResultat = () => {
 
     const { resultat, innvilgelsesPeriode } = vedtak;
 
+    const erIkkeSaksbehandler = rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER;
+
     return (
         <>
             <RadioGroup
@@ -24,7 +26,7 @@ export const BehandlingResultat = () => {
                 size={'small'}
                 className={style.radioGroup}
                 defaultValue={vedtak.resultat}
-                readOnly={rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER}
+                readOnly={erIkkeSaksbehandler}
                 onChange={(valgtResultat: VedtakResultat) => {
                     setResultat({ resultat: valgtResultat, innvilgelsesPeriode });
                 }}
@@ -41,6 +43,7 @@ export const BehandlingResultat = () => {
                     label={'Innvilgelse f.o.m'}
                     size={'small'}
                     defaultSelected={new Date(initiellTiltaksPeriode.fraOgMed)}
+                    readOnly={erIkkeSaksbehandler}
                     onDateChange={(valgtDato) => {
                         if (valgtDato) {
                             oppdaterInnvilgelsesPeriode({
@@ -53,6 +56,7 @@ export const BehandlingResultat = () => {
                     label={'Innvilgelse t.o.m'}
                     size={'small'}
                     defaultSelected={new Date(initiellTiltaksPeriode.tilOgMed)}
+                    readOnly={erIkkeSaksbehandler}
                     onDateChange={(valgtDato) => {
                         if (valgtDato) {
                             oppdaterInnvilgelsesPeriode({

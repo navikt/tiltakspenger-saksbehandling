@@ -20,7 +20,7 @@ export type BehandlingData = {
     saksbehandler: string | null;
     beslutter: string | null;
     behandlingstype: TypeBehandling;
-    vurderingsperiode: Periode;
+    vurderingsperiode: null;
     attesteringer: Attestering[];
     saksopplysninger: BehandlingSaksopplysningerData;
     søknad: SøknadForBehandlingProps;
