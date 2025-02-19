@@ -1,6 +1,6 @@
 import { BodyLong, Button, Heading, Textarea, Tooltip } from '@navikt/ds-react';
 import { ParagraphIcon, TasklistIcon } from '@navikt/aksel-icons';
-import { useBehandling } from '../../../../context/behandling/BehandlingContext';
+import { useBehandling } from '../../BehandlingContext';
 
 import style from './BehandlingBegrunnelse.module.css';
 import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';

@@ -9,6 +9,7 @@ import { SaksbehandlerRolle } from '../../types/Saksbehandler';
 
 export type BehandlingContextState = {
     behandling: BehandlingData;
+    setBehandling: (behandling: BehandlingData) => void;
     vedtak: VedtakData;
     rolleForBehandling: SaksbehandlerRolle.SAKSBEHANDLER | SaksbehandlerRolle.BESLUTTER | null;
     setBegrunnelse: (begrunnelse: string) => void;
@@ -24,7 +25,9 @@ type ProviderProps = {
     children: ReactNode;
 };
 
-export const BehandlingProvider = ({ behandling, children }: ProviderProps) => {
+export const BehandlingProvider = ({ behandling: initialBehandling, children }: ProviderProps) => {
+    const [behandling, setBehandling] = useState<BehandlingData>(initialBehandling);
+
     const initialVedtak: VedtakData = {
         begrunnelseVilkårsvurdering: behandling.begrunnelseVilkårsvurdering ?? '',
         fritekstTilVedtaksbrev: behandling.fritekstTilVedtaksbrev ?? '',
@@ -77,6 +80,7 @@ export const BehandlingProvider = ({ behandling, children }: ProviderProps) => {
         <BehandlingContext.Provider
             value={{
                 behandling,
+                setBehandling,
                 vedtak,
                 rolleForBehandling,
                 setBegrunnelse,

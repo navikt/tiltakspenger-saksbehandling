@@ -47,10 +47,7 @@ export interface tiltaksdeltagelseBody {
     statusForPeriode: StatusForPeriode[];
 }
 
-export type TiltakId = `taks_${string}`;
-
 export type Tiltaksdeltagelse = {
-    id: TiltakId;
     eksternDeltagelseId: string;
     gjennomføringId: string | null;
     typeNavn: string;

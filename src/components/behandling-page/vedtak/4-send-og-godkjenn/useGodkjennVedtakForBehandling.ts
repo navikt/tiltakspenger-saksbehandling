@@ -1,13 +1,11 @@
 import { BehandlingData } from '../../../../types/BehandlingTypes';
 import useSWRMutation from 'swr/mutation';
 import { FetcherError, throwErrorIfFatal } from '../../../../utils/http';
-import { EmptyObject } from '../../../../types/UtilTyper';
 
 export const useGodkjennVedtakForBehandling = (behandling: BehandlingData) => {
-    const { trigger, isMutating, error } = useSWRMutation<EmptyObject, FetcherError, string>(
+    const { trigger, isMutating, error } = useSWRMutation<BehandlingData, FetcherError, string>(
         `/api/sak/${behandling.sakId}/behandling/${behandling.id}/iverksettv2`,
         fetchGodkjennBehandling,
-        { throwOnError: false },
     );
 
     return {

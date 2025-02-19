@@ -16,7 +16,6 @@ export const useSendVedtakTilBeslutter = (vedtak: VedtakData, behandling: Behand
     >(
         `/api/sak/${behandling.sakId}/behandling/${behandling.id}/sendtilbeslutter`,
         fetchSendTilBeslutter,
-        { throwOnError: false },
     );
 
     const sendTilBeslutter = () => trigger(tilBeslutterDTO(vedtak as VedtakMedResultat));
@@ -43,20 +42,4 @@ const tilBeslutterDTO = (vedtak: VedtakMedResultat): VedtakTilBeslutterDTO => {
         fritekstTilVedtaksbrev: vedtak.fritekstTilVedtaksbrev,
         innvilgelsesperiode: vedtak.innvilgelsesPeriode,
     };
-};
-
-const validerVedtak = (vedtak: VedtakData) => {
-    const errors: string[] = [];
-
-    if (!vedtak.resultat) {
-        errors.push('Mangler innvilgelse eller avslag');
-    }
-
-    if (!vedtak.begrunnelseVilkårsvurdering) {
-        errors.push('Mangler begrunnelse for vedtak');
-    }
-
-    if (!vedtak.fritekstTilVedtaksbrev) {
-        errors.push('Mangler tekst til vedtaksbrev');
-    }
 };

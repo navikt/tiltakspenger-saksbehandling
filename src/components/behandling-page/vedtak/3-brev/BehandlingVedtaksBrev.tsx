@@ -1,5 +1,5 @@
 import { Button, Textarea } from '@navikt/ds-react';
-import { useBehandling } from '../../../../context/behandling/BehandlingContext';
+import { useBehandling } from '../../BehandlingContext';
 import { EnvelopeOpenIcon } from '@navikt/aksel-icons';
 
 import style from './BehandlingVedtaksBrev.module.css';

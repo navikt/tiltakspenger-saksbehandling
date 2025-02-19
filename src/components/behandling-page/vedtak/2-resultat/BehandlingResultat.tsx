@@ -2,7 +2,7 @@ import { Radio, RadioGroup } from '@navikt/ds-react';
 import { Datovelger } from '../../../revurderingsmodal/Datovelger';
 import { classNames } from '../../../../utils/classNames';
 import { VedtakResultat } from '../../../../types/VedtakTyper';
-import { useBehandling } from '../../../../context/behandling/BehandlingContext';
+import { useBehandling } from '../../BehandlingContext';
 import { hentTiltaksPeriode } from '../../../../utils/vilkår';
 import { dateTilISOTekst } from '../../../../utils/date';
 import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';

@@ -4,7 +4,7 @@ import { Fragment, ReactNode } from 'react';
 import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
 import { classNames } from '../../../utils/classNames';
 import { Periode } from '../../../types/Periode';
-import { useBehandling } from '../../../context/behandling/BehandlingContext';
+import { useBehandling } from '../BehandlingContext';
 import { Separator } from '../../separator/Separator';
 
 import style from './BehandlingSaksopplysninger.module.css';
