@@ -17,7 +17,9 @@ export const BehandlingKnappForOversikt = ({ behandling }: Props) => {
     const { status, id } = behandling;
 
     const { innloggetSaksbehandler } = useSaksbehandler();
-    const { taBehandling, isBehandlingMutating, taBehandlingError } = useTaBehandling();
+    const { taBehandling, isBehandlingMutating } = useTaBehandling();
+
+    const behandlingLenke = finnBehandlingslenke(behandling);
 
     switch (status) {
         case BehandlingStatus.UNDER_BEHANDLING:
@@ -32,7 +34,7 @@ export const BehandlingKnappForOversikt = ({ behandling }: Props) => {
                     size={'small'}
                     variant={'secondary'}
                     as={Link}
-                    href={finnBehandlingslenke(behandling)}
+                    href={behandlingLenke}
                 >
                     {'Fortsett'}
                 </Button>
@@ -50,11 +52,14 @@ export const BehandlingKnappForOversikt = ({ behandling }: Props) => {
                     size={'small'}
                     variant={'primary'}
                     loading={isBehandlingMutating}
-                    onClick={() =>
+                    as={Link}
+                    href={behandlingLenke}
+                    onClick={(e) => {
+                        e.preventDefault();
                         taBehandling({ id }).then(() => {
-                            router.push(finnBehandlingslenke(behandling));
-                        })
-                    }
+                            router.push(behandlingLenke);
+                        });
+                    }}
                 >
                     {'Tildel meg'}
                 </Button>
@@ -76,7 +81,7 @@ const finnBehandlingslenke = (behandling: BehandlingForOversiktData) => {
                 : `/behandling/${id}`;
         case BehandlingStatus.KLAR_TIL_BESLUTNING:
         case BehandlingStatus.UNDER_BESLUTNING:
-            return `/behandling/${id}/oppsummering`;
+            return erDeprecatedBehandling ? `/behandling/${id}/oppsummering` : `/behandling/${id}`;
         default:
             return '/';
     }

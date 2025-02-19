@@ -9,12 +9,11 @@ import { dateTilISOTekst } from '../../../../utils/date';
 import style from './BehandlingResultat.module.css';
 
 export const BehandlingResultat = () => {
-    const { behandling, vedtakUnderBehandling, setResultat, oppdaterInnvilgelsesPeriode } =
-        useBehandling();
+    const { behandling, vedtak, setResultat, oppdaterInnvilgelsesPeriode } = useBehandling();
 
     const initiellTiltaksPeriode = hentTiltaksPeriode(behandling);
 
-    const { resultat, innvilgelsesPeriode } = vedtakUnderBehandling;
+    const { resultat, innvilgelsesPeriode } = vedtak;
 
     return (
         <div className={style.resultat}>
@@ -22,12 +21,15 @@ export const BehandlingResultat = () => {
                 legend={'Resultat'}
                 size={'small'}
                 className={style.radioGroup}
+                defaultValue={vedtak.resultat}
                 onChange={(valgtResultat: VedtakResultat) => {
                     setResultat({ resultat: valgtResultat, innvilgelsesPeriode });
                 }}
             >
                 <Radio value={'innvilget' satisfies VedtakResultat}>{'Innvilgelse'}</Radio>
-                <Radio value={'avslag' satisfies VedtakResultat}>{'Avslag'}</Radio>
+                <Radio value={'avslag' satisfies VedtakResultat} disabled={true}>
+                    {'Avslag (støttes ikke ennå)'}
+                </Radio>
             </RadioGroup>
             <div
                 className={classNames(style.datovelgere, resultat !== 'innvilget' && style.skjult)}

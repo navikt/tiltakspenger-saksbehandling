@@ -2,7 +2,6 @@ import { useBehandling } from '../../../../context/behandling/BehandlingContext'
 import {
     VedtakData,
     VedtakMedResultat,
-    VedtakResultat,
     VedtakTilBeslutterDTO,
 } from '../../../../types/VedtakTyper';
 import { BehandlingData } from '../../../../types/BehandlingTypes';
@@ -10,7 +9,7 @@ import useSWRMutation from 'swr/mutation';
 import { FetcherError, throwErrorIfFatal } from '../../../../utils/http';
 
 export const useSendVedtakTilBeslutter = () => {
-    const { vedtakUnderBehandling, behandling } = useBehandling();
+    const { vedtak, behandling } = useBehandling();
 
     const { trigger, isMutating, error } = useSWRMutation<
         BehandlingData,
@@ -23,8 +22,7 @@ export const useSendVedtakTilBeslutter = () => {
         { throwOnError: false },
     );
 
-    const sendTilBeslutter = () =>
-        trigger(tilBeslutterDTO(vedtakUnderBehandling as VedtakMedResultat));
+    const sendTilBeslutter = () => trigger(tilBeslutterDTO(vedtak as VedtakMedResultat));
 
     return {
         sendTilBeslutter,

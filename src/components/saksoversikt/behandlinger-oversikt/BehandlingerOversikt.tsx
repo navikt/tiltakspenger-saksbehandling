@@ -6,7 +6,7 @@ import {
 } from '../../../utils/tekstformateringUtils';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '../../../utils/date';
 import { BehandlingKnappForOversikt } from '../../behandlingsknapper/BehandlingKnappForOversikt';
-import router from 'next/router';
+import Link from 'next/link';
 
 type Props = {
     behandlinger: BehandlingForOversiktData[];
@@ -57,9 +57,8 @@ export const BehandlingerOversikt = ({ behandlinger }: Props) => {
                                 style={{ minWidth: '50%' }}
                                 size="small"
                                 variant={'secondary'}
-                                onClick={() =>
-                                    router.push(`/behandling/${behandling.id}/oppsummering`)
-                                }
+                                as={Link}
+                                href={`/behandling/${behandling.id}${behandling.erDeprecatedBehandling ? '/oppsummering' : ''}`}
                             >
                                 Se behandling
                             </Button>

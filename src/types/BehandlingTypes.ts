@@ -26,6 +26,7 @@ export type BehandlingData = {
     søknad: SøknadForBehandlingProps;
     begrunnelseVilkårsvurdering: string | null;
     fritekstTilVedtaksbrev: string | null;
+    innvilgelsesperiode: Periode | null;
 };
 
 export type BehandlingSaksopplysningerData = {

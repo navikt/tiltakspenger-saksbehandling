@@ -10,15 +10,11 @@ import {
 } from '../utils/tekstformateringUtils';
 import Varsel from '../components/varsel/Varsel';
 import { BehandlingKnappForOversikt } from '../components/behandlingsknapper/BehandlingKnappForOversikt';
-import { preload } from 'swr';
-import { fetcher } from '../utils/http';
 import Link from 'next/link';
 import { StartSøknadBehandling } from '../components/behandlingsknapper/start-behandling/StartSøknadBehandling';
 import { SøknadStartBehandlingDeprecated } from '../components/behandlingsknapper/SøknadStartBehandlingDeprecated';
 
 const Oversikten: NextPage = () => {
-    preload('/api/behandlinger', fetcher);
-
     const { søknaderOgBehandlinger, isLoading, error } = useHentSøknaderOgBehandlinger();
 
     if (isLoading) {
@@ -50,84 +46,84 @@ const Oversikten: NextPage = () => {
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {søknaderOgBehandlinger.map((søknadEllerBehandling) => (
-                        <Table.Row shadeOnHover={false} key={søknadEllerBehandling.id}>
-                            <Table.HeaderCell scope="row" style={{ wordBreak: 'unset' }}>
-                                <HStack align="center">
-                                    {søknadEllerBehandling.fnr}
-                                    <CopyButton
-                                        copyText={søknadEllerBehandling.fnr}
-                                        variant="action"
-                                        size="small"
-                                    />
-                                </HStack>
-                            </Table.HeaderCell>
-                            <Table.DataCell>
-                                {finnBehandlingstypeTekst[søknadEllerBehandling.typeBehandling]}
-                                {søknadEllerBehandling.erDeprecatedBehandling === false
-                                    ? ' (V2)'
-                                    : ''}
-                            </Table.DataCell>
-                            <Table.DataCell>
-                                {søknadEllerBehandling.kravtidspunkt
-                                    ? formaterTidspunkt(søknadEllerBehandling.kravtidspunkt)
-                                    : 'Ukjent'}
-                            </Table.DataCell>
-                            <Table.DataCell>
-                                {finnBehandlingStatusTekst(
-                                    søknadEllerBehandling.status,
-                                    søknadEllerBehandling.underkjent,
-                                )}
-                            </Table.DataCell>
-                            <Table.DataCell>
-                                {søknadEllerBehandling.periode &&
-                                    `${periodeTilFormatertDatotekst(søknadEllerBehandling.periode)}`}
-                            </Table.DataCell>
-                            <Table.DataCell>
-                                {søknadEllerBehandling.saksbehandler ?? 'Ikke tildelt'}
-                            </Table.DataCell>
-                            <Table.DataCell>
-                                {søknadEllerBehandling.beslutter ?? 'Ikke tildelt'}
-                            </Table.DataCell>
-                            <Table.DataCell scope="col">
-                                {søknadEllerBehandling.status === 'SØKNAD' ? (
-                                    <>
-                                        <SøknadStartBehandlingDeprecated
-                                            søknad={søknadEllerBehandling}
+                    {søknaderOgBehandlinger.map((søknadEllerBehandling) => {
+                        const {
+                            fnr,
+                            typeBehandling,
+                            erDeprecatedBehandling,
+                            kravtidspunkt,
+                            status,
+                            underkjent,
+                            periode,
+                            saksbehandler,
+                            beslutter,
+                            saksnummer,
+                            id,
+                        } = søknadEllerBehandling;
+
+                        return (
+                            <Table.Row shadeOnHover={false} key={id}>
+                                <Table.HeaderCell scope="row" style={{ wordBreak: 'unset' }}>
+                                    <HStack align="center">
+                                        {fnr}
+                                        <CopyButton copyText={fnr} variant="action" size="small" />
+                                    </HStack>
+                                </Table.HeaderCell>
+                                <Table.DataCell>
+                                    {finnBehandlingstypeTekst[typeBehandling]}
+                                    {erDeprecatedBehandling === false ? ' (V2)' : ''}
+                                </Table.DataCell>
+                                <Table.DataCell>
+                                    {kravtidspunkt ? formaterTidspunkt(kravtidspunkt) : 'Ukjent'}
+                                </Table.DataCell>
+                                <Table.DataCell>
+                                    {finnBehandlingStatusTekst(status, underkjent)}
+                                </Table.DataCell>
+                                <Table.DataCell>
+                                    {periode && `${periodeTilFormatertDatotekst(periode)}`}
+                                </Table.DataCell>
+                                <Table.DataCell>{saksbehandler ?? 'Ikke tildelt'}</Table.DataCell>
+                                <Table.DataCell>{beslutter ?? 'Ikke tildelt'}</Table.DataCell>
+                                <Table.DataCell scope="col">
+                                    {status === 'SØKNAD' ? (
+                                        <>
+                                            <SøknadStartBehandlingDeprecated
+                                                søknad={søknadEllerBehandling}
+                                            />
+                                            <StartSøknadBehandling søknad={søknadEllerBehandling} />
+                                        </>
+                                    ) : (
+                                        <BehandlingKnappForOversikt
+                                            behandling={søknadEllerBehandling}
                                         />
-                                        <StartSøknadBehandling søknad={søknadEllerBehandling} />
-                                    </>
-                                ) : (
-                                    <BehandlingKnappForOversikt
-                                        behandling={søknadEllerBehandling}
-                                    />
-                                )}
-                            </Table.DataCell>
-                            <Table.DataCell>
-                                {søknadEllerBehandling.status !== 'SØKNAD' && (
-                                    <>
-                                        <Button
-                                            as={Link}
-                                            style={{ marginRight: '1rem' }}
-                                            size="small"
-                                            variant={'secondary'}
-                                            href={`/sak/${søknadEllerBehandling.saksnummer}`}
-                                        >
-                                            Se sak
-                                        </Button>
-                                        <Button
-                                            as={Link}
-                                            size="small"
-                                            variant={'secondary'}
-                                            href={`/behandling/${søknadEllerBehandling.id}/oppsummering`}
-                                        >
-                                            Se behandling
-                                        </Button>
-                                    </>
-                                )}
-                            </Table.DataCell>
-                        </Table.Row>
-                    ))}
+                                    )}
+                                </Table.DataCell>
+                                <Table.DataCell>
+                                    {status !== 'SØKNAD' && (
+                                        <>
+                                            <Button
+                                                as={Link}
+                                                style={{ marginRight: '1rem' }}
+                                                size="small"
+                                                variant={'secondary'}
+                                                href={`/sak/${saksnummer}`}
+                                            >
+                                                Se sak
+                                            </Button>
+                                            <Button
+                                                as={Link}
+                                                size="small"
+                                                variant={'secondary'}
+                                                href={`/behandling/${id}${erDeprecatedBehandling ? '/oppsummering' : ''}`}
+                                            >
+                                                Se behandling
+                                            </Button>
+                                        </>
+                                    )}
+                                </Table.DataCell>
+                            </Table.Row>
+                        );
+                    })}
                 </Table.Body>
             </Table>
         </VStack>

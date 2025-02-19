@@ -3,10 +3,14 @@ import { createContext, ReactNode, useCallback, useContext, useState } from 'rea
 import { VedtakAvslagResultat, VedtakData, VedtakInnvilgetResultat } from '../../types/VedtakTyper';
 import { hentTiltaksPeriode } from '../../utils/vilkår';
 import { Periode } from '../../types/Periode';
+import { kanBeslutteForBehandling, kanSaksbehandleForBehandling } from '../../utils/tilganger';
+import { useSaksbehandler } from '../../hooks/useSaksbehandler';
+import { SaksbehandlerRolle } from '../../types/Saksbehandler';
 
 export type BehandlingContextState = {
     behandling: BehandlingData;
-    vedtakUnderBehandling: VedtakData;
+    vedtak: VedtakData;
+    rolleForBehandling: SaksbehandlerRolle.SAKSBEHANDLER | SaksbehandlerRolle.BESLUTTER | null;
     setBegrunnelse: (begrunnelse: string) => void;
     setBrevTekst: (brevTekst: string) => void;
     setResultat: (resultat: VedtakInnvilgetResultat | VedtakAvslagResultat) => void;
@@ -21,14 +25,21 @@ type ProviderProps = {
 };
 
 export const BehandlingProvider = ({ behandling, children }: ProviderProps) => {
-    const defaultVedtak: VedtakData = {
+    const initialVedtak: VedtakData = {
         begrunnelseVilkårsvurdering: behandling.begrunnelseVilkårsvurdering ?? '',
         fritekstTilVedtaksbrev: behandling.fritekstTilVedtaksbrev ?? '',
-        innvilgelsesPeriode: hentTiltaksPeriode(behandling),
-        resultat: undefined,
+        innvilgelsesPeriode: behandling.innvilgelsesperiode ?? hentTiltaksPeriode(behandling),
+        resultat: behandling.innvilgelsesperiode ? 'innvilget' : undefined,
     };
 
-    const [vedtak, setvedtak] = useState<VedtakData>(defaultVedtak);
+    const [vedtak, setvedtak] = useState<VedtakData>(initialVedtak);
+
+    const { innloggetSaksbehandler } = useSaksbehandler();
+    const rolleForBehandling = kanSaksbehandleForBehandling(behandling, innloggetSaksbehandler)
+        ? SaksbehandlerRolle.SAKSBEHANDLER
+        : kanBeslutteForBehandling(behandling, innloggetSaksbehandler)
+          ? SaksbehandlerRolle.BESLUTTER
+          : null;
 
     const setBegrunnelse: BehandlingContextState['setBegrunnelse'] = useCallback(
         (begrunnelse) => {
@@ -51,7 +62,7 @@ export const BehandlingProvider = ({ behandling, children }: ProviderProps) => {
         [vedtak],
     );
 
-    const oppdaterInnvilgetPeriode: BehandlingContextState['oppdaterInnvilgelsesPeriode'] =
+    const oppdaterInnvilgelsesPeriode: BehandlingContextState['oppdaterInnvilgelsesPeriode'] =
         useCallback(
             (periode) => {
                 setvedtak({
@@ -66,11 +77,12 @@ export const BehandlingProvider = ({ behandling, children }: ProviderProps) => {
         <BehandlingContext.Provider
             value={{
                 behandling,
-                vedtakUnderBehandling: vedtak,
+                vedtak,
+                rolleForBehandling,
                 setBegrunnelse,
                 setBrevTekst,
                 setResultat,
-                oppdaterInnvilgelsesPeriode: oppdaterInnvilgetPeriode,
+                oppdaterInnvilgelsesPeriode,
             }}
         >
             {children}

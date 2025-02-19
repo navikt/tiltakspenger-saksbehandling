@@ -3,11 +3,7 @@
     flex-direction: column;
 }
 
-.varsel {
-    margin-top: 1rem;
-}
-
 .knapp {
+    margin-top: 1rem;
     align-self: flex-end;
-    margin-top: 2rem;
 }
