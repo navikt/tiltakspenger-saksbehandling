@@ -1,10 +1,10 @@
-.resultat {
+.radioGroup {
     margin-top: 2rem;
-}
 
-.radioGroup > :global(.navds-radio-buttons) {
-    display: flex;
-    gap: 2rem;
+    & > :global(.navds-radio-buttons) {
+        display: flex;
+        gap: 2rem;
+    }
 }
 
 .datovelgere {

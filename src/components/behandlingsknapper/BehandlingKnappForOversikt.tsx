@@ -52,10 +52,7 @@ export const BehandlingKnappForOversikt = ({ behandling }: Props) => {
                     size={'small'}
                     variant={'primary'}
                     loading={isBehandlingMutating}
-                    as={Link}
-                    href={behandlingLenke}
                     onClick={(e) => {
-                        e.preventDefault();
                         taBehandling({ id }).then(() => {
                             router.push(behandlingLenke);
                         });

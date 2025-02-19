@@ -3,13 +3,14 @@ import { useBehandling } from '../../../../context/behandling/BehandlingContext'
 import { EnvelopeOpenIcon } from '@navikt/aksel-icons';
 
 import style from './BehandlingVedtaksBrev.module.css';
+import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
 
 export const BehandlingVedtaksBrev = () => {
-    const { setBrevTekst, behandling } = useBehandling();
+    const { setBrevTekst, behandling, rolleForBehandling } = useBehandling();
     const { fritekstTilVedtaksbrev } = behandling;
 
     return (
-        <div className={style.wrapper}>
+        <>
             <Textarea
                 label={'Tekst til vedtaksbrev'}
                 description={'Teksten vises i vedtaksbrevet til bruker.'}
@@ -17,6 +18,7 @@ export const BehandlingVedtaksBrev = () => {
                 minRows={10}
                 resize={'vertical'}
                 defaultValue={fritekstTilVedtaksbrev ?? ''}
+                readOnly={rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER}
                 onChange={(event) => {
                     setBrevTekst(event.target.value);
                 }}
@@ -29,6 +31,6 @@ export const BehandlingVedtaksBrev = () => {
             >
                 {'Forhåndsvis brev'}
             </Button>
-        </div>
+        </>
     );
 };

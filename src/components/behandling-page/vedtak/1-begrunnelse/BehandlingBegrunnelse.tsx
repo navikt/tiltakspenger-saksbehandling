@@ -3,16 +3,17 @@ import { ParagraphIcon, TasklistIcon } from '@navikt/aksel-icons';
 import { useBehandling } from '../../../../context/behandling/BehandlingContext';
 
 import style from './BehandlingBegrunnelse.module.css';
+import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
 
 const HEADING_ID = 'begrunnelse-heading';
 
 export const BehandlingBegrunnelse = () => {
-    const { behandling, setBegrunnelse } = useBehandling();
+    const { behandling, setBegrunnelse, rolleForBehandling } = useBehandling();
 
     const { begrunnelseVilkårsvurdering } = behandling;
 
     return (
-        <div>
+        <>
             <div className={style.toppRad}>
                 <Heading size={'xsmall'} level={'2'} className={style.header} id={HEADING_ID}>
                     {'Begrunnelse vilkårsvurdering'}
@@ -63,10 +64,11 @@ export const BehandlingBegrunnelse = () => {
                 minRows={10}
                 resize={'vertical'}
                 defaultValue={begrunnelseVilkårsvurdering ?? ''}
+                readOnly={rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER}
                 onChange={(event) => {
                     setBegrunnelse(event.target.value);
                 }}
             />
-        </div>
+        </>
     );
 };

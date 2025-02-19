@@ -4,6 +4,8 @@
 }
 
 .inner {
+    display: flex;
+    flex-direction: column;
     background-color: var(--a-white);
     padding: 2rem;
     border: solid 1px var(--a-gray-800);

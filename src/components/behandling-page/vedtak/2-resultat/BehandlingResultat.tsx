@@ -5,23 +5,26 @@ import { VedtakResultat } from '../../../../types/VedtakTyper';
 import { useBehandling } from '../../../../context/behandling/BehandlingContext';
 import { hentTiltaksPeriode } from '../../../../utils/vilkår';
 import { dateTilISOTekst } from '../../../../utils/date';
+import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
 
 import style from './BehandlingResultat.module.css';
 
 export const BehandlingResultat = () => {
-    const { behandling, vedtak, setResultat, oppdaterInnvilgelsesPeriode } = useBehandling();
+    const { behandling, vedtak, setResultat, oppdaterInnvilgelsesPeriode, rolleForBehandling } =
+        useBehandling();
 
     const initiellTiltaksPeriode = hentTiltaksPeriode(behandling);
 
     const { resultat, innvilgelsesPeriode } = vedtak;
 
     return (
-        <div className={style.resultat}>
+        <>
             <RadioGroup
                 legend={'Resultat'}
                 size={'small'}
                 className={style.radioGroup}
                 defaultValue={vedtak.resultat}
+                readOnly={rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER}
                 onChange={(valgtResultat: VedtakResultat) => {
                     setResultat({ resultat: valgtResultat, innvilgelsesPeriode });
                 }}
@@ -59,6 +62,6 @@ export const BehandlingResultat = () => {
                     }}
                 />
             </div>
-        </div>
+        </>
     );
 };
