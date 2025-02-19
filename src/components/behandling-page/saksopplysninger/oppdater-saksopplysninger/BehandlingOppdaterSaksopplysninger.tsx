@@ -3,6 +3,8 @@ import { ArrowCirclepathIcon, CheckmarkIcon, XMarkIcon } from '@navikt/aksel-ico
 import { useOppdaterSaksopplysninger } from '../useOppdaterSaksopplysninger';
 import { useBehandling } from '../../BehandlingContext';
 import { useState } from 'react';
+import { classNames } from '../../../../utils/classNames';
+import Varsel from '../../../varsel/Varsel';
 
 import style from './BehandlingOppdaterSaksopplysninger.module.css';
 
@@ -13,31 +15,43 @@ export const BehandlingOppdaterSaksopplysninger = () => {
     const { oppdaterOgHentBehandling, isLoading, error } = useOppdaterSaksopplysninger(behandling);
 
     return (
-        <Button
-            variant={'tertiary'}
-            size={'xsmall'}
-            className={style.knapp}
-            icon={
-                isLoading ? (
-                    <Loader />
-                ) : harOppdatert ? (
-                    <CheckmarkIcon />
-                ) : error ? (
-                    <XMarkIcon />
-                ) : (
-                    <ArrowCirclepathIcon />
-                )
-            }
-            onClick={() => {
-                oppdaterOgHentBehandling()
-                    .then((oppdatertBehandling) => {
-                        setHarOppdatert(true);
-                        setBehandling(oppdatertBehandling);
-                    })
-                    .catch();
-            }}
-        >
-            {'Hent oppdaterte opplysninger om tiltak'}
-        </Button>
+        <>
+            <Button
+                variant={'tertiary'}
+                size={'xsmall'}
+                className={classNames(style.knapp, harOppdatert && style.loaded)}
+                icon={
+                    isLoading ? (
+                        <Loader />
+                    ) : harOppdatert ? (
+                        <CheckmarkIcon />
+                    ) : error ? (
+                        <XMarkIcon />
+                    ) : (
+                        <ArrowCirclepathIcon />
+                    )
+                }
+                onClick={() => {
+                    oppdaterOgHentBehandling()
+                        .then((oppdatertBehandling) => {
+                            setHarOppdatert(true);
+                            setBehandling(oppdatertBehandling);
+                            setTimeout(() => setHarOppdatert(false), 3000);
+                        })
+                        .catch();
+                }}
+            >
+                {'Hent oppdaterte opplysninger om tiltak'}
+            </Button>
+            {error && (
+                <Varsel
+                    variant={'error'}
+                    size={'small'}
+                    className={style.varsel}
+                    key={Date.now()}
+                    melding={`Oppdatering av saksopplysninger feilet - [${error.status}] ${error.info?.melding || error.message}`}
+                />
+            )}
+        </>
     );
 };

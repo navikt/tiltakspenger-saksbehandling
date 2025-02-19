@@ -3,4 +3,19 @@
     margin-left: -0.5rem;
 
     min-height: 32px;
+
+    transition: background-color, color 300ms ease-in-out;
+}
+
+.loaded {
+    color: var(--a-text-default);
+    background-color: var(--a-green-100);
+
+    & svg {
+        color: var(--a-green-500);
+    }
+}
+
+.varsel {
+    margin-bottom: 1rem;
 }
