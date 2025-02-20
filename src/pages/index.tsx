@@ -12,7 +12,6 @@ import Varsel from '../components/varsel/Varsel';
 import { BehandlingKnappForOversikt } from '../components/behandlingsknapper/BehandlingKnappForOversikt';
 import Link from 'next/link';
 import { StartSøknadBehandling } from '../components/behandlingsknapper/start-behandling/StartSøknadBehandling';
-import { SøknadStartBehandlingDeprecated } from '../components/behandlingsknapper/SøknadStartBehandlingDeprecated';
 
 const Oversikten: NextPage = () => {
     const { søknaderOgBehandlinger, isLoading, error } = useHentSøknaderOgBehandlinger();
@@ -71,7 +70,7 @@ const Oversikten: NextPage = () => {
                                 </Table.HeaderCell>
                                 <Table.DataCell>
                                     {finnBehandlingstypeTekst[typeBehandling]}
-                                    {erDeprecatedBehandling === false ? ' (V2)' : ''}
+                                    {erDeprecatedBehandling ? ' (gammel flyt)' : ''}
                                 </Table.DataCell>
                                 <Table.DataCell>
                                     {kravtidspunkt ? formaterTidspunkt(kravtidspunkt) : 'Ukjent'}
@@ -86,12 +85,7 @@ const Oversikten: NextPage = () => {
                                 <Table.DataCell>{beslutter ?? 'Ikke tildelt'}</Table.DataCell>
                                 <Table.DataCell scope="col">
                                     {status === 'SØKNAD' ? (
-                                        <>
-                                            <SøknadStartBehandlingDeprecated
-                                                søknad={søknadEllerBehandling}
-                                            />
-                                            <StartSøknadBehandling søknad={søknadEllerBehandling} />
-                                        </>
+                                        <StartSøknadBehandling søknad={søknadEllerBehandling} />
                                     ) : (
                                         <BehandlingKnappForOversikt
                                             behandling={søknadEllerBehandling}

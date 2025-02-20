@@ -1,6 +1,6 @@
 import { Periode } from './Periode';
 import { SakId } from './SakTypes';
-import { BehandlingStatus, TypeBehandling } from './BehandlingTypes';
+import { BehandlingStatus, Behandlingstype } from './BehandlingTypes';
 
 export type SøknadId = `soknad_${string}`;
 
@@ -29,7 +29,7 @@ export type SøknadForOversiktProps = {
     id: SøknadId;
     sakId: SakId | null;
     saksnummer: string | null;
-    typeBehandling: TypeBehandling.SØKNAD;
+    typeBehandling: Behandlingstype.SØKNAD;
     status: BehandlingStatus.SØKNAD;
     underkjent: boolean;
     kravtidspunkt: string;

@@ -8,7 +8,7 @@ import { finnDeltagelsestatusTekst, lagUtfallstekst } from '../../utils/tekstfor
 import IkonMedTekst from '../ikon-med-tekst/IkonMedTekst';
 import { UtfallIkon } from '../utfallikon/UtfallIkon';
 import { useHentTiltaksdeltagelse } from '../../hooks/vilkår/useHentTiltaksdeltagelse';
-import { TypeBehandling } from '../../types/BehandlingTypes';
+import { Behandlingstype } from '../../types/BehandlingTypes';
 import Spørsmålsmodal from '../revurderingsmodal/Spørsmålsmodal';
 import { periodeTilFormatertDatotekst } from '../../utils/date';
 import { Controller, useForm } from 'react-hook-form';
@@ -30,12 +30,7 @@ const Tiltaksdeltagelse = () => {
 
     const modalRef = useRef<HTMLDialogElement>(null);
 
-    const {
-        getValues,
-        control,
-        formState: { errors },
-        handleSubmit,
-    } = useForm<StatusForm>({});
+    const { getValues, control, handleSubmit } = useForm<StatusForm>({});
 
     const onSubmit = () => {
         oppdaterTiltaksdeltagelse({
@@ -83,7 +78,7 @@ const Tiltaksdeltagelse = () => {
                     { header: 'Siste status', data: finnDeltagelsestatusTekst(status) },
                 ]}
             />
-            {behandlingstype == TypeBehandling.REVURDERING && (
+            {behandlingstype == Behandlingstype.REVURDERING && (
                 <>
                     <HStack>
                         <Button size="small" onClick={() => modalRef.current?.showModal()}>

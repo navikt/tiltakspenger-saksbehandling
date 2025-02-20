@@ -12,22 +12,36 @@ import { SøknadForOversiktProps, SøknadForBehandlingProps } from './SøknadTyp
 
 export type BehandlingId = `beh_${string}`;
 
-export type BehandlingData = {
+type BehandlingDataCommon = {
+    behandlingstype: Behandlingstype;
     id: BehandlingId;
     sakId: SakId;
     saksnummer: string;
     status: BehandlingStatus;
     saksbehandler: string | null;
     beslutter: string | null;
-    behandlingstype: TypeBehandling;
-    vurderingsperiode: null;
     attesteringer: Attestering[];
     saksopplysninger: BehandlingSaksopplysningerData;
+};
+
+export type FørstegangsbehandlingData = BehandlingDataCommon & {
+    behandlingstype: Behandlingstype.FØRSTEGANGSBEHANDLING;
     søknad: SøknadForBehandlingProps;
     begrunnelseVilkårsvurdering: string | null;
     fritekstTilVedtaksbrev: string | null;
     innvilgelsesperiode: Periode | null;
 };
+
+export type RevurderingData = BehandlingDataCommon & {
+    behandlingstype: Behandlingstype.REVURDERING;
+    vurderingsperiode: Periode;
+    saksopplysninger: BehandlingSaksopplysningerData;
+    begrunnelseVilkårsvurdering: string | null;
+    fritekstTilVedtaksbrev: string | null;
+    innvilgelsesperiode: Periode | null;
+};
+
+export type BehandlingData = FørstegangsbehandlingData | RevurderingData;
 
 export type BehandlingSaksopplysningerData = {
     fødselsdato: string;
@@ -41,7 +55,7 @@ export type BehandlingDataDeprecated = {
     status: BehandlingStatus;
     saksbehandler: string | null;
     beslutter: string | null;
-    behandlingstype: TypeBehandling;
+    behandlingstype: Behandlingstype;
     vurderingsperiode: Periode;
     vilkårssett: VilkårsettDTO;
     attesteringer: Attestering[];
@@ -54,7 +68,7 @@ export type BehandlingDataDeprecatedOgNy = BehandlingDataDeprecated | Behandling
 export type BehandlingForOversiktData = {
     id: BehandlingId;
     sakId: SakId;
-    typeBehandling: Exclude<TypeBehandling, TypeBehandling.SØKNAD>;
+    typeBehandling: Exclude<Behandlingstype, Behandlingstype.SØKNAD>;
     status: Exclude<BehandlingStatus, BehandlingStatus.SØKNAD>;
     underkjent: boolean;
     kravtidspunkt: string | null;
@@ -129,7 +143,7 @@ export enum Utfall {
     UAVKLART = 'UAVKLART',
 }
 
-export enum TypeBehandling {
+export enum Behandlingstype {
     SØKNAD = 'SØKNAD',
     FØRSTEGANGSBEHANDLING = 'FØRSTEGANGSBEHANDLING',
     REVURDERING = 'REVURDERING',

@@ -2,10 +2,10 @@ import useSWRMutation from 'swr/mutation';
 import { FetcherError, mutateBehandling } from '../utils/http';
 import router from 'next/router';
 import { mutate } from 'swr';
-import { BehandlingDataDeprecated, TypeBehandling } from '../types/BehandlingTypes';
+import { BehandlingDataDeprecated, Behandlingstype } from '../types/BehandlingTypes';
 
-export const finnOversiktslenke = (saksnummer: string, type: TypeBehandling) => {
-    return type === TypeBehandling.REVURDERING ? `/sak/${saksnummer}` : '/';
+export const finnOversiktslenke = (saksnummer: string, type: Behandlingstype) => {
+    return type === Behandlingstype.REVURDERING ? `/sak/${saksnummer}` : '/';
 };
 
 export function useSendTilBeslutter(behandlingId: string) {

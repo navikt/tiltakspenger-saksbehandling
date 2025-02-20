@@ -5,14 +5,14 @@ import { Saksbehandlingstabs } from '../saksbehandlingstabs/SaksbehandlingTabs';
 import { Loader, Tag } from '@navikt/ds-react';
 import React, { createContext } from 'react';
 import { finnBehandlingStatusTekst } from '../../utils/tekstformateringUtils';
-import { BehandlingId, TypeBehandling } from '../../types/BehandlingTypes';
+import { BehandlingId, Behandlingstype } from '../../types/BehandlingTypes';
 import { Periode } from '../../types/Periode';
 import { SakId } from '../../types/SakTypes';
 
 type BehandlingContextType = {
     behandlingId: BehandlingId;
     sakId: SakId;
-    behandlingstype: TypeBehandling;
+    behandlingstype: Behandlingstype;
     behandlingsperiode: Periode;
 };
 

@@ -1,0 +1,7 @@
+.opplysning {
+    margin-bottom: 0.25rem;
+
+    &.spacing {
+        margin-bottom: 1rem;
+    }
+}

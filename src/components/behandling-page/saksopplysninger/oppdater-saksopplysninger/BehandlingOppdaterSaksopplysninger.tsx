@@ -1,6 +1,6 @@
 import { Button, Loader } from '@navikt/ds-react';
-import { ArrowCirclepathIcon, CheckmarkIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { useOppdaterSaksopplysninger } from '../useOppdaterSaksopplysninger';
+import { ArrowCirclepathIcon, CheckmarkIcon } from '@navikt/aksel-icons';
+import { useOppdaterSaksopplysninger } from './useOppdaterSaksopplysninger';
 import { useBehandling } from '../../BehandlingContext';
 import { useState } from 'react';
 import { classNames } from '../../../../utils/classNames';
@@ -25,8 +25,6 @@ export const BehandlingOppdaterSaksopplysninger = () => {
                         <Loader />
                     ) : harOppdatert ? (
                         <CheckmarkIcon />
-                    ) : error ? (
-                        <XMarkIcon />
                     ) : (
                         <ArrowCirclepathIcon />
                     )

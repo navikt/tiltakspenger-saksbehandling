@@ -1,6 +1,6 @@
 import {
     BehandlingStatus,
-    TypeBehandling,
+    Behandlingstype,
     Utfall,
     ÅrsakTilEndring,
 } from '../types/BehandlingTypes';
@@ -117,10 +117,10 @@ export const deltagelseTekst = (deltagelse: Deltagelse): string => {
     }
 };
 
-export const finnBehandlingstypeTekst: Record<TypeBehandling, string> = {
-    [TypeBehandling.FØRSTEGANGSBEHANDLING]: 'Førstegangsbehandling',
-    [TypeBehandling.REVURDERING]: 'Revurdering',
-    [TypeBehandling.SØKNAD]: 'Søknad',
+export const finnBehandlingstypeTekst: Record<Behandlingstype, string> = {
+    [Behandlingstype.FØRSTEGANGSBEHANDLING]: 'Førstegangsbehandling',
+    [Behandlingstype.REVURDERING]: 'Revurdering',
+    [Behandlingstype.SØKNAD]: 'Søknad',
 };
 
 export const finnDeltagelsestatusTekst = (deltagelsestatus: DeltagelseStatus): string => {

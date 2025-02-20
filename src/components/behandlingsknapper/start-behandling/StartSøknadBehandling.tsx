@@ -35,13 +35,13 @@ export const StartSøknadBehandling = ({ søknad }: Props) => {
                 />
             )}
             <Button
-                className={style.knappV2}
+                className={style.knapp}
                 variant={'primary'}
                 size={'small'}
                 loading={opprettBehandlingIsLoading}
                 onClick={startBehandling}
             >
-                {'(V2)'}
+                {'Opprett behandling (ny flyt)'}
             </Button>
         </>
     );
