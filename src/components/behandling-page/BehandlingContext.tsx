@@ -1,11 +1,11 @@
-import { BehandlingData } from '../../types/BehandlingTypes';
+import { BehandlingData, Behandlingstype } from '../../types/BehandlingTypes';
 import { createContext, ReactNode, useCallback, useContext, useState } from 'react';
 import { VedtakAvslagResultat, VedtakData, VedtakInnvilgetResultat } from '../../types/VedtakTyper';
-import { hentTiltaksPeriode } from '../../utils/vilkår';
 import { Periode } from '../../types/Periode';
 import { kanBeslutteForBehandling, kanSaksbehandleForBehandling } from '../../utils/tilganger';
 import { useSaksbehandler } from '../../hooks/useSaksbehandler';
 import { SaksbehandlerRolle } from '../../types/Saksbehandler';
+import { hentTiltaksPeriode } from '../../utils/vilkår';
 
 export type BehandlingContextState = {
     behandling: BehandlingData;
@@ -28,10 +28,15 @@ type ProviderProps = {
 export const BehandlingProvider = ({ behandling: initialBehandling, children }: ProviderProps) => {
     const [behandling, setBehandling] = useState<BehandlingData>(initialBehandling);
 
+    // TODO: vedtak bør ha sin egen provider, og må separares for førstegangsbehandling og revurdering
     const initialVedtak: VedtakData = {
         begrunnelseVilkårsvurdering: behandling.begrunnelseVilkårsvurdering ?? '',
         fritekstTilVedtaksbrev: behandling.fritekstTilVedtaksbrev ?? '',
-        innvilgelsesPeriode: behandling.innvilgelsesperiode ?? hentTiltaksPeriode(behandling),
+        innvilgelsesPeriode:
+            behandling.innvilgelsesperiode ??
+            (behandling.behandlingstype === Behandlingstype.FØRSTEGANGSBEHANDLING
+                ? hentTiltaksPeriode(behandling)
+                : { fraOgMed: new Date().toISOString(), tilOgMed: new Date().toISOString() }),
         resultat: behandling.innvilgelsesperiode ? 'innvilget' : undefined,
     };
 

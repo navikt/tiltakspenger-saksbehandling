@@ -6,9 +6,9 @@ import { Separator } from '../../separator/Separator';
 import { BehandlingSendTilBeslutter } from './4-send-og-godkjenn/BehandlingSendTilBeslutter';
 import { BehandlingGodkjennVedtak } from './4-send-og-godkjenn/BehandlingGodkjennVedtak';
 
-import style from './BehandlingVedtak.module.css';
+import style from './FørstegangsbehandlingVedtak.module.css';
 
-export const BehandlingVedtak = () => {
+export const FørstegangsbehandlingVedtak = () => {
     return (
         <div className={style.outer}>
             <div className={style.inner}>

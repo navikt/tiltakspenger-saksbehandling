@@ -6,6 +6,7 @@ import { useBehandling } from '../../BehandlingContext';
 import { hentTiltaksPeriode } from '../../../../utils/vilkår';
 import { dateTilISOTekst } from '../../../../utils/date';
 import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
+import { FørstegangsbehandlingData } from '../../../../types/BehandlingTypes';
 
 import style from './BehandlingResultat.module.css';
 
@@ -13,7 +14,7 @@ export const BehandlingResultat = () => {
     const { behandling, vedtak, setResultat, oppdaterInnvilgelsesPeriode, rolleForBehandling } =
         useBehandling();
 
-    const initiellTiltaksPeriode = hentTiltaksPeriode(behandling);
+    const initiellTiltaksPeriode = hentTiltaksPeriode(behandling as FørstegangsbehandlingData);
 
     const { resultat, innvilgelsesPeriode } = vedtak;
 
