@@ -13,7 +13,7 @@ export const FørstegangsbehandlingVedtak = () => {
         <div className={style.outer}>
             <div className={style.inner}>
                 <Heading size={'medium'} level={'1'} className={style.header}>
-                    {'Vedtak'}
+                    {'Vedtak (førstegangsbehandling)'}
                 </Heading>
                 <BehandlingBegrunnelse />
                 <BehandlingResultat />

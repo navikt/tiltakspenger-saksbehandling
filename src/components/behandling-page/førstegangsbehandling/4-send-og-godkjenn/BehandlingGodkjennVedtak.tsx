@@ -1,6 +1,6 @@
 import { Alert, Button } from '@navikt/ds-react';
 import { useGodkjennVedtakForBehandling } from './useGodkjennVedtakForBehandling';
-import { useBehandling } from '../../BehandlingContext';
+import { useBehandling } from '../../context/BehandlingContext';
 import { useState } from 'react';
 import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
 

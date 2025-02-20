@@ -13,32 +13,28 @@ import { SøknadForOversiktProps, SøknadForBehandlingProps } from './SøknadTyp
 export type BehandlingId = `beh_${string}`;
 
 type BehandlingDataCommon = {
-    behandlingstype: Behandlingstype;
     id: BehandlingId;
+    type: Behandlingstype;
+    status: BehandlingStatus;
     sakId: SakId;
     saksnummer: string;
-    status: BehandlingStatus;
     saksbehandler: string | null;
     beslutter: string | null;
     attesteringer: Attestering[];
+    virkningsperiode: Periode;
+    saksopplysningsperiode: Periode;
     saksopplysninger: BehandlingSaksopplysningerData;
+    begrunnelseVilkårsvurdering: string | null;
 };
 
 export type FørstegangsbehandlingData = BehandlingDataCommon & {
-    behandlingstype: Behandlingstype.FØRSTEGANGSBEHANDLING;
+    type: Behandlingstype.FØRSTEGANGSBEHANDLING;
     søknad: SøknadForBehandlingProps;
-    begrunnelseVilkårsvurdering: string | null;
     fritekstTilVedtaksbrev: string | null;
-    innvilgelsesperiode: Periode | null;
 };
 
 export type RevurderingData = BehandlingDataCommon & {
-    behandlingstype: Behandlingstype.REVURDERING;
-    vurderingsperiode: Periode;
-    saksopplysninger: BehandlingSaksopplysningerData;
-    begrunnelseVilkårsvurdering: string | null;
-    fritekstTilVedtaksbrev: string | null;
-    innvilgelsesperiode: Periode | null;
+    type: Behandlingstype.REVURDERING;
 };
 
 export type BehandlingData = FørstegangsbehandlingData | RevurderingData;
@@ -55,8 +51,8 @@ export type BehandlingDataDeprecated = {
     status: BehandlingStatus;
     saksbehandler: string | null;
     beslutter: string | null;
-    behandlingstype: Behandlingstype;
-    vurderingsperiode: Periode;
+    type: Behandlingstype;
+    virkningsperiode: Periode;
     vilkårssett: VilkårsettDTO;
     attesteringer: Attestering[];
     stønadsdager: Stønadsdager;

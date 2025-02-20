@@ -28,15 +28,15 @@ export const FørstegangsbehandlingLayout = ({ children }: React.PropsWithChildr
         return <Loader />;
     }
 
-    const { id, sakId, behandlingstype, vurderingsperiode, saksnummer, status } = valgtBehandling;
+    const { id, sakId, type, virkningsperiode, saksnummer, status } = valgtBehandling;
 
     return (
         <BehandlingContextDeprecated.Provider
             value={{
                 behandlingId: id,
                 sakId: sakId,
-                behandlingstype: behandlingstype,
-                behandlingsperiode: vurderingsperiode,
+                behandlingstype: type,
+                behandlingsperiode: virkningsperiode,
             }}
         >
             <PersonaliaHeader sakId={sakId} saksnummer={saksnummer}>

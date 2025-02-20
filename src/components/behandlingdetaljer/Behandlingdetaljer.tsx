@@ -15,14 +15,14 @@ const Behandlingdetaljer = () => {
         return <Loader />;
     }
 
-    const { vurderingsperiode, vilkårssett, stønadsdager, saksbehandler } = valgtBehandling;
+    const { virkningsperiode, vilkårssett, stønadsdager, saksbehandler } = valgtBehandling;
     return (
         <>
             <VStack gap="3" className={styles.wrapper}>
                 <BodyShort>
                     <b>Vurderingsperiode: </b>
                 </BodyShort>
-                <BodyShort>{periodeTilFormatertDatotekst(vurderingsperiode)}</BodyShort>
+                <BodyShort>{periodeTilFormatertDatotekst(virkningsperiode)}</BodyShort>
                 <BodyShort>
                     <b>Tiltak</b>
                 </BodyShort>

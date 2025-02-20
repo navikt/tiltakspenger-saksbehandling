@@ -2,7 +2,7 @@ import PersonaliaHeader from '../../personaliaheader/PersonaliaHeader';
 import { Tag } from '@navikt/ds-react';
 import { finnBehandlingStatusTekst } from '../../../utils/tekstformateringUtils';
 import React from 'react';
-import { useBehandling } from '../BehandlingContext';
+import { useBehandling } from '../context/BehandlingContext';
 
 export const BehandlingHeader = () => {
     const { behandling } = useBehandling();

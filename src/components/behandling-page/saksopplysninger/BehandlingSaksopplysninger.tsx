@@ -1,20 +1,20 @@
 import { BodyShort, Heading } from '@navikt/ds-react';
 import { alderFraDato } from '../../../utils/date';
 import { ReactNode } from 'react';
-import { useBehandling } from '../BehandlingContext';
+import { useBehandling } from '../context/BehandlingContext';
 import { Separator } from '../../separator/Separator';
 import { SaksbehandlerRolle } from '../../../types/Saksbehandler';
 import { BehandlingOppdaterSaksopplysninger } from './oppdater-saksopplysninger/BehandlingOppdaterSaksopplysninger';
 import { BehandlingSøknadOpplysninger } from './søknad/BehandlingSøknadOpplysninger';
 import { BehandlingSaksopplysning } from './BehandlingSaksopplysning';
 import { Behandlingstype } from '../../../types/BehandlingTypes';
+import { BehandlingTiltakOpplysninger } from './tiltak/BehandlingTiltakOpplysninger';
 
 import style from './BehandlingSaksopplysninger.module.css';
-import { BehandlingTiltakOpplysninger } from './tiltak/BehandlingTiltakOpplysninger';
 
 export const BehandlingSaksopplysninger = () => {
     const { behandling, rolleForBehandling } = useBehandling();
-    const { saksopplysninger, behandlingstype } = behandling;
+    const { saksopplysninger, type } = behandling;
     const { tiltaksdeltagelse, fødselsdato } = saksopplysninger;
 
     return (
@@ -33,7 +33,7 @@ export const BehandlingSaksopplysninger = () => {
                 <BehandlingSaksopplysning navn={'Fødselsdato'} verdi={fødselsdato} />
             </OpplysningerBlokk>
 
-            {behandlingstype === Behandlingstype.FØRSTEGANGSBEHANDLING && (
+            {type === Behandlingstype.FØRSTEGANGSBEHANDLING && (
                 <>
                     <Separator />
                     <OpplysningerBlokk header={'Fra søknad'}>

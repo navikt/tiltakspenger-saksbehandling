@@ -1,4 +1,4 @@
-import { useBehandling } from '../../BehandlingContext';
+import { useBehandling } from '../../context/BehandlingContext';
 import { useSendVedtakTilBeslutter } from './useSendVedtakTilBeslutter';
 import { Alert, Button } from '@navikt/ds-react';
 import { useState } from 'react';

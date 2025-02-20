@@ -19,7 +19,7 @@ export function useGodkjennBehandling(behandlingId: string, sakId: SakId) {
             onSuccess: (data) => {
                 mutate('/api/behandlinger');
                 mutate(`/api/behandling/${behandlingId}`);
-                router.push(finnOversiktslenke(data.saksnummer, data.behandlingstype));
+                router.push(finnOversiktslenke(data.saksnummer, data.type));
             },
         },
     );

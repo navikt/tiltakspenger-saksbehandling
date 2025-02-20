@@ -49,7 +49,7 @@ const AndreYtelser = () => {
 
         onLagreLivsopphold({
             ytelseForPeriode: {
-                periode: valgtBehandling.vurderingsperiode,
+                periode: valgtBehandling.virkningsperiode,
                 harYtelse: harYtelser,
             },
         });

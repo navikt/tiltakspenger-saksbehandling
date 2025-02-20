@@ -3,7 +3,7 @@ import { Loader } from '@navikt/ds-react';
 import { BehandlingHeader } from './header/BehandlingHeader';
 import { FørstegangsbehandlingVedtak } from './førstegangsbehandling/FørstegangsbehandlingVedtak';
 import { BehandlingSaksopplysninger } from './saksopplysninger/BehandlingSaksopplysninger';
-import { BehandlingProvider } from './BehandlingContext';
+import { BehandlingProvider } from './context/BehandlingContext';
 import useSWR from 'swr';
 import { BehandlingData, BehandlingId } from '../../types/BehandlingTypes';
 import { fetcher, FetcherError } from '../../utils/http';
@@ -40,7 +40,7 @@ export const BehandlingPage = ({ behandlingId }: Props) => {
             <BehandlingHeader />
             <div className={style.main}>
                 <BehandlingSaksopplysninger />
-                <div className={style.vedtak}>
+                <div className={style.vedtakOuter}>
                     <FørstegangsbehandlingVedtak />
                 </div>
             </div>
