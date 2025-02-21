@@ -1,9 +1,7 @@
 import { Button, HStack, Loader, Tag, VStack } from '@navikt/ds-react';
 import { pageWithAuthentication } from '../../../../auth/pageWithAuthentication';
 import { Meldekortside } from '../../../../components/meldekort/meldekortside/Meldekortside';
-import { NextPageWithLayout } from '../../../_app';
 import { SakLayout, useSak } from '../../../../components/layout/SakLayout';
-import { ReactElement } from 'react';
 import { PersonaliaHeader } from '../../../../components/personaliaheader/PersonaliaHeader';
 import { finnMeldeperiodeStatusTekst } from '../../../../utils/tekstformateringUtils';
 import { useHentMeldeperiodeKjede } from '../../../../hooks/meldekort/useHentMeldeperiodeKjede';
@@ -15,11 +13,7 @@ import { MeldeperiodeKjedeId } from '../../../../types/meldekort/Meldeperiode';
 
 import styles from './meldeperiode.module.css';
 
-type Props = {
-    meldeperiodeKjedeId: MeldeperiodeKjedeId;
-};
-
-const Meldekort: NextPageWithLayout<Props> = ({ meldeperiodeKjedeId }) => {
+const Meldekort = ({ meldeperiodeKjedeId }: { meldeperiodeKjedeId: MeldeperiodeKjedeId }) => {
     const { sakId, saknummer } = useSak();
 
     const { meldeperiodeKjede, error, laster } = useHentMeldeperiodeKjede(
@@ -35,51 +29,63 @@ const Meldekort: NextPageWithLayout<Props> = ({ meldeperiodeKjedeId }) => {
     const valgtMeldeperiode = meldeperiodeKjede?.meldeperioder[0];
 
     return (
-        <VStack>
-            <PersonaliaHeader sakId={sakId} saksnummer={saknummer}>
-                <Button as={Link} href={`/sak/${saknummer}`} type="submit" size="small">
-                    Tilbake til saksoversikt
-                </Button>
-                {valgtMeldeperiode && (
-                    <Tag variant="alt3-filled" className={styles.behandlingTag}>
-                        {finnMeldeperiodeStatusTekst[valgtMeldeperiode.status]}
-                    </Tag>
-                )}
-            </PersonaliaHeader>
-            <HStack wrap={false} className={styles.behandlingLayout}>
-                {laster ? (
-                    <Loader />
-                ) : error ? (
-                    <Varsel variant="error" melding={error.message} />
-                ) : !valgtMeldeperiode ? (
-                    <Varsel
-                        variant="error"
-                        melding={`Fant ingen meldeperioder for ${meldeperiodeKjedeId}`}
-                    />
-                ) : (
-                    <MeldeperioderProvider
-                        meldeperiodeKjede={meldeperiodeKjede}
-                        valgtMeldeperiode={valgtMeldeperiode}
-                    >
-                        <MeldekortDetaljer />
-                        <Meldekortside />
-                    </MeldeperioderProvider>
-                )}
-            </HStack>
-        </VStack>
+        <SakLayout saksnummer={saknummer}>
+            <VStack>
+                <PersonaliaHeader sakId={sakId} saksnummer={saknummer}>
+                    <Button as={Link} href={`/sak/${saknummer}`} type="submit" size="small">
+                        Tilbake til saksoversikt
+                    </Button>
+                    {valgtMeldeperiode && (
+                        <Tag variant="alt3-filled" className={styles.behandlingTag}>
+                            {finnMeldeperiodeStatusTekst[valgtMeldeperiode.status]}
+                        </Tag>
+                    )}
+                </PersonaliaHeader>
+                <HStack wrap={false} className={styles.behandlingLayout}>
+                    {laster ? (
+                        <Loader />
+                    ) : error ? (
+                        <Varsel variant="error" melding={error.message} />
+                    ) : !valgtMeldeperiode ? (
+                        <Varsel
+                            variant="error"
+                            melding={`Fant ingen meldeperioder for ${meldeperiodeKjedeId}`}
+                        />
+                    ) : (
+                        <MeldeperioderProvider
+                            meldeperiodeKjede={meldeperiodeKjede}
+                            valgtMeldeperiode={valgtMeldeperiode}
+                        >
+                            <MeldekortDetaljer />
+                            <Meldekortside />
+                        </MeldeperioderProvider>
+                    )}
+                </HStack>
+            </VStack>
+        </SakLayout>
     );
 };
 
-Meldekort.getLayout = function getLayout(page: ReactElement) {
-    return <SakLayout>{page}</SakLayout>;
+type Props = {
+    meldeperiodeKjedeId: MeldeperiodeKjedeId;
+    saksnummer: string;
+};
+
+const SakWrapper = ({ meldeperiodeKjedeId, saksnummer }: Props) => {
+    return (
+        <SakLayout saksnummer={saksnummer}>
+            <Meldekort meldeperiodeKjedeId={meldeperiodeKjedeId} />
+        </SakLayout>
+    );
 };
 
 export const getServerSideProps = pageWithAuthentication(async (context) => {
     return {
         props: {
+            saksnummer: context.params!.saksnummer,
             meldeperiodeKjedeId: context.params!.meldeperiodeId,
         },
     };
 });
 
-export default Meldekort;
+export default SakWrapper;

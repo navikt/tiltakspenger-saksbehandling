@@ -1,4 +1,3 @@
-import { ReactElement } from 'react';
 import { pageWithAuthentication } from '../../../auth/pageWithAuthentication';
 import { NextPageWithLayout } from '../../_app';
 import { SakLayout } from '../../../components/layout/SakLayout';
@@ -16,8 +15,9 @@ const Saksside: NextPageWithLayout<Sak> = ({
     sakId,
 }: Sak) => {
     preload(`/api/sak/${sakId}/personopplysninger`, fetcher);
+
     return (
-        <>
+        <SakLayout saksnummer={saksnummer}>
             <PersonaliaHeader sakId={sakId} saksnummer={saksnummer} />
             <Saksoversikt
                 sakId={sakId}
@@ -25,12 +25,8 @@ const Saksside: NextPageWithLayout<Sak> = ({
                 behandlingsoversikt={behandlingsoversikt}
                 meldeperioder={meldeperiodeoversikt}
             />
-        </>
+        </SakLayout>
     );
-};
-
-Saksside.getLayout = function getLayout(page: ReactElement) {
-    return <SakLayout>{page}</SakLayout>;
 };
 
 export const getServerSideProps = pageWithAuthentication(async (context) => {

@@ -1,8 +1,9 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useHentSak } from '../../hooks/useHentSak';
-import router from 'next/router';
 import { Loader } from '@navikt/ds-react';
 import { SakId } from '../../types/SakTypes';
+
+// TODO: Refactor sak context
 
 interface SakContextType {
     sakId: SakId;
@@ -19,8 +20,11 @@ export const SakContext = createContext<SakContextType>({
     saknummer: '',
 });
 
-export const SakLayout = ({ children }: React.PropsWithChildren) => {
-    const saksnummer = router.query.saksnummer as string;
+type Props = React.PropsWithChildren<{
+    saksnummer: string;
+}>;
+
+export const SakLayout = ({ saksnummer, children }: Props) => {
     const [tynnSak, settTynnSak] = useState<TynnSak | undefined>();
 
     const { sak, isLoading } = useHentSak(saksnummer);
