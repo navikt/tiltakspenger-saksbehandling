@@ -3,11 +3,11 @@ import { pageWithAuthentication } from '../../../auth/pageWithAuthentication';
 import { NextPageWithLayout } from '../../_app';
 import { SakLayout } from '../../../components/layout/SakLayout';
 import { Sak } from '../../../types/SakTypes';
-import PersonaliaHeader from '../../../components/personaliaheader/PersonaliaHeader';
+import { PersonaliaHeader } from '../../../components/personaliaheader/PersonaliaHeader';
 import { preload } from 'swr';
 import { fetcher } from '../../../utils/http';
 import { Saksoversikt } from '../../../components/saksoversikt/Saksoversikt';
-import { hentOboToken } from '../../../utils/auth';
+import { fetchJsonFraApi } from '../../../utils/auth';
 
 const Saksside: NextPageWithLayout<Sak> = ({
     behandlingsoversikt,
@@ -34,18 +34,7 @@ Saksside.getLayout = function getLayout(page: ReactElement) {
 };
 
 export const getServerSideProps = pageWithAuthentication(async (context) => {
-    const backendUrl = process.env.TILTAKSPENGER_SAKSBEHANDLING_API_URL;
-
-    const oboToken = await hentOboToken(context.req);
-
-    const sakResponse: Response = await fetch(`${backendUrl}/sak/${context.params!.saksnummer}`, {
-        method: 'GET',
-        headers: {
-            'content-type': 'application/json',
-            authorization: `Bearer ${oboToken}`,
-        },
-    });
-    const sak: Sak = await sakResponse.json();
+    const sak = await fetchJsonFraApi<Sak>(context.req, `/sak/${context.params!.saksnummer}`);
 
     if (!sak) {
         return {

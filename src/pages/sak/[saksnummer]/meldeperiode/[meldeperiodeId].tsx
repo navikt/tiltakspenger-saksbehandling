@@ -4,7 +4,7 @@ import { Meldekortside } from '../../../../components/meldekort/meldekortside/Me
 import { NextPageWithLayout } from '../../../_app';
 import { SakLayout, useSak } from '../../../../components/layout/SakLayout';
 import { ReactElement } from 'react';
-import PersonaliaHeader from '../../../../components/personaliaheader/PersonaliaHeader';
+import { PersonaliaHeader } from '../../../../components/personaliaheader/PersonaliaHeader';
 import { finnMeldeperiodeStatusTekst } from '../../../../utils/tekstformateringUtils';
 import { useHentMeldeperiodeKjede } from '../../../../hooks/meldekort/useHentMeldeperiodeKjede';
 import Varsel from '../../../../components/varsel/Varsel';

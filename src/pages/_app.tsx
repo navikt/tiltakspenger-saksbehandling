@@ -28,7 +28,7 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
                 <title>Tiltakspenger saksbehandler</title>
             </Head>
             <FeatureTogglesProvider deployEnv={pageProps.deployEnv}>
-                <SaksbehandlerProvider>
+                <SaksbehandlerProvider saksbehandler={pageProps.saksbehandler}>
                     <SWRConfig
                         value={{
                             shouldRetryOnError: false,

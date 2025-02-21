@@ -1,7 +1,16 @@
 import useSWR, { mutate } from 'swr';
 import { fetcher } from '../utils/http';
-import { Personopplysninger } from '../types/BehandlingTypes';
 import { SakId } from '../types/SakTypes';
+
+export type Personopplysninger = {
+    fnr: string;
+    fornavn: string;
+    mellomnavn: string;
+    etternavn: string;
+    skjerming: boolean;
+    strengtFortrolig: boolean;
+    fortrolig: boolean;
+};
 
 export function useHentPersonopplysninger(sakId: SakId) {
     const {

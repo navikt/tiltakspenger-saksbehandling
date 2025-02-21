@@ -3,36 +3,15 @@ import { BehandlingData, BehandlingId } from '../../../types/BehandlingTypes';
 import { BehandlingPage } from '../../../components/behandling-page/BehandlingPage';
 import React, { ComponentProps } from 'react';
 import { GetServerSideProps } from 'next';
-import useSWR from 'swr';
-import { fetcher, FetcherError } from '../../../utils/http';
-import Varsel from '../../../components/varsel/Varsel';
-import { Loader } from '@navikt/ds-react';
 import { BehandlingProvider } from '../../../components/behandling-page/context/BehandlingContext';
+import { fetchJsonFraApi } from '../../../utils/auth';
+import { logger } from '@navikt/next-logger';
 
 type Props = {
-    behandlingId: BehandlingId;
+    behandling: BehandlingData;
 };
 
-const Behandling = ({ behandlingId }: Props) => {
-    const {
-        data: behandling,
-        isLoading,
-        error,
-    } = useSWR<BehandlingData, FetcherError>(`/api/behandling/${behandlingId}`, fetcher);
-
-    if (error) {
-        return (
-            <Varsel
-                variant={'error'}
-                melding={`Kunne ikke hente behandling med id ${behandlingId} - [${error.status}] ${error.message}`}
-            />
-        );
-    }
-
-    if (isLoading || !behandling) {
-        return <Loader />;
-    }
-
+const Behandling = ({ behandling }: Props) => {
     return (
         <BehandlingProvider behandling={behandling}>
             <BehandlingPage />
@@ -41,10 +20,18 @@ const Behandling = ({ behandlingId }: Props) => {
 };
 
 export const getServerSideProps: GetServerSideProps = pageWithAuthentication(async (context) => {
+    const behandlingId = context.params!.behandlingId as BehandlingId;
+
+    const behandling = await fetchJsonFraApi<BehandlingData>(
+        context.req,
+        `/behandling/${behandlingId}`,
+    ).catch((e) => {
+        logger.error(`Feil under henting av behandling med id ${behandlingId} - ${e.toString()}`);
+        throw e;
+    });
+
     return {
-        props: {
-            behandlingId: context.params!.behandlingId as BehandlingId,
-        } satisfies ComponentProps<typeof Behandling>,
+        props: { behandling } satisfies ComponentProps<typeof Behandling>,
     };
 });
 

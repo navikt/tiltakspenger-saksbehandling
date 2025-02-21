@@ -6,6 +6,8 @@ import {
     NextApiResponse,
 } from 'next';
 import { logger } from '@navikt/next-logger';
+import { fetchFraApi } from '../utils/auth';
+import { Saksbehandler } from '../types/Saksbehandler';
 
 const LOGIN_API_URL = `${process.env.WONDERWALL_ORIGIN || ''}/oauth2/login`;
 
@@ -39,7 +41,7 @@ export function pageWithAuthentication(
         }
 
         const validationResult = await validateToken(token);
-        if (validationResult.ok === false) {
+        if (!validationResult.ok) {
             const error = new Error(
                 `Ugyldig JWT token funnet omdirigerer til innlogging. Error: ${validationResult.error}, ErrorType: ${validationResult.errorType}`,
             );
@@ -54,9 +56,19 @@ export function pageWithAuthentication(
             };
         }
 
+        const saksbehandler = await fetchFraApi(context.req, '/saksbehandler')
+            .then((res) => (res.ok ? (res.json() as Promise<Saksbehandler>) : null))
+            .catch((e) => {
+                logger.error(`Feil under henting av saksbehandler - ${e}`);
+                return null;
+            });
+
         return getServerSideProps(context).then((result) => {
             const props = (result as any).props;
-            return { ...result, props: props ? { ...defaultProps, ...props } : undefined };
+            return {
+                ...result,
+                props: props ? { ...defaultProps, ...props, saksbehandler } : undefined,
+            };
         });
     };
 }

@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "next dev | pino-pretty",
     "build": "next build",
-    "start": "next start",
+    "start": "node .next/standalone/server.js",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "format:check": "prettier --check .",

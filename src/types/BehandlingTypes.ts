@@ -111,16 +111,6 @@ export enum Attesteringsstatus {
     SENDT_TILBAKE = 'SENDT_TILBAKE',
 }
 
-export type Personopplysninger = {
-    fnr: string;
-    fornavn: string;
-    mellomnavn: string;
-    etternavn: string;
-    skjerming: boolean;
-    strengtFortrolig: boolean;
-    fortrolig: boolean;
-};
-
 export type Lovreferanse = {
     lovverk: string;
     paragraf: string;
