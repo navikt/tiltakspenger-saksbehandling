@@ -5,4 +5,4 @@ type SaksbehandlerState = {
     innloggetSaksbehandler: Saksbehandler;
 };
 
-export const SaksbehandlerContext = createContext<Partial<SaksbehandlerState>>({});
+export const SaksbehandlerContext = createContext<SaksbehandlerState>({} as SaksbehandlerState);

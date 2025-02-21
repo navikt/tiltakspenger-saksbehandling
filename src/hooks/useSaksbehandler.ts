@@ -2,11 +2,5 @@ import { SaksbehandlerContext } from '../context/saksbehandler/SaksbehandlerCont
 import { useContext } from 'react';
 
 export const useSaksbehandler = () => {
-    const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
-
-    if (!innloggetSaksbehandler) {
-        throw new Error('Mangler innlogget saksbehandler!');
-    }
-
-    return { innloggetSaksbehandler };
+    return useContext(SaksbehandlerContext);
 };
