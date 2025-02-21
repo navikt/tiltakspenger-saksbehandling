@@ -58,8 +58,6 @@ export type BehandlingDataDeprecated = {
     stønadsdager: Stønadsdager;
 };
 
-export type BehandlingDataDeprecatedOgNy = BehandlingDataDeprecated | BehandlingData;
-
 // TODO: revurdering og førstegangsbehandling bør ha separate typer
 export type BehandlingForOversiktData = {
     id: BehandlingId;

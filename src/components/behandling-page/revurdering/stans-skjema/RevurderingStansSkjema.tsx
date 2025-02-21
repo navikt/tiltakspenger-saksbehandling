@@ -5,7 +5,7 @@ import { Datovelger } from '../../../revurderingsmodal/Datovelger';
 import { dateTilISOTekst } from '../../../../utils/date';
 
 import style from './RevurderingStansSkjema.module.css';
-import { BehandlingSendTilBeslutter } from '../../send-og-godkjenn/BehandlingSendTilBeslutter';
+import { BehandlingSendTilBeslutning } from '../../send-og-godkjenn/BehandlingSendTilBeslutning';
 import { useSendRevurdering } from './useSendRevurdering';
 import { useGodkjennBehandling } from '../../send-og-godkjenn/useGodkjennBehandling';
 import { BehandlingGodkjenn } from '../../send-og-godkjenn/BehandlingGodkjenn';
@@ -48,8 +48,8 @@ export const RevurderingStansSkjema = () => {
                     }
                 }}
             />
-            <BehandlingSendTilBeslutter
-                sendTilBeslutter={sendRevurderingTilBeslutter}
+            <BehandlingSendTilBeslutning
+                sendTilBeslutning={sendRevurderingTilBeslutter}
                 isLoading={sendRevurderingTilBeslutterLaster}
                 error={sendRevurderingTilBeslutterError}
             />

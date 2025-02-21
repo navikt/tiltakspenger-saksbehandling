@@ -41,7 +41,7 @@ export const StartSøknadBehandling = ({ søknad }: Props) => {
                 loading={opprettBehandlingIsLoading}
                 onClick={startBehandling}
             >
-                {'Opprett behandling (ny flyt)'}
+                {'Opprett behandling'}
             </Button>
         </>
     );

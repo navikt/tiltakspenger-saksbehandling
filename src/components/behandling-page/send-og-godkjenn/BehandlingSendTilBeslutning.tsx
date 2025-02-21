@@ -3,17 +3,17 @@ import { useState } from 'react';
 import { useBehandling } from '../context/BehandlingContext';
 import { BehandlingData } from '../../../types/BehandlingTypes';
 import { FetcherError } from '../../../utils/http';
-
-import style from './BehandlingSendOgGodkjenn.module.css';
 import { SaksbehandlerRolle } from '../../../types/Saksbehandler';
 
+import style from './BehandlingSendOgGodkjenn.module.css';
+
 type Props = {
-    sendTilBeslutter: () => Promise<BehandlingData>;
+    sendTilBeslutning: () => Promise<BehandlingData>;
     isLoading: boolean;
     error?: FetcherError;
 };
 
-export const BehandlingSendTilBeslutter = ({ sendTilBeslutter, isLoading, error }: Props) => {
+export const BehandlingSendTilBeslutning = ({ sendTilBeslutning, isLoading, error }: Props) => {
     const [harSendt, setHarSendt] = useState(false);
 
     const { setBehandling, rolleForBehandling } = useBehandling();
@@ -22,21 +22,21 @@ export const BehandlingSendTilBeslutter = ({ sendTilBeslutter, isLoading, error 
         <>
             {harSendt && (
                 <Alert variant={'success'} className={style.varsel}>
-                    {'Behandlingen ble sendt til godkjenning'}
+                    {'Vedtaket ble sendt til beslutning'}
                 </Alert>
             )}
             {error && (
                 <Alert
                     variant={'error'}
                     className={style.varsel}
-                >{`Feil ved send til beslutter: [${error.status}] ${error.info?.melding || error.message}`}</Alert>
+                >{`Feil ved send til beslutning: [${error.status}] ${error.info?.melding || error.message}`}</Alert>
             )}
             {rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER && (
                 <Button
                     variant={'primary'}
                     loading={isLoading}
                     onClick={() => {
-                        sendTilBeslutter()
+                        sendTilBeslutning()
                             .then((oppdatertBehandling) => {
                                 setHarSendt(true);
                                 setBehandling(oppdatertBehandling);
@@ -45,7 +45,7 @@ export const BehandlingSendTilBeslutter = ({ sendTilBeslutter, isLoading, error 
                     }}
                     className={style.knapp}
                 >
-                    {'Send til beslutter'}
+                    {'Send til beslutning'}
                 </Button>
             )}
         </>

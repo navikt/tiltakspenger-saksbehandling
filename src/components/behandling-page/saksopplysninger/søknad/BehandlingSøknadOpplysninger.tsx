@@ -22,7 +22,25 @@ export const BehandlingSøknadOpplysninger = ({ førstegangsbehandling }: Props)
         sykepenger,
         barnetillegg,
         antallVedlegg,
+        alderspensjon,
+        gjenlevendepensjon,
+        supplerendeStønadAlder,
+        supplerendeStønadFlyktning,
+        jobbsjansen,
+        trygdOgPensjon,
     } = søknad;
+
+    const pengestøtter = Object.entries({
+        alderspensjon,
+        gjenlevendepensjon,
+        supplerendeStønadAlder,
+        supplerendeStønadFlyktning,
+        jobbsjansen,
+        trygdOgPensjon,
+    }).reduce<OpplysningMedDatoerProps[]>(
+        (acc, [navn, verdi]) => (verdi ? [...acc, { navn, periodeEllerDato: verdi }] : acc),
+        [],
+    );
 
     return (
         <>
@@ -40,15 +58,30 @@ export const BehandlingSøknadOpplysninger = ({ førstegangsbehandling }: Props)
                 })}
                 spacing={true}
             />
-            <OpplysningMedPeriode navn={'KVP'} periode={kvp} />
-            <OpplysningMedPeriode navn={'Intro'} periode={intro} />
-            <OpplysningMedPeriode navn={'Institusjonsopphold'} periode={institusjon} />
+            <OpplysningMedDatoer navn={'KVP'} periodeEllerDato={kvp} />
+            <OpplysningMedDatoer navn={'Intro'} periodeEllerDato={intro} />
+            <OpplysningMedDatoer navn={'Institusjonsopphold'} periodeEllerDato={institusjon} />
             <BehandlingSaksopplysning navn={'Etterlønn'} verdi={etterlønn ? 'Ja' : 'Nei'} />
-            <OpplysningMedPeriode
+            <OpplysningMedDatoer
                 navn={'Mottar sykepenger og fortsatt sykmeldt'}
-                periode={sykepenger}
+                periodeEllerDato={sykepenger}
             />
-            <BehandlingSaksopplysning navn={'Mottar pengestøtte'} verdi={'Tja?'} spacing={true} />
+
+            {pengestøtter.length > 0 ? (
+                pengestøtter.map((pengestøtte) => (
+                    <OpplysningMedDatoer
+                        navn={pengestøtte.navn}
+                        periodeEllerDato={pengestøtte.periodeEllerDato}
+                    />
+                ))
+            ) : (
+                <BehandlingSaksopplysning
+                    navn={'Mottar pengestøtte'}
+                    verdi={'Nei'}
+                    spacing={true}
+                />
+            )}
+
             {barnetillegg.length > 0 && (
                 <>
                     <BodyShort>{'Barn:'}</BodyShort>
@@ -88,24 +121,26 @@ export const BehandlingSøknadOpplysninger = ({ førstegangsbehandling }: Props)
     );
 };
 
-const OpplysningMedPeriode = ({
-    navn,
-    periode,
-    spacing,
-}: {
+type OpplysningMedDatoerProps = {
     navn: string;
-    periode?: Periode | null;
+    periodeEllerDato?: Periode | string | null;
     spacing?: boolean;
-}) => {
-    return periode ? (
+};
+
+const OpplysningMedDatoer = ({ navn, periodeEllerDato, spacing }: OpplysningMedDatoerProps) => {
+    return periodeEllerDato ? (
         <>
             <BehandlingSaksopplysning navn={navn} verdi={'Ja'} />
             <BehandlingSaksopplysning
                 navn={navn}
-                verdi={periodeTilFormatertDatotekst({
-                    fraOgMed: periode.fraOgMed,
-                    tilOgMed: periode.tilOgMed,
-                })}
+                verdi={
+                    typeof periodeEllerDato === 'string'
+                        ? periodeEllerDato
+                        : periodeTilFormatertDatotekst({
+                              fraOgMed: periodeEllerDato.fraOgMed,
+                              tilOgMed: periodeEllerDato.tilOgMed,
+                          })
+                }
                 spacing={spacing}
             />
         </>

@@ -1,5 +1,5 @@
 import {
-    BehandlingDataDeprecatedOgNy,
+    BehandlingData,
     BehandlingForOversiktData,
     BehandlingStatus,
 } from '../types/BehandlingTypes';
@@ -10,7 +10,7 @@ import {
 import { erBeslutter, erSaksbehandler, Saksbehandler } from '../types/Saksbehandler';
 
 export const kanBeslutteForBehandling = (
-    behandling: BehandlingDataDeprecatedOgNy,
+    behandling: BehandlingData,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     const { status, saksbehandler, beslutter } = behandling;
@@ -31,7 +31,7 @@ const kanBehandle = (
     innloggetSaksbehandler.navIdent === saksbehandlerForBehandling;
 
 export const kanSaksbehandleForBehandling = (
-    behandling: BehandlingDataDeprecatedOgNy,
+    behandling: BehandlingData,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     return (

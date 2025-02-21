@@ -15,14 +15,14 @@ export type SøknadForBehandlingProps = {
     kvp?: Periode;
     intro?: Periode;
     institusjon?: Periode;
+    sykepenger?: Periode;
     gjenlevendepensjon?: Periode;
     // Fra-dato for alderspensjon
     alderspensjon?: string;
-    sykepenger?: Periode;
     supplerendeStønadAlder?: Periode;
     supplerendeStønadFlyktning?: Periode;
-    jobbsjansen?: Periode;
     trygdOgPensjon?: Periode;
+    jobbsjansen?: Periode;
 };
 
 export type SøknadForOversiktProps = {

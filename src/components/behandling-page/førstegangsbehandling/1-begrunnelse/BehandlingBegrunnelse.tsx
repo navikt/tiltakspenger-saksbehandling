@@ -1,7 +1,8 @@
-import { BodyLong, Button, Heading, Textarea, Tooltip } from '@navikt/ds-react';
+import { BodyLong, BodyShort, Button, Heading, Textarea } from '@navikt/ds-react';
 import { ParagraphIcon, TasklistIcon } from '@navikt/aksel-icons';
 import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
 import { useFørstegangsbehandling } from '../FørstegangsbehandlingContext';
+import { FunctionComponent, ReactNode } from 'react';
 
 import style from './BehandlingBegrunnelse.module.css';
 
@@ -20,30 +21,20 @@ export const BehandlingBegrunnelse = () => {
                 </Heading>
 
                 <div className={style.lovKnapper}>
-                    <Tooltip content={'Rundskriv om tiltakspenger'}>
-                        <Button
-                            variant={'secondary'}
-                            size={'small'}
-                            as={'a'}
-                            href={
-                                'https://lovdata.no/nav/rundskriv/r76-13-02?q=rundskriv%20om%20tiltakspenger'
-                            }
-                            target={'_blank'}
-                        >
-                            <TasklistIcon className={style.ikon} />
-                        </Button>
-                    </Tooltip>
-                    <Tooltip content={'Forskrift om tiltakspenger'}>
-                        <Button
-                            variant={'secondary'}
-                            size={'small'}
-                            as={'a'}
-                            href={'https://lovdata.no/nav/forskrift/2013-11-04-1286'}
-                            target={'_blank'}
-                        >
-                            <ParagraphIcon className={style.ikon} />
-                        </Button>
-                    </Tooltip>
+                    <LovKnapp
+                        href={'https://lovdata.no/nav/forskrift/2013-11-04-1286'}
+                        ikon={ParagraphIcon}
+                    >
+                        {'Forskrift'}
+                    </LovKnapp>
+                    <LovKnapp
+                        href={
+                            'https://lovdata.no/nav/rundskriv/r76-13-02?q=rundskriv%20om%20tiltakspenger'
+                        }
+                        ikon={TasklistIcon}
+                    >
+                        {'Rundskriv'}
+                    </LovKnapp>
                 </div>
             </div>
 
@@ -70,5 +61,22 @@ export const BehandlingBegrunnelse = () => {
                 }}
             />
         </>
+    );
+};
+
+type LovKnappProps = {
+    href: string;
+    ikon: FunctionComponent;
+    children: ReactNode;
+};
+
+const LovKnapp = ({ href, ikon: IkonComponent, children }: LovKnappProps) => {
+    return (
+        <Button variant={'secondary'} size={'small'} as={'a'} href={href} target={'_blank'}>
+            <IkonComponent />
+            <BodyShort size={'small'} weight={'semibold'}>
+                {children}
+            </BodyShort>
+        </Button>
     );
 };
