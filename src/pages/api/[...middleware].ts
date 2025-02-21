@@ -17,6 +17,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         const response = await fetchFraApi(req, path, {
             method: req.method,
             body: req.method === 'GET' ? undefined : req.body,
+            headers: {
+                'content-type': 'application/json',
+            },
         });
 
         const body = await response.json();
