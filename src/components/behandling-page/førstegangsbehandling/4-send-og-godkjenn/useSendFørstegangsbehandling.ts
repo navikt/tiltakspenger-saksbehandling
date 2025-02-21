@@ -14,7 +14,7 @@ export const useSendFørstegangsbehandling = (vedtak: VedtakData, behandling: Be
         string,
         VedtakTilBeslutterDTO
     >(
-        `/api/sak/${behandling.sakId}/behandling/${behandling.id}/sendtilbeslutter`,
+        `/api/sak/${behandling.sakId}/behandling/${behandling.id}/sendtilbeslutning`,
         fetchSendTilBeslutter,
     );
 
