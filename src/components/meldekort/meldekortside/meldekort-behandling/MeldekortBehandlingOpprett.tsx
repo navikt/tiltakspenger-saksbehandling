@@ -3,7 +3,7 @@ import { MeldeperiodeProps, MeldeperiodeStatus } from '../../../../types/meldeko
 import { useOpprettMeldekortBehandling } from '../../../../hooks/meldekort/useOpprettMeldekortBehandling';
 import { useSak } from '../../../layout/SakLayout';
 import { useHentMeldeperiodeKjede } from '../../../../hooks/meldekort/useHentMeldeperiodeKjede';
-import BekreftelsesModal from '../../../bekreftelsesmodal/BekreftelsesModal';
+import BekreftelsesModal from '../../../modaler/BekreftelsesModal';
 import { useRef } from 'react';
 
 import styles from './MeldekortBehandlingOpprett.module.css';

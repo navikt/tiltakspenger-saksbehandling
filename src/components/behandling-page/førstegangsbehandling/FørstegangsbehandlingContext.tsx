@@ -6,7 +6,7 @@ import {
     VedtakInnvilgetResultat,
 } from '../../../types/VedtakTyper';
 import { Periode } from '../../../types/Periode';
-import { hentTiltaksPeriode } from '../../../utils/vilkår';
+import { hentTiltaksPeriode } from '../../../utils/tiltak';
 import { BehandlingContextState } from '../context/BehandlingContext';
 
 export type FørstegangsbehandlingContextState = {

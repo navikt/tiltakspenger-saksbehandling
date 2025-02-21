@@ -1,7 +1,7 @@
 import { Textarea } from '@navikt/ds-react';
 import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
 import { useRevurdering } from '../RevurderingContext';
-import { Datovelger } from '../../../revurderingsmodal/Datovelger';
+import { Datovelger } from '../../../datovelger/Datovelger';
 import { dateTilISOTekst } from '../../../../utils/date';
 
 import style from './RevurderingStansSkjema.module.css';

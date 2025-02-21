@@ -1,7 +1,5 @@
 import { logger } from '@navikt/next-logger';
 import { finnFetchFeilmelding } from './feilmeldinger';
-import { tiltaksdeltagelseBody } from '../types/TiltakDeltagelseTypes';
-import { LivsoppholdSaksopplysningBody } from '../types/LivsoppholdTypes';
 
 export class FetcherError extends Error {
     info?: { melding: string; kode: string };
@@ -13,39 +11,6 @@ export const fetcher = async (url: string) => {
     await throwErrorIfFatal(res);
     return res.json();
 };
-
-export async function mutateBehandling<R>(
-    url: string,
-    { arg }: { arg: { id: string } | { begrunnelse: string } | null },
-): Promise<R> {
-    const res = await fetch(url, {
-        method: 'POST',
-        body: JSON.stringify(arg),
-    });
-    await throwErrorIfFatal(res);
-    return res.json();
-}
-
-export async function mutateVilkår<R>(
-    url: string,
-    { arg }: { arg: LivsoppholdSaksopplysningBody | tiltaksdeltagelseBody },
-): Promise<R> {
-    const res = await fetch(url, {
-        method: 'POST',
-        body: JSON.stringify(arg),
-    });
-    await throwErrorIfFatal(res);
-    return res.json();
-}
-
-export async function sakFetcher<R>(url: string, { arg }: { arg: { fnr: string } }): Promise<R> {
-    const res = await fetch(url, {
-        method: 'POST',
-        body: JSON.stringify(arg),
-    });
-    await throwErrorIfFatal(res);
-    return res.json();
-}
 
 export const throwErrorIfFatal = async (res: Response) => {
     if (!res.ok) {

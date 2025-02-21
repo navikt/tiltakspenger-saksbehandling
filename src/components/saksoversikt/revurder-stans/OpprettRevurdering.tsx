@@ -1,5 +1,5 @@
 import { Button } from '@navikt/ds-react';
-import Spørsmålsmodal from '../../revurderingsmodal/Spørsmålsmodal';
+import Spørsmålsmodal from '../../modaler/Spørsmålsmodal';
 import { useRef } from 'react';
 import { SakId } from '../../../types/SakTypes';
 import { mutate } from 'swr';

@@ -1,12 +1,5 @@
-import { AlderVilkår } from './AlderTypes';
-import { InstitusjonsoppholdVilkår } from './InstitusjonsoppholdTypes';
-import { IntroVilkår } from './IntroduksjonsprogrammetTypes';
-import { KravfristVilkår } from './KravfristTypes';
-import { KvpVilkår } from './KvpTypes';
-import { LivsoppholdVilkår } from './LivsoppholdTypes';
 import { Periode } from './Periode';
-import { Stønadsdager } from './StønadsdagerTypes';
-import { TiltakDeltagelseVilkår, Tiltaksdeltagelse } from './TiltakDeltagelseTypes';
+import { Tiltaksdeltagelse } from './TiltakDeltagelseTypes';
 import { SakId } from './SakTypes';
 import { SøknadForOversiktProps, SøknadForBehandlingProps } from './SøknadTypes';
 
@@ -44,20 +37,6 @@ export type BehandlingSaksopplysningerData = {
     tiltaksdeltagelse: Tiltaksdeltagelse;
 };
 
-export type BehandlingDataDeprecated = {
-    id: BehandlingId;
-    sakId: SakId;
-    saksnummer: string;
-    status: BehandlingStatus;
-    saksbehandler: string | null;
-    beslutter: string | null;
-    type: Behandlingstype;
-    virkningsperiode: Periode;
-    vilkårssett: VilkårsettDTO;
-    attesteringer: Attestering[];
-    stønadsdager: Stønadsdager;
-};
-
 // TODO: revurdering og førstegangsbehandling bør ha separate typer
 export type BehandlingForOversiktData = {
     id: BehandlingId;
@@ -85,16 +64,6 @@ export enum BehandlingStatus {
     UNDER_BESLUTNING = 'UNDER_BESLUTNING',
     VEDTATT = 'VEDTATT',
 }
-
-export type VilkårsettDTO = {
-    alderVilkår: AlderVilkår;
-    tiltakDeltagelseVilkår: TiltakDeltagelseVilkår;
-    kvpVilkår: KvpVilkår;
-    introVilkår: IntroVilkår;
-    institusjonsoppholdVilkår: InstitusjonsoppholdVilkår;
-    livsoppholdVilkår: LivsoppholdVilkår;
-    kravfristVilkår: KravfristVilkår;
-};
 
 export type Attestering = {
     status: Attesteringsstatus;

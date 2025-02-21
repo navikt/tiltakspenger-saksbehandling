@@ -3,7 +3,7 @@ import { useRef, useState } from 'react';
 import { useSak } from '../../../../layout/SakLayout';
 import { useSendMeldekortTilBeslutter } from '../../../../../hooks/meldekort/useSendMeldekortTilBeslutter';
 import { MeldekortBehandlingUke } from './MeldekortBehandlingUke';
-import BekreftelsesModal from '../../../../bekreftelsesmodal/BekreftelsesModal';
+import BekreftelsesModal from '../../../../modaler/BekreftelsesModal';
 import {
     hentMeldekortBehandlingDager,
     MeldekortBehandlingForm,

@@ -13,7 +13,7 @@ import { MeldeperioderProvider } from '../../../../context/meldeperioder/Meldepe
 import { MeldekortDetaljer } from '../../../../components/meldekort/meldekortdetaljer/MeldekortDetaljer';
 import { MeldeperiodeKjedeId } from '../../../../types/meldekort/Meldeperiode';
 
-import styles from '../../../behandling/Behandling.module.css';
+import styles from './meldeperiode.module.css';
 
 type Props = {
     meldeperiodeKjedeId: MeldeperiodeKjedeId;

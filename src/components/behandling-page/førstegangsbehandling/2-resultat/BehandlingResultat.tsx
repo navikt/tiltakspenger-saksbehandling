@@ -1,8 +1,8 @@
 import { Radio, RadioGroup } from '@navikt/ds-react';
-import { Datovelger } from '../../../revurderingsmodal/Datovelger';
+import { Datovelger } from '../../../datovelger/Datovelger';
 import { classNames } from '../../../../utils/classNames';
 import { VedtakResultat } from '../../../../types/VedtakTyper';
-import { hentTiltaksPeriode } from '../../../../utils/vilkår';
+import { hentTiltaksPeriode } from '../../../../utils/tiltak';
 import { dateTilISOTekst } from '../../../../utils/date';
 import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
 import { FørstegangsbehandlingData } from '../../../../types/BehandlingTypes';

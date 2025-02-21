@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, CopyButton, Heading, HStack, Loader, Table, VStack } from '@navikt/ds-react';
+import { Button, CopyButton, Heading, HStack, Table, VStack } from '@navikt/ds-react';
 import { useHentSøknaderOgBehandlinger } from '../hooks/useHentSøknaderOgBehandlinger';
 import { pageWithAuthentication } from '../auth/pageWithAuthentication';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '../utils/date';
