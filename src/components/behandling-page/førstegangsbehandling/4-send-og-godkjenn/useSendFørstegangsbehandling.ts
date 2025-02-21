@@ -7,7 +7,7 @@ import { BehandlingData } from '../../../../types/BehandlingTypes';
 import useSWRMutation from 'swr/mutation';
 import { FetcherError, throwErrorIfFatal } from '../../../../utils/http';
 
-export const useSendVedtakTilBeslutter = (vedtak: VedtakData, behandling: BehandlingData) => {
+export const useSendFørstegangsbehandling = (vedtak: VedtakData, behandling: BehandlingData) => {
     const { trigger, isMutating, error } = useSWRMutation<
         BehandlingData,
         FetcherError,
@@ -22,8 +22,8 @@ export const useSendVedtakTilBeslutter = (vedtak: VedtakData, behandling: Behand
 
     return {
         sendTilBeslutter,
-        isLoading: isMutating,
-        error,
+        sendTilBeslutterLaster: isMutating,
+        sendTilBeslutterError: error,
     };
 };
 

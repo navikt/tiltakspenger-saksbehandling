@@ -1,0 +1,35 @@
+import useSWRMutation from 'swr/mutation';
+import { FetcherError, throwErrorIfFatal } from '../../../../utils/http';
+import { RevurderingData } from '../../../../types/BehandlingTypes';
+import { RevurderTilStansVedtak, VedtakMedResultat } from '../../../../types/VedtakTyper';
+
+export const useSendRevurdering = (behandling: RevurderingData, vedtak: RevurderTilStansVedtak) => {
+    const {
+        trigger,
+        isMutating: sendRevurderingTilBeslutterLaster,
+        error: sendRevurderingTilBeslutterError,
+    } = useSWRMutation<RevurderingData, FetcherError, string, RevurderTilStansVedtak>(
+        `/api/sak/${behandling.sakId}/revurdering/${behandling.id}/sendtilbeslutter`,
+        fetchSendRevurdering,
+    );
+
+    const sendRevurderingTilBeslutter = () => trigger(vedtak);
+
+    return {
+        sendRevurderingTilBeslutter,
+        sendRevurderingTilBeslutterLaster,
+        sendRevurderingTilBeslutterError,
+    };
+};
+
+const fetchSendRevurdering = async (
+    url: string,
+    { arg }: { arg: RevurderTilStansVedtak },
+): Promise<RevurderingData> => {
+    const res = await fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(arg),
+    });
+    await throwErrorIfFatal(res);
+    return res.json();
+};

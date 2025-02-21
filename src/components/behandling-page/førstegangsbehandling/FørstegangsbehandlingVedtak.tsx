@@ -3,25 +3,37 @@ import { BehandlingBegrunnelse } from './1-begrunnelse/BehandlingBegrunnelse';
 import { BehandlingResultat } from './2-resultat/BehandlingResultat';
 import { BehandlingVedtaksBrev } from './3-brev/BehandlingVedtaksBrev';
 import { Separator } from '../../separator/Separator';
-import { BehandlingSendTilBeslutter } from './4-send-og-godkjenn/BehandlingSendTilBeslutter';
-import { BehandlingGodkjennVedtak } from './4-send-og-godkjenn/BehandlingGodkjennVedtak';
+import {
+    FørstegangsbehandlingContextState,
+    FørstegangsbehandlingProvider,
+} from './FørstegangsbehandlingContext';
+import { useBehandling } from '../context/BehandlingContext';
+import { Behandlingstype } from '../../../types/BehandlingTypes';
+import { FørstegangsbehandlingSendOgGodkjenn } from './4-send-og-godkjenn/FørstegangsbehandlingSendOgGodkjenn';
 
 import style from './FørstegangsbehandlingVedtak.module.css';
 
 export const FørstegangsbehandlingVedtak = () => {
+    const behandlingContext = useBehandling();
+
+    if (behandlingContext.behandling.type !== Behandlingstype.FØRSTEGANGSBEHANDLING) {
+        return null;
+    }
+
     return (
-        <div className={style.outer}>
-            <div className={style.inner}>
-                <Heading size={'medium'} level={'1'} className={style.header}>
-                    {'Vedtak (førstegangsbehandling)'}
-                </Heading>
-                <BehandlingBegrunnelse />
-                <BehandlingResultat />
-                <Separator />
-                <BehandlingVedtaksBrev />
-                <BehandlingSendTilBeslutter />
-                <BehandlingGodkjennVedtak />
-            </div>
-        </div>
+        <FørstegangsbehandlingProvider
+            behandlingContext={behandlingContext as FørstegangsbehandlingContextState}
+        >
+            <Heading size={'medium'} level={'1'} className={style.header}>
+                {'Vedtak (førstegangsbehandling)'}
+            </Heading>
+            <BehandlingBegrunnelse />
+            <BehandlingResultat />
+
+            <Separator />
+
+            <BehandlingVedtaksBrev />
+            <FørstegangsbehandlingSendOgGodkjenn />
+        </FørstegangsbehandlingProvider>
     );
 };

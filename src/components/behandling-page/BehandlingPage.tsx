@@ -8,6 +8,7 @@ import useSWR from 'swr';
 import { BehandlingData, BehandlingId } from '../../types/BehandlingTypes';
 import { fetcher, FetcherError } from '../../utils/http';
 import Varsel from '../varsel/Varsel';
+import { RevurderingsVedtak } from './revurdering/RevurderingsVedtak';
 
 import style from './BehandlingPage.module.css';
 
@@ -41,7 +42,10 @@ export const BehandlingPage = ({ behandlingId }: Props) => {
             <div className={style.main}>
                 <BehandlingSaksopplysninger />
                 <div className={style.vedtakOuter}>
-                    <FørstegangsbehandlingVedtak />
+                    <div className={style.vedtakInner}>
+                        <FørstegangsbehandlingVedtak />
+                        <RevurderingsVedtak />
+                    </div>
                 </div>
             </div>
         </BehandlingProvider>

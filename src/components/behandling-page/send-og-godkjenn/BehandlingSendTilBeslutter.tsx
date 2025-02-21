@@ -1,16 +1,22 @@
-import { useBehandling } from '../../context/BehandlingContext';
-import { useSendVedtakTilBeslutter } from './useSendVedtakTilBeslutter';
 import { Alert, Button } from '@navikt/ds-react';
 import { useState } from 'react';
-import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
+import { useBehandling } from '../context/BehandlingContext';
+import { BehandlingData } from '../../../types/BehandlingTypes';
+import { FetcherError } from '../../../utils/http';
 
 import style from './BehandlingSendOgGodkjenn.module.css';
+import { SaksbehandlerRolle } from '../../../types/Saksbehandler';
 
-export const BehandlingSendTilBeslutter = () => {
+type Props = {
+    sendTilBeslutter: () => Promise<BehandlingData>;
+    isLoading: boolean;
+    error?: FetcherError;
+};
+
+export const BehandlingSendTilBeslutter = ({ sendTilBeslutter, isLoading, error }: Props) => {
     const [harSendt, setHarSendt] = useState(false);
 
-    const { vedtak, behandling, setBehandling, rolleForBehandling } = useBehandling();
-    const { sendTilBeslutter, isLoading, error } = useSendVedtakTilBeslutter(vedtak, behandling);
+    const { setBehandling, rolleForBehandling } = useBehandling();
 
     return (
         <>

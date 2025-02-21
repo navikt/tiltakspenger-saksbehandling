@@ -1,36 +1,42 @@
 import { Alert, Button } from '@navikt/ds-react';
-import { useGodkjennVedtakForBehandling } from './useGodkjennVedtakForBehandling';
-import { useBehandling } from '../../context/BehandlingContext';
 import { useState } from 'react';
-import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
+import { BehandlingData } from '../../../types/BehandlingTypes';
+import { FetcherError } from '../../../utils/http';
+import { useBehandling } from '../context/BehandlingContext';
+import { SaksbehandlerRolle } from '../../../types/Saksbehandler';
 
 import style from './BehandlingSendOgGodkjenn.module.css';
 
-export const BehandlingGodkjennVedtak = () => {
+type Props = {
+    godkjennBehandling: () => Promise<BehandlingData>;
+    isLoading: boolean;
+    error?: FetcherError;
+};
+
+export const BehandlingGodkjenn = ({ godkjennBehandling, isLoading, error }: Props) => {
     const [harGodkjent, setHarGodkjent] = useState(false);
 
-    const { behandling, setBehandling, rolleForBehandling } = useBehandling();
-    const { godkjennVedtak, isLoading, error } = useGodkjennVedtakForBehandling(behandling);
+    const { setBehandling, rolleForBehandling } = useBehandling();
 
     return (
         <>
             {harGodkjent && (
                 <Alert variant={'success'} className={style.varsel}>
-                    {'Behandlingen er godkjent'}
+                    {'Vedtaket er godkjent'}
                 </Alert>
             )}
             {error && (
                 <Alert
                     variant={'error'}
                     className={style.varsel}
-                >{`Feil godkjenning av vedtak: [${error.status}] ${error.info?.melding || error.message}`}</Alert>
+                >{`Feil ved godkjenning av vedtak: [${error.status}] ${error.info?.melding || error.message}`}</Alert>
             )}
             {rolleForBehandling === SaksbehandlerRolle.BESLUTTER && (
                 <Button
                     variant={'primary'}
                     loading={isLoading}
                     onClick={() => {
-                        godkjennVedtak()
+                        godkjennBehandling()
                             .then((oppdatertBehandling) => {
                                 setHarGodkjent(true);
                                 setBehandling(oppdatertBehandling);

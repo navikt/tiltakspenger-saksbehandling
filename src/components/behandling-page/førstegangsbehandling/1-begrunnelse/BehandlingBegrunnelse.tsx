@@ -1,14 +1,14 @@
 import { BodyLong, Button, Heading, Textarea, Tooltip } from '@navikt/ds-react';
 import { ParagraphIcon, TasklistIcon } from '@navikt/aksel-icons';
-import { useBehandling } from '../../context/BehandlingContext';
+import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
+import { useFørstegangsbehandling } from '../FørstegangsbehandlingContext';
 
 import style from './BehandlingBegrunnelse.module.css';
-import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
 
 const HEADING_ID = 'begrunnelse-heading';
 
 export const BehandlingBegrunnelse = () => {
-    const { behandling, setBegrunnelse, rolleForBehandling } = useBehandling();
+    const { behandling, setBegrunnelse, rolleForBehandling } = useFørstegangsbehandling();
 
     const { begrunnelseVilkårsvurdering } = behandling;
 
@@ -53,14 +53,14 @@ export const BehandlingBegrunnelse = () => {
                 <li>{'Hvordan du vurderte informasjonen opp mot vilkårene'}</li>
             </BodyLong>
 
-            <BodyLong size={'small'} className={style.personinfoVarsel}>
-                {'Ikke skriv personsensitiv informasjon'}
-            </BodyLong>
-
             <Textarea
                 label={''}
+                description={
+                    <BodyLong size={'small'} className={style.personinfoVarsel}>
+                        {'Ikke skriv personsensitiv informasjon'}
+                    </BodyLong>
+                }
                 aria-describedby={HEADING_ID}
-                hideLabel={true}
                 minRows={10}
                 resize={'vertical'}
                 defaultValue={begrunnelseVilkårsvurdering ?? ''}

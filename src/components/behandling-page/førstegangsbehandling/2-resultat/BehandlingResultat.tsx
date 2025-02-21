@@ -2,17 +2,17 @@ import { Radio, RadioGroup } from '@navikt/ds-react';
 import { Datovelger } from '../../../revurderingsmodal/Datovelger';
 import { classNames } from '../../../../utils/classNames';
 import { VedtakResultat } from '../../../../types/VedtakTyper';
-import { useBehandling } from '../../context/BehandlingContext';
 import { hentTiltaksPeriode } from '../../../../utils/vilkår';
 import { dateTilISOTekst } from '../../../../utils/date';
 import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
 import { FørstegangsbehandlingData } from '../../../../types/BehandlingTypes';
+import { useFørstegangsbehandling } from '../FørstegangsbehandlingContext';
 
 import style from './BehandlingResultat.module.css';
 
 export const BehandlingResultat = () => {
     const { behandling, vedtak, setResultat, oppdaterInnvilgelsesPeriode, rolleForBehandling } =
-        useBehandling();
+        useFørstegangsbehandling();
 
     const initiellTiltaksPeriode = hentTiltaksPeriode(behandling as FørstegangsbehandlingData);
 

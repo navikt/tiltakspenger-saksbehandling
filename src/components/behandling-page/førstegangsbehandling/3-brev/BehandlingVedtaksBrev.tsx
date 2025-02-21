@@ -1,13 +1,13 @@
 import { Button, Textarea } from '@navikt/ds-react';
-import { useBehandling } from '../../context/BehandlingContext';
 import { EnvelopeOpenIcon } from '@navikt/aksel-icons';
-
-import style from './BehandlingVedtaksBrev.module.css';
 import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
 import { FørstegangsbehandlingData } from '../../../../types/BehandlingTypes';
+import { useFørstegangsbehandling } from '../FørstegangsbehandlingContext';
+
+import style from './BehandlingVedtaksBrev.module.css';
 
 export const BehandlingVedtaksBrev = () => {
-    const { setBrevTekst, behandling, rolleForBehandling } = useBehandling();
+    const { setBrevTekst, behandling, rolleForBehandling } = useFørstegangsbehandling();
     const { fritekstTilVedtaksbrev } = behandling as FørstegangsbehandlingData;
 
     return (

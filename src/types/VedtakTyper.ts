@@ -31,3 +31,8 @@ export type VedtakTilBeslutterDTO = {
     begrunnelseVilkårsvurdering: string;
     innvilgelsesperiode: Periode;
 };
+
+export type RevurderTilStansVedtak = {
+    begrunnelse: string;
+    stansDato: string;
+};

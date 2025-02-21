@@ -21,7 +21,7 @@ type BehandlingDataCommon = {
     saksbehandler: string | null;
     beslutter: string | null;
     attesteringer: Attestering[];
-    virkningsperiode: Periode;
+    virkningsperiode: Periode | null;
     saksopplysningsperiode: Periode;
     saksopplysninger: BehandlingSaksopplysningerData;
     begrunnelseVilkårsvurdering: string | null;

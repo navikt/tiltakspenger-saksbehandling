@@ -1,7 +1,5 @@
 import useSWRMutation from 'swr/mutation';
 import { FetcherError, throwErrorIfFatal } from '../utils/http';
-import router from 'next/router';
-import { mutate } from 'swr';
 import { SakId } from '../types/SakTypes';
 
 type RevurderTilStansBody = { fraOgMed: string };
@@ -15,7 +13,7 @@ async function mutateSak(url: string, { arg }: { arg: RevurderTilStansBody }) {
     return res.json();
 }
 
-export function useOpprettRevurdering(sakId: SakId, saksnummer: string) {
+export function useOpprettRevurderingDeprecated(sakId: SakId) {
     const {
         trigger: opprettRevurdering,
         isMutating: oppretterBehandling,
@@ -27,12 +25,7 @@ export function useOpprettRevurdering(sakId: SakId, saksnummer: string) {
         FetcherError,
         any,
         RevurderTilStansBody
-    >(`/api/sak/${sakId}/revurdering`, mutateSak, {
-        onSuccess: (data) => {
-            mutate(`/api/sak/${saksnummer}`);
-            router.push(`/behandling/${data.id}/inngangsvilkar/tiltaksdeltagelse`);
-        },
-    });
+    >(`/api/sak/${sakId}/revurdering`, mutateSak);
 
     return {
         opprettRevurdering,
