@@ -29,40 +29,38 @@ const Meldekort = ({ meldeperiodeKjedeId }: { meldeperiodeKjedeId: MeldeperiodeK
     const valgtMeldeperiode = meldeperiodeKjede?.meldeperioder[0];
 
     return (
-        <SakLayout saksnummer={saknummer}>
-            <VStack>
-                <PersonaliaHeader sakId={sakId} saksnummer={saknummer}>
-                    <Button as={Link} href={`/sak/${saknummer}`} type="submit" size="small">
-                        Tilbake til saksoversikt
-                    </Button>
-                    {valgtMeldeperiode && (
-                        <Tag variant="alt3-filled" className={styles.behandlingTag}>
-                            {finnMeldeperiodeStatusTekst[valgtMeldeperiode.status]}
-                        </Tag>
-                    )}
-                </PersonaliaHeader>
-                <HStack wrap={false} className={styles.behandlingLayout}>
-                    {laster ? (
-                        <Loader />
-                    ) : error ? (
-                        <Varsel variant="error" melding={error.message} />
-                    ) : !valgtMeldeperiode ? (
-                        <Varsel
-                            variant="error"
-                            melding={`Fant ingen meldeperioder for ${meldeperiodeKjedeId}`}
-                        />
-                    ) : (
-                        <MeldeperioderProvider
-                            meldeperiodeKjede={meldeperiodeKjede}
-                            valgtMeldeperiode={valgtMeldeperiode}
-                        >
-                            <MeldekortDetaljer />
-                            <Meldekortside />
-                        </MeldeperioderProvider>
-                    )}
-                </HStack>
-            </VStack>
-        </SakLayout>
+        <VStack>
+            <PersonaliaHeader sakId={sakId} saksnummer={saknummer}>
+                <Button as={Link} href={`/sak/${saknummer}`} type="submit" size="small">
+                    Tilbake til saksoversikt
+                </Button>
+                {valgtMeldeperiode && (
+                    <Tag variant="alt3-filled" className={styles.behandlingTag}>
+                        {finnMeldeperiodeStatusTekst[valgtMeldeperiode.status]}
+                    </Tag>
+                )}
+            </PersonaliaHeader>
+            <HStack wrap={false} className={styles.behandlingLayout}>
+                {laster ? (
+                    <Loader />
+                ) : error ? (
+                    <Varsel variant="error" melding={error.message} />
+                ) : !valgtMeldeperiode ? (
+                    <Varsel
+                        variant="error"
+                        melding={`Fant ingen meldeperioder for ${meldeperiodeKjedeId}`}
+                    />
+                ) : (
+                    <MeldeperioderProvider
+                        meldeperiodeKjede={meldeperiodeKjede}
+                        valgtMeldeperiode={valgtMeldeperiode}
+                    >
+                        <MeldekortDetaljer />
+                        <Meldekortside />
+                    </MeldeperioderProvider>
+                )}
+            </HStack>
+        </VStack>
     );
 };
 
