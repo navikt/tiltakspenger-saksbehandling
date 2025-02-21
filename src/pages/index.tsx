@@ -21,17 +21,21 @@ type Props = {
 const Oversikten = ({ initialData }: Props) => {
     const { søknaderOgBehandlinger, error } = useHentSøknaderOgBehandlinger(initialData);
 
-    if (!søknaderOgBehandlinger) {
-        return <Loader />;
+    if (error) {
+        return (
+            <Varsel
+                variant={'error'}
+                melding={`Feil ved lasting av data til oversikten - [${error.status}] ${error.message}`}
+            />
+        );
     }
 
-    if (søknaderOgBehandlinger.length === 0) {
+    if (!søknaderOgBehandlinger || søknaderOgBehandlinger.length === 0) {
         return <Varsel variant="info" melding={`Ingen søknader eller behandlinger i basen`} />;
     }
 
     return (
         <VStack gap="5" style={{ padding: '1rem' }}>
-            {error && <Varsel variant={'error'} melding={error.message} />}
             <Heading size="medium" level="2">
                 Oversikt over behandlinger og søknader
             </Heading>
@@ -126,7 +130,6 @@ const Oversikten = ({ initialData }: Props) => {
         </VStack>
     );
 };
-
 export const getServerSideProps = pageWithAuthentication(async (context) => {
     const behandlingerOgSøknader = await fetchJsonFraApi<BehandlingEllerSøknadForOversiktData[]>(
         context.req,

@@ -1,20 +1,23 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { BodyShort, Dropdown, InternalHeader, Search, Spacer, VStack } from '@navikt/ds-react';
 import { Loader } from '@navikt/ds-react';
-import { SaksbehandlerContext } from '../../context/saksbehandler/SaksbehandlerContext';
 import { LeaveIcon } from '@navikt/aksel-icons';
 import { useHentSakForFNR } from '../../hooks/useHentSakForFNR';
 import Varsel from '../varsel/Varsel';
+import Link from 'next/link';
+import { useSaksbehandler } from '../../hooks/useSaksbehandler';
 
 const InternDekoratør = () => {
-    const { innloggetSaksbehandler } = useContext(SaksbehandlerContext);
+    const { innloggetSaksbehandler } = useSaksbehandler();
     const { søk, error } = useHentSakForFNR();
     const [søketekst, settSøketekst] = useState<string>('');
 
     return (
         <VStack gap="3">
             <InternalHeader>
-                <InternalHeader.Title href="/">Tiltakspenger</InternalHeader.Title>
+                <InternalHeader.Title as={Link} href="/">
+                    Tiltakspenger
+                </InternalHeader.Title>
                 <form
                     role="search"
                     style={{ alignContent: 'center', marginLeft: '20px' }}
@@ -28,7 +31,7 @@ const InternDekoratør = () => {
                         size="small"
                         variant="simple"
                         placeholder="Søk på fnr"
-                        onChange={(e) => settSøketekst(e)}
+                        onChange={(e) => settSøketekst(e.trim())}
                     />
                 </form>
                 <Spacer />
