@@ -73,7 +73,6 @@ export type BehandlingForOversiktData = {
     saksnummer: string;
     saksbehandler: string;
     beslutter: string | null;
-    erDeprecatedBehandling: boolean | null;
 };
 
 export type BehandlingEllerSøknadForOversiktData =

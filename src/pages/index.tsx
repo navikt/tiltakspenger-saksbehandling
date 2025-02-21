@@ -1,7 +1,6 @@
 import React from 'react';
 import { Button, CopyButton, Heading, HStack, Loader, Table, VStack } from '@navikt/ds-react';
 import { useHentSøknaderOgBehandlinger } from '../hooks/useHentSøknaderOgBehandlinger';
-import { NextPage } from 'next';
 import { pageWithAuthentication } from '../auth/pageWithAuthentication';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '../utils/date';
 import {
@@ -12,15 +11,21 @@ import Varsel from '../components/varsel/Varsel';
 import { BehandlingKnappForOversikt } from '../components/behandlingsknapper/BehandlingKnappForOversikt';
 import Link from 'next/link';
 import { StartSøknadBehandling } from '../components/behandlingsknapper/start-behandling/StartSøknadBehandling';
+import { fetchJsonFraApi } from '../utils/auth';
+import { BehandlingEllerSøknadForOversiktData } from '../types/BehandlingTypes';
 
-const Oversikten: NextPage = () => {
-    const { søknaderOgBehandlinger, isLoading, error } = useHentSøknaderOgBehandlinger();
+type Props = {
+    initialData: BehandlingEllerSøknadForOversiktData[];
+};
 
-    if (isLoading) {
+const Oversikten = ({ initialData }: Props) => {
+    const { søknaderOgBehandlinger, error } = useHentSøknaderOgBehandlinger(initialData);
+
+    if (!søknaderOgBehandlinger) {
         return <Loader />;
     }
 
-    if (!søknaderOgBehandlinger) {
+    if (søknaderOgBehandlinger.length === 0) {
         return <Varsel variant="info" melding={`Ingen søknader eller behandlinger i basen`} />;
     }
 
@@ -49,7 +54,6 @@ const Oversikten: NextPage = () => {
                         const {
                             fnr,
                             typeBehandling,
-                            erDeprecatedBehandling,
                             kravtidspunkt,
                             status,
                             underkjent,
@@ -70,7 +74,6 @@ const Oversikten: NextPage = () => {
                                 </Table.HeaderCell>
                                 <Table.DataCell>
                                     {finnBehandlingstypeTekst[typeBehandling]}
-                                    {erDeprecatedBehandling ? ' (gammel flyt)' : ''}
                                 </Table.DataCell>
                                 <Table.DataCell>
                                     {kravtidspunkt ? formaterTidspunkt(kravtidspunkt) : 'Ukjent'}
@@ -108,7 +111,7 @@ const Oversikten: NextPage = () => {
                                                 as={Link}
                                                 size="small"
                                                 variant={'secondary'}
-                                                href={`/behandling/${id}${erDeprecatedBehandling ? '/oppsummering' : ''}`}
+                                                href={`/behandling/${id}`}
                                             >
                                                 Se behandling
                                             </Button>
@@ -124,6 +127,13 @@ const Oversikten: NextPage = () => {
     );
 };
 
-export default Oversikten;
+export const getServerSideProps = pageWithAuthentication(async (context) => {
+    const behandlingerOgSøknader = await fetchJsonFraApi<BehandlingEllerSøknadForOversiktData[]>(
+        context.req,
+        '/behandlinger',
+    );
 
-export const getServerSideProps = pageWithAuthentication();
+    return { props: { initialData: behandlingerOgSøknader || [] } satisfies Props };
+});
+
+export default Oversikten;

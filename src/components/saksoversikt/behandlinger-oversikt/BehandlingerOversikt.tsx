@@ -58,7 +58,7 @@ export const BehandlingerOversikt = ({ behandlinger }: Props) => {
                                 size="small"
                                 variant={'secondary'}
                                 as={Link}
-                                href={`/behandling/${behandling.id}${behandling.erDeprecatedBehandling ? '/oppsummering' : ''}`}
+                                href={`/behandling/${behandling.id}`}
                             >
                                 Se behandling
                             </Button>

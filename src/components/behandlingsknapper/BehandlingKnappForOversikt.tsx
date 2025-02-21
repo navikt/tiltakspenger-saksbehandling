@@ -19,7 +19,7 @@ export const BehandlingKnappForOversikt = ({ behandling }: Props) => {
     const { innloggetSaksbehandler } = useSaksbehandler();
     const { taBehandling, isBehandlingMutating } = useTaBehandling();
 
-    const behandlingLenke = finnBehandlingslenke(behandling);
+    const behandlingLenke = `/behandling/${id}`;
 
     switch (status) {
         case BehandlingStatus.UNDER_BEHANDLING:
@@ -52,7 +52,7 @@ export const BehandlingKnappForOversikt = ({ behandling }: Props) => {
                     size={'small'}
                     variant={'primary'}
                     loading={isBehandlingMutating}
-                    onClick={(e) => {
+                    onClick={() => {
                         taBehandling({ id }).then(() => {
                             router.push(behandlingLenke);
                         });
@@ -65,21 +65,4 @@ export const BehandlingKnappForOversikt = ({ behandling }: Props) => {
     }
 
     return null;
-};
-
-const finnBehandlingslenke = (behandling: BehandlingForOversiktData) => {
-    const { id, status, erDeprecatedBehandling } = behandling;
-
-    switch (status) {
-        case BehandlingStatus.KLAR_TIL_BEHANDLING:
-        case BehandlingStatus.UNDER_BEHANDLING:
-            return erDeprecatedBehandling
-                ? `/behandling/${id}/inngangsvilkar/kravfrist`
-                : `/behandling/${id}`;
-        case BehandlingStatus.KLAR_TIL_BESLUTNING:
-        case BehandlingStatus.UNDER_BESLUTNING:
-            return erDeprecatedBehandling ? `/behandling/${id}/oppsummering` : `/behandling/${id}`;
-        default:
-            return '/';
-    }
 };
