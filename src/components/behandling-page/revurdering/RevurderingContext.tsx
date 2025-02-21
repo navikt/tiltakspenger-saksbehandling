@@ -24,7 +24,7 @@ export const RevurderingProvider = ({ behandlingContext, children }: ProviderPro
     const { behandling } = behandlingContext;
 
     const initialVedtak: RevurderTilStansVedtak = {
-        begrunnelse: '',
+        begrunnelse: behandling.begrunnelseVilkårsvurdering ?? '',
         stansDato: behandling.virkningsperiode?.fraOgMed ?? new Date().toISOString(),
     };
 

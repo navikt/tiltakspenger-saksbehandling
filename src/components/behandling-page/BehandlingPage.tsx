@@ -1,53 +1,48 @@
 import React from 'react';
-import { Loader } from '@navikt/ds-react';
 import { BehandlingHeader } from './header/BehandlingHeader';
 import { FørstegangsbehandlingVedtak } from './førstegangsbehandling/FørstegangsbehandlingVedtak';
 import { BehandlingSaksopplysninger } from './saksopplysninger/BehandlingSaksopplysninger';
-import { BehandlingProvider } from './context/BehandlingContext';
-import useSWR from 'swr';
-import { BehandlingData, BehandlingId } from '../../types/BehandlingTypes';
-import { fetcher, FetcherError } from '../../utils/http';
-import Varsel from '../varsel/Varsel';
 import { RevurderingsVedtak } from './revurdering/RevurderingsVedtak';
+import { useBehandling } from './context/BehandlingContext';
+import {
+    FørstegangsbehandlingContextState,
+    FørstegangsbehandlingProvider,
+} from './førstegangsbehandling/FørstegangsbehandlingContext';
+import { Behandlingstype } from '../../types/BehandlingTypes';
+import { RevurderingContextState, RevurderingProvider } from './revurdering/RevurderingContext';
 
 import style from './BehandlingPage.module.css';
 
-type Props = {
-    behandlingId: BehandlingId;
-};
-
-export const BehandlingPage = ({ behandlingId }: Props) => {
-    const {
-        data: behandling,
-        isLoading,
-        error,
-    } = useSWR<BehandlingData, FetcherError>(`/api/behandling/${behandlingId}`, fetcher);
-
-    if (error) {
-        return (
-            <Varsel
-                variant={'error'}
-                melding={`Kunne ikke hente behandling med id ${behandlingId} - [${error.status}] ${error.message}`}
-            />
-        );
-    }
-
-    if (isLoading || !behandling) {
-        return <Loader />;
-    }
+export const BehandlingPage = () => {
+    const behandlingsContext = useBehandling();
+    const behandlingsType = behandlingsContext.behandling.type;
 
     return (
-        <BehandlingProvider behandling={behandling}>
+        <>
             <BehandlingHeader />
             <div className={style.main}>
                 <BehandlingSaksopplysninger />
                 <div className={style.vedtakOuter}>
                     <div className={style.vedtakInner}>
-                        <FørstegangsbehandlingVedtak />
-                        <RevurderingsVedtak />
+                        {behandlingsType === Behandlingstype.FØRSTEGANGSBEHANDLING && (
+                            <FørstegangsbehandlingProvider
+                                behandlingContext={
+                                    behandlingsContext as FørstegangsbehandlingContextState
+                                }
+                            >
+                                <FørstegangsbehandlingVedtak />
+                            </FørstegangsbehandlingProvider>
+                        )}
+                        {behandlingsType === Behandlingstype.REVURDERING && (
+                            <RevurderingProvider
+                                behandlingContext={behandlingsContext as RevurderingContextState}
+                            >
+                                <RevurderingsVedtak />
+                            </RevurderingProvider>
+                        )}
                     </div>
                 </div>
             </div>
-        </BehandlingProvider>
+        </>
     );
 };

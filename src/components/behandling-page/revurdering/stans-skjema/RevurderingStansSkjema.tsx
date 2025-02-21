@@ -39,7 +39,7 @@ export const RevurderingStansSkjema = () => {
             />
             <Datovelger
                 label={'Stans fra og med'}
-                defaultSelected={new Date()}
+                defaultSelected={new Date(vedtak.stansDato)}
                 readOnly={rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER}
                 className={style.dato}
                 onDateChange={(valgtDato) => {
