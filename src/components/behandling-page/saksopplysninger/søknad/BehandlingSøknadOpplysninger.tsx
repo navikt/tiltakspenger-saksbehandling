@@ -72,6 +72,7 @@ export const BehandlingSøknadOpplysninger = ({ førstegangsbehandling }: Props)
                     <OpplysningMedDatoer
                         navn={pengestøtte.navn}
                         periodeEllerDato={pengestøtte.periodeEllerDato}
+                        key={pengestøtte.navn}
                     />
                 ))
             ) : (
