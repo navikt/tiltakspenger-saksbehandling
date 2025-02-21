@@ -7,7 +7,7 @@ import { dateTilISOTekst } from '../../../../utils/date';
 import style from './RevurderingStansSkjema.module.css';
 import { BehandlingSendTilBeslutter } from '../../send-og-godkjenn/BehandlingSendTilBeslutter';
 import { useSendRevurdering } from './useSendRevurdering';
-import { useGodkjennFørstegangsbehandling } from '../../førstegangsbehandling/4-send-og-godkjenn/useGodkjennFørstegangsbehandling';
+import { useGodkjennBehandling } from '../../send-og-godkjenn/useGodkjennBehandling';
 import { BehandlingGodkjenn } from '../../send-og-godkjenn/BehandlingGodkjenn';
 
 export const RevurderingStansSkjema = () => {
@@ -22,7 +22,7 @@ export const RevurderingStansSkjema = () => {
     } = useSendRevurdering(behandling, vedtak);
 
     const { godkjennVedtak, godkjennVedtakLaster, godkjennVedtakError } =
-        useGodkjennFørstegangsbehandling(behandling);
+        useGodkjennBehandling(behandling);
 
     return (
         <>

@@ -2,7 +2,7 @@ import useSWRMutation from 'swr/mutation';
 import { FetcherError, throwErrorIfFatal } from '../../../../utils/http';
 import { SakId } from '../../../../types/SakTypes';
 
-export const useOpprettRevurderingV2 = (sakId: SakId) => {
+export const useOpprettRevurdering = (sakId: SakId) => {
     const {
         trigger: opprettRevurdering,
         isMutating: opprettRevurderingLaster,

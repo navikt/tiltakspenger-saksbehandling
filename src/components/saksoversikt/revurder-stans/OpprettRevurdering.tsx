@@ -4,22 +4,27 @@ import { useRef } from 'react';
 import { SakId } from '../../../types/SakTypes';
 import { mutate } from 'swr';
 import router from 'next/router';
-import { useOpprettRevurderingV2 } from '../../behandling-page/revurdering/stans-skjema/useOpprettRevurderingV2';
+import { useOpprettRevurdering } from '../../behandling-page/revurdering/stans-skjema/useOpprettRevurdering';
 
 type Props = {
-    førsteLovligeStansdato: string;
     sakId: SakId;
     saksnummer: string;
+    harVedtak: boolean;
 };
 
-export const RevurderTilStans = ({ førsteLovligeStansdato, sakId, saksnummer }: Props) => {
+export const OpprettRevurdering = ({ sakId, saksnummer, harVedtak }: Props) => {
     const modalRef = useRef<HTMLDialogElement>(null);
 
-    const { opprettRevurdering } = useOpprettRevurderingV2(sakId);
+    const { opprettRevurdering } = useOpprettRevurdering(sakId);
 
     return (
         <>
-            <Button size="small" variant="secondary" onClick={() => modalRef.current?.showModal()}>
+            <Button
+                size="small"
+                variant="secondary"
+                onClick={() => modalRef.current?.showModal()}
+                disabled={!harVedtak}
+            >
                 {'Opprett revurdering'}
             </Button>
             <Spørsmålsmodal

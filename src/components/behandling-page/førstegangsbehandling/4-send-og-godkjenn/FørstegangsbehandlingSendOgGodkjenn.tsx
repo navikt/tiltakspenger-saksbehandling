@@ -1,7 +1,7 @@
 import { useSendFørstegangsbehandling } from './useSendFørstegangsbehandling';
 import { useFørstegangsbehandling } from '../FørstegangsbehandlingContext';
 import { BehandlingGodkjenn } from '../../send-og-godkjenn/BehandlingGodkjenn';
-import { useGodkjennFørstegangsbehandling } from './useGodkjennFørstegangsbehandling';
+import { useGodkjennBehandling } from '../../send-og-godkjenn/useGodkjennBehandling';
 import { BehandlingSendTilBeslutter } from '../../send-og-godkjenn/BehandlingSendTilBeslutter';
 
 export const FørstegangsbehandlingSendOgGodkjenn = () => {
@@ -11,7 +11,7 @@ export const FørstegangsbehandlingSendOgGodkjenn = () => {
         useSendFørstegangsbehandling(vedtak, behandling);
 
     const { godkjennVedtak, godkjennVedtakLaster, godkjennVedtakError } =
-        useGodkjennFørstegangsbehandling(behandling);
+        useGodkjennBehandling(behandling);
 
     return (
         <>

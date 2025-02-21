@@ -14,7 +14,6 @@ const Saksside: NextPageWithLayout<Sak> = ({
     meldeperiodeoversikt,
     saksnummer,
     sakId,
-    førsteLovligeStansdato,
 }: Sak) => {
     preload(`/api/sak/${sakId}/personopplysninger`, fetcher);
     return (
@@ -25,7 +24,6 @@ const Saksside: NextPageWithLayout<Sak> = ({
                 saksnummer={saksnummer}
                 behandlingsoversikt={behandlingsoversikt}
                 meldeperioder={meldeperiodeoversikt}
-                førsteLovligeStansdato={førsteLovligeStansdato}
             />
         </>
     );

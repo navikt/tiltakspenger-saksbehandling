@@ -1,10 +1,14 @@
-import { Box, HStack, Heading, Spacer } from '@navikt/ds-react';
-import { BehandlingForOversiktData } from '../../types/BehandlingTypes';
+import { Box, Heading, HStack, Spacer } from '@navikt/ds-react';
+import {
+    BehandlingForOversiktData,
+    BehandlingStatus,
+    Behandlingstype,
+} from '../../types/BehandlingTypes';
 import { MeldeperiodeProps } from '../../types/meldekort/Meldeperiode';
 import { MeldekortOversikt } from './meldekort-oversikt/MeldekortOversikt';
 import { BehandlingerOversikt } from './behandlinger-oversikt/BehandlingerOversikt';
 import { useFeatureToggles } from '../../hooks/useFeatureToggles';
-import { RevurderTilStans } from './revurder-stans/RevurderTilStans';
+import { OpprettRevurdering } from './revurder-stans/OpprettRevurdering';
 import { SakId } from '../../types/SakTypes';
 
 import styles from './Saksoversikt.module.css';
@@ -12,14 +16,12 @@ import styles from './Saksoversikt.module.css';
 type SaksoversiktProps = {
     behandlingsoversikt: BehandlingForOversiktData[];
     meldeperioder: MeldeperiodeProps[];
-    førsteLovligeStansdato: string;
     saksnummer: string;
     sakId: SakId;
 };
 
 export const Saksoversikt = ({
     behandlingsoversikt,
-    førsteLovligeStansdato,
     meldeperioder,
     saksnummer,
     sakId,
@@ -34,10 +36,10 @@ export const Saksoversikt = ({
                 </Heading>
                 <Spacer />
                 {revurderingStansToggle && (
-                    <RevurderTilStans
+                    <OpprettRevurdering
                         sakId={sakId}
                         saksnummer={saksnummer}
-                        førsteLovligeStansdato={førsteLovligeStansdato}
+                        harVedtak={harVedtattFørstegangsbehandling(behandlingsoversikt)}
                     />
                 )}
             </HStack>
@@ -56,3 +58,10 @@ export const Saksoversikt = ({
         </Box>
     );
 };
+
+const harVedtattFørstegangsbehandling = (behandlingsoversikt: BehandlingForOversiktData[]) =>
+    behandlingsoversikt.some(
+        (behandling) =>
+            behandling.typeBehandling === Behandlingstype.FØRSTEGANGSBEHANDLING &&
+            behandling.status === BehandlingStatus.VEDTATT,
+    );
