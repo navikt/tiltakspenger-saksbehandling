@@ -21,12 +21,16 @@ const Meldekort = ({ meldeperiodeKjedeId }: { meldeperiodeKjedeId: MeldeperiodeK
         sakId,
     );
 
+    if (laster) {
+        return <Loader />;
+    }
+
     if (error) {
         console.error(error.message);
     }
 
     // TODO: selector komponent for å velge blant flere instanser av meldeperioden
-    const valgtMeldeperiode = meldeperiodeKjede?.meldeperioder[0];
+    const valgtMeldeperiode = meldeperiodeKjede?.meldeperioder?.[0];
 
     return (
         <VStack>
