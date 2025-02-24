@@ -10,7 +10,6 @@ import {
     tellDagerMedDeltattEllerFravær,
 } from './meldekortBehandlingUtils';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
-import { useHentMeldeperiodeKjede } from '../../../../../hooks/meldekort/useHentMeldeperiodeKjede';
 import { MeldeperiodeMedBehandlingProps } from '../../../../../types/meldekort/Meldeperiode';
 
 import styles from '../../Meldekort.module.css';
@@ -22,7 +21,6 @@ type Props = {
 export const MeldekortBehandling = ({ meldeperiode }: Props) => {
     const { meldekortBehandling, brukersMeldekort, antallDager } = meldeperiode;
     const { sakId } = useSak().sak;
-    const { revalider } = useHentMeldeperiodeKjede(meldeperiode.kjedeId, sakId);
 
     const [valideringsFeil, setValideringsFeil] = useState('');
 
@@ -48,7 +46,6 @@ export const MeldekortBehandling = ({ meldeperiode }: Props) => {
         sakId,
         onSuccess: () => {
             lukkModal();
-            revalider();
         },
     });
 

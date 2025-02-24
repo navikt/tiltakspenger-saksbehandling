@@ -1,8 +1,8 @@
-import { Sak } from '../../types/SakTypes';
+import { SakProps } from '../../types/SakTypes';
 import { createContext } from 'react';
 
 export type SakContextState = {
-    sak: Sak;
+    sak: SakProps;
 };
 
 export const SakContext = createContext<SakContextState>({} as SakContextState);

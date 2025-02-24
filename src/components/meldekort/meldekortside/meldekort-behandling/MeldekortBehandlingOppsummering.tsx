@@ -6,7 +6,7 @@ import { useGodkjennMeldekort } from '../../../../hooks/meldekort/useGodkjennMel
 import { kanBeslutteForMeldekort } from '../../../../utils/tilganger';
 import BekreftelsesModal from '../../../modaler/BekreftelsesModal';
 import { MeldeperiodeMedBehandlingProps } from '../../../../types/meldekort/Meldeperiode';
-import { useSaksbehandler } from '../../../../hooks/useSaksbehandler';
+import { useSaksbehandler } from '../../../../context/saksbehandler/useSaksbehandler';
 import { useSak } from '../../../../context/sak/useSak';
 
 import styles from '../Meldekort.module.css';

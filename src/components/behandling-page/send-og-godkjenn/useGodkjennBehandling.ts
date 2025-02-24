@@ -4,7 +4,7 @@ import { FetcherError, throwErrorIfFatal } from '../../../utils/client-fetch';
 
 export const useGodkjennBehandling = (behandling: BehandlingData) => {
     const { trigger, isMutating, error } = useSWRMutation<BehandlingData, FetcherError, string>(
-        `/api/sak/${behandling.sakId}/behandling/${behandling.id}/iverksettv2`,
+        `/api/sak/${behandling.sakId}/behandling/${behandling.id}/iverksett`,
         fetchGodkjennBehandling,
     );
 

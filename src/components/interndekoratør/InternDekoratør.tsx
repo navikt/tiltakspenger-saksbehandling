@@ -5,7 +5,7 @@ import { LeaveIcon } from '@navikt/aksel-icons';
 import { useHentSakForFNR } from '../../hooks/useHentSakForFNR';
 import Varsel from '../varsel/Varsel';
 import Link from 'next/link';
-import { useSaksbehandler } from '../../hooks/useSaksbehandler';
+import { useSaksbehandler } from '../../context/saksbehandler/useSaksbehandler';
 
 const InternDekoratør = () => {
     const { innloggetSaksbehandler } = useSaksbehandler();

@@ -1,11 +1,11 @@
 import { pageWithAuthentication } from '../../../auth/pageWithAuthentication';
-import { Sak } from '../../../types/SakTypes';
+import { SakProps } from '../../../types/SakTypes';
 import { Saksoversikt } from '../../../components/saksoversikt/Saksoversikt';
 import { fetchSak } from '../../../utils/server-fetch';
 import { SakProvider } from '../../../context/sak/SakProvider';
 
 type Props = {
-    sak: Sak;
+    sak: SakProps;
 };
 
 const Saksside = ({ sak }: Props) => {

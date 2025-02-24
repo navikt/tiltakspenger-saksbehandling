@@ -1,4 +1,4 @@
-import { SaksbehandlerContext } from '../context/saksbehandler/SaksbehandlerContext';
+import { SaksbehandlerContext } from './SaksbehandlerContext';
 import { useContext } from 'react';
 
 export const useSaksbehandler = () => {

@@ -9,7 +9,7 @@ import { MeldekortBehandlingOppsummering } from './meldekort-behandling/Meldekor
 import { BrukersMeldekortVisning } from './BrukersMeldekort';
 import { useMeldeperioder } from '../../../hooks/meldekort/useMeldeperioder';
 import { kanSaksbehandleForMeldekort } from '../../../utils/tilganger';
-import { useSaksbehandler } from '../../../hooks/useSaksbehandler';
+import { useSaksbehandler } from '../../../context/saksbehandler/useSaksbehandler';
 
 import styles from './Meldekort.module.css';
 

@@ -1,4 +1,4 @@
-import { Sak } from '../types/SakTypes';
+import { SakProps } from '../types/SakTypes';
 import router from 'next/router';
 import useSWRMutation from 'swr/mutation';
 import { FetcherError, throwErrorIfFatal } from '../utils/client-fetch';
@@ -8,7 +8,7 @@ export function useHentSakForFNR() {
         trigger: søk,
         data: sak,
         error,
-    } = useSWRMutation<Sak, FetcherError, any, { fnr: string }>('/api/sak', sakFetcher, {
+    } = useSWRMutation<SakProps, FetcherError, any, { fnr: string }>('/api/sak', sakFetcher, {
         onSuccess: (data) => router.push(`/sak/${data.saksnummer}`),
     });
     return { søk, sak, error };

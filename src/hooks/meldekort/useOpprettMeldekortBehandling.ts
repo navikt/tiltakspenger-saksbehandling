@@ -1,7 +1,6 @@
 import useSWRMutation from 'swr/mutation';
 import { MeldeperiodeKjedeId } from '../../types/meldekort/Meldeperiode';
 import { SakId } from '../../types/SakTypes';
-
 import { throwErrorIfFatal } from '../../utils/client-fetch';
 
 const fetcher = async (url: string) => {

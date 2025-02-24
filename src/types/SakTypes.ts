@@ -3,7 +3,7 @@ import { MeldeperiodeProps } from './meldekort/Meldeperiode';
 
 export type SakId = `sak_${string}`;
 
-export type Sak = {
+export type SakProps = {
     sakId: SakId;
     saksnummer: string;
     fnr: string;

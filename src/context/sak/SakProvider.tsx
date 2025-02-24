@@ -1,9 +1,9 @@
 import React from 'react';
-import { Sak } from '../../types/SakTypes';
+import { SakProps } from '../../types/SakTypes';
 import { SakContext } from './SakContext';
 
 type Props = React.PropsWithChildren<{
-    sak: Sak;
+    sak: SakProps;
 }>;
 
 export const SakProvider = ({ sak, children }: Props) => {

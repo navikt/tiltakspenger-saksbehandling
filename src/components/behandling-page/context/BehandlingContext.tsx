@@ -1,7 +1,7 @@
 import { BehandlingData } from '../../../types/BehandlingTypes';
 import { createContext, ReactNode, useContext, useState } from 'react';
 import { kanBeslutteForBehandling, kanSaksbehandleForBehandling } from '../../../utils/tilganger';
-import { useSaksbehandler } from '../../../hooks/useSaksbehandler';
+import { useSaksbehandler } from '../../../context/saksbehandler/useSaksbehandler';
 import { SaksbehandlerRolle } from '../../../types/Saksbehandler';
 
 export type BehandlingContextState<Behandling extends BehandlingData> = {
