@@ -28,18 +28,16 @@ export const BehandlingTiltakOpplysninger = ({ tiltaksdeltagelse }: Props) => {
                     })}
                 />
             )}
-            <BehandlingSaksopplysning navn={'Registerkilde'} verdi={kildeMap[kilde] ?? kilde} />
+            <BehandlingSaksopplysning navn={'Registerkilde'} verdi={kildeTekst[kilde] ?? kilde} />
             <BehandlingSaksopplysning navn={'Status'} verdi={deltakelseStatus} />
-            {antallDagerPerUke && (
-                <BehandlingSaksopplysning
-                    navn={'Antall dager i uka'}
-                    verdi={antallDagerPerUke.toString()}
-                />
-            )}
+            <BehandlingSaksopplysning
+                navn={'Antall dager i uka'}
+                verdi={antallDagerPerUke?.toString() ?? 'Ukjent'}
+            />
         </>
     );
 };
 
-const kildeMap: Record<string, string> = {
+const kildeTekst: Record<string, string> = {
     Komet: 'Modia arbeidsrettet oppfølging',
 } as const;
