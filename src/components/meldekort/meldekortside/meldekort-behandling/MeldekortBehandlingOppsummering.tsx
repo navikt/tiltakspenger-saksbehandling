@@ -2,12 +2,12 @@ import { HStack, BodyShort, Button } from '@navikt/ds-react';
 import { ukeHeading } from '../../../../utils/date';
 import { Utbetalingsuke } from '../Utbetalingsuke';
 import { useRef } from 'react';
-import { useSak } from '../../../layout/SakLayout';
 import { useGodkjennMeldekort } from '../../../../hooks/meldekort/useGodkjennMeldekort';
 import { kanBeslutteForMeldekort } from '../../../../utils/tilganger';
 import BekreftelsesModal from '../../../modaler/BekreftelsesModal';
 import { MeldeperiodeMedBehandlingProps } from '../../../../types/meldekort/Meldeperiode';
 import { useSaksbehandler } from '../../../../hooks/useSaksbehandler';
+import { useSak } from '../../../../context/sak/useSak';
 
 import styles from '../Meldekort.module.css';
 
@@ -16,12 +16,12 @@ type Props = {
 };
 
 export const MeldekortBehandlingOppsummering = ({ meldeperiode }: Props) => {
-    const { sakId, saknummer } = useSak();
+    const { sakId, saksnummer } = useSak().sak;
     const { innloggetSaksbehandler } = useSaksbehandler();
     const { meldekortBehandling } = meldeperiode;
 
     const { onGodkjennMeldekort, isMeldekortMutating, reset, feilVedGodkjenning } =
-        useGodkjennMeldekort(meldekortBehandling.id, sakId, saknummer);
+        useGodkjennMeldekort(meldekortBehandling.id, sakId, saksnummer);
 
     const modalRef = useRef<HTMLDialogElement>(null);
 

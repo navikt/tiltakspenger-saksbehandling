@@ -1,10 +1,10 @@
 import { Alert, Button, Loader } from '@navikt/ds-react';
 import { MeldeperiodeProps, MeldeperiodeStatus } from '../../../../types/meldekort/Meldeperiode';
 import { useOpprettMeldekortBehandling } from '../../../../hooks/meldekort/useOpprettMeldekortBehandling';
-import { useSak } from '../../../layout/SakLayout';
 import { useHentMeldeperiodeKjede } from '../../../../hooks/meldekort/useHentMeldeperiodeKjede';
 import BekreftelsesModal from '../../../modaler/BekreftelsesModal';
 import { useRef } from 'react';
+import { useSak } from '../../../../context/sak/useSak';
 
 import styles from './MeldekortBehandlingOpprett.module.css';
 
@@ -13,7 +13,7 @@ type Props = {
 };
 
 export const MeldekortBehandlingOpprett = ({ meldeperiode }: Props) => {
-    const { sakId } = useSak();
+    const { sakId } = useSak().sak;
     const { revalider } = useHentMeldeperiodeKjede(meldeperiode.kjedeId, sakId);
     const { opprett, laster, feil } = useOpprettMeldekortBehandling({
         kjedeId: meldeperiode.kjedeId,

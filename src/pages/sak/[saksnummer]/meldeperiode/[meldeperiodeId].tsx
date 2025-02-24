@@ -1,7 +1,6 @@
 import { Button, HStack, Loader, Tag, VStack } from '@navikt/ds-react';
 import { pageWithAuthentication } from '../../../../auth/pageWithAuthentication';
 import { Meldekortside } from '../../../../components/meldekort/meldekortside/Meldekortside';
-import { SakLayout, useSak } from '../../../../components/layout/SakLayout';
 import { PersonaliaHeader } from '../../../../components/personaliaheader/PersonaliaHeader';
 import { finnMeldeperiodeStatusTekst } from '../../../../utils/tekstformateringUtils';
 import { useHentMeldeperiodeKjede } from '../../../../hooks/meldekort/useHentMeldeperiodeKjede';
@@ -10,11 +9,17 @@ import Link from 'next/link';
 import { MeldeperioderProvider } from '../../../../context/meldeperioder/MeldeperioderProvider';
 import { MeldekortDetaljer } from '../../../../components/meldekort/meldekortdetaljer/MeldekortDetaljer';
 import { MeldeperiodeKjedeId } from '../../../../types/meldekort/Meldeperiode';
+import { Sak } from '../../../../types/SakTypes';
+import { fetchSak } from '../../../../utils/server-fetch';
+import { SakProvider } from '../../../../context/sak/SakProvider';
+import { useSak } from '../../../../context/sak/useSak';
 
 import styles from './meldeperiode.module.css';
 
 const Meldekort = ({ meldeperiodeKjedeId }: { meldeperiodeKjedeId: MeldeperiodeKjedeId }) => {
-    const { sakId, saknummer } = useSak();
+    const { sak } = useSak();
+
+    const { sakId, saksnummer } = sak;
 
     const { meldeperiodeKjede, error, laster } = useHentMeldeperiodeKjede(
         meldeperiodeKjedeId,
@@ -34,8 +39,8 @@ const Meldekort = ({ meldeperiodeKjedeId }: { meldeperiodeKjedeId: MeldeperiodeK
 
     return (
         <VStack>
-            <PersonaliaHeader sakId={sakId} saksnummer={saknummer}>
-                <Button as={Link} href={`/sak/${saknummer}`} type="submit" size="small">
+            <PersonaliaHeader sakId={sakId} saksnummer={saksnummer}>
+                <Button as={Link} href={`/sak/${saksnummer}`} type="submit" size="small">
                     Tilbake til saksoversikt
                 </Button>
                 {valgtMeldeperiode && (
@@ -70,21 +75,23 @@ const Meldekort = ({ meldeperiodeKjedeId }: { meldeperiodeKjedeId: MeldeperiodeK
 
 type Props = {
     meldeperiodeKjedeId: MeldeperiodeKjedeId;
-    saksnummer: string;
+    sak: Sak;
 };
 
-const SakWrapper = ({ meldeperiodeKjedeId, saksnummer }: Props) => {
+const SakWrapper = ({ meldeperiodeKjedeId, sak }: Props) => {
     return (
-        <SakLayout saksnummer={saksnummer}>
+        <SakProvider sak={sak}>
             <Meldekort meldeperiodeKjedeId={meldeperiodeKjedeId} />
-        </SakLayout>
+        </SakProvider>
     );
 };
 
 export const getServerSideProps = pageWithAuthentication(async (context) => {
+    const sak = await fetchSak(context.req, context.params!.saksnummer as string);
+
     return {
         props: {
-            saksnummer: context.params!.saksnummer,
+            sak,
             meldeperiodeKjedeId: context.params!.meldeperiodeId,
         },
     };

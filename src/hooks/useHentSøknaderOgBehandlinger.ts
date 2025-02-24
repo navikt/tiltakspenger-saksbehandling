@@ -1,6 +1,7 @@
 import useSWR from 'swr';
-import { fetcher, FetcherError } from '../utils/http';
 import { BehandlingEllerSøknadForOversiktData } from '../types/BehandlingTypes';
+
+import { fetcher, FetcherError } from '../utils/client-fetch';
 
 export const useHentSøknaderOgBehandlinger = (
     initialData: BehandlingEllerSøknadForOversiktData[],

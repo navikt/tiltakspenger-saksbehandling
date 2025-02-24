@@ -1,8 +1,9 @@
 import useSWRMutation from 'swr/mutation';
-import { FetcherError, throwErrorIfFatal } from '../../utils/http';
 import router from 'next/router';
 import { SakId } from '../../types/SakTypes';
 import { MeldekortBehandlingId } from '../../types/meldekort/MeldekortBehandling';
+
+import { FetcherError, throwErrorIfFatal } from '../../utils/client-fetch';
 
 export async function mutateMeldekort<R>(url: string, { arg }: { arg: any }): Promise<R> {
     const res = await fetch(url, {

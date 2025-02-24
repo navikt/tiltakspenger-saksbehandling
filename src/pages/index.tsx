@@ -11,7 +11,7 @@ import Varsel from '../components/varsel/Varsel';
 import { BehandlingKnappForOversikt } from '../components/behandlingsknapper/BehandlingKnappForOversikt';
 import Link from 'next/link';
 import { StartSøknadBehandling } from '../components/behandlingsknapper/start-behandling/StartSøknadBehandling';
-import { fetchJsonFraApi } from '../utils/auth';
+import { fetchJsonFraApi } from '../utils/server-fetch';
 import { BehandlingEllerSøknadForOversiktData } from '../types/BehandlingTypes';
 
 type Props = {

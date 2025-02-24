@@ -1,7 +1,8 @@
 import useSWRMutation from 'swr/mutation';
-import { FetcherError, throwErrorIfFatal } from '../../../../utils/http';
 import { RevurderingData } from '../../../../types/BehandlingTypes';
 import { RevurderTilStansVedtak } from '../../../../types/VedtakTyper';
+
+import { FetcherError, throwErrorIfFatal } from '../../../../utils/client-fetch';
 
 export const useSendRevurdering = (behandling: RevurderingData, vedtak: RevurderTilStansVedtak) => {
     const {

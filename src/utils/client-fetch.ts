@@ -1,5 +1,5 @@
-import { logger } from '@navikt/next-logger';
 import { finnFetchFeilmelding } from './feilmeldinger';
+import { logger } from '@navikt/next-logger';
 
 export class FetcherError extends Error {
     info?: { melding: string; kode: string };

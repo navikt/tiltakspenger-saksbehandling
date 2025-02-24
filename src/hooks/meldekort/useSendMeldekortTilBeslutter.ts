@@ -1,7 +1,8 @@
 import useSWRMutation from 'swr/mutation';
-import { FetcherError, throwErrorIfFatal } from '../../utils/http';
 import { MeldekortBehandlingDTO } from '../../types/meldekort/MeldekortBehandling';
 import { SakId } from '../../types/SakTypes';
+
+import { FetcherError, throwErrorIfFatal } from '../../utils/client-fetch';
 
 const mutateMeldekort = async (
     url: string,

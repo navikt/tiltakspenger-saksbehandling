@@ -1,7 +1,8 @@
 import useSWR from 'swr';
 import { MeldeperiodeKjedeId, MeldeperiodeKjedeProps } from '../../types/meldekort/Meldeperiode';
-import { fetcher, FetcherError } from '../../utils/http';
 import { SakId } from '../../types/SakTypes';
+
+import { fetcher, FetcherError } from '../../utils/client-fetch';
 
 export function useHentMeldeperiodeKjede(meldeperiodeKjedeId: MeldeperiodeKjedeId, sakId: SakId) {
     const { data, mutate, isLoading, error, isValidating } = useSWR<

@@ -2,7 +2,7 @@ import { Alert, Button } from '@navikt/ds-react';
 import { useState } from 'react';
 import { useBehandling } from '../context/BehandlingContext';
 import { BehandlingData } from '../../../types/BehandlingTypes';
-import { FetcherError } from '../../../utils/http';
+import { FetcherError } from '../../../utils/client-fetch';
 import { SaksbehandlerRolle } from '../../../types/Saksbehandler';
 
 import style from './BehandlingSendOgGodkjenn.module.css';

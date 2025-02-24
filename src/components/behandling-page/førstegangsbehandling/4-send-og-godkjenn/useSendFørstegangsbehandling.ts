@@ -5,7 +5,8 @@ import {
 } from '../../../../types/VedtakTyper';
 import { BehandlingData } from '../../../../types/BehandlingTypes';
 import useSWRMutation from 'swr/mutation';
-import { FetcherError, throwErrorIfFatal } from '../../../../utils/http';
+
+import { FetcherError, throwErrorIfFatal } from '../../../../utils/client-fetch';
 
 export const useSendFørstegangsbehandling = (vedtak: VedtakData, behandling: BehandlingData) => {
     const { trigger, isMutating, error } = useSWRMutation<

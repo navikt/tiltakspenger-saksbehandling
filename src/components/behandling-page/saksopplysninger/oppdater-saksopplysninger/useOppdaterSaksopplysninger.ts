@@ -1,6 +1,7 @@
 import useSWRMutation from 'swr/mutation';
 import { BehandlingData } from '../../../../types/BehandlingTypes';
-import { FetcherError, throwErrorIfFatal } from '../../../../utils/http';
+
+import { FetcherError, throwErrorIfFatal } from '../../../../utils/client-fetch';
 
 export const useOppdaterSaksopplysninger = (behandling: BehandlingData) => {
     const { sakId, id } = behandling;

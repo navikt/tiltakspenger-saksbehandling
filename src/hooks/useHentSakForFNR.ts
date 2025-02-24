@@ -1,7 +1,7 @@
-import { FetcherError, throwErrorIfFatal } from '../utils/http';
 import { Sak } from '../types/SakTypes';
 import router from 'next/router';
 import useSWRMutation from 'swr/mutation';
+import { FetcherError, throwErrorIfFatal } from '../utils/client-fetch';
 
 export function useHentSakForFNR() {
     const {

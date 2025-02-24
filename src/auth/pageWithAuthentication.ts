@@ -6,7 +6,7 @@ import {
     NextApiResponse,
 } from 'next';
 import { logger } from '@navikt/next-logger';
-import { fetchFraApi } from '../utils/auth';
+import { fetchFraApi } from '../utils/server-fetch';
 import { Saksbehandler } from '../types/Saksbehandler';
 
 const LOGIN_API_URL = `${process.env.WONDERWALL_ORIGIN || ''}/oauth2/login`;

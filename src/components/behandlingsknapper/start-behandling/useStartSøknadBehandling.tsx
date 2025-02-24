@@ -1,5 +1,5 @@
 import useSWRMutation from 'swr/mutation';
-import { FetcherError, throwErrorIfFatal } from '../../../utils/http';
+import { FetcherError, throwErrorIfFatal } from '../../../utils/client-fetch';
 import { BehandlingId } from '../../../types/BehandlingTypes';
 import { SøknadForOversiktProps } from '../../../types/SøknadTypes';
 

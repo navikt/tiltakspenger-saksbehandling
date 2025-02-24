@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { withAuthenticatedApi } from '../../auth/pageWithAuthentication';
-import { FetcherError } from '../../utils/http';
-import { fetchFraApi } from '../../utils/auth';
+import { fetchFraApi } from '../../utils/server-fetch';
 import { logger } from '@navikt/next-logger';
+import { FetcherError } from '../../utils/client-fetch';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (!req.url) {

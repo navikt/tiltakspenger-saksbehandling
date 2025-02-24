@@ -1,8 +1,9 @@
 import { BodyShort, Button, Modal } from '@navikt/ds-react';
 import { ReactNode, RefObject } from 'react';
 import styles from './BekreftelsesModal.module.css';
-import { FetcherError } from '../../utils/http';
 import Varsel from '../varsel/Varsel';
+
+import { FetcherError } from '../../utils/client-fetch';
 
 interface BekreftelsesModalProps {
     modalRef: RefObject<HTMLDialogElement>;

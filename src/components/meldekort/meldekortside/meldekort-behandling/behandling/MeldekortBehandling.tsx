@@ -1,6 +1,6 @@
 import { Alert, BodyShort, Button, HStack, Spacer } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
-import { useSak } from '../../../../layout/SakLayout';
+import { useSak } from '../../../../../context/sak/useSak';
 import { useSendMeldekortTilBeslutter } from '../../../../../hooks/meldekort/useSendMeldekortTilBeslutter';
 import { MeldekortBehandlingUke } from './MeldekortBehandlingUke';
 import BekreftelsesModal from '../../../../modaler/BekreftelsesModal';
@@ -21,7 +21,7 @@ type Props = {
 
 export const MeldekortBehandling = ({ meldeperiode }: Props) => {
     const { meldekortBehandling, brukersMeldekort, antallDager } = meldeperiode;
-    const { sakId } = useSak();
+    const { sakId } = useSak().sak;
     const { revalider } = useHentMeldeperiodeKjede(meldeperiode.kjedeId, sakId);
 
     const [valideringsFeil, setValideringsFeil] = useState('');

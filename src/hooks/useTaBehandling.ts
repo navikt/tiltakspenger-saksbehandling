@@ -1,7 +1,8 @@
 import useSWRMutation from 'swr/mutation';
-import { throwErrorIfFatal } from '../utils/http';
 import { BehandlingData, BehandlingId } from '../types/BehandlingTypes';
 import { mutate } from 'swr';
+
+import { throwErrorIfFatal } from '../utils/client-fetch';
 
 type TaBehandlingResponse = BehandlingData;
 
