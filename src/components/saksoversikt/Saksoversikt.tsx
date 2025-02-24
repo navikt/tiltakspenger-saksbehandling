@@ -16,8 +16,9 @@ import styles from './Saksoversikt.module.css';
 export const Saksoversikt = () => {
     const { revurderingStansToggle } = useFeatureToggles();
 
-    const { sak } = useSak();
-    const { sakId, saksnummer, behandlingsoversikt, meldeperiodeoversikt } = sak;
+    const { sakId, saksnummer, behandlingsoversikt, meldeperiodeKjeder } = useSak().sak;
+
+    const meldeperioder = meldeperiodeKjeder.flatMap((kjede) => kjede.meldeperioder);
 
     return (
         <>
@@ -45,10 +46,7 @@ export const Saksoversikt = () => {
                     <Heading level={'3'} size={'small'}>
                         {'Meldekort'}
                     </Heading>
-                    <MeldekortOversikt
-                        meldeperioder={meldeperiodeoversikt}
-                        saksnummer={saksnummer}
-                    />
+                    <MeldekortOversikt meldeperioder={meldeperioder} saksnummer={saksnummer} />
                 </Box>
             </Box>
         </>

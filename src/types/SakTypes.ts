@@ -1,5 +1,5 @@
 import { BehandlingForOversiktData } from './BehandlingTypes';
-import { MeldeperiodeProps } from './meldekort/Meldeperiode';
+import { MeldeperiodeKjedeProps } from './meldekort/Meldeperiode';
 
 export type SakId = `sak_${string}`;
 
@@ -8,7 +8,7 @@ export type SakProps = {
     saksnummer: string;
     fnr: string;
     behandlingsoversikt: BehandlingForOversiktData[];
-    meldeperiodeoversikt: MeldeperiodeProps[];
+    meldeperiodeKjeder: MeldeperiodeKjedeProps[];
     førsteLovligeStansdato?: string;
     sisteDagSomGirRett?: string;
 };

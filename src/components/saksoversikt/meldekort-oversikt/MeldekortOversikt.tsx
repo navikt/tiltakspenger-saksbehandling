@@ -25,16 +25,15 @@ export const MeldekortOversikt = ({ meldeperioder, saksnummer }: Props) => {
                 {meldeperioder
                     .sort((a, b) => (a.periode.fraOgMed > b.periode.fraOgMed ? -1 : 1))
                     .map((meldeperiode) => {
-                        const { meldekortBehandling } = meldeperiode;
+                        const { meldekortBehandling, id, status, periode } = meldeperiode;
 
                         return (
-                            <Table.Row shadeOnHover={false} key={meldeperiode.id}>
+                            <Table.Row shadeOnHover={false} key={id}>
                                 <Table.DataCell>
-                                    {finnMeldeperiodeStatusTekst[meldeperiode.status]}
+                                    {finnMeldeperiodeStatusTekst[status]}
                                 </Table.DataCell>
                                 <Table.DataCell>
-                                    {meldeperiode.periode &&
-                                        `${periodeTilFormatertDatotekst(meldeperiode.periode)}`}
+                                    {periodeTilFormatertDatotekst(periode)}
                                 </Table.DataCell>
                                 <Table.DataCell>
                                     {meldekortBehandling?.saksbehandler ?? '-'}
@@ -43,11 +42,10 @@ export const MeldekortOversikt = ({ meldeperioder, saksnummer }: Props) => {
                                     {meldekortBehandling?.beslutter ?? '-'}
                                 </Table.DataCell>
                                 <Table.DataCell>
-                                    {meldeperiode.status !==
-                                        MeldeperiodeStatus.IKKE_KLAR_TIL_UTFYLLING && (
+                                    {status !== MeldeperiodeStatus.IKKE_KLAR_TIL_UTFYLLING && (
                                         <Button
                                             as={Link}
-                                            href={`/sak/${saksnummer}/meldeperiode/${encodeURIComponent(meldeperiode.kjedeId)}`}
+                                            href={`/sak/${saksnummer}/meldeperiode/${periode.fraOgMed}/${periode.tilOgMed}`}
                                             style={{ minWidth: '50%' }}
                                             size="small"
                                             variant="secondary"
