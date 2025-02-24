@@ -9,5 +9,6 @@ export type SakProps = {
     fnr: string;
     behandlingsoversikt: BehandlingForOversiktData[];
     meldeperiodeoversikt: MeldeperiodeProps[];
-    førsteLovligeStansdato: string;
+    førsteLovligeStansdato?: string;
+    sisteDagSomGirRett?: string;
 };

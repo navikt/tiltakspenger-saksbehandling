@@ -27,11 +27,23 @@ const Meldeperiode = ({ meldeperiodeKjede, sak }: Props) => {
 export const getServerSideProps = pageWithAuthentication(async (context) => {
     const sak = await fetchSak(context.req, context.params!.saksnummer as string);
 
+    const meldeperiodeKjedeId = context.params!.meldeperiodeId as MeldeperiodeKjedeId;
+
+    // const meldeperiodeKjede = sak.meldeperiodeoversikt.find(
+    //     (meldeperiode) => meldeperiode.kjedeId === meldeperiodeKjedeId,
+    // );
+
     const meldeperiodeKjede = await fetchMeldeperiodeKjede(
         context.req,
         sak.sakId,
-        context.params!.meldeperiodeId as MeldeperiodeKjedeId,
+        meldeperiodeKjedeId,
     );
+
+    // if (!meldeperiodeKjede) {
+    //     return {
+    //         notFound: true,
+    //     };
+    // }
 
     return {
         props: {

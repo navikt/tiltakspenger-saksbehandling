@@ -33,8 +33,7 @@ export type MeldeperiodeProps = {
 export type MeldeperiodeKjedeProps = {
     kjedeId: MeldeperiodeKjedeId;
     periode: Periode;
-    tiltaksnavn: string;
-    vedtaksPeriode?: Periode;
+    tiltaksnavn?: string;
     meldeperioder: MeldeperiodeProps[];
 };
 

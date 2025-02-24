@@ -1,31 +1,37 @@
 import { VStack, BodyShort } from '@navikt/ds-react';
-import { formaterTidspunkt, periodeTilFormatertDatotekst } from '../../../utils/date';
+import {
+    formaterDatotekst,
+    formaterTidspunkt,
+    periodeTilFormatertDatotekst,
+} from '../../../utils/date';
 import { useMeldeperioder } from '../../../hooks/meldekort/useMeldeperioder';
 import { MeldekortBehandlingOpprett } from '../meldekortside/meldekort-behandling/MeldekortBehandlingOpprett';
 import { MeldekortBehandlingProps } from '../../../types/meldekort/MeldekortBehandling';
 import { useFeatureToggles } from '../../../hooks/useFeatureToggles';
 
 import styles from './MeldekortDetaljer.module.css';
+import { useSak } from '../../../context/sak/useSak';
 
 export const MeldekortDetaljer = () => {
+    const { sak } = useSak();
+    const { sisteDagSomGirRett } = sak;
+
     const { meldeperiodeKjede, valgtMeldeperiode } = useMeldeperioder();
-    const { vedtaksPeriode, periode, tiltaksnavn } = meldeperiodeKjede;
+    const { periode, tiltaksnavn } = meldeperiodeKjede;
     const { antallDager, meldekortBehandling, brukersMeldekort } = valgtMeldeperiode;
     const { brukersMeldekortToggle } = useFeatureToggles();
 
     return (
         <VStack gap="3" className={styles.wrapper}>
-            {vedtaksPeriode && (
-                <MeldekortDetalj
-                    header={'Vedtaksperiode'}
-                    tekst={periodeTilFormatertDatotekst(vedtaksPeriode)}
-                />
-            )}
+            <MeldekortDetalj
+                header={'Siste dag med rett'}
+                tekst={sisteDagSomGirRett ? formaterDatotekst(sisteDagSomGirRett) : 'Ukjent'}
+            />
             <MeldekortDetalj
                 header={'Meldekortperiode'}
                 tekst={periodeTilFormatertDatotekst(periode)}
             />
-            <MeldekortDetalj header={'Tiltak'} tekst={tiltaksnavn} />
+            <MeldekortDetalj header={'Tiltak'} tekst={tiltaksnavn ?? 'Ukjent'} />
             <MeldekortDetalj
                 header={'Antall dager per meldeperiode'}
                 tekst={antallDager.toString()}
