@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { finnMeldeperiodeStatusTekst } from '../../utils/tekstformateringUtils';
 import { MeldekortDetaljer } from './meldekortdetaljer/MeldekortDetaljer';
 import { Meldekortside } from './meldekortside/Meldekortside';
-import { useMeldeperioder } from '../../hooks/meldekort/useMeldeperioder';
+import { useMeldeperiodeKjede } from '../../hooks/meldekort/useMeldeperiodeKjede';
 
 import style from './MeldeperiodeSide.module.css';
 
@@ -13,7 +13,7 @@ export const MeldeperiodeSide = () => {
     const { sak } = useSak();
     const { sakId, saksnummer } = sak;
 
-    const { valgtMeldeperiode } = useMeldeperioder();
+    const { valgtMeldeperiode } = useMeldeperiodeKjede();
 
     return (
         <VStack>

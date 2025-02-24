@@ -7,7 +7,7 @@ import {
 import { MeldekortBehandling } from './meldekort-behandling/behandling/MeldekortBehandling';
 import { MeldekortBehandlingOppsummering } from './meldekort-behandling/MeldekortBehandlingOppsummering';
 import { BrukersMeldekortVisning } from './BrukersMeldekort';
-import { useMeldeperioder } from '../../../hooks/meldekort/useMeldeperioder';
+import { useMeldeperiodeKjede } from '../../../hooks/meldekort/useMeldeperiodeKjede';
 import { kanSaksbehandleForMeldekort } from '../../../utils/tilganger';
 import { useSaksbehandler } from '../../../context/saksbehandler/useSaksbehandler';
 
@@ -20,7 +20,7 @@ import {
 
 export const Meldekortside = () => {
     const { innloggetSaksbehandler } = useSaksbehandler();
-    const { meldeperiodeKjede, valgtMeldeperiode } = useMeldeperioder();
+    const { meldeperiodeKjede, valgtMeldeperiode } = useMeldeperiodeKjede();
     const { brukersMeldekort, meldekortBehandling } = valgtMeldeperiode;
 
     return (

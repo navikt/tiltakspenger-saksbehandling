@@ -4,7 +4,7 @@ import {
     formaterTidspunkt,
     periodeTilFormatertDatotekst,
 } from '../../../utils/date';
-import { useMeldeperioder } from '../../../hooks/meldekort/useMeldeperioder';
+import { useMeldeperiodeKjede } from '../../../hooks/meldekort/useMeldeperiodeKjede';
 import { MeldekortBehandlingOpprett } from '../meldekortside/meldekort-behandling/MeldekortBehandlingOpprett';
 import { MeldekortBehandlingProps } from '../../../types/meldekort/MeldekortBehandling';
 import { useFeatureToggles } from '../../../hooks/useFeatureToggles';
@@ -16,7 +16,7 @@ export const MeldekortDetaljer = () => {
     const { sak } = useSak();
     const { sisteDagSomGirRett } = sak;
 
-    const { meldeperiodeKjede, valgtMeldeperiode } = useMeldeperioder();
+    const { meldeperiodeKjede, valgtMeldeperiode } = useMeldeperiodeKjede();
     const { periode, tiltaksnavn } = meldeperiodeKjede;
     const { antallDager, meldekortBehandling, brukersMeldekort } = valgtMeldeperiode;
     const { brukersMeldekortToggle } = useFeatureToggles();

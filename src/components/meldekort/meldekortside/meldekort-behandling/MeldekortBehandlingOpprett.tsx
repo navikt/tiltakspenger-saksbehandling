@@ -4,6 +4,7 @@ import { useOpprettMeldekortBehandling } from '../../../../hooks/meldekort/useOp
 import BekreftelsesModal from '../../../modaler/BekreftelsesModal';
 import { useRef } from 'react';
 import { useSak } from '../../../../context/sak/useSak';
+import { useMeldeperiodeKjede } from '../../../../hooks/meldekort/useMeldeperiodeKjede';
 
 import styles from './MeldekortBehandlingOpprett.module.css';
 
@@ -13,6 +14,7 @@ type Props = {
 
 export const MeldekortBehandlingOpprett = ({ meldeperiode }: Props) => {
     const { sakId } = useSak().sak;
+    const { setMeldekortbehandling } = useMeldeperiodeKjede();
 
     const { opprett, laster, feil } = useOpprettMeldekortBehandling({
         kjedeId: meldeperiode.kjedeId,
@@ -30,7 +32,7 @@ export const MeldekortBehandlingOpprett = ({ meldeperiode }: Props) => {
                     {'Start behandling'}
                 </Button>
             )}
-            {feil && <Alert variant={'error'}>{feil}</Alert>}
+            {feil && <Alert variant={'error'}>{feil.message}</Alert>}
             <BekreftelsesModal
                 modalRef={modalRef}
                 tittel={'Start behandling av meldekortet'}
@@ -40,9 +42,10 @@ export const MeldekortBehandlingOpprett = ({ meldeperiode }: Props) => {
             >
                 <Button
                     icon={laster && <Loader />}
+                    disabled={laster}
                     onClick={() => {
-                        opprett().then((data) => {
-                            console.log('something something');
+                        opprett().then((meldekortBehandling) => {
+                            setMeldekortbehandling(meldeperiode.id, meldekortBehandling);
                         });
                     }}
                 >

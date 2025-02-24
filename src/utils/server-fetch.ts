@@ -2,9 +2,8 @@ import { getToken, requestOboToken } from '@navikt/oasis';
 import { logger } from '@navikt/next-logger';
 import { IncomingMessage } from 'node:http';
 import { NextApiRequest } from 'next';
-import { SakProps, SakId } from '../types/SakTypes';
+import { SakProps } from '../types/SakTypes';
 import { throwErrorIfFatal } from './client-fetch';
-import { MeldeperiodeKjedeId, MeldeperiodeKjedeProps } from '../types/meldekort/Meldeperiode';
 
 type NextRequest = Request | IncomingMessage | NextApiRequest;
 
@@ -55,13 +54,3 @@ export const fetchJsonFraApi = async <JsonResponse>(
 
 export const fetchSak = async (req: NextRequest, saksnummer: string) =>
     fetchJsonFraApi<SakProps>(req, `/sak/${saksnummer}`);
-
-export const fetchMeldeperiodeKjede = async (
-    req: NextRequest,
-    sakId: SakId,
-    meldeperiodeKjedeId: MeldeperiodeKjedeId,
-) =>
-    fetchJsonFraApi<MeldeperiodeKjedeProps>(
-        req,
-        `/sak/${sakId}/meldeperiode/${encodeURIComponent(meldeperiodeKjedeId)}`,
-    );

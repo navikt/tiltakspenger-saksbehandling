@@ -4,7 +4,7 @@ import { SakProps } from '../../../../../types/SakTypes';
 import { fetchSak } from '../../../../../utils/server-fetch';
 import { SakProvider } from '../../../../../context/sak/SakProvider';
 import { MeldeperiodeSide } from '../../../../../components/meldekort/MeldeperiodeSide';
-import { MeldeperioderProvider } from '../../../../../context/meldeperioder/MeldeperioderProvider';
+import { MeldeperiodeKjedeProvider } from '../../../../../context/meldeperioder/MeldeperiodeKjedeProvider';
 
 type Props = {
     meldeperiodeKjede: MeldeperiodeKjedeProps;
@@ -14,9 +14,9 @@ type Props = {
 const Meldeperiode = ({ meldeperiodeKjede, sak }: Props) => {
     return (
         <SakProvider sak={sak}>
-            <MeldeperioderProvider meldeperiodeKjede={meldeperiodeKjede}>
+            <MeldeperiodeKjedeProvider meldeperiodeKjede={meldeperiodeKjede}>
                 <MeldeperiodeSide />
-            </MeldeperioderProvider>
+            </MeldeperiodeKjedeProvider>
         </SakProvider>
     );
 };
