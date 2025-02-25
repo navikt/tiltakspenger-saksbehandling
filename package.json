@@ -1,6 +1,8 @@
 {
   "name": "tiltakspenger-saksbehandling",
   "version": "0.1.0",
+  "author": "NAV",
+  "license": "MIT",
   "scripts": {
     "dev": "next dev | pino-pretty",
     "build": "next build",
@@ -8,13 +10,14 @@
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "format:check": "prettier --check .",
-    "format:all": "prettier --write ."
+    "format:all": "prettier --write .",
+    "prepare": "husky"
   },
   "dependencies": {
-    "@navikt/aksel-icons": "7.12.2",
-    "@navikt/ds-css": "7.12.2",
-    "@navikt/ds-react": "7.12.2",
-    "@navikt/ds-tokens": "7.12.2",
+    "@navikt/aksel-icons": "7.14.2",
+    "@navikt/ds-css": "7.14.2",
+    "@navikt/ds-react": "7.14.2",
+    "@navikt/ds-tokens": "7.14.2",
     "@navikt/next-logger": "1.35.0",
     "@navikt/oasis": "3.7.0",
     "dayjs": "1.11.13",
@@ -27,14 +30,20 @@
     "typescript": "5.7.3"
   },
   "devDependencies": {
-    "@types/node": "22.13.4",
+    "@types/node": "22.13.5",
     "@types/react": "18.3.18",
     "@types/react-dom": "18.3.5",
     "eslint-config-next": "15.1.7",
     "eslint-config-prettier": "10.0.1",
+    "husky": "9.1.7",
+    "lint-staged": "15.4.3",
     "pino-pretty": "13.0.0",
-    "prettier": "3.5.1"
+    "prettier": "3.5.2"
   },
-  "author": "NAV",
-  "license": "MIT"
+  "lint-staged": {
+    "*.{ts,tsx,css}": [
+      "prettier --write",
+      "eslint"
+    ]
+  }
 }
