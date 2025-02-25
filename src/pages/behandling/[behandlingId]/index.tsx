@@ -1,9 +1,9 @@
 import { pageWithAuthentication } from '../../../auth/pageWithAuthentication';
 import { BehandlingData, BehandlingId } from '../../../types/BehandlingTypes';
-import { BehandlingPage } from '../../../components/behandling-page/BehandlingPage';
+import { BehandlingPage } from '../../../components/behandling/BehandlingPage';
 import React, { ComponentProps } from 'react';
 import { GetServerSideProps } from 'next';
-import { BehandlingProvider } from '../../../components/behandling-page/context/BehandlingContext';
+import { BehandlingProvider } from '../../../components/behandling/context/BehandlingContext';
 import { fetchJsonFraApi } from '../../../utils/server-fetch';
 import { logger } from '@navikt/next-logger';
 

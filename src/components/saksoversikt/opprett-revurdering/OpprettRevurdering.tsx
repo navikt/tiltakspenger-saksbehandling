@@ -3,7 +3,7 @@ import Spørsmålsmodal from '../../modaler/Spørsmålsmodal';
 import { useRef } from 'react';
 import { SakId } from '../../../types/SakTypes';
 import router from 'next/router';
-import { useOpprettRevurdering } from '../../behandling-page/revurdering/stans-skjema/useOpprettRevurdering';
+import { useOpprettRevurdering } from './useOpprettRevurdering';
 
 type Props = {
     sakId: SakId;
