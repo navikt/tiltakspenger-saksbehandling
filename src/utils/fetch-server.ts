@@ -3,13 +3,14 @@ import { logger } from '@navikt/next-logger';
 import { IncomingMessage } from 'node:http';
 import { NextApiRequest } from 'next';
 import { SakProps } from '../types/SakTypes';
-import { throwErrorIfFatal } from './client-fetch';
 import {
     BehandlingData,
     BehandlingEllerSøknadForOversiktData,
     BehandlingId,
 } from '../types/BehandlingTypes';
 import { Saksbehandler } from '../types/Saksbehandler';
+import { stripLeadingSlash } from './string';
+import { errorFraApiResponse } from './fetch';
 
 type NextRequest = Request | IncomingMessage | NextApiRequest;
 
@@ -30,10 +31,14 @@ const hentOboToken = async (req: NextRequest) => {
     return obo.token;
 };
 
-export const fetchFraApi = async (req: NextRequest, path: string, options?: RequestInit) => {
+export const fetchFraApiServerSide = async (
+    req: NextRequest,
+    path: string,
+    options?: RequestInit,
+) => {
     const oboToken = await hentOboToken(req);
 
-    const url = `${SBH_API_URL}/${path.replace(/^\//, '')}`;
+    const url = `${SBH_API_URL}/${stripLeadingSlash(path)}`;
 
     return fetch(url, {
         ...options,
@@ -52,9 +57,11 @@ const fetchJsonFraApi = async <JsonResponse>(
     path: string,
     options?: RequestInit,
 ): Promise<JsonResponse> => {
-    return fetchFraApi(req, path, options).then((res) => {
-        throwErrorIfFatal(res);
-        return res.json() as JsonResponse;
+    return fetchFraApiServerSide(req, path, options).then((res) => {
+        if (res.ok) {
+            return res.json() as JsonResponse;
+        }
+        throw errorFraApiResponse(res);
     });
 };
 

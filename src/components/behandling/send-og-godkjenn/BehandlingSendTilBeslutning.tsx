@@ -2,13 +2,13 @@ import { Alert, Button } from '@navikt/ds-react';
 import { useState } from 'react';
 import { useBehandling } from '../context/BehandlingContext';
 import { BehandlingData } from '../../../types/BehandlingTypes';
-import { FetcherError } from '../../../utils/client-fetch';
+import { FetcherError } from '../../../utils/fetch';
 import { SaksbehandlerRolle } from '../../../types/Saksbehandler';
 
 import style from './BehandlingSendOgGodkjenn.module.css';
 
 type Props = {
-    sendTilBeslutning: () => Promise<BehandlingData>;
+    sendTilBeslutning: () => Promise<BehandlingData | undefined>;
     isLoading: boolean;
     error?: FetcherError;
 };
@@ -38,8 +38,10 @@ export const BehandlingSendTilBeslutning = ({ sendTilBeslutning, isLoading, erro
                     onClick={() => {
                         sendTilBeslutning()
                             .then((oppdatertBehandling) => {
-                                setHarSendt(true);
-                                setBehandling(oppdatertBehandling);
+                                if (oppdatertBehandling) {
+                                    setHarSendt(true);
+                                    setBehandling(oppdatertBehandling);
+                                }
                             })
                             .catch();
                     }}

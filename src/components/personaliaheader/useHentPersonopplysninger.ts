@@ -1,7 +1,6 @@
 import useSWR, { mutate } from 'swr';
 import { SakId } from '../../types/SakTypes';
-
-import { fetcher } from '../../utils/client-fetch';
+import { fetchJsonFraApiClientSide } from '../../utils/fetch';
 
 export type Personopplysninger = {
     fnr: string;
@@ -13,11 +12,14 @@ export type Personopplysninger = {
     fortrolig: boolean;
 };
 
-export function useHentPersonopplysninger(sakId: SakId) {
+export const useHentPersonopplysninger = (sakId: SakId) => {
     const {
         data: personopplysninger,
         isLoading: isPersonopplysningerLoading,
         error,
-    } = useSWR<Personopplysninger>(`/api/sak/${sakId}/personopplysninger`, fetcher);
+    } = useSWR<Personopplysninger>(sakId, fetcher);
     return { personopplysninger, isPersonopplysningerLoading, error, mutate };
-}
+};
+
+const fetcher = async (sakId: SakId) =>
+    fetchJsonFraApiClientSide<Personopplysninger>(`/sak/${sakId}/personopplysninger`);

@@ -88,7 +88,12 @@ export const MeldekortBehandlingOppsummering = ({ meldeperiode }: Props) => {
                             loading={godkjennMeldekortLaster}
                             onClick={() =>
                                 godkjennMeldekort().then((meldekortBehandling) => {
-                                    setMeldekortbehandling(meldeperiode.id, meldekortBehandling);
+                                    if (meldekortBehandling) {
+                                        setMeldekortbehandling(
+                                            meldeperiode.id,
+                                            meldekortBehandling,
+                                        );
+                                    }
                                 })
                             }
                         >

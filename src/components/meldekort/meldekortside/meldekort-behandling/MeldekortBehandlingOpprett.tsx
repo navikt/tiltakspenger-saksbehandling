@@ -45,7 +45,9 @@ export const MeldekortBehandlingOpprett = ({ meldeperiode }: Props) => {
                     disabled={laster}
                     onClick={() => {
                         opprett().then((meldekortBehandling) => {
-                            setMeldekortbehandling(meldeperiode.id, meldekortBehandling);
+                            if (meldekortBehandling) {
+                                setMeldekortbehandling(meldeperiode.id, meldekortBehandling);
+                            }
                         });
                     }}
                 >

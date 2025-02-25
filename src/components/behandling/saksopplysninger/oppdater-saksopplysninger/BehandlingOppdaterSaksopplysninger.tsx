@@ -30,13 +30,13 @@ export const BehandlingOppdaterSaksopplysninger = () => {
                     )
                 }
                 onClick={() => {
-                    oppdaterOgHentBehandling()
-                        .then((oppdatertBehandling) => {
+                    oppdaterOgHentBehandling().then((oppdatertBehandling) => {
+                        if (oppdatertBehandling) {
                             setHarOppdatert(true);
                             setBehandling(oppdatertBehandling);
                             setTimeout(() => setHarOppdatert(false), 3000);
-                        })
-                        .catch();
+                        }
+                    });
                 }}
             >
                 {'Hent oppdaterte opplysninger om tiltak'}

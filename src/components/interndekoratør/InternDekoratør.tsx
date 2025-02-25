@@ -6,6 +6,7 @@ import { useHentSakForFNR } from './useHentSakForFNR';
 import Varsel from '../varsel/Varsel';
 import Link from 'next/link';
 import { useSaksbehandler } from '../../context/saksbehandler/useSaksbehandler';
+import router from 'next/router';
 
 export const InternDekoratør = () => {
     const { innloggetSaksbehandler } = useSaksbehandler();
@@ -23,7 +24,11 @@ export const InternDekoratør = () => {
                     style={{ alignContent: 'center', marginLeft: '20px' }}
                     onSubmit={(e) => {
                         e.preventDefault();
-                        søk({ fnr: søketekst });
+                        søk({ fnr: søketekst }).then((sak) => {
+                            if (sak) {
+                                router.push(`/sak/${sak.saksnummer}`);
+                            }
+                        });
                     }}
                 >
                     <Search
@@ -35,8 +40,45 @@ export const InternDekoratør = () => {
                     />
                 </form>
                 <Spacer />
+                {innloggetSaksbehandler ? (
+                    <Dropdown>
+                        <InternalHeader.UserButton
+                            as={Dropdown.Toggle}
+                            name={innloggetSaksbehandler.navIdent}
+                        />
+                        <Dropdown.Menu>
+                            <dl>
+                                <BodyShort as="dt" size="small">
+                                    {innloggetSaksbehandler.navIdent}
+                                </BodyShort>
+                            </dl>
+                            <Dropdown.Menu.Divider />
+                            <Dropdown.Menu.List>
+                                <Dropdown.Menu.List.Item as="a" href={'/oauth2/logout'}>
+                                    Logg ut
+                                    <Spacer />
+                                    <LeaveIcon aria-hidden fontSize="1.5rem" />
+                                </Dropdown.Menu.List.Item>
+                            </Dropdown.Menu.List>
+                        </Dropdown.Menu>
+                    </Dropdown>
+                ) : (
+                    <Loader />
+                )}
+            </InternalHeader>
+            {error && (
+                <Varsel
+                    melding={error.message ?? `Noe gikk galt ved henting av sak for "${søketekst}"`}
+                    variant="error"
+                    marginX
+                />
+            )}
+        </VStack>
+    );
+};
 
-                {/*
+{
+    /*
         ** B: Kommentert ut frem til vi har løst forskjellige url-er for prod og dev
         <Dropdown>
           <InternalHeader.Button as={Dropdown.Toggle}>
@@ -81,34 +123,5 @@ export const InternDekoratør = () => {
             </Dropdown.Menu.GroupedList>
           </Dropdown.Menu>
         </Dropdown>
-*/}
-                {innloggetSaksbehandler ? (
-                    <Dropdown>
-                        <InternalHeader.UserButton
-                            as={Dropdown.Toggle}
-                            name={innloggetSaksbehandler.navIdent}
-                        />
-                        <Dropdown.Menu>
-                            <dl>
-                                <BodyShort as="dt" size="small">
-                                    {innloggetSaksbehandler.navIdent}
-                                </BodyShort>
-                            </dl>
-                            <Dropdown.Menu.Divider />
-                            <Dropdown.Menu.List>
-                                <Dropdown.Menu.List.Item as="a" href={'/oauth2/logout'}>
-                                    Logg ut
-                                    <Spacer />
-                                    <LeaveIcon aria-hidden fontSize="1.5rem" />
-                                </Dropdown.Menu.List.Item>
-                            </Dropdown.Menu.List>
-                        </Dropdown.Menu>
-                    </Dropdown>
-                ) : (
-                    <Loader />
-                )}
-            </InternalHeader>
-            {error && <Varsel melding={error.message ?? ''} variant="error" marginX />}
-        </VStack>
-    );
-};
+*/
+}
