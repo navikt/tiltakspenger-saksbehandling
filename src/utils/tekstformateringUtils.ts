@@ -54,4 +54,4 @@ export const finnBehandlingstypeTekst: Record<Behandlingstype, string> = {
     [Behandlingstype.FØRSTEGANGSBEHANDLING]: 'Førstegangsbehandling',
     [Behandlingstype.REVURDERING]: 'Revurdering',
     [Behandlingstype.SØKNAD]: 'Søknad',
-};
+} as const;

@@ -1,20 +1,11 @@
 import useSWRMutation from 'swr/mutation';
-import { MeldekortBehandlingDTO } from '../../../types/meldekort/MeldekortBehandling';
+import {
+    MeldekortBehandlingDTO,
+    MeldekortBehandlingProps,
+} from '../../../types/meldekort/MeldekortBehandling';
 import { SakId } from '../../../types/SakTypes';
 
 import { FetcherError, throwErrorIfFatal } from '../../../utils/client-fetch';
-
-const mutateMeldekort = async (
-    url: string,
-    { arg }: { arg: MeldekortBehandlingDTO },
-): Promise<unknown> => {
-    const res = await fetch(url, {
-        method: 'POST',
-        body: JSON.stringify(arg),
-    });
-    await throwErrorIfFatal(res);
-    return res.json();
-};
 
 type Props = {
     meldekortId: string;
@@ -22,15 +13,15 @@ type Props = {
     onSuccess?: () => void;
 };
 
-export function useSendMeldekortTilBeslutter({ meldekortId, sakId, onSuccess }: Props) {
+export const useSendMeldekortTilBeslutter = ({ meldekortId, sakId, onSuccess }: Props) => {
     const {
         trigger: sendMeldekortTilBeslutter,
         isMutating: senderMeldekortTilBeslutter,
         error: feilVedSendingTilBeslutter,
         reset,
-    } = useSWRMutation<any, FetcherError, any, MeldekortBehandlingDTO>(
+    } = useSWRMutation<MeldekortBehandlingProps, FetcherError, string, MeldekortBehandlingDTO>(
         `/api/sak/${sakId}/meldekort/${meldekortId}`,
-        mutateMeldekort,
+        fetchSendMeldekortBehandling,
         { onSuccess },
     );
 
@@ -40,4 +31,16 @@ export function useSendMeldekortTilBeslutter({ meldekortId, sakId, onSuccess }: 
         feilVedSendingTilBeslutter,
         reset,
     };
-}
+};
+
+const fetchSendMeldekortBehandling = async (
+    url: string,
+    { arg }: { arg: MeldekortBehandlingDTO },
+): Promise<MeldekortBehandlingProps> => {
+    const res = await fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(arg),
+    });
+    await throwErrorIfFatal(res);
+    return res.json();
+};

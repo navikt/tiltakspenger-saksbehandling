@@ -4,10 +4,10 @@ import {
     formaterTidspunkt,
     periodeTilFormatertDatotekst,
 } from '../../../utils/date';
-import { useMeldeperiodeKjede } from '../hooks/useMeldeperiodeKjede';
+import { useMeldeperiodeKjede } from '../../../context/meldeperioder/useMeldeperiodeKjede';
 import { MeldekortBehandlingOpprett } from '../meldekortside/meldekort-behandling/MeldekortBehandlingOpprett';
 import { MeldekortBehandlingProps } from '../../../types/meldekort/MeldekortBehandling';
-import { useFeatureToggles } from '../../../hooks/useFeatureToggles';
+import { useFeatureToggles } from '../../../context/feature-toggles/useFeatureToggles';
 
 import styles from './MeldekortDetaljer.module.css';
 import { useSak } from '../../../context/sak/useSak';

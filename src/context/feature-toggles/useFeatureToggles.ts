@@ -1,4 +1,4 @@
-import { FeatureTogglesContext } from '../context/feature-toggles/FeatureTogglesContext';
+import { FeatureTogglesContext } from './FeatureTogglesContext';
 import { useContext } from 'react';
 
 export const useFeatureToggles = () => {

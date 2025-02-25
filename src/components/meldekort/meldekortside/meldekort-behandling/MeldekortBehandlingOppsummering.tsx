@@ -8,6 +8,7 @@ import BekreftelsesModal from '../../../modaler/BekreftelsesModal';
 import { MeldeperiodeMedBehandlingProps } from '../../../../types/meldekort/Meldeperiode';
 import { useSaksbehandler } from '../../../../context/saksbehandler/useSaksbehandler';
 import { useSak } from '../../../../context/sak/useSak';
+import { useMeldeperiodeKjede } from '../../../../context/meldeperioder/useMeldeperiodeKjede';
 
 import styles from '../Meldekort.module.css';
 
@@ -16,12 +17,14 @@ type Props = {
 };
 
 export const MeldekortBehandlingOppsummering = ({ meldeperiode }: Props) => {
-    const { sakId, saksnummer } = useSak().sak;
+    const { sakId } = useSak().sak;
     const { innloggetSaksbehandler } = useSaksbehandler();
+    const { setMeldekortbehandling } = useMeldeperiodeKjede();
+
     const { meldekortBehandling } = meldeperiode;
 
-    const { onGodkjennMeldekort, isMeldekortMutating, reset, feilVedGodkjenning } =
-        useGodkjennMeldekort(meldekortBehandling.id, sakId, saksnummer);
+    const { godkjennMeldekort, godkjennMeldekortLaster, reset, godkjennMeldekortFeil } =
+        useGodkjennMeldekort(meldekortBehandling.id, sakId);
 
     const modalRef = useRef<HTMLDialogElement>(null);
 
@@ -65,7 +68,7 @@ export const MeldekortBehandlingOppsummering = ({ meldeperiode }: Props) => {
                     <HStack justify="start" gap="3" align="end">
                         <Button
                             size="small"
-                            loading={isMeldekortMutating}
+                            loading={godkjennMeldekortLaster}
                             onClick={() => modalRef.current?.showModal()}
                         >
                             Godkjenn meldekort
@@ -77,13 +80,17 @@ export const MeldekortBehandlingOppsummering = ({ meldeperiode }: Props) => {
                         body={
                             'Er du sikker på at meldekortet er korrekt og ønsker å sende det til utbetaling?'
                         }
-                        error={feilVedGodkjenning}
+                        error={godkjennMeldekortFeil}
                         lukkModal={lukkModal}
                     >
                         <Button
                             size="small"
-                            loading={isMeldekortMutating}
-                            onClick={() => onGodkjennMeldekort()}
+                            loading={godkjennMeldekortLaster}
+                            onClick={() =>
+                                godkjennMeldekort().then((meldekortBehandling) => {
+                                    setMeldekortbehandling(meldeperiode.id, meldekortBehandling);
+                                })
+                            }
                         >
                             Godkjenn meldekort
                         </Button>

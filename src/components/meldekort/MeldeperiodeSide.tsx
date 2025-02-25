@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { finnMeldeperiodeStatusTekst } from '../../utils/tekstformateringUtils';
 import { MeldekortDetaljer } from './meldekortdetaljer/MeldekortDetaljer';
 import { Meldekortside } from './meldekortside/Meldekortside';
-import { useMeldeperiodeKjede } from './hooks/useMeldeperiodeKjede';
+import { useMeldeperiodeKjede } from '../../context/meldeperioder/useMeldeperiodeKjede';
 
 import style from './MeldeperiodeSide.module.css';
 

@@ -11,6 +11,7 @@ import {
 } from './meldekortBehandlingUtils';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { MeldeperiodeMedBehandlingProps } from '../../../../../types/meldekort/Meldeperiode';
+import { useMeldeperiodeKjede } from '../../../../../context/meldeperioder/useMeldeperiodeKjede';
 
 import styles from '../../Meldekort.module.css';
 
@@ -21,6 +22,8 @@ type Props = {
 export const MeldekortBehandling = ({ meldeperiode }: Props) => {
     const { meldekortBehandling, brukersMeldekort, antallDager } = meldeperiode;
     const { sakId } = useSak().sak;
+
+    const { setMeldekortbehandling } = useMeldeperiodeKjede();
 
     const [valideringsFeil, setValideringsFeil] = useState('');
 
@@ -100,6 +103,9 @@ export const MeldekortBehandling = ({ meldeperiode }: Props) => {
                                 dager: formMethods
                                     .getValues()
                                     .uke1.concat(formMethods.getValues().uke2),
+                            }).then((meldekortBehandling) => {
+                                setMeldekortbehandling(meldeperiode.id, meldekortBehandling);
+                                lukkModal();
                             })
                         }
                     >

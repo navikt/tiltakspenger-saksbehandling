@@ -1,8 +1,15 @@
 import React, { useCallback, useState } from 'react';
 import { MeldeperiodeKjedeContext } from './MeldeperiodeKjedeContext';
-import { MeldeperiodeId, MeldeperiodeKjedeProps } from '../../types/meldekort/Meldeperiode';
+import {
+    MeldeperiodeId,
+    MeldeperiodeKjedeProps,
+    MeldeperiodeStatus,
+} from '../../types/meldekort/Meldeperiode';
 import Varsel from '../../components/varsel/Varsel';
-import { MeldekortBehandlingProps } from '../../types/meldekort/MeldekortBehandling';
+import {
+    MeldekortBehandlingProps,
+    MeldekortBehandlingStatus,
+} from '../../types/meldekort/MeldekortBehandling';
 
 type Props = {
     meldeperiodeKjede: MeldeperiodeKjedeProps;
@@ -24,7 +31,11 @@ export const MeldeperiodeKjedeProvider = ({
                 ...meldeperiodeKjede,
                 meldeperioder: meldeperiodeKjede.meldeperioder.map((meldeperiode) =>
                     meldeperiode.id === id
-                        ? { ...meldeperiode, meldekortBehandling: behandling }
+                        ? {
+                              ...meldeperiode,
+                              meldekortBehandling: behandling,
+                              status: meldekortBehandlingStatusTilPeriodeStatus[behandling.status],
+                          }
                         : meldeperiode,
                 ),
             });
@@ -52,4 +63,15 @@ export const MeldeperiodeKjedeProvider = ({
             {children}
         </MeldeperiodeKjedeContext.Provider>
     );
+};
+
+const meldekortBehandlingStatusTilPeriodeStatus: Record<
+    MeldekortBehandlingStatus,
+    MeldeperiodeStatus
+> = {
+    [MeldekortBehandlingStatus.KLAR_TIL_UTFYLLING]: MeldeperiodeStatus.KLAR_TIL_BEHANDLING,
+    [MeldekortBehandlingStatus.GODKJENT]: MeldeperiodeStatus.GODKJENT,
+    [MeldekortBehandlingStatus.KLAR_TIL_BESLUTNING]: MeldeperiodeStatus.KLAR_TIL_BESLUTNING,
+    [MeldekortBehandlingStatus.IKKE_RETT_TIL_TILTAKSPENGER]:
+        MeldeperiodeStatus.IKKE_RETT_TIL_TILTAKSPENGER,
 };

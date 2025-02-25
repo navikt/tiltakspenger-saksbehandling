@@ -1,43 +1,35 @@
 import useSWRMutation from 'swr/mutation';
-import router from 'next/router';
 import { SakId } from '../../../types/SakTypes';
-import { MeldekortBehandlingId } from '../../../types/meldekort/MeldekortBehandling';
+import {
+    MeldekortBehandlingId,
+    MeldekortBehandlingProps,
+} from '../../../types/meldekort/MeldekortBehandling';
 
 import { FetcherError, throwErrorIfFatal } from '../../../utils/client-fetch';
 
-export async function mutateMeldekort<R>(url: string, { arg }: { arg: any }): Promise<R> {
-    const res = await fetch(url, {
-        method: 'POST',
-        body: JSON.stringify(arg),
-    });
-    await throwErrorIfFatal(res);
-    return res.json();
-}
-
-export function useGodkjennMeldekort(
-    meldekortId: MeldekortBehandlingId,
-    sakId: SakId,
-    saksnummer: string,
-) {
+export const useGodkjennMeldekort = (meldekortId: MeldekortBehandlingId, sakId: SakId) => {
     const {
-        trigger: onGodkjennMeldekort,
-        isMutating: isMeldekortMutating,
-        error: feilVedGodkjenning,
+        trigger: godkjennMeldekort,
+        isMutating: godkjennMeldekortLaster,
+        error: godkjennMeldekortFeil,
         reset,
-    } = useSWRMutation<any, FetcherError, any, any>(
+    } = useSWRMutation<MeldekortBehandlingProps, FetcherError, any, any>(
         `/api/sak/${sakId}/meldekort/${meldekortId}/iverksett`,
         mutateMeldekort,
-        {
-            onSuccess: () => {
-                router.push(`/sak/${saksnummer}`);
-            },
-        },
     );
 
     return {
-        onGodkjennMeldekort,
-        isMeldekortMutating,
-        feilVedGodkjenning,
+        godkjennMeldekort,
+        godkjennMeldekortLaster,
+        godkjennMeldekortFeil,
         reset,
     };
-}
+};
+
+export const mutateMeldekort = async (url: string) => {
+    const res = await fetch(url, {
+        method: 'POST',
+    });
+    await throwErrorIfFatal(res);
+    return res.json();
+};
