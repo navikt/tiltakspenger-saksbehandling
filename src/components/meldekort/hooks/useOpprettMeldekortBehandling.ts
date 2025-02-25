@@ -11,7 +11,7 @@ type Props = {
 export const useOpprettMeldekortBehandling = ({ kjedeId, sakId }: Props) => {
     const { trigger, isMutating, error } = useFetchFraApi<MeldekortBehandlingProps>(
         `/sak/${encodeURIComponent(sakId)}/meldeperiode/${encodeURIComponent(kjedeId)}/opprettBehandling`,
-        'GET',
+        'POST',
     );
 
     return {
