@@ -11,10 +11,8 @@ export const errorFraApiResponse = async (res: Response) => {
 
     try {
         error.info = await res.json();
-        console.log(`Feil: ${JSON.stringify(error.info)}`);
         error.status = res.status || 500;
         error.message = finnFetchFeilmelding(error);
-        console.log(`${error.status} - ${error.message}`);
     } catch (e) {
         error.status = 500;
         error.message = 'Noe har gått galt på serversiden, kontakt utviklingsteamet.';
@@ -36,7 +34,7 @@ export const fetchJsonFraApiClientSide = async <ResponseType>(
             throw await errorFraApiResponse(res);
         })
         .catch((error) => {
-            console.error(`Feil ved fetch fra ${url} - ${error.message}`);
+            console.error(`Feil ved fetch fra ${url} - [${error.status}] ${error.message}`);
             throw error;
         });
 };
