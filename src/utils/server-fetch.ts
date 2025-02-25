@@ -4,6 +4,7 @@ import { IncomingMessage } from 'node:http';
 import { NextApiRequest } from 'next';
 import { SakProps } from '../types/SakTypes';
 import { throwErrorIfFatal } from './client-fetch';
+import { BehandlingEllerSøknadForOversiktData } from '../types/BehandlingTypes';
 
 type NextRequest = Request | IncomingMessage | NextApiRequest;
 
@@ -54,3 +55,6 @@ export const fetchJsonFraApi = async <JsonResponse>(
 
 export const fetchSak = async (req: NextRequest, saksnummer: string) =>
     fetchJsonFraApi<SakProps>(req, `/sak/${saksnummer}`);
+
+export const fetchBenkOversikt = async (req: NextRequest) =>
+    fetchJsonFraApi<BehandlingEllerSøknadForOversiktData[]>(req, '/behandlinger');

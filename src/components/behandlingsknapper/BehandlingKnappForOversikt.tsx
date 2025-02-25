@@ -17,7 +17,7 @@ export const BehandlingKnappForOversikt = ({ behandling }: Props) => {
     const { status, id } = behandling;
 
     const { innloggetSaksbehandler } = useSaksbehandler();
-    const { taBehandling, isBehandlingMutating } = useTaBehandling();
+    const { taBehandling, isBehandlingMutating } = useTaBehandling(id);
 
     const behandlingLenke = `/behandling/${id}`;
 
@@ -52,8 +52,11 @@ export const BehandlingKnappForOversikt = ({ behandling }: Props) => {
                     size={'small'}
                     variant={'primary'}
                     loading={isBehandlingMutating}
-                    onClick={() => {
-                        taBehandling({ id }).then(() => {
+                    as={'a'}
+                    href={behandlingLenke}
+                    onClick={(e) => {
+                        e.preventDefault();
+                        taBehandling().then(() => {
                             router.push(behandlingLenke);
                         });
                     }}
