@@ -7,6 +7,7 @@ import { FørstegangsbehandlingSend } from './5-send-og-godkjenn/Førstegangsbeh
 
 import style from './FørstegangsbehandlingVedtak.module.css';
 import { VedtakSeksjon } from '../vedtak/seksjon/VedtakSeksjon';
+import { FørstegangsbehandlingBarn } from './3-barn/FørstegangsbehandlingBarn';
 
 export const FørstegangsbehandlingVedtak = () => {
     return (
@@ -20,6 +21,8 @@ export const FørstegangsbehandlingVedtak = () => {
             </VedtakSeksjon>
             <FørstegangsbehandlingBegrunnelse />
             <FørstegangsbehandlingResultat />
+            <Separator />
+            <FørstegangsbehandlingBarn />
             <Separator />
             <FørstegangsbehandlingBrev />
             <FørstegangsbehandlingSend />

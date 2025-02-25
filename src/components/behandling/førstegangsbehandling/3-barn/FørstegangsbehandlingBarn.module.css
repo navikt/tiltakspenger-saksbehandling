@@ -1,0 +1,20 @@
+.radioGroup {
+    & > :global(.navds-radio-buttons) {
+        display: flex;
+        gap: 2rem;
+    }
+}
+
+.barnetillegg {
+    &.skjult {
+        display: none;
+    }
+
+    .header {
+        margin-top: 1.5rem;
+    }
+
+    .knapp {
+        margin-top: 1.5rem;
+    }
+}

@@ -14,6 +14,7 @@ export type FørstegangsbehandlingContextState = {
     setBegrunnelse: (begrunnelse: string) => void;
     setBrevTekst: (brevTekst: string) => void;
     setResultat: (resultat: VedtakInnvilgetResultat | VedtakAvslagResultat) => void;
+    setBarnetillegg: (barneTillegg: VedtakData['barnetillegg']) => void;
     oppdaterInnvilgelsesPeriode: (periode: Partial<Periode>) => void;
 } & BehandlingContextState<FørstegangsbehandlingData>;
 
@@ -61,6 +62,13 @@ export const FørstegangsbehandlingProvider = ({ behandlingContext, children }: 
         [vedtak],
     );
 
+    const setBarnetillegg: FørstegangsbehandlingContextState['setBarnetillegg'] = useCallback(
+        (barneTillegg) => {
+            setvedtak({ ...vedtak, barnetillegg: barneTillegg });
+        },
+        [vedtak],
+    );
+
     const oppdaterInnvilgelsesPeriode: FørstegangsbehandlingContextState['oppdaterInnvilgelsesPeriode'] =
         useCallback(
             (periode) => {
@@ -80,6 +88,7 @@ export const FørstegangsbehandlingProvider = ({ behandlingContext, children }: 
                 setBegrunnelse,
                 setBrevTekst,
                 setResultat,
+                setBarnetillegg,
                 oppdaterInnvilgelsesPeriode,
             }}
         >

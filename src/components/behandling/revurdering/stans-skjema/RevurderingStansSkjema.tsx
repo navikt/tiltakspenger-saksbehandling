@@ -3,12 +3,12 @@ import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
 import { useRevurdering } from '../RevurderingContext';
 import { Datovelger } from '../../../datovelger/Datovelger';
 import { dateTilISOTekst } from '../../../../utils/date';
-
-import style from './RevurderingStansSkjema.module.css';
 import { BehandlingSendTilBeslutning } from '../../send-og-godkjenn/BehandlingSendTilBeslutning';
 import { useSendRevurdering } from './useSendRevurdering';
 import { useGodkjennBehandling } from '../../send-og-godkjenn/useGodkjennBehandling';
 import { BehandlingGodkjenn } from '../../send-og-godkjenn/BehandlingGodkjenn';
+
+import style from './RevurderingStansSkjema.module.css';
 
 export const RevurderingStansSkjema = () => {
     const { behandling, setBegrunnelse, rolleForBehandling, setStansDato, vedtak } =
@@ -39,7 +39,7 @@ export const RevurderingStansSkjema = () => {
             />
             <Datovelger
                 label={'Stans fra og med'}
-                defaultSelected={new Date(vedtak.stansDato)}
+                defaultSelected={vedtak.stansDato}
                 readOnly={rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER}
                 className={style.dato}
                 onDateChange={(valgtDato) => {

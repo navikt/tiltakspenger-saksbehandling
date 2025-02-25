@@ -7,6 +7,7 @@ type VedtakFellesData = {
     fritekstTilVedtaksbrev: string;
     resultat?: VedtakResultat;
     innvilgelsesPeriode: Periode;
+    barnetillegg?: unknown;
 };
 
 export type VedtakInnvilgetResultat = {

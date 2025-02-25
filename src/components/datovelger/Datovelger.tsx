@@ -1,26 +1,28 @@
 import { DatePicker, useDatepicker } from '@navikt/ds-react';
 import { ComponentProps } from 'react';
 
+type DateOrString = Date | string;
+
 type Props = {
     onDateChange: (date: Date | undefined) => void;
-    minDate?: Date;
-    maxDate?: Date;
-    defaultSelected: Date;
+    defaultSelected: DateOrString;
+    minDate?: DateOrString;
+    maxDate?: DateOrString;
 } & ComponentProps<typeof DatePicker.Input>;
 
 export const Datovelger = ({
     onDateChange,
+    defaultSelected,
     maxDate,
     minDate,
-    defaultSelected,
     ...inputPropsCustom
 }: Props) => {
     const { datepickerProps, inputProps } = useDatepicker({
         onDateChange,
-        fromDate: minDate,
-        defaultMonth: minDate,
-        toDate: maxDate,
-        defaultSelected: defaultSelected,
+        fromDate: toDate(minDate),
+        defaultMonth: toDate(minDate),
+        toDate: toDate(maxDate),
+        defaultSelected: toDate(defaultSelected),
     });
 
     return (
@@ -29,3 +31,6 @@ export const Datovelger = ({
         </DatePicker>
     );
 };
+
+const toDate = (date?: DateOrString): Date | undefined =>
+    date ? (date instanceof Date ? date : new Date(date)) : undefined;

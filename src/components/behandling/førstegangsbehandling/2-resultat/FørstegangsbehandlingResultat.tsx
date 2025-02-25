@@ -5,7 +5,6 @@ import { VedtakResultat } from '../../../../types/VedtakTyper';
 import { hentTiltaksPeriode } from '../../../../utils/tiltak';
 import { dateTilISOTekst } from '../../../../utils/date';
 import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
-import { FørstegangsbehandlingData } from '../../../../types/BehandlingTypes';
 import { useFørstegangsbehandling } from '../FørstegangsbehandlingContext';
 import { VedtakSeksjon } from '../../vedtak/seksjon/VedtakSeksjon';
 
@@ -15,7 +14,7 @@ export const FørstegangsbehandlingResultat = () => {
     const { behandling, vedtak, setResultat, oppdaterInnvilgelsesPeriode, rolleForBehandling } =
         useFørstegangsbehandling();
 
-    const initiellTiltaksPeriode = hentTiltaksPeriode(behandling as FørstegangsbehandlingData);
+    const initiellTiltaksPeriode = hentTiltaksPeriode(behandling);
 
     const { resultat, innvilgelsesPeriode } = vedtak;
 
@@ -46,9 +45,9 @@ export const FørstegangsbehandlingResultat = () => {
                     )}
                 >
                     <Datovelger
-                        label={'Innvilgelse f.o.m'}
+                        label={'Innvilges f.o.m'}
                         size={'small'}
-                        defaultSelected={new Date(initiellTiltaksPeriode.fraOgMed)}
+                        defaultSelected={initiellTiltaksPeriode.fraOgMed}
                         readOnly={erIkkeSaksbehandler}
                         onDateChange={(valgtDato) => {
                             if (valgtDato) {
@@ -59,9 +58,9 @@ export const FørstegangsbehandlingResultat = () => {
                         }}
                     />
                     <Datovelger
-                        label={'Innvilgelse t.o.m'}
+                        label={'Innvilges t.o.m'}
                         size={'small'}
-                        defaultSelected={new Date(initiellTiltaksPeriode.tilOgMed)}
+                        defaultSelected={initiellTiltaksPeriode.tilOgMed}
                         readOnly={erIkkeSaksbehandler}
                         onDateChange={(valgtDato) => {
                             if (valgtDato) {
