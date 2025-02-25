@@ -4,7 +4,7 @@ import { BehandlingPage } from '../../../components/behandling/BehandlingPage';
 import React, { ComponentProps } from 'react';
 import { GetServerSideProps } from 'next';
 import { BehandlingProvider } from '../../../components/behandling/context/BehandlingContext';
-import { fetchBehandling } from '../../../utils/server-fetch';
+import { fetchBehandling } from '../../../utils/fetch-server';
 import { logger } from '@navikt/next-logger';
 
 type Props = {

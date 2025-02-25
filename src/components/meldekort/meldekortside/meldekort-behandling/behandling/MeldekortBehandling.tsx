@@ -104,8 +104,10 @@ export const MeldekortBehandling = ({ meldeperiode }: Props) => {
                                     .getValues()
                                     .uke1.concat(formMethods.getValues().uke2),
                             }).then((meldekortBehandling) => {
-                                setMeldekortbehandling(meldeperiode.id, meldekortBehandling);
-                                lukkModal();
+                                if (meldekortBehandling) {
+                                    setMeldekortbehandling(meldeperiode.id, meldekortBehandling);
+                                    lukkModal();
+                                }
                             })
                         }
                     >

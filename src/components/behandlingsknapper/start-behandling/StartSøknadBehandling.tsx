@@ -16,11 +16,11 @@ export const StartSøknadBehandling = ({ søknad }: Props) => {
         useStartSøknadBehandling(søknad);
 
     const startBehandling = () => {
-        opprettBehandling()
-            .then((behandling) => {
+        opprettBehandling().then((behandling) => {
+            if (behandling) {
                 router.push(`/behandling/${behandling.id}`);
-            })
-            .catch(() => ({}));
+            }
+        });
     };
 
     return (

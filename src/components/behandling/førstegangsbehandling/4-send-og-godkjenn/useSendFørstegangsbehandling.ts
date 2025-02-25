@@ -4,19 +4,12 @@ import {
     VedtakTilBeslutterDTO,
 } from '../../../../types/VedtakTyper';
 import { BehandlingData } from '../../../../types/BehandlingTypes';
-import useSWRMutation from 'swr/mutation';
-
-import { FetcherError, throwErrorIfFatal } from '../../../../utils/client-fetch';
+import { useFetchFraApi } from '../../../../utils/useFetchFraApi';
 
 export const useSendFørstegangsbehandling = (vedtak: VedtakData, behandling: BehandlingData) => {
-    const { trigger, isMutating, error } = useSWRMutation<
-        BehandlingData,
-        FetcherError,
-        string,
-        VedtakTilBeslutterDTO
-    >(
-        `/api/sak/${behandling.sakId}/behandling/${behandling.id}/sendtilbeslutning`,
-        fetchSendTilBeslutter,
+    const { trigger, isMutating, error } = useFetchFraApi<BehandlingData, VedtakTilBeslutterDTO>(
+        `/sak/${behandling.sakId}/behandling/${behandling.id}/sendtilbeslutning`,
+        'POST',
     );
 
     const sendTilBeslutter = () => trigger(tilBeslutterDTO(vedtak as VedtakMedResultat));
@@ -26,15 +19,6 @@ export const useSendFørstegangsbehandling = (vedtak: VedtakData, behandling: Be
         sendTilBeslutterLaster: isMutating,
         sendTilBeslutterError: error,
     };
-};
-
-const fetchSendTilBeslutter = async (url: string, { arg }: { arg: VedtakTilBeslutterDTO }) => {
-    const res = await fetch(url, {
-        method: 'POST',
-        body: JSON.stringify(arg),
-    });
-    await throwErrorIfFatal(res);
-    return res.json();
 };
 
 const tilBeslutterDTO = (vedtak: VedtakMedResultat): VedtakTilBeslutterDTO => {

@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { withAuthenticatedApi } from '../../auth/pageWithAuthentication';
-import { fetchFraApi } from '../../utils/server-fetch';
+import { fetchFraApiServerSide } from '../../utils/fetch-server';
 import { logger } from '@navikt/next-logger';
-import { FetcherError } from '../../utils/client-fetch';
+import { FetcherError } from '../../utils/fetch';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (!req.url) {
@@ -14,7 +14,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const path = req.url.replace('/api', '');
 
     try {
-        const response = await fetchFraApi(req, path, {
+        const response = await fetchFraApiServerSide(req, path, {
             method: req.method,
             body: req.method === 'GET' ? undefined : req.body,
             headers: {

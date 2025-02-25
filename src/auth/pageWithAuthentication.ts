@@ -6,7 +6,7 @@ import {
     NextApiResponse,
 } from 'next';
 import { logger } from '@navikt/next-logger';
-import { fetchSaksbehandler } from '../utils/server-fetch';
+import { fetchSaksbehandler } from '../utils/fetch-server';
 
 const LOGIN_API_URL = `${process.env.WONDERWALL_ORIGIN || ''}/oauth2/login`;
 
@@ -15,7 +15,8 @@ const LOGIN_API_URL = `${process.env.WONDERWALL_ORIGIN || ''}/oauth2/login`;
  */
 
 const defaultProps = { deployEnv: process.env.NAIS_CLUSTER_NAME ?? null };
-const defaultGetServerSideProps: GetServerSideProps = async () => ({ props: defaultProps });
+
+const defaultGetServerSideProps: GetServerSideProps = async () => ({ props: {} });
 
 type ApiHandler = (req: NextApiRequest, res: NextApiResponse) => Promise<unknown> | unknown;
 

@@ -1,11 +1,10 @@
 import { BehandlingData } from '../../../types/BehandlingTypes';
-import useSWRMutation from 'swr/mutation';
-import { FetcherError, throwErrorIfFatal } from '../../../utils/client-fetch';
+import { useFetchFraApi } from '../../../utils/useFetchFraApi';
 
 export const useGodkjennBehandling = (behandling: BehandlingData) => {
-    const { trigger, isMutating, error } = useSWRMutation<BehandlingData, FetcherError, string>(
-        `/api/sak/${behandling.sakId}/behandling/${behandling.id}/iverksett`,
-        fetchGodkjennBehandling,
+    const { trigger, isMutating, error } = useFetchFraApi<BehandlingData>(
+        `/sak/${behandling.sakId}/behandling/${behandling.id}/iverksett`,
+        'POST',
     );
 
     return {
@@ -13,12 +12,4 @@ export const useGodkjennBehandling = (behandling: BehandlingData) => {
         godkjennVedtakLaster: isMutating,
         godkjennVedtakError: error,
     };
-};
-
-const fetchGodkjennBehandling = async (url: string) => {
-    const res = await fetch(url, {
-        method: 'POST',
-    });
-    await throwErrorIfFatal(res);
-    return res.json();
 };

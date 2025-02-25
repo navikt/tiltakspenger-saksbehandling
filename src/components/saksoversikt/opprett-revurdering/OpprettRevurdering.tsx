@@ -31,7 +31,9 @@ export const OpprettRevurdering = ({ sakId, harVedtak }: Props) => {
                 submitTekst="Opprett revurdering"
                 onSubmit={() => {
                     opprettRevurdering().then((data) => {
-                        router.push(`/behandling/${data.id}`);
+                        if (data) {
+                            router.push(`/behandling/${data.id}`);
+                        }
                     });
                 }}
             />

@@ -3,7 +3,7 @@ import { ReactNode, RefObject } from 'react';
 import styles from './BekreftelsesModal.module.css';
 import Varsel from '../varsel/Varsel';
 
-import { FetcherError } from '../../utils/client-fetch';
+import { FetcherError } from '../../utils/fetch';
 
 interface BekreftelsesModalProps {
     modalRef: RefObject<HTMLDialogElement>;
