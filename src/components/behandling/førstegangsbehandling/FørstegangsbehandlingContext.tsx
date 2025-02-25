@@ -7,7 +7,7 @@ import {
 } from '../../../types/VedtakTyper';
 import { Periode } from '../../../types/Periode';
 import { hentTiltaksPeriode } from '../../../utils/tiltak';
-import { BehandlingContextState } from '../context/BehandlingContext';
+import { BehandlingContextState } from '../BehandlingContext';
 
 export type FørstegangsbehandlingContextState = {
     vedtak: VedtakData;

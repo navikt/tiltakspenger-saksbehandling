@@ -1,16 +1,11 @@
-.toppRad {
-    display: flex;
-    justify-content: space-between;
-}
-
 .header {
-    margin-bottom: 0.5rem;
 }
 
 .lovKnapper {
     display: flex;
     gap: 1rem;
     align-items: center;
+    margin-bottom: 1rem;
 
     & span {
         display: flex;
@@ -26,5 +21,4 @@
 
 .personinfoVarsel {
     font-style: italic;
-    margin-top: 1rem;
 }

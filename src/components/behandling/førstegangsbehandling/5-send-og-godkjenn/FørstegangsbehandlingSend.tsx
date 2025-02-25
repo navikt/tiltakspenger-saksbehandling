@@ -3,8 +3,11 @@ import { useFørstegangsbehandling } from '../FørstegangsbehandlingContext';
 import { BehandlingGodkjenn } from '../../send-og-godkjenn/BehandlingGodkjenn';
 import { useGodkjennBehandling } from '../../send-og-godkjenn/useGodkjennBehandling';
 import { BehandlingSendTilBeslutning } from '../../send-og-godkjenn/BehandlingSendTilBeslutning';
+import { VedtakSeksjon } from '../../vedtak/seksjon/VedtakSeksjon';
 
-export const FørstegangsbehandlingSendOgGodkjenn = () => {
+import style from './FørstegangsbehandlingSend.module.css';
+
+export const FørstegangsbehandlingSend = () => {
     const { behandling, vedtak } = useFørstegangsbehandling();
 
     const { sendTilBeslutter, sendTilBeslutterLaster, sendTilBeslutterError } =
@@ -14,17 +17,19 @@ export const FørstegangsbehandlingSendOgGodkjenn = () => {
         useGodkjennBehandling(behandling);
 
     return (
-        <>
-            <BehandlingSendTilBeslutning
-                sendTilBeslutning={sendTilBeslutter}
-                isLoading={sendTilBeslutterLaster}
-                error={sendTilBeslutterError}
-            />
-            <BehandlingGodkjenn
-                godkjennBehandling={godkjennVedtak}
-                isLoading={godkjennVedtakLaster}
-                error={godkjennVedtakError}
-            />
-        </>
+        <VedtakSeksjon>
+            <VedtakSeksjon.Venstre className={style.knapper}>
+                <BehandlingSendTilBeslutning
+                    sendTilBeslutning={sendTilBeslutter}
+                    isLoading={sendTilBeslutterLaster}
+                    error={sendTilBeslutterError}
+                />
+                <BehandlingGodkjenn
+                    godkjennBehandling={godkjennVedtak}
+                    isLoading={godkjennVedtakLaster}
+                    error={godkjennVedtakError}
+                />
+            </VedtakSeksjon.Venstre>
+        </VedtakSeksjon>
     );
 };

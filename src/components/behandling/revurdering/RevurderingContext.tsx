@@ -1,7 +1,7 @@
 import { RevurderingData } from '../../../types/BehandlingTypes';
 import { createContext, ReactNode, useCallback, useContext, useState } from 'react';
 import { RevurderTilStansVedtak } from '../../../types/VedtakTyper';
-import { BehandlingContextState } from '../context/BehandlingContext';
+import { BehandlingContextState } from '../BehandlingContext';
 
 export type RevurderingContextState = {
     vedtak: RevurderTilStansVedtak;

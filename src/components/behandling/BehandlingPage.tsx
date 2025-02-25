@@ -1,30 +1,34 @@
 import React from 'react';
-import { BehandlingHeader } from './header/BehandlingHeader';
 import { FørstegangsbehandlingVedtak } from './førstegangsbehandling/FørstegangsbehandlingVedtak';
 import { BehandlingSaksopplysninger } from './saksopplysninger/BehandlingSaksopplysninger';
 import { RevurderingsVedtak } from './revurdering/RevurderingsVedtak';
-import { useBehandling } from './context/BehandlingContext';
+import { useBehandling } from './BehandlingContext';
 import {
     FørstegangsbehandlingContextState,
     FørstegangsbehandlingProvider,
 } from './førstegangsbehandling/FørstegangsbehandlingContext';
 import { Behandlingstype } from '../../types/BehandlingTypes';
 import { RevurderingContextState, RevurderingProvider } from './revurdering/RevurderingContext';
+import { PersonaliaHeader } from '../personaliaheader/PersonaliaHeader';
+import { Tag } from '@navikt/ds-react';
+import { finnBehandlingStatusTekst } from '../../utils/tekstformateringUtils';
 
 import style from './BehandlingPage.module.css';
 
 export const BehandlingPage = () => {
     const behandlingsContext = useBehandling();
-    const behandlingsType = behandlingsContext.behandling.type;
+    const { type, sakId, saksnummer, status } = behandlingsContext.behandling;
 
     return (
         <>
-            <BehandlingHeader />
+            <PersonaliaHeader sakId={sakId} saksnummer={saksnummer}>
+                <Tag variant={'alt3-filled'}>{finnBehandlingStatusTekst(status, false)}</Tag>
+            </PersonaliaHeader>
             <div className={style.main}>
                 <BehandlingSaksopplysninger />
                 <div className={style.vedtakOuter}>
                     <div className={style.vedtakInner}>
-                        {behandlingsType === Behandlingstype.FØRSTEGANGSBEHANDLING && (
+                        {type === Behandlingstype.FØRSTEGANGSBEHANDLING && (
                             <FørstegangsbehandlingProvider
                                 behandlingContext={
                                     behandlingsContext as FørstegangsbehandlingContextState
@@ -33,7 +37,7 @@ export const BehandlingPage = () => {
                                 <FørstegangsbehandlingVedtak />
                             </FørstegangsbehandlingProvider>
                         )}
-                        {behandlingsType === Behandlingstype.REVURDERING && (
+                        {type === Behandlingstype.REVURDERING && (
                             <RevurderingProvider
                                 behandlingContext={behandlingsContext as RevurderingContextState}
                             >
