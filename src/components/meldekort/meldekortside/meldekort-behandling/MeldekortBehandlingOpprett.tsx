@@ -4,7 +4,7 @@ import { useOpprettMeldekortBehandling } from '../../hooks/useOpprettMeldekortBe
 import BekreftelsesModal from '../../../modaler/BekreftelsesModal';
 import { useRef } from 'react';
 import { useSak } from '../../../../context/sak/useSak';
-import { useMeldeperiodeKjede } from '../../../../context/meldeperioder/useMeldeperiodeKjede';
+import { useMeldeperiodeKjede } from '../../hooks/useMeldeperiodeKjede';
 
 import styles from './MeldekortBehandlingOpprett.module.css';
 

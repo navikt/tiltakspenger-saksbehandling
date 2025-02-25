@@ -4,12 +4,12 @@ import {
     MeldeperiodeId,
     MeldeperiodeKjedeProps,
     MeldeperiodeStatus,
-} from '../../types/meldekort/Meldeperiode';
-import Varsel from '../../components/varsel/Varsel';
+} from '../../../types/meldekort/Meldeperiode';
+import Varsel from '../../varsel/Varsel';
 import {
     MeldekortBehandlingProps,
     MeldekortBehandlingStatus,
-} from '../../types/meldekort/MeldekortBehandling';
+} from '../../../types/meldekort/MeldekortBehandling';
 
 type Props = {
     meldeperiodeKjede: MeldeperiodeKjedeProps;

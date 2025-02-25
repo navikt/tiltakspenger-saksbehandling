@@ -11,7 +11,7 @@ import {
 } from './meldekortBehandlingUtils';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { MeldeperiodeMedBehandlingProps } from '../../../../../types/meldekort/Meldeperiode';
-import { useMeldeperiodeKjede } from '../../../../../context/meldeperioder/useMeldeperiodeKjede';
+import { useMeldeperiodeKjede } from '../../../hooks/useMeldeperiodeKjede';
 
 import styles from '../../Meldekort.module.css';
 

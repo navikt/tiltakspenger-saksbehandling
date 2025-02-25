@@ -4,7 +4,12 @@ import { IncomingMessage } from 'node:http';
 import { NextApiRequest } from 'next';
 import { SakProps } from '../types/SakTypes';
 import { throwErrorIfFatal } from './client-fetch';
-import { BehandlingEllerSøknadForOversiktData } from '../types/BehandlingTypes';
+import {
+    BehandlingData,
+    BehandlingEllerSøknadForOversiktData,
+    BehandlingId,
+} from '../types/BehandlingTypes';
+import { Saksbehandler } from '../types/Saksbehandler';
 
 type NextRequest = Request | IncomingMessage | NextApiRequest;
 
@@ -42,7 +47,7 @@ export const fetchFraApi = async (req: NextRequest, path: string, options?: Requ
     });
 };
 
-export const fetchJsonFraApi = async <JsonResponse>(
+const fetchJsonFraApi = async <JsonResponse>(
     req: NextRequest,
     path: string,
     options?: RequestInit,
@@ -58,3 +63,9 @@ export const fetchSak = async (req: NextRequest, saksnummer: string) =>
 
 export const fetchBenkOversikt = async (req: NextRequest) =>
     fetchJsonFraApi<BehandlingEllerSøknadForOversiktData[]>(req, '/behandlinger');
+
+export const fetchSaksbehandler = async (req: NextRequest) =>
+    fetchJsonFraApi<Saksbehandler>(req, '/saksbehandler');
+
+export const fetchBehandling = async (req: NextRequest, behandlingId: BehandlingId) =>
+    fetchJsonFraApi<BehandlingData>(req, `/behandling/${behandlingId}`);

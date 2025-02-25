@@ -1,4 +1,4 @@
-import { MeldeperiodeKjedeContext } from './MeldeperiodeKjedeContext';
+import { MeldeperiodeKjedeContext } from '../context/MeldeperiodeKjedeContext';
 import { useContext } from 'react';
 
 export const useMeldeperiodeKjede = () => {

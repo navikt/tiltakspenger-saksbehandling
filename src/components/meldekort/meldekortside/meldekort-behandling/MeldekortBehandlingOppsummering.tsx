@@ -8,7 +8,7 @@ import BekreftelsesModal from '../../../modaler/BekreftelsesModal';
 import { MeldeperiodeMedBehandlingProps } from '../../../../types/meldekort/Meldeperiode';
 import { useSaksbehandler } from '../../../../context/saksbehandler/useSaksbehandler';
 import { useSak } from '../../../../context/sak/useSak';
-import { useMeldeperiodeKjede } from '../../../../context/meldeperioder/useMeldeperiodeKjede';
+import { useMeldeperiodeKjede } from '../../hooks/useMeldeperiodeKjede';
 
 import styles from '../Meldekort.module.css';
 

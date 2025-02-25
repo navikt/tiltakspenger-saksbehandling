@@ -4,7 +4,7 @@ import { BehandlingPage } from '../../../components/behandling/BehandlingPage';
 import React, { ComponentProps } from 'react';
 import { GetServerSideProps } from 'next';
 import { BehandlingProvider } from '../../../components/behandling/context/BehandlingContext';
-import { fetchJsonFraApi } from '../../../utils/server-fetch';
+import { fetchBehandling } from '../../../utils/server-fetch';
 import { logger } from '@navikt/next-logger';
 
 type Props = {
@@ -22,10 +22,7 @@ const Behandling = ({ behandling }: Props) => {
 export const getServerSideProps: GetServerSideProps = pageWithAuthentication(async (context) => {
     const behandlingId = context.params!.behandlingId as BehandlingId;
 
-    const behandling = await fetchJsonFraApi<BehandlingData>(
-        context.req,
-        `/behandling/${behandlingId}`,
-    ).catch((e) => {
+    const behandling = await fetchBehandling(context.req, behandlingId).catch((e) => {
         logger.error(`Feil under henting av behandling med id ${behandlingId} - ${e.toString()}`);
         throw e;
     });

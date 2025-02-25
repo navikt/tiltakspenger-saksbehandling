@@ -4,7 +4,7 @@ import {
     formaterTidspunkt,
     periodeTilFormatertDatotekst,
 } from '../../../utils/date';
-import { useMeldeperiodeKjede } from '../../../context/meldeperioder/useMeldeperiodeKjede';
+import { useMeldeperiodeKjede } from '../hooks/useMeldeperiodeKjede';
 import { MeldekortBehandlingOpprett } from '../meldekortside/meldekort-behandling/MeldekortBehandlingOpprett';
 import { MeldekortBehandlingProps } from '../../../types/meldekort/MeldekortBehandling';
 import { useFeatureToggles } from '../../../context/feature-toggles/useFeatureToggles';

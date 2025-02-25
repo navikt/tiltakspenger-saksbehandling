@@ -3,8 +3,8 @@ import {
     MeldeperiodeId,
     MeldeperiodeKjedeProps,
     MeldeperiodeProps,
-} from '../../types/meldekort/Meldeperiode';
-import { MeldekortBehandlingProps } from '../../types/meldekort/MeldekortBehandling';
+} from '../../../types/meldekort/Meldeperiode';
+import { MeldekortBehandlingProps } from '../../../types/meldekort/MeldekortBehandling';
 
 export type MeldeperioderContextState = {
     meldeperiodeKjede: MeldeperiodeKjedeProps;

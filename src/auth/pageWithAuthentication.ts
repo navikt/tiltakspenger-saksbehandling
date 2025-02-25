@@ -6,8 +6,7 @@ import {
     NextApiResponse,
 } from 'next';
 import { logger } from '@navikt/next-logger';
-import { fetchFraApi } from '../utils/server-fetch';
-import { Saksbehandler } from '../types/Saksbehandler';
+import { fetchSaksbehandler } from '../utils/server-fetch';
 
 const LOGIN_API_URL = `${process.env.WONDERWALL_ORIGIN || ''}/oauth2/login`;
 
@@ -17,6 +16,7 @@ const LOGIN_API_URL = `${process.env.WONDERWALL_ORIGIN || ''}/oauth2/login`;
 
 const defaultProps = { deployEnv: process.env.NAIS_CLUSTER_NAME ?? null };
 const defaultGetServerSideProps: GetServerSideProps = async () => ({ props: defaultProps });
+
 type ApiHandler = (req: NextApiRequest, res: NextApiResponse) => Promise<unknown> | unknown;
 
 /**
@@ -25,9 +25,9 @@ type ApiHandler = (req: NextApiRequest, res: NextApiResponse) => Promise<unknown
  * Wonderwall-cookie mangler.
  */
 
-export function pageWithAuthentication(
+export const pageWithAuthentication = (
     getServerSideProps: GetServerSideProps = defaultGetServerSideProps,
-) {
+) => {
     return async (context: GetServerSidePropsContext) => {
         const token = getToken(context.req);
 
@@ -56,28 +56,26 @@ export function pageWithAuthentication(
             };
         }
 
-        const saksbehandler = await fetchFraApi(context.req, '/saksbehandler')
-            .then((res) => (res.ok ? (res.json() as Promise<Saksbehandler>) : null))
-            .catch((e) => {
+        const [saksbehandler, serverSidePropsResult] = await Promise.all([
+            fetchSaksbehandler(context.req).catch((e) => {
                 logger.error(`Feil under henting av saksbehandler - ${e}`);
                 return null;
-            });
+            }),
+            getServerSideProps(context),
+        ]);
 
-        return getServerSideProps(context).then((result) => {
-            const props = (result as any).props;
-            return {
-                ...result,
-                props: props ? { ...defaultProps, ...props, saksbehandler } : undefined,
-            };
-        });
+        return {
+            ...serverSidePropsResult,
+            props: { ...defaultProps, ...(serverSidePropsResult as any)?.props, saksbehandler },
+        };
     };
-}
+};
 
 /**
  * Brukes for å autentisere api requests. Forutsetter at applikasjonen ligger bak
  * Wonderwall (https://doc.nais.io/security/auth/idporten/sidecar/).
  */
-export function withAuthenticatedApi(handler: ApiHandler): ApiHandler {
+export const withAuthenticatedApi = (handler: ApiHandler): ApiHandler => {
     return async function withBearerTokenHandler(req, res, ...rest) {
         const token = getToken(req);
         if (token == null) {
@@ -95,4 +93,4 @@ export function withAuthenticatedApi(handler: ApiHandler): ApiHandler {
 
         return handler(req, res, ...rest);
     };
-}
+};
