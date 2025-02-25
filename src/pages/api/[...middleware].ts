@@ -22,10 +22,24 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             },
         });
 
-        const body = await response.json();
+        let responseData;
+        const responseContentType = response.headers.get('content-type');
 
-        res.status(response.status).json(body);
+        if (responseContentType?.includes('application/json')) {
+            responseData = await response.json();
+        } else {
+            responseData = Buffer.from(await response.arrayBuffer());
+        }
+
+        res.status(response.status);
+
+        response.headers.forEach((value, key) => {
+            res.setHeader(key, value);
+        });
+
+        res.send(responseData);
     } catch (err: unknown) {
+        console.error('Original error', err);
         if (err instanceof FetcherError && err.info) {
             res.status(err.status || 500).json(err.info);
         } else {
