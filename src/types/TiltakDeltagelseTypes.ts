@@ -3,20 +3,6 @@ enum Kilde {
     ARENA = 'Arena',
 }
 
-export enum DeltagelseStatus {
-    HarSluttet = 'HarSluttet',
-    VenterPåOppstart = 'VenterPåOppstart',
-    Deltar = 'Deltar',
-    Avbrutt = 'Avbrutt',
-    Fullført = 'Fullført',
-    IkkeAktuell = 'IkkeAktuell',
-    Feilregistrert = 'Feilregistrert',
-    PåbegyntRegistrering = 'PåbegyntRegistrering',
-    SøktInn = 'SøktInn',
-    Venteliste = 'Venteliste',
-    Vurderes = 'Vurderes',
-}
-
 export type Tiltaksdeltagelse = {
     eksternDeltagelseId: string;
     gjennomføringId: string | null;

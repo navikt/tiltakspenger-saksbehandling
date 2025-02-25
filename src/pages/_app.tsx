@@ -6,7 +6,7 @@ import Head from 'next/head';
 import { SWRConfig } from 'swr';
 import { FeatureTogglesProvider } from '../context/feature-toggles/FeatureTogglesProvider';
 import { SaksbehandlerProvider } from '../context/saksbehandler/SaksbehandlerProvider';
-import InternDekoratør from '../components/interndekoratør/InternDekoratør';
+import { InternDekoratør } from '../components/interndekoratør/InternDekoratør';
 
 export default function MyApp({ Component, pageProps }: AppProps) {
     return (

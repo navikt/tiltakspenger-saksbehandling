@@ -1,8 +1,8 @@
 import useSWRMutation from 'swr/mutation';
-import { MeldeperiodeKjedeId } from '../../types/meldekort/Meldeperiode';
-import { SakId } from '../../types/SakTypes';
-import { FetcherError, throwErrorIfFatal } from '../../utils/client-fetch';
-import { MeldekortBehandlingProps } from '../../types/meldekort/MeldekortBehandling';
+import { MeldeperiodeKjedeId } from '../../../types/meldekort/Meldeperiode';
+import { SakId } from '../../../types/SakTypes';
+import { FetcherError, throwErrorIfFatal } from '../../../utils/client-fetch';
+import { MeldekortBehandlingProps } from '../../../types/meldekort/MeldekortBehandling';
 
 const fetcher = async (url: string) => {
     const res = await fetch(url, {

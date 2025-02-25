@@ -1,7 +1,7 @@
 import useSWR, { mutate } from 'swr';
-import { SakId } from '../types/SakTypes';
+import { SakId } from '../../types/SakTypes';
 
-import { fetcher } from '../utils/client-fetch';
+import { fetcher } from '../../utils/client-fetch';
 
 export type Personopplysninger = {
     fnr: string;

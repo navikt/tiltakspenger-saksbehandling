@@ -1,8 +1,8 @@
 import useSWRMutation from 'swr/mutation';
-import { MeldekortBehandlingDTO } from '../../types/meldekort/MeldekortBehandling';
-import { SakId } from '../../types/SakTypes';
+import { MeldekortBehandlingDTO } from '../../../types/meldekort/MeldekortBehandling';
+import { SakId } from '../../../types/SakTypes';
 
-import { FetcherError, throwErrorIfFatal } from '../../utils/client-fetch';
+import { FetcherError, throwErrorIfFatal } from '../../../utils/client-fetch';
 
 const mutateMeldekort = async (
     url: string,

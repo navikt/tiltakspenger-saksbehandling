@@ -77,24 +77,6 @@ export enum Attesteringsstatus {
     SENDT_TILBAKE = 'SENDT_TILBAKE',
 }
 
-export type Lovreferanse = {
-    lovverk: string;
-    paragraf: string;
-    beskrivelse: string;
-};
-
-export enum ÅrsakTilEndring {
-    FEIL_I_INNHENTET_DATA = 'FEIL_I_INNHENTET_DATA',
-    ENDRING_ETTER_SØKNADSTIDSPUNKT = 'ENDRING_ETTER_SØKNADSTIDSPUNKT',
-}
-
-export enum Utfall {
-    OPPFYLT = 'OPPFYLT',
-    DELVIS_OPPFYLT = 'DELVIS_OPPFYLT',
-    IKKE_OPPFYLT = 'IKKE_OPPFYLT',
-    UAVKLART = 'UAVKLART',
-}
-
 export enum Behandlingstype {
     SØKNAD = 'SØKNAD',
     FØRSTEGANGSBEHANDLING = 'FØRSTEGANGSBEHANDLING',

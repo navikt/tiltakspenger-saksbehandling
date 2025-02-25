@@ -13,9 +13,3 @@ export type Saksbehandler = {
     navIdent: string;
     roller: SaksbehandlerRolle[];
 };
-
-export const erSaksbehandler = (saksbehandler: Saksbehandler) =>
-    saksbehandler.roller.includes(SaksbehandlerRolle.SAKSBEHANDLER);
-
-export const erBeslutter = (saksbehandler: Saksbehandler) =>
-    saksbehandler.roller.includes(SaksbehandlerRolle.BESLUTTER);

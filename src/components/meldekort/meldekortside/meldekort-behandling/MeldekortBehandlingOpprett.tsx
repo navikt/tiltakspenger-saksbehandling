@@ -1,10 +1,10 @@
 import { Alert, Button, Loader } from '@navikt/ds-react';
 import { MeldeperiodeProps, MeldeperiodeStatus } from '../../../../types/meldekort/Meldeperiode';
-import { useOpprettMeldekortBehandling } from '../../../../hooks/meldekort/useOpprettMeldekortBehandling';
+import { useOpprettMeldekortBehandling } from '../../hooks/useOpprettMeldekortBehandling';
 import BekreftelsesModal from '../../../modaler/BekreftelsesModal';
 import { useRef } from 'react';
 import { useSak } from '../../../../context/sak/useSak';
-import { useMeldeperiodeKjede } from '../../../../hooks/meldekort/useMeldeperiodeKjede';
+import { useMeldeperiodeKjede } from '../../hooks/useMeldeperiodeKjede';
 
 import styles from './MeldekortBehandlingOpprett.module.css';
 

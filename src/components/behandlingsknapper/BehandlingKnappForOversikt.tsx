@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from '@navikt/ds-react';
 import { BehandlingForOversiktData, BehandlingStatus } from '../../types/BehandlingTypes';
-import { useTaBehandling } from '../../hooks/useTaBehandling';
+import { useTaBehandling } from './useTaBehandling';
 import { useSaksbehandler } from '../../context/saksbehandler/useSaksbehandler';
 import { eierBehandling, skalKunneTaBehandling } from '../../utils/tilganger';
 import Link from 'next/link';

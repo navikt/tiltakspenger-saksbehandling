@@ -1,7 +1,7 @@
 import useSWRMutation from 'swr/mutation';
-import { BehandlingData, BehandlingId } from '../types/BehandlingTypes';
+import { BehandlingData, BehandlingId } from '../../types/BehandlingTypes';
 
-import { throwErrorIfFatal } from '../utils/client-fetch';
+import { throwErrorIfFatal } from '../../utils/client-fetch';
 
 export const useTaBehandling = (behandlingId: BehandlingId) => {
     const {

@@ -7,7 +7,13 @@ import {
     MeldekortBehandlingProps,
     MeldekortBehandlingStatus,
 } from '../types/meldekort/MeldekortBehandling';
-import { erBeslutter, erSaksbehandler, Saksbehandler } from '../types/Saksbehandler';
+import { Saksbehandler, SaksbehandlerRolle } from '../types/Saksbehandler';
+
+export const erSaksbehandler = (saksbehandler: Saksbehandler) =>
+    saksbehandler.roller.includes(SaksbehandlerRolle.SAKSBEHANDLER);
+
+export const erBeslutter = (saksbehandler: Saksbehandler) =>
+    saksbehandler.roller.includes(SaksbehandlerRolle.BESLUTTER);
 
 export const kanBeslutteForBehandling = (
     behandling: BehandlingData,

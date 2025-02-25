@@ -1,9 +1,9 @@
-import { SakProps } from '../types/SakTypes';
+import { SakProps } from '../../types/SakTypes';
 import router from 'next/router';
 import useSWRMutation from 'swr/mutation';
-import { FetcherError, throwErrorIfFatal } from '../utils/client-fetch';
+import { FetcherError, throwErrorIfFatal } from '../../utils/client-fetch';
 
-export function useHentSakForFNR() {
+export const useHentSakForFNR = () => {
     const {
         trigger: søk,
         data: sak,
@@ -12,13 +12,13 @@ export function useHentSakForFNR() {
         onSuccess: (data) => router.push(`/sak/${data.saksnummer}`),
     });
     return { søk, sak, error };
-}
+};
 
-async function sakFetcher<R>(url: string, { arg }: { arg: { fnr: string } }): Promise<R> {
+const sakFetcher = async (url: string, { arg }: { arg: { fnr: string } }) => {
     const res = await fetch(url, {
         method: 'POST',
         body: JSON.stringify(arg),
     });
     await throwErrorIfFatal(res);
     return res.json();
-}
+};

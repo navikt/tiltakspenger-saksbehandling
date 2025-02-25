@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { BodyShort, Dropdown, InternalHeader, Search, Spacer, VStack } from '@navikt/ds-react';
 import { Loader } from '@navikt/ds-react';
 import { LeaveIcon } from '@navikt/aksel-icons';
-import { useHentSakForFNR } from '../../hooks/useHentSakForFNR';
+import { useHentSakForFNR } from './useHentSakForFNR';
 import Varsel from '../varsel/Varsel';
 import Link from 'next/link';
 import { useSaksbehandler } from '../../context/saksbehandler/useSaksbehandler';
 
-const InternDekoratør = () => {
+export const InternDekoratør = () => {
     const { innloggetSaksbehandler } = useSaksbehandler();
     const { søk, error } = useHentSakForFNR();
     const [søketekst, settSøketekst] = useState<string>('');
@@ -112,5 +112,3 @@ const InternDekoratør = () => {
         </VStack>
     );
 };
-
-export default InternDekoratør;

@@ -7,7 +7,7 @@ import {
 import { MeldekortBehandling } from './meldekort-behandling/behandling/MeldekortBehandling';
 import { MeldekortBehandlingOppsummering } from './meldekort-behandling/MeldekortBehandlingOppsummering';
 import { BrukersMeldekortVisning } from './BrukersMeldekort';
-import { useMeldeperiodeKjede } from '../../../hooks/meldekort/useMeldeperiodeKjede';
+import { useMeldeperiodeKjede } from '../hooks/useMeldeperiodeKjede';
 import { kanSaksbehandleForMeldekort } from '../../../utils/tilganger';
 import { useSaksbehandler } from '../../../context/saksbehandler/useSaksbehandler';
 

@@ -2,7 +2,7 @@ import { HStack, BodyShort, Button } from '@navikt/ds-react';
 import { ukeHeading } from '../../../../utils/date';
 import { Utbetalingsuke } from '../Utbetalingsuke';
 import { useRef } from 'react';
-import { useGodkjennMeldekort } from '../../../../hooks/meldekort/useGodkjennMeldekort';
+import { useGodkjennMeldekort } from '../../hooks/useGodkjennMeldekort';
 import { kanBeslutteForMeldekort } from '../../../../utils/tilganger';
 import BekreftelsesModal from '../../../modaler/BekreftelsesModal';
 import { MeldeperiodeMedBehandlingProps } from '../../../../types/meldekort/Meldeperiode';
