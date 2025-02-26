@@ -1,4 +1,4 @@
-import { BodyLong, Button, Heading, Textarea } from '@navikt/ds-react';
+import { BodyLong, Button, Heading } from '@navikt/ds-react';
 import { EnvelopeOpenIcon } from '@navikt/aksel-icons';
 import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
 import {
@@ -11,6 +11,8 @@ import { VedtakHjelpetekst } from '../../vedtak/hjelpetekst/VedtakHjelpetekst';
 import { Periode } from '../../../../types/Periode';
 import useSWRMutation from 'swr/mutation';
 import { FetcherError } from '../../../../utils/fetch';
+import { TekstfeltMedMellomlagring } from '../../../tekstfelt/TekstfeltMedMellomlagring';
+import { VedtakBrevFritekstDTO } from '../../../../types/VedtakTyper';
 
 import style from './FørstegangsbehandlingBrev.module.css';
 
@@ -31,7 +33,7 @@ const fetchForhåndsvisVedtaksbrev = async (
 
 export const FørstegangsbehandlingBrev = () => {
     const { behandling, rolleForBehandling } = useFørstegangsbehandling();
-    const { fritekstTilVedtaksbrev } = behandling;
+    const { fritekstTilVedtaksbrev, sakId, id } = behandling;
 
     const vedtak = useFørstegangsVedtakSkjema();
     const dispatch = useFørstegangsVedtakDispatch();
@@ -60,15 +62,12 @@ export const FørstegangsbehandlingBrev = () => {
                 <BodyLong size={'small'}>{'Teksten vises i vedtaksbrevet til bruker.'}</BodyLong>
             </VedtakSeksjon.Venstre>
             <VedtakSeksjon.Venstre className={style.brev}>
-                <Textarea
-                    label={'Tekst til vedtaksbrev'}
-                    hideLabel={true}
+                <TekstfeltMedMellomlagring
                     description={'Teksten vises i vedtaksbrevet til bruker.'}
-                    size={'small'}
-                    minRows={10}
-                    resize={'vertical'}
                     defaultValue={fritekstTilVedtaksbrev ?? ''}
                     readOnly={rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER}
+                    lagringUrl={`/sak/${sakId}/behandling/${id}/fritekst`}
+                    lagringBody={(tekst) => ({ fritekst: tekst }) satisfies VedtakBrevFritekstDTO}
                     onChange={(event) => {
                         dispatch({
                             type: 'setBrevtekst',

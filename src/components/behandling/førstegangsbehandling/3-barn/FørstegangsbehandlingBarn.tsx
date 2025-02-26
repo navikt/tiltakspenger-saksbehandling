@@ -11,7 +11,8 @@ import style from './FørstegangsbehandlingBarn.module.css';
 
 export const FørstegangsbehandlingBarn = () => {
     const { behandling, rolleForBehandling } = useFørstegangsbehandling();
-    const { barnetillegg } = behandling.søknad;
+    const { søknad, sakId, id } = behandling;
+    const { barnetillegg } = søknad;
 
     const [harSøktBarnetillegg, setHarSøktBarnetillegg] = useState(barnetillegg.length > 0);
 

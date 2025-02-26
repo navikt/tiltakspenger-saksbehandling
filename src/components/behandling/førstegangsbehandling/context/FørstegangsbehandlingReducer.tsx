@@ -1,14 +1,12 @@
-import { Dispatch, Reducer, useReducer } from 'react';
+import { Reducer } from 'react';
 import {
     VedtakAvslagResultat,
     VedtakData,
     VedtakInnvilgetResultat,
 } from '../../../../types/VedtakTyper';
 import { Periode } from '../../../../types/Periode';
-import { hentTiltaksPeriode } from '../../../../utils/tiltak';
-import { FørstegangsbehandlingData } from '../../../../types/BehandlingTypes';
 
-type FørstegangsbehandlingActions =
+export type FørstegangsbehandlingActions =
     | {
           type: 'setBegrunnelse';
           payload: { begrunnelse: string };
@@ -30,9 +28,10 @@ type FørstegangsbehandlingActions =
           payload: { periode: Partial<Periode> };
       };
 
-export type FørstegangsbehandlingDispatch = Dispatch<FørstegangsbehandlingActions>;
-
-const reducer: Reducer<VedtakData, FørstegangsbehandlingActions> = (state, action) => {
+export const førstegangsVedtakReducer: Reducer<VedtakData, FørstegangsbehandlingActions> = (
+    state,
+    action,
+) => {
     const { type, payload } = action;
 
     switch (type) {
@@ -53,15 +52,4 @@ const reducer: Reducer<VedtakData, FørstegangsbehandlingActions> = (state, acti
 
     console.error(`Ugyldig action for førstegangsbehandlingsvedtak: "${type}"`);
     return state;
-};
-
-const initiellVedtaksData = (behandling: FørstegangsbehandlingData): VedtakData => ({
-    begrunnelseVilkårsvurdering: behandling.begrunnelseVilkårsvurdering ?? '',
-    fritekstTilVedtaksbrev: behandling.fritekstTilVedtaksbrev ?? '',
-    innvilgelsesPeriode: behandling.virkningsperiode ?? hentTiltaksPeriode(behandling),
-    resultat: behandling.virkningsperiode ? 'innvilget' : undefined,
-});
-
-export const useFørstegangsbehandlingReducer = (behandling: FørstegangsbehandlingData) => {
-    return useReducer(reducer, initiellVedtaksData(behandling));
 };

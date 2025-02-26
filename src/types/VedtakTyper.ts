@@ -10,6 +10,11 @@ type VedtakFellesData = {
     barnetillegg?: unknown;
 };
 
+type Barnetillegg = {
+    periode: Periode;
+    antallBarn: number;
+};
+
 export type VedtakInnvilgetResultat = {
     resultat: 'innvilget';
     innvilgelsesPeriode: Periode;
@@ -36,4 +41,17 @@ export type VedtakTilBeslutterDTO = {
 export type RevurderTilStansVedtak = {
     begrunnelse: string;
     stansDato: string;
+};
+
+export type VedtakBegrunnelseDTO = {
+    begrunnelse: string;
+};
+
+export type VedtakBrevFritekstDTO = {
+    fritekst: string;
+};
+
+export type VedtakBarnetilleggDTO = {
+    barnetilleggForPeriode: Barnetillegg;
+    begrunnelse?: string;
 };

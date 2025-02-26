@@ -1,0 +1,32 @@
+.lagringVarsel {
+    font-size: var(--a-font-size-medium);
+    color: var(--a-gray-600);
+}
+
+.lagringFeil {
+    margin-top: 0.25rem;
+}
+
+.venter:after {
+    content: '.';
+
+    animation-name: ellipses;
+    animation-duration: 1500ms;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+@keyframes ellipses {
+    0% {
+        content: '.';
+    }
+    25% {
+        content: '..';
+    }
+    50% {
+        content: '...';
+    }
+    75% {
+        content: '....';
+    }
+}

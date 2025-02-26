@@ -1,17 +1,25 @@
 import { FørstegangsbehandlingData } from '../../../../types/BehandlingTypes';
-import { createContext, ReactNode, useContext } from 'react';
+import { createContext, Dispatch, ReactNode, useContext, useReducer } from 'react';
 import { BehandlingContextState } from '../../BehandlingContext';
 import {
-    FørstegangsbehandlingDispatch,
-    useFørstegangsbehandlingReducer,
+    FørstegangsbehandlingActions,
+    førstegangsVedtakReducer,
 } from './FørstegangsbehandlingReducer';
 import { VedtakData } from '../../../../types/VedtakTyper';
+import { hentTiltaksPeriode } from '../../../../utils/tiltak';
 
 export type FørstegangsbehandlingContextState = BehandlingContextState<FørstegangsbehandlingData>;
 
 const BehandlingContext = createContext({} as FørstegangsbehandlingContextState);
 const VedtakSkjemaContext = createContext({} as VedtakData);
-const VedtakDispatchContext = createContext(undefined as unknown as FørstegangsbehandlingDispatch);
+const VedtakDispatchContext = createContext((() => ({})) as Dispatch<FørstegangsbehandlingActions>);
+
+const initieltVedtakSkjema = (behandling: FørstegangsbehandlingData): VedtakData => ({
+    begrunnelseVilkårsvurdering: behandling.begrunnelseVilkårsvurdering ?? '',
+    fritekstTilVedtaksbrev: behandling.fritekstTilVedtaksbrev ?? '',
+    innvilgelsesPeriode: behandling.virkningsperiode ?? hentTiltaksPeriode(behandling),
+    resultat: behandling.virkningsperiode ? 'innvilget' : undefined,
+});
 
 type Props = {
     behandlingContext: BehandlingContextState<FørstegangsbehandlingData>;
@@ -21,7 +29,11 @@ type Props = {
 export const FørstegangsbehandlingProvider = ({ behandlingContext, children }: Props) => {
     const { behandling } = behandlingContext;
 
-    const [vedtak, dispatch] = useFørstegangsbehandlingReducer(behandling);
+    const [vedtak, dispatch] = useReducer(
+        førstegangsVedtakReducer,
+        behandling,
+        initieltVedtakSkjema,
+    );
 
     return (
         <BehandlingContext.Provider value={behandlingContext}>

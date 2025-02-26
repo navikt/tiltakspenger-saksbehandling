@@ -8,13 +8,14 @@ import {
 import { FunctionComponent, ReactNode } from 'react';
 import { VedtakSeksjon } from '../../vedtak/seksjon/VedtakSeksjon';
 import { VedtakHjelpetekst } from '../../vedtak/hjelpetekst/VedtakHjelpetekst';
-import { Tekstfelt } from '../../../tekstfelt/Tekstfelt';
+import { TekstfeltMedMellomlagring } from '../../../tekstfelt/TekstfeltMedMellomlagring';
+import { VedtakBegrunnelseDTO } from '../../../../types/VedtakTyper';
 
 import style from './FørstegangsbehandlingBegrunnelse.module.css';
 
 export const FørstegangsbehandlingBegrunnelse = () => {
     const { behandling, rolleForBehandling } = useFørstegangsbehandling();
-    const { begrunnelseVilkårsvurdering } = behandling;
+    const { begrunnelseVilkårsvurdering, sakId, id } = behandling;
 
     const dispatch = useFørstegangsVedtakDispatch();
 
@@ -48,13 +49,11 @@ export const FørstegangsbehandlingBegrunnelse = () => {
                 </div>
             </VedtakSeksjon.Høyre>
             <VedtakSeksjon.Venstre>
-                <Tekstfelt
+                <TekstfeltMedMellomlagring
                     defaultValue={begrunnelseVilkårsvurdering ?? ''}
                     readOnly={rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER}
-                    mellomlagring={{
-                        url: 'asdf',
-                        tilBody: () => 'asdfasdf',
-                    }}
+                    lagringUrl={`/sak/${sakId}/behandling/${id}/begrunnelse`}
+                    lagringBody={(tekst) => ({ begrunnelse: tekst }) satisfies VedtakBegrunnelseDTO}
                     onChange={(event) => {
                         dispatch({
                             type: 'setBegrunnelse',
