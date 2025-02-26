@@ -6,10 +6,43 @@ import { VedtakSeksjon } from '../../vedtak/seksjon/VedtakSeksjon';
 import { VedtakHjelpetekst } from '../../vedtak/hjelpetekst/VedtakHjelpetekst';
 
 import style from './FørstegangsbehandlingBrev.module.css';
+import { Periode } from '../../../../types/Periode';
+import useSWRMutation from 'swr/mutation';
+import { FetcherError } from '../../../../utils/fetch';
+
+const fetchForhåndsvisVedtaksbrev = async (
+    url: string,
+    body: { arg: { fritekst: string; virkningsperiode: Periode } },
+): Promise<Blob> => {
+    const res = await fetch(url, {
+        method: 'POST',
+        body: JSON.stringify({
+            fritekst: body.arg.fritekst,
+            virkningsperiode: body.arg.virkningsperiode,
+        }),
+    });
+
+    return res.blob();
+};
 
 export const FørstegangsbehandlingBrev = () => {
-    const { dispatch, behandling, rolleForBehandling } = useFørstegangsbehandling();
+    const { dispatch, behandling, vedtak, rolleForBehandling } = useFørstegangsbehandling();
     const { fritekstTilVedtaksbrev } = behandling;
+
+    const forhåndsvisVedtaksbrevMutation = useSWRMutation<
+        Blob,
+        FetcherError,
+        string,
+        { fritekst: string; virkningsperiode: Periode }
+    >(
+        `/api/sak/${behandling.sakId}/behandling/${behandling.id}/forhandsvis`,
+        fetchForhåndsvisVedtaksbrev,
+        {
+            onSuccess(b) {
+                return window.open(URL.createObjectURL(b));
+            },
+        },
+    );
 
     return (
         <VedtakSeksjon>
@@ -37,12 +70,21 @@ export const FørstegangsbehandlingBrev = () => {
                     }}
                 />
                 <Button
-                    size={'small'}
-                    variant={'secondary'}
+                    size="small"
+                    type="button"
+                    variant="secondary"
                     icon={<EnvelopeOpenIcon />}
                     className={style.knapp}
+                    loading={forhåndsvisVedtaksbrevMutation.isMutating}
+                    onClick={() =>
+                        //Backend vil ignorere perioden dersom vedtaket er avslag, og hvis tilstanden er tilBeslutter (senere enn under behandling)
+                        forhåndsvisVedtaksbrevMutation.trigger({
+                            fritekst: vedtak.fritekstTilVedtaksbrev,
+                            virkningsperiode: vedtak.innvilgelsesPeriode,
+                        })
+                    }
                 >
-                    {'Forhåndsvis brev'}
+                    Forhåndsvis brev
                 </Button>
             </VedtakSeksjon.Venstre>
             <VedtakSeksjon.Høyre>
