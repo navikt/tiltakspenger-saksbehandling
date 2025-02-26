@@ -9,6 +9,7 @@ type Props = {
 export const BehandlingTiltakOpplysninger = ({ tiltaksdeltagelse }: Props) => {
     const {
         antallDagerPerUke,
+        deltakelseProsent,
         deltakelseStatus,
         deltagelseTilOgMed,
         deltagelseFraOgMed,
@@ -33,6 +34,10 @@ export const BehandlingTiltakOpplysninger = ({ tiltaksdeltagelse }: Props) => {
             <BehandlingSaksopplysning
                 navn={'Antall dager i uka'}
                 verdi={antallDagerPerUke?.toString() ?? 'Ukjent'}
+            />
+            <BehandlingSaksopplysning
+                navn={'Deltagelsesprosent'}
+                verdi={deltakelseProsent !== null ? `${deltakelseProsent}%` : 'Ukjent'}
             />
         </>
     );

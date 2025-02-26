@@ -19,33 +19,33 @@ export const BehandlingSaksopplysninger = () => {
 
     return (
         <div className={style.saksopplysninger}>
-            <OpplysningerBlokk header={'Tiltak registrert på bruker'}>
+            <OpplysningerSeksjon header={'Tiltak registrert på bruker'}>
                 {rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER && (
                     <BehandlingOppdaterSaksopplysninger />
                 )}
                 <BehandlingTiltakOpplysninger tiltaksdeltagelse={tiltaksdeltagelse} />
-            </OpplysningerBlokk>
+            </OpplysningerSeksjon>
 
             <Separator />
 
-            <OpplysningerBlokk header={'Alder'}>
+            <OpplysningerSeksjon header={'Alder'}>
                 <BodyShort weight={'semibold'}>{`${alderFraDato(fødselsdato)} år`}</BodyShort>
                 <BehandlingSaksopplysning navn={'Fødselsdato'} verdi={fødselsdato} />
-            </OpplysningerBlokk>
+            </OpplysningerSeksjon>
 
             {type === Behandlingstype.FØRSTEGANGSBEHANDLING && (
                 <>
                     <Separator />
-                    <OpplysningerBlokk header={'Fra søknad'}>
+                    <OpplysningerSeksjon header={'Fra søknad'}>
                         <BehandlingSøknadOpplysninger førstegangsbehandling={behandling} />
-                    </OpplysningerBlokk>
+                    </OpplysningerSeksjon>
                 </>
             )}
         </div>
     );
 };
 
-const OpplysningerBlokk = ({ header, children }: { header: string; children: ReactNode }) => {
+const OpplysningerSeksjon = ({ header, children }: { header: string; children: ReactNode }) => {
     return (
         <>
             <Heading size={'small'} level={'3'} className={style.header}>
