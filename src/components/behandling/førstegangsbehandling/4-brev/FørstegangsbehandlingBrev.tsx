@@ -4,14 +4,15 @@ import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
 import {
     useFørstegangsbehandling,
     useFørstegangsVedtakDispatch,
+    useFørstegangsVedtakSkjema,
 } from '../context/FørstegangsbehandlingContext';
 import { VedtakSeksjon } from '../../vedtak/seksjon/VedtakSeksjon';
 import { VedtakHjelpetekst } from '../../vedtak/hjelpetekst/VedtakHjelpetekst';
-
-import style from './FørstegangsbehandlingBrev.module.css';
 import { Periode } from '../../../../types/Periode';
 import useSWRMutation from 'swr/mutation';
 import { FetcherError } from '../../../../utils/fetch';
+
+import style from './FørstegangsbehandlingBrev.module.css';
 
 const fetchForhåndsvisVedtaksbrev = async (
     url: string,
@@ -31,6 +32,8 @@ const fetchForhåndsvisVedtaksbrev = async (
 export const FørstegangsbehandlingBrev = () => {
     const { behandling, rolleForBehandling } = useFørstegangsbehandling();
     const { fritekstTilVedtaksbrev } = behandling;
+
+    const vedtak = useFørstegangsVedtakSkjema();
     const dispatch = useFørstegangsVedtakDispatch();
 
     const forhåndsvisVedtaksbrevMutation = useSWRMutation<

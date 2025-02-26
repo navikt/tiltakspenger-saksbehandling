@@ -18,7 +18,7 @@ export const Tekstfelt = ({ label = '', mellomlagring, onChange, ...textareaProp
         [mellomlagring],
     );
 
-    console.log('what');
+    console.log('Rerender tekstfelt');
 
     return (
         <Textarea

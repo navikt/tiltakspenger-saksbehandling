@@ -14,10 +14,10 @@ import { errorFraApiResponse } from './fetch';
 
 type NextRequest = Request | IncomingMessage | NextApiRequest;
 
-export const SBH_API_URL = process.env.TILTAKSPENGER_SAKSBEHANDLING_API_URL;
-export const SBH_API_SCOPE = process.env.SAKSBEHANDLING_API_SCOPE;
+const SBH_API_URL = process.env.TILTAKSPENGER_SAKSBEHANDLING_API_URL;
+const SBH_API_SCOPE = process.env.SAKSBEHANDLING_API_SCOPE;
 
-export const hentOboToken = async (req: NextRequest) => {
+const hentOboToken = async (req: NextRequest) => {
     const token = getToken(req);
     if (!token) {
         throw new Error('Kunne ikke hente token!');
