@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { hentOboToken, SBH_API_URL } from '../../utils/server-fetch';
 import { withAuthenticatedApi } from '../../auth/pageWithAuthentication';
 import { logger } from '@navikt/next-logger';
+import { hentOboToken, SBH_API_URL } from '../../utils/fetch-server';
 
 async function apiProxy(clientRequest: NextApiRequest, responseToClient: NextApiResponse) {
     if (!clientRequest.url) {
