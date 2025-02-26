@@ -1,5 +1,5 @@
 import { BodyShort, Heading } from '@navikt/ds-react';
-import { alderFraDato } from '../../../utils/date';
+import { alderFraDato, formaterDatotekst } from '../../../utils/date';
 import { ReactNode } from 'react';
 import { useBehandling } from '../BehandlingContext';
 import { Separator } from '../../separator/Separator';
@@ -30,7 +30,10 @@ export const BehandlingSaksopplysninger = () => {
 
             <OpplysningerSeksjon header={'Alder'}>
                 <BodyShort weight={'semibold'}>{`${alderFraDato(fødselsdato)} år`}</BodyShort>
-                <BehandlingSaksopplysning navn={'Fødselsdato'} verdi={fødselsdato} />
+                <BehandlingSaksopplysning
+                    navn={'Fødselsdato'}
+                    verdi={formaterDatotekst(fødselsdato)}
+                />
             </OpplysningerSeksjon>
 
             {type === Behandlingstype.FØRSTEGANGSBEHANDLING && (
