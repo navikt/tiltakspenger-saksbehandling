@@ -5,17 +5,22 @@ import { VedtakResultat } from '../../../../types/VedtakTyper';
 import { hentTiltaksPeriode } from '../../../../utils/tiltak';
 import { dateTilISOTekst } from '../../../../utils/date';
 import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
-import { useFørstegangsbehandling } from '../context/FørstegangsbehandlingContext';
+import {
+    useFørstegangsbehandling,
+    useFørstegangsVedtakSkjema,
+    useFørstegangsVedtakDispatch,
+} from '../context/FørstegangsbehandlingContext';
 import { VedtakSeksjon } from '../../vedtak/seksjon/VedtakSeksjon';
 
 import style from './FørstegangsbehandlingResultat.module.css';
 
 export const FørstegangsbehandlingResultat = () => {
-    const { behandling, vedtak, dispatch, rolleForBehandling } = useFørstegangsbehandling();
+    const { behandling, rolleForBehandling } = useFørstegangsbehandling();
+    const { resultat, innvilgelsesPeriode } = useFørstegangsVedtakSkjema();
+
+    const dispatch = useFørstegangsVedtakDispatch();
 
     const initiellTiltaksPeriode = hentTiltaksPeriode(behandling);
-
-    const { resultat, innvilgelsesPeriode } = vedtak;
 
     const erIkkeSaksbehandler = rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER;
 
@@ -26,7 +31,7 @@ export const FørstegangsbehandlingResultat = () => {
                     legend={'Resultat'}
                     size={'small'}
                     className={style.radioGroup}
-                    defaultValue={vedtak.resultat}
+                    defaultValue={resultat}
                     readOnly={erIkkeSaksbehandler}
                     onChange={(valgtResultat: VedtakResultat) => {
                         dispatch({

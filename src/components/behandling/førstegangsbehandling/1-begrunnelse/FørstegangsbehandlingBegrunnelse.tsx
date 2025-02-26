@@ -1,16 +1,22 @@
-import { BodyLong, BodyShort, Button, Heading, Textarea } from '@navikt/ds-react';
+import { BodyLong, BodyShort, Button, Heading } from '@navikt/ds-react';
 import { ParagraphIcon, TasklistIcon } from '@navikt/aksel-icons';
 import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
-import { useFørstegangsbehandling } from '../context/FørstegangsbehandlingContext';
+import {
+    useFørstegangsbehandling,
+    useFørstegangsVedtakDispatch,
+} from '../context/FørstegangsbehandlingContext';
 import { FunctionComponent, ReactNode } from 'react';
 import { VedtakSeksjon } from '../../vedtak/seksjon/VedtakSeksjon';
 import { VedtakHjelpetekst } from '../../vedtak/hjelpetekst/VedtakHjelpetekst';
+import { Tekstfelt } from '../../../tekstfelt/Tekstfelt';
 
 import style from './FørstegangsbehandlingBegrunnelse.module.css';
 
 export const FørstegangsbehandlingBegrunnelse = () => {
-    const { behandling, dispatch, rolleForBehandling } = useFørstegangsbehandling();
+    const { behandling, rolleForBehandling } = useFørstegangsbehandling();
     const { begrunnelseVilkårsvurdering } = behandling;
+
+    const dispatch = useFørstegangsVedtakDispatch();
 
     return (
         <VedtakSeksjon>
@@ -42,13 +48,13 @@ export const FørstegangsbehandlingBegrunnelse = () => {
                 </div>
             </VedtakSeksjon.Høyre>
             <VedtakSeksjon.Venstre>
-                <Textarea
-                    label={''}
-                    hideLabel={true}
-                    minRows={10}
-                    resize={'vertical'}
+                <Tekstfelt
                     defaultValue={begrunnelseVilkårsvurdering ?? ''}
                     readOnly={rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER}
+                    mellomlagring={{
+                        url: 'asdf',
+                        tilBody: () => 'asdfasdf',
+                    }}
                     onChange={(event) => {
                         dispatch({
                             type: 'setBegrunnelse',

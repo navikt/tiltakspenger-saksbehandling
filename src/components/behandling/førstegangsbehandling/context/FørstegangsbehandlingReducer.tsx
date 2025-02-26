@@ -63,5 +63,5 @@ const initiellVedtaksData = (behandling: FørstegangsbehandlingData): VedtakData
 });
 
 export const useFørstegangsbehandlingReducer = (behandling: FørstegangsbehandlingData) => {
-    return useReducer(reducer, behandling, initiellVedtaksData);
+    return useReducer(reducer, initiellVedtaksData(behandling));
 };

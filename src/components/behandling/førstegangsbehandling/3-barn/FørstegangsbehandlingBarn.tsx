@@ -5,12 +5,12 @@ import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
 import { useState } from 'react';
 import { BarnetilleggPerioder } from './barnetillegg/BarnetilleggPerioder';
 import { classNames } from '../../../../utils/classNames';
-
-import style from './FørstegangsbehandlingBarn.module.css';
 import { VedtakHjelpetekst } from '../../vedtak/hjelpetekst/VedtakHjelpetekst';
 
+import style from './FørstegangsbehandlingBarn.module.css';
+
 export const FørstegangsbehandlingBarn = () => {
-    const { behandling, rolleForBehandling, dispatch } = useFørstegangsbehandling();
+    const { behandling, rolleForBehandling } = useFørstegangsbehandling();
     const { barnetillegg } = behandling.søknad;
 
     const [harSøktBarnetillegg, setHarSøktBarnetillegg] = useState(barnetillegg.length > 0);

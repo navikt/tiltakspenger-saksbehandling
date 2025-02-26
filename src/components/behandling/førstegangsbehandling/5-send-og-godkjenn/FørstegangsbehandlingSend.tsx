@@ -1,5 +1,8 @@
 import { useSendFørstegangsbehandling } from './useSendFørstegangsbehandling';
-import { useFørstegangsbehandling } from '../context/FørstegangsbehandlingContext';
+import {
+    useFørstegangsbehandling,
+    useFørstegangsVedtakSkjema,
+} from '../context/FørstegangsbehandlingContext';
 import { BehandlingGodkjenn } from '../../send-og-godkjenn/BehandlingGodkjenn';
 import { useGodkjennBehandling } from '../../send-og-godkjenn/useGodkjennBehandling';
 import { BehandlingSendTilBeslutning } from '../../send-og-godkjenn/BehandlingSendTilBeslutning';
@@ -8,7 +11,8 @@ import { VedtakSeksjon } from '../../vedtak/seksjon/VedtakSeksjon';
 import style from './FørstegangsbehandlingSend.module.css';
 
 export const FørstegangsbehandlingSend = () => {
-    const { behandling, vedtak } = useFørstegangsbehandling();
+    const { behandling } = useFørstegangsbehandling();
+    const vedtak = useFørstegangsVedtakSkjema();
 
     const { sendTilBeslutter, sendTilBeslutterLaster, sendTilBeslutterError } =
         useSendFørstegangsbehandling(vedtak, behandling);

@@ -1,7 +1,10 @@
 import { BodyLong, Button, Heading, Textarea } from '@navikt/ds-react';
 import { EnvelopeOpenIcon } from '@navikt/aksel-icons';
 import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
-import { useFørstegangsbehandling } from '../context/FørstegangsbehandlingContext';
+import {
+    useFørstegangsbehandling,
+    useFørstegangsVedtakDispatch,
+} from '../context/FørstegangsbehandlingContext';
 import { VedtakSeksjon } from '../../vedtak/seksjon/VedtakSeksjon';
 import { VedtakHjelpetekst } from '../../vedtak/hjelpetekst/VedtakHjelpetekst';
 
@@ -26,8 +29,9 @@ const fetchForhåndsvisVedtaksbrev = async (
 };
 
 export const FørstegangsbehandlingBrev = () => {
-    const { dispatch, behandling, vedtak, rolleForBehandling } = useFørstegangsbehandling();
+    const { behandling, rolleForBehandling } = useFørstegangsbehandling();
     const { fritekstTilVedtaksbrev } = behandling;
+    const dispatch = useFørstegangsVedtakDispatch();
 
     const forhåndsvisVedtaksbrevMutation = useSWRMutation<
         Blob,
