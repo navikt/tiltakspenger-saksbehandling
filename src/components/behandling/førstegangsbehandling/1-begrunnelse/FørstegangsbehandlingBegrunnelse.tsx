@@ -1,7 +1,7 @@
 import { BodyLong, BodyShort, Button, Heading, Textarea } from '@navikt/ds-react';
 import { ParagraphIcon, TasklistIcon } from '@navikt/aksel-icons';
 import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
-import { useFørstegangsbehandling } from '../FørstegangsbehandlingContext';
+import { useFørstegangsbehandling } from '../context/FørstegangsbehandlingContext';
 import { FunctionComponent, ReactNode } from 'react';
 import { VedtakSeksjon } from '../../vedtak/seksjon/VedtakSeksjon';
 import { VedtakHjelpetekst } from '../../vedtak/hjelpetekst/VedtakHjelpetekst';
@@ -9,7 +9,7 @@ import { VedtakHjelpetekst } from '../../vedtak/hjelpetekst/VedtakHjelpetekst';
 import style from './FørstegangsbehandlingBegrunnelse.module.css';
 
 export const FørstegangsbehandlingBegrunnelse = () => {
-    const { behandling, setBegrunnelse, rolleForBehandling } = useFørstegangsbehandling();
+    const { behandling, dispatch, rolleForBehandling } = useFørstegangsbehandling();
     const { begrunnelseVilkårsvurdering } = behandling;
 
     return (
@@ -50,7 +50,10 @@ export const FørstegangsbehandlingBegrunnelse = () => {
                     defaultValue={begrunnelseVilkårsvurdering ?? ''}
                     readOnly={rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER}
                     onChange={(event) => {
-                        setBegrunnelse(event.target.value);
+                        dispatch({
+                            type: 'setBegrunnelse',
+                            payload: { begrunnelse: event.target.value },
+                        });
                     }}
                 />
             </VedtakSeksjon.Venstre>

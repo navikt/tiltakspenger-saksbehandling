@@ -6,7 +6,7 @@ import { useBehandling } from './BehandlingContext';
 import {
     FørstegangsbehandlingContextState,
     FørstegangsbehandlingProvider,
-} from './førstegangsbehandling/FørstegangsbehandlingContext';
+} from './førstegangsbehandling/context/FørstegangsbehandlingContext';
 import { Behandlingstype } from '../../types/BehandlingTypes';
 import { RevurderingContextState, RevurderingProvider } from './revurdering/RevurderingContext';
 import { PersonaliaHeader } from '../personaliaheader/PersonaliaHeader';

@@ -1,7 +1,7 @@
 import { Button, Select } from '@navikt/ds-react';
 import { VedtakSeksjon } from '../../../vedtak/seksjon/VedtakSeksjon';
 import { Datovelger } from '../../../../datovelger/Datovelger';
-import { useFørstegangsbehandling } from '../../FørstegangsbehandlingContext';
+import { useFørstegangsbehandling } from '../../context/FørstegangsbehandlingContext';
 import { hentTiltaksPeriode } from '../../../../../utils/tiltak';
 
 import style from './BarnetilleggPerioder.module.css';

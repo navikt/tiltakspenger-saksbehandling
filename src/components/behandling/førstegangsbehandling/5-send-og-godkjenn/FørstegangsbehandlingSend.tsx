@@ -1,5 +1,5 @@
 import { useSendFørstegangsbehandling } from './useSendFørstegangsbehandling';
-import { useFørstegangsbehandling } from '../FørstegangsbehandlingContext';
+import { useFørstegangsbehandling } from '../context/FørstegangsbehandlingContext';
 import { BehandlingGodkjenn } from '../../send-og-godkjenn/BehandlingGodkjenn';
 import { useGodkjennBehandling } from '../../send-og-godkjenn/useGodkjennBehandling';
 import { BehandlingSendTilBeslutning } from '../../send-og-godkjenn/BehandlingSendTilBeslutning';

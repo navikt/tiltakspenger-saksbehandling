@@ -5,14 +5,13 @@ import { VedtakResultat } from '../../../../types/VedtakTyper';
 import { hentTiltaksPeriode } from '../../../../utils/tiltak';
 import { dateTilISOTekst } from '../../../../utils/date';
 import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
-import { useFørstegangsbehandling } from '../FørstegangsbehandlingContext';
+import { useFørstegangsbehandling } from '../context/FørstegangsbehandlingContext';
 import { VedtakSeksjon } from '../../vedtak/seksjon/VedtakSeksjon';
 
 import style from './FørstegangsbehandlingResultat.module.css';
 
 export const FørstegangsbehandlingResultat = () => {
-    const { behandling, vedtak, setResultat, oppdaterInnvilgelsesPeriode, rolleForBehandling } =
-        useFørstegangsbehandling();
+    const { behandling, vedtak, dispatch, rolleForBehandling } = useFørstegangsbehandling();
 
     const initiellTiltaksPeriode = hentTiltaksPeriode(behandling);
 
@@ -30,7 +29,10 @@ export const FørstegangsbehandlingResultat = () => {
                     defaultValue={vedtak.resultat}
                     readOnly={erIkkeSaksbehandler}
                     onChange={(valgtResultat: VedtakResultat) => {
-                        setResultat({ resultat: valgtResultat, innvilgelsesPeriode });
+                        dispatch({
+                            type: 'setResultat',
+                            payload: { resultat: { resultat: valgtResultat, innvilgelsesPeriode } },
+                        });
                     }}
                 >
                     <Radio value={'innvilget' satisfies VedtakResultat}>{'Innvilgelse'}</Radio>
@@ -51,8 +53,13 @@ export const FørstegangsbehandlingResultat = () => {
                         readOnly={erIkkeSaksbehandler}
                         onDateChange={(valgtDato) => {
                             if (valgtDato) {
-                                oppdaterInnvilgelsesPeriode({
-                                    fraOgMed: dateTilISOTekst(valgtDato),
+                                dispatch({
+                                    type: 'oppdaterInnvilgetPeriode',
+                                    payload: {
+                                        periode: {
+                                            fraOgMed: dateTilISOTekst(valgtDato),
+                                        },
+                                    },
                                 });
                             }
                         }}
@@ -64,8 +71,13 @@ export const FørstegangsbehandlingResultat = () => {
                         readOnly={erIkkeSaksbehandler}
                         onDateChange={(valgtDato) => {
                             if (valgtDato) {
-                                oppdaterInnvilgelsesPeriode({
-                                    tilOgMed: dateTilISOTekst(valgtDato),
+                                dispatch({
+                                    type: 'oppdaterInnvilgetPeriode',
+                                    payload: {
+                                        periode: {
+                                            tilOgMed: dateTilISOTekst(valgtDato),
+                                        },
+                                    },
                                 });
                             }
                         }}

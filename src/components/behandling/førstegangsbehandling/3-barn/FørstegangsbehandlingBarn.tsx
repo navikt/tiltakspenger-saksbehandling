@@ -1,6 +1,6 @@
 import { VedtakSeksjon } from '../../vedtak/seksjon/VedtakSeksjon';
 import { BodyLong, Button, Heading, Radio, RadioGroup, Textarea } from '@navikt/ds-react';
-import { useFørstegangsbehandling } from '../FørstegangsbehandlingContext';
+import { useFørstegangsbehandling } from '../context/FørstegangsbehandlingContext';
 import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
 import { useState } from 'react';
 import { BarnetilleggPerioder } from './barnetillegg/BarnetilleggPerioder';
@@ -10,7 +10,7 @@ import style from './FørstegangsbehandlingBarn.module.css';
 import { VedtakHjelpetekst } from '../../vedtak/hjelpetekst/VedtakHjelpetekst';
 
 export const FørstegangsbehandlingBarn = () => {
-    const { behandling, rolleForBehandling } = useFørstegangsbehandling();
+    const { behandling, rolleForBehandling, dispatch } = useFørstegangsbehandling();
     const { barnetillegg } = behandling.søknad;
 
     const [harSøktBarnetillegg, setHarSøktBarnetillegg] = useState(barnetillegg.length > 0);

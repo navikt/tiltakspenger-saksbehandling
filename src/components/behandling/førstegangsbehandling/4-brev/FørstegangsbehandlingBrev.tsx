@@ -1,14 +1,14 @@
 import { BodyLong, Button, Heading, Textarea } from '@navikt/ds-react';
 import { EnvelopeOpenIcon } from '@navikt/aksel-icons';
 import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
-import { useFørstegangsbehandling } from '../FørstegangsbehandlingContext';
+import { useFørstegangsbehandling } from '../context/FørstegangsbehandlingContext';
 import { VedtakSeksjon } from '../../vedtak/seksjon/VedtakSeksjon';
 import { VedtakHjelpetekst } from '../../vedtak/hjelpetekst/VedtakHjelpetekst';
 
 import style from './FørstegangsbehandlingBrev.module.css';
 
 export const FørstegangsbehandlingBrev = () => {
-    const { setBrevTekst, behandling, rolleForBehandling } = useFørstegangsbehandling();
+    const { dispatch, behandling, rolleForBehandling } = useFørstegangsbehandling();
     const { fritekstTilVedtaksbrev } = behandling;
 
     return (
@@ -30,7 +30,10 @@ export const FørstegangsbehandlingBrev = () => {
                     defaultValue={fritekstTilVedtaksbrev ?? ''}
                     readOnly={rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER}
                     onChange={(event) => {
-                        setBrevTekst(event.target.value);
+                        dispatch({
+                            type: 'setBrevtekst',
+                            payload: { brevtekst: event.target.value },
+                        });
                     }}
                 />
                 <Button
