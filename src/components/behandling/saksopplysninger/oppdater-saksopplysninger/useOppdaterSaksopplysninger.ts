@@ -1,10 +1,10 @@
 import { BehandlingData } from '../../../../types/BehandlingTypes';
-import { useFetchFraApi } from '../../../../utils/useFetchFraApi';
+import { useFetchJsonFraApi } from '../../../../utils/fetch/useFetchFraApi';
 
 export const useOppdaterSaksopplysninger = (behandling: BehandlingData) => {
     const { sakId, id } = behandling;
 
-    const { trigger, isMutating, error } = useFetchFraApi<BehandlingData>(
+    const { trigger, isMutating, error } = useFetchJsonFraApi<BehandlingData>(
         `/sak/${sakId}/behandling/${id}/saksopplysninger`,
         'PATCH',
     );

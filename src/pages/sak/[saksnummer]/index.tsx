@@ -1,7 +1,7 @@
 import { pageWithAuthentication } from '../../../auth/pageWithAuthentication';
 import { SakProps } from '../../../types/SakTypes';
 import { Saksoversikt } from '../../../components/saksoversikt/Saksoversikt';
-import { fetchSak } from '../../../utils/fetch-server';
+import { fetchSak } from '../../../utils/fetch/fetch-server';
 import { SakProvider } from '../../../context/sak/SakProvider';
 
 type Props = {

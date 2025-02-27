@@ -2,7 +2,7 @@ import { Alert, Textarea } from '@navikt/ds-react';
 import { ComponentProps, useCallback, useState } from 'react';
 import { debounce } from 'lodash';
 import { classNames } from '../../utils/classNames';
-import { fetchJsonFraApiClientSide } from '../../utils/fetch';
+import { fetchJsonFraApiClientSide } from '../../utils/fetch/fetch';
 
 import style from './TekstfeltMedMellomlagring.module.css';
 

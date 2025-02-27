@@ -3,7 +3,7 @@ import {
     MeldekortBehandlingId,
     MeldekortBehandlingProps,
 } from '../../../types/meldekort/MeldekortBehandling';
-import { useFetchFraApi } from '../../../utils/useFetchFraApi';
+import { useFetchJsonFraApi } from '../../../utils/fetch/useFetchFraApi';
 
 export const useGodkjennMeldekort = (meldekortId: MeldekortBehandlingId, sakId: SakId) => {
     const {
@@ -11,7 +11,7 @@ export const useGodkjennMeldekort = (meldekortId: MeldekortBehandlingId, sakId: 
         isMutating: godkjennMeldekortLaster,
         error: godkjennMeldekortFeil,
         reset,
-    } = useFetchFraApi<MeldekortBehandlingProps>(
+    } = useFetchJsonFraApi<MeldekortBehandlingProps>(
         `/sak/${sakId}/meldekort/${meldekortId}/iverksett`,
         'POST',
     );

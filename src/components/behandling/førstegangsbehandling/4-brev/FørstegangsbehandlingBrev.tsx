@@ -1,4 +1,4 @@
-import { BodyLong, Button, Heading } from '@navikt/ds-react';
+import { Alert, BodyLong, Button, Heading } from '@navikt/ds-react';
 import { EnvelopeOpenIcon } from '@navikt/aksel-icons';
 import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
 import {
@@ -8,28 +8,11 @@ import {
 } from '../context/FørstegangsbehandlingContext';
 import { VedtakSeksjon } from '../../vedtak/seksjon/VedtakSeksjon';
 import { VedtakHjelpetekst } from '../../vedtak/hjelpetekst/VedtakHjelpetekst';
-import { Periode } from '../../../../types/Periode';
-import useSWRMutation from 'swr/mutation';
-import { FetcherError } from '../../../../utils/fetch';
 import { TekstfeltMedMellomlagring } from '../../../tekstfelt/TekstfeltMedMellomlagring';
 import { VedtakBrevFritekstDTO } from '../../../../types/VedtakTyper';
+import { useHentVedtaksbrevForhåndsvisning } from './useHentVedtaksbrevForhåndsvisning';
 
 import style from './FørstegangsbehandlingBrev.module.css';
-
-const fetchForhåndsvisVedtaksbrev = async (
-    url: string,
-    body: { arg: { fritekst: string; virkningsperiode: Periode } },
-): Promise<Blob> => {
-    const res = await fetch(url, {
-        method: 'POST',
-        body: JSON.stringify({
-            fritekst: body.arg.fritekst,
-            virkningsperiode: body.arg.virkningsperiode,
-        }),
-    });
-
-    return res.blob();
-};
 
 export const FørstegangsbehandlingBrev = () => {
     const { behandling, rolleForBehandling } = useFørstegangsbehandling();
@@ -38,20 +21,8 @@ export const FørstegangsbehandlingBrev = () => {
     const vedtak = useFørstegangsVedtakSkjema();
     const dispatch = useFørstegangsVedtakDispatch();
 
-    const forhåndsvisVedtaksbrevMutation = useSWRMutation<
-        Blob,
-        FetcherError,
-        string,
-        { fritekst: string; virkningsperiode: Periode }
-    >(
-        `/api/sak/${behandling.sakId}/behandling/${behandling.id}/forhandsvis`,
-        fetchForhåndsvisVedtaksbrev,
-        {
-            onSuccess(b) {
-                return window.open(URL.createObjectURL(b));
-            },
-        },
-    );
+    const { hentForhåndsvisning, forhåndsvisningLaster, forhåndsvisningError } =
+        useHentVedtaksbrevForhåndsvisning(behandling);
 
     return (
         <VedtakSeksjon>
@@ -81,17 +52,28 @@ export const FørstegangsbehandlingBrev = () => {
                     variant="secondary"
                     icon={<EnvelopeOpenIcon />}
                     className={style.knapp}
-                    loading={forhåndsvisVedtaksbrevMutation.isMutating}
+                    loading={forhåndsvisningLaster}
                     onClick={() =>
                         //Backend vil ignorere perioden dersom vedtaket er avslag, og hvis tilstanden er tilBeslutter (senere enn under behandling)
-                        forhåndsvisVedtaksbrevMutation.trigger({
+                        hentForhåndsvisning({
                             fritekst: vedtak.fritekstTilVedtaksbrev,
                             virkningsperiode: vedtak.innvilgelsesPeriode,
+                        }).then((blob) => {
+                            if (blob) {
+                                window.open(URL.createObjectURL(blob));
+                            }
                         })
                     }
                 >
                     Forhåndsvis brev
                 </Button>
+                {forhåndsvisningError && (
+                    <Alert
+                        variant={'error'}
+                        size={'small'}
+                        inline={true}
+                    >{`Feil ved forhåndsvisning av brev: [${forhåndsvisningError.status}] ${forhåndsvisningError.message}`}</Alert>
+                )}
             </VedtakSeksjon.Venstre>
             <VedtakSeksjon.Høyre>
                 <VedtakHjelpetekst header={'Tekst i brev'}>

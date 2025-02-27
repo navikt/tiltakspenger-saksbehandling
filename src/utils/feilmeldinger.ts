@@ -1,4 +1,4 @@
-import { FetcherError } from './fetch';
+import { FetcherError } from './fetch/fetch';
 
 const feilmeldinger: Record<string, string> = {
     fant_ikke_fnr: 'Fant ikke fødselsnummeret',

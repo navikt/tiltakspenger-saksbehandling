@@ -1,5 +1,5 @@
 import { pageWithAuthentication } from '../auth/pageWithAuthentication';
-import { fetchBenkOversikt } from '../utils/fetch-server';
+import { fetchBenkOversikt } from '../utils/fetch/fetch-server';
 import { BenkOversiktSide } from '../components/benk/BenkSide';
 import { ComponentProps } from 'react';
 

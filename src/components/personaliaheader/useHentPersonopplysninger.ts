@@ -1,6 +1,6 @@
 import useSWR, { mutate } from 'swr';
 import { SakId } from '../../types/SakTypes';
-import { fetchJsonFraApiClientSide } from '../../utils/fetch';
+import { fetchJsonFraApiClientSide } from '../../utils/fetch/fetch';
 
 export type Personopplysninger = {
     fnr: string;

@@ -4,13 +4,13 @@ import {
     VedtakTilBeslutterDTO,
 } from '../../../../types/VedtakTyper';
 import { BehandlingData } from '../../../../types/BehandlingTypes';
-import { useFetchFraApi } from '../../../../utils/useFetchFraApi';
+import { useFetchJsonFraApi } from '../../../../utils/fetch/useFetchFraApi';
 
 export const useSendFørstegangsbehandling = (vedtak: VedtakData, behandling: BehandlingData) => {
-    const { trigger, isMutating, error } = useFetchFraApi<BehandlingData, VedtakTilBeslutterDTO>(
-        `/sak/${behandling.sakId}/behandling/${behandling.id}/sendtilbeslutning`,
-        'POST',
-    );
+    const { trigger, isMutating, error } = useFetchJsonFraApi<
+        BehandlingData,
+        VedtakTilBeslutterDTO
+    >(`/sak/${behandling.sakId}/behandling/${behandling.id}/sendtilbeslutning`, 'POST');
 
     const sendTilBeslutter = () => trigger(tilBeslutterDTO(vedtak as VedtakMedResultat));
 

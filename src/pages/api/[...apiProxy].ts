@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { withAuthenticatedApi } from '../../auth/pageWithAuthentication';
-import { fetchFraApiServerSide } from '../../utils/fetch-server';
+import { fetchFraApiServerSide } from '../../utils/fetch/fetch-server';
 import { logger } from '@navikt/next-logger';
 
 async function apiProxy(clientRequest: NextApiRequest, responseToClient: NextApiResponse) {
@@ -10,17 +10,16 @@ async function apiProxy(clientRequest: NextApiRequest, responseToClient: NextApi
 
     const path = clientRequest.url.replace('/api', '');
 
-    const headers = new Headers();
+    const headers: Record<string, string> = {};
     Object.entries(clientRequest.headers).forEach(([key, value]) => {
-        headers.set(key, value as string);
+        headers[key] = value as string;
     });
-    headers.delete('content-length');
+    delete headers['content-length'];
 
     await fetchFraApiServerSide(clientRequest, path, {
         method: clientRequest.method,
         headers,
-        //ikke stringify ellers blir stringen escapet
-        body: clientRequest.body || undefined,
+        body: clientRequest.body ? JSON.stringify(clientRequest.body) : undefined,
     })
         .then(async (res) => {
             const data = await res.arrayBuffer();

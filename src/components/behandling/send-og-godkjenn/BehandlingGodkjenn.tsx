@@ -1,7 +1,7 @@
 import { Alert, Button } from '@navikt/ds-react';
 import { useState } from 'react';
 import { BehandlingData } from '../../../types/BehandlingTypes';
-import { FetcherError } from '../../../utils/fetch';
+import { FetcherError } from '../../../utils/fetch/fetch';
 import { useBehandling } from '../BehandlingContext';
 import { SaksbehandlerRolle } from '../../../types/Saksbehandler';
 

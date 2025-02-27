@@ -1,12 +1,12 @@
 import { SakProps } from '../../types/SakTypes';
-import { useFetchFraApi } from '../../utils/useFetchFraApi';
+import { useFetchJsonFraApi } from '../../utils/fetch/useFetchFraApi';
 
 export const useHentSakForFNR = () => {
     const {
         trigger: søk,
         data: sak,
         error,
-    } = useFetchFraApi<SakProps, { fnr: string }>('/sak', 'POST');
+    } = useFetchJsonFraApi<SakProps, { fnr: string }>('/sak', 'POST');
 
     return { søk, sak, error };
 };

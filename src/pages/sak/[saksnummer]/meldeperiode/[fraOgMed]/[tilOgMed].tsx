@@ -1,7 +1,7 @@
 import { pageWithAuthentication } from '../../../../../auth/pageWithAuthentication';
 import { MeldeperiodeKjedeProps } from '../../../../../types/meldekort/Meldeperiode';
 import { SakProps } from '../../../../../types/SakTypes';
-import { fetchSak } from '../../../../../utils/fetch-server';
+import { fetchSak } from '../../../../../utils/fetch/fetch-server';
 import { SakProvider } from '../../../../../context/sak/SakProvider';
 import { MeldeperiodeSide } from '../../../../../components/meldekort/MeldeperiodeSide';
 import { MeldeperiodeKjedeProvider } from '../../../../../components/meldekort/context/MeldeperiodeKjedeProvider';

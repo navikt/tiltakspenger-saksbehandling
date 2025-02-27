@@ -1,7 +1,7 @@
 import { MeldeperiodeKjedeId } from '../../../types/meldekort/Meldeperiode';
 import { SakId } from '../../../types/SakTypes';
 import { MeldekortBehandlingProps } from '../../../types/meldekort/MeldekortBehandling';
-import { useFetchFraApi } from '../../../utils/useFetchFraApi';
+import { useFetchJsonFraApi } from '../../../utils/fetch/useFetchFraApi';
 
 type Props = {
     kjedeId: MeldeperiodeKjedeId;
@@ -9,7 +9,7 @@ type Props = {
 };
 
 export const useOpprettMeldekortBehandling = ({ kjedeId, sakId }: Props) => {
-    const { trigger, isMutating, error } = useFetchFraApi<MeldekortBehandlingProps>(
+    const { trigger, isMutating, error } = useFetchJsonFraApi<MeldekortBehandlingProps>(
         `/sak/${encodeURIComponent(sakId)}/meldeperiode/${encodeURIComponent(kjedeId)}/opprettBehandling`,
         'POST',
     );

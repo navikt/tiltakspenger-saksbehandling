@@ -2,14 +2,14 @@ import { getToken, requestOboToken } from '@navikt/oasis';
 import { logger } from '@navikt/next-logger';
 import { IncomingMessage } from 'node:http';
 import { NextApiRequest } from 'next';
-import { SakProps } from '../types/SakTypes';
+import { SakProps } from '../../types/SakTypes';
 import {
     BehandlingData,
     BehandlingEllerSøknadForOversiktData,
     BehandlingId,
-} from '../types/BehandlingTypes';
-import { Saksbehandler } from '../types/Saksbehandler';
-import { stripLeadingSlash } from './string';
+} from '../../types/BehandlingTypes';
+import { Saksbehandler } from '../../types/Saksbehandler';
+import { stripLeadingSlash } from '../string';
 import { errorFraApiResponse } from './fetch';
 
 type NextRequest = Request | IncomingMessage | NextApiRequest;
@@ -31,6 +31,16 @@ const hentOboToken = async (req: NextRequest) => {
     return obo.token;
 };
 
+const methodsWithBody: ReadonlySet<string> = new Set(['POST', 'PUT', 'PATCH', 'DELETE']);
+
+const hentBody = (options?: RequestInit) => {
+    if (!options?.body) {
+        return undefined;
+    }
+    const { method = 'GET', body } = options;
+    return methodsWithBody.has(method) ? body : undefined;
+};
+
 export const fetchFraApiServerSide = async (
     req: NextRequest,
     path: string,
@@ -42,6 +52,7 @@ export const fetchFraApiServerSide = async (
 
     return fetch(url, {
         ...options,
+        body: hentBody(options),
         headers: {
             ...options?.headers,
             authorization: `Bearer ${oboToken}`,
