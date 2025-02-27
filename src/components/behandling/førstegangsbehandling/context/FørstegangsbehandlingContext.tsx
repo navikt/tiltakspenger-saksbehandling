@@ -19,6 +19,10 @@ const initieltVedtakSkjema = (behandling: FørstegangsbehandlingData): VedtakDat
     fritekstTilVedtaksbrev: behandling.fritekstTilVedtaksbrev ?? '',
     innvilgelsesPeriode: behandling.virkningsperiode ?? hentTiltaksPeriode(behandling),
     resultat: behandling.virkningsperiode ? 'innvilget' : undefined,
+    barnetillegg: {
+        begrunnelse: behandling.barnetillegg?.begrunnelse,
+        barnetilleggForPeriode: behandling.barnetillegg?.perioder,
+    },
 });
 
 type Props = {

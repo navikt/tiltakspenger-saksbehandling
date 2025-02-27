@@ -8,13 +8,15 @@ import {
 } from '../../context/FørstegangsbehandlingContext';
 import { hentTiltaksPeriode } from '../../../../../utils/tiltak';
 import { VedtakBarnetilleggPeriode } from '../../../../../types/VedtakTyper';
+import { SaksbehandlerRolle } from '../../../../../types/Saksbehandler';
+import { dateTilISOTekst } from '../../../../../utils/date';
 
 import style from './BarnetilleggPerioder.module.css';
 
 const MAKS_ANTALL_BARN = 20;
 
 export const BarnetilleggPerioder = () => {
-    const { behandling } = useFørstegangsbehandling();
+    const { behandling, rolleForBehandling } = useFørstegangsbehandling();
     const { barnetillegg } = useFørstegangsVedtakSkjema();
     const dispatch = useFørstegangsVedtakDispatch();
 
@@ -28,20 +30,26 @@ export const BarnetilleggPerioder = () => {
                         <BarnetilleggPeriode
                             periode={periode}
                             index={index}
+                            rolle={rolleForBehandling}
                             key={`${periode.periode.fraOgMed}-${index}`}
                         />
                     );
                 })}
-                <Button
-                    variant={'secondary'}
-                    size={'small'}
-                    className={style.ny}
-                    onClick={() => {
-                        dispatch({ type: 'addBarnetilleggPeriode', payload: { tiltaksperiode } });
-                    }}
-                >
-                    {'Ny periode for barnetillegg'}
-                </Button>
+                {rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER && (
+                    <Button
+                        variant={'secondary'}
+                        size={'small'}
+                        className={style.ny}
+                        onClick={() => {
+                            dispatch({
+                                type: 'addBarnetilleggPeriode',
+                                payload: { tiltaksperiode },
+                            });
+                        }}
+                    >
+                        {'Ny periode for barnetillegg'}
+                    </Button>
+                )}
             </VedtakSeksjon.Venstre>
         </>
     );
@@ -50,10 +58,13 @@ export const BarnetilleggPerioder = () => {
 type PeriodeProps = {
     periode: VedtakBarnetilleggPeriode;
     index: number;
+    rolle: SaksbehandlerRolle | null;
 };
 
-const BarnetilleggPeriode = ({ periode, index }: PeriodeProps) => {
+const BarnetilleggPeriode = ({ periode, index, rolle }: PeriodeProps) => {
     const dispatch = useFørstegangsVedtakDispatch();
+
+    const erSaksbehandler = rolle === SaksbehandlerRolle.SAKSBEHANDLER;
 
     return (
         <div className={style.periode}>
@@ -62,6 +73,13 @@ const BarnetilleggPeriode = ({ periode, index }: PeriodeProps) => {
                 size={'small'}
                 className={style.antall}
                 defaultValue={periode.antallBarn}
+                readOnly={!erSaksbehandler}
+                onChange={(event) => {
+                    dispatch({
+                        type: 'oppdaterBarnetilleggAntall',
+                        payload: { antall: Number(event.target.value), index },
+                    });
+                }}
             >
                 {Array.from({ length: MAKS_ANTALL_BARN + 1 }).map((_, index) => (
                     <option value={index} key={index}>
@@ -70,33 +88,51 @@ const BarnetilleggPeriode = ({ periode, index }: PeriodeProps) => {
                 ))}
             </Select>
             <Datovelger
-                onDateChange={console.log}
                 defaultSelected={periode.periode.fraOgMed}
                 label={'Fra og med'}
                 size={'small'}
+                readOnly={!erSaksbehandler}
+                onDateChange={(value) => {
+                    if (value) {
+                        dispatch({
+                            type: 'oppdaterBarnetilleggPeriode',
+                            payload: { periode: { fraOgMed: dateTilISOTekst(value) }, index },
+                        });
+                    }
+                }}
             />
             <Datovelger
-                onDateChange={console.log}
                 defaultSelected={periode.periode.tilOgMed}
                 label={'Til og med'}
                 size={'small'}
+                readOnly={!erSaksbehandler}
+                onDateChange={(value) => {
+                    if (value) {
+                        dispatch({
+                            type: 'oppdaterBarnetilleggPeriode',
+                            payload: { periode: { tilOgMed: dateTilISOTekst(value) }, index },
+                        });
+                    }
+                }}
             />
 
-            <Button
-                variant={'tertiary'}
-                size={'small'}
-                className={style.fjern}
-                onClick={() => {
-                    dispatch({
-                        type: 'fjernBarnetilleggPeriode',
-                        payload: {
-                            fjernIndex: index,
-                        },
-                    });
-                }}
-            >
-                {'Fjern periode'}
-            </Button>
+            {erSaksbehandler && (
+                <Button
+                    variant={'tertiary'}
+                    size={'small'}
+                    className={style.fjern}
+                    onClick={() => {
+                        dispatch({
+                            type: 'fjernBarnetilleggPeriode',
+                            payload: {
+                                fjernIndex: index,
+                            },
+                        });
+                    }}
+                >
+                    {'Fjern periode'}
+                </Button>
+            )}
         </div>
     );
 };

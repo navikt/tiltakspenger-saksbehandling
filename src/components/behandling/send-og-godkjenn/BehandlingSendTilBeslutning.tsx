@@ -19,7 +19,7 @@ export const BehandlingSendTilBeslutning = ({ sendTilBeslutning, isLoading, erro
     const { setBehandling, rolleForBehandling } = useBehandling();
 
     return (
-        <>
+        <div className={style.wrapper}>
             {harSendt && (
                 <Alert variant={'success'} className={style.varsel}>
                     {'Vedtaket ble sendt til beslutning'}
@@ -50,6 +50,6 @@ export const BehandlingSendTilBeslutning = ({ sendTilBeslutning, isLoading, erro
                     {'Send til beslutning'}
                 </Button>
             )}
-        </>
+        </div>
     );
 };

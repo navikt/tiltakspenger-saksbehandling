@@ -11,10 +11,12 @@ import style from './FørstegangsbehandlingBarn.module.css';
 
 export const FørstegangsbehandlingBarn = () => {
     const { behandling, rolleForBehandling } = useFørstegangsbehandling();
-    const { søknad } = behandling;
-    const { barnetillegg } = søknad;
+    const { søknad, barnetillegg } = behandling;
+    const barnetilleggFraSøknad = søknad.barnetillegg;
 
-    const [harSøktBarnetillegg, setHarSøktBarnetillegg] = useState(barnetillegg.length > 0);
+    const [harSøktBarnetillegg, setHarSøktBarnetillegg] = useState<boolean>(
+        barnetilleggFraSøknad.length > 0 || !!barnetillegg,
+    );
 
     return (
         <>

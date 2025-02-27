@@ -14,7 +14,7 @@ import style from './BarnetilleggBegrunnelse.module.css';
 
 export const BarnetilleggBegrunnelse = () => {
     const { behandling, rolleForBehandling } = useFørstegangsbehandling();
-    const { sakId, id } = behandling;
+    const { sakId, id, barnetillegg } = behandling;
 
     const dispatch = useFørstegangsVedtakDispatch();
 
@@ -33,13 +33,14 @@ export const BarnetilleggBegrunnelse = () => {
             <VedtakSeksjon.Venstre>
                 <TekstfeltMedMellomlagring
                     label={'Begrunnelse vilkårsvurdering barnetillegg'}
-                    defaultValue={''}
+                    defaultValue={barnetillegg?.begrunnelse}
                     readOnly={rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER}
                     lagringUrl={`/sak/${sakId}/behandling/${id}/barnetillegg`}
                     lagringBody={(tekst) =>
                         ({
                             begrunnelse: tekst,
-                            // TODO: hent periodene hvis backend vil ha det...
+                            // TODO Anders: å hente ut denne fra vedtaket her vil forårsaket re-render for input av hver bokstav i begrunnelsen
+                            // tenker mer på det i morgen!:D
                             barnetilleggForPeriode: [],
                         }) satisfies VedtakBarnetilleggBegrunnelseDTO
                     }

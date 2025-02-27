@@ -34,6 +34,14 @@ export type FørstegangsbehandlingActions =
           payload: { fjernIndex: number };
       }
     | {
+          type: 'oppdaterBarnetilleggAntall';
+          payload: { antall: number; index: number };
+      }
+    | {
+          type: 'oppdaterBarnetilleggPeriode';
+          payload: { periode: Partial<Periode>; index: number };
+      }
+    | {
           type: 'oppdaterInnvilgetPeriode';
           payload: { periode: Partial<Periode> };
       };
@@ -100,6 +108,35 @@ export const førstegangsVedtakReducer: Reducer<VedtakData, Førstegangsbehandli
                     ...state.barnetillegg,
                     barnetilleggForPeriode: state.barnetillegg?.barnetilleggForPeriode?.filter(
                         (_, index) => index !== payload.fjernIndex,
+                    ),
+                },
+            };
+        case 'oppdaterBarnetilleggAntall':
+            return {
+                ...state,
+                barnetillegg: {
+                    ...state.barnetillegg,
+                    barnetilleggForPeriode: state.barnetillegg?.barnetilleggForPeriode?.map(
+                        (periode, index) =>
+                            index === payload.index
+                                ? { ...periode, antallBarn: payload.antall }
+                                : periode,
+                    ),
+                },
+            };
+        case 'oppdaterBarnetilleggPeriode':
+            return {
+                ...state,
+                barnetillegg: {
+                    ...state.barnetillegg,
+                    barnetilleggForPeriode: state.barnetillegg?.barnetilleggForPeriode?.map(
+                        (periode, index) =>
+                            index === payload.index
+                                ? {
+                                      ...periode,
+                                      periode: { ...periode.periode, ...payload.periode },
+                                  }
+                                : periode,
                     ),
                 },
             };

@@ -1,8 +1,4 @@
-import {
-    VedtakData,
-    VedtakMedResultat,
-    VedtakTilBeslutterDTO,
-} from '../../../../types/VedtakTyper';
+import { VedtakData, VedtakTilBeslutterDTO } from '../../../../types/VedtakTyper';
 import { BehandlingData } from '../../../../types/BehandlingTypes';
 import { useFetchJsonFraApi } from '../../../../utils/fetch/useFetchFraApi';
 
@@ -12,7 +8,7 @@ export const useSendFørstegangsbehandling = (vedtak: VedtakData, behandling: Be
         VedtakTilBeslutterDTO
     >(`/sak/${behandling.sakId}/behandling/${behandling.id}/sendtilbeslutning`, 'POST');
 
-    const sendTilBeslutter = () => trigger(tilBeslutterDTO(vedtak as VedtakMedResultat));
+    const sendTilBeslutter = () => trigger(tilBeslutterDTO(vedtak));
 
     return {
         sendTilBeslutter,
@@ -21,10 +17,14 @@ export const useSendFørstegangsbehandling = (vedtak: VedtakData, behandling: Be
     };
 };
 
-const tilBeslutterDTO = (vedtak: VedtakMedResultat): VedtakTilBeslutterDTO => {
+const tilBeslutterDTO = (vedtak: VedtakData): VedtakTilBeslutterDTO => {
     return {
         begrunnelseVilkårsvurdering: vedtak.begrunnelseVilkårsvurdering,
         fritekstTilVedtaksbrev: vedtak.fritekstTilVedtaksbrev,
         innvilgelsesperiode: vedtak.innvilgelsesPeriode,
+        barnetillegg: {
+            begrunnelse: vedtak.barnetillegg?.begrunnelse,
+            perioder: vedtak.barnetillegg?.barnetilleggForPeriode,
+        },
     };
 };

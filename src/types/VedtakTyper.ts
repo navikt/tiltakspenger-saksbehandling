@@ -23,6 +23,10 @@ export type VedtakTilBeslutterDTO = {
     fritekstTilVedtaksbrev: string;
     begrunnelseVilkårsvurdering: string;
     innvilgelsesperiode: Periode;
+    barnetillegg?: {
+        begrunnelse?: string;
+        perioder?: VedtakBarnetilleggPeriode[];
+    };
 };
 
 export type VedtakBarnetillegg = {

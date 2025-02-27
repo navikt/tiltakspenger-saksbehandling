@@ -24,7 +24,7 @@ export type FørstegangsbehandlingData = BehandlingDataCommon & {
     type: Behandlingstype.FØRSTEGANGSBEHANDLING;
     søknad: SøknadForBehandlingProps;
     fritekstTilVedtaksbrev: string | null;
-    barnetillegg: Barnetillegg;
+    barnetillegg: Barnetillegg | null;
 };
 
 export type RevurderingData = BehandlingDataCommon & {
