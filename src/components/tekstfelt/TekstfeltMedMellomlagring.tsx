@@ -10,7 +10,6 @@ const LAGRE_TIMER_MS = 3000;
 const LAGRE_MAX_WAIT_MS = 10000;
 
 type Props<BodyType> = {
-    label?: string;
     lagringUrl: string;
     lagringBody: (tekst: string) => BodyType;
 } & ComponentProps<typeof Textarea>;
