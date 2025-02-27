@@ -7,6 +7,7 @@ import { fetchJsonFraApiClientSide } from '../../utils/fetch';
 import style from './TekstfeltMedMellomlagring.module.css';
 
 const LAGRE_TIMER_MS = 3000;
+const LAGRE_MAX_WAIT_MS = 10000;
 
 type Props<BodyType> = {
     label?: string;
@@ -27,19 +28,23 @@ export const TekstfeltMedMellomlagring = <BodyType,>({
 
     // TODO: legg på timestamp el for å hindre out of order lagring?
     const lagre = useCallback(
-        debounce(async (body: BodyType) => {
-            return fetchJsonFraApiClientSide(lagringUrl, {
-                method: 'PATCH',
-                body: JSON.stringify(body),
-            })
-                .then(() => {
-                    setVenterPåLagring(false);
-                    setLagringFeil(null);
+        debounce(
+            async (body: BodyType) => {
+                return fetchJsonFraApiClientSide(lagringUrl, {
+                    method: 'PATCH',
+                    body: JSON.stringify(body),
                 })
-                .catch((e) => {
-                    setLagringFeil(`${e.status} ${e.message}`);
-                });
-        }, LAGRE_TIMER_MS),
+                    .then(() => {
+                        setVenterPåLagring(false);
+                        setLagringFeil(null);
+                    })
+                    .catch((e) => {
+                        setLagringFeil(`${e.status} ${e.message}`);
+                    });
+            },
+            LAGRE_TIMER_MS,
+            { maxWait: LAGRE_MAX_WAIT_MS },
+        ),
         [lagringUrl],
     );
 

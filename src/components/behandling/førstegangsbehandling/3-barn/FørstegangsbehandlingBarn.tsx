@@ -8,6 +8,7 @@ import { classNames } from '../../../../utils/classNames';
 import { VedtakHjelpetekst } from '../../vedtak/hjelpetekst/VedtakHjelpetekst';
 
 import style from './FørstegangsbehandlingBarn.module.css';
+import { TekstfeltMedMellomlagring } from '../../../tekstfelt/TekstfeltMedMellomlagring';
 
 export const FørstegangsbehandlingBarn = () => {
     const { behandling, rolleForBehandling } = useFørstegangsbehandling();
@@ -64,13 +65,11 @@ export const FørstegangsbehandlingBarn = () => {
                 </VedtakSeksjon.Venstre>
 
                 <VedtakSeksjon.Venstre>
-                    <Textarea
-                        label={''}
-                        hideLabel={true}
-                        minRows={10}
-                        resize={'vertical'}
+                    <TekstfeltMedMellomlagring
                         defaultValue={''}
                         readOnly={rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER}
+                        lagringUrl={'/asdf'}
+                        lagringBody={() => 'asdf'}
                         onChange={(event) => {
                             console.log(event.target.value);
                         }}
