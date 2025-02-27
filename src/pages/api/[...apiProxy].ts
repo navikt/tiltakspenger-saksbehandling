@@ -10,8 +10,15 @@ async function apiProxy(clientRequest: NextApiRequest, responseToClient: NextApi
 
     const path = clientRequest.url.replace('/api', '');
 
-    fetchFraApiServerSide(clientRequest, path, {
+    const headers = new Headers();
+    Object.entries(clientRequest.headers).forEach(([key, value]) => {
+        headers.set(key, value as string);
+    });
+    headers.delete('content-length');
+
+    await fetchFraApiServerSide(clientRequest, path, {
         method: clientRequest.method,
+        headers,
         //ikke stringify ellers blir stringen escapet
         body: clientRequest.body || undefined,
     })
