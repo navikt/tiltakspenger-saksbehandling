@@ -7,12 +7,7 @@ type VedtakFellesData = {
     fritekstTilVedtaksbrev: string;
     resultat?: VedtakResultat;
     innvilgelsesPeriode: Periode;
-    barnetillegg?: unknown;
-};
-
-type Barnetillegg = {
-    periode: Periode;
-    antallBarn: number;
+    barnetillegg?: VedtakBarnetilleggDTO;
 };
 
 export type VedtakInnvilgetResultat = {
@@ -52,6 +47,11 @@ export type VedtakBrevFritekstDTO = {
 };
 
 export type VedtakBarnetilleggDTO = {
-    barnetilleggForPeriode: Barnetillegg;
+    barnetilleggForPeriode?: VedtakBarnetilleggPeriode[];
     begrunnelse?: string;
+};
+
+export type VedtakBarnetilleggPeriode = {
+    antallBarn: number;
+    periode: Periode;
 };

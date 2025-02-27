@@ -1,6 +1,6 @@
-import { useFetchBlobFraApi } from '../../../../utils/fetch/useFetchFraApi';
-import { BehandlingData } from '../../../../types/BehandlingTypes';
-import { Periode } from '../../../../types/Periode';
+import { useFetchBlobFraApi } from '../../../../../utils/fetch/useFetchFraApi';
+import { BehandlingData } from '../../../../../types/BehandlingTypes';
+import { Periode } from '../../../../../types/Periode';
 
 type BrevForhåndsvisningDTO = {
     fritekst: string;

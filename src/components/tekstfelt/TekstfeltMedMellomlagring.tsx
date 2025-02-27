@@ -13,10 +13,10 @@ type Props<BodyType> = {
     label?: string;
     lagringUrl: string;
     lagringBody: (tekst: string) => BodyType;
-} & Omit<ComponentProps<typeof Textarea>, 'label'>;
+} & ComponentProps<typeof Textarea>;
 
 export const TekstfeltMedMellomlagring = <BodyType,>({
-    label = '',
+    label,
     lagringUrl,
     lagringBody,
     onChange,
@@ -30,6 +30,7 @@ export const TekstfeltMedMellomlagring = <BodyType,>({
     const lagre = useCallback(
         debounce(
             async (body: BodyType) => {
+                console.log(`Sender til mellomlagring: ${JSON.stringify(body)}`);
                 return fetchJsonFraApiClientSide(lagringUrl, {
                     method: 'PATCH',
                     body: JSON.stringify(body),
@@ -47,6 +48,8 @@ export const TekstfeltMedMellomlagring = <BodyType,>({
         ),
         [lagringUrl],
     );
+
+    console.log(`Render tekstfelt "${label}"`);
 
     return (
         <div>

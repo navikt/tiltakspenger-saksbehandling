@@ -28,7 +28,7 @@ export const RevurderingStansSkjema = () => {
     return (
         <>
             <TekstfeltMedMellomlagring
-                label={'Begrunnelse'}
+                label={'Begrunnelse revurdering'}
                 description={'Her skal det kanskje stå noe mer!'}
                 defaultValue={begrunnelseVilkårsvurdering ?? ''}
                 readOnly={rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER}

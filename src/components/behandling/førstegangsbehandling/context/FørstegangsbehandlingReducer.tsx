@@ -1,6 +1,7 @@
 import { Reducer } from 'react';
 import {
     VedtakAvslagResultat,
+    VedtakBarnetilleggPeriode,
     VedtakData,
     VedtakInnvilgetResultat,
 } from '../../../../types/VedtakTyper';
@@ -20,8 +21,12 @@ export type FørstegangsbehandlingActions =
           payload: { resultat: VedtakInnvilgetResultat | VedtakAvslagResultat };
       }
     | {
-          type: 'setBarnetillegg';
-          payload: { barnetillegg: unknown };
+          type: 'setBarnetilleggBegrunnelse';
+          payload: { begrunnelse: string };
+      }
+    | {
+          type: 'setBarnetilleggPerioder';
+          payload: { perioder: VedtakBarnetilleggPeriode[] };
       }
     | {
           type: 'oppdaterInnvilgetPeriode';
@@ -46,10 +51,24 @@ export const førstegangsVedtakReducer: Reducer<VedtakData, Førstegangsbehandli
             return { ...state, fritekstTilVedtaksbrev: payload.brevtekst };
         case 'setResultat':
             return { ...state, ...payload.resultat };
-        case 'setBarnetillegg':
-            return { ...state, barnetillegg: payload.barnetillegg };
+        case 'setBarnetilleggBegrunnelse':
+            return {
+                ...state,
+                barnetillegg: {
+                    ...state.barnetillegg,
+                    begrunnelse: payload.begrunnelse,
+                },
+            };
+        case 'setBarnetilleggPerioder':
+            return {
+                ...state,
+                barnetillegg: {
+                    ...state.barnetillegg,
+                    barnetilleggForPeriode: payload.perioder,
+                },
+            };
     }
 
-    console.error(`Ugyldig action for førstegangsbehandlingsvedtak: "${type}"`);
+    console.error(`Ugyldig action for førstegangsbehandlingsvedtak: "${type satisfies never}"`);
     return state;
 };

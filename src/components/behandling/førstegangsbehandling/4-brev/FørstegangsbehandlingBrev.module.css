@@ -2,8 +2,3 @@
     display: flex;
     flex-direction: column;
 }
-
-.knapp {
-    margin-top: 1rem;
-    align-self: flex-end;
-}

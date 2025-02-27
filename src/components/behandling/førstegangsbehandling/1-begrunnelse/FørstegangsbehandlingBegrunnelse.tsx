@@ -10,6 +10,7 @@ import { VedtakSeksjon } from '../../vedtak/seksjon/VedtakSeksjon';
 import { VedtakHjelpetekst } from '../../vedtak/hjelpetekst/VedtakHjelpetekst';
 import { TekstfeltMedMellomlagring } from '../../../tekstfelt/TekstfeltMedMellomlagring';
 import { VedtakBegrunnelseDTO } from '../../../../types/VedtakTyper';
+import { TekstListe } from '../../../liste/TekstListe';
 
 import style from './FørstegangsbehandlingBegrunnelse.module.css';
 
@@ -50,6 +51,7 @@ export const FørstegangsbehandlingBegrunnelse = () => {
             </VedtakSeksjon.Høyre>
             <VedtakSeksjon.Venstre>
                 <TekstfeltMedMellomlagring
+                    label={'Begrunnelse vilkårsvurdering'}
                     defaultValue={begrunnelseVilkårsvurdering ?? ''}
                     readOnly={rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER}
                     lagringUrl={`/sak/${sakId}/behandling/${id}/begrunnelse`}
@@ -67,14 +69,12 @@ export const FørstegangsbehandlingBegrunnelse = () => {
                     <BodyLong size={'small'}>
                         {'Vurder vilkårene for tiltakspenger og noter ned:'}
                     </BodyLong>
-                    <ul>
-                        <li>
-                            {
-                                'Er det noe som begrenser retten? Vis til informasjonen du har funnet, hvordan det endrer retten og paragrafen det gjelder'
-                            }
-                        </li>
-                        <li>{'Eventuelle kommentarer til beslutter'}</li>
-                    </ul>
+                    <TekstListe
+                        tekster={[
+                            'Er det noe som begrenser retten? Vis til informasjonen du har funnet, hvordan det endrer retten og paragrafen det gjelder',
+                            'Eventuelle kommentarer til beslutter',
+                        ]}
+                    />
                 </VedtakHjelpetekst>
             </VedtakSeksjon.Høyre>
         </VedtakSeksjon>
