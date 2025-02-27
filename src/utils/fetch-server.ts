@@ -57,11 +57,11 @@ const fetchJsonFraApi = async <JsonResponse>(
     path: string,
     options?: RequestInit,
 ): Promise<JsonResponse> => {
-    return fetchFraApiServerSide(req, path, options).then((res) => {
+    return fetchFraApiServerSide(req, path, options).then(async (res) => {
         if (res.ok) {
             return res.json() as JsonResponse;
         }
-        throw errorFraApiResponse(res);
+        throw await errorFraApiResponse(res);
     });
 };
 

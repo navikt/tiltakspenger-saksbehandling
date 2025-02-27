@@ -1,25 +1,30 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { withAuthenticatedApi } from '../../auth/pageWithAuthentication';
 import { fetchFraApiServerSide } from '../../utils/fetch-server';
+import { logger } from '@navikt/next-logger';
 
 async function apiProxy(clientRequest: NextApiRequest, responseToClient: NextApiResponse) {
     if (!clientRequest.url) {
-        const msg = 'Ingen url spesifisert for api-request';
-        throw new Error(msg);
+        return responseToClient.status(400).send('Ingen url spesifisert for api-request');
     }
 
     const path = clientRequest.url.replace('/api', '');
 
-    const response = await fetchFraApiServerSide(clientRequest, path, {
+    fetchFraApiServerSide(clientRequest, path, {
         method: clientRequest.method,
         //ikke stringify ellers blir stringen escapet
         body: clientRequest.body || undefined,
-    });
+    })
+        .then(async (res) => {
+            const data = await res.arrayBuffer();
 
-    const data = await response.arrayBuffer();
-
-    responseToClient.setHeaders(response.headers);
-    responseToClient.send(Buffer.from(data));
+            responseToClient.setHeaders(res.headers);
+            responseToClient.status(res.status).send(Buffer.from(data));
+        })
+        .catch((e) => {
+            logger.error(`Api-proxy fetch error: ${e}`);
+            responseToClient.status(500).end();
+        });
 }
 
 export default withAuthenticatedApi(apiProxy);
