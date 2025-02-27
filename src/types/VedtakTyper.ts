@@ -2,14 +2,6 @@ import { Periode } from './Periode';
 
 export type VedtakResultat = 'innvilget' | 'avslag';
 
-type VedtakFellesData = {
-    begrunnelseVilkårsvurdering: string;
-    fritekstTilVedtaksbrev: string;
-    resultat?: VedtakResultat;
-    innvilgelsesPeriode: Periode;
-    barnetillegg?: VedtakBarnetilleggDTO;
-};
-
 export type VedtakInnvilgetResultat = {
     resultat: 'innvilget';
     innvilgelsesPeriode: Periode;
@@ -19,18 +11,28 @@ export type VedtakAvslagResultat = {
     resultat: 'avslag';
 };
 
-export type VedtakUtenResultat = VedtakFellesData & {
-    resultat?: undefined;
+export type VedtakData = {
+    begrunnelseVilkårsvurdering: string;
+    fritekstTilVedtaksbrev: string;
+    resultat?: VedtakResultat;
+    innvilgelsesPeriode: Periode;
+    barnetillegg?: VedtakBarnetillegg;
 };
-
-export type VedtakMedResultat = VedtakFellesData & (VedtakInnvilgetResultat | VedtakAvslagResultat);
-
-export type VedtakData = VedtakUtenResultat | VedtakMedResultat;
 
 export type VedtakTilBeslutterDTO = {
     fritekstTilVedtaksbrev: string;
     begrunnelseVilkårsvurdering: string;
     innvilgelsesperiode: Periode;
+};
+
+export type VedtakBarnetillegg = {
+    barnetilleggForPeriode?: VedtakBarnetilleggPeriode[];
+    begrunnelse?: string;
+};
+
+export type VedtakBarnetilleggPeriode = {
+    antallBarn: number;
+    periode: Periode;
 };
 
 export type RevurderTilStansVedtak = {
@@ -44,14 +46,4 @@ export type VedtakBegrunnelseDTO = {
 
 export type VedtakBrevFritekstDTO = {
     fritekst: string;
-};
-
-export type VedtakBarnetilleggDTO = {
-    barnetilleggForPeriode?: VedtakBarnetilleggPeriode[];
-    begrunnelse?: string;
-};
-
-export type VedtakBarnetilleggPeriode = {
-    antallBarn: number;
-    periode: Periode;
 };

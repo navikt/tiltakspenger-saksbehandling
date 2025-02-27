@@ -6,6 +6,7 @@ import {
     VedtakInnvilgetResultat,
 } from '../../../../types/VedtakTyper';
 import { Periode } from '../../../../types/Periode';
+import { leggTilDager } from '../../../../utils/date';
 
 export type FørstegangsbehandlingActions =
     | {
@@ -25,8 +26,12 @@ export type FørstegangsbehandlingActions =
           payload: { begrunnelse: string };
       }
     | {
-          type: 'setBarnetilleggPerioder';
-          payload: { perioder: VedtakBarnetilleggPeriode[] };
+          type: 'addBarnetilleggPeriode';
+          payload: { tiltaksperiode: Periode };
+      }
+    | {
+          type: 'fjernBarnetilleggPeriode';
+          payload: { fjernIndex: number };
       }
     | {
           type: 'oppdaterInnvilgetPeriode';
@@ -36,7 +41,7 @@ export type FørstegangsbehandlingActions =
 export const førstegangsVedtakReducer: Reducer<VedtakData, FørstegangsbehandlingActions> = (
     state,
     action,
-) => {
+): VedtakData => {
     const { type, payload } = action;
 
     switch (type) {
@@ -46,7 +51,10 @@ export const førstegangsVedtakReducer: Reducer<VedtakData, Førstegangsbehandli
                 innvilgelsesPeriode: { ...state.innvilgelsesPeriode, ...payload.periode },
             };
         case 'setBegrunnelse':
-            return { ...state, begrunnelseVilkårsvurdering: payload.begrunnelse };
+            return {
+                ...state,
+                begrunnelseVilkårsvurdering: payload.begrunnelse,
+            };
         case 'setBrevtekst':
             return { ...state, fritekstTilVedtaksbrev: payload.brevtekst };
         case 'setResultat':
@@ -59,12 +67,40 @@ export const førstegangsVedtakReducer: Reducer<VedtakData, Førstegangsbehandli
                     begrunnelse: payload.begrunnelse,
                 },
             };
-        case 'setBarnetilleggPerioder':
+        case 'addBarnetilleggPeriode':
+            const forrigePeriode =
+                state.barnetillegg?.barnetilleggForPeriode?.slice(-1)[0]?.periode;
+
+            const nestePeriode: Periode = forrigePeriode
+                ? {
+                      fraOgMed: leggTilDager(forrigePeriode.tilOgMed, 1),
+                      tilOgMed: leggTilDager(forrigePeriode.tilOgMed, 30),
+                  }
+                : payload.tiltaksperiode;
+
+            const nyBarnetilleggperiode: VedtakBarnetilleggPeriode = {
+                antallBarn: 0,
+                periode: nestePeriode,
+            };
+
             return {
                 ...state,
                 barnetillegg: {
                     ...state.barnetillegg,
-                    barnetilleggForPeriode: payload.perioder,
+                    barnetilleggForPeriode: [
+                        ...(state.barnetillegg?.barnetilleggForPeriode || []),
+                        nyBarnetilleggperiode,
+                    ],
+                },
+            };
+        case 'fjernBarnetilleggPeriode':
+            return {
+                ...state,
+                barnetillegg: {
+                    ...state.barnetillegg,
+                    barnetilleggForPeriode: state.barnetillegg?.barnetilleggForPeriode?.filter(
+                        (_, index) => index !== payload.fjernIndex,
+                    ),
                 },
             };
     }

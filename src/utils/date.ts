@@ -8,8 +8,10 @@ dayjs.extend(weekday);
 dayjs.extend(weekOfYear);
 dayjs.locale('nb');
 
+const DATO_FORMAT = 'YYYY-MM-DD';
+
 export function dateTilISOTekst(date: Date) {
-    return dayjs(date).format('YYYY-MM-DD');
+    return dayjs(date).format(DATO_FORMAT);
 }
 
 export function formaterTidspunkt(dateString: string) {
@@ -65,4 +67,8 @@ export function ukenummerFraDatotekst(dato: string) {
 
 export const alderFraDato = (dato: string) => {
     return dayjs().diff(dato, 'years');
+};
+
+export const leggTilDager = (dato: string, dager: number) => {
+    return dayjs(dato).add(dager, 'day').format(DATO_FORMAT);
 };

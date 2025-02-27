@@ -1,13 +1,16 @@
 import { VedtakSeksjon } from '../../../vedtak/seksjon/VedtakSeksjon';
-import { BodyLong, Heading } from '@navikt/ds-react';
-import style from '../FørstegangsbehandlingBarn.module.css';
 import { TekstfeltMedMellomlagring } from '../../../../tekstfelt/TekstfeltMedMellomlagring';
 import { SaksbehandlerRolle } from '../../../../../types/Saksbehandler';
-import { VedtakBarnetilleggDTO } from '../../../../../types/VedtakTyper';
+import { VedtakBarnetillegg } from '../../../../../types/VedtakTyper';
 import {
     useFørstegangsbehandling,
     useFørstegangsVedtakDispatch,
 } from '../../context/FørstegangsbehandlingContext';
+import { VedtakHjelpetekst } from '../../../vedtak/hjelpetekst/VedtakHjelpetekst';
+import { TekstListe } from '../../../../liste/TekstListe';
+import { BodyLong, Heading } from '@navikt/ds-react';
+
+import style from './BarnetilleggBegrunnelse.module.css';
 
 export const BarnetilleggBegrunnelse = () => {
     const { behandling, rolleForBehandling } = useFørstegangsbehandling();
@@ -22,7 +25,7 @@ export const BarnetilleggBegrunnelse = () => {
                     {'Begrunnelse vilkårsvurdering barnetillegg'}
                 </Heading>
                 <BodyLong size={'small'}>{'Noter ned vurderingen.'}</BodyLong>
-                <BodyLong size={'small'} className={style.personinfoVarsel}>
+                <BodyLong size={'small'} className={style.personinfo}>
                     {'Ikke skriv personsensitiv informasjon som ikke er relevant for saken.'}
                 </BodyLong>
             </VedtakSeksjon.Venstre>
@@ -33,9 +36,7 @@ export const BarnetilleggBegrunnelse = () => {
                     defaultValue={''}
                     readOnly={rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER}
                     lagringUrl={`/sak/${sakId}/behandling/${id}/barnetillegg`}
-                    lagringBody={(tekst) =>
-                        ({ begrunnelse: tekst }) satisfies VedtakBarnetilleggDTO
-                    }
+                    lagringBody={(tekst) => ({ begrunnelse: tekst }) satisfies VedtakBarnetillegg}
                     onChange={(event) => {
                         dispatch({
                             type: 'setBarnetilleggBegrunnelse',
@@ -46,6 +47,20 @@ export const BarnetilleggBegrunnelse = () => {
                     }}
                 />
             </VedtakSeksjon.Venstre>
+
+            <VedtakSeksjon.Høyre>
+                <VedtakHjelpetekst header={'Vilkårsvurdering barnetillegg'}>
+                    <BodyLong size={'small'}>
+                        {'Vurder vilkårene for barnetillegg og noter ned:'}
+                    </BodyLong>
+                    <TekstListe
+                        tekster={[
+                            'Er det noe som begrenser retten? Vis til informasjonen du har funnet, hvordan det endrer retten og paragrafen det gjelder',
+                            'Eventuelle kommentarer til beslutter',
+                        ]}
+                    />
+                </VedtakHjelpetekst>
+            </VedtakSeksjon.Høyre>
         </>
     );
 };
