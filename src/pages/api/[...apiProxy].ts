@@ -16,10 +16,18 @@ async function apiProxy(clientRequest: NextApiRequest, responseToClient: NextApi
     });
     delete headers['content-length'];
 
+    const clientBody = clientRequest.body;
+
+    const body = clientBody
+        ? typeof clientBody === 'string'
+            ? clientBody
+            : JSON.stringify(clientBody)
+        : undefined;
+
     await fetchFraApiServerSide(clientRequest, path, {
         method: clientRequest.method,
         headers,
-        body: clientRequest.body ? JSON.stringify(clientRequest.body) : undefined,
+        body,
     })
         .then(async (res) => {
             const data = await res.arrayBuffer();
