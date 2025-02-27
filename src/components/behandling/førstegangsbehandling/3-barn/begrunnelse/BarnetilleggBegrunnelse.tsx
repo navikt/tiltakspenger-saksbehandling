@@ -1,7 +1,7 @@
 import { VedtakSeksjon } from '../../../vedtak/seksjon/VedtakSeksjon';
 import { TekstfeltMedMellomlagring } from '../../../../tekstfelt/TekstfeltMedMellomlagring';
 import { SaksbehandlerRolle } from '../../../../../types/Saksbehandler';
-import { VedtakBarnetillegg } from '../../../../../types/VedtakTyper';
+import { VedtakBarnetilleggBegrunnelseDTO } from '../../../../../types/VedtakTyper';
 import {
     useFørstegangsbehandling,
     useFørstegangsVedtakDispatch,
@@ -36,7 +36,13 @@ export const BarnetilleggBegrunnelse = () => {
                     defaultValue={''}
                     readOnly={rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER}
                     lagringUrl={`/sak/${sakId}/behandling/${id}/barnetillegg`}
-                    lagringBody={(tekst) => ({ begrunnelse: tekst }) satisfies VedtakBarnetillegg}
+                    lagringBody={(tekst) =>
+                        ({
+                            begrunnelse: tekst,
+                            // TODO: hent periodene hvis backend vil ha det...
+                            barnetilleggForPeriode: [],
+                        }) satisfies VedtakBarnetilleggBegrunnelseDTO
+                    }
                     onChange={(event) => {
                         dispatch({
                             type: 'setBarnetilleggBegrunnelse',

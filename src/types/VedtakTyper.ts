@@ -47,3 +47,8 @@ export type VedtakBegrunnelseDTO = {
 export type VedtakBrevFritekstDTO = {
     fritekst: string;
 };
+
+export type VedtakBarnetilleggBegrunnelseDTO = {
+    begrunnelse: string;
+    barnetilleggForPeriode: VedtakBarnetilleggPeriode[];
+};
