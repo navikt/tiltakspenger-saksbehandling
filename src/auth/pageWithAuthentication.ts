@@ -67,7 +67,13 @@ export const pageWithAuthentication = (
 
         return {
             ...serverSidePropsResult,
-            props: { ...defaultProps, ...(serverSidePropsResult as any)?.props, saksbehandler },
+            props: {
+                ...defaultProps,
+                ...(serverSidePropsResult && 'props' in serverSidePropsResult
+                    ? serverSidePropsResult.props
+                    : {}),
+                saksbehandler,
+            },
         };
     };
 };

@@ -1,8 +1,6 @@
 import dayjs from 'dayjs';
 
-export type ValidatorFunction = (value: any) => string | undefined;
-
-const inneholderKunTall = (verdi: string) => /^\d+$/.test(verdi);
+export type ValidatorFunction = (value: unknown) => string | undefined;
 
 export function påkrevdPeriodeValidator(periode: { fra: Date; til: Date }) {
     if (!periode?.fra || !periode?.til) {

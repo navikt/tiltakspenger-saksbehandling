@@ -13,7 +13,7 @@ export const errorFraApiResponse = async (res: Response) => {
         error.info = await res.json();
         error.status = res.status || 500;
         error.message = finnFetchFeilmelding(error);
-    } catch (e) {
+    } catch {
         error.status = 500;
         error.message = 'Noe har gått galt på serversiden, kontakt utviklingsteamet.';
     }
