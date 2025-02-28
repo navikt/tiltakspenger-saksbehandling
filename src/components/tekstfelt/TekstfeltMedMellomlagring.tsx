@@ -20,7 +20,10 @@ export const TekstfeltMedMellomlagring = forwardRef<HTMLTextAreaElement, Props>(
         const [lagringFeil, setLagringFeil] = useState<string | null>(null);
 
         // TODO: legg på timestamp el for å hindre out of order lagring?
-        const lagreDebounce =
+        // Denne må wrappes i useCallback for ikke å kalles flere ganger for hver lagring
+        // eslint skjønner ikke higher order functions, men den er ok!
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        const lagre = useCallback(
             debounce(
                 async (body: unknown) => {
                     return fetchJsonFraApiClientSide(lagringUrl, {
@@ -37,10 +40,9 @@ export const TekstfeltMedMellomlagring = forwardRef<HTMLTextAreaElement, Props>(
                 },
                 LAGRE_TIMER_MS,
                 { maxWait: LAGRE_MAX_WAIT_MS },
-            )
-
-        // TODO: legg på timestamp el for å hindre out of order lagring?
-        const lagre = useCallback(lagreDebounce, [lagreDebounce, lagringUrl]);
+            ),
+            [lagringUrl],
+        );
 
         return (
             <div>

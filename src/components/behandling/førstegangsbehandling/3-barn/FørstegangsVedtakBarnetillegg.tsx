@@ -36,7 +36,6 @@ export const FørstegangsVedtakBarnetillegg = () => {
                         defaultValue={harSøktBarnetillegg(behandling)}
                         readOnly={rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER}
                         onChange={(harSøkt: boolean) => {
-                            console.log(`Har søkt ${harSøkt}`);
                             dispatch({
                                 type: 'setHarSøktBarnetillegg',
                                 payload: { harSøkt },
