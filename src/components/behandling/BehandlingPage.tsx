@@ -3,10 +3,7 @@ import { FørstegangsbehandlingVedtak } from './førstegangsbehandling/Førstega
 import { BehandlingSaksopplysninger } from './saksopplysninger/BehandlingSaksopplysninger';
 import { RevurderingsVedtak } from './revurdering/RevurderingsVedtak';
 import { useBehandling } from './BehandlingContext';
-import {
-    FørstegangsbehandlingContextState,
-    FørstegangsbehandlingProvider,
-} from './førstegangsbehandling/context/FørstegangsbehandlingContext';
+import { FørstegangsbehandlingContextState } from './førstegangsbehandling/context/FørstegangsbehandlingContext';
 import { Behandlingstype } from '../../types/BehandlingTypes';
 import { RevurderingContextState, RevurderingProvider } from './revurdering/RevurderingContext';
 import { PersonaliaHeader } from '../personaliaheader/PersonaliaHeader';
@@ -29,13 +26,11 @@ export const BehandlingPage = () => {
                 <div className={style.vedtakOuter}>
                     <div className={style.vedtakInner}>
                         {type === Behandlingstype.FØRSTEGANGSBEHANDLING && (
-                            <FørstegangsbehandlingProvider
+                            <FørstegangsbehandlingVedtak
                                 behandlingContext={
                                     behandlingsContext as FørstegangsbehandlingContextState
                                 }
-                            >
-                                <FørstegangsbehandlingVedtak />
-                            </FørstegangsbehandlingProvider>
+                            />
                         )}
                         {type === Behandlingstype.REVURDERING && (
                             <RevurderingProvider

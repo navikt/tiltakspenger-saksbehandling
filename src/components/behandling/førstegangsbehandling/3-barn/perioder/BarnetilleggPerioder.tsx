@@ -17,7 +17,7 @@ const MAKS_ANTALL_BARN = 20;
 
 export const BarnetilleggPerioder = () => {
     const { behandling, rolleForBehandling } = useFørstegangsbehandling();
-    const { barnetillegg } = useFørstegangsVedtakSkjema();
+    const { barnetilleggPerioder } = useFørstegangsVedtakSkjema();
     const dispatch = useFørstegangsVedtakDispatch();
 
     const tiltaksperiode = hentTiltaksPeriode(behandling);
@@ -25,7 +25,7 @@ export const BarnetilleggPerioder = () => {
     return (
         <>
             <VedtakSeksjon.Venstre className={style.wrapper}>
-                {barnetillegg?.barnetilleggForPeriode?.map((periode, index) => {
+                {barnetilleggPerioder?.map((periode, index) => {
                     return (
                         <BarnetilleggPeriode
                             periode={periode}

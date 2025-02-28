@@ -24,10 +24,10 @@ export const VedtaksbrevForhåndsvisning = () => {
                 icon={<EnvelopeOpenIcon />}
                 className={style.knapp}
                 loading={forhåndsvisningLaster}
-                onClick={() => {
+                onClick={async () => {
                     //Backend vil ignorere perioden dersom vedtaket er avslag, og hvis tilstanden er tilBeslutter (senere enn under behandling)
                     return hentForhåndsvisning({
-                        fritekst: vedtak.fritekstTilVedtaksbrev,
+                        fritekst: vedtak.brevtekstRef.current?.value ?? '',
                         virkningsperiode: vedtak.innvilgelsesPeriode,
                     }).then((blob) => {
                         if (blob) {

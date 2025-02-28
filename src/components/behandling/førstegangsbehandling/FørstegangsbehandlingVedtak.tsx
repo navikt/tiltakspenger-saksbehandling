@@ -4,14 +4,21 @@ import { FørstegangsbehandlingResultat } from './2-resultat/Førstegangsbehandl
 import { FørstegangsbehandlingBrev } from './4-brev/FørstegangsbehandlingBrev';
 import { Separator } from '../../separator/Separator';
 import { FørstegangsbehandlingSend } from './5-send-og-godkjenn/FørstegangsbehandlingSend';
-
-import style from './FørstegangsbehandlingVedtak.module.css';
 import { VedtakSeksjon } from '../vedtak/seksjon/VedtakSeksjon';
 import { FørstegangsbehandlingBarn } from './3-barn/FørstegangsbehandlingBarn';
+import { FørstegangsbehandlingProvider } from './context/FørstegangsbehandlingContext';
+import { BehandlingContextState } from '../BehandlingContext';
+import { FørstegangsbehandlingData } from '../../../types/BehandlingTypes';
 
-export const FørstegangsbehandlingVedtak = () => {
+import style from './FørstegangsbehandlingVedtak.module.css';
+
+type Props = {
+    behandlingContext: BehandlingContextState<FørstegangsbehandlingData>;
+};
+
+export const FørstegangsbehandlingVedtak = ({ behandlingContext }: Props) => {
     return (
-        <>
+        <FørstegangsbehandlingProvider behandlingContext={behandlingContext}>
             <Heading size={'medium'} level={'1'} className={style.header}>
                 {'Vedtak (førstegangsbehandling)'}
             </Heading>
@@ -26,6 +33,6 @@ export const FørstegangsbehandlingVedtak = () => {
             <Separator />
             <FørstegangsbehandlingBrev />
             <FørstegangsbehandlingSend />
-        </>
+        </FørstegangsbehandlingProvider>
     );
 };

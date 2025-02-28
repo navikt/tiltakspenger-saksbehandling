@@ -1,22 +1,23 @@
 import { VedtakSeksjon } from '../../vedtak/seksjon/VedtakSeksjon';
 import { Heading, Radio, RadioGroup } from '@navikt/ds-react';
-import { useFørstegangsbehandling } from '../context/FørstegangsbehandlingContext';
+import {
+    useFørstegangsbehandling,
+    useFørstegangsVedtakDispatch,
+    useFørstegangsVedtakSkjema,
+} from '../context/FørstegangsbehandlingContext';
 import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
-import { useState } from 'react';
 import { BarnetilleggPerioder } from './perioder/BarnetilleggPerioder';
 import { classNames } from '../../../../utils/classNames';
 import { BarnetilleggBegrunnelse } from './begrunnelse/BarnetilleggBegrunnelse';
+import { harSøktBarnetillegg } from '../../../../utils/tiltak';
 
 import style from './FørstegangsbehandlingBarn.module.css';
 
 export const FørstegangsbehandlingBarn = () => {
     const { behandling, rolleForBehandling } = useFørstegangsbehandling();
-    const { søknad, barnetillegg } = behandling;
-    const barnetilleggFraSøknad = søknad.barnetillegg;
+    const dispatch = useFørstegangsVedtakDispatch();
 
-    const [harSøktBarnetillegg, setHarSøktBarnetillegg] = useState<boolean>(
-        barnetilleggFraSøknad.length > 0 || !!barnetillegg,
-    );
+    const { harBarnetillegg } = useFørstegangsVedtakSkjema();
 
     return (
         <>
@@ -32,10 +33,14 @@ export const FørstegangsbehandlingBarn = () => {
                         legend={'Har det blitt søkt om barnetillegg?'}
                         size={'small'}
                         className={style.radioGroup}
-                        value={harSøktBarnetillegg}
+                        defaultValue={harSøktBarnetillegg(behandling)}
                         readOnly={rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER}
                         onChange={(harSøkt: boolean) => {
-                            setHarSøktBarnetillegg(harSøkt);
+                            console.log(`Har søkt ${harSøkt}`);
+                            dispatch({
+                                type: 'setHarSøktBarnetillegg',
+                                payload: { harSøkt },
+                            });
                         }}
                     >
                         <Radio value={true}>{'Ja'}</Radio>
@@ -44,9 +49,7 @@ export const FørstegangsbehandlingBarn = () => {
                 </VedtakSeksjon.Venstre>
             </VedtakSeksjon>
 
-            <VedtakSeksjon
-                className={classNames(style.input, !harSøktBarnetillegg && style.skjult)}
-            >
+            <VedtakSeksjon className={classNames(style.input, !harBarnetillegg && style.skjult)}>
                 <BarnetilleggPerioder />
                 <BarnetilleggBegrunnelse />
             </VedtakSeksjon>

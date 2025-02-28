@@ -11,27 +11,14 @@ export type VedtakAvslagResultat = {
     resultat: 'avslag';
 };
 
-export type VedtakData = {
-    begrunnelseVilkårsvurdering: string;
-    fritekstTilVedtaksbrev: string;
-    resultat?: VedtakResultat;
-    innvilgelsesPeriode: Periode;
-    barnetillegg?: VedtakBarnetillegg;
-};
-
-export type VedtakTilBeslutterDTO = {
+export type VedtakTilBeslutningDTO = {
     fritekstTilVedtaksbrev: string;
     begrunnelseVilkårsvurdering: string;
     innvilgelsesperiode: Periode;
-    barnetillegg?: {
+    barnetillegg: {
         begrunnelse?: string;
         perioder?: VedtakBarnetilleggPeriode[];
-    };
-};
-
-export type VedtakBarnetillegg = {
-    barnetilleggForPeriode?: VedtakBarnetilleggPeriode[];
-    begrunnelse?: string;
+    } | null;
 };
 
 export type VedtakBarnetilleggPeriode = {

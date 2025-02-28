@@ -2,28 +2,20 @@ import { Reducer } from 'react';
 import {
     VedtakAvslagResultat,
     VedtakBarnetilleggPeriode,
-    VedtakData,
     VedtakInnvilgetResultat,
 } from '../../../../types/VedtakTyper';
 import { Periode } from '../../../../types/Periode';
 import { leggTilDager } from '../../../../utils/date';
+import { VedtakData } from './FørstegangsbehandlingContext';
 
 export type FørstegangsbehandlingActions =
-    | {
-          type: 'setBegrunnelse';
-          payload: { begrunnelse: string };
-      }
-    | {
-          type: 'setBrevtekst';
-          payload: { brevtekst: string };
-      }
     | {
           type: 'setResultat';
           payload: { resultat: VedtakInnvilgetResultat | VedtakAvslagResultat };
       }
     | {
-          type: 'setBarnetilleggBegrunnelse';
-          payload: { begrunnelse: string };
+          type: 'setHarSøktBarnetillegg';
+          payload: { harSøkt: boolean };
       }
     | {
           type: 'addBarnetilleggPeriode';
@@ -58,26 +50,12 @@ export const førstegangsVedtakReducer: Reducer<VedtakData, Førstegangsbehandli
                 ...state,
                 innvilgelsesPeriode: { ...state.innvilgelsesPeriode, ...payload.periode },
             };
-        case 'setBegrunnelse':
-            return {
-                ...state,
-                begrunnelseVilkårsvurdering: payload.begrunnelse,
-            };
-        case 'setBrevtekst':
-            return { ...state, fritekstTilVedtaksbrev: payload.brevtekst };
         case 'setResultat':
             return { ...state, ...payload.resultat };
-        case 'setBarnetilleggBegrunnelse':
-            return {
-                ...state,
-                barnetillegg: {
-                    ...state.barnetillegg,
-                    begrunnelse: payload.begrunnelse,
-                },
-            };
+        case 'setHarSøktBarnetillegg':
+            return { ...state, harBarnetillegg: payload.harSøkt };
         case 'addBarnetilleggPeriode':
-            const forrigePeriode =
-                state.barnetillegg?.barnetilleggForPeriode?.slice(-1)[0]?.periode;
+            const forrigePeriode = state.barnetilleggPerioder?.slice(-1)[0]?.periode;
 
             const nestePeriode: Periode = forrigePeriode
                 ? {
@@ -93,52 +71,36 @@ export const førstegangsVedtakReducer: Reducer<VedtakData, Førstegangsbehandli
 
             return {
                 ...state,
-                barnetillegg: {
-                    ...state.barnetillegg,
-                    barnetilleggForPeriode: [
-                        ...(state.barnetillegg?.barnetilleggForPeriode || []),
-                        nyBarnetilleggperiode,
-                    ],
-                },
+                barnetilleggPerioder: [
+                    ...(state.barnetilleggPerioder || []),
+                    nyBarnetilleggperiode,
+                ],
             };
         case 'fjernBarnetilleggPeriode':
             return {
                 ...state,
-                barnetillegg: {
-                    ...state.barnetillegg,
-                    barnetilleggForPeriode: state.barnetillegg?.barnetilleggForPeriode?.filter(
-                        (_, index) => index !== payload.fjernIndex,
-                    ),
-                },
+                barnetilleggPerioder: state.barnetilleggPerioder?.filter(
+                    (_, index) => index !== payload.fjernIndex,
+                ),
             };
         case 'oppdaterBarnetilleggAntall':
             return {
                 ...state,
-                barnetillegg: {
-                    ...state.barnetillegg,
-                    barnetilleggForPeriode: state.barnetillegg?.barnetilleggForPeriode?.map(
-                        (periode, index) =>
-                            index === payload.index
-                                ? { ...periode, antallBarn: payload.antall }
-                                : periode,
-                    ),
-                },
+                barnetilleggPerioder: state.barnetilleggPerioder?.map((periode, index) =>
+                    index === payload.index ? { ...periode, antallBarn: payload.antall } : periode,
+                ),
             };
         case 'oppdaterBarnetilleggPeriode':
             return {
                 ...state,
-                barnetillegg: {
-                    ...state.barnetillegg,
-                    barnetilleggForPeriode: state.barnetillegg?.barnetilleggForPeriode?.map(
-                        (periode, index) =>
-                            index === payload.index
-                                ? {
-                                      ...periode,
-                                      periode: { ...periode.periode, ...payload.periode },
-                                  }
-                                : periode,
-                    ),
-                },
+                barnetilleggPerioder: state.barnetilleggPerioder?.map((periode, index) =>
+                    index === payload.index
+                        ? {
+                              ...periode,
+                              periode: { ...periode.periode, ...payload.periode },
+                          }
+                        : periode,
+                ),
             };
     }
 

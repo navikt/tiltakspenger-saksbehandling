@@ -12,10 +12,11 @@ import style from './FørstegangsbehandlingSend.module.css';
 
 export const FørstegangsbehandlingSend = () => {
     const { behandling } = useFørstegangsbehandling();
-    const vedtak = useFørstegangsVedtakSkjema();
+
+    const vedtakSkjema = useFørstegangsVedtakSkjema();
 
     const { sendTilBeslutter, sendTilBeslutterLaster, sendTilBeslutterError } =
-        useSendFørstegangsbehandling(vedtak, behandling);
+        useSendFørstegangsbehandling(behandling, vedtakSkjema);
 
     const { godkjennVedtak, godkjennVedtakLaster, godkjennVedtakError } =
         useGodkjennBehandling(behandling);

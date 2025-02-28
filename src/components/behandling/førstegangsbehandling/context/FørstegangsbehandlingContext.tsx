@@ -1,28 +1,48 @@
 import { FørstegangsbehandlingData } from '../../../../types/BehandlingTypes';
-import { createContext, Dispatch, ReactNode, useContext, useReducer } from 'react';
+import {
+    createContext,
+    Dispatch,
+    ReactNode,
+    RefObject,
+    useContext,
+    useReducer,
+    useRef,
+} from 'react';
 import { BehandlingContextState } from '../../BehandlingContext';
 import {
     FørstegangsbehandlingActions,
     førstegangsVedtakReducer,
 } from './FørstegangsbehandlingReducer';
-import { VedtakData } from '../../../../types/VedtakTyper';
-import { hentTiltaksPeriode } from '../../../../utils/tiltak';
+import { VedtakBarnetilleggPeriode, VedtakResultat } from '../../../../types/VedtakTyper';
+import { harSøktBarnetillegg, hentTiltaksPeriode } from '../../../../utils/tiltak';
+import { Periode } from '../../../../types/Periode';
 
 export type FørstegangsbehandlingContextState = BehandlingContextState<FørstegangsbehandlingData>;
 
+export type VedtakData = {
+    resultat?: VedtakResultat;
+    innvilgelsesPeriode: Periode;
+    harBarnetillegg: boolean;
+    barnetilleggPerioder?: VedtakBarnetilleggPeriode[];
+};
+
+type TextAreaInputs = {
+    begrunnelseRef: RefObject<HTMLTextAreaElement>;
+    brevtekstRef: RefObject<HTMLTextAreaElement>;
+    barnetilleggBegrunnelseRef: RefObject<HTMLTextAreaElement>;
+};
+
+export type VedtakContextState = TextAreaInputs & VedtakData;
+
 const BehandlingContext = createContext({} as FørstegangsbehandlingContextState);
-const VedtakSkjemaContext = createContext({} as VedtakData);
+const VedtakSkjemaContext = createContext({} as VedtakContextState);
 const VedtakDispatchContext = createContext((() => ({})) as Dispatch<FørstegangsbehandlingActions>);
 
 const initieltVedtakSkjema = (behandling: FørstegangsbehandlingData): VedtakData => ({
-    begrunnelseVilkårsvurdering: behandling.begrunnelseVilkårsvurdering ?? '',
-    fritekstTilVedtaksbrev: behandling.fritekstTilVedtaksbrev ?? '',
     innvilgelsesPeriode: behandling.virkningsperiode ?? hentTiltaksPeriode(behandling),
     resultat: behandling.virkningsperiode ? 'innvilget' : undefined,
-    barnetillegg: {
-        begrunnelse: behandling.barnetillegg?.begrunnelse,
-        barnetilleggForPeriode: behandling.barnetillegg?.perioder,
-    },
+    harBarnetillegg: harSøktBarnetillegg(behandling),
+    barnetilleggPerioder: behandling.barnetillegg?.perioder,
 });
 
 type Props = {
@@ -39,10 +59,16 @@ export const FørstegangsbehandlingProvider = ({ behandlingContext, children }: 
         initieltVedtakSkjema,
     );
 
+    const begrunnelseRef = useRef<HTMLTextAreaElement>(null);
+    const brevtekstRef = useRef<HTMLTextAreaElement>(null);
+    const barnetilleggBegrunnelseRef = useRef<HTMLTextAreaElement>(null);
+
     return (
         <BehandlingContext.Provider value={behandlingContext}>
             <VedtakDispatchContext.Provider value={dispatch}>
-                <VedtakSkjemaContext.Provider value={vedtak}>
+                <VedtakSkjemaContext.Provider
+                    value={{ ...vedtak, begrunnelseRef, brevtekstRef, barnetilleggBegrunnelseRef }}
+                >
                     {children}
                 </VedtakSkjemaContext.Provider>
             </VedtakDispatchContext.Provider>

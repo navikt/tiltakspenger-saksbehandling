@@ -2,19 +2,21 @@ import { VedtakSeksjon } from '../../../vedtak/seksjon/VedtakSeksjon';
 import { SaksbehandlerRolle } from '../../../../../types/Saksbehandler';
 import {
     useFørstegangsbehandling,
-    useFørstegangsVedtakDispatch,
+    useFørstegangsVedtakSkjema,
 } from '../../context/FørstegangsbehandlingContext';
 import { VedtakHjelpetekst } from '../../../vedtak/hjelpetekst/VedtakHjelpetekst';
 import { TekstListe } from '../../../../liste/TekstListe';
-import { BodyLong, Heading, Textarea } from '@navikt/ds-react';
+import { BodyLong, Heading } from '@navikt/ds-react';
+import { TekstfeltMedMellomlagring } from '../../../../tekstfelt/TekstfeltMedMellomlagring';
+import { VedtakBarnetilleggBegrunnelseDTO } from '../../../../../types/VedtakTyper';
 
 import style from './BarnetilleggBegrunnelse.module.css';
 
 export const BarnetilleggBegrunnelse = () => {
     const { behandling, rolleForBehandling } = useFørstegangsbehandling();
-    const { barnetillegg } = behandling;
+    const { barnetillegg, sakId, id } = behandling;
 
-    const dispatch = useFørstegangsVedtakDispatch();
+    const { barnetilleggBegrunnelseRef, barnetilleggPerioder } = useFørstegangsVedtakSkjema();
 
     return (
         <>
@@ -29,29 +31,18 @@ export const BarnetilleggBegrunnelse = () => {
             </VedtakSeksjon.Venstre>
 
             <VedtakSeksjon.Venstre>
-                <Textarea
+                <TekstfeltMedMellomlagring
                     label={'Begrunnelse vilkårsvurdering barnetillegg'}
-                    hideLabel={true}
-                    minRows={10}
-                    resize={'vertical'}
                     defaultValue={barnetillegg?.begrunnelse}
                     readOnly={rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER}
-                    // TODO Anders: må gjøre noe på en annen måte, enten med mellomlagringen eller vedtak context'en :D
-                    // lagringUrl={`/sak/${sakId}/behandling/${id}/barnetillegg`}
-                    // lagringBody={(tekst) =>
-                    //     ({
-                    //         begrunnelse: tekst,
-                    //         barnetilleggForPeriode: barnetilleggForPeriode ?? [],
-                    //     }) satisfies VedtakBarnetilleggBegrunnelseDTO
-                    // }
-                    onChange={(event) => {
-                        dispatch({
-                            type: 'setBarnetilleggBegrunnelse',
-                            payload: {
-                                begrunnelse: event.target.value,
-                            },
-                        });
-                    }}
+                    lagringUrl={`/sak/${sakId}/behandling/${id}/barnetillegg`}
+                    lagringBody={(tekst) =>
+                        ({
+                            begrunnelse: tekst,
+                            barnetilleggForPeriode: barnetilleggPerioder ?? [],
+                        }) satisfies VedtakBarnetilleggBegrunnelseDTO
+                    }
+                    ref={barnetilleggBegrunnelseRef}
                 />
             </VedtakSeksjon.Venstre>
 

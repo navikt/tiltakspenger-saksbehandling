@@ -11,3 +11,6 @@ export const hentTiltaksPeriode = (behandling: FørstegangsbehandlingData): Peri
             behandling.søknad.tiltak.tilOgMed,
     };
 };
+
+export const harSøktBarnetillegg = (behandling: FørstegangsbehandlingData) =>
+    !!behandling.barnetillegg || behandling.søknad.barnetillegg.length > 0;

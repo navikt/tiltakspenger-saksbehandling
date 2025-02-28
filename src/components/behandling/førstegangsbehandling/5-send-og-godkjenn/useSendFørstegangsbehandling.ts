@@ -1,14 +1,18 @@
-import { VedtakData, VedtakTilBeslutterDTO } from '../../../../types/VedtakTyper';
+import { VedtakTilBeslutningDTO } from '../../../../types/VedtakTyper';
 import { BehandlingData } from '../../../../types/BehandlingTypes';
 import { useFetchJsonFraApi } from '../../../../utils/fetch/useFetchFraApi';
+import { VedtakContextState } from '../context/FørstegangsbehandlingContext';
 
-export const useSendFørstegangsbehandling = (vedtak: VedtakData, behandling: BehandlingData) => {
+export const useSendFørstegangsbehandling = (
+    behandling: BehandlingData,
+    vedtakSkjema: VedtakContextState,
+) => {
     const { trigger, isMutating, error } = useFetchJsonFraApi<
         BehandlingData,
-        VedtakTilBeslutterDTO
+        VedtakTilBeslutningDTO
     >(`/sak/${behandling.sakId}/behandling/${behandling.id}/sendtilbeslutning`, 'POST');
 
-    const sendTilBeslutter = () => trigger(tilBeslutterDTO(vedtak));
+    const sendTilBeslutter = () => trigger(tilBeslutterDTO(vedtakSkjema));
 
     return {
         sendTilBeslutter,
@@ -17,14 +21,16 @@ export const useSendFørstegangsbehandling = (vedtak: VedtakData, behandling: Be
     };
 };
 
-const tilBeslutterDTO = (vedtak: VedtakData): VedtakTilBeslutterDTO => {
+const tilBeslutterDTO = (vedtak: VedtakContextState): VedtakTilBeslutningDTO => {
     return {
-        begrunnelseVilkårsvurdering: vedtak.begrunnelseVilkårsvurdering,
-        fritekstTilVedtaksbrev: vedtak.fritekstTilVedtaksbrev,
+        begrunnelseVilkårsvurdering: vedtak.begrunnelseRef.current?.value ?? '',
+        fritekstTilVedtaksbrev: vedtak.brevtekstRef.current?.value ?? '',
         innvilgelsesperiode: vedtak.innvilgelsesPeriode,
-        barnetillegg: {
-            begrunnelse: vedtak.barnetillegg?.begrunnelse,
-            perioder: vedtak.barnetillegg?.barnetilleggForPeriode,
-        },
+        barnetillegg: vedtak.harBarnetillegg
+            ? {
+                  begrunnelse: vedtak.barnetilleggBegrunnelseRef.current?.value ?? '',
+                  perioder: vedtak.barnetilleggPerioder ?? [],
+              }
+            : null,
     };
 };

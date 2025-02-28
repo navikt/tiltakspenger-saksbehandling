@@ -3,7 +3,7 @@ import { ParagraphIcon, TasklistIcon } from '@navikt/aksel-icons';
 import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
 import {
     useFørstegangsbehandling,
-    useFørstegangsVedtakDispatch,
+    useFørstegangsVedtakSkjema,
 } from '../context/FørstegangsbehandlingContext';
 import { FunctionComponent, ReactNode } from 'react';
 import { VedtakSeksjon } from '../../vedtak/seksjon/VedtakSeksjon';
@@ -18,7 +18,7 @@ export const FørstegangsbehandlingBegrunnelse = () => {
     const { behandling, rolleForBehandling } = useFørstegangsbehandling();
     const { begrunnelseVilkårsvurdering, sakId, id } = behandling;
 
-    const dispatch = useFørstegangsVedtakDispatch();
+    const { begrunnelseRef } = useFørstegangsVedtakSkjema();
 
     return (
         <VedtakSeksjon>
@@ -56,12 +56,7 @@ export const FørstegangsbehandlingBegrunnelse = () => {
                     readOnly={rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER}
                     lagringUrl={`/sak/${sakId}/behandling/${id}/begrunnelse`}
                     lagringBody={(tekst) => ({ begrunnelse: tekst }) satisfies VedtakBegrunnelseDTO}
-                    onChange={(event) => {
-                        dispatch({
-                            type: 'setBegrunnelse',
-                            payload: { begrunnelse: event.target.value },
-                        });
-                    }}
+                    ref={begrunnelseRef}
                 />
             </VedtakSeksjon.Venstre>
             <VedtakSeksjon.Høyre>

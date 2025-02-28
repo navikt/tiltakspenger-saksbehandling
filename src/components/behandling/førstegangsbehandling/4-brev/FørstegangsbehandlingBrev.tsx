@@ -2,7 +2,7 @@ import { BodyLong, Heading } from '@navikt/ds-react';
 import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
 import {
     useFørstegangsbehandling,
-    useFørstegangsVedtakDispatch,
+    useFørstegangsVedtakSkjema,
 } from '../context/FørstegangsbehandlingContext';
 import { VedtakSeksjon } from '../../vedtak/seksjon/VedtakSeksjon';
 import { VedtakHjelpetekst } from '../../vedtak/hjelpetekst/VedtakHjelpetekst';
@@ -17,7 +17,7 @@ export const FørstegangsbehandlingBrev = () => {
     const { behandling, rolleForBehandling } = useFørstegangsbehandling();
     const { fritekstTilVedtaksbrev, sakId, id } = behandling;
 
-    const dispatch = useFørstegangsVedtakDispatch();
+    const { brevtekstRef } = useFørstegangsVedtakSkjema();
 
     return (
         <VedtakSeksjon>
@@ -35,12 +35,7 @@ export const FørstegangsbehandlingBrev = () => {
                     readOnly={rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER}
                     lagringUrl={`/sak/${sakId}/behandling/${id}/fritekst`}
                     lagringBody={(tekst) => ({ fritekst: tekst }) satisfies VedtakBrevFritekstDTO}
-                    onChange={(event) => {
-                        dispatch({
-                            type: 'setBrevtekst',
-                            payload: { brevtekst: event.target.value },
-                        });
-                    }}
+                    ref={brevtekstRef}
                 />
                 <VedtaksbrevForhåndsvisning />
             </VedtakSeksjon.Venstre>
