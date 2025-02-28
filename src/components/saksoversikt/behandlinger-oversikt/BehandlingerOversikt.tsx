@@ -1,4 +1,4 @@
-import { BehandlingForOversiktData } from '../../../types/BehandlingTypes';
+import { BehandlingEllerSøknadForOversiktData } from '../../../types/BehandlingTypes';
 import { Button, Table } from '@navikt/ds-react';
 import {
     finnBehandlingstypeTekst,
@@ -7,9 +7,11 @@ import {
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '../../../utils/date';
 import { BehandlingKnappForOversikt } from '../../behandlingsknapper/BehandlingKnappForOversikt';
 import Link from 'next/link';
+import { isBehandling, isSøknad } from '../../../utils/behandlingForOversiktUtils';
+import { StartSøknadBehandling } from '../../behandlingsknapper/start-behandling/StartSøknadBehandling';
 
 type Props = {
-    behandlinger: BehandlingForOversiktData[];
+    behandlinger: BehandlingEllerSøknadForOversiktData[];
 };
 
 export const BehandlingerOversikt = ({ behandlinger }: Props) => {
@@ -50,18 +52,23 @@ export const BehandlingerOversikt = ({ behandlinger }: Props) => {
                         </Table.DataCell>
                         <Table.DataCell>{behandling.beslutter ?? 'Ikke tildelt'}</Table.DataCell>
                         <Table.DataCell scope="col">
-                            <BehandlingKnappForOversikt behandling={behandling} />
+                            {isBehandling(behandling) && (
+                                <BehandlingKnappForOversikt behandling={behandling} />
+                            )}
+                            {isSøknad(behandling) && <StartSøknadBehandling søknad={behandling} />}
                         </Table.DataCell>
                         <Table.DataCell>
-                            <Button
-                                style={{ minWidth: '50%' }}
-                                size="small"
-                                variant={'secondary'}
-                                as={Link}
-                                href={`/behandling/${behandling.id}`}
-                            >
-                                Se behandling
-                            </Button>
+                            {isBehandling(behandling) && (
+                                <Button
+                                    style={{ minWidth: '50%' }}
+                                    size="small"
+                                    variant={'secondary'}
+                                    as={Link}
+                                    href={`/behandling/${behandling.id}`}
+                                >
+                                    Se behandling
+                                </Button>
+                            )}
                         </Table.DataCell>
                     </Table.Row>
                 ))}

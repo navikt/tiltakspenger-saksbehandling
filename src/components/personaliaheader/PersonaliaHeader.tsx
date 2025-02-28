@@ -5,6 +5,7 @@ import { Personopplysninger, useHentPersonopplysninger } from './useHentPersonop
 import { SakId } from '../../types/SakTypes';
 
 import styles from './PersonaliaHeader.module.css';
+import Link from 'next/link';
 
 type PersonaliaHeaderProps = PropsWithChildren<{
     sakId: SakId;
@@ -18,7 +19,10 @@ export const PersonaliaHeader = ({ sakId, saksnummer, children }: PersonaliaHead
         <HStack gap="3" align="center" className={styles.personaliaHeader}>
             <PersonCircleIcon className={styles.personIcon} />
             {!isPersonopplysningerLoading && personopplysninger ? (
-                <PersonaliaInnhold personopplysninger={personopplysninger} />
+                <PersonaliaInnhold
+                    saksnummer={saksnummer}
+                    personopplysninger={personopplysninger}
+                />
             ) : (
                 <Skeleton variant={'text'} className={styles.loader} />
             )}
@@ -31,18 +35,21 @@ export const PersonaliaHeader = ({ sakId, saksnummer, children }: PersonaliaHead
 };
 
 type PersonaliaInnholdProps = {
+    saksnummer: string;
     personopplysninger: Personopplysninger;
 };
 
-const PersonaliaInnhold = ({ personopplysninger }: PersonaliaInnholdProps) => {
+const PersonaliaInnhold = ({ saksnummer, personopplysninger }: PersonaliaInnholdProps) => {
     const { fornavn, mellomnavn, etternavn, fnr, skjerming, strengtFortrolig, fortrolig } =
         personopplysninger || {};
 
     return (
         <>
-            <BodyShort>
-                {fornavn} {mellomnavn} {etternavn}
-            </BodyShort>
+            <Link href={`/sak/${saksnummer}`}>
+                <BodyShort>
+                    {fornavn} {mellomnavn} {etternavn}
+                </BodyShort>
+            </Link>
             <BodyShort>{fnr}</BodyShort>
             <CopyButton copyText={fnr} variant="action" size="small" />
             {strengtFortrolig && <Tag variant="error">Søker har strengt fortrolig adresse</Tag>}
