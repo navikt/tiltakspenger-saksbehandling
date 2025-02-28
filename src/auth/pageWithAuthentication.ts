@@ -58,6 +58,7 @@ export const pageWithAuthentication = (
         }
 
         const [saksbehandler, serverSidePropsResult] = await Promise.all([
+            // TODO: vi kan få data for innlogget saksbehandler fra obo-tokenet, så trenger egentlig ikke dette kallet
             fetchSaksbehandler(context.req).catch((e) => {
                 logger.error(`Feil under henting av saksbehandler - ${e}`);
                 return null;

@@ -9,7 +9,7 @@ import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
 import { BarnetilleggPerioder } from './perioder/BarnetilleggPerioder';
 import { classNames } from '../../../../utils/classNames';
 import { BarnetilleggBegrunnelse } from './begrunnelse/BarnetilleggBegrunnelse';
-import { harSøktBarnetillegg } from '../../../../utils/tiltak';
+import { harSøktBarnetillegg } from '../../../../utils/behandling';
 
 import style from './FørstegangsbehandlingBarn.module.css';
 

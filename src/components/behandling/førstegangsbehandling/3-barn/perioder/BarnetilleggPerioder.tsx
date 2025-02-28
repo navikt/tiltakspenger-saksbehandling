@@ -6,7 +6,7 @@ import {
     useFørstegangsVedtakDispatch,
     useFørstegangsVedtakSkjema,
 } from '../../context/FørstegangsbehandlingContext';
-import { hentTiltaksPeriode } from '../../../../../utils/tiltak';
+import { hentTiltaksPeriode } from '../../../../../utils/behandling';
 import { VedtakBarnetilleggPeriode } from '../../../../../types/VedtakTyper';
 import { SaksbehandlerRolle } from '../../../../../types/Saksbehandler';
 import { dateTilISOTekst } from '../../../../../utils/date';

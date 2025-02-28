@@ -14,7 +14,7 @@ import {
     førstegangsVedtakReducer,
 } from './FørstegangsbehandlingReducer';
 import { VedtakBarnetilleggPeriode, VedtakResultat } from '../../../../types/VedtakTyper';
-import { harSøktBarnetillegg, hentTiltaksPeriode } from '../../../../utils/tiltak';
+import { harSøktBarnetillegg, hentTiltaksPeriode } from '../../../../utils/behandling';
 import { Periode } from '../../../../types/Periode';
 
 export type FørstegangsbehandlingContextState = BehandlingContextState<FørstegangsbehandlingData>;

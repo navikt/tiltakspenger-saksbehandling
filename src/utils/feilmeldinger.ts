@@ -2,13 +2,14 @@ import { FetcherError } from './fetch/fetch';
 
 const feilmeldinger: Record<string, string> = {
     fant_ikke_fnr: 'Fant ikke fødselsnummeret',
+    ugyldig_fnr: 'Fødselsnummeret er ugyldig',
+    fnr_parsing_feil: 'Teknisk feil: Kunne ikke hente fødselsnummer fra forespørselen',
     fant_ikke_sak: 'Fant ikke saken',
     fant_ikke_meldekort: 'Fant ikke meldekortet',
     må_være_beslutter_eller_saksbehandler:
         'Ingen tilgang. Har ikke påkrevd rolle for å kunne gjennomføre handlingen',
     må_ha_beslutter_rolle:
         'Ingen tilgang. Må ha beslutter-rolle for å kunne gjennomføre handlingen',
-    ugyldig_fnr: 'Fødselsnummeret er ugyldig',
     for_mange_dager_utfylt: 'Det er fylt ut flere dager enn tillatt på dette meldekortet',
     støtter_ikke_delvis_innvilgelse_eller_avslag:
         'Vi støtter ikke å opprette en behandling som vil føre til delvis innvilgelse eller avslag',
