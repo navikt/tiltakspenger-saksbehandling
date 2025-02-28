@@ -3,12 +3,12 @@ import {
     VedtakAvslagResultat,
     VedtakBarnetilleggPeriode,
     VedtakInnvilgetResultat,
+    VedtakResultat,
 } from '../../../../types/VedtakTyper';
 import { Periode } from '../../../../types/Periode';
 import { leggTilDager } from '../../../../utils/date';
-import { VedtakData } from './FørstegangsbehandlingContext';
 
-export type FørstegangsbehandlingActions =
+export type FørstegangsVedtakSkjemaActions =
     | {
           type: 'setResultat';
           payload: { resultat: VedtakInnvilgetResultat | VedtakAvslagResultat };
@@ -38,10 +38,17 @@ export type FørstegangsbehandlingActions =
           payload: { periode: Partial<Periode> };
       };
 
-export const førstegangsVedtakReducer: Reducer<VedtakData, FørstegangsbehandlingActions> = (
-    state,
-    action,
-): VedtakData => {
+export type FørstegangsVedtakSkjemaState = {
+    resultat?: VedtakResultat;
+    innvilgelsesPeriode: Periode;
+    harBarnetillegg: boolean;
+    barnetilleggPerioder?: VedtakBarnetilleggPeriode[];
+};
+
+export const førstegangsVedtakReducer: Reducer<
+    FørstegangsVedtakSkjemaState,
+    FørstegangsVedtakSkjemaActions
+> = (state, action): FørstegangsVedtakSkjemaState => {
     const { type, payload } = action;
 
     switch (type) {
@@ -104,6 +111,6 @@ export const førstegangsVedtakReducer: Reducer<VedtakData, Førstegangsbehandli
             };
     }
 
-    console.error(`Ugyldig action for førstegangsbehandlingsvedtak: "${type satisfies never}"`);
+    console.error(`Ugyldig action for førstegangsvedtak: "${type satisfies never}"`);
     return state;
 };

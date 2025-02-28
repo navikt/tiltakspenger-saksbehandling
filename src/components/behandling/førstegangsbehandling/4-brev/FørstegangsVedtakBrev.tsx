@@ -1,19 +1,17 @@
 import { BodyLong, Heading } from '@navikt/ds-react';
 import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
-import {
-    useFørstegangsbehandling,
-    useFørstegangsVedtakSkjema,
-} from '../context/FørstegangsbehandlingContext';
-import { VedtakSeksjon } from '../../vedtak/seksjon/VedtakSeksjon';
-import { VedtakHjelpetekst } from '../../vedtak/hjelpetekst/VedtakHjelpetekst';
+import { useFørstegangsVedtakSkjema } from '../context/FørstegangsVedtakContext';
+import { VedtakSeksjon } from '../../vedtak-layout/seksjon/VedtakSeksjon';
+import { VedtakHjelpetekst } from '../../vedtak-layout/hjelpetekst/VedtakHjelpetekst';
 import { TekstfeltMedMellomlagring } from '../../../tekstfelt/TekstfeltMedMellomlagring';
-import { VedtakBrevFritekstDTO } from '../../../../types/VedtakTyper';
+import { VedtakBrevFritekstLagringDTO } from '../../../../types/VedtakTyper';
 import { VedtaksbrevForhåndsvisning } from './forhåndsvisning/VedtaksbrevForhåndsvisning';
 import { TekstListe } from '../../../liste/TekstListe';
+import { useFørstegangsbehandling } from '../../BehandlingContext';
 
-import style from './FørstegangsbehandlingBrev.module.css';
+import style from './FørstegangsVedtakBrev.module.css';
 
-export const FørstegangsbehandlingBrev = () => {
+export const FørstegangsVedtakBrev = () => {
     const { behandling, rolleForBehandling } = useFørstegangsbehandling();
     const { fritekstTilVedtaksbrev, sakId, id } = behandling;
 
@@ -34,7 +32,9 @@ export const FørstegangsbehandlingBrev = () => {
                     defaultValue={fritekstTilVedtaksbrev ?? ''}
                     readOnly={rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER}
                     lagringUrl={`/sak/${sakId}/behandling/${id}/fritekst`}
-                    lagringBody={(tekst) => ({ fritekst: tekst }) satisfies VedtakBrevFritekstDTO}
+                    lagringBody={(tekst) =>
+                        ({ fritekst: tekst }) satisfies VedtakBrevFritekstLagringDTO
+                    }
                     ref={brevtekstRef}
                 />
                 <VedtaksbrevForhåndsvisning />

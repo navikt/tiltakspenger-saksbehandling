@@ -1,20 +1,18 @@
 import { BodyLong, BodyShort, Button, Heading } from '@navikt/ds-react';
 import { ParagraphIcon, TasklistIcon } from '@navikt/aksel-icons';
 import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
-import {
-    useFørstegangsbehandling,
-    useFørstegangsVedtakSkjema,
-} from '../context/FørstegangsbehandlingContext';
+import { useFørstegangsVedtakSkjema } from '../context/FørstegangsVedtakContext';
 import { FunctionComponent, ReactNode } from 'react';
-import { VedtakSeksjon } from '../../vedtak/seksjon/VedtakSeksjon';
-import { VedtakHjelpetekst } from '../../vedtak/hjelpetekst/VedtakHjelpetekst';
+import { VedtakSeksjon } from '../../vedtak-layout/seksjon/VedtakSeksjon';
+import { VedtakHjelpetekst } from '../../vedtak-layout/hjelpetekst/VedtakHjelpetekst';
 import { TekstfeltMedMellomlagring } from '../../../tekstfelt/TekstfeltMedMellomlagring';
-import { VedtakBegrunnelseDTO } from '../../../../types/VedtakTyper';
+import { VedtakBegrunnelseLagringDTO } from '../../../../types/VedtakTyper';
 import { TekstListe } from '../../../liste/TekstListe';
+import { useFørstegangsbehandling } from '../../BehandlingContext';
 
-import style from './FørstegangsbehandlingBegrunnelse.module.css';
+import style from './FørstegangsVedtakBegrunnelse.module.css';
 
-export const FørstegangsbehandlingBegrunnelse = () => {
+export const FørstegangsVedtakBegrunnelse = () => {
     const { behandling, rolleForBehandling } = useFørstegangsbehandling();
     const { begrunnelseVilkårsvurdering, sakId, id } = behandling;
 
@@ -55,7 +53,9 @@ export const FørstegangsbehandlingBegrunnelse = () => {
                     defaultValue={begrunnelseVilkårsvurdering ?? ''}
                     readOnly={rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER}
                     lagringUrl={`/sak/${sakId}/behandling/${id}/begrunnelse`}
-                    lagringBody={(tekst) => ({ begrunnelse: tekst }) satisfies VedtakBegrunnelseDTO}
+                    lagringBody={(tekst) =>
+                        ({ begrunnelse: tekst }) satisfies VedtakBegrunnelseLagringDTO
+                    }
                     ref={begrunnelseRef}
                 />
             </VedtakSeksjon.Venstre>

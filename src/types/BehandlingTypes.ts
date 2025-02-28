@@ -7,7 +7,6 @@ export type BehandlingId = `beh_${string}`;
 
 type BehandlingDataCommon = {
     id: BehandlingId;
-    type: Behandlingstype;
     status: BehandlingStatus;
     sakId: SakId;
     saksnummer: string;

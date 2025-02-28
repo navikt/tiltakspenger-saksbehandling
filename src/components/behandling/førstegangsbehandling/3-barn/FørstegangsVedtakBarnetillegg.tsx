@@ -1,21 +1,21 @@
-import { VedtakSeksjon } from '../../vedtak/seksjon/VedtakSeksjon';
+import { VedtakSeksjon } from '../../vedtak-layout/seksjon/VedtakSeksjon';
 import { Heading, Radio, RadioGroup } from '@navikt/ds-react';
 import {
-    useFørstegangsbehandling,
-    useFørstegangsVedtakDispatch,
+    useFørstegangsVedtakSkjemaDispatch,
     useFørstegangsVedtakSkjema,
-} from '../context/FørstegangsbehandlingContext';
+} from '../context/FørstegangsVedtakContext';
 import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
 import { BarnetilleggPerioder } from './perioder/BarnetilleggPerioder';
 import { classNames } from '../../../../utils/classNames';
 import { BarnetilleggBegrunnelse } from './begrunnelse/BarnetilleggBegrunnelse';
 import { harSøktBarnetillegg } from '../../../../utils/behandling';
+import { useFørstegangsbehandling } from '../../BehandlingContext';
 
-import style from './FørstegangsbehandlingBarn.module.css';
+import style from './FørstegangsVedtakBarnetillegg.module.css';
 
-export const FørstegangsbehandlingBarn = () => {
+export const FørstegangsVedtakBarnetillegg = () => {
     const { behandling, rolleForBehandling } = useFørstegangsbehandling();
-    const dispatch = useFørstegangsVedtakDispatch();
+    const dispatch = useFørstegangsVedtakSkjemaDispatch();
 
     const { harBarnetillegg } = useFørstegangsVedtakSkjema();
 

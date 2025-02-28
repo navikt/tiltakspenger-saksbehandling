@@ -1,15 +1,15 @@
 import { Button, Select } from '@navikt/ds-react';
-import { VedtakSeksjon } from '../../../vedtak/seksjon/VedtakSeksjon';
+import { VedtakSeksjon } from '../../../vedtak-layout/seksjon/VedtakSeksjon';
 import { Datovelger } from '../../../../datovelger/Datovelger';
 import {
-    useFørstegangsbehandling,
-    useFørstegangsVedtakDispatch,
+    useFørstegangsVedtakSkjemaDispatch,
     useFørstegangsVedtakSkjema,
-} from '../../context/FørstegangsbehandlingContext';
+} from '../../context/FørstegangsVedtakContext';
 import { hentTiltaksPeriode } from '../../../../../utils/behandling';
 import { VedtakBarnetilleggPeriode } from '../../../../../types/VedtakTyper';
 import { SaksbehandlerRolle } from '../../../../../types/Saksbehandler';
 import { dateTilISOTekst } from '../../../../../utils/date';
+import { useFørstegangsbehandling } from '../../../BehandlingContext';
 
 import style from './BarnetilleggPerioder.module.css';
 
@@ -18,7 +18,7 @@ const MAKS_ANTALL_BARN = 20;
 export const BarnetilleggPerioder = () => {
     const { behandling, rolleForBehandling } = useFørstegangsbehandling();
     const { barnetilleggPerioder } = useFørstegangsVedtakSkjema();
-    const dispatch = useFørstegangsVedtakDispatch();
+    const dispatch = useFørstegangsVedtakSkjemaDispatch();
 
     const tiltaksperiode = hentTiltaksPeriode(behandling);
 
@@ -62,7 +62,7 @@ type PeriodeProps = {
 };
 
 const BarnetilleggPeriode = ({ periode, index, rolle }: PeriodeProps) => {
-    const dispatch = useFørstegangsVedtakDispatch();
+    const dispatch = useFørstegangsVedtakSkjemaDispatch();
 
     const erSaksbehandler = rolle === SaksbehandlerRolle.SAKSBEHANDLER;
 

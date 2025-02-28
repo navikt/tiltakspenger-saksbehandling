@@ -1,14 +1,12 @@
-import { VedtakSeksjon } from '../../../vedtak/seksjon/VedtakSeksjon';
+import { VedtakSeksjon } from '../../../vedtak-layout/seksjon/VedtakSeksjon';
 import { SaksbehandlerRolle } from '../../../../../types/Saksbehandler';
-import {
-    useFørstegangsbehandling,
-    useFørstegangsVedtakSkjema,
-} from '../../context/FørstegangsbehandlingContext';
-import { VedtakHjelpetekst } from '../../../vedtak/hjelpetekst/VedtakHjelpetekst';
+import { useFørstegangsVedtakSkjema } from '../../context/FørstegangsVedtakContext';
+import { VedtakHjelpetekst } from '../../../vedtak-layout/hjelpetekst/VedtakHjelpetekst';
 import { TekstListe } from '../../../../liste/TekstListe';
 import { BodyLong, Heading } from '@navikt/ds-react';
 import { TekstfeltMedMellomlagring } from '../../../../tekstfelt/TekstfeltMedMellomlagring';
-import { VedtakBarnetilleggBegrunnelseDTO } from '../../../../../types/VedtakTyper';
+import { VedtakBarnetilleggBegrunnelseLagringDTO } from '../../../../../types/VedtakTyper';
+import { useFørstegangsbehandling } from '../../../BehandlingContext';
 
 import style from './BarnetilleggBegrunnelse.module.css';
 
@@ -40,7 +38,7 @@ export const BarnetilleggBegrunnelse = () => {
                         ({
                             begrunnelse: tekst,
                             barnetilleggForPeriode: barnetilleggPerioder ?? [],
-                        }) satisfies VedtakBarnetilleggBegrunnelseDTO
+                        }) satisfies VedtakBarnetilleggBegrunnelseLagringDTO
                     }
                     ref={barnetilleggBegrunnelseRef}
                 />

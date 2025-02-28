@@ -26,20 +26,20 @@ export type VedtakBarnetilleggPeriode = {
     periode: Periode;
 };
 
-export type RevurderTilStansVedtak = {
+export type VedtakRevurderTilStansDTO = {
     begrunnelse: string;
     stansDato: string;
 };
 
-export type VedtakBegrunnelseDTO = {
+export type VedtakBegrunnelseLagringDTO = {
     begrunnelse: string;
 };
 
-export type VedtakBrevFritekstDTO = {
+export type VedtakBrevFritekstLagringDTO = {
     fritekst: string;
 };
 
-export type VedtakBarnetilleggBegrunnelseDTO = {
+export type VedtakBarnetilleggBegrunnelseLagringDTO = {
     begrunnelse: string;
     barnetilleggForPeriode: VedtakBarnetilleggPeriode[];
 };

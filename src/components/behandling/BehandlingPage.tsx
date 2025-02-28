@@ -1,13 +1,11 @@
 import React from 'react';
-import { FørstegangsbehandlingVedtak } from './førstegangsbehandling/FørstegangsbehandlingVedtak';
+import { FørstegangsVedtak } from './førstegangsbehandling/FørstegangsVedtak';
 import { BehandlingSaksopplysninger } from './saksopplysninger/BehandlingSaksopplysninger';
-import { RevurderingsVedtak } from './revurdering/RevurderingsVedtak';
+import { RevurderingVedtak } from './revurdering/RevurderingVedtak';
 import { useBehandling } from './BehandlingContext';
-import { FørstegangsbehandlingContextState } from './førstegangsbehandling/context/FørstegangsbehandlingContext';
 import { Behandlingstype } from '../../types/BehandlingTypes';
-import { RevurderingContextState, RevurderingProvider } from './revurdering/RevurderingContext';
 import { PersonaliaHeader } from '../personaliaheader/PersonaliaHeader';
-import { Tag } from '@navikt/ds-react';
+import { Alert, Tag } from '@navikt/ds-react';
 import { finnBehandlingStatusTekst } from '../../utils/tekstformateringUtils';
 
 import style from './BehandlingPage.module.css';
@@ -25,19 +23,14 @@ export const BehandlingPage = () => {
                 <BehandlingSaksopplysninger />
                 <div className={style.vedtakOuter}>
                     <div className={style.vedtakInner}>
-                        {type === Behandlingstype.FØRSTEGANGSBEHANDLING && (
-                            <FørstegangsbehandlingVedtak
-                                behandlingContext={
-                                    behandlingsContext as FørstegangsbehandlingContextState
-                                }
-                            />
-                        )}
-                        {type === Behandlingstype.REVURDERING && (
-                            <RevurderingProvider
-                                behandlingContext={behandlingsContext as RevurderingContextState}
-                            >
-                                <RevurderingsVedtak />
-                            </RevurderingProvider>
+                        {type === Behandlingstype.FØRSTEGANGSBEHANDLING ? (
+                            <FørstegangsVedtak />
+                        ) : type === Behandlingstype.REVURDERING ? (
+                            <RevurderingVedtak />
+                        ) : (
+                            <Alert
+                                variant={'error'}
+                            >{`Behandlingstypen er ikke implementert: ${type}`}</Alert>
                         )}
                     </div>
                 </div>

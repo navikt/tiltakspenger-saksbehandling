@@ -1,22 +1,20 @@
-import { useSendFørstegangsbehandling } from './useSendFørstegangsbehandling';
-import {
-    useFørstegangsbehandling,
-    useFørstegangsVedtakSkjema,
-} from '../context/FørstegangsbehandlingContext';
+import { useSendFørstegangsVedtak } from './useSendFørstegangsVedtak';
+import { useFørstegangsVedtakSkjema } from '../context/FørstegangsVedtakContext';
 import { BehandlingGodkjenn } from '../../send-og-godkjenn/BehandlingGodkjenn';
 import { useGodkjennBehandling } from '../../send-og-godkjenn/useGodkjennBehandling';
 import { BehandlingSendTilBeslutning } from '../../send-og-godkjenn/BehandlingSendTilBeslutning';
-import { VedtakSeksjon } from '../../vedtak/seksjon/VedtakSeksjon';
+import { VedtakSeksjon } from '../../vedtak-layout/seksjon/VedtakSeksjon';
+import { useFørstegangsbehandling } from '../../BehandlingContext';
 
-import style from './FørstegangsbehandlingSend.module.css';
+import style from './FørstegangsVedtakSend.module.css';
 
-export const FørstegangsbehandlingSend = () => {
+export const FørstegangsVedtakSend = () => {
     const { behandling } = useFørstegangsbehandling();
 
     const vedtakSkjema = useFørstegangsVedtakSkjema();
 
-    const { sendTilBeslutter, sendTilBeslutterLaster, sendTilBeslutterError } =
-        useSendFørstegangsbehandling(behandling, vedtakSkjema);
+    const { sendTilBeslutning, sendTilBeslutningLaster, sendTilBeslutningError } =
+        useSendFørstegangsVedtak(behandling, vedtakSkjema);
 
     const { godkjennVedtak, godkjennVedtakLaster, godkjennVedtakError } =
         useGodkjennBehandling(behandling);
@@ -25,9 +23,9 @@ export const FørstegangsbehandlingSend = () => {
         <VedtakSeksjon>
             <VedtakSeksjon.Venstre className={style.knapper}>
                 <BehandlingSendTilBeslutning
-                    sendTilBeslutning={sendTilBeslutter}
-                    isLoading={sendTilBeslutterLaster}
-                    error={sendTilBeslutterError}
+                    sendTilBeslutning={sendTilBeslutning}
+                    isLoading={sendTilBeslutningLaster}
+                    error={sendTilBeslutningError}
                 />
                 <BehandlingGodkjenn
                     godkjennBehandling={godkjennVedtak}

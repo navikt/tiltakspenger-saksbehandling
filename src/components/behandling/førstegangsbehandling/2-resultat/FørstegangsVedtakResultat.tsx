@@ -6,19 +6,19 @@ import { hentTiltaksPeriode } from '../../../../utils/behandling';
 import { dateTilISOTekst } from '../../../../utils/date';
 import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
 import {
-    useFørstegangsbehandling,
     useFørstegangsVedtakSkjema,
-    useFørstegangsVedtakDispatch,
-} from '../context/FørstegangsbehandlingContext';
-import { VedtakSeksjon } from '../../vedtak/seksjon/VedtakSeksjon';
+    useFørstegangsVedtakSkjemaDispatch,
+} from '../context/FørstegangsVedtakContext';
+import { VedtakSeksjon } from '../../vedtak-layout/seksjon/VedtakSeksjon';
+import { useFørstegangsbehandling } from '../../BehandlingContext';
 
-import style from './FørstegangsbehandlingResultat.module.css';
+import style from './FørstegangsVedtakResultat.module.css';
 
-export const FørstegangsbehandlingResultat = () => {
+export const FørstegangsVedtakResultat = () => {
     const { behandling, rolleForBehandling } = useFørstegangsbehandling();
     const { resultat, innvilgelsesPeriode } = useFørstegangsVedtakSkjema();
 
-    const dispatch = useFørstegangsVedtakDispatch();
+    const dispatch = useFørstegangsVedtakSkjemaDispatch();
 
     const initiellTiltaksPeriode = hentTiltaksPeriode(behandling);
 

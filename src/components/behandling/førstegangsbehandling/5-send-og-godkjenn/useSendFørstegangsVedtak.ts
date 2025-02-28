@@ -1,34 +1,34 @@
 import { VedtakTilBeslutningDTO } from '../../../../types/VedtakTyper';
 import { BehandlingData } from '../../../../types/BehandlingTypes';
 import { useFetchJsonFraApi } from '../../../../utils/fetch/useFetchFraApi';
-import { VedtakContextState } from '../context/FørstegangsbehandlingContext';
+import { FørstegangsVedtakContext } from '../context/FørstegangsVedtakContext';
 
-export const useSendFørstegangsbehandling = (
+export const useSendFørstegangsVedtak = (
     behandling: BehandlingData,
-    vedtakSkjema: VedtakContextState,
+    vedtak: FørstegangsVedtakContext,
 ) => {
     const { trigger, isMutating, error } = useFetchJsonFraApi<
         BehandlingData,
         VedtakTilBeslutningDTO
     >(`/sak/${behandling.sakId}/behandling/${behandling.id}/sendtilbeslutning`, 'POST');
 
-    const sendTilBeslutter = () => trigger(tilBeslutterDTO(vedtakSkjema));
+    const sendTilBeslutning = () => trigger(tilBeslutningDTO(vedtak));
 
     return {
-        sendTilBeslutter,
-        sendTilBeslutterLaster: isMutating,
-        sendTilBeslutterError: error,
+        sendTilBeslutning,
+        sendTilBeslutningLaster: isMutating,
+        sendTilBeslutningError: error,
     };
 };
 
-const tilBeslutterDTO = (vedtak: VedtakContextState): VedtakTilBeslutningDTO => {
+const tilBeslutningDTO = (vedtak: FørstegangsVedtakContext): VedtakTilBeslutningDTO => {
     return {
-        begrunnelseVilkårsvurdering: vedtak.begrunnelseRef.current?.value ?? '',
-        fritekstTilVedtaksbrev: vedtak.brevtekstRef.current?.value ?? '',
+        begrunnelseVilkårsvurdering: vedtak.getBegrunnelse(),
+        fritekstTilVedtaksbrev: vedtak.getBrevtekst(),
         innvilgelsesperiode: vedtak.innvilgelsesPeriode,
         barnetillegg: vedtak.harBarnetillegg
             ? {
-                  begrunnelse: vedtak.barnetilleggBegrunnelseRef.current?.value ?? '',
+                  begrunnelse: vedtak.getBrevtekst(),
                   perioder: vedtak.barnetilleggPerioder ?? [],
               }
             : null,

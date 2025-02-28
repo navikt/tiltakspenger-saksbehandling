@@ -1,10 +1,8 @@
 import { Alert, Button } from '@navikt/ds-react';
 import { EnvelopeOpenIcon } from '@navikt/aksel-icons';
 import { useHentVedtaksbrevForhåndsvisning } from './useHentVedtaksbrevForhåndsvisning';
-import {
-    useFørstegangsbehandling,
-    useFørstegangsVedtakSkjema,
-} from '../../context/FørstegangsbehandlingContext';
+import { useFørstegangsVedtakSkjema } from '../../context/FørstegangsVedtakContext';
+import { useFørstegangsbehandling } from '../../../BehandlingContext';
 
 import style from './VedtaksbrevForhåndsvisning.module.css';
 
