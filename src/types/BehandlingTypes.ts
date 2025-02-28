@@ -51,6 +51,7 @@ export type BehandlingForOversiktData = {
     saksnummer: string;
     saksbehandler: string;
     beslutter: string | null;
+    opprettet: string;
 };
 
 export type BehandlingEllerSøknadForOversiktData =

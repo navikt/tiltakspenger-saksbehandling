@@ -37,6 +37,7 @@ export type SøknadForOversiktProps = {
     periode: null;
     saksbehandler: null;
     beslutter: null;
+    opprettet: string;
 };
 
 export type SøknadTiltaksDeltagelse = {
