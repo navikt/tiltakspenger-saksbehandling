@@ -53,9 +53,14 @@ export const BehandlingerOversikt = ({ behandlinger }: Props) => {
                         <Table.DataCell>{behandling.beslutter ?? 'Ikke tildelt'}</Table.DataCell>
                         <Table.DataCell scope="col">
                             {isBehandling(behandling) && (
-                                <BehandlingKnappForOversikt behandling={behandling} />
+                                <BehandlingKnappForOversikt
+                                    behandling={behandling}
+                                    medAvsluttBehandling
+                                />
                             )}
-                            {isSøknad(behandling) && <StartSøknadBehandling søknad={behandling} />}
+                            {isSøknad(behandling) && (
+                                <StartSøknadBehandling søknad={behandling} medAvsluttBehandling />
+                            )}
                         </Table.DataCell>
                         <Table.DataCell>
                             {isBehandling(behandling) && (
