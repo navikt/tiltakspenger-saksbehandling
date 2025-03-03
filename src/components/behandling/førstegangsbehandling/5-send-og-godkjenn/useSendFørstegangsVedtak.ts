@@ -28,7 +28,7 @@ const tilBeslutningDTO = (vedtak: FørstegangsVedtakContext): VedtakTilBeslutnin
         innvilgelsesperiode: vedtak.innvilgelsesPeriode,
         barnetillegg: vedtak.harBarnetillegg
             ? {
-                  begrunnelse: vedtak.getBrevtekst(),
+                  begrunnelse: vedtak.getBarnetilleggBegrunnelse(),
                   perioder: vedtak.barnetilleggPerioder ?? [],
               }
             : null,
