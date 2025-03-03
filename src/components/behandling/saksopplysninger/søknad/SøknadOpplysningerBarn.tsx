@@ -1,8 +1,8 @@
-import { SøknadBarn } from '../../../../../types/SøknadTypes';
+import { SøknadBarn } from '../../../../types/SøknadTypes';
 import { BodyShort } from '@navikt/ds-react';
 import { Fragment } from 'react';
-import { BehandlingSaksopplysning } from '../../BehandlingSaksopplysning';
-import { formaterDatotekst } from '../../../../../utils/date';
+import { BehandlingSaksopplysning } from '../BehandlingSaksopplysning';
+import { formaterDatotekst } from '../../../../utils/date';
 
 type Props = {
     barn: SøknadBarn[];

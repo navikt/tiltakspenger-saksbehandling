@@ -1,10 +1,13 @@
 import { FørstegangsbehandlingData } from '../../../../types/BehandlingTypes';
 import { formaterDatotekst, periodeTilFormatertDatotekst } from '../../../../utils/date';
 import { Alert, Link } from '@navikt/ds-react';
-import { Periode } from '../../../../types/Periode';
-import { BehandlingSaksopplysning } from '../BehandlingSaksopplysning';
+import {
+    BehandlingSaksopplysning,
+    BehandlingSaksopplysningMedPeriode,
+} from '../BehandlingSaksopplysning';
 import { singleOrFirst } from '../../../../utils/array';
-import { SøknadOpplysningerBarn } from './barn/SøknadOpplysningerBarn';
+import { SøknadOpplysningerBarn } from './SøknadOpplysningerBarn';
+import { SøknadOpplysningerPengestøtter } from './SøknadOpplysningerPengestøtter';
 
 import style from './BehandlingSøknadOpplysninger.module.css';
 
@@ -36,6 +39,7 @@ export const BehandlingSøknadOpplysninger = ({ førstegangsbehandling }: Props)
                 verdi={formaterDatotekst(tidsstempelHosOss)}
                 spacing={true}
             />
+
             <BehandlingSaksopplysning navn={'Tiltak'} verdi={tiltak.typeNavn} />
             <BehandlingSaksopplysning
                 navn={'Periode'}
@@ -45,38 +49,24 @@ export const BehandlingSøknadOpplysninger = ({ førstegangsbehandling }: Props)
                 })}
                 spacing={true}
             />
-            <OpplysningMedDatoer navn={'KVP'} periodeEllerDato={kvp} />
-            <OpplysningMedDatoer navn={'Intro'} periodeEllerDato={intro} />
-            <OpplysningMedDatoer navn={'Institusjonsopphold'} periodeEllerDato={institusjon} />
-            <BehandlingSaksopplysning navn={'Etterlønn'} verdi={etterlønn ? 'Ja' : 'Nei'} />
-            <OpplysningMedDatoer
-                navn={'Mottar sykepenger og fortsatt sykmeldt'}
-                periodeEllerDato={sykepenger}
+
+            <BehandlingSaksopplysningMedPeriode navn={'KVP'} periode={kvp} />
+            <BehandlingSaksopplysningMedPeriode navn={'Intro'} periode={intro} />
+            <BehandlingSaksopplysningMedPeriode
+                navn={'Institusjonsopphold'}
+                periode={institusjon}
             />
-
-            {/*{pengestøtter.length > 0 ? (*/}
-            {/*    pengestøtter.map((pengestøtte) => (*/}
-            {/*        <OpplysningMedDatoer*/}
-            {/*            navn={pengestøtte.navn}*/}
-            {/*            periodeEllerDato={pengestøtte.periodeEllerDato}*/}
-            {/*            key={pengestøtte.navn}*/}
-            {/*        />*/}
-            {/*    ))*/}
-            {/*) : (*/}
-            {/*    <BehandlingSaksopplysning*/}
-            {/*        navn={'Mottar pengestøtte'}*/}
-            {/*        verdi={'Nei'}*/}
-            {/*        spacing={true}*/}
-            {/*    />*/}
-            {/*)}*/}
-
-            <SøknadOpplysningerBarn barn={barnetillegg} className={style.barn} />
-
-            <BehandlingSaksopplysning
-                navn={'Vedlegg'}
-                verdi={antallVedlegg > 0 ? 'Ja' : 'Nei'}
+            <BehandlingSaksopplysning navn={'Etterlønn'} verdi={etterlønn ? 'Ja' : 'Nei'} />
+            <BehandlingSaksopplysningMedPeriode
+                navn={'Mottar sykepenger og fortsatt sykmeldt'}
+                periode={sykepenger}
                 spacing={true}
             />
+
+            <SøknadOpplysningerPengestøtter pengestøtter={søknad} className={style.spacing} />
+            <SøknadOpplysningerBarn barn={barnetillegg} className={style.spacing} />
+
+            <BehandlingSaksopplysning navn={'Vedlegg'} verdi={antallVedlegg > 0 ? 'Ja' : 'Nei'} />
             {antallVedlegg > 0 && (
                 <Alert variant={'warning'} inline={true} size={'small'}>
                     {'Sjekk vedlegg i '}
@@ -84,33 +74,5 @@ export const BehandlingSøknadOpplysninger = ({ førstegangsbehandling }: Props)
                 </Alert>
             )}
         </>
-    );
-};
-
-type OpplysningMedDatoerProps = {
-    navn: string;
-    periodeEllerDato?: Periode | string | null;
-    spacing?: boolean;
-};
-
-const OpplysningMedDatoer = ({ navn, periodeEllerDato, spacing }: OpplysningMedDatoerProps) => {
-    return periodeEllerDato ? (
-        <>
-            <BehandlingSaksopplysning navn={navn} verdi={'Ja'} />
-            <BehandlingSaksopplysning
-                navn={navn}
-                verdi={
-                    typeof periodeEllerDato === 'string'
-                        ? formaterDatotekst(periodeEllerDato)
-                        : periodeTilFormatertDatotekst({
-                              fraOgMed: periodeEllerDato.fraOgMed,
-                              tilOgMed: periodeEllerDato.tilOgMed,
-                          })
-                }
-                spacing={spacing}
-            />
-        </>
-    ) : (
-        <BehandlingSaksopplysning navn={navn} verdi={'Nei'} spacing={spacing} />
     );
 };
