@@ -4,6 +4,7 @@ import { Alert, BodyShort, Link } from '@navikt/ds-react';
 import { Fragment } from 'react';
 import { Periode } from '../../../../types/Periode';
 import { BehandlingSaksopplysning } from '../BehandlingSaksopplysning';
+import { singleOrFirst } from '../../../../utils/array';
 
 type Props = {
     førstegangsbehandling: FørstegangsbehandlingData;
@@ -14,7 +15,7 @@ export const BehandlingSøknadOpplysninger = ({ førstegangsbehandling }: Props)
 
     const {
         tidsstempelHosOss,
-        tiltak,
+        tiltak: tiltakRaw,
         kvp,
         intro,
         institusjon,
@@ -29,6 +30,8 @@ export const BehandlingSøknadOpplysninger = ({ førstegangsbehandling }: Props)
         jobbsjansen,
         trygdOgPensjon,
     } = søknad;
+
+    const tiltak = singleOrFirst(tiltakRaw);
 
     const pengestøtter = Object.entries({
         alderspensjon,

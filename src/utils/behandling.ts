@@ -1,14 +1,15 @@
 import { FørstegangsbehandlingData } from '../types/BehandlingTypes';
 import { Periode } from '../types/Periode';
+import { singleOrFirst } from './array';
 
 export const hentTiltaksPeriode = (behandling: FørstegangsbehandlingData): Periode => {
     return {
         fraOgMed:
-            behandling.saksopplysninger.tiltaksdeltagelse.deltagelseFraOgMed ??
-            behandling.søknad.tiltak.fraOgMed,
+            singleOrFirst(behandling.saksopplysninger.tiltaksdeltagelse).deltagelseFraOgMed ??
+            singleOrFirst(behandling.søknad.tiltak).fraOgMed,
         tilOgMed:
-            behandling.saksopplysninger.tiltaksdeltagelse.deltagelseTilOgMed ??
-            behandling.søknad.tiltak.tilOgMed,
+            singleOrFirst(behandling.saksopplysninger.tiltaksdeltagelse).deltagelseTilOgMed ??
+            singleOrFirst(behandling.søknad.tiltak).tilOgMed,
     };
 };
 

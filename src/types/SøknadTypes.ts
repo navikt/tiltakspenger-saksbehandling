@@ -1,12 +1,13 @@
 import { Periode } from './Periode';
 import { SakId } from './SakTypes';
 import { BehandlingStatus, Behandlingstype } from './BehandlingTypes';
+import { ArrayOrSingle } from './UtilTypes';
 
 export type SøknadId = `soknad_${string}`;
 
 export type SøknadForBehandlingProps = {
     journalpostId: string;
-    tiltak: SøknadTiltaksDeltagelse;
+    tiltak: ArrayOrSingle<SøknadTiltaksDeltagelse>;
     barnetillegg: SøknadBarn[];
     opprettet: string;
     tidsstempelHosOss: string;
