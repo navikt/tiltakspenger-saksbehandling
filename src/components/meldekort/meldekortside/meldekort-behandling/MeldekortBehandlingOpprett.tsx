@@ -1,7 +1,7 @@
 import { Alert, Button, Loader } from '@navikt/ds-react';
 import { MeldeperiodeProps, MeldeperiodeStatus } from '../../../../types/meldekort/Meldeperiode';
 import { useOpprettMeldekortBehandling } from '../../hooks/useOpprettMeldekortBehandling';
-import BekreftelsesModal from '../../../modaler/BekreftelsesModal';
+import { BekreftelsesModal } from '../../../modaler/BekreftelsesModal';
 import { useRef } from 'react';
 import { useSak } from '../../../../context/sak/useSak';
 import { useMeldeperiodeKjede } from '../../hooks/useMeldeperiodeKjede';
@@ -36,23 +36,25 @@ export const MeldekortBehandlingOpprett = ({ meldeperiode }: Props) => {
             <BekreftelsesModal
                 modalRef={modalRef}
                 tittel={'Start behandling av meldekortet'}
-                body={'Vil du starte behandling av dette meldekortet?'}
-                error={feil}
+                feil={feil}
                 lukkModal={() => modalRef.current?.close()}
+                bekreftKnapp={
+                    <Button
+                        icon={laster && <Loader />}
+                        disabled={laster}
+                        onClick={() => {
+                            opprett().then((meldekortBehandling) => {
+                                if (meldekortBehandling) {
+                                    setMeldekortbehandling(meldeperiode.id, meldekortBehandling);
+                                }
+                            });
+                        }}
+                    >
+                        {'Start behandling'}
+                    </Button>
+                }
             >
-                <Button
-                    icon={laster && <Loader />}
-                    disabled={laster}
-                    onClick={() => {
-                        opprett().then((meldekortBehandling) => {
-                            if (meldekortBehandling) {
-                                setMeldekortbehandling(meldeperiode.id, meldekortBehandling);
-                            }
-                        });
-                    }}
-                >
-                    {'Start behandling'}
-                </Button>
+                {'Vil du starte behandling av dette meldekortet?'}
             </BekreftelsesModal>
         </div>
     );

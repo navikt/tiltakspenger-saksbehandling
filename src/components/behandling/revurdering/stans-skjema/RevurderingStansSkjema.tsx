@@ -53,13 +53,18 @@ export const RevurderingStansSkjema = () => {
                 }}
             />
             <BehandlingSendTilBeslutning
-                sendTilBeslutning={sendRevurderingTilBeslutning}
-                isLoading={sendRevurderingTilBeslutningLaster}
-                error={sendRevurderingTilBeslutningError}
+                send={sendRevurderingTilBeslutning}
+                laster={sendRevurderingTilBeslutningLaster}
+                serverfeil={sendRevurderingTilBeslutningError}
+                // TODO: validering
+                validering={() => ({
+                    warnings: [],
+                    errors: [],
+                })}
             />
             <BehandlingGodkjenn
-                godkjennBehandling={godkjennVedtak}
-                isLoading={godkjennVedtakLaster}
+                godkjenn={godkjennVedtak}
+                laster={godkjennVedtakLaster}
                 error={godkjennVedtakError}
             />
         </>

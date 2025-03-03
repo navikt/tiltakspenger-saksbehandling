@@ -4,7 +4,7 @@ import { Utbetalingsuke } from '../Utbetalingsuke';
 import { useRef } from 'react';
 import { useGodkjennMeldekort } from '../../hooks/useGodkjennMeldekort';
 import { kanBeslutteForMeldekort } from '../../../../utils/tilganger';
-import BekreftelsesModal from '../../../modaler/BekreftelsesModal';
+import { BekreftelsesModal } from '../../../modaler/BekreftelsesModal';
 import { MeldeperiodeMedBehandlingProps } from '../../../../types/meldekort/Meldeperiode';
 import { useSaksbehandler } from '../../../../context/saksbehandler/useSaksbehandler';
 import { useSak } from '../../../../context/sak/useSak';
@@ -77,28 +77,30 @@ export const MeldekortBehandlingOppsummering = ({ meldeperiode }: Props) => {
                     <BekreftelsesModal
                         modalRef={modalRef}
                         tittel={'Godkjenn meldekortet'}
-                        body={
+                        feil={godkjennMeldekortFeil}
+                        lukkModal={lukkModal}
+                        bekreftKnapp={
+                            <Button
+                                size={'small'}
+                                loading={godkjennMeldekortLaster}
+                                onClick={() =>
+                                    godkjennMeldekort().then((meldekortBehandling) => {
+                                        if (meldekortBehandling) {
+                                            setMeldekortbehandling(
+                                                meldeperiode.id,
+                                                meldekortBehandling,
+                                            );
+                                        }
+                                    })
+                                }
+                            >
+                                {'Godkjenn meldekort'}
+                            </Button>
+                        }
+                    >
+                        {
                             'Er du sikker på at meldekortet er korrekt og ønsker å sende det til utbetaling?'
                         }
-                        error={godkjennMeldekortFeil}
-                        lukkModal={lukkModal}
-                    >
-                        <Button
-                            size="small"
-                            loading={godkjennMeldekortLaster}
-                            onClick={() =>
-                                godkjennMeldekort().then((meldekortBehandling) => {
-                                    if (meldekortBehandling) {
-                                        setMeldekortbehandling(
-                                            meldeperiode.id,
-                                            meldekortBehandling,
-                                        );
-                                    }
-                                })
-                            }
-                        >
-                            Godkjenn meldekort
-                        </Button>
                     </BekreftelsesModal>
                 </>
             )}

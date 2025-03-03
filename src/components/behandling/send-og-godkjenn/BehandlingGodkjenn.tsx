@@ -1,55 +1,60 @@
 import { Alert, Button } from '@navikt/ds-react';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { BehandlingData } from '../../../types/BehandlingTypes';
 import { FetcherError } from '../../../utils/fetch/fetch';
 import { useBehandling } from '../BehandlingContext';
 import { SaksbehandlerRolle } from '../../../types/Saksbehandler';
+import { BekreftelsesModal } from '../../modaler/BekreftelsesModal';
 
 import style from './BehandlingSendOgGodkjenn.module.css';
 
 type Props = {
-    godkjennBehandling: () => Promise<BehandlingData | undefined>;
-    isLoading: boolean;
+    godkjenn: () => Promise<BehandlingData | undefined>;
+    laster: boolean;
     error?: FetcherError;
 };
 
-export const BehandlingGodkjenn = ({ godkjennBehandling, isLoading, error }: Props) => {
+export const BehandlingGodkjenn = ({ godkjenn, laster, error }: Props) => {
     const [harGodkjent, setHarGodkjent] = useState(false);
+    const modalRef = useRef<HTMLDialogElement>(null);
 
     const { setBehandling, rolleForBehandling } = useBehandling();
 
+    const lukkModal = () => modalRef.current?.close();
+
     return (
-        <>
+        <div className={style.wrapper}>
+            {rolleForBehandling === SaksbehandlerRolle.BESLUTTER && (
+                <Button onClick={() => modalRef.current?.showModal()}>{'Godkjenn vedtaket'}</Button>
+            )}
             {harGodkjent && (
-                <Alert variant={'success'} className={style.varsel}>
+                <Alert variant={'success'} className={style.success}>
                     {'Vedtaket er godkjent'}
                 </Alert>
             )}
-            {error && (
-                <Alert
-                    variant={'error'}
-                    className={style.varsel}
-                >{`Feil ved godkjenning av vedtak: [${error.status}] ${error.info?.melding || error.message}`}</Alert>
-            )}
-            {rolleForBehandling === SaksbehandlerRolle.BESLUTTER && (
-                <Button
-                    variant={'primary'}
-                    loading={isLoading}
-                    onClick={() => {
-                        godkjennBehandling()
-                            .then((oppdatertBehandling) => {
+            <BekreftelsesModal
+                modalRef={modalRef}
+                tittel={'Godkjenn vedtaket?'}
+                feil={error}
+                lukkModal={lukkModal}
+                bekreftKnapp={
+                    <Button
+                        variant={'primary'}
+                        loading={laster}
+                        onClick={() => {
+                            godkjenn().then((oppdatertBehandling) => {
                                 if (oppdatertBehandling) {
                                     setHarGodkjent(true);
                                     setBehandling(oppdatertBehandling);
+                                    lukkModal();
                                 }
-                            })
-                            .catch();
-                    }}
-                    className={style.knapp}
-                >
-                    {'Godkjenn vedtaket'}
-                </Button>
-            )}
-        </>
+                            });
+                        }}
+                    >
+                        {'Godkjenn vedtaket'}
+                    </Button>
+                }
+            />
+        </div>
     );
 };

@@ -5,12 +5,12 @@ import { useGodkjennBehandling } from '../../send-og-godkjenn/useGodkjennBehandl
 import { BehandlingSendTilBeslutning } from '../../send-og-godkjenn/BehandlingSendTilBeslutning';
 import { VedtakSeksjon } from '../../vedtak-layout/seksjon/VedtakSeksjon';
 import { useFørstegangsbehandling } from '../../BehandlingContext';
+import { førstegangsVedtakValidering } from '../førstegangsVedtakValidering';
 
 import style from './FørstegangsVedtakSend.module.css';
 
 export const FørstegangsVedtakSend = () => {
     const { behandling } = useFørstegangsbehandling();
-
     const vedtakSkjema = useFørstegangsVedtakSkjema();
 
     const { sendTilBeslutning, sendTilBeslutningLaster, sendTilBeslutningError } =
@@ -23,13 +23,15 @@ export const FørstegangsVedtakSend = () => {
         <VedtakSeksjon>
             <VedtakSeksjon.Venstre className={style.knapper}>
                 <BehandlingSendTilBeslutning
-                    sendTilBeslutning={sendTilBeslutning}
-                    isLoading={sendTilBeslutningLaster}
-                    error={sendTilBeslutningError}
+                    send={sendTilBeslutning}
+                    laster={sendTilBeslutningLaster}
+                    serverfeil={sendTilBeslutningError}
+                    validering={() => førstegangsVedtakValidering(behandling, vedtakSkjema)}
                 />
+
                 <BehandlingGodkjenn
-                    godkjennBehandling={godkjennVedtak}
-                    isLoading={godkjennVedtakLaster}
+                    godkjenn={godkjennVedtak}
+                    laster={godkjennVedtakLaster}
                     error={godkjennVedtakError}
                 />
             </VedtakSeksjon.Venstre>

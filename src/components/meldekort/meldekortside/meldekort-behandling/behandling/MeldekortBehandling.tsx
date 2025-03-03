@@ -3,7 +3,7 @@ import { useRef, useState } from 'react';
 import { useSak } from '../../../../../context/sak/useSak';
 import { useSendMeldekortTilBeslutter } from '../../../hooks/useSendMeldekortTilBeslutter';
 import { MeldekortBehandlingUke } from './MeldekortBehandlingUke';
-import BekreftelsesModal from '../../../../modaler/BekreftelsesModal';
+import { BekreftelsesModal } from '../../../../modaler/BekreftelsesModal';
 import {
     hentMeldekortBehandlingDager,
     MeldekortBehandlingForm,
@@ -89,30 +89,35 @@ export const MeldekortBehandling = ({ meldeperiode }: Props) => {
                 <BekreftelsesModal
                     modalRef={modalRef}
                     tittel={'Send meldekort til beslutter'}
-                    body={
+                    feil={feilVedSendingTilBeslutter}
+                    lukkModal={lukkModal}
+                    bekreftKnapp={
+                        <Button
+                            size={'small'}
+                            loading={senderMeldekortTilBeslutter}
+                            onClick={() =>
+                                sendMeldekortTilBeslutter({
+                                    dager: formMethods
+                                        .getValues()
+                                        .uke1.concat(formMethods.getValues().uke2),
+                                }).then((meldekortBehandling) => {
+                                    if (meldekortBehandling) {
+                                        setMeldekortbehandling(
+                                            meldeperiode.id,
+                                            meldekortBehandling,
+                                        );
+                                        lukkModal();
+                                    }
+                                })
+                            }
+                        >
+                            {'Send til beslutter'}
+                        </Button>
+                    }
+                >
+                    {
                         'Er du sikker på at meldekortet er ferdig utfylt og klart til å sendes til beslutter?'
                     }
-                    error={feilVedSendingTilBeslutter}
-                    lukkModal={lukkModal}
-                >
-                    <Button
-                        size="small"
-                        loading={senderMeldekortTilBeslutter}
-                        onClick={() =>
-                            sendMeldekortTilBeslutter({
-                                dager: formMethods
-                                    .getValues()
-                                    .uke1.concat(formMethods.getValues().uke2),
-                            }).then((meldekortBehandling) => {
-                                if (meldekortBehandling) {
-                                    setMeldekortbehandling(meldeperiode.id, meldekortBehandling);
-                                    lukkModal();
-                                }
-                            })
-                        }
-                    >
-                        Send til beslutter
-                    </Button>
                 </BekreftelsesModal>
             </form>
         </FormProvider>

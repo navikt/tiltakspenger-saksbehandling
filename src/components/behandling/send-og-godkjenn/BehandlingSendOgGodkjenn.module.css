@@ -4,10 +4,10 @@
     align-items: flex-end;
 }
 
-.varsel {
-    margin-top: 1rem;
+.success {
+    margin-bottom: 1rem;
 }
 
-.knapp {
-    margin-top: 2rem;
+.warning {
+    margin-bottom: 1rem;
 }

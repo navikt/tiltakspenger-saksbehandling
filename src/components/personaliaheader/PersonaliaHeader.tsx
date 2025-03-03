@@ -1,11 +1,11 @@
 import React, { PropsWithChildren } from 'react';
-import { BodyShort, CopyButton, HStack, Skeleton, Spacer, Tag } from '@navikt/ds-react';
+import { BodyShort, CopyButton, HStack, Link, Skeleton, Spacer, Tag } from '@navikt/ds-react';
 import { PersonCircleIcon } from '@navikt/aksel-icons';
 import { Personopplysninger, useHentPersonopplysninger } from './useHentPersonopplysninger';
 import { SakId } from '../../types/SakTypes';
+import NextLink from 'next/link';
 
 import styles from './PersonaliaHeader.module.css';
-import Link from 'next/link';
 
 type PersonaliaHeaderProps = PropsWithChildren<{
     sakId: SakId;
@@ -45,10 +45,8 @@ const PersonaliaInnhold = ({ saksnummer, personopplysninger }: PersonaliaInnhold
 
     return (
         <>
-            <Link href={`/sak/${saksnummer}`}>
-                <BodyShort>
-                    {fornavn} {mellomnavn} {etternavn}
-                </BodyShort>
+            <Link as={NextLink} href={`/sak/${saksnummer}`}>
+                {fornavn} {mellomnavn} {etternavn}
             </Link>
             <BodyShort>{fnr}</BodyShort>
             <CopyButton copyText={fnr} variant="action" size="small" />

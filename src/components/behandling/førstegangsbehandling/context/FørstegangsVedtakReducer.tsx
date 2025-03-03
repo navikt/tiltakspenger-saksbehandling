@@ -42,7 +42,7 @@ export type FørstegangsVedtakSkjemaState = {
     resultat?: VedtakResultat;
     innvilgelsesPeriode: Periode;
     harBarnetillegg: boolean;
-    barnetilleggPerioder?: VedtakBarnetilleggPeriode[];
+    barnetilleggPerioder: VedtakBarnetilleggPeriode[];
 };
 
 export const førstegangsVedtakReducer: Reducer<
