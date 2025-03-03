@@ -2,7 +2,7 @@ import { Radio, RadioGroup } from '@navikt/ds-react';
 import { Datovelger } from '../../../datovelger/Datovelger';
 import { classNames } from '../../../../utils/classNames';
 import { VedtakResultat } from '../../../../types/VedtakTyper';
-import { hentTiltaksPeriode } from '../../../../utils/behandling';
+import { hentTiltaksperiode } from '../../../../utils/behandling';
 import { dateTilISOTekst } from '../../../../utils/date';
 import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
 import {
@@ -20,7 +20,7 @@ export const FørstegangsVedtakResultat = () => {
 
     const dispatch = useFørstegangsVedtakSkjemaDispatch();
 
-    const initiellTiltaksPeriode = hentTiltaksPeriode(behandling);
+    const initiellTiltaksperiode = hentTiltaksperiode(behandling);
 
     const erIkkeSaksbehandler = rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER;
 
@@ -54,7 +54,7 @@ export const FørstegangsVedtakResultat = () => {
                     <Datovelger
                         label={'Innvilges f.o.m'}
                         size={'small'}
-                        defaultSelected={initiellTiltaksPeriode.fraOgMed}
+                        defaultSelected={initiellTiltaksperiode.fraOgMed}
                         readOnly={erIkkeSaksbehandler}
                         onDateChange={(valgtDato) => {
                             if (valgtDato) {
@@ -72,7 +72,7 @@ export const FørstegangsVedtakResultat = () => {
                     <Datovelger
                         label={'Innvilges t.o.m'}
                         size={'small'}
-                        defaultSelected={initiellTiltaksPeriode.tilOgMed}
+                        defaultSelected={initiellTiltaksperiode.tilOgMed}
                         readOnly={erIkkeSaksbehandler}
                         onDateChange={(valgtDato) => {
                             if (valgtDato) {

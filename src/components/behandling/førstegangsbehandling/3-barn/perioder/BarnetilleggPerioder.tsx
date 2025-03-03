@@ -5,7 +5,7 @@ import {
     useFørstegangsVedtakSkjemaDispatch,
     useFørstegangsVedtakSkjema,
 } from '../../context/FørstegangsVedtakContext';
-import { hentTiltaksPeriode } from '../../../../../utils/behandling';
+import { hentTiltaksperiode } from '../../../../../utils/behandling';
 import { VedtakBarnetilleggPeriode } from '../../../../../types/VedtakTyper';
 import { SaksbehandlerRolle } from '../../../../../types/Saksbehandler';
 import { dateTilISOTekst } from '../../../../../utils/date';
@@ -20,7 +20,7 @@ export const BarnetilleggPerioder = () => {
     const { barnetilleggPerioder } = useFørstegangsVedtakSkjema();
     const dispatch = useFørstegangsVedtakSkjemaDispatch();
 
-    const tiltaksperiode = hentTiltaksPeriode(behandling);
+    const tiltaksperiode = hentTiltaksperiode(behandling);
 
     return (
         <>

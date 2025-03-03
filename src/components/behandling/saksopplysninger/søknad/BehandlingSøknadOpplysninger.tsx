@@ -1,10 +1,12 @@
 import { FørstegangsbehandlingData } from '../../../../types/BehandlingTypes';
 import { formaterDatotekst, periodeTilFormatertDatotekst } from '../../../../utils/date';
-import { Alert, BodyShort, Link } from '@navikt/ds-react';
-import { Fragment } from 'react';
+import { Alert, Link } from '@navikt/ds-react';
 import { Periode } from '../../../../types/Periode';
 import { BehandlingSaksopplysning } from '../BehandlingSaksopplysning';
 import { singleOrFirst } from '../../../../utils/array';
+import { SøknadOpplysningerBarn } from './barn/SøknadOpplysningerBarn';
+
+import style from './BehandlingSøknadOpplysninger.module.css';
 
 type Props = {
     førstegangsbehandling: FørstegangsbehandlingData;
@@ -23,27 +25,9 @@ export const BehandlingSøknadOpplysninger = ({ førstegangsbehandling }: Props)
         sykepenger,
         barnetillegg,
         antallVedlegg,
-        alderspensjon,
-        gjenlevendepensjon,
-        supplerendeStønadAlder,
-        supplerendeStønadFlyktning,
-        jobbsjansen,
-        trygdOgPensjon,
     } = søknad;
 
     const tiltak = singleOrFirst(tiltakRaw);
-
-    const pengestøtter = Object.entries({
-        alderspensjon,
-        gjenlevendepensjon,
-        supplerendeStønadAlder,
-        supplerendeStønadFlyktning,
-        jobbsjansen,
-        trygdOgPensjon,
-    }).reduce<OpplysningMedDatoerProps[]>(
-        (acc, [navn, verdi]) => (verdi ? [...acc, { navn, periodeEllerDato: verdi }] : acc),
-        [],
-    );
 
     return (
         <>
@@ -70,46 +54,24 @@ export const BehandlingSøknadOpplysninger = ({ førstegangsbehandling }: Props)
                 periodeEllerDato={sykepenger}
             />
 
-            {pengestøtter.length > 0 ? (
-                pengestøtter.map((pengestøtte) => (
-                    <OpplysningMedDatoer
-                        navn={pengestøtte.navn}
-                        periodeEllerDato={pengestøtte.periodeEllerDato}
-                        key={pengestøtte.navn}
-                    />
-                ))
-            ) : (
-                <BehandlingSaksopplysning
-                    navn={'Mottar pengestøtte'}
-                    verdi={'Nei'}
-                    spacing={true}
-                />
-            )}
+            {/*{pengestøtter.length > 0 ? (*/}
+            {/*    pengestøtter.map((pengestøtte) => (*/}
+            {/*        <OpplysningMedDatoer*/}
+            {/*            navn={pengestøtte.navn}*/}
+            {/*            periodeEllerDato={pengestøtte.periodeEllerDato}*/}
+            {/*            key={pengestøtte.navn}*/}
+            {/*        />*/}
+            {/*    ))*/}
+            {/*) : (*/}
+            {/*    <BehandlingSaksopplysning*/}
+            {/*        navn={'Mottar pengestøtte'}*/}
+            {/*        verdi={'Nei'}*/}
+            {/*        spacing={true}*/}
+            {/*    />*/}
+            {/*)}*/}
 
-            {barnetillegg.length > 0 && (
-                <>
-                    <BodyShort>{'Barn:'}</BodyShort>
-                    {barnetillegg.map((barn, index) => (
-                        <Fragment key={`${barn.fødselsdato}-${index}`}>
-                            <BehandlingSaksopplysning
-                                navn={'Navn'}
-                                verdi={[barn.fornavn, barn.mellomnavn, barn.etternavn]
-                                    .filter(Boolean)
-                                    .join(' ')}
-                            />
-                            <BehandlingSaksopplysning
-                                navn={'Fødselsdato'}
-                                verdi={barn.fødselsdato}
-                            />
-                            <BehandlingSaksopplysning
-                                navn={'Oppholder seg i Norge/EØS?'}
-                                verdi={barn.oppholderSegIEØS ? 'Ja' : 'Nei'}
-                                spacing={true}
-                            />
-                        </Fragment>
-                    ))}
-                </>
-            )}
+            <SøknadOpplysningerBarn barn={barnetillegg} className={style.barn} />
+
             <BehandlingSaksopplysning
                 navn={'Vedlegg'}
                 verdi={antallVedlegg > 0 ? 'Ja' : 'Nei'}
@@ -139,7 +101,7 @@ const OpplysningMedDatoer = ({ navn, periodeEllerDato, spacing }: OpplysningMedD
                 navn={navn}
                 verdi={
                     typeof periodeEllerDato === 'string'
-                        ? periodeEllerDato
+                        ? formaterDatotekst(periodeEllerDato)
                         : periodeTilFormatertDatotekst({
                               fraOgMed: periodeEllerDato.fraOgMed,
                               tilOgMed: periodeEllerDato.tilOgMed,

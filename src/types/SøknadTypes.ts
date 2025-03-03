@@ -17,9 +17,12 @@ export type SøknadForBehandlingProps = {
     intro?: Periode;
     institusjon?: Periode;
     sykepenger?: Periode;
-    gjenlevendepensjon?: Periode;
+} & SøknadPengestøtter;
+
+export type SøknadPengestøtter = {
     // Fra-dato for alderspensjon
     alderspensjon?: string;
+    gjenlevendepensjon?: Periode;
     supplerendeStønadAlder?: Periode;
     supplerendeStønadFlyktning?: Periode;
     trygdOgPensjon?: Periode;
@@ -54,4 +57,10 @@ export type SøknadBarn = {
     mellomnavn?: string;
     etternavn?: string;
     fødselsdato: string;
+    kilde: SøknadBarnKilde;
 };
+
+export enum SøknadBarnKilde {
+    PDL = 'PDL',
+    Manuell = 'Manuell',
+}

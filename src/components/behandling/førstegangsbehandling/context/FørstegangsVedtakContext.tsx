@@ -15,7 +15,7 @@ import {
     førstegangsVedtakReducer,
     FørstegangsVedtakSkjemaState,
 } from './FørstegangsVedtakReducer';
-import { harSøktBarnetillegg, hentTiltaksPeriode } from '../../../../utils/behandling';
+import { harSøktBarnetillegg, hentTiltaksperiode } from '../../../../utils/behandling';
 
 type TextAreaInputs = {
     begrunnelseRef: RefObject<HTMLTextAreaElement>;
@@ -35,7 +35,7 @@ const DispatchContext = createContext((() => ({})) as Dispatch<FørstegangsVedta
 const initieltVedtakSkjema = (
     behandling: FørstegangsbehandlingData,
 ): FørstegangsVedtakSkjemaState => {
-    const tiltaksperiode = hentTiltaksPeriode(behandling);
+    const tiltaksperiode = hentTiltaksperiode(behandling);
 
     return {
         innvilgelsesPeriode: behandling.virkningsperiode ?? tiltaksperiode,
