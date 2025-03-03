@@ -34,12 +34,18 @@ const DispatchContext = createContext((() => ({})) as Dispatch<FørstegangsVedta
 
 const initieltVedtakSkjema = (
     behandling: FørstegangsbehandlingData,
-): FørstegangsVedtakSkjemaState => ({
-    innvilgelsesPeriode: behandling.virkningsperiode ?? hentTiltaksPeriode(behandling),
-    resultat: behandling.virkningsperiode ? 'innvilget' : undefined,
-    harBarnetillegg: harSøktBarnetillegg(behandling),
-    barnetilleggPerioder: behandling.barnetillegg?.perioder,
-});
+): FørstegangsVedtakSkjemaState => {
+    const tiltaksperiode = hentTiltaksPeriode(behandling);
+
+    return {
+        innvilgelsesPeriode: behandling.virkningsperiode ?? tiltaksperiode,
+        resultat: behandling.virkningsperiode ? 'innvilget' : undefined,
+        harBarnetillegg: harSøktBarnetillegg(behandling),
+        barnetilleggPerioder: behandling.barnetillegg?.perioder || [
+            { periode: tiltaksperiode, antallBarn: behandling.søknad.barnetillegg.length },
+        ],
+    };
+};
 
 export const FørstegangsVedtakProvider = ({ children }: PropsWithChildren) => {
     const { behandling } = useFørstegangsbehandling();

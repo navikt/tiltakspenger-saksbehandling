@@ -13,7 +13,7 @@ import { useFørstegangsbehandling } from '../../../BehandlingContext';
 
 import style from './BarnetilleggPerioder.module.css';
 
-const MAKS_ANTALL_BARN = 20;
+const BATCH_MED_BARN = 10;
 
 export const BarnetilleggPerioder = () => {
     const { behandling, rolleForBehandling } = useFørstegangsbehandling();
@@ -64,6 +64,8 @@ type PeriodeProps = {
 const BarnetilleggPeriode = ({ periode, index, rolle }: PeriodeProps) => {
     const dispatch = useFørstegangsVedtakSkjemaDispatch();
 
+    // Støtter uendelig mange barn!
+    const maksAntall = (Math.floor(periode.antallBarn / BATCH_MED_BARN) + 1) * BATCH_MED_BARN;
     const erSaksbehandler = rolle === SaksbehandlerRolle.SAKSBEHANDLER;
 
     return (
@@ -81,7 +83,7 @@ const BarnetilleggPeriode = ({ periode, index, rolle }: PeriodeProps) => {
                     });
                 }}
             >
-                {Array.from({ length: MAKS_ANTALL_BARN + 1 }).map((_, index) => (
+                {Array.from({ length: maksAntall + 1 }).map((_, index) => (
                     <option value={index} key={index}>
                         {index}
                     </option>
