@@ -8,6 +8,7 @@ import { FørstegangsVedtakBarnetillegg } from './3-barn/FørstegangsVedtakBarne
 import { FørstegangsVedtakProvider } from './context/FørstegangsVedtakContext';
 
 import style from './FørstegangsVedtak.module.css';
+import FørstegangsvedtakAvbrytBehandling from './6-avbryt-behandling/FørstegangsvedtakAvbrytBehandling';
 
 export const FørstegangsVedtak = () => {
     return (
@@ -22,6 +23,7 @@ export const FørstegangsVedtak = () => {
             <Separator />
             <FørstegangsVedtakBrev />
             <FørstegangsVedtakSend />
+            <FørstegangsvedtakAvbrytBehandling />
         </FørstegangsVedtakProvider>
     );
 };

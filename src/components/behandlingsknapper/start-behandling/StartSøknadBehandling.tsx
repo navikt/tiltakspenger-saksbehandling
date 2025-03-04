@@ -36,13 +36,8 @@ export const StartSøknadBehandling = ({ søknad, medAvsluttBehandling }: Props)
                     key={Date.now()}
                 />
             )}
-            <VStack align="start" gap="2">
-                <Button
-                    className={style.knapp}
-                    size="small"
-                    loading={opprettBehandlingIsLoading}
-                    onClick={startBehandling}
-                >
+            <VStack style={{ maxWidth: '50%' }} gap="2">
+                <Button size="small" loading={opprettBehandlingIsLoading} onClick={startBehandling}>
                     Opprett behandling
                 </Button>
                 {medAvsluttBehandling && (

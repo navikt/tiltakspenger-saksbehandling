@@ -8,11 +8,16 @@ import { SøknadId } from '../../../types/SøknadTypes';
 import { useFetchJsonFraApi } from '../../../utils/fetch/useFetchFraApi';
 import { Nullable } from '../../../types/common';
 import { SakProps } from '../../../types/SakTypes';
+import { useSak } from '../../../context/sak/useSak';
 
 const AvsluttBehandling = (props: {
     saksnummer: string;
     søknadsId?: Nullable<SøknadId>;
     behandlingsId?: Nullable<BehandlingId>;
+    button?: {
+        size?: 'small' | 'medium';
+        alignment?: 'start' | 'end';
+    };
 }) => {
     const [vilAvslutteBehandling, setVilAvslutteBehandling] = React.useState(false);
 
@@ -22,7 +27,7 @@ const AvsluttBehandling = (props: {
     }
 
     return (
-        <VStack className={style.avsluttBehandlingContainer}>
+        <VStack>
             {vilAvslutteBehandling && (
                 <AvsluttBehandlingModal
                     åpen={vilAvslutteBehandling}
@@ -33,10 +38,9 @@ const AvsluttBehandling = (props: {
                 />
             )}
             <Button
-                className={style.knapp}
                 variant="danger"
                 type="button"
-                size="small"
+                size={props.button?.size ?? 'small'}
                 onClick={() => setVilAvslutteBehandling(true)}
             >
                 Avslutt behandling
@@ -54,6 +58,7 @@ const AvsluttBehandlingModal = (props: {
     åpen: boolean;
     onClose: () => void;
 }) => {
+    const { setSak } = useSak();
     const form = useForm<{ begrunnelse: string }>({ defaultValues: { begrunnelse: '' } });
 
     const avsluttBehandlingMutation = useFetchJsonFraApi<
@@ -61,7 +66,7 @@ const AvsluttBehandlingModal = (props: {
         { søknadId: Nullable<string>; behandlingId: Nullable<string>; begrunnelse: string }
     >(`sak/${props.saksnummer}/avbryt-aktiv-behandling`, 'POST', {
         onSuccess: (sak) => {
-            console.log(sak);
+            setSak(sak!);
             props.onClose();
         },
     });

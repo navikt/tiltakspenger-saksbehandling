@@ -6,11 +6,14 @@ type Props = React.PropsWithChildren<{
     sak: SakProps;
 }>;
 
-export const SakProvider = ({ sak, children }: Props) => {
+export const SakProvider = ({ sak: initialSak, children }: Props) => {
+    const [sak, setSak] = React.useState<SakProps>(initialSak);
+
     return (
         <SakContext.Provider
             value={{
-                sak,
+                sak: sak,
+                setSak,
             }}
         >
             {children}
