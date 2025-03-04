@@ -41,19 +41,25 @@ export const førstegangsVedtakValidering = (
         }
 
         const perioder = barnetilleggPerioder.map((bt) => bt.periode);
-        const perioderErUtenBarn = barnetilleggPerioder.every((bt) => bt.antallBarn === 0);
-        const helePerioden = joinPerioder(perioder);
 
         if (perioder.length === 0) {
             errors.push('Minst en periode må spesifiseres når barnetillegg er valgt');
-        } else if (!validerPeriodisering(perioder)) {
-            errors.push('Perioder for barnetillegg må være sammenhengende');
-        } else if (perioderErUtenBarn) {
-            errors.push('Minst en periode må ha barn når barnetillegg er valgt');
-        } else if (helePerioden.fraOgMed < innvilgelsesPeriode.fraOgMed) {
-            errors.push('Barnetillegg-perioden kan ikke starte før innvilgelsesperioden');
-        } else if (helePerioden.tilOgMed > innvilgelsesPeriode.tilOgMed) {
-            errors.push('Barnetillegg-perioden kan ikke slutte etter innvilgelsesperioden');
+        } else {
+            const perioderErUtenBarn = barnetilleggPerioder.every((bt) => bt.antallBarn === 0);
+            const helePerioden = joinPerioder(perioder);
+
+            if (!validerPeriodisering(perioder)) {
+                errors.push('Periodene for barnetillegg må være sammenhengende og uten overlapp');
+            }
+            if (perioderErUtenBarn) {
+                errors.push('Minst en periode må ha barn når barnetillegg er valgt');
+            }
+            if (helePerioden.fraOgMed < innvilgelsesPeriode.fraOgMed) {
+                errors.push('Barnetillegg-perioden kan ikke starte før innvilgelsesperioden');
+            }
+            if (helePerioden.tilOgMed > innvilgelsesPeriode.tilOgMed) {
+                errors.push('Barnetillegg-perioden kan ikke slutte etter innvilgelsesperioden');
+            }
         }
     }
 

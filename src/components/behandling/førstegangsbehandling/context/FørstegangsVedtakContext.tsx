@@ -60,10 +60,16 @@ export const FørstegangsVedtakProvider = ({ children }: PropsWithChildren) => {
     const brevtekstRef = useRef<HTMLTextAreaElement>(null);
     const barnetilleggBegrunnelseRef = useRef<HTMLTextAreaElement>(null);
 
-    const getBegrunnelse = useCallback(() => begrunnelseRef.current!.value, [begrunnelseRef]);
-    const getBrevtekst = useCallback(() => brevtekstRef.current!.value, [brevtekstRef]);
+    const getBegrunnelse = useCallback(
+        () => begrunnelseRef.current?.value.trim() ?? '',
+        [begrunnelseRef],
+    );
+    const getBrevtekst = useCallback(
+        () => brevtekstRef.current?.value.trim() ?? '',
+        [brevtekstRef],
+    );
     const getBarnetilleggBegrunnelse = useCallback(
-        () => barnetilleggBegrunnelseRef.current!.value,
+        () => barnetilleggBegrunnelseRef.current?.value.trim() ?? '',
         [barnetilleggBegrunnelseRef],
     );
 
