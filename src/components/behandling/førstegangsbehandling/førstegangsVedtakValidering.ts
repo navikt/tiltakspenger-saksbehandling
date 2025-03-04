@@ -8,38 +8,18 @@ export const førstegangsVedtakValidering = (
     behandling: FørstegangsbehandlingData,
     vedtak: FørstegangsVedtakContext,
 ): ValideringResultat => {
-    const {
-        getBegrunnelse,
-        getBrevtekst,
-        getBarnetilleggBegrunnelse,
-        innvilgelsesPeriode,
-        resultat,
-        barnetilleggPerioder,
-        harBarnetillegg,
-    } = vedtak;
+    const { innvilgelsesPeriode, resultat, barnetilleggPerioder, harBarnetillegg } = vedtak;
 
     const tiltaksperiode = hentTiltaksperiode(behandling);
 
     const errors: string[] = [];
     const warnings: string[] = [];
 
-    const begrunnelse = getBegrunnelse();
-    const brevtekst = getBrevtekst();
-    const barnetilleggBegrunnelse = getBarnetilleggBegrunnelse();
-
-    if (!begrunnelse) {
-        errors.push('Begrunnelse for vilkårsvurdering mangler');
-    }
-
     if (!resultat) {
         errors.push('Resultat for vilkårsvurdering mangler');
     }
 
     if (harBarnetillegg) {
-        if (!barnetilleggBegrunnelse) {
-            errors.push('Begrunnelse for barnetillegg mangler');
-        }
-
         const perioder = barnetilleggPerioder.map((bt) => bt.periode);
 
         if (perioder.length === 0) {
@@ -61,10 +41,6 @@ export const førstegangsVedtakValidering = (
                 errors.push('Barnetillegg-perioden kan ikke slutte etter innvilgelsesperioden');
             }
         }
-    }
-
-    if (!brevtekst) {
-        errors.push('Brevtekst mangler');
     }
 
     if (tiltaksperiode.fraOgMed > innvilgelsesPeriode.fraOgMed) {
