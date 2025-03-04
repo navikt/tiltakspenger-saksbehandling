@@ -10,12 +10,19 @@ import { BehandlingKnappForOversikt } from '../behandlingsknapper/BehandlingKnap
 import Link from 'next/link';
 import React from 'react';
 import { BehandlingEllerSøknadForOversiktData } from '../../types/BehandlingTypes';
+import { fetchFraApiClientSide } from '../../utils/fetch/fetch';
 
 type Props = {
     søknaderOgBehandlinger: BehandlingEllerSøknadForOversiktData[];
 };
 
 export const BenkOversiktSide = ({ søknaderOgBehandlinger }: Props) => {
+    fetchFraApiClientSide('/dev/isAlive');
+    fetchFraApiClientSide('/dev/soknad/ny', {
+        method: 'POST',
+        body: JSON.stringify({ fnr: '12345678901' }),
+    });
+
     return (
         <VStack gap="5" style={{ padding: '1rem' }}>
             <Heading size="medium" level="2">

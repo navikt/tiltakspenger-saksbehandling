@@ -16,7 +16,7 @@ type Props = {
 };
 
 export const BehandlingKnappForOversikt = ({ behandling, medAvsluttBehandling }: Props) => {
-    const { status, id } = behandling;
+    const { status, id, saksnummer } = behandling;
 
     const { innloggetSaksbehandler } = useSaksbehandler();
     const { taBehandling, isBehandlingMutating } = useTaBehandling(id);
@@ -41,7 +41,9 @@ export const BehandlingKnappForOversikt = ({ behandling, medAvsluttBehandling }:
                     >
                         Fortsett
                     </Button>
-                    {medAvsluttBehandling && <AvsluttBehandling id={behandling.id} />}
+                    {medAvsluttBehandling && (
+                        <AvsluttBehandling saksnummer={saksnummer} behandlingsId={id} />
+                    )}
                 </VStack>
             );
         }

@@ -45,7 +45,9 @@ export const StartSøknadBehandling = ({ søknad, medAvsluttBehandling }: Props)
                 >
                     Opprett behandling
                 </Button>
-                {medAvsluttBehandling && <AvsluttBehandling id={søknad.id} />}
+                {medAvsluttBehandling && (
+                    <AvsluttBehandling saksnummer={søknad.saksnummer} søknadsId={søknad.id} />
+                )}
             </VStack>
         </>
     );

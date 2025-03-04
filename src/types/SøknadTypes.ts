@@ -27,8 +27,8 @@ export type SøknadForBehandlingProps = {
 
 export type SøknadForOversiktProps = {
     id: SøknadId;
-    sakId: SakId | null;
-    saksnummer: string | null;
+    sakId: SakId;
+    saksnummer: string;
     typeBehandling: Behandlingstype.SØKNAD;
     status: BehandlingStatus.SØKNAD;
     underkjent: boolean;
