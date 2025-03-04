@@ -6,9 +6,20 @@ import style from './AvsluttBehandling.module.css';
 import { BehandlingId } from '../../../types/BehandlingTypes';
 import { SøknadId } from '../../../types/SøknadTypes';
 import { useFetchJsonFraApi } from '../../../utils/fetch/useFetchFraApi';
+import { Nullable } from '../../../types/common';
+import { SakProps } from '../../../types/SakTypes';
 
-const AvsluttBehandling = (props: { id: BehandlingId | SøknadId }) => {
+const AvsluttBehandling = (props: {
+    saksnummer: string;
+    søknadsId?: Nullable<SøknadId>;
+    behandlingsId?: Nullable<BehandlingId>;
+}) => {
     const [vilAvslutteBehandling, setVilAvslutteBehandling] = React.useState(false);
+
+    //TODO - her burde vi nok ha litt mer context rundt hva som er valgt
+    if (!props.søknadsId && !props.behandlingsId) {
+        return <div>Teknisk feil: Enten søknadsId, eller behandlingsId må være satt</div>;
+    }
 
     return (
         <VStack className={style.avsluttBehandlingContainer}>
@@ -16,7 +27,9 @@ const AvsluttBehandling = (props: { id: BehandlingId | SøknadId }) => {
                 <AvsluttBehandlingModal
                     åpen={vilAvslutteBehandling}
                     onClose={() => setVilAvslutteBehandling(false)}
-                    id={props.id}
+                    saksnummer={props.saksnummer}
+                    søknadsId={props.søknadsId ?? null}
+                    behandlingsId={props.behandlingsId ?? null}
                 />
             )}
             <Button
@@ -35,29 +48,32 @@ const AvsluttBehandling = (props: { id: BehandlingId | SøknadId }) => {
 export default AvsluttBehandling;
 
 const AvsluttBehandlingModal = (props: {
-    id: BehandlingId | SøknadId;
+    saksnummer: string;
+    søknadsId: Nullable<SøknadId>;
+    behandlingsId: Nullable<BehandlingId>;
     åpen: boolean;
     onClose: () => void;
 }) => {
-    const isBehandling = props.id.startsWith('beh_');
-    const url = isBehandling ? `/behandling/${props.id}/avslutt` : `/soknad/${props.id}/avslutt`;
     const form = useForm<{ begrunnelse: string }>({ defaultValues: { begrunnelse: '' } });
 
-    //TODO - fiks returtype
-    const avsluttBehandlingMutation = useFetchJsonFraApi<unknown, { begrunnelse: string }>(
-        url,
-        'POST',
-        {
-            onSuccess: () => {
-                //TODO - refresh sak eller noe
-            },
+    const avsluttBehandlingMutation = useFetchJsonFraApi<
+        SakProps,
+        { søknadId: Nullable<string>; behandlingId: Nullable<string>; begrunnelse: string }
+    >(`sak/${props.saksnummer}/avbryt-aktiv-behandling`, 'POST', {
+        onSuccess: (sak) => {
+            console.log(sak);
+            props.onClose();
         },
-    );
+    });
 
     return (
         <form
             onSubmit={form.handleSubmit((values) => {
-                avsluttBehandlingMutation.trigger({ begrunnelse: values.begrunnelse });
+                avsluttBehandlingMutation.trigger({
+                    søknadId: props.søknadsId,
+                    behandlingId: props.behandlingsId,
+                    begrunnelse: values.begrunnelse,
+                });
             })}
         >
             <Modal
