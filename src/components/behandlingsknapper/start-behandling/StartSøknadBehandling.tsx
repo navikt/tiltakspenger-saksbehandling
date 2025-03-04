@@ -19,6 +19,7 @@ export const StartSøknadBehandling = ({ søknad, medAvsluttBehandling }: Props)
 
     const startBehandling = () => {
         opprettBehandling().then((behandling) => {
+            console.log(behandling);
             if (behandling) {
                 router.push(`/behandling/${behandling.id}`);
             }
@@ -36,12 +37,21 @@ export const StartSøknadBehandling = ({ søknad, medAvsluttBehandling }: Props)
                     key={Date.now()}
                 />
             )}
-            <VStack style={{ maxWidth: '50%' }} gap="2">
-                <Button size="small" loading={opprettBehandlingIsLoading} onClick={startBehandling}>
+            <VStack align="start" gap="2">
+                <Button
+                    className={style.knapp}
+                    size="small"
+                    loading={opprettBehandlingIsLoading}
+                    onClick={startBehandling}
+                >
                     Opprett behandling
                 </Button>
                 {medAvsluttBehandling && (
-                    <AvsluttBehandling saksnummer={søknad.saksnummer} søknadsId={søknad.id} />
+                    <AvsluttBehandling
+                        saksnummer={søknad.saksnummer}
+                        søknadsId={søknad.id}
+                        minWidth
+                    />
                 )}
             </VStack>
         </>
