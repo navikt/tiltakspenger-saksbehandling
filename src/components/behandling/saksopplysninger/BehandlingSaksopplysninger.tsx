@@ -9,7 +9,6 @@ import { BehandlingSøknadOpplysninger } from './søknad/BehandlingSøknadOpplys
 import { BehandlingSaksopplysning } from './BehandlingSaksopplysning';
 import { Behandlingstype } from '../../../types/BehandlingTypes';
 import { BehandlingTiltakOpplysninger } from './tiltak/BehandlingTiltakOpplysninger';
-import { singleOrFirst } from '../../../utils/array';
 
 import style from './BehandlingSaksopplysninger.module.css';
 
@@ -24,9 +23,7 @@ export const BehandlingSaksopplysninger = () => {
                 {rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER && (
                     <BehandlingOppdaterSaksopplysninger />
                 )}
-                <BehandlingTiltakOpplysninger
-                    tiltaksdeltagelse={singleOrFirst(tiltaksdeltagelse)}
-                />
+                <BehandlingTiltakOpplysninger tiltaksdeltagelse={tiltaksdeltagelse} />
             </OpplysningerSeksjon>
 
             <Separator />

@@ -1,12 +1,25 @@
 import { BehandlingSaksopplysning } from '../BehandlingSaksopplysning';
 import { periodeTilFormatertDatotekst } from '../../../../utils/date';
 import { Tiltaksdeltagelse } from '../../../../types/TiltakDeltagelseTypes';
+import { VStack } from '@navikt/ds-react';
 
 type Props = {
-    tiltaksdeltagelse: Tiltaksdeltagelse;
+    tiltaksdeltagelse: Tiltaksdeltagelse[];
 };
 
 export const BehandlingTiltakOpplysninger = ({ tiltaksdeltagelse }: Props) => {
+    return (
+        <VStack gap="2">
+            {tiltaksdeltagelse.concat(tiltaksdeltagelse).map((tiltak) => (
+                <div key={tiltak.eksternDeltagelseId}>
+                    <TiltaksdeltagelseOpplysning tiltaksdeltagelse={tiltak} />
+                </div>
+            ))}
+        </VStack>
+    );
+};
+
+const TiltaksdeltagelseOpplysning = (props: { tiltaksdeltagelse: Tiltaksdeltagelse }) => {
     const {
         antallDagerPerUke,
         deltakelseProsent,
@@ -15,7 +28,7 @@ export const BehandlingTiltakOpplysninger = ({ tiltaksdeltagelse }: Props) => {
         deltagelseFraOgMed,
         typeNavn,
         kilde,
-    } = tiltaksdeltagelse;
+    } = props.tiltaksdeltagelse;
 
     return (
         <>

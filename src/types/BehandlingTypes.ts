@@ -2,7 +2,6 @@ import { Periode } from './Periode';
 import { Tiltaksdeltagelse } from './TiltakDeltagelseTypes';
 import { SakId } from './SakTypes';
 import { SøknadForOversiktProps, SøknadForBehandlingProps } from './SøknadTypes';
-import { ArrayOrSingle } from './UtilTypes';
 
 export type BehandlingId = `beh_${string}`;
 
@@ -35,7 +34,7 @@ export type BehandlingData = FørstegangsbehandlingData | RevurderingData;
 
 export type BehandlingSaksopplysningerData = {
     fødselsdato: string;
-    tiltaksdeltagelse: ArrayOrSingle<Tiltaksdeltagelse>;
+    tiltaksdeltagelse: Tiltaksdeltagelse[];
 };
 
 // TODO: revurdering og førstegangsbehandling bør ha separate typer
