@@ -1,5 +1,5 @@
 .avsluttBehandlingContainer {
-    width: 100%;
+    min-width: 50%;
 }
 .modalHeader {
     padding-bottom: 0;

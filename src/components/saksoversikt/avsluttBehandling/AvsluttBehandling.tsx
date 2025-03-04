@@ -2,7 +2,7 @@ import { TrashIcon } from '@navikt/aksel-icons';
 import { Modal, HStack, Heading, BodyLong, Textarea, Button, VStack } from '@navikt/ds-react';
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import style from './AvsluttBehandling.module.css';
+import styles from './AvsluttBehandling.module.css';
 import { BehandlingId } from '../../../types/BehandlingTypes';
 import { SøknadId } from '../../../types/SøknadTypes';
 import { useFetchJsonFraApi } from '../../../utils/fetch/useFetchFraApi';
@@ -18,6 +18,7 @@ const AvsluttBehandling = (props: {
         size?: 'small' | 'medium';
         alignment?: 'start' | 'end';
     };
+    minWidth?: boolean;
 }) => {
     const [vilAvslutteBehandling, setVilAvslutteBehandling] = React.useState(false);
 
@@ -27,7 +28,7 @@ const AvsluttBehandling = (props: {
     }
 
     return (
-        <VStack>
+        <VStack className={props.minWidth ? styles.avsluttBehandlingContainer : undefined}>
             {vilAvslutteBehandling && (
                 <AvsluttBehandlingModal
                     åpen={vilAvslutteBehandling}
@@ -82,14 +83,14 @@ const AvsluttBehandlingModal = (props: {
             })}
         >
             <Modal
-                className={style.modal}
+                className={styles.modal}
                 width={700}
                 aria-label="Avslutt behandling"
                 open={props.åpen}
                 onClose={props.onClose}
                 size="small"
             >
-                <Modal.Header className={style.modalHeader}>
+                <Modal.Header className={styles.modalHeader}>
                     <HStack>
                         <TrashIcon title="Søppelbøtte ikon" fontSize="1.5rem" />
                         <Heading level="4" size="small">
@@ -97,7 +98,7 @@ const AvsluttBehandlingModal = (props: {
                         </Heading>
                     </HStack>
                 </Modal.Header>
-                <Modal.Body className={style.modalBody}>
+                <Modal.Body className={styles.modalBody}>
                     <BodyLong>
                         Hvis du avslutter søknadsbehandlingen kan ikke søknaden lenger behandles.
                     </BodyLong>
@@ -108,7 +109,7 @@ const AvsluttBehandlingModal = (props: {
                             <Textarea
                                 {...field}
                                 error={fieldState.error?.message}
-                                className={style.textarea}
+                                className={styles.textarea}
                                 label="Hvorfor avsluttes behandlingen? (obligatorisk)"
                             />
                         )}
