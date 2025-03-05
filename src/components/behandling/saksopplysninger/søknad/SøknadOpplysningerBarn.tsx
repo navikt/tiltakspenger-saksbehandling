@@ -26,8 +26,12 @@ export const SøknadOpplysningerBarn = ({ barn, className }: Props) => {
                             .join(' ')}
                     />
                     <BehandlingSaksopplysning
+                        navn={'Alder'}
+                        verdi={`${alderFraDato(barn.fødselsdato)} år`}
+                    />
+                    <BehandlingSaksopplysning
                         navn={'Fødselsdato'}
-                        verdi={`${formaterDatotekst(barn.fødselsdato)} - Alder ${alderFraDato(barn.fødselsdato)} år`}
+                        verdi={formaterDatotekst(barn.fødselsdato)}
                     />
                     <BehandlingSaksopplysning
                         navn={'Oppholder seg i Norge/EØS?'}
