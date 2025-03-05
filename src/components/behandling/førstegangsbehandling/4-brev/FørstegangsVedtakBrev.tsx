@@ -21,7 +21,7 @@ export const FørstegangsVedtakBrev = () => {
         <VedtakSeksjon>
             <VedtakSeksjon.Venstre>
                 <Heading size={'xsmall'} level={'2'}>
-                    {'Tekst til vedtaksbrev'}
+                    {'Vedtaksbrev for tiltakspenger og barnetillegg'}
                 </Heading>
                 <BodyLong size={'small'}>{'Teksten vises i vedtaksbrevet til bruker.'}</BodyLong>
             </VedtakSeksjon.Venstre>
