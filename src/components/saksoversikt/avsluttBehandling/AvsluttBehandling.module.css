@@ -1,0 +1,16 @@
+.avsluttBehandlingContainer {
+    min-width: 50%;
+}
+.modalHeader {
+    padding-bottom: 0;
+}
+
+.modalBody {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    .textarea {
+        padding: 12px 35px;
+    }
+}

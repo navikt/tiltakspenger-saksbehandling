@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from '@navikt/ds-react';
+import { Button, VStack } from '@navikt/ds-react';
 import { BehandlingForOversiktData, BehandlingStatus } from '../../types/BehandlingTypes';
 import { useTaBehandling } from './useTaBehandling';
 import { useSaksbehandler } from '../../context/saksbehandler/useSaksbehandler';
@@ -8,13 +8,15 @@ import Link from 'next/link';
 import router from 'next/router';
 
 import style from './BehandlingKnapper.module.css';
+import AvsluttBehandling from '../saksoversikt/avsluttBehandling/AvsluttBehandling';
 
 type Props = {
     behandling: BehandlingForOversiktData;
+    medAvsluttBehandling?: boolean;
 };
 
-export const BehandlingKnappForOversikt = ({ behandling }: Props) => {
-    const { status, id } = behandling;
+export const BehandlingKnappForOversikt = ({ behandling, medAvsluttBehandling }: Props) => {
+    const { status, id, saksnummer } = behandling;
 
     const { innloggetSaksbehandler } = useSaksbehandler();
     const { taBehandling, isBehandlingMutating } = useTaBehandling(id);
@@ -29,15 +31,20 @@ export const BehandlingKnappForOversikt = ({ behandling }: Props) => {
             }
 
             return (
-                <Button
-                    className={style.knapp}
-                    size={'small'}
-                    variant={'secondary'}
-                    as={Link}
-                    href={behandlingLenke}
-                >
-                    {'Fortsett'}
-                </Button>
+                <VStack align="start" gap="2">
+                    <Button
+                        className={style.knapp}
+                        size="small"
+                        variant="secondary"
+                        as={Link}
+                        href={behandlingLenke}
+                    >
+                        Fortsett
+                    </Button>
+                    {medAvsluttBehandling && (
+                        <AvsluttBehandling saksnummer={saksnummer} behandlingsId={id} />
+                    )}
+                </VStack>
             );
         }
         case BehandlingStatus.KLAR_TIL_BEHANDLING:

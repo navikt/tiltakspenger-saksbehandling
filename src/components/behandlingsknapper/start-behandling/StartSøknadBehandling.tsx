@@ -1,22 +1,25 @@
 import { useStartSøknadBehandling } from './useStartSøknadBehandling';
 import Varsel from '../../varsel/Varsel';
-import { Button } from '@navikt/ds-react';
+import { Button, VStack } from '@navikt/ds-react';
 import React from 'react';
 import router from 'next/router';
 import { SøknadForOversiktProps } from '../../../types/SøknadTypes';
 
 import style from '../BehandlingKnapper.module.css';
+import AvsluttBehandling from '../../saksoversikt/avsluttBehandling/AvsluttBehandling';
 
 type Props = {
     søknad: SøknadForOversiktProps;
+    medAvsluttBehandling?: boolean;
 };
 
-export const StartSøknadBehandling = ({ søknad }: Props) => {
+export const StartSøknadBehandling = ({ søknad, medAvsluttBehandling }: Props) => {
     const { opprettBehandling, opprettBehandlingIsLoading, opprettBehandlingError } =
         useStartSøknadBehandling(søknad);
 
     const startBehandling = () => {
         opprettBehandling().then((behandling) => {
+            console.log(behandling);
             if (behandling) {
                 router.push(`/behandling/${behandling.id}`);
             }
@@ -27,22 +30,30 @@ export const StartSøknadBehandling = ({ søknad }: Props) => {
         <>
             {opprettBehandlingError && (
                 <Varsel
-                    size={'small'}
-                    variant={'error'}
+                    size="small"
+                    variant="error"
                     melding={opprettBehandlingError.message}
                     className={style.varsel}
                     key={Date.now()}
                 />
             )}
-            <Button
-                className={style.knapp}
-                variant={'primary'}
-                size={'small'}
-                loading={opprettBehandlingIsLoading}
-                onClick={startBehandling}
-            >
-                {'Opprett behandling'}
-            </Button>
+            <VStack align="start" gap="2">
+                <Button
+                    className={style.knapp}
+                    size="small"
+                    loading={opprettBehandlingIsLoading}
+                    onClick={startBehandling}
+                >
+                    Opprett behandling
+                </Button>
+                {medAvsluttBehandling && (
+                    <AvsluttBehandling
+                        saksnummer={søknad.saksnummer}
+                        søknadsId={søknad.id}
+                        minWidth
+                    />
+                )}
+            </VStack>
         </>
     );
 };
