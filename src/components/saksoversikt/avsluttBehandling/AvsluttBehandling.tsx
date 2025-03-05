@@ -19,6 +19,7 @@ const AvsluttBehandling = (props: {
         alignment?: 'start' | 'end';
     };
     minWidth?: boolean;
+    onSuccess?: () => void;
 }) => {
     const [vilAvslutteBehandling, setVilAvslutteBehandling] = React.useState(false);
 
@@ -36,6 +37,7 @@ const AvsluttBehandling = (props: {
                     saksnummer={props.saksnummer}
                     søknadsId={props.søknadsId ?? null}
                     behandlingsId={props.behandlingsId ?? null}
+                    onSuccess={props.onSuccess}
                 />
             )}
             <Button
@@ -58,6 +60,7 @@ const AvsluttBehandlingModal = (props: {
     behandlingsId: Nullable<BehandlingId>;
     åpen: boolean;
     onClose: () => void;
+    onSuccess?: () => void;
 }) => {
     const { setSak } = useSak();
     const form = useForm<{ begrunnelse: string }>({ defaultValues: { begrunnelse: '' } });
@@ -67,6 +70,7 @@ const AvsluttBehandlingModal = (props: {
         { søknadId: Nullable<string>; behandlingId: Nullable<string>; begrunnelse: string }
     >(`sak/${props.saksnummer}/avbryt-aktiv-behandling`, 'POST', {
         onSuccess: (sak) => {
+            props.onSuccess?.();
             setSak(sak!);
             props.onClose();
         },
