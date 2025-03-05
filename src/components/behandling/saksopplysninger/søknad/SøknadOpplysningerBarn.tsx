@@ -2,7 +2,7 @@ import { SøknadBarn } from '../../../../types/SøknadTypes';
 import { BodyShort } from '@navikt/ds-react';
 import { Fragment } from 'react';
 import { BehandlingSaksopplysning } from '../BehandlingSaksopplysning';
-import { formaterDatotekst } from '../../../../utils/date';
+import { alderFraDato, formaterDatotekst } from '../../../../utils/date';
 
 type Props = {
     barn: SøknadBarn[];
@@ -27,7 +27,7 @@ export const SøknadOpplysningerBarn = ({ barn, className }: Props) => {
                     />
                     <BehandlingSaksopplysning
                         navn={'Fødselsdato'}
-                        verdi={formaterDatotekst(barn.fødselsdato)}
+                        verdi={`${formaterDatotekst(barn.fødselsdato)} - Alder ${alderFraDato(barn.fødselsdato)} år`}
                     />
                     <BehandlingSaksopplysning
                         navn={'Oppholder seg i Norge/EØS?'}
