@@ -1,4 +1,9 @@
-import { FørstegangsbehandlingData } from '../types/BehandlingTypes';
+import {
+    BehandlingData,
+    BehandlingStatus,
+    Behandlingstype,
+    FørstegangsbehandlingData,
+} from '../types/BehandlingTypes';
 import { Periode } from '../types/Periode';
 import { singleOrFirst } from './array';
 
@@ -14,3 +19,13 @@ export const hentTiltaksperiode = (behandling: FørstegangsbehandlingData): Peri
 
 export const harSøktBarnetillegg = (behandling: FørstegangsbehandlingData) =>
     !!behandling.barnetillegg || behandling.søknad.barnetillegg.length > 0;
+
+export const erBehandlingAbrutt = (behandling: BehandlingData) => !!behandling.avbrutt;
+
+export const erBehandlingVedtatt = (behandling: BehandlingData) =>
+    behandling.status === BehandlingStatus.VEDTATT;
+
+export const erBehandlingFørstegangsbehandling = (
+    behandling: BehandlingData,
+): behandling is FørstegangsbehandlingData =>
+    behandling.type === Behandlingstype.FØRSTEGANGSBEHANDLING;

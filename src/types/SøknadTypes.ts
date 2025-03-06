@@ -2,10 +2,13 @@ import { Periode } from './Periode';
 import { SakId } from './SakTypes';
 import { BehandlingStatus, Behandlingstype } from './BehandlingTypes';
 import { ArrayOrSingle } from './UtilTypes';
+import { Avbrutt } from './Avbrutt';
+import { Nullable } from './common';
 
 export type SøknadId = `soknad_${string}`;
 
 export type SøknadForBehandlingProps = {
+    id: SøknadId;
     journalpostId: string;
     tiltak: ArrayOrSingle<SøknadTiltaksDeltagelse>;
     barnetillegg: SøknadBarn[];
@@ -17,6 +20,7 @@ export type SøknadForBehandlingProps = {
     intro?: Periode;
     institusjon?: Periode;
     sykepenger?: Periode;
+    avbrutt: Nullable<Avbrutt>;
 } & SøknadPengestøtter;
 
 export type SøknadPengestøtter = {

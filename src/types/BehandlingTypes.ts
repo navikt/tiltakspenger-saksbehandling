@@ -2,6 +2,8 @@ import { Periode } from './Periode';
 import { Tiltaksdeltagelse } from './TiltakDeltagelseTypes';
 import { SakId } from './SakTypes';
 import { SøknadForOversiktProps, SøknadForBehandlingProps } from './SøknadTypes';
+import { Avbrutt } from './Avbrutt';
+import { Nullable } from './common';
 
 export type BehandlingId = `beh_${string}`;
 
@@ -17,6 +19,8 @@ type BehandlingDataCommon = {
     saksopplysningsperiode: Periode;
     saksopplysninger: BehandlingSaksopplysningerData;
     begrunnelseVilkårsvurdering: string | null;
+    avbrutt: Nullable<Avbrutt>;
+    iverksattTidspunkt: Nullable<string>;
 };
 
 export type FørstegangsbehandlingData = BehandlingDataCommon & {
