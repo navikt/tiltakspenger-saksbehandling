@@ -13,7 +13,6 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         <>
             <Head>
                 <title>Tiltakspenger saksbehandler</title>
-                <link rel="icon" href="/favicon.ico" />
             </Head>
             <FeatureTogglesProvider deployEnv={pageProps.deployEnv}>
                 <SaksbehandlerProvider saksbehandler={pageProps.saksbehandler}>
