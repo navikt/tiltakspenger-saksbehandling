@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { SakProps } from '../../types/SakTypes';
 import { SakContext } from './SakContext';
 
@@ -7,12 +7,16 @@ type Props = React.PropsWithChildren<{
 }>;
 
 export const SakProvider = ({ sak: initialSak, children }: Props) => {
-    const [sak, setSak] = React.useState<SakProps>(initialSak);
+    const [sak, setSak] = useState<SakProps>(initialSak);
+
+    useEffect(() => {
+        setSak(initialSak);
+    }, [initialSak]);
 
     return (
         <SakContext.Provider
             value={{
-                sak: sak,
+                sak,
                 setSak,
             }}
         >
