@@ -19,7 +19,6 @@ export const StartSøknadBehandling = ({ søknad, medAvsluttBehandling }: Props)
 
     const startBehandling = () => {
         opprettBehandling().then((behandling) => {
-            console.log(behandling);
             if (behandling) {
                 router.push(`/behandling/${behandling.id}`);
             }

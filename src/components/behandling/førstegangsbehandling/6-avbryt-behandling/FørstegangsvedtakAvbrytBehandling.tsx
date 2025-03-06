@@ -20,7 +20,6 @@ const FørstegangsvedtakAvbrytBehandling = () => {
                         alignment: 'end',
                     }}
                     onSuccess={() => {
-                        console.log('router.psuh');
                         router.push(`/sak/${behandling.saksnummer}`);
                     }}
                 />
