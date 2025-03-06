@@ -10,7 +10,7 @@ type Props = {
 export const BehandlingTiltakOpplysninger = ({ tiltaksdeltagelse }: Props) => {
     return (
         <VStack gap="2">
-            {tiltaksdeltagelse.concat(tiltaksdeltagelse).map((tiltak) => (
+            {tiltaksdeltagelse.map((tiltak) => (
                 <div key={tiltak.eksternDeltagelseId}>
                     <TiltaksdeltagelseOpplysning tiltaksdeltagelse={tiltak} />
                 </div>
