@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { MeldeperiodeKjedeContext } from './MeldeperiodeKjedeContext';
 import {
     MeldeperiodeId,
@@ -42,6 +42,10 @@ export const MeldeperiodeKjedeProvider = ({
         },
         [meldeperiodeKjede],
     );
+
+    useEffect(() => {
+        setMeldeperiodeKjede(meldeperiodeKjedeInitial);
+    }, [meldeperiodeKjedeInitial]);
 
     if (!valgtMeldeperiode) {
         return (

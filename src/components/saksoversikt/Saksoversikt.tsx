@@ -6,10 +6,10 @@ import {
 } from '../../types/BehandlingTypes';
 import { MeldekortOversikt } from './meldekort-oversikt/MeldekortOversikt';
 import { BehandlingerOversikt } from './behandlinger-oversikt/BehandlingerOversikt';
-import { useFeatureToggles } from '../../context/feature-toggles/useFeatureToggles';
 import { OpprettRevurdering } from './opprett-revurdering/OpprettRevurdering';
 import { PersonaliaHeader } from '../personaliaheader/PersonaliaHeader';
-import { useSak } from '../../context/sak/useSak';
+import { useSak } from '../../context/sak/SakContext';
+import { useFeatureToggles } from '../../context/feature-toggles/FeatureTogglesContext';
 
 import styles from './Saksoversikt.module.css';
 

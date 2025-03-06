@@ -5,7 +5,7 @@ import { LeaveIcon } from '@navikt/aksel-icons';
 import { useHentSakForFNR } from './useHentSakForFNR';
 import Varsel from '../varsel/Varsel';
 import Link from 'next/link';
-import { useSaksbehandler } from '../../context/saksbehandler/useSaksbehandler';
+import { useSaksbehandler } from '../../context/saksbehandler/SaksbehandlerContext';
 import router from 'next/router';
 
 export const InternDekoratør = () => {

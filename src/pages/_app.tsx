@@ -4,9 +4,9 @@ import React from 'react';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { SWRConfig } from 'swr';
-import { FeatureTogglesProvider } from '../context/feature-toggles/FeatureTogglesProvider';
-import { SaksbehandlerProvider } from '../context/saksbehandler/SaksbehandlerProvider';
 import { InternDekoratør } from '../components/interndekoratør/InternDekoratør';
+import { FeatureTogglesProvider } from '../context/feature-toggles/FeatureTogglesContext';
+import { SaksbehandlerProvider } from '../context/saksbehandler/SaksbehandlerContext';
 
 export default function MyApp({ Component, pageProps }: AppProps) {
     return (

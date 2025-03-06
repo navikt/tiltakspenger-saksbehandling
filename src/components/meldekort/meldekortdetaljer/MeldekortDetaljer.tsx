@@ -7,10 +7,10 @@ import {
 import { useMeldeperiodeKjede } from '../hooks/useMeldeperiodeKjede';
 import { MeldekortBehandlingOpprett } from '../meldekortside/meldekort-behandling/MeldekortBehandlingOpprett';
 import { MeldekortBehandlingProps } from '../../../types/meldekort/MeldekortBehandling';
-import { useFeatureToggles } from '../../../context/feature-toggles/useFeatureToggles';
+import { useSak } from '../../../context/sak/SakContext';
+import { useFeatureToggles } from '../../../context/feature-toggles/FeatureTogglesContext';
 
 import styles from './MeldekortDetaljer.module.css';
-import { useSak } from '../../../context/sak/useSak';
 
 export const MeldekortDetaljer = () => {
     const { sak } = useSak();

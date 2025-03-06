@@ -4,9 +4,9 @@ import {
     FørstegangsbehandlingData,
     RevurderingData,
 } from '../../types/BehandlingTypes';
-import { createContext, ReactNode, useContext, useState } from 'react';
+import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { kanBeslutteForBehandling, kanSaksbehandleForBehandling } from '../../utils/tilganger';
-import { useSaksbehandler } from '../../context/saksbehandler/useSaksbehandler';
+import { useSaksbehandler } from '../../context/saksbehandler/SaksbehandlerContext';
 import { SaksbehandlerRolle } from '../../types/Saksbehandler';
 
 export type BehandlingContext<Behandling extends BehandlingData> = {
@@ -32,6 +32,10 @@ export const BehandlingProvider = ({ behandling: initialBehandling, children }: 
         : kanBeslutteForBehandling(behandling, innloggetSaksbehandler)
           ? SaksbehandlerRolle.BESLUTTER
           : null;
+
+    useEffect(() => {
+        setBehandling(initialBehandling);
+    }, [initialBehandling]);
 
     return (
         <Context.Provider

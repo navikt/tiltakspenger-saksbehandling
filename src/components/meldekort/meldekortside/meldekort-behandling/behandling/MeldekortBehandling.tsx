@@ -1,6 +1,6 @@
 import { Alert, BodyShort, Button, HStack, Spacer } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
-import { useSak } from '../../../../../context/sak/useSak';
+import { useSak } from '../../../../../context/sak/SakContext';
 import { useSendMeldekortTilBeslutter } from '../../../hooks/useSendMeldekortTilBeslutter';
 import { MeldekortBehandlingUke } from './MeldekortBehandlingUke';
 import { BekreftelsesModal } from '../../../../modaler/BekreftelsesModal';

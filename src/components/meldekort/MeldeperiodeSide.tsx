@@ -1,4 +1,3 @@
-import { useSak } from '../../context/sak/useSak';
 import { Button, HStack, Tag, VStack } from '@navikt/ds-react';
 import { PersonaliaHeader } from '../personaliaheader/PersonaliaHeader';
 import Link from 'next/link';
@@ -6,6 +5,7 @@ import { finnMeldeperiodeStatusTekst } from '../../utils/tekstformateringUtils';
 import { MeldekortDetaljer } from './meldekortdetaljer/MeldekortDetaljer';
 import { Meldekortside } from './meldekortside/Meldekortside';
 import { useMeldeperiodeKjede } from './hooks/useMeldeperiodeKjede';
+import { useSak } from '../../context/sak/SakContext';
 
 import style from './MeldeperiodeSide.module.css';
 

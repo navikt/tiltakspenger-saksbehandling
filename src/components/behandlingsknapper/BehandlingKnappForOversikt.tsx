@@ -2,13 +2,13 @@ import React from 'react';
 import { Button, VStack } from '@navikt/ds-react';
 import { BehandlingForOversiktData, BehandlingStatus } from '../../types/BehandlingTypes';
 import { useTaBehandling } from './useTaBehandling';
-import { useSaksbehandler } from '../../context/saksbehandler/useSaksbehandler';
+import AvsluttBehandling from '../saksoversikt/avsluttBehandling/AvsluttBehandling';
+import { useSaksbehandler } from '../../context/saksbehandler/SaksbehandlerContext';
 import { eierBehandling, skalKunneTaBehandling } from '../../utils/tilganger';
 import Link from 'next/link';
 import router from 'next/router';
 
 import style from './BehandlingKnapper.module.css';
-import AvsluttBehandling from '../saksoversikt/avsluttBehandling/AvsluttBehandling';
 
 type Props = {
     behandling: BehandlingForOversiktData;

@@ -9,14 +9,13 @@ import { MeldekortBehandlingOppsummering } from './meldekort-behandling/Meldekor
 import { BrukersMeldekortVisning } from './BrukersMeldekort';
 import { useMeldeperiodeKjede } from '../hooks/useMeldeperiodeKjede';
 import { kanSaksbehandleForMeldekort } from '../../../utils/tilganger';
-import { useSaksbehandler } from '../../../context/saksbehandler/useSaksbehandler';
-
-import styles from './Meldekort.module.css';
-
 import {
     MeldeperiodeMedBehandlingProps,
     MeldeperiodeProps,
 } from '../../../types/meldekort/Meldeperiode';
+import { useSaksbehandler } from '../../../context/saksbehandler/SaksbehandlerContext';
+
+import styles from './Meldekort.module.css';
 
 export const Meldekortside = () => {
     const { innloggetSaksbehandler } = useSaksbehandler();

@@ -2,9 +2,9 @@ import { pageWithAuthentication } from '../../../../../auth/pageWithAuthenticati
 import { MeldeperiodeKjedeProps } from '../../../../../types/meldekort/Meldeperiode';
 import { SakProps } from '../../../../../types/SakTypes';
 import { fetchSak } from '../../../../../utils/fetch/fetch-server';
-import { SakProvider } from '../../../../../context/sak/SakProvider';
 import { MeldeperiodeSide } from '../../../../../components/meldekort/MeldeperiodeSide';
 import { MeldeperiodeKjedeProvider } from '../../../../../components/meldekort/context/MeldeperiodeKjedeProvider';
+import { SakProvider } from '../../../../../context/sak/SakContext';
 
 type Props = {
     meldeperiodeKjede: MeldeperiodeKjedeProps;

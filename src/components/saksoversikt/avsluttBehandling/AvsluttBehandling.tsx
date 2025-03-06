@@ -8,7 +8,7 @@ import { SøknadId } from '../../../types/SøknadTypes';
 import { useFetchJsonFraApi } from '../../../utils/fetch/useFetchFraApi';
 import { Nullable } from '../../../types/common';
 import { SakProps } from '../../../types/SakTypes';
-import { useSak } from '../../../context/sak/useSak';
+import { useSak } from '../../../context/sak/SakContext';
 
 const AvsluttBehandling = (props: {
     saksnummer: string;
