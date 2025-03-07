@@ -1,4 +1,4 @@
-import { HStack, BodyShort, Button } from '@navikt/ds-react';
+import { HStack, BodyShort, Button, VStack } from '@navikt/ds-react';
 import { ukeHeading } from '../../../../utils/date';
 import { Utbetalingsuke } from '../Utbetalingsuke';
 import { useRef } from 'react';
@@ -49,12 +49,26 @@ export const MeldekortBehandlingOppsummering = ({ meldeperiode }: Props) => {
                 utbetalingUke={uke2}
                 headingtekst={ukeHeading(meldeperiode.periode.tilOgMed)}
             />
-            <HStack gap="5" className={styles.totalbeløp}>
-                <BodyShort weight="semibold">Totalt beløp for perioden:</BodyShort>
-                <BodyShort weight="semibold">
-                    {meldekortBehandling.totalbeløpTilUtbetaling},-
-                </BodyShort>
-            </HStack>
+            <VStack>
+                <HStack gap="5" className={styles.totalbeløp}>
+                    <BodyShort weight="semibold">Totalt ordinær beløp for perioden:</BodyShort>
+                    <BodyShort weight="semibold" className={styles.meldekortBeløp}>
+                        {meldekortBehandling.totalOrdinærBeløpTilUtbetaling},-
+                    </BodyShort>
+                </HStack>
+                <HStack gap="5" className={styles.totalbeløp}>
+                    <BodyShort weight="semibold">Totalt barnetillegg beløp for perioden:</BodyShort>
+                    <BodyShort weight="semibold" className={styles.meldekortBeløp}>
+                        {meldekortBehandling.totalBarnetilleggTilUtbetaling},-
+                    </BodyShort>
+                </HStack>
+                <HStack gap="5" className={styles.totalbeløp}>
+                    <BodyShort weight="semibold">Totalt beløp for perioden:</BodyShort>
+                    <BodyShort weight="semibold" className={styles.meldekortBeløp}>
+                        {meldekortBehandling.totalbeløpTilUtbetaling},-
+                    </BodyShort>
+                </HStack>
+            </VStack>
             <HStack gap="5" className={styles.totalbeløp}>
                 <BodyShort weight="semibold">Nav-kontor det skal utbetales fra: </BodyShort>
                 <BodyShort weight="semibold">

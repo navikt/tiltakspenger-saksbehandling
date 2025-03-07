@@ -35,6 +35,8 @@ export type MeldekortBehandlingProps = {
     beslutter?: string;
     status: MeldekortBehandlingStatus;
     totalbeløpTilUtbetaling: number;
+    totalOrdinærBeløpTilUtbetaling: number;
+    totalBarnetilleggTilUtbetaling: number;
     navkontor: string;
     navkontorNavn?: string;
     dager: MeldekortBehandlingDagBeregnet[];
@@ -53,6 +55,7 @@ export type MeldekortBehandlingDagBeregnet = MeldekortBehandlingDagProps & {
 type Beregningsdag = {
     beløp: number;
     prosent: number;
+    barnetillegg: number;
 };
 
 export type MeldekortBehandlingDTO = {

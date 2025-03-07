@@ -7,7 +7,6 @@
 .innerWrapper {
     display: flex;
     flex-direction: row;
-
 }
 
 .heading {
@@ -20,6 +19,14 @@
     border: 1px #9099a5 solid;
     border-radius: 4px;
     padding: 0.5rem;
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+
+    .meldekortBeløp {
+        justify-self: end;
+        margin-right: 1rem;
+    }
 }
 
 .meldekort {
