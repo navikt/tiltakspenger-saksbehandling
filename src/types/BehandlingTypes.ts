@@ -88,12 +88,12 @@ export enum Behandlingstype {
     REVURDERING = 'REVURDERING',
 }
 
-type Barnetillegg = {
+export type Barnetillegg = {
     perioder: BarnetilleggPeriode[];
     begrunnelse?: string;
 };
 
-type BarnetilleggPeriode = {
+export type BarnetilleggPeriode = {
     antallBarn: number;
     periode: Periode;
 };
