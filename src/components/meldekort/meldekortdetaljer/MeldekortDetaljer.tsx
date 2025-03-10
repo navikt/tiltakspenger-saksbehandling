@@ -11,6 +11,8 @@ import { useSak } from '../../../context/sak/SakContext';
 import { useFeatureToggles } from '../../../context/feature-toggles/FeatureTogglesContext';
 
 import styles from './MeldekortDetaljer.module.css';
+import { ArrayOrSingle } from '../../../types/UtilTypes';
+import { forceArray } from '../../../utils/array';
 
 export const MeldekortDetaljer = () => {
     const { sak } = useSak();
@@ -65,11 +67,15 @@ const MeldekortBehandlingDetaljer = ({ saksbehandler, beslutter }: MeldekortBeha
     );
 };
 
-const MeldekortDetalj = ({ header, tekst }: { header: string; tekst: string }) => {
+const MeldekortDetalj = ({ header, tekst }: { header: string; tekst: ArrayOrSingle<string> }) => {
     return (
         <div className={styles.detalj}>
             <BodyShort weight={'semibold'}>{header}</BodyShort>
-            <BodyShort>{tekst}</BodyShort>
+            {forceArray(tekst).map((tekstverdi, index) => (
+                <BodyShort className={styles.detaljtekst} key={`${tekstverdi}-${index}`}>
+                    {tekstverdi}
+                </BodyShort>
+            ))}
         </div>
     );
 };
