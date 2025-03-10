@@ -6,8 +6,7 @@ import {
 import { meldekortdagHeading, ukeHeading } from '../../../../../utils/date';
 import { ikonForMeldekortBehandlingDagStatus } from '../../Meldekortikoner';
 import { meldekortBehandlingDagStatusTekst } from '../../../../../utils/tekstformateringUtils';
-import { Controller, useFormContext } from 'react-hook-form';
-import { FieldPath } from 'react-hook-form/dist/types/path';
+import { Controller, FieldPath, useFormContext } from 'react-hook-form';
 import { MeldekortBehandlingForm } from './meldekortBehandlingUtils';
 
 import styles from '../../Meldekort.module.css';

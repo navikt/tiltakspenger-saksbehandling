@@ -1,5 +1,5 @@
-module.exports = {
-  tabWidth: 4,
-  singleQuote: true,
-  printWidth: 100,
+export default {
+    tabWidth: 4,
+    singleQuote: true,
+    printWidth: 100,
 };
