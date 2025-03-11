@@ -6,6 +6,7 @@ import {
 } from '../types/BehandlingTypes';
 import { Periode } from '../types/Periode';
 import { singleOrFirst } from './array';
+import { Tiltaksdeltagelse } from '../types/TiltakDeltagelseTypes';
 
 export const hentTiltaksperiode = (behandling: FørstegangsbehandlingData): Periode => {
     const tiltakFraSaksopplysning = singleOrFirst(behandling.saksopplysninger.tiltaksdeltagelse);
@@ -29,3 +30,10 @@ export const erBehandlingFørstegangsbehandling = (
     behandling: BehandlingData,
 ): behandling is FørstegangsbehandlingData =>
     behandling.type === Behandlingstype.FØRSTEGANGSBEHANDLING;
+
+export const deltarPaFlereTiltak = (behandling: FørstegangsbehandlingData) =>
+    behandling.saksopplysninger.tiltaksdeltagelse.length > 1;
+
+export const hentTiltaksdeltakelser = (
+    behandling: FørstegangsbehandlingData,
+): Tiltaksdeltagelse[] => behandling.saksopplysninger.tiltaksdeltagelse;

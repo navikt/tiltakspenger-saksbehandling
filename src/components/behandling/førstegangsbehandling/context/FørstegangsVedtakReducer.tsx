@@ -4,6 +4,7 @@ import {
     VedtakBarnetilleggPeriode,
     VedtakInnvilgetResultat,
     VedtakResultat,
+    VedtakTiltaksdeltakelsePeriode,
 } from '../../../../types/VedtakTyper';
 import { Periode } from '../../../../types/Periode';
 import { leggTilDager } from '../../../../utils/date';
@@ -36,6 +37,22 @@ export type FørstegangsVedtakSkjemaActions =
     | {
           type: 'oppdaterInnvilgetPeriode';
           payload: { periode: Partial<Periode> };
+      }
+    | {
+          type: 'addTiltakPeriode';
+          payload: { periode: Periode };
+      }
+    | {
+          type: 'fjernTiltakPeriode';
+          payload: { fjernIndex: number };
+      }
+    | {
+          type: 'oppdaterTiltakId';
+          payload: { eksternDeltagelseId: string; index: number };
+      }
+    | {
+          type: 'oppdaterTiltakPeriode';
+          payload: { periode: Partial<Periode>; index: number };
       };
 
 export type FørstegangsVedtakSkjemaState = {
@@ -43,6 +60,7 @@ export type FørstegangsVedtakSkjemaState = {
     innvilgelsesPeriode: Periode;
     harBarnetillegg: boolean;
     barnetilleggPerioder: VedtakBarnetilleggPeriode[];
+    valgteTiltaksdeltakelser: VedtakTiltaksdeltakelsePeriode[];
 };
 
 export const førstegangsVedtakReducer: Reducer<
@@ -101,6 +119,56 @@ export const førstegangsVedtakReducer: Reducer<
             return {
                 ...state,
                 barnetilleggPerioder: state.barnetilleggPerioder?.map((periode, index) =>
+                    index === payload.index
+                        ? {
+                              ...periode,
+                              periode: { ...periode.periode, ...payload.periode },
+                          }
+                        : periode,
+                ),
+            };
+        case 'addTiltakPeriode':
+            const forrigeTiltakPeriode = state.valgteTiltaksdeltakelser?.slice(-1)[0];
+
+            const nesteTiltakPeriode: Periode = forrigeTiltakPeriode
+                ? {
+                      fraOgMed: leggTilDager(forrigeTiltakPeriode.periode.tilOgMed, 1),
+                      tilOgMed: leggTilDager(forrigeTiltakPeriode.periode.tilOgMed, 30),
+                  }
+                : payload.periode;
+
+            const nyTiltakPeriode: VedtakTiltaksdeltakelsePeriode = {
+                eksternDeltagelseId: forrigeTiltakPeriode.eksternDeltagelseId,
+                periode: nesteTiltakPeriode,
+            };
+
+            return {
+                ...state,
+                valgteTiltaksdeltakelser: [
+                    ...(state.valgteTiltaksdeltakelser || []),
+                    nyTiltakPeriode,
+                ],
+            };
+        case 'fjernTiltakPeriode':
+            return {
+                ...state,
+                valgteTiltaksdeltakelser: state.valgteTiltaksdeltakelser?.filter(
+                    (_, index) => index !== payload.fjernIndex,
+                ),
+            };
+        case 'oppdaterTiltakId':
+            return {
+                ...state,
+                valgteTiltaksdeltakelser: state.valgteTiltaksdeltakelser?.map((periode, index) =>
+                    index === payload.index
+                        ? { ...periode, eksternDeltagelseId: payload.eksternDeltagelseId }
+                        : periode,
+                ),
+            };
+        case 'oppdaterTiltakPeriode':
+            return {
+                ...state,
+                valgteTiltaksdeltakelser: state.valgteTiltaksdeltakelser?.map((periode, index) =>
                     index === payload.index
                         ? {
                               ...periode,

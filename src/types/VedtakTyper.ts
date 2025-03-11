@@ -19,10 +19,18 @@ export type VedtakTilBeslutningDTO = {
         begrunnelse?: string;
         perioder?: VedtakBarnetilleggPeriode[];
     } | null;
+    valgteTiltaksdeltakelser: {
+        valgteTiltaksdeltakelser: VedtakTiltaksdeltakelsePeriode[];
+    };
 };
 
 export type VedtakBarnetilleggPeriode = {
     antallBarn: number;
+    periode: Periode;
+};
+
+export type VedtakTiltaksdeltakelsePeriode = {
+    eksternDeltagelseId: string;
     periode: Periode;
 };
 

@@ -27,7 +27,7 @@ export const VedtaksbrevForhåndsvisning = () => {
                     return hentForhåndsvisning({
                         fritekst: vedtak.brevtekstRef.current?.value ?? '',
                         virkningsperiode: vedtak.innvilgelsesPeriode,
-                        barnetillegg: vedtak.barnetilleggPerioder,
+                        barnetillegg: vedtak.tiltakPerioder,
                     }).then((blob) => {
                         if (blob) {
                             window.open(URL.createObjectURL(blob));

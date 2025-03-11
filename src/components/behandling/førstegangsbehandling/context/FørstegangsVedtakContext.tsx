@@ -16,6 +16,7 @@ import {
     FørstegangsVedtakSkjemaState,
 } from './FørstegangsVedtakReducer';
 import { harSøktBarnetillegg, hentTiltaksperiode } from '../../../../utils/behandling';
+import { singleOrFirst } from '../../../../utils/array';
 
 type TextAreaInputs = {
     begrunnelseRef: RefObject<HTMLTextAreaElement>;
@@ -43,6 +44,13 @@ const initieltVedtakSkjema = (
         harBarnetillegg: harSøktBarnetillegg(behandling),
         barnetilleggPerioder: behandling.barnetillegg?.perioder || [
             { periode: tiltaksperiode, antallBarn: behandling.søknad.barnetillegg.length },
+        ],
+        valgteTiltaksdeltakelser: behandling.valgteTiltaksdeltakelser?.valgteTiltaksdeltakelser || [
+            {
+                eksternDeltagelseId: singleOrFirst(behandling.saksopplysninger.tiltaksdeltagelse)
+                    .eksternDeltagelseId,
+                periode: behandling.virkningsperiode ?? tiltaksperiode,
+            },
         ],
     };
 };
