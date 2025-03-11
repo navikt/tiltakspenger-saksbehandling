@@ -14,7 +14,7 @@ export const BarnetilleggBegrunnelse = () => {
     const { behandling, rolleForBehandling } = useFørstegangsbehandling();
     const { barnetillegg, sakId, id } = behandling;
 
-    const { barnetilleggBegrunnelseRef, tiltakPerioder } = useFørstegangsVedtakSkjema();
+    const { barnetilleggBegrunnelseRef, barnetilleggPerioder } = useFørstegangsVedtakSkjema();
 
     return (
         <>
@@ -37,7 +37,7 @@ export const BarnetilleggBegrunnelse = () => {
                     lagringBody={(tekst) =>
                         ({
                             begrunnelse: tekst,
-                            barnetilleggForPeriode: tiltakPerioder ?? [],
+                            barnetilleggForPeriode: barnetilleggPerioder ?? [],
                         }) satisfies VedtakBarnetilleggBegrunnelseLagringDTO
                     }
                     ref={barnetilleggBegrunnelseRef}
