@@ -81,6 +81,7 @@ export const førstegangsVedtakValidering = (
                     'Tiltaksdeltakelse-perioden kan ikke slutte etter innvilgelsesperioden',
                 );
             }
+            // TODO: Her kan vi vurdere å legge til validering av at valgt periode ikke er utenfor deltakelsesperioden for tiltaket
         }
     }
 

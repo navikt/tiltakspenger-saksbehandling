@@ -9,12 +9,13 @@ import { singleOrFirst } from './array';
 import { Tiltaksdeltagelse } from '../types/TiltakDeltagelseTypes';
 
 export const hentTiltaksperiode = (behandling: FørstegangsbehandlingData): Periode => {
-    const tiltakFraSaksopplysning = singleOrFirst(behandling.saksopplysninger.tiltaksdeltagelse);
+    const forsteStartdatoForDeltakelse = finnForsteStartdatoForTiltaksdeltakelse(behandling);
+    const sisteSluttdatoForDeltakelse = finnSisteSluttdatoForTiltaksdeltakelse(behandling);
     const tiltakFraSøknad = singleOrFirst(behandling.søknad.tiltak);
 
     return {
-        fraOgMed: tiltakFraSaksopplysning.deltagelseFraOgMed ?? tiltakFraSøknad.fraOgMed,
-        tilOgMed: tiltakFraSaksopplysning.deltagelseTilOgMed ?? tiltakFraSøknad.tilOgMed,
+        fraOgMed: forsteStartdatoForDeltakelse ?? tiltakFraSøknad.fraOgMed,
+        tilOgMed: sisteSluttdatoForDeltakelse ?? tiltakFraSøknad.tilOgMed,
     };
 };
 
@@ -37,3 +38,21 @@ export const deltarPaFlereTiltak = (behandling: FørstegangsbehandlingData) =>
 export const hentTiltaksdeltakelser = (
     behandling: FørstegangsbehandlingData,
 ): Tiltaksdeltagelse[] => behandling.saksopplysninger.tiltaksdeltagelse;
+
+export const finnForsteStartdatoForTiltaksdeltakelse = (
+    behandling: FørstegangsbehandlingData,
+): string | null => {
+    const sorterteDeltakelser = hentTiltaksdeltakelser(behandling)
+        .filter((t) => t.deltagelseFraOgMed != null)
+        .sort((a, b) => (b.deltagelseFraOgMed! > a.deltagelseFraOgMed! ? -1 : 1));
+    return sorterteDeltakelser[0]?.deltagelseFraOgMed;
+};
+
+export const finnSisteSluttdatoForTiltaksdeltakelse = (
+    behandling: FørstegangsbehandlingData,
+): string | null => {
+    const sorterteDeltakelser = hentTiltaksdeltakelser(behandling)
+        .filter((t) => t.deltagelseTilOgMed != null)
+        .sort((a, b) => (a.deltagelseTilOgMed! > b.deltagelseTilOgMed! ? -1 : 1));
+    return sorterteDeltakelser[0]?.deltagelseTilOgMed;
+};

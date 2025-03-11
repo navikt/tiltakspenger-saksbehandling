@@ -32,7 +32,7 @@ export const TiltakPerioder = () => {
                             tiltaksdeltakelser={tiltaksdeltakelser}
                             index={index}
                             rolle={rolleForBehandling}
-                            key={`${periode.periode.fraOgMed}-${index}`}
+                            key={`${periode.periode.fraOgMed}-${periode.eksternDeltagelseId}-${index}`}
                         />
                     );
                 })}
@@ -84,7 +84,10 @@ const TiltakPeriode = ({ periode, tiltaksdeltakelser, index, rolle }: PeriodePro
                 }}
             >
                 {tiltaksdeltakelser.map((tiltak, index) => (
-                    <option value={tiltak.eksternDeltagelseId} key={index}>
+                    <option
+                        value={tiltak.eksternDeltagelseId}
+                        key={`${tiltak.deltagelseFraOgMed}-${tiltak.eksternDeltagelseId}-${index}`}
+                    >
                         {tiltak.typeNavn}
                     </option>
                 ))}
