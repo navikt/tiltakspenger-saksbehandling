@@ -32,8 +32,6 @@ const tilBeslutningDTO = (vedtak: FørstegangsVedtakContext): VedtakTilBeslutnin
                   perioder: vedtak.barnetilleggPerioder ?? [],
               }
             : null,
-        valgteTiltaksdeltakelser: {
-            valgteTiltaksdeltakelser: vedtak.valgteTiltaksdeltakelser,
-        },
+        valgteTiltaksdeltakelser: vedtak.valgteTiltaksdeltakelser,
     };
 };

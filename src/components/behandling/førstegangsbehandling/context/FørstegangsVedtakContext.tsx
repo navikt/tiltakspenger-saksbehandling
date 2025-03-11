@@ -45,7 +45,7 @@ const initieltVedtakSkjema = (
         barnetilleggPerioder: behandling.barnetillegg?.perioder || [
             { periode: tiltaksperiode, antallBarn: behandling.søknad.barnetillegg.length },
         ],
-        valgteTiltaksdeltakelser: behandling.valgteTiltaksdeltakelser?.valgteTiltaksdeltakelser || [
+        valgteTiltaksdeltakelser: behandling.valgteTiltaksdeltakelser || [
             {
                 eksternDeltagelseId: singleOrFirst(behandling.saksopplysninger.tiltaksdeltagelse)
                     .eksternDeltagelseId,
