@@ -1,7 +1,7 @@
 import { Periode } from '../types/Periode';
 import dayjs from 'dayjs';
 
-export const validerPeriodisering = (perioder: Periode[]) => {
+export const validerPeriodisering = (perioder: Periode[], tillatHull: boolean) => {
     return perioder.every((periode, index) => {
         if (index === 0) {
             return true;
@@ -9,7 +9,9 @@ export const validerPeriodisering = (perioder: Periode[]) => {
 
         const forrigePeriode = perioder[index - 1];
 
-        return dayjs(periode.fraOgMed).subtract(1, 'day').isSame(forrigePeriode.tilOgMed);
+        return tillatHull
+            ? dayjs(periode.fraOgMed).isAfter(forrigePeriode.tilOgMed)
+            : dayjs(periode.fraOgMed).subtract(1, 'day').isSame(forrigePeriode.tilOgMed);
     });
 };
 

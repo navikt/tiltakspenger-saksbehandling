@@ -35,8 +35,8 @@ export const førstegangsVedtakValidering = (
             const perioderErUtenBarn = barnetilleggPerioder.every((bt) => bt.antallBarn === 0);
             const helePerioden = joinPerioder(perioder);
 
-            if (!validerPeriodisering(perioder)) {
-                errors.push('Periodene for barnetillegg må være sammenhengende og uten overlapp');
+            if (!validerPeriodisering(perioder, true)) {
+                errors.push('Periodene for barnetillegg kan ikke ha overlapp');
             }
             if (perioderErUtenBarn) {
                 errors.push('Minst en periode må ha barn når barnetillegg er valgt');
@@ -68,7 +68,7 @@ export const førstegangsVedtakValidering = (
         } else {
             const helePerioden = joinPerioder(perioder);
 
-            if (!validerPeriodisering(perioder)) {
+            if (!validerPeriodisering(perioder, false)) {
                 errors.push(
                     'Periodene for tiltaksdeltakelse må være sammenhengende og uten overlapp',
                 );
