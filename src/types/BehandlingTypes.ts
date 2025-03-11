@@ -28,6 +28,7 @@ export type FørstegangsbehandlingData = BehandlingDataCommon & {
     søknad: SøknadForBehandlingProps;
     fritekstTilVedtaksbrev: string | null;
     barnetillegg: Barnetillegg | null;
+    valgteTiltaksdeltakelser: TiltaksdeltakelsePeriode[] | null;
 };
 
 export type RevurderingData = BehandlingDataCommon & {
@@ -95,5 +96,10 @@ export type Barnetillegg = {
 
 export type BarnetilleggPeriode = {
     antallBarn: number;
+    periode: Periode;
+};
+
+export type TiltaksdeltakelsePeriode = {
+    eksternDeltagelseId: string;
     periode: Periode;
 };

@@ -1,0 +1,20 @@
+.wrapper {
+    margin-top: 1rem;
+}
+
+.periode {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-end;
+    margin-bottom: 1rem;
+}
+
+.tiltakstype {
+    width: 350px;
+}
+
+.fjern {
+}
+
+.ny {
+}
