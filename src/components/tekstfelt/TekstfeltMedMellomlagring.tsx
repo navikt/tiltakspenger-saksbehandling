@@ -49,7 +49,7 @@ export const TekstfeltMedMellomlagring = forwardRef<HTMLTextAreaElement, Props>(
                 <Textarea
                     label={label}
                     hideLabel={true}
-                    minRows={10}
+                    minRows={5}
                     resize={'vertical'}
                     onChange={(event) => {
                         setVenterPåLagring(true);
