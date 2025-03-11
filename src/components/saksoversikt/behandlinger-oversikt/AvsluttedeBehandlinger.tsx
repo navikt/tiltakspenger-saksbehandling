@@ -1,4 +1,4 @@
-import { Box, Button, Heading, Link, Table } from '@navikt/ds-react';
+import { Box, Button, Heading, Table } from '@navikt/ds-react';
 
 import { finnBehandlingstypeTekst } from '../../../utils/tekstformateringUtils';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '../../../utils/date';
@@ -17,6 +17,7 @@ import {
     erBehandlingVedtatt,
 } from '../../../utils/behandling';
 import { erSøknadAvbrutt } from '../../../utils/SøknadUtils';
+import Link from 'next/link';
 
 export const AvsluttedeBehandlinger = (props: {
     søknader: SøknadForBehandlingProps[];

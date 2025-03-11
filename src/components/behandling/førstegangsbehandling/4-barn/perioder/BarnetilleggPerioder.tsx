@@ -63,6 +63,7 @@ type PeriodeProps = {
 
 const BarnetilleggPeriode = ({ periode, index, rolle }: PeriodeProps) => {
     const dispatch = useFørstegangsVedtakSkjemaDispatch();
+    const { innvilgelsesPeriode } = useFørstegangsVedtakSkjema();
 
     // Støtter uendelig mange barn!
     const maksAntall = (Math.floor(periode.antallBarn / BATCH_MED_BARN) + 1) * BATCH_MED_BARN;
@@ -90,29 +91,43 @@ const BarnetilleggPeriode = ({ periode, index, rolle }: PeriodeProps) => {
                 ))}
             </Select>
             <Datovelger
-                defaultSelected={periode.periode.fraOgMed}
+                selected={periode.periode.fraOgMed}
+                minDate={innvilgelsesPeriode.fraOgMed}
+                maxDate={innvilgelsesPeriode.tilOgMed}
                 label={'Fra og med'}
                 size={'small'}
                 readOnly={!erSaksbehandler}
                 onDateChange={(value) => {
-                    if (value) {
+                    if (!value) {
+                        return;
+                    }
+
+                    const nyFraOgMed = dateTilISOTekst(value);
+                    if (nyFraOgMed !== periode.periode.fraOgMed) {
                         dispatch({
                             type: 'oppdaterBarnetilleggPeriode',
-                            payload: { periode: { fraOgMed: dateTilISOTekst(value) }, index },
+                            payload: { periode: { fraOgMed: nyFraOgMed }, index },
                         });
                     }
                 }}
             />
             <Datovelger
-                defaultSelected={periode.periode.tilOgMed}
+                selected={periode.periode.tilOgMed}
+                minDate={innvilgelsesPeriode.fraOgMed}
+                maxDate={innvilgelsesPeriode.tilOgMed}
                 label={'Til og med'}
                 size={'small'}
                 readOnly={!erSaksbehandler}
                 onDateChange={(value) => {
-                    if (value) {
+                    if (!value) {
+                        return;
+                    }
+
+                    const nyTilOgMed = dateTilISOTekst(value);
+                    if (nyTilOgMed !== periode.periode.tilOgMed) {
                         dispatch({
                             type: 'oppdaterBarnetilleggPeriode',
-                            payload: { periode: { tilOgMed: dateTilISOTekst(value) }, index },
+                            payload: { periode: { tilOgMed: nyTilOgMed }, index },
                         });
                     }
                 }}

@@ -5,7 +5,8 @@ type DateOrString = Date | string;
 
 type Props = {
     onDateChange: (date: Date | undefined) => void;
-    defaultSelected: DateOrString;
+    defaultSelected?: DateOrString;
+    selected?: DateOrString;
     minDate?: DateOrString;
     maxDate?: DateOrString;
 } & ComponentProps<typeof DatePicker.Input>;
@@ -13,17 +14,24 @@ type Props = {
 export const Datovelger = ({
     onDateChange,
     defaultSelected,
+    selected,
     maxDate,
     minDate,
     ...inputPropsCustom
 }: Props) => {
-    const { datepickerProps, inputProps } = useDatepicker({
+    const { datepickerProps, inputProps, setSelected, selectedDay } = useDatepicker({
         onDateChange,
         fromDate: toDate(minDate),
         defaultMonth: toDate(minDate),
         toDate: toDate(maxDate),
         defaultSelected: toDate(defaultSelected),
     });
+
+    const newSelectedDay = toDate(selected);
+
+    if (newSelectedDay && newSelectedDay.getTime() !== selectedDay?.getTime()) {
+        setSelected(newSelectedDay);
+    }
 
     return (
         <DatePicker {...datepickerProps}>

@@ -108,28 +108,62 @@ export const førstegangsVedtakReducer: Reducer<
         case 'fjernBarnetilleggPeriode':
             return {
                 ...state,
-                barnetilleggPerioder: state.barnetilleggPerioder?.filter(
+                barnetilleggPerioder: state.barnetilleggPerioder.filter(
                     (_, index) => index !== payload.fjernIndex,
                 ),
             };
         case 'oppdaterBarnetilleggAntall':
             return {
                 ...state,
-                barnetilleggPerioder: state.barnetilleggPerioder?.map((periode, index) =>
+                barnetilleggPerioder: state.barnetilleggPerioder.map((periode, index) =>
                     index === payload.index ? { ...periode, antallBarn: payload.antall } : periode,
                 ),
             };
         case 'oppdaterBarnetilleggPeriode':
+            const { index: oppdatertIndex, periode: oppdatertPeriode } = payload;
+
+            const forrigePeriode = state.barnetilleggPerioder[oppdatertIndex].periode;
+
             return {
                 ...state,
-                barnetilleggPerioder: state.barnetilleggPerioder?.map((periode, index) =>
-                    index === payload.index
-                        ? {
-                              ...periode,
-                              periode: { ...periode.periode, ...payload.periode },
-                          }
-                        : periode,
-                ),
+                barnetilleggPerioder: state.barnetilleggPerioder.map((barnetillegg, index) => {
+                    if (
+                        index === oppdatertIndex - 1 &&
+                        oppdatertPeriode.fraOgMed &&
+                        oppdatertPeriode.fraOgMed < forrigePeriode.fraOgMed
+                    ) {
+                        return {
+                            ...barnetillegg,
+                            periode: {
+                                ...barnetillegg.periode,
+                                tilOgMed: leggTilDager(oppdatertPeriode.fraOgMed, -1),
+                            },
+                        };
+                    }
+
+                    if (index === oppdatertIndex) {
+                        return {
+                            ...barnetillegg,
+                            periode: { ...barnetillegg.periode, ...oppdatertPeriode },
+                        };
+                    }
+
+                    if (
+                        index === oppdatertIndex + 1 &&
+                        oppdatertPeriode.tilOgMed &&
+                        oppdatertPeriode.tilOgMed > forrigePeriode.tilOgMed
+                    ) {
+                        return {
+                            ...barnetillegg,
+                            periode: {
+                                ...barnetillegg.periode,
+                                fraOgMed: leggTilDager(oppdatertPeriode.tilOgMed, 1),
+                            },
+                        };
+                    }
+
+                    return barnetillegg;
+                }),
             };
         case 'addTiltakPeriode':
             const forrigeTiltakPeriode = state.valgteTiltaksdeltakelser?.slice(-1)[0];
