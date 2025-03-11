@@ -2,7 +2,6 @@ import { Radio, RadioGroup } from '@navikt/ds-react';
 import { Datovelger } from '../../../datovelger/Datovelger';
 import { classNames } from '../../../../utils/classNames';
 import { VedtakResultat } from '../../../../types/VedtakTyper';
-import { hentTiltaksperiode } from '../../../../utils/behandling';
 import { dateTilISOTekst } from '../../../../utils/date';
 import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
 import {
@@ -15,12 +14,10 @@ import { useFørstegangsbehandling } from '../../BehandlingContext';
 import style from './FørstegangsVedtakResultat.module.css';
 
 export const FørstegangsVedtakResultat = () => {
-    const { behandling, rolleForBehandling } = useFørstegangsbehandling();
+    const { rolleForBehandling } = useFørstegangsbehandling();
     const { resultat, innvilgelsesPeriode } = useFørstegangsVedtakSkjema();
 
     const dispatch = useFørstegangsVedtakSkjemaDispatch();
-
-    const initiellTiltaksperiode = hentTiltaksperiode(behandling);
 
     const erIkkeSaksbehandler = rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER;
 
@@ -54,7 +51,7 @@ export const FørstegangsVedtakResultat = () => {
                     <Datovelger
                         label={'Innvilges f.o.m'}
                         size={'small'}
-                        defaultSelected={initiellTiltaksperiode.fraOgMed}
+                        defaultSelected={innvilgelsesPeriode.fraOgMed}
                         readOnly={erIkkeSaksbehandler}
                         onDateChange={(valgtDato) => {
                             if (valgtDato) {
@@ -72,7 +69,7 @@ export const FørstegangsVedtakResultat = () => {
                     <Datovelger
                         label={'Innvilges t.o.m'}
                         size={'small'}
-                        defaultSelected={initiellTiltaksperiode.tilOgMed}
+                        defaultSelected={innvilgelsesPeriode.tilOgMed}
                         readOnly={erIkkeSaksbehandler}
                         onDateChange={(valgtDato) => {
                             if (valgtDato) {
