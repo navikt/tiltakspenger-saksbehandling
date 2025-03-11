@@ -28,6 +28,7 @@ export const BehandlingSøknadOpplysninger = ({ førstegangsbehandling }: Props)
         sykepenger,
         barnetillegg,
         antallVedlegg,
+        visVedlegg,
     } = søknad;
 
     const tiltak = singleOrFirst(tiltakRaw);
@@ -66,12 +67,19 @@ export const BehandlingSøknadOpplysninger = ({ førstegangsbehandling }: Props)
             <SøknadOpplysningerPengestøtter pengestøtter={søknad} className={style.spacing} />
             <SøknadOpplysningerBarn barn={barnetillegg} className={style.spacing} />
 
-            <BehandlingSaksopplysning navn={'Vedlegg'} verdi={antallVedlegg > 0 ? 'Ja' : 'Nei'} />
-            {antallVedlegg > 0 && (
-                <Alert variant={'warning'} inline={true} size={'small'}>
-                    {'Sjekk vedlegg i '}
-                    <Link href={'#gosys.com'}>{'gosys'}</Link>
-                </Alert>
+            {visVedlegg && (
+                <>
+                    <BehandlingSaksopplysning
+                        navn={'Vedlegg'}
+                        verdi={antallVedlegg > 0 ? 'Ja' : 'Nei'}
+                    />
+                    {antallVedlegg > 0 && (
+                        <Alert variant={'warning'} inline={true} size={'small'}>
+                            {'Sjekk vedlegg i '}
+                            <Link href={'#gosys.com'}>{'gosys'}</Link>
+                        </Alert>
+                    )}
+                </>
             )}
         </>
     );
