@@ -50,6 +50,9 @@ export const StartSøknadBehandling = ({ søknad, medAvsluttBehandling }: Props)
                         saksnummer={søknad.saksnummer}
                         søknadsId={søknad.id}
                         minWidth
+                        button={{
+                            text: 'Avslutt søknad',
+                        }}
                     />
                 )}
             </VStack>

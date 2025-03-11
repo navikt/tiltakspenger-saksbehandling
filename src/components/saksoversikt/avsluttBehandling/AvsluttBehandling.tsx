@@ -17,6 +17,7 @@ const AvsluttBehandling = (props: {
     button?: {
         size?: 'small' | 'medium';
         alignment?: 'start' | 'end';
+        text?: string;
     };
     minWidth?: boolean;
     onSuccess?: () => void;
@@ -46,7 +47,7 @@ const AvsluttBehandling = (props: {
                 size={props.button?.size ?? 'small'}
                 onClick={() => setVilAvslutteBehandling(true)}
             >
-                Avslutt behandling
+                {props.button?.text ?? 'Avslutt behandling'}
             </Button>
         </VStack>
     );

@@ -5,9 +5,18 @@ import router from 'next/router';
 import React from 'react';
 import { useFørstegangsbehandling } from '../../BehandlingContext';
 import styles from './FørstegangsvedtakAvbrytBehandling.module.css';
+import { BehandlingStatus } from '../../../../types/BehandlingTypes';
 
 const FørstegangsvedtakAvbrytBehandling = () => {
     const { behandling } = useFørstegangsbehandling();
+
+    if (
+        behandling.status === BehandlingStatus.UNDER_BESLUTNING ||
+        behandling.status === BehandlingStatus.KLAR_TIL_BESLUTNING ||
+        behandling.status === BehandlingStatus.VEDTATT
+    ) {
+        return null;
+    }
 
     return (
         <VedtakSeksjon.Høyre className={styles.vedtakContainer}>

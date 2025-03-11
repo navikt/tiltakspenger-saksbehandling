@@ -4,6 +4,7 @@ import { Periode } from '../../../types/Periode';
 import { SøknadForBehandlingProps } from '../../../types/SøknadTypes';
 
 export interface AvsluttetBehandlingDataCellInfo {
+    id: string;
     behandlingstype: Behandlingstype;
     tidspunktAvsluttet: string;
     behandlingsperiode: Nullable<Periode>;
@@ -18,6 +19,7 @@ export const avsluttetBehandlingToDataCellInfo = (
         : behandling.iverksattTidspunkt!;
 
     return {
+        id: behandling.id,
         behandlingsperiode: behandling.virkningsperiode,
         behandlingstype: behandling.type,
         tidspunktAvsluttet: tidspunktAvsluttet,
@@ -32,6 +34,7 @@ export const avbruttSøknadToDataCellInfo = (
         throw new Error('Kan ikke hente ut informasjon fra en behandling som ikke er avbrutt');
     }
     return {
+        id: søknad.id,
         behandlingsperiode: {
             fraOgMed: Array.isArray(søknad.tiltak)
                 ? søknad.tiltak[0].fraOgMed
