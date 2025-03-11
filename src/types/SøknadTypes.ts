@@ -21,6 +21,7 @@ export type SøknadForBehandlingProps = {
     institusjon?: Periode;
     sykepenger?: Periode;
     avbrutt: Nullable<Avbrutt>;
+    visVedlegg: boolean;
 } & SøknadPengestøtter;
 
 export type SøknadPengestøtter = {
