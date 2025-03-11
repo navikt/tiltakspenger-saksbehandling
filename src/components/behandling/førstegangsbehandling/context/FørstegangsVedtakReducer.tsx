@@ -80,17 +80,21 @@ export const førstegangsVedtakReducer: Reducer<
         case 'setHarSøktBarnetillegg':
             return { ...state, harBarnetillegg: payload.harSøkt };
         case 'addBarnetilleggPeriode':
-            const forrigePeriode = state.barnetilleggPerioder?.slice(-1)[0];
+            const { tiltaksperiode } = payload;
+            const forrigeBarnetillegg = state.barnetilleggPerioder?.slice(-1)[0];
 
-            const nestePeriode: Periode = forrigePeriode
+            const nestePeriode: Periode = forrigeBarnetillegg
                 ? {
-                      fraOgMed: leggTilDager(forrigePeriode.periode.tilOgMed, 1),
-                      tilOgMed: leggTilDager(forrigePeriode.periode.tilOgMed, 30),
+                      fraOgMed:
+                          tiltaksperiode.tilOgMed > forrigeBarnetillegg.periode.tilOgMed
+                              ? leggTilDager(forrigeBarnetillegg.periode.tilOgMed, 1)
+                              : tiltaksperiode.tilOgMed,
+                      tilOgMed: tiltaksperiode.tilOgMed,
                   }
-                : payload.tiltaksperiode;
+                : tiltaksperiode;
 
             const nyBarnetilleggperiode: VedtakBarnetilleggPeriode = {
-                antallBarn: forrigePeriode?.antallBarn ?? 0,
+                antallBarn: forrigeBarnetillegg?.antallBarn ?? 0,
                 periode: nestePeriode,
             };
 
