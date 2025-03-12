@@ -6,12 +6,12 @@ import { Separator } from '../../separator/Separator';
 import { FørstegangsVedtakSend } from './6-send-og-godkjenn/FørstegangsVedtakSend';
 import { FørstegangsVedtakBarnetillegg } from './4-barn/FørstegangsVedtakBarnetillegg';
 import { FørstegangsVedtakProvider } from './context/FørstegangsVedtakContext';
-
-import style from './FørstegangsVedtak.module.css';
 import FørstegangsvedtakAvbrytBehandling from './7-avbryt-behandling/FørstegangsvedtakAvbrytBehandling';
 import { FørstegangsVedtakTiltak } from './3-tiltak/FørstegangsVedtakTiltak';
 import { useFørstegangsbehandling } from '../BehandlingContext';
 import { deltarPaFlereTiltak } from '../../../utils/behandling';
+
+import style from './FørstegangsVedtak.module.css';
 
 export const FørstegangsVedtak = () => {
     const { behandling } = useFørstegangsbehandling();
@@ -31,7 +31,6 @@ export const FørstegangsVedtak = () => {
                 </>
             )}
             <FørstegangsVedtakBarnetillegg />
-            <Separator />
             <FørstegangsVedtakBrev />
             <FørstegangsVedtakSend />
             <FørstegangsvedtakAvbrytBehandling />

@@ -7,12 +7,6 @@
     }
 }
 
-.input {
-    &.skjult {
-        display: none;
-    }
-
-    .knapp {
-        margin-top: 1.5rem;
-    }
+.skjult {
+    display: none;
 }

@@ -10,6 +10,7 @@ import { classNames } from '../../../../utils/classNames';
 import { BarnetilleggBegrunnelse } from './begrunnelse/BarnetilleggBegrunnelse';
 import { harSøktBarnetillegg } from '../../../../utils/behandling';
 import { useFørstegangsbehandling } from '../../BehandlingContext';
+import { Separator } from '../../../separator/Separator';
 
 import style from './FørstegangsVedtakBarnetillegg.module.css';
 
@@ -17,10 +18,10 @@ export const FørstegangsVedtakBarnetillegg = () => {
     const { behandling, rolleForBehandling } = useFørstegangsbehandling();
     const dispatch = useFørstegangsVedtakSkjemaDispatch();
 
-    const { harBarnetillegg } = useFørstegangsVedtakSkjema();
+    const { harBarnetillegg, resultat } = useFørstegangsVedtakSkjema();
 
     return (
-        <>
+        <div className={classNames(resultat !== 'innvilget' && style.skjult)}>
             <VedtakSeksjon>
                 <VedtakSeksjon.Venstre>
                     <Heading level={'3'} size={'xsmall'} className={style.header}>
@@ -52,6 +53,7 @@ export const FørstegangsVedtakBarnetillegg = () => {
                 <BarnetilleggPerioder />
                 <BarnetilleggBegrunnelse />
             </VedtakSeksjon>
-        </>
+            <Separator />
+        </div>
     );
 };
