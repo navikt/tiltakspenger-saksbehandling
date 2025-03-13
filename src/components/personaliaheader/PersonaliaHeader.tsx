@@ -1,5 +1,14 @@
 import React, { PropsWithChildren } from 'react';
-import { BodyShort, CopyButton, HStack, Link, Skeleton, Spacer, Tag } from '@navikt/ds-react';
+import {
+    BodyShort,
+    Button,
+    CopyButton,
+    HStack,
+    Link,
+    Skeleton,
+    Spacer,
+    Tag,
+} from '@navikt/ds-react';
 import { PersonCircleIcon } from '@navikt/aksel-icons';
 import { Personopplysninger, useHentPersonopplysninger } from './useHentPersonopplysninger';
 import { SakId } from '../../types/SakTypes';
@@ -10,9 +19,15 @@ import styles from './PersonaliaHeader.module.css';
 type PersonaliaHeaderProps = PropsWithChildren<{
     sakId: SakId;
     saksnummer: string;
+    visTilbakeKnapp?: boolean;
 }>;
 
-export const PersonaliaHeader = ({ sakId, saksnummer, children }: PersonaliaHeaderProps) => {
+export const PersonaliaHeader = ({
+    sakId,
+    saksnummer,
+    visTilbakeKnapp,
+    children,
+}: PersonaliaHeaderProps) => {
     const { personopplysninger, isPersonopplysningerLoading } = useHentPersonopplysninger(sakId);
 
     return (
@@ -29,6 +44,11 @@ export const PersonaliaHeader = ({ sakId, saksnummer, children }: PersonaliaHead
             <Spacer />
             <b>Saksnr:</b> {saksnummer}
             <CopyButton copyText={saksnummer} variant="action" size="small" />
+            {visTilbakeKnapp && (
+                <Button as={NextLink} href={`/sak/${saksnummer}`} type="submit" size="small">
+                    Tilbake til saksoversikt
+                </Button>
+            )}
             {children}
         </HStack>
     );

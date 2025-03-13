@@ -1,6 +1,5 @@
-import { Button, HStack, Tag, VStack } from '@navikt/ds-react';
+import { HStack, Tag, VStack } from '@navikt/ds-react';
 import { PersonaliaHeader } from '../personaliaheader/PersonaliaHeader';
-import Link from 'next/link';
 import { finnMeldeperiodeStatusTekst } from '../../utils/tekstformateringUtils';
 import { MeldekortDetaljer } from './meldekortdetaljer/MeldekortDetaljer';
 import { Meldekortside } from './meldekortside/Meldekortside';
@@ -17,10 +16,7 @@ export const MeldeperiodeSide = () => {
 
     return (
         <VStack>
-            <PersonaliaHeader sakId={sakId} saksnummer={saksnummer}>
-                <Button as={Link} href={`/sak/${saksnummer}`} type="submit" size="small">
-                    Tilbake til saksoversikt
-                </Button>
+            <PersonaliaHeader sakId={sakId} saksnummer={saksnummer} visTilbakeKnapp={true}>
                 {valgtMeldeperiode && (
                     <Tag variant="alt3-filled" className={style.behandlingTag}>
                         {finnMeldeperiodeStatusTekst[valgtMeldeperiode.status]}

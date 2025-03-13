@@ -16,7 +16,7 @@ export const BehandlingPage = () => {
 
     return (
         <>
-            <PersonaliaHeader sakId={sakId} saksnummer={saksnummer}>
+            <PersonaliaHeader sakId={sakId} saksnummer={saksnummer} visTilbakeKnapp={true}>
                 <Tag variant={'alt3-filled'}>{finnBehandlingStatusTekst(status, false)}</Tag>
             </PersonaliaHeader>
             <div className={style.main}>
