@@ -39,6 +39,13 @@ export const hentTiltaksdeltakelser = (
     behandling: FørstegangsbehandlingData,
 ): Tiltaksdeltagelse[] => behandling.saksopplysninger.tiltaksdeltagelse;
 
+export const hentTiltaksdeltakelserMedStartOgSluttdato = (
+    behandling: FørstegangsbehandlingData,
+): Tiltaksdeltagelse[] =>
+    hentTiltaksdeltakelser(behandling).filter(
+        (t) => t.deltagelseFraOgMed != null && t.deltagelseTilOgMed != null,
+    );
+
 export const finnForsteStartdatoForTiltaksdeltakelse = (
     behandling: FørstegangsbehandlingData,
 ): string | null => {
