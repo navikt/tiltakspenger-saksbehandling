@@ -56,11 +56,11 @@ export const førstegangsVedtakValidering = (
     }
 
     if (tiltaksperiode.fraOgMed > innvilgelsesPeriode.fraOgMed) {
-        warnings.push('Innvilgelsesperioden starter før tiltaksperioden');
+        errors.push('Innvilgelsesperioden starter før tiltaksperioden');
     }
 
     if (tiltaksperiode.tilOgMed < innvilgelsesPeriode.tilOgMed) {
-        warnings.push('Innvilgelsesperioden slutter etter tiltaksperioden');
+        errors.push('Innvilgelsesperioden slutter etter tiltaksperioden');
     }
 
     if (flereTiltak) {
