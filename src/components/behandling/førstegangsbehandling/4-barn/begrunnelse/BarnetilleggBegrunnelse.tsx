@@ -5,7 +5,7 @@ import { VedtakHjelpetekst } from '../../../vedtak-layout/hjelpetekst/VedtakHjel
 import { TekstListe } from '../../../../liste/TekstListe';
 import { BodyLong, Heading } from '@navikt/ds-react';
 import { TekstfeltMedMellomlagring } from '../../../../tekstfelt/TekstfeltMedMellomlagring';
-import { VedtakBarnetilleggBegrunnelseLagringDTO } from '../../../../../types/VedtakTyper';
+import { VedtakBarnetilleggDTO } from '../../../../../types/VedtakTyper';
 import { useFørstegangsbehandling } from '../../../BehandlingContext';
 
 import style from './BarnetilleggBegrunnelse.module.css';
@@ -37,8 +37,8 @@ export const BarnetilleggBegrunnelse = () => {
                     lagringBody={(tekst) =>
                         ({
                             begrunnelse: tekst,
-                            barnetilleggForPeriode: barnetilleggPerioder ?? [],
-                        }) satisfies VedtakBarnetilleggBegrunnelseLagringDTO
+                            perioder: barnetilleggPerioder ?? [],
+                        }) satisfies VedtakBarnetilleggDTO
                     }
                     ref={barnetilleggBegrunnelseRef}
                 />

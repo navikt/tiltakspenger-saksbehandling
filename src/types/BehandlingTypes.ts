@@ -71,14 +71,14 @@ export enum BehandlingStatus {
     VEDTATT = 'VEDTATT',
 }
 
-export type Attestering = {
+type Attestering = {
     status: Attesteringsstatus;
     begrunnelse: string;
     endretAv: string;
     endretTidspunkt: string;
 };
 
-export enum Attesteringsstatus {
+enum Attesteringsstatus {
     GODKJENT = 'GODKJENT',
     SENDT_TILBAKE = 'SENDT_TILBAKE',
 }
@@ -89,17 +89,17 @@ export enum Behandlingstype {
     REVURDERING = 'REVURDERING',
 }
 
-export type Barnetillegg = {
+type Barnetillegg = {
     perioder: BarnetilleggPeriode[];
     begrunnelse?: string;
 };
 
-export type BarnetilleggPeriode = {
+type BarnetilleggPeriode = {
     antallBarn: number;
     periode: Periode;
 };
 
-export type TiltaksdeltakelsePeriode = {
+type TiltaksdeltakelsePeriode = {
     eksternDeltagelseId: string;
     periode: Periode;
 };
