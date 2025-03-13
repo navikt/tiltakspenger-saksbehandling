@@ -18,3 +18,7 @@ export const validerPeriodisering = (perioder: Periode[], tillatHull: boolean) =
 export const joinPerioder = (perioder: Periode[]): Periode => {
     return { fraOgMed: perioder[0].fraOgMed, tilOgMed: perioder.slice(-1)[0].tilOgMed };
 };
+
+export const erDatoIPeriode = (dato: string, periode: Periode) => {
+    return dato >= periode.fraOgMed && dato <= periode.tilOgMed;
+};

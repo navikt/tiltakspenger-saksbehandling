@@ -40,7 +40,7 @@ export const BehandlingSaksopplysninger = () => {
                 <>
                     <Separator />
                     <OpplysningerSeksjon header={'Fra søknad'}>
-                        <BehandlingSøknadOpplysninger førstegangsbehandling={behandling} />
+                        <BehandlingSøknadOpplysninger behandling={behandling} />
                     </OpplysningerSeksjon>
                 </>
             )}

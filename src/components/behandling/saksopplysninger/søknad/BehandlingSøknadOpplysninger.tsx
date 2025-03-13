@@ -12,11 +12,11 @@ import { SøknadOpplysningerPengestøtter } from './SøknadOpplysningerPengestø
 import style from './BehandlingSøknadOpplysninger.module.css';
 
 type Props = {
-    førstegangsbehandling: FørstegangsbehandlingData;
+    behandling: FørstegangsbehandlingData;
 };
 
-export const BehandlingSøknadOpplysninger = ({ førstegangsbehandling }: Props) => {
-    const { søknad } = førstegangsbehandling;
+export const BehandlingSøknadOpplysninger = ({ behandling }: Props) => {
+    const { søknad } = behandling;
 
     const {
         tidsstempelHosOss,
@@ -26,7 +26,6 @@ export const BehandlingSøknadOpplysninger = ({ førstegangsbehandling }: Props)
         institusjon,
         etterlønn,
         sykepenger,
-        barnetillegg,
         antallVedlegg,
         visVedlegg,
     } = søknad;
@@ -65,7 +64,7 @@ export const BehandlingSøknadOpplysninger = ({ førstegangsbehandling }: Props)
             />
 
             <SøknadOpplysningerPengestøtter pengestøtter={søknad} className={style.spacing} />
-            <SøknadOpplysningerBarn barn={barnetillegg} className={style.spacing} />
+            <SøknadOpplysningerBarn behandling={behandling} className={style.spacing} />
 
             {visVedlegg && (
                 <>
