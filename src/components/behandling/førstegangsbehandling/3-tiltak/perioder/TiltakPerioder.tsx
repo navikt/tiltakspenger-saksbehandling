@@ -5,7 +5,10 @@ import {
     useFørstegangsVedtakSkjemaDispatch,
     useFørstegangsVedtakSkjema,
 } from '../../context/FørstegangsVedtakContext';
-import { hentTiltaksdeltakelser, hentTiltaksperiode } from '../../../../../utils/behandling';
+import {
+    hentTiltaksdeltakelserMedStartOgSluttdato,
+    hentTiltaksperiode,
+} from '../../../../../utils/behandling';
 import { VedtakTiltaksdeltakelsePeriode } from '../../../../../types/VedtakTyper';
 import { SaksbehandlerRolle } from '../../../../../types/Saksbehandler';
 import { dateTilISOTekst } from '../../../../../utils/date';
@@ -19,7 +22,7 @@ export const TiltakPerioder = () => {
     const { valgteTiltaksdeltakelser } = useFørstegangsVedtakSkjema();
     const dispatch = useFørstegangsVedtakSkjemaDispatch();
 
-    const tiltaksdeltakelser = hentTiltaksdeltakelser(behandling);
+    const tiltaksdeltakelser = hentTiltaksdeltakelserMedStartOgSluttdato(behandling);
     const tiltaksperiode = hentTiltaksperiode(behandling);
 
     return (
@@ -32,6 +35,7 @@ export const TiltakPerioder = () => {
                             tiltaksdeltakelser={tiltaksdeltakelser}
                             index={index}
                             rolle={rolleForBehandling}
+                            skalKunneFjernePeriode={valgteTiltaksdeltakelser?.length > 1}
                             key={`${periode.periode.fraOgMed}-${periode.eksternDeltagelseId}-${index}`}
                         />
                     );
@@ -61,9 +65,16 @@ type PeriodeProps = {
     tiltaksdeltakelser: Tiltaksdeltagelse[];
     index: number;
     rolle: SaksbehandlerRolle | null;
+    skalKunneFjernePeriode: boolean;
 };
 
-const TiltakPeriode = ({ periode, tiltaksdeltakelser, index, rolle }: PeriodeProps) => {
+const TiltakPeriode = ({
+    periode,
+    tiltaksdeltakelser,
+    index,
+    rolle,
+    skalKunneFjernePeriode,
+}: PeriodeProps) => {
     const dispatch = useFørstegangsVedtakSkjemaDispatch();
 
     const erSaksbehandler = rolle === SaksbehandlerRolle.SAKSBEHANDLER;
@@ -121,7 +132,7 @@ const TiltakPeriode = ({ periode, tiltaksdeltakelser, index, rolle }: PeriodePro
                 }}
             />
 
-            {erSaksbehandler && (
+            {erSaksbehandler && skalKunneFjernePeriode && (
                 <Button
                     variant={'tertiary'}
                     size={'small'}
