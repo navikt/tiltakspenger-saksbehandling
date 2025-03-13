@@ -5,7 +5,6 @@ import {
     useFørstegangsVedtakSkjemaDispatch,
     useFørstegangsVedtakSkjema,
 } from '../../context/FørstegangsVedtakContext';
-import { hentTiltaksperiode } from '../../../../../utils/behandling';
 import { VedtakBarnetilleggPeriode } from '../../../../../types/VedtakTyper';
 import { SaksbehandlerRolle } from '../../../../../types/Saksbehandler';
 import { dateTilISOTekst } from '../../../../../utils/date';
@@ -16,11 +15,9 @@ import style from './BarnetilleggPerioder.module.css';
 const BATCH_MED_BARN = 10;
 
 export const BarnetilleggPerioder = () => {
-    const { behandling, rolleForBehandling } = useFørstegangsbehandling();
-    const { barnetilleggPerioder } = useFørstegangsVedtakSkjema();
+    const { rolleForBehandling } = useFørstegangsbehandling();
+    const { barnetilleggPerioder, innvilgelsesPeriode } = useFørstegangsVedtakSkjema();
     const dispatch = useFørstegangsVedtakSkjemaDispatch();
-
-    const tiltaksperiode = hentTiltaksperiode(behandling);
 
     return (
         <>
@@ -43,7 +40,7 @@ export const BarnetilleggPerioder = () => {
                         onClick={() => {
                             dispatch({
                                 type: 'addBarnetilleggPeriode',
-                                payload: { tiltaksperiode },
+                                payload: { innvilgelsesPeriode },
                             });
                         }}
                     >
