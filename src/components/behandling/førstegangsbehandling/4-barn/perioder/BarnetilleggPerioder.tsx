@@ -19,6 +19,8 @@ export const BarnetilleggPerioder = () => {
     const { barnetilleggPerioder, innvilgelsesPeriode } = useFørstegangsVedtakSkjema();
     const dispatch = useFørstegangsVedtakSkjemaDispatch();
 
+    const søknadHarBarn = behandling.søknad.barnetillegg.length > 0;
+
     return (
         <>
             <VedtakSeksjon.Venstre className={style.wrapper}>
@@ -46,18 +48,20 @@ export const BarnetilleggPerioder = () => {
                         >
                             {'Ny periode for barnetillegg'}
                         </Button>
-                        <Button
-                            variant={'secondary'}
-                            size={'small'}
-                            onClick={() => {
-                                dispatch({
-                                    type: 'nullstillBarnetilleggPerioder',
-                                    payload: { innvilgelsesPeriode, søknad: behandling.søknad },
-                                });
-                            }}
-                        >
-                            {'Sett perioder fra søknaden'}
-                        </Button>
+                        {søknadHarBarn && (
+                            <Button
+                                variant={'secondary'}
+                                size={'small'}
+                                onClick={() => {
+                                    dispatch({
+                                        type: 'nullstillBarnetilleggPerioder',
+                                        payload: { innvilgelsesPeriode, søknad: behandling.søknad },
+                                    });
+                                }}
+                            >
+                                {'Sett perioder fra søknaden'}
+                            </Button>
+                        )}
                     </div>
                 )}
             </VedtakSeksjon.Venstre>

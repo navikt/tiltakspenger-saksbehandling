@@ -11,8 +11,9 @@ export const periodiserBarnetillegg = (
 ): VedtakBarnetilleggPeriode[] => {
     const sorterteBarn = barnFraSøknad.toSorted((a, b) => (a.fødselsdato > b.fødselsdato ? 1 : -1));
 
-    const perioderPerBarn = sorterteBarn.reduce<Array<Periode & { navn: string }>>((acc, barn) => {
-        const { fødselsdato, fornavn } = barn;
+    // Periodene med rett til barnetillegg for hvert barn, innenfor virkningsperioden
+    const perioderPerBarn = sorterteBarn.reduce<Periode[]>((acc, barn) => {
+        const { fødselsdato } = barn;
         const sisteDagFør16År = forrigeDag(finn16årsdag(fødselsdato));
 
         const kanFåBarnetillegg =
@@ -21,7 +22,6 @@ export const periodiserBarnetillegg = (
 
         if (kanFåBarnetillegg) {
             acc.push({
-                navn: fornavn!,
                 fraOgMed:
                     fødselsdato > virkningsperiode.fraOgMed
                         ? fødselsdato
