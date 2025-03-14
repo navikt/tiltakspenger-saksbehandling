@@ -5,3 +5,6 @@ export const forceArray = <T>(arrayOrSingle: ArrayOrSingle<T>): T[] =>
 
 export const singleOrFirst = <T>(arrayOrSingle: ArrayOrSingle<T>): T =>
     Array.isArray(arrayOrSingle) ? arrayOrSingle[0] : arrayOrSingle;
+
+export const removeDuplicates = <T>(verdi: T, index: number, array: T[]): boolean =>
+    array.indexOf(verdi) === index;

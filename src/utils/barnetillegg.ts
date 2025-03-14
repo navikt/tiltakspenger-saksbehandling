@@ -3,6 +3,7 @@ import { VedtakBarnetilleggPeriode } from '../types/VedtakTyper';
 import { finn16årsdag, forrigeDag, nesteDag } from './date';
 import { Periode } from '../types/Periode';
 import { erDatoIPeriode } from './periode';
+import { removeDuplicates } from './array';
 
 export const periodiserBarnetillegg = (
     barnFraSøknad: SøknadBarn[],
@@ -10,7 +11,7 @@ export const periodiserBarnetillegg = (
 ): VedtakBarnetilleggPeriode[] => {
     const sorterteBarn = barnFraSøknad.toSorted((a, b) => (a.fødselsdato > b.fødselsdato ? 1 : -1));
 
-    const periodePerBarn = sorterteBarn.reduce<Array<Periode & { navn: string }>>((acc, barn) => {
+    const perioderPerBarn = sorterteBarn.reduce<Array<Periode & { navn: string }>>((acc, barn) => {
         const { fødselsdato, fornavn } = barn;
         const sisteDagFør16År = forrigeDag(finn16årsdag(fødselsdato));
 
@@ -35,18 +36,18 @@ export const periodiserBarnetillegg = (
         return acc;
     }, []);
 
-    const datoer = periodePerBarn
+    const avgrensningsdatoer = perioderPerBarn
         .flatMap((periode) => [
             periode.fraOgMed,
             ...(periode.tilOgMed === virkningsperiode.tilOgMed ? [] : [nesteDag(periode.tilOgMed)]),
         ])
-        .filter((dato, index, array) => array.indexOf(dato) === index)
+        .filter(removeDuplicates)
         .toSorted();
 
-    return datoer
+    return avgrensningsdatoer
         .map((fraOgMed, index) => {
-            const perioder = periodePerBarn.filter((periode) => erDatoIPeriode(fraOgMed, periode));
-            const nesteDato = datoer.at(index + 1);
+            const perioder = perioderPerBarn.filter((periode) => erDatoIPeriode(fraOgMed, periode));
+            const nesteDato = avgrensningsdatoer.at(index + 1);
 
             return {
                 antallBarn: perioder.length,

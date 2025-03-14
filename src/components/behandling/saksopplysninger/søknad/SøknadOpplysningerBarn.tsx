@@ -33,6 +33,9 @@ export const SøknadOpplysningerBarn = ({ behandling, className }: Props) => {
                         barn;
 
                     const navn = [fornavn, mellomnavn, etternavn].filter(Boolean).join(' ');
+                    const fødselsdatoFormattert = formaterDatotekst(fødselsdato);
+
+                    const bleFødtITiltaksperioden = erDatoIPeriode(fødselsdato, tiltaksperiode);
 
                     const fyller16dato = finn16årsdag(fødselsdato);
                     const fyller16ITiltaksperioden = erDatoIPeriode(fyller16dato, tiltaksperiode);
@@ -45,7 +48,7 @@ export const SøknadOpplysningerBarn = ({ behandling, className }: Props) => {
                                 verdi={`${alderFraDato(fødselsdato)} år`}
                             />
                             {fyller16ITiltaksperioden && (
-                                <div className={style.barn16varsel}>
+                                <div className={style.alderVarsel}>
                                     <BehandlingSaksopplysning
                                         navn={'Barnet fyller 16 år i tiltaksperioden'}
                                         verdi={formaterDatotekst(fyller16dato)}
@@ -53,10 +56,20 @@ export const SøknadOpplysningerBarn = ({ behandling, className }: Props) => {
                                     <ExclamationmarkTriangleFillIcon />
                                 </div>
                             )}
-                            <BehandlingSaksopplysning
-                                navn={'Fødselsdato'}
-                                verdi={formaterDatotekst(fødselsdato)}
-                            />
+                            {bleFødtITiltaksperioden ? (
+                                <div className={style.alderVarsel}>
+                                    <BehandlingSaksopplysning
+                                        navn={'Barnet ble født i tiltaksperioden'}
+                                        verdi={fødselsdatoFormattert}
+                                    />
+                                    <ExclamationmarkTriangleFillIcon />
+                                </div>
+                            ) : (
+                                <BehandlingSaksopplysning
+                                    navn={'Fødselsdato'}
+                                    verdi={fødselsdatoFormattert}
+                                />
+                            )}
                             <BehandlingSaksopplysning
                                 navn={'Oppholder seg i Norge/EØS?'}
                                 verdi={oppholderSegIEØS ? 'Ja' : 'Nei'}
