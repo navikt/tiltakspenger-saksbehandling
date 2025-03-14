@@ -32,8 +32,8 @@ export const erBehandlingFørstegangsbehandling = (
 ): behandling is FørstegangsbehandlingData =>
     behandling.type === Behandlingstype.FØRSTEGANGSBEHANDLING;
 
-export const deltarPaFlereTiltak = (behandling: FørstegangsbehandlingData) =>
-    behandling.saksopplysninger.tiltaksdeltagelse.length > 1;
+export const deltarPaFlereTiltakMedStartOgSluttdato = (behandling: FørstegangsbehandlingData) =>
+    hentTiltaksdeltakelserMedStartOgSluttdato(behandling).length > 1;
 
 export const hentTiltaksdeltakelser = (
     behandling: FørstegangsbehandlingData,

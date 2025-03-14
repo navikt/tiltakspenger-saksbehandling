@@ -5,10 +5,7 @@ import {
     useFørstegangsVedtakSkjemaDispatch,
     useFørstegangsVedtakSkjema,
 } from '../../context/FørstegangsVedtakContext';
-import {
-    hentTiltaksdeltakelserMedStartOgSluttdato,
-    hentTiltaksperiode,
-} from '../../../../../utils/behandling';
+import { hentTiltaksdeltakelserMedStartOgSluttdato } from '../../../../../utils/behandling';
 import { VedtakTiltaksdeltakelsePeriode } from '../../../../../types/VedtakTyper';
 import { SaksbehandlerRolle } from '../../../../../types/Saksbehandler';
 import { dateTilISOTekst } from '../../../../../utils/date';
@@ -19,11 +16,10 @@ import { Tiltaksdeltagelse } from '../../../../../types/TiltakDeltagelseTypes';
 
 export const TiltakPerioder = () => {
     const { behandling, rolleForBehandling } = useFørstegangsbehandling();
-    const { valgteTiltaksdeltakelser } = useFørstegangsVedtakSkjema();
+    const { valgteTiltaksdeltakelser, innvilgelsesPeriode } = useFørstegangsVedtakSkjema();
     const dispatch = useFørstegangsVedtakSkjemaDispatch();
 
     const tiltaksdeltakelser = hentTiltaksdeltakelserMedStartOgSluttdato(behandling);
-    const tiltaksperiode = hentTiltaksperiode(behandling);
 
     return (
         <>
@@ -48,7 +44,7 @@ export const TiltakPerioder = () => {
                         onClick={() => {
                             dispatch({
                                 type: 'addTiltakPeriode',
-                                payload: { periode: tiltaksperiode },
+                                payload: { innvilgelsesperiode: innvilgelsesPeriode },
                             });
                         }}
                     >
@@ -76,6 +72,7 @@ const TiltakPeriode = ({
     skalKunneFjernePeriode,
 }: PeriodeProps) => {
     const dispatch = useFørstegangsVedtakSkjemaDispatch();
+    const { innvilgelsesPeriode } = useFørstegangsVedtakSkjema();
 
     const erSaksbehandler = rolle === SaksbehandlerRolle.SAKSBEHANDLER;
 
@@ -104,29 +101,42 @@ const TiltakPeriode = ({
                 ))}
             </Select>
             <Datovelger
-                defaultSelected={periode.periode.fraOgMed}
+                selected={periode.periode.fraOgMed}
+                minDate={innvilgelsesPeriode.fraOgMed}
+                maxDate={innvilgelsesPeriode.tilOgMed}
                 label={'Fra og med'}
                 size={'small'}
                 readOnly={!erSaksbehandler}
                 onDateChange={(value) => {
-                    if (value) {
+                    if (!value) {
+                        return;
+                    }
+                    const nyFraOgMed = dateTilISOTekst(value);
+                    if (nyFraOgMed !== periode.periode.fraOgMed) {
                         dispatch({
                             type: 'oppdaterTiltakPeriode',
-                            payload: { periode: { fraOgMed: dateTilISOTekst(value) }, index },
+                            payload: { periode: { fraOgMed: nyFraOgMed }, index },
                         });
                     }
                 }}
             />
             <Datovelger
-                defaultSelected={periode.periode.tilOgMed}
+                selected={periode.periode.tilOgMed}
+                minDate={innvilgelsesPeriode.fraOgMed}
+                maxDate={innvilgelsesPeriode.tilOgMed}
                 label={'Til og med'}
                 size={'small'}
                 readOnly={!erSaksbehandler}
                 onDateChange={(value) => {
-                    if (value) {
+                    if (!value) {
+                        return;
+                    }
+
+                    const nyTilOgMed = dateTilISOTekst(value);
+                    if (nyTilOgMed !== periode.periode.tilOgMed) {
                         dispatch({
                             type: 'oppdaterTiltakPeriode',
-                            payload: { periode: { tilOgMed: dateTilISOTekst(value) }, index },
+                            payload: { periode: { tilOgMed: nyTilOgMed }, index },
                         });
                     }
                 }}

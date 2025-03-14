@@ -40,7 +40,7 @@ export type FørstegangsVedtakSkjemaActions =
       }
     | {
           type: 'addTiltakPeriode';
-          payload: { periode: Periode };
+          payload: { innvilgelsesperiode: Periode };
       }
     | {
           type: 'fjernTiltakPeriode';
@@ -166,14 +166,18 @@ export const førstegangsVedtakReducer: Reducer<
                 }),
             };
         case 'addTiltakPeriode':
+            const { innvilgelsesperiode } = payload;
             const forrigeTiltakPeriode = state.valgteTiltaksdeltakelser?.slice(-1)[0];
 
             const nesteTiltakPeriode: Periode = forrigeTiltakPeriode
                 ? {
-                      fraOgMed: leggTilDager(forrigeTiltakPeriode.periode.tilOgMed, 1),
-                      tilOgMed: leggTilDager(forrigeTiltakPeriode.periode.tilOgMed, 30),
+                      fraOgMed:
+                          innvilgelsesperiode.tilOgMed > forrigeTiltakPeriode.periode.tilOgMed
+                              ? leggTilDager(forrigeTiltakPeriode.periode.tilOgMed, 1)
+                              : innvilgelsesperiode.tilOgMed,
+                      tilOgMed: innvilgelsesperiode.tilOgMed,
                   }
-                : payload.periode;
+                : innvilgelsesperiode;
 
             const nyTiltakPeriode: VedtakTiltaksdeltakelsePeriode = {
                 eksternDeltagelseId: forrigeTiltakPeriode.eksternDeltagelseId,
