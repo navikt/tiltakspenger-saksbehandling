@@ -7,7 +7,7 @@ import {
     VedtakTiltaksdeltakelsePeriode,
 } from '../../../../types/VedtakTyper';
 import { Periode } from '../../../../types/Periode';
-import { leggTilDager } from '../../../../utils/date';
+import { forrigeDag, leggTilDager, nesteDag } from '../../../../utils/date';
 
 export type FørstegangsVedtakSkjemaActions =
     | {
@@ -81,13 +81,13 @@ export const førstegangsVedtakReducer: Reducer<
             return { ...state, harBarnetillegg: payload.harSøkt };
         case 'addBarnetilleggPeriode':
             const { innvilgelsesPeriode } = payload;
-            const forrigeBarnetillegg = state.barnetilleggPerioder?.slice(-1)[0];
+            const forrigeBarnetillegg = state.barnetilleggPerioder?.at(-1);
 
             const nestePeriode: Periode = forrigeBarnetillegg
                 ? {
                       fraOgMed:
                           innvilgelsesPeriode.tilOgMed > forrigeBarnetillegg.periode.tilOgMed
-                              ? leggTilDager(forrigeBarnetillegg.periode.tilOgMed, 1)
+                              ? nesteDag(forrigeBarnetillegg.periode.tilOgMed)
                               : innvilgelsesPeriode.tilOgMed,
                       tilOgMed: innvilgelsesPeriode.tilOgMed,
                   }
@@ -136,7 +136,7 @@ export const førstegangsVedtakReducer: Reducer<
                             ...barnetillegg,
                             periode: {
                                 ...barnetillegg.periode,
-                                tilOgMed: leggTilDager(oppdatertPeriode.fraOgMed, -1),
+                                tilOgMed: forrigeDag(oppdatertPeriode.fraOgMed),
                             },
                         };
                     }
@@ -157,7 +157,7 @@ export const førstegangsVedtakReducer: Reducer<
                             ...barnetillegg,
                             periode: {
                                 ...barnetillegg.periode,
-                                fraOgMed: leggTilDager(oppdatertPeriode.tilOgMed, 1),
+                                fraOgMed: nesteDag(oppdatertPeriode.tilOgMed),
                             },
                         };
                     }

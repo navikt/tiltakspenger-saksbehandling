@@ -26,44 +26,45 @@ export const SøknadOpplysningerBarn = ({ behandling, className }: Props) => {
     return (
         <div className={className}>
             <BodyShort>{'Barn:'}</BodyShort>
-            {barn.map((barn) => {
-                const { fornavn, mellomnavn, etternavn, fødselsdato, oppholderSegIEØS, kilde } =
-                    barn;
+            {barn
+                .toSorted((a, b) => (a.fødselsdato > b.fødselsdato ? 1 : -1))
+                .map((barn) => {
+                    const { fornavn, mellomnavn, etternavn, fødselsdato, oppholderSegIEØS, kilde } =
+                        barn;
 
-                const navn = [fornavn, mellomnavn, etternavn].filter(Boolean).join(' ');
+                    const navn = [fornavn, mellomnavn, etternavn].filter(Boolean).join(' ');
 
-                const alder = alderFraDato(fødselsdato);
+                    const fyller16dato = finn16årsdag(fødselsdato);
+                    const fyller16ITiltaksperioden = erDatoIPeriode(fyller16dato, tiltaksperiode);
 
-                const fyller16dato = finn16årsdag(fødselsdato);
-
-                const fyller16ITiltaksperioden =
-                    alder < 16 && erDatoIPeriode(fyller16dato, tiltaksperiode);
-
-                return (
-                    <Fragment key={`${fødselsdato}-${navn}`}>
-                        <BehandlingSaksopplysning navn={'Navn'} verdi={navn} />
-                        <BehandlingSaksopplysning navn={'Alder'} verdi={`${alder} år`} />
-                        {fyller16ITiltaksperioden && (
-                            <div className={style.barn16varsel}>
-                                <BehandlingSaksopplysning
-                                    navn={'Barnet fyller 16 år i tiltaksperioden'}
-                                    verdi={formaterDatotekst(fyller16dato)}
-                                />
-                                <ExclamationmarkTriangleFillIcon />
-                            </div>
-                        )}
-                        <BehandlingSaksopplysning
-                            navn={'Fødselsdato'}
-                            verdi={formaterDatotekst(fødselsdato)}
-                        />
-                        <BehandlingSaksopplysning
-                            navn={'Oppholder seg i Norge/EØS?'}
-                            verdi={oppholderSegIEØS ? 'Ja' : 'Nei'}
-                        />
-                        <BehandlingSaksopplysning navn={'Kilde'} verdi={kilde} spacing={true} />
-                    </Fragment>
-                );
-            })}
+                    return (
+                        <Fragment key={`${fødselsdato}-${navn}`}>
+                            <BehandlingSaksopplysning navn={'Navn'} verdi={navn} />
+                            <BehandlingSaksopplysning
+                                navn={'Alder'}
+                                verdi={`${alderFraDato(fødselsdato)} år`}
+                            />
+                            {fyller16ITiltaksperioden && (
+                                <div className={style.barn16varsel}>
+                                    <BehandlingSaksopplysning
+                                        navn={'Barnet fyller 16 år i tiltaksperioden'}
+                                        verdi={formaterDatotekst(fyller16dato)}
+                                    />
+                                    <ExclamationmarkTriangleFillIcon />
+                                </div>
+                            )}
+                            <BehandlingSaksopplysning
+                                navn={'Fødselsdato'}
+                                verdi={formaterDatotekst(fødselsdato)}
+                            />
+                            <BehandlingSaksopplysning
+                                navn={'Oppholder seg i Norge/EØS?'}
+                                verdi={oppholderSegIEØS ? 'Ja' : 'Nei'}
+                            />
+                            <BehandlingSaksopplysning navn={'Kilde'} verdi={kilde} spacing={true} />
+                        </Fragment>
+                    );
+                })}
         </div>
     );
 };

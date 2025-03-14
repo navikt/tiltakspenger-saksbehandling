@@ -1,4 +1,4 @@
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import { Periode } from '../types/Periode';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 import weekday from 'dayjs/plugin/weekday';
@@ -10,7 +10,7 @@ dayjs.locale('nb');
 
 const DATO_FORMAT = 'YYYY-MM-DD';
 
-export function dateTilISOTekst(date: Date) {
+export function dateTilISOTekst(date: Date | string | Dayjs) {
     return dayjs(date).format(DATO_FORMAT);
 }
 
@@ -76,3 +76,7 @@ export const finn16årsdag = (fødselsdato: string) => {
 export const leggTilDager = (dato: string, dager: number) => {
     return dayjs(dato).add(dager, 'day').format(DATO_FORMAT);
 };
+
+export const nesteDag = (dato: string) => leggTilDager(dato, 1);
+
+export const forrigeDag = (dato: string) => leggTilDager(dato, -1);
