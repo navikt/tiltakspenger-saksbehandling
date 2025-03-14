@@ -13,8 +13,7 @@
     width: 100px;
 }
 
-.fjern {
-}
-
-.ny {
+.perioderKnapper {
+    display: flex;
+    gap: 1rem;
 }

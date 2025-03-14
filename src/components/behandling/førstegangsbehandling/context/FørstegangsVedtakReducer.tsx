@@ -8,6 +8,8 @@ import {
 } from '../../../../types/VedtakTyper';
 import { Periode } from '../../../../types/Periode';
 import { forrigeDag, leggTilDager, nesteDag } from '../../../../utils/date';
+import { periodiserBarnetillegg } from '../../../../utils/barnetillegg';
+import { SøknadForBehandlingProps } from '../../../../types/SøknadTypes';
 
 export type FørstegangsVedtakSkjemaActions =
     | {
@@ -33,6 +35,10 @@ export type FørstegangsVedtakSkjemaActions =
     | {
           type: 'oppdaterBarnetilleggPeriode';
           payload: { periode: Partial<Periode>; index: number };
+      }
+    | {
+          type: 'nullstillBarnetilleggPerioder';
+          payload: { innvilgelsesPeriode: Periode; søknad: SøknadForBehandlingProps };
       }
     | {
           type: 'oppdaterInnvilgetPeriode';
@@ -110,6 +116,14 @@ export const førstegangsVedtakReducer: Reducer<
                 ...state,
                 barnetilleggPerioder: state.barnetilleggPerioder.filter(
                     (_, index) => index !== payload.fjernIndex,
+                ),
+            };
+        case 'nullstillBarnetilleggPerioder':
+            return {
+                ...state,
+                barnetilleggPerioder: periodiserBarnetillegg(
+                    payload.søknad.barnetillegg,
+                    payload.innvilgelsesPeriode,
                 ),
             };
         case 'oppdaterBarnetilleggAntall':

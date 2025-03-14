@@ -15,7 +15,7 @@ import style from './BarnetilleggPerioder.module.css';
 const BATCH_MED_BARN = 10;
 
 export const BarnetilleggPerioder = () => {
-    const { rolleForBehandling } = useFørstegangsbehandling();
+    const { rolleForBehandling, behandling } = useFørstegangsbehandling();
     const { barnetilleggPerioder, innvilgelsesPeriode } = useFørstegangsVedtakSkjema();
     const dispatch = useFørstegangsVedtakSkjemaDispatch();
 
@@ -33,19 +33,32 @@ export const BarnetilleggPerioder = () => {
                     );
                 })}
                 {rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER && (
-                    <Button
-                        variant={'secondary'}
-                        size={'small'}
-                        className={style.ny}
-                        onClick={() => {
-                            dispatch({
-                                type: 'addBarnetilleggPeriode',
-                                payload: { innvilgelsesPeriode },
-                            });
-                        }}
-                    >
-                        {'Ny periode for barnetillegg'}
-                    </Button>
+                    <div className={style.perioderKnapper}>
+                        <Button
+                            variant={'secondary'}
+                            size={'small'}
+                            onClick={() => {
+                                dispatch({
+                                    type: 'addBarnetilleggPeriode',
+                                    payload: { innvilgelsesPeriode },
+                                });
+                            }}
+                        >
+                            {'Ny periode for barnetillegg'}
+                        </Button>
+                        <Button
+                            variant={'secondary'}
+                            size={'small'}
+                            onClick={() => {
+                                dispatch({
+                                    type: 'nullstillBarnetilleggPerioder',
+                                    payload: { innvilgelsesPeriode, søknad: behandling.søknad },
+                                });
+                            }}
+                        >
+                            {'Sett perioder fra søknaden'}
+                        </Button>
+                    </div>
                 )}
             </VedtakSeksjon.Venstre>
         </>
@@ -68,25 +81,6 @@ const BarnetilleggPeriode = ({ periode, index, rolle }: PeriodeProps) => {
 
     return (
         <div className={style.periode}>
-            <Select
-                label={'Antall barn'}
-                size={'small'}
-                className={style.antall}
-                defaultValue={periode.antallBarn}
-                readOnly={!erSaksbehandler}
-                onChange={(event) => {
-                    dispatch({
-                        type: 'oppdaterBarnetilleggAntall',
-                        payload: { antall: Number(event.target.value), index },
-                    });
-                }}
-            >
-                {Array.from({ length: maksAntall + 1 }).map((_, index) => (
-                    <option value={index} key={index}>
-                        {index}
-                    </option>
-                ))}
-            </Select>
             <Datovelger
                 selected={periode.periode.fraOgMed}
                 minDate={innvilgelsesPeriode.fraOgMed}
@@ -129,12 +123,30 @@ const BarnetilleggPeriode = ({ periode, index, rolle }: PeriodeProps) => {
                     }
                 }}
             />
+            <Select
+                label={'Antall barn'}
+                size={'small'}
+                className={style.antall}
+                value={periode.antallBarn}
+                readOnly={!erSaksbehandler}
+                onChange={(event) => {
+                    dispatch({
+                        type: 'oppdaterBarnetilleggAntall',
+                        payload: { antall: Number(event.target.value), index },
+                    });
+                }}
+            >
+                {Array.from({ length: maksAntall + 1 }).map((_, index) => (
+                    <option value={index} key={index}>
+                        {index}
+                    </option>
+                ))}
+            </Select>
 
             {erSaksbehandler && (
                 <Button
                     variant={'tertiary'}
                     size={'small'}
-                    className={style.fjern}
                     onClick={() => {
                         dispatch({
                             type: 'fjernBarnetilleggPeriode',
