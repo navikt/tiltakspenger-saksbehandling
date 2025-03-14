@@ -2,7 +2,7 @@ import { FørstegangsVedtakContext } from './context/FørstegangsVedtakContext';
 import { ValideringResultat } from '../send-og-godkjenn/BehandlingSendTilBeslutning';
 import { FørstegangsbehandlingData } from '../../../types/BehandlingTypes';
 import {
-    deltarPaFlereTiltak,
+    deltarPaFlereTiltakMedStartOgSluttdato,
     hentTiltaksdeltakelser,
     hentTiltaksperiode,
 } from '../../../utils/behandling';
@@ -22,7 +22,7 @@ export const førstegangsVedtakValidering = (
     } = vedtak;
 
     const tiltaksperiode = hentTiltaksperiode(behandling);
-    const flereTiltak = deltarPaFlereTiltak(behandling);
+    const flereTiltak = deltarPaFlereTiltakMedStartOgSluttdato(behandling);
 
     const errors: string[] = [];
     const warnings: string[] = [];
