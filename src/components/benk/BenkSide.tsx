@@ -6,16 +6,23 @@ import {
 } from '../../utils/tekstformateringUtils';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '../../utils/date';
 import Link from 'next/link';
-import React from 'react';
+import React, { useState } from 'react';
 import { BehandlingEllerSøknadForOversiktData } from '../../types/BehandlingTypes';
 import { sorterBenkoversikt } from './sorterBenkoversikt';
+import { CaretDownFillIcon, CaretUpFillIcon } from '@navikt/aksel-icons';
+
+import style from './BenkSide.module.css';
 
 type Props = {
     søknaderOgBehandlinger: BehandlingEllerSøknadForOversiktData[];
 };
 
 export const BenkOversiktSide = ({ søknaderOgBehandlinger }: Props) => {
-    const sorterteSøknaderOgBehandlinger = sorterBenkoversikt(søknaderOgBehandlinger);
+    const [sorterStigende, setSorterStigende] = useState(true);
+    const sorterteSøknaderOgBehandlinger = sorterBenkoversikt(
+        søknaderOgBehandlinger,
+        sorterStigende,
+    );
 
     return (
         <VStack gap="5" style={{ padding: '1rem' }}>
@@ -27,7 +34,16 @@ export const BenkOversiktSide = ({ søknaderOgBehandlinger }: Props) => {
                     <Table.Row>
                         <Table.HeaderCell scope="col">Fødselsnummer</Table.HeaderCell>
                         <Table.HeaderCell scope="col">Type</Table.HeaderCell>
-                        <Table.HeaderCell scope="col">Kravtidspunkt</Table.HeaderCell>
+                        <Table.HeaderCell scope="col">
+                            <Button
+                                onClick={() => setSorterStigende(!sorterStigende)}
+                                variant={'tertiary-neutral'}
+                                icon={sorterStigende ? <CaretUpFillIcon /> : <CaretDownFillIcon />}
+                                className={style.sortKnapp}
+                            >
+                                Kravtidspunkt
+                            </Button>
+                        </Table.HeaderCell>
                         <Table.HeaderCell scope="col">Status</Table.HeaderCell>
                         <Table.HeaderCell scope="col">Periode</Table.HeaderCell>
                         <Table.HeaderCell scope="col">Saksbehandler</Table.HeaderCell>

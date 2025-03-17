@@ -3,28 +3,36 @@ import { BehandlingEllerSøknadForOversiktData } from '../../types/BehandlingTyp
 // Gruppperer behandlinger/søknader på fnr, og sorterer gruppene på eldste timestamp (kravtidspunkt eller opprettet tidspunkt)
 export const sorterBenkoversikt = (
     søknaderOgBehandlinger: BehandlingEllerSøknadForOversiktData[],
+    stigende: boolean,
 ): BehandlingEllerSøknadForOversiktData[] => {
+    const sortFunc = stigende ? ascSort : descSort;
+
     return (
         Object.values(
             Object.groupBy(søknaderOgBehandlinger, ({ fnr }) => fnr),
         ) as BehandlingEllerSøknadForOversiktData[][]
     ) // "as" fordi groupBy return er typet som Partial<T>. fnr er alltid er definert så values her er aldri undefined
         .toSorted((behandlingerForFnrA, behandlingerForFnrB) =>
-            sortByTimestamp(
+            sortFunc(
                 finnEldsteBehandling(behandlingerForFnrA),
                 finnEldsteBehandling(behandlingerForFnrB),
             ),
         )
-        .flatMap((behandlinger) => behandlinger.toSorted(sortByTimestamp));
+        .flatMap((behandlinger) => behandlinger.toSorted(sortFunc));
 };
 
 const finnEldsteBehandling = (søknaderOgBehandlinger: BehandlingEllerSøknadForOversiktData[]) =>
-    søknaderOgBehandlinger.toSorted(sortByTimestamp).at(-1)!;
+    søknaderOgBehandlinger.toSorted(ascSort).at(-1)!;
 
 const getTimestamp = (søknadEllerBehandling: BehandlingEllerSøknadForOversiktData) =>
     søknadEllerBehandling.kravtidspunkt ?? søknadEllerBehandling.opprettet;
 
-const sortByTimestamp = (
+const ascSort = (
+    a: BehandlingEllerSøknadForOversiktData,
+    b: BehandlingEllerSøknadForOversiktData,
+) => (getTimestamp(a) > getTimestamp(b) ? 1 : -1);
+
+const descSort = (
     a: BehandlingEllerSøknadForOversiktData,
     b: BehandlingEllerSøknadForOversiktData,
 ) => (getTimestamp(a) > getTimestamp(b) ? -1 : 1);
