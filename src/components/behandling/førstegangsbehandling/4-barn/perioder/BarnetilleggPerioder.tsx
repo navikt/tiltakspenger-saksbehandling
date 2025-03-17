@@ -140,9 +140,9 @@ const BarnetilleggPeriode = ({ periode, index, rolle }: PeriodeProps) => {
                     });
                 }}
             >
-                {Array.from({ length: maksAntall + 1 }).map((_, index) => (
-                    <option value={index} key={index}>
-                        {index}
+                {Array.from({ length: maksAntall }).map((_, index) => (
+                    <option value={index + 1} key={index}>
+                        {index + 1}
                     </option>
                 ))}
             </Select>
