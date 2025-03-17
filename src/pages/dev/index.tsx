@@ -1,4 +1,5 @@
 import {
+    Alert,
     Button,
     DatePicker,
     Heading,
@@ -13,6 +14,7 @@ import React from 'react';
 import { useFetchJsonFraApi } from '../../utils/fetch/useFetchFraApi';
 import router from 'next/router';
 import { pageWithAuthentication } from '../../auth/pageWithAuthentication';
+import { formatToIsoDate } from '../../utils/date';
 
 export const getServerSideProps = pageWithAuthentication(async () => {
     if (process?.env.NEXT_PUBLIC_DEVROUTES && process.env.NEXT_PUBLIC_DEVROUTES === 'true') {
@@ -78,7 +80,9 @@ const NySøknadModal = (props: { open: boolean; onClose: () => void }) => {
         fetchNysøknad.trigger({
             fnr: fnr ? fnr : null,
             deltakelsesperiode:
-                fom && tom ? { fraOgMed: fom.toISOString(), tilOgMed: tom.toISOString() } : null,
+                fom && tom
+                    ? { fraOgMed: formatToIsoDate(fom), tilOgMed: formatToIsoDate(tom) }
+                    : null,
         });
     };
 
@@ -108,17 +112,24 @@ const NySøknadModal = (props: { open: boolean; onClose: () => void }) => {
                 </VStack>
             </Modal.Body>
             <Modal.Footer>
-                <Button
-                    variant="primary"
-                    type="button"
-                    onClick={() => onSubmit()}
-                    loading={fetchNysøknad.isMutating}
-                >
-                    Lag søknad
-                </Button>
-                <Button variant="secondary" type="button" onClick={props.onClose}>
-                    Avbryt
-                </Button>
+                <VStack gap="4">
+                    {fetchNysøknad.error && (
+                        <Alert variant="error">{fetchNysøknad.error.message}</Alert>
+                    )}
+                    <HStack gap="4">
+                        <Button variant="secondary" type="button" onClick={props.onClose}>
+                            Avbryt
+                        </Button>
+                        <Button
+                            variant="primary"
+                            type="button"
+                            onClick={() => onSubmit()}
+                            loading={fetchNysøknad.isMutating}
+                        >
+                            Lag søknad
+                        </Button>
+                    </HStack>
+                </VStack>
             </Modal.Footer>
         </Modal>
     );

@@ -9,6 +9,7 @@ dayjs.extend(weekOfYear);
 dayjs.locale('nb');
 
 const DATO_FORMAT = 'YYYY-MM-DD';
+const ISO_FORMAT = 'YYYY-MM-DD';
 
 export function dateTilISOTekst(date: Date | string | Dayjs) {
     return dayjs(date).format(DATO_FORMAT);
@@ -80,3 +81,5 @@ export const leggTilDager = (dato: string, dager: number) => {
 export const nesteDag = (dato: string) => leggTilDager(dato, 1);
 
 export const forrigeDag = (dato: string) => leggTilDager(dato, -1);
+
+export const formatToIsoDate = (date: Date) => dayjs(date).format(ISO_FORMAT);
