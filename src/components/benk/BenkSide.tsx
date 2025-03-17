@@ -8,22 +8,14 @@ import { formaterTidspunkt, periodeTilFormatertDatotekst } from '../../utils/dat
 import Link from 'next/link';
 import React from 'react';
 import { BehandlingEllerSøknadForOversiktData } from '../../types/BehandlingTypes';
-import { groupBy } from 'lodash';
+import { sorterBenkoversikt } from './sorterBenkoversikt';
 
 type Props = {
     søknaderOgBehandlinger: BehandlingEllerSøknadForOversiktData[];
 };
 
 export const BenkOversiktSide = ({ søknaderOgBehandlinger }: Props) => {
-    const sorterteSøknaderOgBehandlinger = Object.entries(
-        groupBy(søknaderOgBehandlinger, 'fnr'),
-    ).flatMap(([, behandlinger]) => {
-        return behandlinger.toSorted(
-            (a, b) =>
-                new Date(a.kravtidspunkt ?? a.opprettet).getTime() -
-                new Date(b.kravtidspunkt ?? b.opprettet).getTime(),
-        );
-    });
+    const sorterteSøknaderOgBehandlinger = sorterBenkoversikt(søknaderOgBehandlinger);
 
     return (
         <VStack gap="5" style={{ padding: '1rem' }}>
