@@ -14,7 +14,7 @@ import React from 'react';
 import { useFetchJsonFraApi } from '../../utils/fetch/useFetchFraApi';
 import router from 'next/router';
 import { pageWithAuthentication } from '../../auth/pageWithAuthentication';
-import { formatToIsoDate } from '../../utils/date';
+import { dateTilISOTekst } from '../../utils/date';
 
 export const getServerSideProps = pageWithAuthentication(async () => {
     if (process?.env.NEXT_PUBLIC_DEVROUTES && process.env.NEXT_PUBLIC_DEVROUTES === 'true') {
@@ -81,7 +81,7 @@ const NySøknadModal = (props: { open: boolean; onClose: () => void }) => {
             fnr: fnr ? fnr : null,
             deltakelsesperiode:
                 fom && tom
-                    ? { fraOgMed: formatToIsoDate(fom), tilOgMed: formatToIsoDate(tom) }
+                    ? { fraOgMed: dateTilISOTekst(fom), tilOgMed: dateTilISOTekst(tom) }
                     : null,
         });
     };
