@@ -100,7 +100,8 @@ export const førstegangsVedtakReducer: Reducer<
                 : innvilgelsesPeriode;
 
             const nyBarnetilleggperiode: VedtakBarnetilleggPeriode = {
-                antallBarn: forrigeBarnetillegg?.antallBarn ?? antallBarnFraSøknad,
+                // Antall barn må alltid være >=1
+                antallBarn: forrigeBarnetillegg?.antallBarn || antallBarnFraSøknad || 1,
                 periode: nestePeriode,
             };
 
