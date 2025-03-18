@@ -15,7 +15,8 @@ import style from './FørstegangsVedtakResultat.module.css';
 
 export const FørstegangsVedtakResultat = () => {
     const { rolleForBehandling } = useFørstegangsbehandling();
-    const { resultat, innvilgelsesPeriode } = useFørstegangsVedtakSkjema();
+    const { valgteTiltaksdeltakelser, resultat, innvilgelsesPeriode } =
+        useFørstegangsVedtakSkjema();
 
     const dispatch = useFørstegangsVedtakSkjemaDispatch();
 
@@ -55,14 +56,23 @@ export const FørstegangsVedtakResultat = () => {
                         readOnly={erIkkeSaksbehandler}
                         onDateChange={(valgtDato) => {
                             if (valgtDato) {
+                                const isoDate = dateTilISOTekst(valgtDato);
                                 dispatch({
                                     type: 'oppdaterInnvilgetPeriode',
-                                    payload: {
-                                        periode: {
-                                            fraOgMed: dateTilISOTekst(valgtDato),
-                                        },
-                                    },
+                                    payload: { periode: { fraOgMed: isoDate } },
                                 });
+                                /**
+                                 * Dersom vi kun har 1 tiltak på behandlingen, så viser vi ikke tiltaksperiodene, og saksbehandler har dermed
+                                 * ikke mulighet til å matche tiltaksperioden med den nye innvilgelsesperioden.
+                                 *
+                                 * Derfor oppdaterer vi tiltaksperioden til å matche innvilgelsesperioden.
+                                 */
+                                if (valgteTiltaksdeltakelser.length === 1) {
+                                    dispatch({
+                                        type: 'oppdaterTiltakPeriode',
+                                        payload: { index: 0, periode: { fraOgMed: isoDate } },
+                                    });
+                                }
                             }
                         }}
                     />
@@ -73,14 +83,23 @@ export const FørstegangsVedtakResultat = () => {
                         readOnly={erIkkeSaksbehandler}
                         onDateChange={(valgtDato) => {
                             if (valgtDato) {
+                                const isoDate = dateTilISOTekst(valgtDato);
                                 dispatch({
                                     type: 'oppdaterInnvilgetPeriode',
-                                    payload: {
-                                        periode: {
-                                            tilOgMed: dateTilISOTekst(valgtDato),
-                                        },
-                                    },
+                                    payload: { periode: { tilOgMed: isoDate } },
                                 });
+                                /**
+                                 * Dersom vi kun har 1 tiltak på behandlingen, så viser vi ikke tiltaksperiodene, og saksbehandler har dermed
+                                 * ikke mulighet til å matche tiltaksperioden med den nye innvilgelsesperioden.
+                                 *
+                                 * Derfor oppdaterer vi tiltaksperioden til å matche innvilgelsesperioden.
+                                 */
+                                if (valgteTiltaksdeltakelser.length === 1) {
+                                    dispatch({
+                                        type: 'oppdaterTiltakPeriode',
+                                        payload: { index: 0, periode: { tilOgMed: isoDate } },
+                                    });
+                                }
                             }
                         }}
                     />
