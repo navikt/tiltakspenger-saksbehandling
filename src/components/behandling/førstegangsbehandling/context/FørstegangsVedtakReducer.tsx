@@ -22,7 +22,7 @@ export type FørstegangsVedtakSkjemaActions =
       }
     | {
           type: 'addBarnetilleggPeriode';
-          payload: { innvilgelsesPeriode: Periode };
+          payload: { innvilgelsesPeriode: Periode; antallBarnFraSøknad: number };
       }
     | {
           type: 'fjernBarnetilleggPeriode';
@@ -86,7 +86,7 @@ export const førstegangsVedtakReducer: Reducer<
         case 'setHarSøktBarnetillegg':
             return { ...state, harBarnetillegg: payload.harSøkt };
         case 'addBarnetilleggPeriode':
-            const { innvilgelsesPeriode } = payload;
+            const { innvilgelsesPeriode, antallBarnFraSøknad } = payload;
             const forrigeBarnetillegg = state.barnetilleggPerioder?.at(-1);
 
             const nestePeriode: Periode = forrigeBarnetillegg
@@ -100,7 +100,7 @@ export const førstegangsVedtakReducer: Reducer<
                 : innvilgelsesPeriode;
 
             const nyBarnetilleggperiode: VedtakBarnetilleggPeriode = {
-                antallBarn: forrigeBarnetillegg?.antallBarn ?? 0,
+                antallBarn: forrigeBarnetillegg?.antallBarn ?? antallBarnFraSøknad,
                 periode: nestePeriode,
             };
 

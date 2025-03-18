@@ -19,7 +19,7 @@ export const BarnetilleggPerioder = () => {
     const { barnetilleggPerioder, innvilgelsesPeriode } = useFørstegangsVedtakSkjema();
     const dispatch = useFørstegangsVedtakSkjemaDispatch();
 
-    const søknadHarBarn = behandling.søknad.barnetillegg.length > 0;
+    const antallBarnFraSøknad = behandling.søknad.barnetillegg.length;
 
     return (
         <>
@@ -42,13 +42,16 @@ export const BarnetilleggPerioder = () => {
                             onClick={() => {
                                 dispatch({
                                     type: 'addBarnetilleggPeriode',
-                                    payload: { innvilgelsesPeriode },
+                                    payload: {
+                                        innvilgelsesPeriode,
+                                        antallBarnFraSøknad,
+                                    },
                                 });
                             }}
                         >
                             {'Ny periode for barnetillegg'}
                         </Button>
-                        {søknadHarBarn && (
+                        {antallBarnFraSøknad > 0 && (
                             <Button
                                 variant={'secondary'}
                                 size={'small'}
@@ -140,11 +143,14 @@ const BarnetilleggPeriode = ({ periode, index, rolle }: PeriodeProps) => {
                     });
                 }}
             >
-                {Array.from({ length: maksAntall }).map((_, index) => (
-                    <option value={index + 1} key={index}>
-                        {index + 1}
-                    </option>
-                ))}
+                {Array.from({ length: maksAntall }).map((_, index) => {
+                    const verdi = index + 1;
+                    return (
+                        <option value={verdi} key={verdi}>
+                            {verdi}
+                        </option>
+                    );
+                })}
             </Select>
 
             {erSaksbehandler && (
