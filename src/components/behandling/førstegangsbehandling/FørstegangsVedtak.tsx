@@ -8,14 +8,10 @@ import { FørstegangsVedtakBarnetillegg } from './4-barn/FørstegangsVedtakBarne
 import { FørstegangsVedtakProvider } from './context/FørstegangsVedtakContext';
 import FørstegangsvedtakAvbrytBehandling from './7-avbryt-behandling/FørstegangsvedtakAvbrytBehandling';
 import { FørstegangsVedtakTiltak } from './3-tiltak/FørstegangsVedtakTiltak';
-import { useFørstegangsbehandling } from '../BehandlingContext';
-import { deltarPaFlereTiltakMedStartOgSluttdato } from '../../../utils/behandling';
 
 import style from './FørstegangsVedtak.module.css';
 
 export const FørstegangsVedtak = () => {
-    const { behandling } = useFørstegangsbehandling();
-    const flereTiltak = deltarPaFlereTiltakMedStartOgSluttdato(behandling);
     return (
         <FørstegangsVedtakProvider>
             <Heading size={'medium'} level={'1'} className={style.header}>
@@ -24,12 +20,7 @@ export const FørstegangsVedtak = () => {
             <FørstegangsVedtakBegrunnelse />
             <FørstegangsVedtakResultat />
             <Separator />
-            {flereTiltak && (
-                <>
-                    <FørstegangsVedtakTiltak />
-                    <Separator />
-                </>
-            )}
+            <FørstegangsVedtakTiltak />
             <FørstegangsVedtakBarnetillegg />
             <FørstegangsVedtakBrev />
             <FørstegangsVedtakSend />
