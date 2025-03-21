@@ -8,7 +8,7 @@ import {
 import { hentTiltaksdeltakelserMedStartOgSluttdato } from '../../../../../utils/behandling';
 import { VedtakTiltaksdeltakelsePeriode } from '../../../../../types/VedtakTyper';
 import { SaksbehandlerRolle } from '../../../../../types/Saksbehandler';
-import { dateTilISOTekst } from '../../../../../utils/date';
+import { dateTilISOTekst, periodeTilFormatertDatotekst } from '../../../../../utils/date';
 import { useFørstegangsbehandling } from '../../../BehandlingContext';
 
 import style from './TiltakPerioder.module.css';
@@ -96,7 +96,7 @@ const TiltakPeriode = ({
                         value={tiltak.eksternDeltagelseId}
                         key={`${tiltak.deltagelseFraOgMed}-${tiltak.eksternDeltagelseId}-${index}`}
                     >
-                        {tiltak.typeNavn}
+                        {getVisningsnavn(tiltak, tiltaksdeltakelser)}
                     </option>
                 ))}
             </Select>
@@ -161,4 +161,21 @@ const TiltakPeriode = ({
             )}
         </div>
     );
+};
+
+const getVisningsnavn = (
+    tiltaksdeltagelse: Tiltaksdeltagelse,
+    tiltaksdeltakelser: Tiltaksdeltagelse[],
+): string => {
+    const deltakelserMedType = tiltaksdeltakelser.filter(
+        (t) => t.typeKode === tiltaksdeltagelse.typeKode,
+    );
+    if (deltakelserMedType.length > 1) {
+        return `${tiltaksdeltagelse.typeNavn} (${periodeTilFormatertDatotekst({
+            fraOgMed: tiltaksdeltagelse.deltagelseFraOgMed!,
+            tilOgMed: tiltaksdeltagelse.deltagelseTilOgMed!,
+        })})`;
+    } else {
+        return tiltaksdeltagelse.typeNavn;
+    }
 };
