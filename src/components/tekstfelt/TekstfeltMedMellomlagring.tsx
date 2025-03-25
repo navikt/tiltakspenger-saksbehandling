@@ -15,7 +15,7 @@ type Props = {
 } & ComponentProps<typeof Textarea>;
 
 export const TekstfeltMedMellomlagring = forwardRef<HTMLTextAreaElement, Props>(
-    ({ label, lagringUrl, lagringBody, onChange, ...textareaProps }, ref) => {
+    ({ label, hideLabel = true, lagringUrl, lagringBody, onChange, ...textareaProps }, ref) => {
         const [venterPåLagring, setVenterPåLagring] = useState(false);
         const [lagringFeil, setLagringFeil] = useState<string | null>(null);
 
@@ -48,7 +48,7 @@ export const TekstfeltMedMellomlagring = forwardRef<HTMLTextAreaElement, Props>(
             <div>
                 <Textarea
                     label={label}
-                    hideLabel={true}
+                    hideLabel={hideLabel}
                     minRows={5}
                     resize={'vertical'}
                     onChange={(event) => {

@@ -32,6 +32,7 @@ export type VedtakTiltaksdeltakelsePeriode = {
 export type VedtakRevurderTilStansDTO = {
     begrunnelse: string;
     stansDato: string;
+    valgteHjemler: string[];
 };
 
 export type VedtakBegrunnelseLagringDTO = {

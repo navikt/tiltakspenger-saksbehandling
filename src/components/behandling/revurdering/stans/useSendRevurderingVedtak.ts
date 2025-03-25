@@ -29,5 +29,6 @@ const tilBeslutningDTO = (vedtak: RevurderingVedtakContext): VedtakRevurderTilSt
     return {
         begrunnelse: vedtak.getBegrunnelse(),
         stansDato: vedtak.stansdato,
+        valgteHjemler: vedtak.valgtHjemmel,
     };
 };

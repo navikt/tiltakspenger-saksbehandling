@@ -1,0 +1,116 @@
+import { Alert, Link, Select } from '@navikt/ds-react';
+import style from './RevurderingStansResultat.module.css';
+import { useRevurderingVedtak } from '../../RevurderingVedtakContext';
+import { useRevurderingBehandling } from '../../../BehandlingContext';
+import { useSendRevurderingVedtak } from '../useSendRevurderingVedtak';
+import { SaksbehandlerRolle } from '../../../../../types/Saksbehandler';
+import { VedtakSeksjon } from '../../../vedtak-layout/seksjon/VedtakSeksjon';
+import { Datovelger } from '../../../../datovelger/Datovelger';
+import { dateTilISOTekst } from '../../../../../utils/date';
+import React from 'react';
+import { useSak } from '../../../../../context/sak/SakContext';
+
+enum ValgtHjemmelForStans {
+    DELTAR_IKKE_PÅ_ARBEIDSMARKEDSTILTAK = 'DeltarIkkePåArbeidsmarkedstiltak',
+    ALDER = 'Alder',
+    LIVSOPPHOLDYTELSER = 'Livsoppholdytelser',
+    KVALIFISERINGSPROGRAMMET = 'Kvalifiseringsprogrammet',
+    INTRODUKSJONSPROGRAMMET = 'Introduksjonsprogrammet',
+    LØNN_FRA_TILTAKSARRANGØR = 'LønnFraTiltaksarrangør',
+    LØNN_FRA_ANDRE = 'LønnFraAndre',
+    INSTITUSJONSOPPHOLD = 'Institusjonsopphold',
+}
+
+export type ValgtHjemmelForStansOption = {
+    beskrivelse: string;
+    kode: ValgtHjemmelForStans;
+};
+
+export const RevurderingStansResultat = () => {
+    const revurderingVedtak = useRevurderingVedtak();
+    const { førsteLovligeStansdato, sisteDagSomGirRett } = useSak().sak;
+    const { setStansdato, valgtHjemmel, setValgtHjemmel } = revurderingVedtak;
+
+    const { behandling, rolleForBehandling } = useRevurderingBehandling();
+
+    const {} = useSendRevurderingVedtak(behandling, revurderingVedtak);
+    const erSaksbehandler = rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER;
+
+    const gosys = <Link href={'#gosys'}>{'Gosys'}</Link>;
+    const modiaPersonoversikt = <Link href={'#modia'}>{'Modia personoversikt'}</Link>;
+
+    const options: ValgtHjemmelForStansOption[] = [
+        {
+            beskrivelse: 'Ingen deltagelse - tiltakspengeforskriften § 2',
+            kode: ValgtHjemmelForStans.DELTAR_IKKE_PÅ_ARBEIDSMARKEDSTILTAK,
+        },
+        {
+            beskrivelse: 'Alder - tiltakspengeforskriften § 3',
+            kode: ValgtHjemmelForStans.ALDER,
+        },
+        {
+            beskrivelse: 'Andre livsoppholdsytelser - tiltakspengeforskriften § 7, første ledd',
+            kode: ValgtHjemmelForStans.LIVSOPPHOLDYTELSER,
+        },
+        {
+            beskrivelse: 'KVP - tiltakspengeforskriften § 7, tredje ledd',
+            kode: ValgtHjemmelForStans.KVALIFISERINGSPROGRAMMET,
+        },
+        {
+            beskrivelse: 'Introduksjonsprogram - tiltakspengeforskriften § 7, tredje ledd',
+            kode: ValgtHjemmelForStans.INTRODUKSJONSPROGRAMMET,
+        },
+        {
+            beskrivelse: 'Lønn fra tiltaksarrangør - tiltakspengeforskriften § 8',
+            kode: ValgtHjemmelForStans.LØNN_FRA_TILTAKSARRANGØR,
+        },
+        {
+            beskrivelse: 'Lønn fra andre - arbeidsmarkedsloven § 13',
+            kode: ValgtHjemmelForStans.LØNN_FRA_ANDRE,
+        },
+        {
+            beskrivelse: 'Institusjon - tiltakspengeforskriften § 9',
+            kode: ValgtHjemmelForStans.INSTITUSJONSOPPHOLD,
+        },
+    ];
+
+    return (
+        <VedtakSeksjon>
+            <VedtakSeksjon.Venstre>
+                <Alert className={style.alert} variant={'warning'} inline>
+                    <>
+                        Husk å vurdere om du må forhåndsvarsle bruker før du foretår en stans. Dette
+                        må gjøres via {gosys} eller {modiaPersonoversikt}.
+                    </>
+                </Alert>
+                <Select
+                    label={'Hjemmel for stans'}
+                    size={'medium'}
+                    readOnly={!erSaksbehandler}
+                    defaultValue={valgtHjemmel?.[0]}
+                    onChange={(event) => {
+                        setValgtHjemmel([event.target.value as ValgtHjemmelForStans]);
+                    }}
+                >
+                    <option>{'- Velg hjemmel for stans -'}</option>
+                    {options.map((option) => (
+                        <option key={option.kode}>{option.beskrivelse}</option>
+                    ))}
+                </Select>
+                <Datovelger
+                    label={'Stans fra og med'}
+                    minDate={førsteLovligeStansdato}
+                    maxDate={sisteDagSomGirRett}
+                    defaultSelected={sisteDagSomGirRett}
+                    readOnly={!erSaksbehandler}
+                    className={style.dato}
+                    onDateChange={(valgtDato) => {
+                        if (valgtDato) {
+                            setStansdato(dateTilISOTekst(valgtDato));
+                        }
+                    }}
+                />
+            </VedtakSeksjon.Venstre>
+        </VedtakSeksjon>
+    );
+};
