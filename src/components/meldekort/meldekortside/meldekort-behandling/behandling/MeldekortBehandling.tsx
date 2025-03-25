@@ -1,4 +1,13 @@
-import { Alert, BodyShort, Button, HStack, Spacer } from '@navikt/ds-react';
+import {
+    Alert,
+    BodyLong,
+    BodyShort,
+    Button,
+    Heading,
+    HStack,
+    Spacer,
+    Textarea,
+} from '@navikt/ds-react';
 import { useRef, useState } from 'react';
 import { useSak } from '../../../../../context/sak/SakContext';
 import { useSendMeldekortTilBeslutter } from '../../../hooks/useSendMeldekortTilBeslutter';
@@ -36,6 +45,7 @@ export const MeldekortBehandling = ({ meldeperiode }: Props) => {
         defaultValues: {
             uke1: dagerDefault.slice(0, 7),
             uke2: dagerDefault.slice(7, 14),
+            begrunnelse: undefined,
         },
     });
 
@@ -77,6 +87,21 @@ export const MeldekortBehandling = ({ meldeperiode }: Props) => {
                     <Spacer />
                     <MeldekortBehandlingUke dager={formMethods.getValues().uke2} ukenummer={2} />
                 </HStack>
+                <Heading size={'xsmall'} level={'2'} className={styles.header}>
+                    {'Begrunnelse (valgfri)'}
+                </Heading>
+                <BodyLong size={'small'} className={styles.personinfoVarsel}>
+                    {'Ikke skriv personsensitiv informasjon som ikke er relevant for saken.'}
+                </BodyLong>
+                <Textarea
+                    label={'Begrunnelse'}
+                    hideLabel={true}
+                    minRows={5}
+                    resize={'vertical'}
+                    onChange={(event) => {
+                        formMethods.setValue('begrunnelse', event.target.value);
+                    }}
+                />
                 {valideringsFeil && (
                     <Alert variant={'error'}>
                         <BodyShort weight={'semibold'}>{'Feil i utfyllingen'}</BodyShort>
@@ -100,6 +125,7 @@ export const MeldekortBehandling = ({ meldeperiode }: Props) => {
                                     dager: formMethods
                                         .getValues()
                                         .uke1.concat(formMethods.getValues().uke2),
+                                    begrunnelse: formMethods.getValues().begrunnelse,
                                 }).then((meldekortBehandling) => {
                                     if (meldekortBehandling) {
                                         setMeldekortbehandling(

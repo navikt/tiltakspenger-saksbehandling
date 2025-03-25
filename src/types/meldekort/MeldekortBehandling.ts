@@ -40,6 +40,7 @@ export type MeldekortBehandlingProps = {
     navkontor: string;
     navkontorNavn?: string;
     dager: MeldekortBehandlingDagBeregnet[];
+    begrunnelse?: string;
 };
 
 export type MeldekortBehandlingDagProps = {
@@ -60,4 +61,5 @@ type Beregningsdag = {
 
 export type MeldekortBehandlingDTO = {
     dager: MeldekortBehandlingDagProps[];
+    begrunnelse?: string;
 };
