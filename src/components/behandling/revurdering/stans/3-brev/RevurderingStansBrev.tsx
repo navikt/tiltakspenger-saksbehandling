@@ -5,7 +5,7 @@ import { SaksbehandlerRolle } from '../../../../../types/Saksbehandler';
 import { VedtakSeksjon } from '../../../vedtak-layout/seksjon/VedtakSeksjon';
 import React from 'react';
 import { TekstfeltMedMellomlagring } from '../../../../tekstfelt/TekstfeltMedMellomlagring';
-import { VedtakBegrunnelseLagringDTO } from '../../../../../types/VedtakTyper';
+import { VedtakBrevFritekstLagringDTO } from '../../../../../types/VedtakTyper';
 import { VedtaksbrevForhåndsvisning } from './forhåndsvisning/VedtaksbrevForhåndsvisning';
 
 export const RevurderingStansBrev = () => {
@@ -28,9 +28,9 @@ export const RevurderingStansBrev = () => {
                     description={'Teksten vises i vedtaksbrevet til bruker.'}
                     defaultValue={''}
                     readOnly={!erSaksbehandler}
-                    lagringUrl={`/sak/${sakId}/behandling/${id}/begrunnelse`}
+                    lagringUrl={`/sak/${sakId}/behandling/${id}/fritekst`}
                     lagringBody={(tekst) =>
-                        ({ begrunnelse: tekst }) satisfies VedtakBegrunnelseLagringDTO
+                        ({ fritekst: tekst }) satisfies VedtakBrevFritekstLagringDTO
                     }
                     ref={brevtekstRef}
                 />
