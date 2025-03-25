@@ -23,7 +23,7 @@ export const MeldekortOversikt = ({ meldeperioder, saksnummer }: Props) => {
             </Table.Header>
             <Table.Body>
                 {meldeperioder
-                    .sort((a, b) => (a.periode.fraOgMed > b.periode.fraOgMed ? -1 : 1))
+                    .toSorted((a, b) => (a.periode.fraOgMed > b.periode.fraOgMed ? -1 : 1))
                     .map((meldeperiode) => {
                         const { meldekortBehandling, id, status, periode } = meldeperiode;
 
