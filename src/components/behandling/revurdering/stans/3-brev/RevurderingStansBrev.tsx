@@ -13,7 +13,7 @@ export const RevurderingStansBrev = () => {
     const { brevtekstRef } = revurderingVedtak;
 
     const { behandling, rolleForBehandling } = useRevurderingBehandling();
-    const { sakId, id } = behandling;
+    const { sakId, id, fritekstTilVedtaksbrev } = behandling;
 
     const {} = useSendRevurderingVedtak(behandling, revurderingVedtak);
 
@@ -26,7 +26,7 @@ export const RevurderingStansBrev = () => {
                     hideLabel={false}
                     label={'Fritekst til brev'}
                     description={'Teksten vises i vedtaksbrevet til bruker.'}
-                    defaultValue={''}
+                    defaultValue={fritekstTilVedtaksbrev ?? ''}
                     readOnly={!erSaksbehandler}
                     lagringUrl={`/sak/${sakId}/behandling/${id}/fritekst`}
                     lagringBody={(tekst) =>
