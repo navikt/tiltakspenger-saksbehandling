@@ -6,14 +6,17 @@ import { OpprettRevurdering } from './opprett-revurdering/OpprettRevurdering';
 import { PersonaliaHeader } from '../personaliaheader/PersonaliaHeader';
 import { useSak } from '../../context/sak/SakContext';
 import { useFeatureToggles } from '../../context/feature-toggles/FeatureTogglesContext';
+import { AvsluttedeBehandlinger } from './behandlinger-oversikt/AvsluttedeBehandlinger';
+import { finnSisteMeldeperiodeVersjon } from '../../utils/meldeperioder';
 
 import styles from './Saksoversikt.module.css';
-import { AvsluttedeBehandlinger } from './behandlinger-oversikt/AvsluttedeBehandlinger';
 
 export const Saksoversikt = () => {
     const sak = useSak().sak;
     const { revurderingStansToggle } = useFeatureToggles();
-    const meldeperioder = sak.meldeperiodeKjeder.flatMap((kjede) => kjede.meldeperioder);
+    const nyesteMeldeperioder = sak.meldeperiodeKjeder.map((kjede) =>
+        finnSisteMeldeperiodeVersjon(kjede),
+    );
 
     return (
         <>
@@ -43,7 +46,10 @@ export const Saksoversikt = () => {
                     <Heading level={'3'} size={'small'}>
                         {'Meldekort'}
                     </Heading>
-                    <MeldekortOversikt meldeperioder={meldeperioder} saksnummer={sak.saksnummer} />
+                    <MeldekortOversikt
+                        meldeperioder={nyesteMeldeperioder}
+                        saksnummer={sak.saksnummer}
+                    />
                 </Box>
             </Box>
         </>

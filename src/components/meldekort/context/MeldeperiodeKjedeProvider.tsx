@@ -10,6 +10,7 @@ import {
     MeldekortBehandlingProps,
     MeldekortBehandlingStatus,
 } from '../../../types/meldekort/MeldekortBehandling';
+import { finnSisteMeldeperiodeVersjon } from '../../../utils/meldeperioder';
 
 type Props = {
     meldeperiodeKjede: MeldeperiodeKjedeProps;
@@ -23,7 +24,7 @@ export const MeldeperiodeKjedeProvider = ({
     const [meldeperiodeKjede, setMeldeperiodeKjede] = useState(meldeperiodeKjedeInitial);
 
     // TODO: selector komponent for å velge blant flere instanser av meldeperioden
-    const valgtMeldeperiode = meldeperiodeKjede.meldeperioder[0];
+    const valgtMeldeperiode = finnSisteMeldeperiodeVersjon(meldeperiodeKjede);
 
     const setMeldekortbehandling = useCallback(
         (id: MeldeperiodeId, behandling: MeldekortBehandlingProps) => {
