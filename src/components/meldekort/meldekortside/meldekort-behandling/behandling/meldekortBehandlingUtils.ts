@@ -59,4 +59,5 @@ const dagerMedDeltattEllerFravær: ReadonlySet<MeldekortBehandlingDagStatus> = n
 export type MeldekortBehandlingForm = {
     uke1: MeldekortBehandlingDagProps[];
     uke2: MeldekortBehandlingDagProps[];
+    begrunnelse?: string;
 };

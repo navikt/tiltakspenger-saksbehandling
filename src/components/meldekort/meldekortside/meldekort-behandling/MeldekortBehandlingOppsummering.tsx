@@ -1,4 +1,4 @@
-import { HStack, BodyShort, Button, VStack } from '@navikt/ds-react';
+import { HStack, BodyShort, Button, VStack, Heading, Textarea } from '@navikt/ds-react';
 import { ukeHeading } from '../../../../utils/date';
 import { Utbetalingsuke } from '../Utbetalingsuke';
 import { useRef } from 'react';
@@ -49,6 +49,23 @@ export const MeldekortBehandlingOppsummering = ({ meldeperiode }: Props) => {
                 utbetalingUke={uke2}
                 headingtekst={ukeHeading(meldeperiode.periode.tilOgMed)}
             />
+            {meldekortBehandling.begrunnelse && (
+                <VStack className={styles.begrunnelse}>
+                    <>
+                        <Heading size={'xsmall'} level={'2'} className={styles.header}>
+                            {'Begrunnelse (valgfri)'}
+                        </Heading>
+                        <Textarea
+                            label={'Begrunnelse'}
+                            hideLabel={true}
+                            minRows={5}
+                            resize={'vertical'}
+                            readOnly={true}
+                            defaultValue={meldekortBehandling.begrunnelse}
+                        />
+                    </>
+                </VStack>
+            )}
             <VStack>
                 <HStack gap="5" className={styles.totalbeløp}>
                     <BodyShort weight="semibold">Totalt ordinær beløp for perioden:</BodyShort>

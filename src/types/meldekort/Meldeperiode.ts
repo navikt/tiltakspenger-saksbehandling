@@ -35,6 +35,7 @@ export type MeldeperiodeKjedeProps = {
     periode: Periode;
     tiltaksnavn?: string[];
     meldeperioder: MeldeperiodeProps[];
+    begrunnelse?: string;
 };
 
 export type MeldeperiodeMedBehandlingProps = MeldeperiodeProps &
