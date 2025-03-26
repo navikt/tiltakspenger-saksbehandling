@@ -29,7 +29,8 @@ export type ValgtHjemmelForStansOption = {
 export const RevurderingStansResultat = () => {
     const revurderingVedtak = useRevurderingVedtak();
     const { førsteLovligeStansdato, sisteDagSomGirRett } = useSak().sak;
-    const { setStansdato, valgtHjemmel, setValgtHjemmel } = revurderingVedtak;
+    const { setStansdato, valgtHjemmelHarIkkeRettighet, setValgtHjemmelHarIkkeRettighet } =
+        revurderingVedtak;
 
     const { behandling, rolleForBehandling } = useRevurderingBehandling();
 
@@ -87,14 +88,20 @@ export const RevurderingStansResultat = () => {
                     label={'Hjemmel for stans'}
                     size={'medium'}
                     readOnly={!erSaksbehandler}
-                    defaultValue={valgtHjemmel?.[0]}
+                    defaultValue={
+                        (valgtHjemmelHarIkkeRettighet?.[0] ?? undefined) as ValgtHjemmelForStans
+                    }
                     onChange={(event) => {
-                        setValgtHjemmel([event.target.value as ValgtHjemmelForStans]);
+                        setValgtHjemmelHarIkkeRettighet([
+                            event.target.value as ValgtHjemmelForStans,
+                        ]);
                     }}
                 >
-                    <option>{'- Velg hjemmel for stans -'}</option>
+                    <option value={undefined}>{'- Velg hjemmel for stans -'}</option>
                     {options.map((option) => (
-                        <option key={option.kode}>{option.beskrivelse}</option>
+                        <option key={option.kode} value={option.kode}>
+                            {option.beskrivelse}
+                        </option>
                     ))}
                 </Select>
                 <Datovelger

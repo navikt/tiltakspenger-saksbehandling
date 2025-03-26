@@ -23,11 +23,10 @@ export const VedtaksbrevForhåndsvisning = () => {
                 className={style.knapp}
                 loading={forhåndsvisningLaster}
                 onClick={async () => {
-                    //Backend vil ignorere perioden dersom vedtaket er avslag, og hvis tilstanden er tilBeslutter (senere enn under behandling)
                     return hentForhåndsvisning({
                         fritekst: revurderingVedtak.brevtekstRef.current?.value ?? '',
                         stansDato: revurderingVedtak.stansdato,
-                        valgteHjemler: revurderingVedtak.valgtHjemmel,
+                        valgteHjemler: revurderingVedtak.valgtHjemmelHarIkkeRettighet,
                     }).then((blob) => {
                         if (blob) {
                             window.open(URL.createObjectURL(blob));

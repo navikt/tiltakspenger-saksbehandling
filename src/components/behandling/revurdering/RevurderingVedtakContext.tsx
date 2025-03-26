@@ -7,16 +7,17 @@ import {
     useRef,
     useState,
 } from 'react';
-import { useBehandling } from '../BehandlingContext';
 import { dateTilISOTekst } from '../../../utils/date';
+import { useSak } from '../../../context/sak/SakContext';
+import { useBehandling } from '../BehandlingContext';
 
 export type RevurderingVedtakContext = {
     begrunnelseRef: RefObject<HTMLTextAreaElement>;
     brevtekstRef: RefObject<HTMLTextAreaElement>;
     getBegrunnelse: () => string;
     getBrevtekst: () => string;
-    valgtHjemmel: string[];
-    setValgtHjemmel: (valgtHjemmel: string[]) => void;
+    valgtHjemmelHarIkkeRettighet: string[];
+    setValgtHjemmelHarIkkeRettighet: (valgtHjemmel: string[]) => void;
     stansdato: string;
     setStansdato: (fraOgMed: string) => void;
 };
@@ -25,10 +26,16 @@ const Context = createContext({} as RevurderingVedtakContext);
 
 export const RevurderingVedtakProvider = ({ children }: PropsWithChildren) => {
     const { behandling } = useBehandling();
+    const { sisteDagSomGirRett } = useSak().sak;
 
-    const initiellStansdato = behandling.virkningsperiode?.fraOgMed ?? new Date().toISOString();
+    // Om saksbehandler har valgt en dato, vis denne. Hvis ikke vis sisteDagSomGirRett.
+    console.log(behandling.virkningsperiode?.fraOgMed);
+    const initiellStansdato =
+        behandling.virkningsperiode?.fraOgMed ?? sisteDagSomGirRett ?? new Date().toISOString();
     const [stansdato, setStansdato] = useState(dateTilISOTekst(initiellStansdato));
-    const [valgtHjemmel, setValgtHjemmel] = useState<string[]>([]);
+    const [valgtHjemmelHarIkkeRettighet, setValgtHjemmelHarIkkeRettighet] = useState<string[]>(
+        behandling.valgtHjemmelHarIkkeRettighet ?? [],
+    );
 
     const begrunnelseRef = useRef<HTMLTextAreaElement>(null);
     const brevtekstRef = useRef<HTMLTextAreaElement>(null);
@@ -48,8 +55,8 @@ export const RevurderingVedtakProvider = ({ children }: PropsWithChildren) => {
                 getBegrunnelse,
                 brevtekstRef,
                 getBrevtekst,
-                valgtHjemmel,
-                setValgtHjemmel,
+                valgtHjemmelHarIkkeRettighet,
+                setValgtHjemmelHarIkkeRettighet,
             }}
         >
             {children}

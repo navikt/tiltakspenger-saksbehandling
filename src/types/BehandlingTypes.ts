@@ -22,7 +22,7 @@ type BehandlingDataCommon = {
     avbrutt: Nullable<Avbrutt>;
     iverksattTidspunkt: Nullable<string>;
     fritekstTilVedtaksbrev: string | null;
-    valgteHjemler: string[] | null;
+    valgtHjemmelHarIkkeRettighet: string[] | null;
 };
 
 export type FørstegangsbehandlingData = BehandlingDataCommon & {

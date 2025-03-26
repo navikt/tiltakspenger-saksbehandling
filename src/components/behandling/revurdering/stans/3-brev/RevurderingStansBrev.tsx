@@ -8,6 +8,8 @@ import { TekstfeltMedMellomlagring } from '../../../../tekstfelt/TekstfeltMedMel
 import { VedtakBrevFritekstLagringDTO } from '../../../../../types/VedtakTyper';
 import { VedtaksbrevForhåndsvisning } from './forhåndsvisning/VedtaksbrevForhåndsvisning';
 
+import style from './RevurderingStansBrev.module.css';
+
 export const RevurderingStansBrev = () => {
     const revurderingVedtak = useRevurderingVedtak();
     const { brevtekstRef } = revurderingVedtak;
@@ -21,7 +23,7 @@ export const RevurderingStansBrev = () => {
 
     return (
         <VedtakSeksjon>
-            <VedtakSeksjon.Venstre>
+            <VedtakSeksjon.Venstre className={style.brev}>
                 <TekstfeltMedMellomlagring
                     hideLabel={false}
                     label={'Fritekst til brev'}

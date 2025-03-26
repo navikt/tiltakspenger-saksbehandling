@@ -30,6 +30,7 @@ export type VedtakTiltaksdeltakelsePeriode = {
 };
 
 export type VedtakRevurderTilStansDTO = {
+    fritekstTilVedtaksbrev: string;
     begrunnelse: string;
     stansDato: string;
     valgteHjemler: string[];
