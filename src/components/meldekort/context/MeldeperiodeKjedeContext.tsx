@@ -1,16 +1,28 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { MeldeperiodeKjedeContext } from './MeldeperiodeKjedeContext';
+import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import {
     MeldeperiodeId,
     MeldeperiodeKjedeProps,
-    MeldeperiodeStatus,
+    MeldeperiodeProps,
 } from '../../../types/meldekort/Meldeperiode';
-import Varsel from '../../varsel/Varsel';
+import { MeldekortBehandlingProps } from '../../../types/meldekort/MeldekortBehandling';
 import {
-    MeldekortBehandlingProps,
-    MeldekortBehandlingStatus,
-} from '../../../types/meldekort/MeldekortBehandling';
-import { finnSisteMeldeperiodeVersjon } from '../../../utils/meldeperioder';
+    finnSisteMeldeperiodeVersjon,
+    meldekortBehandlingStatusTilMeldeperiodeStatus,
+} from '../../../utils/meldeperioder';
+import Varsel from '../../varsel/Varsel';
+
+export type MeldeperioderContextState = {
+    meldeperiodeKjede: MeldeperiodeKjedeProps;
+    valgtMeldeperiode: MeldeperiodeProps;
+    setMeldekortbehandling: (
+        meldeperiodeId: MeldeperiodeId,
+        meldekortBehandling: MeldekortBehandlingProps,
+    ) => void;
+};
+
+export const MeldeperiodeKjedeContext = createContext<MeldeperioderContextState>(
+    {} as MeldeperioderContextState,
+);
 
 type Props = {
     meldeperiodeKjede: MeldeperiodeKjedeProps;
@@ -27,16 +39,20 @@ export const MeldeperiodeKjedeProvider = ({
     const valgtMeldeperiode = finnSisteMeldeperiodeVersjon(meldeperiodeKjede);
 
     const setMeldekortbehandling = useCallback(
-        (id: MeldeperiodeId, behandling: MeldekortBehandlingProps) => {
+        (id: MeldeperiodeId, nyBehandling: MeldekortBehandlingProps) => {
             setMeldeperiodeKjede({
                 ...meldeperiodeKjede,
                 meldeperioder: meldeperiodeKjede.meldeperioder.map((meldeperiode) =>
                     meldeperiode.id === id
-                        ? {
+                        ? ({
                               ...meldeperiode,
-                              meldekortBehandling: behandling,
-                              status: meldekortBehandlingStatusTilPeriodeStatus[behandling.status],
-                          }
+                              meldekortBehandlinger: meldeperiode.meldekortBehandlinger.map(
+                                  (beh) => (beh.id === nyBehandling.id ? nyBehandling : beh),
+                              ),
+                              status: meldekortBehandlingStatusTilMeldeperiodeStatus[
+                                  nyBehandling.status
+                              ],
+                          } satisfies MeldeperiodeProps)
                         : meldeperiode,
                 ),
             });
@@ -70,13 +86,6 @@ export const MeldeperiodeKjedeProvider = ({
     );
 };
 
-const meldekortBehandlingStatusTilPeriodeStatus: Record<
-    MeldekortBehandlingStatus,
-    MeldeperiodeStatus
-> = {
-    [MeldekortBehandlingStatus.KLAR_TIL_UTFYLLING]: MeldeperiodeStatus.KLAR_TIL_BEHANDLING,
-    [MeldekortBehandlingStatus.GODKJENT]: MeldeperiodeStatus.GODKJENT,
-    [MeldekortBehandlingStatus.KLAR_TIL_BESLUTNING]: MeldeperiodeStatus.KLAR_TIL_BESLUTNING,
-    [MeldekortBehandlingStatus.IKKE_RETT_TIL_TILTAKSPENGER]:
-        MeldeperiodeStatus.IKKE_RETT_TIL_TILTAKSPENGER,
+export const useMeldeperiodeKjede = () => {
+    return useContext(MeldeperiodeKjedeContext);
 };

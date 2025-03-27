@@ -19,17 +19,19 @@ import {
     tellDagerMedDeltattEllerFravær,
 } from './meldekortBehandlingUtils';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
-import { MeldeperiodeMedBehandlingProps } from '../../../../../types/meldekort/Meldeperiode';
-import { useMeldeperiodeKjede } from '../../../hooks/useMeldeperiodeKjede';
+import { MeldekortBehandlingProps } from '../../../../../types/meldekort/MeldekortBehandling';
+import { MeldeperiodeProps } from '../../../../../types/meldekort/Meldeperiode';
 
 import styles from '../../Meldekort.module.css';
+import { useMeldeperiodeKjede } from '../../../context/MeldeperiodeKjedeContext';
 
 type Props = {
-    meldeperiode: MeldeperiodeMedBehandlingProps;
+    meldeperiode: MeldeperiodeProps;
+    meldekortBehandling: MeldekortBehandlingProps;
 };
 
-export const MeldekortBehandling = ({ meldeperiode }: Props) => {
-    const { meldekortBehandling, brukersMeldekort, antallDager } = meldeperiode;
+export const MeldekortBehandling = ({ meldeperiode, meldekortBehandling }: Props) => {
+    const { brukersMeldekort, antallDager } = meldeperiode;
     const { sakId } = useSak().sak;
 
     const { setMeldekortbehandling } = useMeldeperiodeKjede();

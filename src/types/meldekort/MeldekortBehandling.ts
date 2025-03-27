@@ -29,6 +29,11 @@ export enum ReduksjonAvYtelse {
     YTELSEN_FALLER_BORT = 'YTELSEN_FALLER_BORT',
 }
 
+export enum MeldekortBehandlingType {
+    FØRSTE_BEHANDLING = 'FØRSTE_BEHANDLING',
+    KORRIGERING = 'KORRIGERING',
+}
+
 export type MeldekortBehandlingProps = {
     id: MeldekortBehandlingId;
     saksbehandler: string;
@@ -41,6 +46,7 @@ export type MeldekortBehandlingProps = {
     navkontorNavn?: string;
     dager: MeldekortBehandlingDagBeregnet[];
     begrunnelse?: string;
+    type: MeldekortBehandlingType;
 };
 
 export type MeldekortBehandlingDagProps = {

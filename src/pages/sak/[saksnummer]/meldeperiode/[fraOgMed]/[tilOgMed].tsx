@@ -3,8 +3,8 @@ import { MeldeperiodeKjedeProps } from '../../../../../types/meldekort/Meldeperi
 import { SakProps } from '../../../../../types/SakTypes';
 import { fetchSak } from '../../../../../utils/fetch/fetch-server';
 import { MeldeperiodeSide } from '../../../../../components/meldekort/MeldeperiodeSide';
-import { MeldeperiodeKjedeProvider } from '../../../../../components/meldekort/context/MeldeperiodeKjedeProvider';
 import { SakProvider } from '../../../../../context/sak/SakContext';
+import { MeldeperiodeKjedeProvider } from '../../../../../components/meldekort/context/MeldeperiodeKjedeContext';
 
 type Props = {
     meldeperiodeKjede: MeldeperiodeKjedeProps;

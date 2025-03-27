@@ -7,20 +7,18 @@ import {
 import { MeldekortBehandling } from './meldekort-behandling/behandling/MeldekortBehandling';
 import { MeldekortBehandlingOppsummering } from './meldekort-behandling/MeldekortBehandlingOppsummering';
 import { BrukersMeldekortVisning } from './BrukersMeldekort';
-import { useMeldeperiodeKjede } from '../hooks/useMeldeperiodeKjede';
 import { kanSaksbehandleForMeldekort } from '../../../utils/tilganger';
-import {
-    MeldeperiodeMedBehandlingProps,
-    MeldeperiodeProps,
-} from '../../../types/meldekort/Meldeperiode';
 import { useSaksbehandler } from '../../../context/saksbehandler/SaksbehandlerContext';
+import { useMeldeperiodeKjede } from '../context/MeldeperiodeKjedeContext';
 
 import styles from './Meldekort.module.css';
 
 export const Meldekortside = () => {
     const { innloggetSaksbehandler } = useSaksbehandler();
     const { meldeperiodeKjede, valgtMeldeperiode } = useMeldeperiodeKjede();
-    const { brukersMeldekort, meldekortBehandling } = valgtMeldeperiode;
+    const { brukersMeldekort, meldekortBehandlinger } = valgtMeldeperiode;
+
+    const sisteMeldekortBehandling = meldekortBehandlinger.at(-1);
 
     return (
         <VStack gap={'5'} className={styles.wrapper}>
@@ -31,16 +29,25 @@ export const Meldekortside = () => {
                         brukersMeldekort={brukersMeldekort}
                     />
                 )}
-                {harBehandling(valgtMeldeperiode) && (
+                {sisteMeldekortBehandling && (
                     <VStack gap={'5'}>
                         <Heading level={'2'} size={'medium'}>
                             {meldekortHeading(meldeperiodeKjede.periode)}
                         </Heading>
-                        {kanUtfylles(meldekortBehandling) &&
-                        kanSaksbehandleForMeldekort(meldekortBehandling, innloggetSaksbehandler) ? (
-                            <MeldekortBehandling meldeperiode={valgtMeldeperiode} />
+                        {kanUtfylles(sisteMeldekortBehandling) &&
+                        kanSaksbehandleForMeldekort(
+                            sisteMeldekortBehandling,
+                            innloggetSaksbehandler,
+                        ) ? (
+                            <MeldekortBehandling
+                                meldeperiode={valgtMeldeperiode}
+                                meldekortBehandling={sisteMeldekortBehandling}
+                            />
                         ) : (
-                            <MeldekortBehandlingOppsummering meldeperiode={valgtMeldeperiode} />
+                            <MeldekortBehandlingOppsummering
+                                meldeperiode={valgtMeldeperiode}
+                                meldekortBehandling={sisteMeldekortBehandling}
+                            />
                         )}
                     </VStack>
                 )}
@@ -48,10 +55,6 @@ export const Meldekortside = () => {
         </VStack>
     );
 };
-
-const harBehandling = (
-    meldeperiode: MeldeperiodeProps,
-): meldeperiode is MeldeperiodeMedBehandlingProps => !!meldeperiode.meldekortBehandling;
 
 const kanUtfylles = (
     meldekortBehandling?: MeldekortBehandlingProps,

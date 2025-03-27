@@ -4,7 +4,7 @@ import { useOpprettMeldekortBehandling } from '../../hooks/useOpprettMeldekortBe
 import { BekreftelsesModal } from '../../../modaler/BekreftelsesModal';
 import { useRef } from 'react';
 import { useSak } from '../../../../context/sak/SakContext';
-import { useMeldeperiodeKjede } from '../../hooks/useMeldeperiodeKjede';
+import { useMeldeperiodeKjede } from '../../context/MeldeperiodeKjedeContext';
 
 import styles from './MeldekortBehandlingOpprett.module.css';
 
@@ -24,13 +24,15 @@ export const MeldekortBehandlingOpprett = ({ meldeperiode, erKorrigering }: Prop
 
     const modalRef = useRef<HTMLDialogElement>(null);
 
+    const lukkModal = () => modalRef.current?.close();
+
     return (
         <div>
             {meldeperiode.status === MeldeperiodeStatus.IKKE_RETT_TIL_TILTAKSPENGER ? (
                 <Alert variant={'info'}>{'Ikke rett til tiltakspenger for denne perioden'}</Alert>
             ) : (
                 <Button onClick={() => modalRef.current?.showModal()} className={styles.knapp}>
-                    {erKorrigering ? 'Start korrigering (ikke trykk meg!)' : 'Start behandling'}
+                    {erKorrigering ? 'Start korrigering (ikke trykk ennå!)' : 'Start behandling'}
                 </Button>
             )}
             {feil && <Alert variant={'error'}>{feil.message}</Alert>}
@@ -38,7 +40,7 @@ export const MeldekortBehandlingOpprett = ({ meldeperiode, erKorrigering }: Prop
                 modalRef={modalRef}
                 tittel={'Start behandling av meldekortet'}
                 feil={feil}
-                lukkModal={() => modalRef.current?.close()}
+                lukkModal={lukkModal}
                 bekreftKnapp={
                     <Button
                         icon={laster && <Loader />}
@@ -47,6 +49,7 @@ export const MeldekortBehandlingOpprett = ({ meldeperiode, erKorrigering }: Prop
                             opprett().then((meldekortBehandling) => {
                                 if (meldekortBehandling) {
                                     setMeldekortbehandling(meldeperiode.id, meldekortBehandling);
+                                    lukkModal();
                                 }
                             });
                         }}

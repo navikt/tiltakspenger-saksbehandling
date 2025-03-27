@@ -25,7 +25,9 @@ export const MeldekortOversikt = ({ meldeperioder, saksnummer }: Props) => {
                 {meldeperioder
                     .toSorted((a, b) => (a.periode.fraOgMed > b.periode.fraOgMed ? -1 : 1))
                     .map((meldeperiode) => {
-                        const { meldekortBehandling, id, status, periode } = meldeperiode;
+                        const { meldekortBehandlinger, id, status, periode } = meldeperiode;
+
+                        const sisteMeldekortBehandling = meldekortBehandlinger.at(-1);
 
                         return (
                             <Table.Row shadeOnHover={false} key={id}>
@@ -36,10 +38,10 @@ export const MeldekortOversikt = ({ meldeperioder, saksnummer }: Props) => {
                                     {periodeTilFormatertDatotekst(periode)}
                                 </Table.DataCell>
                                 <Table.DataCell>
-                                    {meldekortBehandling?.saksbehandler ?? '-'}
+                                    {sisteMeldekortBehandling?.saksbehandler ?? '-'}
                                 </Table.DataCell>
                                 <Table.DataCell>
-                                    {meldekortBehandling?.beslutter ?? '-'}
+                                    {sisteMeldekortBehandling?.beslutter ?? '-'}
                                 </Table.DataCell>
                                 <Table.DataCell>
                                     {status !== MeldeperiodeStatus.IKKE_KLAR_TIL_UTFYLLING && (

@@ -4,7 +4,6 @@ import {
     formaterTidspunkt,
     periodeTilFormatertDatotekst,
 } from '../../../utils/date';
-import { useMeldeperiodeKjede } from '../hooks/useMeldeperiodeKjede';
 import { MeldekortBehandlingOpprett } from '../meldekortside/meldekort-behandling/MeldekortBehandlingOpprett';
 import {
     MeldekortBehandlingProps,
@@ -12,10 +11,11 @@ import {
 } from '../../../types/meldekort/MeldekortBehandling';
 import { useSak } from '../../../context/sak/SakContext';
 import { useFeatureToggles } from '../../../context/feature-toggles/FeatureTogglesContext';
-
-import styles from './MeldekortDetaljer.module.css';
 import { ArrayOrSingle } from '../../../types/UtilTypes';
 import { forceArray } from '../../../utils/array';
+
+import styles from './MeldekortDetaljer.module.css';
+import { useMeldeperiodeKjede } from '../context/MeldeperiodeKjedeContext';
 
 export const MeldekortDetaljer = () => {
     const { sak } = useSak();
@@ -23,8 +23,10 @@ export const MeldekortDetaljer = () => {
 
     const { meldeperiodeKjede, valgtMeldeperiode } = useMeldeperiodeKjede();
     const { periode, tiltaksnavn } = meldeperiodeKjede;
-    const { antallDager, meldekortBehandling, brukersMeldekort } = valgtMeldeperiode;
+    const { antallDager, meldekortBehandlinger, brukersMeldekort } = valgtMeldeperiode;
     const { brukersMeldekortToggle } = useFeatureToggles();
+
+    const sisteMeldekortBehandling = meldekortBehandlinger.at(-1);
 
     return (
         <VStack gap="3" className={styles.wrapper}>
@@ -52,8 +54,8 @@ export const MeldekortDetaljer = () => {
                 />
             )}
 
-            {meldekortBehandling ? (
-                <MeldekortBehandlingDetaljer {...meldekortBehandling} />
+            {sisteMeldekortBehandling ? (
+                <MeldekortBehandlingDetaljer {...sisteMeldekortBehandling} />
             ) : (
                 <MeldekortBehandlingOpprett
                     meldeperiode={valgtMeldeperiode}
@@ -64,12 +66,15 @@ export const MeldekortDetaljer = () => {
     );
 };
 
-const MeldekortBehandlingDetaljer = ({ saksbehandler, beslutter }: MeldekortBehandlingProps) => {
+const MeldekortBehandlingDetaljer = ({
+    saksbehandler,
+    beslutter,
+    status,
+}: MeldekortBehandlingProps) => {
     const { meldekortKorrigeringToggle } = useFeatureToggles();
     const { valgtMeldeperiode } = useMeldeperiodeKjede();
 
-    const erUnderBehandling =
-        valgtMeldeperiode.meldekortBehandling?.status !== MeldekortBehandlingStatus.GODKJENT;
+    const erUnderBehandling = status !== MeldekortBehandlingStatus.GODKJENT;
 
     return (
         <>

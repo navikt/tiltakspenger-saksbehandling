@@ -5,23 +5,23 @@ import { useRef } from 'react';
 import { useGodkjennMeldekort } from '../../hooks/useGodkjennMeldekort';
 import { kanBeslutteForMeldekort } from '../../../../utils/tilganger';
 import { BekreftelsesModal } from '../../../modaler/BekreftelsesModal';
-import { MeldeperiodeMedBehandlingProps } from '../../../../types/meldekort/Meldeperiode';
 import { useSak } from '../../../../context/sak/SakContext';
 import { useSaksbehandler } from '../../../../context/saksbehandler/SaksbehandlerContext';
-import { useMeldeperiodeKjede } from '../../hooks/useMeldeperiodeKjede';
+import { MeldeperiodeProps } from '../../../../types/meldekort/Meldeperiode';
+import { MeldekortBehandlingProps } from '../../../../types/meldekort/MeldekortBehandling';
+import { useMeldeperiodeKjede } from '../../context/MeldeperiodeKjedeContext';
 
 import styles from '../Meldekort.module.css';
 
 type Props = {
-    meldeperiode: MeldeperiodeMedBehandlingProps;
+    meldeperiode: MeldeperiodeProps;
+    meldekortBehandling: MeldekortBehandlingProps;
 };
 
-export const MeldekortBehandlingOppsummering = ({ meldeperiode }: Props) => {
+export const MeldekortBehandlingOppsummering = ({ meldeperiode, meldekortBehandling }: Props) => {
     const { sakId } = useSak().sak;
     const { innloggetSaksbehandler } = useSaksbehandler();
     const { setMeldekortbehandling } = useMeldeperiodeKjede();
-
-    const { meldekortBehandling } = meldeperiode;
 
     const { godkjennMeldekort, godkjennMeldekortLaster, reset, godkjennMeldekortFeil } =
         useGodkjennMeldekort(meldekortBehandling.id, sakId);

@@ -3,8 +3,8 @@ import { PersonaliaHeader } from '../personaliaheader/PersonaliaHeader';
 import { finnMeldeperiodeStatusTekst } from '../../utils/tekstformateringUtils';
 import { MeldekortDetaljer } from './meldekortdetaljer/MeldekortDetaljer';
 import { Meldekortside } from './meldekortside/Meldekortside';
-import { useMeldeperiodeKjede } from './hooks/useMeldeperiodeKjede';
 import { useSak } from '../../context/sak/SakContext';
+import { useMeldeperiodeKjede } from './context/MeldeperiodeKjedeContext';
 
 import style from './MeldeperiodeSide.module.css';
 

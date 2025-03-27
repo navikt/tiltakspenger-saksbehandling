@@ -26,7 +26,7 @@ export type MeldeperiodeProps = {
     status: MeldeperiodeStatus;
     antallDager: number;
     girRett: Record<string, boolean>;
-    meldekortBehandling?: MeldekortBehandlingProps;
+    meldekortBehandlinger: MeldekortBehandlingProps[];
     brukersMeldekort?: BrukersMeldekortProps;
 };
 
@@ -37,6 +37,3 @@ export type MeldeperiodeKjedeProps = {
     meldeperioder: MeldeperiodeProps[];
     begrunnelse?: string;
 };
-
-export type MeldeperiodeMedBehandlingProps = MeldeperiodeProps &
-    Required<Pick<MeldeperiodeProps, 'meldekortBehandling'>>;
