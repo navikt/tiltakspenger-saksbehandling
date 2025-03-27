@@ -11,13 +11,13 @@ import {
 import { useRef, useState } from 'react';
 import { useSak } from '../../../../../context/sak/SakContext';
 import { useSendMeldekortTilBeslutter } from '../../../hooks/useSendMeldekortTilBeslutter';
-import { MeldekortBehandlingUke } from './MeldekortBehandlingUke';
+import { MeldekortUtfyllingUke } from './MeldekortUtfyllingUke';
 import { BekreftelsesModal } from '../../../../modaler/BekreftelsesModal';
 import {
     hentMeldekortBehandlingDager,
     MeldekortBehandlingForm,
     tellDagerMedDeltattEllerFravær,
-} from './meldekortBehandlingUtils';
+} from './meldekortUtfyllingUtils';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { MeldekortBehandlingProps } from '../../../../../types/meldekort/MeldekortBehandling';
 import { MeldeperiodeProps } from '../../../../../types/meldekort/Meldeperiode';
@@ -30,7 +30,7 @@ type Props = {
     meldekortBehandling: MeldekortBehandlingProps;
 };
 
-export const MeldekortBehandling = ({ meldeperiode, meldekortBehandling }: Props) => {
+export const MeldekortUtfylling = ({ meldeperiode, meldekortBehandling }: Props) => {
     const { antallDager } = meldeperiode;
     const { sakId } = useSak().sak;
 
@@ -86,9 +86,9 @@ export const MeldekortBehandling = ({ meldeperiode, meldekortBehandling }: Props
         <FormProvider {...formMethods}>
             <form onSubmit={formMethods.handleSubmit(validerOgÅpneBekreftelse)}>
                 <HStack className={styles.meldekort}>
-                    <MeldekortBehandlingUke dager={formMethods.getValues().uke1} ukenummer={1} />
+                    <MeldekortUtfyllingUke dager={formMethods.getValues().uke1} ukenummer={1} />
                     <Spacer />
-                    <MeldekortBehandlingUke dager={formMethods.getValues().uke2} ukenummer={2} />
+                    <MeldekortUtfyllingUke dager={formMethods.getValues().uke2} ukenummer={2} />
                 </HStack>
                 <Heading size={'xsmall'} level={'2'} className={styles.header}>
                     {'Begrunnelse (valgfri)'}

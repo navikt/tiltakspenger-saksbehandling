@@ -1,18 +1,18 @@
 import { Box, Heading, HStack, Table } from '@navikt/ds-react';
 import React from 'react';
-import { formaterDatotekst, ukedagFraDatotekst } from '../../../../utils/date';
-import { MeldekortBehandlingDagBeregnet } from '../../../../types/meldekort/MeldekortBehandling';
-import { meldekortBehandlingDagStatusTekst } from '../../../../utils/tekstformateringUtils';
-import { ikonForMeldekortBehandlingDagStatus } from '../Meldekortikoner';
+import { formaterDatotekst, ukedagFraDatotekst } from '../../../../../utils/date';
+import { MeldekortBehandlingDagBeregnet } from '../../../../../types/meldekort/MeldekortBehandling';
+import { meldekortBehandlingDagStatusTekst } from '../../../../../utils/tekstformateringUtils';
+import { ikonForMeldekortBehandlingDagStatus } from '../../Meldekortikoner';
 
-import styles from '../MeldekortHovedseksjon.module.css';
+import styles from '../../MeldekortHovedseksjon.module.css';
 
 type UtbetalingsukeProps = {
     utbetalingUke: MeldekortBehandlingDagBeregnet[];
     headingtekst: string;
 };
 
-export const Utbetalingsuke = ({ utbetalingUke, headingtekst }: UtbetalingsukeProps) => {
+export const MeldekortOppsummeringUke = ({ utbetalingUke, headingtekst }: UtbetalingsukeProps) => {
     return (
         <Box className={styles.utbetalingsuke}>
             <Heading size="small" level="3">

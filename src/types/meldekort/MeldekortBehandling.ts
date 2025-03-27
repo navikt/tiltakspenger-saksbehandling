@@ -38,6 +38,7 @@ export type MeldekortBehandlingProps = {
     id: MeldekortBehandlingId;
     saksbehandler: string;
     beslutter?: string;
+    opprettet: string;
     status: MeldekortBehandlingStatus;
     totalbeløpTilUtbetaling: number;
     totalOrdinærBeløpTilUtbetaling: number;

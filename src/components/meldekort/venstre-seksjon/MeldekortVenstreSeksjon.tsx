@@ -4,7 +4,7 @@ import {
     formaterTidspunkt,
     periodeTilFormatertDatotekst,
 } from '../../../utils/date';
-import { MeldekortBehandlingOpprett } from '../hovedseksjon/meldekort-behandling/MeldekortBehandlingOpprett';
+import { MeldekortBehandlingOpprett } from '../hovedseksjon/meldekort-behandling/opprett/MeldekortBehandlingOpprett';
 import {
     MeldekortBehandlingProps,
     MeldekortBehandlingStatus,

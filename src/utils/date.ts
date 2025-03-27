@@ -18,6 +18,10 @@ export function formaterTidspunkt(dateString: string) {
     return dayjs(dateString).format('DD.MM.YYYY kl. HH:mm');
 }
 
+export function formaterTidspunktKort(dateString: string) {
+    return dayjs(dateString).format('DD.MM.YY HH:mm');
+}
+
 export function formaterDatotekst(dateString: string) {
     return dayjs(dateString).format('DD.MM.YYYY');
 }
@@ -27,7 +31,7 @@ export function periodeTilFormatertDatotekst({ fraOgMed, tilOgMed }: Periode) {
 }
 
 export const meldekortHeading = (periode: Periode): string => {
-    return `Meldekort uke ${ukenummerFraDatotekst(periode.fraOgMed)} / ${ukenummerFraDatotekst(periode.tilOgMed)}`;
+    return `Meldekort uke ${ukenummerFraDatotekst(periode.fraOgMed)} og ${ukenummerFraDatotekst(periode.tilOgMed)}`;
 };
 
 export const ukeHeading = (dato: string): string => {

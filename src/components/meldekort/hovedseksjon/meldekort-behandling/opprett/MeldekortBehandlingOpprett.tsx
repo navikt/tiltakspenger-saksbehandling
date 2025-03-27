@@ -1,11 +1,11 @@
 import { Alert, Button, Loader } from '@navikt/ds-react';
-import { useOpprettMeldekortBehandling } from '../../hooks/useOpprettMeldekortBehandling';
-import { BekreftelsesModal } from '../../../modaler/BekreftelsesModal';
+import { useOpprettMeldekortBehandling } from '../../../hooks/useOpprettMeldekortBehandling';
+import { BekreftelsesModal } from '../../../../modaler/BekreftelsesModal';
 import { useRef } from 'react';
-import { useSak } from '../../../../context/sak/SakContext';
-import { useMeldeperiodeKjede } from '../../context/MeldeperiodeKjedeContext';
-import { MeldekortBehandlingType } from '../../../../types/meldekort/MeldekortBehandling';
-import { MeldeperiodeKjedeStatus } from '../../../../types/meldekort/Meldeperiode';
+import { useSak } from '../../../../../context/sak/SakContext';
+import { useMeldeperiodeKjede } from '../../../context/MeldeperiodeKjedeContext';
+import { MeldekortBehandlingType } from '../../../../../types/meldekort/MeldekortBehandling';
+import { MeldeperiodeKjedeStatus } from '../../../../../types/meldekort/Meldeperiode';
 
 import styles from './MeldekortBehandlingOpprett.module.css';
 
@@ -32,6 +32,11 @@ export const MeldekortBehandlingOpprett = ({ type }: Props) => {
 
     return (
         <div>
+            {feil && (
+                <Alert variant={'error'} className={styles.varsel}>
+                    {feil.message}
+                </Alert>
+            )}
             {kjedeStatus === MeldeperiodeKjedeStatus.IKKE_RETT_TIL_TILTAKSPENGER ? (
                 <Alert variant={'info'} className={styles.varsel}>
                     {'Ikke rett til tiltakspenger for denne perioden'}
@@ -52,7 +57,6 @@ export const MeldekortBehandlingOpprett = ({ type }: Props) => {
                     </Button>
                 </>
             )}
-            {feil && <Alert variant={'error'}>{feil.message}</Alert>}
             <BekreftelsesModal
                 modalRef={modalRef}
                 tittel={tekster.modalTittel}

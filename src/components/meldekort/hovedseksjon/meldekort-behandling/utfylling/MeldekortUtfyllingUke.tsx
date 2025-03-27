@@ -7,7 +7,7 @@ import { meldekortdagHeading, ukeHeading } from '../../../../../utils/date';
 import { ikonForMeldekortBehandlingDagStatus } from '../../Meldekortikoner';
 import { meldekortBehandlingDagStatusTekst } from '../../../../../utils/tekstformateringUtils';
 import { Controller, FieldPath, useFormContext } from 'react-hook-form';
-import { MeldekortBehandlingForm } from './meldekortBehandlingUtils';
+import { MeldekortBehandlingForm } from './meldekortUtfyllingUtils';
 
 import styles from '../../MeldekortHovedseksjon.module.css';
 
@@ -23,7 +23,7 @@ type Props = {
     ukenummer: 1 | 2;
 };
 
-export const MeldekortBehandlingUke = ({ dager, ukenummer }: Props) => {
+export const MeldekortUtfyllingUke = ({ dager, ukenummer }: Props) => {
     const { control, watch, getFieldState, formState } = useFormContext<MeldekortBehandlingForm>();
 
     return (
