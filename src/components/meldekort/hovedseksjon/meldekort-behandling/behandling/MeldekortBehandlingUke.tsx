@@ -9,7 +9,7 @@ import { meldekortBehandlingDagStatusTekst } from '../../../../../utils/tekstfor
 import { Controller, FieldPath, useFormContext } from 'react-hook-form';
 import { MeldekortBehandlingForm } from './meldekortBehandlingUtils';
 
-import styles from '../../Meldekort.module.css';
+import styles from '../../MeldekortHovedseksjon.module.css';
 
 const meldekortStatusValg = Object.values(MeldekortBehandlingDagStatus).filter(
     (status) =>

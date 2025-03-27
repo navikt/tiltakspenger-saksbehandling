@@ -1,7 +1,7 @@
 import { BehandlingStatus, Behandlingstype } from '../types/BehandlingTypes';
 import { MeldekortBehandlingDagStatus } from '../types/meldekort/MeldekortBehandling';
-import { MeldeperiodeStatus } from '../types/meldekort/Meldeperiode';
 import { BrukersMeldekortDagStatus } from '../types/meldekort/BrukersMeldekort';
+import { MeldeperiodeKjedeStatus } from '../types/meldekort/Meldeperiode';
 
 export const finnBehandlingStatusTekst = (status: BehandlingStatus, underkjent: boolean) => {
     switch (status) {
@@ -41,13 +41,14 @@ export const meldekortBehandlingDagStatusTekst: Record<MeldekortBehandlingDagSta
     [MeldekortBehandlingDagStatus.IkkeUtfylt]: 'Ikke utfylt',
 } as const;
 
-export const finnMeldeperiodeStatusTekst: Record<MeldeperiodeStatus, string> = {
-    [MeldeperiodeStatus.IKKE_RETT_TIL_TILTAKSPENGER]: 'Ikke rett til tiltakspenger',
-    [MeldeperiodeStatus.IKKE_KLAR_TIL_UTFYLLING]: 'Ikke klar til utfylling',
-    [MeldeperiodeStatus.VENTER_PÅ_UTFYLLING]: 'Venter på utfylling',
-    [MeldeperiodeStatus.KLAR_TIL_BEHANDLING]: 'Klar til behandling',
-    [MeldeperiodeStatus.KLAR_TIL_BESLUTNING]: 'Klar til beslutning',
-    [MeldeperiodeStatus.GODKJENT]: 'Godkjent',
+export const finnMeldeperiodeKjedeStatusTekst: Record<MeldeperiodeKjedeStatus, string> = {
+    [MeldeperiodeKjedeStatus.IKKE_RETT_TIL_TILTAKSPENGER]: 'Ikke rett til tiltakspenger',
+    [MeldeperiodeKjedeStatus.IKKE_KLAR_TIL_BEHANDLING]: 'Ikke klar til behandling',
+    [MeldeperiodeKjedeStatus.KLAR_TIL_BEHANDLING]: 'Klar til behandling',
+    [MeldeperiodeKjedeStatus.UNDER_BEHANDLING]: 'Under behandling',
+    [MeldeperiodeKjedeStatus.UNDER_KORRIGERING]: 'Under korrigering',
+    [MeldeperiodeKjedeStatus.KLAR_TIL_BESLUTNING]: 'Klar til beslutning',
+    [MeldeperiodeKjedeStatus.GODKJENT]: 'Godkjent',
 } as const;
 
 export const finnBehandlingstypeTekst: Record<Behandlingstype, string> = {

@@ -21,9 +21,9 @@ import {
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { MeldekortBehandlingProps } from '../../../../../types/meldekort/MeldekortBehandling';
 import { MeldeperiodeProps } from '../../../../../types/meldekort/Meldeperiode';
-
-import styles from '../../Meldekort.module.css';
 import { useMeldeperiodeKjede } from '../../../context/MeldeperiodeKjedeContext';
+
+import styles from '../../MeldekortHovedseksjon.module.css';
 
 type Props = {
     meldeperiode: MeldeperiodeProps;
@@ -31,10 +31,11 @@ type Props = {
 };
 
 export const MeldekortBehandling = ({ meldeperiode, meldekortBehandling }: Props) => {
-    const { brukersMeldekort, antallDager } = meldeperiode;
+    const { antallDager } = meldeperiode;
     const { sakId } = useSak().sak;
 
-    const { setMeldekortbehandling } = useMeldeperiodeKjede();
+    const { oppdaterMeldekortBehandling, meldeperiodeKjede } = useMeldeperiodeKjede();
+    const { brukersMeldekort } = meldeperiodeKjede;
 
     const [valideringsFeil, setValideringsFeil] = useState('');
 
@@ -130,10 +131,7 @@ export const MeldekortBehandling = ({ meldeperiode, meldekortBehandling }: Props
                                     begrunnelse: formMethods.getValues().begrunnelse,
                                 }).then((meldekortBehandling) => {
                                     if (meldekortBehandling) {
-                                        setMeldekortbehandling(
-                                            meldeperiode.id,
-                                            meldekortBehandling,
-                                        );
+                                        oppdaterMeldekortBehandling(meldekortBehandling);
                                         lukkModal();
                                     }
                                 })

@@ -1,23 +1,16 @@
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
-import {
-    MeldeperiodeId,
-    MeldeperiodeKjedeProps,
-    MeldeperiodeProps,
-} from '../../../types/meldekort/Meldeperiode';
+import { MeldeperiodeKjedeProps, MeldeperiodeProps } from '../../../types/meldekort/Meldeperiode';
 import { MeldekortBehandlingProps } from '../../../types/meldekort/MeldekortBehandling';
 import {
     finnSisteMeldeperiodeVersjon,
     meldekortBehandlingStatusTilMeldeperiodeStatus,
 } from '../../../utils/meldeperioder';
-import Varsel from '../../varsel/Varsel';
 
 export type MeldeperioderContextState = {
     meldeperiodeKjede: MeldeperiodeKjedeProps;
-    valgtMeldeperiode: MeldeperiodeProps;
-    setMeldekortbehandling: (
-        meldeperiodeId: MeldeperiodeId,
-        meldekortBehandling: MeldekortBehandlingProps,
-    ) => void;
+    sisteMeldeperiode: MeldeperiodeProps;
+    sisteMeldekortBehandling?: MeldekortBehandlingProps;
+    oppdaterMeldekortBehandling: (meldekortBehandling: MeldekortBehandlingProps) => void;
 };
 
 export const MeldeperiodeKjedeContext = createContext<MeldeperioderContextState>(
@@ -35,26 +28,22 @@ export const MeldeperiodeKjedeProvider = ({
 }: Props) => {
     const [meldeperiodeKjede, setMeldeperiodeKjede] = useState(meldeperiodeKjedeInitial);
 
-    // TODO: selector komponent for å velge blant flere instanser av meldeperioden
-    const valgtMeldeperiode = finnSisteMeldeperiodeVersjon(meldeperiodeKjede);
+    const { meldekortBehandlinger } = meldeperiodeKjede;
 
-    const setMeldekortbehandling = useCallback(
-        (id: MeldeperiodeId, nyBehandling: MeldekortBehandlingProps) => {
+    const oppdaterMeldekortBehandling = useCallback(
+        (oppdatertBehandling: MeldekortBehandlingProps) => {
+            const behandlinger = meldeperiodeKjede.meldekortBehandlinger;
+            const behandlingIndex = behandlinger.findIndex(
+                (behandling) => behandling.id == oppdatertBehandling.id,
+            );
+
             setMeldeperiodeKjede({
                 ...meldeperiodeKjede,
-                meldeperioder: meldeperiodeKjede.meldeperioder.map((meldeperiode) =>
-                    meldeperiode.id === id
-                        ? ({
-                              ...meldeperiode,
-                              meldekortBehandlinger: meldeperiode.meldekortBehandlinger.map(
-                                  (beh) => (beh.id === nyBehandling.id ? nyBehandling : beh),
-                              ),
-                              status: meldekortBehandlingStatusTilMeldeperiodeStatus[
-                                  nyBehandling.status
-                              ],
-                          } satisfies MeldeperiodeProps)
-                        : meldeperiode,
-                ),
+                status: meldekortBehandlingStatusTilMeldeperiodeStatus[oppdatertBehandling.status],
+                meldekortBehandlinger:
+                    behandlingIndex === -1
+                        ? [...behandlinger, oppdatertBehandling]
+                        : behandlinger.with(behandlingIndex, oppdatertBehandling),
             });
         },
         [meldeperiodeKjede],
@@ -64,21 +53,13 @@ export const MeldeperiodeKjedeProvider = ({
         setMeldeperiodeKjede(meldeperiodeKjedeInitial);
     }, [meldeperiodeKjedeInitial]);
 
-    if (!valgtMeldeperiode) {
-        return (
-            <Varsel
-                variant="error"
-                melding={`Fant ingen meldeperioder for ${meldeperiodeKjede.kjedeId}`}
-            />
-        );
-    }
-
     return (
         <MeldeperiodeKjedeContext.Provider
             value={{
                 meldeperiodeKjede,
-                valgtMeldeperiode,
-                setMeldekortbehandling,
+                sisteMeldeperiode: finnSisteMeldeperiodeVersjon(meldeperiodeKjede),
+                sisteMeldekortBehandling: meldekortBehandlinger.at(-1),
+                oppdaterMeldekortBehandling,
             }}
         >
             {children}

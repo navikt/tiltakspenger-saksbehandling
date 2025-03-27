@@ -1,4 +1,4 @@
-import { MeldeperiodeKjedeProps, MeldeperiodeStatus } from '../types/meldekort/Meldeperiode';
+import { MeldeperiodeKjedeProps, MeldeperiodeKjedeStatus } from '../types/meldekort/Meldeperiode';
 import { MeldekortBehandlingStatus } from '../types/meldekort/MeldekortBehandling';
 
 export const finnSisteMeldeperiodeVersjon = (kjede: MeldeperiodeKjedeProps) =>
@@ -8,11 +8,11 @@ export const finnSisteMeldeperiodeVersjon = (kjede: MeldeperiodeKjedeProps) =>
 
 export const meldekortBehandlingStatusTilMeldeperiodeStatus: Record<
     MeldekortBehandlingStatus,
-    MeldeperiodeStatus
+    MeldeperiodeKjedeStatus
 > = {
-    [MeldekortBehandlingStatus.KLAR_TIL_UTFYLLING]: MeldeperiodeStatus.KLAR_TIL_BEHANDLING,
-    [MeldekortBehandlingStatus.GODKJENT]: MeldeperiodeStatus.GODKJENT,
-    [MeldekortBehandlingStatus.KLAR_TIL_BESLUTNING]: MeldeperiodeStatus.KLAR_TIL_BESLUTNING,
+    [MeldekortBehandlingStatus.KLAR_TIL_UTFYLLING]: MeldeperiodeKjedeStatus.KLAR_TIL_BEHANDLING,
+    [MeldekortBehandlingStatus.GODKJENT]: MeldeperiodeKjedeStatus.GODKJENT,
+    [MeldekortBehandlingStatus.KLAR_TIL_BESLUTNING]: MeldeperiodeKjedeStatus.KLAR_TIL_BESLUTNING,
     [MeldekortBehandlingStatus.IKKE_RETT_TIL_TILTAKSPENGER]:
-        MeldeperiodeStatus.IKKE_RETT_TIL_TILTAKSPENGER,
+        MeldeperiodeKjedeStatus.IKKE_RETT_TIL_TILTAKSPENGER,
 };

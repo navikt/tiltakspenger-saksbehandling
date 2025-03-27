@@ -2,7 +2,7 @@ import { pageWithAuthentication } from '../../../../../auth/pageWithAuthenticati
 import { MeldeperiodeKjedeProps } from '../../../../../types/meldekort/Meldeperiode';
 import { SakProps } from '../../../../../types/SakTypes';
 import { fetchSak } from '../../../../../utils/fetch/fetch-server';
-import { MeldeperiodeSide } from '../../../../../components/meldekort/MeldeperiodeSide';
+import { MeldekortSide } from '../../../../../components/meldekort/MeldekortSide';
 import { SakProvider } from '../../../../../context/sak/SakContext';
 import { MeldeperiodeKjedeProvider } from '../../../../../components/meldekort/context/MeldeperiodeKjedeContext';
 
@@ -15,7 +15,7 @@ const Meldeperiode = ({ meldeperiodeKjede, sak }: Props) => {
     return (
         <SakProvider sak={sak}>
             <MeldeperiodeKjedeProvider meldeperiodeKjede={meldeperiodeKjede}>
-                <MeldeperiodeSide />
+                <MeldekortSide />
             </MeldeperiodeKjedeProvider>
         </SakProvider>
     );

@@ -6,5 +6,7 @@
 }
 
 .behandlingLayout {
+    display: grid;
+    grid-template-columns: minmax(400px, min-content) 1fr;
     min-height: 100vh;
 }

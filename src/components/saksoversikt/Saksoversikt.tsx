@@ -7,30 +7,27 @@ import { PersonaliaHeader } from '../personaliaheader/PersonaliaHeader';
 import { useSak } from '../../context/sak/SakContext';
 import { useFeatureToggles } from '../../context/feature-toggles/FeatureTogglesContext';
 import { AvsluttedeBehandlinger } from './behandlinger-oversikt/AvsluttedeBehandlinger';
-import { finnSisteMeldeperiodeVersjon } from '../../utils/meldeperioder';
 
 import styles from './Saksoversikt.module.css';
 
 export const Saksoversikt = () => {
-    const sak = useSak().sak;
-    const { revurderingStansToggle } = useFeatureToggles();
-    const nyesteMeldeperioder = sak.meldeperiodeKjeder.map((kjede) =>
-        finnSisteMeldeperiodeVersjon(kjede),
-    );
+    const { sakId, saksnummer, behandlinger, behandlingsoversikt, søknader, meldeperiodeKjeder } =
+        useSak().sak;
+    const { revurderingToggle } = useFeatureToggles();
 
     return (
         <>
-            <PersonaliaHeader sakId={sak.sakId} saksnummer={sak.saksnummer} />
+            <PersonaliaHeader sakId={sakId} saksnummer={saksnummer} />
             <Box className={styles.wrapper}>
-                <HStack align="center" style={{ marginBottom: '1rem' }}>
+                <HStack align="center" className={styles.spacing}>
                     <Heading spacing size="medium" level="2">
                         Saksoversikt
                     </Heading>
                     <Spacer />
-                    {revurderingStansToggle && (
+                    {revurderingToggle && (
                         <OpprettRevurdering
-                            sakId={sak.sakId}
-                            harVedtak={harVedtattFørstegangsbehandling(sak.behandlinger)}
+                            sakId={sakId}
+                            harVedtak={harVedtattFørstegangsbehandling(behandlinger)}
                         />
                     )}
                 </HStack>
@@ -38,17 +35,17 @@ export const Saksoversikt = () => {
                     <Heading level={'3'} size={'small'}>
                         {'Behandlinger'}
                     </Heading>
-                    <BehandlingerOversikt behandlinger={sak.behandlingsoversikt} />
+                    <BehandlingerOversikt behandlinger={behandlingsoversikt} />
                 </Box>
-                <AvsluttedeBehandlinger søknader={sak.søknader} behandlinger={sak.behandlinger} />
+                <AvsluttedeBehandlinger søknader={søknader} behandlinger={behandlinger} />
 
                 <Box className={styles.tabellwrapper}>
                     <Heading level={'3'} size={'small'}>
                         {'Meldekort'}
                     </Heading>
                     <MeldekortOversikt
-                        meldeperioder={nyesteMeldeperioder}
-                        saksnummer={sak.saksnummer}
+                        meldeperiodeKjeder={meldeperiodeKjeder}
+                        saksnummer={saksnummer}
                     />
                 </Box>
             </Box>

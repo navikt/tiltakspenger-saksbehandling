@@ -1,15 +1,15 @@
-import { MeldeperiodeProps } from '../../../types/meldekort/Meldeperiode';
+import { MeldeperiodeProps } from '../../../../types/meldekort/Meldeperiode';
 import {
     BrukersMeldekortDagProps,
     BrukersMeldekortProps,
-} from '../../../types/meldekort/BrukersMeldekort';
+} from '../../../../types/meldekort/BrukersMeldekort';
 import { Box, Heading, HStack, Table, VStack } from '@navikt/ds-react';
-import { formaterDatotekst, ukedagFraDatotekst, ukeHeading } from '../../../utils/date';
-import { ikonForBrukersMeldekortDagStatus } from './Meldekortikoner';
-import { brukersMeldekortDagStatusTekst } from '../../../utils/tekstformateringUtils';
+import { formaterDatotekst, ukedagFraDatotekst, ukeHeading } from '../../../../utils/date';
+import { ikonForBrukersMeldekortDagStatus } from '../Meldekortikoner';
+import { brukersMeldekortDagStatusTekst } from '../../../../utils/tekstformateringUtils';
 import React from 'react';
 
-import styles from './Meldekort.module.css';
+import styles from '../MeldekortHovedseksjon.module.css';
 
 type Props = {
     meldeperiode: MeldeperiodeProps;

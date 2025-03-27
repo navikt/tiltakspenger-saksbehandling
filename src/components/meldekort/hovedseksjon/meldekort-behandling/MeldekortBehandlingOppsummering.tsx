@@ -1,6 +1,6 @@
 import { HStack, BodyShort, Button, VStack, Heading, Textarea } from '@navikt/ds-react';
 import { ukeHeading } from '../../../../utils/date';
-import { Utbetalingsuke } from '../Utbetalingsuke';
+import { Utbetalingsuke } from './Utbetalingsuke';
 import { useRef } from 'react';
 import { useGodkjennMeldekort } from '../../hooks/useGodkjennMeldekort';
 import { kanBeslutteForMeldekort } from '../../../../utils/tilganger';
@@ -11,7 +11,7 @@ import { MeldeperiodeProps } from '../../../../types/meldekort/Meldeperiode';
 import { MeldekortBehandlingProps } from '../../../../types/meldekort/MeldekortBehandling';
 import { useMeldeperiodeKjede } from '../../context/MeldeperiodeKjedeContext';
 
-import styles from '../Meldekort.module.css';
+import styles from '../MeldekortHovedseksjon.module.css';
 
 type Props = {
     meldeperiode: MeldeperiodeProps;
@@ -21,7 +21,7 @@ type Props = {
 export const MeldekortBehandlingOppsummering = ({ meldeperiode, meldekortBehandling }: Props) => {
     const { sakId } = useSak().sak;
     const { innloggetSaksbehandler } = useSaksbehandler();
-    const { setMeldekortbehandling } = useMeldeperiodeKjede();
+    const { oppdaterMeldekortBehandling } = useMeldeperiodeKjede();
 
     const { godkjennMeldekort, godkjennMeldekortLaster, reset, godkjennMeldekortFeil } =
         useGodkjennMeldekort(meldekortBehandling.id, sakId);
@@ -117,10 +117,7 @@ export const MeldekortBehandlingOppsummering = ({ meldeperiode, meldekortBehandl
                                 onClick={() =>
                                     godkjennMeldekort().then((meldekortBehandling) => {
                                         if (meldekortBehandling) {
-                                            setMeldekortbehandling(
-                                                meldeperiode.id,
-                                                meldekortBehandling,
-                                            );
+                                            oppdaterMeldekortBehandling(meldekortBehandling);
                                         }
                                     })
                                 }

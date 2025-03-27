@@ -4,29 +4,27 @@ import {
     formaterTidspunkt,
     periodeTilFormatertDatotekst,
 } from '../../../utils/date';
-import { MeldekortBehandlingOpprett } from '../meldekortside/meldekort-behandling/MeldekortBehandlingOpprett';
+import { MeldekortBehandlingOpprett } from '../hovedseksjon/meldekort-behandling/MeldekortBehandlingOpprett';
 import {
     MeldekortBehandlingProps,
     MeldekortBehandlingStatus,
+    MeldekortBehandlingType,
 } from '../../../types/meldekort/MeldekortBehandling';
 import { useSak } from '../../../context/sak/SakContext';
 import { useFeatureToggles } from '../../../context/feature-toggles/FeatureTogglesContext';
 import { ArrayOrSingle } from '../../../types/UtilTypes';
 import { forceArray } from '../../../utils/array';
-
-import styles from './MeldekortDetaljer.module.css';
 import { useMeldeperiodeKjede } from '../context/MeldeperiodeKjedeContext';
 
-export const MeldekortDetaljer = () => {
+import styles from './MeldekortVenstreSeksjon.module.css';
+
+export const MeldekortVenstreSeksjon = () => {
     const { sak } = useSak();
     const { sisteDagSomGirRett } = sak;
 
-    const { meldeperiodeKjede, valgtMeldeperiode } = useMeldeperiodeKjede();
-    const { periode, tiltaksnavn } = meldeperiodeKjede;
-    const { antallDager, meldekortBehandlinger, brukersMeldekort } = valgtMeldeperiode;
-    const { brukersMeldekortToggle } = useFeatureToggles();
-
-    const sisteMeldekortBehandling = meldekortBehandlinger.at(-1);
+    const { meldeperiodeKjede, sisteMeldeperiode, sisteMeldekortBehandling } =
+        useMeldeperiodeKjede();
+    const { periode, tiltaksnavn, brukersMeldekort } = meldeperiodeKjede;
 
     return (
         <VStack gap="3" className={styles.wrapper}>
@@ -41,26 +39,21 @@ export const MeldekortDetaljer = () => {
             <MeldekortDetalj header={'Tiltak'} tekst={tiltaksnavn ?? 'Ukjent'} />
             <MeldekortDetalj
                 header={'Antall dager per meldeperiode'}
-                tekst={antallDager.toString()}
+                tekst={sisteMeldeperiode.antallDager.toString()}
             />
-            {brukersMeldekortToggle && (
-                <MeldekortDetalj
-                    header={'Meldekort mottatt fra bruker'}
-                    tekst={
-                        brukersMeldekort?.mottatt
-                            ? formaterTidspunkt(brukersMeldekort.mottatt)
-                            : 'Ikke mottatt'
-                    }
-                />
-            )}
+            <MeldekortDetalj
+                header={'Meldekort mottatt fra bruker'}
+                tekst={
+                    brukersMeldekort?.mottatt
+                        ? formaterTidspunkt(brukersMeldekort.mottatt)
+                        : 'Ikke mottatt'
+                }
+            />
 
             {sisteMeldekortBehandling ? (
                 <MeldekortBehandlingDetaljer {...sisteMeldekortBehandling} />
             ) : (
-                <MeldekortBehandlingOpprett
-                    meldeperiode={valgtMeldeperiode}
-                    erKorrigering={false}
-                />
+                <MeldekortBehandlingOpprett type={MeldekortBehandlingType.FØRSTE_BEHANDLING} />
             )}
         </VStack>
     );
@@ -72,7 +65,6 @@ const MeldekortBehandlingDetaljer = ({
     status,
 }: MeldekortBehandlingProps) => {
     const { meldekortKorrigeringToggle } = useFeatureToggles();
-    const { valgtMeldeperiode } = useMeldeperiodeKjede();
 
     const erUnderBehandling = status !== MeldekortBehandlingStatus.GODKJENT;
 
@@ -81,7 +73,7 @@ const MeldekortBehandlingDetaljer = ({
             {saksbehandler && <MeldekortDetalj header={'Behandler'} tekst={saksbehandler} />}
             {beslutter && <MeldekortDetalj header={'Beslutter'} tekst={beslutter} />}
             {meldekortKorrigeringToggle && !erUnderBehandling && (
-                <MeldekortBehandlingOpprett meldeperiode={valgtMeldeperiode} erKorrigering={true} />
+                <MeldekortBehandlingOpprett type={MeldekortBehandlingType.KORRIGERING} />
             )}
         </>
     );
