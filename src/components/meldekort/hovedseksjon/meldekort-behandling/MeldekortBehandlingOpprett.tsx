@@ -85,14 +85,14 @@ const teksterForType = {
     [MeldekortBehandlingType.FØRSTE_BEHANDLING]: {
         start: 'Start behandling',
         kanIkkeStarte:
-            'Kan ikke starte behandling - Det finnes allerede en åpen meldekortbehandling på denne saken',
+            'Kan ikke starte behandling av meldekortet - Det finnes allerede en åpen meldekortbehandling på denne saken',
         modalTittel: 'Start behandling av meldekortet',
         modalTekst: 'Vil du starte behandling av dette meldekortet?',
     },
     [MeldekortBehandlingType.KORRIGERING]: {
-        start: 'Start korrigering (ikke trykk ennå!)',
+        start: 'Start korrigering',
         kanIkkeStarte:
-            'Kan ikke starte korrigering - Det finnes allerede en åpen meldekortbehandling på denne saken',
+            'Kan ikke starte korrigering av meldekortet - Det finnes allerede en åpen meldekortbehandling på denne saken',
         modalTittel: 'Start korrigering av meldekortet',
         modalTekst: 'Vil du starte korrigering av dette meldekortet?',
     },
