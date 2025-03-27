@@ -10,6 +10,8 @@ import { VedtakHjelpetekst } from '../../../vedtak-layout/hjelpetekst/VedtakHjel
 import { BodyLong } from '@navikt/ds-react';
 import { TekstListe } from '../../../../liste/TekstListe';
 
+import style from './RevurderingStansBegrunnelse.module.css';
+
 export const RevurderingStansBegrunnelse = () => {
     const revurderingVedtak = useRevurderingVedtak();
     const { begrunnelseRef } = revurderingVedtak;
@@ -23,7 +25,7 @@ export const RevurderingStansBegrunnelse = () => {
 
     return (
         <VedtakSeksjon>
-            <VedtakSeksjon.Venstre>
+            <VedtakSeksjon.Venstre className={style.container}>
                 <TekstfeltMedMellomlagring
                     hideLabel={false}
                     label={'Begrunnelse for stans'}

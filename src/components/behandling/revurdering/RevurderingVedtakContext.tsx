@@ -7,8 +7,6 @@ import {
     useRef,
     useState,
 } from 'react';
-import { dateTilISOTekst } from '../../../utils/date';
-import { useSak } from '../../../context/sak/SakContext';
 import { useBehandling } from '../BehandlingContext';
 
 export type RevurderingVedtakContext = {
@@ -26,17 +24,13 @@ const Context = createContext({} as RevurderingVedtakContext);
 
 export const RevurderingVedtakProvider = ({ children }: PropsWithChildren) => {
     const { behandling } = useBehandling();
-    const { sisteDagSomGirRett } = useSak().sak;
 
-    // Om saksbehandler har valgt en dato, vis denne. Hvis ikke vis sisteDagSomGirRett.
-    console.log(behandling.virkningsperiode?.fraOgMed);
-    const initiellStansdato =
-        behandling.virkningsperiode?.fraOgMed ?? sisteDagSomGirRett ?? new Date().toISOString();
-    const [stansdato, setStansdato] = useState(dateTilISOTekst(initiellStansdato));
+    // Om saksbehandler har valgt en dato, vis denne. Hvis ikke er den tom så saksbehandler må ta stilling til når vedtaket skal stanses.
+    const initiellStansdato = behandling.virkningsperiode?.fraOgMed ?? '';
+    const [stansdato, setStansdato] = useState(initiellStansdato);
     const [valgtHjemmelHarIkkeRettighet, setValgtHjemmelHarIkkeRettighet] = useState<string[]>(
         behandling.valgtHjemmelHarIkkeRettighet ?? [],
     );
-
     const begrunnelseRef = useRef<HTMLTextAreaElement>(null);
     const brevtekstRef = useRef<HTMLTextAreaElement>(null);
 

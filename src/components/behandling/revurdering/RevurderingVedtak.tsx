@@ -16,7 +16,6 @@ export const RevurderingVedtak = () => {
                 {'Revurdering til stans av tiltakspenger'}
             </Heading>
             <RevurderingStansResultat />
-            <Separator />
             <RevurderingStansBegrunnelse />
             <Separator />
             <RevurderingStansBrev />

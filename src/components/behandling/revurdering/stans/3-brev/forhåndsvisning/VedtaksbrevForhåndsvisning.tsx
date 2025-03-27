@@ -5,6 +5,8 @@ import { useHentVedtaksbrevForhåndsvisning } from './useHentVedtaksbrevForhånd
 import style from './VedtaksbrevForhåndsvisning.module.css';
 import { useRevurderingVedtak } from '../../../RevurderingVedtakContext';
 import { useRevurderingBehandling } from '../../../../BehandlingContext';
+import React from 'react';
+import { revurderingStansValidering } from '../../../revurderingStansValidering';
 
 export const VedtaksbrevForhåndsvisning = () => {
     const { behandling } = useRevurderingBehandling();
@@ -12,6 +14,9 @@ export const VedtaksbrevForhåndsvisning = () => {
 
     const { hentForhåndsvisning, forhåndsvisningLaster, forhåndsvisningError } =
         useHentVedtaksbrevForhåndsvisning(behandling);
+
+    const [showValidationError, setShowValidationError] = React.useState(false);
+    const validering = revurderingStansValidering(revurderingVedtak);
 
     return (
         <>
@@ -23,19 +28,29 @@ export const VedtaksbrevForhåndsvisning = () => {
                 className={style.knapp}
                 loading={forhåndsvisningLaster}
                 onClick={async () => {
-                    return hentForhåndsvisning({
-                        fritekst: revurderingVedtak.brevtekstRef.current?.value ?? '',
-                        stansDato: revurderingVedtak.stansdato,
-                        valgteHjemler: revurderingVedtak.valgtHjemmelHarIkkeRettighet,
-                    }).then((blob) => {
-                        if (blob) {
-                            window.open(URL.createObjectURL(blob));
-                        }
-                    });
+                    if (validering.errors.length === 0) {
+                        return hentForhåndsvisning({
+                            fritekst: revurderingVedtak.brevtekstRef.current?.value ?? '',
+                            stansDato: revurderingVedtak.stansdato,
+                            valgteHjemler: revurderingVedtak.valgtHjemmelHarIkkeRettighet,
+                        }).then((blob) => {
+                            if (blob) {
+                                window.open(URL.createObjectURL(blob));
+                            }
+                        });
+                    } else {
+                        setShowValidationError(true);
+                    }
                 }}
             >
                 Forhåndsvis brev
             </Button>
+            {showValidationError &&
+                validering.errors.map((error, index) => (
+                    <Alert key={index} variant={'error'} size={'small'} inline={true}>
+                        {error}
+                    </Alert>
+                ))}
             {forhåndsvisningError && (
                 <Alert
                     variant={'error'}

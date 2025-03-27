@@ -29,8 +29,12 @@ export type ValgtHjemmelForStansOption = {
 export const RevurderingStansResultat = () => {
     const revurderingVedtak = useRevurderingVedtak();
     const { førsteLovligeStansdato, sisteDagSomGirRett } = useSak().sak;
-    const { setStansdato, valgtHjemmelHarIkkeRettighet, setValgtHjemmelHarIkkeRettighet } =
-        revurderingVedtak;
+    const {
+        stansdato,
+        setStansdato,
+        valgtHjemmelHarIkkeRettighet,
+        setValgtHjemmelHarIkkeRettighet,
+    } = revurderingVedtak;
 
     const { behandling, rolleForBehandling } = useRevurderingBehandling();
 
@@ -88,16 +92,14 @@ export const RevurderingStansResultat = () => {
                     label={'Hjemmel for stans'}
                     size={'medium'}
                     readOnly={!erSaksbehandler}
-                    defaultValue={
-                        (valgtHjemmelHarIkkeRettighet?.[0] ?? undefined) as ValgtHjemmelForStans
-                    }
+                    defaultValue={(valgtHjemmelHarIkkeRettighet?.[0] ?? '') as ValgtHjemmelForStans}
                     onChange={(event) => {
                         setValgtHjemmelHarIkkeRettighet([
                             event.target.value as ValgtHjemmelForStans,
                         ]);
                     }}
                 >
-                    <option value={undefined}>{'- Velg hjemmel for stans -'}</option>
+                    <option value={''}>{'- Velg hjemmel for stans -'}</option>
                     {options.map((option) => (
                         <option key={option.kode} value={option.kode}>
                             {option.beskrivelse}
@@ -108,12 +110,14 @@ export const RevurderingStansResultat = () => {
                     label={'Stans fra og med'}
                     minDate={førsteLovligeStansdato}
                     maxDate={sisteDagSomGirRett}
-                    defaultSelected={sisteDagSomGirRett}
+                    defaultSelected={stansdato}
                     readOnly={!erSaksbehandler}
                     className={style.dato}
                     onDateChange={(valgtDato) => {
                         if (valgtDato) {
                             setStansdato(dateTilISOTekst(valgtDato));
+                        } else {
+                            setStansdato('');
                         }
                     }}
                 />
