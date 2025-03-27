@@ -10,9 +10,10 @@ import styles from './MeldekortBehandlingOpprett.module.css';
 
 type Props = {
     meldeperiode: MeldeperiodeProps;
+    erKorrigering: boolean;
 };
 
-export const MeldekortBehandlingOpprett = ({ meldeperiode }: Props) => {
+export const MeldekortBehandlingOpprett = ({ meldeperiode, erKorrigering }: Props) => {
     const { sakId } = useSak().sak;
     const { setMeldekortbehandling } = useMeldeperiodeKjede();
 
@@ -29,7 +30,7 @@ export const MeldekortBehandlingOpprett = ({ meldeperiode }: Props) => {
                 <Alert variant={'info'}>{'Ikke rett til tiltakspenger for denne perioden'}</Alert>
             ) : (
                 <Button onClick={() => modalRef.current?.showModal()} className={styles.knapp}>
-                    {'Start behandling'}
+                    {erKorrigering ? 'Start korrigering (ikke trykk meg!)' : 'Start behandling'}
                 </Button>
             )}
             {feil && <Alert variant={'error'}>{feil.message}</Alert>}

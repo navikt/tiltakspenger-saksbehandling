@@ -1,4 +1,4 @@
-import { VStack, BodyShort } from '@navikt/ds-react';
+import { BodyShort, VStack } from '@navikt/ds-react';
 import {
     formaterDatotekst,
     formaterTidspunkt,
@@ -6,7 +6,10 @@ import {
 } from '../../../utils/date';
 import { useMeldeperiodeKjede } from '../hooks/useMeldeperiodeKjede';
 import { MeldekortBehandlingOpprett } from '../meldekortside/meldekort-behandling/MeldekortBehandlingOpprett';
-import { MeldekortBehandlingProps } from '../../../types/meldekort/MeldekortBehandling';
+import {
+    MeldekortBehandlingProps,
+    MeldekortBehandlingStatus,
+} from '../../../types/meldekort/MeldekortBehandling';
 import { useSak } from '../../../context/sak/SakContext';
 import { useFeatureToggles } from '../../../context/feature-toggles/FeatureTogglesContext';
 
@@ -52,17 +55,29 @@ export const MeldekortDetaljer = () => {
             {meldekortBehandling ? (
                 <MeldekortBehandlingDetaljer {...meldekortBehandling} />
             ) : (
-                <MeldekortBehandlingOpprett meldeperiode={valgtMeldeperiode} />
+                <MeldekortBehandlingOpprett
+                    meldeperiode={valgtMeldeperiode}
+                    erKorrigering={false}
+                />
             )}
         </VStack>
     );
 };
 
 const MeldekortBehandlingDetaljer = ({ saksbehandler, beslutter }: MeldekortBehandlingProps) => {
+    const { meldekortKorrigeringToggle } = useFeatureToggles();
+    const { valgtMeldeperiode } = useMeldeperiodeKjede();
+
+    const erUnderBehandling =
+        valgtMeldeperiode.meldekortBehandling?.status !== MeldekortBehandlingStatus.GODKJENT;
+
     return (
         <>
             {saksbehandler && <MeldekortDetalj header={'Behandler'} tekst={saksbehandler} />}
             {beslutter && <MeldekortDetalj header={'Beslutter'} tekst={beslutter} />}
+            {meldekortKorrigeringToggle && !erUnderBehandling && (
+                <MeldekortBehandlingOpprett meldeperiode={valgtMeldeperiode} erKorrigering={true} />
+            )}
         </>
     );
 };

@@ -13,7 +13,6 @@ interface UtbetalingsukeProps {
 }
 
 export const Utbetalingsuke = ({ utbetalingUke, headingtekst }: UtbetalingsukeProps) => {
-    console.log(utbetalingUke);
     return (
         <Box className={styles.utbetalingsuke}>
             <Heading size="small" level="3">
