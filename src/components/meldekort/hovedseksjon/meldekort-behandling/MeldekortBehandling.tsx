@@ -21,7 +21,7 @@ export const MeldekortBehandling = ({ meldekortBehandling }: Props) => {
 
     return (
         <VStack gap={'5'}>
-            <HStack align={'center'} justify={'space-between'} gap={'5'}>
+            <HStack align={'center'} justify={'space-between'}>
                 <Heading level={'2'} size={'medium'}>
                     {meldekortHeading(meldeperiodeKjede.periode)}
                 </Heading>

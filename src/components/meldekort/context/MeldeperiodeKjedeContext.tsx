@@ -30,6 +30,12 @@ export const MeldeperiodeKjedeProvider = ({
 
     const { meldekortBehandlinger } = meldeperiodeKjede;
 
+    const sisteMeldekortBehandling = meldekortBehandlinger.reduce((acc, mbeh) =>
+        mbeh.opprettet > acc.opprettet ? mbeh : acc,
+    );
+
+    const sisteMeldeperiode = finnSisteMeldeperiodeVersjon(meldeperiodeKjede);
+
     const oppdaterMeldekortBehandling = useCallback(
         (oppdatertBehandling: MeldekortBehandlingProps) => {
             const behandlinger = meldeperiodeKjede.meldekortBehandlinger;
@@ -57,8 +63,8 @@ export const MeldeperiodeKjedeProvider = ({
         <MeldeperiodeKjedeContext.Provider
             value={{
                 meldeperiodeKjede,
-                sisteMeldeperiode: finnSisteMeldeperiodeVersjon(meldeperiodeKjede),
-                sisteMeldekortBehandling: meldekortBehandlinger.at(-1),
+                sisteMeldeperiode,
+                sisteMeldekortBehandling,
                 oppdaterMeldekortBehandling,
             }}
         >
