@@ -84,7 +84,7 @@ export const RevurderingStansResultat = () => {
             <VedtakSeksjon.Venstre>
                 <Alert className={style.alert} variant={'warning'} inline>
                     <>
-                        Husk å vurdere om du må forhåndsvarsle bruker før du foretår en stans. Dette
+                        Husk å vurdere om du må forhåndsvarsle bruker før du foretar en stans. Dette
                         må gjøres via {gosys} eller {modiaPersonoversikt}.
                     </>
                 </Alert>
