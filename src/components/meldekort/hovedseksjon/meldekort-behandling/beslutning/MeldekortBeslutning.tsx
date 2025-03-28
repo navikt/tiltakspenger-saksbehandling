@@ -5,17 +5,31 @@ import { useGodkjennMeldekort } from '../../../hooks/useGodkjennMeldekort';
 import { useSak } from '../../../../../context/sak/SakContext';
 import { useRef } from 'react';
 import { MeldekortBehandlingProps } from '../../../../../types/meldekort/MeldekortBehandling';
+import Underkjenn from '../../../../underkjenn/Underkjenn';
+import { useFetchJsonFraApi } from '../../../../../utils/fetch/useFetchFraApi';
+import router from 'next/router';
 
 type Props = {
     meldekortBehandling: MeldekortBehandlingProps;
 };
 
 export const MeldekortBeslutning = ({ meldekortBehandling }: Props) => {
-    const { sakId } = useSak().sak;
+    const { sakId, saksnummer } = useSak().sak;
     const { oppdaterMeldekortBehandling } = useMeldeperiodeKjede();
 
     const { godkjennMeldekort, godkjennMeldekortLaster, reset, godkjennMeldekortFeil } =
         useGodkjennMeldekort(meldekortBehandling.id, sakId);
+
+    const underkjennApi = useFetchJsonFraApi<MeldekortBehandlingProps, { begrunnelse: string }>(
+        `/sak/${sakId}/meldekort/${meldekortBehandling.id}/underkjenn`,
+        'POST',
+        {
+            onSuccess: (oppdatertBehandling) => {
+                oppdaterMeldekortBehandling(oppdatertBehandling!);
+                router.push(`/sak/${saksnummer}`);
+            },
+        },
+    );
 
     const modalRef = useRef<HTMLDialogElement>(null);
 
@@ -23,9 +37,18 @@ export const MeldekortBeslutning = ({ meldekortBehandling }: Props) => {
         modalRef.current?.close();
         reset();
     };
+
     return (
         <>
             <HStack justify="start" gap="3" align="end">
+                <Underkjenn
+                    size="small"
+                    onUnderkjenn={{
+                        click: (begrunnelse) => underkjennApi.trigger({ begrunnelse }),
+                        pending: underkjennApi.isMutating,
+                        error: underkjennApi.error,
+                    }}
+                />
                 <Button
                     size="small"
                     loading={godkjennMeldekortLaster}
