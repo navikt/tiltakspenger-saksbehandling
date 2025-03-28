@@ -30,9 +30,12 @@ export const MeldeperiodeKjedeProvider = ({
 
     const { meldekortBehandlinger } = meldeperiodeKjede;
 
-    const sisteMeldekortBehandling = meldekortBehandlinger.reduce((acc, mbeh) =>
-        mbeh.opprettet > acc.opprettet ? mbeh : acc,
-    );
+    const sisteMeldekortBehandling =
+        meldekortBehandlinger.length > 0
+            ? meldekortBehandlinger.reduce((acc, mbeh) =>
+                  mbeh.opprettet > acc.opprettet ? mbeh : acc,
+              )
+            : undefined;
 
     const sisteMeldeperiode = finnSisteMeldeperiodeVersjon(meldeperiodeKjede);
 
