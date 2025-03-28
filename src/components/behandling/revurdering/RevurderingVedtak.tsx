@@ -8,6 +8,7 @@ import { Separator } from '../../separator/Separator';
 import { RevurderingStansResultat } from './stans/1-resultat/RevurderingStansResultat';
 import { RevurderingStansBegrunnelse } from './stans/2-begrunnelse/RevurderingStansBegrunnelse';
 import { RevurderingStansBrev } from './stans/3-brev/RevurderingStansBrev';
+import RevurderingStansAvbrytBehandling from './stans/5-avbryt-behandling/RevurderingStansAvbrytBehandling';
 
 export const RevurderingVedtak = () => {
     return (
@@ -20,6 +21,7 @@ export const RevurderingVedtak = () => {
             <Separator />
             <RevurderingStansBrev />
             <RevurderingStansSend />
+            <RevurderingStansAvbrytBehandling />
         </RevurderingVedtakProvider>
     );
 };
