@@ -1,0 +1,12 @@
+.attesteringerContainer {
+    list-style: none;
+    padding: 0;
+}
+
+.attesteringerContainer > :not(:last-child) {
+    border-bottom: solid 1px var(--a-grayalpha-200);
+}
+
+.attesteringContainer {
+    margin-bottom: var(--a-spacing-4);
+}

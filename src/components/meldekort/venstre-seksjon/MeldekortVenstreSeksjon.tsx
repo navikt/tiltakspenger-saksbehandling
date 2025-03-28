@@ -17,6 +17,7 @@ import { forceArray } from '../../../utils/array';
 import { useMeldeperiodeKjede } from '../context/MeldeperiodeKjedeContext';
 
 import styles from './MeldekortVenstreSeksjon.module.css';
+import OppsummeringAvAttesteringer from '../../attestering/OppsummeringAvAttestering';
 
 export const MeldekortVenstreSeksjon = () => {
     const { sak } = useSak();
@@ -54,6 +55,12 @@ export const MeldekortVenstreSeksjon = () => {
                 <MeldekortBehandlingDetaljer {...sisteMeldekortBehandling} />
             ) : (
                 <MeldekortBehandlingOpprett type={MeldekortBehandlingType.FØRSTE_BEHANDLING} />
+            )}
+
+            {sisteMeldekortBehandling?.attesteringer && (
+                <OppsummeringAvAttesteringer
+                    attesteringer={sisteMeldekortBehandling.attesteringer}
+                />
             )}
         </VStack>
     );

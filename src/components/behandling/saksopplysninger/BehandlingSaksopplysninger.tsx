@@ -11,6 +11,7 @@ import { Behandlingstype } from '../../../types/BehandlingTypes';
 import { BehandlingTiltakOpplysninger } from './tiltak/BehandlingTiltakOpplysninger';
 
 import style from './BehandlingSaksopplysninger.module.css';
+import OppsummeringAvAttesteringer from '../../attestering/OppsummeringAvAttestering';
 
 export const BehandlingSaksopplysninger = () => {
     const { behandling, rolleForBehandling } = useBehandling();
@@ -24,9 +25,8 @@ export const BehandlingSaksopplysninger = () => {
                     <BehandlingOppdaterSaksopplysninger />
                 )}
                 <BehandlingTiltakOpplysninger tiltaksdeltagelse={tiltaksdeltagelse} />
+                <Separator />
             </OpplysningerSeksjon>
-
-            <Separator />
 
             <OpplysningerSeksjon header={'Alder'}>
                 <BodyShort weight={'semibold'}>{`${alderFraDato(fødselsdato)} år`}</BodyShort>
@@ -35,14 +35,19 @@ export const BehandlingSaksopplysninger = () => {
                     verdi={formaterDatotekst(fødselsdato)}
                 />
             </OpplysningerSeksjon>
-
             {type === Behandlingstype.FØRSTEGANGSBEHANDLING && (
-                <>
+                <div>
                     <Separator />
                     <OpplysningerSeksjon header={'Fra søknad'}>
                         <BehandlingSøknadOpplysninger behandling={behandling} />
                     </OpplysningerSeksjon>
-                </>
+                </div>
+            )}
+            {behandling.attesteringer.length > 0 && (
+                <div>
+                    <Separator />
+                    <OppsummeringAvAttesteringer attesteringer={behandling.attesteringer} />
+                </div>
             )}
         </div>
     );
@@ -50,11 +55,11 @@ export const BehandlingSaksopplysninger = () => {
 
 const OpplysningerSeksjon = ({ header, children }: { header: string; children: ReactNode }) => {
     return (
-        <>
+        <div>
             <Heading size={'small'} level={'3'} className={style.header}>
                 {header}
             </Heading>
             {children}
-        </>
+        </div>
     );
 };

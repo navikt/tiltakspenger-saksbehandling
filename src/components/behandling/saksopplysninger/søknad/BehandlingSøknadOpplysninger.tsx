@@ -33,7 +33,7 @@ export const BehandlingSøknadOpplysninger = ({ behandling }: Props) => {
     const tiltak = singleOrFirst(tiltakRaw);
 
     return (
-        <>
+        <div>
             <BehandlingSaksopplysning
                 navn={'Kravdato'}
                 verdi={formaterDatotekst(tidsstempelHosOss)}
@@ -80,6 +80,6 @@ export const BehandlingSøknadOpplysninger = ({ behandling }: Props) => {
                     )}
                 </>
             )}
-        </>
+        </div>
     );
 };

@@ -71,14 +71,14 @@ export enum BehandlingStatus {
     VEDTATT = 'VEDTATT',
 }
 
-type Attestering = {
+export type Attestering = {
     status: Attesteringsstatus;
     begrunnelse: string;
     endretAv: string;
     endretTidspunkt: string;
 };
 
-enum Attesteringsstatus {
+export enum Attesteringsstatus {
     GODKJENT = 'GODKJENT',
     SENDT_TILBAKE = 'SENDT_TILBAKE',
 }

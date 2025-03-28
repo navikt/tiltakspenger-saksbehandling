@@ -3,6 +3,10 @@
     background-color: var(--a-blue-50);
 }
 
+.saksopplysninger > :not(:last-child):not(hr) {
+    margin-bottom: 1.25rem;
+}
+
 .header {
     font-weight: normal;
     margin-bottom: 0.5rem;

@@ -15,7 +15,7 @@ export const BehandlingOppdaterSaksopplysninger = () => {
     const { oppdaterOgHentBehandling, isLoading, error } = useOppdaterSaksopplysninger(behandling);
 
     return (
-        <>
+        <div>
             <Button
                 variant={'tertiary'}
                 size={'xsmall'}
@@ -50,6 +50,6 @@ export const BehandlingOppdaterSaksopplysninger = () => {
                     melding={`Oppdatering av saksopplysninger feilet - [${error.status}] ${error.info?.melding || error.message}`}
                 />
             )}
-        </>
+        </div>
     );
 };
