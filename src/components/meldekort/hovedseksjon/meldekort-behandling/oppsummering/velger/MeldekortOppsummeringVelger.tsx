@@ -1,7 +1,7 @@
 import { Heading, HStack, Select, VStack } from '@navikt/ds-react';
 import { MeldekortBehandlingProps } from '../../../../../../types/meldekort/MeldekortBehandling';
 import { MeldekortOppsummering } from '../MeldekortOppsummering';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { formaterTidspunktKort } from '../../../../../../utils/date';
 import { meldekortBehandlingTypeTekst } from '../../../../../../utils/tekstformateringUtils';
 
@@ -17,6 +17,10 @@ export const MeldekortOppsummeringVelger = ({ meldekortBehandlinger }: Props) =>
     const [valgtBehandling, setValgtBehandling] = useState<MeldekortBehandlingProps | undefined>(
         sisteBehandling,
     );
+
+    useEffect(() => {
+        setValgtBehandling(sisteBehandling);
+    }, [sisteBehandling]);
 
     if (meldekortBehandlinger.length === 0) {
         return null;

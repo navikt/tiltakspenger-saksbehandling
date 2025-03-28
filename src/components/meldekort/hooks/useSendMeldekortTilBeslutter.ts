@@ -1,9 +1,7 @@
-import {
-    MeldekortBehandlingDTO,
-    MeldekortBehandlingProps,
-} from '../../../types/meldekort/MeldekortBehandling';
+import { MeldekortBehandlingDTO } from '../../../types/meldekort/MeldekortBehandling';
 import { SakId } from '../../../types/SakTypes';
 import { useFetchJsonFraApi } from '../../../utils/fetch/useFetchFraApi';
+import { MeldeperiodeKjedeProps } from '../../../types/meldekort/Meldeperiode';
 
 type Props = {
     meldekortId: string;
@@ -17,7 +15,7 @@ export const useSendMeldekortTilBeslutter = ({ meldekortId, sakId, onSuccess }: 
         isMutating: senderMeldekortTilBeslutter,
         error: feilVedSendingTilBeslutter,
         reset,
-    } = useFetchJsonFraApi<MeldekortBehandlingProps, MeldekortBehandlingDTO>(
+    } = useFetchJsonFraApi<MeldeperiodeKjedeProps, MeldekortBehandlingDTO>(
         `/sak/${sakId}/meldekort/${meldekortId}`,
         'POST',
         { onSuccess },

@@ -34,7 +34,7 @@ export const MeldekortUtfylling = ({ meldeperiode, meldekortBehandling }: Props)
     const { antallDager } = meldeperiode;
     const { sakId } = useSak().sak;
 
-    const { oppdaterMeldekortBehandling, meldeperiodeKjede } = useMeldeperiodeKjede();
+    const { setMeldeperiodeKjede, meldeperiodeKjede } = useMeldeperiodeKjede();
     const { brukersMeldekort } = meldeperiodeKjede;
 
     const [valideringsFeil, setValideringsFeil] = useState('');
@@ -129,9 +129,9 @@ export const MeldekortUtfylling = ({ meldeperiode, meldekortBehandling }: Props)
                                         .getValues()
                                         .uke1.concat(formMethods.getValues().uke2),
                                     begrunnelse: formMethods.getValues().begrunnelse,
-                                }).then((meldekortBehandling) => {
-                                    if (meldekortBehandling) {
-                                        oppdaterMeldekortBehandling(meldekortBehandling);
+                                }).then((oppdatertKjede) => {
+                                    if (oppdatertKjede) {
+                                        setMeldeperiodeKjede(oppdatertKjede);
                                         lukkModal();
                                     }
                                 })

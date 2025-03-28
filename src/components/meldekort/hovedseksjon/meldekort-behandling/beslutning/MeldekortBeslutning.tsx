@@ -15,7 +15,7 @@ type Props = {
 
 export const MeldekortBeslutning = ({ meldekortBehandling }: Props) => {
     const { sakId, saksnummer } = useSak().sak;
-    const { oppdaterMeldekortBehandling } = useMeldeperiodeKjede();
+    const { setMeldeperiodeKjede } = useMeldeperiodeKjede();
 
     const { godkjennMeldekort, godkjennMeldekortLaster, reset, godkjennMeldekortFeil } =
         useGodkjennMeldekort(meldekortBehandling.id, sakId);
@@ -24,8 +24,7 @@ export const MeldekortBeslutning = ({ meldekortBehandling }: Props) => {
         `/sak/${sakId}/meldekort/${meldekortBehandling.id}/underkjenn`,
         'POST',
         {
-            onSuccess: (oppdatertBehandling) => {
-                oppdaterMeldekortBehandling(oppdatertBehandling!);
+            onSuccess: () => {
                 router.push(`/sak/${saksnummer}`);
             },
         },
@@ -67,9 +66,9 @@ export const MeldekortBeslutning = ({ meldekortBehandling }: Props) => {
                         size={'small'}
                         loading={godkjennMeldekortLaster}
                         onClick={() =>
-                            godkjennMeldekort().then((meldekortBehandling) => {
-                                if (meldekortBehandling) {
-                                    oppdaterMeldekortBehandling(meldekortBehandling);
+                            godkjennMeldekort().then((oppdatertKjede) => {
+                                if (oppdatertKjede) {
+                                    setMeldeperiodeKjede(oppdatertKjede);
                                 }
                             })
                         }

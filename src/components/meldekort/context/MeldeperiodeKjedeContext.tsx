@@ -1,16 +1,13 @@
-import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { MeldeperiodeKjedeProps, MeldeperiodeProps } from '../../../types/meldekort/Meldeperiode';
 import { MeldekortBehandlingProps } from '../../../types/meldekort/MeldekortBehandling';
-import {
-    finnSisteMeldeperiodeVersjon,
-    meldekortBehandlingStatusTilMeldeperiodeStatus,
-} from '../../../utils/meldeperioder';
+import { finnSisteMeldeperiodeVersjon } from '../../../utils/meldeperioder';
 
 export type MeldeperioderContextState = {
     meldeperiodeKjede: MeldeperiodeKjedeProps;
+    setMeldeperiodeKjede: (meldeperiodeKjede: MeldeperiodeKjedeProps) => void;
     sisteMeldeperiode: MeldeperiodeProps;
     sisteMeldekortBehandling?: MeldekortBehandlingProps;
-    oppdaterMeldekortBehandling: (meldekortBehandling: MeldekortBehandlingProps) => void;
 };
 
 export const MeldeperiodeKjedeContext = createContext<MeldeperioderContextState>(
@@ -39,25 +36,6 @@ export const MeldeperiodeKjedeProvider = ({
 
     const sisteMeldeperiode = finnSisteMeldeperiodeVersjon(meldeperiodeKjede);
 
-    const oppdaterMeldekortBehandling = useCallback(
-        (oppdatertBehandling: MeldekortBehandlingProps) => {
-            const behandlinger = meldeperiodeKjede.meldekortBehandlinger;
-            const behandlingIndex = behandlinger.findIndex(
-                (behandling) => behandling.id == oppdatertBehandling.id,
-            );
-
-            setMeldeperiodeKjede({
-                ...meldeperiodeKjede,
-                status: meldekortBehandlingStatusTilMeldeperiodeStatus[oppdatertBehandling.status],
-                meldekortBehandlinger:
-                    behandlingIndex === -1
-                        ? [...behandlinger, oppdatertBehandling]
-                        : behandlinger.with(behandlingIndex, oppdatertBehandling),
-            });
-        },
-        [meldeperiodeKjede],
-    );
-
     useEffect(() => {
         setMeldeperiodeKjede(meldeperiodeKjedeInitial);
     }, [meldeperiodeKjedeInitial]);
@@ -66,9 +44,9 @@ export const MeldeperiodeKjedeProvider = ({
         <MeldeperiodeKjedeContext.Provider
             value={{
                 meldeperiodeKjede,
+                setMeldeperiodeKjede,
                 sisteMeldeperiode,
                 sisteMeldekortBehandling,
-                oppdaterMeldekortBehandling,
             }}
         >
             {children}
