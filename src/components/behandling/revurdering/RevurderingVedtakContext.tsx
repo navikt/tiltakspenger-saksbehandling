@@ -11,7 +11,11 @@ import { useBehandling } from '../BehandlingContext';
 
 export type RevurderingVedtakContext = {
     begrunnelseRef: RefObject<HTMLTextAreaElement>;
+    brevtekstRef: RefObject<HTMLTextAreaElement>;
     getBegrunnelse: () => string;
+    getBrevtekst: () => string;
+    valgtHjemmelHarIkkeRettighet: string[];
+    setValgtHjemmelHarIkkeRettighet: (valgtHjemmel: string[]) => void;
     stansdato: string;
     setStansdato: (fraOgMed: string) => void;
 };
@@ -21,10 +25,19 @@ const Context = createContext({} as RevurderingVedtakContext);
 export const RevurderingVedtakProvider = ({ children }: PropsWithChildren) => {
     const { behandling } = useBehandling();
 
-    const initiellStansdato = behandling.virkningsperiode?.fraOgMed ?? new Date().toISOString();
+    // Om saksbehandler har valgt en dato, vis denne. Hvis ikke er den tom så saksbehandler må ta stilling til når vedtaket skal stanses.
+    const initiellStansdato = behandling.virkningsperiode?.fraOgMed ?? '';
     const [stansdato, setStansdato] = useState(initiellStansdato);
-
+    const [valgtHjemmelHarIkkeRettighet, setValgtHjemmelHarIkkeRettighet] = useState<string[]>(
+        behandling.valgtHjemmelHarIkkeRettighet ?? [],
+    );
     const begrunnelseRef = useRef<HTMLTextAreaElement>(null);
+    const brevtekstRef = useRef<HTMLTextAreaElement>(null);
+
+    const getBrevtekst = useCallback(
+        () => brevtekstRef.current?.value.trim() ?? '',
+        [brevtekstRef],
+    );
     const getBegrunnelse = useCallback(() => begrunnelseRef.current!.value, [begrunnelseRef]);
 
     return (
@@ -34,6 +47,10 @@ export const RevurderingVedtakProvider = ({ children }: PropsWithChildren) => {
                 setStansdato,
                 begrunnelseRef,
                 getBegrunnelse,
+                brevtekstRef,
+                getBrevtekst,
+                valgtHjemmelHarIkkeRettighet,
+                setValgtHjemmelHarIkkeRettighet,
             }}
         >
             {children}

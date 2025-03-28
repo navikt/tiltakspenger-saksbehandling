@@ -4,17 +4,22 @@ import { BehandlingPage } from '../../../components/behandling/BehandlingPage';
 import React, { ComponentProps } from 'react';
 import { GetServerSideProps } from 'next';
 import { BehandlingProvider } from '../../../components/behandling/BehandlingContext';
-import { fetchBehandling } from '../../../utils/fetch/fetch-server';
+import { fetchBehandling, fetchSak } from '../../../utils/fetch/fetch-server';
 import { logger } from '@navikt/next-logger';
+import { SakProvider } from '../../../context/sak/SakContext';
+import { SakProps } from '../../../types/SakTypes';
 
 type Props = {
     behandling: BehandlingData;
+    sak: SakProps;
 };
 
-const Behandling = ({ behandling }: Props) => {
+const Behandling = ({ behandling, sak }: Props) => {
     return (
         <BehandlingProvider behandling={behandling}>
-            <BehandlingPage />
+            <SakProvider sak={sak}>
+                <BehandlingPage />
+            </SakProvider>
         </BehandlingProvider>
     );
 };
@@ -27,8 +32,15 @@ export const getServerSideProps: GetServerSideProps = pageWithAuthentication(asy
         throw e;
     });
 
+    const sak = await fetchSak(context.req, behandling.saksnummer).catch((e) => {
+        logger.error(
+            `Feil under henting av sak med saksnummer ${behandling.saksnummer} - ${e.toString()}`,
+        );
+        throw e;
+    });
+
     return {
-        props: { behandling } satisfies ComponentProps<typeof Behandling>,
+        props: { behandling, sak } satisfies ComponentProps<typeof Behandling>,
     };
 });
 

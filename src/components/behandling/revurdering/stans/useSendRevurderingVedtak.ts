@@ -28,6 +28,8 @@ export const useSendRevurderingVedtak = (
 const tilBeslutningDTO = (vedtak: RevurderingVedtakContext): VedtakRevurderTilStansDTO => {
     return {
         begrunnelse: vedtak.getBegrunnelse(),
+        fritekstTilVedtaksbrev: vedtak.getBrevtekst(),
         stansDato: vedtak.stansdato,
+        valgteHjemler: vedtak.valgtHjemmelHarIkkeRettighet,
     };
 };

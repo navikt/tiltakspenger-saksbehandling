@@ -43,7 +43,7 @@ export const BehandlingSendTilBeslutning = ({ send, laster, serverfeil, valideri
     return (
         <div className={style.wrapper}>
             {rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER && (
-                <Button onClick={åpneModal}>{'Send til beslutning'}</Button>
+                <Button onClick={åpneModal}>{'Send til beslutter'}</Button>
             )}
             {harSendt && (
                 <Alert variant={'success'} className={style.success}>

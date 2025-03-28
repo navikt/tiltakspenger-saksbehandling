@@ -21,12 +21,13 @@ type BehandlingDataCommon = {
     begrunnelseVilkårsvurdering: string | null;
     avbrutt: Nullable<Avbrutt>;
     iverksattTidspunkt: Nullable<string>;
+    fritekstTilVedtaksbrev: string | null;
+    valgtHjemmelHarIkkeRettighet: string[] | null;
 };
 
 export type FørstegangsbehandlingData = BehandlingDataCommon & {
     type: Behandlingstype.FØRSTEGANGSBEHANDLING;
     søknad: SøknadForBehandlingProps;
-    fritekstTilVedtaksbrev: string | null;
     barnetillegg: Barnetillegg | null;
     valgteTiltaksdeltakelser: TiltaksdeltakelsePeriode[] | null;
 };
