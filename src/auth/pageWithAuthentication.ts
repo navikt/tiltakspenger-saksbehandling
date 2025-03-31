@@ -14,7 +14,11 @@ const LOGIN_API_URL = `${process.env.WONDERWALL_ORIGIN || ''}/oauth2/login`;
  * Inspirert av løsningen til sykepenger: https://github.com/navikt/sykmeldinger/pull/548/files
  */
 
-const defaultProps = { deployEnv: process.env.NAIS_CLUSTER_NAME ?? null };
+const defaultProps = {
+    deployEnv: process.env.NAIS_CLUSTER_NAME ?? null,
+    gosysUrl: process.env.GOSYS_URL ?? null,
+    modiaPersonoversiktUrl: process.env.MODIA_PERSONOVERSIKT_URL ?? null,
+};
 
 const defaultGetServerSideProps: GetServerSideProps = async () => ({ props: {} });
 

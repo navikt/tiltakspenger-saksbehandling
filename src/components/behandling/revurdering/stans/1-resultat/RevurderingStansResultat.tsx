@@ -9,6 +9,7 @@ import { Datovelger } from '../../../../datovelger/Datovelger';
 import { dateTilISOTekst } from '../../../../../utils/date';
 import React from 'react';
 import { useSak } from '../../../../../context/sak/SakContext';
+import { useConfig } from '../../../../../context/ConfigContext';
 
 enum ValgtHjemmelForStans {
     DELTAR_IKKE_PÅ_ARBEIDSMARKEDSTILTAK = 'DeltarIkkePåArbeidsmarkedstiltak',
@@ -37,12 +38,15 @@ export const RevurderingStansResultat = () => {
     } = revurderingVedtak;
 
     const { behandling, rolleForBehandling } = useRevurderingBehandling();
+    const { gosysUrl, modiaPersonoversiktUrl } = useConfig();
 
     const {} = useSendRevurderingVedtak(behandling, revurderingVedtak);
     const erSaksbehandler = rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER;
 
-    const gosys = <Link href={'#gosys'}>{'Gosys'}</Link>;
-    const modiaPersonoversikt = <Link href={'#modia'}>{'Modia personoversikt'}</Link>;
+    const gosysLinkComponent = <Link href={gosysUrl}>Gosys</Link>;
+    const modiaPersonoversiktLinkComponent = (
+        <Link href={modiaPersonoversiktUrl}>Modia personoversikt</Link>
+    );
 
     const options: ValgtHjemmelForStansOption[] = [
         {
@@ -85,7 +89,7 @@ export const RevurderingStansResultat = () => {
                 <Alert className={style.alert} variant={'warning'} inline>
                     <>
                         Husk å vurdere om du må forhåndsvarsle bruker før du foretar en stans. Dette
-                        må gjøres via {gosys} eller {modiaPersonoversikt}.
+                        må gjøres via {gosysLinkComponent} eller {modiaPersonoversiktLinkComponent}.
                     </>
                 </Alert>
                 <Select
