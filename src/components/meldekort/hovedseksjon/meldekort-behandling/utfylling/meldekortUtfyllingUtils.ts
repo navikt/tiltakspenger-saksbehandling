@@ -22,7 +22,7 @@ export const hentMeldekortForhåndsutfylling = (
     tidligereBehandlinger: MeldekortBehandlingProps[],
     brukersMeldekort?: BrukersMeldekortProps,
 ): MeldekortBehandlingDagProps[] => {
-    const forrigeBehandling = tidligereBehandlinger.at(-1);
+    const forrigeBehandling = tidligereBehandlinger.at(0);
 
     if (
         meldekortBehandling.status === MeldekortBehandlingStatus.KLAR_TIL_UTFYLLING &&

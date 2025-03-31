@@ -12,19 +12,17 @@ type Props = {
 };
 
 export const MeldekortOppsummeringVelger = ({ meldekortBehandlinger }: Props) => {
-    const sisteBehandling = meldekortBehandlinger.at(0);
-
-    const [valgtBehandling, setValgtBehandling] = useState<MeldekortBehandlingProps | undefined>(
-        sisteBehandling,
-    );
+    const [valgtIndex, setValgtIndex] = useState(0);
 
     useEffect(() => {
-        setValgtBehandling(sisteBehandling);
-    }, [sisteBehandling]);
+        setValgtIndex(0);
+    }, [meldekortBehandlinger]);
 
     if (meldekortBehandlinger.length === 0) {
         return null;
     }
+
+    const valgtBehandling = meldekortBehandlinger.at(valgtIndex);
 
     return (
         <VStack gap={'5'}>
@@ -35,9 +33,9 @@ export const MeldekortOppsummeringVelger = ({ meldekortBehandlinger }: Props) =>
                 <Select
                     label={'Velg tidligere behandling'}
                     onChange={(event) => {
-                        setValgtBehandling(meldekortBehandlinger.at(Number(event.target.value)));
+                        setValgtIndex(Number(event.target.value));
                     }}
-                    defaultValue={sisteBehandling!.id}
+                    value={valgtIndex}
                     size={'small'}
                 >
                     {meldekortBehandlinger.map((behandling, index) => {

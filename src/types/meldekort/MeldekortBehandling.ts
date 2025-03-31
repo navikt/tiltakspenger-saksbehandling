@@ -1,8 +1,7 @@
-// Egentlig har denne samme prefix som BrukersMeldekortId (bare "meldekort_")
-
 import { Attestering } from '../BehandlingTypes';
 
-// Typer den med en unik prefix for at typescript skal ikke skal se de som ekvivalente
+// Egentlig har denne samme prefix som BrukersMeldekortId (bare "meldekort_")
+// Typer den med en unik prefix for at typescript ikke skal se de som ekvivalente
 export type MeldekortBehandlingId = `meldekort_beh_${string}`;
 
 export enum MeldekortBehandlingStatus {
