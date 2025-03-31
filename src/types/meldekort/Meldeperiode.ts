@@ -32,7 +32,7 @@ export type MeldeperiodeKjedeProps = {
     id: MeldeperiodeKjedeId;
     periode: Periode;
     status: MeldeperiodeKjedeStatus;
-    sakHarMeldekortUnderBehandling: boolean;
+    periodeMedÅpenBehandling?: Periode;
     tiltaksnavn: string[];
     meldeperioder: MeldeperiodeProps[];
     meldekortBehandlinger: MeldekortBehandlingProps[];

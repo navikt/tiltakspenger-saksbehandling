@@ -6,6 +6,7 @@ import {
     MeldeperiodeKjedeProps,
     MeldeperiodeKjedeStatus,
 } from '../../../types/meldekort/Meldeperiode';
+import { meldeperiodeUrl } from '../../../utils/urls';
 
 import style from './MeldekortOversikt.module.css';
 
@@ -60,7 +61,7 @@ export const MeldekortOversikt = ({ meldeperiodeKjeder, saksnummer }: Props) => 
                                         MeldeperiodeKjedeStatus.IKKE_KLAR_TIL_BEHANDLING && (
                                         <Button
                                             as={Link}
-                                            href={`/sak/${saksnummer}/meldeperiode/${periode.fraOgMed}/${periode.tilOgMed}`}
+                                            href={meldeperiodeUrl(saksnummer, periode)}
                                             size="small"
                                             variant="secondary"
                                             className={style.knapp}
