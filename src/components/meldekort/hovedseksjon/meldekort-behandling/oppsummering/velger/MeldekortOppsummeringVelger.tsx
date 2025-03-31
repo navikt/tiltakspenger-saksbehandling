@@ -26,17 +26,14 @@ export const MeldekortOppsummeringVelger = ({ meldekortBehandlinger }: Props) =>
         return null;
     }
 
-    const harFlere = meldekortBehandlinger.length > 1;
-
     return (
         <VStack gap={'5'}>
             <HStack className={style.toppRad}>
                 <Heading level={'3'} size={'medium'}>
-                    {`Tidligere behandling${harFlere ? 'er' : ''}`}
+                    {`Tidligere behandlinger`}
                 </Heading>
                 <Select
-                    label={'Velg behandlinger'}
-                    hideLabel={true}
+                    label={'Velg tidligere behandling'}
                     onChange={(event) => {
                         setValgtBehandling(meldekortBehandlinger.at(Number(event.target.value)));
                     }}

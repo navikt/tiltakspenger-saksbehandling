@@ -16,7 +16,7 @@ type Props = {
 };
 
 export const MeldekortBehandling = ({ meldekortBehandling }: Props) => {
-    const { meldeperiodeKjede, sisteMeldeperiode } = useMeldeperiodeKjede();
+    const { meldeperiodeKjede } = useMeldeperiodeKjede();
     const { innloggetSaksbehandler } = useSaksbehandler();
 
     return (
@@ -32,10 +32,7 @@ export const MeldekortBehandling = ({ meldekortBehandling }: Props) => {
                 )}
             </HStack>
             {kanSaksbehandleForMeldekort(meldekortBehandling, innloggetSaksbehandler) ? (
-                <MeldekortUtfylling
-                    meldeperiode={sisteMeldeperiode}
-                    meldekortBehandling={meldekortBehandling}
-                />
+                <MeldekortUtfylling meldekortBehandling={meldekortBehandling} />
             ) : (
                 <>
                     <MeldekortOppsummering meldekortBehandling={meldekortBehandling} />

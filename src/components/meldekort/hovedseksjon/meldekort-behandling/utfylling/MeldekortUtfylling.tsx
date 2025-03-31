@@ -14,34 +14,42 @@ import { useSendMeldekortTilBeslutter } from '../../../hooks/useSendMeldekortTil
 import { MeldekortUtfyllingUke } from './MeldekortUtfyllingUke';
 import { BekreftelsesModal } from '../../../../modaler/BekreftelsesModal';
 import {
-    hentMeldekortBehandlingDager,
+    hentMeldekortForhåndsutfylling,
     MeldekortBehandlingForm,
     tellDagerMedDeltattEllerFravær,
 } from './meldekortUtfyllingUtils';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
-import { MeldekortBehandlingProps } from '../../../../../types/meldekort/MeldekortBehandling';
-import { MeldeperiodeProps } from '../../../../../types/meldekort/Meldeperiode';
 import { useMeldeperiodeKjede } from '../../../context/MeldeperiodeKjedeContext';
+import { MeldekortBehandlingProps } from '../../../../../types/meldekort/MeldekortBehandling';
 
 import styles from '../../MeldekortHovedseksjon.module.css';
 
 type Props = {
-    meldeperiode: MeldeperiodeProps;
     meldekortBehandling: MeldekortBehandlingProps;
 };
 
-export const MeldekortUtfylling = ({ meldeperiode, meldekortBehandling }: Props) => {
-    const { antallDager } = meldeperiode;
-    const { sakId } = useSak().sak;
+export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
+    const {
+        setMeldeperiodeKjede,
+        meldeperiodeKjede,
+        sisteMeldeperiode,
+        tidligereMeldekortBehandlinger,
+    } = useMeldeperiodeKjede();
 
-    const { setMeldeperiodeKjede, meldeperiodeKjede } = useMeldeperiodeKjede();
-    const { brukersMeldekort } = meldeperiodeKjede;
+    const { sakId } = useSak().sak;
 
     const [valideringsFeil, setValideringsFeil] = useState('');
 
+    const { antallDager } = sisteMeldeperiode;
+    const { brukersMeldekort } = meldeperiodeKjede;
+
     const modalRef = useRef<HTMLDialogElement>(null);
 
-    const dagerDefault = hentMeldekortBehandlingDager(meldekortBehandling, brukersMeldekort);
+    const dagerDefault = hentMeldekortForhåndsutfylling(
+        meldekortBehandling,
+        tidligereMeldekortBehandlinger,
+        brukersMeldekort,
+    );
 
     const formMethods = useForm<MeldekortBehandlingForm>({
         mode: 'onSubmit',

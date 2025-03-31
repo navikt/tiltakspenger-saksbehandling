@@ -1,13 +1,13 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { MeldeperiodeKjedeProps, MeldeperiodeProps } from '../../../types/meldekort/Meldeperiode';
 import { MeldekortBehandlingProps } from '../../../types/meldekort/MeldekortBehandling';
-import { finnSisteMeldeperiodeVersjon } from '../../../utils/meldeperioder';
 
 export type MeldeperioderContextState = {
     meldeperiodeKjede: MeldeperiodeKjedeProps;
     setMeldeperiodeKjede: (meldeperiodeKjede: MeldeperiodeKjedeProps) => void;
     sisteMeldeperiode: MeldeperiodeProps;
     sisteMeldekortBehandling?: MeldekortBehandlingProps;
+    tidligereMeldekortBehandlinger: MeldekortBehandlingProps[];
 };
 
 export const MeldeperiodeKjedeContext = createContext<MeldeperioderContextState>(
@@ -27,14 +27,12 @@ export const MeldeperiodeKjedeProvider = ({
 
     const { meldekortBehandlinger } = meldeperiodeKjede;
 
-    const sisteMeldekortBehandling =
-        meldekortBehandlinger.length > 0
-            ? meldekortBehandlinger.reduce((acc, mbeh) =>
-                  mbeh.opprettet > acc.opprettet ? mbeh : acc,
-              )
-            : undefined;
+    const sisteMeldeperiode = meldeperiodeKjede.meldeperioder.reduce((acc, meldeperiode) =>
+        meldeperiode.versjon > acc.versjon ? meldeperiode : acc,
+    );
 
-    const sisteMeldeperiode = finnSisteMeldeperiodeVersjon(meldeperiodeKjede);
+    const [sisteMeldekortBehandling, ...tidligereMeldekortBehandlinger] =
+        meldekortBehandlinger.toSorted((a, b) => (a.opprettet > b.opprettet ? -1 : 1));
 
     useEffect(() => {
         setMeldeperiodeKjede(meldeperiodeKjedeInitial);
@@ -47,6 +45,7 @@ export const MeldeperiodeKjedeProvider = ({
                 setMeldeperiodeKjede,
                 sisteMeldeperiode,
                 sisteMeldekortBehandling,
+                tidligereMeldekortBehandlinger,
             }}
         >
             {children}

@@ -7,16 +7,14 @@ import { MeldekortOppsummeringVelger } from './meldekort-behandling/oppsummering
 import styles from './MeldekortHovedseksjon.module.css';
 
 export const MeldekortHovedseksjon = () => {
-    const { meldeperiodeKjede, sisteMeldeperiode, sisteMeldekortBehandling } =
-        useMeldeperiodeKjede();
+    const {
+        meldeperiodeKjede,
+        sisteMeldeperiode,
+        sisteMeldekortBehandling,
+        tidligereMeldekortBehandlinger,
+    } = useMeldeperiodeKjede();
 
-    const { brukersMeldekort, meldekortBehandlinger } = meldeperiodeKjede;
-
-    const tidligereBehandlinger =
-        sisteMeldekortBehandling &&
-        meldekortBehandlinger
-            .filter((behandling) => behandling.id !== sisteMeldekortBehandling.id)
-            .toSorted((a, b) => (a.opprettet > b.opprettet ? -1 : 1));
+    const { brukersMeldekort } = meldeperiodeKjede;
 
     return (
         <VStack gap={'5'} className={styles.wrapper}>
@@ -24,9 +22,9 @@ export const MeldekortHovedseksjon = () => {
                 {sisteMeldekortBehandling && (
                     <MeldekortBehandling meldekortBehandling={sisteMeldekortBehandling} />
                 )}
-                {tidligereBehandlinger && (
-                    <MeldekortOppsummeringVelger meldekortBehandlinger={tidligereBehandlinger} />
-                )}
+                <MeldekortOppsummeringVelger
+                    meldekortBehandlinger={tidligereMeldekortBehandlinger}
+                />
                 {brukersMeldekort && (
                     <BrukersMeldekortVisning
                         meldeperiode={sisteMeldeperiode}
