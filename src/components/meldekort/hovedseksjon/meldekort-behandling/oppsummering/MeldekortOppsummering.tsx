@@ -3,6 +3,7 @@ import { ukeHeading } from '../../../../../utils/date';
 import { MeldekortOppsummeringUke } from './MeldekortOppsummeringUke';
 import { MeldekortBehandlingProps } from '../../../../../types/meldekort/MeldekortBehandling';
 import { useMeldeperiodeKjede } from '../../../context/MeldeperiodeKjedeContext';
+import { MeldekortOppsummeringKorrigeringer } from './korrigeringer/MeldekortOppsummeringKorrigeringer';
 
 import styles from '../../MeldekortHovedseksjon.module.css';
 
@@ -20,6 +21,7 @@ export const MeldekortOppsummering = ({ meldekortBehandling }: Props) => {
         totalbeløpTilUtbetaling,
         navkontor,
         navkontorNavn,
+        korrigeringer,
     } = meldekortBehandling;
 
     const uke1 = dager.slice(0, 7);
@@ -35,6 +37,9 @@ export const MeldekortOppsummering = ({ meldekortBehandling }: Props) => {
                 utbetalingUke={uke2}
                 headingtekst={ukeHeading(periode.tilOgMed)}
             />
+            {korrigeringer.length > 0 && (
+                <MeldekortOppsummeringKorrigeringer korrigeringer={korrigeringer} />
+            )}
             {begrunnelse && (
                 <VStack className={styles.begrunnelse}>
                     <>

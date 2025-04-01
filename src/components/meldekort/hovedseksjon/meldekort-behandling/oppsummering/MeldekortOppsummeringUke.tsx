@@ -9,15 +9,17 @@ import styles from '../../MeldekortHovedseksjon.module.css';
 
 type UtbetalingsukeProps = {
     utbetalingUke: MeldekortBehandlingDagBeregnet[];
-    headingtekst: string;
+    headingtekst?: string;
 };
 
 export const MeldekortOppsummeringUke = ({ utbetalingUke, headingtekst }: UtbetalingsukeProps) => {
     return (
         <Box className={styles.utbetalingsuke}>
-            <Heading size="small" level="3">
-                {headingtekst}
-            </Heading>
+            {headingtekst && (
+                <Heading size="small" level="3">
+                    {headingtekst}
+                </Heading>
+            )}
             <Table size="small">
                 <Table.Header>
                     <Table.Row>

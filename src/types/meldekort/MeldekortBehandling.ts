@@ -1,4 +1,6 @@
 import { Attestering } from '../BehandlingTypes';
+import { MeldeperiodeKjedeId } from './Meldeperiode';
+import { Periode } from '../Periode';
 
 // Egentlig har denne samme prefix som BrukersMeldekortId (bare "meldekort_")
 // Typer den med en unik prefix for at typescript ikke skal se de som ekvivalente
@@ -42,15 +44,17 @@ export type MeldekortBehandlingProps = {
     beslutter?: string;
     opprettet: string;
     status: MeldekortBehandlingStatus;
-    totalbeløpTilUtbetaling: number;
-    totalOrdinærBeløpTilUtbetaling: number;
-    totalBarnetilleggTilUtbetaling: number;
     navkontor: string;
     navkontorNavn?: string;
     dager: MeldekortBehandlingDagBeregnet[];
     begrunnelse?: string;
     type: MeldekortBehandlingType;
     attesteringer: Attestering[];
+    totalbeløpTilUtbetaling: number;
+    totalOrdinærBeløpTilUtbetaling: number;
+    totalBarnetilleggTilUtbetaling: number;
+    beregning?: MeldeperiodeBeregning[];
+    korrigeringer: MeldeperiodeKorrigering[];
 };
 
 export type MeldekortBehandlingDagProps = {
@@ -61,6 +65,20 @@ export type MeldekortBehandlingDagProps = {
 export type MeldekortBehandlingDagBeregnet = MeldekortBehandlingDagProps & {
     reduksjonAvYtelsePåGrunnAvFravær?: ReduksjonAvYtelse;
     beregningsdag: Beregningsdag;
+};
+
+export type MeldeperiodeBeregning = {
+    kjedeId: MeldeperiodeKjedeId;
+    meldekortId: MeldekortBehandlingId;
+    dager: MeldekortBehandlingDagBeregnet[];
+};
+
+export type MeldeperiodeKorrigering = {
+    meldekortId: MeldekortBehandlingId;
+    kjedeId: MeldeperiodeKjedeId;
+    periode: Periode;
+    iverksatt: string;
+    dager: MeldekortBehandlingDagBeregnet[];
 };
 
 type Beregningsdag = {

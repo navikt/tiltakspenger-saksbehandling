@@ -1,4 +1,6 @@
-export type BrukersMeldekortId = `meldekort_${string}`;
+// Egentlig har denne samme prefix som MeldekortBehandlingId (bare "meldekort_")
+// Typer den med en unik prefix for at typescript ikke skal se de som ekvivalente
+export type BrukersMeldekortId = `meldekort_bruker_${string}`;
 
 export enum BrukersMeldekortDagStatus {
     DELTATT = 'DELTATT',
