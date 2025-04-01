@@ -24,6 +24,8 @@ Opprett en `.env.local` på roten av `tiltakspenger-saksbehandling`, med følgen
 
 ```
 TILTAKSPENGER_SAKSBEHANDLING_API_URL=http://localhost:8080
+GOSYS_URL=https://gosys-q2.dev.intern.nav.no/gosys
+MODIA_PERSONOVERSIKT_URL=https://modiapersonoversikt.intern.dev.nav.no/
 WONDERWALL_ORIGIN=http://localhost:2222
 SAKSBEHANDLING_API_SCOPE=tiltakspenger-saksbehandling-api
 AZURE_APP_CLIENT_ID=tiltakspenger-saksbehandling

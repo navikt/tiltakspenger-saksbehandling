@@ -10,12 +10,14 @@ import { SøknadOpplysningerBarn } from './SøknadOpplysningerBarn';
 import { SøknadOpplysningerPengestøtter } from './SøknadOpplysningerPengestøtter';
 
 import style from './BehandlingSøknadOpplysninger.module.css';
+import { useConfig } from '../../../../context/ConfigContext';
 
 type Props = {
     behandling: FørstegangsbehandlingData;
 };
 
 export const BehandlingSøknadOpplysninger = ({ behandling }: Props) => {
+    const { gosysUrl } = useConfig();
     const { søknad } = behandling;
 
     const {
@@ -75,7 +77,7 @@ export const BehandlingSøknadOpplysninger = ({ behandling }: Props) => {
                     {antallVedlegg > 0 && (
                         <Alert variant={'warning'} inline={true} size={'small'}>
                             {'Sjekk vedlegg i '}
-                            <Link href={'#gosys.com'}>{'gosys'}</Link>
+                            <Link href={gosysUrl}>{'gosys'}</Link>
                         </Alert>
                     )}
                 </>
