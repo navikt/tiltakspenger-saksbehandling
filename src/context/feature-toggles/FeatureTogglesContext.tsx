@@ -3,7 +3,6 @@ import { createContext, ReactNode, useContext } from 'react';
 type TogglesRecord = Record<`${string}Toggle`, boolean>;
 
 const featureTogglesDefaultState = {
-    revurderingToggle: false,
     meldekortKorrigeringToggle: false,
 } as const satisfies TogglesRecord;
 
@@ -22,7 +21,6 @@ export const FeatureTogglesProvider = ({ deployEnv, children }: Props) => {
     return (
         <Context.Provider
             value={{
-                revurderingToggle: !isProd,
                 meldekortKorrigeringToggle: !isProd,
             }}
         >

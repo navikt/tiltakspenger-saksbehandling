@@ -5,7 +5,6 @@ import { BehandlingerOversikt } from './behandlinger-oversikt/BehandlingerOversi
 import { OpprettRevurdering } from './opprett-revurdering/OpprettRevurdering';
 import { PersonaliaHeader } from '../personaliaheader/PersonaliaHeader';
 import { useSak } from '../../context/sak/SakContext';
-import { useFeatureToggles } from '../../context/feature-toggles/FeatureTogglesContext';
 import { AvsluttedeBehandlinger } from './behandlinger-oversikt/AvsluttedeBehandlinger';
 
 import styles from './Saksoversikt.module.css';
@@ -13,7 +12,6 @@ import styles from './Saksoversikt.module.css';
 export const Saksoversikt = () => {
     const { sakId, saksnummer, behandlinger, behandlingsoversikt, søknader, meldeperiodeKjeder } =
         useSak().sak;
-    const { revurderingToggle } = useFeatureToggles();
 
     return (
         <>
@@ -24,12 +22,10 @@ export const Saksoversikt = () => {
                         Saksoversikt
                     </Heading>
                     <Spacer />
-                    {revurderingToggle && (
-                        <OpprettRevurdering
-                            sakId={sakId}
-                            harVedtak={harVedtattFørstegangsbehandling(behandlinger)}
-                        />
-                    )}
+                    <OpprettRevurdering
+                        sakId={sakId}
+                        harVedtak={harVedtattFørstegangsbehandling(behandlinger)}
+                    />
                 </HStack>
                 <Box className={styles.tabellwrapper}>
                     <Heading level={'3'} size={'small'}>
