@@ -29,6 +29,9 @@ export const MeldekortOppsummering = ({ meldekortBehandling }: Props) => {
 
     return (
         <VStack gap={'5'}>
+            {korrigeringer.length > 0 && (
+                <MeldekortOppsummeringKorrigeringer korrigeringer={korrigeringer} />
+            )}
             <MeldekortOppsummeringUke
                 utbetalingUke={uke1}
                 headingtekst={ukeHeading(periode.fraOgMed)}
@@ -37,9 +40,6 @@ export const MeldekortOppsummering = ({ meldekortBehandling }: Props) => {
                 utbetalingUke={uke2}
                 headingtekst={ukeHeading(periode.tilOgMed)}
             />
-            {korrigeringer.length > 0 && (
-                <MeldekortOppsummeringKorrigeringer korrigeringer={korrigeringer} />
-            )}
             {begrunnelse && (
                 <VStack className={styles.begrunnelse}>
                     <>
