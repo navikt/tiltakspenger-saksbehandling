@@ -9,10 +9,11 @@ import { Alert, Tag } from '@navikt/ds-react';
 import { finnBehandlingStatusTekst } from '../../utils/tekstformateringUtils';
 
 import style from './BehandlingPage.module.css';
+import AvbruttOppsummering from '../oppsummeringer/oppsummeringAvAvbruttBehandling/OppsummeringAvAvbruttBehandling';
 
 export const BehandlingPage = () => {
     const behandlingsContext = useBehandling();
-    const { type, sakId, saksnummer, status } = behandlingsContext.behandling;
+    const { type, sakId, saksnummer, status, avbrutt } = behandlingsContext.behandling;
 
     return (
         <>
@@ -22,6 +23,7 @@ export const BehandlingPage = () => {
             <div className={style.main}>
                 <BehandlingSaksopplysninger />
                 <div className={style.vedtakOuter}>
+                    {avbrutt && <AvbruttOppsummering avbrutt={avbrutt} withPanel={true} />}
                     <div className={style.vedtakInner}>
                         {type === Behandlingstype.FØRSTEGANGSBEHANDLING ? (
                             <FørstegangsVedtak />

@@ -9,6 +9,10 @@
     padding: 2rem;
 }
 
+.vedtakOuter > :not(:last-child) {
+    margin-bottom: 2rem;
+}
+
 .vedtakInner {
     display: flex;
     flex-direction: column;

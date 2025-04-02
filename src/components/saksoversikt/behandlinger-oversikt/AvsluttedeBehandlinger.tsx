@@ -137,6 +137,7 @@ export const AvsluttedeBehandlingerTabell = (props: {
                     <Table.HeaderCell scope="col">Behandlingstype</Table.HeaderCell>
                     <Table.HeaderCell scope="col">Tidspunkt avsluttet</Table.HeaderCell>
                     <Table.HeaderCell scope="col">Behandlingsperiode</Table.HeaderCell>
+                    <Table.HeaderCell scope="col"></Table.HeaderCell>
                 </Table.Row>
             </Table.Header>
             <Table.Body>
@@ -152,6 +153,20 @@ export const AvsluttedeBehandlingerTabell = (props: {
                             {avsluttet.behandlingsperiode
                                 ? periodeTilFormatertDatotekst(avsluttet.behandlingsperiode)
                                 : 'Ingen periode'}
+                        </Table.DataCell>
+                        <Table.DataCell>
+                            {(avsluttet.behandlingstype === Behandlingstype.FØRSTEGANGSBEHANDLING ||
+                                avsluttet.behandlingstype === Behandlingstype.REVURDERING) && (
+                                <Button
+                                    style={{ minWidth: '50%' }}
+                                    size="small"
+                                    variant={'secondary'}
+                                    as={Link}
+                                    href={`/behandling/${avsluttet.id}`}
+                                >
+                                    Se behandling
+                                </Button>
+                            )}
                         </Table.DataCell>
                     </Table.Row>
                 ))}

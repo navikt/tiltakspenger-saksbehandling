@@ -2,6 +2,7 @@ import {
     Alert,
     Button,
     DatePicker,
+    Detail,
     Heading,
     HStack,
     Label,
@@ -153,6 +154,7 @@ export const RangePickerDate = (props: {
     return (
         <VStack>
             <Label>Deltakelsesperiode</Label>
+            <Detail>Default periode er 1.april 2025 - 10.april 2025</Detail>
             <HStack gap={'4'}>
                 <DatePicker {...datepickerProps} dropdownCaption>
                     <DatePicker.Input

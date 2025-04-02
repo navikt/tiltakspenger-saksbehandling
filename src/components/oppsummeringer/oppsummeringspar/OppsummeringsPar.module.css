@@ -1,0 +1,14 @@
+.horisontalt {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--a-spacing-8);
+}
+
+.vertikalt {
+    display: flex;
+    flex-direction: column;
+}
+
+.verdi {
+    white-space: pre-wrap;
+}

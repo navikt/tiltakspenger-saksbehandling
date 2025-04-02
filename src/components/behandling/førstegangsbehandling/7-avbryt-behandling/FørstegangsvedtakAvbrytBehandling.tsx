@@ -15,7 +15,8 @@ const FørstegangsvedtakAvbrytBehandling = () => {
     if (
         behandling.status === BehandlingStatus.UNDER_BESLUTNING ||
         behandling.status === BehandlingStatus.KLAR_TIL_BESLUTNING ||
-        behandling.status === BehandlingStatus.VEDTATT
+        behandling.status === BehandlingStatus.VEDTATT ||
+        behandling.avbrutt !== null
     ) {
         return null;
     }

@@ -9,6 +9,7 @@ import Link from 'next/link';
 import router from 'next/router';
 
 import style from './BehandlingKnapper.module.css';
+import OvertaBehandling from './OvertaBehandling';
 
 type Props = {
     behandling: BehandlingForOversiktData;
@@ -16,10 +17,10 @@ type Props = {
 };
 
 export const BehandlingKnappForOversikt = ({ behandling, medAvsluttBehandling }: Props) => {
-    const { status, id, saksnummer } = behandling;
+    const { status, id, saksnummer, sakId } = behandling;
 
     const { innloggetSaksbehandler } = useSaksbehandler();
-    const { taBehandling, isBehandlingMutating } = useTaBehandling(id);
+    const { taBehandling, isBehandlingMutating } = useTaBehandling(sakId, id);
 
     const behandlingLenke = `/behandling/${id}`;
 
@@ -27,7 +28,26 @@ export const BehandlingKnappForOversikt = ({ behandling, medAvsluttBehandling }:
         case BehandlingStatus.UNDER_BEHANDLING:
         case BehandlingStatus.UNDER_BESLUTNING: {
             if (!eierBehandling(behandling, innloggetSaksbehandler)) {
-                break;
+                if (
+                    innloggetSaksbehandler.navIdent === behandling.saksbehandler ||
+                    innloggetSaksbehandler.navIdent === behandling.beslutter
+                ) {
+                    return null;
+                }
+
+                return (
+                    <OvertaBehandling
+                        sakId={sakId}
+                        behandlingId={id}
+                        overtarFra={
+                            behandling.status === BehandlingStatus.UNDER_BEHANDLING
+                                ? behandling.saksbehandler!
+                                : behandling.status === BehandlingStatus.UNDER_BESLUTNING
+                                  ? behandling.beslutter!
+                                  : 'Ukjent saksbehandler/beslutter'
+                        }
+                    />
+                );
             }
 
             return (
@@ -41,7 +61,7 @@ export const BehandlingKnappForOversikt = ({ behandling, medAvsluttBehandling }:
                     >
                         Fortsett
                     </Button>
-                    {medAvsluttBehandling && (
+                    {medAvsluttBehandling && status === BehandlingStatus.UNDER_BEHANDLING && (
                         <AvsluttBehandling saksnummer={saksnummer} behandlingsId={id} />
                     )}
                 </VStack>
