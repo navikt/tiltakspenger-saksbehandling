@@ -38,6 +38,8 @@ const OppsummeringAvAttesteringer = (props: { attesteringer: Attestering[] }) =>
                                 <BodyShort>
                                     {formaterTidspunkt(attestering.endretTidspunkt)}
                                 </BodyShort>
+
+                                <BodyShort>- {attestering.endretAv}</BodyShort>
                             </HStack>
                             <BodyShort spacing>{attestering.begrunnelse}</BodyShort>
                         </VStack>
