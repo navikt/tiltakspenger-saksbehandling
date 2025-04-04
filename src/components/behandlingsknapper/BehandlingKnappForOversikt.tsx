@@ -1,6 +1,10 @@
 import React from 'react';
 import { Button, VStack } from '@navikt/ds-react';
-import { BehandlingForOversiktData, BehandlingStatus } from '../../types/BehandlingTypes';
+import {
+    BehandlingForOversiktData,
+    BehandlingStatus,
+    Behandlingstype,
+} from '../../types/BehandlingTypes';
 import { useTaBehandling } from './useTaBehandling';
 import AvsluttBehandling from '../saksoversikt/avsluttBehandling/AvsluttBehandling';
 import { useSaksbehandler } from '../../context/saksbehandler/SaksbehandlerContext';
@@ -62,7 +66,15 @@ export const BehandlingKnappForOversikt = ({ behandling, medAvsluttBehandling }:
                         Fortsett
                     </Button>
                     {medAvsluttBehandling && status === BehandlingStatus.UNDER_BEHANDLING && (
-                        <AvsluttBehandling saksnummer={saksnummer} behandlingsId={id} />
+                        <AvsluttBehandling
+                            saksnummer={saksnummer}
+                            behandlingsId={id}
+                            modal={{
+                                tittel: `Avslutt ${behandling.typeBehandling === Behandlingstype.REVURDERING ? 'revurdering' : 'behandling'}`,
+                                tekst: `Er du sikker på at du vil avslutte ${behandling.typeBehandling === Behandlingstype.REVURDERING ? 'revurderingen' : 'behandling av søknad'}?`,
+                                textareaLabel: `Hvorfor avsluttes ${behandling.typeBehandling === Behandlingstype.REVURDERING ? 'revurderingen' : 'behandlingen'}? (obligatorisk)`,
+                            }}
+                        />
                     )}
                 </VStack>
             );

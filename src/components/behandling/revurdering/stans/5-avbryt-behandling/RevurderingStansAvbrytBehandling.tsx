@@ -7,15 +7,22 @@ import AvsluttBehandling from '../../../../saksoversikt/avsluttBehandling/Avslut
 import { VedtakSeksjon } from '../../../vedtak-layout/seksjon/VedtakSeksjon';
 
 import styles from './RevurderingStansAvbrytBehandling.module.css';
+import { useSaksbehandler } from '../../../../../context/saksbehandler/SaksbehandlerContext';
 
 const RevurderingStansAvbrytBehandling = () => {
     const { behandling } = useRevurderingBehandling();
+    const { innloggetSaksbehandler } = useSaksbehandler();
 
     if (
         behandling.status === BehandlingStatus.UNDER_BESLUTNING ||
         behandling.status === BehandlingStatus.KLAR_TIL_BESLUTNING ||
-        behandling.status === BehandlingStatus.VEDTATT
+        behandling.status === BehandlingStatus.VEDTATT ||
+        behandling.avbrutt !== null
     ) {
+        return null;
+    }
+
+    if (behandling.saksbehandler !== innloggetSaksbehandler.navIdent) {
         return null;
     }
 
@@ -31,6 +38,9 @@ const RevurderingStansAvbrytBehandling = () => {
                     }}
                     onSuccess={() => {
                         router.push(`/sak/${behandling.saksnummer}`);
+                    }}
+                    modal={{
+                        tittel: 'Avslutt revurdering',
                     }}
                 />
             </HStack>

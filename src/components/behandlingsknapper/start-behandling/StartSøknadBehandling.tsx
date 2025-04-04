@@ -53,6 +53,13 @@ export const StartSøknadBehandling = ({ søknad, medAvsluttBehandling }: Props)
                         button={{
                             text: 'Avslutt søknad',
                         }}
+                        modal={{
+                            tittel: 'Avslutt søknad',
+                            tekst: 'Er du sikker på at du vil avslutte søknaden?',
+                            textareaLabel: 'Hvorfor avsluttes søknaden? (Obligatorisk)',
+                            primaryButtonText: 'Avslutt søknad',
+                            secondaryButtonText: 'Ikke avslutt søknad',
+                        }}
                     />
                 )}
             </VStack>

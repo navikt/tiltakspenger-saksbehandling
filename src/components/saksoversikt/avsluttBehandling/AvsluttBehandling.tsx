@@ -21,6 +21,18 @@ const AvsluttBehandling = (props: {
     };
     minWidth?: boolean;
     onSuccess?: () => void;
+    /**
+     * overstying av tekster i modalen. Default er generell behandlings-realterte tekster
+     *
+     * TODO - dette blir ikke så veldig smooth når vi skal ha forskjeller på de ulike behandlingstypene
+     */
+    modal?: {
+        tittel?: string;
+        tekst?: string;
+        textareaLabel?: string;
+        primaryButtonText?: string;
+        secondaryButtonText?: string;
+    };
 }) => {
     const [vilAvslutteBehandling, setVilAvslutteBehandling] = React.useState(false);
 
@@ -39,6 +51,13 @@ const AvsluttBehandling = (props: {
                     søknadsId={props.søknadsId ?? null}
                     behandlingsId={props.behandlingsId ?? null}
                     onSuccess={props.onSuccess}
+                    tittel={props.modal?.tittel}
+                    tekst={props.modal?.tekst}
+                    textareaLabel={props.modal?.textareaLabel}
+                    footer={{
+                        primaryButtonText: props.modal?.primaryButtonText,
+                        secondaryButtonText: props.modal?.secondaryButtonText,
+                    }}
                 />
             )}
             <Button
@@ -47,7 +66,7 @@ const AvsluttBehandling = (props: {
                 size={props.button?.size ?? 'small'}
                 onClick={() => setVilAvslutteBehandling(true)}
             >
-                {props.button?.text ?? 'Avslutt behandling'}
+                {props.button?.text ?? props.modal?.tittel ?? 'Avslutt behandling'}
             </Button>
         </VStack>
     );
@@ -62,6 +81,13 @@ const AvsluttBehandlingModal = (props: {
     åpen: boolean;
     onClose: () => void;
     onSuccess?: () => void;
+    tittel?: string;
+    tekst?: string;
+    textareaLabel?: string;
+    footer?: {
+        primaryButtonText?: string;
+        secondaryButtonText?: string;
+    };
 }) => {
     const { setSak } = useSak();
     const form = useForm<{ begrunnelse: string }>({ defaultValues: { begrunnelse: '' } });
@@ -99,13 +125,14 @@ const AvsluttBehandlingModal = (props: {
                     <HStack>
                         <TrashIcon title="Søppelbøtte ikon" fontSize="1.5rem" />
                         <Heading level="4" size="small">
-                            Avslutt behandling
+                            {props.tittel ?? 'Avslutt behandling'}
                         </Heading>
                     </HStack>
                 </Modal.Header>
                 <Modal.Body className={styles.modalBody}>
                     <BodyLong>
-                        Hvis du avslutter søknadsbehandlingen kan ikke søknaden lenger behandles.
+                        {props.tekst ??
+                            'Hvis du avslutter behandlingen kan den ikke lenger behandles.'}
                     </BodyLong>
                     <Controller
                         rules={{ required: 'Du må fylle ut en begrunnelse' }}
@@ -115,7 +142,10 @@ const AvsluttBehandlingModal = (props: {
                                 {...field}
                                 error={fieldState.error?.message}
                                 className={styles.textarea}
-                                label="Hvorfor avsluttes behandlingen? (obligatorisk)"
+                                label={
+                                    props.textareaLabel ??
+                                    'Hvorfor avsluttes behandlingen? (obligatorisk)'
+                                }
                             />
                         )}
                         name={'begrunnelse'}
@@ -128,10 +158,10 @@ const AvsluttBehandlingModal = (props: {
                         loading={avsluttBehandlingMutation.isMutating}
                         type="submit"
                     >
-                        Avslutt behandling
+                        {props.footer?.primaryButtonText ?? 'Avslutt behandling'}
                     </Button>
                     <Button variant="secondary" type="button" size="small" onClick={props.onClose}>
-                        Ikke avslutt behandling
+                        {props.footer?.secondaryButtonText ?? 'Ikke avslutt behandling'}
                     </Button>
                 </Modal.Footer>
             </Modal>
