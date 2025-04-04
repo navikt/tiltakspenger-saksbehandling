@@ -33,7 +33,11 @@ export const Saksoversikt = () => {
                     </Heading>
                     <BehandlingerOversikt behandlinger={behandlingsoversikt} />
                 </Box>
-                <AvsluttedeBehandlinger søknader={søknader} behandlinger={behandlinger} />
+                <AvsluttedeBehandlinger
+                    søknader={søknader}
+                    behandlinger={behandlinger}
+                    saksnummer={saksnummer}
+                />
 
                 <Box className={styles.tabellwrapper}>
                     <Heading level={'3'} size={'small'}>

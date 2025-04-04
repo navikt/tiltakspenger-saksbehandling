@@ -10,6 +10,7 @@ import { finnBehandlingStatusTekst } from '../../utils/tekstformateringUtils';
 
 import style from './BehandlingPage.module.css';
 import AvbruttOppsummering from '../oppsummeringer/oppsummeringAvAvbruttBehandling/OppsummeringAvAvbruttBehandling';
+import SideBarMain from '../../layouts/sidebar-main/SideBarMain';
 
 export const BehandlingPage = () => {
     const behandlingsContext = useBehandling();
@@ -20,23 +21,26 @@ export const BehandlingPage = () => {
             <PersonaliaHeader sakId={sakId} saksnummer={saksnummer} visTilbakeKnapp={true}>
                 <Tag variant={'alt3-filled'}>{finnBehandlingStatusTekst(status, false)}</Tag>
             </PersonaliaHeader>
-            <div className={style.main}>
-                <BehandlingSaksopplysninger />
-                <div className={style.vedtakOuter}>
-                    {avbrutt && <AvbruttOppsummering avbrutt={avbrutt} withPanel={true} />}
-                    <div className={style.vedtakInner}>
-                        {type === Behandlingstype.FØRSTEGANGSBEHANDLING ? (
-                            <FørstegangsVedtak />
-                        ) : type === Behandlingstype.REVURDERING ? (
-                            <RevurderingVedtak />
-                        ) : (
-                            <Alert
-                                variant={'error'}
-                            >{`Behandlingstypen er ikke implementert: ${type}`}</Alert>
-                        )}
+
+            <SideBarMain
+                sidebar={<BehandlingSaksopplysninger />}
+                main={
+                    <div className={style.main}>
+                        {avbrutt && <AvbruttOppsummering avbrutt={avbrutt} withPanel={true} />}
+                        <div className={style.vedtakContainer}>
+                            {type === Behandlingstype.FØRSTEGANGSBEHANDLING ? (
+                                <FørstegangsVedtak />
+                            ) : type === Behandlingstype.REVURDERING ? (
+                                <RevurderingVedtak />
+                            ) : (
+                                <Alert
+                                    variant={'error'}
+                                >{`Behandlingstypen er ikke implementert: ${type}`}</Alert>
+                            )}
+                        </div>
                     </div>
-                </div>
-            </div>
+                }
+            />
         </>
     );
 };

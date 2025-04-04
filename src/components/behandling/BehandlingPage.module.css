@@ -1,22 +1,14 @@
 .main {
-    height: 100vh;
-    display: grid;
-    grid-template-columns: minmax(400px, min-content) 1fr;
+    max-width: 1200px;
 }
 
-.vedtakOuter {
-    background-color: var(--a-gray-50);
-    padding: 2rem;
-}
-
-.vedtakOuter > :not(:last-child) {
+.main > :not(:last-child) {
     margin-bottom: 2rem;
 }
 
-.vedtakInner {
+.vedtakContainer {
     display: flex;
     flex-direction: column;
     background-color: var(--a-white);
     padding: 2rem;
-    max-width: 1200px;
 }

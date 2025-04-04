@@ -20,6 +20,7 @@ import { erSøknadAvbrutt } from '../../../utils/SøknadUtils';
 import Link from 'next/link';
 
 export const AvsluttedeBehandlinger = (props: {
+    saksnummer: string;
     søknader: SøknadForBehandlingProps[];
     behandlinger: BehandlingData[];
 }) => {
@@ -64,7 +65,10 @@ export const AvsluttedeBehandlinger = (props: {
                     <Heading level="3" size="small">
                         Avsluttede behandlinger
                     </Heading>
-                    <AvsluttedeBehandlingerTabell avsluttede={avbrutte} />
+                    <AvsluttedeBehandlingerTabell
+                        avsluttede={avbrutte}
+                        saksnummer={props.saksnummer}
+                    />
                 </Box>
             )}
         </>
@@ -124,6 +128,7 @@ export const VedtatteBehandlingerTabell = (props: {
 };
 
 export const AvsluttedeBehandlingerTabell = (props: {
+    saksnummer: string;
     avsluttede: AvsluttetBehandlingDataCellInfo[];
 }) => {
     if (props.avsluttede.length === 0) {
@@ -165,6 +170,17 @@ export const AvsluttedeBehandlingerTabell = (props: {
                                     href={`/behandling/${avsluttet.id}`}
                                 >
                                     Se behandling
+                                </Button>
+                            )}
+                            {avsluttet.behandlingstype === Behandlingstype.SØKNAD && (
+                                <Button
+                                    style={{ minWidth: '50%' }}
+                                    size="small"
+                                    variant={'secondary'}
+                                    as={Link}
+                                    href={`/sak/${props.saksnummer}/avbrutt/${avsluttet.id}`}
+                                >
+                                    Se søknad
                                 </Button>
                             )}
                         </Table.DataCell>

@@ -1,4 +1,3 @@
-import { FørstegangsbehandlingData } from '../../../../types/BehandlingTypes';
 import { formaterDatotekst, periodeTilFormatertDatotekst } from '../../../../utils/date';
 import { Alert, Link } from '@navikt/ds-react';
 import {
@@ -11,14 +10,16 @@ import { SøknadOpplysningerPengestøtter } from './SøknadOpplysningerPengestø
 
 import style from './BehandlingSøknadOpplysninger.module.css';
 import { useConfig } from '../../../../context/ConfigContext';
+import { Periode } from '../../../../types/Periode';
+import { SøknadForBehandlingProps } from '../../../../types/SøknadTypes';
 
 type Props = {
-    behandling: FørstegangsbehandlingData;
+    tiltaksperiode: Periode;
+    søknad: SøknadForBehandlingProps;
 };
 
-export const BehandlingSøknadOpplysninger = ({ behandling }: Props) => {
+export const BehandlingSøknadOpplysninger = ({ tiltaksperiode, søknad }: Props) => {
     const { gosysUrl } = useConfig();
-    const { søknad } = behandling;
 
     const {
         tidsstempelHosOss,
@@ -66,7 +67,11 @@ export const BehandlingSøknadOpplysninger = ({ behandling }: Props) => {
             />
 
             <SøknadOpplysningerPengestøtter pengestøtter={søknad} className={style.spacing} />
-            <SøknadOpplysningerBarn behandling={behandling} className={style.spacing} />
+            <SøknadOpplysningerBarn
+                tiltaksperiode={tiltaksperiode}
+                søknad={søknad}
+                className={style.spacing}
+            />
 
             {visVedlegg && (
                 <>

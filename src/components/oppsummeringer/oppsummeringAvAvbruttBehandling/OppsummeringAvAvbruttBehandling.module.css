@@ -1,3 +1,4 @@
 .box {
+    background-color: var(--a-white);
     padding: 2rem;
 }

@@ -1,0 +1,19 @@
+.container {
+    height: 100vh;
+    display: grid;
+    grid-template-columns: minmax(400px, min-content) 1fr;
+}
+
+.sidebar {
+    padding: 2rem;
+    background-color: var(--a-blue-50);
+}
+
+.main {
+    background-color: var(--a-gray-50);
+    padding: 2rem;
+}
+
+.main > :not(:last-child) {
+    margin-bottom: 2rem;
+}

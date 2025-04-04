@@ -3,25 +3,24 @@ import { Fragment } from 'react';
 import { BehandlingSaksopplysning } from '../BehandlingSaksopplysning';
 import { alderFraDato, finn16årsdag, formaterDatotekst } from '../../../../utils/date';
 import { erDatoIPeriode } from '../../../../utils/periode';
-import { hentTiltaksperiode } from '../../../../utils/behandling';
-import { FørstegangsbehandlingData } from '../../../../types/BehandlingTypes';
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
 
 import style from './SøknadOpplysningerBarn.module.css';
+import { SøknadForBehandlingProps } from '../../../../types/SøknadTypes';
+import { Periode } from '../../../../types/Periode';
 
 type Props = {
-    behandling: FørstegangsbehandlingData;
+    tiltaksperiode: Periode;
+    søknad: SøknadForBehandlingProps;
     className?: string;
 };
 
-export const SøknadOpplysningerBarn = ({ behandling, className }: Props) => {
-    const barn = behandling.søknad.barnetillegg;
+export const SøknadOpplysningerBarn = ({ tiltaksperiode, søknad, className }: Props) => {
+    const barn = søknad.barnetillegg;
 
     if (barn.length === 0) {
         return null;
     }
-
-    const tiltaksperiode = hentTiltaksperiode(behandling);
 
     return (
         <div className={className}>

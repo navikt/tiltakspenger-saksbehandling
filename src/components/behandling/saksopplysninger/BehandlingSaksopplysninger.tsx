@@ -5,13 +5,14 @@ import { useBehandling } from '../BehandlingContext';
 import { Separator } from '../../separator/Separator';
 import { SaksbehandlerRolle } from '../../../types/Saksbehandler';
 import { BehandlingOppdaterSaksopplysninger } from './oppdater-saksopplysninger/BehandlingOppdaterSaksopplysninger';
-import { BehandlingSøknadOpplysninger } from './søknad/BehandlingSøknadOpplysninger';
 import { BehandlingSaksopplysning } from './BehandlingSaksopplysning';
 import { Behandlingstype } from '../../../types/BehandlingTypes';
 import { BehandlingTiltakOpplysninger } from './tiltak/BehandlingTiltakOpplysninger';
 
 import style from './BehandlingSaksopplysninger.module.css';
 import OppsummeringAvAttesteringer from '../../attestering/OppsummeringAvAttestering';
+import { hentTiltaksperiode } from '../../../utils/behandling';
+import OppsummeringAvSøknad from '../../oppsummeringer/oppsummeringAvSøknad/OppsummeringAvSøknad';
 
 export const BehandlingSaksopplysninger = () => {
     const { behandling, rolleForBehandling } = useBehandling();
@@ -19,7 +20,7 @@ export const BehandlingSaksopplysninger = () => {
     const { tiltaksdeltagelse, fødselsdato } = saksopplysninger;
 
     return (
-        <div className={style.saksopplysninger}>
+        <div>
             <OpplysningerSeksjon header={'Tiltak registrert på bruker'}>
                 {rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER && (
                     <BehandlingOppdaterSaksopplysninger />
@@ -39,7 +40,10 @@ export const BehandlingSaksopplysninger = () => {
                 <div>
                     <Separator />
                     <OpplysningerSeksjon header={'Fra søknad'}>
-                        <BehandlingSøknadOpplysninger behandling={behandling} />
+                        <OppsummeringAvSøknad
+                            tiltaksperiode={hentTiltaksperiode(behandling)}
+                            søknad={behandling.søknad}
+                        />
                     </OpplysningerSeksjon>
                 </div>
             )}
