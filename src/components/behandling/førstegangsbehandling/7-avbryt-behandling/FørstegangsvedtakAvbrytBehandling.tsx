@@ -38,11 +38,6 @@ const FørstegangsvedtakAvbrytBehandling = () => {
                     onSuccess={() => {
                         router.push(`/sak/${behandling.saksnummer}`);
                     }}
-                    modal={{
-                        tittel: '',
-                        tekst: '',
-                        textareaLabel: '',
-                    }}
                 />
             </HStack>
         </VedtakSeksjon.Høyre>
