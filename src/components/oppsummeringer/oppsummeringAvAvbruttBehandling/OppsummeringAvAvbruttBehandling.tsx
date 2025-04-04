@@ -20,16 +20,16 @@ const AvbruttOppsummering = (props: {
         >
             <VStack gap="6">
                 <Heading size="medium" level="3">
-                    Behandling er avbrutt
+                    Behandling er Avsluttet
                 </Heading>
                 <HStack gap="6">
                     <OppsummeringsPar
-                        label={'Avbrutt av'}
+                        label={'Avsluttet av'}
                         verdi={props.avbrutt.avbruttAv}
                         retning="vertikal"
                     />
                     <OppsummeringsPar
-                        label={'Tidspunkt avbrutt'}
+                        label={'Tidspunkt avsluttet'}
                         verdi={formaterTidspunkt(props.avbrutt.avbruttTidspunkt)}
                         retning="vertikal"
                     />
