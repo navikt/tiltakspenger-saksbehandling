@@ -1,5 +1,5 @@
 import { BodyShort, Heading, HStack, Textarea, VStack } from '@navikt/ds-react';
-import { ukeHeading } from '../../../../../utils/date';
+import { formaterTidspunktKort, ukeHeading } from '../../../../../utils/date';
 import { MeldekortOppsummeringUke } from './MeldekortOppsummeringUke';
 import { MeldekortBehandlingProps } from '../../../../../types/meldekort/MeldekortBehandling';
 import { useMeldeperiodeKjede } from '../../../context/MeldeperiodeKjedeContext';
@@ -22,6 +22,7 @@ export const MeldekortOppsummering = ({ meldekortBehandling }: Props) => {
         navkontor,
         navkontorNavn,
         korrigeringer,
+        godkjentTidspunkt,
     } = meldekortBehandling;
 
     const uke1 = dagerBeregnet.slice(0, 7);
@@ -56,6 +57,12 @@ export const MeldekortOppsummering = ({ meldekortBehandling }: Props) => {
                         />
                     </>
                 </VStack>
+            )}
+            {godkjentTidspunkt && (
+                <BodyShort size={'small'}>
+                    {'Iverksatt: '}
+                    <strong>{formaterTidspunktKort(godkjentTidspunkt)}</strong>
+                </BodyShort>
             )}
             <VStack>
                 <HStack gap="5" className={styles.totalbeløp}>

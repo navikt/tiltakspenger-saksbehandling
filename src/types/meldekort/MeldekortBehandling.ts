@@ -43,6 +43,7 @@ export type MeldekortBehandlingProps = {
     saksbehandler: string;
     beslutter?: string;
     opprettet: string;
+    godkjentTidspunkt?: string;
     status: MeldekortBehandlingStatus;
     navkontor: string;
     navkontorNavn?: string;
