@@ -1,6 +1,5 @@
 import {
-    MeldekortBehandlingDagBeregnet,
-    MeldekortBehandlingDagProps,
+    MeldekortDagProps,
     MeldekortBehandlingDagStatus,
     MeldekortBehandlingProps,
     MeldekortBehandlingStatus,
@@ -10,25 +9,18 @@ import {
     BrukersMeldekortProps,
 } from '../../../../../types/meldekort/BrukersMeldekort';
 
-const fraBeregnetDag = (dag: MeldekortBehandlingDagBeregnet): MeldekortBehandlingDagProps => {
-    return {
-        dato: dag.dato,
-        status: dag.status,
-    };
-};
-
 export const hentMeldekortForhåndsutfylling = (
     meldekortBehandling: MeldekortBehandlingProps,
     tidligereBehandlinger: MeldekortBehandlingProps[],
     brukersMeldekort?: BrukersMeldekortProps,
-): MeldekortBehandlingDagProps[] => {
+): MeldekortDagProps[] => {
     const forrigeBehandling = tidligereBehandlinger.at(0);
 
     if (
         meldekortBehandling.status === MeldekortBehandlingStatus.KLAR_TIL_UTFYLLING &&
         forrigeBehandling
     ) {
-        return forrigeBehandling.dager.map(fraBeregnetDag);
+        return forrigeBehandling.dager;
     }
 
     if (brukersMeldekort) {
@@ -41,7 +33,7 @@ export const hentMeldekortForhåndsutfylling = (
         }));
     }
 
-    return meldekortBehandling.dager.map(fraBeregnetDag);
+    return meldekortBehandling.dager;
 };
 
 const brukersStatusTilBehandlingsStatus: Record<
@@ -58,7 +50,7 @@ const brukersStatusTilBehandlingsStatus: Record<
     [BrukersMeldekortDagStatus.IKKE_REGISTRERT]: MeldekortBehandlingDagStatus.IkkeDeltatt,
 } as const;
 
-export const tellDagerMedDeltattEllerFravær = (dager: MeldekortBehandlingDagProps[]) =>
+export const tellDagerMedDeltattEllerFravær = (dager: MeldekortDagProps[]) =>
     dager.filter((dag) => dagerMedDeltattEllerFravær.has(dag.status)).length;
 
 const dagerMedDeltattEllerFravær: ReadonlySet<MeldekortBehandlingDagStatus> = new Set([
@@ -71,7 +63,7 @@ const dagerMedDeltattEllerFravær: ReadonlySet<MeldekortBehandlingDagStatus> = n
 ]);
 
 export type MeldekortBehandlingForm = {
-    uke1: MeldekortBehandlingDagProps[];
-    uke2: MeldekortBehandlingDagProps[];
+    uke1: MeldekortDagProps[];
+    uke2: MeldekortDagProps[];
     begrunnelse?: string;
 };

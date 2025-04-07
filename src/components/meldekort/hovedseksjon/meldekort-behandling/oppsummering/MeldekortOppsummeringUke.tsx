@@ -1,14 +1,14 @@
 import { Box, Heading, HStack, Table } from '@navikt/ds-react';
 import React from 'react';
 import { formaterDatotekst, ukedagFraDatotekst } from '../../../../../utils/date';
-import { MeldekortBehandlingDagBeregnet } from '../../../../../types/meldekort/MeldekortBehandling';
+import { MeldekortDagBeregnetProps } from '../../../../../types/meldekort/MeldekortBehandling';
 import { meldekortBehandlingDagStatusTekst } from '../../../../../utils/tekstformateringUtils';
 import { ikonForMeldekortBehandlingDagStatus } from '../../Meldekortikoner';
 
 import styles from '../../MeldekortHovedseksjon.module.css';
 
 type UtbetalingsukeProps = {
-    utbetalingUke: MeldekortBehandlingDagBeregnet[];
+    utbetalingUke: MeldekortDagBeregnetProps[];
     headingtekst?: string;
 };
 

@@ -1,6 +1,6 @@
 import { BodyShort, Heading, HStack, Label, Select, VStack } from '@navikt/ds-react';
 import {
-    MeldekortBehandlingDagProps,
+    MeldekortDagProps,
     MeldekortBehandlingDagStatus,
 } from '../../../../../types/meldekort/MeldekortBehandling';
 import { meldekortdagHeading, ukeHeading } from '../../../../../utils/date';
@@ -19,7 +19,7 @@ const meldekortStatusValg = Object.values(MeldekortBehandlingDagStatus).filter(
 );
 
 type Props = {
-    dager: MeldekortBehandlingDagProps[];
+    dager: MeldekortDagProps[];
     ukenummer: 1 | 2;
 };
 

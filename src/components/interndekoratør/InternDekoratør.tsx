@@ -71,6 +71,7 @@ export const InternDekoratør = () => {
                     melding={error.message ?? `Noe gikk galt ved henting av sak for "${søketekst}"`}
                     variant="error"
                     marginX
+                    key={Date.now()}
                 />
             )}
         </VStack>

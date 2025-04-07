@@ -14,7 +14,7 @@ type Props = {
 export const MeldekortOppsummering = ({ meldekortBehandling }: Props) => {
     const { periode } = useMeldeperiodeKjede().meldeperiodeKjede;
     const {
-        dager,
+        dagerBeregnet,
         begrunnelse,
         totalOrdinærBeløpTilUtbetaling,
         totalBarnetilleggTilUtbetaling,
@@ -24,8 +24,8 @@ export const MeldekortOppsummering = ({ meldekortBehandling }: Props) => {
         korrigeringer,
     } = meldekortBehandling;
 
-    const uke1 = dager.slice(0, 7);
-    const uke2 = dager.slice(7, 14);
+    const uke1 = dagerBeregnet.slice(0, 7);
+    const uke2 = dagerBeregnet.slice(7, 14);
 
     return (
         <VStack gap={'5'}>

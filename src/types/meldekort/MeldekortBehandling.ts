@@ -46,23 +46,26 @@ export type MeldekortBehandlingProps = {
     status: MeldekortBehandlingStatus;
     navkontor: string;
     navkontorNavn?: string;
-    dager: MeldekortBehandlingDagBeregnet[];
     begrunnelse?: string;
     type: MeldekortBehandlingType;
     attesteringer: Attestering[];
     totalbeløpTilUtbetaling: number;
     totalOrdinærBeløpTilUtbetaling: number;
     totalBarnetilleggTilUtbetaling: number;
+    dager: MeldekortDagProps[];
+    dagerBeregnet: MeldekortDagBeregnetProps[];
     beregning?: MeldeperiodeBeregning[];
     korrigeringer: MeldeperiodeKorrigering[];
 };
 
-export type MeldekortBehandlingDagProps = {
+export type MeldekortDagProps = {
     dato: string;
     status: MeldekortBehandlingDagStatus;
 };
 
-export type MeldekortBehandlingDagBeregnet = MeldekortBehandlingDagProps & {
+export type MeldekortDagBeregnetProps = {
+    dato: string;
+    status: MeldekortBehandlingDagStatus;
     reduksjonAvYtelsePåGrunnAvFravær?: ReduksjonAvYtelse;
     beregningsdag: Beregningsdag;
 };
@@ -70,7 +73,7 @@ export type MeldekortBehandlingDagBeregnet = MeldekortBehandlingDagProps & {
 export type MeldeperiodeBeregning = {
     kjedeId: MeldeperiodeKjedeId;
     meldekortId: MeldekortBehandlingId;
-    dager: MeldekortBehandlingDagBeregnet[];
+    dager: MeldekortDagBeregnetProps[];
 };
 
 export type MeldeperiodeKorrigering = {
@@ -78,7 +81,7 @@ export type MeldeperiodeKorrigering = {
     kjedeId: MeldeperiodeKjedeId;
     periode: Periode;
     iverksatt: string;
-    dager: MeldekortBehandlingDagBeregnet[];
+    dager: MeldekortDagBeregnetProps[];
 };
 
 type Beregningsdag = {
@@ -88,6 +91,6 @@ type Beregningsdag = {
 };
 
 export type MeldekortBehandlingDTO = {
-    dager: MeldekortBehandlingDagProps[];
+    dager: MeldekortDagProps[];
     begrunnelse?: string;
 };
