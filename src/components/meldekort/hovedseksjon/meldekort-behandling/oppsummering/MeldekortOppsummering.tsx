@@ -13,26 +13,18 @@ type Props = {
 
 export const MeldekortOppsummering = ({ meldekortBehandling }: Props) => {
     const { periode } = useMeldeperiodeKjede().meldeperiodeKjede;
-    const {
-        dagerBeregnet,
-        begrunnelse,
-        totalOrdinærBeløpTilUtbetaling,
-        totalBarnetilleggTilUtbetaling,
-        totalbeløpTilUtbetaling,
-        navkontor,
-        navkontorNavn,
-        korrigeringer,
-        godkjentTidspunkt,
-    } = meldekortBehandling;
+    const { beregning, begrunnelse, navkontor, navkontorNavn, korrigering, godkjentTidspunkt } =
+        meldekortBehandling;
 
-    const uke1 = dagerBeregnet.slice(0, 7);
-    const uke2 = dagerBeregnet.slice(7, 14);
+    const { beregningForMeldekortetsPeriode } = beregning!;
+    const { beløp, dager } = beregningForMeldekortetsPeriode;
+
+    const uke1 = dager.slice(0, 7);
+    const uke2 = dager.slice(7, 14);
 
     return (
         <VStack gap={'5'}>
-            {korrigeringer.length > 0 && (
-                <MeldekortOppsummeringKorrigeringer korrigeringer={korrigeringer} />
-            )}
+            {korrigering && <MeldekortOppsummeringKorrigeringer korrigering={korrigering} />}
             <MeldekortOppsummeringUke
                 utbetalingUke={uke1}
                 headingtekst={ukeHeading(periode.fraOgMed)}
@@ -68,19 +60,19 @@ export const MeldekortOppsummering = ({ meldekortBehandling }: Props) => {
                 <HStack gap="5" className={styles.totalbeløp}>
                     <BodyShort weight="semibold">Totalt ordinær beløp for perioden:</BodyShort>
                     <BodyShort weight="semibold" className={styles.meldekortBeløp}>
-                        {totalOrdinærBeløpTilUtbetaling},-
+                        {beløp.ordinært},-
                     </BodyShort>
                 </HStack>
                 <HStack gap="5" className={styles.totalbeløp}>
                     <BodyShort weight="semibold">Totalt barnetillegg beløp for perioden:</BodyShort>
                     <BodyShort weight="semibold" className={styles.meldekortBeløp}>
-                        {totalBarnetilleggTilUtbetaling},-
+                        {beløp.barnetillegg},-
                     </BodyShort>
                 </HStack>
                 <HStack gap="5" className={styles.totalbeløp}>
                     <BodyShort weight="semibold">Totalt beløp for perioden:</BodyShort>
                     <BodyShort weight="semibold" className={styles.meldekortBeløp}>
-                        {totalbeløpTilUtbetaling},-
+                        {beløp.totalt},-
                     </BodyShort>
                 </HStack>
             </VStack>

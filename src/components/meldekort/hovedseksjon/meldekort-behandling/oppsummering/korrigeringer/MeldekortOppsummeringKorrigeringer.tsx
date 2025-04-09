@@ -1,8 +1,7 @@
 import { Alert, Link, VStack } from '@navikt/ds-react';
-import { Fragment } from 'react';
 import { meldeperiodeUrl } from '../../../../../../utils/urls';
 import NextLink from 'next/link';
-import { formaterTidspunktKort, periodeTilFormatertDatotekst } from '../../../../../../utils/date';
+import { periodeTilFormatertDatotekst } from '../../../../../../utils/date';
 import { MeldekortOppsummeringUke } from '../MeldekortOppsummeringUke';
 import { MeldeperiodeKorrigering } from '../../../../../../types/meldekort/MeldekortBehandling';
 import { useSak } from '../../../../../../context/sak/SakContext';
@@ -10,27 +9,24 @@ import { useSak } from '../../../../../../context/sak/SakContext';
 import style from './MeldekortOppsummeringKorrigeringer.module.css';
 
 type Props = {
-    korrigeringer: MeldeperiodeKorrigering[];
+    korrigering: MeldeperiodeKorrigering;
 };
 
-export const MeldekortOppsummeringKorrigeringer = ({ korrigeringer }: Props) => {
+export const MeldekortOppsummeringKorrigeringer = ({ korrigering }: Props) => {
     const { saksnummer } = useSak().sak;
+    const { periode, beregning } = korrigering;
 
     return (
         <VStack gap={'5'} className={style.korrigering}>
-            {korrigeringer.map((korrigering) => (
-                <Fragment key={korrigering.meldekortId}>
-                    <Alert size={'small'} inline={true} variant={'info'}>
-                        {'Korrigering av meldeperioden '}
-                        <Link href={meldeperiodeUrl(saksnummer, korrigering.periode)} as={NextLink}>
-                            {periodeTilFormatertDatotekst(korrigering.periode)}
-                        </Link>
-                        {` endret på beregningen av dette meldekortet. Korrigeringen ble iverksatt ${formaterTidspunktKort(korrigering.iverksatt)}`}
-                    </Alert>
-                    <MeldekortOppsummeringUke utbetalingUke={korrigering.dager.slice(0, 7)} />
-                    <MeldekortOppsummeringUke utbetalingUke={korrigering.dager.slice(7, 14)} />
-                </Fragment>
-            ))}
+            <Alert size={'small'} inline={true} variant={'info'}>
+                {'Korrigering av meldeperioden '}
+                <Link href={meldeperiodeUrl(saksnummer, periode)} as={NextLink}>
+                    {periodeTilFormatertDatotekst(periode)}
+                </Link>
+                {` endret på beregningen av dette meldekortet.`}
+            </Alert>
+            <MeldekortOppsummeringUke utbetalingUke={beregning.dager.slice(0, 7)} />
+            <MeldekortOppsummeringUke utbetalingUke={beregning.dager.slice(7, 14)} />
         </VStack>
     );
 };
