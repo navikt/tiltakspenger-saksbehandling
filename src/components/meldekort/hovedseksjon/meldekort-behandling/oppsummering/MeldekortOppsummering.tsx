@@ -1,5 +1,5 @@
 import { BodyShort, Heading, Textarea, VStack } from '@navikt/ds-react';
-import { formaterTidspunktKort, ukeHeading } from '../../../../../utils/date';
+import { formaterTidspunktKort } from '../../../../../utils/date';
 import { MeldekortOppsummeringUke } from './uke/MeldekortOppsummeringUke';
 import { MeldekortBehandlingProps } from '../../../../../types/meldekort/MeldekortBehandling';
 import { useMeldeperiodeKjede } from '../../../context/MeldeperiodeKjedeContext';
@@ -12,8 +12,7 @@ type Props = {
 };
 
 export const MeldekortOppsummering = ({ meldekortBehandling }: Props) => {
-    const { meldeperiodeKjede, finnForrigeMeldekortBehandling } = useMeldeperiodeKjede();
-    const { periode } = meldeperiodeKjede;
+    const { finnForrigeMeldekortBehandling } = useMeldeperiodeKjede();
     const { beregning, begrunnelse, navkontor, navkontorNavn, godkjentTidspunkt } =
         meldekortBehandling;
 
@@ -24,14 +23,8 @@ export const MeldekortOppsummering = ({ meldekortBehandling }: Props) => {
 
     return (
         <VStack gap={'5'}>
-            <MeldekortOppsummeringUke
-                utbetalingUke={uke1}
-                headingtekst={ukeHeading(periode.fraOgMed)}
-            />
-            <MeldekortOppsummeringUke
-                utbetalingUke={uke2}
-                headingtekst={ukeHeading(periode.tilOgMed)}
-            />
+            <MeldekortOppsummeringUke utbetalingUke={uke1} />
+            <MeldekortOppsummeringUke utbetalingUke={uke2} />
             {begrunnelse && (
                 <VStack className={style.begrunnelse}>
                     <Heading size={'xsmall'} level={'2'} className={style.header}>

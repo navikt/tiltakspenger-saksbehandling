@@ -1,18 +1,26 @@
 import { Heading, HStack, Select, VStack } from '@navikt/ds-react';
-import { MeldekortBehandlingProps } from '../../../../../../types/meldekort/MeldekortBehandling';
-import { MeldekortOppsummering } from '../MeldekortOppsummering';
+import { MeldekortBehandlingProps } from '../../../../../types/meldekort/MeldekortBehandling';
+import { MeldekortOppsummering } from '../oppsummering/MeldekortOppsummering';
 import React, { useEffect, useState } from 'react';
-import { formaterTidspunktKort } from '../../../../../../utils/date';
-import { meldekortBehandlingTypeTekst } from '../../../../../../utils/tekstformateringUtils';
+import { formaterTidspunktKort } from '../../../../../utils/date';
+import { meldekortBehandlingTypeTekst } from '../../../../../utils/tekstformateringUtils';
 
-import style from './MeldekortOppsummeringVelger.module.css';
+import style from './MeldekortTidligereBehandlinger.module.css';
+import { useMeldeperiodeKjede } from '../../../context/MeldeperiodeKjedeContext';
+import { MeldekortKorrigertFraTidligerePeriode } from '../korrigert-fra-tidligere/MeldekortKorrigertFraTidligerePeriode';
 
 type Props = {
     meldekortBehandlinger: MeldekortBehandlingProps[];
+    visKorrigeringFraTidligerePeriode: boolean;
 };
 
-export const MeldekortOppsummeringVelger = ({ meldekortBehandlinger }: Props) => {
+export const MeldekortTidligereBehandlinger = ({
+    meldekortBehandlinger,
+    visKorrigeringFraTidligerePeriode,
+}: Props) => {
     const [valgtIndex, setValgtIndex] = useState(0);
+
+    const { korrigeringFraTidligerePeriode } = useMeldeperiodeKjede().meldeperiodeKjede;
 
     useEffect(() => {
         setValgtIndex(0);
@@ -26,6 +34,11 @@ export const MeldekortOppsummeringVelger = ({ meldekortBehandlinger }: Props) =>
 
     return (
         <VStack gap={'5'}>
+            {visKorrigeringFraTidligerePeriode && korrigeringFraTidligerePeriode && (
+                <MeldekortKorrigertFraTidligerePeriode
+                    korrigering={korrigeringFraTidligerePeriode}
+                />
+            )}
             <HStack className={style.toppRad}>
                 <Heading level={'3'} size={'medium'}>
                     {`Tidligere behandlinger`}

@@ -31,7 +31,7 @@ export const MeldekortKorrigertFraTidligerePeriode = ({ korrigering }: Props) =>
                 <Link href={meldeperiodeUrl(saksnummer, periode)} as={NextLink}>
                     {periodeTilFormatertDatotekst(periode)}
                 </Link>
-                {' endret på siste beregningen av dette meldekortet.'}
+                {' endret på beregningen av dette meldekortet.'}
             </Alert>
             <MeldekortOppsummeringUke utbetalingUke={beregning.dager.slice(0, 7)} />
             <MeldekortOppsummeringUke utbetalingUke={beregning.dager.slice(7, 14)} />

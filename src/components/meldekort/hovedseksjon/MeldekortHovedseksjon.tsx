@@ -2,10 +2,10 @@ import { HStack, VStack } from '@navikt/ds-react';
 import { BrukersMeldekortVisning } from './brukers-meldekort/BrukersMeldekort';
 import { useMeldeperiodeKjede } from '../context/MeldeperiodeKjedeContext';
 import { MeldekortBehandling } from './meldekort-behandling/MeldekortBehandling';
-import { MeldekortOppsummeringVelger } from './meldekort-behandling/oppsummering/velger/MeldekortOppsummeringVelger';
-import { MeldekortKorrigertFraTidligerePeriode } from './meldekort-behandling/korrigert-fra-tidligere/MeldekortKorrigertFraTidligerePeriode';
+import { MeldekortTidligereBehandlinger } from './meldekort-behandling/tidligere-behandlinger/MeldekortTidligereBehandlinger';
 
 import styles from './MeldekortHovedseksjon.module.css';
+import { MeldekortBehandlingStatus } from '../../../types/meldekort/MeldekortBehandling';
 
 export const MeldekortHovedseksjon = () => {
     const {
@@ -15,21 +15,26 @@ export const MeldekortHovedseksjon = () => {
         tidligereMeldekortBehandlinger,
     } = useMeldeperiodeKjede();
 
-    const { brukersMeldekort, korrigeringFraTidligerePeriode } = meldeperiodeKjede;
+    const { brukersMeldekort } = meldeperiodeKjede;
+
+    // Hvis den siste behandlingen av meldekortet er godkjent, ønsker vi å vise en evt korrigering
+    // fra en tidligere kjede ovenfor dette. Dersom meldekortet er under behandling viser vi heller
+    // denne korrigeringen ovenfor de tidligere behandlingene.
+    const sisteBehandlingErGodkjent =
+        sisteMeldekortBehandling?.status === MeldekortBehandlingStatus.GODKJENT;
 
     return (
         <VStack gap={'5'} className={styles.wrapper}>
             <HStack gap={'5'}>
                 {sisteMeldekortBehandling && (
-                    <MeldekortBehandling meldekortBehandling={sisteMeldekortBehandling} />
-                )}
-                {korrigeringFraTidligerePeriode && (
-                    <MeldekortKorrigertFraTidligerePeriode
-                        korrigering={korrigeringFraTidligerePeriode}
+                    <MeldekortBehandling
+                        meldekortBehandling={sisteMeldekortBehandling}
+                        visKorrigeringFraTidligerePeriode={sisteBehandlingErGodkjent}
                     />
                 )}
-                <MeldekortOppsummeringVelger
+                <MeldekortTidligereBehandlinger
                     meldekortBehandlinger={tidligereMeldekortBehandlinger}
+                    visKorrigeringFraTidligerePeriode={!sisteBehandlingErGodkjent}
                 />
                 {brukersMeldekort && (
                     <BrukersMeldekortVisning
