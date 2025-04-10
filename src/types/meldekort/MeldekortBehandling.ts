@@ -16,6 +16,7 @@ export enum MeldekortBehandlingStatus {
 }
 
 export enum MeldekortBehandlingDagStatus {
+    // OBS! Ved endring av disse kodene så burde tilsvarende endringer gjøres for tekstene som utledes for brevene!
     Sperret = 'SPERRET',
     IkkeUtfylt = 'IKKE_UTFYLT',
     DeltattUtenLønnITiltaket = 'DELTATT_UTEN_LØNN_I_TILTAKET',
