@@ -13,14 +13,12 @@ type Props = {
 
 export const MeldekortOppsummering = ({ meldekortBehandling }: Props) => {
     const { finnForrigeMeldekortBehandling } = useMeldeperiodeKjede();
-    const { beregning, begrunnelse, navkontor, navkontorNavn, godkjentTidspunkt } =
+    const { beregning, begrunnelse, navkontor, navkontorNavn, godkjentTidspunkt, dager } =
         meldekortBehandling;
-
-    const { beløp, dager } = beregning!.beregningForMeldekortetsPeriode;
 
     return (
         <VStack gap={'5'}>
-            <MeldekortUker dager={dager} />
+            <MeldekortUker dager={beregning?.beregningForMeldekortetsPeriode.dager ?? dager} />
             {begrunnelse && (
                 <VStack className={style.begrunnelse}>
                     <Heading size={'xsmall'} level={'2'} className={style.header}>
@@ -42,16 +40,18 @@ export const MeldekortOppsummering = ({ meldekortBehandling }: Props) => {
                     <strong>{formaterTidspunktKort(godkjentTidspunkt)}</strong>
                 </BodyShort>
             )}
-            <MeldekortBeløp
-                beløp={beløp}
-                forrigeBeløp={
-                    finnForrigeMeldekortBehandling(meldekortBehandling.id)?.beregning
-                        ?.beregningForMeldekortetsPeriode.beløp
-                }
-                navkontorForUtbetaling={
-                    navkontorNavn ? `${navkontorNavn} (${navkontor})` : navkontor
-                }
-            />
+            {beregning && (
+                <MeldekortBeløp
+                    beløp={beregning.beregningForMeldekortetsPeriode.beløp}
+                    forrigeBeløp={
+                        finnForrigeMeldekortBehandling(meldekortBehandling.id)?.beregning
+                            ?.beregningForMeldekortetsPeriode.beløp
+                    }
+                    navkontorForUtbetaling={
+                        navkontorNavn ? `${navkontorNavn} (${navkontor})` : navkontor
+                    }
+                />
+            )}
         </VStack>
     );
 };
