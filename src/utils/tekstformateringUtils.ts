@@ -2,6 +2,7 @@ import { BehandlingStatus, Behandlingstype } from '../types/BehandlingTypes';
 import {
     MeldekortBehandlingDagStatus,
     MeldekortBehandlingType,
+    Utbetalingsstatus,
 } from '../types/meldekort/MeldekortBehandling';
 import { BrukersMeldekortDagStatus } from '../types/meldekort/BrukersMeldekort';
 import { MeldeperiodeKjedeStatus } from '../types/meldekort/Meldeperiode';
@@ -64,3 +65,13 @@ export const meldekortBehandlingTypeTekst: Record<MeldekortBehandlingType, strin
     [MeldekortBehandlingType.FØRSTE_BEHANDLING]: 'Behandling',
     [MeldekortBehandlingType.KORRIGERING]: 'Korrigering',
 } as const;
+
+export const meldekortUtbetalingstatusTekst: Record<Utbetalingsstatus, string | null> = {
+    FEILET_MOT_OPPDRAG: 'Feilet mot oppdrag',
+    IKKE_GODKJENT: '-',
+    IKKE_SENDT_TIL_HELVED: '-',
+    OK: 'Sendt til utbetaling',
+    OK_UTEN_UTBETALING: 'Ok uten utbetaling',
+    SENDT_TIL_HELVED: 'Venter på helved',
+    SENDT_TIL_OPPDRAG: 'Venter på oppdrag',
+};
