@@ -2,14 +2,14 @@ import { BodyShort, Heading, HStack, Label, Select, VStack } from '@navikt/ds-re
 import {
     MeldekortDagProps,
     MeldekortBehandlingDagStatus,
-} from '../../../../../types/meldekort/MeldekortBehandling';
-import { meldekortdagHeading, ukeHeading } from '../../../../../utils/date';
-import { ikonForMeldekortBehandlingDagStatus } from '../../Meldekortikoner';
-import { meldekortBehandlingDagStatusTekst } from '../../../../../utils/tekstformateringUtils';
+} from '../../../../../../types/meldekort/MeldekortBehandling';
+import { meldekortdagHeading, ukeHeading } from '../../../../../../utils/date';
+import { ikonForMeldekortBehandlingDagStatus } from '../../../Meldekortikoner';
+import { meldekortBehandlingDagStatusTekst } from '../../../../../../utils/tekstformateringUtils';
 import { Controller, FieldPath, useFormContext } from 'react-hook-form';
-import { MeldekortBehandlingForm } from './meldekortUtfyllingUtils';
+import { MeldekortBehandlingForm } from '../meldekortUtfyllingUtils';
 
-import styles from '../../MeldekortHovedseksjon.module.css';
+import styles from './MeldekortUtfyllingUke.module.css';
 
 const meldekortStatusValg = Object.values(MeldekortBehandlingDagStatus).filter(
     (status) =>
@@ -28,7 +28,7 @@ export const MeldekortUtfyllingUke = ({ dager, ukenummer }: Props) => {
 
     return (
         <VStack gap="5" justify="space-evenly" className={styles.meldekortuke}>
-            <Heading size="small" level="3" className={styles.heading}>
+            <Heading size="small" level="3" className={styles.header}>
                 {ukeHeading(dager[0].dato)}
             </Heading>
             {dager.map(({ dato, status }, i) => {

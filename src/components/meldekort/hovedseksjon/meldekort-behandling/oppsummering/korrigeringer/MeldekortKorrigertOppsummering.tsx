@@ -2,9 +2,10 @@ import { Alert, BodyShort, Link, VStack } from '@navikt/ds-react';
 import { meldeperiodeUrl } from '../../../../../../utils/urls';
 import NextLink from 'next/link';
 import { formaterTidspunktKort, periodeTilFormatertDatotekst } from '../../../../../../utils/date';
-import { MeldekortOppsummeringUke } from '../MeldekortOppsummeringUke';
+import { MeldekortOppsummeringUke } from '../uke/MeldekortOppsummeringUke';
 import { useSak } from '../../../../../../context/sak/SakContext';
 import { MeldeperiodeKorrigering } from '../../../../../../types/meldekort/Meldeperiode';
+import { MeldekortBeløp } from '../../beløp/MeldekortBeløp';
 
 import style from './MeldekortOppsummeringKorrigeringer.module.css';
 
@@ -33,6 +34,7 @@ export const MeldekortKorrigertOppsummering = ({ korrigering }: Props) => {
                     <strong>{formaterTidspunktKort(iverksatt)}</strong>
                 </BodyShort>
             )}
+            <MeldekortBeløp beløp={beregning.beløp} />
         </VStack>
     );
 };

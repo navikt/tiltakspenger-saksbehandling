@@ -11,7 +11,7 @@ import {
 import { useRef, useState } from 'react';
 import { useSak } from '../../../../../context/sak/SakContext';
 import { useSendMeldekortTilBeslutter } from '../../../hooks/useSendMeldekortTilBeslutter';
-import { MeldekortUtfyllingUke } from './MeldekortUtfyllingUke';
+import { MeldekortUtfyllingUke } from './uke/MeldekortUtfyllingUke';
 import { BekreftelsesModal } from '../../../../modaler/BekreftelsesModal';
 import {
     hentMeldekortForhåndsutfylling,
@@ -22,7 +22,7 @@ import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { useMeldeperiodeKjede } from '../../../context/MeldeperiodeKjedeContext';
 import { MeldekortBehandlingProps } from '../../../../../types/meldekort/MeldekortBehandling';
 
-import styles from '../../MeldekortHovedseksjon.module.css';
+import styles from './MeldekortUtfylling.module.css';
 
 type Props = {
     meldekortBehandling: MeldekortBehandlingProps;

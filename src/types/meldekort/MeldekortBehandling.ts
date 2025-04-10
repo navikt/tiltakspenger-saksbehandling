@@ -83,17 +83,17 @@ export type MeldekortDagBeregnetProps = {
 };
 
 export type MeldekortBeregning = {
-    totalBeløp: BeløpProps;
+    totalBeløp: MeldekortBeløpProps;
     beregningForMeldekortetsPeriode: MeldeperiodeBeregning;
     beregningerForPåfølgendePerioder: MeldeperiodeBeregning[];
 };
 
 export type MeldeperiodeBeregning = {
-    beløp: BeløpProps;
+    beløp: MeldekortBeløpProps;
     dager: MeldekortDagBeregnetProps[];
 };
 
-type BeløpProps = {
+export type MeldekortBeløpProps = {
     totalt: number;
     ordinært: number;
     barnetillegg: number;

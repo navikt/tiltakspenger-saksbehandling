@@ -9,7 +9,7 @@ import { ikonForBrukersMeldekortDagStatus } from '../Meldekortikoner';
 import { brukersMeldekortDagStatusTekst } from '../../../../utils/tekstformateringUtils';
 import React from 'react';
 
-import styles from '../MeldekortHovedseksjon.module.css';
+import styles from './BrukersMeldekort.module.css';
 
 type Props = {
     meldeperiode: MeldeperiodeProps;
