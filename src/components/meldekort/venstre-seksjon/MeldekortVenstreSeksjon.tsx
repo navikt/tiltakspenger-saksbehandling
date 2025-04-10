@@ -15,9 +15,9 @@ import { useFeatureToggles } from '../../../context/feature-toggles/FeatureToggl
 import { ArrayOrSingle } from '../../../types/UtilTypes';
 import { forceArray } from '../../../utils/array';
 import { useMeldeperiodeKjede } from '../context/MeldeperiodeKjedeContext';
+import OppsummeringAvAttesteringer from '../../attestering/OppsummeringAvAttestering';
 
 import styles from './MeldekortVenstreSeksjon.module.css';
-import OppsummeringAvAttesteringer from '../../attestering/OppsummeringAvAttestering';
 
 export const MeldekortVenstreSeksjon = () => {
     const { sak } = useSak();

@@ -2,7 +2,7 @@ import { Alert, BodyShort, Link, VStack } from '@navikt/ds-react';
 import { meldeperiodeUrl } from '../../../../../utils/urls';
 import NextLink from 'next/link';
 import { formaterTidspunktKort, periodeTilFormatertDatotekst } from '../../../../../utils/date';
-import { MeldekortOppsummeringUke } from '../oppsummering/uke/MeldekortOppsummeringUke';
+import { MeldekortUker } from '../../uker/MeldekortUker';
 import { useSak } from '../../../../../context/sak/SakContext';
 import { MeldeperiodeKorrigering } from '../../../../../types/meldekort/Meldeperiode';
 import { MeldekortBeløp } from '../beløp/MeldekortBeløp';
@@ -33,8 +33,7 @@ export const MeldekortKorrigertFraTidligerePeriode = ({ korrigering }: Props) =>
                 </Link>
                 {' endret på beregningen av dette meldekortet.'}
             </Alert>
-            <MeldekortOppsummeringUke utbetalingUke={beregning.dager.slice(0, 7)} />
-            <MeldekortOppsummeringUke utbetalingUke={beregning.dager.slice(7, 14)} />
+            <MeldekortUker dager={beregning.dager} />
             {iverksatt && (
                 <BodyShort size={'small'}>
                     {'Iverksatt: '}

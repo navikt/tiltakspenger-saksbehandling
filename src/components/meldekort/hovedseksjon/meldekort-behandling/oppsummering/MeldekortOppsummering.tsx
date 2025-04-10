@@ -1,9 +1,9 @@
 import { BodyShort, Heading, Textarea, VStack } from '@navikt/ds-react';
 import { formaterTidspunktKort } from '../../../../../utils/date';
-import { MeldekortOppsummeringUke } from './uke/MeldekortOppsummeringUke';
 import { MeldekortBehandlingProps } from '../../../../../types/meldekort/MeldekortBehandling';
 import { useMeldeperiodeKjede } from '../../../context/MeldeperiodeKjedeContext';
 import { MeldekortBeløp } from '../beløp/MeldekortBeløp';
+import { MeldekortUker } from '../../uker/MeldekortUker';
 
 import style from './MeldekortOppsummering.module.css';
 
@@ -18,13 +18,9 @@ export const MeldekortOppsummering = ({ meldekortBehandling }: Props) => {
 
     const { beløp, dager } = beregning!.beregningForMeldekortetsPeriode;
 
-    const uke1 = dager.slice(0, 7);
-    const uke2 = dager.slice(7, 14);
-
     return (
         <VStack gap={'5'}>
-            <MeldekortOppsummeringUke utbetalingUke={uke1} />
-            <MeldekortOppsummeringUke utbetalingUke={uke2} />
+            <MeldekortUker dager={dager} />
             {begrunnelse && (
                 <VStack className={style.begrunnelse}>
                     <Heading size={'xsmall'} level={'2'} className={style.header}>
