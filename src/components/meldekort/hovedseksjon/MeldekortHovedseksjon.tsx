@@ -3,6 +3,7 @@ import { BrukersMeldekortVisning } from './brukers-meldekort/BrukersMeldekort';
 import { useMeldeperiodeKjede } from '../context/MeldeperiodeKjedeContext';
 import { MeldekortBehandling } from './meldekort-behandling/MeldekortBehandling';
 import { MeldekortOppsummeringVelger } from './meldekort-behandling/oppsummering/velger/MeldekortOppsummeringVelger';
+import { MeldekortKorrigertOppsummering } from './meldekort-behandling/oppsummering/korrigeringer/MeldekortKorrigertOppsummering';
 
 import styles from './MeldekortHovedseksjon.module.css';
 
@@ -14,7 +15,7 @@ export const MeldekortHovedseksjon = () => {
         tidligereMeldekortBehandlinger,
     } = useMeldeperiodeKjede();
 
-    const { brukersMeldekort } = meldeperiodeKjede;
+    const { brukersMeldekort, korrigering } = meldeperiodeKjede;
 
     return (
         <VStack gap={'5'} className={styles.wrapper}>
@@ -22,6 +23,7 @@ export const MeldekortHovedseksjon = () => {
                 {sisteMeldekortBehandling && (
                     <MeldekortBehandling meldekortBehandling={sisteMeldekortBehandling} />
                 )}
+                {korrigering && <MeldekortKorrigertOppsummering korrigering={korrigering} />}
                 <MeldekortOppsummeringVelger
                     meldekortBehandlinger={tidligereMeldekortBehandlinger}
                 />

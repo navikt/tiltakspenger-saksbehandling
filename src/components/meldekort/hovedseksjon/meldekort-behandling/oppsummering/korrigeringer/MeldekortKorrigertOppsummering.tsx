@@ -1,10 +1,10 @@
-import { Alert, Link, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Link, VStack } from '@navikt/ds-react';
 import { meldeperiodeUrl } from '../../../../../../utils/urls';
 import NextLink from 'next/link';
-import { periodeTilFormatertDatotekst } from '../../../../../../utils/date';
+import { formaterTidspunktKort, periodeTilFormatertDatotekst } from '../../../../../../utils/date';
 import { MeldekortOppsummeringUke } from '../MeldekortOppsummeringUke';
-import { MeldeperiodeKorrigering } from '../../../../../../types/meldekort/MeldekortBehandling';
 import { useSak } from '../../../../../../context/sak/SakContext';
+import { MeldeperiodeKorrigering } from '../../../../../../types/meldekort/Meldeperiode';
 
 import style from './MeldekortOppsummeringKorrigeringer.module.css';
 
@@ -12,9 +12,9 @@ type Props = {
     korrigering: MeldeperiodeKorrigering;
 };
 
-export const MeldekortOppsummeringKorrigeringer = ({ korrigering }: Props) => {
+export const MeldekortKorrigertOppsummering = ({ korrigering }: Props) => {
     const { saksnummer } = useSak().sak;
-    const { periode, beregning } = korrigering;
+    const { periode, beregning, iverksatt } = korrigering;
 
     return (
         <VStack gap={'5'} className={style.korrigering}>
@@ -23,10 +23,16 @@ export const MeldekortOppsummeringKorrigeringer = ({ korrigering }: Props) => {
                 <Link href={meldeperiodeUrl(saksnummer, periode)} as={NextLink}>
                     {periodeTilFormatertDatotekst(periode)}
                 </Link>
-                {` endret på beregningen av dette meldekortet.`}
+                {' endret på siste beregningen av dette meldekortet.'}
             </Alert>
             <MeldekortOppsummeringUke utbetalingUke={beregning.dager.slice(0, 7)} />
             <MeldekortOppsummeringUke utbetalingUke={beregning.dager.slice(7, 14)} />
+            {iverksatt && (
+                <BodyShort size={'small'}>
+                    {'Iverksatt: '}
+                    <strong>{formaterTidspunktKort(iverksatt)}</strong>
+                </BodyShort>
+            )}
         </VStack>
     );
 };

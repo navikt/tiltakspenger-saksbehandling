@@ -1,10 +1,11 @@
 import { Attestering } from '../BehandlingTypes';
-import { MeldeperiodeId, MeldeperiodeKjedeId } from './Meldeperiode';
+import { MeldeperiodeId } from './Meldeperiode';
 import { Periode } from '../Periode';
 import { BrukersMeldekortId } from './BrukersMeldekort';
 
 // Egentlig har denne samme prefix som BrukersMeldekortId (bare "meldekort_")
 // Typer den med en unik prefix for at typescript ikke skal se de som ekvivalente
+// Ikke gjør run-time typesjekk på denne!
 export type MeldekortBehandlingId = `meldekort_beh_${string}`;
 
 export enum MeldekortBehandlingStatus {
@@ -67,7 +68,6 @@ export type MeldekortBehandlingProps = {
     periode: Periode;
     dager: MeldekortDagProps[];
     beregning?: MeldekortBeregning;
-    korrigering?: MeldeperiodeKorrigering;
 };
 
 export type MeldekortDagProps = {
@@ -91,13 +91,6 @@ export type MeldekortBeregning = {
 export type MeldeperiodeBeregning = {
     beløp: BeløpProps;
     dager: MeldekortDagBeregnetProps[];
-};
-
-export type MeldeperiodeKorrigering = {
-    meldekortId: MeldekortBehandlingId;
-    kjedeId: MeldeperiodeKjedeId;
-    periode: Periode;
-    beregning: MeldeperiodeBeregning;
 };
 
 type BeløpProps = {

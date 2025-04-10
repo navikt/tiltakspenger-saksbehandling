@@ -1,5 +1,6 @@
 // Egentlig har denne samme prefix som MeldekortBehandlingId (bare "meldekort_")
 // Typer den med en unik prefix for at typescript ikke skal se de som ekvivalente
+// Ikke gjør run-time typesjekk på denne!
 export type BrukersMeldekortId = `meldekort_bruker_${string}`;
 
 export enum BrukersMeldekortDagStatus {

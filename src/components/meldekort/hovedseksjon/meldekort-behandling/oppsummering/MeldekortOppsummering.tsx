@@ -3,7 +3,6 @@ import { formaterTidspunktKort, ukeHeading } from '../../../../../utils/date';
 import { MeldekortOppsummeringUke } from './MeldekortOppsummeringUke';
 import { MeldekortBehandlingProps } from '../../../../../types/meldekort/MeldekortBehandling';
 import { useMeldeperiodeKjede } from '../../../context/MeldeperiodeKjedeContext';
-import { MeldekortOppsummeringKorrigeringer } from './korrigeringer/MeldekortOppsummeringKorrigeringer';
 
 import styles from '../../MeldekortHovedseksjon.module.css';
 
@@ -13,7 +12,7 @@ type Props = {
 
 export const MeldekortOppsummering = ({ meldekortBehandling }: Props) => {
     const { periode } = useMeldeperiodeKjede().meldeperiodeKjede;
-    const { beregning, begrunnelse, navkontor, navkontorNavn, korrigering, godkjentTidspunkt } =
+    const { beregning, begrunnelse, navkontor, navkontorNavn, godkjentTidspunkt } =
         meldekortBehandling;
 
     const { beregningForMeldekortetsPeriode } = beregning!;
@@ -24,7 +23,6 @@ export const MeldekortOppsummering = ({ meldekortBehandling }: Props) => {
 
     return (
         <VStack gap={'5'}>
-            {korrigering && <MeldekortOppsummeringKorrigeringer korrigering={korrigering} />}
             <MeldekortOppsummeringUke
                 utbetalingUke={uke1}
                 headingtekst={ukeHeading(periode.fraOgMed)}
