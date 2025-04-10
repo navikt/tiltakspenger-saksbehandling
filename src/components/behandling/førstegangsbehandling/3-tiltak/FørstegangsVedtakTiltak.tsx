@@ -20,7 +20,8 @@ export const FørstegangsVedtakTiltak = () => {
                     <VedtakSeksjon.Venstre>
                         <Alert variant={'warning'} size={'small'}>
                             Flere tiltak registrert på bruker. Velg tiltak(ene) som bruker skal
-                            vurderes for og periodene som gjelder.
+                            vurderes for og periodene som gjelder. Det du velger brukes for
+                            regnskapsføring og statistikk, og påvirker ikke vedtaket.
                         </Alert>
                     </VedtakSeksjon.Venstre>
                 </VedtakSeksjon>
