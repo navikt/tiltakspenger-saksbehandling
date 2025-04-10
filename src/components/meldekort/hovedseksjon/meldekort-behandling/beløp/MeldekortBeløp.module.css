@@ -4,11 +4,16 @@
     border-radius: 4px;
     padding: 0.5rem;
 
-    display: grid;
+    display: flex;
+    justify-content: space-between;
     grid-template-columns: repeat(2, 1fr);
+}
 
-    .meldekortBeløp {
-        justify-self: end;
-        margin-right: 1rem;
+.beløp {
+    display: inline-flex;
+    gap: 0.25rem;
+
+    .negativ {
+        color: var(--a-red-500);
     }
 }

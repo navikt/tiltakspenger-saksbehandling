@@ -3,43 +3,66 @@ import { MeldekortBeløpProps } from '../../../../../types/meldekort/MeldekortBe
 import { formatterBeløp } from '../../../../../utils/beløp';
 
 import style from './MeldekortBeløp.module.css';
+import { classNames } from '../../../../../utils/classNames';
 
 type Props = {
     beløp: MeldekortBeløpProps;
+    forrigeBeløp?: MeldekortBeløpProps;
     navkontorForUtbetaling?: string;
 };
 
-export const MeldekortBeløp = ({ beløp, navkontorForUtbetaling }: Props) => {
+export const MeldekortBeløp = ({ beløp, forrigeBeløp, navkontorForUtbetaling }: Props) => {
     return (
         <>
             <VStack gap={'1'}>
-                <HStack gap={'5'} className={style.rad}>
-                    <BodyShort weight={'semibold'}>{'Ordinært beløp for perioden:'}</BodyShort>
-                    <BodyShort weight={'semibold'} className={style.meldekortBeløp}>
-                        {formatterBeløp(beløp.ordinært)}
-                    </BodyShort>
-                </HStack>
-                <HStack gap={'5'} className={style.rad}>
-                    <BodyShort weight={'semibold'}>{'Barnetillegg beløp for perioden:'}</BodyShort>
-                    <BodyShort weight={'semibold'} className={style.meldekortBeløp}>
-                        {formatterBeløp(beløp.barnetillegg)}
-                    </BodyShort>
-                </HStack>
-                <HStack gap={'5'} className={style.rad}>
-                    <BodyShort weight={'semibold'}>{'Totalt beløp for perioden:'}</BodyShort>
-                    <BodyShort weight={'semibold'} className={style.meldekortBeløp}>
-                        {formatterBeløp(beløp.totalt)}
-                    </BodyShort>
-                </HStack>
+                <BeløpRad
+                    tekst={'Ordinært beløp for perioden:'}
+                    beløp={beløp.ordinært}
+                    beløpForrige={forrigeBeløp?.ordinært}
+                />
+                <BeløpRad
+                    tekst={'Barnetillegg beløp for perioden:'}
+                    beløp={beløp.barnetillegg}
+                    beløpForrige={forrigeBeløp?.barnetillegg}
+                />
+                <BeløpRad
+                    tekst={'Totalt beløp for perioden:'}
+                    beløp={beløp.totalt}
+                    beløpForrige={forrigeBeløp?.totalt}
+                />
             </VStack>
             {navkontorForUtbetaling && (
                 <HStack gap={'5'} className={style.rad}>
-                    <BodyShort weight={'semibold'}>
-                        {'Nav - kontor det skal utbetales fra:'}
-                    </BodyShort>
-                    <BodyShort weight={'semibold'}>{navkontorForUtbetaling}</BodyShort>
+                    <BodyShort>{'Nav-kontor det skal utbetales fra:'}</BodyShort>
+                    <BodyShort>{navkontorForUtbetaling}</BodyShort>
                 </HStack>
             )}
         </>
+    );
+};
+
+const BeløpRad = ({
+    tekst,
+    beløp,
+    beløpForrige,
+}: {
+    tekst: string;
+    beløp: number;
+    beløpForrige?: number;
+}) => {
+    const diff = beløpForrige && beløp - beløpForrige;
+
+    return (
+        <HStack gap={'5'} className={style.rad}>
+            <BodyShort>{tekst}</BodyShort>
+            <div className={style.beløp}>
+                <BodyShort weight={'semibold'}>{formatterBeløp(beløp)}</BodyShort>
+                {!!diff && (
+                    <BodyShort
+                        className={classNames(diff < 0 && style.negativ)}
+                    >{`(${formatterBeløp(diff, { signDisplay: 'always' })})`}</BodyShort>
+                )}
+            </div>
+        </HStack>
     );
 };

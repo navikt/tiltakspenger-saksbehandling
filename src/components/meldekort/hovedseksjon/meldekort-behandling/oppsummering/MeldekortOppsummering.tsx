@@ -12,12 +12,12 @@ type Props = {
 };
 
 export const MeldekortOppsummering = ({ meldekortBehandling }: Props) => {
-    const { periode } = useMeldeperiodeKjede().meldeperiodeKjede;
+    const { meldeperiodeKjede, finnForrigeMeldekortBehandling } = useMeldeperiodeKjede();
+    const { periode } = meldeperiodeKjede;
     const { beregning, begrunnelse, navkontor, navkontorNavn, godkjentTidspunkt } =
         meldekortBehandling;
 
-    const { beregningForMeldekortetsPeriode } = beregning!;
-    const { beløp, dager } = beregningForMeldekortetsPeriode;
+    const { beløp, dager } = beregning!.beregningForMeldekortetsPeriode;
 
     const uke1 = dager.slice(0, 7);
     const uke2 = dager.slice(7, 14);
@@ -55,6 +55,10 @@ export const MeldekortOppsummering = ({ meldekortBehandling }: Props) => {
             )}
             <MeldekortBeløp
                 beløp={beløp}
+                forrigeBeløp={
+                    finnForrigeMeldekortBehandling(meldekortBehandling.id)?.beregning
+                        ?.beregningForMeldekortetsPeriode.beløp
+                }
                 navkontorForUtbetaling={
                     navkontorNavn ? `${navkontorNavn} (${navkontor})` : navkontor
                 }

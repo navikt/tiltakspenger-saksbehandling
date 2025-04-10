@@ -3,7 +3,7 @@ import { BrukersMeldekortVisning } from './brukers-meldekort/BrukersMeldekort';
 import { useMeldeperiodeKjede } from '../context/MeldeperiodeKjedeContext';
 import { MeldekortBehandling } from './meldekort-behandling/MeldekortBehandling';
 import { MeldekortOppsummeringVelger } from './meldekort-behandling/oppsummering/velger/MeldekortOppsummeringVelger';
-import { MeldekortKorrigertOppsummering } from './meldekort-behandling/oppsummering/korrigeringer/MeldekortKorrigertOppsummering';
+import { MeldekortKorrigertFraTidligerePeriode } from './meldekort-behandling/korrigert-fra-tidligere/MeldekortKorrigertFraTidligerePeriode';
 
 import styles from './MeldekortHovedseksjon.module.css';
 
@@ -24,7 +24,9 @@ export const MeldekortHovedseksjon = () => {
                     <MeldekortBehandling meldekortBehandling={sisteMeldekortBehandling} />
                 )}
                 {korrigeringFraTidligerePeriode && (
-                    <MeldekortKorrigertOppsummering korrigering={korrigeringFraTidligerePeriode} />
+                    <MeldekortKorrigertFraTidligerePeriode
+                        korrigering={korrigeringFraTidligerePeriode}
+                    />
                 )}
                 <MeldekortOppsummeringVelger
                     meldekortBehandlinger={tidligereMeldekortBehandlinger}
