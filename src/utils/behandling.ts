@@ -19,6 +19,15 @@ export const hentTiltaksperiode = (behandling: FørstegangsbehandlingData): Peri
     };
 };
 
+export const hentTiltaksperiodeFraSøknad = (behandling: FørstegangsbehandlingData): Periode => {
+    const tiltakFraSøknad = singleOrFirst(behandling.søknad.tiltak);
+
+    return {
+        fraOgMed: tiltakFraSøknad.fraOgMed,
+        tilOgMed: tiltakFraSøknad.tilOgMed,
+    };
+};
+
 export const harSøktBarnetillegg = (behandling: FørstegangsbehandlingData) =>
     !!behandling.barnetillegg || behandling.søknad.barnetillegg.length > 0;
 

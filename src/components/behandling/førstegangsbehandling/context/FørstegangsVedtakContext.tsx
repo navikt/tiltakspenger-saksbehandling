@@ -15,7 +15,7 @@ import {
     førstegangsVedtakReducer,
     FørstegangsVedtakSkjemaState,
 } from './FørstegangsVedtakReducer';
-import { harSøktBarnetillegg, hentTiltaksperiode } from '../../../../utils/behandling';
+import { harSøktBarnetillegg, hentTiltaksperiodeFraSøknad } from '../../../../utils/behandling';
 import { singleOrFirst } from '../../../../utils/array';
 import { periodiserBarnetillegg } from '../../../../utils/barnetillegg';
 
@@ -37,7 +37,7 @@ const DispatchContext = createContext((() => ({})) as Dispatch<FørstegangsVedta
 const initieltVedtakSkjema = (
     behandling: FørstegangsbehandlingData,
 ): FørstegangsVedtakSkjemaState => {
-    const tiltaksperiode = hentTiltaksperiode(behandling);
+    const tiltaksperiode = hentTiltaksperiodeFraSøknad(behandling);
 
     return {
         innvilgelsesPeriode: behandling.virkningsperiode ?? tiltaksperiode,
