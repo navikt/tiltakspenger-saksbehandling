@@ -18,3 +18,8 @@
 .spacing {
     margin-bottom: 1rem;
 }
+
+.meldekortHeaderRad {
+    display: inline-flex;
+    gap: 1rem;
+}

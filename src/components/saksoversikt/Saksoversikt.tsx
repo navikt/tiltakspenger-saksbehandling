@@ -6,12 +6,22 @@ import { OpprettRevurdering } from './opprett-revurdering/OpprettRevurdering';
 import { PersonaliaHeader } from '../personaliaheader/PersonaliaHeader';
 import { useSak } from '../../context/sak/SakContext';
 import { AvsluttedeBehandlinger } from './behandlinger-oversikt/AvsluttedeBehandlinger';
+import { MeldeperiodeKjedeStatus } from '../../types/meldekort/Meldeperiode';
+import { MeldekortOversiktIkkeKlar } from './meldekort-oversikt/ikke-klar/MeldekortOversiktIkkeKlar';
 
 import styles from './Saksoversikt.module.css';
 
 export const Saksoversikt = () => {
     const { sakId, saksnummer, behandlinger, behandlingsoversikt, søknader, meldeperiodeKjeder } =
         useSak().sak;
+
+    const { meldeperiodeKjederIkkeKlare, meldeperiodeKjederKlare } = Object.groupBy(
+        meldeperiodeKjeder,
+        ({ status }) =>
+            status === MeldeperiodeKjedeStatus.IKKE_KLAR_TIL_BEHANDLING
+                ? 'meldeperiodeKjederIkkeKlare'
+                : 'meldeperiodeKjederKlare',
+    );
 
     return (
         <>
@@ -40,13 +50,22 @@ export const Saksoversikt = () => {
                 />
 
                 <Box className={styles.tabellwrapper}>
-                    <Heading level={'3'} size={'small'}>
-                        {'Meldekort'}
-                    </Heading>
-                    <MeldekortOversikt
-                        meldeperiodeKjeder={meldeperiodeKjeder}
-                        saksnummer={saksnummer}
-                    />
+                    <div className={styles.meldekortHeaderRad}>
+                        <Heading level={'3'} size={'small'}>
+                            {'Meldekort'}
+                        </Heading>
+                        {meldeperiodeKjederIkkeKlare && (
+                            <MeldekortOversiktIkkeKlar
+                                meldeperiodeKjeder={meldeperiodeKjederIkkeKlare}
+                            />
+                        )}
+                    </div>
+                    {meldeperiodeKjederKlare && (
+                        <MeldekortOversikt
+                            meldeperiodeKjeder={meldeperiodeKjederKlare}
+                            saksnummer={saksnummer}
+                        />
+                    )}
                 </Box>
             </Box>
         </>
