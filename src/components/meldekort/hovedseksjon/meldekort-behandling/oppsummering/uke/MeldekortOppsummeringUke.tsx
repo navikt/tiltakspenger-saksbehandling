@@ -4,6 +4,7 @@ import { formaterDatotekst, ukedagFraDatotekst } from '../../../../../../utils/d
 import { MeldekortDagBeregnetProps } from '../../../../../../types/meldekort/MeldekortBehandling';
 import { meldekortBehandlingDagStatusTekst } from '../../../../../../utils/tekstformateringUtils';
 import { ikonForMeldekortBehandlingDagStatus } from '../../../Meldekortikoner';
+import { formatterBeløp } from '../../../../../../utils/beløp';
 
 import styles from './MeldekortOppsummeringUke.module.css';
 
@@ -43,13 +44,14 @@ export const MeldekortOppsummeringUke = ({ utbetalingUke, headingtekst }: Utbeta
                                 </HStack>
                             </Table.DataCell>
                             <Table.DataCell>
-                                {dag.beregningsdag ? `${dag.beregningsdag.prosent}%` : '-'}
+                                {dag.beregningsdag && `${dag.beregningsdag.prosent}%`}
                             </Table.DataCell>
                             <Table.DataCell>
-                                {dag.beregningsdag ? `${dag.beregningsdag.beløp},-` : '-'}
+                                {dag.beregningsdag && formatterBeløp(dag.beregningsdag.beløp)}
                             </Table.DataCell>
                             <Table.DataCell>
-                                {dag.beregningsdag ? `${dag.beregningsdag.barnetillegg},-` : '-'}
+                                {dag.beregningsdag &&
+                                    formatterBeløp(dag.beregningsdag.barnetillegg)}
                             </Table.DataCell>
                         </Table.Row>
                     ))}

@@ -79,7 +79,7 @@ export type MeldekortDagBeregnetProps = {
     dato: string;
     status: MeldekortBehandlingDagStatus;
     reduksjonAvYtelsePåGrunnAvFravær?: ReduksjonAvYtelse;
-    beregningsdag: Beregningsdag;
+    beregningsdag?: Beregningsdag;
 };
 
 export type MeldekortBeregning = {

@@ -1,5 +1,6 @@
 import { BodyShort, HStack, VStack } from '@navikt/ds-react';
 import { MeldekortBeløpProps } from '../../../../../types/meldekort/MeldekortBehandling';
+import { formatterBeløp } from '../../../../../utils/beløp';
 
 import style from './MeldekortBeløp.module.css';
 
@@ -15,19 +16,19 @@ export const MeldekortBeløp = ({ beløp, navkontorForUtbetaling }: Props) => {
                 <HStack gap={'5'} className={style.rad}>
                     <BodyShort weight={'semibold'}>{'Ordinært beløp for perioden:'}</BodyShort>
                     <BodyShort weight={'semibold'} className={style.meldekortBeløp}>
-                        {beløp.ordinært},-
+                        {formatterBeløp(beløp.ordinært)}
                     </BodyShort>
                 </HStack>
                 <HStack gap={'5'} className={style.rad}>
                     <BodyShort weight={'semibold'}>{'Barnetillegg beløp for perioden:'}</BodyShort>
                     <BodyShort weight={'semibold'} className={style.meldekortBeløp}>
-                        {`${beløp.barnetillegg},-`}
+                        {formatterBeløp(beløp.barnetillegg)}
                     </BodyShort>
                 </HStack>
                 <HStack gap={'5'} className={style.rad}>
                     <BodyShort weight={'semibold'}>{'Totalt beløp for perioden:'}</BodyShort>
                     <BodyShort weight={'semibold'} className={style.meldekortBeløp}>
-                        {`${beløp.totalt},-`}
+                        {formatterBeløp(beløp.totalt)}
                     </BodyShort>
                 </HStack>
             </VStack>

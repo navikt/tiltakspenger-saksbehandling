@@ -7,6 +7,8 @@ import {
     MeldeperiodeKjedeStatus,
 } from '../../../types/meldekort/Meldeperiode';
 import { meldeperiodeUrl } from '../../../utils/urls';
+import { MeldekortBehandlingType } from '../../../types/meldekort/MeldekortBehandling';
+import { formatterBeløp } from '../../../utils/beløp';
 
 import style from './MeldekortOversikt.module.css';
 
@@ -22,6 +24,7 @@ export const MeldekortOversikt = ({ meldeperiodeKjeder, saksnummer }: Props) => 
                 <Table.Row>
                     <Table.HeaderCell scope="col">Status</Table.HeaderCell>
                     <Table.HeaderCell scope="col">Periode</Table.HeaderCell>
+                    <Table.HeaderCell scope="col">Beregnet beløp</Table.HeaderCell>
                     <Table.HeaderCell scope="col">Mottatt fra bruker</Table.HeaderCell>
                     <Table.HeaderCell scope="col">Saksbehandler</Table.HeaderCell>
                     <Table.HeaderCell scope="col">Beslutter</Table.HeaderCell>
@@ -32,18 +35,39 @@ export const MeldekortOversikt = ({ meldeperiodeKjeder, saksnummer }: Props) => 
                 {meldeperiodeKjeder
                     .toSorted((a, b) => (a.periode.fraOgMed > b.periode.fraOgMed ? -1 : 1))
                     .map((kjede) => {
-                        const { meldekortBehandlinger, id, status, periode, brukersMeldekort } =
-                            kjede;
+                        const {
+                            meldekortBehandlinger,
+                            id,
+                            status,
+                            periode,
+                            brukersMeldekort,
+                            korrigeringFraTidligerePeriode,
+                        } = kjede;
 
                         const sisteMeldekortBehandling = meldekortBehandlinger.at(-1);
+                        const beregnetBeløpForPeriode =
+                            korrigeringFraTidligerePeriode?.beregning.beløp.totalt ??
+                            sisteMeldekortBehandling?.beregning?.beregningForMeldekortetsPeriode
+                                .beløp.totalt;
+
+                        const erKorrigering =
+                            sisteMeldekortBehandling?.type === MeldekortBehandlingType.KORRIGERING;
+
+                        const korrigeringTekst = korrigeringFraTidligerePeriode
+                            ? ` (korrigert via ${periodeTilFormatertDatotekst(korrigeringFraTidligerePeriode.periode)})`
+                            : erKorrigering
+                              ? ' (korrigering)'
+                              : '';
 
                         return (
                             <Table.Row shadeOnHover={false} key={id}>
-                                <Table.DataCell>
-                                    {finnMeldeperiodeKjedeStatusTekst[status]}
-                                </Table.DataCell>
+                                <Table.DataCell>{`${finnMeldeperiodeKjedeStatusTekst[status]}${korrigeringTekst}`}</Table.DataCell>
                                 <Table.DataCell>
                                     {periodeTilFormatertDatotekst(periode)}
+                                </Table.DataCell>
+                                <Table.DataCell>
+                                    {beregnetBeløpForPeriode !== undefined &&
+                                        formatterBeløp(beregnetBeløpForPeriode)}
                                 </Table.DataCell>
                                 <Table.DataCell>
                                     {brukersMeldekort

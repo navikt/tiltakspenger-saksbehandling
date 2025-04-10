@@ -17,7 +17,6 @@ export enum MeldeperiodeKjedeStatus {
     IKKE_KLAR_TIL_BEHANDLING = 'IKKE_KLAR_TIL_BEHANDLING',
     KLAR_TIL_BEHANDLING = 'KLAR_TIL_BEHANDLING',
     UNDER_BEHANDLING = 'UNDER_BEHANDLING',
-    UNDER_KORRIGERING = 'UNDER_KORRIGERING',
     KLAR_TIL_BESLUTNING = 'KLAR_TIL_BESLUTNING',
     GODKJENT = 'GODKJENT',
 }
@@ -41,7 +40,7 @@ export type MeldeperiodeKjedeProps = {
     meldeperioder: MeldeperiodeProps[];
     meldekortBehandlinger: MeldekortBehandlingProps[];
     brukersMeldekort?: BrukersMeldekortProps;
-    korrigering?: MeldeperiodeKorrigering;
+    korrigeringFraTidligerePeriode?: MeldeperiodeKorrigering;
 };
 
 export type MeldeperiodeKorrigering = {

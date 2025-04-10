@@ -15,7 +15,7 @@ export const MeldekortHovedseksjon = () => {
         tidligereMeldekortBehandlinger,
     } = useMeldeperiodeKjede();
 
-    const { brukersMeldekort, korrigering } = meldeperiodeKjede;
+    const { brukersMeldekort, korrigeringFraTidligerePeriode } = meldeperiodeKjede;
 
     return (
         <VStack gap={'5'} className={styles.wrapper}>
@@ -23,7 +23,9 @@ export const MeldekortHovedseksjon = () => {
                 {sisteMeldekortBehandling && (
                     <MeldekortBehandling meldekortBehandling={sisteMeldekortBehandling} />
                 )}
-                {korrigering && <MeldekortKorrigertOppsummering korrigering={korrigering} />}
+                {korrigeringFraTidligerePeriode && (
+                    <MeldekortKorrigertOppsummering korrigering={korrigeringFraTidligerePeriode} />
+                )}
                 <MeldekortOppsummeringVelger
                     meldekortBehandlinger={tidligereMeldekortBehandlinger}
                 />
