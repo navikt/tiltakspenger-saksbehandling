@@ -5,6 +5,7 @@ import { MeldekortOppsummering } from './oppsummering/MeldekortOppsummering';
 import { MeldekortBeslutning } from './beslutning/MeldekortBeslutning';
 import {
     MeldekortBehandlingProps,
+    MeldekortBehandlingStatus,
     MeldekortBehandlingType,
 } from '../../../../types/meldekort/MeldekortBehandling';
 import { useSaksbehandler } from '../../../../context/saksbehandler/SaksbehandlerContext';
@@ -19,13 +20,17 @@ type Props = {
 export const MeldekortBehandling = ({ meldekortBehandling }: Props) => {
     const { innloggetSaksbehandler } = useSaksbehandler();
 
+    const { type, status } = meldekortBehandling;
+
     return (
         <VStack gap={'5'}>
             <div className={style.toppRad}>
                 <Heading level={'3'} size={'medium'}>
-                    {`Siste behandling`}
+                    {status === MeldekortBehandlingStatus.GODKJENT
+                        ? 'Siste behandling'
+                        : 'Pågående behandling'}
                 </Heading>
-                {meldekortBehandling.type === MeldekortBehandlingType.KORRIGERING && (
+                {type === MeldekortBehandlingType.KORRIGERING && (
                     <Alert variant={'info'} inline={true} size={'small'}>
                         {'Korrigering'}
                     </Alert>

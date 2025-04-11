@@ -2,7 +2,7 @@ import {
     MeldekortDagProps,
     MeldekortBehandlingDagStatus,
     MeldekortBehandlingProps,
-    MeldekortBehandlingStatus,
+    MeldekortDagBeregnetProps,
 } from '../../../../../types/meldekort/MeldekortBehandling';
 import {
     BrukersMeldekortDagStatus,
@@ -13,14 +13,15 @@ export const hentMeldekortForhåndsutfylling = (
     meldekortBehandling: MeldekortBehandlingProps,
     tidligereBehandlinger: MeldekortBehandlingProps[],
     brukersMeldekort?: BrukersMeldekortProps,
-): MeldekortDagProps[] => {
+): MeldekortDagBeregnetProps[] => {
+    if (meldekortBehandling.beregning) {
+        return hentMeldekortDager(meldekortBehandling);
+    }
+
     const forrigeBehandling = tidligereBehandlinger.at(0);
 
-    if (
-        meldekortBehandling.status === MeldekortBehandlingStatus.KLAR_TIL_UTFYLLING &&
-        forrigeBehandling
-    ) {
-        return forrigeBehandling.dager;
+    if (forrigeBehandling) {
+        return hentMeldekortDager(forrigeBehandling);
     }
 
     if (brukersMeldekort) {
@@ -35,6 +36,10 @@ export const hentMeldekortForhåndsutfylling = (
 
     return meldekortBehandling.dager;
 };
+
+const hentMeldekortDager = (meldekortBehandling: MeldekortBehandlingProps) =>
+    meldekortBehandling.beregning?.beregningForMeldekortetsPeriode.dager ??
+    meldekortBehandling.dager;
 
 const brukersStatusTilBehandlingsStatus: Record<
     BrukersMeldekortDagStatus,

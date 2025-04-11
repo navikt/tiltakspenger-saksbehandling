@@ -1,10 +1,8 @@
 import { BodyShort, Heading, Textarea, VStack } from '@navikt/ds-react';
 import { formaterTidspunktKort } from '../../../../../utils/date';
 import { MeldekortBehandlingProps } from '../../../../../types/meldekort/MeldekortBehandling';
-import { useMeldeperiodeKjede } from '../../../context/MeldeperiodeKjedeContext';
-import { MeldekortBeløp } from '../beløp/MeldekortBeløp';
 import { MeldekortUker } from '../../uker/MeldekortUker';
-import { MeldekortKorrigertTilPåfølgendePerioder } from '../korrigert-til-påfølgende/MeldekortKorrigertTilPåfølgendePerioder';
+import { MeldekortBeregningOppsummering } from '../beregning-oppsummering/MeldekortBeregningOppsummering';
 
 import style from './MeldekortOppsummering.module.css';
 
@@ -13,18 +11,7 @@ type Props = {
 };
 
 export const MeldekortOppsummering = ({ meldekortBehandling }: Props) => {
-    const { finnForrigeMeldekortBehandling } = useMeldeperiodeKjede();
-    const {
-        beregning,
-        begrunnelse,
-        navkontor,
-        navkontorNavn,
-        godkjentTidspunkt,
-        dager,
-        utbetalingsstatus,
-    } = meldekortBehandling;
-
-    const forrigeBeregning = finnForrigeMeldekortBehandling(meldekortBehandling.id)?.beregning;
+    const { beregning, begrunnelse, godkjentTidspunkt, dager } = meldekortBehandling;
 
     return (
         <VStack gap={'5'}>
@@ -50,22 +37,7 @@ export const MeldekortOppsummering = ({ meldekortBehandling }: Props) => {
                     <strong>{formaterTidspunktKort(godkjentTidspunkt)}</strong>
                 </BodyShort>
             )}
-            {beregning && (
-                <>
-                    <MeldekortKorrigertTilPåfølgendePerioder
-                        beregninger={beregning.beregningerForPåfølgendePerioder}
-                    />
-                    <MeldekortBeløp
-                        beløp={beregning.beregningForMeldekortetsPeriode.beløp}
-                        forrigeBeløp={forrigeBeregning?.beregningForMeldekortetsPeriode.beløp}
-                        totalBeløp={beregning.totalBeløp}
-                        utbetalingsstatus={utbetalingsstatus}
-                        navkontorForUtbetaling={
-                            navkontorNavn ? `${navkontorNavn} (${navkontor})` : navkontor
-                        }
-                    />
-                </>
-            )}
+            <MeldekortBeregningOppsummering meldekortBehandling={meldekortBehandling} />
         </VStack>
     );
 };

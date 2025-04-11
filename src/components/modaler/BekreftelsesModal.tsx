@@ -44,7 +44,7 @@ export const BekreftelsesModal = ({
                 )}
                 <div className={styles.knapper}>
                     {bekreftKnapp}
-                    <Button variant={'secondary'} onClick={() => lukkModal()}>
+                    <Button variant={'secondary'} type={'button'} onClick={() => lukkModal()}>
                         {'Avbryt'}
                     </Button>
                 </div>

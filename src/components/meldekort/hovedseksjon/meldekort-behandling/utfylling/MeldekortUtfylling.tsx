@@ -1,17 +1,22 @@
-import { Alert, BodyLong, BodyShort, Button, Heading, Textarea } from '@navikt/ds-react';
-import { useRef, useState } from 'react';
+import { Alert, BodyLong, BodyShort, Heading, HStack, Textarea, VStack } from '@navikt/ds-react';
 import { useSak } from '../../../../../context/sak/SakContext';
-import { useSendMeldekortTilBeslutter } from '../../../hooks/useSendMeldekortTilBeslutter';
-import { BekreftelsesModal } from '../../../../modaler/BekreftelsesModal';
 import {
     hentMeldekortForhåndsutfylling,
     MeldekortBehandlingForm,
     tellDagerMedDeltattEllerFravær,
 } from './meldekortUtfyllingUtils';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import { useMeldeperiodeKjede } from '../../../context/MeldeperiodeKjedeContext';
-import { MeldekortBehandlingProps } from '../../../../../types/meldekort/MeldekortBehandling';
+import {
+    MeldekortBehandlingDTO,
+    MeldekortBehandlingProps,
+} from '../../../../../types/meldekort/MeldekortBehandling';
 import { MeldekortUker } from '../../uker/MeldekortUker';
+import { MeldekortLagreOgBeregn } from '../lagre-og-beregn/MeldekortLagreOgBeregn';
+import { MeldekortSendTilBeslutning } from '../beslutning/MeldekortSendTilBeslutning';
+import { useEffect, useState } from 'react';
+import { MeldekortBeregningOppsummering } from '../beregning-oppsummering/MeldekortBeregningOppsummering';
+import { classNames } from '../../../../../utils/classNames';
 
 import styles from './MeldekortUtfylling.module.css';
 
@@ -20,126 +25,117 @@ type Props = {
 };
 
 export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
-    const {
-        setMeldeperiodeKjede,
-        meldeperiodeKjede,
-        sisteMeldeperiode,
-        tidligereMeldekortBehandlinger,
-    } = useMeldeperiodeKjede();
-
-    const { sakId } = useSak().sak;
-
     const [valideringsFeil, setValideringsFeil] = useState('');
 
-    const { antallDager } = sisteMeldeperiode;
+    const { meldeperiodeKjede, tidligereMeldekortBehandlinger, sisteMeldeperiode } =
+        useMeldeperiodeKjede();
+    const { sakId } = useSak().sak;
     const { brukersMeldekort } = meldeperiodeKjede;
+    const { antallDager } = sisteMeldeperiode;
 
-    const modalRef = useRef<HTMLDialogElement>(null);
-
-    const dagerDefault = hentMeldekortForhåndsutfylling(
-        meldekortBehandling,
-        tidligereMeldekortBehandlinger,
-        brukersMeldekort,
-    );
-
-    const formMethods = useForm<MeldekortBehandlingForm>({
+    const formContext = useForm<MeldekortBehandlingForm>({
         mode: 'onSubmit',
         defaultValues: {
-            dager: dagerDefault,
-            begrunnelse: undefined,
+            dager: hentMeldekortForhåndsutfylling(
+                meldekortBehandling,
+                tidligereMeldekortBehandlinger,
+                brukersMeldekort,
+            ),
+            begrunnelse: meldekortBehandling.begrunnelse,
         },
     });
 
-    const {
-        sendMeldekortTilBeslutter,
-        senderMeldekortTilBeslutter,
-        feilVedSendingTilBeslutter,
-        reset,
-    } = useSendMeldekortTilBeslutter({
-        meldekortId: meldekortBehandling.id,
-        sakId,
-        onSuccess: () => {
-            lukkModal();
-        },
+    const skjemaErIkkeBeregnet = formContext.formState.isDirty;
+
+    const hentMeldekortUtfylling = (): MeldekortBehandlingDTO => ({
+        dager: formContext.getValues().dager,
+        begrunnelse: formContext.getValues().begrunnelse,
     });
 
-    const lukkModal = () => {
-        modalRef.current?.close();
-        reset();
-    };
-
-    const validerOgÅpneBekreftelse: SubmitHandler<MeldekortBehandlingForm> = (form) => {
-        if (tellDagerMedDeltattEllerFravær(form.dager) > antallDager) {
+    const customValidering = () => {
+        if (tellDagerMedDeltattEllerFravær(formContext.getValues().dager) > antallDager) {
             setValideringsFeil(
                 `For mange dager utfylt - Maks ${antallDager} dager med tiltak for denne perioden.`,
             );
-            return;
+            return false;
         }
 
         setValideringsFeil('');
-        modalRef.current?.showModal();
+        return true;
     };
 
+    useEffect(() => {
+        formContext.reset({
+            dager: hentMeldekortForhåndsutfylling(
+                meldekortBehandling,
+                tidligereMeldekortBehandlinger,
+                brukersMeldekort,
+            ),
+            begrunnelse: meldekortBehandling.begrunnelse,
+        });
+    }, [meldekortBehandling]);
+
     return (
-        <form onSubmit={formMethods.handleSubmit(validerOgÅpneBekreftelse)}>
-            <MeldekortUker
-                dager={formMethods.getValues().dager}
-                formContext={formMethods}
-                className={styles.uker}
-            />
-            <Heading size={'xsmall'} level={'2'} className={styles.header}>
-                {'Begrunnelse (valgfri)'}
-            </Heading>
-            <BodyLong size={'small'} className={styles.personinfoVarsel}>
-                {'Ikke skriv personsensitiv informasjon som ikke er relevant for saken.'}
-            </BodyLong>
-            <Textarea
-                label={'Begrunnelse'}
-                hideLabel={true}
-                minRows={5}
-                resize={'vertical'}
-                onChange={(event) => {
-                    formMethods.setValue('begrunnelse', event.target.value);
-                }}
-            />
-            {valideringsFeil && (
-                <Alert variant={'error'}>
-                    <BodyShort weight={'semibold'}>{'Feil i utfyllingen'}</BodyShort>
-                    <BodyShort>{valideringsFeil}</BodyShort>
-                </Alert>
-            )}
-            <Button type="submit" value="submit" size="small" style={{ marginTop: '2.5rem' }}>
-                Send til beslutter
-            </Button>
-            <BekreftelsesModal
-                modalRef={modalRef}
-                tittel={'Send meldekort til beslutter'}
-                feil={feilVedSendingTilBeslutter}
-                lukkModal={lukkModal}
-                bekreftKnapp={
-                    <Button
-                        size={'small'}
-                        loading={senderMeldekortTilBeslutter}
-                        onClick={() =>
-                            sendMeldekortTilBeslutter({
-                                dager: formMethods.getValues().dager,
-                                begrunnelse: formMethods.getValues().begrunnelse,
-                            }).then((oppdatertKjede) => {
-                                if (oppdatertKjede) {
-                                    setMeldeperiodeKjede(oppdatertKjede);
-                                    lukkModal();
-                                }
-                            })
-                        }
-                    >
-                        {'Send til beslutter'}
-                    </Button>
-                }
-            >
-                {
-                    'Er du sikker på at meldekortet er ferdig utfylt og klart til å sendes til beslutter?'
-                }
-            </BekreftelsesModal>
-        </form>
+        <FormProvider {...formContext}>
+            <form>
+                <VStack gap={'5'}>
+                    <MeldekortUker dager={formContext.getValues().dager} underBehandling={true} />
+                    <div>
+                        <Heading size={'xsmall'} level={'2'} className={styles.header}>
+                            {'Begrunnelse (valgfri)'}
+                        </Heading>
+                        <BodyLong size={'small'} className={styles.personinfoVarsel}>
+                            {
+                                'Ikke skriv personsensitiv informasjon som ikke er relevant for saken.'
+                            }
+                        </BodyLong>
+                        <Textarea
+                            label={'Begrunnelse'}
+                            hideLabel={true}
+                            minRows={5}
+                            resize={'vertical'}
+                            defaultValue={meldekortBehandling.begrunnelse}
+                            onChange={(event) => {
+                                formContext.setValue('begrunnelse', event.target.value);
+                            }}
+                        />
+                    </div>
+                    {skjemaErIkkeBeregnet && (
+                        <Alert inline={true} variant={'warning'} size={'small'}>
+                            {'Beregningen er utdatert - trykk lagre for å oppdatere'}
+                        </Alert>
+                    )}
+                    <MeldekortBeregningOppsummering
+                        meldekortBehandling={meldekortBehandling}
+                        visUtbetalingsstatus={false}
+                        className={classNames(skjemaErIkkeBeregnet && styles.utdatertBeregning)}
+                    />
+                    <VStack gap={'2'}>
+                        {valideringsFeil && (
+                            <Alert variant={'error'} size={'small'}>
+                                <BodyShort weight={'semibold'} size={'small'}>
+                                    {'Feil i utfyllingen'}
+                                </BodyShort>
+                                <BodyShort size={'small'}>{valideringsFeil}</BodyShort>
+                            </Alert>
+                        )}
+                        <HStack justify={'space-between'} className={styles.knapper}>
+                            <MeldekortLagreOgBeregn
+                                meldekortId={meldekortBehandling.id}
+                                sakId={sakId}
+                                hentMeldekortUtfylling={hentMeldekortUtfylling}
+                                customValidering={customValidering}
+                            />
+                            <MeldekortSendTilBeslutning
+                                meldekortId={meldekortBehandling.id}
+                                sakId={sakId}
+                                hentMeldekortUtfylling={hentMeldekortUtfylling}
+                                customValidering={customValidering}
+                            />
+                        </HStack>
+                    </VStack>
+                </VStack>
+            </form>
+        </FormProvider>
     );
 };

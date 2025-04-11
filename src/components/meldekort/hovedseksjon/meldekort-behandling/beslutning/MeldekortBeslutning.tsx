@@ -53,7 +53,7 @@ export const MeldekortBeslutning = ({ meldekortBehandling }: Props) => {
                     loading={godkjennMeldekortLaster}
                     onClick={() => modalRef.current?.showModal()}
                 >
-                    Godkjenn meldekort
+                    {'Godkjenn meldekort'}
                 </Button>
             </HStack>
             <BekreftelsesModal

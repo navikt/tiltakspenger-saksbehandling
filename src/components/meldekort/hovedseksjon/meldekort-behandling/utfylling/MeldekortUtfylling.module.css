@@ -2,10 +2,15 @@
     padding-bottom: 0.5rem;
 }
 
-.uker {
-    margin-bottom: 2rem;
-}
-
 .personinfoVarsel {
     font-style: italic;
+}
+
+.knapper {
+    margin-bottom: 4rem;
+}
+
+.utdatertBeregning {
+    color: var(--a-gray-400);
+    cursor: not-allowed;
 }
