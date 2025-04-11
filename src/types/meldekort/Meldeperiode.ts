@@ -47,6 +47,6 @@ export type MeldeperiodeKorrigering = {
     meldekortId: MeldekortBehandlingId;
     kjedeId: MeldeperiodeKjedeId;
     periode: Periode;
-    iverksatt?: string;
+    iverksatt: string;
     beregning: MeldeperiodeBeregning;
 };

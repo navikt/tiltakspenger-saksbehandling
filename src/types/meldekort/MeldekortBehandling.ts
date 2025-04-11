@@ -1,5 +1,5 @@
 import { Attestering } from '../BehandlingTypes';
-import { MeldeperiodeId } from './Meldeperiode';
+import { MeldeperiodeId, MeldeperiodeKjedeId } from './Meldeperiode';
 import { Periode } from '../Periode';
 import { BrukersMeldekortId } from './BrukersMeldekort';
 
@@ -90,6 +90,8 @@ export type MeldekortBeregning = {
 };
 
 export type MeldeperiodeBeregning = {
+    kjedeId: MeldeperiodeKjedeId;
+    periode: Periode;
     beløp: MeldekortBeløpProps;
     dager: MeldekortDagBeregnetProps[];
 };

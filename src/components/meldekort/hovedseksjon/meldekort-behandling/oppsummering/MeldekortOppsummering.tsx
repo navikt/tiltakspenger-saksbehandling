@@ -1,9 +1,10 @@
 import { BodyShort, Heading, Textarea, VStack } from '@navikt/ds-react';
-import { formaterTidspunktKort, ukeHeading } from '../../../../../utils/date';
-import { MeldekortOppsummeringUke } from './uke/MeldekortOppsummeringUke';
+import { formaterTidspunktKort } from '../../../../../utils/date';
 import { MeldekortBehandlingProps } from '../../../../../types/meldekort/MeldekortBehandling';
 import { useMeldeperiodeKjede } from '../../../context/MeldeperiodeKjedeContext';
 import { MeldekortBeløp } from '../beløp/MeldekortBeløp';
+import { MeldekortUker } from '../../uker/MeldekortUker';
+import { MeldekortKorrigertTilPåfølgendePerioder } from '../korrigert-til-påfølgende/MeldekortKorrigertTilPåfølgendePerioder';
 
 import style from './MeldekortOppsummering.module.css';
 
@@ -12,26 +13,22 @@ type Props = {
 };
 
 export const MeldekortOppsummering = ({ meldekortBehandling }: Props) => {
-    const { periode } = useMeldeperiodeKjede().meldeperiodeKjede;
-    const { beregning, begrunnelse, navkontor, navkontorNavn, godkjentTidspunkt } =
-        meldekortBehandling;
+    const { finnForrigeMeldekortBehandling } = useMeldeperiodeKjede();
+    const {
+        beregning,
+        begrunnelse,
+        navkontor,
+        navkontorNavn,
+        godkjentTidspunkt,
+        dager,
+        utbetalingsstatus,
+    } = meldekortBehandling;
 
-    const { beregningForMeldekortetsPeriode } = beregning!;
-    const { beløp, dager } = beregningForMeldekortetsPeriode;
-
-    const uke1 = dager.slice(0, 7);
-    const uke2 = dager.slice(7, 14);
+    const forrigeBeregning = finnForrigeMeldekortBehandling(meldekortBehandling.id)?.beregning;
 
     return (
         <VStack gap={'5'}>
-            <MeldekortOppsummeringUke
-                utbetalingUke={uke1}
-                headingtekst={ukeHeading(periode.fraOgMed)}
-            />
-            <MeldekortOppsummeringUke
-                utbetalingUke={uke2}
-                headingtekst={ukeHeading(periode.tilOgMed)}
-            />
+            <MeldekortUker dager={beregning?.beregningForMeldekortetsPeriode.dager ?? dager} />
             {begrunnelse && (
                 <VStack className={style.begrunnelse}>
                     <Heading size={'xsmall'} level={'2'} className={style.header}>
@@ -49,16 +46,26 @@ export const MeldekortOppsummering = ({ meldekortBehandling }: Props) => {
             )}
             {godkjentTidspunkt && (
                 <BodyShort size={'small'}>
-                    {'Iverksatt: '}
+                    {'Iverksatt '}
                     <strong>{formaterTidspunktKort(godkjentTidspunkt)}</strong>
                 </BodyShort>
             )}
-            <MeldekortBeløp
-                beløp={beløp}
-                navkontorForUtbetaling={
-                    navkontorNavn ? `${navkontorNavn} (${navkontor})` : navkontor
-                }
-            />
+            {beregning && (
+                <>
+                    <MeldekortKorrigertTilPåfølgendePerioder
+                        beregninger={beregning.beregningerForPåfølgendePerioder}
+                    />
+                    <MeldekortBeløp
+                        beløp={beregning.beregningForMeldekortetsPeriode.beløp}
+                        forrigeBeløp={forrigeBeregning?.beregningForMeldekortetsPeriode.beløp}
+                        totalBeløp={beregning.totalBeløp}
+                        utbetalingsstatus={utbetalingsstatus}
+                        navkontorForUtbetaling={
+                            navkontorNavn ? `${navkontorNavn} (${navkontor})` : navkontor
+                        }
+                    />
+                </>
+            )}
         </VStack>
     );
 };

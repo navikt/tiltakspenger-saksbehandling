@@ -1,11 +1,19 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { MeldeperiodeKjedeProps, MeldeperiodeProps } from '../../../types/meldekort/Meldeperiode';
-import { MeldekortBehandlingProps } from '../../../types/meldekort/MeldekortBehandling';
+import {
+    MeldekortBehandlingId,
+    MeldekortBehandlingProps,
+} from '../../../types/meldekort/MeldekortBehandling';
+import { sorterMeldekortBehandlingerAsc } from '../../../utils/meldekort';
 
 export type MeldeperioderContextState = {
     meldeperiodeKjede: MeldeperiodeKjedeProps;
     setMeldeperiodeKjede: (meldeperiodeKjede: MeldeperiodeKjedeProps) => void;
+    finnForrigeMeldekortBehandling: (
+        meldekortId: MeldekortBehandlingId,
+    ) => MeldekortBehandlingProps | undefined;
     sisteMeldeperiode: MeldeperiodeProps;
+    alleMeldekortBehandlinger: MeldekortBehandlingProps[];
     sisteMeldekortBehandling?: MeldekortBehandlingProps;
     tidligereMeldekortBehandlinger: MeldekortBehandlingProps[];
 };
@@ -31,8 +39,16 @@ export const MeldeperiodeKjedeProvider = ({
         meldeperiode.versjon > acc.versjon ? meldeperiode : acc,
     );
 
-    const [sisteMeldekortBehandling, ...tidligereMeldekortBehandlinger] =
-        meldekortBehandlinger.toSorted((a, b) => (a.opprettet > b.opprettet ? -1 : 1));
+    const alleMeldekortBehandlinger = meldekortBehandlinger.toSorted(
+        sorterMeldekortBehandlingerAsc,
+    );
+
+    const [sisteMeldekortBehandling, ...tidligereMeldekortBehandlinger] = alleMeldekortBehandlinger;
+
+    const finnForrigeMeldekortBehandling = (meldekortId: MeldekortBehandlingId) => {
+        const index = alleMeldekortBehandlinger.findIndex((mbeh) => mbeh.id === meldekortId);
+        return alleMeldekortBehandlinger.at(index + 1);
+    };
 
     useEffect(() => {
         setMeldeperiodeKjede(meldeperiodeKjedeInitial);
@@ -43,7 +59,9 @@ export const MeldeperiodeKjedeProvider = ({
             value={{
                 meldeperiodeKjede,
                 setMeldeperiodeKjede,
+                finnForrigeMeldekortBehandling,
                 sisteMeldeperiode,
+                alleMeldekortBehandlinger,
                 sisteMeldekortBehandling,
                 tidligereMeldekortBehandlinger,
             }}

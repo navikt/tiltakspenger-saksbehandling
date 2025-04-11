@@ -5,6 +5,11 @@
     min-width: 320px;
 }
 
+.behandlingTag {
+    padding: 0.5rem 1rem;
+    margin-bottom: 0.5rem;
+}
+
 .detalj {
     & > :first-child {
         margin-bottom: 0.25rem;

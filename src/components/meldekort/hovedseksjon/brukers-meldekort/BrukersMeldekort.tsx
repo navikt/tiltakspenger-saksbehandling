@@ -4,7 +4,7 @@ import {
     BrukersMeldekortProps,
 } from '../../../../types/meldekort/BrukersMeldekort';
 import { Box, Heading, HStack, Table, VStack } from '@navikt/ds-react';
-import { formaterDatotekst, ukedagFraDatotekst, ukeHeading } from '../../../../utils/date';
+import { formaterDatotekst, ukedagFraDatotekst } from '../../../../utils/date';
 import { ikonForBrukersMeldekortDagStatus } from '../Meldekortikoner';
 import { brukersMeldekortDagStatusTekst } from '../../../../utils/tekstformateringUtils';
 import React from 'react';
@@ -21,12 +21,14 @@ export const BrukersMeldekortVisning = ({ meldeperiode, brukersMeldekort }: Prop
     const uke2 = brukersMeldekort.dager.slice(7, 14);
 
     return (
-        <VStack gap={'5'} justify={'start'}>
+        <VStack gap={'5'}>
             <Heading level={'3'} size={'medium'}>
                 {'Innmelding fra bruker'}
             </Heading>
-            <Uke dager={uke1} meldeperiode={meldeperiode} />
-            <Uke dager={uke2} meldeperiode={meldeperiode} />
+            <VStack gap={'1'}>
+                <Uke dager={uke1} meldeperiode={meldeperiode} />
+                <Uke dager={uke2} meldeperiode={meldeperiode} />
+            </VStack>
         </VStack>
     );
 };
@@ -39,9 +41,6 @@ type UkeProps = {
 const Uke = ({ dager, meldeperiode }: UkeProps) => {
     return (
         <Box className={styles.utbetalingsuke}>
-            <Heading size="small" level="3">
-                {ukeHeading(dager[0].dato)}
-            </Heading>
             <Table size="small">
                 <Table.Header>
                     <Table.Row>

@@ -1,5 +1,4 @@
-import { Alert, Heading, HStack, VStack } from '@navikt/ds-react';
-import { meldekortHeading } from '../../../../utils/date';
+import { Alert, Heading, VStack } from '@navikt/ds-react';
 import { kanBeslutteForMeldekort, kanSaksbehandleForMeldekort } from '../../../../utils/tilganger';
 import { MeldekortUtfylling } from './utfylling/MeldekortUtfylling';
 import { MeldekortOppsummering } from './oppsummering/MeldekortOppsummering';
@@ -8,29 +7,30 @@ import {
     MeldekortBehandlingProps,
     MeldekortBehandlingType,
 } from '../../../../types/meldekort/MeldekortBehandling';
-import { useMeldeperiodeKjede } from '../../context/MeldeperiodeKjedeContext';
 import { useSaksbehandler } from '../../../../context/saksbehandler/SaksbehandlerContext';
+import React from 'react';
+
+import style from './MeldekortBehandling.module.css';
 
 type Props = {
     meldekortBehandling: MeldekortBehandlingProps;
 };
 
 export const MeldekortBehandling = ({ meldekortBehandling }: Props) => {
-    const { meldeperiodeKjede } = useMeldeperiodeKjede();
     const { innloggetSaksbehandler } = useSaksbehandler();
 
     return (
         <VStack gap={'5'}>
-            <HStack align={'center'} justify={'space-between'}>
-                <Heading level={'2'} size={'medium'}>
-                    {meldekortHeading(meldeperiodeKjede.periode)}
+            <div className={style.toppRad}>
+                <Heading level={'3'} size={'medium'}>
+                    {`Siste behandling`}
                 </Heading>
                 {meldekortBehandling.type === MeldekortBehandlingType.KORRIGERING && (
-                    <Alert variant={'info'} inline={true}>
+                    <Alert variant={'info'} inline={true} size={'small'}>
                         {'Korrigering'}
                     </Alert>
                 )}
-            </HStack>
+            </div>
             {kanSaksbehandleForMeldekort(meldekortBehandling, innloggetSaksbehandler) ? (
                 <MeldekortUtfylling meldekortBehandling={meldekortBehandling} />
             ) : (

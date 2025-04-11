@@ -1,6 +1,12 @@
-.utbetalingsuke {
+.uke {
     background-color: #ffffff;
     border: 1px #9099a5 solid;
     border-radius: 4px;
     padding: 1rem;
+}
+
+.select {
+    && select {
+        min-height: 1.75rem;
+    }
 }

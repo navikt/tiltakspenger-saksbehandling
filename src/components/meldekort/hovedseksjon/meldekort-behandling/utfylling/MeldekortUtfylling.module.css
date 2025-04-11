@@ -1,15 +1,9 @@
 .header {
     padding-bottom: 0.5rem;
-    border-bottom: 1px solid #cfcfcf;
 }
 
-.meldekort {
-    background-color: #ffffff;
-    border: 1px #9099a5 solid;
-    border-radius: 4px;
-    padding: 1rem;
+.uker {
     margin-bottom: 2rem;
-    max-width: 1000px;
 }
 
 .personinfoVarsel {

@@ -1,14 +1,15 @@
 import { Button, Table } from '@navikt/ds-react';
-import { finnMeldeperiodeKjedeStatusTekst } from '../../../utils/tekstformateringUtils';
+import {
+    finnMeldeperiodeKjedeStatusTekst,
+    meldekortUtbetalingstatusTekst,
+} from '../../../utils/tekstformateringUtils';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '../../../utils/date';
 import Link from 'next/link';
-import {
-    MeldeperiodeKjedeProps,
-    MeldeperiodeKjedeStatus,
-} from '../../../types/meldekort/Meldeperiode';
+import { MeldeperiodeKjedeProps } from '../../../types/meldekort/Meldeperiode';
 import { meldeperiodeUrl } from '../../../utils/urls';
 import { MeldekortBehandlingType } from '../../../types/meldekort/MeldekortBehandling';
 import { formatterBeløp } from '../../../utils/beløp';
+import { sorterMeldekortBehandlingerAsc } from '../../../utils/meldekort';
 
 import style from './MeldekortOversikt.module.css';
 
@@ -25,6 +26,7 @@ export const MeldekortOversikt = ({ meldeperiodeKjeder, saksnummer }: Props) => 
                     <Table.HeaderCell scope="col">Status</Table.HeaderCell>
                     <Table.HeaderCell scope="col">Periode</Table.HeaderCell>
                     <Table.HeaderCell scope="col">Beregnet beløp</Table.HeaderCell>
+                    <Table.HeaderCell scope="col">Utbetalingsstatus</Table.HeaderCell>
                     <Table.HeaderCell scope="col">Mottatt fra bruker</Table.HeaderCell>
                     <Table.HeaderCell scope="col">Saksbehandler</Table.HeaderCell>
                     <Table.HeaderCell scope="col">Beslutter</Table.HeaderCell>
@@ -44,7 +46,10 @@ export const MeldekortOversikt = ({ meldeperiodeKjeder, saksnummer }: Props) => 
                             korrigeringFraTidligerePeriode,
                         } = kjede;
 
-                        const sisteMeldekortBehandling = meldekortBehandlinger.at(-1);
+                        const sisteMeldekortBehandling = meldekortBehandlinger
+                            .toSorted(sorterMeldekortBehandlingerAsc)
+                            .at(0);
+
                         const beregnetBeløpForPeriode =
                             korrigeringFraTidligerePeriode?.beregning.beløp.totalt ??
                             sisteMeldekortBehandling?.beregning?.beregningForMeldekortetsPeriode
@@ -66,8 +71,16 @@ export const MeldekortOversikt = ({ meldeperiodeKjeder, saksnummer }: Props) => 
                                     {periodeTilFormatertDatotekst(periode)}
                                 </Table.DataCell>
                                 <Table.DataCell>
-                                    {beregnetBeløpForPeriode !== undefined &&
-                                        formatterBeløp(beregnetBeløpForPeriode)}
+                                    {beregnetBeløpForPeriode !== undefined
+                                        ? formatterBeløp(beregnetBeløpForPeriode)
+                                        : '-'}
+                                </Table.DataCell>
+                                <Table.DataCell>
+                                    {sisteMeldekortBehandling?.utbetalingsstatus
+                                        ? meldekortUtbetalingstatusTekst[
+                                              sisteMeldekortBehandling.utbetalingsstatus
+                                          ]
+                                        : '-'}
                                 </Table.DataCell>
                                 <Table.DataCell>
                                     {brukersMeldekort
@@ -81,18 +94,15 @@ export const MeldekortOversikt = ({ meldeperiodeKjeder, saksnummer }: Props) => 
                                     {sisteMeldekortBehandling?.beslutter ?? '-'}
                                 </Table.DataCell>
                                 <Table.DataCell>
-                                    {status !==
-                                        MeldeperiodeKjedeStatus.IKKE_KLAR_TIL_BEHANDLING && (
-                                        <Button
-                                            as={Link}
-                                            href={meldeperiodeUrl(saksnummer, periode)}
-                                            size="small"
-                                            variant="secondary"
-                                            className={style.knapp}
-                                        >
-                                            Åpne
-                                        </Button>
-                                    )}
+                                    <Button
+                                        as={Link}
+                                        href={meldeperiodeUrl(saksnummer, periode)}
+                                        size="small"
+                                        variant="secondary"
+                                        className={style.knapp}
+                                    >
+                                        {'Åpne'}
+                                    </Button>
                                 </Table.DataCell>
                             </Table.Row>
                         );

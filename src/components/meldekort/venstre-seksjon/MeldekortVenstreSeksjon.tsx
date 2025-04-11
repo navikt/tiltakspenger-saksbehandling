@@ -1,7 +1,8 @@
-import { BodyShort, VStack } from '@navikt/ds-react';
+import { BodyShort, Heading, Tag, VStack } from '@navikt/ds-react';
 import {
     formaterDatotekst,
     formaterTidspunkt,
+    meldekortHeading,
     periodeTilFormatertDatotekst,
 } from '../../../utils/date';
 import { MeldekortBehandlingOpprett } from '../hovedseksjon/meldekort-behandling/opprett/MeldekortBehandlingOpprett';
@@ -15,9 +16,12 @@ import { useFeatureToggles } from '../../../context/feature-toggles/FeatureToggl
 import { ArrayOrSingle } from '../../../types/UtilTypes';
 import { forceArray } from '../../../utils/array';
 import { useMeldeperiodeKjede } from '../context/MeldeperiodeKjedeContext';
+import OppsummeringAvAttesteringer from '../../attestering/OppsummeringAvAttestering';
+import { finnMeldeperiodeKjedeStatusTekst } from '../../../utils/tekstformateringUtils';
+import { MeldeperiodeKjedeStatus } from '../../../types/meldekort/Meldeperiode';
+import { ComponentProps } from 'react';
 
 import styles from './MeldekortVenstreSeksjon.module.css';
-import OppsummeringAvAttesteringer from '../../attestering/OppsummeringAvAttestering';
 
 export const MeldekortVenstreSeksjon = () => {
     const { sak } = useSak();
@@ -29,13 +33,22 @@ export const MeldekortVenstreSeksjon = () => {
 
     return (
         <VStack gap="3" className={styles.wrapper}>
-            <MeldekortDetalj
-                header={'Siste dag med rett'}
-                tekst={sisteDagSomGirRett ? formaterDatotekst(sisteDagSomGirRett) : 'Ukjent'}
-            />
+            <Heading level={'2'} size={'medium'} className={styles.header}>
+                {meldekortHeading(periode)}
+            </Heading>
+            <Tag
+                variant={meldekortStatusTagVariant[meldeperiodeKjede.status]}
+                className={styles.behandlingTag}
+            >
+                {finnMeldeperiodeKjedeStatusTekst[meldeperiodeKjede.status]}
+            </Tag>
             <MeldekortDetalj
                 header={'Meldekortperiode'}
                 tekst={periodeTilFormatertDatotekst(periode)}
+            />
+            <MeldekortDetalj
+                header={'Siste dag med rett'}
+                tekst={sisteDagSomGirRett ? formaterDatotekst(sisteDagSomGirRett) : 'Ukjent'}
             />
             <MeldekortDetalj header={'Tiltak'} tekst={tiltaksnavn ?? 'Ukjent'} />
             <MeldekortDetalj
@@ -97,4 +110,16 @@ const MeldekortDetalj = ({ header, tekst }: { header: string; tekst: ArrayOrSing
             ))}
         </div>
     );
+};
+
+const meldekortStatusTagVariant: Record<
+    MeldeperiodeKjedeStatus,
+    ComponentProps<typeof Tag>['variant']
+> = {
+    GODKJENT: 'success-moderate',
+    IKKE_KLAR_TIL_BEHANDLING: 'warning-moderate',
+    IKKE_RETT_TIL_TILTAKSPENGER: 'warning-moderate',
+    KLAR_TIL_BEHANDLING: 'info-moderate',
+    KLAR_TIL_BESLUTNING: 'alt1-moderate',
+    UNDER_BEHANDLING: 'alt3-moderate',
 };
