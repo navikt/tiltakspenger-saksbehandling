@@ -13,7 +13,7 @@ export type MeldeperioderContextState = {
         meldekortId: MeldekortBehandlingId,
     ) => MeldekortBehandlingProps | undefined;
     sisteMeldeperiode: MeldeperiodeProps;
-    meldekortBehandlingerSortert: MeldekortBehandlingProps[];
+    alleMeldekortBehandlinger: MeldekortBehandlingProps[];
     sisteMeldekortBehandling?: MeldekortBehandlingProps;
     tidligereMeldekortBehandlinger: MeldekortBehandlingProps[];
 };
@@ -39,16 +39,15 @@ export const MeldeperiodeKjedeProvider = ({
         meldeperiode.versjon > acc.versjon ? meldeperiode : acc,
     );
 
-    const meldekortBehandlingerSortert = meldekortBehandlinger.toSorted(
+    const alleMeldekortBehandlinger = meldekortBehandlinger.toSorted(
         sorterMeldekortBehandlingerAsc,
     );
 
-    const [sisteMeldekortBehandling, ...tidligereMeldekortBehandlinger] =
-        meldekortBehandlingerSortert;
+    const [sisteMeldekortBehandling, ...tidligereMeldekortBehandlinger] = alleMeldekortBehandlinger;
 
     const finnForrigeMeldekortBehandling = (meldekortId: MeldekortBehandlingId) => {
-        const index = meldekortBehandlingerSortert.findIndex((mbeh) => mbeh.id === meldekortId);
-        return meldekortBehandlingerSortert.at(index + 1);
+        const index = alleMeldekortBehandlinger.findIndex((mbeh) => mbeh.id === meldekortId);
+        return alleMeldekortBehandlinger.at(index + 1);
     };
 
     useEffect(() => {
@@ -62,7 +61,7 @@ export const MeldeperiodeKjedeProvider = ({
                 setMeldeperiodeKjede,
                 finnForrigeMeldekortBehandling,
                 sisteMeldeperiode,
-                meldekortBehandlingerSortert,
+                alleMeldekortBehandlinger,
                 sisteMeldekortBehandling,
                 tidligereMeldekortBehandlinger,
             }}

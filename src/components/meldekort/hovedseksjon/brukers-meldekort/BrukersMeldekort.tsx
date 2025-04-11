@@ -21,12 +21,14 @@ export const BrukersMeldekortVisning = ({ meldeperiode, brukersMeldekort }: Prop
     const uke2 = brukersMeldekort.dager.slice(7, 14);
 
     return (
-        <VStack gap={'1'} justify={'start'}>
+        <VStack gap={'5'}>
             <Heading level={'3'} size={'medium'}>
                 {'Innmelding fra bruker'}
             </Heading>
-            <Uke dager={uke1} meldeperiode={meldeperiode} />
-            <Uke dager={uke2} meldeperiode={meldeperiode} />
+            <VStack gap={'1'}>
+                <Uke dager={uke1} meldeperiode={meldeperiode} />
+                <Uke dager={uke2} meldeperiode={meldeperiode} />
+            </VStack>
         </VStack>
     );
 };

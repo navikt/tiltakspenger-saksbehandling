@@ -3,9 +3,10 @@ import { BrukersMeldekortVisning } from './brukers-meldekort/BrukersMeldekort';
 import { useMeldeperiodeKjede } from '../context/MeldeperiodeKjedeContext';
 import { MeldekortBehandling } from './meldekort-behandling/MeldekortBehandling';
 import { MeldekortTidligereBehandlinger } from './meldekort-behandling/tidligere-behandlinger/MeldekortTidligereBehandlinger';
+import { MeldekortBehandlingStatus } from '../../../types/meldekort/MeldekortBehandling';
+import { MeldekortKorrigertFraTidligerePeriode } from './meldekort-behandling/korrigert-fra-tidligere/MeldekortKorrigertFraTidligerePeriode';
 
 import styles from './MeldekortHovedseksjon.module.css';
-import { MeldekortBehandlingStatus } from '../../../types/meldekort/MeldekortBehandling';
 
 export const MeldekortHovedseksjon = () => {
     const {
@@ -13,28 +14,39 @@ export const MeldekortHovedseksjon = () => {
         sisteMeldeperiode,
         sisteMeldekortBehandling,
         tidligereMeldekortBehandlinger,
+        alleMeldekortBehandlinger,
     } = useMeldeperiodeKjede();
 
-    const { brukersMeldekort } = meldeperiodeKjede;
+    const { brukersMeldekort, korrigeringFraTidligerePeriode } = meldeperiodeKjede;
 
-    // Hvis den siste behandlingen av meldekortet er godkjent, ønsker vi å vise en evt korrigering
-    // fra en tidligere kjede ovenfor dette. Dersom meldekortet er under behandling viser vi heller
-    // denne korrigeringen ovenfor de tidligere behandlingene.
-    const sisteBehandlingErGodkjent =
-        sisteMeldekortBehandling?.status === MeldekortBehandlingStatus.GODKJENT;
+    const sisteErGodkjent = sisteMeldekortBehandling?.status === MeldekortBehandlingStatus.GODKJENT;
+
+    // Hvis den siste behandlingen er godkjent, og beregningen senere er overstyrt av korrigering på en
+    // tidligere periode, så viser vi siste behandling under "tidligere behandlinger", og fremhever
+    // korrigeringen som gjeldende beregning
+    const skalIkkeViseSisteBehandling = !!korrigeringFraTidligerePeriode && sisteErGodkjent;
 
     return (
         <VStack gap={'5'} className={styles.wrapper}>
             <HStack gap={'5'}>
-                {sisteMeldekortBehandling && (
-                    <MeldekortBehandling
-                        meldekortBehandling={sisteMeldekortBehandling}
-                        visKorrigeringFraTidligerePeriode={sisteBehandlingErGodkjent}
+                {skalIkkeViseSisteBehandling ? (
+                    <MeldekortKorrigertFraTidligerePeriode
+                        korrigering={korrigeringFraTidligerePeriode}
                     />
+                ) : (
+                    sisteMeldekortBehandling && (
+                        <MeldekortBehandling meldekortBehandling={sisteMeldekortBehandling} />
+                    )
                 )}
                 <MeldekortTidligereBehandlinger
-                    meldekortBehandlinger={tidligereMeldekortBehandlinger}
-                    visKorrigeringFraTidligerePeriode={!sisteBehandlingErGodkjent}
+                    meldekortBehandlinger={
+                        skalIkkeViseSisteBehandling
+                            ? alleMeldekortBehandlinger
+                            : tidligereMeldekortBehandlinger
+                    }
+                    korrigeringFraTidligerePeriode={
+                        !sisteErGodkjent ? korrigeringFraTidligerePeriode : undefined
+                    }
                 />
                 {brukersMeldekort && (
                     <BrukersMeldekortVisning
