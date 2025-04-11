@@ -7,11 +7,15 @@ import { TiltakPerioder } from './perioder/TiltakPerioder';
 import { useFørstegangsVedtakSkjema } from '../context/FørstegangsVedtakContext';
 import { Separator } from '../../../separator/Separator';
 import { useFørstegangsbehandling } from '../../BehandlingContext';
-import { deltarPaFlereTiltakMedStartOgSluttdato } from '../../../../utils/behandling';
+import { deltarPaFlereTiltakMedStartOgSluttdatoIValgtInnvilgelsesperiode } from '../../../../utils/behandling';
 
 export const FørstegangsVedtakTiltak = () => {
     const { behandling } = useFørstegangsbehandling();
-    const flereTiltak = deltarPaFlereTiltakMedStartOgSluttdato(behandling);
+    const { innvilgelsesPeriode } = useFørstegangsVedtakSkjema();
+    const flereTiltak = deltarPaFlereTiltakMedStartOgSluttdatoIValgtInnvilgelsesperiode(
+        behandling,
+        innvilgelsesPeriode,
+    );
     const { resultat } = useFørstegangsVedtakSkjema();
     return (
         flereTiltak && (

@@ -15,8 +15,11 @@ import {
     førstegangsVedtakReducer,
     FørstegangsVedtakSkjemaState,
 } from './FørstegangsVedtakReducer';
-import { harSøktBarnetillegg, hentTiltaksperiodeFraSøknad } from '../../../../utils/behandling';
-import { singleOrFirst } from '../../../../utils/array';
+import {
+    harSøktBarnetillegg,
+    hentTiltaksdeltagelseFraSoknad,
+    hentTiltaksperiodeFraSøknad,
+} from '../../../../utils/behandling';
 import { periodiserBarnetillegg } from '../../../../utils/barnetillegg';
 
 type TextAreaInputs = {
@@ -38,6 +41,7 @@ const initieltVedtakSkjema = (
     behandling: FørstegangsbehandlingData,
 ): FørstegangsVedtakSkjemaState => {
     const tiltaksperiode = hentTiltaksperiodeFraSøknad(behandling);
+    const tiltakFraSoknad = hentTiltaksdeltagelseFraSoknad(behandling);
 
     return {
         innvilgelsesPeriode: behandling.virkningsperiode ?? tiltaksperiode,
@@ -51,8 +55,7 @@ const initieltVedtakSkjema = (
             ),
         valgteTiltaksdeltakelser: behandling.valgteTiltaksdeltakelser || [
             {
-                eksternDeltagelseId: singleOrFirst(behandling.saksopplysninger.tiltaksdeltagelse)
-                    .eksternDeltagelseId,
+                eksternDeltagelseId: tiltakFraSoknad.eksternDeltagelseId,
                 periode: behandling.virkningsperiode ?? tiltaksperiode,
             },
         ],

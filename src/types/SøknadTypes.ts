@@ -50,6 +50,7 @@ export type SøknadForOversiktProps = {
 };
 
 export type SøknadTiltaksDeltagelse = {
+    id: string;
     fraOgMed: string;
     tilOgMed: string;
     typeKode: string;
