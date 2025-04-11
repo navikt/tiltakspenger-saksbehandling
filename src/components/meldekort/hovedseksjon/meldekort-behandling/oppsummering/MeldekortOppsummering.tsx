@@ -54,6 +54,7 @@ export const MeldekortOppsummering = ({ meldekortBehandling }: Props) => {
                         finnForrigeMeldekortBehandling(meldekortBehandling.id)?.beregning
                             ?.beregningForMeldekortetsPeriode.beløp
                     }
+                    totalBeløp={beregning.totalBeløp}
                     utbetalingsstatus={utbetalingsstatus}
                     navkontorForUtbetaling={
                         navkontorNavn ? `${navkontorNavn} (${navkontor})` : navkontor

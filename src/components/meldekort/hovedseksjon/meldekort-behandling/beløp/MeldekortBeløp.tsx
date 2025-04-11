@@ -12,16 +12,20 @@ import style from './MeldekortBeløp.module.css';
 type Props = {
     beløp: MeldekortBeløpProps;
     forrigeBeløp?: MeldekortBeløpProps;
+    totalBeløp?: MeldekortBeløpProps;
     utbetalingsstatus?: Utbetalingsstatus;
     navkontorForUtbetaling?: string;
 };
 
 export const MeldekortBeløp = ({
     beløp,
-    utbetalingsstatus,
     forrigeBeløp,
+    totalBeløp,
+    utbetalingsstatus,
     navkontorForUtbetaling,
 }: Props) => {
+    const harDiffPåTotalBeløp = totalBeløp && totalBeløp.totalt != beløp.totalt;
+
     return (
         <>
             <VStack gap={'1'}>
@@ -40,6 +44,12 @@ export const MeldekortBeløp = ({
                     beløp={beløp.totalt}
                     beløpForrige={forrigeBeløp?.totalt}
                 />
+                {harDiffPåTotalBeløp && (
+                    <BeløpRad
+                        tekst={'Totalt beløp beregnet for meldekortet:'}
+                        beløp={totalBeløp.totalt}
+                    />
+                )}
             </VStack>
             {(navkontorForUtbetaling || utbetalingsstatus) && (
                 <VStack gap={'1'}>
