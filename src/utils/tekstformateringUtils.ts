@@ -66,7 +66,7 @@ export const meldekortBehandlingTypeTekst: Record<MeldekortBehandlingType, strin
     [MeldekortBehandlingType.KORRIGERING]: 'Korrigering',
 } as const;
 
-export const meldekortUtbetalingstatusTekst: Record<Utbetalingsstatus, string | null> = {
+export const meldekortUtbetalingstatusTekst: Record<Utbetalingsstatus, string> = {
     FEILET_MOT_OPPDRAG: 'Feilet mot oppdrag',
     IKKE_GODKJENT: '-',
     IKKE_SENDT_TIL_HELVED: '-',

@@ -13,8 +13,15 @@ type Props = {
 
 export const MeldekortOppsummering = ({ meldekortBehandling }: Props) => {
     const { finnForrigeMeldekortBehandling } = useMeldeperiodeKjede();
-    const { beregning, begrunnelse, navkontor, navkontorNavn, godkjentTidspunkt, dager } =
-        meldekortBehandling;
+    const {
+        beregning,
+        begrunnelse,
+        navkontor,
+        navkontorNavn,
+        godkjentTidspunkt,
+        dager,
+        utbetalingsstatus,
+    } = meldekortBehandling;
 
     return (
         <VStack gap={'5'}>
@@ -36,7 +43,7 @@ export const MeldekortOppsummering = ({ meldekortBehandling }: Props) => {
             )}
             {godkjentTidspunkt && (
                 <BodyShort size={'small'}>
-                    {'Iverksatt: '}
+                    {'Iverksatt '}
                     <strong>{formaterTidspunktKort(godkjentTidspunkt)}</strong>
                 </BodyShort>
             )}
@@ -47,6 +54,7 @@ export const MeldekortOppsummering = ({ meldekortBehandling }: Props) => {
                         finnForrigeMeldekortBehandling(meldekortBehandling.id)?.beregning
                             ?.beregningForMeldekortetsPeriode.beløp
                     }
+                    utbetalingsstatus={utbetalingsstatus}
                     navkontorForUtbetaling={
                         navkontorNavn ? `${navkontorNavn} (${navkontor})` : navkontor
                     }

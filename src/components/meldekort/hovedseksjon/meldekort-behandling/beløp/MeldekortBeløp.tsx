@@ -1,17 +1,27 @@
 import { BodyShort, HStack, VStack } from '@navikt/ds-react';
-import { MeldekortBeløpProps } from '../../../../../types/meldekort/MeldekortBehandling';
+import {
+    MeldekortBeløpProps,
+    Utbetalingsstatus,
+} from '../../../../../types/meldekort/MeldekortBehandling';
 import { formatterBeløp } from '../../../../../utils/beløp';
+import { classNames } from '../../../../../utils/classNames';
+import { meldekortUtbetalingstatusTekst } from '../../../../../utils/tekstformateringUtils';
 
 import style from './MeldekortBeløp.module.css';
-import { classNames } from '../../../../../utils/classNames';
 
 type Props = {
     beløp: MeldekortBeløpProps;
     forrigeBeløp?: MeldekortBeløpProps;
+    utbetalingsstatus?: Utbetalingsstatus;
     navkontorForUtbetaling?: string;
 };
 
-export const MeldekortBeløp = ({ beløp, forrigeBeløp, navkontorForUtbetaling }: Props) => {
+export const MeldekortBeløp = ({
+    beløp,
+    utbetalingsstatus,
+    forrigeBeløp,
+    navkontorForUtbetaling,
+}: Props) => {
     return (
         <>
             <VStack gap={'1'}>
@@ -31,11 +41,23 @@ export const MeldekortBeløp = ({ beløp, forrigeBeløp, navkontorForUtbetaling 
                     beløpForrige={forrigeBeløp?.totalt}
                 />
             </VStack>
-            {navkontorForUtbetaling && (
-                <HStack gap={'5'} className={style.rad}>
-                    <BodyShort>{'Nav-kontor det skal utbetales fra:'}</BodyShort>
-                    <BodyShort>{navkontorForUtbetaling}</BodyShort>
-                </HStack>
+            {(navkontorForUtbetaling || utbetalingsstatus) && (
+                <VStack gap={'1'}>
+                    {navkontorForUtbetaling && (
+                        <HStack gap={'5'} className={style.rad}>
+                            <BodyShort>{'Nav-kontor det skal utbetales fra:'}</BodyShort>
+                            <BodyShort weight={'semibold'}>{navkontorForUtbetaling}</BodyShort>
+                        </HStack>
+                    )}
+                    {utbetalingsstatus && (
+                        <HStack gap={'5'} className={style.rad}>
+                            <BodyShort>{'Utbetalingsstatus: '}</BodyShort>
+                            <BodyShort weight={'semibold'}>
+                                {meldekortUtbetalingstatusTekst[utbetalingsstatus]}
+                            </BodyShort>
+                        </HStack>
+                    )}
+                </VStack>
             )}
         </>
     );
