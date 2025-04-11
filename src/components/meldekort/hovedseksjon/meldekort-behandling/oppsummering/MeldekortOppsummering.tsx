@@ -4,6 +4,7 @@ import { MeldekortBehandlingProps } from '../../../../../types/meldekort/Meldeko
 import { useMeldeperiodeKjede } from '../../../context/MeldeperiodeKjedeContext';
 import { MeldekortBeløp } from '../beløp/MeldekortBeløp';
 import { MeldekortUker } from '../../uker/MeldekortUker';
+import { MeldekortKorrigertTilPåfølgendePerioder } from '../korrigert-til-påfølgende/MeldekortKorrigertTilPåfølgendePerioder';
 
 import style from './MeldekortOppsummering.module.css';
 
@@ -22,6 +23,8 @@ export const MeldekortOppsummering = ({ meldekortBehandling }: Props) => {
         dager,
         utbetalingsstatus,
     } = meldekortBehandling;
+
+    const forrigeBeregning = finnForrigeMeldekortBehandling(meldekortBehandling.id)?.beregning;
 
     return (
         <VStack gap={'5'}>
@@ -48,18 +51,20 @@ export const MeldekortOppsummering = ({ meldekortBehandling }: Props) => {
                 </BodyShort>
             )}
             {beregning && (
-                <MeldekortBeløp
-                    beløp={beregning.beregningForMeldekortetsPeriode.beløp}
-                    forrigeBeløp={
-                        finnForrigeMeldekortBehandling(meldekortBehandling.id)?.beregning
-                            ?.beregningForMeldekortetsPeriode.beløp
-                    }
-                    totalBeløp={beregning.totalBeløp}
-                    utbetalingsstatus={utbetalingsstatus}
-                    navkontorForUtbetaling={
-                        navkontorNavn ? `${navkontorNavn} (${navkontor})` : navkontor
-                    }
-                />
+                <>
+                    <MeldekortKorrigertTilPåfølgendePerioder
+                        beregninger={beregning.beregningerForPåfølgendePerioder}
+                    />
+                    <MeldekortBeløp
+                        beløp={beregning.beregningForMeldekortetsPeriode.beløp}
+                        forrigeBeløp={forrigeBeregning?.beregningForMeldekortetsPeriode.beløp}
+                        totalBeløp={beregning.totalBeløp}
+                        utbetalingsstatus={utbetalingsstatus}
+                        navkontorForUtbetaling={
+                            navkontorNavn ? `${navkontorNavn} (${navkontor})` : navkontor
+                        }
+                    />
+                </>
             )}
         </VStack>
     );
