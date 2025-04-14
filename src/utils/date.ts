@@ -10,6 +10,8 @@ dayjs.locale('nb');
 
 const DATO_FORMAT = 'YYYY-MM-DD';
 
+const ukedager = ['Man', 'Tir', 'Ons', 'Tor', 'Fre', 'Lør', 'Søn'] as const;
+
 export function dateTilISOTekst(date: Date | string | Dayjs) {
     return dayjs(date).format(DATO_FORMAT);
 }
@@ -34,35 +36,8 @@ export const meldekortHeading = (periode: Periode): string => {
     return `Meldekort uke ${ukenummerFraDatotekst(periode.fraOgMed)} og ${ukenummerFraDatotekst(periode.tilOgMed)}`;
 };
 
-export const ukeHeading = (dato: string): string => {
-    return `Uke ${ukenummerFraDatotekst(dato)} - ${månedFraDatotekst(dato)} ${dayjs(dato).year()} `;
-};
-
-export const meldekortdagHeading = (dato: string) => {
-    return `${ukedagFraDatotekst(dato)} ${formaterDatotekst(dato)}`;
-};
-
 export function ukedagFraDatotekst(dato: string) {
-    const ukedager = ['Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag', 'Søndag'];
     return ukedager[dayjs(dato).weekday()];
-}
-
-export function månedFraDatotekst(dato: string) {
-    const måneder = [
-        'januar',
-        'februar',
-        'mars',
-        'april',
-        'mai',
-        'juni',
-        'juli',
-        'august',
-        'september',
-        'oktober',
-        'november',
-        'desember',
-    ];
-    return måneder[dayjs(dato).month()];
 }
 
 export function ukenummerFraDatotekst(dato: string) {

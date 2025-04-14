@@ -21,12 +21,12 @@ export const MeldekortUke = ({ dager, ukeIndex, underBehandling }: Props) => {
             <Table size="small">
                 <Table.Header>
                     <Table.Row>
-                        <Table.HeaderCell>Dag</Table.HeaderCell>
-                        <Table.HeaderCell>Dato</Table.HeaderCell>
-                        <Table.HeaderCell>Status</Table.HeaderCell>
-                        <Table.HeaderCell>Sats</Table.HeaderCell>
-                        <Table.HeaderCell>Beløp</Table.HeaderCell>
-                        <Table.HeaderCell>Barnetillegg</Table.HeaderCell>
+                        <Table.HeaderCell>{'Dag'}</Table.HeaderCell>
+                        <Table.HeaderCell>{'Dato'}</Table.HeaderCell>
+                        <Table.HeaderCell>{'Status'}</Table.HeaderCell>
+                        <Table.HeaderCell>{'Sats'}</Table.HeaderCell>
+                        <Table.HeaderCell>{'Beløp'}</Table.HeaderCell>
+                        <Table.HeaderCell>{'Barn'}</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>

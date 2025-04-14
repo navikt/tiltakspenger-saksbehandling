@@ -26,7 +26,7 @@ export const MeldekortKorrigertTilPåfølgendePerioder = ({ beregninger }: Props
             <BodyShort
                 size={'small'}
                 className={style.toppTekst}
-            >{`Korrigeringen påvirket beregningen av ${antall} påfølgende periode${antall > 1 ? 'r' : ''}:`}</BodyShort>
+            >{`Korrigeringen endret beregningen av ${antall} påfølgende periode${antall > 1 ? 'r' : ''}:`}</BodyShort>
             {beregninger.map((beregning) => (
                 <BodyShort key={beregning.kjedeId} size={'small'}>
                     <Link as={NextLink} href={meldeperiodeUrl(saksnummer, beregning.periode)}>
