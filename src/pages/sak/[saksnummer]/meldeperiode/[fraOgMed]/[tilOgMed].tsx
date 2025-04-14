@@ -4,7 +4,7 @@ import { SakProps } from '../../../../../types/SakTypes';
 import { fetchSak } from '../../../../../utils/fetch/fetch-server';
 import { MeldekortSide } from '../../../../../components/meldekort/MeldekortSide';
 import { SakProvider } from '../../../../../context/sak/SakContext';
-import { MeldeperiodeKjedeProvider } from '../../../../../components/meldekort/context/MeldeperiodeKjedeContext';
+import { MeldeperiodeKjedeProvider } from '../../../../../components/meldekort/MeldeperiodeKjedeContext';
 
 type Props = {
     meldeperiodeKjede: MeldeperiodeKjedeProps;

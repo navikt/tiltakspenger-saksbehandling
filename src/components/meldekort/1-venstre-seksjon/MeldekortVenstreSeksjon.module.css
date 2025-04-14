@@ -1,0 +1,31 @@
+.wrapper {
+    border-left: 1px solid var(--a-gray-300);
+    border-right: 1px solid var(--a-gray-300);
+    padding: 1em;
+    min-width: 320px;
+}
+
+.behandlingTag {
+    padding: 0.5rem 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.detalj {
+    & > :first-child {
+        margin-bottom: 0.25rem;
+    }
+
+    &:not(:last-child) {
+        margin-bottom: 0.75rem;
+    }
+}
+
+.detaljtekst {
+    & > :first-child {
+        margin-bottom: 0.25rem;
+    }
+
+    &:not(:last-child) {
+        margin-bottom: 0.4rem;
+    }
+}

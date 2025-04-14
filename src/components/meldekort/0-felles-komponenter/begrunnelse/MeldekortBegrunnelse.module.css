@@ -1,0 +1,17 @@
+.header {
+    padding-bottom: 0.5rem;
+}
+
+.personinfoVarsel {
+    font-style: italic;
+}
+
+.readonly {
+    background-color: var(--a-white);
+    border: 1px var(--a-gray-500) solid;
+    border-radius: var(--a-border-radius-medium);
+
+    && > textarea {
+        background-color: var(--a-white);
+    }
+}

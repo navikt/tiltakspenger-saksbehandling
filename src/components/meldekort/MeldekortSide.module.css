@@ -1,5 +1,8 @@
 .behandlingLayout {
     display: grid;
-    grid-template-columns: minmax(400px, min-content) 1fr;
+    grid-template-columns: minmax(350px, min-content) minmax(700px, min-content) minmax(
+            700px,
+            min-content
+        );
     min-height: 100vh;
 }
