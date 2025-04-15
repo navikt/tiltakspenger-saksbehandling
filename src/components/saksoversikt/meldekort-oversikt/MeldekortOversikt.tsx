@@ -5,7 +5,10 @@ import {
 } from '../../../utils/tekstformateringUtils';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '../../../utils/date';
 import Link from 'next/link';
-import { MeldeperiodeKjedeProps } from '../../../types/meldekort/Meldeperiode';
+import {
+    MeldeperiodeKjedeProps,
+    MeldeperiodeKjedeStatus,
+} from '../../../types/meldekort/Meldeperiode';
 import { meldeperiodeUrl } from '../../../utils/urls';
 import { MeldekortBehandlingType } from '../../../types/meldekort/MeldekortBehandling';
 import { formatterBeløp } from '../../../utils/beløp';
@@ -58,11 +61,13 @@ export const MeldekortOversikt = ({ meldeperiodeKjeder, saksnummer }: Props) => 
                         const erKorrigering =
                             sisteMeldekortBehandling?.type === MeldekortBehandlingType.KORRIGERING;
 
-                        const korrigeringTekst = korrigeringFraTidligerePeriode
-                            ? ` (korrigert via ${periodeTilFormatertDatotekst(korrigeringFraTidligerePeriode.periode)})`
-                            : erKorrigering
-                              ? ' (korrigering)'
-                              : '';
+                        const korrigeringTekst =
+                            korrigeringFraTidligerePeriode &&
+                            status === MeldeperiodeKjedeStatus.GODKJENT
+                                ? ` (korrigert via ${periodeTilFormatertDatotekst(korrigeringFraTidligerePeriode.periode)})`
+                                : erKorrigering
+                                  ? ' (korrigering)'
+                                  : '';
 
                         return (
                             <Table.Row shadeOnHover={false} key={id}>

@@ -56,7 +56,7 @@ export const MeldekortVenstreSeksjon = () => {
                 tekst={sisteMeldeperiode.antallDager.toString()}
             />
             <MeldekortDetalj
-                header={'Meldekort mottatt fra bruker'}
+                header={'Siste meldekort mottatt fra bruker'}
                 tekst={
                     brukersMeldekort?.mottatt
                         ? formaterTidspunkt(brukersMeldekort.mottatt)

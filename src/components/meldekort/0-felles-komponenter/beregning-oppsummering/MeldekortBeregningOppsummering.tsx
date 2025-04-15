@@ -9,15 +9,10 @@ import { VStack } from '@navikt/ds-react';
 
 type Props = {
     meldekortBehandling: MeldekortBehandlingProps;
-    visUtbetalingsstatus?: boolean;
     className?: string;
 };
 
-export const MeldekortBeregningOppsummering = ({
-    meldekortBehandling,
-    visUtbetalingsstatus = true,
-    className,
-}: Props) => {
+export const MeldekortBeregningOppsummering = ({ meldekortBehandling, className }: Props) => {
     const { finnForrigeMeldekortBehandling } = useMeldeperiodeKjede();
     const { beregning, utbetalingsstatus, navkontor, navkontorNavn } = meldekortBehandling;
 
@@ -37,7 +32,6 @@ export const MeldekortBeregningOppsummering = ({
                 forrigeBeløp={forrigeBeregning?.beregningForMeldekortetsPeriode.beløp}
                 totalBeløp={beregning.totalBeløp}
                 utbetalingsstatus={
-                    visUtbetalingsstatus &&
                     meldekortBehandling.status === MeldekortBehandlingStatus.GODKJENT
                         ? utbetalingsstatus
                         : undefined

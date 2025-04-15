@@ -1,7 +1,7 @@
 .wrapper {
     border-left: solid var(--a-gray-300) 1px;
     border-right: solid var(--a-gray-300) 1px;
-    background-color: var(--a-white);
+    background-color: var(--a-bg-default);
 }
 
 .panel {
@@ -11,4 +11,9 @@
 .tabDisabled {
     pointer-events: none;
     color: var(--a-gray-400);
+}
+
+.tabs {
+    background-color: var(--a-bg-default);
+    border-bottom: solid 1px var(--a-gray-300);
 }

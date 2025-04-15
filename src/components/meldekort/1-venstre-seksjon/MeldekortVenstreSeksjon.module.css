@@ -1,8 +1,7 @@
 .wrapper {
-    border-left: 1px solid var(--a-gray-300);
     border-right: 1px solid var(--a-gray-300);
-    padding: 1em;
-    min-width: 320px;
+    padding: 1rem;
+    background-color: var(--a-blue-50);
 }
 
 .behandlingTag {

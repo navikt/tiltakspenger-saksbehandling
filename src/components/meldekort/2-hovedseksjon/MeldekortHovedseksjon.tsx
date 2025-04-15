@@ -20,6 +20,7 @@ export const MeldekortHovedseksjon = () => {
             {skalViseTidligereKorrigering ? (
                 <MeldekortKorrigertFraTidligerePeriode
                     korrigering={korrigeringFraTidligerePeriode}
+                    headerTekst={'Gjeldende beregning'}
                 />
             ) : (
                 sisteMeldekortBehandling && (

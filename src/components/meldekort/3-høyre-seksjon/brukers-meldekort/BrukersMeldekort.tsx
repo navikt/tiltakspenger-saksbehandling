@@ -3,8 +3,8 @@ import {
     BrukersMeldekortDagProps,
     BrukersMeldekortProps,
 } from '../../../../types/meldekort/BrukersMeldekort';
-import { Box, HStack, Table, VStack } from '@navikt/ds-react';
-import { formaterDatotekst, ukedagFraDatotekst } from '../../../../utils/date';
+import { Alert, BodyShort, Box, HStack, Table, VStack } from '@navikt/ds-react';
+import { formaterDatotekst, formaterTidspunkt, ukedagFraDatotekst } from '../../../../utils/date';
 import { ikonForBrukersMeldekortDagStatus } from '../../0-felles-komponenter/MeldekortIkoner';
 import { brukersMeldekortDagStatusTekst } from '../../../../utils/tekstformateringUtils';
 import React from 'react';
@@ -22,6 +22,12 @@ export const BrukersMeldekortVisning = ({ meldeperiode, brukersMeldekort }: Prop
 
     return (
         <VStack gap={'1'}>
+            <Alert variant={'info'} inline={true} size={'small'} className={styles.mottatt}>
+                <BodyShort>
+                    {'Mottatt fra bruker: '}
+                    <strong>{formaterTidspunkt(brukersMeldekort.mottatt)}</strong>
+                </BodyShort>
+            </Alert>
             <Uke dager={uke1} meldeperiode={meldeperiode} />
             <Uke dager={uke2} meldeperiode={meldeperiode} />
         </VStack>

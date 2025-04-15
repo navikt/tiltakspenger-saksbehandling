@@ -62,7 +62,7 @@ export const finnBehandlingstypeTekst: Record<Behandlingstype, string> = {
 } as const;
 
 export const meldekortBehandlingTypeTekst: Record<MeldekortBehandlingType, string> = {
-    [MeldekortBehandlingType.FØRSTE_BEHANDLING]: 'Behandling',
+    [MeldekortBehandlingType.FØRSTE_BEHANDLING]: 'Første behandling',
     [MeldekortBehandlingType.KORRIGERING]: 'Korrigering',
 } as const;
 

@@ -88,7 +88,6 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
                     )}
                     <MeldekortBeregningOppsummering
                         meldekortBehandling={meldekortBehandling}
-                        visUtbetalingsstatus={false}
                         className={classNames(skjemaErIkkeBeregnet && styles.utdatertBeregning)}
                     />
                     <MeldekortBegrunnelse

@@ -3,7 +3,6 @@ import { MeldekortTidligereBehandlinger } from './tidligere-behandlinger/Meldeko
 import { BrukersMeldekortVisning } from './brukers-meldekort/BrukersMeldekort';
 import { useMeldeperiodeKjede } from '../MeldeperiodeKjedeContext';
 import { classNames } from '../../../utils/classNames';
-import { MeldekortBehandlingStatus } from '../../../types/meldekort/MeldekortBehandling';
 
 import style from './MeldekortHøyreSeksjon.module.css';
 
@@ -11,20 +10,16 @@ export const MeldekortHøyreSeksjon = () => {
     const {
         alleMeldekortBehandlinger,
         tidligereMeldekortBehandlinger,
-        sisteMeldekortBehandling,
         meldeperiodeKjede,
         sisteMeldeperiode,
     } = useMeldeperiodeKjede();
 
     const { brukersMeldekort, korrigeringFraTidligerePeriode } = meldeperiodeKjede;
 
-    const tidligereBehandlinger =
-        korrigeringFraTidligerePeriode &&
-        sisteMeldekortBehandling?.status === MeldekortBehandlingStatus.GODKJENT
-            ? alleMeldekortBehandlinger
-            : tidligereMeldekortBehandlinger;
+    const antallTidligereBehandlinger = korrigeringFraTidligerePeriode
+        ? alleMeldekortBehandlinger.length
+        : tidligereMeldekortBehandlinger.length;
 
-    const antallTidligereBehandlinger = tidligereBehandlinger.length;
     const antallBrukersMeldekort = brukersMeldekort ? 1 : 0;
 
     if (antallTidligereBehandlinger === 0 && antallBrukersMeldekort === 0) {
@@ -38,7 +33,7 @@ export const MeldekortHøyreSeksjon = () => {
 
     return (
         <Tabs defaultValue={defaultTab} fill={true} className={style.wrapper}>
-            <Tabs.List>
+            <Tabs.List className={style.tabs}>
                 <Tabs.Tab
                     value={'tidligereBehandlinger'}
                     label={`Tidligere behandlinger (${antallTidligereBehandlinger})`}

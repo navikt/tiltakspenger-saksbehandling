@@ -1,4 +1,6 @@
 .wrapper {
     padding: 1.25rem 1rem 2rem 1rem;
-    background-color: var(--a-bg-subtle);
+    background-color: var(--a-bg-default);
+    border-left: solid var(--a-gray-300) 1px;
+    border-right: solid var(--a-gray-300) 1px;
 }

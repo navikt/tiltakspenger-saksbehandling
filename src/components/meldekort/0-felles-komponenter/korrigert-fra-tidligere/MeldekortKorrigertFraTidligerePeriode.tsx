@@ -1,4 +1,4 @@
-import { Alert, BodyShort, Link, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Heading, Link, VStack } from '@navikt/ds-react';
 import { meldeperiodeUrl } from '../../../../utils/urls';
 import NextLink from 'next/link';
 import { formaterTidspunktKort, periodeTilFormatertDatotekst } from '../../../../utils/date';
@@ -11,9 +11,10 @@ import { MeldekortBehandlingStatus } from '../../../../types/meldekort/Meldekort
 
 type Props = {
     korrigering: MeldeperiodeKorrigering;
+    headerTekst?: string;
 };
 
-export const MeldekortKorrigertFraTidligerePeriode = ({ korrigering }: Props) => {
+export const MeldekortKorrigertFraTidligerePeriode = ({ korrigering, headerTekst }: Props) => {
     const { alleMeldekortBehandlinger } = useMeldeperiodeKjede();
     const { saksnummer } = useSak().sak;
     const { periode, beregning, iverksatt } = korrigering;
@@ -24,6 +25,7 @@ export const MeldekortKorrigertFraTidligerePeriode = ({ korrigering }: Props) =>
 
     return (
         <VStack gap={'5'}>
+            {headerTekst && <Heading size={'medium'}>{headerTekst}</Heading>}
             <Alert size={'small'} inline={true} variant={'warning'}>
                 {'Korrigering av meldeperioden '}
                 <Link href={meldeperiodeUrl(saksnummer, periode)} as={NextLink}>
