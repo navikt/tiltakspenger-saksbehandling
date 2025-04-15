@@ -1,4 +1,4 @@
-import { HStack, Select, VStack } from '@navikt/ds-react';
+import { Alert, HStack, Select, VStack } from '@navikt/ds-react';
 import {
     MeldekortBehandlingProps,
     MeldekortBehandlingStatus,
@@ -47,7 +47,11 @@ export const MeldekortTidligereBehandlinger = () => {
     }, [behandlingerOgKorrigeringer]);
 
     if (behandlingerOgKorrigeringer.length === 0) {
-        return null;
+        return (
+            <Alert variant={'info'} inline={true}>
+                {'Meldeperioden har ingen tidligere behandlinger'}
+            </Alert>
+        );
     }
 
     const valgtBehandling = behandlingerOgKorrigeringer.at(valgtIndex);

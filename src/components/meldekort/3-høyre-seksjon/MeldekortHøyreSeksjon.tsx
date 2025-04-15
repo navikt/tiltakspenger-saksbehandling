@@ -22,10 +22,6 @@ export const MeldekortHøyreSeksjon = () => {
 
     const antallBrukersMeldekort = brukersMeldekort ? 1 : 0;
 
-    if (antallTidligereBehandlinger === 0 && antallBrukersMeldekort === 0) {
-        return null;
-    }
-
     const defaultTab =
         antallBrukersMeldekort > 0 && antallTidligereBehandlinger === 0
             ? 'brukersMeldekort'

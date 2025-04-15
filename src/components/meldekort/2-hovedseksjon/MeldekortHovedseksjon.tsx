@@ -15,6 +15,10 @@ export const MeldekortHovedseksjon = () => {
         sisteMeldekortBehandling?.status === MeldekortBehandlingStatus.GODKJENT &&
         korrigeringFraTidligerePeriode;
 
+    if (!sisteMeldekortBehandling && !skalViseTidligereKorrigering) {
+        return null;
+    }
+
     return (
         <div className={styles.wrapper}>
             {skalViseTidligereKorrigering ? (
