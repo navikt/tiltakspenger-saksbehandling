@@ -13,6 +13,7 @@ export enum MeldekortBehandlingStatus {
     KLAR_TIL_BESLUTNING = 'KLAR_TIL_BESLUTNING',
     GODKJENT = 'GODKJENT',
     IKKE_RETT_TIL_TILTAKSPENGER = 'IKKE_RETT_TIL_TILTAKSPENGER',
+    AUTOMATISK_BEHANDLET = 'AUTOMATISK_BEHANDLET',
 }
 
 export enum MeldekortBehandlingDagStatus {

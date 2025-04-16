@@ -53,6 +53,7 @@ export const finnMeldeperiodeKjedeStatusTekst: Record<MeldeperiodeKjedeStatus, s
     [MeldeperiodeKjedeStatus.UNDER_BEHANDLING]: 'Under behandling',
     [MeldeperiodeKjedeStatus.KLAR_TIL_BESLUTNING]: 'Klar til beslutning',
     [MeldeperiodeKjedeStatus.GODKJENT]: 'Godkjent',
+    [MeldeperiodeKjedeStatus.AUTOMATISK_BEHANDLET]: 'Automatisk behandlet',
 } as const;
 
 export const finnBehandlingstypeTekst: Record<Behandlingstype, string> = {

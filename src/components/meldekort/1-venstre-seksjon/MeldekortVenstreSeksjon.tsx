@@ -116,6 +116,7 @@ const meldekortStatusTagVariant: Record<
     MeldeperiodeKjedeStatus,
     ComponentProps<typeof Tag>['variant']
 > = {
+    AUTOMATISK_BEHANDLET: 'success-moderate',
     GODKJENT: 'success-moderate',
     IKKE_KLAR_TIL_BEHANDLING: 'warning-moderate',
     IKKE_RETT_TIL_TILTAKSPENGER: 'warning-moderate',

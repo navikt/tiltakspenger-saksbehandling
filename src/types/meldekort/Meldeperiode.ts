@@ -19,6 +19,7 @@ export enum MeldeperiodeKjedeStatus {
     UNDER_BEHANDLING = 'UNDER_BEHANDLING',
     KLAR_TIL_BESLUTNING = 'KLAR_TIL_BESLUTNING',
     GODKJENT = 'GODKJENT',
+    AUTOMATISK_BEHANDLET = 'AUTOMATISK_BEHANDLET',
 }
 
 export type MeldeperiodeProps = {

@@ -26,13 +26,19 @@ export const MeldekortBehandling = ({ meldekortBehandling }: Props) => {
         <VStack gap={'5'}>
             <div className={style.toppRad}>
                 <Heading level={'3'} size={'medium'}>
-                    {status === MeldekortBehandlingStatus.GODKJENT
+                    {status === MeldekortBehandlingStatus.GODKJENT ||
+                    status === MeldekortBehandlingStatus.AUTOMATISK_BEHANDLET
                         ? 'Siste behandling'
                         : 'Pågående behandling'}
                 </Heading>
                 {type === MeldekortBehandlingType.KORRIGERING && (
                     <Alert variant={'info'} inline={true} size={'small'}>
                         {'Korrigering'}
+                    </Alert>
+                )}
+                {status === MeldekortBehandlingStatus.AUTOMATISK_BEHANDLET && (
+                    <Alert variant={'info'} inline={true} size={'small'}>
+                        {'Automatisk behandlet'}
                     </Alert>
                 )}
             </div>
