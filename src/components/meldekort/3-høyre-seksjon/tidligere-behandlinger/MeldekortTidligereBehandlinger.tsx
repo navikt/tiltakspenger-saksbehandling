@@ -1,9 +1,12 @@
 import { Alert, HStack, Select, VStack } from '@navikt/ds-react';
-import { MeldekortBehandlingProps } from '../../../../types/meldekort/MeldekortBehandling';
+import {
+    MeldekortBehandlingProps,
+    MeldekortBehandlingStatus,
+    MeldekortBehandlingType,
+} from '../../../../types/meldekort/MeldekortBehandling';
 import { MeldekortOppsummering } from '../../0-felles-komponenter/meldekort-oppsummering/MeldekortOppsummering';
 import React, { useEffect, useMemo, useState } from 'react';
 import { formaterTidspunktKort, periodeTilFormatertDatotekst } from '../../../../utils/date';
-import { meldekortBehandlingTypeTekst } from '../../../../utils/tekstformateringUtils';
 import { MeldeperiodeKorrigering } from '../../../../types/meldekort/Meldeperiode';
 import { MeldekortKorrigertFraTidligerePeriode } from '../../0-felles-komponenter/korrigert-fra-tidligere/MeldekortKorrigertFraTidligerePeriode';
 import { useMeldeperiodeKjede } from '../../MeldeperiodeKjedeContext';
@@ -66,18 +69,16 @@ export const MeldekortTidligereBehandlinger = () => {
                     size={'small'}
                 >
                     {behandlingerOgKorrigeringer.map((mbeh, index) => {
-                        const erTidligereKorrigering = erKorrigeringFraTidligerePeriode(mbeh);
-
-                        const tekst = erTidligereKorrigering
-                            ? `${formaterTidspunktKort(mbeh.iverksatt)} (Korrigert via ${periodeTilFormatertDatotekst(mbeh.periode)})`
-                            : `${formaterTidspunktKort(mbeh.godkjentTidspunkt!)} (${meldekortBehandlingTypeTekst[mbeh.type]})`;
-
                         return (
                             <option
                                 value={index}
-                                key={erTidligereKorrigering ? mbeh.meldekortId : mbeh.id}
+                                key={
+                                    erKorrigeringFraTidligerePeriode(mbeh)
+                                        ? mbeh.meldekortId
+                                        : mbeh.id
+                                }
                             >
-                                {tekst}
+                                {optionTekst(mbeh)}
                             </option>
                         );
                     })}
@@ -97,3 +98,17 @@ const erKorrigeringFraTidligerePeriode = (
     behandlingEllerTidligereKorrigering: MeldekortBehandlingProps | MeldeperiodeKorrigering,
 ): behandlingEllerTidligereKorrigering is MeldeperiodeKorrigering =>
     !!(behandlingEllerTidligereKorrigering as MeldeperiodeKorrigering).meldekortId;
+
+const optionTekst = (mbeh: MeldekortBehandlingProps | MeldeperiodeKorrigering) => {
+    if (erKorrigeringFraTidligerePeriode(mbeh)) {
+        return `${formaterTidspunktKort(mbeh.iverksatt)} (korrigert via ${periodeTilFormatertDatotekst(mbeh.periode)})`;
+    }
+
+    const tidspunkt = formaterTidspunktKort(mbeh.godkjentTidspunkt!);
+
+    if (mbeh.type === MeldekortBehandlingType.KORRIGERING) {
+        return `${tidspunkt} (korrigering)`;
+    }
+
+    return `${tidspunkt} (${mbeh.status === MeldekortBehandlingStatus.AUTOMATISK_BEHANDLET ? 'automatisk behandlet' : 'manuelt behandlet'})`;
+};

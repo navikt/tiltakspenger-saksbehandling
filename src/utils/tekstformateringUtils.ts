@@ -1,7 +1,6 @@
 import { BehandlingStatus, Behandlingstype } from '../types/BehandlingTypes';
 import {
     MeldekortBehandlingDagStatus,
-    MeldekortBehandlingType,
     Utbetalingsstatus,
 } from '../types/meldekort/MeldekortBehandling';
 import { BrukersMeldekortDagStatus } from '../types/meldekort/BrukersMeldekort';
@@ -60,11 +59,6 @@ export const finnBehandlingstypeTekst: Record<Behandlingstype, string> = {
     [Behandlingstype.FØRSTEGANGSBEHANDLING]: 'Førstegangsbehandling',
     [Behandlingstype.REVURDERING]: 'Revurdering (stans)',
     [Behandlingstype.SØKNAD]: 'Søknad',
-} as const;
-
-export const meldekortBehandlingTypeTekst: Record<MeldekortBehandlingType, string> = {
-    [MeldekortBehandlingType.FØRSTE_BEHANDLING]: 'Første behandling',
-    [MeldekortBehandlingType.KORRIGERING]: 'Korrigering',
 } as const;
 
 export const meldekortUtbetalingstatusTekst: Record<Utbetalingsstatus, string> = {
