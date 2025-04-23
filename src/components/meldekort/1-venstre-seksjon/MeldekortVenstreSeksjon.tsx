@@ -8,7 +8,6 @@ import {
 import { MeldekortBehandlingOpprett } from './opprett-behandling/MeldekortBehandlingOpprett';
 import {
     MeldekortBehandlingProps,
-    MeldekortBehandlingStatus,
     MeldekortBehandlingType,
 } from '../../../types/meldekort/MeldekortBehandling';
 import { useSak } from '../../../context/sak/SakContext';
@@ -82,17 +81,15 @@ export const MeldekortVenstreSeksjon = () => {
 const MeldekortBehandlingDetaljer = ({
     saksbehandler,
     beslutter,
-    status,
+    erAvsluttet,
 }: MeldekortBehandlingProps) => {
     const { meldekortKorrigeringToggle } = useFeatureToggles();
-
-    const erUnderBehandling = status !== MeldekortBehandlingStatus.GODKJENT;
 
     return (
         <>
             {saksbehandler && <MeldekortDetalj header={'Behandler'} tekst={saksbehandler} />}
             {beslutter && <MeldekortDetalj header={'Beslutter'} tekst={beslutter} />}
-            {meldekortKorrigeringToggle && !erUnderBehandling && (
+            {meldekortKorrigeringToggle && erAvsluttet && (
                 <MeldekortBehandlingOpprett type={MeldekortBehandlingType.KORRIGERING} />
             )}
         </>

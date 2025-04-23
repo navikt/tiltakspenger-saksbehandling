@@ -1,8 +1,5 @@
 import { Alert, HStack, Select, VStack } from '@navikt/ds-react';
-import {
-    MeldekortBehandlingProps,
-    MeldekortBehandlingStatus,
-} from '../../../../types/meldekort/MeldekortBehandling';
+import { MeldekortBehandlingProps } from '../../../../types/meldekort/MeldekortBehandling';
 import { MeldekortOppsummering } from '../../0-felles-komponenter/meldekort-oppsummering/MeldekortOppsummering';
 import React, { useEffect, useMemo, useState } from 'react';
 import { formaterTidspunktKort, periodeTilFormatertDatotekst } from '../../../../utils/date';
@@ -30,7 +27,7 @@ export const MeldekortTidligereBehandlinger = () => {
     const behandlingerOgKorrigeringer = useMemo(
         () =>
             korrigeringFraTidligerePeriode
-                ? sisteMeldekortBehandling?.status === MeldekortBehandlingStatus.GODKJENT
+                ? sisteMeldekortBehandling?.erAvsluttet
                     ? alleMeldekortBehandlinger
                     : [korrigeringFraTidligerePeriode, ...tidligereMeldekortBehandlinger]
                 : tidligereMeldekortBehandlinger,

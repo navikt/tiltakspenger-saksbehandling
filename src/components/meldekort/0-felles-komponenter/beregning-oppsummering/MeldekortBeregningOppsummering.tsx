@@ -1,9 +1,6 @@
 import { MeldekortKorrigertTilPåfølgendePerioder } from './korrigert-til-påfølgende/MeldekortKorrigertTilPåfølgendePerioder';
 import { MeldekortBeløp } from '../beløp/MeldekortBeløp';
-import {
-    MeldekortBehandlingProps,
-    MeldekortBehandlingStatus,
-} from '../../../../types/meldekort/MeldekortBehandling';
+import { MeldekortBehandlingProps } from '../../../../types/meldekort/MeldekortBehandling';
 import { useMeldeperiodeKjede } from '../../MeldeperiodeKjedeContext';
 import { VStack } from '@navikt/ds-react';
 
@@ -31,11 +28,7 @@ export const MeldekortBeregningOppsummering = ({ meldekortBehandling, className 
                 beløp={beregning.beregningForMeldekortetsPeriode.beløp}
                 forrigeBeløp={forrigeBeregning?.beregningForMeldekortetsPeriode.beløp}
                 totalBeløp={beregning.totalBeløp}
-                utbetalingsstatus={
-                    meldekortBehandling.status === MeldekortBehandlingStatus.GODKJENT
-                        ? utbetalingsstatus
-                        : undefined
-                }
+                utbetalingsstatus={meldekortBehandling.erAvsluttet ? utbetalingsstatus : undefined}
                 navkontorForUtbetaling={
                     navkontorNavn ? `${navkontorNavn} (${navkontor})` : navkontor
                 }

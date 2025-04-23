@@ -7,7 +7,6 @@ import { useSak } from '../../../../context/sak/SakContext';
 import { MeldeperiodeKorrigering } from '../../../../types/meldekort/Meldeperiode';
 import { MeldekortBeløp } from '../beløp/MeldekortBeløp';
 import { useMeldeperiodeKjede } from '../../MeldeperiodeKjedeContext';
-import { MeldekortBehandlingStatus } from '../../../../types/meldekort/MeldekortBehandling';
 
 type Props = {
     korrigering: MeldeperiodeKorrigering;
@@ -19,9 +18,8 @@ export const MeldekortKorrigertFraTidligerePeriode = ({ korrigering, headerTekst
     const { saksnummer } = useSak().sak;
     const { periode, beregning, iverksatt } = korrigering;
 
-    const forrigeGodkjenteBeløp = alleMeldekortBehandlinger.find(
-        (mbeh) => mbeh.status === MeldekortBehandlingStatus.GODKJENT,
-    )?.beregning?.beregningForMeldekortetsPeriode.beløp;
+    const forrigeGodkjenteBeløp = alleMeldekortBehandlinger.find((mbeh) => mbeh.erAvsluttet)
+        ?.beregning?.beregningForMeldekortetsPeriode.beløp;
 
     return (
         <VStack gap={'5'}>

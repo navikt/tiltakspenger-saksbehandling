@@ -61,6 +61,7 @@ export type MeldekortBehandlingProps = {
     opprettet: string;
     godkjentTidspunkt?: string;
     status: MeldekortBehandlingStatus;
+    erAvsluttet: boolean;
     navkontor: string;
     navkontorNavn?: string;
     begrunnelse?: string;
