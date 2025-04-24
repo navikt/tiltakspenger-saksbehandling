@@ -64,6 +64,7 @@ export const Saksoversikt = () => {
                         <MeldekortOversikt
                             meldeperiodeKjeder={meldeperiodeKjederKlare}
                             saksnummer={saksnummer}
+                            sakId={sakId}
                         />
                     )}
                 </Box>

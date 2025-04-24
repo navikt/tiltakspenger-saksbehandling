@@ -15,13 +15,16 @@ import { formatterBeløp } from '../../../utils/beløp';
 import { sorterMeldekortBehandlingerAsc } from '../../../utils/meldekort';
 
 import style from './MeldekortOversikt.module.css';
+import { MeldekortBehandlingKnappForOversikt } from './MeldekortBehandlingKnappForOversikt';
+import { SakId } from '../../../types/SakTypes';
 
 type Props = {
     meldeperiodeKjeder: MeldeperiodeKjedeProps[];
     saksnummer: string;
+    sakId: SakId;
 };
 
-export const MeldekortOversikt = ({ meldeperiodeKjeder, saksnummer }: Props) => {
+export const MeldekortOversikt = ({ meldeperiodeKjeder, saksnummer, sakId }: Props) => {
     return (
         <Table>
             <Table.Header>
@@ -33,6 +36,7 @@ export const MeldekortOversikt = ({ meldeperiodeKjeder, saksnummer }: Props) => 
                     <Table.HeaderCell scope="col">Mottatt fra bruker</Table.HeaderCell>
                     <Table.HeaderCell scope="col">Saksbehandler</Table.HeaderCell>
                     <Table.HeaderCell scope="col">Beslutter</Table.HeaderCell>
+                    <Table.HeaderCell scope="col">Handlinger</Table.HeaderCell>
                     <Table.HeaderCell scope="col"></Table.HeaderCell>
                 </Table.Row>
             </Table.Header>
@@ -97,6 +101,15 @@ export const MeldekortOversikt = ({ meldeperiodeKjeder, saksnummer }: Props) => 
                                 </Table.DataCell>
                                 <Table.DataCell>
                                     {sisteMeldekortBehandling?.beslutter ?? '-'}
+                                </Table.DataCell>
+                                <Table.DataCell scope="col">
+                                    {sisteMeldekortBehandling && (
+                                        <MeldekortBehandlingKnappForOversikt
+                                            meldekortBehandling={sisteMeldekortBehandling}
+                                            sakId={sakId}
+                                            meldeperiodeUrl={meldeperiodeUrl(saksnummer, periode)}
+                                        />
+                                    )}
                                 </Table.DataCell>
                                 <Table.DataCell>
                                     <Button
