@@ -5,12 +5,12 @@ import {
 } from '../../../utils/tekstformateringUtils';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '../../../utils/date';
 import Link from 'next/link';
-import {
-    MeldeperiodeKjedeProps,
-    MeldeperiodeKjedeStatus,
-} from '../../../types/meldekort/Meldeperiode';
+import { MeldeperiodeKjedeProps } from '../../../types/meldekort/Meldeperiode';
 import { meldeperiodeUrl } from '../../../utils/urls';
-import { MeldekortBehandlingType } from '../../../types/meldekort/MeldekortBehandling';
+import {
+    MeldekortBehandlingStatus,
+    MeldekortBehandlingType,
+} from '../../../types/meldekort/MeldekortBehandling';
 import { formatterBeløp } from '../../../utils/beløp';
 import { sorterMeldekortBehandlingerAsc } from '../../../utils/meldekort';
 
@@ -65,9 +65,12 @@ export const MeldekortOversikt = ({ meldeperiodeKjeder, saksnummer, sakId }: Pro
                         const erKorrigering =
                             sisteMeldekortBehandling?.type === MeldekortBehandlingType.KORRIGERING;
 
+                        const erAutomatiskBehandlet =
+                            sisteMeldekortBehandling?.status ===
+                            MeldekortBehandlingStatus.AUTOMATISK_BEHANDLET;
+
                         const korrigeringTekst =
-                            korrigeringFraTidligerePeriode &&
-                            status === MeldeperiodeKjedeStatus.GODKJENT
+                            korrigeringFraTidligerePeriode && sisteMeldekortBehandling?.erAvsluttet
                                 ? ` (korrigert via ${periodeTilFormatertDatotekst(korrigeringFraTidligerePeriode.periode)})`
                                 : erKorrigering
                                   ? ' (korrigering)'
@@ -97,10 +100,14 @@ export const MeldekortOversikt = ({ meldeperiodeKjeder, saksnummer, sakId }: Pro
                                         : 'Ikke mottatt'}
                                 </Table.DataCell>
                                 <Table.DataCell>
-                                    {sisteMeldekortBehandling?.saksbehandler ?? '-'}
+                                    {(!erAutomatiskBehandlet &&
+                                        sisteMeldekortBehandling?.saksbehandler) ||
+                                        '-'}
                                 </Table.DataCell>
                                 <Table.DataCell>
-                                    {sisteMeldekortBehandling?.beslutter ?? '-'}
+                                    {(!erAutomatiskBehandlet &&
+                                        sisteMeldekortBehandling?.beslutter) ||
+                                        '-'}
                                 </Table.DataCell>
                                 <Table.DataCell scope="col">
                                     {sisteMeldekortBehandling && (
