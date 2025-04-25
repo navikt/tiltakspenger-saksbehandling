@@ -1,4 +1,4 @@
-import { Box, HStack, Table } from '@navikt/ds-react';
+import { Box, Table } from '@navikt/ds-react';
 import React from 'react';
 import { formaterDatotekst, ukedagFraDatotekst } from '../../../../utils/date';
 import { MeldekortDagBeregnetProps } from '../../../../types/meldekort/MeldekortBehandling';
@@ -23,7 +23,7 @@ export const MeldekortUke = ({ dager, ukeIndex, underBehandling }: Props) => {
                     <Table.Row>
                         <Table.HeaderCell>{'Dag'}</Table.HeaderCell>
                         <Table.HeaderCell>{'Dato'}</Table.HeaderCell>
-                        <Table.HeaderCell>{'Status'}</Table.HeaderCell>
+                        <Table.HeaderCell colSpan={2}>{'Status'}</Table.HeaderCell>
                         <Table.HeaderCell>{'Sats'}</Table.HeaderCell>
                         <Table.HeaderCell>{'Beløp'}</Table.HeaderCell>
                         <Table.HeaderCell>{'Barn'}</Table.HeaderCell>
@@ -37,11 +37,11 @@ export const MeldekortUke = ({ dager, ukeIndex, underBehandling }: Props) => {
                             <Table.Row key={dag.dato}>
                                 <Table.DataCell>{ukedagFraDatotekst(dag.dato)}</Table.DataCell>
                                 <Table.DataCell>{formaterDatotekst(dag.dato)}</Table.DataCell>
+                                <Table.DataCell className={styles.ikon}>
+                                    {ikonForMeldekortBehandlingDagStatus[dag.status]}
+                                </Table.DataCell>
                                 <Table.DataCell>
-                                    <HStack align="center" gap="3" wrap={false}>
-                                        {ikonForMeldekortBehandlingDagStatus[dag.status]}
-                                        {meldekortBehandlingDagStatusTekst[dag.status]}
-                                    </HStack>
+                                    {meldekortBehandlingDagStatusTekst[dag.status]}
                                 </Table.DataCell>
                                 <Table.DataCell>
                                     {dag.beregningsdag && `${dag.beregningsdag.prosent}%`}

@@ -3,7 +3,16 @@
     border: 1px #9099a5 solid;
     border-radius: 4px;
     padding: 1rem;
-    min-width: 650px;
+    text-wrap: nowrap;
+}
+
+.ikon:global(.navds-table__data-cell) {
+    padding-right: 0;
+    text-align: center;
+    min-width: 2rem;
+    & > svg {
+        vertical-align: middle;
+    }
 }
 
 .select {

@@ -1,4 +1,4 @@
-import { BodyShort, HStack, Select, Table } from '@navikt/ds-react';
+import { BodyShort, Select, Table } from '@navikt/ds-react';
 import { formaterDatotekst, ukedagFraDatotekst } from '../../../../utils/date';
 import { ikonForMeldekortBehandlingDagStatus } from '../MeldekortIkoner';
 import { meldekortBehandlingDagStatusTekst } from '../../../../utils/tekstformateringUtils';
@@ -42,46 +42,46 @@ export const MeldekortUkeBehandling = ({ dager, ukeIndex }: Props) => {
             >
                 <Table.DataCell>{ukedagFraDatotekst(dato)}</Table.DataCell>
                 <Table.DataCell>{formaterDatotekst(dato)}</Table.DataCell>
+                <Table.DataCell className={styles.ikon}>
+                    {ikonForMeldekortBehandlingDagStatus[valgtStatus]}
+                </Table.DataCell>
                 <Table.DataCell>
-                    <HStack gap={'2'} align={'center'}>
-                        {ikonForMeldekortBehandlingDagStatus[valgtStatus]}
-                        {valgtStatus === MeldekortBehandlingDagStatus.Sperret ? (
-                            <BodyShort>Ikke rett på tiltakspenger</BodyShort>
-                        ) : (
-                            <Controller
-                                name={statusFieldPath}
-                                control={control}
-                                rules={{ validate: (value) => gyldigeStatusValg.includes(value) }}
-                                defaultValue={MeldekortBehandlingDagStatus.IkkeUtfylt}
-                                render={({ field: { onChange, value } }) => (
-                                    <Select
-                                        label={'Velg status for dag'}
-                                        id={valgtDato}
-                                        size={'small'}
-                                        hideLabel={true}
-                                        error={error ? 'Status må fylles ut' : ''}
-                                        value={value}
-                                        onChange={(e) => {
-                                            if (
-                                                e.target.value !==
-                                                    MeldekortBehandlingDagStatus.IkkeUtfylt &&
-                                                error
-                                            ) {
-                                                clearErrors(statusFieldPath);
-                                            }
-                                            onChange(e);
-                                        }}
-                                        className={styles.select}
-                                    >
-                                        <option value={MeldekortBehandlingDagStatus.IkkeUtfylt}>
-                                            {'- Velg status -'}
-                                        </option>
-                                        {statusOptions}
-                                    </Select>
-                                )}
-                            />
-                        )}
-                    </HStack>
+                    {valgtStatus === MeldekortBehandlingDagStatus.Sperret ? (
+                        <BodyShort>Ikke rett på tiltakspenger</BodyShort>
+                    ) : (
+                        <Controller
+                            name={statusFieldPath}
+                            control={control}
+                            rules={{ validate: (value) => gyldigeStatusValg.includes(value) }}
+                            defaultValue={MeldekortBehandlingDagStatus.IkkeUtfylt}
+                            render={({ field: { onChange, value } }) => (
+                                <Select
+                                    label={'Velg status for dag'}
+                                    id={valgtDato}
+                                    size={'small'}
+                                    hideLabel={true}
+                                    error={error ? 'Status må fylles ut' : ''}
+                                    value={value}
+                                    onChange={(e) => {
+                                        if (
+                                            e.target.value !==
+                                                MeldekortBehandlingDagStatus.IkkeUtfylt &&
+                                            error
+                                        ) {
+                                            clearErrors(statusFieldPath);
+                                        }
+                                        onChange(e);
+                                    }}
+                                    className={styles.select}
+                                >
+                                    <option value={MeldekortBehandlingDagStatus.IkkeUtfylt}>
+                                        {'- Velg status -'}
+                                    </option>
+                                    {statusOptions}
+                                </Select>
+                            )}
+                        />
+                    )}
                 </Table.DataCell>
                 <Table.DataCell className={styles.beregning}>
                     {beregningsdag && `${beregningsdag.prosent}%`}

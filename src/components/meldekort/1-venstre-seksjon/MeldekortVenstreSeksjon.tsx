@@ -19,7 +19,15 @@ import { useMeldeperiodeKjede } from '../MeldeperiodeKjedeContext';
 import OppsummeringAvAttesteringer from '../../attestering/OppsummeringAvAttestering';
 import { finnMeldeperiodeKjedeStatusTekst } from '../../../utils/tekstformateringUtils';
 import { MeldeperiodeKjedeStatus } from '../../../types/meldekort/Meldeperiode';
-import { ComponentProps } from 'react';
+import React, { ComponentProps } from 'react';
+import {
+    CheckmarkIcon,
+    CircleSlashIcon,
+    HourglassTopFilledIcon,
+    NotePencilDashIcon,
+    NotePencilIcon,
+    RobotSmileIcon,
+} from '@navikt/aksel-icons';
 
 import styles from './MeldekortVenstreSeksjon.module.css';
 
@@ -29,7 +37,7 @@ export const MeldekortVenstreSeksjon = () => {
 
     const { meldeperiodeKjede, sisteMeldeperiode, sisteMeldekortBehandling } =
         useMeldeperiodeKjede();
-    const { periode, tiltaksnavn, brukersMeldekort } = meldeperiodeKjede;
+    const { periode, tiltaksnavn, brukersMeldekort, status } = meldeperiodeKjede;
 
     return (
         <VStack gap="3" className={styles.wrapper}>
@@ -37,10 +45,11 @@ export const MeldekortVenstreSeksjon = () => {
                 {meldekortHeading(periode)}
             </Heading>
             <Tag
-                variant={meldekortStatusTagVariant[meldeperiodeKjede.status]}
+                variant={meldekortStatusTagVariant[status]}
+                icon={meldekortStatusIkon[status]}
                 className={styles.behandlingTag}
             >
-                {finnMeldeperiodeKjedeStatusTekst[meldeperiodeKjede.status]}
+                {finnMeldeperiodeKjedeStatusTekst[status]}
             </Tag>
             <MeldekortDetalj
                 header={'Meldekortperiode'}
@@ -128,4 +137,14 @@ const meldekortStatusTagVariant: Record<
     KLAR_TIL_BEHANDLING: 'info-moderate',
     KLAR_TIL_BESLUTNING: 'alt1-moderate',
     UNDER_BEHANDLING: 'alt3-moderate',
+};
+
+const meldekortStatusIkon: Record<MeldeperiodeKjedeStatus, React.ReactNode> = {
+    [MeldeperiodeKjedeStatus.IKKE_RETT_TIL_TILTAKSPENGER]: <CircleSlashIcon />,
+    [MeldeperiodeKjedeStatus.IKKE_KLAR_TIL_BEHANDLING]: <CircleSlashIcon />,
+    [MeldeperiodeKjedeStatus.KLAR_TIL_BEHANDLING]: <NotePencilDashIcon />,
+    [MeldeperiodeKjedeStatus.UNDER_BEHANDLING]: <NotePencilIcon />,
+    [MeldeperiodeKjedeStatus.KLAR_TIL_BESLUTNING]: <HourglassTopFilledIcon />,
+    [MeldeperiodeKjedeStatus.GODKJENT]: <CheckmarkIcon />,
+    [MeldeperiodeKjedeStatus.AUTOMATISK_BEHANDLET]: <RobotSmileIcon />,
 };
