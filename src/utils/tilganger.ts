@@ -82,6 +82,20 @@ export const kanBeslutteForMeldekort = (
     );
 };
 
+export const eierMeldekortBehandling = (
+    meldekortBehandling: MeldekortBehandlingProps,
+    innloggetSaksbehandler: Saksbehandler,
+): boolean => {
+    const { status, saksbehandler } = meldekortBehandling;
+
+    switch (status) {
+        case MeldekortBehandlingStatus.KLAR_TIL_UTFYLLING:
+            return innloggetSaksbehandler.navIdent === saksbehandler;
+        default:
+            return false;
+    }
+};
+
 export const skalKunneTaBehandling = (
     behandling: BehandlingForOversiktData,
     innloggetSaksbehandler: Saksbehandler,
