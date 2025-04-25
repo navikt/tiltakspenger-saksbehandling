@@ -38,7 +38,7 @@ export const BekreftelsesModal = ({
                     <Varsel
                         variant={'error'}
                         size={'small'}
-                        melding={`Feil: [${feil.status}] ${feil.info?.melding || feil.message}`}
+                        melding={`${feil.info?.melding || feil.message}`}
                         key={Date.now()}
                     />
                 )}
