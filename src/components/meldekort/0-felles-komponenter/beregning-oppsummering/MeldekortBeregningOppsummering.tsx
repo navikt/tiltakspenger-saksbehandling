@@ -8,17 +8,12 @@ import { kanBehandle } from '../../../../utils/tilganger';
 
 type Props = {
     meldekortBehandling: MeldekortBehandlingProps;
-    visUtfallVarsel?: boolean;
     className?: string;
 };
 
-export const MeldekortBeregningOppsummering = ({
-    meldekortBehandling,
-    visUtfallVarsel,
-    className,
-}: Props) => {
+export const MeldekortBeregningOppsummering = ({ meldekortBehandling, className }: Props) => {
     const { innloggetSaksbehandler } = useSaksbehandler();
-    const { finnForrigeMeldekortBehandling } = useMeldeperiodeKjede();
+    const { finnForrigeMeldekortBehandling, sisteMeldekortBehandling } = useMeldeperiodeKjede();
     const { beregning, utbetalingsstatus, navkontor, navkontorNavn, saksbehandler } =
         meldekortBehandling;
 
@@ -28,10 +23,13 @@ export const MeldekortBeregningOppsummering = ({
 
     const forrigeBeregning = finnForrigeMeldekortBehandling(meldekortBehandling.id)?.beregning;
 
-    const totalBeløp = beregning.beregningForMeldekortetsPeriode.beløp.totalt;
-    const forrigeTotalBeløp = forrigeBeregning?.beregningForMeldekortetsPeriode.beløp.totalt;
-
+    const totalBeløp = beregning.totalBeløp.totalt;
+    const forrigeTotalBeløp = forrigeBeregning?.totalBeløp.totalt;
     const totalBeløpDiff = forrigeTotalBeløp ? totalBeløp - forrigeTotalBeløp : 0;
+
+    const skalViseUtfallVarsel =
+        kanBehandle(innloggetSaksbehandler, saksbehandler) &&
+        sisteMeldekortBehandling === meldekortBehandling;
 
     return (
         <VStack gap={'5'} className={className}>
@@ -47,7 +45,7 @@ export const MeldekortBeregningOppsummering = ({
                     navkontorNavn ? `${navkontorNavn} (${navkontor})` : navkontor
                 }
             />
-            {visUtfallVarsel && kanBehandle(innloggetSaksbehandler, saksbehandler) && (
+            {skalViseUtfallVarsel && (
                 <Alert variant={totalBeløpDiff < 0 ? 'warning' : 'info'} size={'small'}>
                     {utfallTekst(totalBeløpDiff)}
                 </Alert>
