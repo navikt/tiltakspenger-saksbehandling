@@ -10,9 +10,9 @@ import {
 } from '../../../../types/meldekort/MeldekortBehandling';
 import { Controller, FieldPath, useFormContext } from 'react-hook-form';
 import { MeldekortBehandlingForm } from '../../2-hovedseksjon/behandling/utfylling/meldekortUtfyllingUtils';
+import { classNames } from '../../../../utils/classNames';
 
 import styles from './MeldekortUke.module.css';
-import { classNames } from '../../../../utils/classNames';
 
 type Props = {
     dager: MeldekortDagBeregnetProps[];
@@ -20,7 +20,8 @@ type Props = {
 };
 
 export const MeldekortUkeBehandling = ({ dager, ukeIndex }: Props) => {
-    const { control, watch, getFieldState, formState } = useFormContext<MeldekortBehandlingForm>();
+    const { control, watch, getFieldState, formState, clearErrors } =
+        useFormContext<MeldekortBehandlingForm>();
 
     return dager.map((dag, index) => {
         const { beregningsdag, dato } = dag;
@@ -60,7 +61,16 @@ export const MeldekortUkeBehandling = ({ dager, ukeIndex }: Props) => {
                                         hideLabel={true}
                                         error={error ? 'Status må fylles ut' : ''}
                                         value={value}
-                                        onChange={onChange}
+                                        onChange={(e) => {
+                                            if (
+                                                e.target.value !==
+                                                    MeldekortBehandlingDagStatus.IkkeUtfylt &&
+                                                error
+                                            ) {
+                                                clearErrors(statusFieldPath);
+                                            }
+                                            onChange(e);
+                                        }}
                                         className={styles.select}
                                     >
                                         <option value={MeldekortBehandlingDagStatus.IkkeUtfylt}>

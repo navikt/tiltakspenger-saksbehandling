@@ -46,7 +46,7 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
         },
     });
 
-    const skjemaErIkkeBeregnet = formContext.formState.isDirty;
+    const skalViseBeregningVarsel = formContext.formState.isDirty && formContext.formState.isValid;
 
     const hentMeldekortUtfylling = (): MeldekortBehandlingDTO => ({
         dager: formContext.getValues().dager,
@@ -81,14 +81,14 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
             <form>
                 <VStack gap={'5'}>
                     <MeldekortUker dager={formContext.getValues().dager} underBehandling={true} />
-                    {skjemaErIkkeBeregnet && (
+                    {skalViseBeregningVarsel && (
                         <Alert inline={true} variant={'warning'}>
-                            {'Beregningen er utdatert - trykk lagre for å oppdatere'}
+                            {'Trykk "lagre og beregn" for å oppdatere beregningene'}
                         </Alert>
                     )}
                     <MeldekortBeregningOppsummering
                         meldekortBehandling={meldekortBehandling}
-                        className={classNames(skjemaErIkkeBeregnet && styles.utdatertBeregning)}
+                        className={classNames(skalViseBeregningVarsel && styles.utdatertBeregning)}
                     />
                     <MeldekortBegrunnelse
                         defaultValue={meldekortBehandling.begrunnelse}
