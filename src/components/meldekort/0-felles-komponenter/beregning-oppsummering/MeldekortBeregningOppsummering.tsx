@@ -2,22 +2,36 @@ import { MeldekortKorrigertTilPåfølgendePerioder } from './korrigert-til-påf�
 import { MeldekortBeløp } from '../beløp/MeldekortBeløp';
 import { MeldekortBehandlingProps } from '../../../../types/meldekort/MeldekortBehandling';
 import { useMeldeperiodeKjede } from '../../MeldeperiodeKjedeContext';
-import { VStack } from '@navikt/ds-react';
+import { Alert, VStack } from '@navikt/ds-react';
+import { useSaksbehandler } from '../../../../context/saksbehandler/SaksbehandlerContext';
+import { kanBehandle } from '../../../../utils/tilganger';
 
 type Props = {
     meldekortBehandling: MeldekortBehandlingProps;
+    visUtfallVarsel?: boolean;
     className?: string;
 };
 
-export const MeldekortBeregningOppsummering = ({ meldekortBehandling, className }: Props) => {
+export const MeldekortBeregningOppsummering = ({
+    meldekortBehandling,
+    visUtfallVarsel,
+    className,
+}: Props) => {
+    const { innloggetSaksbehandler } = useSaksbehandler();
     const { finnForrigeMeldekortBehandling } = useMeldeperiodeKjede();
-    const { beregning, utbetalingsstatus, navkontor, navkontorNavn } = meldekortBehandling;
+    const { beregning, utbetalingsstatus, navkontor, navkontorNavn, saksbehandler } =
+        meldekortBehandling;
 
     if (!beregning) {
         return null;
     }
 
     const forrigeBeregning = finnForrigeMeldekortBehandling(meldekortBehandling.id)?.beregning;
+
+    const totalBeløp = beregning.beregningForMeldekortetsPeriode.beløp.totalt;
+    const forrigeTotalBeløp = forrigeBeregning?.beregningForMeldekortetsPeriode.beløp.totalt;
+
+    const totalBeløpDiff = forrigeTotalBeløp ? totalBeløp - forrigeTotalBeløp : 0;
 
     return (
         <VStack gap={'5'} className={className}>
@@ -33,6 +47,23 @@ export const MeldekortBeregningOppsummering = ({ meldekortBehandling, className 
                     navkontorNavn ? `${navkontorNavn} (${navkontor})` : navkontor
                 }
             />
+            {visUtfallVarsel && kanBehandle(innloggetSaksbehandler, saksbehandler) && (
+                <Alert variant={totalBeløpDiff < 0 ? 'warning' : 'info'} size={'small'}>
+                    {utfallTekst(totalBeløpDiff)}
+                </Alert>
+            )}
         </VStack>
     );
+};
+
+const utfallTekst = (beløpDiff: number) => {
+    if (beløpDiff < 0) {
+        return 'Vurder å sende forhåndsvarsling til bruker om mulig tilbakebetaling i tilbakekrevingsløsningen eller via brevløsningen i Gosys.';
+    }
+
+    if (beløpDiff > 0) {
+        return 'Husk å informere bruker om etterbetalingen og konsekvensene av det i Modia.';
+    }
+
+    return 'Husk å informere bruker om utfallet av korrigeringen i Modia selv om det ikke vil ha en praktisk betydning for utbetalingen.';
 };

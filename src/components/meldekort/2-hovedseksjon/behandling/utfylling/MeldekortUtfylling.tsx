@@ -46,7 +46,8 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
         },
     });
 
-    const skalViseBeregningVarsel = formContext.formState.isDirty && formContext.formState.isValid;
+    const skjemaErEndret = formContext.formState.isDirty;
+    const skalViseBeregningVarsel = skjemaErEndret && formContext.formState.isValid;
 
     const hentMeldekortUtfylling = (): MeldekortBehandlingDTO => ({
         dager: formContext.getValues().dager,
@@ -88,7 +89,8 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
                     )}
                     <MeldekortBeregningOppsummering
                         meldekortBehandling={meldekortBehandling}
-                        className={classNames(skalViseBeregningVarsel && styles.utdatertBeregning)}
+                        visUtfallVarsel={true}
+                        className={classNames(skjemaErEndret && styles.utdatertBeregning)}
                     />
                     <MeldekortBegrunnelse
                         defaultValue={meldekortBehandling.begrunnelse}
