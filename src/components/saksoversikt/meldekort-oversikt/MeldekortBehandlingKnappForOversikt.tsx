@@ -7,10 +7,12 @@ import {
     MeldekortBehandlingProps,
     MeldekortBehandlingStatus,
 } from '../../../types/meldekort/MeldekortBehandling';
-import { eierMeldekortBehandling } from '../../../utils/tilganger';
+import { eierMeldekortBehandling, skalKunneTaMeldekortBehandling } from '../../../utils/tilganger';
 import { useSaksbehandler } from '../../../context/saksbehandler/SaksbehandlerContext';
 import OvertaMeldekortBehandling from './OvertaMeldekortBehandling';
 import { SakId } from '../../../types/SakTypes';
+import router from 'next/router';
+import { useTaMeldekortBehandling } from './useTaMeldekortBehandling';
 
 type Props = {
     meldekortBehandling: MeldekortBehandlingProps;
@@ -26,9 +28,14 @@ export const MeldekortBehandlingKnappForOversikt = ({
     const { status, id } = meldekortBehandling;
 
     const { innloggetSaksbehandler } = useSaksbehandler();
+    const { taMeldekortBehandling, isMeldekortBehandlingMutating } = useTaMeldekortBehandling(
+        sakId,
+        id,
+    );
 
     switch (status) {
         case MeldekortBehandlingStatus.KLAR_TIL_UTFYLLING:
+        case MeldekortBehandlingStatus.UNDER_BESLUTNING:
             if (!eierMeldekortBehandling(meldekortBehandling, innloggetSaksbehandler)) {
                 if (
                     innloggetSaksbehandler.navIdent === meldekortBehandling.saksbehandler ||
@@ -45,7 +52,10 @@ export const MeldekortBehandlingKnappForOversikt = ({
                             meldekortBehandling.status ===
                             MeldekortBehandlingStatus.KLAR_TIL_UTFYLLING
                                 ? meldekortBehandling.saksbehandler!
-                                : 'Ukjent saksbehandler/beslutter'
+                                : meldekortBehandling.status ===
+                                    MeldekortBehandlingStatus.UNDER_BESLUTNING
+                                  ? meldekortBehandling.beslutter!
+                                  : 'Ukjent saksbehandler/beslutter'
                         }
                         meldeperiodeUrl={meldeperiodeUrl}
                     />
@@ -65,6 +75,31 @@ export const MeldekortBehandlingKnappForOversikt = ({
                     </Button>
                 </VStack>
             );
+
+        case MeldekortBehandlingStatus.KLAR_TIL_BESLUTNING: {
+            if (!skalKunneTaMeldekortBehandling(meldekortBehandling, innloggetSaksbehandler)) {
+                break;
+            }
+
+            return (
+                <Button
+                    className={style.knapp}
+                    size={'small'}
+                    variant={'primary'}
+                    loading={isMeldekortBehandlingMutating}
+                    as={'a'}
+                    href={meldeperiodeUrl}
+                    onClick={(e) => {
+                        e.preventDefault();
+                        taMeldekortBehandling().then(() => {
+                            router.push(meldeperiodeUrl);
+                        });
+                    }}
+                >
+                    {'Tildel meg'}
+                </Button>
+            );
+        }
     }
 
     return null;
