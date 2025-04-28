@@ -146,6 +146,7 @@ const meldekortStatusIkon: Record<MeldeperiodeKjedeStatus, React.ReactNode> = {
     [MeldeperiodeKjedeStatus.KLAR_TIL_BEHANDLING]: <NotePencilDashIcon />,
     [MeldeperiodeKjedeStatus.UNDER_BEHANDLING]: <NotePencilIcon />,
     [MeldeperiodeKjedeStatus.KLAR_TIL_BESLUTNING]: <HourglassTopFilledIcon />,
+    [MeldeperiodeKjedeStatus.UNDER_BESLUTNING]: <NotePencilIcon />,
     [MeldeperiodeKjedeStatus.GODKJENT]: <CheckmarkIcon />,
     [MeldeperiodeKjedeStatus.AUTOMATISK_BEHANDLET]: <RobotSmileIcon />,
 };
