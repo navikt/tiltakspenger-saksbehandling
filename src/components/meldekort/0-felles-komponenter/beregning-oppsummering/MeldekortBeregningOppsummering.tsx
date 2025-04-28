@@ -1,6 +1,9 @@
 import { MeldekortKorrigertTilPåfølgendePerioder } from './korrigert-til-påfølgende/MeldekortKorrigertTilPåfølgendePerioder';
 import { MeldekortBeløp } from '../beløp/MeldekortBeløp';
-import { MeldekortBehandlingProps } from '../../../../types/meldekort/MeldekortBehandling';
+import {
+    MeldekortBehandlingProps,
+    MeldekortBehandlingType,
+} from '../../../../types/meldekort/MeldekortBehandling';
 import { useMeldeperiodeKjede } from '../../MeldeperiodeKjedeContext';
 import { Alert, VStack } from '@navikt/ds-react';
 import { useSaksbehandler } from '../../../../context/saksbehandler/SaksbehandlerContext';
@@ -14,7 +17,7 @@ type Props = {
 export const MeldekortBeregningOppsummering = ({ meldekortBehandling, className }: Props) => {
     const { innloggetSaksbehandler } = useSaksbehandler();
     const { finnForrigeMeldekortBehandling, sisteMeldekortBehandling } = useMeldeperiodeKjede();
-    const { beregning, utbetalingsstatus, navkontor, navkontorNavn, saksbehandler } =
+    const { beregning, utbetalingsstatus, navkontor, navkontorNavn, saksbehandler, type } =
         meldekortBehandling;
 
     if (!beregning) {
@@ -29,6 +32,7 @@ export const MeldekortBeregningOppsummering = ({ meldekortBehandling, className 
 
     const skalViseUtfallVarsel =
         kanBehandle(innloggetSaksbehandler, saksbehandler) &&
+        type === MeldekortBehandlingType.KORRIGERING &&
         sisteMeldekortBehandling === meldekortBehandling;
 
     return (

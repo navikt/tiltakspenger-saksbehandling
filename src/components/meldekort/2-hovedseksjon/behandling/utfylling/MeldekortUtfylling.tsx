@@ -8,6 +8,7 @@ import {
 import { FormProvider, useForm } from 'react-hook-form';
 import { useMeldeperiodeKjede } from '../../../MeldeperiodeKjedeContext';
 import {
+    MeldekortBehandlingDagStatus,
     MeldekortBehandlingDTO,
     MeldekortBehandlingProps,
 } from '../../../../../types/meldekort/MeldekortBehandling';
@@ -47,7 +48,10 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
     });
 
     const skjemaErEndret = formContext.formState.isDirty;
-    const skalViseBeregningVarsel = skjemaErEndret && formContext.formState.isValid;
+    const skjemaErUtfylt = formContext
+        .getValues()
+        .dager.every((dag) => dag.status !== MeldekortBehandlingDagStatus.IkkeUtfylt);
+    const skalViseBeregningVarsel = skjemaErEndret && skjemaErUtfylt;
 
     const hentMeldekortUtfylling = (): MeldekortBehandlingDTO => ({
         dager: formContext.getValues().dager,
