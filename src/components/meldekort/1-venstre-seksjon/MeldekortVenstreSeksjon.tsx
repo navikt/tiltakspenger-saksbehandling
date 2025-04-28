@@ -120,4 +120,5 @@ const meldekortStatusTagVariant: Record<
     KLAR_TIL_BEHANDLING: 'info-moderate',
     KLAR_TIL_BESLUTNING: 'alt1-moderate',
     UNDER_BEHANDLING: 'alt3-moderate',
+    UNDER_BESLUTNING: 'alt3-moderate',
 };

@@ -78,7 +78,7 @@ export const kanBeslutteForMeldekort = (
     return (
         erBeslutter(innloggetSaksbehandler) &&
         innloggetSaksbehandler.navIdent !== saksbehandler &&
-        status === MeldekortBehandlingStatus.KLAR_TIL_BESLUTNING
+        status === MeldekortBehandlingStatus.UNDER_BESLUTNING
     );
 };
 
@@ -86,11 +86,13 @@ export const eierMeldekortBehandling = (
     meldekortBehandling: MeldekortBehandlingProps,
     innloggetSaksbehandler: Saksbehandler,
 ): boolean => {
-    const { status, saksbehandler } = meldekortBehandling;
+    const { status, saksbehandler, beslutter } = meldekortBehandling;
 
     switch (status) {
         case MeldekortBehandlingStatus.KLAR_TIL_UTFYLLING:
             return innloggetSaksbehandler.navIdent === saksbehandler;
+        case MeldekortBehandlingStatus.UNDER_BESLUTNING:
+            return innloggetSaksbehandler.navIdent === beslutter;
         default:
             return false;
     }
@@ -110,6 +112,23 @@ export const skalKunneTaBehandling = (
             );
         case BehandlingStatus.KLAR_TIL_BEHANDLING:
             return erSaksbehandler(innloggetSaksbehandler);
+        default:
+            return false;
+    }
+};
+
+export const skalKunneTaMeldekortBehandling = (
+    meldekortBehandling: MeldekortBehandlingProps,
+    innloggetSaksbehandler: Saksbehandler,
+) => {
+    const { status, saksbehandler } = meldekortBehandling;
+
+    switch (status) {
+        case MeldekortBehandlingStatus.KLAR_TIL_BESLUTNING:
+            return (
+                erBeslutter(innloggetSaksbehandler) &&
+                innloggetSaksbehandler.navIdent != saksbehandler
+            );
         default:
             return false;
     }

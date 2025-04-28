@@ -51,6 +51,7 @@ export const finnMeldeperiodeKjedeStatusTekst: Record<MeldeperiodeKjedeStatus, s
     [MeldeperiodeKjedeStatus.KLAR_TIL_BEHANDLING]: 'Klar til behandling',
     [MeldeperiodeKjedeStatus.UNDER_BEHANDLING]: 'Under behandling',
     [MeldeperiodeKjedeStatus.KLAR_TIL_BESLUTNING]: 'Klar til beslutning',
+    [MeldeperiodeKjedeStatus.UNDER_BESLUTNING]: 'Under beslutning',
     [MeldeperiodeKjedeStatus.GODKJENT]: 'Godkjent',
     [MeldeperiodeKjedeStatus.AUTOMATISK_BEHANDLET]: 'Automatisk behandlet',
 } as const;
