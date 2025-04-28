@@ -7,6 +7,10 @@
 .behandlingTag {
     padding: 0.5rem 1rem;
     margin-bottom: 0.5rem;
+
+    & > :first-child {
+        margin-right: 0.5rem;
+    }
 }
 
 .detalj {

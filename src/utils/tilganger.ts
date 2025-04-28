@@ -29,7 +29,7 @@ export const kanBeslutteForBehandling = (
     );
 };
 
-const kanBehandle = (
+export const kanBehandle = (
     innloggetSaksbehandler: Saksbehandler,
     saksbehandlerForBehandling?: string | null,
 ) =>

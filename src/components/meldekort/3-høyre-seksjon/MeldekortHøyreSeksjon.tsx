@@ -3,6 +3,7 @@ import { MeldekortTidligereBehandlinger } from './tidligere-behandlinger/Meldeko
 import { BrukersMeldekortVisning } from './brukers-meldekort/BrukersMeldekort';
 import { useMeldeperiodeKjede } from '../MeldeperiodeKjedeContext';
 import { classNames } from '../../../utils/classNames';
+import { DocPencilIcon, PersonPencilIcon } from '@navikt/aksel-icons';
 
 import style from './MeldekortHøyreSeksjon.module.css';
 
@@ -33,11 +34,13 @@ export const MeldekortHøyreSeksjon = () => {
                 <Tabs.Tab
                     value={'tidligereBehandlinger'}
                     label={`Tidligere behandlinger (${antallTidligereBehandlinger})`}
+                    icon={<DocPencilIcon />}
                     className={classNames(antallTidligereBehandlinger === 0 && style.tabDisabled)}
                 />
                 <Tabs.Tab
                     value={'brukersMeldekort'}
                     label={`Innmeldinger fra bruker (${antallBrukersMeldekort})`}
+                    icon={<PersonPencilIcon />}
                     className={classNames(antallBrukersMeldekort === 0 && style.tabDisabled)}
                 />
             </Tabs.List>

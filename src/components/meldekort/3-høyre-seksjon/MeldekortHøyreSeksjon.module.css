@@ -16,4 +16,10 @@
 .tabs {
     background-color: var(--a-bg-default);
     border-bottom: solid 1px var(--a-gray-300);
+
+    & svg {
+        margin-right: 0.25rem;
+        width: 1.5rem;
+        height: 1.5rem;
+    }
 }
