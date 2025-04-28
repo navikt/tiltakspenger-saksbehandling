@@ -45,12 +45,15 @@ const brukersStatusTilBehandlingsStatus: Record<
     BrukersMeldekortDagStatus,
     MeldekortBehandlingDagStatus
 > = {
-    [BrukersMeldekortDagStatus.DELTATT]: MeldekortBehandlingDagStatus.DeltattUtenLønnITiltaket,
+    [BrukersMeldekortDagStatus.DELTATT_UTEN_LØNN_I_TILTAKET]:
+        MeldekortBehandlingDagStatus.DeltattUtenLønnITiltaket,
+    [BrukersMeldekortDagStatus.DELTATT_MED_LØNN_I_TILTAKET]:
+        MeldekortBehandlingDagStatus.DeltattMedLønnITiltaket,
     [BrukersMeldekortDagStatus.FRAVÆR_SYK]: MeldekortBehandlingDagStatus.FraværSyk,
     [BrukersMeldekortDagStatus.FRAVÆR_SYKT_BARN]: MeldekortBehandlingDagStatus.FraværSyktBarn,
-    [BrukersMeldekortDagStatus.FRAVÆR_ANNET]:
+    [BrukersMeldekortDagStatus.FRAVÆR_VELFERD_GODKJENT_AV_NAV]:
         MeldekortBehandlingDagStatus.FraværVelferdGodkjentAvNav,
-    [BrukersMeldekortDagStatus.IKKE_DELTATT]:
+    [BrukersMeldekortDagStatus.FRAVÆR_VELFERD_IKKE_GODKJENT_AV_NAV]:
         MeldekortBehandlingDagStatus.FraværVelferdIkkeGodkjentAvNav,
     [BrukersMeldekortDagStatus.IKKE_REGISTRERT]: MeldekortBehandlingDagStatus.IkkeDeltatt,
 } as const;

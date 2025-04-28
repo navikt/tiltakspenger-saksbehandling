@@ -4,13 +4,13 @@
 export type BrukersMeldekortId = `meldekort_bruker_${string}`;
 
 export enum BrukersMeldekortDagStatus {
-    DELTATT = 'DELTATT',
+    DELTATT_UTEN_LØNN_I_TILTAKET = 'DELTATT_UTEN_LØNN_I_TILTAKET',
+    // DELTATT_MED_LØNN_I_TILTAKET er ikke i bruk ennå
+    DELTATT_MED_LØNN_I_TILTAKET = 'DELTATT_MED_LØNN_I_TILTAKET',
     FRAVÆR_SYK = 'FRAVÆR_SYK',
     FRAVÆR_SYKT_BARN = 'FRAVÆR_SYKT_BARN',
-    FRAVÆR_ANNET = 'FRAVÆR_ANNET',
-    // Denne er forvirrende, betyr her "ikke godkjent fravær", men i meldekort-behandlingen betyr den "ikke tiltak denne dagen"
-    // Bør renames ett av stedene
-    IKKE_DELTATT = 'IKKE_DELTATT',
+    FRAVÆR_VELFERD_GODKJENT_AV_NAV = 'FRAVÆR_VELFERD_GODKJENT_AV_NAV',
+    FRAVÆR_VELFERD_IKKE_GODKJENT_AV_NAV = 'FRAVÆR_VELFERD_IKKE_GODKJENT_AV_NAV',
     IKKE_REGISTRERT = 'IKKE_REGISTRERT',
 }
 

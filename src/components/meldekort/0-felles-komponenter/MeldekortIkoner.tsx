@@ -37,12 +37,13 @@ export const ikonForBrukersMeldekortDagStatus: Record<
     BrukersMeldekortDagStatus,
     React.JSX.Element
 > = {
-    [BrukersMeldekortDagStatus.DELTATT]: Ikoner.checkmarkCircleFill,
-    [BrukersMeldekortDagStatus.FRAVÆR_ANNET]: Ikoner.minusCircleFill,
+    [BrukersMeldekortDagStatus.DELTATT_UTEN_LØNN_I_TILTAKET]: Ikoner.checkmarkCircleFill,
+    [BrukersMeldekortDagStatus.DELTATT_MED_LØNN_I_TILTAKET]: Ikoner.minusCircleFill,
+    [BrukersMeldekortDagStatus.FRAVÆR_VELFERD_GODKJENT_AV_NAV]: Ikoner.minusCircleFill,
     [BrukersMeldekortDagStatus.FRAVÆR_SYK]: Ikoner.firstAidKitFill,
     [BrukersMeldekortDagStatus.FRAVÆR_SYKT_BARN]: Ikoner.firstAidKitFill,
     [BrukersMeldekortDagStatus.IKKE_REGISTRERT]: Ikoner.notePencil,
-    [BrukersMeldekortDagStatus.IKKE_DELTATT]: Ikoner.circleSlash,
+    [BrukersMeldekortDagStatus.FRAVÆR_VELFERD_IKKE_GODKJENT_AV_NAV]: Ikoner.circleSlash,
 } as const;
 
 export const ikonForMeldekortBehandlingDagStatus: Record<

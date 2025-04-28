@@ -24,11 +24,12 @@ export const finnBehandlingStatusTekst = (status: BehandlingStatus, underkjent: 
 };
 
 export const brukersMeldekortDagStatusTekst: Record<BrukersMeldekortDagStatus, string> = {
-    [BrukersMeldekortDagStatus.DELTATT]: 'Deltatt i tiltaket',
+    [BrukersMeldekortDagStatus.DELTATT_UTEN_LØNN_I_TILTAKET]: 'Deltatt i tiltaket',
+    [BrukersMeldekortDagStatus.DELTATT_MED_LØNN_I_TILTAKET]: 'Deltatt med lønn i tiltaket',
     [BrukersMeldekortDagStatus.FRAVÆR_SYK]: 'Fravær - Syk',
     [BrukersMeldekortDagStatus.FRAVÆR_SYKT_BARN]: 'Fravær - Sykt barn',
-    [BrukersMeldekortDagStatus.FRAVÆR_ANNET]: 'Godkjent fravær - Velferd',
-    [BrukersMeldekortDagStatus.IKKE_DELTATT]: 'Ikke godkjent fravær',
+    [BrukersMeldekortDagStatus.FRAVÆR_VELFERD_GODKJENT_AV_NAV]: 'Godkjent fravær - Velferd',
+    [BrukersMeldekortDagStatus.FRAVÆR_VELFERD_IKKE_GODKJENT_AV_NAV]: 'Ikke godkjent fravær',
     [BrukersMeldekortDagStatus.IKKE_REGISTRERT]: 'Ikke utfylt',
 } as const;
 
