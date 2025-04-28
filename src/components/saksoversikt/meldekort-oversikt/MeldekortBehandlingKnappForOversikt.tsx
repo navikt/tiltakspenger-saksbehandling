@@ -44,7 +44,6 @@ export const MeldekortBehandlingKnappForOversikt = ({
                     return null;
                 }
 
-                console.log(meldekortBehandling);
                 return (
                     <OvertaMeldekortBehandling
                         sakId={sakId}
