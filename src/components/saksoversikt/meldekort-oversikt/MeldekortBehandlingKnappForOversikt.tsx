@@ -7,7 +7,11 @@ import {
     MeldekortBehandlingProps,
     MeldekortBehandlingStatus,
 } from '../../../types/meldekort/MeldekortBehandling';
-import { eierMeldekortBehandling, skalKunneTaMeldekortBehandling } from '../../../utils/tilganger';
+import {
+    eierMeldekortBehandling,
+    skalKunneOvertaMeldekortBehandling,
+    skalKunneTaMeldekortBehandling,
+} from '../../../utils/tilganger';
 import { useSaksbehandler } from '../../../context/saksbehandler/SaksbehandlerContext';
 import OvertaMeldekortBehandling from './OvertaMeldekortBehandling';
 import { SakId } from '../../../types/SakTypes';
@@ -40,6 +44,12 @@ export const MeldekortBehandlingKnappForOversikt = ({
                 if (
                     innloggetSaksbehandler.navIdent === meldekortBehandling.saksbehandler ||
                     innloggetSaksbehandler.navIdent === meldekortBehandling.beslutter
+                ) {
+                    return null;
+                }
+
+                if (
+                    !skalKunneOvertaMeldekortBehandling(meldekortBehandling, innloggetSaksbehandler)
                 ) {
                     return null;
                 }

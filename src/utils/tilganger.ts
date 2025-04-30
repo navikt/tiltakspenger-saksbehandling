@@ -117,6 +117,26 @@ export const skalKunneTaBehandling = (
     }
 };
 
+export const skalKunneOvertaBehandling = (
+    behandling: BehandlingForOversiktData,
+    innloggetSaksbehandler: Saksbehandler,
+) => {
+    const { status, saksbehandler, beslutter } = behandling;
+
+    switch (status) {
+        case BehandlingStatus.UNDER_BESLUTNING:
+            return (
+                beslutter &&
+                erBeslutter(innloggetSaksbehandler) &&
+                innloggetSaksbehandler.navIdent != saksbehandler
+            );
+        case BehandlingStatus.UNDER_BEHANDLING:
+            return saksbehandler && erSaksbehandler(innloggetSaksbehandler);
+        default:
+            return false;
+    }
+};
+
 export const skalKunneTaMeldekortBehandling = (
     meldekortBehandling: MeldekortBehandlingProps,
     innloggetSaksbehandler: Saksbehandler,
@@ -126,6 +146,24 @@ export const skalKunneTaMeldekortBehandling = (
     switch (status) {
         case MeldekortBehandlingStatus.KLAR_TIL_BESLUTNING:
             return (
+                erBeslutter(innloggetSaksbehandler) &&
+                innloggetSaksbehandler.navIdent != saksbehandler
+            );
+        default:
+            return false;
+    }
+};
+
+export const skalKunneOvertaMeldekortBehandling = (
+    meldekortBehandling: MeldekortBehandlingProps,
+    innloggetSaksbehandler: Saksbehandler,
+) => {
+    const { status, saksbehandler, beslutter } = meldekortBehandling;
+
+    switch (status) {
+        case MeldekortBehandlingStatus.UNDER_BESLUTNING:
+            return (
+                beslutter &&
                 erBeslutter(innloggetSaksbehandler) &&
                 innloggetSaksbehandler.navIdent != saksbehandler
             );
