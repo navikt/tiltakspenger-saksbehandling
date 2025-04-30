@@ -55,7 +55,7 @@ export type MeldekortBehandlingProps = {
     id: MeldekortBehandlingId;
     meldeperiodeId: MeldeperiodeId;
     brukersMeldekortId?: BrukersMeldekortId;
-    saksbehandler: string;
+    saksbehandler?: string;
     beslutter?: string;
     opprettet: string;
     godkjentTidspunkt?: string;
