@@ -8,7 +8,11 @@ import {
 import { useTaBehandling } from './useTaBehandling';
 import AvsluttBehandling from '../saksoversikt/avsluttBehandling/AvsluttBehandling';
 import { useSaksbehandler } from '../../context/saksbehandler/SaksbehandlerContext';
-import { eierBehandling, skalKunneTaBehandling } from '../../utils/tilganger';
+import {
+    eierBehandling,
+    skalKunneOvertaBehandling,
+    skalKunneTaBehandling,
+} from '../../utils/tilganger';
 import Link from 'next/link';
 import router from 'next/router';
 
@@ -41,6 +45,10 @@ export const BehandlingKnappForOversikt = ({ behandling, medAvsluttBehandling }:
                     innloggetSaksbehandler.navIdent === behandling.saksbehandler ||
                     innloggetSaksbehandler.navIdent === behandling.beslutter
                 ) {
+                    return null;
+                }
+
+                if (!skalKunneOvertaBehandling(behandling, innloggetSaksbehandler)) {
                     return null;
                 }
 
