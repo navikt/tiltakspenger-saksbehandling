@@ -115,6 +115,7 @@ export const MeldekortOversikt = ({ meldeperiodeKjeder, saksnummer, sakId }: Pro
                                             meldekortBehandling={sisteMeldekortBehandling}
                                             sakId={sakId}
                                             meldeperiodeUrl={meldeperiodeUrl(saksnummer, periode)}
+                                            saksnummer={saksnummer}
                                         />
                                     )}
                                 </Table.DataCell>

@@ -144,6 +144,8 @@ export const skalKunneTaMeldekortBehandling = (
     const { status, saksbehandler } = meldekortBehandling;
 
     switch (status) {
+        case MeldekortBehandlingStatus.KLAR_TIL_UTFYLLING:
+            return erSaksbehandler(innloggetSaksbehandler);
         case MeldekortBehandlingStatus.KLAR_TIL_BESLUTNING:
             return (
                 erBeslutter(innloggetSaksbehandler) &&
