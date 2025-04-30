@@ -14,6 +14,7 @@ import router from 'next/router';
 
 import style from './BehandlingKnapper.module.css';
 import OvertaBehandling from './OvertaBehandling';
+import { useLeggTilbakeBehandling } from './useLeggTilbakeBehandling';
 
 type Props = {
     behandling: BehandlingForOversiktData;
@@ -25,6 +26,10 @@ export const BehandlingKnappForOversikt = ({ behandling, medAvsluttBehandling }:
 
     const { innloggetSaksbehandler } = useSaksbehandler();
     const { taBehandling, isBehandlingMutating } = useTaBehandling(sakId, id);
+    const { leggTilbakeBehandling, isLeggTilbakeBehandlingMutating } = useLeggTilbakeBehandling(
+        sakId,
+        id,
+    );
 
     const behandlingLenke = `/behandling/${id}`;
 
@@ -59,11 +64,26 @@ export const BehandlingKnappForOversikt = ({ behandling, medAvsluttBehandling }:
                     <Button
                         className={style.knapp}
                         size="small"
-                        variant="secondary"
+                        variant="primary"
                         as={Link}
                         href={behandlingLenke}
                     >
                         Fortsett
+                    </Button>
+                    <Button
+                        className={style.knapp}
+                        size={'small'}
+                        variant={'secondary'}
+                        loading={isLeggTilbakeBehandlingMutating}
+                        as={'a'}
+                        onClick={(e) => {
+                            e.preventDefault();
+                            leggTilbakeBehandling().then(() => {
+                                router.push(`/sak/${behandling.saksnummer}`);
+                            });
+                        }}
+                    >
+                        {'Legg tilbake'}
                     </Button>
                     {medAvsluttBehandling && status === BehandlingStatus.UNDER_BEHANDLING && (
                         <AvsluttBehandling
