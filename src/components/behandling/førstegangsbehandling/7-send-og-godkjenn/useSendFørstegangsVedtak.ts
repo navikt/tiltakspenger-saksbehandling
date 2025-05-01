@@ -25,7 +25,7 @@ const tilBeslutningDTO = (vedtak: FørstegangsVedtakContext): VedtakTilBeslutnin
     return {
         begrunnelseVilkårsvurdering: vedtak.getBegrunnelse(),
         fritekstTilVedtaksbrev: vedtak.getBrevtekst(),
-        innvilgelsesperiode: vedtak.innvilgelsesPeriode,
+        behandlingsperiode: vedtak.behandlingsperiode,
         barnetillegg: vedtak.harBarnetillegg
             ? {
                   begrunnelse: vedtak.getBarnetilleggBegrunnelse(),
@@ -34,5 +34,7 @@ const tilBeslutningDTO = (vedtak: FørstegangsVedtakContext): VedtakTilBeslutnin
             : null,
         valgteTiltaksdeltakelser: vedtak.valgteTiltaksdeltakelser,
         antallDagerPerMeldeperiode: vedtak.antallDagerPerMeldeperiode,
+        avslagsgrunner: vedtak.avslagsgrunner,
+        utfall: vedtak.utfall,
     };
 };

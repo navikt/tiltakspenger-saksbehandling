@@ -11,6 +11,7 @@ import { FørstegangsVedtakTiltak } from './4-tiltak/FørstegangsVedtakTiltak';
 
 import style from './FørstegangsVedtak.module.css';
 import { FørstegangsVedtakDagerPerMeldeperiode } from './3-dager-per-meldeperiode/FørstegangsVedtakDagerPerMeldeperiode';
+import FørstegangsvedtakAvslagsgrunner from './4 - avslagsgrunner/FørstegangsvedtakAvslagsgrunner';
 
 export const FørstegangsVedtak = () => {
     return (
@@ -23,6 +24,7 @@ export const FørstegangsVedtak = () => {
             <FørstegangsVedtakDagerPerMeldeperiode />
             <Separator />
             <FørstegangsVedtakTiltak />
+            <FørstegangsvedtakAvslagsgrunner />
             <FørstegangsVedtakBarnetillegg />
             <FørstegangsVedtakBrev />
             <FørstegangsVedtakSend />

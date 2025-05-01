@@ -1,7 +1,6 @@
 import { Radio, RadioGroup } from '@navikt/ds-react';
 import { Datovelger } from '../../../datovelger/Datovelger';
 import { classNames } from '../../../../utils/classNames';
-import { VedtakResultat } from '../../../../types/VedtakTyper';
 import { dateTilISOTekst } from '../../../../utils/date';
 import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
 import {
@@ -12,11 +11,11 @@ import { VedtakSeksjon } from '../../vedtak-layout/seksjon/VedtakSeksjon';
 import { useFørstegangsbehandling } from '../../BehandlingContext';
 
 import style from './FørstegangsVedtakResultat.module.css';
+import { Behandlingsutfall } from '../../../../types/BehandlingTypes';
 
 export const FørstegangsVedtakResultat = () => {
     const { rolleForBehandling } = useFørstegangsbehandling();
-    const { valgteTiltaksdeltakelser, resultat, innvilgelsesPeriode } =
-        useFørstegangsVedtakSkjema();
+    const { valgteTiltaksdeltakelser, utfall, behandlingsperiode } = useFørstegangsVedtakSkjema();
 
     const dispatch = useFørstegangsVedtakSkjemaDispatch();
 
@@ -29,36 +28,33 @@ export const FørstegangsVedtakResultat = () => {
                     legend={'Resultat'}
                     size={'small'}
                     className={style.radioGroup}
-                    defaultValue={resultat}
+                    defaultValue={utfall}
                     readOnly={erIkkeSaksbehandler}
-                    onChange={(valgtResultat: VedtakResultat) => {
+                    onChange={(valgtUtfall: Behandlingsutfall) => {
                         dispatch({
                             type: 'setResultat',
-                            payload: { resultat: { resultat: valgtResultat, innvilgelsesPeriode } },
+                            payload: {
+                                utfall: valgtUtfall,
+                            },
                         });
                     }}
                 >
-                    <Radio value={'innvilget' satisfies VedtakResultat}>{'Innvilgelse'}</Radio>
-                    <Radio value={'avslag' satisfies VedtakResultat} disabled={true}>
-                        {'Avslag (støttes ikke ennå)'}
-                    </Radio>
+                    <Radio value={Behandlingsutfall.INNVILGELSE}>Innvilgelse</Radio>
+                    <Radio value={Behandlingsutfall.AVSLAG}>Avslag</Radio>
                 </RadioGroup>
                 <div
-                    className={classNames(
-                        style.datovelgere,
-                        resultat !== 'innvilget' && style.skjult,
-                    )}
+                    className={classNames(style.datovelgere, utfall === undefined && style.skjult)}
                 >
                     <Datovelger
-                        label={'Innvilges f.o.m'}
+                        label={`${utfall === Behandlingsutfall.INNVILGELSE ? 'Innvilges' : 'Avslag'} f.o.m`}
                         size={'small'}
-                        defaultSelected={innvilgelsesPeriode.fraOgMed}
+                        defaultSelected={behandlingsperiode.fraOgMed}
                         readOnly={erIkkeSaksbehandler}
                         onDateChange={(valgtDato) => {
                             if (valgtDato) {
                                 const isoDate = dateTilISOTekst(valgtDato);
                                 dispatch({
-                                    type: 'oppdaterInnvilgetPeriode',
+                                    type: 'oppdaterBehandlingsperiode',
                                     payload: { periode: { fraOgMed: isoDate } },
                                 });
                                 /**
@@ -77,15 +73,15 @@ export const FørstegangsVedtakResultat = () => {
                         }}
                     />
                     <Datovelger
-                        label={'Innvilges t.o.m'}
+                        label={`${utfall === Behandlingsutfall.INNVILGELSE ? 'Innvilges' : 'Avslag'} t.o.m`}
                         size={'small'}
-                        defaultSelected={innvilgelsesPeriode.tilOgMed}
+                        defaultSelected={behandlingsperiode.tilOgMed}
                         readOnly={erIkkeSaksbehandler}
                         onDateChange={(valgtDato) => {
                             if (valgtDato) {
                                 const isoDate = dateTilISOTekst(valgtDato);
                                 dispatch({
-                                    type: 'oppdaterInnvilgetPeriode',
+                                    type: 'oppdaterBehandlingsperiode',
                                     payload: { periode: { tilOgMed: isoDate } },
                                 });
                                 /**

@@ -16,7 +16,8 @@ const BATCH_MED_BARN = 10;
 
 export const BarnetilleggPerioder = () => {
     const { rolleForBehandling, behandling } = useFørstegangsbehandling();
-    const { barnetilleggPerioder, innvilgelsesPeriode } = useFørstegangsVedtakSkjema();
+    const { barnetilleggPerioder, behandlingsperiode: innvilgelsesPeriode } =
+        useFørstegangsVedtakSkjema();
     const dispatch = useFørstegangsVedtakSkjemaDispatch();
 
     const antallBarnFraSøknad = behandling.søknad.barnetillegg.length;
@@ -80,7 +81,7 @@ type PeriodeProps = {
 
 const BarnetilleggPeriode = ({ periode, index, rolle }: PeriodeProps) => {
     const dispatch = useFørstegangsVedtakSkjemaDispatch();
-    const { innvilgelsesPeriode } = useFørstegangsVedtakSkjema();
+    const { behandlingsperiode: innvilgelsesPeriode } = useFørstegangsVedtakSkjema();
 
     // Støtter uendelig mange barn!
     const maksAntall = (Math.floor(periode.antallBarn / BATCH_MED_BARN) + 1) * BATCH_MED_BARN;

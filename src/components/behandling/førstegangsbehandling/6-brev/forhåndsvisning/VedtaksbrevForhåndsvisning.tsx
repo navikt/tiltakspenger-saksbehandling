@@ -26,7 +26,7 @@ export const VedtaksbrevForhåndsvisning = () => {
                     //Backend vil ignorere perioden dersom vedtaket er avslag, og hvis tilstanden er tilBeslutter (senere enn under behandling)
                     return hentForhåndsvisning({
                         fritekst: vedtak.getBrevtekst(),
-                        virkningsperiode: vedtak.innvilgelsesPeriode,
+                        virkningsperiode: vedtak.behandlingsperiode,
                         barnetillegg: vedtak.harBarnetillegg ? vedtak.barnetilleggPerioder : [],
                     }).then((blob) => {
                         if (blob) {
