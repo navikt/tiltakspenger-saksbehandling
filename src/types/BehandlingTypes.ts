@@ -10,7 +10,7 @@ export type BehandlingId = `beh_${string}`;
 type BehandlingDataCommon = {
     id: BehandlingId;
     status: BehandlingStatus;
-    utfall: Behandlingsutfall;
+    utfall: Nullable<Behandlingsutfall>;
     sakId: SakId;
     saksnummer: string;
     saksbehandler: string | null;
@@ -24,7 +24,7 @@ type BehandlingDataCommon = {
     iverksattTidspunkt: Nullable<string>;
     fritekstTilVedtaksbrev: string | null;
     valgtHjemmelHarIkkeRettighet: string[] | null;
-    avslagsgrunner: string[];
+    avslagsgrunner: Avslagsgrunn[];
 };
 
 export type FørstegangsbehandlingData = BehandlingDataCommon & {
@@ -120,6 +120,7 @@ export enum Avslagsgrunn {
     LønnFraTiltaksarrangør = 'LønnFraTiltaksarrangør',
     LønnFraAndre = 'LønnFraAndre',
     Institusjonsopphold = 'Institusjonsopphold',
+    FremmetForSent = 'FremmetForSent',
 }
 
 export enum Behandlingsutfall {

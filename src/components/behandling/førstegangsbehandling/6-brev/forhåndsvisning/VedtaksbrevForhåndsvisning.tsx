@@ -5,6 +5,7 @@ import { useFørstegangsVedtakSkjema } from '../../context/FørstegangsVedtakCon
 import { useFørstegangsbehandling } from '../../../BehandlingContext';
 
 import style from './VedtaksbrevForhåndsvisning.module.css';
+import { Behandlingsutfall } from '../../../../../types/BehandlingTypes';
 
 export const VedtaksbrevForhåndsvisning = () => {
     const { behandling } = useFørstegangsbehandling();
@@ -28,6 +29,10 @@ export const VedtaksbrevForhåndsvisning = () => {
                         fritekst: vedtak.getBrevtekst(),
                         virkningsperiode: vedtak.behandlingsperiode,
                         barnetillegg: vedtak.harBarnetillegg ? vedtak.barnetilleggPerioder : [],
+                        // vi rendrer ikke komponenten hvis utfallet ikke eksiterer i parenten
+                        utfall: vedtak.utfall!,
+                        avslagsgrunner:
+                            vedtak.utfall === Behandlingsutfall.AVSLAG ? vedtak.avslagsgrunner : [],
                     }).then((blob) => {
                         if (blob) {
                             window.open(URL.createObjectURL(blob));

@@ -19,6 +19,7 @@ export const AvslagsgrunnTekst = {
     [Avslagsgrunn.LønnFraTiltaksarrangør]: 'Lønn fra tiltaksarrangør',
     [Avslagsgrunn.LønnFraAndre]: 'Lønn fra andre',
     [Avslagsgrunn.Institusjonsopphold]: 'Institusjonsopphold',
+    [Avslagsgrunn.FremmetForSent]: 'Fremmet for sent',
 };
 
 const FørstegangsvedtakAvslagsgrunner = () => {

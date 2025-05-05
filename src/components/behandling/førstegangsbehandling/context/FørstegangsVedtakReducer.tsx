@@ -8,6 +8,7 @@ import { forrigeDag, leggTilDager, nesteDag } from '../../../../utils/date';
 import { periodiserBarnetillegg } from '../../../../utils/barnetillegg';
 import { SøknadForBehandlingProps } from '../../../../types/SøknadTypes';
 import { Avslagsgrunn, Behandlingsutfall } from '../../../../types/BehandlingTypes';
+import { Nullable } from '../../../../types/common';
 
 export type FørstegangsVedtakSkjemaActions =
     | {
@@ -68,13 +69,13 @@ export type FørstegangsVedtakSkjemaActions =
       };
 
 export type FørstegangsVedtakSkjemaState = {
-    utfall: Behandlingsutfall;
+    utfall: Nullable<Behandlingsutfall>;
     behandlingsperiode: Periode;
     harBarnetillegg: boolean;
     barnetilleggPerioder: VedtakBarnetilleggPeriode[];
     valgteTiltaksdeltakelser: VedtakTiltaksdeltakelsePeriode[];
     antallDagerPerMeldeperiode: number;
-    avslagsgrunner: string[];
+    avslagsgrunner: Avslagsgrunn[];
 };
 
 export const førstegangsVedtakReducer: Reducer<

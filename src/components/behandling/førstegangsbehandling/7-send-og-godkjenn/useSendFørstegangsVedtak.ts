@@ -1,5 +1,5 @@
 import { VedtakTilBeslutningDTO } from '../../../../types/VedtakTyper';
-import { BehandlingData } from '../../../../types/BehandlingTypes';
+import { BehandlingData, Behandlingsutfall } from '../../../../types/BehandlingTypes';
 import { useFetchJsonFraApi } from '../../../../utils/fetch/useFetchFraApi';
 import { FørstegangsVedtakContext } from '../context/FørstegangsVedtakContext';
 
@@ -34,7 +34,8 @@ const tilBeslutningDTO = (vedtak: FørstegangsVedtakContext): VedtakTilBeslutnin
             : null,
         valgteTiltaksdeltakelser: vedtak.valgteTiltaksdeltakelser,
         antallDagerPerMeldeperiode: vedtak.antallDagerPerMeldeperiode,
-        avslagsgrunner: vedtak.avslagsgrunner,
-        utfall: vedtak.utfall,
+        avslagsgrunner: vedtak.utfall === Behandlingsutfall.AVSLAG ? vedtak.avslagsgrunner : [],
+        //Validering skal fange at utfallet ikke er null
+        utfall: vedtak.utfall!,
     };
 };
