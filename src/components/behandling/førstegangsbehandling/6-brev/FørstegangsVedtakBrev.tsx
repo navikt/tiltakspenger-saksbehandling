@@ -39,6 +39,7 @@ export const FørstegangsVedtakBrev = () => {
                             lagringBody={(tekst) =>
                                 ({ fritekst: tekst }) satisfies VedtakBrevFritekstLagringDTO
                             }
+                            minRows={10}
                             ref={brevtekstRef}
                         />
                         <VedtaksbrevForhåndsvisning />

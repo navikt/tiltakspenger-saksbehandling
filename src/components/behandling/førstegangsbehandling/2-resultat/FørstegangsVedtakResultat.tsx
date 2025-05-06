@@ -42,9 +42,7 @@ export const FørstegangsVedtakResultat = () => {
                     <Radio value={Behandlingsutfall.INNVILGELSE}>Innvilgelse</Radio>
                     <Radio value={Behandlingsutfall.AVSLAG}>Avslag</Radio>
                 </RadioGroup>
-                <div
-                    className={classNames(style.datovelgere, utfall === undefined && style.skjult)}
-                >
+                <div className={classNames(style.datovelgere, !utfall && style.skjult)}>
                     <Datovelger
                         label={`${utfall === Behandlingsutfall.INNVILGELSE ? 'Innvilges' : 'Avslag'} f.o.m`}
                         size={'small'}
