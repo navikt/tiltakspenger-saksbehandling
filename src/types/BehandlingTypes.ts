@@ -30,6 +30,7 @@ export type FørstegangsbehandlingData = BehandlingDataCommon & {
     søknad: SøknadForBehandlingProps;
     barnetillegg: Barnetillegg | null;
     valgteTiltaksdeltakelser: TiltaksdeltakelsePeriode[] | null;
+    antallDagerPerMeldeperiode: number | null;
 };
 
 export type RevurderingData = BehandlingDataCommon & {

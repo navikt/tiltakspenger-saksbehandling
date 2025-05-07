@@ -59,6 +59,7 @@ const initieltVedtakSkjema = (
                 periode: behandling.virkningsperiode ?? tiltaksperiode,
             },
         ],
+        antallDagerPerMeldeperiode: behandling.antallDagerPerMeldeperiode || 10,
     };
 };
 

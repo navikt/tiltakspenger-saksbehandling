@@ -17,6 +17,10 @@ export type FørstegangsVedtakSkjemaActions =
           payload: { resultat: VedtakInnvilgetResultat | VedtakAvslagResultat };
       }
     | {
+          type: 'oppdaterDagerPerMeldeperiode';
+          payload: { antallDagerPerMeldeperiode: number };
+      }
+    | {
           type: 'setHarSøktBarnetillegg';
           payload: { harSøkt: boolean };
       }
@@ -67,6 +71,7 @@ export type FørstegangsVedtakSkjemaState = {
     harBarnetillegg: boolean;
     barnetilleggPerioder: VedtakBarnetilleggPeriode[];
     valgteTiltaksdeltakelser: VedtakTiltaksdeltakelsePeriode[];
+    antallDagerPerMeldeperiode: number;
 };
 
 export const førstegangsVedtakReducer: Reducer<
@@ -83,6 +88,8 @@ export const førstegangsVedtakReducer: Reducer<
             };
         case 'setResultat':
             return { ...state, ...payload.resultat };
+        case 'oppdaterDagerPerMeldeperiode':
+            return { ...state, antallDagerPerMeldeperiode: payload.antallDagerPerMeldeperiode };
         case 'setHarSøktBarnetillegg':
             return { ...state, harBarnetillegg: payload.harSøkt };
         case 'addBarnetilleggPeriode':

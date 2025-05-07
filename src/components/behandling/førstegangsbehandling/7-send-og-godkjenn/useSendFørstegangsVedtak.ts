@@ -33,5 +33,6 @@ const tilBeslutningDTO = (vedtak: FørstegangsVedtakContext): VedtakTilBeslutnin
               }
             : null,
         valgteTiltaksdeltakelser: vedtak.valgteTiltaksdeltakelser,
+        antallDagerPerMeldeperiode: vedtak.antallDagerPerMeldeperiode,
     };
 };
