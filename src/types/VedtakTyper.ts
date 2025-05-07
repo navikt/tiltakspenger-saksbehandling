@@ -17,6 +17,7 @@ export type VedtakTilBeslutningDTO = {
     innvilgelsesperiode: Periode;
     barnetillegg: VedtakBarnetilleggDTO | null;
     valgteTiltaksdeltakelser: VedtakTiltaksdeltakelsePeriode[];
+    antallDagerPerMeldeperiode: number;
 };
 
 export type VedtakBarnetilleggPeriode = {

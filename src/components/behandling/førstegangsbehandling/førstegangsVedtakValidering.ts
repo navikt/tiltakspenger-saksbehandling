@@ -19,6 +19,7 @@ export const førstegangsVedtakValidering = (
         barnetilleggPerioder,
         harBarnetillegg,
         valgteTiltaksdeltakelser,
+        antallDagerPerMeldeperiode,
     } = vedtak;
 
     const tiltaksperiode = hentTiltaksperiode(behandling);
@@ -129,6 +130,13 @@ export const førstegangsVedtakValidering = (
                 }
             });
         }
+    }
+
+    if (
+        antallDagerPerMeldeperiode &&
+        (antallDagerPerMeldeperiode < 1 || antallDagerPerMeldeperiode > 14)
+    ) {
+        errors.push('Antall dager per meldeperiode må være mellom 1 og 14');
     }
 
     return {
