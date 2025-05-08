@@ -4,6 +4,7 @@ type TogglesRecord = Record<`${string}Toggle`, boolean>;
 
 const featureTogglesDefaultState = {
     meldekortKorrigeringToggle: false,
+    avslagToggle: false,
 } as const satisfies TogglesRecord;
 
 type FeatureTogglesState = Record<keyof typeof featureTogglesDefaultState, boolean>;
@@ -22,6 +23,7 @@ export const FeatureTogglesProvider = ({ deployEnv, children }: Props) => {
         <Context.Provider
             value={{
                 meldekortKorrigeringToggle: !isProd,
+                avslagToggle: isProd,
             }}
         >
             {children}
