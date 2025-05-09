@@ -72,4 +72,5 @@ export const meldekortUtbetalingstatusTekst: Record<Utbetalingsstatus, string> =
     OK_UTEN_UTBETALING: 'Ok uten utbetaling',
     SENDT_TIL_HELVED: 'Venter på helved',
     SENDT_TIL_OPPDRAG: 'Venter på oppdrag',
+    AVBRUTT: 'Avbrutt',
 };

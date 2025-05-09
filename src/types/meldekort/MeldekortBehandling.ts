@@ -51,6 +51,7 @@ export enum Utbetalingsstatus {
     OK_UTEN_UTBETALING = 'OK_UTEN_UTBETALING',
     OK = 'OK',
     FEILET_MOT_OPPDRAG = 'FEILET_MOT_OPPDRAG',
+    AVBRUTT = 'AVBRUTT',
 }
 
 export type MeldekortBehandlingProps = {
