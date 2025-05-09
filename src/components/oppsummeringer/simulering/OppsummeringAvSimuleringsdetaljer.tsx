@@ -27,33 +27,37 @@ const OppsummeringAvSimuleringsdetaljer = (props: { simuleringsdetaljer: Simuler
                         Grunnleggende perioder
                     </Heading>
                     <Accordion size="small">
-                        {props.simuleringsdetaljer.oppsummeringForPerioder.map((periode) => (
-                            <Accordion.Item
-                                key={`grunnleggende-${periode.periode.fraOgMed}-${periode.periode.tilOgMed}`}
-                            >
-                                <Accordion.Header>
-                                    {`${formaterDatotekst(periode.periode.fraOgMed)} - ${formaterDatotekst(periode.periode.tilOgMed)}`}
-                                </Accordion.Header>
-                                <Accordion.Content className={styles.accordionContent}>
-                                    <OppsummeringsPar
-                                        label={'Tidligere utbetalt'}
-                                        verdi={periode.tidligereUtbetalt}
-                                    />
-                                    <OppsummeringsPar
-                                        label={'Ny utbetaling'}
-                                        verdi={periode.nyUtbetaling}
-                                    />
-                                    <OppsummeringsPar
-                                        label={'Total etterbetaling'}
-                                        verdi={periode.totalEtterbetaling}
-                                    />
-                                    <OppsummeringsPar
-                                        label={'Total feilutbetaling'}
-                                        verdi={periode.totalFeilutbetaling}
-                                    />
-                                </Accordion.Content>
-                            </Accordion.Item>
-                        ))}
+                        <ul>
+                            {props.simuleringsdetaljer.oppsummeringForPerioder.map((periode) => (
+                                <li
+                                    key={`grunnleggende-${periode.periode.fraOgMed}-${periode.periode.tilOgMed}`}
+                                >
+                                    <Accordion.Item>
+                                        <Accordion.Header>
+                                            {`${formaterDatotekst(periode.periode.fraOgMed)} - ${formaterDatotekst(periode.periode.tilOgMed)}`}
+                                        </Accordion.Header>
+                                        <Accordion.Content className={styles.accordionContent}>
+                                            <OppsummeringsPar
+                                                label={'Tidligere utbetalt'}
+                                                verdi={periode.tidligereUtbetalt}
+                                            />
+                                            <OppsummeringsPar
+                                                label={'Ny utbetaling'}
+                                                verdi={periode.nyUtbetaling}
+                                            />
+                                            <OppsummeringsPar
+                                                label={'Total etterbetaling'}
+                                                verdi={periode.totalEtterbetaling}
+                                            />
+                                            <OppsummeringsPar
+                                                label={'Total feilutbetaling'}
+                                                verdi={periode.totalFeilutbetaling}
+                                            />
+                                        </Accordion.Content>
+                                    </Accordion.Item>
+                                </li>
+                            ))}
+                        </ul>
                     </Accordion>
                 </Box>
 
@@ -74,42 +78,46 @@ const OppsummeringAvSimuleringsdetaljer = (props: { simuleringsdetaljer: Simuler
                         />
                     </div>
                     <Accordion size="small">
-                        {props.simuleringsdetaljer.detaljer.perioder.map((periode) => (
-                            <Accordion.Item
-                                key={`detaljert-${periode.periode.fraOgMed}-${periode.periode.tilOgMed}`}
-                            >
-                                <Accordion.Header>
-                                    {`${formaterDatotekst(periode.periode.fraOgMed)} - ${formaterDatotekst(periode.periode.tilOgMed)}`}
-                                </Accordion.Header>
-                                <Accordion.Content className={styles.accordionContent}>
-                                    <ul>
-                                        {periode.delperiode.map((delperiode) => (
-                                            <li
-                                                key={`delperiode-${delperiode.periode.fraOgMed}-${delperiode.periode.tilOgMed}`}
-                                            >
-                                                <OppsummeringsPar
-                                                    label={'Type'}
-                                                    verdi={delperiode.type}
-                                                />
-                                                <OppsummeringsPar
-                                                    label={'Klassekode'}
-                                                    verdi={delperiode.klassekode}
-                                                />
-                                                <OppsummeringsPar
-                                                    label={'Fagområde'}
-                                                    verdi={delperiode.fagområde}
-                                                />
+                        <ul>
+                            {props.simuleringsdetaljer.detaljer.perioder.map((periode) => (
+                                <li
+                                    key={`detaljert-${periode.periode.fraOgMed}-${periode.periode.tilOgMed}`}
+                                >
+                                    <Accordion.Item>
+                                        <Accordion.Header>
+                                            {`${formaterDatotekst(periode.periode.fraOgMed)} - ${formaterDatotekst(periode.periode.tilOgMed)}`}
+                                        </Accordion.Header>
+                                        <Accordion.Content className={styles.accordionContent}>
+                                            <ul>
+                                                {periode.delperiode.map((delperiode) => (
+                                                    <li
+                                                        key={`delperiode-${delperiode.periode.fraOgMed}-${delperiode.periode.tilOgMed}`}
+                                                    >
+                                                        <OppsummeringsPar
+                                                            label={'Type'}
+                                                            verdi={delperiode.type}
+                                                        />
+                                                        <OppsummeringsPar
+                                                            label={'Klassekode'}
+                                                            verdi={delperiode.klassekode}
+                                                        />
+                                                        <OppsummeringsPar
+                                                            label={'Fagområde'}
+                                                            verdi={delperiode.fagområde}
+                                                        />
 
-                                                <OppsummeringsPar
-                                                    label={'Beløp'}
-                                                    verdi={delperiode.beløp}
-                                                />
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </Accordion.Content>
-                            </Accordion.Item>
-                        ))}
+                                                        <OppsummeringsPar
+                                                            label={'Beløp'}
+                                                            verdi={delperiode.beløp}
+                                                        />
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </Accordion.Content>
+                                    </Accordion.Item>
+                                </li>
+                            ))}
+                        </ul>
                     </Accordion>
                 </Box>
             </VStack>
