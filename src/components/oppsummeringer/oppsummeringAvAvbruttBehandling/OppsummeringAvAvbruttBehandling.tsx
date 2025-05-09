@@ -20,7 +20,7 @@ const AvbruttOppsummering = (props: {
         >
             <VStack gap="6">
                 <Heading size="medium" level="3">
-                    Behandling er Avsluttet
+                    Behandling er avsluttet
                 </Heading>
                 <HStack gap="6">
                     <OppsummeringsPar

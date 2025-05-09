@@ -24,6 +24,7 @@ export enum MeldeperiodeKjedeStatus {
     UNDER_BESLUTNING = 'UNDER_BESLUTNING',
     GODKJENT = 'GODKJENT',
     AUTOMATISK_BEHANDLET = 'AUTOMATISK_BEHANDLET',
+    AVBRUTT = 'AVBRUTT',
 }
 
 export type MeldeperiodeProps = {
@@ -47,6 +48,7 @@ export type MeldeperiodeKjedeProps = {
     meldekortBehandlinger: MeldekortBehandlingProps[];
     brukersMeldekort?: BrukersMeldekortProps;
     korrigeringFraTidligerePeriode?: MeldeperiodeKorrigering;
+    avbrutteMeldekortBehandlinger: MeldekortBehandlingProps[];
 };
 
 export type MeldeperiodeKorrigering = {

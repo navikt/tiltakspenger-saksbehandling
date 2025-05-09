@@ -2,6 +2,7 @@ import { Attestering } from '../BehandlingTypes';
 import { MeldeperiodeId, MeldeperiodeKjedeId } from './Meldeperiode';
 import { Periode } from '../Periode';
 import { BrukersMeldekortId } from './BrukersMeldekort';
+import { Avbrutt } from '../Avbrutt';
 
 // Egentlig har denne samme prefix som BrukersMeldekortId (bare "meldekort_")
 // Typer den med en unik prefix for at typescript ikke skal se de som ekvivalente
@@ -15,6 +16,7 @@ export enum MeldekortBehandlingStatus {
     GODKJENT = 'GODKJENT',
     IKKE_RETT_TIL_TILTAKSPENGER = 'IKKE_RETT_TIL_TILTAKSPENGER',
     AUTOMATISK_BEHANDLET = 'AUTOMATISK_BEHANDLET',
+    AVBRUTT = 'AVBRUTT',
 }
 
 export enum MeldekortBehandlingDagStatus {
@@ -49,6 +51,7 @@ export enum Utbetalingsstatus {
     OK_UTEN_UTBETALING = 'OK_UTEN_UTBETALING',
     OK = 'OK',
     FEILET_MOT_OPPDRAG = 'FEILET_MOT_OPPDRAG',
+    AVBRUTT = 'AVBRUTT',
 }
 
 export type MeldekortBehandlingProps = {
@@ -70,6 +73,7 @@ export type MeldekortBehandlingProps = {
     periode: Periode;
     dager: MeldekortDagProps[];
     beregning?: MeldekortBeregning;
+    avbrutt?: Avbrutt;
 };
 
 export type MeldekortDagProps = {

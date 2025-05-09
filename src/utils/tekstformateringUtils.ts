@@ -55,6 +55,7 @@ export const finnMeldeperiodeKjedeStatusTekst: Record<MeldeperiodeKjedeStatus, s
     [MeldeperiodeKjedeStatus.UNDER_BESLUTNING]: 'Under beslutning',
     [MeldeperiodeKjedeStatus.GODKJENT]: 'Godkjent',
     [MeldeperiodeKjedeStatus.AUTOMATISK_BEHANDLET]: 'Automatisk behandlet',
+    [MeldeperiodeKjedeStatus.AVBRUTT]: 'Avsluttet',
 } as const;
 
 export const finnBehandlingstypeTekst: Record<Behandlingstype, string> = {
@@ -71,4 +72,5 @@ export const meldekortUtbetalingstatusTekst: Record<Utbetalingsstatus, string> =
     OK_UTEN_UTBETALING: 'Ok uten utbetaling',
     SENDT_TIL_HELVED: 'Venter på helved',
     SENDT_TIL_OPPDRAG: 'Venter på oppdrag',
+    AVBRUTT: 'Avbrutt',
 };
