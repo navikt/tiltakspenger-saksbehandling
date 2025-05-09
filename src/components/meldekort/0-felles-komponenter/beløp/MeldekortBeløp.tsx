@@ -8,6 +8,9 @@ import {
 } from '../../../../types/meldekort/MeldekortBehandling';
 
 import style from './MeldekortBeløp.module.css';
+import { Simuleringsdetaljer } from '../../../../types/Simulering';
+import { Nullable } from '../../../../types/common';
+import SimuleringsdetaljerModal from '../../../oppsummeringer/simulering/SimuleringsdetaljerModal';
 
 type Props = {
     beløp: MeldekortBeløpProps;
@@ -15,6 +18,7 @@ type Props = {
     totalBeløp?: MeldekortBeløpProps;
     utbetalingsstatus?: Utbetalingsstatus;
     navkontorForUtbetaling?: string;
+    simuleringsdetaljer: Nullable<Simuleringsdetaljer>;
 };
 
 export const MeldekortBeløp = ({
@@ -23,6 +27,7 @@ export const MeldekortBeløp = ({
     totalBeløp,
     utbetalingsstatus,
     navkontorForUtbetaling,
+    simuleringsdetaljer,
 }: Props) => {
     const harDiffPåTotalBeløp = totalBeløp && totalBeløp.totalt != beløp.totalt;
 
@@ -51,6 +56,9 @@ export const MeldekortBeløp = ({
                     />
                 )}
             </VStack>
+            {simuleringsdetaljer && (
+                <SimuleringsdetaljerModal simuleringsdetaljer={simuleringsdetaljer} />
+            )}
             {(navkontorForUtbetaling || utbetalingsstatus) && (
                 <VStack gap={'1'}>
                     {navkontorForUtbetaling && (

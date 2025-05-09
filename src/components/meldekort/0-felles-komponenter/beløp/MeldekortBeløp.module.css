@@ -17,3 +17,8 @@
         color: var(--a-red-500);
     }
 }
+
+.simuleringsknapp {
+    display: flex;
+    align-self: flex-start;
+}
