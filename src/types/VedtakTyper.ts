@@ -1,23 +1,15 @@
+import { Behandlingsutfall } from './BehandlingTypes';
 import { Periode } from './Periode';
-
-export type VedtakResultat = 'innvilget' | 'avslag';
-
-export type VedtakInnvilgetResultat = {
-    resultat: 'innvilget';
-    innvilgelsesPeriode: Periode;
-};
-
-export type VedtakAvslagResultat = {
-    resultat: 'avslag';
-};
 
 export type VedtakTilBeslutningDTO = {
     fritekstTilVedtaksbrev: string;
     begrunnelseVilkårsvurdering: string;
-    innvilgelsesperiode: Periode;
+    behandlingsperiode: Periode;
     barnetillegg: VedtakBarnetilleggDTO | null;
     valgteTiltaksdeltakelser: VedtakTiltaksdeltakelsePeriode[];
     antallDagerPerMeldeperiode: number;
+    avslagsgrunner: string[];
+    utfall: Behandlingsutfall;
 };
 
 export type VedtakBarnetilleggPeriode = {

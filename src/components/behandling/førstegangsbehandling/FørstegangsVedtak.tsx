@@ -3,14 +3,14 @@ import { FørstegangsVedtakBegrunnelse } from './1-begrunnelse/FørstegangsVedta
 import { FørstegangsVedtakResultat } from './2-resultat/FørstegangsVedtakResultat';
 import { FørstegangsVedtakBrev } from './6-brev/FørstegangsVedtakBrev';
 import { Separator } from '../../separator/Separator';
-import { FørstegangsVedtakSend } from './7-send-og-godkjenn/FørstegangsVedtakSend';
+import { FørstegangsVedtakKnapper } from './7-send-og-godkjenn/FørstegangsVedtakKnapper';
 import { FørstegangsVedtakBarnetillegg } from './5-barn/FørstegangsVedtakBarnetillegg';
 import { FørstegangsVedtakProvider } from './context/FørstegangsVedtakContext';
-import FørstegangsvedtakAvbrytBehandling from './8-avbryt-behandling/FørstegangsvedtakAvbrytBehandling';
 import { FørstegangsVedtakTiltak } from './4-tiltak/FørstegangsVedtakTiltak';
 
 import style from './FørstegangsVedtak.module.css';
 import { FørstegangsVedtakDagerPerMeldeperiode } from './3-dager-per-meldeperiode/FørstegangsVedtakDagerPerMeldeperiode';
+import FørstegangsvedtakAvslagsgrunner from './4 - avslagsgrunner/FørstegangsvedtakAvslagsgrunner';
 
 export const FørstegangsVedtak = () => {
     return (
@@ -23,10 +23,10 @@ export const FørstegangsVedtak = () => {
             <FørstegangsVedtakDagerPerMeldeperiode />
             <Separator />
             <FørstegangsVedtakTiltak />
+            <FørstegangsvedtakAvslagsgrunner />
             <FørstegangsVedtakBarnetillegg />
             <FørstegangsVedtakBrev />
-            <FørstegangsVedtakSend />
-            <FørstegangsvedtakAvbrytBehandling />
+            <FørstegangsVedtakKnapper />
         </FørstegangsVedtakProvider>
     );
 };

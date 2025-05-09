@@ -8,18 +8,19 @@ import { useFørstegangsVedtakSkjema } from '../context/FørstegangsVedtakContex
 import { Separator } from '../../../separator/Separator';
 import { useFørstegangsbehandling } from '../../BehandlingContext';
 import { deltarPaFlereTiltakMedStartOgSluttdatoIValgtInnvilgelsesperiode } from '../../../../utils/behandling';
+import { Behandlingsutfall } from '../../../../types/BehandlingTypes';
 
 export const FørstegangsVedtakTiltak = () => {
     const { behandling } = useFørstegangsbehandling();
-    const { innvilgelsesPeriode } = useFørstegangsVedtakSkjema();
+    const { behandlingsperiode: innvilgelsesPeriode } = useFørstegangsVedtakSkjema();
     const flereTiltak = deltarPaFlereTiltakMedStartOgSluttdatoIValgtInnvilgelsesperiode(
         behandling,
         innvilgelsesPeriode,
     );
-    const { resultat } = useFørstegangsVedtakSkjema();
+    const { utfall } = useFørstegangsVedtakSkjema();
     return (
         flereTiltak && (
-            <div className={classNames(resultat !== 'innvilget' && style.skjult)}>
+            <div className={classNames(utfall !== Behandlingsutfall.INNVILGELSE && style.skjult)}>
                 <VedtakSeksjon>
                     <VedtakSeksjon.Venstre>
                         <Alert variant={'warning'} size={'small'}>

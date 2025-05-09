@@ -10,6 +10,7 @@ export type BehandlingId = `beh_${string}`;
 type BehandlingDataCommon = {
     id: BehandlingId;
     status: BehandlingStatus;
+    utfall: Nullable<Behandlingsutfall>;
     sakId: SakId;
     saksnummer: string;
     saksbehandler: string | null;
@@ -23,6 +24,7 @@ type BehandlingDataCommon = {
     iverksattTidspunkt: Nullable<string>;
     fritekstTilVedtaksbrev: string | null;
     valgtHjemmelHarIkkeRettighet: string[] | null;
+    avslagsgrunner: Avslagsgrunn[];
 };
 
 export type FørstegangsbehandlingData = BehandlingDataCommon & {
@@ -105,3 +107,23 @@ type TiltaksdeltakelsePeriode = {
     eksternDeltagelseId: string;
     periode: Periode;
 };
+
+/**
+ * https://confluence.adeo.no/pages/viewpage.action?pageId=679150248
+ */
+export enum Avslagsgrunn {
+    DeltarIkkePåArbeidsmarkedstiltak = 'DeltarIkkePåArbeidsmarkedstiltak',
+    Alder = 'Alder',
+    Livsoppholdytelser = 'Livsoppholdytelser',
+    Kvalifiseringsprogrammet = 'Kvalifiseringsprogrammet',
+    Introduksjonsprogrammet = 'Introduksjonsprogrammet',
+    LønnFraTiltaksarrangør = 'LønnFraTiltaksarrangør',
+    LønnFraAndre = 'LønnFraAndre',
+    Institusjonsopphold = 'Institusjonsopphold',
+    FremmetForSent = 'FremmetForSent',
+}
+
+export enum Behandlingsutfall {
+    AVSLAG = 'AVSLAG',
+    INNVILGELSE = 'INNVILGELSE',
+}

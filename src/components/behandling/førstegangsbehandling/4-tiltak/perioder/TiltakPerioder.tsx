@@ -16,7 +16,8 @@ import { Tiltaksdeltagelse } from '../../../../../types/TiltakDeltagelseTypes';
 
 export const TiltakPerioder = () => {
     const { behandling, rolleForBehandling } = useFørstegangsbehandling();
-    const { valgteTiltaksdeltakelser, innvilgelsesPeriode } = useFørstegangsVedtakSkjema();
+    const { valgteTiltaksdeltakelser, behandlingsperiode: innvilgelsesPeriode } =
+        useFørstegangsVedtakSkjema();
     const dispatch = useFørstegangsVedtakSkjemaDispatch();
 
     const tiltaksdeltakelser = hentTiltaksdeltakelserMedStartOgSluttdato(behandling);
@@ -72,7 +73,7 @@ const TiltakPeriode = ({
     skalKunneFjernePeriode,
 }: PeriodeProps) => {
     const dispatch = useFørstegangsVedtakSkjemaDispatch();
-    const { innvilgelsesPeriode } = useFørstegangsVedtakSkjema();
+    const { behandlingsperiode: innvilgelsesPeriode } = useFørstegangsVedtakSkjema();
 
     const erSaksbehandler = rolle === SaksbehandlerRolle.SAKSBEHANDLER;
 

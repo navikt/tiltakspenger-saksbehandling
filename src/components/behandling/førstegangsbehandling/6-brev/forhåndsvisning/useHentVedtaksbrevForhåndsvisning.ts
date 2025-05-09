@@ -1,5 +1,9 @@
 import { useFetchBlobFraApi } from '../../../../../utils/fetch/useFetchFraApi';
-import { BehandlingData } from '../../../../../types/BehandlingTypes';
+import {
+    Avslagsgrunn,
+    BehandlingData,
+    Behandlingsutfall,
+} from '../../../../../types/BehandlingTypes';
 import { Periode } from '../../../../../types/Periode';
 import { VedtakBarnetilleggPeriode } from '../../../../../types/VedtakTyper';
 
@@ -7,6 +11,8 @@ type BrevForhåndsvisningDTO = {
     fritekst: string;
     virkningsperiode: Periode;
     barnetillegg: VedtakBarnetilleggPeriode[];
+    utfall: Behandlingsutfall;
+    avslagsgrunner: Avslagsgrunn[];
 };
 
 export const useHentVedtaksbrevForhåndsvisning = (behandling: BehandlingData) => {

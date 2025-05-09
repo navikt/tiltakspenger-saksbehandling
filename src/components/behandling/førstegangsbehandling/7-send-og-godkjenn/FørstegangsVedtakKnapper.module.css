@@ -1,0 +1,8 @@
+.knapper {
+    margin-bottom: var(--a-spacing-8);
+}
+
+.godkjentWrapper {
+    display: flex;
+    justify-content: end;
+}
