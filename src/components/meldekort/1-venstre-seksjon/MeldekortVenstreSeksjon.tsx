@@ -138,6 +138,7 @@ const meldekortStatusTagVariant: Record<
     KLAR_TIL_BESLUTNING: 'alt1-moderate',
     UNDER_BEHANDLING: 'alt3-moderate',
     UNDER_BESLUTNING: 'alt3-moderate',
+    AVBRUTT: 'warning-moderate',
 };
 
 const meldekortStatusIkon: Record<MeldeperiodeKjedeStatus, React.ReactNode> = {
@@ -149,4 +150,5 @@ const meldekortStatusIkon: Record<MeldeperiodeKjedeStatus, React.ReactNode> = {
     [MeldeperiodeKjedeStatus.UNDER_BESLUTNING]: <NotePencilIcon />,
     [MeldeperiodeKjedeStatus.GODKJENT]: <CheckmarkIcon />,
     [MeldeperiodeKjedeStatus.AUTOMATISK_BEHANDLET]: <RobotSmileIcon />,
+    [MeldeperiodeKjedeStatus.AVBRUTT]: <CircleSlashIcon />,
 };

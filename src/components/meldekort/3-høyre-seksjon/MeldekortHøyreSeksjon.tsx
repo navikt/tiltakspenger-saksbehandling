@@ -3,9 +3,10 @@ import { MeldekortTidligereBehandlinger } from './tidligere-behandlinger/Meldeko
 import { BrukersMeldekortVisning } from './brukers-meldekort/BrukersMeldekort';
 import { useMeldeperiodeKjede } from '../MeldeperiodeKjedeContext';
 import { classNames } from '../../../utils/classNames';
-import { DocPencilIcon, PersonPencilIcon } from '@navikt/aksel-icons';
+import { CircleSlashIcon, DocPencilIcon, PersonPencilIcon } from '@navikt/aksel-icons';
 
 import style from './MeldekortHøyreSeksjon.module.css';
+import { MeldekortAvsluttedeBehandlinger } from './avsluttede-meldekort/MeldekortAvsluttedeBehandlinger';
 
 export const MeldekortHøyreSeksjon = () => {
     const {
@@ -13,6 +14,7 @@ export const MeldekortHøyreSeksjon = () => {
         tidligereMeldekortBehandlinger,
         meldeperiodeKjede,
         sisteMeldeperiode,
+        avbrutteMeldekortBehandlinger,
     } = useMeldeperiodeKjede();
 
     const { brukersMeldekort, korrigeringFraTidligerePeriode } = meldeperiodeKjede;
@@ -22,6 +24,8 @@ export const MeldekortHøyreSeksjon = () => {
         : tidligereMeldekortBehandlinger.length;
 
     const antallBrukersMeldekort = brukersMeldekort ? 1 : 0;
+
+    const antallAvbrutteMeldekortBehandlinger = avbrutteMeldekortBehandlinger.length;
 
     const defaultTab =
         antallBrukersMeldekort > 0 && antallTidligereBehandlinger === 0
@@ -43,6 +47,14 @@ export const MeldekortHøyreSeksjon = () => {
                     icon={<PersonPencilIcon />}
                     className={classNames(antallBrukersMeldekort === 0 && style.tabDisabled)}
                 />
+                <Tabs.Tab
+                    value={'avsluttedeMeldekort'}
+                    label={'Avsluttede behandlinger'}
+                    icon={<CircleSlashIcon />}
+                    className={classNames(
+                        antallAvbrutteMeldekortBehandlinger === 0 && style.tabDisabled,
+                    )}
+                />
             </Tabs.List>
 
             <Tabs.Panel value={'tidligereBehandlinger'} lazy={false} className={style.panel}>
@@ -56,6 +68,10 @@ export const MeldekortHøyreSeksjon = () => {
                         brukersMeldekort={brukersMeldekort}
                     />
                 )}
+            </Tabs.Panel>
+
+            <Tabs.Panel value={'avsluttedeMeldekort'} lazy={false} className={style.panel}>
+                {antallAvbrutteMeldekortBehandlinger > 0 && <MeldekortAvsluttedeBehandlinger />}
             </Tabs.Panel>
         </Tabs>
     );

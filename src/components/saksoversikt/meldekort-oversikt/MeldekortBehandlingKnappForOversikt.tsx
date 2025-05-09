@@ -20,6 +20,7 @@ import { useTaMeldekortBehandling } from './useTaMeldekortBehandling';
 import { useLeggTilbakeMeldekortBehandling } from './useLeggTilbakeMeldekortBehandling';
 import { TriggerWithOptionsArgs } from 'swr/mutation';
 import { FetcherError } from '../../../utils/fetch/fetch';
+import AvsluttMeldekortBehandling from './avsluttMeldekortBehandling/AvsluttMeldekortBehandling';
 
 type Props = {
     meldekortBehandling: MeldekortBehandlingProps;
@@ -115,6 +116,11 @@ export const MeldekortBehandlingKnappForOversikt = ({
                     >
                         {'Legg tilbake'}
                     </Button>
+                    <AvsluttMeldekortBehandling
+                        sakId={sakId}
+                        meldekortBehandlingId={id}
+                        saksoversiktUrl={`/sak/${saksnummer}`}
+                    />
                 </VStack>
             );
 

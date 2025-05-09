@@ -16,6 +16,7 @@ export type MeldeperioderContextState = {
     alleMeldekortBehandlinger: MeldekortBehandlingProps[];
     sisteMeldekortBehandling?: MeldekortBehandlingProps;
     tidligereMeldekortBehandlinger: MeldekortBehandlingProps[];
+    avbrutteMeldekortBehandlinger: MeldekortBehandlingProps[];
 };
 
 export const MeldeperiodeKjedeContext = createContext<MeldeperioderContextState>(
@@ -33,7 +34,7 @@ export const MeldeperiodeKjedeProvider = ({
 }: Props) => {
     const [meldeperiodeKjede, setMeldeperiodeKjede] = useState(meldeperiodeKjedeInitial);
 
-    const { meldekortBehandlinger } = meldeperiodeKjede;
+    const { meldekortBehandlinger, avbrutteMeldekortBehandlinger } = meldeperiodeKjede;
 
     const sisteMeldeperiode = meldeperiodeKjede.meldeperioder.reduce((acc, meldeperiode) =>
         meldeperiode.versjon > acc.versjon ? meldeperiode : acc,
@@ -64,6 +65,7 @@ export const MeldeperiodeKjedeProvider = ({
                 alleMeldekortBehandlinger,
                 sisteMeldekortBehandling,
                 tidligereMeldekortBehandlinger,
+                avbrutteMeldekortBehandlinger,
             }}
         >
             {children}
