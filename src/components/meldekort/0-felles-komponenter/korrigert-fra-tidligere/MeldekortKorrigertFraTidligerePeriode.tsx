@@ -38,7 +38,11 @@ export const MeldekortKorrigertFraTidligerePeriode = ({ korrigering, headerTekst
                     <strong>{formaterTidspunktKort(iverksatt)}</strong>
                 </BodyShort>
             )}
-            <MeldekortBeløp beløp={beregning.beløp} forrigeBeløp={forrigeGodkjenteBeløp} />
+            <MeldekortBeløp
+                beløp={beregning.beløp}
+                forrigeBeløp={forrigeGodkjenteBeløp}
+                simuleringsdetaljer={null}
+            />
         </VStack>
     );
 };
