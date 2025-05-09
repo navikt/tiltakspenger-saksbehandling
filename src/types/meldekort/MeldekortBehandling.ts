@@ -3,6 +3,8 @@ import { MeldeperiodeId, MeldeperiodeKjedeId } from './Meldeperiode';
 import { Periode } from '../Periode';
 import { BrukersMeldekortId } from './BrukersMeldekort';
 import { Avbrutt } from '../Avbrutt';
+import { Simuleringsdetaljer } from '../Simulering';
+import { Nullable } from '../common';
 
 // Egentlig har denne samme prefix som BrukersMeldekortId (bare "meldekort_")
 // Typer den med en unik prefix for at typescript ikke skal se de som ekvivalente
@@ -74,6 +76,7 @@ export type MeldekortBehandlingProps = {
     dager: MeldekortDagProps[];
     beregning?: MeldekortBeregning;
     avbrutt?: Avbrutt;
+    simulering: Nullable<Simuleringsdetaljer>;
 };
 
 export type MeldekortDagProps = {

@@ -1,4 +1,4 @@
-import '@navikt/ds-css';
+import '../styles/global.css';
 
 import React from 'react';
 import { AppProps } from 'next/app';
