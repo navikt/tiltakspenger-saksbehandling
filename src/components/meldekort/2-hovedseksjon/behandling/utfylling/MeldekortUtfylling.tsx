@@ -15,12 +15,14 @@ import {
 import { MeldekortUker } from '../../../0-felles-komponenter/uker/MeldekortUker';
 import { MeldekortUtfyllingLagre } from './lagre/MeldekortUtfyllingLagre';
 import { MeldekortSendTilBeslutning } from '../beslutning/MeldekortSendTilBeslutning';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MeldekortBeregningOppsummering } from '../../../0-felles-komponenter/beregning-oppsummering/MeldekortBeregningOppsummering';
 import { classNames } from '../../../../../utils/classNames';
 import { MeldekortBegrunnelse } from '../../../0-felles-komponenter/begrunnelse/MeldekortBegrunnelse';
 
 import styles from './MeldekortUtfylling.module.css';
+import AvsluttMeldekortBehandling from '../../../../saksoversikt/meldekort-oversikt/avsluttMeldekortBehandling/AvsluttMeldekortBehandling';
+import { meldeperiodeUrl } from '../../../../../utils/urls';
 
 type Props = {
     meldekortBehandling: MeldekortBehandlingProps;
@@ -31,7 +33,7 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
 
     const { meldeperiodeKjede, tidligereMeldekortBehandlinger, sisteMeldeperiode } =
         useMeldeperiodeKjede();
-    const { sakId } = useSak().sak;
+    const { sakId, saksnummer } = useSak().sak;
     const { brukersMeldekort } = meldeperiodeKjede;
     const { antallDager } = sisteMeldeperiode;
 
@@ -122,6 +124,14 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
                                 sakId={sakId}
                                 hentMeldekortUtfylling={hentMeldekortUtfylling}
                                 customValidering={customValidering}
+                            />
+                            <AvsluttMeldekortBehandling
+                                sakId={sakId}
+                                meldekortBehandlingId={meldekortBehandling.id}
+                                saksoversiktUrl={meldeperiodeUrl(
+                                    saksnummer,
+                                    meldekortBehandling.periode,
+                                )}
                             />
                         </HStack>
                     </VStack>
