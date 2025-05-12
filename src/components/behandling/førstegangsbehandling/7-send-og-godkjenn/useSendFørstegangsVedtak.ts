@@ -34,7 +34,10 @@ const tilBeslutningDTO = (vedtak: FørstegangsVedtakContext): VedtakTilBeslutnin
             : null,
         valgteTiltaksdeltakelser: vedtak.valgteTiltaksdeltakelser,
         antallDagerPerMeldeperiode: vedtak.antallDagerPerMeldeperiode,
-        avslagsgrunner: vedtak.utfall === Behandlingsutfall.AVSLAG ? vedtak.avslagsgrunner : [],
+        avslagsgrunner:
+            vedtak.utfall === Behandlingsutfall.AVSLAG && vedtak.avslagsgrunner !== null
+                ? vedtak.avslagsgrunner
+                : null,
         //Validering skal fange at utfallet ikke er null
         utfall: vedtak.utfall!,
     };

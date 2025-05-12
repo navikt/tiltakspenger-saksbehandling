@@ -10,6 +10,7 @@ import { TekstListe } from '../../../liste/TekstListe';
 import { useFørstegangsbehandling } from '../../BehandlingContext';
 
 import style from './FørstegangsVedtakBrev.module.css';
+import { Behandlingsutfall } from '../../../../types/BehandlingTypes';
 
 export const FørstegangsVedtakBrev = () => {
     const { behandling, rolleForBehandling } = useFørstegangsbehandling();
@@ -19,7 +20,8 @@ export const FørstegangsVedtakBrev = () => {
 
     return (
         <VedtakSeksjon>
-            {utfall && avslagsgrunner.length > 0 && (
+            {(utfall === Behandlingsutfall.INNVILGELSE ||
+                (Behandlingsutfall.AVSLAG && avslagsgrunner !== null)) && (
                 <>
                     <VedtakSeksjon.Venstre>
                         <Heading size={'xsmall'} level={'2'}>

@@ -32,7 +32,10 @@ export const VedtaksbrevForhåndsvisning = () => {
                         // vi rendrer ikke komponenten hvis utfallet ikke eksiterer i parenten
                         utfall: vedtak.utfall!,
                         avslagsgrunner:
-                            vedtak.utfall === Behandlingsutfall.AVSLAG ? vedtak.avslagsgrunner : [],
+                            vedtak.utfall === Behandlingsutfall.AVSLAG &&
+                            vedtak.avslagsgrunner !== null
+                                ? vedtak.avslagsgrunner
+                                : null,
                     }).then((blob) => {
                         if (blob) {
                             window.open(URL.createObjectURL(blob));

@@ -24,7 +24,7 @@ type BehandlingDataCommon = {
     iverksattTidspunkt: Nullable<string>;
     fritekstTilVedtaksbrev: string | null;
     valgtHjemmelHarIkkeRettighet: string[] | null;
-    avslagsgrunner: Avslagsgrunn[];
+    avslagsgrunner: Nullable<Avslagsgrunn[]>;
 };
 
 export type FørstegangsbehandlingData = BehandlingDataCommon & {

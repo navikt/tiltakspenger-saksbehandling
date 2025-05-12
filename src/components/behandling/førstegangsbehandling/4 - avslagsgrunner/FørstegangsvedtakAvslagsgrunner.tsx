@@ -43,7 +43,7 @@ const FørstegangsvedtakAvslagsgrunner = () => {
                                 value={grunn}
                                 size={'small'}
                                 readOnly={erIkkeSaksbehandler}
-                                checked={avslagsgrunner.includes(grunn)}
+                                checked={avslagsgrunner !== null && avslagsgrunner.includes(grunn)}
                                 onChange={() => {
                                     dispatch({
                                         type: 'oppdaterAvslagsgrunn',

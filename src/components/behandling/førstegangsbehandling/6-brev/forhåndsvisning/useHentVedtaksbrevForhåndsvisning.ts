@@ -6,13 +6,14 @@ import {
 } from '../../../../../types/BehandlingTypes';
 import { Periode } from '../../../../../types/Periode';
 import { VedtakBarnetilleggPeriode } from '../../../../../types/VedtakTyper';
+import { Nullable } from '../../../../../types/common';
 
 type BrevForhåndsvisningDTO = {
     fritekst: string;
     virkningsperiode: Periode;
     barnetillegg: VedtakBarnetilleggPeriode[];
     utfall: Behandlingsutfall;
-    avslagsgrunner: Avslagsgrunn[];
+    avslagsgrunner: Nullable<Avslagsgrunn[]>;
 };
 
 export const useHentVedtaksbrevForhåndsvisning = (behandling: BehandlingData) => {

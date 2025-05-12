@@ -19,7 +19,6 @@ export const FørstegangsVedtakResultat = () => {
     const { valgteTiltaksdeltakelser, utfall, behandlingsperiode } = useFørstegangsVedtakSkjema();
     const { avslagToggle } = useFeatureToggles();
     const dispatch = useFørstegangsVedtakSkjemaDispatch();
-    console.log('avslagToggle', avslagToggle);
     const erIkkeSaksbehandler = rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER;
 
     return (

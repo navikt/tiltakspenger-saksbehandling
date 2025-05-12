@@ -75,7 +75,7 @@ export type FørstegangsVedtakSkjemaState = {
     barnetilleggPerioder: VedtakBarnetilleggPeriode[];
     valgteTiltaksdeltakelser: VedtakTiltaksdeltakelsePeriode[];
     antallDagerPerMeldeperiode: number;
-    avslagsgrunner: Avslagsgrunn[];
+    avslagsgrunner: Nullable<Avslagsgrunn[]>;
 };
 
 export const førstegangsVedtakReducer: Reducer<
@@ -246,22 +246,35 @@ export const førstegangsVedtakReducer: Reducer<
                 ),
             };
         case 'oppdaterAvslagsgrunn': {
-            const nåværendeAvslagsgrunner = state.avslagsgrunner || [];
-            const eksistererAllerede = nåværendeAvslagsgrunner.includes(payload.avslagsgrunn);
-
-            if (eksistererAllerede) {
+            if (state.avslagsgrunner === null) {
                 return {
                     ...state,
-                    avslagsgrunner: nåværendeAvslagsgrunner.filter(
-                        (grunn) => grunn !== payload.avslagsgrunn,
-                    ),
-                };
-            } else {
-                return {
-                    ...state,
-                    avslagsgrunner: [...nåværendeAvslagsgrunner, payload.avslagsgrunn],
+                    avslagsgrunner: [payload.avslagsgrunn],
                 };
             }
+
+            if (state.avslagsgrunner !== null) {
+                const eksistererAllerede = state.avslagsgrunner.includes(payload.avslagsgrunn);
+
+                if (eksistererAllerede) {
+                    const newArr = state.avslagsgrunner.filter(
+                        (grunn) => grunn !== payload.avslagsgrunn,
+                    );
+
+                    if (newArr.length === 0) {
+                        return { ...state, avslagsgrunner: null };
+                    } else {
+                        return { ...state, avslagsgrunner: newArr };
+                    }
+                } else {
+                    return {
+                        ...state,
+                        avslagsgrunner: [...state.avslagsgrunner, payload.avslagsgrunn],
+                    };
+                }
+            }
+
+            return state;
         }
     }
 

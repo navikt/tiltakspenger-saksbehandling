@@ -140,7 +140,7 @@ export const førstegangsVedtakValidering = (
     }
 
     if (utfall === Behandlingsutfall.AVSLAG) {
-        if (vedtak.avslagsgrunner.length === 0) {
+        if (vedtak.avslagsgrunner === null) {
             errors.push('Avslagsgrunn må velges');
         }
     }

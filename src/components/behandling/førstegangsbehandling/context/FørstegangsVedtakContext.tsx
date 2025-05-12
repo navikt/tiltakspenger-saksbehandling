@@ -60,7 +60,7 @@ const initieltVedtakSkjema = (
             },
         ],
         antallDagerPerMeldeperiode: behandling.antallDagerPerMeldeperiode || 10,
-        avslagsgrunner: behandling.avslagsgrunner.length === 0 ? [] : behandling.avslagsgrunner,
+        avslagsgrunner: behandling.avslagsgrunner,
     };
 };
 
