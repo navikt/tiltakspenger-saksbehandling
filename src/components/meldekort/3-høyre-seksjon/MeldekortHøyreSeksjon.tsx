@@ -49,7 +49,7 @@ export const MeldekortHøyreSeksjon = () => {
                 />
                 <Tabs.Tab
                     value={'avsluttedeMeldekort'}
-                    label={'Avsluttede behandlinger'}
+                    label={`Avsluttede behandlinger (${antallAvbrutteMeldekortBehandlinger})`}
                     icon={<CircleSlashIcon />}
                     className={classNames(
                         antallAvbrutteMeldekortBehandlinger === 0 && style.tabDisabled,
