@@ -76,7 +76,7 @@ const AvsluttMeldekortbehandlingModal = (props: {
                     <Alert variant={'info'}>
                         Bruker får ikke innsyn eller informasjon når behandlingen avsluttes i
                         tiltakspenger-saksbehandling. Du må vurdere å informere bruker i Modia om
-                        hvorfor behandlingen er avsluttet, og hva vil det bety for bruker.
+                        hvorfor behandlingen er avsluttet, og hva det vil bety for bruker.
                     </Alert>
                 </Modal.Body>
                 <Modal.Footer>
