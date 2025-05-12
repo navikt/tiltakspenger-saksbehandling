@@ -169,6 +169,12 @@ export const skalKunneOvertaMeldekortBehandling = (
                 erBeslutter(innloggetSaksbehandler) &&
                 innloggetSaksbehandler.navIdent != saksbehandler
             );
+        case MeldekortBehandlingStatus.KLAR_TIL_UTFYLLING:
+            return (
+                saksbehandler &&
+                erSaksbehandler(innloggetSaksbehandler) &&
+                innloggetSaksbehandler.navIdent != saksbehandler
+            );
         default:
             return false;
     }
