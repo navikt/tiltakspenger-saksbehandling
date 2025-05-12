@@ -1,5 +1,5 @@
 import { BodyLong, Button, Heading, HStack, Modal, Textarea } from '@navikt/ds-react';
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useRef, useState } from 'react';
 import router from 'next/router';
 
 import style from './AvsluttMeldekortBehandling.module.css';
@@ -20,7 +20,7 @@ const AvsluttMeldekortbehandlingModal = (props: {
     åpen: boolean;
     onClose: () => void;
 }) => {
-    const [begrunnelse, setBegrunnelse] = useState<string>('');
+    const begrunnelseRef = useRef<HTMLTextAreaElement>(null);
     const [error, setError] = useState<string>();
     const hasError = error !== undefined;
 
@@ -35,7 +35,8 @@ const AvsluttMeldekortbehandlingModal = (props: {
 
     const submit = (e: FormEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        if (begrunnelse.trim() === '') {
+        const begrunnelse = begrunnelseRef.current?.value?.trim();
+        if (!begrunnelse || begrunnelse === '') {
             setError('Du må fylle ut en begrunnelse');
         } else {
             avsluttMeldekortBehandlingApi.trigger({
@@ -67,13 +68,12 @@ const AvsluttMeldekortbehandlingModal = (props: {
                     behandle meldekortet manuelt.
                 </BodyLong>
                 <Textarea
-                    onChange={(e) => {
-                        setBegrunnelse(e.target.value);
+                    ref={begrunnelseRef}
+                    onChange={() => {
                         setError(undefined);
                     }}
                     error={error}
                     label={'Hvorfor avsluttes behandlingen? (obligatorisk)'}
-                    value={begrunnelse}
                     maxLength={200}
                     id="begrunnelse"
                     size="small"
