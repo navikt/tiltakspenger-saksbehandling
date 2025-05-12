@@ -1,2 +1,9 @@
-@import 'reset-css';
 @import '@navikt/ds-css';
+
+ul,
+ol,
+li {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
