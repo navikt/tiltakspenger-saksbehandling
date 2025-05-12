@@ -19,10 +19,10 @@ import React, { useEffect, useState } from 'react';
 import { MeldekortBeregningOppsummering } from '../../../0-felles-komponenter/beregning-oppsummering/MeldekortBeregningOppsummering';
 import { classNames } from '../../../../../utils/classNames';
 import { MeldekortBegrunnelse } from '../../../0-felles-komponenter/begrunnelse/MeldekortBegrunnelse';
-
-import styles from './MeldekortUtfylling.module.css';
 import AvsluttMeldekortBehandling from '../../../../saksoversikt/meldekort-oversikt/avsluttMeldekortBehandling/AvsluttMeldekortBehandling';
 import { meldeperiodeUrl } from '../../../../../utils/urls';
+
+import styles from './MeldekortUtfylling.module.css';
 
 type Props = {
     meldekortBehandling: MeldekortBehandlingProps;
@@ -43,6 +43,7 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
             dager: hentMeldekortForhåndsutfylling(
                 meldekortBehandling,
                 tidligereMeldekortBehandlinger,
+                sisteMeldeperiode,
                 brukersMeldekort,
             ),
             begrunnelse: meldekortBehandling.begrunnelse,
@@ -77,6 +78,7 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
             dager: hentMeldekortForhåndsutfylling(
                 meldekortBehandling,
                 tidligereMeldekortBehandlinger,
+                sisteMeldeperiode,
                 brukersMeldekort,
             ),
             begrunnelse: meldekortBehandling.begrunnelse,

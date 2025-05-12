@@ -8,38 +8,49 @@ import {
     BrukersMeldekortDagStatus,
     BrukersMeldekortProps,
 } from '../../../../../types/meldekort/BrukersMeldekort';
+import { MeldeperiodeProps } from '../../../../../types/meldekort/Meldeperiode';
 
-export const hentMeldekortForhåndsutfylling = (
+const hentDagerFraBehandling = (meldekortBehandling: MeldekortBehandlingProps) =>
+    meldekortBehandling.beregning?.beregningForMeldekortetsPeriode.dager ??
+    meldekortBehandling.dager;
+
+const hentDager = (
     meldekortBehandling: MeldekortBehandlingProps,
     tidligereBehandlinger: MeldekortBehandlingProps[],
     brukersMeldekort?: BrukersMeldekortProps,
 ): MeldekortDagBeregnetProps[] => {
     if (meldekortBehandling.beregning) {
-        return hentMeldekortDager(meldekortBehandling);
+        return hentDagerFraBehandling(meldekortBehandling);
     }
 
     const forrigeBehandling = tidligereBehandlinger.at(0);
 
     if (forrigeBehandling) {
-        return hentMeldekortDager(forrigeBehandling);
+        return hentDagerFraBehandling(forrigeBehandling);
     }
 
     if (brukersMeldekort) {
-        return brukersMeldekort.dager.map((dag, index) => ({
+        return brukersMeldekort.dager.map((dag) => ({
             dato: dag.dato,
-            status:
-                meldekortBehandling.dager[index].status === MeldekortBehandlingDagStatus.Sperret
-                    ? MeldekortBehandlingDagStatus.Sperret
-                    : brukersStatusTilBehandlingsStatus[dag.status],
+            status: brukersStatusTilBehandlingsStatus[dag.status],
         }));
     }
 
     return meldekortBehandling.dager;
 };
 
-const hentMeldekortDager = (meldekortBehandling: MeldekortBehandlingProps) =>
-    meldekortBehandling.beregning?.beregningForMeldekortetsPeriode.dager ??
-    meldekortBehandling.dager;
+export const hentMeldekortForhåndsutfylling = (
+    meldekortBehandling: MeldekortBehandlingProps,
+    tidligereBehandlinger: MeldekortBehandlingProps[],
+    meldeperiode: MeldeperiodeProps,
+    brukersMeldekort?: BrukersMeldekortProps,
+): MeldekortDagBeregnetProps[] => {
+    return hentDager(meldekortBehandling, tidligereBehandlinger, brukersMeldekort).map((dag) =>
+        meldeperiode.girRett[dag.dato]
+            ? dag
+            : { ...dag, status: MeldekortBehandlingDagStatus.Sperret },
+    );
+};
 
 const brukersStatusTilBehandlingsStatus: Record<
     BrukersMeldekortDagStatus,
