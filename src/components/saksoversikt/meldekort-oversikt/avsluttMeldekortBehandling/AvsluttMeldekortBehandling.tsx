@@ -1,4 +1,4 @@
-import { Alert, BodyLong, Button, Heading, HStack, Modal, Textarea } from '@navikt/ds-react';
+import { BodyLong, Button, Heading, HStack, Modal, Textarea } from '@navikt/ds-react';
 import React, { FormEvent, useState } from 'react';
 import router from 'next/router';
 
@@ -63,7 +63,8 @@ const AvsluttMeldekortbehandlingModal = (props: {
             </Modal.Header>
             <Modal.Body className={styles.modalBody}>
                 <BodyLong>
-                    Hvis du avslutter meldekortbehandlingen kan meldekortet ikke lenger behandles.
+                    Hvis du avslutter meldekortbehandlingen må behandlingen startes på nytt for å
+                    behandle meldekortet manuelt.
                 </BodyLong>
                 <Textarea
                     onChange={(e) => {
@@ -79,11 +80,6 @@ const AvsluttMeldekortbehandlingModal = (props: {
                     aria-label={'Begrunnelse'}
                     disabled={false}
                 />
-                <Alert variant={'info'}>
-                    Bruker får ikke innsyn eller informasjon når behandlingen avsluttes i
-                    tiltakspenger-saksbehandling. Du må vurdere å informere bruker i Modia om
-                    hvorfor behandlingen er avsluttet, og hva det vil bety for bruker.
-                </Alert>
             </Modal.Body>
             <Modal.Footer>
                 <Button
