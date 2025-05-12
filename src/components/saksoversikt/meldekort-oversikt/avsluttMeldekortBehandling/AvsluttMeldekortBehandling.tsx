@@ -1,4 +1,4 @@
-import { BodyLong, Button, Heading, HStack, Modal, Textarea } from '@navikt/ds-react';
+import { Alert, BodyLong, Button, Heading, HStack, Modal, Textarea } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import router from 'next/router';
 
@@ -73,6 +73,11 @@ const AvsluttMeldekortbehandlingModal = (props: {
                         )}
                         name={'begrunnelse'}
                     />
+                    <Alert variant={'info'}>
+                        Bruker får ikke innsyn eller informasjon når behandlingen avsluttes i
+                        tiltakspenger-saksbehandling. Du må vurdere å informere bruker i Modia om
+                        hvorfor behandlingen er avsluttet, og hva det vil bety for bruker.
+                    </Alert>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button
