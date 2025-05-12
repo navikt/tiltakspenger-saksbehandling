@@ -12,10 +12,14 @@ const LAGRE_MAX_WAIT_MS = 10000;
 type Props = {
     lagringUrl: string;
     lagringBody: (tekst: string) => unknown;
+    minRows?: number;
 } & ComponentProps<typeof Textarea>;
 
 export const TekstfeltMedMellomlagring = forwardRef<HTMLTextAreaElement, Props>(
-    ({ label, hideLabel = true, lagringUrl, lagringBody, onChange, ...textareaProps }, ref) => {
+    (
+        { label, hideLabel = true, lagringUrl, lagringBody, onChange, minRows, ...textareaProps },
+        ref,
+    ) => {
         const [venterPåLagring, setVenterPåLagring] = useState(false);
         const [lagringFeil, setLagringFeil] = useState<string | null>(null);
 
@@ -49,7 +53,7 @@ export const TekstfeltMedMellomlagring = forwardRef<HTMLTextAreaElement, Props>(
                 <Textarea
                     label={label}
                     hideLabel={hideLabel}
-                    minRows={5}
+                    minRows={minRows ?? 5}
                     resize={'vertical'}
                     onChange={(event) => {
                         setVenterPåLagring(true);

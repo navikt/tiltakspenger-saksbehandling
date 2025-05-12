@@ -1,20 +1,19 @@
 import { Reducer } from 'react';
 import {
-    VedtakAvslagResultat,
     VedtakBarnetilleggPeriode,
-    VedtakInnvilgetResultat,
-    VedtakResultat,
     VedtakTiltaksdeltakelsePeriode,
 } from '../../../../types/VedtakTyper';
 import { Periode } from '../../../../types/Periode';
 import { forrigeDag, leggTilDager, nesteDag } from '../../../../utils/date';
 import { periodiserBarnetillegg } from '../../../../utils/barnetillegg';
 import { SøknadForBehandlingProps } from '../../../../types/SøknadTypes';
+import { Avslagsgrunn, Behandlingsutfall } from '../../../../types/BehandlingTypes';
+import { Nullable } from '../../../../types/common';
 
 export type FørstegangsVedtakSkjemaActions =
     | {
           type: 'setResultat';
-          payload: { resultat: VedtakInnvilgetResultat | VedtakAvslagResultat };
+          payload: { utfall: Behandlingsutfall };
       }
     | {
           type: 'oppdaterDagerPerMeldeperiode';
@@ -45,7 +44,7 @@ export type FørstegangsVedtakSkjemaActions =
           payload: { innvilgelsesPeriode: Periode; søknad: SøknadForBehandlingProps };
       }
     | {
-          type: 'oppdaterInnvilgetPeriode';
+          type: 'oppdaterBehandlingsperiode';
           payload: { periode: Partial<Periode> };
       }
     | {
@@ -63,15 +62,20 @@ export type FørstegangsVedtakSkjemaActions =
     | {
           type: 'oppdaterTiltakPeriode';
           payload: { periode: Partial<Periode>; index: number };
+      }
+    | {
+          type: 'oppdaterAvslagsgrunn';
+          payload: { avslagsgrunn: Avslagsgrunn };
       };
 
 export type FørstegangsVedtakSkjemaState = {
-    resultat?: VedtakResultat;
-    innvilgelsesPeriode: Periode;
+    utfall: Nullable<Behandlingsutfall>;
+    behandlingsperiode: Periode;
     harBarnetillegg: boolean;
     barnetilleggPerioder: VedtakBarnetilleggPeriode[];
     valgteTiltaksdeltakelser: VedtakTiltaksdeltakelsePeriode[];
     antallDagerPerMeldeperiode: number;
+    avslagsgrunner: Avslagsgrunn[];
 };
 
 export const førstegangsVedtakReducer: Reducer<
@@ -81,13 +85,13 @@ export const førstegangsVedtakReducer: Reducer<
     const { type, payload } = action;
 
     switch (type) {
-        case 'oppdaterInnvilgetPeriode':
+        case 'oppdaterBehandlingsperiode':
             return {
                 ...state,
-                innvilgelsesPeriode: { ...state.innvilgelsesPeriode, ...payload.periode },
+                behandlingsperiode: { ...state.behandlingsperiode, ...payload.periode },
             };
         case 'setResultat':
-            return { ...state, ...payload.resultat };
+            return { ...state, utfall: payload.utfall };
         case 'oppdaterDagerPerMeldeperiode':
             return { ...state, antallDagerPerMeldeperiode: payload.antallDagerPerMeldeperiode };
         case 'setHarSøktBarnetillegg':
@@ -241,6 +245,24 @@ export const førstegangsVedtakReducer: Reducer<
                         : periode,
                 ),
             };
+        case 'oppdaterAvslagsgrunn': {
+            const nåværendeAvslagsgrunner = state.avslagsgrunner || [];
+            const eksistererAllerede = nåværendeAvslagsgrunner.includes(payload.avslagsgrunn);
+
+            if (eksistererAllerede) {
+                return {
+                    ...state,
+                    avslagsgrunner: nåværendeAvslagsgrunner.filter(
+                        (grunn) => grunn !== payload.avslagsgrunn,
+                    ),
+                };
+            } else {
+                return {
+                    ...state,
+                    avslagsgrunner: [...nåværendeAvslagsgrunner, payload.avslagsgrunn],
+                };
+            }
+        }
     }
 
     console.error(`Ugyldig action for førstegangsvedtak: "${type satisfies never}"`);

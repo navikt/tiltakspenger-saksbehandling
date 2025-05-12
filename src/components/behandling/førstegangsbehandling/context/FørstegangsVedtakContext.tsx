@@ -44,8 +44,8 @@ const initieltVedtakSkjema = (
     const tiltakFraSoknad = hentTiltaksdeltagelseFraSoknad(behandling);
 
     return {
-        innvilgelsesPeriode: behandling.virkningsperiode ?? tiltaksperiode,
-        resultat: behandling.virkningsperiode ? 'innvilget' : undefined,
+        behandlingsperiode: behandling.virkningsperiode ?? tiltaksperiode,
+        utfall: behandling.utfall,
         harBarnetillegg: harSøktBarnetillegg(behandling),
         barnetilleggPerioder:
             behandling.barnetillegg?.perioder ||
@@ -60,6 +60,7 @@ const initieltVedtakSkjema = (
             },
         ],
         antallDagerPerMeldeperiode: behandling.antallDagerPerMeldeperiode || 10,
+        avslagsgrunner: behandling.avslagsgrunner.length === 0 ? [] : behandling.avslagsgrunner,
     };
 };
 

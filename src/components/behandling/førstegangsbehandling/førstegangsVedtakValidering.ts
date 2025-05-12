@@ -1,6 +1,6 @@
 import { FørstegangsVedtakContext } from './context/FørstegangsVedtakContext';
 import { ValideringResultat } from '../send-og-godkjenn/BehandlingSendTilBeslutning';
-import { FørstegangsbehandlingData } from '../../../types/BehandlingTypes';
+import { Behandlingsutfall, FørstegangsbehandlingData } from '../../../types/BehandlingTypes';
 import {
     deltarPaFlereTiltakMedStartOgSluttdato,
     hentTiltaksdeltakelser,
@@ -14,8 +14,8 @@ export const førstegangsVedtakValidering = (
     vedtak: FørstegangsVedtakContext,
 ): ValideringResultat => {
     const {
-        innvilgelsesPeriode,
-        resultat,
+        behandlingsperiode,
+        utfall,
         barnetilleggPerioder,
         harBarnetillegg,
         valgteTiltaksdeltakelser,
@@ -28,8 +28,8 @@ export const førstegangsVedtakValidering = (
     const errors: string[] = [];
     const warnings: string[] = [];
 
-    if (!resultat) {
-        errors.push('Resultat for vilkårsvurdering mangler');
+    if (!utfall) {
+        errors.push('Behandlingsutfall for vilkårsvurdering mangler');
     }
 
     if (harBarnetillegg) {
@@ -47,20 +47,20 @@ export const førstegangsVedtakValidering = (
             if (perioderErUtenBarn) {
                 errors.push('Minst en periode må ha barn når barnetillegg er valgt');
             }
-            if (helePerioden.fraOgMed < innvilgelsesPeriode.fraOgMed) {
+            if (helePerioden.fraOgMed < behandlingsperiode.fraOgMed) {
                 errors.push('Barnetillegg-perioden kan ikke starte før innvilgelsesperioden');
             }
-            if (helePerioden.tilOgMed > innvilgelsesPeriode.tilOgMed) {
+            if (helePerioden.tilOgMed > behandlingsperiode.tilOgMed) {
                 errors.push('Barnetillegg-perioden kan ikke slutte etter innvilgelsesperioden');
             }
         }
     }
 
-    if (tiltaksperiode.fraOgMed > innvilgelsesPeriode.fraOgMed) {
+    if (tiltaksperiode.fraOgMed > behandlingsperiode.fraOgMed) {
         errors.push('Innvilgelsesperioden starter før tiltaksperioden');
     }
 
-    if (tiltaksperiode.tilOgMed < innvilgelsesPeriode.tilOgMed) {
+    if (tiltaksperiode.tilOgMed < behandlingsperiode.tilOgMed) {
         errors.push('Innvilgelsesperioden slutter etter tiltaksperioden');
     }
 
@@ -80,12 +80,12 @@ export const førstegangsVedtakValidering = (
                     'Periodene for tiltaksdeltakelse må være sammenhengende og uten overlapp',
                 );
             }
-            if (helePerioden.fraOgMed !== innvilgelsesPeriode.fraOgMed) {
+            if (helePerioden.fraOgMed !== behandlingsperiode.fraOgMed) {
                 errors.push(
                     'Tiltaksdeltakelse-perioden må ha samme startdato som innvilgelsesperioden',
                 );
             }
-            if (helePerioden.tilOgMed !== innvilgelsesPeriode.tilOgMed) {
+            if (helePerioden.tilOgMed !== behandlingsperiode.tilOgMed) {
                 errors.push(
                     'Tiltaksdeltakelse-perioden må ha samme sluttdato som innvilgelsesperioden',
                 );
@@ -137,6 +137,12 @@ export const førstegangsVedtakValidering = (
         (antallDagerPerMeldeperiode < 1 || antallDagerPerMeldeperiode > 14)
     ) {
         errors.push('Antall dager per meldeperiode må være mellom 1 og 14');
+    }
+
+    if (utfall === Behandlingsutfall.AVSLAG) {
+        if (vedtak.avslagsgrunner.length === 0) {
+            errors.push('Avslagsgrunn må velges');
+        }
     }
 
     return {

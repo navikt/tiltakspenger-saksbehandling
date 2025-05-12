@@ -70,7 +70,7 @@ const AvsluttBehandling = (props: {
                 />
             )}
             <Button
-                variant="danger"
+                variant="secondary"
                 type="button"
                 size={props.button?.size ?? 'small'}
                 onClick={() => setVilAvslutteBehandling(true)}
