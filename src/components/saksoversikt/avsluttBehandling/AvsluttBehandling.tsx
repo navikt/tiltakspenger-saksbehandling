@@ -1,5 +1,14 @@
 import { TrashIcon } from '@navikt/aksel-icons';
-import { Modal, HStack, Heading, BodyLong, Textarea, Button, VStack } from '@navikt/ds-react';
+import {
+    Modal,
+    HStack,
+    Heading,
+    BodyLong,
+    Textarea,
+    Button,
+    VStack,
+    Alert,
+} from '@navikt/ds-react';
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import styles from './AvsluttBehandling.module.css';
@@ -150,6 +159,11 @@ const AvsluttBehandlingModal = (props: {
                         )}
                         name={'begrunnelse'}
                     />
+                    <Alert variant={'info'}>
+                        Bruker får ikke innsyn eller informasjon når behandlingen avsluttes i
+                        tiltakspenger-saksbehandling. Du må vurdere å informere bruker i Modia om
+                        hvorfor behandlingen er avsluttet, og hva det vil bety for bruker.
+                    </Alert>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button
