@@ -17,8 +17,15 @@ type Props = {
 export const MeldekortBeregningOppsummering = ({ meldekortBehandling, className }: Props) => {
     const { innloggetSaksbehandler } = useSaksbehandler();
     const { finnForrigeMeldekortBehandling, sisteMeldekortBehandling } = useMeldeperiodeKjede();
-    const { beregning, utbetalingsstatus, navkontor, navkontorNavn, saksbehandler, type } =
-        meldekortBehandling;
+    const {
+        beregning,
+        utbetalingsstatus,
+        navkontor,
+        navkontorNavn,
+        saksbehandler,
+        type,
+        simulering,
+    } = meldekortBehandling;
 
     if (!beregning) {
         return null;
@@ -48,6 +55,7 @@ export const MeldekortBeregningOppsummering = ({ meldekortBehandling, className 
                 navkontorForUtbetaling={
                     navkontorNavn ? `${navkontorNavn} (${navkontor})` : navkontor
                 }
+                simuleringsdetaljer={simulering}
             />
             {skalViseUtfallVarsel && (
                 <Alert variant={totalBeløpDiff < 0 ? 'warning' : 'info'} size={'small'}>
