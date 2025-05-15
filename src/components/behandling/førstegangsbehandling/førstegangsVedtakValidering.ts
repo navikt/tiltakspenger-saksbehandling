@@ -13,17 +13,9 @@ export const førstegangsVedtakValidering = (
     behandling: FørstegangsbehandlingData,
     vedtak: FørstegangsVedtakContext,
 ): ValideringResultat => {
-    const {
-        behandlingsperiode,
-        utfall,
-        barnetilleggPerioder,
-        harBarnetillegg,
-        valgteTiltaksdeltakelser,
-        antallDagerPerMeldeperiode,
-    } = vedtak;
+    const { behandlingsperiode, utfall } = vedtak;
 
     const tiltaksperiode = hentTiltaksperiode(behandling);
-    const flereTiltak = deltarPaFlereTiltakMedStartOgSluttdato(behandling);
 
     const errors: string[] = [];
     const warnings: string[] = [];
@@ -31,6 +23,52 @@ export const førstegangsVedtakValidering = (
     if (!utfall) {
         errors.push('Behandlingsutfall for vilkårsvurdering mangler');
     }
+
+    if (tiltaksperiode.fraOgMed > behandlingsperiode.fraOgMed) {
+        errors.push('Behandlingsperioden starter før tiltaksperioden');
+    }
+
+    if (tiltaksperiode.tilOgMed < behandlingsperiode.tilOgMed) {
+        errors.push('Behandlingsperioden slutter etter tiltaksperioden');
+    }
+
+    if (utfall === Behandlingsutfall.AVSLAG) {
+        validerUtfallAvslag(behandling, vedtak, errors);
+    }
+    if (utfall === Behandlingsutfall.INNVILGELSE) {
+        validerUtfallInnvilgelse(behandling, vedtak, errors);
+    }
+
+    return {
+        errors,
+        warnings,
+    };
+};
+
+const validerUtfallAvslag = (
+    behandling: FørstegangsbehandlingData,
+    vedtak: FørstegangsVedtakContext,
+    errors: string[],
+) => {
+    if (vedtak.avslagsgrunner === null) {
+        errors.push('Avslagsgrunn må velges');
+    }
+};
+
+const validerUtfallInnvilgelse = (
+    behandling: FørstegangsbehandlingData,
+    vedtak: FørstegangsVedtakContext,
+    errors: string[],
+) => {
+    const {
+        behandlingsperiode,
+        barnetilleggPerioder,
+        harBarnetillegg,
+        valgteTiltaksdeltakelser,
+        antallDagerPerMeldeperiode,
+    } = vedtak;
+
+    const flereTiltak = deltarPaFlereTiltakMedStartOgSluttdato(behandling);
 
     if (harBarnetillegg) {
         const perioder = barnetilleggPerioder.map((bt) => bt.periode);
@@ -54,14 +92,6 @@ export const førstegangsVedtakValidering = (
                 errors.push('Barnetillegg-perioden kan ikke slutte etter innvilgelsesperioden');
             }
         }
-    }
-
-    if (tiltaksperiode.fraOgMed > behandlingsperiode.fraOgMed) {
-        errors.push('Innvilgelsesperioden starter før tiltaksperioden');
-    }
-
-    if (tiltaksperiode.tilOgMed < behandlingsperiode.tilOgMed) {
-        errors.push('Innvilgelsesperioden slutter etter tiltaksperioden');
     }
 
     if (flereTiltak) {
@@ -138,15 +168,4 @@ export const førstegangsVedtakValidering = (
     ) {
         errors.push('Antall dager per meldeperiode må være mellom 1 og 14');
     }
-
-    if (utfall === Behandlingsutfall.AVSLAG) {
-        if (vedtak.avslagsgrunner === null) {
-            errors.push('Avslagsgrunn må velges');
-        }
-    }
-
-    return {
-        errors,
-        warnings,
-    };
 };
