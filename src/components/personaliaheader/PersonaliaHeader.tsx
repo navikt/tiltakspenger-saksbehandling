@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren, useEffect, useState } from 'react';
 import {
     BodyShort,
     Button,
@@ -29,6 +29,20 @@ export const PersonaliaHeader = ({
     children,
 }: PersonaliaHeaderProps) => {
     const { personopplysninger, isPersonopplysningerLoading } = useHentPersonopplysninger(sakId);
+    const [kopierSakId, setKopierSakId] = useState(false);
+
+    useEffect(() => {
+        const listener = (e: KeyboardEvent) => {
+            setKopierSakId(e.ctrlKey || e.metaKey);
+        };
+
+        window.addEventListener('keyup', listener);
+        window.addEventListener('keydown', listener);
+        return () => {
+            window.removeEventListener('keyup', listener);
+            window.removeEventListener('keydown', listener);
+        };
+    }, []);
 
     return (
         <HStack gap="3" align="center" className={styles.personaliaHeader}>
@@ -42,8 +56,17 @@ export const PersonaliaHeader = ({
                 <Skeleton variant={'text'} className={styles.loader} />
             )}
             <Spacer />
-            <b>Saksnr:</b> {saksnummer}
-            <CopyButton copyText={saksnummer} variant="action" size="small" />
+            {kopierSakId ? (
+                <>
+                    <b>Sak-id:</b> {sakId}
+                    <CopyButton copyText={sakId} variant="action" size="small" />
+                </>
+            ) : (
+                <>
+                    <b>Saksnr:</b> {saksnummer}
+                    <CopyButton copyText={saksnummer} variant="action" size="small" />
+                </>
+            )}
             {visTilbakeKnapp && (
                 <Button as={NextLink} href={`/sak/${saksnummer}`} type="submit" size="small">
                     Tilbake til saksoversikt
