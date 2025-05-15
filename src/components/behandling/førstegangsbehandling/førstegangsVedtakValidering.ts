@@ -33,25 +33,34 @@ export const førstegangsVedtakValidering = (
     }
 
     if (utfall === Behandlingsutfall.AVSLAG) {
-        validerUtfallAvslag(behandling, vedtak, errors);
+        validerUtfallAvslag(behandling, vedtak, errors, warnings);
     }
     if (utfall === Behandlingsutfall.INNVILGELSE) {
         validerUtfallInnvilgelse(behandling, vedtak, errors);
     }
 
-    return {
-        errors,
-        warnings,
-    };
+    return { errors, warnings };
 };
 
 const validerUtfallAvslag = (
     behandling: FørstegangsbehandlingData,
     vedtak: FørstegangsVedtakContext,
     errors: string[],
+    warnings: string[],
 ) => {
+    const tiltaksperiode = hentTiltaksperiode(behandling);
+
     if (vedtak.avslagsgrunner === null) {
         errors.push('Avslagsgrunn må velges');
+    }
+
+    if (
+        tiltaksperiode.fraOgMed !== vedtak.behandlingsperiode.fraOgMed ||
+        tiltaksperiode.tilOgMed !== vedtak.behandlingsperiode.tilOgMed
+    ) {
+        warnings.push(
+            'Avslagsdatoene er endret. De samsvarer ikke lenger med perioden det er søkt for. Vil du fortsette?',
+        );
     }
 };
 
