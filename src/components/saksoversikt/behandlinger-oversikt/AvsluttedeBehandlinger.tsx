@@ -1,6 +1,9 @@
 import { Box, Button, Heading, Table } from '@navikt/ds-react';
 
-import { finnBehandlingstypeTekst } from '../../../utils/tekstformateringUtils';
+import {
+    behandlingsutfallTilTekst,
+    finnBehandlingstypeTekst,
+} from '../../../utils/tekstformateringUtils';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '../../../utils/date';
 
 import styles from '../Saksoversikt.module.css';
@@ -87,6 +90,7 @@ export const VedtatteBehandlingerTabell = (props: {
             <Table.Header>
                 <Table.Row>
                     <Table.HeaderCell scope="col">Behandlingstype</Table.HeaderCell>
+                    <Table.HeaderCell scope="col">Resultat</Table.HeaderCell>
                     <Table.HeaderCell scope="col">Tidspunkt iverksatt</Table.HeaderCell>
                     <Table.HeaderCell scope="col">Behandlingsperiode</Table.HeaderCell>
                     <Table.HeaderCell scope="col"></Table.HeaderCell>
@@ -97,6 +101,9 @@ export const VedtatteBehandlingerTabell = (props: {
                     <Table.Row shadeOnHover={false} key={`${avsluttet.tidspunktAvsluttet}-${idx}`}>
                         <Table.DataCell>
                             {finnBehandlingstypeTekst[avsluttet.behandlingstype]}
+                        </Table.DataCell>
+                        <Table.DataCell>
+                            {avsluttet.utfall ? behandlingsutfallTilTekst[avsluttet.utfall] : '-'}
                         </Table.DataCell>
                         <Table.DataCell>
                             {formaterTidspunkt(avsluttet.tidspunktAvsluttet)}
