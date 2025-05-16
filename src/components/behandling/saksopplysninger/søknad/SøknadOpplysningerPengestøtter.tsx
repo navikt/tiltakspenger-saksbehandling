@@ -5,6 +5,9 @@ import {
 } from '../BehandlingSaksopplysning';
 import { BodyShort } from '@navikt/ds-react';
 import { formaterDatotekst } from '../../../../utils/date';
+import styles from '../../../oppsummeringer/oppsummeringAvSøknad/OppsummeringAvSøknad.module.css';
+import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
+import React from 'react';
 
 type Props = {
     className?: string;
@@ -34,7 +37,10 @@ export const SøknadOpplysningerPengestøtter = ({ className, pengestøtter }: P
         <div className={className}>
             {antallPengestøtter > 0 ? (
                 <>
-                    <BodyShort>{'Pengestøtter'}</BodyShort>
+                    <div className={styles.soknadsopplysningVarsel}>
+                        <BodyShort>{'Pengestøtter'}</BodyShort>
+                        <ExclamationmarkTriangleFillIcon />
+                    </div>
                     {alderspensjon && (
                         <BehandlingSaksopplysning
                             navn={'Alderspensjon fra'}
