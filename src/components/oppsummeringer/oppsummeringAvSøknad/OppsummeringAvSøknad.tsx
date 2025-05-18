@@ -13,6 +13,7 @@ import { SøknadOpplysningerBarn } from '../../behandling/saksopplysninger/søkn
 import { Alert, Box, Heading, Link, VStack } from '@navikt/ds-react';
 
 import styles from './OppsummeringAvSøknad.module.css';
+import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
 
 interface Props {
     /** Behandlingens tiltaksperiode, eller det som er på søknad hvis behandling er enda ikke opprettet */
@@ -63,18 +64,63 @@ const OppsummeringAvSøknad = (props: Props) => {
                     spacing={true}
                 />
 
-                <BehandlingSaksopplysningMedPeriode navn={'KVP'} periode={kvp} />
-                <BehandlingSaksopplysningMedPeriode navn={'Intro'} periode={intro} />
-                <BehandlingSaksopplysningMedPeriode
-                    navn={'Institusjonsopphold'}
-                    periode={institusjon}
-                />
-                <BehandlingSaksopplysning navn={'Etterlønn'} verdi={etterlønn ? 'Ja' : 'Nei'} />
-                <BehandlingSaksopplysningMedPeriode
-                    navn={'Mottar sykepenger og fortsatt sykmeldt'}
-                    periode={sykepenger}
-                    spacing={true}
-                />
+                {kvp ? (
+                    <div className={styles.soknadsopplysningVarsel}>
+                        <BehandlingSaksopplysningMedPeriode navn={'KVP'} periode={kvp} />
+                        <ExclamationmarkTriangleFillIcon />
+                    </div>
+                ) : (
+                    <BehandlingSaksopplysningMedPeriode navn={'KVP'} periode={kvp} />
+                )}
+                {intro ? (
+                    <div className={styles.soknadsopplysningVarsel}>
+                        <BehandlingSaksopplysningMedPeriode navn={'Intro'} periode={intro} />
+                        <ExclamationmarkTriangleFillIcon />
+                    </div>
+                ) : (
+                    <BehandlingSaksopplysningMedPeriode navn={'Intro'} periode={intro} />
+                )}
+                {institusjon ? (
+                    <div className={styles.soknadsopplysningVarsel}>
+                        <BehandlingSaksopplysningMedPeriode
+                            navn={'Institusjonsopphold'}
+                            periode={institusjon}
+                        />
+                        <ExclamationmarkTriangleFillIcon />
+                    </div>
+                ) : (
+                    <BehandlingSaksopplysningMedPeriode
+                        navn={'Institusjonsopphold'}
+                        periode={institusjon}
+                    />
+                )}
+                {etterlønn ? (
+                    <div className={styles.soknadsopplysningVarsel}>
+                        <BehandlingSaksopplysning
+                            navn={'Etterlønn'}
+                            verdi={etterlønn ? 'Ja' : 'Nei'}
+                        />
+                        <ExclamationmarkTriangleFillIcon />
+                    </div>
+                ) : (
+                    <BehandlingSaksopplysning navn={'Etterlønn'} verdi={etterlønn ? 'Ja' : 'Nei'} />
+                )}
+                {sykepenger ? (
+                    <div className={styles.soknadsopplysningVarsel}>
+                        <BehandlingSaksopplysningMedPeriode
+                            navn={'Mottar sykepenger og fortsatt sykmeldt'}
+                            periode={sykepenger}
+                            spacing={true}
+                        />
+                        <ExclamationmarkTriangleFillIcon />
+                    </div>
+                ) : (
+                    <BehandlingSaksopplysningMedPeriode
+                        navn={'Mottar sykepenger og fortsatt sykmeldt'}
+                        periode={sykepenger}
+                        spacing={true}
+                    />
+                )}
 
                 <SøknadOpplysningerPengestøtter pengestøtter={props.søknad} />
                 <SøknadOpplysningerBarn

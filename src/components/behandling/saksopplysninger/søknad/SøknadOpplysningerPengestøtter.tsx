@@ -5,6 +5,9 @@ import {
 } from '../BehandlingSaksopplysning';
 import { BodyShort } from '@navikt/ds-react';
 import { formaterDatotekst } from '../../../../utils/date';
+import styles from '../../../oppsummeringer/oppsummeringAvSøknad/OppsummeringAvSøknad.module.css';
+import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
+import React from 'react';
 
 type Props = {
     className?: string;
@@ -36,40 +39,58 @@ export const SøknadOpplysningerPengestøtter = ({ className, pengestøtter }: P
                 <>
                     <BodyShort>{'Pengestøtter'}</BodyShort>
                     {alderspensjon && (
-                        <BehandlingSaksopplysning
-                            navn={'Alderspensjon fra'}
-                            verdi={formaterDatotekst(alderspensjon)}
-                        />
+                        <div className={styles.soknadsopplysningVarsel}>
+                            <BehandlingSaksopplysning
+                                navn={'Alderspensjon fra'}
+                                verdi={formaterDatotekst(alderspensjon)}
+                            />
+                            <ExclamationmarkTriangleFillIcon />
+                        </div>
                     )}
                     {gjenlevendepensjon && (
-                        <BehandlingSaksopplysningMedPeriode
-                            navn={'Gjenlevende ektefelle'}
-                            periode={gjenlevendepensjon}
-                        />
+                        <div className={styles.soknadsopplysningVarsel}>
+                            <BehandlingSaksopplysningMedPeriode
+                                navn={'Gjenlevende ektefelle'}
+                                periode={gjenlevendepensjon}
+                            />
+                            <ExclamationmarkTriangleFillIcon />
+                        </div>
                     )}
                     {supplerendeStønadAlder && (
-                        <BehandlingSaksopplysningMedPeriode
-                            navn={'Supplerende stønad alder'}
-                            periode={supplerendeStønadAlder}
-                        />
+                        <div className={styles.soknadsopplysningVarsel}>
+                            <BehandlingSaksopplysningMedPeriode
+                                navn={'Supplerende stønad alder'}
+                                periode={supplerendeStønadAlder}
+                            />
+                            <ExclamationmarkTriangleFillIcon />
+                        </div>
                     )}
                     {supplerendeStønadFlyktning && (
-                        <BehandlingSaksopplysningMedPeriode
-                            navn={'Supplerende stønad ufør'}
-                            periode={supplerendeStønadFlyktning}
-                        />
+                        <div className={styles.soknadsopplysningVarsel}>
+                            <BehandlingSaksopplysningMedPeriode
+                                navn={'Supplerende stønad ufør'}
+                                periode={supplerendeStønadFlyktning}
+                            />
+                            <ExclamationmarkTriangleFillIcon />
+                        </div>
                     )}
                     {trygdOgPensjon && (
-                        <BehandlingSaksopplysningMedPeriode
-                            navn={'Annen trygd eller pensjon'}
-                            periode={trygdOgPensjon}
-                        />
+                        <div className={styles.soknadsopplysningVarsel}>
+                            <BehandlingSaksopplysningMedPeriode
+                                navn={'Annen trygd eller pensjon'}
+                                periode={trygdOgPensjon}
+                            />
+                            <ExclamationmarkTriangleFillIcon />
+                        </div>
                     )}
                     {jobbsjansen && (
-                        <BehandlingSaksopplysningMedPeriode
-                            navn={'Jobbsjansen'}
-                            periode={jobbsjansen}
-                        />
+                        <div className={styles.soknadsopplysningVarsel}>
+                            <BehandlingSaksopplysningMedPeriode
+                                navn={'Jobbsjansen'}
+                                periode={jobbsjansen}
+                            />
+                            <ExclamationmarkTriangleFillIcon />
+                        </div>
                     )}
                 </>
             ) : (
