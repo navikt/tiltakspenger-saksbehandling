@@ -64,33 +64,63 @@ const OppsummeringAvSøknad = (props: Props) => {
                     spacing={true}
                 />
 
-                <div className={styles.soknadsopplysningVarsel}>
+                {kvp ? (
+                    <div className={styles.soknadsopplysningVarsel}>
+                        <BehandlingSaksopplysningMedPeriode navn={'KVP'} periode={kvp} />
+                        <ExclamationmarkTriangleFillIcon />
+                    </div>
+                ) : (
                     <BehandlingSaksopplysningMedPeriode navn={'KVP'} periode={kvp} />
-                    {kvp && <ExclamationmarkTriangleFillIcon />}
-                </div>
-                <div className={styles.soknadsopplysningVarsel}>
+                )}
+                {intro ? (
+                    <div className={styles.soknadsopplysningVarsel}>
+                        <BehandlingSaksopplysningMedPeriode navn={'Intro'} periode={intro} />
+                        <ExclamationmarkTriangleFillIcon />
+                    </div>
+                ) : (
                     <BehandlingSaksopplysningMedPeriode navn={'Intro'} periode={intro} />
-                    {intro && <ExclamationmarkTriangleFillIcon />}
-                </div>
-                <div className={styles.soknadsopplysningVarsel}>
+                )}
+                {institusjon ? (
+                    <div className={styles.soknadsopplysningVarsel}>
+                        <BehandlingSaksopplysningMedPeriode
+                            navn={'Institusjonsopphold'}
+                            periode={institusjon}
+                        />
+                        <ExclamationmarkTriangleFillIcon />
+                    </div>
+                ) : (
                     <BehandlingSaksopplysningMedPeriode
                         navn={'Institusjonsopphold'}
                         periode={institusjon}
                     />
-                    {institusjon && <ExclamationmarkTriangleFillIcon />}
-                </div>
-                <div className={styles.soknadsopplysningVarsel}>
+                )}
+                {etterlønn ? (
+                    <div className={styles.soknadsopplysningVarsel}>
+                        <BehandlingSaksopplysning
+                            navn={'Etterlønn'}
+                            verdi={etterlønn ? 'Ja' : 'Nei'}
+                        />
+                        <ExclamationmarkTriangleFillIcon />
+                    </div>
+                ) : (
                     <BehandlingSaksopplysning navn={'Etterlønn'} verdi={etterlønn ? 'Ja' : 'Nei'} />
-                    {etterlønn && <ExclamationmarkTriangleFillIcon />}
-                </div>
-                <div className={styles.soknadsopplysningVarsel}>
+                )}
+                {sykepenger ? (
+                    <div className={styles.soknadsopplysningVarsel}>
+                        <BehandlingSaksopplysningMedPeriode
+                            navn={'Mottar sykepenger og fortsatt sykmeldt'}
+                            periode={sykepenger}
+                            spacing={true}
+                        />
+                        <ExclamationmarkTriangleFillIcon />
+                    </div>
+                ) : (
                     <BehandlingSaksopplysningMedPeriode
                         navn={'Mottar sykepenger og fortsatt sykmeldt'}
                         periode={sykepenger}
                         spacing={true}
                     />
-                    {sykepenger && <ExclamationmarkTriangleFillIcon />}
-                </div>
+                )}
 
                 <SøknadOpplysningerPengestøtter pengestøtter={props.søknad} />
                 <SøknadOpplysningerBarn
