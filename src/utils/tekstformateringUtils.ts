@@ -20,6 +20,8 @@ export const finnBehandlingStatusTekst = (status: BehandlingStatus, underkjent: 
             return underkjent ? 'Underkjent' : 'Under behandling';
         case BehandlingStatus.UNDER_BESLUTNING:
             return 'Under beslutning';
+        case BehandlingStatus.AVBRUTT:
+            return 'Avsluttet';
     }
 };
 
