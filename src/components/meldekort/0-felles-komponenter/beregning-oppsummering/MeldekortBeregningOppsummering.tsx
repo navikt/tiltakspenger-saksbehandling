@@ -55,7 +55,7 @@ export const MeldekortBeregningOppsummering = ({ meldekortBehandling, className 
                 navkontorForUtbetaling={
                     navkontorNavn ? `${navkontorNavn} (${navkontor})` : navkontor
                 }
-                simuleringsdetaljer={simulering}
+                simulering={simulering}
             />
             {skalViseUtfallVarsel && (
                 <Alert variant={totalBeløpDiff < 0 ? 'warning' : 'info'} size={'small'}>

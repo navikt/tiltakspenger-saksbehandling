@@ -1,31 +1,47 @@
 import { Periode } from './Periode';
 
-export interface Simuleringsdetaljer {
-    oppsummeringForPerioder: Simuleringsperiode[];
-    detaljer: Simuleringsdetalje;
+export type Simulering = SimuleringIngenEndring | SimuleringEndring;
+
+export interface SimuleringIngenEndring {
+    type: 'IngenEndring';
 }
-export interface Simuleringsperiode {
-    periode: Periode;
+
+export interface SimuleringEndring {
+    totalPeriode: Periode;
+    perMeldeperiode: SimuleringMeldeperiode[];
     tidligereUtbetalt: number;
     nyUtbetaling: number;
     totalEtterbetaling: number;
     totalFeilutbetaling: number;
-}
-
-export interface Simuleringsdetalje {
-    datoBeregnet: string;
     totalBeløp: number;
-    perioder: SimuleringsdetaljePeriode[];
+    datoberegnet: string;
+    type: 'Endring';
 }
 
-export interface SimuleringsdetaljePeriode {
+export interface SimuleringMeldeperiode {
+    meldeperiodeId: string;
+    meldeperiodeKjedeId: string;
     periode: Periode;
-    delperiode: DelperiodeSimulering[];
+    simuleringsdager: Simuleringsdag[];
 }
 
-export interface DelperiodeSimulering {
+export interface Simuleringsdag {
+    dato: string;
+    tidligereUtbetalt: number;
+    nyUtbetaling: number;
+    totalEtterbetaling: number;
+    totalFeilutbetaling: number;
+    posteringsdag: PosteringerForDag;
+}
+
+export interface PosteringerForDag {
+    dato: string;
+    posteringer: PosteringForDag[];
+}
+
+export interface PosteringForDag {
+    dato: string;
     fagområde: string;
-    periode: Periode;
     beløp: number;
     type: string;
     klassekode: string;

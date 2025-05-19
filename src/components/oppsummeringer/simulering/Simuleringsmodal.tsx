@@ -1,17 +1,18 @@
 import { useState } from 'react';
-import { Simuleringsdetaljer } from '../../../types/Simulering';
+import { Simulering } from '../../../types/Simulering';
 import { Button, Heading, Modal } from '@navikt/ds-react';
-import OppsummeringAvSimuleringsdetaljer from './OppsummeringAvSimuleringsdetaljer';
+
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
-import styles from './SimuleringsdetaljerModal.module.css';
-const SimuleringsdetaljerModal = (props: { simuleringsdetaljer: Simuleringsdetaljer }) => {
+import styles from './Simuleringsmodal.module.css';
+import { erSimuleringEndring } from '../../../utils/simuleringUtils';
+import OppsummeringAvSimulering from './OppsummeringAvSimulering';
+
+const Simuleringsmodal = (props: { simulering: Simulering }) => {
     const [vilSeDetaljer, setVilSeDetaljer] = useState(false);
 
     const erFeilutbetalingStørreEnn0 =
-        props.simuleringsdetaljer.oppsummeringForPerioder.reduce(
-            (akk, periode) => (akk += periode.totalFeilutbetaling),
-            0,
-        ) > 0;
+        erSimuleringEndring(props.simulering) && props.simulering.totalFeilutbetaling > 0;
+
     return (
         <div>
             <Button
@@ -43,9 +44,7 @@ const SimuleringsdetaljerModal = (props: { simuleringsdetaljer: Simuleringsdetal
                         </Heading>
                     </Modal.Header>
                     <Modal.Body>
-                        <OppsummeringAvSimuleringsdetaljer
-                            simuleringsdetaljer={props.simuleringsdetaljer}
-                        />
+                        <OppsummeringAvSimulering simulering={props.simulering} />
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="secondary" onClick={() => setVilSeDetaljer(false)}>
@@ -58,4 +57,4 @@ const SimuleringsdetaljerModal = (props: { simuleringsdetaljer: Simuleringsdetal
     );
 };
 
-export default SimuleringsdetaljerModal;
+export default Simuleringsmodal;

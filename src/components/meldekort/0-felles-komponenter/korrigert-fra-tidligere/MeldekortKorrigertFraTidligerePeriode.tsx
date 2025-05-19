@@ -41,7 +41,7 @@ export const MeldekortKorrigertFraTidligerePeriode = ({ korrigering, headerTekst
             <MeldekortBeløp
                 beløp={beregning.beløp}
                 forrigeBeløp={forrigeGodkjenteBeløp}
-                simuleringsdetaljer={null}
+                simulering={null}
             />
         </VStack>
     );
