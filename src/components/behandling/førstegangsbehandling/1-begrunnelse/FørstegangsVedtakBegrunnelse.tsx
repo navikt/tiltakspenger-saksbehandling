@@ -26,7 +26,9 @@ export const FørstegangsVedtakBegrunnelse = () => {
                 </Heading>
                 <BodyLong size={'small'}>{'Noter ned vurderingen.'}</BodyLong>
                 <BodyLong size={'small'} className={style.personinfoVarsel}>
-                    {'Ikke skriv personsensitiv informasjon som ikke er relevant for saken.'}
+                    {
+                        'Ikke skriv personsensitiv informasjon som ikke er relevant for saken. Husk at bruker har rett til innsyn.'
+                    }
                 </BodyLong>
             </VedtakSeksjon.Venstre>
             <VedtakSeksjon.Høyre>
