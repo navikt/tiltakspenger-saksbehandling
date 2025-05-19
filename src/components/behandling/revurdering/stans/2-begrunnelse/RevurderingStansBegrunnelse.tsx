@@ -30,7 +30,7 @@ export const RevurderingStansBegrunnelse = () => {
                     hideLabel={false}
                     label={'Begrunnelse for stans'}
                     description={
-                        'Ikke skriv personsensitiv informasjon som ikke er relevant for saken.'
+                        'Ikke skriv personsensitiv informasjon som ikke er relevant for saken. Husk at bruker har rett til innsyn.'
                     }
                     defaultValue={begrunnelseVilkårsvurdering ?? ''}
                     readOnly={!erSaksbehandler}
