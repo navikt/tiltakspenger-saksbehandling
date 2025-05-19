@@ -14,7 +14,7 @@ export interface SimuleringEndring {
     totalEtterbetaling: number;
     totalFeilutbetaling: number;
     totalBeløp: number;
-    datoberegnet: string;
+    datoBeregnet: string;
     type: 'Endring';
 }
 

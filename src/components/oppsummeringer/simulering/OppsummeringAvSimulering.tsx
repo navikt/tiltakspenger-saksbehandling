@@ -1,16 +1,8 @@
-import { Accordion, Alert, BodyShort, Button, Heading, HStack, VStack } from '@navikt/ds-react';
-import {
-    PosteringerForDag,
-    PosteringForDag,
-    Simulering,
-    SimuleringEndring,
-    SimuleringIngenEndring,
-    SimuleringMeldeperiode,
-    Simuleringsdag,
-} from '../../../types/Simulering';
+import { Alert, BodyShort, Heading, HStack, VStack } from '@navikt/ds-react';
+import { Simulering, SimuleringEndring, SimuleringIngenEndring } from '../../../types/Simulering';
 import { OppsummeringsPar } from '../oppsummeringspar/OppsummeringsPar';
 import { erSimuleringEndring } from '../../../utils/simuleringUtils';
-import { useState } from 'react';
+import OppsummeringAvSimuleringMeldeperiode from './OppsummeringAvSimuleringMeldeperiode';
 
 const OppsummeringAvSimulering = (props: { simulering: Simulering }) => {
     const erFeilutbetalingStørreEnn0 =
@@ -57,7 +49,7 @@ const OppsummeringAvSimuleringEndring = (props: { simulering: SimuleringEndring 
                     </Heading>
                     <OppsummeringsPar
                         label={'Dato beregnet'}
-                        verdi={props.simulering.datoberegnet}
+                        verdi={props.simulering.datoBeregnet}
                     />
                     <OppsummeringsPar label={'Total beløp'} verdi={props.simulering.totalBeløp} />
                     <HStack gap="2">
@@ -91,103 +83,6 @@ const OppsummeringAvSimuleringEndring = (props: { simulering: SimuleringEndring 
                     />
                 </VStack>
             </VStack>
-        </div>
-    );
-};
-
-const OppsummeringAvSimuleringMeldeperiode = (props: {
-    meldeperioder: SimuleringMeldeperiode[];
-}) => {
-    return (
-        <Accordion size="small">
-            <ul>
-                {props.meldeperioder.map((periode) => (
-                    <li key={periode.meldeperiodeId}>
-                        <Accordion.Item>
-                            <Accordion.Header>{`${periode.meldeperiodeKjedeId}`}</Accordion.Header>
-                            <Accordion.Content>
-                                <ul>
-                                    {periode.simuleringsdager.map((dag) => (
-                                        <li key={dag.dato}>
-                                            <OppsummeringAvSimuleringsdag dag={dag} />
-                                        </li>
-                                    ))}
-                                </ul>
-                            </Accordion.Content>
-                        </Accordion.Item>
-                    </li>
-                ))}
-            </ul>
-        </Accordion>
-    );
-};
-
-const OppsummeringAvSimuleringsdag = (props: { dag: Simuleringsdag }) => {
-    const [vilSePosteringer, setVilSePosteringer] = useState(false);
-
-    return (
-        <VStack gap="2">
-            <OppsummeringsPar label={'Dato'} verdi={props.dag.dato} />
-            <HStack gap="2">
-                <OppsummeringsPar
-                    label={'Tidligere utbetalt'}
-                    verdi={props.dag.tidligereUtbetalt}
-                />
-                <OppsummeringsPar label={'Ny utbetaling'} verdi={props.dag.nyUtbetaling} />
-            </HStack>
-            <HStack gap="2">
-                <OppsummeringsPar
-                    label={'Total etterbetaling'}
-                    verdi={props.dag.totalEtterbetaling}
-                />
-                <OppsummeringsPar
-                    label={'Total feilutbetaling'}
-                    verdi={props.dag.totalFeilutbetaling}
-                />
-            </HStack>
-
-            <VStack gap="2">
-                <Button
-                    type="button"
-                    variant="secondary"
-                    size="xsmall"
-                    onClick={() => setVilSePosteringer(!vilSePosteringer)}
-                >
-                    {vilSePosteringer ? 'Skjul posteringer' : 'Vis posteringer'}
-                </Button>
-                {vilSePosteringer && (
-                    <VStack gap="1">
-                        <OppsummeringAvPosteringerForDag posteringer={props.dag.posteringsdag} />
-                    </VStack>
-                )}
-            </VStack>
-        </VStack>
-    );
-};
-
-const OppsummeringAvPosteringerForDag = (props: { posteringer: PosteringerForDag }) => {
-    return (
-        <div>
-            <OppsummeringsPar label={'Dato'} verdi={props.posteringer.dato} />
-            <ul>
-                {props.posteringer.posteringer.map((postering) => (
-                    <li key={postering.dato}>
-                        <OppsummeringAvPosteringForDag postering={postering} />
-                    </li>
-                ))}
-            </ul>
-        </div>
-    );
-};
-
-const OppsummeringAvPosteringForDag = (props: { postering: PosteringForDag }) => {
-    return (
-        <div>
-            <OppsummeringsPar label={'Dato'} verdi={props.postering.dato} />
-            <OppsummeringsPar label={'Fagområde'} verdi={props.postering.fagområde} />
-            <OppsummeringsPar label={'Klassekode'} verdi={props.postering.klassekode} />
-            <OppsummeringsPar label={'Type'} verdi={props.postering.type} />
-            <OppsummeringsPar label={'Beløp'} verdi={props.postering.beløp} />
         </div>
     );
 };
