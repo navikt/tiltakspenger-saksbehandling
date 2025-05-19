@@ -33,7 +33,11 @@ const AvbruttPage = (props: Props) => {
 
     return (
         <SakProvider sak={props.sak}>
-            <PersonaliaHeader sakId={props.sak.sakId} saksnummer={props.sak.saksnummer} />
+            <PersonaliaHeader
+                sakId={props.sak.sakId}
+                saksnummer={props.sak.saksnummer}
+                visTilbakeKnapp={true}
+            />
             <SideBarMain
                 sidebar={
                     <OppsummeringAvSøknad

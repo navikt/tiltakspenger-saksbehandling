@@ -73,6 +73,7 @@ export enum BehandlingStatus {
     KLAR_TIL_BESLUTNING = 'KLAR_TIL_BESLUTNING',
     UNDER_BESLUTNING = 'UNDER_BESLUTNING',
     VEDTATT = 'VEDTATT',
+    AVBRUTT = 'AVBRUTT',
 }
 
 export type Attestering = {
