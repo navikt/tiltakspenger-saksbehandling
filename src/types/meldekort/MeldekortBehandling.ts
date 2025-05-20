@@ -3,7 +3,7 @@ import { MeldeperiodeId, MeldeperiodeKjedeId } from './Meldeperiode';
 import { Periode } from '../Periode';
 import { BrukersMeldekortId } from './BrukersMeldekort';
 import { Avbrutt } from '../Avbrutt';
-import { Simuleringsdetaljer } from '../Simulering';
+import { Simulering } from '../Simulering';
 import { Nullable } from '../common';
 
 // Egentlig har denne samme prefix som BrukersMeldekortId (bare "meldekort_")
@@ -76,7 +76,7 @@ export type MeldekortBehandlingProps = {
     dager: MeldekortDagProps[];
     beregning?: MeldekortBeregning;
     avbrutt?: Avbrutt;
-    simulering: Nullable<Simuleringsdetaljer>;
+    simulering: Nullable<Simulering>;
 };
 
 export type MeldekortDagProps = {

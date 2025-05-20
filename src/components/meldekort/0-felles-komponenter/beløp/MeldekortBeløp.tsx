@@ -1,4 +1,4 @@
-import { BodyShort, HStack, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, HStack, VStack } from '@navikt/ds-react';
 import { meldekortUtbetalingstatusTekst } from '../../../../utils/tekstformateringUtils';
 import { formatterBeløp } from '../../../../utils/beløp';
 import { classNames } from '../../../../utils/classNames';
@@ -8,9 +8,12 @@ import {
 } from '../../../../types/meldekort/MeldekortBehandling';
 
 import style from './MeldekortBeløp.module.css';
-import { Simuleringsdetaljer } from '../../../../types/Simulering';
+import { Simulering } from '../../../../types/Simulering';
 import { Nullable } from '../../../../types/common';
-import SimuleringsdetaljerModal from '../../../oppsummeringer/simulering/SimuleringsdetaljerModal';
+import OppsummeringAvSimulering from '../../../oppsummeringer/simulering/OppsummeringAvSimulering';
+import { useState } from 'react';
+import { erSimuleringEndring } from '../../../../utils/simuleringUtils';
+import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
 
 type Props = {
     beløp: MeldekortBeløpProps;
@@ -18,7 +21,7 @@ type Props = {
     totalBeløp?: MeldekortBeløpProps;
     utbetalingsstatus?: Utbetalingsstatus;
     navkontorForUtbetaling?: string;
-    simuleringsdetaljer: Nullable<Simuleringsdetaljer>;
+    simulering: Nullable<Simulering>;
 };
 
 export const MeldekortBeløp = ({
@@ -27,9 +30,13 @@ export const MeldekortBeløp = ({
     totalBeløp,
     utbetalingsstatus,
     navkontorForUtbetaling,
-    simuleringsdetaljer,
+    simulering,
 }: Props) => {
+    const [vilSeSimulering, setVilSeSimulering] = useState(false);
     const harDiffPåTotalBeløp = totalBeløp && totalBeløp.totalt != beløp.totalt;
+
+    const erFeilutbetalingStørreEnn0 =
+        simulering && erSimuleringEndring(simulering) && simulering.totalFeilutbetaling > 0;
 
     return (
         <>
@@ -56,9 +63,31 @@ export const MeldekortBeløp = ({
                     />
                 )}
             </VStack>
-            {simuleringsdetaljer && (
-                <SimuleringsdetaljerModal simuleringsdetaljer={simuleringsdetaljer} />
+            {simulering && (
+                <Button
+                    onClick={() => setVilSeSimulering(!vilSeSimulering)}
+                    variant="secondary"
+                    size="small"
+                    type="button"
+                    className={style.seSimuleringKnapp}
+                >
+                    {vilSeSimulering ? (
+                        'Skjul simulering'
+                    ) : (
+                        <>
+                            Vis simulering{' '}
+                            {erFeilutbetalingStørreEnn0 && (
+                                <ExclamationmarkTriangleFillIcon
+                                    className={style.advarselIkon}
+                                    title="Advarsel ikon"
+                                    fontSize="1rem"
+                                />
+                            )}
+                        </>
+                    )}
+                </Button>
             )}
+            {vilSeSimulering && <OppsummeringAvSimulering simulering={simulering!} />}
             {(navkontorForUtbetaling || utbetalingsstatus) && (
                 <VStack gap={'1'}>
                     {navkontorForUtbetaling && (
