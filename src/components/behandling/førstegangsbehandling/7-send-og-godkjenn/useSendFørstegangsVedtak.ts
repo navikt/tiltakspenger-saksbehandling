@@ -26,12 +26,13 @@ const tilBeslutningDTO = (vedtak: FørstegangsVedtakContext): VedtakTilBeslutnin
         begrunnelseVilkårsvurdering: vedtak.getBegrunnelse(),
         fritekstTilVedtaksbrev: vedtak.getBrevtekst(),
         behandlingsperiode: vedtak.behandlingsperiode,
-        barnetillegg: vedtak.harBarnetillegg
-            ? {
-                  begrunnelse: vedtak.getBarnetilleggBegrunnelse(),
-                  perioder: vedtak.barnetilleggPerioder ?? [],
-              }
-            : null,
+        barnetillegg:
+            vedtak.utfall === Behandlingsutfall.INNVILGELSE && vedtak.harBarnetillegg
+                ? {
+                      begrunnelse: vedtak.getBarnetilleggBegrunnelse(),
+                      perioder: vedtak.barnetilleggPerioder ?? [],
+                  }
+                : null,
         valgteTiltaksdeltakelser: vedtak.valgteTiltaksdeltakelser,
         antallDagerPerMeldeperiode: vedtak.antallDagerPerMeldeperiode,
         avslagsgrunner:
