@@ -2,7 +2,8 @@ import { Alert, BodyShort, Heading, HStack, VStack } from '@navikt/ds-react';
 import { Simulering, SimuleringEndring, SimuleringIngenEndring } from '../../../types/Simulering';
 import { OppsummeringsPar } from '../oppsummeringspar/OppsummeringsPar';
 import { erSimuleringEndring } from '../../../utils/simuleringUtils';
-import OppsummeringAvSimuleringMeldeperiode from './OppsummeringAvSimuleringMeldeperiode';
+import OppsummeringAvSimuleringMeldeperiode from './simuleringMeldeperiode/OppsummeringAvSimuleringMeldeperiode';
+import { formaterDatotekst } from '../../../utils/date';
 
 const OppsummeringAvSimulering = (props: { simulering: Simulering }) => {
     const erFeilutbetalingStørreEnn0 =
@@ -42,39 +43,46 @@ const OppsummeringAvSimuleringIngenEndring = (props: { simulering: SimuleringIng
 const OppsummeringAvSimuleringEndring = (props: { simulering: SimuleringEndring }) => {
     return (
         <div>
-            <VStack gap="6">
+            <VStack gap="12">
                 <VStack gap="2">
                     <Heading level="4" size="small">
                         Oppsummering av simulering
                     </Heading>
                     <OppsummeringsPar
                         label={'Dato beregnet'}
-                        verdi={props.simulering.datoBeregnet}
+                        verdi={formaterDatotekst(props.simulering.datoBeregnet)}
+                        variant="inlineColon"
                     />
-                    <OppsummeringsPar label={'Total beløp'} verdi={props.simulering.totalBeløp} />
-                    <HStack gap="2">
+                    <OppsummeringsPar
+                        label={'Total beløp'}
+                        variant="inlineColon"
+                        verdi={props.simulering.totalBeløp}
+                    />
+
+                    <HStack gap="3">
                         <OppsummeringsPar
                             label={'Tidligere utbetalt'}
+                            variant="inlineColon"
                             verdi={props.simulering.tidligereUtbetalt}
                         />
                         <OppsummeringsPar
                             label={'Ny utbetaling'}
+                            variant="inlineColon"
                             verdi={props.simulering.nyUtbetaling}
                         />
-                    </HStack>
-                    <HStack gap="2">
                         <OppsummeringsPar
-                            label={'Total etterbetaling'}
+                            label={'Etterbetaling'}
+                            variant="inlineColon"
                             verdi={props.simulering.totalEtterbetaling}
                         />
                         <OppsummeringsPar
-                            label={'Total feilutbetaling'}
+                            label={'Feilutbetaling'}
+                            variant="inlineColon"
                             verdi={props.simulering.totalFeilutbetaling}
                         />
                     </HStack>
                 </VStack>
-
-                <VStack gap="6">
+                <VStack gap="2">
                     <Heading level="4" size="small">
                         Detaljer per meldeperiode
                     </Heading>

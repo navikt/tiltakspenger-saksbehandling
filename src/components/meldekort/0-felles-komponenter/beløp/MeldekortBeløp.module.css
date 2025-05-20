@@ -22,3 +22,18 @@
     display: flex;
     align-self: flex-start;
 }
+
+.seSimuleringKnapp {
+    display: flex;
+    align-self: flex-start;
+}
+
+.seSimuleringKnapp > :first-child {
+    display: flex;
+    align-items: center;
+    gap: var(--a-spacing-2);
+}
+
+.advarselIkon {
+    color: var(--a-surface-warning);
+}

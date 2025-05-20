@@ -1,6 +1,8 @@
 import { Accordion } from '@navikt/ds-react';
-import { SimuleringMeldeperiode } from '../../../types/Simulering';
-import OppsummeringAvSimuleringsdag from './OppsummeringAvSimuleringsdag';
+import { SimuleringMeldeperiode } from '../../../../types/Simulering';
+import OppsummeringAvSimuleringsdag from '../simuleringsdag/OppsummeringAvSimuleringsdag';
+import { formaterDatotekst } from '../../../../utils/date';
+import styles from './OppsummeringAvSimuleringMeldeperiode.module.css';
 
 const OppsummeringAvSimuleringMeldeperiode = (props: {
     meldeperioder: SimuleringMeldeperiode[];
@@ -11,9 +13,11 @@ const OppsummeringAvSimuleringMeldeperiode = (props: {
                 {props.meldeperioder.map((periode) => (
                     <li key={periode.meldeperiodeId}>
                         <Accordion.Item>
-                            <Accordion.Header>{`${periode.meldeperiodeKjedeId}`}</Accordion.Header>
+                            <Accordion.Header>
+                                {`${formaterDatotekst(periode.periode.fraOgMed)} - ${formaterDatotekst(periode.periode.tilOgMed)}`}
+                            </Accordion.Header>
                             <Accordion.Content>
-                                <ul>
+                                <ul className={styles.simuleringsdager}>
                                     {periode.simuleringsdager.map((dag) => (
                                         <li key={dag.dato}>
                                             <OppsummeringAvSimuleringsdag dag={dag} />

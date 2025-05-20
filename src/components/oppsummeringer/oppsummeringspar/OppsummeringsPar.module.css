@@ -1,7 +1,12 @@
-.horisontalt {
+.spaceBetween {
     display: flex;
     justify-content: space-between;
     gap: var(--a-spacing-8);
+}
+
+.inlineColon {
+    display: flex;
+    gap: var(--a-spacing-1);
 }
 
 .vertikalt {
