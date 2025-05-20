@@ -127,4 +127,5 @@ export enum Avslagsgrunn {
 export enum Behandlingsutfall {
     AVSLAG = 'AVSLAG',
     INNVILGELSE = 'INNVILGELSE',
+    STANS = 'STANS',
 }

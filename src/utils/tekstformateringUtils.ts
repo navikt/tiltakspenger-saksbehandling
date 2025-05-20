@@ -69,6 +69,7 @@ export const finnBehandlingstypeTekst: Record<Behandlingstype, string> = {
 export const behandlingsutfallTilTekst: Record<Behandlingsutfall, string> = {
     [Behandlingsutfall.AVSLAG]: 'Avslag',
     [Behandlingsutfall.INNVILGELSE]: 'Innvilgelse',
+    [Behandlingsutfall.STANS]: 'Stans',
 } as const;
 
 export const meldekortUtbetalingstatusTekst: Record<Utbetalingsstatus, string> = {
