@@ -10,6 +10,8 @@ export interface AvsluttetBehandlingDataCellInfo {
     tidspunktAvsluttet: string;
     behandlingsperiode: Nullable<Periode>;
     avsluttetPga: 'ferdigBehandlet' | 'avbrutt';
+    saksbehandler?: Nullable<string>;
+    beslutter?: Nullable<string>;
 }
 
 export const avsluttetBehandlingToDataCellInfo = (
@@ -26,6 +28,8 @@ export const avsluttetBehandlingToDataCellInfo = (
         behandlingstype: behandling.type,
         tidspunktAvsluttet: tidspunktAvsluttet,
         avsluttetPga: behandling.avbrutt ? 'avbrutt' : 'ferdigBehandlet',
+        saksbehandler: behandling.saksbehandler,
+        beslutter: behandling.beslutter,
     };
 };
 
