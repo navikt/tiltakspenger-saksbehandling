@@ -70,6 +70,7 @@ export const behandlingsutfallTilTekst: Record<Behandlingsutfall, string> = {
     [Behandlingsutfall.AVSLAG]: 'Avslag',
     [Behandlingsutfall.INNVILGELSE]: 'Innvilgelse',
     [Behandlingsutfall.STANS]: 'Stans',
+    [Behandlingsutfall.REVURDERING_INNVILGELSE]: 'Revurdering innvilgelse',
 } as const;
 
 export const meldekortUtbetalingstatusTekst: Record<Utbetalingsstatus, string> = {

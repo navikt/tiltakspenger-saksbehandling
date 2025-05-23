@@ -2,7 +2,6 @@ import { Alert, Link, Select } from '@navikt/ds-react';
 import style from './RevurderingStansResultat.module.css';
 import { useRevurderingVedtak } from '../../RevurderingVedtakContext';
 import { useRevurderingBehandling } from '../../../BehandlingContext';
-import { useSendRevurderingVedtak } from '../useSendRevurderingVedtak';
 import { SaksbehandlerRolle } from '../../../../../types/Saksbehandler';
 import { VedtakSeksjon } from '../../../vedtak-layout/seksjon/VedtakSeksjon';
 import { Datovelger } from '../../../../datovelger/Datovelger';
@@ -37,10 +36,9 @@ export const RevurderingStansResultat = () => {
         setValgtHjemmelHarIkkeRettighet,
     } = revurderingVedtak;
 
-    const { behandling, rolleForBehandling } = useRevurderingBehandling();
+    const { rolleForBehandling } = useRevurderingBehandling();
     const { gosysUrl, modiaPersonoversiktUrl } = useConfig();
 
-    const {} = useSendRevurderingVedtak(behandling, revurderingVedtak);
     const erSaksbehandler = rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER;
 
     const gosysLinkComponent = <Link href={gosysUrl}>Gosys</Link>;

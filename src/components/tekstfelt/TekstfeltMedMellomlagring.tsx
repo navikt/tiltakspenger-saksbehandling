@@ -1,5 +1,5 @@
 import { Alert, Textarea } from '@navikt/ds-react';
-import { ComponentProps, forwardRef, useCallback, useState } from 'react';
+import { ComponentProps, forwardRef, useCallback, useEffect, useState } from 'react';
 import { debounce } from 'lodash';
 import { classNames } from '../../utils/classNames';
 import { fetchJsonFraApiClientSide } from '../../utils/fetch/fetch';
@@ -17,7 +17,16 @@ type Props = {
 
 export const TekstfeltMedMellomlagring = forwardRef<HTMLTextAreaElement, Props>(
     (
-        { label, hideLabel = true, lagringUrl, lagringBody, onChange, minRows, ...textareaProps },
+        {
+            label,
+            hideLabel = true,
+            lagringUrl,
+            lagringBody,
+            onChange,
+            minRows,
+            readOnly,
+            ...textareaProps
+        },
         ref,
     ) => {
         const [venterPåLagring, setVenterPåLagring] = useState(false);
@@ -48,6 +57,15 @@ export const TekstfeltMedMellomlagring = forwardRef<HTMLTextAreaElement, Props>(
             [lagringUrl],
         );
 
+        useEffect(() => {
+            // Ikke lagre mer hvis komponenten slutter å akseptere input (antagelig fordi behandlingen er sendt inn)
+            if (readOnly) {
+                lagre.cancel();
+                setVenterPåLagring(false);
+                setLagringFeil(null);
+            }
+        }, [readOnly]);
+
         return (
             <div>
                 <Textarea
@@ -62,6 +80,7 @@ export const TekstfeltMedMellomlagring = forwardRef<HTMLTextAreaElement, Props>(
                         onChange?.(event);
                     }}
                     ref={ref}
+                    readOnly={readOnly}
                     {...textareaProps}
                 />
                 {lagringFeil ? (

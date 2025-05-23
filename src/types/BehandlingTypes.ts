@@ -17,7 +17,6 @@ type BehandlingDataCommon = {
     beslutter: string | null;
     attesteringer: Attestering[];
     virkningsperiode: Periode | null;
-    saksopplysningsperiode: Periode;
     saksopplysninger: BehandlingSaksopplysningerData;
     begrunnelseVilkårsvurdering: string | null;
     avbrutt: Nullable<Avbrutt>;
@@ -44,6 +43,7 @@ export type BehandlingData = FørstegangsbehandlingData | RevurderingData;
 export type BehandlingSaksopplysningerData = {
     fødselsdato: string;
     tiltaksdeltagelse: Tiltaksdeltagelse[];
+    saksopplysningsperiode: Periode;
 };
 
 // TODO: revurdering og førstegangsbehandling bør ha separate typer
@@ -128,6 +128,7 @@ export enum Behandlingsutfall {
     AVSLAG = 'AVSLAG',
     INNVILGELSE = 'INNVILGELSE',
     STANS = 'STANS',
+    REVURDERING_INNVILGELSE = 'REVURDERING_INNVILGELSE',
 }
 
 export enum RevurderingType {

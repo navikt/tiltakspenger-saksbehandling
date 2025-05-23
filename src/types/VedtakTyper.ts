@@ -23,11 +23,25 @@ export type VedtakTiltaksdeltakelsePeriode = {
     periode: Periode;
 };
 
-export type VedtakRevurderTilStansDTO = {
-    fritekstTilVedtaksbrev: string;
+type VedtakRevurderingDTO = {
+    type: RevurderingType;
     begrunnelse: string;
-    stansDato: string;
-    valgteHjemler: string[];
+    fritekstTilVedtaksbrev: string;
+};
+
+export type VedtakRevurderTilStansDTO = VedtakRevurderingDTO & {
+    type: RevurderingType.STANS;
+    stans: {
+        valgteHjemler: string[];
+        stansFraOgMed: string;
+    };
+};
+
+export type VedtakRevurderInnvilgelseDTO = VedtakRevurderingDTO & {
+    type: RevurderingType.INNVILGELSE;
+    innvilgelse: {
+        innvilgelsesperiode: Periode;
+    };
 };
 
 export type VedtakBegrunnelseLagringDTO = {

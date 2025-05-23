@@ -1,6 +1,5 @@
 import { useRevurderingVedtak } from '../../RevurderingVedtakContext';
 import { useRevurderingBehandling } from '../../../BehandlingContext';
-import { useSendRevurderingVedtak } from '../useSendRevurderingVedtak';
 import { SaksbehandlerRolle } from '../../../../../types/Saksbehandler';
 import { VedtakSeksjon } from '../../../vedtak-layout/seksjon/VedtakSeksjon';
 import React from 'react';
@@ -18,8 +17,6 @@ export const RevurderingStansBegrunnelse = () => {
 
     const { behandling, rolleForBehandling } = useRevurderingBehandling();
     const { begrunnelseVilkårsvurdering, sakId, id } = behandling;
-
-    const {} = useSendRevurderingVedtak(behandling, revurderingVedtak);
 
     const erSaksbehandler = rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER;
 

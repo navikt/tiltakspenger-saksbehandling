@@ -1,4 +1,4 @@
-import { RevurderingData } from '../../../../types/BehandlingTypes';
+import { RevurderingData, RevurderingType } from '../../../../types/BehandlingTypes';
 import { VedtakRevurderTilStansDTO } from '../../../../types/VedtakTyper';
 import { useFetchJsonFraApi } from '../../../../utils/fetch/useFetchFraApi';
 import { RevurderingVedtakContext } from '../RevurderingVedtakContext';
@@ -27,9 +27,12 @@ export const useSendRevurderingVedtak = (
 
 const tilBeslutningDTO = (vedtak: RevurderingVedtakContext): VedtakRevurderTilStansDTO => {
     return {
+        type: RevurderingType.STANS,
         begrunnelse: vedtak.getBegrunnelse(),
         fritekstTilVedtaksbrev: vedtak.getBrevtekst(),
-        stansDato: vedtak.stansdato,
-        valgteHjemler: vedtak.valgtHjemmelHarIkkeRettighet,
+        stans: {
+            stansFraOgMed: vedtak.stansdato,
+            valgteHjemler: vedtak.valgtHjemmelHarIkkeRettighet,
+        },
     };
 };
