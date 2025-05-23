@@ -1,4 +1,4 @@
-import { Avslagsgrunn, Behandlingsutfall } from './BehandlingTypes';
+import { Avslagsgrunn, Behandlingsutfall, RevurderingType } from './BehandlingTypes';
 import { Nullable } from './common';
 import { Periode } from './Periode';
 
@@ -41,4 +41,8 @@ export type VedtakBrevFritekstLagringDTO = {
 export type VedtakBarnetilleggDTO = {
     begrunnelse: string;
     perioder: VedtakBarnetilleggPeriode[];
+};
+
+export type VedtakOpprettRevurderingDTO = {
+    revurderingType: RevurderingType;
 };

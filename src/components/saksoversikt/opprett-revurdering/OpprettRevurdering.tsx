@@ -4,6 +4,7 @@ import { useRef } from 'react';
 import { SakId } from '../../../types/SakTypes';
 import router from 'next/router';
 import { useOpprettRevurdering } from './useOpprettRevurdering';
+import { RevurderingType } from '../../../types/BehandlingTypes';
 
 type Props = {
     sakId: SakId;
@@ -30,7 +31,7 @@ export const OpprettRevurdering = ({ sakId, harVedtak }: Props) => {
                 heading="Bekreft opprett revurdering"
                 submitTekst="Opprett revurdering"
                 onSubmit={() => {
-                    opprettRevurdering().then((data) => {
+                    opprettRevurdering({ revurderingType: RevurderingType.STANS }).then((data) => {
                         if (data) {
                             router.push(`/behandling/${data.id}`);
                         }

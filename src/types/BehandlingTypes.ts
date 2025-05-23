@@ -129,3 +129,8 @@ export enum Behandlingsutfall {
     INNVILGELSE = 'INNVILGELSE',
     STANS = 'STANS',
 }
+
+export enum RevurderingType {
+    STANS = 'STANS',
+    INNVILGELSESPERIODE = 'INNVILGELSESPERIODE',
+}
