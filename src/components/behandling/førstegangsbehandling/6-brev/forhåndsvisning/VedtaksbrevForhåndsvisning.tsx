@@ -6,6 +6,7 @@ import { useFørstegangsbehandling } from '../../../BehandlingContext';
 
 import style from './VedtaksbrevForhåndsvisning.module.css';
 import { Behandlingsutfall } from '../../../../../types/BehandlingTypes';
+import { førstegangsVedtakValidering } from '../../førstegangsVedtakValidering';
 
 export const VedtaksbrevForhåndsvisning = () => {
     const { behandling } = useFørstegangsbehandling();
@@ -13,6 +14,9 @@ export const VedtaksbrevForhåndsvisning = () => {
 
     const { hentForhåndsvisning, forhåndsvisningLaster, forhåndsvisningError } =
         useHentVedtaksbrevForhåndsvisning(behandling);
+
+    const valideringResultat = førstegangsVedtakValidering(behandling, vedtak);
+    const harValideringsfeil = valideringResultat.errors.length > 0;
 
     return (
         <>
@@ -22,6 +26,7 @@ export const VedtaksbrevForhåndsvisning = () => {
                 variant="secondary"
                 icon={<EnvelopeOpenIcon />}
                 className={style.knapp}
+                disabled={harValideringsfeil}
                 loading={forhåndsvisningLaster}
                 onClick={async () => {
                     //Backend vil ignorere perioden dersom vedtaket er avslag, og hvis tilstanden er tilBeslutter (senere enn under behandling)
