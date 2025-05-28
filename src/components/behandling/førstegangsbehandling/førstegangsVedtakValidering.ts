@@ -24,6 +24,10 @@ export const førstegangsVedtakValidering = (
         errors.push('Behandlingsutfall for vilkårsvurdering mangler');
     }
 
+    if (behandlingsperiode.fraOgMed > behandlingsperiode.tilOgMed) {
+        errors.push('Til og med-dato må være etter fra og med-dato');
+    }
+
     if (tiltaksperiode.fraOgMed > behandlingsperiode.fraOgMed) {
         errors.push('Behandlingsperioden starter før tiltaksperioden');
     }

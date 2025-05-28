@@ -18,6 +18,7 @@ export const VedtaksbrevForhåndsvisning = () => {
 
     const [showValidationError, setShowValidationError] = React.useState(false);
     const validering = revurderingStansValidering(revurderingVedtak);
+    const harValideringsfeil = validering.errors.length > 0;
 
     return (
         <>
@@ -27,6 +28,7 @@ export const VedtaksbrevForhåndsvisning = () => {
                 variant="secondary"
                 icon={<EnvelopeOpenIcon />}
                 className={style.knapp}
+                disabled={harValideringsfeil}
                 loading={forhåndsvisningLaster}
                 onClick={async () => {
                     if (validering.errors.length === 0) {
