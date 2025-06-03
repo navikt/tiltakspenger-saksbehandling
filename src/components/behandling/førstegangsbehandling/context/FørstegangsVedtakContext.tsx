@@ -18,7 +18,7 @@ import {
 import {
     harSøktBarnetillegg,
     hentTiltaksdeltagelseFraSoknad,
-    hentTiltaksperiodeFraSøknad,
+    hentTiltaksperiode,
 } from '../../../../utils/behandling';
 import { periodiserBarnetillegg } from '../../../../utils/barnetillegg';
 
@@ -40,7 +40,7 @@ const DispatchContext = createContext((() => ({})) as Dispatch<FørstegangsVedta
 const initieltVedtakSkjema = (
     behandling: FørstegangsbehandlingData,
 ): FørstegangsVedtakSkjemaState => {
-    const tiltaksperiode = hentTiltaksperiodeFraSøknad(behandling);
+    const tiltaksperiode = hentTiltaksperiode(behandling);
     const tiltakFraSoknad = hentTiltaksdeltagelseFraSoknad(behandling);
 
     return {
