@@ -5,6 +5,7 @@ import {
     deltarPaFlereTiltakMedStartOgSluttdato,
     hentTiltaksdeltakelser,
     hentTiltaksperiode,
+    hentTiltaksperiodeFraSøknad,
 } from '../../../utils/behandling';
 import { joinPerioder, validerPeriodisering } from '../../../utils/periode';
 import dayjs from 'dayjs';
@@ -52,7 +53,7 @@ const validerUtfallAvslag = (
     errors: string[],
     warnings: string[],
 ) => {
-    const tiltaksperiode = hentTiltaksperiode(behandling);
+    const tiltaksperiode = hentTiltaksperiodeFraSøknad(behandling);
 
     if (vedtak.avslagsgrunner === null) {
         errors.push('Avslagsgrunn må velges');
