@@ -32,6 +32,14 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
     const saksbehandlerParam = searchParams.get('saksbehandler') as string | null;
     const sorteringParam = searchParams.get('sortering') as 'ASC' | 'DESC' | null;
 
+    const [type, setType] = useState<BehandlingssammendragType | 'Alle'>(typeParam ?? 'Alle');
+    const [status, setStatus] = useState<BehandlingssammendragStatus | 'Alle'>(
+        statusParam ?? 'Alle',
+    );
+    const [saksbehandler, setSaksbehandler] = useState<string | 'Alle'>(
+        saksbehandlerParam ?? 'Alle',
+    );
+
     const [filtrertBenktype, setFiltrertBenkType] = useState<BenkOversiktResponse>(benkOversikt);
 
     const fetchOversikt = useFetchJsonFraApi<BenkOversiktResponse, BenkOversiktRequest>(
@@ -44,14 +52,14 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
         if (firstLoadRef.current) {
             firstLoadRef.current = false;
             fetchOversikt.trigger({
-                behandlingstype: typeParam ? [typeParam] : null,
-                status: statusParam ? [statusParam] : null,
-                identer: saksbehandlerParam ? [saksbehandlerParam] : null,
+                behandlingstype: type === 'Alle' ? null : [type],
+                status: status === 'Alle' ? null : [status],
+                identer: saksbehandler === 'Alle' ? null : [saksbehandler],
                 sortering: sorteringParam ?? 'ASC',
             });
             return;
         }
-    }, [fetchOversikt, typeParam, statusParam, saksbehandlerParam, sorteringParam]);
+    }, [fetchOversikt, type, status, saksbehandler, sorteringParam]);
 
     return (
         <VStack gap="5" style={{ padding: '1rem' }}>
@@ -64,19 +72,10 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
                     <Select
                         label="Type"
                         size="small"
-                        value={typeParam ?? 'Alle'}
-                        onChange={(e) => {
-                            const params = new URLSearchParams(searchParams.toString());
-                            const valgtType = e.target.value as BehandlingssammendragType | 'Alle';
-
-                            if (valgtType === 'Alle') {
-                                params.delete('type');
-                            } else {
-                                params.set('type', valgtType);
-                            }
-
-                            router.push({ pathname: router.pathname, search: params.toString() });
-                        }}
+                        value={type}
+                        onChange={(e) =>
+                            setType(e.target.value as BehandlingssammendragType | 'Alle')
+                        }
                     >
                         <option value={'Alle'}>Alle</option>
                         {Object.entries(BehandlingssammendragType).map(([key, value]) => (
@@ -88,20 +87,10 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
                     <Select
                         label="Status"
                         size="small"
-                        value={statusParam ?? 'Alle'}
-                        onChange={(e) => {
-                            const params = new URLSearchParams(searchParams.toString());
-                            const valgtStatus = e.target.value as
-                                | BehandlingssammendragStatus
-                                | 'Alle';
-                            if (valgtStatus === 'Alle') {
-                                params.delete('status');
-                            } else {
-                                params.set('status', valgtStatus);
-                            }
-
-                            router.push({ pathname: router.pathname, search: params.toString() });
-                        }}
+                        value={status}
+                        onChange={(e) =>
+                            setStatus(e.target.value as BehandlingssammendragStatus | 'Alle')
+                        }
                     >
                         <option value={'Alle'}>Alle</option>
                         {Object.values(BehandlingssammendragStatus).map((status) => (
@@ -113,21 +102,11 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
                     <Select
                         label="Saksbehandler/Beslutter"
                         size="small"
-                        value={saksbehandlerParam ?? 'Alle'}
-                        onChange={(e) => {
-                            const params = new URLSearchParams(searchParams.toString());
-                            const valgtSaksbehandler = e.target.value as string | 'Alle';
-                            if (valgtSaksbehandler === 'Alle') {
-                                params.delete('saksbehandler');
-                            } else {
-                                params.set('saksbehandler', valgtSaksbehandler);
-                            }
-
-                            router.push({ pathname: router.pathname, search: params.toString() });
-                        }}
+                        value={saksbehandler}
+                        onChange={(e) => setSaksbehandler(e.target.value)}
                     >
                         <option value={'Alle'}>Alle</option>
-                        {filtrertBenktype.behandlingssammendrag
+                        {benkOversikt.behandlingssammendrag
                             .map((behandling) => behandling.saksbehandler)
                             .filter((value, index, self) => value && self.indexOf(value) === index)
                             .map((saksbehandler) => (
@@ -146,12 +125,33 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
                         onClick={() => {
                             const query = new URLSearchParams(searchParams.toString());
 
+                            if (type !== 'Alle') {
+                                query.set('type', type);
+                            } else {
+                                query.delete('type');
+                            }
+                            if (status !== 'Alle') {
+                                query.set('status', status);
+                            } else {
+                                query.delete('status');
+                            }
+                            if (saksbehandler !== 'Alle') {
+                                query.set('saksbehandler', saksbehandler);
+                            } else {
+                                query.delete('saksbehandler');
+                            }
+                            if (sorteringParam) {
+                                query.set('sortering', sorteringParam);
+                            } else {
+                                query.delete('sortering');
+                            }
+
                             router.push({ pathname: router.pathname, search: query.toString() });
                             fetchOversikt.trigger({
-                                behandlingstype: typeParam ? [typeParam] : null,
-                                status: statusParam ? [statusParam] : null,
+                                behandlingstype: type === 'Alle' ? null : [type],
+                                status: status === 'Alle' ? null : [status],
+                                identer: saksbehandler === 'Alle' ? null : [saksbehandler],
                                 sortering: sorteringParam ?? 'ASC',
-                                identer: saksbehandlerParam ? [saksbehandlerParam] : null,
                             });
                         }}
                     >
@@ -162,6 +162,10 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
                         size="small"
                         variant="secondary"
                         onClick={() => {
+                            setType('Alle');
+                            setStatus('Alle');
+                            setSaksbehandler('Alle');
+
                             router.push({ pathname: router.pathname });
                             fetchOversikt.trigger({
                                 behandlingstype: null,

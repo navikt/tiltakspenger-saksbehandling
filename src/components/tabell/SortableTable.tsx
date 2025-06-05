@@ -56,8 +56,14 @@ const SortableTable = <Kolonner extends Record<string, string>>(props: Props<Kol
             <Table
                 zebraStripes
                 sort={
-                    sortVerdi && sortertKolonne
-                        ? { orderBy: sortertKolonne, direction: sortVerdi }
+                    sortertKolonne
+                        ? {
+                              orderBy: sortertKolonne,
+                              direction:
+                                  props.kolonnerConfig.sortering.value === 'ASC'
+                                      ? 'ascending'
+                                      : 'descending',
+                          }
                         : undefined
                 }
                 onSortChange={(sortKey) => handleSorterClick(sortKey as ValueOf<Kolonner>)}
