@@ -4,9 +4,9 @@ import { BenkOversiktSide } from '../components/benk/BenkSide';
 import { ComponentProps } from 'react';
 
 export const getServerSideProps = pageWithAuthentication(async (context) => {
-    const søknaderOgBehandlinger = await fetchBenkOversikt(context.req);
+    const benkOversikt = await fetchBenkOversikt(context.req);
 
-    return { props: { søknaderOgBehandlinger } satisfies ComponentProps<typeof BenkOversiktSide> };
+    return { props: { benkOversikt } satisfies ComponentProps<typeof BenkOversiktSide> };
 });
 
 export default BenkOversiktSide;

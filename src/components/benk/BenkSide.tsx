@@ -1,123 +1,265 @@
-import { Button, CopyButton, Heading, HStack, Table, VStack } from '@navikt/ds-react';
-import Varsel from '../varsel/Varsel';
+import { Button, Heading, HStack, Select, Table, VStack } from '@navikt/ds-react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
-    finnBehandlingStatusTekst,
-    finnBehandlingstypeTekst,
-} from '../../utils/tekstformateringUtils';
-import { formaterTidspunkt, periodeTilFormatertDatotekst } from '../../utils/date';
-import Link from 'next/link';
-import React, { useState } from 'react';
-import { BehandlingEllerSøknadForOversiktData } from '../../types/BehandlingTypes';
-import { sorterBenkoversikt } from './sorterBenkoversikt';
-import { CaretDownFillIcon, CaretUpFillIcon } from '@navikt/aksel-icons';
-
-import style from './BenkSide.module.css';
+    BehandlingssammendragStatus,
+    BehandlingssammendragType,
+    BenkOversiktRequest,
+    BenkOversiktResponse,
+} from '../../types/Behandlingssammendrag';
+import { useRouter } from 'next/router';
+import { formaterTidspunkt } from '~/utils/date';
+import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
+import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
+import { useSearchParams } from 'next/navigation';
+import {
+    BehandlingssammendragKolonner,
+    behandlingsstatusTextFormatter,
+    behandlingstypeTextFormatter,
+} from './BenkSideUtils';
+import SortableTable from '../tabell/SortableTable';
 
 type Props = {
-    søknaderOgBehandlinger: BehandlingEllerSøknadForOversiktData[];
+    benkOversikt: BenkOversiktResponse;
 };
 
-export const BenkOversiktSide = ({ søknaderOgBehandlinger }: Props) => {
-    const [sorterStigende, setSorterStigende] = useState(true);
-    const sorterteSøknaderOgBehandlinger = sorterBenkoversikt(
-        søknaderOgBehandlinger,
-        sorterStigende,
+export const BenkOversiktSide = ({ benkOversikt }: Props) => {
+    const router = useRouter();
+    const firstLoadRef = useRef(true);
+    const searchParams = useSearchParams();
+    const { innloggetSaksbehandler } = useSaksbehandler();
+    const typeParam = searchParams.get('type') as BehandlingssammendragType | null;
+    const statusParam = searchParams.get('status') as BehandlingssammendragStatus | null;
+    const saksbehandlerParam = searchParams.get('saksbehandler') as string | null;
+    const sorteringParam = searchParams.get('sortering') as 'ASC' | 'DESC' | null;
+
+    const [filtrertBenktype, setFiltrertBenkType] = useState<BenkOversiktResponse>(benkOversikt);
+
+    const fetchOversikt = useFetchJsonFraApi<BenkOversiktResponse, BenkOversiktRequest>(
+        `/behandlinger`,
+        'POST',
+        { onSuccess: (oversikt) => setFiltrertBenkType(oversikt!) },
     );
+
+    useEffect(() => {
+        if (firstLoadRef.current) {
+            firstLoadRef.current = false;
+            fetchOversikt.trigger({
+                behandlingstype: typeParam ? [typeParam] : null,
+                status: statusParam ? [statusParam] : null,
+                identer: saksbehandlerParam ? [saksbehandlerParam] : null,
+                sortering: sorteringParam ?? 'ASC',
+            });
+            return;
+        }
+    }, [fetchOversikt, typeParam, statusParam, saksbehandlerParam, sorteringParam]);
 
     return (
         <VStack gap="5" style={{ padding: '1rem' }}>
             <Heading size="medium" level="2">
                 Oversikt over behandlinger og søknader
             </Heading>
-            <Table>
-                <Table.Header>
-                    <Table.Row>
-                        <Table.HeaderCell scope="col">Fødselsnummer</Table.HeaderCell>
-                        <Table.HeaderCell scope="col">Type</Table.HeaderCell>
-                        <Table.HeaderCell scope="col">
-                            <Button
-                                onClick={() => setSorterStigende(!sorterStigende)}
-                                variant={'tertiary-neutral'}
-                                icon={sorterStigende ? <CaretUpFillIcon /> : <CaretDownFillIcon />}
-                                className={style.sortKnapp}
-                            >
-                                Kravtidspunkt
-                            </Button>
-                        </Table.HeaderCell>
-                        <Table.HeaderCell scope="col">Status</Table.HeaderCell>
-                        <Table.HeaderCell scope="col">Periode</Table.HeaderCell>
-                        <Table.HeaderCell scope="col">Saksbehandler</Table.HeaderCell>
-                        <Table.HeaderCell scope="col">Beslutter</Table.HeaderCell>
-                        <Table.HeaderCell scope="col">Handlinger</Table.HeaderCell>
-                    </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                    {sorterteSøknaderOgBehandlinger.length === 0 ? (
-                        <Varsel
-                            variant="info"
-                            melding={`Ingen søknader eller behandlinger i basen`}
-                        />
-                    ) : (
-                        sorterteSøknaderOgBehandlinger.map((søknadEllerBehandling) => {
-                            const {
-                                fnr,
-                                typeBehandling,
-                                kravtidspunkt,
-                                status,
-                                underkjent,
-                                periode,
-                                saksbehandler,
-                                beslutter,
-                                saksnummer,
-                                id,
-                            } = søknadEllerBehandling;
 
-                            return (
-                                <Table.Row shadeOnHover={false} key={id}>
-                                    <Table.HeaderCell scope="row" style={{ wordBreak: 'unset' }}>
-                                        <HStack align="center">
-                                            {fnr}
-                                            <CopyButton
-                                                copyText={fnr}
-                                                variant="action"
-                                                size="small"
-                                            />
-                                        </HStack>
-                                    </Table.HeaderCell>
-                                    <Table.DataCell>
-                                        {finnBehandlingstypeTekst[typeBehandling]}
-                                    </Table.DataCell>
-                                    <Table.DataCell>
-                                        {kravtidspunkt
-                                            ? formaterTidspunkt(kravtidspunkt)
-                                            : 'Ukjent'}
-                                    </Table.DataCell>
-                                    <Table.DataCell>
-                                        {finnBehandlingStatusTekst(status, underkjent)}
-                                    </Table.DataCell>
-                                    <Table.DataCell>
-                                        {periode && `${periodeTilFormatertDatotekst(periode)}`}
-                                    </Table.DataCell>
-                                    <Table.DataCell>
-                                        {saksbehandler ?? 'Ikke tildelt'}
-                                    </Table.DataCell>
-                                    <Table.DataCell>{beslutter ?? 'Ikke tildelt'}</Table.DataCell>
-                                    <Table.DataCell>
-                                        <Button
-                                            as={Link}
-                                            size="small"
-                                            variant={'secondary'}
-                                            href={`/sak/${saksnummer}`}
-                                        >
-                                            Se sak
-                                        </Button>
-                                    </Table.DataCell>
-                                </Table.Row>
-                            );
-                        })
-                    )}
-                </Table.Body>
-            </Table>
+            <VStack gap="4">
+                <HStack gap="4">
+                    <Select
+                        label="Type"
+                        size="small"
+                        value={typeParam ?? 'Alle'}
+                        onChange={(e) => {
+                            const params = new URLSearchParams(searchParams.toString());
+                            const valgtType = e.target.value as BehandlingssammendragType | 'Alle';
+
+                            if (valgtType === 'Alle') {
+                                params.delete('type');
+                            } else {
+                                params.set('type', valgtType);
+                            }
+
+                            router.push({ pathname: router.pathname, search: params.toString() });
+                        }}
+                    >
+                        <option value={'Alle'}>Alle</option>
+                        {Object.entries(BehandlingssammendragType).map(([key, value]) => (
+                            <option key={key} value={value}>
+                                {behandlingstypeTextFormatter[value]}
+                            </option>
+                        ))}
+                    </Select>
+                    <Select
+                        label="Status"
+                        size="small"
+                        value={statusParam ?? 'Alle'}
+                        onChange={(e) => {
+                            const params = new URLSearchParams(searchParams.toString());
+                            const valgtStatus = e.target.value as
+                                | BehandlingssammendragStatus
+                                | 'Alle';
+                            if (valgtStatus === 'Alle') {
+                                params.delete('status');
+                            } else {
+                                params.set('status', valgtStatus);
+                            }
+
+                            router.push({ pathname: router.pathname, search: params.toString() });
+                        }}
+                    >
+                        <option value={'Alle'}>Alle</option>
+                        {Object.values(BehandlingssammendragStatus).map((status) => (
+                            <option key={status} value={status}>
+                                {behandlingsstatusTextFormatter[status]}
+                            </option>
+                        ))}
+                    </Select>
+                    <Select
+                        label="Saksbehandler/Beslutter"
+                        size="small"
+                        value={saksbehandlerParam ?? 'Alle'}
+                        onChange={(e) => {
+                            const params = new URLSearchParams(searchParams.toString());
+                            const valgtSaksbehandler = e.target.value as string | 'Alle';
+                            if (valgtSaksbehandler === 'Alle') {
+                                params.delete('saksbehandler');
+                            } else {
+                                params.set('saksbehandler', valgtSaksbehandler);
+                            }
+
+                            router.push({ pathname: router.pathname, search: params.toString() });
+                        }}
+                    >
+                        <option value={'Alle'}>Alle</option>
+                        {filtrertBenktype.behandlingssammendrag
+                            .map((behandling) => behandling.saksbehandler)
+                            .filter((value, index, self) => value && self.indexOf(value) === index)
+                            .map((saksbehandler) => (
+                                <option key={saksbehandler} value={saksbehandler!}>
+                                    {innloggetSaksbehandler.navIdent === saksbehandler
+                                        ? 'Meg'
+                                        : saksbehandler}
+                                </option>
+                            ))}
+                    </Select>
+                </HStack>
+                <HStack gap="4">
+                    <Button
+                        type="button"
+                        size="small"
+                        onClick={() => {
+                            const query = new URLSearchParams(searchParams.toString());
+
+                            router.push({ pathname: router.pathname, search: query.toString() });
+                            fetchOversikt.trigger({
+                                behandlingstype: typeParam ? [typeParam] : null,
+                                status: statusParam ? [statusParam] : null,
+                                sortering: sorteringParam ?? 'ASC',
+                                identer: saksbehandlerParam ? [saksbehandlerParam] : null,
+                            });
+                        }}
+                    >
+                        Oppdater filtre
+                    </Button>
+                    <Button
+                        type="button"
+                        size="small"
+                        variant="secondary"
+                        onClick={() => {
+                            router.push({ pathname: router.pathname });
+                            fetchOversikt.trigger({
+                                behandlingstype: null,
+                                status: null,
+                                identer: null,
+                                sortering: 'ASC',
+                            });
+                        }}
+                    >
+                        Nullstill filtre
+                    </Button>
+                </HStack>
+            </VStack>
+
+            <SortableTable
+                kolonnerConfig={{
+                    kolonner: BehandlingssammendragKolonner,
+                    defaultKolonneSorteresEtter: BehandlingssammendragKolonner.startet,
+                    sortering: {
+                        value: sorteringParam ?? 'ASC',
+                        onSortChange: (sortKey) => {
+                            const currentParams = new URLSearchParams(searchParams.toString());
+                            const sortering = sortKey === 'descending' ? 'DESC' : 'ASC';
+
+                            if (sortering === 'DESC') {
+                                currentParams.set('sortering', 'DESC');
+                            } else if (sortering === 'ASC') {
+                                currentParams.delete('sortering');
+                            }
+
+                            router.push({
+                                pathname: router.pathname,
+                                search: currentParams.toString(),
+                            });
+                            fetchOversikt.trigger({
+                                behandlingstype: typeParam ? [typeParam] : null,
+                                status: statusParam ? [statusParam] : null,
+                                identer: saksbehandlerParam ? [saksbehandlerParam] : null,
+                                sortering: sortering,
+                            });
+                        },
+                    },
+                }}
+                tableHeader={
+                    <Table.Header>
+                        <Table.Row>
+                            <Table.HeaderCell scope="col">Fødselsnummer</Table.HeaderCell>
+                            <Table.HeaderCell scope="col">Type</Table.HeaderCell>
+                            <Table.HeaderCell scope="col">Status</Table.HeaderCell>
+                            <Table.ColumnHeader
+                                sortKey={BehandlingssammendragKolonner.startet}
+                                sortable
+                            >
+                                Kravtidspunkt/Startet
+                            </Table.ColumnHeader>
+                            <Table.HeaderCell scope="col">Saksbehandler</Table.HeaderCell>
+                            <Table.HeaderCell scope="col">Beslutter</Table.HeaderCell>
+                            <Table.HeaderCell scope="col"></Table.HeaderCell>
+                        </Table.Row>
+                    </Table.Header>
+                }
+                tableBody={
+                    <Table.Body>
+                        {filtrertBenktype.behandlingssammendrag.map((behandling) => (
+                            <Table.Row key={`${behandling.sakId}-${behandling.startet}`}>
+                                <Table.HeaderCell scope="row">{behandling.fnr}</Table.HeaderCell>
+                                <Table.DataCell>
+                                    {behandlingstypeTextFormatter[behandling.behandlingstype]}
+                                </Table.DataCell>
+                                <Table.DataCell>
+                                    {behandling.status
+                                        ? behandlingsstatusTextFormatter[behandling.status]
+                                        : '-'}
+                                </Table.DataCell>
+                                <Table.DataCell>
+                                    {formaterTidspunkt(behandling.startet)}
+                                </Table.DataCell>
+                                <Table.DataCell>
+                                    {behandling.saksbehandler ?? 'Ikke tildelt'}
+                                </Table.DataCell>
+                                <Table.DataCell>
+                                    {behandling.beslutter ?? 'Ikke tildelt'}
+                                </Table.DataCell>
+                                <Table.DataCell>
+                                    <Button
+                                        type="button"
+                                        variant="secondary"
+                                        size="small"
+                                        onClick={() => {
+                                            console.log('lol');
+                                        }}
+                                    ></Button>
+                                </Table.DataCell>
+                            </Table.Row>
+                        ))}
+                    </Table.Body>
+                }
+            />
         </VStack>
     );
 };

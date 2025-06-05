@@ -3,14 +3,11 @@ import { logger } from '@navikt/next-logger';
 import { IncomingMessage } from 'node:http';
 import { NextApiRequest } from 'next';
 import { SakProps } from '../../types/SakTypes';
-import {
-    BehandlingData,
-    BehandlingEllerSøknadForOversiktData,
-    BehandlingId,
-} from '../../types/BehandlingTypes';
+import { BehandlingData, BehandlingId } from '../../types/BehandlingTypes';
 import { Saksbehandler } from '../../types/Saksbehandler';
 import { stripLeadingSlash } from '../string';
 import { errorFraApiResponse } from './fetch';
+import { Behandlingssammendrag } from '../../types/Behandlingssammendrag';
 
 type NextRequest = Request | IncomingMessage | NextApiRequest;
 
@@ -80,7 +77,17 @@ export const fetchSak = async (req: NextRequest, saksnummer: string) =>
     fetchJsonFraApi<SakProps>(req, `/sak/${saksnummer}`);
 
 export const fetchBenkOversikt = async (req: NextRequest) =>
-    fetchJsonFraApi<BehandlingEllerSøknadForOversiktData[]>(req, '/behandlinger');
+    fetchJsonFraApi<{
+        behandlingssammendrag: Behandlingssammendrag[];
+        totalAntall: number;
+    }>(req, '/behandlinger', {
+        body: JSON.stringify({
+            behandlingstype: null,
+            status: null,
+            sortering: 'ASC',
+        }),
+        method: 'POST',
+    });
 
 export const fetchSaksbehandler = async (req: NextRequest) =>
     fetchJsonFraApi<Saksbehandler>(req, '/saksbehandler');
