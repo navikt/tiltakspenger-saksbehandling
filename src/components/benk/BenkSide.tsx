@@ -1,4 +1,4 @@
-import { Button, Heading, HStack, Select, Table, VStack } from '@navikt/ds-react';
+import { Button, CopyButton, Heading, HStack, Select, Table, VStack } from '@navikt/ds-react';
 import React, { useEffect, useRef, useState } from 'react';
 import {
     BehandlingssammendragStatus,
@@ -230,8 +230,20 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
                 tableBody={
                     <Table.Body>
                         {filtrertBenktype.behandlingssammendrag.map((behandling) => (
-                            <Table.Row key={`${behandling.sakId}-${behandling.startet}`}>
-                                <Table.HeaderCell scope="row">{behandling.fnr}</Table.HeaderCell>
+                            <Table.Row
+                                shadeOnHover={false}
+                                key={`${behandling.sakId}-${behandling.startet}`}
+                            >
+                                <Table.HeaderCell scope="row">
+                                    <HStack align="center">
+                                        {behandling.fnr}
+                                        <CopyButton
+                                            copyText={behandling.fnr}
+                                            variant="action"
+                                            size="small"
+                                        />
+                                    </HStack>
+                                </Table.HeaderCell>
                                 <Table.DataCell>
                                     {behandlingstypeTextFormatter[behandling.behandlingstype]}
                                 </Table.DataCell>
@@ -255,9 +267,11 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
                                         variant="secondary"
                                         size="small"
                                         onClick={() => {
-                                            console.log('lol');
+                                            router.push(`/sak/${behandling.saksnummer}`);
                                         }}
-                                    ></Button>
+                                    >
+                                        Se sak
+                                    </Button>
                                 </Table.DataCell>
                             </Table.Row>
                         ))}
