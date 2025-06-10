@@ -3,7 +3,7 @@ import {
     useFørstegangsVedtakSkjema,
     useFørstegangsVedtakSkjemaDispatch,
 } from '../context/FørstegangsVedtakContext';
-import { Avslagsgrunn, Behandlingsutfall } from '../../../../types/BehandlingTypes';
+import { Avslagsgrunn, BehandlingResultat } from '../../../../types/BehandlingTypes';
 import styles from './FørstegangsvedtakAvslagsgrunner.module.css';
 import { VedtakSeksjon } from '../../vedtak-layout/seksjon/VedtakSeksjon';
 import { Separator } from '../../../separator/Separator';
@@ -24,11 +24,11 @@ export const AvslagsgrunnTekst = {
 
 const FørstegangsvedtakAvslagsgrunner = () => {
     const { rolleForBehandling } = useFørstegangsbehandling();
-    const { utfall, avslagsgrunner } = useFørstegangsVedtakSkjema();
+    const { resultat, avslagsgrunner } = useFørstegangsVedtakSkjema();
     const dispatch = useFørstegangsVedtakSkjemaDispatch();
     const erIkkeSaksbehandler = rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER;
 
-    if (utfall !== Behandlingsutfall.AVSLAG) {
+    if (resultat !== BehandlingResultat.AVSLAG) {
         return null;
     }
 

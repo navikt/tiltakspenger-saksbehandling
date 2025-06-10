@@ -45,7 +45,7 @@ const initieltVedtakSkjema = (
 
     return {
         behandlingsperiode: behandling.virkningsperiode ?? tiltaksperiode,
-        utfall: behandling.utfall,
+        resultat: behandling.resultat,
         harBarnetillegg: harSøktBarnetillegg(behandling),
         barnetilleggPerioder:
             behandling.barnetillegg?.perioder ||

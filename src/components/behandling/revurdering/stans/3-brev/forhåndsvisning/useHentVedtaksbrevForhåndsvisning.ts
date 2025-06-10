@@ -1,11 +1,11 @@
-import { BehandlingData, Behandlingsutfall } from '../../../../../../types/BehandlingTypes';
+import { BehandlingData, BehandlingResultat } from '../../../../../../types/BehandlingTypes';
 import { useFetchBlobFraApi } from '../../../../../../utils/fetch/useFetchFraApi';
 
 type BrevForhåndsvisningDTO = {
     fritekst: string;
     stansDato: string;
     valgteHjemler: string[];
-    utfall: Behandlingsutfall;
+    resultat: BehandlingResultat;
 };
 
 export const useHentVedtaksbrevForhåndsvisning = (behandling: BehandlingData) => {

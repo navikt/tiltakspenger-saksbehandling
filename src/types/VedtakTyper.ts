@@ -1,4 +1,4 @@
-import { Avslagsgrunn, Behandlingsutfall, RevurderingType } from './BehandlingTypes';
+import { Avslagsgrunn, BehandlingResultat, RevurderingType } from './BehandlingTypes';
 import { Nullable } from './common';
 import { Periode } from './Periode';
 
@@ -10,7 +10,7 @@ export type VedtakTilBeslutningDTO = {
     valgteTiltaksdeltakelser: VedtakTiltaksdeltakelsePeriode[];
     antallDagerPerMeldeperiode: number;
     avslagsgrunner: Nullable<Avslagsgrunn[]>;
-    utfall: Behandlingsutfall;
+    resultat: BehandlingResultat;
 };
 
 export type VedtakBarnetilleggPeriode = {

@@ -1,4 +1,8 @@
-import { Behandlingstype, BehandlingData, Behandlingsutfall } from '../../../types/BehandlingTypes';
+import {
+    Behandlingstype,
+    BehandlingData,
+    BehandlingResultat,
+} from '../../../types/BehandlingTypes';
 import { Nullable } from '../../../types/common';
 import { Periode } from '../../../types/Periode';
 import { SøknadForBehandlingProps } from '../../../types/SøknadTypes';
@@ -6,7 +10,7 @@ import { SøknadForBehandlingProps } from '../../../types/SøknadTypes';
 export interface AvsluttetBehandlingDataCellInfo {
     id: string;
     behandlingstype: Behandlingstype;
-    utfall: Nullable<Behandlingsutfall>;
+    resultat: Nullable<BehandlingResultat>;
     tidspunktAvsluttet: string;
     behandlingsperiode: Nullable<Periode>;
     avsluttetPga: 'ferdigBehandlet' | 'avbrutt';
@@ -24,7 +28,7 @@ export const avsluttetBehandlingToDataCellInfo = (
     return {
         id: behandling.id,
         behandlingsperiode: behandling.virkningsperiode,
-        utfall: behandling.utfall,
+        resultat: behandling.resultat,
         behandlingstype: behandling.type,
         tidspunktAvsluttet: tidspunktAvsluttet,
         avsluttetPga: behandling.avbrutt ? 'avbrutt' : 'ferdigBehandlet',
@@ -49,7 +53,7 @@ export const avbruttSøknadToDataCellInfo = (
                 ? søknad.tiltak[søknad.tiltak.length - 1].tilOgMed
                 : søknad.tiltak.tilOgMed,
         },
-        utfall: null,
+        resultat: null,
         behandlingstype: Behandlingstype.SØKNAD,
         tidspunktAvsluttet: søknad.avbrutt.avbruttTidspunkt,
         avsluttetPga: 'avbrutt',

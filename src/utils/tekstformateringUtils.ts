@@ -1,4 +1,4 @@
-import { BehandlingStatus, Behandlingstype, Behandlingsutfall } from '../types/BehandlingTypes';
+import { BehandlingStatus, Behandlingstype, BehandlingResultat } from '../types/BehandlingTypes';
 import {
     MeldekortBehandlingDagStatus,
     Utbetalingsstatus,
@@ -66,11 +66,11 @@ export const finnBehandlingstypeTekst: Record<Behandlingstype, string> = {
     [Behandlingstype.SØKNAD]: 'Søknad',
 } as const;
 
-export const behandlingsutfallTilTekst: Record<Behandlingsutfall, string> = {
-    [Behandlingsutfall.AVSLAG]: 'Avslag',
-    [Behandlingsutfall.INNVILGELSE]: 'Innvilgelse',
-    [Behandlingsutfall.STANS]: 'Stans',
-    [Behandlingsutfall.REVURDERING_INNVILGELSE]: 'Revurdering innvilgelse',
+export const behandlingResultatTilTekst: Record<BehandlingResultat, string> = {
+    [BehandlingResultat.AVSLAG]: 'Avslag',
+    [BehandlingResultat.INNVILGELSE]: 'Innvilgelse',
+    [BehandlingResultat.STANS]: 'Stans',
+    [BehandlingResultat.REVURDERING_INNVILGELSE]: 'Revurdering innvilgelse',
 } as const;
 
 export const meldekortUtbetalingstatusTekst: Record<Utbetalingsstatus, string> = {

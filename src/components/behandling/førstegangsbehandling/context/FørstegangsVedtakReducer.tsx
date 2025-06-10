@@ -7,13 +7,13 @@ import { Periode } from '../../../../types/Periode';
 import { forrigeDag, leggTilDager, nesteDag } from '../../../../utils/date';
 import { periodiserBarnetillegg } from '../../../../utils/barnetillegg';
 import { SøknadForBehandlingProps } from '../../../../types/SøknadTypes';
-import { Avslagsgrunn, Behandlingsutfall } from '../../../../types/BehandlingTypes';
+import { Avslagsgrunn, BehandlingResultat } from '../../../../types/BehandlingTypes';
 import { Nullable } from '../../../../types/common';
 
 export type FørstegangsVedtakSkjemaActions =
     | {
           type: 'setResultat';
-          payload: { utfall: Behandlingsutfall };
+          payload: { resultat: BehandlingResultat };
       }
     | {
           type: 'oppdaterDagerPerMeldeperiode';
@@ -69,7 +69,7 @@ export type FørstegangsVedtakSkjemaActions =
       };
 
 export type FørstegangsVedtakSkjemaState = {
-    utfall: Nullable<Behandlingsutfall>;
+    resultat: Nullable<BehandlingResultat>;
     behandlingsperiode: Periode;
     harBarnetillegg: boolean;
     barnetilleggPerioder: VedtakBarnetilleggPeriode[];
@@ -91,7 +91,7 @@ export const førstegangsVedtakReducer: Reducer<
                 behandlingsperiode: { ...state.behandlingsperiode, ...payload.periode },
             };
         case 'setResultat':
-            return { ...state, utfall: payload.utfall };
+            return { ...state, resultat: payload.resultat };
         case 'oppdaterDagerPerMeldeperiode':
             return { ...state, antallDagerPerMeldeperiode: payload.antallDagerPerMeldeperiode };
         case 'setHarSøktBarnetillegg':

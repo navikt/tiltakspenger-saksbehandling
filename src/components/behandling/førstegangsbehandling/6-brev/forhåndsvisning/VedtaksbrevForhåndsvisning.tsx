@@ -5,7 +5,7 @@ import { useFørstegangsVedtakSkjema } from '../../context/FørstegangsVedtakCon
 import { useFørstegangsbehandling } from '../../../BehandlingContext';
 
 import style from './VedtaksbrevForhåndsvisning.module.css';
-import { Behandlingsutfall } from '../../../../../types/BehandlingTypes';
+import { BehandlingResultat } from '../../../../../types/BehandlingTypes';
 import { førstegangsVedtakValidering } from '../../førstegangsVedtakValidering';
 
 export const VedtaksbrevForhåndsvisning = () => {
@@ -34,10 +34,10 @@ export const VedtaksbrevForhåndsvisning = () => {
                         fritekst: vedtak.getBrevtekst(),
                         virkningsperiode: vedtak.behandlingsperiode,
                         barnetillegg: vedtak.harBarnetillegg ? vedtak.barnetilleggPerioder : [],
-                        // vi rendrer ikke komponenten hvis utfallet ikke eksiterer i parenten
-                        utfall: vedtak.utfall!,
+                        // vi rendrer ikke komponenten hvis resultatet ikke eksiterer i parenten
+                        resultat: vedtak.resultat!,
                         avslagsgrunner:
-                            vedtak.utfall === Behandlingsutfall.AVSLAG &&
+                            vedtak.resultat === BehandlingResultat.AVSLAG &&
                             vedtak.avslagsgrunner !== null
                                 ? vedtak.avslagsgrunner
                                 : null,

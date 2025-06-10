@@ -1,5 +1,5 @@
 import { VedtakTilBeslutningDTO } from '../../../../types/VedtakTyper';
-import { BehandlingData, Behandlingsutfall } from '../../../../types/BehandlingTypes';
+import { BehandlingData, BehandlingResultat } from '../../../../types/BehandlingTypes';
 import { useFetchJsonFraApi } from '../../../../utils/fetch/useFetchFraApi';
 import { FørstegangsVedtakContext } from '../context/FørstegangsVedtakContext';
 
@@ -27,7 +27,7 @@ const tilBeslutningDTO = (vedtak: FørstegangsVedtakContext): VedtakTilBeslutnin
         fritekstTilVedtaksbrev: vedtak.getBrevtekst(),
         behandlingsperiode: vedtak.behandlingsperiode,
         barnetillegg:
-            vedtak.utfall === Behandlingsutfall.INNVILGELSE && vedtak.harBarnetillegg
+            vedtak.resultat === BehandlingResultat.INNVILGELSE && vedtak.harBarnetillegg
                 ? {
                       begrunnelse: vedtak.getBarnetilleggBegrunnelse(),
                       perioder: vedtak.barnetilleggPerioder ?? [],
@@ -36,10 +36,10 @@ const tilBeslutningDTO = (vedtak: FørstegangsVedtakContext): VedtakTilBeslutnin
         valgteTiltaksdeltakelser: vedtak.valgteTiltaksdeltakelser,
         antallDagerPerMeldeperiode: vedtak.antallDagerPerMeldeperiode,
         avslagsgrunner:
-            vedtak.utfall === Behandlingsutfall.AVSLAG && vedtak.avslagsgrunner !== null
+            vedtak.resultat === BehandlingResultat.AVSLAG && vedtak.avslagsgrunner !== null
                 ? vedtak.avslagsgrunner
                 : null,
-        //Validering skal fange at utfallet ikke er null
-        utfall: vedtak.utfall!,
+        //Validering skal fange at resultatet ikke er null
+        resultat: vedtak.resultat!,
     };
 };

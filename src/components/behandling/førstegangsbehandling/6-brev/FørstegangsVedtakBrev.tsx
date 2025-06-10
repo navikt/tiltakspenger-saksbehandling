@@ -10,18 +10,18 @@ import { TekstListe } from '../../../liste/TekstListe';
 import { useFørstegangsbehandling } from '../../BehandlingContext';
 
 import style from './FørstegangsVedtakBrev.module.css';
-import { Behandlingsutfall } from '../../../../types/BehandlingTypes';
+import { BehandlingResultat } from '../../../../types/BehandlingTypes';
 
 export const FørstegangsVedtakBrev = () => {
     const { behandling, rolleForBehandling } = useFørstegangsbehandling();
     const { fritekstTilVedtaksbrev, sakId, id } = behandling;
 
-    const { brevtekstRef, utfall, avslagsgrunner } = useFørstegangsVedtakSkjema();
+    const { brevtekstRef, resultat, avslagsgrunner } = useFørstegangsVedtakSkjema();
 
     return (
         <VedtakSeksjon>
-            {(utfall === Behandlingsutfall.INNVILGELSE ||
-                (Behandlingsutfall.AVSLAG && avslagsgrunner !== null)) && (
+            {(resultat === BehandlingResultat.INNVILGELSE ||
+                (BehandlingResultat.AVSLAG && avslagsgrunner !== null)) && (
                 <>
                     <VedtakSeksjon.Venstre>
                         <Heading size={'xsmall'} level={'2'}>

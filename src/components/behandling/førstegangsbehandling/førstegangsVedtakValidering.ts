@@ -1,6 +1,6 @@
 import { FørstegangsVedtakContext } from './context/FørstegangsVedtakContext';
 import { ValideringResultat } from '../send-og-godkjenn/BehandlingSendTilBeslutning';
-import { Behandlingsutfall, FørstegangsbehandlingData } from '../../../types/BehandlingTypes';
+import { BehandlingResultat, FørstegangsbehandlingData } from '../../../types/BehandlingTypes';
 import {
     deltarPaFlereTiltakMedStartOgSluttdato,
     hentTiltaksdeltakelser,
@@ -14,15 +14,15 @@ export const førstegangsVedtakValidering = (
     behandling: FørstegangsbehandlingData,
     vedtak: FørstegangsVedtakContext,
 ): ValideringResultat => {
-    const { behandlingsperiode, utfall } = vedtak;
+    const { behandlingsperiode, resultat } = vedtak;
 
     const tiltaksperiode = hentTiltaksperiode(behandling);
 
     const errors: string[] = [];
     const warnings: string[] = [];
 
-    if (!utfall) {
-        errors.push('Behandlingsutfall for vilkårsvurdering mangler');
+    if (!resultat) {
+        errors.push('Behandlingsresultat for vilkårsvurdering mangler');
     }
 
     if (behandlingsperiode.fraOgMed > behandlingsperiode.tilOgMed) {
@@ -37,10 +37,10 @@ export const førstegangsVedtakValidering = (
         errors.push('Behandlingsperioden slutter etter tiltaksperioden');
     }
 
-    if (utfall === Behandlingsutfall.AVSLAG) {
+    if (resultat === BehandlingResultat.AVSLAG) {
         validerUtfallAvslag(behandling, vedtak, errors, warnings);
     }
-    if (utfall === Behandlingsutfall.INNVILGELSE) {
+    if (resultat === BehandlingResultat.INNVILGELSE) {
         validerUtfallInnvilgelse(behandling, vedtak, errors);
     }
 

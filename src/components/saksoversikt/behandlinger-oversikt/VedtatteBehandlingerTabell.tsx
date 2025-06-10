@@ -1,7 +1,7 @@
 import { AvsluttetBehandlingDataCellInfo } from './AvsluttedeBehandlingerUtils';
 import { Button, Table } from '@navikt/ds-react';
 import {
-    behandlingsutfallTilTekst,
+    behandlingResultatTilTekst,
     finnBehandlingstypeTekst,
 } from '../../../utils/tekstformateringUtils';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '../../../utils/date';
@@ -38,8 +38,8 @@ export const VedtatteBehandlingerTabell = (props: {
                             {finnBehandlingstypeTekst[vedtattBehandling.behandlingstype]}
                         </Table.DataCell>
                         <Table.DataCell>
-                            {vedtattBehandling.utfall
-                                ? behandlingsutfallTilTekst[vedtattBehandling.utfall]
+                            {vedtattBehandling.resultat
+                                ? behandlingResultatTilTekst[vedtattBehandling.resultat]
                                 : '-'}
                         </Table.DataCell>
                         <Table.DataCell>

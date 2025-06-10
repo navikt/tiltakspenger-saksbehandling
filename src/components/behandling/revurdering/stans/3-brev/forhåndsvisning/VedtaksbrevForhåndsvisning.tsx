@@ -7,7 +7,7 @@ import { useRevurderingVedtak } from '../../../RevurderingVedtakContext';
 import { useRevurderingBehandling } from '../../../../BehandlingContext';
 import React from 'react';
 import { revurderingStansValidering } from '../../../revurderingStansValidering';
-import { Behandlingsutfall } from '../../../../../../types/BehandlingTypes';
+import { BehandlingResultat } from '../../../../../../types/BehandlingTypes';
 
 export const VedtaksbrevForhåndsvisning = () => {
     const { behandling } = useRevurderingBehandling();
@@ -36,7 +36,7 @@ export const VedtaksbrevForhåndsvisning = () => {
                             fritekst: revurderingVedtak.brevtekstRef.current?.value ?? '',
                             stansDato: revurderingVedtak.stansdato,
                             valgteHjemler: revurderingVedtak.valgtHjemmelHarIkkeRettighet,
-                            utfall: behandling.utfall ?? Behandlingsutfall.STANS,
+                            resultat: behandling.resultat ?? BehandlingResultat.STANS,
                         }).then((blob) => {
                             if (blob) {
                                 window.open(URL.createObjectURL(blob));

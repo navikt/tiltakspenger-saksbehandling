@@ -11,11 +11,11 @@ import { VedtakSeksjon } from '../../vedtak-layout/seksjon/VedtakSeksjon';
 import { useFørstegangsbehandling } from '../../BehandlingContext';
 
 import style from './FørstegangsVedtakResultat.module.css';
-import { Behandlingsutfall } from '../../../../types/BehandlingTypes';
+import { BehandlingResultat } from '../../../../types/BehandlingTypes';
 
 export const FørstegangsVedtakResultat = () => {
     const { rolleForBehandling } = useFørstegangsbehandling();
-    const { valgteTiltaksdeltakelser, utfall, behandlingsperiode } = useFørstegangsVedtakSkjema();
+    const { valgteTiltaksdeltakelser, resultat, behandlingsperiode } = useFørstegangsVedtakSkjema();
 
     const dispatch = useFørstegangsVedtakSkjemaDispatch();
     const erIkkeSaksbehandler = rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER;
@@ -27,23 +27,23 @@ export const FørstegangsVedtakResultat = () => {
                     legend={'Resultat'}
                     size={'small'}
                     className={style.radioGroup}
-                    defaultValue={utfall}
+                    defaultValue={resultat}
                     readOnly={erIkkeSaksbehandler}
-                    onChange={(valgtUtfall: Behandlingsutfall) => {
+                    onChange={(valgtResultat: BehandlingResultat) => {
                         dispatch({
                             type: 'setResultat',
                             payload: {
-                                utfall: valgtUtfall,
+                                resultat: valgtResultat,
                             },
                         });
                     }}
                 >
-                    <Radio value={Behandlingsutfall.INNVILGELSE}>Innvilgelse</Radio>
-                    <Radio value={Behandlingsutfall.AVSLAG}>Avslag</Radio>
+                    <Radio value={BehandlingResultat.INNVILGELSE}>Innvilgelse</Radio>
+                    <Radio value={BehandlingResultat.AVSLAG}>Avslag</Radio>
                 </RadioGroup>
-                <div className={classNames(style.datovelgere, !utfall && style.skjult)}>
+                <div className={classNames(style.datovelgere, !resultat && style.skjult)}>
                     <Datovelger
-                        label={`${utfall === Behandlingsutfall.INNVILGELSE ? 'Innvilges' : 'Avslag'} f.o.m`}
+                        label={`${resultat === BehandlingResultat.INNVILGELSE ? 'Innvilges' : 'Avslag'} f.o.m`}
                         size={'small'}
                         defaultSelected={behandlingsperiode.fraOgMed}
                         readOnly={erIkkeSaksbehandler}
@@ -70,7 +70,7 @@ export const FørstegangsVedtakResultat = () => {
                         }}
                     />
                     <Datovelger
-                        label={`${utfall === Behandlingsutfall.INNVILGELSE ? 'Innvilges' : 'Avslag'} t.o.m`}
+                        label={`${resultat === BehandlingResultat.INNVILGELSE ? 'Innvilges' : 'Avslag'} t.o.m`}
                         size={'small'}
                         defaultSelected={behandlingsperiode.tilOgMed}
                         readOnly={erIkkeSaksbehandler}

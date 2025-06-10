@@ -10,7 +10,7 @@ export type BehandlingId = `beh_${string}`;
 type BehandlingDataCommon = {
     id: BehandlingId;
     status: BehandlingStatus;
-    utfall: Nullable<Behandlingsutfall>;
+    resultat: Nullable<BehandlingResultat>;
     sakId: SakId;
     saksnummer: string;
     saksbehandler: string | null;
@@ -124,7 +124,7 @@ export enum Avslagsgrunn {
     FremmetForSent = 'FremmetForSent',
 }
 
-export enum Behandlingsutfall {
+export enum BehandlingResultat {
     AVSLAG = 'AVSLAG',
     INNVILGELSE = 'INNVILGELSE',
     STANS = 'STANS',

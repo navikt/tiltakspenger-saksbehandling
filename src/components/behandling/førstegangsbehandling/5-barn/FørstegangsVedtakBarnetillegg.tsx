@@ -13,16 +13,16 @@ import { useFørstegangsbehandling } from '../../BehandlingContext';
 import { Separator } from '../../../separator/Separator';
 
 import style from './FørstegangsVedtakBarnetillegg.module.css';
-import { Behandlingsutfall } from '../../../../types/BehandlingTypes';
+import { BehandlingResultat } from '../../../../types/BehandlingTypes';
 
 export const FørstegangsVedtakBarnetillegg = () => {
     const { behandling, rolleForBehandling } = useFørstegangsbehandling();
     const dispatch = useFørstegangsVedtakSkjemaDispatch();
 
-    const { harBarnetillegg, utfall } = useFørstegangsVedtakSkjema();
+    const { harBarnetillegg, resultat } = useFørstegangsVedtakSkjema();
 
     return (
-        <div className={classNames(utfall !== Behandlingsutfall.INNVILGELSE && style.skjult)}>
+        <div className={classNames(resultat !== BehandlingResultat.INNVILGELSE && style.skjult)}>
             <VedtakSeksjon>
                 <VedtakSeksjon.Venstre>
                     <Heading level={'3'} size={'xsmall'} className={style.header}>

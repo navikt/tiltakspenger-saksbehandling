@@ -7,15 +7,15 @@ import { VedtakSeksjon } from '../../vedtak-layout/seksjon/VedtakSeksjon';
 import { Alert, Select } from '@navikt/ds-react';
 import { erSaksbehandler } from '../../../../utils/tilganger';
 import style from './FørstegangsVedtakDagerPerMeldeperiode.module.css';
-import { Behandlingsutfall } from '../../../../types/BehandlingTypes';
+import { BehandlingResultat } from '../../../../types/BehandlingTypes';
 
 export const FørstegangsVedtakDagerPerMeldeperiode = () => {
     const { antallDagerPerMeldeperiode } = useFørstegangsVedtakSkjema();
     const dispatch = useFørstegangsVedtakSkjemaDispatch();
 
-    const { utfall } = useFørstegangsVedtakSkjema();
+    const { resultat } = useFørstegangsVedtakSkjema();
     return (
-        <div className={classNames(utfall !== Behandlingsutfall.INNVILGELSE && style.skjult)}>
+        <div className={classNames(resultat !== BehandlingResultat.INNVILGELSE && style.skjult)}>
             <VedtakSeksjon className={style.antallDagerPerMeldeperiode}>
                 <VedtakSeksjon.Venstre>
                     <Select

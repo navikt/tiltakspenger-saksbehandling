@@ -2,7 +2,7 @@ import { useFetchBlobFraApi } from '../../../../../utils/fetch/useFetchFraApi';
 import {
     Avslagsgrunn,
     BehandlingData,
-    Behandlingsutfall,
+    BehandlingResultat,
 } from '../../../../../types/BehandlingTypes';
 import { Periode } from '../../../../../types/Periode';
 import { VedtakBarnetilleggPeriode } from '../../../../../types/VedtakTyper';
@@ -12,7 +12,7 @@ type BrevForhåndsvisningDTO = {
     fritekst: string;
     virkningsperiode: Periode;
     barnetillegg: VedtakBarnetilleggPeriode[];
-    utfall: Behandlingsutfall;
+    resultat: BehandlingResultat;
     avslagsgrunner: Nullable<Avslagsgrunn[]>;
 };
 
