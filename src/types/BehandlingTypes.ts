@@ -27,7 +27,7 @@ type BehandlingDataCommon = {
 };
 
 export type FørstegangsbehandlingData = BehandlingDataCommon & {
-    type: Behandlingstype.FØRSTEGANGSBEHANDLING;
+    type: Behandlingstype.SØKNADSBEHANDLING;
     søknad: SøknadForBehandlingProps;
     barnetillegg: Barnetillegg | null;
     valgteTiltaksdeltakelser: TiltaksdeltakelsePeriode[] | null;
@@ -90,7 +90,7 @@ export enum Attesteringsstatus {
 
 export enum Behandlingstype {
     SØKNAD = 'SØKNAD',
-    FØRSTEGANGSBEHANDLING = 'FØRSTEGANGSBEHANDLING',
+    SØKNADSBEHANDLING = 'SØKNADSBEHANDLING',
     REVURDERING = 'REVURDERING',
 }
 

@@ -39,8 +39,7 @@ export const erBehandlingVedtatt = (behandling: BehandlingData) =>
 
 export const erBehandlingFørstegangsbehandling = (
     behandling: BehandlingData,
-): behandling is FørstegangsbehandlingData =>
-    behandling.type === Behandlingstype.FØRSTEGANGSBEHANDLING;
+): behandling is FørstegangsbehandlingData => behandling.type === Behandlingstype.SØKNADSBEHANDLING;
 
 export const deltarPaFlereTiltakMedStartOgSluttdatoIValgtInnvilgelsesperiode = (
     behandling: FørstegangsbehandlingData,

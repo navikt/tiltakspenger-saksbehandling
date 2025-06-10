@@ -76,6 +76,6 @@ export const Saksoversikt = () => {
 const harVedtattFørstegangsbehandling = (behandlingsoversikt: BehandlingData[]) =>
     behandlingsoversikt.some(
         (behandling) =>
-            behandling.type === Behandlingstype.FØRSTEGANGSBEHANDLING &&
+            behandling.type === Behandlingstype.SØKNADSBEHANDLING &&
             behandling.status === BehandlingStatus.VEDTATT,
     );

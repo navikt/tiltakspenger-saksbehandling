@@ -42,7 +42,7 @@ export const AvbrutteBehandlingerTabell = (props: {
                         <Table.DataCell>{avsluttet.saksbehandler ?? 'Ikke tildelt'}</Table.DataCell>
                         <Table.DataCell>{avsluttet.beslutter ?? 'Ikke tildelt'}</Table.DataCell>
                         <Table.DataCell>
-                            {(avsluttet.behandlingstype === Behandlingstype.FØRSTEGANGSBEHANDLING ||
+                            {(avsluttet.behandlingstype === Behandlingstype.SØKNADSBEHANDLING ||
                                 avsluttet.behandlingstype === Behandlingstype.REVURDERING) && (
                                 <Button
                                     style={{ minWidth: '50%' }}

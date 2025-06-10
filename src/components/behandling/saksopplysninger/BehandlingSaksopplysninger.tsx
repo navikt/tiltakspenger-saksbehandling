@@ -36,7 +36,7 @@ export const BehandlingSaksopplysninger = () => {
                     verdi={formaterDatotekst(fødselsdato)}
                 />
             </OpplysningerSeksjon>
-            {type === Behandlingstype.FØRSTEGANGSBEHANDLING && (
+            {type === Behandlingstype.SØKNADSBEHANDLING && (
                 <div>
                     <Separator />
                     <OpplysningerSeksjon header={'Fra søknad'}>

@@ -28,7 +28,7 @@ export const BehandlingPage = () => {
                     <div className={style.main}>
                         {avbrutt && <AvbruttOppsummering avbrutt={avbrutt} withPanel={true} />}
                         <div className={style.vedtakContainer}>
-                            {type === Behandlingstype.FØRSTEGANGSBEHANDLING ? (
+                            {type === Behandlingstype.SØKNADSBEHANDLING ? (
                                 <FørstegangsVedtak />
                             ) : type === Behandlingstype.REVURDERING ? (
                                 <RevurderingVedtak />

@@ -59,7 +59,7 @@ export const VedtatteBehandlingerTabell = (props: {
                         </Table.DataCell>
                         <Table.DataCell>
                             {(vedtattBehandling.behandlingstype ===
-                                Behandlingstype.FØRSTEGANGSBEHANDLING ||
+                                Behandlingstype.SØKNADSBEHANDLING ||
                                 vedtattBehandling.behandlingstype ===
                                     Behandlingstype.REVURDERING) && (
                                 <Button

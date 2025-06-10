@@ -57,7 +57,7 @@ export const useBehandling = () => {
 export const useFørstegangsbehandling = () => {
     const context = useContext(Context);
 
-    if (context.behandling.type !== Behandlingstype.FØRSTEGANGSBEHANDLING) {
+    if (context.behandling.type !== Behandlingstype.SØKNADSBEHANDLING) {
         throw Error(`Feil context for førstegangsbehandling: ${context.behandling.type}`);
     }
 
