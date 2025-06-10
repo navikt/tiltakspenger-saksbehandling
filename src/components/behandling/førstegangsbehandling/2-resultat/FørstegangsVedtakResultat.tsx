@@ -12,12 +12,11 @@ import { useFørstegangsbehandling } from '../../BehandlingContext';
 
 import style from './FørstegangsVedtakResultat.module.css';
 import { Behandlingsutfall } from '../../../../types/BehandlingTypes';
-import { useFeatureToggles } from '../../../../context/feature-toggles/FeatureTogglesContext';
 
 export const FørstegangsVedtakResultat = () => {
     const { rolleForBehandling } = useFørstegangsbehandling();
     const { valgteTiltaksdeltakelser, utfall, behandlingsperiode } = useFørstegangsVedtakSkjema();
-    const { avslagToggle } = useFeatureToggles();
+
     const dispatch = useFørstegangsVedtakSkjemaDispatch();
     const erIkkeSaksbehandler = rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER;
 
@@ -40,9 +39,7 @@ export const FørstegangsVedtakResultat = () => {
                     }}
                 >
                     <Radio value={Behandlingsutfall.INNVILGELSE}>Innvilgelse</Radio>
-                    <Radio value={Behandlingsutfall.AVSLAG} disabled={avslagToggle}>
-                        Avslag {avslagToggle && '(støttes ikke ennå)'}
-                    </Radio>
+                    <Radio value={Behandlingsutfall.AVSLAG}>Avslag</Radio>
                 </RadioGroup>
                 <div className={classNames(style.datovelgere, !utfall && style.skjult)}>
                     <Datovelger
