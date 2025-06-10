@@ -1,4 +1,13 @@
-import { Button, CopyButton, Heading, HStack, Select, Table, VStack } from '@navikt/ds-react';
+import {
+    Alert,
+    Button,
+    CopyButton,
+    Heading,
+    HStack,
+    Select,
+    Table,
+    VStack,
+} from '@navikt/ds-react';
 import React, { useEffect, useRef, useState } from 'react';
 import {
     BehandlingssammendragStatus,
@@ -17,6 +26,7 @@ import {
     behandlingstypeTextFormatter,
 } from './BenkSideUtils';
 import SortableTable from '../tabell/SortableTable';
+import styles from './BenkSide.module.css';
 
 type Props = {
     benkOversikt: BenkOversiktResponse;
@@ -180,6 +190,14 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
                 </HStack>
             </VStack>
 
+            {benkOversikt.totalAntall > 500 && (
+                <div className={styles.høytAntallBehandlingerContainer}>
+                    <Alert variant="warning" size="small">
+                        Det finnes et høyt antall behandlinger på benken. Oversikten er begrenset,
+                        og vil ikke vise alle behandlinger.
+                    </Alert>
+                </div>
+            )}
             <SortableTable
                 kolonnerConfig={{
                     kolonner: BehandlingssammendragKolonner,

@@ -1,3 +1,4 @@
-.sortKnapp {
-    margin-left: -1rem;
+.høytAntallBehandlingerContainer {
+    display: flex;
+    align-self: flex-start;
 }
