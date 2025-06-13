@@ -39,7 +39,7 @@ export const BehandlingOppdaterSaksopplysninger = () => {
                     });
                 }}
             >
-                {'Hent oppdaterte opplysninger om tiltak'}
+                {'Hent oppdaterte saksopplysninger'}
             </Button>
             {error && (
                 <Varsel
