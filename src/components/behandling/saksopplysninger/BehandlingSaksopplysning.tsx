@@ -39,3 +39,37 @@ export const BehandlingSaksopplysningMedPeriode = ({ navn, periode, spacing }: M
         <BehandlingSaksopplysning navn={navn} verdi={'Nei'} spacing={spacing} />
     );
 };
+
+type MedFlerePerioderProps = {
+    navn: string;
+    perioder: Periode[];
+    spacing?: boolean;
+};
+
+export const BehandlingSaksopplysningMedFlerePerioder = ({
+    navn,
+    perioder,
+    spacing,
+}: MedFlerePerioderProps) => {
+    const verdier = perioder.map((periode) =>
+        periodeTilFormatertDatotekst({
+            fraOgMed: periode.fraOgMed,
+            tilOgMed: periode.tilOgMed,
+        }),
+    );
+    return (
+        <BodyShort
+            size={'small'}
+            className={classNames(style.opplysning, spacing && style.spacing)}
+        >
+            {`${navn}: `}
+            <br />
+            {verdier.map((verdi) => (
+                <strong key={navn + verdi}>
+                    {verdi}
+                    <br />
+                </strong>
+            ))}
+        </BodyShort>
+    );
+};

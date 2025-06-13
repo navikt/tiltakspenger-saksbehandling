@@ -4,6 +4,7 @@ import { SakId } from './SakTypes';
 import { SøknadForOversiktProps, SøknadForBehandlingProps } from './SøknadTypes';
 import { Avbrutt } from './Avbrutt';
 import { Nullable } from './common';
+import { Ytelse } from '~/types/Ytelse';
 
 export type BehandlingId = `beh_${string}`;
 
@@ -44,6 +45,7 @@ export type BehandlingSaksopplysningerData = {
     fødselsdato: string;
     tiltaksdeltagelse: Tiltaksdeltagelse[];
     saksopplysningsperiode: Periode;
+    ytelser: Ytelse[];
 };
 
 // TODO: revurdering og førstegangsbehandling bør ha separate typer

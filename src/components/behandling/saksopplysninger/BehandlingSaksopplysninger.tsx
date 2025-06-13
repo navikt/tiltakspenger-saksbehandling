@@ -13,19 +13,27 @@ import style from './BehandlingSaksopplysninger.module.css';
 import OppsummeringAvAttesteringer from '../../attestering/OppsummeringAvAttestering';
 import { hentTiltaksperiode } from '../../../utils/behandling';
 import OppsummeringAvSøknad from '../../oppsummeringer/oppsummeringAvSøknad/OppsummeringAvSøknad';
+import { BehandlingYtelserOpplysninger } from '~/components/behandling/saksopplysninger/ytelser/BehandlingYtelserOpplysninger';
 
 export const BehandlingSaksopplysninger = () => {
     const { behandling, rolleForBehandling } = useBehandling();
     const { saksopplysninger, type } = behandling;
-    const { tiltaksdeltagelse, fødselsdato } = saksopplysninger;
+    const { tiltaksdeltagelse, fødselsdato, ytelser } = saksopplysninger;
+    const harYtelser = ytelser && ytelser.length > 0;
 
     return (
         <div>
+            {rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER && (
+                <BehandlingOppdaterSaksopplysninger />
+            )}
             <OpplysningerSeksjon header={'Tiltak registrert på bruker'}>
-                {rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER && (
-                    <BehandlingOppdaterSaksopplysninger />
-                )}
                 <BehandlingTiltakOpplysninger tiltaksdeltagelse={tiltaksdeltagelse} />
+                <Separator />
+            </OpplysningerSeksjon>
+
+            <OpplysningerSeksjon header={'Andre ytelser'}>
+                {!harYtelser && <BodyShort size={'small'}>Ingen relevante ytelser</BodyShort>}
+                {harYtelser && <BehandlingYtelserOpplysninger ytelser={ytelser} />}
                 <Separator />
             </OpplysningerSeksjon>
 
