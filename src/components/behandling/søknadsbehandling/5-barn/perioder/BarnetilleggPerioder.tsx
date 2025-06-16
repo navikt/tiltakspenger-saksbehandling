@@ -2,23 +2,23 @@ import { Button, Select } from '@navikt/ds-react';
 import { VedtakSeksjon } from '../../../vedtak-layout/seksjon/VedtakSeksjon';
 import { Datovelger } from '../../../../datovelger/Datovelger';
 import {
-    useFørstegangsVedtakSkjemaDispatch,
-    useFørstegangsVedtakSkjema,
-} from '../../context/FørstegangsVedtakContext';
+    useSøknadsbehandlingSkjemaDispatch,
+    useSøknadsbehandlingSkjema,
+} from '../../context/SøknadsbehandlingVedtakContext';
 import { VedtakBarnetilleggPeriode } from '../../../../../types/VedtakTyper';
 import { SaksbehandlerRolle } from '../../../../../types/Saksbehandler';
 import { dateTilISOTekst } from '../../../../../utils/date';
-import { useFørstegangsbehandling } from '../../../BehandlingContext';
+import { useSøknadsbehandling } from '../../../BehandlingContext';
 
 import style from './BarnetilleggPerioder.module.css';
 
 const BATCH_MED_BARN = 10;
 
 export const BarnetilleggPerioder = () => {
-    const { rolleForBehandling, behandling } = useFørstegangsbehandling();
+    const { rolleForBehandling, behandling } = useSøknadsbehandling();
     const { barnetilleggPerioder, behandlingsperiode: innvilgelsesPeriode } =
-        useFørstegangsVedtakSkjema();
-    const dispatch = useFørstegangsVedtakSkjemaDispatch();
+        useSøknadsbehandlingSkjema();
+    const dispatch = useSøknadsbehandlingSkjemaDispatch();
 
     const antallBarnFraSøknad = behandling.søknad.barnetillegg.length;
 
@@ -80,8 +80,8 @@ type PeriodeProps = {
 };
 
 const BarnetilleggPeriode = ({ periode, index, rolle }: PeriodeProps) => {
-    const dispatch = useFørstegangsVedtakSkjemaDispatch();
-    const { behandlingsperiode: innvilgelsesPeriode } = useFørstegangsVedtakSkjema();
+    const dispatch = useSøknadsbehandlingSkjemaDispatch();
+    const { behandlingsperiode: innvilgelsesPeriode } = useSøknadsbehandlingSkjema();
 
     // Støtter uendelig mange barn!
     const maksAntall = (Math.floor(periode.antallBarn / BATCH_MED_BARN) + 1) * BATCH_MED_BARN;

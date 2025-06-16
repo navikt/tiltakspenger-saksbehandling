@@ -1,22 +1,22 @@
 import { BodyLong, Heading } from '@navikt/ds-react';
 import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
-import { useFørstegangsVedtakSkjema } from '../context/FørstegangsVedtakContext';
+import { useSøknadsbehandlingSkjema } from '../context/SøknadsbehandlingVedtakContext';
 import { VedtakSeksjon } from '../../vedtak-layout/seksjon/VedtakSeksjon';
 import { VedtakHjelpetekst } from '../../vedtak-layout/hjelpetekst/VedtakHjelpetekst';
 import { TekstfeltMedMellomlagring } from '../../../tekstfelt/TekstfeltMedMellomlagring';
 import { VedtakBrevFritekstLagringDTO } from '../../../../types/VedtakTyper';
 import { VedtaksbrevForhåndsvisning } from './forhåndsvisning/VedtaksbrevForhåndsvisning';
 import { TekstListe } from '../../../liste/TekstListe';
-import { useFørstegangsbehandling } from '../../BehandlingContext';
+import { useSøknadsbehandling } from '../../BehandlingContext';
 
-import style from './FørstegangsVedtakBrev.module.css';
+import style from './SøknadsbehandlingBrev.module.css';
 import { BehandlingResultat } from '../../../../types/BehandlingTypes';
 
-export const FørstegangsVedtakBrev = () => {
-    const { behandling, rolleForBehandling } = useFørstegangsbehandling();
+export const SøknadsbehandlingBrev = () => {
+    const { behandling, rolleForBehandling } = useSøknadsbehandling();
     const { fritekstTilVedtaksbrev, sakId, id } = behandling;
 
-    const { brevtekstRef, resultat, avslagsgrunner } = useFørstegangsVedtakSkjema();
+    const { brevtekstRef, resultat, avslagsgrunner } = useSøknadsbehandlingSkjema();
 
     return (
         <VedtakSeksjon>

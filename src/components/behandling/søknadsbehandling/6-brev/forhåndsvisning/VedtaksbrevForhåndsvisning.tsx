@@ -1,21 +1,21 @@
 import { Alert, Button } from '@navikt/ds-react';
 import { EnvelopeOpenIcon } from '@navikt/aksel-icons';
 import { useHentVedtaksbrevForhåndsvisning } from './useHentVedtaksbrevForhåndsvisning';
-import { useFørstegangsVedtakSkjema } from '../../context/FørstegangsVedtakContext';
-import { useFørstegangsbehandling } from '../../../BehandlingContext';
+import { useSøknadsbehandlingSkjema } from '../../context/SøknadsbehandlingVedtakContext';
+import { useSøknadsbehandling } from '../../../BehandlingContext';
 
 import style from './VedtaksbrevForhåndsvisning.module.css';
 import { BehandlingResultat } from '../../../../../types/BehandlingTypes';
-import { førstegangsVedtakValidering } from '../../førstegangsVedtakValidering';
+import { søknadsbehandlingValidering } from '../../søknadsbehandlingValidering';
 
 export const VedtaksbrevForhåndsvisning = () => {
-    const { behandling } = useFørstegangsbehandling();
-    const vedtak = useFørstegangsVedtakSkjema();
+    const { behandling } = useSøknadsbehandling();
+    const vedtak = useSøknadsbehandlingSkjema();
 
     const { hentForhåndsvisning, forhåndsvisningLaster, forhåndsvisningError } =
         useHentVedtaksbrevForhåndsvisning(behandling);
 
-    const valideringResultat = førstegangsVedtakValidering(behandling, vedtak);
+    const valideringResultat = søknadsbehandlingValidering(behandling, vedtak);
     const harValideringsfeil = valideringResultat.errors.length > 0;
 
     return (

@@ -4,20 +4,20 @@ import { classNames } from '../../../../utils/classNames';
 import { dateTilISOTekst } from '../../../../utils/date';
 import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
 import {
-    useFørstegangsVedtakSkjema,
-    useFørstegangsVedtakSkjemaDispatch,
-} from '../context/FørstegangsVedtakContext';
+    useSøknadsbehandlingSkjema,
+    useSøknadsbehandlingSkjemaDispatch,
+} from '../context/SøknadsbehandlingVedtakContext';
 import { VedtakSeksjon } from '../../vedtak-layout/seksjon/VedtakSeksjon';
-import { useFørstegangsbehandling } from '../../BehandlingContext';
+import { useSøknadsbehandling } from '../../BehandlingContext';
 
-import style from './FørstegangsVedtakResultat.module.css';
+import style from './SøknadsbehandlingResultat.module.css';
 import { BehandlingResultat } from '../../../../types/BehandlingTypes';
 
-export const FørstegangsVedtakResultat = () => {
-    const { rolleForBehandling } = useFørstegangsbehandling();
-    const { valgteTiltaksdeltakelser, resultat, behandlingsperiode } = useFørstegangsVedtakSkjema();
+export const SøknadsbehandlingResultat = () => {
+    const { rolleForBehandling } = useSøknadsbehandling();
+    const { valgteTiltaksdeltakelser, resultat, behandlingsperiode } = useSøknadsbehandlingSkjema();
 
-    const dispatch = useFørstegangsVedtakSkjemaDispatch();
+    const dispatch = useSøknadsbehandlingSkjemaDispatch();
     const erIkkeSaksbehandler = rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER;
 
     return (

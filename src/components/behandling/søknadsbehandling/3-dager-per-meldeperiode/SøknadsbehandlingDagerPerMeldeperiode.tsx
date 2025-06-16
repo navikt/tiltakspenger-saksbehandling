@@ -1,19 +1,19 @@
 import {
-    useFørstegangsVedtakSkjema,
-    useFørstegangsVedtakSkjemaDispatch,
-} from '../context/FørstegangsVedtakContext';
+    useSøknadsbehandlingSkjema,
+    useSøknadsbehandlingSkjemaDispatch,
+} from '../context/SøknadsbehandlingVedtakContext';
 import { classNames } from '../../../../utils/classNames';
 import { VedtakSeksjon } from '../../vedtak-layout/seksjon/VedtakSeksjon';
 import { Alert, Select } from '@navikt/ds-react';
 import { erSaksbehandler } from '../../../../utils/tilganger';
-import style from './FørstegangsVedtakDagerPerMeldeperiode.module.css';
+import style from './SøknadsbehandlingDagerPerMeldeperiode.module.css';
 import { BehandlingResultat } from '../../../../types/BehandlingTypes';
 
-export const FørstegangsVedtakDagerPerMeldeperiode = () => {
-    const { antallDagerPerMeldeperiode } = useFørstegangsVedtakSkjema();
-    const dispatch = useFørstegangsVedtakSkjemaDispatch();
+export const SøknadsbehandlingDagerPerMeldeperiode = () => {
+    const { antallDagerPerMeldeperiode } = useSøknadsbehandlingSkjema();
+    const dispatch = useSøknadsbehandlingSkjemaDispatch();
 
-    const { resultat } = useFørstegangsVedtakSkjema();
+    const { resultat } = useSøknadsbehandlingSkjema();
     return (
         <div className={classNames(resultat !== BehandlingResultat.INNVILGELSE && style.skjult)}>
             <VedtakSeksjon className={style.antallDagerPerMeldeperiode}>

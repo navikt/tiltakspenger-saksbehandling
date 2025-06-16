@@ -1,9 +1,9 @@
 import {
     BehandlingData,
     Behandlingstype,
-    FørstegangsbehandlingData,
+    SøknadsbehandlingData,
     RevurderingData,
-} from '../../types/BehandlingTypes';
+} from '~/types/BehandlingTypes';
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { kanBeslutteForBehandling, kanSaksbehandleForBehandling } from '../../utils/tilganger';
 import { useSaksbehandler } from '../../context/saksbehandler/SaksbehandlerContext';
@@ -54,14 +54,14 @@ export const useBehandling = () => {
     return useContext(Context);
 };
 
-export const useFørstegangsbehandling = () => {
+export const useSøknadsbehandling = () => {
     const context = useContext(Context);
 
     if (context.behandling.type !== Behandlingstype.SØKNADSBEHANDLING) {
-        throw Error(`Feil context for førstegangsbehandling: ${context.behandling.type}`);
+        throw Error(`Feil context for søknadsbehandling: ${context.behandling.type}`);
     }
 
-    return context as BehandlingContext<FørstegangsbehandlingData>;
+    return context as BehandlingContext<SøknadsbehandlingData>;
 };
 
 export const useRevurderingBehandling = () => {

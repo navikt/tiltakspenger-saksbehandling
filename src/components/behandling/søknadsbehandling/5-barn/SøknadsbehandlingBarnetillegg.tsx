@@ -1,25 +1,25 @@
 import { VedtakSeksjon } from '../../vedtak-layout/seksjon/VedtakSeksjon';
 import { Heading, Radio, RadioGroup } from '@navikt/ds-react';
 import {
-    useFørstegangsVedtakSkjemaDispatch,
-    useFørstegangsVedtakSkjema,
-} from '../context/FørstegangsVedtakContext';
+    useSøknadsbehandlingSkjemaDispatch,
+    useSøknadsbehandlingSkjema,
+} from '../context/SøknadsbehandlingVedtakContext';
 import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
 import { BarnetilleggPerioder } from './perioder/BarnetilleggPerioder';
 import { classNames } from '../../../../utils/classNames';
 import { BarnetilleggBegrunnelse } from './begrunnelse/BarnetilleggBegrunnelse';
 import { harSøktBarnetillegg } from '../../../../utils/behandling';
-import { useFørstegangsbehandling } from '../../BehandlingContext';
+import { useSøknadsbehandling } from '../../BehandlingContext';
 import { Separator } from '../../../separator/Separator';
 
-import style from './FørstegangsVedtakBarnetillegg.module.css';
+import style from './SøknadsbehandlingBarnetillegg.module.css';
 import { BehandlingResultat } from '../../../../types/BehandlingTypes';
 
-export const FørstegangsVedtakBarnetillegg = () => {
-    const { behandling, rolleForBehandling } = useFørstegangsbehandling();
-    const dispatch = useFørstegangsVedtakSkjemaDispatch();
+export const SøknadsbehandlingBarnetillegg = () => {
+    const { behandling, rolleForBehandling } = useSøknadsbehandling();
+    const dispatch = useSøknadsbehandlingSkjemaDispatch();
 
-    const { harBarnetillegg, resultat } = useFørstegangsVedtakSkjema();
+    const { harBarnetillegg, resultat } = useSøknadsbehandlingSkjema();
 
     return (
         <div className={classNames(resultat !== BehandlingResultat.INNVILGELSE && style.skjult)}>

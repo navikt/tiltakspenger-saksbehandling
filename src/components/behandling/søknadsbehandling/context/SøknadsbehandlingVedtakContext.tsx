@@ -1,4 +1,4 @@
-import { FørstegangsbehandlingData } from '../../../../types/BehandlingTypes';
+import { SøknadsbehandlingData } from '~/types/BehandlingTypes';
 import {
     createContext,
     Dispatch,
@@ -9,18 +9,18 @@ import {
     useReducer,
     useRef,
 } from 'react';
-import { useFørstegangsbehandling } from '../../BehandlingContext';
+import { useSøknadsbehandling } from '../../BehandlingContext';
 import {
-    FørstegangsVedtakSkjemaActions,
-    førstegangsVedtakReducer,
-    FørstegangsVedtakSkjemaState,
-} from './FørstegangsVedtakReducer';
+    SøknadsbehandlingSkjemaActions,
+    SøknadsbehandlingReducer,
+    SøknadsbehandlingSkjemaState,
+} from './SøknadsbehandlingReducer';
 import {
     harSøktBarnetillegg,
     hentTiltaksdeltagelseFraSoknad,
     hentTiltaksperiodeFraSøknad,
-} from '../../../../utils/behandling';
-import { periodiserBarnetillegg } from '../../../../utils/barnetillegg';
+} from '~/utils/behandling';
+import { periodiserBarnetillegg } from '~/utils/barnetillegg';
 
 type TextAreaInputs = {
     begrunnelseRef: RefObject<HTMLTextAreaElement>;
@@ -31,15 +31,13 @@ type TextAreaInputs = {
     getBarnetilleggBegrunnelse: () => string;
 };
 
-export type FørstegangsVedtakContext = TextAreaInputs & FørstegangsVedtakSkjemaState;
+export type SøknadsbehandlingVedtakContext = TextAreaInputs & SøknadsbehandlingSkjemaState;
 
 // Separate contexts for å hindre re-renders for komponenter som kun bruker dispatch
-const StateContext = createContext({} as FørstegangsVedtakContext);
-const DispatchContext = createContext((() => ({})) as Dispatch<FørstegangsVedtakSkjemaActions>);
+const StateContext = createContext({} as SøknadsbehandlingVedtakContext);
+const DispatchContext = createContext((() => ({})) as Dispatch<SøknadsbehandlingSkjemaActions>);
 
-const initieltVedtakSkjema = (
-    behandling: FørstegangsbehandlingData,
-): FørstegangsVedtakSkjemaState => {
+const initieltVedtakSkjema = (behandling: SøknadsbehandlingData): SøknadsbehandlingSkjemaState => {
     const tiltaksperiode = hentTiltaksperiodeFraSøknad(behandling);
     const tiltakFraSoknad = hentTiltaksdeltagelseFraSoknad(behandling);
 
@@ -64,11 +62,11 @@ const initieltVedtakSkjema = (
     };
 };
 
-export const FørstegangsVedtakProvider = ({ children }: PropsWithChildren) => {
-    const { behandling } = useFørstegangsbehandling();
+export const SøknadsbehandlingVedtakProvider = ({ children }: PropsWithChildren) => {
+    const { behandling } = useSøknadsbehandling();
 
     const [vedtak, dispatch] = useReducer(
-        førstegangsVedtakReducer,
+        SøknadsbehandlingReducer,
         behandling,
         initieltVedtakSkjema,
     );
@@ -109,10 +107,10 @@ export const FørstegangsVedtakProvider = ({ children }: PropsWithChildren) => {
     );
 };
 
-export const useFørstegangsVedtakSkjema = () => {
+export const useSøknadsbehandlingSkjema = () => {
     return useContext(StateContext);
 };
 
-export const useFørstegangsVedtakSkjemaDispatch = () => {
+export const useSøknadsbehandlingSkjemaDispatch = () => {
     return useContext(DispatchContext);
 };

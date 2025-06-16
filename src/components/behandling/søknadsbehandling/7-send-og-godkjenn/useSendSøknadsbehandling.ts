@@ -1,11 +1,11 @@
 import { VedtakTilBeslutningDTO } from '../../../../types/VedtakTyper';
 import { BehandlingData, BehandlingResultat } from '../../../../types/BehandlingTypes';
 import { useFetchJsonFraApi } from '../../../../utils/fetch/useFetchFraApi';
-import { FørstegangsVedtakContext } from '../context/FørstegangsVedtakContext';
+import { SøknadsbehandlingVedtakContext } from '../context/SøknadsbehandlingVedtakContext';
 
-export const useSendFørstegangsVedtak = (
+export const useSendSøknadsbehandling = (
     behandling: BehandlingData,
-    vedtak: FørstegangsVedtakContext,
+    vedtak: SøknadsbehandlingVedtakContext,
 ) => {
     const { trigger, isMutating, error } = useFetchJsonFraApi<
         BehandlingData,
@@ -21,7 +21,7 @@ export const useSendFørstegangsVedtak = (
     };
 };
 
-const tilBeslutningDTO = (vedtak: FørstegangsVedtakContext): VedtakTilBeslutningDTO => {
+const tilBeslutningDTO = (vedtak: SøknadsbehandlingVedtakContext): VedtakTilBeslutningDTO => {
     return {
         begrunnelseVilkårsvurdering: vedtak.getBegrunnelse(),
         fritekstTilVedtaksbrev: vedtak.getBrevtekst(),

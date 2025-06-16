@@ -1,18 +1,18 @@
-import { FørstegangsVedtakContext } from './context/FørstegangsVedtakContext';
+import { SøknadsbehandlingVedtakContext } from './context/SøknadsbehandlingVedtakContext';
 import { ValideringResultat } from '../send-og-godkjenn/BehandlingSendTilBeslutning';
-import { BehandlingResultat, FørstegangsbehandlingData } from '../../../types/BehandlingTypes';
+import { BehandlingResultat, SøknadsbehandlingData } from '~/types/BehandlingTypes';
 import {
     deltarPaFlereTiltakMedStartOgSluttdato,
     hentTiltaksdeltakelser,
     hentTiltaksperiode,
     hentTiltaksperiodeFraSøknad,
-} from '../../../utils/behandling';
-import { joinPerioder, validerPeriodisering } from '../../../utils/periode';
+} from '~/utils/behandling';
+import { joinPerioder, validerPeriodisering } from '~/utils/periode';
 import dayjs from 'dayjs';
 
-export const førstegangsVedtakValidering = (
-    behandling: FørstegangsbehandlingData,
-    vedtak: FørstegangsVedtakContext,
+export const søknadsbehandlingValidering = (
+    behandling: SøknadsbehandlingData,
+    vedtak: SøknadsbehandlingVedtakContext,
 ): ValideringResultat => {
     const { behandlingsperiode, resultat } = vedtak;
 
@@ -48,8 +48,8 @@ export const førstegangsVedtakValidering = (
 };
 
 const validerUtfallAvslag = (
-    behandling: FørstegangsbehandlingData,
-    vedtak: FørstegangsVedtakContext,
+    behandling: SøknadsbehandlingData,
+    vedtak: SøknadsbehandlingVedtakContext,
     errors: string[],
     warnings: string[],
 ) => {
@@ -70,8 +70,8 @@ const validerUtfallAvslag = (
 };
 
 const validerUtfallInnvilgelse = (
-    behandling: FørstegangsbehandlingData,
-    vedtak: FørstegangsVedtakContext,
+    behandling: SøknadsbehandlingData,
+    vedtak: SøknadsbehandlingVedtakContext,
     errors: string[],
 ) => {
     const {
