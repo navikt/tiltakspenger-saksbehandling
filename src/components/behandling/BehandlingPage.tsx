@@ -1,5 +1,5 @@
 import React from 'react';
-import { FørstegangsVedtak } from './førstegangsbehandling/FørstegangsVedtak';
+import { SøknadsbehandlingVedtak } from '~/components/behandling/søknadsbehandling/SøknadsbehandlingVedtak';
 import { BehandlingSaksopplysninger } from './saksopplysninger/BehandlingSaksopplysninger';
 import { RevurderingVedtak } from './revurdering/RevurderingVedtak';
 import { useBehandling } from './BehandlingContext';
@@ -29,7 +29,7 @@ export const BehandlingPage = () => {
                         {avbrutt && <AvbruttOppsummering avbrutt={avbrutt} withPanel={true} />}
                         <div className={style.vedtakContainer}>
                             {type === Behandlingstype.SØKNADSBEHANDLING ? (
-                                <FørstegangsVedtak />
+                                <SøknadsbehandlingVedtak />
                             ) : type === Behandlingstype.REVURDERING ? (
                                 <RevurderingVedtak />
                             ) : (

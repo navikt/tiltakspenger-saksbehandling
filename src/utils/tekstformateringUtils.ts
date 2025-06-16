@@ -61,7 +61,7 @@ export const finnMeldeperiodeKjedeStatusTekst: Record<MeldeperiodeKjedeStatus, s
 } as const;
 
 export const finnBehandlingstypeTekst: Record<Behandlingstype, string> = {
-    [Behandlingstype.SØKNADSBEHANDLING]: 'Førstegangsbehandling',
+    [Behandlingstype.SØKNADSBEHANDLING]: 'Søknadsbehandling',
     [Behandlingstype.REVURDERING]: 'Revurdering (stans)',
     [Behandlingstype.SØKNAD]: 'Søknad',
 } as const;

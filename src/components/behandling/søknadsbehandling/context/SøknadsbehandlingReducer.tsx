@@ -1,16 +1,13 @@
 import { Reducer } from 'react';
-import {
-    VedtakBarnetilleggPeriode,
-    VedtakTiltaksdeltakelsePeriode,
-} from '../../../../types/VedtakTyper';
-import { Periode } from '../../../../types/Periode';
-import { forrigeDag, leggTilDager, nesteDag } from '../../../../utils/date';
-import { periodiserBarnetillegg } from '../../../../utils/barnetillegg';
-import { SøknadForBehandlingProps } from '../../../../types/SøknadTypes';
-import { Avslagsgrunn, BehandlingResultat } from '../../../../types/BehandlingTypes';
-import { Nullable } from '../../../../types/common';
+import { VedtakBarnetilleggPeriode, VedtakTiltaksdeltakelsePeriode } from '~/types/VedtakTyper';
+import { Periode } from '~/types/Periode';
+import { forrigeDag, leggTilDager, nesteDag } from '~/utils/date';
+import { periodiserBarnetillegg } from '~/utils/barnetillegg';
+import { SøknadForBehandlingProps } from '~/types/SøknadTypes';
+import { Avslagsgrunn, BehandlingResultat } from '~/types/BehandlingTypes';
+import { Nullable } from '~/types/common';
 
-export type FørstegangsVedtakSkjemaActions =
+export type SøknadsbehandlingSkjemaActions =
     | {
           type: 'setResultat';
           payload: { resultat: BehandlingResultat };
@@ -68,7 +65,7 @@ export type FørstegangsVedtakSkjemaActions =
           payload: { avslagsgrunn: Avslagsgrunn };
       };
 
-export type FørstegangsVedtakSkjemaState = {
+export type SøknadsbehandlingSkjemaState = {
     resultat: Nullable<BehandlingResultat>;
     behandlingsperiode: Periode;
     harBarnetillegg: boolean;
@@ -78,10 +75,10 @@ export type FørstegangsVedtakSkjemaState = {
     avslagsgrunner: Nullable<Avslagsgrunn[]>;
 };
 
-export const førstegangsVedtakReducer: Reducer<
-    FørstegangsVedtakSkjemaState,
-    FørstegangsVedtakSkjemaActions
-> = (state, action): FørstegangsVedtakSkjemaState => {
+export const SøknadsbehandlingReducer: Reducer<
+    SøknadsbehandlingSkjemaState,
+    SøknadsbehandlingSkjemaActions
+> = (state, action): SøknadsbehandlingSkjemaState => {
     const { type, payload } = action;
 
     switch (type) {
@@ -278,6 +275,6 @@ export const førstegangsVedtakReducer: Reducer<
         }
     }
 
-    console.error(`Ugyldig action for førstegangsvedtak: "${type satisfies never}"`);
+    console.error(`Ugyldig action for søknadsbehandling: "${type satisfies never}"`);
     return state;
 };

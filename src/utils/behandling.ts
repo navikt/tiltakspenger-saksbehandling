@@ -2,14 +2,14 @@ import {
     BehandlingData,
     BehandlingStatus,
     Behandlingstype,
-    FørstegangsbehandlingData,
+    SøknadsbehandlingData,
 } from '../types/BehandlingTypes';
 import { Periode } from '../types/Periode';
 import { singleOrFirst } from './array';
 import { Tiltaksdeltagelse } from '../types/TiltakDeltagelseTypes';
 import { erDatoIPeriode } from './periode';
 
-export const hentTiltaksperiode = (behandling: FørstegangsbehandlingData): Periode => {
+export const hentTiltaksperiode = (behandling: SøknadsbehandlingData): Periode => {
     const forsteStartdatoForDeltakelse = finnForsteStartdatoForTiltaksdeltakelse(behandling);
     const sisteSluttdatoForDeltakelse = finnSisteSluttdatoForTiltaksdeltakelse(behandling);
     const tiltakFraSøknad = singleOrFirst(behandling.søknad.tiltak);
@@ -20,7 +20,7 @@ export const hentTiltaksperiode = (behandling: FørstegangsbehandlingData): Peri
     };
 };
 
-export const hentTiltaksperiodeFraSøknad = (behandling: FørstegangsbehandlingData): Periode => {
+export const hentTiltaksperiodeFraSøknad = (behandling: SøknadsbehandlingData): Periode => {
     const tiltakFraSøknad = singleOrFirst(behandling.søknad.tiltak);
 
     return {
@@ -29,20 +29,20 @@ export const hentTiltaksperiodeFraSøknad = (behandling: FørstegangsbehandlingD
     };
 };
 
-export const harSøktBarnetillegg = (behandling: FørstegangsbehandlingData) =>
+export const harSøktBarnetillegg = (behandling: SøknadsbehandlingData) =>
     !!behandling.barnetillegg || behandling.søknad.barnetillegg.length > 0;
 
-export const erBehandlingAbrutt = (behandling: BehandlingData) => !!behandling.avbrutt;
+export const erBehandlingAvbrutt = (behandling: BehandlingData) => !!behandling.avbrutt;
 
 export const erBehandlingVedtatt = (behandling: BehandlingData) =>
     behandling.status === BehandlingStatus.VEDTATT;
 
-export const erBehandlingFørstegangsbehandling = (
+export const erBehandlingSøknadsbehandling = (
     behandling: BehandlingData,
-): behandling is FørstegangsbehandlingData => behandling.type === Behandlingstype.SØKNADSBEHANDLING;
+): behandling is SøknadsbehandlingData => behandling.type === Behandlingstype.SØKNADSBEHANDLING;
 
 export const deltarPaFlereTiltakMedStartOgSluttdatoIValgtInnvilgelsesperiode = (
-    behandling: FørstegangsbehandlingData,
+    behandling: SøknadsbehandlingData,
     innvilgelsesperiode?: Periode,
 ) => {
     const tiltak = hentTiltaksdeltakelserMedStartOgSluttdato(behandling);
@@ -69,10 +69,10 @@ export const deltarPaFlereTiltakMedStartOgSluttdatoIValgtInnvilgelsesperiode = (
     return tiltak.length > 1;
 };
 
-export const deltarPaFlereTiltakMedStartOgSluttdato = (behandling: FørstegangsbehandlingData) =>
+export const deltarPaFlereTiltakMedStartOgSluttdato = (behandling: SøknadsbehandlingData) =>
     hentTiltaksdeltakelserMedStartOgSluttdato(behandling).length > 1;
 
-export const hentTiltaksdeltagelseFraSoknad = (behandling: FørstegangsbehandlingData) => {
+export const hentTiltaksdeltagelseFraSoknad = (behandling: SøknadsbehandlingData) => {
     const tiltakFraSoknad = singleOrFirst(behandling.søknad.tiltak);
     const tiltakFraSaksopplysninger = hentTiltaksdeltakelserMedStartOgSluttdato(behandling);
 
@@ -85,19 +85,18 @@ export const hentTiltaksdeltagelseFraSoknad = (behandling: Førstegangsbehandlin
     );
 };
 
-export const hentTiltaksdeltakelser = (
-    behandling: FørstegangsbehandlingData,
-): Tiltaksdeltagelse[] => behandling.saksopplysninger.tiltaksdeltagelse;
+export const hentTiltaksdeltakelser = (behandling: SøknadsbehandlingData): Tiltaksdeltagelse[] =>
+    behandling.saksopplysninger.tiltaksdeltagelse;
 
 export const hentTiltaksdeltakelserMedStartOgSluttdato = (
-    behandling: FørstegangsbehandlingData,
+    behandling: SøknadsbehandlingData,
 ): Tiltaksdeltagelse[] =>
     hentTiltaksdeltakelser(behandling).filter(
         (t) => t.deltagelseFraOgMed != null && t.deltagelseTilOgMed != null,
     );
 
 export const finnForsteStartdatoForTiltaksdeltakelse = (
-    behandling: FørstegangsbehandlingData,
+    behandling: SøknadsbehandlingData,
 ): string | null => {
     const sorterteDeltakelser = hentTiltaksdeltakelser(behandling)
         .filter((t) => t.deltagelseFraOgMed != null)
@@ -106,7 +105,7 @@ export const finnForsteStartdatoForTiltaksdeltakelse = (
 };
 
 export const finnSisteSluttdatoForTiltaksdeltakelse = (
-    behandling: FørstegangsbehandlingData,
+    behandling: SøknadsbehandlingData,
 ): string | null => {
     const sorterteDeltakelser = hentTiltaksdeltakelser(behandling)
         .filter((t) => t.deltagelseTilOgMed != null)

@@ -34,7 +34,7 @@ export const Saksoversikt = () => {
                     <Spacer />
                     <OpprettRevurdering
                         sakId={sakId}
-                        harVedtak={harVedtattFørstegangsbehandling(behandlinger)}
+                        harVedtak={harVedtattSøknadsbehandling(behandlinger)}
                     />
                 </HStack>
                 <Box className={styles.tabellwrapper}>
@@ -73,7 +73,7 @@ export const Saksoversikt = () => {
     );
 };
 
-const harVedtattFørstegangsbehandling = (behandlingsoversikt: BehandlingData[]) =>
+const harVedtattSøknadsbehandling = (behandlingsoversikt: BehandlingData[]) =>
     behandlingsoversikt.some(
         (behandling) =>
             behandling.type === Behandlingstype.SØKNADSBEHANDLING &&

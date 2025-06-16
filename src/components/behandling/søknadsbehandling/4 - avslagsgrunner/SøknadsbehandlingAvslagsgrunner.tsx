@@ -1,13 +1,13 @@
 import { Checkbox, CheckboxGroup } from '@navikt/ds-react';
 import {
-    useFørstegangsVedtakSkjema,
-    useFørstegangsVedtakSkjemaDispatch,
-} from '../context/FørstegangsVedtakContext';
+    useSøknadsbehandlingSkjema,
+    useSøknadsbehandlingSkjemaDispatch,
+} from '../context/SøknadsbehandlingVedtakContext';
 import { Avslagsgrunn, BehandlingResultat } from '../../../../types/BehandlingTypes';
-import styles from './FørstegangsvedtakAvslagsgrunner.module.css';
+import styles from './SøknadsbehandlingAvslagsgrunner.module.css';
 import { VedtakSeksjon } from '../../vedtak-layout/seksjon/VedtakSeksjon';
 import { Separator } from '../../../separator/Separator';
-import { useFørstegangsbehandling } from '../../BehandlingContext';
+import { useSøknadsbehandling } from '../../BehandlingContext';
 import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
 
 export const AvslagsgrunnTekst = {
@@ -22,10 +22,10 @@ export const AvslagsgrunnTekst = {
     [Avslagsgrunn.FremmetForSent]: 'Fremmet for sent',
 };
 
-const FørstegangsvedtakAvslagsgrunner = () => {
-    const { rolleForBehandling } = useFørstegangsbehandling();
-    const { resultat, avslagsgrunner } = useFørstegangsVedtakSkjema();
-    const dispatch = useFørstegangsVedtakSkjemaDispatch();
+const SøknadsbehandlingAvslagsgrunner = () => {
+    const { rolleForBehandling } = useSøknadsbehandling();
+    const { resultat, avslagsgrunner } = useSøknadsbehandlingSkjema();
+    const dispatch = useSøknadsbehandlingSkjemaDispatch();
     const erIkkeSaksbehandler = rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER;
 
     if (resultat !== BehandlingResultat.AVSLAG) {
@@ -64,4 +64,4 @@ const FørstegangsvedtakAvslagsgrunner = () => {
     );
 };
 
-export default FørstegangsvedtakAvslagsgrunner;
+export default SøknadsbehandlingAvslagsgrunner;

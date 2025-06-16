@@ -2,23 +2,23 @@ import { Button, Select } from '@navikt/ds-react';
 import { VedtakSeksjon } from '../../../vedtak-layout/seksjon/VedtakSeksjon';
 import { Datovelger } from '../../../../datovelger/Datovelger';
 import {
-    useFørstegangsVedtakSkjemaDispatch,
-    useFørstegangsVedtakSkjema,
-} from '../../context/FørstegangsVedtakContext';
+    useSøknadsbehandlingSkjemaDispatch,
+    useSøknadsbehandlingSkjema,
+} from '../../context/SøknadsbehandlingVedtakContext';
 import { hentTiltaksdeltakelserMedStartOgSluttdato } from '../../../../../utils/behandling';
 import { VedtakTiltaksdeltakelsePeriode } from '../../../../../types/VedtakTyper';
 import { SaksbehandlerRolle } from '../../../../../types/Saksbehandler';
 import { dateTilISOTekst, periodeTilFormatertDatotekst } from '../../../../../utils/date';
-import { useFørstegangsbehandling } from '../../../BehandlingContext';
+import { useSøknadsbehandling } from '../../../BehandlingContext';
 
 import style from './TiltakPerioder.module.css';
 import { Tiltaksdeltagelse } from '../../../../../types/TiltakDeltagelseTypes';
 
 export const TiltakPerioder = () => {
-    const { behandling, rolleForBehandling } = useFørstegangsbehandling();
+    const { behandling, rolleForBehandling } = useSøknadsbehandling();
     const { valgteTiltaksdeltakelser, behandlingsperiode: innvilgelsesPeriode } =
-        useFørstegangsVedtakSkjema();
-    const dispatch = useFørstegangsVedtakSkjemaDispatch();
+        useSøknadsbehandlingSkjema();
+    const dispatch = useSøknadsbehandlingSkjemaDispatch();
 
     const tiltaksdeltakelser = hentTiltaksdeltakelserMedStartOgSluttdato(behandling);
 
@@ -72,8 +72,8 @@ const TiltakPeriode = ({
     rolle,
     skalKunneFjernePeriode,
 }: PeriodeProps) => {
-    const dispatch = useFørstegangsVedtakSkjemaDispatch();
-    const { behandlingsperiode: innvilgelsesPeriode } = useFørstegangsVedtakSkjema();
+    const dispatch = useSøknadsbehandlingSkjemaDispatch();
+    const { behandlingsperiode: innvilgelsesPeriode } = useSøknadsbehandlingSkjema();
 
     const erSaksbehandler = rolle === SaksbehandlerRolle.SAKSBEHANDLER;
 

@@ -27,7 +27,7 @@ type BehandlingDataCommon = {
     avslagsgrunner: Nullable<Avslagsgrunn[]>;
 };
 
-export type FørstegangsbehandlingData = BehandlingDataCommon & {
+export type SøknadsbehandlingData = BehandlingDataCommon & {
     type: Behandlingstype.SØKNADSBEHANDLING;
     søknad: SøknadForBehandlingProps;
     barnetillegg: Barnetillegg | null;
@@ -39,7 +39,7 @@ export type RevurderingData = BehandlingDataCommon & {
     type: Behandlingstype.REVURDERING;
 };
 
-export type BehandlingData = FørstegangsbehandlingData | RevurderingData;
+export type BehandlingData = SøknadsbehandlingData | RevurderingData;
 
 export type BehandlingSaksopplysningerData = {
     fødselsdato: string;
@@ -48,7 +48,7 @@ export type BehandlingSaksopplysningerData = {
     ytelser: Ytelse[];
 };
 
-// TODO: revurdering og førstegangsbehandling bør ha separate typer
+// TODO: revurdering og søknadsbehandling bør ha separate typer
 export type BehandlingForOversiktData = {
     id: BehandlingId;
     sakId: SakId;

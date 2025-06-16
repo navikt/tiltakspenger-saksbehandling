@@ -1,22 +1,22 @@
 import { BodyLong, BodyShort, Button, Heading } from '@navikt/ds-react';
 import { ParagraphIcon, TasklistIcon } from '@navikt/aksel-icons';
 import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
-import { useFørstegangsVedtakSkjema } from '../context/FørstegangsVedtakContext';
+import { useSøknadsbehandlingSkjema } from '../context/SøknadsbehandlingVedtakContext';
 import { FunctionComponent, ReactNode } from 'react';
 import { VedtakSeksjon } from '../../vedtak-layout/seksjon/VedtakSeksjon';
 import { VedtakHjelpetekst } from '../../vedtak-layout/hjelpetekst/VedtakHjelpetekst';
 import { TekstfeltMedMellomlagring } from '../../../tekstfelt/TekstfeltMedMellomlagring';
 import { VedtakBegrunnelseLagringDTO } from '../../../../types/VedtakTyper';
 import { TekstListe } from '../../../liste/TekstListe';
-import { useFørstegangsbehandling } from '../../BehandlingContext';
+import { useSøknadsbehandling } from '../../BehandlingContext';
 
-import style from './FørstegangsVedtakBegrunnelse.module.css';
+import style from './SøknadsbehandlingBegrunnelse.module.css';
 
-export const FørstegangsVedtakBegrunnelse = () => {
-    const { behandling, rolleForBehandling } = useFørstegangsbehandling();
+export const SøknadsbehandlingBegrunnelse = () => {
+    const { behandling, rolleForBehandling } = useSøknadsbehandling();
     const { begrunnelseVilkårsvurdering, sakId, id } = behandling;
 
-    const { begrunnelseRef } = useFørstegangsVedtakSkjema();
+    const { begrunnelseRef } = useSøknadsbehandlingSkjema();
 
     return (
         <VedtakSeksjon>

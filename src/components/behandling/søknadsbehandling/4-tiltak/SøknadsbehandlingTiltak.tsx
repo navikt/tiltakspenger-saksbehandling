@@ -2,22 +2,22 @@ import { VedtakSeksjon } from '../../vedtak-layout/seksjon/VedtakSeksjon';
 import { Alert } from '@navikt/ds-react';
 import { classNames } from '../../../../utils/classNames';
 
-import style from './FørstegangsVedtakTiltak.module.css';
+import style from './SøknadsbehandlingTiltak.module.css';
 import { TiltakPerioder } from './perioder/TiltakPerioder';
-import { useFørstegangsVedtakSkjema } from '../context/FørstegangsVedtakContext';
+import { useSøknadsbehandlingSkjema } from '../context/SøknadsbehandlingVedtakContext';
 import { Separator } from '../../../separator/Separator';
-import { useFørstegangsbehandling } from '../../BehandlingContext';
+import { useSøknadsbehandling } from '../../BehandlingContext';
 import { deltarPaFlereTiltakMedStartOgSluttdatoIValgtInnvilgelsesperiode } from '../../../../utils/behandling';
 import { BehandlingResultat } from '../../../../types/BehandlingTypes';
 
-export const FørstegangsVedtakTiltak = () => {
-    const { behandling } = useFørstegangsbehandling();
-    const { behandlingsperiode: innvilgelsesPeriode } = useFørstegangsVedtakSkjema();
+export const SøknadsbehandlingTiltak = () => {
+    const { behandling } = useSøknadsbehandling();
+    const { behandlingsperiode: innvilgelsesPeriode } = useSøknadsbehandlingSkjema();
     const flereTiltak = deltarPaFlereTiltakMedStartOgSluttdatoIValgtInnvilgelsesperiode(
         behandling,
         innvilgelsesPeriode,
     );
-    const { resultat } = useFørstegangsVedtakSkjema();
+    const { resultat } = useSøknadsbehandlingSkjema();
     return (
         flereTiltak && (
             <div

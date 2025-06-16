@@ -1,20 +1,20 @@
 import { VedtakSeksjon } from '../../../vedtak-layout/seksjon/VedtakSeksjon';
 import { SaksbehandlerRolle } from '../../../../../types/Saksbehandler';
-import { useFørstegangsVedtakSkjema } from '../../context/FørstegangsVedtakContext';
+import { useSøknadsbehandlingSkjema } from '../../context/SøknadsbehandlingVedtakContext';
 import { VedtakHjelpetekst } from '../../../vedtak-layout/hjelpetekst/VedtakHjelpetekst';
 import { TekstListe } from '../../../../liste/TekstListe';
 import { BodyLong, Heading } from '@navikt/ds-react';
 import { TekstfeltMedMellomlagring } from '../../../../tekstfelt/TekstfeltMedMellomlagring';
 import { VedtakBarnetilleggDTO } from '../../../../../types/VedtakTyper';
-import { useFørstegangsbehandling } from '../../../BehandlingContext';
+import { useSøknadsbehandling } from '../../../BehandlingContext';
 
 import style from './BarnetilleggBegrunnelse.module.css';
 
 export const BarnetilleggBegrunnelse = () => {
-    const { behandling, rolleForBehandling } = useFørstegangsbehandling();
+    const { behandling, rolleForBehandling } = useSøknadsbehandling();
     const { barnetillegg, sakId, id } = behandling;
 
-    const { barnetilleggBegrunnelseRef, barnetilleggPerioder } = useFørstegangsVedtakSkjema();
+    const { barnetilleggBegrunnelseRef, barnetilleggPerioder } = useSøknadsbehandlingSkjema();
 
     return (
         <>

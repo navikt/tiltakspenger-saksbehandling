@@ -8,11 +8,11 @@ import {
 import { SøknadForBehandlingProps } from '../../../types/SøknadTypes';
 import { BehandlingData } from '../../../types/BehandlingTypes';
 import {
-    erBehandlingAbrutt as erBehandlingAvbrutt,
-    erBehandlingFørstegangsbehandling,
+    erBehandlingAvbrutt,
+    erBehandlingSøknadsbehandling,
     erBehandlingVedtatt,
-} from '../../../utils/behandling';
-import { erSøknadAvbrutt } from '../../../utils/SøknadUtils';
+} from '~/utils/behandling';
+import { erSøknadAvbrutt } from '~/utils/SøknadUtils';
 import { VedtatteBehandlingerTabell } from './VedtatteBehandlingerTabell';
 import { AvbrutteBehandlingerTabell } from './AvbrutteBehandlingerTabell';
 
@@ -30,7 +30,7 @@ export const AvsluttedeBehandlinger = (props: {
             (søknad) =>
                 avsluttedeBehandlinger.find(
                     (behandling) =>
-                        erBehandlingFørstegangsbehandling(behandling) &&
+                        erBehandlingSøknadsbehandling(behandling) &&
                         behandling.søknad.id === søknad.id,
                 ) === undefined,
         );
