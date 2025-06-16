@@ -12,7 +12,7 @@ import { Nullable } from '../common';
 export type MeldekortBehandlingId = `meldekort_beh_${string}`;
 
 export enum MeldekortBehandlingStatus {
-    KLAR_TIL_UTFYLLING = 'KLAR_TIL_UTFYLLING',
+    KLAR_TIL_BEHANDLING = 'KLAR_TIL_BEHANDLING',
     KLAR_TIL_BESLUTNING = 'KLAR_TIL_BESLUTNING',
     UNDER_BESLUTNING = 'UNDER_BESLUTNING',
     GODKJENT = 'GODKJENT',
