@@ -1,10 +1,11 @@
-import { Button } from '@navikt/ds-react';
-import Spørsmålsmodal from '../../modaler/Spørsmålsmodal';
-import { useRef } from 'react';
-import { SakId } from '../../../types/SakTypes';
+import { Button, Radio, RadioGroup } from '@navikt/ds-react';
+import { useRef, useState } from 'react';
+import { SakId } from '~/types/SakTypes';
 import router from 'next/router';
 import { useOpprettRevurdering } from './useOpprettRevurdering';
-import { RevurderingType } from '../../../types/BehandlingTypes';
+import { RevurderingType } from '~/types/BehandlingTypes';
+import { BekreftelsesModal } from '~/components/modaler/BekreftelsesModal';
+import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
 
 type Props = {
     sakId: SakId;
@@ -12,32 +13,75 @@ type Props = {
 };
 
 export const OpprettRevurdering = ({ sakId, harVedtak }: Props) => {
+    const { revurderingInnvilgelseToggle } = useFeatureToggles();
+
+    const [valgtType, setValgtType] = useState<RevurderingType | null>(null);
+
+    const { opprettRevurdering, opprettRevurderingLaster, opprettRevurderingError } =
+        useOpprettRevurdering(sakId);
+
     const modalRef = useRef<HTMLDialogElement>(null);
 
-    const { opprettRevurdering } = useOpprettRevurdering(sakId);
+    const lukkModal = () => {
+        modalRef.current?.close();
+        setValgtType(null);
+    };
 
     return (
         <>
             <Button
-                size="small"
-                variant="secondary"
+                size={'small'}
+                variant={'secondary'}
+                type={'button'}
                 onClick={() => modalRef.current?.showModal()}
                 disabled={!harVedtak}
             >
                 {'Opprett revurdering'}
             </Button>
-            <Spørsmålsmodal
+            <BekreftelsesModal
                 modalRef={modalRef}
-                heading="Bekreft opprett revurdering"
-                submitTekst="Opprett revurdering"
-                onSubmit={() => {
-                    opprettRevurdering({ revurderingType: RevurderingType.STANS }).then((data) => {
-                        if (data) {
-                            router.push(`/behandling/${data.id}`);
-                        }
-                    });
-                }}
-            />
+                lukkModal={lukkModal}
+                feil={opprettRevurderingError}
+                tittel={'Opprett revurdering'}
+                bekreftKnapp={
+                    <Button
+                        variant={'primary'}
+                        type={'button'}
+                        loading={opprettRevurderingLaster}
+                        disabled={!valgtType}
+                        onClick={() => {
+                            if (!valgtType) {
+                                return;
+                            }
+
+                            opprettRevurdering({ revurderingType: valgtType }).then((data) => {
+                                if (data) {
+                                    router.push(`/behandling/${data.id}`);
+                                }
+                            });
+                        }}
+                    >
+                        {`Opprett revurdering${valgtType ? ` (${valgtType.toLowerCase()})` : ''}`}
+                    </Button>
+                }
+            >
+                <RadioGroup
+                    legend={'Velg type revurdering'}
+                    size={'small'}
+                    value={valgtType}
+                    onChange={(type: RevurderingType) => {
+                        setValgtType(type);
+                    }}
+                >
+                    <Radio
+                        value={RevurderingType.INNVILGELSE}
+                        disabled={!revurderingInnvilgelseToggle}
+                    >
+                        {'Innvilgelse'}
+                    </Radio>
+                    <Radio value={RevurderingType.STANS}>{'Stans'}</Radio>
+                </RadioGroup>
+            </BekreftelsesModal>
         </>
     );
 };
