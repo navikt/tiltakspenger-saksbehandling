@@ -46,7 +46,7 @@ export const MeldekortBehandlingKnappForOversikt = ({
         useLeggTilbakeMeldekortBehandling(sakId, id);
 
     switch (status) {
-        case MeldekortBehandlingStatus.KLAR_TIL_BEHANDLING:
+        case MeldekortBehandlingStatus.KLAR_TIL_UTFYLLING:
         case MeldekortBehandlingStatus.UNDER_BESLUTNING:
             if (!eierMeldekortBehandling(meldekortBehandling, innloggetSaksbehandler)) {
                 if (
@@ -65,7 +65,7 @@ export const MeldekortBehandlingKnappForOversikt = ({
                             meldekortBehandlingId={id}
                             overtarFra={
                                 meldekortBehandling.status ===
-                                MeldekortBehandlingStatus.KLAR_TIL_BEHANDLING
+                                MeldekortBehandlingStatus.KLAR_TIL_UTFYLLING
                                     ? meldekortBehandling.saksbehandler!
                                     : meldekortBehandling.status ===
                                         MeldekortBehandlingStatus.UNDER_BESLUTNING
