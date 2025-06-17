@@ -26,6 +26,7 @@ export type RevurderingStansBrevForhåndsvisningDTO = {
 
 export type RevurderingInnvilgelseBrevForhåndsvisningDTO = {
     fritekst: string;
+    virkningsperiode: Periode;
     resultat: RevurderingResultat.REVURDERING_INNVILGELSE;
 };
 

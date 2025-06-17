@@ -6,13 +6,13 @@ import { BehandlingSendTilBeslutning } from '../../send-og-godkjenn/BehandlingSe
 import { VedtakSeksjon } from '../../vedtak-layout/seksjon/VedtakSeksjon';
 import { useSøknadsbehandling } from '../../BehandlingContext';
 import { søknadsbehandlingValidering } from '../søknadsbehandlingValidering';
-
-import style from './SøknadsbehandlingKnapper.module.css';
 import { HStack } from '@navikt/ds-react';
 import AvsluttBehandling from '../../../saksoversikt/avsluttBehandling/AvsluttBehandling';
 import { BehandlingStatus } from '../../../../types/BehandlingTypes';
 import { useSaksbehandler } from '../../../../context/saksbehandler/SaksbehandlerContext';
 import router from 'next/router';
+
+import style from './SøknadsbehandlingKnapper.module.css';
 
 export const SøknadsbehandlingKnapper = () => {
     const { behandling } = useSøknadsbehandling();

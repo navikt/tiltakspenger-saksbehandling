@@ -4,6 +4,7 @@ import { RevurderingInnvilgelseBegrunnelse } from '~/components/behandling/revur
 import { RevurderingInnvilgelsesperiodeVelger } from '~/components/behandling/revurdering/innvilgelse/2-innvilgelsesperiode/RevurderingInnvilgelsesperiodeVelger';
 import { RevurderingInnvilgelseVedtakProvider } from '~/components/behandling/revurdering/innvilgelse/context/RevurderingInnvilgelseVedtakContext';
 import { Separator } from '~/components/separator/Separator';
+import { RevurderingInnvilgelseBrev } from '~/components/behandling/revurdering/innvilgelse/3-brev/RevurderingInnvilgelseBrev';
 
 export const RevurderingInnvilgelseVedtak = () => {
     return (
@@ -14,6 +15,7 @@ export const RevurderingInnvilgelseVedtak = () => {
             <RevurderingInnvilgelseBegrunnelse />
             <RevurderingInnvilgelsesperiodeVelger />
             <Separator />
+            <RevurderingInnvilgelseBrev />
         </RevurderingInnvilgelseVedtakProvider>
     );
 };
