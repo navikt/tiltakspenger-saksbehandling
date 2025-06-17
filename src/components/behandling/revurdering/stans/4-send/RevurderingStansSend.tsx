@@ -11,11 +11,11 @@ import { VedtakSeksjon } from '../../../vedtak-layout/seksjon/VedtakSeksjon';
 import { Button } from '@navikt/ds-react';
 import NextLink from 'next/link';
 import React from 'react';
+import { revurderingStansValidering } from '../revurderingStansValidering';
+import { VedtakRevurderTilStansDTO } from '~/types/VedtakTyper';
+import { RevurderingResultat } from '~/types/BehandlingTypes';
 
 import style from './RevurderingStansSend.module.css';
-import { revurderingStansValidering } from '../revurderingStansValidering';
-import { VedtakRevurderingDTO } from '~/types/VedtakTyper';
-import { RevurderingResultat } from '~/types/BehandlingTypes';
 
 export const RevurderingStansSend = () => {
     const revurderingVedtak = useRevurderingStansVedtak();
@@ -63,7 +63,7 @@ export const RevurderingStansSend = () => {
     );
 };
 
-const tilBeslutningDTO = (vedtak: RevurderingStansVedtakContext): VedtakRevurderingDTO => {
+const tilBeslutningDTO = (vedtak: RevurderingStansVedtakContext): VedtakRevurderTilStansDTO => {
     return {
         type: RevurderingResultat.STANS,
         begrunnelse: vedtak.getBegrunnelse(),

@@ -8,8 +8,8 @@ import { useSøknadsbehandling } from '../../BehandlingContext';
 import { søknadsbehandlingValidering } from '../søknadsbehandlingValidering';
 import { HStack } from '@navikt/ds-react';
 import AvsluttBehandling from '../../../saksoversikt/avsluttBehandling/AvsluttBehandling';
-import { BehandlingStatus } from '../../../../types/BehandlingTypes';
-import { useSaksbehandler } from '../../../../context/saksbehandler/SaksbehandlerContext';
+import { BehandlingStatus } from '~/types/BehandlingTypes';
+import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
 import router from 'next/router';
 
 import style from './SøknadsbehandlingKnapper.module.css';

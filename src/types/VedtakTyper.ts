@@ -41,6 +41,7 @@ export type VedtakRevurderInnvilgelseDTO = VedtakRevurderingBaseDTO & {
     type: RevurderingResultat.REVURDERING_INNVILGELSE;
     innvilgelse: {
         innvilgelsesperiode: Periode;
+        valgteTiltaksdeltakelser: VedtakTiltaksdeltakelsePeriode[];
     };
 };
 
