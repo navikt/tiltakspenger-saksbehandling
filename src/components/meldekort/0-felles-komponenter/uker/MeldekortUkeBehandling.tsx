@@ -53,7 +53,7 @@ export const MeldekortUkeBehandling = ({ dager, ukeIndex }: Props) => {
                             name={statusFieldPath}
                             control={control}
                             rules={{ validate: (value) => gyldigeStatusValg.includes(value) }}
-                            defaultValue={MeldekortBehandlingDagStatus.IkkeUtfylt}
+                            defaultValue={MeldekortBehandlingDagStatus.IkkeBesvart}
                             render={({ field: { onChange, value } }) => (
                                 <Select
                                     label={'Velg status for dag'}
@@ -65,7 +65,7 @@ export const MeldekortUkeBehandling = ({ dager, ukeIndex }: Props) => {
                                     onChange={(e) => {
                                         if (
                                             e.target.value !==
-                                                MeldekortBehandlingDagStatus.IkkeUtfylt &&
+                                                MeldekortBehandlingDagStatus.IkkeBesvart &&
                                             error
                                         ) {
                                             clearErrors(statusFieldPath);
@@ -74,7 +74,7 @@ export const MeldekortUkeBehandling = ({ dager, ukeIndex }: Props) => {
                                     }}
                                     className={styles.select}
                                 >
-                                    <option value={MeldekortBehandlingDagStatus.IkkeUtfylt}>
+                                    <option value={MeldekortBehandlingDagStatus.IkkeBesvart}>
                                         {'- Velg status -'}
                                     </option>
                                     {statusOptions}
@@ -99,7 +99,7 @@ export const MeldekortUkeBehandling = ({ dager, ukeIndex }: Props) => {
 
 const gyldigeStatusValg = Object.values(MeldekortBehandlingDagStatus).filter(
     (status) =>
-        ![MeldekortBehandlingDagStatus.Sperret, MeldekortBehandlingDagStatus.IkkeUtfylt].includes(
+        ![MeldekortBehandlingDagStatus.Sperret, MeldekortBehandlingDagStatus.IkkeBesvart].includes(
             status,
         ),
 );

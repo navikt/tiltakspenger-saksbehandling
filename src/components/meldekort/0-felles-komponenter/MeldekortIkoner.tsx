@@ -39,11 +39,11 @@ export const ikonForBrukersMeldekortDagStatus: Record<
 > = {
     [BrukersMeldekortDagStatus.DELTATT_UTEN_LØNN_I_TILTAKET]: Ikoner.checkmarkCircleFill,
     [BrukersMeldekortDagStatus.DELTATT_MED_LØNN_I_TILTAKET]: Ikoner.minusCircleFill,
-    [BrukersMeldekortDagStatus.FRAVÆR_VELFERD_GODKJENT_AV_NAV]: Ikoner.minusCircleFill,
+    [BrukersMeldekortDagStatus.FRAVÆR_GODKJENT_AV_NAV]: Ikoner.minusCircleFill,
     [BrukersMeldekortDagStatus.FRAVÆR_SYK]: Ikoner.firstAidKitFill,
     [BrukersMeldekortDagStatus.FRAVÆR_SYKT_BARN]: Ikoner.firstAidKitFill,
-    [BrukersMeldekortDagStatus.IKKE_REGISTRERT]: Ikoner.notePencil,
-    [BrukersMeldekortDagStatus.FRAVÆR_VELFERD_IKKE_GODKJENT_AV_NAV]: Ikoner.circleSlash,
+    [BrukersMeldekortDagStatus.IKKE_BESVART]: Ikoner.notePencil,
+    [BrukersMeldekortDagStatus.FRAVÆR_ANNET]: Ikoner.circleSlash,
 } as const;
 
 export const ikonForMeldekortBehandlingDagStatus: Record<
@@ -54,9 +54,9 @@ export const ikonForMeldekortBehandlingDagStatus: Record<
     [MeldekortBehandlingDagStatus.DeltattUtenLønnITiltaket]: Ikoner.checkmarkCircleFill,
     [MeldekortBehandlingDagStatus.FraværSyk]: Ikoner.firstAidKitFill,
     [MeldekortBehandlingDagStatus.FraværSyktBarn]: Ikoner.firstAidKitFill,
-    [MeldekortBehandlingDagStatus.FraværVelferdGodkjentAvNav]: Ikoner.checkmarkCircleFill,
-    [MeldekortBehandlingDagStatus.FraværVelferdIkkeGodkjentAvNav]: Ikoner.minusCircleFill,
+    [MeldekortBehandlingDagStatus.FraværGodkjentAvNav]: Ikoner.checkmarkCircleFill,
+    [MeldekortBehandlingDagStatus.FraværAnnet]: Ikoner.minusCircleFill,
     [MeldekortBehandlingDagStatus.IkkeDeltatt]: Ikoner.minusCircleFill,
-    [MeldekortBehandlingDagStatus.IkkeUtfylt]: Ikoner.notePencil,
+    [MeldekortBehandlingDagStatus.IkkeBesvart]: Ikoner.notePencil,
     [MeldekortBehandlingDagStatus.Sperret]: Ikoner.circleSlash,
 } as const;

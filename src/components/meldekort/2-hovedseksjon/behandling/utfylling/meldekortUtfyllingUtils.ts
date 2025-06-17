@@ -62,11 +62,10 @@ const brukersStatusTilBehandlingsStatus: Record<
         MeldekortBehandlingDagStatus.DeltattMedLønnITiltaket,
     [BrukersMeldekortDagStatus.FRAVÆR_SYK]: MeldekortBehandlingDagStatus.FraværSyk,
     [BrukersMeldekortDagStatus.FRAVÆR_SYKT_BARN]: MeldekortBehandlingDagStatus.FraværSyktBarn,
-    [BrukersMeldekortDagStatus.FRAVÆR_VELFERD_GODKJENT_AV_NAV]:
-        MeldekortBehandlingDagStatus.FraværVelferdGodkjentAvNav,
-    [BrukersMeldekortDagStatus.FRAVÆR_VELFERD_IKKE_GODKJENT_AV_NAV]:
-        MeldekortBehandlingDagStatus.FraværVelferdIkkeGodkjentAvNav,
-    [BrukersMeldekortDagStatus.IKKE_REGISTRERT]: MeldekortBehandlingDagStatus.IkkeDeltatt,
+    [BrukersMeldekortDagStatus.FRAVÆR_GODKJENT_AV_NAV]:
+        MeldekortBehandlingDagStatus.FraværGodkjentAvNav,
+    [BrukersMeldekortDagStatus.FRAVÆR_ANNET]: MeldekortBehandlingDagStatus.FraværAnnet,
+    [BrukersMeldekortDagStatus.IKKE_BESVART]: MeldekortBehandlingDagStatus.IkkeBesvart,
 } as const;
 
 export const tellDagerMedDeltattEllerFravær = (dager: MeldekortDagProps[]) =>
@@ -77,8 +76,8 @@ const dagerMedDeltattEllerFravær: ReadonlySet<MeldekortBehandlingDagStatus> = n
     MeldekortBehandlingDagStatus.DeltattMedLønnITiltaket,
     MeldekortBehandlingDagStatus.FraværSyk,
     MeldekortBehandlingDagStatus.FraværSyktBarn,
-    MeldekortBehandlingDagStatus.FraværVelferdGodkjentAvNav,
-    MeldekortBehandlingDagStatus.FraværVelferdIkkeGodkjentAvNav,
+    MeldekortBehandlingDagStatus.FraværGodkjentAvNav,
+    MeldekortBehandlingDagStatus.FraværAnnet,
 ]);
 
 export type MeldekortBehandlingForm = {

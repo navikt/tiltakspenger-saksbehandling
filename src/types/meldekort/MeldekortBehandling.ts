@@ -25,14 +25,14 @@ export enum MeldekortBehandlingStatus {
 export enum MeldekortBehandlingDagStatus {
     // OBS! Ved endring av disse kodene så burde tilsvarende endringer gjøres for tekstene som utledes for brevene!
     Sperret = 'SPERRET',
-    IkkeUtfylt = 'IKKE_UTFYLT',
+    IkkeBesvart = 'IKKE_BESVART',
     DeltattUtenLønnITiltaket = 'DELTATT_UTEN_LØNN_I_TILTAKET',
     DeltattMedLønnITiltaket = 'DELTATT_MED_LØNN_I_TILTAKET',
     IkkeDeltatt = 'IKKE_DELTATT',
     FraværSyk = 'FRAVÆR_SYK',
     FraværSyktBarn = 'FRAVÆR_SYKT_BARN',
-    FraværVelferdGodkjentAvNav = 'FRAVÆR_VELFERD_GODKJENT_AV_NAV',
-    FraværVelferdIkkeGodkjentAvNav = 'FRAVÆR_VELFERD_IKKE_GODKJENT_AV_NAV',
+    FraværGodkjentAvNav = 'FRAVÆR_GODKJENT_AV_NAV',
+    FraværAnnet = 'FRAVÆR_ANNET',
 }
 
 export enum ReduksjonAvYtelse {

@@ -36,9 +36,9 @@ export const brukersMeldekortDagStatusTekst: Record<BrukersMeldekortDagStatus, s
     [BrukersMeldekortDagStatus.DELTATT_MED_LØNN_I_TILTAKET]: 'Deltatt med lønn i tiltaket',
     [BrukersMeldekortDagStatus.FRAVÆR_SYK]: 'Fravær - Syk',
     [BrukersMeldekortDagStatus.FRAVÆR_SYKT_BARN]: 'Fravær - Sykt barn',
-    [BrukersMeldekortDagStatus.FRAVÆR_VELFERD_GODKJENT_AV_NAV]: 'Godkjent fravær - Velferd',
-    [BrukersMeldekortDagStatus.FRAVÆR_VELFERD_IKKE_GODKJENT_AV_NAV]: 'Ikke godkjent fravær',
-    [BrukersMeldekortDagStatus.IKKE_REGISTRERT]: 'Ikke utfylt',
+    [BrukersMeldekortDagStatus.FRAVÆR_GODKJENT_AV_NAV]: 'Godkjent fravær',
+    [BrukersMeldekortDagStatus.FRAVÆR_ANNET]: 'Ikke godkjent fravær',
+    [BrukersMeldekortDagStatus.IKKE_BESVART]: 'Ikke besvart',
 } as const;
 
 export const meldekortBehandlingDagStatusTekst: Record<MeldekortBehandlingDagStatus, string> = {
@@ -48,10 +48,10 @@ export const meldekortBehandlingDagStatusTekst: Record<MeldekortBehandlingDagSta
     [MeldekortBehandlingDagStatus.DeltattUtenLønnITiltaket]: 'Deltatt uten lønn i tiltaket',
     [MeldekortBehandlingDagStatus.FraværSyk]: 'Fravær - Syk',
     [MeldekortBehandlingDagStatus.FraværSyktBarn]: 'Fravær - Sykt barn',
-    [MeldekortBehandlingDagStatus.FraværVelferdGodkjentAvNav]: 'Godkjent fravær - Velferd',
-    [MeldekortBehandlingDagStatus.FraværVelferdIkkeGodkjentAvNav]: 'Ikke godkjent fravær - Velferd',
+    [MeldekortBehandlingDagStatus.FraværGodkjentAvNav]: 'Godkjent fravær',
+    [MeldekortBehandlingDagStatus.FraværAnnet]: 'Ikke godkjent fravær',
+    [MeldekortBehandlingDagStatus.IkkeBesvart]: 'Ikke besvart',
     [MeldekortBehandlingDagStatus.IkkeDeltatt]: 'Ikke tiltak denne dagen',
-    [MeldekortBehandlingDagStatus.IkkeUtfylt]: 'Ikke utfylt',
 } as const;
 
 export const finnMeldeperiodeKjedeStatusTekst: Record<MeldeperiodeKjedeStatus, string> = {

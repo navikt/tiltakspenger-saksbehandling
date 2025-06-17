@@ -53,7 +53,7 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
     const skjemaErEndret = formContext.formState.isDirty;
     const skjemaErUtfylt = formContext
         .getValues()
-        .dager.every((dag) => dag.status !== MeldekortBehandlingDagStatus.IkkeUtfylt);
+        .dager.every((dag) => dag.status !== MeldekortBehandlingDagStatus.IkkeBesvart);
     const skalViseBeregningVarsel = skjemaErEndret && skjemaErUtfylt;
 
     const hentMeldekortUtfylling = (): MeldekortBehandlingDTO => ({
