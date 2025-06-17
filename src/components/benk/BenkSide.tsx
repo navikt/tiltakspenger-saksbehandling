@@ -50,12 +50,15 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
         saksbehandlerParam ?? 'Alle',
     );
 
-    const [filtrertBenktype, setFiltrertBenkType] = useState<BenkOversiktResponse>(benkOversikt);
+    const [filtrertBenkoversikt, setFiltrertBenkoversikt] =
+        useState<BenkOversiktResponse>(benkOversikt);
 
     const fetchOversikt = useFetchJsonFraApi<BenkOversiktResponse, BenkOversiktRequest>(
         `/behandlinger`,
         'POST',
-        { onSuccess: (oversikt) => setFiltrertBenkType(oversikt!) },
+        {
+            onSuccess: (oversikt) => setFiltrertBenkoversikt(oversikt!),
+        },
     );
 
     useEffect(() => {
@@ -198,6 +201,7 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
                     </Alert>
                 </div>
             )}
+
             <SortableTable
                 kolonnerConfig={{
                     kolonner: BehandlingssammendragKolonner,
@@ -247,10 +251,10 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
                 }
                 tableBody={
                     <Table.Body>
-                        {filtrertBenktype.behandlingssammendrag.map((behandling) => (
+                        {filtrertBenkoversikt.behandlingssammendrag.map((behandling, idx) => (
                             <Table.Row
                                 shadeOnHover={false}
-                                key={`${behandling.sakId}-${behandling.startet}`}
+                                key={`${behandling.sakId}-${behandling.startet}-${idx}`}
                             >
                                 <Table.HeaderCell scope="row">
                                     <HStack align="center">
