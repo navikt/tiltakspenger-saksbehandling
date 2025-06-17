@@ -1,17 +1,17 @@
 import { Radio, RadioGroup } from '@navikt/ds-react';
 import { Datovelger } from '../../../datovelger/Datovelger';
-import { classNames } from '../../../../utils/classNames';
-import { dateTilISOTekst } from '../../../../utils/date';
-import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
+import { classNames } from '~/utils/classNames';
+import { dateTilISOTekst } from '~/utils/date';
+import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import {
     useSøknadsbehandlingSkjema,
     useSøknadsbehandlingSkjemaDispatch,
 } from '../context/SøknadsbehandlingVedtakContext';
 import { VedtakSeksjon } from '../../vedtak-layout/seksjon/VedtakSeksjon';
 import { useSøknadsbehandling } from '../../BehandlingContext';
-import { SøknadsbehandlingResultat } from '../../../../types/BehandlingTypes';
+import { SøknadsbehandlingResultat } from '~/types/BehandlingTypes';
 
-import style from './SøknadsbehandlingResultat.module.css';
+import style from './SøknadsbehandlingResultatVelger.module.css';
 
 export const SøknadsbehandlingResultatVelger = () => {
     const { rolleForBehandling } = useSøknadsbehandling();
