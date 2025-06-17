@@ -1,13 +1,10 @@
-import { BehandlingEllerSøknadForOversiktData } from '../../../types/BehandlingTypes';
+import { BehandlingEllerSøknadForOversiktData } from '~/types/BehandlingTypes';
 import { Button, Table } from '@navikt/ds-react';
-import {
-    finnBehandlingstypeTekst,
-    finnBehandlingStatusTekst,
-} from '../../../utils/tekstformateringUtils';
-import { formaterTidspunkt, periodeTilFormatertDatotekst } from '../../../utils/date';
+import { finnBehandlingstypeTekst, finnBehandlingStatusTag } from '~/utils/tekstformateringUtils';
+import { formaterTidspunkt, periodeTilFormatertDatotekst } from '~/utils/date';
 import { BehandlingKnappForOversikt } from '../../behandlingsknapper/BehandlingKnappForOversikt';
 import Link from 'next/link';
-import { isBehandling, isSøknad } from '../../../utils/behandlingForOversiktUtils';
+import { isBehandling, isSøknad } from '~/utils/behandlingForOversiktUtils';
 import { StartSøknadBehandling } from '../../behandlingsknapper/start-behandling/StartSøknadBehandling';
 
 type Props = {
@@ -41,7 +38,7 @@ export const BehandlingerOversikt = ({ behandlinger }: Props) => {
                                 : 'Ukjent'}
                         </Table.DataCell>
                         <Table.DataCell>
-                            {finnBehandlingStatusTekst(behandling.status, behandling.underkjent)}
+                            {finnBehandlingStatusTag(behandling.status, behandling.underkjent)}
                         </Table.DataCell>
                         <Table.DataCell>
                             {behandling.periode &&

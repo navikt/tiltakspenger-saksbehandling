@@ -1,19 +1,15 @@
 import { Box, Heading } from '@navikt/ds-react';
 
 import styles from '../Saksoversikt.module.css';
-import {
-    avbruttSøknadToDataCellInfo,
-    avsluttetBehandlingToDataCellInfo,
-} from './AvsluttedeBehandlingerUtils';
-import { SøknadForBehandlingProps } from '../../../types/SøknadTypes';
-import { BehandlingData } from '../../../types/BehandlingTypes';
+import { avbruttSøknadToDataCellInfo } from './AvsluttedeBehandlingerUtils';
+import { SøknadForBehandlingProps } from '~/types/SøknadTypes';
+import { BehandlingData } from '~/types/BehandlingTypes';
 import {
     erBehandlingAvbrutt,
     erBehandlingSøknadsbehandling,
     erBehandlingVedtatt,
 } from '~/utils/behandling';
 import { erSøknadAvbrutt } from '~/utils/SøknadUtils';
-import { VedtatteBehandlingerTabell } from './VedtatteBehandlingerTabell';
 import { AvbrutteBehandlingerTabell } from './AvbrutteBehandlingerTabell';
 
 export const AvsluttedeBehandlinger = (props: {
@@ -35,28 +31,14 @@ export const AvsluttedeBehandlinger = (props: {
                 ) === undefined,
         );
 
-    const avsluttedeBehandlingerInfo = avsluttedeBehandlinger.map(
-        avsluttetBehandlingToDataCellInfo,
-    );
     const avbrutteSøknaderInfo = avbrutteSøknader.map(avbruttSøknadToDataCellInfo);
 
-    const avsluttede = [...avsluttedeBehandlingerInfo, ...avbrutteSøknaderInfo].toSorted((a, b) =>
-        a.tidspunktAvsluttet.localeCompare(b.tidspunktAvsluttet),
-    );
-
-    const vedtatte = avsluttede.filter((avsluttet) => avsluttet.avsluttetPga === 'ferdigBehandlet');
-    const avbrutte = avsluttede.filter((avsluttet) => avsluttet.avsluttetPga === 'avbrutt');
+    const avbrutte = [...avbrutteSøknaderInfo]
+        .toSorted((a, b) => a.tidspunktAvsluttet.localeCompare(b.tidspunktAvsluttet))
+        .filter((avsluttet) => avsluttet.avsluttetPga === 'avbrutt');
 
     return (
         <>
-            {vedtatte.length > 0 && (
-                <Box className={styles.tabellwrapper}>
-                    <Heading level="3" size="small">
-                        Vedtatte behandlinger
-                    </Heading>
-                    <VedtatteBehandlingerTabell vedtatteBehandlinger={vedtatte} />
-                </Box>
-            )}
             {avbrutte.length > 0 && (
                 <Box className={styles.tabellwrapper}>
                     <Heading level="3" size="small">

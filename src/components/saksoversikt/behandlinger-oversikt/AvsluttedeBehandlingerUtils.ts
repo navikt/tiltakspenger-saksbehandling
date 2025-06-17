@@ -1,13 +1,9 @@
-import {
-    Behandlingstype,
-    BehandlingData,
-    BehandlingResultat,
-} from '../../../types/BehandlingTypes';
+import { BehandlingResultat, Behandlingstype } from '~/types/BehandlingTypes';
 import { Nullable } from '~/types/UtilTypes';
-import { Periode } from '../../../types/Periode';
-import { SøknadForBehandlingProps } from '../../../types/SøknadTypes';
+import { Periode } from '~/types/Periode';
+import { SøknadForBehandlingProps } from '~/types/SøknadTypes';
 
-export interface AvsluttetBehandlingDataCellInfo {
+export interface AvbruttSøknadDataCellInfo {
     id: string;
     behandlingstype: Behandlingstype;
     resultat: Nullable<BehandlingResultat>;
@@ -18,28 +14,9 @@ export interface AvsluttetBehandlingDataCellInfo {
     beslutter?: Nullable<string>;
 }
 
-export const avsluttetBehandlingToDataCellInfo = (
-    behandling: BehandlingData,
-): AvsluttetBehandlingDataCellInfo => {
-    const tidspunktAvsluttet = behandling.avbrutt?.avbruttTidspunkt
-        ? behandling.avbrutt.avbruttTidspunkt
-        : behandling.iverksattTidspunkt!;
-
-    return {
-        id: behandling.id,
-        behandlingsperiode: behandling.virkningsperiode,
-        resultat: behandling.resultat,
-        behandlingstype: behandling.type,
-        tidspunktAvsluttet: tidspunktAvsluttet,
-        avsluttetPga: behandling.avbrutt ? 'avbrutt' : 'ferdigBehandlet',
-        saksbehandler: behandling.saksbehandler,
-        beslutter: behandling.beslutter,
-    };
-};
-
 export const avbruttSøknadToDataCellInfo = (
     søknad: SøknadForBehandlingProps,
-): AvsluttetBehandlingDataCellInfo => {
+): AvbruttSøknadDataCellInfo => {
     if (søknad.avbrutt == null) {
         throw new Error('Kan ikke hente ut informasjon fra en behandling som ikke er avbrutt');
     }

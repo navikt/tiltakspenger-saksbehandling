@@ -1,15 +1,14 @@
-import { AvsluttetBehandlingDataCellInfo } from './AvsluttedeBehandlingerUtils';
-import { Button, Table } from '@navikt/ds-react';
-import {
-    behandlingResultatTilTekst,
-    finnBehandlingstypeTekst,
-} from '../../../utils/tekstformateringUtils';
-import { formaterTidspunkt, periodeTilFormatertDatotekst } from '../../../utils/date';
-import { Behandlingstype } from '../../../types/BehandlingTypes';
+import { ActionMenu, Button, Table } from '@navikt/ds-react';
+import { behandlingResultatTilTag, finnBehandlingstypeTekst } from '~/utils/tekstformateringUtils';
+import { formaterTidspunkt, periodeTilFormatertDatotekst } from '~/utils/date';
+import { BehandlingResultat, Behandlingstype } from '~/types/BehandlingTypes';
 import Link from 'next/link';
+import { ChevronDownIcon, FileIcon } from '@navikt/aksel-icons';
+import ActionMenuItemBehandleSøknadPåNytt from '~/components/behandlingsknapper/behandle-søknad-på-nytt/ActionMenuItemBehandleSøknadPåNytt';
+import { VedtattBehandlingDataCellInfo } from '~/components/saksoversikt/behandlinger-oversikt/VedtatteBehandlingerUtils';
 
 export const VedtatteBehandlingerTabell = (props: {
-    vedtatteBehandlinger: AvsluttetBehandlingDataCellInfo[];
+    vedtatteBehandlinger: VedtattBehandlingDataCellInfo[];
 }) => {
     if (props.vedtatteBehandlinger.length === 0) {
         return null;
@@ -39,7 +38,7 @@ export const VedtatteBehandlingerTabell = (props: {
                         </Table.DataCell>
                         <Table.DataCell>
                             {vedtattBehandling.resultat
-                                ? behandlingResultatTilTekst[vedtattBehandling.resultat]
+                                ? behandlingResultatTilTag[vedtattBehandling.resultat]
                                 : '-'}
                         </Table.DataCell>
                         <Table.DataCell>
@@ -57,20 +56,47 @@ export const VedtatteBehandlingerTabell = (props: {
                         <Table.DataCell>
                             {vedtattBehandling.beslutter ?? 'Ikke tildelt'}
                         </Table.DataCell>
-                        <Table.DataCell>
+                        <Table.DataCell style={{ display: 'flex', justifyContent: 'center' }}>
                             {(vedtattBehandling.behandlingstype ===
                                 Behandlingstype.SØKNADSBEHANDLING ||
                                 vedtattBehandling.behandlingstype ===
                                     Behandlingstype.REVURDERING) && (
-                                <Button
-                                    style={{ minWidth: '50%' }}
-                                    size="small"
-                                    variant={'secondary'}
-                                    as={Link}
-                                    href={`/behandling/${vedtattBehandling.id}`}
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        gap: '0.5rem',
+                                    }}
                                 >
-                                    Se behandling
-                                </Button>
+                                    <ActionMenu>
+                                        <ActionMenu.Trigger>
+                                            <Button
+                                                variant="secondary-neutral"
+                                                icon={<ChevronDownIcon aria-hidden />}
+                                                iconPosition="right"
+                                            >
+                                                Velg
+                                            </Button>
+                                        </ActionMenu.Trigger>
+                                        <ActionMenu.Content>
+                                            <ActionMenu.Item
+                                                as={Link}
+                                                href={`/behandling/${vedtattBehandling.id}`}
+                                                icon={<FileIcon aria-hidden />}
+                                            >
+                                                Se behandling
+                                            </ActionMenu.Item>
+
+                                            {vedtattBehandling.resultat ===
+                                                BehandlingResultat.AVSLAG && (
+                                                <ActionMenuItemBehandleSøknadPåNytt
+                                                    sakId={vedtattBehandling.sakId}
+                                                    søknadId={vedtattBehandling.søknadId}
+                                                />
+                                            )}
+                                        </ActionMenu.Content>
+                                    </ActionMenu>
+                                </div>
                             )}
                         </Table.DataCell>
                     </Table.Row>
