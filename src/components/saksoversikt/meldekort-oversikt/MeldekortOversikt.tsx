@@ -25,6 +25,9 @@ type Props = {
 };
 
 export const MeldekortOversikt = ({ meldeperiodeKjeder, saksnummer, sakId }: Props) => {
+    console.log(
+        meldeperiodeKjeder.toSorted((a, b) => (a.periode.fraOgMed > b.periode.fraOgMed ? -1 : 1)),
+    );
     return (
         <Table>
             <Table.Header>
