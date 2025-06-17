@@ -1,4 +1,4 @@
-import { Table } from '@navikt/ds-react';
+import { BodyShort, Table } from '@navikt/ds-react';
 import { useState } from 'react';
 
 interface Props<Kolonner extends Record<string, string>> {
@@ -10,6 +10,7 @@ interface Props<Kolonner extends Record<string, string>> {
             onSortChange?: (sortKey: AriaSortVerdi) => void;
         };
     };
+    antallRader?: number;
     tableHeader: React.ReactElement;
     tableBody: React.ReactElement;
 }
@@ -53,6 +54,7 @@ const SortableTable = <Kolonner extends Record<string, string>>(props: Props<Kol
 
     return (
         <div>
+            {props.antallRader && <BodyShort>Antall behandlinger: {props.antallRader}</BodyShort>}
             <Table
                 zebraStripes
                 sort={

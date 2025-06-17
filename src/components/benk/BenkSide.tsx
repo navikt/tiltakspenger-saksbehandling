@@ -231,6 +231,7 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
                         },
                     },
                 }}
+                antallRader={filtrertBenkoversikt.behandlingssammendrag.length}
                 tableHeader={
                     <Table.Header>
                         <Table.Row>
