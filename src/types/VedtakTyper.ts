@@ -38,7 +38,7 @@ export type VedtakRevurderTilStansDTO = VedtakRevurderingBaseDTO & {
 };
 
 export type VedtakRevurderInnvilgelseDTO = VedtakRevurderingBaseDTO & {
-    type: RevurderingResultat.INNVILGELSE;
+    type: RevurderingResultat.REVURDERING_INNVILGELSE;
     innvilgelse: {
         innvilgelsesperiode: Periode;
     };

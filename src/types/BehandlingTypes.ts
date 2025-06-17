@@ -146,7 +146,7 @@ export enum SøknadsbehandlingResultat {
 
 export enum RevurderingResultat {
     STANS = 'STANS',
-    INNVILGELSE = 'INNVILGELSE',
+    REVURDERING_INNVILGELSE = 'REVURDERING_INNVILGELSE',
 }
 
 export type BehandlingResultat = SøknadsbehandlingResultat | RevurderingResultat;

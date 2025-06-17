@@ -11,7 +11,7 @@ export const RevurderingVedtak = () => {
 
     return resultat === RevurderingResultat.STANS ? (
         <RevurderingStansVedtak />
-    ) : resultat === RevurderingResultat.INNVILGELSE ? (
+    ) : resultat === RevurderingResultat.REVURDERING_INNVILGELSE ? (
         <RevurderingInnvilgelseVedtak />
     ) : (
         <Alert variant={'error'}>{`Revurderingstypen er ikke implementert: ${resultat}`}</Alert>

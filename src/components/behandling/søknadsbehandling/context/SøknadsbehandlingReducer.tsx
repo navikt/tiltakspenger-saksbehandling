@@ -4,13 +4,13 @@ import { Periode } from '~/types/Periode';
 import { forrigeDag, leggTilDager, nesteDag } from '~/utils/date';
 import { periodiserBarnetillegg } from '~/utils/barnetillegg';
 import { SøknadForBehandlingProps } from '~/types/SøknadTypes';
-import { Avslagsgrunn, BehandlingResultat } from '~/types/BehandlingTypes';
+import { Avslagsgrunn, SøknadsbehandlingResultat } from '~/types/BehandlingTypes';
 import { Nullable } from '~/types/common';
 
 export type SøknadsbehandlingSkjemaActions =
     | {
           type: 'setResultat';
-          payload: { resultat: BehandlingResultat };
+          payload: { resultat: SøknadsbehandlingResultat };
       }
     | {
           type: 'oppdaterDagerPerMeldeperiode';
@@ -66,7 +66,7 @@ export type SøknadsbehandlingSkjemaActions =
       };
 
 export type SøknadsbehandlingSkjemaState = {
-    resultat: Nullable<BehandlingResultat>;
+    resultat: Nullable<SøknadsbehandlingResultat>;
     behandlingsperiode: Periode;
     harBarnetillegg: boolean;
     barnetilleggPerioder: VedtakBarnetilleggPeriode[];
@@ -250,28 +250,24 @@ export const SøknadsbehandlingReducer: Reducer<
                 };
             }
 
-            if (state.avslagsgrunner !== null) {
-                const eksistererAllerede = state.avslagsgrunner.includes(payload.avslagsgrunn);
+            const eksistererAllerede = state.avslagsgrunner.includes(payload.avslagsgrunn);
 
-                if (eksistererAllerede) {
-                    const newArr = state.avslagsgrunner.filter(
-                        (grunn) => grunn !== payload.avslagsgrunn,
-                    );
+            if (eksistererAllerede) {
+                const newArr = state.avslagsgrunner.filter(
+                    (grunn) => grunn !== payload.avslagsgrunn,
+                );
 
-                    if (newArr.length === 0) {
-                        return { ...state, avslagsgrunner: null };
-                    } else {
-                        return { ...state, avslagsgrunner: newArr };
-                    }
+                if (newArr.length === 0) {
+                    return { ...state, avslagsgrunner: null };
                 } else {
-                    return {
-                        ...state,
-                        avslagsgrunner: [...state.avslagsgrunner, payload.avslagsgrunn],
-                    };
+                    return { ...state, avslagsgrunner: newArr };
                 }
+            } else {
+                return {
+                    ...state,
+                    avslagsgrunner: [...state.avslagsgrunner, payload.avslagsgrunn],
+                };
             }
-
-            return state;
         }
     }
 

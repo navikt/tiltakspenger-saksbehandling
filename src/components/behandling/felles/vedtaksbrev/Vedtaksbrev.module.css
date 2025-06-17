@@ -1,4 +1,5 @@
 .brev {
     display: flex;
     flex-direction: column;
+    margin-bottom: var(--a-spacing-8);
 }

@@ -73,7 +73,7 @@ export const OpprettRevurdering = ({ sakId, harVedtak }: Props) => {
                     }}
                 >
                     <Radio
-                        value={RevurderingResultat.INNVILGELSE}
+                        value={RevurderingResultat.REVURDERING_INNVILGELSE}
                         disabled={!revurderingInnvilgelseToggle}
                     >
                         {'Innvilgelse'}

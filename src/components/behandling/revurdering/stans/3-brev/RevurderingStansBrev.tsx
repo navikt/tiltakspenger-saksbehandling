@@ -1,40 +1,32 @@
 import { useRevurderingStansVedtak } from '../RevurderingStansVedtakContext';
 import { useRevurderingBehandling } from '../../../BehandlingContext';
-import { SaksbehandlerRolle } from '../../../../../types/Saksbehandler';
-import { VedtakSeksjon } from '../../../vedtak-layout/seksjon/VedtakSeksjon';
 import React from 'react';
-import { TekstfeltMedMellomlagring } from '../../../../tekstfelt/TekstfeltMedMellomlagring';
-import { VedtakBrevFritekstLagringDTO } from '../../../../../types/VedtakTyper';
-import { VedtaksbrevForhåndsvisning } from './forhåndsvisning/VedtaksbrevForhåndsvisning';
-
-import style from './RevurderingStansBrev.module.css';
+import { Vedtaksbrev } from '~/components/behandling/felles/vedtaksbrev/Vedtaksbrev';
+import { revurderingStansValidering } from '~/components/behandling/revurdering/stans/revurderingStansValidering';
+import { RevurderingResultat } from '~/types/BehandlingTypes';
+import { RevurderingStansBrevForhåndsvisningDTO } from '~/components/behandling/felles/vedtaksbrev/forhåndsvisning/useHentVedtaksbrevForhåndsvisning';
 
 export const RevurderingStansBrev = () => {
     const revurderingVedtak = useRevurderingStansVedtak();
     const { brevtekstRef } = revurderingVedtak;
 
     const { behandling, rolleForBehandling } = useRevurderingBehandling();
-    const { sakId, id, fritekstTilVedtaksbrev } = behandling;
 
-    const erSaksbehandler = rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER;
+    const forhåndsvisningDto: RevurderingStansBrevForhåndsvisningDTO = {
+        fritekst: revurderingVedtak.brevtekstRef.current?.value ?? '',
+        stansDato: revurderingVedtak.stansdato,
+        valgteHjemler: revurderingVedtak.valgtHjemmelHarIkkeRettighet,
+        resultat: RevurderingResultat.STANS,
+    };
 
     return (
-        <VedtakSeksjon>
-            <VedtakSeksjon.Venstre className={style.brev}>
-                <TekstfeltMedMellomlagring
-                    hideLabel={false}
-                    label={'Fritekst til brev'}
-                    description={'Teksten vises i vedtaksbrevet til bruker.'}
-                    defaultValue={fritekstTilVedtaksbrev ?? ''}
-                    readOnly={!erSaksbehandler}
-                    lagringUrl={`/sak/${sakId}/behandling/${id}/fritekst`}
-                    lagringBody={(tekst) =>
-                        ({ fritekst: tekst }) satisfies VedtakBrevFritekstLagringDTO
-                    }
-                    ref={brevtekstRef}
-                />
-                <VedtaksbrevForhåndsvisning />
-            </VedtakSeksjon.Venstre>
-        </VedtakSeksjon>
+        <Vedtaksbrev
+            header={'Vedtaksbrev for stans'}
+            behandling={behandling}
+            rolle={rolleForBehandling}
+            tekstRef={brevtekstRef}
+            validering={revurderingStansValidering(revurderingVedtak)}
+            forhåndsvisningDto={forhåndsvisningDto}
+        />
     );
 };
