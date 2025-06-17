@@ -1,4 +1,4 @@
-import { RevurderingData, RevurderingType } from '../../../../types/BehandlingTypes';
+import { RevurderingData, RevurderingResultat } from '../../../../types/BehandlingTypes';
 import { VedtakRevurderTilStansDTO } from '../../../../types/VedtakTyper';
 import { useFetchJsonFraApi } from '../../../../utils/fetch/useFetchFraApi';
 import { RevurderingVedtakContext } from '../RevurderingVedtakContext';
@@ -27,7 +27,7 @@ export const useSendRevurderingVedtak = (
 
 const tilBeslutningDTO = (vedtak: RevurderingVedtakContext): VedtakRevurderTilStansDTO => {
     return {
-        type: RevurderingType.STANS,
+        type: RevurderingResultat.STANS,
         begrunnelse: vedtak.getBegrunnelse(),
         fritekstTilVedtaksbrev: vedtak.getBrevtekst(),
         stans: {

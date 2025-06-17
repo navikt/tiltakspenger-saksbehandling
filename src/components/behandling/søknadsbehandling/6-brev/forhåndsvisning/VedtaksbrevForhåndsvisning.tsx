@@ -3,10 +3,10 @@ import { EnvelopeOpenIcon } from '@navikt/aksel-icons';
 import { useHentVedtaksbrevForhåndsvisning } from './useHentVedtaksbrevForhåndsvisning';
 import { useSøknadsbehandlingSkjema } from '../../context/SøknadsbehandlingVedtakContext';
 import { useSøknadsbehandling } from '../../../BehandlingContext';
+import { søknadsbehandlingValidering } from '../../søknadsbehandlingValidering';
+import { SøknadsbehandlingResultat } from '~/types/BehandlingTypes';
 
 import style from './VedtaksbrevForhåndsvisning.module.css';
-import { BehandlingResultat } from '../../../../../types/BehandlingTypes';
-import { søknadsbehandlingValidering } from '../../søknadsbehandlingValidering';
 
 export const VedtaksbrevForhåndsvisning = () => {
     const { behandling } = useSøknadsbehandling();
@@ -37,7 +37,7 @@ export const VedtaksbrevForhåndsvisning = () => {
                         // vi rendrer ikke komponenten hvis resultatet ikke eksiterer i parenten
                         resultat: vedtak.resultat!,
                         avslagsgrunner:
-                            vedtak.resultat === BehandlingResultat.AVSLAG &&
+                            vedtak.resultat === SøknadsbehandlingResultat.AVSLAG &&
                             vedtak.avslagsgrunner !== null
                                 ? vedtak.avslagsgrunner
                                 : null,

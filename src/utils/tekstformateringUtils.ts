@@ -1,10 +1,16 @@
-import { BehandlingStatus, Behandlingstype, BehandlingResultat } from '../types/BehandlingTypes';
+import {
+    BehandlingStatus,
+    Behandlingstype,
+    BehandlingResultat,
+    SøknadsbehandlingResultat,
+    RevurderingResultat,
+} from '~/types/BehandlingTypes';
 import {
     MeldekortBehandlingDagStatus,
     Utbetalingsstatus,
-} from '../types/meldekort/MeldekortBehandling';
-import { BrukersMeldekortDagStatus } from '../types/meldekort/BrukersMeldekort';
-import { MeldeperiodeKjedeStatus } from '../types/meldekort/Meldeperiode';
+} from '~/types/meldekort/MeldekortBehandling';
+import { BrukersMeldekortDagStatus } from '~/types/meldekort/BrukersMeldekort';
+import { MeldeperiodeKjedeStatus } from '~/types/meldekort/Meldeperiode';
 
 export const finnBehandlingStatusTekst = (status: BehandlingStatus, underkjent: boolean) => {
     switch (status) {
@@ -62,15 +68,14 @@ export const finnMeldeperiodeKjedeStatusTekst: Record<MeldeperiodeKjedeStatus, s
 
 export const finnBehandlingstypeTekst: Record<Behandlingstype, string> = {
     [Behandlingstype.SØKNADSBEHANDLING]: 'Søknadsbehandling',
-    [Behandlingstype.REVURDERING]: 'Revurdering (stans)',
+    [Behandlingstype.REVURDERING]: 'Revurdering',
     [Behandlingstype.SØKNAD]: 'Søknad',
 } as const;
 
 export const behandlingResultatTilTekst: Record<BehandlingResultat, string> = {
-    [BehandlingResultat.AVSLAG]: 'Avslag',
-    [BehandlingResultat.INNVILGELSE]: 'Innvilgelse',
-    [BehandlingResultat.STANS]: 'Stans',
-    [BehandlingResultat.REVURDERING_INNVILGELSE]: 'Revurdering innvilgelse',
+    [SøknadsbehandlingResultat.AVSLAG]: 'Avslag',
+    [SøknadsbehandlingResultat.INNVILGELSE]: 'Innvilgelse',
+    [RevurderingResultat.STANS]: 'Stans',
 } as const;
 
 export const meldekortUtbetalingstatusTekst: Record<Utbetalingsstatus, string> = {

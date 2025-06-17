@@ -1,4 +1,4 @@
-import { Avslagsgrunn, BehandlingResultat, RevurderingType } from './BehandlingTypes';
+import { Avslagsgrunn, BehandlingResultat, RevurderingResultat } from './BehandlingTypes';
 import { Nullable } from './common';
 import { Periode } from './Periode';
 
@@ -24,13 +24,13 @@ export type VedtakTiltaksdeltakelsePeriode = {
 };
 
 type VedtakRevurderingDTO = {
-    type: RevurderingType;
+    type: RevurderingResultat;
     begrunnelse: string;
     fritekstTilVedtaksbrev: string;
 };
 
 export type VedtakRevurderTilStansDTO = VedtakRevurderingDTO & {
-    type: RevurderingType.STANS;
+    type: RevurderingResultat.STANS;
     stans: {
         valgteHjemler: string[];
         stansFraOgMed: string;
@@ -38,7 +38,7 @@ export type VedtakRevurderTilStansDTO = VedtakRevurderingDTO & {
 };
 
 export type VedtakRevurderInnvilgelseDTO = VedtakRevurderingDTO & {
-    type: RevurderingType.INNVILGELSE;
+    type: RevurderingResultat.INNVILGELSE;
     innvilgelse: {
         innvilgelsesperiode: Periode;
     };
@@ -58,5 +58,5 @@ export type VedtakBarnetilleggDTO = {
 };
 
 export type VedtakOpprettRevurderingDTO = {
-    revurderingType: RevurderingType;
+    revurderingType: RevurderingResultat;
 };

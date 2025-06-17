@@ -1,7 +1,7 @@
-import { VedtakTilBeslutningDTO } from '../../../../types/VedtakTyper';
-import { BehandlingData, BehandlingResultat } from '../../../../types/BehandlingTypes';
-import { useFetchJsonFraApi } from '../../../../utils/fetch/useFetchFraApi';
-import { SøknadsbehandlingVedtakContext } from '../context/SøknadsbehandlingVedtakContext';
+import { VedtakTilBeslutningDTO } from '~/types/VedtakTyper';
+import { BehandlingData, SøknadsbehandlingResultat } from '~/types/BehandlingTypes';
+import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
+import { SøknadsbehandlingVedtakContext } from '~/components/behandling/søknadsbehandling/context/SøknadsbehandlingVedtakContext';
 
 export const useSendSøknadsbehandling = (
     behandling: BehandlingData,
@@ -27,7 +27,7 @@ const tilBeslutningDTO = (vedtak: SøknadsbehandlingVedtakContext): VedtakTilBes
         fritekstTilVedtaksbrev: vedtak.getBrevtekst(),
         behandlingsperiode: vedtak.behandlingsperiode,
         barnetillegg:
-            vedtak.resultat === BehandlingResultat.INNVILGELSE && vedtak.harBarnetillegg
+            vedtak.resultat === SøknadsbehandlingResultat.INNVILGELSE && vedtak.harBarnetillegg
                 ? {
                       begrunnelse: vedtak.getBarnetilleggBegrunnelse(),
                       perioder: vedtak.barnetilleggPerioder ?? [],
@@ -36,7 +36,7 @@ const tilBeslutningDTO = (vedtak: SøknadsbehandlingVedtakContext): VedtakTilBes
         valgteTiltaksdeltakelser: vedtak.valgteTiltaksdeltakelser,
         antallDagerPerMeldeperiode: vedtak.antallDagerPerMeldeperiode,
         avslagsgrunner:
-            vedtak.resultat === BehandlingResultat.AVSLAG && vedtak.avslagsgrunner !== null
+            vedtak.resultat === SøknadsbehandlingResultat.AVSLAG && vedtak.avslagsgrunner !== null
                 ? vedtak.avslagsgrunner
                 : null,
         //Validering skal fange at resultatet ikke er null

@@ -6,16 +6,21 @@ import { classNames } from '../../../../utils/classNames';
 import { VedtakSeksjon } from '../../vedtak-layout/seksjon/VedtakSeksjon';
 import { Alert, Select } from '@navikt/ds-react';
 import { erSaksbehandler } from '../../../../utils/tilganger';
+import { SøknadsbehandlingResultat } from '../../../../types/BehandlingTypes';
+
 import style from './SøknadsbehandlingDagerPerMeldeperiode.module.css';
-import { BehandlingResultat } from '../../../../types/BehandlingTypes';
 
 export const SøknadsbehandlingDagerPerMeldeperiode = () => {
     const { antallDagerPerMeldeperiode } = useSøknadsbehandlingSkjema();
     const dispatch = useSøknadsbehandlingSkjemaDispatch();
-
     const { resultat } = useSøknadsbehandlingSkjema();
+
     return (
-        <div className={classNames(resultat !== BehandlingResultat.INNVILGELSE && style.skjult)}>
+        <div
+            className={classNames(
+                resultat !== SøknadsbehandlingResultat.INNVILGELSE && style.skjult,
+            )}
+        >
             <VedtakSeksjon className={style.antallDagerPerMeldeperiode}>
                 <VedtakSeksjon.Venstre>
                     <Select

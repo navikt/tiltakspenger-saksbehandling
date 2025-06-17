@@ -7,7 +7,7 @@ import {
     useRef,
     useState,
 } from 'react';
-import { useBehandling } from '../BehandlingContext';
+import { useRevurderingBehandling } from '../BehandlingContext';
 
 export type RevurderingVedtakContext = {
     begrunnelseRef: RefObject<HTMLTextAreaElement>;
@@ -23,7 +23,7 @@ export type RevurderingVedtakContext = {
 const Context = createContext({} as RevurderingVedtakContext);
 
 export const RevurderingVedtakProvider = ({ children }: PropsWithChildren) => {
-    const { behandling } = useBehandling();
+    const { behandling } = useRevurderingBehandling();
 
     // Om saksbehandler har valgt en dato, vis denne. Hvis ikke er den tom så saksbehandler må ta stilling til når vedtaket skal stanses.
     const initiellStansdato = behandling.virkningsperiode?.fraOgMed ?? '';

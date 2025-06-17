@@ -1,13 +1,13 @@
 import { Alert, Button } from '@navikt/ds-react';
 import { EnvelopeOpenIcon } from '@navikt/aksel-icons';
 import { useHentVedtaksbrevForhåndsvisning } from './useHentVedtaksbrevForhåndsvisning';
-
-import style from './VedtaksbrevForhåndsvisning.module.css';
 import { useRevurderingVedtak } from '../../../RevurderingVedtakContext';
 import { useRevurderingBehandling } from '../../../../BehandlingContext';
 import React from 'react';
 import { revurderingStansValidering } from '../../../revurderingStansValidering';
-import { BehandlingResultat } from '../../../../../../types/BehandlingTypes';
+import { RevurderingResultat } from '../../../../../../types/BehandlingTypes';
+
+import style from './VedtaksbrevForhåndsvisning.module.css';
 
 export const VedtaksbrevForhåndsvisning = () => {
     const { behandling } = useRevurderingBehandling();
@@ -36,7 +36,7 @@ export const VedtaksbrevForhåndsvisning = () => {
                             fritekst: revurderingVedtak.brevtekstRef.current?.value ?? '',
                             stansDato: revurderingVedtak.stansdato,
                             valgteHjemler: revurderingVedtak.valgtHjemmelHarIkkeRettighet,
-                            resultat: behandling.resultat ?? BehandlingResultat.STANS,
+                            resultat: behandling.resultat ?? RevurderingResultat.STANS,
                         }).then((blob) => {
                             if (blob) {
                                 window.open(URL.createObjectURL(blob));

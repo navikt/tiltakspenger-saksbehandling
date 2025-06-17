@@ -1,14 +1,14 @@
 import { VedtakSeksjon } from '../../vedtak-layout/seksjon/VedtakSeksjon';
 import { Alert } from '@navikt/ds-react';
-import { classNames } from '../../../../utils/classNames';
-
-import style from './SøknadsbehandlingTiltak.module.css';
+import { classNames } from '~/utils/classNames';
 import { TiltakPerioder } from './perioder/TiltakPerioder';
 import { useSøknadsbehandlingSkjema } from '../context/SøknadsbehandlingVedtakContext';
 import { Separator } from '../../../separator/Separator';
 import { useSøknadsbehandling } from '../../BehandlingContext';
-import { deltarPaFlereTiltakMedStartOgSluttdatoIValgtInnvilgelsesperiode } from '../../../../utils/behandling';
-import { BehandlingResultat } from '../../../../types/BehandlingTypes';
+import { deltarPaFlereTiltakMedStartOgSluttdatoIValgtInnvilgelsesperiode } from '~/utils/behandling';
+import { SøknadsbehandlingResultat } from '~/types/BehandlingTypes';
+
+import style from './SøknadsbehandlingTiltak.module.css';
 
 export const SøknadsbehandlingTiltak = () => {
     const { behandling } = useSøknadsbehandling();
@@ -21,7 +21,9 @@ export const SøknadsbehandlingTiltak = () => {
     return (
         flereTiltak && (
             <div
-                className={classNames(resultat !== BehandlingResultat.INNVILGELSE && style.skjult)}
+                className={classNames(
+                    resultat !== SøknadsbehandlingResultat.INNVILGELSE && style.skjult,
+                )}
             >
                 <VedtakSeksjon>
                     <VedtakSeksjon.Venstre>

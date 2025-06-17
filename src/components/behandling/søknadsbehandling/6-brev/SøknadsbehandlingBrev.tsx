@@ -1,16 +1,16 @@
 import { BodyLong, Heading } from '@navikt/ds-react';
-import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
+import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { useSøknadsbehandlingSkjema } from '../context/SøknadsbehandlingVedtakContext';
 import { VedtakSeksjon } from '../../vedtak-layout/seksjon/VedtakSeksjon';
 import { VedtakHjelpetekst } from '../../vedtak-layout/hjelpetekst/VedtakHjelpetekst';
 import { TekstfeltMedMellomlagring } from '../../../tekstfelt/TekstfeltMedMellomlagring';
-import { VedtakBrevFritekstLagringDTO } from '../../../../types/VedtakTyper';
+import { VedtakBrevFritekstLagringDTO } from '~/types/VedtakTyper';
 import { VedtaksbrevForhåndsvisning } from './forhåndsvisning/VedtaksbrevForhåndsvisning';
 import { TekstListe } from '../../../liste/TekstListe';
 import { useSøknadsbehandling } from '../../BehandlingContext';
+import { SøknadsbehandlingResultat } from '~/types/BehandlingTypes';
 
 import style from './SøknadsbehandlingBrev.module.css';
-import { BehandlingResultat } from '../../../../types/BehandlingTypes';
 
 export const SøknadsbehandlingBrev = () => {
     const { behandling, rolleForBehandling } = useSøknadsbehandling();
@@ -20,8 +20,8 @@ export const SøknadsbehandlingBrev = () => {
 
     return (
         <VedtakSeksjon>
-            {(resultat === BehandlingResultat.INNVILGELSE ||
-                (BehandlingResultat.AVSLAG && avslagsgrunner !== null)) && (
+            {(resultat === SøknadsbehandlingResultat.INNVILGELSE ||
+                (SøknadsbehandlingResultat.AVSLAG && avslagsgrunner !== null)) && (
                 <>
                     <VedtakSeksjon.Venstre>
                         <Heading size={'xsmall'} level={'2'}>

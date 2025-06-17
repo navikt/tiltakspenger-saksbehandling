@@ -46,49 +46,12 @@ export const RevurderingStansResultat = () => {
         <Link href={modiaPersonoversiktUrl}>Modia personoversikt</Link>
     );
 
-    const options: ValgtHjemmelForStansOption[] = [
-        {
-            beskrivelse: 'Ingen deltagelse - tiltakspengeforskriften § 2',
-            kode: ValgtHjemmelForStans.DELTAR_IKKE_PÅ_ARBEIDSMARKEDSTILTAK,
-        },
-        {
-            beskrivelse: 'Alder - tiltakspengeforskriften § 3',
-            kode: ValgtHjemmelForStans.ALDER,
-        },
-        {
-            beskrivelse: 'Andre livsoppholdsytelser - tiltakspengeforskriften § 7, første ledd',
-            kode: ValgtHjemmelForStans.LIVSOPPHOLDYTELSER,
-        },
-        {
-            beskrivelse: 'KVP - tiltakspengeforskriften § 7, tredje ledd',
-            kode: ValgtHjemmelForStans.KVALIFISERINGSPROGRAMMET,
-        },
-        {
-            beskrivelse: 'Introduksjonsprogram - tiltakspengeforskriften § 7, tredje ledd',
-            kode: ValgtHjemmelForStans.INTRODUKSJONSPROGRAMMET,
-        },
-        {
-            beskrivelse: 'Lønn fra tiltaksarrangør - tiltakspengeforskriften § 8',
-            kode: ValgtHjemmelForStans.LØNN_FRA_TILTAKSARRANGØR,
-        },
-        {
-            beskrivelse: 'Lønn fra andre - arbeidsmarkedsloven § 13',
-            kode: ValgtHjemmelForStans.LØNN_FRA_ANDRE,
-        },
-        {
-            beskrivelse: 'Institusjon - tiltakspengeforskriften § 9',
-            kode: ValgtHjemmelForStans.INSTITUSJONSOPPHOLD,
-        },
-    ];
-
     return (
         <VedtakSeksjon>
             <VedtakSeksjon.Venstre>
                 <Alert className={style.alert} variant={'warning'} inline>
-                    <>
-                        Husk å vurdere om du må forhåndsvarsle bruker før du foretar en stans. Dette
-                        må gjøres via {gosysLinkComponent} eller {modiaPersonoversiktLinkComponent}.
-                    </>
+                    Husk å vurdere om du må forhåndsvarsle bruker før du foretar en stans. Dette må
+                    gjøres via {gosysLinkComponent} eller {modiaPersonoversiktLinkComponent}.
                 </Alert>
                 <Select
                     label={'Hjemmel for stans'}
@@ -127,3 +90,38 @@ export const RevurderingStansResultat = () => {
         </VedtakSeksjon>
     );
 };
+
+const options: ValgtHjemmelForStansOption[] = [
+    {
+        beskrivelse: 'Ingen deltagelse - tiltakspengeforskriften § 2',
+        kode: ValgtHjemmelForStans.DELTAR_IKKE_PÅ_ARBEIDSMARKEDSTILTAK,
+    },
+    {
+        beskrivelse: 'Alder - tiltakspengeforskriften § 3',
+        kode: ValgtHjemmelForStans.ALDER,
+    },
+    {
+        beskrivelse: 'Andre livsoppholdsytelser - tiltakspengeforskriften § 7, første ledd',
+        kode: ValgtHjemmelForStans.LIVSOPPHOLDYTELSER,
+    },
+    {
+        beskrivelse: 'KVP - tiltakspengeforskriften § 7, tredje ledd',
+        kode: ValgtHjemmelForStans.KVALIFISERINGSPROGRAMMET,
+    },
+    {
+        beskrivelse: 'Introduksjonsprogram - tiltakspengeforskriften § 7, tredje ledd',
+        kode: ValgtHjemmelForStans.INTRODUKSJONSPROGRAMMET,
+    },
+    {
+        beskrivelse: 'Lønn fra tiltaksarrangør - tiltakspengeforskriften § 8',
+        kode: ValgtHjemmelForStans.LØNN_FRA_TILTAKSARRANGØR,
+    },
+    {
+        beskrivelse: 'Lønn fra andre - arbeidsmarkedsloven § 13',
+        kode: ValgtHjemmelForStans.LØNN_FRA_ANDRE,
+    },
+    {
+        beskrivelse: 'Institusjon - tiltakspengeforskriften § 9',
+        kode: ValgtHjemmelForStans.INSTITUSJONSOPPHOLD,
+    },
+];

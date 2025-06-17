@@ -3,7 +3,7 @@ import { useRef, useState } from 'react';
 import { SakId } from '~/types/SakTypes';
 import router from 'next/router';
 import { useOpprettRevurdering } from './useOpprettRevurdering';
-import { RevurderingType } from '~/types/BehandlingTypes';
+import { RevurderingResultat } from '~/types/BehandlingTypes';
 import { BekreftelsesModal } from '~/components/modaler/BekreftelsesModal';
 import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
 
@@ -15,7 +15,7 @@ type Props = {
 export const OpprettRevurdering = ({ sakId, harVedtak }: Props) => {
     const { revurderingInnvilgelseToggle } = useFeatureToggles();
 
-    const [valgtType, setValgtType] = useState<RevurderingType | null>(null);
+    const [valgtType, setValgtType] = useState<RevurderingResultat | null>(null);
 
     const { opprettRevurdering, opprettRevurderingLaster, opprettRevurderingError } =
         useOpprettRevurdering(sakId);
@@ -67,19 +67,18 @@ export const OpprettRevurdering = ({ sakId, harVedtak }: Props) => {
             >
                 <RadioGroup
                     legend={'Velg type revurdering'}
-                    size={'small'}
                     value={valgtType}
-                    onChange={(type: RevurderingType) => {
+                    onChange={(type: RevurderingResultat) => {
                         setValgtType(type);
                     }}
                 >
                     <Radio
-                        value={RevurderingType.INNVILGELSE}
+                        value={RevurderingResultat.INNVILGELSE}
                         disabled={!revurderingInnvilgelseToggle}
                     >
                         {'Innvilgelse'}
                     </Radio>
-                    <Radio value={RevurderingType.STANS}>{'Stans'}</Radio>
+                    <Radio value={RevurderingResultat.STANS}>{'Stans'}</Radio>
                 </RadioGroup>
             </BekreftelsesModal>
         </>

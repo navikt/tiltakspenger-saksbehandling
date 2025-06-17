@@ -11,8 +11,8 @@ import {
 } from 'react';
 import { useSøknadsbehandling } from '../../BehandlingContext';
 import {
-    SøknadsbehandlingSkjemaActions,
     SøknadsbehandlingReducer,
+    SøknadsbehandlingSkjemaActions,
     SøknadsbehandlingSkjemaState,
 } from './SøknadsbehandlingReducer';
 import {
@@ -42,8 +42,8 @@ const initieltVedtakSkjema = (behandling: SøknadsbehandlingData): Søknadsbehan
     const tiltakFraSoknad = hentTiltaksdeltagelseFraSoknad(behandling);
 
     return {
-        behandlingsperiode: behandling.virkningsperiode ?? tiltaksperiode,
         resultat: behandling.resultat,
+        behandlingsperiode: behandling.virkningsperiode ?? tiltaksperiode,
         harBarnetillegg: harSøktBarnetillegg(behandling),
         barnetilleggPerioder:
             behandling.barnetillegg?.perioder ||

@@ -14,30 +14,43 @@ type BehandlingDataCommon = {
     resultat: Nullable<BehandlingResultat>;
     sakId: SakId;
     saksnummer: string;
-    saksbehandler: string | null;
-    beslutter: string | null;
+    saksbehandler: Nullable<string>;
+    beslutter: Nullable<string>;
     attesteringer: Attestering[];
-    virkningsperiode: Periode | null;
+    virkningsperiode: Nullable<Periode>;
     saksopplysninger: BehandlingSaksopplysningerData;
-    begrunnelseVilkårsvurdering: string | null;
+    begrunnelseVilkårsvurdering: Nullable<string>;
     avbrutt: Nullable<Avbrutt>;
     iverksattTidspunkt: Nullable<string>;
     fritekstTilVedtaksbrev: string | null;
-    valgtHjemmelHarIkkeRettighet: string[] | null;
+};
+
+type InnvilgelseResultatData = {
+    barnetillegg: Nullable<Barnetillegg>;
+    valgteTiltaksdeltakelser: Nullable<TiltaksdeltakelsePeriode[]>;
+    antallDagerPerMeldeperiode: Nullable<number>;
+};
+
+type StansResultatData = {
+    valgtHjemmelHarIkkeRettighet: Nullable<string[]>;
+};
+
+type AvslagResultatData = {
     avslagsgrunner: Nullable<Avslagsgrunn[]>;
 };
 
 export type SøknadsbehandlingData = BehandlingDataCommon & {
     type: Behandlingstype.SØKNADSBEHANDLING;
+    resultat: Nullable<SøknadsbehandlingResultat>;
     søknad: SøknadForBehandlingProps;
-    barnetillegg: Barnetillegg | null;
-    valgteTiltaksdeltakelser: TiltaksdeltakelsePeriode[] | null;
-    antallDagerPerMeldeperiode: number | null;
-};
+} & InnvilgelseResultatData &
+    AvslagResultatData;
 
 export type RevurderingData = BehandlingDataCommon & {
     type: Behandlingstype.REVURDERING;
-};
+    resultat: RevurderingResultat;
+} & InnvilgelseResultatData &
+    StansResultatData;
 
 export type BehandlingData = SøknadsbehandlingData | RevurderingData;
 
@@ -126,14 +139,14 @@ export enum Avslagsgrunn {
     FremmetForSent = 'FremmetForSent',
 }
 
-export enum BehandlingResultat {
+export enum SøknadsbehandlingResultat {
     AVSLAG = 'AVSLAG',
     INNVILGELSE = 'INNVILGELSE',
-    STANS = 'STANS',
-    REVURDERING_INNVILGELSE = 'REVURDERING_INNVILGELSE',
 }
 
-export enum RevurderingType {
+export enum RevurderingResultat {
     STANS = 'STANS',
     INNVILGELSE = 'INNVILGELSE',
 }
+
+export type BehandlingResultat = SøknadsbehandlingResultat | RevurderingResultat;

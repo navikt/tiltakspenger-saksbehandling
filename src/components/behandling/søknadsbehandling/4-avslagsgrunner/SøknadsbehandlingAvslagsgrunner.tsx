@@ -3,12 +3,13 @@ import {
     useSøknadsbehandlingSkjema,
     useSøknadsbehandlingSkjemaDispatch,
 } from '../context/SøknadsbehandlingVedtakContext';
-import { Avslagsgrunn, BehandlingResultat } from '../../../../types/BehandlingTypes';
-import styles from './SøknadsbehandlingAvslagsgrunner.module.css';
+import { Avslagsgrunn, SøknadsbehandlingResultat } from '../../../../types/BehandlingTypes';
 import { VedtakSeksjon } from '../../vedtak-layout/seksjon/VedtakSeksjon';
 import { Separator } from '../../../separator/Separator';
 import { useSøknadsbehandling } from '../../BehandlingContext';
 import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
+
+import styles from './SøknadsbehandlingAvslagsgrunner.module.css';
 
 export const AvslagsgrunnTekst = {
     [Avslagsgrunn.DeltarIkkePåArbeidsmarkedstiltak]: 'Deltar ikke på arbeidsmarkedstiltak',
@@ -28,7 +29,7 @@ const SøknadsbehandlingAvslagsgrunner = () => {
     const dispatch = useSøknadsbehandlingSkjemaDispatch();
     const erIkkeSaksbehandler = rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER;
 
-    if (resultat !== BehandlingResultat.AVSLAG) {
+    if (resultat !== SøknadsbehandlingResultat.AVSLAG) {
         return null;
     }
 

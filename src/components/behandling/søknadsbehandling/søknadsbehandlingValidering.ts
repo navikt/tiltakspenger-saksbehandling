@@ -1,6 +1,6 @@
 import { SøknadsbehandlingVedtakContext } from './context/SøknadsbehandlingVedtakContext';
 import { ValideringResultat } from '../send-og-godkjenn/BehandlingSendTilBeslutning';
-import { BehandlingResultat, SøknadsbehandlingData } from '~/types/BehandlingTypes';
+import { SøknadsbehandlingData, SøknadsbehandlingResultat } from '~/types/BehandlingTypes';
 import {
     deltarPaFlereTiltakMedStartOgSluttdato,
     hentTiltaksdeltakelser,
@@ -37,10 +37,9 @@ export const søknadsbehandlingValidering = (
         errors.push('Behandlingsperioden slutter etter tiltaksperioden');
     }
 
-    if (resultat === BehandlingResultat.AVSLAG) {
+    if (resultat === SøknadsbehandlingResultat.AVSLAG) {
         validerUtfallAvslag(behandling, vedtak, errors, warnings);
-    }
-    if (resultat === BehandlingResultat.INNVILGELSE) {
+    } else if (resultat === SøknadsbehandlingResultat.INNVILGELSE) {
         validerUtfallInnvilgelse(behandling, vedtak, errors);
     }
 

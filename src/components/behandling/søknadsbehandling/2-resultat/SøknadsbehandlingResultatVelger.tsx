@@ -9,11 +9,11 @@ import {
 } from '../context/SøknadsbehandlingVedtakContext';
 import { VedtakSeksjon } from '../../vedtak-layout/seksjon/VedtakSeksjon';
 import { useSøknadsbehandling } from '../../BehandlingContext';
+import { SøknadsbehandlingResultat } from '../../../../types/BehandlingTypes';
 
 import style from './SøknadsbehandlingResultat.module.css';
-import { BehandlingResultat } from '../../../../types/BehandlingTypes';
 
-export const SøknadsbehandlingResultat = () => {
+export const SøknadsbehandlingResultatVelger = () => {
     const { rolleForBehandling } = useSøknadsbehandling();
     const { valgteTiltaksdeltakelser, resultat, behandlingsperiode } = useSøknadsbehandlingSkjema();
 
@@ -29,7 +29,7 @@ export const SøknadsbehandlingResultat = () => {
                     className={style.radioGroup}
                     defaultValue={resultat}
                     readOnly={erIkkeSaksbehandler}
-                    onChange={(valgtResultat: BehandlingResultat) => {
+                    onChange={(valgtResultat: SøknadsbehandlingResultat) => {
                         dispatch({
                             type: 'setResultat',
                             payload: {
@@ -38,12 +38,12 @@ export const SøknadsbehandlingResultat = () => {
                         });
                     }}
                 >
-                    <Radio value={BehandlingResultat.INNVILGELSE}>Innvilgelse</Radio>
-                    <Radio value={BehandlingResultat.AVSLAG}>Avslag</Radio>
+                    <Radio value={SøknadsbehandlingResultat.INNVILGELSE}>Innvilgelse</Radio>
+                    <Radio value={SøknadsbehandlingResultat.AVSLAG}>Avslag</Radio>
                 </RadioGroup>
                 <div className={classNames(style.datovelgere, !resultat && style.skjult)}>
                     <Datovelger
-                        label={`${resultat === BehandlingResultat.INNVILGELSE ? 'Innvilges' : 'Avslag'} f.o.m`}
+                        label={`${resultat === SøknadsbehandlingResultat.INNVILGELSE ? 'Innvilges' : 'Avslag'} f.o.m`}
                         size={'small'}
                         defaultSelected={behandlingsperiode.fraOgMed}
                         readOnly={erIkkeSaksbehandler}
@@ -70,7 +70,7 @@ export const SøknadsbehandlingResultat = () => {
                         }}
                     />
                     <Datovelger
-                        label={`${resultat === BehandlingResultat.INNVILGELSE ? 'Innvilges' : 'Avslag'} t.o.m`}
+                        label={`${resultat === SøknadsbehandlingResultat.INNVILGELSE ? 'Innvilges' : 'Avslag'} t.o.m`}
                         size={'small'}
                         defaultSelected={behandlingsperiode.tilOgMed}
                         readOnly={erIkkeSaksbehandler}
