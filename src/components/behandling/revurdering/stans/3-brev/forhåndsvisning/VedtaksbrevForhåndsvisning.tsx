@@ -1,17 +1,17 @@
 import { Alert, Button } from '@navikt/ds-react';
 import { EnvelopeOpenIcon } from '@navikt/aksel-icons';
 import { useHentVedtaksbrevForhåndsvisning } from './useHentVedtaksbrevForhåndsvisning';
-import { useRevurderingVedtak } from '../../../RevurderingVedtakContext';
+import { useRevurderingStansVedtak } from '../../RevurderingStansVedtakContext';
 import { useRevurderingBehandling } from '../../../../BehandlingContext';
 import React from 'react';
-import { revurderingStansValidering } from '../../../revurderingStansValidering';
+import { revurderingStansValidering } from '../../revurderingStansValidering';
 import { RevurderingResultat } from '../../../../../../types/BehandlingTypes';
 
 import style from './VedtaksbrevForhåndsvisning.module.css';
 
 export const VedtaksbrevForhåndsvisning = () => {
     const { behandling } = useRevurderingBehandling();
-    const revurderingVedtak = useRevurderingVedtak();
+    const revurderingVedtak = useRevurderingStansVedtak();
 
     const { hentForhåndsvisning, forhåndsvisningLaster, forhåndsvisningError } =
         useHentVedtaksbrevForhåndsvisning(behandling);

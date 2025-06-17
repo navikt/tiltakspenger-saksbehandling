@@ -1,6 +1,6 @@
 import { Alert, Link, Select } from '@navikt/ds-react';
 import style from './RevurderingStansResultat.module.css';
-import { useRevurderingVedtak } from '../../RevurderingVedtakContext';
+import { useRevurderingStansVedtak } from '../RevurderingStansVedtakContext';
 import { useRevurderingBehandling } from '../../../BehandlingContext';
 import { SaksbehandlerRolle } from '../../../../../types/Saksbehandler';
 import { VedtakSeksjon } from '../../../vedtak-layout/seksjon/VedtakSeksjon';
@@ -27,7 +27,7 @@ export type ValgtHjemmelForStansOption = {
 };
 
 export const RevurderingStansResultat = () => {
-    const revurderingVedtak = useRevurderingVedtak();
+    const revurderingVedtak = useRevurderingStansVedtak();
     const { førsteLovligeStansdato, sisteDagSomGirRett } = useSak().sak;
     const {
         stansdato,

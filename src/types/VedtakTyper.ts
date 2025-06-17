@@ -23,13 +23,13 @@ export type VedtakTiltaksdeltakelsePeriode = {
     periode: Periode;
 };
 
-type VedtakRevurderingDTO = {
+type VedtakRevurderingBaseDTO = {
     type: RevurderingResultat;
     begrunnelse: string;
     fritekstTilVedtaksbrev: string;
 };
 
-export type VedtakRevurderTilStansDTO = VedtakRevurderingDTO & {
+export type VedtakRevurderTilStansDTO = VedtakRevurderingBaseDTO & {
     type: RevurderingResultat.STANS;
     stans: {
         valgteHjemler: string[];
@@ -37,12 +37,14 @@ export type VedtakRevurderTilStansDTO = VedtakRevurderingDTO & {
     };
 };
 
-export type VedtakRevurderInnvilgelseDTO = VedtakRevurderingDTO & {
+export type VedtakRevurderInnvilgelseDTO = VedtakRevurderingBaseDTO & {
     type: RevurderingResultat.INNVILGELSE;
     innvilgelse: {
         innvilgelsesperiode: Periode;
     };
 };
+
+export type VedtakRevurderingDTO = VedtakRevurderTilStansDTO | VedtakRevurderInnvilgelseDTO;
 
 export type VedtakBegrunnelseLagringDTO = {
     begrunnelse: string;

@@ -1,8 +1,8 @@
-import { ValideringResultat } from '../send-og-godkjenn/BehandlingSendTilBeslutning';
-import { RevurderingVedtakContext } from './RevurderingVedtakContext';
+import { ValideringResultat } from '../../send-og-godkjenn/BehandlingSendTilBeslutning';
+import { RevurderingStansVedtakContext } from './RevurderingStansVedtakContext';
 
 export const revurderingStansValidering = (
-    vedtak: RevurderingVedtakContext,
+    vedtak: RevurderingStansVedtakContext,
 ): ValideringResultat => {
     const { valgtHjemmelHarIkkeRettighet, stansdato } = vedtak;
 

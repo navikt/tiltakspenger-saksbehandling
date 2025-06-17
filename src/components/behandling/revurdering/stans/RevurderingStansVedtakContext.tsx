@@ -7,9 +7,9 @@ import {
     useRef,
     useState,
 } from 'react';
-import { useRevurderingBehandling } from '../BehandlingContext';
+import { useRevurderingBehandling } from '../../BehandlingContext';
 
-export type RevurderingVedtakContext = {
+export type RevurderingStansVedtakContext = {
     begrunnelseRef: RefObject<HTMLTextAreaElement>;
     brevtekstRef: RefObject<HTMLTextAreaElement>;
     getBegrunnelse: () => string;
@@ -20,9 +20,9 @@ export type RevurderingVedtakContext = {
     setStansdato: (fraOgMed: string) => void;
 };
 
-const Context = createContext({} as RevurderingVedtakContext);
+const Context = createContext({} as RevurderingStansVedtakContext);
 
-export const RevurderingVedtakProvider = ({ children }: PropsWithChildren) => {
+export const RevurderingStansVedtakProvider = ({ children }: PropsWithChildren) => {
     const { behandling } = useRevurderingBehandling();
 
     // Om saksbehandler har valgt en dato, vis denne. Hvis ikke er den tom så saksbehandler må ta stilling til når vedtaket skal stanses.
@@ -58,6 +58,6 @@ export const RevurderingVedtakProvider = ({ children }: PropsWithChildren) => {
     );
 };
 
-export const useRevurderingVedtak = () => {
+export const useRevurderingStansVedtak = () => {
     return useContext(Context);
 };

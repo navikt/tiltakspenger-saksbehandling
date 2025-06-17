@@ -1,4 +1,4 @@
-import { useRevurderingVedtak } from '../../RevurderingVedtakContext';
+import { useRevurderingStansVedtak } from '../RevurderingStansVedtakContext';
 import { useRevurderingBehandling } from '../../../BehandlingContext';
 import { SaksbehandlerRolle } from '../../../../../types/Saksbehandler';
 import { VedtakSeksjon } from '../../../vedtak-layout/seksjon/VedtakSeksjon';
@@ -10,7 +10,7 @@ import { VedtaksbrevForhåndsvisning } from './forhåndsvisning/VedtaksbrevForh�
 import style from './RevurderingStansBrev.module.css';
 
 export const RevurderingStansBrev = () => {
-    const revurderingVedtak = useRevurderingVedtak();
+    const revurderingVedtak = useRevurderingStansVedtak();
     const { brevtekstRef } = revurderingVedtak;
 
     const { behandling, rolleForBehandling } = useRevurderingBehandling();
