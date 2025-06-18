@@ -78,7 +78,7 @@ export const kanSaksbehandleForMeldekort = (
     innloggetSaksbehandler: Saksbehandler,
 ) =>
     kanBehandle(innloggetSaksbehandler, meldekortBehandling.saksbehandler) &&
-    meldekortBehandling.status === MeldekortBehandlingStatus.KLAR_TIL_BEHANDLING;
+    meldekortBehandling.status === MeldekortBehandlingStatus.UNDER_BEHANDLING;
 
 export const kanBeslutteForMeldekort = (
     meldekort: MeldekortBehandlingProps,
@@ -100,7 +100,7 @@ export const eierMeldekortBehandling = (
     const { status, saksbehandler, beslutter } = meldekortBehandling;
 
     switch (status) {
-        case MeldekortBehandlingStatus.KLAR_TIL_BEHANDLING:
+        case MeldekortBehandlingStatus.UNDER_BEHANDLING:
             return innloggetSaksbehandler.navIdent === saksbehandler;
         case MeldekortBehandlingStatus.UNDER_BESLUTNING:
             return innloggetSaksbehandler.navIdent === beslutter;
@@ -180,7 +180,7 @@ export const skalKunneOvertaMeldekortBehandling = (
                 erBeslutter(innloggetSaksbehandler) &&
                 innloggetSaksbehandler.navIdent != saksbehandler
             );
-        case MeldekortBehandlingStatus.KLAR_TIL_BEHANDLING:
+        case MeldekortBehandlingStatus.UNDER_BEHANDLING:
             return (
                 saksbehandler &&
                 erSaksbehandler(innloggetSaksbehandler) &&
