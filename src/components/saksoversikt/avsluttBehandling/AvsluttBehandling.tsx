@@ -4,7 +4,7 @@ import styles from './AvsluttBehandling.module.css';
 import { BehandlingId } from '~/types/BehandlingTypes';
 import { SøknadId } from '~/types/SøknadTypes';
 import { Nullable } from '~/types/UtilTypes';
-import AvsluttBehandlingModal from '~/components/saksoversikt/avsluttBehandling/AvsluttBehandlingModal';
+import AvsluttBehandlingModal from '~/components/modaler/AvsluttBehandlingModal';
 
 const AvsluttBehandling = (props: {
     saksnummer: string;

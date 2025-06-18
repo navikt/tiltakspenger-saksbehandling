@@ -5,10 +5,9 @@ import { Controller, useForm } from 'react-hook-form';
 import styles from './AvsluttBehandlingModal.module.css';
 import { BehandlingId } from '~/types/BehandlingTypes';
 import { SøknadId } from '~/types/SøknadTypes';
-import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { Nullable } from '~/types/common';
-import { SakProps } from '~/types/SakTypes';
 import { useSak } from '~/context/sak/SakContext';
+import { useAvsluttBehandling } from '~/components/behandlingsknapper/useAvsluttBehandling';
 
 const AvsluttBehandlingModal = (props: {
     saksnummer: string;
@@ -27,25 +26,21 @@ const AvsluttBehandlingModal = (props: {
 }) => {
     const { setSak } = useSak();
     const form = useForm<{ begrunnelse: string }>({ defaultValues: { begrunnelse: '' } });
-
-    const avsluttBehandlingMutation = useFetchJsonFraApi<
-        SakProps,
-        { søknadId: Nullable<string>; behandlingId: Nullable<string>; begrunnelse: string }
-    >(`sak/${props.saksnummer}/avbryt-aktiv-behandling`, 'POST', {
-        onSuccess: (sak) => {
-            props.onSuccess?.();
-            setSak(sak!);
-            props.onClose();
-        },
-    });
+    const { avsluttBehandling, avsluttBehandlingIsMutating } = useAvsluttBehandling(
+        props.saksnummer,
+    );
 
     return (
         <form
             onSubmit={form.handleSubmit((values) => {
-                avsluttBehandlingMutation.trigger({
+                avsluttBehandling({
                     søknadId: props.søknadsId,
                     behandlingId: props.behandlingsId,
                     begrunnelse: values.begrunnelse,
+                }).then((sak) => {
+                    props.onSuccess?.();
+                    setSak(sak!);
+                    props.onClose();
                 });
             })}
         >
@@ -96,7 +91,7 @@ const AvsluttBehandlingModal = (props: {
                     <Button
                         variant="danger"
                         size="small"
-                        loading={avsluttBehandlingMutation.isMutating}
+                        loading={avsluttBehandlingIsMutating}
                         type="submit"
                     >
                         {props.footer?.primaryButtonText ?? 'Avslutt behandling'}
