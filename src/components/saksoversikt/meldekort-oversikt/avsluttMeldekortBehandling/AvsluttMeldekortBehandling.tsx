@@ -1,17 +1,14 @@
-import { BodyLong, Button, Heading, HStack, Modal, Textarea } from '@navikt/ds-react';
 import React, { FormEvent, useRef, useState } from 'react';
 import router from 'next/router';
-
-import style from './AvsluttMeldekortBehandling.module.css';
-
-import styles from '../../avsluttBehandling/AvsluttBehandling.module.css';
+import { BodyLong, Button, Heading, HStack, Modal, Textarea } from '@navikt/ds-react';
 import { TrashIcon } from '@navikt/aksel-icons';
-import { SakId } from '../../../../types/SakTypes';
+import { SakId } from '~/types/SakTypes';
 import {
     MeldekortBehandlingId,
     MeldekortBehandlingProps,
-} from '../../../../types/meldekort/MeldekortBehandling';
-import { useFetchJsonFraApi } from '../../../../utils/fetch/useFetchFraApi';
+} from '~/types/meldekort/MeldekortBehandling';
+import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
+import styles from './AvsluttMeldekortBehandling.module.css';
 
 const AvsluttMeldekortbehandlingModal = (props: {
     sakId: SakId;
@@ -121,7 +118,7 @@ const AvsluttMeldekortBehandling = (props: {
                 />
             )}
             <Button
-                className={style.knapp}
+                className={styles.knapp}
                 size="small"
                 variant="danger"
                 type={'button'}
