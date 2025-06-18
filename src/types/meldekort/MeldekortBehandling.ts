@@ -29,7 +29,7 @@ export enum MeldekortBehandlingDagStatus {
     IkkeBesvart = 'IKKE_BESVART',
     DeltattUtenLønnITiltaket = 'DELTATT_UTEN_LØNN_I_TILTAKET',
     DeltattMedLønnITiltaket = 'DELTATT_MED_LØNN_I_TILTAKET',
-    IkkeDeltatt = 'IKKE_DELTATT',
+    IkkeDeltatt = 'IKKE_TILTAKSDAG',
     FraværSyk = 'FRAVÆR_SYK',
     FraværSyktBarn = 'FRAVÆR_SYKT_BARN',
     FraværGodkjentAvNav = 'FRAVÆR_GODKJENT_AV_NAV',
