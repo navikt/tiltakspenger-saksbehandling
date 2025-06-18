@@ -6,10 +6,10 @@ import { TekstfeltMedMellomlagring } from '../../../tekstfelt/TekstfeltMedMellom
 import { VedtakBrevFritekstLagringDTO } from '~/types/VedtakTyper';
 import { VedtaksbrevForhåndsvisning } from './forhåndsvisning/VedtaksbrevForhåndsvisning';
 import { BehandlingData } from '~/types/BehandlingTypes';
-import { Nullable } from '~/types/common';
+import { Nullable } from '~/types/UtilTypes';
 import React, { ReactNode, RefObject } from 'react';
 import { BrevForhåndsvisningDTO } from '~/components/behandling/felles/vedtaksbrev/forhåndsvisning/useHentVedtaksbrevForhåndsvisning';
-import { ValideringResultat } from '~/components/behandling/send-og-godkjenn/BehandlingSendTilBeslutning';
+import { ValideringResultat } from '~/types/Validering';
 
 import style from './Vedtaksbrev.module.css';
 
@@ -20,7 +20,7 @@ type Props = {
     tekstRef: RefObject<HTMLTextAreaElement>;
     hjelpetekst?: ReactNode;
     validering: ValideringResultat;
-    forhåndsvisningDto: BrevForhåndsvisningDTO;
+    hentDto: () => BrevForhåndsvisningDTO;
 };
 
 export const Vedtaksbrev = ({
@@ -30,7 +30,7 @@ export const Vedtaksbrev = ({
     tekstRef,
     hjelpetekst,
     validering,
-    forhåndsvisningDto,
+    hentDto,
 }: Props) => {
     const { fritekstTilVedtaksbrev, sakId, id } = behandling;
 
@@ -56,7 +56,7 @@ export const Vedtaksbrev = ({
                 />
                 <VedtaksbrevForhåndsvisning
                     behandling={behandling}
-                    dto={forhåndsvisningDto}
+                    hentDto={hentDto}
                     validering={validering}
                 />
             </VedtakSeksjon.Venstre>

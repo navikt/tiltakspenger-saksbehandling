@@ -1,5 +1,5 @@
 import { Avslagsgrunn, BehandlingResultat, RevurderingResultat } from './BehandlingTypes';
-import { Nullable } from './common';
+import { Nullable } from '~/types/UtilTypes';
 import { Periode } from './Periode';
 
 export type VedtakTilBeslutningDTO = {

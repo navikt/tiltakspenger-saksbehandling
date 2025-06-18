@@ -1,21 +1,15 @@
-import { BehandlingSendTilBeslutning } from '../../../send-og-godkjenn/BehandlingSendTilBeslutning';
 import { useSendRevurderingVedtak } from '../../useSendRevurderingVedtak';
-import { useGodkjennBehandling } from '../../../send-og-godkjenn/useGodkjennBehandling';
-import { BehandlingGodkjenn } from '../../../send-og-godkjenn/BehandlingGodkjenn';
 import { useRevurderingBehandling } from '../../../BehandlingContext';
 import {
     RevurderingStansVedtakContext,
     useRevurderingStansVedtak,
 } from '../RevurderingStansVedtakContext';
-import { VedtakSeksjon } from '../../../vedtak-layout/seksjon/VedtakSeksjon';
-import { Button } from '@navikt/ds-react';
-import NextLink from 'next/link';
 import React from 'react';
 import { revurderingStansValidering } from '../revurderingStansValidering';
 import { VedtakRevurderTilStansDTO } from '~/types/VedtakTyper';
 import { RevurderingResultat } from '~/types/BehandlingTypes';
 
-import style from './RevurderingStansSend.module.css';
+import { BehandlingSendOgGodkjenn } from '~/components/behandling/felles/send-og-godkjenn/BehandlingSendOgGodkjenn';
 
 export const RevurderingStansSend = () => {
     const revurderingVedtak = useRevurderingStansVedtak();
@@ -28,38 +22,16 @@ export const RevurderingStansSend = () => {
         sendRevurderingTilBeslutningError,
     } = useSendRevurderingVedtak(behandling);
 
-    const { godkjennVedtak, godkjennVedtakLaster, godkjennVedtakError } =
-        useGodkjennBehandling(behandling);
-
     return (
-        <VedtakSeksjon>
-            <VedtakSeksjon.Venstre className={style.knapper}>
-                <div>
-                    <Button
-                        as={NextLink}
-                        href={`/sak/${behandling.saksnummer}`}
-                        variant="secondary"
-                    >
-                        Tilbake til saksoversikt
-                    </Button>
-                </div>
-                <div>
-                    <BehandlingSendTilBeslutning
-                        send={() =>
-                            sendRevurderingTilBeslutning(tilBeslutningDTO(revurderingVedtak))
-                        }
-                        laster={sendRevurderingTilBeslutningLaster}
-                        serverfeil={sendRevurderingTilBeslutningError}
-                        validering={() => revurderingStansValidering(revurderingVedtak)}
-                    />
-                    <BehandlingGodkjenn
-                        godkjenn={godkjennVedtak}
-                        laster={godkjennVedtakLaster}
-                        error={godkjennVedtakError}
-                    />
-                </div>
-            </VedtakSeksjon.Venstre>
-        </VedtakSeksjon>
+        <BehandlingSendOgGodkjenn
+            behandling={behandling}
+            sendTilBeslutningProps={{
+                send: () => sendRevurderingTilBeslutning(tilBeslutningDTO(revurderingVedtak)),
+                laster: sendRevurderingTilBeslutningLaster,
+                feil: sendRevurderingTilBeslutningError,
+                validering: () => revurderingStansValidering(revurderingVedtak),
+            }}
+        />
     );
 };
 

@@ -1,5 +1,4 @@
 import { SøknadsbehandlingVedtakContext } from './context/SøknadsbehandlingVedtakContext';
-import { ValideringResultat } from '../send-og-godkjenn/BehandlingSendTilBeslutning';
 import { SøknadsbehandlingData, SøknadsbehandlingResultat } from '~/types/BehandlingTypes';
 import {
     deltarPaFlereTiltakMedStartOgSluttdato,
@@ -9,6 +8,8 @@ import {
 } from '~/utils/behandling';
 import { joinPerioder, validerPeriodisering } from '~/utils/periode';
 import dayjs from 'dayjs';
+
+import { ValideringResultat } from '~/types/Validering';
 
 export const søknadsbehandlingValidering = (
     behandling: SøknadsbehandlingData,

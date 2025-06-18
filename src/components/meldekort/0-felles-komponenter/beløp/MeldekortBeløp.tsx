@@ -9,7 +9,7 @@ import {
 
 import style from './MeldekortBeløp.module.css';
 import { Simulering } from '../../../../types/Simulering';
-import { Nullable } from '../../../../types/common';
+import { Nullable } from '~/types/UtilTypes';
 import OppsummeringAvSimulering from '../../../oppsummeringer/simulering/OppsummeringAvSimulering';
 import { useState } from 'react';
 import { erSimuleringEndring } from '../../../../utils/simuleringUtils';

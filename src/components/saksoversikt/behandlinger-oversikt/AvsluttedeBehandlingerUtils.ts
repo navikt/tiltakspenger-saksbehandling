@@ -3,7 +3,7 @@ import {
     BehandlingData,
     BehandlingResultat,
 } from '../../../types/BehandlingTypes';
-import { Nullable } from '../../../types/common';
+import { Nullable } from '~/types/UtilTypes';
 import { Periode } from '../../../types/Periode';
 import { SøknadForBehandlingProps } from '../../../types/SøknadTypes';
 

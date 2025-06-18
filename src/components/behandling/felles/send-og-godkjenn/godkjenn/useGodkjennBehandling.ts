@@ -1,5 +1,5 @@
-import { BehandlingData } from '../../../types/BehandlingTypes';
-import { useFetchJsonFraApi } from '../../../utils/fetch/useFetchFraApi';
+import { BehandlingData } from '~/types/BehandlingTypes';
+import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 
 export const useGodkjennBehandling = (behandling: BehandlingData) => {
     const { trigger, isMutating, error } = useFetchJsonFraApi<BehandlingData>(
@@ -8,8 +8,8 @@ export const useGodkjennBehandling = (behandling: BehandlingData) => {
     );
 
     return {
-        godkjennVedtak: trigger,
-        godkjennVedtakLaster: isMutating,
-        godkjennVedtakError: error,
+        godkjennBehandling: trigger,
+        godkjennBehandlingLaster: isMutating,
+        godkjennBehandlingError: error,
     };
 };

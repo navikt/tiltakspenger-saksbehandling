@@ -5,18 +5,18 @@ import {
     useHentVedtaksbrevForhåndsvisning,
 } from './useHentVedtaksbrevForhåndsvisning';
 import { BehandlingData } from '~/types/BehandlingTypes';
-import { ValideringResultat } from '~/components/behandling/send-og-godkjenn/BehandlingSendTilBeslutning';
+import { ValideringResultat } from '~/types/Validering';
 import React, { useEffect, useState } from 'react';
 
 import style from './VedtaksbrevForhåndsvisning.module.css';
 
 type Props = {
     behandling: BehandlingData;
-    dto: BrevForhåndsvisningDTO;
+    hentDto: () => BrevForhåndsvisningDTO;
     validering: ValideringResultat;
 };
 
-export const VedtaksbrevForhåndsvisning = ({ behandling, dto, validering }: Props) => {
+export const VedtaksbrevForhåndsvisning = ({ behandling, hentDto, validering }: Props) => {
     const { hentForhåndsvisning, forhåndsvisningLaster, forhåndsvisningError } =
         useHentVedtaksbrevForhåndsvisning(behandling);
 
@@ -45,7 +45,7 @@ export const VedtaksbrevForhåndsvisning = ({ behandling, dto, validering }: Pro
                         return;
                     }
 
-                    return hentForhåndsvisning(dto).then((blob) => {
+                    return hentForhåndsvisning(hentDto()).then((blob) => {
                         if (blob) {
                             window.open(URL.createObjectURL(blob));
                         }

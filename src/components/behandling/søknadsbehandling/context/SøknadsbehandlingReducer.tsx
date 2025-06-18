@@ -5,7 +5,7 @@ import { forrigeDag, leggTilDager, nesteDag } from '~/utils/date';
 import { periodiserBarnetillegg } from '~/utils/barnetillegg';
 import { SøknadForBehandlingProps } from '~/types/SøknadTypes';
 import { Avslagsgrunn, SøknadsbehandlingResultat } from '~/types/BehandlingTypes';
-import { Nullable } from '~/types/common';
+import { Nullable } from '~/types/UtilTypes';
 
 export type SøknadsbehandlingSkjemaActions =
     | {

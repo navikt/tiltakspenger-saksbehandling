@@ -4,7 +4,8 @@ import { Periode } from '../Periode';
 import { BrukersMeldekortId } from './BrukersMeldekort';
 import { Avbrutt } from '../Avbrutt';
 import { Simulering } from '../Simulering';
-import { Nullable } from '../common';
+
+import { Nullable } from '~/types/UtilTypes';
 
 // Egentlig har denne samme prefix som BrukersMeldekortId (bare "meldekort_")
 // Typer den med en unik prefix for at typescript ikke skal se de som ekvivalente

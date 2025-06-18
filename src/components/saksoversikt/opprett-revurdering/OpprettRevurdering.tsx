@@ -6,6 +6,7 @@ import { useOpprettRevurdering } from './useOpprettRevurdering';
 import { RevurderingResultat } from '~/types/BehandlingTypes';
 import { BekreftelsesModal } from '~/components/modaler/BekreftelsesModal';
 import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
+import { revurderingResultatTekst } from '~/utils/tekstformateringUtils';
 
 type Props = {
     sakId: SakId;
@@ -61,7 +62,7 @@ export const OpprettRevurdering = ({ sakId, harVedtak }: Props) => {
                             });
                         }}
                     >
-                        {`Opprett revurdering${valgtType ? ` (${valgtType.toLowerCase()})` : ''}`}
+                        {`Opprett revurdering${valgtType ? ` (${revurderingResultatTekst[valgtType]})` : ''}`}
                     </Button>
                 }
             >

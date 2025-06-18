@@ -2,21 +2,21 @@ import { Button, Table } from '@navikt/ds-react';
 import {
     finnMeldeperiodeKjedeStatusTekst,
     meldekortUtbetalingstatusTekst,
-} from '../../../utils/tekstformateringUtils';
-import { formaterTidspunkt, periodeTilFormatertDatotekst } from '../../../utils/date';
+} from '~/utils/tekstformateringUtils';
+import { formaterTidspunkt, periodeTilFormatertDatotekst } from '~/utils/date';
 import Link from 'next/link';
-import { MeldeperiodeKjedeProps } from '../../../types/meldekort/Meldeperiode';
-import { meldeperiodeUrl } from '../../../utils/urls';
+import { MeldeperiodeKjedeProps } from '~/types/meldekort/Meldeperiode';
+import { meldeperiodeUrl } from '~/utils/urls';
 import {
     MeldekortBehandlingStatus,
     MeldekortBehandlingType,
-} from '../../../types/meldekort/MeldekortBehandling';
-import { formatterBeløp } from '../../../utils/beløp';
-import { sorterMeldekortBehandlingerAsc } from '../../../utils/meldekort';
+} from '~/types/meldekort/MeldekortBehandling';
+import { formatterBeløp } from '~/utils/beløp';
+import { sorterMeldekortBehandlingerAsc } from '~/utils/meldekort';
+import { MeldekortBehandlingKnappForOversikt } from './MeldekortBehandlingKnappForOversikt';
+import { SakId } from '~/types/SakTypes';
 
 import style from './MeldekortOversikt.module.css';
-import { MeldekortBehandlingKnappForOversikt } from './MeldekortBehandlingKnappForOversikt';
-import { SakId } from '../../../types/SakTypes';
 
 type Props = {
     meldeperiodeKjeder: MeldeperiodeKjedeProps[];
@@ -25,9 +25,6 @@ type Props = {
 };
 
 export const MeldekortOversikt = ({ meldeperiodeKjeder, saksnummer, sakId }: Props) => {
-    console.log(
-        meldeperiodeKjeder.toSorted((a, b) => (a.periode.fraOgMed > b.periode.fraOgMed ? -1 : 1)),
-    );
     return (
         <Table>
             <Table.Header>

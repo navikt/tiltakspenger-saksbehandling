@@ -1,4 +1,4 @@
-import { ValideringResultat } from '../../send-og-godkjenn/BehandlingSendTilBeslutning';
+import { ValideringResultat } from '~/types/Validering';
 import { RevurderingStansVedtakContext } from './RevurderingStansVedtakContext';
 
 export const revurderingStansValidering = (

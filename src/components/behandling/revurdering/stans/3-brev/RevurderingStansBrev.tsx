@@ -12,13 +12,6 @@ export const RevurderingStansBrev = () => {
 
     const { behandling, rolleForBehandling } = useRevurderingBehandling();
 
-    const forhåndsvisningDto: RevurderingStansBrevForhåndsvisningDTO = {
-        fritekst: revurderingVedtak.brevtekstRef.current?.value ?? '',
-        stansDato: revurderingVedtak.stansdato,
-        valgteHjemler: revurderingVedtak.valgtHjemmelHarIkkeRettighet,
-        resultat: RevurderingResultat.STANS,
-    };
-
     return (
         <Vedtaksbrev
             header={'Vedtaksbrev for stans'}
@@ -26,7 +19,12 @@ export const RevurderingStansBrev = () => {
             rolle={rolleForBehandling}
             tekstRef={brevtekstRef}
             validering={revurderingStansValidering(revurderingVedtak)}
-            forhåndsvisningDto={forhåndsvisningDto}
+            hentDto={(): RevurderingStansBrevForhåndsvisningDTO => ({
+                fritekst: revurderingVedtak.brevtekstRef.current?.value ?? '',
+                stansDato: revurderingVedtak.stansdato,
+                valgteHjemler: revurderingVedtak.valgtHjemmelHarIkkeRettighet,
+                resultat: RevurderingResultat.STANS,
+            })}
         />
     );
 };

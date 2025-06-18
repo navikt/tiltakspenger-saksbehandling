@@ -1,9 +1,8 @@
 import { Periode } from './Periode';
 import { SakId } from './SakTypes';
 import { BehandlingStatus, Behandlingstype } from './BehandlingTypes';
-import { ArrayOrSingle } from './UtilTypes';
+import { ArrayOrSingle, Nullable } from './UtilTypes';
 import { Avbrutt } from './Avbrutt';
-import { Nullable } from './common';
 
 export type SøknadId = `soknad_${string}`;
 

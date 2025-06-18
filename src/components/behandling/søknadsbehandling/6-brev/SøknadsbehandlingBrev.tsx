@@ -17,19 +17,6 @@ export const SøknadsbehandlingBrev = () => {
         return null;
     }
 
-    // Backend vil ignorere perioden dersom vedtaket er avslag, og hvis tilstanden er tilBeslutter (senere enn under behandling)
-    const forhåndsvisningDto: SøknadsbehandlingBrevForhåndsvisningDTO = {
-        fritekst: vedtak.getBrevtekst(),
-        virkningsperiode: vedtak.behandlingsperiode,
-        barnetillegg: vedtak.harBarnetillegg ? vedtak.barnetilleggPerioder : [],
-        // vi rendrer ikke komponenten hvis resultatet ikke eksiterer i parenten
-        resultat: vedtak.resultat!,
-        avslagsgrunner:
-            vedtak.resultat === SøknadsbehandlingResultat.AVSLAG && vedtak.avslagsgrunner !== null
-                ? vedtak.avslagsgrunner
-                : null,
-    };
-
     return (
         <Vedtaksbrev
             header={'Vedtaksbrev for tiltakspenger og barnetillegg'}
@@ -37,7 +24,19 @@ export const SøknadsbehandlingBrev = () => {
             rolle={rolleForBehandling}
             tekstRef={brevtekstRef}
             validering={søknadsbehandlingValidering(behandling, vedtak)}
-            forhåndsvisningDto={forhåndsvisningDto}
+            hentDto={(): SøknadsbehandlingBrevForhåndsvisningDTO => ({
+                fritekst: vedtak.getBrevtekst(),
+                // Backend vil ignorere perioden dersom vedtaket er avslag, og hvis tilstanden er tilBeslutter (senere enn under behandling)
+                virkningsperiode: vedtak.behandlingsperiode,
+                barnetillegg: vedtak.harBarnetillegg ? vedtak.barnetilleggPerioder : [],
+                // vi rendrer ikke komponenten hvis resultatet ikke eksiterer i parenten
+                resultat: vedtak.resultat!,
+                avslagsgrunner:
+                    vedtak.resultat === SøknadsbehandlingResultat.AVSLAG &&
+                    vedtak.avslagsgrunner !== null
+                        ? vedtak.avslagsgrunner
+                        : null,
+            })}
             hjelpetekst={<Hjelpetekst />}
         />
     );

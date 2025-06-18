@@ -8,7 +8,7 @@ import { TekstfeltMedMellomlagring } from '../../../tekstfelt/TekstfeltMedMellom
 import { VedtakBegrunnelseLagringDTO } from '~/types/VedtakTyper';
 import { TekstListe } from '../../../liste/TekstListe';
 import { BehandlingData } from '~/types/BehandlingTypes';
-import { Nullable } from '~/types/common';
+import { Nullable } from '~/types/UtilTypes';
 
 import style from './BegrunnelseVilkårsvurdering.module.css';
 

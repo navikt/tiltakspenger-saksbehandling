@@ -11,3 +11,12 @@
 .warning {
     margin-bottom: 1rem;
 }
+
+.knapper {
+    margin-bottom: var(--a-spacing-8);
+}
+
+.godkjentWrapper {
+    display: flex;
+    justify-content: flex-end;
+}

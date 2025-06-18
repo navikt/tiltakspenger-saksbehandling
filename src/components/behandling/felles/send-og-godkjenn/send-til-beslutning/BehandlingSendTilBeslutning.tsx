@@ -1,36 +1,46 @@
 import { Alert, Button, Heading } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
-import { useBehandling } from '../BehandlingContext';
-import { BehandlingData } from '../../../types/BehandlingTypes';
-import { FetcherError } from '../../../utils/fetch/fetch';
-import { SaksbehandlerRolle } from '../../../types/Saksbehandler';
-import { BekreftelsesModal } from '../../modaler/BekreftelsesModal';
-import { TekstListe } from '../../liste/TekstListe';
+import { useBehandling } from '../../../BehandlingContext';
+import { BehandlingData } from '~/types/BehandlingTypes';
+import { FetcherError } from '~/utils/fetch/fetch';
+import { SaksbehandlerRolle } from '~/types/Saksbehandler';
+import { BekreftelsesModal } from '../../../../modaler/BekreftelsesModal';
+import { TekstListe } from '../../../../liste/TekstListe';
+import { ValideringResultat } from '~/types/Validering';
+import { hentRolleForBehandling } from '~/utils/tilganger';
+import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
 
-import style from './BehandlingSendOgGodkjenn.module.css';
+import style from '../BehandlingSendOgGodkjenn.module.css';
 
-export type ValideringResultat = {
-    errors: string[];
-    warnings: string[];
-};
-
-type Props = {
+export type SendTilBeslutningProps = {
     send: () => Promise<BehandlingData | undefined>;
     laster: boolean;
-    serverfeil?: FetcherError;
+    feil?: FetcherError;
     validering: () => ValideringResultat;
 };
 
-export const BehandlingSendTilBeslutning = ({ send, laster, serverfeil, validering }: Props) => {
+type Props = {
+    behandling: BehandlingData;
+} & SendTilBeslutningProps;
+
+export const BehandlingSendTilBeslutning = ({
+    behandling,
+    send,
+    laster,
+    feil,
+    validering,
+}: Props) => {
     const [harSendt, setHarSendt] = useState(false);
     const [valideringResultat, setValideringResultat] = useState<ValideringResultat>({
         errors: [],
         warnings: [],
     });
 
-    const modalRef = useRef<HTMLDialogElement>(null);
+    const { setBehandling } = useBehandling();
+    const { innloggetSaksbehandler } = useSaksbehandler();
+    const rolle = hentRolleForBehandling(behandling, innloggetSaksbehandler);
 
-    const { setBehandling, rolleForBehandling } = useBehandling();
+    const modalRef = useRef<HTMLDialogElement>(null);
 
     const åpneModal = () => {
         setValideringResultat(validering());
@@ -42,7 +52,7 @@ export const BehandlingSendTilBeslutning = ({ send, laster, serverfeil, valideri
 
     return (
         <div className={style.wrapper}>
-            {rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER && (
+            {rolle === SaksbehandlerRolle.SAKSBEHANDLER && (
                 <Button onClick={åpneModal}>{'Send til beslutter'}</Button>
             )}
             {harSendt && (
@@ -53,7 +63,7 @@ export const BehandlingSendTilBeslutning = ({ send, laster, serverfeil, valideri
             <BekreftelsesModal
                 modalRef={modalRef}
                 tittel={'Send vedtaket til beslutning?'}
-                feil={serverfeil}
+                feil={feil}
                 lukkModal={lukkModal}
                 bekreftKnapp={
                     <Button

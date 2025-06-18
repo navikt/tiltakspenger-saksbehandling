@@ -15,7 +15,7 @@ import styles from './AvsluttBehandling.module.css';
 import { BehandlingId } from '../../../types/BehandlingTypes';
 import { SøknadId } from '../../../types/SøknadTypes';
 import { useFetchJsonFraApi } from '../../../utils/fetch/useFetchFraApi';
-import { Nullable } from '../../../types/common';
+import { Nullable } from '~/types/UtilTypes';
 import { SakProps } from '../../../types/SakTypes';
 import { useSak } from '../../../context/sak/SakContext';
 

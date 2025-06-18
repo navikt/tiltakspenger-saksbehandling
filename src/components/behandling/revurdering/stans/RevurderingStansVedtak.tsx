@@ -6,7 +6,6 @@ import { Separator } from '../../../separator/Separator';
 import { RevurderingStansResultat } from './1-resultat/RevurderingStansResultat';
 import { RevurderingStansBegrunnelse } from './2-begrunnelse/RevurderingStansBegrunnelse';
 import { RevurderingStansBrev } from './3-brev/RevurderingStansBrev';
-import RevurderingStansAvbrytBehandling from './5-avbryt-behandling/RevurderingStansAvbrytBehandling';
 
 import style from './RevurderingStansVedtak.module.css';
 
@@ -21,7 +20,6 @@ export const RevurderingStansVedtak = () => {
             <Separator />
             <RevurderingStansBrev />
             <RevurderingStansSend />
-            <RevurderingStansAvbrytBehandling />
         </RevurderingStansVedtakProvider>
     );
 };

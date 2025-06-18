@@ -3,7 +3,7 @@ import { Tiltaksdeltagelse } from './TiltakDeltagelseTypes';
 import { SakId } from './SakTypes';
 import { SøknadForOversiktProps, SøknadForBehandlingProps } from './SøknadTypes';
 import { Avbrutt } from './Avbrutt';
-import { Nullable } from './common';
+import { Nullable } from '~/types/UtilTypes';
 import { Ytelse } from '~/types/Ytelse';
 
 export type BehandlingId = `beh_${string}`;

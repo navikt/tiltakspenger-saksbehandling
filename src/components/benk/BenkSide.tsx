@@ -26,6 +26,8 @@ import {
     behandlingstypeTextFormatter,
 } from './BenkSideUtils';
 import SortableTable from '../tabell/SortableTable';
+import NextLink from 'next/link';
+
 import styles from './BenkSide.module.css';
 
 type Props = {
@@ -289,9 +291,8 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
                                         type="button"
                                         variant="secondary"
                                         size="small"
-                                        onClick={() => {
-                                            router.push(`/sak/${behandling.saksnummer}`);
-                                        }}
+                                        as={NextLink}
+                                        href={`/sak/${behandling.saksnummer}`}
                                     >
                                         Se sak
                                     </Button>

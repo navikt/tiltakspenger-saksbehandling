@@ -7,7 +7,7 @@ import {
 } from '~/types/BehandlingTypes';
 import { Periode } from '~/types/Periode';
 import { VedtakBarnetilleggPeriode } from '~/types/VedtakTyper';
-import { Nullable } from '~/types/common';
+import { Nullable } from '~/types/UtilTypes';
 
 export type SøknadsbehandlingBrevForhåndsvisningDTO = {
     fritekst: string;

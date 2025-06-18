@@ -1,4 +1,4 @@
-import { Nullable } from './common';
+import { Nullable } from '~/types/UtilTypes';
 
 export interface BenkOversiktRequest {
     behandlingstype: Nullable<BehandlingssammendragType[]>;

@@ -1,29 +1,33 @@
 import { Alert, Button, HStack } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
-import { BehandlingData } from '../../../types/BehandlingTypes';
-import { FetcherError } from '../../../utils/fetch/fetch';
-import { useBehandling } from '../BehandlingContext';
-import { SaksbehandlerRolle } from '../../../types/Saksbehandler';
-import { BekreftelsesModal } from '../../modaler/BekreftelsesModal';
-
-import style from './BehandlingSendOgGodkjenn.module.css';
-import Underkjenn from '../../underkjenn/Underkjenn';
-import { useFetchJsonFraApi } from '../../../utils/fetch/useFetchFraApi';
+import { BehandlingData } from '~/types/BehandlingTypes';
+import { useBehandling } from '../../../BehandlingContext';
+import { SaksbehandlerRolle } from '~/types/Saksbehandler';
+import { BekreftelsesModal } from '../../../../modaler/BekreftelsesModal';
+import Underkjenn from '../../../../underkjenn/Underkjenn';
+import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import router from 'next/router';
+import { useGodkjennBehandling } from '~/components/behandling/felles/send-og-godkjenn/godkjenn/useGodkjennBehandling';
+import { hentRolleForBehandling } from '~/utils/tilganger';
+import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
+
+import style from '../BehandlingSendOgGodkjenn.module.css';
 
 type Props = {
-    godkjenn: () => Promise<BehandlingData | undefined>;
-    laster: boolean;
-    error?: FetcherError;
+    behandling: BehandlingData;
 };
 
-export const BehandlingGodkjenn = ({ godkjenn, laster, error }: Props) => {
+export const BehandlingGodkjenn = ({ behandling }: Props) => {
     const [harGodkjent, setHarGodkjent] = useState(false);
     const modalRef = useRef<HTMLDialogElement>(null);
 
-    const { setBehandling, rolleForBehandling, behandling } = useBehandling();
+    const { setBehandling } = useBehandling();
+    const { innloggetSaksbehandler } = useSaksbehandler();
 
     const lukkModal = () => modalRef.current?.close();
+
+    const { godkjennBehandling, godkjennBehandlingLaster, godkjennBehandlingError } =
+        useGodkjennBehandling(behandling);
 
     const underkjennApi = useFetchJsonFraApi<BehandlingData, { begrunnelse: string }>(
         `/behandling/sendtilbake/${behandling.id}`,
@@ -36,9 +40,11 @@ export const BehandlingGodkjenn = ({ godkjenn, laster, error }: Props) => {
         },
     );
 
+    const rolle = hentRolleForBehandling(behandling, innloggetSaksbehandler);
+
     return (
         <div className={style.wrapper}>
-            {rolleForBehandling === SaksbehandlerRolle.BESLUTTER && (
+            {rolle === SaksbehandlerRolle.BESLUTTER && (
                 <HStack gap="2">
                     <Underkjenn
                         onUnderkjenn={{
@@ -60,14 +66,14 @@ export const BehandlingGodkjenn = ({ godkjenn, laster, error }: Props) => {
             <BekreftelsesModal
                 modalRef={modalRef}
                 tittel={'Godkjenn vedtaket?'}
-                feil={error}
+                feil={godkjennBehandlingError}
                 lukkModal={lukkModal}
                 bekreftKnapp={
                     <Button
                         variant={'primary'}
-                        loading={laster}
+                        loading={godkjennBehandlingLaster}
                         onClick={() => {
-                            godkjenn().then((oppdatertBehandling) => {
+                            godkjennBehandling().then((oppdatertBehandling) => {
                                 if (oppdatertBehandling) {
                                     setHarGodkjent(true);
                                     setBehandling(oppdatertBehandling);

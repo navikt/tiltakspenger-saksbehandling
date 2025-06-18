@@ -5,7 +5,7 @@ import {
     RevurderingData,
 } from '~/types/BehandlingTypes';
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
-import { kanBeslutteForBehandling, kanSaksbehandleForBehandling } from '../../utils/tilganger';
+import { hentRolleForBehandling } from '../../utils/tilganger';
 import { useSaksbehandler } from '../../context/saksbehandler/SaksbehandlerContext';
 import { SaksbehandlerRolle } from '../../types/Saksbehandler';
 
@@ -27,11 +27,7 @@ export const BehandlingProvider = ({ behandling: initialBehandling, children }: 
 
     const { innloggetSaksbehandler } = useSaksbehandler();
 
-    const rolleForBehandling = kanSaksbehandleForBehandling(behandling, innloggetSaksbehandler)
-        ? SaksbehandlerRolle.SAKSBEHANDLER
-        : kanBeslutteForBehandling(behandling, innloggetSaksbehandler)
-          ? SaksbehandlerRolle.BESLUTTER
-          : null;
+    const rolleForBehandling = hentRolleForBehandling(behandling, innloggetSaksbehandler);
 
     useEffect(() => {
         setBehandling(initialBehandling);

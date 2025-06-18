@@ -10,12 +10,6 @@ export const RevurderingInnvilgelseBrev = () => {
 
     const { brevtekstRef } = vedtak;
 
-    const forhåndsvisningDto: RevurderingInnvilgelseBrevForhåndsvisningDTO = {
-        resultat: RevurderingResultat.REVURDERING_INNVILGELSE,
-        fritekst: vedtak.getBrevtekst(),
-        virkningsperiode: vedtak.behandlingsperiode,
-    };
-
     return (
         <Vedtaksbrev
             header={'Vedtaksbrev for revurdering av innvilgelse'}
@@ -26,8 +20,17 @@ export const RevurderingInnvilgelseBrev = () => {
                 errors: [],
                 warnings: [],
             }}
-            forhåndsvisningDto={forhåndsvisningDto}
-            hjelpetekst={<div>{'Skal vi ha en egen hjelpetekst for denne?'}</div>}
+            hentDto={(): RevurderingInnvilgelseBrevForhåndsvisningDTO => ({
+                resultat: RevurderingResultat.REVURDERING_INNVILGELSE,
+                fritekst: vedtak.getBrevtekst(),
+                virkningsperiode: vedtak.behandlingsperiode,
+            })}
+            hjelpetekst={
+                <div>
+                    <p>{'Skal vi ha en egen hjelpetekst for denne?'}</p>
+                    <p>{'Brev for revurdering innvilgelse er ikke implementert ennå'}</p>
+                </div>
+            }
         />
     );
 };

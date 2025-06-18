@@ -46,6 +46,17 @@ export const kanSaksbehandleForBehandling = (
     );
 };
 
+export const hentRolleForBehandling = (
+    behandling: BehandlingData,
+    innloggetSaksbehandler: Saksbehandler,
+) => {
+    return kanSaksbehandleForBehandling(behandling, innloggetSaksbehandler)
+        ? SaksbehandlerRolle.SAKSBEHANDLER
+        : kanBeslutteForBehandling(behandling, innloggetSaksbehandler)
+          ? SaksbehandlerRolle.BESLUTTER
+          : null;
+};
+
 export const eierBehandling = (
     behandling: BehandlingForOversiktData,
     innloggetSaksbehandler: Saksbehandler,

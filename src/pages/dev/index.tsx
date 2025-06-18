@@ -20,7 +20,8 @@ import router from 'next/router';
 import { pageWithAuthentication } from '../../auth/pageWithAuthentication';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { dateTilISOTekst } from '../../utils/date';
-import { Nullable } from '../../types/common';
+
+import { Nullable } from '~/types/UtilTypes';
 
 export const getServerSideProps = pageWithAuthentication(async () => {
     if (process?.env.NEXT_PUBLIC_DEVROUTES && process.env.NEXT_PUBLIC_DEVROUTES === 'true') {
