@@ -43,7 +43,7 @@ export const brukersMeldekortDagStatusTekst: Record<BrukersMeldekortDagStatus, s
 
 export const meldekortBehandlingDagStatusTekst: Record<MeldekortBehandlingDagStatus, string> = {
     // OBS! Endring av disse tekstene krever tilsvarende endringer tekstene som utledes for brevene!
-    [MeldekortBehandlingDagStatus.Sperret]: 'Ikke rett på tiltakspenger',
+    [MeldekortBehandlingDagStatus.Sperret]: 'Ikke rett til tiltakspenger',
     [MeldekortBehandlingDagStatus.DeltattMedLønnITiltaket]: 'Deltatt med lønn i tiltaket',
     [MeldekortBehandlingDagStatus.DeltattUtenLønnITiltaket]: 'Deltatt uten lønn i tiltaket',
     [MeldekortBehandlingDagStatus.FraværSyk]: 'Fravær - Syk',

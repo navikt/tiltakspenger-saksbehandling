@@ -47,7 +47,7 @@ export const MeldekortUkeBehandling = ({ dager, ukeIndex }: Props) => {
                 </Table.DataCell>
                 <Table.DataCell>
                     {valgtStatus === MeldekortBehandlingDagStatus.Sperret ? (
-                        <BodyShort>Ikke rett på tiltakspenger</BodyShort>
+                        <BodyShort>Ikke rett til tiltakspenger</BodyShort>
                     ) : (
                         <Controller
                             name={statusFieldPath}
