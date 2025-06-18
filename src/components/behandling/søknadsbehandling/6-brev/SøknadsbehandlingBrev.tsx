@@ -11,11 +11,7 @@ export const SøknadsbehandlingBrev = () => {
     const { behandling, rolleForBehandling } = useSøknadsbehandling();
     const vedtak = useSøknadsbehandlingSkjema();
 
-    const { brevtekstRef, resultat, avslagsgrunner } = vedtak;
-
-    if (resultat === SøknadsbehandlingResultat.AVSLAG && avslagsgrunner !== null) {
-        return null;
-    }
+    const { brevtekstRef } = vedtak;
 
     return (
         <Vedtaksbrev

@@ -15,3 +15,8 @@ export type Tiltaksdeltagelse = {
     antallDagerPerUke: number | null;
     kilde: Kilde;
 };
+
+export type TiltaksdeltagelseMedPeriode = Tiltaksdeltagelse & {
+    deltagelseFraOgMed: string;
+    deltagelseTilOgMed: string;
+};

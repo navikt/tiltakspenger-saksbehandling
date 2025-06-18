@@ -6,6 +6,7 @@ import { periodiserBarnetillegg } from '~/utils/barnetillegg';
 import { SøknadForBehandlingProps } from '~/types/SøknadTypes';
 import { Avslagsgrunn, SøknadsbehandlingResultat } from '~/types/BehandlingTypes';
 import { Nullable } from '~/types/UtilTypes';
+import { TiltaksdeltagelseState } from '~/components/behandling/felles/state/TiltaksdeltagelseState';
 
 export type SøknadsbehandlingSkjemaActions =
     | {
@@ -70,10 +71,9 @@ export type SøknadsbehandlingSkjemaState = {
     behandlingsperiode: Periode;
     harBarnetillegg: boolean;
     barnetilleggPerioder: VedtakBarnetilleggPeriode[];
-    valgteTiltaksdeltakelser: VedtakTiltaksdeltakelsePeriode[];
     antallDagerPerMeldeperiode: number;
     avslagsgrunner: Nullable<Avslagsgrunn[]>;
-};
+} & TiltaksdeltagelseState;
 
 export const SøknadsbehandlingReducer: Reducer<
     SøknadsbehandlingSkjemaState,

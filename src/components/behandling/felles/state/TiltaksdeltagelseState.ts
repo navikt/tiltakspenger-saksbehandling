@@ -1,7 +1,18 @@
 import { Periode } from '~/types/Periode';
 import { VedtakTiltaksdeltakelsePeriode } from '~/types/VedtakTyper';
-import { Reducer } from 'react';
+import { Reducer, useReducer } from 'react';
 import { leggTilDager } from '~/utils/date';
+import {
+    BehandlingData,
+    Behandlingstype,
+    RevurderingData,
+    SøknadsbehandlingData,
+} from '~/types/BehandlingTypes';
+import {
+    hentTiltaksdeltagelseFraSoknad,
+    hentTiltaksdeltakelserMedStartOgSluttdato,
+    hentTiltaksperiodeFraSøknad,
+} from '~/utils/behandling';
 
 export type TiltaksdeltagelseState = {
     valgteTiltaksdeltakelser: VedtakTiltaksdeltakelsePeriode[];
@@ -91,7 +102,51 @@ export const TiltaksdeltagelseReducer: Reducer<TiltaksdeltagelseState, Tiltaksde
     console.error(`Ugyldig action for søknadsbehandling: "${type satisfies never}"`);
     return state;
 };
-//
-// export const useTiltaksdeltagelseReducer = () => {
-//     const [] = useReducer()
-// }
+
+const tilValgteTiltaksdeltakelser = (
+    behandling: BehandlingData,
+): VedtakTiltaksdeltakelsePeriode[] =>
+    hentTiltaksdeltakelserMedStartOgSluttdato(behandling).map((tiltaksdeltagelse) => ({
+        eksternDeltagelseId: tiltaksdeltagelse.eksternDeltagelseId,
+        periode: {
+            fraOgMed: tiltaksdeltagelse.deltagelseFraOgMed,
+            tilOgMed: tiltaksdeltagelse.deltagelseTilOgMed,
+        },
+    }));
+
+const initialStateSøknadsbehandling = (
+    behandling: SøknadsbehandlingData,
+): TiltaksdeltagelseState => {
+    const tiltaksperiodeFraSøknad = hentTiltaksperiodeFraSøknad(behandling);
+    const tiltakFraSoknad = hentTiltaksdeltagelseFraSoknad(behandling);
+
+    return {
+        valgteTiltaksdeltakelser: behandling.valgteTiltaksdeltakelser || [
+            {
+                eksternDeltagelseId: tiltakFraSoknad.eksternDeltagelseId,
+                periode: behandling.virkningsperiode ?? tiltaksperiodeFraSøknad,
+            },
+        ],
+    };
+};
+
+const initialStateRevurdering = (behandling: RevurderingData): TiltaksdeltagelseState => {
+    return {
+        valgteTiltaksdeltakelser:
+            behandling.valgteTiltaksdeltakelser ?? tilValgteTiltaksdeltakelser(behandling),
+    };
+};
+
+const initialState = (behandling: BehandlingData): TiltaksdeltagelseState =>
+    behandling.type === Behandlingstype.SØKNADSBEHANDLING
+        ? initialStateSøknadsbehandling(behandling)
+        : initialStateRevurdering(behandling);
+
+export const useTiltaksdeltagelseReducer = (behandling: BehandlingData) => {
+    const [state, dispatch] = useReducer(TiltaksdeltagelseReducer, behandling, initialState);
+
+    return {
+        tiltaksdeltagelseState: state,
+        tiltaksdeltagelseDispatch: dispatch,
+    };
+};
