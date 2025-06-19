@@ -47,7 +47,7 @@ export const BehandlingBarnetillegg = (props: BehandlingBarnetilleggProps) => {
                         legend={'Har det blitt søkt om barnetillegg?'}
                         size={'small'}
                         className={style.radioGroup}
-                        defaultValue={false}
+                        defaultValue={harBarnetillegg}
                         readOnly={rolle !== SaksbehandlerRolle.SAKSBEHANDLER}
                         onChange={(harSøkt: boolean) => {
                             dispatch({

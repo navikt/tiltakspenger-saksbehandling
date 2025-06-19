@@ -29,8 +29,9 @@ export const hentTiltaksperiodeFraSøknad = (behandling: SøknadsbehandlingData)
     };
 };
 
-export const harSøktBarnetillegg = (behandling: SøknadsbehandlingData) =>
-    !!behandling.barnetillegg || behandling.søknad.barnetillegg.length > 0;
+export const harSøktBarnetillegg = (behandling: BehandlingData) =>
+    !!behandling.barnetillegg ||
+    (erBehandlingSøknadsbehandling(behandling) && behandling.søknad.barnetillegg.length > 0);
 
 export const erBehandlingAvbrutt = (behandling: BehandlingData) => !!behandling.avbrutt;
 

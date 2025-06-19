@@ -17,7 +17,7 @@ import {
 import { useRevurderingBehandling } from '~/components/behandling/BehandlingContext';
 import { Periode } from '~/types/Periode';
 import { VedtakTiltaksdeltakelsePeriode } from '~/types/VedtakTyper';
-import { hentTiltaksdeltakelserMedStartOgSluttdato } from '~/utils/behandling';
+import { harSøktBarnetillegg, hentTiltaksdeltakelserMedStartOgSluttdato } from '~/utils/behandling';
 import { BarnetilleggState } from '~/components/behandling/felles/state/BarnetilleggState';
 
 type TextAreaInputs = {
@@ -60,8 +60,8 @@ const initieltVedtakSkjema = (behandling: RevurderingData): RevurderingInnvilgel
     return {
         behandlingsperiode: behandling.virkningsperiode ?? tiltaksperiode,
         antallDagerPerMeldeperiode: 10,
-        harBarnetillegg: false,
-        barnetilleggPerioder: [],
+        harBarnetillegg: harSøktBarnetillegg(behandling),
+        barnetilleggPerioder: behandling.barnetillegg?.perioder ?? [],
         valgteTiltaksdeltakelser:
             behandling.valgteTiltaksdeltakelser ?? tilValgteTiltaksdeltakelser(behandling),
     };
