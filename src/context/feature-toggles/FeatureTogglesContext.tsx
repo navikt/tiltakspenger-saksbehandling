@@ -18,13 +18,12 @@ type Props = {
 
 export const FeatureTogglesProvider = ({ deployEnv, children }: Props) => {
     const isProd = deployEnv === 'prod-gcp';
-    const isLocal = !deployEnv;
 
     return (
         <Context.Provider
             value={{
                 meldekortKorrigeringToggle: !isProd,
-                revurderingInnvilgelseToggle: isLocal,
+                revurderingInnvilgelseToggle: !isProd,
             }}
         >
             {children}
