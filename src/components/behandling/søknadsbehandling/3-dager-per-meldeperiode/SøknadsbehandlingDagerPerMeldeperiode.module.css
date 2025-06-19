@@ -17,9 +17,28 @@
 }
 
 .antallDagerPerMeldeperiode {
-    margin-top: 1.5rem;
+    margin-top: var(--a-spacing-8);
 }
 
 .infoboks {
     margin-top: 1rem;
+}
+
+.antallDagerHeading {
+    margin-bottom: var(--a-spacing-7);
+}
+
+.antallDagerContainer {
+    display: flex;
+    flex-direction: column;
+    gap: var(--a-spacing-7);
+}
+
+.antallDagerContainer > :last-child {
+    margin-bottom: var(--a-spacing-7);
+}
+
+.antallDagerElementContainer {
+    display: flex;
+    gap: var(--a-spacing-8);
 }

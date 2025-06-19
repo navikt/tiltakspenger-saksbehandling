@@ -3,18 +3,12 @@ import { ReducerActionHandlers } from '~/types/Context';
 
 export type InnvilgelseState = {
     behandlingsperiode: Periode;
-    antallDagerPerMeldeperiode: number;
 };
 
-export type InnvilgelseActions =
-    | {
-          type: 'oppdaterBehandlingsperiode';
-          payload: { periode: Partial<Periode> };
-      }
-    | {
-          type: 'oppdaterDagerPerMeldeperiode';
-          payload: { antallDagerPerMeldeperiode: number };
-      };
+export type InnvilgelseActions = {
+    type: 'oppdaterBehandlingsperiode';
+    payload: { periode: Partial<Periode> };
+};
 
 export const getInnvilgelseActionHandlers = <
     State extends InnvilgelseState,
@@ -25,9 +19,5 @@ export const getInnvilgelseActionHandlers = <
                 ...state,
                 behandlingsperiode: { ...state.behandlingsperiode, ...payload.periode },
             };
-        },
-
-        oppdaterDagerPerMeldeperiode: (state, payload: { antallDagerPerMeldeperiode: number }) => {
-            return { ...state, antallDagerPerMeldeperiode: payload.antallDagerPerMeldeperiode };
         },
     }) as const;
