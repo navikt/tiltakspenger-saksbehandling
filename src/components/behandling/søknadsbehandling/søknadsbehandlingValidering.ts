@@ -176,10 +176,25 @@ const validerUtfallInnvilgelse = (
         }
     }
 
-    if (
-        antallDagerPerMeldeperiode &&
-        (antallDagerPerMeldeperiode < 1 || antallDagerPerMeldeperiode > 14)
-    ) {
-        errors.push('Antall dager per meldeperiode må være mellom 1 og 14');
+    const harFylltUtAlleNødvendigeFelter = antallDagerPerMeldeperiode.every(
+        (periode) =>
+            periode.antallDagerPerMeldeperiode &&
+            periode.periode.fraOgMed &&
+            periode.periode.tilOgMed,
+    );
+
+    if (!harFylltUtAlleNødvendigeFelter) {
+        errors.push('Alle felter for antall dager per meldeperiode må fylles ut');
+    }
+
+    if (harFylltUtAlleNødvendigeFelter) {
+        const antallDager = antallDagerPerMeldeperiode.reduce(
+            (acc, curr) => (acc += curr.antallDagerPerMeldeperiode ?? 0),
+            0,
+        );
+
+        if (antallDager < 1 || antallDager > 14) {
+            errors.push('Antall dager per meldeperiode må være mellom 1 og 14');
+        }
     }
 };

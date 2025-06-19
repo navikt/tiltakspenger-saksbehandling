@@ -20,6 +20,7 @@ export const SøknadsbehandlingVedtak = () => {
             </Heading>
             <SøknadsbehandlingBegrunnelse />
             <SøknadsbehandlingResultatVelger />
+            <Separator />
             <SøknadsbehandlingDagerPerMeldeperiode />
             <Separator />
             <SøknadsbehandlingTiltak />

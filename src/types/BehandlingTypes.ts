@@ -25,10 +25,15 @@ type BehandlingDataCommon = {
     fritekstTilVedtaksbrev: string | null;
 };
 
+export interface AntallDagerForMeldeperiode {
+    antallDagerPerMeldeperiode: number;
+    periode: Periode;
+}
+
 type InnvilgelseResultatData = {
     barnetillegg: Nullable<Barnetillegg>;
     valgteTiltaksdeltakelser: Nullable<TiltaksdeltakelsePeriode[]>;
-    antallDagerPerMeldeperiode: Nullable<number>;
+    antallDagerPerMeldeperiode: Nullable<AntallDagerForMeldeperiode[]>;
 };
 
 type StansResultatData = {
