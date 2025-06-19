@@ -54,7 +54,9 @@ const SortableTable = <Kolonner extends Record<string, string>>(props: Props<Kol
 
     return (
         <div>
-            {props.antallRader && <BodyShort>Antall behandlinger: {props.antallRader}</BodyShort>}
+            {props.antallRader !== undefined && (
+                <BodyShort>Antall behandlinger: {props.antallRader}</BodyShort>
+            )}
             <Table
                 zebraStripes
                 sort={
