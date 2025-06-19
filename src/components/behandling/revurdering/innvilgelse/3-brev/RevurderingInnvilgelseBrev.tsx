@@ -28,7 +28,6 @@ export const RevurderingInnvilgelseBrev = () => {
             hjelpetekst={
                 <div>
                     <p>{'Skal vi ha en egen hjelpetekst for denne?'}</p>
-                    <p>{'Brev for revurdering innvilgelse er ikke implementert ennå'}</p>
                 </div>
             }
         />

@@ -1,34 +1,52 @@
 import { Reducer } from 'react';
-import { VedtakTiltaksdeltakelsePeriode } from '~/types/VedtakTyper';
 import { Periode } from '~/types/Periode';
-import { leggTilDager } from '~/utils/date';
+import {
+    getTiltaksdeltagelseActionHandlers,
+    TiltaksdeltagelseActions,
+    TiltaksdeltagelseState,
+} from '~/components/behandling/felles/state/TiltaksdeltagelseState';
+import {
+    BarnetilleggActions,
+    BarnetilleggState,
+    getBarnetilleggActionHandlers,
+} from '~/components/behandling/felles/state/BarnetilleggState';
+import { ReducerActionHandlers } from '~/types/Context';
+
+type BaseActions = {
+    type: 'oppdaterBehandlingsperiode';
+    payload: { periode: Partial<Periode> };
+};
+
+type BaseState = {
+    behandlingsperiode: Periode;
+};
+
+const baseActionHandlers = {
+    oppdaterBehandlingsperiode: (state, payload) => {
+        return {
+            ...state,
+            behandlingsperiode: { ...state.behandlingsperiode, ...payload.periode },
+        };
+    },
+} as const satisfies ReducerActionHandlers<RevurderingInnvilgelseSkjemaState, BaseActions>;
 
 export type RevurderingInnvilgelseSkjemaActions =
-    | {
-          type: 'oppdaterBehandlingsperiode';
-          payload: { periode: Partial<Periode> };
-      }
-    | {
-          type: 'addTiltakPeriode';
-          payload: { innvilgelsesperiode: Periode };
-      }
-    | {
-          type: 'fjernTiltakPeriode';
-          payload: { fjernIndex: number };
-      }
-    | {
-          type: 'oppdaterTiltakId';
-          payload: { eksternDeltagelseId: string; index: number };
-      }
-    | {
-          type: 'oppdaterTiltakPeriode';
-          payload: { periode: Partial<Periode>; index: number };
-      };
+    | BaseActions
+    | TiltaksdeltagelseActions
+    | BarnetilleggActions;
 
-export type RevurderingInnvilgelseSkjemaState = {
-    behandlingsperiode: Periode;
-    valgteTiltaksdeltakelser: VedtakTiltaksdeltakelsePeriode[];
-};
+export type RevurderingInnvilgelseSkjemaState = BaseState &
+    TiltaksdeltagelseState &
+    BarnetilleggState;
+
+const actionHandlers = {
+    ...getTiltaksdeltagelseActionHandlers<RevurderingInnvilgelseSkjemaState>(),
+    ...getBarnetilleggActionHandlers<RevurderingInnvilgelseSkjemaState>(),
+    ...baseActionHandlers,
+} as const satisfies ReducerActionHandlers<
+    RevurderingInnvilgelseSkjemaState,
+    RevurderingInnvilgelseSkjemaActions
+>;
 
 export const RevurderingInnvilgelseReducer: Reducer<
     RevurderingInnvilgelseSkjemaState,
@@ -36,68 +54,13 @@ export const RevurderingInnvilgelseReducer: Reducer<
 > = (state, action): RevurderingInnvilgelseSkjemaState => {
     const { type, payload } = action;
 
-    switch (type) {
-        case 'oppdaterBehandlingsperiode':
-            return {
-                ...state,
-                behandlingsperiode: { ...state.behandlingsperiode, ...payload.periode },
-            };
-        case 'addTiltakPeriode':
-            const { innvilgelsesperiode } = payload;
-            const forrigeTiltakPeriode = state.valgteTiltaksdeltakelser?.slice(-1)[0];
-
-            const nesteTiltakPeriode: Periode = forrigeTiltakPeriode
-                ? {
-                      fraOgMed:
-                          innvilgelsesperiode.tilOgMed > forrigeTiltakPeriode.periode.tilOgMed
-                              ? leggTilDager(forrigeTiltakPeriode.periode.tilOgMed, 1)
-                              : innvilgelsesperiode.tilOgMed,
-                      tilOgMed: innvilgelsesperiode.tilOgMed,
-                  }
-                : innvilgelsesperiode;
-
-            const nyTiltakPeriode: VedtakTiltaksdeltakelsePeriode = {
-                eksternDeltagelseId: forrigeTiltakPeriode.eksternDeltagelseId,
-                periode: nesteTiltakPeriode,
-            };
-
-            return {
-                ...state,
-                valgteTiltaksdeltakelser: [
-                    ...(state.valgteTiltaksdeltakelser || []),
-                    nyTiltakPeriode,
-                ],
-            };
-        case 'fjernTiltakPeriode':
-            return {
-                ...state,
-                valgteTiltaksdeltakelser: state.valgteTiltaksdeltakelser?.filter(
-                    (_, index) => index !== payload.fjernIndex,
-                ),
-            };
-        case 'oppdaterTiltakId':
-            return {
-                ...state,
-                valgteTiltaksdeltakelser: state.valgteTiltaksdeltakelser?.map((periode, index) =>
-                    index === payload.index
-                        ? { ...periode, eksternDeltagelseId: payload.eksternDeltagelseId }
-                        : periode,
-                ),
-            };
-        case 'oppdaterTiltakPeriode':
-            return {
-                ...state,
-                valgteTiltaksdeltakelser: state.valgteTiltaksdeltakelser?.map((periode, index) =>
-                    index === payload.index
-                        ? {
-                              ...periode,
-                              periode: { ...periode.periode, ...payload.periode },
-                          }
-                        : periode,
-                ),
-            };
+    const handler = actionHandlers[type];
+    if (handler) {
+        // :sadpanda:
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return handler(state, payload as any);
     }
 
-    console.error(`Ugyldig action for revurdering innvilgelse: "${type satisfies never}"`);
+    console.error(`Ugyldig action for revurdering innvilgelse: "${type}"`);
     return state;
 };

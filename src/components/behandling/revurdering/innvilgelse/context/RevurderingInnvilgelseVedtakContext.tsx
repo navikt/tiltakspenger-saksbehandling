@@ -1,4 +1,4 @@
-import { RevurderingData } from '~/types/BehandlingTypes';
+import { BehandlingData, RevurderingData } from '~/types/BehandlingTypes';
 import {
     createContext,
     Dispatch,
@@ -16,6 +16,8 @@ import {
 } from './RevurderingInnvilgelseReducer';
 import { useRevurderingBehandling } from '~/components/behandling/BehandlingContext';
 import { Periode } from '~/types/Periode';
+import { VedtakTiltaksdeltakelsePeriode } from '~/types/VedtakTyper';
+import { hentTiltaksdeltakelserMedStartOgSluttdato } from '~/utils/behandling';
 
 type TextAreaInputs = {
     begrunnelseRef: RefObject<HTMLTextAreaElement>;
@@ -33,6 +35,17 @@ const DispatchContext = createContext(
     (() => ({})) as Dispatch<RevurderingInnvilgelseSkjemaActions>,
 );
 
+const tilValgteTiltaksdeltakelser = (
+    behandling: BehandlingData,
+): VedtakTiltaksdeltakelsePeriode[] =>
+    hentTiltaksdeltakelserMedStartOgSluttdato(behandling).map((tiltaksdeltagelse) => ({
+        eksternDeltagelseId: tiltaksdeltagelse.eksternDeltagelseId,
+        periode: {
+            fraOgMed: tiltaksdeltagelse.deltagelseFraOgMed,
+            tilOgMed: tiltaksdeltagelse.deltagelseTilOgMed,
+        },
+    }));
+
 const initieltVedtakSkjema = (behandling: RevurderingData): RevurderingInnvilgelseSkjemaState => {
     const tiltaksdeltagelse = behandling.saksopplysninger.tiltaksdeltagelse;
     const tiltaksperiode: Periode = {
@@ -41,13 +54,11 @@ const initieltVedtakSkjema = (behandling: RevurderingData): RevurderingInnvilgel
     };
 
     return {
+        harBarnetillegg: false,
+        barnetilleggPerioder: [],
         behandlingsperiode: behandling.virkningsperiode ?? tiltaksperiode,
-        valgteTiltaksdeltakelser: behandling.valgteTiltaksdeltakelser || [
-            {
-                eksternDeltagelseId: tiltaksdeltagelse.at(0)!.eksternDeltagelseId,
-                periode: behandling.virkningsperiode ?? tiltaksperiode,
-            },
-        ],
+        valgteTiltaksdeltakelser:
+            behandling.valgteTiltaksdeltakelser ?? tilValgteTiltaksdeltakelser(behandling),
     };
 };
 
