@@ -1,5 +1,5 @@
 import router from 'next/router';
-import { useBehandleSøknadPåNytt } from '~/components/behandlingsknapper/behandle-søknad-på-nytt/useBehandleSøknadPåNytt';
+import { useBehandleSøknadPåNytt } from '~/components/behandlingmeny/behandle-søknad-på-nytt/useBehandleSøknadPåNytt';
 import { FileResetIcon } from '@navikt/aksel-icons';
 import { ActionMenu } from '@navikt/ds-react';
 
@@ -8,7 +8,7 @@ type props = {
     søknadId: string;
 };
 
-const ActionMenuItemBehandleSøknadPåNytt = ({ sakId, søknadId }: props) => {
+const MenyValgBehandleSøknadPNytt = ({ sakId, søknadId }: props) => {
     const { behandleSøknadPåNytt } = useBehandleSøknadPåNytt(sakId, søknadId);
 
     const opprettSøknadPåNytt = () => {
@@ -26,4 +26,4 @@ const ActionMenuItemBehandleSøknadPåNytt = ({ sakId, søknadId }: props) => {
     );
 };
 
-export default ActionMenuItemBehandleSøknadPåNytt;
+export default MenyValgBehandleSøknadPNytt;

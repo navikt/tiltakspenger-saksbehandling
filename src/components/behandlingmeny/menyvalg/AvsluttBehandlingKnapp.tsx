@@ -1,35 +1,10 @@
 import { Button, VStack } from '@navikt/ds-react';
 import React from 'react';
-import styles from './AvsluttBehandling.module.css';
-import { BehandlingId } from '~/types/BehandlingTypes';
-import { SøknadId } from '~/types/SøknadTypes';
-import { Nullable } from '~/types/UtilTypes';
+import styles from '../../saksoversikt/avsluttBehandling/AvsluttBehandling.module.css';
 import AvsluttBehandlingModal from '~/components/modaler/AvsluttBehandlingModal';
+import { AvsluttBehandlingProps } from '~/components/saksoversikt/avsluttBehandling/AvsluttBehandlingProps';
 
-const AvsluttBehandling = (props: {
-    saksnummer: string;
-    søknadsId?: Nullable<SøknadId>;
-    behandlingsId?: Nullable<BehandlingId>;
-    button?: {
-        size?: 'small' | 'medium';
-        alignment?: 'start' | 'end';
-        text?: string;
-    };
-    minWidth?: boolean;
-    onSuccess?: () => void;
-    /**
-     * overstying av tekster i modalen. Default er generell behandlings-realterte tekster
-     *
-     * TODO - dette blir ikke så veldig smooth når vi skal ha forskjeller på de ulike behandlingstypene
-     */
-    modal?: {
-        tittel?: string;
-        tekst?: string;
-        textareaLabel?: string;
-        primaryButtonText?: string;
-        secondaryButtonText?: string;
-    };
-}) => {
+const AvsluttBehandlingKnapp = (props: AvsluttBehandlingProps) => {
     const [vilAvslutteBehandling, setVilAvslutteBehandling] = React.useState(false);
 
     //TODO - her burde vi nok ha litt mer context rundt hva som er valgt
@@ -68,4 +43,4 @@ const AvsluttBehandling = (props: {
     );
 };
 
-export default AvsluttBehandling;
+export default AvsluttBehandlingKnapp;

@@ -1,9 +1,4 @@
-import {
-    BehandlingData,
-    BehandlingResultat,
-    Behandlingstype,
-    SøknadsbehandlingData,
-} from '~/types/BehandlingTypes';
+import { BehandlingData, BehandlingResultat, Behandlingstype } from '~/types/BehandlingTypes';
 import { Nullable } from '~/types/common';
 import { Periode } from '~/types/Periode';
 
@@ -27,7 +22,10 @@ export const vedtattBehandlingToDataCellInfo = (
         ? behandling.avbrutt.avbruttTidspunkt
         : behandling.iverksattTidspunkt!;
 
-    const søknadId = (behandling as SøknadsbehandlingData).søknad.id ?? '';
+    let søknadId = '';
+    if ('søknad' in behandling && behandling.søknad) {
+        søknadId = behandling.søknad.id;
+    }
 
     return {
         id: behandling.id,

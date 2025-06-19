@@ -73,6 +73,18 @@ export const eierBehandling = (
     }
 };
 
+export const erBehandlerEllerBeslutterAvBehandling = (
+    behandling: BehandlingForOversiktData,
+    innloggetSaksbehandler: Saksbehandler,
+): boolean => {
+    const { saksbehandler, beslutter } = behandling;
+
+    return (
+        innloggetSaksbehandler.navIdent === saksbehandler ||
+        innloggetSaksbehandler.navIdent === beslutter
+    );
+};
+
 export const kanSaksbehandleForMeldekort = (
     meldekortBehandling: MeldekortBehandlingProps,
     innloggetSaksbehandler: Saksbehandler,

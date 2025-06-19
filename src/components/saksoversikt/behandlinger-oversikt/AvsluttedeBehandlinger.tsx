@@ -1,15 +1,13 @@
 import { Box, Heading } from '@navikt/ds-react';
 
 import styles from '../Saksoversikt.module.css';
-import { avbruttSøknadToDataCellInfo } from './AvsluttedeBehandlingerUtils';
+import {
+    avbruttBehandlingToDataCellInfo,
+    avbruttSøknadToDataCellInfo,
+} from './AvsluttedeBehandlingerUtils';
 import { SøknadForBehandlingProps } from '~/types/SøknadTypes';
 import { BehandlingData } from '~/types/BehandlingTypes';
-import {
-    erBehandlingAvbrutt,
-    erBehandlingSøknadsbehandling,
-    erBehandlingVedtatt,
-} from '~/utils/behandling';
-import { erSøknadAvbrutt } from '~/utils/SøknadUtils';
+import { erBehandlingAvbrutt, erBehandlingVedtatt } from '~/utils/behandling';
 import { AvbrutteBehandlingerTabell } from './AvbrutteBehandlingerTabell';
 
 export const AvsluttedeBehandlinger = (props: {
@@ -20,22 +18,17 @@ export const AvsluttedeBehandlinger = (props: {
     const avsluttedeBehandlinger = props.behandlinger.filter(
         (b) => erBehandlingAvbrutt(b) || erBehandlingVedtatt(b),
     );
-    const avbrutteSøknader = props.søknader
-        .filter(erSøknadAvbrutt)
-        .filter(
-            (søknad) =>
-                avsluttedeBehandlinger.find(
-                    (behandling) =>
-                        erBehandlingSøknadsbehandling(behandling) &&
-                        behandling.søknad.id === søknad.id,
-                ) === undefined,
-        );
 
-    const avbrutteSøknaderInfo = avbrutteSøknader.map(avbruttSøknadToDataCellInfo);
+    const behandlinger = avsluttedeBehandlinger
+        .filter((behandling) => behandling.avbrutt)
+        .map(avbruttBehandlingToDataCellInfo);
+    const søknader = props.søknader
+        .filter((søknad) => søknad.avbrutt)
+        .map(avbruttSøknadToDataCellInfo);
 
-    const avbrutte = [...avbrutteSøknaderInfo]
-        .toSorted((a, b) => a.tidspunktAvsluttet.localeCompare(b.tidspunktAvsluttet))
-        .filter((avsluttet) => avsluttet.avsluttetPga === 'avbrutt');
+    const avbrutte = [...behandlinger, ...søknader].toSorted((a, b) =>
+        a.tidspunktAvsluttet.localeCompare(b.tidspunktAvsluttet),
+    );
 
     return (
         <>

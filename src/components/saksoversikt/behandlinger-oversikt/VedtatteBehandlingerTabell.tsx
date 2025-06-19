@@ -2,10 +2,12 @@ import { ActionMenu, Button, Table } from '@navikt/ds-react';
 import { behandlingResultatTilTag, finnBehandlingstypeTekst } from '~/utils/tekstformateringUtils';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '~/utils/date';
 import { BehandlingResultat, Behandlingstype } from '~/types/BehandlingTypes';
-import Link from 'next/link';
-import { ChevronDownIcon, FileIcon } from '@navikt/aksel-icons';
-import ActionMenuItemBehandleSøknadPåNytt from '~/components/behandlingsknapper/behandle-søknad-på-nytt/ActionMenuItemBehandleSøknadPåNytt';
+import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
+import MenyValgBehandleSøknadPNytt from '~/components/behandlingmeny/menyvalg/MenyValgBehandleSøknadPåNytt';
 import { VedtattBehandlingDataCellInfo } from '~/components/saksoversikt/behandlinger-oversikt/VedtatteBehandlingerUtils';
+import SeBehandlingMenyvalg from '~/components/behandlingmeny/menyvalg/SeBehandlingMenyvalg';
+import React from 'react';
+import Link from 'next/link';
 
 export const VedtatteBehandlingerTabell = (props: {
     vedtatteBehandlinger: VedtattBehandlingDataCellInfo[];
@@ -56,47 +58,47 @@ export const VedtatteBehandlingerTabell = (props: {
                         <Table.DataCell>
                             {vedtattBehandling.beslutter ?? 'Ikke tildelt'}
                         </Table.DataCell>
-                        <Table.DataCell style={{ display: 'flex', justifyContent: 'center' }}>
+                        <Table.DataCell align={'right'}>
                             {(vedtattBehandling.behandlingstype ===
                                 Behandlingstype.SØKNADSBEHANDLING ||
                                 vedtattBehandling.behandlingstype ===
-                                    Behandlingstype.REVURDERING) && (
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        gap: '0.5rem',
-                                    }}
-                                >
-                                    <ActionMenu>
-                                        <ActionMenu.Trigger>
-                                            <Button
-                                                variant="secondary-neutral"
-                                                icon={<ChevronDownIcon aria-hidden />}
-                                                iconPosition="right"
-                                            >
-                                                Velg
-                                            </Button>
-                                        </ActionMenu.Trigger>
-                                        <ActionMenu.Content>
-                                            <ActionMenu.Item
-                                                as={Link}
-                                                href={`/behandling/${vedtattBehandling.id}`}
-                                                icon={<FileIcon aria-hidden />}
-                                            >
-                                                Se behandling
-                                            </ActionMenu.Item>
-
-                                            {vedtattBehandling.resultat ===
-                                                BehandlingResultat.AVSLAG && (
-                                                <ActionMenuItemBehandleSøknadPåNytt
-                                                    sakId={vedtattBehandling.sakId}
-                                                    søknadId={vedtattBehandling.søknadId}
+                                    Behandlingstype.REVURDERING) &&
+                            vedtattBehandling.resultat === BehandlingResultat.AVSLAG ? (
+                                <>
+                                    {vedtattBehandling.resultat === BehandlingResultat.AVSLAG && (
+                                        <ActionMenu>
+                                            <ActionMenu.Trigger>
+                                                <Button
+                                                    variant="tertiary-neutral"
+                                                    icon={
+                                                        <MenuElipsisVerticalIcon title="Menyvalg" />
+                                                    }
+                                                    size="small"
                                                 />
-                                            )}
-                                        </ActionMenu.Content>
-                                    </ActionMenu>
-                                </div>
+                                            </ActionMenu.Trigger>
+                                            <ActionMenu.Content>
+                                                <>
+                                                    <SeBehandlingMenyvalg
+                                                        behandlingHref={`/behandling/${vedtattBehandling.id}`}
+                                                    />
+                                                    <MenyValgBehandleSøknadPNytt
+                                                        sakId={vedtattBehandling.sakId}
+                                                        søknadId={vedtattBehandling.søknadId}
+                                                    />
+                                                </>
+                                            </ActionMenu.Content>
+                                        </ActionMenu>
+                                    )}
+                                </>
+                            ) : (
+                                <Button
+                                    variant={'secondary'}
+                                    as={Link}
+                                    href={`/behandling/${vedtattBehandling.id}`}
+                                    size={'small'}
+                                >
+                                    Se behandling
+                                </Button>
                             )}
                         </Table.DataCell>
                     </Table.Row>

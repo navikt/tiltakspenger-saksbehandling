@@ -6,7 +6,7 @@ import router from 'next/router';
 import { SøknadForOversiktProps } from '../../../types/SøknadTypes';
 
 import style from '../BehandlingKnapper.module.css';
-import AvsluttBehandling from '../../saksoversikt/avsluttBehandling/AvsluttBehandling';
+import AvsluttBehandlingKnapp from '../menyvalg/AvsluttBehandlingKnapp';
 
 type Props = {
     søknad: SøknadForOversiktProps;
@@ -46,7 +46,7 @@ export const StartSøknadBehandling = ({ søknad, medAvsluttBehandling }: Props)
                     Opprett behandling
                 </Button>
                 {medAvsluttBehandling && (
-                    <AvsluttBehandling
+                    <AvsluttBehandlingKnapp
                         saksnummer={søknad.saksnummer}
                         søknadsId={søknad.id}
                         minWidth

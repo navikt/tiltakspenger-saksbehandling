@@ -16,18 +16,19 @@ export const VedtatteBehandlinger = (props: {
         (b) => erBehandlingAvbrutt(b) || erBehandlingVedtatt(b),
     );
 
-    const avsluttede = avsluttedeBehandlinger
+    const vedtatte = avsluttedeBehandlinger
         .map(vedtattBehandlingToDataCellInfo)
+        .filter((avsluttet) => avsluttet.avsluttetPga === 'ferdigBehandlet')
         .toSorted((a, b) => a.tidspunktAvsluttet.localeCompare(b.tidspunktAvsluttet));
 
     return (
         <>
-            {avsluttede.length > 0 && (
+            {vedtatte.length > 0 && (
                 <Box className={styles.tabellwrapper}>
                     <Heading level="3" size="small">
                         Vedtatte behandlinger
                     </Heading>
-                    <VedtatteBehandlingerTabell vedtatteBehandlinger={avsluttede} />
+                    <VedtatteBehandlingerTabell vedtatteBehandlinger={vedtatte} />
                 </Box>
             )}
         </>

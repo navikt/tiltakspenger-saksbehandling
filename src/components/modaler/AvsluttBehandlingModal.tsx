@@ -7,7 +7,7 @@ import { BehandlingId } from '~/types/BehandlingTypes';
 import { SøknadId } from '~/types/SøknadTypes';
 import { Nullable } from '~/types/common';
 import { useSak } from '~/context/sak/SakContext';
-import { useAvsluttBehandling } from '~/components/behandlingsknapper/useAvsluttBehandling';
+import { useAvsluttBehandling } from '~/components/behandlingmeny/useAvsluttBehandling';
 
 const AvsluttBehandlingModal = (props: {
     saksnummer: string;
@@ -61,7 +61,7 @@ const AvsluttBehandlingModal = (props: {
                     </HStack>
                 </Modal.Header>
                 <Modal.Body className={styles.modalBody}>
-                    <BodyLong>
+                    <BodyLong className={styles.text}>
                         {props.tekst ??
                             'Hvis du avslutter behandlingen kan den ikke lenger behandles.'}
                     </BodyLong>
