@@ -1,6 +1,6 @@
 import { BehandlingData, BehandlingStatus } from '~/types/BehandlingTypes';
 import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
-import { VedtakSeksjon } from '~/components/behandling/vedtak-layout/seksjon/VedtakSeksjon';
+import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { HStack } from '@navikt/ds-react';
 import AvsluttBehandling from '~/components/saksoversikt/avsluttBehandling/AvsluttBehandling';
 import router from 'next/router';

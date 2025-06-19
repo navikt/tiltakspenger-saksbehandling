@@ -1,5 +1,4 @@
 import { Reducer } from 'react';
-import { Periode } from '~/types/Periode';
 import { Avslagsgrunn, SøknadsbehandlingResultat } from '~/types/BehandlingTypes';
 import { Nullable } from '~/types/UtilTypes';
 import {
@@ -13,6 +12,11 @@ import {
     getBarnetilleggActionHandlers,
 } from '~/components/behandling/felles/state/BarnetilleggState';
 import { ReducerActionHandlers } from '~/types/Context';
+import {
+    getInnvilgelseActionHandlers,
+    InnvilgelseActions,
+    InnvilgelseState,
+} from '~/components/behandling/felles/state/InnvilgelseState';
 
 type BaseActions =
     | {
@@ -20,32 +24,18 @@ type BaseActions =
           payload: { resultat: SøknadsbehandlingResultat };
       }
     | {
-          type: 'oppdaterDagerPerMeldeperiode';
-          payload: { antallDagerPerMeldeperiode: number };
-      }
-    | {
           type: 'oppdaterAvslagsgrunn';
           payload: { avslagsgrunn: Avslagsgrunn };
-      }
-    | {
-          type: 'oppdaterBehandlingsperiode';
-          payload: { periode: Partial<Periode> };
       };
 
 type BaseState = {
     resultat: Nullable<SøknadsbehandlingResultat>;
-    behandlingsperiode: Periode;
-    antallDagerPerMeldeperiode: number;
     avslagsgrunner: Nullable<Avslagsgrunn[]>;
 };
 
 const baseActionHandlers = {
     setResultat: (state, payload: { resultat: SøknadsbehandlingResultat }) => {
         return { ...state, resultat: payload.resultat };
-    },
-
-    oppdaterDagerPerMeldeperiode: (state, payload: { antallDagerPerMeldeperiode: number }) => {
-        return { ...state, antallDagerPerMeldeperiode: payload.antallDagerPerMeldeperiode };
     },
 
     oppdaterAvslagsgrunn: (state, payload: { avslagsgrunn: Avslagsgrunn }) => {
@@ -73,25 +63,23 @@ const baseActionHandlers = {
             };
         }
     },
-
-    oppdaterBehandlingsperiode: (state, payload: { periode: Partial<Periode> }) => {
-        return {
-            ...state,
-            behandlingsperiode: { ...state.behandlingsperiode, ...payload.periode },
-        };
-    },
 } as const satisfies ReducerActionHandlers<SøknadsbehandlingSkjemaState, BaseActions>;
 
 export type SøknadsbehandlingSkjemaActions =
     | BaseActions
     | TiltaksdeltagelseActions
-    | BarnetilleggActions;
+    | BarnetilleggActions
+    | InnvilgelseActions;
 
-export type SøknadsbehandlingSkjemaState = BaseState & BarnetilleggState & TiltaksdeltagelseState;
+export type SøknadsbehandlingSkjemaState = BaseState &
+    BarnetilleggState &
+    TiltaksdeltagelseState &
+    InnvilgelseState;
 
 const actionHandlers = {
     ...getTiltaksdeltagelseActionHandlers<SøknadsbehandlingSkjemaState>(),
     ...getBarnetilleggActionHandlers<SøknadsbehandlingSkjemaState>(),
+    ...getInnvilgelseActionHandlers<SøknadsbehandlingSkjemaState>(),
     ...baseActionHandlers,
 } as const satisfies ReducerActionHandlers<
     SøknadsbehandlingSkjemaState,

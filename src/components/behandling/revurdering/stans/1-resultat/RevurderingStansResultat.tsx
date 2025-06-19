@@ -3,7 +3,7 @@ import style from './RevurderingStansResultat.module.css';
 import { useRevurderingStansVedtak } from '../RevurderingStansVedtakContext';
 import { useRevurderingBehandling } from '../../../BehandlingContext';
 import { SaksbehandlerRolle } from '../../../../../types/Saksbehandler';
-import { VedtakSeksjon } from '../../../vedtak-layout/seksjon/VedtakSeksjon';
+import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { Datovelger } from '../../../../datovelger/Datovelger';
 import { dateTilISOTekst } from '../../../../../utils/date';
 import React from 'react';

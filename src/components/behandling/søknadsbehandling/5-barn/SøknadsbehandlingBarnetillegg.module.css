@@ -1,12 +1,3 @@
-.radioGroup {
-    margin-top: 1rem;
-
-    & > :global(.navds-radio-buttons) {
-        display: flex;
-        gap: 2rem;
-    }
-}
-
 .skjult {
     display: none;
 }

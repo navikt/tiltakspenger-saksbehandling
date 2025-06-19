@@ -4,7 +4,7 @@ import {
     useSøknadsbehandlingSkjemaDispatch,
 } from '../context/SøknadsbehandlingVedtakContext';
 import { Avslagsgrunn, SøknadsbehandlingResultat } from '../../../../types/BehandlingTypes';
-import { VedtakSeksjon } from '../../vedtak-layout/seksjon/VedtakSeksjon';
+import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { Separator } from '../../../separator/Separator';
 import { useSøknadsbehandling } from '../../BehandlingContext';
 import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';

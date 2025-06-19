@@ -1,7 +1,7 @@
 import { BodyLong, Heading } from '@navikt/ds-react';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
-import { VedtakSeksjon } from '../../vedtak-layout/seksjon/VedtakSeksjon';
-import { VedtakHjelpetekst } from '../../vedtak-layout/hjelpetekst/VedtakHjelpetekst';
+import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
+import { VedtakHjelpetekst } from '~/components/behandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
 import { TekstfeltMedMellomlagring } from '../../../tekstfelt/TekstfeltMedMellomlagring';
 import { VedtakBrevFritekstLagringDTO } from '~/types/VedtakTyper';
 import { VedtaksbrevForhåndsvisning } from './forhåndsvisning/VedtaksbrevForhåndsvisning';

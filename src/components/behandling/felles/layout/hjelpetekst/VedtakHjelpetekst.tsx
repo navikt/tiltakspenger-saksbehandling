@@ -1,6 +1,6 @@
 import { PropsWithChildren } from 'react';
 import { Alert, Heading } from '@navikt/ds-react';
-import { classNames } from '../../../../utils/classNames';
+import { classNames } from '../../../../../utils/classNames';
 
 import style from './VedtakHjelpetekst.module.css';
 

@@ -1,5 +1,5 @@
 import { PropsWithChildren } from 'react';
-import { classNames } from '../../../../utils/classNames';
+import { classNames } from '../../../../../utils/classNames';
 
 import style from './VedtakSeksjon.module.css';
 

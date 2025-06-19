@@ -7,7 +7,7 @@ import {
     useSøknadsbehandlingSkjema,
     useSøknadsbehandlingSkjemaDispatch,
 } from '../context/SøknadsbehandlingVedtakContext';
-import { VedtakSeksjon } from '../../vedtak-layout/seksjon/VedtakSeksjon';
+import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { useSøknadsbehandling } from '../../BehandlingContext';
 import { SøknadsbehandlingResultat } from '~/types/BehandlingTypes';
 

@@ -18,16 +18,20 @@ import { useRevurderingBehandling } from '~/components/behandling/BehandlingCont
 import { Periode } from '~/types/Periode';
 import { VedtakTiltaksdeltakelsePeriode } from '~/types/VedtakTyper';
 import { hentTiltaksdeltakelserMedStartOgSluttdato } from '~/utils/behandling';
+import { BarnetilleggState } from '~/components/behandling/felles/state/BarnetilleggState';
 
 type TextAreaInputs = {
     begrunnelseRef: RefObject<HTMLTextAreaElement>;
     brevtekstRef: RefObject<HTMLTextAreaElement>;
+    barnetilleggBegrunnelseRef: RefObject<HTMLTextAreaElement>;
     getBegrunnelse: () => string;
     getBrevtekst: () => string;
+    getBarnetilleggBegrunnelse: () => string;
 };
 
 export type RevurderingInnvilgelseVedtakContext = TextAreaInputs &
-    RevurderingInnvilgelseSkjemaState;
+    RevurderingInnvilgelseSkjemaState &
+    BarnetilleggState;
 
 // Separate contexts for å hindre re-renders for komponenter som kun bruker dispatch
 const StateContext = createContext({} as RevurderingInnvilgelseVedtakContext);
@@ -54,9 +58,10 @@ const initieltVedtakSkjema = (behandling: RevurderingData): RevurderingInnvilgel
     };
 
     return {
+        behandlingsperiode: behandling.virkningsperiode ?? tiltaksperiode,
+        antallDagerPerMeldeperiode: 10,
         harBarnetillegg: false,
         barnetilleggPerioder: [],
-        behandlingsperiode: behandling.virkningsperiode ?? tiltaksperiode,
         valgteTiltaksdeltakelser:
             behandling.valgteTiltaksdeltakelser ?? tilValgteTiltaksdeltakelser(behandling),
     };
@@ -73,6 +78,7 @@ export const RevurderingInnvilgelseVedtakProvider = ({ children }: PropsWithChil
 
     const begrunnelseRef = useRef<HTMLTextAreaElement>(null);
     const brevtekstRef = useRef<HTMLTextAreaElement>(null);
+    const barnetilleggBegrunnelseRef = useRef<HTMLTextAreaElement>(null);
 
     const getBegrunnelse = useCallback(
         () => begrunnelseRef.current?.value.trim() ?? '',
@@ -82,6 +88,10 @@ export const RevurderingInnvilgelseVedtakProvider = ({ children }: PropsWithChil
         () => brevtekstRef.current?.value.trim() ?? '',
         [brevtekstRef],
     );
+    const getBarnetilleggBegrunnelse = useCallback(
+        () => barnetilleggBegrunnelseRef.current?.value.trim() ?? '',
+        [barnetilleggBegrunnelseRef],
+    );
 
     return (
         <DispatchContext.Provider value={dispatch}>
@@ -90,8 +100,10 @@ export const RevurderingInnvilgelseVedtakProvider = ({ children }: PropsWithChil
                     ...vedtak,
                     begrunnelseRef,
                     brevtekstRef,
+                    barnetilleggBegrunnelseRef,
                     getBegrunnelse,
                     getBrevtekst,
+                    getBarnetilleggBegrunnelse,
                 }}
             >
                 {children}

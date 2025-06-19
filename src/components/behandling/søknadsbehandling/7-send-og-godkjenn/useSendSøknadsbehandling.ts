@@ -30,7 +30,7 @@ const tilBeslutningDTO = (vedtak: SøknadsbehandlingVedtakContext): VedtakTilBes
             vedtak.resultat === SøknadsbehandlingResultat.INNVILGELSE && vedtak.harBarnetillegg
                 ? {
                       begrunnelse: vedtak.getBarnetilleggBegrunnelse(),
-                      perioder: vedtak.barnetilleggPerioder ?? [],
+                      perioder: vedtak.barnetilleggPerioder,
                   }
                 : null,
         valgteTiltaksdeltakelser: vedtak.valgteTiltaksdeltakelser,

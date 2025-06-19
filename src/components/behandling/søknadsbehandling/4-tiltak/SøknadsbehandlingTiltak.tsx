@@ -1,4 +1,4 @@
-import { VedtakSeksjon } from '../../vedtak-layout/seksjon/VedtakSeksjon';
+import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { Alert } from '@navikt/ds-react';
 import { classNames } from '~/utils/classNames';
 import { TiltakPerioder } from './perioder/TiltakPerioder';

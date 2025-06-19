@@ -1,11 +1,11 @@
 import { useRevurderingStansVedtak } from '../RevurderingStansVedtakContext';
 import { useRevurderingBehandling } from '../../../BehandlingContext';
 import { SaksbehandlerRolle } from '../../../../../types/Saksbehandler';
-import { VedtakSeksjon } from '../../../vedtak-layout/seksjon/VedtakSeksjon';
+import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import React from 'react';
 import { TekstfeltMedMellomlagring } from '../../../../tekstfelt/TekstfeltMedMellomlagring';
 import { VedtakBegrunnelseLagringDTO } from '../../../../../types/VedtakTyper';
-import { VedtakHjelpetekst } from '../../../vedtak-layout/hjelpetekst/VedtakHjelpetekst';
+import { VedtakHjelpetekst } from '~/components/behandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
 import { BodyLong } from '@navikt/ds-react';
 import { TekstListe } from '../../../../liste/TekstListe';
 

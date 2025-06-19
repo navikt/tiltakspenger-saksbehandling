@@ -1,5 +1,4 @@
 import { Reducer } from 'react';
-import { Periode } from '~/types/Periode';
 import {
     getTiltaksdeltagelseActionHandlers,
     TiltaksdeltagelseActions,
@@ -11,38 +10,25 @@ import {
     getBarnetilleggActionHandlers,
 } from '~/components/behandling/felles/state/BarnetilleggState';
 import { ReducerActionHandlers } from '~/types/Context';
-
-type BaseActions = {
-    type: 'oppdaterBehandlingsperiode';
-    payload: { periode: Partial<Periode> };
-};
-
-type BaseState = {
-    behandlingsperiode: Periode;
-};
-
-const baseActionHandlers = {
-    oppdaterBehandlingsperiode: (state, payload) => {
-        return {
-            ...state,
-            behandlingsperiode: { ...state.behandlingsperiode, ...payload.periode },
-        };
-    },
-} as const satisfies ReducerActionHandlers<RevurderingInnvilgelseSkjemaState, BaseActions>;
+import {
+    getInnvilgelseActionHandlers,
+    InnvilgelseActions,
+    InnvilgelseState,
+} from '~/components/behandling/felles/state/InnvilgelseState';
 
 export type RevurderingInnvilgelseSkjemaActions =
-    | BaseActions
+    | InnvilgelseActions
     | TiltaksdeltagelseActions
     | BarnetilleggActions;
 
-export type RevurderingInnvilgelseSkjemaState = BaseState &
+export type RevurderingInnvilgelseSkjemaState = InnvilgelseState &
     TiltaksdeltagelseState &
     BarnetilleggState;
 
 const actionHandlers = {
     ...getTiltaksdeltagelseActionHandlers<RevurderingInnvilgelseSkjemaState>(),
     ...getBarnetilleggActionHandlers<RevurderingInnvilgelseSkjemaState>(),
-    ...baseActionHandlers,
+    ...getInnvilgelseActionHandlers<RevurderingInnvilgelseSkjemaState>(),
 } as const satisfies ReducerActionHandlers<
     RevurderingInnvilgelseSkjemaState,
     RevurderingInnvilgelseSkjemaActions

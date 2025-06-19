@@ -1,20 +1,24 @@
-import { VedtakSeksjon } from '../../../vedtak-layout/seksjon/VedtakSeksjon';
-import { SaksbehandlerRolle } from '../../../../../types/Saksbehandler';
-import { useSøknadsbehandlingSkjema } from '../../context/SøknadsbehandlingVedtakContext';
-import { VedtakHjelpetekst } from '../../../vedtak-layout/hjelpetekst/VedtakHjelpetekst';
+import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
+import { SaksbehandlerRolle } from '~/types/Saksbehandler';
+import { VedtakHjelpetekst } from '~/components/behandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
 import { TekstListe } from '../../../../liste/TekstListe';
 import { BodyLong, Heading } from '@navikt/ds-react';
 import { TekstfeltMedMellomlagring } from '../../../../tekstfelt/TekstfeltMedMellomlagring';
-import { VedtakBarnetilleggDTO } from '../../../../../types/VedtakTyper';
-import { useSøknadsbehandling } from '../../../BehandlingContext';
+import { VedtakBarnetilleggDTO } from '~/types/VedtakTyper';
+import { BehandlingBarnetilleggProps } from '~/components/behandling/felles/barnetillegg/BehandlingBarnetillegg';
+import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
+import { hentRolleForBehandling } from '~/utils/tilganger';
 
 import style from './BarnetilleggBegrunnelse.module.css';
 
-export const BarnetilleggBegrunnelse = () => {
-    const { behandling, rolleForBehandling } = useSøknadsbehandling();
-    const { barnetillegg, sakId, id } = behandling;
+type Props = BehandlingBarnetilleggProps;
 
-    const { barnetilleggBegrunnelseRef, barnetilleggPerioder } = useSøknadsbehandlingSkjema();
+export const BarnetilleggBegrunnelse = ({ behandling, context }: Props) => {
+    const { barnetillegg, sakId, id } = behandling;
+    const { barnetilleggPerioder, barnetilleggBegrunnelseRef } = context;
+
+    const { innloggetSaksbehandler } = useSaksbehandler();
+    const rolle = hentRolleForBehandling(behandling, innloggetSaksbehandler);
 
     return (
         <>
@@ -32,7 +36,7 @@ export const BarnetilleggBegrunnelse = () => {
                 <TekstfeltMedMellomlagring
                     label={'Begrunnelse vilkårsvurdering barnetillegg'}
                     defaultValue={barnetillegg?.begrunnelse}
-                    readOnly={rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER}
+                    readOnly={rolle !== SaksbehandlerRolle.SAKSBEHANDLER}
                     lagringUrl={`/sak/${sakId}/behandling/${id}/barnetillegg`}
                     lagringBody={(tekst) =>
                         ({

@@ -3,7 +3,7 @@ import {
     useSøknadsbehandlingSkjemaDispatch,
 } from '../context/SøknadsbehandlingVedtakContext';
 import { classNames } from '../../../../utils/classNames';
-import { VedtakSeksjon } from '../../vedtak-layout/seksjon/VedtakSeksjon';
+import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { Alert, Select } from '@navikt/ds-react';
 import { erSaksbehandler } from '../../../../utils/tilganger';
 import { SøknadsbehandlingResultat } from '../../../../types/BehandlingTypes';

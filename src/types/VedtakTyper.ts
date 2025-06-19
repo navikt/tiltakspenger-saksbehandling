@@ -42,6 +42,8 @@ export type VedtakRevurderInnvilgelseDTO = VedtakRevurderingBaseDTO & {
     innvilgelse: {
         innvilgelsesperiode: Periode;
         valgteTiltaksdeltakelser: VedtakTiltaksdeltakelsePeriode[];
+        barnetillegg: VedtakBarnetilleggDTO | null;
+        antallDagerPerMeldeperiode: number;
     };
 };
 

@@ -1,5 +1,5 @@
 import { Button, Select } from '@navikt/ds-react';
-import { VedtakSeksjon } from '../../../vedtak-layout/seksjon/VedtakSeksjon';
+import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { Datovelger } from '../../../../datovelger/Datovelger';
 import {
     useSøknadsbehandlingSkjemaDispatch,

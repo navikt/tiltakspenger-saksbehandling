@@ -1,26 +1,31 @@
 import { Button, Select } from '@navikt/ds-react';
-import { VedtakSeksjon } from '../../../vedtak-layout/seksjon/VedtakSeksjon';
+import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { Datovelger } from '../../../../datovelger/Datovelger';
-import {
-    useSøknadsbehandlingSkjemaDispatch,
-    useSøknadsbehandlingSkjema,
-} from '../../context/SøknadsbehandlingVedtakContext';
-import { VedtakBarnetilleggPeriode } from '../../../../../types/VedtakTyper';
-import { SaksbehandlerRolle } from '../../../../../types/Saksbehandler';
-import { dateTilISOTekst } from '../../../../../utils/date';
-import { useSøknadsbehandling } from '../../../BehandlingContext';
+import { VedtakBarnetilleggPeriode } from '~/types/VedtakTyper';
+import { SaksbehandlerRolle } from '~/types/Saksbehandler';
+import { dateTilISOTekst } from '~/utils/date';
+import { BehandlingBarnetilleggProps } from '~/components/behandling/felles/barnetillegg/BehandlingBarnetillegg';
+import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
+import { hentRolleForBehandling } from '~/utils/tilganger';
+import { Behandlingstype } from '~/types/BehandlingTypes';
 
 import style from './BarnetilleggPerioder.module.css';
 
 const BATCH_MED_BARN = 10;
 
-export const BarnetilleggPerioder = () => {
-    const { rolleForBehandling, behandling } = useSøknadsbehandling();
-    const { barnetilleggPerioder, behandlingsperiode: innvilgelsesPeriode } =
-        useSøknadsbehandlingSkjema();
-    const dispatch = useSøknadsbehandlingSkjemaDispatch();
+type Props = BehandlingBarnetilleggProps;
 
-    const antallBarnFraSøknad = behandling.søknad.barnetillegg.length;
+export const BehandlingBarnetilleggPerioder = (props: Props) => {
+    const { behandling, dispatch, context } = props;
+    const { barnetilleggPerioder, behandlingsperiode } = context;
+
+    const { innloggetSaksbehandler } = useSaksbehandler();
+    const rolle = hentRolleForBehandling(behandling, innloggetSaksbehandler);
+
+    const erSøknadsbehandling = behandling.type === Behandlingstype.SØKNADSBEHANDLING;
+
+    // TODO: burde ha data for barn på revurdering-behandling også
+    const antallBarn = erSøknadsbehandling ? behandling.søknad.barnetillegg.length : 1;
 
     return (
         <>
@@ -28,14 +33,15 @@ export const BarnetilleggPerioder = () => {
                 {barnetilleggPerioder?.map((periode, index) => {
                     return (
                         <BarnetilleggPeriode
+                            {...props}
                             periode={periode}
                             index={index}
-                            rolle={rolleForBehandling}
+                            rolle={rolle}
                             key={`${periode.periode.fraOgMed}-${index}`}
                         />
                     );
                 })}
-                {rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER && (
+                {rolle === SaksbehandlerRolle.SAKSBEHANDLER && (
                     <div className={style.perioderKnapper}>
                         <Button
                             variant={'secondary'}
@@ -44,22 +50,25 @@ export const BarnetilleggPerioder = () => {
                                 dispatch({
                                     type: 'addBarnetilleggPeriode',
                                     payload: {
-                                        innvilgelsesPeriode,
-                                        antallBarnFraSøknad,
+                                        innvilgelsesPeriode: behandlingsperiode,
+                                        antallBarnFraSøknad: antallBarn,
                                     },
                                 });
                             }}
                         >
                             {'Ny periode for barnetillegg'}
                         </Button>
-                        {antallBarnFraSøknad > 0 && (
+                        {antallBarn > 0 && erSøknadsbehandling && (
                             <Button
                                 variant={'secondary'}
                                 size={'small'}
                                 onClick={() => {
                                     dispatch({
                                         type: 'nullstillBarnetilleggPerioder',
-                                        payload: { innvilgelsesPeriode, søknad: behandling.søknad },
+                                        payload: {
+                                            innvilgelsesPeriode: behandlingsperiode,
+                                            søknad: behandling.søknad,
+                                        },
                                     });
                                 }}
                             >
@@ -77,11 +86,10 @@ type PeriodeProps = {
     periode: VedtakBarnetilleggPeriode;
     index: number;
     rolle: SaksbehandlerRolle | null;
-};
+} & BehandlingBarnetilleggProps;
 
-const BarnetilleggPeriode = ({ periode, index, rolle }: PeriodeProps) => {
-    const dispatch = useSøknadsbehandlingSkjemaDispatch();
-    const { behandlingsperiode: innvilgelsesPeriode } = useSøknadsbehandlingSkjema();
+const BarnetilleggPeriode = ({ periode, index, rolle, dispatch, context }: PeriodeProps) => {
+    const { behandlingsperiode: innvilgelsesPeriode } = context;
 
     // Støtter uendelig mange barn!
     const maksAntall = (Math.floor(periode.antallBarn / BATCH_MED_BARN) + 1) * BATCH_MED_BARN;

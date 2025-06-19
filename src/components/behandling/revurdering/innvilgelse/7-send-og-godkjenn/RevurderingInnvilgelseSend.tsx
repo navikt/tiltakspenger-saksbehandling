@@ -44,6 +44,13 @@ const tilBeslutningDTO = (
         innvilgelse: {
             innvilgelsesperiode: vedtak.behandlingsperiode,
             valgteTiltaksdeltakelser: vedtak.valgteTiltaksdeltakelser,
+            barnetillegg: vedtak.harBarnetillegg
+                ? {
+                      begrunnelse: vedtak.getBarnetilleggBegrunnelse(),
+                      perioder: vedtak.barnetilleggPerioder,
+                  }
+                : null,
+            antallDagerPerMeldeperiode: 10,
         },
     };
 };
