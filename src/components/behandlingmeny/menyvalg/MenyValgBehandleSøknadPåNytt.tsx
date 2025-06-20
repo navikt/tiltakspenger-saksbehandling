@@ -8,7 +8,7 @@ type props = {
     søknadId: string;
 };
 
-const MenyValgBehandleSøknadPNytt = ({ sakId, søknadId }: props) => {
+const MenyValgBehandleSøknadPåNytt = ({ sakId, søknadId }: props) => {
     const { behandleSøknadPåNytt } = useBehandleSøknadPåNytt(sakId, søknadId);
 
     const opprettSøknadPåNytt = () => {
@@ -26,4 +26,4 @@ const MenyValgBehandleSøknadPNytt = ({ sakId, søknadId }: props) => {
     );
 };
 
-export default MenyValgBehandleSøknadPNytt;
+export default MenyValgBehandleSøknadPåNytt;
