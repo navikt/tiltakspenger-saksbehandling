@@ -1,15 +1,14 @@
 import React from 'react';
 import { SøknadsbehandlingVedtak } from '~/components/behandling/søknadsbehandling/SøknadsbehandlingVedtak';
 import { BehandlingSaksopplysninger } from './saksopplysninger/BehandlingSaksopplysninger';
+import { RevurderingVedtak } from './revurdering/RevurderingVedtak';
 import { useBehandling } from './BehandlingContext';
 import { Behandlingstype } from '~/types/BehandlingTypes';
 import { PersonaliaHeader } from '../personaliaheader/PersonaliaHeader';
-import { Alert, Tag } from '@navikt/ds-react';
-import { finnBehandlingStatusTekst } from '~/utils/tekstformateringUtils';
+import { Alert } from '@navikt/ds-react';
+import { finnBehandlingStatusTag } from '~/utils/tekstformateringUtils';
 import AvbruttOppsummering from '../oppsummeringer/oppsummeringAvAvbruttBehandling/OppsummeringAvAvbruttBehandling';
 import SideBarMain from '../../layouts/sidebar-main/SideBarMain';
-import { RevurderingVedtak } from '~/components/behandling/revurdering/RevurderingVedtak';
-
 import style from './BehandlingPage.module.css';
 
 export const BehandlingPage = () => {
@@ -19,7 +18,7 @@ export const BehandlingPage = () => {
     return (
         <>
             <PersonaliaHeader sakId={sakId} saksnummer={saksnummer} visTilbakeKnapp={true}>
-                <Tag variant={'alt3-filled'}>{finnBehandlingStatusTekst(status, false)}</Tag>
+                {finnBehandlingStatusTag(status, false)}
             </PersonaliaHeader>
 
             <SideBarMain

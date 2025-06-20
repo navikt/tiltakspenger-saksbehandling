@@ -2,7 +2,7 @@ import { BehandlingData, BehandlingStatus } from '~/types/BehandlingTypes';
 import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { HStack } from '@navikt/ds-react';
-import AvsluttBehandling from '~/components/saksoversikt/avsluttBehandling/AvsluttBehandling';
+import AvsluttBehandlingKnapp from '~/components/behandlingmeny/menyvalg/AvsluttBehandlingKnapp';
 import router from 'next/router';
 import {
     BehandlingSendTilBeslutning,
@@ -31,7 +31,7 @@ export const BehandlingSendOgGodkjenn = ({ behandling, sendTilBeslutningProps }:
             <VedtakSeksjon.Venstre>
                 <HStack justify="space-between" className={style.knapper}>
                     {kanAvslutteBehandling && (
-                        <AvsluttBehandling
+                        <AvsluttBehandlingKnapp
                             saksnummer={behandling.saksnummer}
                             behandlingsId={behandling.id}
                             button={{

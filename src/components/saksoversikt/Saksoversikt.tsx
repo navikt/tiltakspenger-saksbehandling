@@ -1,15 +1,16 @@
 import { Box, Heading, HStack, Spacer } from '@navikt/ds-react';
-import { BehandlingData, BehandlingStatus, Behandlingstype } from '../../types/BehandlingTypes';
+import { BehandlingData, BehandlingStatus, Behandlingstype } from '~/types/BehandlingTypes';
 import { MeldekortOversikt } from './meldekort-oversikt/MeldekortOversikt';
 import { BehandlingerOversikt } from './behandlinger-oversikt/BehandlingerOversikt';
 import { OpprettRevurdering } from './opprett-revurdering/OpprettRevurdering';
 import { PersonaliaHeader } from '../personaliaheader/PersonaliaHeader';
-import { useSak } from '../../context/sak/SakContext';
+import { useSak } from '~/context/sak/SakContext';
 import { AvsluttedeBehandlinger } from './behandlinger-oversikt/AvsluttedeBehandlinger';
-import { MeldeperiodeKjedeStatus } from '../../types/meldekort/Meldeperiode';
+import { MeldeperiodeKjedeStatus } from '~/types/meldekort/Meldeperiode';
 import { MeldekortOversiktIkkeKlar } from './meldekort-oversikt/ikke-klar/MeldekortOversiktIkkeKlar';
 
 import styles from './Saksoversikt.module.css';
+import { VedtatteBehandlinger } from '~/components/saksoversikt/behandlinger-oversikt/VedtatteBehandlinger';
 
 export const Saksoversikt = () => {
     const { sakId, saksnummer, behandlinger, behandlingsoversikt, søknader, meldeperiodeKjeder } =
@@ -43,6 +44,11 @@ export const Saksoversikt = () => {
                     </Heading>
                     <BehandlingerOversikt behandlinger={behandlingsoversikt} />
                 </Box>
+                <VedtatteBehandlinger
+                    saksnummer={saksnummer}
+                    søknader={søknader}
+                    behandlinger={behandlinger}
+                />
                 <AvsluttedeBehandlinger
                     søknader={søknader}
                     behandlinger={behandlinger}

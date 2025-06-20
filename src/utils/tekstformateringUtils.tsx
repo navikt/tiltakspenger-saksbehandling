@@ -1,7 +1,4 @@
-import {
-    BehandlingStatus,
-    Behandlingstype,
-    BehandlingResultat,
+import { BehandlingResultat, BehandlingStatus, Behandlingstype,
     SøknadsbehandlingResultat,
     RevurderingResultat,
 } from '~/types/BehandlingTypes';
@@ -11,24 +8,28 @@ import {
 } from '~/types/meldekort/MeldekortBehandling';
 import { BrukersMeldekortDagStatus } from '~/types/meldekort/BrukersMeldekort';
 import { MeldeperiodeKjedeStatus } from '~/types/meldekort/Meldeperiode';
+import React, { ReactElement } from 'react';
+import { Tag } from '@navikt/ds-react';
 
-export const finnBehandlingStatusTekst = (status: BehandlingStatus, underkjent: boolean) => {
-    switch (status) {
-        case BehandlingStatus.VEDTATT:
-            return 'Vedtatt';
-        case BehandlingStatus.KLAR_TIL_BEHANDLING:
-            return underkjent ? 'Underkjent' : 'Klar til behandling';
-        case BehandlingStatus.KLAR_TIL_BESLUTNING:
-            return 'Klar til beslutning';
-        case BehandlingStatus.SØKNAD:
-            return 'Søknad';
-        case BehandlingStatus.UNDER_BEHANDLING:
-            return underkjent ? 'Underkjent' : 'Under behandling';
-        case BehandlingStatus.UNDER_BESLUTNING:
-            return 'Under beslutning';
-        case BehandlingStatus.AVBRUTT:
-            return 'Avsluttet';
+export const finnBehandlingStatusTag = (status: BehandlingStatus, underkjent: boolean) => {
+    if (
+        (status === BehandlingStatus.KLAR_TIL_BEHANDLING ||
+            status === BehandlingStatus.UNDER_BEHANDLING) &&
+        underkjent
+    ) {
+        return <Tag variant="warning">Underkjent</Tag>;
     }
+    return behandlingStatusTag[status];
+};
+
+const behandlingStatusTag: Record<BehandlingStatus, React.ReactElement> = {
+    [BehandlingStatus.VEDTATT]: <Tag variant="success">Vedtatt</Tag>,
+    [BehandlingStatus.KLAR_TIL_BEHANDLING]: <Tag variant="info">Klar til behandling</Tag>,
+    [BehandlingStatus.KLAR_TIL_BESLUTNING]: <Tag variant="info">Klar til beslutning</Tag>,
+    [BehandlingStatus.SØKNAD]: <Tag variant="neutral">Søknad</Tag>,
+    [BehandlingStatus.UNDER_BEHANDLING]: <Tag variant="info">Under behandling</Tag>,
+    [BehandlingStatus.UNDER_BESLUTNING]: <Tag variant="info">Under beslutning</Tag>,
+    [BehandlingStatus.AVBRUTT]: <Tag variant="neutral">Avsluttet</Tag>,
 };
 
 export const brukersMeldekortDagStatusTekst: Record<BrukersMeldekortDagStatus, string> = {
@@ -72,17 +73,18 @@ export const finnBehandlingstypeTekst: Record<Behandlingstype, string> = {
     [Behandlingstype.SØKNAD]: 'Søknad',
 } as const;
 
-export const behandlingResultatTilTekst: Record<BehandlingResultat, string> = {
-    [SøknadsbehandlingResultat.AVSLAG]: 'Avslag',
-    [SøknadsbehandlingResultat.INNVILGELSE]: 'Innvilgelse',
-    [RevurderingResultat.STANS]: 'Stans',
-    [RevurderingResultat.REVURDERING_INNVILGELSE]: 'Revurdering innvilgelse',
-} as const;
+export const behandlingResultatTilTag: Record<BehandlingResultat, ReactElement> = {
+    [SøknadsbehandlingResultat.AVSLAG]: <Tag variant="error">Avslag</Tag>,
+    [SøknadsbehandlingResultat.INNVILGELSE]: <Tag variant="success">Innvilgelse</Tag>,
+    [RevurderingResultat.STANS]: <Tag variant="warning">Stans</Tag>,
+    [RevurderingResultat.REVURDERING_INNVILGELSE]: <Tag variant="info">Revurdering innvilgelse</Tag>,
+};
 
 export const revurderingResultatTekst: Record<RevurderingResultat, string> = {
     [RevurderingResultat.STANS]: 'stans',
     [RevurderingResultat.REVURDERING_INNVILGELSE]: 'innvilgelse',
 } as const;
+
 
 export const meldekortUtbetalingstatusTekst: Record<Utbetalingsstatus, string> = {
     FEILET_MOT_OPPDRAG: 'Feilet mot oppdrag',

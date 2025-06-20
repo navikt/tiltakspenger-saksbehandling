@@ -1,87 +1,13 @@
 import { TrashIcon } from '@navikt/aksel-icons';
-import {
-    Modal,
-    HStack,
-    Heading,
-    BodyLong,
-    Textarea,
-    Button,
-    VStack,
-    Alert,
-} from '@navikt/ds-react';
+import { Alert, BodyLong, Button, Heading, HStack, Modal, Textarea } from '@navikt/ds-react';
 import React from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import styles from './AvsluttBehandling.module.css';
-import { BehandlingId } from '../../../types/BehandlingTypes';
-import { SøknadId } from '../../../types/SøknadTypes';
-import { useFetchJsonFraApi } from '../../../utils/fetch/useFetchFraApi';
+import { Controller, useForm } from 'react-hook-form';
+import styles from './AvsluttBehandlingModal.module.css';
+import { BehandlingId } from '~/types/BehandlingTypes';
+import { SøknadId } from '~/types/SøknadTypes';
 import { Nullable } from '~/types/UtilTypes';
-import { SakProps } from '../../../types/SakTypes';
-import { useSak } from '../../../context/sak/SakContext';
-
-const AvsluttBehandling = (props: {
-    saksnummer: string;
-    søknadsId?: Nullable<SøknadId>;
-    behandlingsId?: Nullable<BehandlingId>;
-    button?: {
-        size?: 'small' | 'medium';
-        alignment?: 'start' | 'end';
-        text?: string;
-    };
-    minWidth?: boolean;
-    onSuccess?: () => void;
-    /**
-     * overstying av tekster i modalen. Default er generell behandlings-realterte tekster
-     *
-     * TODO - dette blir ikke så veldig smooth når vi skal ha forskjeller på de ulike behandlingstypene
-     */
-    modal?: {
-        tittel?: string;
-        tekst?: string;
-        textareaLabel?: string;
-        primaryButtonText?: string;
-        secondaryButtonText?: string;
-    };
-}) => {
-    const [vilAvslutteBehandling, setVilAvslutteBehandling] = React.useState(false);
-
-    //TODO - her burde vi nok ha litt mer context rundt hva som er valgt
-    if (!props.søknadsId && !props.behandlingsId) {
-        return <div>Teknisk feil: Enten søknadsId, eller behandlingsId må være satt</div>;
-    }
-
-    return (
-        <VStack className={props.minWidth ? styles.avsluttBehandlingContainer : undefined}>
-            {vilAvslutteBehandling && (
-                <AvsluttBehandlingModal
-                    åpen={vilAvslutteBehandling}
-                    onClose={() => setVilAvslutteBehandling(false)}
-                    saksnummer={props.saksnummer}
-                    søknadsId={props.søknadsId ?? null}
-                    behandlingsId={props.behandlingsId ?? null}
-                    onSuccess={props.onSuccess}
-                    tittel={props.modal?.tittel}
-                    tekst={props.modal?.tekst}
-                    textareaLabel={props.modal?.textareaLabel}
-                    footer={{
-                        primaryButtonText: props.modal?.primaryButtonText,
-                        secondaryButtonText: props.modal?.secondaryButtonText,
-                    }}
-                />
-            )}
-            <Button
-                variant="secondary"
-                type="button"
-                size={props.button?.size ?? 'small'}
-                onClick={() => setVilAvslutteBehandling(true)}
-            >
-                {props.button?.text ?? props.modal?.tittel ?? 'Avslutt behandling'}
-            </Button>
-        </VStack>
-    );
-};
-
-export default AvsluttBehandling;
+import { useSak } from '~/context/sak/SakContext';
+import { useAvsluttBehandling } from '~/components/behandlingmeny/useAvsluttBehandling';
 
 const AvsluttBehandlingModal = (props: {
     saksnummer: string;
@@ -100,25 +26,21 @@ const AvsluttBehandlingModal = (props: {
 }) => {
     const { setSak } = useSak();
     const form = useForm<{ begrunnelse: string }>({ defaultValues: { begrunnelse: '' } });
-
-    const avsluttBehandlingMutation = useFetchJsonFraApi<
-        SakProps,
-        { søknadId: Nullable<string>; behandlingId: Nullable<string>; begrunnelse: string }
-    >(`sak/${props.saksnummer}/avbryt-aktiv-behandling`, 'POST', {
-        onSuccess: (sak) => {
-            props.onSuccess?.();
-            setSak(sak!);
-            props.onClose();
-        },
-    });
+    const { avsluttBehandling, avsluttBehandlingIsMutating } = useAvsluttBehandling(
+        props.saksnummer,
+    );
 
     return (
         <form
             onSubmit={form.handleSubmit((values) => {
-                avsluttBehandlingMutation.trigger({
+                avsluttBehandling({
                     søknadId: props.søknadsId,
                     behandlingId: props.behandlingsId,
                     begrunnelse: values.begrunnelse,
+                }).then((sak) => {
+                    props.onSuccess?.();
+                    setSak(sak!);
+                    props.onClose();
                 });
             })}
         >
@@ -139,7 +61,7 @@ const AvsluttBehandlingModal = (props: {
                     </HStack>
                 </Modal.Header>
                 <Modal.Body className={styles.modalBody}>
-                    <BodyLong>
+                    <BodyLong className={styles.text}>
                         {props.tekst ??
                             'Hvis du avslutter behandlingen kan den ikke lenger behandles.'}
                     </BodyLong>
@@ -169,7 +91,7 @@ const AvsluttBehandlingModal = (props: {
                     <Button
                         variant="danger"
                         size="small"
-                        loading={avsluttBehandlingMutation.isMutating}
+                        loading={avsluttBehandlingIsMutating}
                         type="submit"
                     >
                         {props.footer?.primaryButtonText ?? 'Avslutt behandling'}
@@ -182,3 +104,5 @@ const AvsluttBehandlingModal = (props: {
         </form>
     );
 };
+
+export default AvsluttBehandlingModal;

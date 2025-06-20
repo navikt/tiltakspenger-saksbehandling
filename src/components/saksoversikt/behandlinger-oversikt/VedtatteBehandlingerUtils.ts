@@ -1,10 +1,11 @@
 import { BehandlingData, BehandlingResultat, Behandlingstype } from '~/types/BehandlingTypes';
 import { Nullable } from '~/types/UtilTypes';
 import { Periode } from '~/types/Periode';
-import { SøknadForBehandlingProps } from '~/types/SøknadTypes';
 
-export interface AvbruttSøknadEllerBehandlingDataCellInfo {
+export interface VedtattBehandlingDataCellInfo {
     id: string;
+    sakId: string;
+    søknadId: string;
     behandlingstype: Behandlingstype;
     resultat: Nullable<BehandlingResultat>;
     tidspunktAvsluttet: string;
@@ -14,15 +15,22 @@ export interface AvbruttSøknadEllerBehandlingDataCellInfo {
     beslutter?: Nullable<string>;
 }
 
-export const avbruttBehandlingToDataCellInfo = (
+export const vedtattBehandlingToDataCellInfo = (
     behandling: BehandlingData,
-): AvbruttSøknadEllerBehandlingDataCellInfo => {
+): VedtattBehandlingDataCellInfo => {
     const tidspunktAvsluttet = behandling.avbrutt?.avbruttTidspunkt
         ? behandling.avbrutt.avbruttTidspunkt
         : behandling.iverksattTidspunkt!;
 
+    let søknadId = '';
+    if ('søknad' in behandling && behandling.søknad) {
+        søknadId = behandling.søknad.id;
+    }
+
     return {
         id: behandling.id,
+        sakId: behandling.sakId,
+        søknadId: søknadId,
         behandlingsperiode: behandling.virkningsperiode,
         resultat: behandling.resultat,
         behandlingstype: behandling.type,
@@ -30,28 +38,5 @@ export const avbruttBehandlingToDataCellInfo = (
         avsluttetPga: behandling.avbrutt ? 'avbrutt' : 'ferdigBehandlet',
         saksbehandler: behandling.saksbehandler,
         beslutter: behandling.beslutter,
-    };
-};
-
-export const avbruttSøknadToDataCellInfo = (
-    søknad: SøknadForBehandlingProps,
-): AvbruttSøknadEllerBehandlingDataCellInfo => {
-    if (søknad.avbrutt == null) {
-        throw new Error('Kan ikke hente ut informasjon fra en behandling som ikke er avbrutt');
-    }
-    return {
-        id: søknad.id,
-        behandlingsperiode: {
-            fraOgMed: Array.isArray(søknad.tiltak)
-                ? søknad.tiltak[0].fraOgMed
-                : søknad.tiltak.fraOgMed,
-            tilOgMed: Array.isArray(søknad.tiltak)
-                ? søknad.tiltak[søknad.tiltak.length - 1].tilOgMed
-                : søknad.tiltak.tilOgMed,
-        },
-        resultat: null,
-        behandlingstype: Behandlingstype.SØKNAD,
-        tidspunktAvsluttet: søknad.avbrutt.avbruttTidspunkt,
-        avsluttetPga: 'avbrutt',
     };
 };

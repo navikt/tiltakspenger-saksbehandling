@@ -1,13 +1,13 @@
-import { AvsluttetBehandlingDataCellInfo } from './AvsluttedeBehandlingerUtils';
+import { AvbruttSøknadEllerBehandlingDataCellInfo } from './AvsluttedeBehandlingerUtils';
 import { Button, Table } from '@navikt/ds-react';
-import { finnBehandlingstypeTekst } from '../../../utils/tekstformateringUtils';
-import { formaterTidspunkt, periodeTilFormatertDatotekst } from '../../../utils/date';
-import { Behandlingstype } from '../../../types/BehandlingTypes';
+import { finnBehandlingstypeTekst } from '~/utils/tekstformateringUtils';
+import { formaterTidspunkt, periodeTilFormatertDatotekst } from '~/utils/date';
+import { Behandlingstype } from '~/types/BehandlingTypes';
 import Link from 'next/link';
 
 export const AvbrutteBehandlingerTabell = (props: {
     saksnummer: string;
-    avbrutteBehandlinger: AvsluttetBehandlingDataCellInfo[];
+    avbrutteBehandlinger: AvbruttSøknadEllerBehandlingDataCellInfo[];
 }) => {
     if (props.avbrutteBehandlinger.length === 0) {
         return null;
@@ -41,7 +41,7 @@ export const AvbrutteBehandlingerTabell = (props: {
                         </Table.DataCell>
                         <Table.DataCell>{avsluttet.saksbehandler ?? 'Ikke tildelt'}</Table.DataCell>
                         <Table.DataCell>{avsluttet.beslutter ?? 'Ikke tildelt'}</Table.DataCell>
-                        <Table.DataCell>
+                        <Table.DataCell align={'right'}>
                             {(avsluttet.behandlingstype === Behandlingstype.SØKNADSBEHANDLING ||
                                 avsluttet.behandlingstype === Behandlingstype.REVURDERING) && (
                                 <Button

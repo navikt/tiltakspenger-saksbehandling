@@ -2,18 +2,12 @@ import { Box, Heading } from '@navikt/ds-react';
 
 import styles from '../Saksoversikt.module.css';
 import {
+    avbruttBehandlingToDataCellInfo,
     avbruttSøknadToDataCellInfo,
-    avsluttetBehandlingToDataCellInfo,
 } from './AvsluttedeBehandlingerUtils';
-import { SøknadForBehandlingProps } from '../../../types/SøknadTypes';
-import { BehandlingData } from '../../../types/BehandlingTypes';
-import {
-    erBehandlingAvbrutt,
-    erBehandlingSøknadsbehandling,
-    erBehandlingVedtatt,
-} from '~/utils/behandling';
-import { erSøknadAvbrutt } from '~/utils/SøknadUtils';
-import { VedtatteBehandlingerTabell } from './VedtatteBehandlingerTabell';
+import { SøknadForBehandlingProps } from '~/types/SøknadTypes';
+import { BehandlingData } from '~/types/BehandlingTypes';
+import { erBehandlingAvbrutt, erBehandlingVedtatt } from '~/utils/behandling';
 import { AvbrutteBehandlingerTabell } from './AvbrutteBehandlingerTabell';
 
 export const AvsluttedeBehandlinger = (props: {
@@ -24,39 +18,20 @@ export const AvsluttedeBehandlinger = (props: {
     const avsluttedeBehandlinger = props.behandlinger.filter(
         (b) => erBehandlingAvbrutt(b) || erBehandlingVedtatt(b),
     );
-    const avbrutteSøknader = props.søknader
-        .filter(erSøknadAvbrutt)
-        .filter(
-            (søknad) =>
-                avsluttedeBehandlinger.find(
-                    (behandling) =>
-                        erBehandlingSøknadsbehandling(behandling) &&
-                        behandling.søknad.id === søknad.id,
-                ) === undefined,
-        );
 
-    const avsluttedeBehandlingerInfo = avsluttedeBehandlinger.map(
-        avsluttetBehandlingToDataCellInfo,
-    );
-    const avbrutteSøknaderInfo = avbrutteSøknader.map(avbruttSøknadToDataCellInfo);
+    const behandlinger = avsluttedeBehandlinger
+        .filter((behandling) => behandling.avbrutt)
+        .map(avbruttBehandlingToDataCellInfo);
+    const søknader = props.søknader
+        .filter((søknad) => søknad.avbrutt)
+        .map(avbruttSøknadToDataCellInfo);
 
-    const avsluttede = [...avsluttedeBehandlingerInfo, ...avbrutteSøknaderInfo].toSorted((a, b) =>
+    const avbrutte = [...behandlinger, ...søknader].toSorted((a, b) =>
         a.tidspunktAvsluttet.localeCompare(b.tidspunktAvsluttet),
     );
 
-    const vedtatte = avsluttede.filter((avsluttet) => avsluttet.avsluttetPga === 'ferdigBehandlet');
-    const avbrutte = avsluttede.filter((avsluttet) => avsluttet.avsluttetPga === 'avbrutt');
-
     return (
         <>
-            {vedtatte.length > 0 && (
-                <Box className={styles.tabellwrapper}>
-                    <Heading level="3" size="small">
-                        Vedtatte behandlinger
-                    </Heading>
-                    <VedtatteBehandlingerTabell vedtatteBehandlinger={vedtatte} />
-                </Box>
-            )}
             {avbrutte.length > 0 && (
                 <Box className={styles.tabellwrapper}>
                     <Heading level="3" size="small">

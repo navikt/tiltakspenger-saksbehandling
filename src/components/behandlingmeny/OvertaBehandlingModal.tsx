@@ -1,11 +1,9 @@
 import { Alert, BodyShort, Button, Heading, HStack, Modal, VStack } from '@navikt/ds-react';
-import { BehandlingData, BehandlingId } from '../../types/BehandlingTypes';
-import { SakId } from '../../types/SakTypes';
-import { useState } from 'react';
-import { useFetchJsonFraApi } from '../../utils/fetch/useFetchFraApi';
+import { BehandlingData, BehandlingId } from '~/types/BehandlingTypes';
+import { SakId } from '~/types/SakTypes';
+import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import router from 'next/router';
-
-import style from './BehandlingKnapper.module.css';
+import styles from './OvertaBehandlingModal.module.css';
 
 const OvertabehandlingModal = (props: {
     sakId: SakId;
@@ -25,7 +23,13 @@ const OvertabehandlingModal = (props: {
     );
 
     return (
-        <Modal width={480} aria-label="Overta behandling" open={props.åpen} onClose={props.onClose}>
+        <Modal
+            width={480}
+            aria-label="Overta behandling"
+            open={props.åpen}
+            onClose={props.onClose}
+            className={styles.modal}
+        >
             <Modal.Header>
                 <Heading size="medium" level="3">
                     Overta behandling
@@ -61,36 +65,4 @@ const OvertabehandlingModal = (props: {
     );
 };
 
-const OvertaBehandling = (props: {
-    sakId: SakId;
-    behandlingId: BehandlingId;
-    overtarFra: string;
-}) => {
-    const [vilOvertaBehandling, setVilOvertaBehandling] = useState(false);
-
-    return (
-        <div>
-            {vilOvertaBehandling && (
-                <OvertabehandlingModal
-                    åpen={vilOvertaBehandling}
-                    onClose={() => setVilOvertaBehandling(false)}
-                    sakId={props.sakId}
-                    behandlingId={props.behandlingId}
-                    overtarFra={props.overtarFra}
-                />
-            )}
-            <Button
-                className={style.knapp}
-                size="small"
-                variant="secondary"
-                onClick={() => {
-                    setVilOvertaBehandling(true);
-                }}
-            >
-                Overta behandling
-            </Button>
-        </div>
-    );
-};
-
-export default OvertaBehandling;
+export default OvertabehandlingModal;
