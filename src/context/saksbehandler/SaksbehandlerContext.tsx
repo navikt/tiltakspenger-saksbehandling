@@ -1,5 +1,7 @@
 import React, { createContext, ReactNode, useContext } from 'react';
 import { Saksbehandler } from '../../types/Saksbehandler';
+import { BehandlingData } from '~/types/BehandlingTypes';
+import { hentRolleForBehandling } from '~/utils/tilganger';
 
 type SaksbehandlerState = {
     innloggetSaksbehandler: Saksbehandler;
@@ -22,4 +24,8 @@ export const SaksbehandlerProvider = ({ saksbehandler, children }: Props) => {
 
 export const useSaksbehandler = () => {
     return useContext(Context);
+};
+
+export const useRolleForBehandling = (behandling: BehandlingData) => {
+    return hentRolleForBehandling(behandling, useSaksbehandler().innloggetSaksbehandler);
 };

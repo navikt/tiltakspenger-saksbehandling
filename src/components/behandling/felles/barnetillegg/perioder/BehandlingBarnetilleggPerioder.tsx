@@ -5,8 +5,7 @@ import { VedtakBarnetilleggPeriode } from '~/types/VedtakTyper';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { dateTilISOTekst } from '~/utils/date';
 import { BehandlingBarnetilleggProps } from '~/components/behandling/felles/barnetillegg/BehandlingBarnetillegg';
-import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
-import { hentRolleForBehandling } from '~/utils/tilganger';
+import { useRolleForBehandling } from '~/context/saksbehandler/SaksbehandlerContext';
 import { Behandlingstype } from '~/types/BehandlingTypes';
 
 import style from './BarnetilleggPerioder.module.css';
@@ -19,8 +18,7 @@ export const BehandlingBarnetilleggPerioder = (props: Props) => {
     const { behandling, dispatch, context } = props;
     const { barnetilleggPerioder, behandlingsperiode } = context;
 
-    const { innloggetSaksbehandler } = useSaksbehandler();
-    const rolle = hentRolleForBehandling(behandling, innloggetSaksbehandler);
+    const rolle = useRolleForBehandling(behandling);
 
     const erSøknadsbehandling = behandling.type === Behandlingstype.SØKNADSBEHANDLING;
 

@@ -5,8 +5,7 @@ import {
     RevurderingData,
 } from '~/types/BehandlingTypes';
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
-import { hentRolleForBehandling } from '../../utils/tilganger';
-import { useSaksbehandler } from '../../context/saksbehandler/SaksbehandlerContext';
+import { useRolleForBehandling } from '../../context/saksbehandler/SaksbehandlerContext';
 import { SaksbehandlerRolle } from '../../types/Saksbehandler';
 
 export type BehandlingContext<Behandling extends BehandlingData> = {
@@ -25,9 +24,7 @@ type Props = {
 export const BehandlingProvider = ({ behandling: initialBehandling, children }: Props) => {
     const [behandling, setBehandling] = useState<BehandlingData>(initialBehandling);
 
-    const { innloggetSaksbehandler } = useSaksbehandler();
-
-    const rolleForBehandling = hentRolleForBehandling(behandling, innloggetSaksbehandler);
+    const rolleForBehandling = useRolleForBehandling(behandling);
 
     useEffect(() => {
         setBehandling(initialBehandling);

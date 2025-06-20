@@ -5,8 +5,7 @@ import { classNames } from '~/utils/classNames';
 import { BehandlingBarnetilleggPerioder } from './perioder/BehandlingBarnetilleggPerioder';
 import { BarnetilleggBegrunnelse } from './begrunnelse/BarnetilleggBegrunnelse';
 import { BehandlingData } from '~/types/BehandlingTypes';
-import { hentRolleForBehandling } from '~/utils/tilganger';
-import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
+import { useRolleForBehandling } from '~/context/saksbehandler/SaksbehandlerContext';
 import { Dispatch, RefObject } from 'react';
 import {
     BarnetilleggActions,
@@ -30,8 +29,7 @@ export const BehandlingBarnetillegg = (props: BehandlingBarnetilleggProps) => {
     const { behandling, dispatch, context } = props;
     const { harBarnetillegg } = context;
 
-    const { innloggetSaksbehandler } = useSaksbehandler();
-    const rolle = hentRolleForBehandling(behandling, innloggetSaksbehandler);
+    const rolle = useRolleForBehandling(behandling);
 
     return (
         <>

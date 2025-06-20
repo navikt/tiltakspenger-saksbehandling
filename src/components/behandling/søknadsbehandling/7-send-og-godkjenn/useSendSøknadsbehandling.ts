@@ -36,9 +36,7 @@ const tilBeslutningDTO = (vedtak: SøknadsbehandlingVedtakContext): VedtakTilBes
         valgteTiltaksdeltakelser: vedtak.valgteTiltaksdeltakelser,
         antallDagerPerMeldeperiode: vedtak.antallDagerPerMeldeperiode,
         avslagsgrunner:
-            vedtak.resultat === SøknadsbehandlingResultat.AVSLAG && vedtak.avslagsgrunner !== null
-                ? vedtak.avslagsgrunner
-                : null,
+            vedtak.resultat === SøknadsbehandlingResultat.AVSLAG ? vedtak.avslagsgrunner : null,
         //Validering skal fange at resultatet ikke er null
         resultat: vedtak.resultat!,
     };

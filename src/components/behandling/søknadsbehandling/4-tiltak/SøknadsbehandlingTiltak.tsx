@@ -1,46 +1,20 @@
-import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
-import { Alert } from '@navikt/ds-react';
-import { classNames } from '~/utils/classNames';
-import { TiltakPerioder } from './perioder/TiltakPerioder';
-import { useSøknadsbehandlingSkjema } from '../context/SøknadsbehandlingVedtakContext';
-import { Separator } from '../../../separator/Separator';
+import {
+    useSøknadsbehandlingSkjema,
+    useSøknadsbehandlingSkjemaDispatch,
+} from '../context/SøknadsbehandlingVedtakContext';
 import { useSøknadsbehandling } from '../../BehandlingContext';
-import { deltarPaFlereTiltakMedStartOgSluttdatoIValgtInnvilgelsesperiode } from '~/utils/behandling';
 import { SøknadsbehandlingResultat } from '~/types/BehandlingTypes';
-
-import style from './SøknadsbehandlingTiltak.module.css';
+import { BehandlingTiltak } from '~/components/behandling/felles/tiltak/BehandlingTiltak';
 
 export const SøknadsbehandlingTiltak = () => {
     const { behandling } = useSøknadsbehandling();
-    const { behandlingsperiode: innvilgelsesPeriode } = useSøknadsbehandlingSkjema();
-    const flereTiltak = deltarPaFlereTiltakMedStartOgSluttdatoIValgtInnvilgelsesperiode(
-        behandling,
-        innvilgelsesPeriode,
-    );
-    const { resultat } = useSøknadsbehandlingSkjema();
-    return (
-        flereTiltak && (
-            <div
-                className={classNames(
-                    resultat !== SøknadsbehandlingResultat.INNVILGELSE && style.skjult,
-                )}
-            >
-                <VedtakSeksjon>
-                    <VedtakSeksjon.Venstre>
-                        <Alert variant={'warning'} size={'small'}>
-                            Flere tiltak registrert på bruker. Velg tiltak(ene) som bruker skal
-                            vurderes for og periodene som gjelder. Det du velger brukes for
-                            regnskapsføring og statistikk, og påvirker ikke vedtaket.
-                        </Alert>
-                    </VedtakSeksjon.Venstre>
-                </VedtakSeksjon>
+    const dispatch = useSøknadsbehandlingSkjemaDispatch();
+    const skjemaContext = useSøknadsbehandlingSkjema();
+    const { resultat } = skjemaContext;
 
-                <VedtakSeksjon className={classNames(style.input)}>
-                    <TiltakPerioder />
-                </VedtakSeksjon>
+    if (resultat !== SøknadsbehandlingResultat.INNVILGELSE) {
+        return null;
+    }
 
-                <Separator />
-            </div>
-        )
-    );
+    return <BehandlingTiltak behandling={behandling} context={skjemaContext} dispatch={dispatch} />;
 };

@@ -6,8 +6,7 @@ import { BodyLong, Heading } from '@navikt/ds-react';
 import { TekstfeltMedMellomlagring } from '../../../../tekstfelt/TekstfeltMedMellomlagring';
 import { VedtakBarnetilleggDTO } from '~/types/VedtakTyper';
 import { BehandlingBarnetilleggProps } from '~/components/behandling/felles/barnetillegg/BehandlingBarnetillegg';
-import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
-import { hentRolleForBehandling } from '~/utils/tilganger';
+import { useRolleForBehandling } from '~/context/saksbehandler/SaksbehandlerContext';
 
 import style from './BarnetilleggBegrunnelse.module.css';
 
@@ -17,8 +16,7 @@ export const BarnetilleggBegrunnelse = ({ behandling, context }: Props) => {
     const { barnetillegg, sakId, id } = behandling;
     const { barnetilleggPerioder, barnetilleggBegrunnelseRef } = context;
 
-    const { innloggetSaksbehandler } = useSaksbehandler();
-    const rolle = hentRolleForBehandling(behandling, innloggetSaksbehandler);
+    const rolle = useRolleForBehandling(behandling);
 
     return (
         <>

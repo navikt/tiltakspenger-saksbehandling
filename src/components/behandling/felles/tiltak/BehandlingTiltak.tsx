@@ -1,58 +1,90 @@
-import { Button, Select } from '@navikt/ds-react';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
-import { Datovelger } from '../../../../datovelger/Datovelger';
+import { Alert, Button, Select } from '@navikt/ds-react';
+import { SaksbehandlerRolle } from '~/types/Saksbehandler';
+import { VedtakTiltaksdeltakelsePeriode } from '~/types/VedtakTyper';
+import { Tiltaksdeltagelse } from '~/types/TiltakDeltagelseTypes';
+import { Datovelger } from '~/components/datovelger/Datovelger';
+import { dateTilISOTekst, periodeTilFormatertDatotekst } from '~/utils/date';
 import {
-    useSøknadsbehandlingSkjemaDispatch,
-    useSøknadsbehandlingSkjema,
-} from '../../context/SøknadsbehandlingVedtakContext';
-import { hentTiltaksdeltakelserMedStartOgSluttdato } from '../../../../../utils/behandling';
-import { VedtakTiltaksdeltakelsePeriode } from '../../../../../types/VedtakTyper';
-import { SaksbehandlerRolle } from '../../../../../types/Saksbehandler';
-import { dateTilISOTekst, periodeTilFormatertDatotekst } from '../../../../../utils/date';
-import { useSøknadsbehandling } from '../../../BehandlingContext';
+    deltarPaFlereTiltakMedStartOgSluttdatoIValgtInnvilgelsesperiode,
+    hentTiltaksdeltakelserMedStartOgSluttdato,
+} from '~/utils/behandling';
+import { BehandlingData } from '~/types/BehandlingTypes';
+import {
+    TiltaksdeltagelseActions,
+    TiltaksdeltagelseState,
+} from '~/components/behandling/felles/state/TiltaksdeltagelseState';
+import { Dispatch } from 'react';
+import { InnvilgelseState } from '~/components/behandling/felles/state/InnvilgelseState';
+import { useRolleForBehandling } from '~/context/saksbehandler/SaksbehandlerContext';
+import { Separator } from '~/components/separator/Separator';
 
-import style from './TiltakPerioder.module.css';
-import { Tiltaksdeltagelse } from '../../../../../types/TiltakDeltagelseTypes';
+import style from './BehandlingTiltak.module.css';
 
-export const TiltakPerioder = () => {
-    const { behandling, rolleForBehandling } = useSøknadsbehandling();
-    const { valgteTiltaksdeltakelser, behandlingsperiode: innvilgelsesPeriode } =
-        useSøknadsbehandlingSkjema();
-    const dispatch = useSøknadsbehandlingSkjemaDispatch();
+type Props = {
+    behandling: BehandlingData;
+    context: TiltaksdeltagelseState & InnvilgelseState;
+    dispatch: Dispatch<TiltaksdeltagelseActions>;
+};
+
+export const BehandlingTiltak = (props: Props) => {
+    const { behandling, context, dispatch } = props;
+    const { valgteTiltaksdeltakelser, behandlingsperiode } = context;
 
     const tiltaksdeltakelser = hentTiltaksdeltakelserMedStartOgSluttdato(behandling);
 
+    const rolle = useRolleForBehandling(behandling);
+
+    const harFlereTiltak = deltarPaFlereTiltakMedStartOgSluttdatoIValgtInnvilgelsesperiode(
+        behandling,
+        behandlingsperiode,
+    );
+
+    if (!harFlereTiltak) {
+        return null;
+    }
+
     return (
         <>
-            <VedtakSeksjon.Venstre className={style.wrapper}>
-                {valgteTiltaksdeltakelser?.map((periode, index) => {
-                    return (
-                        <TiltakPeriode
-                            periode={periode}
-                            tiltaksdeltakelser={tiltaksdeltakelser}
-                            index={index}
-                            rolle={rolleForBehandling}
-                            skalKunneFjernePeriode={valgteTiltaksdeltakelser?.length > 1}
-                            key={`${periode.periode.fraOgMed}-${periode.eksternDeltagelseId}-${index}`}
-                        />
-                    );
-                })}
-                {rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER && (
-                    <Button
-                        variant={'secondary'}
-                        size={'small'}
-                        className={style.ny}
-                        onClick={() => {
-                            dispatch({
-                                type: 'addTiltakPeriode',
-                                payload: { innvilgelsesperiode: innvilgelsesPeriode },
-                            });
-                        }}
-                    >
-                        {'Ny periode for tiltak'}
-                    </Button>
-                )}
-            </VedtakSeksjon.Venstre>
+            <VedtakSeksjon>
+                <VedtakSeksjon.Venstre>
+                    <Alert variant={'warning'} size={'small'}>
+                        Flere tiltak registrert på bruker. Velg tiltak(ene) som bruker skal vurderes
+                        for og periodene som gjelder. Det du velger brukes for regnskapsføring og
+                        statistikk, og påvirker ikke vedtaket.
+                    </Alert>
+                </VedtakSeksjon.Venstre>
+                <VedtakSeksjon.Venstre className={style.wrapper}>
+                    {valgteTiltaksdeltakelser?.map((periode, index) => {
+                        return (
+                            <TiltakPeriode
+                                {...props}
+                                periode={periode}
+                                tiltaksdeltakelser={tiltaksdeltakelser}
+                                index={index}
+                                rolle={rolle}
+                                skalKunneFjernePeriode={valgteTiltaksdeltakelser.length > 1}
+                                key={`${periode.periode.fraOgMed}-${periode.eksternDeltagelseId}-${index}`}
+                            />
+                        );
+                    })}
+                    {rolle === SaksbehandlerRolle.SAKSBEHANDLER && (
+                        <Button
+                            variant={'secondary'}
+                            size={'small'}
+                            onClick={() => {
+                                dispatch({
+                                    type: 'addTiltakPeriode',
+                                    payload: { innvilgelsesperiode: behandlingsperiode },
+                                });
+                            }}
+                        >
+                            {'Ny periode for tiltak'}
+                        </Button>
+                    )}
+                </VedtakSeksjon.Venstre>
+            </VedtakSeksjon>
+            <Separator />
         </>
     );
 };
@@ -63,7 +95,7 @@ type PeriodeProps = {
     index: number;
     rolle: SaksbehandlerRolle | null;
     skalKunneFjernePeriode: boolean;
-};
+} & Props;
 
 const TiltakPeriode = ({
     periode,
@@ -71,9 +103,10 @@ const TiltakPeriode = ({
     index,
     rolle,
     skalKunneFjernePeriode,
+    dispatch,
+    context,
 }: PeriodeProps) => {
-    const dispatch = useSøknadsbehandlingSkjemaDispatch();
-    const { behandlingsperiode: innvilgelsesPeriode } = useSøknadsbehandlingSkjema();
+    const { behandlingsperiode: innvilgelsesPeriode } = context;
 
     const erSaksbehandler = rolle === SaksbehandlerRolle.SAKSBEHANDLER;
 
@@ -147,7 +180,6 @@ const TiltakPeriode = ({
                 <Button
                     variant={'tertiary'}
                     size={'small'}
-                    className={style.fjern}
                     onClick={() => {
                         dispatch({
                             type: 'fjernTiltakPeriode',

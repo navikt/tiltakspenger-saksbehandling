@@ -7,8 +7,7 @@ import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { BekreftelsesModal } from '../../../../modaler/BekreftelsesModal';
 import { TekstListe } from '../../../../liste/TekstListe';
 import { ValideringResultat } from '~/types/Validering';
-import { hentRolleForBehandling } from '~/utils/tilganger';
-import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
+import { useRolleForBehandling } from '~/context/saksbehandler/SaksbehandlerContext';
 
 import style from '../BehandlingSendOgGodkjenn.module.css';
 
@@ -37,8 +36,7 @@ export const BehandlingSendTilBeslutning = ({
     });
 
     const { setBehandling } = useBehandling();
-    const { innloggetSaksbehandler } = useSaksbehandler();
-    const rolle = hentRolleForBehandling(behandling, innloggetSaksbehandler);
+    const rolle = useRolleForBehandling(behandling);
 
     const modalRef = useRef<HTMLDialogElement>(null);
 

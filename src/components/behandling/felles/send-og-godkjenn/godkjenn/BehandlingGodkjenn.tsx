@@ -8,8 +8,7 @@ import Underkjenn from '../../../../underkjenn/Underkjenn';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import router from 'next/router';
 import { useGodkjennBehandling } from '~/components/behandling/felles/send-og-godkjenn/godkjenn/useGodkjennBehandling';
-import { hentRolleForBehandling } from '~/utils/tilganger';
-import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
+import { useRolleForBehandling } from '~/context/saksbehandler/SaksbehandlerContext';
 
 import style from '../BehandlingSendOgGodkjenn.module.css';
 
@@ -22,7 +21,6 @@ export const BehandlingGodkjenn = ({ behandling }: Props) => {
     const modalRef = useRef<HTMLDialogElement>(null);
 
     const { setBehandling } = useBehandling();
-    const { innloggetSaksbehandler } = useSaksbehandler();
 
     const lukkModal = () => modalRef.current?.close();
 
@@ -40,7 +38,7 @@ export const BehandlingGodkjenn = ({ behandling }: Props) => {
         },
     );
 
-    const rolle = hentRolleForBehandling(behandling, innloggetSaksbehandler);
+    const rolle = useRolleForBehandling(behandling);
 
     return (
         <div className={style.wrapper}>
