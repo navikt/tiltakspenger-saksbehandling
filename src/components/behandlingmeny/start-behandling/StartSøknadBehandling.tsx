@@ -1,12 +1,14 @@
-import { useStartSøknadBehandling } from './useStartSøknadBehandling';
-import Varsel from '../../varsel/Varsel';
-import { Button, VStack } from '@navikt/ds-react';
 import React from 'react';
 import router from 'next/router';
-import { SøknadForOversiktProps } from '../../../types/SøknadTypes';
-
+import { ActionMenu, Button } from '@navikt/ds-react';
+import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
+import { useStartSøknadBehandling } from './useStartSøknadBehandling';
+import Varsel from '../../varsel/Varsel';
+import AvsluttBehandlingModal from '~/components/modaler/AvsluttBehandlingModal';
+import AvsluttBehandlingMenyvalg from '~/components/saksoversikt/avsluttBehandling/AvsluttBehandlingMenyvalg';
+import { SøknadForOversiktProps } from '~/types/SøknadTypes';
+import { BehandlingStatus } from '~/types/BehandlingTypes';
 import style from '../BehandlingKnapper.module.css';
-import AvsluttBehandlingKnapp from '../menyvalg/AvsluttBehandlingKnapp';
 
 type Props = {
     søknad: SøknadForOversiktProps;
@@ -14,8 +16,8 @@ type Props = {
 };
 
 export const StartSøknadBehandling = ({ søknad, medAvsluttBehandling }: Props) => {
-    const { opprettBehandling, opprettBehandlingIsLoading, opprettBehandlingError } =
-        useStartSøknadBehandling(søknad);
+    const { opprettBehandling, opprettBehandlingError } = useStartSøknadBehandling(søknad);
+    const [visAvsluttBehandlingModal, setVisAvsluttBehandlingModal] = React.useState(false);
 
     const startBehandling = () => {
         opprettBehandling().then((behandling) => {
@@ -36,33 +38,47 @@ export const StartSøknadBehandling = ({ søknad, medAvsluttBehandling }: Props)
                     key={Date.now()}
                 />
             )}
-            <VStack align="start" gap="2">
-                <Button
-                    className={style.knapp}
-                    size="small"
-                    loading={opprettBehandlingIsLoading}
-                    onClick={startBehandling}
-                >
-                    Opprett behandling
-                </Button>
-                {medAvsluttBehandling && (
-                    <AvsluttBehandlingKnapp
-                        saksnummer={søknad.saksnummer}
-                        søknadsId={søknad.id}
-                        minWidth
-                        button={{
-                            text: 'Avslutt søknad',
-                        }}
-                        modal={{
-                            tittel: 'Avslutt søknad',
-                            tekst: 'Er du sikker på at du vil avslutte søknaden?',
-                            textareaLabel: 'Hvorfor avsluttes søknaden? (Obligatorisk)',
-                            primaryButtonText: 'Avslutt søknad',
-                            secondaryButtonText: 'Ikke avslutt søknad',
-                        }}
+            <ActionMenu>
+                <ActionMenu.Trigger>
+                    <Button
+                        variant="tertiary-neutral"
+                        icon={<MenuElipsisVerticalIcon title="Menyvalg" />}
+                        size="small"
                     />
-                )}
-            </VStack>
+                </ActionMenu.Trigger>
+                <ActionMenu.Content>
+                    <ActionMenu.Item onClick={startBehandling}>Opprett behandling</ActionMenu.Item>
+                    {medAvsluttBehandling && (
+                        <>
+                            <ActionMenu.Divider />
+                            <AvsluttBehandlingMenyvalg
+                                skalVises={medAvsluttBehandling}
+                                setVisAvsluttBehandlingModal={setVisAvsluttBehandlingModal}
+                                søknadsId={søknad.id}
+                                saksnummer={søknad.saksnummer}
+                                behandlingStatus={BehandlingStatus.SØKNAD}
+                                button={{ text: 'Avslutt søknad' }}
+                            />
+                        </>
+                    )}
+                </ActionMenu.Content>
+            </ActionMenu>
+            {medAvsluttBehandling && visAvsluttBehandlingModal && (
+                <AvsluttBehandlingModal
+                    åpen={visAvsluttBehandlingModal}
+                    onClose={() => setVisAvsluttBehandlingModal(false)}
+                    saksnummer={søknad.saksnummer}
+                    søknadsId={søknad.id}
+                    behandlingsId={null}
+                    tittel={'Avslutt søknad'}
+                    tekst={'Er du sikker på at du vil avslutte søknaden?'}
+                    textareaLabel={'Hvorfor avsluttes søknaden? (Obligatorisk)'}
+                    footer={{
+                        primaryButtonText: 'Avslutt søknad',
+                        secondaryButtonText: 'Ikke avslutt søknad',
+                    }}
+                />
+            )}
         </>
     );
 };

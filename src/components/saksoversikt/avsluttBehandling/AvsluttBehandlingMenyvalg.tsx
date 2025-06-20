@@ -32,7 +32,11 @@ const AvsluttBehandlingMenyvalg = (props: AvsluttBehandlingMenyvalgProps) => {
         return <div>Teknisk feil: Enten søknadsId, eller behandlingsId må være satt</div>;
     }
 
-    if (props.skalVises && props.behandlingStatus !== BehandlingStatus.UNDER_BEHANDLING) {
+    if (
+        !props.skalVises &&
+        props.behandlingStatus !== BehandlingStatus.SØKNAD &&
+        props.behandlingStatus !== BehandlingStatus.UNDER_BEHANDLING
+    ) {
         return null;
     }
 
