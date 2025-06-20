@@ -50,7 +50,13 @@ const tilBeslutningDTO = (
                       perioder: vedtak.barnetilleggPerioder,
                   }
                 : null,
-            antallDagerPerMeldeperiode: 10,
+            antallDagerPerMeldeperiode: vedtak.antallDagerPerMeldeperiode.map((periode) => ({
+                antallDagerPerMeldeperiode: periode.antallDagerPerMeldeperiode!,
+                periode: {
+                    fraOgMed: periode.periode.fraOgMed!,
+                    tilOgMed: periode.periode.tilOgMed!,
+                },
+            })),
         },
     };
 };
