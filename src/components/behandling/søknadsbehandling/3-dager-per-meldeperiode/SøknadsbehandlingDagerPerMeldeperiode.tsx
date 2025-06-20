@@ -5,17 +5,22 @@ import {
 import { classNames } from '../../../../utils/classNames';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { Alert, Button, Heading, Select } from '@navikt/ds-react';
-import { erSaksbehandler } from '../../../../utils/tilganger';
 import { SøknadsbehandlingResultat } from '../../../../types/BehandlingTypes';
 
 import style from './SøknadsbehandlingDagerPerMeldeperiode.module.css';
 import { Datovelger } from '~/components/datovelger/Datovelger';
 import { dateTilISOTekst } from '~/utils/date';
+import { useSøknadsbehandling } from '../../BehandlingContext';
+import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 
 export const SøknadsbehandlingDagerPerMeldeperiode = () => {
+    const { rolleForBehandling } = useSøknadsbehandling();
     const { antallDagerPerMeldeperiode, resultat, behandlingsperiode } =
         useSøknadsbehandlingSkjema();
     const dispatch = useSøknadsbehandlingSkjemaDispatch();
+
+    const erSaksbehandler = rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER;
+    const erIkkeSaksbehandler = !erSaksbehandler;
 
     return (
         <div
@@ -38,7 +43,7 @@ export const SøknadsbehandlingDagerPerMeldeperiode = () => {
                                 label="Antall dager"
                                 size="small"
                                 className={style.antall}
-                                readOnly={!erSaksbehandler}
+                                readOnly={erIkkeSaksbehandler}
                                 value={periode.antallDagerPerMeldeperiode ?? undefined}
                                 onChange={(event) => {
                                     dispatch({
@@ -74,6 +79,7 @@ export const SøknadsbehandlingDagerPerMeldeperiode = () => {
                                 size="small"
                                 minDate={behandlingsperiode.fraOgMed}
                                 maxDate={behandlingsperiode.tilOgMed}
+                                readOnly={erIkkeSaksbehandler}
                                 defaultSelected={periode.periode.fraOgMed ?? undefined}
                                 onDateChange={(date) => {
                                     dispatch({
@@ -101,6 +107,7 @@ export const SøknadsbehandlingDagerPerMeldeperiode = () => {
                                 size="small"
                                 minDate={behandlingsperiode.fraOgMed}
                                 maxDate={behandlingsperiode.tilOgMed}
+                                readOnly={erIkkeSaksbehandler}
                                 defaultSelected={periode.periode.tilOgMed ?? undefined}
                                 onDateChange={(date) => {
                                     dispatch({
@@ -124,7 +131,7 @@ export const SøknadsbehandlingDagerPerMeldeperiode = () => {
                                 }}
                             />
 
-                            {antallDagerPerMeldeperiode.length > 1 && (
+                            {antallDagerPerMeldeperiode.length > 1 && erSaksbehandler && (
                                 <Button
                                     type="button"
                                     variant="tertiary"
@@ -148,27 +155,29 @@ export const SøknadsbehandlingDagerPerMeldeperiode = () => {
                     ))}
                 </ul>
 
-                <Button
-                    variant="secondary"
-                    type="button"
-                    size="small"
-                    onClick={() => {
-                        dispatch({
-                            type: 'oppdaterAntallDagerForMeldeperiode',
-                            payload: {
-                                antallDager: [
-                                    ...antallDagerPerMeldeperiode,
-                                    {
-                                        antallDagerPerMeldeperiode: null,
-                                        periode: { fraOgMed: null, tilOgMed: null },
-                                    },
-                                ],
-                            },
-                        });
-                    }}
-                >
-                    Ny meldeperiode
-                </Button>
+                {erSaksbehandler && (
+                    <Button
+                        variant="secondary"
+                        type="button"
+                        size="small"
+                        onClick={() => {
+                            dispatch({
+                                type: 'oppdaterAntallDagerForMeldeperiode',
+                                payload: {
+                                    antallDager: [
+                                        ...antallDagerPerMeldeperiode,
+                                        {
+                                            antallDagerPerMeldeperiode: null,
+                                            periode: { fraOgMed: null, tilOgMed: null },
+                                        },
+                                    ],
+                                },
+                            });
+                        }}
+                    >
+                        Ny meldeperiode
+                    </Button>
+                )}
             </div>
 
             <VedtakSeksjon
