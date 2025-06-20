@@ -3,7 +3,7 @@ import { behandlingResultatTilTag, finnBehandlingstypeTekst } from '~/utils/teks
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '~/utils/date';
 import { Behandlingstype, SøknadsbehandlingResultat } from '~/types/BehandlingTypes';
 import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
-import MenyValgBehandleSøknadPNytt from '~/components/behandlingmeny/menyvalg/MenyValgBehandleSøknadPåNytt';
+import MenyValgBehandleSøknadPåNytt from '~/components/behandlingmeny/menyvalg/MenyValgBehandleSøknadPåNytt';
 import { VedtattBehandlingDataCellInfo } from '~/components/saksoversikt/behandlinger-oversikt/VedtatteBehandlingerUtils';
 import SeBehandlingMenyvalg from '~/components/behandlingmeny/menyvalg/SeBehandlingMenyvalg';
 import React from 'react';
@@ -79,12 +79,13 @@ export const VedtatteBehandlingerTabell = (props: {
                                             </ActionMenu.Trigger>
                                             <ActionMenu.Content>
                                                 <>
-                                                    <SeBehandlingMenyvalg
-                                                        behandlingHref={`/behandling/${vedtattBehandling.id}`}
-                                                    />
-                                                    <MenyValgBehandleSøknadPNytt
+                                                    <MenyValgBehandleSøknadPåNytt
                                                         sakId={vedtattBehandling.sakId}
                                                         søknadId={vedtattBehandling.søknadId}
+                                                    />
+                                                    <ActionMenu.Divider />
+                                                    <SeBehandlingMenyvalg
+                                                        behandlingHref={`/behandling/${vedtattBehandling.id}`}
                                                     />
                                                 </>
                                             </ActionMenu.Content>
