@@ -2,6 +2,8 @@ import { BegrunnelseVilkårsvurdering } from '~/components/behandling/felles/beg
 import { useRevurderingBehandling } from '~/components/behandling/BehandlingContext';
 import { useRevurderingInnvilgelseSkjema } from '~/components/behandling/revurdering/innvilgelse/context/RevurderingInnvilgelseVedtakContext';
 
+import style from './RevurderingInnvilgelseBegrunnelse.module.css';
+
 export const RevurderingInnvilgelseBegrunnelse = () => {
     const { behandling, rolleForBehandling } = useRevurderingBehandling();
     const { begrunnelseRef } = useRevurderingInnvilgelseSkjema();
@@ -11,6 +13,7 @@ export const RevurderingInnvilgelseBegrunnelse = () => {
             behandling={behandling}
             rolle={rolleForBehandling}
             tekstRef={begrunnelseRef}
+            className={style.begrunnelse}
         />
     );
 };

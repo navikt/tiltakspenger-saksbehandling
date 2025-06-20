@@ -1,7 +1,7 @@
 import { ActionMenu, Button, Table } from '@navikt/ds-react';
 import { behandlingResultatTilTag, finnBehandlingstypeTekst } from '~/utils/tekstformateringUtils';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '~/utils/date';
-import { Behandlingstype, SøknadsbehandlingResultat } from '~/types/BehandlingTypes';
+import { SøknadsbehandlingResultat } from '~/types/BehandlingTypes';
 import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
 import MenyValgBehandleSøknadPåNytt from '~/components/behandlingmeny/menyvalg/MenyValgBehandleSøknadPåNytt';
 import { VedtattBehandlingDataCellInfo } from '~/components/saksoversikt/behandlinger-oversikt/VedtatteBehandlingerUtils';
@@ -59,39 +59,28 @@ export const VedtatteBehandlingerTabell = (props: {
                             {vedtattBehandling.beslutter ?? 'Ikke tildelt'}
                         </Table.DataCell>
                         <Table.DataCell align={'right'}>
-                            {(vedtattBehandling.behandlingstype ===
-                                Behandlingstype.SØKNADSBEHANDLING ||
-                                vedtattBehandling.behandlingstype ===
-                                    Behandlingstype.REVURDERING) &&
-                            vedtattBehandling.resultat === SøknadsbehandlingResultat.AVSLAG ? (
-                                <>
-                                    {vedtattBehandling.resultat ===
-                                        SøknadsbehandlingResultat.AVSLAG && (
-                                        <ActionMenu>
-                                            <ActionMenu.Trigger>
-                                                <Button
-                                                    variant="tertiary-neutral"
-                                                    icon={
-                                                        <MenuElipsisVerticalIcon title="Menyvalg" />
-                                                    }
-                                                    size="small"
-                                                />
-                                            </ActionMenu.Trigger>
-                                            <ActionMenu.Content>
-                                                <>
-                                                    <MenyValgBehandleSøknadPåNytt
-                                                        sakId={vedtattBehandling.sakId}
-                                                        søknadId={vedtattBehandling.søknadId}
-                                                    />
-                                                    <ActionMenu.Divider />
-                                                    <SeBehandlingMenyvalg
-                                                        behandlingHref={`/behandling/${vedtattBehandling.id}`}
-                                                    />
-                                                </>
-                                            </ActionMenu.Content>
-                                        </ActionMenu>
-                                    )}
-                                </>
+                            {vedtattBehandling.resultat === SøknadsbehandlingResultat.AVSLAG ? (
+                                <ActionMenu>
+                                    <ActionMenu.Trigger>
+                                        <Button
+                                            variant="tertiary-neutral"
+                                            icon={<MenuElipsisVerticalIcon title="Menyvalg" />}
+                                            size="small"
+                                        />
+                                    </ActionMenu.Trigger>
+                                    <ActionMenu.Content>
+                                        <>
+                                            <MenyValgBehandleSøknadPåNytt
+                                                sakId={vedtattBehandling.sakId}
+                                                søknadId={vedtattBehandling.søknadId}
+                                            />
+                                            <ActionMenu.Divider />
+                                            <SeBehandlingMenyvalg
+                                                behandlingHref={`/behandling/${vedtattBehandling.id}`}
+                                            />
+                                        </>
+                                    </ActionMenu.Content>
+                                </ActionMenu>
                             ) : (
                                 <Button
                                     variant={'secondary'}

@@ -16,13 +16,14 @@ type Props = {
     behandling: BehandlingData;
     rolle: Nullable<SaksbehandlerRolle>;
     tekstRef: RefObject<HTMLTextAreaElement>;
+    className?: string;
 };
 
-export const BegrunnelseVilkårsvurdering = ({ behandling, rolle, tekstRef }: Props) => {
+export const BegrunnelseVilkårsvurdering = ({ behandling, rolle, tekstRef, className }: Props) => {
     const { begrunnelseVilkårsvurdering, sakId, id } = behandling;
 
     return (
-        <VedtakSeksjon>
+        <VedtakSeksjon className={className}>
             <VedtakSeksjon.Venstre>
                 <Heading size={'xsmall'} level={'2'} className={style.header}>
                     {'Begrunnelse vilkårsvurdering'}

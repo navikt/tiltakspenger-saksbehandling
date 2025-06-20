@@ -48,13 +48,6 @@ export const BehandlingTiltak = (props: Props) => {
         <>
             <VedtakSeksjon>
                 <VedtakSeksjon.Venstre>
-                    <Alert variant={'warning'} size={'small'}>
-                        Flere tiltak registrert på bruker. Velg tiltak(ene) som bruker skal vurderes
-                        for og periodene som gjelder. Det du velger brukes for regnskapsføring og
-                        statistikk, og påvirker ikke vedtaket.
-                    </Alert>
-                </VedtakSeksjon.Venstre>
-                <VedtakSeksjon.Venstre className={style.wrapper}>
                     {valgteTiltaksdeltakelser?.map((periode, index) => {
                         return (
                             <TiltakPeriode
@@ -83,6 +76,14 @@ export const BehandlingTiltak = (props: Props) => {
                         </Button>
                     )}
                 </VedtakSeksjon.Venstre>
+
+                <VedtakSeksjon.Høyre>
+                    <Alert variant={'warning'} size={'small'}>
+                        Flere tiltak registrert på bruker. Velg tiltak(ene) som bruker skal vurderes
+                        for og periodene som gjelder. Det du velger brukes for regnskapsføring og
+                        statistikk, og påvirker ikke vedtaket.
+                    </Alert>
+                </VedtakSeksjon.Høyre>
             </VedtakSeksjon>
             <Separator />
         </>
@@ -189,7 +190,7 @@ const TiltakPeriode = ({
                         });
                     }}
                 >
-                    {'Fjern periode'}
+                    {'Fjern'}
                 </Button>
             )}
         </div>

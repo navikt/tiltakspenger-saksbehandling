@@ -2,18 +2,19 @@ import {
     useSøknadsbehandlingSkjema,
     useSøknadsbehandlingSkjemaDispatch,
 } from '../context/SøknadsbehandlingVedtakContext';
-import { classNames } from '../../../../utils/classNames';
+import { classNames } from '~/utils/classNames';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { Alert, Select } from '@navikt/ds-react';
-import { erSaksbehandler } from '../../../../utils/tilganger';
-import { SøknadsbehandlingResultat } from '../../../../types/BehandlingTypes';
+import { SøknadsbehandlingResultat } from '~/types/BehandlingTypes';
+import { useSøknadsbehandling } from '~/components/behandling/BehandlingContext';
+import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 
 import style from './SøknadsbehandlingDagerPerMeldeperiode.module.css';
 
 export const SøknadsbehandlingDagerPerMeldeperiode = () => {
-    const { antallDagerPerMeldeperiode } = useSøknadsbehandlingSkjema();
+    const { antallDagerPerMeldeperiode, resultat } = useSøknadsbehandlingSkjema();
     const dispatch = useSøknadsbehandlingSkjemaDispatch();
-    const { resultat } = useSøknadsbehandlingSkjema();
+    const { rolleForBehandling } = useSøknadsbehandling();
 
     return (
         <div
@@ -28,7 +29,7 @@ export const SøknadsbehandlingDagerPerMeldeperiode = () => {
                         size={'small'}
                         className={style.antall}
                         value={antallDagerPerMeldeperiode || 10}
-                        readOnly={!erSaksbehandler}
+                        readOnly={rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER}
                         onChange={(event) => {
                             dispatch({
                                 type: 'oppdaterDagerPerMeldeperiode',
