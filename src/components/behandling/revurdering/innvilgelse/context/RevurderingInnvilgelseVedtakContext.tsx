@@ -59,7 +59,15 @@ const initieltVedtakSkjema = (behandling: RevurderingData): RevurderingInnvilgel
 
     return {
         behandlingsperiode: behandling.virkningsperiode ?? tiltaksperiode,
-        antallDagerPerMeldeperiode: 10,
+        antallDagerPerMeldeperiode: behandling.antallDagerPerMeldeperiode ?? [
+            {
+                antallDagerPerMeldeperiode: 10,
+                periode: {
+                    fraOgMed: behandling.virkningsperiode?.fraOgMed ?? tiltaksperiode.fraOgMed,
+                    tilOgMed: behandling.virkningsperiode?.tilOgMed ?? tiltaksperiode.tilOgMed,
+                },
+            },
+        ],
         harBarnetillegg: harSøktBarnetillegg(behandling),
         barnetilleggPerioder: behandling.barnetillegg?.perioder ?? [],
         valgteTiltaksdeltakelser:

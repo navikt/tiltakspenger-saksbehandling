@@ -15,7 +15,7 @@ export interface AntallDagerForMeldeperiodeFormData {
 
 export type AntallDagerForMeldeperiodeAction = {
     type: 'oppdaterAntallDagerForMeldeperiode';
-    payload: { antallDager: AntallDagerForMeldeperiodeState[] };
+    payload: { antallDager: AntallDagerForMeldeperiodeFormData[] };
 };
 
 export const getAntallDagerForMeldeperiodeActionHandler = <
@@ -24,7 +24,7 @@ export const getAntallDagerForMeldeperiodeActionHandler = <
     ({
         oppdaterAntallDagerForMeldeperiode: (
             state,
-            payload: { antallDager: AntallDagerForMeldeperiodeState[] },
+            payload: { antallDager: AntallDagerForMeldeperiodeFormData[] },
         ) => {
             return {
                 ...state,
