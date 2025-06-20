@@ -1,6 +1,6 @@
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { SakProps } from '~/types/SakTypes';
-import { Nullable } from '~/types/common';
+import { Nullable } from '~/types/UtilTypes';
 
 export type AvsluttBehandlingDTO = {
     søknadId: Nullable<string>;

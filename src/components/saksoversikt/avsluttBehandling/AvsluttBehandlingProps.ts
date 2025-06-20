@@ -1,4 +1,4 @@
-import { Nullable } from '~/types/common';
+import { Nullable } from '~/types/UtilTypes';
 import { SøknadId } from '~/types/SøknadTypes';
 import { BehandlingId } from '~/types/BehandlingTypes';
 

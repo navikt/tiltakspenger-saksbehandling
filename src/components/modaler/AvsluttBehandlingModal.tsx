@@ -5,7 +5,7 @@ import { Controller, useForm } from 'react-hook-form';
 import styles from './AvsluttBehandlingModal.module.css';
 import { BehandlingId } from '~/types/BehandlingTypes';
 import { SøknadId } from '~/types/SøknadTypes';
-import { Nullable } from '~/types/common';
+import { Nullable } from '~/types/UtilTypes';
 import { useSak } from '~/context/sak/SakContext';
 import { useAvsluttBehandling } from '~/components/behandlingmeny/useAvsluttBehandling';
 

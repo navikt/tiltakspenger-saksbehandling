@@ -1,5 +1,5 @@
 import { BehandlingData, BehandlingResultat, Behandlingstype } from '~/types/BehandlingTypes';
-import { Nullable } from '~/types/common';
+import { Nullable } from '~/types/UtilTypes';
 import { Periode } from '~/types/Periode';
 
 export interface VedtattBehandlingDataCellInfo {

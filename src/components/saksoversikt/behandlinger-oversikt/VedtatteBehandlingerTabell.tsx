@@ -1,7 +1,7 @@
 import { ActionMenu, Button, Table } from '@navikt/ds-react';
 import { behandlingResultatTilTag, finnBehandlingstypeTekst } from '~/utils/tekstformateringUtils';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '~/utils/date';
-import { BehandlingResultat, Behandlingstype } from '~/types/BehandlingTypes';
+import { Behandlingstype, SøknadsbehandlingResultat } from '~/types/BehandlingTypes';
 import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
 import MenyValgBehandleSøknadPNytt from '~/components/behandlingmeny/menyvalg/MenyValgBehandleSøknadPåNytt';
 import { VedtattBehandlingDataCellInfo } from '~/components/saksoversikt/behandlinger-oversikt/VedtatteBehandlingerUtils';
@@ -63,9 +63,10 @@ export const VedtatteBehandlingerTabell = (props: {
                                 Behandlingstype.SØKNADSBEHANDLING ||
                                 vedtattBehandling.behandlingstype ===
                                     Behandlingstype.REVURDERING) &&
-                            vedtattBehandling.resultat === BehandlingResultat.AVSLAG ? (
+                            vedtattBehandling.resultat === SøknadsbehandlingResultat.AVSLAG ? (
                                 <>
-                                    {vedtattBehandling.resultat === BehandlingResultat.AVSLAG && (
+                                    {vedtattBehandling.resultat ===
+                                        SøknadsbehandlingResultat.AVSLAG && (
                                         <ActionMenu>
                                             <ActionMenu.Trigger>
                                                 <Button
