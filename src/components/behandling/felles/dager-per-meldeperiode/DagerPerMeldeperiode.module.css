@@ -1,0 +1,21 @@
+.input {
+    &.skjult {
+        display: none;
+    }
+
+    .knapp {
+        margin-top: 1.5rem;
+    }
+}
+
+.skjult {
+    display: none;
+}
+
+.antallDagerPerMeldeperiode {
+    margin-top: var(--a-spacing-8);
+}
+
+.infoboks {
+    margin-top: 1rem;
+}

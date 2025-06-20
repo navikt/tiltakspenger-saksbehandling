@@ -7,6 +7,7 @@ import { Separator } from '~/components/separator/Separator';
 import { RevurderingInnvilgelseBrev } from '~/components/behandling/revurdering/innvilgelse/6-brev/RevurderingInnvilgelseBrev';
 import { RevurderingInnvilgelseKnapper } from '~/components/behandling/revurdering/innvilgelse/7-send-og-godkjenn/RevurderingInnvilgelseSend';
 import { RevurderingInnvilgelseBarnetillegg } from '~/components/behandling/revurdering/innvilgelse/5-barn/RevurderingInnvilgelseBarnetillegg';
+import RevurderingDagerPerMeldeperiode from './3-dager-per-meldeperiode/RevurderingDagerPerMeldeperiode';
 
 export const RevurderingInnvilgelseVedtak = () => {
     return (
@@ -16,6 +17,7 @@ export const RevurderingInnvilgelseVedtak = () => {
             </Heading>
             <RevurderingInnvilgelseBegrunnelse />
             <RevurderingInnvilgelsesperiodeVelger />
+            <RevurderingDagerPerMeldeperiode />
             <Separator />
             <RevurderingInnvilgelseBarnetillegg />
             <Separator />
