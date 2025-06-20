@@ -7,20 +7,19 @@ import { SøknadsbehandlingKnapper } from './7-send-og-godkjenn/Søknadsbehandli
 import { SøknadsbehandlingBarnetillegg } from './5-barn/SøknadsbehandlingBarnetillegg';
 import { SøknadsbehandlingVedtakProvider } from './context/SøknadsbehandlingVedtakContext';
 import { SøknadsbehandlingTiltak } from './4-tiltak/SøknadsbehandlingTiltak';
-import { SøknadsbehandlingDagerPerMeldeperiode } from './3-dager-per-meldeperiode/SøknadsbehandlingDagerPerMeldeperiode';
 import SøknadsbehandlingAvslagsgrunner from '~/components/behandling/søknadsbehandling/4-avslagsgrunner/SøknadsbehandlingAvslagsgrunner';
 
 import style from './SøknadsbehandlingVedtak.module.css';
+import SøknadsbehandlingDagerPerMeldeperiode from './3-dager-per-meldeperiode/SøknadsbehandlingDagerPerMeldeperiode';
 
 export const SøknadsbehandlingVedtak = () => {
     return (
         <SøknadsbehandlingVedtakProvider>
-            <Heading size={'medium'} level={'1'} className={style.header}>
+            <Heading size={'medium'} level={'3'} className={style.header}>
                 {'Vedtak (søknadsbehandling)'}
             </Heading>
             <SøknadsbehandlingBegrunnelse />
             <SøknadsbehandlingResultatVelger />
-            <Separator />
             <SøknadsbehandlingDagerPerMeldeperiode />
             <Separator />
             <SøknadsbehandlingTiltak />
