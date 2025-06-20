@@ -44,9 +44,9 @@ export const SøknadsbehandlingDagerPerMeldeperiode = () => {
                                 value={periode.antallDagerPerMeldeperiode ?? undefined}
                                 onChange={(event) => {
                                     dispatch({
-                                        type: 'oppdaterDagerPerMeldeperiode',
+                                        type: 'oppdaterAntallDagerForMeldeperiode',
                                         payload: {
-                                            antallDagerPerMeldeperiode: [
+                                            antallDager: [
                                                 ...antallDagerPerMeldeperiode.slice(0, index),
                                                 {
                                                     ...periode,
@@ -79,9 +79,9 @@ export const SøknadsbehandlingDagerPerMeldeperiode = () => {
                                 defaultSelected={periode.periode.fraOgMed ?? undefined}
                                 onDateChange={(date) => {
                                     dispatch({
-                                        type: 'oppdaterDagerPerMeldeperiode',
+                                        type: 'oppdaterAntallDagerForMeldeperiode',
                                         payload: {
-                                            antallDagerPerMeldeperiode: [
+                                            antallDager: [
                                                 ...antallDagerPerMeldeperiode.slice(0, index),
                                                 {
                                                     ...periode,
@@ -106,9 +106,9 @@ export const SøknadsbehandlingDagerPerMeldeperiode = () => {
                                 defaultSelected={periode.periode.tilOgMed ?? undefined}
                                 onDateChange={(date) => {
                                     dispatch({
-                                        type: 'oppdaterDagerPerMeldeperiode',
+                                        type: 'oppdaterAntallDagerForMeldeperiode',
                                         payload: {
-                                            antallDagerPerMeldeperiode: [
+                                            antallDager: [
                                                 ...antallDagerPerMeldeperiode.slice(0, index),
                                                 {
                                                     ...periode,
@@ -133,9 +133,9 @@ export const SøknadsbehandlingDagerPerMeldeperiode = () => {
                                     size="small"
                                     onClick={() => {
                                         dispatch({
-                                            type: 'oppdaterDagerPerMeldeperiode',
+                                            type: 'oppdaterAntallDagerForMeldeperiode',
                                             payload: {
-                                                antallDagerPerMeldeperiode: [
+                                                antallDager: [
                                                     ...antallDagerPerMeldeperiode.slice(0, index),
                                                     ...antallDagerPerMeldeperiode.slice(index + 1),
                                                 ],
@@ -156,9 +156,9 @@ export const SøknadsbehandlingDagerPerMeldeperiode = () => {
                     size="small"
                     onClick={() => {
                         dispatch({
-                            type: 'oppdaterDagerPerMeldeperiode',
+                            type: 'oppdaterAntallDagerForMeldeperiode',
                             payload: {
-                                antallDagerPerMeldeperiode: [
+                                antallDager: [
                                     ...antallDagerPerMeldeperiode,
                                     {
                                         antallDagerPerMeldeperiode: null,

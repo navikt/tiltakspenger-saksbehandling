@@ -15,6 +15,7 @@ import {
     InnvilgelseActions,
     InnvilgelseState,
 } from '~/components/behandling/felles/state/InnvilgelseState';
+import { AntallDagerForMeldeperiodeState } from '~/components/behandling/felles/state/AntallDagerState';
 
 export type RevurderingInnvilgelseSkjemaActions =
     | InnvilgelseActions
@@ -23,7 +24,8 @@ export type RevurderingInnvilgelseSkjemaActions =
 
 export type RevurderingInnvilgelseSkjemaState = InnvilgelseState &
     TiltaksdeltagelseState &
-    BarnetilleggState;
+    BarnetilleggState &
+    AntallDagerForMeldeperiodeState;
 
 const actionHandlers = {
     ...getTiltaksdeltagelseActionHandlers<RevurderingInnvilgelseSkjemaState>(),
