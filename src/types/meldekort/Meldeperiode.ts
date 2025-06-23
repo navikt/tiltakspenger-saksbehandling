@@ -50,6 +50,7 @@ export type MeldeperiodeKjedeProps = {
     brukersMeldekort?: BrukersMeldekortProps;
     korrigeringFraTidligerePeriode?: MeldeperiodeKorrigering;
     avbrutteMeldekortBehandlinger: MeldekortBehandlingProps[];
+    sisteBeregning: MeldeperiodeBeregning;
 };
 
 export type MeldeperiodeKorrigering = {

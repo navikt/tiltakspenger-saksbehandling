@@ -21,3 +21,7 @@
 .stansetIkon {
     color: var(--a-border-danger);
 }
+
+.behandlingLink {
+    font-size: var(--a-font-size-medium);
+}
