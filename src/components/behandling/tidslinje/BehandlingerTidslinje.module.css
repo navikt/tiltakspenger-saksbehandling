@@ -1,0 +1,23 @@
+.wrapper {
+    background: white;
+    padding: 2rem;
+    border-radius: var(--a-border-radius-medium);
+}
+
+.header {
+    margin-bottom: 1rem;
+}
+
+.behandlingPreview {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.innvilgetIkon {
+    color: var(--a-border-success);
+}
+
+.stansetIkon {
+    color: var(--a-border-danger);
+}

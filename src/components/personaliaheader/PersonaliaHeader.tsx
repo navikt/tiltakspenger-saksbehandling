@@ -29,11 +29,13 @@ export const PersonaliaHeader = ({
     children,
 }: PersonaliaHeaderProps) => {
     const { personopplysninger, isPersonopplysningerLoading } = useHentPersonopplysninger(sakId);
-    const [kopierSakId, setKopierSakId] = useState(false);
+    const [visSakId, setVisSakId] = useState(false);
+
+    const idSomVises = visSakId ? sakId : saksnummer;
 
     useEffect(() => {
         const listener = (e: KeyboardEvent) => {
-            setKopierSakId(e.ctrlKey || e.metaKey);
+            setVisSakId(e.ctrlKey || e.metaKey);
         };
 
         window.addEventListener('keyup', listener);
@@ -56,17 +58,8 @@ export const PersonaliaHeader = ({
                 <Skeleton variant={'text'} className={styles.loader} />
             )}
             <Spacer />
-            {kopierSakId ? (
-                <>
-                    <b>Sak-id:</b> {sakId}
-                    <CopyButton copyText={sakId} variant="action" size="small" />
-                </>
-            ) : (
-                <>
-                    <b>Saksnr:</b> {saksnummer}
-                    <CopyButton copyText={saksnummer} variant="action" size="small" />
-                </>
-            )}
+            <strong>{visSakId ? 'Sak-id:' : 'Saksnr:'}</strong> {idSomVises}
+            <CopyButton copyText={idSomVises} variant="action" size="small" />
             {visTilbakeKnapp && (
                 <Button as={NextLink} href={`/sak/${saksnummer}`} type="submit" size="small">
                     Tilbake til saksoversikt

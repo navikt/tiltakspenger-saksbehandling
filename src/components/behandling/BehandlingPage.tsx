@@ -9,9 +9,13 @@ import { Alert } from '@navikt/ds-react';
 import { finnBehandlingStatusTag } from '~/utils/tekstformateringUtils';
 import AvbruttOppsummering from '../oppsummeringer/oppsummeringAvAvbruttBehandling/OppsummeringAvAvbruttBehandling';
 import SideBarMain from '../../layouts/sidebar-main/SideBarMain';
+import { BehandlingerTidslinje } from '~/components/behandling/tidslinje/BehandlingerTidslinje';
+import { useSak } from '~/context/sak/SakContext';
+
 import style from './BehandlingPage.module.css';
 
 export const BehandlingPage = () => {
+    const { sak } = useSak();
     const behandlingsContext = useBehandling();
     const { type, sakId, saksnummer, status, avbrutt } = behandlingsContext.behandling;
 
@@ -25,6 +29,7 @@ export const BehandlingPage = () => {
                 sidebar={<BehandlingSaksopplysninger />}
                 main={
                     <div className={style.main}>
+                        <BehandlingerTidslinje sak={sak} />
                         {avbrutt && <AvbruttOppsummering avbrutt={avbrutt} withPanel={true} />}
                         <div className={style.vedtakContainer}>
                             {type === Behandlingstype.SØKNADSBEHANDLING ? (

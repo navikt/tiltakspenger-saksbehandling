@@ -1,11 +1,15 @@
 import {
     AntallDagerForMeldeperiode,
     Avslagsgrunn,
+    BarnetilleggData,
+    BehandlingId,
     BehandlingResultat,
     RevurderingResultat,
 } from './BehandlingTypes';
 import { Nullable } from '~/types/UtilTypes';
 import { Periode } from './Periode';
+
+export type VedtakId = `vedtak_${string}`;
 
 export type VedtakTilBeslutningDTO = {
     fritekstTilVedtaksbrev: string;
@@ -69,4 +73,23 @@ export type VedtakBarnetilleggDTO = {
 
 export type VedtakOpprettRevurderingDTO = {
     revurderingType: RevurderingResultat;
+};
+
+export enum Vedtakstype {
+    INNVILGELSE = 'INNVILGELSE',
+    AVSLAG = 'AVSLAG',
+    STANS = 'STANS',
+}
+
+export type Rammevedtak = {
+    id: VedtakId;
+    behandlingId: BehandlingId;
+    opprettet: string;
+    vedtaksdato: string;
+    vedtaksType: Vedtakstype;
+    periode: Periode;
+    saksbehandler: string;
+    beslutter: string;
+    antallDagerPerMeldeperiode: Nullable<number>;
+    barnetillegg: Nullable<BarnetilleggData>;
 };

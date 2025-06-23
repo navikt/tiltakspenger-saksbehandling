@@ -31,7 +31,7 @@ export interface AntallDagerForMeldeperiode {
 }
 
 type InnvilgelseResultatData = {
-    barnetillegg: Nullable<Barnetillegg>;
+    barnetillegg: Nullable<BarnetilleggData>;
     valgteTiltaksdeltakelser: Nullable<TiltaksdeltakelsePeriode[]>;
     antallDagerPerMeldeperiode: Nullable<AntallDagerForMeldeperiode[]>;
 };
@@ -114,7 +114,7 @@ export enum Behandlingstype {
     REVURDERING = 'REVURDERING',
 }
 
-type Barnetillegg = {
+export type BarnetilleggData = {
     perioder: BarnetilleggPeriode[];
     begrunnelse?: string;
 };

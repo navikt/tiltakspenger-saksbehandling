@@ -7,10 +7,9 @@ import { Simulering } from '../Simulering';
 
 import { Nullable } from '~/types/UtilTypes';
 
-// Egentlig har denne samme prefix som BrukersMeldekortId (bare "meldekort_")
-// Typer den med en unik prefix for at typescript ikke skal se de som ekvivalente
+// "_behandling"-suffixen er ikke reell, er kun for at typescript ikke skal se denne som ekvivalent med BrukersMeldekortId
 // Ikke gjør run-time typesjekk på denne!
-export type MeldekortBehandlingId = `meldekort_beh_${string}`;
+export type MeldekortBehandlingId = `meldekort_${string}_behandling`;
 
 export enum MeldekortBehandlingStatus {
     KLAR_TIL_BEHANDLING = 'KLAR_TIL_BEHANDLING',
