@@ -57,7 +57,28 @@ const initieltVedtakSkjema = (behandling: SøknadsbehandlingData): Søknadsbehan
                 periode: behandling.virkningsperiode ?? tiltaksperiode,
             },
         ],
-        antallDagerPerMeldeperiode: behandling.antallDagerPerMeldeperiode || 10,
+        antallDagerPerMeldeperiode: behandling.antallDagerPerMeldeperiode
+            ? behandling.antallDagerPerMeldeperiode.map((dager) => ({
+                  antallDagerPerMeldeperiode: dager.antallDagerPerMeldeperiode,
+                  periode: {
+                      fraOgMed: dager.periode.fraOgMed,
+                      tilOgMed: dager.periode.tilOgMed,
+                  },
+              }))
+            : [
+                  {
+                      antallDagerPerMeldeperiode: 10,
+                      periode: behandling.virkningsperiode
+                          ? {
+                                fraOgMed: behandling.virkningsperiode.fraOgMed,
+                                tilOgMed: behandling.virkningsperiode.tilOgMed,
+                            }
+                          : {
+                                fraOgMed: tiltaksperiode.fraOgMed,
+                                tilOgMed: tiltaksperiode.tilOgMed,
+                            },
+                  },
+              ],
         avslagsgrunner: behandling.avslagsgrunner,
     };
 };

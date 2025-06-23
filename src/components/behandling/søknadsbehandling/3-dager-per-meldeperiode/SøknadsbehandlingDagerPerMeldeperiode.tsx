@@ -1,67 +1,41 @@
+import { SøknadsbehandlingResultat } from '~/types/BehandlingTypes';
+import { DagerPerMeldeperiode } from '../../felles/dager-per-meldeperiode/DagerPerMeldeperiode';
 import {
     useSøknadsbehandlingSkjema,
     useSøknadsbehandlingSkjemaDispatch,
 } from '../context/SøknadsbehandlingVedtakContext';
-import { classNames } from '~/utils/classNames';
-import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
-import { Alert, Select } from '@navikt/ds-react';
-import { SøknadsbehandlingResultat } from '~/types/BehandlingTypes';
-import { useSøknadsbehandling } from '~/components/behandling/BehandlingContext';
-import { SaksbehandlerRolle } from '~/types/Saksbehandler';
+import { Separator } from '~/components/separator/Separator';
+import { AntallDagerForMeldeperiodeFormData } from '../../felles/state/AntallDagerState';
+import { useSøknadsbehandling } from '../../BehandlingContext';
 
-import style from './SøknadsbehandlingDagerPerMeldeperiode.module.css';
-
-export const SøknadsbehandlingDagerPerMeldeperiode = () => {
-    const { antallDagerPerMeldeperiode, resultat } = useSøknadsbehandlingSkjema();
-    const dispatch = useSøknadsbehandlingSkjemaDispatch();
+const SøknadsbehandlingDagerPerMeldeperiode = () => {
     const { rolleForBehandling } = useSøknadsbehandling();
+    const { resultat, behandlingsperiode, antallDagerPerMeldeperiode } =
+        useSøknadsbehandlingSkjema();
+    const dispatch = useSøknadsbehandlingSkjemaDispatch();
+
+    const onDispatch = (antallDager: AntallDagerForMeldeperiodeFormData[]) => {
+        dispatch({
+            type: 'oppdaterAntallDagerForMeldeperiode',
+            payload: { antallDager: antallDager },
+        });
+    };
 
     return (
-        <div
-            className={classNames(
-                resultat !== SøknadsbehandlingResultat.INNVILGELSE && style.skjult,
+        <div>
+            {resultat === SøknadsbehandlingResultat.INNVILGELSE && (
+                <>
+                    <Separator />
+                    <DagerPerMeldeperiode
+                        antallDagerPerMeldeperiode={antallDagerPerMeldeperiode}
+                        behandlingsperiode={behandlingsperiode}
+                        dispatch={onDispatch}
+                        rolleForBehandling={rolleForBehandling}
+                    />
+                </>
             )}
-        >
-            <VedtakSeksjon className={style.antallDagerPerMeldeperiode}>
-                <VedtakSeksjon.Venstre>
-                    <Select
-                        label={'Antall dager per meldeperiode'}
-                        size={'small'}
-                        className={style.antall}
-                        value={antallDagerPerMeldeperiode || 10}
-                        readOnly={rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER}
-                        onChange={(event) => {
-                            dispatch({
-                                type: 'oppdaterDagerPerMeldeperiode',
-                                payload: {
-                                    antallDagerPerMeldeperiode: Number(event.target.value),
-                                },
-                            });
-                        }}
-                    >
-                        {Array.from({ length: 14 }).map((_, index) => {
-                            const verdi = index + 1;
-                            return (
-                                <option value={verdi} key={verdi}>
-                                    {verdi}
-                                </option>
-                            );
-                        })}
-                    </Select>
-                </VedtakSeksjon.Venstre>
-            </VedtakSeksjon>
-
-            <VedtakSeksjon
-                className={classNames(
-                    style.input,
-                    antallDagerPerMeldeperiode === 10 && style.skjult,
-                )}
-            >
-                <Alert className={style.infoboks} variant={'info'} size={'small'}>
-                    Husk å oppgi antall dager per uke det innvilges tiltakspenger for i
-                    vedtaksbrevet.
-                </Alert>
-            </VedtakSeksjon>
         </div>
     );
 };
+
+export default SøknadsbehandlingDagerPerMeldeperiode;

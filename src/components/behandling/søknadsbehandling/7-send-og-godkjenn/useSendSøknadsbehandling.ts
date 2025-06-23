@@ -34,7 +34,16 @@ const tilBeslutningDTO = (vedtak: SøknadsbehandlingVedtakContext): VedtakTilBes
                   }
                 : null,
         valgteTiltaksdeltakelser: vedtak.valgteTiltaksdeltakelser,
-        antallDagerPerMeldeperiode: vedtak.antallDagerPerMeldeperiode,
+        antallDagerPerMeldeperiode:
+            vedtak.resultat === SøknadsbehandlingResultat.INNVILGELSE
+                ? vedtak.antallDagerPerMeldeperiode.map((dager) => ({
+                      antallDagerPerMeldeperiode: dager.antallDagerPerMeldeperiode!,
+                      periode: {
+                          fraOgMed: dager.periode.fraOgMed!,
+                          tilOgMed: dager.periode.tilOgMed!,
+                      },
+                  }))
+                : null,
         avslagsgrunner:
             vedtak.resultat === SøknadsbehandlingResultat.AVSLAG ? vedtak.avslagsgrunner : null,
         //Validering skal fange at resultatet ikke er null

@@ -15,20 +15,28 @@ import {
     InnvilgelseActions,
     InnvilgelseState,
 } from '~/components/behandling/felles/state/InnvilgelseState';
+import {
+    AntallDagerForMeldeperiodeAction,
+    AntallDagerForMeldeperiodeState,
+    getAntallDagerForMeldeperiodeActionHandler,
+} from '~/components/behandling/felles/state/AntallDagerState';
 
 export type RevurderingInnvilgelseSkjemaActions =
     | InnvilgelseActions
     | TiltaksdeltagelseActions
-    | BarnetilleggActions;
+    | BarnetilleggActions
+    | AntallDagerForMeldeperiodeAction;
 
 export type RevurderingInnvilgelseSkjemaState = InnvilgelseState &
     TiltaksdeltagelseState &
-    BarnetilleggState;
+    BarnetilleggState &
+    AntallDagerForMeldeperiodeState;
 
 const actionHandlers = {
     ...getTiltaksdeltagelseActionHandlers<RevurderingInnvilgelseSkjemaState>(),
     ...getBarnetilleggActionHandlers<RevurderingInnvilgelseSkjemaState>(),
     ...getInnvilgelseActionHandlers<RevurderingInnvilgelseSkjemaState>(),
+    ...getAntallDagerForMeldeperiodeActionHandler<RevurderingInnvilgelseSkjemaState>(),
 } as const satisfies ReducerActionHandlers<
     RevurderingInnvilgelseSkjemaState,
     RevurderingInnvilgelseSkjemaActions
