@@ -1,4 +1,7 @@
-import { BehandlingResultat, BehandlingStatus, Behandlingstype,
+import {
+    BehandlingResultat,
+    BehandlingStatus,
+    Behandlingstype,
     SøknadsbehandlingResultat,
     RevurderingResultat,
 } from '~/types/BehandlingTypes';
@@ -56,6 +59,7 @@ export const meldekortBehandlingDagStatusTekst: Record<MeldekortBehandlingDagSta
 } as const;
 
 export const finnMeldeperiodeKjedeStatusTekst: Record<MeldeperiodeKjedeStatus, string> = {
+    [MeldeperiodeKjedeStatus.AVVENTER_MELDEKORT]: 'Avventer meldekort',
     [MeldeperiodeKjedeStatus.IKKE_RETT_TIL_TILTAKSPENGER]: 'Ikke rett til tiltakspenger',
     [MeldeperiodeKjedeStatus.IKKE_KLAR_TIL_BEHANDLING]: 'Ikke klar til behandling',
     [MeldeperiodeKjedeStatus.KLAR_TIL_BEHANDLING]: 'Klar til behandling',
@@ -77,14 +81,15 @@ export const behandlingResultatTilTag: Record<BehandlingResultat, ReactElement> 
     [SøknadsbehandlingResultat.AVSLAG]: <Tag variant="error">Avslag</Tag>,
     [SøknadsbehandlingResultat.INNVILGELSE]: <Tag variant="success">Innvilgelse</Tag>,
     [RevurderingResultat.STANS]: <Tag variant="warning">Stans</Tag>,
-    [RevurderingResultat.REVURDERING_INNVILGELSE]: <Tag variant="info">Revurdering innvilgelse</Tag>,
+    [RevurderingResultat.REVURDERING_INNVILGELSE]: (
+        <Tag variant="info">Revurdering innvilgelse</Tag>
+    ),
 };
 
 export const revurderingResultatTekst: Record<RevurderingResultat, string> = {
     [RevurderingResultat.STANS]: 'stans',
     [RevurderingResultat.REVURDERING_INNVILGELSE]: 'innvilgelse',
 } as const;
-
 
 export const meldekortUtbetalingstatusTekst: Record<Utbetalingsstatus, string> = {
     FEILET_MOT_OPPDRAG: 'Feilet mot oppdrag',

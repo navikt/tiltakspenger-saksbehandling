@@ -16,6 +16,7 @@ export type MeldeperiodeKjedeId = `${MeldeperiodeDato}/${MeldeperiodeDato}`;
 export type MeldeperiodeId = `meldeperiode_${string}`;
 
 export enum MeldeperiodeKjedeStatus {
+    AVVENTER_MELDEKORT = 'AVVENTER_MELDEKORT',
     IKKE_RETT_TIL_TILTAKSPENGER = 'IKKE_RETT_TIL_TILTAKSPENGER',
     IKKE_KLAR_TIL_BEHANDLING = 'IKKE_KLAR_TIL_BEHANDLING',
     KLAR_TIL_BEHANDLING = 'KLAR_TIL_BEHANDLING',
