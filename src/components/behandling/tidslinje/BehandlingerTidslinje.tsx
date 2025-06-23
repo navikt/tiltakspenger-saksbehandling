@@ -1,6 +1,7 @@
 import React from 'react';
 import {
     CheckmarkCircleIcon,
+    CheckmarkIcon,
     SackKronerIcon,
     TasklistIcon,
     XMarkOctagonIcon,
@@ -80,7 +81,7 @@ export const BehandlingerTidslinje = ({ sak }: Props) => {
                                             />
                                         )}
                                         <InfoElement
-                                            navn={'Har barnetillegg?'}
+                                            navn={'Har barnetillegg'}
                                             verdi={barnetillegg ? 'Ja' : 'Nei'}
                                         />
                                     </div>
@@ -116,6 +117,7 @@ export const BehandlingerTidslinje = ({ sak }: Props) => {
                                 start={new Date(fraOgMed)}
                                 end={new Date(tilOgMed)}
                                 status={'info'}
+                                icon={<CheckmarkIcon />}
                                 key={kjedeId}
                             >
                                 <div className={style.behandlingPreview}>

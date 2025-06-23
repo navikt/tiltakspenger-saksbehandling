@@ -1,5 +1,5 @@
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
-import { Alert, Button, Select } from '@navikt/ds-react';
+import { Button, Select } from '@navikt/ds-react';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { VedtakTiltaksdeltakelsePeriode } from '~/types/VedtakTyper';
 import { Tiltaksdeltagelse } from '~/types/TiltakDeltagelseTypes';
@@ -18,6 +18,7 @@ import { Dispatch } from 'react';
 import { InnvilgelseState } from '~/components/behandling/felles/state/InnvilgelseState';
 import { useRolleForBehandling } from '~/context/saksbehandler/SaksbehandlerContext';
 import { Separator } from '~/components/separator/Separator';
+import { VedtakHjelpetekst } from '~/components/behandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
 
 import style from './BehandlingTiltak.module.css';
 
@@ -78,11 +79,11 @@ export const BehandlingTiltak = (props: Props) => {
                 </VedtakSeksjon.Venstre>
 
                 <VedtakSeksjon.Høyre>
-                    <Alert variant={'warning'} size={'small'}>
+                    <VedtakHjelpetekst variant={'warning'}>
                         Flere tiltak registrert på bruker. Velg tiltak(ene) som bruker skal vurderes
                         for og periodene som gjelder. Det du velger brukes for regnskapsføring og
                         statistikk, og påvirker ikke vedtaket.
-                    </Alert>
+                    </VedtakHjelpetekst>
                 </VedtakSeksjon.Høyre>
             </VedtakSeksjon>
             <Separator />

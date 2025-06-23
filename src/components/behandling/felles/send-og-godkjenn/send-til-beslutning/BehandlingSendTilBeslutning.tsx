@@ -83,7 +83,7 @@ export const BehandlingSendTilBeslutning = ({
                 }
             >
                 {valideringResultat.warnings.length > 0 && (
-                    <Alert variant={'warning'} className={style.warning}>
+                    <Alert variant={'warning'} className={style.warning} size={'small'}>
                         <Heading size={'small'} level={'2'}>
                             {'Obs!'}
                         </Heading>
@@ -91,7 +91,7 @@ export const BehandlingSendTilBeslutning = ({
                     </Alert>
                 )}
                 {harValideringsfeil && (
-                    <Alert variant={'error'}>
+                    <Alert variant={'error'} size={'small'}>
                         <Heading size={'small'} level={'2'}>
                             {'Feil i vedtaket'}
                         </Heading>

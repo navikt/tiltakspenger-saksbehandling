@@ -44,26 +44,28 @@ export const BehandlingsperiodeVelger = ({
                 defaultSelected={behandlingsperiode.fraOgMed}
                 readOnly={erIkkeSaksbehandler}
                 onDateChange={(valgtDato) => {
-                    if (valgtDato) {
-                        const isoDate = dateTilISOTekst(valgtDato);
+                    if (!valgtDato) {
+                        return;
+                    }
 
+                    const isoDate = dateTilISOTekst(valgtDato);
+
+                    dispatch({
+                        type: 'oppdaterBehandlingsperiode',
+                        payload: { periode: { fraOgMed: isoDate } },
+                    });
+
+                    /**
+                     * Dersom vi kun har 1 tiltak på behandlingen, så viser vi ikke tiltaksperiodene, og saksbehandler har dermed
+                     * ikke mulighet til å matche tiltaksperioden med den nye innvilgelsesperioden.
+                     *
+                     * Derfor oppdaterer vi tiltaksperioden til å matche innvilgelsesperioden.
+                     */
+                    if (valgteTiltaksdeltakelser.length === 1) {
                         dispatch({
-                            type: 'oppdaterBehandlingsperiode',
-                            payload: { periode: { fraOgMed: isoDate } },
+                            type: 'oppdaterTiltakPeriode',
+                            payload: { index: 0, periode: { fraOgMed: isoDate } },
                         });
-
-                        /**
-                         * Dersom vi kun har 1 tiltak på behandlingen, så viser vi ikke tiltaksperiodene, og saksbehandler har dermed
-                         * ikke mulighet til å matche tiltaksperioden med den nye innvilgelsesperioden.
-                         *
-                         * Derfor oppdaterer vi tiltaksperioden til å matche innvilgelsesperioden.
-                         */
-                        if (valgteTiltaksdeltakelser.length === 1) {
-                            dispatch({
-                                type: 'oppdaterTiltakPeriode',
-                                payload: { index: 0, periode: { fraOgMed: isoDate } },
-                            });
-                        }
                     }
                 }}
             />
@@ -73,20 +75,22 @@ export const BehandlingsperiodeVelger = ({
                 defaultSelected={behandlingsperiode.tilOgMed}
                 readOnly={erIkkeSaksbehandler}
                 onDateChange={(valgtDato) => {
-                    if (valgtDato) {
-                        const isoDate = dateTilISOTekst(valgtDato);
+                    if (!valgtDato) {
+                        return;
+                    }
 
+                    const isoDate = dateTilISOTekst(valgtDato);
+
+                    dispatch({
+                        type: 'oppdaterBehandlingsperiode',
+                        payload: { periode: { tilOgMed: isoDate } },
+                    });
+
+                    if (valgteTiltaksdeltakelser.length === 1) {
                         dispatch({
-                            type: 'oppdaterBehandlingsperiode',
-                            payload: { periode: { tilOgMed: isoDate } },
+                            type: 'oppdaterTiltakPeriode',
+                            payload: { index: 0, periode: { tilOgMed: isoDate } },
                         });
-
-                        if (valgteTiltaksdeltakelser.length === 1) {
-                            dispatch({
-                                type: 'oppdaterTiltakPeriode',
-                                payload: { index: 0, periode: { tilOgMed: isoDate } },
-                            });
-                        }
                     }
                 }}
             />

@@ -7,8 +7,11 @@ import {
 import { useSendRevurderingVedtak } from '~/components/behandling/revurdering/useSendRevurderingVedtak';
 import { VedtakRevurderInnvilgelseDTO } from '~/types/VedtakTyper';
 import { BehandlingSendOgGodkjenn } from '~/components/behandling/felles/send-og-godkjenn/BehandlingSendOgGodkjenn';
+import { revurderingInnvilgelseValidering } from '~/components/behandling/revurdering/innvilgelse/revurderingInnvilgelseValidering';
+import { useSak } from '~/context/sak/SakContext';
 
 export const RevurderingInnvilgelseKnapper = () => {
+    const { sak } = useSak();
     const { behandling } = useRevurderingBehandling();
     const vedtakSkjema = useRevurderingInnvilgelseSkjema();
 
@@ -25,10 +28,7 @@ export const RevurderingInnvilgelseKnapper = () => {
                 send: () => sendRevurderingTilBeslutning(tilBeslutningDTO(vedtakSkjema)),
                 laster: sendRevurderingTilBeslutningLaster,
                 feil: sendRevurderingTilBeslutningError,
-                validering: () => ({
-                    errors: [],
-                    warnings: [],
-                }),
+                validering: () => revurderingInnvilgelseValidering(sak, behandling, vedtakSkjema),
             }}
         />
     );
