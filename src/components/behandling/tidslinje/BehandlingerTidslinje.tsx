@@ -2,17 +2,20 @@ import React from 'react';
 import {
     CheckmarkCircleIcon,
     CheckmarkIcon,
+    ChevronLeftIcon,
+    ChevronRightIcon,
     SackKronerIcon,
     TasklistIcon,
     XMarkOctagonIcon,
 } from '@navikt/aksel-icons';
-import { Heading, Timeline, Link, BodyShort } from '@navikt/ds-react';
+import { Heading, Timeline, Link, BodyShort, Button } from '@navikt/ds-react';
 import { SakProps } from '~/types/SakTypes';
 import { Vedtakstype } from '~/types/VedtakTyper';
 import NextLink from 'next/link';
-import { formaterDatotekst } from '~/utils/date';
+import { formaterDatotekst, periodeTilFormatertDatotekst } from '~/utils/date';
 import { formatterBeløp } from '~/utils/beløp';
 import { meldeperiodeUrl } from '~/utils/urls';
+import { useTidslinjeDateRange } from '~/components/behandling/tidslinje/useTidslinjeDateRange';
 
 import style from './BehandlingerTidslinje.module.css';
 
@@ -22,19 +25,43 @@ type Props = {
 
 export const BehandlingerTidslinje = ({ sak }: Props) => {
     const { tidslinje, meldeperiodeKjeder, saksnummer } = sak;
-
-    if (tidslinje.length === 0) {
-        return <div>{'Det finnes ingen vedtak på denne saken ennå'}</div>;
-    }
-
     const beregninger = meldeperiodeKjeder.map((kjede) => kjede.sisteBeregning).filter(Boolean);
+
+    const { startDate, endDate, scrollTidslinje } = useTidslinjeDateRange(tidslinje);
 
     return (
         <div className={style.wrapper}>
-            <Heading size={'small'} level={'2'} className={style.header}>
-                {'Gjeldende tilstand for saken'}
-            </Heading>
-            <Timeline>
+            <div className={style.header}>
+                <Heading size={'small'} level={'2'}>
+                    {'Gjeldende vedtak og utbetalinger'}
+                </Heading>
+                <div className={style.scroll}>
+                    <BodyShort size={'small'} className={style.periode}>
+                        {periodeTilFormatertDatotekst({
+                            fraOgMed: startDate.toString(),
+                            tilOgMed: endDate.toString(),
+                        })}
+                    </BodyShort>
+                    <Button
+                        size={'small'}
+                        variant={'tertiary'}
+                        onClick={() => scrollTidslinje(-1)}
+                        icon={<ChevronLeftIcon />}
+                    >
+                        {'Forrige'}
+                    </Button>
+                    <Button
+                        size={'small'}
+                        variant={'tertiary'}
+                        onClick={() => scrollTidslinje(1)}
+                        icon={<ChevronRightIcon />}
+                        iconPosition={'right'}
+                    >
+                        {'Neste'}
+                    </Button>
+                </div>
+            </div>
+            <Timeline startDate={startDate} endDate={endDate}>
                 <Timeline.Row label={'Vedtak'} icon={<TasklistIcon />}>
                     {tidslinje.map((vedtak) => {
                         const {
@@ -117,7 +144,7 @@ export const BehandlingerTidslinje = ({ sak }: Props) => {
                                 start={new Date(fraOgMed)}
                                 end={new Date(tilOgMed)}
                                 status={'info'}
-                                icon={<CheckmarkIcon />}
+                                icon={<CheckmarkIcon className={style.utbetalingIkon} />}
                                 key={kjedeId}
                             >
                                 <div className={style.behandlingPreview}>

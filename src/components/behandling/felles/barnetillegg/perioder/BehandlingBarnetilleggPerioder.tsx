@@ -54,7 +54,7 @@ export const BehandlingBarnetilleggPerioder = (props: Props) => {
                                 });
                             }}
                         >
-                            {'Ny periode for barnetillegg'}
+                            {'Ny periode'}
                         </Button>
                         {antallBarn > 0 && erSøknadsbehandling && (
                             <Button

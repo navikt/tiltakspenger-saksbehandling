@@ -73,7 +73,7 @@ export const BehandlingTiltak = (props: Props) => {
                                 });
                             }}
                         >
-                            {'Ny periode for tiltak'}
+                            {'Ny periode'}
                         </Button>
                     )}
                 </VedtakSeksjon.Venstre>

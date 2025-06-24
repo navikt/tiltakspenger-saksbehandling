@@ -106,7 +106,7 @@ const AntallDagerForMeldeperiodeForm = (props: {
                                     ]);
                                 }}
                             >
-                                Fjern meldeperiode
+                                Fjern
                             </Button>
                         )}
                     </li>
@@ -128,7 +128,7 @@ const AntallDagerForMeldeperiodeForm = (props: {
                         ]);
                     }}
                 >
-                    Ny meldeperiode
+                    Ny periode
                 </Button>
             )}
         </div>
