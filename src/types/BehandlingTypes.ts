@@ -66,11 +66,9 @@ export type BehandlingSaksopplysningerData = {
     ytelser: Ytelse[];
 };
 
-// TODO: revurdering og søknadsbehandling bør ha separate typer
 export type BehandlingForOversiktData = {
     id: BehandlingId;
     sakId: SakId;
-    typeBehandling: Exclude<Behandlingstype, Behandlingstype.SØKNAD>;
     status: Exclude<BehandlingStatus, BehandlingStatus.SØKNAD>;
     underkjent: boolean;
     kravtidspunkt: string | null;
@@ -80,7 +78,16 @@ export type BehandlingForOversiktData = {
     saksbehandler: string;
     beslutter: string | null;
     opprettet: string;
-};
+} & (
+    | {
+          typeBehandling: Behandlingstype.REVURDERING;
+          resultat: RevurderingResultat;
+      }
+    | {
+          typeBehandling: Behandlingstype.SØKNADSBEHANDLING;
+          resultat: Nullable<SøknadsbehandlingResultat>;
+      }
+);
 
 export type BehandlingEllerSøknadForOversiktData =
     | BehandlingForOversiktData
