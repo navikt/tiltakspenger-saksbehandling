@@ -21,6 +21,8 @@ export const SøknadsbehandlingResultatVelger = () => {
     const { resultat } = skjemaContext;
 
     const erIkkeSaksbehandler = rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER;
+    const kanIkkeInnvilge =
+        !behandling.valgteTiltaksdeltakelser || behandling.valgteTiltaksdeltakelser.length === 0;
 
     return (
         <VedtakSeksjon>
@@ -40,7 +42,9 @@ export const SøknadsbehandlingResultatVelger = () => {
                         });
                     }}
                 >
-                    <Radio value={SøknadsbehandlingResultat.INNVILGELSE}>Innvilgelse</Radio>
+                    <Radio value={SøknadsbehandlingResultat.INNVILGELSE} disabled={kanIkkeInnvilge}>
+                        Innvilgelse
+                    </Radio>
                     <Radio value={SøknadsbehandlingResultat.AVSLAG}>Avslag</Radio>
                 </RadioGroup>
                 <BehandlingsperiodeVelger
