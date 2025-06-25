@@ -4,6 +4,7 @@ import {
     Behandlingstype,
     SøknadsbehandlingResultat,
     RevurderingResultat,
+    ManueltBehandlesGrunn,
 } from '~/types/BehandlingTypes';
 import {
     MeldekortBehandlingDagStatus,
@@ -33,6 +34,9 @@ const behandlingStatusTag: Record<BehandlingStatus, React.ReactElement> = {
     [BehandlingStatus.UNDER_BEHANDLING]: <Tag variant="info">Under behandling</Tag>,
     [BehandlingStatus.UNDER_BESLUTNING]: <Tag variant="info">Under beslutning</Tag>,
     [BehandlingStatus.AVBRUTT]: <Tag variant="neutral">Avsluttet</Tag>,
+    [BehandlingStatus.UNDER_AUTOMATISK_BEHANDLING]: (
+        <Tag variant="neutral">Under automatisk behandling</Tag>
+    ),
 };
 
 export const brukersMeldekortDagStatusTekst: Record<BrukersMeldekortDagStatus, string> = {
@@ -100,4 +104,30 @@ export const meldekortUtbetalingstatusTekst: Record<Utbetalingsstatus, string> =
     SENDT_TIL_HELVED: 'Venter på helved',
     SENDT_TIL_OPPDRAG: 'Venter på oppdrag',
     AVBRUTT: 'Avbrutt',
+};
+
+export const manueltBehandlesGrunnTekst: Record<ManueltBehandlesGrunn, string> = {
+    SOKNAD_HAR_ANDRE_YTELSER: 'Bruker har svart ja på spørsmål om andre ytelser i søknaden',
+    SOKNAD_HAR_LAGT_TIL_BARN_MANUELT: 'Bruker har lagt til barn manuelt i søknaden',
+    SOKNAD_BARN_UTENFOR_EOS: 'Bruker har barn som oppholder seg utenfor EØS',
+    SOKNAD_BARN_FYLLER_16_I_SOKNADSPERIODEN:
+        'Bruker har barn som fyller 16 år i løpet av søknadsperioden',
+    SOKNAD_BARN_FODT_I_SOKNADSPERIODEN: 'Bruker har fått barn i løpet av søknadsperioden',
+    SOKNAD_HAR_KVP: 'Bruker har svart ja på spørsmål om KVP i søknaden',
+    SOKNAD_INTRO: 'Bruker har svart ja på spørsmål om introduksjonsstønad i søknaden',
+    SOKNAD_INSTITUSJONSOPPHOLD: 'Bruker har svart ja på spørsmål om institusjonsopphold i søknaden',
+
+    SAKSOPPLYSNING_FANT_IKKE_TILTAK: 'Fant ikke tiltaksdeltakelsen det er søkt for',
+    SAKSOPPLYSNING_OVERLAPPENDE_TILTAK:
+        'Bruker har overlappende tiltaksdeltakelser i søknadsperioden',
+    SAKSOPPLYSNING_MINDRE_ENN_14_DAGER_MELLOM_TILTAK_OG_SOKNAD:
+        'Bruker har tiltaksdeltakelse som starter eller slutter mindre enn 14 dager før eller etter søknadsperioden',
+    SAKSOPPLYSNING_ULIK_TILTAKSPERIODE:
+        'Tiltaksdeltakelsen har ikke samme periode som det er søkt for',
+    SAKSOPPLYSNING_ANDRE_YTELSER: 'Bruker mottar andre ytelser i søknadsperioden',
+
+    ANNET_APEN_BEHANDLING: 'Det finnes en åpen behandling for søker',
+    ANNET_VEDTAK_FOR_SAMME_PERIODE: 'Det finnes et annet vedtak som overlapper med søknadsperioden',
+    ANNET_HAR_SOKT_FOR_SENT: 'Tiltaksdeltakelsen startet mer enn tre måneder før kravdato',
+    ANNET_ER_UNDER_18_I_SOKNADSPERIODEN: 'Bruker er under 18 år i søknadsperioden',
 };
