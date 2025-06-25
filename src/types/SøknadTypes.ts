@@ -38,6 +38,7 @@ export type SøknadForOversiktProps = {
     sakId: SakId;
     saksnummer: string;
     typeBehandling: Behandlingstype.SØKNAD;
+    resultat: null;
     status: BehandlingStatus.SØKNAD;
     underkjent: boolean;
     kravtidspunkt: string;
