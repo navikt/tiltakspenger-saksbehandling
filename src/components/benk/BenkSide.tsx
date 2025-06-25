@@ -48,7 +48,7 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
     const [status, setStatus] = useState<BehandlingssammendragStatus | 'Alle'>(
         statusParam ?? 'Alle',
     );
-    const [saksbehandler, setSaksbehandler] = useState<string | 'Alle'>(
+    const [saksbehandler, setSaksbehandler] = useState<string | 'Alle' | 'IKKE_TILDELT'>(
         saksbehandlerParam ?? 'Alle',
     );
 
@@ -121,6 +121,7 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
                         onChange={(e) => setSaksbehandler(e.target.value)}
                     >
                         <option value={'Alle'}>Alle</option>
+                        <option value={'IKKE_TILDELT'}>Ikke tildelt</option>
                         {benkOversikt.behandlingssammendrag
                             .map((behandling) => behandling.saksbehandler)
                             .filter((value, index, self) => value && self.indexOf(value) === index)
