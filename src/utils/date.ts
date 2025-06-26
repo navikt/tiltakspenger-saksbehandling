@@ -2,10 +2,12 @@ import dayjs, { Dayjs } from 'dayjs';
 import { Periode } from '../types/Periode';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 import weekday from 'dayjs/plugin/weekday';
+import isBetween from 'dayjs/plugin/isBetween';
 import 'dayjs/locale/nb';
 
 dayjs.extend(weekday);
 dayjs.extend(weekOfYear);
+dayjs.extend(isBetween);
 dayjs.locale('nb');
 
 const DATO_FORMAT = 'YYYY-MM-DD';
@@ -59,3 +61,12 @@ export const leggTilDager = (dato: string, dager: number) => {
 export const nesteDag = (dato: string) => leggTilDager(dato, 1);
 
 export const forrigeDag = (dato: string) => leggTilDager(dato, -1);
+
+export const overlapperMed = (dato: string | Date, periode: Periode) =>
+    dayjs(dato).isBetween(periode.fraOgMed, periode.tilOgMed) ||
+    dayjs(dato).isSame(periode.fraOgMed) ||
+    dayjs(dato).isSame(periode.tilOgMed);
+
+export const datoTilDatoInputText = (dato: string | Date): string => {
+    return dayjs(dato).format('DD.MM.YYYY');
+};

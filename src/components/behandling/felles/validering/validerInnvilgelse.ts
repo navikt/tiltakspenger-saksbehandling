@@ -54,14 +54,17 @@ export const validerInnvilgelse = (
     if (!harFylltUtAlleNødvendigeFelter) {
         validering.errors.push('Alle felter for antall dager per meldeperiode må fylles ut');
     } else {
-        const antallDager = antallDagerPerMeldeperiode.reduce(
-            (acc, curr) => acc + (curr.antallDagerPerMeldeperiode ?? 0),
-            0,
-        );
-
-        if (antallDager < 1 || antallDager > 14) {
-            validering.errors.push('Antall dager per meldeperiode må være mellom 1 og 14');
-        }
+        antallDagerPerMeldeperiode.forEach((periode) => {
+            //validert over til å være utfylt.
+            if (
+                periode.antallDagerPerMeldeperiode! < 1 ||
+                periode.antallDagerPerMeldeperiode! > 14
+            ) {
+                validering.errors.push(
+                    `Antall dager per meldeperiode må være mellom 1 og 14. Perioden: ${periode.periode.fraOgMed} - ${periode.periode.tilOgMed}, Antall dager: ${periode.antallDagerPerMeldeperiode}`,
+                );
+            }
+        });
     }
 
     return validering;

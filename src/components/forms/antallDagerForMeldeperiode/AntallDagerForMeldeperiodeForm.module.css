@@ -16,7 +16,6 @@
     margin-bottom: var(--a-spacing-7);
 }
 
-.antallDagerElementContainer {
-    display: flex;
-    gap: var(--a-spacing-8);
+.fjernMeldeperiodeKnapp {
+    align-self: flex-end;
 }

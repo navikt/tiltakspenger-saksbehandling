@@ -33,12 +33,7 @@ export const SøknadsbehandlingResultatVelger = () => {
                     defaultValue={resultat}
                     readOnly={erIkkeSaksbehandler}
                     onChange={(valgtResultat: SøknadsbehandlingResultat) => {
-                        dispatch({
-                            type: 'setResultat',
-                            payload: {
-                                resultat: valgtResultat,
-                            },
-                        });
+                        dispatch({ type: 'setResultat', payload: { resultat: valgtResultat } });
                     }}
                 >
                     <Radio value={SøknadsbehandlingResultat.INNVILGELSE} disabled={kanIkkeInnvilge}>

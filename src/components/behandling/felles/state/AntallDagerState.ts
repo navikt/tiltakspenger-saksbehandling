@@ -25,10 +25,8 @@ export const getAntallDagerForMeldeperiodeActionHandler = <
         oppdaterAntallDagerForMeldeperiode: (
             state,
             payload: { antallDager: AntallDagerForMeldeperiodeFormData[] },
-        ) => {
-            return {
-                ...state,
-                antallDagerPerMeldeperiode: payload.antallDager,
-            };
-        },
+        ) => ({
+            ...state,
+            antallDagerPerMeldeperiode: payload.antallDager,
+        }),
     }) as const;

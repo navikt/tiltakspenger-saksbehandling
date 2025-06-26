@@ -15,10 +15,6 @@ export const DagerPerMeldeperiode = (props: {
     dispatch: (action: AntallDagerForMeldeperiodeFormData[]) => void;
     rolleForBehandling: Nullable<SaksbehandlerRolle>;
 }) => {
-    // const { rolleForBehandling } = useSøknadsbehandling();
-    // const { antallDagerPerMeldeperiode, behandlingsperiode } = useSøknadsbehandlingSkjema();
-    // const dispatch = useSøknadsbehandlingSkjemaDispatch();
-
     const erSaksbehandler = props.rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER;
     const erIkkeSaksbehandler = !erSaksbehandler;
 
