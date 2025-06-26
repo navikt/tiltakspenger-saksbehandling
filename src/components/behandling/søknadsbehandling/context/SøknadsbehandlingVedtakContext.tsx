@@ -51,12 +51,15 @@ const initieltVedtakSkjema = (behandling: SøknadsbehandlingData): Søknadsbehan
                 behandling.søknad.barnetillegg,
                 behandling.virkningsperiode ?? tiltaksperiode,
             ),
-        valgteTiltaksdeltakelser: behandling.valgteTiltaksdeltakelser || [
-            {
-                eksternDeltagelseId: tiltakFraSoknad.eksternDeltagelseId,
-                periode: behandling.virkningsperiode ?? tiltaksperiode,
-            },
-        ],
+        valgteTiltaksdeltakelser:
+            behandling.valgteTiltaksdeltakelser ||
+            (tiltakFraSoknad && [
+                {
+                    eksternDeltagelseId: tiltakFraSoknad.eksternDeltagelseId,
+                    periode: behandling.virkningsperiode ?? tiltaksperiode,
+                },
+            ]) ||
+            [],
         antallDagerPerMeldeperiode: behandling.antallDagerPerMeldeperiode
             ? behandling.antallDagerPerMeldeperiode.map((dager) => ({
                   antallDagerPerMeldeperiode: dager.antallDagerPerMeldeperiode,
