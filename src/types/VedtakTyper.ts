@@ -17,7 +17,7 @@ export type VedtakTilBeslutningDTO = {
     behandlingsperiode: Periode;
     barnetillegg: VedtakBarnetilleggDTO | null;
     valgteTiltaksdeltakelser: VedtakTiltaksdeltakelsePeriode[];
-    antallDagerPerMeldeperiode: Nullable<AntallDagerForMeldeperiode[]>;
+    antallDagerPerMeldeperiodeForPerioder: Nullable<AntallDagerForMeldeperiode[]>;
     avslagsgrunner: Nullable<Avslagsgrunn[]>;
     resultat: BehandlingResultat;
 };

@@ -34,7 +34,7 @@ const tilBeslutningDTO = (vedtak: SøknadsbehandlingVedtakContext): VedtakTilBes
                   }
                 : null,
         valgteTiltaksdeltakelser: vedtak.valgteTiltaksdeltakelser,
-        antallDagerPerMeldeperiode:
+        antallDagerPerMeldeperiodeForPerioder:
             vedtak.resultat === SøknadsbehandlingResultat.INNVILGELSE
                 ? vedtak.antallDagerPerMeldeperiode.map((dager) => ({
                       antallDagerPerMeldeperiode: dager.antallDagerPerMeldeperiode!,
