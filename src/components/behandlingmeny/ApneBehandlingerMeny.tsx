@@ -20,7 +20,7 @@ import LeggTilbakeBehandlingMenyValg, {
 import TildelMegMenyvalg, {
     visTildelMegMenyvalg,
 } from '~/components/behandlingmeny/menyvalg/TildelMegMenyvalg';
-import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
+import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
 import SeBehandlingMenyvalg from '~/components/behandlingmeny/menyvalg/SeBehandlingMenyvalg';
 import AvsluttBehandlingModal from '~/components/modaler/AvsluttBehandlingModal';
@@ -73,10 +73,13 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
             <ActionMenu>
                 <ActionMenu.Trigger>
                     <Button
-                        variant="tertiary-neutral"
-                        icon={<MenuElipsisVerticalIcon title="Menyvalg" />}
+                        variant="secondary"
+                        iconPosition="right"
+                        icon={<ChevronDownIcon title="Menyvalg" />}
                         size="small"
-                    />
+                    >
+                        Velg
+                    </Button>
                 </ActionMenu.Trigger>
                 <ActionMenu.Content>
                     {visOvertaBehandling && (

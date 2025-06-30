@@ -1,7 +1,7 @@
 import React from 'react';
 import router from 'next/router';
 import { ActionMenu, Button } from '@navikt/ds-react';
-import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
+import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { useStartSøknadBehandling } from './useStartSøknadBehandling';
 import Varsel from '../../varsel/Varsel';
 import AvsluttBehandlingModal from '~/components/modaler/AvsluttBehandlingModal';
@@ -41,10 +41,13 @@ export const StartSøknadBehandling = ({ søknad, medAvsluttBehandling }: Props)
             <ActionMenu>
                 <ActionMenu.Trigger>
                     <Button
-                        variant="tertiary-neutral"
-                        icon={<MenuElipsisVerticalIcon title="Menyvalg" />}
+                        variant="secondary"
+                        iconPosition="right"
+                        icon={<ChevronDownIcon title="Menyvalg" />}
                         size="small"
-                    />
+                    >
+                        Velg
+                    </Button>
                 </ActionMenu.Trigger>
                 <ActionMenu.Content>
                     <ActionMenu.Item onClick={startBehandling}>Opprett behandling</ActionMenu.Item>

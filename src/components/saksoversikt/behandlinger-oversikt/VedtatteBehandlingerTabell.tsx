@@ -2,7 +2,7 @@ import { ActionMenu, Button, Table } from '@navikt/ds-react';
 import { behandlingResultatTilTag, finnBehandlingstypeTekst } from '~/utils/tekstformateringUtils';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '~/utils/date';
 import { SøknadsbehandlingResultat } from '~/types/BehandlingTypes';
-import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
+import { ChevronDownIcon } from '@navikt/aksel-icons';
 import MenyValgBehandleSøknadPåNytt from '~/components/behandlingmeny/menyvalg/MenyValgBehandleSøknadPåNytt';
 import { VedtattBehandlingDataCellInfo } from '~/components/saksoversikt/behandlinger-oversikt/VedtatteBehandlingerUtils';
 import SeBehandlingMenyvalg from '~/components/behandlingmeny/menyvalg/SeBehandlingMenyvalg';
@@ -63,10 +63,13 @@ export const VedtatteBehandlingerTabell = (props: {
                                 <ActionMenu>
                                     <ActionMenu.Trigger>
                                         <Button
-                                            variant="tertiary-neutral"
-                                            icon={<MenuElipsisVerticalIcon title="Menyvalg" />}
+                                            variant="secondary"
+                                            iconPosition="right"
+                                            icon={<ChevronDownIcon title="Menyvalg" />}
                                             size="small"
-                                        />
+                                        >
+                                            Velg
+                                        </Button>
                                     </ActionMenu.Trigger>
                                     <ActionMenu.Content>
                                         <>
