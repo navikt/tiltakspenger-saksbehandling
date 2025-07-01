@@ -24,7 +24,7 @@ export const SøknadsbehandlingBrev = () => {
                 fritekst: vedtak.getBrevtekst(),
                 // Backend vil ignorere perioden dersom vedtaket er avslag, og hvis tilstanden er tilBeslutter (senere enn under behandling)
                 virkningsperiode: vedtak.behandlingsperiode,
-                barnetillegg: vedtak.harBarnetillegg ? vedtak.barnetilleggPerioder : [],
+                barnetillegg: vedtak.harBarnetillegg ? vedtak.barnetilleggPerioder : null,
                 // vi rendrer ikke komponenten hvis resultatet ikke eksiterer i parenten
                 resultat: vedtak.resultat!,
                 avslagsgrunner:

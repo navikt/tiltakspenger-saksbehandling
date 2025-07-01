@@ -12,7 +12,7 @@ import { Nullable } from '~/types/UtilTypes';
 export type SøknadsbehandlingBrevForhåndsvisningDTO = {
     fritekst: string;
     virkningsperiode: Periode;
-    barnetillegg: VedtakBarnetilleggPeriode[];
+    barnetillegg: Nullable<VedtakBarnetilleggPeriode[]>;
     resultat: SøknadsbehandlingResultat;
     avslagsgrunner: Nullable<Avslagsgrunn[]>;
 };
