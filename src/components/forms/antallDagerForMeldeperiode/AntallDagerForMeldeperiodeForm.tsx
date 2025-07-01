@@ -26,7 +26,7 @@ const AntallDagerForMeldeperiodeForm = (props: {
             <ul className={styles.antallDagerContainer}>
                 {props.antallDagerPerMeldeperiode.map((periode, index) => (
                     <li
-                        key={`d-${periode.antallDagerPerMeldeperiode}-f-${periode.periode.fraOgMed}-${periode.periode.tilOgMed}`}
+                        key={`d-${periode.antallDagerPerMeldeperiode}-f-${periode.periode.fraOgMed}-${periode.periode.tilOgMed}-${index}`}
                     >
                         <VStack gap="2">
                             <HStack gap="8">
