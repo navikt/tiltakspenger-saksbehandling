@@ -91,7 +91,7 @@ const AntallDagerForMeldeperiodeForm = (props: {
                                             setValideringsFeil({
                                                 index,
                                                 melding:
-                                                    'Valgt dato vil overlappe med en anne periode. Vennligst velg en annen dato.',
+                                                    'Valgt dato vil overlappe med en annen periode. Vennligst velg en annen dato.',
                                             });
                                             return;
                                         }
@@ -141,7 +141,7 @@ const AntallDagerForMeldeperiodeForm = (props: {
                                             setValideringsFeil({
                                                 index,
                                                 melding:
-                                                    'Valgt dato vil overlappe med en anne periode. Vennligst velg en annen dato.',
+                                                    'Valgt dato vil overlappe med en annen periode. Vennligst velg en annen dato.',
                                             });
                                             return;
                                         }
