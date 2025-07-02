@@ -16,6 +16,7 @@ export const RevurderingInnvilgelseBarnetillegg = () => {
             behandling={behandling}
             dispatch={dispatch}
             context={skjemaContext}
+            valgTekst={'Ønsker du å behandle barnetillegg?'}
         />
     );
 };

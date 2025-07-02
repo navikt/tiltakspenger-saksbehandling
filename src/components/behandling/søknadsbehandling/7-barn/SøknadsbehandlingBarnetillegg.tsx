@@ -26,6 +26,7 @@ export const SøknadsbehandlingBarnetillegg = () => {
                 behandling={behandling}
                 dispatch={dispatch}
                 context={skjemaContext}
+                valgTekst={'Har det blitt søkt om barnetillegg?'}
             />
             <Separator />
         </div>

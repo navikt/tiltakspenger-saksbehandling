@@ -23,10 +23,11 @@ export type BehandlingBarnetilleggProps = {
     dispatch: Dispatch<BarnetilleggActions | InnvilgelseActions>;
     context: BarnetilleggState &
         InnvilgelseState & { barnetilleggBegrunnelseRef: RefObject<HTMLTextAreaElement> };
+    valgTekst: string;
 };
 
 export const BehandlingBarnetillegg = (props: BehandlingBarnetilleggProps) => {
-    const { behandling, dispatch, context } = props;
+    const { behandling, dispatch, context, valgTekst } = props;
     const { harBarnetillegg } = context;
 
     const rolle = useRolleForBehandling(behandling);
@@ -42,7 +43,7 @@ export const BehandlingBarnetillegg = (props: BehandlingBarnetilleggProps) => {
 
                 <VedtakSeksjon.Venstre>
                     <RadioGroup
-                        legend={'Har det blitt søkt om barnetillegg?'}
+                        legend={valgTekst}
                         size={'small'}
                         className={style.radioGroup}
                         defaultValue={harBarnetillegg}
