@@ -24,6 +24,7 @@ export const RevurderingInnvilgelseBrev = () => {
                 resultat: RevurderingResultat.REVURDERING_INNVILGELSE,
                 fritekst: vedtak.getBrevtekst(),
                 virkningsperiode: vedtak.behandlingsperiode,
+                barnetillegg: vedtak.harBarnetillegg ? vedtak.barnetilleggPerioder : null,
             })}
             hjelpetekst={
                 <div>
