@@ -85,11 +85,12 @@ export type Rammevedtak = {
     id: VedtakId;
     behandlingId: BehandlingId;
     opprettet: string;
-    vedtaksdato: string;
+    vedtaksdato: Nullable<string>;
     vedtaksType: Vedtakstype;
     periode: Periode;
     saksbehandler: string;
     beslutter: string;
-    antallDagerPerMeldeperiode: Nullable<number>;
+    // TODO jah: Denne blir en periodisering. På samme måte som behandlingen. Brukes for å vises i tidslinja.
+    antallDagerPerMeldeperiode: number;
     barnetillegg: Nullable<BarnetilleggData>;
 };

@@ -101,12 +101,10 @@ export const BehandlingerTidslinje = ({ sak }: Props) => {
                                             navn={'Periode'}
                                             verdi={`${formaterDatotekst(fraOgMed)} - ${formaterDatotekst(tilOgMed)}`}
                                         />
-                                        {antallDagerPerMeldeperiode !== null && (
-                                            <InfoElement
-                                                navn={'Antall dager per meldeperiode'}
-                                                verdi={antallDagerPerMeldeperiode.toString()}
-                                            />
-                                        )}
+                                        <InfoElement
+                                            navn={'Antall dager per meldeperiode'}
+                                            verdi={antallDagerPerMeldeperiode.toString()}
+                                        />
                                         <InfoElement
                                             navn={'Har barnetillegg'}
                                             verdi={barnetillegg ? 'Ja' : 'Nei'}
@@ -115,7 +113,11 @@ export const BehandlingerTidslinje = ({ sak }: Props) => {
                                     <div>
                                         <InfoElement
                                             navn={'Vedtaksdato'}
-                                            verdi={formaterDatotekst(vedtaksdato)}
+                                            verdi={
+                                                vedtaksdato
+                                                    ? formaterDatotekst(vedtaksdato)
+                                                    : 'Brev ikke journalført enda'
+                                            }
                                         />
                                         <InfoElement navn={'Saksbehandler'} verdi={saksbehandler} />
                                         <InfoElement navn={'Beslutter'} verdi={beslutter} />
