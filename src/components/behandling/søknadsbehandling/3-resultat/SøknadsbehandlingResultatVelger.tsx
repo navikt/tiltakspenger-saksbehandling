@@ -45,10 +45,11 @@ export const SøknadsbehandlingResultatVelger = () => {
                     behandling={behandling}
                     context={skjemaContext}
                     dispatch={dispatch}
-                    label={
-                        resultat === SøknadsbehandlingResultat.INNVILGELSE ? 'Innvilges' : 'Avslag'
-                    }
-                    className={classNames(style.datovelgere, !resultat && style.skjult)}
+                    label={'Innvilges'}
+                    className={classNames(
+                        style.datovelgere,
+                        resultat !== SøknadsbehandlingResultat.INNVILGELSE && style.skjult,
+                    )}
                 />
             </VedtakSeksjon.Venstre>
         </VedtakSeksjon>

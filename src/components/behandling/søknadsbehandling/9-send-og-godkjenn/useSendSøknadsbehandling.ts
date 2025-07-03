@@ -22,31 +22,39 @@ export const useSendSøknadsbehandling = (
 };
 
 const tilBeslutningDTO = (vedtak: SøknadsbehandlingVedtakContext): VedtakTilBeslutningDTO => {
-    return {
-        begrunnelseVilkårsvurdering: vedtak.getBegrunnelse(),
-        fritekstTilVedtaksbrev: vedtak.getBrevtekst(),
-        behandlingsperiode: vedtak.behandlingsperiode,
-        barnetillegg:
-            vedtak.resultat === SøknadsbehandlingResultat.INNVILGELSE && vedtak.harBarnetillegg
-                ? {
-                      begrunnelse: vedtak.getBarnetilleggBegrunnelse(),
-                      perioder: vedtak.barnetilleggPerioder,
-                  }
-                : null,
-        valgteTiltaksdeltakelser: vedtak.valgteTiltaksdeltakelser,
-        antallDagerPerMeldeperiodeForPerioder:
-            vedtak.resultat === SøknadsbehandlingResultat.INNVILGELSE
-                ? vedtak.antallDagerPerMeldeperiode.map((dager) => ({
-                      antallDagerPerMeldeperiode: dager.antallDagerPerMeldeperiode!,
-                      periode: {
-                          fraOgMed: dager.periode.fraOgMed!,
-                          tilOgMed: dager.periode.tilOgMed!,
-                      },
-                  }))
-                : null,
-        avslagsgrunner:
-            vedtak.resultat === SøknadsbehandlingResultat.AVSLAG ? vedtak.avslagsgrunner : null,
-        //Validering skal fange at resultatet ikke er null
-        resultat: vedtak.resultat!,
-    };
+    switch (vedtak.resultat) {
+        case SøknadsbehandlingResultat.INNVILGELSE:
+            return {
+                begrunnelseVilkårsvurdering: vedtak.getBegrunnelse(),
+                fritekstTilVedtaksbrev: vedtak.getBrevtekst(),
+                innvilgelsesperiode: vedtak.behandlingsperiode,
+                barnetillegg: vedtak.harBarnetillegg
+                    ? {
+                          begrunnelse: vedtak.getBarnetilleggBegrunnelse(),
+                          perioder: vedtak.barnetilleggPerioder,
+                      }
+                    : null,
+                valgteTiltaksdeltakelser: vedtak.valgteTiltaksdeltakelser,
+                antallDagerPerMeldeperiodeForPerioder: vedtak.antallDagerPerMeldeperiode.map(
+                    (dager) => ({
+                        antallDagerPerMeldeperiode: dager.antallDagerPerMeldeperiode!,
+                        periode: {
+                            fraOgMed: dager.periode.fraOgMed!,
+                            tilOgMed: dager.periode.tilOgMed!,
+                        },
+                    }),
+                ),
+                resultat: vedtak.resultat,
+            };
+        case SøknadsbehandlingResultat.AVSLAG:
+            return {
+                avslagsgrunner: vedtak.avslagsgrunner!,
+                begrunnelseVilkårsvurdering: vedtak.getBegrunnelse(),
+                fritekstTilVedtaksbrev: vedtak.getBrevtekst(),
+                valgteTiltaksdeltakelser: vedtak.valgteTiltaksdeltakelser,
+                resultat: vedtak.resultat,
+            };
+    }
+
+    throw new Error('Ugyldig resultat for søknadsbehandling vedtak');
 };

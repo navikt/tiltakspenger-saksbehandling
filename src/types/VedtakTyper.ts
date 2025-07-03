@@ -3,7 +3,6 @@ import {
     Avslagsgrunn,
     BarnetilleggData,
     BehandlingId,
-    BehandlingResultat,
     RevurderingResultat,
 } from './BehandlingTypes';
 import { Nullable } from '~/types/UtilTypes';
@@ -11,16 +10,27 @@ import { Periode } from './Periode';
 
 export type VedtakId = `vedtak_${string}`;
 
-export type VedtakTilBeslutningDTO = {
+interface VedtakTilBeslutningBaseFelter {
     fritekstTilVedtaksbrev: string;
     begrunnelseVilkårsvurdering: string;
-    behandlingsperiode: Periode;
-    barnetillegg: VedtakBarnetilleggDTO | null;
     valgteTiltaksdeltakelser: VedtakTiltaksdeltakelsePeriode[];
-    antallDagerPerMeldeperiodeForPerioder: Nullable<AntallDagerForMeldeperiode[]>;
-    avslagsgrunner: Nullable<Avslagsgrunn[]>;
-    resultat: BehandlingResultat;
-};
+}
+
+export interface VedtakTilBeslutningInnvilgelseDTO extends VedtakTilBeslutningBaseFelter {
+    innvilgelsesperiode: Periode;
+    barnetillegg: Nullable<VedtakBarnetilleggDTO>;
+    antallDagerPerMeldeperiodeForPerioder: AntallDagerForMeldeperiode[];
+    resultat: 'INNVILGELSE';
+}
+
+export interface VedtakTilBeslutningAvslagDTO extends VedtakTilBeslutningBaseFelter {
+    avslagsgrunner: Avslagsgrunn[];
+    resultat: 'AVSLAG';
+}
+
+export type VedtakTilBeslutningDTO =
+    | VedtakTilBeslutningInnvilgelseDTO
+    | VedtakTilBeslutningAvslagDTO;
 
 export type VedtakBarnetilleggPeriode = {
     antallBarn: number;

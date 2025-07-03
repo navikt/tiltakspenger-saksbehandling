@@ -25,6 +25,7 @@ type Props = {
 
 export const BehandlingerTidslinje = ({ sak }: Props) => {
     const { tidslinje, meldeperiodeKjeder, saksnummer } = sak;
+
     const beregninger = meldeperiodeKjeder.map((kjede) => kjede.sisteBeregning).filter(Boolean);
 
     const { startDate, endDate, scrollTidslinje } = useTidslinjeDateRange(tidslinje);
@@ -82,7 +83,18 @@ export const BehandlingerTidslinje = ({ sak }: Props) => {
                             <Timeline.Period
                                 start={new Date(fraOgMed)}
                                 end={new Date(tilOgMed)}
-                                status={erInnvilgelse ? 'success' : 'danger'}
+                                status={(() => {
+                                    switch (vedtaksType) {
+                                        case Vedtakstype.INNVILGELSE:
+                                            return 'success';
+                                        case Vedtakstype.STANS:
+                                            return 'danger';
+                                        case Vedtakstype.AVSLAG:
+                                            return 'warning';
+                                        default:
+                                            return undefined;
+                                    }
+                                })()}
                                 icon={
                                     erInnvilgelse ? (
                                         <CheckmarkCircleIcon className={style.innvilgetIkon} />
