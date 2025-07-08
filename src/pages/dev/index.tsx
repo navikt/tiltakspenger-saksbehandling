@@ -111,6 +111,7 @@ const NySøknadModal = (props: { open: boolean; onClose: () => void }) => {
     });
 
     const onSubmit = (values: NySøknadFormData) => {
+        console.log(values);
         fetchNysøknad.trigger({
             fnr: values.fnr ? values.fnr : null,
             deltakelsesperiode:
@@ -239,13 +240,13 @@ const NySøknadModal = (props: { open: boolean; onClose: () => void }) => {
                                                                 size="small"
                                                                 legend={'Oppholder seg i EØS?'}
                                                                 {...field}
-                                                                value={field.value.svar}
+                                                                value={field.value}
                                                             >
                                                                 <Radio value={'Ja'}>Ja</Radio>
                                                                 <Radio value={'Nei'}>Nei</Radio>
                                                             </RadioGroup>
                                                         )}
-                                                        name={`barnetillegg.${index}.oppholderSegIEØS`}
+                                                        name={`barnetillegg.${index}.oppholderSegIEØS.svar`}
                                                         control={form.control}
                                                     />
                                                     <Button
