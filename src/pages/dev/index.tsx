@@ -111,7 +111,6 @@ const NySøknadModal = (props: { open: boolean; onClose: () => void }) => {
     });
 
     const onSubmit = (values: NySøknadFormData) => {
-        console.log(values);
         fetchNysøknad.trigger({
             fnr: values.fnr ? values.fnr : null,
             deltakelsesperiode:

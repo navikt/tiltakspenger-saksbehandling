@@ -17,6 +17,7 @@ import {
 } from '~/components/behandling/felles/state/InnvilgelseState';
 
 import style from './BehandlingBarnetillegg.module.css';
+import { VedtakBarnetilleggDTO, VedtakTilBeslutningDTO } from '~/types/VedtakTyper';
 
 export type BehandlingBarnetilleggProps = {
     behandling: BehandlingData;
@@ -24,6 +25,10 @@ export type BehandlingBarnetilleggProps = {
     context: BarnetilleggState &
         InnvilgelseState & { barnetilleggBegrunnelseRef: RefObject<HTMLTextAreaElement> };
     valgTekst: string;
+    lagring: {
+        url: string;
+        body: (tekst: string) => VedtakTilBeslutningDTO | VedtakBarnetilleggDTO;
+    };
 };
 
 export const BehandlingBarnetillegg = (props: BehandlingBarnetilleggProps) => {

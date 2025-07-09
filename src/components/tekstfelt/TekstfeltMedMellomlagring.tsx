@@ -11,7 +11,7 @@ const LAGRE_MAX_WAIT_MS = 10000;
 
 type Props = {
     lagringUrl: string;
-    lagringBody: (tekst: string) => unknown;
+    lagringBody: (tekst: string) => void;
     minRows?: number;
 } & ComponentProps<typeof Textarea>;
 

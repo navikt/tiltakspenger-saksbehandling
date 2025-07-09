@@ -4,17 +4,23 @@ import { VedtakHjelpetekst } from '~/components/behandling/felles/layout/hjelpet
 import { TekstListe } from '../../../../liste/TekstListe';
 import { BodyLong, Heading } from '@navikt/ds-react';
 import { TekstfeltMedMellomlagring } from '../../../../tekstfelt/TekstfeltMedMellomlagring';
-import { VedtakBarnetilleggDTO } from '~/types/VedtakTyper';
+import { VedtakBarnetilleggDTO, VedtakTilBeslutningDTO } from '~/types/VedtakTyper';
 import { BehandlingBarnetilleggProps } from '~/components/behandling/felles/barnetillegg/BehandlingBarnetillegg';
 import { useRolleForBehandling } from '~/context/saksbehandler/SaksbehandlerContext';
 
 import style from './BarnetilleggBegrunnelse.module.css';
 
-type Props = BehandlingBarnetilleggProps;
+type Props = BehandlingBarnetilleggProps & {
+    lagring: {
+        url: string;
+        //TODO - bruk egen barnetilleg dto type
+        body: (tekst: string) => VedtakTilBeslutningDTO | VedtakBarnetilleggDTO;
+    };
+};
 
-export const BarnetilleggBegrunnelse = ({ behandling, context }: Props) => {
-    const { barnetillegg, sakId, id } = behandling;
-    const { barnetilleggPerioder, barnetilleggBegrunnelseRef } = context;
+export const BarnetilleggBegrunnelse = ({ behandling, context, lagring }: Props) => {
+    const { barnetillegg } = behandling;
+    const { barnetilleggBegrunnelseRef } = context;
 
     const rolle = useRolleForBehandling(behandling);
 
@@ -35,13 +41,8 @@ export const BarnetilleggBegrunnelse = ({ behandling, context }: Props) => {
                     label={'Begrunnelse vilkårsvurdering barnetillegg'}
                     defaultValue={barnetillegg?.begrunnelse}
                     readOnly={rolle !== SaksbehandlerRolle.SAKSBEHANDLER}
-                    lagringUrl={`/sak/${sakId}/behandling/${id}/barnetillegg`}
-                    lagringBody={(tekst) =>
-                        ({
-                            begrunnelse: tekst,
-                            perioder: barnetilleggPerioder ?? [],
-                        }) satisfies VedtakBarnetilleggDTO
-                    }
+                    lagringUrl={lagring.url}
+                    lagringBody={(tekst) => lagring.body(tekst)}
                     ref={barnetilleggBegrunnelseRef}
                 />
             </VedtakSeksjon.Venstre>
