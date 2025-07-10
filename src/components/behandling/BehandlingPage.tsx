@@ -22,7 +22,7 @@ export const BehandlingPage = () => {
     return (
         <>
             <PersonaliaHeader sakId={sakId} saksnummer={saksnummer} visTilbakeKnapp={true}>
-                {finnBehandlingStatusTag(status, false)}
+                {finnBehandlingStatusTag(status, false, false)}
             </PersonaliaHeader>
 
             <SideBarMain
