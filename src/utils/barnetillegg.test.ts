@@ -1,7 +1,7 @@
 import { describe, expect, test } from '@jest/globals';
 import { SøknadBarnKilde } from '../types/SøknadTypes';
 import { Periode } from '../types/Periode';
-import { periodiserBarnetillegg } from './barnetillegg';
+import { periodiserBarnetillegg } from './BarnetilleggUtils';
 import { finn16årsdag, forrigeDag } from './date';
 
 const virkningsperiode: Periode = {

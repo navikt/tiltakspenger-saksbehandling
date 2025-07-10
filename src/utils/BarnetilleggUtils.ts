@@ -4,6 +4,8 @@ import { finn16årsdag, forrigeDag, nesteDag } from './date';
 import { Periode } from '../types/Periode';
 import { erDatoIPeriode } from './periode';
 import { removeDuplicates } from './array';
+import { OppdaterBarnetilleggRequest } from '~/types/Barnetillegg';
+import { SøknadsbehandlingVedtakContext } from '~/components/behandling/søknadsbehandling/context/SøknadsbehandlingVedtakContext';
 
 export const periodiserBarnetillegg = (
     barnFraSøknad: SøknadBarn[],
@@ -58,4 +60,23 @@ export const periodiserBarnetillegg = (
             };
         })
         .filter((bt) => bt.antallBarn > 0);
+};
+
+export const tilBarnetilleggRequest = (
+    vedtak: SøknadsbehandlingVedtakContext,
+): OppdaterBarnetilleggRequest => {
+    return {
+        innvilgelsesperiode: vedtak.behandlingsperiode,
+        barnetillegg: vedtak.harBarnetillegg
+            ? {
+                  begrunnelse: vedtak.getBarnetilleggBegrunnelse(),
+                  perioder: vedtak.barnetilleggPerioder,
+              }
+            : null,
+        valgteTiltaksdeltakelser: vedtak.valgteTiltaksdeltakelser,
+        antallDagerPerMeldeperiodeForPerioder: vedtak.antallDagerPerMeldeperiode.map((dager) => ({
+            antallDagerPerMeldeperiode: dager.antallDagerPerMeldeperiode!,
+            periode: { fraOgMed: dager.periode.fraOgMed!, tilOgMed: dager.periode.tilOgMed! },
+        })),
+    };
 };

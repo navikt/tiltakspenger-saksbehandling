@@ -21,9 +21,7 @@ export const useSendSøknadsbehandling = (
     };
 };
 
-export const tilBeslutningDTO = (
-    vedtak: SøknadsbehandlingVedtakContext,
-): VedtakTilBeslutningDTO => {
+const tilBeslutningDTO = (vedtak: SøknadsbehandlingVedtakContext): VedtakTilBeslutningDTO => {
     switch (vedtak.resultat) {
         case SøknadsbehandlingResultat.INNVILGELSE:
             return {

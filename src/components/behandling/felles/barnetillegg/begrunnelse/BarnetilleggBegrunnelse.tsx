@@ -4,17 +4,17 @@ import { VedtakHjelpetekst } from '~/components/behandling/felles/layout/hjelpet
 import { TekstListe } from '../../../../liste/TekstListe';
 import { BodyLong, Heading } from '@navikt/ds-react';
 import { TekstfeltMedMellomlagring } from '../../../../tekstfelt/TekstfeltMedMellomlagring';
-import { VedtakBarnetilleggDTO, VedtakTilBeslutningDTO } from '~/types/VedtakTyper';
 import { BehandlingBarnetilleggProps } from '~/components/behandling/felles/barnetillegg/BehandlingBarnetillegg';
 import { useRolleForBehandling } from '~/context/saksbehandler/SaksbehandlerContext';
 
 import style from './BarnetilleggBegrunnelse.module.css';
+import { OppdaterBarnetilleggRequest, VedtakBarnetilleggDTO } from '~/types/Barnetillegg';
 
 type Props = BehandlingBarnetilleggProps & {
     lagring: {
         url: string;
         //TODO - bruk egen barnetilleg dto type
-        body: (tekst: string) => VedtakTilBeslutningDTO | VedtakBarnetilleggDTO;
+        body: (tekst: string) => OppdaterBarnetilleggRequest | VedtakBarnetilleggDTO;
     };
 };
 

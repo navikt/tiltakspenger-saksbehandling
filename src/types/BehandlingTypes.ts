@@ -5,6 +5,7 @@ import { SøknadForOversiktProps, SøknadForBehandlingProps } from './SøknadTyp
 import { Avbrutt } from './Avbrutt';
 import { Nullable } from '~/types/UtilTypes';
 import { Ytelse } from '~/types/Ytelse';
+import { BarnetilleggData } from './Barnetillegg';
 
 export type BehandlingId = `beh_${string}`;
 
@@ -123,16 +124,6 @@ export enum Behandlingstype {
     SØKNADSBEHANDLING = 'SØKNADSBEHANDLING',
     REVURDERING = 'REVURDERING',
 }
-
-export type BarnetilleggData = {
-    perioder: BarnetilleggPeriode[];
-    begrunnelse?: string;
-};
-
-type BarnetilleggPeriode = {
-    antallBarn: number;
-    periode: Periode;
-};
 
 type TiltaksdeltakelsePeriode = {
     eksternDeltagelseId: string;

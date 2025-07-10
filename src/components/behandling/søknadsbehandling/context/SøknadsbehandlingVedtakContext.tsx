@@ -20,7 +20,7 @@ import {
     hentTiltaksdeltagelseFraSoknad,
     hentTiltaksperiodeFraSøknad,
 } from '~/utils/behandling';
-import { periodiserBarnetillegg } from '~/utils/barnetillegg';
+import { periodiserBarnetillegg } from '~/utils/BarnetilleggUtils';
 
 type TextAreaInputs = {
     begrunnelseRef: RefObject<HTMLTextAreaElement>;

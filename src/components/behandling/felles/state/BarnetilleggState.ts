@@ -3,7 +3,7 @@ import { VedtakBarnetilleggPeriode } from '~/types/VedtakTyper';
 import { forrigeDag, nesteDag } from '~/utils/date';
 import { ReducerActionHandlers } from '~/types/Context';
 import { SøknadForBehandlingProps } from '~/types/SøknadTypes';
-import { periodiserBarnetillegg } from '~/utils/barnetillegg';
+import { periodiserBarnetillegg } from '~/utils/BarnetilleggUtils';
 
 export type BarnetilleggState = {
     harBarnetillegg: boolean;

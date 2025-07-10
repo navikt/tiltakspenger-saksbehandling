@@ -9,7 +9,7 @@ import { SøknadsbehandlingResultat } from '~/types/BehandlingTypes';
 import { BehandlingBarnetillegg } from '~/components/behandling/felles/barnetillegg/BehandlingBarnetillegg';
 
 import style from './SøknadsbehandlingBarnetillegg.module.css';
-import { tilBeslutningDTO } from '../9-send-og-godkjenn/useSendSøknadsbehandling';
+import { tilBarnetilleggRequest } from '~/utils/BarnetilleggUtils';
 
 export const SøknadsbehandlingBarnetillegg = () => {
     const { behandling } = useSøknadsbehandling();
@@ -30,7 +30,7 @@ export const SøknadsbehandlingBarnetillegg = () => {
                 valgTekst={'Har det blitt søkt om barnetillegg?'}
                 lagring={{
                     url: `/sak/${behandling.sakId}/behandling/${behandling.id}/barnetillegg`,
-                    body: () => tilBeslutningDTO(skjemaContext),
+                    body: () => tilBarnetilleggRequest(skjemaContext),
                 }}
             />
             <Separator />

@@ -4,7 +4,7 @@ import {
     useRevurderingInnvilgelseSkjema,
     useRevurderingInnvilgelseSkjemaDispatch,
 } from '~/components/behandling/revurdering/innvilgelse/context/RevurderingInnvilgelseVedtakContext';
-import { VedtakBarnetilleggDTO } from '~/types/VedtakTyper';
+import { VedtakBarnetilleggDTO } from '~/types/Barnetillegg';
 
 export const RevurderingInnvilgelseBarnetillegg = () => {
     const { behandling } = useRevurderingBehandling();
