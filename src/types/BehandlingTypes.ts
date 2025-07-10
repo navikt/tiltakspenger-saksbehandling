@@ -6,6 +6,7 @@ import { Avbrutt } from './Avbrutt';
 import { Nullable } from '~/types/UtilTypes';
 import { Ytelse } from '~/types/Ytelse';
 import { BarnetilleggData } from './Barnetillegg';
+import { SattPåVentBegrunnelse } from '~/types/SattPåVentBegrunnelse';
 
 export type BehandlingId = `beh_${string}`;
 
@@ -24,6 +25,8 @@ type BehandlingDataCommon = {
     avbrutt: Nullable<Avbrutt>;
     iverksattTidspunkt: Nullable<string>;
     fritekstTilVedtaksbrev: string | null;
+    erSattPåVent: boolean;
+    sattPåVentBegrunnelse: Nullable<SattPåVentBegrunnelse>;
 };
 
 export interface AntallDagerForMeldeperiode {
@@ -81,6 +84,7 @@ export type BehandlingForOversiktData = {
     saksbehandler: string;
     beslutter: string | null;
     opprettet: string;
+    erSattPåVent: boolean;
 } & (
     | {
           typeBehandling: Behandlingstype.REVURDERING;

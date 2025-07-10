@@ -37,7 +37,7 @@ export const avbruttSøknadToDataCellInfo = (
     søknad: SøknadForBehandlingProps,
 ): AvbruttSøknadEllerBehandlingDataCellInfo => {
     if (søknad.avbrutt == null) {
-        throw new Error('Kan ikke hente ut informasjon fra en behandling som ikke er avbrutt');
+        throw new Error('Kan ikke hente ut informasjon fra en behandling som ikke er begrunnelse');
     }
     return {
         id: søknad.id,

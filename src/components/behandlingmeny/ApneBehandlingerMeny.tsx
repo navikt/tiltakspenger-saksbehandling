@@ -26,6 +26,13 @@ import SeBehandlingMenyvalg from '~/components/behandlingmeny/menyvalg/SeBehandl
 import AvsluttBehandlingModal from '~/components/modaler/AvsluttBehandlingModal';
 import OvertabehandlingModal from '~/components/behandlingmeny/OvertaBehandlingModal';
 import Link from 'next/link';
+import SettBehandlingPåVentMenyvalg, {
+    visSettBehandlingPåVentMenyvalg,
+} from '~/components/behandlingmeny/menyvalg/SettBehandlingPåVentMenyvalg';
+import GjenopptaBehandlingMenyvalg, {
+    visGjenopptaBehandlingMenyvalg,
+} from '~/components/behandlingmeny/menyvalg/GjenopptaBehandlingMenyvalg';
+import SettBehandlingPåVentModal from '~/components/modaler/SettBehandlingPåVentModal';
 
 type Props = {
     behandling: BehandlingForOversiktData;
@@ -37,11 +44,20 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
     const { status, id, saksnummer } = behandling;
     const [visAvsluttBehandlingModal, setVisAvsluttBehandlingModal] = React.useState(false);
     const [visOvertaBehandlingModal, setVisOvertaBehandlingModal] = useState(false);
+    const [visSettBehandlingPåVentModal, setVisSettBehandlingPåVentModal] = useState(false);
 
     const visTildelMeg = visTildelMegMenyvalg(behandling, innloggetSaksbehandler);
     const visFortsettBehandling = visFortsettBehandlingMenyvalg(behandling, innloggetSaksbehandler);
     const visLeggTilbake = visLeggTilbakeMenyvalg(behandling, innloggetSaksbehandler);
     const visOvertaBehandling = visOvertaBehandlingMenyvalg(behandling, innloggetSaksbehandler);
+    const visSettBehandlingPåVent = visSettBehandlingPåVentMenyvalg(
+        behandling,
+        innloggetSaksbehandler,
+    );
+    const visGjenopptaBehandling = visGjenopptaBehandlingMenyvalg(
+        behandling,
+        innloggetSaksbehandler,
+    );
     const visAvsluttBehandling = visAvsluttBehandlingMenyvalg(
         behandling,
         innloggetSaksbehandler,
@@ -53,6 +69,8 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
         visFortsettBehandling ||
         visLeggTilbake ||
         visOvertaBehandling ||
+        visSettBehandlingPåVent ||
+        visGjenopptaBehandling ||
         visAvsluttBehandling;
 
     if (!menySkalVises) {
@@ -91,6 +109,14 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
                         <FortsettBehandlingMenyvalg behandling={behandling} />
                     )}
                     {visLeggTilbake && <LeggTilbakeBehandlingMenyValg behandling={behandling} />}
+                    {visSettBehandlingPåVent && (
+                        <SettBehandlingPåVentMenyvalg
+                            setVisSettBehandlingPåVentModal={setVisSettBehandlingPåVentModal}
+                        />
+                    )}
+                    {visGjenopptaBehandling && (
+                        <GjenopptaBehandlingMenyvalg behandling={behandling} />
+                    )}
                     {visTildelMeg && <TildelMegMenyvalg behandling={behandling} />}
                     {menySkalVises && (
                         <>
@@ -137,6 +163,15 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
                               ? behandling.beslutter!
                               : 'Ukjent saksbehandler/beslutter'
                     }
+                />
+            )}
+            {visSettBehandlingPåVentModal && (
+                <SettBehandlingPåVentModal
+                    sakId={behandling.sakId}
+                    behandlingId={behandling.id}
+                    saksnummer={behandling.saksnummer}
+                    åpen={visSettBehandlingPåVentModal}
+                    onClose={() => setVisSettBehandlingPåVentModal(false)}
                 />
             )}
         </>
