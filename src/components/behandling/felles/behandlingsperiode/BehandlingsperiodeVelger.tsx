@@ -20,13 +20,20 @@ import {
     AntallDagerForMeldeperiodeState,
 } from '../state/AntallDagerState';
 import dayjs from 'dayjs';
+import { BarnetilleggActions, BarnetilleggState } from '../state/BarnetilleggState';
 
 type Props = {
     behandling: BehandlingData;
     dispatch: Dispatch<
-        TiltaksdeltagelseActions | InnvilgelseActions | AntallDagerForMeldeperiodeAction
+        | TiltaksdeltagelseActions
+        | InnvilgelseActions
+        | AntallDagerForMeldeperiodeAction
+        | BarnetilleggActions
     >;
-    context: TiltaksdeltagelseState & InnvilgelseState & AntallDagerForMeldeperiodeState;
+    context: TiltaksdeltagelseState &
+        InnvilgelseState &
+        AntallDagerForMeldeperiodeState &
+        BarnetilleggState;
     label: string;
     className?: string;
 };
@@ -38,7 +45,12 @@ export const BehandlingsperiodeVelger = ({
     label,
     className,
 }: Props) => {
-    const { behandlingsperiode, valgteTiltaksdeltakelser, antallDagerPerMeldeperiode } = context;
+    const {
+        behandlingsperiode,
+        valgteTiltaksdeltakelser,
+        antallDagerPerMeldeperiode,
+        barnetilleggPerioder,
+    } = context;
 
     const erIkkeSaksbehandler =
         useRolleForBehandling(behandling) !== SaksbehandlerRolle.SAKSBEHANDLER;
@@ -73,6 +85,18 @@ export const BehandlingsperiodeVelger = ({
                     dispatch({
                         type: 'oppdaterAntallDagerForMeldeperiode',
                         payload: { antallDager: oppdatertAntallDagerPerMeldeperiode },
+                    });
+
+                    //vi ønsker at barnetillegg-perioden skal matche behandlingsperioden dersom den blir snevret inn
+                    const oppdaterteBarnetillegg = barnetilleggPerioder.map((b) =>
+                        b.periode.fraOgMed && dayjs(isoDate).isAfter(b.periode.fraOgMed)
+                            ? { ...b, periode: { ...b.periode, fraOgMed: isoDate } }
+                            : b,
+                    );
+
+                    dispatch({
+                        type: 'oppdaterBarnetillegg',
+                        payload: { barnetillegg: oppdaterteBarnetillegg },
                     });
 
                     /**
@@ -117,6 +141,17 @@ export const BehandlingsperiodeVelger = ({
                     dispatch({
                         type: 'oppdaterAntallDagerForMeldeperiode',
                         payload: { antallDager: oppdatertAntallDagerPerMeldeperiode },
+                    });
+
+                    //vi ønsker at barnetillegg-perioden skal matche behandlingsperioden dersom den blir snevret inn
+                    const oppdaterteBarnetillegg = barnetilleggPerioder.map((b) =>
+                        b.periode.tilOgMed && dayjs(isoDate).isBefore(b.periode.tilOgMed)
+                            ? { ...b, periode: { ...b.periode, tilOgMed: isoDate } }
+                            : b,
+                    );
+                    dispatch({
+                        type: 'oppdaterBarnetillegg',
+                        payload: { barnetillegg: oppdaterteBarnetillegg },
                     });
 
                     if (valgteTiltaksdeltakelser.length === 1) {

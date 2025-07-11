@@ -3,7 +3,7 @@ import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/Ved
 import { Datovelger } from '../../../../datovelger/Datovelger';
 import { VedtakBarnetilleggPeriode } from '~/types/VedtakTyper';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
-import { dateTilISOTekst } from '~/utils/date';
+import { dateTilISOTekst, datoTilDatoInputText } from '~/utils/date';
 import { BehandlingBarnetilleggProps } from '~/components/behandling/felles/barnetillegg/BehandlingBarnetillegg';
 import { useRolleForBehandling } from '~/context/saksbehandler/SaksbehandlerContext';
 import { Behandlingstype } from '~/types/BehandlingTypes';
@@ -97,6 +97,11 @@ const BarnetilleggPeriode = ({ periode, index, rolle, dispatch, context }: Perio
         <div className={style.periode}>
             <Datovelger
                 selected={periode.periode.fraOgMed}
+                value={
+                    periode.periode.fraOgMed
+                        ? datoTilDatoInputText(periode.periode.fraOgMed)
+                        : undefined
+                }
                 minDate={innvilgelsesPeriode.fraOgMed}
                 maxDate={innvilgelsesPeriode.tilOgMed}
                 label={'Fra og med'}
@@ -120,6 +125,11 @@ const BarnetilleggPeriode = ({ periode, index, rolle, dispatch, context }: Perio
                 selected={periode.periode.tilOgMed}
                 minDate={innvilgelsesPeriode.fraOgMed}
                 maxDate={innvilgelsesPeriode.tilOgMed}
+                value={
+                    periode.periode.tilOgMed
+                        ? datoTilDatoInputText(periode.periode.tilOgMed)
+                        : undefined
+                }
                 label={'Til og med'}
                 size={'small'}
                 readOnly={!erSaksbehandler}
