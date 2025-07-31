@@ -8,6 +8,7 @@ import { InternDekoratør } from '../components/interndekoratør/InternDekoratø
 import { FeatureTogglesProvider } from '../context/feature-toggles/FeatureTogglesContext';
 import { SaksbehandlerProvider } from '../context/saksbehandler/SaksbehandlerContext';
 import { ConfigProvider } from '../context/ConfigContext';
+import { NotificationProvider } from '~/context/NotificationContext';
 
 export default function MyApp({ Component, pageProps }: AppProps) {
     return (
@@ -21,18 +22,20 @@ export default function MyApp({ Component, pageProps }: AppProps) {
             >
                 <FeatureTogglesProvider deployEnv={pageProps.deployEnv}>
                     <SaksbehandlerProvider saksbehandler={pageProps.saksbehandler}>
-                        <SWRConfig
-                            value={{
-                                shouldRetryOnError: false,
-                                revalidateOnFocus: false,
-                                revalidateOnReconnect: true,
-                            }}
-                        >
-                            <InternDekoratør />
-                            <main>
-                                <Component {...pageProps} />
-                            </main>
-                        </SWRConfig>
+                        <NotificationProvider>
+                            <SWRConfig
+                                value={{
+                                    shouldRetryOnError: false,
+                                    revalidateOnFocus: false,
+                                    revalidateOnReconnect: true,
+                                }}
+                            >
+                                <InternDekoratør />
+                                <main>
+                                    <Component {...pageProps} />
+                                </main>
+                            </SWRConfig>
+                        </NotificationProvider>
                     </SaksbehandlerProvider>
                 </FeatureTogglesProvider>
             </ConfigProvider>

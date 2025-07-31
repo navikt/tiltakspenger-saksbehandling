@@ -1,5 +1,5 @@
-import { Alert, Button, HStack } from '@navikt/ds-react';
-import { useRef, useState } from 'react';
+import { Button, HStack } from '@navikt/ds-react';
+import { useRef } from 'react';
 import { BehandlingData } from '~/types/BehandlingTypes';
 import { useBehandling } from '../../../BehandlingContext';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
@@ -11,13 +11,14 @@ import { useGodkjennBehandling } from '~/components/behandling/felles/send-og-go
 import { useRolleForBehandling } from '~/context/saksbehandler/SaksbehandlerContext';
 
 import style from '../BehandlingSendOgGodkjenn.module.css';
+import { useNotification } from '~/context/NotificationContext';
 
 type Props = {
     behandling: BehandlingData;
 };
 
 export const BehandlingGodkjenn = ({ behandling }: Props) => {
-    const [harGodkjent, setHarGodkjent] = useState(false);
+    const { navigateWithNotification } = useNotification();
     const modalRef = useRef<HTMLDialogElement>(null);
 
     const { setBehandling } = useBehandling();
@@ -56,11 +57,7 @@ export const BehandlingGodkjenn = ({ behandling }: Props) => {
                     </Button>
                 </HStack>
             )}
-            {harGodkjent && (
-                <Alert variant={'success'} className={style.success}>
-                    {'Vedtaket er godkjent'}
-                </Alert>
-            )}
+
             <BekreftelsesModal
                 modalRef={modalRef}
                 tittel={'Godkjenn vedtaket?'}
@@ -73,14 +70,14 @@ export const BehandlingGodkjenn = ({ behandling }: Props) => {
                         onClick={() => {
                             godkjennBehandling().then((oppdatertBehandling) => {
                                 if (oppdatertBehandling) {
-                                    setHarGodkjent(true);
                                     setBehandling(oppdatertBehandling);
                                     lukkModal();
+                                    navigateWithNotification('/', 'Vedtaket er godkjent!');
                                 }
                             });
                         }}
                     >
-                        {'Godkjenn vedtaket'}
+                        Godkjenn vedtaket
                     </Button>
                 }
             />

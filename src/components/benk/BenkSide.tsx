@@ -29,6 +29,7 @@ import SortableTable from '../tabell/SortableTable';
 import NextLink from 'next/link';
 
 import styles from './BenkSide.module.css';
+import { NotificationBanner } from '../notificationBanner/NotificationBanner';
 
 type Props = {
     benkOversikt: BenkOversiktResponse;
@@ -78,6 +79,7 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
 
     return (
         <VStack gap="5" style={{ padding: '1rem' }}>
+            <NotificationBanner />
             <Heading size="medium" level="2">
                 Oversikt over behandlinger og søknader
             </Heading>
@@ -195,7 +197,6 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
                     </Button>
                 </HStack>
             </VStack>
-
             {benkOversikt.totalAntall > 500 && (
                 <div className={styles.høytAntallBehandlingerContainer}>
                     <Alert variant="warning" size="small">
@@ -204,7 +205,6 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
                     </Alert>
                 </div>
             )}
-
             <SortableTable
                 kolonnerConfig={{
                     kolonner: BehandlingssammendragKolonner,
