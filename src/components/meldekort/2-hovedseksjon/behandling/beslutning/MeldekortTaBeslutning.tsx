@@ -8,6 +8,7 @@ import { MeldekortBehandlingProps } from '../../../../../types/meldekort/Meldeko
 import Underkjenn from '../../../../underkjenn/Underkjenn';
 import { useFetchJsonFraApi } from '../../../../../utils/fetch/useFetchFraApi';
 import router from 'next/router';
+import { useNotification } from '~/context/NotificationContext';
 
 type Props = {
     meldekortBehandling: MeldekortBehandlingProps;
@@ -15,6 +16,7 @@ type Props = {
 
 export const MeldekortTaBeslutning = ({ meldekortBehandling }: Props) => {
     const { sakId, saksnummer } = useSak().sak;
+    const { navigateWithNotification } = useNotification();
     const { setMeldeperiodeKjede } = useMeldeperiodeKjede();
 
     const { godkjennMeldekort, godkjennMeldekortLaster, reset, godkjennMeldekortFeil } =
@@ -53,7 +55,7 @@ export const MeldekortTaBeslutning = ({ meldekortBehandling }: Props) => {
                     loading={godkjennMeldekortLaster}
                     onClick={() => modalRef.current?.showModal()}
                 >
-                    {'Godkjenn meldekort'}
+                    Godkjenn meldekort
                 </Button>
             </HStack>
             <BekreftelsesModal
@@ -69,11 +71,15 @@ export const MeldekortTaBeslutning = ({ meldekortBehandling }: Props) => {
                             godkjennMeldekort().then((oppdatertKjede) => {
                                 if (oppdatertKjede) {
                                     setMeldeperiodeKjede(oppdatertKjede);
+                                    navigateWithNotification(
+                                        `/sak/${saksnummer}`,
+                                        'Meldekortet er godkjent',
+                                    );
                                 }
                             })
                         }
                     >
-                        {'Godkjenn meldekort'}
+                        Godkjenn meldekort
                     </Button>
                 }
             >

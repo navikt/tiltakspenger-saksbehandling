@@ -11,6 +11,7 @@ import { MeldekortOversiktIkkeKlar } from './meldekort-oversikt/ikke-klar/Meldek
 
 import styles from './Saksoversikt.module.css';
 import { VedtatteBehandlinger } from '~/components/saksoversikt/behandlinger-oversikt/VedtatteBehandlinger';
+import { NotificationBanner } from '../notificationBanner/NotificationBanner';
 
 export const Saksoversikt = () => {
     const { sakId, saksnummer, behandlinger, behandlingsoversikt, søknader, meldeperiodeKjeder } =
@@ -26,6 +27,7 @@ export const Saksoversikt = () => {
 
     return (
         <>
+            <NotificationBanner />
             <PersonaliaHeader sakId={sakId} saksnummer={saksnummer} />
             <Box className={styles.wrapper}>
                 <HStack align="center" className={styles.spacing}>
