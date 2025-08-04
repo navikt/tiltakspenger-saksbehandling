@@ -1,4 +1,4 @@
-import { VedtakTilBeslutningDTO } from '~/types/VedtakTyper';
+import { SøknadsbehandlingVedtakDTO } from '~/types/VedtakTyper';
 import { BehandlingData, SøknadsbehandlingResultat } from '~/types/BehandlingTypes';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { SøknadsbehandlingVedtakContext } from '~/components/behandling/søknadsbehandling/context/SøknadsbehandlingVedtakContext';
@@ -9,7 +9,7 @@ export const useSendSøknadsbehandling = (
 ) => {
     const { trigger, isMutating, error } = useFetchJsonFraApi<
         BehandlingData,
-        VedtakTilBeslutningDTO
+        SøknadsbehandlingVedtakDTO
     >(`/sak/${behandling.sakId}/behandling/${behandling.id}/sendtilbeslutning`, 'POST');
 
     const sendTilBeslutning = () => trigger(tilBeslutningDTO(vedtak));
@@ -21,7 +21,7 @@ export const useSendSøknadsbehandling = (
     };
 };
 
-const tilBeslutningDTO = (vedtak: SøknadsbehandlingVedtakContext): VedtakTilBeslutningDTO => {
+const tilBeslutningDTO = (vedtak: SøknadsbehandlingVedtakContext): SøknadsbehandlingVedtakDTO => {
     switch (vedtak.resultat) {
         case SøknadsbehandlingResultat.INNVILGELSE:
             return {

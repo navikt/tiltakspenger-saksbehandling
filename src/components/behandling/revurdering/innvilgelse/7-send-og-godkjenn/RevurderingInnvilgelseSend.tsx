@@ -5,7 +5,7 @@ import {
     useRevurderingInnvilgelseSkjema,
 } from '~/components/behandling/revurdering/innvilgelse/context/RevurderingInnvilgelseVedtakContext';
 import { useSendRevurderingVedtak } from '~/components/behandling/revurdering/useSendRevurderingVedtak';
-import { VedtakRevurderInnvilgelseDTO } from '~/types/VedtakTyper';
+import { RevurderingVedtakInnvilgelseDTO } from '~/types/VedtakTyper';
 import { BehandlingSendOgGodkjenn } from '~/components/behandling/felles/send-og-godkjenn/BehandlingSendOgGodkjenn';
 import { revurderingInnvilgelseValidering } from '~/components/behandling/revurdering/innvilgelse/revurderingInnvilgelseValidering';
 import { useSak } from '~/context/sak/SakContext';
@@ -36,29 +36,25 @@ export const RevurderingInnvilgelseKnapper = () => {
 
 const tilBeslutningDTO = (
     vedtak: RevurderingInnvilgelseVedtakContext,
-): VedtakRevurderInnvilgelseDTO => {
+): RevurderingVedtakInnvilgelseDTO => {
     return {
-        type: RevurderingResultat.REVURDERING_INNVILGELSE,
-        begrunnelse: vedtak.getBegrunnelse(),
+        resultat: RevurderingResultat.REVURDERING_INNVILGELSE,
+        begrunnelseVilkårsvurdering: vedtak.getBegrunnelse(),
         fritekstTilVedtaksbrev: vedtak.getBrevtekst(),
-        innvilgelse: {
-            innvilgelsesperiode: vedtak.behandlingsperiode,
-            valgteTiltaksdeltakelser: vedtak.valgteTiltaksdeltakelser,
-            barnetillegg: vedtak.harBarnetillegg
-                ? {
-                      begrunnelse: vedtak.getBarnetilleggBegrunnelse(),
-                      perioder: vedtak.barnetilleggPerioder,
-                  }
-                : null,
-            antallDagerPerMeldeperiodeForPerioder: vedtak.antallDagerPerMeldeperiode.map(
-                (periode) => ({
-                    antallDagerPerMeldeperiode: periode.antallDagerPerMeldeperiode!,
-                    periode: {
-                        fraOgMed: periode.periode.fraOgMed!,
-                        tilOgMed: periode.periode.tilOgMed!,
-                    },
-                }),
-            ),
-        },
+        innvilgelsesperiode: vedtak.behandlingsperiode,
+        valgteTiltaksdeltakelser: vedtak.valgteTiltaksdeltakelser,
+        barnetillegg: vedtak.harBarnetillegg
+            ? {
+                  begrunnelse: vedtak.getBarnetilleggBegrunnelse(),
+                  perioder: vedtak.barnetilleggPerioder,
+              }
+            : null,
+        antallDagerPerMeldeperiodeForPerioder: vedtak.antallDagerPerMeldeperiode.map((periode) => ({
+            antallDagerPerMeldeperiode: periode.antallDagerPerMeldeperiode!,
+            periode: {
+                fraOgMed: periode.periode.fraOgMed!,
+                tilOgMed: periode.periode.tilOgMed!,
+            },
+        })),
     };
 };

@@ -2,7 +2,9 @@ import {
     AntallDagerForMeldeperiode,
     Avslagsgrunn,
     BehandlingId,
+    BehandlingResultat,
     RevurderingResultat,
+    SøknadsbehandlingResultat,
 } from './BehandlingTypes';
 import { Nullable } from '~/types/UtilTypes';
 import { Periode } from './Periode';
@@ -10,27 +12,45 @@ import { BarnetilleggData, VedtakBarnetilleggDTO } from './Barnetillegg';
 
 export type VedtakId = `vedtak_${string}`;
 
-interface VedtakTilBeslutningBaseFelter {
+interface BehandlingVedtakBaseDTO {
+    resultat: BehandlingResultat;
     fritekstTilVedtaksbrev: string;
     begrunnelseVilkårsvurdering: string;
+}
+
+export interface SøknadsbehandlingVedtakInnvilgelseDTO extends BehandlingVedtakBaseDTO {
+    resultat: SøknadsbehandlingResultat.INNVILGELSE;
+    innvilgelsesperiode: Periode;
+    valgteTiltaksdeltakelser: VedtakTiltaksdeltakelsePeriode[];
+    antallDagerPerMeldeperiodeForPerioder: AntallDagerForMeldeperiode[];
+    barnetillegg: Nullable<VedtakBarnetilleggDTO>;
+}
+
+export interface SøknadsbehandlingVedtakAvslagDTO extends BehandlingVedtakBaseDTO {
+    resultat: SøknadsbehandlingResultat.AVSLAG;
+    avslagsgrunner: Avslagsgrunn[];
     valgteTiltaksdeltakelser: VedtakTiltaksdeltakelsePeriode[];
 }
 
-export interface VedtakTilBeslutningInnvilgelseDTO extends VedtakTilBeslutningBaseFelter {
+export type SøknadsbehandlingVedtakDTO =
+    | SøknadsbehandlingVedtakInnvilgelseDTO
+    | SøknadsbehandlingVedtakAvslagDTO;
+
+export interface RevurderingVedtakStansDTO extends BehandlingVedtakBaseDTO {
+    resultat: RevurderingResultat.STANS;
+    valgteHjemler: string[];
+    stansFraOgMed: string;
+}
+
+export interface RevurderingVedtakInnvilgelseDTO extends BehandlingVedtakBaseDTO {
+    resultat: RevurderingResultat.REVURDERING_INNVILGELSE;
     innvilgelsesperiode: Periode;
-    barnetillegg: Nullable<VedtakBarnetilleggDTO>;
+    valgteTiltaksdeltakelser: VedtakTiltaksdeltakelsePeriode[];
     antallDagerPerMeldeperiodeForPerioder: AntallDagerForMeldeperiode[];
-    resultat: 'INNVILGELSE';
+    barnetillegg: Nullable<VedtakBarnetilleggDTO>;
 }
 
-export interface VedtakTilBeslutningAvslagDTO extends VedtakTilBeslutningBaseFelter {
-    avslagsgrunner: Avslagsgrunn[];
-    resultat: 'AVSLAG';
-}
-
-export type VedtakTilBeslutningDTO =
-    | VedtakTilBeslutningInnvilgelseDTO
-    | VedtakTilBeslutningAvslagDTO;
+export type RevurderingVedtakDTO = RevurderingVedtakStansDTO | RevurderingVedtakInnvilgelseDTO;
 
 export type VedtakBarnetilleggPeriode = {
     antallBarn: number;
@@ -41,32 +61,6 @@ export type VedtakTiltaksdeltakelsePeriode = {
     eksternDeltagelseId: string;
     periode: Periode;
 };
-
-type VedtakRevurderingBaseDTO = {
-    type: RevurderingResultat;
-    begrunnelse: string;
-    fritekstTilVedtaksbrev: string;
-};
-
-export type VedtakRevurderTilStansDTO = VedtakRevurderingBaseDTO & {
-    type: RevurderingResultat.STANS;
-    stans: {
-        valgteHjemler: string[];
-        stansFraOgMed: string;
-    };
-};
-
-export type VedtakRevurderInnvilgelseDTO = VedtakRevurderingBaseDTO & {
-    type: RevurderingResultat.REVURDERING_INNVILGELSE;
-    innvilgelse: {
-        innvilgelsesperiode: Periode;
-        valgteTiltaksdeltakelser: VedtakTiltaksdeltakelsePeriode[];
-        barnetillegg: VedtakBarnetilleggDTO | null;
-        antallDagerPerMeldeperiodeForPerioder: AntallDagerForMeldeperiode[];
-    };
-};
-
-export type VedtakRevurderingDTO = VedtakRevurderTilStansDTO | VedtakRevurderInnvilgelseDTO;
 
 export type VedtakBegrunnelseLagringDTO = {
     begrunnelse: string;
