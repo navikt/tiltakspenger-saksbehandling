@@ -6,7 +6,7 @@ import {
 } from '../RevurderingStansVedtakContext';
 import React from 'react';
 import { revurderingStansValidering } from '../revurderingStansValidering';
-import { VedtakRevurderTilStansDTO } from '~/types/VedtakTyper';
+import { RevurderingVedtakStansDTO } from '~/types/VedtakTyper';
 import { RevurderingResultat } from '~/types/BehandlingTypes';
 
 import { BehandlingSendOgGodkjenn } from '~/components/behandling/felles/send-og-godkjenn/BehandlingSendOgGodkjenn';
@@ -35,14 +35,12 @@ export const RevurderingStansSend = () => {
     );
 };
 
-const tilBeslutningDTO = (vedtak: RevurderingStansVedtakContext): VedtakRevurderTilStansDTO => {
+const tilBeslutningDTO = (vedtak: RevurderingStansVedtakContext): RevurderingVedtakStansDTO => {
     return {
-        type: RevurderingResultat.STANS,
-        begrunnelse: vedtak.getBegrunnelse(),
+        resultat: RevurderingResultat.STANS,
+        begrunnelseVilkårsvurdering: vedtak.getBegrunnelse(),
         fritekstTilVedtaksbrev: vedtak.getBrevtekst(),
-        stans: {
-            stansFraOgMed: vedtak.stansdato,
-            valgteHjemler: vedtak.valgtHjemmelHarIkkeRettighet,
-        },
+        stansFraOgMed: vedtak.stansdato,
+        valgteHjemler: vedtak.valgtHjemmelHarIkkeRettighet,
     };
 };

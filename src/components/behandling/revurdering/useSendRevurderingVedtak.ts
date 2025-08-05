@@ -1,5 +1,5 @@
 import { RevurderingData } from '~/types/BehandlingTypes';
-import { VedtakRevurderingDTO } from '~/types/VedtakTyper';
+import { RevurderingVedtakDTO } from '~/types/VedtakTyper';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 
 export const useSendRevurderingVedtak = (behandling: RevurderingData) => {
@@ -7,7 +7,7 @@ export const useSendRevurderingVedtak = (behandling: RevurderingData) => {
         trigger: sendRevurderingTilBeslutning,
         isMutating: sendRevurderingTilBeslutningLaster,
         error: sendRevurderingTilBeslutningError,
-    } = useFetchJsonFraApi<RevurderingData, VedtakRevurderingDTO>(
+    } = useFetchJsonFraApi<RevurderingData, RevurderingVedtakDTO>(
         `/sak/${behandling.sakId}/revurdering/${behandling.id}/sendtilbeslutning`,
         'POST',
     );
