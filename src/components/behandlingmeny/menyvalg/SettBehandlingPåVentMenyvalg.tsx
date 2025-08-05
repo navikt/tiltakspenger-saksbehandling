@@ -9,8 +9,9 @@ export const visSettBehandlingPåVentMenyvalg = (
     behandling: BehandlingForOversiktData,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
-    const erRelevantMenyValgForStatus = behandling.status === BehandlingStatus.UNDER_BESLUTNING;
-    // console.log(behandling);
+    const erRelevantMenyValgForStatus =
+        behandling.status == BehandlingStatus.UNDER_BEHANDLING ||
+        behandling.status === BehandlingStatus.UNDER_BESLUTNING;
     return (
         erRelevantMenyValgForStatus &&
         !behandling.erSattPåVent &&

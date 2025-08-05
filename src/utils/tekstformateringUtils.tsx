@@ -21,15 +21,18 @@ export const finnBehandlingStatusTag = (
     erSattPåVent: boolean,
 ) => {
     if (
+        (status == BehandlingStatus.UNDER_BEHANDLING ||
+            status === BehandlingStatus.UNDER_BESLUTNING) &&
+        erSattPåVent
+    ) {
+        return <Tag variant="warning">Satt på vent</Tag>;
+    }
+    if (
         (status === BehandlingStatus.KLAR_TIL_BEHANDLING ||
             status === BehandlingStatus.UNDER_BEHANDLING) &&
         underkjent
     ) {
         return <Tag variant="warning">Underkjent</Tag>;
-    }
-    console.log(erSattPåVent);
-    if (status === BehandlingStatus.UNDER_BESLUTNING && erSattPåVent) {
-        return <Tag variant="warning">Satt på vent</Tag>;
     }
     return behandlingStatusTag[status];
 };

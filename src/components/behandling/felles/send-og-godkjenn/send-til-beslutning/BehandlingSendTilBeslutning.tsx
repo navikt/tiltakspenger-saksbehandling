@@ -11,6 +11,7 @@ import { useSendBehandlingTilBeslutning } from '~/components/behandling/felles/s
 import { BehandlingVedtakDTO } from '~/types/VedtakTyper';
 
 import style from '../BehandlingSendOgGodkjenn.module.css';
+import { GjenopptaButton } from '~/components/behandling/felles/send-og-godkjenn/gjenoppta/GjenopptaButton';
 
 type Props = {
     behandling: BehandlingData;
@@ -44,7 +45,13 @@ export const BehandlingSendTilBeslutning = ({ behandling, hentVedtakDTO, valider
     return (
         <div className={style.wrapper}>
             {rolle === SaksbehandlerRolle.SAKSBEHANDLER && (
-                <Button onClick={åpneModal}>{'Send til beslutter'}</Button>
+                <>
+                    {behandling.sattPåVent.erSattPåVent ? (
+                        <GjenopptaButton behandling={behandling} />
+                    ) : (
+                        <Button onClick={åpneModal}>{'Send til beslutter'}</Button>
+                    )}
+                </>
             )}
             {harSendt && (
                 <Alert variant={'success'} className={style.success}>

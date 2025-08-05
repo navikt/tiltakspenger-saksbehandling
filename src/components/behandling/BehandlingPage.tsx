@@ -18,8 +18,8 @@ import BehandlingSattPåVentOppsummering from '~/components/oppsummeringer/behan
 export const BehandlingPage = () => {
     const { sak } = useSak();
     const behandlingsContext = useBehandling();
-    const { type, sakId, saksnummer, status, avbrutt, erSattPåVent, sattPåVentBegrunnelse } =
-        behandlingsContext.behandling;
+    const { type, sakId, saksnummer, status, avbrutt, sattPåVent } = behandlingsContext.behandling;
+    const { erSattPåVent, sattPåVentBegrunnelse } = sattPåVent;
 
     return (
         <>

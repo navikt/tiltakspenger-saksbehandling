@@ -1,12 +1,12 @@
 import { Periode } from './Periode';
 import { Tiltaksdeltagelse } from './TiltakDeltagelseTypes';
 import { SakId } from './SakTypes';
-import { SøknadForOversiktProps, SøknadForBehandlingProps } from './SøknadTypes';
+import { SøknadForBehandlingProps, SøknadForOversiktProps } from './SøknadTypes';
 import { Avbrutt } from './Avbrutt';
 import { Nullable } from '~/types/UtilTypes';
 import { Ytelse } from '~/types/Ytelse';
 import { BarnetilleggData } from './Barnetillegg';
-import { SattPåVentBegrunnelse } from '~/types/SattPåVentBegrunnelse';
+import { SattPåVent } from '~/types/SattPåVentTypes';
 
 export type BehandlingId = `beh_${string}`;
 
@@ -25,8 +25,7 @@ type BehandlingDataCommon = {
     avbrutt: Nullable<Avbrutt>;
     iverksattTidspunkt: Nullable<string>;
     fritekstTilVedtaksbrev: string | null;
-    erSattPåVent: boolean;
-    sattPåVentBegrunnelse: Nullable<SattPåVentBegrunnelse>;
+    sattPåVent: SattPåVent;
 };
 
 export interface AntallDagerForMeldeperiode {

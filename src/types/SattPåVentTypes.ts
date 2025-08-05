@@ -3,3 +3,8 @@ export interface SattPåVentBegrunnelse {
     tidspunkt: string;
     begrunnelse: string;
 }
+
+export interface SattPåVent {
+    erSattPåVent: boolean;
+    sattPåVentBegrunnelse: SattPåVentBegrunnelse;
+}

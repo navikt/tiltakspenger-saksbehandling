@@ -4,7 +4,7 @@ import { Box, Heading, HStack, VStack } from '@navikt/ds-react';
 import { formaterTidspunkt } from '~/utils/date';
 import { OppsummeringsPar } from '../oppsummeringspar/OppsummeringsPar';
 import { classNames } from '~/utils/classNames';
-import { SattPåVentBegrunnelse } from '~/types/SattPåVentBegrunnelse';
+import { SattPåVentBegrunnelse } from '~/types/SattPåVentTypes';
 
 const BehandlingSattPåVentOppsummering = (props: {
     begrunnelse: SattPåVentBegrunnelse;
