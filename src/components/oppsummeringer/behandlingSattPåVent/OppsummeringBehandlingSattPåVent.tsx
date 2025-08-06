@@ -4,10 +4,10 @@ import { Box, Heading, HStack, VStack } from '@navikt/ds-react';
 import { formaterTidspunkt } from '~/utils/date';
 import { OppsummeringsPar } from '../oppsummeringspar/OppsummeringsPar';
 import { classNames } from '~/utils/classNames';
-import { SattPåVentBegrunnelse } from '~/types/SattPåVentTypes';
+import { VentestatusHendelse } from '~/types/BehandlingTypes';
 
 const BehandlingSattPåVentOppsummering = (props: {
-    begrunnelse: SattPåVentBegrunnelse;
+    ventestatus: VentestatusHendelse;
     wrapperClassName?: string;
 }) => {
     return (
@@ -19,18 +19,18 @@ const BehandlingSattPåVentOppsummering = (props: {
                 <HStack gap="6">
                     <OppsummeringsPar
                         label={'Satt på vent av'}
-                        verdi={props.begrunnelse.sattPåVentAv}
+                        verdi={props.ventestatus.sattPåVentAv}
                         retning="vertikal"
                     />
                     <OppsummeringsPar
                         label={'Tidspunkt'}
-                        verdi={formaterTidspunkt(props.begrunnelse.tidspunkt)}
+                        verdi={formaterTidspunkt(props.ventestatus.tidspunkt)}
                         retning="vertikal"
                     />
                 </HStack>
                 <OppsummeringsPar
                     label={'Begrunnelse'}
-                    verdi={props.begrunnelse.begrunnelse}
+                    verdi={props.ventestatus.begrunnelse}
                     retning="vertikal"
                 />
             </VStack>

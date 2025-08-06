@@ -46,7 +46,7 @@ export const BehandlingGodkjenn = ({ behandling }: Props) => {
         <div className={style.wrapper}>
             {rolle === SaksbehandlerRolle.BESLUTTER && (
                 <HStack gap="2">
-                    {behandling.sattPåVent.erSattPåVent ? (
+                    {behandling.ventestatus.erSattPåVent ? (
                         <GjenopptaButton behandling={behandling} />
                     ) : (
                         <>

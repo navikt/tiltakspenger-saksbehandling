@@ -11,7 +11,9 @@ export const visGjenopptaBehandlingMenyvalg = (
     behandling: BehandlingForOversiktData,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
-    const erRelevantMenyValgForStatus = behandling.status === BehandlingStatus.UNDER_BESLUTNING;
+    const erRelevantMenyValgForStatus =
+        behandling.status === BehandlingStatus.UNDER_BEHANDLING ||
+        behandling.status === BehandlingStatus.UNDER_BESLUTNING;
 
     return (
         erRelevantMenyValgForStatus &&

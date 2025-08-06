@@ -6,7 +6,6 @@ import { Avbrutt } from './Avbrutt';
 import { Nullable } from '~/types/UtilTypes';
 import { Ytelse } from '~/types/Ytelse';
 import { BarnetilleggData } from './Barnetillegg';
-import { SattPåVent } from '~/types/SattPåVentTypes';
 
 export type BehandlingId = `beh_${string}`;
 
@@ -25,7 +24,7 @@ type BehandlingDataCommon = {
     avbrutt: Nullable<Avbrutt>;
     iverksattTidspunkt: Nullable<string>;
     fritekstTilVedtaksbrev: string | null;
-    sattPåVent: SattPåVent;
+    ventestatus: VentestatusHendelse;
 };
 
 export interface AntallDagerForMeldeperiode {
@@ -181,3 +180,11 @@ export enum RevurderingResultat {
 }
 
 export type BehandlingResultat = SøknadsbehandlingResultat | RevurderingResultat;
+
+export interface VentestatusHendelse {
+    sattPåVentAv: string;
+    tidspunkt: string;
+    begrunnelse: string;
+    erSattPåVent: boolean;
+    behandlingStatus: BehandlingStatus;
+}

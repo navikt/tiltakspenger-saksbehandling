@@ -46,7 +46,7 @@ export const BehandlingSendTilBeslutning = ({ behandling, hentVedtakDTO, valider
         <div className={style.wrapper}>
             {rolle === SaksbehandlerRolle.SAKSBEHANDLER && (
                 <>
-                    {behandling.sattPåVent.erSattPåVent ? (
+                    {behandling.ventestatus.erSattPåVent ? (
                         <GjenopptaButton behandling={behandling} />
                     ) : (
                         <Button onClick={åpneModal}>{'Send til beslutter'}</Button>
