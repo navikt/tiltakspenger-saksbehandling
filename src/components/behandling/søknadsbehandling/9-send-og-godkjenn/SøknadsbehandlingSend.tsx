@@ -1,27 +1,29 @@
+import {
+    SøknadsbehandlingVedtakContext,
+    useSøknadsbehandlingSkjema,
+} from '../context/SøknadsbehandlingVedtakContext';
+import { useSøknadsbehandling } from '../../BehandlingContext';
+import { søknadsbehandlingValidering } from '../søknadsbehandlingValidering';
+import { BehandlingSendOgGodkjenn } from '~/components/behandling/felles/send-og-godkjenn/BehandlingSendOgGodkjenn';
 import { SøknadsbehandlingVedtakDTO } from '~/types/VedtakTyper';
-import { BehandlingData, SøknadsbehandlingResultat } from '~/types/BehandlingTypes';
-import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
-import { SøknadsbehandlingVedtakContext } from '~/components/behandling/søknadsbehandling/context/SøknadsbehandlingVedtakContext';
+import { SøknadsbehandlingResultat } from '~/types/BehandlingTypes';
 
-export const useSendSøknadsbehandling = (
-    behandling: BehandlingData,
-    vedtak: SøknadsbehandlingVedtakContext,
-) => {
-    const { trigger, isMutating, error } = useFetchJsonFraApi<
-        BehandlingData,
-        SøknadsbehandlingVedtakDTO
-    >(`/sak/${behandling.sakId}/behandling/${behandling.id}/sendtilbeslutning`, 'POST');
+export const SøknadsbehandlingSend = () => {
+    const { behandling } = useSøknadsbehandling();
+    const vedtakSkjema = useSøknadsbehandlingSkjema();
 
-    const sendTilBeslutning = () => trigger(tilBeslutningDTO(vedtak));
-
-    return {
-        sendTilBeslutning,
-        sendTilBeslutningLaster: isMutating,
-        sendTilBeslutningError: error,
-    };
+    return (
+        <BehandlingSendOgGodkjenn
+            behandling={behandling}
+            hentVedtakDTO={() => tilSøknadsbehandlingVedtakDTO(vedtakSkjema)}
+            validering={() => søknadsbehandlingValidering(behandling, vedtakSkjema)}
+        />
+    );
 };
 
-const tilBeslutningDTO = (vedtak: SøknadsbehandlingVedtakContext): SøknadsbehandlingVedtakDTO => {
+const tilSøknadsbehandlingVedtakDTO = (
+    vedtak: SøknadsbehandlingVedtakContext,
+): SøknadsbehandlingVedtakDTO => {
     switch (vedtak.resultat) {
         case SøknadsbehandlingResultat.INNVILGELSE:
             return {
@@ -54,7 +56,13 @@ const tilBeslutningDTO = (vedtak: SøknadsbehandlingVedtakContext): Søknadsbeha
                 valgteTiltaksdeltakelser: vedtak.valgteTiltaksdeltakelser,
                 resultat: vedtak.resultat,
             };
+        case null:
+            throw new Error(
+                `Resultat må være satt for søknadsbehandling vedtak - ${vedtak.resultat}`,
+            );
     }
 
-    throw new Error('Ugyldig resultat for søknadsbehandling vedtak');
+    throw new Error(
+        `Ugyldig resultat for søknadsbehandling vedtak - ${vedtak.resultat satisfies never}`,
+    );
 };

@@ -9,9 +9,9 @@ import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import router from 'next/router';
 import { useGodkjennBehandling } from '~/components/behandling/felles/send-og-godkjenn/godkjenn/useGodkjennBehandling';
 import { useRolleForBehandling } from '~/context/saksbehandler/SaksbehandlerContext';
+import { useNotification } from '~/context/NotificationContext';
 
 import style from '../BehandlingSendOgGodkjenn.module.css';
-import { useNotification } from '~/context/NotificationContext';
 
 type Props = {
     behandling: BehandlingData;

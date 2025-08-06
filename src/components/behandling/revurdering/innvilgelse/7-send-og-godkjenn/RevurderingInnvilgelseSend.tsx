@@ -4,7 +4,6 @@ import {
     RevurderingInnvilgelseVedtakContext,
     useRevurderingInnvilgelseSkjema,
 } from '~/components/behandling/revurdering/innvilgelse/context/RevurderingInnvilgelseVedtakContext';
-import { useSendRevurderingVedtak } from '~/components/behandling/revurdering/useSendRevurderingVedtak';
 import { RevurderingVedtakInnvilgelseDTO } from '~/types/VedtakTyper';
 import { BehandlingSendOgGodkjenn } from '~/components/behandling/felles/send-og-godkjenn/BehandlingSendOgGodkjenn';
 import { revurderingInnvilgelseValidering } from '~/components/behandling/revurdering/innvilgelse/revurderingInnvilgelseValidering';
@@ -15,21 +14,11 @@ export const RevurderingInnvilgelseKnapper = () => {
     const { behandling } = useRevurderingBehandling();
     const vedtakSkjema = useRevurderingInnvilgelseSkjema();
 
-    const {
-        sendRevurderingTilBeslutning,
-        sendRevurderingTilBeslutningLaster,
-        sendRevurderingTilBeslutningError,
-    } = useSendRevurderingVedtak(behandling);
-
     return (
         <BehandlingSendOgGodkjenn
             behandling={behandling}
-            sendTilBeslutningProps={{
-                send: () => sendRevurderingTilBeslutning(tilBeslutningDTO(vedtakSkjema)),
-                laster: sendRevurderingTilBeslutningLaster,
-                feil: sendRevurderingTilBeslutningError,
-                validering: () => revurderingInnvilgelseValidering(sak, behandling, vedtakSkjema),
-            }}
+            hentVedtakDTO={() => tilBeslutningDTO(vedtakSkjema)}
+            validering={() => revurderingInnvilgelseValidering(sak, behandling, vedtakSkjema)}
         />
     );
 };

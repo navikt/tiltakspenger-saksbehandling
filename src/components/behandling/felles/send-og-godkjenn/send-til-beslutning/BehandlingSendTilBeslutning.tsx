@@ -2,38 +2,31 @@ import { Alert, Button, Heading } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
 import { useBehandling } from '../../../BehandlingContext';
 import { BehandlingData } from '~/types/BehandlingTypes';
-import { FetcherError } from '~/utils/fetch/fetch';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { BekreftelsesModal } from '../../../../modaler/BekreftelsesModal';
 import { TekstListe } from '../../../../liste/TekstListe';
 import { ValideringResultat } from '~/types/Validering';
 import { useRolleForBehandling } from '~/context/saksbehandler/SaksbehandlerContext';
+import { useSendBehandlingTilBeslutning } from '~/components/behandling/felles/send-og-godkjenn/send-til-beslutning/useSendBehandlingTilBeslutning';
+import { BehandlingVedtakDTO } from '~/types/VedtakTyper';
 
 import style from '../BehandlingSendOgGodkjenn.module.css';
 
-export type SendTilBeslutningProps = {
-    send: () => Promise<BehandlingData | undefined>;
-    laster: boolean;
-    feil?: FetcherError;
+type Props = {
+    behandling: BehandlingData;
+    hentVedtakDTO: () => BehandlingVedtakDTO;
     validering: () => ValideringResultat;
 };
 
-type Props = {
-    behandling: BehandlingData;
-} & SendTilBeslutningProps;
-
-export const BehandlingSendTilBeslutning = ({
-    behandling,
-    send,
-    laster,
-    feil,
-    validering,
-}: Props) => {
+export const BehandlingSendTilBeslutning = ({ behandling, hentVedtakDTO, validering }: Props) => {
     const [harSendt, setHarSendt] = useState(false);
     const [valideringResultat, setValideringResultat] = useState<ValideringResultat>({
         errors: [],
         warnings: [],
     });
+
+    const { sendTilBeslutning, sendTilBeslutningLaster, sendTilBeslutningError } =
+        useSendBehandlingTilBeslutning(behandling);
 
     const { setBehandling } = useBehandling();
     const rolle = useRolleForBehandling(behandling);
@@ -61,15 +54,15 @@ export const BehandlingSendTilBeslutning = ({
             <BekreftelsesModal
                 modalRef={modalRef}
                 tittel={'Send vedtaket til beslutning?'}
-                feil={feil}
+                feil={sendTilBeslutningError}
                 lukkModal={lukkModal}
                 bekreftKnapp={
                     <Button
                         variant={'primary'}
-                        loading={laster}
+                        loading={sendTilBeslutningLaster}
                         disabled={harValideringsfeil}
                         onClick={() => {
-                            send().then((oppdatertBehandling) => {
+                            sendTilBeslutning(hentVedtakDTO()).then((oppdatertBehandling) => {
                                 if (oppdatertBehandling) {
                                     setHarSendt(true);
                                     setBehandling(oppdatertBehandling);

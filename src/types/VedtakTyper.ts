@@ -52,6 +52,8 @@ export interface RevurderingVedtakInnvilgelseDTO extends BehandlingVedtakBaseDTO
 
 export type RevurderingVedtakDTO = RevurderingVedtakStansDTO | RevurderingVedtakInnvilgelseDTO;
 
+export type BehandlingVedtakDTO = SøknadsbehandlingVedtakDTO | RevurderingVedtakDTO;
+
 export type VedtakBarnetilleggPeriode = {
     antallBarn: number;
     periode: Periode;

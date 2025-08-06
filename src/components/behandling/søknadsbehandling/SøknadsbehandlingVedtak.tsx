@@ -3,7 +3,7 @@ import { SøknadsbehandlingBegrunnelse } from '~/components/behandling/søknadsb
 import { SøknadsbehandlingResultatVelger } from '~/components/behandling/søknadsbehandling/3-resultat/SøknadsbehandlingResultatVelger';
 import { SøknadsbehandlingBrev } from '~/components/behandling/søknadsbehandling/8-brev/SøknadsbehandlingBrev';
 import { Separator } from '../../separator/Separator';
-import { SøknadsbehandlingKnapper } from '~/components/behandling/søknadsbehandling/9-send-og-godkjenn/SøknadsbehandlingKnapper';
+import { SøknadsbehandlingSend } from '~/components/behandling/søknadsbehandling/9-send-og-godkjenn/SøknadsbehandlingSend';
 import { SøknadsbehandlingBarnetillegg } from '~/components/behandling/søknadsbehandling/7-barn/SøknadsbehandlingBarnetillegg';
 import { SøknadsbehandlingVedtakProvider } from './context/SøknadsbehandlingVedtakContext';
 import { SøknadsbehandlingTiltak } from '~/components/behandling/søknadsbehandling/5-tiltak/SøknadsbehandlingTiltak';
@@ -28,7 +28,7 @@ export const SøknadsbehandlingVedtak = () => {
             <SøknadsbehandlingAvslagsgrunner />
             <SøknadsbehandlingBarnetillegg />
             <SøknadsbehandlingBrev />
-            <SøknadsbehandlingKnapper />
+            <SøknadsbehandlingSend />
         </SøknadsbehandlingVedtakProvider>
     );
 };
