@@ -1,11 +1,16 @@
 'use client';
 
 import { Alert } from '@navikt/ds-react';
-import { useEffect, useState } from 'react';
+
 import { useNotification } from '~/context/NotificationContext';
 import styles from './NotificationBanner.module.css';
+import { forwardRef, useImperativeHandle, useEffect, useState } from 'react';
 
-export function NotificationBanner() {
+export interface NotificationBannerRef {
+    clearMessage: () => void;
+}
+
+const NotificationBanner = forwardRef<NotificationBannerRef>((_, ref) => {
     const { notification, consumeNotification } = useNotification();
     const [message, setMessage] = useState<string | null>(null);
 
@@ -16,6 +21,10 @@ export function NotificationBanner() {
         }
     }, [notification, consumeNotification, message]);
 
+    useImperativeHandle(ref, () => ({
+        clearMessage: () => setMessage(null),
+    }));
+
     if (!message) return null;
 
     return (
@@ -23,4 +32,8 @@ export function NotificationBanner() {
             {message}
         </Alert>
     );
-}
+});
+
+NotificationBanner.displayName = 'NotificationBanner';
+
+export default NotificationBanner;

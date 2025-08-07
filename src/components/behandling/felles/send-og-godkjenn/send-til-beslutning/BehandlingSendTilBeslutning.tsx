@@ -14,6 +14,7 @@ import { useSendBehandlingTilBeslutning } from '~/components/behandling/felles/s
 import { BehandlingVedtakDTO } from '~/types/VedtakTyper';
 
 import style from '../BehandlingSendOgGodkjenn.module.css';
+import { useNotification } from '~/context/NotificationContext';
 import { GjenopptaButton } from '~/components/behandling/felles/send-og-godkjenn/gjenoppta/GjenopptaButton';
 import { skalKunneGjenopptaBehandling } from '~/utils/tilganger';
 
@@ -25,14 +26,13 @@ type Props = {
 
 export const BehandlingSendTilBeslutning = ({ behandling, hentVedtakDTO, validering }: Props) => {
     const { innloggetSaksbehandler } = useSaksbehandler();
-    const [harSendt, setHarSendt] = useState(false);
     const [valideringResultat, setValideringResultat] = useState<ValideringResultat>({
         errors: [],
         warnings: [],
     });
     const { sendTilBeslutning, sendTilBeslutningLaster, sendTilBeslutningError } =
         useSendBehandlingTilBeslutning(behandling);
-
+    const { navigateWithNotification } = useNotification();
     const { setBehandling } = useBehandling();
     const rolle = useRolleForBehandling(behandling);
 
@@ -57,11 +57,6 @@ export const BehandlingSendTilBeslutning = ({ behandling, hentVedtakDTO, valider
                     )}
                 </>
             )}
-            {harSendt && (
-                <Alert variant={'success'} className={style.success}>
-                    {'Vedtaket ble sendt til beslutning'}
-                </Alert>
-            )}
             <BekreftelsesModal
                 modalRef={modalRef}
                 tittel={'Send vedtaket til beslutning?'}
@@ -75,8 +70,11 @@ export const BehandlingSendTilBeslutning = ({ behandling, hentVedtakDTO, valider
                         onClick={() => {
                             sendTilBeslutning(hentVedtakDTO()).then((oppdatertBehandling) => {
                                 if (oppdatertBehandling) {
-                                    setHarSendt(true);
                                     setBehandling(oppdatertBehandling);
+                                    navigateWithNotification(
+                                        '/',
+                                        'Vedtaket er sendt til beslutning!',
+                                    );
                                     lukkModal();
                                 }
                             });

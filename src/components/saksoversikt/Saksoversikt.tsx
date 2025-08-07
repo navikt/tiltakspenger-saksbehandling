@@ -11,7 +11,7 @@ import { MeldekortOversiktIkkeKlar } from './meldekort-oversikt/ikke-klar/Meldek
 
 import styles from './Saksoversikt.module.css';
 import { VedtatteBehandlinger } from '~/components/saksoversikt/behandlinger-oversikt/VedtatteBehandlinger';
-import { NotificationBanner } from '../notificationBanner/NotificationBanner';
+import NotificationBanner from '../notificationBanner/NotificationBanner';
 
 export const Saksoversikt = () => {
     const { sakId, saksnummer, behandlinger, behandlingsoversikt, søknader, meldeperiodeKjeder } =

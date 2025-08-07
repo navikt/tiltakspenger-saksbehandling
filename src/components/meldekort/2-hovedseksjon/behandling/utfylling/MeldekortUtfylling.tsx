@@ -126,6 +126,7 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
                                 sakId={sakId}
                                 hentMeldekortUtfylling={hentMeldekortUtfylling}
                                 customValidering={customValidering}
+                                saksnummer={saksnummer}
                             />
                             <AvsluttMeldekortBehandling
                                 sakId={sakId}

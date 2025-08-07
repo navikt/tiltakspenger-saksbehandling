@@ -29,7 +29,9 @@ import SortableTable from '../tabell/SortableTable';
 import NextLink from 'next/link';
 
 import styles from './BenkSide.module.css';
-import { NotificationBanner } from '../notificationBanner/NotificationBanner';
+import NotificationBanner, {
+    NotificationBannerRef,
+} from '../notificationBanner/NotificationBanner';
 
 type Props = {
     benkOversikt: BenkOversiktResponse;
@@ -39,7 +41,9 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
     const router = useRouter();
     const firstLoadRef = useRef(true);
     const searchParams = useSearchParams();
+    const bannerRef = useRef<NotificationBannerRef>(null);
     const { innloggetSaksbehandler } = useSaksbehandler();
+
     const typeParam = searchParams.get('type') as BehandlingssammendragType | null;
     const statusParam = searchParams.get('status') as BehandlingssammendragStatus | null;
     const saksbehandlerParam = searchParams.get('saksbehandler') as string | null;
@@ -79,7 +83,7 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
 
     return (
         <VStack gap="5" style={{ padding: '1rem' }}>
-            <NotificationBanner />
+            <NotificationBanner ref={bannerRef} />
             <Heading size="medium" level="2">
                 Oversikt over behandlinger og søknader
             </Heading>
@@ -165,6 +169,7 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
                             }
 
                             router.push({ pathname: router.pathname, search: query.toString() });
+                            bannerRef.current?.clearMessage();
                             fetchOversikt.trigger({
                                 behandlingstype: type === 'Alle' ? null : [type],
                                 status: status === 'Alle' ? null : [status],

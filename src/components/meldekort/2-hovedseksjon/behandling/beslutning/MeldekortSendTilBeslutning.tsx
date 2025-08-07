@@ -10,10 +10,12 @@ import { SakId } from '../../../../../types/SakTypes';
 import { useMeldeperiodeKjede } from '../../../MeldeperiodeKjedeContext';
 import { useFormContext } from 'react-hook-form';
 import { MeldekortBehandlingForm } from '../utfylling/meldekortUtfyllingUtils';
+import { useNotification } from '~/context/NotificationContext';
 
 type Props = {
     meldekortId: MeldekortBehandlingId;
     sakId: SakId;
+    saksnummer: string;
     hentMeldekortUtfylling: () => MeldekortBehandlingDTO;
     customValidering: () => boolean;
 };
@@ -21,9 +23,12 @@ type Props = {
 export const MeldekortSendTilBeslutning = ({
     meldekortId,
     sakId,
+    saksnummer,
     hentMeldekortUtfylling,
     customValidering,
 }: Props) => {
+    const { navigateWithNotification } = useNotification();
+
     const formContext = useFormContext<MeldekortBehandlingForm>();
 
     const { setMeldeperiodeKjede } = useMeldeperiodeKjede();
@@ -35,13 +40,7 @@ export const MeldekortSendTilBeslutning = ({
         senderMeldekortTilBeslutter,
         feilVedSendingTilBeslutter,
         reset,
-    } = useSendMeldekortTilBeslutter({
-        meldekortId,
-        sakId,
-        onSuccess: () => {
-            lukkModal();
-        },
-    });
+    } = useSendMeldekortTilBeslutter({ meldekortId, sakId });
 
     const lukkModal = () => {
         modalRef.current?.close();
@@ -78,6 +77,10 @@ export const MeldekortSendTilBeslutning = ({
                                 (oppdatertKjede) => {
                                     if (oppdatertKjede) {
                                         setMeldeperiodeKjede(oppdatertKjede);
+                                        navigateWithNotification(
+                                            `/sak/${saksnummer}`,
+                                            'Meldekortet er sendt til beslutter!',
+                                        );
                                         lukkModal();
                                     }
                                 },
@@ -88,9 +91,7 @@ export const MeldekortSendTilBeslutning = ({
                     </Button>
                 }
             >
-                {
-                    'Er du sikker på at meldekortet er ferdig utfylt og klart til å sendes til beslutter?'
-                }
+                Er du sikker på at meldekortet er ferdig utfylt og klart til å sendes til beslutter?
             </BekreftelsesModal>
         </>
     );
