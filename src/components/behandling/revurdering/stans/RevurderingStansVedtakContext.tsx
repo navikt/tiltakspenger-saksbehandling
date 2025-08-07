@@ -1,19 +1,12 @@
-import {
-    createContext,
-    PropsWithChildren,
-    RefObject,
-    useCallback,
-    useContext,
-    useRef,
-    useState,
-} from 'react';
+import { createContext, PropsWithChildren, useCallback, useContext, useRef, useState } from 'react';
 import { useRevurderingBehandling } from '../../BehandlingContext';
+import { TextAreaInput } from '~/utils/textarea';
 
 export type RevurderingStansVedtakContext = {
-    begrunnelseRef: RefObject<HTMLTextAreaElement>;
-    brevtekstRef: RefObject<HTMLTextAreaElement>;
-    getBegrunnelse: () => string;
-    getBrevtekst: () => string;
+    textAreas: {
+        begrunnelse: TextAreaInput;
+        brevtekst: TextAreaInput;
+    };
     valgtHjemmelHarIkkeRettighet: string[];
     setValgtHjemmelHarIkkeRettighet: (valgtHjemmel: string[]) => void;
     stansdato: string;
@@ -34,21 +27,27 @@ export const RevurderingStansVedtakProvider = ({ children }: PropsWithChildren) 
     const begrunnelseRef = useRef<HTMLTextAreaElement>(null);
     const brevtekstRef = useRef<HTMLTextAreaElement>(null);
 
+    const getBegrunnelse = useCallback(() => begrunnelseRef.current!.value, [begrunnelseRef]);
     const getBrevtekst = useCallback(
         () => brevtekstRef.current?.value.trim() ?? '',
         [brevtekstRef],
     );
-    const getBegrunnelse = useCallback(() => begrunnelseRef.current!.value, [begrunnelseRef]);
 
     return (
         <Context.Provider
             value={{
+                textAreas: {
+                    begrunnelse: {
+                        ref: begrunnelseRef,
+                        get: getBegrunnelse,
+                    },
+                    brevtekst: {
+                        ref: brevtekstRef,
+                        get: getBrevtekst,
+                    },
+                },
                 stansdato,
                 setStansdato,
-                begrunnelseRef,
-                getBegrunnelse,
-                brevtekstRef,
-                getBrevtekst,
                 valgtHjemmelHarIkkeRettighet,
                 setValgtHjemmelHarIkkeRettighet,
             }}

@@ -1,25 +1,45 @@
 import { BehandlingData, BehandlingStatus } from '~/types/BehandlingTypes';
 import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
-import { HStack } from '@navikt/ds-react';
+import { HStack, VStack } from '@navikt/ds-react';
 import AvsluttBehandlingKnapp from '~/components/behandlingmeny/menyvalg/AvsluttBehandlingKnapp';
 import router from 'next/router';
 import { BehandlingSendTilBeslutning } from '~/components/behandling/felles/send-og-godkjenn/send-til-beslutning/BehandlingSendTilBeslutning';
 import { BehandlingGodkjenn } from '~/components/behandling/felles/send-og-godkjenn/godkjenn/BehandlingGodkjenn';
-import { OppdaterBehandling } from '~/components/behandling/felles/oppdater/OppdaterBehandling';
-import { BehandlingVedtakDTO } from '~/types/VedtakTyper';
+import { LagreBehandlingKnapp } from '~/components/behandling/felles/send-og-godkjenn/lagre/LagreBehandlingKnapp';
 import { ValideringResultat } from '~/types/Validering';
+import { useState } from 'react';
+import { BehandlingValideringVarsler } from '~/components/behandling/felles/send-og-godkjenn/varsler/BehandlingValideringVarsler';
+import {
+    BehandlingLagringResultat,
+    BehandlingLagringVarsler,
+} from '~/components/behandling/felles/send-og-godkjenn/varsler/BehandlingLagringVarsler';
+import { BehandlingLagringProps } from '~/components/behandling/felles/send-og-godkjenn/lagre/useHentBehandlingLagringProps';
 
 import style from './BehandlingSendOgGodkjenn.module.css';
 
 type Props = {
     behandling: BehandlingData;
-    hentVedtakDTO: () => BehandlingVedtakDTO;
-    validering: () => ValideringResultat;
+    lagringProps: BehandlingLagringProps;
 };
 
-export const BehandlingSendOgGodkjenn = ({ behandling, hentVedtakDTO, validering }: Props) => {
+export const BehandlingSendOgGodkjenn = ({ behandling, lagringProps }: Props) => {
     const { innloggetSaksbehandler } = useSaksbehandler();
+
+    const { validerOgHentVedtakDTO, isDirty } = lagringProps;
+
+    const [valideringResultat, setValideringResultat] = useState<ValideringResultat>({
+        errors: [],
+        warnings: [],
+    });
+
+    const [lagringResultat, setLagringResultat] = useState<BehandlingLagringResultat>('ok');
+
+    const hentVedtakDTO = () => {
+        const { valideringResultat, vedtakDTO } = validerOgHentVedtakDTO();
+        setValideringResultat(valideringResultat);
+        return vedtakDTO;
+    };
 
     const kanAvslutteBehandling =
         (behandling.status === BehandlingStatus.KLAR_TIL_BEHANDLING ||
@@ -30,6 +50,10 @@ export const BehandlingSendOgGodkjenn = ({ behandling, hentVedtakDTO, validering
     return (
         <VedtakSeksjon>
             <VedtakSeksjon.Venstre>
+                <VStack className={style.varsler} gap={'2'}>
+                    <BehandlingValideringVarsler resultat={valideringResultat} />
+                    <BehandlingLagringVarsler isDirty={isDirty} resultat={lagringResultat} />
+                </VStack>
                 <HStack justify="space-between" className={style.knapper}>
                     {kanAvslutteBehandling && (
                         <AvsluttBehandlingKnapp
@@ -43,12 +67,23 @@ export const BehandlingSendOgGodkjenn = ({ behandling, hentVedtakDTO, validering
                             }}
                         />
                     )}
-                    <HStack gap={'2'}>
-                        <OppdaterBehandling behandling={behandling} hentVedtakDTO={hentVedtakDTO} />
+                    <HStack gap={'5'}>
+                        {isDirty && (
+                            <LagreBehandlingKnapp
+                                behandling={behandling}
+                                hentVedtakDTO={hentVedtakDTO}
+                                onSuccess={() => {
+                                    setLagringResultat('ok');
+                                }}
+                                onError={(error) => {
+                                    setLagringResultat(error);
+                                }}
+                            />
+                        )}
                         <BehandlingSendTilBeslutning
                             behandling={behandling}
-                            hentVedtakDTO={hentVedtakDTO}
-                            validering={validering}
+                            hentVedtakDto={hentVedtakDTO}
+                            disabled={valideringResultat.errors.length > 0 || isDirty}
                         />
                     </HStack>
                 </HStack>

@@ -7,8 +7,8 @@ import { RevurderingResultat } from '~/types/BehandlingTypes';
 import { RevurderingStansBrevForhåndsvisningDTO } from '~/components/behandling/felles/vedtaksbrev/forhåndsvisning/useHentVedtaksbrevForhåndsvisning';
 
 export const RevurderingStansBrev = () => {
-    const revurderingVedtak = useRevurderingStansVedtak();
-    const { brevtekstRef } = revurderingVedtak;
+    const vedtak = useRevurderingStansVedtak();
+    const { brevtekst } = vedtak.textAreas;
 
     const { behandling, rolleForBehandling } = useRevurderingBehandling();
 
@@ -17,12 +17,12 @@ export const RevurderingStansBrev = () => {
             header={'Vedtaksbrev for stans'}
             behandling={behandling}
             rolle={rolleForBehandling}
-            tekstRef={brevtekstRef}
-            validering={revurderingStansValidering(revurderingVedtak)}
+            tekstRef={brevtekst.ref}
+            validering={revurderingStansValidering(vedtak)}
             hentDto={(): RevurderingStansBrevForhåndsvisningDTO => ({
-                fritekst: revurderingVedtak.brevtekstRef.current?.value ?? '',
-                stansDato: revurderingVedtak.stansdato,
-                valgteHjemler: revurderingVedtak.valgtHjemmelHarIkkeRettighet,
+                fritekst: brevtekst.get(),
+                stansDato: vedtak.stansdato,
+                valgteHjemler: vedtak.valgtHjemmelHarIkkeRettighet,
                 resultat: RevurderingResultat.STANS,
             })}
         />

@@ -12,8 +12,8 @@ import { TekstListe } from '../../../../liste/TekstListe';
 import style from './RevurderingStansBegrunnelse.module.css';
 
 export const RevurderingStansBegrunnelse = () => {
-    const revurderingVedtak = useRevurderingStansVedtak();
-    const { begrunnelseRef } = revurderingVedtak;
+    const vedtak = useRevurderingStansVedtak();
+    const { begrunnelse } = vedtak.textAreas;
 
     const { behandling, rolleForBehandling } = useRevurderingBehandling();
     const { begrunnelseVilkårsvurdering, sakId, id } = behandling;
@@ -35,7 +35,7 @@ export const RevurderingStansBegrunnelse = () => {
                     lagringBody={(tekst) =>
                         ({ begrunnelse: tekst }) satisfies VedtakBegrunnelseLagringDTO
                     }
-                    ref={begrunnelseRef}
+                    ref={begrunnelse.ref}
                 />
             </VedtakSeksjon.Venstre>
             <VedtakSeksjon.Høyre>

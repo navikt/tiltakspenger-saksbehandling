@@ -1,40 +1,39 @@
-import { RevurderingResultat } from '~/types/BehandlingTypes';
 import { useRevurderingBehandling } from '~/components/behandling/BehandlingContext';
+import { BehandlingSendOgGodkjenn } from '~/components/behandling/felles/send-og-godkjenn/BehandlingSendOgGodkjenn';
+import { useHentBehandlingLagringProps } from '~/components/behandling/felles/send-og-godkjenn/lagre/useHentBehandlingLagringProps';
 import {
     RevurderingInnvilgelseVedtakContext,
     useRevurderingInnvilgelseSkjema,
 } from '~/components/behandling/revurdering/innvilgelse/context/RevurderingInnvilgelseVedtakContext';
 import { RevurderingVedtakInnvilgelseDTO } from '~/types/VedtakTyper';
-import { BehandlingSendOgGodkjenn } from '~/components/behandling/felles/send-og-godkjenn/BehandlingSendOgGodkjenn';
+import { RevurderingResultat } from '~/types/BehandlingTypes';
 import { revurderingInnvilgelseValidering } from '~/components/behandling/revurdering/innvilgelse/revurderingInnvilgelseValidering';
 import { useSak } from '~/context/sak/SakContext';
 
-export const RevurderingInnvilgelseKnapper = () => {
+export const RevurderingInnvilgelseSend = () => {
     const { sak } = useSak();
     const { behandling } = useRevurderingBehandling();
-    const vedtakSkjema = useRevurderingInnvilgelseSkjema();
+    const vedtak = useRevurderingInnvilgelseSkjema();
 
-    return (
-        <BehandlingSendOgGodkjenn
-            behandling={behandling}
-            hentVedtakDTO={() => tilBeslutningDTO(vedtakSkjema)}
-            validering={() => revurderingInnvilgelseValidering(sak, behandling, vedtakSkjema)}
-        />
-    );
+    const lagringProps = useHentBehandlingLagringProps({
+        hentDTO: () => tilDTO(vedtak),
+        vedtak,
+        validerVedtak: () => revurderingInnvilgelseValidering(sak, behandling, vedtak),
+    });
+
+    return <BehandlingSendOgGodkjenn behandling={behandling} lagringProps={lagringProps} />;
 };
 
-const tilBeslutningDTO = (
-    vedtak: RevurderingInnvilgelseVedtakContext,
-): RevurderingVedtakInnvilgelseDTO => {
+const tilDTO = (vedtak: RevurderingInnvilgelseVedtakContext): RevurderingVedtakInnvilgelseDTO => {
     return {
         resultat: RevurderingResultat.REVURDERING_INNVILGELSE,
-        begrunnelseVilkårsvurdering: vedtak.getBegrunnelse(),
-        fritekstTilVedtaksbrev: vedtak.getBrevtekst(),
+        begrunnelseVilkårsvurdering: vedtak.textAreas.begrunnelse.get(),
+        fritekstTilVedtaksbrev: vedtak.textAreas.brevtekst.get(),
         innvilgelsesperiode: vedtak.behandlingsperiode,
         valgteTiltaksdeltakelser: vedtak.valgteTiltaksdeltakelser,
         barnetillegg: vedtak.harBarnetillegg
             ? {
-                  begrunnelse: vedtak.getBarnetilleggBegrunnelse(),
+                  begrunnelse: vedtak.textAreas.barnetilleggBegrunnelse.get(),
                   perioder: vedtak.barnetilleggPerioder,
               }
             : null,

@@ -11,18 +11,18 @@ export const RevurderingInnvilgelseBrev = () => {
     const vedtak = useRevurderingInnvilgelseSkjema();
     const { sak } = useSak();
 
-    const { brevtekstRef } = vedtak;
+    const { brevtekst } = vedtak.textAreas;
 
     return (
         <Vedtaksbrev
             header={'Vedtaksbrev for revurdering av innvilgelse'}
             behandling={behandling}
             rolle={rolleForBehandling}
-            tekstRef={brevtekstRef}
+            tekstRef={brevtekst.ref}
             validering={revurderingInnvilgelseValidering(sak, behandling, vedtak)}
             hentDto={(): RevurderingInnvilgelseBrevForhåndsvisningDTO => ({
                 resultat: RevurderingResultat.REVURDERING_INNVILGELSE,
-                fritekst: vedtak.getBrevtekst(),
+                fritekst: brevtekst.get(),
                 virkningsperiode: vedtak.behandlingsperiode,
                 barnetillegg: vedtak.harBarnetillegg ? vedtak.barnetilleggPerioder : null,
             })}

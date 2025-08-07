@@ -11,17 +11,17 @@ export const SøknadsbehandlingBrev = () => {
     const { behandling, rolleForBehandling } = useSøknadsbehandling();
     const vedtak = useSøknadsbehandlingSkjema();
 
-    const { brevtekstRef } = vedtak;
+    const { brevtekst } = vedtak.textAreas;
 
     return (
         <Vedtaksbrev
             header={'Vedtaksbrev for tiltakspenger og barnetillegg'}
             behandling={behandling}
             rolle={rolleForBehandling}
-            tekstRef={brevtekstRef}
+            tekstRef={brevtekst.ref}
             validering={søknadsbehandlingValidering(behandling, vedtak)}
             hentDto={(): SøknadsbehandlingBrevForhåndsvisningDTO => ({
-                fritekst: vedtak.getBrevtekst(),
+                fritekst: brevtekst.get(),
                 // Backend vil ignorere perioden dersom vedtaket er avslag, og hvis tilstanden er tilBeslutter (senere enn under behandling)
                 virkningsperiode: vedtak.behandlingsperiode,
                 barnetillegg: vedtak.harBarnetillegg ? vedtak.barnetilleggPerioder : null,

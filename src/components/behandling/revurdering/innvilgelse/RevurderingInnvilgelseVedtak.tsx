@@ -5,7 +5,7 @@ import { RevurderingInnvilgelsesperiodeVelger } from '~/components/behandling/re
 import { RevurderingInnvilgelseVedtakProvider } from '~/components/behandling/revurdering/innvilgelse/context/RevurderingInnvilgelseVedtakContext';
 import { Separator } from '~/components/separator/Separator';
 import { RevurderingInnvilgelseBrev } from '~/components/behandling/revurdering/innvilgelse/6-brev/RevurderingInnvilgelseBrev';
-import { RevurderingInnvilgelseKnapper } from '~/components/behandling/revurdering/innvilgelse/7-send-og-godkjenn/RevurderingInnvilgelseSend';
+import { RevurderingInnvilgelseSend } from '~/components/behandling/revurdering/innvilgelse/7-send-og-godkjenn/RevurderingInnvilgelseSend';
 import { RevurderingInnvilgelseBarnetillegg } from '~/components/behandling/revurdering/innvilgelse/5-barn/RevurderingInnvilgelseBarnetillegg';
 import RevurderingDagerPerMeldeperiode from './3-dager-per-meldeperiode/RevurderingDagerPerMeldeperiode';
 import { RevurderingInnvilgelseTiltak } from '~/components/behandling/revurdering/innvilgelse/4-tiltak/RevurderingInnvilgelseTiltak';
@@ -24,7 +24,8 @@ export const RevurderingInnvilgelseVedtak = () => {
             <RevurderingInnvilgelseBarnetillegg />
             <Separator />
             <RevurderingInnvilgelseBrev />
-            <RevurderingInnvilgelseKnapper />
+            <Separator />
+            <RevurderingInnvilgelseSend />
         </RevurderingInnvilgelseVedtakProvider>
     );
 };

@@ -3,7 +3,6 @@ import {
     createContext,
     Dispatch,
     PropsWithChildren,
-    RefObject,
     useCallback,
     useContext,
     useReducer,
@@ -21,14 +20,14 @@ import {
     hentTiltaksperiodeFraSøknad,
 } from '~/utils/behandling';
 import { periodiserBarnetillegg } from '~/utils/BarnetilleggUtils';
+import { TextAreaInput } from '~/utils/textarea';
 
 type TextAreaInputs = {
-    begrunnelseRef: RefObject<HTMLTextAreaElement>;
-    brevtekstRef: RefObject<HTMLTextAreaElement>;
-    barnetilleggBegrunnelseRef: RefObject<HTMLTextAreaElement>;
-    getBegrunnelse: () => string;
-    getBrevtekst: () => string;
-    getBarnetilleggBegrunnelse: () => string;
+    textAreas: {
+        begrunnelse: TextAreaInput;
+        brevtekst: TextAreaInput;
+        barnetilleggBegrunnelse: TextAreaInput;
+    };
 };
 
 export type SøknadsbehandlingVedtakContext = TextAreaInputs & SøknadsbehandlingSkjemaState;
@@ -117,12 +116,20 @@ export const SøknadsbehandlingVedtakProvider = ({ children }: PropsWithChildren
             <StateContext.Provider
                 value={{
                     ...vedtak,
-                    begrunnelseRef,
-                    brevtekstRef,
-                    barnetilleggBegrunnelseRef,
-                    getBegrunnelse,
-                    getBrevtekst,
-                    getBarnetilleggBegrunnelse,
+                    textAreas: {
+                        begrunnelse: {
+                            ref: begrunnelseRef,
+                            get: getBegrunnelse,
+                        },
+                        brevtekst: {
+                            ref: brevtekstRef,
+                            get: getBrevtekst,
+                        },
+                        barnetilleggBegrunnelse: {
+                            ref: barnetilleggBegrunnelseRef,
+                            get: getBarnetilleggBegrunnelse,
+                        },
+                    },
                 }}
             >
                 {children}

@@ -3,7 +3,6 @@ import {
     createContext,
     Dispatch,
     PropsWithChildren,
-    RefObject,
     useCallback,
     useContext,
     useReducer,
@@ -18,20 +17,18 @@ import { useRevurderingBehandling } from '~/components/behandling/BehandlingCont
 import { Periode } from '~/types/Periode';
 import { VedtakTiltaksdeltakelsePeriode } from '~/types/VedtakTyper';
 import { harSøktBarnetillegg, hentTiltaksdeltakelserMedStartOgSluttdato } from '~/utils/behandling';
-import { BarnetilleggState } from '~/components/behandling/felles/state/BarnetilleggState';
+import { getTextAreaRefValue, TextAreaInput } from '~/utils/textarea';
+import { BarnetilleggBegrunnelseInput } from '~/components/behandling/felles/state/BarnetilleggState';
 
 type TextAreaInputs = {
-    begrunnelseRef: RefObject<HTMLTextAreaElement>;
-    brevtekstRef: RefObject<HTMLTextAreaElement>;
-    barnetilleggBegrunnelseRef: RefObject<HTMLTextAreaElement>;
-    getBegrunnelse: () => string;
-    getBrevtekst: () => string;
-    getBarnetilleggBegrunnelse: () => string;
-};
+    textAreas: {
+        begrunnelse: TextAreaInput;
+        brevtekst: TextAreaInput;
+    };
+} & BarnetilleggBegrunnelseInput;
 
 export type RevurderingInnvilgelseVedtakContext = TextAreaInputs &
-    RevurderingInnvilgelseSkjemaState &
-    BarnetilleggState;
+    RevurderingInnvilgelseSkjemaState;
 
 // Separate contexts for å hindre re-renders for komponenter som kun bruker dispatch
 const StateContext = createContext({} as RevurderingInnvilgelseVedtakContext);
@@ -83,39 +80,44 @@ export const RevurderingInnvilgelseVedtakProvider = ({ children }: PropsWithChil
         behandling,
         initieltVedtakSkjema,
     );
-
     const begrunnelseRef = useRef<HTMLTextAreaElement>(null);
     const brevtekstRef = useRef<HTMLTextAreaElement>(null);
     const barnetilleggBegrunnelseRef = useRef<HTMLTextAreaElement>(null);
 
     const getBegrunnelse = useCallback(
-        () => begrunnelseRef.current?.value.trim() ?? '',
-        [begrunnelseRef],
+        () => getTextAreaRefValue(begrunnelseRef, behandling.begrunnelseVilkårsvurdering),
+        [begrunnelseRef, behandling.begrunnelseVilkårsvurdering],
     );
     const getBrevtekst = useCallback(
-        () => brevtekstRef.current?.value.trim() ?? '',
-        [brevtekstRef],
+        () => getTextAreaRefValue(brevtekstRef, behandling.fritekstTilVedtaksbrev),
+        [brevtekstRef, behandling.fritekstTilVedtaksbrev],
     );
     const getBarnetilleggBegrunnelse = useCallback(
-        () => barnetilleggBegrunnelseRef.current?.value.trim() ?? '',
-        [barnetilleggBegrunnelseRef],
+        () => getTextAreaRefValue(barnetilleggBegrunnelseRef, behandling.barnetillegg?.begrunnelse),
+        [barnetilleggBegrunnelseRef, behandling.barnetillegg],
     );
+
+    const contextValue: RevurderingInnvilgelseVedtakContext = {
+        ...vedtak,
+        textAreas: {
+            begrunnelse: {
+                ref: begrunnelseRef,
+                get: getBegrunnelse,
+            },
+            brevtekst: {
+                ref: brevtekstRef,
+                get: getBrevtekst,
+            },
+            barnetilleggBegrunnelse: {
+                ref: barnetilleggBegrunnelseRef,
+                get: getBarnetilleggBegrunnelse,
+            },
+        },
+    };
 
     return (
         <DispatchContext.Provider value={dispatch}>
-            <StateContext.Provider
-                value={{
-                    ...vedtak,
-                    begrunnelseRef,
-                    brevtekstRef,
-                    barnetilleggBegrunnelseRef,
-                    getBegrunnelse,
-                    getBrevtekst,
-                    getBarnetilleggBegrunnelse,
-                }}
-            >
-                {children}
-            </StateContext.Provider>
+            <StateContext.Provider value={contextValue}>{children}</StateContext.Provider>
         </DispatchContext.Provider>
     );
 };

@@ -69,7 +69,7 @@ export const tilBarnetilleggRequest = (
         innvilgelsesperiode: vedtak.behandlingsperiode,
         barnetillegg: vedtak.harBarnetillegg
             ? {
-                  begrunnelse: vedtak.getBarnetilleggBegrunnelse(),
+                  begrunnelse: vedtak.textAreas.barnetilleggBegrunnelse.get(),
                   perioder: vedtak.barnetilleggPerioder,
               }
             : null,

@@ -4,13 +4,13 @@ import { BegrunnelseVilkårsvurdering } from '~/components/behandling/felles/beg
 
 export const SøknadsbehandlingBegrunnelse = () => {
     const { behandling, rolleForBehandling } = useSøknadsbehandling();
-    const { begrunnelseRef } = useSøknadsbehandlingSkjema();
+    const { begrunnelse } = useSøknadsbehandlingSkjema().textAreas;
 
     return (
         <BegrunnelseVilkårsvurdering
             behandling={behandling}
             rolle={rolleForBehandling}
-            tekstRef={begrunnelseRef}
+            tekstRef={begrunnelse.ref}
         />
     );
 };

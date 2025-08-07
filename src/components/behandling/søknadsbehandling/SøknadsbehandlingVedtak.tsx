@@ -8,10 +8,10 @@ import { SøknadsbehandlingBarnetillegg } from '~/components/behandling/søknads
 import { SøknadsbehandlingVedtakProvider } from './context/SøknadsbehandlingVedtakContext';
 import { SøknadsbehandlingTiltak } from '~/components/behandling/søknadsbehandling/5-tiltak/SøknadsbehandlingTiltak';
 import SøknadsbehandlingAvslagsgrunner from '~/components/behandling/søknadsbehandling/6-avslagsgrunner/SøknadsbehandlingAvslagsgrunner';
-
-import style from './SøknadsbehandlingVedtak.module.css';
 import SøknadsbehandlingDagerPerMeldeperiode from '~/components/behandling/søknadsbehandling/4-dager-per-meldeperiode/SøknadsbehandlingDagerPerMeldeperiode';
 import { SøknadsbehandlingAutomatiskBehandling } from '~/components/behandling/søknadsbehandling/1-automatisk-behandling/SøknadsbehandlingAutomatiskBehandling';
+
+import style from './SøknadsbehandlingVedtak.module.css';
 
 export const SøknadsbehandlingVedtak = () => {
     return (
@@ -28,6 +28,7 @@ export const SøknadsbehandlingVedtak = () => {
             <SøknadsbehandlingAvslagsgrunner />
             <SøknadsbehandlingBarnetillegg />
             <SøknadsbehandlingBrev />
+            <Separator />
             <SøknadsbehandlingSend />
         </SøknadsbehandlingVedtakProvider>
     );
