@@ -10,6 +10,9 @@ const LAGRE_TIMER_MS = 3000;
 const LAGRE_MAX_WAIT_MS = 10000;
 
 type Props = {
+    // TODO abn: hvis vi ender opp med å droppe autolagring for overskuelig fromtid, så kan hele denne komponenten fjernes.
+    // Bare disabler den som default for nå!
+    lagringDisabled?: boolean;
     lagringUrl: string;
     lagringBody: (tekst: string) => void;
     minRows?: number;
@@ -25,6 +28,7 @@ export const TekstfeltMedMellomlagring = forwardRef<HTMLTextAreaElement, Props>(
             onChange,
             minRows,
             readOnly,
+            lagringDisabled = true,
             ...textareaProps
         },
         ref,
@@ -74,16 +78,18 @@ export const TekstfeltMedMellomlagring = forwardRef<HTMLTextAreaElement, Props>(
                     minRows={minRows ?? 5}
                     resize={'vertical'}
                     onChange={(event) => {
-                        setVenterPåLagring(true);
-                        setLagringFeil(null);
-                        lagre(lagringBody(event.target.value));
+                        if (!lagringDisabled) {
+                            setVenterPåLagring(true);
+                            setLagringFeil(null);
+                            lagre(lagringBody(event.target.value));
+                        }
                         onChange?.(event);
                     }}
                     ref={ref}
                     readOnly={readOnly}
                     {...textareaProps}
                 />
-                {lagringFeil ? (
+                {lagringDisabled ? null : lagringFeil ? (
                     <Alert
                         variant={'error'}
                         size={'small'}
