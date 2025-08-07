@@ -1,7 +1,7 @@
 import { Periode } from './Periode';
 import { Tiltaksdeltagelse } from './TiltakDeltagelseTypes';
 import { SakId } from './SakTypes';
-import { SøknadForOversiktProps, SøknadForBehandlingProps } from './SøknadTypes';
+import { SøknadForBehandlingProps, SøknadForOversiktProps } from './SøknadTypes';
 import { Avbrutt } from './Avbrutt';
 import { Nullable } from '~/types/UtilTypes';
 import { Ytelse } from '~/types/Ytelse';
@@ -24,6 +24,7 @@ type BehandlingDataCommon = {
     avbrutt: Nullable<Avbrutt>;
     iverksattTidspunkt: Nullable<string>;
     fritekstTilVedtaksbrev: string | null;
+    ventestatus: Nullable<VentestatusHendelse>;
 };
 
 export interface AntallDagerForMeldeperiode {
@@ -81,6 +82,7 @@ export type BehandlingForOversiktData = {
     saksbehandler: string;
     beslutter: string | null;
     opprettet: string;
+    erSattPåVent: boolean;
 } & (
     | {
           typeBehandling: Behandlingstype.REVURDERING;
@@ -178,3 +180,11 @@ export enum RevurderingResultat {
 }
 
 export type BehandlingResultat = SøknadsbehandlingResultat | RevurderingResultat;
+
+export interface VentestatusHendelse {
+    sattPåVentAv: string;
+    tidspunkt: string;
+    begrunnelse: string;
+    erSattPåVent: boolean;
+    behandlingStatus: BehandlingStatus;
+}

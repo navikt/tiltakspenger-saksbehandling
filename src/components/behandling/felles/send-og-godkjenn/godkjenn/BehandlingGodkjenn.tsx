@@ -8,16 +8,22 @@ import Underkjenn from '../../../../underkjenn/Underkjenn';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import router from 'next/router';
 import { useGodkjennBehandling } from '~/components/behandling/felles/send-og-godkjenn/godkjenn/useGodkjennBehandling';
-import { useRolleForBehandling } from '~/context/saksbehandler/SaksbehandlerContext';
+import {
+    useRolleForBehandling,
+    useSaksbehandler,
+} from '~/context/saksbehandler/SaksbehandlerContext';
 import { useNotification } from '~/context/NotificationContext';
+import { GjenopptaButton } from '~/components/behandling/felles/send-og-godkjenn/gjenoppta/GjenopptaButton';
 
 import style from '../BehandlingSendOgGodkjenn.module.css';
+import { skalKunneGjenopptaBehandling } from '~/utils/tilganger';
 
 type Props = {
     behandling: BehandlingData;
 };
 
 export const BehandlingGodkjenn = ({ behandling }: Props) => {
+    const { innloggetSaksbehandler } = useSaksbehandler();
     const { navigateWithNotification } = useNotification();
     const modalRef = useRef<HTMLDialogElement>(null);
 
@@ -45,16 +51,22 @@ export const BehandlingGodkjenn = ({ behandling }: Props) => {
         <div className={style.wrapper}>
             {rolle === SaksbehandlerRolle.BESLUTTER && (
                 <HStack gap="2">
-                    <Underkjenn
-                        onUnderkjenn={{
-                            click: (begrunnelse) => underkjennApi.trigger({ begrunnelse }),
-                            pending: underkjennApi.isMutating,
-                            error: underkjennApi.error,
-                        }}
-                    />
-                    <Button onClick={() => modalRef.current?.showModal()}>
-                        {'Godkjenn vedtaket'}
-                    </Button>
+                    {skalKunneGjenopptaBehandling(behandling, innloggetSaksbehandler) ? (
+                        <GjenopptaButton behandling={behandling} />
+                    ) : (
+                        <>
+                            <Underkjenn
+                                onUnderkjenn={{
+                                    click: (begrunnelse) => underkjennApi.trigger({ begrunnelse }),
+                                    pending: underkjennApi.isMutating,
+                                    error: underkjennApi.error,
+                                }}
+                            />
+                            <Button onClick={() => modalRef.current?.showModal()}>
+                                {'Godkjenn vedtaket'}
+                            </Button>
+                        </>
+                    )}
                 </HStack>
             )}
 

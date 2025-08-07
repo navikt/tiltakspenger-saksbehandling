@@ -14,7 +14,11 @@ export const visFortsettBehandlingMenyvalg = (
         behandling.status === BehandlingStatus.UNDER_BEHANDLING ||
         behandling.status === BehandlingStatus.UNDER_BESLUTNING;
 
-    return erReleventMenyValgForStatus && eierBehandling(behandling, innloggetSaksbehandler);
+    return (
+        erReleventMenyValgForStatus &&
+        !behandling.erSattPåVent &&
+        eierBehandling(behandling, innloggetSaksbehandler)
+    );
 };
 
 type Props = {

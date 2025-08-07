@@ -43,7 +43,11 @@ export const BehandlingerOversikt = ({ behandlinger }: Props) => {
                         <Table.Row shadeOnHover={false} key={behandling.id}>
                             <Table.DataCell>{`${typeTekst}${revurderingTekst}`}</Table.DataCell>
                             <Table.DataCell>
-                                {finnBehandlingStatusTag(behandling.status, behandling.underkjent)}
+                                {finnBehandlingStatusTag(
+                                    behandling.status,
+                                    behandling.underkjent,
+                                    behandling.erSattPåVent,
+                                )}
                             </Table.DataCell>
                             <Table.DataCell>
                                 {behandling.kravtidspunkt

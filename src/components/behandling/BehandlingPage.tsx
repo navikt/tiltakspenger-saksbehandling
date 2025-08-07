@@ -13,22 +13,26 @@ import { BehandlingerTidslinje } from '~/components/behandling/tidslinje/Behandl
 import { useSak } from '~/context/sak/SakContext';
 
 import style from './BehandlingPage.module.css';
+import BehandlingSattPåVentOppsummering from '~/components/oppsummeringer/behandlingSattPåVent/OppsummeringBehandlingSattPåVent';
 
 export const BehandlingPage = () => {
     const { sak } = useSak();
     const behandlingsContext = useBehandling();
-    const { type, sakId, saksnummer, status, avbrutt } = behandlingsContext.behandling;
+    const { type, sakId, saksnummer, status, avbrutt, ventestatus } = behandlingsContext.behandling;
 
     return (
         <>
             <PersonaliaHeader sakId={sakId} saksnummer={saksnummer} visTilbakeKnapp={true}>
-                {finnBehandlingStatusTag(status, false)}
+                {finnBehandlingStatusTag(status, false, ventestatus?.erSattPåVent)}
             </PersonaliaHeader>
 
             <SideBarMain
                 sidebar={<BehandlingSaksopplysninger />}
                 main={
                     <div className={style.main}>
+                        {ventestatus && ventestatus.erSattPåVent && (
+                            <BehandlingSattPåVentOppsummering ventestatus={ventestatus} />
+                        )}
                         <BehandlingerTidslinje sak={sak} />
                         {avbrutt && <AvbruttOppsummering avbrutt={avbrutt} withPanel={true} />}
                         <div className={style.vedtakContainer}>

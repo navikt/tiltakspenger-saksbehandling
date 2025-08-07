@@ -2,12 +2,12 @@ import {
     BehandlingData,
     BehandlingForOversiktData,
     BehandlingStatus,
-} from '../types/BehandlingTypes';
+} from '~/types/BehandlingTypes';
 import {
     MeldekortBehandlingProps,
     MeldekortBehandlingStatus,
-} from '../types/meldekort/MeldekortBehandling';
-import { Saksbehandler, SaksbehandlerRolle } from '../types/Saksbehandler';
+} from '~/types/meldekort/MeldekortBehandling';
+import { Saksbehandler, SaksbehandlerRolle } from '~/types/Saksbehandler';
 
 export const erSaksbehandler = (saksbehandler: Saksbehandler) =>
     saksbehandler.roller.includes(SaksbehandlerRolle.SAKSBEHANDLER);
@@ -58,11 +58,10 @@ export const hentRolleForBehandling = (
 };
 
 export const eierBehandling = (
-    behandling: BehandlingForOversiktData,
+    behandling: BehandlingForOversiktData | BehandlingData,
     innloggetSaksbehandler: Saksbehandler,
 ): boolean => {
     const { status, saksbehandler, beslutter } = behandling;
-
     switch (status) {
         case BehandlingStatus.UNDER_BEHANDLING:
             return innloggetSaksbehandler.navIdent === saksbehandler;
@@ -203,5 +202,30 @@ export const skalKunneOvertaMeldekortBehandling = (
             );
         default:
             return false;
+    }
+};
+
+export const skalKunneGjenopptaBehandling = (
+    behandling: BehandlingData | BehandlingForOversiktData,
+    innloggetSaksbehandler: Saksbehandler,
+) => {
+    const erRelevantMenyValgForStatus =
+        behandling.status === BehandlingStatus.UNDER_BEHANDLING ||
+        behandling.status === BehandlingStatus.UNDER_BESLUTNING;
+
+    if ('ventestatus' in behandling) {
+        return (
+            erRelevantMenyValgForStatus &&
+            behandling.ventestatus &&
+            behandling.ventestatus.erSattPåVent
+            // &&
+            // eierBehandling(behandling, innloggetSaksbehandler)
+        );
+    } else {
+        return (
+            erRelevantMenyValgForStatus &&
+            behandling.erSattPåVent &&
+            eierBehandling(behandling, innloggetSaksbehandler)
+        );
     }
 };
