@@ -1,7 +1,7 @@
 import React from 'react';
 import { ActionMenu } from '@navikt/ds-react';
-import { BehandlingForOversiktData, BehandlingStatus } from '~/types/BehandlingTypes';
-import { eierBehandling } from '~/utils/tilganger';
+import { BehandlingForOversiktData } from '~/types/BehandlingTypes';
+import { skalKunneGjenopptaBehandling } from '~/utils/tilganger';
 import { Saksbehandler } from '~/types/Saksbehandler';
 import { PlayIcon } from '@navikt/aksel-icons';
 import { useGjenopptaBehandling } from '~/components/behandlingmeny/useGjenopptaBehandling';
@@ -11,15 +11,7 @@ export const visGjenopptaBehandlingMenyvalg = (
     behandling: BehandlingForOversiktData,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
-    const erRelevantMenyValgForStatus =
-        behandling.status === BehandlingStatus.UNDER_BEHANDLING ||
-        behandling.status === BehandlingStatus.UNDER_BESLUTNING;
-
-    return (
-        erRelevantMenyValgForStatus &&
-        behandling.erSattPåVent &&
-        eierBehandling(behandling, innloggetSaksbehandler)
-    );
+    return skalKunneGjenopptaBehandling(behandling, innloggetSaksbehandler);
 };
 
 type Props = {

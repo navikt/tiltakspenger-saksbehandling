@@ -6,12 +6,16 @@ import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { BekreftelsesModal } from '../../../../modaler/BekreftelsesModal';
 import { TekstListe } from '../../../../liste/TekstListe';
 import { ValideringResultat } from '~/types/Validering';
-import { useRolleForBehandling } from '~/context/saksbehandler/SaksbehandlerContext';
+import {
+    useRolleForBehandling,
+    useSaksbehandler,
+} from '~/context/saksbehandler/SaksbehandlerContext';
 import { useSendBehandlingTilBeslutning } from '~/components/behandling/felles/send-og-godkjenn/send-til-beslutning/useSendBehandlingTilBeslutning';
 import { BehandlingVedtakDTO } from '~/types/VedtakTyper';
 
 import style from '../BehandlingSendOgGodkjenn.module.css';
 import { GjenopptaButton } from '~/components/behandling/felles/send-og-godkjenn/gjenoppta/GjenopptaButton';
+import { skalKunneGjenopptaBehandling } from '~/utils/tilganger';
 
 type Props = {
     behandling: BehandlingData;
@@ -20,12 +24,12 @@ type Props = {
 };
 
 export const BehandlingSendTilBeslutning = ({ behandling, hentVedtakDTO, validering }: Props) => {
+    const { innloggetSaksbehandler } = useSaksbehandler();
     const [harSendt, setHarSendt] = useState(false);
     const [valideringResultat, setValideringResultat] = useState<ValideringResultat>({
         errors: [],
         warnings: [],
     });
-
     const { sendTilBeslutning, sendTilBeslutningLaster, sendTilBeslutningError } =
         useSendBehandlingTilBeslutning(behandling);
 
@@ -46,7 +50,7 @@ export const BehandlingSendTilBeslutning = ({ behandling, hentVedtakDTO, valider
         <div className={style.wrapper}>
             {rolle === SaksbehandlerRolle.SAKSBEHANDLER && (
                 <>
-                    {behandling.ventestatus.erSattPåVent ? (
+                    {skalKunneGjenopptaBehandling(behandling, innloggetSaksbehandler) ? (
                         <GjenopptaButton behandling={behandling} />
                     ) : (
                         <Button onClick={åpneModal}>{'Send til beslutter'}</Button>

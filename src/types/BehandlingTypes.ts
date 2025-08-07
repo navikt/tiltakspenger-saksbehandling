@@ -24,7 +24,7 @@ type BehandlingDataCommon = {
     avbrutt: Nullable<Avbrutt>;
     iverksattTidspunkt: Nullable<string>;
     fritekstTilVedtaksbrev: string | null;
-    ventestatus: VentestatusHendelse;
+    ventestatus: Nullable<VentestatusHendelse>;
 };
 
 export interface AntallDagerForMeldeperiode {

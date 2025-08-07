@@ -23,14 +23,14 @@ export const BehandlingPage = () => {
     return (
         <>
             <PersonaliaHeader sakId={sakId} saksnummer={saksnummer} visTilbakeKnapp={true}>
-                {finnBehandlingStatusTag(status, false, ventestatus.erSattPåVent)}
+                {finnBehandlingStatusTag(status, false, ventestatus?.erSattPåVent)}
             </PersonaliaHeader>
 
             <SideBarMain
                 sidebar={<BehandlingSaksopplysninger />}
                 main={
                     <div className={style.main}>
-                        {ventestatus.erSattPåVent && (
+                        {ventestatus && ventestatus.erSattPåVent && (
                             <BehandlingSattPåVentOppsummering ventestatus={ventestatus} />
                         )}
                         <BehandlingerTidslinje sak={sak} />

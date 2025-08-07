@@ -18,7 +18,7 @@ import { Tag } from '@navikt/ds-react';
 export const finnBehandlingStatusTag = (
     status: BehandlingStatus,
     underkjent: boolean,
-    erSattPåVent: boolean,
+    erSattPåVent: boolean = false,
 ) => {
     if (
         (status == BehandlingStatus.UNDER_BEHANDLING ||
