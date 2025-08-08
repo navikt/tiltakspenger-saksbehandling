@@ -6,7 +6,7 @@ import { FetcherError } from '~/utils/fetch/fetch';
 import styles from './BekreftelsesModal.module.css';
 
 type Props = {
-    modalRef?: RefObject<HTMLDialogElement>;
+    modalRef?: RefObject<HTMLDialogElement | null>;
     children?: ReactNode;
     tittel: string;
     feil?: FetcherError;
@@ -26,7 +26,7 @@ export const BekreftelsesModal = ({
 }: Props) => {
     return (
         <Modal
-            ref={modalRef}
+            ref={modalRef ?? undefined}
             width={'medium'}
             className={styles.modal}
             onClose={() => {
