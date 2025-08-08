@@ -1,5 +1,5 @@
 import { Button, HStack } from '@navikt/ds-react';
-import { useRef } from 'react';
+import React, { useState } from 'react';
 import { BehandlingData } from '~/types/BehandlingTypes';
 import { useBehandling } from '../../../BehandlingContext';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
@@ -17,6 +17,7 @@ import { GjenopptaButton } from '~/components/behandling/felles/send-og-godkjenn
 
 import style from '../BehandlingSendOgGodkjenn.module.css';
 import { skalKunneGjenopptaBehandling } from '~/utils/tilganger';
+import SettBehandlingPåVentModal from '~/components/modaler/SettBehandlingPåVentModal';
 
 type Props = {
     behandling: BehandlingData;
@@ -25,11 +26,9 @@ type Props = {
 export const BehandlingGodkjenn = ({ behandling }: Props) => {
     const { innloggetSaksbehandler } = useSaksbehandler();
     const { navigateWithNotification } = useNotification();
-    const modalRef = useRef<HTMLDialogElement>(null);
-
     const { setBehandling } = useBehandling();
-
-    const lukkModal = () => modalRef.current?.close();
+    const [visSettBehandlingPåVentModal, setVisSettBehandlingPåVentModal] = useState(false);
+    const [visGodkjennVedtakModal, setVisGodkjennVedtakModal] = useState(false);
 
     const { godkjennBehandling, godkjennBehandlingLaster, godkjennBehandlingError } =
         useGodkjennBehandling(behandling);
@@ -55,6 +54,12 @@ export const BehandlingGodkjenn = ({ behandling }: Props) => {
                         <GjenopptaButton behandling={behandling} />
                     ) : (
                         <>
+                            <Button
+                                variant={'secondary'}
+                                onClick={() => setVisSettBehandlingPåVentModal(true)}
+                            >
+                                {'Sett på vent'}
+                            </Button>
                             <Underkjenn
                                 onUnderkjenn={{
                                     click: (begrunnelse) => underkjennApi.trigger({ begrunnelse }),
@@ -62,19 +67,27 @@ export const BehandlingGodkjenn = ({ behandling }: Props) => {
                                     error: underkjennApi.error,
                                 }}
                             />
-                            <Button onClick={() => modalRef.current?.showModal()}>
+                            <Button onClick={() => setVisGodkjennVedtakModal(true)}>
                                 {'Godkjenn vedtaket'}
                             </Button>
                         </>
                     )}
                 </HStack>
             )}
-
+            {visSettBehandlingPåVentModal && (
+                <SettBehandlingPåVentModal
+                    sakId={behandling.sakId}
+                    behandlingId={behandling.id}
+                    saksnummer={behandling.saksnummer}
+                    åpen={visSettBehandlingPåVentModal}
+                    onClose={() => setVisSettBehandlingPåVentModal(false)}
+                />
+            )}
             <BekreftelsesModal
-                modalRef={modalRef}
                 tittel={'Godkjenn vedtaket?'}
+                åpen={visGodkjennVedtakModal}
                 feil={godkjennBehandlingError}
-                lukkModal={lukkModal}
+                lukkModal={() => setVisGodkjennVedtakModal(false)}
                 bekreftKnapp={
                     <Button
                         variant={'primary'}
@@ -83,7 +96,7 @@ export const BehandlingGodkjenn = ({ behandling }: Props) => {
                             godkjennBehandling().then((oppdatertBehandling) => {
                                 if (oppdatertBehandling) {
                                     setBehandling(oppdatertBehandling);
-                                    lukkModal();
+                                    setVisGodkjennVedtakModal(false);
                                     navigateWithNotification('/', 'Vedtaket er godkjent!');
                                 }
                             });

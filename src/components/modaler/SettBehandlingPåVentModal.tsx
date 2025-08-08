@@ -68,13 +68,12 @@ const SettBehandlingPåVentModal = (props: {
                 <Modal.Footer>
                     <Button
                         variant="primary"
-                        size="small"
                         loading={isSettBehandlingPåVentMutating}
                         type="submit"
                     >
                         Sett behandling på vent
                     </Button>
-                    <Button variant="secondary" type="button" size="small" onClick={props.onClose}>
+                    <Button variant="secondary" type="button" onClick={props.onClose}>
                         Avbryt
                     </Button>
                 </Modal.Footer>
