@@ -10,11 +10,12 @@ import {
 } from '@navikt/ds-react';
 import React, { useEffect, useRef, useState } from 'react';
 import {
+    BehandlingssammendragBenktype,
     BehandlingssammendragStatus,
     BehandlingssammendragType,
     BenkOversiktRequest,
     BenkOversiktResponse,
-} from '../../types/Behandlingssammendrag';
+} from '~/types/Behandlingssammendrag';
 import { useRouter } from 'next/router';
 import { formaterTidspunkt } from '~/utils/date';
 import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
@@ -50,6 +51,9 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
     const sorteringParam = searchParams.get('sortering') as 'ASC' | 'DESC' | null;
 
     const [type, setType] = useState<BehandlingssammendragType | 'Alle'>(typeParam ?? 'Alle');
+    const [benktype, setBenktype] = useState<BehandlingssammendragBenktype>(
+        BehandlingssammendragBenktype.KLAR,
+    );
     const [status, setStatus] = useState<BehandlingssammendragStatus | 'Alle'>(
         statusParam ?? 'Alle',
     );
@@ -72,6 +76,7 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
         if (firstLoadRef.current) {
             firstLoadRef.current = false;
             fetchOversikt.trigger({
+                benktype: benktype,
                 behandlingstype: type === 'Alle' ? null : [type],
                 status: status === 'Alle' ? null : [status],
                 identer: saksbehandler === 'Alle' ? null : [saksbehandler],
@@ -79,7 +84,7 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
             });
             return;
         }
-    }, [fetchOversikt, type, status, saksbehandler, sorteringParam]);
+    }, [fetchOversikt, benktype, type, status, saksbehandler, sorteringParam]);
 
     return (
         <VStack gap="5" style={{ padding: '1rem' }}>
@@ -90,6 +95,17 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
 
             <VStack gap="4">
                 <HStack gap="4">
+                    <Select
+                        label="Benk"
+                        size="small"
+                        value={benktype as BehandlingssammendragBenktype}
+                        onChange={(e) =>
+                            setBenktype(e.target.value as unknown as BehandlingssammendragBenktype)
+                        }
+                    >
+                        <option value={BehandlingssammendragBenktype.KLAR}>Klar</option>
+                        <option value={BehandlingssammendragBenktype.VENTER}>Venter</option>
+                    </Select>
                     <Select
                         label="Type"
                         size="small"
@@ -147,6 +163,9 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
                         onClick={() => {
                             const query = new URLSearchParams(searchParams.toString());
 
+                            if (benktype) {
+                                query.set('benktype', benktype);
+                            }
                             if (type !== 'Alle') {
                                 query.set('type', type);
                             } else {
@@ -171,6 +190,7 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
                             router.push({ pathname: router.pathname, search: query.toString() });
                             bannerRef.current?.clearMessage();
                             fetchOversikt.trigger({
+                                benktype: benktype,
                                 behandlingstype: type === 'Alle' ? null : [type],
                                 status: status === 'Alle' ? null : [status],
                                 identer: saksbehandler === 'Alle' ? null : [saksbehandler],
@@ -191,6 +211,7 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
 
                             router.push({ pathname: router.pathname });
                             fetchOversikt.trigger({
+                                benktype: BehandlingssammendragBenktype.KLAR,
                                 behandlingstype: null,
                                 status: null,
                                 identer: null,
@@ -231,6 +252,7 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
                                 search: currentParams.toString(),
                             });
                             fetchOversikt.trigger({
+                                benktype: benktype,
                                 behandlingstype: typeParam ? [typeParam] : null,
                                 status: statusParam ? [statusParam] : null,
                                 identer: saksbehandlerParam ? [saksbehandlerParam] : null,

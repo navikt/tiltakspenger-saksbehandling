@@ -1,6 +1,7 @@
 import { Nullable } from '~/types/UtilTypes';
 
 export interface BenkOversiktRequest {
+    benktype: BehandlingssammendragBenktype;
     behandlingstype: Nullable<BehandlingssammendragType[]>;
     status: Nullable<BehandlingssammendragStatus[]>;
     sortering: 'ASC' | 'DESC';
@@ -36,4 +37,9 @@ export enum BehandlingssammendragStatus {
     UNDER_BEHANDLING = 'UNDER_BEHANDLING',
     KLAR_TIL_BESLUTNING = 'KLAR_TIL_BESLUTNING',
     UNDER_BESLUTNING = 'UNDER_BESLUTNING',
+}
+
+export enum BehandlingssammendragBenktype {
+    KLAR = 'KLAR',
+    VENTER = 'VENTER',
 }
