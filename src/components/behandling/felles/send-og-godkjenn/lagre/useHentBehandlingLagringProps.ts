@@ -56,13 +56,17 @@ export const useHentBehandlingLagringProps = ({
     };
 
     useEffect(() => {
-        Object.values(vedtak.textAreas).forEach((textArea) => {
-            textArea.ref.current!.addEventListener('input', updateDirtyState);
+        const textAreaElements = Object.values(vedtak.textAreas)
+            .map((textArea) => textArea.ref.current)
+            .filter((element) => element !== null);
+
+        textAreaElements.forEach((element) => {
+            element.addEventListener('input', updateDirtyState);
         });
 
         return () => {
-            Object.values(vedtak.textAreas).forEach((textArea) => {
-                textArea.ref.current!.removeEventListener('input', updateDirtyState);
+            textAreaElements.forEach((element) => {
+                element.removeEventListener('input', updateDirtyState);
             });
         };
     }, [vedtak.textAreas]);
