@@ -17,17 +17,12 @@ import { useRevurderingBehandling } from '~/components/behandling/BehandlingCont
 import { Periode } from '~/types/Periode';
 import { VedtakTiltaksdeltakelsePeriode } from '~/types/VedtakTyper';
 import { harSøktBarnetillegg, hentTiltaksdeltakelserMedStartOgSluttdato } from '~/utils/behandling';
-import { getTextAreaRefValue, TextAreaInput } from '~/utils/textarea';
+import { getTextAreaRefValue } from '~/utils/textarea';
 import { BarnetilleggBegrunnelseInput } from '~/components/behandling/felles/state/BarnetilleggState';
+import { BegrunnelseOgBrevInput } from '~/components/behandling/felles/state/BegrunnelseOgBrev';
 
-type TextAreaInputs = {
-    textAreas: {
-        begrunnelse: TextAreaInput;
-        brevtekst: TextAreaInput;
-    };
-} & BarnetilleggBegrunnelseInput;
-
-export type RevurderingInnvilgelseVedtakContext = TextAreaInputs &
+export type RevurderingInnvilgelseVedtakContext = BegrunnelseOgBrevInput &
+    BarnetilleggBegrunnelseInput &
     RevurderingInnvilgelseSkjemaState;
 
 // Separate contexts for å hindre re-renders for komponenter som kun bruker dispatch
@@ -102,15 +97,15 @@ export const RevurderingInnvilgelseVedtakProvider = ({ children }: PropsWithChil
         textAreas: {
             begrunnelse: {
                 ref: begrunnelseRef,
-                get: getBegrunnelse,
+                getValue: getBegrunnelse,
             },
             brevtekst: {
                 ref: brevtekstRef,
-                get: getBrevtekst,
+                getValue: getBrevtekst,
             },
             barnetilleggBegrunnelse: {
                 ref: barnetilleggBegrunnelseRef,
-                get: getBarnetilleggBegrunnelse,
+                getValue: getBarnetilleggBegrunnelse,
             },
         },
     };

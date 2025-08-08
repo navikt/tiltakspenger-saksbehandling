@@ -26,12 +26,12 @@ const tilDTO = (vedtak: SøknadsbehandlingVedtakContext): SøknadsbehandlingVedt
     switch (vedtak.resultat) {
         case SøknadsbehandlingResultat.INNVILGELSE:
             return {
-                begrunnelseVilkårsvurdering: vedtak.textAreas.begrunnelse.get(),
-                fritekstTilVedtaksbrev: vedtak.textAreas.brevtekst.get(),
+                begrunnelseVilkårsvurdering: vedtak.textAreas.begrunnelse.getValue(),
+                fritekstTilVedtaksbrev: vedtak.textAreas.brevtekst.getValue(),
                 innvilgelsesperiode: vedtak.behandlingsperiode,
                 barnetillegg: vedtak.harBarnetillegg
                     ? {
-                          begrunnelse: vedtak.textAreas.barnetilleggBegrunnelse.get(),
+                          begrunnelse: vedtak.textAreas.barnetilleggBegrunnelse.getValue(),
                           perioder: vedtak.barnetilleggPerioder,
                       }
                     : null,
@@ -50,8 +50,8 @@ const tilDTO = (vedtak: SøknadsbehandlingVedtakContext): SøknadsbehandlingVedt
         case SøknadsbehandlingResultat.AVSLAG:
             return {
                 avslagsgrunner: vedtak.avslagsgrunner!,
-                begrunnelseVilkårsvurdering: vedtak.textAreas.begrunnelse.get(),
-                fritekstTilVedtaksbrev: vedtak.textAreas.brevtekst.get(),
+                begrunnelseVilkårsvurdering: vedtak.textAreas.begrunnelse.getValue(),
+                fritekstTilVedtaksbrev: vedtak.textAreas.brevtekst.getValue(),
                 valgteTiltaksdeltakelser: vedtak.valgteTiltaksdeltakelser,
                 resultat: vedtak.resultat,
             };

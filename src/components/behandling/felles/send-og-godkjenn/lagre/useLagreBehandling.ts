@@ -22,8 +22,8 @@ export const useLagreBehandling = ({ behandling, options }: Props) => {
     );
 
     return {
-        oppdaterBehandling: trigger,
-        oppdaterBehandlingLaster: isMutating,
-        oppdaterBehandlingError: error,
+        lagreBehandling: trigger,
+        lagreBehandlingLaster: isMutating,
+        lagreBehandlingError: error,
     };
 };

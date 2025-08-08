@@ -27,13 +27,13 @@ export const RevurderingInnvilgelseSend = () => {
 const tilDTO = (vedtak: RevurderingInnvilgelseVedtakContext): RevurderingVedtakInnvilgelseDTO => {
     return {
         resultat: RevurderingResultat.REVURDERING_INNVILGELSE,
-        begrunnelseVilkårsvurdering: vedtak.textAreas.begrunnelse.get(),
-        fritekstTilVedtaksbrev: vedtak.textAreas.brevtekst.get(),
+        begrunnelseVilkårsvurdering: vedtak.textAreas.begrunnelse.getValue(),
+        fritekstTilVedtaksbrev: vedtak.textAreas.brevtekst.getValue(),
         innvilgelsesperiode: vedtak.behandlingsperiode,
         valgteTiltaksdeltakelser: vedtak.valgteTiltaksdeltakelser,
         barnetillegg: vedtak.harBarnetillegg
             ? {
-                  begrunnelse: vedtak.textAreas.barnetilleggBegrunnelse.get(),
+                  begrunnelse: vedtak.textAreas.barnetilleggBegrunnelse.getValue(),
                   perioder: vedtak.barnetilleggPerioder,
               }
             : null,

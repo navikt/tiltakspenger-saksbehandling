@@ -21,7 +21,7 @@ export const SøknadsbehandlingBrev = () => {
             tekstRef={brevtekst.ref}
             validering={søknadsbehandlingValidering(behandling, vedtak)}
             hentDto={(): SøknadsbehandlingBrevForhåndsvisningDTO => ({
-                fritekst: brevtekst.get(),
+                fritekst: brevtekst.getValue(),
                 // Backend vil ignorere perioden dersom vedtaket er avslag, og hvis tilstanden er tilBeslutter (senere enn under behandling)
                 virkningsperiode: vedtak.behandlingsperiode,
                 barnetillegg: vedtak.harBarnetillegg ? vedtak.barnetilleggPerioder : null,

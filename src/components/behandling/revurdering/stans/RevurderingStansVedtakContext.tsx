@@ -1,17 +1,13 @@
 import { createContext, PropsWithChildren, useCallback, useContext, useRef, useState } from 'react';
 import { useRevurderingBehandling } from '../../BehandlingContext';
-import { TextAreaInput } from '~/utils/textarea';
+import { BegrunnelseOgBrevInput } from '~/components/behandling/felles/state/BegrunnelseOgBrev';
 
 export type RevurderingStansVedtakContext = {
-    textAreas: {
-        begrunnelse: TextAreaInput;
-        brevtekst: TextAreaInput;
-    };
     valgtHjemmelHarIkkeRettighet: string[];
     setValgtHjemmelHarIkkeRettighet: (valgtHjemmel: string[]) => void;
     stansdato: string;
     setStansdato: (fraOgMed: string) => void;
-};
+} & BegrunnelseOgBrevInput;
 
 const Context = createContext({} as RevurderingStansVedtakContext);
 
@@ -39,11 +35,11 @@ export const RevurderingStansVedtakProvider = ({ children }: PropsWithChildren) 
                 textAreas: {
                     begrunnelse: {
                         ref: begrunnelseRef,
-                        get: getBegrunnelse,
+                        getValue: getBegrunnelse,
                     },
                     brevtekst: {
                         ref: brevtekstRef,
-                        get: getBrevtekst,
+                        getValue: getBrevtekst,
                     },
                 },
                 stansdato,

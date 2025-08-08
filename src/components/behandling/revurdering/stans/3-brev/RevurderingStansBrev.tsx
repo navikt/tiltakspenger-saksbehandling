@@ -20,7 +20,7 @@ export const RevurderingStansBrev = () => {
             tekstRef={brevtekst.ref}
             validering={revurderingStansValidering(vedtak)}
             hentDto={(): RevurderingStansBrevForhåndsvisningDTO => ({
-                fritekst: brevtekst.get(),
+                fritekst: brevtekst.getValue(),
                 stansDato: vedtak.stansdato,
                 valgteHjemler: vedtak.valgtHjemmelHarIkkeRettighet,
                 resultat: RevurderingResultat.STANS,

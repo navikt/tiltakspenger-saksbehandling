@@ -20,17 +20,12 @@ import {
     hentTiltaksperiodeFraSøknad,
 } from '~/utils/behandling';
 import { periodiserBarnetillegg } from '~/utils/BarnetilleggUtils';
-import { TextAreaInput } from '~/utils/textarea';
+import { BarnetilleggBegrunnelseInput } from '~/components/behandling/felles/state/BarnetilleggState';
+import { BegrunnelseOgBrevInput } from '~/components/behandling/felles/state/BegrunnelseOgBrev';
 
-type TextAreaInputs = {
-    textAreas: {
-        begrunnelse: TextAreaInput;
-        brevtekst: TextAreaInput;
-        barnetilleggBegrunnelse: TextAreaInput;
-    };
-};
-
-export type SøknadsbehandlingVedtakContext = TextAreaInputs & SøknadsbehandlingSkjemaState;
+export type SøknadsbehandlingVedtakContext = BegrunnelseOgBrevInput &
+    BarnetilleggBegrunnelseInput &
+    SøknadsbehandlingSkjemaState;
 
 // Separate contexts for å hindre re-renders for komponenter som kun bruker dispatch
 const StateContext = createContext({} as SøknadsbehandlingVedtakContext);
@@ -119,15 +114,15 @@ export const SøknadsbehandlingVedtakProvider = ({ children }: PropsWithChildren
                     textAreas: {
                         begrunnelse: {
                             ref: begrunnelseRef,
-                            get: getBegrunnelse,
+                            getValue: getBegrunnelse,
                         },
                         brevtekst: {
                             ref: brevtekstRef,
-                            get: getBrevtekst,
+                            getValue: getBrevtekst,
                         },
                         barnetilleggBegrunnelse: {
                             ref: barnetilleggBegrunnelseRef,
-                            get: getBarnetilleggBegrunnelse,
+                            getValue: getBarnetilleggBegrunnelse,
                         },
                     },
                 }}

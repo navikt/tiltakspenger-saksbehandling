@@ -26,8 +26,8 @@ export const RevurderingStansSend = () => {
 const tilDTO = (vedtak: RevurderingStansVedtakContext): RevurderingVedtakStansDTO => {
     return {
         resultat: RevurderingResultat.STANS,
-        begrunnelseVilkårsvurdering: vedtak.textAreas.begrunnelse.get(),
-        fritekstTilVedtaksbrev: vedtak.textAreas.brevtekst.get(),
+        begrunnelseVilkårsvurdering: vedtak.textAreas.begrunnelse.getValue(),
+        fritekstTilVedtaksbrev: vedtak.textAreas.brevtekst.getValue(),
         stansFraOgMed: vedtak.stansdato,
         valgteHjemler: vedtak.valgtHjemmelHarIkkeRettighet,
     };

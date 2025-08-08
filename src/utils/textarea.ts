@@ -3,7 +3,7 @@ import { Nullable } from '~/types/UtilTypes';
 
 export type TextAreaInput = {
     ref: RefObject<HTMLTextAreaElement>;
-    get: () => string;
+    getValue: () => string;
 };
 
 export const getTextAreaRefValue = (

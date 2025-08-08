@@ -15,7 +15,7 @@ type Props = {
 
 export const LagreBehandlingKnapp = ({ behandling, hentVedtakDTO, onSuccess, onError }: Props) => {
     const { setBehandling } = useBehandling();
-    const { oppdaterBehandling, oppdaterBehandlingLaster } = useLagreBehandling({
+    const { lagreBehandling, lagreBehandlingLaster } = useLagreBehandling({
         behandling,
         options: {
             onSuccess,
@@ -28,7 +28,7 @@ export const LagreBehandlingKnapp = ({ behandling, hentVedtakDTO, onSuccess, onE
             size={'medium'}
             variant={'secondary'}
             type={'button'}
-            loading={oppdaterBehandlingLaster}
+            loading={lagreBehandlingLaster}
             onClick={() => {
                 const vedtakDto = hentVedtakDTO();
 
@@ -36,7 +36,7 @@ export const LagreBehandlingKnapp = ({ behandling, hentVedtakDTO, onSuccess, onE
                     return;
                 }
 
-                oppdaterBehandling(vedtakDto).then((behandling) => {
+                lagreBehandling(vedtakDto).then((behandling) => {
                     if (behandling) {
                         setBehandling(behandling);
                     }
