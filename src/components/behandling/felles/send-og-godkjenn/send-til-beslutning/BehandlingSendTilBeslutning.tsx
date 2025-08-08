@@ -1,5 +1,5 @@
-import { Button } from '@navikt/ds-react';
-import { useRef } from 'react';
+import { Button, HStack } from '@navikt/ds-react';
+import React, { useState } from 'react';
 import { useBehandling } from '../../../BehandlingContext';
 import { BehandlingData } from '~/types/BehandlingTypes';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
@@ -16,6 +16,7 @@ import { Nullable } from '~/types/UtilTypes';
 import { useNotification } from '~/context/NotificationContext';
 
 import style from '../BehandlingSendOgGodkjenn.module.css';
+import SettBehandlingPåVentModal from '~/components/modaler/SettBehandlingPåVentModal';
 
 type Props = {
     behandling: BehandlingData;
@@ -30,32 +31,47 @@ export const BehandlingSendTilBeslutning = ({ behandling, hentVedtakDto, disable
     const { setBehandling } = useBehandling();
     const { innloggetSaksbehandler } = useSaksbehandler();
     const rolle = useRolleForBehandling(behandling);
-
-    const modalRef = useRef<HTMLDialogElement>(null);
-
-    const åpneModal = () => {
-        modalRef.current?.showModal();
-    };
-    const lukkModal = () => modalRef.current?.close();
+    const [visSettBehandlingPåVentModal, setVisSettBehandlingPåVentModal] = useState(false);
+    const [visSendTilBeslutningModal, setVisSendTilBeslutningModal] = useState(false);
 
     return (
         <div className={style.wrapper}>
             {rolle === SaksbehandlerRolle.SAKSBEHANDLER && (
-                <>
+                <HStack gap="2">
                     {skalKunneGjenopptaBehandling(behandling, innloggetSaksbehandler) ? (
                         <GjenopptaButton behandling={behandling} />
                     ) : (
-                        <Button onClick={åpneModal} disabled={disabled}>
-                            {'Send til beslutter'}
-                        </Button>
+                        <>
+                            <Button
+                                variant={'secondary'}
+                                onClick={() => setVisSettBehandlingPåVentModal(true)}
+                            >
+                                {'Sett på vent'}
+                            </Button>
+                            <Button
+                                onClick={() => setVisSendTilBeslutningModal(true)}
+                                disabled={disabled}
+                            >
+                                {'Send til beslutter'}
+                            </Button>
+                        </>
                     )}
-                </>
+                </HStack>
+            )}
+            {visSettBehandlingPåVentModal && (
+                <SettBehandlingPåVentModal
+                    sakId={behandling.sakId}
+                    behandlingId={behandling.id}
+                    saksnummer={behandling.saksnummer}
+                    åpen={visSettBehandlingPåVentModal}
+                    onClose={() => setVisSettBehandlingPåVentModal(false)}
+                />
             )}
             <BekreftelsesModal
-                modalRef={modalRef}
+                åpen={visSendTilBeslutningModal}
                 tittel={'Send vedtaket til beslutning?'}
                 feil={sendTilBeslutningError}
-                lukkModal={lukkModal}
+                lukkModal={() => setVisSendTilBeslutningModal(false)}
                 bekreftKnapp={
                     <Button
                         variant={'primary'}
@@ -74,7 +90,7 @@ export const BehandlingSendTilBeslutning = ({ behandling, hentVedtakDto, disable
                                         '/',
                                         'Vedtaket er sendt til beslutning!',
                                     );
-                                    lukkModal();
+                                    setVisSendTilBeslutningModal(false);
                                 }
                             });
                         }}

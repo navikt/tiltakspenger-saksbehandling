@@ -118,7 +118,7 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
                         <GjenopptaBehandlingMenyvalg behandling={behandling} />
                     )}
                     {visTildelMeg && <TildelMegMenyvalg behandling={behandling} />}
-                    {menySkalVises && (
+                    {menySkalVises && !visFortsettBehandling && (
                         <>
                             <ActionMenu.Divider />
                             <SeBehandlingMenyvalg behandlingHref={`/behandling/${behandling.id}`} />

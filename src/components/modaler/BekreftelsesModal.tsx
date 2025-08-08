@@ -1,17 +1,18 @@
 import { Button, Modal } from '@navikt/ds-react';
 import React, { ReactNode, RefObject } from 'react';
 import Varsel from '../varsel/Varsel';
-import { FetcherError } from '../../utils/fetch/fetch';
+import { FetcherError } from '~/utils/fetch/fetch';
 
 import styles from './BekreftelsesModal.module.css';
 
 type Props = {
-    modalRef: RefObject<HTMLDialogElement>;
+    modalRef?: RefObject<HTMLDialogElement>;
     children?: ReactNode;
     tittel: string;
     feil?: FetcherError;
     lukkModal: () => void;
     bekreftKnapp: ReactNode;
+    åpen?: boolean;
 };
 
 export const BekreftelsesModal = ({
@@ -21,6 +22,7 @@ export const BekreftelsesModal = ({
     feil,
     lukkModal,
     bekreftKnapp,
+    åpen,
 }: Props) => {
     return (
         <Modal
@@ -31,6 +33,7 @@ export const BekreftelsesModal = ({
                 lukkModal();
             }}
             header={{ heading: tittel }}
+            open={åpen}
         >
             <Modal.Body>{children}</Modal.Body>
             <Modal.Footer>
