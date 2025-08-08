@@ -8,10 +8,6 @@
     margin-bottom: 1rem;
 }
 
-.warning {
-    margin-bottom: 1rem;
-}
-
 .knapper {
     margin-bottom: var(--a-spacing-8);
 }
@@ -19,4 +15,10 @@
 .godkjentWrapper {
     display: flex;
     justify-content: flex-end;
+}
+
+.varsler {
+    &:not(:empty) {
+        margin-bottom: 1rem;
+    }
 }

@@ -3,7 +3,6 @@ import {
     createContext,
     Dispatch,
     PropsWithChildren,
-    RefObject,
     useCallback,
     useContext,
     useReducer,
@@ -21,17 +20,12 @@ import {
     hentTiltaksperiodeFraSøknad,
 } from '~/utils/behandling';
 import { periodiserBarnetillegg } from '~/utils/BarnetilleggUtils';
+import { BarnetilleggBegrunnelseInput } from '~/components/behandling/felles/state/BarnetilleggState';
+import { BegrunnelseOgBrevInput } from '~/components/behandling/felles/state/BegrunnelseOgBrev';
 
-type TextAreaInputs = {
-    begrunnelseRef: RefObject<HTMLTextAreaElement>;
-    brevtekstRef: RefObject<HTMLTextAreaElement>;
-    barnetilleggBegrunnelseRef: RefObject<HTMLTextAreaElement>;
-    getBegrunnelse: () => string;
-    getBrevtekst: () => string;
-    getBarnetilleggBegrunnelse: () => string;
-};
-
-export type SøknadsbehandlingVedtakContext = TextAreaInputs & SøknadsbehandlingSkjemaState;
+export type SøknadsbehandlingVedtakContext = BegrunnelseOgBrevInput &
+    BarnetilleggBegrunnelseInput &
+    SøknadsbehandlingSkjemaState;
 
 // Separate contexts for å hindre re-renders for komponenter som kun bruker dispatch
 const StateContext = createContext({} as SøknadsbehandlingVedtakContext);
@@ -117,12 +111,20 @@ export const SøknadsbehandlingVedtakProvider = ({ children }: PropsWithChildren
             <StateContext.Provider
                 value={{
                     ...vedtak,
-                    begrunnelseRef,
-                    brevtekstRef,
-                    barnetilleggBegrunnelseRef,
-                    getBegrunnelse,
-                    getBrevtekst,
-                    getBarnetilleggBegrunnelse,
+                    textAreas: {
+                        begrunnelse: {
+                            ref: begrunnelseRef,
+                            getValue: getBegrunnelse,
+                        },
+                        brevtekst: {
+                            ref: brevtekstRef,
+                            getValue: getBrevtekst,
+                        },
+                        barnetilleggBegrunnelse: {
+                            ref: barnetilleggBegrunnelseRef,
+                            getValue: getBarnetilleggBegrunnelse,
+                        },
+                    },
                 }}
             >
                 {children}

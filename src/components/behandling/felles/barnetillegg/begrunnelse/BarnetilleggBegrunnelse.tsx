@@ -6,9 +6,9 @@ import { BodyLong, Heading } from '@navikt/ds-react';
 import { TekstfeltMedMellomlagring } from '../../../../tekstfelt/TekstfeltMedMellomlagring';
 import { BehandlingBarnetilleggProps } from '~/components/behandling/felles/barnetillegg/BehandlingBarnetillegg';
 import { useRolleForBehandling } from '~/context/saksbehandler/SaksbehandlerContext';
+import { OppdaterBarnetilleggRequest, VedtakBarnetilleggDTO } from '~/types/Barnetillegg';
 
 import style from './BarnetilleggBegrunnelse.module.css';
-import { OppdaterBarnetilleggRequest, VedtakBarnetilleggDTO } from '~/types/Barnetillegg';
 
 type Props = BehandlingBarnetilleggProps & {
     lagring: {
@@ -18,9 +18,9 @@ type Props = BehandlingBarnetilleggProps & {
     };
 };
 
-export const BarnetilleggBegrunnelse = ({ behandling, context, lagring }: Props) => {
+export const BarnetilleggBegrunnelse = ({ behandling, lagring, context }: Props) => {
     const { barnetillegg } = behandling;
-    const { barnetilleggBegrunnelseRef } = context;
+    const { barnetilleggBegrunnelse } = context.textAreas;
 
     const rolle = useRolleForBehandling(behandling);
 
@@ -43,7 +43,7 @@ export const BarnetilleggBegrunnelse = ({ behandling, context, lagring }: Props)
                     readOnly={rolle !== SaksbehandlerRolle.SAKSBEHANDLER}
                     lagringUrl={lagring.url}
                     lagringBody={(tekst) => lagring.body(tekst)}
-                    ref={barnetilleggBegrunnelseRef}
+                    ref={barnetilleggBegrunnelse.ref}
                 />
             </VedtakSeksjon.Venstre>
 

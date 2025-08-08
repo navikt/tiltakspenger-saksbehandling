@@ -6,13 +6,13 @@ import style from './RevurderingInnvilgelseBegrunnelse.module.css';
 
 export const RevurderingInnvilgelseBegrunnelse = () => {
     const { behandling, rolleForBehandling } = useRevurderingBehandling();
-    const { begrunnelseRef } = useRevurderingInnvilgelseSkjema();
+    const { begrunnelse } = useRevurderingInnvilgelseSkjema().textAreas;
 
     return (
         <BegrunnelseVilkårsvurdering
             behandling={behandling}
             rolle={rolleForBehandling}
-            tekstRef={begrunnelseRef}
+            tekstRef={begrunnelse.ref}
             className={style.begrunnelse}
         />
     );

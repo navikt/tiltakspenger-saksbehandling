@@ -32,7 +32,7 @@ const AvsluttBehandlingKnapp = (props: AvsluttBehandlingProps) => {
                 />
             )}
             <Button
-                variant="secondary"
+                variant="tertiary"
                 type="button"
                 size={props.button?.size ?? 'small'}
                 onClick={() => setVilAvslutteBehandling(true)}

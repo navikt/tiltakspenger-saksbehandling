@@ -1,7 +1,7 @@
-import { SøknadBarn } from '../types/SøknadTypes';
-import { VedtakBarnetilleggPeriode } from '../types/VedtakTyper';
+import { SøknadBarn } from '~/types/SøknadTypes';
+import { VedtakBarnetilleggPeriode } from '~/types/VedtakTyper';
 import { finn16årsdag, forrigeDag, nesteDag } from './date';
-import { Periode } from '../types/Periode';
+import { Periode } from '~/types/Periode';
 import { erDatoIPeriode } from './periode';
 import { removeDuplicates } from './array';
 import { OppdaterBarnetilleggRequest } from '~/types/Barnetillegg';
@@ -69,7 +69,7 @@ export const tilBarnetilleggRequest = (
         innvilgelsesperiode: vedtak.behandlingsperiode,
         barnetillegg: vedtak.harBarnetillegg
             ? {
-                  begrunnelse: vedtak.getBarnetilleggBegrunnelse(),
+                  begrunnelse: vedtak.textAreas.barnetilleggBegrunnelse.getValue(),
                   perioder: vedtak.barnetilleggPerioder,
               }
             : null,

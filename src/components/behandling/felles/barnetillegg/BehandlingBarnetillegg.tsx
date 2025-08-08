@@ -6,25 +6,24 @@ import { BehandlingBarnetilleggPerioder } from './perioder/BehandlingBarnetilleg
 import { BarnetilleggBegrunnelse } from './begrunnelse/BarnetilleggBegrunnelse';
 import { BehandlingData } from '~/types/BehandlingTypes';
 import { useRolleForBehandling } from '~/context/saksbehandler/SaksbehandlerContext';
-import { Dispatch, RefObject } from 'react';
+import { Dispatch } from 'react';
 import {
     BarnetilleggActions,
+    BarnetilleggBegrunnelseInput,
     BarnetilleggState,
 } from '~/components/behandling/felles/state/BarnetilleggState';
 import {
     InnvilgelseActions,
     InnvilgelseState,
 } from '~/components/behandling/felles/state/InnvilgelseState';
+import { OppdaterBarnetilleggRequest, VedtakBarnetilleggDTO } from '~/types/Barnetillegg';
 
 import style from './BehandlingBarnetillegg.module.css';
-
-import { OppdaterBarnetilleggRequest, VedtakBarnetilleggDTO } from '~/types/Barnetillegg';
 
 export type BehandlingBarnetilleggProps = {
     behandling: BehandlingData;
     dispatch: Dispatch<BarnetilleggActions | InnvilgelseActions>;
-    context: BarnetilleggState &
-        InnvilgelseState & { barnetilleggBegrunnelseRef: RefObject<HTMLTextAreaElement> };
+    context: InnvilgelseState & BarnetilleggState & BarnetilleggBegrunnelseInput;
     valgTekst: string;
     lagring: {
         url: string;

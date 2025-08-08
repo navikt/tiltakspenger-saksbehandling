@@ -7,32 +7,31 @@ import { søknadsbehandlingValidering } from '../søknadsbehandlingValidering';
 import { BehandlingSendOgGodkjenn } from '~/components/behandling/felles/send-og-godkjenn/BehandlingSendOgGodkjenn';
 import { SøknadsbehandlingVedtakDTO } from '~/types/VedtakTyper';
 import { SøknadsbehandlingResultat } from '~/types/BehandlingTypes';
+import { useHentBehandlingLagringProps } from '~/components/behandling/felles/send-og-godkjenn/lagre/useHentBehandlingLagringProps';
 
 export const SøknadsbehandlingSend = () => {
     const { behandling } = useSøknadsbehandling();
-    const vedtakSkjema = useSøknadsbehandlingSkjema();
+    const vedtak = useSøknadsbehandlingSkjema();
 
-    return (
-        <BehandlingSendOgGodkjenn
-            behandling={behandling}
-            hentVedtakDTO={() => tilSøknadsbehandlingVedtakDTO(vedtakSkjema)}
-            validering={() => søknadsbehandlingValidering(behandling, vedtakSkjema)}
-        />
-    );
+    const lagringProps = useHentBehandlingLagringProps({
+        hentDTO: () => tilDTO(vedtak),
+        vedtak,
+        validerVedtak: () => søknadsbehandlingValidering(behandling, vedtak),
+    });
+
+    return <BehandlingSendOgGodkjenn behandling={behandling} lagringProps={lagringProps} />;
 };
 
-const tilSøknadsbehandlingVedtakDTO = (
-    vedtak: SøknadsbehandlingVedtakContext,
-): SøknadsbehandlingVedtakDTO => {
+const tilDTO = (vedtak: SøknadsbehandlingVedtakContext): SøknadsbehandlingVedtakDTO => {
     switch (vedtak.resultat) {
         case SøknadsbehandlingResultat.INNVILGELSE:
             return {
-                begrunnelseVilkårsvurdering: vedtak.getBegrunnelse(),
-                fritekstTilVedtaksbrev: vedtak.getBrevtekst(),
+                begrunnelseVilkårsvurdering: vedtak.textAreas.begrunnelse.getValue(),
+                fritekstTilVedtaksbrev: vedtak.textAreas.brevtekst.getValue(),
                 innvilgelsesperiode: vedtak.behandlingsperiode,
                 barnetillegg: vedtak.harBarnetillegg
                     ? {
-                          begrunnelse: vedtak.getBarnetilleggBegrunnelse(),
+                          begrunnelse: vedtak.textAreas.barnetilleggBegrunnelse.getValue(),
                           perioder: vedtak.barnetilleggPerioder,
                       }
                     : null,
@@ -51,8 +50,8 @@ const tilSøknadsbehandlingVedtakDTO = (
         case SøknadsbehandlingResultat.AVSLAG:
             return {
                 avslagsgrunner: vedtak.avslagsgrunner!,
-                begrunnelseVilkårsvurdering: vedtak.getBegrunnelse(),
-                fritekstTilVedtaksbrev: vedtak.getBrevtekst(),
+                begrunnelseVilkårsvurdering: vedtak.textAreas.begrunnelse.getValue(),
+                fritekstTilVedtaksbrev: vedtak.textAreas.brevtekst.getValue(),
                 valgteTiltaksdeltakelser: vedtak.valgteTiltaksdeltakelser,
                 resultat: vedtak.resultat,
             };

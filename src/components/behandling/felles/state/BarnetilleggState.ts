@@ -4,10 +4,17 @@ import { forrigeDag, nesteDag } from '~/utils/date';
 import { ReducerActionHandlers } from '~/types/Context';
 import { SøknadForBehandlingProps } from '~/types/SøknadTypes';
 import { periodiserBarnetillegg } from '~/utils/BarnetilleggUtils';
+import { TextAreaInput } from '~/utils/textarea';
 
 export type BarnetilleggState = {
     harBarnetillegg: boolean;
     barnetilleggPerioder: VedtakBarnetilleggPeriode[];
+};
+
+export type BarnetilleggBegrunnelseInput = {
+    textAreas: {
+        barnetilleggBegrunnelse: TextAreaInput;
+    };
 };
 
 export type BarnetilleggActions =
