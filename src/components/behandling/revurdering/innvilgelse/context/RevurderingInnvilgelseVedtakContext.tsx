@@ -92,27 +92,29 @@ export const RevurderingInnvilgelseVedtakProvider = ({ children }: PropsWithChil
         [barnetilleggBegrunnelseRef, behandling.barnetillegg],
     );
 
-    const contextValue: RevurderingInnvilgelseVedtakContext = {
-        ...vedtak,
-        textAreas: {
-            begrunnelse: {
-                ref: begrunnelseRef,
-                getValue: getBegrunnelse,
-            },
-            brevtekst: {
-                ref: brevtekstRef,
-                getValue: getBrevtekst,
-            },
-            barnetilleggBegrunnelse: {
-                ref: barnetilleggBegrunnelseRef,
-                getValue: getBarnetilleggBegrunnelse,
-            },
-        },
-    };
-
     return (
         <DispatchContext.Provider value={dispatch}>
-            <StateContext.Provider value={contextValue}>{children}</StateContext.Provider>
+            <StateContext.Provider
+                value={{
+                    ...vedtak,
+                    textAreas: {
+                        begrunnelse: {
+                            ref: begrunnelseRef,
+                            getValue: getBegrunnelse,
+                        },
+                        brevtekst: {
+                            ref: brevtekstRef,
+                            getValue: getBrevtekst,
+                        },
+                        barnetilleggBegrunnelse: {
+                            ref: barnetilleggBegrunnelseRef,
+                            getValue: getBarnetilleggBegrunnelse,
+                        },
+                    },
+                }}
+            >
+                {children}
+            </StateContext.Provider>
         </DispatchContext.Provider>
     );
 };

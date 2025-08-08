@@ -44,6 +44,9 @@ const Hjelpetekst = () => {
                     'Eventuelt andre relevante opplysninger som ikke kommer frem i standardtekstene i brevet',
                 ]}
             />
+            <BodyLong size={'small'}>
+                {'(skal vi ha en spesifikk tekst for revurdering her?)'}
+            </BodyLong>
         </>
     );
 };
