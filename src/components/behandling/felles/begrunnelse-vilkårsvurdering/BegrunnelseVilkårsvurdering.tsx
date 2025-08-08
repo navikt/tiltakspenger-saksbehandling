@@ -15,7 +15,7 @@ import style from './BegrunnelseVilkårsvurdering.module.css';
 type Props = {
     behandling: BehandlingData;
     rolle: Nullable<SaksbehandlerRolle>;
-    tekstRef: RefObject<HTMLTextAreaElement>;
+    tekstRef: RefObject<HTMLTextAreaElement | null>;
     className?: string;
 };
 
