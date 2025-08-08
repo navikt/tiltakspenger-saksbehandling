@@ -1,5 +1,8 @@
 import { BehandlingData, BehandlingStatus } from '~/types/BehandlingTypes';
-import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
+import {
+    useRolleForBehandling,
+    useSaksbehandler,
+} from '~/context/saksbehandler/SaksbehandlerContext';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { HStack, VStack } from '@navikt/ds-react';
 import AvsluttBehandlingKnapp from '~/components/behandlingmeny/menyvalg/AvsluttBehandlingKnapp';
@@ -15,6 +18,7 @@ import {
     BehandlingLagringVarsler,
 } from '~/components/behandling/felles/send-og-godkjenn/varsler/BehandlingLagringVarsler';
 import { BehandlingLagringProps } from '~/components/behandling/felles/send-og-godkjenn/lagre/useHentBehandlingLagringProps';
+import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 
 import style from './BehandlingSendOgGodkjenn.module.css';
 
@@ -25,6 +29,7 @@ type Props = {
 
 export const BehandlingSendOgGodkjenn = ({ behandling, lagringProps }: Props) => {
     const { innloggetSaksbehandler } = useSaksbehandler();
+    const rolleForBehandling = useRolleForBehandling(behandling);
 
     const { validerOgHentVedtakDTO, isDirty } = lagringProps;
 
@@ -50,10 +55,12 @@ export const BehandlingSendOgGodkjenn = ({ behandling, lagringProps }: Props) =>
     return (
         <VedtakSeksjon>
             <VedtakSeksjon.Venstre>
-                <VStack className={style.varsler} gap={'2'}>
-                    <BehandlingValideringVarsler resultat={valideringResultat} />
-                    <BehandlingLagringVarsler isDirty={isDirty} resultat={lagringResultat} />
-                </VStack>
+                {rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER && (
+                    <VStack className={style.varsler} gap={'2'}>
+                        <BehandlingValideringVarsler resultat={valideringResultat} />
+                        <BehandlingLagringVarsler isDirty={isDirty} resultat={lagringResultat} />
+                    </VStack>
+                )}
                 <HStack justify="space-between" className={style.knapper}>
                     {kanAvslutteBehandling && (
                         <AvsluttBehandlingKnapp
