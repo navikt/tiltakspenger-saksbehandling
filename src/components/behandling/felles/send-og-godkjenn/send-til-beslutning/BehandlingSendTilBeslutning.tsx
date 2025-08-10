@@ -14,9 +14,9 @@ import { GjenopptaButton } from '~/components/behandling/felles/send-og-godkjenn
 import { skalKunneGjenopptaBehandling } from '~/utils/tilganger';
 import { Nullable } from '~/types/UtilTypes';
 import { useNotification } from '~/context/NotificationContext';
+import SettBehandlingPåVentModal from '~/components/modaler/SettBehandlingPåVentModal';
 
 import style from '../BehandlingSendOgGodkjenn.module.css';
-import SettBehandlingPåVentModal from '~/components/modaler/SettBehandlingPåVentModal';
 
 type Props = {
     behandling: BehandlingData;
@@ -31,6 +31,7 @@ export const BehandlingSendTilBeslutning = ({ behandling, hentVedtakDto, disable
     const { setBehandling } = useBehandling();
     const { innloggetSaksbehandler } = useSaksbehandler();
     const rolle = useRolleForBehandling(behandling);
+
     const [visSettBehandlingPåVentModal, setVisSettBehandlingPåVentModal] = useState(false);
     const [visSendTilBeslutningModal, setVisSendTilBeslutningModal] = useState(false);
 
@@ -49,7 +50,14 @@ export const BehandlingSendTilBeslutning = ({ behandling, hentVedtakDto, disable
                                 {'Sett på vent'}
                             </Button>
                             <Button
-                                onClick={() => setVisSendTilBeslutningModal(true)}
+                                onClick={() => {
+                                    // midlertidig løsning for å kjøre valideringsfunksjonen når saksbehandler klikker på send til beslutter
+                                    // TODO: må uansett skrive om denne komponenten litt når backend er oppdatert til ikke å lagre nye data ved send til beslutter
+                                    const vedtakDto = hentVedtakDto();
+                                    if (vedtakDto) {
+                                        setVisSendTilBeslutningModal(true);
+                                    }
+                                }}
                                 disabled={disabled}
                             >
                                 {'Send til beslutter'}

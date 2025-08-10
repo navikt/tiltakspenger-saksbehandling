@@ -3,7 +3,7 @@ import {
     useSøknadsbehandlingSkjema,
 } from '../context/SøknadsbehandlingVedtakContext';
 import { useSøknadsbehandling } from '../../BehandlingContext';
-import { søknadsbehandlingValidering } from '../søknadsbehandlingValidering';
+import { søknadsbehandlingValidering } from './søknadsbehandlingValidering';
 import { BehandlingSendOgGodkjenn } from '~/components/behandling/felles/send-og-godkjenn/BehandlingSendOgGodkjenn';
 import { SøknadsbehandlingVedtakDTO } from '~/types/VedtakTyper';
 import { SøknadsbehandlingResultat } from '~/types/BehandlingTypes';
@@ -22,7 +22,7 @@ export const SøknadsbehandlingSend = () => {
     return <BehandlingSendOgGodkjenn behandling={behandling} lagringProps={lagringProps} />;
 };
 
-const tilDTO = (vedtak: SøknadsbehandlingVedtakContext): SøknadsbehandlingVedtakDTO => {
+const tilDTO = (vedtak: SøknadsbehandlingVedtakContext): SøknadsbehandlingVedtakDTO | null => {
     switch (vedtak.resultat) {
         case SøknadsbehandlingResultat.INNVILGELSE:
             return {
@@ -56,9 +56,7 @@ const tilDTO = (vedtak: SøknadsbehandlingVedtakContext): SøknadsbehandlingVedt
                 resultat: vedtak.resultat,
             };
         case null:
-            throw new Error(
-                `Resultat må være satt for søknadsbehandling vedtak - ${vedtak.resultat}`,
-            );
+            return null;
     }
 
     throw new Error(

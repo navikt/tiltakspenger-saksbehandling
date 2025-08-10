@@ -6,7 +6,7 @@ import { FetcherError } from '~/utils/fetch/fetch';
 import styles from './BekreftelsesModal.module.css';
 
 type Props = {
-    modalRef?: RefObject<HTMLDialogElement | null>;
+    modalRef?: RefObject<HTMLDialogElement>;
     children?: ReactNode;
     tittel: string;
     feil?: FetcherError;

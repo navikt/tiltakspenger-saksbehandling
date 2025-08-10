@@ -41,6 +41,12 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
 
+      - name: Run type checking
+        run: tsc --noEmit
+
+      - name: Run linting
+        run: npm run lint
+
       - name: Run tests
         run: npm run test
 

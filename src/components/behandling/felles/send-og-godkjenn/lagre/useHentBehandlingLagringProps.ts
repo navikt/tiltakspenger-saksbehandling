@@ -25,7 +25,7 @@ type VedtakContext =
 type Props = {
     vedtak: VedtakContext;
     validerVedtak: () => ValideringResultat;
-    hentDTO: () => BehandlingVedtakDTO;
+    hentDTO: () => Nullable<BehandlingVedtakDTO>;
 };
 
 export const useHentBehandlingLagringProps = ({
@@ -33,7 +33,7 @@ export const useHentBehandlingLagringProps = ({
     validerVedtak,
     hentDTO,
 }: Props): BehandlingLagringProps => {
-    const [sisteLagring, setSisteLagring] = useState<BehandlingVedtakDTO>(hentDTO());
+    const [sisteLagring, setSisteLagring] = useState<BehandlingVedtakDTO | null>(hentDTO());
     const [isDirty, setIsDirty] = useState(false);
 
     const updateDirtyState = () => {

@@ -17,7 +17,7 @@ type Props = {
     header: string;
     behandling: BehandlingData;
     rolle: Nullable<SaksbehandlerRolle>;
-    tekstRef: RefObject<HTMLTextAreaElement | null>;
+    tekstRef: RefObject<HTMLTextAreaElement>;
     hjelpetekst?: ReactNode;
     validering: ValideringResultat;
     hentDto: () => BrevForhåndsvisningDTO;

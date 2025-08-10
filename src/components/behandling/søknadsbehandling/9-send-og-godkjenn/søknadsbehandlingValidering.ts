@@ -1,4 +1,4 @@
-import { SøknadsbehandlingVedtakContext } from './context/SøknadsbehandlingVedtakContext';
+import { SøknadsbehandlingVedtakContext } from '../context/SøknadsbehandlingVedtakContext';
 import { SøknadsbehandlingData, SøknadsbehandlingResultat } from '~/types/BehandlingTypes';
 import { hentTiltaksperiode, hentTiltaksperiodeFraSøknad } from '~/utils/behandling';
 import { ValideringResultat } from '~/types/Validering';
