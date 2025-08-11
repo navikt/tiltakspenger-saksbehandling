@@ -6,7 +6,6 @@ import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { BekreftelsesModal } from '../../../../modaler/BekreftelsesModal';
 import Underkjenn from '../../../../underkjenn/Underkjenn';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
-import router from 'next/router';
 import { useGodkjennBehandling } from '~/components/behandling/felles/send-og-godkjenn/godkjenn/useGodkjennBehandling';
 import {
     useRolleForBehandling,
@@ -39,7 +38,7 @@ export const BehandlingGodkjenn = ({ behandling }: Props) => {
         {
             onSuccess: (oppdatertBehandling) => {
                 setBehandling(oppdatertBehandling!);
-                router.push(`/sak/${oppdatertBehandling!.saksnummer}`);
+                navigateWithNotification('/', 'Vedtaket har blitt underkjent!');
             },
         },
     );
