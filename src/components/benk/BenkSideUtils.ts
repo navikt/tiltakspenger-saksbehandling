@@ -24,4 +24,5 @@ export enum BehandlingssammendragKolonner {
     startet = 'startet',
     saksbehandler = 'saksbehandler',
     beslutter = 'beslutter',
+    sistEndret = 'sist_endret',
 }

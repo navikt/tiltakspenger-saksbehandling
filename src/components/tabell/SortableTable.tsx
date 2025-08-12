@@ -1,79 +1,68 @@
 import { BodyShort, Table } from '@navikt/ds-react';
 import { useState } from 'react';
 
+type ValueOf<T> = T[keyof T];
+export type AriaSortVerdi = 'ascending' | 'descending';
+
+interface SorteringConfig<Kolonner extends Record<string, string>> {
+    retning: 'ASC' | 'DESC';
+    defaultKolonne: ValueOf<Kolonner>;
+    onSortChange: (kolonne: ValueOf<Kolonner>, direction: 'ASC' | 'DESC') => void;
+}
+
 interface Props<Kolonner extends Record<string, string>> {
     kolonnerConfig: {
         kolonner: Kolonner;
-        defaultKolonneSorteresEtter: ValueOf<Kolonner>;
-        sortering: {
-            value: 'ASC' | 'DESC';
-            onSortChange?: (sortKey: AriaSortVerdi) => void;
-        };
+        sortering: SorteringConfig<Kolonner>;
     };
     antallRader?: number;
     tableHeader: React.ReactElement;
     tableBody: React.ReactElement;
 }
 
-type ValueOf<T> = T[keyof T];
-export type AriaSortVerdi = 'ascending' | 'descending';
-
-/**
- * En tabell som har intern state for visning av sortering. Merk at den forventer at sortering er gjort
- */
-const SortableTable = <Kolonner extends Record<string, string>>(props: Props<Kolonner>) => {
-    const [sortVerdi, setSortVerdi] = useState<AriaSortVerdi>(
-        props.kolonnerConfig.sortering.value === 'ASC' ? 'ascending' : 'descending',
-    );
+const SortableTable = <Kolonner extends Record<string, string>>({
+    kolonnerConfig,
+    antallRader,
+    tableHeader,
+    tableBody,
+}: Props<Kolonner>) => {
     const [sortertKolonne, setSortertKolonne] = useState<ValueOf<Kolonner>>(
-        props.kolonnerConfig.defaultKolonneSorteresEtter,
+        kolonnerConfig.sortering.defaultKolonne,
+    );
+
+    const [sortVerdi, setSortVerdi] = useState<AriaSortVerdi>(
+        kolonnerConfig.sortering.retning === 'ASC' ? 'ascending' : 'descending',
     );
 
     const handleSorterClick = (kolonne: ValueOf<Kolonner>) => {
         if (sortertKolonne !== kolonne) {
             setSortertKolonne(kolonne);
             setSortVerdi('ascending');
+            kolonnerConfig.sortering.onSortChange(kolonne, 'ASC');
             return;
         }
 
-        setSortVerdi(nesteSortVerdi(sortVerdi));
-    };
-
-    const nesteSortVerdi = (sortVerdi: AriaSortVerdi) => {
-        switch (sortVerdi) {
-            case 'ascending': {
-                props.kolonnerConfig.sortering.onSortChange?.('descending');
-                return 'descending';
-            }
-            case 'descending': {
-                props.kolonnerConfig.sortering.onSortChange?.('ascending');
-                return 'ascending';
-            }
-        }
+        const newSortVerdi: AriaSortVerdi = sortVerdi === 'ascending' ? 'descending' : 'ascending';
+        setSortVerdi(newSortVerdi);
+        kolonnerConfig.sortering.onSortChange(
+            kolonne,
+            newSortVerdi === 'ascending' ? 'ASC' : 'DESC',
+        );
     };
 
     return (
         <div>
-            {props.antallRader !== undefined && (
-                <BodyShort>Antall behandlinger: {props.antallRader}</BodyShort>
-            )}
+            {antallRader !== undefined && <BodyShort>Antall behandlinger: {antallRader}</BodyShort>}
             <Table
                 zebraStripes
-                sort={
-                    sortertKolonne
-                        ? {
-                              orderBy: sortertKolonne,
-                              direction:
-                                  props.kolonnerConfig.sortering.value === 'ASC'
-                                      ? 'ascending'
-                                      : 'descending',
-                          }
-                        : undefined
-                }
+                sort={{
+                    orderBy: sortertKolonne,
+                    direction: sortVerdi,
+                }}
                 onSortChange={(sortKey) => handleSorterClick(sortKey as ValueOf<Kolonner>)}
             >
-                {props.tableHeader}
-                {props.tableBody}
+                {tableHeader}
+                {tableBody}
             </Table>
         </div>
     );

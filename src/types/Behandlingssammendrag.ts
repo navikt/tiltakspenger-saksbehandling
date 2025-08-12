@@ -4,7 +4,7 @@ export interface BenkOversiktRequest {
     benktype: BehandlingssammendragBenktype;
     behandlingstype: Nullable<BehandlingssammendragType[]>;
     status: Nullable<BehandlingssammendragStatus[]>;
-    sortering: 'ASC' | 'DESC';
+    sortering: string;
     identer: Nullable<string[]>;
 }
 
@@ -23,6 +23,7 @@ export interface Behandlingssammendrag {
     status: Nullable<BehandlingssammendragStatus>;
     saksbehandler: Nullable<string>;
     beslutter: Nullable<string>;
+    sistEndret?: string;
 }
 
 export enum BehandlingssammendragType {

@@ -33,6 +33,7 @@ import styles from './BenkSide.module.css';
 import NotificationBanner, {
     NotificationBannerRef,
 } from '../notificationBanner/NotificationBanner';
+import { ValueOf } from 'next/dist/shared/lib/constants';
 
 type Props = {
     benkOversikt: BenkOversiktResponse;
@@ -48,7 +49,7 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
     const typeParam = searchParams.get('type') as BehandlingssammendragType | null;
     const statusParam = searchParams.get('status') as BehandlingssammendragStatus | null;
     const saksbehandlerParam = searchParams.get('saksbehandler') as string | null;
-    const sorteringParam = searchParams.get('sortering') as 'ASC' | 'DESC' | null;
+    const sorteringRetningParam = searchParams.get('sortering') as 'ASC' | 'DESC' | null;
 
     const [type, setType] = useState<BehandlingssammendragType | 'Alle'>(typeParam ?? 'Alle');
     const [benktype, setBenktype] = useState<BehandlingssammendragBenktype>(
@@ -80,11 +81,11 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
                 behandlingstype: type === 'Alle' ? null : [type],
                 status: status === 'Alle' ? null : [status],
                 identer: saksbehandler === 'Alle' ? null : [saksbehandler],
-                sortering: sorteringParam ?? 'ASC',
+                sortering: sorteringRetningParam ?? 'ASC',
             });
             return;
         }
-    }, [fetchOversikt, benktype, type, status, saksbehandler, sorteringParam]);
+    }, [fetchOversikt, benktype, type, status, saksbehandler, sorteringRetningParam]);
 
     return (
         <VStack gap="5" style={{ padding: '1rem' }}>
@@ -181,8 +182,8 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
                             } else {
                                 query.delete('saksbehandler');
                             }
-                            if (sorteringParam) {
-                                query.set('sortering', sorteringParam);
+                            if (sorteringRetningParam) {
+                                query.set('sortering', sorteringRetningParam);
                             } else {
                                 query.delete('sortering');
                             }
@@ -194,7 +195,7 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
                                 behandlingstype: type === 'Alle' ? null : [type],
                                 status: status === 'Alle' ? null : [status],
                                 identer: saksbehandler === 'Alle' ? null : [saksbehandler],
-                                sortering: sorteringParam ?? 'ASC',
+                                sortering: sorteringRetningParam ?? 'ASC',
                             });
                         }}
                     >
@@ -234,29 +235,38 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
             <SortableTable
                 kolonnerConfig={{
                     kolonner: BehandlingssammendragKolonner,
-                    defaultKolonneSorteresEtter: BehandlingssammendragKolonner.startet,
                     sortering: {
-                        value: sorteringParam ?? 'ASC',
-                        onSortChange: (sortKey) => {
-                            const currentParams = new URLSearchParams(searchParams.toString());
-                            const sortering = sortKey === 'descending' ? 'DESC' : 'ASC';
+                        retning: sorteringRetningParam ?? 'ASC',
+                        defaultKolonne: BehandlingssammendragKolonner.startet,
+                        onSortChange: (
+                            kolonne: ValueOf<typeof BehandlingssammendragKolonner>,
+                            sorteringRetning: 'ASC' | 'DESC',
+                        ) => {
+                            const sortering = `${kolonne},${sorteringRetning}`;
+                            const erDefaultSortering =
+                                kolonne === BehandlingssammendragKolonner.startet &&
+                                sorteringRetning === 'ASC';
 
-                            if (sortering === 'DESC') {
-                                currentParams.set('sortering', 'DESC');
-                            } else if (sortering === 'ASC') {
+                            const currentParams = new URLSearchParams(searchParams.toString());
+                            if (erDefaultSortering) {
                                 currentParams.delete('sortering');
+                            } else {
+                                currentParams.set('sortering', sortering);
                             }
 
                             router.push({
                                 pathname: router.pathname,
                                 search: currentParams.toString(),
                             });
+
                             fetchOversikt.trigger({
-                                benktype: benktype,
-                                behandlingstype: typeParam ? [typeParam] : null,
-                                status: statusParam ? [statusParam] : null,
-                                identer: saksbehandlerParam ? [saksbehandlerParam] : null,
-                                sortering: sortering,
+                                benktype,
+                                behandlingstype: type === 'Alle' ? null : [type],
+                                status: status === 'Alle' ? null : [status],
+                                identer: saksbehandler === 'Alle' ? null : [saksbehandler],
+                                sortering: erDefaultSortering
+                                    ? `${BehandlingssammendragKolonner.startet},ASC`
+                                    : sortering,
                             });
                         },
                     },
@@ -273,6 +283,12 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
                                 sortable
                             >
                                 Kravtidspunkt/Startet
+                            </Table.ColumnHeader>
+                            <Table.ColumnHeader
+                                sortKey={BehandlingssammendragKolonner.sistEndret}
+                                sortable
+                            >
+                                Sist endret
                             </Table.ColumnHeader>
                             <Table.HeaderCell scope="col">Saksbehandler</Table.HeaderCell>
                             <Table.HeaderCell scope="col">Beslutter</Table.HeaderCell>
@@ -307,6 +323,11 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
                                 </Table.DataCell>
                                 <Table.DataCell>
                                     {formaterTidspunkt(behandling.startet)}
+                                </Table.DataCell>{' '}
+                                <Table.DataCell>
+                                    {behandling.sistEndret
+                                        ? formaterTidspunkt(behandling.sistEndret)
+                                        : '-'}
                                 </Table.DataCell>
                                 <Table.DataCell>
                                     {behandling.saksbehandler ?? 'Ikke tildelt'}
