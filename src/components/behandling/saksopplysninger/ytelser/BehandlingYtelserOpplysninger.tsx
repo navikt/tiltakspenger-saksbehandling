@@ -5,6 +5,9 @@ import {
     BehandlingSaksopplysningMedFlerePerioder,
     BehandlingSaksopplysningMedPeriode,
 } from '~/components/behandling/saksopplysninger/BehandlingSaksopplysning';
+import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
+import React from 'react';
+import styles from './BehandlingYtelserOpplysninger.module.css';
 
 type Props = {
     ytelser: Ytelse[];
@@ -28,7 +31,10 @@ const YtelseOpplysning = (props: { ytelse: Ytelse }) => {
 
     return (
         <>
-            <BehandlingSaksopplysning navn={'Type'} verdi={ytelsetype} />
+            <div className={styles.ytelsesopplysningVarsel}>
+                <BehandlingSaksopplysning navn={'Type'} verdi={ytelsetype} />
+                <ExclamationmarkTriangleFillIcon />
+            </div>
             {!flerePerioder && (
                 <BehandlingSaksopplysningMedPeriode navn={'Periode'} periode={perioder[0]} />
             )}
