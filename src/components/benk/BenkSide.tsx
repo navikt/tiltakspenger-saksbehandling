@@ -206,6 +206,7 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
                         size="small"
                         variant="secondary"
                         onClick={() => {
+                            setBenktype(BehandlingssammendragBenktype.KLAR);
                             setType('Alle');
                             setStatus('Alle');
                             setSaksbehandler('Alle');
