@@ -1,13 +1,4 @@
-import {
-    Alert,
-    Button,
-    CopyButton,
-    Heading,
-    HStack,
-    Select,
-    Table,
-    VStack,
-} from '@navikt/ds-react';
+import { Alert, Button, Heading, HStack, Select, VStack } from '@navikt/ds-react';
 import React, { useEffect, useRef, useState } from 'react';
 import {
     BehandlingssammendragBenktype,
@@ -17,7 +8,6 @@ import {
     BenkOversiktResponse,
 } from '~/types/Behandlingssammendrag';
 import { useRouter } from 'next/router';
-import { formaterTidspunkt } from '~/utils/date';
 import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { useSearchParams } from 'next/navigation';
@@ -26,14 +16,12 @@ import {
     behandlingsstatusTextFormatter,
     behandlingstypeTextFormatter,
 } from './BenkSideUtils';
-import SortableTable from '../tabell/SortableTable';
-import NextLink from 'next/link';
 
 import styles from './BenkSide.module.css';
 import NotificationBanner, {
     NotificationBannerRef,
 } from '../notificationBanner/NotificationBanner';
-import { ValueOf } from 'next/dist/shared/lib/constants';
+import BenkTabell from '~/components/benk/BenkTabell';
 
 type Props = {
     benkOversikt: BenkOversiktResponse;
@@ -233,124 +221,37 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
                     </Alert>
                 </div>
             )}
-            <SortableTable
-                kolonnerConfig={{
-                    kolonner: BehandlingssammendragKolonner,
-                    sortering: {
-                        retning: sorteringRetningParam ?? 'ASC',
-                        defaultKolonne: BehandlingssammendragKolonner.startet,
-                        onSortChange: (
-                            kolonne: ValueOf<typeof BehandlingssammendragKolonner>,
-                            sorteringRetning: 'ASC' | 'DESC',
-                        ) => {
-                            const sortering = `${kolonne},${sorteringRetning}`;
-                            const erDefaultSortering =
-                                kolonne === BehandlingssammendragKolonner.startet &&
-                                sorteringRetning === 'ASC';
+            <BenkTabell
+                data={filtrertBenkoversikt}
+                sorteringRetning={sorteringRetningParam ?? 'ASC'}
+                onSortChange={(kolonne, sorteringRetning) => {
+                    const sortering = `${kolonne},${sorteringRetning}`;
+                    const erDefaultSortering =
+                        kolonne === BehandlingssammendragKolonner.startet &&
+                        sorteringRetning === 'ASC';
 
-                            const currentParams = new URLSearchParams(searchParams.toString());
-                            if (erDefaultSortering) {
-                                currentParams.delete('sortering');
-                            } else {
-                                currentParams.set('sortering', sortering);
-                            }
+                    const currentParams = new URLSearchParams(searchParams.toString());
+                    if (erDefaultSortering) {
+                        currentParams.delete('sortering');
+                    } else {
+                        currentParams.set('sortering', sortering);
+                    }
 
-                            router.push({
-                                pathname: router.pathname,
-                                search: currentParams.toString(),
-                            });
+                    router.push({
+                        pathname: router.pathname,
+                        search: currentParams.toString(),
+                    });
 
-                            fetchOversikt.trigger({
-                                benktype,
-                                behandlingstype: type === 'Alle' ? null : [type],
-                                status: status === 'Alle' ? null : [status],
-                                identer: saksbehandler === 'Alle' ? null : [saksbehandler],
-                                sortering: erDefaultSortering
-                                    ? `${BehandlingssammendragKolonner.startet},ASC`
-                                    : sortering,
-                            });
-                        },
-                    },
+                    fetchOversikt.trigger({
+                        benktype,
+                        behandlingstype: type === 'Alle' ? null : [type],
+                        status: status === 'Alle' ? null : [status],
+                        identer: saksbehandler === 'Alle' ? null : [saksbehandler],
+                        sortering: erDefaultSortering
+                            ? `${BehandlingssammendragKolonner.startet},ASC`
+                            : sortering,
+                    });
                 }}
-                antallRader={filtrertBenkoversikt.behandlingssammendrag.length}
-                tableHeader={
-                    <Table.Header>
-                        <Table.Row>
-                            <Table.HeaderCell scope="col">Fødselsnummer</Table.HeaderCell>
-                            <Table.HeaderCell scope="col">Type</Table.HeaderCell>
-                            <Table.HeaderCell scope="col">Status</Table.HeaderCell>
-                            <Table.ColumnHeader
-                                sortKey={BehandlingssammendragKolonner.startet}
-                                sortable
-                            >
-                                Kravtidspunkt/Startet
-                            </Table.ColumnHeader>
-                            <Table.ColumnHeader
-                                sortKey={BehandlingssammendragKolonner.sistEndret}
-                                sortable
-                            >
-                                Sist endret
-                            </Table.ColumnHeader>
-                            <Table.HeaderCell scope="col">Saksbehandler</Table.HeaderCell>
-                            <Table.HeaderCell scope="col">Beslutter</Table.HeaderCell>
-                            <Table.HeaderCell scope="col"></Table.HeaderCell>
-                        </Table.Row>
-                    </Table.Header>
-                }
-                tableBody={
-                    <Table.Body>
-                        {filtrertBenkoversikt.behandlingssammendrag.map((behandling, idx) => (
-                            <Table.Row
-                                shadeOnHover={false}
-                                key={`${behandling.sakId}-${behandling.startet}-${idx}`}
-                            >
-                                <Table.HeaderCell scope="row">
-                                    <HStack align="center">
-                                        {behandling.fnr}
-                                        <CopyButton
-                                            copyText={behandling.fnr}
-                                            variant="action"
-                                            size="small"
-                                        />
-                                    </HStack>
-                                </Table.HeaderCell>
-                                <Table.DataCell>
-                                    {behandlingstypeTextFormatter[behandling.behandlingstype]}
-                                </Table.DataCell>
-                                <Table.DataCell>
-                                    {behandling.status
-                                        ? behandlingsstatusTextFormatter[behandling.status]
-                                        : '-'}
-                                </Table.DataCell>
-                                <Table.DataCell>
-                                    {formaterTidspunkt(behandling.startet)}
-                                </Table.DataCell>{' '}
-                                <Table.DataCell>
-                                    {behandling.sistEndret
-                                        ? formaterTidspunkt(behandling.sistEndret)
-                                        : '-'}
-                                </Table.DataCell>
-                                <Table.DataCell>
-                                    {behandling.saksbehandler ?? 'Ikke tildelt'}
-                                </Table.DataCell>
-                                <Table.DataCell>
-                                    {behandling.beslutter ?? 'Ikke tildelt'}
-                                </Table.DataCell>
-                                <Table.DataCell>
-                                    <Button
-                                        type="button"
-                                        variant="secondary"
-                                        size="small"
-                                        as={NextLink}
-                                        href={`/sak/${behandling.saksnummer}`}
-                                    >
-                                        Se sak
-                                    </Button>
-                                </Table.DataCell>
-                            </Table.Row>
-                        ))}
-                    </Table.Body>
-                }
             />
         </VStack>
     );
