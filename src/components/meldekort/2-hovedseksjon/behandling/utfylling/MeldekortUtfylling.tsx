@@ -34,7 +34,9 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
     const { meldeperiodeKjede, tidligereMeldekortBehandlinger, sisteMeldeperiode } =
         useMeldeperiodeKjede();
     const { sakId, saksnummer } = useSak().sak;
-    const { brukersMeldekort } = meldeperiodeKjede;
+    const brukersMeldekortForBehandling = meldeperiodeKjede.brukersMeldekort.find(
+        (b) => b.id === meldekortBehandling.brukersMeldekortId,
+    );
     const { antallDager } = sisteMeldeperiode;
 
     const formContext = useForm<MeldekortBehandlingForm>({
@@ -44,7 +46,7 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
                 meldekortBehandling,
                 tidligereMeldekortBehandlinger,
                 sisteMeldeperiode,
-                brukersMeldekort,
+                brukersMeldekortForBehandling,
             ),
             begrunnelse: meldekortBehandling.begrunnelse,
         },
@@ -79,11 +81,11 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
                 meldekortBehandling,
                 tidligereMeldekortBehandlinger,
                 sisteMeldeperiode,
-                brukersMeldekort,
+                brukersMeldekortForBehandling,
             ),
             begrunnelse: meldekortBehandling.begrunnelse,
         });
-    }, [meldekortBehandling, tidligereMeldekortBehandlinger, brukersMeldekort]);
+    }, [meldekortBehandling, tidligereMeldekortBehandlinger, brukersMeldekortForBehandling]);
 
     return (
         <FormProvider {...formContext}>

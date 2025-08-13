@@ -53,6 +53,9 @@ export const MeldekortOversikt = ({ meldeperiodeKjeder, saksnummer, sakId }: Pro
                             korrigeringFraTidligerePeriode,
                         } = kjede;
 
+                        //TODO - raq - vi er interessert i å vise mottatt - men fra hvilket meldekort egentlig?
+                        const sisteBrukersMeldekort = brukersMeldekort.at(-1);
+
                         const sisteMeldekortBehandling = meldekortBehandlinger
                             .toSorted(sorterMeldekortBehandlingerAsc)
                             .at(0);
@@ -95,8 +98,8 @@ export const MeldekortOversikt = ({ meldeperiodeKjeder, saksnummer, sakId }: Pro
                                         : '-'}
                                 </Table.DataCell>
                                 <Table.DataCell>
-                                    {brukersMeldekort
-                                        ? formaterTidspunkt(brukersMeldekort.mottatt)
+                                    {sisteBrukersMeldekort
+                                        ? formaterTidspunkt(sisteBrukersMeldekort.mottatt)
                                         : 'Ikke mottatt'}
                                 </Table.DataCell>
                                 <Table.DataCell>

@@ -24,13 +24,11 @@ export enum MeldekortBehandlingStatus {
 
 export enum MeldekortBehandlingDagStatus {
     // OBS! Ved endring av disse kodene så burde tilsvarende endringer gjøres for tekstene som utledes for brevene!
-    // TODO: Noen med refaktoreringsmulighet endre fra Sperret til IkkeRettTilTiltakspenger
-    Sperret = 'IKKE_RETT_TIL_TILTAKSPENGER',
+    IkkeRettTilTiltakspenger = 'IKKE_RETT_TIL_TILTAKSPENGER',
     IkkeBesvart = 'IKKE_BESVART',
     DeltattUtenLønnITiltaket = 'DELTATT_UTEN_LØNN_I_TILTAKET',
     DeltattMedLønnITiltaket = 'DELTATT_MED_LØNN_I_TILTAKET',
-    // TODO: Noen med refaktoreringsmulighet endre fra IkkeDeltatt til IkkeTiltaksdag
-    IkkeDeltatt = 'IKKE_TILTAKSDAG',
+    IkkeTiltaksdag = 'IKKE_TILTAKSDAG',
     FraværSyk = 'FRAVÆR_SYK',
     FraværSyktBarn = 'FRAVÆR_SYKT_BARN',
     FraværGodkjentAvNav = 'FRAVÆR_GODKJENT_AV_NAV',
