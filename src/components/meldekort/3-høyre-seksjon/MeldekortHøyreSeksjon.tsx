@@ -13,7 +13,6 @@ export const MeldekortHøyreSeksjon = () => {
         alleMeldekortBehandlinger,
         tidligereMeldekortBehandlinger,
         meldeperiodeKjede,
-        sisteMeldeperiode,
         avbrutteMeldekortBehandlinger,
     } = useMeldeperiodeKjede();
 
@@ -23,7 +22,7 @@ export const MeldekortHøyreSeksjon = () => {
         ? alleMeldekortBehandlinger.length
         : tidligereMeldekortBehandlinger.length;
 
-    const antallBrukersMeldekort = brukersMeldekort ? 1 : 0;
+    const antallBrukersMeldekort = brukersMeldekort.length;
 
     const antallAvbrutteMeldekortBehandlinger = avbrutteMeldekortBehandlinger.length;
 
@@ -62,12 +61,13 @@ export const MeldekortHøyreSeksjon = () => {
             </Tabs.Panel>
 
             <Tabs.Panel value={'brukersMeldekort'} lazy={false} className={style.panel}>
-                {brukersMeldekort && (
+                {/* TODO - raq -  Må se hvordan effekten av denne vil være - eventuelt ta det opp med loritha  */}
+                {brukersMeldekort.map((brukersMeldekort) => (
                     <BrukersMeldekortVisning
-                        meldeperiode={sisteMeldeperiode}
+                        key={brukersMeldekort.id}
                         brukersMeldekort={brukersMeldekort}
                     />
-                )}
+                ))}
             </Tabs.Panel>
 
             <Tabs.Panel value={'avsluttedeMeldekort'} lazy={false} className={style.panel}>

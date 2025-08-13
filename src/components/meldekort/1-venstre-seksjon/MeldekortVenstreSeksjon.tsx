@@ -67,8 +67,8 @@ export const MeldekortVenstreSeksjon = () => {
             <MeldekortDetalj
                 header={'Siste meldekort mottatt fra bruker'}
                 tekst={
-                    brukersMeldekort?.mottatt
-                        ? formaterTidspunkt(brukersMeldekort.mottatt)
+                    brukersMeldekort.at(-1)
+                        ? formaterTidspunkt(brukersMeldekort.at(-1)!.mottatt)
                         : 'Ikke mottatt'
                 }
             />

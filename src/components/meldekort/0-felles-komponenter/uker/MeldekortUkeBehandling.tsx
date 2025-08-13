@@ -46,7 +46,7 @@ export const MeldekortUkeBehandling = ({ dager, ukeIndex }: Props) => {
                     {ikonForMeldekortBehandlingDagStatus[valgtStatus]}
                 </Table.DataCell>
                 <Table.DataCell>
-                    {valgtStatus === MeldekortBehandlingDagStatus.Sperret ? (
+                    {valgtStatus === MeldekortBehandlingDagStatus.IkkeRettTilTiltakspenger ? (
                         <BodyShort>Ikke rett til tiltakspenger</BodyShort>
                     ) : (
                         <Controller
@@ -99,9 +99,10 @@ export const MeldekortUkeBehandling = ({ dager, ukeIndex }: Props) => {
 
 const gyldigeStatusValg = Object.values(MeldekortBehandlingDagStatus).filter(
     (status) =>
-        ![MeldekortBehandlingDagStatus.Sperret, MeldekortBehandlingDagStatus.IkkeBesvart].includes(
-            status,
-        ),
+        ![
+            MeldekortBehandlingDagStatus.IkkeRettTilTiltakspenger,
+            MeldekortBehandlingDagStatus.IkkeBesvart,
+        ].includes(status),
 );
 
 const statusOptions = gyldigeStatusValg.map((meldekortStatus) => (

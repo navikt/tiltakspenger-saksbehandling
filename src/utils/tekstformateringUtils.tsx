@@ -58,11 +58,13 @@ export const brukersMeldekortDagStatusTekst: Record<BrukersMeldekortDagStatus, s
     [BrukersMeldekortDagStatus.FRAVÆR_GODKJENT_AV_NAV]: 'Fravær godkjent av Nav',
     [BrukersMeldekortDagStatus.FRAVÆR_ANNET]: 'Annet fravær',
     [BrukersMeldekortDagStatus.IKKE_BESVART]: 'Ikke besvart',
+    [BrukersMeldekortDagStatus.IKKE_RETT_TIL_TILTAKSPENGER]: 'Ikke rett til tiltakspenger',
+    [BrukersMeldekortDagStatus.IKKE_TILTAKSDAG]: 'Ikke tiltaksdag',
 } as const;
 
 export const meldekortBehandlingDagStatusTekst: Record<MeldekortBehandlingDagStatus, string> = {
     // OBS! Endring av disse tekstene krever tilsvarende endringer tekstene som utledes for brevene!
-    [MeldekortBehandlingDagStatus.Sperret]: 'Ikke rett til tiltakspenger',
+    [MeldekortBehandlingDagStatus.IkkeRettTilTiltakspenger]: 'Ikke rett til tiltakspenger',
     [MeldekortBehandlingDagStatus.DeltattMedLønnITiltaket]: 'Deltatt med lønn',
     [MeldekortBehandlingDagStatus.DeltattUtenLønnITiltaket]: 'Deltatt',
     [MeldekortBehandlingDagStatus.FraværSyk]: 'Syk',
@@ -70,7 +72,7 @@ export const meldekortBehandlingDagStatusTekst: Record<MeldekortBehandlingDagSta
     [MeldekortBehandlingDagStatus.FraværGodkjentAvNav]: 'Fravær godkjent av Nav',
     [MeldekortBehandlingDagStatus.FraværAnnet]: 'Annet fravær',
     [MeldekortBehandlingDagStatus.IkkeBesvart]: 'Ikke besvart',
-    [MeldekortBehandlingDagStatus.IkkeDeltatt]: 'Ikke tiltaksdag',
+    [MeldekortBehandlingDagStatus.IkkeTiltaksdag]: 'Ikke tiltaksdag',
 } as const;
 
 export const finnMeldeperiodeKjedeStatusTekst: Record<MeldeperiodeKjedeStatus, string> = {

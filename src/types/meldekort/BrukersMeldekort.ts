@@ -11,18 +11,8 @@ export enum BrukersMeldekortDagStatus {
     FRAVÆR_GODKJENT_AV_NAV = 'FRAVÆR_GODKJENT_AV_NAV',
     FRAVÆR_ANNET = 'FRAVÆR_ANNET',
     IKKE_BESVART = 'IKKE_BESVART',
-}
-
-export enum BrukersMeldekortBehandletAutomatiskStatus {
-    VENTER_BEHANDLING = 'VENTER_BEHANDLING',
-    BEHANDLET = 'BEHANDLET',
-    UKJENT_FEIL = 'UKJENT_FEIL',
-    HENTE_NAVKONTOR_FEILET = 'HENTE_NAVKONTOR_FEILET',
-    BEHANDLING_FEILET_PÅ_SAK = 'BEHANDLING_FEILET_PÅ_SAK',
-    UTBETALING_FEILET_PÅ_SAK = 'UTBETALING_FEILET_PÅ_SAK',
-    SKAL_IKKE_BEHANDLES_AUTOMATISK = 'SKAL_IKKE_BEHANDLES_AUTOMATISK',
-    ALLEREDE_BEHANDLET = 'ALLEREDE_BEHANDLET',
-    UTDATERT_MELDEPERIODE = 'UTDATERT_MELDEPERIODE',
+    IKKE_RETT_TIL_TILTAKSPENGER = 'IKKE_RETT_TIL_TILTAKSPENGER',
+    IKKE_TILTAKSDAG = 'IKKE_TILTAKSDAG',
 }
 
 export type BrukersMeldekortDagProps = {
@@ -34,5 +24,4 @@ export type BrukersMeldekortProps = {
     id: BrukersMeldekortId;
     mottatt: string;
     dager: BrukersMeldekortDagProps[];
-    behandletAutomatiskStatus?: BrukersMeldekortBehandletAutomatiskStatus;
 };

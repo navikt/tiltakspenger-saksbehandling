@@ -44,6 +44,8 @@ export const ikonForBrukersMeldekortDagStatus: Record<
     [BrukersMeldekortDagStatus.FRAVÆR_SYKT_BARN]: Ikoner.firstAidKitFill,
     [BrukersMeldekortDagStatus.IKKE_BESVART]: Ikoner.notePencil,
     [BrukersMeldekortDagStatus.FRAVÆR_ANNET]: Ikoner.circleSlash,
+    [BrukersMeldekortDagStatus.IKKE_RETT_TIL_TILTAKSPENGER]: Ikoner.circleSlash,
+    [BrukersMeldekortDagStatus.IKKE_TILTAKSDAG]: Ikoner.circleSlash,
 } as const;
 
 export const ikonForMeldekortBehandlingDagStatus: Record<
@@ -56,7 +58,7 @@ export const ikonForMeldekortBehandlingDagStatus: Record<
     [MeldekortBehandlingDagStatus.FraværSyktBarn]: Ikoner.firstAidKitFill,
     [MeldekortBehandlingDagStatus.FraværGodkjentAvNav]: Ikoner.checkmarkCircleFill,
     [MeldekortBehandlingDagStatus.FraværAnnet]: Ikoner.minusCircleFill,
-    [MeldekortBehandlingDagStatus.IkkeDeltatt]: Ikoner.minusCircleFill,
+    [MeldekortBehandlingDagStatus.IkkeTiltaksdag]: Ikoner.minusCircleFill,
     [MeldekortBehandlingDagStatus.IkkeBesvart]: Ikoner.notePencil,
-    [MeldekortBehandlingDagStatus.Sperret]: Ikoner.circleSlash,
+    [MeldekortBehandlingDagStatus.IkkeRettTilTiltakspenger]: Ikoner.circleSlash,
 } as const;

@@ -1,4 +1,3 @@
-import { MeldeperiodeProps } from '../../../../types/meldekort/Meldeperiode';
 import {
     BrukersMeldekortDagProps,
     BrukersMeldekortProps,
@@ -12,11 +11,10 @@ import React from 'react';
 import styles from './BrukersMeldekort.module.css';
 
 type Props = {
-    meldeperiode: MeldeperiodeProps;
     brukersMeldekort: BrukersMeldekortProps;
 };
 
-export const BrukersMeldekortVisning = ({ meldeperiode, brukersMeldekort }: Props) => {
+export const BrukersMeldekortVisning = ({ brukersMeldekort }: Props) => {
     const uke1 = brukersMeldekort.dager.slice(0, 7);
     const uke2 = brukersMeldekort.dager.slice(7, 14);
 
@@ -28,18 +26,17 @@ export const BrukersMeldekortVisning = ({ meldeperiode, brukersMeldekort }: Prop
                     <strong>{formaterTidspunkt(brukersMeldekort.mottatt)}</strong>
                 </BodyShort>
             </Alert>
-            <Uke dager={uke1} meldeperiode={meldeperiode} />
-            <Uke dager={uke2} meldeperiode={meldeperiode} />
+            <Uke dager={uke1} />
+            <Uke dager={uke2} />
         </VStack>
     );
 };
 
 type UkeProps = {
     dager: BrukersMeldekortDagProps[];
-    meldeperiode: MeldeperiodeProps;
 };
 
-const Uke = ({ dager, meldeperiode }: UkeProps) => {
+const Uke = ({ dager }: UkeProps) => {
     return (
         <Box className={styles.utbetalingsuke}>
             <Table size="small">
@@ -53,7 +50,6 @@ const Uke = ({ dager, meldeperiode }: UkeProps) => {
                 <Table.Body>
                     {dager.map((dag) => {
                         const { dato, status } = dag;
-                        const harRett = meldeperiode.girRett[dato];
 
                         return (
                             <Table.Row key={dato.toString()}>
@@ -62,7 +58,7 @@ const Uke = ({ dager, meldeperiode }: UkeProps) => {
                                 <Table.DataCell>
                                     <HStack align="center" gap="3" wrap={false}>
                                         {ikonForBrukersMeldekortDagStatus[status]}
-                                        {`${brukersMeldekortDagStatusTekst[status]}${harRett ? '' : ' (ikke rett)'}`}
+                                        {`${brukersMeldekortDagStatusTekst[status]}`}
                                     </HStack>
                                 </Table.DataCell>
                             </Table.Row>
