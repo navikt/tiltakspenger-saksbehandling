@@ -28,7 +28,7 @@ type AvsluttBehandlingMenyvalgProps = AvsluttBehandlingProps & {
 // Litt duplikat av AvsluttBehandlingKnapp, men for å vise i menyvalg
 const AvsluttBehandlingMenyvalg = (props: AvsluttBehandlingMenyvalgProps) => {
     //TODO - her burde vi nok ha litt mer context rundt hva som er valgt
-    if (!props.søknadsId && !props.behandlingsId) {
+    if (!props.søknadId && !props.behandlingId) {
         return <div>Teknisk feil: Enten søknadsId, eller behandlingsId må være satt</div>;
     }
 

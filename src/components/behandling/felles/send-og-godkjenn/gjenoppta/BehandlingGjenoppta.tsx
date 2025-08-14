@@ -9,15 +9,17 @@ type Props = {
     behandling: BehandlingData;
 };
 
-export const GjenopptaButton = ({ behandling }: Props) => {
+export const BehandlingGjenoppta = ({ behandling }: Props) => {
     const { gjenopptaBehandling, isGjennopptaBehandlingMutating, gjenopptaBehandlingError } =
         useGjenopptaBehandling(behandling.sakId, behandling.id);
-    const behandlingLenke = `/behandling/${behandling.id}`;
+
     const modalRef = useRef<HTMLDialogElement>(null);
+
     const lukkModal = () => modalRef.current?.close();
     const visModal = () => modalRef.current?.showModal();
+
     return (
-        <div>
+        <>
             <Button onClick={visModal}>{'Gjenoppta behandling'}</Button>
             <BekreftelsesModal
                 modalRef={modalRef}
@@ -30,9 +32,11 @@ export const GjenopptaButton = ({ behandling }: Props) => {
                         loading={isGjennopptaBehandlingMutating}
                         onClick={(e) => {
                             e.preventDefault();
-                            gjenopptaBehandling().then(() => {
-                                lukkModal();
-                                router.push(behandlingLenke);
+                            gjenopptaBehandling().then((oppdaterBehandling) => {
+                                if (oppdaterBehandling) {
+                                    lukkModal();
+                                    router.push(`/behandling/${oppdaterBehandling.id}`);
+                                }
                             });
                         }}
                     >
@@ -40,6 +44,6 @@ export const GjenopptaButton = ({ behandling }: Props) => {
                     </Button>
                 }
             />
-        </div>
+        </>
     );
 };

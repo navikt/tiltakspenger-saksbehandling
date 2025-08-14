@@ -1,12 +1,10 @@
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { SakProps } from '~/types/SakTypes';
-import { Nullable } from '~/types/UtilTypes';
+import { SøknadIdEllerBehandlingId } from '~/components/saksoversikt/avsluttBehandling/AvsluttBehandlingProps';
 
-export type AvsluttBehandlingDTO = {
-    søknadId: Nullable<string>;
-    behandlingId: Nullable<string>;
+type AvsluttBehandlingDTO = {
     begrunnelse: string;
-};
+} & SøknadIdEllerBehandlingId;
 
 export const useAvsluttBehandling = (saksnummer: string) => {
     const {
@@ -17,5 +15,6 @@ export const useAvsluttBehandling = (saksnummer: string) => {
         `sak/${saksnummer}/avbryt-aktiv-behandling`,
         'POST',
     );
+
     return { avsluttBehandling, avsluttBehandlingIsMutating, avsluttBehandlingError };
 };

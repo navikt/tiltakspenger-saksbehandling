@@ -5,7 +5,7 @@ import { useGodkjennMeldekort } from './useGodkjennMeldekort';
 import { useSak } from '../../../../../context/sak/SakContext';
 import { useRef } from 'react';
 import { MeldekortBehandlingProps } from '../../../../../types/meldekort/MeldekortBehandling';
-import Underkjenn from '../../../../underkjenn/Underkjenn';
+import { Underkjenn } from '../../../../underkjenn/Underkjenn';
 import { useFetchJsonFraApi } from '../../../../../utils/fetch/useFetchFraApi';
 import router from 'next/router';
 import { useNotification } from '~/context/NotificationContext';

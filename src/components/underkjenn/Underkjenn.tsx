@@ -1,9 +1,9 @@
 import { Alert, Button, Heading, HStack, Modal, Textarea } from '@navikt/ds-react';
 import { useState } from 'react';
-import { FetcherError } from '../../utils/fetch/fetch';
+import { FetcherError } from '~/utils/fetch/fetch';
 import { Controller, useForm } from 'react-hook-form';
 
-const Underkjenn = (props: {
+export const Underkjenn = (props: {
     size?: 'small' | 'medium';
     onUnderkjenn: {
         click: (begrunnelse: string) => void;
@@ -14,7 +14,7 @@ const Underkjenn = (props: {
     const [vilUnderkjenne, setVilUnderkjenne] = useState(false);
 
     return (
-        <div>
+        <>
             <Button
                 size={props.size}
                 onClick={() => setVilUnderkjenne(true)}
@@ -30,11 +30,9 @@ const Underkjenn = (props: {
                     onUnderkjenn={props.onUnderkjenn}
                 />
             )}
-        </div>
+        </>
     );
 };
-
-export default Underkjenn;
 
 const UnderkjennModal = (props: {
     open: boolean;

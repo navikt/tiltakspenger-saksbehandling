@@ -5,13 +5,12 @@ import {
 } from '~/context/saksbehandler/SaksbehandlerContext';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { HStack, VStack } from '@navikt/ds-react';
-import AvsluttBehandlingKnapp from '~/components/behandlingmeny/menyvalg/AvsluttBehandlingKnapp';
-import router from 'next/router';
+import { BehandlingAvslutt } from '~/components/behandling/felles/send-og-godkjenn/avslutt/BehandlingAvslutt';
 import { BehandlingSendTilBeslutning } from '~/components/behandling/felles/send-og-godkjenn/send-til-beslutning/BehandlingSendTilBeslutning';
 import { BehandlingGodkjenn } from '~/components/behandling/felles/send-og-godkjenn/godkjenn/BehandlingGodkjenn';
-import { LagreBehandlingKnapp } from '~/components/behandling/felles/send-og-godkjenn/lagre/LagreBehandlingKnapp';
+import { BehandlingLagreKnapp } from '~/components/behandling/felles/send-og-godkjenn/lagre/BehandlingLagreKnapp';
 import { ValideringResultat } from '~/types/Validering';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { BehandlingValideringVarsler } from '~/components/behandling/felles/send-og-godkjenn/varsler/BehandlingValideringVarsler';
 import {
     BehandlingLagringResultat,
@@ -19,6 +18,9 @@ import {
 } from '~/components/behandling/felles/send-og-godkjenn/varsler/BehandlingLagringVarsler';
 import { BehandlingLagringProps } from '~/components/behandling/felles/send-og-godkjenn/lagre/useHentBehandlingLagringProps';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
+import { BehandlingSettPåVent } from '~/components/behandling/felles/send-og-godkjenn/sett-på-vent/BehandlingSettPåVent';
+import { BehandlingGjenoppta } from '~/components/behandling/felles/send-og-godkjenn/gjenoppta/BehandlingGjenoppta';
+import { skalKunneGjenopptaBehandling } from '~/utils/tilganger';
 
 import style from './BehandlingSendOgGodkjenn.module.css';
 
@@ -28,10 +30,8 @@ type Props = {
 };
 
 export const BehandlingSendOgGodkjenn = ({ behandling, lagringProps }: Props) => {
-    const { innloggetSaksbehandler } = useSaksbehandler();
     const rolleForBehandling = useRolleForBehandling(behandling);
-
-    const { validerOgHentVedtakDTO, isDirty } = lagringProps;
+    const { innloggetSaksbehandler } = useSaksbehandler();
 
     const [valideringResultat, setValideringResultat] = useState<ValideringResultat>({
         errors: [],
@@ -40,63 +40,72 @@ export const BehandlingSendOgGodkjenn = ({ behandling, lagringProps }: Props) =>
 
     const [lagringResultat, setLagringResultat] = useState<BehandlingLagringResultat>('ok');
 
+    const { validerOgHentVedtakDTO, isDirty } = lagringProps;
+
     const hentVedtakDTO = () => {
         const { valideringResultat, vedtakDTO } = validerOgHentVedtakDTO();
         setValideringResultat(valideringResultat);
         return vedtakDTO;
     };
 
+    const erSaksbehandler = rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER;
+    const erBeslutter = rolleForBehandling === SaksbehandlerRolle.BESLUTTER;
+
     const kanAvslutteBehandling =
         (behandling.status === BehandlingStatus.KLAR_TIL_BEHANDLING ||
             behandling.status === BehandlingStatus.UNDER_BEHANDLING) &&
         behandling.avbrutt === null &&
-        behandling.saksbehandler === innloggetSaksbehandler.navIdent;
+        erSaksbehandler;
+
+    const kanGjenopptaBehandling = skalKunneGjenopptaBehandling(behandling, innloggetSaksbehandler);
+
+    if (!erSaksbehandler && !erBeslutter) {
+        return null;
+    }
 
     return (
         <VedtakSeksjon>
             <VedtakSeksjon.Venstre>
-                {rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER && (
+                {erSaksbehandler && (
                     <VStack className={style.varsler} gap={'2'}>
                         <BehandlingValideringVarsler resultat={valideringResultat} />
                         <BehandlingLagringVarsler isDirty={isDirty} resultat={lagringResultat} />
                     </VStack>
                 )}
+
                 <HStack justify="space-between" className={style.knapper}>
-                    {kanAvslutteBehandling && (
-                        <AvsluttBehandlingKnapp
-                            saksnummer={behandling.saksnummer}
-                            behandlingsId={behandling.id}
-                            button={{
-                                size: 'medium',
-                            }}
-                            onSuccess={() => {
-                                router.push(`/sak/${behandling.saksnummer}`);
-                            }}
-                        />
-                    )}
-                    <HStack gap={'5'}>
-                        {isDirty && (
-                            <LagreBehandlingKnapp
-                                behandling={behandling}
-                                hentVedtakDTO={hentVedtakDTO}
-                                onSuccess={() => {
-                                    setLagringResultat('ok');
-                                }}
-                                onError={(error) => {
-                                    setLagringResultat(error);
-                                }}
-                            />
+                    <HStack gap={'2'}>
+                        {kanAvslutteBehandling && <BehandlingAvslutt behandling={behandling} />}
+                        {!kanGjenopptaBehandling && (
+                            <BehandlingSettPåVent behandling={behandling} />
                         )}
-                        <BehandlingSendTilBeslutning
-                            behandling={behandling}
-                            hentVedtakDto={hentVedtakDTO}
-                            disabled={valideringResultat.errors.length > 0 || isDirty}
-                        />
                     </HStack>
+                    {kanGjenopptaBehandling ? (
+                        <BehandlingGjenoppta behandling={behandling} />
+                    ) : erSaksbehandler ? (
+                        <HStack gap={'5'}>
+                            {isDirty && (
+                                <BehandlingLagreKnapp
+                                    behandling={behandling}
+                                    hentVedtakDTO={hentVedtakDTO}
+                                    onSuccess={() => {
+                                        setLagringResultat('ok');
+                                    }}
+                                    onError={(error) => {
+                                        setLagringResultat(error);
+                                    }}
+                                />
+                            )}
+                            <BehandlingSendTilBeslutning
+                                behandling={behandling}
+                                hentVedtakDto={hentVedtakDTO}
+                                disabled={valideringResultat.errors.length > 0 || isDirty}
+                            />
+                        </HStack>
+                    ) : (
+                        <BehandlingGodkjenn behandling={behandling} />
+                    )}
                 </HStack>
-                <div className={style.godkjentWrapper}>
-                    <BehandlingGodkjenn behandling={behandling} />
-                </div>
             </VedtakSeksjon.Venstre>
         </VedtakSeksjon>
     );

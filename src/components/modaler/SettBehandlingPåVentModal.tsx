@@ -28,9 +28,11 @@ const SettBehandlingPåVentModal = (props: {
                     sakId: props.sakId,
                     behandlingId: props.behandlingId,
                     begrunnelse: values.begrunnelse,
-                }).then(() => {
-                    props.onClose();
-                    router.push(`/sak/${props.saksnummer}`);
+                }).then((oppdaterBehandling) => {
+                    if (oppdaterBehandling) {
+                        props.onClose();
+                        router.push(`/sak/${oppdaterBehandling.saksnummer}`);
+                    }
                 });
             })}
         >

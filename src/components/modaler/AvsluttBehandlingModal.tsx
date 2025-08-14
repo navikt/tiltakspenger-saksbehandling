@@ -2,17 +2,14 @@ import { TrashIcon } from '@navikt/aksel-icons';
 import { Alert, BodyLong, Button, Heading, HStack, Modal, Textarea } from '@navikt/ds-react';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import styles from './AvsluttBehandlingModal.module.css';
-import { BehandlingId } from '~/types/BehandlingTypes';
-import { SøknadId } from '~/types/SøknadTypes';
-import { Nullable } from '~/types/UtilTypes';
 import { useSak } from '~/context/sak/SakContext';
 import { useAvsluttBehandling } from '~/components/behandlingmeny/useAvsluttBehandling';
+import { SøknadIdEllerBehandlingId } from '~/components/saksoversikt/avsluttBehandling/AvsluttBehandlingProps';
 
-const AvsluttBehandlingModal = (props: {
+import styles from './AvsluttBehandlingModal.module.css';
+
+type Props = {
     saksnummer: string;
-    søknadsId: Nullable<SøknadId>;
-    behandlingsId: Nullable<BehandlingId>;
     åpen: boolean;
     onClose: () => void;
     onSuccess?: () => void;
@@ -23,19 +20,22 @@ const AvsluttBehandlingModal = (props: {
         primaryButtonText?: string;
         secondaryButtonText?: string;
     };
-}) => {
+} & SøknadIdEllerBehandlingId;
+
+const AvsluttBehandlingModal = (props: Props) => {
     const { setSak } = useSak();
     const form = useForm<{ begrunnelse: string }>({ defaultValues: { begrunnelse: '' } });
     const { avsluttBehandling, avsluttBehandlingIsMutating } = useAvsluttBehandling(
         props.saksnummer,
     );
 
+    const { søknadId, behandlingId } = props;
+
     return (
         <form
             onSubmit={form.handleSubmit((values) => {
                 avsluttBehandling({
-                    søknadId: props.søknadsId,
-                    behandlingId: props.behandlingsId,
+                    ...(søknadId ? { søknadId } : { behandlingId }),
                     begrunnelse: values.begrunnelse,
                 }).then((sak) => {
                     props.onSuccess?.();

@@ -57,7 +57,7 @@ export const StartSøknadBehandling = ({ søknad, medAvsluttBehandling }: Props)
                             <AvsluttBehandlingMenyvalg
                                 skalVises={medAvsluttBehandling}
                                 setVisAvsluttBehandlingModal={setVisAvsluttBehandlingModal}
-                                søknadsId={søknad.id}
+                                søknadId={søknad.id}
                                 saksnummer={søknad.saksnummer}
                                 behandlingStatus={BehandlingStatus.SØKNAD}
                                 button={{ text: 'Avslutt søknad' }}
@@ -71,8 +71,7 @@ export const StartSøknadBehandling = ({ søknad, medAvsluttBehandling }: Props)
                     åpen={visAvsluttBehandlingModal}
                     onClose={() => setVisAvsluttBehandlingModal(false)}
                     saksnummer={søknad.saksnummer}
-                    søknadsId={søknad.id}
-                    behandlingsId={null}
+                    søknadId={søknad.id}
                     tittel={'Avslutt søknad'}
                     tekst={'Er du sikker på at du vil avslutte søknaden?'}
                     textareaLabel={'Hvorfor avsluttes søknaden? (Obligatorisk)'}

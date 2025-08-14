@@ -1,17 +1,11 @@
-import { Nullable } from '~/types/UtilTypes';
 import { SøknadId } from '~/types/SøknadTypes';
 import { BehandlingId } from '~/types/BehandlingTypes';
 
 export type AvsluttBehandlingProps = {
     saksnummer: string;
-    søknadsId?: Nullable<SøknadId>;
-    behandlingsId?: Nullable<BehandlingId>;
     button?: {
-        size?: 'small' | 'medium';
-        alignment?: 'start' | 'end';
         text?: string;
     };
-    minWidth?: boolean;
     onSuccess?: () => void;
     /**
      * overstying av tekster i modalen. Default er generell behandlings-realterte tekster
@@ -25,4 +19,8 @@ export type AvsluttBehandlingProps = {
         primaryButtonText?: string;
         secondaryButtonText?: string;
     };
-};
+} & SøknadIdEllerBehandlingId;
+
+export type SøknadIdEllerBehandlingId =
+    | { søknadId: SøknadId; behandlingId?: never }
+    | { behandlingId: BehandlingId; søknadId?: never };

@@ -132,7 +132,7 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
                                 setVisAvsluttBehandlingModal={setVisAvsluttBehandlingModal}
                                 behandlingStatus={status}
                                 saksnummer={saksnummer}
-                                behandlingsId={id}
+                                behandlingId={id}
                             />
                         </>
                     )}
@@ -143,8 +143,7 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
                     åpen={visAvsluttBehandlingModal}
                     onClose={() => setVisAvsluttBehandlingModal(false)}
                     saksnummer={behandling.saksnummer}
-                    søknadsId={null}
-                    behandlingsId={behandling.id ?? null}
+                    behandlingId={behandling.id}
                     tittel={`Avslutt ${behandling.typeBehandling === Behandlingstype.REVURDERING ? 'revurdering' : 'behandling'}`}
                     tekst={`Er du sikker på at du vil avslutte ${behandling.typeBehandling === Behandlingstype.REVURDERING ? 'revurderingen' : 'behandling av søknad'}?`}
                     textareaLabel={`Hvorfor avsluttes ${behandling.typeBehandling === Behandlingstype.REVURDERING ? 'revurderingen' : 'behandlingen'}? (obligatorisk)`}

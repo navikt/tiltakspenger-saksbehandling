@@ -13,7 +13,7 @@ type Props = {
     onError?: (error: FetcherError) => void;
 };
 
-export const LagreBehandlingKnapp = ({ behandling, hentVedtakDTO, onSuccess, onError }: Props) => {
+export const BehandlingLagreKnapp = ({ behandling, hentVedtakDTO, onSuccess, onError }: Props) => {
     const { setBehandling } = useBehandling();
     const { lagreBehandling, lagreBehandlingLaster } = useLagreBehandling({
         behandling,
