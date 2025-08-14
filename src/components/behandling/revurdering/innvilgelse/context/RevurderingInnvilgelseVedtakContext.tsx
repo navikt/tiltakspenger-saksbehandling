@@ -75,6 +75,7 @@ export const RevurderingInnvilgelseVedtakProvider = ({ children }: PropsWithChil
         behandling,
         initieltVedtakSkjema,
     );
+
     const begrunnelseRef = useRef<HTMLTextAreaElement>(null);
     const brevtekstRef = useRef<HTMLTextAreaElement>(null);
     const barnetilleggBegrunnelseRef = useRef<HTMLTextAreaElement>(null);

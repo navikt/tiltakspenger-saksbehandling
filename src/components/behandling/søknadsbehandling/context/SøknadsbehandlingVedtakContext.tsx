@@ -22,6 +22,7 @@ import {
 import { periodiserBarnetillegg } from '~/utils/BarnetilleggUtils';
 import { BarnetilleggBegrunnelseInput } from '~/components/behandling/felles/state/BarnetilleggState';
 import { BegrunnelseOgBrevInput } from '~/components/behandling/felles/state/BegrunnelseOgBrev';
+import { getTextAreaRefValue } from '~/utils/textarea';
 
 export type SøknadsbehandlingVedtakContext = BegrunnelseOgBrevInput &
     BarnetilleggBegrunnelseInput &
@@ -94,16 +95,16 @@ export const SøknadsbehandlingVedtakProvider = ({ children }: PropsWithChildren
     const barnetilleggBegrunnelseRef = useRef<HTMLTextAreaElement>(null);
 
     const getBegrunnelse = useCallback(
-        () => begrunnelseRef.current?.value.trim() ?? '',
-        [begrunnelseRef],
+        () => getTextAreaRefValue(begrunnelseRef, behandling.begrunnelseVilkårsvurdering),
+        [begrunnelseRef, behandling.begrunnelseVilkårsvurdering],
     );
     const getBrevtekst = useCallback(
-        () => brevtekstRef.current?.value.trim() ?? '',
-        [brevtekstRef],
+        () => getTextAreaRefValue(brevtekstRef, behandling.fritekstTilVedtaksbrev),
+        [brevtekstRef, behandling.fritekstTilVedtaksbrev],
     );
     const getBarnetilleggBegrunnelse = useCallback(
-        () => barnetilleggBegrunnelseRef.current?.value.trim() ?? '',
-        [barnetilleggBegrunnelseRef],
+        () => getTextAreaRefValue(barnetilleggBegrunnelseRef, behandling.barnetillegg?.begrunnelse),
+        [barnetilleggBegrunnelseRef, behandling.barnetillegg],
     );
 
     return (

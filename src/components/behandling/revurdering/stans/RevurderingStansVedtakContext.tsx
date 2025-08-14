@@ -1,6 +1,7 @@
 import { createContext, PropsWithChildren, useCallback, useContext, useRef, useState } from 'react';
 import { useRevurderingBehandling } from '../../BehandlingContext';
 import { BegrunnelseOgBrevInput } from '~/components/behandling/felles/state/BegrunnelseOgBrev';
+import { getTextAreaRefValue } from '~/utils/textarea';
 
 export type RevurderingStansVedtakContext = {
     valgtHjemmelHarIkkeRettighet: string[];
@@ -23,10 +24,13 @@ export const RevurderingStansVedtakProvider = ({ children }: PropsWithChildren) 
     const begrunnelseRef = useRef<HTMLTextAreaElement>(null);
     const brevtekstRef = useRef<HTMLTextAreaElement>(null);
 
-    const getBegrunnelse = useCallback(() => begrunnelseRef.current!.value, [begrunnelseRef]);
+    const getBegrunnelse = useCallback(
+        () => getTextAreaRefValue(begrunnelseRef, behandling.begrunnelseVilkårsvurdering),
+        [begrunnelseRef, behandling.begrunnelseVilkårsvurdering],
+    );
     const getBrevtekst = useCallback(
-        () => brevtekstRef.current?.value.trim() ?? '',
-        [brevtekstRef],
+        () => getTextAreaRefValue(brevtekstRef, behandling.fritekstTilVedtaksbrev),
+        [brevtekstRef, behandling.fritekstTilVedtaksbrev],
     );
 
     return (
