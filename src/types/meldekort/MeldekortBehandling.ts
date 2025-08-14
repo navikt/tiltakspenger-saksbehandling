@@ -1,11 +1,11 @@
 import { Attestering } from '../BehandlingTypes';
-import { MeldeperiodeId, MeldeperiodeKjedeId } from './Meldeperiode';
+import { MeldeperiodeId } from './Meldeperiode';
 import { Periode } from '../Periode';
 import { BrukersMeldekortId } from './BrukersMeldekort';
 import { Avbrutt } from '../Avbrutt';
 import { Simulering } from '../Simulering';
-
 import { Nullable } from '~/types/UtilTypes';
+import { BeløpProps, MeldeperiodeBeregningProps } from '~/types/Beregning';
 
 // "_behandling"-suffixen er ikke reell, er kun for at typescript ikke skal se denne som ekvivalent med BrukersMeldekortId
 // Ikke gjør run-time typesjekk på denne!
@@ -93,22 +93,9 @@ export type MeldekortDagBeregnetProps = {
 };
 
 export type MeldekortBeregning = {
-    totalBeløp: MeldekortBeløpProps;
-    beregningForMeldekortetsPeriode: MeldeperiodeBeregning;
-    beregningerForPåfølgendePerioder: MeldeperiodeBeregning[];
-};
-
-export type MeldeperiodeBeregning = {
-    kjedeId: MeldeperiodeKjedeId;
-    periode: Periode;
-    beløp: MeldekortBeløpProps;
-    dager: MeldekortDagBeregnetProps[];
-};
-
-export type MeldekortBeløpProps = {
-    totalt: number;
-    ordinært: number;
-    barnetillegg: number;
+    totalBeløp: BeløpProps;
+    beregningForMeldekortetsPeriode: MeldeperiodeBeregningProps;
+    beregningerForPåfølgendePerioder: MeldeperiodeBeregningProps[];
 };
 
 type Beregningsdag = {

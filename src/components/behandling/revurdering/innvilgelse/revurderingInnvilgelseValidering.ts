@@ -26,7 +26,7 @@ export const revurderingInnvilgelseValidering = (
         const periode = kjede.sisteBeregning?.periode;
 
         if (periode && perioderOverlapper(periode, behandlingsperiode)) {
-            validering.errors.push(
+            validering.warnings.push(
                 `Innvilgelsesperioden overlapper med den utbetalte meldeperioden ${periodeTilFormatertDatotekst(periode)}`,
             );
         }

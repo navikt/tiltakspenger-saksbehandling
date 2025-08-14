@@ -1,0 +1,8 @@
+.beløp {
+    display: inline-flex;
+    gap: 0.25rem;
+}
+
+.negativ {
+    color: var(--a-red-500);
+}

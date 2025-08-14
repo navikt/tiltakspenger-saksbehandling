@@ -1,36 +1,32 @@
-import { BodyShort, Button, HStack, VStack } from '@navikt/ds-react';
-import { meldekortUtbetalingstatusTekst } from '../../../../utils/tekstformateringUtils';
-import { formatterBeløp } from '../../../../utils/beløp';
-import { classNames } from '../../../../utils/classNames';
-import {
-    MeldekortBeløpProps,
-    Utbetalingsstatus,
-} from '../../../../types/meldekort/MeldekortBehandling';
-
-import style from './MeldekortBeløp.module.css';
-import { Simulering } from '../../../../types/Simulering';
-import { Nullable } from '~/types/UtilTypes';
+import { Button, VStack } from '@navikt/ds-react';
+import { Simulering } from '~/types/Simulering';
 import OppsummeringAvSimulering from '../../../oppsummeringer/simulering/OppsummeringAvSimulering';
 import { useState } from 'react';
-import { erSimuleringEndring } from '../../../../utils/simuleringUtils';
+import { erSimuleringEndring } from '~/utils/simuleringUtils';
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
+import { BeløpProps } from '~/types/Beregning';
+import {
+    UtbetalingStatus,
+    UtbetalingStatusProps,
+} from '~/components/utbetaling/status/UtbetalingStatus';
+import { UtbetalingBeløp } from '~/components/utbetaling/beløp/UtbetalingBeløp';
+
+import style from './MeldekortBeløp.module.css';
 
 type Props = {
-    beløp: MeldekortBeløpProps;
-    forrigeBeløp?: MeldekortBeløpProps;
-    totalBeløp?: MeldekortBeløpProps;
-    utbetalingsstatus?: Utbetalingsstatus;
-    navkontorForUtbetaling?: string;
-    simulering: Nullable<Simulering>;
+    beløp: BeløpProps;
+    forrigeBeløp?: BeløpProps;
+    totalBeløp?: BeløpProps;
+    simulering?: Simulering;
+    utbetalingStatusProps?: UtbetalingStatusProps;
 };
 
 export const MeldekortBeløp = ({
     beløp,
     forrigeBeløp,
     totalBeløp,
-    utbetalingsstatus,
-    navkontorForUtbetaling,
     simulering,
+    utbetalingStatusProps,
 }: Props) => {
     const [vilSeSimulering, setVilSeSimulering] = useState(false);
     const harDiffPåTotalBeløp = totalBeløp && totalBeløp.totalt != beløp.totalt;
@@ -41,97 +37,52 @@ export const MeldekortBeløp = ({
     return (
         <>
             <VStack gap={'1'}>
-                <BeløpRad
+                <UtbetalingBeløp
                     tekst={'Ordinært beløp for perioden:'}
                     beløp={beløp.ordinært}
                     beløpForrige={forrigeBeløp?.ordinært}
                 />
-                <BeløpRad
+                <UtbetalingBeløp
                     tekst={'Barnetillegg beløp for perioden:'}
                     beløp={beløp.barnetillegg}
                     beløpForrige={forrigeBeløp?.barnetillegg}
                 />
-                <BeløpRad
+                <UtbetalingBeløp
                     tekst={'Totalt beløp for perioden:'}
                     beløp={beløp.totalt}
                     beløpForrige={forrigeBeløp?.totalt}
                 />
                 {harDiffPåTotalBeløp && (
-                    <BeløpRad
+                    <UtbetalingBeløp
                         tekst={'Totalt beløp beregnet for meldekortet:'}
                         beløp={totalBeløp.totalt}
                     />
                 )}
             </VStack>
             {simulering && (
-                <Button
-                    onClick={() => setVilSeSimulering(!vilSeSimulering)}
-                    variant="secondary"
-                    size="small"
-                    type="button"
-                    className={style.seSimuleringKnapp}
-                >
-                    {vilSeSimulering ? (
-                        'Skjul simulering'
-                    ) : (
-                        <>
-                            Vis simulering{' '}
-                            {erFeilutbetalingStørreEnn0 && (
+                <>
+                    <Button
+                        onClick={() => setVilSeSimulering(!vilSeSimulering)}
+                        variant={'secondary'}
+                        size={'small'}
+                        type={'button'}
+                        icon={
+                            erFeilutbetalingStørreEnn0 && (
                                 <ExclamationmarkTriangleFillIcon
                                     className={style.advarselIkon}
                                     title="Advarsel ikon"
                                     fontSize="1rem"
                                 />
-                            )}
-                        </>
-                    )}
-                </Button>
+                            )
+                        }
+                        className={style.seSimuleringKnapp}
+                    >
+                        {`${vilSeSimulering ? 'Skjul' : 'Vis'} simulering`}
+                    </Button>
+                    {vilSeSimulering && <OppsummeringAvSimulering simulering={simulering!} />}
+                </>
             )}
-            {vilSeSimulering && <OppsummeringAvSimulering simulering={simulering!} />}
-            {(navkontorForUtbetaling || utbetalingsstatus) && (
-                <VStack gap={'1'}>
-                    {navkontorForUtbetaling && (
-                        <HStack gap={'5'} className={style.rad}>
-                            <BodyShort>{'Nav-kontor det skal utbetales fra:'}</BodyShort>
-                            <BodyShort weight={'semibold'}>{navkontorForUtbetaling}</BodyShort>
-                        </HStack>
-                    )}
-                    {utbetalingsstatus && (
-                        <HStack gap={'5'} className={style.rad}>
-                            <BodyShort>{'Utbetalingsstatus: '}</BodyShort>
-                            <BodyShort weight={'semibold'}>
-                                {meldekortUtbetalingstatusTekst[utbetalingsstatus]}
-                            </BodyShort>
-                        </HStack>
-                    )}
-                </VStack>
-            )}
+            {utbetalingStatusProps && <UtbetalingStatus {...utbetalingStatusProps} />}
         </>
-    );
-};
-
-const BeløpRad = ({
-    tekst,
-    beløp,
-    beløpForrige,
-}: {
-    tekst: string;
-    beløp: number;
-    beløpForrige?: number;
-}) => {
-    const diff = beløpForrige && beløp - beløpForrige;
-
-    return (
-        <HStack gap={'5'} className={style.rad}>
-            <BodyShort>{tekst}</BodyShort>
-            <div className={style.beløp}>
-                <BodyShort weight={'semibold'}>{formatterBeløp(beløp)}</BodyShort>
-                {!!diff && (
-                    <BodyShort
-                        className={classNames(diff < 0 && style.negativ)}
-                    >{`(${formatterBeløp(diff, { signDisplay: 'always' })})`}</BodyShort>
-                )}
-            </div>
-        </HStack>
     );
 };

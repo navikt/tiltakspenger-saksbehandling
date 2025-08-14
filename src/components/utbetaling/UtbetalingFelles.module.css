@@ -1,0 +1,10 @@
+.rad {
+    background-color: #ffffff;
+    border: 1px #9099a5 solid;
+    border-radius: 4px;
+    padding: 0.5rem;
+
+    display: flex;
+    justify-content: space-between;
+    grid-template-columns: repeat(2, 1fr);
+}

@@ -72,7 +72,6 @@ export const BehandlingSendOgGodkjenn = ({ behandling, lagringProps }: Props) =>
                         <BehandlingLagringVarsler isDirty={isDirty} resultat={lagringResultat} />
                     </VStack>
                 )}
-
                 <HStack justify="space-between" className={style.knapper}>
                     <HStack gap={'2'}>
                         {kanAvslutteBehandling && <BehandlingAvslutt behandling={behandling} />}

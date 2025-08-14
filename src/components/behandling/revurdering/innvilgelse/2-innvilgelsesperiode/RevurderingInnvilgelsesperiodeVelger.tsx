@@ -5,7 +5,6 @@ import {
 } from '~/components/behandling/revurdering/innvilgelse/context/RevurderingInnvilgelseVedtakContext';
 import { BehandlingsperiodeVelger } from '~/components/behandling/felles/behandlingsperiode/BehandlingsperiodeVelger';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
-import { VedtakHjelpetekst } from '~/components/behandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
 
 import style from './RevurderingInnvilgelsesperiodeVelger.module.css';
 
@@ -24,11 +23,6 @@ export const RevurderingInnvilgelsesperiodeVelger = () => {
                     label={'Innvilges'}
                 />
             </VedtakSeksjon.Venstre>
-            <VedtakSeksjon.Høyre>
-                <VedtakHjelpetekst>
-                    {'Innvilgelsesperioden kan ikke overlappe tidligere utbetalte meldeperioder'}
-                </VedtakHjelpetekst>
-            </VedtakSeksjon.Høyre>
         </VedtakSeksjon>
     );
 };

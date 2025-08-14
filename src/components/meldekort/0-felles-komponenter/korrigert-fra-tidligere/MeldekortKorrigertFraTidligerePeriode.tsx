@@ -1,10 +1,10 @@
 import { Alert, BodyShort, Heading, Link, VStack } from '@navikt/ds-react';
-import { meldeperiodeUrl } from '../../../../utils/urls';
+import { meldeperiodeUrl } from '~/utils/urls';
 import NextLink from 'next/link';
-import { formaterTidspunktKort, periodeTilFormatertDatotekst } from '../../../../utils/date';
+import { formaterTidspunktKort, periodeTilFormatertDatotekst } from '~/utils/date';
 import { MeldekortUker } from '../uker/MeldekortUker';
-import { useSak } from '../../../../context/sak/SakContext';
-import { MeldeperiodeKorrigering } from '../../../../types/meldekort/Meldeperiode';
+import { useSak } from '~/context/sak/SakContext';
+import { MeldeperiodeKorrigering } from '~/types/meldekort/Meldeperiode';
 import { MeldekortBeløp } from '../beløp/MeldekortBeløp';
 import { useMeldeperiodeKjede } from '../../MeldeperiodeKjedeContext';
 
@@ -38,11 +38,7 @@ export const MeldekortKorrigertFraTidligerePeriode = ({ korrigering, headerTekst
                     <strong>{formaterTidspunktKort(iverksatt)}</strong>
                 </BodyShort>
             )}
-            <MeldekortBeløp
-                beløp={beregning.beløp}
-                forrigeBeløp={forrigeGodkjenteBeløp}
-                simulering={null}
-            />
+            <MeldekortBeløp beløp={beregning.beløp} forrigeBeløp={forrigeGodkjenteBeløp} />
         </VStack>
     );
 };

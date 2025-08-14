@@ -108,7 +108,7 @@ export const revurderingResultatTekst: Record<RevurderingResultat, string> = {
     [RevurderingResultat.REVURDERING_INNVILGELSE]: 'innvilgelse',
 } as const;
 
-export const meldekortUtbetalingstatusTekst: Record<Utbetalingsstatus, string> = {
+export const utbetalingsstatusTekst: Record<Utbetalingsstatus, string> = {
     FEILET_MOT_OPPDRAG: 'Feilet mot oppdrag',
     IKKE_GODKJENT: '-',
     IKKE_SENDT_TIL_HELVED: '-',

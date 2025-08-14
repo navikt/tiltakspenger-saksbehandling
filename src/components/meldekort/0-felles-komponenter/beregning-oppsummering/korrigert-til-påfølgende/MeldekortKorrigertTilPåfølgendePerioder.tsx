@@ -1,5 +1,4 @@
 import { Alert, BodyShort, Link } from '@navikt/ds-react';
-import { MeldeperiodeBeregning } from '../../../../../types/meldekort/MeldekortBehandling';
 import NextLink from 'next/link';
 import { meldeperiodeUrl } from '../../../../../utils/urls';
 import { useSak } from '../../../../../context/sak/SakContext';
@@ -8,8 +7,10 @@ import { formatterBeløp } from '../../../../../utils/beløp';
 
 import style from './MeldekortKorrigertTilPåfølgendePerioder.module.css';
 
+import { MeldeperiodeBeregningProps } from '~/types/Beregning';
+
 type Props = {
-    beregninger: MeldeperiodeBeregning[];
+    beregninger: MeldeperiodeBeregningProps[];
 };
 
 export const MeldekortKorrigertTilPåfølgendePerioder = ({ beregninger }: Props) => {

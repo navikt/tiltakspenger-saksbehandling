@@ -3,11 +3,11 @@ import { MeldekortBeløp } from '../beløp/MeldekortBeløp';
 import {
     MeldekortBehandlingProps,
     MeldekortBehandlingType,
-} from '../../../../types/meldekort/MeldekortBehandling';
+} from '~/types/meldekort/MeldekortBehandling';
 import { useMeldeperiodeKjede } from '../../MeldeperiodeKjedeContext';
 import { Alert, VStack } from '@navikt/ds-react';
-import { useSaksbehandler } from '../../../../context/saksbehandler/SaksbehandlerContext';
-import { kanBehandle } from '../../../../utils/tilganger';
+import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
+import { kanBehandle } from '~/utils/tilganger';
 
 type Props = {
     meldekortBehandling: MeldekortBehandlingProps;
@@ -51,11 +51,14 @@ export const MeldekortBeregningOppsummering = ({ meldekortBehandling, className 
                 beløp={beregning.beregningForMeldekortetsPeriode.beløp}
                 forrigeBeløp={forrigeBeregning?.beregningForMeldekortetsPeriode.beløp}
                 totalBeløp={beregning.totalBeløp}
-                utbetalingsstatus={meldekortBehandling.erAvsluttet ? utbetalingsstatus : undefined}
-                navkontorForUtbetaling={
-                    navkontorNavn ? `${navkontorNavn} (${navkontor})` : navkontor
-                }
-                simulering={simulering}
+                utbetalingStatusProps={{
+                    navkontor,
+                    navkontorNavn,
+                    utbetalingsstatus: meldekortBehandling.erAvsluttet
+                        ? utbetalingsstatus
+                        : undefined,
+                }}
+                simulering={simulering ?? undefined}
             />
             {skalViseUtfallVarsel && (
                 <Alert variant={totalBeløpDiff < 0 ? 'warning' : 'info'} size={'small'}>

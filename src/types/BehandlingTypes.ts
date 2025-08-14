@@ -7,6 +7,8 @@ import { Nullable } from '~/types/UtilTypes';
 import { Ytelse } from '~/types/Ytelse';
 import { BarnetilleggData } from './Barnetillegg';
 
+import { BeløpProps, MeldeperiodeBeregningProps } from '~/types/Beregning';
+
 export type BehandlingId = `beh_${string}`;
 
 type BehandlingDataCommon = {
@@ -25,6 +27,7 @@ type BehandlingDataCommon = {
     iverksattTidspunkt: Nullable<string>;
     fritekstTilVedtaksbrev: string | null;
     ventestatus: Nullable<VentestatusHendelse>;
+    utbetaling: Nullable<BehandlingUtbetalingProps>;
 };
 
 export interface AntallDagerForMeldeperiode {
@@ -188,3 +191,10 @@ export interface VentestatusHendelse {
     erSattPåVent: boolean;
     behandlingStatus: BehandlingStatus;
 }
+
+export type BehandlingUtbetalingProps = {
+    navkontor: string;
+    navkontorNavn?: string;
+    beregninger: MeldeperiodeBeregningProps[];
+    totalBeløp: BeløpProps;
+};

@@ -9,8 +9,12 @@ import { RevurderingInnvilgelseSend } from '~/components/behandling/revurdering/
 import { RevurderingInnvilgelseBarnetillegg } from '~/components/behandling/revurdering/innvilgelse/5-barn/RevurderingInnvilgelseBarnetillegg';
 import RevurderingDagerPerMeldeperiode from './3-dager-per-meldeperiode/RevurderingDagerPerMeldeperiode';
 import { RevurderingInnvilgelseTiltak } from '~/components/behandling/revurdering/innvilgelse/4-tiltak/RevurderingInnvilgelseTiltak';
+import { BehandlingUtbetaling } from '~/components/behandling/felles/utbetaling/BehandlingUtbetaling';
+import { useBehandling } from '~/components/behandling/BehandlingContext';
 
 export const RevurderingInnvilgelseVedtak = () => {
+    const { utbetaling } = useBehandling().behandling;
+
     return (
         <RevurderingInnvilgelseVedtakProvider>
             <Heading size={'medium'} level={'1'}>
@@ -25,6 +29,7 @@ export const RevurderingInnvilgelseVedtak = () => {
             <Separator />
             <RevurderingInnvilgelseBrev />
             <Separator />
+            {utbetaling && <BehandlingUtbetaling utbetaling={utbetaling} />}
             <RevurderingInnvilgelseSend />
         </RevurderingInnvilgelseVedtakProvider>
     );

@@ -1,7 +1,7 @@
 import { Button, Table } from '@navikt/ds-react';
 import {
     finnMeldeperiodeKjedeStatusTekst,
-    meldekortUtbetalingstatusTekst,
+    utbetalingsstatusTekst,
 } from '~/utils/tekstformateringUtils';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '~/utils/date';
 import Link from 'next/link';
@@ -92,7 +92,7 @@ export const MeldekortOversikt = ({ meldeperiodeKjeder, saksnummer, sakId }: Pro
                                 </Table.DataCell>
                                 <Table.DataCell>
                                     {sisteMeldekortBehandling?.utbetalingsstatus
-                                        ? meldekortUtbetalingstatusTekst[
+                                        ? utbetalingsstatusTekst[
                                               sisteMeldekortBehandling.utbetalingsstatus
                                           ]
                                         : '-'}
