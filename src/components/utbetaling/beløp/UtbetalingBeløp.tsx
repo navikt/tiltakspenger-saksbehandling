@@ -12,7 +12,7 @@ type Props = {
 };
 
 export const UtbetalingBeløp = ({ tekst, beløp, beløpForrige }: Props) => {
-    const diff = beløpForrige && beløp - beløpForrige;
+    const diff = beløpForrige === undefined ? undefined : beløp - beløpForrige;
 
     return (
         <HStack gap={'5'} className={fellesStyle.rad}>

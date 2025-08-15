@@ -12,11 +12,13 @@ type Props = {
 };
 
 export const BehandlingUtbetaling = ({ utbetaling }: Props) => {
-    const { navkontor, navkontorNavn, totalBeløp, beregninger } = utbetaling;
+    const { navkontor, navkontorNavn, beregningerSummert, beregninger } = utbetaling;
 
-    const { totalt, ordinært, barnetillegg } = totalBeløp;
+    const { totalt, ordinært, barnetillegg } = beregningerSummert;
 
-    if (totalt === 0) {
+    const totalDiff = totalt.nå - totalt.før;
+
+    if (totalDiff === 0) {
         return (
             <Alert variant={'warning'}>{'Beregningen har totalbeløp 0 (dette er en bug!)'}</Alert>
         );
@@ -36,22 +38,33 @@ export const BehandlingUtbetaling = ({ utbetaling }: Props) => {
                             {`Vedtaket vil føre til en endring i beregningen av ${antallPerioder} tidligere utbetalte meldeperioder.`}
                         </Alert>
                         <UtbetalingBeløp
+                            tekst={
+                                totalDiff > 0
+                                    ? 'Beløp for etterbetaling'
+                                    : 'Beløp for tilbakekreving'
+                            }
+                            beløp={Math.abs(totalDiff)}
+                        />
+                        <UtbetalingBeløp
                             tekst={'Nytt ordinært beløp (alle perioder)'}
-                            beløp={ordinært}
+                            beløp={ordinært.nå}
+                            beløpForrige={ordinært.før}
                         />
                         <UtbetalingBeløp
                             tekst={'Nytt barnetillegg beløp (alle perioder)'}
-                            beløp={barnetillegg}
+                            beløp={barnetillegg.nå}
+                            beløpForrige={barnetillegg.før}
                         />
                         <UtbetalingBeløp
                             tekst={'Nytt totalt beløp (alle perioder)'}
-                            beløp={totalt}
+                            beløp={totalt.nå}
+                            beløpForrige={totalt.før}
                         />
                     </VStack>
                     <UtbetalingStatus navkontor={navkontor} navkontorNavn={navkontorNavn} />
                 </VedtakSeksjon.Venstre>
                 <VedtakSeksjon.Høyre>
-                    {totalt > 0 ? (
+                    {totalDiff > 0 ? (
                         <Alert variant={'info'}>{'Vedtaket vil føre til en etterbetaling'}</Alert>
                     ) : (
                         <Alert variant={'error'}>

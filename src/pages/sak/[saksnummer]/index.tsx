@@ -1,8 +1,8 @@
-import { pageWithAuthentication } from '../../../auth/pageWithAuthentication';
-import { SakProps } from '../../../types/SakTypes';
-import { Saksoversikt } from '../../../components/saksoversikt/Saksoversikt';
-import { fetchSak } from '../../../utils/fetch/fetch-server';
-import { SakProvider } from '../../../context/sak/SakContext';
+import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
+import { SakProps } from '~/types/SakTypes';
+import { Saksoversikt } from '~/components/saksoversikt/Saksoversikt';
+import { fetchSak } from '~/utils/fetch/fetch-server';
+import { SakProvider } from '~/context/sak/SakContext';
 
 type Props = {
     sak: SakProps;

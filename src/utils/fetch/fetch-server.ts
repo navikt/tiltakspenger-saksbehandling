@@ -2,12 +2,11 @@ import { getToken, requestOboToken } from '@navikt/oasis';
 import { logger } from '@navikt/next-logger';
 import { IncomingMessage } from 'node:http';
 import { NextApiRequest } from 'next';
-import { SakProps } from '../../types/SakTypes';
-import { BehandlingData, BehandlingId } from '../../types/BehandlingTypes';
-import { Saksbehandler } from '../../types/Saksbehandler';
+import { SakProps } from '~/types/SakTypes';
+import { Saksbehandler } from '~/types/Saksbehandler';
 import { stripLeadingSlash } from '../string';
 import { errorFraApiResponse } from './fetch';
-import { Behandlingssammendrag } from '../../types/Behandlingssammendrag';
+import { Behandlingssammendrag } from '~/types/Behandlingssammendrag';
 
 type NextRequest = Request | IncomingMessage | NextApiRequest;
 
@@ -91,6 +90,3 @@ export const fetchBenkOversikt = async (req: NextRequest) =>
 
 export const fetchSaksbehandler = async (req: NextRequest) =>
     fetchJsonFraApi<Saksbehandler>(req, '/saksbehandler');
-
-export const fetchBehandling = async (req: NextRequest, behandlingId: BehandlingId) =>
-    fetchJsonFraApi<BehandlingData>(req, `/behandling/${behandlingId}`);

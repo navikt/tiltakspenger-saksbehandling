@@ -6,6 +6,7 @@ import { Saksbehandler } from '~/types/Saksbehandler';
 import { PlayIcon } from '@navikt/aksel-icons';
 import { useGjenopptaBehandling } from '~/components/behandlingmeny/useGjenopptaBehandling';
 import router from 'next/router';
+import { behandlingUrl } from '~/utils/urls';
 
 export const visGjenopptaBehandlingMenyvalg = (
     behandling: BehandlingForOversiktData,
@@ -20,14 +21,13 @@ type Props = {
 
 const GjenopptaBehandlingMenyvalg = ({ behandling }: Props) => {
     const { gjenopptaBehandling } = useGjenopptaBehandling(behandling.sakId, behandling.id);
-    const behandlingLenke = `/behandling/${behandling.id}`;
 
     return (
         <ActionMenu.Item
             icon={<PlayIcon aria-hidden />}
             onClick={(e) => {
                 e.preventDefault();
-                gjenopptaBehandling().then(() => router.push(behandlingLenke));
+                gjenopptaBehandling().then(() => router.push(behandlingUrl(behandling)));
             }}
         >
             Gjenoppta

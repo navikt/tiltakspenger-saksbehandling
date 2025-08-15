@@ -136,7 +136,7 @@ export const BehandlingerTidslinje = ({ sak }: Props) => {
                                     </div>
                                     <Link
                                         as={NextLink}
-                                        href={`/behandling/${vedtak.behandlingId}`}
+                                        href={`/src/pages/sak/%5Bsaksnummer%5D/behandling/${vedtak.behandlingId}`}
                                         className={style.behandlingLink}
                                     >
                                         {'Til behandlingen'}

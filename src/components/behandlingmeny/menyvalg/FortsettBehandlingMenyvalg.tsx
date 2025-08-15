@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { eierBehandling } from '~/utils/tilganger';
 import { Saksbehandler } from '~/types/Saksbehandler';
 import { ArrowRightIcon } from '@navikt/aksel-icons';
+import { behandlingUrl } from '~/utils/urls';
 
 export const visFortsettBehandlingMenyvalg = (
     behandling: BehandlingForOversiktData,
@@ -26,9 +27,12 @@ type Props = {
 };
 
 const FortsettBehandlingMenyvalg = ({ behandling }: Props) => {
-    const behandlingLenke = `/behandling/${behandling.id}`;
     return (
-        <ActionMenu.Item as={Link} href={behandlingLenke} icon={<ArrowRightIcon aria-hidden />}>
+        <ActionMenu.Item
+            as={Link}
+            href={behandlingUrl(behandling)}
+            icon={<ArrowRightIcon aria-hidden />}
+        >
             Fortsett
         </ActionMenu.Item>
     );

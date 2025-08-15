@@ -4,6 +4,7 @@ import { useGjenopptaBehandling } from '~/components/behandlingmeny/useGjenoppta
 import router from 'next/router';
 import { BekreftelsesModal } from '~/components/modaler/BekreftelsesModal';
 import { useRef } from 'react';
+import { behandlingUrl } from '~/utils/urls';
 
 type Props = {
     behandling: BehandlingData;
@@ -35,7 +36,7 @@ export const BehandlingGjenoppta = ({ behandling }: Props) => {
                             gjenopptaBehandling().then((oppdaterBehandling) => {
                                 if (oppdaterBehandling) {
                                     lukkModal();
-                                    router.push(`/behandling/${oppdaterBehandling.id}`);
+                                    router.push(behandlingUrl(oppdaterBehandling));
                                 }
                             });
                         }}

@@ -21,7 +21,7 @@ export const BehandlingGodkjenn = ({ behandling }: Props) => {
         useGodkjennBehandling(behandling);
 
     const underkjennApi = useFetchJsonFraApi<BehandlingData, { begrunnelse: string }>(
-        `/behandling/sendtilbake/${behandling.id}`,
+        `/sak/${behandling.sakId}/behandling/${behandling.id}/underkjenn`,
         'POST',
         {
             onSuccess: (oppdatertBehandling) => {
