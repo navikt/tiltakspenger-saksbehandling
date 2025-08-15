@@ -33,6 +33,7 @@ import GjenopptaBehandlingMenyvalg, {
     visGjenopptaBehandlingMenyvalg,
 } from '~/components/behandlingmeny/menyvalg/GjenopptaBehandlingMenyvalg';
 import SettBehandlingPåVentModal from '~/components/modaler/SettBehandlingPåVentModal';
+import { behandlingUrl } from '~/utils/urls';
 
 type Props = {
     behandling: BehandlingForOversiktData;
@@ -75,12 +76,7 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
 
     if (!menySkalVises) {
         return (
-            <Button
-                variant={'secondary'}
-                as={Link}
-                href={`/behandling/${behandling.id}`}
-                size={'small'}
-            >
+            <Button variant={'secondary'} as={Link} href={behandlingUrl(behandling)} size={'small'}>
                 Se behandling
             </Button>
         );
@@ -121,7 +117,7 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
                     {menySkalVises && !visFortsettBehandling && (
                         <>
                             <ActionMenu.Divider />
-                            <SeBehandlingMenyvalg behandlingHref={`/behandling/${behandling.id}`} />
+                            <SeBehandlingMenyvalg behandlingHref={behandlingUrl(behandling)} />
                         </>
                     )}
                     {visAvsluttBehandling && (

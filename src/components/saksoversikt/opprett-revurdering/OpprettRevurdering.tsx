@@ -7,6 +7,7 @@ import { RevurderingResultat } from '~/types/BehandlingTypes';
 import { BekreftelsesModal } from '~/components/modaler/BekreftelsesModal';
 import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
 import { revurderingResultatTekst } from '~/utils/tekstformateringUtils';
+import { behandlingUrl } from '~/utils/urls';
 
 type Props = {
     sakId: SakId;
@@ -55,11 +56,13 @@ export const OpprettRevurdering = ({ sakId, harVedtak }: Props) => {
                                 return;
                             }
 
-                            opprettRevurdering({ revurderingType: valgtType }).then((data) => {
-                                if (data) {
-                                    router.push(`/behandling/${data.id}`);
-                                }
-                            });
+                            opprettRevurdering({ revurderingType: valgtType }).then(
+                                (behandling) => {
+                                    if (behandling) {
+                                        router.push(behandlingUrl(behandling));
+                                    }
+                                },
+                            );
                         }}
                     >
                         {`Opprett revurdering${valgtType ? ` (${revurderingResultatTekst[valgtType]})` : ''}`}

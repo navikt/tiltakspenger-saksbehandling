@@ -8,6 +8,8 @@ import AvsluttBehandlingModal from '~/components/modaler/AvsluttBehandlingModal'
 import AvsluttBehandlingMenyvalg from '~/components/saksoversikt/avsluttBehandling/AvsluttBehandlingMenyvalg';
 import { SøknadForOversiktProps } from '~/types/SøknadTypes';
 import { BehandlingStatus } from '~/types/BehandlingTypes';
+import { behandlingUrl } from '~/utils/urls';
+
 import style from '../BehandlingKnapper.module.css';
 
 type Props = {
@@ -22,7 +24,7 @@ export const StartSøknadBehandling = ({ søknad, medAvsluttBehandling }: Props)
     const startBehandling = () => {
         opprettBehandling().then((behandling) => {
             if (behandling) {
-                router.push(`/behandling/${behandling.id}`);
+                router.push(behandlingUrl(behandling));
             }
         });
     };

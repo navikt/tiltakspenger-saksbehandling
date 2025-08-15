@@ -4,6 +4,7 @@ import { finnBehandlingstypeTekst } from '~/utils/tekstformateringUtils';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '~/utils/date';
 import { Behandlingstype } from '~/types/BehandlingTypes';
 import Link from 'next/link';
+import { behandlingUrl } from '~/utils/urls';
 
 export const AvbrutteBehandlingerTabell = (props: {
     saksnummer: string;
@@ -49,7 +50,10 @@ export const AvbrutteBehandlingerTabell = (props: {
                                     size="small"
                                     variant={'secondary'}
                                     as={Link}
-                                    href={`/behandling/${avsluttet.id}`}
+                                    href={behandlingUrl({
+                                        saksnummer: props.saksnummer,
+                                        id: avsluttet.id,
+                                    })}
                                 >
                                     Se behandling
                                 </Button>

@@ -8,6 +8,7 @@ import { VedtattBehandlingDataCellInfo } from '~/components/saksoversikt/behandl
 import SeBehandlingMenyvalg from '~/components/behandlingmeny/menyvalg/SeBehandlingMenyvalg';
 import React from 'react';
 import Link from 'next/link';
+import { behandlingUrl } from '~/utils/urls';
 
 export const VedtatteBehandlingerTabell = (props: {
     vedtatteBehandlinger: VedtattBehandlingDataCellInfo[];
@@ -73,13 +74,17 @@ export const VedtatteBehandlingerTabell = (props: {
                                     </ActionMenu.Trigger>
                                     <ActionMenu.Content>
                                         <>
-                                            <MenyValgBehandleSøknadPåNytt
-                                                sakId={vedtattBehandling.sakId}
-                                                søknadId={vedtattBehandling.søknadId}
-                                            />
-                                            <ActionMenu.Divider />
+                                            {vedtattBehandling.søknadId && (
+                                                <>
+                                                    <MenyValgBehandleSøknadPåNytt
+                                                        sakId={vedtattBehandling.sakId}
+                                                        søknadId={vedtattBehandling.søknadId}
+                                                    />
+                                                    <ActionMenu.Divider />
+                                                </>
+                                            )}
                                             <SeBehandlingMenyvalg
-                                                behandlingHref={`/behandling/${vedtattBehandling.id}`}
+                                                behandlingHref={behandlingUrl(vedtattBehandling)}
                                             />
                                         </>
                                     </ActionMenu.Content>
@@ -88,7 +93,7 @@ export const VedtatteBehandlingerTabell = (props: {
                                 <Button
                                     variant={'secondary'}
                                     as={Link}
-                                    href={`/behandling/${vedtattBehandling.id}`}
+                                    href={behandlingUrl(vedtattBehandling)}
                                     size={'small'}
                                 >
                                     Se behandling

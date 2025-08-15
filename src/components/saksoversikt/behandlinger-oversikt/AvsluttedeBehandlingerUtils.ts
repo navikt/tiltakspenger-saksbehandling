@@ -1,18 +1,31 @@
-import { BehandlingData, BehandlingResultat, Behandlingstype } from '~/types/BehandlingTypes';
+import {
+    BehandlingData,
+    BehandlingId,
+    BehandlingResultat,
+    Behandlingstype,
+} from '~/types/BehandlingTypes';
 import { Nullable } from '~/types/UtilTypes';
 import { Periode } from '~/types/Periode';
-import { SøknadForBehandlingProps } from '~/types/SøknadTypes';
+import { SøknadForBehandlingProps, SøknadId } from '~/types/SøknadTypes';
 
-export interface AvbruttSøknadEllerBehandlingDataCellInfo {
-    id: string;
-    behandlingstype: Behandlingstype;
+type AvbruttSøknad = {
+    behandlingstype: Behandlingstype.SØKNAD;
+    id: SøknadId;
+};
+
+type AvbruttBehandling = {
+    behandlingstype: Behandlingstype.SØKNADSBEHANDLING | Behandlingstype.REVURDERING;
+    id: BehandlingId;
     resultat: Nullable<BehandlingResultat>;
+};
+
+export type AvbruttSøknadEllerBehandlingDataCellInfo = {
     tidspunktAvsluttet: string;
     behandlingsperiode: Nullable<Periode>;
     avsluttetPga: 'ferdigBehandlet' | 'avbrutt';
     saksbehandler?: Nullable<string>;
     beslutter?: Nullable<string>;
-}
+} & (AvbruttSøknad | AvbruttBehandling);
 
 export const avbruttBehandlingToDataCellInfo = (
     behandling: BehandlingData,
@@ -49,7 +62,6 @@ export const avbruttSøknadToDataCellInfo = (
                 ? søknad.tiltak[søknad.tiltak.length - 1].tilOgMed
                 : søknad.tiltak.tilOgMed,
         },
-        resultat: null,
         behandlingstype: Behandlingstype.SØKNAD,
         tidspunktAvsluttet: søknad.avbrutt.avbruttTidspunkt,
         avsluttetPga: 'avbrutt',
