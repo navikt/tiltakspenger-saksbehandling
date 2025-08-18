@@ -2,6 +2,14 @@
     margin-bottom: 0.5rem;
 }
 
-.beløp {
+.underseksjon {
     margin-bottom: 1rem;
+}
+
+.etterbetalingBeløp {
+    background-color: var(--a-green-100);
+}
+
+.tilbakekrevingBeløp {
+    background-color: var(--a-red-100);
 }
