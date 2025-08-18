@@ -12,7 +12,7 @@ type Props = {
 };
 
 export const BehandlingUtbetaling = ({ utbetaling }: Props) => {
-    const { navkontor, navkontorNavn, beregningerSummert, beregninger } = utbetaling;
+    const { navkontor, navkontorNavn, status, beregningerSummert, beregninger } = utbetaling;
 
     const { totalt, ordinært, barnetillegg } = beregningerSummert;
 
@@ -61,7 +61,11 @@ export const BehandlingUtbetaling = ({ utbetaling }: Props) => {
                             beløpForrige={totalt.før}
                         />
                     </VStack>
-                    <UtbetalingStatus navkontor={navkontor} navkontorNavn={navkontorNavn} />
+                    <UtbetalingStatus
+                        navkontor={navkontor}
+                        navkontorNavn={navkontorNavn}
+                        utbetalingsstatus={status}
+                    />
                 </VedtakSeksjon.Venstre>
                 <VedtakSeksjon.Høyre>
                     {totalDiff > 0 ? (
