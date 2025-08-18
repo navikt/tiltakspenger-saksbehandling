@@ -1,11 +1,19 @@
-import { BehandlingData, BehandlingResultat, Behandlingstype } from '~/types/BehandlingTypes';
+import {
+    BehandlingData,
+    BehandlingId,
+    BehandlingResultat,
+    Behandlingstype,
+} from '~/types/BehandlingTypes';
 import { Nullable } from '~/types/UtilTypes';
 import { Periode } from '~/types/Periode';
+import { SakId } from '~/types/SakTypes';
+import { SøknadId } from '~/types/SøknadTypes';
 
 export interface VedtattBehandlingDataCellInfo {
-    id: string;
-    sakId: string;
-    søknadId: string;
+    id: BehandlingId;
+    sakId: SakId;
+    saksnummer: string;
+    søknadId?: SøknadId;
     behandlingstype: Behandlingstype;
     resultat: Nullable<BehandlingResultat>;
     tidspunktAvsluttet: string;
@@ -22,14 +30,13 @@ export const vedtattBehandlingToDataCellInfo = (
         ? behandling.avbrutt.avbruttTidspunkt
         : behandling.iverksattTidspunkt!;
 
-    let søknadId = '';
-    if ('søknad' in behandling && behandling.søknad) {
-        søknadId = behandling.søknad.id;
-    }
+    const søknadId =
+        behandling.type === Behandlingstype.SØKNADSBEHANDLING ? behandling.søknad.id : undefined;
 
     return {
         id: behandling.id,
         sakId: behandling.sakId,
+        saksnummer: behandling.saksnummer,
         søknadId: søknadId,
         behandlingsperiode: behandling.virkningsperiode,
         resultat: behandling.resultat,

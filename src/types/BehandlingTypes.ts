@@ -6,8 +6,7 @@ import { Avbrutt } from './Avbrutt';
 import { Nullable } from '~/types/UtilTypes';
 import { Ytelse } from '~/types/Ytelse';
 import { BarnetilleggData } from './Barnetillegg';
-
-import { BeløpProps, MeldeperiodeBeregningProps } from '~/types/Beregning';
+import { MeldeperiodeBeregningProps } from '~/types/Beregning';
 
 export type BehandlingId = `beh_${string}`;
 
@@ -196,5 +195,16 @@ export type BehandlingUtbetalingProps = {
     navkontor: string;
     navkontorNavn?: string;
     beregninger: MeldeperiodeBeregningProps[];
-    totalBeløp: BeløpProps;
+    beregningerSummert: BeregningerSummert;
+};
+
+export type BeregningerSummert = {
+    totalt: BeløpFørOgNå;
+    ordinært: BeløpFørOgNå;
+    barnetillegg: BeløpFørOgNå;
+};
+
+export type BeløpFørOgNå = {
+    før: number;
+    nå: number;
 };

@@ -3,6 +3,8 @@ import { BehandlingData, BehandlingId } from '~/types/BehandlingTypes';
 import { SakId } from '~/types/SakTypes';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import router from 'next/router';
+import { behandlingUrl } from '~/utils/urls';
+
 import styles from './OvertaBehandlingModal.module.css';
 
 const OvertabehandlingModal = (props: {
@@ -17,7 +19,9 @@ const OvertabehandlingModal = (props: {
         'PATCH',
         {
             onSuccess: (behandling) => {
-                router.push(`/behandling/${behandling!.id}`);
+                if (behandling) {
+                    router.push(behandlingUrl(behandling));
+                }
             },
         },
     );

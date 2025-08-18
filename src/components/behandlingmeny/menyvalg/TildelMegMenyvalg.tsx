@@ -7,6 +7,7 @@ import router from 'next/router';
 import { useTaBehandling } from '~/components/behandlingmeny/useTaBehandling';
 import { Saksbehandler } from '~/types/Saksbehandler';
 import { PersonIcon } from '@navikt/aksel-icons';
+import { behandlingUrl } from '~/utils/urls';
 
 export const visTildelMegMenyvalg = (
     behandling: BehandlingForOversiktData,
@@ -25,7 +26,7 @@ type Props = {
 
 const TildelMegMenyvalg = ({ behandling }: Props) => {
     const { taBehandling } = useTaBehandling(behandling.sakId, behandling.id);
-    const behandlingLenke = `/behandling/${behandling.id}`;
+    const behandlingLenke = behandlingUrl(behandling);
 
     return (
         <ActionMenu.Item
