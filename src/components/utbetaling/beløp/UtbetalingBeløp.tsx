@@ -9,13 +9,14 @@ type Props = {
     tekst: string;
     beløp: number;
     beløpForrige?: number;
+    className?: string;
 };
 
-export const UtbetalingBeløp = ({ tekst, beløp, beløpForrige }: Props) => {
+export const UtbetalingBeløp = ({ tekst, beløp, beløpForrige, className }: Props) => {
     const diff = beløpForrige === undefined ? undefined : beløp - beløpForrige;
 
     return (
-        <HStack gap={'5'} className={fellesStyle.rad}>
+        <HStack gap={'5'} className={classNames(fellesStyle.rad, className)}>
             <BodyShort>{tekst}</BodyShort>
             <div className={style.beløp}>
                 <BodyShort weight={'semibold'}>{formatterBeløp(beløp)}</BodyShort>

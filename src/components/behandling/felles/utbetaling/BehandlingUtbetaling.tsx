@@ -12,7 +12,7 @@ type Props = {
 };
 
 export const BehandlingUtbetaling = ({ utbetaling }: Props) => {
-    const { navkontor, navkontorNavn, beregningerSummert, beregninger } = utbetaling;
+    const { navkontor, navkontorNavn, status, beregningerSummert, beregninger } = utbetaling;
 
     const { totalt, ordinært, barnetillegg } = beregningerSummert;
 
@@ -25,6 +25,7 @@ export const BehandlingUtbetaling = ({ utbetaling }: Props) => {
     }
 
     const antallPerioder = beregninger.length;
+    const erEtterbetaling = totalDiff > 0;
 
     return (
         <>
@@ -33,18 +34,36 @@ export const BehandlingUtbetaling = ({ utbetaling }: Props) => {
                     {'Beregning av utbetaling'}
                 </Heading>
                 <VedtakSeksjon.Venstre>
-                    <VStack gap={'1'} className={style.beløp}>
-                        <Alert variant={'info'} size={'small'} inline={true}>
-                            {`Vedtaket vil føre til en endring i beregningen av ${antallPerioder} tidligere utbetalte meldeperioder.`}
-                        </Alert>
+                    <VStack gap={'1'} className={style.underseksjon}>
+                        {erEtterbetaling ? (
+                            <Alert variant={'info'} size={'small'} inline={true}>
+                                {'Vedtaket vil føre til en etterbetaling.'}
+                            </Alert>
+                        ) : (
+                            <Alert variant={'error'}>
+                                {
+                                    'Vedtaket vil føre til en tilbakekreving. Dette støtter vi ikke ennå.'
+                                }
+                            </Alert>
+                        )}
                         <UtbetalingBeløp
                             tekst={
-                                totalDiff > 0
-                                    ? 'Beløp for etterbetaling'
-                                    : 'Beløp for tilbakekreving'
+                                erEtterbetaling
+                                    ? 'Beløp som vil etterbetales'
+                                    : 'Beløp som vil tilbakekreves'
                             }
                             beløp={Math.abs(totalDiff)}
+                            className={
+                                erEtterbetaling
+                                    ? style.etterbetalingBeløp
+                                    : style.tilbakekrevingBeløp
+                            }
                         />
+                    </VStack>
+                    <VStack gap={'1'} className={style.underseksjon}>
+                        <Alert variant={'info'} size={'small'} inline={true}>
+                            {`Vedtaket endrer beregningen av ${antallPerioder} tidligere utbetalte meldeperioder.`}
+                        </Alert>
                         <UtbetalingBeløp
                             tekst={'Nytt ordinært beløp (alle perioder)'}
                             beløp={ordinært.nå}
@@ -61,17 +80,12 @@ export const BehandlingUtbetaling = ({ utbetaling }: Props) => {
                             beløpForrige={totalt.før}
                         />
                     </VStack>
-                    <UtbetalingStatus navkontor={navkontor} navkontorNavn={navkontorNavn} />
+                    <UtbetalingStatus
+                        navkontor={navkontor}
+                        navkontorNavn={navkontorNavn}
+                        utbetalingsstatus={status}
+                    />
                 </VedtakSeksjon.Venstre>
-                <VedtakSeksjon.Høyre>
-                    {totalDiff > 0 ? (
-                        <Alert variant={'info'}>{'Vedtaket vil føre til en etterbetaling'}</Alert>
-                    ) : (
-                        <Alert variant={'error'}>
-                            {'Vedtaket vil føre til en tilbakekreving. Dette støtter vi ikke ennå.'}
-                        </Alert>
-                    )}
-                </VedtakSeksjon.Høyre>
             </VedtakSeksjon>
             <Separator />
         </>
