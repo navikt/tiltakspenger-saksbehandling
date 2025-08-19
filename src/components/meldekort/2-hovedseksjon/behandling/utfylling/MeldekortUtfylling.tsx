@@ -1,5 +1,5 @@
 import { Alert, BodyShort, HStack, VStack } from '@navikt/ds-react';
-import { useSak } from '../../../../../context/sak/SakContext';
+import { useSak } from '~/context/sak/SakContext';
 import {
     hentMeldekortForhåndsutfylling,
     MeldekortBehandlingForm,
@@ -11,16 +11,16 @@ import {
     MeldekortBehandlingDagStatus,
     MeldekortBehandlingDTO,
     MeldekortBehandlingProps,
-} from '../../../../../types/meldekort/MeldekortBehandling';
+} from '~/types/meldekort/MeldekortBehandling';
 import { MeldekortUker } from '../../../0-felles-komponenter/uker/MeldekortUker';
 import { MeldekortUtfyllingLagre } from './lagre/MeldekortUtfyllingLagre';
 import { MeldekortSendTilBeslutning } from '../beslutning/MeldekortSendTilBeslutning';
 import React, { useEffect, useState } from 'react';
 import { MeldekortBeregningOppsummering } from '../../../0-felles-komponenter/beregning-oppsummering/MeldekortBeregningOppsummering';
-import { classNames } from '../../../../../utils/classNames';
+import { classNames } from '~/utils/classNames';
 import { MeldekortBegrunnelse } from '../../../0-felles-komponenter/begrunnelse/MeldekortBegrunnelse';
 import AvsluttMeldekortBehandling from '../../../../saksoversikt/meldekort-oversikt/avsluttMeldekortBehandling/AvsluttMeldekortBehandling';
-import { meldeperiodeUrl } from '../../../../../utils/urls';
+import { meldeperiodeUrl } from '~/utils/urls';
 
 import styles from './MeldekortUtfylling.module.css';
 
@@ -34,9 +34,11 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
     const { meldeperiodeKjede, tidligereMeldekortBehandlinger, sisteMeldeperiode } =
         useMeldeperiodeKjede();
     const { sakId, saksnummer } = useSak().sak;
-    const brukersMeldekortForBehandling = meldeperiodeKjede.brukersMeldekort.find(
-        (b) => b.id === meldekortBehandling.brukersMeldekortId,
-    );
+    const brukersMeldekortForBehandling =
+        meldeperiodeKjede.brukersMeldekort.find(
+            (b) => b.id === meldekortBehandling.brukersMeldekortId,
+        ) ?? meldeperiodeKjede.brukersMeldekort.at(-1); // Bruk siste brukers meldekort som fallback
+
     const { antallDager } = sisteMeldeperiode;
 
     const formContext = useForm<MeldekortBehandlingForm>({
