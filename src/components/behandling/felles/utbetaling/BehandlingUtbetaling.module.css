@@ -7,9 +7,9 @@
 }
 
 .etterbetalingBeløp {
-    background-color: var(--a-green-100);
+    border: 2px solid var(--a-green-500);
 }
 
 .tilbakekrevingBeløp {
-    background-color: var(--a-red-100);
+    border: 2px solid var(--a-red-500);
 }

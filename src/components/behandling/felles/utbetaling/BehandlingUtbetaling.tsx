@@ -30,27 +30,16 @@ export const BehandlingUtbetaling = ({ utbetaling }: Props) => {
     return (
         <>
             <VedtakSeksjon>
-                <Heading size={'xsmall'} level={'3'} className={style.header}>
-                    {'Beregning av utbetaling'}
+                <Heading size={'small'} level={'3'} className={style.header}>
+                    {erEtterbetaling ? 'Etterbetaling' : 'Tilbakekreving'}
                 </Heading>
                 <VedtakSeksjon.Venstre>
                     <VStack gap={'1'} className={style.underseksjon}>
-                        {erEtterbetaling ? (
-                            <Alert variant={'info'} size={'small'} inline={true}>
-                                {'Vedtaket vil føre til en etterbetaling.'}
-                            </Alert>
-                        ) : (
-                            <Alert variant={'error'}>
-                                {
-                                    'Vedtaket vil føre til en tilbakekreving. Dette støtter vi ikke ennå.'
-                                }
-                            </Alert>
-                        )}
                         <UtbetalingBeløp
                             tekst={
                                 erEtterbetaling
-                                    ? 'Beløp som vil etterbetales'
-                                    : 'Beløp som vil tilbakekreves'
+                                    ? 'Beløp som etterbetales'
+                                    : 'Beløp som tilbakekreves'
                             }
                             beløp={Math.abs(totalDiff)}
                             className={
@@ -86,6 +75,13 @@ export const BehandlingUtbetaling = ({ utbetaling }: Props) => {
                         utbetalingsstatus={status}
                     />
                 </VedtakSeksjon.Venstre>
+                <VedtakSeksjon.Høyre>
+                    {!erEtterbetaling && (
+                        <Alert variant={'error'}>
+                            {'Vedtaket vil føre til en tilbakekreving. Dette støtter vi ikke ennå.'}
+                        </Alert>
+                    )}
+                </VedtakSeksjon.Høyre>
             </VedtakSeksjon>
             <Separator />
         </>
