@@ -60,14 +60,19 @@ export const MeldekortHøyreSeksjon = () => {
                 <MeldekortTidligereBehandlinger />
             </Tabs.Panel>
 
-            <Tabs.Panel value={'brukersMeldekort'} lazy={false} className={style.panel}>
-                {/* TODO - raq -  Må se hvordan effekten av denne vil være - eventuelt ta det opp med loritha  */}
-                {brukersMeldekort.map((brukersMeldekort) => (
-                    <BrukersMeldekortVisning
-                        key={brukersMeldekort.id}
-                        brukersMeldekort={brukersMeldekort}
-                    />
-                ))}
+            <Tabs.Panel
+                value={'brukersMeldekort'}
+                lazy={false}
+                className={classNames(style.panel, style.brukersMeldekortPanel)}
+            >
+                {brukersMeldekort
+                    .toSorted((a, b) => b.mottatt.localeCompare(a.mottatt))
+                    .map((brukersMeldekort) => (
+                        <BrukersMeldekortVisning
+                            key={brukersMeldekort.id}
+                            brukersMeldekort={brukersMeldekort}
+                        />
+                    ))}
             </Tabs.Panel>
 
             <Tabs.Panel value={'avsluttedeMeldekort'} lazy={false} className={style.panel}>

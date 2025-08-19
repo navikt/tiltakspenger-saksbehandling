@@ -8,6 +8,10 @@
     padding: 1rem;
 }
 
+.brukersMeldekortPanel > :not(:last-child) {
+    margin-bottom: var(--a-spacing-8);
+}
+
 .tabDisabled {
     pointer-events: none;
     color: var(--a-gray-400);
