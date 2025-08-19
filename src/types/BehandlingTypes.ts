@@ -24,6 +24,7 @@ type BehandlingDataCommon = {
     saksopplysninger: BehandlingSaksopplysningerData;
     begrunnelseVilkårsvurdering: Nullable<string>;
     avbrutt: Nullable<Avbrutt>;
+    sistEndret: string;
     iverksattTidspunkt: Nullable<string>;
     fritekstTilVedtaksbrev: string | null;
     ventestatus: Nullable<VentestatusHendelse>;

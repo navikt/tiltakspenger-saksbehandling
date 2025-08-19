@@ -4,7 +4,7 @@ import {
     useSaksbehandler,
 } from '~/context/saksbehandler/SaksbehandlerContext';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
-import { HStack, VStack } from '@navikt/ds-react';
+import { Alert, HStack, VStack } from '@navikt/ds-react';
 import { BehandlingAvslutt } from '~/components/behandling/felles/send-og-godkjenn/avslutt/BehandlingAvslutt';
 import { BehandlingSendTilBeslutning } from '~/components/behandling/felles/send-og-godkjenn/send-til-beslutning/BehandlingSendTilBeslutning';
 import { BehandlingGodkjenn } from '~/components/behandling/felles/send-og-godkjenn/godkjenn/BehandlingGodkjenn';
@@ -23,6 +23,7 @@ import { BehandlingGjenoppta } from '~/components/behandling/felles/send-og-godk
 import { skalKunneGjenopptaBehandling } from '~/utils/tilganger';
 
 import style from './BehandlingSendOgGodkjenn.module.css';
+import { formaterTidspunkt } from '~/utils/date';
 
 type Props = {
     behandling: BehandlingData;
@@ -106,6 +107,13 @@ export const BehandlingSendOgGodkjenn = ({ behandling, lagringProps }: Props) =>
                     )}
                 </HStack>
             </VedtakSeksjon.Venstre>
+            <VedtakSeksjon.Høyre>
+                <Alert
+                    variant={'info'}
+                    inline={true}
+                    size={'small'}
+                >{`Sist lagret: ${formaterTidspunkt(behandling.sistEndret)}`}</Alert>
+            </VedtakSeksjon.Høyre>
         </VedtakSeksjon>
     );
 };
