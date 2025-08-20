@@ -16,7 +16,20 @@ export const validerPeriodisering = (perioder: Periode[], tillatHull: boolean) =
 };
 
 export const joinPerioder = (perioder: Periode[]): Periode => {
-    return { fraOgMed: perioder[0].fraOgMed, tilOgMed: perioder.slice(-1)[0].tilOgMed };
+    if (perioder.length === 0) {
+        throw Error('Må ha minst en periode');
+    }
+
+    const førsteFraOgMed = perioder
+        .map((periode) => periode.fraOgMed)
+        .toSorted()
+        .at(0)!;
+    const sisteTilOgMed = perioder
+        .map((periode) => periode.tilOgMed)
+        .toSorted()
+        .at(-1)!;
+
+    return { fraOgMed: førsteFraOgMed, tilOgMed: sisteTilOgMed };
 };
 
 export const erDatoIPeriode = (dato: string, periode: Periode) => {

@@ -20,6 +20,7 @@ import { harSøktBarnetillegg, hentTiltaksdeltakelserMedStartOgSluttdato } from 
 import { getTextAreaRefValue } from '~/utils/textarea';
 import { BarnetilleggBegrunnelseInput } from '~/components/behandling/felles/state/BarnetilleggState';
 import { BegrunnelseOgBrevInput } from '~/components/behandling/felles/state/BegrunnelseOgBrev';
+import { joinPerioder } from '~/utils/periode';
 
 export type RevurderingInnvilgelseVedtakContext = BegrunnelseOgBrevInput &
     BarnetilleggBegrunnelseInput &
@@ -43,11 +44,13 @@ const tilValgteTiltaksdeltakelser = (
     }));
 
 const initieltVedtakSkjema = (behandling: RevurderingData): RevurderingInnvilgelseSkjemaState => {
-    const tiltaksdeltagelse = behandling.saksopplysninger.tiltaksdeltagelse;
-    const tiltaksperiode: Periode = {
-        fraOgMed: tiltaksdeltagelse.at(0)!.deltagelseFraOgMed!,
-        tilOgMed: tiltaksdeltagelse.at(-1)!.deltagelseTilOgMed!,
-    };
+    const tiltaksdeltagelser: Periode[] = hentTiltaksdeltakelserMedStartOgSluttdato(behandling).map(
+        (tiltaksdeltagelse) => ({
+            fraOgMed: tiltaksdeltagelse.deltagelseFraOgMed,
+            tilOgMed: tiltaksdeltagelse.deltagelseTilOgMed,
+        }),
+    );
+    const tiltaksperiode: Periode = joinPerioder(tiltaksdeltagelser);
 
     return {
         behandlingsperiode: behandling.virkningsperiode ?? tiltaksperiode,
