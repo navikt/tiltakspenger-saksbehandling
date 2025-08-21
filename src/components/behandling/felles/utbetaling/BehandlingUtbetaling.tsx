@@ -75,13 +75,6 @@ export const BehandlingUtbetaling = ({ utbetaling }: Props) => {
                         utbetalingsstatus={status}
                     />
                 </VedtakSeksjon.Venstre>
-                <VedtakSeksjon.Høyre>
-                    {!erEtterbetaling && (
-                        <Alert variant={'error'}>
-                            {'Vedtaket vil føre til en tilbakekreving. Dette støtter vi ikke ennå.'}
-                        </Alert>
-                    )}
-                </VedtakSeksjon.Høyre>
             </VedtakSeksjon>
             <Separator />
         </>
