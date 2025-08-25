@@ -31,6 +31,7 @@ export enum BehandlingssammendragType {
     REVURDERING = 'REVURDERING',
     MELDEKORTBEHANDLING = 'MELDEKORTBEHANDLING',
     INNSENDT_MELDEKORT = 'INNSENDT_MELDEKORT',
+    KORRIGERT_MELDEKORT = 'KORRIGERT_MELDEKORT',
 }
 
 export enum BehandlingssammendragStatus {
