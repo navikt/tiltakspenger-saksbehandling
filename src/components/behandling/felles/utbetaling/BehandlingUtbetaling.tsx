@@ -31,15 +31,15 @@ export const BehandlingUtbetaling = ({ utbetaling }: Props) => {
         <>
             <VedtakSeksjon>
                 <Heading size={'small'} level={'3'} className={style.header}>
-                    {erEtterbetaling ? 'Etterbetaling' : 'Tilbakekreving'}
+                    {erEtterbetaling ? 'Etterbetaling' : 'Feilutbetaling'}
                 </Heading>
                 <VedtakSeksjon.Venstre>
                     <VStack gap={'1'} className={style.underseksjon}>
                         <UtbetalingBeløp
                             tekst={
                                 erEtterbetaling
-                                    ? 'Beløp som etterbetales'
-                                    : 'Beløp som tilbakekreves'
+                                    ? 'Beløp til etterbetaling'
+                                    : 'Beløp til feilutbetaling'
                             }
                             beløp={Math.abs(totalDiff)}
                             className={
