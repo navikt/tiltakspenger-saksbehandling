@@ -26,7 +26,7 @@ import {
 type BaseActions =
     | {
           type: 'setResultat';
-          payload: { resultat: SøknadsbehandlingResultat };
+          payload: { resultat: SøknadsbehandlingResultat | null };
       }
     | {
           type: 'oppdaterAvslagsgrunn';
@@ -39,7 +39,7 @@ type BaseState = {
 };
 
 const baseActionHandlers = {
-    setResultat: (state, payload: { resultat: SøknadsbehandlingResultat }) => {
+    setResultat: (state, payload: { resultat: SøknadsbehandlingResultat | null }) => {
         return { ...state, resultat: payload.resultat };
     },
 

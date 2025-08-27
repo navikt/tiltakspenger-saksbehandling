@@ -1,4 +1,4 @@
-import { Radio, RadioGroup } from '@navikt/ds-react';
+import { Button, Radio, RadioGroup } from '@navikt/ds-react';
 import { classNames } from '~/utils/classNames';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import {
@@ -30,7 +30,7 @@ export const SøknadsbehandlingResultatVelger = () => {
                     legend={'Resultat'}
                     size={'small'}
                     className={style.radioGroup}
-                    defaultValue={resultat}
+                    value={resultat}
                     readOnly={erIkkeSaksbehandler}
                     onChange={(valgtResultat: SøknadsbehandlingResultat) => {
                         dispatch({ type: 'setResultat', payload: { resultat: valgtResultat } });
@@ -40,6 +40,18 @@ export const SøknadsbehandlingResultatVelger = () => {
                         Innvilgelse
                     </Radio>
                     <Radio value={SøknadsbehandlingResultat.AVSLAG}>Avslag</Radio>
+                    {resultat && (
+                        <Button
+                            size={'xsmall'}
+                            variant={'tertiary'}
+                            type={'button'}
+                            onClick={() => {
+                                dispatch({ type: 'setResultat', payload: { resultat: null } });
+                            }}
+                        >
+                            {'Nullstill'}
+                        </Button>
+                    )}
                 </RadioGroup>
                 <BehandlingsperiodeVelger
                     behandling={behandling}
