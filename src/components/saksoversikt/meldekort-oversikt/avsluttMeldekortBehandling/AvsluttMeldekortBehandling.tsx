@@ -10,7 +10,7 @@ import {
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import styles from './AvsluttMeldekortBehandling.module.css';
 
-const AvsluttMeldekortbehandlingModal = (props: {
+export const AvsluttMeldekortbehandlingModal = (props: {
     sakId: SakId;
     meldekortBehandlingId: MeldekortBehandlingId;
     saksoversiktUrl: string;

@@ -106,9 +106,11 @@ const MeldekortBehandlingDetaljer = ({
                     {beslutter && <MeldekortDetalj header={'Beslutter'} tekst={beslutter} />}
                 </>
             )}
-            {meldekortKorrigeringToggle && erAvsluttet && (
-                <MeldekortBehandlingOpprett type={MeldekortBehandlingType.KORRIGERING} />
-            )}
+
+            {meldekortKorrigeringToggle &&
+                (erAvsluttet || status === MeldekortBehandlingStatus.KLAR_TIL_BEHANDLING) && (
+                    <MeldekortBehandlingOpprett type={MeldekortBehandlingType.KORRIGERING} />
+                )}
         </>
     );
 };
@@ -140,6 +142,7 @@ const meldekortStatusTagVariant: Record<
     UNDER_BESLUTNING: 'alt3-moderate',
     AVBRUTT: 'warning-moderate',
     AVVENTER_MELDEKORT: 'neutral-moderate',
+    KORRIGERT_MELDEKORT: 'info-moderate',
 };
 
 const meldekortStatusIkon: Record<MeldeperiodeKjedeStatus, React.ReactNode> = {
@@ -153,4 +156,5 @@ const meldekortStatusIkon: Record<MeldeperiodeKjedeStatus, React.ReactNode> = {
     [MeldeperiodeKjedeStatus.AUTOMATISK_BEHANDLET]: <RobotSmileIcon />,
     [MeldeperiodeKjedeStatus.AVBRUTT]: <CircleSlashIcon />,
     [MeldeperiodeKjedeStatus.AVVENTER_MELDEKORT]: <HourglassTopFilledIcon />,
+    [MeldeperiodeKjedeStatus.KORRIGERT_MELDEKORT]: <NotePencilDashIcon />,
 };

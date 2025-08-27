@@ -20,7 +20,7 @@ export const AvbrutteBehandlingerTabell = (props: {
                 <Table.Row>
                     <Table.HeaderCell scope="col">Behandlingstype</Table.HeaderCell>
                     <Table.HeaderCell scope="col">Tidspunkt avsluttet</Table.HeaderCell>
-                    <Table.HeaderCell scope="col">Behandlingsperiode</Table.HeaderCell>{' '}
+                    <Table.HeaderCell scope="col">Behandlingsperiode</Table.HeaderCell>
                     <Table.HeaderCell scope="col">Saksbehandler</Table.HeaderCell>
                     <Table.HeaderCell scope="col">Beslutter</Table.HeaderCell>
                     <Table.HeaderCell scope="col"></Table.HeaderCell>

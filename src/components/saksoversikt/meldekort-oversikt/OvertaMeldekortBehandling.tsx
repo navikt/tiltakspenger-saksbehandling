@@ -10,7 +10,7 @@ import {
 import { useFetchJsonFraApi } from '../../../utils/fetch/useFetchFraApi';
 import { SakId } from '../../../types/SakTypes';
 
-const OvertaMeldekortbehandlingModal = (props: {
+export const OvertaMeldekortbehandlingModal = (props: {
     sakId: SakId;
     meldekortBehandlingId: MeldekortBehandlingId;
     overtarFra: string;
