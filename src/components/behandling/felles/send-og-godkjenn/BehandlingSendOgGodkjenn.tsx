@@ -83,7 +83,7 @@ export const BehandlingSendOgGodkjenn = ({ behandling, lagringProps }: Props) =>
                     <HStack gap={'2'}>
                         {kanAvslutteBehandling && <BehandlingAvslutt behandling={behandling} />}
                         {!kanGjenopptaBehandling && (
-                            <BehandlingSettPåVent behandling={behandling} />
+                            <BehandlingSettPåVent behandling={behandling} disabled={isDirty} />
                         )}
                     </HStack>
                     {kanGjenopptaBehandling ? (
