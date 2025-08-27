@@ -1,30 +1,24 @@
-import { RevurderingInnvilgelseVedtakContext } from '~/components/behandling/revurdering/innvilgelse/context/RevurderingInnvilgelseVedtakContext';
 import { useEffect, useState } from 'react';
 import { BehandlingVedtakDTO } from '~/types/VedtakTyper';
 import { isEqualJson } from '~/utils/is-equal-json';
-import { SøknadsbehandlingVedtakContext } from '~/components/behandling/søknadsbehandling/context/SøknadsbehandlingVedtakContext';
-import { RevurderingStansVedtakContext } from '~/components/behandling/revurdering/stans/RevurderingStansVedtakContext';
-import { ValideringResultat } from '~/types/Validering';
+import { ValideringFunc, ValideringResultat, ValideringType } from '~/types/Validering';
 import { Nullable } from '~/types/UtilTypes';
+import { VedtakContext } from '~/types/Context';
 
-type ValiderOgHentVedtakDTO = () => {
+type ValiderOgHentVedtakDTO = (type: ValideringType) => {
     valideringResultat: ValideringResultat;
     vedtakDTO: Nullable<BehandlingVedtakDTO>;
 };
 
 export type BehandlingLagringProps = {
-    validerOgHentVedtakDTO: ValiderOgHentVedtakDTO;
+    validerOgHentLagringDTO: ValiderOgHentVedtakDTO;
+    validerVedtak: (type: ValideringType) => ValideringResultat;
     isDirty: boolean;
 };
 
-type VedtakContext =
-    | SøknadsbehandlingVedtakContext
-    | RevurderingInnvilgelseVedtakContext
-    | RevurderingStansVedtakContext;
-
 type Props = {
     vedtak: VedtakContext;
-    validerVedtak: () => ValideringResultat;
+    validerVedtak: ValideringFunc;
     hentDTO: () => Nullable<BehandlingVedtakDTO>;
 };
 
@@ -40,8 +34,8 @@ export const useHentBehandlingLagringProps = ({
         setIsDirty(!isEqualJson(hentDTO(), sisteLagring));
     };
 
-    const validerOgHentVedtakDTO = () => {
-        const valideringResultat = validerVedtak();
+    const validerOgHentLagringDTO = (type: ValideringType) => {
+        const valideringResultat = validerVedtak(type);
         const harErrors = valideringResultat.errors.length > 0;
 
         const vedtakDTO = harErrors ? null : hentDTO();
@@ -75,5 +69,5 @@ export const useHentBehandlingLagringProps = ({
         updateDirtyState();
     }, [vedtak]);
 
-    return { validerOgHentVedtakDTO, isDirty };
+    return { validerOgHentLagringDTO, validerVedtak, isDirty };
 };

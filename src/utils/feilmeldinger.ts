@@ -21,7 +21,7 @@ const feilmeldinger: Record<string, string> = {
         'Perioden til saksopplysningen er forskjellig fra vurderingsperioden',
     server_feil: 'Noe gikk galt på serversiden',
     ikke_tilgang: 'Bruker har ikke tilgang',
-    ugyldig_request: 'Noe gikk galt under prossessering av data på serversiden.',
+    ugyldig_request: 'Noe gikk galt under prosessering av data på server siden.',
     ikke_funnet: 'Finner ikke resursen handlingen ber om',
     ikke_implementert: 'Vi mangler en implementasjon for å gjennomføre denne handlingen',
     kan_ikke_stanse_utbetalt_dag: 'Kan ikke stanse utbetalt dag',

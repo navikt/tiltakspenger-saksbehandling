@@ -19,7 +19,7 @@ export const SøknadsbehandlingBrev = () => {
             behandling={behandling}
             rolle={rolleForBehandling}
             tekstRef={brevtekst.ref}
-            validering={søknadsbehandlingValidering(behandling, vedtak)}
+            validering={søknadsbehandlingValidering(behandling, vedtak)('tilBeslutning')}
             hentDto={(): SøknadsbehandlingBrevForhåndsvisningDTO => ({
                 fritekst: brevtekst.getValue(),
                 // Backend vil ignorere perioden dersom vedtaket er avslag, og hvis tilstanden er tilBeslutter (senere enn under behandling)

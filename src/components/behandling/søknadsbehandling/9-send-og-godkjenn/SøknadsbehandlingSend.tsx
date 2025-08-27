@@ -5,7 +5,13 @@ import {
 import { useSøknadsbehandling } from '../../BehandlingContext';
 import { søknadsbehandlingValidering } from './søknadsbehandlingValidering';
 import { BehandlingSendOgGodkjenn } from '~/components/behandling/felles/send-og-godkjenn/BehandlingSendOgGodkjenn';
-import { SøknadsbehandlingVedtakDTO } from '~/types/VedtakTyper';
+import {
+    BehandlingResultatDTO,
+    SøknadsbehandlingVedtakAvslagDTO,
+    SøknadsbehandlingVedtakDTO,
+    SøknadsbehandlingVedtakIkkeValgtDTO,
+    SøknadsbehandlingVedtakInnvilgelseDTO,
+} from '~/types/VedtakTyper';
 import { SøknadsbehandlingResultat } from '~/types/BehandlingTypes';
 import { useHentBehandlingLagringProps } from '~/components/behandling/felles/send-og-godkjenn/lagre/useHentBehandlingLagringProps';
 
@@ -16,13 +22,13 @@ export const SøknadsbehandlingSend = () => {
     const lagringProps = useHentBehandlingLagringProps({
         hentDTO: () => tilDTO(vedtak),
         vedtak,
-        validerVedtak: () => søknadsbehandlingValidering(behandling, vedtak),
+        validerVedtak: søknadsbehandlingValidering(behandling, vedtak),
     });
 
     return <BehandlingSendOgGodkjenn behandling={behandling} lagringProps={lagringProps} />;
 };
 
-const tilDTO = (vedtak: SøknadsbehandlingVedtakContext): SøknadsbehandlingVedtakDTO | null => {
+const tilDTO = (vedtak: SøknadsbehandlingVedtakContext): SøknadsbehandlingVedtakDTO => {
     switch (vedtak.resultat) {
         case SøknadsbehandlingResultat.INNVILGELSE:
             return {
@@ -45,18 +51,21 @@ const tilDTO = (vedtak: SøknadsbehandlingVedtakContext): SøknadsbehandlingVedt
                         },
                     }),
                 ),
-                resultat: vedtak.resultat,
-            };
+                resultat: BehandlingResultatDTO.INNVILGELSE,
+            } satisfies SøknadsbehandlingVedtakInnvilgelseDTO;
         case SøknadsbehandlingResultat.AVSLAG:
             return {
                 avslagsgrunner: vedtak.avslagsgrunner!,
                 begrunnelseVilkårsvurdering: vedtak.textAreas.begrunnelse.getValue(),
                 fritekstTilVedtaksbrev: vedtak.textAreas.brevtekst.getValue(),
-                valgteTiltaksdeltakelser: vedtak.valgteTiltaksdeltakelser,
-                resultat: vedtak.resultat,
-            };
+                resultat: BehandlingResultatDTO.AVSLAG,
+            } satisfies SøknadsbehandlingVedtakAvslagDTO;
         case null:
-            return null;
+            return {
+                begrunnelseVilkårsvurdering: vedtak.textAreas.begrunnelse.getValue(),
+                fritekstTilVedtaksbrev: vedtak.textAreas.brevtekst.getValue(),
+                resultat: BehandlingResultatDTO.IKKE_VALGT,
+            } satisfies SøknadsbehandlingVedtakIkkeValgtDTO;
     }
 
     throw new Error(

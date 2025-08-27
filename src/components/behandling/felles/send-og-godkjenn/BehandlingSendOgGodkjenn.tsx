@@ -21,9 +21,9 @@ import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { BehandlingSettPåVent } from '~/components/behandling/felles/send-og-godkjenn/sett-på-vent/BehandlingSettPåVent';
 import { BehandlingGjenoppta } from '~/components/behandling/felles/send-og-godkjenn/gjenoppta/BehandlingGjenoppta';
 import { skalKunneGjenopptaBehandling } from '~/utils/tilganger';
+import { formaterTidspunkt } from '~/utils/date';
 
 import style from './BehandlingSendOgGodkjenn.module.css';
-import { formaterTidspunkt } from '~/utils/date';
 
 type Props = {
     behandling: BehandlingData;
@@ -41,12 +41,18 @@ export const BehandlingSendOgGodkjenn = ({ behandling, lagringProps }: Props) =>
 
     const [lagringResultat, setLagringResultat] = useState<BehandlingLagringResultat>('ok');
 
-    const { validerOgHentVedtakDTO, isDirty } = lagringProps;
+    const { validerOgHentLagringDTO, validerVedtak, isDirty } = lagringProps;
 
-    const hentVedtakDTO = () => {
-        const { valideringResultat, vedtakDTO } = validerOgHentVedtakDTO();
+    const validerOgHentDTO = () => {
+        const { valideringResultat, vedtakDTO } = validerOgHentLagringDTO('lagring');
         setValideringResultat(valideringResultat);
         return vedtakDTO;
+    };
+
+    const validerTilBeslutning = () => {
+        const valideringResultat = validerVedtak('tilBeslutning');
+        setValideringResultat(valideringResultat);
+        return valideringResultat.errors.length === 0;
     };
 
     const erSaksbehandler = rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER;
@@ -87,7 +93,7 @@ export const BehandlingSendOgGodkjenn = ({ behandling, lagringProps }: Props) =>
                             {isDirty && (
                                 <BehandlingLagreKnapp
                                     behandling={behandling}
-                                    hentVedtakDTO={hentVedtakDTO}
+                                    hentVedtakDTO={validerOgHentDTO}
                                     onSuccess={() => {
                                         setLagringResultat('ok');
                                     }}
@@ -98,7 +104,7 @@ export const BehandlingSendOgGodkjenn = ({ behandling, lagringProps }: Props) =>
                             )}
                             <BehandlingSendTilBeslutning
                                 behandling={behandling}
-                                hentVedtakDto={hentVedtakDTO}
+                                valider={validerTilBeslutning}
                                 disabled={valideringResultat.errors.length > 0 || isDirty}
                             />
                         </HStack>

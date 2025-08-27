@@ -5,8 +5,7 @@ import {
 } from '../RevurderingStansVedtakContext';
 import React from 'react';
 import { revurderingStansValidering } from '../revurderingStansValidering';
-import { RevurderingVedtakStansDTO } from '~/types/VedtakTyper';
-import { RevurderingResultat } from '~/types/BehandlingTypes';
+import { BehandlingResultatDTO, RevurderingVedtakStansDTO } from '~/types/VedtakTyper';
 import { BehandlingSendOgGodkjenn } from '~/components/behandling/felles/send-og-godkjenn/BehandlingSendOgGodkjenn';
 import { useHentBehandlingLagringProps } from '~/components/behandling/felles/send-og-godkjenn/lagre/useHentBehandlingLagringProps';
 
@@ -25,7 +24,7 @@ export const RevurderingStansSend = () => {
 
 const tilDTO = (vedtak: RevurderingStansVedtakContext): RevurderingVedtakStansDTO => {
     return {
-        resultat: RevurderingResultat.STANS,
+        resultat: BehandlingResultatDTO.STANS,
         begrunnelseVilkårsvurdering: vedtak.textAreas.begrunnelse.getValue(),
         fritekstTilVedtaksbrev: vedtak.textAreas.brevtekst.getValue(),
         stansFraOgMed: vedtak.stansdato,

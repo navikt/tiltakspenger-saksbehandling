@@ -4,17 +4,15 @@ import { useBehandling } from '../../../BehandlingContext';
 import { BehandlingData } from '~/types/BehandlingTypes';
 import { BekreftelsesModal } from '../../../../modaler/BekreftelsesModal';
 import { useSendBehandlingTilBeslutning } from '~/components/behandling/felles/send-og-godkjenn/send-til-beslutning/useSendBehandlingTilBeslutning';
-import { BehandlingVedtakDTO } from '~/types/VedtakTyper';
-import { Nullable } from '~/types/UtilTypes';
 import { useNotification } from '~/context/NotificationContext';
 
 type Props = {
     behandling: BehandlingData;
-    hentVedtakDto: () => Nullable<BehandlingVedtakDTO>;
+    valider: () => boolean;
     disabled: boolean;
 };
 
-export const BehandlingSendTilBeslutning = ({ behandling, hentVedtakDto, disabled }: Props) => {
+export const BehandlingSendTilBeslutning = ({ behandling, valider, disabled }: Props) => {
     const { sendTilBeslutning, sendTilBeslutningLaster, sendTilBeslutningError } =
         useSendBehandlingTilBeslutning(behandling);
     const { navigateWithNotification } = useNotification();
@@ -26,9 +24,7 @@ export const BehandlingSendTilBeslutning = ({ behandling, hentVedtakDto, disable
         <>
             <Button
                 onClick={() => {
-                    // midlertidig løsning for å kjøre valideringsfunksjonen når saksbehandler klikker på send til beslutter
-                    const vedtakDto = hentVedtakDto();
-                    if (vedtakDto) {
+                    if (valider()) {
                         setVisSendTilBeslutningModal(true);
                     }
                 }}
@@ -46,12 +42,6 @@ export const BehandlingSendTilBeslutning = ({ behandling, hentVedtakDto, disable
                         variant={'primary'}
                         loading={sendTilBeslutningLaster}
                         onClick={() => {
-                            const vedtakDto = hentVedtakDto();
-
-                            if (!vedtakDto) {
-                                return;
-                            }
-
                             sendTilBeslutning().then((oppdatertBehandling) => {
                                 if (oppdatertBehandling) {
                                     setBehandling(oppdatertBehandling);

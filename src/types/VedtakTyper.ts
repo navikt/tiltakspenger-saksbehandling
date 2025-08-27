@@ -2,9 +2,7 @@ import {
     AntallDagerForMeldeperiode,
     Avslagsgrunn,
     BehandlingId,
-    BehandlingResultat,
     RevurderingResultat,
-    SøknadsbehandlingResultat,
 } from './BehandlingTypes';
 import { Nullable } from '~/types/UtilTypes';
 import { Periode } from './Periode';
@@ -12,14 +10,22 @@ import { BarnetilleggData, VedtakBarnetilleggDTO } from './Barnetillegg';
 
 export type VedtakId = `vedtak_${string}`;
 
+export enum BehandlingResultatDTO {
+    AVSLAG = 'AVSLAG',
+    INNVILGELSE = 'INNVILGELSE',
+    IKKE_VALGT = 'IKKE_VALGT',
+    STANS = 'STANS',
+    REVURDERING_INNVILGELSE = 'REVURDERING_INNVILGELSE',
+}
+
 interface BehandlingVedtakBaseDTO {
-    resultat: BehandlingResultat;
+    resultat: BehandlingResultatDTO;
     fritekstTilVedtaksbrev: string;
     begrunnelseVilkårsvurdering: string;
 }
 
 export interface SøknadsbehandlingVedtakInnvilgelseDTO extends BehandlingVedtakBaseDTO {
-    resultat: SøknadsbehandlingResultat.INNVILGELSE;
+    resultat: BehandlingResultatDTO.INNVILGELSE;
     innvilgelsesperiode: Periode;
     valgteTiltaksdeltakelser: VedtakTiltaksdeltakelsePeriode[];
     antallDagerPerMeldeperiodeForPerioder: AntallDagerForMeldeperiode[];
@@ -27,23 +33,27 @@ export interface SøknadsbehandlingVedtakInnvilgelseDTO extends BehandlingVedtak
 }
 
 export interface SøknadsbehandlingVedtakAvslagDTO extends BehandlingVedtakBaseDTO {
-    resultat: SøknadsbehandlingResultat.AVSLAG;
+    resultat: BehandlingResultatDTO.AVSLAG;
     avslagsgrunner: Avslagsgrunn[];
-    valgteTiltaksdeltakelser: VedtakTiltaksdeltakelsePeriode[];
+}
+
+export interface SøknadsbehandlingVedtakIkkeValgtDTO extends BehandlingVedtakBaseDTO {
+    resultat: BehandlingResultatDTO.IKKE_VALGT;
 }
 
 export type SøknadsbehandlingVedtakDTO =
     | SøknadsbehandlingVedtakInnvilgelseDTO
-    | SøknadsbehandlingVedtakAvslagDTO;
+    | SøknadsbehandlingVedtakAvslagDTO
+    | SøknadsbehandlingVedtakIkkeValgtDTO;
 
 export interface RevurderingVedtakStansDTO extends BehandlingVedtakBaseDTO {
-    resultat: RevurderingResultat.STANS;
+    resultat: BehandlingResultatDTO.STANS;
     valgteHjemler: string[];
     stansFraOgMed: string;
 }
 
 export interface RevurderingVedtakInnvilgelseDTO extends BehandlingVedtakBaseDTO {
-    resultat: RevurderingResultat.REVURDERING_INNVILGELSE;
+    resultat: BehandlingResultatDTO.REVURDERING_INNVILGELSE;
     innvilgelsesperiode: Periode;
     valgteTiltaksdeltakelser: VedtakTiltaksdeltakelsePeriode[];
     antallDagerPerMeldeperiodeForPerioder: AntallDagerForMeldeperiode[];

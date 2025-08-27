@@ -5,8 +5,7 @@ import {
     RevurderingInnvilgelseVedtakContext,
     useRevurderingInnvilgelseSkjema,
 } from '~/components/behandling/revurdering/innvilgelse/context/RevurderingInnvilgelseVedtakContext';
-import { RevurderingVedtakInnvilgelseDTO } from '~/types/VedtakTyper';
-import { RevurderingResultat } from '~/types/BehandlingTypes';
+import { BehandlingResultatDTO, RevurderingVedtakInnvilgelseDTO } from '~/types/VedtakTyper';
 import { revurderingInnvilgelseValidering } from '~/components/behandling/revurdering/innvilgelse/revurderingInnvilgelseValidering';
 import { useSak } from '~/context/sak/SakContext';
 
@@ -26,7 +25,7 @@ export const RevurderingInnvilgelseSend = () => {
 
 const tilDTO = (vedtak: RevurderingInnvilgelseVedtakContext): RevurderingVedtakInnvilgelseDTO => {
     return {
-        resultat: RevurderingResultat.REVURDERING_INNVILGELSE,
+        resultat: BehandlingResultatDTO.REVURDERING_INNVILGELSE,
         begrunnelseVilkårsvurdering: vedtak.textAreas.begrunnelse.getValue(),
         fritekstTilVedtaksbrev: vedtak.textAreas.brevtekst.getValue(),
         innvilgelsesperiode: vedtak.behandlingsperiode,
