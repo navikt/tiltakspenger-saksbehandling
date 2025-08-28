@@ -1,19 +1,19 @@
 import { BodyShort, Heading } from '@navikt/ds-react';
-import { alderFraDato, formaterDatotekst } from '../../../utils/date';
+import { alderFraDato, formaterDatotekst } from '~/utils/date';
 import { ReactNode } from 'react';
 import { useBehandling } from '../BehandlingContext';
 import { Separator } from '../../separator/Separator';
-import { SaksbehandlerRolle } from '../../../types/Saksbehandler';
+import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { BehandlingOppdaterSaksopplysninger } from './oppdater-saksopplysninger/BehandlingOppdaterSaksopplysninger';
 import { BehandlingSaksopplysning } from './BehandlingSaksopplysning';
-import { Behandlingstype } from '../../../types/BehandlingTypes';
+import { Behandlingstype } from '~/types/BehandlingTypes';
 import { BehandlingTiltakOpplysninger } from './tiltak/BehandlingTiltakOpplysninger';
-
-import style from './BehandlingSaksopplysninger.module.css';
 import OppsummeringAvAttesteringer from '../../attestering/OppsummeringAvAttestering';
-import { hentTiltaksperiode } from '../../../utils/behandling';
+import { hentTiltaksperiode } from '~/utils/behandling';
 import OppsummeringAvSøknad from '../../oppsummeringer/oppsummeringAvSøknad/OppsummeringAvSøknad';
 import { BehandlingYtelserOpplysninger } from '~/components/behandling/saksopplysninger/ytelser/BehandlingYtelserOpplysninger';
+
+import style from './BehandlingSaksopplysninger.module.css';
 
 export const BehandlingSaksopplysninger = () => {
     const { behandling, rolleForBehandling } = useBehandling();
@@ -22,7 +22,7 @@ export const BehandlingSaksopplysninger = () => {
     const harYtelser = ytelser && ytelser.length > 0;
 
     return (
-        <div>
+        <>
             {rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER && (
                 <BehandlingOppdaterSaksopplysninger />
             )}
@@ -45,7 +45,7 @@ export const BehandlingSaksopplysninger = () => {
                 />
             </OpplysningerSeksjon>
             {type === Behandlingstype.SØKNADSBEHANDLING && (
-                <div>
+                <>
                     <Separator />
                     <OpplysningerSeksjon header={'Fra søknad'}>
                         <OppsummeringAvSøknad
@@ -53,15 +53,15 @@ export const BehandlingSaksopplysninger = () => {
                             søknad={behandling.søknad}
                         />
                     </OpplysningerSeksjon>
-                </div>
+                </>
             )}
             {behandling.attesteringer.length > 0 && (
-                <div>
+                <>
                     <Separator />
                     <OppsummeringAvAttesteringer attesteringer={behandling.attesteringer} />
-                </div>
+                </>
             )}
-        </div>
+        </>
     );
 };
 

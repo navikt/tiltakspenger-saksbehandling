@@ -1,19 +1,19 @@
 import React from 'react';
-import { SøknadForBehandlingProps } from '../../../types/SøknadTypes';
-import { Periode } from '../../../types/Periode';
-import { useConfig } from '../../../context/ConfigContext';
-import { singleOrFirst } from '../../../utils/array';
+import { SøknadForBehandlingProps } from '~/types/SøknadTypes';
+import { Periode } from '~/types/Periode';
+import { useConfig } from '~/context/ConfigContext';
+import { singleOrFirst } from '~/utils/array';
 import {
     BehandlingSaksopplysning,
     BehandlingSaksopplysningMedPeriode,
 } from '../../behandling/saksopplysninger/BehandlingSaksopplysning';
-import { formaterDatotekst, periodeTilFormatertDatotekst } from '../../../utils/date';
+import { formaterDatotekst, periodeTilFormatertDatotekst } from '~/utils/date';
 import { SøknadOpplysningerPengestøtter } from '../../behandling/saksopplysninger/søknad/SøknadOpplysningerPengestøtter';
 import { SøknadOpplysningerBarn } from '../../behandling/saksopplysninger/søknad/SøknadOpplysningerBarn';
 import { Alert, Box, Heading, Link, VStack } from '@navikt/ds-react';
+import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
 
 import styles from './OppsummeringAvSøknad.module.css';
-import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
 
 interface Props {
     /** Behandlingens tiltaksperiode, eller det som er på søknad hvis behandling er enda ikke opprettet */
