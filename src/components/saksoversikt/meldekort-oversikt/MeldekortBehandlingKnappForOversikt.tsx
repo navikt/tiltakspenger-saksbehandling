@@ -48,6 +48,7 @@ export const MeldekortBehandlingKnappForOversikt = ({
     switch (status) {
         case MeldekortBehandlingStatus.UNDER_BEHANDLING:
         case MeldekortBehandlingStatus.UNDER_BESLUTNING:
+        case MeldekortBehandlingStatus.KLAR_TIL_BEHANDLING:
             if (!eierMeldekortBehandling(meldekortBehandling, innloggetSaksbehandler)) {
                 if (
                     innloggetSaksbehandler.navIdent === meldekortBehandling.saksbehandler ||
