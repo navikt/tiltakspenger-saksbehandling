@@ -5,6 +5,7 @@ import {
     MeldekortBehandlingProps,
 } from '../../types/meldekort/MeldekortBehandling';
 import { sorterMeldekortBehandlingerAsc } from '../../utils/meldekort';
+import { BrukersMeldekortProps } from '~/types/meldekort/BrukersMeldekort';
 
 export type MeldeperioderContextState = {
     meldeperiodeKjede: MeldeperiodeKjedeProps;
@@ -17,6 +18,7 @@ export type MeldeperioderContextState = {
     sisteMeldekortBehandling?: MeldekortBehandlingProps;
     tidligereMeldekortBehandlinger: MeldekortBehandlingProps[];
     avbrutteMeldekortBehandlinger: MeldekortBehandlingProps[];
+    brukersMeldekort: BrukersMeldekortProps[];
 };
 
 export const MeldeperiodeKjedeContext = createContext<MeldeperioderContextState>(
@@ -66,6 +68,7 @@ export const MeldeperiodeKjedeProvider = ({
                 sisteMeldekortBehandling,
                 tidligereMeldekortBehandlinger,
                 avbrutteMeldekortBehandlinger,
+                brukersMeldekort: meldeperiodeKjede.brukersMeldekort,
             }}
         >
             {children}
