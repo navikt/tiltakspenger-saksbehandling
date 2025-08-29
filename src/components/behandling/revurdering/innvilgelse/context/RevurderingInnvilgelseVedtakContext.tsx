@@ -64,7 +64,9 @@ const initieltVedtakSkjema = ({
     const behandlingsperiode = behandling.virkningsperiode ?? tiltaksperiode;
     const barnetilleggPerioder =
         behandling.barnetillegg?.perioder ??
-        hentBarnetilleggFraVedtakTidslinje(sak.tidslinje, behandlingsperiode);
+        hentBarnetilleggFraVedtakTidslinje(sak.tidslinje, behandlingsperiode).filter(
+            (it) => it.antallBarn > 0,
+        );
 
     return {
         behandlingsperiode,

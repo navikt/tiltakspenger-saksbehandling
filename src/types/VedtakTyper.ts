@@ -100,5 +100,6 @@ export type Rammevedtak = {
     beslutter: string;
     // TODO jah: Denne blir en periodisering. På samme måte som behandlingen. Brukes for å vises i tidslinja.
     antallDagerPerMeldeperiode: number;
+    // Inkluderer perioder med 0 barn
     barnetillegg: Nullable<BarnetilleggData>;
 };

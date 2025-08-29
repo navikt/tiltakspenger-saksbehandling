@@ -18,6 +18,7 @@ import { meldeperiodeUrl } from '~/utils/urls';
 import { useTidslinjeDateRange } from '~/components/behandling/tidslinje/useTidslinjeDateRange';
 
 import style from './BehandlingerTidslinje.module.css';
+import { tellAntallBarnFraVedtak } from '~/components/behandling/felles/barnetillegg/utils/tellAntallBarnFraVedtak';
 
 type Props = {
     sak: SakProps;
@@ -73,11 +74,12 @@ export const BehandlingerTidslinje = ({ sak }: Props) => {
                             saksbehandler,
                             beslutter,
                             antallDagerPerMeldeperiode,
-                            barnetillegg,
                         } = vedtak;
 
                         const { fraOgMed, tilOgMed } = periode;
                         const erInnvilgelse = vedtaksType === Vedtakstype.INNVILGELSE;
+
+                        const barn = tellAntallBarnFraVedtak(vedtak);
 
                         return (
                             <Timeline.Period
@@ -119,7 +121,11 @@ export const BehandlingerTidslinje = ({ sak }: Props) => {
                                         />
                                         <InfoElement
                                             navn={'Har barnetillegg'}
-                                            verdi={barnetillegg ? 'Ja' : 'Nei'}
+                                            verdi={
+                                                barn
+                                                    ? `Ja (${barn.minBarn}${barn.minBarn != barn.maxBarn ? ` - ${barn.maxBarn}` : ''} barn)`
+                                                    : 'Nei'
+                                            }
                                         />
                                     </div>
                                     <div>
