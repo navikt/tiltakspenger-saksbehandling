@@ -1,4 +1,4 @@
-import { BodyShort, Timeline } from '@navikt/ds-react';
+import { Alert, BodyShort, Timeline } from '@navikt/ds-react';
 import { Periode } from '~/types/Periode';
 import { useSak } from '~/context/sak/SakContext';
 import { hentBarnetilleggFraVedtakTidslinje } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraVedtakTidslinje';
@@ -17,7 +17,11 @@ export const BarnetilleggTidslinje = ({ behandlingsperiode }: Props) => {
     const barnetillegg = hentBarnetilleggFraVedtakTidslinje(sak.tidslinje, behandlingsperiode);
 
     if (barnetillegg.length === 0) {
-        return null;
+        return (
+            <Alert variant={'info'} size={'small'} inline={true}>
+                {'Ingen tidligere vedtak om barnetillegg innenfor valgt innvilgelsesperiode'}
+            </Alert>
+        );
     }
 
     const startDate = new Date(behandlingsperiode.fraOgMed);
@@ -25,7 +29,7 @@ export const BarnetilleggTidslinje = ({ behandlingsperiode }: Props) => {
 
     return (
         <Timeline startDate={startDate} endDate={endDate}>
-            <Timeline.Row label={'Tidligere vedtak:'}>
+            <Timeline.Row label={'Gjeldende vedtak:'}>
                 {barnetillegg.map((bt) => {
                     const { periode, antallBarn } = bt;
 
