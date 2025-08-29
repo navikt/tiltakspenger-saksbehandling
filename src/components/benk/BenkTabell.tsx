@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, CopyButton, HStack, Table } from '@navikt/ds-react';
+import { BodyShort, Button, CopyButton, HStack, Table, Tag } from '@navikt/ds-react';
 import SortableTable from '../tabell/SortableTable';
 import {
     BehandlingssammendragKolonner,
@@ -9,7 +9,7 @@ import {
 import { formaterTidspunkt } from '~/utils/date';
 import NextLink from 'next/link';
 import { ValueOf } from 'next/dist/shared/lib/constants';
-import { BenkOversiktResponse } from '~/types/Behandlingssammendrag';
+import { BehandlingssammendragType, BenkOversiktResponse } from '~/types/Behandlingssammendrag';
 
 type Props = {
     data: BenkOversiktResponse;
@@ -74,7 +74,20 @@ const BenkTabell = ({ data, sorteringRetning, onSortChange }: Props) => {
                                 </HStack>
                             </Table.HeaderCell>
                             <Table.DataCell>
-                                {behandlingstypeTextFormatter[behandling.behandlingstype]}
+                                <HStack gap="2">
+                                    <BodyShort>
+                                        {behandlingstypeTextFormatter[behandling.behandlingstype]}
+                                    </BodyShort>
+                                    {(behandling.behandlingstype ===
+                                        BehandlingssammendragType.SØKNADSBEHANDLING ||
+                                        behandling.behandlingstype ===
+                                            BehandlingssammendragType.REVURDERING) &&
+                                        behandling.erSattPåVent && (
+                                            <Tag size="small" variant={'error-moderate'}>
+                                                Venter
+                                            </Tag>
+                                        )}
+                                </HStack>
                             </Table.DataCell>
                             <Table.DataCell>
                                 {behandling.status

@@ -1,7 +1,7 @@
 import { Nullable } from '~/types/UtilTypes';
 
 export interface BenkOversiktRequest {
-    benktype: BehandlingssammendragBenktype;
+    benktype: Nullable<BehandlingssammendragBenktype[]>;
     behandlingstype: Nullable<BehandlingssammendragType[]>;
     status: Nullable<BehandlingssammendragStatus[]>;
     sortering: string;
@@ -24,6 +24,7 @@ export interface Behandlingssammendrag {
     saksbehandler: Nullable<string>;
     beslutter: Nullable<string>;
     sistEndret?: string;
+    erSattPåVent: boolean;
 }
 
 export enum BehandlingssammendragType {

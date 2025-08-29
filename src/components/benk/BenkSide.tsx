@@ -20,7 +20,7 @@ import { BehandlingssammendragKolonner } from './BenkSideUtils';
 import styles from './BenkSide.module.css';
 
 type Filters = {
-    benktype: BehandlingssammendragBenktype;
+    benktype: BehandlingssammendragBenktype | 'Alle';
     type: BehandlingssammendragType | 'Alle';
     status: BehandlingssammendragStatus | 'Alle';
     saksbehandler: string | 'Alle' | 'IKKE_TILDELT';
@@ -37,13 +37,14 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
     const bannerRef = useRef<NotificationBannerRef>(null);
     const { innloggetSaksbehandler } = useSaksbehandler();
 
+    const benktypeParam = searchParams.get('benktype') as BehandlingssammendragBenktype | null;
     const typeParam = searchParams.get('type') as BehandlingssammendragType | null;
     const statusParam = searchParams.get('status') as BehandlingssammendragStatus | null;
     const saksbehandlerParam = searchParams.get('saksbehandler') as string | null;
     const sorteringRetningParam = searchParams.get('sortering') as 'ASC' | 'DESC' | null;
 
     const [filters, setFilters] = useState<Filters>({
-        benktype: BehandlingssammendragBenktype.KLAR,
+        benktype: benktypeParam ?? 'Alle',
         type: typeParam ?? 'Alle',
         status: statusParam ?? 'Alle',
         saksbehandler: saksbehandlerParam ?? 'Alle',
@@ -64,7 +65,7 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
         if (firstLoadRef.current) {
             firstLoadRef.current = false;
             fetchOversikt.trigger({
-                benktype: filters.benktype,
+                benktype: filters.benktype === 'Alle' ? null : [filters.benktype],
                 behandlingstype: filters.type === 'Alle' ? null : [filters.type],
                 status: filters.status === 'Alle' ? null : [filters.status],
                 identer: filters.saksbehandler === 'Alle' ? null : [filters.saksbehandler],
@@ -76,8 +77,10 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
 
     const handleOppdaterFilter = () => {
         const query = new URLSearchParams(searchParams.toString());
-        if (filters.benktype) {
+        if (filters.benktype !== 'Alle') {
             query.set('benktype', filters.benktype);
+        } else {
+            query.delete('benktype');
         }
         if (filters.type !== 'Alle') {
             query.set('type', filters.type);
@@ -103,7 +106,7 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
         router.push({ pathname: router.pathname, search: query.toString() });
         bannerRef.current?.clearMessage();
         fetchOversikt.trigger({
-            benktype: filters.benktype,
+            benktype: filters.benktype === 'Alle' ? null : [filters.benktype],
             behandlingstype: filters.type === 'Alle' ? null : [filters.type],
             status: filters.status === 'Alle' ? null : [filters.status],
             identer: filters.saksbehandler === 'Alle' ? null : [filters.saksbehandler],
@@ -113,14 +116,14 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
 
     const handleNullstillFilter = () => {
         setFilters({
-            benktype: BehandlingssammendragBenktype.KLAR,
+            benktype: 'Alle',
             type: 'Alle',
             status: 'Alle',
             saksbehandler: 'Alle',
         });
         router.push({ pathname: router.pathname });
         fetchOversikt.trigger({
-            benktype: BehandlingssammendragBenktype.KLAR,
+            benktype: null,
             behandlingstype: null,
             status: null,
             identer: null,
@@ -172,7 +175,7 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
                     });
 
                     fetchOversikt.trigger({
-                        benktype: filters.benktype,
+                        benktype: filters.benktype === 'Alle' ? null : [filters.benktype],
                         behandlingstype: filters.type === 'Alle' ? null : [filters.type],
                         status: filters.status === 'Alle' ? null : [filters.status],
                         identer: filters.saksbehandler === 'Alle' ? null : [filters.saksbehandler],

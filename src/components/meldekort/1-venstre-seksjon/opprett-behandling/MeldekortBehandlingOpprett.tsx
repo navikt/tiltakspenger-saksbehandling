@@ -46,24 +46,32 @@ export const MeldekortBehandlingOpprett = ({ type }: Props) => {
                 </Alert>
             ) : (
                 <>
-                    {periodeMedÅpenBehandling && (
-                        <Alert
-                            variant={'warning'}
-                            inline={true}
-                            size={'small'}
-                            className={styles.varsel}
-                        >
-                            {`Det finnes allerede en åpen meldekortbehandling på saken - se `}
-                            <Link
-                                as={NextLink}
-                                href={meldeperiodeUrl(saksnummer, periodeMedÅpenBehandling)}
+                    {periodeMedÅpenBehandling &&
+                        periodeMedÅpenBehandling.fraOgMed !== meldeperiodeKjede.periode.fraOgMed &&
+                        periodeMedÅpenBehandling.tilOgMed !==
+                            meldeperiodeKjede.periode.tilOgMed && (
+                            <Alert
+                                variant={'warning'}
+                                inline={true}
+                                size={'small'}
+                                className={styles.varsel}
                             >
-                                {periodeTilFormatertDatotekst(periodeMedÅpenBehandling)}
-                            </Link>
-                        </Alert>
-                    )}
+                                {`Det finnes allerede en åpen meldekortbehandling på saken - se `}
+                                <Link
+                                    as={NextLink}
+                                    href={meldeperiodeUrl(saksnummer, periodeMedÅpenBehandling)}
+                                >
+                                    {periodeTilFormatertDatotekst(periodeMedÅpenBehandling)}
+                                </Link>
+                            </Alert>
+                        )}
                     <Button
-                        disabled={!!periodeMedÅpenBehandling}
+                        disabled={
+                            !!periodeMedÅpenBehandling &&
+                            periodeMedÅpenBehandling.fraOgMed !==
+                                meldeperiodeKjede.periode.fraOgMed &&
+                            periodeMedÅpenBehandling.tilOgMed !== meldeperiodeKjede.periode.tilOgMed
+                        }
                         onClick={() => modalRef.current?.showModal()}
                         className={styles.knapp}
                     >

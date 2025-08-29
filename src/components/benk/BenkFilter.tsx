@@ -13,7 +13,7 @@ import {
 import { Saksbehandler } from '~/types/Saksbehandler';
 
 type Filters = {
-    benktype: BehandlingssammendragBenktype;
+    benktype: BehandlingssammendragBenktype | 'Alle';
     type: BehandlingssammendragType | 'Alle';
     status: BehandlingssammendragStatus | 'Alle';
     saksbehandler: string | 'Alle' | 'IKKE_TILDELT';
@@ -49,6 +49,7 @@ const BenkFilter = ({
                     }))
                 }
             >
+                <option value={'Alle'}>Alle</option>
                 <option value={BehandlingssammendragBenktype.KLAR}>Klar</option>
                 <option value={BehandlingssammendragBenktype.VENTER}>Venter</option>
             </Select>
