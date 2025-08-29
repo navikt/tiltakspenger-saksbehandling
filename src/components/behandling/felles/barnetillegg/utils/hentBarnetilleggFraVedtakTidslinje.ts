@@ -13,18 +13,17 @@ export const hentBarnetilleggFraVedtakTidslinje = (
     behandlingsperiode: Periode,
 ): BarnetilleggPeriode[] => {
     const relevanteBarnetilleggsPerioder = tidslinje
-        .filter(
-            (vedtak): vedtak is VedtakMedBarnetillegg =>
-                perioderOverlapper(vedtak.periode, behandlingsperiode) && !!vedtak.barnetillegg,
-        )
+        .filter((vedtak): vedtak is VedtakMedBarnetillegg => !!vedtak.barnetillegg)
         .flatMap((vedtak) =>
-            vedtak.barnetillegg.perioder.map((bt) => ({
-                ...bt,
-                periode: {
-                    fraOgMed: datoMax(bt.periode.fraOgMed, behandlingsperiode.fraOgMed),
-                    tilOgMed: datoMin(bt.periode.tilOgMed, behandlingsperiode.tilOgMed),
-                },
-            })),
+            vedtak.barnetillegg.perioder
+                .filter((bt) => perioderOverlapper(bt.periode, behandlingsperiode))
+                .map((bt) => ({
+                    ...bt,
+                    periode: {
+                        fraOgMed: datoMax(bt.periode.fraOgMed, behandlingsperiode.fraOgMed),
+                        tilOgMed: datoMin(bt.periode.tilOgMed, behandlingsperiode.tilOgMed),
+                    },
+                })),
         );
 
     if (relevanteBarnetilleggsPerioder.length === 0) {

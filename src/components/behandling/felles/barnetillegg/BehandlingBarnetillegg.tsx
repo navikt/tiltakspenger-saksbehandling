@@ -17,6 +17,7 @@ import {
     InnvilgelseState,
 } from '~/components/behandling/felles/state/InnvilgelseState';
 import { OppdaterBarnetilleggRequest, VedtakBarnetilleggDTO } from '~/types/Barnetillegg';
+import { BarnetilleggTidslinje } from '~/components/behandling/felles/barnetillegg/tidslinje/BarnetilleggTidslinje';
 
 import style from './BehandlingBarnetillegg.module.css';
 
@@ -33,7 +34,7 @@ export type BehandlingBarnetilleggProps = {
 
 export const BehandlingBarnetillegg = (props: BehandlingBarnetilleggProps) => {
     const { behandling, dispatch, context, valgTekst } = props;
-    const { harBarnetillegg } = context;
+    const { harBarnetillegg, behandlingsperiode } = context;
 
     const rolle = useRolleForBehandling(behandling);
 
@@ -45,6 +46,10 @@ export const BehandlingBarnetillegg = (props: BehandlingBarnetilleggProps) => {
                         {'Barnetillegg'}
                     </Heading>
                 </VedtakSeksjon.Venstre>
+
+                <VedtakSeksjon.FullBredde className={style.pølseSeksjon}>
+                    <BarnetilleggTidslinje behandlingsperiode={behandlingsperiode} />
+                </VedtakSeksjon.FullBredde>
 
                 <VedtakSeksjon.Venstre>
                     <RadioGroup

@@ -11,3 +11,7 @@
 .høyre {
     grid-column: 2;
 }
+
+.full {
+    grid-column: span 2;
+}

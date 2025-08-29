@@ -19,5 +19,10 @@ const Høyre = ({ children, className }: Props) => {
     return <div className={classNames(style.høyre, className)}>{children}</div>;
 };
 
+const FullBredde = ({ children, className }: Props) => {
+    return <div className={classNames(style.full, className)}>{children}</div>;
+};
+
 VedtakSeksjon.Venstre = Venstre;
 VedtakSeksjon.Høyre = Høyre;
+VedtakSeksjon.FullBredde = FullBredde;

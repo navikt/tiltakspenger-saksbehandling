@@ -22,7 +22,6 @@ export const BehandlingBarnetilleggPerioder = (props: Props) => {
 
     const erSøknadsbehandling = behandling.type === Behandlingstype.SØKNADSBEHANDLING;
 
-    // TODO: burde ha data for barn på revurdering-behandling også
     const antallBarn = erSøknadsbehandling ? behandling.søknad.barnetillegg.length : 1;
 
     return (
