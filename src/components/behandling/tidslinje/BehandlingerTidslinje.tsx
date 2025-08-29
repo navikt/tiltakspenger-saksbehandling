@@ -24,11 +24,11 @@ type Props = {
 };
 
 export const BehandlingerTidslinje = ({ sak }: Props) => {
-    const { vedtakshistorikk, meldeperiodeKjeder, saksnummer } = sak;
+    const { tidslinje, meldeperiodeKjeder, saksnummer } = sak;
 
     const beregninger = meldeperiodeKjeder.map((kjede) => kjede.sisteBeregning).filter(Boolean);
 
-    const { startDate, endDate, scrollTidslinje } = useTidslinjeDateRange(vedtakshistorikk);
+    const { startDate, endDate, scrollTidslinje } = useTidslinjeDateRange(tidslinje);
 
     return (
         <div className={style.wrapper}>
@@ -64,7 +64,7 @@ export const BehandlingerTidslinje = ({ sak }: Props) => {
             </div>
             <Timeline startDate={startDate} endDate={endDate}>
                 <Timeline.Row label={'Vedtak'} icon={<TasklistIcon />}>
-                    {vedtakshistorikk.map((vedtak) => {
+                    {tidslinje.map((vedtak) => {
                         const {
                             id,
                             periode,

@@ -16,5 +16,4 @@ export type SakProps = {
     søknader: SøknadForBehandlingProps[];
     behandlinger: BehandlingData[];
     tidslinje: Rammevedtak[];
-    vedtakshistorikk: Rammevedtak[];
 };
