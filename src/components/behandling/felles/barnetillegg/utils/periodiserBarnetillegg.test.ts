@@ -1,8 +1,8 @@
 import { describe, expect, test } from '@jest/globals';
-import { SøknadBarnKilde } from '../types/SøknadTypes';
-import { Periode } from '../types/Periode';
-import { periodiserBarnetillegg } from './BarnetilleggUtils';
-import { finn16årsdag, forrigeDag } from './date';
+import { SøknadBarnKilde } from '~/types/SøknadTypes';
+import { Periode } from '~/types/Periode';
+import { periodiserBarnetillegg } from './periodiserBarnetillegg';
+import { finn16årsdag, forrigeDag } from '~/utils/date';
 
 const virkningsperiode: Periode = {
     fraOgMed: '2024-07-01',
@@ -14,6 +14,13 @@ const barnSomBlir16FørPerioden = {
     fornavn: 'Ola',
     kilde: SøknadBarnKilde.PDL,
     oppholderSegIEØS: true,
+};
+
+const barnSomIkkeOppholderSegIEØS = {
+    fødselsdato: '2008-06-30',
+    fornavn: 'Ole',
+    kilde: SøknadBarnKilde.PDL,
+    oppholderSegIEØS: false,
 };
 
 const barnSomBlir16TidligIPerioden = {
@@ -237,6 +244,23 @@ describe('Periodiserer barnetillegg fra søknaden', () => {
                 antallBarn: 2,
                 periode: {
                     fraOgMed: barnSomBlirFødtSentIPerioden.fødselsdato,
+                    tilOgMed: virkningsperiode.tilOgMed,
+                },
+            },
+        ]);
+    });
+
+    test('1 barn i EØS hele periode, 1 barn utenfor EØS', () => {
+        const barnetillegg = periodiserBarnetillegg(
+            [barnSomErUnder16HelePerioden, barnSomIkkeOppholderSegIEØS],
+            virkningsperiode,
+        );
+
+        expect(barnetillegg).toEqual([
+            {
+                antallBarn: 1,
+                periode: {
+                    fraOgMed: virkningsperiode.fraOgMed,
                     tilOgMed: virkningsperiode.tilOgMed,
                 },
             },

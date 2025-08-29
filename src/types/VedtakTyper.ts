@@ -6,7 +6,7 @@ import {
 } from './BehandlingTypes';
 import { Nullable } from '~/types/UtilTypes';
 import { Periode } from './Periode';
-import { BarnetilleggData, VedtakBarnetilleggDTO } from './Barnetillegg';
+import { BarnetilleggData, BarnetilleggPeriode, VedtakBarnetilleggDTO } from './Barnetillegg';
 
 export type VedtakId = `vedtak_${string}`;
 
@@ -64,10 +64,7 @@ export type RevurderingVedtakDTO = RevurderingVedtakStansDTO | RevurderingVedtak
 
 export type BehandlingVedtakDTO = SøknadsbehandlingVedtakDTO | RevurderingVedtakDTO;
 
-export type VedtakBarnetilleggPeriode = {
-    antallBarn: number;
-    periode: Periode;
-};
+export type VedtakBarnetilleggPeriode = BarnetilleggPeriode;
 
 export type VedtakTiltaksdeltakelsePeriode = {
     eksternDeltagelseId: string;

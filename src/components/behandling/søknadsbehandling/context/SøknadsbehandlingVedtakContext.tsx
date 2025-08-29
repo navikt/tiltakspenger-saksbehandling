@@ -19,7 +19,7 @@ import {
     hentTiltaksdeltagelseFraSoknad,
     hentTiltaksperiodeFraSøknad,
 } from '~/utils/behandling';
-import { periodiserBarnetillegg } from '~/utils/BarnetilleggUtils';
+import { periodiserBarnetillegg } from '~/components/behandling/felles/barnetillegg/utils/periodiserBarnetillegg';
 import { BarnetilleggBegrunnelseInput } from '~/components/behandling/felles/state/BarnetilleggState';
 import { BegrunnelseOgBrevInput } from '~/components/behandling/felles/state/BegrunnelseOgBrev';
 import { getTextAreaRefValue } from '~/utils/textarea';

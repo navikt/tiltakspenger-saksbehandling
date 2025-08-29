@@ -1,19 +1,22 @@
 import { SøknadBarn } from '~/types/SøknadTypes';
-import { VedtakBarnetilleggPeriode } from '~/types/VedtakTyper';
-import { finn16årsdag, forrigeDag, nesteDag } from './date';
+import { finn16årsdag, forrigeDag, nesteDag } from '~/utils/date';
 import { Periode } from '~/types/Periode';
-import { erDatoIPeriode } from './periode';
-import { removeDuplicates } from './array';
-import { OppdaterBarnetilleggRequest } from '~/types/Barnetillegg';
-import { SøknadsbehandlingVedtakContext } from '~/components/behandling/søknadsbehandling/context/SøknadsbehandlingVedtakContext';
+import { erDatoIPeriode } from '~/utils/periode';
+import { removeDuplicates } from '~/utils/array';
+import { BarnetilleggPeriode } from '~/types/Barnetillegg';
 
 export const periodiserBarnetillegg = (
     barnFraSøknad: SøknadBarn[],
     virkningsperiode: Periode,
-): VedtakBarnetilleggPeriode[] => {
+): BarnetilleggPeriode[] => {
     // Periodene med rett til barnetillegg for hvert barn, innenfor virkningsperioden
     const perioderPerBarn = barnFraSøknad.reduce<Periode[]>((acc, barn) => {
-        const { fødselsdato } = barn;
+        const { fødselsdato, oppholderSegIEØS } = barn;
+
+        if (!oppholderSegIEØS) {
+            return acc;
+        }
+
         const sisteDagFør16År = forrigeDag(finn16årsdag(fødselsdato));
 
         const kanFåBarnetillegg =
@@ -60,23 +63,4 @@ export const periodiserBarnetillegg = (
             };
         })
         .filter((bt) => bt.antallBarn > 0);
-};
-
-export const tilBarnetilleggRequest = (
-    vedtak: SøknadsbehandlingVedtakContext,
-): OppdaterBarnetilleggRequest => {
-    return {
-        innvilgelsesperiode: vedtak.behandlingsperiode,
-        barnetillegg: vedtak.harBarnetillegg
-            ? {
-                  begrunnelse: vedtak.textAreas.barnetilleggBegrunnelse.getValue(),
-                  perioder: vedtak.barnetilleggPerioder,
-              }
-            : null,
-        valgteTiltaksdeltakelser: vedtak.valgteTiltaksdeltakelser,
-        antallDagerPerMeldeperiodeForPerioder: vedtak.antallDagerPerMeldeperiode.map((dager) => ({
-            antallDagerPerMeldeperiode: dager.antallDagerPerMeldeperiode!,
-            periode: { fraOgMed: dager.periode.fraOgMed!, tilOgMed: dager.periode.tilOgMed! },
-        })),
-    };
 };

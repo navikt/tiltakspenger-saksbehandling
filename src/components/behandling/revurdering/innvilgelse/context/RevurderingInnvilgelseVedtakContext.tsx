@@ -16,11 +16,14 @@ import {
 import { useRevurderingBehandling } from '~/components/behandling/BehandlingContext';
 import { Periode } from '~/types/Periode';
 import { VedtakTiltaksdeltakelsePeriode } from '~/types/VedtakTyper';
-import { harSøktBarnetillegg, hentTiltaksdeltakelserMedStartOgSluttdato } from '~/utils/behandling';
+import { hentTiltaksdeltakelserMedStartOgSluttdato } from '~/utils/behandling';
 import { getTextAreaRefValue } from '~/utils/textarea';
 import { BarnetilleggBegrunnelseInput } from '~/components/behandling/felles/state/BarnetilleggState';
 import { BegrunnelseOgBrevInput } from '~/components/behandling/felles/state/BegrunnelseOgBrev';
 import { joinPerioder } from '~/utils/periode';
+import { hentBarnetilleggFraVedtakTidslinje } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraVedtakTidslinje';
+import { useSak } from '~/context/sak/SakContext';
+import { SakProps } from '~/types/SakTypes';
 
 export type RevurderingInnvilgelseVedtakContext = BegrunnelseOgBrevInput &
     BarnetilleggBegrunnelseInput &
@@ -43,7 +46,13 @@ const tilValgteTiltaksdeltakelser = (
         },
     }));
 
-const initieltVedtakSkjema = (behandling: RevurderingData): RevurderingInnvilgelseSkjemaState => {
+const initieltVedtakSkjema = ({
+    behandling,
+    sak,
+}: {
+    behandling: RevurderingData;
+    sak: SakProps;
+}): RevurderingInnvilgelseSkjemaState => {
     const tiltaksdeltagelser: Periode[] = hentTiltaksdeltakelserMedStartOgSluttdato(behandling).map(
         (tiltaksdeltagelse) => ({
             fraOgMed: tiltaksdeltagelse.deltagelseFraOgMed,
@@ -52,19 +61,24 @@ const initieltVedtakSkjema = (behandling: RevurderingData): RevurderingInnvilgel
     );
     const tiltaksperiode: Periode = joinPerioder(tiltaksdeltagelser);
 
+    const behandlingsperiode = behandling.virkningsperiode ?? tiltaksperiode;
+    const barnetilleggPerioder =
+        behandling.barnetillegg?.perioder ??
+        hentBarnetilleggFraVedtakTidslinje(sak.tidslinje, behandlingsperiode);
+
     return {
-        behandlingsperiode: behandling.virkningsperiode ?? tiltaksperiode,
+        behandlingsperiode,
         antallDagerPerMeldeperiode: behandling.antallDagerPerMeldeperiode ?? [
             {
                 antallDagerPerMeldeperiode: 10,
                 periode: {
-                    fraOgMed: behandling.virkningsperiode?.fraOgMed ?? tiltaksperiode.fraOgMed,
-                    tilOgMed: behandling.virkningsperiode?.tilOgMed ?? tiltaksperiode.tilOgMed,
+                    fraOgMed: behandlingsperiode.fraOgMed,
+                    tilOgMed: behandlingsperiode.tilOgMed,
                 },
             },
         ],
-        harBarnetillegg: harSøktBarnetillegg(behandling),
-        barnetilleggPerioder: behandling.barnetillegg?.perioder ?? [],
+        harBarnetillegg: !!behandling.barnetillegg?.perioder,
+        barnetilleggPerioder,
         valgteTiltaksdeltakelser:
             behandling.valgteTiltaksdeltakelser ?? tilValgteTiltaksdeltakelser(behandling),
     };
@@ -72,10 +86,11 @@ const initieltVedtakSkjema = (behandling: RevurderingData): RevurderingInnvilgel
 
 export const RevurderingInnvilgelseVedtakProvider = ({ children }: PropsWithChildren) => {
     const { behandling } = useRevurderingBehandling();
+    const { sak } = useSak();
 
     const [vedtak, dispatch] = useReducer(
         RevurderingInnvilgelseReducer,
-        behandling,
+        { behandling, sak },
         initieltVedtakSkjema,
     );
 

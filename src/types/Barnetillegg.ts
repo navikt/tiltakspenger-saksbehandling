@@ -8,7 +8,7 @@ export type BarnetilleggData = {
     begrunnelse?: string;
 };
 
-type BarnetilleggPeriode = {
+export type BarnetilleggPeriode = {
     antallBarn: number;
     periode: Periode;
 };

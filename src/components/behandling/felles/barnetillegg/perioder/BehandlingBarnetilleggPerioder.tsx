@@ -8,7 +8,7 @@ import { BehandlingBarnetilleggProps } from '~/components/behandling/felles/barn
 import { useRolleForBehandling } from '~/context/saksbehandler/SaksbehandlerContext';
 import { Behandlingstype } from '~/types/BehandlingTypes';
 
-import style from './BarnetilleggPerioder.module.css';
+import style from './BehandlingBarnetilleggPerioder.module.css';
 
 const BATCH_MED_BARN = 10;
 

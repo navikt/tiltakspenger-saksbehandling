@@ -3,11 +3,13 @@ import { Periode } from '../types/Periode';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 import weekday from 'dayjs/plugin/weekday';
 import isBetween from 'dayjs/plugin/isBetween';
+import minMax from 'dayjs/plugin/minMax';
 import 'dayjs/locale/nb';
 
 dayjs.extend(weekday);
 dayjs.extend(weekOfYear);
 dayjs.extend(isBetween);
+dayjs.extend(minMax);
 dayjs.locale('nb');
 
 const DATO_FORMAT = 'YYYY-MM-DD';
@@ -69,4 +71,12 @@ export const overlapperMed = (dato: string | Date, periode: Periode) =>
 
 export const datoTilDatoInputText = (dato: string | Date): string => {
     return dayjs(dato).format('DD.MM.YYYY');
+};
+
+export const datoMin = (...datoer: Array<string | Date>): string => {
+    return dayjs.min(datoer.map(dayjs))!.format(DATO_FORMAT);
+};
+
+export const datoMax = (...datoer: Array<string | Date>): string => {
+    return dayjs.max(datoer.map(dayjs))!.format(DATO_FORMAT);
 };

@@ -20,7 +20,7 @@ const OppsummeringAvAttesteringer = (props: { attesteringer: Attestering[] }) =>
                         className={styles.attesteringContainer}
                     >
                         <VStack gap="2">
-                            <HStack gap="1">
+                            <HStack gap="1" align={'center'}>
                                 {attestering.status === Attesteringsstatus.SENDT_TILBAKE && (
                                     <ExclamationmarkTriangleFillIcon
                                         title="Advarsel-trekant"
@@ -35,11 +35,9 @@ const OppsummeringAvAttesteringer = (props: { attesteringer: Attestering[] }) =>
                                         color="var(--a-green-500)"
                                     />
                                 )}
-                                <BodyShort>
-                                    {formaterTidspunkt(attestering.endretTidspunkt)}
+                                <BodyShort size={'small'}>
+                                    {`${formaterTidspunkt(attestering.endretTidspunkt)} - ${attestering.endretAv}`}
                                 </BodyShort>
-
-                                <BodyShort>- {attestering.endretAv}</BodyShort>
                             </HStack>
                             <BodyShort spacing>{attestering.begrunnelse}</BodyShort>
                         </VStack>
