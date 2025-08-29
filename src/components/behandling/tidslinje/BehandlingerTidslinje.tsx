@@ -69,6 +69,7 @@ export const BehandlingerTidslinje = ({ sak }: Props) => {
                         const {
                             id,
                             periode,
+                            gjeldendePeriode,
                             vedtaksType,
                             vedtaksdato,
                             saksbehandler,
@@ -76,7 +77,10 @@ export const BehandlingerTidslinje = ({ sak }: Props) => {
                             antallDagerPerMeldeperiode,
                         } = vedtak;
 
-                        const { fraOgMed, tilOgMed } = periode;
+                        const { fraOgMed, tilOgMed } = gjeldendePeriode;
+                        const gjeldendePeriodeErEndret =
+                            periode.fraOgMed !== fraOgMed || periode.tilOgMed !== tilOgMed;
+
                         const erInnvilgelse = vedtaksType === Vedtakstype.INNVILGELSE;
 
                         const barn = tellAntallBarnFraVedtak(vedtak);
@@ -112,9 +116,15 @@ export const BehandlingerTidslinje = ({ sak }: Props) => {
                                     </Heading>
                                     <div>
                                         <InfoElement
-                                            navn={'Periode'}
-                                            verdi={`${formaterDatotekst(fraOgMed)} - ${formaterDatotekst(tilOgMed)}`}
+                                            navn={'Gjeldende periode'}
+                                            verdi={periodeTilFormatertDatotekst(gjeldendePeriode)}
                                         />
+                                        {gjeldendePeriodeErEndret && (
+                                            <InfoElement
+                                                navn={'Opprinnelig periode'}
+                                                verdi={periodeTilFormatertDatotekst(periode)}
+                                            />
+                                        )}
                                         <InfoElement
                                             navn={'Antall dager per meldeperiode'}
                                             verdi={antallDagerPerMeldeperiode.toString()}

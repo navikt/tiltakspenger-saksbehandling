@@ -96,6 +96,8 @@ export type Rammevedtak = {
     vedtaksdato: Nullable<string>;
     vedtaksType: Vedtakstype;
     periode: Periode;
+    // Perioden der vedtaket fortsatt er gjeldende for sakens nå-tilstand
+    gjeldendePeriode: Periode;
     saksbehandler: string;
     beslutter: string;
     // TODO jah: Denne blir en periodisering. På samme måte som behandlingen. Brukes for å vises i tidslinja.
