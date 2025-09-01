@@ -3,22 +3,26 @@ import { Periode } from '~/types/Periode';
 import { joinPerioder, perioderOverlapper } from '~/utils/periode';
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';
 import { datoMax, datoMin, nesteDag } from '~/utils/date';
+import { BehandlingId } from '~/types/BehandlingTypes';
 
 type VedtakMedBarnetillegg = Rammevedtak & {
     barnetillegg: NonNullable<Rammevedtak['barnetillegg']>;
 };
 
+type BarnetilleggMedBehandlingId = BarnetilleggPeriode & { behandlingId: BehandlingId };
+
 export const hentBarnetilleggFraVedtakTidslinje = (
     tidslinje: Rammevedtak[],
     behandlingsperiode: Periode,
-): BarnetilleggPeriode[] => {
-    const relevanteBarnetilleggsPerioder = tidslinje
+): BarnetilleggMedBehandlingId[] => {
+    const relevanteBarnetillegg: BarnetilleggMedBehandlingId[] = tidslinje
         .filter((vedtak): vedtak is VedtakMedBarnetillegg => !!vedtak.barnetillegg)
         .flatMap((vedtak) =>
             vedtak.barnetillegg.perioder
                 .filter((bt) => perioderOverlapper(bt.periode, behandlingsperiode))
                 .map((bt) => ({
                     ...bt,
+                    behandlingId: vedtak.behandlingId,
                     periode: {
                         fraOgMed: datoMax(bt.periode.fraOgMed, behandlingsperiode.fraOgMed),
                         tilOgMed: datoMin(bt.periode.tilOgMed, behandlingsperiode.tilOgMed),
@@ -26,11 +30,7 @@ export const hentBarnetilleggFraVedtakTidslinje = (
                 })),
         );
 
-    if (relevanteBarnetilleggsPerioder.length === 0) {
-        return [];
-    }
-
-    return relevanteBarnetilleggsPerioder.reduce<BarnetilleggPeriode[]>((acc, neste) => {
+    return relevanteBarnetillegg.reduce<BarnetilleggMedBehandlingId[]>((acc, neste) => {
         const forrige = acc.at(-1);
         if (!forrige) {
             return [neste];

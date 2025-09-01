@@ -1,9 +1,12 @@
-import { Alert, BodyShort, Timeline } from '@navikt/ds-react';
+import { Alert, BodyShort, Link, Timeline } from '@navikt/ds-react';
 import { Periode } from '~/types/Periode';
 import { useSak } from '~/context/sak/SakContext';
 import { hentBarnetilleggFraVedtakTidslinje } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraVedtakTidslinje';
 import { ChildEyesIcon } from '@navikt/aksel-icons';
 import { periodeTilFormatertDatotekst } from '~/utils/date';
+import NextLink from 'next/link';
+import React from 'react';
+import { behandlingUrl } from '~/utils/urls';
 
 import style from './BarnetilleggTidslinje.module.css';
 
@@ -31,7 +34,7 @@ export const BarnetilleggTidslinje = ({ behandlingsperiode }: Props) => {
         <Timeline startDate={startDate} endDate={endDate}>
             <Timeline.Row label={'Gjeldende vedtak:'}>
                 {barnetillegg.map((bt) => {
-                    const { periode, antallBarn } = bt;
+                    const { periode, antallBarn, behandlingId } = bt;
 
                     const start = new Date(periode.fraOgMed);
                     const end = new Date(periode.tilOgMed);
@@ -53,8 +56,17 @@ export const BarnetilleggTidslinje = ({ behandlingsperiode }: Props) => {
                             }
                             key={periode.fraOgMed}
                         >
-                            <BodyShort size={'small'}>
-                                {`${antallBarn} barn i perioden ${periodeTilFormatertDatotekst(periode)}`}
+                            <BodyShort size={'small'} className={style.detaljer}>
+                                {`${antallBarn} barn i perioden: ${periodeTilFormatertDatotekst(periode)}`}
+                                <Link
+                                    as={NextLink}
+                                    href={behandlingUrl({
+                                        saksnummer: sak.saksnummer,
+                                        id: behandlingId,
+                                    })}
+                                >
+                                    {'Til behandlingen'}
+                                </Link>
                             </BodyShort>
                         </Timeline.Period>
                     );
