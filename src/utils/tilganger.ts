@@ -124,7 +124,7 @@ export const skalKunneTaBehandling = (
     behandling: BehandlingForOversiktData,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
-    const { status, saksbehandler, beslutter } = behandling;
+    const { status, saksbehandler } = behandling;
 
     switch (status) {
         case BehandlingStatus.KLAR_TIL_BESLUTNING:
@@ -133,10 +133,7 @@ export const skalKunneTaBehandling = (
                 innloggetSaksbehandler.navIdent != saksbehandler
             );
         case BehandlingStatus.KLAR_TIL_BEHANDLING:
-            return (
-                erSaksbehandler(innloggetSaksbehandler) &&
-                innloggetSaksbehandler.navIdent != beslutter
-            );
+            return erSaksbehandler(innloggetSaksbehandler);
         default:
             return false;
     }
