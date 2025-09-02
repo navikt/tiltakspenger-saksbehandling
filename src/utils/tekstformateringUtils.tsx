@@ -111,8 +111,8 @@ export const revurderingResultatTekst: Record<RevurderingResultat, string> = {
 
 export const utbetalingsstatusTekst: Record<Utbetalingsstatus, string> = {
     FEILET_MOT_OPPDRAG: 'Feilet mot oppdrag',
-    IKKE_GODKJENT: '-',
-    IKKE_SENDT_TIL_HELVED: '-',
+    IKKE_GODKJENT: 'Ikke godkjent',
+    IKKE_SENDT_TIL_HELVED: 'Ikke sendt til helved',
     OK: 'Sendt til utbetaling',
     OK_UTEN_UTBETALING: 'Ok uten utbetaling',
     SENDT_TIL_HELVED: 'Venter på helved',
