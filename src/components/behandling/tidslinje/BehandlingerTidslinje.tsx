@@ -125,18 +125,22 @@ export const BehandlingerTidslinje = ({ sak }: Props) => {
                                                 verdi={periodeTilFormatertDatotekst(periode)}
                                             />
                                         )}
-                                        <InfoElement
-                                            navn={'Antall dager per meldeperiode'}
-                                            verdi={antallDagerPerMeldeperiode.toString()}
-                                        />
-                                        <InfoElement
-                                            navn={'Har barnetillegg'}
-                                            verdi={
-                                                barn
-                                                    ? `Ja (${barn.minBarn}${barn.minBarn != barn.maxBarn ? ` - ${barn.maxBarn}` : ''} barn)`
-                                                    : 'Nei'
-                                            }
-                                        />
+                                        {erInnvilgelse && (
+                                            <>
+                                                <InfoElement
+                                                    navn={'Antall dager per meldeperiode'}
+                                                    verdi={antallDagerPerMeldeperiode.toString()}
+                                                />
+                                                <InfoElement
+                                                    navn={'Har barnetillegg'}
+                                                    verdi={
+                                                        barn
+                                                            ? `Ja (${barn.minBarn}${barn.minBarn != barn.maxBarn ? ` - ${barn.maxBarn}` : ''} barn)`
+                                                            : 'Nei'
+                                                    }
+                                                />
+                                            </>
+                                        )}
                                     </div>
                                     <div>
                                         <InfoElement

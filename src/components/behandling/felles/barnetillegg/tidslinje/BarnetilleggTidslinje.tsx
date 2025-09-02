@@ -39,20 +39,18 @@ export const BarnetilleggTidslinje = ({ behandlingsperiode }: Props) => {
                     const start = new Date(periode.fraOgMed);
                     const end = new Date(periode.tilOgMed);
 
-                    const erBarnetillegg = antallBarn > 0;
+                    const harBarnetillegg = antallBarn > 0;
 
                     return (
                         <Timeline.Period
                             start={start}
                             end={end}
-                            status={erBarnetillegg ? 'success' : 'neutral'}
+                            status={harBarnetillegg ? 'success' : 'neutral'}
                             icon={
-                                erBarnetillegg && (
-                                    <span className={style.ikon}>
-                                        <ChildEyesIcon />
-                                        <BodyShort size={'small'}>{antallBarn}</BodyShort>
-                                    </span>
-                                )
+                                <span className={style.ikon}>
+                                    {harBarnetillegg && <ChildEyesIcon />}
+                                    <BodyShort size={'small'}>{antallBarn}</BodyShort>
+                                </span>
                             }
                             key={periode.fraOgMed}
                         >
