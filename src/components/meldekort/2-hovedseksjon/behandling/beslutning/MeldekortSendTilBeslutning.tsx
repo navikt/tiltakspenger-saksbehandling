@@ -51,7 +51,6 @@ export const MeldekortSendTilBeslutning = ({
         <>
             <Button
                 type={'button'}
-                size={'small'}
                 onClick={() => {
                     formContext.trigger().then((isValid) => {
                         if (isValid && customValidering()) {

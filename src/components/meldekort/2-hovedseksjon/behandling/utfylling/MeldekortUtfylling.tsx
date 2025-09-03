@@ -119,26 +119,33 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
                             </Alert>
                         )}
                         <HStack justify={'space-between'}>
-                            <MeldekortUtfyllingLagre
-                                meldekortId={meldekortBehandling.id}
-                                sakId={sakId}
-                                hentMeldekortUtfylling={hentMeldekortUtfylling}
-                                customValidering={customValidering}
-                            />
+                            <HStack gap="2">
+                                <AvsluttMeldekortBehandling
+                                    sakId={sakId}
+                                    meldekortBehandlingId={meldekortBehandling.id}
+                                    saksoversiktUrl={meldeperiodeUrl(
+                                        saksnummer,
+                                        meldekortBehandling.periode,
+                                    )}
+                                    buttonProps={{
+                                        size: 'medium',
+                                        variant: 'tertiary',
+                                    }}
+                                />
+                                <MeldekortUtfyllingLagre
+                                    meldekortId={meldekortBehandling.id}
+                                    sakId={sakId}
+                                    hentMeldekortUtfylling={hentMeldekortUtfylling}
+                                    customValidering={customValidering}
+                                />
+                            </HStack>
+
                             <MeldekortSendTilBeslutning
                                 meldekortId={meldekortBehandling.id}
                                 sakId={sakId}
                                 hentMeldekortUtfylling={hentMeldekortUtfylling}
                                 customValidering={customValidering}
                                 saksnummer={saksnummer}
-                            />
-                            <AvsluttMeldekortBehandling
-                                sakId={sakId}
-                                meldekortBehandlingId={meldekortBehandling.id}
-                                saksoversiktUrl={meldeperiodeUrl(
-                                    saksnummer,
-                                    meldekortBehandling.periode,
-                                )}
                             />
                         </HStack>
                     </VStack>

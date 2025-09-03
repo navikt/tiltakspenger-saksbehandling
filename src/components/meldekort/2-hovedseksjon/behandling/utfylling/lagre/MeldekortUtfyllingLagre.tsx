@@ -32,8 +32,7 @@ export const MeldekortUtfyllingLagre = ({
 
     return (
         <Button
-            size={'small'}
-            variant={'secondary'}
+            variant={'tertiary'}
             type={'button'}
             loading={sendLagreMeldekortLaster}
             onClick={() => {

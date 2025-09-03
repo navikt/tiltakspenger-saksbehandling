@@ -1,6 +1,6 @@
 import React, { FormEvent, useRef, useState } from 'react';
 import router from 'next/router';
-import { BodyLong, Button, Heading, HStack, Modal, Textarea } from '@navikt/ds-react';
+import { BodyLong, Button, ButtonProps, Heading, HStack, Modal, Textarea } from '@navikt/ds-react';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { SakId } from '~/types/SakTypes';
 import {
@@ -103,6 +103,10 @@ const AvsluttMeldekortBehandling = (props: {
     sakId: SakId;
     meldekortBehandlingId: MeldekortBehandlingId;
     saksoversiktUrl: string;
+    buttonProps?: {
+        size?: ButtonProps['size'];
+        variant?: ButtonProps['variant'];
+    };
 }) => {
     const [vilAvslutteBehandling, setVilAvslutteBehandling] = useState(false);
 
@@ -119,9 +123,9 @@ const AvsluttMeldekortBehandling = (props: {
             )}
             <Button
                 className={styles.knapp}
-                size="small"
-                variant="danger"
-                type={'button'}
+                size={props.buttonProps?.size ?? 'small'}
+                variant={props.buttonProps?.variant ?? 'danger'}
+                type="button"
                 onClick={() => {
                     setVilAvslutteBehandling(true);
                 }}
