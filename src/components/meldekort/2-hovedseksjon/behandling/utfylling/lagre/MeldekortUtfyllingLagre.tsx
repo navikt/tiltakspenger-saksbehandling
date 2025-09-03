@@ -32,7 +32,7 @@ export const MeldekortUtfyllingLagre = ({
 
     return (
         <Button
-            variant={'tertiary'}
+            variant={'secondary'}
             type={'button'}
             loading={sendLagreMeldekortLaster}
             onClick={() => {

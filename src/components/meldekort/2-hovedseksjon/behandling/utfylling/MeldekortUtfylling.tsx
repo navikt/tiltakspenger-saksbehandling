@@ -119,34 +119,34 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
                             </Alert>
                         )}
                         <HStack justify={'space-between'}>
+                            <AvsluttMeldekortBehandling
+                                sakId={sakId}
+                                meldekortBehandlingId={meldekortBehandling.id}
+                                saksoversiktUrl={meldeperiodeUrl(
+                                    saksnummer,
+                                    meldekortBehandling.periode,
+                                )}
+                                buttonProps={{
+                                    size: 'medium',
+                                    variant: 'tertiary',
+                                }}
+                            />
+
                             <HStack gap="2">
-                                <AvsluttMeldekortBehandling
-                                    sakId={sakId}
-                                    meldekortBehandlingId={meldekortBehandling.id}
-                                    saksoversiktUrl={meldeperiodeUrl(
-                                        saksnummer,
-                                        meldekortBehandling.periode,
-                                    )}
-                                    buttonProps={{
-                                        size: 'medium',
-                                        variant: 'tertiary',
-                                    }}
-                                />
                                 <MeldekortUtfyllingLagre
                                     meldekortId={meldekortBehandling.id}
                                     sakId={sakId}
                                     hentMeldekortUtfylling={hentMeldekortUtfylling}
                                     customValidering={customValidering}
                                 />
+                                <MeldekortSendTilBeslutning
+                                    meldekortId={meldekortBehandling.id}
+                                    sakId={sakId}
+                                    hentMeldekortUtfylling={hentMeldekortUtfylling}
+                                    customValidering={customValidering}
+                                    saksnummer={saksnummer}
+                                />
                             </HStack>
-
-                            <MeldekortSendTilBeslutning
-                                meldekortId={meldekortBehandling.id}
-                                sakId={sakId}
-                                hentMeldekortUtfylling={hentMeldekortUtfylling}
-                                customValidering={customValidering}
-                                saksnummer={saksnummer}
-                            />
                         </HStack>
                     </VStack>
                 </VStack>
