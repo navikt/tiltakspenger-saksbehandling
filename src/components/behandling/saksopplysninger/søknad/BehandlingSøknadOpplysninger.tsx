@@ -30,7 +30,6 @@ export const BehandlingSøknadOpplysninger = ({ tiltaksperiode, søknad }: Props
         etterlønn,
         sykepenger,
         antallVedlegg,
-        visVedlegg,
     } = søknad;
 
     const tiltak = singleOrFirst(tiltakRaw);
@@ -73,19 +72,12 @@ export const BehandlingSøknadOpplysninger = ({ tiltaksperiode, søknad }: Props
                 className={style.spacing}
             />
 
-            {visVedlegg && (
-                <>
-                    <BehandlingSaksopplysning
-                        navn={'Vedlegg'}
-                        verdi={antallVedlegg > 0 ? 'Ja' : 'Nei'}
-                    />
-                    {antallVedlegg > 0 && (
-                        <Alert variant={'warning'} inline={true} size={'small'}>
-                            {'Sjekk vedlegg i '}
-                            <Link href={gosysUrl}>{'gosys'}</Link>
-                        </Alert>
-                    )}
-                </>
+            <BehandlingSaksopplysning navn={'Vedlegg'} verdi={antallVedlegg > 0 ? 'Ja' : 'Nei'} />
+            {antallVedlegg > 0 && (
+                <Alert variant={'warning'} inline={true} size={'small'}>
+                    {'Sjekk vedlegg i '}
+                    <Link href={gosysUrl}>{'gosys'}</Link>
+                </Alert>
             )}
         </div>
     );

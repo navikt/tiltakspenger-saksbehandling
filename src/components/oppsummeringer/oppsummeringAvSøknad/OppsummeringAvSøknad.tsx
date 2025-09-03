@@ -34,7 +34,6 @@ const OppsummeringAvSøknad = (props: Props) => {
         etterlønn,
         sykepenger,
         antallVedlegg,
-        visVedlegg,
     } = props.søknad;
 
     const tiltak = singleOrFirst(tiltakRaw);
@@ -128,19 +127,15 @@ const OppsummeringAvSøknad = (props: Props) => {
                     søknad={props.søknad}
                 />
 
-                {visVedlegg && (
-                    <>
-                        <BehandlingSaksopplysning
-                            navn={'Vedlegg'}
-                            verdi={antallVedlegg > 0 ? 'Ja' : 'Nei'}
-                        />
-                        {antallVedlegg > 0 && (
-                            <Alert variant={'warning'} inline={true} size={'small'}>
-                                {'Sjekk vedlegg i '}
-                                <Link href={gosysUrl}>{'gosys'}</Link>
-                            </Alert>
-                        )}
-                    </>
+                <BehandlingSaksopplysning
+                    navn={'Vedlegg'}
+                    verdi={antallVedlegg > 0 ? 'Ja' : 'Nei'}
+                />
+                {antallVedlegg > 0 && (
+                    <Alert variant={'warning'} inline={true} size={'small'}>
+                        {'Sjekk vedlegg i '}
+                        <Link href={gosysUrl}>{'gosys'}</Link>
+                    </Alert>
                 )}
             </VStack>
         </Box>
