@@ -2,29 +2,14 @@ import { Alert, Link, Select } from '@navikt/ds-react';
 import style from './RevurderingStansResultat.module.css';
 import { useRevurderingStansVedtak } from '../RevurderingStansVedtakContext';
 import { useRevurderingBehandling } from '../../../BehandlingContext';
-import { SaksbehandlerRolle } from '../../../../../types/Saksbehandler';
+import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { Datovelger } from '../../../../datovelger/Datovelger';
-import { dateTilISOTekst } from '../../../../../utils/date';
+import { dateTilISOTekst } from '~/utils/date';
 import React from 'react';
-import { useSak } from '../../../../../context/sak/SakContext';
-import { useConfig } from '../../../../../context/ConfigContext';
-
-enum ValgtHjemmelForStans {
-    DELTAR_IKKE_PÅ_ARBEIDSMARKEDSTILTAK = 'DeltarIkkePåArbeidsmarkedstiltak',
-    ALDER = 'Alder',
-    LIVSOPPHOLDYTELSER = 'Livsoppholdytelser',
-    KVALIFISERINGSPROGRAMMET = 'Kvalifiseringsprogrammet',
-    INTRODUKSJONSPROGRAMMET = 'Introduksjonsprogrammet',
-    LØNN_FRA_TILTAKSARRANGØR = 'LønnFraTiltaksarrangør',
-    LØNN_FRA_ANDRE = 'LønnFraAndre',
-    INSTITUSJONSOPPHOLD = 'Institusjonsopphold',
-}
-
-export type ValgtHjemmelForStansOption = {
-    beskrivelse: string;
-    kode: ValgtHjemmelForStans;
-};
+import { useSak } from '~/context/sak/SakContext';
+import { useConfig } from '~/context/ConfigContext';
+import { ValgtHjemmelForStans } from '~/types/BehandlingTypes';
 
 export const RevurderingStansResultat = () => {
     const revurderingVedtak = useRevurderingStansVedtak();
@@ -57,17 +42,18 @@ export const RevurderingStansResultat = () => {
                     label={'Hjemmel for stans'}
                     size={'medium'}
                     readOnly={!erSaksbehandler}
-                    defaultValue={(valgtHjemmelHarIkkeRettighet?.[0] ?? '') as ValgtHjemmelForStans}
+                    defaultValue={valgtHjemmelHarIkkeRettighet?.[0] ?? defaultValue}
                     onChange={(event) => {
-                        setValgtHjemmelHarIkkeRettighet([
-                            event.target.value as ValgtHjemmelForStans,
-                        ]);
+                        const valg = event.target.value as
+                            | ValgtHjemmelForStans
+                            | typeof defaultValue;
+                        setValgtHjemmelHarIkkeRettighet(valg === defaultValue ? [] : [valg]);
                     }}
                 >
-                    <option value={''}>{'- Velg hjemmel for stans -'}</option>
-                    {options.map((option) => (
-                        <option key={option.kode} value={option.kode}>
-                            {option.beskrivelse}
+                    <option value={defaultValue}>{'- Velg hjemmel for stans -'}</option>
+                    {Object.entries(options).map(([kode, beskrivelse]) => (
+                        <option key={kode} value={kode}>
+                            {beskrivelse}
                         </option>
                     ))}
                 </Select>
@@ -91,37 +77,20 @@ export const RevurderingStansResultat = () => {
     );
 };
 
-const options: ValgtHjemmelForStansOption[] = [
-    {
-        beskrivelse: 'Ingen deltagelse - tiltakspengeforskriften § 2',
-        kode: ValgtHjemmelForStans.DELTAR_IKKE_PÅ_ARBEIDSMARKEDSTILTAK,
-    },
-    {
-        beskrivelse: 'Alder - tiltakspengeforskriften § 3',
-        kode: ValgtHjemmelForStans.ALDER,
-    },
-    {
-        beskrivelse: 'Andre livsoppholdsytelser - tiltakspengeforskriften § 7, første ledd',
-        kode: ValgtHjemmelForStans.LIVSOPPHOLDYTELSER,
-    },
-    {
-        beskrivelse: 'KVP - tiltakspengeforskriften § 7, tredje ledd',
-        kode: ValgtHjemmelForStans.KVALIFISERINGSPROGRAMMET,
-    },
-    {
-        beskrivelse: 'Introduksjonsprogram - tiltakspengeforskriften § 7, tredje ledd',
-        kode: ValgtHjemmelForStans.INTRODUKSJONSPROGRAMMET,
-    },
-    {
-        beskrivelse: 'Lønn fra tiltaksarrangør - tiltakspengeforskriften § 8',
-        kode: ValgtHjemmelForStans.LØNN_FRA_TILTAKSARRANGØR,
-    },
-    {
-        beskrivelse: 'Lønn fra andre - arbeidsmarkedsloven § 13',
-        kode: ValgtHjemmelForStans.LØNN_FRA_ANDRE,
-    },
-    {
-        beskrivelse: 'Institusjon - tiltakspengeforskriften § 9',
-        kode: ValgtHjemmelForStans.INSTITUSJONSOPPHOLD,
-    },
-];
+const defaultValue = '';
+
+const options: Record<ValgtHjemmelForStans, string> = {
+    [ValgtHjemmelForStans.DELTAR_IKKE_PÅ_ARBEIDSMARKEDSTILTAK]:
+        'Ingen deltagelse - tiltakspengeforskriften § 2',
+    [ValgtHjemmelForStans.ALDER]: 'Alder - tiltakspengeforskriften § 3',
+    [ValgtHjemmelForStans.LIVSOPPHOLDYTELSER]:
+        'Andre livsoppholdsytelser - tiltakspengeforskriften § 7, første ledd',
+    [ValgtHjemmelForStans.KVALIFISERINGSPROGRAMMET]:
+        'KVP - tiltakspengeforskriften § 7, tredje ledd',
+    [ValgtHjemmelForStans.INTRODUKSJONSPROGRAMMET]:
+        'Introduksjonsprogram - tiltakspengeforskriften § 7, tredje ledd',
+    [ValgtHjemmelForStans.LØNN_FRA_TILTAKSARRANGØR]:
+        'Lønn fra tiltaksarrangør - tiltakspengeforskriften § 8',
+    [ValgtHjemmelForStans.LØNN_FRA_ANDRE]: 'Lønn fra andre - arbeidsmarkedsloven § 13',
+    [ValgtHjemmelForStans.INSTITUSJONSOPPHOLD]: 'Institusjon - tiltakspengeforskriften § 9',
+} as const;

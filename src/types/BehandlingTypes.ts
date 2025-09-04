@@ -44,7 +44,7 @@ type InnvilgelseResultatData = {
 };
 
 type StansResultatData = {
-    valgtHjemmelHarIkkeRettighet: Nullable<string[]>;
+    valgtHjemmelHarIkkeRettighet: Nullable<ValgtHjemmelForStans[]>;
 };
 
 type AvslagResultatData = {
@@ -172,6 +172,17 @@ export enum Avslagsgrunn {
     LønnFraAndre = 'LønnFraAndre',
     Institusjonsopphold = 'Institusjonsopphold',
     FremmetForSent = 'FremmetForSent',
+}
+
+export enum ValgtHjemmelForStans {
+    DELTAR_IKKE_PÅ_ARBEIDSMARKEDSTILTAK = 'DeltarIkkePåArbeidsmarkedstiltak',
+    ALDER = 'Alder',
+    LIVSOPPHOLDYTELSER = 'Livsoppholdytelser',
+    KVALIFISERINGSPROGRAMMET = 'Kvalifiseringsprogrammet',
+    INTRODUKSJONSPROGRAMMET = 'Introduksjonsprogrammet',
+    LØNN_FRA_TILTAKSARRANGØR = 'LønnFraTiltaksarrangør',
+    LØNN_FRA_ANDRE = 'LønnFraAndre',
+    INSTITUSJONSOPPHOLD = 'Institusjonsopphold',
 }
 
 export enum SøknadsbehandlingResultat {
