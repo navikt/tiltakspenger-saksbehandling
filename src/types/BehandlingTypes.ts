@@ -8,6 +8,7 @@ import { Ytelse } from '~/types/Ytelse';
 import { BarnetilleggData } from './Barnetillegg';
 import { MeldeperiodeBeregningProps } from '~/types/Beregning';
 import { Utbetalingsstatus } from '~/types/meldekort/MeldekortBehandling';
+import { Simulering } from './Simulering';
 
 export type BehandlingId = `beh_${string}`;
 
@@ -199,6 +200,7 @@ export type BehandlingUtbetalingProps = {
     status: Utbetalingsstatus;
     beregninger: MeldeperiodeBeregningProps[];
     beregningerSummert: BeregningerSummert;
+    simulering?: Simulering;
 };
 
 export type BeregningerSummert = {

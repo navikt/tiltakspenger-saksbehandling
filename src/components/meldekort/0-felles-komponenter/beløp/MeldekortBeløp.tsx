@@ -1,9 +1,5 @@
-import { Button, VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react';
 import { Simulering } from '~/types/Simulering';
-import OppsummeringAvSimulering from '../../../oppsummeringer/simulering/OppsummeringAvSimulering';
-import { useState } from 'react';
-import { erSimuleringEndring } from '~/utils/simuleringUtils';
-import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
 import { BeløpProps } from '~/types/Beregning';
 import {
     UtbetalingStatus,
@@ -11,7 +7,7 @@ import {
 } from '~/components/utbetaling/status/UtbetalingStatus';
 import { UtbetalingBeløp } from '~/components/utbetaling/beløp/UtbetalingBeløp';
 
-import style from './MeldekortBeløp.module.css';
+import { Simuleringsknapp } from '~/components/behandling/felles/utbetaling/Simulering';
 
 type Props = {
     beløp: BeløpProps;
@@ -28,11 +24,7 @@ export const MeldekortBeløp = ({
     simulering,
     utbetalingStatusProps,
 }: Props) => {
-    const [vilSeSimulering, setVilSeSimulering] = useState(false);
     const harDiffPåTotalBeløp = totalBeløp && totalBeløp.totalt != beløp.totalt;
-
-    const erFeilutbetalingStørreEnn0 =
-        simulering && erSimuleringEndring(simulering) && simulering.totalFeilutbetaling > 0;
 
     return (
         <>
@@ -59,29 +51,7 @@ export const MeldekortBeløp = ({
                     />
                 )}
             </VStack>
-            {simulering && (
-                <>
-                    <Button
-                        onClick={() => setVilSeSimulering(!vilSeSimulering)}
-                        variant={'secondary'}
-                        size={'small'}
-                        type={'button'}
-                        icon={
-                            erFeilutbetalingStørreEnn0 && (
-                                <ExclamationmarkTriangleFillIcon
-                                    className={style.advarselIkon}
-                                    title="Advarsel ikon"
-                                    fontSize="1rem"
-                                />
-                            )
-                        }
-                        className={style.seSimuleringKnapp}
-                    >
-                        {`${vilSeSimulering ? 'Skjul' : 'Vis'} simulering`}
-                    </Button>
-                    {vilSeSimulering && <OppsummeringAvSimulering simulering={simulering!} />}
-                </>
-            )}
+            {simulering && <Simuleringsknapp simulering={simulering} />}
             {utbetalingStatusProps && <UtbetalingStatus {...utbetalingStatusProps} />}
         </>
     );

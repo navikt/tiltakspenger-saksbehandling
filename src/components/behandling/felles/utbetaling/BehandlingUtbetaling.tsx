@@ -6,13 +6,15 @@ import { Alert, Heading, VStack } from '@navikt/ds-react';
 import { UtbetalingBeløp } from '~/components/utbetaling/beløp/UtbetalingBeløp';
 
 import style from './BehandlingUtbetaling.module.css';
+import { Simuleringsknapp } from './Simulering';
 
 type Props = {
     utbetaling: BehandlingUtbetalingProps;
 };
 
 export const BehandlingUtbetaling = ({ utbetaling }: Props) => {
-    const { navkontor, navkontorNavn, status, beregningerSummert, beregninger } = utbetaling;
+    const { navkontor, navkontorNavn, status, beregningerSummert, beregninger, simulering } =
+        utbetaling;
 
     const { totalt, ordinært, barnetillegg } = beregningerSummert;
 
@@ -74,6 +76,7 @@ export const BehandlingUtbetaling = ({ utbetaling }: Props) => {
                         navkontorNavn={navkontorNavn}
                         utbetalingsstatus={status}
                     />
+                    <Simuleringsknapp simulering={simulering} />
                 </VedtakSeksjon.Venstre>
             </VedtakSeksjon>
             <Separator />
