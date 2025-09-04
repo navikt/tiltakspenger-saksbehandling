@@ -12,8 +12,12 @@ import SøknadsbehandlingDagerPerMeldeperiode from '~/components/behandling/søk
 import { SøknadsbehandlingAutomatiskBehandling } from '~/components/behandling/søknadsbehandling/1-automatisk-behandling/SøknadsbehandlingAutomatiskBehandling';
 
 import style from './SøknadsbehandlingVedtak.module.css';
+import { BehandlingUtbetaling } from '../felles/utbetaling/BehandlingUtbetaling';
+import { useBehandling } from '~/components/behandling/BehandlingContext';
 
 export const SøknadsbehandlingVedtak = () => {
+    const { utbetaling } = useBehandling().behandling;
+
     return (
         <SøknadsbehandlingVedtakProvider>
             <Heading size={'medium'} level={'3'} className={style.header}>
@@ -29,6 +33,7 @@ export const SøknadsbehandlingVedtak = () => {
             <SøknadsbehandlingBarnetillegg />
             <SøknadsbehandlingBrev />
             <Separator />
+            {utbetaling && <BehandlingUtbetaling utbetaling={utbetaling} />}
             <SøknadsbehandlingSend />
         </SøknadsbehandlingVedtakProvider>
     );
