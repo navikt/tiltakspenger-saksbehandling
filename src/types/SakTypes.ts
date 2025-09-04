@@ -11,7 +11,7 @@ export type SakProps = {
     fnr: string;
     behandlingsoversikt: BehandlingForOversiktData[];
     meldeperiodeKjeder: MeldeperiodeKjedeProps[];
-    førsteLovligeStansdato?: string;
+    førsteDagSomGirRett?: string;
     sisteDagSomGirRett?: string;
     søknader: SøknadForBehandlingProps[];
     behandlinger: BehandlingData[];

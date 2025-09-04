@@ -1,18 +1,20 @@
-import { BehandlingUtbetalingProps } from '~/types/BehandlingTypes';
 import { UtbetalingStatus } from '~/components/utbetaling/status/UtbetalingStatus';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { Separator } from '~/components/separator/Separator';
 import { Alert, Heading, VStack } from '@navikt/ds-react';
 import { UtbetalingBeløp } from '~/components/utbetaling/beløp/UtbetalingBeløp';
+import { Simuleringsknapp } from './Simulering';
+import { useBehandling } from '~/components/behandling/BehandlingContext';
 
 import style from './BehandlingUtbetaling.module.css';
-import { Simuleringsknapp } from './Simulering';
 
-type Props = {
-    utbetaling: BehandlingUtbetalingProps;
-};
+export const BehandlingUtbetaling = () => {
+    const { utbetaling } = useBehandling().behandling;
 
-export const BehandlingUtbetaling = ({ utbetaling }: Props) => {
+    if (!utbetaling) {
+        return null;
+    }
+
     const { navkontor, navkontorNavn, status, beregningerSummert, beregninger, simulering } =
         utbetaling;
 
@@ -35,8 +37,8 @@ export const BehandlingUtbetaling = ({ utbetaling }: Props) => {
                 <Heading size={'small'} level={'3'} className={style.header}>
                     {erEtterbetaling ? 'Etterbetaling' : 'Feilutbetaling'}
                 </Heading>
-                <VedtakSeksjon.Venstre>
-                    <VStack gap={'1'} className={style.underseksjon}>
+                <VedtakSeksjon.Venstre className={style.underseksjon}>
+                    <VStack gap={'1'}>
                         <UtbetalingBeløp
                             tekst={
                                 erEtterbetaling
@@ -51,9 +53,9 @@ export const BehandlingUtbetaling = ({ utbetaling }: Props) => {
                             }
                         />
                     </VStack>
-                    <VStack gap={'1'} className={style.underseksjon}>
+                    <VStack gap={'1'}>
                         <Alert variant={'info'} size={'small'} inline={true}>
-                            {`Vedtaket endrer beregningen av ${antallPerioder} tidligere utbetalte meldeperioder.`}
+                            {`Vedtaket endrer beregningen av ${antallPerioder} tidligere ${antallPerioder > 1 ? 'utbetalte meldeperioder' : 'utbetalt meldeperiode'}.`}
                         </Alert>
                         <UtbetalingBeløp
                             tekst={'Nytt ordinært beløp (alle perioder)'}

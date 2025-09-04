@@ -28,7 +28,7 @@ export type ValgtHjemmelForStansOption = {
 
 export const RevurderingStansResultat = () => {
     const revurderingVedtak = useRevurderingStansVedtak();
-    const { førsteLovligeStansdato, sisteDagSomGirRett } = useSak().sak;
+    const { førsteDagSomGirRett, sisteDagSomGirRett } = useSak().sak;
     const {
         stansdato,
         setStansdato,
@@ -73,7 +73,7 @@ export const RevurderingStansResultat = () => {
                 </Select>
                 <Datovelger
                     label={'Stans fra og med'}
-                    minDate={førsteLovligeStansdato}
+                    minDate={førsteDagSomGirRett}
                     maxDate={sisteDagSomGirRett}
                     defaultSelected={stansdato}
                     readOnly={!erSaksbehandler}
