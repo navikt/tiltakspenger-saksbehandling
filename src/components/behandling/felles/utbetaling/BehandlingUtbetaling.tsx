@@ -5,11 +5,12 @@ import { Alert, Heading, VStack } from '@navikt/ds-react';
 import { UtbetalingBeløp } from '~/components/utbetaling/beløp/UtbetalingBeløp';
 import { Simuleringsknapp } from './Simulering';
 import { useBehandling } from '~/components/behandling/BehandlingContext';
+import { BehandlingStatus } from '~/types/BehandlingTypes';
 
 import style from './BehandlingUtbetaling.module.css';
 
 export const BehandlingUtbetaling = () => {
-    const { utbetaling } = useBehandling().behandling;
+    const { utbetaling, status: behandlingStatus } = useBehandling().behandling;
 
     if (!utbetaling) {
         return null;
@@ -35,16 +36,12 @@ export const BehandlingUtbetaling = () => {
         <>
             <VedtakSeksjon>
                 <Heading size={'small'} level={'3'} className={style.header}>
-                    {erEtterbetaling ? 'Etterbetaling' : 'Feilutbetaling'}
+                    {'Beregning'}
                 </Heading>
                 <VedtakSeksjon.Venstre className={style.underseksjon}>
                     <VStack gap={'1'}>
                         <UtbetalingBeløp
-                            tekst={
-                                erEtterbetaling
-                                    ? 'Beløp til etterbetaling'
-                                    : 'Beløp til feilutbetaling'
-                            }
+                            tekst={'Beløp'}
                             beløp={Math.abs(totalDiff)}
                             className={
                                 erEtterbetaling
@@ -76,7 +73,9 @@ export const BehandlingUtbetaling = () => {
                     <UtbetalingStatus
                         navkontor={navkontor}
                         navkontorNavn={navkontorNavn}
-                        utbetalingsstatus={status}
+                        utbetalingsstatus={
+                            behandlingStatus === BehandlingStatus.VEDTATT ? status : undefined
+                        }
                     />
                     <Simuleringsknapp simulering={simulering} />
                 </VedtakSeksjon.Venstre>

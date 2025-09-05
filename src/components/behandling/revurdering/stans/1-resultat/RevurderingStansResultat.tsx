@@ -42,7 +42,7 @@ export const RevurderingStansResultat = () => {
                     label={'Hjemmel for stans'}
                     size={'medium'}
                     readOnly={!erSaksbehandler}
-                    defaultValue={valgtHjemmelHarIkkeRettighet?.[0] ?? defaultValue}
+                    defaultValue={valgtHjemmelHarIkkeRettighet[0] ?? defaultValue}
                     onChange={(event) => {
                         const valg = event.target.value as
                             | ValgtHjemmelForStans
