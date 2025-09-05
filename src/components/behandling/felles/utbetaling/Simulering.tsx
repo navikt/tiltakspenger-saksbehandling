@@ -19,29 +19,28 @@ export const Simuleringsknapp = ({ simulering }: Props) => {
 
     return (
         <>
-            {simulering && (
-                <>
-                    <Button
-                        onClick={() => setVilSeSimulering(!vilSeSimulering)}
-                        variant={'secondary'}
-                        size={'small'}
-                        type={'button'}
-                        icon={
-                            erFeilutbetalingStørreEnn0 && (
-                                <ExclamationmarkTriangleFillIcon
-                                    className={style.advarselIkon}
-                                    title="Advarsel ikon"
-                                    fontSize="1rem"
-                                />
-                            )
-                        }
-                        className={style.seSimuleringKnapp}
-                    >
-                        {`${vilSeSimulering ? 'Skjul' : 'Vis'} simulering`}
-                    </Button>
-                    {vilSeSimulering && <OppsummeringAvSimulering simulering={simulering!} />}
-                </>
-            )}
+            <Button
+                onClick={() => setVilSeSimulering(!vilSeSimulering)}
+                variant={'secondary'}
+                size={'small'}
+                type={'button'}
+                disabled={!simulering}
+                icon={
+                    erFeilutbetalingStørreEnn0 && (
+                        <ExclamationmarkTriangleFillIcon
+                            className={style.advarselIkon}
+                            title="Advarsel ikon"
+                            fontSize="1rem"
+                        />
+                    )
+                }
+                className={style.seSimuleringKnapp}
+            >
+                {simulering
+                    ? `${vilSeSimulering ? 'Skjul' : 'Vis'} simulering`
+                    : 'Simulering mangler'}
+            </Button>
+            {vilSeSimulering && <OppsummeringAvSimulering simulering={simulering!} />}
         </>
     );
 };
