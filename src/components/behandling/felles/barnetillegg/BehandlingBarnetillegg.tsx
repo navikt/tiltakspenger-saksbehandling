@@ -20,6 +20,8 @@ import { OppdaterBarnetilleggRequest, VedtakBarnetilleggDTO } from '~/types/Barn
 import { BarnetilleggTidslinje } from '~/components/behandling/felles/barnetillegg/tidslinje/BarnetilleggTidslinje';
 
 import style from './BehandlingBarnetillegg.module.css';
+import { VedtakHjelpetekst } from '~/components/behandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
+import { harSøktBarnetillegg } from '~/utils/behandling';
 
 export type BehandlingBarnetilleggProps = {
     behandling: BehandlingData;
@@ -69,6 +71,13 @@ export const BehandlingBarnetillegg = (props: BehandlingBarnetilleggProps) => {
                         <Radio value={false}>{'Nei'}</Radio>
                     </RadioGroup>
                 </VedtakSeksjon.Venstre>
+                {!harBarnetillegg && harSøktBarnetillegg(behandling) && (
+                    <VedtakSeksjon.Høyre>
+                        <VedtakHjelpetekst variant={'info'}>
+                            Husk å begrunne avslaget på barnetillegg i vedtaksbrevet.
+                        </VedtakHjelpetekst>
+                    </VedtakSeksjon.Høyre>
+                )}
             </VedtakSeksjon>
 
             <VedtakSeksjon className={classNames(style.input, !harBarnetillegg && style.skjult)}>
