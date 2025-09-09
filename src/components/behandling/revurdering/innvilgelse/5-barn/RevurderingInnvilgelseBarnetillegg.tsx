@@ -17,7 +17,7 @@ export const RevurderingInnvilgelseBarnetillegg = () => {
             behandling={behandling}
             dispatch={dispatch}
             context={skjemaContext}
-            valgTekst={'Ønsker du å behandle barnetillegg?'}
+            valgTekst={'Skal det innvilges barnetillegg?'}
             lagring={{
                 url: `/sak/${behandling.sakId}/behandling/${behandling.id}/barnetillegg`,
                 body: (tekst) =>
