@@ -1,5 +1,5 @@
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
-import { Heading, Radio, RadioGroup } from '@navikt/ds-react';
+import { Alert, Heading, Radio, RadioGroup } from '@navikt/ds-react';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { classNames } from '~/utils/classNames';
 import { BehandlingBarnetilleggPerioder } from './perioder/BehandlingBarnetilleggPerioder';
@@ -20,7 +20,6 @@ import { OppdaterBarnetilleggRequest, VedtakBarnetilleggDTO } from '~/types/Barn
 import { BarnetilleggTidslinje } from '~/components/behandling/felles/barnetillegg/tidslinje/BarnetilleggTidslinje';
 
 import style from './BehandlingBarnetillegg.module.css';
-import { VedtakHjelpetekst } from '~/components/behandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
 import { harSøktBarnetillegg } from '~/utils/behandling';
 
 export type BehandlingBarnetilleggProps = {
@@ -70,14 +69,12 @@ export const BehandlingBarnetillegg = (props: BehandlingBarnetilleggProps) => {
                         <Radio value={true}>{'Ja'}</Radio>
                         <Radio value={false}>{'Nei'}</Radio>
                     </RadioGroup>
-                </VedtakSeksjon.Venstre>
-                {!harBarnetillegg && harSøktBarnetillegg(behandling) && (
-                    <VedtakSeksjon.Høyre>
-                        <VedtakHjelpetekst variant={'info'}>
+                    {!harBarnetillegg && harSøktBarnetillegg(behandling) && (
+                        <Alert className={style.infoboks} variant={'info'} size={'small'}>
                             Husk å begrunne avslaget på barnetillegg i vedtaksbrevet.
-                        </VedtakHjelpetekst>
-                    </VedtakSeksjon.Høyre>
-                )}
+                        </Alert>
+                    )}
+                </VedtakSeksjon.Venstre>
             </VedtakSeksjon>
 
             <VedtakSeksjon className={classNames(style.input, !harBarnetillegg && style.skjult)}>
