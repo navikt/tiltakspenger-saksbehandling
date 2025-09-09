@@ -59,6 +59,9 @@ export const MeldekortBeregningOppsummering = ({ meldekortBehandling, className 
                         : undefined,
                 }}
                 simulering={simulering ?? undefined}
+                sakId={meldekortBehandling.sakId}
+                meldekortbehandlingId={meldekortBehandling.id}
+                behandlingsstatus={meldekortBehandling.status}
             />
             {skalViseUtfallVarsel && (
                 <Alert variant={totalBeløpDiff < 0 ? 'warning' : 'info'} size={'small'}>
