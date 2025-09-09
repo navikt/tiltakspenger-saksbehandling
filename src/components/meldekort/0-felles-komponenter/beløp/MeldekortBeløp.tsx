@@ -1,4 +1,4 @@
-import { VStack } from '@navikt/ds-react';
+import { HStack, VStack } from '@navikt/ds-react';
 import { Simulering } from '~/types/Simulering';
 import { BeløpProps } from '~/types/Beregning';
 import {
@@ -8,6 +8,12 @@ import {
 import { UtbetalingBeløp } from '~/components/utbetaling/beløp/UtbetalingBeløp';
 
 import { Simuleringsknapp } from '~/components/behandling/felles/utbetaling/Simulering';
+import { SakId } from '~/types/SakTypes';
+import {
+    MeldekortBehandlingId,
+    MeldekortBehandlingStatus,
+} from '~/types/meldekort/MeldekortBehandling';
+import { OppdaterSimuleringKnapp } from '~/components/behandling/felles/utbetaling/OppdaterSimuleringKnapp';
 
 type Props = {
     beløp: BeløpProps;
@@ -15,6 +21,9 @@ type Props = {
     totalBeløp?: BeløpProps;
     simulering?: Simulering;
     utbetalingStatusProps?: UtbetalingStatusProps;
+    sakId: SakId;
+    meldekortbehandlingId: MeldekortBehandlingId;
+    behandlingsstatus?: MeldekortBehandlingStatus;
 };
 
 export const MeldekortBeløp = ({
@@ -23,6 +32,9 @@ export const MeldekortBeløp = ({
     totalBeløp,
     simulering,
     utbetalingStatusProps,
+    sakId,
+    meldekortbehandlingId,
+    behandlingsstatus,
 }: Props) => {
     const harDiffPåTotalBeløp = totalBeløp && totalBeløp.totalt != beløp.totalt;
 
@@ -51,7 +63,12 @@ export const MeldekortBeløp = ({
                     />
                 )}
             </VStack>
-            {simulering && <Simuleringsknapp simulering={simulering} />}
+            <HStack>
+                {simulering && <Simuleringsknapp simulering={simulering} />}
+                {behandlingsstatus === MeldekortBehandlingStatus.UNDER_BEHANDLING && (
+                    <OppdaterSimuleringKnapp sakId={sakId} behandlingId={meldekortbehandlingId} />
+                )}
+            </HStack>
             {utbetalingStatusProps && <UtbetalingStatus {...utbetalingStatusProps} />}
         </>
     );
