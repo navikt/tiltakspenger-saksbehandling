@@ -28,25 +28,22 @@ export const RevurderingInnvilgelseBrev = () => {
                 virkningsperiode: vedtak.behandlingsperiode,
                 barnetillegg: vedtak.harBarnetillegg ? vedtak.barnetilleggPerioder : null,
             })}
-            hjelpetekst={<Hjelpetekst />}
+            hjelpetekst={<HjelpetekstRevurdering />}
         />
     );
 };
 
-const Hjelpetekst = () => {
+export const HjelpetekstRevurdering = () => {
     return (
         <>
             <BodyLong size={'small'}>{'Informer bruker om:'}</BodyLong>
             <TekstListe
                 tekster={[
-                    'Tiltaket de har fått godkjent tiltakspenger for og perioden det gjelder',
-                    'Om det er noe som reduserer retten i deler av perioden de har søkt på',
+                    'Hvorfor du har endret vedtaket',
+                    'Hvordan du har vurdert faktum opp mot reglene',
                     'Eventuelt andre relevante opplysninger som ikke kommer frem i standardtekstene i brevet',
                 ]}
             />
-            <BodyLong size={'small'}>
-                {'(skal vi ha en spesifikk tekst for revurdering her?)'}
-            </BodyLong>
         </>
     );
 };
