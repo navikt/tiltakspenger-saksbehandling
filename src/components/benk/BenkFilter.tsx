@@ -98,7 +98,7 @@ const BenkFilter = ({
                 <option value="Alle">Alle</option>
                 <option value="IKKE_TILDELT">Ikke tildelt</option>
                 {benkOversikt.behandlingssammendrag
-                    .map((behandling) => behandling.saksbehandler)
+                    .flatMap((behandling) => [behandling.saksbehandler, behandling.beslutter])
                     .filter((value, index, self) => value && self.indexOf(value) === index)
                     .map((saksbehandler) => (
                         <option key={saksbehandler} value={saksbehandler!}>
