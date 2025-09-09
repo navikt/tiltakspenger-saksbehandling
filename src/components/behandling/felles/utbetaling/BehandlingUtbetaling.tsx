@@ -1,16 +1,17 @@
 import { UtbetalingStatus } from '~/components/utbetaling/status/UtbetalingStatus';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { Separator } from '~/components/separator/Separator';
-import { Alert, Heading, VStack } from '@navikt/ds-react';
+import { Alert, Heading, HStack, VStack } from '@navikt/ds-react';
 import { UtbetalingBeløp } from '~/components/utbetaling/beløp/UtbetalingBeløp';
 import { Simuleringsknapp } from './Simulering';
 import { useBehandling } from '~/components/behandling/BehandlingContext';
 import { BehandlingStatus } from '~/types/BehandlingTypes';
 
 import style from './BehandlingUtbetaling.module.css';
+import { OppdaterSimuleringKnapp } from './OppdaterSimuleringKnapp';
 
 export const BehandlingUtbetaling = () => {
-    const { utbetaling, status: behandlingStatus } = useBehandling().behandling;
+    const { utbetaling, status: behandlingStatus, sakId, id } = useBehandling().behandling;
 
     if (!utbetaling) {
         return null;
@@ -77,7 +78,12 @@ export const BehandlingUtbetaling = () => {
                             behandlingStatus === BehandlingStatus.VEDTATT ? status : undefined
                         }
                     />
-                    <Simuleringsknapp simulering={simulering} />
+                    <HStack>
+                        <Simuleringsknapp simulering={simulering} />
+                        {behandlingStatus === BehandlingStatus.UNDER_BESLUTNING && (
+                            <OppdaterSimuleringKnapp sakId={sakId} behandlingId={id} />
+                        )}
+                    </HStack>
                 </VedtakSeksjon.Venstre>
             </VedtakSeksjon>
             <Separator />

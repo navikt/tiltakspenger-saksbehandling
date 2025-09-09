@@ -7,7 +7,7 @@ import { Nullable } from '~/types/UtilTypes';
 import { Ytelse } from '~/types/Ytelse';
 import { BarnetilleggData } from './Barnetillegg';
 import { MeldeperiodeBeregningProps } from '~/types/Beregning';
-import { Utbetalingsstatus } from '~/types/meldekort/MeldekortBehandling';
+import { MeldekortBehandlingProps, Utbetalingsstatus } from '~/types/meldekort/MeldekortBehandling';
 import { Simulering } from './Simulering';
 
 export type BehandlingId = `beh_${string}`;
@@ -67,6 +67,8 @@ export type RevurderingData = BehandlingDataCommon & {
     StansResultatData;
 
 export type BehandlingData = SøknadsbehandlingData | RevurderingData;
+
+export type AlleBehandlingData = SøknadsbehandlingData | RevurderingData | MeldekortBehandlingProps;
 
 export type BehandlingSaksopplysningerData = {
     fødselsdato: string;
