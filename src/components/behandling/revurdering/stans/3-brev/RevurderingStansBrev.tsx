@@ -5,6 +5,7 @@ import { Vedtaksbrev } from '~/components/behandling/felles/vedtaksbrev/Vedtaksb
 import { revurderingStansValidering } from '~/components/behandling/revurdering/stans/revurderingStansValidering';
 import { RevurderingResultat } from '~/types/BehandlingTypes';
 import { RevurderingStansBrevForhåndsvisningDTO } from '~/components/behandling/felles/vedtaksbrev/forhåndsvisning/useHentVedtaksbrevForhåndsvisning';
+import { HjelpetekstRevurdering } from '~/components/behandling/revurdering/innvilgelse/6-brev/RevurderingInnvilgelseBrev';
 
 export const RevurderingStansBrev = () => {
     const vedtak = useRevurderingStansVedtak();
@@ -25,6 +26,7 @@ export const RevurderingStansBrev = () => {
                 valgteHjemler: vedtak.valgtHjemmelHarIkkeRettighet,
                 resultat: RevurderingResultat.STANS,
             })}
+            hjelpetekst={<HjelpetekstRevurdering />}
         />
     );
 };
