@@ -14,12 +14,16 @@ import OppsummeringAvSøknad from '../../oppsummeringer/oppsummeringAvSøknad/Op
 import { BehandlingYtelserOpplysninger } from '~/components/behandling/saksopplysninger/ytelser/BehandlingYtelserOpplysninger';
 
 import style from './BehandlingSaksopplysninger.module.css';
+import { BehandlingTiltakspengerArenaOpplysninger } from '~/components/behandling/saksopplysninger/tiltakspenger-fra-arena/BehandlingTiltakspengerArenaOpplysninger';
 
 export const BehandlingSaksopplysninger = () => {
     const { behandling, rolleForBehandling } = useBehandling();
     const { saksopplysninger, type } = behandling;
-    const { tiltaksdeltagelse, fødselsdato, ytelser } = saksopplysninger;
+    const { tiltaksdeltagelse, fødselsdato, ytelser, tiltakspengevedtakFraArena } =
+        saksopplysninger;
     const harYtelser = ytelser && ytelser.length > 0;
+    const harTiltakspengevedtakFraArena =
+        tiltakspengevedtakFraArena && tiltakspengevedtakFraArena.length > 0;
 
     return (
         <>
@@ -34,6 +38,16 @@ export const BehandlingSaksopplysninger = () => {
             <OpplysningerSeksjon header={'Andre ytelser'}>
                 {!harYtelser && <BodyShort size={'small'}>Ingen relevante ytelser</BodyShort>}
                 {harYtelser && <BehandlingYtelserOpplysninger ytelser={ytelser} />}
+                <Separator />
+            </OpplysningerSeksjon>
+
+            <OpplysningerSeksjon header={'Tiltakspengevedtak fra Arena'}>
+                {!harTiltakspengevedtakFraArena && (
+                    <BodyShort size={'small'}>Ingen relevante tiltakspengevedtak i Arena</BodyShort>
+                )}
+                {harTiltakspengevedtakFraArena && (
+                    <BehandlingTiltakspengerArenaOpplysninger vedtak={tiltakspengevedtakFraArena} />
+                )}
                 <Separator />
             </OpplysningerSeksjon>
 

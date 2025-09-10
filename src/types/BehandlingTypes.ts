@@ -9,6 +9,7 @@ import { BarnetilleggData } from './Barnetillegg';
 import { MeldeperiodeBeregningProps } from '~/types/Beregning';
 import { Utbetalingsstatus } from '~/types/meldekort/MeldekortBehandling';
 import { Simulering } from './Simulering';
+import { ArenaTPVedtak } from '~/types/ArenaTPVedtak';
 
 export type BehandlingId = `beh_${string}`;
 
@@ -73,6 +74,7 @@ export type BehandlingSaksopplysningerData = {
     tiltaksdeltagelse: Tiltaksdeltagelse[];
     saksopplysningsperiode: Periode;
     ytelser: Ytelse[];
+    tiltakspengevedtakFraArena: ArenaTPVedtak[];
 };
 
 export type BehandlingForOversiktData = {
@@ -152,6 +154,7 @@ export enum ManueltBehandlesGrunn {
     SAKSOPPLYSNING_MINDRE_ENN_14_DAGER_MELLOM_TILTAK_OG_SOKNAD = 'SAKSOPPLYSNING_MINDRE_ENN_14_DAGER_MELLOM_TILTAK_OG_SOKNAD',
     SAKSOPPLYSNING_ULIK_TILTAKSPERIODE = 'SAKSOPPLYSNING_ULIK_TILTAKSPERIODE',
     SAKSOPPLYSNING_ANDRE_YTELSER = 'SAKSOPPLYSNING_ANDRE_YTELSER',
+    SAKSOPPLYSNING_VEDTAK_I_ARENA = 'SAKSOPPLYSNING_VEDTAK_I_ARENA',
 
     ANNET_APEN_BEHANDLING = 'ANNET_APEN_BEHANDLING',
     ANNET_VEDTAK_FOR_SAMME_PERIODE = 'ANNET_VEDTAK_FOR_SAMME_PERIODE',
