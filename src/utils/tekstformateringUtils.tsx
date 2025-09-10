@@ -139,6 +139,8 @@ export const manueltBehandlesGrunnTekst: Record<ManueltBehandlesGrunn, string> =
     SAKSOPPLYSNING_ULIK_TILTAKSPERIODE:
         'Tiltaksdeltakelsen har ikke samme periode som det er søkt for',
     SAKSOPPLYSNING_ANDRE_YTELSER: 'Bruker mottar andre ytelser i søknadsperioden',
+    SAKSOPPLYSNING_VEDTAK_I_ARENA:
+        'Det finnes tiltakspengevedtak i Arena som kan overlappe med søknadsperioden',
 
     ANNET_APEN_BEHANDLING: 'Det finnes en åpen behandling for søker',
     ANNET_VEDTAK_FOR_SAMME_PERIODE: 'Det finnes et annet vedtak som overlapper med søknadsperioden',
