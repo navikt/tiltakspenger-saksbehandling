@@ -9,6 +9,7 @@ import { BarnetilleggData } from './Barnetillegg';
 import { MeldeperiodeBeregningProps } from '~/types/Beregning';
 import { Utbetalingsstatus } from '~/types/meldekort/MeldekortBehandling';
 import { Simulering } from './Simulering';
+import { ArenaTPVedtak } from '~/types/ArenaTPVedtak';
 
 export type BehandlingId = `beh_${string}`;
 
@@ -73,6 +74,7 @@ export type BehandlingSaksopplysningerData = {
     tiltaksdeltagelse: Tiltaksdeltagelse[];
     saksopplysningsperiode: Periode;
     ytelser: Ytelse[];
+    tiltakspengevedtakFraArena: ArenaTPVedtak[];
 };
 
 export type BehandlingForOversiktData = {
