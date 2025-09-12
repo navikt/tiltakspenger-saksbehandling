@@ -16,14 +16,16 @@ import {
 import { useRevurderingBehandling } from '~/components/behandling/BehandlingContext';
 import { Periode } from '~/types/Periode';
 import { VedtakTiltaksdeltakelsePeriode } from '~/types/VedtakTyper';
-import { hentTiltaksdeltakelserMedStartOgSluttdato } from '~/utils/behandling';
+import {
+    hentHeleTiltaksdeltagelsesperioden,
+    hentTiltaksdeltakelserMedStartOgSluttdato,
+} from '~/utils/behandling';
 import { getTextAreaRefValue } from '~/utils/textarea';
 import { BarnetilleggBegrunnelseInput } from '~/components/behandling/felles/state/BarnetilleggState';
 import { BegrunnelseOgBrevInput } from '~/components/behandling/felles/state/BegrunnelseOgBrev';
-import { joinPerioder } from '~/utils/periode';
-import { hentBarnetilleggFraVedtakTidslinje } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraVedtakTidslinje';
 import { useSak } from '~/context/sak/SakContext';
 import { SakProps } from '~/types/SakTypes';
+import { hentBarnetilleggForRevurdering } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
 
 export type RevurderingInnvilgelseVedtakContext = BegrunnelseOgBrevInput &
     BarnetilleggBegrunnelseInput &
@@ -53,20 +55,11 @@ const initieltVedtakSkjema = ({
     behandling: RevurderingData;
     sak: SakProps;
 }): RevurderingInnvilgelseSkjemaState => {
-    const tiltaksdeltagelser: Periode[] = hentTiltaksdeltakelserMedStartOgSluttdato(behandling).map(
-        (tiltaksdeltagelse) => ({
-            fraOgMed: tiltaksdeltagelse.deltagelseFraOgMed,
-            tilOgMed: tiltaksdeltagelse.deltagelseTilOgMed,
-        }),
-    );
-    const tiltaksperiode: Periode = joinPerioder(tiltaksdeltagelser);
+    const tiltaksperiode: Periode = hentHeleTiltaksdeltagelsesperioden(behandling);
 
     const behandlingsperiode = behandling.virkningsperiode ?? tiltaksperiode;
-    const barnetilleggPerioder =
-        behandling.barnetillegg?.perioder ??
-        hentBarnetilleggFraVedtakTidslinje(sak.tidslinje, behandlingsperiode).filter(
-            (it) => it.antallBarn > 0,
-        );
+
+    const barnetilleggPerioder = hentBarnetilleggForRevurdering(behandling, sak);
 
     return {
         behandlingsperiode,
@@ -79,7 +72,7 @@ const initieltVedtakSkjema = ({
                 },
             },
         ],
-        harBarnetillegg: !!behandling.barnetillegg?.perioder,
+        harBarnetillegg: barnetilleggPerioder.length > 0,
         barnetilleggPerioder,
         valgteTiltaksdeltakelser:
             behandling.valgteTiltaksdeltakelser ?? tilValgteTiltaksdeltakelser(behandling),

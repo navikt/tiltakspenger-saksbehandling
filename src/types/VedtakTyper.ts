@@ -29,7 +29,7 @@ export interface SøknadsbehandlingVedtakInnvilgelseDTO extends BehandlingVedtak
     innvilgelsesperiode: Periode;
     valgteTiltaksdeltakelser: VedtakTiltaksdeltakelsePeriode[];
     antallDagerPerMeldeperiodeForPerioder: AntallDagerForMeldeperiode[];
-    barnetillegg: Nullable<VedtakBarnetilleggDTO>;
+    barnetillegg: VedtakBarnetilleggDTO;
 }
 
 export interface SøknadsbehandlingVedtakAvslagDTO extends BehandlingVedtakBaseDTO {
@@ -57,7 +57,7 @@ export interface RevurderingVedtakInnvilgelseDTO extends BehandlingVedtakBaseDTO
     innvilgelsesperiode: Periode;
     valgteTiltaksdeltakelser: VedtakTiltaksdeltakelsePeriode[];
     antallDagerPerMeldeperiodeForPerioder: AntallDagerForMeldeperiode[];
-    barnetillegg: Nullable<VedtakBarnetilleggDTO>;
+    barnetillegg: VedtakBarnetilleggDTO;
 }
 
 export type RevurderingVedtakDTO = RevurderingVedtakStansDTO | RevurderingVedtakInnvilgelseDTO;

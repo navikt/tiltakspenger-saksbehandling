@@ -27,7 +27,7 @@ export const BehandlingBarnetilleggPerioder = (props: Props) => {
     return (
         <>
             <VedtakSeksjon.Venstre className={style.wrapper}>
-                {barnetilleggPerioder?.map((periode, index) => {
+                {barnetilleggPerioder.map((periode, index) => {
                     return (
                         <BarnetilleggPeriode
                             {...props}

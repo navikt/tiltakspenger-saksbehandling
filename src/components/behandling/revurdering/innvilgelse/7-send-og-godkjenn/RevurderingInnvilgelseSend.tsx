@@ -35,7 +35,9 @@ const tilDTO = (vedtak: RevurderingInnvilgelseVedtakContext): RevurderingVedtakI
                   begrunnelse: vedtak.textAreas.barnetilleggBegrunnelse.getValue(),
                   perioder: vedtak.barnetilleggPerioder,
               }
-            : null,
+            : {
+                  perioder: [],
+              },
         antallDagerPerMeldeperiodeForPerioder: vedtak.antallDagerPerMeldeperiode.map((periode) => ({
             antallDagerPerMeldeperiode: periode.antallDagerPerMeldeperiode!,
             periode: {

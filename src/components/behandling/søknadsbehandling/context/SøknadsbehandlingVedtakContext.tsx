@@ -14,15 +14,11 @@ import {
     SøknadsbehandlingSkjemaActions,
     SøknadsbehandlingSkjemaState,
 } from './SøknadsbehandlingReducer';
-import {
-    harSøktBarnetillegg,
-    hentTiltaksdeltagelseFraSoknad,
-    hentTiltaksperiodeFraSøknad,
-} from '~/utils/behandling';
-import { periodiserBarnetillegg } from '~/components/behandling/felles/barnetillegg/utils/periodiserBarnetillegg';
+import { hentTiltaksdeltagelseFraSoknad, hentTiltaksperiodeFraSøknad } from '~/utils/behandling';
 import { BarnetilleggBegrunnelseInput } from '~/components/behandling/felles/state/BarnetilleggState';
 import { BegrunnelseOgBrevInput } from '~/components/behandling/felles/state/BegrunnelseOgBrev';
 import { getTextAreaRefValue } from '~/utils/textarea';
+import { hentBarnetilleggForSøknadsbehandling } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
 
 export type SøknadsbehandlingVedtakContext = BegrunnelseOgBrevInput &
     BarnetilleggBegrunnelseInput &
@@ -36,16 +32,13 @@ const initieltVedtakSkjema = (behandling: SøknadsbehandlingData): Søknadsbehan
     const tiltaksperiode = hentTiltaksperiodeFraSøknad(behandling);
     const tiltakFraSoknad = hentTiltaksdeltagelseFraSoknad(behandling);
 
+    const barnetilleggPerioder = hentBarnetilleggForSøknadsbehandling(behandling);
+
     return {
         resultat: behandling.resultat,
         behandlingsperiode: behandling.virkningsperiode ?? tiltaksperiode,
-        harBarnetillegg: harSøktBarnetillegg(behandling),
-        barnetilleggPerioder:
-            behandling.barnetillegg?.perioder ||
-            periodiserBarnetillegg(
-                behandling.søknad.barnetillegg,
-                behandling.virkningsperiode ?? tiltaksperiode,
-            ),
+        harBarnetillegg: barnetilleggPerioder.length > 0,
+        barnetilleggPerioder,
         valgteTiltaksdeltakelser:
             behandling.valgteTiltaksdeltakelser ||
             (tiltakFraSoknad && [

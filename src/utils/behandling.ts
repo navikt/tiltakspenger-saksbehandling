@@ -7,7 +7,7 @@ import {
 import { Periode } from '~/types/Periode';
 import { singleOrFirst } from './array';
 import { Tiltaksdeltagelse, TiltaksdeltagelseMedPeriode } from '~/types/TiltakDeltagelseTypes';
-import { erDatoIPeriode } from './periode';
+import { erDatoIPeriode, joinPerioder } from './periode';
 
 export const hentTiltaksperiode = (behandling: SøknadsbehandlingData): Periode => {
     const forsteStartdatoForDeltakelse = finnForsteStartdatoForTiltaksdeltakelse(behandling);
@@ -96,6 +96,16 @@ export const hentTiltaksdeltakelserMedStartOgSluttdato = (
         (t): t is TiltaksdeltagelseMedPeriode =>
             t.deltagelseFraOgMed != null && t.deltagelseTilOgMed != null,
     );
+
+export const hentHeleTiltaksdeltagelsesperioden = (behandling: BehandlingData) => {
+    const perioder = hentTiltaksdeltakelserMedStartOgSluttdato(behandling).map(
+        (tiltaksdeltagelse) => ({
+            fraOgMed: tiltaksdeltagelse.deltagelseFraOgMed,
+            tilOgMed: tiltaksdeltagelse.deltagelseTilOgMed,
+        }),
+    );
+    return joinPerioder(perioder);
+};
 
 export const finnForsteStartdatoForTiltaksdeltakelse = (
     behandling: BehandlingData,

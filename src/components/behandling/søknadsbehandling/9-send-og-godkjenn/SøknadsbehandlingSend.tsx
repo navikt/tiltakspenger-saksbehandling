@@ -40,7 +40,9 @@ const tilDTO = (vedtak: SøknadsbehandlingVedtakContext): SøknadsbehandlingVedt
                           begrunnelse: vedtak.textAreas.barnetilleggBegrunnelse.getValue(),
                           perioder: vedtak.barnetilleggPerioder,
                       }
-                    : null,
+                    : {
+                          perioder: [],
+                      },
                 valgteTiltaksdeltakelser: vedtak.valgteTiltaksdeltakelser,
                 antallDagerPerMeldeperiodeForPerioder: vedtak.antallDagerPerMeldeperiode.map(
                     (dager) => ({

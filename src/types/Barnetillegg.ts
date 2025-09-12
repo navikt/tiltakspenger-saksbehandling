@@ -14,7 +14,7 @@ export type BarnetilleggPeriode = {
 };
 
 export type VedtakBarnetilleggDTO = {
-    begrunnelse: string;
+    begrunnelse?: string;
     perioder: VedtakBarnetilleggPeriode[];
 };
 
