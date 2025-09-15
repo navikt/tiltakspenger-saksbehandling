@@ -15,8 +15,12 @@ type Props = {
 
 export const MeldekortKorrigertFraTidligerePeriode = ({ korrigering, headerTekst }: Props) => {
     const { alleMeldekortBehandlinger } = useMeldeperiodeKjede();
-    const { saksnummer } = useSak().sak;
-    const { periode, beregning, iverksatt } = korrigering;
+    const { saksnummer, sakId } = useSak().sak;
+    const { periode, beregning, iverksatt, meldekortId } = korrigering;
+
+    const behandlingsstatus = alleMeldekortBehandlinger.find(
+        (mbeh) => mbeh.id === meldekortId,
+    )?.status;
 
     const forrigeGodkjenteBeløp = alleMeldekortBehandlinger.find((mbeh) => mbeh.erAvsluttet)
         ?.beregning?.beregningForMeldekortetsPeriode.beløp;
@@ -38,7 +42,13 @@ export const MeldekortKorrigertFraTidligerePeriode = ({ korrigering, headerTekst
                     <strong>{formaterTidspunktKort(iverksatt)}</strong>
                 </BodyShort>
             )}
-            <MeldekortBeløp beløp={beregning.beløp} forrigeBeløp={forrigeGodkjenteBeløp} />
+            <MeldekortBeløp
+                beløp={beregning.beløp}
+                forrigeBeløp={forrigeGodkjenteBeløp}
+                sakId={sakId}
+                meldekortbehandlingId={meldekortId}
+                behandlingsstatus={behandlingsstatus}
+            />
         </VStack>
     );
 };

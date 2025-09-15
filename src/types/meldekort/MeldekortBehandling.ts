@@ -6,6 +6,7 @@ import { Avbrutt } from '../Avbrutt';
 import { Simulering } from '../Simulering';
 import { Nullable } from '~/types/UtilTypes';
 import { BeløpProps, MeldeperiodeBeregningProps } from '~/types/Beregning';
+import { SakId } from '../SakTypes';
 
 // "_behandling"-suffixen er ikke reell, er kun for at typescript ikke skal se denne som ekvivalent med BrukersMeldekortId
 // Ikke gjør run-time typesjekk på denne!
@@ -59,6 +60,7 @@ export enum Utbetalingsstatus {
 
 export type MeldekortBehandlingProps = {
     id: MeldekortBehandlingId;
+    sakId: SakId;
     meldeperiodeId: MeldeperiodeId;
     brukersMeldekortId?: BrukersMeldekortId;
     saksbehandler?: string;
