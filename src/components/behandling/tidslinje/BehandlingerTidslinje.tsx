@@ -14,7 +14,7 @@ import { Vedtakstype } from '~/types/VedtakTyper';
 import NextLink from 'next/link';
 import { formaterDatotekst, periodeTilFormatertDatotekst } from '~/utils/date';
 import { formatterBeløp } from '~/utils/beløp';
-import { meldeperiodeUrl } from '~/utils/urls';
+import { behandlingUrl, meldeperiodeUrl } from '~/utils/urls';
 import { useTidslinjeDateRange } from '~/components/behandling/tidslinje/useTidslinjeDateRange';
 import { tellAntallBarnFraVedtak } from '~/components/behandling/felles/barnetillegg/utils/barnetilleggUtils';
 
@@ -154,7 +154,10 @@ export const BehandlingerTidslinje = ({ sak }: Props) => {
                                     </div>
                                     <Link
                                         as={NextLink}
-                                        href={`/sak/${saksnummer}/behandling/${vedtak.behandlingId}`}
+                                        href={behandlingUrl({
+                                            saksnummer,
+                                            id: vedtak.behandlingId,
+                                        })}
                                         className={style.behandlingLink}
                                     >
                                         {'Til behandlingen'}

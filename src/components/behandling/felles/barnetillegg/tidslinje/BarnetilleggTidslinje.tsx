@@ -55,7 +55,7 @@ export const BarnetilleggTidslinje = ({ behandlingsperiode }: Props) => {
                             key={periode.fraOgMed}
                         >
                             <BodyShort size={'small'} className={style.detaljer}>
-                                {`${antallBarn} barn i perioden: ${periodeTilFormatertDatotekst(periode)}`}
+                                {`${harBarnetillegg ? `${antallBarn} barn` : 'Ikke barnetillegg'} i perioden: ${periodeTilFormatertDatotekst(periode)}`}
                                 <Link
                                     as={NextLink}
                                     href={behandlingUrl({
