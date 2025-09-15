@@ -14,7 +14,7 @@ import {
     SøknadsbehandlingSkjemaActions,
     SøknadsbehandlingSkjemaState,
 } from './SøknadsbehandlingReducer';
-import { hentTiltaksdeltagelseFraSoknad, hentTiltaksperiodeFraSøknad } from '~/utils/behandling';
+import { hentTiltaksdeltagelseFraSøknad, hentTiltaksperiodeFraSøknad } from '~/utils/behandling';
 import { BarnetilleggBegrunnelseInput } from '~/components/behandling/felles/state/BarnetilleggState';
 import { BegrunnelseOgBrevInput } from '~/components/behandling/felles/state/BegrunnelseOgBrev';
 import { getTextAreaRefValue } from '~/utils/textarea';
@@ -30,7 +30,7 @@ const DispatchContext = createContext((() => ({})) as Dispatch<Søknadsbehandlin
 
 const initieltVedtakSkjema = (behandling: SøknadsbehandlingData): SøknadsbehandlingSkjemaState => {
     const tiltaksperiode = hentTiltaksperiodeFraSøknad(behandling);
-    const tiltakFraSoknad = hentTiltaksdeltagelseFraSoknad(behandling);
+    const tiltakFraSoknad = hentTiltaksdeltagelseFraSøknad(behandling);
 
     const barnetilleggPerioder = hentBarnetilleggForSøknadsbehandling(behandling);
 

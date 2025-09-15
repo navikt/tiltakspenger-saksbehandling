@@ -132,7 +132,7 @@ export const BehandlingerTidslinje = ({ sak }: Props) => {
                                                 <InfoElement
                                                     navn={'Har barnetillegg'}
                                                     verdi={
-                                                        barn
+                                                        barn.maxBarn > 0
                                                             ? `Ja (${barn.minBarn}${barn.minBarn != barn.maxBarn ? ` - ${barn.maxBarn}` : ''} barn)`
                                                             : 'Nei'
                                                     }

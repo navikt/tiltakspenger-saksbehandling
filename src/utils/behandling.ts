@@ -60,7 +60,7 @@ export const deltarPaFlereTiltakMedStartOgSluttdatoIValgtInnvilgelsesperiode = (
 export const deltarPaFlereTiltakMedStartOgSluttdato = (behandling: BehandlingData) =>
     hentTiltaksdeltakelserMedStartOgSluttdato(behandling).length > 1;
 
-export const hentTiltaksdeltagelseFraSoknad = (behandling: SøknadsbehandlingData) => {
+export const hentTiltaksdeltagelseFraSøknad = (behandling: SøknadsbehandlingData) => {
     const tiltakFraSoknad = singleOrFirst(behandling.søknad.tiltak);
     const tiltakFraSaksopplysninger = hentTiltaksdeltakelserMedStartOgSluttdato(behandling);
 

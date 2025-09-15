@@ -34,7 +34,7 @@ export const hentBarnetilleggForRevurdering = (
     );
 };
 
-const hentLagredePerioderMedBarn = (
+export const hentLagredePerioderMedBarn = (
     behandling: BehandlingData,
 ): BarnetilleggPeriode[] | undefined => {
     return behandling.barnetillegg?.perioder.filter(kunPerioderMedBarn);
