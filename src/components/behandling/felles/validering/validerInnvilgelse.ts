@@ -6,6 +6,7 @@ import { BarnetilleggState } from '~/components/behandling/felles/state/Barnetil
 import { TiltaksdeltagelseState } from '~/components/behandling/felles/state/TiltaksdeltagelseState';
 import { InnvilgelseState } from '~/components/behandling/felles/state/InnvilgelseState';
 import { AntallDagerForMeldeperiodeState } from '~/components/behandling/felles/state/AntallDagerState';
+import { validerAntallDagerPerMeldeperiode } from '~/components/behandling/felles/validering/validerAntallDagerPerMeldeperiode';
 
 export const validerInnvilgelse = (
     behandling: BehandlingData,
@@ -44,28 +45,12 @@ export const validerInnvilgelse = (
     validering.warnings.push(...tiltaksdeltagelseValidering.warnings);
     validering.errors.push(...tiltaksdeltagelseValidering.errors);
 
-    const harFylltUtAlleNødvendigeFelter = antallDagerPerMeldeperiode.every(
-        (periode) =>
-            periode.antallDagerPerMeldeperiode &&
-            periode.periode.fraOgMed &&
-            periode.periode.tilOgMed,
+    const antallDagerPerMeldeperiodeValidering = validerAntallDagerPerMeldeperiode(
+        antallDagerPerMeldeperiode,
+        behandlingsperiode,
     );
-
-    if (!harFylltUtAlleNødvendigeFelter) {
-        validering.errors.push('Alle felter for antall dager per meldeperiode må fylles ut');
-    } else {
-        antallDagerPerMeldeperiode.forEach((periode) => {
-            //validert over til å være utfylt.
-            if (
-                periode.antallDagerPerMeldeperiode! < 1 ||
-                periode.antallDagerPerMeldeperiode! > 14
-            ) {
-                validering.errors.push(
-                    `Antall dager per meldeperiode må være mellom 1 og 14. Perioden: ${periode.periode.fraOgMed} - ${periode.periode.tilOgMed}, Antall dager: ${periode.antallDagerPerMeldeperiode}`,
-                );
-            }
-        });
-    }
+    validering.warnings.push(...antallDagerPerMeldeperiodeValidering.warnings);
+    validering.errors.push(...antallDagerPerMeldeperiodeValidering.errors);
 
     return validering;
 };
