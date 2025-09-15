@@ -4,21 +4,20 @@ import {
     formaterTidspunkt,
     meldekortHeading,
     periodeTilFormatertDatotekst,
-} from '../../../utils/date';
+} from '~/utils/date';
 import { MeldekortBehandlingOpprett } from './opprett-behandling/MeldekortBehandlingOpprett';
 import {
     MeldekortBehandlingProps,
     MeldekortBehandlingStatus,
     MeldekortBehandlingType,
-} from '../../../types/meldekort/MeldekortBehandling';
-import { useSak } from '../../../context/sak/SakContext';
-import { useFeatureToggles } from '../../../context/feature-toggles/FeatureTogglesContext';
-import { ArrayOrSingle } from '../../../types/UtilTypes';
-import { forceArray } from '../../../utils/array';
+} from '~/types/meldekort/MeldekortBehandling';
+import { useSak } from '~/context/sak/SakContext';
+import { ArrayOrSingle } from '~/types/UtilTypes';
+import { forceArray } from '~/utils/array';
 import { useMeldeperiodeKjede } from '../MeldeperiodeKjedeContext';
 import OppsummeringAvAttesteringer from '../../attestering/OppsummeringAvAttestering';
-import { finnMeldeperiodeKjedeStatusTekst } from '../../../utils/tekstformateringUtils';
-import { MeldeperiodeKjedeStatus } from '../../../types/meldekort/Meldeperiode';
+import { finnMeldeperiodeKjedeStatusTekst } from '~/utils/tekstformateringUtils';
+import { MeldeperiodeKjedeStatus } from '~/types/meldekort/Meldeperiode';
 import React, { ComponentProps } from 'react';
 import {
     CheckmarkIcon,
@@ -94,8 +93,6 @@ const MeldekortBehandlingDetaljer = ({
     erAvsluttet,
     status,
 }: MeldekortBehandlingProps) => {
-    const { meldekortKorrigeringToggle } = useFeatureToggles();
-
     return (
         <>
             {status !== MeldekortBehandlingStatus.AUTOMATISK_BEHANDLET && (
@@ -106,11 +103,9 @@ const MeldekortBehandlingDetaljer = ({
                     {beslutter && <MeldekortDetalj header={'Beslutter'} tekst={beslutter} />}
                 </>
             )}
-
-            {meldekortKorrigeringToggle &&
-                (erAvsluttet || status === MeldekortBehandlingStatus.KLAR_TIL_BEHANDLING) && (
-                    <MeldekortBehandlingOpprett type={MeldekortBehandlingType.KORRIGERING} />
-                )}
+            {(erAvsluttet || status === MeldekortBehandlingStatus.KLAR_TIL_BEHANDLING) && (
+                <MeldekortBehandlingOpprett type={MeldekortBehandlingType.KORRIGERING} />
+            )}
         </>
     );
 };

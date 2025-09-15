@@ -2,10 +2,7 @@ import { createContext, ReactNode, useContext } from 'react';
 
 type TogglesRecord = Record<`${string}Toggle`, boolean>;
 
-const featureTogglesDefaultState = {
-    meldekortKorrigeringToggle: false,
-    revurderingInnvilgelseToggle: false,
-} as const satisfies TogglesRecord;
+const featureTogglesDefaultState = {} as const satisfies TogglesRecord;
 
 type FeatureTogglesState = Record<keyof typeof featureTogglesDefaultState, boolean>;
 
@@ -17,18 +14,10 @@ type Props = {
 };
 
 export const FeatureTogglesProvider = ({ deployEnv, children }: Props) => {
+    //eslint-disable-next-line @typescript-eslint/no-unused-vars
     const isProd = deployEnv === 'prod-gcp';
 
-    return (
-        <Context.Provider
-            value={{
-                meldekortKorrigeringToggle: !isProd,
-                revurderingInnvilgelseToggle: !isProd,
-            }}
-        >
-            {children}
-        </Context.Provider>
-    );
+    return <Context.Provider value={{}}>{children}</Context.Provider>;
 };
 
 export const useFeatureToggles = () => {

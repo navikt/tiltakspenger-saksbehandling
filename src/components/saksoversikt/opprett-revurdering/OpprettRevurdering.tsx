@@ -5,7 +5,6 @@ import router from 'next/router';
 import { useOpprettRevurdering } from './useOpprettRevurdering';
 import { RevurderingResultat } from '~/types/BehandlingTypes';
 import { BekreftelsesModal } from '~/components/modaler/BekreftelsesModal';
-import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
 import { revurderingResultatTekst } from '~/utils/tekstformateringUtils';
 import { behandlingUrl } from '~/utils/urls';
 
@@ -15,8 +14,6 @@ type Props = {
 };
 
 export const OpprettRevurdering = ({ sakId, harVedtak }: Props) => {
-    const { revurderingInnvilgelseToggle } = useFeatureToggles();
-
     const [valgtType, setValgtType] = useState<RevurderingResultat | null>(null);
 
     const { opprettRevurdering, opprettRevurderingLaster, opprettRevurderingError } =
@@ -76,10 +73,7 @@ export const OpprettRevurdering = ({ sakId, harVedtak }: Props) => {
                         setValgtType(type);
                     }}
                 >
-                    <Radio
-                        value={RevurderingResultat.REVURDERING_INNVILGELSE}
-                        disabled={!revurderingInnvilgelseToggle}
-                    >
+                    <Radio value={RevurderingResultat.REVURDERING_INNVILGELSE}>
                         {'Innvilgelse'}
                     </Radio>
                     <Radio value={RevurderingResultat.STANS}>{'Stans'}</Radio>

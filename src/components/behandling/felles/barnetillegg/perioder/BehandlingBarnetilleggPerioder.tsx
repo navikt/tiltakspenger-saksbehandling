@@ -92,6 +92,9 @@ const BarnetilleggPeriode = ({ periode, index, rolle, dispatch, context }: Perio
     const maksAntall = (Math.floor(periode.antallBarn / BATCH_MED_BARN) + 1) * BATCH_MED_BARN;
     const erSaksbehandler = rolle === SaksbehandlerRolle.SAKSBEHANDLER;
 
+    // Normalt skal det ikke være mulig å sette en 0-periode, men dersom det skulle skje må det vises til saksbehandler
+    const erPeriodeMed0Barn = periode.antallBarn === 0;
+
     return (
         <div className={style.periode}>
             <Datovelger
@@ -152,6 +155,7 @@ const BarnetilleggPeriode = ({ periode, index, rolle, dispatch, context }: Perio
                 className={style.antall}
                 value={periode.antallBarn}
                 readOnly={!erSaksbehandler}
+                error={erPeriodeMed0Barn && 'Perioden må ha minst ett barn'}
                 onChange={(event) => {
                     dispatch({
                         type: 'oppdaterBarnetilleggAntall',
@@ -159,6 +163,11 @@ const BarnetilleggPeriode = ({ periode, index, rolle, dispatch, context }: Perio
                     });
                 }}
             >
+                {erPeriodeMed0Barn && (
+                    <option value={0} disabled={true}>
+                        {0}
+                    </option>
+                )}
                 {Array.from({ length: maksAntall }).map((_, index) => {
                     const verdi = index + 1;
                     return (
