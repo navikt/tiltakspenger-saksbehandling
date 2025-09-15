@@ -16,9 +16,9 @@ import { formaterDatotekst, periodeTilFormatertDatotekst } from '~/utils/date';
 import { formatterBeløp } from '~/utils/beløp';
 import { meldeperiodeUrl } from '~/utils/urls';
 import { useTidslinjeDateRange } from '~/components/behandling/tidslinje/useTidslinjeDateRange';
+import { tellAntallBarnFraVedtak } from '~/components/behandling/felles/barnetillegg/utils/barnetilleggUtils';
 
 import style from './BehandlingerTidslinje.module.css';
-import { tellAntallBarnFraVedtak } from '~/components/behandling/felles/barnetillegg/utils/tellAntallBarnFraVedtak';
 
 type Props = {
     sak: SakProps;

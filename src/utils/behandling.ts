@@ -1,9 +1,4 @@
-import {
-    BehandlingData,
-    BehandlingStatus,
-    Behandlingstype,
-    SøknadsbehandlingData,
-} from '~/types/BehandlingTypes';
+import { BehandlingData, BehandlingStatus, SøknadsbehandlingData } from '~/types/BehandlingTypes';
 import { Periode } from '~/types/Periode';
 import { singleOrFirst } from './array';
 import { Tiltaksdeltagelse, TiltaksdeltagelseMedPeriode } from '~/types/TiltakDeltagelseTypes';
@@ -29,18 +24,10 @@ export const hentTiltaksperiodeFraSøknad = (behandling: SøknadsbehandlingData)
     };
 };
 
-export const harSøktBarnetillegg = (behandling: BehandlingData) =>
-    !!behandling.barnetillegg ||
-    (erBehandlingSøknadsbehandling(behandling) && behandling.søknad.barnetillegg.length > 0);
-
 export const erBehandlingAvbrutt = (behandling: BehandlingData) => !!behandling.avbrutt;
 
 export const erBehandlingVedtatt = (behandling: BehandlingData) =>
     behandling.status === BehandlingStatus.VEDTATT;
-
-export const erBehandlingSøknadsbehandling = (
-    behandling: BehandlingData,
-): behandling is SøknadsbehandlingData => behandling.type === Behandlingstype.SØKNADSBEHANDLING;
 
 export const deltarPaFlereTiltakMedStartOgSluttdatoIValgtInnvilgelsesperiode = (
     behandling: BehandlingData,

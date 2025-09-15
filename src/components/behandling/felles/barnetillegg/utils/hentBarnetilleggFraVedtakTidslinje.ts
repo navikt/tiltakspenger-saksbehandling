@@ -4,6 +4,7 @@ import { joinPerioder, perioderOverlapper } from '~/utils/periode';
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';
 import { datoMax, datoMin, nesteDag } from '~/utils/date';
 import { BehandlingId } from '~/types/BehandlingTypes';
+import { kunPerioderMedBarn } from '~/components/behandling/felles/barnetillegg/utils/barnetilleggUtils';
 
 type VedtakMedBarnetillegg = Rammevedtak & {
     barnetillegg: NonNullable<Rammevedtak['barnetillegg']>;
@@ -49,4 +50,13 @@ export const hentBarnetilleggFraVedtakTidslinje = (
 
         return [...acc, neste];
     }, []);
+};
+
+export const hentBarnetilleggPerioderMedBarn = (
+    tidslinje: Rammevedtak[],
+    behandlingsperiode: Periode,
+): BarnetilleggMedBehandlingId[] => {
+    return hentBarnetilleggFraVedtakTidslinje(tidslinje, behandlingsperiode).filter(
+        kunPerioderMedBarn,
+    );
 };

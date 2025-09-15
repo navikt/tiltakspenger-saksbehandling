@@ -4,8 +4,9 @@ import { Periode } from '~/types/Periode';
 import { erDatoIPeriode } from '~/utils/periode';
 import { removeDuplicates } from '~/utils/array';
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';
+import { kunPerioderMedBarn } from '~/components/behandling/felles/barnetillegg/utils/barnetilleggUtils';
 
-export const periodiserBarnetillegg = (
+export const periodiserBarnetilleggFraSøknad = (
     barnFraSøknad: SøknadBarn[],
     virkningsperiode: Periode,
 ): BarnetilleggPeriode[] => {
@@ -62,5 +63,5 @@ export const periodiserBarnetillegg = (
                 },
             };
         })
-        .filter((bt) => bt.antallBarn > 0);
+        .filter(kunPerioderMedBarn);
 };

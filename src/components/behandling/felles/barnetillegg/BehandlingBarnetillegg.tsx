@@ -18,9 +18,10 @@ import {
 } from '~/components/behandling/felles/state/InnvilgelseState';
 import { OppdaterBarnetilleggRequest, VedtakBarnetilleggDTO } from '~/types/Barnetillegg';
 import { BarnetilleggTidslinje } from '~/components/behandling/felles/barnetillegg/tidslinje/BarnetilleggTidslinje';
+import { harSøktBarnetillegg } from '~/components/behandling/felles/barnetillegg/utils/barnetilleggUtils';
+import { useSak } from '~/context/sak/SakContext';
 
 import style from './BehandlingBarnetillegg.module.css';
-import { harSøktBarnetillegg } from '~/utils/behandling';
 
 export type BehandlingBarnetilleggProps = {
     behandling: BehandlingData;
@@ -36,6 +37,8 @@ export type BehandlingBarnetilleggProps = {
 export const BehandlingBarnetillegg = (props: BehandlingBarnetilleggProps) => {
     const { behandling, dispatch, context, valgTekst } = props;
     const { harBarnetillegg, behandlingsperiode } = context;
+
+    const { sak } = useSak();
 
     const rolle = useRolleForBehandling(behandling);
 
@@ -69,11 +72,12 @@ export const BehandlingBarnetillegg = (props: BehandlingBarnetilleggProps) => {
                         <Radio value={true}>{'Ja'}</Radio>
                         <Radio value={false}>{'Nei'}</Radio>
                     </RadioGroup>
-                    {!harBarnetillegg && harSøktBarnetillegg(behandling) && (
-                        <Alert className={style.infoboks} variant={'info'} size={'small'}>
-                            Husk å begrunne avslaget på barnetillegg i vedtaksbrevet.
-                        </Alert>
-                    )}
+                    {!harBarnetillegg &&
+                        harSøktBarnetillegg(behandlingsperiode, behandling, sak) && (
+                            <Alert className={style.infoboks} variant={'info'} size={'small'}>
+                                Husk å begrunne avslaget på barnetillegg i vedtaksbrevet.
+                            </Alert>
+                        )}
                 </VedtakSeksjon.Venstre>
             </VedtakSeksjon>
 

@@ -1,7 +1,7 @@
 import { describe, expect, test } from '@jest/globals';
 import { SøknadBarnKilde } from '~/types/SøknadTypes';
 import { Periode } from '~/types/Periode';
-import { periodiserBarnetillegg } from './periodiserBarnetillegg';
+import { periodiserBarnetilleggFraSøknad } from './periodiserBarnetilleggFraSøknad';
 import { finn16årsdag, forrigeDag } from '~/utils/date';
 
 const virkningsperiode: Periode = {
@@ -74,7 +74,7 @@ const barnSomBlirFødtSentIPerioden = {
 
 describe('Periodiserer barnetillegg fra søknaden', () => {
     test('3 barn i hele perioden', () => {
-        const barnetillegg = periodiserBarnetillegg(
+        const barnetillegg = periodiserBarnetilleggFraSøknad(
             [
                 barnSomErUnder16HelePerioden,
                 barnSomErUnder16HelePerioden,
@@ -95,7 +95,7 @@ describe('Periodiserer barnetillegg fra søknaden', () => {
     });
 
     test('2 barn hele perioden + 1 fødsel i løpet av perioden', () => {
-        const barnetillegg = periodiserBarnetillegg(
+        const barnetillegg = periodiserBarnetilleggFraSøknad(
             [
                 barnSomErUnder16HelePerioden,
                 barnSomErUnder16HelePerioden,
@@ -123,7 +123,7 @@ describe('Periodiserer barnetillegg fra søknaden', () => {
     });
 
     test('1 fødsel i løpet av perioden', () => {
-        const barnetillegg = periodiserBarnetillegg(
+        const barnetillegg = periodiserBarnetilleggFraSøknad(
             [barnSomBlirFødtMidtIPerioden],
             virkningsperiode,
         );
@@ -140,7 +140,10 @@ describe('Periodiserer barnetillegg fra søknaden', () => {
     });
 
     test('1 barn som blir 16 i løpet av perioden', () => {
-        const barnetillegg = periodiserBarnetillegg([barnSomBlir16SentIPerioden], virkningsperiode);
+        const barnetillegg = periodiserBarnetilleggFraSøknad(
+            [barnSomBlir16SentIPerioden],
+            virkningsperiode,
+        );
 
         expect(barnetillegg).toEqual([
             {
@@ -154,7 +157,7 @@ describe('Periodiserer barnetillegg fra søknaden', () => {
     });
 
     test('2 barn hele perioden + 1 fødsel i løpet av perioden + 1 blir 16', () => {
-        const barnetillegg = periodiserBarnetillegg(
+        const barnetillegg = periodiserBarnetilleggFraSøknad(
             [
                 barnSomErUnder16HelePerioden,
                 barnSomErUnder16HelePerioden,
@@ -190,7 +193,7 @@ describe('Periodiserer barnetillegg fra søknaden', () => {
     });
 
     test('1 barn blir 16 år, og 1 blir senere født', () => {
-        const barnetillegg = periodiserBarnetillegg(
+        const barnetillegg = periodiserBarnetilleggFraSøknad(
             [barnSomBlir16TidligIPerioden, barnSomBlirFødtSentIPerioden],
             virkningsperiode,
         );
@@ -214,7 +217,7 @@ describe('Periodiserer barnetillegg fra søknaden', () => {
     });
 
     test('2 barn blir 16 før perioden, 1 barn i hele perioden, 1 barn blir 16 i perioden, og 1 blir senere født', () => {
-        const barnetillegg = periodiserBarnetillegg(
+        const barnetillegg = periodiserBarnetilleggFraSøknad(
             [
                 barnSomBlir16FørPerioden,
                 barnSomBlir16FørPerioden,
@@ -251,7 +254,7 @@ describe('Periodiserer barnetillegg fra søknaden', () => {
     });
 
     test('1 barn i EØS hele periode, 1 barn utenfor EØS', () => {
-        const barnetillegg = periodiserBarnetillegg(
+        const barnetillegg = periodiserBarnetilleggFraSøknad(
             [barnSomErUnder16HelePerioden, barnSomIkkeOppholderSegIEØS],
             virkningsperiode,
         );

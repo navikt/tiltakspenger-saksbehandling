@@ -1,19 +1,20 @@
 import { BehandlingData, RevurderingData, SøknadsbehandlingData } from '~/types/BehandlingTypes';
-import { periodiserBarnetillegg } from '~/components/behandling/felles/barnetillegg/utils/periodiserBarnetillegg';
+import { periodiserBarnetilleggFraSøknad } from '~/components/behandling/felles/barnetillegg/utils/periodiserBarnetilleggFraSøknad';
 import {
     hentHeleTiltaksdeltagelsesperioden,
     hentTiltaksperiodeFraSøknad,
 } from '~/utils/behandling';
-import { hentBarnetilleggFraVedtakTidslinje } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraVedtakTidslinje';
+import { hentBarnetilleggPerioderMedBarn } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraVedtakTidslinje';
 import { SakProps } from '~/types/SakTypes';
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';
+import { kunPerioderMedBarn } from '~/components/behandling/felles/barnetillegg/utils/barnetilleggUtils';
 
 export const hentBarnetilleggForSøknadsbehandling = (
     behandling: SøknadsbehandlingData,
 ): BarnetilleggPeriode[] => {
     return (
-        hentLagredePerioder(behandling) ||
-        periodiserBarnetillegg(
+        hentLagredePerioderMedBarn(behandling) ||
+        periodiserBarnetilleggFraSøknad(
             behandling.søknad.barnetillegg,
             behandling.virkningsperiode ?? hentTiltaksperiodeFraSøknad(behandling),
         )
@@ -25,16 +26,16 @@ export const hentBarnetilleggForRevurdering = (
     sak: SakProps,
 ): BarnetilleggPeriode[] => {
     return (
-        hentLagredePerioder(behandling) ||
-        hentBarnetilleggFraVedtakTidslinje(
+        hentLagredePerioderMedBarn(behandling) ||
+        hentBarnetilleggPerioderMedBarn(
             sak.tidslinje,
             behandling.virkningsperiode ?? hentHeleTiltaksdeltagelsesperioden(behandling),
-        ).filter(filterPerioderMedBarn)
+        )
     );
 };
 
-const hentLagredePerioder = (behandling: BehandlingData): BarnetilleggPeriode[] | undefined => {
-    return behandling.barnetillegg?.perioder.filter(filterPerioderMedBarn);
+const hentLagredePerioderMedBarn = (
+    behandling: BehandlingData,
+): BarnetilleggPeriode[] | undefined => {
+    return behandling.barnetillegg?.perioder.filter(kunPerioderMedBarn);
 };
-
-const filterPerioderMedBarn = (it: BarnetilleggPeriode) => it.antallBarn > 0;

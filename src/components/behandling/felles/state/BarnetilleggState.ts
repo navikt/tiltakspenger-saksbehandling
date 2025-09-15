@@ -3,7 +3,7 @@ import { VedtakBarnetilleggPeriode } from '~/types/VedtakTyper';
 import { forrigeDag, nesteDag } from '~/utils/date';
 import { ReducerActionHandlers } from '~/types/Context';
 import { SøknadForBehandlingProps } from '~/types/SøknadTypes';
-import { periodiserBarnetillegg } from '~/components/behandling/felles/barnetillegg/utils/periodiserBarnetillegg';
+import { periodiserBarnetilleggFraSøknad } from '~/components/behandling/felles/barnetillegg/utils/periodiserBarnetilleggFraSøknad';
 import { TextAreaInput } from '~/utils/textarea';
 
 export type BarnetilleggState = {
@@ -96,7 +96,7 @@ export const getBarnetilleggActionHandlers = <
         nullstillBarnetilleggPerioder: (state, payload) => {
             return {
                 ...state,
-                barnetilleggPerioder: periodiserBarnetillegg(
+                barnetilleggPerioder: periodiserBarnetilleggFraSøknad(
                     payload.søknad.barnetillegg,
                     payload.innvilgelsesPeriode,
                 ),
