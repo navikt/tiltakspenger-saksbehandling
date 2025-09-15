@@ -1,4 +1,4 @@
-import { Button } from '@navikt/ds-react';
+import { Alert, Button } from '@navikt/ds-react';
 
 import style from './OppdaterSimulering.module.css';
 import { BehandlingId } from '~/types/BehandlingTypes';
@@ -12,7 +12,10 @@ type Props = {
 };
 
 export const OppdaterSimuleringKnapp = ({ sakId, behandlingId }: Props) => {
-    const { oppdaterSimulering } = useOppdaterSimulering(sakId, behandlingId);
+    const { oppdaterSimulering, oppdaterSimuleringError } = useOppdaterSimulering(
+        sakId,
+        behandlingId,
+    );
     return (
         <>
             <Button
@@ -24,6 +27,11 @@ export const OppdaterSimuleringKnapp = ({ sakId, behandlingId }: Props) => {
             >
                 {'Oppdater simulering'}
             </Button>
+            {oppdaterSimuleringError && (
+                <Alert variant={'warning'} size="small">
+                    {oppdaterSimuleringError.message}
+                </Alert>
+            )}
         </>
     );
 };
