@@ -80,7 +80,7 @@ export const BehandlingUtbetaling = () => {
                     />
                     <HStack>
                         <Simuleringsknapp simulering={simulering} />
-                        {behandlingStatus === BehandlingStatus.UNDER_BESLUTNING && (
+                        {behandlingStatus === BehandlingStatus.UNDER_BEHANDLING && (
                             <OppdaterSimuleringKnapp sakId={sakId} behandlingId={id} />
                         )}
                     </HStack>
