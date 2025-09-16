@@ -26,6 +26,7 @@ import { BegrunnelseOgBrevInput } from '~/components/behandling/felles/state/Beg
 import { useSak } from '~/context/sak/SakContext';
 import { SakProps } from '~/types/SakTypes';
 import { hentBarnetilleggForRevurdering } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
+import { erDatoIPeriode } from '~/utils/periode';
 
 export type RevurderingInnvilgelseVedtakContext = BegrunnelseOgBrevInput &
     BarnetilleggBegrunnelseInput &
@@ -39,14 +40,31 @@ const DispatchContext = createContext(
 
 const tilValgteTiltaksdeltakelser = (
     behandling: BehandlingData,
-): VedtakTiltaksdeltakelsePeriode[] =>
-    hentTiltaksdeltakelserMedStartOgSluttdato(behandling).map((tiltaksdeltagelse) => ({
-        eksternDeltagelseId: tiltaksdeltagelse.eksternDeltagelseId,
-        periode: {
-            fraOgMed: tiltaksdeltagelse.deltagelseFraOgMed,
-            tilOgMed: tiltaksdeltagelse.deltagelseTilOgMed,
-        },
-    }));
+    behandlingsperiode: Periode,
+): VedtakTiltaksdeltakelsePeriode[] => {
+    const overlappendeDeltakelser: VedtakTiltaksdeltakelsePeriode[] = [];
+
+    const tiltak = hentTiltaksdeltakelserMedStartOgSluttdato(behandling).map(
+        (tiltaksdeltagelse) => ({
+            eksternDeltagelseId: tiltaksdeltagelse.eksternDeltagelseId,
+            periode: {
+                fraOgMed: tiltaksdeltagelse.deltagelseFraOgMed,
+                tilOgMed: tiltaksdeltagelse.deltagelseTilOgMed,
+            },
+        }),
+    );
+
+    // finner tiltaksdeltakelsene som overlapper med innvilgelsesperioden for at det skal bli riktig når man har flere tiltak, men bare et av dem gjelder valgt periode
+    tiltak.forEach((tiltaksdeltagelse) => {
+        if (
+            erDatoIPeriode(behandlingsperiode.fraOgMed, tiltaksdeltagelse.periode) ||
+            erDatoIPeriode(behandlingsperiode.tilOgMed, tiltaksdeltagelse.periode)
+        ) {
+            overlappendeDeltakelser.push(tiltaksdeltagelse);
+        }
+    });
+    return overlappendeDeltakelser;
+};
 
 const initieltVedtakSkjema = ({
     behandling,
@@ -75,7 +93,8 @@ const initieltVedtakSkjema = ({
         harBarnetillegg: barnetilleggPerioder.length > 0,
         barnetilleggPerioder,
         valgteTiltaksdeltakelser:
-            behandling.valgteTiltaksdeltakelser ?? tilValgteTiltaksdeltakelser(behandling),
+            behandling.valgteTiltaksdeltakelser ??
+            tilValgteTiltaksdeltakelser(behandling, behandlingsperiode),
     };
 };
 
