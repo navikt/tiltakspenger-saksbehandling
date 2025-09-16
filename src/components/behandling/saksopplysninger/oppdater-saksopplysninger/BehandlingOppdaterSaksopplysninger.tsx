@@ -1,7 +1,7 @@
 import { Button, Loader } from '@navikt/ds-react';
 import { ArrowCirclepathIcon, CheckmarkIcon } from '@navikt/aksel-icons';
 import { useOppdaterSaksopplysninger } from './useOppdaterSaksopplysninger';
-import { useBehandling } from '../../BehandlingContext';
+import { useBehandling } from '../../context/BehandlingContext';
 import { useState } from 'react';
 import { classNames } from '../../../../utils/classNames';
 import Varsel from '../../../varsel/Varsel';

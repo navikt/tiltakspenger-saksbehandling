@@ -1,13 +1,11 @@
 import { BehandlingData, RevurderingData, SøknadsbehandlingData } from '~/types/BehandlingTypes';
 import { periodiserBarnetilleggFraSøknad } from '~/components/behandling/felles/barnetillegg/utils/periodiserBarnetilleggFraSøknad';
-import {
-    hentHeleTiltaksdeltagelsesperioden,
-    hentTiltaksperiodeFraSøknad,
-} from '~/utils/behandling';
+import { hentTiltaksperiodeFraSøknad } from '~/utils/behandling';
 import { hentBarnetilleggPerioderMedBarn } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraVedtakTidslinje';
 import { SakProps } from '~/types/SakTypes';
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';
 import { kunPerioderMedBarn } from '~/components/behandling/felles/barnetillegg/utils/barnetilleggUtils';
+import { Periode } from '~/types/Periode';
 
 export const hentBarnetilleggForSøknadsbehandling = (
     behandling: SøknadsbehandlingData,
@@ -22,15 +20,13 @@ export const hentBarnetilleggForSøknadsbehandling = (
 };
 
 export const hentBarnetilleggForRevurdering = (
+    periode: Periode,
     behandling: RevurderingData,
     sak: SakProps,
 ): BarnetilleggPeriode[] => {
     return (
         hentLagredePerioderMedBarn(behandling) ||
-        hentBarnetilleggPerioderMedBarn(
-            sak.tidslinje,
-            behandling.virkningsperiode ?? hentHeleTiltaksdeltagelsesperioden(behandling),
-        )
+        hentBarnetilleggPerioderMedBarn(sak.tidslinje, periode)
     );
 };
 

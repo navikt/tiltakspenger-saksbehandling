@@ -8,7 +8,7 @@ import {
     useReducer,
     useRef,
 } from 'react';
-import { useSøknadsbehandling } from '../../BehandlingContext';
+import { useSøknadsbehandling } from '../../context/BehandlingContext';
 import {
     SøknadsbehandlingReducer,
     SøknadsbehandlingSkjemaActions,

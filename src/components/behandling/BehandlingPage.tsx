@@ -2,7 +2,7 @@ import React from 'react';
 import { SøknadsbehandlingVedtak } from '~/components/behandling/søknadsbehandling/SøknadsbehandlingVedtak';
 import { BehandlingSaksopplysninger } from './saksopplysninger/BehandlingSaksopplysninger';
 import { RevurderingVedtak } from './revurdering/RevurderingVedtak';
-import { useBehandling } from './BehandlingContext';
+import { useBehandling } from './context/BehandlingContext';
 import { Behandlingstype } from '~/types/BehandlingTypes';
 import { PersonaliaHeader } from '../personaliaheader/PersonaliaHeader';
 import { Alert } from '@navikt/ds-react';

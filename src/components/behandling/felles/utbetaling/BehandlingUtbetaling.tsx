@@ -4,7 +4,7 @@ import { Separator } from '~/components/separator/Separator';
 import { Alert, Heading, HStack, VStack } from '@navikt/ds-react';
 import { UtbetalingBeløp } from '~/components/utbetaling/beløp/UtbetalingBeløp';
 import { Simuleringsknapp } from './Simulering';
-import { useBehandling } from '~/components/behandling/BehandlingContext';
+import { useBehandling } from '~/components/behandling/context/BehandlingContext';
 import { BehandlingStatus } from '~/types/BehandlingTypes';
 
 import style from './BehandlingUtbetaling.module.css';

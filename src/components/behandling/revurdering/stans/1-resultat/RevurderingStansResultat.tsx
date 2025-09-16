@@ -1,7 +1,7 @@
 import { Alert, Link, Select } from '@navikt/ds-react';
 import style from './RevurderingStansResultat.module.css';
 import { useRevurderingStansVedtak } from '../RevurderingStansVedtakContext';
-import { useRevurderingBehandling } from '../../../BehandlingContext';
+import { useRevurderingBehandling } from '../../../context/BehandlingContext';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { Datovelger } from '../../../../datovelger/Datovelger';

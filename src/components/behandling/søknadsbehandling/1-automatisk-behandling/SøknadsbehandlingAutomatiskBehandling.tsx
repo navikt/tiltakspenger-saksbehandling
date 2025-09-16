@@ -1,4 +1,4 @@
-import { useSøknadsbehandling } from '~/components/behandling/BehandlingContext';
+import { useSøknadsbehandling } from '~/components/behandling/context/BehandlingContext';
 import { Alert } from '@navikt/ds-react';
 import React from 'react';
 import style from './SøknadsbehandlingAutomatiskBehandling.module.css';

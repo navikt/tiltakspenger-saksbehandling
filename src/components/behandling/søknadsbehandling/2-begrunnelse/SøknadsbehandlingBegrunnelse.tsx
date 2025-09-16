@@ -1,5 +1,5 @@
 import { useSøknadsbehandlingSkjema } from '../context/SøknadsbehandlingVedtakContext';
-import { useSøknadsbehandling } from '../../BehandlingContext';
+import { useSøknadsbehandling } from '../../context/BehandlingContext';
 import { BegrunnelseVilkårsvurdering } from '~/components/behandling/felles/begrunnelse-vilkårsvurdering/BegrunnelseVilkårsvurdering';
 
 export const SøknadsbehandlingBegrunnelse = () => {

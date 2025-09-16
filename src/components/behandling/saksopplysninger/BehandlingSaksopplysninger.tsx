@@ -1,7 +1,7 @@
 import { BodyShort, Heading } from '@navikt/ds-react';
 import { alderFraDato, formaterDatotekst } from '~/utils/date';
 import { ReactNode } from 'react';
-import { useBehandling } from '../BehandlingContext';
+import { useBehandling } from '../context/BehandlingContext';
 import { Separator } from '../../separator/Separator';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { BehandlingOppdaterSaksopplysninger } from './oppdater-saksopplysninger/BehandlingOppdaterSaksopplysninger';

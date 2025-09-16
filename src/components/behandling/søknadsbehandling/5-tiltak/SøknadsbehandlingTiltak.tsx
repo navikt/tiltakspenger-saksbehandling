@@ -2,7 +2,7 @@ import {
     useSøknadsbehandlingSkjema,
     useSøknadsbehandlingSkjemaDispatch,
 } from '../context/SøknadsbehandlingVedtakContext';
-import { useSøknadsbehandling } from '../../BehandlingContext';
+import { useSøknadsbehandling } from '../../context/BehandlingContext';
 import { SøknadsbehandlingResultat } from '~/types/BehandlingTypes';
 import { BehandlingTiltak } from '~/components/behandling/felles/tiltak/BehandlingTiltak';
 

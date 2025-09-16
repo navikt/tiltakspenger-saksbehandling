@@ -1,6 +1,6 @@
 import { Button } from '@navikt/ds-react';
 import React, { useState } from 'react';
-import { useBehandling } from '../../../BehandlingContext';
+import { useBehandling } from '../../../context/BehandlingContext';
 import { BehandlingData } from '~/types/BehandlingTypes';
 import { BekreftelsesModal } from '../../../../modaler/BekreftelsesModal';
 import { useSendBehandlingTilBeslutning } from '~/components/behandling/felles/send-og-godkjenn/send-til-beslutning/useSendBehandlingTilBeslutning';

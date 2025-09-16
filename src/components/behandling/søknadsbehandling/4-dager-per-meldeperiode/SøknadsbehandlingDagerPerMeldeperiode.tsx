@@ -6,7 +6,7 @@ import {
 } from '../context/SøknadsbehandlingVedtakContext';
 import { Separator } from '~/components/separator/Separator';
 import { AntallDagerForMeldeperiodeFormData } from '../../felles/state/AntallDagerState';
-import { useSøknadsbehandling } from '../../BehandlingContext';
+import { useSøknadsbehandling } from '../../context/BehandlingContext';
 
 const SøknadsbehandlingDagerPerMeldeperiode = () => {
     const { rolleForBehandling } = useSøknadsbehandling();

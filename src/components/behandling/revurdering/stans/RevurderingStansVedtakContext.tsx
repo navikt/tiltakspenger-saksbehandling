@@ -1,5 +1,5 @@
 import { createContext, PropsWithChildren, useCallback, useContext, useRef, useState } from 'react';
-import { useRevurderingBehandling } from '../../BehandlingContext';
+import { useRevurderingBehandling } from '../../context/BehandlingContext';
 import { BegrunnelseOgBrevInput } from '~/components/behandling/felles/state/BegrunnelseOgBrev';
 import { getTextAreaRefValue } from '~/utils/textarea';
 import { ValgtHjemmelForStans } from '~/types/BehandlingTypes';

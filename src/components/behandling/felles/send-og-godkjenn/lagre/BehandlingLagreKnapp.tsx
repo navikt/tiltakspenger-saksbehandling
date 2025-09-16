@@ -1,7 +1,7 @@
 import { Button } from '@navikt/ds-react';
 import { useLagreBehandling } from '~/components/behandling/felles/send-og-godkjenn/lagre/useLagreBehandling';
 import { BehandlingVedtakDTO } from '~/types/VedtakTyper';
-import { useBehandling } from '~/components/behandling/BehandlingContext';
+import { useBehandling } from '~/components/behandling/context/BehandlingContext';
 import { BehandlingData } from '~/types/BehandlingTypes';
 import { Nullable } from '~/types/UtilTypes';
 import { FetcherError } from '~/utils/fetch/fetch';

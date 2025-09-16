@@ -2,7 +2,7 @@ import { RevurderingResultat } from '~/types/BehandlingTypes';
 
 import { Separator } from '~/components/separator/Separator';
 import { DagerPerMeldeperiode } from '~/components/behandling/felles/dager-per-meldeperiode/DagerPerMeldeperiode';
-import { useRevurderingBehandling } from '~/components/behandling/BehandlingContext';
+import { useRevurderingBehandling } from '~/components/behandling/context/BehandlingContext';
 import {
     useRevurderingInnvilgelseSkjema,
     useRevurderingInnvilgelseSkjemaDispatch,

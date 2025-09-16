@@ -1,7 +1,7 @@
 import { Button, HStack } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import { BehandlingData } from '~/types/BehandlingTypes';
-import { useBehandling } from '../../../BehandlingContext';
+import { useBehandling } from '../../../context/BehandlingContext';
 import { BekreftelsesModal } from '../../../../modaler/BekreftelsesModal';
 import { Underkjenn } from '../../../../underkjenn/Underkjenn';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';

@@ -1,5 +1,5 @@
 import { BehandlingBarnetillegg } from '~/components/behandling/felles/barnetillegg/BehandlingBarnetillegg';
-import { useRevurderingBehandling } from '~/components/behandling/BehandlingContext';
+import { useRevurderingBehandling } from '~/components/behandling/context/BehandlingContext';
 import {
     useRevurderingInnvilgelseSkjema,
     useRevurderingInnvilgelseSkjemaDispatch,

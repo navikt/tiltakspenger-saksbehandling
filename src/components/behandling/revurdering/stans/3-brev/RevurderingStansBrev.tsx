@@ -1,5 +1,5 @@
 import { useRevurderingStansVedtak } from '../RevurderingStansVedtakContext';
-import { useRevurderingBehandling } from '../../../BehandlingContext';
+import { useRevurderingBehandling } from '../../../context/BehandlingContext';
 import React from 'react';
 import { Vedtaksbrev } from '~/components/behandling/felles/vedtaksbrev/Vedtaksbrev';
 import { revurderingStansValidering } from '~/components/behandling/revurdering/stans/revurderingStansValidering';

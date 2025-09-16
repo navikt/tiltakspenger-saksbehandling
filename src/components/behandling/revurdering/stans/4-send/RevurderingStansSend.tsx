@@ -1,4 +1,4 @@
-import { useRevurderingBehandling } from '../../../BehandlingContext';
+import { useRevurderingBehandling } from '../../../context/BehandlingContext';
 import {
     RevurderingStansVedtakContext,
     useRevurderingStansVedtak,
