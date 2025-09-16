@@ -150,10 +150,15 @@ export const skalKunneOvertaBehandling = (
             return (
                 beslutter &&
                 erBeslutter(innloggetSaksbehandler) &&
-                innloggetSaksbehandler.navIdent != saksbehandler
+                !eierBehandling(behandling, innloggetSaksbehandler) &&
+                innloggetSaksbehandler.navIdent !== saksbehandler
             );
         case BehandlingStatus.UNDER_BEHANDLING:
-            return saksbehandler && erSaksbehandler(innloggetSaksbehandler);
+            return (
+                saksbehandler &&
+                erSaksbehandler(innloggetSaksbehandler) &&
+                !eierBehandling(behandling, innloggetSaksbehandler)
+            );
         default:
             return false;
     }
@@ -215,8 +220,6 @@ export const skalKunneGjenopptaBehandling = (
             erRelevantMenyValgForStatus &&
             behandling.ventestatus &&
             behandling.ventestatus.erSattPåVent
-            // &&
-            // eierBehandling(behandling, innloggetSaksbehandler)
         );
     } else {
         return (

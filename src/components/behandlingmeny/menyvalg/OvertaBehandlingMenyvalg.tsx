@@ -1,10 +1,6 @@
 import { ActionMenu } from '@navikt/ds-react';
 import { BehandlingForOversiktData, BehandlingStatus } from '~/types/BehandlingTypes';
-import {
-    eierBehandling,
-    erBehandlerEllerBeslutterAvBehandling,
-    skalKunneOvertaBehandling,
-} from '~/utils/tilganger';
+import { skalKunneOvertaBehandling } from '~/utils/tilganger';
 import { Saksbehandler } from '~/types/Saksbehandler';
 import { ArrowRightIcon } from '@navikt/aksel-icons';
 
@@ -17,10 +13,7 @@ export const visOvertaBehandlingMenyvalg = (
         behandling.status === BehandlingStatus.UNDER_BESLUTNING;
 
     return (
-        erRelevantMenyValgForStatus &&
-        !eierBehandling(behandling, innloggetSaksbehandler) &&
-        !erBehandlerEllerBeslutterAvBehandling(behandling, innloggetSaksbehandler) &&
-        skalKunneOvertaBehandling(behandling, innloggetSaksbehandler)
+        erRelevantMenyValgForStatus && skalKunneOvertaBehandling(behandling, innloggetSaksbehandler)
     );
 };
 
