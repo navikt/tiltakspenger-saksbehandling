@@ -13,6 +13,8 @@ export interface SimuleringEndring {
     nyUtbetaling: number;
     totalEtterbetaling: number;
     totalFeilutbetaling: number;
+    totalTrekk: number;
+    totalJustering: number;
     totalBeløp: number;
     datoBeregnet: string;
     type: 'Endring';
@@ -31,6 +33,8 @@ export interface Simuleringsdag {
     nyUtbetaling: number;
     totalEtterbetaling: number;
     totalFeilutbetaling: number;
+    totalTrekk: number;
+    totalJustering: number;
     posteringsdag: PosteringerForDag;
 }
 
