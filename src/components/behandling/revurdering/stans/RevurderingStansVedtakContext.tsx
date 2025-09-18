@@ -2,11 +2,11 @@ import { createContext, PropsWithChildren, useCallback, useContext, useRef, useS
 import { useRevurderingBehandling } from '../../context/BehandlingContext';
 import { BegrunnelseOgBrevInput } from '~/components/behandling/felles/state/BegrunnelseOgBrev';
 import { getTextAreaRefValue } from '~/utils/textarea';
-import { ValgtHjemmelForStans } from '~/types/BehandlingTypes';
+import { HjemmelForStans } from '~/types/BehandlingTypes';
 
 export type RevurderingStansVedtakContext = {
-    valgtHjemmelHarIkkeRettighet: ValgtHjemmelForStans[];
-    setValgtHjemmelHarIkkeRettighet: (valgtHjemmel: ValgtHjemmelForStans[]) => void;
+    valgtHjemmelHarIkkeRettighet: HjemmelForStans[];
+    setValgtHjemmelHarIkkeRettighet: (valgtHjemmel: HjemmelForStans[]) => void;
     stansdato: string;
     setStansdato: (fraOgMed: string) => void;
 } & BegrunnelseOgBrevInput;
@@ -20,7 +20,7 @@ export const RevurderingStansVedtakProvider = ({ children }: PropsWithChildren) 
     const initiellStansdato = behandling.virkningsperiode?.fraOgMed ?? '';
     const [stansdato, setStansdato] = useState(initiellStansdato);
     const [valgtHjemmelHarIkkeRettighet, setValgtHjemmelHarIkkeRettighet] = useState<
-        ValgtHjemmelForStans[]
+        HjemmelForStans[]
     >(behandling.valgtHjemmelHarIkkeRettighet ?? []);
     const begrunnelseRef = useRef<HTMLTextAreaElement>(null);
     const brevtekstRef = useRef<HTMLTextAreaElement>(null);

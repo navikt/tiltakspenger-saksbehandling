@@ -1,5 +1,5 @@
-import { ReducerActionHandlers } from '~/types/Context';
 import { Nullable } from '~/types/UtilTypes';
+import { BehandlingSkjemaActionHandlers } from '~/components/behandling/context/BehandlingSkjemaReducer';
 
 export type AntallDagerPerMeldeperiodeState = {
     antallDagerPerMeldeperiode: AntallDagerPerMeldeperiodeFormData[];
@@ -18,7 +18,7 @@ export type AntallDagerPerMeldeperiodeActions = {
     payload: { antallDager: AntallDagerPerMeldeperiodeFormData[] };
 };
 
-export const antallDagerForMeldeperiodeActionHandlers = {
+export const antallDagerPerMeldeperiodeActionHandlers = {
     oppdaterAntallDagerForMeldeperiode: (
         state,
         payload: { antallDager: AntallDagerPerMeldeperiodeFormData[] },
@@ -26,7 +26,4 @@ export const antallDagerForMeldeperiodeActionHandlers = {
         ...state,
         antallDagerPerMeldeperiode: payload.antallDager,
     }),
-} as const satisfies ReducerActionHandlers<
-    AntallDagerPerMeldeperiodeState,
-    AntallDagerPerMeldeperiodeActions
->;
+} as const satisfies BehandlingSkjemaActionHandlers<AntallDagerPerMeldeperiodeActions>;

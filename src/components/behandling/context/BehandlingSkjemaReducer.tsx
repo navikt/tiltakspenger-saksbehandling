@@ -1,76 +1,64 @@
 import { Reducer } from 'react';
 import {
+    antallDagerPerMeldeperiodeActionHandlers,
+    AntallDagerPerMeldeperiodeActions,
+    AntallDagerPerMeldeperiodeState,
+} from '~/components/behandling/context/slices/AntallDagerPerMeldeperiodeState';
+import {
+    behandlingsperiodeActionHandlers,
+    BehandlingsperiodeActions,
+    BehandlingsperiodeState,
+} from '~/components/behandling/context/slices/BehandlingsperiodeState';
+import {
+    avslagActionHandlers,
+    AvslagActions,
+    AvslagState,
+} from '~/components/behandling/context/slices/AvslagState';
+import { ReducerAction, ReducerActionHandlers } from '~/types/Context';
+import {
+    tiltaksdeltagelseActionHandlers,
     TiltaksdeltagelseActions,
     TiltaksdeltagelseState,
-} from '~/components/behandling/felles/state/TiltaksdeltagelseState';
+} from '~/components/behandling/context/slices/TiltaksdeltagelseState';
 import {
+    barnetilleggActionHandlers,
     BarnetilleggActions,
     BarnetilleggState,
-} from '~/components/behandling/felles/state/BarnetilleggState';
-import { InnvilgelseActions } from '~/components/behandling/felles/state/InnvilgelseState';
-import { AntallDagerForMeldeperiodeState } from '~/components/behandling/felles/state/AntallDagerState';
-import { Nullable } from '~/types/UtilTypes';
-import { Avslagsgrunn, BehandlingResultat } from '~/types/BehandlingTypes';
-import { BehandlingsperiodeState } from '~/components/behandling/context/BehandlingsperiodeContext';
-import { AntallDagerPerMeldeperiodeActions } from '~/components/behandling/context/slices/AntallDagerPerMeldeperiodeContext';
-import { ReducerActionHandlers } from '~/types/Context';
+} from '~/components/behandling/context/slices/BarnetilleggState';
+import {
+    stansActionHandlers,
+    StansActions,
+    StansState,
+} from '~/components/behandling/context/slices/StansState';
 
-export type BehandlingSkjemaState = {
-    resultat: Nullable<BehandlingResultat>;
-    avslagsgrunner: Nullable<Avslagsgrunn[]>;
-} & BehandlingsperiodeState &
+export type BehandlingSkjemaState = BehandlingsperiodeState &
     TiltaksdeltagelseState &
     BarnetilleggState &
-    AntallDagerForMeldeperiodeState;
-
-type BaseActions =
-    | {
-          type: 'setResultat';
-          payload: { resultat: BehandlingResultat | null };
-      }
-    | {
-          type: 'oppdaterAvslagsgrunn';
-          payload: { avslagsgrunn: Avslagsgrunn };
-      };
-
-const baseActionHandlers = {
-    setResultat: (state, payload: { resultat: BehandlingResultat | null }) => {
-        return { ...state, resultat: payload.resultat };
-    },
-
-    oppdaterAvslagsgrunn: (state, payload: { avslagsgrunn: Avslagsgrunn }) => {
-        if (state.avslagsgrunner === null) {
-            return {
-                ...state,
-                avslagsgrunner: [payload.avslagsgrunn],
-            };
-        }
-
-        const eksistererAllerede = state.avslagsgrunner.includes(payload.avslagsgrunn);
-
-        if (eksistererAllerede) {
-            const newArr = state.avslagsgrunner.filter((grunn) => grunn !== payload.avslagsgrunn);
-
-            if (newArr.length === 0) {
-                return { ...state, avslagsgrunner: null };
-            } else {
-                return { ...state, avslagsgrunner: newArr };
-            }
-        } else {
-            return {
-                ...state,
-                avslagsgrunner: [...state.avslagsgrunner, payload.avslagsgrunn],
-            };
-        }
-    },
-} as const satisfies ReducerActionHandlers<BehandlingSkjemaState, BaseActions>;
+    AntallDagerPerMeldeperiodeState &
+    AvslagState &
+    StansState;
 
 export type BehandlingSkjemaActions =
-    | BaseActions
+    | BehandlingsperiodeActions
     | TiltaksdeltagelseActions
     | BarnetilleggActions
-    | InnvilgelseActions
-    | AntallDagerPerMeldeperiodeActions;
+    | AntallDagerPerMeldeperiodeActions
+    | AvslagActions
+    | StansActions;
+
+export type BehandlingSkjemaActionHandlers<Actions extends ReducerAction> = ReducerActionHandlers<
+    BehandlingSkjemaState,
+    Actions
+>;
+
+const actionsHandlers = {
+    ...behandlingsperiodeActionHandlers,
+    ...tiltaksdeltagelseActionHandlers,
+    ...barnetilleggActionHandlers,
+    ...antallDagerPerMeldeperiodeActionHandlers,
+    ...avslagActionHandlers,
+    ...stansActionHandlers,
+} as const satisfies ReducerActionHandlers<BehandlingSkjemaState, BehandlingSkjemaActions>;
 
 export const BehandlingSkjemaReducer: Reducer<BehandlingSkjemaState, BehandlingSkjemaActions> = (
     state,
@@ -78,11 +66,13 @@ export const BehandlingSkjemaReducer: Reducer<BehandlingSkjemaState, BehandlingS
 ): BehandlingSkjemaState => {
     const { type, payload } = action;
 
-    const handler = baseActionHandlers[type];
+    const handler = actionsHandlers[type];
     if (handler) {
-        return handler(state, payload);
+        // :sadpanda:
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return handler(state, payload as any);
     }
 
-    console.error(`Ugyldig action for søknadsbehandling: "${type}"`);
+    console.error(`Ugyldig action for søknadsbehandling: "${type as never}"`);
     return state;
 };

@@ -2,7 +2,7 @@ import { SøknadsbehandlingVedtakContext } from '~/components/behandling/søknad
 import { RevurderingInnvilgelseVedtakContext } from '~/components/behandling/revurdering/innvilgelse/context/RevurderingInnvilgelseVedtakContext';
 import { RevurderingStansVedtakContext } from '~/components/behandling/revurdering/stans/RevurderingStansVedtakContext';
 
-type ReducerAction = {
+export type ReducerAction = {
     type: string;
     payload: Record<string, unknown>;
 };

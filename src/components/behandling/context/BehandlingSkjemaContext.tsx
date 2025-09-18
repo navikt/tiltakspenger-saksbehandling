@@ -15,6 +15,7 @@ import {
     BehandlingSkjemaReducer,
     BehandlingSkjemaState,
 } from '~/components/behandling/context/BehandlingSkjemaReducer';
+import { useSak } from '~/context/sak/SakContext';
 
 type FritekstInput = {
     textAreas: {
@@ -31,11 +32,12 @@ const StateContext = createContext({} as BehandlingSkjemaContext);
 const DispatchContext = createContext((() => ({})) as Dispatch<BehandlingSkjemaActions>);
 
 export const BehandlingSkjemaProvider = ({ children }: PropsWithChildren) => {
+    const { sak } = useSak();
     const { behandling } = useBehandling();
 
     const [vedtak, dispatch] = useReducer(
         BehandlingSkjemaReducer,
-        behandling,
+        { behandling, sak },
         behandlingSkjemaInitialValue,
     );
 
