@@ -8,7 +8,7 @@ import { createContext, ReactNode, useContext, useEffect, useState } from 'react
 import { useRolleForBehandling } from '~/context/saksbehandler/SaksbehandlerContext';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 
-export type BehandlingContext<Behandling extends BehandlingData> = {
+type BehandlingContext<Behandling extends BehandlingData> = {
     behandling: Behandling;
     setBehandling: (behandling: BehandlingData) => void;
     rolleForBehandling: SaksbehandlerRolle.SAKSBEHANDLER | SaksbehandlerRolle.BESLUTTER | null;

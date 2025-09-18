@@ -68,11 +68,11 @@ export const BehandlingSkjemaReducer: Reducer<BehandlingSkjemaState, BehandlingS
 
     const handler = actionsHandlers[type];
     if (handler) {
-        // :sadpanda:
+        // Typen for ReducerAction er ikke helt 100% :|
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return handler(state, payload as any);
     }
 
-    console.error(`Ugyldig action for søknadsbehandling: "${type as never}"`);
+    console.error(`Ugyldig action for behandling skjema: "${type as never}"`);
     return state;
 };

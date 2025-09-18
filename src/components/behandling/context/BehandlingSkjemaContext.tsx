@@ -35,7 +35,7 @@ export const BehandlingSkjemaProvider = ({ children }: PropsWithChildren) => {
     const { sak } = useSak();
     const { behandling } = useBehandling();
 
-    const [vedtak, dispatch] = useReducer(
+    const [skjema, dispatch] = useReducer(
         BehandlingSkjemaReducer,
         { behandling, sak },
         behandlingSkjemaInitialValue,
@@ -62,7 +62,7 @@ export const BehandlingSkjemaProvider = ({ children }: PropsWithChildren) => {
         <DispatchContext.Provider value={dispatch}>
             <StateContext.Provider
                 value={{
-                    ...vedtak,
+                    ...skjema,
                     textAreas: {
                         begrunnelse: {
                             ref: begrunnelseRef,

@@ -87,6 +87,8 @@ const søknadsbehandlingInitialState = (
                   },
               ],
         avslagsgrunner: behandling.avslagsgrunner ?? [],
+
+        // Ikke i bruk for denne behandlingstypen
         hjemlerForStans: [],
     };
 };
@@ -124,7 +126,7 @@ const revurderingInnvilgelseInitialState = (
     );
 
     return {
-        resultat: behandling.resultat,
+        resultat: RevurderingResultat.REVURDERING_INNVILGELSE,
         behandlingsperiode,
         harBarnetillegg: barnetilleggPerioder.length > 0,
         barnetilleggPerioder,
@@ -140,8 +142,10 @@ const revurderingInnvilgelseInitialState = (
                 },
             },
         ],
+
+        // Ikke i bruk for denne behandlingstypen
         avslagsgrunner: [],
-        hjemlerForStans: behandling.valgtHjemmelHarIkkeRettighet ?? [],
+        hjemlerForStans: [],
     };
 };
 
@@ -149,12 +153,14 @@ const revurderingStansInitialState = (behandling: RevurderingData): BehandlingSk
     return {
         resultat: RevurderingResultat.STANS,
         behandlingsperiode: behandling.virkningsperiode ?? {},
+        hjemlerForStans: behandling.valgtHjemmelHarIkkeRettighet ?? [],
+
+        // Ikke i bruk for denne behandlingstypen
         harBarnetillegg: false,
         barnetilleggPerioder: [],
         valgteTiltaksdeltakelser: [],
         antallDagerPerMeldeperiode: [],
         avslagsgrunner: [],
-        hjemlerForStans: behandling.valgtHjemmelHarIkkeRettighet ?? [],
     };
 };
 
