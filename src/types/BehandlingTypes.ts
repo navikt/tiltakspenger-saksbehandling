@@ -45,7 +45,7 @@ type InnvilgelseResultatData = {
 };
 
 type StansResultatData = {
-    valgtHjemmelHarIkkeRettighet: Nullable<ValgtHjemmelForStans[]>;
+    valgtHjemmelHarIkkeRettighet: Nullable<HjemmelForStans[]>;
 };
 
 type AvslagResultatData = {
@@ -179,7 +179,7 @@ export enum Avslagsgrunn {
     FremmetForSent = 'FremmetForSent',
 }
 
-export enum ValgtHjemmelForStans {
+export enum HjemmelForStans {
     DELTAR_IKKE_PÅ_ARBEIDSMARKEDSTILTAK = 'DeltarIkkePåArbeidsmarkedstiltak',
     ALDER = 'Alder',
     LIVSOPPHOLDYTELSER = 'Livsoppholdytelser',

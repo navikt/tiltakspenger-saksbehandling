@@ -6,7 +6,7 @@ import {
     useSøknadsbehandlingSkjemaDispatch,
 } from '../context/SøknadsbehandlingVedtakContext';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
-import { useSøknadsbehandling } from '../../BehandlingContext';
+import { useSøknadsbehandling } from '../../context/BehandlingContext';
 import { SøknadsbehandlingResultat } from '~/types/BehandlingTypes';
 import { BehandlingsperiodeVelger } from '~/components/behandling/felles/behandlingsperiode/BehandlingsperiodeVelger';
 

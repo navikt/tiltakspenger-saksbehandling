@@ -1,4 +1,4 @@
-import { useRevurderingBehandling } from '~/components/behandling/BehandlingContext';
+import { useRevurderingBehandling } from '~/components/behandling/context/BehandlingContext';
 import { RevurderingResultat } from '~/types/BehandlingTypes';
 import { RevurderingInnvilgelseBrevForhåndsvisningDTO } from '~/components/behandling/felles/vedtaksbrev/forhåndsvisning/useHentVedtaksbrevForhåndsvisning';
 import { Vedtaksbrev } from '~/components/behandling/felles/vedtaksbrev/Vedtaksbrev';

@@ -1,4 +1,4 @@
-import { useRevurderingBehandling } from '~/components/behandling/BehandlingContext';
+import { useRevurderingBehandling } from '~/components/behandling/context/BehandlingContext';
 import { BehandlingSendOgGodkjenn } from '~/components/behandling/felles/send-og-godkjenn/BehandlingSendOgGodkjenn';
 import { useHentBehandlingLagringProps } from '~/components/behandling/felles/send-og-godkjenn/lagre/useHentBehandlingLagringProps';
 import {

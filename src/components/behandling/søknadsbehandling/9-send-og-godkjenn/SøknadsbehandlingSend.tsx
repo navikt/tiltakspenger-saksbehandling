@@ -2,7 +2,7 @@ import {
     SøknadsbehandlingVedtakContext,
     useSøknadsbehandlingSkjema,
 } from '../context/SøknadsbehandlingVedtakContext';
-import { useSøknadsbehandling } from '../../BehandlingContext';
+import { useSøknadsbehandling } from '../../context/BehandlingContext';
 import { søknadsbehandlingValidering } from './søknadsbehandlingValidering';
 import { BehandlingSendOgGodkjenn } from '~/components/behandling/felles/send-og-godkjenn/BehandlingSendOgGodkjenn';
 import {

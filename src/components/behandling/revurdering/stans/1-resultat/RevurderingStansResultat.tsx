@@ -1,27 +1,26 @@
 import { Alert, Link, Select } from '@navikt/ds-react';
-import style from './RevurderingStansResultat.module.css';
-import { useRevurderingStansVedtak } from '../RevurderingStansVedtakContext';
-import { useRevurderingBehandling } from '../../../BehandlingContext';
+import { useRevurderingBehandling } from '../../../context/BehandlingContext';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { Datovelger } from '../../../../datovelger/Datovelger';
 import { dateTilISOTekst } from '~/utils/date';
-import React from 'react';
 import { useSak } from '~/context/sak/SakContext';
 import { useConfig } from '~/context/ConfigContext';
-import { ValgtHjemmelForStans } from '~/types/BehandlingTypes';
+import { HjemmelForStans } from '~/types/BehandlingTypes';
+import {
+    useBehandlingSkjema,
+    useBehandlingSkjemaDispatch,
+} from '~/components/behandling/context/BehandlingSkjemaContext';
+
+import style from './RevurderingStansResultat.module.css';
 
 export const RevurderingStansResultat = () => {
-    const revurderingVedtak = useRevurderingStansVedtak();
-    const { førsteDagSomGirRett, sisteDagSomGirRett } = useSak().sak;
-    const {
-        stansdato,
-        setStansdato,
-        valgtHjemmelHarIkkeRettighet,
-        setValgtHjemmelHarIkkeRettighet,
-    } = revurderingVedtak;
-
     const { rolleForBehandling } = useRevurderingBehandling();
+    const { førsteDagSomGirRett, sisteDagSomGirRett } = useSak().sak;
+
+    const { behandlingsperiode, hjemlerForStans } = useBehandlingSkjema();
+    const dispatch = useBehandlingSkjemaDispatch();
+
     const { gosysUrl, modiaPersonoversiktUrl } = useConfig();
 
     const erSaksbehandler = rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER;
@@ -42,12 +41,13 @@ export const RevurderingStansResultat = () => {
                     label={'Hjemmel for stans'}
                     size={'medium'}
                     readOnly={!erSaksbehandler}
-                    defaultValue={valgtHjemmelHarIkkeRettighet[0] ?? defaultValue}
+                    defaultValue={hjemlerForStans.at(0) ?? defaultValue}
                     onChange={(event) => {
-                        const valg = event.target.value as
-                            | ValgtHjemmelForStans
-                            | typeof defaultValue;
-                        setValgtHjemmelHarIkkeRettighet(valg === defaultValue ? [] : [valg]);
+                        const valg = event.target.value as HjemmelForStans | typeof defaultValue;
+                        dispatch({
+                            type: 'setHjemlerForStans',
+                            payload: { hjemler: valg === defaultValue ? [] : [valg] },
+                        });
                     }}
                 >
                     <option value={defaultValue}>{'- Velg hjemmel for stans -'}</option>
@@ -61,14 +61,15 @@ export const RevurderingStansResultat = () => {
                     label={'Stans fra og med'}
                     minDate={førsteDagSomGirRett}
                     maxDate={sisteDagSomGirRett}
-                    defaultSelected={stansdato}
+                    defaultSelected={behandlingsperiode.fraOgMed}
                     readOnly={!erSaksbehandler}
                     className={style.dato}
                     onDateChange={(valgtDato) => {
                         if (valgtDato) {
-                            setStansdato(dateTilISOTekst(valgtDato));
-                        } else {
-                            setStansdato('');
+                            dispatch({
+                                type: 'oppdaterBehandlingsperiode',
+                                payload: { periode: { fraOgMed: dateTilISOTekst(valgtDato) } },
+                            });
                         }
                     }}
                 />
@@ -79,18 +80,17 @@ export const RevurderingStansResultat = () => {
 
 const defaultValue = '';
 
-const options: Record<ValgtHjemmelForStans, string> = {
-    [ValgtHjemmelForStans.DELTAR_IKKE_PÅ_ARBEIDSMARKEDSTILTAK]:
+const options: Record<HjemmelForStans, string> = {
+    [HjemmelForStans.DELTAR_IKKE_PÅ_ARBEIDSMARKEDSTILTAK]:
         'Ingen deltagelse - tiltakspengeforskriften § 2',
-    [ValgtHjemmelForStans.ALDER]: 'Alder - tiltakspengeforskriften § 3',
-    [ValgtHjemmelForStans.LIVSOPPHOLDYTELSER]:
+    [HjemmelForStans.ALDER]: 'Alder - tiltakspengeforskriften § 3',
+    [HjemmelForStans.LIVSOPPHOLDYTELSER]:
         'Andre livsoppholdsytelser - tiltakspengeforskriften § 7, første ledd',
-    [ValgtHjemmelForStans.KVALIFISERINGSPROGRAMMET]:
-        'KVP - tiltakspengeforskriften § 7, tredje ledd',
-    [ValgtHjemmelForStans.INTRODUKSJONSPROGRAMMET]:
+    [HjemmelForStans.KVALIFISERINGSPROGRAMMET]: 'KVP - tiltakspengeforskriften § 7, tredje ledd',
+    [HjemmelForStans.INTRODUKSJONSPROGRAMMET]:
         'Introduksjonsprogram - tiltakspengeforskriften § 7, tredje ledd',
-    [ValgtHjemmelForStans.LØNN_FRA_TILTAKSARRANGØR]:
+    [HjemmelForStans.LØNN_FRA_TILTAKSARRANGØR]:
         'Lønn fra tiltaksarrangør - tiltakspengeforskriften § 8',
-    [ValgtHjemmelForStans.LØNN_FRA_ANDRE]: 'Lønn fra andre - arbeidsmarkedsloven § 13',
-    [ValgtHjemmelForStans.INSTITUSJONSOPPHOLD]: 'Institusjon - tiltakspengeforskriften § 9',
+    [HjemmelForStans.LØNN_FRA_ANDRE]: 'Lønn fra andre - arbeidsmarkedsloven § 13',
+    [HjemmelForStans.INSTITUSJONSOPPHOLD]: 'Institusjon - tiltakspengeforskriften § 9',
 } as const;

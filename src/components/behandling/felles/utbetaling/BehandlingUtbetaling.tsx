@@ -4,11 +4,11 @@ import { Separator } from '~/components/separator/Separator';
 import { Alert, Heading, HStack, VStack } from '@navikt/ds-react';
 import { UtbetalingBeløp } from '~/components/utbetaling/beløp/UtbetalingBeløp';
 import { Simuleringsknapp } from './Simulering';
-import { useBehandling } from '~/components/behandling/BehandlingContext';
+import { useBehandling } from '~/components/behandling/context/BehandlingContext';
 import { BehandlingStatus } from '~/types/BehandlingTypes';
+import { OppdaterSimuleringKnapp } from './OppdaterSimuleringKnapp';
 
 import style from './BehandlingUtbetaling.module.css';
-import { OppdaterSimuleringKnapp } from './OppdaterSimuleringKnapp';
 
 export const BehandlingUtbetaling = () => {
     const { utbetaling, status: behandlingStatus, sakId, id } = useBehandling().behandling;

@@ -4,7 +4,7 @@ import {
     SøknadsbehandlingVedtakContext,
 } from '~/components/behandling/søknadsbehandling/context/SøknadsbehandlingVedtakContext';
 import { classNames } from '~/utils/classNames';
-import { useSøknadsbehandling } from '~/components/behandling/BehandlingContext';
+import { useSøknadsbehandling } from '~/components/behandling/context/BehandlingContext';
 import { Separator } from '~/components/separator/Separator';
 import { SøknadsbehandlingResultat } from '~/types/BehandlingTypes';
 import { BehandlingBarnetillegg } from '~/components/behandling/felles/barnetillegg/BehandlingBarnetillegg';

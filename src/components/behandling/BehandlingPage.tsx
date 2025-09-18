@@ -2,7 +2,7 @@ import React from 'react';
 import { SøknadsbehandlingVedtak } from '~/components/behandling/søknadsbehandling/SøknadsbehandlingVedtak';
 import { BehandlingSaksopplysninger } from './saksopplysninger/BehandlingSaksopplysninger';
 import { RevurderingVedtak } from './revurdering/RevurderingVedtak';
-import { useBehandling } from './BehandlingContext';
+import { useBehandling } from './context/BehandlingContext';
 import { Behandlingstype } from '~/types/BehandlingTypes';
 import { PersonaliaHeader } from '../personaliaheader/PersonaliaHeader';
 import { Alert } from '@navikt/ds-react';
@@ -11,9 +11,9 @@ import AvbruttOppsummering from '../oppsummeringer/oppsummeringAvAvbruttBehandli
 import SideBarMain from '../../layouts/sidebar-main/SideBarMain';
 import { BehandlingerTidslinje } from '~/components/behandling/tidslinje/BehandlingerTidslinje';
 import { useSak } from '~/context/sak/SakContext';
+import BehandlingSattPåVentOppsummering from '~/components/oppsummeringer/behandlingSattPåVent/OppsummeringBehandlingSattPåVent';
 
 import style from './BehandlingPage.module.css';
-import BehandlingSattPåVentOppsummering from '~/components/oppsummeringer/behandlingSattPåVent/OppsummeringBehandlingSattPåVent';
 
 export const BehandlingPage = () => {
     const { sak } = useSak();

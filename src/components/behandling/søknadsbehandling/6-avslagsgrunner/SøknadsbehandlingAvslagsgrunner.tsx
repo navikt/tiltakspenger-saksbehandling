@@ -6,7 +6,7 @@ import {
 import { Avslagsgrunn, SøknadsbehandlingResultat } from '../../../../types/BehandlingTypes';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { Separator } from '../../../separator/Separator';
-import { useSøknadsbehandling } from '../../BehandlingContext';
+import { useSøknadsbehandling } from '../../context/BehandlingContext';
 import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
 
 import styles from './SøknadsbehandlingAvslagsgrunner.module.css';

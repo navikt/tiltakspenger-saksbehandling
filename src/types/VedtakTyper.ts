@@ -2,6 +2,7 @@ import {
     AntallDagerForMeldeperiode,
     Avslagsgrunn,
     BehandlingId,
+    HjemmelForStans,
     RevurderingResultat,
 } from './BehandlingTypes';
 import { Nullable } from '~/types/UtilTypes';
@@ -48,7 +49,7 @@ export type SøknadsbehandlingVedtakDTO =
 
 export interface RevurderingVedtakStansDTO extends BehandlingVedtakBaseDTO {
     resultat: BehandlingResultatDTO.STANS;
-    valgteHjemler: string[];
+    valgteHjemler: HjemmelForStans[];
     stansFraOgMed: string;
 }
 

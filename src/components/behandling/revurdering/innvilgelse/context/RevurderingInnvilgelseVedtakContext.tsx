@@ -13,7 +13,7 @@ import {
     RevurderingInnvilgelseSkjemaActions,
     RevurderingInnvilgelseSkjemaState,
 } from './RevurderingInnvilgelseReducer';
-import { useRevurderingBehandling } from '~/components/behandling/BehandlingContext';
+import { useRevurderingBehandling } from '~/components/behandling/context/BehandlingContext';
 import { Periode } from '~/types/Periode';
 import { VedtakTiltaksdeltakelsePeriode } from '~/types/VedtakTyper';
 import {
@@ -77,10 +77,18 @@ const initieltVedtakSkjema = ({
 
     const behandlingsperiode = behandling.virkningsperiode ?? tiltaksperiode;
 
-    const barnetilleggPerioder = hentBarnetilleggForRevurdering(behandling, sak);
+    const barnetilleggPerioder = hentBarnetilleggForRevurdering(
+        behandlingsperiode,
+        behandling,
+        sak,
+    );
 
     return {
         behandlingsperiode,
+        harBarnetillegg: barnetilleggPerioder.length > 0,
+        barnetilleggPerioder,
+        valgteTiltaksdeltakelser:
+            behandling.valgteTiltaksdeltakelser ?? tilValgteTiltaksdeltakelser(behandling, behandlingsperiode),
         antallDagerPerMeldeperiode: behandling.antallDagerPerMeldeperiode ?? [
             {
                 antallDagerPerMeldeperiode: 10,
@@ -90,11 +98,6 @@ const initieltVedtakSkjema = ({
                 },
             },
         ],
-        harBarnetillegg: barnetilleggPerioder.length > 0,
-        barnetilleggPerioder,
-        valgteTiltaksdeltakelser:
-            behandling.valgteTiltaksdeltakelser ??
-            tilValgteTiltaksdeltakelser(behandling, behandlingsperiode),
     };
 };
 
