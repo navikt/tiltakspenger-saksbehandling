@@ -25,7 +25,7 @@ type FritekstInput = {
     };
 };
 
-type BehandlingSkjemaContext = FritekstInput & BehandlingSkjemaState;
+export type BehandlingSkjemaContext = FritekstInput & BehandlingSkjemaState;
 
 // Separate contexts for å hindre re-renders for komponenter som kun bruker dispatch
 const StateContext = createContext({} as BehandlingSkjemaContext);

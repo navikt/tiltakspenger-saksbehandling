@@ -1,33 +1,32 @@
 import { useRevurderingBehandling } from '../../../context/BehandlingContext';
-import {
-    RevurderingStansVedtakContext,
-    useRevurderingStansVedtak,
-} from '../RevurderingStansVedtakContext';
-import React from 'react';
 import { revurderingStansValidering } from '../revurderingStansValidering';
 import { BehandlingResultatDTO, RevurderingVedtakStansDTO } from '~/types/VedtakTyper';
 import { BehandlingSendOgGodkjenn } from '~/components/behandling/felles/send-og-godkjenn/BehandlingSendOgGodkjenn';
 import { useHentBehandlingLagringProps } from '~/components/behandling/felles/send-og-godkjenn/lagre/useHentBehandlingLagringProps';
+import {
+    BehandlingSkjemaContext,
+    useBehandlingSkjema,
+} from '~/components/behandling/context/BehandlingSkjemaContext';
 
 export const RevurderingStansSend = () => {
-    const vedtak = useRevurderingStansVedtak();
+    const skjema = useBehandlingSkjema();
     const { behandling } = useRevurderingBehandling();
 
     const lagringProps = useHentBehandlingLagringProps({
-        hentDTO: () => tilDTO(vedtak),
-        vedtak,
-        validerVedtak: () => revurderingStansValidering(vedtak),
+        hentDTO: () => tilDTO(skjema),
+        vedtak: skjema,
+        validerVedtak: () => revurderingStansValidering(skjema),
     });
 
     return <BehandlingSendOgGodkjenn behandling={behandling} lagringProps={lagringProps} />;
 };
 
-const tilDTO = (vedtak: RevurderingStansVedtakContext): RevurderingVedtakStansDTO => {
+const tilDTO = (skjema: BehandlingSkjemaContext): RevurderingVedtakStansDTO => {
     return {
         resultat: BehandlingResultatDTO.STANS,
-        begrunnelseVilkårsvurdering: vedtak.textAreas.begrunnelse.getValue(),
-        fritekstTilVedtaksbrev: vedtak.textAreas.brevtekst.getValue(),
-        stansFraOgMed: vedtak.stansdato,
-        valgteHjemler: vedtak.valgtHjemmelHarIkkeRettighet,
+        begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
+        fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
+        stansFraOgMed: skjema.behandlingsperiode.fraOgMed!,
+        valgteHjemler: skjema.hjemlerForStans!,
     };
 };

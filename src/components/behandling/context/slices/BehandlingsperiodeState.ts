@@ -5,7 +5,7 @@ import { BehandlingResultat } from '~/types/BehandlingTypes';
 
 export type BehandlingsperiodeState = {
     resultat: Nullable<BehandlingResultat>;
-    behandlingsperiode: Periode;
+    behandlingsperiode: Partial<Periode>;
 };
 
 export type BehandlingsperiodeActions =
@@ -19,10 +19,11 @@ export type BehandlingsperiodeActions =
       };
 
 export const behandlingsperiodeActionHandlers = {
-    setResultat: (state, payload: { resultat: BehandlingResultat | null }) => {
+    setResultat: (state, payload) => {
         return { ...state, resultat: payload.resultat };
     },
-    oppdaterBehandlingsperiode: (state, payload: { periode: Partial<Periode> }) => {
+
+    oppdaterBehandlingsperiode: (state, payload) => {
         return {
             ...state,
             behandlingsperiode: { ...state.behandlingsperiode, ...payload.periode },

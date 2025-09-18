@@ -11,9 +11,9 @@ import AvbruttOppsummering from '../oppsummeringer/oppsummeringAvAvbruttBehandli
 import SideBarMain from '../../layouts/sidebar-main/SideBarMain';
 import { BehandlingerTidslinje } from '~/components/behandling/tidslinje/BehandlingerTidslinje';
 import { useSak } from '~/context/sak/SakContext';
+import BehandlingSattPåVentOppsummering from '~/components/oppsummeringer/behandlingSattPåVent/OppsummeringBehandlingSattPåVent';
 
 import style from './BehandlingPage.module.css';
-import BehandlingSattPåVentOppsummering from '~/components/oppsummeringer/behandlingSattPåVent/OppsummeringBehandlingSattPåVent';
 
 export const BehandlingPage = () => {
     const { sak } = useSak();

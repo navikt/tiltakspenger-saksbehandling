@@ -1,27 +1,26 @@
 import { Alert, Link, Select } from '@navikt/ds-react';
-import style from './RevurderingStansResultat.module.css';
-import { useRevurderingStansVedtak } from '../RevurderingStansVedtakContext';
 import { useRevurderingBehandling } from '../../../context/BehandlingContext';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { Datovelger } from '../../../../datovelger/Datovelger';
 import { dateTilISOTekst } from '~/utils/date';
-import React from 'react';
 import { useSak } from '~/context/sak/SakContext';
 import { useConfig } from '~/context/ConfigContext';
 import { HjemmelForStans } from '~/types/BehandlingTypes';
+import {
+    useBehandlingSkjema,
+    useBehandlingSkjemaDispatch,
+} from '~/components/behandling/context/BehandlingSkjemaContext';
+
+import style from './RevurderingStansResultat.module.css';
 
 export const RevurderingStansResultat = () => {
-    const revurderingVedtak = useRevurderingStansVedtak();
-    const { førsteDagSomGirRett, sisteDagSomGirRett } = useSak().sak;
-    const {
-        stansdato,
-        setStansdato,
-        valgtHjemmelHarIkkeRettighet,
-        setValgtHjemmelHarIkkeRettighet,
-    } = revurderingVedtak;
-
     const { rolleForBehandling } = useRevurderingBehandling();
+    const { førsteDagSomGirRett, sisteDagSomGirRett } = useSak().sak;
+
+    const { behandlingsperiode, hjemlerForStans } = useBehandlingSkjema();
+    const dispatch = useBehandlingSkjemaDispatch();
+
     const { gosysUrl, modiaPersonoversiktUrl } = useConfig();
 
     const erSaksbehandler = rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER;
@@ -42,10 +41,13 @@ export const RevurderingStansResultat = () => {
                     label={'Hjemmel for stans'}
                     size={'medium'}
                     readOnly={!erSaksbehandler}
-                    defaultValue={valgtHjemmelHarIkkeRettighet[0] ?? defaultValue}
+                    defaultValue={hjemlerForStans.at(0) ?? defaultValue}
                     onChange={(event) => {
                         const valg = event.target.value as HjemmelForStans | typeof defaultValue;
-                        setValgtHjemmelHarIkkeRettighet(valg === defaultValue ? [] : [valg]);
+                        dispatch({
+                            type: 'setHjemlerForStans',
+                            payload: { hjemler: valg === defaultValue ? [] : [valg] },
+                        });
                     }}
                 >
                     <option value={defaultValue}>{'- Velg hjemmel for stans -'}</option>
@@ -59,14 +61,15 @@ export const RevurderingStansResultat = () => {
                     label={'Stans fra og med'}
                     minDate={førsteDagSomGirRett}
                     maxDate={sisteDagSomGirRett}
-                    defaultSelected={stansdato}
+                    defaultSelected={behandlingsperiode.fraOgMed}
                     readOnly={!erSaksbehandler}
                     className={style.dato}
                     onDateChange={(valgtDato) => {
                         if (valgtDato) {
-                            setStansdato(dateTilISOTekst(valgtDato));
-                        } else {
-                            setStansdato('');
+                            dispatch({
+                                type: 'oppdaterBehandlingsperiode',
+                                payload: { periode: { fraOgMed: dateTilISOTekst(valgtDato) } },
+                            });
                         }
                     }}
                 />

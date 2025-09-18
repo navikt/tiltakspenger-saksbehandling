@@ -6,9 +6,9 @@ import { UtbetalingBeløp } from '~/components/utbetaling/beløp/UtbetalingBelø
 import { Simuleringsknapp } from './Simulering';
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
 import { BehandlingStatus } from '~/types/BehandlingTypes';
+import { OppdaterSimuleringKnapp } from './OppdaterSimuleringKnapp';
 
 import style from './BehandlingUtbetaling.module.css';
-import { OppdaterSimuleringKnapp } from './OppdaterSimuleringKnapp';
 
 export const BehandlingUtbetaling = () => {
     const { utbetaling, status: behandlingStatus, sakId, id } = useBehandling().behandling;

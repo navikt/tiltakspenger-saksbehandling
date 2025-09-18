@@ -1,9 +1,8 @@
 import { BehandlingSkjemaActionHandlers } from '~/components/behandling/context/BehandlingSkjemaReducer';
-import { Nullable } from '~/types/UtilTypes';
 import { Avslagsgrunn } from '~/types/BehandlingTypes';
 
 export type AvslagState = {
-    avslagsgrunner: Nullable<Avslagsgrunn[]>;
+    avslagsgrunner: Avslagsgrunn[];
 };
 
 export type AvslagActions = {
@@ -12,8 +11,8 @@ export type AvslagActions = {
 };
 
 export const avslagActionHandlers = {
-    oppdaterAvslagsgrunn: (state, payload: { avslagsgrunn: Avslagsgrunn }) => {
-        if (state.avslagsgrunner === null) {
+    oppdaterAvslagsgrunn: (state, payload) => {
+        if (state.avslagsgrunner.length === 0) {
             return {
                 ...state,
                 avslagsgrunner: [payload.avslagsgrunn],
@@ -26,7 +25,7 @@ export const avslagActionHandlers = {
             const newArr = state.avslagsgrunner.filter((grunn) => grunn !== payload.avslagsgrunn);
 
             if (newArr.length === 0) {
-                return { ...state, avslagsgrunner: null };
+                return { ...state, avslagsgrunner: [] };
             } else {
                 return { ...state, avslagsgrunner: newArr };
             }

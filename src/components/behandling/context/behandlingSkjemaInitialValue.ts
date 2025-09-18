@@ -2,6 +2,7 @@ import {
     BehandlingData,
     Behandlingstype,
     RevurderingData,
+    RevurderingResultat,
     SøknadsbehandlingData,
 } from '~/types/BehandlingTypes';
 import {
@@ -27,9 +28,18 @@ export const behandlingSkjemaInitialValue = ({
     behandling: BehandlingData;
     sak: SakProps;
 }): BehandlingSkjemaState => {
-    return behandling.type === Behandlingstype.SØKNADSBEHANDLING
-        ? søknadsbehandlingInitialState(behandling)
-        : revurderingInitialState(behandling, sak);
+    const { type } = behandling;
+
+    switch (type) {
+        case Behandlingstype.SØKNADSBEHANDLING: {
+            return søknadsbehandlingInitialState(behandling);
+        }
+        case Behandlingstype.REVURDERING: {
+            return revurderingInitialState(behandling, sak);
+        }
+    }
+
+    throw new Error(`Ukjent behandlingstype: ${type satisfies never}`);
 };
 
 const søknadsbehandlingInitialState = (
@@ -76,15 +86,30 @@ const søknadsbehandlingInitialState = (
                             },
                   },
               ],
-        avslagsgrunner:
-            behandling.type === Behandlingstype.SØKNADSBEHANDLING
-                ? behandling.avslagsgrunner
-                : null,
-        hjemlerForStans: null,
+        avslagsgrunner: behandling.avslagsgrunner ?? [],
+        hjemlerForStans: [],
     };
 };
 
 const revurderingInitialState = (
+    behandling: RevurderingData,
+    sak: SakProps,
+): BehandlingSkjemaState => {
+    const { resultat } = behandling;
+
+    switch (resultat) {
+        case RevurderingResultat.REVURDERING_INNVILGELSE: {
+            return revurderingInnvilgelseInitialState(behandling, sak);
+        }
+        case RevurderingResultat.STANS: {
+            return revurderingStansInitialState(behandling);
+        }
+    }
+
+    throw new Error(`Ukjent revurdering resultat: ${resultat satisfies never}`);
+};
+
+const revurderingInnvilgelseInitialState = (
     behandling: RevurderingData,
     sak: SakProps,
 ): BehandlingSkjemaState => {
@@ -99,7 +124,7 @@ const revurderingInitialState = (
     );
 
     return {
-        resultat: null,
+        resultat: behandling.resultat,
         behandlingsperiode,
         harBarnetillegg: barnetilleggPerioder.length > 0,
         barnetilleggPerioder,
@@ -115,8 +140,21 @@ const revurderingInitialState = (
                 },
             },
         ],
-        avslagsgrunner: null,
-        hjemlerForStans: null,
+        avslagsgrunner: [],
+        hjemlerForStans: behandling.valgtHjemmelHarIkkeRettighet ?? [],
+    };
+};
+
+const revurderingStansInitialState = (behandling: RevurderingData): BehandlingSkjemaState => {
+    return {
+        resultat: RevurderingResultat.STANS,
+        behandlingsperiode: behandling.virkningsperiode ?? {},
+        harBarnetillegg: false,
+        barnetilleggPerioder: [],
+        valgteTiltaksdeltakelser: [],
+        antallDagerPerMeldeperiode: [],
+        avslagsgrunner: [],
+        hjemlerForStans: behandling.valgtHjemmelHarIkkeRettighet ?? [],
     };
 };
 
