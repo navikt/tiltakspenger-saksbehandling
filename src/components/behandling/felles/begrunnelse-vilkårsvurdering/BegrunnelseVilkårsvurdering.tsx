@@ -4,8 +4,7 @@ import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { FunctionComponent, ReactNode, RefObject } from 'react';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { VedtakHjelpetekst } from '~/components/behandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
-import { TekstfeltMedMellomlagring } from '../../../tekstfelt/TekstfeltMedMellomlagring';
-import { VedtakBegrunnelseLagringDTO } from '~/types/VedtakTyper';
+import { FritekstInput } from '~/components/fritekst/FritekstInput';
 import { TekstListe } from '../../../liste/TekstListe';
 import { BehandlingData } from '~/types/BehandlingTypes';
 import { Nullable } from '~/types/UtilTypes';
@@ -20,7 +19,7 @@ type Props = {
 };
 
 export const BegrunnelseVilkårsvurdering = ({ behandling, rolle, tekstRef, className }: Props) => {
-    const { begrunnelseVilkårsvurdering, sakId, id } = behandling;
+    const { begrunnelseVilkårsvurdering } = behandling;
 
     return (
         <VedtakSeksjon className={className}>
@@ -54,14 +53,10 @@ export const BegrunnelseVilkårsvurdering = ({ behandling, rolle, tekstRef, clas
                 </div>
             </VedtakSeksjon.Høyre>
             <VedtakSeksjon.Venstre>
-                <TekstfeltMedMellomlagring
+                <FritekstInput
                     label={'Begrunnelse vilkårsvurdering'}
                     defaultValue={begrunnelseVilkårsvurdering ?? ''}
                     readOnly={rolle !== SaksbehandlerRolle.SAKSBEHANDLER}
-                    lagringUrl={`/sak/${sakId}/behandling/${id}/begrunnelse`}
-                    lagringBody={(tekst) =>
-                        ({ begrunnelse: tekst }) satisfies VedtakBegrunnelseLagringDTO
-                    }
                     ref={tekstRef}
                 />
             </VedtakSeksjon.Venstre>

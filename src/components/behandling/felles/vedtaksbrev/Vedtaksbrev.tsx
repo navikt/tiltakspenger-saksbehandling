@@ -2,12 +2,11 @@ import { BodyLong, Heading } from '@navikt/ds-react';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { VedtakHjelpetekst } from '~/components/behandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
-import { TekstfeltMedMellomlagring } from '../../../tekstfelt/TekstfeltMedMellomlagring';
-import { VedtakBrevFritekstLagringDTO } from '~/types/VedtakTyper';
+import { FritekstInput } from '~/components/fritekst/FritekstInput';
 import { VedtaksbrevForhåndsvisning } from './forhåndsvisning/VedtaksbrevForhåndsvisning';
 import { BehandlingData } from '~/types/BehandlingTypes';
 import { Nullable } from '~/types/UtilTypes';
-import React, { ReactNode, RefObject } from 'react';
+import { ReactNode, RefObject } from 'react';
 import { BrevForhåndsvisningDTO } from '~/components/behandling/felles/vedtaksbrev/forhåndsvisning/useHentVedtaksbrevForhåndsvisning';
 import { ValideringResultat } from '~/types/Validering';
 
@@ -32,7 +31,7 @@ export const Vedtaksbrev = ({
     validering,
     hentDto,
 }: Props) => {
-    const { fritekstTilVedtaksbrev, sakId, id } = behandling;
+    const { fritekstTilVedtaksbrev } = behandling;
 
     return (
         <VedtakSeksjon>
@@ -43,15 +42,11 @@ export const Vedtaksbrev = ({
                 <BodyLong size={'small'}>{'Teksten vises i vedtaksbrevet til bruker.'}</BodyLong>
             </VedtakSeksjon.Venstre>
             <VedtakSeksjon.Venstre className={style.brev}>
-                <TekstfeltMedMellomlagring
+                <FritekstInput
                     label={'Tekst til vedtaksbrev'}
                     description={'Teksten vises i vedtaksbrevet til bruker.'}
                     defaultValue={fritekstTilVedtaksbrev ?? ''}
                     readOnly={rolle !== SaksbehandlerRolle.SAKSBEHANDLER}
-                    lagringUrl={`/sak/${sakId}/behandling/${id}/fritekst`}
-                    lagringBody={(tekst) =>
-                        ({ fritekst: tekst }) satisfies VedtakBrevFritekstLagringDTO
-                    }
                     ref={tekstRef}
                 />
                 <VedtaksbrevForhåndsvisning

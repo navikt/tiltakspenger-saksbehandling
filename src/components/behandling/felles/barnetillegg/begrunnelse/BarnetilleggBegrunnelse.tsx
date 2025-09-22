@@ -3,22 +3,15 @@ import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { VedtakHjelpetekst } from '~/components/behandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
 import { TekstListe } from '../../../../liste/TekstListe';
 import { BodyLong, Heading } from '@navikt/ds-react';
-import { TekstfeltMedMellomlagring } from '../../../../tekstfelt/TekstfeltMedMellomlagring';
+import { FritekstInput } from '~/components/fritekst/FritekstInput';
 import { BehandlingBarnetilleggProps } from '~/components/behandling/felles/barnetillegg/BehandlingBarnetillegg';
 import { useRolleForBehandling } from '~/context/saksbehandler/SaksbehandlerContext';
-import { OppdaterBarnetilleggRequest, VedtakBarnetilleggDTO } from '~/types/Barnetillegg';
 
 import style from './BarnetilleggBegrunnelse.module.css';
 
-type Props = BehandlingBarnetilleggProps & {
-    lagring: {
-        url: string;
-        //TODO - bruk egen barnetilleg dto type
-        body: (tekst: string) => OppdaterBarnetilleggRequest | VedtakBarnetilleggDTO;
-    };
-};
+type Props = BehandlingBarnetilleggProps;
 
-export const BarnetilleggBegrunnelse = ({ behandling, lagring, context }: Props) => {
+export const BarnetilleggBegrunnelse = ({ behandling, context }: Props) => {
     const { barnetillegg } = behandling;
     const { barnetilleggBegrunnelse } = context.textAreas;
 
@@ -37,12 +30,10 @@ export const BarnetilleggBegrunnelse = ({ behandling, lagring, context }: Props)
             </VedtakSeksjon.Venstre>
 
             <VedtakSeksjon.Venstre>
-                <TekstfeltMedMellomlagring
+                <FritekstInput
                     label={'Begrunnelse vilkårsvurdering barnetillegg'}
                     defaultValue={barnetillegg?.begrunnelse}
                     readOnly={rolle !== SaksbehandlerRolle.SAKSBEHANDLER}
-                    lagringUrl={lagring.url}
-                    lagringBody={(tekst) => lagring.body(tekst)}
                     ref={barnetilleggBegrunnelse.ref}
                 />
             </VedtakSeksjon.Venstre>

@@ -72,14 +72,6 @@ export type VedtakTiltaksdeltakelsePeriode = {
     periode: Periode;
 };
 
-export type VedtakBegrunnelseLagringDTO = {
-    begrunnelse: string;
-};
-
-export type VedtakBrevFritekstLagringDTO = {
-    fritekst: string;
-};
-
 export type VedtakOpprettRevurderingDTO = {
     revurderingType: RevurderingResultat;
 };

@@ -1,9 +1,7 @@
 import { useRevurderingBehandling } from '../../../context/BehandlingContext';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
-import React from 'react';
-import { TekstfeltMedMellomlagring } from '../../../../tekstfelt/TekstfeltMedMellomlagring';
-import { VedtakBegrunnelseLagringDTO } from '~/types/VedtakTyper';
+import { FritekstInput } from '~/components/fritekst/FritekstInput';
 import { VedtakHjelpetekst } from '~/components/behandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
 import { BodyLong } from '@navikt/ds-react';
 import { TekstListe } from '../../../../liste/TekstListe';
@@ -16,14 +14,14 @@ export const RevurderingStansBegrunnelse = () => {
     const { begrunnelse } = textAreas;
 
     const { behandling, rolleForBehandling } = useRevurderingBehandling();
-    const { begrunnelseVilkårsvurdering, sakId, id } = behandling;
+    const { begrunnelseVilkårsvurdering } = behandling;
 
     const erSaksbehandler = rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER;
 
     return (
         <VedtakSeksjon>
             <VedtakSeksjon.Venstre className={style.container}>
-                <TekstfeltMedMellomlagring
+                <FritekstInput
                     hideLabel={false}
                     label={'Begrunnelse for stans'}
                     description={
@@ -31,10 +29,6 @@ export const RevurderingStansBegrunnelse = () => {
                     }
                     defaultValue={begrunnelseVilkårsvurdering ?? ''}
                     readOnly={!erSaksbehandler}
-                    lagringUrl={`/sak/${sakId}/behandling/${id}/begrunnelse`}
-                    lagringBody={(tekst) =>
-                        ({ begrunnelse: tekst }) satisfies VedtakBegrunnelseLagringDTO
-                    }
                     ref={begrunnelse.ref}
                 />
             </VedtakSeksjon.Venstre>

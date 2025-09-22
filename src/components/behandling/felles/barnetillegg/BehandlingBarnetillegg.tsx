@@ -16,7 +16,6 @@ import {
     InnvilgelseActions,
     InnvilgelseState,
 } from '~/components/behandling/felles/state/InnvilgelseState';
-import { OppdaterBarnetilleggRequest, VedtakBarnetilleggDTO } from '~/types/Barnetillegg';
 import { BarnetilleggTidslinje } from '~/components/behandling/felles/barnetillegg/tidslinje/BarnetilleggTidslinje';
 import { harSøktBarnetillegg } from '~/components/behandling/felles/barnetillegg/utils/barnetilleggUtils';
 import { useSak } from '~/context/sak/SakContext';
@@ -28,10 +27,6 @@ export type BehandlingBarnetilleggProps = {
     dispatch: Dispatch<BarnetilleggActions | InnvilgelseActions>;
     context: InnvilgelseState & BarnetilleggState & BarnetilleggBegrunnelseInput;
     valgTekst: string;
-    lagring: {
-        url: string;
-        body: (tekst: string) => OppdaterBarnetilleggRequest | VedtakBarnetilleggDTO;
-    };
 };
 
 export const BehandlingBarnetillegg = (props: BehandlingBarnetilleggProps) => {
