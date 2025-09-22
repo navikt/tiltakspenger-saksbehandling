@@ -1,44 +1,44 @@
 import { useRevurderingBehandling } from '~/components/behandling/context/BehandlingContext';
 import { BehandlingSendOgGodkjenn } from '~/components/behandling/felles/send-og-godkjenn/BehandlingSendOgGodkjenn';
 import { useHentBehandlingLagringProps } from '~/components/behandling/felles/send-og-godkjenn/lagre/useHentBehandlingLagringProps';
-import {
-    RevurderingInnvilgelseVedtakContext,
-    useRevurderingInnvilgelseSkjema,
-} from '~/components/behandling/revurdering/innvilgelse/context/RevurderingInnvilgelseVedtakContext';
 import { BehandlingResultatDTO, RevurderingVedtakInnvilgelseDTO } from '~/types/VedtakTyper';
 import { revurderingInnvilgelseValidering } from '~/components/behandling/revurdering/innvilgelse/revurderingInnvilgelseValidering';
 import { useSak } from '~/context/sak/SakContext';
+import {
+    BehandlingSkjemaContext,
+    useBehandlingSkjema,
+} from '~/components/behandling/context/BehandlingSkjemaContext';
 
 export const RevurderingInnvilgelseSend = () => {
     const { sak } = useSak();
     const { behandling } = useRevurderingBehandling();
-    const vedtak = useRevurderingInnvilgelseSkjema();
+    const vedtak = useBehandlingSkjema();
 
     const lagringProps = useHentBehandlingLagringProps({
         hentDTO: () => tilDTO(vedtak),
-        vedtak,
-        validerVedtak: () => revurderingInnvilgelseValidering(sak, behandling, vedtak),
+        skjema: vedtak,
+        validerSkjema: () => revurderingInnvilgelseValidering(sak, behandling, vedtak),
     });
 
     return <BehandlingSendOgGodkjenn behandling={behandling} lagringProps={lagringProps} />;
 };
 
-const tilDTO = (vedtak: RevurderingInnvilgelseVedtakContext): RevurderingVedtakInnvilgelseDTO => {
+const tilDTO = (skjema: BehandlingSkjemaContext): RevurderingVedtakInnvilgelseDTO => {
     return {
         resultat: BehandlingResultatDTO.REVURDERING_INNVILGELSE,
-        begrunnelseVilkårsvurdering: vedtak.textAreas.begrunnelse.getValue(),
-        fritekstTilVedtaksbrev: vedtak.textAreas.brevtekst.getValue(),
-        innvilgelsesperiode: vedtak.behandlingsperiode,
-        valgteTiltaksdeltakelser: vedtak.valgteTiltaksdeltakelser,
-        barnetillegg: vedtak.harBarnetillegg
+        begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
+        fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
+        innvilgelsesperiode: skjema.behandlingsperiode,
+        valgteTiltaksdeltakelser: skjema.valgteTiltaksdeltakelser,
+        barnetillegg: skjema.harBarnetillegg
             ? {
-                  begrunnelse: vedtak.textAreas.barnetilleggBegrunnelse.getValue(),
-                  perioder: vedtak.barnetilleggPerioder,
+                  begrunnelse: skjema.textAreas.barnetilleggBegrunnelse.getValue(),
+                  perioder: skjema.barnetilleggPerioder,
               }
             : {
                   perioder: [],
               },
-        antallDagerPerMeldeperiodeForPerioder: vedtak.antallDagerPerMeldeperiode.map((periode) => ({
+        antallDagerPerMeldeperiodeForPerioder: skjema.antallDagerPerMeldeperiode.map((periode) => ({
             antallDagerPerMeldeperiode: periode.antallDagerPerMeldeperiode!,
             periode: {
                 fraOgMed: periode.periode.fraOgMed!,

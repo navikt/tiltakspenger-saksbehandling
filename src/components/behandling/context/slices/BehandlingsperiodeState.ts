@@ -5,7 +5,7 @@ import { BehandlingResultat } from '~/types/BehandlingTypes';
 
 export type BehandlingsperiodeState = {
     resultat: Nullable<BehandlingResultat>;
-    behandlingsperiode: Partial<Periode>;
+    behandlingsperiode: Periode;
 };
 
 export type BehandlingsperiodeActions =

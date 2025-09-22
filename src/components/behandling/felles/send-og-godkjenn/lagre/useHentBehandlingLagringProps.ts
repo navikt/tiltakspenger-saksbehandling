@@ -3,7 +3,7 @@ import { BehandlingVedtakDTO } from '~/types/VedtakTyper';
 import { isEqualJson } from '~/utils/is-equal-json';
 import { ValideringFunc, ValideringResultat, ValideringType } from '~/types/Validering';
 import { Nullable } from '~/types/UtilTypes';
-import { VedtakContext } from '~/types/Context';
+import { BehandlingSkjemaContext } from '~/components/behandling/context/BehandlingSkjemaContext';
 
 type ValiderOgHentVedtakDTO = (type: ValideringType) => {
     valideringResultat: ValideringResultat;
@@ -17,14 +17,14 @@ export type BehandlingLagringProps = {
 };
 
 type Props = {
-    vedtak: VedtakContext;
-    validerVedtak: ValideringFunc;
+    skjema: BehandlingSkjemaContext;
+    validerSkjema: ValideringFunc;
     hentDTO: () => Nullable<BehandlingVedtakDTO>;
 };
 
 export const useHentBehandlingLagringProps = ({
-    vedtak,
-    validerVedtak,
+    skjema,
+    validerSkjema,
     hentDTO,
 }: Props): BehandlingLagringProps => {
     const [sisteLagring, setSisteLagring] = useState<BehandlingVedtakDTO | null>(hentDTO());
@@ -35,7 +35,7 @@ export const useHentBehandlingLagringProps = ({
     };
 
     const validerOgHentLagringDTO = (type: ValideringType) => {
-        const valideringResultat = validerVedtak(type);
+        const valideringResultat = validerSkjema(type);
         const harErrors = valideringResultat.errors.length > 0;
 
         const vedtakDTO = harErrors ? null : hentDTO();
@@ -50,7 +50,7 @@ export const useHentBehandlingLagringProps = ({
     };
 
     useEffect(() => {
-        const textAreaElements = Object.values(vedtak.textAreas)
+        const textAreaElements = Object.values(skjema.textAreas)
             .map((textArea) => textArea.ref.current)
             .filter((element) => element !== null);
 
@@ -63,11 +63,11 @@ export const useHentBehandlingLagringProps = ({
                 element.removeEventListener('input', updateDirtyState);
             });
         };
-    }, [vedtak.textAreas]);
+    }, [skjema.textAreas]);
 
     useEffect(() => {
         updateDirtyState();
-    }, [vedtak]);
+    }, [skjema]);
 
-    return { validerOgHentLagringDTO, validerVedtak, isDirty };
+    return { validerOgHentLagringDTO, validerVedtak: validerSkjema, isDirty };
 };

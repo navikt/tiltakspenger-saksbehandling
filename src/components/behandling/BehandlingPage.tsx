@@ -1,4 +1,3 @@
-import React from 'react';
 import { SøknadsbehandlingVedtak } from '~/components/behandling/søknadsbehandling/SøknadsbehandlingVedtak';
 import { BehandlingSaksopplysninger } from './saksopplysninger/BehandlingSaksopplysninger';
 import { RevurderingVedtak } from './revurdering/RevurderingVedtak';
@@ -12,6 +11,7 @@ import SideBarMain from '../../layouts/sidebar-main/SideBarMain';
 import { BehandlingerTidslinje } from '~/components/behandling/tidslinje/BehandlingerTidslinje';
 import { useSak } from '~/context/sak/SakContext';
 import BehandlingSattPåVentOppsummering from '~/components/oppsummeringer/behandlingSattPåVent/OppsummeringBehandlingSattPåVent';
+import { BehandlingSkjemaProvider } from '~/components/behandling/context/BehandlingSkjemaContext';
 
 import style from './BehandlingPage.module.css';
 
@@ -26,29 +26,31 @@ export const BehandlingPage = () => {
                 {finnBehandlingStatusTag(status, false, ventestatus?.erSattPåVent)}
             </PersonaliaHeader>
 
-            <SideBarMain
-                sidebar={<BehandlingSaksopplysninger />}
-                main={
-                    <div className={style.main}>
-                        {ventestatus && ventestatus.erSattPåVent && (
-                            <BehandlingSattPåVentOppsummering ventestatus={ventestatus} />
-                        )}
-                        <BehandlingerTidslinje sak={sak} />
-                        {avbrutt && <AvbruttOppsummering avbrutt={avbrutt} withPanel={true} />}
-                        <div className={style.vedtakContainer}>
-                            {type === Behandlingstype.SØKNADSBEHANDLING ? (
-                                <SøknadsbehandlingVedtak />
-                            ) : type === Behandlingstype.REVURDERING ? (
-                                <RevurderingVedtak />
-                            ) : (
-                                <Alert
-                                    variant={'error'}
-                                >{`Behandlingstypen er ikke implementert: ${type}`}</Alert>
+            <BehandlingSkjemaProvider>
+                <SideBarMain
+                    sidebar={<BehandlingSaksopplysninger />}
+                    main={
+                        <div className={style.main}>
+                            {ventestatus && ventestatus.erSattPåVent && (
+                                <BehandlingSattPåVentOppsummering ventestatus={ventestatus} />
                             )}
+                            <BehandlingerTidslinje sak={sak} />
+                            {avbrutt && <AvbruttOppsummering avbrutt={avbrutt} withPanel={true} />}
+                            <div className={style.vedtakContainer}>
+                                {type === Behandlingstype.SØKNADSBEHANDLING ? (
+                                    <SøknadsbehandlingVedtak />
+                                ) : type === Behandlingstype.REVURDERING ? (
+                                    <RevurderingVedtak />
+                                ) : (
+                                    <Alert
+                                        variant={'error'}
+                                    >{`Behandlingstypen er ikke implementert: ${type}`}</Alert>
+                                )}
+                            </div>
                         </div>
-                    </div>
-                }
-            />
+                    }
+                />
+            </BehandlingSkjemaProvider>
         </>
     );
 };

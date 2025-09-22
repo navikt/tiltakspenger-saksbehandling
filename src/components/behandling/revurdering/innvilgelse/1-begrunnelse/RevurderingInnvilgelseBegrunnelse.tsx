@@ -1,12 +1,12 @@
 import { BegrunnelseVilkårsvurdering } from '~/components/behandling/felles/begrunnelse-vilkårsvurdering/BegrunnelseVilkårsvurdering';
 import { useRevurderingBehandling } from '~/components/behandling/context/BehandlingContext';
-import { useRevurderingInnvilgelseSkjema } from '~/components/behandling/revurdering/innvilgelse/context/RevurderingInnvilgelseVedtakContext';
+import { useBehandlingSkjema } from '~/components/behandling/context/BehandlingSkjemaContext';
 
 import style from './RevurderingInnvilgelseBegrunnelse.module.css';
 
 export const RevurderingInnvilgelseBegrunnelse = () => {
     const { behandling, rolleForBehandling } = useRevurderingBehandling();
-    const { begrunnelse } = useRevurderingInnvilgelseSkjema().textAreas;
+    const { begrunnelse } = useBehandlingSkjema().textAreas;
 
     return (
         <BegrunnelseVilkårsvurdering

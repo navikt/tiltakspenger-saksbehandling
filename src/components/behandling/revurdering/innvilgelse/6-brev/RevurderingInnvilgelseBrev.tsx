@@ -2,18 +2,18 @@ import { useRevurderingBehandling } from '~/components/behandling/context/Behand
 import { RevurderingResultat } from '~/types/BehandlingTypes';
 import { RevurderingInnvilgelseBrevForhåndsvisningDTO } from '~/components/behandling/felles/vedtaksbrev/forhåndsvisning/useHentVedtaksbrevForhåndsvisning';
 import { Vedtaksbrev } from '~/components/behandling/felles/vedtaksbrev/Vedtaksbrev';
-import { useRevurderingInnvilgelseSkjema } from '~/components/behandling/revurdering/innvilgelse/context/RevurderingInnvilgelseVedtakContext';
 import { revurderingInnvilgelseValidering } from '~/components/behandling/revurdering/innvilgelse/revurderingInnvilgelseValidering';
 import { useSak } from '~/context/sak/SakContext';
 import { BodyLong } from '@navikt/ds-react';
 import { TekstListe } from '~/components/liste/TekstListe';
+import { useBehandlingSkjema } from '~/components/behandling/context/BehandlingSkjemaContext';
 
 export const RevurderingInnvilgelseBrev = () => {
     const { behandling, rolleForBehandling } = useRevurderingBehandling();
-    const vedtak = useRevurderingInnvilgelseSkjema();
+    const skjema = useBehandlingSkjema();
     const { sak } = useSak();
 
-    const { brevtekst } = vedtak.textAreas;
+    const { brevtekst } = skjema.textAreas;
 
     return (
         <Vedtaksbrev
@@ -21,12 +21,12 @@ export const RevurderingInnvilgelseBrev = () => {
             behandling={behandling}
             rolle={rolleForBehandling}
             tekstRef={brevtekst.ref}
-            validering={revurderingInnvilgelseValidering(sak, behandling, vedtak)}
+            validering={revurderingInnvilgelseValidering(sak, behandling, skjema)}
             hentDto={(): RevurderingInnvilgelseBrevForhåndsvisningDTO => ({
                 resultat: RevurderingResultat.REVURDERING_INNVILGELSE,
                 fritekst: brevtekst.getValue(),
-                virkningsperiode: vedtak.behandlingsperiode,
-                barnetillegg: vedtak.harBarnetillegg ? vedtak.barnetilleggPerioder : null,
+                virkningsperiode: skjema.behandlingsperiode,
+                barnetillegg: skjema.harBarnetillegg ? skjema.barnetilleggPerioder : null,
             })}
             hjelpetekst={<HjelpetekstRevurdering />}
         />

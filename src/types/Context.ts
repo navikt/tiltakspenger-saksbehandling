@@ -1,7 +1,3 @@
-import { SøknadsbehandlingVedtakContext } from '~/components/behandling/søknadsbehandling/context/SøknadsbehandlingVedtakContext';
-import { RevurderingInnvilgelseVedtakContext } from '~/components/behandling/revurdering/innvilgelse/context/RevurderingInnvilgelseVedtakContext';
-import { BehandlingSkjemaContext } from '~/components/behandling/context/BehandlingSkjemaContext';
-
 export type ReducerAction = {
     type: string;
     payload: Record<string, unknown>;
@@ -13,8 +9,3 @@ export type ReducerActionHandlers<State, Actions extends ReducerAction> = {
         payload: Extract<Actions, { type: Type }>['payload'],
     ) => State;
 };
-
-export type VedtakContext =
-    | SøknadsbehandlingVedtakContext
-    | RevurderingInnvilgelseVedtakContext
-    | BehandlingSkjemaContext;

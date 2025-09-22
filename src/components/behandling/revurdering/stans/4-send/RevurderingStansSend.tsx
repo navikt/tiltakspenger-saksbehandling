@@ -14,8 +14,8 @@ export const RevurderingStansSend = () => {
 
     const lagringProps = useHentBehandlingLagringProps({
         hentDTO: () => tilDTO(skjema),
-        vedtak: skjema,
-        validerVedtak: () => revurderingStansValidering(skjema),
+        skjema: skjema,
+        validerSkjema: () => revurderingStansValidering(skjema),
     });
 
     return <BehandlingSendOgGodkjenn behandling={behandling} lagringProps={lagringProps} />;

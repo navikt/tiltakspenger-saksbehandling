@@ -1,22 +1,22 @@
-import {
-    useSøknadsbehandlingSkjemaDispatch,
-    useSøknadsbehandlingSkjema,
-    SøknadsbehandlingVedtakContext,
-} from '~/components/behandling/søknadsbehandling/context/SøknadsbehandlingVedtakContext';
 import { classNames } from '~/utils/classNames';
 import { useSøknadsbehandling } from '~/components/behandling/context/BehandlingContext';
 import { Separator } from '~/components/separator/Separator';
 import { SøknadsbehandlingResultat } from '~/types/BehandlingTypes';
 import { BehandlingBarnetillegg } from '~/components/behandling/felles/barnetillegg/BehandlingBarnetillegg';
 import { OppdaterBarnetilleggRequest } from '~/types/Barnetillegg';
+import {
+    BehandlingSkjemaContext,
+    useBehandlingSkjema,
+    useBehandlingSkjemaDispatch,
+} from '~/components/behandling/context/BehandlingSkjemaContext';
 
 import style from './SøknadsbehandlingBarnetillegg.module.css';
 
 export const SøknadsbehandlingBarnetillegg = () => {
     const { behandling } = useSøknadsbehandling();
 
-    const dispatch = useSøknadsbehandlingSkjemaDispatch();
-    const skjemaContext = useSøknadsbehandlingSkjema();
+    const dispatch = useBehandlingSkjemaDispatch();
+    const skjemaContext = useBehandlingSkjema();
 
     return (
         <div
@@ -39,19 +39,17 @@ export const SøknadsbehandlingBarnetillegg = () => {
     );
 };
 
-const tilBarnetilleggRequest = (
-    vedtak: SøknadsbehandlingVedtakContext,
-): OppdaterBarnetilleggRequest => {
+const tilBarnetilleggRequest = (skjema: BehandlingSkjemaContext): OppdaterBarnetilleggRequest => {
     return {
-        innvilgelsesperiode: vedtak.behandlingsperiode,
-        barnetillegg: vedtak.harBarnetillegg
+        innvilgelsesperiode: skjema.behandlingsperiode,
+        barnetillegg: skjema.harBarnetillegg
             ? {
-                  begrunnelse: vedtak.textAreas.barnetilleggBegrunnelse.getValue(),
-                  perioder: vedtak.barnetilleggPerioder,
+                  begrunnelse: skjema.textAreas.barnetilleggBegrunnelse.getValue(),
+                  perioder: skjema.barnetilleggPerioder,
               }
             : null,
-        valgteTiltaksdeltakelser: vedtak.valgteTiltaksdeltakelser,
-        antallDagerPerMeldeperiodeForPerioder: vedtak.antallDagerPerMeldeperiode.map((dager) => ({
+        valgteTiltaksdeltakelser: skjema.valgteTiltaksdeltakelser,
+        antallDagerPerMeldeperiodeForPerioder: skjema.antallDagerPerMeldeperiode.map((dager) => ({
             antallDagerPerMeldeperiode: dager.antallDagerPerMeldeperiode!,
             periode: { fraOgMed: dager.periode.fraOgMed!, tilOgMed: dager.periode.tilOgMed! },
         })),

@@ -1,17 +1,17 @@
 import { Checkbox, CheckboxGroup } from '@navikt/ds-react';
-import {
-    useSøknadsbehandlingSkjema,
-    useSøknadsbehandlingSkjemaDispatch,
-} from '../context/SøknadsbehandlingVedtakContext';
-import { Avslagsgrunn, SøknadsbehandlingResultat } from '../../../../types/BehandlingTypes';
+import { Avslagsgrunn, SøknadsbehandlingResultat } from '~/types/BehandlingTypes';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { Separator } from '../../../separator/Separator';
 import { useSøknadsbehandling } from '../../context/BehandlingContext';
-import { SaksbehandlerRolle } from '../../../../types/Saksbehandler';
+import { SaksbehandlerRolle } from '~/types/Saksbehandler';
+import {
+    useBehandlingSkjema,
+    useBehandlingSkjemaDispatch,
+} from '~/components/behandling/context/BehandlingSkjemaContext';
 
 import styles from './SøknadsbehandlingAvslagsgrunner.module.css';
 
-export const AvslagsgrunnTekst = {
+const AvslagsgrunnTekst = {
     [Avslagsgrunn.DeltarIkkePåArbeidsmarkedstiltak]: 'Deltar ikke på arbeidsmarkedstiltak',
     [Avslagsgrunn.Alder]: 'Alder',
     [Avslagsgrunn.Livsoppholdytelser]: 'Livsoppholdytelser',
@@ -23,10 +23,10 @@ export const AvslagsgrunnTekst = {
     [Avslagsgrunn.FremmetForSent]: 'Fremmet for sent',
 };
 
-const SøknadsbehandlingAvslagsgrunner = () => {
+export const SøknadsbehandlingAvslagsgrunner = () => {
     const { rolleForBehandling } = useSøknadsbehandling();
-    const { resultat, avslagsgrunner } = useSøknadsbehandlingSkjema();
-    const dispatch = useSøknadsbehandlingSkjemaDispatch();
+    const { resultat, avslagsgrunner } = useBehandlingSkjema();
+    const dispatch = useBehandlingSkjemaDispatch();
     const erIkkeSaksbehandler = rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER;
 
     if (resultat !== SøknadsbehandlingResultat.AVSLAG) {
@@ -34,7 +34,7 @@ const SøknadsbehandlingAvslagsgrunner = () => {
     }
 
     return (
-        <div>
+        <>
             <VedtakSeksjon>
                 <VedtakSeksjon.Venstre>
                     <CheckboxGroup legend="Avslagsgrunner" className={styles.checkboxGroup}>
@@ -61,8 +61,6 @@ const SøknadsbehandlingAvslagsgrunner = () => {
                 </VedtakSeksjon.Venstre>
             </VedtakSeksjon>
             <Separator />
-        </div>
+        </>
     );
 };
-
-export default SøknadsbehandlingAvslagsgrunner;

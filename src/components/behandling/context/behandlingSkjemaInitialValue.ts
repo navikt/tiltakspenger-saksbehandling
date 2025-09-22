@@ -115,7 +115,7 @@ const revurderingInnvilgelseInitialState = (
     behandling: RevurderingData,
     sak: SakProps,
 ): BehandlingSkjemaState => {
-    const tiltaksperiode: Periode = hentHeleTiltaksdeltagelsesperioden(behandling);
+    const tiltaksperiode = hentHeleTiltaksdeltagelsesperioden(behandling);
 
     const behandlingsperiode = behandling.virkningsperiode ?? tiltaksperiode;
 
@@ -152,7 +152,8 @@ const revurderingInnvilgelseInitialState = (
 const revurderingStansInitialState = (behandling: RevurderingData): BehandlingSkjemaState => {
     return {
         resultat: RevurderingResultat.STANS,
-        behandlingsperiode: behandling.virkningsperiode ?? {},
+        behandlingsperiode:
+            behandling.virkningsperiode ?? hentHeleTiltaksdeltagelsesperioden(behandling),
         hjemlerForStans: behandling.valgtHjemmelHarIkkeRettighet ?? [],
 
         // Ikke i bruk for denne behandlingstypen

@@ -1,22 +1,22 @@
 import { Button, Radio, RadioGroup } from '@navikt/ds-react';
 import { classNames } from '~/utils/classNames';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
-import {
-    useSøknadsbehandlingSkjema,
-    useSøknadsbehandlingSkjemaDispatch,
-} from '../context/SøknadsbehandlingVedtakContext';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { useSøknadsbehandling } from '../../context/BehandlingContext';
 import { SøknadsbehandlingResultat } from '~/types/BehandlingTypes';
 import { BehandlingsperiodeVelger } from '~/components/behandling/felles/behandlingsperiode/BehandlingsperiodeVelger';
+import {
+    useBehandlingSkjema,
+    useBehandlingSkjemaDispatch,
+} from '~/components/behandling/context/BehandlingSkjemaContext';
 
 import style from './SøknadsbehandlingResultatVelger.module.css';
 
 export const SøknadsbehandlingResultatVelger = () => {
     const { rolleForBehandling, behandling } = useSøknadsbehandling();
 
-    const skjemaContext = useSøknadsbehandlingSkjema();
-    const dispatch = useSøknadsbehandlingSkjemaDispatch();
+    const skjemaContext = useBehandlingSkjema();
+    const dispatch = useBehandlingSkjemaDispatch();
 
     const { resultat } = skjemaContext;
 
@@ -55,8 +55,6 @@ export const SøknadsbehandlingResultatVelger = () => {
                 </RadioGroup>
                 <BehandlingsperiodeVelger
                     behandling={behandling}
-                    context={skjemaContext}
-                    dispatch={dispatch}
                     label={'Innvilges'}
                     className={classNames(
                         style.datovelgere,

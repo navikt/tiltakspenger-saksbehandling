@@ -1,18 +1,18 @@
-import { SøknadsbehandlingVedtakContext } from '../context/SøknadsbehandlingVedtakContext';
 import { SøknadsbehandlingData, SøknadsbehandlingResultat } from '~/types/BehandlingTypes';
 import { hentTiltaksperiode, hentTiltaksperiodeFraSøknad } from '~/utils/behandling';
 import { ValideringFunc, ValideringResultat } from '~/types/Validering';
 import { validerInnvilgelse } from '~/components/behandling/felles/validering/validerInnvilgelse';
+import { BehandlingSkjemaContext } from '~/components/behandling/context/BehandlingSkjemaContext';
 
 export const søknadsbehandlingValidering =
-    (behandling: SøknadsbehandlingData, vedtak: SøknadsbehandlingVedtakContext): ValideringFunc =>
+    (behandling: SøknadsbehandlingData, skjema: BehandlingSkjemaContext): ValideringFunc =>
     (type): ValideringResultat => {
         const validering: ValideringResultat = {
             errors: [],
             warnings: [],
         };
 
-        const { behandlingsperiode, resultat } = vedtak;
+        const { behandlingsperiode, resultat } = skjema;
 
         const tiltaksperiode = hentTiltaksperiode(behandling);
 
@@ -35,11 +35,11 @@ export const søknadsbehandlingValidering =
         }
 
         if (resultat === SøknadsbehandlingResultat.AVSLAG) {
-            const avslagValidering = validerAvslag(behandling, vedtak);
+            const avslagValidering = validerAvslag(behandling, skjema);
             validering.errors.push(...avslagValidering.errors);
             validering.warnings.push(...avslagValidering.warnings);
         } else if (resultat === SøknadsbehandlingResultat.INNVILGELSE) {
-            const innvilgelseValidering = validerInnvilgelse(behandling, vedtak);
+            const innvilgelseValidering = validerInnvilgelse(behandling, skjema);
             validering.errors.push(...innvilgelseValidering.errors);
             validering.warnings.push(...innvilgelseValidering.warnings);
         }
@@ -49,7 +49,7 @@ export const søknadsbehandlingValidering =
 
 const validerAvslag = (
     behandling: SøknadsbehandlingData,
-    vedtak: SøknadsbehandlingVedtakContext,
+    skjema: BehandlingSkjemaContext,
 ): ValideringResultat => {
     const validering: ValideringResultat = {
         errors: [],
@@ -58,13 +58,13 @@ const validerAvslag = (
 
     const tiltaksperiode = hentTiltaksperiodeFraSøknad(behandling);
 
-    if (vedtak.avslagsgrunner === null) {
+    if (skjema.avslagsgrunner === null) {
         validering.errors.push('Avslagsgrunn må velges');
     }
 
     if (
-        tiltaksperiode.fraOgMed !== vedtak.behandlingsperiode.fraOgMed ||
-        tiltaksperiode.tilOgMed !== vedtak.behandlingsperiode.tilOgMed
+        tiltaksperiode.fraOgMed !== skjema.behandlingsperiode.fraOgMed ||
+        tiltaksperiode.tilOgMed !== skjema.behandlingsperiode.tilOgMed
     ) {
         validering.warnings.push(
             'Avslagsdatoene er endret. De samsvarer ikke lenger med perioden det er søkt for. Vil du fortsette?',

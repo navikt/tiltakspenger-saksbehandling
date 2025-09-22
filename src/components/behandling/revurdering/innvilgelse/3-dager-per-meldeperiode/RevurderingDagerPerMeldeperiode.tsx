@@ -1,21 +1,20 @@
 import { RevurderingResultat } from '~/types/BehandlingTypes';
-
+import { BehandlingDagerPerMeldeperiode } from '~/components/behandling/felles/dager-per-meldeperiode/BehandlingDagerPerMeldeperiode';
 import { Separator } from '~/components/separator/Separator';
-import { DagerPerMeldeperiode } from '~/components/behandling/felles/dager-per-meldeperiode/DagerPerMeldeperiode';
 import { useRevurderingBehandling } from '~/components/behandling/context/BehandlingContext';
-import {
-    useRevurderingInnvilgelseSkjema,
-    useRevurderingInnvilgelseSkjemaDispatch,
-} from '../context/RevurderingInnvilgelseVedtakContext';
 import { AntallDagerForMeldeperiodeFormData } from '~/components/behandling/felles/state/AntallDagerState';
 import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
 import { hentRolleForBehandling } from '~/utils/tilganger';
+import {
+    useBehandlingSkjema,
+    useBehandlingSkjemaDispatch,
+} from '~/components/behandling/context/BehandlingSkjemaContext';
 
-const RevurderingDagerPerMeldeperiode = () => {
+export const RevurderingDagerPerMeldeperiode = () => {
     const { behandling } = useRevurderingBehandling();
 
-    const { behandlingsperiode, antallDagerPerMeldeperiode } = useRevurderingInnvilgelseSkjema();
-    const dispatch = useRevurderingInnvilgelseSkjemaDispatch();
+    const { behandlingsperiode, antallDagerPerMeldeperiode } = useBehandlingSkjema();
+    const dispatch = useBehandlingSkjemaDispatch();
 
     const { innloggetSaksbehandler } = useSaksbehandler();
     const rolle = hentRolleForBehandling(behandling, innloggetSaksbehandler);
@@ -31,7 +30,7 @@ const RevurderingDagerPerMeldeperiode = () => {
             {behandling.resultat === RevurderingResultat.REVURDERING_INNVILGELSE && (
                 <>
                     <Separator />
-                    <DagerPerMeldeperiode
+                    <BehandlingDagerPerMeldeperiode
                         antallDagerPerMeldeperiode={antallDagerPerMeldeperiode}
                         behandlingsperiode={behandlingsperiode}
                         dispatch={onDispatch}
@@ -42,4 +41,3 @@ const RevurderingDagerPerMeldeperiode = () => {
         </div>
     );
 };
-export default RevurderingDagerPerMeldeperiode;

@@ -10,22 +10,19 @@ import {
     hentTiltaksdeltakelserMedStartOgSluttdato,
 } from '~/utils/behandling';
 import { BehandlingData } from '~/types/BehandlingTypes';
-import {
-    TiltaksdeltagelseActions,
-    TiltaksdeltagelseState,
-} from '~/components/behandling/felles/state/TiltaksdeltagelseState';
 import { Dispatch } from 'react';
-import { InnvilgelseState } from '~/components/behandling/felles/state/InnvilgelseState';
 import { useRolleForBehandling } from '~/context/saksbehandler/SaksbehandlerContext';
 import { Separator } from '~/components/separator/Separator';
 import { VedtakHjelpetekst } from '~/components/behandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
+import { BehandlingSkjemaContext } from '~/components/behandling/context/BehandlingSkjemaContext';
+import { BehandlingSkjemaActions } from '~/components/behandling/context/BehandlingSkjemaReducer';
 
 import style from './BehandlingTiltak.module.css';
 
 type Props = {
     behandling: BehandlingData;
-    context: TiltaksdeltagelseState & InnvilgelseState;
-    dispatch: Dispatch<TiltaksdeltagelseActions>;
+    context: BehandlingSkjemaContext;
+    dispatch: Dispatch<BehandlingSkjemaActions>;
 };
 
 export const BehandlingTiltak = (props: Props) => {

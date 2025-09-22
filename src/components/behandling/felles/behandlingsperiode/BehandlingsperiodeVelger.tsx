@@ -2,55 +2,31 @@ import { Datovelger } from '~/components/datovelger/Datovelger';
 import { BehandlingData } from '~/types/BehandlingTypes';
 import { dateTilISOTekst } from '~/utils/date';
 import { classNames } from '~/utils/classNames';
-import { Dispatch } from 'react';
-import {
-    InnvilgelseActions,
-    InnvilgelseState,
-} from '~/components/behandling/felles/state/InnvilgelseState';
-import {
-    TiltaksdeltagelseActions,
-    TiltaksdeltagelseState,
-} from '~/components/behandling/felles/state/TiltaksdeltagelseState';
 import { useRolleForBehandling } from '~/context/saksbehandler/SaksbehandlerContext';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
+import dayjs from 'dayjs';
+import {
+    useBehandlingSkjema,
+    useBehandlingSkjemaDispatch,
+} from '~/components/behandling/context/BehandlingSkjemaContext';
 
 import style from './BehandlingsperiodeVelger.module.css';
-import {
-    AntallDagerForMeldeperiodeAction,
-    AntallDagerForMeldeperiodeState,
-} from '../state/AntallDagerState';
-import dayjs from 'dayjs';
-import { BarnetilleggActions, BarnetilleggState } from '../state/BarnetilleggState';
 
 type Props = {
     behandling: BehandlingData;
-    dispatch: Dispatch<
-        | TiltaksdeltagelseActions
-        | InnvilgelseActions
-        | AntallDagerForMeldeperiodeAction
-        | BarnetilleggActions
-    >;
-    context: TiltaksdeltagelseState &
-        InnvilgelseState &
-        AntallDagerForMeldeperiodeState &
-        BarnetilleggState;
     label: string;
     className?: string;
 };
 
-export const BehandlingsperiodeVelger = ({
-    behandling,
-    dispatch,
-    context,
-    label,
-    className,
-}: Props) => {
+export const BehandlingsperiodeVelger = ({ behandling, label, className }: Props) => {
     const {
         behandlingsperiode,
         valgteTiltaksdeltakelser,
         antallDagerPerMeldeperiode,
         barnetilleggPerioder,
-    } = context;
+    } = useBehandlingSkjema();
+
+    const dispatch = useBehandlingSkjemaDispatch();
 
     const erIkkeSaksbehandler =
         useRolleForBehandling(behandling) !== SaksbehandlerRolle.SAKSBEHANDLER;

@@ -1,4 +1,3 @@
-import { useSøknadsbehandlingSkjema } from '../context/SøknadsbehandlingVedtakContext';
 import { useSøknadsbehandling } from '../../context/BehandlingContext';
 import { SøknadsbehandlingResultat } from '~/types/BehandlingTypes';
 import { Vedtaksbrev } from '~/components/behandling/felles/vedtaksbrev/Vedtaksbrev';
@@ -6,12 +5,13 @@ import { søknadsbehandlingValidering } from '~/components/behandling/søknadsbe
 import { SøknadsbehandlingBrevForhåndsvisningDTO } from '~/components/behandling/felles/vedtaksbrev/forhåndsvisning/useHentVedtaksbrevForhåndsvisning';
 import { BodyLong } from '@navikt/ds-react';
 import { TekstListe } from '~/components/liste/TekstListe';
+import { useBehandlingSkjema } from '~/components/behandling/context/BehandlingSkjemaContext';
 
 export const SøknadsbehandlingBrev = () => {
     const { behandling, rolleForBehandling } = useSøknadsbehandling();
-    const vedtak = useSøknadsbehandlingSkjema();
+    const skjema = useBehandlingSkjema();
 
-    const { brevtekst } = vedtak.textAreas;
+    const { brevtekst } = skjema.textAreas;
 
     return (
         <Vedtaksbrev
@@ -19,22 +19,22 @@ export const SøknadsbehandlingBrev = () => {
             behandling={behandling}
             rolle={rolleForBehandling}
             tekstRef={brevtekst.ref}
-            validering={søknadsbehandlingValidering(behandling, vedtak)('tilBeslutning')}
+            validering={søknadsbehandlingValidering(behandling, skjema)('tilBeslutning')}
             hentDto={(): SøknadsbehandlingBrevForhåndsvisningDTO => ({
                 fritekst: brevtekst.getValue(),
                 // Backend vil ignorere perioden dersom vedtaket er avslag, og hvis tilstanden er tilBeslutter (senere enn under behandling)
-                virkningsperiode: vedtak.behandlingsperiode,
+                virkningsperiode: skjema.behandlingsperiode,
                 barnetillegg:
-                    vedtak.resultat === SøknadsbehandlingResultat.INNVILGELSE &&
-                    vedtak.harBarnetillegg
-                        ? vedtak.barnetilleggPerioder
+                    skjema.resultat === SøknadsbehandlingResultat.INNVILGELSE &&
+                    skjema.harBarnetillegg
+                        ? skjema.barnetilleggPerioder
                         : null,
                 // vi rendrer ikke komponenten hvis resultatet ikke eksiterer i parenten
-                resultat: vedtak.resultat!,
+                resultat: skjema.resultat! as SøknadsbehandlingResultat,
                 avslagsgrunner:
-                    vedtak.resultat === SøknadsbehandlingResultat.AVSLAG &&
-                    vedtak.avslagsgrunner !== null
-                        ? vedtak.avslagsgrunner
+                    skjema.resultat === SøknadsbehandlingResultat.AVSLAG &&
+                    skjema.avslagsgrunner !== null
+                        ? skjema.avslagsgrunner
                         : null,
             })}
             hjelpetekst={<Hjelpetekst />}

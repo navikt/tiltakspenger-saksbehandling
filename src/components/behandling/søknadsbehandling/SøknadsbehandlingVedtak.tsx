@@ -5,10 +5,9 @@ import { SøknadsbehandlingBrev } from '~/components/behandling/søknadsbehandli
 import { Separator } from '../../separator/Separator';
 import { SøknadsbehandlingSend } from '~/components/behandling/søknadsbehandling/9-send-og-godkjenn/SøknadsbehandlingSend';
 import { SøknadsbehandlingBarnetillegg } from '~/components/behandling/søknadsbehandling/7-barn/SøknadsbehandlingBarnetillegg';
-import { SøknadsbehandlingVedtakProvider } from './context/SøknadsbehandlingVedtakContext';
 import { SøknadsbehandlingTiltak } from '~/components/behandling/søknadsbehandling/5-tiltak/SøknadsbehandlingTiltak';
-import SøknadsbehandlingAvslagsgrunner from '~/components/behandling/søknadsbehandling/6-avslagsgrunner/SøknadsbehandlingAvslagsgrunner';
-import SøknadsbehandlingDagerPerMeldeperiode from '~/components/behandling/søknadsbehandling/4-dager-per-meldeperiode/SøknadsbehandlingDagerPerMeldeperiode';
+import { SøknadsbehandlingAvslagsgrunner } from '~/components/behandling/søknadsbehandling/6-avslagsgrunner/SøknadsbehandlingAvslagsgrunner';
+import { SøknadsbehandlingDagerPerMeldeperiode } from '~/components/behandling/søknadsbehandling/4-dager-per-meldeperiode/SøknadsbehandlingDagerPerMeldeperiode';
 import { SøknadsbehandlingAutomatiskBehandling } from '~/components/behandling/søknadsbehandling/1-automatisk-behandling/SøknadsbehandlingAutomatiskBehandling';
 import { BehandlingUtbetaling } from '../felles/utbetaling/BehandlingUtbetaling';
 
@@ -16,7 +15,7 @@ import style from './SøknadsbehandlingVedtak.module.css';
 
 export const SøknadsbehandlingVedtak = () => {
     return (
-        <SøknadsbehandlingVedtakProvider>
+        <>
             <Heading size={'medium'} level={'3'} className={style.header}>
                 {'Vedtak (søknadsbehandling)'}
             </Heading>
@@ -32,6 +31,6 @@ export const SøknadsbehandlingVedtak = () => {
             <Separator />
             <BehandlingUtbetaling />
             <SøknadsbehandlingSend />
-        </SøknadsbehandlingVedtakProvider>
+        </>
     );
 };

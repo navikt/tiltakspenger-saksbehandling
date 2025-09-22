@@ -1,16 +1,16 @@
 import { BehandlingBarnetillegg } from '~/components/behandling/felles/barnetillegg/BehandlingBarnetillegg';
 import { useRevurderingBehandling } from '~/components/behandling/context/BehandlingContext';
-import {
-    useRevurderingInnvilgelseSkjema,
-    useRevurderingInnvilgelseSkjemaDispatch,
-} from '~/components/behandling/revurdering/innvilgelse/context/RevurderingInnvilgelseVedtakContext';
 import { VedtakBarnetilleggDTO } from '~/types/Barnetillegg';
+import {
+    useBehandlingSkjema,
+    useBehandlingSkjemaDispatch,
+} from '~/components/behandling/context/BehandlingSkjemaContext';
 
 export const RevurderingInnvilgelseBarnetillegg = () => {
     const { behandling } = useRevurderingBehandling();
 
-    const dispatch = useRevurderingInnvilgelseSkjemaDispatch();
-    const skjemaContext = useRevurderingInnvilgelseSkjema();
+    const dispatch = useBehandlingSkjemaDispatch();
+    const skjemaContext = useBehandlingSkjema();
 
     return (
         <BehandlingBarnetillegg

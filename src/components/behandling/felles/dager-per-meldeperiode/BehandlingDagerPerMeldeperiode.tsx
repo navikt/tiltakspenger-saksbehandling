@@ -1,15 +1,15 @@
-import { classNames } from '../../../../utils/classNames';
+import { classNames } from '~/utils/classNames';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { Alert } from '@navikt/ds-react';
-
-import style from './DagerPerMeldeperiode.module.css';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import AntallDagerForMeldeperiodeForm from '~/components/forms/antallDagerForMeldeperiode/AntallDagerForMeldeperiodeForm';
 import { AntallDagerForMeldeperiodeFormData } from '../state/AntallDagerState';
 import { Periode } from '~/types/Periode';
 import { Nullable } from '~/types/UtilTypes';
 
-export const DagerPerMeldeperiode = (props: {
+import style from './BehandlingDagerPerMeldeperiode.module.css';
+
+export const BehandlingDagerPerMeldeperiode = (props: {
     antallDagerPerMeldeperiode: AntallDagerForMeldeperiodeFormData[];
     behandlingsperiode: Periode;
     dispatch: (action: AntallDagerForMeldeperiodeFormData[]) => void;
