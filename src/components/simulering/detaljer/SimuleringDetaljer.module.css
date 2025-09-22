@@ -1,0 +1,35 @@
+.detaljer {
+    display: none;
+
+    &.åpen {
+        display: block;
+    }
+}
+
+.tabell {
+    position: relative;
+}
+
+.tabellHeader {
+    position: sticky;
+    top: 0;
+    background-color: var(--a-gray-100);
+}
+
+.meldeperiodeHeader {
+    border: 0;
+    font-weight: bold;
+    background-color: var(--a-gray-50);
+}
+
+.meldeperiodeDag {
+    &td {
+        border: none;
+    }
+}
+
+.bold {
+    font-weight: bold;
+}
+
+

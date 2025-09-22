@@ -8,6 +8,7 @@ import { RevurderingInnvilgelseBarnetillegg } from '~/components/behandling/revu
 import { RevurderingDagerPerMeldeperiode } from './3-dager-per-meldeperiode/RevurderingDagerPerMeldeperiode';
 import { BehandlingUtbetaling } from '~/components/behandling/felles/utbetaling/BehandlingUtbetaling';
 import { RevurderingInnvilgelseTiltak } from '~/components/behandling/revurdering/innvilgelse/4-tiltak/RevurderingInnvilgelseTiltak';
+import { BeregningOgSimulering } from '~/components/simulering/BeregningOgSimulering';
 
 export const RevurderingInnvilgelseVedtak = () => {
     return (
@@ -15,6 +16,7 @@ export const RevurderingInnvilgelseVedtak = () => {
             <Heading size={'medium'} level={'1'}>
                 {'Revurdering av innvilgelse'}
             </Heading>
+            <BeregningOgSimulering />
             <RevurderingInnvilgelseBegrunnelse />
             <RevurderingInnvilgelsesperiodeVelger />
             <RevurderingDagerPerMeldeperiode />

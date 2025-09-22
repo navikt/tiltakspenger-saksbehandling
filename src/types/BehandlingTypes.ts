@@ -10,6 +10,7 @@ import { MeldeperiodeBeregningProps } from '~/types/Beregning';
 import { MeldekortBehandlingProps, Utbetalingsstatus } from '~/types/meldekort/MeldekortBehandling';
 import { Simulering } from './Simulering';
 import { ArenaTPVedtak } from '~/types/ArenaTPVedtak';
+import { SimulertBeregning } from '~/types/SimulertBeregningTypes';
 
 export type BehandlingId = `beh_${string}`;
 
@@ -31,6 +32,7 @@ type BehandlingDataCommon = {
     fritekstTilVedtaksbrev: string | null;
     ventestatus: Nullable<VentestatusHendelse>;
     utbetaling: Nullable<BehandlingUtbetalingProps>;
+
 };
 
 export interface AntallDagerForMeldeperiode {
@@ -217,6 +219,7 @@ export type BehandlingUtbetalingProps = {
     beregninger: MeldeperiodeBeregningProps[];
     beregningerSummert: BeregningerSummert;
     simulering?: Simulering;
+    simulertBeregning?: SimulertBeregning;
 };
 
 export type BeregningerSummert = {
