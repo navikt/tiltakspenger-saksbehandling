@@ -2,7 +2,7 @@ import { classNames } from '~/utils/classNames';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { Alert } from '@navikt/ds-react';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
-import AntallDagerForMeldeperiodeForm from '~/components/forms/antallDagerForMeldeperiode/AntallDagerForMeldeperiodeForm';
+import { AntallDagerForMeldeperiodeForm } from '~/components/forms/antallDagerForMeldeperiode/AntallDagerForMeldeperiodeForm';
 import { AntallDagerForMeldeperiodeFormData } from '../state/AntallDagerState';
 import { Periode } from '~/types/Periode';
 import { Nullable } from '~/types/UtilTypes';
@@ -12,7 +12,6 @@ import style from './BehandlingDagerPerMeldeperiode.module.css';
 export const BehandlingDagerPerMeldeperiode = (props: {
     antallDagerPerMeldeperiode: AntallDagerForMeldeperiodeFormData[];
     behandlingsperiode: Periode;
-    dispatch: (action: AntallDagerForMeldeperiodeFormData[]) => void;
     rolleForBehandling: Nullable<SaksbehandlerRolle>;
 }) => {
     const erSaksbehandler = props.rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER;
@@ -23,7 +22,6 @@ export const BehandlingDagerPerMeldeperiode = (props: {
             <AntallDagerForMeldeperiodeForm
                 antallDagerPerMeldeperiode={props.antallDagerPerMeldeperiode}
                 behandlingsperiode={props.behandlingsperiode}
-                dispatch={props.dispatch}
                 erSaksbehandler={erSaksbehandler}
                 erIkkeSaksbehandler={erIkkeSaksbehandler}
             />

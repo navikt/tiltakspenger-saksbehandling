@@ -9,25 +9,21 @@ import {
     deltarPaFlereTiltakMedStartOgSluttdatoIValgtInnvilgelsesperiode,
     hentTiltaksdeltakelserMedStartOgSluttdato,
 } from '~/utils/behandling';
-import { BehandlingData } from '~/types/BehandlingTypes';
-import { Dispatch } from 'react';
 import { useRolleForBehandling } from '~/context/saksbehandler/SaksbehandlerContext';
 import { Separator } from '~/components/separator/Separator';
 import { VedtakHjelpetekst } from '~/components/behandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
-import { BehandlingSkjemaContext } from '~/components/behandling/context/BehandlingSkjemaContext';
-import { BehandlingSkjemaActions } from '~/components/behandling/context/BehandlingSkjemaReducer';
+import {
+    useBehandlingSkjema,
+    useBehandlingSkjemaDispatch,
+} from '~/components/behandling/context/BehandlingSkjemaContext';
+import { useBehandling } from '~/components/behandling/context/BehandlingContext';
 
 import style from './BehandlingTiltak.module.css';
 
-type Props = {
-    behandling: BehandlingData;
-    context: BehandlingSkjemaContext;
-    dispatch: Dispatch<BehandlingSkjemaActions>;
-};
-
-export const BehandlingTiltak = (props: Props) => {
-    const { behandling, context, dispatch } = props;
-    const { valgteTiltaksdeltakelser, behandlingsperiode } = context;
+export const BehandlingTiltak = () => {
+    const { behandling } = useBehandling();
+    const { valgteTiltaksdeltakelser, behandlingsperiode } = useBehandlingSkjema();
+    const dispatch = useBehandlingSkjemaDispatch();
 
     const tiltaksdeltakelser = hentTiltaksdeltakelserMedStartOgSluttdato(behandling);
 
@@ -49,7 +45,6 @@ export const BehandlingTiltak = (props: Props) => {
                     {valgteTiltaksdeltakelser?.map((periode, index) => {
                         return (
                             <TiltakPeriode
-                                {...props}
                                 periode={periode}
                                 tiltaksdeltakelser={tiltaksdeltakelser}
                                 index={index}
@@ -94,7 +89,7 @@ type PeriodeProps = {
     index: number;
     rolle: SaksbehandlerRolle | null;
     skalKunneFjernePeriode: boolean;
-} & Props;
+};
 
 const TiltakPeriode = ({
     periode,
@@ -102,10 +97,9 @@ const TiltakPeriode = ({
     index,
     rolle,
     skalKunneFjernePeriode,
-    dispatch,
-    context,
 }: PeriodeProps) => {
-    const { behandlingsperiode: innvilgelsesPeriode } = context;
+    const { behandlingsperiode: innvilgelsesPeriode } = useBehandlingSkjema();
+    const dispatch = useBehandlingSkjemaDispatch();
 
     const erSaksbehandler = rolle === SaksbehandlerRolle.SAKSBEHANDLER;
 

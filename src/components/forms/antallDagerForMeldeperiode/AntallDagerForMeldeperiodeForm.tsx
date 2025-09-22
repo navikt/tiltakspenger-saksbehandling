@@ -1,14 +1,15 @@
 import { Button, ErrorMessage, Heading, HStack, Select, VStack } from '@navikt/ds-react';
 import { AntallDagerForMeldeperiodeFormData } from '../../behandling/felles/state/AntallDagerState';
-import styles from './AntallDagerForMeldeperiodeForm.module.css';
 import { Datovelger } from '~/components/datovelger/Datovelger';
 import { dateTilISOTekst, datoTilDatoInputText, overlapperMed } from '~/utils/date';
 import { useState } from 'react';
+import { useBehandlingSkjemaDispatch } from '~/components/behandling/context/BehandlingSkjemaContext';
 
-const AntallDagerForMeldeperiodeForm = (props: {
+import styles from './AntallDagerForMeldeperiodeForm.module.css';
+
+export const AntallDagerForMeldeperiodeForm = (props: {
     antallDagerPerMeldeperiode: AntallDagerForMeldeperiodeFormData[];
     behandlingsperiode: { fraOgMed: string; tilOgMed: string };
-    dispatch: (action: AntallDagerForMeldeperiodeFormData[]) => void;
     erSaksbehandler: boolean;
     erIkkeSaksbehandler: boolean;
 }) => {
@@ -16,6 +17,8 @@ const AntallDagerForMeldeperiodeForm = (props: {
         index: number;
         melding: string;
     } | null>(null);
+
+    const dispatch = useBehandlingSkjemaDispatch();
 
     return (
         <div>
@@ -37,7 +40,7 @@ const AntallDagerForMeldeperiodeForm = (props: {
                                     readOnly={props.erIkkeSaksbehandler}
                                     value={periode.antallDagerPerMeldeperiode ?? undefined}
                                     onChange={(event) => {
-                                        props.dispatch([
+                                        const antallDager = [
                                             ...props.antallDagerPerMeldeperiode.slice(0, index),
                                             {
                                                 ...periode,
@@ -46,7 +49,12 @@ const AntallDagerForMeldeperiodeForm = (props: {
                                                 ),
                                             },
                                             ...props.antallDagerPerMeldeperiode.slice(index + 1),
-                                        ]);
+                                        ];
+
+                                        dispatch({
+                                            type: 'oppdaterAntallDagerForMeldeperiode',
+                                            payload: { antallDager },
+                                        });
                                     }}
                                 >
                                     <option>Velg antall dager</option>
@@ -97,7 +105,8 @@ const AntallDagerForMeldeperiodeForm = (props: {
                                         }
 
                                         setValideringsFeil(null);
-                                        props.dispatch([
+
+                                        const antallDager = [
                                             ...props.antallDagerPerMeldeperiode.slice(0, index),
                                             {
                                                 ...periode,
@@ -107,7 +116,12 @@ const AntallDagerForMeldeperiodeForm = (props: {
                                                 },
                                             },
                                             ...props.antallDagerPerMeldeperiode.slice(index + 1),
-                                        ]);
+                                        ];
+
+                                        dispatch({
+                                            type: 'oppdaterAntallDagerForMeldeperiode',
+                                            payload: { antallDager },
+                                        });
                                     }}
                                 />
                                 <Datovelger
@@ -147,7 +161,8 @@ const AntallDagerForMeldeperiodeForm = (props: {
                                         }
 
                                         setValideringsFeil(null);
-                                        props.dispatch([
+
+                                        const antallDager = [
                                             ...props.antallDagerPerMeldeperiode.slice(0, index),
                                             {
                                                 ...periode,
@@ -157,7 +172,12 @@ const AntallDagerForMeldeperiodeForm = (props: {
                                                 },
                                             },
                                             ...props.antallDagerPerMeldeperiode.slice(index + 1),
-                                        ]);
+                                        ];
+
+                                        dispatch({
+                                            type: 'oppdaterAntallDagerForMeldeperiode',
+                                            payload: { antallDager: antallDager },
+                                        });
                                     }}
                                 />
 
@@ -169,7 +189,7 @@ const AntallDagerForMeldeperiodeForm = (props: {
                                             variant="tertiary"
                                             size="small"
                                             onClick={() => {
-                                                props.dispatch([
+                                                const antallDager = [
                                                     ...props.antallDagerPerMeldeperiode.slice(
                                                         0,
                                                         index,
@@ -177,7 +197,12 @@ const AntallDagerForMeldeperiodeForm = (props: {
                                                     ...props.antallDagerPerMeldeperiode.slice(
                                                         index + 1,
                                                     ),
-                                                ]);
+                                                ];
+
+                                                dispatch({
+                                                    type: 'oppdaterAntallDagerForMeldeperiode',
+                                                    payload: { antallDager },
+                                                });
                                             }}
                                         >
                                             Fjern meldeperiode
@@ -198,13 +223,18 @@ const AntallDagerForMeldeperiodeForm = (props: {
                     type="button"
                     size="small"
                     onClick={() => {
-                        props.dispatch([
+                        const antallDager = [
                             ...props.antallDagerPerMeldeperiode,
                             {
                                 antallDagerPerMeldeperiode: null,
                                 periode: { fraOgMed: null, tilOgMed: null },
                             },
-                        ]);
+                        ];
+
+                        dispatch({
+                            type: 'oppdaterAntallDagerForMeldeperiode',
+                            payload: { antallDager: antallDager },
+                        });
                     }}
                 >
                     Ny meldeperiode
@@ -213,5 +243,3 @@ const AntallDagerForMeldeperiodeForm = (props: {
         </div>
     );
 };
-
-export default AntallDagerForMeldeperiodeForm;
