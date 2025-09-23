@@ -1,16 +1,15 @@
-import { BodyShort, Select, Table } from '@navikt/ds-react';
-import { formaterDatotekst, ukedagFraDatotekst } from '../../../../utils/date';
+import { BodyShort, Select, Table, Tooltip } from '@navikt/ds-react';
+import { erLørdagEllerSøndag, formaterDatotekst, ukedagFraDatotekst } from '~/utils/date';
 import { ikonForMeldekortBehandlingDagStatus } from '../MeldekortIkoner';
-import { meldekortBehandlingDagStatusTekst } from '../../../../utils/tekstformateringUtils';
-import { formatterBeløp } from '../../../../utils/beløp';
-import React from 'react';
+import { meldekortBehandlingDagStatusTekst } from '~/utils/tekstformateringUtils';
+import { formatterBeløp } from '~/utils/beløp';
 import {
     MeldekortBehandlingDagStatus,
     MeldekortDagBeregnetProps,
-} from '../../../../types/meldekort/MeldekortBehandling';
+} from '~/types/meldekort/MeldekortBehandling';
 import { Controller, FieldPath, useFormContext } from 'react-hook-form';
 import { MeldekortBehandlingForm } from '../../2-hovedseksjon/behandling/utfylling/meldekortUtfyllingUtils';
-import { classNames } from '../../../../utils/classNames';
+import { classNames } from '~/utils/classNames';
 
 import styles from './MeldekortUke.module.css';
 
@@ -33,6 +32,8 @@ export const MeldekortUkeBehandling = ({ dager, ukeIndex }: Props) => {
         const valgtStatus = watch(statusFieldPath);
         const valgtDato = watch(dagFieldPath);
 
+        const erHelg = erLørdagEllerSøndag(valgtDato);
+
         const error = getFieldState(statusFieldPath, formState).error;
 
         return (
@@ -47,7 +48,15 @@ export const MeldekortUkeBehandling = ({ dager, ukeIndex }: Props) => {
                 </Table.DataCell>
                 <Table.DataCell>
                     {valgtStatus === MeldekortBehandlingDagStatus.IkkeRettTilTiltakspenger ? (
-                        <BodyShort>Ikke rett til tiltakspenger</BodyShort>
+                        <BodyShort>{meldekortBehandlingDagStatusTekst[valgtStatus]}</BodyShort>
+                    ) : erHelg ? (
+                        <BodyShort>
+                            <Tooltip content={'Støtter ikke utbetaling av helgedager ennå'}>
+                                <BodyShort as={'span'}>
+                                    {meldekortBehandlingDagStatusTekst[valgtStatus]}
+                                </BodyShort>
+                            </Tooltip>
+                        </BodyShort>
                     ) : (
                         <Controller
                             name={statusFieldPath}

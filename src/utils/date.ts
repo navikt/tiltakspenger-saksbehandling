@@ -1,5 +1,5 @@
 import dayjs, { Dayjs } from 'dayjs';
-import { Periode } from '../types/Periode';
+import { Periode } from '~/types/Periode';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 import weekday from 'dayjs/plugin/weekday';
 import isBetween from 'dayjs/plugin/isBetween';
@@ -79,4 +79,8 @@ export const datoMin = (...datoer: Array<string | Date>): string => {
 
 export const datoMax = (...datoer: Array<string | Date>): string => {
     return dayjs.max(datoer.map(dayjs))!.format(DATO_FORMAT);
+};
+
+export const erLørdagEllerSøndag = (dato: string | Date): boolean => {
+    return dayjs(dato).weekday() >= 5;
 };

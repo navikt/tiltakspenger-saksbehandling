@@ -1,14 +1,15 @@
 import {
-    MeldekortDagProps,
     MeldekortBehandlingDagStatus,
     MeldekortBehandlingProps,
     MeldekortDagBeregnetProps,
-} from '../../../../../types/meldekort/MeldekortBehandling';
+    MeldekortDagProps,
+} from '~/types/meldekort/MeldekortBehandling';
 import {
     BrukersMeldekortDagStatus,
     BrukersMeldekortProps,
-} from '../../../../../types/meldekort/BrukersMeldekort';
-import { MeldeperiodeProps } from '../../../../../types/meldekort/Meldeperiode';
+} from '~/types/meldekort/BrukersMeldekort';
+import { MeldeperiodeProps } from '~/types/meldekort/Meldeperiode';
+import { erLørdagEllerSøndag } from '~/utils/date';
 
 const hentDagerFraBehandling = (meldekortBehandling: MeldekortBehandlingProps) =>
     meldekortBehandling.beregning?.beregningForMeldekortetsPeriode.dager ??
@@ -46,10 +47,24 @@ export const hentMeldekortForhåndsutfylling = (
     brukersMeldekortForBehandling?: BrukersMeldekortProps,
 ): MeldekortDagBeregnetProps[] => {
     return hentDager(meldekortBehandling, tidligereBehandlinger, brukersMeldekortForBehandling).map(
-        (dag) =>
-            meldeperiode.girRett[dag.dato]
-                ? dag
-                : { ...dag, status: MeldekortBehandlingDagStatus.IkkeRettTilTiltakspenger },
+        (dag) => {
+            if (!meldeperiode.girRett[dag.dato]) {
+                return {
+                    ...dag,
+                    status: MeldekortBehandlingDagStatus.IkkeRettTilTiltakspenger,
+                };
+            }
+
+            // Pga bugs i OS ved utbetaling av helgedager kan vi ikke støtte dette ennå
+            if (erLørdagEllerSøndag(dag.dato)) {
+                return {
+                    ...dag,
+                    status: MeldekortBehandlingDagStatus.IkkeTiltaksdag,
+                };
+            }
+
+            return dag;
+        },
     );
 };
 
