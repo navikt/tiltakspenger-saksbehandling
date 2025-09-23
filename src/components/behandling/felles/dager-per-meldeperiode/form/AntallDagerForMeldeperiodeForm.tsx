@@ -74,7 +74,6 @@ export const AntallDagerForMeldeperiodeForm = () => {
                     <Select
                         label="Antall dager"
                         size="small"
-                        className={styles.antall}
                         readOnly={!erSaksbehandler}
                         value={periode.antallDagerPerMeldeperiode}
                         onChange={(event) => {
