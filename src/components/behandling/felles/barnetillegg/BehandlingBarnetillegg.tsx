@@ -4,38 +4,28 @@ import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { classNames } from '~/utils/classNames';
 import { BehandlingBarnetilleggPerioder } from './perioder/BehandlingBarnetilleggPerioder';
 import { BarnetilleggBegrunnelse } from './begrunnelse/BarnetilleggBegrunnelse';
-import { BehandlingData } from '~/types/BehandlingTypes';
-import { useRolleForBehandling } from '~/context/saksbehandler/SaksbehandlerContext';
-import { Dispatch } from 'react';
-import {
-    BarnetilleggActions,
-    BarnetilleggBegrunnelseInput,
-    BarnetilleggState,
-} from '~/components/behandling/felles/state/BarnetilleggState';
-import {
-    InnvilgelseActions,
-    InnvilgelseState,
-} from '~/components/behandling/felles/state/InnvilgelseState';
 import { BarnetilleggTidslinje } from '~/components/behandling/felles/barnetillegg/tidslinje/BarnetilleggTidslinje';
 import { harSøktBarnetillegg } from '~/components/behandling/felles/barnetillegg/utils/barnetilleggUtils';
 import { useSak } from '~/context/sak/SakContext';
+import {
+    useBehandlingSkjema,
+    useBehandlingSkjemaDispatch,
+} from '~/components/behandling/context/BehandlingSkjemaContext';
+import { useBehandling } from '~/components/behandling/context/BehandlingContext';
 
 import style from './BehandlingBarnetillegg.module.css';
 
-export type BehandlingBarnetilleggProps = {
-    behandling: BehandlingData;
-    dispatch: Dispatch<BarnetilleggActions | InnvilgelseActions>;
-    context: InnvilgelseState & BarnetilleggState & BarnetilleggBegrunnelseInput;
+type Props = {
     valgTekst: string;
 };
 
-export const BehandlingBarnetillegg = (props: BehandlingBarnetilleggProps) => {
-    const { behandling, dispatch, context, valgTekst } = props;
-    const { harBarnetillegg, behandlingsperiode } = context;
+export const BehandlingBarnetillegg = ({ valgTekst }: Props) => {
+    const { harBarnetillegg, behandlingsperiode } = useBehandlingSkjema();
+    const dispatch = useBehandlingSkjemaDispatch();
+
+    const { behandling, rolleForBehandling } = useBehandling();
 
     const { sak } = useSak();
-
-    const rolle = useRolleForBehandling(behandling);
 
     return (
         <>
@@ -56,7 +46,7 @@ export const BehandlingBarnetillegg = (props: BehandlingBarnetilleggProps) => {
                         size={'small'}
                         className={style.radioGroup}
                         defaultValue={harBarnetillegg}
-                        readOnly={rolle !== SaksbehandlerRolle.SAKSBEHANDLER}
+                        readOnly={rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER}
                         onChange={(harSøkt: boolean) => {
                             dispatch({
                                 type: 'setHarSøktBarnetillegg',
@@ -77,8 +67,8 @@ export const BehandlingBarnetillegg = (props: BehandlingBarnetilleggProps) => {
             </VedtakSeksjon>
 
             <VedtakSeksjon className={classNames(style.input, !harBarnetillegg && style.skjult)}>
-                <BehandlingBarnetilleggPerioder {...props} />
-                <BarnetilleggBegrunnelse {...props} />
+                <BehandlingBarnetilleggPerioder />
+                <BarnetilleggBegrunnelse />
             </VedtakSeksjon>
         </>
     );

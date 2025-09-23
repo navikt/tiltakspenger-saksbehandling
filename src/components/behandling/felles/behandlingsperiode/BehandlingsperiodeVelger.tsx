@@ -50,6 +50,7 @@ export const BehandlingsperiodeVelger = ({ behandling, label, className }: Props
                         payload: { periode: { fraOgMed: isoDate } },
                     });
 
+                    // TODO: flytt all logikken under inn i reducer action'en for oppdaterBehandlingsperiode
                     //vi ønsker at meldeperiode-perioden skal matche behandlingsperioden dersom den blir snevret inn
                     const oppdatertAntallDagerPerMeldeperiode = antallDagerPerMeldeperiode.map(
                         (m) =>
@@ -59,8 +60,8 @@ export const BehandlingsperiodeVelger = ({ behandling, label, className }: Props
                     );
 
                     dispatch({
-                        type: 'oppdaterAntallDagerForMeldeperiode',
-                        payload: { antallDager: oppdatertAntallDagerPerMeldeperiode },
+                        type: 'oppdaterAntallDagerPerioder',
+                        payload: { perioder: oppdatertAntallDagerPerMeldeperiode },
                     });
 
                     //vi ønsker at barnetillegg-perioden skal matche behandlingsperioden dersom den blir snevret inn
@@ -115,8 +116,8 @@ export const BehandlingsperiodeVelger = ({ behandling, label, className }: Props
                     );
 
                     dispatch({
-                        type: 'oppdaterAntallDagerForMeldeperiode',
-                        payload: { antallDager: oppdatertAntallDagerPerMeldeperiode },
+                        type: 'oppdaterAntallDagerPerioder',
+                        payload: { perioder: oppdatertAntallDagerPerMeldeperiode },
                     });
 
                     //vi ønsker at barnetillegg-perioden skal matche behandlingsperioden dersom den blir snevret inn

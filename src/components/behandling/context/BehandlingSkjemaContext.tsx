@@ -17,7 +17,7 @@ import {
 } from '~/components/behandling/context/BehandlingSkjemaReducer';
 import { useSak } from '~/context/sak/SakContext';
 
-type FritekstInput = {
+type Fritekstfelter = {
     textAreas: {
         begrunnelse: TextAreaInput;
         brevtekst: TextAreaInput;
@@ -25,7 +25,7 @@ type FritekstInput = {
     };
 };
 
-export type BehandlingSkjemaContext = FritekstInput & BehandlingSkjemaState;
+export type BehandlingSkjemaContext = Fritekstfelter & BehandlingSkjemaState;
 
 // Separate contexts for å hindre re-renders for komponenter som kun bruker dispatch
 const StateContext = createContext({} as BehandlingSkjemaContext);

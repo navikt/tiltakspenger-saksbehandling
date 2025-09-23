@@ -44,3 +44,7 @@ export const perioderOverlapper = (a: Periode, b: Periode) => {
         erDatoIPeriode(b.tilOgMed, a)
     );
 };
+
+export const inneholderHelePerioden = (a: Periode, b: Periode) => {
+    return erDatoIPeriode(b.fraOgMed, a) && erDatoIPeriode(b.tilOgMed, a);
+};

@@ -2,18 +2,12 @@ import { BehandlingData } from '~/types/BehandlingTypes';
 import { ValideringResultat } from '~/types/Validering';
 import { validerBarnetillegg } from '~/components/behandling/felles/validering/validerBarnetillegg';
 import { validerTiltaksdeltakelser } from '~/components/behandling/felles/validering/validerTiltaksdeltakelser';
-import { BarnetilleggState } from '~/components/behandling/felles/state/BarnetilleggState';
-import { TiltaksdeltagelseState } from '~/components/behandling/felles/state/TiltaksdeltagelseState';
-import { InnvilgelseState } from '~/components/behandling/felles/state/InnvilgelseState';
-import { AntallDagerForMeldeperiodeState } from '~/components/behandling/felles/state/AntallDagerState';
 import { validerAntallDagerPerMeldeperiode } from '~/components/behandling/felles/validering/validerAntallDagerPerMeldeperiode';
+import { BehandlingSkjemaContext } from '~/components/behandling/context/BehandlingSkjemaContext';
 
 export const validerInnvilgelse = (
     behandling: BehandlingData,
-    vedtak: BarnetilleggState &
-        TiltaksdeltagelseState &
-        InnvilgelseState &
-        AntallDagerForMeldeperiodeState,
+    skjema: BehandlingSkjemaContext,
 ): ValideringResultat => {
     const validering: ValideringResultat = {
         errors: [],
@@ -26,7 +20,7 @@ export const validerInnvilgelse = (
         harBarnetillegg,
         valgteTiltaksdeltakelser,
         antallDagerPerMeldeperiode,
-    } = vedtak;
+    } = skjema;
 
     if (harBarnetillegg) {
         const barnetilleggValidering = validerBarnetillegg(

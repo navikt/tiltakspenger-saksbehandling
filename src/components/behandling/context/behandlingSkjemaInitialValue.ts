@@ -20,6 +20,7 @@ import { Periode } from '~/types/Periode';
 import { SakProps } from '~/types/SakTypes';
 import { VedtakTiltaksdeltakelsePeriode } from '~/types/VedtakTyper';
 import { erDatoIPeriode } from '~/utils/periode';
+import { ANTALL_DAGER_DEFAULT } from '~/components/behandling/felles/dager-per-meldeperiode/BehandlingDagerPerMeldeperiode';
 
 export const behandlingSkjemaInitialValue = ({
     behandling,
@@ -74,7 +75,7 @@ const søknadsbehandlingInitialState = (
               }))
             : [
                   {
-                      antallDagerPerMeldeperiode: 10,
+                      antallDagerPerMeldeperiode: ANTALL_DAGER_DEFAULT,
                       periode: behandling.virkningsperiode
                           ? {
                                 fraOgMed: behandling.virkningsperiode.fraOgMed,
@@ -135,7 +136,7 @@ const revurderingInnvilgelseInitialState = (
             tilValgteTiltaksdeltakelser(behandling, behandlingsperiode),
         antallDagerPerMeldeperiode: behandling.antallDagerPerMeldeperiode ?? [
             {
-                antallDagerPerMeldeperiode: 10,
+                antallDagerPerMeldeperiode: ANTALL_DAGER_DEFAULT,
                 periode: {
                     fraOgMed: behandlingsperiode.fraOgMed,
                     tilOgMed: behandlingsperiode.tilOgMed,

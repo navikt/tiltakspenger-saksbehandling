@@ -4,41 +4,39 @@ import { Datovelger } from '../../../../datovelger/Datovelger';
 import { VedtakBarnetilleggPeriode } from '~/types/VedtakTyper';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { dateTilISOTekst, datoTilDatoInputText } from '~/utils/date';
-import { BehandlingBarnetilleggProps } from '~/components/behandling/felles/barnetillegg/BehandlingBarnetillegg';
-import { useRolleForBehandling } from '~/context/saksbehandler/SaksbehandlerContext';
 import { Behandlingstype } from '~/types/BehandlingTypes';
+import {
+    useBehandlingSkjema,
+    useBehandlingSkjemaDispatch,
+} from '~/components/behandling/context/BehandlingSkjemaContext';
+import { useBehandling } from '~/components/behandling/context/BehandlingContext';
 
 import style from './BehandlingBarnetilleggPerioder.module.css';
 
 const BATCH_MED_BARN = 10;
 
-type Props = BehandlingBarnetilleggProps;
-
-export const BehandlingBarnetilleggPerioder = (props: Props) => {
-    const { behandling, dispatch, context } = props;
-    const { barnetilleggPerioder, behandlingsperiode } = context;
-
-    const rolle = useRolleForBehandling(behandling);
+export const BehandlingBarnetilleggPerioder = () => {
+    const { behandling, rolleForBehandling } = useBehandling();
+    const { barnetilleggPerioder, behandlingsperiode } = useBehandlingSkjema();
+    const dispatch = useBehandlingSkjemaDispatch();
 
     const erSøknadsbehandling = behandling.type === Behandlingstype.SØKNADSBEHANDLING;
+    const erSaksbehandler = rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER;
 
     const antallBarn = erSøknadsbehandling ? behandling.søknad.barnetillegg.length : 1;
 
     return (
         <>
             <VedtakSeksjon.Venstre className={style.wrapper}>
-                {barnetilleggPerioder.map((periode, index) => {
-                    return (
-                        <BarnetilleggPeriode
-                            {...props}
-                            periode={periode}
-                            index={index}
-                            rolle={rolle}
-                            key={`${periode.periode.fraOgMed}-${index}`}
-                        />
-                    );
-                })}
-                {rolle === SaksbehandlerRolle.SAKSBEHANDLER && (
+                {barnetilleggPerioder.map((periode, index) => (
+                    <BarnetilleggPeriode
+                        periode={periode}
+                        index={index}
+                        erSaksbehandler={erSaksbehandler}
+                        key={`${periode.periode.fraOgMed}-${index}`}
+                    />
+                ))}
+                {erSaksbehandler && (
                     <div className={style.perioderKnapper}>
                         <Button
                             variant={'secondary'}
@@ -82,15 +80,15 @@ export const BehandlingBarnetilleggPerioder = (props: Props) => {
 type PeriodeProps = {
     periode: VedtakBarnetilleggPeriode;
     index: number;
-    rolle: SaksbehandlerRolle | null;
-} & BehandlingBarnetilleggProps;
+    erSaksbehandler: boolean;
+};
 
-const BarnetilleggPeriode = ({ periode, index, rolle, dispatch, context }: PeriodeProps) => {
-    const { behandlingsperiode: innvilgelsesPeriode } = context;
+const BarnetilleggPeriode = ({ periode, index, erSaksbehandler }: PeriodeProps) => {
+    const { behandlingsperiode: innvilgelsesPeriode } = useBehandlingSkjema();
+    const dispatch = useBehandlingSkjemaDispatch();
 
     // Støtter uendelig mange barn!
     const maksAntall = (Math.floor(periode.antallBarn / BATCH_MED_BARN) + 1) * BATCH_MED_BARN;
-    const erSaksbehandler = rolle === SaksbehandlerRolle.SAKSBEHANDLER;
 
     // Normalt skal det ikke være mulig å sette en 0-periode, men dersom det skulle skje må det vises til saksbehandler
     const erPeriodeMed0Barn = periode.antallBarn === 0;

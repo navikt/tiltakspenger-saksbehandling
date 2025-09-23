@@ -1,10 +1,10 @@
 import { ValideringResultat } from '~/types/Validering';
 import { Periode } from '~/types/Periode';
-import { AntallDagerForMeldeperiodeFormData } from '~/components/behandling/felles/state/AntallDagerState';
 import { joinPerioder, validerPeriodisering } from '~/utils/periode';
+import { AntallDagerPerMeldeperiodeFormData } from '~/components/behandling/context/slices/AntallDagerPerMeldeperiodeState';
 
 export const validerAntallDagerPerMeldeperiode = (
-    antallDagerPerMeldeperiode: AntallDagerForMeldeperiodeFormData[],
+    antallDagerPerMeldeperiode: AntallDagerPerMeldeperiodeFormData[],
     behandlingsperiode: Periode,
 ): ValideringResultat => {
     const validering: ValideringResultat = {

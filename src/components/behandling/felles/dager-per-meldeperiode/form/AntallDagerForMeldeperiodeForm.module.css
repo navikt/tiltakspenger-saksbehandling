@@ -1,0 +1,11 @@
+.antall {
+    width: 100px;
+}
+
+.fjernMeldeperiodeKnapp {
+    align-self: flex-end;
+}
+
+.nyPeriodeKnapp {
+    align-self: flex-start;
+}

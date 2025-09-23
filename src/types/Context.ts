@@ -1,6 +1,6 @@
 export type ReducerAction = {
     type: string;
-    payload: Record<string, unknown>;
+    payload?: Record<string, unknown>;
 };
 
 export type ReducerActionHandlers<State, Actions extends ReducerAction> = {
