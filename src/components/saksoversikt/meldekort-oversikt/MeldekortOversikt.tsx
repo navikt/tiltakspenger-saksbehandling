@@ -142,7 +142,7 @@ export const MeldekortOversikt = ({ meldeperiodeKjeder, saksnummer, sakId }: Pro
 /**
  * For at modalene ikke skal forsvinne når ActionMenu lukkes, så må dem rendres utenfor ActionMenu. Da trenger vi state håndtering av det på siden av ActionMenu
  */
-const MeldeperiodeKjedeOversiktMeny = (props: {
+export const MeldeperiodeKjedeOversiktMeny = (props: {
     sakId: SakId;
     saksnummer: string;
     kjedePeriode: Periode;
