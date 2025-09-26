@@ -24,12 +24,6 @@ export const BehandlingUtbetaling = () => {
 
     const totalDiff = totalt.nå - totalt.før;
 
-    if (totalDiff === 0) {
-        return (
-            <Alert variant={'warning'}>{'Beregningen har totalbeløp 0 (dette er en bug!)'}</Alert>
-        );
-    }
-
     const antallPerioder = beregninger.length;
     const erEtterbetaling = totalDiff > 0;
 
