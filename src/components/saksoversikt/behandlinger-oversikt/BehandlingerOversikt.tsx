@@ -67,7 +67,7 @@ export const BehandlingerOversikt = ({
                             <Table.DataCell>
                                 {behandling.kravtidspunkt
                                     ? formaterTidspunkt(behandling.kravtidspunkt)
-                                    : 'Ukjent'}
+                                    : '-'}
                             </Table.DataCell>
                             <Table.DataCell>
                                 {behandling.periode &&

@@ -29,8 +29,15 @@ import {
 } from '~/utils/tilganger';
 import { OvertaMeldekortbehandlingModal } from './OvertaMeldekortBehandling';
 import { AvsluttMeldekortbehandlingModal } from './avsluttMeldekortBehandling/AvsluttMeldekortBehandling';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { erMeldekortBehandlingUnderAktivBehandling } from '~/utils/MeldekortBehandlingUtils';
+import {
+    ArrowLeftIcon,
+    ArrowRightIcon,
+    ChevronDownIcon,
+    PersonIcon,
+    XMarkOctagonIcon,
+} from '@navikt/aksel-icons';
 
 type Props = {
     meldeperiodeKjeder: MeldeperiodeKjedeProps[];
@@ -185,8 +192,13 @@ export const MeldeperiodeKjedeOversiktMeny = (props: {
 
             <ActionMenu>
                 <ActionMenu.Trigger>
-                    <Button variant="secondary" size="small">
-                        ...
+                    <Button
+                        variant="secondary"
+                        iconPosition="right"
+                        icon={<ChevronDownIcon title="Menyvalg" />}
+                        size="small"
+                    >
+                        Velg
                     </Button>
                 </ActionMenu.Trigger>
                 <ActionMenu.Content>
@@ -258,6 +270,7 @@ const MeldekortBehandlingMenyKnapper = (props: {
                 ) {
                     return (
                         <ActionMenu.Item
+                            icon={<ArrowRightIcon aria-hidden />}
                             onSelect={() => {
                                 props.setVilOvertaBehandling(true);
                             }}
@@ -287,10 +300,14 @@ const MeldekortBehandlingMenyKnapper = (props: {
 
             return (
                 <VStack align="start" gap="2">
-                    <ActionMenu.Item onClick={() => router.push(props.meldeperiodeUrl)}>
+                    <ActionMenu.Item
+                        icon={<ArrowRightIcon aria-hidden />}
+                        onClick={() => router.push(props.meldeperiodeUrl)}
+                    >
                         Fortsett
                     </ActionMenu.Item>
                     <ActionMenu.Item
+                        icon={<ArrowLeftIcon aria-hidden />}
                         onClick={(e) => {
                             e.preventDefault();
                             leggTilbakeMeldekortBehandling().then(() => {
@@ -302,6 +319,8 @@ const MeldekortBehandlingMenyKnapper = (props: {
                     </ActionMenu.Item>
 
                     <ActionMenu.Item
+                        variant={'danger'}
+                        icon={<XMarkOctagonIcon aria-hidden />}
                         onSelect={() => {
                             props.setVilAvslutteBehandling(true);
                         }}
@@ -343,6 +362,7 @@ const TildelMegButton = (props: {
 }) => {
     return (
         <ActionMenu.Item
+            icon={<PersonIcon aria-hidden />}
             onClick={(e) => {
                 e.preventDefault();
                 props.taMeldekortBehandling().then(() => {
