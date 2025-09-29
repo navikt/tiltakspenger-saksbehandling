@@ -24,6 +24,19 @@ export const Saksoversikt = () => {
                 ? 'meldeperiodeKjederIkkeKlare'
                 : 'meldeperiodeKjederKlare',
     );
+    const meldeperiodekjederSomKreverBehandling = meldeperiodeKjeder.filter((kjede) => {
+        const apneMeldekortbehandlinger = kjede.meldekortBehandlinger.filter((mb) => {
+            return !mb.erAvsluttet;
+        });
+        return (
+            apneMeldekortbehandlinger.length > 0 ||
+            kjede.status === MeldeperiodeKjedeStatus.KLAR_TIL_BEHANDLING ||
+            kjede.status === MeldeperiodeKjedeStatus.UNDER_BEHANDLING ||
+            kjede.status === MeldeperiodeKjedeStatus.UNDER_BESLUTNING ||
+            kjede.status === MeldeperiodeKjedeStatus.KLAR_TIL_BESLUTNING ||
+            kjede.status === MeldeperiodeKjedeStatus.KORRIGERT_MELDEKORT
+        );
+    });
 
     return (
         <>
@@ -44,7 +57,12 @@ export const Saksoversikt = () => {
                     <Heading level={'3'} size={'small'}>
                         {'Behandlinger'}
                     </Heading>
-                    <BehandlingerOversikt behandlinger={behandlingsoversikt} />
+                    <BehandlingerOversikt
+                        behandlinger={behandlingsoversikt}
+                        meldeperiodeKjeder={meldeperiodekjederSomKreverBehandling}
+                        saksnummer={saksnummer}
+                        sakId={sakId}
+                    />
                 </Box>
                 <VedtatteBehandlinger
                     saksnummer={saksnummer}
