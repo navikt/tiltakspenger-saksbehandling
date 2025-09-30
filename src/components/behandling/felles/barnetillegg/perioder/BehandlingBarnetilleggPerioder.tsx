@@ -17,7 +17,7 @@ const BATCH_MED_BARN = 10;
 
 export const BehandlingBarnetilleggPerioder = () => {
     const { behandling, rolleForBehandling } = useBehandling();
-    const { barnetilleggPerioder, behandlingsperiode } = useBehandlingSkjema();
+    const { barnetilleggPerioder } = useBehandlingSkjema();
     const dispatch = useBehandlingSkjemaDispatch();
 
     const erSøknadsbehandling = behandling.type === Behandlingstype.SØKNADSBEHANDLING;
@@ -44,10 +44,7 @@ export const BehandlingBarnetilleggPerioder = () => {
                             onClick={() => {
                                 dispatch({
                                     type: 'addBarnetilleggPeriode',
-                                    payload: {
-                                        innvilgelsesPeriode: behandlingsperiode,
-                                        antallBarnFraSøknad: antallBarn,
-                                    },
+                                    payload: { antallBarnFraSøknad: antallBarn },
                                 });
                             }}
                         >
@@ -60,10 +57,7 @@ export const BehandlingBarnetilleggPerioder = () => {
                                 onClick={() => {
                                     dispatch({
                                         type: 'nullstillBarnetilleggPerioder',
-                                        payload: {
-                                            innvilgelsesPeriode: behandlingsperiode,
-                                            søknad: behandling.søknad,
-                                        },
+                                        payload: { søknad: behandling.søknad },
                                     });
                                 }}
                             >

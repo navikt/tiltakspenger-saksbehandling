@@ -40,6 +40,7 @@ export type AntallDagerPerMeldeperiodeActions =
 export const antallDagerPerMeldeperiodeActionHandlers = {
     leggTilAntallDagerPeriode: (state) => {
         const sistePeriode = state.antallDagerPerMeldeperiode.at(-1);
+        const behandlingsperiode = state.behandlingsperiode as Periode;
 
         if (!sistePeriode) {
             return {
@@ -47,7 +48,7 @@ export const antallDagerPerMeldeperiodeActionHandlers = {
                 antallDagerPerMeldeperiode: [
                     {
                         antallDagerPerMeldeperiode: ANTALL_DAGER_DEFAULT,
-                        periode: state.behandlingsperiode,
+                        periode: behandlingsperiode,
                     },
                 ],
             };
@@ -58,9 +59,9 @@ export const antallDagerPerMeldeperiodeActionHandlers = {
             periode: {
                 fraOgMed: datoMin(
                     nesteDag(sistePeriode.periode.tilOgMed),
-                    state.behandlingsperiode.tilOgMed,
+                    behandlingsperiode.tilOgMed,
                 ),
-                tilOgMed: state.behandlingsperiode.tilOgMed,
+                tilOgMed: behandlingsperiode.tilOgMed,
             },
         };
 

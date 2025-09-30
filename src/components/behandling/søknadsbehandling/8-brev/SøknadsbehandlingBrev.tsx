@@ -6,6 +6,7 @@ import { SøknadsbehandlingBrevForhåndsvisningDTO } from '~/components/behandli
 import { BodyLong } from '@navikt/ds-react';
 import { TekstListe } from '~/components/liste/TekstListe';
 import { useBehandlingSkjema } from '~/components/behandling/context/BehandlingSkjemaContext';
+import { Periode } from '~/types/Periode';
 
 export const SøknadsbehandlingBrev = () => {
     const { behandling, rolleForBehandling } = useSøknadsbehandling();
@@ -23,7 +24,7 @@ export const SøknadsbehandlingBrev = () => {
             hentDto={(): SøknadsbehandlingBrevForhåndsvisningDTO => ({
                 fritekst: brevtekst.getValue(),
                 // Backend vil ignorere perioden dersom vedtaket er avslag, og hvis tilstanden er tilBeslutter (senere enn under behandling)
-                virkningsperiode: skjema.behandlingsperiode,
+                virkningsperiode: skjema.behandlingsperiode as Periode,
                 barnetillegg:
                     skjema.resultat === SøknadsbehandlingResultat.INNVILGELSE &&
                     skjema.harBarnetillegg

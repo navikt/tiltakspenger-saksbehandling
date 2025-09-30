@@ -4,6 +4,8 @@ import { validerBarnetillegg } from '~/components/behandling/felles/validering/v
 import { validerTiltaksdeltakelser } from '~/components/behandling/felles/validering/validerTiltaksdeltakelser';
 import { validerAntallDagerPerMeldeperiode } from '~/components/behandling/felles/validering/validerAntallDagerPerMeldeperiode';
 import { BehandlingSkjemaContext } from '~/components/behandling/context/BehandlingSkjemaContext';
+import { erFullstendigPeriode } from '~/utils/periode';
+import { hentHeleTiltaksdeltagelsesperioden } from '~/utils/behandling';
 
 export const validerInnvilgelse = (
     behandling: BehandlingData,
@@ -21,6 +23,25 @@ export const validerInnvilgelse = (
         valgteTiltaksdeltakelser,
         antallDagerPerMeldeperiode,
     } = skjema;
+
+    const tiltaksperiode = hentHeleTiltaksdeltagelsesperioden(behandling);
+
+    if (erFullstendigPeriode(behandlingsperiode)) {
+        if (behandlingsperiode.fraOgMed > behandlingsperiode.tilOgMed) {
+            validering.errors.push('Til og med-dato må være etter fra og med-dato');
+        }
+
+        if (tiltaksperiode.fraOgMed > behandlingsperiode.fraOgMed) {
+            validering.errors.push('Behandlingsperioden starter før tiltaksperioden');
+        }
+
+        if (tiltaksperiode.tilOgMed < behandlingsperiode.tilOgMed) {
+            validering.errors.push('Behandlingsperioden slutter etter tiltaksperioden');
+        }
+    } else {
+        validering.errors.push('Behandlingsperioden må være satt');
+        return validering;
+    }
 
     if (harBarnetillegg) {
         const barnetilleggValidering = validerBarnetillegg(

@@ -3,15 +3,14 @@ import { RevurderingResultat } from '~/types/BehandlingTypes';
 import { RevurderingInnvilgelseBrevForhåndsvisningDTO } from '~/components/behandling/felles/vedtaksbrev/forhåndsvisning/useHentVedtaksbrevForhåndsvisning';
 import { Vedtaksbrev } from '~/components/behandling/felles/vedtaksbrev/Vedtaksbrev';
 import { revurderingInnvilgelseValidering } from '~/components/behandling/revurdering/innvilgelse/revurderingInnvilgelseValidering';
-import { useSak } from '~/context/sak/SakContext';
 import { BodyLong } from '@navikt/ds-react';
 import { TekstListe } from '~/components/liste/TekstListe';
 import { useBehandlingSkjema } from '~/components/behandling/context/BehandlingSkjemaContext';
+import { Periode } from '~/types/Periode';
 
 export const RevurderingInnvilgelseBrev = () => {
     const { behandling, rolleForBehandling } = useRevurderingBehandling();
     const skjema = useBehandlingSkjema();
-    const { sak } = useSak();
 
     const { brevtekst } = skjema.textAreas;
 
@@ -21,11 +20,11 @@ export const RevurderingInnvilgelseBrev = () => {
             behandling={behandling}
             rolle={rolleForBehandling}
             tekstRef={brevtekst.ref}
-            validering={revurderingInnvilgelseValidering(sak, behandling, skjema)}
+            validering={revurderingInnvilgelseValidering(behandling, skjema)}
             hentDto={(): RevurderingInnvilgelseBrevForhåndsvisningDTO => ({
                 resultat: RevurderingResultat.REVURDERING_INNVILGELSE,
                 fritekst: brevtekst.getValue(),
-                virkningsperiode: skjema.behandlingsperiode,
+                virkningsperiode: skjema.behandlingsperiode as Periode,
                 barnetillegg: skjema.harBarnetillegg ? skjema.barnetilleggPerioder : null,
             })}
             hjelpetekst={<HjelpetekstRevurdering />}

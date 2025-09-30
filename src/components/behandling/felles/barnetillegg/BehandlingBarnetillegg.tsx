@@ -14,6 +14,7 @@ import {
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
 
 import style from './BehandlingBarnetillegg.module.css';
+import { Periode } from '~/types/Periode';
 
 type Props = {
     valgTekst: string;
@@ -37,7 +38,7 @@ export const BehandlingBarnetillegg = ({ valgTekst }: Props) => {
                 </VedtakSeksjon.Venstre>
 
                 <VedtakSeksjon.FullBredde className={style.pølseSeksjon}>
-                    <BarnetilleggTidslinje behandlingsperiode={behandlingsperiode} />
+                    <BarnetilleggTidslinje behandlingsperiode={behandlingsperiode as Periode} />
                 </VedtakSeksjon.FullBredde>
 
                 <VedtakSeksjon.Venstre>
@@ -58,7 +59,7 @@ export const BehandlingBarnetillegg = ({ valgTekst }: Props) => {
                         <Radio value={false}>{'Nei'}</Radio>
                     </RadioGroup>
                     {!harBarnetillegg &&
-                        harSøktBarnetillegg(behandlingsperiode, behandling, sak) && (
+                        harSøktBarnetillegg(behandlingsperiode as Periode, behandling, sak) && (
                             <Alert className={style.infoboks} variant={'info'} size={'small'}>
                                 Husk å begrunne avslaget på barnetillegg i vedtaksbrevet.
                             </Alert>

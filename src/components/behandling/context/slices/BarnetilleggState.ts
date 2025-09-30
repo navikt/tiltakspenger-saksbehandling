@@ -17,7 +17,7 @@ export type BarnetilleggActions =
       }
     | {
           type: 'addBarnetilleggPeriode';
-          payload: { innvilgelsesPeriode: Periode; antallBarnFraSøknad: number };
+          payload: { antallBarnFraSøknad: number };
       }
     | {
           type: 'fjernBarnetilleggPeriode';
@@ -33,7 +33,7 @@ export type BarnetilleggActions =
       }
     | {
           type: 'nullstillBarnetilleggPerioder';
-          payload: { innvilgelsesPeriode: Periode; søknad: SøknadForBehandlingProps };
+          payload: { søknad: SøknadForBehandlingProps };
       }
     | {
           type: 'oppdaterBarnetillegg';
@@ -46,7 +46,8 @@ export const barnetilleggActionHandlers = {
     },
 
     addBarnetilleggPeriode: (state, payload) => {
-        const { innvilgelsesPeriode, antallBarnFraSøknad } = payload;
+        const { antallBarnFraSøknad } = payload;
+        const innvilgelsesPeriode = state.behandlingsperiode as Periode;
         const forrigeBarnetillegg = state.barnetilleggPerioder?.at(-1);
 
         const nestePeriode: Periode = forrigeBarnetillegg
@@ -85,7 +86,7 @@ export const barnetilleggActionHandlers = {
             ...state,
             barnetilleggPerioder: periodiserBarnetilleggFraSøknad(
                 payload.søknad.barnetillegg,
-                payload.innvilgelsesPeriode,
+                state.behandlingsperiode as Periode,
             ),
         };
     },

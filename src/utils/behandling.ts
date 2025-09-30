@@ -31,16 +31,15 @@ export const erBehandlingVedtatt = (behandling: BehandlingData) =>
 
 export const deltarPaFlereTiltakMedStartOgSluttdatoIValgtInnvilgelsesperiode = (
     behandling: BehandlingData,
-    innvilgelsesperiode?: Periode,
+    innvilgelsesperiode: Partial<Periode>,
 ) => {
     const tiltak = hentTiltaksdeltakelserMedStartOgSluttdato(behandling);
     if (tiltak.length <= 1) {
         return false;
     }
 
-    const fom = innvilgelsesperiode?.fraOgMed;
-    const tom = innvilgelsesperiode?.tilOgMed;
-    if (fom && tom) {
+    const { fraOgMed, tilOgMed } = innvilgelsesperiode;
+    if (fraOgMed && tilOgMed) {
         const overlappendeDeltakelser: Tiltaksdeltagelse[] = [];
 
         tiltak.forEach((tiltaksdeltagelse) => {
@@ -48,7 +47,7 @@ export const deltarPaFlereTiltakMedStartOgSluttdatoIValgtInnvilgelsesperiode = (
                 fraOgMed: tiltaksdeltagelse.deltagelseFraOgMed!,
                 tilOgMed: tiltaksdeltagelse.deltagelseTilOgMed!,
             };
-            if (erDatoIPeriode(fom, periode) || erDatoIPeriode(tom, periode)) {
+            if (erDatoIPeriode(fraOgMed, periode) || erDatoIPeriode(tilOgMed, periode)) {
                 overlappendeDeltakelser.push(tiltaksdeltagelse);
             }
         });

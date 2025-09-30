@@ -153,8 +153,7 @@ const revurderingInnvilgelseInitialState = (
 const revurderingStansInitialState = (behandling: RevurderingData): BehandlingSkjemaState => {
     return {
         resultat: RevurderingResultat.STANS,
-        behandlingsperiode:
-            behandling.virkningsperiode ?? hentHeleTiltaksdeltagelsesperioden(behandling),
+        behandlingsperiode: behandling.virkningsperiode ?? {},
         hjemlerForStans: behandling.valgtHjemmelHarIkkeRettighet ?? [],
 
         // Ikke i bruk for denne behandlingstypen

@@ -59,10 +59,7 @@ export const BehandlingTiltak = () => {
                             variant={'secondary'}
                             size={'small'}
                             onClick={() => {
-                                dispatch({
-                                    type: 'addTiltakPeriode',
-                                    payload: { innvilgelsesperiode: behandlingsperiode },
-                                });
+                                dispatch({ type: 'addTiltakPeriode' });
                             }}
                         >
                             {'Ny periode'}

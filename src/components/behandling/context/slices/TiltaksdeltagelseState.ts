@@ -10,7 +10,6 @@ export type TiltaksdeltagelseState = {
 export type TiltaksdeltagelseActions =
     | {
           type: 'addTiltakPeriode';
-          payload: { innvilgelsesperiode: Periode };
       }
     | {
           type: 'fjernTiltakPeriode';
@@ -26,8 +25,8 @@ export type TiltaksdeltagelseActions =
       };
 
 export const tiltaksdeltagelseActionHandlers = {
-    addTiltakPeriode: (state, payload) => {
-        const { innvilgelsesperiode } = payload;
+    addTiltakPeriode: (state) => {
+        const innvilgelsesperiode = state.behandlingsperiode as Periode;
         const forrigeTiltakPeriode = state.valgteTiltaksdeltakelser?.slice(-1)[0];
 
         const nesteTiltakPeriode: Periode = forrigeTiltakPeriode
