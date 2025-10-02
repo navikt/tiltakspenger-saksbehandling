@@ -5,6 +5,7 @@ import { RevurderingStansResultat } from './1-resultat/RevurderingStansResultat'
 import { RevurderingStansBegrunnelse } from './2-begrunnelse/RevurderingStansBegrunnelse';
 import { RevurderingStansBrev } from './3-brev/RevurderingStansBrev';
 import { BehandlingUtbetaling } from '~/components/behandling/felles/utbetaling/BehandlingUtbetaling';
+import { BehandlingBeregningOgSimulering } from '~/components/simulering/BehandlingBeregningOgSimulering';
 
 import style from './RevurderingStansVedtak.module.css';
 
@@ -19,6 +20,7 @@ export const RevurderingStansVedtak = () => {
             <Separator />
             <RevurderingStansBrev />
             <Separator />
+            <BehandlingBeregningOgSimulering />
             <BehandlingUtbetaling />
             <RevurderingStansSend />
         </>

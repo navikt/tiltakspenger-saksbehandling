@@ -22,7 +22,7 @@ export const BehandlingUtbetaling = () => {
 
     const { totalt, ordinært, barnetillegg } = beregningerSummert;
 
-    const totalDiff = totalt.nå - totalt.før;
+    const totalDiff = totalt.nå - (totalt.før ?? 0);
 
     const antallPerioder = beregninger.length;
     const erEtterbetaling = totalDiff > 0;

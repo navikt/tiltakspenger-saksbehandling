@@ -10,6 +10,7 @@ import { MeldeperiodeBeregningProps } from '~/types/Beregning';
 import { MeldekortBehandlingProps, Utbetalingsstatus } from '~/types/meldekort/MeldekortBehandling';
 import { Simulering } from './Simulering';
 import { ArenaTPVedtak } from '~/types/ArenaTPVedtak';
+import { SimulertBeregning } from '~/types/SimulertBeregningTypes';
 
 export type BehandlingId = `beh_${string}`;
 
@@ -217,6 +218,7 @@ export type BehandlingUtbetalingProps = {
     beregninger: MeldeperiodeBeregningProps[];
     beregningerSummert: BeregningerSummert;
     simulering?: Simulering;
+    simulertBeregning?: SimulertBeregning;
 };
 
 export type BeregningerSummert = {
@@ -226,6 +228,6 @@ export type BeregningerSummert = {
 };
 
 export type BeløpFørOgNå = {
-    før: number;
+    før: Nullable<number>;
     nå: number;
 };

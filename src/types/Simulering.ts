@@ -8,7 +8,7 @@ export interface SimuleringIngenEndring {
 
 export interface SimuleringEndring {
     totalPeriode: Periode;
-    perMeldeperiode: SimuleringMeldeperiode[];
+    perMeldeperiode: SimuleringMeldeperiodeProps[];
     tidligereUtbetalt: number;
     nyUtbetaling: number;
     totalEtterbetaling: number;
@@ -20,7 +20,7 @@ export interface SimuleringEndring {
     type: 'Endring';
 }
 
-export interface SimuleringMeldeperiode {
+export interface SimuleringMeldeperiodeProps {
     meldeperiodeId: string;
     meldeperiodeKjedeId: string;
     periode: Periode;

@@ -1,0 +1,28 @@
+.detaljerKnapp {
+    margin-top: 0.5rem;
+    margin-bottom: 0.25rem;
+
+    .detaljerKnappIkon {
+        transition: transform 0.3s ease-in-out;
+
+        &.åpen {
+            transform: rotate(-180deg);
+        }
+    }
+}
+
+.detaljer {
+    display: none;
+
+    &.åpen {
+        display: block;
+    }
+}
+
+.spacer {
+    margin-bottom: 1rem;
+
+    td {
+        border: none;
+    }
+}

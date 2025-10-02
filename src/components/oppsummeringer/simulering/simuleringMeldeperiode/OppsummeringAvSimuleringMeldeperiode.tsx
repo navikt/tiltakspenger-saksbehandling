@@ -1,11 +1,11 @@
 import { Accordion } from '@navikt/ds-react';
-import { SimuleringMeldeperiode } from '../../../../types/Simulering';
+import { SimuleringMeldeperiodeProps } from '../../../../types/Simulering';
 import OppsummeringAvSimuleringsdag from '../simuleringsdag/OppsummeringAvSimuleringsdag';
 import { formaterDatotekst } from '../../../../utils/date';
 import styles from './OppsummeringAvSimuleringMeldeperiode.module.css';
 
 const OppsummeringAvSimuleringMeldeperiode = (props: {
-    meldeperioder: SimuleringMeldeperiode[];
+    meldeperioder: SimuleringMeldeperiodeProps[];
 }) => {
     return (
         <Accordion size="small">
