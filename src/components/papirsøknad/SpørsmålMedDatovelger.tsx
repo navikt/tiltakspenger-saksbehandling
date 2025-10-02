@@ -34,7 +34,11 @@ export const SpørsmålMedDatovelger = ({ spørsmålName, datoName, legend, titt
                                 {tittel}
                             </Heading>
                         )}
-                        <Datovelger name={datoName} label={'Fra og med (dd.mm.åååå)'} />
+                        <Datovelger
+                            name={datoName}
+                            label={'Fra og med (dd.mm.åååå)'}
+                            onDateChange={(date) => console.log(date)}
+                        />
                     </VStack>
                 </div>
             )}

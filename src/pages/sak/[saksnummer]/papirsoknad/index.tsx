@@ -131,15 +131,21 @@ const PapirsøknadPage = (props: Props) => {
                                 periodeSpørsmål="I hvilken del av perioden bor brukeren på institusjon med gratis opphold, mat og drikke?"
                             />
 
-                            <Spørsmål name="" legend="Har bruker søkt barnetillegg?" />
+                            <Spørsmål
+                                name="svar.barnetillegg"
+                                legend="Har bruker søkt barnetillegg?"
+                            />
                             <div>
                                 <TextField label="Fornavn" />
                             </div>
                             <div>
                                 <TextField label="Fornavn" />
                                 <TextField label="Etternavn" />
-                                <Datovelger label="Fødselsdato" />
-                                <Spørsmål name="" legend="Oppholder seg i EØS-land" />
+                                {/*<Datovelger label="Fødselsdato" />*/}
+                                <Spørsmål
+                                    name="svar.barnetillegg.kladd.oppholdInnenforEøs"
+                                    legend="Oppholder seg i EØS-land"
+                                />
                             </div>
 
                             <HStack gap="4">
