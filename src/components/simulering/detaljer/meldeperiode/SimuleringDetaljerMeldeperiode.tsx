@@ -10,9 +10,9 @@ import { ikonForMeldekortBehandlingDagStatus } from '~/components/meldekort/0-fe
 import { meldekortBehandlingDagStatusTekst } from '~/utils/tekstformateringUtils';
 import { classNames } from '~/utils/classNames';
 import { useState } from 'react';
+import { formatterBeløp } from '~/utils/beløp';
 
 import style from './SimuleringDetaljerMeldeperiode.module.css';
-import { formatterBeløp } from '~/utils/beløp';
 
 type Props = {
     meldeperiode: SimulertBeregningPerMeldeperiode;
@@ -27,9 +27,10 @@ export const SimuleringDetaljerMeldeperiode = ({ meldeperiode }: Props) => {
     const beregnetDiff = totalt.nå - (totalt.før ?? 0);
     const simulertDiff = simulerteBeløp
         ? simulerteBeløp.nyUtbetaling - simulerteBeløp.tidligereUtbetaling
-        : 0;
+        : undefined;
 
-    const beregningOgSimuleringAvviker = beregnetDiff !== simulertDiff;
+    const beregningOgSimuleringAvviker =
+        simulertDiff !== undefined && beregnetDiff !== simulertDiff;
 
     const periode = {
         fraOgMed: dager.at(0)!.dato,
@@ -76,9 +77,7 @@ export const SimuleringDetaljerMeldeperiode = ({ meldeperiode }: Props) => {
                                     <BodyShort>{`Beregnet endring: `}</BodyShort>
                                     <BodyShort
                                         weight={'semibold'}
-                                        className={classNames(
-                                            beregnetDiff >= 0 ? style.positiv : style.negativ,
-                                        )}
+                                        className={classNames(styleForBeløp(beregnetDiff))}
                                     >
                                         {formatterBeløp(beregnetDiff)}
                                     </BodyShort>
@@ -118,7 +117,13 @@ export const SimuleringDetaljerMeldeperiode = ({ meldeperiode }: Props) => {
 
             {dager.map((dag) => {
                 const beregnetDiffDag = dag.beregning.totalt.nå - (dag.beregning.totalt.før ?? 0);
-                const simulertDiffDag = dag.simulerteBeløp?.nyUtbetaling ?? 0;
+
+                const simulertDiffDag =
+                    dag.simulerteBeløp !== null
+                        ? dag.simulerteBeløp.nyUtbetaling - dag.simulerteBeløp.tidligereUtbetaling
+                        : undefined;
+
+                console.log(simulertDiffDag, dag.simulerteBeløp);
 
                 return (
                     <Table.Row
@@ -144,19 +149,10 @@ export const SimuleringDetaljerMeldeperiode = ({ meldeperiode }: Props) => {
                         <Table.DataCell className={style.bold}>
                             {dag.beregning.totalt.nå}
                         </Table.DataCell>
-                        <Table.DataCell
-                            className={classNames(
-                                beregnetDiffDag >= 0 ? style.positiv : style.negativ,
-                            )}
-                        >
+                        <Table.DataCell className={classNames(styleForBeløp(beregnetDiffDag))}>
                             {beregnetDiffDag}
                         </Table.DataCell>
-                        <Table.DataCell
-                            className={classNames(
-                                simulertDiffDag && style.simulertEllerUtbetalt,
-                                simulertDiffDag >= 0 ? style.positiv : style.negativ,
-                            )}
-                        >
+                        <Table.DataCell className={classNames(styleForBeløp(simulertDiffDag))}>
                             {simulertDiffDag ?? '-'}
                         </Table.DataCell>
                     </Table.Row>
@@ -173,23 +169,17 @@ export const SimuleringDetaljerMeldeperiode = ({ meldeperiode }: Props) => {
                 <Table.DataCell className={style.bold}>{barnetillegg.nå}</Table.DataCell>
                 <Table.DataCell>{totalt.før}</Table.DataCell>
                 <Table.DataCell className={style.bold}>{totalt.nå}</Table.DataCell>
-                <Table.DataCell
-                    className={classNames(
-                        beregnetDiff >= 0 ? style.positiv : style.negativ,
-                        style.bold,
-                    )}
-                >
+                <Table.DataCell className={classNames(styleForBeløp(beregnetDiff), style.bold)}>
                     {beregnetDiff}
                 </Table.DataCell>
-                <Table.DataCell
-                    className={classNames(
-                        simulertDiff >= 0 ? style.positiv : style.negativ,
-                        style.bold,
-                    )}
-                >
-                    {simulertDiff}
+                <Table.DataCell className={classNames(styleForBeløp(simulertDiff), style.bold)}>
+                    {simulertDiff ?? '-'}
                 </Table.DataCell>
             </Table.Row>
         </>
     );
+};
+
+const styleForBeløp = (beløp?: number) => {
+    return !beløp ? undefined : beløp > 0 ? style.positiv : style.negativ;
 };

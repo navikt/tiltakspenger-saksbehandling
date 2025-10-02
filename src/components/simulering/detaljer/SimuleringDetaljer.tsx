@@ -30,7 +30,7 @@ export const SimuleringDetaljer = ({ simulertBeregning }: Props) => {
                 }
                 className={style.detaljerKnapp}
             >
-                {`${åpen ? 'Skjul' : 'Vis'} detaljer per meldeperiode`}
+                {`${åpen ? 'Skjul' : 'Vis'} detaljer`}
             </Button>
 
             <div className={classNames(style.detaljer, åpen && style.åpen)}>

@@ -1,10 +1,14 @@
-import { Heading, VStack } from '@navikt/ds-react';
-import { UtbetalingBeløp } from '~/components/utbetaling/beløp/UtbetalingBeløp';
+import { Alert, Heading, VStack } from '@navikt/ds-react';
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { SimuleringDetaljer } from '~/components/simulering/detaljer/SimuleringDetaljer';
 import { Separator } from '~/components/separator/Separator';
 import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
+import { SimuleringOppsummering } from '~/components/simulering/simulering-oppsummering/SimuleringOppsummering';
+import { BeregningOppsummering } from '~/components/simulering/beregning-oppsummering/BeregningOppsummering';
+import { VedtakHjelpetekst } from '~/components/behandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
+
+import style from './BehandlingBeregningOgSimulering.module.css';
 
 export const BehandlingBeregningOgSimulering = () => {
     const { nyBeregningVisningToggle } = useFeatureToggles();
@@ -23,48 +27,34 @@ export const BehandlingBeregningOgSimulering = () => {
         return null;
     }
 
-    const { beregning } = simulertBeregning;
-
-    const { totalt, ordinært, barnetillegg } = beregning;
+    const { beregning, simulerteBeløp } = simulertBeregning;
 
     return (
         <>
             <VedtakSeksjon>
-                <Heading size={'small'} level={'3'}>
-                    {'Beregning og simulering (ny versjon under arbeid, vises ikke i prod)'}
-                </Heading>
-
                 <VedtakSeksjon.Venstre>
-                    <VStack gap={'1'}>
-                        <UtbetalingBeløp tekst={'Totalt'} beløp={totalt.nå} />
-                        <UtbetalingBeløp tekst={'Ordinær'} beløp={ordinært.nå} />
-                        <UtbetalingBeløp tekst={'Barnetillegg'} beløp={barnetillegg.nå} />
-                    </VStack>
+                    <Heading size={'small'} level={'3'} className={style.header}>
+                        {'Utbetaling (ny versjon under arbeid, vises ikke i prod)'}
+                    </Heading>
 
-                    {/*<VStack gap={'1'}>*/}
-                    {/*    <Heading size={'small'} level={'3'}>*/}
-                    {/*        {'Simulering'}*/}
-                    {/*    </Heading>*/}
-                    {/*    {simuleringTidligereUtbetalt !== null ? (*/}
-                    {/*        <UtbetalingBeløp*/}
-                    {/*            tekst={'Tidligere utbetaling'}*/}
-                    {/*            beløp={simuleringTidligereUtbetalt}*/}
-                    {/*        />*/}
-                    {/*    ) : (*/}
-                    {/*        'Ingen tidligere utbetaling'*/}
-                    {/*    )}*/}
-                    {/*    {simuleringFeilutbetaling !== null ? (*/}
-                    {/*        <UtbetalingBeløp*/}
-                    {/*            tekst={'Feilutbetaling'}*/}
-                    {/*            beløp={simuleringFeilutbetaling}*/}
-                    {/*        />*/}
-                    {/*    ) : null}*/}
-                    {/*    {simuleringEtterbetaling !== null ? (*/}
-                    {/*        <UtbetalingBeløp tekst={'Etterbetaling'} beløp={simuleringEtterbetaling} />*/}
-                    {/*    ) : null}*/}
-                    {/*</VStack>*/}
+                    <VStack gap={'5'}>
+                        <BeregningOppsummering beregninger={beregning} />
+
+                        {simulerteBeløp ? (
+                            <SimuleringOppsummering simulerteBeløp={simulerteBeløp} />
+                        ) : (
+                            <Alert variant={'warning'}>{'Simulering er ikke tilgjengelig'}</Alert>
+                        )}
+                    </VStack>
                 </VedtakSeksjon.Venstre>
-                <VedtakSeksjon.FullBredde>
+
+                <VedtakSeksjon.Høyre>
+                    <VedtakHjelpetekst>
+                        {'Her kunne vi kanskje ha en hjelpetekst om utbetaling på en behandling?'}
+                    </VedtakHjelpetekst>
+                </VedtakSeksjon.Høyre>
+
+                <VedtakSeksjon.FullBredde className={style.detaljer}>
                     <SimuleringDetaljer simulertBeregning={simulertBeregning} />
                 </VedtakSeksjon.FullBredde>
             </VedtakSeksjon>
