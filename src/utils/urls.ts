@@ -6,3 +6,5 @@ export const meldeperiodeUrl = (saksnummer: string, periode: Periode) =>
 
 export const behandlingUrl = ({ saksnummer, id }: Pick<BehandlingData, 'saksnummer' | 'id'>) =>
     `/sak/${saksnummer}/behandling/${id}`;
+
+export const papirsøknadUrl = (saksnummer: string) => `/sak/${saksnummer}/papirsoknad`;
