@@ -1,4 +1,4 @@
-import { Alert, Link, Select } from '@navikt/ds-react';
+import { Alert, Checkbox, HStack, Link, Select } from '@navikt/ds-react';
 import { useRevurderingBehandling } from '../../../context/BehandlingContext';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
@@ -13,12 +13,13 @@ import {
 } from '~/components/behandling/context/BehandlingSkjemaContext';
 
 import style from './RevurderingStansResultat.module.css';
+import { useState } from 'react';
 
 export const RevurderingStansResultat = () => {
     const { rolleForBehandling } = useRevurderingBehandling();
     const { førsteDagSomGirRett, sisteDagSomGirRett } = useSak().sak;
 
-    const { behandlingsperiode, hjemlerForStans } = useBehandlingSkjema();
+    const { hjemlerForStans, behandlingsperiode } = useBehandlingSkjema();
     const dispatch = useBehandlingSkjemaDispatch();
 
     const { gosysUrl, modiaPersonoversiktUrl } = useConfig();
@@ -29,6 +30,9 @@ export const RevurderingStansResultat = () => {
     const modiaPersonoversiktLinkComponent = (
         <Link href={modiaPersonoversiktUrl}>Modia personoversikt</Link>
     );
+
+    const [brukerFørsteDagSomGirRettCheckbox, setFørsteDagSomGirRettCheckbox] = useState(false);
+    const [brukerSisteDagSomGirRettCheckbox, setSisteDagSomGirRettCheckbox] = useState(false);
 
     return (
         <VedtakSeksjon>
@@ -57,22 +61,92 @@ export const RevurderingStansResultat = () => {
                         </option>
                     ))}
                 </Select>
-                <Datovelger
-                    label={'Stans fra og med'}
-                    minDate={førsteDagSomGirRett}
-                    maxDate={sisteDagSomGirRett}
-                    defaultSelected={behandlingsperiode.fraOgMed}
-                    readOnly={!erSaksbehandler}
-                    className={style.dato}
-                    onDateChange={(valgtDato) => {
-                        if (valgtDato) {
+
+                <HStack align={'end'} gap={'4'}>
+                    <Datovelger
+                        label={'Stans fra og med'}
+                        minDate={førsteDagSomGirRett}
+                        maxDate={sisteDagSomGirRett}
+                        readOnly={!erSaksbehandler || brukerFørsteDagSomGirRettCheckbox}
+                        selected={
+                            behandlingsperiode.fraOgMed
+                                ? dateTilISOTekst(behandlingsperiode.fraOgMed)
+                                : ''
+                        }
+                        className={style.dato}
+                        onDateChange={(valgtDato) => {
                             dispatch({
                                 type: 'oppdaterBehandlingsperiode',
-                                payload: { periode: { fraOgMed: dateTilISOTekst(valgtDato) } },
+                                payload: {
+                                    periode: {
+                                        fraOgMed: valgtDato
+                                            ? dateTilISOTekst(valgtDato)
+                                            : valgtDato,
+                                    },
+                                },
                             });
+                        }}
+                    />
+                    <Checkbox
+                        onChange={(b) => {
+                            setFørsteDagSomGirRettCheckbox(b.target.checked);
+                            dispatch({
+                                type: 'oppdaterBehandlingsperiode',
+                                payload: {
+                                    periode: { fraOgMed: førsteDagSomGirRett },
+                                },
+                            });
+
+                            dispatch({
+                                type: 'setHarValgtFørsteDagSomGirRett',
+                                payload: { harValgtFørsteDagSomGirRett: b.target.checked },
+                            });
+                        }}
+                    >
+                        Stans fra første dag som gir rett
+                    </Checkbox>
+                </HStack>
+                <HStack align={'end'} gap={'4'}>
+                    <Datovelger
+                        label={'Stans til og med'}
+                        minDate={førsteDagSomGirRett}
+                        maxDate={sisteDagSomGirRett}
+                        readOnly={!erSaksbehandler || brukerSisteDagSomGirRettCheckbox}
+                        selected={
+                            behandlingsperiode.tilOgMed
+                                ? dateTilISOTekst(behandlingsperiode.tilOgMed)
+                                : ''
                         }
-                    }}
-                />
+                        className={style.dato}
+                        onDateChange={(valgtDato) => {
+                            dispatch({
+                                type: 'oppdaterBehandlingsperiode',
+                                payload: {
+                                    periode: {
+                                        tilOgMed: valgtDato
+                                            ? dateTilISOTekst(valgtDato)
+                                            : valgtDato,
+                                    },
+                                },
+                            });
+                        }}
+                    />
+                    <Checkbox
+                        onChange={(b) => {
+                            setSisteDagSomGirRettCheckbox(b.target.checked);
+                            dispatch({
+                                type: 'oppdaterBehandlingsperiode',
+                                payload: { periode: { tilOgMed: sisteDagSomGirRett } },
+                            });
+                            dispatch({
+                                type: 'setHarValgtSisteDagSomGirRett',
+                                payload: { harValgtSisteDagSomGirRett: b.target.checked },
+                            });
+                        }}
+                    >
+                        Stans til siste dag som gir rett
+                    </Checkbox>
+                </HStack>
             </VedtakSeksjon.Venstre>
         </VedtakSeksjon>
     );

@@ -54,6 +54,7 @@ const søknadsbehandlingInitialState = (
     return {
         resultat: behandling.resultat,
         behandlingsperiode: behandling.virkningsperiode ?? tiltaksperiode,
+
         harBarnetillegg: barnetilleggPerioder.length > 0,
         barnetilleggPerioder,
         valgteTiltaksdeltakelser:
@@ -91,6 +92,9 @@ const søknadsbehandlingInitialState = (
 
         // Ikke i bruk for denne behandlingstypen
         hjemlerForStans: [],
+        //Kanskje disse burde vært Nullable<boolean> for søknadsbehandling. Må da skille stans-staten og søknadsbehandling staten (vi bruker felles behandling state)
+        harValgtStansFraFørsteDagSomGirRett: false,
+        harValgtStansTilSisteDagSomGirRett: false,
     };
 };
 
@@ -147,6 +151,10 @@ const revurderingInnvilgelseInitialState = (
         // Ikke i bruk for denne behandlingstypen
         avslagsgrunner: [],
         hjemlerForStans: [],
+
+        //Kanskje disse burde vært Nullable<boolean> for revurdering innvilgelse vi bruker felles behandling state
+        harValgtStansFraFørsteDagSomGirRett: false,
+        harValgtStansTilSisteDagSomGirRett: false,
     };
 };
 
@@ -155,6 +163,9 @@ const revurderingStansInitialState = (behandling: RevurderingData): BehandlingSk
         resultat: RevurderingResultat.STANS,
         behandlingsperiode: behandling.virkningsperiode ?? {},
         hjemlerForStans: behandling.valgtHjemmelHarIkkeRettighet ?? [],
+        harValgtStansFraFørsteDagSomGirRett:
+            behandling.harValgtStansFraFørsteDagSomGirRett ?? false,
+        harValgtStansTilSisteDagSomGirRett: behandling.harValgtStansTilSisteDagSomGirRett ?? false,
 
         // Ikke i bruk for denne behandlingstypen
         harBarnetillegg: false,

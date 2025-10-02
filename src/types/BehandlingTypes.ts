@@ -47,6 +47,8 @@ type InnvilgelseResultatData = {
 
 type StansResultatData = {
     valgtHjemmelHarIkkeRettighet: Nullable<HjemmelForStans[]>;
+    harValgtStansFraFørsteDagSomGirRett: boolean;
+    harValgtStansTilSisteDagSomGirRett: boolean;
 };
 
 type AvslagResultatData = {
