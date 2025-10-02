@@ -26,7 +26,14 @@ const tilDTO = (skjema: BehandlingSkjemaContext): RevurderingVedtakStansDTO => {
         resultat: BehandlingResultatDTO.STANS,
         begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
         fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
-        stansFraOgMed: skjema.behandlingsperiode.fraOgMed!,
+        stansFraOgMed: skjema.harValgtStansFraFørsteDagSomGirRett
+            ? null
+            : skjema.behandlingsperiode.fraOgMed!,
+        harValgtStansFraFørsteDagSomGirRett: skjema.harValgtStansFraFørsteDagSomGirRett,
+        stansTilOgMed: skjema.harValgtStansTilSisteDagSomGirRett
+            ? null
+            : skjema.behandlingsperiode.tilOgMed!,
+        harValgtStansTilSisteDagSomGirRett: skjema.harValgtStansTilSisteDagSomGirRett,
         valgteHjemler: skjema.hjemlerForStans!,
     };
 };

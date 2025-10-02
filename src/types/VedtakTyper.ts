@@ -50,7 +50,10 @@ export type SøknadsbehandlingVedtakDTO =
 export interface RevurderingVedtakStansDTO extends BehandlingVedtakBaseDTO {
     resultat: BehandlingResultatDTO.STANS;
     valgteHjemler: HjemmelForStans[];
-    stansFraOgMed: string;
+    stansFraOgMed: Nullable<string>;
+    harValgtStansFraFørsteDagSomGirRett: Nullable<boolean>;
+    stansTilOgMed: Nullable<string>;
+    harValgtStansTilSisteDagSomGirRett: Nullable<boolean>;
 }
 
 export interface RevurderingVedtakInnvilgelseDTO extends BehandlingVedtakBaseDTO {

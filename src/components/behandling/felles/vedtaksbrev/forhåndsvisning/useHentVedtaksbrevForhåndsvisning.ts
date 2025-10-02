@@ -19,7 +19,10 @@ export type SøknadsbehandlingBrevForhåndsvisningDTO = {
 
 export type RevurderingStansBrevForhåndsvisningDTO = {
     fritekst: string;
-    stansDato: string;
+    stansFraOgMed: Nullable<string>;
+    harValgtStansFraFørsteDagSomGirRett: Nullable<boolean>;
+    stansTilOgMed: Nullable<string>;
+    harValgtStansTilSisteDagSomGirRett: Nullable<boolean>;
     valgteHjemler: string[];
     resultat: RevurderingResultat.STANS;
 };

@@ -23,7 +23,10 @@ export const RevurderingStansBrev = () => {
             validering={revurderingStansValidering(skjema)}
             hentDto={(): RevurderingStansBrevForhåndsvisningDTO => ({
                 fritekst: brevtekst.getValue(),
-                stansDato: behandlingsperiode.fraOgMed!,
+                stansFraOgMed: behandlingsperiode.fraOgMed!,
+                harValgtStansFraFørsteDagSomGirRett: skjema.harValgtStansFraFørsteDagSomGirRett!,
+                stansTilOgMed: behandlingsperiode.tilOgMed!,
+                harValgtStansTilSisteDagSomGirRett: skjema.harValgtStansTilSisteDagSomGirRett!,
                 valgteHjemler: hjemlerForStans,
                 resultat: RevurderingResultat.STANS,
             })}
