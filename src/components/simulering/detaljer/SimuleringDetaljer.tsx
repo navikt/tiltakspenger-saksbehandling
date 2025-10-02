@@ -1,24 +1,20 @@
 import { SimulertBeregning } from '~/types/SimulertBeregningTypes';
-import { Button, Table, VStack } from '@navikt/ds-react';
-import React, { Fragment, useState } from 'react';
+import { Button, Table } from '@navikt/ds-react';
+import { Fragment, useState } from 'react';
+import { classNames } from '~/utils/classNames';
+import { ChevronDownIcon } from '@navikt/aksel-icons';
+import { SimuleringDetaljerMeldeperiode } from '~/components/simulering/detaljer/meldeperiode/SimuleringDetaljerMeldeperiode';
 
 import style from './SimuleringDetaljer.module.css';
-import { classNames } from '~/utils/classNames';
-import { TableHeader } from '@navikt/ds-react/Table';
-import { formaterDatotekst, periodeTilFormatertDatotekst } from '~/utils/date';
-import {
-    brukersMeldekortDagStatusTekst,
-    meldekortBehandlingDagStatusTekst,
-} from '~/utils/tekstformateringUtils';
 
 type Props = {
     simulertBeregning: SimulertBeregning;
 };
 
 export const SimuleringDetaljer = ({ simulertBeregning }: Props) => {
-    const [åpen, setÅpen] = useState(false);
+    const [åpen, setÅpen] = useState(true);
 
-    const { perMeldeperiode } = simulertBeregning;
+    const { meldeperioder } = simulertBeregning;
 
     return (
         <>
@@ -27,60 +23,32 @@ export const SimuleringDetaljer = ({ simulertBeregning }: Props) => {
                 variant={'tertiary'}
                 size={'small'}
                 type={'button'}
+                icon={
+                    <ChevronDownIcon
+                        className={classNames(style.detaljerKnappIkon, åpen && style.åpen)}
+                    />
+                }
+                className={style.detaljerKnapp}
             >
-                {`${åpen ? 'Skjul' : 'Vis'} detaljer for simulering`}
+                {`${åpen ? 'Skjul' : 'Vis'} detaljer per meldeperiode`}
             </Button>
-            <VStack className={classNames(style.detaljer, åpen && style.åpen)}>
-                <Table size={'small'} className={style.tabell} >
-                    <Table.Header className={style.tabellHeader}>
-                        <Table.Row>
-                            <Table.HeaderCell>Dato</Table.HeaderCell>
-                            <Table.HeaderCell>Status</Table.HeaderCell>
-                            <Table.HeaderCell colSpan={2}>Ordinær</Table.HeaderCell>
-                            <Table.HeaderCell colSpan={2}>Barnetillegg</Table.HeaderCell>
-                            <Table.HeaderCell>Utbetaling</Table.HeaderCell>
-                        </Table.Row>
-                    </Table.Header>
+
+            <div className={classNames(style.detaljer, åpen && style.åpen)}>
+                <Table size={'small'}>
                     <Table.Body>
-                        {perMeldeperiode.map((meldeperiode) => {
-                            const { dager, meldeperiodeKjedeId } = meldeperiode;
-
-                            const periodeString = periodeTilFormatertDatotekst({
-                                fraOgMed: dager.at(0)!.dato,
-                                tilOgMed: dager.at(-1)!.dato,
-                            });
-
-                            return (
-                                <Fragment>
-                                    <Table.Row>
-                                        <Table.DataCell
-                                            colSpan={7}
-                                            className={style.meldeperiodeHeader}
-                                        >
-                                            {`${periodeString}`}
-                                        </Table.DataCell>
+                        {meldeperioder.map((meldeperiode, index) => (
+                            <Fragment key={meldeperiode.kjedeId}>
+                                <SimuleringDetaljerMeldeperiode meldeperiode={meldeperiode} />
+                                {index < meldeperioder.length - 1 && (
+                                    <Table.Row className={style.spacer} shadeOnHover={false}>
+                                        <Table.DataCell />
                                     </Table.Row>
-                                    {dager.map((dag) => (
-                                        <Table.Row className={style.meldeperiodeDag}>
-                                            <Table.DataCell>
-                                                {formaterDatotekst(dag.dato)}
-                                            </Table.DataCell>
-                                            <Table.DataCell>
-                                                {meldekortBehandlingDagStatusTekst[dag.status]}
-                                            </Table.DataCell>
-                                            <Table.DataCell>{dag.beregning.ordinært.før}</Table.DataCell>
-                                            <Table.DataCell className={style.bold}>{dag.beregning.ordinært.nå}</Table.DataCell>
-                                            <Table.DataCell>{dag.beregning.barnetillegg.før}</Table.DataCell>
-                                            <Table.DataCell className={style.bold}>{dag.beregning.barnetillegg.nå}</Table.DataCell>
-                                            <Table.DataCell>{dag.simuleringNyUtbetaling}</Table.DataCell>
-                                        </Table.Row>
-                                    ))}
-                                </Fragment>
-                            );
-                        })}
+                                )}
+                            </Fragment>
+                        ))}
                     </Table.Body>
                 </Table>
-            </VStack>
+            </div>
         </>
     );
 };

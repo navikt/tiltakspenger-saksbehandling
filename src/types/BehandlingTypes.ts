@@ -32,7 +32,6 @@ type BehandlingDataCommon = {
     fritekstTilVedtaksbrev: string | null;
     ventestatus: Nullable<VentestatusHendelse>;
     utbetaling: Nullable<BehandlingUtbetalingProps>;
-
 };
 
 export interface AntallDagerForMeldeperiode {
@@ -229,6 +228,6 @@ export type BeregningerSummert = {
 };
 
 export type BeløpFørOgNå = {
-    før: number;
+    før: Nullable<number>;
     nå: number;
 };

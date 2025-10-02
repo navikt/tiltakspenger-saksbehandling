@@ -1,46 +1,47 @@
-import { BeløpProps } from '~/types/Beregning';
-import { Behandlingstype, BeløpFørOgNå, BeregningerSummert } from '~/types/BehandlingTypes';
-import { MeldekortBehandlingDagStatus } from '~/types/meldekort/MeldekortBehandling';
+import { BehandlingId, BeregningerSummert } from '~/types/BehandlingTypes';
+import {
+    MeldekortBehandlingDagStatus,
+    MeldekortBehandlingId,
+} from '~/types/meldekort/MeldekortBehandling';
+import { Nullable } from '~/types/UtilTypes';
+import { MeldeperiodeKjedeId } from '~/types/meldekort/Meldeperiode';
+
+export enum SimulerertBehandlingstype {
+    RAMME = 'RAMME',
+    MELDERKORT = 'MELDEKORT',
+}
 
 export type SimulertBeregning = {
-    behandlingId: string;
-    behandlingstype: Behandlingstype;
-    perMeldeperiode: SimulertBeregningPerMeldeperiode[];
-    beregningstidspunkt: string | null;
-    simuleringstidspunkt: string | null;
-    simuleringsdato: string | null;
-    simuleringTotalBeløp: number | null;
-    simuleringFeilutbetaling: number | null;
-    simuleringEtterbetaling: number | null;
-    simuleringTidligereUtbetalt: number | null;
-    simuleringNyUtbetaling: number | null;
-    simuleringTotalJustering: number | null;
-    simuleringTotalTrekk: number | null;
-    beregningEndring: BeløpProps;
-}
+    behandlingId: MeldekortBehandlingId | BehandlingId;
+    behandlingstype: SimulerertBehandlingstype;
+    meldeperioder: SimulertBeregningPerMeldeperiode[];
+    beregningstidspunkt: Nullable<string>;
+    simuleringstidspunkt: Nullable<string>;
+    simuleringsdato: Nullable<string>;
+    simuleringTotalBeløp: Nullable<number>;
+    simulerteBeløp: Nullable<SimulerteBeløp>;
+    beregning: BeregningerSummert;
+};
 
 export type SimulertBeregningPerMeldeperiode = {
-    meldeperiodeKjedeId: string;
+    kjedeId: MeldeperiodeKjedeId;
     dager: SimulertBeregningDag[];
-    simuleringFeilutbetaling: number | null;
-    simuleringEtterbetaling: number | null;
-    simuleringTidligereUtbetalt: number | null;
-    simuleringNyUtbetaling: number | null;
-    simuleringTotalJustering: number | null;
-    simuleringTotalTrekk: number | null;
-    beregningEndring: BeløpProps;
-    beregning: BeløpProps;
-}
+    simulerteBeløp: Nullable<SimulerteBeløp>;
+    beregning: BeregningerSummert;
+};
 
 export type SimulertBeregningDag = {
     dato: string;
     status: MeldekortBehandlingDagStatus;
-    simuleringFeilutbetaling: number | null;
-    simuleringEtterbetaling: number | null;
-    simuleringTidligereUtbetalt: number | null;
-    simuleringNyUtbetaling: number | null;
-    simuleringTotalJustering: number | null;
-    simuleringTotalTrekk: number | null;
-    beregningEndring: BeløpProps;
+    simulerteBeløp: Nullable<SimulerteBeløp>;
     beregning: BeregningerSummert;
-}
+};
+
+export type SimulerteBeløp = {
+    feilutbetaling: number;
+    etterbetaling: number;
+    tidligereUtbetaling: number;
+    nyUtbetaling: number;
+    totalJustering: number;
+    totalTrekk: number;
+};

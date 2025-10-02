@@ -1,3 +1,16 @@
+.detaljerKnapp {
+    margin-top: 0.5rem;
+    margin-bottom: 0.25rem;
+
+    .detaljerKnappIkon {
+        transition: transform 0.3s ease-in-out;
+
+        &.åpen {
+            transform: rotate(-180deg);
+        }
+    }
+}
+
 .detaljer {
     display: none;
 
@@ -6,30 +19,10 @@
     }
 }
 
-.tabell {
-    position: relative;
-}
+.spacer {
+    margin-bottom: 1rem;
 
-.tabellHeader {
-    position: sticky;
-    top: 0;
-    background-color: var(--a-gray-100);
-}
-
-.meldeperiodeHeader {
-    border: 0;
-    font-weight: bold;
-    background-color: var(--a-gray-50);
-}
-
-.meldeperiodeDag {
-    &td {
+    td {
         border: none;
     }
 }
-
-.bold {
-    font-weight: bold;
-}
-
-

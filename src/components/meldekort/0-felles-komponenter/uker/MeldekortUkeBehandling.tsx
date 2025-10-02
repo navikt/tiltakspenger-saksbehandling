@@ -50,13 +50,11 @@ export const MeldekortUkeBehandling = ({ dager, ukeIndex }: Props) => {
                     {valgtStatus === MeldekortBehandlingDagStatus.IkkeRettTilTiltakspenger ? (
                         <BodyShort>{meldekortBehandlingDagStatusTekst[valgtStatus]}</BodyShort>
                     ) : erHelg ? (
-                        <BodyShort>
-                            <Tooltip content={'Støtter ikke utbetaling av helgedager ennå'}>
-                                <BodyShort as={'span'}>
-                                    {meldekortBehandlingDagStatusTekst[valgtStatus]}
-                                </BodyShort>
-                            </Tooltip>
-                        </BodyShort>
+                        <Tooltip content={'Støtter ikke utbetaling av helgedager ennå'}>
+                            <BodyShort as={'span'}>
+                                {meldekortBehandlingDagStatusTekst[valgtStatus]}
+                            </BodyShort>
+                        </Tooltip>
                     ) : (
                         <Controller
                             name={statusFieldPath}

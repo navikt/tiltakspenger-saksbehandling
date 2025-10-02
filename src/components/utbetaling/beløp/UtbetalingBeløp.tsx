@@ -8,12 +8,12 @@ import style from './UtbetalingBeløp.module.css';
 type Props = {
     tekst: string;
     beløp: number;
-    beløpForrige?: number;
+    beløpForrige?: number | null;
     className?: string;
 };
 
 export const UtbetalingBeløp = ({ tekst, beløp, beløpForrige, className }: Props) => {
-    const diff = beløpForrige === undefined ? undefined : beløp - beløpForrige;
+    const diff = typeof beløpForrige !== 'number' ? undefined : beløp - beløpForrige;
 
     return (
         <HStack gap={'5'} className={classNames(fellesStyle.rad, className)}>
