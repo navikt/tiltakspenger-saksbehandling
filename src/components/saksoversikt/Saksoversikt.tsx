@@ -14,6 +14,7 @@ import { VedtatteBehandlinger } from '~/components/saksoversikt/behandlinger-ove
 import NotificationBanner from '../notificationBanner/NotificationBanner';
 import MeldekortHelgToggle from '../toggles/MeldekortHelgToggle';
 import { Rammebehandling, Behandlingsstatus, Behandlingstype } from '~/types/Behandling';
+import { OpprettPapirsøknad } from '~/components/saksoversikt/papirsøknad/OpprettPapirsøknad';
 
 export const Saksoversikt = () => {
     const {
@@ -63,6 +64,10 @@ export const Saksoversikt = () => {
                     <Spacer />
                     <HStack gap="3">
                         <MeldekortHelgToggle />
+                        <OpprettPapirsøknad
+                            saksnummer={saksnummer}
+                            harVedtak={harVedtattSøknadsbehandling(behandlinger)}
+                        />
                         <OpprettRevurdering
                             sakId={sakId}
                             harVedtak={harVedtattSøknadsbehandling(behandlinger)}
