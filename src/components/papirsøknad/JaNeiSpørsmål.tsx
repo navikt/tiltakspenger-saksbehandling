@@ -7,10 +7,10 @@ type Props = {
     name: FieldPath<Søknad>;
     legend: string;
     details?: React.ReactNode;
-    onChange?: ((val: boolean) => void) | undefined;
+    onChange?: (() => void) | undefined;
 };
 
-export const Spørsmål = ({ name, legend, details }: Props) => {
+export const JaNeiSpørsmål = ({ name, legend, details, onChange }: Props) => {
     const { control } = useFormContext<Søknad>();
 
     const spørsmål = useController({
@@ -24,7 +24,10 @@ export const Spørsmål = ({ name, legend, details }: Props) => {
             <RadioGroup
                 legend={legend}
                 value={spørsmål.field.value as boolean}
-                onChange={(val: boolean) => spørsmål.field.onChange(val)}
+                onChange={(value: boolean) => {
+                    spørsmål.field.onChange(value);
+                    onChange?.();
+                }}
             >
                 {details}
                 <Stack gap="space-0 space-24" direction={{ xs: 'column', sm: 'row' }} wrap={false}>
