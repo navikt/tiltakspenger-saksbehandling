@@ -75,19 +75,19 @@ export const Barnetillegg = ({ name, legend }: Props) => {
                                         <JaNeiSpørsmål
                                             name={`svar.barnetillegg.eøsOppholdForBarnFraAPI.${barn.uuid}`}
                                             legend={` Oppholder seg i EØS-land i tiltaksperioden`}
-                                            afterOnChange={() => {
-                                                setPdlBarn((prev) =>
-                                                    prev.map((b) =>
-                                                        b.uuid === barn.uuid
-                                                            ? {
-                                                                  ...b,
-                                                                  oppholdInnenforEøs:
-                                                                      !b.oppholdInnenforEøs,
-                                                              }
-                                                            : b,
-                                                    ),
-                                                );
-                                            }}
+                                            // afterOnChange={() => {
+                                            //     setPdlBarn((prev) =>
+                                            //         prev.map((b) =>
+                                            //             b.uuid === barn.uuid
+                                            //                 ? {
+                                            //                       ...b,
+                                            //                       oppholdInnenforEøs:
+                                            //                           !b.oppholdInnenforEøs,
+                                            //                   }
+                                            //                 : b,
+                                            //         ),
+                                            //     );
+                                            // }}
                                         />
                                     </div>
                                 </>
@@ -110,19 +110,19 @@ export const Barnetillegg = ({ name, legend }: Props) => {
                                         <JaNeiSpørsmål
                                             name={`svar.barnetillegg.eøsOppholdForBarnFraAPI.${barn.uuid}`}
                                             legend={` Oppholder seg i EØS-land i tiltaksperioden`}
-                                            afterOnChange={() => {
-                                                setPdlBarn((prev) =>
-                                                    prev.map((b) =>
-                                                        b.uuid === barn.uuid
-                                                            ? {
-                                                                  ...b,
-                                                                  oppholdInnenforEøs:
-                                                                      !b.oppholdInnenforEøs,
-                                                              }
-                                                            : b,
-                                                    ),
-                                                );
-                                            }}
+                                            // afterOnChange={() => {
+                                            //     setPdlBarn((prev) =>
+                                            //         prev.map((b) =>
+                                            //             b.uuid === barn.uuid
+                                            //                 ? {
+                                            //                       ...b,
+                                            //                       oppholdInnenforEøs:
+                                            //                           !b.oppholdInnenforEøs,
+                                            //                   }
+                                            //                 : b,
+                                            //         ),
+                                            //     );
+                                            // }}
                                         />
                                     </div>
                                 </>
