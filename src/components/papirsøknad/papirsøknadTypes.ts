@@ -7,11 +7,6 @@ export interface Søknad {
     svar: Spørsmålsbesvarelser;
 }
 
-export interface Søknadstiltak {
-    harTiltak: boolean;
-    periode?: Periode;
-}
-
 export interface Introduksjonsprogram {
     deltar: boolean;
     periode?: Periode;
@@ -27,10 +22,10 @@ export interface Institusjonsopphold {
     periode?: Periode;
 }
 
-export interface FormTiltak {
+export interface Tiltak {
     aktivitetId: string;
+    navn: string;
     periode?: Periode;
-    arenaRegistrertPeriode?: Periode;
 }
 
 export interface Barnetillegg {
@@ -82,7 +77,8 @@ export interface Spørsmålsbesvarelser {
     kvalifiseringsprogram: Kvalifiseringsprogram;
     introduksjonsprogram: Introduksjonsprogram;
     institusjonsopphold: Institusjonsopphold;
-    tiltak: FormTiltak;
+    tiltak: Tiltak;
+    harTiltak: boolean;
     mottarAndreUtbetalinger: boolean;
     sykepenger: Sykepenger;
     gjenlevendepensjon: Gjenlevendepensjon;
@@ -93,8 +89,7 @@ export interface Spørsmålsbesvarelser {
     etterlønn: Etterlønn;
     jobbsjansen: Jobbsjansen;
     barnetillegg: Barnetillegg;
-    harBekreftetAlleOpplysninger: boolean;
-    harBekreftetÅSvareSåGodtManKan: boolean;
+    harSøktOmBarnetillegg: boolean;
 }
 
 export interface Barn {
@@ -127,8 +122,7 @@ const defaultValues = {
         etterlønn: {},
         jobbsjansen: {},
         mottarAndreUtbetalinger: undefined,
-        harBekreftetAlleOpplysninger: false,
-        harBekreftetÅSvareSåGodtManKan: false,
+        harTiltak: false,
     },
     vedlegg: [],
 };
