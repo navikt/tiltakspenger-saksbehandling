@@ -8,12 +8,14 @@ import { fetchSak } from '~/utils/fetch/fetch-server';
 import { SpørsmålMedPeriodevelger } from '~/components/papirsøknad/SpørsmålMedPeriodevelger';
 import { PersonaliaHeader } from '~/components/personaliaheader/PersonaliaHeader';
 import defaultValues, { Søknad } from '~/components/papirsøknad/papirsøknadTypes';
-import { Spørsmål } from '~/components/papirsøknad/Spørsmål';
+import { JaNeiSpørsmål } from '~/components/papirsøknad/JaNeiSpørsmål';
 import { MottarPengestøtterSpørsmål } from '~/components/papirsøknad/MottarPengestøtterSpørsmål';
 import { Datovelger } from '~/components/datovelger/Datovelger';
 import React from 'react';
 import { Periodevelger } from '~/components/papirsøknad/Periodevelger';
 import { dateTilISOTekst, datoTilDatoInputText } from '~/utils/date';
+import { VelgTiltak } from '~/components/papirsøknad/VelgTiltak';
+import { Barnetillegg } from '~/components/papirsøknad/Barnetillegg';
 
 interface Props {
     sak: SakProps;
@@ -91,12 +93,10 @@ const PapirsøknadPage = (props: Props) => {
                                 )}
                             />
 
-                            {/*<div>*/}
-                            {/*    <Spørsmål*/}
-                            {/*        name=""*/}
-                            {/*        legend="Deltar i arbeidmarkedtiltak som gir rett til tiltakspenger?"*/}
-                            {/*    />*/}
-                            {/*</div>*/}
+                            <VelgTiltak
+                                spørsmålName="svar.harTiltak"
+                                legend="Deltar i arbeidmarkedtiltak som gir rett til tiltakspenger?"
+                            />
 
                             <SpørsmålMedPeriodevelger
                                 spørsmålName="svar.kvalifiseringsprogram.deltar"
@@ -110,7 +110,7 @@ const PapirsøknadPage = (props: Props) => {
                                 spørsmål="Mottar introduksjonsstønad"
                             />
 
-                            <Spørsmål name="svar.etterlønn.mottar" legend="Mottar etterlønn" />
+                            <JaNeiSpørsmål name="svar.etterlønn.mottar" legend="Mottar etterlønn" />
 
                             <SpørsmålMedPeriodevelger
                                 spørsmålName="svar.sykepenger.mottar"
@@ -131,22 +131,10 @@ const PapirsøknadPage = (props: Props) => {
                                 periodeSpørsmål="I hvilken del av perioden bor brukeren på institusjon med gratis opphold, mat og drikke?"
                             />
 
-                            <Spørsmål
-                                name="svar.barnetillegg"
+                            <Barnetillegg
+                                name="svar.harSøktOmBarnetillegg"
                                 legend="Har bruker søkt barnetillegg?"
                             />
-                            <div>
-                                <TextField label="Fornavn" />
-                            </div>
-                            <div>
-                                <TextField label="Fornavn" />
-                                <TextField label="Etternavn" />
-                                {/*<Datovelger label="Fødselsdato" />*/}
-                                <Spørsmål
-                                    name="svar.barnetillegg.kladd.oppholdInnenforEøs"
-                                    legend="Oppholder seg i EØS-land"
-                                />
-                            </div>
 
                             <HStack gap="4">
                                 <Button variant="secondary" type="reset">

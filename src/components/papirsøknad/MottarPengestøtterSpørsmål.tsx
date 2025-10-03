@@ -1,7 +1,7 @@
 import React from 'react';
 import { FieldPath, useController, useFormContext } from 'react-hook-form';
 import type { Søknad } from '~/components/papirsøknad/papirsøknadTypes';
-import { Spørsmål } from './Spørsmål';
+import { JaNeiSpørsmål } from './JaNeiSpørsmål';
 
 import styles from './Spørsmål.module.css';
 import { SpørsmålMedPeriodevelger } from '~/components/papirsøknad/SpørsmålMedPeriodevelger';
@@ -15,7 +15,7 @@ type Props = {
 };
 
 export const MottarPengestøtterSpørsmål = ({ name, legend }: Props) => {
-    const { control } = useFormContext<Søknad>();
+    const { control, resetField } = useFormContext<Søknad>();
 
     const spørsmål = useController({
         name: name,
@@ -23,11 +23,31 @@ export const MottarPengestøtterSpørsmål = ({ name, legend }: Props) => {
         defaultValue: undefined,
     });
 
+    const nullstillFelter = (): void => {
+        resetField('svar.gjenlevendepensjon.mottar');
+        resetField('svar.gjenlevendepensjon.periode');
+        resetField('svar.alderspensjon.mottar');
+        resetField('svar.alderspensjon.fraDato');
+        resetField('svar.supplerendestønadover67.mottar');
+        resetField('svar.supplerendestønadover67.periode');
+        resetField('svar.supplerendestønadflyktninger.mottar');
+        resetField('svar.supplerendestønadflyktninger.periode');
+        resetField('svar.pensjonsordning.mottar');
+        resetField('svar.pensjonsordning.periode');
+        resetField('svar.jobbsjansen.mottar');
+        resetField('svar.jobbsjansen.periode');
+    };
+
     return (
         <div className={spørsmål.field.value ? styles.blokkUtvidet : ''}>
-            <Spørsmål
+            <JaNeiSpørsmål
                 name={name}
                 legend={legend}
+                onChange={() => {
+                    if (!spørsmål.field.value) {
+                        nullstillFelter();
+                    }
+                }}
                 details={
                     <List as="ul">
                         <List.Item>Pengestøtte til gjenlevende ektefelle</List.Item>
