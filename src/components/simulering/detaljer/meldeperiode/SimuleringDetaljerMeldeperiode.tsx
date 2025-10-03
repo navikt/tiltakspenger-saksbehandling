@@ -4,7 +4,7 @@ import { classNames } from '~/utils/classNames';
 import { useState } from 'react';
 import { SimuleringMeldeperiodeOppsummering } from '~/components/simulering/detaljer/meldeperiode/oppsummering/SimuleringMeldeperiodeOppsummering';
 import { beløpStyle } from '~/components/utbetaling/beløp/beløpStyle';
-import { SimuleringDetaljerDager } from '~/components/simulering/detaljer/meldeperiode/dager/SimuleringDetaljerDager';
+import { SimuleringDetaljerDag } from '~/components/simulering/detaljer/meldeperiode/dag/SimuleringDetaljerDag';
 import { SimuleringDetaljerMeldeperiodeHeader } from '~/components/simulering/detaljer/meldeperiode/header/SimuleringDetaljerMeldeperiodeHeader';
 
 import style from './SimuleringDetaljerMeldeperiode.module.css';
@@ -72,7 +72,9 @@ export const SimuleringDetaljerMeldeperiode = ({ meldeperiode }: Props) => {
                 <Table.HeaderCell>{'Simulert'}</Table.HeaderCell>
             </Table.Row>
 
-            <SimuleringDetaljerDager dager={dager} className={kanLukkesStyle} />
+            {dager.map((dag) => (
+                <SimuleringDetaljerDag dag={dag} className={kanLukkesStyle} key={dag.dato} />
+            ))}
 
             <Table.Row className={classNames(style.periodeSum, kanLukkesStyle)}>
                 <Table.DataCell colSpan={3}>

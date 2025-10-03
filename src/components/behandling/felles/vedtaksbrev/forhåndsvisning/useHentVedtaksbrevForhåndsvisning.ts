@@ -17,15 +17,32 @@ export type SøknadsbehandlingBrevForhåndsvisningDTO = {
     avslagsgrunner: Nullable<Avslagsgrunn[]>;
 };
 
+type StansFraOgMed =
+    | {
+          stansFraOgMed?: null;
+          harValgtStansFraFørsteDagSomGirRett: true;
+      }
+    | {
+          stansFraOgMed: string;
+          harValgtStansFraFørsteDagSomGirRett: false;
+      };
+
+type StansTilOgMed =
+    | {
+          stansTilOgMed?: null;
+          harValgtStansTilSisteDagSomGirRett: true;
+      }
+    | {
+          stansTilOgMed: string;
+          harValgtStansTilSisteDagSomGirRett: false;
+      };
+
 export type RevurderingStansBrevForhåndsvisningDTO = {
     fritekst: string;
-    stansFraOgMed: Nullable<string>;
-    harValgtStansFraFørsteDagSomGirRett: Nullable<boolean>;
-    stansTilOgMed: Nullable<string>;
-    harValgtStansTilSisteDagSomGirRett: Nullable<boolean>;
     valgteHjemler: string[];
     resultat: RevurderingResultat.STANS;
-};
+} & StansFraOgMed &
+    StansTilOgMed;
 
 export type RevurderingInnvilgelseBrevForhåndsvisningDTO = {
     fritekst: string;

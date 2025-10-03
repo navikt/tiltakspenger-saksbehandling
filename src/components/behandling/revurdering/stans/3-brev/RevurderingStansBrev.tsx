@@ -9,7 +9,13 @@ import { useBehandlingSkjema } from '~/components/behandling/context/BehandlingS
 export const RevurderingStansBrev = () => {
     const skjema = useBehandlingSkjema();
 
-    const { hjemlerForStans, behandlingsperiode, textAreas } = skjema;
+    const {
+        hjemlerForStans,
+        behandlingsperiode,
+        textAreas,
+        harValgtStansFraFørsteDagSomGirRett,
+        harValgtStansTilSisteDagSomGirRett,
+    } = skjema;
     const { brevtekst } = textAreas;
 
     const { behandling, rolleForBehandling } = useRevurderingBehandling();
@@ -22,11 +28,24 @@ export const RevurderingStansBrev = () => {
             tekstRef={brevtekst.ref}
             validering={revurderingStansValidering(skjema)}
             hentDto={(): RevurderingStansBrevForhåndsvisningDTO => ({
+                ...(harValgtStansFraFørsteDagSomGirRett
+                    ? {
+                          harValgtStansFraFørsteDagSomGirRett,
+                      }
+                    : {
+                          harValgtStansFraFørsteDagSomGirRett,
+                          stansFraOgMed: behandlingsperiode.fraOgMed!,
+                      }),
+
+                ...(harValgtStansTilSisteDagSomGirRett
+                    ? {
+                          harValgtStansTilSisteDagSomGirRett,
+                      }
+                    : {
+                          harValgtStansTilSisteDagSomGirRett,
+                          stansTilOgMed: behandlingsperiode.tilOgMed!,
+                      }),
                 fritekst: brevtekst.getValue(),
-                stansFraOgMed: behandlingsperiode.fraOgMed!,
-                harValgtStansFraFørsteDagSomGirRett: skjema.harValgtStansFraFørsteDagSomGirRett!,
-                stansTilOgMed: behandlingsperiode.tilOgMed!,
-                harValgtStansTilSisteDagSomGirRett: skjema.harValgtStansTilSisteDagSomGirRett!,
                 valgteHjemler: hjemlerForStans,
                 resultat: RevurderingResultat.STANS,
             })}
