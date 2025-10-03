@@ -2,7 +2,7 @@ import { Table } from '@navikt/ds-react';
 import { SimulertBeregningPerMeldeperiode } from '~/types/SimulertBeregningTypes';
 import { classNames } from '~/utils/classNames';
 import { useState } from 'react';
-import { SimuleringMeldeperiodeOppsummering } from '~/components/simulering/detaljer/meldeperiode/oppsummering/SimuleringMeldeperiodeOppsummering';
+import { SimuleringOppsummeringDetaljert } from '~/components/simulering/detaljer/meldeperiode/oppsummering/SimuleringOppsummeringDetaljert';
 import { beløpStyle } from '~/components/utbetaling/beløp/beløpStyle';
 import { SimuleringDetaljerDag } from '~/components/simulering/detaljer/meldeperiode/dag/SimuleringDetaljerDag';
 import { SimuleringDetaljerMeldeperiodeHeader } from '~/components/simulering/detaljer/meldeperiode/header/SimuleringDetaljerMeldeperiodeHeader';
@@ -69,7 +69,9 @@ export const SimuleringDetaljerMeldeperiode = ({ meldeperiode }: Props) => {
                 <Table.HeaderCell>{'Før'}</Table.HeaderCell>
                 <Table.HeaderCell>{'Nå'}</Table.HeaderCell>
                 <Table.HeaderCell>{'Beregnet'}</Table.HeaderCell>
-                <Table.HeaderCell>{'Simulert'}</Table.HeaderCell>
+                <Table.HeaderCell className={style.endringOgVisMerCell}>
+                    {'Simulert'}
+                </Table.HeaderCell>
             </Table.Row>
 
             {dager.map((dag) => (
@@ -102,7 +104,8 @@ export const SimuleringDetaljerMeldeperiode = ({ meldeperiode }: Props) => {
 
             <Table.Row shadeOnHover={false} className={kanLukkesStyle}>
                 <Table.DataCell colSpan={11} className={style.simuleringCell}>
-                    <SimuleringMeldeperiodeOppsummering
+                    <SimuleringOppsummeringDetaljert
+                        headerTekst={'Simulering for hele perioden'}
                         simulerteBeløp={meldeperiode.simulerteBeløp}
                     />
                 </Table.DataCell>

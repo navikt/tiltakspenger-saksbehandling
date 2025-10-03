@@ -11,3 +11,14 @@
         vertical-align: top;
     }
 }
+
+.simuleringCell {
+    display: flex;
+    justify-content: space-between;
+}
+
+.detaljerRow {
+    & > td {
+        border: none;
+    }
+}

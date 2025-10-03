@@ -26,6 +26,7 @@ export const SimuleringOppsummering = ({ simulerteBeløp }: Props) => {
                 beløp={nyUtbetaling}
                 beløpForrige={tidligereUtbetaling}
             />
+            <UtbetalingBeløp tekst={'Tidligere utbetaling'} beløp={tidligereUtbetaling} />
             {feilutbetaling !== 0 && (
                 <UtbetalingBeløp tekst={'Feilutbetaling'} beløp={feilutbetaling} />
             )}

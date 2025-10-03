@@ -4,13 +4,14 @@ import { UtbetalingBeløp } from '~/components/utbetaling/beløp/UtbetalingBelø
 import { classNames } from '~/utils/classNames';
 import { Nullable } from '~/types/UtilTypes';
 
-import style from './SimuleringMeldeperiodeOppsummering.module.css';
+import style from './SimuleringOppsummeringDetaljert.module.css';
 
 type Props = {
+    headerTekst?: string;
     simulerteBeløp: Nullable<SimulerteBeløp>;
 };
 
-export const SimuleringMeldeperiodeOppsummering = ({ simulerteBeløp }: Props) => {
+export const SimuleringOppsummeringDetaljert = ({ headerTekst, simulerteBeløp }: Props) => {
     if (!simulerteBeløp) {
         return (
             <Alert variant={'warning'} size={'small'}>
@@ -30,11 +31,17 @@ export const SimuleringMeldeperiodeOppsummering = ({ simulerteBeløp }: Props) =
 
     return (
         <div className={style.wrapper}>
-            <Heading size={'xsmall'} level={'4'}>
-                {'Simulering for hele perioden'}
-            </Heading>
+            {headerTekst && (
+                <Heading size={'xsmall'} level={'4'}>
+                    {headerTekst}
+                </Heading>
+            )}
             <div className={style.beløpWrapper}>
-                <UtbetalingBeløp tekst={'Tidligere utbetaling'} beløp={tidligereUtbetaling} />
+                <UtbetalingBeløp
+                    tekst={'Ny utbetaling'}
+                    beløp={nyUtbetaling}
+                    beløpForrige={tidligereUtbetaling}
+                />
                 <UtbetalingBeløp
                     tekst={'Etterbetaling'}
                     beløp={etterbetaling}
@@ -45,11 +52,7 @@ export const SimuleringMeldeperiodeOppsummering = ({ simulerteBeløp }: Props) =
                     beløp={totalJustering}
                     className={classNames(totalJustering === 0 && style.disabled)}
                 />
-                <UtbetalingBeløp
-                    tekst={'Ny utbetaling'}
-                    beløp={nyUtbetaling}
-                    beløpForrige={tidligereUtbetaling}
-                />
+                <UtbetalingBeløp tekst={'Tidligere utbetaling'} beløp={tidligereUtbetaling} />
                 <UtbetalingBeløp
                     tekst={'Feilutbetaling'}
                     beløp={feilutbetaling}

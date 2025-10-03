@@ -39,3 +39,8 @@
         border: 0;
     }
 }
+
+.endringOgVisMerCell {
+    display: flex;
+    justify-content: space-between;
+}
