@@ -1,0 +1,23 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.headerBeregning {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.knapp {
+    padding: 0.5rem;
+}
+
+.knappIkon {
+    transition: transform 0.3s ease-in-out;
+
+    &.ikonÅpen {
+        transform: rotate(-180deg);
+    }
+}

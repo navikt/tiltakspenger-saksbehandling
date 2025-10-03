@@ -1,0 +1,13 @@
+.meldeperiodeDag {
+    td {
+        border: none;
+    }
+}
+
+.statusIkon {
+    width: 1rem;
+
+    & > svg {
+        vertical-align: top;
+    }
+}

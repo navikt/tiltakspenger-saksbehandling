@@ -3,30 +3,10 @@
     border-top-left-radius: var(--a-border-radius-medium);
     border-top-right-radius: var(--a-border-radius-medium);
     background-color: var(--a-gray-50);
+}
 
-    .header {
-        display: flex;
-        justify-content: space-between;
-        gap: 1rem;
-
-        .headerBeregning {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-    }
-
-    .knapp {
-        padding: 0.5rem;
-
-        .knappIkon {
-            transition: transform 0.3s ease-in-out;
-
-            &.ikonÅpen {
-                transform: rotate(-180deg);
-            }
-        }
-    }
+.lukket {
+    display: none;
 }
 
 .tabellHeaderOver {
@@ -47,37 +27,15 @@
     }
 }
 
-.meldeperiodeDag {
-    td {
-        border: none;
-    }
-}
-
-.bold {
-    font-weight: bold;
-}
-
 .periodeSum {
     border-top: 1px solid var(--a-gray-500);
     border-bottom: 2px solid var(--a-gray-500);
 }
 
-.positiv {
-    color: var(--a-green-500);
-}
-
-.negativ {
-    color: var(--a-red-500);
-}
-
-.statusIkon {
-    width: 1rem;
-
-    & > svg {
-        vertical-align: top;
+.simuleringCell {
+    /* Overstyrer navds spesifisitet */
+    && {
+        padding: 0.5rem 0;
+        border: 0;
     }
-}
-
-.lukket {
-    display: none;
 }
