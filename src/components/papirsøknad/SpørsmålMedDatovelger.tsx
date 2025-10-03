@@ -1,6 +1,6 @@
 import React from 'react';
 import { FieldPath, useController, useFormContext } from 'react-hook-form';
-import { Spørsmål } from '~/components/papirsøknad/Spørsmål';
+import { JaNeiSpørsmål } from '~/components/papirsøknad/JaNeiSpørsmål';
 import { Datovelger } from '~/components/datovelger/Datovelger';
 import type { Søknad } from '~/components/papirsøknad/papirsøknadTypes';
 import { Heading, VStack } from '@navikt/ds-react';
@@ -14,19 +14,31 @@ type Props = {
 };
 
 export const SpørsmålMedDatovelger = ({ spørsmålName, datoName, legend, tittel }: Props) => {
-    const { control } = useFormContext<Søknad>();
+    const { control, resetField } = useFormContext<Søknad>();
 
-    const spørsmål = useController({
+    const controller = useController({
         name: spørsmålName,
         control,
         defaultValue: undefined,
     });
 
-    return (
-        <div className={spørsmål.field.value ? styles.blokkUtvidet : ''}>
-            <Spørsmål name={spørsmålName} legend={legend} />
+    const reset = () => {
+        resetField(datoName);
+    };
 
-            {spørsmål.field.value && (
+    return (
+        <div className={controller.field.value ? styles.blokkUtvidet : ''}>
+            <JaNeiSpørsmål
+                name={spørsmålName}
+                legend={legend}
+                onChange={() => {
+                    if (!controller.field.value) {
+                        reset();
+                    }
+                }}
+            />
+
+            {controller.field.value && (
                 <div className={styles.blokk}>
                     <VStack gap="2">
                         {tittel && (
@@ -37,7 +49,9 @@ export const SpørsmålMedDatovelger = ({ spørsmålName, datoName, legend, titt
                         <Datovelger
                             name={datoName}
                             label={'Fra og med (dd.mm.åååå)'}
-                            onDateChange={(date) => console.log(date)}
+                            onDateChange={(date) => {
+                                console.log(date);
+                            }}
                         />
                     </VStack>
                 </div>
