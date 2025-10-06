@@ -8,12 +8,13 @@ type Props = {
     legend: string;
     details?: React.ReactNode;
     onChange?: (() => void) | undefined;
+    måVæreBesvart?: boolean;
 };
 
-export const JaNeiSpørsmål = ({ name, legend, details, onChange }: Props) => {
+export const JaNeiSpørsmål = ({ name, legend, details, onChange, måVæreBesvart }: Props) => {
     const { control } = useFormContext<Søknad>();
 
-    const spørsmål = useController({
+    const controller = useController({
         name: name,
         control,
         defaultValue: undefined,
@@ -23,9 +24,9 @@ export const JaNeiSpørsmål = ({ name, legend, details, onChange }: Props) => {
         <div className={styles.blokk}>
             <RadioGroup
                 legend={legend}
-                value={spørsmål.field.value as boolean}
+                value={controller.field.value as boolean}
                 onChange={(value: boolean) => {
-                    spørsmål.field.onChange(value);
+                    controller.field.onChange(value);
                     onChange?.();
                 }}
             >
@@ -33,7 +34,7 @@ export const JaNeiSpørsmål = ({ name, legend, details, onChange }: Props) => {
                 <Stack gap="space-0 space-24" direction={{ xs: 'column', sm: 'row' }} wrap={false}>
                     <Radio value={true}>Ja</Radio>
                     <Radio value={false}>Nei</Radio>
-                    <Radio value={null}>Ikke besvart</Radio>
+                    {!måVæreBesvart && <Radio value={null}>Ikke besvart</Radio>}
                 </Stack>
             </RadioGroup>
         </div>
