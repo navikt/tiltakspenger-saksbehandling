@@ -1,0 +1,13 @@
+.blokk {
+    padding: 0.5rem;
+    border: 1px solid var(--a-border-default);
+}
+
+.leggTilBarnButton {
+    background: var(--a-bg-default);
+    width: 100%;
+}
+
+.avbrytButton {
+    background: var(--a-bg-default);
+}

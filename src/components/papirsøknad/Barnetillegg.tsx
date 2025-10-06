@@ -1,14 +1,13 @@
 import React from 'react';
-import { Controller, FieldPath, useController, useFormContext } from 'react-hook-form';
-import type { Barn, Søknad } from '~/components/papirsøknad/papirsøknadTypes';
-import { JaNeiSpørsmål } from './JaNeiSpørsmål';
-
 import styles from './Spørsmål.module.css';
-import { Button, Heading, TextField } from '@navikt/ds-react';
-import { Datovelger } from '~/components/datovelger/Datovelger';
+import { FieldPath, useController, useFieldArray, useFormContext } from 'react-hook-form';
+import { Button, Heading, HStack, VStack } from '@navikt/ds-react';
+import { TrashIcon } from '@navikt/aksel-icons';
 import { formaterDatotekst } from '~/utils/date';
 import { classNames } from '~/utils/classNames';
-import { PlusIcon } from '@navikt/aksel-icons';
+import type { Barn, Søknad } from '~/components/papirsøknad/papirsøknadTypes';
+import { LeggTilBarnManuelt } from '~/components/papirsøknad/LeggTilBarnManuelt';
+import { JaNeiSpørsmål } from './JaNeiSpørsmål';
 
 type Props = {
     name: FieldPath<Søknad>;
@@ -17,231 +16,131 @@ type Props = {
 };
 
 export const Barnetillegg = ({ name, legend }: Props) => {
-    const { control, getValues, setValue } = useFormContext<Søknad>();
-    const [pdlBarn, setPdlBarn] = React.useState<Barn[]>([]);
-    const [manuelleBarn, setManuelleBarn] = React.useState<Barn[]>([]);
-    const [visLeggTilBarnFelter, setVisLeggTilBarnFelt] = React.useState(false);
+    const { control } = useFormContext<Søknad>();
 
-    const spørsmål = useController({
+    const barnFraFolkeregisteret = useFieldArray<Søknad>({
+        control,
+        name: 'svar.barnetillegg.barnFraFolkeregisteret',
+    });
+
+    const manuelleBarn = useFieldArray<Søknad>({
+        control,
+        name: 'svar.barnetillegg.manueltRegistrerteBarn',
+    });
+
+    const hardkodaPdlBarn: Barn[] = [
+        {
+            uuid: '1',
+            fornavn: 'Ezekiel',
+            etternavn: 'Ruud',
+            fødselsdato: '2010-05-20',
+            oppholdInnenforEøs: undefined,
+        },
+        {
+            uuid: '2',
+            fornavn: 'Bartholomeus',
+            etternavn: 'Ruud',
+            fødselsdato: '2012-08-15',
+            oppholdInnenforEøs: undefined,
+        },
+    ];
+
+    const harSøktOmBarnetillegg = useController({
         name: name,
         control,
         defaultValue: undefined,
     });
 
+    const getTekstForJaNeiSpørsmål = (value: boolean | undefined) => {
+        if (value === null || value === undefined) return 'Ikke besvart';
+        return value ? 'Ja' : 'Nei';
+    };
+
     return (
-        <div className={spørsmål.field.value ? styles.blokkUtvidet : ''}>
+        <div className={harSøktOmBarnetillegg.field.value ? styles.blokkUtvidet : ''}>
             <JaNeiSpørsmål name={name} legend={legend} />
 
-            {spørsmål.field.value && (
+            {harSøktOmBarnetillegg.field.value && (
                 <div className={styles.blokk}>
                     <Button
                         className={styles.finnTiltakButton}
                         size="small"
-                        onClick={() =>
-                            setPdlBarn([
-                                {
-                                    uuid: '1',
-                                    fornavn: 'Ezekiel',
-                                    etternavn: 'Ruud',
-                                    fødselsdato: '2010-05-20',
-                                    oppholdInnenforEøs: false,
-                                },
-                                {
-                                    uuid: '2',
-                                    fornavn: 'Bartholomeus',
-                                    etternavn: 'Ruud',
-                                    fødselsdato: '2012-08-15',
-                                    oppholdInnenforEøs: true,
-                                },
-                            ])
-                        }
+                        onClick={() => barnFraFolkeregisteret.replace(hardkodaPdlBarn)}
                     >
                         Hent barn fra folkeregisteret
                     </Button>
-                    {pdlBarn.length > 0 && (
+
+                    {barnFraFolkeregisteret.fields.length > 0 && (
+                        <Button
+                            size="small"
+                            variant="secondary"
+                            onClick={() => {
+                                barnFraFolkeregisteret.remove();
+                            }}
+                        >
+                            Nullstill
+                        </Button>
+                    )}
+
+                    {barnFraFolkeregisteret.fields.length > 0 && (
                         <div
                             className={classNames(styles.blokk, styles.informasjonsInnhentingBlokk)}
                         >
                             <Heading size="medium" level="3" spacing>
                                 Barn fra Folkeregisteret
                             </Heading>
-                            {pdlBarn.map((barn) => (
-                                <>
-                                    <Heading
-                                        size="small"
-                                        level="4"
-                                    >{`${barn.fornavn} ${barn.etternavn} - født ${formaterDatotekst(barn.fødselsdato)}`}</Heading>
-                                    <div key={barn.uuid}>
-                                        <JaNeiSpørsmål
-                                            name={`svar.barnetillegg.eøsOppholdForBarnFraAPI.${barn.uuid}`}
-                                            legend={` Oppholder seg i EØS-land i tiltaksperioden`}
-                                            // afterOnChange={() => {
-                                            //     setPdlBarn((prev) =>
-                                            //         prev.map((b) =>
-                                            //             b.uuid === barn.uuid
-                                            //                 ? {
-                                            //                       ...b,
-                                            //                       oppholdInnenforEøs:
-                                            //                           !b.oppholdInnenforEøs,
-                                            //                   }
-                                            //                 : b,
-                                            //         ),
-                                            //     );
-                                            // }}
-                                        />
-                                    </div>
-                                </>
+                            {barnFraFolkeregisteret.fields.map((barn, index) => (
+                                <div key={barn.id ?? barn.uuid}>
+                                    <Heading size="small" level="4">
+                                        {`${barn.fornavn} ${barn.etternavn} - født ${formaterDatotekst(
+                                            barn.fødselsdato,
+                                        )}`}
+                                    </Heading>
+                                    <JaNeiSpørsmål
+                                        name={`svar.barnetillegg.barnFraFolkeregisteret.${index}.oppholdInnenforEøs`}
+                                        legend={` Oppholder seg i EØS-land i tiltaksperioden`}
+                                    />
+                                </div>
                             ))}
                         </div>
                     )}
 
-                    {manuelleBarn.length > 0 && (
-                        <div className={classNames(styles.blokk)}>
+                    {manuelleBarn.fields.length > 0 && (
+                        <div className={styles.blokk}>
                             <Heading size="medium" level="3" spacing>
                                 Barn lagt til manuelt
                             </Heading>
-                            {manuelleBarn.map((barn) => (
-                                <>
-                                    <Heading
-                                        size="small"
-                                        level="4"
-                                    >{`${barn.fornavn} ${barn.etternavn} - født ${formaterDatotekst(barn.fødselsdato)}`}</Heading>
-                                    <div key={barn.uuid}>
-                                        <JaNeiSpørsmål
-                                            name={`svar.barnetillegg.eøsOppholdForBarnFraAPI.${barn.uuid}`}
-                                            legend={` Oppholder seg i EØS-land i tiltaksperioden`}
-                                            // afterOnChange={() => {
-                                            //     setPdlBarn((prev) =>
-                                            //         prev.map((b) =>
-                                            //             b.uuid === barn.uuid
-                                            //                 ? {
-                                            //                       ...b,
-                                            //                       oppholdInnenforEøs:
-                                            //                           !b.oppholdInnenforEøs,
-                                            //                   }
-                                            //                 : b,
-                                            //         ),
-                                            //     );
-                                            // }}
-                                        />
-                                    </div>
-                                </>
+                            {manuelleBarn.fields.map((barn: Barn, index: number) => (
+                                <HStack key={barn.uuid} gap="4" justify="space-between">
+                                    <VStack>
+                                        <Heading
+                                            size="small"
+                                            level="4"
+                                        >{`${barn.fornavn} ${barn.etternavn} - født ${formaterDatotekst(
+                                            barn.fødselsdato,
+                                        )}`}</Heading>
+                                        <div>
+                                            Oppholder seg i EØS-land i tiltaksperioden:{' '}
+                                            {getTekstForJaNeiSpørsmål(barn.oppholdInnenforEøs)}
+                                            <br />
+                                            Det er vedlagt dokumentasjon for barnet:{' '}
+                                            {getTekstForJaNeiSpørsmål(
+                                                barn.manueltRegistrertBarnHarVedlegg,
+                                            )}
+                                        </div>
+                                    </VStack>
+                                    <Button
+                                        icon={<TrashIcon />}
+                                        variant="tertiary"
+                                        onClick={() => manuelleBarn.remove(index)}
+                                    >
+                                        Slett
+                                    </Button>
+                                </HStack>
                             ))}
                         </div>
                     )}
-                    <Button
-                        onClick={() => setVisLeggTilBarnFelt(true)}
-                        className={styles.leggTilBarnButton}
-                        variant="secondary"
-                        type="button"
-                        icon={<PlusIcon aria-hidden />}
-                        hidden={visLeggTilBarnFelter}
-                    >
-                        Legg til barn
-                    </Button>
-
-                    {visLeggTilBarnFelter && (
-                        <div className={styles.blokk}>
-                            <Heading size="small" level="4" spacing>
-                                Legg til barn manuelt
-                            </Heading>
-                            <Controller
-                                name={`svar.barnetillegg.kladd`}
-                                render={({ field }) => {
-                                    const value = field.value ?? {
-                                        fornavn: '',
-                                        etternavn: '',
-                                        fødselsdato: '',
-                                        oppholdInnenforEøs: false,
-                                        uuid: '',
-                                    };
-                                    return (
-                                        <div>
-                                            <TextField
-                                                label="Fornavn"
-                                                value={value.fornavn ?? ''}
-                                                onChange={(e) =>
-                                                    field.onChange({
-                                                        ...value,
-                                                        fornavn: e.target.value,
-                                                    })
-                                                }
-                                            />
-                                            <TextField
-                                                label="Etternavn"
-                                                value={value.etternavn ?? ''}
-                                                onChange={(e) =>
-                                                    field.onChange({
-                                                        ...value,
-                                                        etternavn: e.target.value,
-                                                    })
-                                                }
-                                            />
-                                            <Datovelger
-                                                label="Fødselsdato"
-                                                selected={value.fødselsdato || undefined}
-                                                onDateChange={(date) =>
-                                                    field.onChange({
-                                                        ...value,
-                                                        fødselsdato: date
-                                                            ? typeof date === 'string'
-                                                                ? date
-                                                                : date.toISOString().split('T')[0]
-                                                            : '',
-                                                    })
-                                                }
-                                            />
-                                            <JaNeiSpørsmål
-                                                name="svar.barnetillegg.kladd.oppholdInnenforEøs"
-                                                legend="Oppholder seg i EØS-land"
-                                            />
-                                        </div>
-                                    );
-                                }}
-                            />
-
-                            <Button
-                                onClick={() => setVisLeggTilBarnFelt(false)}
-                                className={styles.leggTilBarnButton}
-                                variant="secondary"
-                                type="button"
-                            >
-                                Avbryt
-                            </Button>
-
-                            <Button
-                                onClick={() => {
-                                    const kladd = getValues('svar.barnetillegg.kladd') as
-                                        | Barn
-                                        | undefined;
-                                    if (!kladd) {
-                                        setVisLeggTilBarnFelt(false);
-                                        return;
-                                    }
-                                    const newBarn: Barn = {
-                                        fornavn: kladd.fornavn ?? '',
-                                        etternavn: kladd.etternavn ?? '',
-                                        fødselsdato: kladd.fødselsdato ?? '',
-                                        oppholdInnenforEøs: kladd.oppholdInnenforEøs ?? false,
-                                        uuid: kladd.uuid || `${Date.now()}`,
-                                    };
-                                    setManuelleBarn((prev) => [...prev, newBarn]);
-                                    setValue('svar.barnetillegg.kladd', {
-                                        fornavn: '',
-                                        etternavn: '',
-                                        fødselsdato: '',
-                                        oppholdInnenforEøs: false,
-                                        uuid: '',
-                                    });
-                                    setVisLeggTilBarnFelt(false);
-                                }}
-                                variant="primary"
-                                type="button"
-                            >
-                                Legg til barn
-                            </Button>
-                        </div>
-                    )}
+                    <LeggTilBarnManuelt onAppend={(barn) => manuelleBarn.append(barn)} />
                 </div>
             )}
         </div>
