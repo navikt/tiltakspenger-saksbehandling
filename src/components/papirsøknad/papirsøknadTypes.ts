@@ -29,8 +29,8 @@ export interface Tiltak {
 }
 
 export interface Barnetillegg {
-    manueltRegistrerteBarnSøktBarnetilleggFor: Barn[];
-    eøsOppholdForBarnFraAPI: Record<string, boolean>;
+    manueltRegistrerteBarn: Barn[];
+    barnFraFolkeregisteret: Barn[];
     kladd: Barn;
 }
 
@@ -101,14 +101,15 @@ export interface Barn {
     uuid: string;
     oppholdInnenforEøs?: boolean;
     index?: number;
+    manueltRegistrertBarnHarVedlegg?: boolean;
 }
 
 const defaultValues = {
     svar: {
         tiltak: {},
         barnetillegg: {
-            eøsOppholdForBarnFraAPI: {},
-            manueltRegistrerteBarnSøktBarnetilleggFor: [],
+            barnFraFolkeregisteret: [],
+            manueltRegistrerteBarn: [],
         },
         institusjonsopphold: {},
         introduksjonsprogram: {},
@@ -124,7 +125,6 @@ const defaultValues = {
         mottarAndreUtbetalinger: undefined,
         harTiltak: false,
     },
-    vedlegg: [],
 };
 
 export default defaultValues;
