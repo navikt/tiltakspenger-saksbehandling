@@ -8,6 +8,8 @@ import { useMeldeperiodeKjede } from '../../MeldeperiodeKjedeContext';
 import { Alert, VStack } from '@navikt/ds-react';
 import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
 import { kanBehandle } from '~/utils/tilganger';
+import { UtbetalingStatus } from '~/components/utbetaling/status/UtbetalingStatus';
+import { Simuleringsknapp } from '~/components/behandling/felles/utbetaling/Simulering';
 
 type Props = {
     meldekortBehandling: MeldekortBehandlingProps;
@@ -17,15 +19,8 @@ type Props = {
 export const MeldekortBeregningOppsummering = ({ meldekortBehandling, className }: Props) => {
     const { innloggetSaksbehandler } = useSaksbehandler();
     const { finnForrigeMeldekortBehandling, sisteMeldekortBehandling } = useMeldeperiodeKjede();
-    const {
-        beregning,
-        utbetalingsstatus,
-        navkontor,
-        navkontorNavn,
-        saksbehandler,
-        type,
-        simulering,
-    } = meldekortBehandling;
+    const { beregning, utbetalingsstatus, navkontor, navkontorNavn, saksbehandler, type } =
+        meldekortBehandling;
 
     if (!beregning) {
         return null;
@@ -51,18 +46,13 @@ export const MeldekortBeregningOppsummering = ({ meldekortBehandling, className 
                 beløp={beregning.beregningForMeldekortetsPeriode.beløp}
                 forrigeBeløp={forrigeBeregning?.beregningForMeldekortetsPeriode.beløp}
                 totalBeløp={beregning.totalBeløp}
-                utbetalingStatusProps={{
-                    navkontor,
-                    navkontorNavn,
-                    utbetalingsstatus: meldekortBehandling.erAvsluttet
-                        ? utbetalingsstatus
-                        : undefined,
-                }}
-                simulering={simulering ?? undefined}
-                sakId={meldekortBehandling.sakId}
-                meldekortbehandlingId={meldekortBehandling.id}
-                behandlingsstatus={meldekortBehandling.status}
             />
+            <UtbetalingStatus
+                navkontor={navkontor}
+                navkontorNavn={navkontorNavn}
+                utbetalingsstatus={meldekortBehandling.erAvsluttet ? utbetalingsstatus : undefined}
+            />
+            <Simuleringsknapp simulering={meldekortBehandling.simulering ?? undefined} />
             {skalViseUtfallVarsel && (
                 <Alert variant={totalBeløpDiff < 0 ? 'warning' : 'info'} size={'small'}>
                     {utfallTekst(totalBeløpDiff)}

@@ -9,8 +9,7 @@ import { SøknadsbehandlingTiltak } from '~/components/behandling/søknadsbehand
 import { SøknadsbehandlingAvslagsgrunner } from '~/components/behandling/søknadsbehandling/6-avslagsgrunner/SøknadsbehandlingAvslagsgrunner';
 import { SøknadsbehandlingDagerPerMeldeperiode } from '~/components/behandling/søknadsbehandling/4-dager-per-meldeperiode/SøknadsbehandlingDagerPerMeldeperiode';
 import { SøknadsbehandlingAutomatiskBehandling } from '~/components/behandling/søknadsbehandling/1-automatisk-behandling/SøknadsbehandlingAutomatiskBehandling';
-import { BehandlingUtbetaling } from '../felles/utbetaling/BehandlingUtbetaling';
-import { BehandlingBeregningOgSimulering } from '~/components/simulering/BehandlingBeregningOgSimulering';
+import { BehandlingBeregningOgSimulering } from '~/components/behandling/felles/beregning-og-simulering/BehandlingBeregningOgSimulering';
 
 import style from './SøknadsbehandlingVedtak.module.css';
 
@@ -31,7 +30,6 @@ export const SøknadsbehandlingVedtak = () => {
             <SøknadsbehandlingBrev />
             <Separator />
             <BehandlingBeregningOgSimulering />
-            <BehandlingUtbetaling />
             <SøknadsbehandlingSend />
         </>
     );

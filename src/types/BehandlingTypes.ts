@@ -220,7 +220,7 @@ export type BehandlingUtbetalingProps = {
     beregninger: MeldeperiodeBeregningProps[];
     beregningerSummert: BeregningerSummert;
     simulering?: Simulering;
-    simulertBeregning?: SimulertBeregning;
+    simulertBeregning: SimulertBeregning;
 };
 
 export type BeregningerSummert = {

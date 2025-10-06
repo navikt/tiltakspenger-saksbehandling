@@ -1,58 +1,40 @@
-import { Alert, Heading, VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react';
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { SimuleringDetaljer } from '~/components/simulering/detaljer/SimuleringDetaljer';
 import { Separator } from '~/components/separator/Separator';
-import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
 import { SimuleringOppsummering } from '~/components/simulering/simulering-oppsummering/SimuleringOppsummering';
 import { BeregningOppsummering } from '~/components/simulering/beregning-oppsummering/BeregningOppsummering';
-import { VedtakHjelpetekst } from '~/components/behandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
+import { BehandlingBeregningHeader } from '~/components/behandling/felles/beregning-og-simulering/header/BehandlingBeregningHeader';
 
 import style from './BehandlingBeregningOgSimulering.module.css';
 
 export const BehandlingBeregningOgSimulering = () => {
-    const { nyBeregningVisningToggle } = useFeatureToggles();
-
     const { behandling } = useBehandling();
-
-    if (!nyBeregningVisningToggle) {
-        return null;
-    }
 
     const { utbetaling } = behandling;
 
-    const simulertBeregning = utbetaling?.simulertBeregning;
-
-    if (!simulertBeregning) {
+    if (!utbetaling) {
         return null;
     }
 
+    const { simulertBeregning } = utbetaling;
     const { beregning, simulerteBeløp } = simulertBeregning;
 
     return (
         <>
             <VedtakSeksjon>
                 <VedtakSeksjon.Venstre>
-                    <Heading size={'small'} level={'3'} className={style.header}>
-                        {'Utbetaling (ny versjon under arbeid, vises ikke i prod)'}
-                    </Heading>
-
                     <VStack gap={'5'}>
-                        <BeregningOppsummering beregninger={beregning} />
+                        <BehandlingBeregningHeader
+                            utbetaling={utbetaling}
+                            behandlingStatus={behandling.status}
+                        />
 
-                        {simulerteBeløp ? (
-                            <SimuleringOppsummering simulerteBeløp={simulerteBeløp} />
-                        ) : (
-                            <Alert variant={'warning'}>{'Simulering er ikke tilgjengelig'}</Alert>
-                        )}
+                        <BeregningOppsummering beregninger={beregning} />
+                        <SimuleringOppsummering simulerteBeløp={simulerteBeløp} />
                     </VStack>
                 </VedtakSeksjon.Venstre>
-
-                <VedtakSeksjon.Høyre>
-                    <VedtakHjelpetekst>
-                        {'Her kunne vi kanskje ha en hjelpetekst om utbetaling på en behandling?'}
-                    </VedtakHjelpetekst>
-                </VedtakSeksjon.Høyre>
 
                 <VedtakSeksjon.FullBredde className={style.detaljer}>
                     <SimuleringDetaljer simulertBeregning={simulertBeregning} />
