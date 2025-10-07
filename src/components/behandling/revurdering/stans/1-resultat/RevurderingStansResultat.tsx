@@ -13,13 +13,17 @@ import {
 } from '~/components/behandling/context/BehandlingSkjemaContext';
 
 import style from './RevurderingStansResultat.module.css';
-import { useState } from 'react';
 
 export const RevurderingStansResultat = () => {
     const { rolleForBehandling } = useRevurderingBehandling();
     const { førsteDagSomGirRett, sisteDagSomGirRett } = useSak().sak;
 
-    const { hjemlerForStans, behandlingsperiode } = useBehandlingSkjema();
+    const {
+        hjemlerForStans,
+        behandlingsperiode,
+        harValgtStansFraFørsteDagSomGirRett,
+        harValgtStansTilSisteDagSomGirRett,
+    } = useBehandlingSkjema();
     const dispatch = useBehandlingSkjemaDispatch();
 
     const { gosysUrl, modiaPersonoversiktUrl } = useConfig();
@@ -30,9 +34,6 @@ export const RevurderingStansResultat = () => {
     const modiaPersonoversiktLinkComponent = (
         <Link href={modiaPersonoversiktUrl}>Modia personoversikt</Link>
     );
-
-    const [brukerFørsteDagSomGirRettCheckbox, setFørsteDagSomGirRettCheckbox] = useState(false);
-    const [brukerSisteDagSomGirRettCheckbox, setSisteDagSomGirRettCheckbox] = useState(false);
 
     return (
         <VedtakSeksjon>
@@ -67,39 +68,43 @@ export const RevurderingStansResultat = () => {
                         label={'Stans fra og med'}
                         minDate={førsteDagSomGirRett}
                         maxDate={sisteDagSomGirRett}
-                        readOnly={!erSaksbehandler || brukerFørsteDagSomGirRettCheckbox}
-                        selected={
-                            behandlingsperiode.fraOgMed
-                                ? dateTilISOTekst(behandlingsperiode.fraOgMed)
-                                : ''
-                        }
+                        readOnly={!erSaksbehandler || harValgtStansFraFørsteDagSomGirRett}
+                        selected={behandlingsperiode.fraOgMed}
                         className={style.dato}
                         onDateChange={(valgtDato) => {
+                            if (!valgtDato) {
+                                return;
+                            }
+
                             dispatch({
                                 type: 'oppdaterBehandlingsperiode',
                                 payload: {
                                     periode: {
-                                        fraOgMed: valgtDato
-                                            ? dateTilISOTekst(valgtDato)
-                                            : valgtDato,
+                                        fraOgMed: dateTilISOTekst(valgtDato),
                                     },
                                 },
                             });
                         }}
                     />
+
                     <Checkbox
-                        onChange={(b) => {
-                            setFørsteDagSomGirRettCheckbox(b.target.checked);
-                            dispatch({
-                                type: 'oppdaterBehandlingsperiode',
-                                payload: {
-                                    periode: { fraOgMed: førsteDagSomGirRett },
-                                },
-                            });
+                        readOnly={!erSaksbehandler}
+                        defaultChecked={harValgtStansFraFørsteDagSomGirRett}
+                        onChange={(e) => {
+                            const { checked } = e.target;
+
+                            if (checked) {
+                                dispatch({
+                                    type: 'oppdaterBehandlingsperiode',
+                                    payload: {
+                                        periode: { fraOgMed: førsteDagSomGirRett },
+                                    },
+                                });
+                            }
 
                             dispatch({
                                 type: 'setHarValgtFørsteDagSomGirRett',
-                                payload: { harValgtFørsteDagSomGirRett: b.target.checked },
+                                payload: { harValgtFørsteDagSomGirRett: checked },
                             });
                         }}
                     >
@@ -111,36 +116,41 @@ export const RevurderingStansResultat = () => {
                         label={'Stans til og med'}
                         minDate={førsteDagSomGirRett}
                         maxDate={sisteDagSomGirRett}
-                        readOnly={!erSaksbehandler || brukerSisteDagSomGirRettCheckbox}
-                        selected={
-                            behandlingsperiode.tilOgMed
-                                ? dateTilISOTekst(behandlingsperiode.tilOgMed)
-                                : ''
-                        }
+                        readOnly={!erSaksbehandler || harValgtStansTilSisteDagSomGirRett}
+                        selected={behandlingsperiode.tilOgMed}
                         className={style.dato}
                         onDateChange={(valgtDato) => {
+                            if (!valgtDato) {
+                                return;
+                            }
+
                             dispatch({
                                 type: 'oppdaterBehandlingsperiode',
                                 payload: {
                                     periode: {
-                                        tilOgMed: valgtDato
-                                            ? dateTilISOTekst(valgtDato)
-                                            : valgtDato,
+                                        tilOgMed: dateTilISOTekst(valgtDato),
                                     },
                                 },
                             });
                         }}
                     />
+
                     <Checkbox
-                        onChange={(b) => {
-                            setSisteDagSomGirRettCheckbox(b.target.checked);
-                            dispatch({
-                                type: 'oppdaterBehandlingsperiode',
-                                payload: { periode: { tilOgMed: sisteDagSomGirRett } },
-                            });
+                        readOnly={!erSaksbehandler}
+                        defaultChecked={harValgtStansTilSisteDagSomGirRett}
+                        onChange={(e) => {
+                            const { checked } = e.target;
+
+                            if (checked) {
+                                dispatch({
+                                    type: 'oppdaterBehandlingsperiode',
+                                    payload: { periode: { tilOgMed: sisteDagSomGirRett } },
+                                });
+                            }
+
                             dispatch({
                                 type: 'setHarValgtSisteDagSomGirRett',
-                                payload: { harValgtSisteDagSomGirRett: b.target.checked },
+                                payload: { harValgtSisteDagSomGirRett: checked },
                             });
                         }}
                     >
