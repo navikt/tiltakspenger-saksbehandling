@@ -69,6 +69,7 @@ export const RevurderingStansResultat = () => {
                         minDate={førsteDagSomGirRett}
                         maxDate={sisteDagSomGirRett}
                         readOnly={!erSaksbehandler || harValgtStansFraFørsteDagSomGirRett}
+                        defaultSelected={behandlingsperiode.fraOgMed}
                         selected={behandlingsperiode.fraOgMed}
                         className={style.dato}
                         onDateChange={(valgtDato) => {
@@ -117,6 +118,7 @@ export const RevurderingStansResultat = () => {
                         minDate={førsteDagSomGirRett}
                         maxDate={sisteDagSomGirRett}
                         readOnly={!erSaksbehandler || harValgtStansTilSisteDagSomGirRett}
+                        defaultSelected={behandlingsperiode.tilOgMed}
                         selected={behandlingsperiode.tilOgMed}
                         className={style.dato}
                         onDateChange={(valgtDato) => {

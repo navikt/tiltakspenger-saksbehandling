@@ -1,5 +1,5 @@
 import { DatePicker, useDatepicker } from '@navikt/ds-react';
-import { ComponentProps } from 'react';
+import { ComponentProps, useEffect } from 'react';
 
 type DateOrString = Date | string;
 
@@ -27,11 +27,14 @@ export const Datovelger = ({
         defaultSelected: toDate(defaultSelected),
     });
 
-    const newSelectedDay = toDate(selected);
+    useEffect(() => {
+        const newSelectedDay = toDate(selected);
 
-    if (newSelectedDay && newSelectedDay.getTime() !== selectedDay?.getTime()) {
-        setSelected(newSelectedDay);
-    }
+        // Oppdaterer ikke når verdien ikke endres, for å hindre infinite loop i noen tilfeller ved bruk som controlled component
+        if (newSelectedDay && newSelectedDay.getTime() !== selectedDay?.getTime()) {
+            setSelected(newSelectedDay);
+        }
+    }, [selected]);
 
     return (
         <DatePicker {...datepickerProps}>
