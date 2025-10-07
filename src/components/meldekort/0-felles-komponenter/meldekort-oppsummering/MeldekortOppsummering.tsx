@@ -1,6 +1,6 @@
 import { BodyShort, VStack } from '@navikt/ds-react';
-import { formaterTidspunktKort } from '../../../../utils/date';
-import { MeldekortBehandlingProps } from '../../../../types/meldekort/MeldekortBehandling';
+import { formaterTidspunktKort } from '~/utils/date';
+import { MeldekortBehandlingProps } from '~/types/meldekort/MeldekortBehandling';
 import { MeldekortUker } from '../uker/MeldekortUker';
 import { MeldekortBeregningOppsummering } from '../beregning-oppsummering/MeldekortBeregningOppsummering';
 import { MeldekortBegrunnelse } from '../begrunnelse/MeldekortBegrunnelse';

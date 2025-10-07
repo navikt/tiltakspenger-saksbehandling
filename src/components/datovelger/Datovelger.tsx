@@ -1,5 +1,5 @@
 import { DatePicker, useDatepicker } from '@navikt/ds-react';
-import { ComponentProps, useEffect } from 'react';
+import { ComponentProps } from 'react';
 
 type DateOrString = Date | string;
 
@@ -19,7 +19,7 @@ export const Datovelger = ({
     minDate,
     ...inputPropsCustom
 }: Props) => {
-    const { datepickerProps, inputProps, setSelected } = useDatepicker({
+    const { datepickerProps, inputProps, setSelected, selectedDay } = useDatepicker({
         onDateChange,
         fromDate: toDate(minDate),
         defaultMonth: toDate(minDate),
@@ -27,9 +27,11 @@ export const Datovelger = ({
         defaultSelected: toDate(defaultSelected),
     });
 
-    useEffect(() => {
-        setSelected(toDate(selected));
-    }, [selected]);
+    const newSelectedDay = toDate(selected);
+
+    if (newSelectedDay && newSelectedDay.getTime() !== selectedDay?.getTime()) {
+        setSelected(newSelectedDay);
+    }
 
     return (
         <DatePicker {...datepickerProps}>

@@ -8,7 +8,6 @@ import { Ytelse } from '~/types/Ytelse';
 import { BarnetilleggData } from './Barnetillegg';
 import { MeldeperiodeBeregningProps } from '~/types/Beregning';
 import { MeldekortBehandlingProps, Utbetalingsstatus } from '~/types/meldekort/MeldekortBehandling';
-import { Simulering } from './Simulering';
 import { ArenaTPVedtak } from '~/types/ArenaTPVedtak';
 import { SimulertBeregning } from '~/types/SimulertBeregningTypes';
 
@@ -219,7 +218,6 @@ export type BehandlingUtbetalingProps = {
     status: Utbetalingsstatus;
     beregninger: MeldeperiodeBeregningProps[];
     beregningerSummert: BeregningerSummert;
-    simulering?: Simulering;
     simulertBeregning: SimulertBeregning;
 };
 

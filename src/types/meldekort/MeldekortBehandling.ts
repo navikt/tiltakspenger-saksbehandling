@@ -7,6 +7,7 @@ import { Simulering } from '../Simulering';
 import { Nullable } from '~/types/UtilTypes';
 import { BeløpProps, MeldeperiodeBeregningProps } from '~/types/Beregning';
 import { SakId } from '../SakTypes';
+import { SimulertBeregning } from '~/types/SimulertBeregningTypes';
 
 // "_behandling"-suffixen er ikke reell, er kun for at typescript ikke skal se denne som ekvivalent med BrukersMeldekortId
 // Ikke gjør run-time typesjekk på denne!
@@ -80,6 +81,7 @@ export type MeldekortBehandlingProps = {
     beregning?: MeldekortBeregning;
     avbrutt?: Avbrutt;
     simulering: Nullable<Simulering>;
+    simulertBeregning: Nullable<SimulertBeregning>;
 };
 
 export type MeldekortDagProps = {
