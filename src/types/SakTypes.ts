@@ -1,8 +1,10 @@
 import { BehandlingData, BehandlingForOversiktData } from './BehandlingTypes';
-import { MeldeperiodeKjedeProps } from './meldekort/Meldeperiode';
+import { MeldeperiodeKjedeId, MeldeperiodeKjedeProps } from './meldekort/Meldeperiode';
 import { SøknadForBehandlingProps } from './SøknadTypes';
 import { Rammevedtak } from '~/types/VedtakTyper';
-import { UtbetalingstidslinjePeriode } from './UtbetalingTypes';
+import { Periode } from '~/types/Periode';
+import { BeløpProps } from '~/types/Beregning';
+import { Utbetalingsstatus } from '~/types/meldekort/MeldekortBehandling';
 
 export type SakId = `sak_${string}`;
 
@@ -18,4 +20,11 @@ export type SakProps = {
     behandlinger: BehandlingData[];
     tidslinje: Rammevedtak[];
     utbetalingstidslinje: UtbetalingstidslinjePeriode[];
+};
+
+type UtbetalingstidslinjePeriode = {
+    kjedeId: MeldeperiodeKjedeId;
+    periode: Periode;
+    beløp: BeløpProps;
+    status: Utbetalingsstatus;
 };

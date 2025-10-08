@@ -1,6 +1,7 @@
 import { MeldeperiodeKjedeId } from '~/types/meldekort/Meldeperiode';
 import { Periode } from '~/types/Periode';
 import { MeldekortDagBeregnetProps } from '~/types/meldekort/MeldekortBehandling';
+import { Nullable } from '~/types/UtilTypes';
 
 export type BeløpProps = {
     totalt: number;
@@ -13,4 +14,15 @@ export type MeldeperiodeBeregningProps = {
     periode: Periode;
     beløp: BeløpProps;
     dager: MeldekortDagBeregnetProps[];
+};
+
+export type BeregningerSummert = {
+    totalt: BeløpFørOgNå;
+    ordinært: BeløpFørOgNå;
+    barnetillegg: BeløpFørOgNå;
+};
+
+export type BeløpFørOgNå = {
+    før: Nullable<number>;
+    nå: number;
 };

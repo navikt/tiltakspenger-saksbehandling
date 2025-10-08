@@ -3,16 +3,17 @@ import { Button, Table } from '@navikt/ds-react';
 import { Fragment, useState } from 'react';
 import { classNames } from '~/utils/classNames';
 import { ChevronDownIcon } from '@navikt/aksel-icons';
-import { SimuleringDetaljerMeldeperiode } from '~/components/simulering/detaljer/meldeperiode/SimuleringDetaljerMeldeperiode';
+import { SimuleringDetaljerMeldeperiode } from '~/components/beregning-og-simulering/detaljer/meldeperiode/SimuleringDetaljerMeldeperiode';
 
 import style from './SimuleringDetaljer.module.css';
 
 type Props = {
     simulertBeregning: SimulertBeregning;
+    className?: string;
 };
 
-export const SimuleringDetaljer = ({ simulertBeregning }: Props) => {
-    const [åpen, setÅpen] = useState(true);
+export const SimuleringDetaljer = ({ simulertBeregning, className }: Props) => {
+    const [åpen, setÅpen] = useState(false);
 
     const { meldeperioder } = simulertBeregning;
 
@@ -33,7 +34,7 @@ export const SimuleringDetaljer = ({ simulertBeregning }: Props) => {
                 {`${åpen ? 'Skjul' : 'Vis'} detaljer`}
             </Button>
 
-            <div className={classNames(style.detaljer, åpen && style.åpen)}>
+            <div className={classNames(style.detaljer, åpen && style.åpen, className)}>
                 <Table size={'small'}>
                     <Table.Body>
                         {meldeperioder.map((meldeperiode, index) => (

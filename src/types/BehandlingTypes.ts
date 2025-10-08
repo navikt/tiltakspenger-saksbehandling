@@ -6,12 +6,13 @@ import { Avbrutt } from './Avbrutt';
 import { Nullable } from '~/types/UtilTypes';
 import { Ytelse } from '~/types/Ytelse';
 import { BarnetilleggData } from './Barnetillegg';
-import { MeldeperiodeBeregningProps } from '~/types/Beregning';
-import { MeldekortBehandlingProps, Utbetalingsstatus } from '~/types/meldekort/MeldekortBehandling';
+import { Utbetalingsstatus } from '~/types/meldekort/MeldekortBehandling';
 import { ArenaTPVedtak } from '~/types/ArenaTPVedtak';
 import { SimulertBeregning } from '~/types/SimulertBeregningTypes';
 
 export type BehandlingId = `beh_${string}`;
+
+// TODO: rename alt her fra Behandling til Rammebehandling, for å speile backend-navngivning og tydeligere skille fra MeldekortBehandling
 
 type BehandlingDataCommon = {
     id: BehandlingId;
@@ -33,10 +34,10 @@ type BehandlingDataCommon = {
     utbetaling: Nullable<BehandlingUtbetalingProps>;
 };
 
-export interface AntallDagerForMeldeperiode {
+export type AntallDagerForMeldeperiode = {
     antallDagerPerMeldeperiode: number;
     periode: Periode;
-}
+};
 
 type InnvilgelseResultatData = {
     barnetillegg: Nullable<BarnetilleggData>;
@@ -70,8 +71,6 @@ export type RevurderingData = BehandlingDataCommon & {
     StansResultatData;
 
 export type BehandlingData = SøknadsbehandlingData | RevurderingData;
-
-export type AlleBehandlingData = SøknadsbehandlingData | RevurderingData | MeldekortBehandlingProps;
 
 export type BehandlingSaksopplysningerData = {
     fødselsdato: string;
@@ -204,30 +203,17 @@ export enum RevurderingResultat {
 
 export type BehandlingResultat = SøknadsbehandlingResultat | RevurderingResultat;
 
-export interface VentestatusHendelse {
+export type VentestatusHendelse = {
     sattPåVentAv: string;
     tidspunkt: string;
     begrunnelse: string;
     erSattPåVent: boolean;
     behandlingStatus: BehandlingStatus;
-}
+};
 
 export type BehandlingUtbetalingProps = {
     navkontor: string;
     navkontorNavn?: string;
     status: Utbetalingsstatus;
-    beregninger: MeldeperiodeBeregningProps[];
-    beregningerSummert: BeregningerSummert;
     simulertBeregning: SimulertBeregning;
-};
-
-export type BeregningerSummert = {
-    totalt: BeløpFørOgNå;
-    ordinært: BeløpFørOgNå;
-    barnetillegg: BeløpFørOgNå;
-};
-
-export type BeløpFørOgNå = {
-    før: Nullable<number>;
-    nå: number;
 };

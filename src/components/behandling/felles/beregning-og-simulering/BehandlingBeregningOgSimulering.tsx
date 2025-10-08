@@ -1,38 +1,59 @@
 import { VStack } from '@navikt/ds-react';
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
-import { SimuleringDetaljer } from '~/components/simulering/detaljer/SimuleringDetaljer';
+import { SimuleringDetaljer } from '~/components/beregning-og-simulering/detaljer/SimuleringDetaljer';
 import { Separator } from '~/components/separator/Separator';
-import { SimuleringOppsummering } from '~/components/simulering/simulering-oppsummering/SimuleringOppsummering';
-import { BeregningOppsummering } from '~/components/simulering/beregning-oppsummering/BeregningOppsummering';
-import { BehandlingBeregningHeader } from '~/components/behandling/felles/beregning-og-simulering/header/BehandlingBeregningHeader';
+import { SimuleringOppsummering } from '~/components/beregning-og-simulering/simulering-oppsummering/SimuleringOppsummering';
+import { BeregningOppsummering } from '~/components/beregning-og-simulering/beregning-oppsummering/BeregningOppsummering';
+import { BeregningOgSimuleringHeader } from '~/components/beregning-og-simulering/header/BeregningOgSimuleringHeader';
+import { BehandlingData, BehandlingStatus } from '~/types/BehandlingTypes';
+import { kanSaksbehandleForBehandling } from '~/utils/tilganger';
+import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
 
 import style from './BehandlingBeregningOgSimulering.module.css';
 
 export const BehandlingBeregningOgSimulering = () => {
-    const { behandling } = useBehandling();
+    const { behandling, setBehandling } = useBehandling();
+    const { innloggetSaksbehandler } = useSaksbehandler();
 
-    const { utbetaling } = behandling;
+    const { utbetaling, status } = behandling;
 
     if (!utbetaling) {
         return null;
     }
 
-    const { simulertBeregning } = utbetaling;
+    const { simulertBeregning, status: utbetalingsstatus, navkontor, navkontorNavn } = utbetaling;
     const { beregning, simulerteBeløp } = simulertBeregning;
+
+    kanSaksbehandleForBehandling(behandling, innloggetSaksbehandler);
 
     return (
         <>
             <VedtakSeksjon>
                 <VedtakSeksjon.Venstre>
                     <VStack gap={'5'}>
-                        <BehandlingBeregningHeader
-                            utbetaling={utbetaling}
-                            behandlingStatus={behandling.status}
+                        <BeregningOgSimuleringHeader
+                            simulertBeregning={simulertBeregning}
+                            navkontor={navkontor}
+                            navkontorNavn={navkontorNavn}
+                            utbetalingsstatus={
+                                status === BehandlingStatus.VEDTATT ? utbetalingsstatus : undefined
+                            }
+                            visEndringVarsel={true}
                         />
 
                         <BeregningOppsummering beregninger={beregning} />
-                        <SimuleringOppsummering simulerteBeløp={simulerteBeløp} />
+                        <SimuleringOppsummering
+                            simulerteBeløp={simulerteBeløp}
+                            behandlingId={behandling.id}
+                            oppdaterBehandlingEllerKjede={(behandling) =>
+                                setBehandling(behandling as BehandlingData)
+                            }
+                            visOppdaterKnapp={kanSaksbehandleForBehandling(
+                                behandling,
+                                innloggetSaksbehandler,
+                            )}
+                        />
                     </VStack>
                 </VedtakSeksjon.Venstre>
 
