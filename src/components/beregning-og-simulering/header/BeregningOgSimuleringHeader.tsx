@@ -28,10 +28,13 @@ export const BeregningOgSimuleringHeader = ({
     const { meldeperioder, beregning } = simulertBeregning;
     const { totalt } = beregning;
 
-    const periode: Periode = {
-        fraOgMed: meldeperioder.at(0)!.dager.at(0)!.dato,
-        tilOgMed: meldeperioder.at(-1)!.dager.at(-1)!.dato,
-    };
+    const periode: Periode | undefined =
+        meldeperioder.length > 0
+            ? {
+                  fraOgMed: meldeperioder.at(0)!.dager.at(0)!.dato,
+                  tilOgMed: meldeperioder.at(-1)!.dager.at(-1)!.dato,
+              }
+            : undefined;
 
     const totalDiff = totalt.nå - (totalt.før ?? 0);
 
@@ -43,7 +46,7 @@ export const BeregningOgSimuleringHeader = ({
                 {'Utbetaling'}
             </Heading>
 
-            {visEndringVarsel && (
+            {visEndringVarsel && periode && (
                 <Alert
                     variant={'info'}
                     inline={true}
