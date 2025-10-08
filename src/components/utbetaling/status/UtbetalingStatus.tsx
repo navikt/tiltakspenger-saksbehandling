@@ -18,7 +18,7 @@ export const UtbetalingStatus = ({
     return (
         <VStack gap={'1'}>
             <HStack gap={'5'} className={style.rad}>
-                <BodyShort>{'Nav-kontor det skal utbetales fra:'}</BodyShort>
+                <BodyShort>{'Nav-kontor for utbetaling:'}</BodyShort>
                 <BodyShort weight={'semibold'}>
                     {navkontorNavn ? `${navkontorNavn} (${navkontor})` : navkontor}
                 </BodyShort>

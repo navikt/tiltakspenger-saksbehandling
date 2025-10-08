@@ -2,10 +2,10 @@ import { Table } from '@navikt/ds-react';
 import { SimulertBeregningPerMeldeperiode } from '~/types/SimulertBeregningTypes';
 import { classNames } from '~/utils/classNames';
 import { useState } from 'react';
-import { SimuleringOppsummeringDetaljert } from '~/components/simulering/detaljer/meldeperiode/oppsummering/SimuleringOppsummeringDetaljert';
+import { SimuleringOppsummeringDetaljert } from '~/components/beregning-og-simulering/detaljer/meldeperiode/oppsummering/SimuleringOppsummeringDetaljert';
 import { beløpStyle } from '~/components/utbetaling/beløp/beløpStyle';
-import { SimuleringDetaljerDag } from '~/components/simulering/detaljer/meldeperiode/dag/SimuleringDetaljerDag';
-import { SimuleringDetaljerMeldeperiodeHeader } from '~/components/simulering/detaljer/meldeperiode/header/SimuleringDetaljerMeldeperiodeHeader';
+import { SimuleringDetaljerDag } from '~/components/beregning-og-simulering/detaljer/meldeperiode/dag/SimuleringDetaljerDag';
+import { SimuleringDetaljerMeldeperiodeHeader } from '~/components/beregning-og-simulering/detaljer/meldeperiode/header/SimuleringDetaljerMeldeperiodeHeader';
 
 import style from './SimuleringDetaljerMeldeperiode.module.css';
 

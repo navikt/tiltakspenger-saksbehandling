@@ -1,9 +1,6 @@
 .behandlingLayout {
     display: grid;
-    grid-template-columns: minmax(350px, min-content) minmax(700px, min-content) minmax(
-            625px,
-            min-content
-        );
+    grid-template-columns: 350px 700px 625px;
     min-height: 100vh;
     background-color: var(--a-bg-subtle);
     gap: 1.25rem;

@@ -7,7 +7,7 @@ import { meldekortBehandlingDagStatusTekst } from '~/utils/tekstformateringUtils
 import { beløpStyle } from '~/components/utbetaling/beløp/beløpStyle';
 import { useState } from 'react';
 import { MinusIcon, PlusIcon } from '@navikt/aksel-icons';
-import { SimuleringOppsummeringDetaljert } from '~/components/simulering/detaljer/meldeperiode/oppsummering/SimuleringOppsummeringDetaljert';
+import { SimuleringOppsummeringDetaljert } from '~/components/beregning-og-simulering/detaljer/meldeperiode/oppsummering/SimuleringOppsummeringDetaljert';
 
 import style from './SimuleringDetaljerDager.module.css';
 

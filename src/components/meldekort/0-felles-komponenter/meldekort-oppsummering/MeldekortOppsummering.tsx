@@ -2,8 +2,8 @@ import { BodyShort, VStack } from '@navikt/ds-react';
 import { formaterTidspunktKort } from '~/utils/date';
 import { MeldekortBehandlingProps } from '~/types/meldekort/MeldekortBehandling';
 import { MeldekortUker } from '../uker/MeldekortUker';
-import { MeldekortBeregningOppsummering } from '../beregning-oppsummering/MeldekortBeregningOppsummering';
 import { MeldekortBegrunnelse } from '../begrunnelse/MeldekortBegrunnelse';
+import { MeldekortBeregningOgSimulering } from '~/components/meldekort/0-felles-komponenter/beregning-simulering/MeldekortBeregningOgSimulering';
 
 type Props = {
     meldekortBehandling: MeldekortBehandlingProps;
@@ -21,7 +21,7 @@ export const MeldekortOppsummering = ({ meldekortBehandling }: Props) => {
                     <strong>{formaterTidspunktKort(godkjentTidspunkt)}</strong>
                 </BodyShort>
             )}
-            <MeldekortBeregningOppsummering meldekortBehandling={meldekortBehandling} />
+            <MeldekortBeregningOgSimulering meldekortBehandling={meldekortBehandling} />
             {begrunnelse && <MeldekortBegrunnelse readOnly={true} defaultValue={begrunnelse} />}
         </VStack>
     );

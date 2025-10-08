@@ -16,13 +16,13 @@ import { MeldekortUker } from '../../../0-felles-komponenter/uker/MeldekortUker'
 import { MeldekortUtfyllingLagre } from './lagre/MeldekortUtfyllingLagre';
 import { MeldekortSendTilBeslutning } from '../beslutning/MeldekortSendTilBeslutning';
 import React, { useEffect, useState } from 'react';
-import { MeldekortBeregningOppsummering } from '../../../0-felles-komponenter/beregning-oppsummering/MeldekortBeregningOppsummering';
 import { classNames } from '~/utils/classNames';
 import { MeldekortBegrunnelse } from '../../../0-felles-komponenter/begrunnelse/MeldekortBegrunnelse';
 import AvsluttMeldekortBehandling from '../../../../saksoversikt/meldekort-oversikt/avsluttMeldekortBehandling/AvsluttMeldekortBehandling';
 import { meldeperiodeUrl } from '~/utils/urls';
 
 import styles from './MeldekortUtfylling.module.css';
+import { MeldekortBeregningOgSimulering } from '~/components/meldekort/0-felles-komponenter/beregning-simulering/MeldekortBeregningOgSimulering';
 
 type Props = {
     meldekortBehandling: MeldekortBehandlingProps;
@@ -99,7 +99,7 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
                             {'Trykk "lagre og beregn" for å oppdatere beregningene'}
                         </Alert>
                     )}
-                    <MeldekortBeregningOppsummering
+                    <MeldekortBeregningOgSimulering
                         meldekortBehandling={meldekortBehandling}
                         className={classNames(skjemaErEndret && styles.utdatertBeregning)}
                     />
