@@ -3,15 +3,13 @@ import {
     MeldekortBehandlingStatus,
     MeldekortBehandlingType,
 } from '~/types/meldekort/MeldekortBehandling';
-import { Alert, BodyShort, VStack } from '@navikt/ds-react';
+import { Alert, VStack } from '@navikt/ds-react';
 import { BeregningOppsummering } from '~/components/beregning-og-simulering/beregning-oppsummering/BeregningOppsummering';
 import { SimuleringOppsummering } from '~/components/beregning-og-simulering/simulering-oppsummering/SimuleringOppsummering';
 import { SimuleringDetaljer } from '~/components/beregning-og-simulering/detaljer/SimuleringDetaljer';
 import { useMeldeperiodeKjede } from '~/components/meldekort/MeldeperiodeKjedeContext';
 import { MeldeperiodeKjedeProps } from '~/types/meldekort/Meldeperiode';
 import { BeregningOgSimuleringHeader } from '~/components/beregning-og-simulering/header/BeregningOgSimuleringHeader';
-import { Simulering } from '~/types/Simulering';
-import { erSimuleringEndring } from '~/utils/simuleringUtils';
 import { kanBehandle, kanSaksbehandleForMeldekort } from '~/utils/tilganger';
 import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
 
@@ -97,30 +95,30 @@ const utfallTekst = (beløpDiff: number) => {
     return 'Husk å informere bruker om utfallet av korrigeringen i Modia selv om det ikke vil ha en praktisk betydning for utbetalingen.';
 };
 
-//eslint-disable-next-line @typescript-eslint/no-unused-vars
-const OppsummeringAvSimulering = (props: { simulering: Simulering }) => {
-    const erFeilutbetalingStørreEnn0 =
-        erSimuleringEndring(props.simulering) && props.simulering.totalFeilutbetaling > 0;
-
-    return (
-        <VStack gap="6">
-            {erFeilutbetalingStørreEnn0 && (
-                <Alert variant={'warning'} size="small">
-                    Denne behandlingen vil føre til feilutbetaling eller trekk for bruker.
-                    Saksbehandler bør se nøye over simuleringen for å vurdere konsekvensen for
-                    bruker og i noen tilfeller må man opprette en JIRA-sak hos Økonomi slik at de
-                    får endret utbetalingen til ønsket resultat.
-                </Alert>
-            )}
-            {props.simulering.type === 'IngenEndring' && <OppsummeringAvSimuleringIngenEndring />}
-        </VStack>
-    );
-};
-
-const OppsummeringAvSimuleringIngenEndring = () => {
-    return (
-        <div>
-            <BodyShort>Simuleringen har ført til ingen endring</BodyShort>
-        </div>
-    );
-};
+// TODO: reimplementer disse?
+// const OppsummeringAvSimulering = () => {
+//     const erFeilutbetalingStørreEnn0 =
+//         erSimuleringEndring(props.simulering) && props.simulering.totalFeilutbetaling > 0;
+//
+//     return (
+//         <VStack gap="6">
+//             {erFeilutbetalingStørreEnn0 && (
+//                 <Alert variant={'warning'} size="small">
+//                     Denne behandlingen vil føre til feilutbetaling eller trekk for bruker.
+//                     Saksbehandler bør se nøye over simuleringen for å vurdere konsekvensen for
+//                     bruker og i noen tilfeller må man opprette en JIRA-sak hos Økonomi slik at de
+//                     får endret utbetalingen til ønsket resultat.
+//                 </Alert>
+//             )}
+//             {props.simulering.type === 'IngenEndring' && <OppsummeringAvSimuleringIngenEndring />}
+//         </VStack>
+//     );
+// };
+//
+// const OppsummeringAvSimuleringIngenEndring = () => {
+//     return (
+//         <div>
+//             <BodyShort>Simuleringen har ført til ingen endring</BodyShort>
+//         </div>
+//     );
+// };

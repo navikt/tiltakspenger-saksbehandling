@@ -3,7 +3,6 @@ import { MeldeperiodeId } from './Meldeperiode';
 import { Periode } from '../Periode';
 import { BrukersMeldekortId } from './BrukersMeldekort';
 import { Avbrutt } from '../Avbrutt';
-import { Simulering } from '../Simulering';
 import { Nullable } from '~/types/UtilTypes';
 import { BeløpProps, MeldeperiodeBeregningProps } from '~/types/Beregning';
 import { SakId } from '../SakTypes';
@@ -80,7 +79,6 @@ export type MeldekortBehandlingProps = {
     dager: MeldekortDagProps[];
     beregning?: MeldekortBeregning;
     avbrutt?: Avbrutt;
-    simulering: Nullable<Simulering>;
     simulertBeregning: Nullable<SimulertBeregning>;
 };
 
