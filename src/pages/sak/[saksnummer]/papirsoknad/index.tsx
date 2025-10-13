@@ -15,7 +15,7 @@ import React from 'react';
 import { Periodevelger } from '~/components/papirsøknad/Periodevelger';
 import { dateTilISOTekst, datoTilDatoInputText } from '~/utils/date';
 import { VelgTiltak } from '~/components/papirsøknad/VelgTiltak';
-import { Barnetillegg } from '~/components/papirsøknad/Barnetillegg';
+import { Barnetillegg } from '../../../../components/papirsøknad/barnetillegg/Barnetillegg';
 
 interface Props {
     sak: SakProps;
@@ -132,6 +132,7 @@ const PapirsøknadPage = (props: Props) => {
                             />
 
                             <Barnetillegg
+                                sakId={props.sak.sakId}
                                 name="svar.harSøktOmBarnetillegg"
                                 legend="Har bruker søkt barnetillegg?"
                             />
