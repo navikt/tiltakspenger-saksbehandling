@@ -13,8 +13,10 @@ import styles from './Saksoversikt.module.css';
 import { VedtatteBehandlinger } from '~/components/saksoversikt/behandlinger-oversikt/VedtatteBehandlinger';
 import NotificationBanner from '../notificationBanner/NotificationBanner';
 import { OpprettPapirsøknad } from '~/components/saksoversikt/papirsøknad/OpprettPapirsøknad';
+import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
 
 export const Saksoversikt = () => {
+    const { papirsøknadToggle } = useFeatureToggles();
     const { sakId, saksnummer, behandlinger, behandlingsoversikt, søknader, meldeperiodeKjeder } =
         useSak().sak;
 
@@ -54,10 +56,12 @@ export const Saksoversikt = () => {
                             sakId={sakId}
                             harVedtak={harVedtattSøknadsbehandling(behandlinger)}
                         />
-                        <OpprettPapirsøknad
-                            saksnummer={saksnummer}
-                            harVedtak={harVedtattSøknadsbehandling(behandlinger)}
-                        />
+                        {papirsøknadToggle && (
+                            <OpprettPapirsøknad
+                                saksnummer={saksnummer}
+                                harVedtak={harVedtattSøknadsbehandling(behandlinger)}
+                            />
+                        )}
                     </HStack>
                 </HStack>
                 <Box className={styles.tabellwrapper}>

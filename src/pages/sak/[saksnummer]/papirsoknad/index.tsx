@@ -15,13 +15,15 @@ import React from 'react';
 import { Periodevelger } from '~/components/papirsøknad/Periodevelger';
 import { dateTilISOTekst, datoTilDatoInputText } from '~/utils/date';
 import { VelgTiltak } from '~/components/papirsøknad/VelgTiltak';
-import { Barnetillegg } from '../../../../components/papirsøknad/barnetillegg/Barnetillegg';
+import { Barnetillegg } from '~/components/papirsøknad/barnetillegg/Barnetillegg';
+import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
 
 interface Props {
     sak: SakProps;
 }
 
 const PapirsøknadPage = (props: Props) => {
+    const { papirsøknadToggle } = useFeatureToggles();
     const formContext = useForm<Søknad>({
         defaultValues: defaultValues,
         mode: 'onSubmit',
@@ -30,6 +32,8 @@ const PapirsøknadPage = (props: Props) => {
     const { handleSubmit, control } = formContext;
 
     const onSubmit = (data: Søknad) => {
+        if (!papirsøknadToggle) return;
+        // TODO Ikke implementert ennå.
         console.log('form data', data);
     };
 
