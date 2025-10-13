@@ -15,8 +15,10 @@ import NotificationBanner from '../notificationBanner/NotificationBanner';
 import MeldekortHelgToggle from '../toggles/MeldekortHelgToggle';
 import { Rammebehandling, Behandlingsstatus, Behandlingstype } from '~/types/Behandling';
 import { OpprettPapirsøknad } from '~/components/saksoversikt/papirsøknad/OpprettPapirsøknad';
+import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
 
 export const Saksoversikt = () => {
+    const { papirsøknadToggle } = useFeatureToggles();
     const {
         sakId,
         saksnummer,
@@ -64,10 +66,12 @@ export const Saksoversikt = () => {
                     <Spacer />
                     <HStack gap="3">
                         <MeldekortHelgToggle />
-                        <OpprettPapirsøknad
-                            saksnummer={saksnummer}
-                            harVedtak={harVedtattSøknadsbehandling(behandlinger)}
-                        />
+                        {papirsøknadToggle && (
+                            <OpprettPapirsøknad
+                                saksnummer={saksnummer}
+                                harVedtak={harVedtattSøknadsbehandling(behandlinger)}
+                            />
+                        )}
                         <OpprettRevurdering
                             sakId={sakId}
                             harVedtak={harVedtattSøknadsbehandling(behandlinger)}
