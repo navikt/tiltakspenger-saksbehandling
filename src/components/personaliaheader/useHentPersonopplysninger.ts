@@ -11,6 +11,7 @@ export type Personopplysninger = {
     skjerming: boolean;
     strengtFortrolig: boolean;
     fortrolig: boolean;
+    dødsdato?: string;
 };
 
 export const useHentPersonopplysninger = (sakId: SakId) => {
