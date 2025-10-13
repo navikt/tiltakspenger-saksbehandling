@@ -1,0 +1,20 @@
+.blokkUtvidet {
+    background-color: var(--a-gray-50);
+}
+
+.blokk {
+    padding: 0.5rem;
+}
+
+.informasjonsInnhentingBlokk {
+    background-color: var(--a-blue-50);
+    border: 1px solid var(--a-border-default);
+}
+
+.finnTiltakButton {
+    margin: 1rem 1rem 1rem 0;
+}
+
+.leggTilBarnButton {
+    background: var(--a-bg-default);
+}

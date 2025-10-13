@@ -1,0 +1,20 @@
+.main {
+    max-width: 50rem;
+    padding: 1rem 2rem;
+    background-color: var(--a-bg-default);
+}
+
+.main > :not(:last-child) {
+    margin-bottom: 1rem;
+}
+
+.vedtakContainer {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--a-white);
+    padding: 2rem;
+}
+
+.blokk {
+    padding: 0.5rem;
+}
