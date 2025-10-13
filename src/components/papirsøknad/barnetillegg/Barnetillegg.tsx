@@ -137,6 +137,11 @@ export const Barnetillegg = ({ sakId, name, legend }: Props) => {
                                             <Tag variant="error">Fortrolig adresse</Tag>
                                         )}
                                         {barn.skjerming && <Tag variant="error">Skjermet</Tag>}
+                                        {barn.dødsdato && (
+                                            <Tag variant="neutral">
+                                                Død {formaterDatotekst(barn.dødsdato)}
+                                            </Tag>
+                                        )}
                                     </HStack>
                                     <JaNeiSpørsmål
                                         name={`svar.barnetillegg.barnFraFolkeregisteret.${index}.oppholdInnenforEøs`}
