@@ -11,7 +11,7 @@ import { BrukersMeldekortProps } from '~/types/meldekort/BrukersMeldekort';
 import { erMeldekortBehandlingUnderAktivBehandling } from '~/utils/MeldekortBehandlingUtils';
 
 export const MeldekortSide = () => {
-    const { sakId, saksnummer } = useSak().sak;
+    const { sakId, saksnummer, kanSendeInnHelgForMeldekort } = useSak().sak;
     const { brukersMeldekort, sisteMeldekortBehandling } = useMeldeperiodeKjede();
 
     //kan være undefined - bruker har enda ikke har sendt inn meldekort, og saksbehandler oppretter meldekortbehandling uten meldekort
@@ -28,7 +28,12 @@ export const MeldekortSide = () => {
 
     return (
         <VStack>
-            <PersonaliaHeader sakId={sakId} saksnummer={saksnummer} visTilbakeKnapp={true} />
+            <PersonaliaHeader
+                sakId={sakId}
+                saksnummer={saksnummer}
+                visTilbakeKnapp={true}
+                kanSendeInnHelgForMeldekort={kanSendeInnHelgForMeldekort}
+            />
             {erSisteMeldekortEtterMeldekortBehandling && (
                 <Alert variant="warning" size="small">
                     Det har kommet inn et nytt korrigert meldekort etter opprettelsen av
