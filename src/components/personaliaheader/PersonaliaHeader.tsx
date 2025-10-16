@@ -55,7 +55,7 @@ export const PersonaliaHeader = ({
     const toggleBrukerSendInnHelgMeldekort = useFetchJsonFraApi<
         SakProps,
         { kanSendeHelg: boolean }
-    >(`/sak/${saksnummer}/toggle-helg-meldekort`, 'POST', {
+    >(`/sak/${sakId}/toggle-helg-meldekort`, 'POST', {
         onSuccess: (sak) => {
             sakContext.setSak(sak!);
         },
