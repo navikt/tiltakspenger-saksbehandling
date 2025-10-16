@@ -14,8 +14,15 @@ import { VedtatteBehandlinger } from '~/components/saksoversikt/behandlinger-ove
 import NotificationBanner from '../notificationBanner/NotificationBanner';
 
 export const Saksoversikt = () => {
-    const { sakId, saksnummer, behandlinger, behandlingsoversikt, søknader, meldeperiodeKjeder } =
-        useSak().sak;
+    const {
+        sakId,
+        saksnummer,
+        behandlinger,
+        behandlingsoversikt,
+        søknader,
+        meldeperiodeKjeder,
+        kanSendeInnHelgForMeldekort,
+    } = useSak().sak;
 
     const { meldeperiodeKjederIkkeKlare, meldeperiodeKjederKlare } = Object.groupBy(
         meldeperiodeKjeder,
@@ -41,7 +48,11 @@ export const Saksoversikt = () => {
     return (
         <>
             <NotificationBanner />
-            <PersonaliaHeader sakId={sakId} saksnummer={saksnummer} />
+            <PersonaliaHeader
+                sakId={sakId}
+                saksnummer={saksnummer}
+                kanSendeInnHelgForMeldekort={kanSendeInnHelgForMeldekort}
+            />
             <Box className={styles.wrapper}>
                 <HStack align="center" className={styles.spacing}>
                     <Heading spacing size="medium" level="2">

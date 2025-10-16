@@ -20,6 +20,7 @@ export type SakProps = {
     behandlinger: BehandlingData[];
     tidslinje: Rammevedtak[];
     utbetalingstidslinje: UtbetalingstidslinjePeriode[];
+    kanSendeInnHelgForMeldekort: boolean;
 };
 
 type UtbetalingstidslinjePeriode = {
