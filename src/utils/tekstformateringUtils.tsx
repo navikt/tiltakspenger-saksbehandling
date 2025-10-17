@@ -132,6 +132,7 @@ export const manueltBehandlesGrunnTekst: Record<ManueltBehandlesGrunn, string> =
     SOKNAD_INSTITUSJONSOPPHOLD: 'Bruker har svart ja på spørsmål om institusjonsopphold i søknaden',
 
     SAKSOPPLYSNING_FANT_IKKE_TILTAK: 'Fant ikke tiltaksdeltakelsen det er søkt for',
+    SAKSOPPLYSNING_TILTAK_MANGLER_PERIODE: 'Tiltaksdeltakelsen det er søkt for mangler periode',
     SAKSOPPLYSNING_OVERLAPPENDE_TILTAK:
         'Bruker har overlappende tiltaksdeltakelser i søknadsperioden',
     SAKSOPPLYSNING_MINDRE_ENN_14_DAGER_MELLOM_TILTAK_OG_SOKNAD:
