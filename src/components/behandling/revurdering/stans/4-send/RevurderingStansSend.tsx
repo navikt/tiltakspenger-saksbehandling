@@ -30,10 +30,8 @@ const tilDTO = (skjema: BehandlingSkjemaContext): RevurderingVedtakStansDTO => {
             ? null
             : skjema.behandlingsperiode.fraOgMed!,
         harValgtStansFraFørsteDagSomGirRett: skjema.harValgtStansFraFørsteDagSomGirRett,
-        stansTilOgMed: skjema.harValgtStansTilSisteDagSomGirRett
-            ? null
-            : skjema.behandlingsperiode.tilOgMed!,
-        harValgtStansTilSisteDagSomGirRett: skjema.harValgtStansTilSisteDagSomGirRett,
+        stansTilOgMed: null,
+        harValgtStansTilSisteDagSomGirRett: true,
         valgteHjemler: skjema.hjemlerForStans!,
     };
 };

@@ -18,12 +18,8 @@ export const RevurderingStansResultat = () => {
     const { rolleForBehandling } = useRevurderingBehandling();
     const { førsteDagSomGirRett, sisteDagSomGirRett } = useSak().sak;
 
-    const {
-        hjemlerForStans,
-        behandlingsperiode,
-        harValgtStansFraFørsteDagSomGirRett,
-        harValgtStansTilSisteDagSomGirRett,
-    } = useBehandlingSkjema();
+    const { hjemlerForStans, behandlingsperiode, harValgtStansFraFørsteDagSomGirRett } =
+        useBehandlingSkjema();
     const dispatch = useBehandlingSkjemaDispatch();
 
     const { gosysUrl, modiaPersonoversiktUrl } = useConfig();
@@ -110,53 +106,6 @@ export const RevurderingStansResultat = () => {
                         }}
                     >
                         Stans fra første dag som gir rett
-                    </Checkbox>
-                </HStack>
-                <HStack align={'end'} gap={'4'}>
-                    <Datovelger
-                        label={'Stans til og med'}
-                        minDate={førsteDagSomGirRett}
-                        maxDate={sisteDagSomGirRett}
-                        readOnly={!erSaksbehandler || harValgtStansTilSisteDagSomGirRett}
-                        defaultSelected={behandlingsperiode.tilOgMed}
-                        selected={behandlingsperiode.tilOgMed}
-                        className={style.dato}
-                        onDateChange={(valgtDato) => {
-                            if (!valgtDato) {
-                                return;
-                            }
-
-                            dispatch({
-                                type: 'oppdaterBehandlingsperiode',
-                                payload: {
-                                    periode: {
-                                        tilOgMed: dateTilISOTekst(valgtDato),
-                                    },
-                                },
-                            });
-                        }}
-                    />
-
-                    <Checkbox
-                        readOnly={!erSaksbehandler}
-                        defaultChecked={harValgtStansTilSisteDagSomGirRett}
-                        onChange={(e) => {
-                            const { checked } = e.target;
-
-                            if (checked) {
-                                dispatch({
-                                    type: 'oppdaterBehandlingsperiode',
-                                    payload: { periode: { tilOgMed: sisteDagSomGirRett } },
-                                });
-                            }
-
-                            dispatch({
-                                type: 'setHarValgtSisteDagSomGirRett',
-                                payload: { harValgtSisteDagSomGirRett: checked },
-                            });
-                        }}
-                    >
-                        Stans til siste dag som gir rett
                     </Checkbox>
                 </HStack>
             </VedtakSeksjon.Venstre>
