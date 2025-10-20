@@ -22,13 +22,12 @@ export const avslagActionHandlers = {
         const eksistererAllerede = state.avslagsgrunner.includes(payload.avslagsgrunn);
 
         if (eksistererAllerede) {
-            const newArr = state.avslagsgrunner.filter((grunn) => grunn !== payload.avslagsgrunn);
-
-            if (newArr.length === 0) {
-                return { ...state, avslagsgrunner: [] };
-            } else {
-                return { ...state, avslagsgrunner: newArr };
-            }
+            return {
+                ...state,
+                avslagsgrunner: state.avslagsgrunner.filter(
+                    (grunn) => grunn !== payload.avslagsgrunn,
+                ),
+            };
         } else {
             return {
                 ...state,

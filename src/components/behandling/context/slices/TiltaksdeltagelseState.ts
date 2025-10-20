@@ -13,7 +13,7 @@ export type TiltaksdeltagelseActions =
       }
     | {
           type: 'fjernTiltakPeriode';
-          payload: { fjernIndex: number };
+          payload: { index: number };
       }
     | {
           type: 'oppdaterTiltakId';
@@ -27,7 +27,7 @@ export type TiltaksdeltagelseActions =
 export const tiltaksdeltagelseActionHandlers = {
     addTiltakPeriode: (state) => {
         const innvilgelsesperiode = state.behandlingsperiode as Periode;
-        const forrigeTiltakPeriode = state.valgteTiltaksdeltakelser?.slice(-1)[0];
+        const forrigeTiltakPeriode = state.valgteTiltaksdeltakelser.slice(-1)[0];
 
         const nesteTiltakPeriode: Periode = forrigeTiltakPeriode
             ? {
@@ -53,16 +53,14 @@ export const tiltaksdeltagelseActionHandlers = {
     fjernTiltakPeriode: (state, payload) => {
         return {
             ...state,
-            valgteTiltaksdeltakelser: state.valgteTiltaksdeltakelser?.filter(
-                (_, index) => index !== payload.fjernIndex,
-            ),
+            valgteTiltaksdeltakelser: state.valgteTiltaksdeltakelser.toSpliced(payload.index, 1),
         };
     },
 
     oppdaterTiltakId: (state, payload) => {
         return {
             ...state,
-            valgteTiltaksdeltakelser: state.valgteTiltaksdeltakelser?.map((periode, index) =>
+            valgteTiltaksdeltakelser: state.valgteTiltaksdeltakelser.map((periode, index) =>
                 index === payload.index
                     ? { ...periode, eksternDeltagelseId: payload.eksternDeltagelseId }
                     : periode,
@@ -73,7 +71,7 @@ export const tiltaksdeltagelseActionHandlers = {
     oppdaterTiltakPeriode: (state, payload) => {
         return {
             ...state,
-            valgteTiltaksdeltakelser: state.valgteTiltaksdeltakelser?.map((periode, index) =>
+            valgteTiltaksdeltakelser: state.valgteTiltaksdeltakelser.map((periode, index) =>
                 index === payload.index
                     ? {
                           ...periode,

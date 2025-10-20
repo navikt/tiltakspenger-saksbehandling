@@ -21,7 +21,7 @@ export type BarnetilleggActions =
       }
     | {
           type: 'fjernBarnetilleggPeriode';
-          payload: { fjernIndex: number };
+          payload: { index: number };
       }
     | {
           type: 'oppdaterBarnetilleggAntall';
@@ -75,9 +75,7 @@ export const barnetilleggActionHandlers = {
     fjernBarnetilleggPeriode: (state, payload) => {
         return {
             ...state,
-            barnetilleggPerioder: state.barnetilleggPerioder.filter(
-                (_, index) => index !== payload.fjernIndex,
-            ),
+            barnetilleggPerioder: state.barnetilleggPerioder.toSpliced(payload.index, 1),
         };
     },
 

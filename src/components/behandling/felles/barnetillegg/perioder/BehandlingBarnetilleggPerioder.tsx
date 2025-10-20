@@ -177,9 +177,7 @@ const BarnetilleggPeriode = ({ periode, index, erSaksbehandler }: PeriodeProps) 
                     onClick={() => {
                         dispatch({
                             type: 'fjernBarnetilleggPeriode',
-                            payload: {
-                                fjernIndex: index,
-                            },
+                            payload: { index },
                         });
                     }}
                 >

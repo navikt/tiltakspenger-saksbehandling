@@ -9,7 +9,6 @@ import {
     deltarPaFlereTiltakMedStartOgSluttdatoIValgtInnvilgelsesperiode,
     hentTiltaksdeltakelserMedStartOgSluttdato,
 } from '~/utils/behandling';
-import { useRolleForBehandling } from '~/context/saksbehandler/SaksbehandlerContext';
 import { Separator } from '~/components/separator/Separator';
 import { VedtakHjelpetekst } from '~/components/behandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
 import {
@@ -21,13 +20,11 @@ import { useBehandling } from '~/components/behandling/context/BehandlingContext
 import style from './BehandlingTiltak.module.css';
 
 export const BehandlingTiltak = () => {
-    const { behandling } = useBehandling();
+    const { behandling, rolleForBehandling } = useBehandling();
     const { valgteTiltaksdeltakelser, behandlingsperiode } = useBehandlingSkjema();
     const dispatch = useBehandlingSkjemaDispatch();
 
     const tiltaksdeltakelser = hentTiltaksdeltakelserMedStartOgSluttdato(behandling);
-
-    const rolle = useRolleForBehandling(behandling);
 
     const harFlereTiltak = deltarPaFlereTiltakMedStartOgSluttdatoIValgtInnvilgelsesperiode(
         behandling,
@@ -42,19 +39,19 @@ export const BehandlingTiltak = () => {
         <>
             <VedtakSeksjon>
                 <VedtakSeksjon.Venstre>
-                    {valgteTiltaksdeltakelser?.map((periode, index) => {
+                    {valgteTiltaksdeltakelser.map((periode, index) => {
                         return (
                             <TiltakPeriode
                                 periode={periode}
                                 tiltaksdeltakelser={tiltaksdeltakelser}
                                 index={index}
-                                rolle={rolle}
+                                rolle={rolleForBehandling}
                                 skalKunneFjernePeriode={valgteTiltaksdeltakelser.length > 1}
                                 key={`${periode.periode.fraOgMed}-${periode.eksternDeltagelseId}-${index}`}
                             />
                         );
                     })}
-                    {rolle === SaksbehandlerRolle.SAKSBEHANDLER && (
+                    {rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER && (
                         <Button
                             variant={'secondary'}
                             size={'small'}
@@ -173,9 +170,7 @@ const TiltakPeriode = ({
                     onClick={() => {
                         dispatch({
                             type: 'fjernTiltakPeriode',
-                            payload: {
-                                fjernIndex: index,
-                            },
+                            payload: { index },
                         });
                     }}
                 >

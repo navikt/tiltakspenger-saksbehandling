@@ -19,12 +19,8 @@ type Props = {
 };
 
 export const BehandlingsperiodeVelger = ({ behandling, label, className }: Props) => {
-    const {
-        behandlingsperiode,
-        valgteTiltaksdeltakelser,
-        antallDagerPerMeldeperiode,
-        barnetilleggPerioder,
-    } = useBehandlingSkjema();
+    const { behandlingsperiode, antallDagerPerMeldeperiode, barnetilleggPerioder } =
+        useBehandlingSkjema();
 
     const dispatch = useBehandlingSkjemaDispatch();
 
@@ -75,19 +71,6 @@ export const BehandlingsperiodeVelger = ({ behandling, label, className }: Props
                         type: 'oppdaterBarnetillegg',
                         payload: { barnetillegg: oppdaterteBarnetillegg },
                     });
-
-                    /**
-                     * Dersom vi kun har 1 tiltak på behandlingen, så viser vi ikke tiltaksperiodene, og saksbehandler har dermed
-                     * ikke mulighet til å matche tiltaksperioden med den nye innvilgelsesperioden.
-                     *
-                     * Derfor oppdaterer vi tiltaksperioden til å matche innvilgelsesperioden.
-                     */
-                    if (valgteTiltaksdeltakelser.length === 1) {
-                        dispatch({
-                            type: 'oppdaterTiltakPeriode',
-                            payload: { index: 0, periode: { fraOgMed: isoDate } },
-                        });
-                    }
                 }}
             />
             <Datovelger
@@ -130,13 +113,6 @@ export const BehandlingsperiodeVelger = ({ behandling, label, className }: Props
                         type: 'oppdaterBarnetillegg',
                         payload: { barnetillegg: oppdaterteBarnetillegg },
                     });
-
-                    if (valgteTiltaksdeltakelser.length === 1) {
-                        dispatch({
-                            type: 'oppdaterTiltakPeriode',
-                            payload: { index: 0, periode: { tilOgMed: isoDate } },
-                        });
-                    }
                 }}
             />
         </div>
