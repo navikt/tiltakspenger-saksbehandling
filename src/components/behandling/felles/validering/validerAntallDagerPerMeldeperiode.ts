@@ -38,6 +38,11 @@ export const validerAntallDagerPerMeldeperiode = (
             tilOgMed: apm.periode.tilOgMed!,
         }));
 
+        if (perioder.length === 0) {
+            validering.errors.push('Må ha minst en periode for antall dager per meldeperiode');
+            return validering;
+        }
+
         if (!validerPeriodisering(perioder, false)) {
             validering.errors.push(
                 'Periodene for antall dager per meldeperiode må være sammenhengende og uten overlapp',

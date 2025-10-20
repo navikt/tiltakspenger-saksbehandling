@@ -34,10 +34,6 @@ export type BarnetilleggActions =
     | {
           type: 'nullstillBarnetilleggPerioder';
           payload: { søknad: SøknadForBehandlingProps };
-      }
-    | {
-          type: 'oppdaterBarnetillegg';
-          payload: { barnetillegg: VedtakBarnetilleggPeriode[] };
       };
 
 export const barnetilleggActionHandlers = {
@@ -143,12 +139,6 @@ export const barnetilleggActionHandlers = {
 
                 return barnetillegg;
             }),
-        };
-    },
-    oppdaterBarnetillegg: (state, payload) => {
-        return {
-            ...state,
-            barnetilleggPerioder: payload.barnetillegg,
         };
     },
 } as const satisfies BehandlingSkjemaActionHandlers<BarnetilleggActions>;

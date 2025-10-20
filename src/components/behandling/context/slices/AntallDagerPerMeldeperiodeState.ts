@@ -31,10 +31,6 @@ export type AntallDagerPerMeldeperiodeActions =
     | {
           type: 'settAntallDagerForPeriode';
           payload: { antallDager: number; index: number };
-      }
-    | {
-          type: 'oppdaterAntallDagerPerioder';
-          payload: { perioder: AntallDagerPerMeldeperiodeFormData[] };
       };
 
 export const antallDagerPerMeldeperiodeActionHandlers = {
@@ -118,9 +114,6 @@ export const antallDagerPerMeldeperiodeActionHandlers = {
                 antallDagerPerMeldeperiode: antallDager,
             }),
         };
-    },
-    oppdaterAntallDagerPerioder: (state, { perioder }) => {
-        return { ...state, antallDagerPerMeldeperiode: perioder };
     },
 } as const satisfies BehandlingSkjemaActionHandlers<AntallDagerPerMeldeperiodeActions>;
 

@@ -2,6 +2,8 @@ import { Periode } from '~/types/Periode';
 import { BehandlingSkjemaActionHandlers } from '~/components/behandling/context/BehandlingSkjemaReducer';
 import { Nullable } from '~/types/UtilTypes';
 import { BehandlingResultat } from '~/types/BehandlingTypes';
+import { perioderOverlapper } from '~/utils/periode';
+import { datoMax, datoMin } from '~/utils/date';
 
 export type BehandlingsperiodeState = {
     resultat: Nullable<BehandlingResultat>;
@@ -29,10 +31,20 @@ export const behandlingsperiodeActionHandlers = {
         return {
             ...state,
             behandlingsperiode: nyBehandlingsperiode,
-
             valgteTiltaksdeltakelser: oppdaterPeriodisering(
                 state.valgteTiltaksdeltakelser,
                 nyBehandlingsperiode,
+                true,
+            ),
+            antallDagerPerMeldeperiode: oppdaterPeriodisering(
+                state.antallDagerPerMeldeperiode,
+                nyBehandlingsperiode,
+                true,
+            ),
+            barnetilleggPerioder: oppdaterPeriodisering(
+                state.barnetilleggPerioder,
+                nyBehandlingsperiode,
+                false,
             ),
         };
     },
@@ -42,30 +54,61 @@ type MedPeriode = {
     periode: Periode;
 };
 
+// Denne må kanskje tweakes litt hvis vi får periodiserte innvilgelser i en behandling
 const oppdaterPeriodisering = <T extends MedPeriode>(
     periodisering: T[],
     behandlingsperiode: Periode,
+    // Tiltaksdeltagelse og antall dager per meldeperiode skal alltid fylle hele behandlingsperioden ved innvilgelse,
+    // men barnetillegg kan omfatte kun deler av innvilgelsesperioden. Vi gjør en best-effort for å tilpasse for dette.
+    skalAlltidFylleBehandlingsperioden: boolean,
 ): T[] => {
-    const perioderInnenforBehandlingsperiode = periodisering.filter(
-        (p) =>
-            p.periode.fraOgMed <= behandlingsperiode.tilOgMed &&
-            p.periode.tilOgMed >= behandlingsperiode.fraOgMed,
+    const perioderInnenforBehandlingsperioden = periodisering.filter((p) =>
+        perioderOverlapper(behandlingsperiode, p.periode),
     );
 
-    if (perioderInnenforBehandlingsperiode.length === 0) {
+    if (perioderInnenforBehandlingsperioden.length === 0) {
         return [];
     }
 
-    const førstePeriode = perioderInnenforBehandlingsperiode.at(0)!;
-    const sistePeriode = perioderInnenforBehandlingsperiode.at(-1)!;
+    const førstePeriode = perioderInnenforBehandlingsperioden.at(0)!;
 
-    return perioderInnenforBehandlingsperiode
+    if (perioderInnenforBehandlingsperioden.length === 1) {
+        return perioderInnenforBehandlingsperioden.with(0, {
+            ...førstePeriode,
+            periode: skalAlltidFylleBehandlingsperioden
+                ? behandlingsperiode
+                : {
+                      fraOgMed: datoMax(
+                          behandlingsperiode.fraOgMed,
+                          førstePeriode.periode.fraOgMed,
+                      ),
+                      tilOgMed: datoMin(
+                          behandlingsperiode.tilOgMed,
+                          førstePeriode.periode.tilOgMed,
+                      ),
+                  },
+        });
+    }
+
+    const sistePeriode = perioderInnenforBehandlingsperioden.at(-1)!;
+
+    return perioderInnenforBehandlingsperioden
         .with(0, {
             ...førstePeriode,
-            periode: { ...førstePeriode.periode, fraOgMed: behandlingsperiode.fraOgMed },
+            periode: {
+                fraOgMed: skalAlltidFylleBehandlingsperioden
+                    ? behandlingsperiode.fraOgMed
+                    : datoMax(behandlingsperiode.fraOgMed, førstePeriode.periode.fraOgMed),
+                tilOgMed: førstePeriode.periode.tilOgMed,
+            },
         })
         .with(-1, {
             ...sistePeriode,
-            periode: { ...sistePeriode.periode, tilOgMed: behandlingsperiode.tilOgMed },
+            periode: {
+                fraOgMed: sistePeriode.periode.fraOgMed,
+                tilOgMed: skalAlltidFylleBehandlingsperioden
+                    ? behandlingsperiode.tilOgMed
+                    : datoMin(behandlingsperiode.tilOgMed, sistePeriode.periode.tilOgMed),
+            },
         });
 };
