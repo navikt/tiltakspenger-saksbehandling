@@ -44,6 +44,7 @@ const PapirsøknadPage = (props: Props) => {
                     sakId={props.sak.sakId}
                     saksnummer={props.sak.saksnummer}
                     visTilbakeKnapp={true}
+                    kanSendeInnHelgForMeldekort={props.sak.kanSendeInnHelgForMeldekort}
                 />
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className={styles.main}>
