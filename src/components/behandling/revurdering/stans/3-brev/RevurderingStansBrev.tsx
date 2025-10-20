@@ -9,13 +9,8 @@ import { useBehandlingSkjema } from '~/components/behandling/context/BehandlingS
 export const RevurderingStansBrev = () => {
     const skjema = useBehandlingSkjema();
 
-    const {
-        hjemlerForStans,
-        behandlingsperiode,
-        textAreas,
-        harValgtStansFraFørsteDagSomGirRett,
-        harValgtStansTilSisteDagSomGirRett,
-    } = skjema;
+    const { hjemlerForStans, behandlingsperiode, textAreas, harValgtStansFraFørsteDagSomGirRett } =
+        skjema;
     const { brevtekst } = textAreas;
 
     const { behandling, rolleForBehandling } = useRevurderingBehandling();
@@ -36,15 +31,8 @@ export const RevurderingStansBrev = () => {
                           harValgtStansFraFørsteDagSomGirRett,
                           stansFraOgMed: behandlingsperiode.fraOgMed!,
                       }),
-
-                ...(harValgtStansTilSisteDagSomGirRett
-                    ? {
-                          harValgtStansTilSisteDagSomGirRett,
-                      }
-                    : {
-                          harValgtStansTilSisteDagSomGirRett,
-                          stansTilOgMed: behandlingsperiode.tilOgMed!,
-                      }),
+                stansTilOgMed: null,
+                harValgtStansTilSisteDagSomGirRett: true,
                 fritekst: brevtekst.getValue(),
                 valgteHjemler: hjemlerForStans,
                 resultat: RevurderingResultat.STANS,
