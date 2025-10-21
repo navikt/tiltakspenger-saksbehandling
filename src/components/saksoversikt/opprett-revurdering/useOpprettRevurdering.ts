@@ -1,14 +1,15 @@
-import { SakId } from '../../../types/SakTypes';
+import { SakId } from '../../../types/Sak';
 import { useFetchJsonFraApi } from '../../../utils/fetch/useFetchFraApi';
-import { RevurderingData } from '../../../types/BehandlingTypes';
-import { VedtakOpprettRevurderingDTO } from '../../../types/VedtakTyper';
+
+import { VedtakOpprettRevurdering } from '../../../types/Vedtak';
+import { Revurdering } from '~/types/Revurdering';
 
 export const useOpprettRevurdering = (sakId: SakId) => {
     const {
         trigger: opprettRevurdering,
         isMutating: opprettRevurderingLaster,
         error: opprettRevurderingError,
-    } = useFetchJsonFraApi<RevurderingData, VedtakOpprettRevurderingDTO>(
+    } = useFetchJsonFraApi<Revurdering, VedtakOpprettRevurdering>(
         `/sak/${sakId}/revurdering/start`,
         'POST',
     );

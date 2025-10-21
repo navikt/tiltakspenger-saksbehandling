@@ -1,9 +1,10 @@
 import { BodyShort, Heading, HStack, VStack } from '@navikt/ds-react';
-import { Attestering, Attesteringsstatus } from '../../types/BehandlingTypes';
+
 import { CheckmarkCircleFillIcon, ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
 
 import styles from './OppsummeringAvAttestering.module.css';
 import { formaterTidspunkt } from '../../utils/date';
+import { Attestering, Attesteringsstatus } from '~/types/Attestering';
 
 const OppsummeringAvAttesteringer = (props: { attesteringer: Attestering[] }) => {
     if (props.attesteringer.length === 0) {

@@ -1,7 +1,7 @@
 import React, { createContext, ReactNode, useContext } from 'react';
 import { Saksbehandler } from '../../types/Saksbehandler';
-import { BehandlingData } from '~/types/BehandlingTypes';
 import { hentRolleForBehandling } from '~/utils/tilganger';
+import { Behandling } from '~/types/Behandling';
 
 type SaksbehandlerState = {
     innloggetSaksbehandler: Saksbehandler;
@@ -26,6 +26,6 @@ export const useSaksbehandler = () => {
     return useContext(Context);
 };
 
-export const useRolleForBehandling = (behandling: BehandlingData) => {
+export const useRolleForBehandling = (behandling: Behandling) => {
     return hentRolleForBehandling(behandling, useSaksbehandler().innloggetSaksbehandler);
 };

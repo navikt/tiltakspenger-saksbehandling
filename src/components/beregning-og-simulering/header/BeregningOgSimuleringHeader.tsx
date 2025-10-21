@@ -3,16 +3,17 @@ import { Periode } from '~/types/Periode';
 import { periodeTilFormatertDatotekst } from '~/utils/date';
 import { UtbetalingStatus } from '~/components/utbetaling/status/UtbetalingStatus';
 import { UtbetalingBeløp } from '~/components/utbetaling/beløp/UtbetalingBeløp';
-import { Utbetalingsstatus } from '~/types/meldekort/MeldekortBehandling';
 import { SimulertBeregning } from '~/types/SimulertBeregningTypes';
 
 import style from './BeregningOgSimuleringHeader.module.css';
+import { Utbetalingsstatus } from '~/types/Utbetaling';
+import { MeldekortBehandlingUtbetalingsstatus } from '~/types/meldekort/MeldekortBehandling';
 
 type Props = {
     navkontor: string;
     navkontorNavn?: string;
     simulertBeregning: SimulertBeregning;
-    utbetalingsstatus?: Utbetalingsstatus;
+    utbetalingsstatus?: Utbetalingsstatus | MeldekortBehandlingUtbetalingsstatus;
     erOmberegning: boolean;
     className?: string;
 };

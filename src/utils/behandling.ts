@@ -1,45 +1,56 @@
-import { BehandlingData, BehandlingStatus, SøknadsbehandlingData } from '~/types/BehandlingTypes';
 import { Periode } from '~/types/Periode';
 import { singleOrFirst } from './array';
 import { Tiltaksdeltagelse, TiltaksdeltagelseMedPeriode } from '~/types/TiltakDeltagelseTypes';
 import { erDatoIPeriode, joinPerioder } from './periode';
+import { Nullable } from '~/types/UtilTypes';
+import { Behandling, Behandlingsstatus } from '~/types/Behandling';
+import { Søknadsbehandling } from '~/types/Søknadsbehandling';
 
-export const hentTiltaksperiode = (behandling: SøknadsbehandlingData): Periode => {
+export const hentTiltaksperiode = (behandling: Søknadsbehandling): Nullable<Periode> => {
     const forsteStartdatoForDeltakelse = finnForsteStartdatoForTiltaksdeltakelse(behandling);
     const sisteSluttdatoForDeltakelse = finnSisteSluttdatoForTiltaksdeltakelse(behandling);
-    const tiltakFraSøknad = singleOrFirst(behandling.søknad.tiltak);
+    const tiltakFraSøknad = behandling.søknad.tiltak;
 
-    return {
-        fraOgMed: forsteStartdatoForDeltakelse ?? tiltakFraSøknad.fraOgMed,
-        tilOgMed: sisteSluttdatoForDeltakelse ?? tiltakFraSøknad.tilOgMed,
-    };
+    if (forsteStartdatoForDeltakelse && sisteSluttdatoForDeltakelse) {
+        return {
+            fraOgMed: forsteStartdatoForDeltakelse,
+            tilOgMed: sisteSluttdatoForDeltakelse,
+        };
+    } else if (tiltakFraSøknad?.fraOgMed && tiltakFraSøknad?.tilOgMed) {
+        return {
+            fraOgMed: tiltakFraSøknad.fraOgMed,
+            tilOgMed: tiltakFraSøknad.tilOgMed,
+        };
+    }
+    return null;
 };
 
-export const hentTiltaksperiodeFraSøknad = (behandling: SøknadsbehandlingData): Periode => {
+export const hentTiltaksperiodeFraSøknad = (behandling: Søknadsbehandling): Nullable<Periode> => {
     const tiltakFraSøknad = singleOrFirst(behandling.søknad.tiltak);
 
-    return {
-        fraOgMed: tiltakFraSøknad.fraOgMed,
-        tilOgMed: tiltakFraSøknad.tilOgMed,
-    };
+    return tiltakFraSøknad?.fraOgMed && tiltakFraSøknad?.tilOgMed
+        ? {
+              fraOgMed: tiltakFraSøknad.fraOgMed,
+              tilOgMed: tiltakFraSøknad.tilOgMed,
+          }
+        : null;
 };
 
-export const erBehandlingAvbrutt = (behandling: BehandlingData) => !!behandling.avbrutt;
+export const erBehandlingAvbrutt = (behandling: Behandling) => !!behandling.avbrutt;
 
-export const erBehandlingVedtatt = (behandling: BehandlingData) =>
-    behandling.status === BehandlingStatus.VEDTATT;
+export const erBehandlingVedtatt = (behandling: Behandling) =>
+    behandling.status === Behandlingsstatus.VEDTATT;
 
 export const deltarPaFlereTiltakMedStartOgSluttdatoIValgtInnvilgelsesperiode = (
-    behandling: BehandlingData,
-    innvilgelsesperiode: Partial<Periode>,
+    behandling: Behandling,
+    innvilgelsesperiode: Nullable<Partial<Periode>>,
 ) => {
     const tiltak = hentTiltaksdeltakelserMedStartOgSluttdato(behandling);
     if (tiltak.length <= 1) {
         return false;
     }
 
-    const { fraOgMed, tilOgMed } = innvilgelsesperiode;
-    if (fraOgMed && tilOgMed) {
+    if (innvilgelsesperiode?.fraOgMed && innvilgelsesperiode?.tilOgMed) {
         const overlappendeDeltakelser: Tiltaksdeltagelse[] = [];
 
         tiltak.forEach((tiltaksdeltagelse) => {
@@ -47,7 +58,10 @@ export const deltarPaFlereTiltakMedStartOgSluttdatoIValgtInnvilgelsesperiode = (
                 fraOgMed: tiltaksdeltagelse.deltagelseFraOgMed!,
                 tilOgMed: tiltaksdeltagelse.deltagelseTilOgMed!,
             };
-            if (erDatoIPeriode(fraOgMed, periode) || erDatoIPeriode(tilOgMed, periode)) {
+            if (
+                erDatoIPeriode(innvilgelsesperiode.fraOgMed!, periode) ||
+                erDatoIPeriode(innvilgelsesperiode.tilOgMed!, periode)
+            ) {
                 overlappendeDeltakelser.push(tiltaksdeltagelse);
             }
         });
@@ -56,34 +70,38 @@ export const deltarPaFlereTiltakMedStartOgSluttdatoIValgtInnvilgelsesperiode = (
     return tiltak.length > 1;
 };
 
-export const deltarPaFlereTiltakMedStartOgSluttdato = (behandling: BehandlingData) =>
+export const deltarPaFlereTiltakMedStartOgSluttdato = (behandling: Behandling) =>
     hentTiltaksdeltakelserMedStartOgSluttdato(behandling).length > 1;
 
-export const hentTiltaksdeltagelseFraSøknad = (behandling: SøknadsbehandlingData) => {
-    const tiltakFraSoknad = singleOrFirst(behandling.søknad.tiltak);
+export const hentTiltaksdeltagelseFraSøknad = (
+    behandling: Søknadsbehandling,
+): Nullable<TiltaksdeltagelseMedPeriode> => {
+    const tiltakFraSoknad = behandling.søknad.tiltak;
     const tiltakFraSaksopplysninger = hentTiltaksdeltakelserMedStartOgSluttdato(behandling);
 
     const tiltaksdeltagelser = tiltakFraSaksopplysninger.filter(
-        (t) => t.eksternDeltagelseId === tiltakFraSoknad.id,
+        (t) => t.eksternDeltagelseId === tiltakFraSoknad?.id,
     );
     return (
         singleOrFirst(tiltaksdeltagelser) ??
-        singleOrFirst(behandling.saksopplysninger.tiltaksdeltagelse)
+        (behandling.saksopplysninger?.tiltaksdeltagelse
+            ? singleOrFirst(behandling.saksopplysninger.tiltaksdeltagelse)
+            : null)
     );
 };
 
-export const hentTiltaksdeltakelser = (behandling: BehandlingData): Tiltaksdeltagelse[] =>
-    behandling.saksopplysninger.tiltaksdeltagelse;
+export const hentTiltaksdeltakelser = (behandling: Behandling): Tiltaksdeltagelse[] =>
+    behandling.saksopplysninger?.tiltaksdeltagelse ?? [];
 
 export const hentTiltaksdeltakelserMedStartOgSluttdato = (
-    behandling: BehandlingData,
+    behandling: Behandling,
 ): TiltaksdeltagelseMedPeriode[] =>
     hentTiltaksdeltakelser(behandling).filter(
         (t): t is TiltaksdeltagelseMedPeriode =>
             t.deltagelseFraOgMed != null && t.deltagelseTilOgMed != null,
     );
 
-export const hentHeleTiltaksdeltagelsesperioden = (behandling: BehandlingData) => {
+export const hentHeleTiltaksdeltagelsesperioden = (behandling: Behandling) => {
     const perioder = hentTiltaksdeltakelserMedStartOgSluttdato(behandling).map(
         (tiltaksdeltagelse) => ({
             fraOgMed: tiltaksdeltagelse.deltagelseFraOgMed,
@@ -93,18 +111,14 @@ export const hentHeleTiltaksdeltagelsesperioden = (behandling: BehandlingData) =
     return joinPerioder(perioder);
 };
 
-export const finnForsteStartdatoForTiltaksdeltakelse = (
-    behandling: BehandlingData,
-): string | null => {
+export const finnForsteStartdatoForTiltaksdeltakelse = (behandling: Behandling): string | null => {
     const sorterteDeltakelser = hentTiltaksdeltakelser(behandling)
         .filter((t) => t.deltagelseFraOgMed != null)
         .sort((a, b) => (b.deltagelseFraOgMed! > a.deltagelseFraOgMed! ? -1 : 1));
     return sorterteDeltakelser[0]?.deltagelseFraOgMed;
 };
 
-export const finnSisteSluttdatoForTiltaksdeltakelse = (
-    behandling: BehandlingData,
-): string | null => {
+export const finnSisteSluttdatoForTiltaksdeltakelse = (behandling: Behandling): string | null => {
     const sorterteDeltakelser = hentTiltaksdeltakelser(behandling)
         .filter((t) => t.deltagelseTilOgMed != null)
         .sort((a, b) => (a.deltagelseTilOgMed! > b.deltagelseTilOgMed! ? -1 : 1));

@@ -2,7 +2,7 @@ import {
     MeldekortBehandlingDTO,
     MeldekortBehandlingId,
 } from '../../../../../../types/meldekort/MeldekortBehandling';
-import { SakId } from '../../../../../../types/SakTypes';
+import { SakId } from '../../../../../../types/Sak';
 import { useFetchJsonFraApi } from '../../../../../../utils/fetch/useFetchFraApi';
 import { MeldeperiodeKjedeProps } from '../../../../../../types/meldekort/Meldeperiode';
 

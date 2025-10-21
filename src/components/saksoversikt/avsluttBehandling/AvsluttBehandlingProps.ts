@@ -1,5 +1,5 @@
-import { SøknadId } from '~/types/SøknadTypes';
-import { BehandlingId } from '~/types/BehandlingTypes';
+import { BehandlingId } from '~/types/Behandling';
+import { SøknadId } from '~/types/Søknad';
 
 export type AvsluttBehandlingProps = {
     saksnummer: string;

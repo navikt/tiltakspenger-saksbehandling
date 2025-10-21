@@ -1,10 +1,11 @@
-import { Rammevedtak } from '~/types/VedtakTyper';
+import { Rammevedtak } from '~/types/Vedtak';
 import { Periode } from '~/types/Periode';
 import { joinPerioder, perioderOverlapper } from '~/utils/periode';
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';
 import { datoMax, datoMin, nesteDag } from '~/utils/date';
-import { BehandlingId } from '~/types/BehandlingTypes';
+
 import { kunPerioderMedBarn } from '~/components/behandling/felles/barnetillegg/utils/barnetilleggUtils';
+import { BehandlingId } from '~/types/Behandling';
 
 type VedtakMedBarnetillegg = Rammevedtak & {
     barnetillegg: NonNullable<Rammevedtak['barnetillegg']>;

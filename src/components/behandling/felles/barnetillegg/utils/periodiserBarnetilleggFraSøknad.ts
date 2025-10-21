@@ -1,15 +1,25 @@
-import { SøknadBarn } from '~/types/SøknadTypes';
 import { finn16årsdag, forrigeDag, nesteDag } from '~/utils/date';
 import { Periode } from '~/types/Periode';
 import { erDatoIPeriode } from '~/utils/periode';
 import { removeDuplicates } from '~/utils/array';
-import { BarnetilleggPeriode } from '~/types/Barnetillegg';
 import { kunPerioderMedBarn } from '~/components/behandling/felles/barnetillegg/utils/barnetilleggUtils';
+import { SøknadBarn } from '~/types/Søknad';
+import { Nullable } from '~/types/UtilTypes';
+import { BarnetilleggPeriodeFormData } from './hentBarnetilleggFraBehandling';
 
 export const periodiserBarnetilleggFraSøknad = (
     barnFraSøknad: SøknadBarn[],
-    virkningsperiode: Periode,
-): BarnetilleggPeriode[] => {
+    virkningsperiode: Nullable<Periode>,
+): BarnetilleggPeriodeFormData[] => {
+    if (!virkningsperiode) {
+        return [
+            {
+                antallBarn: barnFraSøknad.length,
+                periode: { fraOgMed: null, tilOgMed: null },
+            },
+        ];
+    }
+
     // Periodene med rett til barnetillegg for hvert barn, innenfor virkningsperioden
     const perioderPerBarn = barnFraSøknad.reduce<Periode[]>((acc, barn) => {
         const { fødselsdato, oppholderSegIEØS } = barn;
@@ -43,7 +53,9 @@ export const periodiserBarnetilleggFraSøknad = (
     const avgrensningsdatoer = perioderPerBarn
         .flatMap((periode) => [
             periode.fraOgMed,
-            ...(periode.tilOgMed === virkningsperiode.tilOgMed ? [] : [nesteDag(periode.tilOgMed)]),
+            ...(periode.tilOgMed === virkningsperiode?.tilOgMed
+                ? []
+                : [nesteDag(periode.tilOgMed)]),
         ])
         .filter(removeDuplicates)
         .toSorted();

@@ -3,7 +3,7 @@ import {
     MeldekortBehandlingProps,
 } from '../../../types/meldekort/MeldekortBehandling';
 import { useFetchJsonFraApi } from '../../../utils/fetch/useFetchFraApi';
-import { SakId } from '../../../types/SakTypes';
+import { SakId } from '../../../types/Sak';
 
 export const useLeggTilbakeMeldekortBehandling = (
     sakId: SakId,

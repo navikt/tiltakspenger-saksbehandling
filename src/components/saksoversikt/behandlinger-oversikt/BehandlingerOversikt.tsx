@@ -1,10 +1,10 @@
-import { BehandlingEllerSøknadForOversiktData, Behandlingstype } from '~/types/BehandlingTypes';
+import { BehandlingEllerSøknadForOversikt } from '~/types/BehandlingForOversikt';
 import { Table } from '@navikt/ds-react';
 import {
+    behandlingResultatTilText,
     finnBehandlingStatusTag,
     finnBehandlingstypeTekst,
     finnMeldeperiodeKjedeStatusTekst,
-    revurderingResultatTekst,
 } from '~/utils/tekstformateringUtils';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '~/utils/date';
 import { ApneBehandlingerMeny } from '~/components/behandlingmeny/ApneBehandlingerMeny';
@@ -15,10 +15,11 @@ import { sorterMeldekortBehandlingerAsc } from '~/utils/meldekort';
 import { MeldekortBehandlingType } from '~/types/meldekort/MeldekortBehandling';
 import { meldeperiodeUrl } from '~/utils/urls';
 import { MeldeperiodeKjedeOversiktMeny } from '~/components/saksoversikt/meldekort-oversikt/MeldekortOversikt';
-import { SakId } from '~/types/SakTypes';
+import { SakId } from '~/types/Sak';
+import { Behandlingstype } from '~/types/Behandling';
 
 type Props = {
-    behandlinger: BehandlingEllerSøknadForOversiktData[];
+    behandlinger: BehandlingEllerSøknadForOversikt[];
     meldeperiodeKjeder: MeldeperiodeKjedeProps[];
     saksnummer: string;
     sakId: SakId;
@@ -51,7 +52,7 @@ export const BehandlingerOversikt = ({
 
                     const revurderingTekst =
                         typeBehandling === Behandlingstype.REVURDERING
-                            ? ` (${revurderingResultatTekst[resultat]})`
+                            ? ` (${behandlingResultatTilText[resultat]})`
                             : '';
 
                     return (

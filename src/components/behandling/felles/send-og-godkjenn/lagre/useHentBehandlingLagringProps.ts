@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
-import { BehandlingVedtakDTO } from '~/types/VedtakTyper';
+
 import { isEqualJson } from '~/utils/is-equal-json';
 import { ValideringFunc, ValideringResultat, ValideringType } from '~/types/Validering';
 import { Nullable } from '~/types/UtilTypes';
 import { BehandlingSkjemaContext } from '~/components/behandling/context/BehandlingSkjemaContext';
+import { BehandlingVedtak } from '~/types/Behandling';
 
 type ValiderOgHentVedtakDTO = (type: ValideringType) => {
     valideringResultat: ValideringResultat;
-    vedtakDTO: Nullable<BehandlingVedtakDTO>;
+    vedtakDTO: Nullable<BehandlingVedtak>;
 };
 
 export type BehandlingLagringProps = {
@@ -19,7 +20,7 @@ export type BehandlingLagringProps = {
 type Props = {
     skjema: BehandlingSkjemaContext;
     validerSkjema: ValideringFunc;
-    hentDTO: () => Nullable<BehandlingVedtakDTO>;
+    hentDTO: () => Nullable<BehandlingVedtak>;
 };
 
 export const useHentBehandlingLagringProps = ({
@@ -27,7 +28,7 @@ export const useHentBehandlingLagringProps = ({
     validerSkjema,
     hentDTO,
 }: Props): BehandlingLagringProps => {
-    const [sisteLagring, setSisteLagring] = useState<BehandlingVedtakDTO | null>(hentDTO());
+    const [sisteLagring, setSisteLagring] = useState<BehandlingVedtak | null>(hentDTO());
     const [isDirty, setIsDirty] = useState(false);
 
     const updateDirtyState = () => {

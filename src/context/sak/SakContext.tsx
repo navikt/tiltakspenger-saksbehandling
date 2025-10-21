@@ -1,4 +1,4 @@
-import { SakProps } from '../../types/SakTypes';
+import { SakProps } from '../../types/Sak';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
 type ContextState = {

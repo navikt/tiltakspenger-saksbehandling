@@ -1,14 +1,15 @@
-import { AvbruttSøknadEllerBehandlingDataCellInfo } from './AvsluttedeBehandlingerUtils';
+import { AvbruttSøknadEllerBehandlingCellInfo } from './AvsluttedeBehandlingerUtils';
 import { Button, Table } from '@navikt/ds-react';
 import { finnBehandlingstypeTekst } from '~/utils/tekstformateringUtils';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '~/utils/date';
-import { Behandlingstype } from '~/types/BehandlingTypes';
+
 import Link from 'next/link';
 import { behandlingUrl } from '~/utils/urls';
+import { Behandlingstype } from '~/types/Behandling';
 
 export const AvbrutteBehandlingerTabell = (props: {
     saksnummer: string;
-    avbrutteBehandlinger: AvbruttSøknadEllerBehandlingDataCellInfo[];
+    avbrutteBehandlinger: AvbruttSøknadEllerBehandlingCellInfo[];
 }) => {
     if (props.avbrutteBehandlinger.length === 0) {
         return null;

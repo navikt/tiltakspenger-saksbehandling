@@ -1,10 +1,6 @@
 import React, { useState } from 'react';
 import { ActionMenu, Button } from '@navikt/ds-react';
-import {
-    BehandlingForOversiktData,
-    BehandlingStatus,
-    Behandlingstype,
-} from '~/types/BehandlingTypes';
+import { BehandlingForOversikt } from '~/types/BehandlingForOversikt';
 import OvertaBehandlingMenyvalg, {
     visOvertaBehandlingMenyvalg,
 } from './menyvalg/OvertaBehandlingMenyvalg';
@@ -34,9 +30,10 @@ import GjenopptaBehandlingMenyvalg, {
 } from '~/components/behandlingmeny/menyvalg/GjenopptaBehandlingMenyvalg';
 import SettBehandlingPåVentModal from '~/components/modaler/SettBehandlingPåVentModal';
 import { behandlingUrl } from '~/utils/urls';
+import { Behandlingsstatus, Behandlingstype } from '~/types/Behandling';
 
 type Props = {
-    behandling: BehandlingForOversiktData;
+    behandling: BehandlingForOversikt;
     medAvsluttBehandling: boolean;
 };
 
@@ -152,9 +149,9 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
                     sakId={behandling.sakId}
                     behandlingId={behandling.id}
                     overtarFra={
-                        behandling.status === BehandlingStatus.UNDER_BEHANDLING
+                        behandling.status === Behandlingsstatus.UNDER_BEHANDLING
                             ? behandling.saksbehandler!
-                            : behandling.status === BehandlingStatus.UNDER_BESLUTNING
+                            : behandling.status === Behandlingsstatus.UNDER_BESLUTNING
                               ? behandling.beslutter!
                               : 'Ukjent saksbehandler/beslutter'
                     }

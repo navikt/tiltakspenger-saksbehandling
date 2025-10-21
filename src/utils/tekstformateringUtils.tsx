@@ -1,35 +1,30 @@
 import {
-    BehandlingResultat,
-    BehandlingStatus,
-    Behandlingstype,
-    ManueltBehandlesGrunn,
-    RevurderingResultat,
-    SøknadsbehandlingResultat,
-} from '~/types/BehandlingTypes';
-import {
     MeldekortBehandlingDagStatus,
-    Utbetalingsstatus,
+    MeldekortBehandlingUtbetalingsstatus,
 } from '~/types/meldekort/MeldekortBehandling';
 import { BrukersMeldekortDagStatus } from '~/types/meldekort/BrukersMeldekort';
 import { MeldeperiodeKjedeStatus } from '~/types/meldekort/Meldeperiode';
 import React, { ReactElement } from 'react';
 import { Tag } from '@navikt/ds-react';
+import { BehandlingResultat, Behandlingsstatus, Behandlingstype } from '~/types/Behandling';
+import { Utbetalingsstatus } from '~/types/Utbetaling';
+import { ManueltBehandlesGrunn } from '~/types/Søknadsbehandling';
 
 export const finnBehandlingStatusTag = (
-    status: BehandlingStatus,
+    status: Behandlingsstatus | 'SØKNAD',
     underkjent: boolean,
     erSattPåVent: boolean = false,
 ) => {
     if (
-        (status == BehandlingStatus.UNDER_BEHANDLING ||
-            status === BehandlingStatus.UNDER_BESLUTNING) &&
+        (status == Behandlingsstatus.UNDER_BEHANDLING ||
+            status === Behandlingsstatus.UNDER_BESLUTNING) &&
         erSattPåVent
     ) {
         return <Tag variant="warning">Satt på vent</Tag>;
     }
     if (
-        (status === BehandlingStatus.KLAR_TIL_BEHANDLING ||
-            status === BehandlingStatus.UNDER_BEHANDLING) &&
+        (status === Behandlingsstatus.KLAR_TIL_BEHANDLING ||
+            status === Behandlingsstatus.UNDER_BEHANDLING) &&
         underkjent
     ) {
         return <Tag variant="warning">Underkjent</Tag>;
@@ -37,17 +32,17 @@ export const finnBehandlingStatusTag = (
     return behandlingStatusTag[status];
 };
 
-const behandlingStatusTag: Record<BehandlingStatus, React.ReactElement> = {
-    [BehandlingStatus.VEDTATT]: <Tag variant="success">Vedtatt</Tag>,
-    [BehandlingStatus.KLAR_TIL_BEHANDLING]: <Tag variant="info">Klar til behandling</Tag>,
-    [BehandlingStatus.KLAR_TIL_BESLUTNING]: <Tag variant="info">Klar til beslutning</Tag>,
-    [BehandlingStatus.SØKNAD]: <Tag variant="neutral">Søknad</Tag>,
-    [BehandlingStatus.UNDER_BEHANDLING]: <Tag variant="info">Under behandling</Tag>,
-    [BehandlingStatus.UNDER_BESLUTNING]: <Tag variant="info">Under beslutning</Tag>,
-    [BehandlingStatus.AVBRUTT]: <Tag variant="neutral">Avsluttet</Tag>,
-    [BehandlingStatus.UNDER_AUTOMATISK_BEHANDLING]: (
+const behandlingStatusTag: Record<Behandlingsstatus | 'SØKNAD', React.ReactElement> = {
+    [Behandlingsstatus.VEDTATT]: <Tag variant="success">Vedtatt</Tag>,
+    [Behandlingsstatus.KLAR_TIL_BEHANDLING]: <Tag variant="info">Klar til behandling</Tag>,
+    [Behandlingsstatus.KLAR_TIL_BESLUTNING]: <Tag variant="info">Klar til beslutning</Tag>,
+    [Behandlingsstatus.UNDER_BEHANDLING]: <Tag variant="info">Under behandling</Tag>,
+    [Behandlingsstatus.UNDER_BESLUTNING]: <Tag variant="info">Under beslutning</Tag>,
+    [Behandlingsstatus.AVBRUTT]: <Tag variant="neutral">Avsluttet</Tag>,
+    [Behandlingsstatus.UNDER_AUTOMATISK_BEHANDLING]: (
         <Tag variant="neutral">Under automatisk behandling</Tag>
     ),
+    SØKNAD: <Tag variant="neutral">Søknad</Tag>,
 };
 
 export const brukersMeldekortDagStatusTekst: Record<BrukersMeldekortDagStatus, string> = {
@@ -95,29 +90,47 @@ export const finnBehandlingstypeTekst: Record<Behandlingstype, string> = {
     [Behandlingstype.SØKNAD]: 'Søknad',
 } as const;
 
+export const behandlingResultatTilText: Record<BehandlingResultat, string> = {
+    [BehandlingResultat.AVSLAG]: 'Avslag',
+    [BehandlingResultat.INNVILGELSE]: 'Innvilgelse',
+    [BehandlingResultat.STANS]: 'Stans',
+    [BehandlingResultat.REVURDERING_INNVILGELSE]: 'Revurdering innvilgelse',
+    [BehandlingResultat.IKKE_VALGT]: 'Ikke valgt',
+};
+
 export const behandlingResultatTilTag: Record<BehandlingResultat, ReactElement> = {
-    [SøknadsbehandlingResultat.AVSLAG]: <Tag variant="error">Avslag</Tag>,
-    [SøknadsbehandlingResultat.INNVILGELSE]: <Tag variant="success">Innvilgelse</Tag>,
-    [RevurderingResultat.STANS]: <Tag variant="warning">Stans</Tag>,
-    [RevurderingResultat.REVURDERING_INNVILGELSE]: (
-        <Tag variant="info">Revurdering innvilgelse</Tag>
+    [BehandlingResultat.AVSLAG]: (
+        <Tag variant="error">{behandlingResultatTilText[BehandlingResultat.AVSLAG]}</Tag>
+    ),
+    [BehandlingResultat.INNVILGELSE]: (
+        <Tag variant="success">{behandlingResultatTilText[BehandlingResultat.INNVILGELSE]}</Tag>
+    ),
+    [BehandlingResultat.STANS]: (
+        <Tag variant="warning">{behandlingResultatTilText[BehandlingResultat.STANS]}</Tag>
+    ),
+    [BehandlingResultat.REVURDERING_INNVILGELSE]: (
+        <Tag variant="info">
+            {behandlingResultatTilText[BehandlingResultat.REVURDERING_INNVILGELSE]}
+        </Tag>
+    ),
+    [BehandlingResultat.IKKE_VALGT]: (
+        <Tag variant="neutral">{behandlingResultatTilText[BehandlingResultat.IKKE_VALGT]}</Tag>
     ),
 };
 
-export const revurderingResultatTekst: Record<RevurderingResultat, string> = {
-    [RevurderingResultat.STANS]: 'stans',
-    [RevurderingResultat.REVURDERING_INNVILGELSE]: 'innvilgelse',
-} as const;
-
-export const utbetalingsstatusTekst: Record<Utbetalingsstatus, string> = {
+export const utbetalingsstatusTekst: Record<
+    Utbetalingsstatus | MeldekortBehandlingUtbetalingsstatus,
+    string
+> = {
     FEILET_MOT_OPPDRAG: 'Feilet mot oppdrag',
-    IKKE_GODKJENT: 'Ikke godkjent',
     IKKE_SENDT_TIL_HELVED: 'Ikke sendt til helved',
     OK: 'Sendt til utbetaling',
     OK_UTEN_UTBETALING: 'Ok uten utbetaling',
     SENDT_TIL_HELVED: 'Venter på helved',
     SENDT_TIL_OPPDRAG: 'Venter på oppdrag',
     AVBRUTT: 'Avbrutt',
+
+    IKKE_GODKJENT: 'Ikke godkjent',
 };
 
 export const manueltBehandlesGrunnTekst: Record<ManueltBehandlesGrunn, string> = {

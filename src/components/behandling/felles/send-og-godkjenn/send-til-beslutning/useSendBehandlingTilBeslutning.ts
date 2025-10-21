@@ -1,8 +1,8 @@
+import { Behandling } from '~/types/Behandling';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
-import { BehandlingData } from '~/types/BehandlingTypes';
 
-export const useSendBehandlingTilBeslutning = (behandling: BehandlingData) => {
-    const { trigger, isMutating, error } = useFetchJsonFraApi<BehandlingData>(
+export const useSendBehandlingTilBeslutning = (behandling: Behandling) => {
+    const { trigger, isMutating, error } = useFetchJsonFraApi<Behandling>(
         `/sak/${behandling.sakId}/behandling/${behandling.id}/sendtilbeslutning`,
         'POST',
     );

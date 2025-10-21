@@ -2,7 +2,7 @@ import { SøknadsbehandlingVedtak } from '~/components/behandling/søknadsbehand
 import { BehandlingSaksopplysninger } from './saksopplysninger/BehandlingSaksopplysninger';
 import { RevurderingVedtak } from './revurdering/RevurderingVedtak';
 import { useBehandling } from './context/BehandlingContext';
-import { Behandlingstype } from '~/types/BehandlingTypes';
+
 import { PersonaliaHeader } from '../personaliaheader/PersonaliaHeader';
 import { Alert } from '@navikt/ds-react';
 import { finnBehandlingStatusTag } from '~/utils/tekstformateringUtils';
@@ -14,6 +14,7 @@ import BehandlingSattPåVentOppsummering from '~/components/oppsummeringer/behan
 import { BehandlingSkjemaProvider } from '~/components/behandling/context/BehandlingSkjemaContext';
 
 import style from './BehandlingPage.module.css';
+import { Behandlingstype } from '~/types/Behandling';
 
 export const BehandlingPage = () => {
     const { sak } = useSak();

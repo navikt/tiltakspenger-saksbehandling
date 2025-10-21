@@ -1,4 +1,3 @@
-import { BehandlingData, BehandlingStatus } from '~/types/BehandlingTypes';
 import {
     useRolleForBehandling,
     useSaksbehandler,
@@ -24,9 +23,10 @@ import { skalKunneGjenopptaBehandling } from '~/utils/tilganger';
 import { formaterTidspunkt } from '~/utils/date';
 
 import style from './BehandlingSendOgGodkjenn.module.css';
+import { Behandling, Behandlingsstatus } from '~/types/Behandling';
 
 type Props = {
-    behandling: BehandlingData;
+    behandling: Behandling;
     lagringProps: BehandlingLagringProps;
 };
 
@@ -59,8 +59,8 @@ export const BehandlingSendOgGodkjenn = ({ behandling, lagringProps }: Props) =>
     const erBeslutter = rolleForBehandling === SaksbehandlerRolle.BESLUTTER;
 
     const kanAvslutteBehandling =
-        (behandling.status === BehandlingStatus.KLAR_TIL_BEHANDLING ||
-            behandling.status === BehandlingStatus.UNDER_BEHANDLING) &&
+        (behandling.status === Behandlingsstatus.KLAR_TIL_BEHANDLING ||
+            behandling.status === Behandlingsstatus.UNDER_BEHANDLING) &&
         behandling.avbrutt === null &&
         erSaksbehandler;
 

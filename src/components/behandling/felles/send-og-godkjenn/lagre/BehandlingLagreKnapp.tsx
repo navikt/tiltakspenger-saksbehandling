@@ -1,14 +1,14 @@
 import { Button } from '@navikt/ds-react';
 import { useLagreBehandling } from '~/components/behandling/felles/send-og-godkjenn/lagre/useLagreBehandling';
-import { BehandlingVedtakDTO } from '~/types/VedtakTyper';
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
-import { BehandlingData } from '~/types/BehandlingTypes';
+
 import { Nullable } from '~/types/UtilTypes';
 import { FetcherError } from '~/utils/fetch/fetch';
+import { Behandling, BehandlingVedtak } from '~/types/Behandling';
 
 type Props = {
-    behandling: BehandlingData;
-    hentVedtakDTO: () => Nullable<BehandlingVedtakDTO>;
+    behandling: Behandling;
+    hentVedtakDTO: () => Nullable<BehandlingVedtak>;
     onSuccess?: () => void;
     onError?: (error: FetcherError) => void;
 };

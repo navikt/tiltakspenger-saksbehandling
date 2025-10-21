@@ -1,8 +1,7 @@
 import React from 'react';
-import { SøknadForBehandlingProps } from '~/types/SøknadTypes';
+
 import { Periode } from '~/types/Periode';
 import { useConfig } from '~/context/ConfigContext';
-import { singleOrFirst } from '~/utils/array';
 import {
     BehandlingSaksopplysning,
     BehandlingSaksopplysningMedPeriode,
@@ -14,11 +13,13 @@ import { Alert, Box, Heading, Link, VStack } from '@navikt/ds-react';
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
 
 import styles from './OppsummeringAvSøknad.module.css';
+import { SøknadDTO } from '~/types/Søknad';
+import { Nullable } from '~/types/UtilTypes';
 
 interface Props {
-    /** Behandlingens tiltaksperiode, eller det som er på søknad hvis behandling er enda ikke opprettet */
-    tiltaksperiode: Periode;
-    søknad: SøknadForBehandlingProps;
+    /** Behandlingens tiltaksperiode, eller det som er på søknad hvis behandling er enda ikke opprettet (null ved papirsøknad dersom saksbehandler ikke har fyllt inn)*/
+    tiltaksperiode: Nullable<Periode>;
+    søknad: SøknadDTO;
     medTittel?: boolean;
 }
 
@@ -27,7 +28,7 @@ const OppsummeringAvSøknad = (props: Props) => {
 
     const {
         tidsstempelHosOss,
-        tiltak: tiltakRaw,
+        tiltak,
         kvp,
         intro,
         institusjon,
@@ -35,8 +36,6 @@ const OppsummeringAvSøknad = (props: Props) => {
         sykepenger,
         antallVedlegg,
     } = props.søknad;
-
-    const tiltak = singleOrFirst(tiltakRaw);
 
     return (
         <Box>
@@ -53,15 +52,17 @@ const OppsummeringAvSøknad = (props: Props) => {
                     spacing={true}
                 />
 
-                <BehandlingSaksopplysning navn={'Tiltak'} verdi={tiltak.typeNavn} />
-                <BehandlingSaksopplysning
-                    navn={'Periode'}
-                    verdi={periodeTilFormatertDatotekst({
-                        fraOgMed: tiltak.fraOgMed,
-                        tilOgMed: tiltak.tilOgMed,
-                    })}
-                    spacing={true}
-                />
+                {tiltak && <BehandlingSaksopplysning navn={'Tiltak'} verdi={tiltak.typeNavn} />}
+                {tiltak?.fraOgMed && tiltak.tilOgMed && (
+                    <BehandlingSaksopplysning
+                        navn={'Periode'}
+                        verdi={periodeTilFormatertDatotekst({
+                            fraOgMed: tiltak.fraOgMed,
+                            tilOgMed: tiltak.tilOgMed,
+                        })}
+                        spacing={true}
+                    />
+                )}
 
                 {kvp ? (
                     <div className={styles.soknadsopplysningVarsel}>
@@ -122,10 +123,13 @@ const OppsummeringAvSøknad = (props: Props) => {
                 )}
 
                 <SøknadOpplysningerPengestøtter pengestøtter={props.søknad} />
-                <SøknadOpplysningerBarn
-                    tiltaksperiode={props.tiltaksperiode}
-                    søknad={props.søknad}
-                />
+                {/* TODO - kan vi se om vi kan støtte underkomponenten uten tiltaksperiode? Denne kan være viktig for papirsøknad @Henrik */}
+                {props.tiltaksperiode && (
+                    <SøknadOpplysningerBarn
+                        tiltaksperiode={props.tiltaksperiode}
+                        søknad={props.søknad}
+                    />
+                )}
 
                 <BehandlingSaksopplysning
                     navn={'Vedlegg'}

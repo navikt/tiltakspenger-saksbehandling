@@ -1,4 +1,3 @@
-import { BehandlingData } from '~/types/BehandlingTypes';
 import { ValideringResultat } from '~/types/Validering';
 import { validerBarnetillegg } from '~/components/behandling/felles/validering/validerBarnetillegg';
 import { validerTiltaksdeltakelser } from '~/components/behandling/felles/validering/validerTiltaksdeltakelser';
@@ -6,9 +5,10 @@ import { validerAntallDagerPerMeldeperiode } from '~/components/behandling/felle
 import { BehandlingSkjemaContext } from '~/components/behandling/context/BehandlingSkjemaContext';
 import { erFullstendigPeriode } from '~/utils/periode';
 import { hentHeleTiltaksdeltagelsesperioden } from '~/utils/behandling';
+import { Behandling } from '~/types/Behandling';
 
 export const validerInnvilgelse = (
-    behandling: BehandlingData,
+    behandling: Behandling,
     skjema: BehandlingSkjemaContext,
 ): ValideringResultat => {
     const validering: ValideringResultat = {
@@ -26,7 +26,11 @@ export const validerInnvilgelse = (
 
     const tiltaksperiode = hentHeleTiltaksdeltagelsesperioden(behandling);
 
-    if (erFullstendigPeriode(behandlingsperiode)) {
+    if (
+        behandlingsperiode?.fraOgMed &&
+        behandlingsperiode?.tilOgMed &&
+        erFullstendigPeriode(behandlingsperiode)
+    ) {
         if (behandlingsperiode.fraOgMed > behandlingsperiode.tilOgMed) {
             validering.errors.push('Til og med-dato må være etter fra og med-dato');
         }

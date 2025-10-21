@@ -1,5 +1,4 @@
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
-import { BehandlingData, BehandlingId } from '~/types/BehandlingTypes';
 import { BehandlingPage } from '~/components/behandling/BehandlingPage';
 import React, { ComponentProps } from 'react';
 import { GetServerSideProps } from 'next';
@@ -7,10 +6,11 @@ import { BehandlingProvider } from '~/components/behandling/context/BehandlingCo
 import { fetchSak } from '~/utils/fetch/fetch-server';
 import { logger } from '@navikt/next-logger';
 import { SakProvider } from '~/context/sak/SakContext';
-import { SakProps } from '~/types/SakTypes';
+import { SakProps } from '~/types/Sak';
+import { BehandlingId, Behandling as BehandlingType } from '~/types/Behandling';
 
 type Props = {
-    behandling: BehandlingData;
+    behandling: BehandlingType;
     sak: SakProps;
 };
 

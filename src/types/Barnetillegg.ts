@@ -1,17 +1,12 @@
 import { Periode } from './Periode';
-import { VedtakBarnetilleggPeriode } from './VedtakTyper';
-
-export type BarnetilleggData = {
-    perioder: BarnetilleggPeriode[];
-    begrunnelse?: string;
-};
+import { Nullable } from './UtilTypes';
 
 export type BarnetilleggPeriode = {
     antallBarn: number;
     periode: Periode;
 };
 
-export type VedtakBarnetilleggDTO = {
-    begrunnelse?: string;
-    perioder: VedtakBarnetilleggPeriode[];
+export type Barnetillegg = {
+    perioder: BarnetilleggPeriode[];
+    begrunnelse: Nullable<string>;
 };

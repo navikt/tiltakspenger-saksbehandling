@@ -1,5 +1,5 @@
 import { Datovelger } from '~/components/datovelger/Datovelger';
-import { BehandlingData } from '~/types/BehandlingTypes';
+
 import { dateTilISOTekst } from '~/utils/date';
 import { classNames } from '~/utils/classNames';
 import { useRolleForBehandling } from '~/context/saksbehandler/SaksbehandlerContext';
@@ -10,9 +10,10 @@ import {
 } from '~/components/behandling/context/BehandlingSkjemaContext';
 
 import style from './BehandlingsperiodeVelger.module.css';
+import { Behandling } from '~/types/Behandling';
 
 type Props = {
-    behandling: BehandlingData;
+    behandling: Behandling;
     label: string;
     className?: string;
 };
@@ -30,7 +31,7 @@ export const BehandlingsperiodeVelger = ({ behandling, label, className }: Props
             <Datovelger
                 label={`${label} fra og med`}
                 size={'small'}
-                defaultSelected={behandlingsperiode.fraOgMed}
+                defaultSelected={behandlingsperiode?.fraOgMed}
                 readOnly={erIkkeSaksbehandler}
                 onDateChange={(valgtDato) => {
                     if (!valgtDato) {
@@ -46,7 +47,7 @@ export const BehandlingsperiodeVelger = ({ behandling, label, className }: Props
             <Datovelger
                 label={`${label} til og med`}
                 size={'small'}
-                defaultSelected={behandlingsperiode.tilOgMed}
+                defaultSelected={behandlingsperiode?.tilOgMed}
                 readOnly={erIkkeSaksbehandler}
                 onDateChange={(valgtDato) => {
                     if (!valgtDato) {

@@ -13,7 +13,7 @@ import {
 } from '~/types/meldekort/MeldekortBehandling';
 import { formatterBeløp } from '~/utils/beløp';
 import { sorterMeldekortBehandlingerAsc } from '~/utils/meldekort';
-import { SakId } from '~/types/SakTypes';
+import { SakId } from '~/types/Sak';
 import router from 'next/router';
 import { Periode } from '~/types/Periode';
 import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';

@@ -11,7 +11,7 @@ export const revurderingStansValidering = (skjema: BehandlingSkjemaContext): Val
         errors.push('Du må velge en hjemmel som begrunnelse for hvorfor tiltakspengene stanses.');
     }
 
-    if (!behandlingsperiode.fraOgMed) {
+    if (!behandlingsperiode?.fraOgMed) {
         errors.push('Du må velge en fra-dato for når tiltakspengene skal stanses.');
     }
 

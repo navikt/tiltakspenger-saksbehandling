@@ -11,7 +11,7 @@ import {
 } from '@navikt/ds-react';
 import { PersonCircleIcon } from '@navikt/aksel-icons';
 import { Personopplysninger, useHentPersonopplysninger } from './useHentPersonopplysninger';
-import { SakId } from '../../types/SakTypes';
+import { SakId } from '../../types/Sak';
 import NextLink from 'next/link';
 
 import styles from './PersonaliaHeader.module.css';

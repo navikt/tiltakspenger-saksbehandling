@@ -1,5 +1,6 @@
-import { BehandlingData, BehandlingId } from '../../types/BehandlingTypes';
-import { SakId } from '../../types/SakTypes';
+import { Behandling, BehandlingId } from '~/types/Behandling';
+
+import { SakId } from '../../types/Sak';
 import { useFetchJsonFraApi } from '../../utils/fetch/useFetchFraApi';
 
 export const useTaBehandling = (sakId: SakId, behandlingId: BehandlingId) => {
@@ -7,7 +8,7 @@ export const useTaBehandling = (sakId: SakId, behandlingId: BehandlingId) => {
         trigger: taBehandling,
         isMutating: isBehandlingMutating,
         error: taBehandlingError,
-    } = useFetchJsonFraApi<BehandlingData>(`/sak/${sakId}/behandling/${behandlingId}/ta`, 'POST');
+    } = useFetchJsonFraApi<Behandling>(`/sak/${sakId}/behandling/${behandlingId}/ta`, 'POST');
 
     return { taBehandling, isBehandlingMutating, taBehandlingError };
 };

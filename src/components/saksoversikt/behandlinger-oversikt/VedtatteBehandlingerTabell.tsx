@@ -1,17 +1,18 @@
 import { ActionMenu, Button, Table } from '@navikt/ds-react';
 import { behandlingResultatTilTag, finnBehandlingstypeTekst } from '~/utils/tekstformateringUtils';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '~/utils/date';
-import { SøknadsbehandlingResultat } from '~/types/BehandlingTypes';
-import { ChevronDownIcon } from '@navikt/aksel-icons';
+
+import { ArrowsCirclepathIcon, ChevronDownIcon, MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import MenyValgBehandleSøknadPåNytt from '~/components/behandlingmeny/menyvalg/MenyValgBehandleSøknadPåNytt';
-import { VedtattBehandlingDataCellInfo } from '~/components/saksoversikt/behandlinger-oversikt/VedtatteBehandlingerUtils';
+import { VedtattBehandlingCellInfo } from '~/components/saksoversikt/behandlinger-oversikt/VedtatteBehandlingerUtils';
 import SeBehandlingMenyvalg from '~/components/behandlingmeny/menyvalg/SeBehandlingMenyvalg';
 import React from 'react';
 import Link from 'next/link';
 import { behandlingUrl } from '~/utils/urls';
+import { BehandlingResultat } from '~/types/Behandling';
 
 export const VedtatteBehandlingerTabell = (props: {
-    vedtatteBehandlinger: VedtattBehandlingDataCellInfo[];
+    vedtatteBehandlinger: VedtattBehandlingCellInfo[];
 }) => {
     if (props.vedtatteBehandlinger.length === 0) {
         return null;
@@ -60,7 +61,7 @@ export const VedtatteBehandlingerTabell = (props: {
                             {vedtattBehandling.beslutter ?? 'Ikke tildelt'}
                         </Table.DataCell>
                         <Table.DataCell align={'right'}>
-                            {vedtattBehandling.resultat === SøknadsbehandlingResultat.AVSLAG ? (
+                            {vedtattBehandling.resultat === BehandlingResultat.AVSLAG ? (
                                 <ActionMenu>
                                     <ActionMenu.Trigger>
                                         <Button
@@ -90,14 +91,33 @@ export const VedtatteBehandlingerTabell = (props: {
                                     </ActionMenu.Content>
                                 </ActionMenu>
                             ) : (
-                                <Button
-                                    variant={'secondary'}
-                                    as={Link}
-                                    href={behandlingUrl(vedtattBehandling)}
-                                    size={'small'}
-                                >
-                                    Se behandling
-                                </Button>
+                                <ActionMenu>
+                                    <ActionMenu.Trigger>
+                                        <Button
+                                            variant="secondary"
+                                            iconPosition="right"
+                                            icon={<ChevronDownIcon title="Menyvalg" />}
+                                            size="small"
+                                        >
+                                            Velg
+                                        </Button>
+                                    </ActionMenu.Trigger>
+                                    <ActionMenu.Content>
+                                        <ActionMenu.Item
+                                            as={Link}
+                                            href={behandlingUrl(vedtattBehandling)}
+                                            icon={<MagnifyingGlassIcon aria-hidden />}
+                                        >
+                                            Se behandling
+                                        </ActionMenu.Item>
+                                        <ActionMenu.Item
+                                            onClick={() => {}}
+                                            icon={<ArrowsCirclepathIcon aria-hidden />}
+                                        >
+                                            Omgjør
+                                        </ActionMenu.Item>
+                                    </ActionMenu.Content>
+                                </ActionMenu>
                             )}
                         </Table.DataCell>
                     </Table.Row>

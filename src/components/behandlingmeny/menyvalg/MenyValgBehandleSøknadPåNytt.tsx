@@ -2,9 +2,10 @@ import router from 'next/router';
 import { useBehandleSøknadPåNytt } from '~/components/behandlingmeny/behandle-søknad-på-nytt/useBehandleSøknadPåNytt';
 import { FileResetIcon } from '@navikt/aksel-icons';
 import { ActionMenu } from '@navikt/ds-react';
-import { SakId } from '~/types/SakTypes';
-import { SøknadId } from '~/types/SøknadTypes';
+import { SakId } from '~/types/Sak';
+
 import { behandlingUrl } from '~/utils/urls';
+import { SøknadId } from '~/types/Søknad';
 
 type Props = {
     sakId: SakId;

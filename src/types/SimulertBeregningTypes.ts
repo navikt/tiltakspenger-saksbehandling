@@ -1,4 +1,3 @@
-import { BehandlingId } from '~/types/BehandlingTypes';
 import {
     MeldekortBehandlingDagStatus,
     MeldekortBehandlingId,
@@ -6,6 +5,7 @@ import {
 import { Nullable } from '~/types/UtilTypes';
 import { MeldeperiodeKjedeId } from '~/types/meldekort/Meldeperiode';
 import { BeregningerSummert } from '~/types/Beregning';
+import { BehandlingId } from './Behandling';
 
 export enum SimulerertBehandlingstype {
     RAMME = 'RAMME',

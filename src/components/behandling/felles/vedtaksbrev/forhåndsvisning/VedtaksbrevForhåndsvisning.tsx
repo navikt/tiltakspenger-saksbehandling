@@ -4,14 +4,15 @@ import {
     BrevForhåndsvisningDTO,
     useHentVedtaksbrevForhåndsvisning,
 } from './useHentVedtaksbrevForhåndsvisning';
-import { BehandlingData } from '~/types/BehandlingTypes';
+
 import { ValideringResultat } from '~/types/Validering';
 import React, { useEffect, useState } from 'react';
 
 import style from './VedtaksbrevForhåndsvisning.module.css';
+import { Behandling } from '~/types/Behandling';
 
 type Props = {
-    behandling: BehandlingData;
+    behandling: Behandling;
     hentDto: () => BrevForhåndsvisningDTO;
     validering: ValideringResultat;
 };

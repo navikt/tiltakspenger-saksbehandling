@@ -1,12 +1,7 @@
-import {
-    BehandlingData,
-    BehandlingId,
-    BehandlingResultat,
-    Behandlingstype,
-} from '~/types/BehandlingTypes';
 import { Nullable } from '~/types/UtilTypes';
 import { Periode } from '~/types/Periode';
-import { SøknadForBehandlingProps, SøknadId } from '~/types/SøknadTypes';
+import { SøknadDTO, SøknadId } from '~/types/Søknad';
+import { Behandling, BehandlingId, BehandlingResultat, Behandlingstype } from '~/types/Behandling';
 
 type AvbruttSøknad = {
     behandlingstype: Behandlingstype.SØKNAD;
@@ -19,7 +14,7 @@ type AvbruttBehandling = {
     resultat: Nullable<BehandlingResultat>;
 };
 
-export type AvbruttSøknadEllerBehandlingDataCellInfo = {
+export type AvbruttSøknadEllerBehandlingCellInfo = {
     tidspunktAvsluttet: string;
     behandlingsperiode: Nullable<Periode>;
     avsluttetPga: 'ferdigBehandlet' | 'avbrutt';
@@ -28,8 +23,8 @@ export type AvbruttSøknadEllerBehandlingDataCellInfo = {
 } & (AvbruttSøknad | AvbruttBehandling);
 
 export const avbruttBehandlingToDataCellInfo = (
-    behandling: BehandlingData,
-): AvbruttSøknadEllerBehandlingDataCellInfo => {
+    behandling: Behandling,
+): AvbruttSøknadEllerBehandlingCellInfo => {
     const tidspunktAvsluttet = behandling.avbrutt?.avbruttTidspunkt
         ? behandling.avbrutt.avbruttTidspunkt
         : behandling.iverksattTidspunkt!;
@@ -38,7 +33,10 @@ export const avbruttBehandlingToDataCellInfo = (
         id: behandling.id,
         behandlingsperiode: behandling.virkningsperiode,
         resultat: behandling.resultat,
-        behandlingstype: behandling.type,
+        //raq - todo - fiks dette
+        behandlingstype: behandling.type as
+            | Behandlingstype.SØKNADSBEHANDLING
+            | Behandlingstype.REVURDERING,
         tidspunktAvsluttet: tidspunktAvsluttet,
         avsluttetPga: behandling.avbrutt ? 'avbrutt' : 'ferdigBehandlet',
         saksbehandler: behandling.saksbehandler,
@@ -47,21 +45,20 @@ export const avbruttBehandlingToDataCellInfo = (
 };
 
 export const avbruttSøknadToDataCellInfo = (
-    søknad: SøknadForBehandlingProps,
-): AvbruttSøknadEllerBehandlingDataCellInfo => {
+    søknad: SøknadDTO,
+): AvbruttSøknadEllerBehandlingCellInfo => {
     if (søknad.avbrutt == null) {
         throw new Error('Kan ikke hente ut informasjon fra en behandling som ikke er begrunnelse');
     }
     return {
         id: søknad.id,
-        behandlingsperiode: {
-            fraOgMed: Array.isArray(søknad.tiltak)
-                ? søknad.tiltak[0].fraOgMed
-                : søknad.tiltak.fraOgMed,
-            tilOgMed: Array.isArray(søknad.tiltak)
-                ? søknad.tiltak[søknad.tiltak.length - 1].tilOgMed
-                : søknad.tiltak.tilOgMed,
-        },
+        behandlingsperiode:
+            søknad.tiltak?.fraOgMed && søknad.tiltak?.tilOgMed
+                ? {
+                      fraOgMed: søknad.tiltak.fraOgMed,
+                      tilOgMed: søknad.tiltak.tilOgMed,
+                  }
+                : null,
         behandlingstype: Behandlingstype.SØKNAD,
         tidspunktAvsluttet: søknad.avbrutt.avbruttTidspunkt,
         avsluttetPga: 'avbrutt',

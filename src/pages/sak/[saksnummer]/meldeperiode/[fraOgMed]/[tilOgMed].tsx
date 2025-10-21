@@ -1,6 +1,6 @@
 import { pageWithAuthentication } from '../../../../../auth/pageWithAuthentication';
 import { MeldeperiodeKjedeProps } from '../../../../../types/meldekort/Meldeperiode';
-import { SakProps } from '../../../../../types/SakTypes';
+import { SakProps } from '../../../../../types/Sak';
 import { fetchSak } from '../../../../../utils/fetch/fetch-server';
 import { MeldekortSide } from '../../../../../components/meldekort/MeldekortSide';
 import { SakProvider } from '../../../../../context/sak/SakContext';

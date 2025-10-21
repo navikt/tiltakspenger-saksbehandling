@@ -1,12 +1,13 @@
-import { Attestering } from '../BehandlingTypes';
 import { MeldeperiodeId } from './Meldeperiode';
 import { Periode } from '../Periode';
 import { BrukersMeldekortId } from './BrukersMeldekort';
 import { Avbrutt } from '../Avbrutt';
 import { Nullable } from '~/types/UtilTypes';
 import { BeløpProps, MeldeperiodeBeregningProps } from '~/types/Beregning';
-import { SakId } from '../SakTypes';
+import { SakId } from '../Sak';
 import { SimulertBeregning } from '~/types/SimulertBeregningTypes';
+import { Utbetalingsstatus } from '../Utbetaling';
+import { Attestering } from '../Attestering';
 
 // "_behandling"-suffixen er ikke reell, er kun for at typescript ikke skal se denne som ekvivalent med BrukersMeldekortId
 // Ikke gjør run-time typesjekk på denne!
@@ -47,15 +48,9 @@ export enum MeldekortBehandlingType {
     KORRIGERING = 'KORRIGERING',
 }
 
-export enum Utbetalingsstatus {
-    IKKE_GODKJENT = 'IKKE_GODKJENT',
-    IKKE_SENDT_TIL_HELVED = 'IKKE_SENDT_TIL_HELVED',
-    SENDT_TIL_HELVED = 'SENDT_TIL_HELVED',
-    SENDT_TIL_OPPDRAG = 'SENDT_TIL_OPPDRAG',
-    OK_UTEN_UTBETALING = 'OK_UTEN_UTBETALING',
-    OK = 'OK',
-    FEILET_MOT_OPPDRAG = 'FEILET_MOT_OPPDRAG',
+export enum MeldekortBehandlingUtbetalingsstatus {
     AVBRUTT = 'AVBRUTT',
+    IKKE_GODKJENT = 'IKKE_GODKJENT',
 }
 
 export type MeldekortBehandlingProps = {
@@ -74,7 +69,7 @@ export type MeldekortBehandlingProps = {
     begrunnelse?: string;
     type: MeldekortBehandlingType;
     attesteringer: Attestering[];
-    utbetalingsstatus: Utbetalingsstatus;
+    utbetalingsstatus: Utbetalingsstatus | MeldekortBehandlingUtbetalingsstatus;
     periode: Periode;
     dager: MeldekortDagProps[];
     beregning?: MeldekortBeregning;

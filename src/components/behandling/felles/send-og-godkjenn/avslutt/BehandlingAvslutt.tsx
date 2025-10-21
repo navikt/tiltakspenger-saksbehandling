@@ -1,11 +1,12 @@
 import { Button } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import AvsluttBehandlingModal from '~/components/modaler/AvsluttBehandlingModal';
-import { BehandlingData } from '~/types/BehandlingTypes';
+
 import router from 'next/router';
+import { Behandling } from '~/types/Behandling';
 
 type Props = {
-    behandling: BehandlingData;
+    behandling: Behandling;
 };
 
 export const BehandlingAvslutt = ({ behandling }: Props) => {

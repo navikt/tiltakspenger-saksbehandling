@@ -1,5 +1,5 @@
 import { BehandlingSkjemaActionHandlers } from '~/components/behandling/context/BehandlingSkjemaReducer';
-import { Avslagsgrunn } from '~/types/BehandlingTypes';
+import { Avslagsgrunn } from '~/types/Søknadsbehandling';
 
 export type AvslagState = {
     avslagsgrunner: Avslagsgrunn[];

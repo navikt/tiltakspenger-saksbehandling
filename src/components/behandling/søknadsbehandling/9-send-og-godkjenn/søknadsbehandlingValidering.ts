@@ -1,10 +1,11 @@
-import { SøknadsbehandlingData, SøknadsbehandlingResultat } from '~/types/BehandlingTypes';
 import { ValideringFunc, ValideringResultat } from '~/types/Validering';
 import { validerInnvilgelse } from '~/components/behandling/felles/validering/validerInnvilgelse';
 import { BehandlingSkjemaContext } from '~/components/behandling/context/BehandlingSkjemaContext';
+import { BehandlingResultat } from '~/types/Behandling';
+import { Søknadsbehandling } from '~/types/Søknadsbehandling';
 
 export const søknadsbehandlingValidering =
-    (behandling: SøknadsbehandlingData, skjema: BehandlingSkjemaContext): ValideringFunc =>
+    (behandling: Søknadsbehandling, skjema: BehandlingSkjemaContext): ValideringFunc =>
     (type): ValideringResultat => {
         const validering: ValideringResultat = {
             errors: [],
@@ -17,11 +18,11 @@ export const søknadsbehandlingValidering =
             (type === 'lagring' ? validering.warnings : validering.errors).push(
                 'Behandlingsresultat mangler',
             );
-        } else if (resultat === SøknadsbehandlingResultat.AVSLAG) {
+        } else if (resultat === BehandlingResultat.AVSLAG) {
             const avslagValidering = validerAvslag(skjema);
             validering.errors.push(...avslagValidering.errors);
             validering.warnings.push(...avslagValidering.warnings);
-        } else if (resultat === SøknadsbehandlingResultat.INNVILGELSE) {
+        } else if (resultat === BehandlingResultat.INNVILGELSE) {
             const innvilgelseValidering = validerInnvilgelse(behandling, skjema);
             validering.errors.push(...innvilgelseValidering.errors);
             validering.warnings.push(...innvilgelseValidering.warnings);

@@ -1,16 +1,17 @@
 import { Box, Heading } from '@navikt/ds-react';
 
 import styles from '../Saksoversikt.module.css';
-import { SøknadForBehandlingProps } from '~/types/SøknadTypes';
-import { BehandlingData } from '~/types/BehandlingTypes';
+
 import { erBehandlingAvbrutt, erBehandlingVedtatt } from '~/utils/behandling';
 import { VedtatteBehandlingerTabell } from './VedtatteBehandlingerTabell';
 import { vedtattBehandlingToDataCellInfo } from '~/components/saksoversikt/behandlinger-oversikt/VedtatteBehandlingerUtils';
+import { SøknadDTO } from '~/types/Søknad';
+import { Behandling } from '~/types/Behandling';
 
 export const VedtatteBehandlinger = (props: {
     saksnummer: string;
-    søknader: SøknadForBehandlingProps[];
-    behandlinger: BehandlingData[];
+    søknader: SøknadDTO[];
+    behandlinger: Behandling[];
 }) => {
     const avsluttedeBehandlinger = props.behandlinger.filter(
         (b) => erBehandlingAvbrutt(b) || erBehandlingVedtatt(b),

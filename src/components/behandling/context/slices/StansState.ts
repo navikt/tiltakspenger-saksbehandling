@@ -1,5 +1,5 @@
-import { HjemmelForStans } from '~/types/BehandlingTypes';
 import { BehandlingSkjemaActionHandlers } from '~/components/behandling/context/BehandlingSkjemaReducer';
+import { HjemmelForStans } from '~/types/Revurdering';
 
 export type StansState = {
     hjemlerForStans: HjemmelForStans[];

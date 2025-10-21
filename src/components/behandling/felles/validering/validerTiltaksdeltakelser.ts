@@ -1,14 +1,15 @@
 import { deltarPaFlereTiltakMedStartOgSluttdato, hentTiltaksdeltakelser } from '~/utils/behandling';
-import { BehandlingData } from '~/types/BehandlingTypes';
+
 import { ValideringResultat } from '~/types/Validering';
 import { joinPerioder, validerPeriodisering } from '~/utils/periode';
 import dayjs from 'dayjs';
-import { VedtakTiltaksdeltakelsePeriode } from '~/types/VedtakTyper';
 import { Periode } from '~/types/Periode';
+import { TiltaksdeltakelsePeriodeFormData } from '../../context/slices/TiltaksdeltagelseState';
+import { Behandling } from '~/types/Behandling';
 
 export const validerTiltaksdeltakelser = (
-    behandling: BehandlingData,
-    valgteTiltaksdeltakelser: VedtakTiltaksdeltakelsePeriode[],
+    behandling: Behandling,
+    valgteTiltaksdeltakelser: TiltaksdeltakelsePeriodeFormData[],
     behandlingsperiode: Periode,
 ): ValideringResultat => {
     const validering: ValideringResultat = {
@@ -24,6 +25,15 @@ export const validerTiltaksdeltakelser = (
 
     const perioder = valgteTiltaksdeltakelser.map((td) => td.periode);
 
+    const erAllePerioderUtfyllt = perioder.every((p) => p.fraOgMed !== null && p.tilOgMed !== null);
+
+    if (!erAllePerioderUtfyllt) {
+        validering.errors.push(
+            'Alle perioder for tiltaksdeltakelse må ha både fra og med- og til og med-dato satt',
+        );
+        return validering;
+    }
+
     if (perioder.length === 0) {
         validering.errors.push(
             'Minst en tiltaksperiode må spesifiseres når bruker deltar på flere tiltak',
@@ -34,9 +44,9 @@ export const validerTiltaksdeltakelser = (
 
     const tiltaksdeltakelserFraSaksopplysninger = hentTiltaksdeltakelser(behandling);
 
-    const helePerioden = joinPerioder(perioder);
+    const helePerioden = joinPerioder(perioder as Periode[]);
 
-    if (!validerPeriodisering(perioder, false)) {
+    if (!validerPeriodisering(perioder as Periode[], false)) {
         validering.errors.push(
             'Periodene for tiltaksdeltakelse må være sammenhengende og uten overlapp',
         );
@@ -78,6 +88,7 @@ export const validerTiltaksdeltakelser = (
                     'Valgt periode for tiltaksdeltakelse kan ikke starte før tiltaksdeltakelsens startdato',
                 );
             }
+
             if (
                 dayjs(valgtDeltakelsePeriode.periode.tilOgMed).isAfter(
                     dayjs(deltakelse.deltagelseTilOgMed),

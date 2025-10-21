@@ -9,8 +9,8 @@ import {
     XMarkOctagonIcon,
 } from '@navikt/aksel-icons';
 import { Heading, Timeline, Link, BodyShort, Button } from '@navikt/ds-react';
-import { SakProps } from '~/types/SakTypes';
-import { Vedtakstype } from '~/types/VedtakTyper';
+import { SakProps } from '~/types/Sak';
+import { Vedtakstype } from '~/types/Vedtak';
 import NextLink from 'next/link';
 import { formaterDatotekst, periodeTilFormatertDatotekst } from '~/utils/date';
 import { formatterBeløp } from '~/utils/beløp';

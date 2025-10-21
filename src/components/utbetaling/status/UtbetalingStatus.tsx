@@ -1,13 +1,14 @@
 import { BodyShort, HStack, VStack } from '@navikt/ds-react';
 import { utbetalingsstatusTekst } from '~/utils/tekstformateringUtils';
-import { Utbetalingsstatus } from '~/types/meldekort/MeldekortBehandling';
 
 import style from '../UtbetalingFelles.module.css';
+import { Utbetalingsstatus } from '~/types/Utbetaling';
+import { MeldekortBehandlingUtbetalingsstatus } from '~/types/meldekort/MeldekortBehandling';
 
 export type UtbetalingStatusProps = {
     navkontor: string;
     navkontorNavn?: string;
-    utbetalingsstatus?: Utbetalingsstatus;
+    utbetalingsstatus?: Utbetalingsstatus | MeldekortBehandlingUtbetalingsstatus;
 };
 
 export const UtbetalingStatus = ({
