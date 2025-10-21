@@ -56,7 +56,7 @@ export const MeldekortBeregningOgSimulering = ({ meldekortBehandling, className 
                 navkontor={navkontor}
                 navkontorNavn={navkontorNavn}
                 simulertBeregning={simulertBeregning}
-                visEndringVarsel={type === MeldekortBehandlingType.KORRIGERING}
+                erOmberegning={type === MeldekortBehandlingType.KORRIGERING}
             />
 
             {skalViseUtfallVarsel && (

@@ -13,7 +13,7 @@ type Props = {
     navkontorNavn?: string;
     simulertBeregning: SimulertBeregning;
     utbetalingsstatus?: Utbetalingsstatus;
-    visEndringVarsel: boolean;
+    erOmberegning: boolean;
     className?: string;
 };
 
@@ -22,7 +22,7 @@ export const BeregningOgSimuleringHeader = ({
     navkontorNavn,
     simulertBeregning,
     utbetalingsstatus,
-    visEndringVarsel,
+    erOmberegning,
     className,
 }: Props) => {
     const { meldeperioder, beregning } = simulertBeregning;
@@ -40,13 +40,17 @@ export const BeregningOgSimuleringHeader = ({
 
     const erFeilutbetaling = totalDiff < 0;
 
+    const beløpTekst = erOmberegning
+        ? `Beløp til ${erFeilutbetaling ? 'feilutbetaling' : 'etterbetaling'}`
+        : 'Beløp';
+
     return (
         <VStack gap={'1'} className={className}>
             <Heading size={'small'} level={'3'} className={style.header}>
                 {'Utbetaling'}
             </Heading>
 
-            {visEndringVarsel && periode && (
+            {erOmberegning && periode && (
                 <Alert
                     variant={'info'}
                     inline={true}
@@ -55,7 +59,7 @@ export const BeregningOgSimuleringHeader = ({
             )}
 
             <UtbetalingBeløp
-                tekst={`Beløp til ${erFeilutbetaling ? 'feilutbetaling' : 'etterbetaling'}`}
+                tekst={beløpTekst}
                 beløp={Math.abs(totalDiff)}
                 className={erFeilutbetaling ? style.tilbakekrevingBeløp : style.etterbetalingBeløp}
             />

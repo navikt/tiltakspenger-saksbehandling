@@ -39,7 +39,7 @@ export const BehandlingBeregningOgSimulering = () => {
                             utbetalingsstatus={
                                 status === BehandlingStatus.VEDTATT ? utbetalingsstatus : undefined
                             }
-                            visEndringVarsel={true}
+                            erOmberegning={true}
                         />
 
                         <BeregningOppsummering beregninger={beregning} />
