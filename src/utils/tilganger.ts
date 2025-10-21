@@ -63,6 +63,8 @@ export const eierBehandling = (
 ): boolean => {
     const { status, saksbehandler, beslutter } = behandling;
     switch (status) {
+        case BehandlingStatus.UNDER_AUTOMATISK_BEHANDLING:
+            return saksbehandler === 'tp-sak';
         case BehandlingStatus.UNDER_BEHANDLING:
             return innloggetSaksbehandler.navIdent === saksbehandler;
         case BehandlingStatus.UNDER_BESLUTNING:
@@ -212,6 +214,7 @@ export const skalKunneGjenopptaBehandling = (
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     const erRelevantMenyValgForStatus =
+        behandling.status === BehandlingStatus.UNDER_AUTOMATISK_BEHANDLING ||
         behandling.status === BehandlingStatus.UNDER_BEHANDLING ||
         behandling.status === BehandlingStatus.UNDER_BESLUTNING;
 
