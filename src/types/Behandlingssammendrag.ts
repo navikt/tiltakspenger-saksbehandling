@@ -36,6 +36,7 @@ export enum BehandlingssammendragType {
 }
 
 export enum BehandlingssammendragStatus {
+    UNDER_AUTOMATISK_BEHANDLING = 'UNDER_AUTOMATISK_BEHANDLING',
     KLAR_TIL_BEHANDLING = 'KLAR_TIL_BEHANDLING',
     UNDER_BEHANDLING = 'UNDER_BEHANDLING',
     KLAR_TIL_BESLUTNING = 'KLAR_TIL_BESLUTNING',

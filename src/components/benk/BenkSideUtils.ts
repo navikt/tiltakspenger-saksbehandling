@@ -12,6 +12,7 @@ export const behandlingstypeTextFormatter: Record<BehandlingssammendragType, str
 };
 
 export const behandlingsstatusTextFormatter: Record<BehandlingssammendragStatus, string> = {
+    [BehandlingssammendragStatus.UNDER_AUTOMATISK_BEHANDLING]: 'Under automatisk behandling',
     [BehandlingssammendragStatus.KLAR_TIL_BEHANDLING]: 'Klar til behandling',
     [BehandlingssammendragStatus.UNDER_BEHANDLING]: 'Under behandling',
     [BehandlingssammendragStatus.KLAR_TIL_BESLUTNING]: 'Klar til beslutning',
