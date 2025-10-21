@@ -139,6 +139,8 @@ export const manueltBehandlesGrunnTekst: Record<ManueltBehandlesGrunn, string> =
         'Bruker har tiltaksdeltakelse som starter eller slutter mindre enn 14 dager før eller etter søknadsperioden',
     SAKSOPPLYSNING_ULIK_TILTAKSPERIODE:
         'Tiltaksdeltakelsen har ikke samme periode som det er søkt for',
+    SAKSOPPLYSNING_HAR_IKKE_DELTATT_PA_TILTAK:
+        'Bruker har ikke deltatt på tiltaket det er søkt for',
     SAKSOPPLYSNING_ANDRE_YTELSER: 'Bruker mottar andre ytelser i søknadsperioden',
     SAKSOPPLYSNING_VEDTAK_I_ARENA:
         'Det finnes tiltakspengevedtak i Arena som kan overlappe med søknadsperioden',
