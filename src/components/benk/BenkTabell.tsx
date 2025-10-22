@@ -9,7 +9,11 @@ import {
 import { formaterTidspunkt } from '~/utils/date';
 import NextLink from 'next/link';
 import { ValueOf } from 'next/dist/shared/lib/constants';
-import { BehandlingssammendragType, BenkOversiktResponse } from '~/types/Behandlingssammendrag';
+import {
+    BehandlingssammendragStatus,
+    BehandlingssammendragType,
+    BenkOversiktResponse,
+} from '~/types/Behandlingssammendrag';
 
 type Props = {
     data: BenkOversiktResponse;
@@ -90,9 +94,21 @@ const BenkTabell = ({ data, sorteringRetning, onSortChange }: Props) => {
                                 </HStack>
                             </Table.DataCell>
                             <Table.DataCell>
-                                {behandling.status
-                                    ? behandlingsstatusTextFormatter[behandling.status]
-                                    : '-'}
+                                {behandling.status ===
+                                BehandlingssammendragStatus.KLAR_TIL_BEHANDLING ? (
+                                    <Tag variant="success">
+                                        {behandlingsstatusTextFormatter[behandling.status]}
+                                    </Tag>
+                                ) : behandling.status ===
+                                  BehandlingssammendragStatus.KLAR_TIL_BESLUTNING ? (
+                                    <Tag variant="alt2">
+                                        {behandlingsstatusTextFormatter[behandling.status]}
+                                    </Tag>
+                                ) : behandling.status ? (
+                                    behandlingsstatusTextFormatter[behandling.status]
+                                ) : (
+                                    '-'
+                                )}
                             </Table.DataCell>
                             <Table.DataCell>{formaterTidspunkt(behandling.startet)}</Table.DataCell>
                             <Table.DataCell>
