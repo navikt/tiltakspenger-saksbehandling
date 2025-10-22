@@ -1,4 +1,4 @@
-import { Button, Heading, Modal } from '@navikt/ds-react';
+import { Alert, Button, Heading, HStack, Modal, VStack } from '@navikt/ds-react';
 import { ModalHeader } from '@navikt/ds-react/Modal';
 import { useState } from 'react';
 import { useSak } from '~/context/sak/SakContext';
@@ -60,20 +60,29 @@ const MeldekortHelgModalBekreftelse = (props: { åpen: boolean; onClose: () => v
                 </ModalHeader>
 
                 <Modal.Footer>
-                    <Button variant="secondary" type="button" onClick={props.onClose}>
-                        Avbryt
-                    </Button>
-                    <Button
-                        type="button"
-                        loading={toggleBrukerSendInnHelgMeldekort.isMutating}
-                        onClick={() =>
-                            toggleBrukerSendInnHelgMeldekort.trigger({
-                                kanSendeHelg: !sakContext.sak.kanSendeInnHelgForMeldekort,
-                            })
-                        }
-                    >
-                        Bekreft
-                    </Button>
+                    <VStack gap="2">
+                        <HStack gap="2">
+                            <Button
+                                type="button"
+                                loading={toggleBrukerSendInnHelgMeldekort.isMutating}
+                                onClick={() =>
+                                    toggleBrukerSendInnHelgMeldekort.trigger({
+                                        kanSendeHelg: !sakContext.sak.kanSendeInnHelgForMeldekort,
+                                    })
+                                }
+                            >
+                                Bekreft
+                            </Button>
+                            <Button variant="secondary" type="button" onClick={props.onClose}>
+                                Avbryt
+                            </Button>
+                        </HStack>
+                        {toggleBrukerSendInnHelgMeldekort.error && (
+                            <Alert variant="error">
+                                {toggleBrukerSendInnHelgMeldekort.error.message}
+                            </Alert>
+                        )}
+                    </VStack>
                 </Modal.Footer>
             </Modal>
         </div>
