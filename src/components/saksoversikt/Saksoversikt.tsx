@@ -12,7 +12,7 @@ import { MeldekortOversiktIkkeKlar } from './meldekort-oversikt/ikke-klar/Meldek
 import styles from './Saksoversikt.module.css';
 import { VedtatteBehandlinger } from '~/components/saksoversikt/behandlinger-oversikt/VedtatteBehandlinger';
 import NotificationBanner from '../notificationBanner/NotificationBanner';
-import MeldekortHelgModal from '../modaler/meldekort-helg/MeldekortHelgModal';
+import MeldekortHelgToggle from '../toggles/MeldekortHelgToggle';
 
 export const Saksoversikt = () => {
     const {
@@ -61,7 +61,7 @@ export const Saksoversikt = () => {
                     </Heading>
                     <Spacer />
                     <HStack gap="3">
-                        <MeldekortHelgModal />
+                        <MeldekortHelgToggle />
                         <OpprettRevurdering
                             sakId={sakId}
                             harVedtak={harVedtattSøknadsbehandling(behandlinger)}
