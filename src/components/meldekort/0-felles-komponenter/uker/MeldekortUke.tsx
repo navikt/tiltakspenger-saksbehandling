@@ -13,9 +13,10 @@ type Props = {
     dager: MeldekortDagBeregnetProps[];
     ukeIndex: 0 | 1;
     underBehandling: boolean;
+    kanMeldeInnForHelg: boolean;
 };
 
-export const MeldekortUke = ({ dager, ukeIndex, underBehandling }: Props) => {
+export const MeldekortUke = ({ dager, ukeIndex, underBehandling, kanMeldeInnForHelg }: Props) => {
     return (
         <Box className={styles.uke}>
             <Table size="small">
@@ -31,7 +32,11 @@ export const MeldekortUke = ({ dager, ukeIndex, underBehandling }: Props) => {
                 </Table.Header>
                 <Table.Body>
                     {underBehandling ? (
-                        <MeldekortUkeBehandling dager={dager} ukeIndex={ukeIndex} />
+                        <MeldekortUkeBehandling
+                            dager={dager}
+                            ukeIndex={ukeIndex}
+                            kanMeldeInnForHelg={kanMeldeInnForHelg}
+                        />
                     ) : (
                         dager.map((dag) => (
                             <Table.Row key={dag.dato}>

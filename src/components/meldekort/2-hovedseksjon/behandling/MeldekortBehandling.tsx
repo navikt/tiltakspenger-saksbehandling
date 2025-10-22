@@ -14,9 +14,10 @@ import style from './MeldekortBehandling.module.css';
 
 type Props = {
     meldekortBehandling: MeldekortBehandlingProps;
+    kanMeldeInnForHelg: boolean;
 };
 
-export const MeldekortBehandling = ({ meldekortBehandling }: Props) => {
+export const MeldekortBehandling = ({ meldekortBehandling, kanMeldeInnForHelg }: Props) => {
     const { innloggetSaksbehandler } = useSaksbehandler();
 
     const { type, status, erAvsluttet } = meldekortBehandling;
@@ -39,10 +40,16 @@ export const MeldekortBehandling = ({ meldekortBehandling }: Props) => {
                 )}
             </div>
             {kanSaksbehandleForMeldekort(meldekortBehandling, innloggetSaksbehandler) ? (
-                <MeldekortUtfylling meldekortBehandling={meldekortBehandling} />
+                <MeldekortUtfylling
+                    meldekortBehandling={meldekortBehandling}
+                    kanMeldeInnForHelg={kanMeldeInnForHelg}
+                />
             ) : (
                 <>
-                    <MeldekortOppsummering meldekortBehandling={meldekortBehandling} />
+                    <MeldekortOppsummering
+                        meldekortBehandling={meldekortBehandling}
+                        kanSendeInnHelgForMeldekort={kanMeldeInnForHelg}
+                    />
                     {kanBeslutteForMeldekort(meldekortBehandling, innloggetSaksbehandler) && (
                         <MeldekortTaBeslutning meldekortBehandling={meldekortBehandling} />
                     )}

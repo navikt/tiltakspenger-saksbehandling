@@ -8,7 +8,7 @@ import { CircleSlashIcon, DocPencilIcon, PersonPencilIcon } from '@navikt/aksel-
 import style from './MeldekortHøyreSeksjon.module.css';
 import { MeldekortAvsluttedeBehandlinger } from './avsluttede-meldekort/MeldekortAvsluttedeBehandlinger';
 
-export const MeldekortHøyreSeksjon = () => {
+export const MeldekortHøyreSeksjon = (props: { kanMeldeInnForHelg: boolean }) => {
     const {
         alleMeldekortBehandlinger,
         tidligereMeldekortBehandlinger,
@@ -57,7 +57,7 @@ export const MeldekortHøyreSeksjon = () => {
             </Tabs.List>
 
             <Tabs.Panel value={'tidligereBehandlinger'} lazy={false} className={style.panel}>
-                <MeldekortTidligereBehandlinger />
+                <MeldekortTidligereBehandlinger kanMeldeInnForHelg={props.kanMeldeInnForHelg} />
             </Tabs.Panel>
 
             <Tabs.Panel

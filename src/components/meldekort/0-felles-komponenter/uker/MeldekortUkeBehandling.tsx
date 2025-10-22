@@ -16,9 +16,10 @@ import styles from './MeldekortUke.module.css';
 type Props = {
     dager: MeldekortDagBeregnetProps[];
     ukeIndex: 0 | 1;
+    kanMeldeInnForHelg: boolean;
 };
 
-export const MeldekortUkeBehandling = ({ dager, ukeIndex }: Props) => {
+export const MeldekortUkeBehandling = ({ dager, ukeIndex, kanMeldeInnForHelg }: Props) => {
     const { control, watch, getFieldState, formState, clearErrors } =
         useFormContext<MeldekortBehandlingForm>();
 
@@ -49,7 +50,7 @@ export const MeldekortUkeBehandling = ({ dager, ukeIndex }: Props) => {
                 <Table.DataCell>
                     {valgtStatus === MeldekortBehandlingDagStatus.IkkeRettTilTiltakspenger ? (
                         <BodyShort>{meldekortBehandlingDagStatusTekst[valgtStatus]}</BodyShort>
-                    ) : erHelg ? (
+                    ) : erHelg && !kanMeldeInnForHelg ? (
                         <Tooltip content={'Støtter ikke utbetaling av helgedager ennå'}>
                             <BodyShort as={'span'}>
                                 {meldekortBehandlingDagStatusTekst[valgtStatus]}

@@ -7,17 +7,14 @@ import {
     Link,
     Skeleton,
     Spacer,
-    Switch,
     Tag,
 } from '@navikt/ds-react';
 import { PersonCircleIcon } from '@navikt/aksel-icons';
 import { Personopplysninger, useHentPersonopplysninger } from './useHentPersonopplysninger';
-import { SakId, SakProps } from '../../types/SakTypes';
+import { SakId } from '../../types/SakTypes';
 import NextLink from 'next/link';
 
 import styles from './PersonaliaHeader.module.css';
-import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
-import { useSak } from '~/context/sak/SakContext';
 
 type PersonaliaHeaderProps = PropsWithChildren<{
     sakId: SakId;
@@ -30,11 +27,10 @@ export const PersonaliaHeader = ({
     sakId,
     saksnummer,
     visTilbakeKnapp,
-    kanSendeInnHelgForMeldekort,
     children,
 }: PersonaliaHeaderProps) => {
     const { personopplysninger, isPersonopplysningerLoading } = useHentPersonopplysninger(sakId);
-    const sakContext = useSak();
+
     const [visSakId, setVisSakId] = useState(false);
 
     const idSomVises = visSakId ? sakId : saksnummer;
@@ -52,15 +48,6 @@ export const PersonaliaHeader = ({
         };
     }, []);
 
-    const toggleBrukerSendInnHelgMeldekort = useFetchJsonFraApi<
-        SakProps,
-        { kanSendeHelg: boolean }
-    >(`/sak/${sakId}/toggle-helg-meldekort`, 'POST', {
-        onSuccess: (sak) => {
-            sakContext.setSak(sak!);
-        },
-    });
-
     return (
         <HStack gap="3" align="center" className={styles.personaliaHeader}>
             <PersonCircleIcon className={styles.personIcon} />
@@ -73,15 +60,6 @@ export const PersonaliaHeader = ({
                 <Skeleton variant={'text'} className={styles.loader} />
             )}
             <Spacer />
-            <Switch
-                checked={kanSendeInnHelgForMeldekort}
-                onChange={(e) =>
-                    toggleBrukerSendInnHelgMeldekort.trigger({ kanSendeHelg: e.target.checked })
-                }
-                loading={toggleBrukerSendInnHelgMeldekort.isMutating}
-            >
-                Tillatt bruker å sende inn helgedager på meldekortet
-            </Switch>
             <strong>{visSakId ? 'Sak-id:' : 'Saksnr:'}</strong> {idSomVises}
             <CopyButton copyText={idSomVises} variant="action" size="small" />
             {visTilbakeKnapp && (

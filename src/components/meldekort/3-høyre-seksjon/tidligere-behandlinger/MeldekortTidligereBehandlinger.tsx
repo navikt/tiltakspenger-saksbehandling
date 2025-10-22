@@ -13,7 +13,7 @@ import { useMeldeperiodeKjede } from '../../MeldeperiodeKjedeContext';
 
 import style from './MeldekortTidligereBehandlinger.module.css';
 
-export const MeldekortTidligereBehandlinger = () => {
+export const MeldekortTidligereBehandlinger = (props: { kanMeldeInnForHelg: boolean }) => {
     const [valgtIndex, setValgtIndex] = useState(0);
 
     const {
@@ -88,7 +88,10 @@ export const MeldekortTidligereBehandlinger = () => {
                 (erKorrigeringFraTidligerePeriode(valgtBehandling) ? (
                     <MeldekortKorrigertFraTidligerePeriode korrigering={valgtBehandling} />
                 ) : (
-                    <MeldekortOppsummering meldekortBehandling={valgtBehandling} />
+                    <MeldekortOppsummering
+                        meldekortBehandling={valgtBehandling}
+                        kanSendeInnHelgForMeldekort={props.kanMeldeInnForHelg}
+                    />
                 ))}
         </VStack>
     );

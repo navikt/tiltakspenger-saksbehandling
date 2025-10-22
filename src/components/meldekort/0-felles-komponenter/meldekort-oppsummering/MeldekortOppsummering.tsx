@@ -7,14 +7,21 @@ import { MeldekortBeregningOgSimulering } from '~/components/meldekort/0-felles-
 
 type Props = {
     meldekortBehandling: MeldekortBehandlingProps;
+    kanSendeInnHelgForMeldekort: boolean;
 };
 
-export const MeldekortOppsummering = ({ meldekortBehandling }: Props) => {
+export const MeldekortOppsummering = ({
+    meldekortBehandling,
+    kanSendeInnHelgForMeldekort,
+}: Props) => {
     const { beregning, begrunnelse, godkjentTidspunkt, dager } = meldekortBehandling;
 
     return (
         <VStack gap={'5'}>
-            <MeldekortUker dager={beregning?.beregningForMeldekortetsPeriode.dager ?? dager} />
+            <MeldekortUker
+                dager={beregning?.beregningForMeldekortetsPeriode.dager ?? dager}
+                kanMeldeInnForHelg={kanSendeInnHelgForMeldekort}
+            />
             {godkjentTidspunkt && (
                 <BodyShort size={'small'}>
                     {'Godkjent: '}

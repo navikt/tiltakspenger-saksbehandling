@@ -26,9 +26,10 @@ import { MeldekortBeregningOgSimulering } from '~/components/meldekort/0-felles-
 
 type Props = {
     meldekortBehandling: MeldekortBehandlingProps;
+    kanMeldeInnForHelg: boolean;
 };
 
-export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
+export const MeldekortUtfylling = ({ meldekortBehandling, kanMeldeInnForHelg }: Props) => {
     const [valideringsFeil, setValideringsFeil] = useState('');
 
     const { meldeperiodeKjede, tidligereMeldekortBehandlinger, sisteMeldeperiode } =
@@ -93,7 +94,11 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
         <FormProvider {...formContext}>
             <form>
                 <VStack gap={'5'}>
-                    <MeldekortUker dager={formContext.getValues().dager} underBehandling={true} />
+                    <MeldekortUker
+                        dager={formContext.getValues().dager}
+                        underBehandling={true}
+                        kanMeldeInnForHelg={kanMeldeInnForHelg}
+                    />
                     {skalViseBeregningVarsel && (
                         <Alert inline={true} variant={'warning'}>
                             {'Trykk "lagre og beregn" for å oppdatere beregningene'}

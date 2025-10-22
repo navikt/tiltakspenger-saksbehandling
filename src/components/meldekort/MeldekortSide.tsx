@@ -42,8 +42,8 @@ export const MeldekortSide = () => {
             )}
             <div className={style.behandlingLayout}>
                 <MeldekortVenstreSeksjon />
-                <MeldekortHovedseksjon />
-                <MeldekortHøyreSeksjon />
+                <MeldekortHovedseksjon kanMeldeInnForHelg={kanSendeInnHelgForMeldekort} />
+                <MeldekortHøyreSeksjon kanMeldeInnForHelg={kanSendeInnHelgForMeldekort} />
             </div>
         </VStack>
     );

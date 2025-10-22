@@ -12,6 +12,7 @@ import { MeldekortOversiktIkkeKlar } from './meldekort-oversikt/ikke-klar/Meldek
 import styles from './Saksoversikt.module.css';
 import { VedtatteBehandlinger } from '~/components/saksoversikt/behandlinger-oversikt/VedtatteBehandlinger';
 import NotificationBanner from '../notificationBanner/NotificationBanner';
+import MeldekortHelgModal from '../modaler/meldekort-helg/MeldekortHelgModal';
 
 export const Saksoversikt = () => {
     const {
@@ -59,10 +60,13 @@ export const Saksoversikt = () => {
                         Saksoversikt
                     </Heading>
                     <Spacer />
-                    <OpprettRevurdering
-                        sakId={sakId}
-                        harVedtak={harVedtattSøknadsbehandling(behandlinger)}
-                    />
+                    <HStack gap="3">
+                        <MeldekortHelgModal />
+                        <OpprettRevurdering
+                            sakId={sakId}
+                            harVedtak={harVedtattSøknadsbehandling(behandlinger)}
+                        />
+                    </HStack>
                 </HStack>
                 <Box className={styles.tabellwrapper}>
                     <Heading level={'3'} size={'small'}>
