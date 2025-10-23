@@ -52,6 +52,7 @@ const tilMetaStatus: Record<MeldekortBehandletAutomatiskStatus, MetaStatus> = {
     [MeldekortBehandletAutomatiskStatus.ER_UNDER_REVURDERING]: MetaStatus.MeldekortFeil,
     [MeldekortBehandletAutomatiskStatus.FOR_MANGE_DAGER_REGISTRERT]: MetaStatus.MeldekortFeil,
     [MeldekortBehandletAutomatiskStatus.KAN_IKKE_MELDE_HELG]: MetaStatus.MeldekortFeil,
+    [MeldekortBehandletAutomatiskStatus.FOR_MANGE_DAGER_GODKJENT_FRAVÆR]: MetaStatus.MeldekortFeil,
     [MeldekortBehandletAutomatiskStatus.HENTE_NAVKONTOR_FEILET]: MetaStatus.TekniskFeil,
     [MeldekortBehandletAutomatiskStatus.BEHANDLING_FEILET_PÅ_SAK]: MetaStatus.TekniskFeil,
     [MeldekortBehandletAutomatiskStatus.UTBETALING_FEILET_PÅ_SAK]: MetaStatus.TekniskFeil,
@@ -70,6 +71,8 @@ const tilStatusTekst: Record<MeldekortBehandletAutomatiskStatus, string> = {
     [MeldekortBehandletAutomatiskStatus.FOR_MANGE_DAGER_REGISTRERT]:
         'For mange dager registrert på meldekortet',
     [MeldekortBehandletAutomatiskStatus.KAN_IKKE_MELDE_HELG]: 'Saken tillater ikke melding i helg',
+    [MeldekortBehandletAutomatiskStatus.FOR_MANGE_DAGER_GODKJENT_FRAVÆR]:
+        'For mange sammenhengende dager med godkjent fravær',
     [MeldekortBehandletAutomatiskStatus.HENTE_NAVKONTOR_FEILET]:
         'Henting av brukers Nav-kontor feilet',
     [MeldekortBehandletAutomatiskStatus.BEHANDLING_FEILET_PÅ_SAK]: 'Feil relatert til behandlingen',
