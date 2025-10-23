@@ -1,21 +1,21 @@
-import { BehandlingData } from '~/types/BehandlingTypes';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
-import { BehandlingVedtakDTO } from '~/types/VedtakTyper';
+
 import { SWRMutationConfiguration } from 'swr/mutation';
 import { FetcherError } from '~/utils/fetch/fetch';
+import { Rammebehandling, BehandlingVedtak } from '~/types/Behandling';
 
 type Props = {
-    behandling: BehandlingData;
+    behandling: Rammebehandling;
     options?: SWRMutationConfiguration<
-        BehandlingData | undefined,
+        Rammebehandling | undefined,
         FetcherError,
         string,
-        BehandlingVedtakDTO
+        BehandlingVedtak
     >;
 };
 
 export const useLagreBehandling = ({ behandling, options }: Props) => {
-    const { trigger, isMutating, error } = useFetchJsonFraApi<BehandlingData, BehandlingVedtakDTO>(
+    const { trigger, isMutating, error } = useFetchJsonFraApi<Rammebehandling, BehandlingVedtak>(
         `/sak/${behandling.sakId}/behandling/${behandling.id}/oppdater`,
         'POST',
         options,

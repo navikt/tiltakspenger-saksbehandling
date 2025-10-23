@@ -1,11 +1,4 @@
 import {
-    BehandlingData,
-    Behandlingstype,
-    RevurderingData,
-    RevurderingResultat,
-    SøknadsbehandlingData,
-} from '~/types/BehandlingTypes';
-import {
     hentHeleTiltaksdeltagelsesperioden,
     hentTiltaksdeltagelseFraSøknad,
     hentTiltaksdeltakelserMedStartOgSluttdato,
@@ -17,16 +10,26 @@ import {
 } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
 import { BehandlingSkjemaState } from '~/components/behandling/context/BehandlingSkjemaReducer';
 import { Periode } from '~/types/Periode';
-import { SakProps } from '~/types/SakTypes';
-import { VedtakTiltaksdeltakelsePeriode } from '~/types/VedtakTyper';
+import { SakProps } from '~/types/Sak';
+
 import { erDatoIPeriode } from '~/utils/periode';
 import { ANTALL_DAGER_DEFAULT } from '~/components/behandling/felles/dager-per-meldeperiode/BehandlingDagerPerMeldeperiode';
+import { Rammebehandling, BehandlingResultat, Behandlingstype } from '~/types/Behandling';
+import { TiltaksdeltakelsePeriodeFormData } from './slices/TiltaksdeltagelseState';
+import { Nullable } from '~/types/UtilTypes';
+import {
+    TiltaksdeltagelseMedPeriode,
+    TiltaksdeltakelsePeriode,
+} from '~/types/TiltakDeltagelseTypes';
+
+import { Søknadsbehandling } from '~/types/Søknadsbehandling';
+import { Revurdering } from '~/types/Revurdering';
 
 export const behandlingSkjemaInitialValue = ({
     behandling,
     sak,
 }: {
-    behandling: BehandlingData;
+    behandling: Rammebehandling;
     sak: SakProps;
 }): BehandlingSkjemaState => {
     const { type } = behandling;
@@ -43,9 +46,33 @@ export const behandlingSkjemaInitialValue = ({
     throw new Error(`Ukjent behandlingstype: ${type satisfies never}`);
 };
 
-const søknadsbehandlingInitialState = (
-    behandling: SøknadsbehandlingData,
-): BehandlingSkjemaState => {
+const valgteTiltaksdeltakelserFraBehandlingTilFormData = (
+    behandlingsperiode: Nullable<Periode>,
+    valgteTiltaksdeltakelser: Nullable<TiltaksdeltakelsePeriode[]>,
+    tiltakFraSøknad: Nullable<TiltaksdeltagelseMedPeriode>,
+): TiltaksdeltakelsePeriodeFormData[] => {
+    return (
+        valgteTiltaksdeltakelser?.map((tiltaksdeltakelse) => ({
+            eksternDeltagelseId: tiltaksdeltakelse.eksternDeltagelseId,
+            periode: {
+                fraOgMed: tiltaksdeltakelse.periode.fraOgMed,
+                tilOgMed: tiltaksdeltakelse.periode.tilOgMed,
+            },
+        })) ||
+        (tiltakFraSøknad && [
+            {
+                eksternDeltagelseId: tiltakFraSøknad.eksternDeltagelseId,
+                periode: {
+                    fraOgMed: behandlingsperiode?.fraOgMed ?? null,
+                    tilOgMed: behandlingsperiode?.tilOgMed ?? null,
+                },
+            },
+        ]) ||
+        []
+    );
+};
+
+const søknadsbehandlingInitialState = (behandling: Søknadsbehandling): BehandlingSkjemaState => {
     const tiltaksperiode = hentTiltaksperiodeFraSøknad(behandling);
     const tiltakFraSoknad = hentTiltaksdeltagelseFraSøknad(behandling);
 
@@ -57,15 +84,11 @@ const søknadsbehandlingInitialState = (
 
         harBarnetillegg: barnetilleggPerioder.length > 0,
         barnetilleggPerioder,
-        valgteTiltaksdeltakelser:
-            behandling.valgteTiltaksdeltakelser ||
-            (tiltakFraSoknad && [
-                {
-                    eksternDeltagelseId: tiltakFraSoknad.eksternDeltagelseId,
-                    periode: behandling.virkningsperiode ?? tiltaksperiode,
-                },
-            ]) ||
-            [],
+        valgteTiltaksdeltakelser: valgteTiltaksdeltakelserFraBehandlingTilFormData(
+            behandling.virkningsperiode ?? tiltaksperiode,
+            behandling.valgteTiltaksdeltakelser,
+            tiltakFraSoknad,
+        ),
         antallDagerPerMeldeperiode: behandling.antallDagerPerMeldeperiode
             ? behandling.antallDagerPerMeldeperiode.map((dager) => ({
                   antallDagerPerMeldeperiode: dager.antallDagerPerMeldeperiode,
@@ -82,10 +105,12 @@ const søknadsbehandlingInitialState = (
                                 fraOgMed: behandling.virkningsperiode.fraOgMed,
                                 tilOgMed: behandling.virkningsperiode.tilOgMed,
                             }
-                          : {
-                                fraOgMed: tiltaksperiode.fraOgMed,
-                                tilOgMed: tiltaksperiode.tilOgMed,
-                            },
+                          : tiltaksperiode?.fraOgMed && tiltaksperiode?.tilOgMed
+                            ? {
+                                  fraOgMed: tiltaksperiode.fraOgMed,
+                                  tilOgMed: tiltaksperiode.tilOgMed,
+                              }
+                            : { fraOgMed: null, tilOgMed: null },
                   },
               ],
         avslagsgrunner: behandling.avslagsgrunner ?? [],
@@ -98,17 +123,14 @@ const søknadsbehandlingInitialState = (
     };
 };
 
-const revurderingInitialState = (
-    behandling: RevurderingData,
-    sak: SakProps,
-): BehandlingSkjemaState => {
+const revurderingInitialState = (behandling: Revurdering, sak: SakProps): BehandlingSkjemaState => {
     const { resultat } = behandling;
 
     switch (resultat) {
-        case RevurderingResultat.REVURDERING_INNVILGELSE: {
+        case BehandlingResultat.REVURDERING_INNVILGELSE: {
             return revurderingInnvilgelseInitialState(behandling, sak);
         }
-        case RevurderingResultat.STANS: {
+        case BehandlingResultat.STANS: {
             return revurderingStansInitialState(behandling);
         }
     }
@@ -117,7 +139,7 @@ const revurderingInitialState = (
 };
 
 const revurderingInnvilgelseInitialState = (
-    behandling: RevurderingData,
+    behandling: Revurdering,
     sak: SakProps,
 ): BehandlingSkjemaState => {
     const tiltaksperiode = hentHeleTiltaksdeltagelsesperioden(behandling);
@@ -131,7 +153,7 @@ const revurderingInnvilgelseInitialState = (
     );
 
     return {
-        resultat: RevurderingResultat.REVURDERING_INNVILGELSE,
+        resultat: BehandlingResultat.REVURDERING_INNVILGELSE,
         behandlingsperiode,
         harBarnetillegg: barnetilleggPerioder.length > 0,
         barnetilleggPerioder,
@@ -158,9 +180,9 @@ const revurderingInnvilgelseInitialState = (
     };
 };
 
-const revurderingStansInitialState = (behandling: RevurderingData): BehandlingSkjemaState => {
+const revurderingStansInitialState = (behandling: Revurdering): BehandlingSkjemaState => {
     return {
-        resultat: RevurderingResultat.STANS,
+        resultat: BehandlingResultat.STANS,
         behandlingsperiode: behandling.virkningsperiode ?? {},
         hjemlerForStans: behandling.valgtHjemmelHarIkkeRettighet ?? [],
         harValgtStansFraFørsteDagSomGirRett:
@@ -177,10 +199,10 @@ const revurderingStansInitialState = (behandling: RevurderingData): BehandlingSk
 };
 
 const tilValgteTiltaksdeltakelser = (
-    behandling: BehandlingData,
+    behandling: Rammebehandling,
     behandlingsperiode: Periode,
-): VedtakTiltaksdeltakelsePeriode[] => {
-    const overlappendeDeltakelser: VedtakTiltaksdeltakelsePeriode[] = [];
+): TiltaksdeltakelsePeriodeFormData[] => {
+    const overlappendeDeltakelser: TiltaksdeltakelsePeriodeFormData[] = [];
 
     const tiltak = hentTiltaksdeltakelserMedStartOgSluttdato(behandling).map(
         (tiltaksdeltagelse) => ({

@@ -14,8 +14,8 @@ export const validerAntallDagerPerMeldeperiode = (
     const harFylltUtAlleNødvendigeFelter = antallDagerPerMeldeperiode.every(
         (periode) =>
             periode.antallDagerPerMeldeperiode &&
-            periode.periode.fraOgMed &&
-            periode.periode.tilOgMed,
+            periode.periode?.fraOgMed &&
+            periode.periode?.tilOgMed,
     );
 
     if (!harFylltUtAlleNødvendigeFelter) {
@@ -28,14 +28,14 @@ export const validerAntallDagerPerMeldeperiode = (
                 periode.antallDagerPerMeldeperiode! > 14
             ) {
                 validering.errors.push(
-                    `Antall dager per meldeperiode må være mellom 1 og 14. Perioden: ${periode.periode.fraOgMed} - ${periode.periode.tilOgMed}, Antall dager: ${periode.antallDagerPerMeldeperiode}`,
+                    `Antall dager per meldeperiode må være mellom 1 og 14. Perioden: ${periode.periode!.fraOgMed} - ${periode.periode!.tilOgMed}, Antall dager: ${periode.antallDagerPerMeldeperiode}`,
                 );
             }
         });
 
         const perioder = antallDagerPerMeldeperiode.map((apm) => ({
-            fraOgMed: apm.periode.fraOgMed!,
-            tilOgMed: apm.periode.tilOgMed!,
+            fraOgMed: apm.periode!.fraOgMed!,
+            tilOgMed: apm.periode!.tilOgMed!,
         }));
 
         if (perioder.length === 0) {

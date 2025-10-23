@@ -1,8 +1,5 @@
-import {
-    BehandlingData,
-    BehandlingForOversiktData,
-    BehandlingStatus,
-} from '~/types/BehandlingTypes';
+import { Rammebehandling, Behandlingsstatus } from '~/types/Behandling';
+import { BehandlingForOversikt } from '~/types/BehandlingForOversikt';
 import {
     MeldekortBehandlingProps,
     MeldekortBehandlingStatus,
@@ -16,7 +13,7 @@ export const erBeslutter = (saksbehandler: Saksbehandler) =>
     saksbehandler.roller.includes(SaksbehandlerRolle.BESLUTTER);
 
 export const kanBeslutteForBehandling = (
-    behandling: BehandlingData,
+    behandling: Rammebehandling,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     const { status, saksbehandler, beslutter } = behandling;
@@ -25,7 +22,7 @@ export const kanBeslutteForBehandling = (
         erBeslutter(innloggetSaksbehandler) &&
         innloggetSaksbehandler.navIdent === beslutter &&
         innloggetSaksbehandler.navIdent !== saksbehandler &&
-        status === BehandlingStatus.UNDER_BESLUTNING
+        status === Behandlingsstatus.UNDER_BESLUTNING
     );
 };
 
@@ -37,17 +34,17 @@ export const kanBehandle = (
     innloggetSaksbehandler.navIdent === saksbehandlerForBehandling;
 
 export const kanSaksbehandleForBehandling = (
-    behandling: BehandlingData,
+    behandling: Rammebehandling,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     return (
         kanBehandle(innloggetSaksbehandler, behandling.saksbehandler) &&
-        behandling.status === BehandlingStatus.UNDER_BEHANDLING
+        behandling.status === Behandlingsstatus.UNDER_BEHANDLING
     );
 };
 
 export const hentRolleForBehandling = (
-    behandling: BehandlingData,
+    behandling: Rammebehandling,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     return kanSaksbehandleForBehandling(behandling, innloggetSaksbehandler)
@@ -58,16 +55,16 @@ export const hentRolleForBehandling = (
 };
 
 export const eierBehandling = (
-    behandling: BehandlingForOversiktData | BehandlingData,
+    behandling: BehandlingForOversikt | Rammebehandling,
     innloggetSaksbehandler: Saksbehandler,
 ): boolean => {
     const { status, saksbehandler, beslutter } = behandling;
     switch (status) {
-        case BehandlingStatus.UNDER_AUTOMATISK_BEHANDLING:
+        case Behandlingsstatus.UNDER_AUTOMATISK_BEHANDLING:
             return saksbehandler === 'tp-sak';
-        case BehandlingStatus.UNDER_BEHANDLING:
+        case Behandlingsstatus.UNDER_BEHANDLING:
             return innloggetSaksbehandler.navIdent === saksbehandler;
-        case BehandlingStatus.UNDER_BESLUTNING:
+        case Behandlingsstatus.UNDER_BESLUTNING:
             return innloggetSaksbehandler.navIdent === beslutter;
         default:
             return false;
@@ -75,7 +72,7 @@ export const eierBehandling = (
 };
 
 export const erBehandlerEllerBeslutterAvBehandling = (
-    behandling: BehandlingForOversiktData,
+    behandling: BehandlingForOversikt,
     innloggetSaksbehandler: Saksbehandler,
 ): boolean => {
     const { saksbehandler, beslutter } = behandling;
@@ -123,18 +120,18 @@ export const eierMeldekortBehandling = (
 };
 
 export const skalKunneTaBehandling = (
-    behandling: BehandlingForOversiktData,
+    behandling: BehandlingForOversikt,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     const { status, saksbehandler } = behandling;
 
     switch (status) {
-        case BehandlingStatus.KLAR_TIL_BESLUTNING:
+        case Behandlingsstatus.KLAR_TIL_BESLUTNING:
             return (
                 erBeslutter(innloggetSaksbehandler) &&
                 innloggetSaksbehandler.navIdent != saksbehandler
             );
-        case BehandlingStatus.KLAR_TIL_BEHANDLING:
+        case Behandlingsstatus.KLAR_TIL_BEHANDLING:
             return erSaksbehandler(innloggetSaksbehandler);
         default:
             return false;
@@ -142,20 +139,20 @@ export const skalKunneTaBehandling = (
 };
 
 export const skalKunneOvertaBehandling = (
-    behandling: BehandlingForOversiktData,
+    behandling: BehandlingForOversikt,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     const { status, saksbehandler, beslutter } = behandling;
 
     switch (status) {
-        case BehandlingStatus.UNDER_BESLUTNING:
+        case Behandlingsstatus.UNDER_BESLUTNING:
             return (
                 beslutter &&
                 erBeslutter(innloggetSaksbehandler) &&
                 !eierBehandling(behandling, innloggetSaksbehandler) &&
                 innloggetSaksbehandler.navIdent !== saksbehandler
             );
-        case BehandlingStatus.UNDER_BEHANDLING:
+        case Behandlingsstatus.UNDER_BEHANDLING:
             return (
                 saksbehandler &&
                 erSaksbehandler(innloggetSaksbehandler) &&
@@ -210,13 +207,13 @@ export const skalKunneOvertaMeldekortBehandling = (
 };
 
 export const skalKunneGjenopptaBehandling = (
-    behandling: BehandlingData | BehandlingForOversiktData,
+    behandling: Rammebehandling | BehandlingForOversikt,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     const erRelevantMenyValgForStatus =
-        behandling.status === BehandlingStatus.UNDER_AUTOMATISK_BEHANDLING ||
-        behandling.status === BehandlingStatus.UNDER_BEHANDLING ||
-        behandling.status === BehandlingStatus.UNDER_BESLUTNING;
+        behandling.status === Behandlingsstatus.UNDER_AUTOMATISK_BEHANDLING ||
+        behandling.status === Behandlingsstatus.UNDER_BEHANDLING ||
+        behandling.status === Behandlingsstatus.UNDER_BESLUTNING;
 
     if ('ventestatus' in behandling) {
         return (

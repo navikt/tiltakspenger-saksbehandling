@@ -4,14 +4,14 @@ import { BehandlingSaksopplysning } from '../BehandlingSaksopplysning';
 import { alderFraDato, finn16årsdag, formaterDatotekst } from '~/utils/date';
 import { erDatoIPeriode } from '~/utils/periode';
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
-import { SøknadForBehandlingProps } from '~/types/SøknadTypes';
 import { Periode } from '~/types/Periode';
 
 import style from './SøknadOpplysningerBarn.module.css';
+import { SøknadDTO } from '~/types/Søknad';
 
 type Props = {
     tiltaksperiode: Periode;
-    søknad: SøknadForBehandlingProps;
+    søknad: SøknadDTO;
     className?: string;
 };
 

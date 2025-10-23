@@ -1,15 +1,16 @@
 import { Button, HStack } from '@navikt/ds-react';
 import React, { useState } from 'react';
-import { BehandlingData } from '~/types/BehandlingTypes';
+
 import { useBehandling } from '../../../context/BehandlingContext';
 import { BekreftelsesModal } from '../../../../modaler/BekreftelsesModal';
 import { Underkjenn } from '../../../../underkjenn/Underkjenn';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { useGodkjennBehandling } from '~/components/behandling/felles/send-og-godkjenn/godkjenn/useGodkjennBehandling';
 import { useNotification } from '~/context/NotificationContext';
+import { Rammebehandling } from '~/types/Behandling';
 
 type Props = {
-    behandling: BehandlingData;
+    behandling: Rammebehandling;
 };
 
 export const BehandlingGodkjenn = ({ behandling }: Props) => {
@@ -20,7 +21,7 @@ export const BehandlingGodkjenn = ({ behandling }: Props) => {
     const { godkjennBehandling, godkjennBehandlingLaster, godkjennBehandlingError } =
         useGodkjennBehandling(behandling);
 
-    const underkjennApi = useFetchJsonFraApi<BehandlingData, { begrunnelse: string }>(
+    const underkjennApi = useFetchJsonFraApi<Rammebehandling, { begrunnelse: string }>(
         `/sak/${behandling.sakId}/behandling/${behandling.id}/underkjenn`,
         'POST',
         {

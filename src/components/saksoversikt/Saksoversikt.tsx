@@ -1,5 +1,5 @@
 import { Box, Heading, HStack, Spacer } from '@navikt/ds-react';
-import { BehandlingData, BehandlingStatus, Behandlingstype } from '~/types/BehandlingTypes';
+
 import { MeldekortOversikt } from './meldekort-oversikt/MeldekortOversikt';
 import { BehandlingerOversikt } from './behandlinger-oversikt/BehandlingerOversikt';
 import { OpprettRevurdering } from './opprett-revurdering/OpprettRevurdering';
@@ -13,6 +13,7 @@ import styles from './Saksoversikt.module.css';
 import { VedtatteBehandlinger } from '~/components/saksoversikt/behandlinger-oversikt/VedtatteBehandlinger';
 import NotificationBanner from '../notificationBanner/NotificationBanner';
 import MeldekortHelgToggle from '../toggles/MeldekortHelgToggle';
+import { Rammebehandling, Behandlingsstatus, Behandlingstype } from '~/types/Behandling';
 
 export const Saksoversikt = () => {
     const {
@@ -114,9 +115,9 @@ export const Saksoversikt = () => {
     );
 };
 
-const harVedtattSøknadsbehandling = (behandlingsoversikt: BehandlingData[]) =>
+const harVedtattSøknadsbehandling = (behandlingsoversikt: Rammebehandling[]) =>
     behandlingsoversikt.some(
         (behandling) =>
             behandling.type === Behandlingstype.SØKNADSBEHANDLING &&
-            behandling.status === BehandlingStatus.VEDTATT,
+            behandling.status === Behandlingsstatus.VEDTATT,
     );

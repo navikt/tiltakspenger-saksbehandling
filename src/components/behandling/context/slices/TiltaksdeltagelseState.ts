@@ -1,10 +1,14 @@
-import { Periode } from '~/types/Periode';
-import { VedtakTiltaksdeltakelsePeriode } from '~/types/VedtakTyper';
+import { Periode, PeriodeMedNullable } from '~/types/Periode';
 import { leggTilDager } from '~/utils/date';
 import { BehandlingSkjemaActionHandlers } from '~/components/behandling/context/BehandlingSkjemaReducer';
 
 export type TiltaksdeltagelseState = {
-    valgteTiltaksdeltakelser: VedtakTiltaksdeltakelsePeriode[];
+    valgteTiltaksdeltakelser: TiltaksdeltakelsePeriodeFormData[];
+};
+
+export type TiltaksdeltakelsePeriodeFormData = {
+    eksternDeltagelseId: string;
+    periode: PeriodeMedNullable;
 };
 
 export type TiltaksdeltagelseActions =
@@ -20,8 +24,12 @@ export type TiltaksdeltagelseActions =
           payload: { eksternDeltagelseId: string; index: number };
       }
     | {
-          type: 'oppdaterTiltakPeriode';
-          payload: { periode: Partial<Periode>; index: number };
+          type: 'oppdaterTiltaksdeltagelseFraOgMed';
+          payload: { fraOgMed: string; index: number };
+      }
+    | {
+          type: 'oppdaterTiltaksdeltagelseTilOgMed';
+          payload: { tilOgMed: string; index: number };
       };
 
 export const tiltaksdeltagelseActionHandlers = {
@@ -29,17 +37,16 @@ export const tiltaksdeltagelseActionHandlers = {
         const innvilgelsesperiode = state.behandlingsperiode as Periode;
         const forrigeTiltakPeriode = state.valgteTiltaksdeltakelser.slice(-1)[0];
 
-        const nesteTiltakPeriode: Periode = forrigeTiltakPeriode
+        const nesteTiltakPeriode = forrigeTiltakPeriode
             ? {
-                  fraOgMed:
-                      innvilgelsesperiode.tilOgMed > forrigeTiltakPeriode.periode.tilOgMed
-                          ? leggTilDager(forrigeTiltakPeriode.periode.tilOgMed, 1)
-                          : innvilgelsesperiode.tilOgMed,
+                  fraOgMed: forrigeTiltakPeriode.periode.tilOgMed
+                      ? leggTilDager(forrigeTiltakPeriode.periode.tilOgMed, 1)
+                      : innvilgelsesperiode.fraOgMed,
                   tilOgMed: innvilgelsesperiode.tilOgMed,
               }
             : innvilgelsesperiode;
 
-        const nyTiltakPeriode: VedtakTiltaksdeltakelsePeriode = {
+        const nyTiltakPeriode: TiltaksdeltakelsePeriodeFormData = {
             eksternDeltagelseId: forrigeTiltakPeriode.eksternDeltagelseId,
             periode: nesteTiltakPeriode,
         };
@@ -67,15 +74,27 @@ export const tiltaksdeltagelseActionHandlers = {
             ),
         };
     },
-
-    oppdaterTiltakPeriode: (state, payload) => {
+    oppdaterTiltaksdeltagelseFraOgMed: (state, payload) => {
         return {
             ...state,
             valgteTiltaksdeltakelser: state.valgteTiltaksdeltakelser.map((periode, index) =>
                 index === payload.index
                     ? {
                           ...periode,
-                          periode: { ...periode.periode, ...payload.periode },
+                          periode: { ...periode.periode, fraOgMed: payload.fraOgMed },
+                      }
+                    : periode,
+            ),
+        };
+    },
+    oppdaterTiltaksdeltagelseTilOgMed: (state, payload) => {
+        return {
+            ...state,
+            valgteTiltaksdeltakelser: state.valgteTiltaksdeltakelser?.map((periode, index) =>
+                index === payload.index
+                    ? {
+                          ...periode,
+                          periode: { ...periode.periode, tilOgMed: payload.tilOgMed },
                       }
                     : periode,
             ),

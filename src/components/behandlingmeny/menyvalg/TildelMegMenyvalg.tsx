@@ -1,5 +1,5 @@
 import { ActionMenu } from '@navikt/ds-react';
-import { BehandlingForOversiktData, BehandlingStatus } from '~/types/BehandlingTypes';
+import { BehandlingForOversikt } from '~/types/BehandlingForOversikt';
 import React from 'react';
 import Link from 'next/link';
 import { skalKunneTaBehandling } from '~/utils/tilganger';
@@ -8,20 +8,21 @@ import { useTaBehandling } from '~/components/behandlingmeny/useTaBehandling';
 import { Saksbehandler } from '~/types/Saksbehandler';
 import { PersonIcon } from '@navikt/aksel-icons';
 import { behandlingUrl } from '~/utils/urls';
+import { Behandlingsstatus } from '~/types/Behandling';
 
 export const visTildelMegMenyvalg = (
-    behandling: BehandlingForOversiktData,
+    behandling: BehandlingForOversikt,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     const erReleventMenyValgForStatus =
-        behandling.status === BehandlingStatus.KLAR_TIL_BEHANDLING ||
-        behandling.status === BehandlingStatus.KLAR_TIL_BESLUTNING;
+        behandling.status === Behandlingsstatus.KLAR_TIL_BEHANDLING ||
+        behandling.status === Behandlingsstatus.KLAR_TIL_BESLUTNING;
 
     return erReleventMenyValgForStatus && skalKunneTaBehandling(behandling, innloggetSaksbehandler);
 };
 
 type Props = {
-    behandling: BehandlingForOversiktData;
+    behandling: BehandlingForOversikt;
 };
 
 const TildelMegMenyvalg = ({ behandling }: Props) => {

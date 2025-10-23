@@ -1,28 +1,26 @@
-import {
-    BehandlingData,
-    Behandlingstype,
-    SøknadsbehandlingData,
-    RevurderingData,
-} from '~/types/BehandlingTypes';
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { useRolleForBehandling } from '~/context/saksbehandler/SaksbehandlerContext';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
+import { Rammebehandling, Behandlingstype } from '~/types/Behandling';
 
-type BehandlingContext<Behandling extends BehandlingData> = {
-    behandling: Behandling;
-    setBehandling: (behandling: BehandlingData) => void;
+import { Søknadsbehandling } from '~/types/Søknadsbehandling';
+import { Revurdering } from '~/types/Revurdering';
+
+type BehandlingContext<Rammebehandling> = {
+    behandling: Rammebehandling;
+    setBehandling: (behandling: Rammebehandling) => void;
     rolleForBehandling: SaksbehandlerRolle.SAKSBEHANDLER | SaksbehandlerRolle.BESLUTTER | null;
 };
 
-const Context = createContext({} as BehandlingContext<BehandlingData>);
+const Context = createContext({} as BehandlingContext<Rammebehandling>);
 
 type Props = {
-    behandling: BehandlingData;
+    behandling: Rammebehandling;
     children: ReactNode;
 };
 
 export const BehandlingProvider = ({ behandling: initialBehandling, children }: Props) => {
-    const [behandling, setBehandling] = useState<BehandlingData>(initialBehandling);
+    const [behandling, setBehandling] = useState<Rammebehandling>(initialBehandling);
 
     const rolleForBehandling = useRolleForBehandling(behandling);
 
@@ -54,7 +52,7 @@ export const useSøknadsbehandling = () => {
         throw Error(`Feil context for søknadsbehandling: ${context.behandling.type}`);
     }
 
-    return context as BehandlingContext<SøknadsbehandlingData>;
+    return context as BehandlingContext<Søknadsbehandling>;
 };
 
 export const useRevurderingBehandling = () => {
@@ -64,5 +62,5 @@ export const useRevurderingBehandling = () => {
         throw Error(`Feil context for revurdering: ${context.behandling.type}`);
     }
 
-    return context as BehandlingContext<RevurderingData>;
+    return context as BehandlingContext<Revurdering>;
 };

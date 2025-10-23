@@ -1,6 +1,6 @@
 import React from 'react';
 import { ActionMenu } from '@navikt/ds-react';
-import { BehandlingForOversiktData } from '~/types/BehandlingTypes';
+import { BehandlingForOversikt } from '~/types/BehandlingForOversikt';
 import { skalKunneGjenopptaBehandling } from '~/utils/tilganger';
 import { Saksbehandler } from '~/types/Saksbehandler';
 import { PlayIcon } from '@navikt/aksel-icons';
@@ -9,14 +9,14 @@ import router from 'next/router';
 import { behandlingUrl } from '~/utils/urls';
 
 export const visGjenopptaBehandlingMenyvalg = (
-    behandling: BehandlingForOversiktData,
+    behandling: BehandlingForOversikt,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     return skalKunneGjenopptaBehandling(behandling, innloggetSaksbehandler);
 };
 
 type Props = {
-    behandling: BehandlingForOversiktData;
+    behandling: BehandlingForOversikt;
 };
 
 const GjenopptaBehandlingMenyvalg = ({ behandling }: Props) => {

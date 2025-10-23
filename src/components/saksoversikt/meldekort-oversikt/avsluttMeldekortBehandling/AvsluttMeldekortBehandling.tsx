@@ -2,7 +2,7 @@ import React, { FormEvent, useRef, useState } from 'react';
 import router from 'next/router';
 import { BodyLong, Button, ButtonProps, Heading, HStack, Modal, Textarea } from '@navikt/ds-react';
 import { TrashIcon } from '@navikt/aksel-icons';
-import { SakId } from '~/types/SakTypes';
+import { SakId } from '~/types/Sak';
 import {
     MeldekortBehandlingId,
     MeldekortBehandlingProps,

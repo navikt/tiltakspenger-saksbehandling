@@ -1,8 +1,9 @@
 import { describe, expect, test } from '@jest/globals';
-import { SøknadBarnKilde } from '~/types/SøknadTypes';
+
 import { Periode } from '~/types/Periode';
 import { periodiserBarnetilleggFraSøknad } from './periodiserBarnetilleggFraSøknad';
 import { finn16årsdag, forrigeDag } from '~/utils/date';
+import { SøknadBarnKilde } from '~/types/Søknad';
 
 const virkningsperiode: Periode = {
     fraOgMed: '2024-07-01',
@@ -12,6 +13,8 @@ const virkningsperiode: Periode = {
 const barnSomBlir16FørPerioden = {
     fødselsdato: '2008-06-30',
     fornavn: 'Ola',
+    mellomnavn: null,
+    etternavn: null,
     kilde: SøknadBarnKilde.PDL,
     oppholderSegIEØS: true,
 };
@@ -19,6 +22,8 @@ const barnSomBlir16FørPerioden = {
 const barnSomIkkeOppholderSegIEØS = {
     fødselsdato: '2008-06-30',
     fornavn: 'Ole',
+    mellomnavn: null,
+    etternavn: null,
     kilde: SøknadBarnKilde.PDL,
     oppholderSegIEØS: false,
 };
@@ -26,6 +31,8 @@ const barnSomIkkeOppholderSegIEØS = {
 const barnSomBlir16TidligIPerioden = {
     fødselsdato: '2008-07-15',
     fornavn: 'Kari',
+    mellomnavn: null,
+    etternavn: null,
     kilde: SøknadBarnKilde.PDL,
     oppholderSegIEØS: true,
 };
@@ -33,6 +40,8 @@ const barnSomBlir16TidligIPerioden = {
 const barnSomBlir16MidtIPerioden = {
     fødselsdato: '2008-12-31',
     fornavn: 'Bob',
+    mellomnavn: null,
+    etternavn: null,
     kilde: SøknadBarnKilde.PDL,
     oppholderSegIEØS: true,
 };
@@ -40,6 +49,8 @@ const barnSomBlir16MidtIPerioden = {
 const barnSomBlir16SentIPerioden = {
     fødselsdato: '2009-06-15',
     fornavn: 'Alice',
+    mellomnavn: null,
+    etternavn: null,
     kilde: SøknadBarnKilde.PDL,
     oppholderSegIEØS: true,
 };
@@ -47,6 +58,8 @@ const barnSomBlir16SentIPerioden = {
 const barnSomErUnder16HelePerioden = {
     fødselsdato: '2010-01-01',
     fornavn: 'Chuck',
+    mellomnavn: null,
+    etternavn: null,
     kilde: SøknadBarnKilde.PDL,
     oppholderSegIEØS: true,
 };
@@ -54,6 +67,8 @@ const barnSomErUnder16HelePerioden = {
 const barnSomBlirFødtTidligIPerioden = {
     fødselsdato: '2024-08-01',
     fornavn: 'Sneed',
+    mellomnavn: null,
+    etternavn: null,
     kilde: SøknadBarnKilde.PDL,
     oppholderSegIEØS: true,
 };
@@ -61,6 +76,8 @@ const barnSomBlirFødtTidligIPerioden = {
 const barnSomBlirFødtMidtIPerioden = {
     fødselsdato: '2025-01-01',
     fornavn: 'Knoll',
+    mellomnavn: null,
+    etternavn: null,
     kilde: SøknadBarnKilde.PDL,
     oppholderSegIEØS: true,
 };
@@ -68,6 +85,8 @@ const barnSomBlirFødtMidtIPerioden = {
 const barnSomBlirFødtSentIPerioden = {
     fødselsdato: '2025-06-15',
     fornavn: 'Tott',
+    mellomnavn: null,
+    etternavn: null,
     kilde: SøknadBarnKilde.PDL,
     oppholderSegIEØS: true,
 };

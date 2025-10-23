@@ -4,17 +4,18 @@ import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/Ved
 import { VedtakHjelpetekst } from '~/components/behandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
 import { FritekstInput } from '~/components/fritekst/FritekstInput';
 import { VedtaksbrevForhåndsvisning } from './forhåndsvisning/VedtaksbrevForhåndsvisning';
-import { BehandlingData } from '~/types/BehandlingTypes';
+
 import { Nullable } from '~/types/UtilTypes';
 import { ReactNode, RefObject } from 'react';
 import { BrevForhåndsvisningDTO } from '~/components/behandling/felles/vedtaksbrev/forhåndsvisning/useHentVedtaksbrevForhåndsvisning';
 import { ValideringResultat } from '~/types/Validering';
 
 import style from './Vedtaksbrev.module.css';
+import { Rammebehandling } from '~/types/Behandling';
 
 type Props = {
     header: string;
-    behandling: BehandlingData;
+    behandling: Rammebehandling;
     rolle: Nullable<SaksbehandlerRolle>;
     tekstRef: RefObject<HTMLTextAreaElement | null>;
     hjelpetekst?: ReactNode;

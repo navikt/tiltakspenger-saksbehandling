@@ -1,10 +1,10 @@
 import { ValideringResultat } from '~/types/Validering';
 import { joinPerioder, validerPeriodisering } from '~/utils/periode';
 import { Periode } from '~/types/Periode';
-import { VedtakBarnetilleggPeriode } from '~/types/VedtakTyper';
+import { BarnetilleggPeriodeFormData } from '../barnetillegg/utils/hentBarnetilleggFraBehandling';
 
 export const validerBarnetillegg = (
-    barnetilleggPerioder: VedtakBarnetilleggPeriode[],
+    barnetilleggPerioder: BarnetilleggPeriodeFormData[],
     behandlingsperiode: Periode,
 ): ValideringResultat => {
     const validering: ValideringResultat = {
@@ -13,6 +13,14 @@ export const validerBarnetillegg = (
     };
 
     const perioder = barnetilleggPerioder.map((bt) => bt.periode);
+    const erAllePerioderUtfyllt = perioder.every((p) => p.fraOgMed !== null && p.tilOgMed !== null);
+
+    if (!erAllePerioderUtfyllt) {
+        validering.errors.push(
+            'Alle perioder for barnetillegg må ha både fra og med- og til og med-dato satt',
+        );
+        return validering;
+    }
 
     if (perioder.length === 0) {
         validering.errors.push('Minst en periode må spesifiseres når barnetillegg er valgt');
@@ -20,9 +28,9 @@ export const validerBarnetillegg = (
     }
 
     const perioderErUtenBarn = barnetilleggPerioder.every((bt) => bt.antallBarn === 0);
-    const helePerioden = joinPerioder(perioder);
+    const helePerioden = joinPerioder(perioder as Periode[]);
 
-    if (!validerPeriodisering(perioder, true)) {
+    if (!validerPeriodisering(perioder as Periode[], true)) {
         validering.errors.push('Periodene for barnetillegg kan ikke ha overlapp');
     }
 

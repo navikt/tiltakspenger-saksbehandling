@@ -1,5 +1,5 @@
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
-import { SakProps } from '~/types/SakTypes';
+import { SakProps } from '~/types/Sak';
 import { Saksoversikt } from '~/components/saksoversikt/Saksoversikt';
 import { fetchSak } from '~/utils/fetch/fetch-server';
 import { SakProvider } from '~/context/sak/SakContext';

@@ -1,15 +1,29 @@
-import { BehandlingData, RevurderingData, SøknadsbehandlingData } from '~/types/BehandlingTypes';
 import { periodiserBarnetilleggFraSøknad } from '~/components/behandling/felles/barnetillegg/utils/periodiserBarnetilleggFraSøknad';
 import { hentTiltaksperiodeFraSøknad } from '~/utils/behandling';
 import { hentBarnetilleggPerioderMedBarn } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraVedtakTidslinje';
-import { SakProps } from '~/types/SakTypes';
+import { SakProps } from '~/types/Sak';
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';
 import { kunPerioderMedBarn } from '~/components/behandling/felles/barnetillegg/utils/barnetilleggUtils';
-import { Periode } from '~/types/Periode';
+import { Periode, PeriodeMedNullable } from '~/types/Periode';
+import { Nullable } from '~/types/UtilTypes';
+
+import { Søknadsbehandling } from '~/types/Søknadsbehandling';
+import { Revurdering } from '~/types/Revurdering';
+import { Rammebehandling } from '~/types/Behandling';
+
+export interface BarnetilleggFormData {
+    perioder: BarnetilleggPeriodeFormData[];
+    begrunnelse: Nullable<string>;
+}
+
+export interface BarnetilleggPeriodeFormData {
+    antallBarn: number;
+    periode: PeriodeMedNullable;
+}
 
 export const hentBarnetilleggForSøknadsbehandling = (
-    behandling: SøknadsbehandlingData,
-): BarnetilleggPeriode[] => {
+    behandling: Søknadsbehandling,
+): BarnetilleggPeriodeFormData[] => {
     return (
         hentLagredePerioderMedBarn(behandling) ||
         periodiserBarnetilleggFraSøknad(
@@ -21,7 +35,7 @@ export const hentBarnetilleggForSøknadsbehandling = (
 
 export const hentBarnetilleggForRevurdering = (
     periode: Periode,
-    behandling: RevurderingData,
+    behandling: Revurdering,
     sak: SakProps,
 ): BarnetilleggPeriode[] => {
     return (
@@ -31,7 +45,7 @@ export const hentBarnetilleggForRevurdering = (
 };
 
 export const hentLagredePerioderMedBarn = (
-    behandling: BehandlingData,
+    behandling: Rammebehandling,
 ): BarnetilleggPeriode[] | undefined => {
     return behandling.barnetillegg?.perioder.filter(kunPerioderMedBarn);
 };

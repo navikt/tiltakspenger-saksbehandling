@@ -1,17 +1,18 @@
 import React from 'react';
 import { ActionMenu } from '@navikt/ds-react';
-import { BehandlingForOversiktData, BehandlingStatus } from '~/types/BehandlingTypes';
+import { BehandlingForOversikt } from '~/types/BehandlingForOversikt';
 import { eierBehandling } from '~/utils/tilganger';
 import { Saksbehandler } from '~/types/Saksbehandler';
 import { PauseIcon } from '@navikt/aksel-icons';
+import { Behandlingsstatus } from '~/types/Behandling';
 
 export const visSettBehandlingPåVentMenyvalg = (
-    behandling: BehandlingForOversiktData,
+    behandling: BehandlingForOversikt,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     const erRelevantMenyValgForStatus =
-        behandling.status == BehandlingStatus.UNDER_BEHANDLING ||
-        behandling.status === BehandlingStatus.UNDER_BESLUTNING;
+        behandling.status == Behandlingsstatus.UNDER_BEHANDLING ||
+        behandling.status === Behandlingsstatus.UNDER_BESLUTNING;
     return (
         erRelevantMenyValgForStatus &&
         !behandling.erSattPåVent &&

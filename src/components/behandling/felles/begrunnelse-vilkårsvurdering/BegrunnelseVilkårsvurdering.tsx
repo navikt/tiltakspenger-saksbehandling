@@ -6,13 +6,14 @@ import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/Ved
 import { VedtakHjelpetekst } from '~/components/behandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
 import { FritekstInput } from '~/components/fritekst/FritekstInput';
 import { TekstListe } from '../../../liste/TekstListe';
-import { BehandlingData } from '~/types/BehandlingTypes';
+
 import { Nullable } from '~/types/UtilTypes';
 
 import style from './BegrunnelseVilkårsvurdering.module.css';
+import { Rammebehandling } from '~/types/Behandling';
 
 type Props = {
-    behandling: BehandlingData;
+    behandling: Rammebehandling;
     rolle: Nullable<SaksbehandlerRolle>;
     tekstRef: RefObject<HTMLTextAreaElement | null>;
     className?: string;

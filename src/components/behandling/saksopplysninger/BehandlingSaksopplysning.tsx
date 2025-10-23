@@ -4,6 +4,7 @@ import { Periode } from '../../../types/Periode';
 import { periodeTilFormatertDatotekst } from '../../../utils/date';
 
 import style from './BehandlingSaksopplysning.module.css';
+import { Nullable } from '~/types/UtilTypes';
 
 type Props = { navn: string; verdi: string; spacing?: boolean };
 
@@ -21,7 +22,7 @@ export const BehandlingSaksopplysning = ({ navn, verdi, spacing }: Props) => {
 
 type MedPeriodeProps = {
     navn: string;
-    periode?: Periode;
+    periode: Nullable<Periode>;
     spacing?: boolean;
 };
 

@@ -21,30 +21,31 @@ export const AntallDagerForMeldeperiodeForm = () => {
     const sistePeriode = antallDagerPerMeldeperiode.at(-1);
 
     const kanLeggeTilNyPeriode =
-        !sistePeriode || sistePeriode?.periode.fraOgMed !== sistePeriode?.periode.tilOgMed;
+        !sistePeriode || sistePeriode?.periode?.fraOgMed !== sistePeriode?.periode?.tilOgMed;
 
     return (
         <VStack gap={'5'}>
             {antallDagerPerMeldeperiode.map((periode, index) => (
-                <HStack gap={'5'} key={`${periode.periode.fraOgMed}-${index}`}>
+                <HStack gap={'5'} key={`${periode.periode?.fraOgMed}-${index}`}>
                     <Datovelger
                         label={'Fra og med'}
                         size={'small'}
-                        minDate={behandlingsperiode.fraOgMed}
-                        maxDate={behandlingsperiode.tilOgMed}
+                        minDate={behandlingsperiode?.fraOgMed}
+                        maxDate={behandlingsperiode?.tilOgMed}
                         readOnly={!erSaksbehandler}
-                        value={datoTilDatoInputText(periode.periode.fraOgMed)}
+                        value={
+                            periode.periode.fraOgMed
+                                ? datoTilDatoInputText(periode.periode.fraOgMed)
+                                : undefined
+                        }
                         onDateChange={(date) => {
                             if (!date) {
                                 return;
                             }
 
                             dispatch({
-                                type: 'oppdaterAntallDagerPeriode',
-                                payload: {
-                                    periode: { fraOgMed: dateTilISOTekst(date) },
-                                    index,
-                                },
+                                type: 'oppdaterAntallDagerFraOgMed',
+                                payload: { fraOgMed: dateTilISOTekst(date), index },
                             });
                         }}
                     />
@@ -52,21 +53,22 @@ export const AntallDagerForMeldeperiodeForm = () => {
                     <Datovelger
                         label={'Til og med'}
                         size={'small'}
-                        minDate={behandlingsperiode.fraOgMed}
-                        maxDate={behandlingsperiode.tilOgMed}
+                        minDate={behandlingsperiode?.fraOgMed}
+                        maxDate={behandlingsperiode?.tilOgMed}
                         readOnly={!erSaksbehandler}
-                        value={datoTilDatoInputText(periode.periode.tilOgMed)}
+                        value={
+                            periode.periode.tilOgMed
+                                ? datoTilDatoInputText(periode.periode.tilOgMed)
+                                : undefined
+                        }
                         onDateChange={(date) => {
                             if (!date) {
                                 return;
                             }
 
                             dispatch({
-                                type: 'oppdaterAntallDagerPeriode',
-                                payload: {
-                                    periode: { tilOgMed: dateTilISOTekst(date) },
-                                    index,
-                                },
+                                type: 'oppdaterAntallDagerTilOgMed',
+                                payload: { tilOgMed: dateTilISOTekst(date), index },
                             });
                         }}
                     />
@@ -122,7 +124,7 @@ export const AntallDagerForMeldeperiodeForm = () => {
                     disabled={!kanLeggeTilNyPeriode}
                     className={styles.nyPeriodeKnapp}
                 >
-                    {'Ny periode'}
+                    Ny periode
                 </Button>
             )}
         </VStack>

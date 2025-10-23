@@ -1,7 +1,7 @@
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { Button, Select } from '@navikt/ds-react';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
-import { VedtakTiltaksdeltakelsePeriode } from '~/types/VedtakTyper';
+
 import { Tiltaksdeltagelse } from '~/types/TiltakDeltagelseTypes';
 import { Datovelger } from '~/components/datovelger/Datovelger';
 import { dateTilISOTekst, periodeTilFormatertDatotekst } from '~/utils/date';
@@ -18,6 +18,7 @@ import {
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
 
 import style from './BehandlingTiltak.module.css';
+import { TiltaksdeltakelsePeriodeFormData } from '../../context/slices/TiltaksdeltagelseState';
 
 export const BehandlingTiltak = () => {
     const { behandling, rolleForBehandling } = useBehandling();
@@ -59,7 +60,7 @@ export const BehandlingTiltak = () => {
                                 dispatch({ type: 'addTiltakPeriode' });
                             }}
                         >
-                            {'Ny periode'}
+                            Ny periode
                         </Button>
                     )}
                 </VedtakSeksjon.Venstre>
@@ -78,7 +79,7 @@ export const BehandlingTiltak = () => {
 };
 
 type PeriodeProps = {
-    periode: VedtakTiltaksdeltakelsePeriode;
+    periode: TiltaksdeltakelsePeriodeFormData;
     tiltaksdeltakelser: Tiltaksdeltagelse[];
     index: number;
     rolle: SaksbehandlerRolle | null;
@@ -122,9 +123,9 @@ const TiltakPeriode = ({
                 ))}
             </Select>
             <Datovelger
-                selected={periode.periode.fraOgMed}
-                minDate={innvilgelsesPeriode.fraOgMed}
-                maxDate={innvilgelsesPeriode.tilOgMed}
+                selected={periode.periode.fraOgMed ?? ''}
+                minDate={innvilgelsesPeriode?.fraOgMed}
+                maxDate={innvilgelsesPeriode?.tilOgMed}
                 label={'Fra og med'}
                 size={'small'}
                 readOnly={!erSaksbehandler}
@@ -132,19 +133,18 @@ const TiltakPeriode = ({
                     if (!value) {
                         return;
                     }
+
                     const nyFraOgMed = dateTilISOTekst(value);
-                    if (nyFraOgMed !== periode.periode.fraOgMed) {
-                        dispatch({
-                            type: 'oppdaterTiltakPeriode',
-                            payload: { periode: { fraOgMed: nyFraOgMed }, index },
-                        });
-                    }
+                    dispatch({
+                        type: 'oppdaterTiltaksdeltagelseFraOgMed',
+                        payload: { fraOgMed: nyFraOgMed, index },
+                    });
                 }}
             />
             <Datovelger
-                selected={periode.periode.tilOgMed}
-                minDate={innvilgelsesPeriode.fraOgMed}
-                maxDate={innvilgelsesPeriode.tilOgMed}
+                selected={periode.periode.tilOgMed ?? ''}
+                minDate={innvilgelsesPeriode?.fraOgMed}
+                maxDate={innvilgelsesPeriode?.tilOgMed}
                 label={'Til og med'}
                 size={'small'}
                 readOnly={!erSaksbehandler}
@@ -154,12 +154,11 @@ const TiltakPeriode = ({
                     }
 
                     const nyTilOgMed = dateTilISOTekst(value);
-                    if (nyTilOgMed !== periode.periode.tilOgMed) {
-                        dispatch({
-                            type: 'oppdaterTiltakPeriode',
-                            payload: { periode: { tilOgMed: nyTilOgMed }, index },
-                        });
-                    }
+
+                    dispatch({
+                        type: 'oppdaterTiltaksdeltagelseTilOgMed',
+                        payload: { tilOgMed: nyTilOgMed, index },
+                    });
                 }}
             />
 

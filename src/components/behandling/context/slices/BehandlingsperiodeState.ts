@@ -1,13 +1,13 @@
 import { Periode } from '~/types/Periode';
 import { BehandlingSkjemaActionHandlers } from '~/components/behandling/context/BehandlingSkjemaReducer';
 import { Nullable } from '~/types/UtilTypes';
-import { BehandlingResultat } from '~/types/BehandlingTypes';
+import { BehandlingResultat } from '~/types/Behandling';
 import { perioderOverlapper } from '~/utils/periode';
 import { datoMax, datoMin } from '~/utils/date';
 
 export type BehandlingsperiodeState = {
     resultat: Nullable<BehandlingResultat>;
-    behandlingsperiode: Partial<Periode>;
+    behandlingsperiode: Nullable<Partial<Periode>>;
 };
 
 export type BehandlingsperiodeActions =
@@ -26,26 +26,76 @@ export const behandlingsperiodeActionHandlers = {
     },
 
     oppdaterBehandlingsperiode: (state, payload) => {
-        const nyBehandlingsperiode = { ...state.behandlingsperiode, ...payload.periode } as Periode;
+        const nyBehandlingsperiode = { ...state.behandlingsperiode, ...payload.periode };
+
+        if (!nyBehandlingsperiode.fraOgMed || !nyBehandlingsperiode.tilOgMed) {
+            return state;
+        }
 
         return {
             ...state,
             behandlingsperiode: nyBehandlingsperiode,
-            valgteTiltaksdeltakelser: oppdaterPeriodisering(
-                state.valgteTiltaksdeltakelser,
-                nyBehandlingsperiode,
-                true,
-            ),
-            antallDagerPerMeldeperiode: oppdaterPeriodisering(
-                state.antallDagerPerMeldeperiode,
-                nyBehandlingsperiode,
-                true,
-            ),
-            barnetilleggPerioder: oppdaterPeriodisering(
-                state.barnetilleggPerioder,
-                nyBehandlingsperiode,
-                false,
-            ),
+            /*
+            Pga papirsøknad kan vi ikke garantere at periodene har fraOgMed og tilOgMed satt
+            går for en enkel fiks der vi bare sjekker om alle periodene har fraOgMed og tilOgMed satt før vi oppdaterer periodiseringen
+            */
+            valgteTiltaksdeltakelser: state.valgteTiltaksdeltakelser.every(
+                (tpd) => tpd.periode.fraOgMed !== null && tpd.periode.tilOgMed !== null,
+            )
+                ? oppdaterPeriodisering(
+                      state.valgteTiltaksdeltakelser.map((tpd) => ({
+                          ...tpd,
+                          periode: {
+                              fraOgMed: tpd.periode.fraOgMed!,
+                              tilOgMed: tpd.periode.tilOgMed!,
+                          },
+                      })),
+                      //den forstår ikke at peridoen er garantert pga if'en
+                      nyBehandlingsperiode as Periode,
+                      true,
+                  )
+                : state.valgteTiltaksdeltakelser,
+
+            /*
+            Pga papirsøknad kan vi ikke garantere at periodene har fraOgMed og tilOgMed satt
+            går for en enkel fiks der vi bare sjekker om alle periodene har fraOgMed og tilOgMed satt før vi oppdaterer periodiseringen
+            */
+            antallDagerPerMeldeperiode: state.antallDagerPerMeldeperiode.every(
+                (adp) => adp.periode.fraOgMed !== null && adp.periode.tilOgMed !== null,
+            )
+                ? oppdaterPeriodisering(
+                      state.antallDagerPerMeldeperiode.map((adp) => ({
+                          ...adp,
+                          periode: {
+                              fraOgMed: adp.periode.fraOgMed!,
+                              tilOgMed: adp.periode.tilOgMed!,
+                          },
+                      })),
+                      //den forstår ikke at peridoen er garantert pga if'en
+                      nyBehandlingsperiode as Periode,
+                      true,
+                  )
+                : state.antallDagerPerMeldeperiode,
+            /*
+            Pga papirsøknad kan vi ikke garantere at periodene har fraOgMed og tilOgMed satt
+            går for en enkel fiks der vi bare sjekker om alle periodene har fraOgMed og tilOgMed satt før vi oppdaterer periodiseringen
+            */
+            barnetilleggPerioder: state.barnetilleggPerioder.every(
+                (bp) => bp.periode.fraOgMed !== null && bp.periode.tilOgMed !== null,
+            )
+                ? oppdaterPeriodisering(
+                      state.barnetilleggPerioder.map((bp) => ({
+                          ...bp,
+                          periode: {
+                              fraOgMed: bp.periode.fraOgMed!,
+                              tilOgMed: bp.periode.tilOgMed!,
+                          },
+                      })),
+                      //den forstår ikke at peridoen er garantert pga if'en
+                      nyBehandlingsperiode as Periode,
+                      false,
+                  )
+                : state.barnetilleggPerioder,
         };
     },
 } as const satisfies BehandlingSkjemaActionHandlers<BehandlingsperiodeActions>;

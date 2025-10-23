@@ -1,25 +1,26 @@
 import React from 'react';
 import router from 'next/router';
 import { ActionMenu } from '@navikt/ds-react';
-import { BehandlingForOversiktData, BehandlingStatus } from '~/types/BehandlingTypes';
+import { BehandlingForOversikt } from '~/types/BehandlingForOversikt';
 import { useLeggTilbakeBehandling } from '~/components/behandlingmeny/useLeggTilbakeBehandling';
 import { eierBehandling } from '~/utils/tilganger';
 import { Saksbehandler } from '~/types/Saksbehandler';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
+import { Behandlingsstatus } from '~/types/Behandling';
 
 export const visLeggTilbakeMenyvalg = (
-    behandling: BehandlingForOversiktData,
+    behandling: BehandlingForOversikt,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     const erRelevantMenyValgForStatus =
-        behandling.status === BehandlingStatus.UNDER_BEHANDLING ||
-        behandling.status === BehandlingStatus.UNDER_BESLUTNING;
+        behandling.status === Behandlingsstatus.UNDER_BEHANDLING ||
+        behandling.status === Behandlingsstatus.UNDER_BESLUTNING;
 
     return erRelevantMenyValgForStatus && eierBehandling(behandling, innloggetSaksbehandler);
 };
 
 type Props = {
-    behandling: BehandlingForOversiktData;
+    behandling: BehandlingForOversikt;
 };
 
 const LeggTilbakeMenyvalg = ({ behandling }: Props) => {

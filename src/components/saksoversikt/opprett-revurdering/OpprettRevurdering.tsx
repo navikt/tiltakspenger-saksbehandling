@@ -1,12 +1,14 @@
 import { Button, Radio, RadioGroup } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
-import { SakId } from '~/types/SakTypes';
+import { SakId } from '~/types/Sak';
 import router from 'next/router';
 import { useOpprettRevurdering } from './useOpprettRevurdering';
-import { RevurderingResultat } from '~/types/BehandlingTypes';
+
 import { BekreftelsesModal } from '~/components/modaler/BekreftelsesModal';
-import { revurderingResultatTekst } from '~/utils/tekstformateringUtils';
+
 import { behandlingUrl } from '~/utils/urls';
+import { BehandlingResultat } from '~/types/Behandling';
+import { behandlingResultatTilText } from '~/utils/tekstformateringUtils';
 
 type Props = {
     sakId: SakId;
@@ -14,7 +16,7 @@ type Props = {
 };
 
 export const OpprettRevurdering = ({ sakId, harVedtak }: Props) => {
-    const [valgtType, setValgtType] = useState<RevurderingResultat | null>(null);
+    const [valgtType, setValgtType] = useState<BehandlingResultat | null>(null);
 
     const { opprettRevurdering, opprettRevurderingLaster, opprettRevurderingError } =
         useOpprettRevurdering(sakId);
@@ -62,21 +64,21 @@ export const OpprettRevurdering = ({ sakId, harVedtak }: Props) => {
                             );
                         }}
                     >
-                        {`Opprett revurdering${valgtType ? ` (${revurderingResultatTekst[valgtType]})` : ''}`}
+                        {`Opprett revurdering${valgtType ? ` (${behandlingResultatTilText[valgtType]})` : ''}`}
                     </Button>
                 }
             >
                 <RadioGroup
                     legend={'Velg type revurdering'}
                     value={valgtType}
-                    onChange={(type: RevurderingResultat) => {
+                    onChange={(type: BehandlingResultat) => {
                         setValgtType(type);
                     }}
                 >
-                    <Radio value={RevurderingResultat.REVURDERING_INNVILGELSE}>
+                    <Radio value={BehandlingResultat.REVURDERING_INNVILGELSE}>
                         {'Innvilgelse'}
                     </Radio>
-                    <Radio value={RevurderingResultat.STANS}>{'Stans'}</Radio>
+                    <Radio value={BehandlingResultat.STANS}>{'Stans'}</Radio>
                 </RadioGroup>
             </BekreftelsesModal>
         </>

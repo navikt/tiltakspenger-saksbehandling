@@ -6,13 +6,14 @@ import { Datovelger } from '../../../../datovelger/Datovelger';
 import { dateTilISOTekst } from '~/utils/date';
 import { useSak } from '~/context/sak/SakContext';
 import { useConfig } from '~/context/ConfigContext';
-import { HjemmelForStans } from '~/types/BehandlingTypes';
+
 import {
     useBehandlingSkjema,
     useBehandlingSkjemaDispatch,
 } from '~/components/behandling/context/BehandlingSkjemaContext';
 
 import style from './RevurderingStansResultat.module.css';
+import { HjemmelForStans } from '~/types/Revurdering';
 
 export const RevurderingStansResultat = () => {
     const { rolleForBehandling } = useRevurderingBehandling();
@@ -65,8 +66,8 @@ export const RevurderingStansResultat = () => {
                         minDate={førsteDagSomGirRett}
                         maxDate={sisteDagSomGirRett}
                         readOnly={!erSaksbehandler || harValgtStansFraFørsteDagSomGirRett}
-                        defaultSelected={behandlingsperiode.fraOgMed}
-                        selected={behandlingsperiode.fraOgMed}
+                        defaultSelected={behandlingsperiode?.fraOgMed}
+                        selected={behandlingsperiode?.fraOgMed}
                         className={style.dato}
                         onDateChange={(valgtDato) => {
                             if (!valgtDato) {

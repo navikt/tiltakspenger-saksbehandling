@@ -1,5 +1,6 @@
-import { BehandlingData, BehandlingId } from '../../types/BehandlingTypes';
-import { SakId } from '../../types/SakTypes';
+import { Rammebehandling, BehandlingId } from '~/types/Behandling';
+
+import { SakId } from '../../types/Sak';
 import { useFetchJsonFraApi } from '../../utils/fetch/useFetchFraApi';
 
 export const useLeggTilbakeBehandling = (sakId: SakId, behandlingId: BehandlingId) => {
@@ -7,7 +8,7 @@ export const useLeggTilbakeBehandling = (sakId: SakId, behandlingId: BehandlingI
         trigger: leggTilbakeBehandling,
         isMutating: isLeggTilbakeBehandlingMutating,
         error: leggTilbakeBehandlingError,
-    } = useFetchJsonFraApi<BehandlingData>(
+    } = useFetchJsonFraApi<Rammebehandling>(
         `/sak/${sakId}/behandling/${behandlingId}/legg-tilbake`,
         'POST',
     );

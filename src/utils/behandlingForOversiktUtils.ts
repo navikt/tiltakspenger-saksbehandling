@@ -1,12 +1,11 @@
 import {
-    BehandlingEllerSøknadForOversiktData,
-    BehandlingForOversiktData,
-} from '../types/BehandlingTypes';
-import { SøknadForOversiktProps } from '../types/SøknadTypes';
+    BehandlingEllerSøknadForOversikt,
+    BehandlingForOversikt,
+    SøknadForOversikt,
+} from '../types/BehandlingForOversikt';
 
-export const isBehandling = (
-    b: BehandlingEllerSøknadForOversiktData,
-): b is BehandlingForOversiktData => b.id.startsWith('beh_');
+export const isBehandling = (b: BehandlingEllerSøknadForOversikt): b is BehandlingForOversikt =>
+    b.id.startsWith('beh_');
 
-export const isSøknad = (b: BehandlingEllerSøknadForOversiktData): b is SøknadForOversiktProps =>
+export const isSøknad = (b: BehandlingEllerSøknadForOversikt): b is SøknadForOversikt =>
     b.id.startsWith('soknad_');

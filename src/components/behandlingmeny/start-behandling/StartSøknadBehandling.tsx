@@ -6,14 +6,14 @@ import { useStartSøknadBehandling } from './useStartSøknadBehandling';
 import Varsel from '../../varsel/Varsel';
 import AvsluttBehandlingModal from '~/components/modaler/AvsluttBehandlingModal';
 import AvsluttBehandlingMenyvalg from '~/components/saksoversikt/avsluttBehandling/AvsluttBehandlingMenyvalg';
-import { SøknadForOversiktProps } from '~/types/SøknadTypes';
-import { BehandlingStatus } from '~/types/BehandlingTypes';
+
 import { behandlingUrl } from '~/utils/urls';
 
 import style from '../BehandlingKnapper.module.css';
+import { SøknadForOversikt } from '~/types/BehandlingForOversikt';
 
 type Props = {
-    søknad: SøknadForOversiktProps;
+    søknad: SøknadForOversikt;
     medAvsluttBehandling?: boolean;
 };
 
@@ -61,7 +61,7 @@ export const StartSøknadBehandling = ({ søknad, medAvsluttBehandling }: Props)
                                 setVisAvsluttBehandlingModal={setVisAvsluttBehandlingModal}
                                 søknadId={søknad.id}
                                 saksnummer={søknad.saksnummer}
-                                behandlingStatus={BehandlingStatus.SØKNAD}
+                                behandlingStatus={null}
                                 button={{ text: 'Avslutt søknad' }}
                             />
                         </>

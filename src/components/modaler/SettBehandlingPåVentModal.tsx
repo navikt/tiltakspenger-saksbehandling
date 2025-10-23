@@ -3,10 +3,11 @@ import { Button, Heading, HStack, Modal, Textarea } from '@navikt/ds-react';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import styles from './AvsluttBehandlingModal.module.css';
-import { BehandlingId } from '~/types/BehandlingTypes';
+
 import { useSettBehandlingPåVent } from '~/components/behandlingmeny/useSettBehandlingPåVent';
-import { SakId } from '~/types/SakTypes';
+import { SakId } from '~/types/Sak';
 import router from 'next/router';
+import { BehandlingId } from '~/types/Behandling';
 
 const SettBehandlingPåVentModal = (props: {
     sakId: SakId;

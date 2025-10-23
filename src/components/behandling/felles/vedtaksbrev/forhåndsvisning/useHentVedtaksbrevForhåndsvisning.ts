@@ -1,19 +1,17 @@
 import { useFetchBlobFraApi } from '~/utils/fetch/useFetchFraApi';
-import {
-    Avslagsgrunn,
-    BehandlingData,
-    RevurderingResultat,
-    SøknadsbehandlingResultat,
-} from '~/types/BehandlingTypes';
+
 import { Periode } from '~/types/Periode';
-import { VedtakBarnetilleggPeriode } from '~/types/VedtakTyper';
+
 import { Nullable } from '~/types/UtilTypes';
+import { Rammebehandling, BehandlingResultat } from '~/types/Behandling';
+import { BarnetilleggPeriode } from '~/types/Barnetillegg';
+import { Avslagsgrunn } from '~/types/Søknadsbehandling';
 
 export type SøknadsbehandlingBrevForhåndsvisningDTO = {
     fritekst: string;
     virkningsperiode: Periode;
-    barnetillegg: Nullable<VedtakBarnetilleggPeriode[]>;
-    resultat: SøknadsbehandlingResultat;
+    barnetillegg: Nullable<BarnetilleggPeriode[]>;
+    resultat: BehandlingResultat;
     avslagsgrunner: Nullable<Avslagsgrunn[]>;
 };
 
@@ -40,15 +38,15 @@ type StansTilOgMed =
 export type RevurderingStansBrevForhåndsvisningDTO = {
     fritekst: string;
     valgteHjemler: string[];
-    resultat: RevurderingResultat.STANS;
+    resultat: BehandlingResultat.STANS;
 } & StansFraOgMed &
     StansTilOgMed;
 
 export type RevurderingInnvilgelseBrevForhåndsvisningDTO = {
     fritekst: string;
     virkningsperiode: Periode;
-    resultat: RevurderingResultat.REVURDERING_INNVILGELSE;
-    barnetillegg: Nullable<VedtakBarnetilleggPeriode[]>;
+    resultat: BehandlingResultat.REVURDERING_INNVILGELSE;
+    barnetillegg: Nullable<BarnetilleggPeriode[]>;
 };
 
 export type BrevForhåndsvisningDTO =
@@ -56,7 +54,7 @@ export type BrevForhåndsvisningDTO =
     | RevurderingStansBrevForhåndsvisningDTO
     | RevurderingInnvilgelseBrevForhåndsvisningDTO;
 
-export const useHentVedtaksbrevForhåndsvisning = (behandling: BehandlingData) => {
+export const useHentVedtaksbrevForhåndsvisning = (behandling: Rammebehandling) => {
     const { trigger, error, isMutating } = useFetchBlobFraApi<BrevForhåndsvisningDTO>(
         `/sak/${behandling.sakId}/behandling/${behandling.id}/forhandsvis`,
         'POST',

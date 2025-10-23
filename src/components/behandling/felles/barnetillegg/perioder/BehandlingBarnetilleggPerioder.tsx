@@ -1,10 +1,10 @@
 import { Button, Select } from '@navikt/ds-react';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { Datovelger } from '../../../../datovelger/Datovelger';
-import { VedtakBarnetilleggPeriode } from '~/types/VedtakTyper';
+
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { dateTilISOTekst, datoTilDatoInputText } from '~/utils/date';
-import { Behandlingstype } from '~/types/BehandlingTypes';
+
 import {
     useBehandlingSkjema,
     useBehandlingSkjemaDispatch,
@@ -12,6 +12,8 @@ import {
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
 
 import style from './BehandlingBarnetilleggPerioder.module.css';
+import { Behandlingstype } from '~/types/Behandling';
+import { BarnetilleggPeriodeFormData } from '../utils/hentBarnetilleggFraBehandling';
 
 const BATCH_MED_BARN = 10;
 
@@ -57,7 +59,9 @@ export const BehandlingBarnetilleggPerioder = () => {
                                 onClick={() => {
                                     dispatch({
                                         type: 'nullstillBarnetilleggPerioder',
-                                        payload: { søknad: behandling.søknad },
+                                        payload: {
+                                            søknad: behandling.søknad,
+                                        },
                                     });
                                 }}
                             >
@@ -72,7 +76,7 @@ export const BehandlingBarnetilleggPerioder = () => {
 };
 
 type PeriodeProps = {
-    periode: VedtakBarnetilleggPeriode;
+    periode: BarnetilleggPeriodeFormData;
     index: number;
     erSaksbehandler: boolean;
 };
@@ -90,14 +94,14 @@ const BarnetilleggPeriode = ({ periode, index, erSaksbehandler }: PeriodeProps) 
     return (
         <div className={style.periode}>
             <Datovelger
-                selected={periode.periode.fraOgMed}
+                selected={periode.periode.fraOgMed ?? undefined}
                 value={
                     periode.periode.fraOgMed
                         ? datoTilDatoInputText(periode.periode.fraOgMed)
                         : undefined
                 }
-                minDate={innvilgelsesPeriode.fraOgMed}
-                maxDate={innvilgelsesPeriode.tilOgMed}
+                minDate={innvilgelsesPeriode?.fraOgMed}
+                maxDate={innvilgelsesPeriode?.tilOgMed}
                 label={'Fra og med'}
                 size={'small'}
                 readOnly={!erSaksbehandler}
@@ -109,16 +113,16 @@ const BarnetilleggPeriode = ({ periode, index, erSaksbehandler }: PeriodeProps) 
                     const nyFraOgMed = dateTilISOTekst(value);
                     if (nyFraOgMed !== periode.periode.fraOgMed) {
                         dispatch({
-                            type: 'oppdaterBarnetilleggPeriode',
-                            payload: { periode: { fraOgMed: nyFraOgMed }, index },
+                            type: 'oppdaterBarnetilleggFraOgMed',
+                            payload: { fraOgMed: nyFraOgMed, index },
                         });
                     }
                 }}
             />
             <Datovelger
-                selected={periode.periode.tilOgMed}
-                minDate={innvilgelsesPeriode.fraOgMed}
-                maxDate={innvilgelsesPeriode.tilOgMed}
+                selected={periode.periode.tilOgMed ?? undefined}
+                minDate={innvilgelsesPeriode?.fraOgMed}
+                maxDate={innvilgelsesPeriode?.tilOgMed}
                 value={
                     periode.periode.tilOgMed
                         ? datoTilDatoInputText(periode.periode.tilOgMed)
@@ -135,8 +139,8 @@ const BarnetilleggPeriode = ({ periode, index, erSaksbehandler }: PeriodeProps) 
                     const nyTilOgMed = dateTilISOTekst(value);
                     if (nyTilOgMed !== periode.periode.tilOgMed) {
                         dispatch({
-                            type: 'oppdaterBarnetilleggPeriode',
-                            payload: { periode: { tilOgMed: nyTilOgMed }, index },
+                            type: 'oppdaterBarnetilleggTilOgMed',
+                            payload: { tilOgMed: nyTilOgMed, index },
                         });
                     }
                 }}

@@ -6,7 +6,6 @@ import { Separator } from '../../separator/Separator';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { BehandlingOppdaterSaksopplysninger } from './oppdater-saksopplysninger/BehandlingOppdaterSaksopplysninger';
 import { BehandlingSaksopplysning } from './BehandlingSaksopplysning';
-import { Behandlingstype } from '~/types/BehandlingTypes';
 import { BehandlingTiltakOpplysninger } from './tiltak/BehandlingTiltakOpplysninger';
 import OppsummeringAvAttesteringer from '../../attestering/OppsummeringAvAttestering';
 import { hentTiltaksperiode } from '~/utils/behandling';
@@ -15,29 +14,33 @@ import { BehandlingYtelserOpplysninger } from '~/components/behandling/saksopply
 
 import style from './BehandlingSaksopplysninger.module.css';
 import { BehandlingTiltakspengerArenaOpplysninger } from '~/components/behandling/saksopplysninger/tiltakspenger-fra-arena/BehandlingTiltakspengerArenaOpplysninger';
+import { Behandlingstype } from '~/types/Behandling';
 
 export const BehandlingSaksopplysninger = () => {
     const { behandling, rolleForBehandling } = useBehandling();
     const { saksopplysninger, type } = behandling;
-    const { tiltaksdeltagelse, fødselsdato, ytelser, tiltakspengevedtakFraArena } =
-        saksopplysninger;
-    const harYtelser = ytelser && ytelser.length > 0;
+    const harYtelser = saksopplysninger?.ytelser && saksopplysninger?.ytelser.length > 0;
     const harTiltakspengevedtakFraArena =
-        tiltakspengevedtakFraArena && tiltakspengevedtakFraArena.length > 0;
+        saksopplysninger?.tiltakspengevedtakFraArena &&
+        saksopplysninger?.tiltakspengevedtakFraArena.length > 0;
 
     return (
         <>
             {rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER && (
                 <BehandlingOppdaterSaksopplysninger />
             )}
-            <OpplysningerSeksjon header={'Tiltak registrert på bruker'}>
-                <BehandlingTiltakOpplysninger tiltaksdeltagelse={tiltaksdeltagelse} />
-                <Separator />
-            </OpplysningerSeksjon>
+            {(saksopplysninger?.tiltaksdeltagelse?.length ?? 0) > 0 && (
+                <OpplysningerSeksjon header={'Tiltak registrert på bruker'}>
+                    <BehandlingTiltakOpplysninger
+                        tiltaksdeltagelse={saksopplysninger!.tiltaksdeltagelse}
+                    />
+                    <Separator />
+                </OpplysningerSeksjon>
+            )}
 
             <OpplysningerSeksjon header={'Andre ytelser'}>
                 {!harYtelser && <BodyShort size={'small'}>Ingen relevante ytelser</BodyShort>}
-                {harYtelser && <BehandlingYtelserOpplysninger ytelser={ytelser} />}
+                {harYtelser && <BehandlingYtelserOpplysninger ytelser={saksopplysninger.ytelser} />}
                 <Separator />
             </OpplysningerSeksjon>
 
@@ -46,18 +49,24 @@ export const BehandlingSaksopplysninger = () => {
                     <BodyShort size={'small'}>Ingen relevante tiltakspengevedtak i Arena</BodyShort>
                 )}
                 {harTiltakspengevedtakFraArena && (
-                    <BehandlingTiltakspengerArenaOpplysninger vedtak={tiltakspengevedtakFraArena} />
+                    <BehandlingTiltakspengerArenaOpplysninger
+                        vedtak={saksopplysninger.tiltakspengevedtakFraArena}
+                    />
                 )}
                 <Separator />
             </OpplysningerSeksjon>
 
-            <OpplysningerSeksjon header={'Alder'}>
-                <BodyShort weight={'semibold'}>{`${alderFraDato(fødselsdato)} år`}</BodyShort>
-                <BehandlingSaksopplysning
-                    navn={'Fødselsdato'}
-                    verdi={formaterDatotekst(fødselsdato)}
-                />
-            </OpplysningerSeksjon>
+            {saksopplysninger?.fødselsdato && (
+                <OpplysningerSeksjon header={'Alder'}>
+                    <BodyShort
+                        weight={'semibold'}
+                    >{`${alderFraDato(saksopplysninger.fødselsdato)} år`}</BodyShort>
+                    <BehandlingSaksopplysning
+                        navn={'Fødselsdato'}
+                        verdi={formaterDatotekst(saksopplysninger.fødselsdato)}
+                    />
+                </OpplysningerSeksjon>
+            )}
             {type === Behandlingstype.SØKNADSBEHANDLING && (
                 <>
                     <Separator />

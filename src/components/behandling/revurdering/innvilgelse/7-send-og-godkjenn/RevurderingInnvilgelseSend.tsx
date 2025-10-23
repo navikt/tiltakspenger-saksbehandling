@@ -1,13 +1,17 @@
 import { useRevurderingBehandling } from '~/components/behandling/context/BehandlingContext';
 import { BehandlingSendOgGodkjenn } from '~/components/behandling/felles/send-og-godkjenn/BehandlingSendOgGodkjenn';
 import { useHentBehandlingLagringProps } from '~/components/behandling/felles/send-og-godkjenn/lagre/useHentBehandlingLagringProps';
-import { BehandlingResultatDTO, RevurderingVedtakInnvilgelseDTO } from '~/types/VedtakTyper';
+
 import { revurderingInnvilgelseValidering } from '~/components/behandling/revurdering/innvilgelse/revurderingInnvilgelseValidering';
 import {
     BehandlingSkjemaContext,
     useBehandlingSkjema,
 } from '~/components/behandling/context/BehandlingSkjemaContext';
 import { Periode } from '~/types/Periode';
+import { RevurderingVedtakInnvilgelseRequest } from '~/types/Revurdering';
+import { BehandlingResultat } from '~/types/Behandling';
+import { tiltaksdeltakelsePeriodeFormToTiltaksdeltakelsePeriode } from '~/components/behandling/søknadsbehandling/9-send-og-godkjenn/SøknadsbehandlingSend';
+import { barnetilleggPeriodeFormDataTilBarnetilleggPeriode } from '../6-brev/RevurderingInnvilgelseBrev';
 
 export const RevurderingInnvilgelseSend = () => {
     const { behandling } = useRevurderingBehandling();
@@ -22,26 +26,31 @@ export const RevurderingInnvilgelseSend = () => {
     return <BehandlingSendOgGodkjenn behandling={behandling} lagringProps={lagringProps} />;
 };
 
-const tilDTO = (skjema: BehandlingSkjemaContext): RevurderingVedtakInnvilgelseDTO => {
+const tilDTO = (skjema: BehandlingSkjemaContext): RevurderingVedtakInnvilgelseRequest => {
     return {
-        resultat: BehandlingResultatDTO.REVURDERING_INNVILGELSE,
+        resultat: BehandlingResultat.REVURDERING_INNVILGELSE,
         begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
         fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
         innvilgelsesperiode: skjema.behandlingsperiode as Periode,
-        valgteTiltaksdeltakelser: skjema.valgteTiltaksdeltakelser,
+        valgteTiltaksdeltakelser: tiltaksdeltakelsePeriodeFormToTiltaksdeltakelsePeriode(
+            skjema.valgteTiltaksdeltakelser,
+        ),
         barnetillegg: skjema.harBarnetillegg
             ? {
                   begrunnelse: skjema.textAreas.barnetilleggBegrunnelse.getValue(),
-                  perioder: skjema.barnetilleggPerioder,
+                  perioder: barnetilleggPeriodeFormDataTilBarnetilleggPeriode(
+                      skjema.barnetilleggPerioder,
+                  ),
               }
             : {
+                  begrunnelse: null,
                   perioder: [],
               },
         antallDagerPerMeldeperiodeForPerioder: skjema.antallDagerPerMeldeperiode.map((periode) => ({
             antallDagerPerMeldeperiode: periode.antallDagerPerMeldeperiode!,
             periode: {
-                fraOgMed: periode.periode.fraOgMed!,
-                tilOgMed: periode.periode.tilOgMed!,
+                fraOgMed: periode.periode!.fraOgMed!,
+                tilOgMed: periode.periode!.tilOgMed!,
             },
         })),
     };

@@ -3,10 +3,10 @@ import { Periode } from '~/types/Periode';
 import { periodeTilFormatertDatotekst } from '~/utils/date';
 import { UtbetalingStatus } from '~/components/utbetaling/status/UtbetalingStatus';
 import { UtbetalingBeløp } from '~/components/utbetaling/beløp/UtbetalingBeløp';
-import { Utbetalingsstatus } from '~/types/meldekort/MeldekortBehandling';
 import { SimulertBeregning } from '~/types/SimulertBeregningTypes';
 
 import style from './BeregningOgSimuleringHeader.module.css';
+import { Utbetalingsstatus } from '~/types/Utbetaling';
 
 type Props = {
     navkontor: string;

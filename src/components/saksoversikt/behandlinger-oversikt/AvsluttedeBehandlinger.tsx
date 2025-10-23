@@ -5,15 +5,16 @@ import {
     avbruttBehandlingToDataCellInfo,
     avbruttSøknadToDataCellInfo,
 } from './AvsluttedeBehandlingerUtils';
-import { SøknadForBehandlingProps } from '~/types/SøknadTypes';
-import { BehandlingData } from '~/types/BehandlingTypes';
+
 import { erBehandlingAvbrutt, erBehandlingVedtatt } from '~/utils/behandling';
 import { AvbrutteBehandlingerTabell } from './AvbrutteBehandlingerTabell';
+import { SøknadDTO } from '~/types/Søknad';
+import { Rammebehandling } from '~/types/Behandling';
 
 export const AvsluttedeBehandlinger = (props: {
     saksnummer: string;
-    søknader: SøknadForBehandlingProps[];
-    behandlinger: BehandlingData[];
+    søknader: SøknadDTO[];
+    behandlinger: Rammebehandling[];
 }) => {
     const avsluttedeBehandlinger = props.behandlinger.filter(
         (b) => erBehandlingAvbrutt(b) || erBehandlingVedtatt(b),

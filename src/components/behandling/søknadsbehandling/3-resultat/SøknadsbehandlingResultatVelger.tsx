@@ -3,7 +3,6 @@ import { classNames } from '~/utils/classNames';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { useSøknadsbehandling } from '../../context/BehandlingContext';
-import { SøknadsbehandlingResultat } from '~/types/BehandlingTypes';
 import { BehandlingsperiodeVelger } from '~/components/behandling/felles/behandlingsperiode/BehandlingsperiodeVelger';
 import {
     useBehandlingSkjema,
@@ -11,6 +10,7 @@ import {
 } from '~/components/behandling/context/BehandlingSkjemaContext';
 
 import style from './SøknadsbehandlingResultatVelger.module.css';
+import { BehandlingResultat } from '~/types/Behandling';
 
 export const SøknadsbehandlingResultatVelger = () => {
     const { rolleForBehandling, behandling } = useSøknadsbehandling();
@@ -21,7 +21,7 @@ export const SøknadsbehandlingResultatVelger = () => {
     const { resultat } = skjemaContext;
 
     const erIkkeSaksbehandler = rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER;
-    const kanIkkeInnvilge = behandling.saksopplysninger.tiltaksdeltagelse.length === 0;
+    const kanIkkeInnvilge = behandling.saksopplysninger?.tiltaksdeltagelse.length === 0;
 
     return (
         <VedtakSeksjon>
@@ -32,14 +32,14 @@ export const SøknadsbehandlingResultatVelger = () => {
                     className={style.radioGroup}
                     value={resultat}
                     readOnly={erIkkeSaksbehandler}
-                    onChange={(valgtResultat: SøknadsbehandlingResultat) => {
+                    onChange={(valgtResultat: BehandlingResultat) => {
                         dispatch({ type: 'setResultat', payload: { resultat: valgtResultat } });
                     }}
                 >
-                    <Radio value={SøknadsbehandlingResultat.INNVILGELSE} disabled={kanIkkeInnvilge}>
+                    <Radio value={BehandlingResultat.INNVILGELSE} disabled={kanIkkeInnvilge}>
                         Innvilgelse
                     </Radio>
-                    <Radio value={SøknadsbehandlingResultat.AVSLAG}>Avslag</Radio>
+                    <Radio value={BehandlingResultat.AVSLAG}>Avslag</Radio>
                     {resultat && (
                         <Button
                             size={'xsmall'}
@@ -58,7 +58,7 @@ export const SøknadsbehandlingResultatVelger = () => {
                     label={'Innvilges'}
                     className={classNames(
                         style.datovelgere,
-                        resultat !== SøknadsbehandlingResultat.INNVILGELSE && style.skjult,
+                        resultat !== BehandlingResultat.INNVILGELSE && style.skjult,
                     )}
                 />
             </VedtakSeksjon.Venstre>

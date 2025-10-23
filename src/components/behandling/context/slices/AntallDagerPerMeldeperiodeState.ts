@@ -1,5 +1,5 @@
 import { BehandlingSkjemaActionHandlers } from '~/components/behandling/context/BehandlingSkjemaReducer';
-import { Periode } from '~/types/Periode';
+import { Periode, PeriodeMedNullable } from '~/types/Periode';
 import { ANTALL_DAGER_DEFAULT } from '~/components/behandling/felles/dager-per-meldeperiode/BehandlingDagerPerMeldeperiode';
 import { inneholderHelePerioden } from '~/utils/periode';
 import { datoMax, datoMin, forrigeDag, nesteDag } from '~/utils/date';
@@ -10,10 +10,7 @@ export type AntallDagerPerMeldeperiodeState = {
 
 export type AntallDagerPerMeldeperiodeFormData = {
     antallDagerPerMeldeperiode: number;
-    periode: {
-        fraOgMed: string;
-        tilOgMed: string;
-    };
+    periode: PeriodeMedNullable;
 };
 
 export type AntallDagerPerMeldeperiodeActions =
@@ -25,8 +22,12 @@ export type AntallDagerPerMeldeperiodeActions =
           payload: { index: number };
       }
     | {
-          type: 'oppdaterAntallDagerPeriode';
-          payload: { periode: Partial<Periode>; index: number };
+          type: 'oppdaterAntallDagerFraOgMed';
+          payload: { fraOgMed: string; index: number };
+      }
+    | {
+          type: 'oppdaterAntallDagerTilOgMed';
+          payload: { tilOgMed: string; index: number };
       }
     | {
           type: 'settAntallDagerForPeriode';
@@ -38,7 +39,7 @@ export const antallDagerPerMeldeperiodeActionHandlers = {
         const sistePeriode = state.antallDagerPerMeldeperiode.at(-1);
         const behandlingsperiode = state.behandlingsperiode as Periode;
 
-        if (!sistePeriode) {
+        if (!sistePeriode?.periode?.fraOgMed || !sistePeriode?.periode?.tilOgMed) {
             return {
                 ...state,
                 antallDagerPerMeldeperiode: [
@@ -76,7 +77,7 @@ export const antallDagerPerMeldeperiodeActionHandlers = {
             antallDagerPerMeldeperiode: state.antallDagerPerMeldeperiode.toSpliced(index, 1),
         };
     },
-    oppdaterAntallDagerPeriode: (state, { periode, index }) => {
+    oppdaterAntallDagerFraOgMed: (state, { fraOgMed, index }) => {
         const eksisterendePeriode = state.antallDagerPerMeldeperiode.at(index);
 
         if (!eksisterendePeriode) {
@@ -86,8 +87,32 @@ export const antallDagerPerMeldeperiodeActionHandlers = {
         const oppdatertPeriode = {
             ...eksisterendePeriode,
             periode: {
-                ...eksisterendePeriode.periode,
-                ...periode,
+                fraOgMed: fraOgMed,
+                tilOgMed: eksisterendePeriode.periode?.tilOgMed ?? fraOgMed,
+            },
+        };
+
+        return {
+            ...state,
+            antallDagerPerMeldeperiode: oppdaterUtenOverlapp(
+                state.antallDagerPerMeldeperiode,
+                oppdatertPeriode,
+                index,
+            ),
+        };
+    },
+    oppdaterAntallDagerTilOgMed: (state, { tilOgMed, index }) => {
+        const eksisterendePeriode = state.antallDagerPerMeldeperiode.at(index);
+
+        if (!eksisterendePeriode) {
+            return state;
+        }
+
+        const oppdatertPeriode = {
+            ...eksisterendePeriode,
+            periode: {
+                fraOgMed: eksisterendePeriode.periode?.fraOgMed ?? tilOgMed,
+                tilOgMed: tilOgMed,
             },
         };
 
@@ -129,10 +154,27 @@ const oppdaterUtenOverlapp = (
                 return true;
             }
 
-            return !inneholderHelePerioden(oppdatertPeriode.periode, it.periode);
+            return oppdatertPeriode.periode.fraOgMed &&
+                oppdatertPeriode.periode.tilOgMed &&
+                it.periode.fraOgMed &&
+                it.periode.tilOgMed
+                ? !inneholderHelePerioden(
+                      oppdatertPeriode.periode as Periode,
+                      it.periode as Periode,
+                  )
+                : true;
         })
         .map((it) => {
             if (it === oppdatertPeriode) {
+                return it;
+            }
+
+            if (
+                !it.periode.fraOgMed ||
+                !it.periode.tilOgMed ||
+                !oppdatertPeriode.periode.fraOgMed ||
+                !oppdatertPeriode.periode.tilOgMed
+            ) {
                 return it;
             }
 

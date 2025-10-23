@@ -14,7 +14,7 @@ import {
 } from '../../../utils/tilganger';
 import { useSaksbehandler } from '../../../context/saksbehandler/SaksbehandlerContext';
 import OvertaMeldekortBehandling from './OvertaMeldekortBehandling';
-import { SakId } from '../../../types/SakTypes';
+import { SakId } from '../../../types/Sak';
 import router from 'next/router';
 import { useTaMeldekortBehandling } from './useTaMeldekortBehandling';
 import { useLeggTilbakeMeldekortBehandling } from './useLeggTilbakeMeldekortBehandling';

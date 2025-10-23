@@ -1,4 +1,4 @@
 import { MeldekortBehandlingId } from '~/types/meldekort/MeldekortBehandling';
-import { BehandlingId } from '~/types/BehandlingTypes';
+import { BehandlingId } from './Behandling';
 
 export type BehandlingIdFelles = BehandlingId | MeldekortBehandlingId;

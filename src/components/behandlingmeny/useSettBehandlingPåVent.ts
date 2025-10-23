@@ -1,7 +1,7 @@
-import { BehandlingData, BehandlingId } from '~/types/BehandlingTypes';
-import { SakId } from '~/types/SakTypes';
+import { SakId } from '~/types/Sak';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { Nullable } from '~/types/UtilTypes';
+import { Rammebehandling, BehandlingId } from '~/types/Behandling';
 
 export type SettBehandlingPåVentDTO = {
     sakId: Nullable<string>;
@@ -14,7 +14,7 @@ export const useSettBehandlingPåVent = (sakId: SakId, behandlingId: BehandlingI
         trigger: settBehandlingPåVent,
         isMutating: isSettBehandlingPåVentMutating,
         error: settBehandlingPåVentError,
-    } = useFetchJsonFraApi<BehandlingData, SettBehandlingPåVentDTO>(
+    } = useFetchJsonFraApi<Rammebehandling, SettBehandlingPåVentDTO>(
         `/sak/${sakId}/behandling/${behandlingId}/pause`,
         'POST',
     );

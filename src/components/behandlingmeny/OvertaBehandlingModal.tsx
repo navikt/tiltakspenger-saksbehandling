@@ -1,11 +1,12 @@
 import { Alert, BodyShort, Button, Heading, HStack, Modal, VStack } from '@navikt/ds-react';
-import { BehandlingData, BehandlingId } from '~/types/BehandlingTypes';
-import { SakId } from '~/types/SakTypes';
+
+import { SakId } from '~/types/Sak';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import router from 'next/router';
 import { behandlingUrl } from '~/utils/urls';
 
 import styles from './OvertaBehandlingModal.module.css';
+import { Rammebehandling, BehandlingId } from '~/types/Behandling';
 
 const OvertabehandlingModal = (props: {
     sakId: SakId;
@@ -14,7 +15,7 @@ const OvertabehandlingModal = (props: {
     åpen: boolean;
     onClose: () => void;
 }) => {
-    const overtaBehandlingApi = useFetchJsonFraApi<BehandlingData, { overtarFra: string }>(
+    const overtaBehandlingApi = useFetchJsonFraApi<Rammebehandling, { overtarFra: string }>(
         `/sak/${props.sakId}/behandling/${props.behandlingId}/overta`,
         'PATCH',
         {

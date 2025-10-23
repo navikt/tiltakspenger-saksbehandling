@@ -6,7 +6,7 @@ import {
     MeldekortBehandlingDTO,
     MeldekortBehandlingId,
 } from '../../../../../types/meldekort/MeldekortBehandling';
-import { SakId } from '../../../../../types/SakTypes';
+import { SakId } from '../../../../../types/Sak';
 import { useMeldeperiodeKjede } from '../../../MeldeperiodeKjedeContext';
 import { useFormContext } from 'react-hook-form';
 import { MeldekortBehandlingForm } from '../utfylling/meldekortUtfyllingUtils';

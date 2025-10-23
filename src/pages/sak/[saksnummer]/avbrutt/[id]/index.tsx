@@ -2,9 +2,8 @@ import { useParams } from 'next/navigation';
 import { pageWithAuthentication } from '../../../../../auth/pageWithAuthentication';
 import { PersonaliaHeader } from '../../../../../components/personaliaheader/PersonaliaHeader';
 import { SakProvider } from '../../../../../context/sak/SakContext';
-import { SakProps } from '../../../../../types/SakTypes';
+import { SakProps } from '../../../../../types/Sak';
 import { fetchSak } from '../../../../../utils/fetch/fetch-server';
-import { singleOrFirst } from '../../../../../utils/array';
 import OppsummeringAvSøknad from '../../../../../components/oppsummeringer/oppsummeringAvSøknad/OppsummeringAvSøknad';
 import AvbruttOppsummering from '../../../../../components/oppsummeringer/oppsummeringAvAvbruttBehandling/OppsummeringAvAvbruttBehandling';
 import SideBarMain from '../../../../../layouts/sidebar-main/SideBarMain';
@@ -29,8 +28,6 @@ const AvbruttPage = (props: Props) => {
         return <div>Dette er ikke en avbrutt søknad</div>;
     }
 
-    const tiltakFraSøknad = singleOrFirst(søknad.tiltak);
-
     return (
         <SakProvider sak={props.sak}>
             <PersonaliaHeader
@@ -43,10 +40,14 @@ const AvbruttPage = (props: Props) => {
                 sidebar={
                     <OppsummeringAvSøknad
                         søknad={søknad}
-                        tiltaksperiode={{
-                            fraOgMed: tiltakFraSøknad.fraOgMed,
-                            tilOgMed: tiltakFraSøknad.tilOgMed,
-                        }}
+                        tiltaksperiode={
+                            søknad.tiltak?.fraOgMed && søknad.tiltak?.tilOgMed
+                                ? {
+                                      fraOgMed: søknad.tiltak.fraOgMed,
+                                      tilOgMed: søknad.tiltak.tilOgMed,
+                                  }
+                                : null
+                        }
                         medTittel
                     />
                 }

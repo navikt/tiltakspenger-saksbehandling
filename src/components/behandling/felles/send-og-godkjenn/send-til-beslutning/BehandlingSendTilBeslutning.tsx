@@ -1,13 +1,14 @@
 import { Button } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import { useBehandling } from '../../../context/BehandlingContext';
-import { BehandlingData } from '~/types/BehandlingTypes';
+
 import { BekreftelsesModal } from '../../../../modaler/BekreftelsesModal';
 import { useSendBehandlingTilBeslutning } from '~/components/behandling/felles/send-og-godkjenn/send-til-beslutning/useSendBehandlingTilBeslutning';
 import { useNotification } from '~/context/NotificationContext';
+import { Rammebehandling } from '~/types/Behandling';
 
 type Props = {
-    behandling: BehandlingData;
+    behandling: Rammebehandling;
     valider: () => boolean;
     disabled: boolean;
 };

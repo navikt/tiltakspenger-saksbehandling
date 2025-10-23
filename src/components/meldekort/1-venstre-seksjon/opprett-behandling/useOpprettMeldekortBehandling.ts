@@ -2,7 +2,7 @@ import {
     MeldeperiodeKjedeId,
     MeldeperiodeKjedeProps,
 } from '../../../../types/meldekort/Meldeperiode';
-import { SakId } from '../../../../types/SakTypes';
+import { SakId } from '../../../../types/Sak';
 import { useFetchJsonFraApi } from '../../../../utils/fetch/useFetchFraApi';
 
 type Props = {

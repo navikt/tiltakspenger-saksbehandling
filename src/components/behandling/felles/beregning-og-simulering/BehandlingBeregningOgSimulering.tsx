@@ -6,11 +6,12 @@ import { Separator } from '~/components/separator/Separator';
 import { SimuleringOppsummering } from '~/components/beregning-og-simulering/simulering-oppsummering/SimuleringOppsummering';
 import { BeregningOppsummering } from '~/components/beregning-og-simulering/beregning-oppsummering/BeregningOppsummering';
 import { BeregningOgSimuleringHeader } from '~/components/beregning-og-simulering/header/BeregningOgSimuleringHeader';
-import { BehandlingData, BehandlingStatus } from '~/types/BehandlingTypes';
+
 import { kanSaksbehandleForBehandling } from '~/utils/tilganger';
 import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
 
 import style from './BehandlingBeregningOgSimulering.module.css';
+import { Rammebehandling, Behandlingsstatus } from '~/types/Behandling';
 
 export const BehandlingBeregningOgSimulering = () => {
     const { behandling, setBehandling } = useBehandling();
@@ -37,7 +38,7 @@ export const BehandlingBeregningOgSimulering = () => {
                             navkontor={navkontor}
                             navkontorNavn={navkontorNavn}
                             utbetalingsstatus={
-                                status === BehandlingStatus.VEDTATT ? utbetalingsstatus : undefined
+                                status === Behandlingsstatus.VEDTATT ? utbetalingsstatus : undefined
                             }
                             erOmberegning={true}
                         />
@@ -47,7 +48,7 @@ export const BehandlingBeregningOgSimulering = () => {
                             simulerteBeløp={simulerteBeløp}
                             behandlingId={behandling.id}
                             oppdaterBehandlingEllerKjede={(behandling) =>
-                                setBehandling(behandling as BehandlingData)
+                                setBehandling(behandling as Rammebehandling)
                             }
                             visOppdaterKnapp={kanSaksbehandleForBehandling(
                                 behandling,

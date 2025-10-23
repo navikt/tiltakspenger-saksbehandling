@@ -1,19 +1,20 @@
 import { ActionMenu } from '@navikt/ds-react';
-import { BehandlingForOversiktData, BehandlingStatus } from '~/types/BehandlingTypes';
+import { BehandlingForOversikt } from '~/types/BehandlingForOversikt';
 import React from 'react';
 import Link from 'next/link';
 import { eierBehandling } from '~/utils/tilganger';
 import { Saksbehandler } from '~/types/Saksbehandler';
 import { ArrowRightIcon } from '@navikt/aksel-icons';
 import { behandlingUrl } from '~/utils/urls';
+import { Behandlingsstatus } from '~/types/Behandling';
 
 export const visFortsettBehandlingMenyvalg = (
-    behandling: BehandlingForOversiktData,
+    behandling: BehandlingForOversikt,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     const erReleventMenyValgForStatus =
-        behandling.status === BehandlingStatus.UNDER_BEHANDLING ||
-        behandling.status === BehandlingStatus.UNDER_BESLUTNING;
+        behandling.status === Behandlingsstatus.UNDER_BEHANDLING ||
+        behandling.status === Behandlingsstatus.UNDER_BESLUTNING;
 
     return (
         erReleventMenyValgForStatus &&
@@ -23,7 +24,7 @@ export const visFortsettBehandlingMenyvalg = (
 };
 
 type Props = {
-    behandling: BehandlingForOversiktData;
+    behandling: BehandlingForOversikt;
 };
 
 const FortsettBehandlingMenyvalg = ({ behandling }: Props) => {

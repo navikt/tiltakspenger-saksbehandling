@@ -1,4 +1,3 @@
-import { SøknadPengestøtter } from '../../../../types/SøknadTypes';
 import {
     BehandlingSaksopplysning,
     BehandlingSaksopplysningMedPeriode,
@@ -8,6 +7,7 @@ import { formaterDatotekst } from '../../../../utils/date';
 import styles from '../../../oppsummeringer/oppsummeringAvSøknad/OppsummeringAvSøknad.module.css';
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
 import React from 'react';
+import { SøknadPengestøtter } from '~/types/Søknad';
 
 type Props = {
     className?: string;

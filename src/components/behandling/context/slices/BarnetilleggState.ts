@@ -1,13 +1,16 @@
 import { Periode } from '~/types/Periode';
-import { VedtakBarnetilleggPeriode } from '~/types/VedtakTyper';
+
 import { forrigeDag, nesteDag } from '~/utils/date';
-import { SøknadForBehandlingProps } from '~/types/SøknadTypes';
+
 import { periodiserBarnetilleggFraSøknad } from '~/components/behandling/felles/barnetillegg/utils/periodiserBarnetilleggFraSøknad';
 import { BehandlingSkjemaActionHandlers } from '~/components/behandling/context/BehandlingSkjemaReducer';
+import { BarnetilleggPeriode } from '~/types/Barnetillegg';
+import { SøknadDTO } from '~/types/Søknad';
+import { BarnetilleggPeriodeFormData } from '../../felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
 
 export type BarnetilleggState = {
     harBarnetillegg: boolean;
-    barnetilleggPerioder: VedtakBarnetilleggPeriode[];
+    barnetilleggPerioder: BarnetilleggPeriodeFormData[];
 };
 
 export type BarnetilleggActions =
@@ -28,12 +31,16 @@ export type BarnetilleggActions =
           payload: { antall: number; index: number };
       }
     | {
-          type: 'oppdaterBarnetilleggPeriode';
-          payload: { periode: Partial<Periode>; index: number };
+          type: 'oppdaterBarnetilleggFraOgMed';
+          payload: { fraOgMed: string; index: number };
+      }
+    | {
+          type: 'oppdaterBarnetilleggTilOgMed';
+          payload: { tilOgMed: string; index: number };
       }
     | {
           type: 'nullstillBarnetilleggPerioder';
-          payload: { søknad: SøknadForBehandlingProps };
+          payload: { søknad: SøknadDTO };
       };
 
 export const barnetilleggActionHandlers = {
@@ -49,6 +56,7 @@ export const barnetilleggActionHandlers = {
         const nestePeriode: Periode = forrigeBarnetillegg
             ? {
                   fraOgMed:
+                      forrigeBarnetillegg.periode?.tilOgMed &&
                       innvilgelsesPeriode.tilOgMed > forrigeBarnetillegg.periode.tilOgMed
                           ? nesteDag(forrigeBarnetillegg.periode.tilOgMed)
                           : innvilgelsesPeriode.tilOgMed,
@@ -56,7 +64,7 @@ export const barnetilleggActionHandlers = {
               }
             : innvilgelsesPeriode;
 
-        const nyBarnetilleggperiode: VedtakBarnetilleggPeriode = {
+        const nyBarnetilleggperiode: BarnetilleggPeriode = {
             // Antall barn må alltid være >=1
             antallBarn: forrigeBarnetillegg?.antallBarn || antallBarnFraSøknad || 1,
             periode: nestePeriode,
@@ -93,46 +101,74 @@ export const barnetilleggActionHandlers = {
             ),
         };
     },
-
-    oppdaterBarnetilleggPeriode: (state, payload) => {
-        const { index: oppdatertIndex, periode: oppdatertPeriode } = payload;
-
-        const forrigePeriode = state.barnetilleggPerioder[oppdatertIndex].periode;
+    oppdaterBarnetilleggFraOgMed: (state, payload) => {
+        const { index: oppdatertIndex, fraOgMed } = payload;
+        const forrigePeriode = state.barnetilleggPerioder[oppdatertIndex]?.periode ?? null;
 
         return {
             ...state,
             barnetilleggPerioder: state.barnetilleggPerioder.map((barnetillegg, index) => {
+                // Oppdater forrige periode sin slutt
                 if (
                     index === oppdatertIndex - 1 &&
-                    oppdatertPeriode.fraOgMed &&
-                    oppdatertPeriode.fraOgMed < forrigePeriode.fraOgMed
+                    fraOgMed &&
+                    forrigePeriode?.fraOgMed &&
+                    fraOgMed < forrigePeriode.fraOgMed
                 ) {
                     return {
                         ...barnetillegg,
                         periode: {
                             ...barnetillegg.periode,
-                            tilOgMed: forrigeDag(oppdatertPeriode.fraOgMed),
+                            tilOgMed: forrigeDag(fraOgMed),
                         },
                     };
                 }
 
+                // Oppdater aktuell periode sin start
                 if (index === oppdatertIndex) {
                     return {
                         ...barnetillegg,
-                        periode: { ...barnetillegg.periode, ...oppdatertPeriode },
+                        periode: {
+                            ...barnetillegg.periode,
+                            fraOgMed,
+                        },
                     };
                 }
 
+                return barnetillegg;
+            }),
+        };
+    },
+    oppdaterBarnetilleggTilOgMed: (state, payload) => {
+        const { index: oppdatertIndex, tilOgMed } = payload;
+        const forrigePeriode = state.barnetilleggPerioder[oppdatertIndex]?.periode ?? null;
+
+        return {
+            ...state,
+            barnetilleggPerioder: state.barnetilleggPerioder.map((barnetillegg, index) => {
+                // Oppdater aktuell periode sin slutt
+                if (index === oppdatertIndex) {
+                    return {
+                        ...barnetillegg,
+                        periode: {
+                            ...barnetillegg.periode,
+                            tilOgMed,
+                        },
+                    };
+                }
+
+                // Oppdater neste periode sin start
                 if (
                     index === oppdatertIndex + 1 &&
-                    oppdatertPeriode.tilOgMed &&
-                    oppdatertPeriode.tilOgMed > forrigePeriode.tilOgMed
+                    tilOgMed &&
+                    forrigePeriode?.tilOgMed &&
+                    tilOgMed > forrigePeriode.tilOgMed
                 ) {
                     return {
                         ...barnetillegg,
                         periode: {
                             ...barnetillegg.periode,
-                            fraOgMed: nesteDag(oppdatertPeriode.tilOgMed),
+                            fraOgMed: nesteDag(tilOgMed),
                         },
                     };
                 }

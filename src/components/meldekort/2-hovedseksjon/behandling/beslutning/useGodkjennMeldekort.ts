@@ -1,4 +1,4 @@
-import { SakId } from '../../../../../types/SakTypes';
+import { SakId } from '../../../../../types/Sak';
 import { MeldekortBehandlingId } from '../../../../../types/meldekort/MeldekortBehandling';
 import { MeldeperiodeKjedeProps } from '../../../../../types/meldekort/Meldeperiode';
 import { useFetchJsonFraApi } from '../../../../../utils/fetch/useFetchFraApi';

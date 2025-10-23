@@ -1,7 +1,8 @@
 import { Alert, HStack, Switch } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import { useSak } from '~/context/sak/SakContext';
-import { SakProps } from '~/types/SakTypes';
+import { SakProps } from '~/types/Sak';
+
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 
 const MeldekortHelgToggle = () => {

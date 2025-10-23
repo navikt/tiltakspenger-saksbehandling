@@ -1,12 +1,13 @@
 import { useRevurderingBehandling } from '../../../context/BehandlingContext';
 import { revurderingStansValidering } from '../revurderingStansValidering';
-import { BehandlingResultatDTO, RevurderingVedtakStansDTO } from '~/types/VedtakTyper';
 import { BehandlingSendOgGodkjenn } from '~/components/behandling/felles/send-og-godkjenn/BehandlingSendOgGodkjenn';
 import { useHentBehandlingLagringProps } from '~/components/behandling/felles/send-og-godkjenn/lagre/useHentBehandlingLagringProps';
 import {
     BehandlingSkjemaContext,
     useBehandlingSkjema,
 } from '~/components/behandling/context/BehandlingSkjemaContext';
+import { RevurderingVedtakStansRequest } from '~/types/Revurdering';
+import { BehandlingResultat } from '~/types/Behandling';
 
 export const RevurderingStansSend = () => {
     const skjema = useBehandlingSkjema();
@@ -21,14 +22,14 @@ export const RevurderingStansSend = () => {
     return <BehandlingSendOgGodkjenn behandling={behandling} lagringProps={lagringProps} />;
 };
 
-const tilDTO = (skjema: BehandlingSkjemaContext): RevurderingVedtakStansDTO => {
+const tilDTO = (skjema: BehandlingSkjemaContext): RevurderingVedtakStansRequest => {
     return {
-        resultat: BehandlingResultatDTO.STANS,
+        resultat: BehandlingResultat.STANS,
         begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
         fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
         stansFraOgMed: skjema.harValgtStansFraFørsteDagSomGirRett
             ? null
-            : skjema.behandlingsperiode.fraOgMed!,
+            : skjema.behandlingsperiode!.fraOgMed!,
         harValgtStansFraFørsteDagSomGirRett: skjema.harValgtStansFraFørsteDagSomGirRett,
         stansTilOgMed: null,
         harValgtStansTilSisteDagSomGirRett: true,

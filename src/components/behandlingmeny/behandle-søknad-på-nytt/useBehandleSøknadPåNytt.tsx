@@ -1,14 +1,14 @@
-import { SøknadsbehandlingData } from '~/types/BehandlingTypes';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
-import { SakId } from '~/types/SakTypes';
-import { SøknadId } from '~/types/SøknadTypes';
+import { SakId } from '~/types/Sak';
+import { SøknadId } from '~/types/Søknad';
+import { Søknadsbehandling } from '~/types/Søknadsbehandling';
 
 export const useBehandleSøknadPåNytt = (sakId: SakId, søknadId: SøknadId) => {
     const {
         trigger: behandleSøknadPåNytt,
         isMutating: behandleSøknadPåNyttIsLoading,
         error: behandleSøknadPåNyttError,
-    } = useFetchJsonFraApi<SøknadsbehandlingData>(
+    } = useFetchJsonFraApi<Søknadsbehandling>(
         `/sak/${sakId}/soknad/${søknadId}/behandling/ny-behandling`,
         'POST',
     );

@@ -1,8 +1,8 @@
 import { BodyShort, HStack, VStack } from '@navikt/ds-react';
 import { utbetalingsstatusTekst } from '~/utils/tekstformateringUtils';
-import { Utbetalingsstatus } from '~/types/meldekort/MeldekortBehandling';
 
 import style from '../UtbetalingFelles.module.css';
+import { Utbetalingsstatus } from '~/types/Utbetaling';
 
 export type UtbetalingStatusProps = {
     navkontor: string;
