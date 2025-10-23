@@ -5,10 +5,10 @@ import { validerAntallDagerPerMeldeperiode } from '~/components/behandling/felle
 import { BehandlingSkjemaContext } from '~/components/behandling/context/BehandlingSkjemaContext';
 import { erFullstendigPeriode } from '~/utils/periode';
 import { hentHeleTiltaksdeltagelsesperioden } from '~/utils/behandling';
-import { Behandling } from '~/types/Behandling';
+import { Rammebehandling } from '~/types/Behandling';
 
 export const validerInnvilgelse = (
-    behandling: Behandling,
+    behandling: Rammebehandling,
     skjema: BehandlingSkjemaContext,
 ): ValideringResultat => {
     const validering: ValideringResultat = {

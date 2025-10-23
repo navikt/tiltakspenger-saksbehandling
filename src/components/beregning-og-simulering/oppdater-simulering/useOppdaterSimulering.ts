@@ -3,10 +3,10 @@ import { MeldeperiodeKjedeProps } from '~/types/meldekort/Meldeperiode';
 import { MeldekortBehandlingId } from '~/types/meldekort/MeldekortBehandling';
 import { SakId } from '~/types/Sak';
 import { BehandlingIdFelles } from '~/types/BehandlingFelles';
-import { Behandling, BehandlingId } from '~/types/Behandling';
+import { Rammebehandling, BehandlingId } from '~/types/Behandling';
 
 type ResponseType<BehId extends BehandlingIdFelles> = BehId extends BehandlingId
-    ? Behandling
+    ? Rammebehandling
     : BehId extends MeldekortBehandlingId
       ? MeldeperiodeKjedeProps
       : never;

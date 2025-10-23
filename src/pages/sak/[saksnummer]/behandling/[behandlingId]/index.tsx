@@ -7,7 +7,7 @@ import { fetchSak } from '~/utils/fetch/fetch-server';
 import { logger } from '@navikt/next-logger';
 import { SakProvider } from '~/context/sak/SakContext';
 import { SakProps } from '~/types/Sak';
-import { BehandlingId, Behandling as BehandlingType } from '~/types/Behandling';
+import { BehandlingId, Rammebehandling as BehandlingType } from '~/types/Behandling';
 
 type Props = {
     behandling: BehandlingType;

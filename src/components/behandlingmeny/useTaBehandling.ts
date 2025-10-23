@@ -1,4 +1,4 @@
-import { Behandling, BehandlingId } from '~/types/Behandling';
+import { Rammebehandling, BehandlingId } from '~/types/Behandling';
 
 import { SakId } from '../../types/Sak';
 import { useFetchJsonFraApi } from '../../utils/fetch/useFetchFraApi';
@@ -8,7 +8,7 @@ export const useTaBehandling = (sakId: SakId, behandlingId: BehandlingId) => {
         trigger: taBehandling,
         isMutating: isBehandlingMutating,
         error: taBehandlingError,
-    } = useFetchJsonFraApi<Behandling>(`/sak/${sakId}/behandling/${behandlingId}/ta`, 'POST');
+    } = useFetchJsonFraApi<Rammebehandling>(`/sak/${sakId}/behandling/${behandlingId}/ta`, 'POST');
 
     return { taBehandling, isBehandlingMutating, taBehandlingError };
 };

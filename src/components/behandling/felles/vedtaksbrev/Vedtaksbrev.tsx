@@ -11,11 +11,11 @@ import { BrevForhåndsvisningDTO } from '~/components/behandling/felles/vedtaksb
 import { ValideringResultat } from '~/types/Validering';
 
 import style from './Vedtaksbrev.module.css';
-import { Behandling } from '~/types/Behandling';
+import { Rammebehandling } from '~/types/Behandling';
 
 type Props = {
     header: string;
-    behandling: Behandling;
+    behandling: Rammebehandling;
     rolle: Nullable<SaksbehandlerRolle>;
     tekstRef: RefObject<HTMLTextAreaElement | null>;
     hjelpetekst?: ReactNode;

@@ -48,11 +48,6 @@ export enum MeldekortBehandlingType {
     KORRIGERING = 'KORRIGERING',
 }
 
-export enum MeldekortBehandlingUtbetalingsstatus {
-    AVBRUTT = 'AVBRUTT',
-    IKKE_GODKJENT = 'IKKE_GODKJENT',
-}
-
 export type MeldekortBehandlingProps = {
     id: MeldekortBehandlingId;
     sakId: SakId;
@@ -69,7 +64,7 @@ export type MeldekortBehandlingProps = {
     begrunnelse?: string;
     type: MeldekortBehandlingType;
     attesteringer: Attestering[];
-    utbetalingsstatus: Utbetalingsstatus | MeldekortBehandlingUtbetalingsstatus;
+    utbetalingsstatus: Utbetalingsstatus;
     periode: Periode;
     dager: MeldekortDagProps[];
     beregning?: MeldekortBeregning;

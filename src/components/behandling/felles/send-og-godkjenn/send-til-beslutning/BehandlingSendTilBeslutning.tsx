@@ -5,10 +5,10 @@ import { useBehandling } from '../../../context/BehandlingContext';
 import { BekreftelsesModal } from '../../../../modaler/BekreftelsesModal';
 import { useSendBehandlingTilBeslutning } from '~/components/behandling/felles/send-og-godkjenn/send-til-beslutning/useSendBehandlingTilBeslutning';
 import { useNotification } from '~/context/NotificationContext';
-import { Behandling } from '~/types/Behandling';
+import { Rammebehandling } from '~/types/Behandling';
 
 type Props = {
-    behandling: Behandling;
+    behandling: Rammebehandling;
     valider: () => boolean;
     disabled: boolean;
 };

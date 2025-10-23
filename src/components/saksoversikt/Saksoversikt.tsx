@@ -13,7 +13,7 @@ import styles from './Saksoversikt.module.css';
 import { VedtatteBehandlinger } from '~/components/saksoversikt/behandlinger-oversikt/VedtatteBehandlinger';
 import NotificationBanner from '../notificationBanner/NotificationBanner';
 import MeldekortHelgToggle from '../toggles/MeldekortHelgToggle';
-import { Behandling, Behandlingsstatus, Behandlingstype } from '~/types/Behandling';
+import { Rammebehandling, Behandlingsstatus, Behandlingstype } from '~/types/Behandling';
 
 export const Saksoversikt = () => {
     const {
@@ -115,7 +115,7 @@ export const Saksoversikt = () => {
     );
 };
 
-const harVedtattSøknadsbehandling = (behandlingsoversikt: Behandling[]) =>
+const harVedtattSøknadsbehandling = (behandlingsoversikt: Rammebehandling[]) =>
     behandlingsoversikt.some(
         (behandling) =>
             behandling.type === Behandlingstype.SØKNADSBEHANDLING &&

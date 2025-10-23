@@ -1,9 +1,13 @@
 import { Nullable } from '~/types/UtilTypes';
 import { Periode } from '~/types/Periode';
 import { SakId } from '~/types/Sak';
-import { Behandling, BehandlingId, BehandlingResultat, Behandlingstype } from '~/types/Behandling';
+import {
+    Rammebehandling,
+    BehandlingId,
+    BehandlingResultat,
+    Behandlingstype,
+} from '~/types/Behandling';
 import { SøknadId } from '~/types/Søknad';
-import { Søknadsbehandling } from '~/types/Søknadsbehandling';
 
 export interface VedtattBehandlingCellInfo {
     id: BehandlingId;
@@ -20,16 +24,14 @@ export interface VedtattBehandlingCellInfo {
 }
 
 export const vedtattBehandlingToDataCellInfo = (
-    behandling: Behandling,
+    behandling: Rammebehandling,
 ): VedtattBehandlingCellInfo => {
     const tidspunktAvsluttet = behandling.avbrutt?.avbruttTidspunkt
         ? behandling.avbrutt.avbruttTidspunkt
         : behandling.iverksattTidspunkt!;
 
     const søknadId =
-        behandling.type === Behandlingstype.SØKNADSBEHANDLING
-            ? (behandling as Søknadsbehandling).søknad.id
-            : undefined;
+        behandling.type === Behandlingstype.SØKNADSBEHANDLING ? behandling.søknad.id : undefined;
 
     return {
         id: behandling.id,

@@ -3,10 +3,10 @@ import React, { useState } from 'react';
 import AvsluttBehandlingModal from '~/components/modaler/AvsluttBehandlingModal';
 
 import router from 'next/router';
-import { Behandling } from '~/types/Behandling';
+import { Rammebehandling } from '~/types/Behandling';
 
 type Props = {
-    behandling: Behandling;
+    behandling: Rammebehandling;
 };
 
 export const BehandlingAvslutt = ({ behandling }: Props) => {

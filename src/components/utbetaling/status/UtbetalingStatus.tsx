@@ -3,12 +3,11 @@ import { utbetalingsstatusTekst } from '~/utils/tekstformateringUtils';
 
 import style from '../UtbetalingFelles.module.css';
 import { Utbetalingsstatus } from '~/types/Utbetaling';
-import { MeldekortBehandlingUtbetalingsstatus } from '~/types/meldekort/MeldekortBehandling';
 
 export type UtbetalingStatusProps = {
     navkontor: string;
     navkontorNavn?: string;
-    utbetalingsstatus?: Utbetalingsstatus | MeldekortBehandlingUtbetalingsstatus;
+    utbetalingsstatus?: Utbetalingsstatus;
 };
 
 export const UtbetalingStatus = ({

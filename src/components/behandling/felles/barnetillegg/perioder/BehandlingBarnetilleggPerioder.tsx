@@ -14,7 +14,6 @@ import { useBehandling } from '~/components/behandling/context/BehandlingContext
 import style from './BehandlingBarnetilleggPerioder.module.css';
 import { Behandlingstype } from '~/types/Behandling';
 import { BarnetilleggPeriodeFormData } from '../utils/hentBarnetilleggFraBehandling';
-import { Søknadsbehandling } from '~/types/Søknadsbehandling';
 
 const BATCH_MED_BARN = 10;
 
@@ -26,9 +25,7 @@ export const BehandlingBarnetilleggPerioder = () => {
     const erSøknadsbehandling = behandling.type === Behandlingstype.SØKNADSBEHANDLING;
     const erSaksbehandler = rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER;
 
-    const antallBarn = erSøknadsbehandling
-        ? (behandling as Søknadsbehandling).søknad.barnetillegg.length
-        : 1;
+    const antallBarn = erSøknadsbehandling ? behandling.søknad.barnetillegg.length : 1;
 
     return (
         <>
@@ -63,7 +60,7 @@ export const BehandlingBarnetilleggPerioder = () => {
                                     dispatch({
                                         type: 'nullstillBarnetilleggPerioder',
                                         payload: {
-                                            søknad: (behandling as Søknadsbehandling).søknad,
+                                            søknad: behandling.søknad,
                                         },
                                     });
                                 }}

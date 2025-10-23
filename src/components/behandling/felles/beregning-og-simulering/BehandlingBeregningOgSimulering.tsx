@@ -11,7 +11,7 @@ import { kanSaksbehandleForBehandling } from '~/utils/tilganger';
 import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
 
 import style from './BehandlingBeregningOgSimulering.module.css';
-import { Behandling, Behandlingsstatus } from '~/types/Behandling';
+import { Rammebehandling, Behandlingsstatus } from '~/types/Behandling';
 
 export const BehandlingBeregningOgSimulering = () => {
     const { behandling, setBehandling } = useBehandling();
@@ -48,7 +48,7 @@ export const BehandlingBeregningOgSimulering = () => {
                             simulerteBeløp={simulerteBeløp}
                             behandlingId={behandling.id}
                             oppdaterBehandlingEllerKjede={(behandling) =>
-                                setBehandling(behandling as Behandling)
+                                setBehandling(behandling as Rammebehandling)
                             }
                             visOppdaterKnapp={kanSaksbehandleForBehandling(
                                 behandling,

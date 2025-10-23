@@ -23,10 +23,10 @@ import { skalKunneGjenopptaBehandling } from '~/utils/tilganger';
 import { formaterTidspunkt } from '~/utils/date';
 
 import style from './BehandlingSendOgGodkjenn.module.css';
-import { Behandling, Behandlingsstatus } from '~/types/Behandling';
+import { Rammebehandling, Behandlingsstatus } from '~/types/Behandling';
 
 type Props = {
-    behandling: Behandling;
+    behandling: Rammebehandling;
     lagringProps: BehandlingLagringProps;
 };
 

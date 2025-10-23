@@ -9,10 +9,10 @@ import { ValideringResultat } from '~/types/Validering';
 import React, { useEffect, useState } from 'react';
 
 import style from './VedtaksbrevForhåndsvisning.module.css';
-import { Behandling } from '~/types/Behandling';
+import { Rammebehandling } from '~/types/Behandling';
 
 type Props = {
-    behandling: Behandling;
+    behandling: Rammebehandling;
     hentDto: () => BrevForhåndsvisningDTO;
     validering: ValideringResultat;
 };

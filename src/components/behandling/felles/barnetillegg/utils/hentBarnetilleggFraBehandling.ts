@@ -9,7 +9,7 @@ import { Nullable } from '~/types/UtilTypes';
 
 import { Søknadsbehandling } from '~/types/Søknadsbehandling';
 import { Revurdering } from '~/types/Revurdering';
-import { Behandling } from '~/types/Behandling';
+import { Rammebehandling } from '~/types/Behandling';
 
 export interface BarnetilleggFormData {
     perioder: BarnetilleggPeriodeFormData[];
@@ -45,7 +45,7 @@ export const hentBarnetilleggForRevurdering = (
 };
 
 export const hentLagredePerioderMedBarn = (
-    behandling: Behandling,
+    behandling: Rammebehandling,
 ): BarnetilleggPeriode[] | undefined => {
     return behandling.barnetillegg?.perioder.filter(kunPerioderMedBarn);
 };

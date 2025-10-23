@@ -10,10 +10,10 @@ import {
 } from '~/components/behandling/context/BehandlingSkjemaContext';
 
 import style from './BehandlingsperiodeVelger.module.css';
-import { Behandling } from '~/types/Behandling';
+import { Rammebehandling } from '~/types/Behandling';
 
 type Props = {
-    behandling: Behandling;
+    behandling: Rammebehandling;
     label: string;
     className?: string;
 };

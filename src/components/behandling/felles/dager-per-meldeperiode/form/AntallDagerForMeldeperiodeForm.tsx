@@ -34,9 +34,9 @@ export const AntallDagerForMeldeperiodeForm = () => {
                         maxDate={behandlingsperiode?.tilOgMed}
                         readOnly={!erSaksbehandler}
                         value={
-                            periode.periode?.fraOgMed
-                                ? datoTilDatoInputText(periode.periode?.fraOgMed)
-                                : ''
+                            periode.periode.fraOgMed
+                                ? datoTilDatoInputText(periode.periode.fraOgMed)
+                                : undefined
                         }
                         onDateChange={(date) => {
                             if (!date) {
@@ -57,9 +57,9 @@ export const AntallDagerForMeldeperiodeForm = () => {
                         maxDate={behandlingsperiode?.tilOgMed}
                         readOnly={!erSaksbehandler}
                         value={
-                            periode.periode?.tilOgMed
+                            periode.periode.tilOgMed
                                 ? datoTilDatoInputText(periode.periode.tilOgMed)
-                                : ''
+                                : undefined
                         }
                         onDateChange={(date) => {
                             if (!date) {

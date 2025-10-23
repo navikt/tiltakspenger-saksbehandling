@@ -1,4 +1,4 @@
-import { Behandling, Behandlingsstatus } from '~/types/Behandling';
+import { Rammebehandling, Behandlingsstatus } from '~/types/Behandling';
 import { BehandlingForOversikt } from '~/types/BehandlingForOversikt';
 import {
     MeldekortBehandlingProps,
@@ -13,7 +13,7 @@ export const erBeslutter = (saksbehandler: Saksbehandler) =>
     saksbehandler.roller.includes(SaksbehandlerRolle.BESLUTTER);
 
 export const kanBeslutteForBehandling = (
-    behandling: Behandling,
+    behandling: Rammebehandling,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     const { status, saksbehandler, beslutter } = behandling;
@@ -34,7 +34,7 @@ export const kanBehandle = (
     innloggetSaksbehandler.navIdent === saksbehandlerForBehandling;
 
 export const kanSaksbehandleForBehandling = (
-    behandling: Behandling,
+    behandling: Rammebehandling,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     return (
@@ -44,7 +44,7 @@ export const kanSaksbehandleForBehandling = (
 };
 
 export const hentRolleForBehandling = (
-    behandling: Behandling,
+    behandling: Rammebehandling,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     return kanSaksbehandleForBehandling(behandling, innloggetSaksbehandler)
@@ -55,7 +55,7 @@ export const hentRolleForBehandling = (
 };
 
 export const eierBehandling = (
-    behandling: BehandlingForOversikt | Behandling,
+    behandling: BehandlingForOversikt | Rammebehandling,
     innloggetSaksbehandler: Saksbehandler,
 ): boolean => {
     const { status, saksbehandler, beslutter } = behandling;
@@ -207,7 +207,7 @@ export const skalKunneOvertaMeldekortBehandling = (
 };
 
 export const skalKunneGjenopptaBehandling = (
-    behandling: Behandling | BehandlingForOversikt,
+    behandling: Rammebehandling | BehandlingForOversikt,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     const erRelevantMenyValgForStatus =

@@ -10,10 +10,10 @@ import { TekstListe } from '../../../liste/TekstListe';
 import { Nullable } from '~/types/UtilTypes';
 
 import style from './BegrunnelseVilkårsvurdering.module.css';
-import { Behandling } from '~/types/Behandling';
+import { Rammebehandling } from '~/types/Behandling';
 
 type Props = {
-    behandling: Behandling;
+    behandling: Rammebehandling;
     rolle: Nullable<SaksbehandlerRolle>;
     tekstRef: RefObject<HTMLTextAreaElement | null>;
     className?: string;

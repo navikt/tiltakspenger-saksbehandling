@@ -1,10 +1,10 @@
 import { Button } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import SettBehandlingPåVentModal from '~/components/modaler/SettBehandlingPåVentModal';
-import { Behandling } from '~/types/Behandling';
+import { Rammebehandling } from '~/types/Behandling';
 
 type Props = {
-    behandling: Behandling;
+    behandling: Rammebehandling;
     disabled?: boolean;
 };
 

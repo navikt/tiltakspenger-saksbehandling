@@ -5,7 +5,7 @@ import { Rammevedtak } from '~/types/Vedtak';
 
 import { SøknadDTO } from './Søknad';
 import { UtbetalingstidslinjePeriode } from './Utbetaling';
-import { Behandling } from './Behandling';
+import { Rammebehandling } from './Behandling';
 
 export type SakId = `sak_${string}`;
 
@@ -18,7 +18,7 @@ export type SakProps = {
     førsteDagSomGirRett?: string;
     sisteDagSomGirRett?: string;
     søknader: SøknadDTO[];
-    behandlinger: Behandling[];
+    behandlinger: Rammebehandling[];
     tidslinje: Rammevedtak[];
     utbetalingstidslinje: UtbetalingstidslinjePeriode[];
     kanSendeInnHelgForMeldekort: boolean;

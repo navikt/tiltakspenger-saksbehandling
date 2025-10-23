@@ -7,13 +7,12 @@ import { SimulertBeregning } from '~/types/SimulertBeregningTypes';
 
 import style from './BeregningOgSimuleringHeader.module.css';
 import { Utbetalingsstatus } from '~/types/Utbetaling';
-import { MeldekortBehandlingUtbetalingsstatus } from '~/types/meldekort/MeldekortBehandling';
 
 type Props = {
     navkontor: string;
     navkontorNavn?: string;
     simulertBeregning: SimulertBeregning;
-    utbetalingsstatus?: Utbetalingsstatus | MeldekortBehandlingUtbetalingsstatus;
+    utbetalingsstatus?: Utbetalingsstatus;
     erOmberegning: boolean;
     className?: string;
 };

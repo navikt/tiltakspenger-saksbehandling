@@ -1,7 +1,12 @@
 import { Nullable } from '~/types/UtilTypes';
 import { Periode } from '~/types/Periode';
 import { SøknadDTO, SøknadId } from '~/types/Søknad';
-import { Behandling, BehandlingId, BehandlingResultat, Behandlingstype } from '~/types/Behandling';
+import {
+    Rammebehandling,
+    BehandlingId,
+    BehandlingResultat,
+    Behandlingstype,
+} from '~/types/Behandling';
 
 type AvbruttSøknad = {
     behandlingstype: Behandlingstype.SØKNAD;
@@ -23,7 +28,7 @@ export type AvbruttSøknadEllerBehandlingCellInfo = {
 } & (AvbruttSøknad | AvbruttBehandling);
 
 export const avbruttBehandlingToDataCellInfo = (
-    behandling: Behandling,
+    behandling: Rammebehandling,
 ): AvbruttSøknadEllerBehandlingCellInfo => {
     const tidspunktAvsluttet = behandling.avbrutt?.avbruttTidspunkt
         ? behandling.avbrutt.avbruttTidspunkt

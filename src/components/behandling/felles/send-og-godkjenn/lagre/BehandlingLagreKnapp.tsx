@@ -4,10 +4,10 @@ import { useBehandling } from '~/components/behandling/context/BehandlingContext
 
 import { Nullable } from '~/types/UtilTypes';
 import { FetcherError } from '~/utils/fetch/fetch';
-import { Behandling, BehandlingVedtak } from '~/types/Behandling';
+import { Rammebehandling, BehandlingVedtak } from '~/types/Behandling';
 
 type Props = {
-    behandling: Behandling;
+    behandling: Rammebehandling;
     hentVedtakDTO: () => Nullable<BehandlingVedtak>;
     onSuccess?: () => void;
     onError?: (error: FetcherError) => void;

@@ -3,7 +3,7 @@ import { useFetchBlobFraApi } from '~/utils/fetch/useFetchFraApi';
 import { Periode } from '~/types/Periode';
 
 import { Nullable } from '~/types/UtilTypes';
-import { Behandling, BehandlingResultat } from '~/types/Behandling';
+import { Rammebehandling, BehandlingResultat } from '~/types/Behandling';
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';
 import { Avslagsgrunn } from '~/types/Søknadsbehandling';
 
@@ -54,7 +54,7 @@ export type BrevForhåndsvisningDTO =
     | RevurderingStansBrevForhåndsvisningDTO
     | RevurderingInnvilgelseBrevForhåndsvisningDTO;
 
-export const useHentVedtaksbrevForhåndsvisning = (behandling: Behandling) => {
+export const useHentVedtaksbrevForhåndsvisning = (behandling: Rammebehandling) => {
     const { trigger, error, isMutating } = useFetchBlobFraApi<BrevForhåndsvisningDTO>(
         `/sak/${behandling.sakId}/behandling/${behandling.id}/forhandsvis`,
         'POST',

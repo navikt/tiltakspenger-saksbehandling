@@ -4,12 +4,12 @@ import { useOppdaterSimulering } from './useOppdaterSimulering';
 import { MeldeperiodeKjedeProps } from '~/types/meldekort/Meldeperiode';
 import { useSak } from '~/context/sak/SakContext';
 import { BehandlingIdFelles } from '~/types/BehandlingFelles';
-import { Behandling } from '~/types/Behandling';
+import { Rammebehandling } from '~/types/Behandling';
 
 export type OppdaterSimuleringProps<BehId extends BehandlingIdFelles> = {
     behandlingId: BehId;
     oppdaterBehandlingEllerKjede: (
-        behandlingEllerKjede: Behandling | MeldeperiodeKjedeProps,
+        behandlingEllerKjede: Rammebehandling | MeldeperiodeKjedeProps,
     ) => void;
 };
 

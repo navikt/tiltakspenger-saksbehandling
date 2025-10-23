@@ -1,27 +1,51 @@
 import { AntallDagerForMeldeperiode } from './AntallDagerForMeldeperiode';
+import { Attestering } from './Attestering';
+import { Avbrutt } from './Avbrutt';
 import { Barnetillegg } from './Barnetillegg';
 import {
-    Behandling,
     BehandlingResultat,
     Behandlingstype,
     OppdaterBehandlingRequest,
+    BehandlingId,
+    Behandlingsstatus,
+    Saksopplysninger,
+    VentestatusHendelse,
+    BehandlingUtbetalingProps,
 } from './Behandling';
 
 import { Periode } from './Periode';
+import { SakId } from './Sak';
 import { SøknadDTO } from './Søknad';
 import { TiltaksdeltakelsePeriode } from './TiltakDeltagelseTypes';
 import { Nullable } from './UtilTypes';
 
-export interface Søknadsbehandling extends Behandling {
+export interface Søknadsbehandling {
+    id: BehandlingId;
     type: Behandlingstype.SØKNADSBEHANDLING;
+    status: Behandlingsstatus;
+    //TODO - kontrakten sier at denne kan være null + andre behandlingstyper - men så sniker vi inn kun disse 2 verdiene her.
+    resultat: Nullable<BehandlingResultat.AVSLAG | BehandlingResultat.INNVILGELSE>;
+    sakId: SakId;
+    saksnummer: string;
+    saksbehandler: Nullable<string>;
+    beslutter: Nullable<string>;
+    saksopplysninger: Nullable<Saksopplysninger>;
+    attesteringer: Attestering[];
+    virkningsperiode: Nullable<Periode>;
+    fritekstTilVedtaksbrev: Nullable<string>;
+    begrunnelseVilkårsvurdering: Nullable<string>;
+    avbrutt: Nullable<Avbrutt>;
+    sistEndret: string;
+    iverksattTidspunkt: Nullable<string>;
+    ventestatus: Nullable<VentestatusHendelse>;
+    utbetaling: Nullable<BehandlingUtbetalingProps>;
+    barnetillegg: Nullable<Barnetillegg>;
     søknad: SøknadDTO;
     valgteTiltaksdeltakelser: Nullable<TiltaksdeltakelsePeriode[]>;
     antallDagerPerMeldeperiode: Nullable<AntallDagerForMeldeperiode[]>;
     avslagsgrunner: Nullable<Avslagsgrunn[]>;
     automatiskSaksbehandlet: boolean;
     manueltBehandlesGrunner: ManueltBehandlesGrunn[];
-    //TODO - kontrakten sier at denne kan være null + andre behandlingstyper - men så sniker vi inn kun disse 2 verdiene her.
-    resultat: Nullable<BehandlingResultat.AVSLAG | BehandlingResultat.INNVILGELSE>;
 }
 
 export interface SøknadsbehandlingVedtakInnvilgelseRequest extends OppdaterBehandlingRequest {

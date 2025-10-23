@@ -1,13 +1,9 @@
 import { ArenaTPVedtak } from './ArenaTPVedtak';
-import { Attestering } from './Attestering';
-import { Avbrutt } from './Avbrutt';
-import { Barnetillegg } from './Barnetillegg';
 
 import { Periode } from './Periode';
-import { RevurderingVedtakRequest } from './Revurdering';
-import { SakId } from './Sak';
+import { Revurdering, RevurderingVedtakRequest } from './Revurdering';
 import { SimulertBeregning } from './SimulertBeregningTypes';
-import { SøknadsbehandlingVedtakRequest } from './Søknadsbehandling';
+import { Søknadsbehandling, SøknadsbehandlingVedtakRequest } from './Søknadsbehandling';
 import { Tiltaksdeltagelse } from './TiltakDeltagelseTypes';
 import { Utbetalingsstatus } from './Utbetaling';
 import { Nullable } from './UtilTypes';
@@ -54,27 +50,7 @@ export type BehandlingUtbetalingProps = {
     simulertBeregning: SimulertBeregning;
 };
 
-export interface Behandling {
-    id: BehandlingId;
-    type: Behandlingstype;
-    status: Behandlingsstatus;
-    resultat: Nullable<BehandlingResultat>;
-    sakId: SakId;
-    saksnummer: string;
-    saksbehandler: Nullable<string>;
-    beslutter: Nullable<string>;
-    saksopplysninger: Nullable<Saksopplysninger>;
-    attesteringer: Attestering[];
-    virkningsperiode: Nullable<Periode>;
-    fritekstTilVedtaksbrev: Nullable<string>;
-    begrunnelseVilkårsvurdering: Nullable<string>;
-    avbrutt: Nullable<Avbrutt>;
-    sistEndret: string;
-    iverksattTidspunkt: Nullable<string>;
-    ventestatus: Nullable<VentestatusHendelse>;
-    utbetaling: Nullable<BehandlingUtbetalingProps>;
-    barnetillegg: Nullable<Barnetillegg>;
-}
+export type Rammebehandling = Søknadsbehandling | Revurdering;
 
 export type Saksopplysninger = {
     fødselsdato: string;

@@ -5,10 +5,10 @@ import { joinPerioder, validerPeriodisering } from '~/utils/periode';
 import dayjs from 'dayjs';
 import { Periode } from '~/types/Periode';
 import { TiltaksdeltakelsePeriodeFormData } from '../../context/slices/TiltaksdeltagelseState';
-import { Behandling } from '~/types/Behandling';
+import { Rammebehandling } from '~/types/Behandling';
 
 export const validerTiltaksdeltakelser = (
-    behandling: Behandling,
+    behandling: Rammebehandling,
     valgteTiltaksdeltakelser: TiltaksdeltakelsePeriodeFormData[],
     behandlingsperiode: Periode,
 ): ValideringResultat => {

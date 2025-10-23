@@ -6,7 +6,7 @@ import router from 'next/router';
 import { behandlingUrl } from '~/utils/urls';
 
 import styles from './OvertaBehandlingModal.module.css';
-import { Behandling, BehandlingId } from '~/types/Behandling';
+import { Rammebehandling, BehandlingId } from '~/types/Behandling';
 
 const OvertabehandlingModal = (props: {
     sakId: SakId;
@@ -15,7 +15,7 @@ const OvertabehandlingModal = (props: {
     åpen: boolean;
     onClose: () => void;
 }) => {
-    const overtaBehandlingApi = useFetchJsonFraApi<Behandling, { overtarFra: string }>(
+    const overtaBehandlingApi = useFetchJsonFraApi<Rammebehandling, { overtarFra: string }>(
         `/sak/${props.sakId}/behandling/${props.behandlingId}/overta`,
         'PATCH',
         {

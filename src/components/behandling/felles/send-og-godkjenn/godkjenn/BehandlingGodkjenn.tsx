@@ -7,10 +7,10 @@ import { Underkjenn } from '../../../../underkjenn/Underkjenn';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { useGodkjennBehandling } from '~/components/behandling/felles/send-og-godkjenn/godkjenn/useGodkjennBehandling';
 import { useNotification } from '~/context/NotificationContext';
-import { Behandling } from '~/types/Behandling';
+import { Rammebehandling } from '~/types/Behandling';
 
 type Props = {
-    behandling: Behandling;
+    behandling: Rammebehandling;
 };
 
 export const BehandlingGodkjenn = ({ behandling }: Props) => {
@@ -21,7 +21,7 @@ export const BehandlingGodkjenn = ({ behandling }: Props) => {
     const { godkjennBehandling, godkjennBehandlingLaster, godkjennBehandlingError } =
         useGodkjennBehandling(behandling);
 
-    const underkjennApi = useFetchJsonFraApi<Behandling, { begrunnelse: string }>(
+    const underkjennApi = useFetchJsonFraApi<Rammebehandling, { begrunnelse: string }>(
         `/sak/${behandling.sakId}/behandling/${behandling.id}/underkjenn`,
         'POST',
         {

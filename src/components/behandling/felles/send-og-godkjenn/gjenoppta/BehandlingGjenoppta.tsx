@@ -5,10 +5,10 @@ import router from 'next/router';
 import { BekreftelsesModal } from '~/components/modaler/BekreftelsesModal';
 import { useRef } from 'react';
 import { behandlingUrl } from '~/utils/urls';
-import { Behandling } from '~/types/Behandling';
+import { Rammebehandling } from '~/types/Behandling';
 
 type Props = {
-    behandling: Behandling;
+    behandling: Rammebehandling;
 };
 
 export const BehandlingGjenoppta = ({ behandling }: Props) => {

@@ -1,7 +1,4 @@
-import {
-    MeldekortBehandlingDagStatus,
-    MeldekortBehandlingUtbetalingsstatus,
-} from '~/types/meldekort/MeldekortBehandling';
+import { MeldekortBehandlingDagStatus } from '~/types/meldekort/MeldekortBehandling';
 import { BrukersMeldekortDagStatus } from '~/types/meldekort/BrukersMeldekort';
 import { MeldeperiodeKjedeStatus } from '~/types/meldekort/Meldeperiode';
 import React, { ReactElement } from 'react';
@@ -118,10 +115,7 @@ export const behandlingResultatTilTag: Record<BehandlingResultat, ReactElement> 
     ),
 };
 
-export const utbetalingsstatusTekst: Record<
-    Utbetalingsstatus | MeldekortBehandlingUtbetalingsstatus,
-    string
-> = {
+export const utbetalingsstatusTekst: Record<Utbetalingsstatus, string> = {
     FEILET_MOT_OPPDRAG: 'Feilet mot oppdrag',
     IKKE_SENDT_TIL_HELVED: 'Ikke sendt til helved',
     OK: 'Sendt til utbetaling',
@@ -129,7 +123,6 @@ export const utbetalingsstatusTekst: Record<
     SENDT_TIL_HELVED: 'Venter på helved',
     SENDT_TIL_OPPDRAG: 'Venter på oppdrag',
     AVBRUTT: 'Avbrutt',
-
     IKKE_GODKJENT: 'Ikke godkjent',
 };
 

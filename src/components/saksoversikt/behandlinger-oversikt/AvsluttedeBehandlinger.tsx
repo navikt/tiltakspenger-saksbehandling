@@ -9,12 +9,12 @@ import {
 import { erBehandlingAvbrutt, erBehandlingVedtatt } from '~/utils/behandling';
 import { AvbrutteBehandlingerTabell } from './AvbrutteBehandlingerTabell';
 import { SøknadDTO } from '~/types/Søknad';
-import { Behandling } from '~/types/Behandling';
+import { Rammebehandling } from '~/types/Behandling';
 
 export const AvsluttedeBehandlinger = (props: {
     saksnummer: string;
     søknader: SøknadDTO[];
-    behandlinger: Behandling[];
+    behandlinger: Rammebehandling[];
 }) => {
     const avsluttedeBehandlinger = props.behandlinger.filter(
         (b) => erBehandlingAvbrutt(b) || erBehandlingVedtatt(b),

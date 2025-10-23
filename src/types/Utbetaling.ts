@@ -10,6 +10,7 @@ export enum Utbetalingsstatus {
     OK_UTEN_UTBETALING = 'OK_UTEN_UTBETALING',
     AVBRUTT = 'AVBRUTT',
     IKKE_SENDT_TIL_HELVED = 'IKKE_SENDT_TIL_HELVED',
+    IKKE_GODKJENT = 'IKKE_GODKJENT',
 }
 
 export type UtbetalingstidslinjePeriode = {

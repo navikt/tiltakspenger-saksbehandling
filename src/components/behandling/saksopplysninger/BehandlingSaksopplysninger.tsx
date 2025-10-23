@@ -15,7 +15,6 @@ import { BehandlingYtelserOpplysninger } from '~/components/behandling/saksopply
 import style from './BehandlingSaksopplysninger.module.css';
 import { BehandlingTiltakspengerArenaOpplysninger } from '~/components/behandling/saksopplysninger/tiltakspenger-fra-arena/BehandlingTiltakspengerArenaOpplysninger';
 import { Behandlingstype } from '~/types/Behandling';
-import { Søknadsbehandling } from '~/types/Søknadsbehandling';
 
 export const BehandlingSaksopplysninger = () => {
     const { behandling, rolleForBehandling } = useBehandling();
@@ -73,8 +72,8 @@ export const BehandlingSaksopplysninger = () => {
                     <Separator />
                     <OpplysningerSeksjon header={'Fra søknad'}>
                         <OppsummeringAvSøknad
-                            tiltaksperiode={hentTiltaksperiode(behandling as Søknadsbehandling)}
-                            søknad={(behandling as Søknadsbehandling).søknad}
+                            tiltaksperiode={hentTiltaksperiode(behandling)}
+                            søknad={behandling.søknad}
                         />
                     </OpplysningerSeksjon>
                 </>

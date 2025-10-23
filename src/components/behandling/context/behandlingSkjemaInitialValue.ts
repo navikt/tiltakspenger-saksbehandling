@@ -14,7 +14,7 @@ import { SakProps } from '~/types/Sak';
 
 import { erDatoIPeriode } from '~/utils/periode';
 import { ANTALL_DAGER_DEFAULT } from '~/components/behandling/felles/dager-per-meldeperiode/BehandlingDagerPerMeldeperiode';
-import { Behandling, BehandlingResultat, Behandlingstype } from '~/types/Behandling';
+import { Rammebehandling, BehandlingResultat, Behandlingstype } from '~/types/Behandling';
 import { TiltaksdeltakelsePeriodeFormData } from './slices/TiltaksdeltagelseState';
 import { Nullable } from '~/types/UtilTypes';
 import {
@@ -29,20 +29,17 @@ export const behandlingSkjemaInitialValue = ({
     behandling,
     sak,
 }: {
-    behandling: Behandling;
+    behandling: Rammebehandling;
     sak: SakProps;
 }): BehandlingSkjemaState => {
     const { type } = behandling;
 
     switch (type) {
         case Behandlingstype.SØKNADSBEHANDLING: {
-            return søknadsbehandlingInitialState(behandling as Søknadsbehandling);
+            return søknadsbehandlingInitialState(behandling);
         }
         case Behandlingstype.REVURDERING: {
-            return revurderingInitialState(behandling as Revurdering, sak);
-        }
-        case Behandlingstype.SØKNAD: {
-            throw new Error('Behandlingstype SØKNAD støttes ikke i skjema initial value');
+            return revurderingInitialState(behandling, sak);
         }
     }
 
@@ -202,7 +199,7 @@ const revurderingStansInitialState = (behandling: Revurdering): BehandlingSkjema
 };
 
 const tilValgteTiltaksdeltakelser = (
-    behandling: Behandling,
+    behandling: Rammebehandling,
     behandlingsperiode: Periode,
 ): TiltaksdeltakelsePeriodeFormData[] => {
     const overlappendeDeltakelser: TiltaksdeltakelsePeriodeFormData[] = [];
