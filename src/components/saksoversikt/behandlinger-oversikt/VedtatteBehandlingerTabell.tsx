@@ -2,7 +2,7 @@ import { ActionMenu, Button, Table } from '@navikt/ds-react';
 import { behandlingResultatTilTag, finnBehandlingstypeTekst } from '~/utils/tekstformateringUtils';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '~/utils/date';
 
-import { ArrowsCirclepathIcon, ChevronDownIcon, MagnifyingGlassIcon } from '@navikt/aksel-icons';
+import { ChevronDownIcon, MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import MenyValgBehandleSøknadPåNytt from '~/components/behandlingmeny/menyvalg/MenyValgBehandleSøknadPåNytt';
 import { VedtattBehandlingCellInfo } from '~/components/saksoversikt/behandlinger-oversikt/VedtatteBehandlingerUtils';
 import SeBehandlingMenyvalg from '~/components/behandlingmeny/menyvalg/SeBehandlingMenyvalg';
@@ -109,12 +109,6 @@ export const VedtatteBehandlingerTabell = (props: {
                                             icon={<MagnifyingGlassIcon aria-hidden />}
                                         >
                                             Se behandling
-                                        </ActionMenu.Item>
-                                        <ActionMenu.Item
-                                            onClick={() => {}}
-                                            icon={<ArrowsCirclepathIcon aria-hidden />}
-                                        >
-                                            Omgjør
                                         </ActionMenu.Item>
                                     </ActionMenu.Content>
                                 </ActionMenu>

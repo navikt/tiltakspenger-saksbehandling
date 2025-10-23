@@ -44,7 +44,6 @@ export interface Revurdering {
     valgtHjemmelHarIkkeRettighet: Nullable<HjemmelForStans[]>;
     harValgtStansFraFørsteDagSomGirRett: Nullable<boolean>;
     harValgtStansTilSisteDagSomGirRett: Nullable<boolean>;
-    omgjørVedtak: Nullable<string>;
     innvilgelsesperiode: Nullable<Periode>;
 }
 
