@@ -1,12 +1,12 @@
 import {
     BrukersMeldekortDagProps,
     BrukersMeldekortProps,
-} from '../../../../types/meldekort/BrukersMeldekort';
-import { Alert, BodyShort, Box, HStack, Table, VStack } from '@navikt/ds-react';
-import { formaterDatotekst, formaterTidspunkt, ukedagFraDatotekst } from '../../../../utils/date';
+} from '~/types/meldekort/BrukersMeldekort';
+import { BodyShort, Box, HStack, Table, VStack } from '@navikt/ds-react';
+import { formaterDatotekst, formaterTidspunkt, ukedagFraDatotekst } from '~/utils/date';
 import { ikonForBrukersMeldekortDagStatus } from '../../0-felles-komponenter/MeldekortIkoner';
-import { brukersMeldekortDagStatusTekst } from '../../../../utils/tekstformateringUtils';
-import React from 'react';
+import { brukersMeldekortDagStatusTekst } from '~/utils/tekstformateringUtils';
+import { BrukersMeldekortAutomatiskBehandlingStatus } from '~/components/meldekort/3-høyre-seksjon/brukers-meldekort/automatisk-behandling-status/BrukersMeldekortAutomatiskBehandlingStatus';
 
 import styles from './BrukersMeldekort.module.css';
 
@@ -15,17 +15,18 @@ type Props = {
 };
 
 export const BrukersMeldekortVisning = ({ brukersMeldekort }: Props) => {
-    const uke1 = brukersMeldekort.dager.slice(0, 7);
-    const uke2 = brukersMeldekort.dager.slice(7, 14);
+    const { dager, behandletAutomatiskStatus, mottatt } = brukersMeldekort;
+
+    const uke1 = dager.slice(0, 7);
+    const uke2 = dager.slice(7, 14);
 
     return (
         <VStack gap={'1'}>
-            <Alert variant={'info'} inline={true} size={'small'} className={styles.mottatt}>
-                <BodyShort>
-                    {'Mottatt fra bruker: '}
-                    <strong>{formaterTidspunkt(brukersMeldekort.mottatt)}</strong>
-                </BodyShort>
-            </Alert>
+            <BodyShort size={'small'} className={styles.mottatt}>
+                {'Mottatt fra bruker: '}
+                <strong>{formaterTidspunkt(mottatt)}</strong>
+            </BodyShort>
+            <BrukersMeldekortAutomatiskBehandlingStatus status={behandletAutomatiskStatus} />
             <Uke dager={uke1} />
             <Uke dager={uke2} />
         </VStack>
