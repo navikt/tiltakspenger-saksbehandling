@@ -5,6 +5,7 @@ import { Periode } from '~/types/Periode';
 import { FieldPath, useController, useFormContext } from 'react-hook-form';
 import { Søknad } from '~/components/papirsøknad/papirsøknadTypes';
 import styles from './Spørsmål.module.css';
+import { datoTilDatoInputText } from '~/utils/date';
 
 type Props = {
     name: FieldPath<Søknad>;
@@ -38,12 +39,16 @@ export const Periodevelger = ({ name, tittel }: Props) => {
                 <HStack gap="8">
                     <Datovelger
                         label="Fra og med"
-                        value={current.fraOgMed}
+                        value={
+                            current.fraOgMed ? datoTilDatoInputText(current.fraOgMed) : undefined
+                        }
                         onDateChange={onChangeFraOgMed}
                     />
                     <Datovelger
                         label="Til og med"
-                        value={current.tilOgMed}
+                        value={
+                            current.tilOgMed ? datoTilDatoInputText(current.tilOgMed) : undefined
+                        }
                         onDateChange={onChangeTilOgMed}
                     />
                 </HStack>

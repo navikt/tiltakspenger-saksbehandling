@@ -23,8 +23,10 @@ export interface Institusjonsopphold {
 }
 
 export interface Tiltak {
-    aktivitetId: string;
-    navn: string;
+    eksternDeltakelseId: string;
+    typeKode: string;
+    typeNavn: string;
+    arrangørnavn?: string;
     periode?: Periode;
 }
 
@@ -123,7 +125,7 @@ const defaultValues = {
         etterlønn: {},
         jobbsjansen: {},
         mottarAndreUtbetalinger: undefined,
-        harTiltak: false,
+        harTiltak: undefined,
     },
 };
 
