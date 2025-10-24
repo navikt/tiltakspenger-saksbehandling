@@ -1,7 +1,7 @@
 import useSWR, { mutate } from 'swr';
-import { SakId } from '~/types/SakTypes';
 import { fetchJsonFraApiClientSide } from '~/utils/fetch/fetch';
 import { Personopplysninger } from '~/components/personaliaheader/useHentPersonopplysninger';
+import { SakId } from '~/types/Sak';
 
 export const useHentPersonopplysningerBarn = (sakId: SakId, enabled: boolean = true) => {
     const { data, isLoading, error } = useSWR<Personopplysninger[]>(
