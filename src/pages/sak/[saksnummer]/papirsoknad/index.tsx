@@ -3,7 +3,7 @@ import { Button, Heading, HStack, TextField, VStack } from '@navikt/ds-react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
 import { SakProvider } from '~/context/sak/SakContext';
-import { SakProps } from '~/types/SakTypes';
+import { SakProps } from '~/types/Sak';
 import { fetchSak } from '~/utils/fetch/fetch-server';
 import { SpørsmålMedPeriodevelger } from '~/components/papirsøknad/SpørsmålMedPeriodevelger';
 import { PersonaliaHeader } from '~/components/personaliaheader/PersonaliaHeader';
