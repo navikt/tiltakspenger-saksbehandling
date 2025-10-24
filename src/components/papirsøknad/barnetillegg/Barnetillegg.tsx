@@ -1,44 +1,49 @@
 import React from 'react';
 import styles from '../Spørsmål.module.css';
 import { FieldPath, useController, useFieldArray, useFormContext } from 'react-hook-form';
-import { Alert, Button, Heading, HStack, Tag, VStack } from '@navikt/ds-react';
-import { TrashIcon } from '@navikt/aksel-icons';
-import { formaterDatotekst } from '~/utils/date';
+import { Alert, Button, Heading, HStack } from '@navikt/ds-react';
 import { classNames } from '~/utils/classNames';
-import type { Barn, Søknad } from '~/components/papirsøknad/papirsøknadTypes';
+import type { Barn, Papirsøknad } from '~/components/papirsøknad/papirsøknadTypes';
 import { LeggTilBarnManuelt } from '~/components/papirsøknad/barnetillegg/LeggTilBarnManuelt';
 import { JaNeiSpørsmål } from '~/components/papirsøknad/JaNeiSpørsmål';
 import { useHentPersonopplysningerBarn } from '~/components/papirsøknad/barnetillegg/useHentPersonopplysningerBarn';
-import { Personopplysninger } from '~/components/personaliaheader/useHentPersonopplysninger';
 import { v4 as uuidv4 } from 'uuid';
 import { SakId } from '~/types/Sak';
+import { InformasjonOmBarnPDL } from '~/components/papirsøknad/barnetillegg/InformasjonOmBarnPDL';
+import { InformasjonOmBarnManuell } from '~/components/papirsøknad/barnetillegg/InformasjonOmBarnManuell';
+import { TrashIcon } from '@navikt/aksel-icons';
 
 type Props = {
     sakId: SakId;
-    name: FieldPath<Søknad>;
+    name: FieldPath<Papirsøknad>;
     legend: string;
     tittel?: string;
 };
 
 export const Barnetillegg = ({ sakId, name, legend }: Props) => {
-    const { control } = useFormContext<Søknad>();
+    const { control } = useFormContext<Papirsøknad>();
+    const [skalHenteBarn, setSkalHenteBarn] = React.useState(false);
 
-    const barnFraFolkeregisteret = useFieldArray<Søknad>({
+    const barnFraFolkeregisteret = useFieldArray<Papirsøknad>({
         control,
         name: 'svar.barnetillegg.barnFraFolkeregisteret',
     });
 
-    const manuelleBarn = useFieldArray<Søknad>({
+    const manuelleBarn = useFieldArray<Papirsøknad>({
         control,
         name: 'svar.barnetillegg.manueltRegistrerteBarn',
     });
 
-    const periode = useController<Søknad>({
+    const periode = useController<Papirsøknad>({
         control,
         name: 'manueltSattSøknadsperiode',
     });
 
-    const [skalHenteBarn, setSkalHenteBarn] = React.useState(false);
+    const harSøktOmBarnetillegg = useController({
+        name: name,
+        control,
+        defaultValue: undefined,
+    });
 
     const {
         data: barnFraAPI,
@@ -54,7 +59,7 @@ export const Barnetillegg = ({ sakId, name, legend }: Props) => {
                     mellomnavn: p.mellomnavn || undefined,
                     etternavn: p.etternavn,
                     fødselsdato: p.fødselsdato,
-                    uuid: p.fnr,
+                    uuid: uuidv4(),
                     index,
                 }),
             );
@@ -67,25 +72,6 @@ export const Barnetillegg = ({ sakId, name, legend }: Props) => {
             }
         }
     }, [skalHenteBarn, barnFraAPI, barnFraFolkeregisteret]);
-
-    const harSøktOmBarnetillegg = useController({
-        name: name,
-        control,
-        defaultValue: undefined,
-    });
-
-    const getTekstForJaNeiSpørsmål = (value: boolean | undefined) => {
-        if (value === null || value === undefined) return 'Ikke besvart';
-        return value ? 'Ja' : 'Nei';
-    };
-
-    const getBarnHeader = (barn: Barn | Personopplysninger, adressebeskyttet: boolean) => {
-        if (!adressebeskyttet) {
-            return `${barn.fornavn} ${barn.etternavn} - født ${formaterDatotekst(barn.fødselsdato)}`;
-        } else {
-            return `Barn med adressebeskyttelse - Født ${formaterDatotekst(barn.fødselsdato)}`;
-        }
-    };
 
     return (
         <div className={harSøktOmBarnetillegg.field.value ? styles.blokkUtvidet : ''}>
@@ -124,7 +110,9 @@ export const Barnetillegg = ({ sakId, name, legend }: Props) => {
                         </Button>
                     )}
 
-                    {error && skalHenteBarn && <div>Kunne ikke hente barn fra folkeregisteret</div>}
+                    {error && skalHenteBarn && (
+                        <Alert variant="error">Kunne ikke hente barn fra folkeregisteret</Alert>
+                    )}
 
                     {(barnFraAPI?.length ?? 0) > 0 && (
                         <div
@@ -134,32 +122,13 @@ export const Barnetillegg = ({ sakId, name, legend }: Props) => {
                                 Barn fra Folkeregisteret
                             </Heading>
                             {barnFraAPI?.map((barn, index) => (
-                                <div key={`barn-${index}-${uuidv4()}`}>
-                                    <HStack gap="2">
-                                        <Heading size="small" level="4">
-                                            {getBarnHeader(
-                                                barn,
-                                                barn.fortrolig || barn.strengtFortrolig,
-                                            )}
-                                        </Heading>
-                                        {barn.strengtFortrolig && (
-                                            <Tag variant="error">Strengt fortrolig adresse</Tag>
-                                        )}
-                                        {barn.fortrolig && (
-                                            <Tag variant="error">Fortrolig adresse</Tag>
-                                        )}
-                                        {barn.skjerming && <Tag variant="error">Skjermet</Tag>}
-                                        {barn.dødsdato && (
-                                            <Tag variant="neutral">
-                                                Død {formaterDatotekst(barn.dødsdato)}
-                                            </Tag>
-                                        )}
-                                    </HStack>
+                                <>
+                                    <InformasjonOmBarnPDL key={`barn-${uuidv4()}`} barn={barn} />
                                     <JaNeiSpørsmål
                                         name={`svar.barnetillegg.barnFraFolkeregisteret.${index}.oppholdInnenforEøs`}
                                         legend={` Oppholder seg i EØS-land i tiltaksperioden`}
                                     />
-                                </div>
+                                </>
                             ))}
                         </div>
                     )}
@@ -171,20 +140,7 @@ export const Barnetillegg = ({ sakId, name, legend }: Props) => {
                             </Heading>
                             {manuelleBarn.fields.map((barn: Barn, index: number) => (
                                 <HStack key={barn.uuid} gap="4" justify="space-between">
-                                    <VStack>
-                                        <Heading size="small" level="4">
-                                            {getBarnHeader(barn, false)}
-                                        </Heading>
-                                        <div>
-                                            Oppholder seg i EØS-land i tiltaksperioden:{' '}
-                                            {getTekstForJaNeiSpørsmål(barn.oppholdInnenforEøs)}
-                                            <br />
-                                            Det er vedlagt dokumentasjon for barnet:{' '}
-                                            {getTekstForJaNeiSpørsmål(
-                                                barn.manueltRegistrertBarnHarVedlegg,
-                                            )}
-                                        </div>
-                                    </VStack>
+                                    <InformasjonOmBarnManuell barn={barn} />
                                     <Button
                                         icon={<TrashIcon />}
                                         variant="tertiary"

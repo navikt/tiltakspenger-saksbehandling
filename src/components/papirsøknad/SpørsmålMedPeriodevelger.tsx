@@ -1,14 +1,14 @@
 import React from 'react';
 import { FieldPath, useController, useFormContext } from 'react-hook-form';
-import type { Søknad } from '~/components/papirsøknad/papirsøknadTypes';
+import type { Papirsøknad } from '~/components/papirsøknad/papirsøknadTypes';
 import { JaNeiSpørsmål } from './JaNeiSpørsmål';
 import { Periodevelger } from './Periodevelger';
 
 import styles from './Spørsmål.module.css';
 
 type Props = {
-    spørsmålName: FieldPath<Søknad>;
-    periodeName: FieldPath<Søknad>;
+    spørsmålName: FieldPath<Papirsøknad>;
+    periodeName: FieldPath<Papirsøknad>;
     spørsmål: string;
     periodeSpørsmål?: string;
 };
@@ -19,26 +19,26 @@ export const SpørsmålMedPeriodevelger = ({
     spørsmål,
     periodeSpørsmål,
 }: Props) => {
-    const { control, resetField } = useFormContext<Søknad>();
+    const { control, resetField } = useFormContext<Papirsøknad>();
 
-    const controller = useController({
+    const jaNeiSpørsmål = useController({
         name: spørsmålName,
         control,
         defaultValue: undefined,
     });
 
     return (
-        <div className={controller.field.value ? styles.blokkUtvidet : ''}>
+        <div className={jaNeiSpørsmål.field.value ? styles.blokkUtvidet : ''}>
             <JaNeiSpørsmål
                 name={spørsmålName}
                 legend={spørsmål}
-                onChange={() => {
-                    if (!controller.field.value) {
+                onChange={(newValue) => {
+                    if (!newValue) {
                         resetField(periodeName);
                     }
                 }}
             />
-            {controller.field.value && (
+            {jaNeiSpørsmål.field.value && (
                 <Periodevelger name={periodeName} tittel={periodeSpørsmål} />
             )}
         </div>

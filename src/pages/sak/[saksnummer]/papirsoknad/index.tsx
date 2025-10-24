@@ -1,5 +1,5 @@
 import styles from './PapirsøknadPage.module.css';
-import { Button, Heading, HStack, TextField, VStack } from '@navikt/ds-react';
+import { Alert, Button, Heading, HStack, TextField, VStack } from '@navikt/ds-react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
 import { SakProvider } from '~/context/sak/SakContext';
@@ -7,7 +7,9 @@ import { SakProps } from '~/types/Sak';
 import { fetchSak } from '~/utils/fetch/fetch-server';
 import { SpørsmålMedPeriodevelger } from '~/components/papirsøknad/SpørsmålMedPeriodevelger';
 import { PersonaliaHeader } from '~/components/personaliaheader/PersonaliaHeader';
-import defaultValues, { Søknad } from '~/components/papirsøknad/papirsøknadTypes';
+import defaultPapirsøknadFormValues, {
+    Papirsøknad,
+} from '~/components/papirsøknad/papirsøknadTypes';
 import { JaNeiSpørsmål } from '~/components/papirsøknad/JaNeiSpørsmål';
 import { MottarPengestøtterSpørsmål } from '~/components/papirsøknad/MottarPengestøtterSpørsmål';
 import { Datovelger } from '~/components/datovelger/Datovelger';
@@ -17,6 +19,7 @@ import { dateTilISOTekst, datoTilDatoInputText } from '~/utils/date';
 import { VelgTiltak } from '~/components/papirsøknad/tiltak/VelgTiltak';
 import { Barnetillegg } from '~/components/papirsøknad/barnetillegg/Barnetillegg';
 import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
+import { useOpprettPapirsøknad } from '~/components/saksoversikt/papirsøknad/useOpprettPapirsøknad';
 
 interface Props {
     sak: SakProps;
@@ -24,17 +27,20 @@ interface Props {
 
 const PapirsøknadPage = (props: Props) => {
     const { papirsøknadToggle } = useFeatureToggles();
-    const formContext = useForm<Søknad>({
-        defaultValues: defaultValues,
+    const formContext = useForm<Papirsøknad>({
+        defaultValues: defaultPapirsøknadFormValues,
         mode: 'onSubmit',
     });
 
     const { handleSubmit, control } = formContext;
 
-    const onSubmit = (data: Søknad) => {
+    const { opprettPapirsøknad, opprettPapirsøknadLaster, opprettPapirsøknadError } =
+        useOpprettPapirsøknad(props.sak.sakId);
+
+    const onSubmit = (data: Papirsøknad) => {
         if (!papirsøknadToggle) return;
-        // TODO Ikke implementert ennå.
         console.log('form data', data);
+        opprettPapirsøknad(data);
     };
 
     return (
@@ -58,7 +64,11 @@ const PapirsøknadPage = (props: Props) => {
                                 control={control}
                                 render={({ field }) => (
                                     <div className={styles.blokk}>
-                                        <TextField label={'JournalpostId'} value={field.value} />
+                                        <TextField
+                                            label={'JournalpostId'}
+                                            value={field.value}
+                                            onChange={(value) => field.onChange(value)}
+                                        />
                                     </div>
                                 )}
                             />
@@ -69,17 +79,20 @@ const PapirsøknadPage = (props: Props) => {
                                 render={({ field }) => (
                                     <div className={styles.blokk}>
                                         <Datovelger
-                                            name={'kravDato'}
-                                            label={'Kravdato'}
+                                            name="kravDato"
+                                            label="Kravdato"
                                             value={
                                                 field.value
                                                     ? datoTilDatoInputText(field.value)
                                                     : undefined
                                             }
                                             onChange={field.onChange}
-                                            onDateChange={(value) => {
-                                                if (!value) return;
-                                                return dateTilISOTekst(value);
+                                            onDateChange={(date) => {
+                                                if (!date) {
+                                                    field.onChange(undefined);
+                                                    return;
+                                                }
+                                                field.onChange(dateTilISOTekst(date));
                                             }}
                                         />
                                     </div>
@@ -143,11 +156,20 @@ const PapirsøknadPage = (props: Props) => {
                                 legend="Har bruker søkt barnetillegg?"
                             />
 
+                            {opprettPapirsøknadError && (
+                                <Alert variant="error">
+                                    Noe gikk galt ved registrering av papirsøknad. Vennligst prøv
+                                    igjen litt senere.
+                                </Alert>
+                            )}
+
                             <HStack gap="4">
                                 <Button variant="secondary" type="reset">
                                     Avbryt
                                 </Button>
-                                <Button type="submit">Start behandling</Button>
+                                <Button type="submit" loading={opprettPapirsøknadLaster}>
+                                    Start behandling
+                                </Button>
                             </HStack>
                         </VStack>
                     </div>

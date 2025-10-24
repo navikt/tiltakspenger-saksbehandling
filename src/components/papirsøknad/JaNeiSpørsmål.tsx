@@ -1,18 +1,18 @@
 import { Radio, RadioGroup, Stack } from '@navikt/ds-react';
 import { FieldPath, useController, useFormContext } from 'react-hook-form';
-import { Søknad } from '~/components/papirsøknad/papirsøknadTypes';
+import { Papirsøknad } from '~/components/papirsøknad/papirsøknadTypes';
 import styles from './Spørsmål.module.css';
 
 type Props = {
-    name: FieldPath<Søknad>;
+    name: FieldPath<Papirsøknad>;
     legend: string;
     details?: React.ReactNode;
-    onChange?: (() => void) | undefined;
+    onChange?: (value: boolean | null | undefined) => void; // changed to receive value
     måVæreBesvart?: boolean;
 };
 
 export const JaNeiSpørsmål = ({ name, legend, details, onChange, måVæreBesvart }: Props) => {
-    const { control } = useFormContext<Søknad>();
+    const { control } = useFormContext<Papirsøknad>();
 
     const controller = useController({
         name: name,
@@ -24,10 +24,10 @@ export const JaNeiSpørsmål = ({ name, legend, details, onChange, måVæreBesva
         <div className={styles.blokk}>
             <RadioGroup
                 legend={legend}
-                value={controller.field.value as boolean}
-                onChange={(value: boolean) => {
+                value={controller.field.value as boolean | null | undefined}
+                onChange={(value: boolean | null) => {
                     controller.field.onChange(value);
-                    onChange?.();
+                    onChange?.(value);
                 }}
             >
                 {details}

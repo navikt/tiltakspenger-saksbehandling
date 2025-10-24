@@ -1,6 +1,6 @@
 import React from 'react';
 import { FieldPath, useController, useFormContext } from 'react-hook-form';
-import type { Søknad } from '~/components/papirsøknad/papirsøknadTypes';
+import type { Papirsøknad } from '~/components/papirsøknad/papirsøknadTypes';
 import { JaNeiSpørsmål } from './JaNeiSpørsmål';
 
 import styles from './Spørsmål.module.css';
@@ -9,13 +9,13 @@ import { List } from '@navikt/ds-react';
 import { SpørsmålMedDatovelger } from '~/components/papirsøknad/SpørsmålMedDatovelger';
 
 type Props = {
-    name: FieldPath<Søknad>;
+    name: FieldPath<Papirsøknad>;
     legend: string;
     tittel?: string;
 };
 
 export const MottarPengestøtterSpørsmål = ({ name, legend }: Props) => {
-    const { control, resetField } = useFormContext<Søknad>();
+    const { control, resetField } = useFormContext<Papirsøknad>();
 
     const spørsmål = useController({
         name: name,

@@ -1,8 +1,8 @@
 import React from 'react';
 import { FieldPath, useController, useFormContext } from 'react-hook-form';
 import { JaNeiSpørsmål } from '~/components/papirsøknad/JaNeiSpørsmål';
-import { Søknad, Tiltak } from '~/components/papirsøknad/papirsøknadTypes';
-import { Button, Radio, RadioGroup } from '@navikt/ds-react';
+import { Papirsøknad, Tiltak } from '~/components/papirsøknad/papirsøknadTypes';
+import { Alert, Button, Radio, RadioGroup } from '@navikt/ds-react';
 import styles from '../Spørsmål.module.css';
 import { classNames } from '~/utils/classNames';
 import { formaterDatotekst } from '~/utils/date';
@@ -11,12 +11,12 @@ import { SakId } from '~/types/Sak';
 
 type Props = {
     sakId: SakId;
-    spørsmålName: FieldPath<Søknad>;
+    spørsmålName: FieldPath<Papirsøknad>;
     legend: string;
 };
 
 export const VelgTiltak = ({ sakId, spørsmålName, legend }: Props) => {
-    const { control, setValue, resetField } = useFormContext<Søknad>();
+    const { control, setValue, resetField } = useFormContext<Papirsøknad>();
     const [muligeTiltak, setMuligeTiltak] = React.useState<Tiltak[]>([]);
 
     const spørsmål = useController({
@@ -77,7 +77,9 @@ export const VelgTiltak = ({ sakId, spørsmålName, legend }: Props) => {
                     )}
 
                     {error && skalHenteTiltak && (
-                        <div>Noe gikk galt ved uthenting av søkers tiltaksdeltakelser.</div>
+                        <Alert variant="error">
+                            Noe gikk galt ved uthenting av søkers tiltaksdeltakelser.
+                        </Alert>
                     )}
 
                     {skalHenteTiltak && muligeTiltak.length > 0 && (

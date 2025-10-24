@@ -6,7 +6,7 @@ import { Controller, useFormContext } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
 import { Datovelger } from '~/components/datovelger/Datovelger';
 import { JaNeiSpørsmål } from '~/components/papirsøknad/JaNeiSpørsmål';
-import type { Barn, Søknad } from '~/components/papirsøknad/papirsøknadTypes';
+import type { Barn, Papirsøknad } from '~/components/papirsøknad/papirsøknadTypes';
 import { dateTilISOTekst } from '~/utils/date';
 
 type Props = {
@@ -14,7 +14,7 @@ type Props = {
 };
 
 export const LeggTilBarnManuelt = ({ onAppend }: Props) => {
-    const { getValues, setValue } = useFormContext<Søknad>();
+    const { getValues, setValue } = useFormContext<Papirsøknad>();
     const [visLeggTilBarnFelter, setVisLeggTilBarnFelt] = React.useState(false);
 
     const emptyKladd = {
