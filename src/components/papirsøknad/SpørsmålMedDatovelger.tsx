@@ -2,43 +2,40 @@ import React from 'react';
 import { FieldPath, useController, useFormContext } from 'react-hook-form';
 import { JaNeiSpørsmål } from '~/components/papirsøknad/JaNeiSpørsmål';
 import { Datovelger } from '~/components/datovelger/Datovelger';
-import type { Søknad } from '~/components/papirsøknad/papirsøknadTypes';
+import type { Papirsøknad } from '~/components/papirsøknad/papirsøknadTypes';
 import { Heading, VStack } from '@navikt/ds-react';
 import styles from './Spørsmål.module.css';
+import { dateTilISOTekst } from '~/utils/date';
 
 type Props = {
-    spørsmålName: FieldPath<Søknad>;
-    datoName: FieldPath<Søknad>;
+    spørsmålName: FieldPath<Papirsøknad>;
+    datoName: FieldPath<Papirsøknad>;
     legend: string;
     tittel?: string;
 };
 
 export const SpørsmålMedDatovelger = ({ spørsmålName, datoName, legend, tittel }: Props) => {
-    const { control, resetField } = useFormContext<Søknad>();
+    const { control, resetField, setValue } = useFormContext<Papirsøknad>();
 
-    const controller = useController({
+    const jaNeiSpørsmål = useController({
         name: spørsmålName,
         control,
         defaultValue: undefined,
     });
 
-    const reset = () => {
-        resetField(datoName);
-    };
-
     return (
-        <div className={controller.field.value ? styles.blokkUtvidet : ''}>
+        <div className={jaNeiSpørsmål.field.value ? styles.blokkUtvidet : ''}>
             <JaNeiSpørsmål
                 name={spørsmålName}
                 legend={legend}
-                onChange={() => {
-                    if (!controller.field.value) {
-                        reset();
+                onChange={(newValue) => {
+                    if (!newValue) {
+                        resetField(datoName);
                     }
                 }}
             />
 
-            {controller.field.value && (
+            {jaNeiSpørsmål.field.value && (
                 <div className={styles.blokk}>
                     <VStack gap="2">
                         {tittel && (
@@ -50,7 +47,7 @@ export const SpørsmålMedDatovelger = ({ spørsmålName, datoName, legend, titt
                             name={datoName}
                             label={'Fra og med (dd.mm.åååå)'}
                             onDateChange={(date) => {
-                                console.log(date);
+                                setValue(spørsmålName, date ? dateTilISOTekst(date) : undefined);
                             }}
                         />
                     </VStack>

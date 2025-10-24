@@ -1,6 +1,6 @@
 import { Periode } from '~/types/Periode';
 
-export interface Søknad {
+export interface Papirsøknad {
     journalpostId: string;
     kravDato: string;
     manueltSattSøknadsperiode: Periode;
@@ -95,18 +95,17 @@ export interface Spørsmålsbesvarelser {
 }
 
 export interface Barn {
+    index?: number;
+    uuid: string;
     fornavn?: string;
     mellomnavn?: string;
     etternavn?: string;
     fødselsdato: string;
-    bostedsland?: string;
-    uuid: string;
     oppholdInnenforEøs?: boolean;
-    index?: number;
     manueltRegistrertBarnHarVedlegg?: boolean;
 }
 
-const defaultValues = {
+const defaultPapirsøknadFormValues = {
     svar: {
         tiltak: {},
         barnetillegg: {
@@ -129,4 +128,4 @@ const defaultValues = {
     },
 };
 
-export default defaultValues;
+export default defaultPapirsøknadFormValues;

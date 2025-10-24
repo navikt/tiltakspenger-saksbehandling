@@ -3,18 +3,18 @@ import { Heading, HStack, VStack } from '@navikt/ds-react';
 import { Datovelger } from '~/components/datovelger/Datovelger';
 import { Periode } from '~/types/Periode';
 import { FieldPath, useController, useFormContext } from 'react-hook-form';
-import { Søknad } from '~/components/papirsøknad/papirsøknadTypes';
+import { Papirsøknad } from '~/components/papirsøknad/papirsøknadTypes';
 import styles from './Spørsmål.module.css';
-import { datoTilDatoInputText } from '~/utils/date';
+import { dateTilISOTekst, datoTilDatoInputText } from '~/utils/date';
 
 type Props = {
-    name: FieldPath<Søknad>;
+    name: FieldPath<Papirsøknad>;
     tittel?: string;
     value?: Periode;
 };
 
 export const Periodevelger = ({ name, tittel }: Props) => {
-    const { control } = useFormContext<Søknad>();
+    const { control } = useFormContext<Papirsøknad>();
 
     const periode = useController({
         name: name,
@@ -24,9 +24,9 @@ export const Periodevelger = ({ name, tittel }: Props) => {
 
     const current = periode.field.value as Periode;
     const onChangeFraOgMed = (dato: Date | undefined) =>
-        periode.field.onChange({ ...current, fraOgMed: dato });
+        periode.field.onChange({ ...current, fraOgMed: dato ? dateTilISOTekst(dato) : undefined });
     const onChangeTilOgMed = (dato: Date | undefined) =>
-        periode.field.onChange({ ...current, tilOgMed: dato });
+        periode.field.onChange({ ...current, tilOgMed: dato ? dateTilISOTekst(dato) : undefined });
 
     return (
         <div className={styles.blokk}>
