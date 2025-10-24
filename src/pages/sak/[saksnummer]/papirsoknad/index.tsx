@@ -14,7 +14,7 @@ import { Datovelger } from '~/components/datovelger/Datovelger';
 import React from 'react';
 import { Periodevelger } from '~/components/papirsøknad/Periodevelger';
 import { dateTilISOTekst, datoTilDatoInputText } from '~/utils/date';
-import { VelgTiltak } from '~/components/papirsøknad/VelgTiltak';
+import { VelgTiltak } from '~/components/papirsøknad/tiltak/VelgTiltak';
 import { Barnetillegg } from '~/components/papirsøknad/barnetillegg/Barnetillegg';
 import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
 
@@ -99,6 +99,7 @@ const PapirsøknadPage = (props: Props) => {
                             />
 
                             <VelgTiltak
+                                sakId={props.sak.sakId}
                                 spørsmålName="svar.harTiltak"
                                 legend="Deltar i arbeidmarkedtiltak som gir rett til tiltakspenger?"
                             />

@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from '../Spørsmål.module.css';
 import { FieldPath, useController, useFieldArray, useFormContext } from 'react-hook-form';
-import { Button, Heading, HStack, Tag, VStack } from '@navikt/ds-react';
+import { Alert, Button, Heading, HStack, Tag, VStack } from '@navikt/ds-react';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { formaterDatotekst } from '~/utils/date';
 import { classNames } from '~/utils/classNames';
@@ -31,6 +31,11 @@ export const Barnetillegg = ({ sakId, name, legend }: Props) => {
     const manuelleBarn = useFieldArray<Søknad>({
         control,
         name: 'svar.barnetillegg.manueltRegistrerteBarn',
+    });
+
+    const periode = useController<Søknad>({
+        control,
+        name: 'manueltSattSøknadsperiode',
     });
 
     const [skalHenteBarn, setSkalHenteBarn] = React.useState(false);
@@ -88,6 +93,12 @@ export const Barnetillegg = ({ sakId, name, legend }: Props) => {
 
             {harSøktOmBarnetillegg.field.value && (
                 <div className={styles.blokk}>
+                    {!periode.field.value && (
+                        <Alert variant="warning">
+                            Vi kan ikke hente informasjon om barn fra folkeregisteret uten å at
+                            søknadsperioden er satt.
+                        </Alert>
+                    )}
                     <Button
                         className={styles.finnTiltakButton}
                         size="small"
@@ -95,8 +106,9 @@ export const Barnetillegg = ({ sakId, name, legend }: Props) => {
                             setSkalHenteBarn(true);
                         }}
                         loading={isLoading}
+                        disabled={!periode.field.value}
                     >
-                        Hent informasjon om barn fra folkeregisteret
+                        Legg til barn fra folkeregisteret
                     </Button>
 
                     {barnFraFolkeregisteret.fields.length > 0 && (
