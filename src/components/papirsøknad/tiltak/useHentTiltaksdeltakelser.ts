@@ -1,7 +1,7 @@
 import useSWR, { mutate } from 'swr';
-import { SakId } from '~/types/SakTypes';
 import { fetchJsonFraApiClientSide } from '~/utils/fetch/fetch';
 import { Tiltak } from '~/components/papirsøknad/papirsøknadTypes';
+import { SakId } from '~/types/Sak';
 
 export const useHentTiltaksdeltakelser = (sakId: SakId, enabled: boolean = true) => {
     const { data, isLoading, error } = useSWR<Tiltak[]>(

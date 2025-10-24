@@ -1,14 +1,15 @@
-import { SakId } from '../../../types/SakTypes';
 import { useFetchJsonFraApi } from '../../../utils/fetch/useFetchFraApi';
-import { RevurderingData } from '../../../types/BehandlingTypes';
-import { VedtakOpprettRevurderingDTO } from '../../../types/VedtakTyper';
+import { SakId } from '~/types/Sak';
+import { Revurdering } from '~/types/Revurdering';
+import { VedtakOpprettRevurdering } from '~/types/Vedtak';
 
 export const useOpprettPapirsøknad = (sakId: SakId) => {
     const {
         trigger: opprettPapirsøknad,
         isMutating: opprettPapirsøknadLaster,
         error: opprettPapirsøknadError,
-    } = useFetchJsonFraApi<RevurderingData, VedtakOpprettRevurderingDTO>(
+        // TODO Denne har ikke noe revurdering å gjøre, det er bare kopiert kode enn så lenge.
+    } = useFetchJsonFraApi<Revurdering, VedtakOpprettRevurdering>(
         `/sak/${sakId}/papirsoknad`,
         'POST',
     );

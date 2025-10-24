@@ -9,9 +9,9 @@ import type { Barn, Søknad } from '~/components/papirsøknad/papirsøknadTypes'
 import { LeggTilBarnManuelt } from '~/components/papirsøknad/barnetillegg/LeggTilBarnManuelt';
 import { JaNeiSpørsmål } from '~/components/papirsøknad/JaNeiSpørsmål';
 import { useHentPersonopplysningerBarn } from '~/components/papirsøknad/barnetillegg/useHentPersonopplysningerBarn';
-import { SakId } from '~/types/SakTypes';
 import { Personopplysninger } from '~/components/personaliaheader/useHentPersonopplysninger';
 import { v4 as uuidv4 } from 'uuid';
+import { SakId } from '~/types/Sak';
 
 type Props = {
     sakId: SakId;

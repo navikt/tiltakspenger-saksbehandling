@@ -7,7 +7,7 @@ import styles from '../Spørsmål.module.css';
 import { classNames } from '~/utils/classNames';
 import { formaterDatotekst } from '~/utils/date';
 import { useHentTiltaksdeltakelser } from '~/components/papirsøknad/tiltak/useHentTiltaksdeltakelser';
-import { SakId } from '~/types/SakTypes';
+import { SakId } from '~/types/Sak';
 
 type Props = {
     sakId: SakId;
