@@ -8,6 +8,7 @@ import {
     Behandlingstype,
 } from '~/types/Behandling';
 import { SøknadId } from '~/types/Søknad';
+import { VedtakId } from '~/types/Vedtak';
 
 export interface VedtattBehandlingCellInfo {
     id: BehandlingId;
@@ -21,6 +22,7 @@ export interface VedtattBehandlingCellInfo {
     avsluttetPga: 'ferdigBehandlet' | 'avbrutt';
     saksbehandler?: Nullable<string>;
     beslutter?: Nullable<string>;
+    rammevedtakId: Nullable<VedtakId>;
 }
 
 export const vedtattBehandlingToDataCellInfo = (
@@ -45,5 +47,6 @@ export const vedtattBehandlingToDataCellInfo = (
         avsluttetPga: behandling.avbrutt ? 'avbrutt' : 'ferdigBehandlet',
         saksbehandler: behandling.saksbehandler,
         beslutter: behandling.beslutter,
+        rammevedtakId: behandling.rammevedtakId,
     };
 };

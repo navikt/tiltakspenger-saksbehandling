@@ -1,8 +1,8 @@
-import { ActionMenu, Button, Table } from '@navikt/ds-react';
+import { ActionMenu, Button, Loader, Table } from '@navikt/ds-react';
 import { behandlingResultatTilTag, finnBehandlingstypeTekst } from '~/utils/tekstformateringUtils';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '~/utils/date';
 
-import { ChevronDownIcon, MagnifyingGlassIcon } from '@navikt/aksel-icons';
+import { ArrowsCirclepathIcon, ChevronDownIcon, MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import MenyValgBehandleSøknadPåNytt from '~/components/behandlingmeny/menyvalg/MenyValgBehandleSøknadPåNytt';
 import { VedtattBehandlingCellInfo } from '~/components/saksoversikt/behandlinger-oversikt/VedtatteBehandlingerUtils';
 import SeBehandlingMenyvalg from '~/components/behandlingmeny/menyvalg/SeBehandlingMenyvalg';
@@ -10,10 +10,25 @@ import React from 'react';
 import Link from 'next/link';
 import { behandlingUrl } from '~/utils/urls';
 import { BehandlingResultat } from '~/types/Behandling';
+import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
+import { OpprettRevurderingRequest, Revurdering } from '~/types/Revurdering';
+import { SakId } from '~/types/Sak';
+import router from 'next/router';
 
 export const VedtatteBehandlingerTabell = (props: {
+    sakId: SakId;
     vedtatteBehandlinger: VedtattBehandlingCellInfo[];
 }) => {
+    const opprettRevurdering = useFetchJsonFraApi<Revurdering, OpprettRevurderingRequest>(
+        `/sak/${props.sakId}/revurdering/start`,
+        'POST',
+        {
+            onSuccess: (behandling) => {
+                router.push(behandlingUrl(behandling!));
+            },
+        },
+    );
+
     if (props.vedtatteBehandlinger.length === 0) {
         return null;
     }
@@ -109,6 +124,22 @@ export const VedtatteBehandlingerTabell = (props: {
                                             icon={<MagnifyingGlassIcon aria-hidden />}
                                         >
                                             Se behandling
+                                        </ActionMenu.Item>
+                                        <ActionMenu.Item
+                                            onSelect={(e) => {
+                                                e.preventDefault();
+                                                opprettRevurdering.trigger({
+                                                    revurderingType: BehandlingResultat.OMGJØRING,
+                                                    rammevedtakIdSomOmgjøres:
+                                                        vedtattBehandling.rammevedtakId,
+                                                });
+                                            }}
+                                            icon={<ArrowsCirclepathIcon aria-hidden />}
+                                        >
+                                            Omgjør
+                                            {opprettRevurdering.isMutating && (
+                                                <Loader size="small" />
+                                            )}
                                         </ActionMenu.Item>
                                     </ActionMenu.Content>
                                 </ActionMenu>

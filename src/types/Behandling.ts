@@ -12,11 +12,12 @@ import { Ytelse } from './Ytelse';
 export type BehandlingId = `beh_${string}`;
 
 export enum BehandlingResultat {
-    AVSLAG = 'AVSLAG',
     INNVILGELSE = 'INNVILGELSE',
-    IKKE_VALGT = 'IKKE_VALGT',
+    AVSLAG = 'AVSLAG',
     STANS = 'STANS',
     REVURDERING_INNVILGELSE = 'REVURDERING_INNVILGELSE',
+    OMGJØRING = 'OMGJØRING',
+    IKKE_VALGT = 'IKKE_VALGT',
 }
 
 export enum Behandlingstype {

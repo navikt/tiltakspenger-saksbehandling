@@ -18,6 +18,7 @@ import { SakId } from './Sak';
 import { SøknadDTO } from './Søknad';
 import { TiltaksdeltakelsePeriode } from './TiltakDeltagelseTypes';
 import { Nullable } from './UtilTypes';
+import { VedtakId } from './Vedtak';
 
 export interface Søknadsbehandling {
     id: BehandlingId;
@@ -46,6 +47,8 @@ export interface Søknadsbehandling {
     avslagsgrunner: Nullable<Avslagsgrunn[]>;
     automatiskSaksbehandlet: boolean;
     manueltBehandlesGrunner: ManueltBehandlesGrunn[];
+    rammevedtakId: Nullable<VedtakId>;
+    innvilgelsesperiode: Nullable<Periode>;
 }
 
 export interface SøknadsbehandlingVedtakInnvilgelseRequest extends OppdaterBehandlingRequest {
