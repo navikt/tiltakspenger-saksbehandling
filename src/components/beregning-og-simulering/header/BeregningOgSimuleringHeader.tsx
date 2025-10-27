@@ -4,9 +4,9 @@ import { periodeTilFormatertDatotekst } from '~/utils/date';
 import { UtbetalingStatus } from '~/components/utbetaling/status/UtbetalingStatus';
 import { UtbetalingBeløp } from '~/components/utbetaling/beløp/UtbetalingBeløp';
 import { SimulertBeregning } from '~/types/SimulertBeregningTypes';
+import { Utbetalingsstatus } from '~/types/Utbetaling';
 
 import style from './BeregningOgSimuleringHeader.module.css';
-import { Utbetalingsstatus } from '~/types/Utbetaling';
 
 type Props = {
     navkontor: string;
@@ -40,9 +40,7 @@ export const BeregningOgSimuleringHeader = ({
 
     const erFeilutbetaling = totalDiff < 0;
 
-    const beløpTekst = erOmberegning
-        ? `Beløp til ${erFeilutbetaling ? 'feilutbetaling' : 'etterbetaling'}`
-        : 'Beløp';
+    const beløpTekst = erOmberegning ? beløpOmberegningTekst(totalDiff) : 'Beløp';
 
     return (
         <VStack gap={'1'} className={className}>
@@ -71,4 +69,16 @@ export const BeregningOgSimuleringHeader = ({
             />
         </VStack>
     );
+};
+
+const beløpOmberegningTekst = (beløp: number): string => {
+    if (beløp > 0) {
+        return 'Beløp (etterbetaling)';
+    }
+
+    if (beløp < 0) {
+        return 'Beløp (feilutbetaling)';
+    }
+
+    return 'Beløp (ingen endring)';
 };
