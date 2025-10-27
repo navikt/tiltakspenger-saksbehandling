@@ -15,7 +15,7 @@ type Props = {
 
 export const MeldekortKorrigertFraTidligerePeriode = ({ korrigering, headerTekst }: Props) => {
     const { alleMeldekortBehandlinger } = useMeldeperiodeKjede();
-    const { saksnummer, kanSendeInnHelgForMeldekort } = useSak().sak;
+    const { saksnummer } = useSak().sak;
     const { periode, beregning, iverksatt } = korrigering;
 
     const forrigeGodkjenteBeløp = alleMeldekortBehandlinger.find((mbeh) => mbeh.erAvsluttet)
@@ -31,10 +31,7 @@ export const MeldekortKorrigertFraTidligerePeriode = ({ korrigering, headerTekst
                 </Link>
                 {' endret på den siste beregningen av dette meldekortet.'}
             </Alert>
-            <MeldekortUker
-                dager={beregning.dager}
-                kanMeldeInnForHelg={kanSendeInnHelgForMeldekort}
-            />
+            <MeldekortUker dager={beregning.dager} />
             {iverksatt && (
                 <BodyShort size={'small'}>
                     {'Iverksatt: '}

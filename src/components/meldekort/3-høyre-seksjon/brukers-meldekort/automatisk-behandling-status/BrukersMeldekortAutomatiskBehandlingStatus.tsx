@@ -34,13 +34,13 @@ const alertVariant: Record<MetaStatus, ComponentProps<typeof Alert>['variant']> 
     [MetaStatus.SkalIkkeBehandles]: 'info',
     [MetaStatus.MeldekortFeil]: 'warning',
     [MetaStatus.TekniskFeil]: 'error',
-};
+} as const;
 
 const tilMetaTekst: { [key in MetaStatus]?: string } = {
     [MetaStatus.SkalIkkeBehandles]: 'Behandles ikke automatisk',
     [MetaStatus.MeldekortFeil]: 'Tilstand på meldekort/sak stoppet automatisk behandling',
     [MetaStatus.TekniskFeil]: 'Teknisk feil ved automatisk behandling',
-};
+} as const;
 
 const tilMetaStatus: Record<MeldekortBehandletAutomatiskStatus, MetaStatus> = {
     [MeldekortBehandletAutomatiskStatus.BEHANDLET]: MetaStatus.Behandlet,

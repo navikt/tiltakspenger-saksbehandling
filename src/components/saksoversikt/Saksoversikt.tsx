@@ -16,15 +16,8 @@ import MeldekortHelgToggle from '../toggles/MeldekortHelgToggle';
 import { Rammebehandling, Behandlingsstatus, Behandlingstype } from '~/types/Behandling';
 
 export const Saksoversikt = () => {
-    const {
-        sakId,
-        saksnummer,
-        behandlinger,
-        behandlingsoversikt,
-        søknader,
-        meldeperiodeKjeder,
-        kanSendeInnHelgForMeldekort,
-    } = useSak().sak;
+    const { sakId, saksnummer, behandlinger, behandlingsoversikt, søknader, meldeperiodeKjeder } =
+        useSak().sak;
 
     const { meldeperiodeKjederIkkeKlare, meldeperiodeKjederKlare } = Object.groupBy(
         meldeperiodeKjeder,
@@ -50,11 +43,7 @@ export const Saksoversikt = () => {
     return (
         <>
             <NotificationBanner />
-            <PersonaliaHeader
-                sakId={sakId}
-                saksnummer={saksnummer}
-                kanSendeInnHelgForMeldekort={kanSendeInnHelgForMeldekort}
-            />
+            <PersonaliaHeader sakId={sakId} saksnummer={saksnummer} />
             <Box className={styles.wrapper}>
                 <HStack align="center" className={styles.spacing}>
                     <Heading spacing size="medium" level="2">

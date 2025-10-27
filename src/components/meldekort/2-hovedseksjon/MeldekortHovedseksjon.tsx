@@ -4,7 +4,7 @@ import { useMeldeperiodeKjede } from '../MeldeperiodeKjedeContext';
 
 import styles from './MeldekortHovedseksjon.module.css';
 
-export const MeldekortHovedseksjon = (props: { kanMeldeInnForHelg: boolean }) => {
+export const MeldekortHovedseksjon = () => {
     const { meldeperiodeKjede, sisteMeldekortBehandling } = useMeldeperiodeKjede();
     const { korrigeringFraTidligerePeriode } = meldeperiodeKjede;
 
@@ -26,10 +26,7 @@ export const MeldekortHovedseksjon = (props: { kanMeldeInnForHelg: boolean }) =>
                 />
             ) : (
                 sisteMeldekortBehandling && (
-                    <MeldekortBehandling
-                        meldekortBehandling={sisteMeldekortBehandling}
-                        kanMeldeInnForHelg={props.kanMeldeInnForHelg}
-                    />
+                    <MeldekortBehandling meldekortBehandling={sisteMeldekortBehandling} />
                 )
             )}
         </div>

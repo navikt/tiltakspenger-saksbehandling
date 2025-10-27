@@ -33,10 +33,7 @@ export const AvsluttetMeldekortOppsummering = ({ meldekortBehandling }: Props) =
                     verdi={avbrutt.begrunnelse}
                     retning="vertikal"
                 />
-                <MeldekortUker
-                    dager={beregning?.beregningForMeldekortetsPeriode.dager ?? dager}
-                    kanMeldeInnForHelg={false}
-                />
+                <MeldekortUker dager={beregning?.beregningForMeldekortetsPeriode.dager ?? dager} />
                 <MeldekortBeregningOgSimulering meldekortBehandling={meldekortBehandling} />
                 {begrunnelse && <MeldekortBegrunnelse readOnly={true} defaultValue={begrunnelse} />}
             </VStack>

@@ -20,16 +20,15 @@ import { classNames } from '~/utils/classNames';
 import { MeldekortBegrunnelse } from '../../../0-felles-komponenter/begrunnelse/MeldekortBegrunnelse';
 import AvsluttMeldekortBehandling from '../../../../saksoversikt/meldekort-oversikt/avsluttMeldekortBehandling/AvsluttMeldekortBehandling';
 import { meldeperiodeUrl } from '~/utils/urls';
+import { MeldekortBeregningOgSimulering } from '~/components/meldekort/0-felles-komponenter/beregning-simulering/MeldekortBeregningOgSimulering';
 
 import styles from './MeldekortUtfylling.module.css';
-import { MeldekortBeregningOgSimulering } from '~/components/meldekort/0-felles-komponenter/beregning-simulering/MeldekortBeregningOgSimulering';
 
 type Props = {
     meldekortBehandling: MeldekortBehandlingProps;
-    kanMeldeInnForHelg: boolean;
 };
 
-export const MeldekortUtfylling = ({ meldekortBehandling, kanMeldeInnForHelg }: Props) => {
+export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
     const [valideringsFeil, setValideringsFeil] = useState('');
 
     const { meldeperiodeKjede, tidligereMeldekortBehandlinger, sisteMeldeperiode } =
@@ -94,11 +93,7 @@ export const MeldekortUtfylling = ({ meldekortBehandling, kanMeldeInnForHelg }: 
         <FormProvider {...formContext}>
             <form>
                 <VStack gap={'5'}>
-                    <MeldekortUker
-                        dager={formContext.getValues().dager}
-                        underBehandling={true}
-                        kanMeldeInnForHelg={kanMeldeInnForHelg}
-                    />
+                    <MeldekortUker dager={formContext.getValues().dager} underBehandling={true} />
                     {skalViseBeregningVarsel && (
                         <Alert inline={true} variant={'warning'}>
                             {'Trykk "lagre og beregn" for å oppdatere beregningene'}

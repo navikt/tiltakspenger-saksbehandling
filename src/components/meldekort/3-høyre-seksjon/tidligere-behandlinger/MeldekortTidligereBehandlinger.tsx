@@ -3,17 +3,17 @@ import {
     MeldekortBehandlingProps,
     MeldekortBehandlingStatus,
     MeldekortBehandlingType,
-} from '../../../../types/meldekort/MeldekortBehandling';
+} from '~/types/meldekort/MeldekortBehandling';
 import { MeldekortOppsummering } from '../../0-felles-komponenter/meldekort-oppsummering/MeldekortOppsummering';
 import React, { useEffect, useMemo, useState } from 'react';
-import { formaterTidspunktKort, periodeTilFormatertDatotekst } from '../../../../utils/date';
-import { MeldeperiodeKorrigering } from '../../../../types/meldekort/Meldeperiode';
+import { formaterTidspunktKort, periodeTilFormatertDatotekst } from '~/utils/date';
+import { MeldeperiodeKorrigering } from '~/types/meldekort/Meldeperiode';
 import { MeldekortKorrigertFraTidligerePeriode } from '../../0-felles-komponenter/korrigert-fra-tidligere/MeldekortKorrigertFraTidligerePeriode';
 import { useMeldeperiodeKjede } from '../../MeldeperiodeKjedeContext';
 
 import style from './MeldekortTidligereBehandlinger.module.css';
 
-export const MeldekortTidligereBehandlinger = (props: { kanMeldeInnForHelg: boolean }) => {
+export const MeldekortTidligereBehandlinger = () => {
     const [valgtIndex, setValgtIndex] = useState(0);
 
     const {
@@ -88,10 +88,7 @@ export const MeldekortTidligereBehandlinger = (props: { kanMeldeInnForHelg: bool
                 (erKorrigeringFraTidligerePeriode(valgtBehandling) ? (
                     <MeldekortKorrigertFraTidligerePeriode korrigering={valgtBehandling} />
                 ) : (
-                    <MeldekortOppsummering
-                        meldekortBehandling={valgtBehandling}
-                        kanSendeInnHelgForMeldekort={props.kanMeldeInnForHelg}
-                    />
+                    <MeldekortOppsummering meldekortBehandling={valgtBehandling} />
                 ))}
         </VStack>
     );

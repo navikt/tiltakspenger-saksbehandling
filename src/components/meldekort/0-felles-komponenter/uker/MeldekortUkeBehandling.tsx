@@ -1,5 +1,5 @@
-import { BodyShort, Select, Table, Tooltip } from '@navikt/ds-react';
-import { erLørdagEllerSøndag, formaterDatotekst, ukedagFraDatotekst } from '~/utils/date';
+import { BodyShort, Select, Table } from '@navikt/ds-react';
+import { formaterDatotekst, ukedagFraDatotekst } from '~/utils/date';
 import { ikonForMeldekortBehandlingDagStatus } from '../MeldekortIkoner';
 import { meldekortBehandlingDagStatusTekst } from '~/utils/tekstformateringUtils';
 import { formatterBeløp } from '~/utils/beløp';
@@ -16,10 +16,9 @@ import styles from './MeldekortUke.module.css';
 type Props = {
     dager: MeldekortDagBeregnetProps[];
     ukeIndex: 0 | 1;
-    kanMeldeInnForHelg: boolean;
 };
 
-export const MeldekortUkeBehandling = ({ dager, ukeIndex, kanMeldeInnForHelg }: Props) => {
+export const MeldekortUkeBehandling = ({ dager, ukeIndex }: Props) => {
     const { control, watch, getFieldState, formState, clearErrors } =
         useFormContext<MeldekortBehandlingForm>();
 
@@ -32,8 +31,6 @@ export const MeldekortUkeBehandling = ({ dager, ukeIndex, kanMeldeInnForHelg }: 
 
         const valgtStatus = watch(statusFieldPath);
         const valgtDato = watch(dagFieldPath);
-
-        const erHelg = erLørdagEllerSøndag(valgtDato);
 
         const error = getFieldState(statusFieldPath, formState).error;
 
@@ -50,12 +47,6 @@ export const MeldekortUkeBehandling = ({ dager, ukeIndex, kanMeldeInnForHelg }: 
                 <Table.DataCell>
                     {valgtStatus === MeldekortBehandlingDagStatus.IkkeRettTilTiltakspenger ? (
                         <BodyShort>{meldekortBehandlingDagStatusTekst[valgtStatus]}</BodyShort>
-                    ) : erHelg && !kanMeldeInnForHelg ? (
-                        <Tooltip content={'Støtter ikke utbetaling av helgedager ennå'}>
-                            <BodyShort as={'span'}>
-                                {meldekortBehandlingDagStatusTekst[valgtStatus]}
-                            </BodyShort>
-                        </Tooltip>
                     ) : (
                         <Controller
                             name={statusFieldPath}

@@ -1,9 +1,9 @@
 import { useParams } from 'next/navigation';
-import { pageWithAuthentication } from '../../../../../auth/pageWithAuthentication';
-import { PersonaliaHeader } from '../../../../../components/personaliaheader/PersonaliaHeader';
-import { SakProvider } from '../../../../../context/sak/SakContext';
-import { SakProps } from '../../../../../types/Sak';
-import { fetchSak } from '../../../../../utils/fetch/fetch-server';
+import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
+import { PersonaliaHeader } from '~/components/personaliaheader/PersonaliaHeader';
+import { SakProvider } from '~/context/sak/SakContext';
+import { SakProps } from '~/types/Sak';
+import { fetchSak } from '~/utils/fetch/fetch-server';
 import OppsummeringAvSøknad from '../../../../../components/oppsummeringer/oppsummeringAvSøknad/OppsummeringAvSøknad';
 import AvbruttOppsummering from '../../../../../components/oppsummeringer/oppsummeringAvAvbruttBehandling/OppsummeringAvAvbruttBehandling';
 import SideBarMain from '../../../../../layouts/sidebar-main/SideBarMain';
@@ -34,7 +34,6 @@ const AvbruttPage = (props: Props) => {
                 sakId={props.sak.sakId}
                 saksnummer={props.sak.saksnummer}
                 visTilbakeKnapp={true}
-                kanSendeInnHelgForMeldekort={props.sak.kanSendeInnHelgForMeldekort}
             />
             <SideBarMain
                 sidebar={

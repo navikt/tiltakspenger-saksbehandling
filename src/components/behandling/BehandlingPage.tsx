@@ -23,12 +23,7 @@ export const BehandlingPage = () => {
 
     return (
         <>
-            <PersonaliaHeader
-                sakId={sakId}
-                saksnummer={saksnummer}
-                visTilbakeKnapp={true}
-                kanSendeInnHelgForMeldekort={sak.kanSendeInnHelgForMeldekort}
-            >
+            <PersonaliaHeader sakId={sakId} saksnummer={saksnummer} visTilbakeKnapp={true}>
                 {finnBehandlingStatusTag(status, false, ventestatus?.erSattPåVent)}
             </PersonaliaHeader>
 

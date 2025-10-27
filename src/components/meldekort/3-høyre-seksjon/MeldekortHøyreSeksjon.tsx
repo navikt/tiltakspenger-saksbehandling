@@ -2,13 +2,13 @@ import { Tabs } from '@navikt/ds-react';
 import { MeldekortTidligereBehandlinger } from './tidligere-behandlinger/MeldekortTidligereBehandlinger';
 import { BrukersMeldekortVisning } from './brukers-meldekort/BrukersMeldekort';
 import { useMeldeperiodeKjede } from '../MeldeperiodeKjedeContext';
-import { classNames } from '../../../utils/classNames';
+import { classNames } from '~/utils/classNames';
 import { CircleSlashIcon, DocPencilIcon, PersonPencilIcon } from '@navikt/aksel-icons';
-
-import style from './MeldekortHøyreSeksjon.module.css';
 import { MeldekortAvsluttedeBehandlinger } from './avsluttede-meldekort/MeldekortAvsluttedeBehandlinger';
 
-export const MeldekortHøyreSeksjon = (props: { kanMeldeInnForHelg: boolean }) => {
+import style from './MeldekortHøyreSeksjon.module.css';
+
+export const MeldekortHøyreSeksjon = () => {
     const {
         alleMeldekortBehandlinger,
         tidligereMeldekortBehandlinger,
@@ -57,7 +57,7 @@ export const MeldekortHøyreSeksjon = (props: { kanMeldeInnForHelg: boolean }) =
             </Tabs.List>
 
             <Tabs.Panel value={'tidligereBehandlinger'} lazy={false} className={style.panel}>
-                <MeldekortTidligereBehandlinger kanMeldeInnForHelg={props.kanMeldeInnForHelg} />
+                <MeldekortTidligereBehandlinger />
             </Tabs.Panel>
 
             <Tabs.Panel

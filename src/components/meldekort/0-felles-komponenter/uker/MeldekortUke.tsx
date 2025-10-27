@@ -1,10 +1,10 @@
 import { Box, Table } from '@navikt/ds-react';
 import React from 'react';
-import { formaterDatotekst, ukedagFraDatotekst } from '../../../../utils/date';
-import { MeldekortDagBeregnetProps } from '../../../../types/meldekort/MeldekortBehandling';
-import { meldekortBehandlingDagStatusTekst } from '../../../../utils/tekstformateringUtils';
+import { formaterDatotekst, ukedagFraDatotekst } from '~/utils/date';
+import { MeldekortDagBeregnetProps } from '~/types/meldekort/MeldekortBehandling';
+import { meldekortBehandlingDagStatusTekst } from '~/utils/tekstformateringUtils';
 import { ikonForMeldekortBehandlingDagStatus } from '../MeldekortIkoner';
-import { formatterBeløp } from '../../../../utils/beløp';
+import { formatterBeløp } from '~/utils/beløp';
 import { MeldekortUkeBehandling } from './MeldekortUkeBehandling';
 
 import styles from './MeldekortUke.module.css';
@@ -13,10 +13,9 @@ type Props = {
     dager: MeldekortDagBeregnetProps[];
     ukeIndex: 0 | 1;
     underBehandling: boolean;
-    kanMeldeInnForHelg: boolean;
 };
 
-export const MeldekortUke = ({ dager, ukeIndex, underBehandling, kanMeldeInnForHelg }: Props) => {
+export const MeldekortUke = ({ dager, ukeIndex, underBehandling }: Props) => {
     return (
         <Box className={styles.uke}>
             <Table size="small">
@@ -32,11 +31,7 @@ export const MeldekortUke = ({ dager, ukeIndex, underBehandling, kanMeldeInnForH
                 </Table.Header>
                 <Table.Body>
                     {underBehandling ? (
-                        <MeldekortUkeBehandling
-                            dager={dager}
-                            ukeIndex={ukeIndex}
-                            kanMeldeInnForHelg={kanMeldeInnForHelg}
-                        />
+                        <MeldekortUkeBehandling dager={dager} ukeIndex={ukeIndex} />
                     ) : (
                         dager.map((dag) => (
                             <Table.Row key={dag.dato}>
