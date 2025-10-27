@@ -28,9 +28,11 @@ export const behandlingsperiodeActionHandlers = {
     oppdaterBehandlingsperiode: (state, payload) => {
         const nyBehandlingsperiode = { ...state.behandlingsperiode, ...payload.periode };
 
-        if (!nyBehandlingsperiode.fraOgMed || !nyBehandlingsperiode.tilOgMed) {
-            return state;
-        }
+        // "Uinnvilgbare" søknader uten en fullstendig tiltaksperiode bør ha sin egen state så vi slipper alle null-sjekkene her
+        //
+        // if (!nyBehandlingsperiode.fraOgMed || !nyBehandlingsperiode.tilOgMed) {
+        //     return state;
+        // }
 
         return {
             ...state,
