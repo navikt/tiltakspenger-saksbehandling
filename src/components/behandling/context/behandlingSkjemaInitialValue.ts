@@ -133,6 +133,9 @@ const revurderingInitialState = (behandling: Revurdering, sak: SakProps): Behand
         case BehandlingResultat.STANS: {
             return revurderingStansInitialState(behandling);
         }
+        case BehandlingResultat.OMGJØRING: {
+            return revurderingOmgjøringInitialState(sak, behandling);
+        }
     }
 
     throw new Error(`Ukjent revurdering resultat: ${resultat satisfies never}`);
@@ -174,7 +177,7 @@ const revurderingInnvilgelseInitialState = (
         avslagsgrunner: [],
         hjemlerForStans: [],
 
-        //Kanskje disse burde vært Nullable<boolean> for revurdering innvilgelse vi bruker felles behandling state
+        //Kanskje disse burde vært Nullable<boolean> for revurdering innvilgelse - vi bruker felles behandling state
         harValgtStansFraFørsteDagSomGirRett: false,
         harValgtStansTilSisteDagSomGirRett: false,
     };
@@ -195,6 +198,31 @@ const revurderingStansInitialState = (behandling: Revurdering): BehandlingSkjema
         valgteTiltaksdeltakelser: [],
         antallDagerPerMeldeperiode: [],
         avslagsgrunner: [],
+    };
+};
+
+/*
+ * Ved en omgjøring så skal all informasjon i behandlingen allerede være utfyllt fra før av.
+ */
+const revurderingOmgjøringInitialState = (
+    sak: SakProps,
+    behandling: Revurdering,
+): BehandlingSkjemaState => {
+    return {
+        resultat: BehandlingResultat.OMGJØRING,
+        behandlingsperiode: behandling.innvilgelsesperiode,
+        harBarnetillegg: behandling.barnetillegg !== null,
+        barnetilleggPerioder: behandling.barnetillegg!.perioder,
+        valgteTiltaksdeltakelser: behandling.valgteTiltaksdeltakelser!,
+        antallDagerPerMeldeperiode: behandling.antallDagerPerMeldeperiode!,
+
+        // Ikke i bruk for denne behandlingstypen
+        avslagsgrunner: [],
+        hjemlerForStans: [],
+
+        //Kanskje disse burde vært Nullable<boolean> for revurdering omgjøring - vi bruker felles behandling state
+        harValgtStansFraFørsteDagSomGirRett: false,
+        harValgtStansTilSisteDagSomGirRett: false,
     };
 };
 

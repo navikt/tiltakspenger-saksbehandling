@@ -93,6 +93,7 @@ export const behandlingResultatTilText: Record<BehandlingResultat, string> = {
     [BehandlingResultat.STANS]: 'Stans',
     [BehandlingResultat.REVURDERING_INNVILGELSE]: 'Revurdering innvilgelse',
     [BehandlingResultat.IKKE_VALGT]: 'Ikke valgt',
+    [BehandlingResultat.OMGJØRING]: 'Omgjøring',
 };
 
 export const behandlingResultatTilTag: Record<BehandlingResultat, ReactElement> = {
@@ -112,6 +113,9 @@ export const behandlingResultatTilTag: Record<BehandlingResultat, ReactElement> 
     ),
     [BehandlingResultat.IKKE_VALGT]: (
         <Tag variant="neutral">{behandlingResultatTilText[BehandlingResultat.IKKE_VALGT]}</Tag>
+    ),
+    [BehandlingResultat.OMGJØRING]: (
+        <Tag variant="alt1">{behandlingResultatTilText[BehandlingResultat.OMGJØRING]}</Tag>
     ),
 };
 

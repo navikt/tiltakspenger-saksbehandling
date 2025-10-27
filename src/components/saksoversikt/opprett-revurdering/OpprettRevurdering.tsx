@@ -55,13 +55,14 @@ export const OpprettRevurdering = ({ sakId, harVedtak }: Props) => {
                                 return;
                             }
 
-                            opprettRevurdering({ revurderingType: valgtType }).then(
-                                (behandling) => {
-                                    if (behandling) {
-                                        router.push(behandlingUrl(behandling));
-                                    }
-                                },
-                            );
+                            opprettRevurdering({
+                                revurderingType: valgtType,
+                                rammevedtakIdSomOmgjøres: null,
+                            }).then((behandling) => {
+                                if (behandling) {
+                                    router.push(behandlingUrl(behandling));
+                                }
+                            });
                         }}
                     >
                         {`Opprett revurdering${valgtType ? ` (${behandlingResultatTilText[valgtType]})` : ''}`}

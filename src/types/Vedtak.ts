@@ -1,13 +1,9 @@
 import { Nullable } from '~/types/UtilTypes';
 import { Periode } from './Periode';
 import { Barnetillegg } from './Barnetillegg';
-import { BehandlingId, BehandlingResultat as BehandlingResultat } from './Behandling';
+import { BehandlingId } from './Behandling';
 
 export type VedtakId = `vedtak_${string}`;
-
-export type VedtakOpprettRevurdering = {
-    revurderingType: BehandlingResultat;
-};
 
 export enum Vedtakstype {
     INNVILGELSE = 'INNVILGELSE',

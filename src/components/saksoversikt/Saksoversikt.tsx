@@ -71,6 +71,7 @@ export const Saksoversikt = () => {
                 </Box>
                 <VedtatteBehandlinger
                     saksnummer={saksnummer}
+                    sakId={sakId}
                     søknader={søknader}
                     behandlinger={behandlinger}
                 />

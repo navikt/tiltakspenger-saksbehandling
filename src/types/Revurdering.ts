@@ -17,13 +17,17 @@ import { Periode } from './Periode';
 import { SakId } from './Sak';
 import { TiltaksdeltakelsePeriode } from './TiltakDeltagelseTypes';
 import { Nullable } from './UtilTypes';
+import { VedtakId } from './Vedtak';
 
 export interface Revurdering {
     id: BehandlingId;
     type: Behandlingstype.REVURDERING;
     status: Behandlingsstatus;
     //TODO - kontrakten sier at denne kan være disse + andre behandlingstyper - men så sniker vi inn kun disse 2 verdiene her.
-    resultat: BehandlingResultat.REVURDERING_INNVILGELSE | BehandlingResultat.STANS;
+    resultat:
+        | BehandlingResultat.REVURDERING_INNVILGELSE
+        | BehandlingResultat.STANS
+        | BehandlingResultat.OMGJØRING;
     sakId: SakId;
     saksnummer: string;
     saksbehandler: Nullable<string>;
@@ -44,7 +48,9 @@ export interface Revurdering {
     valgtHjemmelHarIkkeRettighet: Nullable<HjemmelForStans[]>;
     harValgtStansFraFørsteDagSomGirRett: Nullable<boolean>;
     harValgtStansTilSisteDagSomGirRett: Nullable<boolean>;
+    omgjørVedtak: Nullable<string>;
     innvilgelsesperiode: Nullable<Periode>;
+    rammevedtakId: Nullable<VedtakId>;
 }
 
 export interface RevurderingVedtakStansRequest extends OppdaterBehandlingRequest {
@@ -64,9 +70,23 @@ export interface RevurderingVedtakInnvilgelseRequest extends OppdaterBehandlingR
     barnetillegg: Barnetillegg;
 }
 
+export interface RevurderingVedtakOmgjøringRequest extends OppdaterBehandlingRequest {
+    resultat: BehandlingResultat.OMGJØRING;
+    innvilgelsesperiode: Periode;
+    valgteTiltaksdeltakelser: TiltaksdeltakelsePeriode[];
+    antallDagerPerMeldeperiodeForPerioder: AntallDagerForMeldeperiode[];
+    barnetillegg: Barnetillegg;
+}
+
 export type RevurderingVedtakRequest =
     | RevurderingVedtakStansRequest
-    | RevurderingVedtakInnvilgelseRequest;
+    | RevurderingVedtakInnvilgelseRequest
+    | RevurderingVedtakOmgjøringRequest;
+
+export type OpprettRevurderingRequest = {
+    revurderingType: BehandlingResultat;
+    rammevedtakIdSomOmgjøres: Nullable<string>;
+};
 
 export enum HjemmelForStans {
     DELTAR_IKKE_PÅ_ARBEIDSMARKEDSTILTAK = 'DeltarIkkePåArbeidsmarkedstiltak',
