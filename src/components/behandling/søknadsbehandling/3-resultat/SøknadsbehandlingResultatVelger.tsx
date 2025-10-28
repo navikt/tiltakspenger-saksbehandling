@@ -40,7 +40,7 @@ export const SøknadsbehandlingResultatVelger = () => {
                         Innvilgelse
                     </Radio>
                     <Radio value={BehandlingResultat.AVSLAG}>Avslag</Radio>
-                    {resultat && (
+                    {resultat !== BehandlingResultat.IKKE_VALGT && (
                         <Button
                             size={'xsmall'}
                             variant={'tertiary'}

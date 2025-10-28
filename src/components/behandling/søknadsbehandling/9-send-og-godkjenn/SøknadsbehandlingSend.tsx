@@ -72,7 +72,7 @@ const tilDTO = (skjema: BehandlingSkjemaContext): SøknadsbehandlingVedtakReques
                 fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
                 resultat: BehandlingResultat.AVSLAG,
             } satisfies SøknadsbehandlingVedtakAvslagRequest;
-        case null:
+        case BehandlingResultat.IKKE_VALGT:
             return {
                 begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
                 fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
@@ -80,10 +80,13 @@ const tilDTO = (skjema: BehandlingSkjemaContext): SøknadsbehandlingVedtakReques
             } satisfies SøknadsbehandlingVedtakIkkeValgtRequest;
         case BehandlingResultat.REVURDERING_INNVILGELSE:
         case BehandlingResultat.STANS:
+        case BehandlingResultat.OMGJØRING:
             throw new Error(`Forventet søknadsbehandling men var revurdering - ${skjema.resultat}`);
     }
 
-    throw new Error(`Ugyldig resultat for søknadsbehandling vedtak - ${skjema.resultat}`);
+    throw new Error(
+        `Ugyldig resultat for søknadsbehandling vedtak - ${skjema.resultat satisfies never}`,
+    );
 };
 
 export const tiltaksdeltakelsePeriodeFormToTiltaksdeltakelsePeriode = (
