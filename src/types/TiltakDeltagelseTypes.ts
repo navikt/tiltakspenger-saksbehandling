@@ -16,6 +16,7 @@ export type Tiltaksdeltagelse = {
     deltakelseProsent: number | null;
     antallDagerPerUke: number | null;
     kilde: Kilde;
+    deltakelseProsentFraGjennomforing: boolean | null;
 };
 
 export type TiltaksdeltagelseMedPeriode = Tiltaksdeltagelse & {
