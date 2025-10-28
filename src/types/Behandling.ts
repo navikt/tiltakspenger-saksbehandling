@@ -92,7 +92,7 @@ export type Rammebehandling = Søknadsbehandling | Revurdering;
 export type Saksopplysninger = {
     fødselsdato: string;
     tiltaksdeltagelse: Tiltaksdeltagelse[];
-    saksopplysningsperiode: Periode;
+    periode: Nullable<Periode>;
     ytelser: Ytelse[];
     tiltakspengevedtakFraArena: ArenaTPVedtak[];
 };
