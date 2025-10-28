@@ -3,7 +3,12 @@ import { singleOrFirst } from './array';
 import { Tiltaksdeltagelse, TiltaksdeltagelseMedPeriode } from '~/types/TiltakDeltagelseTypes';
 import { erDatoIPeriode, joinPerioder } from './periode';
 import { Nullable } from '~/types/UtilTypes';
-import { Rammebehandling, Rammebehandlingsstatus } from '~/types/Behandling';
+import {
+    Rammebehandling,
+    RammebehandlingMedInnvilgelse,
+    RammebehandlingResultatType,
+    Rammebehandlingsstatus,
+} from '~/types/Behandling';
 import { Søknadsbehandling } from '~/types/Søknadsbehandling';
 
 export const hentTiltaksperiode = (behandling: Søknadsbehandling): Nullable<Periode> => {
@@ -127,4 +132,22 @@ export const finnSisteSluttdatoForTiltaksdeltakelse = (
         .filter((t) => t.deltagelseTilOgMed != null)
         .sort((a, b) => (a.deltagelseTilOgMed! > b.deltagelseTilOgMed! ? -1 : 1));
     return sorterteDeltakelser[0]?.deltagelseTilOgMed;
+};
+
+export const erRammebehandlingMedInnvilgelse = (
+    behandling: Rammebehandling,
+): behandling is RammebehandlingMedInnvilgelse => {
+    const resultatType = behandling.resultat;
+
+    return (
+        resultatType === RammebehandlingResultatType.INNVILGELSE ||
+        resultatType === RammebehandlingResultatType.REVURDERING_INNVILGELSE ||
+        resultatType === RammebehandlingResultatType.OMGJØRING
+    );
+};
+
+export const rammebehandlingMedInnvilgelseEllerNull = (
+    behandling: Rammebehandling,
+): RammebehandlingMedInnvilgelse | null => {
+    return erRammebehandlingMedInnvilgelse(behandling) ? behandling : null;
 };

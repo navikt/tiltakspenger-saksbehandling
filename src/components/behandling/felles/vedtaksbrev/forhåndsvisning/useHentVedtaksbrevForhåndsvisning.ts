@@ -3,7 +3,7 @@ import { useFetchBlobFraApi } from '~/utils/fetch/useFetchFraApi';
 import { Periode } from '~/types/Periode';
 
 import { Nullable } from '~/types/UtilTypes';
-import { Rammebehandling, RammebehandlingResultat } from '~/types/Behandling';
+import { Rammebehandling, RammebehandlingResultatType } from '~/types/Behandling';
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';
 import { Avslagsgrunn } from '~/types/Søknadsbehandling';
 
@@ -11,7 +11,7 @@ export type SøknadsbehandlingBrevForhåndsvisningDTO = {
     fritekst: string;
     virkningsperiode: Periode;
     barnetillegg: Nullable<BarnetilleggPeriode[]>;
-    resultat: RammebehandlingResultat;
+    resultat: RammebehandlingResultatType;
     avslagsgrunner: Nullable<Avslagsgrunn[]>;
 };
 
@@ -38,14 +38,14 @@ type StansTilOgMed =
 export type RevurderingStansBrevForhåndsvisningDTO = {
     fritekst: string;
     valgteHjemler: string[];
-    resultat: RammebehandlingResultat.STANS;
+    resultat: RammebehandlingResultatType.STANS;
 } & StansFraOgMed &
     StansTilOgMed;
 
 export type RevurderingInnvilgelseBrevForhåndsvisningDTO = {
     fritekst: string;
     virkningsperiode: Periode;
-    resultat: RammebehandlingResultat.REVURDERING_INNVILGELSE;
+    resultat: RammebehandlingResultatType.REVURDERING_INNVILGELSE;
     barnetillegg: Nullable<BarnetilleggPeriode[]>;
 };
 

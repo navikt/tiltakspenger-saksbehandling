@@ -10,7 +10,7 @@ import {
 } from '~/components/behandling/context/BehandlingSkjemaContext';
 
 import styles from './SøknadsbehandlingAvslagsgrunner.module.css';
-import { RammebehandlingResultat } from '~/types/Behandling';
+import { RammebehandlingResultatType } from '~/types/Behandling';
 import { Avslagsgrunn } from '~/types/Søknadsbehandling';
 
 const AvslagsgrunnTekst = {
@@ -31,7 +31,7 @@ export const SøknadsbehandlingAvslagsgrunner = () => {
     const dispatch = useBehandlingSkjemaDispatch();
     const erIkkeSaksbehandler = rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER;
 
-    if (resultat !== RammebehandlingResultat.AVSLAG) {
+    if (resultat !== RammebehandlingResultatType.AVSLAG) {
         return null;
     }
 
@@ -46,7 +46,7 @@ export const SøknadsbehandlingAvslagsgrunner = () => {
                                 value={grunn}
                                 size={'small'}
                                 readOnly={erIkkeSaksbehandler}
-                                checked={avslagsgrunner !== null && avslagsgrunner.includes(grunn)}
+                                checked={avslagsgrunner.includes(grunn)}
                                 onChange={() => {
                                     dispatch({
                                         type: 'oppdaterAvslagsgrunn',

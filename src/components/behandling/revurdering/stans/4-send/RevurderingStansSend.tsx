@@ -7,7 +7,7 @@ import {
     useBehandlingSkjema,
 } from '~/components/behandling/context/BehandlingSkjemaContext';
 import { RevurderingVedtakStansRequest } from '~/types/Revurdering';
-import { RammebehandlingResultat } from '~/types/Behandling';
+import { RammebehandlingResultatType } from '~/types/Behandling';
 
 export const RevurderingStansSend = () => {
     const skjema = useBehandlingSkjema();
@@ -24,7 +24,7 @@ export const RevurderingStansSend = () => {
 
 const tilDTO = (skjema: BehandlingSkjemaContext): RevurderingVedtakStansRequest => {
     return {
-        resultat: RammebehandlingResultat.STANS,
+        resultat: RammebehandlingResultatType.STANS,
         begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
         fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
         stansFraOgMed: skjema.harValgtStansFraFørsteDagSomGirRett

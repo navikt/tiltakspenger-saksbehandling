@@ -5,7 +5,7 @@ import { BehandlingBarnetillegg } from '~/components/behandling/felles/barnetill
 import { useBehandlingSkjema } from '~/components/behandling/context/BehandlingSkjemaContext';
 
 import style from './SøknadsbehandlingBarnetillegg.module.css';
-import { RammebehandlingResultat } from '~/types/Behandling';
+import { RammebehandlingResultatType } from '~/types/Behandling';
 
 export const SøknadsbehandlingBarnetillegg = () => {
     const skjemaContext = useBehandlingSkjema();
@@ -13,7 +13,7 @@ export const SøknadsbehandlingBarnetillegg = () => {
     return (
         <div
             className={classNames(
-                skjemaContext.resultat !== RammebehandlingResultat.INNVILGELSE && style.skjult,
+                skjemaContext.resultat !== RammebehandlingResultatType.INNVILGELSE && style.skjult,
             )}
         >
             <BehandlingBarnetillegg valgTekst={'Skal det innvilges barnetillegg?'} />

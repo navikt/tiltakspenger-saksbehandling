@@ -1,21 +1,24 @@
 import { ArenaTPVedtak } from './ArenaTPVedtak';
 import { Periode } from './Periode';
-import { Revurdering, RevurderingVedtakRequest } from './Revurdering';
+import {
+    Revurdering,
+    RevurderingInnvilgelse,
+    RevurderingOmgjøring,
+    RevurderingVedtakRequest,
+} from './Revurdering';
 import { SimulertBeregning } from './SimulertBeregningTypes';
 import {
-    Avslagsgrunn,
     Søknadsbehandling,
+    SøknadsbehandlingInnvilgelse,
     SøknadsbehandlingVedtakRequest,
 } from './Søknadsbehandling';
-import { Tiltaksdeltagelse, TiltaksdeltakelsePeriode } from './TiltakDeltagelseTypes';
+import { Tiltaksdeltagelse } from './TiltakDeltagelseTypes';
 import { Utbetalingsstatus } from './Utbetaling';
 import { Nullable } from './UtilTypes';
 import { Ytelse } from './Ytelse';
 import { SakId } from '~/types/Sak';
 import { Attestering } from '~/types/Attestering';
 import { Avbrutt } from '~/types/Avbrutt';
-import { Barnetillegg } from '~/types/Barnetillegg';
-import { AntallDagerForMeldeperiode } from '~/types/AntallDagerForMeldeperiode';
 import { VedtakId } from '~/types/Vedtak';
 
 export type BehandlingId = `beh_${string}`;
@@ -24,7 +27,7 @@ export interface RammebehandlingBase {
     id: BehandlingId;
     type: Behandlingstype;
     status: Rammebehandlingsstatus;
-    resultat: RammebehandlingResultat;
+    resultat: RammebehandlingResultatType;
     sakId: SakId;
     saksnummer: string;
     rammevedtakId: Nullable<VedtakId>;
@@ -40,14 +43,11 @@ export interface RammebehandlingBase {
     iverksattTidspunkt: Nullable<string>;
     ventestatus: Nullable<VentestatusHendelse>;
     utbetaling: Nullable<BehandlingUtbetalingProps>;
-    innvilgelsesperiode: Nullable<Periode>;
-    barnetillegg: Nullable<Barnetillegg>;
-    valgteTiltaksdeltakelser: Nullable<TiltaksdeltakelsePeriode[]>;
-    antallDagerPerMeldeperiode: Nullable<AntallDagerForMeldeperiode[]>;
-    avslagsgrunner: Nullable<Avslagsgrunn[]>;
 }
 
-export enum RammebehandlingResultat {
+export type Rammebehandling = Søknadsbehandling | Revurdering;
+
+export enum RammebehandlingResultatType {
     INNVILGELSE = 'INNVILGELSE',
     AVSLAG = 'AVSLAG',
     STANS = 'STANS',
@@ -87,8 +87,6 @@ export type BehandlingUtbetalingProps = {
     simulertBeregning: SimulertBeregning;
 };
 
-export type Rammebehandling = Søknadsbehandling | Revurdering;
-
 export type Saksopplysninger = {
     fødselsdato: string;
     tiltaksdeltagelse: Tiltaksdeltagelse[];
@@ -102,7 +100,12 @@ export type RammebehandlingVedtakRequest =
     | RevurderingVedtakRequest;
 
 export interface OppdaterBehandlingRequestBase {
-    resultat: RammebehandlingResultat;
+    resultat: RammebehandlingResultatType;
     fritekstTilVedtaksbrev: Nullable<string>;
     begrunnelseVilkårsvurdering: Nullable<string>;
 }
+
+export type RammebehandlingMedInnvilgelse =
+    | SøknadsbehandlingInnvilgelse
+    | RevurderingInnvilgelse
+    | RevurderingOmgjøring;
