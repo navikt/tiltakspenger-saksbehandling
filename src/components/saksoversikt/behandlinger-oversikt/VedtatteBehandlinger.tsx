@@ -5,14 +5,14 @@ import styles from '../Saksoversikt.module.css';
 import { erBehandlingAvbrutt, erBehandlingVedtatt } from '~/utils/behandling';
 import { VedtatteBehandlingerTabell } from './VedtatteBehandlingerTabell';
 import { vedtattBehandlingToDataCellInfo } from '~/components/saksoversikt/behandlinger-oversikt/VedtatteBehandlingerUtils';
-import { SøknadDTO } from '~/types/Søknad';
+import { Søknad } from '~/types/Søknad';
 import { Rammebehandling } from '~/types/Behandling';
 import { SakId } from '~/types/Sak';
 
 export const VedtatteBehandlinger = (props: {
     saksnummer: string;
     sakId: SakId;
-    søknader: SøknadDTO[];
+    søknader: Søknad[];
     behandlinger: Rammebehandling[];
 }) => {
     const avsluttedeBehandlinger = props.behandlinger.filter(

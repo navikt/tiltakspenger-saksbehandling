@@ -23,7 +23,12 @@ import {
 } from '~/types/TiltakDeltagelseTypes';
 
 import { Søknadsbehandling } from '~/types/Søknadsbehandling';
-import { Revurdering } from '~/types/Revurdering';
+import {
+    Revurdering,
+    RevurderingInnvilgelse,
+    RevurderingOmgjøring,
+    RevurderingStans,
+} from '~/types/Revurdering';
 
 export const behandlingSkjemaInitialValue = ({
     behandling,
@@ -134,7 +139,7 @@ const revurderingInitialState = (behandling: Revurdering, sak: SakProps): Behand
             return revurderingStansInitialState(behandling);
         }
         case BehandlingResultat.OMGJØRING: {
-            return revurderingOmgjøringInitialState(sak, behandling);
+            return revurderingOmgjøringInitialState(behandling);
         }
     }
 
@@ -142,7 +147,7 @@ const revurderingInitialState = (behandling: Revurdering, sak: SakProps): Behand
 };
 
 const revurderingInnvilgelseInitialState = (
-    behandling: Revurdering,
+    behandling: RevurderingInnvilgelse,
     sak: SakProps,
 ): BehandlingSkjemaState => {
     const tiltaksperiode = hentHeleTiltaksdeltagelsesperioden(behandling);
@@ -183,7 +188,7 @@ const revurderingInnvilgelseInitialState = (
     };
 };
 
-const revurderingStansInitialState = (behandling: Revurdering): BehandlingSkjemaState => {
+const revurderingStansInitialState = (behandling: RevurderingStans): BehandlingSkjemaState => {
     return {
         resultat: BehandlingResultat.STANS,
         behandlingsperiode: behandling.virkningsperiode ?? {},
@@ -205,8 +210,7 @@ const revurderingStansInitialState = (behandling: Revurdering): BehandlingSkjema
  * Ved en omgjøring så skal all informasjon i behandlingen allerede være utfyllt fra før av.
  */
 const revurderingOmgjøringInitialState = (
-    sak: SakProps,
-    behandling: Revurdering,
+    behandling: RevurderingOmgjøring,
 ): BehandlingSkjemaState => {
     return {
         resultat: BehandlingResultat.OMGJØRING,

@@ -7,11 +7,11 @@ import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
 import { Periode } from '~/types/Periode';
 
 import style from './SøknadOpplysningerBarn.module.css';
-import { SøknadDTO } from '~/types/Søknad';
+import { Søknad } from '~/types/Søknad';
 
 type Props = {
     tiltaksperiode: Periode;
-    søknad: SøknadDTO;
+    søknad: Søknad;
     className?: string;
 };
 

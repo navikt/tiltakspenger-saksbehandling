@@ -5,7 +5,7 @@ import { forrigeDag, nesteDag } from '~/utils/date';
 import { periodiserBarnetilleggFraSøknad } from '~/components/behandling/felles/barnetillegg/utils/periodiserBarnetilleggFraSøknad';
 import { BehandlingSkjemaActionHandlers } from '~/components/behandling/context/BehandlingSkjemaReducer';
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';
-import { SøknadDTO } from '~/types/Søknad';
+import { Søknad } from '~/types/Søknad';
 import { BarnetilleggPeriodeFormData } from '../../felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
 
 export type BarnetilleggState = {
@@ -40,7 +40,7 @@ export type BarnetilleggActions =
       }
     | {
           type: 'nullstillBarnetilleggPerioder';
-          payload: { søknad: SøknadDTO };
+          payload: { søknad: Søknad };
       };
 
 export const barnetilleggActionHandlers = {

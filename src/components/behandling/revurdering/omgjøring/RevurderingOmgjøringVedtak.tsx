@@ -10,7 +10,7 @@ import {
     RevurderingInnvilgelseBrev,
 } from '../innvilgelse/6-brev/RevurderingInnvilgelseBrev';
 import { BehandlingBeregningOgSimulering } from '../../felles/beregning-og-simulering/BehandlingBeregningOgSimulering';
-import { useRevurderingBehandling } from '../../context/BehandlingContext';
+import { useRevurderingOmgjøring } from '../../context/BehandlingContext';
 import { BehandlingResultat } from '~/types/Behandling';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '~/utils/date';
 import { useSak } from '~/context/sak/SakContext';
@@ -29,8 +29,8 @@ import {
 import { revurderingOmgjøringValidering } from './revurderingInnvilgelseValidering';
 import { useHentBehandlingLagringProps } from '../../felles/send-og-godkjenn/lagre/useHentBehandlingLagringProps';
 
-const RevurderingOmgjøringVedtak = () => {
-    const { behandling } = useRevurderingBehandling();
+export const RevurderingOmgjøringVedtak = () => {
+    const { behandling } = useRevurderingOmgjøring();
     const { sak } = useSak();
     const vedtak = useBehandlingSkjema();
 
@@ -105,8 +105,6 @@ const RevurderingOmgjøringVedtak = () => {
         </div>
     );
 };
-
-export default RevurderingOmgjøringVedtak;
 
 const tilDTO = (skjema: BehandlingSkjemaContext): RevurderingVedtakOmgjøringRequest => {
     return {

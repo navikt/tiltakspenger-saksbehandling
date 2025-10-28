@@ -1,15 +1,51 @@
 import { ArenaTPVedtak } from './ArenaTPVedtak';
-
 import { Periode } from './Periode';
 import { Revurdering, RevurderingVedtakRequest } from './Revurdering';
 import { SimulertBeregning } from './SimulertBeregningTypes';
-import { Søknadsbehandling, SøknadsbehandlingVedtakRequest } from './Søknadsbehandling';
-import { Tiltaksdeltagelse } from './TiltakDeltagelseTypes';
+import {
+    Avslagsgrunn,
+    Søknadsbehandling,
+    SøknadsbehandlingVedtakRequest,
+} from './Søknadsbehandling';
+import { Tiltaksdeltagelse, TiltaksdeltakelsePeriode } from './TiltakDeltagelseTypes';
 import { Utbetalingsstatus } from './Utbetaling';
 import { Nullable } from './UtilTypes';
 import { Ytelse } from './Ytelse';
+import { SakId } from '~/types/Sak';
+import { Attestering } from '~/types/Attestering';
+import { Avbrutt } from '~/types/Avbrutt';
+import { Barnetillegg } from '~/types/Barnetillegg';
+import { AntallDagerForMeldeperiode } from '~/types/AntallDagerForMeldeperiode';
+import { VedtakId } from '~/types/Vedtak';
 
 export type BehandlingId = `beh_${string}`;
+
+export interface RammebehandlingBase {
+    id: BehandlingId;
+    type: Behandlingstype;
+    status: Behandlingsstatus;
+    resultat: BehandlingResultat;
+    sakId: SakId;
+    saksnummer: string;
+    rammevedtakId: Nullable<VedtakId>;
+    saksbehandler: Nullable<string>;
+    beslutter: Nullable<string>;
+    saksopplysninger: Saksopplysninger;
+    attesteringer: Attestering[];
+    virkningsperiode: Nullable<Periode>;
+    fritekstTilVedtaksbrev: Nullable<string>;
+    begrunnelseVilkårsvurdering: Nullable<string>;
+    avbrutt: Nullable<Avbrutt>;
+    sistEndret: string;
+    iverksattTidspunkt: Nullable<string>;
+    ventestatus: Nullable<VentestatusHendelse>;
+    utbetaling: Nullable<BehandlingUtbetalingProps>;
+    innvilgelsesperiode: Nullable<Periode>;
+    barnetillegg: Nullable<Barnetillegg>;
+    valgteTiltaksdeltakelser: Nullable<TiltaksdeltakelsePeriode[]>;
+    antallDagerPerMeldeperiode: Nullable<AntallDagerForMeldeperiode[]>;
+    avslagsgrunner: Nullable<Avslagsgrunn[]>;
+}
 
 export enum BehandlingResultat {
     INNVILGELSE = 'INNVILGELSE',
@@ -63,7 +99,7 @@ export type Saksopplysninger = {
 
 export type BehandlingVedtak = SøknadsbehandlingVedtakRequest | RevurderingVedtakRequest;
 
-export interface OppdaterBehandlingRequest {
+export interface OppdaterBehandlingRequestBase {
     resultat: Nullable<BehandlingResultat>;
     fritekstTilVedtaksbrev: Nullable<string>;
     begrunnelseVilkårsvurdering: Nullable<string>;

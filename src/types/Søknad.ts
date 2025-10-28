@@ -5,10 +5,10 @@ import { Nullable } from './UtilTypes';
 
 export type SøknadId = `soknad_${string}`;
 
-export interface SøknadDTO extends SøknadPengestøtter {
+interface SøknadBase extends SøknadPengestøtter {
     id: SøknadId;
     journalpostId: string;
-    tiltak: Nullable<TiltaksdeltagelseFraSøknadDTO>;
+    tiltak: Nullable<TiltaksdeltagelseFraSøknad>;
     barnetillegg: SøknadBarn[];
     opprettet: string;
     tidsstempelHosOss: string;
@@ -22,6 +22,17 @@ export interface SøknadDTO extends SøknadPengestøtter {
     kanInnvilges: boolean;
 }
 
+export interface InnvilgbarSøknad extends SøknadBase {
+    tiltak: TiltaksdeltagelseFraSøknad;
+    kanInnvilges: true;
+}
+
+export interface IkkeInnvilgbarSøknad extends SøknadBase {
+    kanInnvilges: false;
+}
+
+export type Søknad = InnvilgbarSøknad | IkkeInnvilgbarSøknad;
+
 export interface SøknadPengestøtter {
     // Fra-dato for alderspensjon
     alderspensjon: Nullable<string>;
@@ -32,7 +43,7 @@ export interface SøknadPengestøtter {
     jobbsjansen: Nullable<Periode>;
 }
 
-export interface TiltaksdeltagelseFraSøknadDTO {
+export interface TiltaksdeltagelseFraSøknad {
     id: string;
     fraOgMed: Nullable<string>;
     tilOgMed: Nullable<string>;

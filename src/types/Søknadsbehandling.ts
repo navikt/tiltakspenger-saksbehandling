@@ -1,57 +1,48 @@
 import { AntallDagerForMeldeperiode } from './AntallDagerForMeldeperiode';
-import { Attestering } from './Attestering';
-import { Avbrutt } from './Avbrutt';
 import { Barnetillegg } from './Barnetillegg';
 import {
     BehandlingResultat,
     Behandlingstype,
-    OppdaterBehandlingRequest,
-    BehandlingId,
-    Behandlingsstatus,
-    Saksopplysninger,
-    VentestatusHendelse,
-    BehandlingUtbetalingProps,
+    OppdaterBehandlingRequestBase,
+    RammebehandlingBase,
 } from './Behandling';
-
 import { Periode } from './Periode';
-import { SakId } from './Sak';
-import { SøknadDTO } from './Søknad';
+import { InnvilgbarSøknad, Søknad } from './Søknad';
 import { TiltaksdeltakelsePeriode } from './TiltakDeltagelseTypes';
-import { Nullable } from './UtilTypes';
-import { VedtakId } from './Vedtak';
 
-export interface Søknadsbehandling {
-    id: BehandlingId;
+interface SøknadsbehandlingBase extends RammebehandlingBase {
     type: Behandlingstype.SØKNADSBEHANDLING;
-    status: Behandlingsstatus;
-    //TODO - kontrakten sier at denne kan være null + andre behandlingstyper - men så sniker vi inn kun disse 2 verdiene her.
-    resultat: Nullable<BehandlingResultat.AVSLAG | BehandlingResultat.INNVILGELSE>;
-    sakId: SakId;
-    saksnummer: string;
-    saksbehandler: Nullable<string>;
-    beslutter: Nullable<string>;
-    saksopplysninger: Nullable<Saksopplysninger>;
-    attesteringer: Attestering[];
-    virkningsperiode: Nullable<Periode>;
-    fritekstTilVedtaksbrev: Nullable<string>;
-    begrunnelseVilkårsvurdering: Nullable<string>;
-    avbrutt: Nullable<Avbrutt>;
-    sistEndret: string;
-    iverksattTidspunkt: Nullable<string>;
-    ventestatus: Nullable<VentestatusHendelse>;
-    utbetaling: Nullable<BehandlingUtbetalingProps>;
-    barnetillegg: Nullable<Barnetillegg>;
-    søknad: SøknadDTO;
-    valgteTiltaksdeltakelser: Nullable<TiltaksdeltakelsePeriode[]>;
-    antallDagerPerMeldeperiode: Nullable<AntallDagerForMeldeperiode[]>;
-    avslagsgrunner: Nullable<Avslagsgrunn[]>;
+    resultat: SøknadsbehandlingResultat;
+    søknad: Søknad;
     automatiskSaksbehandlet: boolean;
     manueltBehandlesGrunner: ManueltBehandlesGrunn[];
-    rammevedtakId: Nullable<VedtakId>;
-    innvilgelsesperiode: Nullable<Periode>;
 }
 
-export interface SøknadsbehandlingVedtakInnvilgelseRequest extends OppdaterBehandlingRequest {
+export interface SøknadsbehandlingIkkeValgt extends SøknadsbehandlingBase {
+    resultat: BehandlingResultat.IKKE_VALGT;
+}
+
+export interface SøknadsbehandlingInnvilgelse extends SøknadsbehandlingBase {
+    resultat: BehandlingResultat.INNVILGELSE;
+    søknad: InnvilgbarSøknad;
+}
+
+export interface SøknadsbehandlingAvslag extends SøknadsbehandlingBase {
+    resultat: BehandlingResultat.AVSLAG;
+    avslagsgrunner: Avslagsgrunn[];
+}
+
+export type Søknadsbehandling =
+    | SøknadsbehandlingInnvilgelse
+    | SøknadsbehandlingAvslag
+    | SøknadsbehandlingIkkeValgt;
+
+export type SøknadsbehandlingResultat =
+    | BehandlingResultat.AVSLAG
+    | BehandlingResultat.INNVILGELSE
+    | BehandlingResultat.IKKE_VALGT;
+
+export interface SøknadsbehandlingVedtakInnvilgelseRequest extends OppdaterBehandlingRequestBase {
     resultat: BehandlingResultat.INNVILGELSE;
     innvilgelsesperiode: Periode;
     valgteTiltaksdeltakelser: TiltaksdeltakelsePeriode[];
@@ -59,12 +50,12 @@ export interface SøknadsbehandlingVedtakInnvilgelseRequest extends OppdaterBeha
     barnetillegg: Barnetillegg;
 }
 
-export interface SøknadsbehandlingVedtakAvslagRequest extends OppdaterBehandlingRequest {
+export interface SøknadsbehandlingVedtakAvslagRequest extends OppdaterBehandlingRequestBase {
     resultat: BehandlingResultat.AVSLAG;
     avslagsgrunner: Avslagsgrunn[];
 }
 
-export interface SøknadsbehandlingVedtakIkkeValgtRequest extends OppdaterBehandlingRequest {
+export interface SøknadsbehandlingVedtakIkkeValgtRequest extends OppdaterBehandlingRequestBase {
     resultat: BehandlingResultat.IKKE_VALGT;
 }
 

@@ -1,6 +1,6 @@
 import { Nullable } from '~/types/UtilTypes';
 import { Periode } from '~/types/Periode';
-import { SøknadDTO, SøknadId } from '~/types/Søknad';
+import { Søknad, SøknadId } from '~/types/Søknad';
 import {
     Rammebehandling,
     BehandlingId,
@@ -50,7 +50,7 @@ export const avbruttBehandlingToDataCellInfo = (
 };
 
 export const avbruttSøknadToDataCellInfo = (
-    søknad: SøknadDTO,
+    søknad: Søknad,
 ): AvbruttSøknadEllerBehandlingCellInfo => {
     if (søknad.avbrutt == null) {
         throw new Error('Kan ikke hente ut informasjon fra en behandling som ikke er begrunnelse');

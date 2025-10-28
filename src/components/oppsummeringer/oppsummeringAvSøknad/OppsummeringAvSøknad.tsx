@@ -13,13 +13,13 @@ import { Alert, Box, Heading, Link, VStack } from '@navikt/ds-react';
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
 
 import styles from './OppsummeringAvSøknad.module.css';
-import { SøknadDTO } from '~/types/Søknad';
+import { Søknad } from '~/types/Søknad';
 import { Nullable } from '~/types/UtilTypes';
 
 interface Props {
     /** Behandlingens tiltaksperiode, eller det som er på søknad hvis behandling er enda ikke opprettet (null ved papirsøknad dersom saksbehandler ikke har fyllt inn)*/
     tiltaksperiode: Nullable<Periode>;
-    søknad: SøknadDTO;
+    søknad: Søknad;
     medTittel?: boolean;
 }
 

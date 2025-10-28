@@ -3,7 +3,7 @@ import { MeldeperiodeKjedeProps } from './meldekort/Meldeperiode';
 
 import { Rammevedtak } from '~/types/Vedtak';
 
-import { SøknadDTO } from './Søknad';
+import { Søknad } from './Søknad';
 import { UtbetalingstidslinjePeriode } from './Utbetaling';
 import { Rammebehandling } from './Behandling';
 
@@ -17,7 +17,7 @@ export type SakProps = {
     meldeperiodeKjeder: MeldeperiodeKjedeProps[];
     førsteDagSomGirRett?: string;
     sisteDagSomGirRett?: string;
-    søknader: SøknadDTO[];
+    søknader: Søknad[];
     behandlinger: Rammebehandling[];
     tidslinje: Rammevedtak[];
     utbetalingstidslinje: UtbetalingstidslinjePeriode[];

@@ -1,59 +1,45 @@
 import { AntallDagerForMeldeperiode } from './AntallDagerForMeldeperiode';
-import { Attestering } from './Attestering';
-import { Avbrutt } from './Avbrutt';
 import { Barnetillegg } from './Barnetillegg';
 import {
     BehandlingResultat,
-    Saksopplysninger,
     Behandlingstype,
-    OppdaterBehandlingRequest,
-    BehandlingId,
-    VentestatusHendelse,
-    BehandlingUtbetalingProps,
-    Behandlingsstatus,
+    OppdaterBehandlingRequestBase,
+    RammebehandlingBase,
 } from './Behandling';
-
 import { Periode } from './Periode';
-import { SakId } from './Sak';
 import { TiltaksdeltakelsePeriode } from './TiltakDeltagelseTypes';
 import { Nullable } from './UtilTypes';
 import { VedtakId } from './Vedtak';
 
-export interface Revurdering {
-    id: BehandlingId;
+interface RevurderingBase extends RammebehandlingBase {
     type: Behandlingstype.REVURDERING;
-    status: Behandlingsstatus;
-    //TODO - kontrakten sier at denne kan være disse + andre behandlingstyper - men så sniker vi inn kun disse 2 verdiene her.
-    resultat:
-        | BehandlingResultat.REVURDERING_INNVILGELSE
-        | BehandlingResultat.STANS
-        | BehandlingResultat.OMGJØRING;
-    sakId: SakId;
-    saksnummer: string;
-    saksbehandler: Nullable<string>;
-    beslutter: Nullable<string>;
-    saksopplysninger: Saksopplysninger;
-    attesteringer: Attestering[];
-    virkningsperiode: Nullable<Periode>;
-    fritekstTilVedtaksbrev: Nullable<string>;
-    begrunnelseVilkårsvurdering: Nullable<string>;
-    avbrutt: Nullable<Avbrutt>;
-    sistEndret: string;
-    iverksattTidspunkt: Nullable<string>;
-    ventestatus: Nullable<VentestatusHendelse>;
-    utbetaling: Nullable<BehandlingUtbetalingProps>;
-    barnetillegg: Nullable<Barnetillegg>;
-    valgteTiltaksdeltakelser: Nullable<TiltaksdeltakelsePeriode[]>;
-    antallDagerPerMeldeperiode: Nullable<AntallDagerForMeldeperiode[]>;
+    resultat: RevurderingResultat;
+}
+
+export interface RevurderingStans extends RevurderingBase {
+    resultat: BehandlingResultat.STANS;
     valgtHjemmelHarIkkeRettighet: Nullable<HjemmelForStans[]>;
     harValgtStansFraFørsteDagSomGirRett: Nullable<boolean>;
     harValgtStansTilSisteDagSomGirRett: Nullable<boolean>;
-    omgjørVedtak: Nullable<string>;
-    innvilgelsesperiode: Nullable<Periode>;
-    rammevedtakId: Nullable<VedtakId>;
 }
 
-export interface RevurderingVedtakStansRequest extends OppdaterBehandlingRequest {
+export interface RevurderingInnvilgelse extends RevurderingBase {
+    resultat: BehandlingResultat.REVURDERING_INNVILGELSE;
+}
+
+export interface RevurderingOmgjøring extends RevurderingBase {
+    resultat: BehandlingResultat.OMGJØRING;
+    omgjørVedtak: VedtakId;
+}
+
+export type Revurdering = RevurderingStans | RevurderingInnvilgelse | RevurderingOmgjøring;
+
+export type RevurderingResultat =
+    | BehandlingResultat.REVURDERING_INNVILGELSE
+    | BehandlingResultat.STANS
+    | BehandlingResultat.OMGJØRING;
+
+export interface RevurderingVedtakStansRequest extends OppdaterBehandlingRequestBase {
     resultat: BehandlingResultat.STANS;
     valgteHjemler: HjemmelForStans[];
     stansFraOgMed: Nullable<string>;
@@ -62,7 +48,7 @@ export interface RevurderingVedtakStansRequest extends OppdaterBehandlingRequest
     harValgtStansTilSisteDagSomGirRett: Nullable<boolean>;
 }
 
-export interface RevurderingVedtakInnvilgelseRequest extends OppdaterBehandlingRequest {
+export interface RevurderingVedtakInnvilgelseRequest extends OppdaterBehandlingRequestBase {
     resultat: BehandlingResultat.REVURDERING_INNVILGELSE;
     innvilgelsesperiode: Periode;
     valgteTiltaksdeltakelser: TiltaksdeltakelsePeriode[];
@@ -70,7 +56,7 @@ export interface RevurderingVedtakInnvilgelseRequest extends OppdaterBehandlingR
     barnetillegg: Barnetillegg;
 }
 
-export interface RevurderingVedtakOmgjøringRequest extends OppdaterBehandlingRequest {
+export interface RevurderingVedtakOmgjøringRequest extends OppdaterBehandlingRequestBase {
     resultat: BehandlingResultat.OMGJØRING;
     innvilgelsesperiode: Periode;
     valgteTiltaksdeltakelser: TiltaksdeltakelsePeriode[];
@@ -85,7 +71,7 @@ export type RevurderingVedtakRequest =
 
 export type OpprettRevurderingRequest = {
     revurderingType: BehandlingResultat;
-    rammevedtakIdSomOmgjøres: Nullable<string>;
+    rammevedtakIdSomOmgjøres: Nullable<VedtakId>;
 };
 
 export enum HjemmelForStans {

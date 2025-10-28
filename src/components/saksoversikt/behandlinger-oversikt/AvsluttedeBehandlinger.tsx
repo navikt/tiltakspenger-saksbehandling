@@ -8,12 +8,12 @@ import {
 
 import { erBehandlingAvbrutt, erBehandlingVedtatt } from '~/utils/behandling';
 import { AvbrutteBehandlingerTabell } from './AvbrutteBehandlingerTabell';
-import { SøknadDTO } from '~/types/Søknad';
+import { Søknad } from '~/types/Søknad';
 import { Rammebehandling } from '~/types/Behandling';
 
 export const AvsluttedeBehandlinger = (props: {
     saksnummer: string;
-    søknader: SøknadDTO[];
+    søknader: Søknad[];
     behandlinger: Rammebehandling[];
 }) => {
     const avsluttedeBehandlinger = props.behandlinger.filter(
