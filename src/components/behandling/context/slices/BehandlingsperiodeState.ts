@@ -6,14 +6,14 @@ import { perioderOverlapper } from '~/utils/periode';
 import { datoMax, datoMin } from '~/utils/date';
 
 export type BehandlingsperiodeState = {
-    resultat: Nullable<BehandlingResultat>;
+    resultat: BehandlingResultat;
     behandlingsperiode: Nullable<Partial<Periode>>;
 };
 
 export type BehandlingsperiodeActions =
     | {
           type: 'setResultat';
-          payload: { resultat: BehandlingResultat | null };
+          payload: { resultat: BehandlingResultat };
       }
     | {
           type: 'oppdaterBehandlingsperiode';

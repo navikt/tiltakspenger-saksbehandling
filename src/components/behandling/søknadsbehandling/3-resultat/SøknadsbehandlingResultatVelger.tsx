@@ -46,7 +46,10 @@ export const SøknadsbehandlingResultatVelger = () => {
                             variant={'tertiary'}
                             type={'button'}
                             onClick={() => {
-                                dispatch({ type: 'setResultat', payload: { resultat: null } });
+                                dispatch({
+                                    type: 'setResultat',
+                                    payload: { resultat: BehandlingResultat.IKKE_VALGT },
+                                });
                             }}
                         >
                             {'Nullstill'}

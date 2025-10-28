@@ -16,7 +16,7 @@ export interface VedtattBehandlingCellInfo {
     saksnummer: string;
     søknadId?: SøknadId;
     behandlingstype: Behandlingstype;
-    resultat: Nullable<BehandlingResultat>;
+    resultat: BehandlingResultat;
     tidspunktAvsluttet: string;
     behandlingsperiode: Nullable<Periode>;
     avsluttetPga: 'ferdigBehandlet' | 'avbrutt';

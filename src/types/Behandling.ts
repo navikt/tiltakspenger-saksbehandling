@@ -100,7 +100,7 @@ export type Saksopplysninger = {
 export type BehandlingVedtak = SøknadsbehandlingVedtakRequest | RevurderingVedtakRequest;
 
 export interface OppdaterBehandlingRequestBase {
-    resultat: Nullable<BehandlingResultat>;
+    resultat: BehandlingResultat;
     fritekstTilVedtaksbrev: Nullable<string>;
     begrunnelseVilkårsvurdering: Nullable<string>;
 }

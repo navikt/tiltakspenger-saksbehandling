@@ -14,7 +14,7 @@ export const søknadsbehandlingValidering =
 
         const { resultat } = skjema;
 
-        if (!resultat) {
+        if (resultat === BehandlingResultat.IKKE_VALGT) {
             (type === 'lagring' ? validering.warnings : validering.errors).push(
                 'Behandlingsresultat mangler',
             );

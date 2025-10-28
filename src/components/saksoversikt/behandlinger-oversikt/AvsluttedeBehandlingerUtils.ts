@@ -16,7 +16,7 @@ type AvbruttSøknad = {
 type AvbruttBehandling = {
     behandlingstype: Behandlingstype.SØKNADSBEHANDLING | Behandlingstype.REVURDERING;
     id: BehandlingId;
-    resultat: Nullable<BehandlingResultat>;
+    resultat: BehandlingResultat;
 };
 
 export type AvbruttSøknadEllerBehandlingCellInfo = {
