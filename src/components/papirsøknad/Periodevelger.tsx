@@ -1,32 +1,39 @@
 import React from 'react';
 import { Heading, HStack, VStack } from '@navikt/ds-react';
 import { Datovelger } from '~/components/datovelger/Datovelger';
-import { Periode } from '~/types/Periode';
-import { FieldPath, useController, useFormContext } from 'react-hook-form';
+import { FieldPath, RegisterOptions, useController, useFormContext } from 'react-hook-form';
 import { Papirsøknad } from '~/components/papirsøknad/papirsøknadTypes';
 import styles from './Spørsmål.module.css';
-import { dateTilISOTekst, datoTilDatoInputText } from '~/utils/date';
+import { dateTilISOTekst } from '~/utils/date';
 
 type Props = {
     name: FieldPath<Papirsøknad>;
     tittel?: string;
-    value?: Periode;
+    rules?: {
+        fraOgMed?: RegisterOptions<Papirsøknad, FieldPath<Papirsøknad>>;
+        tilOgMed?: RegisterOptions<Papirsøknad, FieldPath<Papirsøknad>>;
+    };
 };
 
-export const Periodevelger = ({ name, tittel }: Props) => {
+export const Periodevelger = ({ name, tittel, rules }: Props) => {
     const { control } = useFormContext<Papirsøknad>();
 
-    const periode = useController({
-        name: name,
+    const fraField = useController({
+        name: `${name}.fraOgMed` as FieldPath<Papirsøknad>,
         control,
-        defaultValue: { fraOgMed: '', tilOgMed: '' } as Periode,
+        rules: rules?.fraOgMed,
+    });
+    const tilField = useController({
+        name: `${name}.tilOgMed` as FieldPath<Papirsøknad>,
+        control,
+        rules: rules?.tilOgMed,
     });
 
-    const current = periode.field.value as Periode;
-    const onChangeFraOgMed = (dato: Date | undefined) =>
-        periode.field.onChange({ ...current, fraOgMed: dato ? dateTilISOTekst(dato) : undefined });
-    const onChangeTilOgMed = (dato: Date | undefined) =>
-        periode.field.onChange({ ...current, tilOgMed: dato ? dateTilISOTekst(dato) : undefined });
+    const fraValue = fraField.field.value as string | undefined;
+    const tilValue = tilField.field.value as string | undefined;
+
+    const fraError = fraField.fieldState.error?.message as string | undefined;
+    const tilError = tilField.fieldState.error?.message as string | undefined;
 
     return (
         <div className={styles.blokk}>
@@ -39,17 +46,19 @@ export const Periodevelger = ({ name, tittel }: Props) => {
                 <HStack gap="8">
                     <Datovelger
                         label="Fra og med"
-                        value={
-                            current.fraOgMed ? datoTilDatoInputText(current.fraOgMed) : undefined
+                        selected={fraValue || undefined}
+                        onDateChange={(dato) =>
+                            fraField.field.onChange(dato ? dateTilISOTekst(dato) : '')
                         }
-                        onDateChange={onChangeFraOgMed}
+                        error={fraError}
                     />
                     <Datovelger
                         label="Til og med"
-                        value={
-                            current.tilOgMed ? datoTilDatoInputText(current.tilOgMed) : undefined
+                        selected={tilValue || undefined}
+                        onDateChange={(dato) =>
+                            tilField.field.onChange(dato ? dateTilISOTekst(dato) : '')
                         }
-                        onDateChange={onChangeTilOgMed}
+                        error={tilError}
                     />
                 </HStack>
             </VStack>

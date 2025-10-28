@@ -39,7 +39,14 @@ export const SpørsmålMedPeriodevelger = ({
                 }}
             />
             {jaNeiSpørsmål.field.value && (
-                <Periodevelger name={periodeName} tittel={periodeSpørsmål} />
+                <Periodevelger
+                    name={periodeName}
+                    tittel={periodeSpørsmål}
+                    rules={{
+                        fraOgMed: { required: 'Fra og med er påkrevd' },
+                        tilOgMed: { required: 'Til og med er påkrevd' },
+                    }}
+                />
             )}
         </div>
     );

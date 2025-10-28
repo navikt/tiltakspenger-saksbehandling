@@ -15,7 +15,7 @@ import { MottarPengestøtterSpørsmål } from '~/components/papirsøknad/MottarP
 import { Datovelger } from '~/components/datovelger/Datovelger';
 import React, { useEffect } from 'react';
 import { Periodevelger } from '~/components/papirsøknad/Periodevelger';
-import { dateTilISOTekst, datoTilDatoInputText } from '~/utils/date';
+import { dateTilISOTekst } from '~/utils/date';
 import { VelgTiltak } from '~/components/papirsøknad/tiltak/VelgTiltak';
 import { Barnetillegg } from '~/components/papirsøknad/barnetillegg/Barnetillegg';
 import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
@@ -81,12 +81,14 @@ const PapirsøknadPage = (props: Props) => {
                             <Controller
                                 name="journalpostId"
                                 control={control}
-                                render={({ field }) => (
+                                rules={{ required: 'JournalpostId er påkrevd' }}
+                                render={({ field, fieldState }) => (
                                     <div className={styles.blokk}>
                                         <TextField
                                             label={'JournalpostId'}
-                                            value={field.value}
-                                            onChange={(value) => field.onChange(value)}
+                                            value={field.value ?? ''}
+                                            onChange={(e) => field.onChange(e.target.value)}
+                                            error={fieldState.error?.message}
                                         />
                                     </div>
                                 )}
@@ -95,39 +97,28 @@ const PapirsøknadPage = (props: Props) => {
                             <Controller
                                 name="kravDato"
                                 control={control}
-                                render={({ field }) => (
+                                rules={{ required: 'Kravdato er påkrevd' }}
+                                render={({ field, fieldState }) => (
                                     <div className={styles.blokk}>
                                         <Datovelger
-                                            name="kravDato"
                                             label="Kravdato"
-                                            value={
-                                                field.value
-                                                    ? datoTilDatoInputText(field.value)
-                                                    : undefined
+                                            selected={field.value || undefined}
+                                            onDateChange={(date) =>
+                                                field.onChange(date ? dateTilISOTekst(date) : '')
                                             }
-                                            onChange={field.onChange}
-                                            onDateChange={(date) => {
-                                                if (!date) {
-                                                    field.onChange(undefined);
-                                                    return;
-                                                }
-                                                field.onChange(dateTilISOTekst(date));
-                                            }}
+                                            error={fieldState.error?.message}
                                         />
                                     </div>
                                 )}
                             />
 
-                            <Controller
+                            <Periodevelger
                                 name="manueltSattSøknadsperiode"
-                                control={control}
-                                render={({ field }) => (
-                                    <Periodevelger
-                                        name={'manueltSattSøknadsperiode'}
-                                        tittel={'Periode'}
-                                        value={field.value}
-                                    />
-                                )}
+                                tittel="Periode"
+                                rules={{
+                                    fraOgMed: { required: 'Fra og med er påkrevd' },
+                                    tilOgMed: { required: 'Til og med er påkrevd' },
+                                }}
                             />
 
                             <VelgTiltak

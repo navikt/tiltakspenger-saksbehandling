@@ -71,6 +71,9 @@ export interface Barn {
 }
 
 const defaultPapirsøknadFormValues = {
+    journalpostId: '',
+    kravDato: '',
+    manueltSattSøknadsperiode: { fraOgMed: '', tilOgMed: '' },
     svar: {
         harTiltak: undefined,
         tiltak: {},
