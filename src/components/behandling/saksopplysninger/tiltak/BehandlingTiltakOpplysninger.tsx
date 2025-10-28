@@ -28,6 +28,7 @@ const TiltaksdeltagelseOpplysning = (props: { tiltaksdeltagelse: Tiltaksdeltagel
         deltagelseFraOgMed,
         typeNavn,
         kilde,
+        deltakelseProsentFraGjennomforing,
     } = props.tiltaksdeltagelse;
 
     return (
@@ -49,11 +50,23 @@ const TiltaksdeltagelseOpplysning = (props: { tiltaksdeltagelse: Tiltaksdeltagel
                 verdi={antallDagerPerUke?.toString() ?? 'Ukjent'}
             />
             <BehandlingSaksopplysning
-                navn={'Deltagelsesprosent'}
-                verdi={deltakelseProsent !== null ? `${deltakelseProsent}%` : 'Ukjent'}
+                navn={'Deltakelsesprosent'}
+                verdi={deltakelseProsentTekst(deltakelseProsent, deltakelseProsentFraGjennomforing)}
             />
         </>
     );
+};
+
+const deltakelseProsentTekst = (
+    deltakelseProsent: number | null,
+    deltakelseProsentFraGjennomforing: boolean | null,
+) => {
+    const tekst = deltakelseProsent !== null ? `${deltakelseProsent}%` : 'Ukjent';
+    if (deltakelseProsentFraGjennomforing === true && deltakelseProsent !== null) {
+        return `${tekst} (fra tiltaksgjennomføringen)`;
+    } else {
+        return tekst;
+    }
 };
 
 const kildeTekst: Record<string, string> = {
