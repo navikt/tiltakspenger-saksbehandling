@@ -9,6 +9,6 @@ export const getNavnMedFødselsdato = (
     if (!adressebeskyttet) {
         return `${barn.fornavn} ${barn.etternavn} - født ${formaterDatotekst(barn.fødselsdato)}`;
     } else {
-        return `Barn med adressebeskyttelse - Født ${formaterDatotekst(barn.fødselsdato)}`;
+        return `Barn med adressebeskyttelse - født ${formaterDatotekst(barn.fødselsdato)}`;
     }
 };

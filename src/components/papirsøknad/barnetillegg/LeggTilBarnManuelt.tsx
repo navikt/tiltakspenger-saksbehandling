@@ -44,6 +44,7 @@ export const LeggTilBarnManuelt = ({ onAppend }: Props) => {
     return (
         <div>
             <Button
+                type="button"
                 onClick={() => setVisLeggTilBarnFelt(true)}
                 className={styles.leggTilBarnButton}
                 variant="secondary"
@@ -117,13 +118,14 @@ export const LeggTilBarnManuelt = ({ onAppend }: Props) => {
                     <HStack gap="4">
                         <Button
                             className={styles.avbrytButton}
+                            type="button"
                             variant="secondary"
                             onClick={skjulKladd}
                         >
                             Avbryt
                         </Button>
 
-                        <Button variant="primary" onClick={leggTilManueltBarn}>
+                        <Button type="button" variant="primary" onClick={leggTilManueltBarn}>
                             Legg til barn
                         </Button>
                     </HStack>

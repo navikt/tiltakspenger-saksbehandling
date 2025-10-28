@@ -81,6 +81,7 @@ export const Barnetillegg = ({ sakId, name, legend }: Props) => {
                     )}
                     <Button
                         className={styles.finnTiltakButton}
+                        type="button"
                         size="small"
                         onClick={() => {
                             setSkalHenteBarn(true);
@@ -93,6 +94,7 @@ export const Barnetillegg = ({ sakId, name, legend }: Props) => {
 
                     {barnFraFolkeregisteret.fields.length > 0 && (
                         <Button
+                            type="button"
                             size="small"
                             variant="secondary"
                             onClick={() => {
@@ -116,13 +118,13 @@ export const Barnetillegg = ({ sakId, name, legend }: Props) => {
                                 Barn fra Folkeregisteret
                             </Heading>
                             {barnFraAPI?.map((barn, index) => (
-                                <>
-                                    <InformasjonOmBarnPDL key={`barn-${uuidv4()}`} barn={barn} />
+                                <div key={`barn-${uuidv4()}`}>
+                                    <InformasjonOmBarnPDL barn={barn} />
                                     <JaNeiSpørsmål
                                         name={`svar.barnetilleggPdl.${index}.oppholdInnenforEøs`}
                                         legend={` Oppholder seg i EØS-land i tiltaksperioden`}
                                     />
-                                </>
+                                </div>
                             ))}
                         </div>
                     )}
@@ -136,6 +138,7 @@ export const Barnetillegg = ({ sakId, name, legend }: Props) => {
                                 <HStack key={barn.uuid} gap="4" justify="space-between">
                                     <InformasjonOmBarnManuell barn={barn} />
                                     <Button
+                                        type="button"
                                         icon={<TrashIcon />}
                                         variant="tertiary"
                                         onClick={() => manuelleBarn.remove(index)}
