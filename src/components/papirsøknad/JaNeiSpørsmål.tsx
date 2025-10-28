@@ -11,6 +11,10 @@ type Props = {
     måVæreBesvart?: boolean;
 };
 
+// TODO denne sjekken er litt skitten, tror ja/nei/ikke besvart burde vært eksplisitte typer og ikke bare en boolean
+const isBooleanish = (v: unknown): v is boolean | null | undefined =>
+    v === true || v === false || v === null || v === undefined;
+
 export const JaNeiSpørsmål = ({ name, legend, details, onChange, måVæreBesvart }: Props) => {
     const { control } = useFormContext<Papirsøknad>();
 
@@ -19,11 +23,12 @@ export const JaNeiSpørsmål = ({ name, legend, details, onChange, måVæreBesva
         control,
         defaultValue: undefined,
         rules: {
-            validate: (v) => v !== undefined || 'Du må velge et svar',
+            validate: (v) =>
+                (måVæreBesvart ? v === true || v === false : true) || 'Du må velge et svar',
         },
     });
 
-    const rawValue: boolean | null | undefined = controller.field.value;
+    const rawValue = isBooleanish(controller.field.value) ? controller.field.value : undefined;
     const radioGroupValue =
         rawValue === undefined ? '' : rawValue === null ? 'null' : rawValue ? 'true' : 'false';
     const errorMessage = controller.fieldState.error?.message;
