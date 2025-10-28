@@ -2,96 +2,61 @@ import { Periode } from '~/types/Periode';
 
 export interface Papirsøknad {
     journalpostId: string;
+    personopplysninger: PersonopplysningerSøker;
     kravDato: string;
     manueltSattSøknadsperiode: Periode;
     svar: Spørsmålsbesvarelser;
 }
 
-export interface Introduksjonsprogram {
-    deltar: boolean;
-    periode?: Periode;
-}
-
-export interface Kvalifiseringsprogram {
-    deltar: boolean;
-    periode?: Periode;
-}
-
-export interface Institusjonsopphold {
-    borPåInstitusjon: boolean;
-    periode?: Periode;
+export interface PersonopplysningerSøker {
+    ident: string;
+    fornavn: string;
+    etternavn: string;
 }
 
 export interface Tiltak {
     eksternDeltakelseId: string;
+    arrangør?: string;
     typeKode: string;
     typeNavn: string;
+    deltakelseFraOgMed?: string;
+    deltakelseTilOgMed?: string;
     arrangørnavn?: string;
-    periode?: Periode;
 }
 
-export interface Barnetillegg {
-    manueltRegistrerteBarn: Barn[];
-    barnFraFolkeregisteret: Barn[];
-    kladd: Barn;
+export interface JaNeiSpm {
+    svar: boolean;
 }
 
-export interface Pensjonsordning {
-    mottar: boolean;
-    periode: Periode;
-}
-
-export interface Etterlønn {
-    mottar: boolean;
-}
-
-export interface Sykepenger {
-    mottar: boolean;
-    periode: Periode;
-}
-
-export interface Gjenlevendepensjon {
-    mottar: boolean;
-    periode: Periode;
-}
-
-export interface Alderspensjon {
-    mottar: boolean;
+export interface FraOgMedDatoSpm {
+    svar: boolean;
     fraDato: string;
 }
 
-export interface Supplerendestønadover67 {
-    mottar: boolean;
-    periode: Periode;
-}
-
-export interface Supplerendestønadflyktninger {
-    mottar: boolean;
-    periode: Periode;
-}
-
-export interface Jobbsjansen {
-    mottar: boolean;
+export interface PeriodeSpm {
+    svar: boolean;
     periode: Periode;
 }
 
 export interface Spørsmålsbesvarelser {
-    kvalifiseringsprogram: Kvalifiseringsprogram;
-    introduksjonsprogram: Introduksjonsprogram;
-    institusjonsopphold: Institusjonsopphold;
     tiltak: Tiltak;
     harTiltak: boolean;
-    mottarAndreUtbetalinger: boolean;
-    sykepenger: Sykepenger;
-    gjenlevendepensjon: Gjenlevendepensjon;
-    alderspensjon: Alderspensjon;
-    supplerendestønadover67: Supplerendestønadover67;
-    supplerendestønadflyktninger: Supplerendestønadflyktninger;
-    pensjonsordning: Pensjonsordning;
-    etterlønn: Etterlønn;
-    jobbsjansen: Jobbsjansen;
-    barnetillegg: Barnetillegg;
+    barnetilleggPdl: Barn[];
+    barnetilleggManuelle: Barn[];
+    barnetilleggKladd: Barn;
     harSøktOmBarnetillegg: boolean;
+    kvalifiseringsprogram: PeriodeSpm;
+    introduksjonsprogram: PeriodeSpm;
+    institusjonsopphold: PeriodeSpm;
+    mottarAndreUtbetalinger: boolean;
+    sykepenger: PeriodeSpm;
+    gjenlevendepensjon: PeriodeSpm;
+    alderspensjon: FraOgMedDatoSpm;
+    supplerendestønadover67: PeriodeSpm;
+    supplerendestønadflyktninger: PeriodeSpm;
+    pensjonsordning: PeriodeSpm;
+    etterlønn: JaNeiSpm;
+    jobbsjansen: PeriodeSpm;
 }
 
 export interface Barn {
@@ -107,11 +72,10 @@ export interface Barn {
 
 const defaultPapirsøknadFormValues = {
     svar: {
+        harTiltak: undefined,
         tiltak: {},
-        barnetillegg: {
-            barnFraFolkeregisteret: [],
-            manueltRegistrerteBarn: [],
-        },
+        barnetilleggPdl: [],
+        barnetilleggManuelle: [],
         institusjonsopphold: {},
         introduksjonsprogram: {},
         kvalifiseringsprogram: {},
@@ -124,7 +88,6 @@ const defaultPapirsøknadFormValues = {
         etterlønn: {},
         jobbsjansen: {},
         mottarAndreUtbetalinger: undefined,
-        harTiltak: undefined,
     },
 };
 

@@ -21,17 +21,17 @@ type Props = {
 };
 
 export const Barnetillegg = ({ sakId, name, legend }: Props) => {
-    const { control } = useFormContext<Papirsøknad>();
+    const { control, setValue } = useFormContext<Papirsøknad>();
     const [skalHenteBarn, setSkalHenteBarn] = React.useState(false);
 
     const barnFraFolkeregisteret = useFieldArray<Papirsøknad>({
         control,
-        name: 'svar.barnetillegg.barnFraFolkeregisteret',
+        name: 'svar.barnetilleggPdl',
     });
 
     const manuelleBarn = useFieldArray<Papirsøknad>({
         control,
-        name: 'svar.barnetillegg.manueltRegistrerteBarn',
+        name: 'svar.barnetilleggManuelle',
     });
 
     const periode = useController<Papirsøknad>({
@@ -63,15 +63,9 @@ export const Barnetillegg = ({ sakId, name, legend }: Props) => {
                     index,
                 }),
             );
-            if (
-                !barn.every((b) =>
-                    barnFraFolkeregisteret.fields.flatMap((bff) => bff.uuid).includes(b.uuid),
-                )
-            ) {
-                barnFraFolkeregisteret.replace(barn);
-            }
+            setValue('svar.barnetilleggPdl', barn);
         }
-    }, [skalHenteBarn, barnFraAPI, barnFraFolkeregisteret]);
+    }, [skalHenteBarn, barnFraAPI, setValue]);
 
     return (
         <div className={harSøktOmBarnetillegg.field.value ? styles.blokkUtvidet : ''}>
@@ -125,7 +119,7 @@ export const Barnetillegg = ({ sakId, name, legend }: Props) => {
                                 <>
                                     <InformasjonOmBarnPDL key={`barn-${uuidv4()}`} barn={barn} />
                                     <JaNeiSpørsmål
-                                        name={`svar.barnetillegg.barnFraFolkeregisteret.${index}.oppholdInnenforEøs`}
+                                        name={`svar.barnetilleggPdl.${index}.oppholdInnenforEøs`}
                                         legend={` Oppholder seg i EØS-land i tiltaksperioden`}
                                     />
                                 </>

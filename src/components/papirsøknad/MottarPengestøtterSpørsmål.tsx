@@ -24,17 +24,17 @@ export const MottarPengestøtterSpørsmål = ({ name, legend }: Props) => {
     });
 
     const nullstillFelter = (): void => {
-        resetField('svar.gjenlevendepensjon.mottar');
+        resetField('svar.gjenlevendepensjon.svar');
         resetField('svar.gjenlevendepensjon.periode');
-        resetField('svar.alderspensjon.mottar');
+        resetField('svar.alderspensjon.svar');
         resetField('svar.alderspensjon.fraDato');
-        resetField('svar.supplerendestønadover67.mottar');
+        resetField('svar.supplerendestønadover67.svar');
         resetField('svar.supplerendestønadover67.periode');
-        resetField('svar.supplerendestønadflyktninger.mottar');
+        resetField('svar.supplerendestønadflyktninger.svar');
         resetField('svar.supplerendestønadflyktninger.periode');
-        resetField('svar.pensjonsordning.mottar');
+        resetField('svar.pensjonsordning.svar');
         resetField('svar.pensjonsordning.periode');
-        resetField('svar.jobbsjansen.mottar');
+        resetField('svar.jobbsjansen.svar');
         resetField('svar.jobbsjansen.periode');
     };
 
@@ -62,45 +62,45 @@ export const MottarPengestøtterSpørsmål = ({ name, legend }: Props) => {
             {spørsmål.field.value && (
                 <>
                     <SpørsmålMedPeriodevelger
-                        spørsmålName="svar.gjenlevendepensjon.mottar"
+                        spørsmålName="svar.gjenlevendepensjon.svar"
                         periodeName="svar.gjenlevendepensjon.periode"
                         spørsmål="Mottar pengestøtte til gjenlevende ektefelle"
-                        periodeSpørsmål="I hvilken del av perioden mottar bruker pengestøtte til gjenlevende ektefelle?"
+                        periodeSpørsmål="I hvilken del av perioden svar bruker pengestøtte til gjenlevende ektefelle?"
                     />
 
                     <SpørsmålMedDatovelger
-                        spørsmålName="svar.alderspensjon.mottar"
+                        spørsmålName="svar.alderspensjon.svar"
                         datoName="svar.alderspensjon.fraDato"
                         tittel="Når begynner brukers alderspensjon?"
                         legend="Mottar pengestøtte til gjenlevende ektefelle"
                     />
 
                     <SpørsmålMedPeriodevelger
-                        spørsmålName="svar.supplerendestønadover67.mottar"
+                        spørsmålName="svar.supplerendestønadover67.svar"
                         periodeName="svar.supplerendestønadover67.periode"
                         spørsmål="Mottar supplerende stønad for personer over 67 år med kort botid i Norge i perioden"
-                        periodeSpørsmål="I hvilken del av perioden mottar bruker supplerende stønad for personer over 67 år med kort botid i Norge?"
+                        periodeSpørsmål="I hvilken del av perioden svar bruker supplerende stønad for personer over 67 år med kort botid i Norge?"
                     />
 
                     <SpørsmålMedPeriodevelger
-                        spørsmålName="svar.supplerendestønadflyktninger.mottar"
+                        spørsmålName="svar.supplerendestønadflyktninger.svar"
                         periodeName="svar.supplerendestønadflyktninger.periode"
                         spørsmål="Mottar supplerende stønad for uføre flyktninger i perioden"
-                        periodeSpørsmål="I hvilken del av perioden mottar bruker supplerende stønad for uføre flyktninger?"
+                        periodeSpørsmål="I hvilken del av perioden svar bruker supplerende stønad for uføre flyktninger?"
                     />
 
                     <SpørsmålMedPeriodevelger
-                        spørsmålName="svar.pensjonsordning.mottar"
+                        spørsmålName="svar.pensjonsordning.svar"
                         periodeName="svar.pensjonsordning.periode"
                         spørsmål="Mottar pengestøtte fra andre trygde- eller pensjonsordninger"
-                        periodeSpørsmål="I hvilken del av perioden mottar bruker pengestøtte fra andre trygde- eller pensjonsordninger?"
+                        periodeSpørsmål="I hvilken del av perioden svar bruker pengestøtte fra andre trygde- eller pensjonsordninger?"
                     />
 
                     <SpørsmålMedPeriodevelger
-                        spørsmålName="svar.jobbsjansen.mottar"
+                        spørsmålName="svar.jobbsjansen.svar"
                         periodeName="svar.jobbsjansen.periode"
                         spørsmål="Mottar stønad gjennom Jobbsjansen"
-                        periodeSpørsmål="I hvilken del av perioden mottar bruker stønad gjennom Jobbsjansen?"
+                        periodeSpørsmål="I hvilken del av perioden svar bruker stønad gjennom Jobbsjansen?"
                     />
                 </>
             )}

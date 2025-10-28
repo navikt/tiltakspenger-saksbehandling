@@ -27,7 +27,7 @@ export const LeggTilBarnManuelt = ({ onAppend }: Props) => {
     };
 
     const leggTilManueltBarn = () => {
-        const existingKladd = getValues('svar.barnetillegg.kladd') ?? emptyKladd;
+        const existingKladd = getValues('svar.barnetilleggKladd') ?? emptyKladd;
         const kladd = {
             ...existingKladd,
             uuid: uuidv4(),
@@ -37,7 +37,7 @@ export const LeggTilBarnManuelt = ({ onAppend }: Props) => {
     };
 
     const skjulKladd = () => {
-        setValue('svar.barnetillegg.kladd', emptyKladd);
+        setValue('svar.barnetilleggKladd', emptyKladd);
         setVisLeggTilBarnFelt(false);
     };
 
@@ -59,7 +59,7 @@ export const LeggTilBarnManuelt = ({ onAppend }: Props) => {
                         Legg til barn manuelt
                     </Heading>
                     <Controller
-                        name={`svar.barnetillegg.kladd`}
+                        name={`svar.barnetilleggKladd`}
                         render={({ field }) => {
                             const value = field.value ?? {
                                 fornavn: '',
@@ -101,11 +101,11 @@ export const LeggTilBarnManuelt = ({ onAppend }: Props) => {
                                         }
                                     />
                                     <JaNeiSpørsmål
-                                        name="svar.barnetillegg.kladd.oppholdInnenforEøs"
+                                        name="svar.barnetilleggKladd.oppholdInnenforEøs"
                                         legend="Oppholder seg i EØS-land"
                                     />
                                     <JaNeiSpørsmål
-                                        name="svar.barnetillegg.kladd.manueltRegistrertBarnHarVedlegg"
+                                        name="svar.barnetilleggKladd.manueltRegistrertBarnHarVedlegg"
                                         legend="Det er vedlagt dokumentasjon for barnet"
                                         måVæreBesvart
                                     />

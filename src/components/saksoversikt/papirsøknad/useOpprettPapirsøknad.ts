@@ -1,13 +1,16 @@
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
-import { SakId } from '~/types/Sak';
 import { Papirsøknad } from '~/components/papirsøknad/papirsøknadTypes';
+import { Søknadsbehandling } from '~/types/Søknadsbehandling';
 
-export const useOpprettPapirsøknad = (sakId: SakId) => {
+export const useOpprettPapirsøknad = (saksnummer: string) => {
     const {
         trigger: opprettPapirsøknad,
         isMutating: opprettPapirsøknadLaster,
         error: opprettPapirsøknadError,
-    } = useFetchJsonFraApi<Papirsøknad, Papirsøknad>(`/sak/${sakId}/papirsoknad`, 'POST');
+    } = useFetchJsonFraApi<Søknadsbehandling, Papirsøknad>(
+        `/sak/${saksnummer}/papirsoknad`,
+        'POST',
+    );
 
     return {
         opprettPapirsøknad,

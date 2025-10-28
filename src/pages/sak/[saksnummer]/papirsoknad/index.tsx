@@ -13,13 +13,16 @@ import defaultPapirsøknadFormValues, {
 import { JaNeiSpørsmål } from '~/components/papirsøknad/JaNeiSpørsmål';
 import { MottarPengestøtterSpørsmål } from '~/components/papirsøknad/MottarPengestøtterSpørsmål';
 import { Datovelger } from '~/components/datovelger/Datovelger';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Periodevelger } from '~/components/papirsøknad/Periodevelger';
 import { dateTilISOTekst, datoTilDatoInputText } from '~/utils/date';
 import { VelgTiltak } from '~/components/papirsøknad/tiltak/VelgTiltak';
 import { Barnetillegg } from '~/components/papirsøknad/barnetillegg/Barnetillegg';
 import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
 import { useOpprettPapirsøknad } from '~/components/saksoversikt/papirsøknad/useOpprettPapirsøknad';
+import router from 'next/router';
+import { behandlingUrl } from '~/utils/urls';
+import { useHentPersonopplysninger } from '~/components/personaliaheader/useHentPersonopplysninger';
 
 interface Props {
     sak: SakProps;
@@ -27,20 +30,36 @@ interface Props {
 
 const PapirsøknadPage = (props: Props) => {
     const { papirsøknadToggle } = useFeatureToggles();
+    const { personopplysninger } = useHentPersonopplysninger(props.sak.sakId);
     const formContext = useForm<Papirsøknad>({
         defaultValues: defaultPapirsøknadFormValues,
         mode: 'onSubmit',
     });
 
-    const { handleSubmit, control } = formContext;
+    const { handleSubmit, control, setValue } = formContext;
+
+    useEffect(() => {
+        if (!personopplysninger) return;
+        setValue('personopplysninger', {
+            fornavn: personopplysninger.fornavn,
+            etternavn: personopplysninger.etternavn,
+            ident: personopplysninger.fnr,
+        });
+    }, [personopplysninger, setValue]);
 
     const { opprettPapirsøknad, opprettPapirsøknadLaster, opprettPapirsøknadError } =
-        useOpprettPapirsøknad(props.sak.sakId);
+        useOpprettPapirsøknad(props.sak.saksnummer);
 
     const onSubmit = (data: Papirsøknad) => {
         if (!papirsøknadToggle) return;
-        console.log('form data', data);
-        opprettPapirsøknad(data);
+        if (!personopplysninger) return;
+
+        console.log('data', data);
+        opprettPapirsøknad(data).then((behandling) => {
+            if (behandling) {
+                router.push(behandlingUrl(behandling));
+            }
+        });
     };
 
     return (
@@ -118,21 +137,21 @@ const PapirsøknadPage = (props: Props) => {
                             />
 
                             <SpørsmålMedPeriodevelger
-                                spørsmålName="svar.kvalifiseringsprogram.deltar"
+                                spørsmålName="svar.kvalifiseringsprogram.svar"
                                 periodeName="svar.kvalifiseringsprogram.periode"
                                 spørsmål="Mottar kvalifiseringsstønad"
                             />
 
                             <SpørsmålMedPeriodevelger
-                                spørsmålName="svar.introduksjonsprogram.deltar"
+                                spørsmålName="svar.introduksjonsprogram.svar"
                                 periodeName="svar.introduksjonsprogram.periode"
                                 spørsmål="Mottar introduksjonsstønad"
                             />
 
-                            <JaNeiSpørsmål name="svar.etterlønn.mottar" legend="Mottar etterlønn" />
+                            <JaNeiSpørsmål name="svar.etterlønn.svar" legend="Mottar etterlønn" />
 
                             <SpørsmålMedPeriodevelger
-                                spørsmålName="svar.sykepenger.mottar"
+                                spørsmålName="svar.sykepenger.svar"
                                 periodeName="svar.sykepenger.periode"
                                 periodeSpørsmål="I hvilken del av perioden var bruker sykemeldt?"
                                 spørsmål="Har nylig mottatt sykepenger og er fortsatt sykemeldt"
@@ -144,7 +163,7 @@ const PapirsøknadPage = (props: Props) => {
                             />
 
                             <SpørsmålMedPeriodevelger
-                                spørsmålName="svar.institusjonsopphold.borPåInstitusjon"
+                                spørsmålName="svar.institusjonsopphold.svar"
                                 periodeName="svar.institusjonsopphold.periode"
                                 spørsmål="Bor bruker i en institusjon med gratis opphold, mat og drikke i perioden "
                                 periodeSpørsmål="I hvilken del av perioden bor brukeren på institusjon med gratis opphold, mat og drikke?"

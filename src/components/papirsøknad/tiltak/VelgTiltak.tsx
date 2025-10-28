@@ -28,10 +28,9 @@ export const VelgTiltak = ({ sakId, spørsmålName, legend }: Props) => {
     const [skalHenteTiltak, setSkalHenteTiltak] = React.useState(false);
 
     const formatLabelForTiltakValg = (tiltak: Tiltak) => {
-        const { fraOgMed, tilOgMed } = tiltak.periode ?? {};
         const periodeTekst =
-            fraOgMed && tilOgMed
-                ? ` (${formaterDatotekst(fraOgMed)} - ${formaterDatotekst(tilOgMed)})`
+            tiltak.deltakelseFraOgMed && tiltak.deltakelseTilOgMed
+                ? ` (${formaterDatotekst(tiltak.deltakelseFraOgMed)} - ${formaterDatotekst(tiltak.deltakelseTilOgMed)})`
                 : '';
         const arrangørNavn = tiltak.arrangørnavn ? ` - ${tiltak.arrangørnavn}` : '';
         return `${tiltak.typeNavn}${arrangørNavn}${periodeTekst}`;
@@ -90,7 +89,13 @@ export const VelgTiltak = ({ sakId, spørsmålName, legend }: Props) => {
                             {muligeTiltak.map((tiltak) => (
                                 <Radio
                                     key={tiltak.eksternDeltakelseId}
-                                    value={tiltak.eksternDeltakelseId}
+                                    value={{
+                                        eksternDeltakelseId: tiltak.eksternDeltakelseId,
+                                        deltakelseFraOgMed: tiltak.deltakelseFraOgMed,
+                                        deltakelseTilOgMed: tiltak.deltakelseTilOgMed,
+                                        typeKode: tiltak.typeKode,
+                                        typeNavn: tiltak.typeNavn,
+                                    }}
                                 >
                                     {formatLabelForTiltakValg(tiltak)}
                                 </Radio>
