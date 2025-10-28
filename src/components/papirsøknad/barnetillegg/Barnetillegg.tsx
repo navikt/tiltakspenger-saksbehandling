@@ -121,7 +121,7 @@ export const Barnetillegg = ({ sakId, name, legend }: Props) => {
                                 <div key={`barn-${uuidv4()}`}>
                                     <InformasjonOmBarnPDL barn={barn} />
                                     <JaNeiSpørsmål
-                                        name={`svar.barnetilleggPdl.${index}.oppholdInnenforEøs`}
+                                        name={`svar.barnetilleggPdl.${index}.oppholdInnenforEøs.svar`}
                                         legend={` Oppholder seg i EØS-land i tiltaksperioden`}
                                     />
                                 </div>

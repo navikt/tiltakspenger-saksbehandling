@@ -20,10 +20,10 @@ export const InformasjonOmBarnManuell = ({ barn }: Props) => {
             </Heading>
             <div>
                 Oppholder seg i EØS-land i tiltaksperioden:{' '}
-                {getTekstForJaNeiSpørsmål(barn.oppholdInnenforEøs)}
+                {getTekstForJaNeiSpørsmål(barn.oppholdInnenforEøs?.svar)}
                 <br />
                 Det er vedlagt dokumentasjon for barnet:{' '}
-                {getTekstForJaNeiSpørsmål(barn.manueltRegistrertBarnHarVedlegg)}
+                {getTekstForJaNeiSpørsmål(barn.manueltRegistrertBarnHarVedlegg?.svar)}
             </div>
         </VStack>
     );

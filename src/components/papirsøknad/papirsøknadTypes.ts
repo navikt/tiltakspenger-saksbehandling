@@ -66,8 +66,8 @@ export interface Barn {
     mellomnavn?: string;
     etternavn?: string;
     fødselsdato: string;
-    oppholdInnenforEøs?: boolean;
-    manueltRegistrertBarnHarVedlegg?: boolean;
+    oppholdInnenforEøs?: JaNeiSpm;
+    manueltRegistrertBarnHarVedlegg?: JaNeiSpm;
 }
 
 const defaultPapirsøknadFormValues = {
