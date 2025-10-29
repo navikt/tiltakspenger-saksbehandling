@@ -11,17 +11,10 @@ import {
 import { BehandlingSkjemaState } from '~/components/behandling/context/BehandlingSkjemaReducer';
 import { Periode } from '~/types/Periode';
 import { SakProps } from '~/types/Sak';
-
 import { erDatoIPeriode } from '~/utils/periode';
 import { ANTALL_DAGER_DEFAULT } from '~/components/behandling/felles/dager-per-meldeperiode/BehandlingDagerPerMeldeperiode';
 import { Behandlingstype, Rammebehandling, RammebehandlingResultat } from '~/types/Behandling';
 import { TiltaksdeltakelsePeriodeFormData } from './slices/TiltaksdeltagelseState';
-import { Nullable } from '~/types/UtilTypes';
-import {
-    TiltaksdeltagelseMedPeriode,
-    TiltaksdeltakelsePeriode,
-} from '~/types/TiltakDeltagelseTypes';
-
 import {
     Søknadsbehandling,
     SøknadsbehandlingAvslag,
@@ -34,6 +27,8 @@ import {
     RevurderingOmgjøring,
     RevurderingStans,
 } from '~/types/Revurdering';
+import { AntallDagerPerMeldeperiodeFormData } from '~/components/behandling/context/slices/AntallDagerPerMeldeperiodeState';
+import { Nullable } from '~/types/UtilTypes';
 
 export const behandlingSkjemaInitialValue = ({
     behandling,
@@ -56,30 +51,51 @@ export const behandlingSkjemaInitialValue = ({
     throw new Error(`Ukjent behandlingstype: ${type satisfies never}`);
 };
 
-const valgteTiltaksdeltakelserFraBehandlingTilFormData = (
-    behandlingsperiode: Nullable<Periode>,
-    valgteTiltaksdeltakelser: Nullable<TiltaksdeltakelsePeriode[]>,
-    tiltakFraSøknad: Nullable<TiltaksdeltagelseMedPeriode>,
+const valgteTiltaksdeltakelserDefault = (
+    behandling: Søknadsbehandling,
 ): TiltaksdeltakelsePeriodeFormData[] => {
-    return (
-        valgteTiltaksdeltakelser?.map((tiltaksdeltakelse) => ({
-            eksternDeltagelseId: tiltaksdeltakelse.eksternDeltagelseId,
-            periode: {
-                fraOgMed: tiltaksdeltakelse.periode.fraOgMed,
-                tilOgMed: tiltaksdeltakelse.periode.tilOgMed,
-            },
-        })) ||
-        (tiltakFraSøknad && [
-            {
-                eksternDeltagelseId: tiltakFraSøknad.eksternDeltagelseId,
-                periode: {
-                    fraOgMed: behandlingsperiode?.fraOgMed ?? null,
-                    tilOgMed: behandlingsperiode?.tilOgMed ?? null,
-                },
-            },
-        ]) ||
-        []
-    );
+    const tiltakFraSøknad = hentTiltaksdeltagelseFraSøknad(behandling);
+    const behandlingsperiode =
+        behandling.virkningsperiode ?? hentTiltaksperiodeFraSøknad(behandling);
+
+    return tiltakFraSøknad
+        ? [
+              {
+                  eksternDeltagelseId: tiltakFraSøknad.eksternDeltagelseId,
+                  periode: {
+                      fraOgMed: behandlingsperiode?.fraOgMed ?? null,
+                      tilOgMed: behandlingsperiode?.tilOgMed ?? null,
+                  },
+              },
+          ]
+        : [];
+};
+
+const antallDagerDefault = (
+    behandling: Søknadsbehandling,
+): AntallDagerPerMeldeperiodeFormData[] => {
+    const tiltaksperiode = hentTiltaksperiodeFraSøknad(behandling);
+
+    return [
+        {
+            antallDagerPerMeldeperiode: ANTALL_DAGER_DEFAULT,
+            periode: behandling.virkningsperiode
+                ? {
+                      fraOgMed: behandling.virkningsperiode.fraOgMed,
+                      tilOgMed: behandling.virkningsperiode.tilOgMed,
+                  }
+                : tiltaksperiode?.fraOgMed && tiltaksperiode?.tilOgMed
+                  ? {
+                        fraOgMed: tiltaksperiode.fraOgMed,
+                        tilOgMed: tiltaksperiode.tilOgMed,
+                    }
+                  : { fraOgMed: null, tilOgMed: null },
+        },
+    ];
+};
+
+const hentBehandlingsperiode = (behandling: Søknadsbehandling): Nullable<Periode> => {
+    return behandling.virkningsperiode ?? hentTiltaksperiodeFraSøknad(behandling);
 };
 
 const søknadsbehandlingInitialState = (behandling: Søknadsbehandling): BehandlingSkjemaState => {
@@ -103,18 +119,21 @@ const søknadsbehandlingInitialState = (behandling: Søknadsbehandling): Behandl
 const fraSøknadsbehandlingIkkeValgt = (
     behandling: SøknadsbehandlingIkkeValgt,
 ): BehandlingSkjemaState => {
-    const tiltaksperiode = hentTiltaksperiodeFraSøknad(behandling);
+    const barnetilleggPerioder = hentBarnetilleggForSøknadsbehandling(behandling);
 
     return {
         resultat: behandling.resultat,
-        behandlingsperiode: behandling.virkningsperiode ?? tiltaksperiode,
-        valgteTiltaksdeltakelser: [],
-        antallDagerPerMeldeperiode: [],
-        avslagsgrunner: [],
-        barnetilleggPerioder: [],
-        harBarnetillegg: false,
+        behandlingsperiode: hentBehandlingsperiode(behandling),
+
+        // Ikke i bruk for denne resultattypen, men det må populeres ettersom resultat kan endres
+        // til innvilgelse, der disse feltene er påkrevd.
+        harBarnetillegg: barnetilleggPerioder.length > 0,
+        barnetilleggPerioder: barnetilleggPerioder,
+        valgteTiltaksdeltakelser: valgteTiltaksdeltakelserDefault(behandling),
+        antallDagerPerMeldeperiode: antallDagerDefault(behandling),
 
         // Ikke i bruk for denne behandlingstypen
+        avslagsgrunner: [],
         harValgtStansFraFørsteDagSomGirRett: false,
         harValgtStansTilSisteDagSomGirRett: false,
         hjemlerForStans: [],
@@ -124,45 +143,17 @@ const fraSøknadsbehandlingIkkeValgt = (
 const fraSøknadsbehandlingInnvilgelse = (
     behandling: SøknadsbehandlingInnvilgelse,
 ): BehandlingSkjemaState => {
-    const tiltaksperiode = hentTiltaksperiodeFraSøknad(behandling);
-    const tiltakFraSoknad = hentTiltaksdeltagelseFraSøknad(behandling);
-
     const barnetilleggPerioder = hentBarnetilleggForSøknadsbehandling(behandling);
 
     return {
         resultat: behandling.resultat,
-        behandlingsperiode: behandling.virkningsperiode ?? tiltaksperiode,
+        behandlingsperiode: hentBehandlingsperiode(behandling),
         harBarnetillegg: barnetilleggPerioder.length > 0,
         barnetilleggPerioder,
-        valgteTiltaksdeltakelser: valgteTiltaksdeltakelserFraBehandlingTilFormData(
-            behandling.virkningsperiode ?? tiltaksperiode,
-            behandling.valgteTiltaksdeltakelser,
-            tiltakFraSoknad,
-        ),
+        valgteTiltaksdeltakelser: behandling.valgteTiltaksdeltakelser,
         antallDagerPerMeldeperiode: behandling.antallDagerPerMeldeperiode
-            ? behandling.antallDagerPerMeldeperiode.map((dager) => ({
-                  antallDagerPerMeldeperiode: dager.antallDagerPerMeldeperiode,
-                  periode: {
-                      fraOgMed: dager.periode.fraOgMed,
-                      tilOgMed: dager.periode.tilOgMed,
-                  },
-              }))
-            : [
-                  {
-                      antallDagerPerMeldeperiode: ANTALL_DAGER_DEFAULT,
-                      periode: behandling.virkningsperiode
-                          ? {
-                                fraOgMed: behandling.virkningsperiode.fraOgMed,
-                                tilOgMed: behandling.virkningsperiode.tilOgMed,
-                            }
-                          : tiltaksperiode?.fraOgMed && tiltaksperiode?.tilOgMed
-                            ? {
-                                  fraOgMed: tiltaksperiode.fraOgMed,
-                                  tilOgMed: tiltaksperiode.tilOgMed,
-                              }
-                            : { fraOgMed: null, tilOgMed: null },
-                  },
-              ],
+            ? behandling.antallDagerPerMeldeperiode
+            : antallDagerDefault(behandling),
 
         // Ikke i bruk for denne behandlingstypen
         avslagsgrunner: [],
@@ -174,18 +165,21 @@ const fraSøknadsbehandlingInnvilgelse = (
 };
 
 const fraSøknadsbehandlingAvslag = (behandling: SøknadsbehandlingAvslag): BehandlingSkjemaState => {
-    const tiltaksperiode = hentTiltaksperiodeFraSøknad(behandling);
+    const barnetilleggPerioder = hentBarnetilleggForSøknadsbehandling(behandling);
 
     return {
         resultat: behandling.resultat,
-        behandlingsperiode: behandling.virkningsperiode ?? tiltaksperiode,
+        behandlingsperiode: hentBehandlingsperiode(behandling),
         avslagsgrunner: behandling.avslagsgrunner,
 
+        // Ikke i bruk for denne resultattypen, men det må populeres ettersom resultat kan endres
+        // til innvilgelse, der disse feltene er påkrevd.
+        harBarnetillegg: barnetilleggPerioder.length > 0,
+        barnetilleggPerioder: barnetilleggPerioder,
+        valgteTiltaksdeltakelser: valgteTiltaksdeltakelserDefault(behandling),
+        antallDagerPerMeldeperiode: antallDagerDefault(behandling),
+
         // Ikke i bruk for denne behandlingstypen
-        harBarnetillegg: false,
-        barnetilleggPerioder: [],
-        valgteTiltaksdeltakelser: [],
-        antallDagerPerMeldeperiode: [],
         hjemlerForStans: [],
         harValgtStansFraFørsteDagSomGirRett: false,
         harValgtStansTilSisteDagSomGirRett: false,
