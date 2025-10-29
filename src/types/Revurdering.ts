@@ -13,7 +13,7 @@ import { VedtakId } from './Vedtak';
 
 interface RevurderingBase extends RammebehandlingBase {
     type: Behandlingstype.REVURDERING;
-    resultat: RevurderingResultatType;
+    resultat: RevurderingResultat;
 }
 
 export type Revurdering = RevurderingStans | RevurderingInnvilgelse | RevurderingOmgjøring;
@@ -42,7 +42,7 @@ export interface RevurderingOmgjøring extends RevurderingBase {
     antallDagerPerMeldeperiode: AntallDagerForMeldeperiode[];
 }
 
-export type RevurderingResultatType =
+export type RevurderingResultat =
     | RammebehandlingResultat.REVURDERING_INNVILGELSE
     | RammebehandlingResultat.STANS
     | RammebehandlingResultat.OMGJØRING;

@@ -13,7 +13,7 @@ import { Nullable } from '~/types/UtilTypes';
 
 interface SøknadsbehandlingBase extends RammebehandlingBase {
     type: Behandlingstype.SØKNADSBEHANDLING;
-    resultat: SøknadsbehandlingResultatType;
+    resultat: SøknadsbehandlingResultat;
     søknad: Søknad;
     automatiskSaksbehandlet: boolean;
     manueltBehandlesGrunner: ManueltBehandlesGrunn[];
@@ -41,7 +41,7 @@ export type Søknadsbehandling =
     | SøknadsbehandlingAvslag
     | SøknadsbehandlingIkkeValgt;
 
-export type SøknadsbehandlingResultatType =
+export type SøknadsbehandlingResultat =
     | RammebehandlingResultat.AVSLAG
     | RammebehandlingResultat.INNVILGELSE
     | RammebehandlingResultat.IKKE_VALGT;
