@@ -103,17 +103,21 @@ const søknadsbehandlingInitialState = (behandling: Søknadsbehandling): Behandl
 const fraSøknadsbehandlingIkkeValgt = (
     behandling: SøknadsbehandlingIkkeValgt,
 ): BehandlingSkjemaState => {
+    const tiltaksperiode = hentTiltaksperiodeFraSøknad(behandling);
+
     return {
         resultat: behandling.resultat,
-        behandlingsperiode: {},
+        behandlingsperiode: behandling.virkningsperiode ?? tiltaksperiode,
+        valgteTiltaksdeltakelser: [],
         antallDagerPerMeldeperiode: [],
         avslagsgrunner: [],
         barnetilleggPerioder: [],
         harBarnetillegg: false,
+
+        // Ikke i bruk for denne behandlingstypen
         harValgtStansFraFørsteDagSomGirRett: false,
         harValgtStansTilSisteDagSomGirRett: false,
         hjemlerForStans: [],
-        valgteTiltaksdeltakelser: [],
     };
 };
 
