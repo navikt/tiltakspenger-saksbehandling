@@ -9,7 +9,7 @@ import {
 } from '~/components/behandling/context/BehandlingSkjemaContext';
 import { Periode } from '~/types/Periode';
 import { RevurderingVedtakInnvilgelseRequest } from '~/types/Revurdering';
-import { BehandlingResultat } from '~/types/Behandling';
+import { RammebehandlingResultat } from '~/types/Behandling';
 import { tiltaksdeltakelsePeriodeFormToTiltaksdeltakelsePeriode } from '~/components/behandling/søknadsbehandling/9-send-og-godkjenn/SøknadsbehandlingSend';
 import { barnetilleggPeriodeFormDataTilBarnetilleggPeriode } from '../6-brev/RevurderingInnvilgelseBrev';
 
@@ -28,7 +28,7 @@ export const RevurderingInnvilgelseSend = () => {
 
 const tilDTO = (skjema: BehandlingSkjemaContext): RevurderingVedtakInnvilgelseRequest => {
     return {
-        resultat: BehandlingResultat.REVURDERING_INNVILGELSE,
+        resultat: RammebehandlingResultat.REVURDERING_INNVILGELSE,
         begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
         fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
         innvilgelsesperiode: skjema.behandlingsperiode as Periode,

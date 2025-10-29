@@ -14,7 +14,7 @@ import { SakProps } from '~/types/Sak';
 
 import { erDatoIPeriode } from '~/utils/periode';
 import { ANTALL_DAGER_DEFAULT } from '~/components/behandling/felles/dager-per-meldeperiode/BehandlingDagerPerMeldeperiode';
-import { Rammebehandling, BehandlingResultat, Behandlingstype } from '~/types/Behandling';
+import { Rammebehandling, RammebehandlingResultat, Behandlingstype } from '~/types/Behandling';
 import { TiltaksdeltakelsePeriodeFormData } from './slices/TiltaksdeltagelseState';
 import { Nullable } from '~/types/UtilTypes';
 import {
@@ -132,13 +132,13 @@ const revurderingInitialState = (behandling: Revurdering, sak: SakProps): Behand
     const { resultat } = behandling;
 
     switch (resultat) {
-        case BehandlingResultat.REVURDERING_INNVILGELSE: {
+        case RammebehandlingResultat.REVURDERING_INNVILGELSE: {
             return revurderingInnvilgelseInitialState(behandling, sak);
         }
-        case BehandlingResultat.STANS: {
+        case RammebehandlingResultat.STANS: {
             return revurderingStansInitialState(behandling);
         }
-        case BehandlingResultat.OMGJØRING: {
+        case RammebehandlingResultat.OMGJØRING: {
             return revurderingOmgjøringInitialState(behandling);
         }
     }
@@ -161,7 +161,7 @@ const revurderingInnvilgelseInitialState = (
     );
 
     return {
-        resultat: BehandlingResultat.REVURDERING_INNVILGELSE,
+        resultat: RammebehandlingResultat.REVURDERING_INNVILGELSE,
         behandlingsperiode,
         harBarnetillegg: barnetilleggPerioder.length > 0,
         barnetilleggPerioder,
@@ -190,7 +190,7 @@ const revurderingInnvilgelseInitialState = (
 
 const revurderingStansInitialState = (behandling: RevurderingStans): BehandlingSkjemaState => {
     return {
-        resultat: BehandlingResultat.STANS,
+        resultat: RammebehandlingResultat.STANS,
         behandlingsperiode: behandling.virkningsperiode ?? {},
         hjemlerForStans: behandling.valgtHjemmelHarIkkeRettighet ?? [],
         harValgtStansFraFørsteDagSomGirRett:
@@ -213,7 +213,7 @@ const revurderingOmgjøringInitialState = (
     behandling: RevurderingOmgjøring,
 ): BehandlingSkjemaState => {
     return {
-        resultat: BehandlingResultat.OMGJØRING,
+        resultat: RammebehandlingResultat.OMGJØRING,
         behandlingsperiode: behandling.innvilgelsesperiode,
         harBarnetillegg: behandling.barnetillegg !== null,
         barnetilleggPerioder: behandling.barnetillegg!.perioder,

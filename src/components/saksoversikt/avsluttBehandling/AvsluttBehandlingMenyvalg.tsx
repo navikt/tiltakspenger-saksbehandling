@@ -5,7 +5,7 @@ import { BehandlingForOversikt } from '~/types/BehandlingForOversikt';
 import { XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { eierBehandling } from '~/utils/tilganger';
 import { Saksbehandler } from '~/types/Saksbehandler';
-import { Behandlingsstatus } from '~/types/Behandling';
+import { Rammebehandlingsstatus } from '~/types/Behandling';
 import { Nullable } from '~/types/UtilTypes';
 
 export const visAvsluttBehandlingMenyvalg = (
@@ -13,7 +13,8 @@ export const visAvsluttBehandlingMenyvalg = (
     innloggetSaksbehandler: Saksbehandler,
     behandlingKanAvsluttes: boolean,
 ) => {
-    const erRelevantMenyValgForStatus = behandling.status === Behandlingsstatus.UNDER_BEHANDLING;
+    const erRelevantMenyValgForStatus =
+        behandling.status === Rammebehandlingsstatus.UNDER_BEHANDLING;
     return (
         behandlingKanAvsluttes &&
         erRelevantMenyValgForStatus &&
@@ -23,7 +24,7 @@ export const visAvsluttBehandlingMenyvalg = (
 
 type AvsluttBehandlingMenyvalgProps = AvsluttBehandlingProps & {
     //nullable fordi vi ikke har en spesifikk type for en søknad uten behandling
-    behandlingStatus: Nullable<Behandlingsstatus>;
+    behandlingStatus: Nullable<Rammebehandlingsstatus>;
     skalVises: boolean;
     setVisAvsluttBehandlingModal: (vis: boolean) => void;
 };
@@ -35,7 +36,7 @@ const AvsluttBehandlingMenyvalg = (props: AvsluttBehandlingMenyvalgProps) => {
         return <div>Teknisk feil: Enten søknadsId, eller behandlingsId må være satt</div>;
     }
 
-    if (!props.skalVises && props.behandlingStatus !== Behandlingsstatus.UNDER_BEHANDLING) {
+    if (!props.skalVises && props.behandlingStatus !== Rammebehandlingsstatus.UNDER_BEHANDLING) {
         return null;
     }
 

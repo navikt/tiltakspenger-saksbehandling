@@ -1,19 +1,19 @@
 import { Periode } from '~/types/Periode';
 import { BehandlingSkjemaActionHandlers } from '~/components/behandling/context/BehandlingSkjemaReducer';
 import { Nullable } from '~/types/UtilTypes';
-import { BehandlingResultat } from '~/types/Behandling';
+import { RammebehandlingResultat } from '~/types/Behandling';
 import { perioderOverlapper } from '~/utils/periode';
 import { datoMax, datoMin } from '~/utils/date';
 
 export type BehandlingsperiodeState = {
-    resultat: BehandlingResultat;
+    resultat: RammebehandlingResultat;
     behandlingsperiode: Nullable<Partial<Periode>>;
 };
 
 export type BehandlingsperiodeActions =
     | {
           type: 'setResultat';
-          payload: { resultat: BehandlingResultat };
+          payload: { resultat: RammebehandlingResultat };
       }
     | {
           type: 'oppdaterBehandlingsperiode';

@@ -7,7 +7,7 @@ import { useOpprettRevurdering } from './useOpprettRevurdering';
 import { BekreftelsesModal } from '~/components/modaler/BekreftelsesModal';
 
 import { behandlingUrl } from '~/utils/urls';
-import { BehandlingResultat } from '~/types/Behandling';
+import { RammebehandlingResultat } from '~/types/Behandling';
 import { behandlingResultatTilText } from '~/utils/tekstformateringUtils';
 
 type Props = {
@@ -16,7 +16,7 @@ type Props = {
 };
 
 export const OpprettRevurdering = ({ sakId, harVedtak }: Props) => {
-    const [valgtType, setValgtType] = useState<BehandlingResultat | null>(null);
+    const [valgtType, setValgtType] = useState<RammebehandlingResultat | null>(null);
 
     const { opprettRevurdering, opprettRevurderingLaster, opprettRevurderingError } =
         useOpprettRevurdering(sakId);
@@ -72,14 +72,14 @@ export const OpprettRevurdering = ({ sakId, harVedtak }: Props) => {
                 <RadioGroup
                     legend={'Velg type revurdering'}
                     value={valgtType}
-                    onChange={(type: BehandlingResultat) => {
+                    onChange={(type: RammebehandlingResultat) => {
                         setValgtType(type);
                     }}
                 >
-                    <Radio value={BehandlingResultat.REVURDERING_INNVILGELSE}>
+                    <Radio value={RammebehandlingResultat.REVURDERING_INNVILGELSE}>
                         {'Innvilgelse'}
                     </Radio>
-                    <Radio value={BehandlingResultat.STANS}>{'Stans'}</Radio>
+                    <Radio value={RammebehandlingResultat.STANS}>{'Stans'}</Radio>
                 </RadioGroup>
             </BekreftelsesModal>
         </>

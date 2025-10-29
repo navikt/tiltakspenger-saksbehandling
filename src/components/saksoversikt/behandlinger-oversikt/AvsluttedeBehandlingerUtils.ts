@@ -4,7 +4,7 @@ import { Søknad, SøknadId } from '~/types/Søknad';
 import {
     Rammebehandling,
     BehandlingId,
-    BehandlingResultat,
+    RammebehandlingResultat,
     Behandlingstype,
 } from '~/types/Behandling';
 
@@ -16,7 +16,7 @@ type AvbruttSøknad = {
 type AvbruttBehandling = {
     behandlingstype: Behandlingstype.SØKNADSBEHANDLING | Behandlingstype.REVURDERING;
     id: BehandlingId;
-    resultat: BehandlingResultat;
+    resultat: RammebehandlingResultat;
 };
 
 export type AvbruttSøknadEllerBehandlingCellInfo = {

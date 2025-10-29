@@ -11,7 +11,7 @@ import { kanSaksbehandleForBehandling } from '~/utils/tilganger';
 import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
 
 import style from './BehandlingBeregningOgSimulering.module.css';
-import { Rammebehandling, Behandlingsstatus } from '~/types/Behandling';
+import { Rammebehandling, Rammebehandlingsstatus } from '~/types/Behandling';
 
 export const BehandlingBeregningOgSimulering = () => {
     const { behandling, setBehandling } = useBehandling();
@@ -38,7 +38,9 @@ export const BehandlingBeregningOgSimulering = () => {
                             navkontor={navkontor}
                             navkontorNavn={navkontorNavn}
                             utbetalingsstatus={
-                                status === Behandlingsstatus.VEDTATT ? utbetalingsstatus : undefined
+                                status === Rammebehandlingsstatus.VEDTATT
+                                    ? utbetalingsstatus
+                                    : undefined
                             }
                             erOmberegning={true}
                         />

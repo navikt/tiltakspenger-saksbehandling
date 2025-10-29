@@ -10,7 +10,7 @@ import {
 } from '~/components/behandling/context/BehandlingSkjemaContext';
 
 import styles from './SøknadsbehandlingAvslagsgrunner.module.css';
-import { BehandlingResultat } from '~/types/Behandling';
+import { RammebehandlingResultat } from '~/types/Behandling';
 import { Avslagsgrunn } from '~/types/Søknadsbehandling';
 
 const AvslagsgrunnTekst = {
@@ -31,7 +31,7 @@ export const SøknadsbehandlingAvslagsgrunner = () => {
     const dispatch = useBehandlingSkjemaDispatch();
     const erIkkeSaksbehandler = rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER;
 
-    if (resultat !== BehandlingResultat.AVSLAG) {
+    if (resultat !== RammebehandlingResultat.AVSLAG) {
         return null;
     }
 

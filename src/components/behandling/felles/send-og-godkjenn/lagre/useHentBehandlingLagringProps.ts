@@ -4,11 +4,11 @@ import { isEqualJson } from '~/utils/is-equal-json';
 import { ValideringFunc, ValideringResultat, ValideringType } from '~/types/Validering';
 import { Nullable } from '~/types/UtilTypes';
 import { BehandlingSkjemaContext } from '~/components/behandling/context/BehandlingSkjemaContext';
-import { BehandlingVedtak } from '~/types/Behandling';
+import { RammebehandlingVedtakRequest } from '~/types/Behandling';
 
 type ValiderOgHentVedtakDTO = (type: ValideringType) => {
     valideringResultat: ValideringResultat;
-    vedtakDTO: Nullable<BehandlingVedtak>;
+    vedtakDTO: Nullable<RammebehandlingVedtakRequest>;
 };
 
 export type BehandlingLagringProps = {
@@ -20,7 +20,7 @@ export type BehandlingLagringProps = {
 type Props = {
     skjema: BehandlingSkjemaContext;
     validerSkjema: ValideringFunc;
-    hentDTO: () => Nullable<BehandlingVedtak>;
+    hentDTO: () => Nullable<RammebehandlingVedtakRequest>;
 };
 
 export const useHentBehandlingLagringProps = ({
@@ -28,7 +28,9 @@ export const useHentBehandlingLagringProps = ({
     validerSkjema,
     hentDTO,
 }: Props): BehandlingLagringProps => {
-    const [sisteLagring, setSisteLagring] = useState<BehandlingVedtak | null>(hentDTO());
+    const [sisteLagring, setSisteLagring] = useState<RammebehandlingVedtakRequest | null>(
+        hentDTO(),
+    );
     const [isDirty, setIsDirty] = useState(false);
 
     const updateDirtyState = () => {

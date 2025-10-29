@@ -30,7 +30,7 @@ import GjenopptaBehandlingMenyvalg, {
 } from '~/components/behandlingmeny/menyvalg/GjenopptaBehandlingMenyvalg';
 import SettBehandlingPåVentModal from '~/components/modaler/SettBehandlingPåVentModal';
 import { behandlingUrl } from '~/utils/urls';
-import { Behandlingsstatus, Behandlingstype } from '~/types/Behandling';
+import { Rammebehandlingsstatus, Behandlingstype } from '~/types/Behandling';
 
 type Props = {
     behandling: BehandlingForOversikt;
@@ -149,9 +149,9 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
                     sakId={behandling.sakId}
                     behandlingId={behandling.id}
                     overtarFra={
-                        behandling.status === Behandlingsstatus.UNDER_BEHANDLING
+                        behandling.status === Rammebehandlingsstatus.UNDER_BEHANDLING
                             ? behandling.saksbehandler!
-                            : behandling.status === Behandlingsstatus.UNDER_BESLUTNING
+                            : behandling.status === Rammebehandlingsstatus.UNDER_BESLUTNING
                               ? behandling.beslutter!
                               : 'Ukjent saksbehandler/beslutter'
                     }

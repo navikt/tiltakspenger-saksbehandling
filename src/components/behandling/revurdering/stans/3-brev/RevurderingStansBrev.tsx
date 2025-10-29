@@ -4,7 +4,7 @@ import { revurderingStansValidering } from '~/components/behandling/revurdering/
 import { RevurderingStansBrevForhåndsvisningDTO } from '~/components/behandling/felles/vedtaksbrev/forhåndsvisning/useHentVedtaksbrevForhåndsvisning';
 import { HjelpetekstRevurdering } from '~/components/behandling/revurdering/innvilgelse/6-brev/RevurderingInnvilgelseBrev';
 import { useBehandlingSkjema } from '~/components/behandling/context/BehandlingSkjemaContext';
-import { BehandlingResultat } from '~/types/Behandling';
+import { RammebehandlingResultat } from '~/types/Behandling';
 
 export const RevurderingStansBrev = () => {
     const skjema = useBehandlingSkjema();
@@ -35,7 +35,7 @@ export const RevurderingStansBrev = () => {
                 harValgtStansTilSisteDagSomGirRett: true,
                 fritekst: brevtekst.getValue(),
                 valgteHjemler: hjemlerForStans,
-                resultat: BehandlingResultat.STANS,
+                resultat: RammebehandlingResultat.STANS,
             })}
             hjelpetekst={<HjelpetekstRevurdering />}
         />

@@ -6,15 +6,15 @@ import { eierBehandling } from '~/utils/tilganger';
 import { Saksbehandler } from '~/types/Saksbehandler';
 import { ArrowRightIcon } from '@navikt/aksel-icons';
 import { behandlingUrl } from '~/utils/urls';
-import { Behandlingsstatus } from '~/types/Behandling';
+import { Rammebehandlingsstatus } from '~/types/Behandling';
 
 export const visFortsettBehandlingMenyvalg = (
     behandling: BehandlingForOversikt,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     const erReleventMenyValgForStatus =
-        behandling.status === Behandlingsstatus.UNDER_BEHANDLING ||
-        behandling.status === Behandlingsstatus.UNDER_BESLUTNING;
+        behandling.status === Rammebehandlingsstatus.UNDER_BEHANDLING ||
+        behandling.status === Rammebehandlingsstatus.UNDER_BESLUTNING;
 
     return (
         erReleventMenyValgForStatus &&

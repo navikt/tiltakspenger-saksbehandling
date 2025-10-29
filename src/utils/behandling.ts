@@ -3,7 +3,7 @@ import { singleOrFirst } from './array';
 import { Tiltaksdeltagelse, TiltaksdeltagelseMedPeriode } from '~/types/TiltakDeltagelseTypes';
 import { erDatoIPeriode, joinPerioder } from './periode';
 import { Nullable } from '~/types/UtilTypes';
-import { Rammebehandling, Behandlingsstatus } from '~/types/Behandling';
+import { Rammebehandling, Rammebehandlingsstatus } from '~/types/Behandling';
 import { Søknadsbehandling } from '~/types/Søknadsbehandling';
 
 export const hentTiltaksperiode = (behandling: Søknadsbehandling): Nullable<Periode> => {
@@ -39,7 +39,7 @@ export const hentTiltaksperiodeFraSøknad = (behandling: Søknadsbehandling): Nu
 export const erBehandlingAvbrutt = (behandling: Rammebehandling) => !!behandling.avbrutt;
 
 export const erBehandlingVedtatt = (behandling: Rammebehandling) =>
-    behandling.status === Behandlingsstatus.VEDTATT;
+    behandling.status === Rammebehandlingsstatus.VEDTATT;
 
 export const deltarPaFlereTiltakMedStartOgSluttdatoIValgtInnvilgelsesperiode = (
     behandling: Rammebehandling,

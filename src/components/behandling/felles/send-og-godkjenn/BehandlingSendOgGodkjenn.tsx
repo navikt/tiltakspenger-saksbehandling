@@ -23,7 +23,7 @@ import { skalKunneGjenopptaBehandling } from '~/utils/tilganger';
 import { formaterTidspunkt } from '~/utils/date';
 
 import style from './BehandlingSendOgGodkjenn.module.css';
-import { Rammebehandling, Behandlingsstatus } from '~/types/Behandling';
+import { Rammebehandling, Rammebehandlingsstatus } from '~/types/Behandling';
 
 type Props = {
     behandling: Rammebehandling;
@@ -59,8 +59,8 @@ export const BehandlingSendOgGodkjenn = ({ behandling, lagringProps }: Props) =>
     const erBeslutter = rolleForBehandling === SaksbehandlerRolle.BESLUTTER;
 
     const kanAvslutteBehandling =
-        (behandling.status === Behandlingsstatus.KLAR_TIL_BEHANDLING ||
-            behandling.status === Behandlingsstatus.UNDER_BEHANDLING) &&
+        (behandling.status === Rammebehandlingsstatus.KLAR_TIL_BEHANDLING ||
+            behandling.status === Rammebehandlingsstatus.UNDER_BEHANDLING) &&
         behandling.avbrutt === null &&
         erSaksbehandler;
 

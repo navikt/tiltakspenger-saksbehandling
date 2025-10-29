@@ -2,18 +2,18 @@ import { useRevurderingBehandling } from '~/components/behandling/context/Behand
 import { RevurderingStansVedtak } from '~/components/behandling/revurdering/stans/RevurderingStansVedtak';
 import { RevurderingInnvilgelseVedtak } from '~/components/behandling/revurdering/innvilgelse/RevurderingInnvilgelseVedtak';
 import { Alert } from '@navikt/ds-react';
-import { BehandlingResultat } from '~/types/Behandling';
+import { RammebehandlingResultat } from '~/types/Behandling';
 import { RevurderingOmgjøringVedtak } from './omgjøring/RevurderingOmgjøringVedtak';
 
 export const RevurderingVedtak = () => {
     const { behandling } = useRevurderingBehandling();
     const { resultat } = behandling;
 
-    return resultat === BehandlingResultat.STANS ? (
+    return resultat === RammebehandlingResultat.STANS ? (
         <RevurderingStansVedtak />
-    ) : resultat === BehandlingResultat.REVURDERING_INNVILGELSE ? (
+    ) : resultat === RammebehandlingResultat.REVURDERING_INNVILGELSE ? (
         <RevurderingInnvilgelseVedtak />
-    ) : resultat === BehandlingResultat.OMGJØRING ? (
+    ) : resultat === RammebehandlingResultat.OMGJØRING ? (
         <RevurderingOmgjøringVedtak />
     ) : (
         <Alert variant={'error'}>{`Revurderingstypen er ikke implementert: ${resultat}`}</Alert>

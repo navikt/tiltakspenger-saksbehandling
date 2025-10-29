@@ -3,25 +3,29 @@ import { BrukersMeldekortDagStatus } from '~/types/meldekort/BrukersMeldekort';
 import { MeldeperiodeKjedeStatus } from '~/types/meldekort/Meldeperiode';
 import React, { ReactElement } from 'react';
 import { Tag } from '@navikt/ds-react';
-import { BehandlingResultat, Behandlingsstatus, Behandlingstype } from '~/types/Behandling';
+import {
+    RammebehandlingResultat,
+    Rammebehandlingsstatus,
+    Behandlingstype,
+} from '~/types/Behandling';
 import { Utbetalingsstatus } from '~/types/Utbetaling';
 import { ManueltBehandlesGrunn } from '~/types/Søknadsbehandling';
 
 export const finnBehandlingStatusTag = (
-    status: Behandlingsstatus | 'SØKNAD',
+    status: Rammebehandlingsstatus | 'SØKNAD',
     underkjent: boolean,
     erSattPåVent: boolean = false,
 ) => {
     if (
-        (status == Behandlingsstatus.UNDER_BEHANDLING ||
-            status === Behandlingsstatus.UNDER_BESLUTNING) &&
+        (status == Rammebehandlingsstatus.UNDER_BEHANDLING ||
+            status === Rammebehandlingsstatus.UNDER_BESLUTNING) &&
         erSattPåVent
     ) {
         return <Tag variant="warning">Satt på vent</Tag>;
     }
     if (
-        (status === Behandlingsstatus.KLAR_TIL_BEHANDLING ||
-            status === Behandlingsstatus.UNDER_BEHANDLING) &&
+        (status === Rammebehandlingsstatus.KLAR_TIL_BEHANDLING ||
+            status === Rammebehandlingsstatus.UNDER_BEHANDLING) &&
         underkjent
     ) {
         return <Tag variant="warning">Underkjent</Tag>;
@@ -29,14 +33,14 @@ export const finnBehandlingStatusTag = (
     return behandlingStatusTag[status];
 };
 
-const behandlingStatusTag: Record<Behandlingsstatus | 'SØKNAD', React.ReactElement> = {
-    [Behandlingsstatus.VEDTATT]: <Tag variant="success">Vedtatt</Tag>,
-    [Behandlingsstatus.KLAR_TIL_BEHANDLING]: <Tag variant="info">Klar til behandling</Tag>,
-    [Behandlingsstatus.KLAR_TIL_BESLUTNING]: <Tag variant="info">Klar til beslutning</Tag>,
-    [Behandlingsstatus.UNDER_BEHANDLING]: <Tag variant="info">Under behandling</Tag>,
-    [Behandlingsstatus.UNDER_BESLUTNING]: <Tag variant="info">Under beslutning</Tag>,
-    [Behandlingsstatus.AVBRUTT]: <Tag variant="neutral">Avsluttet</Tag>,
-    [Behandlingsstatus.UNDER_AUTOMATISK_BEHANDLING]: (
+const behandlingStatusTag: Record<Rammebehandlingsstatus | 'SØKNAD', React.ReactElement> = {
+    [Rammebehandlingsstatus.VEDTATT]: <Tag variant="success">Vedtatt</Tag>,
+    [Rammebehandlingsstatus.KLAR_TIL_BEHANDLING]: <Tag variant="info">Klar til behandling</Tag>,
+    [Rammebehandlingsstatus.KLAR_TIL_BESLUTNING]: <Tag variant="info">Klar til beslutning</Tag>,
+    [Rammebehandlingsstatus.UNDER_BEHANDLING]: <Tag variant="info">Under behandling</Tag>,
+    [Rammebehandlingsstatus.UNDER_BESLUTNING]: <Tag variant="info">Under beslutning</Tag>,
+    [Rammebehandlingsstatus.AVBRUTT]: <Tag variant="neutral">Avsluttet</Tag>,
+    [Rammebehandlingsstatus.UNDER_AUTOMATISK_BEHANDLING]: (
         <Tag variant="neutral">Under automatisk behandling</Tag>
     ),
     SØKNAD: <Tag variant="neutral">Søknad</Tag>,
@@ -87,35 +91,37 @@ export const finnBehandlingstypeTekst: Record<Behandlingstype, string> = {
     [Behandlingstype.SØKNAD]: 'Søknad',
 } as const;
 
-export const behandlingResultatTilText: Record<BehandlingResultat, string> = {
-    [BehandlingResultat.AVSLAG]: 'Avslag',
-    [BehandlingResultat.INNVILGELSE]: 'Innvilgelse',
-    [BehandlingResultat.STANS]: 'Stans',
-    [BehandlingResultat.REVURDERING_INNVILGELSE]: 'Revurdering innvilgelse',
-    [BehandlingResultat.IKKE_VALGT]: 'Ikke valgt',
-    [BehandlingResultat.OMGJØRING]: 'Omgjøring',
+export const behandlingResultatTilText: Record<RammebehandlingResultat, string> = {
+    [RammebehandlingResultat.AVSLAG]: 'Avslag',
+    [RammebehandlingResultat.INNVILGELSE]: 'Innvilgelse',
+    [RammebehandlingResultat.STANS]: 'Stans',
+    [RammebehandlingResultat.REVURDERING_INNVILGELSE]: 'Revurdering innvilgelse',
+    [RammebehandlingResultat.IKKE_VALGT]: 'Ikke valgt',
+    [RammebehandlingResultat.OMGJØRING]: 'Omgjøring',
 };
 
-export const behandlingResultatTilTag: Record<BehandlingResultat, ReactElement> = {
-    [BehandlingResultat.AVSLAG]: (
-        <Tag variant="error">{behandlingResultatTilText[BehandlingResultat.AVSLAG]}</Tag>
+export const behandlingResultatTilTag: Record<RammebehandlingResultat, ReactElement> = {
+    [RammebehandlingResultat.AVSLAG]: (
+        <Tag variant="error">{behandlingResultatTilText[RammebehandlingResultat.AVSLAG]}</Tag>
     ),
-    [BehandlingResultat.INNVILGELSE]: (
-        <Tag variant="success">{behandlingResultatTilText[BehandlingResultat.INNVILGELSE]}</Tag>
-    ),
-    [BehandlingResultat.STANS]: (
-        <Tag variant="warning">{behandlingResultatTilText[BehandlingResultat.STANS]}</Tag>
-    ),
-    [BehandlingResultat.REVURDERING_INNVILGELSE]: (
-        <Tag variant="info">
-            {behandlingResultatTilText[BehandlingResultat.REVURDERING_INNVILGELSE]}
+    [RammebehandlingResultat.INNVILGELSE]: (
+        <Tag variant="success">
+            {behandlingResultatTilText[RammebehandlingResultat.INNVILGELSE]}
         </Tag>
     ),
-    [BehandlingResultat.IKKE_VALGT]: (
-        <Tag variant="neutral">{behandlingResultatTilText[BehandlingResultat.IKKE_VALGT]}</Tag>
+    [RammebehandlingResultat.STANS]: (
+        <Tag variant="warning">{behandlingResultatTilText[RammebehandlingResultat.STANS]}</Tag>
     ),
-    [BehandlingResultat.OMGJØRING]: (
-        <Tag variant="alt1">{behandlingResultatTilText[BehandlingResultat.OMGJØRING]}</Tag>
+    [RammebehandlingResultat.REVURDERING_INNVILGELSE]: (
+        <Tag variant="info">
+            {behandlingResultatTilText[RammebehandlingResultat.REVURDERING_INNVILGELSE]}
+        </Tag>
+    ),
+    [RammebehandlingResultat.IKKE_VALGT]: (
+        <Tag variant="neutral">{behandlingResultatTilText[RammebehandlingResultat.IKKE_VALGT]}</Tag>
+    ),
+    [RammebehandlingResultat.OMGJØRING]: (
+        <Tag variant="alt1">{behandlingResultatTilText[RammebehandlingResultat.OMGJØRING]}</Tag>
     ),
 };
 

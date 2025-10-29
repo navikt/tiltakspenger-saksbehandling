@@ -2,7 +2,7 @@ import { Periode } from './Periode';
 import { SakId } from './Sak';
 
 import { Nullable } from '~/types/UtilTypes';
-import { BehandlingId, Behandlingsstatus, Behandlingstype } from './Behandling';
+import { BehandlingId, Rammebehandlingsstatus, Behandlingstype } from './Behandling';
 import { SøknadId } from './Søknad';
 
 type RevurderingResultat = 'STANS' | 'REVURDERING_INNVILGELSE';
@@ -13,7 +13,7 @@ export type BehandlingEllerSøknadForOversikt = BehandlingForOversikt | SøknadF
 export type BehandlingForOversikt = {
     id: BehandlingId;
     sakId: SakId;
-    status: Behandlingsstatus;
+    status: Rammebehandlingsstatus;
     underkjent: boolean;
     kravtidspunkt: string | null;
     fnr: string;

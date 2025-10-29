@@ -8,15 +8,15 @@ import { useTaBehandling } from '~/components/behandlingmeny/useTaBehandling';
 import { Saksbehandler } from '~/types/Saksbehandler';
 import { PersonIcon } from '@navikt/aksel-icons';
 import { behandlingUrl } from '~/utils/urls';
-import { Behandlingsstatus } from '~/types/Behandling';
+import { Rammebehandlingsstatus } from '~/types/Behandling';
 
 export const visTildelMegMenyvalg = (
     behandling: BehandlingForOversikt,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     const erReleventMenyValgForStatus =
-        behandling.status === Behandlingsstatus.KLAR_TIL_BEHANDLING ||
-        behandling.status === Behandlingsstatus.KLAR_TIL_BESLUTNING;
+        behandling.status === Rammebehandlingsstatus.KLAR_TIL_BEHANDLING ||
+        behandling.status === Rammebehandlingsstatus.KLAR_TIL_BESLUTNING;
 
     return erReleventMenyValgForStatus && skalKunneTaBehandling(behandling, innloggetSaksbehandler);
 };

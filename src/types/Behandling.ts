@@ -23,8 +23,8 @@ export type BehandlingId = `beh_${string}`;
 export interface RammebehandlingBase {
     id: BehandlingId;
     type: Behandlingstype;
-    status: Behandlingsstatus;
-    resultat: BehandlingResultat;
+    status: Rammebehandlingsstatus;
+    resultat: RammebehandlingResultat;
     sakId: SakId;
     saksnummer: string;
     rammevedtakId: Nullable<VedtakId>;
@@ -47,7 +47,7 @@ export interface RammebehandlingBase {
     avslagsgrunner: Nullable<Avslagsgrunn[]>;
 }
 
-export enum BehandlingResultat {
+export enum RammebehandlingResultat {
     INNVILGELSE = 'INNVILGELSE',
     AVSLAG = 'AVSLAG',
     STANS = 'STANS',
@@ -62,7 +62,7 @@ export enum Behandlingstype {
     REVURDERING = 'REVURDERING',
 }
 
-export enum Behandlingsstatus {
+export enum Rammebehandlingsstatus {
     UNDER_AUTOMATISK_BEHANDLING = 'UNDER_AUTOMATISK_BEHANDLING',
     KLAR_TIL_BEHANDLING = 'KLAR_TIL_BEHANDLING',
     UNDER_BEHANDLING = 'UNDER_BEHANDLING',
@@ -77,7 +77,7 @@ export type VentestatusHendelse = {
     tidspunkt: string;
     begrunnelse: string;
     erSattPåVent: boolean;
-    behandlingStatus: Behandlingsstatus;
+    behandlingStatus: Rammebehandlingsstatus;
 };
 
 export type BehandlingUtbetalingProps = {
@@ -97,10 +97,12 @@ export type Saksopplysninger = {
     tiltakspengevedtakFraArena: ArenaTPVedtak[];
 };
 
-export type BehandlingVedtak = SøknadsbehandlingVedtakRequest | RevurderingVedtakRequest;
+export type RammebehandlingVedtakRequest =
+    | SøknadsbehandlingVedtakRequest
+    | RevurderingVedtakRequest;
 
 export interface OppdaterBehandlingRequestBase {
-    resultat: BehandlingResultat;
+    resultat: RammebehandlingResultat;
     fritekstTilVedtaksbrev: Nullable<string>;
     begrunnelseVilkårsvurdering: Nullable<string>;
 }

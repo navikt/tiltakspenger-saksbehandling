@@ -9,7 +9,7 @@ import SeBehandlingMenyvalg from '~/components/behandlingmeny/menyvalg/SeBehandl
 import React from 'react';
 import Link from 'next/link';
 import { behandlingUrl } from '~/utils/urls';
-import { BehandlingResultat } from '~/types/Behandling';
+import { RammebehandlingResultat } from '~/types/Behandling';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { OpprettRevurderingRequest, Revurdering } from '~/types/Revurdering';
 import { SakId } from '~/types/Sak';
@@ -76,7 +76,7 @@ export const VedtatteBehandlingerTabell = (props: {
                             {vedtattBehandling.beslutter ?? 'Ikke tildelt'}
                         </Table.DataCell>
                         <Table.DataCell align={'right'}>
-                            {vedtattBehandling.resultat === BehandlingResultat.AVSLAG ? (
+                            {vedtattBehandling.resultat === RammebehandlingResultat.AVSLAG ? (
                                 <ActionMenu>
                                     <ActionMenu.Trigger>
                                         <Button
@@ -129,7 +129,8 @@ export const VedtatteBehandlingerTabell = (props: {
                                             onSelect={(e) => {
                                                 e.preventDefault();
                                                 opprettRevurdering.trigger({
-                                                    revurderingType: BehandlingResultat.OMGJØRING,
+                                                    revurderingType:
+                                                        RammebehandlingResultat.OMGJØRING,
                                                     rammevedtakIdSomOmgjøres:
                                                         vedtattBehandling.rammevedtakId,
                                                 });

@@ -11,7 +11,7 @@ import {
 } from '../innvilgelse/6-brev/RevurderingInnvilgelseBrev';
 import { BehandlingBeregningOgSimulering } from '../../felles/beregning-og-simulering/BehandlingBeregningOgSimulering';
 import { useRevurderingOmgjøring } from '../../context/BehandlingContext';
-import { BehandlingResultat } from '~/types/Behandling';
+import { RammebehandlingResultat } from '~/types/Behandling';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '~/utils/date';
 import { useSak } from '~/context/sak/SakContext';
 import Link from 'next/link';
@@ -49,7 +49,7 @@ export const RevurderingOmgjøringVedtak = () => {
             `Teknisk feil: Klarte ikke finne vedtak som skal omgjøres for revurdering-id: ${behandling.id} og omgjørVedtak-id: ${behandling.omgjørVedtak}`,
         );
     }
-    if (behandling.resultat !== BehandlingResultat.OMGJØRING) {
+    if (behandling.resultat !== RammebehandlingResultat.OMGJØRING) {
         throw new Error(
             `Teknisk feil: Resultatet av revurdering er ikke omgjøring: ${behandling.resultat} for revurdering-id: ${behandling.id}`,
         );
@@ -108,7 +108,7 @@ export const RevurderingOmgjøringVedtak = () => {
 
 const tilDTO = (skjema: BehandlingSkjemaContext): RevurderingVedtakOmgjøringRequest => {
     return {
-        resultat: BehandlingResultat.OMGJØRING,
+        resultat: RammebehandlingResultat.OMGJØRING,
         begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
         fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
         innvilgelsesperiode: skjema.behandlingsperiode as Periode,

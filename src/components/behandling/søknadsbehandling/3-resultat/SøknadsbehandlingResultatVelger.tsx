@@ -10,7 +10,7 @@ import {
 } from '~/components/behandling/context/BehandlingSkjemaContext';
 
 import style from './SøknadsbehandlingResultatVelger.module.css';
-import { BehandlingResultat } from '~/types/Behandling';
+import { RammebehandlingResultat } from '~/types/Behandling';
 
 export const SøknadsbehandlingResultatVelger = () => {
     const { rolleForBehandling, behandling } = useSøknadsbehandling();
@@ -32,15 +32,15 @@ export const SøknadsbehandlingResultatVelger = () => {
                     className={style.radioGroup}
                     value={resultat}
                     readOnly={erIkkeSaksbehandler}
-                    onChange={(valgtResultat: BehandlingResultat) => {
+                    onChange={(valgtResultat: RammebehandlingResultat) => {
                         dispatch({ type: 'setResultat', payload: { resultat: valgtResultat } });
                     }}
                 >
-                    <Radio value={BehandlingResultat.INNVILGELSE} disabled={kanIkkeInnvilge}>
+                    <Radio value={RammebehandlingResultat.INNVILGELSE} disabled={kanIkkeInnvilge}>
                         Innvilgelse
                     </Radio>
-                    <Radio value={BehandlingResultat.AVSLAG}>Avslag</Radio>
-                    {resultat !== BehandlingResultat.IKKE_VALGT && (
+                    <Radio value={RammebehandlingResultat.AVSLAG}>Avslag</Radio>
+                    {resultat !== RammebehandlingResultat.IKKE_VALGT && (
                         <Button
                             size={'xsmall'}
                             variant={'tertiary'}
@@ -48,7 +48,7 @@ export const SøknadsbehandlingResultatVelger = () => {
                             onClick={() => {
                                 dispatch({
                                     type: 'setResultat',
-                                    payload: { resultat: BehandlingResultat.IKKE_VALGT },
+                                    payload: { resultat: RammebehandlingResultat.IKKE_VALGT },
                                 });
                             }}
                         >
@@ -61,7 +61,7 @@ export const SøknadsbehandlingResultatVelger = () => {
                     label={'Innvilges'}
                     className={classNames(
                         style.datovelgere,
-                        resultat !== BehandlingResultat.INNVILGELSE && style.skjult,
+                        resultat !== RammebehandlingResultat.INNVILGELSE && style.skjult,
                     )}
                 />
             </VedtakSeksjon.Venstre>

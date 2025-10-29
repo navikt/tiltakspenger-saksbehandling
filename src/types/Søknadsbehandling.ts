@@ -1,7 +1,7 @@
 import { AntallDagerForMeldeperiode } from './AntallDagerForMeldeperiode';
 import { Barnetillegg } from './Barnetillegg';
 import {
-    BehandlingResultat,
+    RammebehandlingResultat,
     Behandlingstype,
     OppdaterBehandlingRequestBase,
     RammebehandlingBase,
@@ -19,16 +19,16 @@ interface SøknadsbehandlingBase extends RammebehandlingBase {
 }
 
 export interface SøknadsbehandlingIkkeValgt extends SøknadsbehandlingBase {
-    resultat: BehandlingResultat.IKKE_VALGT;
+    resultat: RammebehandlingResultat.IKKE_VALGT;
 }
 
 export interface SøknadsbehandlingInnvilgelse extends SøknadsbehandlingBase {
-    resultat: BehandlingResultat.INNVILGELSE;
+    resultat: RammebehandlingResultat.INNVILGELSE;
     søknad: InnvilgbarSøknad;
 }
 
 export interface SøknadsbehandlingAvslag extends SøknadsbehandlingBase {
-    resultat: BehandlingResultat.AVSLAG;
+    resultat: RammebehandlingResultat.AVSLAG;
     avslagsgrunner: Avslagsgrunn[];
 }
 
@@ -38,12 +38,12 @@ export type Søknadsbehandling =
     | SøknadsbehandlingIkkeValgt;
 
 export type SøknadsbehandlingResultat =
-    | BehandlingResultat.AVSLAG
-    | BehandlingResultat.INNVILGELSE
-    | BehandlingResultat.IKKE_VALGT;
+    | RammebehandlingResultat.AVSLAG
+    | RammebehandlingResultat.INNVILGELSE
+    | RammebehandlingResultat.IKKE_VALGT;
 
 export interface SøknadsbehandlingVedtakInnvilgelseRequest extends OppdaterBehandlingRequestBase {
-    resultat: BehandlingResultat.INNVILGELSE;
+    resultat: RammebehandlingResultat.INNVILGELSE;
     innvilgelsesperiode: Periode;
     valgteTiltaksdeltakelser: TiltaksdeltakelsePeriode[];
     antallDagerPerMeldeperiodeForPerioder: AntallDagerForMeldeperiode[];
@@ -51,12 +51,12 @@ export interface SøknadsbehandlingVedtakInnvilgelseRequest extends OppdaterBeha
 }
 
 export interface SøknadsbehandlingVedtakAvslagRequest extends OppdaterBehandlingRequestBase {
-    resultat: BehandlingResultat.AVSLAG;
+    resultat: RammebehandlingResultat.AVSLAG;
     avslagsgrunner: Avslagsgrunn[];
 }
 
 export interface SøknadsbehandlingVedtakIkkeValgtRequest extends OppdaterBehandlingRequestBase {
-    resultat: BehandlingResultat.IKKE_VALGT;
+    resultat: RammebehandlingResultat.IKKE_VALGT;
 }
 
 export type SøknadsbehandlingVedtakRequest =
