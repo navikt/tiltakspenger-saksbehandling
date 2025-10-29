@@ -68,7 +68,9 @@ export const useRevurderingOmgjøring = () => {
     const context = useRevurderingBehandling();
 
     if (context.behandling.resultat !== RammebehandlingResultat.OMGJØRING) {
-        throw Error(`Feil context for revurdering omgjøring: ${context.behandling.resultat}`);
+        throw Error(
+            `Feil context for revurdering omgjøring med behandling id ${context.behandling.id}: ${context.behandling.resultat}`,
+        );
     }
 
     return context as BehandlingContext<RevurderingOmgjøring>;

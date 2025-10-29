@@ -16,6 +16,7 @@ import {
     BehandlingSkjemaState,
 } from '~/components/behandling/context/BehandlingSkjemaReducer';
 import { useSak } from '~/context/sak/SakContext';
+import { rammebehandlingMedInnvilgelseEllerNull } from '~/utils/behandling';
 
 type Fritekstfelter = {
     textAreas: {
@@ -54,8 +55,12 @@ export const BehandlingSkjemaProvider = ({ children }: PropsWithChildren) => {
         [brevtekstRef, behandling.fritekstTilVedtaksbrev],
     );
     const getBarnetilleggBegrunnelse = useCallback(
-        () => getTextAreaRefValue(barnetilleggBegrunnelseRef, behandling.barnetillegg?.begrunnelse),
-        [barnetilleggBegrunnelseRef, behandling.barnetillegg],
+        () =>
+            getTextAreaRefValue(
+                barnetilleggBegrunnelseRef,
+                rammebehandlingMedInnvilgelseEllerNull(behandling)?.barnetillegg?.begrunnelse,
+            ),
+        [barnetilleggBegrunnelseRef, behandling],
     );
 
     return (

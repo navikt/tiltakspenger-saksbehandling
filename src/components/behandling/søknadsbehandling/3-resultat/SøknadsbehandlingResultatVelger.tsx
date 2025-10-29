@@ -8,9 +8,9 @@ import {
     useBehandlingSkjema,
     useBehandlingSkjemaDispatch,
 } from '~/components/behandling/context/BehandlingSkjemaContext';
+import { RammebehandlingResultat } from '~/types/Behandling';
 
 import style from './SøknadsbehandlingResultatVelger.module.css';
-import { RammebehandlingResultat } from '~/types/Behandling';
 
 export const SøknadsbehandlingResultatVelger = () => {
     const { rolleForBehandling, behandling } = useSøknadsbehandling();

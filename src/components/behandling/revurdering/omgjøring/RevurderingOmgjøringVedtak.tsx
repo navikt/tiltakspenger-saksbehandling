@@ -28,15 +28,16 @@ import {
 } from '../../context/BehandlingSkjemaContext';
 import { revurderingOmgjøringValidering } from './revurderingInnvilgelseValidering';
 import { useHentBehandlingLagringProps } from '../../felles/send-og-godkjenn/lagre/useHentBehandlingLagringProps';
+import { erRammebehandlingMedInnvilgelse } from '~/utils/behandling';
 
 export const RevurderingOmgjøringVedtak = () => {
     const { behandling } = useRevurderingOmgjøring();
     const { sak } = useSak();
     const vedtak = useBehandlingSkjema();
 
-    const vedtakSomBlirOmgjort = sak.behandlinger.find(
-        (b) => b.rammevedtakId === behandling.omgjørVedtak,
-    );
+    const omgjørVedtakId = behandling.omgjørVedtak;
+
+    const vedtakSomBlirOmgjort = sak.behandlinger.find((b) => b.rammevedtakId === omgjørVedtakId);
 
     const lagringProps = useHentBehandlingLagringProps({
         hentDTO: () => tilDTO(vedtak),
@@ -46,12 +47,7 @@ export const RevurderingOmgjøringVedtak = () => {
 
     if (!vedtakSomBlirOmgjort) {
         throw new Error(
-            `Teknisk feil: Klarte ikke finne vedtak som skal omgjøres for revurdering-id: ${behandling.id} og omgjørVedtak-id: ${behandling.omgjørVedtak}`,
-        );
-    }
-    if (behandling.resultat !== RammebehandlingResultat.OMGJØRING) {
-        throw new Error(
-            `Teknisk feil: Resultatet av revurdering er ikke omgjøring: ${behandling.resultat} for revurdering-id: ${behandling.id}`,
+            `Teknisk feil: Klarte ikke finne vedtak som skal omgjøres for revurdering-id: ${behandling.id} og omgjørVedtak-id: ${omgjørVedtakId}`,
         );
     }
 
@@ -68,13 +64,15 @@ export const RevurderingOmgjøringVedtak = () => {
                             {formaterTidspunkt(vedtakSomBlirOmgjort.iverksattTidspunkt!)} - Dette
                             vedtaket vil bli erstattet i sin helhet.
                         </BodyShort>
-                        <OppsummeringsPar
-                            label="Innvilgelsesperiode"
-                            verdi={periodeTilFormatertDatotekst(
-                                vedtakSomBlirOmgjort.innvilgelsesperiode!,
-                            )}
-                            variant="inlineColon"
-                        />
+                        {erRammebehandlingMedInnvilgelse(vedtakSomBlirOmgjort) && (
+                            <OppsummeringsPar
+                                label="Innvilgelsesperiode"
+                                verdi={periodeTilFormatertDatotekst(
+                                    vedtakSomBlirOmgjort.innvilgelsesperiode!,
+                                )}
+                                variant="inlineColon"
+                            />
+                        )}
                         <Link
                             href={behandlingUrl({
                                 saksnummer: vedtakSomBlirOmgjort.saksnummer,

@@ -46,7 +46,7 @@ export const SøknadsbehandlingAvslagsgrunner = () => {
                                 value={grunn}
                                 size={'small'}
                                 readOnly={erIkkeSaksbehandler}
-                                checked={avslagsgrunner !== null && avslagsgrunner.includes(grunn)}
+                                checked={avslagsgrunner.includes(grunn)}
                                 onChange={() => {
                                     dispatch({
                                         type: 'oppdaterAvslagsgrunn',

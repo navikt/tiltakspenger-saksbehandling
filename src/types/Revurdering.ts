@@ -16,6 +16,8 @@ interface RevurderingBase extends RammebehandlingBase {
     resultat: RevurderingResultat;
 }
 
+export type Revurdering = RevurderingStans | RevurderingInnvilgelse | RevurderingOmgjøring;
+
 export interface RevurderingStans extends RevurderingBase {
     resultat: RammebehandlingResultat.STANS;
     valgtHjemmelHarIkkeRettighet: Nullable<HjemmelForStans[]>;
@@ -25,14 +27,20 @@ export interface RevurderingStans extends RevurderingBase {
 
 export interface RevurderingInnvilgelse extends RevurderingBase {
     resultat: RammebehandlingResultat.REVURDERING_INNVILGELSE;
+    innvilgelsesperiode: Nullable<Periode>;
+    valgteTiltaksdeltakelser: Nullable<TiltaksdeltakelsePeriode[]>;
+    barnetillegg: Nullable<Barnetillegg>;
+    antallDagerPerMeldeperiode: Nullable<AntallDagerForMeldeperiode[]>;
 }
 
 export interface RevurderingOmgjøring extends RevurderingBase {
     resultat: RammebehandlingResultat.OMGJØRING;
     omgjørVedtak: VedtakId;
+    innvilgelsesperiode: Periode;
+    valgteTiltaksdeltakelser: TiltaksdeltakelsePeriode[];
+    barnetillegg: Barnetillegg;
+    antallDagerPerMeldeperiode: AntallDagerForMeldeperiode[];
 }
-
-export type Revurdering = RevurderingStans | RevurderingInnvilgelse | RevurderingOmgjøring;
 
 export type RevurderingResultat =
     | RammebehandlingResultat.REVURDERING_INNVILGELSE

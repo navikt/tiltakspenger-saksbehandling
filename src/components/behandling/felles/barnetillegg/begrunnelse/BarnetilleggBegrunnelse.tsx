@@ -10,9 +10,7 @@ import { useBehandlingSkjema } from '~/components/behandling/context/BehandlingS
 import style from './BarnetilleggBegrunnelse.module.css';
 
 export const BarnetilleggBegrunnelse = () => {
-    const { behandling, rolleForBehandling } = useBehandling();
-    const { barnetillegg } = behandling;
-
+    const { rolleForBehandling } = useBehandling();
     const { barnetilleggBegrunnelse } = useBehandlingSkjema().textAreas;
 
     return (
@@ -30,7 +28,7 @@ export const BarnetilleggBegrunnelse = () => {
             <VedtakSeksjon.Venstre>
                 <FritekstInput
                     label={'Begrunnelse vilkårsvurdering barnetillegg'}
-                    defaultValue={barnetillegg?.begrunnelse ?? ''}
+                    defaultValue={barnetilleggBegrunnelse.getValue()}
                     readOnly={rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER}
                     ref={barnetilleggBegrunnelse.ref}
                 />

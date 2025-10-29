@@ -7,8 +7,9 @@ import {
     RammebehandlingBase,
 } from './Behandling';
 import { Periode } from './Periode';
-import { InnvilgbarSøknad, Søknad } from './Søknad';
+import { Søknad } from './Søknad';
 import { TiltaksdeltakelsePeriode } from './TiltakDeltagelseTypes';
+import { Nullable } from '~/types/UtilTypes';
 
 interface SøknadsbehandlingBase extends RammebehandlingBase {
     type: Behandlingstype.SØKNADSBEHANDLING;
@@ -24,7 +25,10 @@ export interface SøknadsbehandlingIkkeValgt extends SøknadsbehandlingBase {
 
 export interface SøknadsbehandlingInnvilgelse extends SøknadsbehandlingBase {
     resultat: RammebehandlingResultat.INNVILGELSE;
-    søknad: InnvilgbarSøknad;
+    innvilgelsesperiode: Periode;
+    valgteTiltaksdeltakelser: TiltaksdeltakelsePeriode[];
+    barnetillegg: Nullable<Barnetillegg>;
+    antallDagerPerMeldeperiode: Nullable<AntallDagerForMeldeperiode[]>;
 }
 
 export interface SøknadsbehandlingAvslag extends SøknadsbehandlingBase {
