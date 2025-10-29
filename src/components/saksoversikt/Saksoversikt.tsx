@@ -14,8 +14,11 @@ import { VedtatteBehandlinger } from '~/components/saksoversikt/behandlinger-ove
 import NotificationBanner from '../notificationBanner/NotificationBanner';
 import MeldekortHelgToggle from '../toggles/MeldekortHelgToggle';
 import { Rammebehandling, Rammebehandlingsstatus, Behandlingstype } from '~/types/Behandling';
+import { OpprettPapirsøknad } from '~/components/saksoversikt/papirsøknad/OpprettPapirsøknad';
+import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
 
 export const Saksoversikt = () => {
+    const { papirsøknadToggle } = useFeatureToggles();
     const { sakId, saksnummer, behandlinger, behandlingsoversikt, søknader, meldeperiodeKjeder } =
         useSak().sak;
 
@@ -52,6 +55,12 @@ export const Saksoversikt = () => {
                     <Spacer />
                     <HStack gap="3">
                         <MeldekortHelgToggle />
+                        {papirsøknadToggle && (
+                            <OpprettPapirsøknad
+                                saksnummer={saksnummer}
+                                harVedtak={harVedtattSøknadsbehandling(behandlinger)}
+                            />
+                        )}
                         <OpprettRevurdering
                             sakId={sakId}
                             harVedtak={harVedtattSøknadsbehandling(behandlinger)}
