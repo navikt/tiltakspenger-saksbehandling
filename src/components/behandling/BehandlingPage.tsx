@@ -14,7 +14,7 @@ import BehandlingSattPåVentOppsummering from '~/components/oppsummeringer/behan
 import { BehandlingSkjemaProvider } from '~/components/behandling/context/BehandlingSkjemaContext';
 
 import style from './BehandlingPage.module.css';
-import { Behandlingstype } from '~/types/Behandling';
+import { Rammebehandlingstype } from '~/types/Behandling';
 
 export const BehandlingPage = () => {
     const { sak } = useSak();
@@ -38,9 +38,9 @@ export const BehandlingPage = () => {
                             <BehandlingerTidslinje sak={sak} />
                             {avbrutt && <AvbruttOppsummering avbrutt={avbrutt} withPanel={true} />}
                             <div className={style.vedtakContainer}>
-                                {type === Behandlingstype.SØKNADSBEHANDLING ? (
+                                {type === Rammebehandlingstype.SØKNADSBEHANDLING ? (
                                     <SøknadsbehandlingVedtak />
-                                ) : type === Behandlingstype.REVURDERING ? (
+                                ) : type === Rammebehandlingstype.REVURDERING ? (
                                     <RevurderingVedtak />
                                 ) : (
                                     <Alert

@@ -3,12 +3,12 @@ import { SakProps } from '~/types/Sak';
 import { hentBarnetilleggPerioderMedBarn } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraVedtakTidslinje';
 import { Periode } from '~/types/Periode';
 import { Rammevedtak } from '~/types/Vedtak';
-import { Rammebehandling, Behandlingstype } from '~/types/Behandling';
+import { Rammebehandling, Rammebehandlingstype } from '~/types/Behandling';
 
 export const kunPerioderMedBarn = (it: BarnetilleggPeriode) => it.antallBarn > 0;
 
 export const harSøktBarnetillegg = (periode: Periode, behandling: Rammebehandling, sak: SakProps) =>
-    (behandling.type === Behandlingstype.SØKNADSBEHANDLING
+    (behandling.type === Rammebehandlingstype.SØKNADSBEHANDLING
         ? behandling.søknad.barnetillegg
         : hentBarnetilleggPerioderMedBarn(sak.tidslinje, periode)
     ).length > 0;

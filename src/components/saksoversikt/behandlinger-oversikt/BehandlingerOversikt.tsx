@@ -1,10 +1,13 @@
-import { BehandlingEllerSøknadForOversikt } from '~/types/BehandlingForOversikt';
-import { Table } from '@navikt/ds-react';
+import {
+    BehandlingEllerSøknadForOversikt,
+    TypeBehandlingForOversikt,
+} from '~/types/BehandlingForOversikt';
+import { Table, Tag } from '@navikt/ds-react';
 import {
     behandlingResultatTilText,
     finnBehandlingStatusTag,
-    finnBehandlingstypeTekst,
     finnMeldeperiodeKjedeStatusTekst,
+    finnTypeBehandlingTekstForOversikt,
 } from '~/utils/tekstformateringUtils';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '~/utils/date';
 import { ApneBehandlingerMeny } from '~/components/behandlingmeny/ApneBehandlingerMeny';
@@ -16,7 +19,6 @@ import { MeldekortBehandlingType } from '~/types/meldekort/MeldekortBehandling';
 import { meldeperiodeUrl } from '~/utils/urls';
 import { MeldeperiodeKjedeOversiktMeny } from '~/components/saksoversikt/meldekort-oversikt/MeldekortOversikt';
 import { SakId } from '~/types/Sak';
-import { Behandlingstype } from '~/types/Behandling';
 
 type Props = {
     behandlinger: BehandlingEllerSøknadForOversikt[];
@@ -45,51 +47,55 @@ export const BehandlingerOversikt = ({
                 </Table.Row>
             </Table.Header>
             <Table.Body>
-                {behandlinger.map((behandling) => {
-                    const { typeBehandling, resultat } = behandling;
+                {behandlinger.map((behandlingEllerSøknad) => {
+                    const { typeBehandling, resultat } = behandlingEllerSøknad;
 
-                    const typeTekst = finnBehandlingstypeTekst[typeBehandling];
+                    const typeTekst = finnTypeBehandlingTekstForOversikt[typeBehandling];
 
-                    const revurderingTekst =
-                        typeBehandling === Behandlingstype.REVURDERING
-                            ? ` (${behandlingResultatTilText[resultat]})`
-                            : '';
+                    const resultatTekst =
+                        typeBehandling === TypeBehandlingForOversikt.SØKNAD
+                            ? ''
+                            : ` (${behandlingResultatTilText[resultat].toLowerCase()})`;
 
                     return (
-                        <Table.Row shadeOnHover={false} key={behandling.id}>
-                            <Table.DataCell>{`${typeTekst}${revurderingTekst}`}</Table.DataCell>
+                        <Table.Row shadeOnHover={false} key={behandlingEllerSøknad.id}>
+                            <Table.DataCell>{`${typeTekst}${resultatTekst}`}</Table.DataCell>
                             <Table.DataCell>
-                                {finnBehandlingStatusTag(
-                                    behandling.status,
-                                    behandling.underkjent,
-                                    behandling.erSattPåVent,
+                                {typeBehandling === TypeBehandlingForOversikt.SØKNAD ? (
+                                    <Tag variant="neutral">{'Søknad'}</Tag>
+                                ) : (
+                                    finnBehandlingStatusTag(
+                                        behandlingEllerSøknad.status,
+                                        behandlingEllerSøknad.underkjent,
+                                        behandlingEllerSøknad.erSattPåVent,
+                                    )
                                 )}
                             </Table.DataCell>
                             <Table.DataCell>
-                                {behandling.kravtidspunkt
-                                    ? formaterTidspunkt(behandling.kravtidspunkt)
+                                {behandlingEllerSøknad.kravtidspunkt
+                                    ? formaterTidspunkt(behandlingEllerSøknad.kravtidspunkt)
                                     : '-'}
                             </Table.DataCell>
                             <Table.DataCell>
-                                {behandling.periode &&
-                                    `${periodeTilFormatertDatotekst(behandling.periode)}`}
+                                {behandlingEllerSøknad.periode &&
+                                    `${periodeTilFormatertDatotekst(behandlingEllerSøknad.periode)}`}
                             </Table.DataCell>
                             <Table.DataCell>
-                                {behandling.saksbehandler ?? 'Ikke tildelt'}
+                                {behandlingEllerSøknad.saksbehandler ?? 'Ikke tildelt'}
                             </Table.DataCell>
                             <Table.DataCell>
-                                {behandling.beslutter ?? 'Ikke tildelt'}
+                                {behandlingEllerSøknad.beslutter ?? 'Ikke tildelt'}
                             </Table.DataCell>
                             <Table.DataCell scope="col" align={'right'}>
-                                {isBehandling(behandling) && (
+                                {isBehandling(behandlingEllerSøknad) && (
                                     <ApneBehandlingerMeny
-                                        behandling={behandling}
+                                        behandling={behandlingEllerSøknad}
                                         medAvsluttBehandling
                                     />
                                 )}
-                                {isSøknad(behandling) && (
+                                {isSøknad(behandlingEllerSøknad) && (
                                     <StartSøknadBehandling
-                                        søknad={behandling}
+                                        søknad={behandlingEllerSøknad}
                                         medAvsluttBehandling
                                     />
                                 )}

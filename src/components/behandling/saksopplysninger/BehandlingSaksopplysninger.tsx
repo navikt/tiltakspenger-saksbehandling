@@ -14,7 +14,7 @@ import { BehandlingYtelserOpplysninger } from '~/components/behandling/saksopply
 
 import style from './BehandlingSaksopplysninger.module.css';
 import { BehandlingTiltakspengerArenaOpplysninger } from '~/components/behandling/saksopplysninger/tiltakspenger-fra-arena/BehandlingTiltakspengerArenaOpplysninger';
-import { Behandlingstype } from '~/types/Behandling';
+import { Rammebehandlingstype } from '~/types/Behandling';
 
 export const BehandlingSaksopplysninger = () => {
     const { behandling, rolleForBehandling } = useBehandling();
@@ -67,7 +67,7 @@ export const BehandlingSaksopplysninger = () => {
                     />
                 </OpplysningerSeksjon>
             )}
-            {type === Behandlingstype.SØKNADSBEHANDLING && (
+            {type === Rammebehandlingstype.SØKNADSBEHANDLING && (
                 <>
                     <Separator />
                     <OpplysningerSeksjon header={'Fra søknad'}>

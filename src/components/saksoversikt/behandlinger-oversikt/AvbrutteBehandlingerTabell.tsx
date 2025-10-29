@@ -1,11 +1,11 @@
 import { AvbruttSøknadEllerBehandlingCellInfo } from './AvsluttedeBehandlingerUtils';
 import { Button, Table } from '@navikt/ds-react';
-import { finnBehandlingstypeTekst } from '~/utils/tekstformateringUtils';
+import { finnTypeBehandlingTekstForOversikt } from '~/utils/tekstformateringUtils';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '~/utils/date';
-
 import Link from 'next/link';
 import { behandlingUrl } from '~/utils/urls';
-import { Behandlingstype } from '~/types/Behandling';
+import { Rammebehandlingstype } from '~/types/Behandling';
+import { TypeBehandlingForOversikt } from '~/types/BehandlingForOversikt';
 
 export const AvbrutteBehandlingerTabell = (props: {
     saksnummer: string;
@@ -31,7 +31,7 @@ export const AvbrutteBehandlingerTabell = (props: {
                 {props.avbrutteBehandlinger.map((avsluttet, idx) => (
                     <Table.Row shadeOnHover={false} key={`${avsluttet.tidspunktAvsluttet}-${idx}`}>
                         <Table.DataCell>
-                            {finnBehandlingstypeTekst[avsluttet.behandlingstype]}
+                            {finnTypeBehandlingTekstForOversikt[avsluttet.behandlingstype]}
                         </Table.DataCell>
                         <Table.DataCell>
                             {formaterTidspunkt(avsluttet.tidspunktAvsluttet)}
@@ -44,8 +44,9 @@ export const AvbrutteBehandlingerTabell = (props: {
                         <Table.DataCell>{avsluttet.saksbehandler ?? 'Ikke tildelt'}</Table.DataCell>
                         <Table.DataCell>{avsluttet.beslutter ?? 'Ikke tildelt'}</Table.DataCell>
                         <Table.DataCell align={'right'}>
-                            {(avsluttet.behandlingstype === Behandlingstype.SØKNADSBEHANDLING ||
-                                avsluttet.behandlingstype === Behandlingstype.REVURDERING) && (
+                            {(avsluttet.behandlingstype ===
+                                Rammebehandlingstype.SØKNADSBEHANDLING ||
+                                avsluttet.behandlingstype === Rammebehandlingstype.REVURDERING) && (
                                 <Button
                                     style={{ minWidth: '50%' }}
                                     size="small"
@@ -59,7 +60,7 @@ export const AvbrutteBehandlingerTabell = (props: {
                                     Se behandling
                                 </Button>
                             )}
-                            {avsluttet.behandlingstype === Behandlingstype.SØKNAD && (
+                            {avsluttet.behandlingstype === TypeBehandlingForOversikt.SØKNAD && (
                                 <Button
                                     style={{ minWidth: '50%' }}
                                     size="small"

@@ -13,7 +13,7 @@ import { Periode } from '~/types/Periode';
 import { SakProps } from '~/types/Sak';
 import { erDatoIPeriode } from '~/utils/periode';
 import { ANTALL_DAGER_DEFAULT } from '~/components/behandling/felles/dager-per-meldeperiode/BehandlingDagerPerMeldeperiode';
-import { Behandlingstype, Rammebehandling } from '~/types/Behandling';
+import { Rammebehandlingstype, Rammebehandling } from '~/types/Behandling';
 import { TiltaksdeltakelsePeriodeFormData } from './slices/TiltaksdeltagelseState';
 import {
     Søknadsbehandling,
@@ -42,10 +42,10 @@ export const behandlingSkjemaInitialValue = ({
     const { type } = behandling;
 
     switch (type) {
-        case Behandlingstype.SØKNADSBEHANDLING: {
+        case Rammebehandlingstype.SØKNADSBEHANDLING: {
             return søknadsbehandlingInitialState(behandling);
         }
-        case Behandlingstype.REVURDERING: {
+        case Rammebehandlingstype.REVURDERING: {
             return revurderingInitialState(behandling, sak);
         }
     }

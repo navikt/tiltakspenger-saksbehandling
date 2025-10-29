@@ -1,13 +1,17 @@
 import { AntallDagerForMeldeperiode } from './AntallDagerForMeldeperiode';
 import { Barnetillegg } from './Barnetillegg';
-import { Behandlingstype, OppdaterBehandlingRequestBase, RammebehandlingBase } from './Behandling';
+import {
+    Rammebehandlingstype,
+    OppdaterBehandlingRequestBase,
+    RammebehandlingBase,
+} from './Behandling';
 import { Periode } from './Periode';
 import { TiltaksdeltakelsePeriode } from './TiltakDeltagelseTypes';
 import { Nullable } from './UtilTypes';
 import { VedtakId } from './Vedtak';
 
 interface RevurderingBase extends RammebehandlingBase {
-    type: Behandlingstype.REVURDERING;
+    type: Rammebehandlingstype.REVURDERING;
     resultat: RevurderingResultat;
 }
 

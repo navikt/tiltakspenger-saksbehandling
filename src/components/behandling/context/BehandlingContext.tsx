@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { useRolleForBehandling } from '~/context/saksbehandler/SaksbehandlerContext';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
-import { Behandlingstype, Rammebehandling } from '~/types/Behandling';
+import { Rammebehandlingstype, Rammebehandling } from '~/types/Behandling';
 import { Søknadsbehandling } from '~/types/Søknadsbehandling';
 import { Revurdering, RevurderingOmgjøring, RevurderingResultat } from '~/types/Revurdering';
 
@@ -47,7 +47,7 @@ export const useBehandling = () => {
 export const useSøknadsbehandling = () => {
     const context = useContext(Context);
 
-    if (context.behandling.type !== Behandlingstype.SØKNADSBEHANDLING) {
+    if (context.behandling.type !== Rammebehandlingstype.SØKNADSBEHANDLING) {
         throw Error(`Feil context for søknadsbehandling: ${context.behandling.type}`);
     }
 
@@ -57,7 +57,7 @@ export const useSøknadsbehandling = () => {
 export const useRevurderingBehandling = () => {
     const context = useContext(Context);
 
-    if (context.behandling.type !== Behandlingstype.REVURDERING) {
+    if (context.behandling.type !== Rammebehandlingstype.REVURDERING) {
         throw Error(`Feil context for revurdering: ${context.behandling.type}`);
     }
 

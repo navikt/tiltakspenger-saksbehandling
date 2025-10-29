@@ -6,14 +6,15 @@ import { Tag } from '@navikt/ds-react';
 import {
     RammebehandlingResultat,
     Rammebehandlingsstatus,
-    Behandlingstype,
+    Rammebehandlingstype,
 } from '~/types/Behandling';
 import { Utbetalingsstatus } from '~/types/Utbetaling';
 import { ManueltBehandlesGrunn, SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
 import { RevurderingResultat } from '~/types/Revurdering';
+import { TypeBehandlingForOversikt } from '~/types/BehandlingForOversikt';
 
 export const finnBehandlingStatusTag = (
-    status: Rammebehandlingsstatus | 'SØKNAD',
+    status: Rammebehandlingsstatus,
     underkjent: boolean,
     erSattPåVent: boolean = false,
 ) => {
@@ -34,7 +35,7 @@ export const finnBehandlingStatusTag = (
     return behandlingStatusTag[status];
 };
 
-const behandlingStatusTag: Record<Rammebehandlingsstatus | 'SØKNAD', React.ReactElement> = {
+const behandlingStatusTag: Record<Rammebehandlingsstatus, React.ReactElement> = {
     [Rammebehandlingsstatus.VEDTATT]: <Tag variant="success">Vedtatt</Tag>,
     [Rammebehandlingsstatus.KLAR_TIL_BEHANDLING]: <Tag variant="info">Klar til behandling</Tag>,
     [Rammebehandlingsstatus.KLAR_TIL_BESLUTNING]: <Tag variant="info">Klar til beslutning</Tag>,
@@ -44,7 +45,6 @@ const behandlingStatusTag: Record<Rammebehandlingsstatus | 'SØKNAD', React.Reac
     [Rammebehandlingsstatus.UNDER_AUTOMATISK_BEHANDLING]: (
         <Tag variant="neutral">Under automatisk behandling</Tag>
     ),
-    SØKNAD: <Tag variant="neutral">Søknad</Tag>,
 };
 
 export const brukersMeldekortDagStatusTekst: Record<BrukersMeldekortDagStatus, string> = {
@@ -86,18 +86,23 @@ export const finnMeldeperiodeKjedeStatusTekst: Record<MeldeperiodeKjedeStatus, s
     [MeldeperiodeKjedeStatus.KORRIGERT_MELDEKORT]: 'Korrigert meldekort',
 } as const;
 
-export const finnBehandlingstypeTekst: Record<Behandlingstype, string> = {
-    [Behandlingstype.SØKNADSBEHANDLING]: 'Søknadsbehandling',
-    [Behandlingstype.REVURDERING]: 'Revurdering',
-    [Behandlingstype.SØKNAD]: 'Søknad',
+export const finnBehandlingstypeTekst: Record<Rammebehandlingstype, string> = {
+    [Rammebehandlingstype.SØKNADSBEHANDLING]: 'Søknadsbehandling',
+    [Rammebehandlingstype.REVURDERING]: 'Revurdering',
+} as const;
+
+export const finnTypeBehandlingTekstForOversikt: Record<TypeBehandlingForOversikt, string> = {
+    [TypeBehandlingForOversikt.SØKNADSBEHANDLING]: 'Søknadsbehandling',
+    [TypeBehandlingForOversikt.REVURDERING]: 'Revurdering',
+    [TypeBehandlingForOversikt.SØKNAD]: 'Søknad',
 } as const;
 
 export const behandlingResultatTilText: Record<RammebehandlingResultat, string> = {
     [SøknadsbehandlingResultat.AVSLAG]: 'Avslag',
     [SøknadsbehandlingResultat.INNVILGELSE]: 'Innvilgelse',
-    [RevurderingResultat.STANS]: 'Stans',
-    [RevurderingResultat.INNVILGELSE]: 'Revurdering innvilgelse',
     [SøknadsbehandlingResultat.IKKE_VALGT]: 'Ikke valgt',
+    [RevurderingResultat.STANS]: 'Stans',
+    [RevurderingResultat.INNVILGELSE]: 'Innvilgelse',
     [RevurderingResultat.OMGJØRING]: 'Omgjøring',
 };
 

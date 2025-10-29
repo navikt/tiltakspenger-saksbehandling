@@ -1,52 +1,71 @@
 import { Periode } from './Periode';
 import { SakId } from './Sak';
-
-import { Nullable } from '~/types/UtilTypes';
-import { BehandlingId, Rammebehandlingsstatus, Behandlingstype } from './Behandling';
+import { BehandlingId, Rammebehandlingsstatus, RammebehandlingResultat } from './Behandling';
 import { SøknadId } from './Søknad';
-
-type RevurderingResultat = 'STANS' | 'REVURDERING_INNVILGELSE';
-type SøknadsbehandlingResultat = 'AVSLAG' | 'INNVILGELSE';
+import { RevurderingResultat } from '~/types/Revurdering';
+import { SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
+import { Nullable } from '~/types/UtilTypes';
 
 export type BehandlingEllerSøknadForOversikt = BehandlingForOversikt | SøknadForOversikt;
 
-export type BehandlingForOversikt = {
-    id: BehandlingId;
+export enum TypeBehandlingForOversikt {
+    SØKNADSBEHANDLING = 'SØKNADSBEHANDLING',
+    REVURDERING = 'REVURDERING',
+    SØKNAD = 'SØKNAD',
+}
+
+interface BehandlingEllerSøknadForOversiktBase {
+    id: BehandlingId | SøknadId;
     sakId: SakId;
+    saksnummer: string;
+    typeBehandling: TypeBehandlingForOversikt;
+    opprettet: string; // LocalDateTime as ISO string
+    periode?: Nullable<Periode>;
+    status: Nullable<Rammebehandlingsstatus>;
+    kravtidspunkt?: Nullable<string>; // LocalDateTime as ISO string
+    underkjent?: Nullable<boolean>;
+    resultat?: Nullable<RammebehandlingResultat>;
+    saksbehandler?: Nullable<string>;
+    beslutter?: Nullable<string>;
+    erSattPåVent?: Nullable<boolean>;
+}
+
+interface BehandlingForOversiktBase extends BehandlingEllerSøknadForOversiktBase {
+    id: BehandlingId;
+    typeBehandling:
+        | TypeBehandlingForOversikt.SØKNADSBEHANDLING
+        | TypeBehandlingForOversikt.REVURDERING;
     status: Rammebehandlingsstatus;
     underkjent: boolean;
     kravtidspunkt: string | null;
-    fnr: string;
-    periode: Periode;
-    saksnummer: string;
-    saksbehandler: string;
-    beslutter: string | null;
     opprettet: string;
+    resultat: RammebehandlingResultat;
     erSattPåVent: boolean;
-} & (
-    | {
-          typeBehandling: Behandlingstype.REVURDERING;
-          resultat: RevurderingResultat;
-      }
-    | {
-          typeBehandling: Behandlingstype.SØKNADSBEHANDLING;
-          resultat: Nullable<SøknadsbehandlingResultat>;
-      }
-);
+}
 
-export type SøknadForOversikt = {
-    id: SøknadId;
-    sakId: SakId;
-    saksnummer: string;
-    typeBehandling: Behandlingstype.SØKNAD;
-    resultat: null;
-    status: 'SØKNAD';
-    underkjent: boolean;
+interface SøknadsbehandlingForOversikt extends BehandlingForOversiktBase {
+    typeBehandling: TypeBehandlingForOversikt.SØKNADSBEHANDLING;
     kravtidspunkt: string;
-    fnr: string;
+    resultat: SøknadsbehandlingResultat;
+}
+
+interface RevurderingForOversikt extends BehandlingForOversiktBase {
+    typeBehandling: TypeBehandlingForOversikt.REVURDERING;
+    kravtidspunkt: null;
+    resultat: RevurderingResultat;
+}
+
+export type BehandlingForOversikt = SøknadsbehandlingForOversikt | RevurderingForOversikt;
+
+export interface SøknadForOversikt extends BehandlingEllerSøknadForOversiktBase {
+    id: SøknadId;
+    typeBehandling: TypeBehandlingForOversikt.SØKNAD;
     periode: null;
+    resultat: null;
+    status: null;
+    kravtidspunkt: string;
+    underkjent: null;
     saksbehandler: null;
     beslutter: null;
-    opprettet: string;
-    erSattPåVent: boolean;
-};
+    erSattPåVent: null;
+}

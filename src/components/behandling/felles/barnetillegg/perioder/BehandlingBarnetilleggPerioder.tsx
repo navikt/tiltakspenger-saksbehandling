@@ -12,7 +12,7 @@ import {
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
 
 import style from './BehandlingBarnetilleggPerioder.module.css';
-import { Behandlingstype } from '~/types/Behandling';
+import { Rammebehandlingstype } from '~/types/Behandling';
 import { BarnetilleggPeriodeFormData } from '../utils/hentBarnetilleggFraBehandling';
 
 const BATCH_MED_BARN = 10;
@@ -22,7 +22,7 @@ export const BehandlingBarnetilleggPerioder = () => {
     const { barnetilleggPerioder } = useBehandlingSkjema();
     const dispatch = useBehandlingSkjemaDispatch();
 
-    const erSøknadsbehandling = behandling.type === Behandlingstype.SØKNADSBEHANDLING;
+    const erSøknadsbehandling = behandling.type === Rammebehandlingstype.SØKNADSBEHANDLING;
     const erSaksbehandler = rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER;
 
     const antallBarn = erSøknadsbehandling ? behandling.søknad.barnetillegg.length : 1;

@@ -5,16 +5,17 @@ import {
     Rammebehandling,
     BehandlingId,
     RammebehandlingResultat,
-    Behandlingstype,
+    Rammebehandlingstype,
 } from '~/types/Behandling';
+import { TypeBehandlingForOversikt } from '~/types/BehandlingForOversikt';
 
 type AvbruttSøknad = {
-    behandlingstype: Behandlingstype.SØKNAD;
+    behandlingstype: TypeBehandlingForOversikt.SØKNAD;
     id: SøknadId;
 };
 
 type AvbruttBehandling = {
-    behandlingstype: Behandlingstype.SØKNADSBEHANDLING | Behandlingstype.REVURDERING;
+    behandlingstype: Rammebehandlingstype.SØKNADSBEHANDLING | Rammebehandlingstype.REVURDERING;
     id: BehandlingId;
     resultat: RammebehandlingResultat;
 };
@@ -38,10 +39,7 @@ export const avbruttBehandlingToDataCellInfo = (
         id: behandling.id,
         behandlingsperiode: behandling.virkningsperiode,
         resultat: behandling.resultat,
-        //raq - todo - fiks dette
-        behandlingstype: behandling.type as
-            | Behandlingstype.SØKNADSBEHANDLING
-            | Behandlingstype.REVURDERING,
+        behandlingstype: behandling.type,
         tidspunktAvsluttet: tidspunktAvsluttet,
         avsluttetPga: behandling.avbrutt ? 'avbrutt' : 'ferdigBehandlet',
         saksbehandler: behandling.saksbehandler,
@@ -64,7 +62,7 @@ export const avbruttSøknadToDataCellInfo = (
                       tilOgMed: søknad.tiltak.tilOgMed,
                   }
                 : null,
-        behandlingstype: Behandlingstype.SØKNAD,
+        behandlingstype: TypeBehandlingForOversikt.SØKNAD,
         tidspunktAvsluttet: søknad.avbrutt.avbruttTidspunkt,
         avsluttetPga: 'avbrutt',
     };

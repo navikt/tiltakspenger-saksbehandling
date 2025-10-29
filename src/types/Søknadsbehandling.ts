@@ -1,13 +1,17 @@
 import { AntallDagerForMeldeperiode } from './AntallDagerForMeldeperiode';
 import { Barnetillegg } from './Barnetillegg';
-import { Behandlingstype, OppdaterBehandlingRequestBase, RammebehandlingBase } from './Behandling';
+import {
+    Rammebehandlingstype,
+    OppdaterBehandlingRequestBase,
+    RammebehandlingBase,
+} from './Behandling';
 import { Periode } from './Periode';
 import { Søknad } from './Søknad';
 import { TiltaksdeltakelsePeriode } from './TiltakDeltagelseTypes';
 import { Nullable } from '~/types/UtilTypes';
 
 interface SøknadsbehandlingBase extends RammebehandlingBase {
-    type: Behandlingstype.SØKNADSBEHANDLING;
+    type: Rammebehandlingstype.SØKNADSBEHANDLING;
     resultat: SøknadsbehandlingResultat;
     søknad: Søknad;
     automatiskSaksbehandlet: boolean;

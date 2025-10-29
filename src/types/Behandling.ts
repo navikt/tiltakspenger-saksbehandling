@@ -27,7 +27,7 @@ export type BehandlingId = `beh_${string}`;
 
 export interface RammebehandlingBase {
     id: BehandlingId;
-    type: Behandlingstype;
+    type: Rammebehandlingstype;
     status: Rammebehandlingsstatus;
     resultat: RammebehandlingResultat;
     sakId: SakId;
@@ -51,8 +51,7 @@ export type Rammebehandling = Søknadsbehandling | Revurdering;
 
 export type RammebehandlingResultat = SøknadsbehandlingResultat | RevurderingResultat;
 
-export enum Behandlingstype {
-    SØKNAD = 'SØKNAD',
+export enum Rammebehandlingstype {
     SØKNADSBEHANDLING = 'SØKNADSBEHANDLING',
     REVURDERING = 'REVURDERING',
 }

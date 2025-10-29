@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ActionMenu, Button } from '@navikt/ds-react';
-import { BehandlingForOversikt } from '~/types/BehandlingForOversikt';
+import { BehandlingForOversikt, TypeBehandlingForOversikt } from '~/types/BehandlingForOversikt';
 import OvertaBehandlingMenyvalg, {
     visOvertaBehandlingMenyvalg,
 } from './menyvalg/OvertaBehandlingMenyvalg';
@@ -30,7 +30,7 @@ import GjenopptaBehandlingMenyvalg, {
 } from '~/components/behandlingmeny/menyvalg/GjenopptaBehandlingMenyvalg';
 import SettBehandlingPåVentModal from '~/components/modaler/SettBehandlingPåVentModal';
 import { behandlingUrl } from '~/utils/urls';
-import { Rammebehandlingsstatus, Behandlingstype } from '~/types/Behandling';
+import { Rammebehandlingsstatus } from '~/types/Behandling';
 
 type Props = {
     behandling: BehandlingForOversikt;
@@ -78,6 +78,8 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
             </Button>
         );
     }
+
+    const erRevurdering = behandling.typeBehandling === TypeBehandlingForOversikt.REVURDERING;
 
     return (
         <>
@@ -137,9 +139,9 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
                     onClose={() => setVisAvsluttBehandlingModal(false)}
                     saksnummer={behandling.saksnummer}
                     behandlingId={behandling.id}
-                    tittel={`Avslutt ${behandling.typeBehandling === Behandlingstype.REVURDERING ? 'revurdering' : 'behandling'}`}
-                    tekst={`Er du sikker på at du vil avslutte ${behandling.typeBehandling === Behandlingstype.REVURDERING ? 'revurderingen' : 'behandling av søknad'}?`}
-                    textareaLabel={`Hvorfor avsluttes ${behandling.typeBehandling === Behandlingstype.REVURDERING ? 'revurderingen' : 'behandlingen'}? (obligatorisk)`}
+                    tittel={`Avslutt ${erRevurdering ? 'revurdering' : 'behandling'}`}
+                    tekst={`Er du sikker på at du vil avslutte ${erRevurdering ? 'revurderingen' : 'behandling av søknad'}?`}
+                    textareaLabel={`Hvorfor avsluttes ${erRevurdering ? 'revurderingen' : 'behandlingen'}? (obligatorisk)`}
                 />
             )}
             {visOvertaBehandlingModal && (

@@ -5,7 +5,7 @@ import {
     Rammebehandling,
     BehandlingId,
     RammebehandlingResultat,
-    Behandlingstype,
+    Rammebehandlingstype,
 } from '~/types/Behandling';
 import { SøknadId } from '~/types/Søknad';
 import { VedtakId } from '~/types/Vedtak';
@@ -15,7 +15,7 @@ export interface VedtattBehandlingCellInfo {
     sakId: SakId;
     saksnummer: string;
     søknadId?: SøknadId;
-    behandlingstype: Behandlingstype;
+    behandlingstype: Rammebehandlingstype;
     resultat: RammebehandlingResultat;
     tidspunktAvsluttet: string;
     behandlingsperiode: Nullable<Periode>;
@@ -33,7 +33,9 @@ export const vedtattBehandlingToDataCellInfo = (
         : behandling.iverksattTidspunkt!;
 
     const søknadId =
-        behandling.type === Behandlingstype.SØKNADSBEHANDLING ? behandling.søknad.id : undefined;
+        behandling.type === Rammebehandlingstype.SØKNADSBEHANDLING
+            ? behandling.søknad.id
+            : undefined;
 
     return {
         id: behandling.id,

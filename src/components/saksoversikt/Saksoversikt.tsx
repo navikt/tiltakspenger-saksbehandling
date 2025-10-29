@@ -13,7 +13,7 @@ import styles from './Saksoversikt.module.css';
 import { VedtatteBehandlinger } from '~/components/saksoversikt/behandlinger-oversikt/VedtatteBehandlinger';
 import NotificationBanner from '../notificationBanner/NotificationBanner';
 import MeldekortHelgToggle from '../toggles/MeldekortHelgToggle';
-import { Rammebehandling, Rammebehandlingsstatus, Behandlingstype } from '~/types/Behandling';
+import { Rammebehandling, Rammebehandlingsstatus, Rammebehandlingstype } from '~/types/Behandling';
 import { OpprettPapirsøknad } from '~/components/saksoversikt/papirsøknad/OpprettPapirsøknad';
 import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
 
@@ -117,6 +117,6 @@ export const Saksoversikt = () => {
 const harVedtattSøknadsbehandling = (behandlingsoversikt: Rammebehandling[]) =>
     behandlingsoversikt.some(
         (behandling) =>
-            behandling.type === Behandlingstype.SØKNADSBEHANDLING &&
+            behandling.type === Rammebehandlingstype.SØKNADSBEHANDLING &&
             behandling.status === Rammebehandlingsstatus.VEDTATT,
     );
