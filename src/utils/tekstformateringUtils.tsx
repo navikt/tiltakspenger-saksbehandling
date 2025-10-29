@@ -4,7 +4,7 @@ import { MeldeperiodeKjedeStatus } from '~/types/meldekort/Meldeperiode';
 import React, { ReactElement } from 'react';
 import { Tag } from '@navikt/ds-react';
 import {
-    RammebehandlingResultatType,
+    RammebehandlingResultat,
     Rammebehandlingsstatus,
     Behandlingstype,
 } from '~/types/Behandling';
@@ -91,39 +91,37 @@ export const finnBehandlingstypeTekst: Record<Behandlingstype, string> = {
     [Behandlingstype.SØKNAD]: 'Søknad',
 } as const;
 
-export const behandlingResultatTilText: Record<RammebehandlingResultatType, string> = {
-    [RammebehandlingResultatType.AVSLAG]: 'Avslag',
-    [RammebehandlingResultatType.INNVILGELSE]: 'Innvilgelse',
-    [RammebehandlingResultatType.STANS]: 'Stans',
-    [RammebehandlingResultatType.REVURDERING_INNVILGELSE]: 'Revurdering innvilgelse',
-    [RammebehandlingResultatType.IKKE_VALGT]: 'Ikke valgt',
-    [RammebehandlingResultatType.OMGJØRING]: 'Omgjøring',
+export const behandlingResultatTilText: Record<RammebehandlingResultat, string> = {
+    [RammebehandlingResultat.AVSLAG]: 'Avslag',
+    [RammebehandlingResultat.INNVILGELSE]: 'Innvilgelse',
+    [RammebehandlingResultat.STANS]: 'Stans',
+    [RammebehandlingResultat.REVURDERING_INNVILGELSE]: 'Revurdering innvilgelse',
+    [RammebehandlingResultat.IKKE_VALGT]: 'Ikke valgt',
+    [RammebehandlingResultat.OMGJØRING]: 'Omgjøring',
 };
 
-export const behandlingResultatTilTag: Record<RammebehandlingResultatType, ReactElement> = {
-    [RammebehandlingResultatType.AVSLAG]: (
-        <Tag variant="error">{behandlingResultatTilText[RammebehandlingResultatType.AVSLAG]}</Tag>
+export const behandlingResultatTilTag: Record<RammebehandlingResultat, ReactElement> = {
+    [RammebehandlingResultat.AVSLAG]: (
+        <Tag variant="error">{behandlingResultatTilText[RammebehandlingResultat.AVSLAG]}</Tag>
     ),
-    [RammebehandlingResultatType.INNVILGELSE]: (
+    [RammebehandlingResultat.INNVILGELSE]: (
         <Tag variant="success">
-            {behandlingResultatTilText[RammebehandlingResultatType.INNVILGELSE]}
+            {behandlingResultatTilText[RammebehandlingResultat.INNVILGELSE]}
         </Tag>
     ),
-    [RammebehandlingResultatType.STANS]: (
-        <Tag variant="warning">{behandlingResultatTilText[RammebehandlingResultatType.STANS]}</Tag>
+    [RammebehandlingResultat.STANS]: (
+        <Tag variant="warning">{behandlingResultatTilText[RammebehandlingResultat.STANS]}</Tag>
     ),
-    [RammebehandlingResultatType.REVURDERING_INNVILGELSE]: (
+    [RammebehandlingResultat.REVURDERING_INNVILGELSE]: (
         <Tag variant="info">
-            {behandlingResultatTilText[RammebehandlingResultatType.REVURDERING_INNVILGELSE]}
+            {behandlingResultatTilText[RammebehandlingResultat.REVURDERING_INNVILGELSE]}
         </Tag>
     ),
-    [RammebehandlingResultatType.IKKE_VALGT]: (
-        <Tag variant="neutral">
-            {behandlingResultatTilText[RammebehandlingResultatType.IKKE_VALGT]}
-        </Tag>
+    [RammebehandlingResultat.IKKE_VALGT]: (
+        <Tag variant="neutral">{behandlingResultatTilText[RammebehandlingResultat.IKKE_VALGT]}</Tag>
     ),
-    [RammebehandlingResultatType.OMGJØRING]: (
-        <Tag variant="alt1">{behandlingResultatTilText[RammebehandlingResultatType.OMGJØRING]}</Tag>
+    [RammebehandlingResultat.OMGJØRING]: (
+        <Tag variant="alt1">{behandlingResultatTilText[RammebehandlingResultat.OMGJØRING]}</Tag>
     ),
 };
 

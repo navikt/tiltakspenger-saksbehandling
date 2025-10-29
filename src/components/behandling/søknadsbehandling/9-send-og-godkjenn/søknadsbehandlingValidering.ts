@@ -1,7 +1,7 @@
 import { ValideringFunc, ValideringResultat } from '~/types/Validering';
 import { validerInnvilgelse } from '~/components/behandling/felles/validering/validerInnvilgelse';
 import { BehandlingSkjemaContext } from '~/components/behandling/context/BehandlingSkjemaContext';
-import { RammebehandlingResultatType } from '~/types/Behandling';
+import { RammebehandlingResultat } from '~/types/Behandling';
 import { Søknadsbehandling } from '~/types/Søknadsbehandling';
 
 export const søknadsbehandlingValidering =
@@ -14,15 +14,15 @@ export const søknadsbehandlingValidering =
 
         const { resultat } = skjema;
 
-        if (resultat === RammebehandlingResultatType.IKKE_VALGT) {
+        if (resultat === RammebehandlingResultat.IKKE_VALGT) {
             (type === 'lagring' ? validering.warnings : validering.errors).push(
                 'Behandlingsresultat mangler',
             );
-        } else if (resultat === RammebehandlingResultatType.AVSLAG) {
+        } else if (resultat === RammebehandlingResultat.AVSLAG) {
             const avslagValidering = validerAvslag(skjema);
             validering.errors.push(...avslagValidering.errors);
             validering.warnings.push(...avslagValidering.warnings);
-        } else if (resultat === RammebehandlingResultatType.INNVILGELSE) {
+        } else if (resultat === RammebehandlingResultat.INNVILGELSE) {
             const innvilgelseValidering = validerInnvilgelse(behandling, skjema);
             validering.errors.push(...innvilgelseValidering.errors);
             validering.warnings.push(...innvilgelseValidering.warnings);

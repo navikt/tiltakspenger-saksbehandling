@@ -4,7 +4,7 @@ import { SakId } from '~/types/Sak';
 import {
     Rammebehandling,
     BehandlingId,
-    RammebehandlingResultatType,
+    RammebehandlingResultat,
     Behandlingstype,
 } from '~/types/Behandling';
 import { SøknadId } from '~/types/Søknad';
@@ -16,7 +16,7 @@ export interface VedtattBehandlingCellInfo {
     saksnummer: string;
     søknadId?: SøknadId;
     behandlingstype: Behandlingstype;
-    resultat: RammebehandlingResultatType;
+    resultat: RammebehandlingResultat;
     tidspunktAvsluttet: string;
     behandlingsperiode: Nullable<Periode>;
     avsluttetPga: 'ferdigBehandlet' | 'avbrutt';

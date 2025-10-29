@@ -10,7 +10,7 @@ import {
     useBehandlingSkjema,
 } from '~/components/behandling/context/BehandlingSkjemaContext';
 import { Periode } from '~/types/Periode';
-import { RammebehandlingResultatType } from '~/types/Behandling';
+import { RammebehandlingResultat } from '~/types/Behandling';
 import { barnetilleggPeriodeFormDataTilBarnetilleggPeriode } from '../../revurdering/innvilgelse/6-brev/RevurderingInnvilgelseBrev';
 
 export const SøknadsbehandlingBrev = () => {
@@ -42,13 +42,13 @@ const søknadsbehandlingSkjemaTilBrevForhåndsvisningDTO = (
         // Backend vil ignorere perioden dersom vedtaket er avslag, og hvis tilstanden er tilBeslutter (senere enn under behandling)
         virkningsperiode: skjema.behandlingsperiode as Periode,
         barnetillegg:
-            skjema.resultat === RammebehandlingResultatType.INNVILGELSE && skjema.harBarnetillegg
+            skjema.resultat === RammebehandlingResultat.INNVILGELSE && skjema.harBarnetillegg
                 ? barnetilleggPeriodeFormDataTilBarnetilleggPeriode(skjema.barnetilleggPerioder)
                 : null,
         // vi rendrer ikke komponenten hvis resultatet ikke eksiterer i parenten
-        resultat: skjema.resultat! as RammebehandlingResultatType,
+        resultat: skjema.resultat! as RammebehandlingResultat,
         avslagsgrunner:
-            skjema.resultat === RammebehandlingResultatType.AVSLAG && skjema.avslagsgrunner !== null
+            skjema.resultat === RammebehandlingResultat.AVSLAG && skjema.avslagsgrunner !== null
                 ? skjema.avslagsgrunner
                 : null,
     };

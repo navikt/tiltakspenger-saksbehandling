@@ -27,7 +27,7 @@ export interface RammebehandlingBase {
     id: BehandlingId;
     type: Behandlingstype;
     status: Rammebehandlingsstatus;
-    resultat: RammebehandlingResultatType;
+    resultat: RammebehandlingResultat;
     sakId: SakId;
     saksnummer: string;
     rammevedtakId: Nullable<VedtakId>;
@@ -47,7 +47,7 @@ export interface RammebehandlingBase {
 
 export type Rammebehandling = Søknadsbehandling | Revurdering;
 
-export enum RammebehandlingResultatType {
+export enum RammebehandlingResultat {
     INNVILGELSE = 'INNVILGELSE',
     AVSLAG = 'AVSLAG',
     STANS = 'STANS',
@@ -100,7 +100,7 @@ export type RammebehandlingVedtakRequest =
     | RevurderingVedtakRequest;
 
 export interface OppdaterBehandlingRequestBase {
-    resultat: RammebehandlingResultatType;
+    resultat: RammebehandlingResultat;
     fritekstTilVedtaksbrev: Nullable<string>;
     begrunnelseVilkårsvurdering: Nullable<string>;
 }

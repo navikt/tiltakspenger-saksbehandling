@@ -10,7 +10,7 @@ import {
     useBehandlingSkjema,
 } from '~/components/behandling/context/BehandlingSkjemaContext';
 import { Periode } from '~/types/Periode';
-import { RammebehandlingResultatType } from '~/types/Behandling';
+import { RammebehandlingResultat } from '~/types/Behandling';
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';
 import { BarnetilleggPeriodeFormData } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
 
@@ -39,7 +39,7 @@ const revurderingskjemaTilBrevForhåndsvisningDTO = (
     skjema: BehandlingSkjemaContext,
 ): RevurderingInnvilgelseBrevForhåndsvisningDTO => {
     return {
-        resultat: RammebehandlingResultatType.REVURDERING_INNVILGELSE,
+        resultat: RammebehandlingResultat.REVURDERING_INNVILGELSE,
         fritekst: skjema.textAreas.brevtekst.getValue(),
         virkningsperiode: skjema.behandlingsperiode as Periode,
         barnetillegg: skjema.harBarnetillegg

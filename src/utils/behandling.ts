@@ -6,7 +6,7 @@ import { Nullable } from '~/types/UtilTypes';
 import {
     Rammebehandling,
     RammebehandlingMedInnvilgelse,
-    RammebehandlingResultatType,
+    RammebehandlingResultat,
     Rammebehandlingsstatus,
 } from '~/types/Behandling';
 import { Søknadsbehandling } from '~/types/Søknadsbehandling';
@@ -140,9 +140,9 @@ export const erRammebehandlingMedInnvilgelse = (
     const resultatType = behandling.resultat;
 
     return (
-        resultatType === RammebehandlingResultatType.INNVILGELSE ||
-        resultatType === RammebehandlingResultatType.REVURDERING_INNVILGELSE ||
-        resultatType === RammebehandlingResultatType.OMGJØRING
+        resultatType === RammebehandlingResultat.INNVILGELSE ||
+        resultatType === RammebehandlingResultat.REVURDERING_INNVILGELSE ||
+        resultatType === RammebehandlingResultat.OMGJØRING
     );
 };
 

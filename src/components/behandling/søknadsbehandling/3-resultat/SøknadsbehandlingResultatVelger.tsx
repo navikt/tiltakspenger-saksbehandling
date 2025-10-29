@@ -8,7 +8,7 @@ import {
     useBehandlingSkjema,
     useBehandlingSkjemaDispatch,
 } from '~/components/behandling/context/BehandlingSkjemaContext';
-import { RammebehandlingResultatType } from '~/types/Behandling';
+import { RammebehandlingResultat } from '~/types/Behandling';
 
 import style from './SøknadsbehandlingResultatVelger.module.css';
 
@@ -32,18 +32,15 @@ export const SøknadsbehandlingResultatVelger = () => {
                     className={style.radioGroup}
                     value={resultat}
                     readOnly={erIkkeSaksbehandler}
-                    onChange={(valgtResultat: RammebehandlingResultatType) => {
+                    onChange={(valgtResultat: RammebehandlingResultat) => {
                         dispatch({ type: 'setResultat', payload: { resultat: valgtResultat } });
                     }}
                 >
-                    <Radio
-                        value={RammebehandlingResultatType.INNVILGELSE}
-                        disabled={kanIkkeInnvilge}
-                    >
+                    <Radio value={RammebehandlingResultat.INNVILGELSE} disabled={kanIkkeInnvilge}>
                         Innvilgelse
                     </Radio>
-                    <Radio value={RammebehandlingResultatType.AVSLAG}>Avslag</Radio>
-                    {resultat !== RammebehandlingResultatType.IKKE_VALGT && (
+                    <Radio value={RammebehandlingResultat.AVSLAG}>Avslag</Radio>
+                    {resultat !== RammebehandlingResultat.IKKE_VALGT && (
                         <Button
                             size={'xsmall'}
                             variant={'tertiary'}
@@ -51,7 +48,7 @@ export const SøknadsbehandlingResultatVelger = () => {
                             onClick={() => {
                                 dispatch({
                                     type: 'setResultat',
-                                    payload: { resultat: RammebehandlingResultatType.IKKE_VALGT },
+                                    payload: { resultat: RammebehandlingResultat.IKKE_VALGT },
                                 });
                             }}
                         >
@@ -64,7 +61,7 @@ export const SøknadsbehandlingResultatVelger = () => {
                     label={'Innvilges'}
                     className={classNames(
                         style.datovelgere,
-                        resultat !== RammebehandlingResultatType.INNVILGELSE && style.skjult,
+                        resultat !== RammebehandlingResultat.INNVILGELSE && style.skjult,
                     )}
                 />
             </VedtakSeksjon.Venstre>

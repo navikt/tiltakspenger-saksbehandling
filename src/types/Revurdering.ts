@@ -1,7 +1,7 @@
 import { AntallDagerForMeldeperiode } from './AntallDagerForMeldeperiode';
 import { Barnetillegg } from './Barnetillegg';
 import {
-    RammebehandlingResultatType,
+    RammebehandlingResultat,
     Behandlingstype,
     OppdaterBehandlingRequestBase,
     RammebehandlingBase,
@@ -19,14 +19,14 @@ interface RevurderingBase extends RammebehandlingBase {
 export type Revurdering = RevurderingStans | RevurderingInnvilgelse | RevurderingOmgjøring;
 
 export interface RevurderingStans extends RevurderingBase {
-    resultat: RammebehandlingResultatType.STANS;
+    resultat: RammebehandlingResultat.STANS;
     valgtHjemmelHarIkkeRettighet: Nullable<HjemmelForStans[]>;
     harValgtStansFraFørsteDagSomGirRett: Nullable<boolean>;
     harValgtStansTilSisteDagSomGirRett: Nullable<boolean>;
 }
 
 export interface RevurderingInnvilgelse extends RevurderingBase {
-    resultat: RammebehandlingResultatType.REVURDERING_INNVILGELSE;
+    resultat: RammebehandlingResultat.REVURDERING_INNVILGELSE;
     innvilgelsesperiode: Nullable<Periode>;
     valgteTiltaksdeltakelser: Nullable<TiltaksdeltakelsePeriode[]>;
     barnetillegg: Nullable<Barnetillegg>;
@@ -34,7 +34,7 @@ export interface RevurderingInnvilgelse extends RevurderingBase {
 }
 
 export interface RevurderingOmgjøring extends RevurderingBase {
-    resultat: RammebehandlingResultatType.OMGJØRING;
+    resultat: RammebehandlingResultat.OMGJØRING;
     omgjørVedtak: VedtakId;
     innvilgelsesperiode: Periode;
     valgteTiltaksdeltakelser: TiltaksdeltakelsePeriode[];
@@ -43,12 +43,12 @@ export interface RevurderingOmgjøring extends RevurderingBase {
 }
 
 export type RevurderingResultatType =
-    | RammebehandlingResultatType.REVURDERING_INNVILGELSE
-    | RammebehandlingResultatType.STANS
-    | RammebehandlingResultatType.OMGJØRING;
+    | RammebehandlingResultat.REVURDERING_INNVILGELSE
+    | RammebehandlingResultat.STANS
+    | RammebehandlingResultat.OMGJØRING;
 
 export interface RevurderingVedtakStansRequest extends OppdaterBehandlingRequestBase {
-    resultat: RammebehandlingResultatType.STANS;
+    resultat: RammebehandlingResultat.STANS;
     valgteHjemler: HjemmelForStans[];
     stansFraOgMed: Nullable<string>;
     harValgtStansFraFørsteDagSomGirRett: Nullable<boolean>;
@@ -57,7 +57,7 @@ export interface RevurderingVedtakStansRequest extends OppdaterBehandlingRequest
 }
 
 export interface RevurderingVedtakInnvilgelseRequest extends OppdaterBehandlingRequestBase {
-    resultat: RammebehandlingResultatType.REVURDERING_INNVILGELSE;
+    resultat: RammebehandlingResultat.REVURDERING_INNVILGELSE;
     innvilgelsesperiode: Periode;
     valgteTiltaksdeltakelser: TiltaksdeltakelsePeriode[];
     antallDagerPerMeldeperiodeForPerioder: AntallDagerForMeldeperiode[];
@@ -65,7 +65,7 @@ export interface RevurderingVedtakInnvilgelseRequest extends OppdaterBehandlingR
 }
 
 export interface RevurderingVedtakOmgjøringRequest extends OppdaterBehandlingRequestBase {
-    resultat: RammebehandlingResultatType.OMGJØRING;
+    resultat: RammebehandlingResultat.OMGJØRING;
     innvilgelsesperiode: Periode;
     valgteTiltaksdeltakelser: TiltaksdeltakelsePeriode[];
     antallDagerPerMeldeperiodeForPerioder: AntallDagerForMeldeperiode[];
@@ -78,7 +78,7 @@ export type RevurderingVedtakRequest =
     | RevurderingVedtakOmgjøringRequest;
 
 export type OpprettRevurderingRequest = {
-    revurderingType: RammebehandlingResultatType;
+    revurderingType: RammebehandlingResultat;
     rammevedtakIdSomOmgjøres: Nullable<VedtakId>;
 };
 

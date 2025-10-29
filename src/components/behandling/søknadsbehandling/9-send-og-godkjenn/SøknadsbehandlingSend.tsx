@@ -14,7 +14,7 @@ import {
     SøknadsbehandlingVedtakInnvilgelseRequest,
     SøknadsbehandlingVedtakRequest,
 } from '~/types/Søknadsbehandling';
-import { RammebehandlingResultatType } from '~/types/Behandling';
+import { RammebehandlingResultat } from '~/types/Behandling';
 
 import { TiltaksdeltakelsePeriodeFormData } from '../../context/slices/TiltaksdeltagelseState';
 import { barnetilleggPeriodeFormDataTilBarnetilleggPeriode } from '../../revurdering/innvilgelse/6-brev/RevurderingInnvilgelseBrev';
@@ -35,7 +35,7 @@ export const SøknadsbehandlingSend = () => {
 
 const tilDTO = (skjema: BehandlingSkjemaContext): SøknadsbehandlingVedtakRequest => {
     switch (skjema.resultat) {
-        case RammebehandlingResultatType.INNVILGELSE:
+        case RammebehandlingResultat.INNVILGELSE:
             return {
                 begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
                 fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
@@ -63,24 +63,24 @@ const tilDTO = (skjema: BehandlingSkjemaContext): SøknadsbehandlingVedtakReques
                         },
                     }),
                 ),
-                resultat: RammebehandlingResultatType.INNVILGELSE,
+                resultat: RammebehandlingResultat.INNVILGELSE,
             } satisfies SøknadsbehandlingVedtakInnvilgelseRequest;
-        case RammebehandlingResultatType.AVSLAG:
+        case RammebehandlingResultat.AVSLAG:
             return {
                 avslagsgrunner: skjema.avslagsgrunner!,
                 begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
                 fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
-                resultat: RammebehandlingResultatType.AVSLAG,
+                resultat: RammebehandlingResultat.AVSLAG,
             } satisfies SøknadsbehandlingVedtakAvslagRequest;
-        case RammebehandlingResultatType.IKKE_VALGT:
+        case RammebehandlingResultat.IKKE_VALGT:
             return {
                 begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
                 fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
-                resultat: RammebehandlingResultatType.IKKE_VALGT,
+                resultat: RammebehandlingResultat.IKKE_VALGT,
             } satisfies SøknadsbehandlingVedtakIkkeValgtRequest;
-        case RammebehandlingResultatType.REVURDERING_INNVILGELSE:
-        case RammebehandlingResultatType.STANS:
-        case RammebehandlingResultatType.OMGJØRING:
+        case RammebehandlingResultat.REVURDERING_INNVILGELSE:
+        case RammebehandlingResultat.STANS:
+        case RammebehandlingResultat.OMGJØRING:
             throw new Error(`Forventet søknadsbehandling men var revurdering - ${skjema.resultat}`);
     }
 

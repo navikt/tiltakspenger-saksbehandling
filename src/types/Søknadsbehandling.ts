@@ -1,7 +1,7 @@
 import { AntallDagerForMeldeperiode } from './AntallDagerForMeldeperiode';
 import { Barnetillegg } from './Barnetillegg';
 import {
-    RammebehandlingResultatType,
+    RammebehandlingResultat,
     Behandlingstype,
     OppdaterBehandlingRequestBase,
     RammebehandlingBase,
@@ -20,11 +20,11 @@ interface SøknadsbehandlingBase extends RammebehandlingBase {
 }
 
 export interface SøknadsbehandlingIkkeValgt extends SøknadsbehandlingBase {
-    resultat: RammebehandlingResultatType.IKKE_VALGT;
+    resultat: RammebehandlingResultat.IKKE_VALGT;
 }
 
 export interface SøknadsbehandlingInnvilgelse extends SøknadsbehandlingBase {
-    resultat: RammebehandlingResultatType.INNVILGELSE;
+    resultat: RammebehandlingResultat.INNVILGELSE;
     innvilgelsesperiode: Periode;
     valgteTiltaksdeltakelser: TiltaksdeltakelsePeriode[];
     barnetillegg: Nullable<Barnetillegg>;
@@ -32,7 +32,7 @@ export interface SøknadsbehandlingInnvilgelse extends SøknadsbehandlingBase {
 }
 
 export interface SøknadsbehandlingAvslag extends SøknadsbehandlingBase {
-    resultat: RammebehandlingResultatType.AVSLAG;
+    resultat: RammebehandlingResultat.AVSLAG;
     avslagsgrunner: Avslagsgrunn[];
 }
 
@@ -42,12 +42,12 @@ export type Søknadsbehandling =
     | SøknadsbehandlingIkkeValgt;
 
 export type SøknadsbehandlingResultatType =
-    | RammebehandlingResultatType.AVSLAG
-    | RammebehandlingResultatType.INNVILGELSE
-    | RammebehandlingResultatType.IKKE_VALGT;
+    | RammebehandlingResultat.AVSLAG
+    | RammebehandlingResultat.INNVILGELSE
+    | RammebehandlingResultat.IKKE_VALGT;
 
 export interface SøknadsbehandlingVedtakInnvilgelseRequest extends OppdaterBehandlingRequestBase {
-    resultat: RammebehandlingResultatType.INNVILGELSE;
+    resultat: RammebehandlingResultat.INNVILGELSE;
     innvilgelsesperiode: Periode;
     valgteTiltaksdeltakelser: TiltaksdeltakelsePeriode[];
     antallDagerPerMeldeperiodeForPerioder: AntallDagerForMeldeperiode[];
@@ -55,12 +55,12 @@ export interface SøknadsbehandlingVedtakInnvilgelseRequest extends OppdaterBeha
 }
 
 export interface SøknadsbehandlingVedtakAvslagRequest extends OppdaterBehandlingRequestBase {
-    resultat: RammebehandlingResultatType.AVSLAG;
+    resultat: RammebehandlingResultat.AVSLAG;
     avslagsgrunner: Avslagsgrunn[];
 }
 
 export interface SøknadsbehandlingVedtakIkkeValgtRequest extends OppdaterBehandlingRequestBase {
-    resultat: RammebehandlingResultatType.IKKE_VALGT;
+    resultat: RammebehandlingResultat.IKKE_VALGT;
 }
 
 export type SøknadsbehandlingVedtakRequest =

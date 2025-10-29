@@ -2,18 +2,18 @@ import { useRevurderingBehandling } from '~/components/behandling/context/Behand
 import { RevurderingStansVedtak } from '~/components/behandling/revurdering/stans/RevurderingStansVedtak';
 import { RevurderingInnvilgelseVedtak } from '~/components/behandling/revurdering/innvilgelse/RevurderingInnvilgelseVedtak';
 import { Alert } from '@navikt/ds-react';
-import { RammebehandlingResultatType } from '~/types/Behandling';
+import { RammebehandlingResultat } from '~/types/Behandling';
 import { RevurderingOmgjøringVedtak } from './omgjøring/RevurderingOmgjøringVedtak';
 
 export const RevurderingVedtak = () => {
     const { resultat } = useRevurderingBehandling().behandling;
 
     switch (resultat) {
-        case RammebehandlingResultatType.STANS:
+        case RammebehandlingResultat.STANS:
             return <RevurderingStansVedtak />;
-        case RammebehandlingResultatType.REVURDERING_INNVILGELSE:
+        case RammebehandlingResultat.REVURDERING_INNVILGELSE:
             return <RevurderingInnvilgelseVedtak />;
-        case RammebehandlingResultatType.OMGJØRING:
+        case RammebehandlingResultat.OMGJØRING:
             return <RevurderingOmgjøringVedtak />;
     }
 
