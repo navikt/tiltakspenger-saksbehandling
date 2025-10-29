@@ -9,11 +9,11 @@ import SeBehandlingMenyvalg from '~/components/behandlingmeny/menyvalg/SeBehandl
 import React from 'react';
 import Link from 'next/link';
 import { behandlingUrl } from '~/utils/urls';
-import { RammebehandlingResultat } from '~/types/Behandling';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
-import { OpprettRevurderingRequest, Revurdering } from '~/types/Revurdering';
+import { OpprettRevurderingRequest, Revurdering, RevurderingResultat } from '~/types/Revurdering';
 import { SakId } from '~/types/Sak';
 import router from 'next/router';
+import { SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
 
 export const VedtatteBehandlingerTabell = (props: {
     sakId: SakId;
@@ -76,7 +76,7 @@ export const VedtatteBehandlingerTabell = (props: {
                             {vedtattBehandling.beslutter ?? 'Ikke tildelt'}
                         </Table.DataCell>
                         <Table.DataCell align={'right'}>
-                            {vedtattBehandling.resultat === RammebehandlingResultat.AVSLAG ? (
+                            {vedtattBehandling.resultat === SøknadsbehandlingResultat.AVSLAG ? (
                                 <ActionMenu>
                                     <ActionMenu.Trigger>
                                         <Button
@@ -129,8 +129,7 @@ export const VedtatteBehandlingerTabell = (props: {
                                             onSelect={(e) => {
                                                 e.preventDefault();
                                                 opprettRevurdering.trigger({
-                                                    revurderingType:
-                                                        RammebehandlingResultat.OMGJØRING,
+                                                    revurderingType: RevurderingResultat.OMGJØRING,
                                                     rammevedtakIdSomOmgjøres:
                                                         vedtattBehandling.rammevedtakId,
                                                 });

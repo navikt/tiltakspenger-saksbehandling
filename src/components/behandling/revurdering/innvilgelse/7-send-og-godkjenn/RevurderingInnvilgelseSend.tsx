@@ -1,15 +1,13 @@
 import { useRevurderingBehandling } from '~/components/behandling/context/BehandlingContext';
 import { BehandlingSendOgGodkjenn } from '~/components/behandling/felles/send-og-godkjenn/BehandlingSendOgGodkjenn';
 import { useHentBehandlingLagringProps } from '~/components/behandling/felles/send-og-godkjenn/lagre/useHentBehandlingLagringProps';
-
 import { revurderingInnvilgelseValidering } from '~/components/behandling/revurdering/innvilgelse/revurderingInnvilgelseValidering';
 import {
     BehandlingSkjemaContext,
     useBehandlingSkjema,
 } from '~/components/behandling/context/BehandlingSkjemaContext';
 import { Periode } from '~/types/Periode';
-import { RevurderingVedtakInnvilgelseRequest } from '~/types/Revurdering';
-import { RammebehandlingResultat } from '~/types/Behandling';
+import { RevurderingResultat, RevurderingVedtakInnvilgelseRequest } from '~/types/Revurdering';
 import { tiltaksdeltakelsePeriodeFormToTiltaksdeltakelsePeriode } from '~/components/behandling/søknadsbehandling/9-send-og-godkjenn/SøknadsbehandlingSend';
 import { barnetilleggPeriodeFormDataTilBarnetilleggPeriode } from '../6-brev/RevurderingInnvilgelseBrev';
 
@@ -28,7 +26,7 @@ export const RevurderingInnvilgelseSend = () => {
 
 const tilDTO = (skjema: BehandlingSkjemaContext): RevurderingVedtakInnvilgelseRequest => {
     return {
-        resultat: RammebehandlingResultat.REVURDERING_INNVILGELSE,
+        resultat: RevurderingResultat.INNVILGELSE,
         begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
         fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
         innvilgelsesperiode: skjema.behandlingsperiode as Periode,

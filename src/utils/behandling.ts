@@ -6,10 +6,10 @@ import { Nullable } from '~/types/UtilTypes';
 import {
     Rammebehandling,
     RammebehandlingMedInnvilgelse,
-    RammebehandlingResultat,
     Rammebehandlingsstatus,
 } from '~/types/Behandling';
-import { Søknadsbehandling } from '~/types/Søknadsbehandling';
+import { Søknadsbehandling, SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
+import { RevurderingResultat } from '~/types/Revurdering';
 
 export const hentTiltaksperiode = (behandling: Søknadsbehandling): Nullable<Periode> => {
     const forsteStartdatoForDeltakelse = finnForsteStartdatoForTiltaksdeltakelse(behandling);
@@ -140,9 +140,9 @@ export const erRammebehandlingMedInnvilgelse = (
     const resultatType = behandling.resultat;
 
     return (
-        resultatType === RammebehandlingResultat.INNVILGELSE ||
-        resultatType === RammebehandlingResultat.REVURDERING_INNVILGELSE ||
-        resultatType === RammebehandlingResultat.OMGJØRING
+        resultatType === SøknadsbehandlingResultat.INNVILGELSE ||
+        resultatType === RevurderingResultat.INNVILGELSE ||
+        resultatType === RevurderingResultat.OMGJØRING
     );
 };
 

@@ -1,5 +1,4 @@
 import { Checkbox, CheckboxGroup } from '@navikt/ds-react';
-
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { Separator } from '../../../separator/Separator';
 import { useSøknadsbehandling } from '../../context/BehandlingContext';
@@ -8,10 +7,9 @@ import {
     useBehandlingSkjema,
     useBehandlingSkjemaDispatch,
 } from '~/components/behandling/context/BehandlingSkjemaContext';
+import { Avslagsgrunn, SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
 
 import styles from './SøknadsbehandlingAvslagsgrunner.module.css';
-import { RammebehandlingResultat } from '~/types/Behandling';
-import { Avslagsgrunn } from '~/types/Søknadsbehandling';
 
 const AvslagsgrunnTekst = {
     [Avslagsgrunn.DeltarIkkePåArbeidsmarkedstiltak]: 'Deltar ikke på arbeidsmarkedstiltak',
@@ -31,7 +29,7 @@ export const SøknadsbehandlingAvslagsgrunner = () => {
     const dispatch = useBehandlingSkjemaDispatch();
     const erIkkeSaksbehandler = rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER;
 
-    if (resultat !== RammebehandlingResultat.AVSLAG) {
+    if (resultat !== SøknadsbehandlingResultat.AVSLAG) {
         return null;
     }
 

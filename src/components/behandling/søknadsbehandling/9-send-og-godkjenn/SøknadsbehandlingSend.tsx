@@ -9,16 +9,17 @@ import {
 } from '~/components/behandling/context/BehandlingSkjemaContext';
 import { Periode } from '~/types/Periode';
 import {
+    SøknadsbehandlingResultat,
     SøknadsbehandlingVedtakAvslagRequest,
     SøknadsbehandlingVedtakIkkeValgtRequest,
     SøknadsbehandlingVedtakInnvilgelseRequest,
     SøknadsbehandlingVedtakRequest,
 } from '~/types/Søknadsbehandling';
-import { RammebehandlingResultat } from '~/types/Behandling';
 
 import { TiltaksdeltakelsePeriodeFormData } from '../../context/slices/TiltaksdeltagelseState';
 import { barnetilleggPeriodeFormDataTilBarnetilleggPeriode } from '../../revurdering/innvilgelse/6-brev/RevurderingInnvilgelseBrev';
 import { TiltaksdeltakelsePeriode } from '~/types/TiltakDeltagelseTypes';
+import { RevurderingResultat } from '~/types/Revurdering';
 
 export const SøknadsbehandlingSend = () => {
     const { behandling } = useSøknadsbehandling();
@@ -35,7 +36,7 @@ export const SøknadsbehandlingSend = () => {
 
 const tilDTO = (skjema: BehandlingSkjemaContext): SøknadsbehandlingVedtakRequest => {
     switch (skjema.resultat) {
-        case RammebehandlingResultat.INNVILGELSE:
+        case SøknadsbehandlingResultat.INNVILGELSE:
             return {
                 begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
                 fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
@@ -63,24 +64,24 @@ const tilDTO = (skjema: BehandlingSkjemaContext): SøknadsbehandlingVedtakReques
                         },
                     }),
                 ),
-                resultat: RammebehandlingResultat.INNVILGELSE,
+                resultat: SøknadsbehandlingResultat.INNVILGELSE,
             } satisfies SøknadsbehandlingVedtakInnvilgelseRequest;
-        case RammebehandlingResultat.AVSLAG:
+        case SøknadsbehandlingResultat.AVSLAG:
             return {
                 avslagsgrunner: skjema.avslagsgrunner!,
                 begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
                 fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
-                resultat: RammebehandlingResultat.AVSLAG,
+                resultat: SøknadsbehandlingResultat.AVSLAG,
             } satisfies SøknadsbehandlingVedtakAvslagRequest;
-        case RammebehandlingResultat.IKKE_VALGT:
+        case SøknadsbehandlingResultat.IKKE_VALGT:
             return {
                 begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
                 fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
-                resultat: RammebehandlingResultat.IKKE_VALGT,
+                resultat: SøknadsbehandlingResultat.IKKE_VALGT,
             } satisfies SøknadsbehandlingVedtakIkkeValgtRequest;
-        case RammebehandlingResultat.REVURDERING_INNVILGELSE:
-        case RammebehandlingResultat.STANS:
-        case RammebehandlingResultat.OMGJØRING:
+        case RevurderingResultat.INNVILGELSE:
+        case RevurderingResultat.STANS:
+        case RevurderingResultat.OMGJØRING:
             throw new Error(`Forventet søknadsbehandling men var revurdering - ${skjema.resultat}`);
     }
 

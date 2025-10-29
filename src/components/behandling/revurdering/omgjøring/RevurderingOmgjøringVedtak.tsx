@@ -11,7 +11,6 @@ import {
 } from '../innvilgelse/6-brev/RevurderingInnvilgelseBrev';
 import { BehandlingBeregningOgSimulering } from '../../felles/beregning-og-simulering/BehandlingBeregningOgSimulering';
 import { useRevurderingOmgjøring } from '../../context/BehandlingContext';
-import { RammebehandlingResultat } from '~/types/Behandling';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '~/utils/date';
 import { useSak } from '~/context/sak/SakContext';
 import Link from 'next/link';
@@ -19,7 +18,7 @@ import { behandlingUrl } from '~/utils/urls';
 import { TabsIcon } from '@navikt/aksel-icons';
 import { OppsummeringsPar } from '~/components/oppsummeringer/oppsummeringspar/OppsummeringsPar';
 import { BehandlingSendOgGodkjenn } from '../../felles/send-og-godkjenn/BehandlingSendOgGodkjenn';
-import { RevurderingVedtakOmgjøringRequest } from '~/types/Revurdering';
+import { RevurderingResultat, RevurderingVedtakOmgjøringRequest } from '~/types/Revurdering';
 import { Periode } from '~/types/Periode';
 import { tiltaksdeltakelsePeriodeFormToTiltaksdeltakelsePeriode } from '../../søknadsbehandling/9-send-og-godkjenn/SøknadsbehandlingSend';
 import {
@@ -106,7 +105,7 @@ export const RevurderingOmgjøringVedtak = () => {
 
 const tilDTO = (skjema: BehandlingSkjemaContext): RevurderingVedtakOmgjøringRequest => {
     return {
-        resultat: RammebehandlingResultat.OMGJØRING,
+        resultat: RevurderingResultat.OMGJØRING,
         begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
         fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
         innvilgelsesperiode: skjema.behandlingsperiode as Periode,

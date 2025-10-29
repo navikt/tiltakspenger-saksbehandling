@@ -13,18 +13,20 @@ import { Periode } from '~/types/Periode';
 import { SakProps } from '~/types/Sak';
 import { erDatoIPeriode } from '~/utils/periode';
 import { ANTALL_DAGER_DEFAULT } from '~/components/behandling/felles/dager-per-meldeperiode/BehandlingDagerPerMeldeperiode';
-import { Behandlingstype, Rammebehandling, RammebehandlingResultat } from '~/types/Behandling';
+import { Behandlingstype, Rammebehandling } from '~/types/Behandling';
 import { TiltaksdeltakelsePeriodeFormData } from './slices/TiltaksdeltagelseState';
 import {
     Søknadsbehandling,
     SøknadsbehandlingAvslag,
     SøknadsbehandlingIkkeValgt,
     SøknadsbehandlingInnvilgelse,
+    SøknadsbehandlingResultat,
 } from '~/types/Søknadsbehandling';
 import {
     Revurdering,
     RevurderingInnvilgelse,
     RevurderingOmgjøring,
+    RevurderingResultat,
     RevurderingStans,
 } from '~/types/Revurdering';
 import { AntallDagerPerMeldeperiodeFormData } from '~/components/behandling/context/slices/AntallDagerPerMeldeperiodeState';
@@ -102,13 +104,13 @@ const søknadsbehandlingInitialState = (behandling: Søknadsbehandling): Behandl
     const { resultat } = behandling;
 
     switch (resultat) {
-        case RammebehandlingResultat.IKKE_VALGT: {
+        case SøknadsbehandlingResultat.IKKE_VALGT: {
             return fraSøknadsbehandlingIkkeValgt(behandling);
         }
-        case RammebehandlingResultat.INNVILGELSE: {
+        case SøknadsbehandlingResultat.INNVILGELSE: {
             return fraSøknadsbehandlingInnvilgelse(behandling);
         }
-        case RammebehandlingResultat.AVSLAG: {
+        case SøknadsbehandlingResultat.AVSLAG: {
             return fraSøknadsbehandlingAvslag(behandling);
         }
     }
@@ -190,13 +192,13 @@ const revurderingInitialState = (behandling: Revurdering, sak: SakProps): Behand
     const { resultat } = behandling;
 
     switch (resultat) {
-        case RammebehandlingResultat.REVURDERING_INNVILGELSE: {
+        case RevurderingResultat.INNVILGELSE: {
             return fraRevurderingInnvilgelse(behandling, sak);
         }
-        case RammebehandlingResultat.STANS: {
+        case RevurderingResultat.STANS: {
             return fraRevurderingStans(behandling);
         }
-        case RammebehandlingResultat.OMGJØRING: {
+        case RevurderingResultat.OMGJØRING: {
             return fraRevurderingOmgjøring(behandling, sak);
         }
     }
@@ -219,7 +221,7 @@ const fraRevurderingInnvilgelse = (
     );
 
     return {
-        resultat: RammebehandlingResultat.REVURDERING_INNVILGELSE,
+        resultat: RevurderingResultat.INNVILGELSE,
         behandlingsperiode,
         harBarnetillegg: barnetilleggPerioder.length > 0,
         barnetilleggPerioder,
@@ -248,7 +250,7 @@ const fraRevurderingInnvilgelse = (
 
 const fraRevurderingStans = (behandling: RevurderingStans): BehandlingSkjemaState => {
     return {
-        resultat: RammebehandlingResultat.STANS,
+        resultat: RevurderingResultat.STANS,
         behandlingsperiode: behandling.virkningsperiode ?? {},
         hjemlerForStans: behandling.valgtHjemmelHarIkkeRettighet ?? [],
         harValgtStansFraFørsteDagSomGirRett:
@@ -280,7 +282,7 @@ const fraRevurderingOmgjøring = (
     );
 
     return {
-        resultat: RammebehandlingResultat.OMGJØRING,
+        resultat: RevurderingResultat.OMGJØRING,
         behandlingsperiode,
         harBarnetillegg: barnetilleggPerioder.length > 0,
         barnetilleggPerioder,

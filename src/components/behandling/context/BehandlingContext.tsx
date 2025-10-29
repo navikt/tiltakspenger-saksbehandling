@@ -1,9 +1,9 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { useRolleForBehandling } from '~/context/saksbehandler/SaksbehandlerContext';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
-import { RammebehandlingResultat, Behandlingstype, Rammebehandling } from '~/types/Behandling';
+import { Behandlingstype, Rammebehandling } from '~/types/Behandling';
 import { Søknadsbehandling } from '~/types/Søknadsbehandling';
-import { Revurdering, RevurderingOmgjøring } from '~/types/Revurdering';
+import { Revurdering, RevurderingOmgjøring, RevurderingResultat } from '~/types/Revurdering';
 
 type BehandlingContext<Rammebehandling> = {
     behandling: Rammebehandling;
@@ -67,7 +67,7 @@ export const useRevurderingBehandling = () => {
 export const useRevurderingOmgjøring = () => {
     const context = useRevurderingBehandling();
 
-    if (context.behandling.resultat !== RammebehandlingResultat.OMGJØRING) {
+    if (context.behandling.resultat !== RevurderingResultat.OMGJØRING) {
         throw Error(
             `Feil context for revurdering omgjøring med behandling id ${context.behandling.id}: ${context.behandling.resultat}`,
         );

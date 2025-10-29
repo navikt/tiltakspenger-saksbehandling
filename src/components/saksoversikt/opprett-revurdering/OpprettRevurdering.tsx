@@ -3,12 +3,10 @@ import { useRef, useState } from 'react';
 import { SakId } from '~/types/Sak';
 import router from 'next/router';
 import { useOpprettRevurdering } from './useOpprettRevurdering';
-
 import { BekreftelsesModal } from '~/components/modaler/BekreftelsesModal';
-
 import { behandlingUrl } from '~/utils/urls';
-import { RammebehandlingResultat } from '~/types/Behandling';
 import { behandlingResultatTilText } from '~/utils/tekstformateringUtils';
+import { RevurderingResultat } from '~/types/Revurdering';
 
 type Props = {
     sakId: SakId;
@@ -16,7 +14,7 @@ type Props = {
 };
 
 export const OpprettRevurdering = ({ sakId, harVedtak }: Props) => {
-    const [valgtType, setValgtType] = useState<RammebehandlingResultat | null>(null);
+    const [valgtType, setValgtType] = useState<RevurderingResultat | null>(null);
 
     const { opprettRevurdering, opprettRevurderingLaster, opprettRevurderingError } =
         useOpprettRevurdering(sakId);
@@ -72,14 +70,12 @@ export const OpprettRevurdering = ({ sakId, harVedtak }: Props) => {
                 <RadioGroup
                     legend={'Velg type revurdering'}
                     value={valgtType}
-                    onChange={(type: RammebehandlingResultat) => {
+                    onChange={(type: RevurderingResultat) => {
                         setValgtType(type);
                     }}
                 >
-                    <Radio value={RammebehandlingResultat.REVURDERING_INNVILGELSE}>
-                        {'Innvilgelse'}
-                    </Radio>
-                    <Radio value={RammebehandlingResultat.STANS}>{'Stans'}</Radio>
+                    <Radio value={RevurderingResultat.INNVILGELSE}>{'Innvilgelse'}</Radio>
+                    <Radio value={RevurderingResultat.STANS}>{'Stans'}</Radio>
                 </RadioGroup>
             </BekreftelsesModal>
         </>

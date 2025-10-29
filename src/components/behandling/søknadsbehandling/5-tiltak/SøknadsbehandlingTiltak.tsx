@@ -1,12 +1,12 @@
 import { BehandlingTiltak } from '~/components/behandling/felles/tiltak/BehandlingTiltak';
 import { useBehandlingSkjema } from '~/components/behandling/context/BehandlingSkjemaContext';
-import { RammebehandlingResultat } from '~/types/Behandling';
+import { SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
 
 export const SøknadsbehandlingTiltak = () => {
     const skjemaContext = useBehandlingSkjema();
     const { resultat } = skjemaContext;
 
-    if (resultat !== RammebehandlingResultat.INNVILGELSE) {
+    if (resultat !== SøknadsbehandlingResultat.INNVILGELSE) {
         return null;
     }
 

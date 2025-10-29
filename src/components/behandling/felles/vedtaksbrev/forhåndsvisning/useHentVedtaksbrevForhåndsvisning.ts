@@ -1,11 +1,10 @@
 import { useFetchBlobFraApi } from '~/utils/fetch/useFetchFraApi';
-
 import { Periode } from '~/types/Periode';
-
 import { Nullable } from '~/types/UtilTypes';
 import { Rammebehandling, RammebehandlingResultat } from '~/types/Behandling';
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';
 import { Avslagsgrunn } from '~/types/Søknadsbehandling';
+import { RevurderingResultat } from '~/types/Revurdering';
 
 export type SøknadsbehandlingBrevForhåndsvisningDTO = {
     fritekst: string;
@@ -38,14 +37,14 @@ type StansTilOgMed =
 export type RevurderingStansBrevForhåndsvisningDTO = {
     fritekst: string;
     valgteHjemler: string[];
-    resultat: RammebehandlingResultat.STANS;
+    resultat: RevurderingResultat.STANS;
 } & StansFraOgMed &
     StansTilOgMed;
 
 export type RevurderingInnvilgelseBrevForhåndsvisningDTO = {
     fritekst: string;
     virkningsperiode: Periode;
-    resultat: RammebehandlingResultat.REVURDERING_INNVILGELSE;
+    resultat: RevurderingResultat.INNVILGELSE;
     barnetillegg: Nullable<BarnetilleggPeriode[]>;
 };
 

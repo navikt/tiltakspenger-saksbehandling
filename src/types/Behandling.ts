@@ -4,12 +4,14 @@ import {
     Revurdering,
     RevurderingInnvilgelse,
     RevurderingOmgjøring,
+    RevurderingResultat,
     RevurderingVedtakRequest,
 } from './Revurdering';
 import { SimulertBeregning } from './SimulertBeregningTypes';
 import {
     Søknadsbehandling,
     SøknadsbehandlingInnvilgelse,
+    SøknadsbehandlingResultat,
     SøknadsbehandlingVedtakRequest,
 } from './Søknadsbehandling';
 import { Tiltaksdeltagelse } from './TiltakDeltagelseTypes';
@@ -47,14 +49,7 @@ export interface RammebehandlingBase {
 
 export type Rammebehandling = Søknadsbehandling | Revurdering;
 
-export enum RammebehandlingResultat {
-    INNVILGELSE = 'INNVILGELSE',
-    AVSLAG = 'AVSLAG',
-    STANS = 'STANS',
-    REVURDERING_INNVILGELSE = 'REVURDERING_INNVILGELSE',
-    OMGJØRING = 'OMGJØRING',
-    IKKE_VALGT = 'IKKE_VALGT',
-}
+export type RammebehandlingResultat = SøknadsbehandlingResultat | RevurderingResultat;
 
 export enum Behandlingstype {
     SØKNAD = 'SØKNAD',

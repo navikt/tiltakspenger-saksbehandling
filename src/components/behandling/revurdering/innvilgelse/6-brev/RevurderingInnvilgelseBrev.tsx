@@ -1,5 +1,4 @@
 import { useRevurderingBehandling } from '~/components/behandling/context/BehandlingContext';
-
 import { RevurderingInnvilgelseBrevForhåndsvisningDTO } from '~/components/behandling/felles/vedtaksbrev/forhåndsvisning/useHentVedtaksbrevForhåndsvisning';
 import { Vedtaksbrev } from '~/components/behandling/felles/vedtaksbrev/Vedtaksbrev';
 import { revurderingInnvilgelseValidering } from '~/components/behandling/revurdering/innvilgelse/revurderingInnvilgelseValidering';
@@ -10,9 +9,9 @@ import {
     useBehandlingSkjema,
 } from '~/components/behandling/context/BehandlingSkjemaContext';
 import { Periode } from '~/types/Periode';
-import { RammebehandlingResultat } from '~/types/Behandling';
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';
 import { BarnetilleggPeriodeFormData } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
+import { RevurderingResultat } from '~/types/Revurdering';
 
 export const RevurderingInnvilgelseBrev = () => {
     const { behandling, rolleForBehandling } = useRevurderingBehandling();
@@ -39,7 +38,7 @@ const revurderingskjemaTilBrevForhåndsvisningDTO = (
     skjema: BehandlingSkjemaContext,
 ): RevurderingInnvilgelseBrevForhåndsvisningDTO => {
     return {
-        resultat: RammebehandlingResultat.REVURDERING_INNVILGELSE,
+        resultat: RevurderingResultat.INNVILGELSE,
         fritekst: skjema.textAreas.brevtekst.getValue(),
         virkningsperiode: skjema.behandlingsperiode as Periode,
         barnetillegg: skjema.harBarnetillegg
