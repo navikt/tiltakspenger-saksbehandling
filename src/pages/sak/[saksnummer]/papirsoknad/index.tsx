@@ -1,5 +1,5 @@
 import styles from './PapirsøknadPage.module.css';
-import { Alert, Button, Heading, HStack, TextField, VStack } from '@navikt/ds-react';
+import { Alert, Button, Heading, HStack, VStack } from '@navikt/ds-react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
 import { SakProvider } from '~/context/sak/SakContext';
@@ -23,6 +23,7 @@ import { useOpprettPapirsøknad } from '~/components/saksoversikt/papirsøknad/u
 import router from 'next/router';
 import { behandlingUrl } from '~/utils/urls';
 import { useHentPersonopplysninger } from '~/components/personaliaheader/useHentPersonopplysninger';
+import { JournalpostId } from '~/components/papirsøknad/journalpostId/JournalpostId';
 
 interface Props {
     sak: SakProps;
@@ -77,21 +78,7 @@ const PapirsøknadPage = (props: Props) => {
                                 Registrere papirsøknad
                             </Heading>
 
-                            <Controller
-                                name="journalpostId"
-                                control={control}
-                                rules={{ required: 'JournalpostId er påkrevd' }}
-                                render={({ field, fieldState }) => (
-                                    <div className={styles.blokk}>
-                                        <TextField
-                                            label={'JournalpostId'}
-                                            value={field.value ?? ''}
-                                            onChange={(e) => field.onChange(e.target.value)}
-                                            error={fieldState.error?.message}
-                                        />
-                                    </div>
-                                )}
-                            />
+                            <JournalpostId />
 
                             <Controller
                                 name="kravDato"
