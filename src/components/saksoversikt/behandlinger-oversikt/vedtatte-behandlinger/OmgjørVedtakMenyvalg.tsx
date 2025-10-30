@@ -13,7 +13,7 @@ type Props = {
     vedtak: RammevedtakMedBehandling;
 };
 
-export const OmgjørVedtakValg = ({ sakId, vedtak }: Props) => {
+export const OmgjørVedtakMenyvalg = ({ sakId, vedtak }: Props) => {
     const { opprettRevurdering, opprettRevurderingLaster, opprettRevurderingError } =
         useOpprettRevurdering(sakId);
 

@@ -9,7 +9,7 @@ import { behandlingUrl } from '~/utils/urls';
 import { SakId } from '~/types/Sak';
 import { SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
 import { RammevedtakMedBehandling } from '~/types/Rammevedtak';
-import { OmgjørVedtakValg } from '~/components/saksoversikt/behandlinger-oversikt/vedtatte-behandlinger/OmgjørVedtakValg';
+import { OmgjørVedtakMenyvalg } from '~/components/saksoversikt/behandlinger-oversikt/vedtatte-behandlinger/OmgjørVedtakMenyvalg';
 
 type Props = {
     sakId: SakId;
@@ -41,10 +41,8 @@ export const VedtatteBehandlingerTabell = ({ sakId, rammevedtakMedBehandlinger }
                             <Table.DataCell>{behandlingResultatTilTag[resultat]}</Table.DataCell>
                             <Table.DataCell>{formaterTidspunkt(opprettet)}</Table.DataCell>
                             <Table.DataCell>{periodeTilFormatertDatotekst(periode)}</Table.DataCell>
-                            <Table.DataCell>
-                                {vedtak.saksbehandler ?? 'Ikke tildelt'}
-                            </Table.DataCell>
-                            <Table.DataCell>{vedtak.beslutter ?? 'Ikke tildelt'}</Table.DataCell>
+                            <Table.DataCell>{vedtak.saksbehandler}</Table.DataCell>
+                            <Table.DataCell>{vedtak.beslutter}</Table.DataCell>
                             <Table.DataCell align={'right'}>
                                 <ActionMenu>
                                     <ActionMenu.Trigger>
@@ -64,7 +62,7 @@ export const VedtatteBehandlingerTabell = ({ sakId, rammevedtakMedBehandlinger }
                                                 søknadId={behandling.søknad.id}
                                             />
                                         ) : (
-                                            <OmgjørVedtakValg vedtak={vedtak} sakId={sakId} />
+                                            <OmgjørVedtakMenyvalg vedtak={vedtak} sakId={sakId} />
                                         )}
                                         <ActionMenu.Divider />
                                         <SeBehandlingMenyvalg
