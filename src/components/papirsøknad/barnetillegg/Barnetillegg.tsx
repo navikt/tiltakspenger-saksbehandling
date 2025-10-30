@@ -68,10 +68,10 @@ export const Barnetillegg = ({ sakId, name, legend }: Props) => {
     }, [skalHenteBarn, barnFraAPI, setValue]);
 
     return (
-        <div className={harSøktOmBarnetillegg.field.value ? styles.blokkUtvidet : ''}>
+        <div className={harSøktOmBarnetillegg.field.value === 'JA' ? styles.blokkUtvidet : ''}>
             <JaNeiSpørsmål name={name} legend={legend} />
 
-            {harSøktOmBarnetillegg.field.value && (
+            {harSøktOmBarnetillegg.field.value === 'JA' && (
                 <div className={styles.blokk}>
                     {!periode.field.value && (
                         <Alert variant="warning">

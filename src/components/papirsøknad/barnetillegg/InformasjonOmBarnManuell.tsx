@@ -1,16 +1,22 @@
 import React from 'react';
 import { Heading, VStack } from '@navikt/ds-react';
 import { getNavnMedFødselsdato } from '~/components/papirsøknad/barnetillegg/barnetilleggUtils';
-import { Barn } from '~/components/papirsøknad/papirsøknadTypes';
+import { Barn, JaNeiSvar } from '~/components/papirsøknad/papirsøknadTypes';
 
 type Props = {
     barn: Barn;
 };
 
 export const InformasjonOmBarnManuell = ({ barn }: Props) => {
-    const getTekstForJaNeiSpørsmål = (value: boolean | undefined) => {
-        if (value === null || value === undefined) return 'Ikke besvart';
-        return value ? 'Ja' : 'Nei';
+    const getTekstForJaNeiSpørsmål = (value: JaNeiSvar | undefined) => {
+        switch (value) {
+            case 'JA':
+                return 'Ja';
+            case 'NEI':
+                return 'Nei';
+            case 'IKKE_BESVART':
+                return 'Ikke besvart';
+        }
     };
 
     return (

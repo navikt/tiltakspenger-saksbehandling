@@ -50,10 +50,19 @@ export const VelgTiltak = ({ sakId, spørsmålName, legend }: Props) => {
 
     return (
         <div className={classNames(styles.informasjonsInnhentingBlokk, styles.blokk)}>
-            <JaNeiSpørsmål name="svar.harTiltak" legend={legend} />
-            {spørsmål.field.value && (
+            <JaNeiSpørsmål
+                name="svar.harTiltak"
+                legend={legend}
+                onChange={(newValue) => {
+                    if (newValue !== 'JA') {
+                        resetField('svar.tiltak');
+                    }
+                }}
+            />
+            {spørsmål.field.value === 'JA' && (
                 <div className={styles.blokk}>
                     <Button
+                        type="button"
                         className={styles.finnTiltakButton}
                         size="small"
                         loading={isLoading}
