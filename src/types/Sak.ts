@@ -1,7 +1,7 @@
 import { BehandlingForOversikt } from './BehandlingForOversikt';
 import { MeldeperiodeKjedeProps } from './meldekort/Meldeperiode';
 
-import { Rammevedtak } from '~/types/Vedtak';
+import { Rammevedtak } from '~/types/Rammevedtak';
 
 import { Søknad } from './Søknad';
 import { UtbetalingstidslinjePeriode } from './Utbetaling';
@@ -19,7 +19,10 @@ export type SakProps = {
     sisteDagSomGirRett?: string;
     søknader: Søknad[];
     behandlinger: Rammebehandling[];
+    // Periodisering av gjeldende rammevedtak på saken
     tidslinje: Rammevedtak[];
+    // Alle rammevedtak på saken med opprinnelige perioder
+    alleRammevedtak: Rammevedtak[];
     utbetalingstidslinje: UtbetalingstidslinjePeriode[];
     kanSendeInnHelgForMeldekort: boolean;
 };

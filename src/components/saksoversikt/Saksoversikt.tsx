@@ -1,5 +1,4 @@
-import { Box, Heading, HStack, Spacer } from '@navikt/ds-react';
-
+import { Box, Heading, HStack } from '@navikt/ds-react';
 import { MeldekortOversikt } from './meldekort-oversikt/MeldekortOversikt';
 import { BehandlingerOversikt } from './behandlinger-oversikt/BehandlingerOversikt';
 import { OpprettRevurdering } from './opprett-revurdering/OpprettRevurdering';
@@ -8,19 +7,26 @@ import { useSak } from '~/context/sak/SakContext';
 import { AvsluttedeBehandlinger } from './behandlinger-oversikt/AvsluttedeBehandlinger';
 import { MeldeperiodeKjedeStatus } from '~/types/meldekort/Meldeperiode';
 import { MeldekortOversiktIkkeKlar } from './meldekort-oversikt/ikke-klar/MeldekortOversiktIkkeKlar';
-
-import styles from './Saksoversikt.module.css';
-import { VedtatteBehandlinger } from '~/components/saksoversikt/behandlinger-oversikt/VedtatteBehandlinger';
+import { VedtatteBehandlinger } from '~/components/saksoversikt/behandlinger-oversikt/vedtatte-behandlinger/VedtatteBehandlinger';
 import NotificationBanner from '../notificationBanner/NotificationBanner';
 import MeldekortHelgToggle from '../toggles/MeldekortHelgToggle';
 import { Rammebehandling, Rammebehandlingsstatus, Rammebehandlingstype } from '~/types/Behandling';
 import { OpprettPapirsøknad } from '~/components/saksoversikt/papirsøknad/OpprettPapirsøknad';
 import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
 
+import styles from './Saksoversikt.module.css';
+
 export const Saksoversikt = () => {
     const { papirsøknadToggle } = useFeatureToggles();
-    const { sakId, saksnummer, behandlinger, behandlingsoversikt, søknader, meldeperiodeKjeder } =
-        useSak().sak;
+    const {
+        sakId,
+        saksnummer,
+        behandlinger,
+        behandlingsoversikt,
+        søknader,
+        meldeperiodeKjeder,
+        alleRammevedtak,
+    } = useSak().sak;
 
     const { meldeperiodeKjederIkkeKlare, meldeperiodeKjederKlare } = Object.groupBy(
         meldeperiodeKjeder,
@@ -29,6 +35,7 @@ export const Saksoversikt = () => {
                 ? 'meldeperiodeKjederIkkeKlare'
                 : 'meldeperiodeKjederKlare',
     );
+
     const meldeperiodekjederSomKreverBehandling = meldeperiodeKjeder.filter((kjede) => {
         const apneMeldekortbehandlinger = kjede.meldekortBehandlinger.filter((mb) => {
             return !mb.erAvsluttet;
@@ -48,11 +55,10 @@ export const Saksoversikt = () => {
             <NotificationBanner />
             <PersonaliaHeader sakId={sakId} saksnummer={saksnummer} />
             <Box className={styles.wrapper}>
-                <HStack align="center" className={styles.spacing}>
-                    <Heading spacing size="medium" level="2">
-                        Saksoversikt
+                <HStack align={'center'} justify={'space-between'} className={styles.spacing}>
+                    <Heading spacing size={'medium'} level={'2'}>
+                        {'Saksoversikt'}
                     </Heading>
-                    <Spacer />
                     <HStack gap="3">
                         <MeldekortHelgToggle />
                         {papirsøknadToggle && (
@@ -67,9 +73,10 @@ export const Saksoversikt = () => {
                         />
                     </HStack>
                 </HStack>
+
                 <Box className={styles.tabellwrapper}>
                     <Heading level={'3'} size={'small'}>
-                        {'Behandlinger'}
+                        {'Åpne behandlinger'}
                     </Heading>
                     <BehandlingerOversikt
                         behandlinger={behandlingsoversikt}
@@ -78,12 +85,13 @@ export const Saksoversikt = () => {
                         sakId={sakId}
                     />
                 </Box>
+
                 <VedtatteBehandlinger
-                    saksnummer={saksnummer}
                     sakId={sakId}
-                    søknader={søknader}
                     behandlinger={behandlinger}
+                    alleRammevedtak={alleRammevedtak}
                 />
+
                 <AvsluttedeBehandlinger
                     søknader={søknader}
                     behandlinger={behandlinger}

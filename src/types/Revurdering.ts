@@ -8,7 +8,7 @@ import {
 import { Periode } from './Periode';
 import { TiltaksdeltakelsePeriode } from './TiltakDeltagelseTypes';
 import { Nullable } from './UtilTypes';
-import { VedtakId } from './Vedtak';
+import { VedtakId } from './Rammevedtak';
 
 interface RevurderingBase extends RammebehandlingBase {
     type: Rammebehandlingstype.REVURDERING;

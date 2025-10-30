@@ -1,7 +1,7 @@
 import { Nullable } from '~/types/UtilTypes';
 import { Periode } from './Periode';
 import { Barnetillegg } from './Barnetillegg';
-import { BehandlingId } from './Behandling';
+import { BehandlingId, Rammebehandling } from './Behandling';
 
 export type VedtakId = `vedtak_${string}`;
 
@@ -27,3 +27,5 @@ export type Rammevedtak = {
     // Inkluderer perioder med 0 barn
     barnetillegg: Nullable<Barnetillegg>;
 };
+
+export type RammevedtakMedBehandling = Rammevedtak & { behandling: Rammebehandling };

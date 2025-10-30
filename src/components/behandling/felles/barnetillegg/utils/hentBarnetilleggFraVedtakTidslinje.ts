@@ -1,4 +1,4 @@
-import { Rammevedtak } from '~/types/Vedtak';
+import { Rammevedtak } from '~/types/Rammevedtak';
 import { Periode } from '~/types/Periode';
 import { joinPerioder, perioderOverlapper } from '~/utils/periode';
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';

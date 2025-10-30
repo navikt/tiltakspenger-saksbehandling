@@ -21,7 +21,7 @@ import { Ytelse } from './Ytelse';
 import { SakId } from '~/types/Sak';
 import { Attestering } from '~/types/Attestering';
 import { Avbrutt } from '~/types/Avbrutt';
-import { VedtakId } from '~/types/Vedtak';
+import { VedtakId } from '~/types/Rammevedtak';
 
 export type BehandlingId = `beh_${string}`;
 

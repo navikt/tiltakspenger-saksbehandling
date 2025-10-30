@@ -1,4 +1,4 @@
-import { Rammevedtak } from '~/types/Vedtak';
+import { Rammevedtak } from '~/types/Rammevedtak';
 import dayjs from 'dayjs';
 import { useCallback, useState } from 'react';
 
