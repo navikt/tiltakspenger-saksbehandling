@@ -155,6 +155,12 @@ export const manueltBehandlesGrunnTekst: Record<ManueltBehandlesGrunn, string> =
 
     SAKSOPPLYSNING_FANT_IKKE_TILTAK: 'Fant ikke tiltaksdeltakelsen det er søkt for',
     SAKSOPPLYSNING_TILTAK_MANGLER_PERIODE: 'Tiltaksdeltakelsen det er søkt for mangler periode',
+    SAKSOPPLYSNING_TILTAK_MANGLER_DELTAKELSESMENGDE:
+        'Tiltaksdeltakelsen det er søkt for mangler antall dager per uke og deltakelsesprosent',
+    SAKSOPPLYSNING_TILTAK_MER_ENN_FEM_DAGER_PER_UKE:
+        'Tiltaksdeltakelsen det er søkt for er mer enn fem dager i uken',
+    SAKSOPPLYSNING_DELTIDSTILTAK_UTEN_DAGER_PER_UKE:
+        'Tiltaksdeltakelsen det er søkt for er et deltidstiltak, men mangler antall dager per uke',
     SAKSOPPLYSNING_OVERLAPPENDE_TILTAK:
         'Bruker har overlappende tiltaksdeltakelser i søknadsperioden',
     SAKSOPPLYSNING_MINDRE_ENN_14_DAGER_MELLOM_TILTAK_OG_SOKNAD:
