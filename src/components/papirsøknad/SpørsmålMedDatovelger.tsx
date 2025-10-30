@@ -29,13 +29,13 @@ export const SpørsmålMedDatovelger = ({ spørsmålName, datoName, legend, titt
                 name={spørsmålName}
                 legend={legend}
                 onChange={(newValue) => {
-                    if (!newValue) {
+                    if (newValue !== 'JA') {
                         resetField(datoName);
                     }
                 }}
             />
 
-            {jaNeiSpørsmål.field.value && (
+            {jaNeiSpørsmål.field.value === 'JA' && (
                 <div className={styles.blokk}>
                     <VStack gap="2">
                         {tittel && (

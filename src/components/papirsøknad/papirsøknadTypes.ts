@@ -24,8 +24,10 @@ export interface Tiltak {
     arrangørnavn?: string;
 }
 
+export type JaNeiSvar = 'JA' | 'NEI' | 'IKKE_BESVART';
+
 export interface JaNeiSpm {
-    svar: boolean;
+    svar?: JaNeiSvar;
 }
 
 export interface FraOgMedDatoSpm {
@@ -40,15 +42,15 @@ export interface PeriodeSpm {
 
 export interface Spørsmålsbesvarelser {
     tiltak: Tiltak;
-    harTiltak: boolean;
+    harTiltak: boolean; // beholdes
     barnetilleggPdl: Barn[];
     barnetilleggManuelle: Barn[];
     barnetilleggKladd: Barn;
-    harSøktOmBarnetillegg: boolean;
+    harSøktOmBarnetillegg: JaNeiSvar | undefined; // endret
     kvalifiseringsprogram: PeriodeSpm;
     introduksjonsprogram: PeriodeSpm;
     institusjonsopphold: PeriodeSpm;
-    mottarAndreUtbetalinger: boolean;
+    mottarAndreUtbetalinger: boolean | undefined;
     sykepenger: PeriodeSpm;
     gjenlevendepensjon: PeriodeSpm;
     alderspensjon: FraOgMedDatoSpm;
@@ -90,6 +92,7 @@ const defaultPapirsøknadFormValues = {
         pensjonsordning: {},
         etterlønn: {},
         jobbsjansen: {},
+        harSøktOmBarnetillegg: undefined,
         mottarAndreUtbetalinger: undefined,
     },
 };

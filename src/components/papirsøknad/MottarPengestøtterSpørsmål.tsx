@@ -39,12 +39,12 @@ export const MottarPengestøtterSpørsmål = ({ name, legend }: Props) => {
     };
 
     return (
-        <div className={spørsmål.field.value ? styles.blokkUtvidet : ''}>
+        <div className={spørsmål.field.value === 'JA' ? styles.blokkUtvidet : ''}>
             <JaNeiSpørsmål
                 name={name}
                 legend={legend}
                 onChange={() => {
-                    if (!spørsmål.field.value) {
+                    if (spørsmål.field.value !== 'JA') {
                         nullstillFelter();
                     }
                 }}
@@ -59,7 +59,7 @@ export const MottarPengestøtterSpørsmål = ({ name, legend }: Props) => {
                     </List>
                 }
             />
-            {spørsmål.field.value && (
+            {spørsmål.field.value === 'JA' && (
                 <>
                     <SpørsmålMedPeriodevelger
                         spørsmålName="svar.gjenlevendepensjon.svar"

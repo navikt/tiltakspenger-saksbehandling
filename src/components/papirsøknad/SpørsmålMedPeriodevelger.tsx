@@ -28,17 +28,17 @@ export const SpørsmålMedPeriodevelger = ({
     });
 
     return (
-        <div className={jaNeiSpørsmål.field.value ? styles.blokkUtvidet : ''}>
+        <div className={jaNeiSpørsmål.field.value === 'JA' ? styles.blokkUtvidet : ''}>
             <JaNeiSpørsmål
                 name={spørsmålName}
                 legend={spørsmål}
                 onChange={(newValue) => {
-                    if (!newValue) {
+                    if (newValue !== 'JA') {
                         resetField(periodeName);
                     }
                 }}
             />
-            {jaNeiSpørsmål.field.value && (
+            {jaNeiSpørsmål.field.value === 'JA' && (
                 <Periodevelger
                     name={periodeName}
                     tittel={periodeSpørsmål}
