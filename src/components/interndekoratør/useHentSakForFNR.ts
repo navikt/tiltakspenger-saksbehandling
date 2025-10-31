@@ -6,7 +6,8 @@ export const useHentSakForFNR = () => {
         trigger: søk,
         data: sak,
         error,
+        reset,
     } = useFetchJsonFraApi<SakProps, { fnr: string }>('/sak', 'POST');
 
-    return { søk, sak, error };
+    return { søk, sak, error, reset };
 };

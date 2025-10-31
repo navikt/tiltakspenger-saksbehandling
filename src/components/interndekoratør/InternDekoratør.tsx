@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BodyShort, Dropdown, InternalHeader, Search, Spacer, VStack } from '@navikt/ds-react';
 import { Loader } from '@navikt/ds-react';
 import { LeaveIcon } from '@navikt/aksel-icons';
@@ -10,8 +10,16 @@ import router from 'next/router';
 
 export const InternDekoratør = () => {
     const { innloggetSaksbehandler } = useSaksbehandler();
-    const { søk, error } = useHentSakForFNR();
-    const [søketekst, settSøketekst] = useState<string>('');
+    const { søk, error, reset } = useHentSakForFNR();
+    const [søketekst, setSøketekst] = useState<string>('');
+
+    //window eksiterer ikke alltid ved lasting til å kunne brukes som en dependency for useEffect
+    const windowPath = typeof window !== 'undefined' ? window.location.pathname : '';
+
+    useEffect(() => {
+        reset();
+        setSøketekst('');
+    }, [windowPath]);
 
     return (
         <VStack gap="3">
@@ -36,7 +44,8 @@ export const InternDekoratør = () => {
                         size="small"
                         variant="simple"
                         placeholder="Søk på fnr"
-                        onChange={(e) => settSøketekst(e.trim())}
+                        value={søketekst}
+                        onChange={(e) => setSøketekst(e.trim())}
                     />
                 </form>
                 <Spacer />
