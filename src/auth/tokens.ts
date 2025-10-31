@@ -7,6 +7,8 @@ const SBH_API_SCOPE = process.env.SAKSBEHANDLING_API_SCOPE;
 const brukFakeToken =
     process.env.BRUK_LOKAL_FAKE_TOKEN === 'true' && process.env.NAIS_CLUSTER_NAME === undefined;
 
+const fakeToken = process.env.LOKAL_FAKE_TOKEN ?? 'TokenMcTokenface';
+
 const hentOboTokenEkte = async (req: NextRequest) => {
     const token = getToken(req);
     if (!token) {
@@ -21,7 +23,7 @@ const hentOboTokenEkte = async (req: NextRequest) => {
     return obo.token;
 };
 
-const hentOboTokenFake = async () => 'TokenMcTokenface';
+const hentOboTokenFake = async () => fakeToken;
 
 const validerTokenEkte = async (req: NextRequest) => {
     const token = getToken(req);
