@@ -8,15 +8,17 @@ import {
     TasklistIcon,
     XMarkOctagonIcon,
 } from '@navikt/aksel-icons';
-import { Heading, Timeline, Link, BodyShort, Button } from '@navikt/ds-react';
+import { BodyShort, Button, Heading, Link, Timeline } from '@navikt/ds-react';
 import { SakProps } from '~/types/Sak';
-import { Vedtakstype } from '~/types/Rammevedtak';
 import NextLink from 'next/link';
 import { formaterDatotekst, periodeTilFormatertDatotekst } from '~/utils/date';
 import { formatterBeløp } from '~/utils/beløp';
 import { behandlingUrl, meldeperiodeUrl } from '~/utils/urls';
 import { useTidslinjeDateRange } from '~/components/behandling/tidslinje/useTidslinjeDateRange';
 import { tellAntallBarnFraVedtak } from '~/components/behandling/felles/barnetillegg/utils/barnetilleggUtils';
+import { erRammebehandlingInnvilgelseResultat } from '~/utils/behandling';
+import { RevurderingResultat } from '~/types/Revurdering';
+import { SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
 
 import style from './BehandlingerTidslinje.module.css';
 
@@ -68,7 +70,7 @@ export const BehandlingerTidslinje = ({ sak }: Props) => {
                             id,
                             periode,
                             gjeldendePeriode,
-                            vedtaksType,
+                            resultat,
                             vedtaksdato,
                             saksbehandler,
                             beslutter,
@@ -79,7 +81,7 @@ export const BehandlingerTidslinje = ({ sak }: Props) => {
                         const gjeldendePeriodeErEndret =
                             periode.fraOgMed !== fraOgMed || periode.tilOgMed !== tilOgMed;
 
-                        const erInnvilgelse = vedtaksType === Vedtakstype.INNVILGELSE;
+                        const erInnvilgelse = erRammebehandlingInnvilgelseResultat(resultat);
 
                         const barn = tellAntallBarnFraVedtak(vedtak);
 
@@ -88,16 +90,17 @@ export const BehandlingerTidslinje = ({ sak }: Props) => {
                                 start={new Date(fraOgMed)}
                                 end={new Date(tilOgMed)}
                                 status={(() => {
-                                    switch (vedtaksType) {
-                                        case Vedtakstype.INNVILGELSE:
-                                            return 'success';
-                                        case Vedtakstype.STANS:
-                                            return 'danger';
-                                        case Vedtakstype.AVSLAG:
-                                            return 'warning';
-                                        default:
-                                            return undefined;
+                                    if (erInnvilgelse) {
+                                        return 'success';
                                     }
+                                    if (resultat === RevurderingResultat.STANS) {
+                                        return 'danger';
+                                    }
+                                    if (resultat === SøknadsbehandlingResultat.AVSLAG) {
+                                        return 'warning';
+                                    }
+
+                                    return undefined;
                                 })()}
                                 icon={
                                     erInnvilgelse ? (

@@ -1,22 +1,16 @@
 import { Nullable } from '~/types/UtilTypes';
 import { Periode } from './Periode';
 import { Barnetillegg } from './Barnetillegg';
-import { BehandlingId, Rammebehandling } from './Behandling';
+import { BehandlingId, Rammebehandling, RammebehandlingResultat } from './Behandling';
 
 export type VedtakId = `vedtak_${string}`;
-
-export enum Vedtakstype {
-    INNVILGELSE = 'INNVILGELSE',
-    AVSLAG = 'AVSLAG',
-    STANS = 'STANS',
-}
 
 export type Rammevedtak = {
     id: VedtakId;
     behandlingId: BehandlingId;
     opprettet: string;
     vedtaksdato: Nullable<string>;
-    vedtaksType: Vedtakstype;
+    resultat: RammebehandlingResultat;
     periode: Periode;
     // Perioden der vedtaket fortsatt er gjeldende for sakens nå-tilstand
     gjeldendePeriode: Periode;

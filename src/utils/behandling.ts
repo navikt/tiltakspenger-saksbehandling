@@ -6,6 +6,7 @@ import { Nullable } from '~/types/UtilTypes';
 import {
     Rammebehandling,
     RammebehandlingMedInnvilgelse,
+    RammebehandlingResultat,
     Rammebehandlingsstatus,
 } from '~/types/Behandling';
 import { Søknadsbehandling, SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
@@ -137,17 +138,21 @@ export const finnSisteSluttdatoForTiltaksdeltakelse = (
 export const erRammebehandlingMedInnvilgelse = (
     behandling: Rammebehandling,
 ): behandling is RammebehandlingMedInnvilgelse => {
-    const resultatType = behandling.resultat;
+    const { resultat } = behandling;
 
-    return (
-        resultatType === SøknadsbehandlingResultat.INNVILGELSE ||
-        resultatType === RevurderingResultat.INNVILGELSE ||
-        resultatType === RevurderingResultat.OMGJØRING
-    );
+    return erRammebehandlingInnvilgelseResultat(resultat);
 };
 
 export const rammebehandlingMedInnvilgelseEllerNull = (
     behandling: Rammebehandling,
 ): RammebehandlingMedInnvilgelse | null => {
     return erRammebehandlingMedInnvilgelse(behandling) ? behandling : null;
+};
+
+export const erRammebehandlingInnvilgelseResultat = (resultat: RammebehandlingResultat) => {
+    return (
+        resultat === SøknadsbehandlingResultat.INNVILGELSE ||
+        resultat === RevurderingResultat.INNVILGELSE ||
+        resultat === RevurderingResultat.OMGJØRING
+    );
 };
