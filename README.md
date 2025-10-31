@@ -35,11 +35,16 @@ AZURE_OPENID_CONFIG_ISSUER="http://host.docker.internal:6969/azuread"
 AZURE_OPENID_CONFIG_JWKS_URI=http://host.docker.internal:6969/azuread/jwks
 AZURE_OPENID_CONFIG_TOKEN_ENDPOINT=http://host.docker.internal:6969/azuread/token
 AZURE_APP_JWK= * Se JWK i wonderwallconfig *
+BRUK_LOKAL_FAKE_TOKEN=true <ikke inkluder denne hvis du kjører auth-tjenestene lokalt>
 ```
 
 Det er laget et docker-compose oppsett i `docker-compose.yml` i [tiltakspenger-meta-repo](https://github.com/navikt/tiltakspenger) som kjører opp verdikjeden lokalt.
 
 Se på [denne siden](https://confluence.adeo.no/display/POAO/Ny+Utvikler+i+Tiltakspenger) for tips til lokalt oppsett av utviklingsmiljø.
+
+Hvis du kjører auth-tjenester lokalt, er appen tilgjengelig via wonderwall på http://localhost:2222
+
+Ved bruk av fake tokens, gå rett på http://localhost:3000
 
 ---
 

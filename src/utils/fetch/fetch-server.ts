@@ -1,4 +1,3 @@
-import { getToken, requestOboToken } from '@navikt/oasis';
 import { logger } from '@navikt/next-logger';
 import { IncomingMessage } from 'node:http';
 import { NextApiRequest } from 'next';
@@ -7,25 +6,11 @@ import { Saksbehandler } from '~/types/Saksbehandler';
 import { stripLeadingSlash } from '../string';
 import { errorFraApiResponse } from './fetch';
 import { Behandlingssammendrag } from '~/types/Behandlingssammendrag';
+import { hentOboToken } from '~/auth/tokens';
 
-type NextRequest = Request | IncomingMessage | NextApiRequest;
+export type NextRequest = Request | IncomingMessage | NextApiRequest;
 
 const SBH_API_URL = process.env.TILTAKSPENGER_SAKSBEHANDLING_API_URL;
-const SBH_API_SCOPE = process.env.SAKSBEHANDLING_API_SCOPE;
-
-const hentOboToken = async (req: NextRequest) => {
-    const token = getToken(req);
-    if (!token) {
-        throw new Error('Kunne ikke hente token!');
-    }
-
-    const obo = await requestOboToken(token, SBH_API_SCOPE);
-    if (!obo.ok) {
-        throw new Error(`Kunne ikke gjøre on-behalf-of-utveksling for saksbehandlertoken`);
-    }
-
-    return obo.token;
-};
 
 const methodsWithBody: ReadonlySet<string> = new Set(['POST', 'PUT', 'PATCH', 'DELETE']);
 

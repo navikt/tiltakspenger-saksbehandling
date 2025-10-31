@@ -1,4 +1,3 @@
-import { getToken, validateToken } from '@navikt/oasis';
 import {
     GetServerSidePropsContext,
     GetServerSideProps,
@@ -6,7 +5,8 @@ import {
     NextApiResponse,
 } from 'next';
 import { logger } from '@navikt/next-logger';
-import { fetchSaksbehandler } from '../utils/fetch/fetch-server';
+import { fetchSaksbehandler } from '~/utils/fetch/fetch-server';
+import { validerToken } from '~/auth/tokens';
 
 const LOGIN_API_URL = `${process.env.WONDERWALL_ORIGIN || ''}/oauth2/login`;
 
@@ -34,25 +34,9 @@ export const pageWithAuthentication = (
     getServerSideProps: GetServerSideProps = defaultGetServerSideProps,
 ) => {
     return async (context: GetServerSidePropsContext) => {
-        const token = getToken(context.req);
+        const token = await validerToken(context.req);
 
-        if (token == null) {
-            return {
-                redirect: {
-                    destination: `${LOGIN_API_URL}?redirect=${context.resolvedUrl}`,
-                    permanent: false,
-                },
-            };
-        }
-
-        const validationResult = await validateToken(token);
-        if (!validationResult.ok) {
-            const error = new Error(
-                `Ugyldig JWT token funnet omdirigerer til innlogging. Error: ${validationResult.error}, ErrorType: ${validationResult.errorType}`,
-            );
-
-            logger.error(error);
-
+        if (!token) {
             return {
                 redirect: {
                     destination: `${LOGIN_API_URL}?redirect=${context.resolvedUrl}`,
@@ -89,16 +73,8 @@ export const pageWithAuthentication = (
  */
 export const withAuthenticatedApi = (handler: ApiHandler): ApiHandler => {
     return async function withBearerTokenHandler(req, res, ...rest) {
-        const token = getToken(req);
-        if (token == null) {
-            res.status(401).json({ message: 'Ingen tilgang' });
-            return;
-        }
-
-        const validatedToken = await validateToken(token);
-        if (!validatedToken.ok) {
-            logger.error(`Ugyldig JWT token funnet for API ${req.url}`);
-
+        const token = await validerToken(req);
+        if (!token) {
             res.status(401).json({ message: 'Ingen tilgang' });
             return;
         }
