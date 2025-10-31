@@ -11,7 +11,7 @@ import { BrevForhåndsvisningDTO } from '~/components/behandling/felles/vedtaksb
 import { ValideringResultat } from '~/types/Validering';
 
 import style from './Vedtaksbrev.module.css';
-import { Rammebehandling } from '~/types/Behandling';
+import { Rammebehandling } from '~/types/Rammebehandling';
 
 type Props = {
     header: string;

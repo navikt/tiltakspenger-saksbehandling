@@ -4,7 +4,7 @@ import { BehandlingForOversikt } from '~/types/BehandlingForOversikt';
 import { eierBehandling } from '~/utils/tilganger';
 import { Saksbehandler } from '~/types/Saksbehandler';
 import { PauseIcon } from '@navikt/aksel-icons';
-import { Rammebehandlingsstatus } from '~/types/Behandling';
+import { Rammebehandlingsstatus } from '~/types/Rammebehandling';
 
 export const visSettBehandlingPåVentMenyvalg = (
     behandling: BehandlingForOversikt,

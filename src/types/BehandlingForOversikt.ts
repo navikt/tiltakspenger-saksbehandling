@@ -1,6 +1,6 @@
 import { Periode } from './Periode';
 import { SakId } from './Sak';
-import { BehandlingId, Rammebehandlingsstatus, RammebehandlingResultat } from './Behandling';
+import { BehandlingId, Rammebehandlingsstatus, RammebehandlingResultat } from './Rammebehandling';
 import { SøknadId } from './Søknad';
 import { RevurderingResultat } from '~/types/Revurdering';
 import { SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';

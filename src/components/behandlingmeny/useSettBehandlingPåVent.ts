@@ -1,7 +1,7 @@
 import { SakId } from '~/types/Sak';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { Nullable } from '~/types/UtilTypes';
-import { Rammebehandling, BehandlingId } from '~/types/Behandling';
+import { Rammebehandling, BehandlingId } from '~/types/Rammebehandling';
 
 export type SettBehandlingPåVentDTO = {
     sakId: Nullable<string>;

@@ -10,7 +10,7 @@ import { TekstListe } from '../../../liste/TekstListe';
 import { Nullable } from '~/types/UtilTypes';
 
 import style from './BegrunnelseVilkårsvurdering.module.css';
-import { Rammebehandling } from '~/types/Behandling';
+import { Rammebehandling } from '~/types/Rammebehandling';
 
 type Props = {
     behandling: Rammebehandling;

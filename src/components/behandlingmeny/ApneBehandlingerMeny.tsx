@@ -30,7 +30,7 @@ import GjenopptaBehandlingMenyvalg, {
 } from '~/components/behandlingmeny/menyvalg/GjenopptaBehandlingMenyvalg';
 import SettBehandlingPåVentModal from '~/components/modaler/SettBehandlingPåVentModal';
 import { behandlingUrl } from '~/utils/urls';
-import { Rammebehandlingsstatus } from '~/types/Behandling';
+import { Rammebehandlingsstatus } from '~/types/Rammebehandling';
 
 type Props = {
     behandling: BehandlingForOversikt;

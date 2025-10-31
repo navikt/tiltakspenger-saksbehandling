@@ -14,7 +14,7 @@ import BehandlingSattPåVentOppsummering from '~/components/oppsummeringer/behan
 import { BehandlingSkjemaProvider } from '~/components/behandling/context/BehandlingSkjemaContext';
 
 import style from './BehandlingPage.module.css';
-import { Rammebehandlingstype } from '~/types/Behandling';
+import { Rammebehandlingstype } from '~/types/Rammebehandling';
 
 export const BehandlingPage = () => {
     const { sak } = useSak();

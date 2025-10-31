@@ -5,7 +5,7 @@ import { BarnetilleggPeriode } from '~/types/Barnetillegg';
 import { datoMax, datoMin, nesteDag } from '~/utils/date';
 
 import { kunPerioderMedBarn } from '~/components/behandling/felles/barnetillegg/utils/barnetilleggUtils';
-import { BehandlingId } from '~/types/Behandling';
+import { BehandlingId } from '~/types/Rammebehandling';
 
 type VedtakMedBarnetillegg = Rammevedtak & {
     barnetillegg: NonNullable<Rammevedtak['barnetillegg']>;

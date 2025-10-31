@@ -4,7 +4,7 @@ import { isEqualJson } from '~/utils/is-equal-json';
 import { ValideringFunc, ValideringResultat, ValideringType } from '~/types/Validering';
 import { Nullable } from '~/types/UtilTypes';
 import { BehandlingSkjemaContext } from '~/components/behandling/context/BehandlingSkjemaContext';
-import { RammebehandlingVedtakRequest } from '~/types/Behandling';
+import { RammebehandlingVedtakRequest } from '~/types/Rammebehandling';
 
 type ValiderOgHentVedtakDTO = (type: ValideringType) => {
     valideringResultat: ValideringResultat;

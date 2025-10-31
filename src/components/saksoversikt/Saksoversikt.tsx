@@ -10,7 +10,11 @@ import { MeldekortOversiktIkkeKlar } from './meldekort-oversikt/ikke-klar/Meldek
 import { VedtatteBehandlinger } from '~/components/saksoversikt/behandlinger-oversikt/vedtatte-behandlinger/VedtatteBehandlinger';
 import NotificationBanner from '../notificationBanner/NotificationBanner';
 import MeldekortHelgToggle from '../toggles/MeldekortHelgToggle';
-import { Rammebehandling, Rammebehandlingsstatus, Rammebehandlingstype } from '~/types/Behandling';
+import {
+    Rammebehandling,
+    Rammebehandlingsstatus,
+    Rammebehandlingstype,
+} from '~/types/Rammebehandling';
 import { OpprettPapirsøknad } from '~/components/saksoversikt/papirsøknad/OpprettPapirsøknad';
 import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
 

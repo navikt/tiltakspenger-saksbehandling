@@ -9,7 +9,7 @@ import {
 import { erBehandlingAvbrutt, erBehandlingVedtatt } from '~/utils/behandling';
 import { AvbrutteBehandlingerTabell } from './AvbrutteBehandlingerTabell';
 import { Søknad } from '~/types/Søknad';
-import { Rammebehandling } from '~/types/Behandling';
+import { Rammebehandling } from '~/types/Rammebehandling';
 
 export const AvsluttedeBehandlinger = (props: {
     saksnummer: string;

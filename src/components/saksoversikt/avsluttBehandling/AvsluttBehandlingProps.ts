@@ -1,4 +1,4 @@
-import { BehandlingId } from '~/types/Behandling';
+import { BehandlingId } from '~/types/Rammebehandling';
 import { SøknadId } from '~/types/Søknad';
 
 export type AvsluttBehandlingProps = {

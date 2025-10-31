@@ -12,7 +12,7 @@ import {
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
 
 import style from './BehandlingBarnetilleggPerioder.module.css';
-import { Rammebehandlingstype } from '~/types/Behandling';
+import { Rammebehandlingstype } from '~/types/Rammebehandling';
 import { BarnetilleggPeriodeFormData } from '../utils/hentBarnetilleggFraBehandling';
 
 const BATCH_MED_BARN = 10;

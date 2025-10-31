@@ -1,4 +1,4 @@
-import { Rammebehandling } from '~/types/Behandling';
+import { Rammebehandling } from '~/types/Rammebehandling';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 
 export const useSendBehandlingTilBeslutning = (behandling: Rammebehandling) => {

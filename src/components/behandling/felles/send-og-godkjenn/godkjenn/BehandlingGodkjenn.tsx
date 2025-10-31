@@ -7,7 +7,7 @@ import { Underkjenn } from '../../../../underkjenn/Underkjenn';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { useGodkjennBehandling } from '~/components/behandling/felles/send-og-godkjenn/godkjenn/useGodkjennBehandling';
 import { useNotification } from '~/context/NotificationContext';
-import { Rammebehandling } from '~/types/Behandling';
+import { Rammebehandling } from '~/types/Rammebehandling';
 
 type Props = {
     behandling: Rammebehandling;

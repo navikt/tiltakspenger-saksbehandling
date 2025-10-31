@@ -1,4 +1,4 @@
-import { Rammebehandling } from '~/types/Behandling';
+import { Rammebehandling } from '~/types/Rammebehandling';
 import { Periode } from '~/types/Periode';
 
 export const meldeperiodeUrl = (saksnummer: string, periode: Periode) =>

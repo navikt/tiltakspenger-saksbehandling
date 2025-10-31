@@ -10,7 +10,7 @@ import {
 } from '~/components/behandling/context/BehandlingSkjemaContext';
 
 import style from './BehandlingsperiodeVelger.module.css';
-import { Rammebehandling } from '~/types/Behandling';
+import { Rammebehandling } from '~/types/Rammebehandling';
 
 type Props = {
     behandling: Rammebehandling;

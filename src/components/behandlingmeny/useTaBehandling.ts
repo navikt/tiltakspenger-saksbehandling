@@ -1,4 +1,4 @@
-import { Rammebehandling, BehandlingId } from '~/types/Behandling';
+import { Rammebehandling, BehandlingId } from '~/types/Rammebehandling';
 
 import { SakId } from '../../types/Sak';
 import { useFetchJsonFraApi } from '../../utils/fetch/useFetchFraApi';

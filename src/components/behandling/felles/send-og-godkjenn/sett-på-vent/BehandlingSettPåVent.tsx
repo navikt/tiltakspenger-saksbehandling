@@ -1,7 +1,7 @@
 import { Button } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import SettBehandlingPåVentModal from '~/components/modaler/SettBehandlingPåVentModal';
-import { Rammebehandling } from '~/types/Behandling';
+import { Rammebehandling } from '~/types/Rammebehandling';
 
 type Props = {
     behandling: Rammebehandling;

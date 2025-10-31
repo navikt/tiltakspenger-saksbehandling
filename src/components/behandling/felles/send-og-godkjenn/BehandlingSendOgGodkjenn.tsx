@@ -23,7 +23,7 @@ import { skalKunneGjenopptaBehandling } from '~/utils/tilganger';
 import { formaterTidspunkt } from '~/utils/date';
 
 import style from './BehandlingSendOgGodkjenn.module.css';
-import { Rammebehandling, Rammebehandlingsstatus } from '~/types/Behandling';
+import { Rammebehandling, Rammebehandlingsstatus } from '~/types/Rammebehandling';
 
 type Props = {
     behandling: Rammebehandling;

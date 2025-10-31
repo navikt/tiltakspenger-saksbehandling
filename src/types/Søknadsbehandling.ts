@@ -4,7 +4,7 @@ import {
     Rammebehandlingstype,
     OppdaterBehandlingRequestBase,
     RammebehandlingBase,
-} from './Behandling';
+} from './Rammebehandling';
 import { Periode } from './Periode';
 import { Søknad } from './Søknad';
 import { TiltaksdeltakelsePeriode } from './TiltakDeltagelseTypes';

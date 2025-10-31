@@ -5,7 +5,7 @@ import { validerAntallDagerPerMeldeperiode } from '~/components/behandling/felle
 import { BehandlingSkjemaContext } from '~/components/behandling/context/BehandlingSkjemaContext';
 import { erFullstendigPeriode } from '~/utils/periode';
 import { hentHeleTiltaksdeltagelsesperioden } from '~/utils/behandling';
-import { Rammebehandling } from '~/types/Behandling';
+import { Rammebehandling } from '~/types/Rammebehandling';
 
 export const validerInnvilgelse = (
     behandling: Rammebehandling,

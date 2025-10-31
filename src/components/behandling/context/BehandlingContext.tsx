@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { useRolleForBehandling } from '~/context/saksbehandler/SaksbehandlerContext';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
-import { Rammebehandlingstype, Rammebehandling } from '~/types/Behandling';
+import { Rammebehandlingstype, Rammebehandling } from '~/types/Rammebehandling';
 import { Søknadsbehandling } from '~/types/Søknadsbehandling';
 import { Revurdering, RevurderingOmgjøring, RevurderingResultat } from '~/types/Revurdering';
 

@@ -1,7 +1,7 @@
 import { Periode } from '~/types/Periode';
 import { BehandlingSkjemaActionHandlers } from '~/components/behandling/context/BehandlingSkjemaReducer';
 import { Nullable } from '~/types/UtilTypes';
-import { RammebehandlingResultat } from '~/types/Behandling';
+import { RammebehandlingResultat } from '~/types/Rammebehandling';
 import { perioderOverlapper } from '~/utils/periode';
 import { datoMax, datoMin } from '~/utils/date';
 

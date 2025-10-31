@@ -11,7 +11,7 @@ import { kanSaksbehandleForBehandling } from '~/utils/tilganger';
 import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
 
 import style from './BehandlingBeregningOgSimulering.module.css';
-import { Rammebehandling, Rammebehandlingsstatus } from '~/types/Behandling';
+import { Rammebehandling, Rammebehandlingsstatus } from '~/types/Rammebehandling';
 
 export const BehandlingBeregningOgSimulering = () => {
     const { behandling, setBehandling } = useBehandling();

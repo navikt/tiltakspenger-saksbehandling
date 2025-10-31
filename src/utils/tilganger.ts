@@ -1,4 +1,4 @@
-import { Rammebehandling, Rammebehandlingsstatus } from '~/types/Behandling';
+import { Rammebehandling, Rammebehandlingsstatus } from '~/types/Rammebehandling';
 import { BehandlingForOversikt } from '~/types/BehandlingForOversikt';
 import {
     MeldekortBehandlingProps,

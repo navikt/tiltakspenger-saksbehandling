@@ -4,7 +4,7 @@ import {
     Rammebehandlingstype,
     OppdaterBehandlingRequestBase,
     RammebehandlingBase,
-} from './Behandling';
+} from './Rammebehandling';
 import { Periode } from './Periode';
 import { TiltaksdeltakelsePeriode } from './TiltakDeltagelseTypes';
 import { Nullable } from './UtilTypes';
@@ -36,7 +36,7 @@ export interface RevurderingOmgjøring extends RevurderingBase {
     resultat: RevurderingResultat.OMGJØRING;
     omgjørVedtak: VedtakId;
     innvilgelsesperiode: Periode;
-    valgteTiltaksdeltakelser: TiltaksdeltakelsePeriode[];
+    valgteTiltaksdeltakelser: Nullable<TiltaksdeltakelsePeriode[]>;
     barnetillegg: Barnetillegg;
     antallDagerPerMeldeperiode: AntallDagerForMeldeperiode[];
 }

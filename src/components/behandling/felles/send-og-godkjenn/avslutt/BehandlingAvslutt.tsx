@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import AvsluttBehandlingModal from '~/components/modaler/AvsluttBehandlingModal';
 
 import router from 'next/router';
-import { Rammebehandling } from '~/types/Behandling';
+import { Rammebehandling } from '~/types/Rammebehandling';
 
 type Props = {
     behandling: Rammebehandling;

@@ -5,7 +5,7 @@ import router from 'next/router';
 import { BekreftelsesModal } from '~/components/modaler/BekreftelsesModal';
 import { useRef } from 'react';
 import { behandlingUrl } from '~/utils/urls';
-import { Rammebehandling } from '~/types/Behandling';
+import { Rammebehandling } from '~/types/Rammebehandling';
 
 type Props = {
     behandling: Rammebehandling;

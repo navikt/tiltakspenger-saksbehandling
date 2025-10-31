@@ -1,7 +1,7 @@
 import React, { createContext, ReactNode, useContext } from 'react';
 import { Saksbehandler } from '../../types/Saksbehandler';
 import { hentRolleForBehandling } from '~/utils/tilganger';
-import { Rammebehandling } from '~/types/Behandling';
+import { Rammebehandling } from '~/types/Rammebehandling';
 
 type SaksbehandlerState = {
     innloggetSaksbehandler: Saksbehandler;

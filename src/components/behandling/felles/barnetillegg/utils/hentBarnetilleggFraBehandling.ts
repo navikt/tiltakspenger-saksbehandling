@@ -10,7 +10,7 @@ import { kunPerioderMedBarn } from '~/components/behandling/felles/barnetillegg/
 import { Periode, PeriodeMedNullable } from '~/types/Periode';
 import { Søknadsbehandling } from '~/types/Søknadsbehandling';
 import { Revurdering } from '~/types/Revurdering';
-import { Rammebehandling } from '~/types/Behandling';
+import { Rammebehandling } from '~/types/Rammebehandling';
 
 export interface BarnetilleggPeriodeFormData {
     antallBarn: number;

@@ -13,7 +13,11 @@ import { Periode } from '~/types/Periode';
 import { SakProps } from '~/types/Sak';
 import { erDatoIPeriode } from '~/utils/periode';
 import { ANTALL_DAGER_DEFAULT } from '~/components/behandling/felles/dager-per-meldeperiode/BehandlingDagerPerMeldeperiode';
-import { Rammebehandlingstype, Rammebehandling } from '~/types/Behandling';
+import {
+    Rammebehandlingstype,
+    Rammebehandling,
+    RammebehandlingMedInnvilgelse,
+} from '~/types/Rammebehandling';
 import { TiltaksdeltakelsePeriodeFormData } from './slices/TiltaksdeltagelseState';
 import {
     Søknadsbehandling,
@@ -225,9 +229,7 @@ const fraRevurderingInnvilgelse = (
         behandlingsperiode,
         harBarnetillegg: barnetilleggPerioder.length > 0,
         barnetilleggPerioder,
-        valgteTiltaksdeltakelser:
-            behandling.valgteTiltaksdeltakelser ??
-            tilValgteTiltaksdeltakelser(behandling, behandlingsperiode),
+        valgteTiltaksdeltakelser: tilValgteTiltaksdeltakelser(behandling, behandlingsperiode),
         antallDagerPerMeldeperiode: behandling.antallDagerPerMeldeperiode ?? [
             {
                 antallDagerPerMeldeperiode: ANTALL_DAGER_DEFAULT,
@@ -286,7 +288,7 @@ const fraRevurderingOmgjøring = (
         behandlingsperiode,
         harBarnetillegg: barnetilleggPerioder.length > 0,
         barnetilleggPerioder,
-        valgteTiltaksdeltakelser: behandling.valgteTiltaksdeltakelser,
+        valgteTiltaksdeltakelser: tilValgteTiltaksdeltakelser(behandling, behandlingsperiode),
         antallDagerPerMeldeperiode: behandling.antallDagerPerMeldeperiode,
 
         // Ikke i bruk for denne behandlingstypen
@@ -300,9 +302,13 @@ const fraRevurderingOmgjøring = (
 };
 
 const tilValgteTiltaksdeltakelser = (
-    behandling: Rammebehandling,
+    behandling: RammebehandlingMedInnvilgelse,
     behandlingsperiode: Periode,
 ): TiltaksdeltakelsePeriodeFormData[] => {
+    if (behandling.valgteTiltaksdeltakelser) {
+        return behandling.valgteTiltaksdeltakelser;
+    }
+
     const overlappendeDeltakelser: TiltaksdeltakelsePeriodeFormData[] = [];
 
     const tiltak = hentTiltaksdeltakelserMedStartOgSluttdato(behandling).map(

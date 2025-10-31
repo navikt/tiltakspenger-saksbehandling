@@ -8,7 +8,7 @@ import { useTaBehandling } from '~/components/behandlingmeny/useTaBehandling';
 import { Saksbehandler } from '~/types/Saksbehandler';
 import { PersonIcon } from '@navikt/aksel-icons';
 import { behandlingUrl } from '~/utils/urls';
-import { Rammebehandlingsstatus } from '~/types/Behandling';
+import { Rammebehandlingsstatus } from '~/types/Rammebehandling';
 
 export const visTildelMegMenyvalg = (
     behandling: BehandlingForOversikt,

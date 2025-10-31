@@ -3,7 +3,7 @@ import { BehandlingForOversikt } from '~/types/BehandlingForOversikt';
 import { skalKunneOvertaBehandling } from '~/utils/tilganger';
 import { Saksbehandler } from '~/types/Saksbehandler';
 import { ArrowRightIcon } from '@navikt/aksel-icons';
-import { Rammebehandlingsstatus } from '~/types/Behandling';
+import { Rammebehandlingsstatus } from '~/types/Rammebehandling';
 
 export const visOvertaBehandlingMenyvalg = (
     behandling: BehandlingForOversikt,

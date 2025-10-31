@@ -5,7 +5,7 @@ import { useBehandling } from '../../../context/BehandlingContext';
 import { BekreftelsesModal } from '../../../../modaler/BekreftelsesModal';
 import { useSendBehandlingTilBeslutning } from '~/components/behandling/felles/send-og-godkjenn/send-til-beslutning/useSendBehandlingTilBeslutning';
 import { useNotification } from '~/context/NotificationContext';
-import { Rammebehandling } from '~/types/Behandling';
+import { Rammebehandling } from '~/types/Rammebehandling';
 
 type Props = {
     behandling: Rammebehandling;

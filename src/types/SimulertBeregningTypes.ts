@@ -5,7 +5,7 @@ import {
 import { Nullable } from '~/types/UtilTypes';
 import { MeldeperiodeKjedeId } from '~/types/meldekort/Meldeperiode';
 import { BeregningerSummert } from '~/types/Beregning';
-import { BehandlingId } from './Behandling';
+import { BehandlingId } from './Rammebehandling';
 
 export enum SimulerertBehandlingstype {
     RAMME = 'RAMME',

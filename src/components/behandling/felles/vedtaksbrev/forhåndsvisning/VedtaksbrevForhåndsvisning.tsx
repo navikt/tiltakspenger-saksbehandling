@@ -9,7 +9,7 @@ import { ValideringResultat } from '~/types/Validering';
 import React, { useEffect, useState } from 'react';
 
 import style from './VedtaksbrevForhåndsvisning.module.css';
-import { Rammebehandling } from '~/types/Behandling';
+import { Rammebehandling } from '~/types/Rammebehandling';
 
 type Props = {
     behandling: Rammebehandling;

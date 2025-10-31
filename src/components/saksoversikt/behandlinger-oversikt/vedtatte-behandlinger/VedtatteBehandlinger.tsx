@@ -1,6 +1,6 @@
 import { Alert, Heading, VStack } from '@navikt/ds-react';
 import { VedtatteBehandlingerTabell } from './VedtatteBehandlingerTabell';
-import { Rammebehandling } from '~/types/Behandling';
+import { Rammebehandling } from '~/types/Rammebehandling';
 import { SakId } from '~/types/Sak';
 import { Rammevedtak, RammevedtakMedBehandling } from '~/types/Rammevedtak';
 

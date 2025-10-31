@@ -1,7 +1,7 @@
 import { Nullable } from '~/types/UtilTypes';
 import { Periode } from './Periode';
 import { Barnetillegg } from './Barnetillegg';
-import { BehandlingId, Rammebehandling, RammebehandlingResultat } from './Behandling';
+import { BehandlingId, Rammebehandling, RammebehandlingResultat } from './Rammebehandling';
 
 export type VedtakId = `vedtak_${string}`;
 

@@ -4,7 +4,7 @@ import { useBehandling } from '~/components/behandling/context/BehandlingContext
 
 import { Nullable } from '~/types/UtilTypes';
 import { FetcherError } from '~/utils/fetch/fetch';
-import { Rammebehandling, RammebehandlingVedtakRequest } from '~/types/Behandling';
+import { Rammebehandling, RammebehandlingVedtakRequest } from '~/types/Rammebehandling';
 
 type Props = {
     behandling: Rammebehandling;

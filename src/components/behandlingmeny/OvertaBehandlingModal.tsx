@@ -6,7 +6,7 @@ import router from 'next/router';
 import { behandlingUrl } from '~/utils/urls';
 
 import styles from './OvertaBehandlingModal.module.css';
-import { Rammebehandling, BehandlingId } from '~/types/Behandling';
+import { Rammebehandling, BehandlingId } from '~/types/Rammebehandling';
 
 const OvertabehandlingModal = (props: {
     sakId: SakId;

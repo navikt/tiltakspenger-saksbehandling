@@ -5,7 +5,7 @@ import { Rammevedtak } from '~/types/Rammevedtak';
 
 import { Søknad } from './Søknad';
 import { UtbetalingstidslinjePeriode } from './Utbetaling';
-import { Rammebehandling } from './Behandling';
+import { Rammebehandling } from './Rammebehandling';
 
 export type SakId = `sak_${string}`;
 

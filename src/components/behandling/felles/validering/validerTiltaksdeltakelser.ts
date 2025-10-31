@@ -5,7 +5,7 @@ import { joinPerioder, validerPeriodisering } from '~/utils/periode';
 import dayjs from 'dayjs';
 import { Periode } from '~/types/Periode';
 import { TiltaksdeltakelsePeriodeFormData } from '../../context/slices/TiltaksdeltagelseState';
-import { Rammebehandling } from '~/types/Behandling';
+import { Rammebehandling } from '~/types/Rammebehandling';
 
 export const validerTiltaksdeltakelser = (
     behandling: Rammebehandling,

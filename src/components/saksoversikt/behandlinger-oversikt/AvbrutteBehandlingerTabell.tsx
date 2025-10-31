@@ -4,7 +4,7 @@ import { finnTypeBehandlingTekstForOversikt } from '~/utils/tekstformateringUtil
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '~/utils/date';
 import Link from 'next/link';
 import { behandlingUrl } from '~/utils/urls';
-import { Rammebehandlingstype } from '~/types/Behandling';
+import { Rammebehandlingstype } from '~/types/Rammebehandling';
 import { TypeBehandlingForOversikt } from '~/types/BehandlingForOversikt';
 
 export const AvbrutteBehandlingerTabell = (props: {

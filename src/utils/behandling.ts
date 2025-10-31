@@ -8,7 +8,7 @@ import {
     RammebehandlingMedInnvilgelse,
     RammebehandlingResultat,
     Rammebehandlingsstatus,
-} from '~/types/Behandling';
+} from '~/types/Rammebehandling';
 import { Søknadsbehandling, SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
 import { RevurderingResultat } from '~/types/Revurdering';
 

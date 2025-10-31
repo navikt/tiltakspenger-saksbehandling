@@ -5,7 +5,7 @@ import { BehandlingForOversikt } from '~/types/BehandlingForOversikt';
 import { XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { eierBehandling } from '~/utils/tilganger';
 import { Saksbehandler } from '~/types/Saksbehandler';
-import { Rammebehandlingsstatus } from '~/types/Behandling';
+import { Rammebehandlingsstatus } from '~/types/Rammebehandling';
 import { Nullable } from '~/types/UtilTypes';
 
 export const visAvsluttBehandlingMenyvalg = (

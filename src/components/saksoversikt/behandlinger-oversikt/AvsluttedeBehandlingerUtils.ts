@@ -6,7 +6,7 @@ import {
     BehandlingId,
     RammebehandlingResultat,
     Rammebehandlingstype,
-} from '~/types/Behandling';
+} from '~/types/Rammebehandling';
 import { TypeBehandlingForOversikt } from '~/types/BehandlingForOversikt';
 
 type AvbruttSøknad = {

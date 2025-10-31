@@ -7,7 +7,7 @@ import styles from './AvsluttBehandlingModal.module.css';
 import { useSettBehandlingPåVent } from '~/components/behandlingmeny/useSettBehandlingPåVent';
 import { SakId } from '~/types/Sak';
 import router from 'next/router';
-import { BehandlingId } from '~/types/Behandling';
+import { BehandlingId } from '~/types/Rammebehandling';
 
 const SettBehandlingPåVentModal = (props: {
     sakId: SakId;
