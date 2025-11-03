@@ -24,7 +24,7 @@ export const SpørsmålMedDatovelger = ({ spørsmålName, datoName, legend, titt
     });
 
     return (
-        <div className={jaNeiSpørsmål.field.value ? styles.blokkUtvidet : ''}>
+        <div className={jaNeiSpørsmål.field.value === 'JA' ? styles.blokkUtvidet : ''}>
             <JaNeiSpørsmål
                 name={spørsmålName}
                 legend={legend}
@@ -47,7 +47,7 @@ export const SpørsmålMedDatovelger = ({ spørsmålName, datoName, legend, titt
                             name={datoName}
                             label={'Fra og med (dd.mm.åååå)'}
                             onDateChange={(date) => {
-                                setValue(spørsmålName, date ? dateTilISOTekst(date) : undefined);
+                                setValue(datoName, date ? dateTilISOTekst(date) : undefined);
                             }}
                         />
                     </VStack>
