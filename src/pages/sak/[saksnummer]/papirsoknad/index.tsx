@@ -114,14 +114,14 @@ const PapirsøknadPage = (props: Props) => {
                             />
 
                             <SpørsmålMedPeriodevelger
-                                spørsmålName="svar.kvalifiseringsprogram.svar"
-                                periodeName="svar.kvalifiseringsprogram.periode"
+                                spørsmålName="svar.kvp.svar"
+                                periodeName="svar.kvp.periode"
                                 spørsmål="Mottar kvalifiseringsstønad"
                             />
 
                             <SpørsmålMedPeriodevelger
-                                spørsmålName="svar.introduksjonsprogram.svar"
-                                periodeName="svar.introduksjonsprogram.periode"
+                                spørsmålName="svar.intro.svar"
+                                periodeName="svar.intro.periode"
                                 spørsmål="Mottar introduksjonsstønad"
                             />
 
@@ -140,8 +140,8 @@ const PapirsøknadPage = (props: Props) => {
                             />
 
                             <SpørsmålMedPeriodevelger
-                                spørsmålName="svar.institusjonsopphold.svar"
-                                periodeName="svar.institusjonsopphold.periode"
+                                spørsmålName="svar.institusjon.svar"
+                                periodeName="svar.institusjon.periode"
                                 spørsmål="Bor bruker i en institusjon med gratis opphold, mat og drikke i perioden "
                                 periodeSpørsmål="I hvilken del av perioden bor brukeren på institusjon med gratis opphold, mat og drikke?"
                             />

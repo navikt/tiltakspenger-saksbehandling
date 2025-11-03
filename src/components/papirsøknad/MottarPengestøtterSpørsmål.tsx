@@ -1,6 +1,6 @@
 import React from 'react';
 import { FieldPath, useController, useFormContext } from 'react-hook-form';
-import type { Papirsøknad } from '~/components/papirsøknad/papirsøknadTypes';
+import type { JaNeiSvar, Papirsøknad } from '~/components/papirsøknad/papirsøknadTypes';
 import { JaNeiSpørsmål } from './JaNeiSpørsmål';
 
 import styles from './Spørsmål.module.css';
@@ -15,7 +15,7 @@ type Props = {
 };
 
 export const MottarPengestøtterSpørsmål = ({ name, legend }: Props) => {
-    const { control, resetField } = useFormContext<Papirsøknad>();
+    const { control, setValue, resetField } = useFormContext<Papirsøknad>();
 
     const spørsmål = useController({
         name: name,
@@ -23,19 +23,35 @@ export const MottarPengestøtterSpørsmål = ({ name, legend }: Props) => {
         defaultValue: undefined,
     });
 
-    const nullstillFelter = (): void => {
-        resetField('svar.gjenlevendepensjon.svar');
+    const nullstillPeriodeFelter = (): void => {
         resetField('svar.gjenlevendepensjon.periode');
-        resetField('svar.alderspensjon.svar');
         resetField('svar.alderspensjon.fraDato');
-        resetField('svar.supplerendestønadover67.svar');
-        resetField('svar.supplerendestønadover67.periode');
-        resetField('svar.supplerendestønadflyktninger.svar');
-        resetField('svar.supplerendestønadflyktninger.periode');
-        resetField('svar.pensjonsordning.svar');
-        resetField('svar.pensjonsordning.periode');
-        resetField('svar.jobbsjansen.svar');
+        resetField('svar.supplerendeStønadAlder.periode');
+        resetField('svar.supplerendeStønadFlyktning.periode');
+        resetField('svar.trygdOgPensjon.periode');
         resetField('svar.jobbsjansen.periode');
+    };
+
+    // Svarer man JA på hovedspørsmålet, så nullstilles alle underspørsmålene i tilfelle man allerede har svart noe annet
+    // om man svarer NEI eller IKKE_BESVART skal alle underliggende spørsmål få samme svar fordi de har implisitt blitt svart på
+    const settFelter = (svar: JaNeiSvar | undefined): void => {
+        if (svar === undefined) {
+            resetField('svar.gjenlevendepensjon.svar');
+            resetField('svar.alderspensjon.svar');
+            resetField('svar.alderspensjon.fraDato');
+            resetField('svar.supplerendeStønadAlder.svar');
+            resetField('svar.supplerendeStønadFlyktning.svar');
+            resetField('svar.trygdOgPensjon.svar');
+            resetField('svar.jobbsjansen.svar');
+        } else {
+            setValue('svar.gjenlevendepensjon.svar', svar);
+            setValue('svar.alderspensjon.svar', svar);
+            setValue('svar.alderspensjon.fraDato', svar);
+            setValue('svar.supplerendeStønadAlder.svar', svar);
+            setValue('svar.supplerendeStønadFlyktning.svar', svar);
+            setValue('svar.trygdOgPensjon.svar', svar);
+            setValue('svar.jobbsjansen.svar', svar);
+        }
     };
 
     return (
@@ -43,9 +59,12 @@ export const MottarPengestøtterSpørsmål = ({ name, legend }: Props) => {
             <JaNeiSpørsmål
                 name={name}
                 legend={legend}
-                onChange={() => {
-                    if (spørsmål.field.value !== 'JA') {
-                        nullstillFelter();
+                onChange={(newValue: JaNeiSvar | undefined) => {
+                    if (newValue !== undefined && newValue !== 'JA') {
+                        nullstillPeriodeFelter();
+                        settFelter(newValue);
+                    } else {
+                        settFelter(undefined);
                     }
                 }}
                 details={
@@ -72,26 +91,26 @@ export const MottarPengestøtterSpørsmål = ({ name, legend }: Props) => {
                         spørsmålName="svar.alderspensjon.svar"
                         datoName="svar.alderspensjon.fraDato"
                         tittel="Når begynner brukers alderspensjon?"
-                        legend="Mottar pengestøtte til gjenlevende ektefelle"
+                        legend="Mottar alderspensjon"
                     />
 
                     <SpørsmålMedPeriodevelger
-                        spørsmålName="svar.supplerendestønadover67.svar"
-                        periodeName="svar.supplerendestønadover67.periode"
+                        spørsmålName="svar.supplerendeStønadAlder.svar"
+                        periodeName="svar.supplerendeStønadAlder.periode"
                         spørsmål="Mottar supplerende stønad for personer over 67 år med kort botid i Norge i perioden"
                         periodeSpørsmål="I hvilken del av perioden svar bruker supplerende stønad for personer over 67 år med kort botid i Norge?"
                     />
 
                     <SpørsmålMedPeriodevelger
-                        spørsmålName="svar.supplerendestønadflyktninger.svar"
-                        periodeName="svar.supplerendestønadflyktninger.periode"
+                        spørsmålName="svar.supplerendeStønadFlyktning.svar"
+                        periodeName="svar.supplerendeStønadFlyktning.periode"
                         spørsmål="Mottar supplerende stønad for uføre flyktninger i perioden"
                         periodeSpørsmål="I hvilken del av perioden svar bruker supplerende stønad for uføre flyktninger?"
                     />
 
                     <SpørsmålMedPeriodevelger
-                        spørsmålName="svar.pensjonsordning.svar"
-                        periodeName="svar.pensjonsordning.periode"
+                        spørsmålName="svar.trygdOgPensjon.svar"
+                        periodeName="svar.trygdOgPensjon.periode"
                         spørsmål="Mottar pengestøtte fra andre trygde- eller pensjonsordninger"
                         periodeSpørsmål="I hvilken del av perioden svar bruker pengestøtte fra andre trygde- eller pensjonsordninger?"
                     />
