@@ -1,43 +1,59 @@
-import { BodyShort } from '@navikt/ds-react';
-import { classNames } from '../../../utils/classNames';
-import { Periode } from '../../../types/Periode';
-import { periodeTilFormatertDatotekst } from '../../../utils/date';
-
+import React from 'react';
 import style from './BehandlingSaksopplysning.module.css';
-import { Nullable } from '~/types/UtilTypes';
+import { BodyShort } from '@navikt/ds-react';
+import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
+import { Periode } from '~/types/Periode';
+import { PeriodeSpm } from '~/types/Søknad';
+import { periodeTilFormatertDatotekst } from '~/utils/date';
+import { classNames } from '~/utils/classNames';
+import { formaterSøknadsspørsmålSvar } from '~/utils/tekstformateringUtils';
 
-type Props = { navn: string; verdi: string; spacing?: boolean };
+type Props = { navn: string; verdi: string; spacing?: boolean; visVarsel?: boolean };
 
-export const BehandlingSaksopplysning = ({ navn, verdi, spacing }: Props) => {
+export const BehandlingSaksopplysning = ({ navn, verdi, spacing, visVarsel = false }: Props) => {
     return (
-        <BodyShort
-            size={'small'}
-            className={classNames(style.opplysning, spacing && style.spacing)}
-        >
-            {`${navn}: `}
-            <strong>{verdi}</strong>
-        </BodyShort>
+        <div className={visVarsel ? classNames(style.soknadsopplysningVarsel) : ''}>
+            <BodyShort
+                size={'small'}
+                className={classNames(style.opplysning, spacing && style.spacing)}
+            >
+                {`${navn}: `}
+                <strong>{formaterSøknadsspørsmålSvar(verdi)}</strong>
+            </BodyShort>
+            {visVarsel && <ExclamationmarkTriangleFillIcon />}
+        </div>
     );
 };
-
 type MedPeriodeProps = {
     navn: string;
-    periode: Nullable<Periode>;
+    periodeSpm: PeriodeSpm;
     spacing?: boolean;
+    visVarsel: boolean;
 };
 
-export const BehandlingSaksopplysningMedPeriode = ({ navn, periode, spacing }: MedPeriodeProps) => {
-    return periode ? (
+export const BehandlingSaksopplysningMedPeriodeSpm = ({
+    navn,
+    periodeSpm,
+    spacing,
+    visVarsel,
+}: MedPeriodeProps) => {
+    return periodeSpm.periode && visVarsel ? (
         <BehandlingSaksopplysning
             navn={navn}
             verdi={periodeTilFormatertDatotekst({
-                fraOgMed: periode.fraOgMed,
-                tilOgMed: periode.tilOgMed,
+                fraOgMed: periodeSpm.periode.fraOgMed,
+                tilOgMed: periodeSpm.periode.tilOgMed,
             })}
             spacing={spacing}
+            visVarsel={visVarsel}
         />
     ) : (
-        <BehandlingSaksopplysning navn={navn} verdi={'Nei'} spacing={spacing} />
+        <BehandlingSaksopplysning
+            navn={navn}
+            verdi={periodeSpm.svar}
+            spacing={spacing}
+            visVarsel={visVarsel}
+        />
     );
 };
 

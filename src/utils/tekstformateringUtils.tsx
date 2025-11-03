@@ -178,3 +178,16 @@ export const manueltBehandlesGrunnTekst: Record<ManueltBehandlesGrunn, string> =
     ANNET_HAR_SOKT_FOR_SENT: 'Tiltaksdeltakelsen startet mer enn tre måneder før kravdato',
     ANNET_ER_UNDER_18_I_SOKNADSPERIODEN: 'Bruker er under 18 år i søknadsperioden',
 };
+
+export const formaterSøknadsspørsmålSvar = (value: string | undefined) => {
+    switch (value) {
+        case 'JA':
+            return 'Ja';
+        case 'NEI':
+            return 'Nei';
+        case 'IKKE_BESVART':
+            return 'Ikke besvart';
+        default:
+            return value;
+    }
+};

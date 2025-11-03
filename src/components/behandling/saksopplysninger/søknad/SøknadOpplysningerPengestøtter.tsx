@@ -1,12 +1,11 @@
+import React from 'react';
+import styles from '../../../oppsummeringer/oppsummeringAvSøknad/OppsummeringAvSøknad.module.css';
 import {
     BehandlingSaksopplysning,
-    BehandlingSaksopplysningMedPeriode,
+    BehandlingSaksopplysningMedPeriodeSpm,
 } from '../BehandlingSaksopplysning';
 import { BodyShort } from '@navikt/ds-react';
-import { formaterDatotekst } from '../../../../utils/date';
-import styles from '../../../oppsummeringer/oppsummeringAvSøknad/OppsummeringAvSøknad.module.css';
-import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
-import React from 'react';
+import { formaterDatotekst } from '~/utils/date';
 import { SøknadPengestøtter } from '~/types/Søknad';
 
 type Props = {
@@ -24,72 +23,72 @@ export const SøknadOpplysningerPengestøtter = ({ className, pengestøtter }: P
         jobbsjansen,
     } = pengestøtter;
 
-    const antallPengestøtter = [
-        alderspensjon,
-        gjenlevendepensjon,
-        supplerendeStønadAlder,
-        supplerendeStønadFlyktning,
-        trygdOgPensjon,
-        jobbsjansen,
-    ].filter(Boolean).length;
+    const mottarPengestøtte =
+        alderspensjon?.svar === 'JA' ||
+        gjenlevendepensjon?.svar === 'JA' ||
+        supplerendeStønadAlder?.svar === 'JA' ||
+        supplerendeStønadFlyktning?.svar === 'JA' ||
+        trygdOgPensjon?.svar === 'JA' ||
+        jobbsjansen?.svar === 'JA';
+    console.log(pengestøtter);
 
     return (
         <div className={className}>
-            {antallPengestøtter > 0 ? (
+            {mottarPengestøtte ? (
                 <>
                     <BodyShort>{'Pengestøtter'}</BodyShort>
-                    {alderspensjon && (
+                    {alderspensjon.svar === 'JA' && (
                         <div className={styles.soknadsopplysningVarsel}>
                             <BehandlingSaksopplysning
                                 navn={'Alderspensjon fra'}
-                                verdi={formaterDatotekst(alderspensjon)}
+                                verdi={formaterDatotekst(alderspensjon.fraDato)}
+                                visVarsel
                             />
-                            <ExclamationmarkTriangleFillIcon />
                         </div>
                     )}
-                    {gjenlevendepensjon && (
+                    {gjenlevendepensjon.svar === 'JA' && (
                         <div className={styles.soknadsopplysningVarsel}>
-                            <BehandlingSaksopplysningMedPeriode
+                            <BehandlingSaksopplysningMedPeriodeSpm
                                 navn={'Gjenlevende ektefelle'}
-                                periode={gjenlevendepensjon}
+                                periodeSpm={gjenlevendepensjon}
+                                visVarsel
                             />
-                            <ExclamationmarkTriangleFillIcon />
                         </div>
                     )}
-                    {supplerendeStønadAlder && (
+                    {supplerendeStønadAlder.svar === 'JA' && (
                         <div className={styles.soknadsopplysningVarsel}>
-                            <BehandlingSaksopplysningMedPeriode
+                            <BehandlingSaksopplysningMedPeriodeSpm
                                 navn={'Supplerende stønad alder'}
-                                periode={supplerendeStønadAlder}
+                                periodeSpm={supplerendeStønadAlder}
+                                visVarsel
                             />
-                            <ExclamationmarkTriangleFillIcon />
                         </div>
                     )}
-                    {supplerendeStønadFlyktning && (
+                    {supplerendeStønadFlyktning.svar === 'JA' && (
                         <div className={styles.soknadsopplysningVarsel}>
-                            <BehandlingSaksopplysningMedPeriode
+                            <BehandlingSaksopplysningMedPeriodeSpm
                                 navn={'Supplerende stønad ufør'}
-                                periode={supplerendeStønadFlyktning}
+                                periodeSpm={supplerendeStønadFlyktning}
+                                visVarsel
                             />
-                            <ExclamationmarkTriangleFillIcon />
                         </div>
                     )}
-                    {trygdOgPensjon && (
+                    {trygdOgPensjon.svar === 'JA' && (
                         <div className={styles.soknadsopplysningVarsel}>
-                            <BehandlingSaksopplysningMedPeriode
+                            <BehandlingSaksopplysningMedPeriodeSpm
                                 navn={'Annen trygd eller pensjon'}
-                                periode={trygdOgPensjon}
+                                periodeSpm={trygdOgPensjon}
+                                visVarsel
                             />
-                            <ExclamationmarkTriangleFillIcon />
                         </div>
                     )}
-                    {jobbsjansen && (
+                    {jobbsjansen.svar === 'JA' && (
                         <div className={styles.soknadsopplysningVarsel}>
-                            <BehandlingSaksopplysningMedPeriode
+                            <BehandlingSaksopplysningMedPeriodeSpm
                                 navn={'Jobbsjansen'}
-                                periode={jobbsjansen}
+                                periodeSpm={jobbsjansen}
+                                visVarsel
                             />
-                            <ExclamationmarkTriangleFillIcon />
                         </div>
                     )}
                 </>
