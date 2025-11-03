@@ -36,7 +36,7 @@ export const MeldekortBeregningOgSimulering = ({ meldekortBehandling, className 
         return null;
     }
 
-    const { beregning, simulerteBeløp } = simulertBeregning;
+    const { beregning } = simulertBeregning;
 
     const beløpDiff = beregning.totalt.nå - (beregning.totalt.før ?? 0);
 
@@ -67,7 +67,7 @@ export const MeldekortBeregningOgSimulering = ({ meldekortBehandling, className 
 
             <BeregningOppsummering beregninger={beregning} />
             <SimuleringOppsummering
-                simulerteBeløp={simulerteBeløp}
+                simulertBeregning={simulertBeregning}
                 behandlingId={meldekortBehandling.id}
                 oppdaterBehandlingEllerKjede={(meldeperiodeKjede) =>
                     setMeldeperiodeKjede(meldeperiodeKjede as MeldeperiodeKjedeProps)

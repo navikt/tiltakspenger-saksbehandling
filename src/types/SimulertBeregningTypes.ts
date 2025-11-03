@@ -12,17 +12,44 @@ export enum SimulerertBehandlingstype {
     MELDERKORT = 'MELDEKORT',
 }
 
-export type SimulertBeregning = {
+interface SimulertBeregningBase {
     behandlingId: MeldekortBehandlingId | BehandlingId;
     behandlingstype: SimulerertBehandlingstype;
     meldeperioder: SimulertBeregningPerMeldeperiode[];
-    beregningstidspunkt: Nullable<string>;
-    simuleringstidspunkt: Nullable<string>;
+    beregningstidspunkt: null;
+    beregning: BeregningerSummert;
+    simuleringstidspunkt: null;
     simuleringsdato: Nullable<string>;
     simuleringTotalBeløp: Nullable<number>;
     simulerteBeløp: Nullable<SimulerteBeløp>;
-    beregning: BeregningerSummert;
-};
+    simuleringResultat: SimuleringResultat;
+}
+
+interface SimulertBeregningMedEndring extends SimulertBeregningBase {
+    simuleringsdato: string;
+    simuleringTotalBeløp: number;
+    simulerteBeløp: SimulerteBeløp;
+    simuleringResultat: SimuleringResultat.ENDRING;
+}
+
+interface SimulertBeregningIngenEndring extends SimulertBeregningBase {
+    simuleringsdato: null;
+    simuleringTotalBeløp: null;
+    simulerteBeløp: null;
+    simuleringResultat: SimuleringResultat.INGEN_ENDRING;
+}
+
+interface SimulertBeregningUtenSimulering extends SimulertBeregningBase {
+    simuleringsdato: null;
+    simuleringTotalBeløp: null;
+    simulerteBeløp: null;
+    simuleringResultat: SimuleringResultat.IKKE_SIMULERT;
+}
+
+export type SimulertBeregning =
+    | SimulertBeregningMedEndring
+    | SimulertBeregningIngenEndring
+    | SimulertBeregningUtenSimulering;
 
 export type SimulertBeregningPerMeldeperiode = {
     kjedeId: MeldeperiodeKjedeId;
@@ -46,3 +73,9 @@ export type SimulerteBeløp = {
     totalJustering: number;
     totalTrekk: number;
 };
+
+export enum SimuleringResultat {
+    ENDRING = 'ENDRING',
+    INGEN_ENDRING = 'INGEN_ENDRING',
+    IKKE_SIMULERT = 'IKKE_SIMULERT',
+}

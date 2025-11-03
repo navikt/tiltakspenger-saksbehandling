@@ -1,32 +1,44 @@
 import { Alert, BodyShort, Heading, HStack, VStack } from '@navikt/ds-react';
 import { UtbetalingBeløp } from '~/components/utbetaling/beløp/UtbetalingBeløp';
-import { SimulerteBeløp } from '~/types/SimulertBeregningTypes';
+import { SimuleringResultat, SimulertBeregning } from '~/types/SimulertBeregningTypes';
 import {
     OppdaterSimuleringKnapp,
     OppdaterSimuleringProps,
 } from '~/components/beregning-og-simulering/oppdater-simulering/OppdaterSimuleringKnapp';
-import { Nullable } from '~/types/UtilTypes';
 import { BehandlingIdFelles } from '~/types/BehandlingFelles';
 
 import style from './SimuleringOppsummering.module.css';
 
 type Props<BehId extends BehandlingIdFelles> = {
-    simulerteBeløp?: Nullable<SimulerteBeløp>;
+    simulertBeregning: SimulertBeregning;
     visOppdaterKnapp: boolean;
 } & OppdaterSimuleringProps<BehId>;
 
 export const SimuleringOppsummering = <BehId extends BehandlingIdFelles>({
-    simulerteBeløp,
+    simulertBeregning,
     visOppdaterKnapp,
     ...oppdaterSimuleringProps
 }: Props<BehId>) => {
-    if (!simulerteBeløp) {
+    const { simuleringResultat, simulerteBeløp } = simulertBeregning;
+
+    const oppdaterKnapp = visOppdaterKnapp && (
+        <OppdaterSimuleringKnapp {...oppdaterSimuleringProps} />
+    );
+
+    if (simuleringResultat === SimuleringResultat.IKKE_SIMULERT) {
         return (
-            <Alert variant={'warning'}>
-                <div className={style.varsel}>
-                    <BodyShort>{'Simulering er ikke tilgjengelig'}</BodyShort>
-                    <OppdaterSimuleringKnapp {...oppdaterSimuleringProps} />
-                </div>
+            <Alert variant={'warning'} className={style.varsel}>
+                <BodyShort>{'Simulering mangler!'}</BodyShort>
+                {oppdaterKnapp}
+            </Alert>
+        );
+    }
+
+    if (simuleringResultat === SimuleringResultat.INGEN_ENDRING) {
+        return (
+            <Alert variant={'info'} className={style.varsel}>
+                <BodyShort>{'Simulering viser ingen endring i utbetalingen'}</BodyShort>
+                {oppdaterKnapp}
             </Alert>
         );
     }
@@ -46,7 +58,7 @@ export const SimuleringOppsummering = <BehId extends BehandlingIdFelles>({
                 <Heading size={'xsmall'} level={'4'} spacing={true}>
                     {'Simulering oppsummert'}
                 </Heading>
-                {visOppdaterKnapp && <OppdaterSimuleringKnapp {...oppdaterSimuleringProps} />}
+                {oppdaterKnapp}
             </HStack>
             <UtbetalingBeløp
                 tekst={'Ny utbetaling'}
