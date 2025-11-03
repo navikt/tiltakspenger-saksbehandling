@@ -27,36 +27,36 @@ export interface Tiltak {
 export type JaNeiSvar = 'JA' | 'NEI' | 'IKKE_BESVART';
 
 export interface JaNeiSpm {
-    svar?: JaNeiSvar;
+    svar: JaNeiSvar;
 }
 
 export interface FraOgMedDatoSpm {
-    svar: boolean;
+    svar: JaNeiSvar;
     fraDato: string;
 }
 
 export interface PeriodeSpm {
-    svar: boolean;
+    svar: JaNeiSvar;
     periode: Periode;
 }
 
 export interface Spørsmålsbesvarelser {
     tiltak: Tiltak;
-    harTiltak: boolean; // beholdes
+    harTiltak: boolean;
     barnetilleggPdl: Barn[];
     barnetilleggManuelle: Barn[];
     barnetilleggKladd: Barn;
-    harSøktOmBarnetillegg: JaNeiSvar | undefined; // endret
-    kvalifiseringsprogram: PeriodeSpm;
-    introduksjonsprogram: PeriodeSpm;
-    institusjonsopphold: PeriodeSpm;
+    harSøktOmBarnetillegg: JaNeiSvar | undefined;
+    kvp: PeriodeSpm;
+    intro: PeriodeSpm;
+    institusjon: PeriodeSpm;
     mottarAndreUtbetalinger: boolean | undefined;
     sykepenger: PeriodeSpm;
     gjenlevendepensjon: PeriodeSpm;
     alderspensjon: FraOgMedDatoSpm;
-    supplerendestønadover67: PeriodeSpm;
-    supplerendestønadflyktninger: PeriodeSpm;
-    pensjonsordning: PeriodeSpm;
+    supplerendeStønadAlder: PeriodeSpm;
+    supplerendeStønadFlyktning: PeriodeSpm;
+    trygdOgPensjon: PeriodeSpm;
     etterlønn: JaNeiSpm;
     jobbsjansen: PeriodeSpm;
 }
