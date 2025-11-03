@@ -32,7 +32,7 @@ export interface JaNeiSpm {
 
 export interface FraOgMedDatoSpm {
     svar: JaNeiSvar;
-    fraDato: string;
+    fraOgMed: string;
 }
 
 export interface PeriodeSpm {

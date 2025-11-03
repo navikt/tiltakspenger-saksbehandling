@@ -25,7 +25,7 @@ export const MottarPengestøtterSpørsmål = ({ name, legend }: Props) => {
 
     const nullstillPeriodeFelter = (): void => {
         resetField('svar.gjenlevendepensjon.periode');
-        resetField('svar.alderspensjon.fraDato');
+        resetField('svar.alderspensjon.fraOgMed');
         resetField('svar.supplerendeStønadAlder.periode');
         resetField('svar.supplerendeStønadFlyktning.periode');
         resetField('svar.trygdOgPensjon.periode');
@@ -38,7 +38,7 @@ export const MottarPengestøtterSpørsmål = ({ name, legend }: Props) => {
         if (svar === undefined) {
             resetField('svar.gjenlevendepensjon.svar');
             resetField('svar.alderspensjon.svar');
-            resetField('svar.alderspensjon.fraDato');
+            resetField('svar.alderspensjon.fraOgMed');
             resetField('svar.supplerendeStønadAlder.svar');
             resetField('svar.supplerendeStønadFlyktning.svar');
             resetField('svar.trygdOgPensjon.svar');
@@ -46,7 +46,7 @@ export const MottarPengestøtterSpørsmål = ({ name, legend }: Props) => {
         } else {
             setValue('svar.gjenlevendepensjon.svar', svar);
             setValue('svar.alderspensjon.svar', svar);
-            setValue('svar.alderspensjon.fraDato', svar);
+            setValue('svar.alderspensjon.fraOgMed', svar);
             setValue('svar.supplerendeStønadAlder.svar', svar);
             setValue('svar.supplerendeStønadFlyktning.svar', svar);
             setValue('svar.trygdOgPensjon.svar', svar);
@@ -89,7 +89,7 @@ export const MottarPengestøtterSpørsmål = ({ name, legend }: Props) => {
 
                     <SpørsmålMedDatovelger
                         spørsmålName="svar.alderspensjon.svar"
-                        datoName="svar.alderspensjon.fraDato"
+                        datoName="svar.alderspensjon.fraOgMed"
                         tittel="Når begynner brukers alderspensjon?"
                         legend="Mottar alderspensjon"
                     />
