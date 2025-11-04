@@ -1,5 +1,4 @@
 import React from 'react';
-import styles from '../../../oppsummeringer/oppsummeringAvSøknad/OppsummeringAvSøknad.module.css';
 import {
     BehandlingSaksopplysning,
     BehandlingSaksopplysningMedPeriodeSpm,
@@ -40,62 +39,50 @@ export const SøknadOpplysningerPengestøtter = ({ className, pengestøtter }: P
                 <>
                     <BodyShort>{'Pengestøtter'}</BodyShort>
                     {jaEllerIkkeBesvart(alderspensjon.svar) && (
-                        <div className={styles.soknadsopplysningVarsel}>
-                            <BehandlingSaksopplysning
-                                navn={'Alderspensjon fra'}
-                                verdi={
-                                    alderspensjon.svar === 'JA'
-                                        ? formaterDatotekst(alderspensjon.fraDato)
-                                        : alderspensjon.svar
-                                }
-                                visVarsel
-                            />
-                        </div>
+                        <BehandlingSaksopplysning
+                            navn={'Alderspensjon fra'}
+                            verdi={
+                                alderspensjon.svar === 'JA'
+                                    ? formaterDatotekst(alderspensjon.fraDato)
+                                    : alderspensjon.svar
+                            }
+                            visVarsel
+                        />
                     )}
                     {jaEllerIkkeBesvart(gjenlevendepensjon.svar) && (
-                        <div className={styles.soknadsopplysningVarsel}>
-                            <BehandlingSaksopplysningMedPeriodeSpm
-                                navn={'Gjenlevende ektefelle'}
-                                periodeSpm={gjenlevendepensjon}
-                                visVarsel
-                            />
-                        </div>
+                        <BehandlingSaksopplysningMedPeriodeSpm
+                            navn={'Gjenlevende ektefelle'}
+                            periodeSpm={gjenlevendepensjon}
+                            visVarsel
+                        />
                     )}
                     {jaEllerIkkeBesvart(supplerendeStønadAlder.svar) && (
-                        <div className={styles.soknadsopplysningVarsel}>
-                            <BehandlingSaksopplysningMedPeriodeSpm
-                                navn={'Supplerende stønad alder'}
-                                periodeSpm={supplerendeStønadAlder}
-                                visVarsel
-                            />
-                        </div>
+                        <BehandlingSaksopplysningMedPeriodeSpm
+                            navn={'Supplerende stønad alder'}
+                            periodeSpm={supplerendeStønadAlder}
+                            visVarsel
+                        />
                     )}
                     {jaEllerIkkeBesvart(supplerendeStønadFlyktning.svar) && (
-                        <div className={styles.soknadsopplysningVarsel}>
-                            <BehandlingSaksopplysningMedPeriodeSpm
-                                navn={'Supplerende stønad ufør'}
-                                periodeSpm={supplerendeStønadFlyktning}
-                                visVarsel
-                            />
-                        </div>
+                        <BehandlingSaksopplysningMedPeriodeSpm
+                            navn={'Supplerende stønad ufør'}
+                            periodeSpm={supplerendeStønadFlyktning}
+                            visVarsel
+                        />
                     )}
                     {jaEllerIkkeBesvart(trygdOgPensjon.svar) && (
-                        <div className={styles.soknadsopplysningVarsel}>
-                            <BehandlingSaksopplysningMedPeriodeSpm
-                                navn={'Annen trygd eller pensjon'}
-                                periodeSpm={trygdOgPensjon}
-                                visVarsel
-                            />
-                        </div>
+                        <BehandlingSaksopplysningMedPeriodeSpm
+                            navn={'Annen trygd eller pensjon'}
+                            periodeSpm={trygdOgPensjon}
+                            visVarsel
+                        />
                     )}
                     {jaEllerIkkeBesvart(jobbsjansen.svar) && (
-                        <div className={styles.soknadsopplysningVarsel}>
-                            <BehandlingSaksopplysningMedPeriodeSpm
-                                navn={'Jobbsjansen'}
-                                periodeSpm={jobbsjansen}
-                                visVarsel
-                            />
-                        </div>
+                        <BehandlingSaksopplysningMedPeriodeSpm
+                            navn={'Jobbsjansen'}
+                            periodeSpm={jobbsjansen}
+                            visVarsel
+                        />
                     )}
                 </>
             ) : (
