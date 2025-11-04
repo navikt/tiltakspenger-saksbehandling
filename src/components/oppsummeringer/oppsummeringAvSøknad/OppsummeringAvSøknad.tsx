@@ -35,8 +35,6 @@ const OppsummeringAvSøknad = (props: Props) => {
         sykepenger: sykepenger,
     } = svar;
 
-    console.log('svar i oppsummering', props.søknad.svar);
-
     return (
         <Box>
             {props.medTittel && (
