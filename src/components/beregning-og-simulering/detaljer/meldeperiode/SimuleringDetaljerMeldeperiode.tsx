@@ -80,7 +80,7 @@ export const SimuleringDetaljerMeldeperiode = ({ meldeperiode }: Props) => {
 
             <Table.Row className={classNames(style.periodeSum, kanLukkesStyle)}>
                 <Table.DataCell colSpan={3}>
-                    <strong>{'Sum for periodeSpm'}</strong>
+                    <strong>{'Sum for periode'}</strong>
                 </Table.DataCell>
                 <Table.DataCell>{ordinært.før}</Table.DataCell>
                 <Table.DataCell>
