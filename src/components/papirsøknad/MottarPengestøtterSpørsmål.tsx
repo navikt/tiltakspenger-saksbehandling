@@ -46,7 +46,6 @@ export const MottarPengestøtterSpørsmål = ({ name, legend }: Props) => {
         } else {
             setValue('svar.gjenlevendepensjon.svar', svar);
             setValue('svar.alderspensjon.svar', svar);
-            setValue('svar.alderspensjon.fraOgMed', svar);
             setValue('svar.supplerendeStønadAlder.svar', svar);
             setValue('svar.supplerendeStønadFlyktning.svar', svar);
             setValue('svar.trygdOgPensjon.svar', svar);
