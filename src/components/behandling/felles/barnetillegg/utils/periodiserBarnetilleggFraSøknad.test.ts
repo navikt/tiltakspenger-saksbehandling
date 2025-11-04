@@ -17,6 +17,9 @@ const barnSomBlir16FørPerioden = {
     etternavn: null,
     kilde: SøknadBarnKilde.PDL,
     oppholderSegIEØS: true,
+    oppholderSegIEØSSpm: {
+        svar: 'JA',
+    },
 };
 
 const barnSomIkkeOppholderSegIEØS = {
@@ -26,6 +29,9 @@ const barnSomIkkeOppholderSegIEØS = {
     etternavn: null,
     kilde: SøknadBarnKilde.PDL,
     oppholderSegIEØS: false,
+    oppholderSegIEØSSpm: {
+        svar: 'FALSE',
+    },
 };
 
 const barnSomBlir16TidligIPerioden = {
@@ -35,6 +41,9 @@ const barnSomBlir16TidligIPerioden = {
     etternavn: null,
     kilde: SøknadBarnKilde.PDL,
     oppholderSegIEØS: true,
+    oppholderSegIEØSSpm: {
+        svar: 'JA',
+    },
 };
 
 const barnSomBlir16MidtIPerioden = {
@@ -44,6 +53,9 @@ const barnSomBlir16MidtIPerioden = {
     etternavn: null,
     kilde: SøknadBarnKilde.PDL,
     oppholderSegIEØS: true,
+    oppholderSegIEØSSpm: {
+        svar: 'JA',
+    },
 };
 
 const barnSomBlir16SentIPerioden = {
@@ -53,6 +65,9 @@ const barnSomBlir16SentIPerioden = {
     etternavn: null,
     kilde: SøknadBarnKilde.PDL,
     oppholderSegIEØS: true,
+    oppholderSegIEØSSpm: {
+        svar: 'JA',
+    },
 };
 
 const barnSomErUnder16HelePerioden = {
@@ -62,6 +77,9 @@ const barnSomErUnder16HelePerioden = {
     etternavn: null,
     kilde: SøknadBarnKilde.PDL,
     oppholderSegIEØS: true,
+    oppholderSegIEØSSpm: {
+        svar: 'JA',
+    },
 };
 
 const barnSomBlirFødtTidligIPerioden = {
@@ -71,6 +89,9 @@ const barnSomBlirFødtTidligIPerioden = {
     etternavn: null,
     kilde: SøknadBarnKilde.PDL,
     oppholderSegIEØS: true,
+    oppholderSegIEØSSpm: {
+        svar: 'JA',
+    },
 };
 
 const barnSomBlirFødtMidtIPerioden = {
@@ -80,6 +101,9 @@ const barnSomBlirFødtMidtIPerioden = {
     etternavn: null,
     kilde: SøknadBarnKilde.PDL,
     oppholderSegIEØS: true,
+    oppholderSegIEØSSpm: {
+        svar: 'JA',
+    },
 };
 
 const barnSomBlirFødtSentIPerioden = {
@@ -89,6 +113,9 @@ const barnSomBlirFødtSentIPerioden = {
     etternavn: null,
     kilde: SøknadBarnKilde.PDL,
     oppholderSegIEØS: true,
+    oppholderSegIEØSSpm: {
+        svar: 'JA',
+    },
 };
 
 describe('Periodiserer barnetillegg fra søknaden', () => {
