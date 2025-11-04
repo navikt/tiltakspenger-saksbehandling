@@ -23,30 +23,36 @@ export const SøknadOpplysningerPengestøtter = ({ className, pengestøtter }: P
         jobbsjansen,
     } = pengestøtter;
 
-    const mottarPengestøtte =
-        alderspensjon?.svar === 'JA' ||
-        gjenlevendepensjon?.svar === 'JA' ||
-        supplerendeStønadAlder?.svar === 'JA' ||
-        supplerendeStønadFlyktning?.svar === 'JA' ||
-        trygdOgPensjon?.svar === 'JA' ||
-        jobbsjansen?.svar === 'JA';
-    console.log(pengestøtter);
+    // Vi må markere tydelig når søker mottar pengestøtte eller har unnlatt å besvare spørsmål om pengestøtte
+    const jaEllerIkkeBesvart = (svar: string) => svar === 'JA' || svar === 'IKKE_BESVART';
+
+    const potensieltMottarPengestøtte =
+        jaEllerIkkeBesvart(alderspensjon.svar) ||
+        jaEllerIkkeBesvart(gjenlevendepensjon.svar) ||
+        jaEllerIkkeBesvart(supplerendeStønadAlder.svar) ||
+        jaEllerIkkeBesvart(supplerendeStønadFlyktning.svar) ||
+        jaEllerIkkeBesvart(trygdOgPensjon.svar) ||
+        jaEllerIkkeBesvart(jobbsjansen.svar);
 
     return (
         <div className={className}>
-            {mottarPengestøtte ? (
+            {potensieltMottarPengestøtte ? (
                 <>
                     <BodyShort>{'Pengestøtter'}</BodyShort>
-                    {alderspensjon.svar === 'JA' && (
+                    {jaEllerIkkeBesvart(alderspensjon.svar) && (
                         <div className={styles.soknadsopplysningVarsel}>
                             <BehandlingSaksopplysning
                                 navn={'Alderspensjon fra'}
-                                verdi={formaterDatotekst(alderspensjon.fraDato)}
+                                verdi={
+                                    alderspensjon.svar === 'JA'
+                                        ? formaterDatotekst(alderspensjon.fraDato)
+                                        : alderspensjon.svar
+                                }
                                 visVarsel
                             />
                         </div>
                     )}
-                    {gjenlevendepensjon.svar === 'JA' && (
+                    {jaEllerIkkeBesvart(gjenlevendepensjon.svar) && (
                         <div className={styles.soknadsopplysningVarsel}>
                             <BehandlingSaksopplysningMedPeriodeSpm
                                 navn={'Gjenlevende ektefelle'}
@@ -55,7 +61,7 @@ export const SøknadOpplysningerPengestøtter = ({ className, pengestøtter }: P
                             />
                         </div>
                     )}
-                    {supplerendeStønadAlder.svar === 'JA' && (
+                    {jaEllerIkkeBesvart(supplerendeStønadAlder.svar) && (
                         <div className={styles.soknadsopplysningVarsel}>
                             <BehandlingSaksopplysningMedPeriodeSpm
                                 navn={'Supplerende stønad alder'}
@@ -64,7 +70,7 @@ export const SøknadOpplysningerPengestøtter = ({ className, pengestøtter }: P
                             />
                         </div>
                     )}
-                    {supplerendeStønadFlyktning.svar === 'JA' && (
+                    {jaEllerIkkeBesvart(supplerendeStønadFlyktning.svar) && (
                         <div className={styles.soknadsopplysningVarsel}>
                             <BehandlingSaksopplysningMedPeriodeSpm
                                 navn={'Supplerende stønad ufør'}
@@ -73,7 +79,7 @@ export const SøknadOpplysningerPengestøtter = ({ className, pengestøtter }: P
                             />
                         </div>
                     )}
-                    {trygdOgPensjon.svar === 'JA' && (
+                    {jaEllerIkkeBesvart(trygdOgPensjon.svar) && (
                         <div className={styles.soknadsopplysningVarsel}>
                             <BehandlingSaksopplysningMedPeriodeSpm
                                 navn={'Annen trygd eller pensjon'}
@@ -82,7 +88,7 @@ export const SøknadOpplysningerPengestøtter = ({ className, pengestøtter }: P
                             />
                         </div>
                     )}
-                    {jobbsjansen.svar === 'JA' && (
+                    {jaEllerIkkeBesvart(jobbsjansen.svar) && (
                         <div className={styles.soknadsopplysningVarsel}>
                             <BehandlingSaksopplysningMedPeriodeSpm
                                 navn={'Jobbsjansen'}
