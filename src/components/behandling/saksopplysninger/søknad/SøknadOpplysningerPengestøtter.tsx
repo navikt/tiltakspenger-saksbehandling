@@ -1,12 +1,10 @@
+import React from 'react';
 import {
     BehandlingSaksopplysning,
-    BehandlingSaksopplysningMedPeriode,
+    BehandlingSaksopplysningMedPeriodeSpm,
 } from '../BehandlingSaksopplysning';
 import { BodyShort } from '@navikt/ds-react';
-import { formaterDatotekst } from '../../../../utils/date';
-import styles from '../../../oppsummeringer/oppsummeringAvSøknad/OppsummeringAvSøknad.module.css';
-import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
-import React from 'react';
+import { formaterDatotekst } from '~/utils/date';
 import { SøknadPengestøtter } from '~/types/Søknad';
 
 type Props = {
@@ -24,73 +22,69 @@ export const SøknadOpplysningerPengestøtter = ({ className, pengestøtter }: P
         jobbsjansen,
     } = pengestøtter;
 
-    const antallPengestøtter = [
-        alderspensjon,
-        gjenlevendepensjon,
-        supplerendeStønadAlder,
-        supplerendeStønadFlyktning,
-        trygdOgPensjon,
-        jobbsjansen,
-    ].filter(Boolean).length;
+    // Vi må markere tydelig når søker mottar pengestøtte eller har unnlatt å besvare spørsmål om pengestøtte
+    const jaEllerIkkeBesvart = (svar: string) => svar === 'JA' || svar === 'IKKE_BESVART';
+
+    const potensieltMottarPengestøtte =
+        jaEllerIkkeBesvart(alderspensjon.svar) ||
+        jaEllerIkkeBesvart(gjenlevendepensjon.svar) ||
+        jaEllerIkkeBesvart(supplerendeStønadAlder.svar) ||
+        jaEllerIkkeBesvart(supplerendeStønadFlyktning.svar) ||
+        jaEllerIkkeBesvart(trygdOgPensjon.svar) ||
+        jaEllerIkkeBesvart(jobbsjansen.svar);
+
+    console.log('alderspensjon', pengestøtter.alderspensjon.fraOgMed);
 
     return (
         <div className={className}>
-            {antallPengestøtter > 0 ? (
+            {potensieltMottarPengestøtte ? (
                 <>
                     <BodyShort>{'Pengestøtter'}</BodyShort>
-                    {alderspensjon && (
-                        <div className={styles.soknadsopplysningVarsel}>
-                            <BehandlingSaksopplysning
-                                navn={'Alderspensjon fra'}
-                                verdi={formaterDatotekst(alderspensjon)}
-                            />
-                            <ExclamationmarkTriangleFillIcon />
-                        </div>
+                    {jaEllerIkkeBesvart(alderspensjon.svar) && (
+                        <BehandlingSaksopplysning
+                            navn={'Alderspensjon fra'}
+                            verdi={
+                                alderspensjon.svar === 'JA'
+                                    ? formaterDatotekst(alderspensjon.fraOgMed)
+                                    : alderspensjon.svar
+                            }
+                            visVarsel
+                        />
                     )}
-                    {gjenlevendepensjon && (
-                        <div className={styles.soknadsopplysningVarsel}>
-                            <BehandlingSaksopplysningMedPeriode
-                                navn={'Gjenlevende ektefelle'}
-                                periode={gjenlevendepensjon}
-                            />
-                            <ExclamationmarkTriangleFillIcon />
-                        </div>
+                    {jaEllerIkkeBesvart(gjenlevendepensjon.svar) && (
+                        <BehandlingSaksopplysningMedPeriodeSpm
+                            navn={'Gjenlevende ektefelle'}
+                            periodeSpm={gjenlevendepensjon}
+                            visVarsel
+                        />
                     )}
-                    {supplerendeStønadAlder && (
-                        <div className={styles.soknadsopplysningVarsel}>
-                            <BehandlingSaksopplysningMedPeriode
-                                navn={'Supplerende stønad alder'}
-                                periode={supplerendeStønadAlder}
-                            />
-                            <ExclamationmarkTriangleFillIcon />
-                        </div>
+                    {jaEllerIkkeBesvart(supplerendeStønadAlder.svar) && (
+                        <BehandlingSaksopplysningMedPeriodeSpm
+                            navn={'Supplerende stønad alder'}
+                            periodeSpm={supplerendeStønadAlder}
+                            visVarsel
+                        />
                     )}
-                    {supplerendeStønadFlyktning && (
-                        <div className={styles.soknadsopplysningVarsel}>
-                            <BehandlingSaksopplysningMedPeriode
-                                navn={'Supplerende stønad ufør'}
-                                periode={supplerendeStønadFlyktning}
-                            />
-                            <ExclamationmarkTriangleFillIcon />
-                        </div>
+                    {jaEllerIkkeBesvart(supplerendeStønadFlyktning.svar) && (
+                        <BehandlingSaksopplysningMedPeriodeSpm
+                            navn={'Supplerende stønad ufør'}
+                            periodeSpm={supplerendeStønadFlyktning}
+                            visVarsel
+                        />
                     )}
-                    {trygdOgPensjon && (
-                        <div className={styles.soknadsopplysningVarsel}>
-                            <BehandlingSaksopplysningMedPeriode
-                                navn={'Annen trygd eller pensjon'}
-                                periode={trygdOgPensjon}
-                            />
-                            <ExclamationmarkTriangleFillIcon />
-                        </div>
+                    {jaEllerIkkeBesvart(trygdOgPensjon.svar) && (
+                        <BehandlingSaksopplysningMedPeriodeSpm
+                            navn={'Annen trygd eller pensjon'}
+                            periodeSpm={trygdOgPensjon}
+                            visVarsel
+                        />
                     )}
-                    {jobbsjansen && (
-                        <div className={styles.soknadsopplysningVarsel}>
-                            <BehandlingSaksopplysningMedPeriode
-                                navn={'Jobbsjansen'}
-                                periode={jobbsjansen}
-                            />
-                            <ExclamationmarkTriangleFillIcon />
-                        </div>
+                    {jaEllerIkkeBesvart(jobbsjansen.svar) && (
+                        <BehandlingSaksopplysningMedPeriodeSpm
+                            navn={'Jobbsjansen'}
+                            periodeSpm={jobbsjansen}
+                            visVarsel
+                        />
                     )}
                 </>
             ) : (

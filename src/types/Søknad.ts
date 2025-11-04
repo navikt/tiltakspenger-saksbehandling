@@ -20,6 +20,7 @@ interface SøknadBase extends SøknadPengestøtter {
     antallVedlegg: number;
     avbrutt: Nullable<Avbrutt>;
     kanInnvilges: boolean;
+    svar: Spørsmålsbesvarelser;
 }
 
 export interface InnvilgbarSøknad extends SøknadBase {
@@ -34,13 +35,20 @@ export interface IkkeInnvilgbarSøknad extends SøknadBase {
 export type Søknad = InnvilgbarSøknad | IkkeInnvilgbarSøknad;
 
 export interface SøknadPengestøtter {
-    // Fra-dato for alderspensjon
-    alderspensjon: Nullable<string>;
-    gjenlevendepensjon: Nullable<Periode>;
-    supplerendeStønadAlder: Nullable<Periode>;
-    supplerendeStønadFlyktning: Nullable<Periode>;
-    trygdOgPensjon: Nullable<Periode>;
-    jobbsjansen: Nullable<Periode>;
+    alderspensjon: FraOgMedDatoSpm;
+    gjenlevendepensjon: PeriodeSpm;
+    supplerendeStønadAlder: PeriodeSpm;
+    supplerendeStønadFlyktning: PeriodeSpm;
+    trygdOgPensjon: PeriodeSpm;
+    jobbsjansen: PeriodeSpm;
+}
+
+export interface Spørsmålsbesvarelser extends SøknadPengestøtter {
+    kvp: PeriodeSpm;
+    intro: PeriodeSpm;
+    institusjon: PeriodeSpm;
+    sykepenger: PeriodeSpm;
+    etterlønn: JaNeiSpm;
 }
 
 export interface TiltaksdeltagelseFraSøknad {
@@ -53,6 +61,7 @@ export interface TiltaksdeltagelseFraSøknad {
 
 export interface SøknadBarn {
     oppholderSegIEØS: Nullable<boolean>;
+    oppholderSegIEØSSpm: JaNeiSpm;
     fornavn: Nullable<string>;
     mellomnavn: Nullable<string>;
     etternavn: Nullable<string>;
@@ -63,4 +72,20 @@ export interface SøknadBarn {
 export enum SøknadBarnKilde {
     PDL = 'PDL',
     Manuell = 'Manuell',
+}
+
+export type JaNeiSvar = 'JA' | 'NEI' | 'IKKE_BESVART';
+
+export interface JaNeiSpm {
+    svar: JaNeiSvar;
+}
+
+export interface FraOgMedDatoSpm {
+    svar: JaNeiSvar;
+    fraOgMed: string;
+}
+
+export interface PeriodeSpm {
+    svar: JaNeiSvar;
+    periode: Periode;
 }

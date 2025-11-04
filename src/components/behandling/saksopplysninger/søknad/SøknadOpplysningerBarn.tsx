@@ -32,7 +32,8 @@ const MedBarn = ({ tiltaksperiode, søknad }: Props) => {
     return søknad.barnetillegg
         .toSorted((a, b) => (a.fødselsdato > b.fødselsdato ? 1 : -1))
         .map((barn) => {
-            const { fornavn, mellomnavn, etternavn, fødselsdato, oppholderSegIEØS, kilde } = barn;
+            const { fornavn, mellomnavn, etternavn, fødselsdato, oppholderSegIEØSSpm, kilde } =
+                barn;
 
             const navn = [fornavn, mellomnavn, etternavn].filter(Boolean).join(' ');
             const fødselsdatoFormattert = formaterDatotekst(fødselsdato);
@@ -74,7 +75,8 @@ const MedBarn = ({ tiltaksperiode, søknad }: Props) => {
                     )}
                     <BehandlingSaksopplysning
                         navn={'Oppholder seg i Norge/EØS?'}
-                        verdi={oppholderSegIEØS ? 'Ja' : 'Nei'}
+                        verdi={oppholderSegIEØSSpm.svar}
+                        visVarsel={oppholderSegIEØSSpm.svar !== 'JA'}
                     />
                     <BehandlingSaksopplysning navn={'Kilde'} verdi={kilde} spacing={true} />
                 </Fragment>

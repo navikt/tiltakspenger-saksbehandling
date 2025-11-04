@@ -4,13 +4,12 @@ import { Periode } from '~/types/Periode';
 import { useConfig } from '~/context/ConfigContext';
 import {
     BehandlingSaksopplysning,
-    BehandlingSaksopplysningMedPeriode,
+    BehandlingSaksopplysningMedPeriodeSpm,
 } from '../../behandling/saksopplysninger/BehandlingSaksopplysning';
 import { formaterDatotekst, periodeTilFormatertDatotekst } from '~/utils/date';
 import { SøknadOpplysningerPengestøtter } from '../../behandling/saksopplysninger/søknad/SøknadOpplysningerPengestøtter';
 import { SøknadOpplysningerBarn } from '../../behandling/saksopplysninger/søknad/SøknadOpplysningerBarn';
 import { Alert, Box, Heading, Link, VStack } from '@navikt/ds-react';
-import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
 
 import styles from './OppsummeringAvSøknad.module.css';
 import { Søknad } from '~/types/Søknad';
@@ -26,16 +25,15 @@ interface Props {
 const OppsummeringAvSøknad = (props: Props) => {
     const { gosysUrl } = useConfig();
 
+    const { tidsstempelHosOss, tiltak, antallVedlegg, svar } = props.søknad;
+
     const {
-        tidsstempelHosOss,
-        tiltak,
-        kvp,
-        intro,
-        institusjon,
-        etterlønn,
-        sykepenger,
-        antallVedlegg,
-    } = props.søknad;
+        kvp: kvp,
+        intro: intro,
+        institusjon: institusjon,
+        etterlønn: etterlønn,
+        sykepenger: sykepenger,
+    } = svar;
 
     return (
         <Box>
@@ -64,65 +62,34 @@ const OppsummeringAvSøknad = (props: Props) => {
                     />
                 )}
 
-                {kvp ? (
-                    <div className={styles.soknadsopplysningVarsel}>
-                        <BehandlingSaksopplysningMedPeriode navn={'KVP'} periode={kvp} />
-                        <ExclamationmarkTriangleFillIcon />
-                    </div>
-                ) : (
-                    <BehandlingSaksopplysningMedPeriode navn={'KVP'} periode={kvp} />
-                )}
-                {intro ? (
-                    <div className={styles.soknadsopplysningVarsel}>
-                        <BehandlingSaksopplysningMedPeriode navn={'Intro'} periode={intro} />
-                        <ExclamationmarkTriangleFillIcon />
-                    </div>
-                ) : (
-                    <BehandlingSaksopplysningMedPeriode navn={'Intro'} periode={intro} />
-                )}
-                {institusjon ? (
-                    <div className={styles.soknadsopplysningVarsel}>
-                        <BehandlingSaksopplysningMedPeriode
-                            navn={'Institusjonsopphold'}
-                            periode={institusjon}
-                        />
-                        <ExclamationmarkTriangleFillIcon />
-                    </div>
-                ) : (
-                    <BehandlingSaksopplysningMedPeriode
-                        navn={'Institusjonsopphold'}
-                        periode={institusjon}
-                    />
-                )}
-                {etterlønn ? (
-                    <div className={styles.soknadsopplysningVarsel}>
-                        <BehandlingSaksopplysning
-                            navn={'Etterlønn'}
-                            verdi={etterlønn ? 'Ja' : 'Nei'}
-                        />
-                        <ExclamationmarkTriangleFillIcon />
-                    </div>
-                ) : (
-                    <BehandlingSaksopplysning navn={'Etterlønn'} verdi={etterlønn ? 'Ja' : 'Nei'} />
-                )}
-                {sykepenger ? (
-                    <div className={styles.soknadsopplysningVarsel}>
-                        <BehandlingSaksopplysningMedPeriode
-                            navn={'Mottar sykepenger og fortsatt sykmeldt'}
-                            periode={sykepenger}
-                            spacing={true}
-                        />
-                        <ExclamationmarkTriangleFillIcon />
-                    </div>
-                ) : (
-                    <BehandlingSaksopplysningMedPeriode
-                        navn={'Mottar sykepenger og fortsatt sykmeldt'}
-                        periode={sykepenger}
-                        spacing={true}
-                    />
-                )}
+                <BehandlingSaksopplysningMedPeriodeSpm
+                    navn={'KVP'}
+                    periodeSpm={kvp}
+                    visVarsel={kvp.svar !== 'NEI'}
+                />
+                <BehandlingSaksopplysningMedPeriodeSpm
+                    navn={'Intro'}
+                    periodeSpm={intro}
+                    visVarsel={intro.svar !== 'NEI'}
+                />
+                <BehandlingSaksopplysningMedPeriodeSpm
+                    navn={'Institusjonsopphold'}
+                    periodeSpm={institusjon}
+                    visVarsel={institusjon.svar !== 'NEI'}
+                />
+                <BehandlingSaksopplysning
+                    navn={'Etterlønn'}
+                    verdi={etterlønn.svar}
+                    visVarsel={etterlønn.svar !== 'NEI'}
+                />
+                <BehandlingSaksopplysningMedPeriodeSpm
+                    navn={'Mottar sykepenger og fortsatt sykmeldt'}
+                    periodeSpm={sykepenger}
+                    spacing={true}
+                    visVarsel={sykepenger.svar !== 'NEI'}
+                />
 
-                <SøknadOpplysningerPengestøtter pengestøtter={props.søknad} />
+                <SøknadOpplysningerPengestøtter pengestøtter={props.søknad.svar} />
                 {/* TODO - kan vi se om vi kan støtte underkomponenten uten tiltaksperiode? Denne kan være viktig for papirsøknad @Henrik */}
                 {props.tiltaksperiode && (
                     <SøknadOpplysningerBarn

@@ -3,92 +3,119 @@ import { describe, expect, test } from '@jest/globals';
 import { Periode } from '~/types/Periode';
 import { periodiserBarnetilleggFraSøknad } from './periodiserBarnetilleggFraSøknad';
 import { finn16årsdag, forrigeDag } from '~/utils/date';
-import { SøknadBarnKilde } from '~/types/Søknad';
+import { SøknadBarnKilde, SøknadBarn } from '~/types/Søknad';
 
 const virkningsperiode: Periode = {
     fraOgMed: '2024-07-01',
     tilOgMed: '2025-06-30',
 };
 
-const barnSomBlir16FørPerioden = {
+const barnSomBlir16FørPerioden: SøknadBarn = {
     fødselsdato: '2008-06-30',
     fornavn: 'Ola',
     mellomnavn: null,
     etternavn: null,
     kilde: SøknadBarnKilde.PDL,
     oppholderSegIEØS: true,
+    oppholderSegIEØSSpm: {
+        svar: 'JA',
+    },
 };
 
-const barnSomIkkeOppholderSegIEØS = {
+const barnSomIkkeOppholderSegIEØS: SøknadBarn = {
     fødselsdato: '2008-06-30',
     fornavn: 'Ole',
     mellomnavn: null,
     etternavn: null,
     kilde: SøknadBarnKilde.PDL,
     oppholderSegIEØS: false,
+    oppholderSegIEØSSpm: {
+        svar: 'NEI',
+    },
 };
 
-const barnSomBlir16TidligIPerioden = {
+const barnSomBlir16TidligIPerioden: SøknadBarn = {
     fødselsdato: '2008-07-15',
     fornavn: 'Kari',
     mellomnavn: null,
     etternavn: null,
     kilde: SøknadBarnKilde.PDL,
     oppholderSegIEØS: true,
+    oppholderSegIEØSSpm: {
+        svar: 'JA',
+    },
 };
 
-const barnSomBlir16MidtIPerioden = {
+const barnSomBlir16MidtIPerioden: SøknadBarn = {
     fødselsdato: '2008-12-31',
     fornavn: 'Bob',
     mellomnavn: null,
     etternavn: null,
     kilde: SøknadBarnKilde.PDL,
     oppholderSegIEØS: true,
+    oppholderSegIEØSSpm: {
+        svar: 'JA',
+    },
 };
 
-const barnSomBlir16SentIPerioden = {
+const barnSomBlir16SentIPerioden: SøknadBarn = {
     fødselsdato: '2009-06-15',
     fornavn: 'Alice',
     mellomnavn: null,
     etternavn: null,
     kilde: SøknadBarnKilde.PDL,
     oppholderSegIEØS: true,
+    oppholderSegIEØSSpm: {
+        svar: 'JA',
+    },
 };
 
-const barnSomErUnder16HelePerioden = {
+const barnSomErUnder16HelePerioden: SøknadBarn = {
     fødselsdato: '2010-01-01',
     fornavn: 'Chuck',
     mellomnavn: null,
     etternavn: null,
     kilde: SøknadBarnKilde.PDL,
     oppholderSegIEØS: true,
+    oppholderSegIEØSSpm: {
+        svar: 'JA',
+    },
 };
 
-const barnSomBlirFødtTidligIPerioden = {
+const barnSomBlirFødtTidligIPerioden: SøknadBarn = {
     fødselsdato: '2024-08-01',
     fornavn: 'Sneed',
     mellomnavn: null,
     etternavn: null,
     kilde: SøknadBarnKilde.PDL,
     oppholderSegIEØS: true,
+    oppholderSegIEØSSpm: {
+        svar: 'JA',
+    },
 };
 
-const barnSomBlirFødtMidtIPerioden = {
+const barnSomBlirFødtMidtIPerioden: SøknadBarn = {
     fødselsdato: '2025-01-01',
     fornavn: 'Knoll',
     mellomnavn: null,
     etternavn: null,
     kilde: SøknadBarnKilde.PDL,
     oppholderSegIEØS: true,
+    oppholderSegIEØSSpm: {
+        svar: 'JA',
+    },
 };
 
-const barnSomBlirFødtSentIPerioden = {
+const barnSomBlirFødtSentIPerioden: SøknadBarn = {
     fødselsdato: '2025-06-15',
     fornavn: 'Tott',
     mellomnavn: null,
     etternavn: null,
     kilde: SøknadBarnKilde.PDL,
     oppholderSegIEØS: true,
+    oppholderSegIEØSSpm: {
+        svar: 'JA',
+    },
 };
 
 describe('Periodiserer barnetillegg fra søknaden', () => {

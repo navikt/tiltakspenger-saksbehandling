@@ -3,11 +3,11 @@ import { VStack } from '@navikt/ds-react';
 import {
     BehandlingSaksopplysning,
     BehandlingSaksopplysningMedFlerePerioder,
-    BehandlingSaksopplysningMedPeriode,
 } from '~/components/behandling/saksopplysninger/BehandlingSaksopplysning';
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
 import React from 'react';
 import styles from './BehandlingYtelserOpplysninger.module.css';
+import { periodeTilFormatertDatotekst } from '~/utils/date';
 
 type Props = {
     ytelser: Ytelse[];
@@ -36,7 +36,13 @@ const YtelseOpplysning = (props: { ytelse: Ytelse }) => {
                 <ExclamationmarkTriangleFillIcon />
             </div>
             {!flerePerioder && (
-                <BehandlingSaksopplysningMedPeriode navn={'Periode'} periode={perioder[0]} />
+                <BehandlingSaksopplysning
+                    navn={'Periode'}
+                    verdi={periodeTilFormatertDatotekst({
+                        tilOgMed: perioder[0].tilOgMed,
+                        fraOgMed: perioder[0].fraOgMed,
+                    })}
+                />
             )}
             {flerePerioder && (
                 <BehandlingSaksopplysningMedFlerePerioder navn={'Perioder'} perioder={perioder} />
