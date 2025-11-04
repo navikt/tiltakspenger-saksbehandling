@@ -38,7 +38,6 @@ export const MottarPengestøtterSpørsmål = ({ name, legend }: Props) => {
         if (svar === undefined) {
             resetField('svar.gjenlevendepensjon.svar');
             resetField('svar.alderspensjon.svar');
-            resetField('svar.alderspensjon.fraOgMed');
             resetField('svar.supplerendeStønadAlder.svar');
             resetField('svar.supplerendeStønadFlyktning.svar');
             resetField('svar.trygdOgPensjon.svar');
