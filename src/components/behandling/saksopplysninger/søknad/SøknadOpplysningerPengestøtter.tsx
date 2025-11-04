@@ -33,6 +33,8 @@ export const SøknadOpplysningerPengestøtter = ({ className, pengestøtter }: P
         jaEllerIkkeBesvart(trygdOgPensjon.svar) ||
         jaEllerIkkeBesvart(jobbsjansen.svar);
 
+    console.log('alderspensjon', pengestøtter.alderspensjon.fraOgMed);
+
     return (
         <div className={className}>
             {potensieltMottarPengestøtte ? (
@@ -43,7 +45,7 @@ export const SøknadOpplysningerPengestøtter = ({ className, pengestøtter }: P
                             navn={'Alderspensjon fra'}
                             verdi={
                                 alderspensjon.svar === 'JA'
-                                    ? formaterDatotekst(alderspensjon.fraDato)
+                                    ? formaterDatotekst(alderspensjon.fraOgMed)
                                     : alderspensjon.svar
                             }
                             visVarsel
