@@ -12,6 +12,7 @@ import { SakId } from '~/types/Sak';
 import { InformasjonOmBarnPDL } from '~/components/papirsøknad/barnetillegg/InformasjonOmBarnPDL';
 import { InformasjonOmBarnManuell } from '~/components/papirsøknad/barnetillegg/InformasjonOmBarnManuell';
 import { TrashIcon } from '@navikt/aksel-icons';
+import { Periode } from '~/types/Periode';
 
 type Props = {
     sakId: SakId;
@@ -67,15 +68,18 @@ export const Barnetillegg = ({ sakId, name, legend }: Props) => {
         }
     }, [skalHenteBarn, barnFraAPI, setValue]);
 
+    const { fraOgMed, tilOgMed } = periode.field.value as Periode;
+    const søknadsperiodeErTom = fraOgMed.length === 0 && tilOgMed.length === 0;
+
     return (
         <div className={harSøktOmBarnetillegg.field.value === 'JA' ? styles.blokkUtvidet : ''}>
             <JaNeiSpørsmål name={name} legend={legend} />
 
             {harSøktOmBarnetillegg.field.value === 'JA' && (
                 <div className={styles.blokk}>
-                    {!periode.field.value && (
+                    {søknadsperiodeErTom && (
                         <Alert variant="warning">
-                            Vi kan ikke hente informasjon om barn fra folkeregisteret uten å at
+                            Vi kan ikke hente informasjon om barn fra folkeregisteret uten at
                             søknadsperioden er satt.
                         </Alert>
                     )}
@@ -87,7 +91,7 @@ export const Barnetillegg = ({ sakId, name, legend }: Props) => {
                             setSkalHenteBarn(true);
                         }}
                         loading={isLoading}
-                        disabled={!periode.field.value}
+                        disabled={søknadsperiodeErTom}
                     >
                         Legg til barn fra folkeregisteret
                     </Button>
