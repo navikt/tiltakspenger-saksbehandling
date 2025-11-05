@@ -102,11 +102,11 @@ export const LeggTilBarnManuelt = ({ onAppend }: Props) => {
                                         }
                                     />
                                     <JaNeiSpørsmål
-                                        name="svar.barnetilleggKladd.oppholdInnenforEøs"
+                                        name="svar.barnetilleggKladd.oppholdInnenforEøs.svar"
                                         legend="Oppholder seg i EØS-land"
                                     />
                                     <JaNeiSpørsmål
-                                        name="svar.barnetilleggKladd.manueltRegistrertBarnHarVedlegg"
+                                        name="svar.barnetilleggKladd.manueltRegistrertBarnHarVedlegg.svar"
                                         legend="Det er vedlagt dokumentasjon for barnet"
                                         måVæreBesvart
                                     />
