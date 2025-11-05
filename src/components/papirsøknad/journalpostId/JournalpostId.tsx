@@ -69,13 +69,14 @@ export const JournalpostId = () => {
             if (data.gjelderInnsendtFnr === false) {
                 return (
                     <Alert variant="warning" inline aria-live="polite">
-                        Journalposten tilhører en annen person.
+                        Journalposten tilhører en annen person, gjerne sjekk om journalposten
+                        tilhører søker eller om det er verge/fullmakt.
                     </Alert>
                 );
             }
             return (
                 <Alert variant="success" inline aria-live="polite">
-                    Journalpost er gyldig.
+                    Journalpost finnes og tilhører søker.
                 </Alert>
             );
         }
