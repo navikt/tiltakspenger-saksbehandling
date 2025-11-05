@@ -21,7 +21,7 @@ export const SøknadsbehandlingResultatVelger = () => {
     const { resultat } = skjemaContext;
 
     const erIkkeSaksbehandler = rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER;
-    const kanIkkeInnvilge = behandling.saksopplysninger?.tiltaksdeltagelse.length === 0;
+    const kanIkkeInnvilge = behandling.saksopplysninger.tiltaksdeltagelse.length === 0;
 
     return (
         <VedtakSeksjon>

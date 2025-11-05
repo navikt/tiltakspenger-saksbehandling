@@ -24,6 +24,10 @@ export function formaterTidspunkt(dateString: string) {
     return dayjs(dateString).format('DD.MM.YYYY kl. HH:mm');
 }
 
+export function formaterTidspunktMedSekunder(dateString: string) {
+    return dayjs(dateString).format('DD.MM.YYYY kl. HH:mm:ss');
+}
+
 export function formaterTidspunktKort(dateString: string) {
     return dayjs(dateString).format('DD.MM.YY HH:mm');
 }

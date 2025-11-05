@@ -90,14 +90,14 @@ export const hentTiltaksdeltagelseFraSøknad = (
     );
     return (
         singleOrFirst(tiltaksdeltagelser) ??
-        (behandling.saksopplysninger?.tiltaksdeltagelse
+        (behandling.saksopplysninger.tiltaksdeltagelse
             ? singleOrFirst(behandling.saksopplysninger.tiltaksdeltagelse)
             : null)
     );
 };
 
 export const hentTiltaksdeltakelser = (behandling: Rammebehandling): Tiltaksdeltagelse[] =>
-    behandling.saksopplysninger?.tiltaksdeltagelse ?? [];
+    behandling.saksopplysninger.tiltaksdeltagelse ?? [];
 
 export const hentTiltaksdeltakelserMedStartOgSluttdato = (
     behandling: Rammebehandling,

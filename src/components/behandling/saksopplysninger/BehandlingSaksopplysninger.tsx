@@ -3,7 +3,6 @@ import { alderFraDato, formaterDatotekst } from '~/utils/date';
 import { ReactNode } from 'react';
 import { useBehandling } from '../context/BehandlingContext';
 import { Separator } from '../../separator/Separator';
-import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { BehandlingOppdaterSaksopplysninger } from './oppdater-saksopplysninger/BehandlingOppdaterSaksopplysninger';
 import { BehandlingSaksopplysning } from './BehandlingSaksopplysning';
 import { BehandlingTiltakOpplysninger } from './tiltak/BehandlingTiltakOpplysninger';
@@ -11,62 +10,62 @@ import OppsummeringAvAttesteringer from '../../attestering/OppsummeringAvAtteste
 import { hentTiltaksperiode } from '~/utils/behandling';
 import OppsummeringAvSøknad from '../../oppsummeringer/oppsummeringAvSøknad/OppsummeringAvSøknad';
 import { BehandlingYtelserOpplysninger } from '~/components/behandling/saksopplysninger/ytelser/BehandlingYtelserOpplysninger';
-
-import style from './BehandlingSaksopplysninger.module.css';
 import { BehandlingTiltakspengerArenaOpplysninger } from '~/components/behandling/saksopplysninger/tiltakspenger-fra-arena/BehandlingTiltakspengerArenaOpplysninger';
 import { Rammebehandlingstype } from '~/types/Rammebehandling';
 
+import style from './BehandlingSaksopplysninger.module.css';
+
 export const BehandlingSaksopplysninger = () => {
-    const { behandling, rolleForBehandling } = useBehandling();
-    const { saksopplysninger, type } = behandling;
-    const harYtelser = saksopplysninger?.ytelser && saksopplysninger?.ytelser.length > 0;
-    const harTiltakspengevedtakFraArena =
-        saksopplysninger?.tiltakspengevedtakFraArena &&
-        saksopplysninger?.tiltakspengevedtakFraArena.length > 0;
+    const { behandling } = useBehandling();
+
+    const { saksopplysninger, type, attesteringer } = behandling;
+    const { ytelser, tiltakspengevedtakFraArena, tiltaksdeltagelse, fødselsdato } =
+        saksopplysninger;
+
+    const harYtelser = ytelser.length > 0;
+    const harTiltakspengevedtakFraArena = tiltakspengevedtakFraArena.length > 0;
+    const harTiltaksdeltagelse = tiltaksdeltagelse.length > 0;
 
     return (
         <>
-            {rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER && (
-                <BehandlingOppdaterSaksopplysninger />
-            )}
-            {(saksopplysninger?.tiltaksdeltagelse?.length ?? 0) > 0 && (
-                <OpplysningerSeksjon header={'Tiltak registrert på bruker'}>
-                    <BehandlingTiltakOpplysninger
-                        tiltaksdeltagelse={saksopplysninger!.tiltaksdeltagelse}
-                    />
-                    <Separator />
-                </OpplysningerSeksjon>
-            )}
+            <BehandlingOppdaterSaksopplysninger />
+            <Separator />
+
+            <OpplysningerSeksjon header={'Tiltak registrert på bruker'}>
+                {harTiltaksdeltagelse ? (
+                    <BehandlingTiltakOpplysninger tiltaksdeltagelse={tiltaksdeltagelse} />
+                ) : (
+                    <BodyShort size={'small'}>Ingen relevante tiltaksdeltagelser</BodyShort>
+                )}
+                <Separator />
+            </OpplysningerSeksjon>
 
             <OpplysningerSeksjon header={'Andre ytelser'}>
-                {!harYtelser && <BodyShort size={'small'}>Ingen relevante ytelser</BodyShort>}
-                {harYtelser && <BehandlingYtelserOpplysninger ytelser={saksopplysninger.ytelser} />}
+                {harYtelser ? (
+                    <BehandlingYtelserOpplysninger ytelser={ytelser} />
+                ) : (
+                    <BodyShort size={'small'}>Ingen relevante ytelser</BodyShort>
+                )}
                 <Separator />
             </OpplysningerSeksjon>
 
             <OpplysningerSeksjon header={'Tiltakspengevedtak fra Arena'}>
-                {!harTiltakspengevedtakFraArena && (
+                {harTiltakspengevedtakFraArena ? (
+                    <BehandlingTiltakspengerArenaOpplysninger vedtak={tiltakspengevedtakFraArena} />
+                ) : (
                     <BodyShort size={'small'}>Ingen relevante tiltakspengevedtak i Arena</BodyShort>
-                )}
-                {harTiltakspengevedtakFraArena && (
-                    <BehandlingTiltakspengerArenaOpplysninger
-                        vedtak={saksopplysninger.tiltakspengevedtakFraArena}
-                    />
                 )}
                 <Separator />
             </OpplysningerSeksjon>
 
-            {saksopplysninger?.fødselsdato && (
-                <OpplysningerSeksjon header={'Alder'}>
-                    <BodyShort
-                        weight={'semibold'}
-                    >{`${alderFraDato(saksopplysninger.fødselsdato)} år`}</BodyShort>
-                    <BehandlingSaksopplysning
-                        navn={'Fødselsdato'}
-                        verdi={formaterDatotekst(saksopplysninger.fødselsdato)}
-                    />
-                </OpplysningerSeksjon>
-            )}
+            <OpplysningerSeksjon header={'Alder'}>
+                <BodyShort weight={'semibold'}>{`${alderFraDato(fødselsdato)} år`}</BodyShort>
+                <BehandlingSaksopplysning
+                    navn={'Fødselsdato'}
+                    verdi={formaterDatotekst(fødselsdato)}
+                />
+            </OpplysningerSeksjon>
+
             {type === Rammebehandlingstype.SØKNADSBEHANDLING && (
                 <>
                     <Separator />
@@ -78,10 +77,10 @@ export const BehandlingSaksopplysninger = () => {
                     </OpplysningerSeksjon>
                 </>
             )}
-            {behandling.attesteringer.length > 0 && (
+            {attesteringer.length > 0 && (
                 <>
                     <Separator />
-                    <OppsummeringAvAttesteringer attesteringer={behandling.attesteringer} />
+                    <OppsummeringAvAttesteringer attesteringer={attesteringer} />
                 </>
             )}
         </>

@@ -87,6 +87,7 @@ export type Saksopplysninger = {
     periode: Nullable<Periode>;
     ytelser: Ytelse[];
     tiltakspengevedtakFraArena: ArenaTPVedtak[];
+    oppslagstidspunkt: string;
 };
 
 export type RammebehandlingVedtakRequest =
