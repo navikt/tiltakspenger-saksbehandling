@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from '../Spørsmål.module.css';
 import { FieldPath, useController, useFieldArray, useFormContext } from 'react-hook-form';
-import { Alert, Button, Heading, HStack } from '@navikt/ds-react';
+import { Alert, Button, Heading, HStack, VStack } from '@navikt/ds-react';
 import { classNames } from '~/utils/classNames';
 import type { Barn, Papirsøknad } from '~/components/papirsøknad/papirsøknadTypes';
 import { LeggTilBarnManuelt } from '~/components/papirsøknad/barnetillegg/LeggTilBarnManuelt';
@@ -123,7 +123,10 @@ export const Barnetillegg = ({ sakId, name, legend }: Props) => {
                             </Heading>
                             {barnFraAPI?.map((barn, index) => (
                                 <div key={`barn-${uuidv4()}`}>
-                                    <InformasjonOmBarnPDL barn={barn} />
+                                    <InformasjonOmBarnPDL
+                                        barn={barn}
+                                        søknadsperiode={periode.field.value as Periode}
+                                    />
                                     <JaNeiSpørsmål
                                         name={`svar.barnetilleggPdl.${index}.oppholdInnenforEøs.svar`}
                                         legend={` Oppholder seg i EØS-land i tiltaksperioden`}
@@ -138,19 +141,24 @@ export const Barnetillegg = ({ sakId, name, legend }: Props) => {
                             <Heading size="medium" level="3" spacing>
                                 Barn lagt til manuelt
                             </Heading>
-                            {manuelleBarn.fields.map((barn: Barn, index: number) => (
-                                <HStack key={barn.uuid} gap="4" justify="space-between">
-                                    <InformasjonOmBarnManuell barn={barn} />
-                                    <Button
-                                        type="button"
-                                        icon={<TrashIcon />}
-                                        variant="tertiary"
-                                        onClick={() => manuelleBarn.remove(index)}
-                                    >
-                                        Slett
-                                    </Button>
-                                </HStack>
-                            ))}
+                            <VStack gap="4">
+                                {manuelleBarn.fields.map((barn: Barn, index: number) => (
+                                    <HStack key={barn.uuid} gap="4" justify="space-between">
+                                        <InformasjonOmBarnManuell
+                                            barn={barn}
+                                            søknadsperiode={periode.field.value as Periode}
+                                        />
+                                        <Button
+                                            type="button"
+                                            icon={<TrashIcon />}
+                                            variant="tertiary"
+                                            onClick={() => manuelleBarn.remove(index)}
+                                        >
+                                            Slett
+                                        </Button>
+                                    </HStack>
+                                ))}
+                            </VStack>
                         </div>
                     )}
                     <LeggTilBarnManuelt onAppend={(barn) => manuelleBarn.append(barn)} />
