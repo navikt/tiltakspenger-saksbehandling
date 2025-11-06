@@ -55,7 +55,6 @@ const PapirsøknadPage = (props: Props) => {
         if (!papirsøknadToggle) return;
         if (!personopplysninger) return;
 
-        console.log('data', data);
         opprettPapirsøknad(data).then((behandling) => {
             if (behandling) {
                 router.push(behandlingUrl(behandling));
