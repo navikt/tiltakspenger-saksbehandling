@@ -20,6 +20,7 @@ const barnSomBlir16FørPerioden: SøknadBarn = {
     oppholderSegIEØSSpm: {
         svar: 'JA',
     },
+    fnr: null,
 };
 
 const barnSomIkkeOppholderSegIEØS: SøknadBarn = {
@@ -32,6 +33,7 @@ const barnSomIkkeOppholderSegIEØS: SøknadBarn = {
     oppholderSegIEØSSpm: {
         svar: 'NEI',
     },
+    fnr: null,
 };
 
 const barnSomBlir16TidligIPerioden: SøknadBarn = {
@@ -44,6 +46,7 @@ const barnSomBlir16TidligIPerioden: SøknadBarn = {
     oppholderSegIEØSSpm: {
         svar: 'JA',
     },
+    fnr: null,
 };
 
 const barnSomBlir16MidtIPerioden: SøknadBarn = {
@@ -56,6 +59,7 @@ const barnSomBlir16MidtIPerioden: SøknadBarn = {
     oppholderSegIEØSSpm: {
         svar: 'JA',
     },
+    fnr: null,
 };
 
 const barnSomBlir16SentIPerioden: SøknadBarn = {
@@ -68,6 +72,7 @@ const barnSomBlir16SentIPerioden: SøknadBarn = {
     oppholderSegIEØSSpm: {
         svar: 'JA',
     },
+    fnr: null,
 };
 
 const barnSomErUnder16HelePerioden: SøknadBarn = {
@@ -80,6 +85,7 @@ const barnSomErUnder16HelePerioden: SøknadBarn = {
     oppholderSegIEØSSpm: {
         svar: 'JA',
     },
+    fnr: null,
 };
 
 const barnSomBlirFødtTidligIPerioden: SøknadBarn = {
@@ -92,6 +98,7 @@ const barnSomBlirFødtTidligIPerioden: SøknadBarn = {
     oppholderSegIEØSSpm: {
         svar: 'JA',
     },
+    fnr: null,
 };
 
 const barnSomBlirFødtMidtIPerioden: SøknadBarn = {
@@ -104,6 +111,7 @@ const barnSomBlirFødtMidtIPerioden: SøknadBarn = {
     oppholderSegIEØSSpm: {
         svar: 'JA',
     },
+    fnr: null,
 };
 
 const barnSomBlirFødtSentIPerioden: SøknadBarn = {
@@ -116,6 +124,7 @@ const barnSomBlirFødtSentIPerioden: SøknadBarn = {
     oppholderSegIEØSSpm: {
         svar: 'JA',
     },
+    fnr: null,
 };
 
 describe('Periodiserer barnetillegg fra søknaden', () => {

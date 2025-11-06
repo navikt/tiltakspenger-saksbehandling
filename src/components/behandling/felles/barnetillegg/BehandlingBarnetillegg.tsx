@@ -21,12 +21,10 @@ type Props = {
 };
 
 export const BehandlingBarnetillegg = ({ valgTekst }: Props) => {
-    const { harBarnetillegg, behandlingsperiode } = useBehandlingSkjema();
-    const dispatch = useBehandlingSkjemaDispatch();
-
-    const { behandling, rolleForBehandling } = useBehandling();
-
     const { sak } = useSak();
+    const dispatch = useBehandlingSkjemaDispatch();
+    const { behandling, rolleForBehandling } = useBehandling();
+    const { harBarnetillegg, behandlingsperiode } = useBehandlingSkjema();
 
     return (
         <>
