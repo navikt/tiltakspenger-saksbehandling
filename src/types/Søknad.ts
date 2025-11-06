@@ -67,6 +67,7 @@ export interface SøknadBarn {
     etternavn: Nullable<string>;
     fødselsdato: string;
     kilde: SøknadBarnKilde;
+    fnr: Nullable<string>;
 }
 
 export enum SøknadBarnKilde {

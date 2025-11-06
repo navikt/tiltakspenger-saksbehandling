@@ -68,6 +68,7 @@ interface NySøknadFormData {
     periode: { fraOgMed: Date | undefined; tilOgMed: Date | undefined };
     vilHaBarn: boolean;
     barnetillegg: {
+        fnr: string;
         fødselsdato: string;
         fornavn: string;
         etternavn: string;
@@ -98,6 +99,7 @@ const NySøknadModal = (props: { open: boolean; onClose: () => void }) => {
                 tilOgMed: string;
             } | null;
             barnetillegg: {
+                fnr: Nullable<string>;
                 fødselsdato: Nullable<string>;
                 fornavn: Nullable<string>;
                 etternavn: Nullable<string>;
@@ -123,6 +125,7 @@ const NySøknadModal = (props: { open: boolean; onClose: () => void }) => {
             barnetillegg:
                 values.vilHaBarn && values.barnetillegg.length > 0
                     ? values.barnetillegg.map((b) => ({
+                          fnr: b.fnr || null,
                           fødselsdato: b.fødselsdato || null,
                           fornavn: b.fornavn || null,
                           etternavn: b.etternavn || null,
@@ -199,6 +202,18 @@ const NySøknadModal = (props: { open: boolean; onClose: () => void }) => {
                                                         render={({ field }) => (
                                                             <TextField
                                                                 size="small"
+                                                                label="Fødselsnummer"
+                                                                description="11 siffer - Tilfeldig (mest sannsynlig ugyldig) hvis ikke oppgitt"
+                                                                {...field}
+                                                            />
+                                                        )}
+                                                        name={`barnetillegg.${index}.fnr`}
+                                                        control={form.control}
+                                                    />
+                                                    <Controller
+                                                        render={({ field }) => (
+                                                            <TextField
+                                                                size="small"
                                                                 label="Fødselsdato"
                                                                 description="YYYY-MM-DD - Tilfeldig hvis ikke oppgitt"
                                                                 {...field}
@@ -268,6 +283,7 @@ const NySøknadModal = (props: { open: boolean; onClose: () => void }) => {
                                         style={{ alignSelf: 'start' }}
                                         onClick={() =>
                                             append({
+                                                fnr: '',
                                                 fødselsdato: '',
                                                 fornavn: '',
                                                 etternavn: '',
