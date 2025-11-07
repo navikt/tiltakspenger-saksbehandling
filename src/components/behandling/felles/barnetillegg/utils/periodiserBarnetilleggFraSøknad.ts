@@ -22,9 +22,9 @@ export const periodiserBarnetilleggFraSøknad = (
 
     // Periodene med rett til barnetillegg for hvert barn, innenfor virkningsperioden
     const perioderPerBarn = barnFraSøknad.reduce<Periode[]>((acc, barn) => {
-        const { fødselsdato, oppholderSegIEØS } = barn;
+        const { fødselsdato, oppholderSegIEØSSpm } = barn;
 
-        if (!oppholderSegIEØS) {
+        if (oppholderSegIEØSSpm.svar !== 'JA') {
             return acc;
         }
 

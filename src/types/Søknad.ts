@@ -56,7 +56,6 @@ export interface TiltaksdeltagelseFraSøknad {
 }
 
 export interface SøknadBarn {
-    oppholderSegIEØS: Nullable<boolean>;
     oppholderSegIEØSSpm: JaNeiSpm;
     fornavn: Nullable<string>;
     mellomnavn: Nullable<string>;
