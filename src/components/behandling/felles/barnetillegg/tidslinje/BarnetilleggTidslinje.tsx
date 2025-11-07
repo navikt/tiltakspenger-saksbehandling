@@ -17,7 +17,10 @@ type Props = {
 export const BarnetilleggTidslinje = ({ behandlingsperiode }: Props) => {
     const { sak } = useSak();
 
-    const barnetillegg = hentBarnetilleggFraVedtakTidslinje(sak.tidslinje, behandlingsperiode);
+    const barnetillegg = hentBarnetilleggFraVedtakTidslinje(
+        sak.tidslinje.elementer.map((e) => e.rammevedtak),
+        behandlingsperiode,
+    );
 
     if (barnetillegg.length === 0) {
         return (

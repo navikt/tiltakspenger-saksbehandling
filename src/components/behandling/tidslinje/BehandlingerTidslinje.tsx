@@ -16,11 +16,10 @@ import { formatterBeløp } from '~/utils/beløp';
 import { behandlingUrl, meldeperiodeUrl } from '~/utils/urls';
 import { useTidslinjeDateRange } from '~/components/behandling/tidslinje/useTidslinjeDateRange';
 import { tellAntallBarnFraVedtak } from '~/components/behandling/felles/barnetillegg/utils/barnetilleggUtils';
-import { erRammebehandlingInnvilgelseResultat } from '~/utils/behandling';
-import { RevurderingResultat } from '~/types/Revurdering';
-import { SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
 
 import style from './BehandlingerTidslinje.module.css';
+import { TidslinjeResultat } from '~/types/Tidslinje';
+import { erTidslinjeElementInnvilgelse } from '~/utils/TidslinjeUtils';
 
 type Props = {
     sak: SakProps;
@@ -65,42 +64,40 @@ export const BehandlingerTidslinje = ({ sak }: Props) => {
             </div>
             <Timeline startDate={startDate} endDate={endDate}>
                 <Timeline.Row label={'Vedtak'} icon={<TasklistIcon />}>
-                    {tidslinje.map((vedtak) => {
+                    {tidslinje.elementer.map((tidslinjeElement) => {
                         const {
                             id,
-                            periode,
                             gjeldendePeriode,
-                            resultat,
                             vedtaksdato,
                             saksbehandler,
                             beslutter,
                             antallDagerPerMeldeperiode,
-                        } = vedtak;
+                        } = tidslinjeElement.rammevedtak;
 
                         const { fraOgMed, tilOgMed } = gjeldendePeriode;
-                        const gjeldendePeriodeErEndret =
-                            periode.fraOgMed !== fraOgMed || periode.tilOgMed !== tilOgMed;
 
-                        const erInnvilgelse = erRammebehandlingInnvilgelseResultat(resultat);
+                        const erInnvilgelse = erTidslinjeElementInnvilgelse(
+                            tidslinjeElement.tidslinjeResultat,
+                        );
 
-                        const barn = tellAntallBarnFraVedtak(vedtak);
+                        const barn = tellAntallBarnFraVedtak(tidslinjeElement.rammevedtak);
 
                         return (
                             <Timeline.Period
                                 start={new Date(fraOgMed)}
                                 end={new Date(tilOgMed)}
                                 status={(() => {
-                                    if (erInnvilgelse) {
-                                        return 'success';
+                                    switch (tidslinjeElement.tidslinjeResultat) {
+                                        case TidslinjeResultat.STANS:
+                                            return 'warning';
+                                        case TidslinjeResultat.OMGJØRING_OPPHØR:
+                                            return 'danger';
+                                        case TidslinjeResultat.FORLENGELSE:
+                                        case TidslinjeResultat.SØKNADSBEHANDLING_INNVILGELSE:
+                                        case TidslinjeResultat.REVURDERING_INNVILGELSE:
+                                        case TidslinjeResultat.OMGJØRING_INNVILGELSE:
+                                            return 'success';
                                     }
-                                    if (resultat === RevurderingResultat.STANS) {
-                                        return 'danger';
-                                    }
-                                    if (resultat === SøknadsbehandlingResultat.AVSLAG) {
-                                        return 'warning';
-                                    }
-
-                                    return undefined;
                                 })()}
                                 icon={
                                     erInnvilgelse ? (
@@ -113,19 +110,28 @@ export const BehandlingerTidslinje = ({ sak }: Props) => {
                             >
                                 <div className={style.behandlingPreview}>
                                     <Heading size={'xsmall'} level={'4'}>
-                                        {erInnvilgelse ? 'Innvilget' : 'Stanset'}
+                                        {(() => {
+                                            switch (tidslinjeElement.tidslinjeResultat) {
+                                                case TidslinjeResultat.STANS:
+                                                    return 'Stanset';
+                                                case TidslinjeResultat.OMGJØRING_OPPHØR:
+                                                    return 'Omgjøring - opphørt';
+                                                case TidslinjeResultat.FORLENGELSE:
+                                                    return 'Forlengelse';
+                                                case TidslinjeResultat.SØKNADSBEHANDLING_INNVILGELSE:
+                                                    return 'Søknadsbehandling - innvilgelse';
+                                                case TidslinjeResultat.REVURDERING_INNVILGELSE:
+                                                    return 'Revurdering - innvilgelse';
+                                                case TidslinjeResultat.OMGJØRING_INNVILGELSE:
+                                                    return 'Omgjøring - innvilgelse';
+                                            }
+                                        })()}
                                     </Heading>
                                     <div>
                                         <InfoElement
                                             navn={'Gjeldende periode'}
                                             verdi={periodeTilFormatertDatotekst(gjeldendePeriode)}
                                         />
-                                        {gjeldendePeriodeErEndret && (
-                                            <InfoElement
-                                                navn={'Opprinnelig periode'}
-                                                verdi={periodeTilFormatertDatotekst(periode)}
-                                            />
-                                        )}
                                         {erInnvilgelse && (
                                             <>
                                                 <InfoElement
@@ -159,7 +165,7 @@ export const BehandlingerTidslinje = ({ sak }: Props) => {
                                         as={NextLink}
                                         href={behandlingUrl({
                                             saksnummer,
-                                            id: vedtak.behandlingId,
+                                            id: tidslinjeElement.rammevedtak.behandlingId,
                                         })}
                                         className={style.behandlingLink}
                                     >

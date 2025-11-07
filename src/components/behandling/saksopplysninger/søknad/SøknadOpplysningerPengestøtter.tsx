@@ -33,8 +33,6 @@ export const SøknadOpplysningerPengestøtter = ({ className, pengestøtter }: P
         jaEllerIkkeBesvart(trygdOgPensjon.svar) ||
         jaEllerIkkeBesvart(jobbsjansen.svar);
 
-    console.log('alderspensjon', pengestøtter.alderspensjon.fraOgMed);
-
     return (
         <div className={className}>
             {potensieltMottarPengestøtte ? (

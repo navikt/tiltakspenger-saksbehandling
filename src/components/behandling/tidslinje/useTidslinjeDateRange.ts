@@ -1,13 +1,13 @@
-import { Rammevedtak } from '~/types/Rammevedtak';
 import dayjs from 'dayjs';
 import { useCallback, useState } from 'react';
+import { Tidslinje } from '~/types/Tidslinje';
 
 const MAX_RANGE_MONTHS = 6;
 const MONTHS_PER_STEP = 4;
 
-export const useTidslinjeDateRange = (tidslinje: Rammevedtak[]) => {
-    const førsteDato = dayjs(tidslinje.at(0)?.periode.fraOgMed);
-    const sisteDato = dayjs(tidslinje.at(-1)?.periode.tilOgMed);
+export const useTidslinjeDateRange = (tidslinje: Tidslinje) => {
+    const førsteDato = dayjs(tidslinje.elementer.at(0)?.periode.fraOgMed);
+    const sisteDato = dayjs(tidslinje.elementer.at(-1)?.periode.tilOgMed);
 
     const numMånederMedVedtak = Math.ceil(sisteDato.diff(førsteDato, 'months', true));
 
