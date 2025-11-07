@@ -78,7 +78,7 @@ const defaultPapirsøknadFormValues = {
     manueltSattSøknadsperiode: { fraOgMed: '', tilOgMed: '' },
     svar: {
         harTiltak: undefined,
-        tiltak: {},
+        tiltak: undefined,
         barnetilleggPdl: [],
         barnetilleggManuelle: [],
         institusjonsopphold: {},
