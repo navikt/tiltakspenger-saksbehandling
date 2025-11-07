@@ -96,6 +96,13 @@ export const RevurderingOmgjøringVedtak = () => {
                 </VStack>
                 <Separator />
                 <RevurderingInnvilgelseBegrunnelse />
+                {behandling.status === Rammebehandlingsstatus.VEDTATT && (
+                    <OppsummeringsPar
+                        label={'Omgjøringsperiode'}
+                        verdi={periodeTilFormatertDatotekst(behandling.virkningsperiode!)}
+                        variant="inlineColon"
+                    />
+                )}
                 <RevurderingInnvilgelsesperiodeVelger />
                 <RevurderingDagerPerMeldeperiode />
                 <Separator />
