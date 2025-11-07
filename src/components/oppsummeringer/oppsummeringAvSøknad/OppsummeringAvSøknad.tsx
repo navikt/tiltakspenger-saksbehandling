@@ -25,7 +25,8 @@ interface Props {
 const OppsummeringAvSøknad = (props: Props) => {
     const { gosysUrl } = useConfig();
 
-    const { tidsstempelHosOss, tiltak, antallVedlegg, svar } = props.søknad;
+    const { tidsstempelHosOss, tiltak, tiltaksdeltakelseperiodeDetErSøktOm, antallVedlegg, svar } =
+        props.søknad;
 
     const {
         kvp: kvp,
@@ -48,6 +49,19 @@ const OppsummeringAvSøknad = (props: Props) => {
                     navn={'Kravdato'}
                     verdi={formaterDatotekst(tidsstempelHosOss)}
                     spacing={true}
+                />
+
+                <BehandlingSaksopplysning
+                    navn={'Periode det er søkt om'}
+                    verdi={
+                        !tiltaksdeltakelseperiodeDetErSøktOm
+                            ? 'Periode mangler'
+                            : periodeTilFormatertDatotekst({
+                                  fraOgMed: tiltaksdeltakelseperiodeDetErSøktOm.fraOgMed,
+                                  tilOgMed: tiltaksdeltakelseperiodeDetErSøktOm.tilOgMed,
+                              })
+                    }
+                    visVarsel={!tiltaksdeltakelseperiodeDetErSøktOm}
                 />
 
                 {tiltak && <BehandlingSaksopplysning navn={'Tiltak'} verdi={tiltak.typeNavn} />}

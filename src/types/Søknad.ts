@@ -9,6 +9,7 @@ interface SøknadBase extends SøknadPengestøtter {
     id: SøknadId;
     journalpostId: string;
     tiltak: Nullable<TiltaksdeltagelseFraSøknad>;
+    tiltaksdeltakelseperiodeDetErSøktOm: Nullable<Periode>;
     barnetillegg: SøknadBarn[];
     opprettet: string;
     tidsstempelHosOss: string;
