@@ -3,7 +3,7 @@ import { describe, expect, test } from '@jest/globals';
 import { Periode } from '~/types/Periode';
 import { periodiserBarnetilleggFraSøknad } from './periodiserBarnetilleggFraSøknad';
 import { finn16årsdag, forrigeDag } from '~/utils/date';
-import { SøknadBarnKilde, SøknadBarn } from '~/types/Søknad';
+import { SøknadBarn, SøknadBarnKilde } from '~/types/Søknad';
 
 const virkningsperiode: Periode = {
     fraOgMed: '2024-07-01',
@@ -16,7 +16,6 @@ const barnSomBlir16FørPerioden: SøknadBarn = {
     mellomnavn: null,
     etternavn: null,
     kilde: SøknadBarnKilde.PDL,
-    oppholderSegIEØS: true,
     oppholderSegIEØSSpm: {
         svar: 'JA',
     },
@@ -29,7 +28,6 @@ const barnSomIkkeOppholderSegIEØS: SøknadBarn = {
     mellomnavn: null,
     etternavn: null,
     kilde: SøknadBarnKilde.PDL,
-    oppholderSegIEØS: false,
     oppholderSegIEØSSpm: {
         svar: 'NEI',
     },
@@ -42,7 +40,6 @@ const barnSomBlir16TidligIPerioden: SøknadBarn = {
     mellomnavn: null,
     etternavn: null,
     kilde: SøknadBarnKilde.PDL,
-    oppholderSegIEØS: true,
     oppholderSegIEØSSpm: {
         svar: 'JA',
     },
@@ -55,7 +52,6 @@ const barnSomBlir16MidtIPerioden: SøknadBarn = {
     mellomnavn: null,
     etternavn: null,
     kilde: SøknadBarnKilde.PDL,
-    oppholderSegIEØS: true,
     oppholderSegIEØSSpm: {
         svar: 'JA',
     },
@@ -68,7 +64,6 @@ const barnSomBlir16SentIPerioden: SøknadBarn = {
     mellomnavn: null,
     etternavn: null,
     kilde: SøknadBarnKilde.PDL,
-    oppholderSegIEØS: true,
     oppholderSegIEØSSpm: {
         svar: 'JA',
     },
@@ -81,7 +76,6 @@ const barnSomErUnder16HelePerioden: SøknadBarn = {
     mellomnavn: null,
     etternavn: null,
     kilde: SøknadBarnKilde.PDL,
-    oppholderSegIEØS: true,
     oppholderSegIEØSSpm: {
         svar: 'JA',
     },
@@ -94,7 +88,6 @@ const barnSomBlirFødtTidligIPerioden: SøknadBarn = {
     mellomnavn: null,
     etternavn: null,
     kilde: SøknadBarnKilde.PDL,
-    oppholderSegIEØS: true,
     oppholderSegIEØSSpm: {
         svar: 'JA',
     },
@@ -107,7 +100,6 @@ const barnSomBlirFødtMidtIPerioden: SøknadBarn = {
     mellomnavn: null,
     etternavn: null,
     kilde: SøknadBarnKilde.PDL,
-    oppholderSegIEØS: true,
     oppholderSegIEØSSpm: {
         svar: 'JA',
     },
@@ -120,7 +112,6 @@ const barnSomBlirFødtSentIPerioden: SøknadBarn = {
     mellomnavn: null,
     etternavn: null,
     kilde: SøknadBarnKilde.PDL,
-    oppholderSegIEØS: true,
     oppholderSegIEØSSpm: {
         svar: 'JA',
     },

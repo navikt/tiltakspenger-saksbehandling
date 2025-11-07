@@ -13,11 +13,6 @@ interface SøknadBase extends SøknadPengestøtter {
     barnetillegg: SøknadBarn[];
     opprettet: string;
     tidsstempelHosOss: string;
-    kvp: Nullable<Periode>;
-    intro: Nullable<Periode>;
-    institusjon: Nullable<Periode>;
-    etterlønn: Nullable<boolean>;
-    sykepenger: Nullable<Periode>;
     antallVedlegg: number;
     avbrutt: Nullable<Avbrutt>;
     kanInnvilges: boolean;
@@ -61,7 +56,6 @@ export interface TiltaksdeltagelseFraSøknad {
 }
 
 export interface SøknadBarn {
-    oppholderSegIEØS: Nullable<boolean>;
     oppholderSegIEØSSpm: JaNeiSpm;
     fornavn: Nullable<string>;
     mellomnavn: Nullable<string>;
