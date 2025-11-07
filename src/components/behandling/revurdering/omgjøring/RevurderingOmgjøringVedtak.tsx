@@ -28,6 +28,7 @@ import {
 import { revurderingOmgjøringValidering } from './revurderingInnvilgelseValidering';
 import { useHentBehandlingLagringProps } from '../../felles/send-og-godkjenn/lagre/useHentBehandlingLagringProps';
 import { erRammebehandlingMedInnvilgelse } from '~/utils/behandling';
+import { Rammebehandlingsstatus } from '~/types/Rammebehandling';
 
 export const RevurderingOmgjøringVedtak = () => {
     const { behandling } = useRevurderingOmgjøring();
@@ -58,19 +59,23 @@ export const RevurderingOmgjøringVedtak = () => {
                         Omgjøring
                     </Heading>
                     <VStack gap="2">
-                        <BodyShort>
-                            Omgjør vedtak med dato{' '}
-                            {formaterTidspunkt(vedtakSomBlirOmgjort.iverksattTidspunkt!)} - Dette
-                            vedtaket vil bli erstattet i sin helhet.
-                        </BodyShort>
-                        {erRammebehandlingMedInnvilgelse(vedtakSomBlirOmgjort) && (
-                            <OppsummeringsPar
-                                label="Innvilgelsesperiode"
-                                verdi={periodeTilFormatertDatotekst(
-                                    vedtakSomBlirOmgjort.innvilgelsesperiode!,
+                        {behandling.status === Rammebehandlingsstatus.VEDTATT ? null : (
+                            <>
+                                <BodyShort>
+                                    Omgjør vedtak med dato{' '}
+                                    {formaterTidspunkt(vedtakSomBlirOmgjort.iverksattTidspunkt!)} -
+                                    Dette vedtaket vil bli erstattet i sin helhet.
+                                </BodyShort>
+                                {erRammebehandlingMedInnvilgelse(vedtakSomBlirOmgjort) && (
+                                    <OppsummeringsPar
+                                        label="Innvilgelsesperiode"
+                                        verdi={periodeTilFormatertDatotekst(
+                                            vedtakSomBlirOmgjort.innvilgelsesperiode!,
+                                        )}
+                                        variant="inlineColon"
+                                    />
                                 )}
-                                variant="inlineColon"
-                            />
+                            </>
                         )}
                         <Link
                             href={behandlingUrl({
