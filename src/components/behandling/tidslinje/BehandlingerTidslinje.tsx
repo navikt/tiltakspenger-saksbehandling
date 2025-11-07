@@ -100,6 +100,7 @@ export const BehandlingerTidslinje = ({ sak }: Props) => {
                                     }
                                 })()}
                                 icon={
+                                    //TODO - finn et fint ikon for stans
                                     erInnvilgelse ? (
                                         <CheckmarkCircleIcon className={style.innvilgetIkon} />
                                     ) : (
