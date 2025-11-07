@@ -75,20 +75,23 @@ export const RevurderingOmgjøringVedtak = () => {
                                         variant="inlineColon"
                                     />
                                 )}
+                                <Link
+                                    href={behandlingUrl({
+                                        saksnummer: vedtakSomBlirOmgjort.saksnummer,
+                                        id: vedtakSomBlirOmgjort.id,
+                                    })}
+                                    target="_blank"
+                                >
+                                    <HStack align="center" gap="2">
+                                        <BodyShort>Se vedtak (åpner i ny fane)</BodyShort>
+                                        <TabsIcon
+                                            title="Se vedtak (åpner i ny fane)"
+                                            fontSize="1.2rem"
+                                        />
+                                    </HStack>
+                                </Link>
                             </>
                         )}
-                        <Link
-                            href={behandlingUrl({
-                                saksnummer: vedtakSomBlirOmgjort.saksnummer,
-                                id: vedtakSomBlirOmgjort.id,
-                            })}
-                            target="_blank"
-                        >
-                            <HStack align="center" gap="2">
-                                <BodyShort>Se vedtak (åpner i ny fane)</BodyShort>
-                                <TabsIcon title="Se vedtak (åpner i ny fane)" fontSize="1.2rem" />
-                            </HStack>
-                        </Link>
                     </VStack>
                 </VStack>
                 <Separator />
