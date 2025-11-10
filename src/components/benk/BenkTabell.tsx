@@ -36,6 +36,7 @@ const BenkTabell = ({ data, sorteringRetning, onSortChange }: Props) => {
                 },
             }}
             antallRader={data.behandlingssammendrag.length}
+            antallRaderFiltrertVekk={data.antallFiltrertPgaTilgang}
             tableHeader={
                 <Table.Header>
                     <Table.Row>

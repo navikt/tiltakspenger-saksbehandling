@@ -1,4 +1,4 @@
-import { BodyShort, Table } from '@navikt/ds-react';
+import { BodyShort, HStack, Table } from '@navikt/ds-react';
 import { useState } from 'react';
 
 type ValueOf<T> = T[keyof T];
@@ -15,7 +15,8 @@ interface Props<Kolonner extends Record<string, string>> {
         kolonner: Kolonner;
         sortering: SorteringConfig<Kolonner>;
     };
-    antallRader?: number;
+    antallRader: number;
+    antallRaderFiltrertVekk: number;
     tableHeader: React.ReactElement;
     tableBody: React.ReactElement;
 }
@@ -23,6 +24,7 @@ interface Props<Kolonner extends Record<string, string>> {
 const SortableTable = <Kolonner extends Record<string, string>>({
     kolonnerConfig,
     antallRader,
+    antallRaderFiltrertVekk,
     tableHeader,
     tableBody,
 }: Props<Kolonner>) => {
@@ -52,7 +54,14 @@ const SortableTable = <Kolonner extends Record<string, string>>({
 
     return (
         <div>
-            {antallRader !== undefined && <BodyShort>Antall behandlinger: {antallRader}</BodyShort>}
+            <HStack gap="4">
+                <BodyShort>Antall behandlinger: {antallRader}</BodyShort>
+                {antallRaderFiltrertVekk > 0 && (
+                    <BodyShort>
+                        Antall behandlinger filtrert vekk pga tilgang: {antallRaderFiltrertVekk}
+                    </BodyShort>
+                )}
+            </HStack>
             <Table
                 zebraStripes
                 sort={{

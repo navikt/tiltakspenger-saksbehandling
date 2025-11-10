@@ -11,6 +11,7 @@ export interface BenkOversiktRequest {
 export interface BenkOversiktResponse {
     behandlingssammendrag: Behandlingssammendrag[];
     totalAntall: number;
+    antallFiltrertPgaTilgang: number;
 }
 
 export interface Behandlingssammendrag {

@@ -5,7 +5,7 @@ import { SakProps } from '~/types/Sak';
 import { Saksbehandler } from '~/types/Saksbehandler';
 import { stripLeadingSlash } from '../string';
 import { errorFraApiResponse } from './fetch';
-import { Behandlingssammendrag } from '~/types/Behandlingssammendrag';
+import { BenkOversiktResponse } from '~/types/Behandlingssammendrag';
 import { hentOboToken } from '~/auth/tokens';
 
 export type NextRequest = Request | IncomingMessage | NextApiRequest;
@@ -61,10 +61,7 @@ export const fetchSak = async (req: NextRequest, saksnummer: string) =>
     fetchJsonFraApi<SakProps>(req, `/sak/${saksnummer}`);
 
 export const fetchBenkOversikt = async (req: NextRequest) =>
-    fetchJsonFraApi<{
-        behandlingssammendrag: Behandlingssammendrag[];
-        totalAntall: number;
-    }>(req, '/behandlinger', {
+    fetchJsonFraApi<BenkOversiktResponse>(req, '/behandlinger', {
         body: JSON.stringify({
             behandlingstype: null,
             status: null,
