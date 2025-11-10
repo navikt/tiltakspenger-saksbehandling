@@ -1,9 +1,8 @@
-import { SøknadForOversikt } from '~/types/BehandlingForOversikt';
+import { SøknadUtenBehandling } from '~/types/ÅpenBehandlingForOversikt';
 import { Søknadsbehandling } from '~/types/Søknadsbehandling';
-
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 
-export const useStartSøknadBehandling = (søknad: SøknadForOversikt) => {
+export const useStartSøknadBehandling = (søknad: SøknadUtenBehandling) => {
     const {
         trigger: opprettBehandling,
         isMutating: opprettBehandlingIsLoading,

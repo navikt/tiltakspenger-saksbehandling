@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { ActionMenu, Button } from '@navikt/ds-react';
-import { BehandlingForOversikt, TypeBehandlingForOversikt } from '~/types/BehandlingForOversikt';
+import {
+    ÅpenBehandlingForOversiktType,
+    ÅpenRevurdering,
+    ÅpenSøknadsbehandling,
+} from '~/types/ÅpenBehandlingForOversikt';
 import OvertaBehandlingMenyvalg, {
     visOvertaBehandlingMenyvalg,
 } from './menyvalg/OvertaBehandlingMenyvalg';
@@ -33,7 +37,7 @@ import { behandlingUrl } from '~/utils/urls';
 import { Rammebehandlingsstatus } from '~/types/Rammebehandling';
 
 type Props = {
-    behandling: BehandlingForOversikt;
+    behandling: ÅpenSøknadsbehandling | ÅpenRevurdering;
     medAvsluttBehandling: boolean;
 };
 
@@ -79,7 +83,7 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
         );
     }
 
-    const erRevurdering = behandling.typeBehandling === TypeBehandlingForOversikt.REVURDERING;
+    const erRevurdering = behandling.type === ÅpenBehandlingForOversiktType.REVURDERING;
 
     return (
         <>

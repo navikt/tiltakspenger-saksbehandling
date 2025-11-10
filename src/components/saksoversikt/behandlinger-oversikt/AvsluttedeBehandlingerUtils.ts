@@ -7,10 +7,10 @@ import {
     RammebehandlingResultat,
     Rammebehandlingstype,
 } from '~/types/Rammebehandling';
-import { TypeBehandlingForOversikt } from '~/types/BehandlingForOversikt';
+import { ÅpenBehandlingForOversiktType } from '~/types/ÅpenBehandlingForOversikt';
 
 type AvbruttSøknad = {
-    behandlingstype: TypeBehandlingForOversikt.SØKNAD;
+    behandlingstype: ÅpenBehandlingForOversiktType.SØKNAD;
     id: SøknadId;
 };
 
@@ -62,7 +62,7 @@ export const avbruttSøknadToDataCellInfo = (
                       tilOgMed: søknad.tiltak.tilOgMed,
                   }
                 : null,
-        behandlingstype: TypeBehandlingForOversikt.SØKNAD,
+        behandlingstype: ÅpenBehandlingForOversiktType.SØKNAD,
         tidspunktAvsluttet: søknad.avbrutt.avbruttTidspunkt,
         avsluttetPga: 'avbrutt',
     };

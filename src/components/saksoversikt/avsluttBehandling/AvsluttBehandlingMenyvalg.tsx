@@ -1,7 +1,7 @@
 import { ActionMenu } from '@navikt/ds-react';
 import React from 'react';
 import { AvsluttBehandlingProps } from '~/components/saksoversikt/avsluttBehandling/AvsluttBehandlingProps';
-import { BehandlingForOversikt } from '~/types/BehandlingForOversikt';
+import { ÅpenRammebehandlingForOversikt } from '~/types/ÅpenBehandlingForOversikt';
 import { XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { eierBehandling } from '~/utils/tilganger';
 import { Saksbehandler } from '~/types/Saksbehandler';
@@ -9,7 +9,7 @@ import { Rammebehandlingsstatus } from '~/types/Rammebehandling';
 import { Nullable } from '~/types/UtilTypes';
 
 export const visAvsluttBehandlingMenyvalg = (
-    behandling: BehandlingForOversikt,
+    behandling: ÅpenRammebehandlingForOversikt,
     innloggetSaksbehandler: Saksbehandler,
     behandlingKanAvsluttes: boolean,
 ) => {

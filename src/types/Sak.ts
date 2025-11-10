@@ -1,4 +1,4 @@
-import { BehandlingForOversikt } from './BehandlingForOversikt';
+import { ÅpenBehandlingForOversikt } from './ÅpenBehandlingForOversikt';
 import { MeldeperiodeKjedeProps } from './meldekort/Meldeperiode';
 
 import { Rammevedtak } from '~/types/Rammevedtak';
@@ -14,7 +14,7 @@ export type SakProps = {
     sakId: SakId;
     saksnummer: string;
     fnr: string;
-    behandlingsoversikt: BehandlingForOversikt[];
+    åpneBehandlinger: ÅpenBehandlingForOversikt[];
     meldeperiodeKjeder: MeldeperiodeKjedeProps[];
     førsteDagSomGirRett?: string;
     sisteDagSomGirRett?: string;

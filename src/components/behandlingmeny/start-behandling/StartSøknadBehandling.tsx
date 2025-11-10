@@ -6,14 +6,13 @@ import { useStartSøknadBehandling } from './useStartSøknadBehandling';
 import Varsel from '../../varsel/Varsel';
 import AvsluttBehandlingModal from '~/components/modaler/AvsluttBehandlingModal';
 import AvsluttBehandlingMenyvalg from '~/components/saksoversikt/avsluttBehandling/AvsluttBehandlingMenyvalg';
-
 import { behandlingUrl } from '~/utils/urls';
+import { SøknadUtenBehandling } from '~/types/ÅpenBehandlingForOversikt';
 
 import style from '../BehandlingKnapper.module.css';
-import { SøknadForOversikt } from '~/types/BehandlingForOversikt';
 
 type Props = {
-    søknad: SøknadForOversikt;
+    søknad: SøknadUtenBehandling;
     medAvsluttBehandling?: boolean;
 };
 

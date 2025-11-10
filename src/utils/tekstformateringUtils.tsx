@@ -11,7 +11,7 @@ import {
 import { Utbetalingsstatus } from '~/types/Utbetaling';
 import { ManueltBehandlesGrunn, SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
 import { RevurderingResultat } from '~/types/Revurdering';
-import { TypeBehandlingForOversikt } from '~/types/BehandlingForOversikt';
+import { ÅpenBehandlingForOversiktType } from '~/types/ÅpenBehandlingForOversikt';
 
 export const finnBehandlingStatusTag = (
     status: Rammebehandlingsstatus,
@@ -86,15 +86,74 @@ export const finnMeldeperiodeKjedeStatusTekst: Record<MeldeperiodeKjedeStatus, s
     [MeldeperiodeKjedeStatus.KORRIGERT_MELDEKORT]: 'Korrigert meldekort',
 } as const;
 
+export const meldeperiodeKjedeStatusTag: Record<MeldeperiodeKjedeStatus, React.ReactElement> = {
+    [MeldeperiodeKjedeStatus.GODKJENT]: (
+        <Tag variant="success">
+            {finnMeldeperiodeKjedeStatusTekst[MeldeperiodeKjedeStatus.GODKJENT]}
+        </Tag>
+    ),
+    [MeldeperiodeKjedeStatus.AUTOMATISK_BEHANDLET]: (
+        <Tag variant="success">
+            {finnMeldeperiodeKjedeStatusTekst[MeldeperiodeKjedeStatus.AUTOMATISK_BEHANDLET]}
+        </Tag>
+    ),
+    [MeldeperiodeKjedeStatus.KLAR_TIL_BEHANDLING]: (
+        <Tag variant="info">
+            {finnMeldeperiodeKjedeStatusTekst[MeldeperiodeKjedeStatus.KLAR_TIL_BEHANDLING]}
+        </Tag>
+    ),
+    [MeldeperiodeKjedeStatus.KLAR_TIL_BESLUTNING]: (
+        <Tag variant="info">
+            {finnMeldeperiodeKjedeStatusTekst[MeldeperiodeKjedeStatus.KLAR_TIL_BESLUTNING]}
+        </Tag>
+    ),
+    [MeldeperiodeKjedeStatus.UNDER_BEHANDLING]: (
+        <Tag variant="info">
+            {finnMeldeperiodeKjedeStatusTekst[MeldeperiodeKjedeStatus.UNDER_BEHANDLING]}
+        </Tag>
+    ),
+    [MeldeperiodeKjedeStatus.UNDER_BESLUTNING]: (
+        <Tag variant="info">
+            {finnMeldeperiodeKjedeStatusTekst[MeldeperiodeKjedeStatus.UNDER_BESLUTNING]}
+        </Tag>
+    ),
+    [MeldeperiodeKjedeStatus.AVBRUTT]: (
+        <Tag variant="neutral">
+            {finnMeldeperiodeKjedeStatusTekst[MeldeperiodeKjedeStatus.AVBRUTT]}
+        </Tag>
+    ),
+    [MeldeperiodeKjedeStatus.AVVENTER_MELDEKORT]: (
+        <Tag variant="neutral">
+            {finnMeldeperiodeKjedeStatusTekst[MeldeperiodeKjedeStatus.AVVENTER_MELDEKORT]}
+        </Tag>
+    ),
+    [MeldeperiodeKjedeStatus.IKKE_RETT_TIL_TILTAKSPENGER]: (
+        <Tag variant="neutral">
+            {finnMeldeperiodeKjedeStatusTekst[MeldeperiodeKjedeStatus.IKKE_RETT_TIL_TILTAKSPENGER]}
+        </Tag>
+    ),
+    [MeldeperiodeKjedeStatus.IKKE_KLAR_TIL_BEHANDLING]: (
+        <Tag variant="neutral">
+            {finnMeldeperiodeKjedeStatusTekst[MeldeperiodeKjedeStatus.IKKE_KLAR_TIL_BEHANDLING]}
+        </Tag>
+    ),
+    [MeldeperiodeKjedeStatus.KORRIGERT_MELDEKORT]: (
+        <Tag variant="info">
+            {finnMeldeperiodeKjedeStatusTekst[MeldeperiodeKjedeStatus.KORRIGERT_MELDEKORT]}
+        </Tag>
+    ),
+} as const;
+
 export const finnBehandlingstypeTekst: Record<Rammebehandlingstype, string> = {
     [Rammebehandlingstype.SØKNADSBEHANDLING]: 'Søknadsbehandling',
     [Rammebehandlingstype.REVURDERING]: 'Revurdering',
 } as const;
 
-export const finnTypeBehandlingTekstForOversikt: Record<TypeBehandlingForOversikt, string> = {
-    [TypeBehandlingForOversikt.SØKNADSBEHANDLING]: 'Søknadsbehandling',
-    [TypeBehandlingForOversikt.REVURDERING]: 'Revurdering',
-    [TypeBehandlingForOversikt.SØKNAD]: 'Søknad',
+export const finnTypeBehandlingTekstForOversikt: Record<ÅpenBehandlingForOversiktType, string> = {
+    [ÅpenBehandlingForOversiktType.SØKNADSBEHANDLING]: 'Søknadsbehandling',
+    [ÅpenBehandlingForOversiktType.REVURDERING]: 'Revurdering',
+    [ÅpenBehandlingForOversiktType.SØKNAD]: 'Søknad',
+    [ÅpenBehandlingForOversiktType.MELDEKORT]: 'Meldekort',
 } as const;
 
 export const behandlingResultatTilText: Record<RammebehandlingResultat, string> = {
