@@ -1,5 +1,5 @@
 import { ActionMenu } from '@navikt/ds-react';
-import { BehandlingForOversikt } from '~/types/BehandlingForOversikt';
+import { ÅpenRammebehandlingForOversikt } from '~/types/ÅpenBehandlingForOversikt';
 import React from 'react';
 import Link from 'next/link';
 import { eierBehandling } from '~/utils/tilganger';
@@ -9,7 +9,7 @@ import { behandlingUrl } from '~/utils/urls';
 import { Rammebehandlingsstatus } from '~/types/Rammebehandling';
 
 export const visFortsettBehandlingMenyvalg = (
-    behandling: BehandlingForOversikt,
+    behandling: ÅpenRammebehandlingForOversikt,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     const erReleventMenyValgForStatus =
@@ -24,7 +24,7 @@ export const visFortsettBehandlingMenyvalg = (
 };
 
 type Props = {
-    behandling: BehandlingForOversikt;
+    behandling: ÅpenRammebehandlingForOversikt;
 };
 
 const FortsettBehandlingMenyvalg = ({ behandling }: Props) => {

@@ -37,14 +37,17 @@ export const SøknadsbehandlingAvslagsgrunner = () => {
         <>
             <VedtakSeksjon>
                 <VedtakSeksjon.Venstre>
-                    <CheckboxGroup legend="Avslagsgrunner" className={styles.checkboxGroup}>
+                    <CheckboxGroup
+                        legend="Avslagsgrunner"
+                        className={styles.checkboxGroup}
+                        value={avslagsgrunner}
+                    >
                         {Object.values(Avslagsgrunn).map((grunn) => (
                             <Checkbox
                                 key={grunn}
                                 value={grunn}
                                 size={'small'}
                                 readOnly={erIkkeSaksbehandler}
-                                checked={avslagsgrunner.includes(grunn)}
                                 onChange={() => {
                                     dispatch({
                                         type: 'oppdaterAvslagsgrunn',

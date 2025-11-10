@@ -1,5 +1,5 @@
 import { Rammebehandling, Rammebehandlingsstatus } from '~/types/Rammebehandling';
-import { BehandlingForOversikt } from '~/types/BehandlingForOversikt';
+import { ÅpenRammebehandlingForOversikt } from '~/types/ÅpenBehandlingForOversikt';
 import {
     MeldekortBehandlingProps,
     MeldekortBehandlingStatus,
@@ -55,7 +55,7 @@ export const hentRolleForBehandling = (
 };
 
 export const eierBehandling = (
-    behandling: BehandlingForOversikt | Rammebehandling,
+    behandling: ÅpenRammebehandlingForOversikt | Rammebehandling,
     innloggetSaksbehandler: Saksbehandler,
 ): boolean => {
     const { status, saksbehandler, beslutter } = behandling;
@@ -72,7 +72,7 @@ export const eierBehandling = (
 };
 
 export const erBehandlerEllerBeslutterAvBehandling = (
-    behandling: BehandlingForOversikt,
+    behandling: ÅpenRammebehandlingForOversikt,
     innloggetSaksbehandler: Saksbehandler,
 ): boolean => {
     const { saksbehandler, beslutter } = behandling;
@@ -120,7 +120,7 @@ export const eierMeldekortBehandling = (
 };
 
 export const skalKunneTaBehandling = (
-    behandling: BehandlingForOversikt,
+    behandling: ÅpenRammebehandlingForOversikt,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     const { status, saksbehandler } = behandling;
@@ -139,7 +139,7 @@ export const skalKunneTaBehandling = (
 };
 
 export const skalKunneOvertaBehandling = (
-    behandling: BehandlingForOversikt,
+    behandling: ÅpenRammebehandlingForOversikt,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     const { status, saksbehandler, beslutter } = behandling;
@@ -207,7 +207,7 @@ export const skalKunneOvertaMeldekortBehandling = (
 };
 
 export const skalKunneGjenopptaBehandling = (
-    behandling: Rammebehandling | BehandlingForOversikt,
+    behandling: Rammebehandling | ÅpenRammebehandlingForOversikt,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     const erRelevantMenyValgForStatus =

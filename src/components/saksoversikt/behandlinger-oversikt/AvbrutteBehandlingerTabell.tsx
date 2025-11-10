@@ -5,7 +5,7 @@ import { formaterTidspunkt, periodeTilFormatertDatotekst } from '~/utils/date';
 import Link from 'next/link';
 import { behandlingUrl } from '~/utils/urls';
 import { Rammebehandlingstype } from '~/types/Rammebehandling';
-import { TypeBehandlingForOversikt } from '~/types/BehandlingForOversikt';
+import { ÅpenBehandlingForOversiktType } from '~/types/ÅpenBehandlingForOversikt';
 
 export const AvbrutteBehandlingerTabell = (props: {
     saksnummer: string;
@@ -60,7 +60,7 @@ export const AvbrutteBehandlingerTabell = (props: {
                                     Se behandling
                                 </Button>
                             )}
-                            {avsluttet.behandlingstype === TypeBehandlingForOversikt.SØKNAD && (
+                            {avsluttet.behandlingstype === ÅpenBehandlingForOversiktType.SØKNAD && (
                                 <Button
                                     style={{ minWidth: '50%' }}
                                     size="small"

@@ -19,7 +19,6 @@ import { Periode } from '~/types/Periode';
 import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
 import { useTaMeldekortBehandling } from './useTaMeldekortBehandling';
 import { useLeggTilbakeMeldekortBehandling } from './useLeggTilbakeMeldekortBehandling';
-import { Nullable } from '~/types/UtilTypes';
 import { TriggerWithOptionsArgs } from 'swr/mutation';
 import { FetcherError } from '~/utils/fetch/fetch';
 import {
@@ -76,9 +75,9 @@ export const MeldekortOversikt = ({ meldeperiodeKjeder, saksnummer, sakId }: Pro
                         //TODO - raq - vi er interessert i å vise mottatt - men fra hvilket meldekort egentlig?
                         const sisteBrukersMeldekort = brukersMeldekort.at(-1);
 
-                        const sisteMeldekortBehandling =
-                            meldekortBehandlinger.toSorted(sorterMeldekortBehandlingerAsc).at(0) ||
-                            null;
+                        const sisteMeldekortBehandling = meldekortBehandlinger
+                            .toSorted(sorterMeldekortBehandlingerAsc)
+                            .at(0);
 
                         const beregnetBeløpForPeriode =
                             korrigeringFraTidligerePeriode?.beregning.beløp.totalt ??
@@ -154,7 +153,7 @@ export const MeldeperiodeKjedeOversiktMeny = (props: {
     saksnummer: string;
     kjedePeriode: Periode;
     meldeperiodeUrl: string;
-    meldekortBehandling: Nullable<MeldekortBehandlingProps>;
+    meldekortBehandling?: MeldekortBehandlingProps;
 }) => {
     const [vilAvslutteBehandling, setVilAvslutteBehandling] = useState(false);
     const [vilOvertaBehandling, setVilOvertaBehandling] = useState(false);

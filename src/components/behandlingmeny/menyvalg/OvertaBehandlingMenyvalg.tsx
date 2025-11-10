@@ -1,12 +1,12 @@
 import { ActionMenu } from '@navikt/ds-react';
-import { BehandlingForOversikt } from '~/types/BehandlingForOversikt';
+import { ÅpenRammebehandlingForOversikt } from '~/types/ÅpenBehandlingForOversikt';
 import { skalKunneOvertaBehandling } from '~/utils/tilganger';
 import { Saksbehandler } from '~/types/Saksbehandler';
 import { ArrowRightIcon } from '@navikt/aksel-icons';
 import { Rammebehandlingsstatus } from '~/types/Rammebehandling';
 
 export const visOvertaBehandlingMenyvalg = (
-    behandling: BehandlingForOversikt,
+    behandling: ÅpenRammebehandlingForOversikt,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     const erRelevantMenyValgForStatus =

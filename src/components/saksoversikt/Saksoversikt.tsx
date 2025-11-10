@@ -1,6 +1,6 @@
 import { Box, Heading, HStack } from '@navikt/ds-react';
 import { MeldekortOversikt } from './meldekort-oversikt/MeldekortOversikt';
-import { BehandlingerOversikt } from './behandlinger-oversikt/BehandlingerOversikt';
+import { ApneBehandlingerOversikt } from './behandlinger-oversikt/ApneBehandlingerOversikt';
 import { OpprettRevurdering } from './opprett-revurdering/OpprettRevurdering';
 import { PersonaliaHeader } from '../personaliaheader/PersonaliaHeader';
 import { useSak } from '~/context/sak/SakContext';
@@ -26,33 +26,19 @@ export const Saksoversikt = () => {
         sakId,
         saksnummer,
         behandlinger,
-        behandlingsoversikt,
+        åpneBehandlinger,
         søknader,
         meldeperiodeKjeder,
         alleRammevedtak,
     } = useSak().sak;
 
-    const { meldeperiodeKjederIkkeKlare, meldeperiodeKjederKlare } = Object.groupBy(
+    const { meldeperiodeKjederIkkeKlare, meldeperiodeKjederKanBehandles } = Object.groupBy(
         meldeperiodeKjeder,
         ({ status }) =>
             status === MeldeperiodeKjedeStatus.IKKE_KLAR_TIL_BEHANDLING
                 ? 'meldeperiodeKjederIkkeKlare'
-                : 'meldeperiodeKjederKlare',
+                : 'meldeperiodeKjederKanBehandles',
     );
-
-    const meldeperiodekjederSomKreverBehandling = meldeperiodeKjeder.filter((kjede) => {
-        const apneMeldekortbehandlinger = kjede.meldekortBehandlinger.filter((mb) => {
-            return !mb.erAvsluttet;
-        });
-        return (
-            apneMeldekortbehandlinger.length > 0 ||
-            kjede.status === MeldeperiodeKjedeStatus.KLAR_TIL_BEHANDLING ||
-            kjede.status === MeldeperiodeKjedeStatus.UNDER_BEHANDLING ||
-            kjede.status === MeldeperiodeKjedeStatus.UNDER_BESLUTNING ||
-            kjede.status === MeldeperiodeKjedeStatus.KLAR_TIL_BESLUTNING ||
-            kjede.status === MeldeperiodeKjedeStatus.KORRIGERT_MELDEKORT
-        );
-    });
 
     return (
         <>
@@ -82,12 +68,7 @@ export const Saksoversikt = () => {
                     <Heading level={'3'} size={'small'}>
                         {'Åpne behandlinger'}
                     </Heading>
-                    <BehandlingerOversikt
-                        behandlinger={behandlingsoversikt}
-                        meldeperiodeKjeder={meldeperiodekjederSomKreverBehandling}
-                        saksnummer={saksnummer}
-                        sakId={sakId}
-                    />
+                    <ApneBehandlingerOversikt åpneBehandlinger={åpneBehandlinger} />
                 </Box>
 
                 <VedtatteBehandlinger
@@ -113,9 +94,9 @@ export const Saksoversikt = () => {
                             />
                         )}
                     </div>
-                    {meldeperiodeKjederKlare && (
+                    {meldeperiodeKjederKanBehandles && (
                         <MeldekortOversikt
-                            meldeperiodeKjeder={meldeperiodeKjederKlare}
+                            meldeperiodeKjeder={meldeperiodeKjederKanBehandles}
                             saksnummer={saksnummer}
                             sakId={sakId}
                         />

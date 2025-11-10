@@ -32,18 +32,16 @@ export const AvsluttedeBehandlinger = (props: {
     );
 
     return (
-        <>
-            {avbrutte.length > 0 && (
-                <Box className={styles.tabellwrapper}>
-                    <Heading level="3" size="small">
-                        Avsluttede behandlinger
-                    </Heading>
-                    <AvbrutteBehandlingerTabell
-                        avbrutteBehandlinger={avbrutte}
-                        saksnummer={props.saksnummer}
-                    />
-                </Box>
-            )}
-        </>
+        avbrutte.length > 0 && (
+            <Box className={styles.tabellwrapper}>
+                <Heading level="3" size="small">
+                    Avsluttede behandlinger
+                </Heading>
+                <AvbrutteBehandlingerTabell
+                    avbrutteBehandlinger={avbrutte}
+                    saksnummer={props.saksnummer}
+                />
+            </Box>
+        )
     );
 };

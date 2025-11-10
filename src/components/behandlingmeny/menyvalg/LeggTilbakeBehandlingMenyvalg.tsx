@@ -1,7 +1,7 @@
 import React from 'react';
 import router from 'next/router';
 import { ActionMenu } from '@navikt/ds-react';
-import { BehandlingForOversikt } from '~/types/BehandlingForOversikt';
+import { ÅpenRammebehandlingForOversikt } from '~/types/ÅpenBehandlingForOversikt';
 import { useLeggTilbakeBehandling } from '~/components/behandlingmeny/useLeggTilbakeBehandling';
 import { eierBehandling } from '~/utils/tilganger';
 import { Saksbehandler } from '~/types/Saksbehandler';
@@ -9,7 +9,7 @@ import { ArrowLeftIcon } from '@navikt/aksel-icons';
 import { Rammebehandlingsstatus } from '~/types/Rammebehandling';
 
 export const visLeggTilbakeMenyvalg = (
-    behandling: BehandlingForOversikt,
+    behandling: ÅpenRammebehandlingForOversikt,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     const erRelevantMenyValgForStatus =
@@ -20,7 +20,7 @@ export const visLeggTilbakeMenyvalg = (
 };
 
 type Props = {
-    behandling: BehandlingForOversikt;
+    behandling: ÅpenRammebehandlingForOversikt;
 };
 
 const LeggTilbakeMenyvalg = ({ behandling }: Props) => {

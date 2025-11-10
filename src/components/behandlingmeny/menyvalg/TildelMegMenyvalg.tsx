@@ -1,5 +1,5 @@
 import { ActionMenu } from '@navikt/ds-react';
-import { BehandlingForOversikt } from '~/types/BehandlingForOversikt';
+import { ÅpenRammebehandlingForOversikt } from '~/types/ÅpenBehandlingForOversikt';
 import React from 'react';
 import Link from 'next/link';
 import { skalKunneTaBehandling } from '~/utils/tilganger';
@@ -11,7 +11,7 @@ import { behandlingUrl } from '~/utils/urls';
 import { Rammebehandlingsstatus } from '~/types/Rammebehandling';
 
 export const visTildelMegMenyvalg = (
-    behandling: BehandlingForOversikt,
+    behandling: ÅpenRammebehandlingForOversikt,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     const erReleventMenyValgForStatus =
@@ -22,7 +22,7 @@ export const visTildelMegMenyvalg = (
 };
 
 type Props = {
-    behandling: BehandlingForOversikt;
+    behandling: ÅpenRammebehandlingForOversikt;
 };
 
 const TildelMegMenyvalg = ({ behandling }: Props) => {
