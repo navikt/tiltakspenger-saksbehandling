@@ -22,9 +22,7 @@ type Props = {
     åpneBehandlinger: ÅpenBehandlingForOversikt[];
 };
 
-export const ÅpneBehandlingerOversikt = ({ åpneBehandlinger }: Props) => {
-    // eslint skjønner ikke at Å i ÅpneBehandlingerOversikt er en uppercase-bokstav...
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+export const ApneBehandlingerOversikt = ({ åpneBehandlinger }: Props) => {
     const { sak } = useSak();
 
     return (

@@ -1,6 +1,6 @@
 import { Box, Heading, HStack } from '@navikt/ds-react';
 import { MeldekortOversikt } from './meldekort-oversikt/MeldekortOversikt';
-import { ÅpneBehandlingerOversikt } from './behandlinger-oversikt/ÅpneBehandlingerOversikt';
+import { ApneBehandlingerOversikt } from './behandlinger-oversikt/ApneBehandlingerOversikt';
 import { OpprettRevurdering } from './opprett-revurdering/OpprettRevurdering';
 import { PersonaliaHeader } from '../personaliaheader/PersonaliaHeader';
 import { useSak } from '~/context/sak/SakContext';
@@ -68,7 +68,7 @@ export const Saksoversikt = () => {
                     <Heading level={'3'} size={'small'}>
                         {'Åpne behandlinger'}
                     </Heading>
-                    <ÅpneBehandlingerOversikt åpneBehandlinger={åpneBehandlinger} />
+                    <ApneBehandlingerOversikt åpneBehandlinger={åpneBehandlinger} />
                 </Box>
 
                 <VedtatteBehandlinger

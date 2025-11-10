@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { ActionMenu, Button } from '@navikt/ds-react';
 import {
     ÅpenBehandlingForOversiktType,
-    ÅpenRevurdering,
-    ÅpenSøknadsbehandling,
+    ÅpenRammebehandlingForOversikt,
 } from '~/types/ÅpenBehandlingForOversikt';
 import OvertaBehandlingMenyvalg, {
     visOvertaBehandlingMenyvalg,
@@ -37,7 +36,7 @@ import { behandlingUrl } from '~/utils/urls';
 import { Rammebehandlingsstatus } from '~/types/Rammebehandling';
 
 type Props = {
-    behandling: ÅpenSøknadsbehandling | ÅpenRevurdering;
+    behandling: ÅpenRammebehandlingForOversikt;
     medAvsluttBehandling: boolean;
 };
 
