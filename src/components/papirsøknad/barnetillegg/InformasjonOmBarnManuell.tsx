@@ -34,8 +34,8 @@ export const InformasjonOmBarnManuell = ({ barn, søknadsperiode }: Props) => {
                 Oppholder seg i EØS-land i tiltaksperioden:{' '}
                 {formaterSøknadsspørsmålSvar(barn.oppholdInnenforEøs?.svar)}
                 <br />
-                Det er vedlagt dokumentasjon for barnet:{' '}
-                {formaterSøknadsspørsmålSvar(barn.manueltRegistrertBarnHarVedlegg?.svar)}
+                Antall vedlegg (dokumentasjon) for barnet:{' '}
+                {barn.manueltRegistrertBarnAntallVedlegg ?? 0}
             </div>
         </VStack>
     );

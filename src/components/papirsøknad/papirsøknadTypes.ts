@@ -6,6 +6,7 @@ export interface Papirsøknad {
     kravDato: string;
     manueltSattSøknadsperiode: Periode;
     svar: Spørsmålsbesvarelser;
+    antallVedlegg: number;
 }
 
 export interface PersonopplysningerSøker {
@@ -69,13 +70,14 @@ export interface Barn {
     etternavn?: string;
     fødselsdato: string;
     oppholdInnenforEøs?: JaNeiSpm;
-    manueltRegistrertBarnHarVedlegg?: JaNeiSpm;
+    manueltRegistrertBarnAntallVedlegg?: number;
 }
 
 const defaultPapirsøknadFormValues = {
     journalpostId: '',
     kravDato: '',
     manueltSattSøknadsperiode: { fraOgMed: '', tilOgMed: '' },
+    antallVedlegg: 0,
     svar: {
         harTiltak: undefined,
         tiltak: undefined,

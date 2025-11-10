@@ -1,8 +1,8 @@
 import React from 'react';
 import styles from './LeggTilBarnManuelt.module.css';
-import { Button, Heading, HStack, TextField } from '@navikt/ds-react';
+import { Button, Heading, HStack, TextField, VStack } from '@navikt/ds-react';
 import { PlusIcon } from '@navikt/aksel-icons';
-import { Controller, useFormContext, useWatch } from 'react-hook-form';
+import { Controller, FieldPath, useFormContext, useWatch } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
 import { Datovelger } from '~/components/datovelger/Datovelger';
 import { JaNeiSpørsmål } from '~/components/papirsøknad/JaNeiSpørsmål';
@@ -16,7 +16,7 @@ const TOM_BARN_KLADD: Barn = {
     etternavn: '',
     fødselsdato: '',
     oppholdInnenforEøs: undefined,
-    manueltRegistrertBarnHarVedlegg: undefined,
+    manueltRegistrertBarnAntallVedlegg: undefined,
 };
 
 type Props = {
@@ -37,12 +37,12 @@ export const LeggTilBarnManuelt = ({ onAppend }: Props) => {
     const fornavn = 'svar.barnetilleggKladd.fornavn';
     const etternavn = 'svar.barnetilleggKladd.etternavn';
     const oppholdInnenforEøsSvar = 'svar.barnetilleggKladd.oppholdInnenforEøs.svar';
-    const manueltBarnHarVedleggSvar = 'svar.barnetilleggKladd.manueltRegistrertBarnHarVedlegg.svar';
+    const manueltBarnAntallVedlegg = 'svar.barnetilleggKladd.manueltRegistrertBarnAntallVedlegg';
     const fødselsdato = 'svar.barnetilleggKladd.fødselsdato';
     const fornavnWatch = useWatch({ name: fornavn });
     const etternavnWatch = useWatch({ name: etternavn });
     const oppholdInnenforEøsWatch = useWatch({ name: oppholdInnenforEøsSvar });
-    const manueltBarnHarVedleggWatch = useWatch({ name: manueltBarnHarVedleggSvar });
+    const manueltBarnAntallVedleggWatch = useWatch({ name: manueltBarnAntallVedlegg });
     const fødselsdatoWatch = useWatch({ name: fødselsdato });
     const fødselsdatoErFørDagensDato = dayjs(fødselsdatoWatch).isBefore(dagensDato);
 
@@ -51,7 +51,8 @@ export const LeggTilBarnManuelt = ({ onAppend }: Props) => {
         if (etternavnWatch !== undefined && etternavnWatch.trim() !== '') clearErrors(etternavn);
         if (!fødselsdatoErFørDagensDato) clearErrors(fødselsdato);
         if (oppholdInnenforEøsWatch !== undefined) clearErrors(oppholdInnenforEøsSvar);
-        if (fødselsdatoWatch !== undefined) clearErrors(manueltBarnHarVedleggSvar);
+        if (manueltBarnAntallVedleggWatch !== undefined && manueltBarnAntallVedleggWatch !== '')
+            clearErrors(manueltBarnAntallVedlegg);
     }, [
         clearErrors,
         fornavnWatch,
@@ -59,32 +60,45 @@ export const LeggTilBarnManuelt = ({ onAppend }: Props) => {
         fødselsdatoWatch,
         fødselsdatoErFørDagensDato,
         oppholdInnenforEøsWatch,
-        manueltBarnHarVedleggWatch,
+        manueltBarnAntallVedleggWatch,
     ]);
 
     // Ettersom dette er en kladd og ikke en full submit av formen må feltene sjekkes manuelt
     const validerKanLeggeTilBarn = React.useCallback(() => {
         let kanLeggeTilBarn = true;
-        type FormError = { type: 'remote'; message: string };
-        const formError = (message: string): FormError => {
+        type Error = { type: 'remote'; message: string };
+        const error = (message: string): Error => ({ type: 'remote', message });
+        const validationError = (fieldName: FieldPath<Papirsøknad>, message: string) => {
+            setError(fieldName, error(message));
             kanLeggeTilBarn = false;
-            return { type: 'remote', message };
         };
 
         if (fornavnWatch === undefined || fornavnWatch.trim() === '') {
-            setError(fornavn, formError('Du må fylle ut fornavn.'));
+            validationError(fornavn, 'Du må fylle ut fornavn.');
         }
+
         if (etternavnWatch === undefined || etternavnWatch.trim() === '') {
-            setError(etternavn, formError('Du må fylle ut etternavn.'));
+            validationError(etternavn, 'Du må fylle ut etternavn.');
         }
+
         if (!fødselsdatoErFørDagensDato) {
-            setError(fødselsdato, formError('Fødselsdato må være før dagens dato.'));
+            validationError(fødselsdato, 'Fødselsdato må være før dagens dato.');
         }
+
         if (oppholdInnenforEøsWatch === undefined) {
-            setError(oppholdInnenforEøsSvar, formError('Du må velge et svar.'));
+            validationError(oppholdInnenforEøsSvar, 'Du må velge et svar.');
         }
-        if (manueltBarnHarVedleggWatch === undefined) {
-            setError(manueltBarnHarVedleggSvar, formError('Du må velge et svar.'));
+
+        if (manueltBarnAntallVedleggWatch === undefined || manueltBarnAntallVedleggWatch === '') {
+            validationError(
+                manueltBarnAntallVedlegg,
+                'Du må fylle inn antall vedlegg som dokumenterer barnet i Gosys.',
+            );
+        } else if (
+            Number.isNaN(Number(manueltBarnAntallVedleggWatch)) ||
+            Number(manueltBarnAntallVedleggWatch) < 0
+        ) {
+            validationError(manueltBarnAntallVedlegg, 'Antall vedlegg må være et heltall >= 0.');
         }
         return kanLeggeTilBarn;
     }, [
@@ -92,7 +106,7 @@ export const LeggTilBarnManuelt = ({ onAppend }: Props) => {
         etternavnWatch,
         fødselsdatoErFørDagensDato,
         oppholdInnenforEøsWatch,
-        manueltBarnHarVedleggWatch,
+        manueltBarnAntallVedleggWatch,
         setError,
     ]);
 
@@ -141,7 +155,7 @@ export const LeggTilBarnManuelt = ({ onAppend }: Props) => {
                                 uuid: '',
                             };
                             return (
-                                <div>
+                                <VStack gap="2">
                                     <TextField
                                         label="Fornavn"
                                         value={value.fornavn ?? ''}
@@ -184,30 +198,47 @@ export const LeggTilBarnManuelt = ({ onAppend }: Props) => {
                                         name={oppholdInnenforEøsSvar}
                                         legend="Oppholder seg i EØS-land"
                                     />
-                                    <JaNeiSpørsmål
-                                        name={manueltBarnHarVedleggSvar}
-                                        legend="Det er vedlagt dokumentasjon for barnet"
-                                        måVæreBesvart
+                                    <TextField
+                                        label="Antall vedlegg i Gosys som dokumenterer barnet"
+                                        type="number"
+                                        value={manueltBarnAntallVedleggWatch ?? ''}
+                                        onChange={(e) => {
+                                            const v = e.target.value;
+                                            const parsed =
+                                                v === '' ? '' : String(Math.max(0, Number(v)));
+                                            setValue(
+                                                manueltBarnAntallVedlegg,
+                                                parsed === '' ? undefined : Number(parsed),
+                                            );
+                                        }}
+                                        error={
+                                            errors.svar?.barnetilleggKladd
+                                                ?.manueltRegistrertBarnAntallVedlegg?.message
+                                        }
+                                        min={0}
                                     />
-                                </div>
+                                    <HStack gap="4">
+                                        <Button
+                                            className={styles.avbrytButton}
+                                            type="button"
+                                            variant="secondary"
+                                            onClick={skjulKladd}
+                                        >
+                                            Avbryt
+                                        </Button>
+
+                                        <Button
+                                            type="button"
+                                            variant="primary"
+                                            onClick={leggTilManueltBarn}
+                                        >
+                                            Legg til barn
+                                        </Button>
+                                    </HStack>
+                                </VStack>
                             );
                         }}
                     />
-
-                    <HStack gap="4">
-                        <Button
-                            className={styles.avbrytButton}
-                            type="button"
-                            variant="secondary"
-                            onClick={skjulKladd}
-                        >
-                            Avbryt
-                        </Button>
-
-                        <Button type="button" variant="primary" onClick={leggTilManueltBarn}>
-                            Legg til barn
-                        </Button>
-                    </HStack>
                 </div>
             )}
         </>

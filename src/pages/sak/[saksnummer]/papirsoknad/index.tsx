@@ -55,7 +55,12 @@ const PapirsøknadPage = (props: Props) => {
         if (!papirsøknadToggle) return;
         if (!personopplysninger) return;
 
-        opprettPapirsøknad(data).then((behandling) => {
+        const antallVedlegg = (data.svar.barnetilleggManuelle || []).reduce(
+            (sum, b) => sum + (b.manueltRegistrertBarnAntallVedlegg ?? 0),
+            0,
+        );
+
+        opprettPapirsøknad({ ...data, antallVedlegg }).then((behandling) => {
             if (behandling) {
                 router.push(behandlingUrl(behandling));
             }
