@@ -2,16 +2,15 @@ import {
     ÅpenBehandlingForOversiktType,
     ÅpenBehandlingForOversikt,
 } from '~/types/ÅpenBehandlingForOversikt';
-import { Table, Tag } from '@navikt/ds-react';
+import { Alert, Table, Tag } from '@navikt/ds-react';
 import {
-    behandlingResultatTilText,
+    behandlingResultatTilTag,
     finnBehandlingStatusTag,
     finnTypeBehandlingTekstForOversikt,
     meldeperiodeKjedeStatusTag,
 } from '~/utils/tekstformateringUtils';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '~/utils/date';
 import { ApneBehandlingerMeny } from '~/components/behandlingmeny/ApneBehandlingerMeny';
-import { StartSøknadBehandling } from '~/components/behandlingmeny/start-behandling/StartSøknadBehandling';
 import { meldeperiodeUrl } from '~/utils/urls';
 import { MeldeperiodeKjedeOversiktMeny } from '~/components/saksoversikt/meldekort-oversikt/MeldekortOversikt';
 import { SakProps } from '~/types/Sak';
@@ -49,7 +48,7 @@ export const ÅpneBehandlingerOversikt = ({ åpneBehandlinger }: Props) => {
 
                     const {
                         typeTekst,
-                        resultatTekst,
+                        resultatTag,
                         statusTag,
                         kravtidspunkt,
                         periode,
@@ -61,7 +60,7 @@ export const ÅpneBehandlingerOversikt = ({ åpneBehandlinger }: Props) => {
                     return (
                         <Table.Row shadeOnHover={false} key={id}>
                             <Table.DataCell>{typeTekst}</Table.DataCell>
-                            <Table.DataCell>{resultatTekst ?? '-'}</Table.DataCell>
+                            <Table.DataCell>{resultatTag ?? '-'}</Table.DataCell>
                             <Table.DataCell>{statusTag}</Table.DataCell>
                             <Table.DataCell>{formaterTidspunkt(opprettet)}</Table.DataCell>
                             <Table.DataCell>{kravtidspunkt ?? '-'}</Table.DataCell>
@@ -83,7 +82,7 @@ export const ÅpneBehandlingerOversikt = ({ åpneBehandlinger }: Props) => {
 
 type ÅpenBehandlingOversiktRadProps = {
     typeTekst: string;
-    resultatTekst?: string;
+    resultatTag?: React.ReactNode;
     statusTag: React.ReactNode;
     kravtidspunkt?: string;
     periode?: Nullable<Periode>;
@@ -106,7 +105,11 @@ const propsForRad = (
                 typeTekst,
                 statusTag: <Tag variant="neutral">{'Søknad'}</Tag>,
                 kravtidspunkt: formaterTidspunkt(åpenBehandling.kravtidspunkt),
-                meny: <StartSøknadBehandling søknad={åpenBehandling} medAvsluttBehandling={true} />,
+                meny: (
+                    <Alert variant={'info'} size={'small'} inline={true}>
+                        {'Søknadsbehandling opprettes automatisk'}
+                    </Alert>
+                ),
             };
         }
         case ÅpenBehandlingForOversiktType.SØKNADSBEHANDLING:
@@ -115,7 +118,7 @@ const propsForRad = (
 
             return {
                 typeTekst,
-                resultatTekst: behandlingResultatTilText[resultat],
+                resultatTag: behandlingResultatTilTag[resultat],
                 statusTag: finnBehandlingStatusTag(
                     åpenBehandling.status,
                     åpenBehandling.underkjent,
