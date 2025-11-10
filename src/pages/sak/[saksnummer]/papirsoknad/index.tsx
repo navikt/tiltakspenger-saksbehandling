@@ -19,7 +19,7 @@ import { dateTilISOTekst } from '~/utils/date';
 import { VelgTiltak } from '~/components/papirsøknad/tiltak/VelgTiltak';
 import { Barnetillegg } from '~/components/papirsøknad/barnetillegg/Barnetillegg';
 import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
-import { useOpprettPapirsøknad } from '~/components/saksoversikt/papirsøknad/useOpprettPapirsøknad';
+import { useOpprettPapirsøknad } from '~/components/personoversikt/papirsøknad/useOpprettPapirsøknad';
 import router from 'next/router';
 import { behandlingUrl } from '~/utils/urls';
 import { useHentPersonopplysninger } from '~/components/personaliaheader/useHentPersonopplysninger';

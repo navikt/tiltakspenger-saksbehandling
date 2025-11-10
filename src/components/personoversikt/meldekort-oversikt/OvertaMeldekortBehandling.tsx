@@ -1,14 +1,14 @@
 import { Alert, BodyShort, Button, Heading, HStack, Modal, VStack } from '@navikt/ds-react';
 import { useState } from 'react';
 import router from 'next/router';
-
-import style from './MeldekortBehandlingKnapper.module.css';
 import {
     MeldekortBehandlingId,
     MeldekortBehandlingProps,
-} from '../../../types/meldekort/MeldekortBehandling';
-import { useFetchJsonFraApi } from '../../../utils/fetch/useFetchFraApi';
-import { SakId } from '../../../types/Sak';
+} from '~/types/meldekort/MeldekortBehandling';
+import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
+import { SakId } from '~/types/Sak';
+
+import style from './MeldekortBehandlingKnapper.module.css';
 
 export const OvertaMeldekortbehandlingModal = (props: {
     sakId: SakId;

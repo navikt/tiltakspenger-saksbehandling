@@ -1,6 +1,6 @@
 import { Box, Heading } from '@navikt/ds-react';
 
-import styles from '../Saksoversikt.module.css';
+import styles from '../Personoversikt.module.css';
 import {
     avbruttBehandlingToDataCellInfo,
     avbruttSøknadToDataCellInfo,

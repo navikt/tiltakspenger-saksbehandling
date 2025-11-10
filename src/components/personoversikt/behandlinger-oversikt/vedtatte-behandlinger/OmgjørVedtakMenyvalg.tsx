@@ -2,7 +2,7 @@ import { RevurderingResultat } from '~/types/Revurdering';
 import { ArrowsCirclepathIcon } from '@navikt/aksel-icons';
 import { ActionMenu, Alert, Loader } from '@navikt/ds-react';
 import { RammevedtakMedBehandling } from '~/types/Rammevedtak';
-import { useOpprettRevurdering } from '~/components/saksoversikt/opprett-revurdering/useOpprettRevurdering';
+import { useOpprettRevurdering } from '~/components/personoversikt/opprett-revurdering/useOpprettRevurdering';
 import { SakId } from '~/types/Sak';
 import router from 'next/router';
 import { behandlingUrl } from '~/utils/urls';

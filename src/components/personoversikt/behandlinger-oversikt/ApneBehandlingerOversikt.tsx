@@ -12,7 +12,7 @@ import {
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '~/utils/date';
 import { ApneBehandlingerMeny } from '~/components/behandlingmeny/ApneBehandlingerMeny';
 import { meldeperiodeUrl } from '~/utils/urls';
-import { MeldeperiodeKjedeOversiktMeny } from '~/components/saksoversikt/meldekort-oversikt/MeldekortOversikt';
+import { MeldeperiodeKjedeOversiktMeny } from '~/components/personoversikt/meldekort-oversikt/MeldekortOversikt';
 import { SakProps } from '~/types/Sak';
 import { Periode } from '~/types/Periode';
 import { useSak } from '~/context/sak/SakContext';

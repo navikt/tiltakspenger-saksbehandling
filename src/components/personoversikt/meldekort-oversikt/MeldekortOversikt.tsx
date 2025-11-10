@@ -166,7 +166,7 @@ export const MeldeperiodeKjedeOversiktMeny = (props: {
                     onClose={() => setVilAvslutteBehandling(false)}
                     sakId={props.sakId}
                     meldekortBehandlingId={props.meldekortBehandling.id}
-                    saksoversiktUrl={`/sak/${props.saksnummer}`}
+                    personoversiktUrl={`/sak/${props.saksnummer}`}
                 />
             )}
 

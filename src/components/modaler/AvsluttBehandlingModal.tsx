@@ -4,7 +4,7 @@ import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useSak } from '~/context/sak/SakContext';
 import { useAvsluttBehandling } from '~/components/behandlingmeny/useAvsluttBehandling';
-import { SøknadIdEllerBehandlingId } from '~/components/saksoversikt/avsluttBehandling/AvsluttBehandlingProps';
+import { SøknadIdEllerBehandlingId } from '~/components/personoversikt/avsluttBehandling/AvsluttBehandlingProps';
 
 import styles from './AvsluttBehandlingModal.module.css';
 

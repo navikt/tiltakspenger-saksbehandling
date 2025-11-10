@@ -9,7 +9,7 @@ import { behandlingUrl } from '~/utils/urls';
 import { SakId } from '~/types/Sak';
 import { SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
 import { RammevedtakMedBehandling } from '~/types/Rammevedtak';
-import { OmgjørVedtakMenyvalg } from '~/components/saksoversikt/behandlinger-oversikt/vedtatte-behandlinger/OmgjørVedtakMenyvalg';
+import { OmgjørVedtakMenyvalg } from '~/components/personoversikt/behandlinger-oversikt/vedtatte-behandlinger/OmgjørVedtakMenyvalg';
 
 type Props = {
     sakId: SakId;

@@ -1,6 +1,6 @@
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { SakProps } from '~/types/Sak';
-import { SøknadIdEllerBehandlingId } from '~/components/saksoversikt/avsluttBehandling/AvsluttBehandlingProps';
+import { SøknadIdEllerBehandlingId } from '~/components/personoversikt/avsluttBehandling/AvsluttBehandlingProps';
 
 type AvsluttBehandlingDTO = {
     begrunnelse: string;

@@ -9,7 +9,7 @@ import OvertaBehandlingMenyvalg, {
 } from './menyvalg/OvertaBehandlingMenyvalg';
 import AvsluttBehandlingMenyvalg, {
     visAvsluttBehandlingMenyvalg,
-} from '~/components/saksoversikt/avsluttBehandling/AvsluttBehandlingMenyvalg';
+} from '~/components/personoversikt/avsluttBehandling/AvsluttBehandlingMenyvalg';
 import FortsettBehandlingMenyvalg, {
     visFortsettBehandlingMenyvalg,
 } from '~/components/behandlingmeny/menyvalg/FortsettBehandlingMenyvalg';

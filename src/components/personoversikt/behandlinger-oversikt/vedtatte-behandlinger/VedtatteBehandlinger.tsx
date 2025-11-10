@@ -4,7 +4,7 @@ import { Rammebehandling } from '~/types/Rammebehandling';
 import { SakId } from '~/types/Sak';
 import { Rammevedtak, RammevedtakMedBehandling } from '~/types/Rammevedtak';
 
-import styles from '../../Saksoversikt.module.css';
+import styles from '../../Personoversikt.module.css';
 
 type Props = {
     sakId: SakId;

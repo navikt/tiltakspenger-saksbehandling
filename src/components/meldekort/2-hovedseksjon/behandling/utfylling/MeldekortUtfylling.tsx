@@ -18,7 +18,7 @@ import { MeldekortSendTilBeslutning } from '../beslutning/MeldekortSendTilBeslut
 import React, { useEffect, useState } from 'react';
 import { classNames } from '~/utils/classNames';
 import { MeldekortBegrunnelse } from '../../../0-felles-komponenter/begrunnelse/MeldekortBegrunnelse';
-import AvsluttMeldekortBehandling from '../../../../saksoversikt/meldekort-oversikt/avsluttMeldekortBehandling/AvsluttMeldekortBehandling';
+import AvsluttMeldekortBehandling from '~/components/personoversikt/meldekort-oversikt/avsluttMeldekortBehandling/AvsluttMeldekortBehandling';
 import { meldeperiodeUrl } from '~/utils/urls';
 import { MeldekortBeregningOgSimulering } from '~/components/meldekort/0-felles-komponenter/beregning-simulering/MeldekortBeregningOgSimulering';
 
@@ -122,7 +122,7 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
                             <AvsluttMeldekortBehandling
                                 sakId={sakId}
                                 meldekortBehandlingId={meldekortBehandling.id}
-                                saksoversiktUrl={meldeperiodeUrl(
+                                personoversiktUrl={meldeperiodeUrl(
                                     saksnummer,
                                     meldekortBehandling.periode,
                                 )}

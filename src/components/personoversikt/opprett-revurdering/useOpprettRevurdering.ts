@@ -1,5 +1,5 @@
-import { SakId } from '../../../types/Sak';
-import { useFetchJsonFraApi } from '../../../utils/fetch/useFetchFraApi';
+import { SakId } from '~/types/Sak';
+import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 
 import { Revurdering, OpprettRevurderingRequest } from '~/types/Revurdering';
 

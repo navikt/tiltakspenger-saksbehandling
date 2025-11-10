@@ -7,7 +7,7 @@ import { useSak } from '~/context/sak/SakContext';
 import { AvsluttedeBehandlinger } from './behandlinger-oversikt/AvsluttedeBehandlinger';
 import { MeldeperiodeKjedeStatus } from '~/types/meldekort/Meldeperiode';
 import { MeldekortOversiktIkkeKlar } from './meldekort-oversikt/ikke-klar/MeldekortOversiktIkkeKlar';
-import { VedtatteBehandlinger } from '~/components/saksoversikt/behandlinger-oversikt/vedtatte-behandlinger/VedtatteBehandlinger';
+import { VedtatteBehandlinger } from '~/components/personoversikt/behandlinger-oversikt/vedtatte-behandlinger/VedtatteBehandlinger';
 import NotificationBanner from '../notificationBanner/NotificationBanner';
 import MeldekortHelgToggle from '../toggles/MeldekortHelgToggle';
 import {
@@ -15,12 +15,12 @@ import {
     Rammebehandlingsstatus,
     Rammebehandlingstype,
 } from '~/types/Rammebehandling';
-import { OpprettPapirsøknad } from '~/components/saksoversikt/papirsøknad/OpprettPapirsøknad';
+import { OpprettPapirsøknad } from '~/components/personoversikt/papirsøknad/OpprettPapirsøknad';
 import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
 
-import styles from './Saksoversikt.module.css';
+import styles from './Personoversikt.module.css';
 
-export const Saksoversikt = () => {
+export const Personoversikt = () => {
     const { papirsøknadToggle } = useFeatureToggles();
     const {
         sakId,
@@ -47,7 +47,7 @@ export const Saksoversikt = () => {
             <Box className={styles.wrapper}>
                 <HStack align={'center'} justify={'space-between'} className={styles.spacing}>
                     <Heading spacing size={'medium'} level={'2'}>
-                        {'Saksoversikt'}
+                        {'Personoversikt'}
                     </Heading>
                     <HStack gap="3">
                         <MeldekortHelgToggle />

@@ -1,6 +1,6 @@
 import { Alert } from '@navikt/ds-react';
-import { MeldeperiodeKjedeProps } from '../../../../types/meldekort/Meldeperiode';
-import { periodeTilFormatertDatotekst } from '../../../../utils/date';
+import { MeldeperiodeKjedeProps } from '~/types/meldekort/Meldeperiode';
+import { periodeTilFormatertDatotekst } from '~/utils/date';
 
 type Props = {
     meldeperiodeKjeder: MeldeperiodeKjedeProps[];

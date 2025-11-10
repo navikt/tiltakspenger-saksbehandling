@@ -63,7 +63,7 @@ export const PersonaliaHeader = ({
             <CopyButton copyText={idSomVises} variant="action" size="small" />
             {visTilbakeKnapp && (
                 <Button as={NextLink} href={`/sak/${saksnummer}`} type="submit" size="small">
-                    Tilbake til saksoversikt
+                    Tilbake til personoversikt
                 </Button>
             )}
             {children}

@@ -1,6 +1,6 @@
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
 import { SakProps } from '~/types/Sak';
-import { Saksoversikt } from '~/components/saksoversikt/Saksoversikt';
+import { Personoversikt } from '~/components/personoversikt/Personoversikt';
 import { fetchSak } from '~/utils/fetch/fetch-server';
 import { SakProvider } from '~/context/sak/SakContext';
 
@@ -11,7 +11,7 @@ type Props = {
 const Saksside = ({ sak }: Props) => {
     return (
         <SakProvider sak={sak}>
-            <Saksoversikt />
+            <Personoversikt />
         </SakProvider>
     );
 };

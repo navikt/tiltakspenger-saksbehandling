@@ -13,7 +13,7 @@ import styles from './AvsluttMeldekortBehandling.module.css';
 export const AvsluttMeldekortbehandlingModal = (props: {
     sakId: SakId;
     meldekortBehandlingId: MeldekortBehandlingId;
-    saksoversiktUrl: string;
+    personoversiktUrl: string;
     åpen: boolean;
     onClose: () => void;
 }) => {
@@ -26,7 +26,7 @@ export const AvsluttMeldekortbehandlingModal = (props: {
         { begrunnelse: string }
     >(`/sak/${props.sakId}/meldekort/${props.meldekortBehandlingId}/avbryt`, 'POST', {
         onSuccess: () => {
-            router.push(props.saksoversiktUrl);
+            router.push(props.personoversiktUrl);
         },
     });
 
@@ -102,7 +102,7 @@ export const AvsluttMeldekortbehandlingModal = (props: {
 const AvsluttMeldekortBehandling = (props: {
     sakId: SakId;
     meldekortBehandlingId: MeldekortBehandlingId;
-    saksoversiktUrl: string;
+    personoversiktUrl: string;
     buttonProps?: {
         size?: ButtonProps['size'];
         variant?: ButtonProps['variant'];
@@ -118,7 +118,7 @@ const AvsluttMeldekortBehandling = (props: {
                     onClose={() => setVilAvslutteBehandling(false)}
                     sakId={props.sakId}
                     meldekortBehandlingId={props.meldekortBehandlingId}
-                    saksoversiktUrl={props.saksoversiktUrl}
+                    personoversiktUrl={props.personoversiktUrl}
                 />
             )}
             <Button

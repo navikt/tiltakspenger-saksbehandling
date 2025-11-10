@@ -6,20 +6,20 @@ import style from './MeldekortBehandlingKnapper.module.css';
 import {
     MeldekortBehandlingProps,
     MeldekortBehandlingStatus,
-} from '../../../types/meldekort/MeldekortBehandling';
+} from '~/types/meldekort/MeldekortBehandling';
 import {
     eierMeldekortBehandling,
     skalKunneOvertaMeldekortBehandling,
     skalKunneTaMeldekortBehandling,
-} from '../../../utils/tilganger';
-import { useSaksbehandler } from '../../../context/saksbehandler/SaksbehandlerContext';
+} from '~/utils/tilganger';
+import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
 import OvertaMeldekortBehandling from './OvertaMeldekortBehandling';
-import { SakId } from '../../../types/Sak';
+import { SakId } from '~/types/Sak';
 import router from 'next/router';
 import { useTaMeldekortBehandling } from './useTaMeldekortBehandling';
 import { useLeggTilbakeMeldekortBehandling } from './useLeggTilbakeMeldekortBehandling';
 import { TriggerWithOptionsArgs } from 'swr/mutation';
-import { FetcherError } from '../../../utils/fetch/fetch';
+import { FetcherError } from '~/utils/fetch/fetch';
 import AvsluttMeldekortBehandling from './avsluttMeldekortBehandling/AvsluttMeldekortBehandling';
 
 type Props = {
@@ -120,7 +120,7 @@ export const MeldekortBehandlingKnappForOversikt = ({
                     <AvsluttMeldekortBehandling
                         sakId={sakId}
                         meldekortBehandlingId={id}
-                        saksoversiktUrl={`/sak/${saksnummer}`}
+                        personoversiktUrl={`/sak/${saksnummer}`}
                     />
                 </VStack>
             );

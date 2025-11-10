@@ -1,6 +1,6 @@
 import { ActionMenu } from '@navikt/ds-react';
 import React from 'react';
-import { AvsluttBehandlingProps } from '~/components/saksoversikt/avsluttBehandling/AvsluttBehandlingProps';
+import { AvsluttBehandlingProps } from '~/components/personoversikt/avsluttBehandling/AvsluttBehandlingProps';
 import { ÅpenRammebehandlingForOversikt } from '~/types/ÅpenBehandlingForOversikt';
 import { XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { eierBehandling } from '~/utils/tilganger';

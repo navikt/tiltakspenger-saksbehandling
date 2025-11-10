@@ -1,9 +1,9 @@
 import {
     MeldekortBehandlingId,
     MeldekortBehandlingProps,
-} from '../../../types/meldekort/MeldekortBehandling';
-import { SakId } from '../../../types/Sak';
-import { useFetchJsonFraApi } from '../../../utils/fetch/useFetchFraApi';
+} from '~/types/meldekort/MeldekortBehandling';
+import { SakId } from '~/types/Sak';
+import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 
 export const useTaMeldekortBehandling = (
     sakId: SakId,
