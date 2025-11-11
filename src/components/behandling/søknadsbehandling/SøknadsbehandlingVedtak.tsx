@@ -1,19 +1,23 @@
 import { Heading } from '@navikt/ds-react';
-import { SøknadsbehandlingBegrunnelse } from '~/components/behandling/søknadsbehandling/2-begrunnelse/SøknadsbehandlingBegrunnelse';
-import { SøknadsbehandlingResultatVelger } from '~/components/behandling/søknadsbehandling/3-resultat/SøknadsbehandlingResultatVelger';
-import { SøknadsbehandlingBrev } from '~/components/behandling/søknadsbehandling/8-brev/SøknadsbehandlingBrev';
+import { SøknadsbehandlingBegrunnelse } from '~/components/behandling/søknadsbehandling/begrunnelse/SøknadsbehandlingBegrunnelse';
+import { SøknadsbehandlingResultatVelger } from '~/components/behandling/søknadsbehandling/resultat-velger/SøknadsbehandlingResultatVelger';
+import { SøknadsbehandlingBrev } from '~/components/behandling/søknadsbehandling/brev/SøknadsbehandlingBrev';
 import { Separator } from '../../separator/Separator';
-import { SøknadsbehandlingSend } from '~/components/behandling/søknadsbehandling/9-send-og-godkjenn/SøknadsbehandlingSend';
-import { SøknadsbehandlingBarnetillegg } from '~/components/behandling/søknadsbehandling/7-barn/SøknadsbehandlingBarnetillegg';
-import { SøknadsbehandlingTiltak } from '~/components/behandling/søknadsbehandling/5-tiltak/SøknadsbehandlingTiltak';
-import { SøknadsbehandlingAvslagsgrunner } from '~/components/behandling/søknadsbehandling/6-avslagsgrunner/SøknadsbehandlingAvslagsgrunner';
-import { SøknadsbehandlingDagerPerMeldeperiode } from '~/components/behandling/søknadsbehandling/4-dager-per-meldeperiode/SøknadsbehandlingDagerPerMeldeperiode';
-import { SøknadsbehandlingAutomatiskBehandling } from '~/components/behandling/søknadsbehandling/1-automatisk-behandling/SøknadsbehandlingAutomatiskBehandling';
+import { SøknadsbehandlingSend } from '~/components/behandling/søknadsbehandling/send-og-godkjenn/SøknadsbehandlingSend';
+import { SøknadsbehandlingAvslagsgrunner } from '~/components/behandling/søknadsbehandling/avslagsgrunner/SøknadsbehandlingAvslagsgrunner';
+import { SøknadsbehandlingAutomatiskBehandling } from '~/components/behandling/søknadsbehandling/automatisk-behandling/SøknadsbehandlingAutomatiskBehandling';
 import { BehandlingBeregningOgSimulering } from '~/components/behandling/felles/beregning-og-simulering/BehandlingBeregningOgSimulering';
+import { useBehandlingSkjema } from '~/components/behandling/context/BehandlingSkjemaContext';
+import { SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
 
 import style from './SøknadsbehandlingVedtak.module.css';
+import { BehandlingDagerPerMeldeperiode } from '~/components/behandling/felles/dager-per-meldeperiode/BehandlingDagerPerMeldeperiode';
+import { BehandlingTiltak } from '~/components/behandling/felles/tiltak/BehandlingTiltak';
+import { BehandlingBarnetillegg } from '~/components/behandling/felles/barnetillegg/BehandlingBarnetillegg';
 
 export const SøknadsbehandlingVedtak = () => {
+    const { resultat } = useBehandlingSkjema();
+
     return (
         <>
             <Heading size={'medium'} level={'3'} className={style.header}>
@@ -22,15 +26,34 @@ export const SøknadsbehandlingVedtak = () => {
             <SøknadsbehandlingAutomatiskBehandling />
             <SøknadsbehandlingBegrunnelse />
             <SøknadsbehandlingResultatVelger />
-            <SøknadsbehandlingDagerPerMeldeperiode />
+            {resultat === SøknadsbehandlingResultat.INNVILGELSE && <Innvilgelse />}
+            {resultat === SøknadsbehandlingResultat.AVSLAG && <Avslag />}
+            <SøknadsbehandlingSend />
+        </>
+    );
+};
+
+const Innvilgelse = () => {
+    return (
+        <>
             <Separator />
-            <SøknadsbehandlingTiltak />
-            <SøknadsbehandlingAvslagsgrunner />
-            <SøknadsbehandlingBarnetillegg />
+            <BehandlingDagerPerMeldeperiode />
+            <Separator />
+            <BehandlingTiltak />
+            <BehandlingBarnetillegg valgTekst={'Skal det innvilges barnetillegg?'} />
+            <Separator />
             <SøknadsbehandlingBrev />
             <Separator />
             <BehandlingBeregningOgSimulering />
-            <SøknadsbehandlingSend />
+        </>
+    );
+};
+
+const Avslag = () => {
+    return (
+        <>
+            <SøknadsbehandlingAvslagsgrunner />
+            <SøknadsbehandlingBrev />
         </>
     );
 };

@@ -1,5 +1,4 @@
-import { Button, Radio, RadioGroup } from '@navikt/ds-react';
-import { classNames } from '~/utils/classNames';
+import { Alert, Button, Radio, RadioGroup } from '@navikt/ds-react';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { useSøknadsbehandling } from '../../context/BehandlingContext';
@@ -14,6 +13,7 @@ import style from './SøknadsbehandlingResultatVelger.module.css';
 
 export const SøknadsbehandlingResultatVelger = () => {
     const { rolleForBehandling, behandling } = useSøknadsbehandling();
+    const { kanInnvilges } = behandling;
 
     const skjemaContext = useBehandlingSkjema();
     const dispatch = useBehandlingSkjemaDispatch();
@@ -21,12 +21,6 @@ export const SøknadsbehandlingResultatVelger = () => {
     const { resultat } = skjemaContext;
 
     const erIkkeSaksbehandler = rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER;
-    const erAlleTiltaksdeltakelserUtenPeriode = behandling.saksopplysninger.tiltaksdeltagelse.every(
-        (td) => td.deltagelseFraOgMed === null && td.deltagelseTilOgMed === null,
-    );
-    const kanIkkeInnvilge =
-        behandling.saksopplysninger.tiltaksdeltagelse.length === 0 ||
-        erAlleTiltaksdeltakelserUtenPeriode;
 
     return (
         <VedtakSeksjon>
@@ -41,7 +35,7 @@ export const SøknadsbehandlingResultatVelger = () => {
                         dispatch({ type: 'setResultat', payload: { resultat: valgtResultat } });
                     }}
                 >
-                    <Radio value={SøknadsbehandlingResultat.INNVILGELSE} disabled={kanIkkeInnvilge}>
+                    <Radio value={SøknadsbehandlingResultat.INNVILGELSE} disabled={!kanInnvilges}>
                         Innvilgelse
                     </Radio>
                     <Radio value={SøknadsbehandlingResultat.AVSLAG}>Avslag</Radio>
@@ -61,14 +55,22 @@ export const SøknadsbehandlingResultatVelger = () => {
                         </Button>
                     )}
                 </RadioGroup>
-                <BehandlingsperiodeVelger
-                    behandling={behandling}
-                    label={'Innvilges'}
-                    className={classNames(
-                        style.datovelgere,
-                        resultat !== SøknadsbehandlingResultat.INNVILGELSE && style.skjult,
-                    )}
-                />
+                {resultat === SøknadsbehandlingResultat.INNVILGELSE && (
+                    <BehandlingsperiodeVelger
+                        behandling={behandling}
+                        label={'Innvilges'}
+                        className={style.datovelgere}
+                    />
+                )}
+                {!kanInnvilges && (
+                    <Alert
+                        variant={'warning'}
+                        size={'small'}
+                        className={style.ikkeInnvilgbarVarsel}
+                    >
+                        {'Søknaden kan ikke innvilges'}
+                    </Alert>
+                )}
             </VedtakSeksjon.Venstre>
         </VedtakSeksjon>
     );

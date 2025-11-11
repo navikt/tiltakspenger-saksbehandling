@@ -1,5 +1,6 @@
 .radioGroup {
     margin-top: 2rem;
+    margin-bottom: 1rem;
 
     & > :global(.navds-radio-buttons) {
         display: flex;
@@ -9,8 +10,8 @@
 
 .datovelgere {
     margin-top: 1rem;
+}
 
-    &.skjult {
-        display: none;
-    }
+.ikkeInnvilgbarVarsel {
+    margin-bottom: 1rem;
 }

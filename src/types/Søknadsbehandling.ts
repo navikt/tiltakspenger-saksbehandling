@@ -16,6 +16,7 @@ interface SøknadsbehandlingBase extends RammebehandlingBase {
     søknad: Søknad;
     automatiskSaksbehandlet: boolean;
     manueltBehandlesGrunner: ManueltBehandlesGrunn[];
+    kanInnvilges: boolean;
 }
 
 export interface SøknadsbehandlingIkkeValgt extends SøknadsbehandlingBase {

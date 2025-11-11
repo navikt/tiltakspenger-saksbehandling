@@ -8,7 +8,7 @@ import {
 } from '~/components/behandling/context/BehandlingSkjemaContext';
 import { Periode } from '~/types/Periode';
 import { RevurderingResultat, RevurderingVedtakInnvilgelseRequest } from '~/types/Revurdering';
-import { tiltaksdeltakelsePeriodeFormToTiltaksdeltakelsePeriode } from '~/components/behandling/søknadsbehandling/9-send-og-godkjenn/SøknadsbehandlingSend';
+import { tiltaksdeltakelsePeriodeFormToTiltaksdeltakelsePeriode } from '~/components/behandling/søknadsbehandling/send-og-godkjenn/SøknadsbehandlingSend';
 import { barnetilleggPeriodeFormDataTilBarnetilleggPeriode } from '../6-brev/RevurderingInnvilgelseBrev';
 
 export const RevurderingInnvilgelseSend = () => {

@@ -20,7 +20,7 @@ import { OppsummeringsPar } from '~/components/oppsummeringer/oppsummeringspar/O
 import { BehandlingSendOgGodkjenn } from '../../felles/send-og-godkjenn/BehandlingSendOgGodkjenn';
 import { RevurderingResultat, RevurderingVedtakOmgjøringRequest } from '~/types/Revurdering';
 import { Periode } from '~/types/Periode';
-import { tiltaksdeltakelsePeriodeFormToTiltaksdeltakelsePeriode } from '../../søknadsbehandling/9-send-og-godkjenn/SøknadsbehandlingSend';
+import { tiltaksdeltakelsePeriodeFormToTiltaksdeltakelsePeriode } from '~/components/behandling/søknadsbehandling/send-og-godkjenn/SøknadsbehandlingSend';
 import {
     BehandlingSkjemaContext,
     useBehandlingSkjema,

@@ -7,7 +7,7 @@ import {
     useBehandlingSkjema,
     useBehandlingSkjemaDispatch,
 } from '~/components/behandling/context/BehandlingSkjemaContext';
-import { Avslagsgrunn, SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
+import { Avslagsgrunn } from '~/types/Søknadsbehandling';
 
 import styles from './SøknadsbehandlingAvslagsgrunner.module.css';
 
@@ -21,17 +21,13 @@ const AvslagsgrunnTekst = {
     [Avslagsgrunn.LønnFraAndre]: 'Lønn fra andre',
     [Avslagsgrunn.Institusjonsopphold]: 'Institusjonsopphold',
     [Avslagsgrunn.FremmetForSent]: 'Fremmet for sent',
-};
+} as const;
 
 export const SøknadsbehandlingAvslagsgrunner = () => {
     const { rolleForBehandling } = useSøknadsbehandling();
-    const { resultat, avslagsgrunner } = useBehandlingSkjema();
+    const { avslagsgrunner } = useBehandlingSkjema();
     const dispatch = useBehandlingSkjemaDispatch();
     const erIkkeSaksbehandler = rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER;
-
-    if (resultat !== SøknadsbehandlingResultat.AVSLAG) {
-        return null;
-    }
 
     return (
         <>
