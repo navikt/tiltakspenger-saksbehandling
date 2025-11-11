@@ -21,7 +21,12 @@ export const SøknadsbehandlingResultatVelger = () => {
     const { resultat } = skjemaContext;
 
     const erIkkeSaksbehandler = rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER;
-    const kanIkkeInnvilge = behandling.saksopplysninger.tiltaksdeltagelse.length === 0;
+    const erAlleTiltaksdeltakelserUtenPeriode = behandling.saksopplysninger.tiltaksdeltagelse.every(
+        (td) => td.deltagelseFraOgMed === null && td.deltagelseTilOgMed === null,
+    );
+    const kanIkkeInnvilge =
+        behandling.saksopplysninger.tiltaksdeltagelse.length === 0 ||
+        erAlleTiltaksdeltakelserUtenPeriode;
 
     return (
         <VedtakSeksjon>
