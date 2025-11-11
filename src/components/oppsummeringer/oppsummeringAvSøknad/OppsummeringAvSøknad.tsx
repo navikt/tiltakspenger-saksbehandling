@@ -25,7 +25,7 @@ interface Props {
 const OppsummeringAvSøknad = (props: Props) => {
     const { gosysUrl } = useConfig();
 
-    const { tidsstempelHosOss, tiltak, tiltaksdeltakelseperiodeDetErSøktOm, antallVedlegg, svar } =
+    const { opprettet, tiltak, tiltaksdeltakelseperiodeDetErSøktOm, antallVedlegg, svar } =
         props.søknad;
 
     const {
@@ -47,7 +47,7 @@ const OppsummeringAvSøknad = (props: Props) => {
             <VStack>
                 <BehandlingSaksopplysning
                     navn={'Kravdato'}
-                    verdi={formaterDatotekst(tidsstempelHosOss)}
+                    verdi={formaterDatotekst(opprettet)}
                     spacing={true}
                 />
 
