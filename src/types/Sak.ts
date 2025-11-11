@@ -1,9 +1,6 @@
 import { ÅpenBehandlingForOversikt } from './ÅpenBehandlingForOversikt';
 import { MeldeperiodeKjedeProps } from './meldekort/Meldeperiode';
-
 import { Rammevedtak } from '~/types/Rammevedtak';
-
-import { Søknad } from './Søknad';
 import { UtbetalingstidslinjePeriode } from './Utbetaling';
 import { Rammebehandling } from './Rammebehandling';
 import { Tidslinje } from './Tidslinje';
@@ -18,7 +15,6 @@ export type SakProps = {
     meldeperiodeKjeder: MeldeperiodeKjedeProps[];
     førsteDagSomGirRett?: string;
     sisteDagSomGirRett?: string;
-    søknader: Søknad[];
     behandlinger: Rammebehandling[];
     tidslinje: Tidslinje;
     // Alle rammevedtak på saken med opprinnelige perioder

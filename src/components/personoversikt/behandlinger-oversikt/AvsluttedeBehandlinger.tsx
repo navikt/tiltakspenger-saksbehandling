@@ -1,47 +1,51 @@
 import { Box, Heading } from '@navikt/ds-react';
+import { AvbruttBehandlingCellInfo } from './AvsluttedeBehandlingerUtils';
+import { AvbrutteBehandlingerTabell } from './AvbrutteBehandlingerTabell';
+import { Rammebehandling } from '~/types/Rammebehandling';
 
 import styles from '../Personoversikt.module.css';
-import {
-    avbruttBehandlingToDataCellInfo,
-    avbruttSøknadToDataCellInfo,
-} from './AvsluttedeBehandlingerUtils';
-
-import { erBehandlingAvbrutt, erBehandlingVedtatt } from '~/utils/behandling';
-import { AvbrutteBehandlingerTabell } from './AvbrutteBehandlingerTabell';
-import { Søknad } from '~/types/Søknad';
-import { Rammebehandling } from '~/types/Rammebehandling';
 
 export const AvsluttedeBehandlinger = (props: {
     saksnummer: string;
-    søknader: Søknad[];
     behandlinger: Rammebehandling[];
 }) => {
-    const avsluttedeBehandlinger = props.behandlinger.filter(
-        (b) => erBehandlingAvbrutt(b) || erBehandlingVedtatt(b),
-    );
-
-    const behandlinger = avsluttedeBehandlinger
+    const avbrutteBehandlinger = props.behandlinger
         .filter((behandling) => behandling.avbrutt)
-        .map(avbruttBehandlingToDataCellInfo);
-    const søknader = props.søknader
-        .filter((søknad) => søknad.avbrutt)
-        .map(avbruttSøknadToDataCellInfo);
+        .map(avbruttBehandlingToDataCellInfo)
+        .toSorted((a, b) => b.tidspunktAvsluttet.localeCompare(a.tidspunktAvsluttet));
 
-    const avbrutte = [...behandlinger, ...søknader].toSorted((a, b) =>
-        a.tidspunktAvsluttet.localeCompare(b.tidspunktAvsluttet),
-    );
+    if (avbrutteBehandlinger.length === 0) {
+        return null;
+    }
 
     return (
-        avbrutte.length > 0 && (
-            <Box className={styles.tabellwrapper}>
-                <Heading level="3" size="small">
-                    Avsluttede behandlinger
-                </Heading>
-                <AvbrutteBehandlingerTabell
-                    avbrutteBehandlinger={avbrutte}
-                    saksnummer={props.saksnummer}
-                />
-            </Box>
-        )
+        <Box className={styles.tabellwrapper}>
+            <Heading level="3" size="small">
+                Avsluttede behandlinger
+            </Heading>
+            <AvbrutteBehandlingerTabell
+                avbrutteBehandlinger={avbrutteBehandlinger}
+                saksnummer={props.saksnummer}
+            />
+        </Box>
     );
+};
+
+const avbruttBehandlingToDataCellInfo = (
+    behandling: Rammebehandling,
+): AvbruttBehandlingCellInfo => {
+    const tidspunktAvsluttet = behandling.avbrutt?.avbruttTidspunkt
+        ? behandling.avbrutt.avbruttTidspunkt
+        : behandling.iverksattTidspunkt!;
+
+    return {
+        id: behandling.id,
+        behandlingsperiode: behandling.virkningsperiode,
+        resultat: behandling.resultat,
+        behandlingstype: behandling.type,
+        tidspunktAvsluttet: tidspunktAvsluttet,
+        avsluttetPga: behandling.avbrutt ? 'avbrutt' : 'ferdigBehandlet',
+        saksbehandler: behandling.saksbehandler,
+        beslutter: behandling.beslutter,
+    };
 };

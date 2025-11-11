@@ -7,7 +7,6 @@ import {
     Rammebehandling,
     RammebehandlingMedInnvilgelse,
     RammebehandlingResultat,
-    Rammebehandlingsstatus,
 } from '~/types/Rammebehandling';
 import { Søknadsbehandling, SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
 import { RevurderingResultat } from '~/types/Revurdering';
@@ -41,11 +40,6 @@ export const hentTiltaksperiodeFraSøknad = (behandling: Søknadsbehandling): Nu
           }
         : null;
 };
-
-export const erBehandlingAvbrutt = (behandling: Rammebehandling) => !!behandling.avbrutt;
-
-export const erBehandlingVedtatt = (behandling: Rammebehandling) =>
-    behandling.status === Rammebehandlingsstatus.VEDTATT;
 
 export const deltarPaFlereTiltakMedStartOgSluttdatoIValgtInnvilgelsesperiode = (
     behandling: Rammebehandling,

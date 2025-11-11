@@ -27,7 +27,7 @@ export const VedtatteBehandlinger = ({ sakId, behandlinger, alleRammevedtak }: P
             };
         })
         .filter((vedtak): vedtak is RammevedtakMedBehandling => !!vedtak.behandling)
-        .toSorted((a, b) => a.opprettet.localeCompare(b.opprettet));
+        .toSorted((a, b) => b.opprettet.localeCompare(a.opprettet));
 
     const antallVedtakUtenBehandling = alleRammevedtak.length - vedtakMedBehandling.length;
 

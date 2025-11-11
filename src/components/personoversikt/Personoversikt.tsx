@@ -27,7 +27,6 @@ export const Personoversikt = () => {
         saksnummer,
         behandlinger,
         åpneBehandlinger,
-        søknader,
         meldeperiodeKjeder,
         alleRammevedtak,
     } = useSak().sak;
@@ -77,11 +76,7 @@ export const Personoversikt = () => {
                     alleRammevedtak={alleRammevedtak}
                 />
 
-                <AvsluttedeBehandlinger
-                    søknader={søknader}
-                    behandlinger={behandlinger}
-                    saksnummer={saksnummer}
-                />
+                <AvsluttedeBehandlinger behandlinger={behandlinger} saksnummer={saksnummer} />
 
                 <Box className={styles.tabellwrapper}>
                     <div className={styles.meldekortHeaderRad}>
