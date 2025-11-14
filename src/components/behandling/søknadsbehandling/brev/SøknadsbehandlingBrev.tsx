@@ -50,6 +50,17 @@ const søknadsbehandlingSkjemaTilBrevForhåndsvisningDTO = (
             skjema.resultat === SøknadsbehandlingResultat.AVSLAG && skjema.avslagsgrunner !== null
                 ? skjema.avslagsgrunner
                 : null,
+        antallDagerPerMeldeperiodeForPerioder:
+            skjema.resultat === SøknadsbehandlingResultat.INNVILGELSE &&
+            skjema.antallDagerPerMeldeperiode
+                ? skjema.antallDagerPerMeldeperiode.map((dager) => ({
+                      antallDagerPerMeldeperiode: dager.antallDagerPerMeldeperiode!,
+                      periode: {
+                          fraOgMed: dager.periode!.fraOgMed!,
+                          tilOgMed: dager.periode!.tilOgMed!,
+                      },
+                  }))
+                : null,
     };
 };
 
