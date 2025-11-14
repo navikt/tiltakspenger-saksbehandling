@@ -1,12 +1,9 @@
-import { Alert, BodyShort, HStack, Loader, VStack } from '@navikt/ds-react';
-import { Fragment } from 'react';
+import { BodyShort, HStack, Loader, VStack } from '@navikt/ds-react';
+import React, { Fragment } from 'react';
 import { BehandlingSaksopplysning } from '../BehandlingSaksopplysning';
 import { alderFraDato, finn16årsdag, formaterDatotekst } from '~/utils/date';
 import { erDatoIPeriode } from '~/utils/periode';
-import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
 import { Periode } from '~/types/Periode';
-
-import style from './SøknadOpplysningerBarn.module.css';
 import { Søknad } from '~/types/Søknad';
 import { useHentPersonopplysningerBarn } from '~/components/papirsøknad/barnetillegg/useHentPersonopplysningerBarn';
 import { useSak } from '~/context/sak/SakContext';
@@ -62,7 +59,11 @@ const MedBarn = ({ tiltaksperiode, søknad, personopplysningerBarn }: Props) => 
             const fyller16dato = finn16årsdag(fødselsdato);
             const fyller16ITiltaksperioden = erDatoIPeriode(fyller16dato, tiltaksperiode);
 
-            const skjermingsInfo = personopplysningerBarn?.find((p) => p.fnr === fnr);
+            const personopplysninger = personopplysningerBarn?.find((p) => p.fnr === fnr);
+            const { fortrolig, strengtFortrolig, dødsdato } = personopplysninger || {};
+            const dødeITiltaksperioden = dødsdato
+                ? erDatoIPeriode(dødsdato, tiltaksperiode)
+                : false;
 
             return (
                 <Fragment key={`${fødselsdato}-${navn}`}>
@@ -72,26 +73,29 @@ const MedBarn = ({ tiltaksperiode, søknad, personopplysningerBarn }: Props) => 
                         verdi={`${alderFraDato(fødselsdato)} år`}
                     />
                     {fyller16ITiltaksperioden && (
-                        <div className={style.alderVarsel}>
-                            <BehandlingSaksopplysning
-                                navn={'Barnet fyller 16 år i tiltaksperioden'}
-                                verdi={formaterDatotekst(fyller16dato)}
-                            />
-                            <ExclamationmarkTriangleFillIcon />
-                        </div>
+                        <BehandlingSaksopplysning
+                            navn={'Barnet fyller 16 år i tiltaksperioden'}
+                            verdi={formaterDatotekst(fyller16dato)}
+                            visVarsel
+                        />
                     )}
                     {bleFødtITiltaksperioden ? (
-                        <div className={style.alderVarsel}>
-                            <BehandlingSaksopplysning
-                                navn={'Barnet ble født i tiltaksperioden'}
-                                verdi={fødselsdatoFormattert}
-                            />
-                            <ExclamationmarkTriangleFillIcon />
-                        </div>
+                        <BehandlingSaksopplysning
+                            navn={'Barnet ble født i tiltaksperioden'}
+                            verdi={fødselsdatoFormattert}
+                            visVarsel
+                        />
                     ) : (
                         <BehandlingSaksopplysning
                             navn={'Fødselsdato'}
                             verdi={fødselsdatoFormattert}
+                        />
+                    )}
+                    {dødeITiltaksperioden && (
+                        <BehandlingSaksopplysning
+                            navn={'Barnet døde  i tiltaksperioden'}
+                            verdi={formaterDatotekst(dødsdato!)}
+                            visVarsel
                         />
                     )}
                     <BehandlingSaksopplysning
@@ -101,11 +105,12 @@ const MedBarn = ({ tiltaksperiode, søknad, personopplysningerBarn }: Props) => 
                     />
                     <BehandlingSaksopplysning navn={'Kilde'} verdi={kilde} />
 
-                    {(skjermingsInfo?.fortrolig || skjermingsInfo?.strengtFortrolig) && (
-                        <Alert size="small" variant="error">
-                            Barnet har {skjermingsInfo?.strengtFortrolig ? 'strengt ' : ''}fortrolig
-                            adresse
-                        </Alert>
+                    {(fortrolig || strengtFortrolig) && (
+                        <BehandlingSaksopplysning
+                            navn={'Adressebeskyttelse'}
+                            verdi={`Barnet har ${strengtFortrolig ? 'strengt ' : ''}fortrolig adresse`}
+                            visVarsel
+                        />
                     )}
                 </Fragment>
             );
