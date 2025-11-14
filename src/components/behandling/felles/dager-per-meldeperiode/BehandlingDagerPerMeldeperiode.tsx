@@ -9,9 +9,10 @@ import style from './BehandlingDagerPerMeldeperiode.module.css';
 export const BehandlingDagerPerMeldeperiode = () => {
     const { antallDagerPerMeldeperiode } = useBehandlingSkjema();
 
-    const harKunDefaultAntallDager = antallDagerPerMeldeperiode.every(
-        (it) => it.antallDagerPerMeldeperiode === ANTALL_DAGER_DEFAULT,
-    );
+    const skalViseAlert =
+        antallDagerPerMeldeperiode.length !== 1 ||
+        antallDagerPerMeldeperiode[0].antallDagerPerMeldeperiode > 10 ||
+        erOddetall(antallDagerPerMeldeperiode[0].antallDagerPerMeldeperiode);
 
     return (
         <VedtakSeksjon>
@@ -23,7 +24,7 @@ export const BehandlingDagerPerMeldeperiode = () => {
                 <AntallDagerForMeldeperiodeForm />
             </VedtakSeksjon.Venstre>
 
-            <VedtakSeksjon.Høyre className={classNames(harKunDefaultAntallDager && style.skjult)}>
+            <VedtakSeksjon.Høyre className={classNames(skalViseAlert && style.skjult)}>
                 <Alert variant={'info'} size={'small'}>
                     Husk å oppgi antall dager per uke det innvilges tiltakspenger for i
                     vedtaksbrevet.
@@ -34,3 +35,7 @@ export const BehandlingDagerPerMeldeperiode = () => {
 };
 
 export const ANTALL_DAGER_DEFAULT = 10;
+
+function erOddetall(antallDager: number) {
+    return Math.abs(antallDager % 2) === 1;
+}
