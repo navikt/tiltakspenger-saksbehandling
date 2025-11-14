@@ -5,6 +5,7 @@ import { BarnetilleggPeriode } from '~/types/Barnetillegg';
 import { datoMax, datoMin, nesteDag } from '~/utils/date';
 import { kunPerioderMedBarn } from '~/components/behandling/felles/barnetillegg/utils/barnetilleggUtils';
 import { BehandlingId } from '~/types/Rammebehandling';
+import { Tidslinje } from '~/types/Tidslinje';
 
 type VedtakMedBarnetillegg = Rammevedtak & {
     barnetillegg: NonNullable<Rammevedtak['barnetillegg']>;
@@ -13,10 +14,11 @@ type VedtakMedBarnetillegg = Rammevedtak & {
 type BarnetilleggMedBehandlingId = BarnetilleggPeriode & { behandlingId: BehandlingId };
 
 export const hentBarnetilleggFraVedtakTidslinje = (
-    tidslinje: Rammevedtak[],
+    tidslinje: Tidslinje,
     behandlingsperiode: Periode,
 ): BarnetilleggMedBehandlingId[] => {
-    const relevanteBarnetillegg: BarnetilleggMedBehandlingId[] = tidslinje
+    const relevanteBarnetillegg: BarnetilleggMedBehandlingId[] = tidslinje.elementer
+        .map((el) => el.rammevedtak)
         .filter((vedtak): vedtak is VedtakMedBarnetillegg => !!vedtak.barnetillegg)
         .flatMap((vedtak) =>
             vedtak.barnetillegg.perioder
@@ -53,7 +55,7 @@ export const hentBarnetilleggFraVedtakTidslinje = (
 };
 
 export const hentBarnetilleggPerioderMedBarn = (
-    tidslinje: Rammevedtak[],
+    tidslinje: Tidslinje,
     behandlingsperiode: Periode,
 ): BarnetilleggMedBehandlingId[] => {
     return hentBarnetilleggFraVedtakTidslinje(tidslinje, behandlingsperiode).filter(

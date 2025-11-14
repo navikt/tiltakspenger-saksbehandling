@@ -10,10 +10,7 @@ export const kunPerioderMedBarn = (it: BarnetilleggPeriode) => it.antallBarn > 0
 export const harSøktBarnetillegg = (periode: Periode, behandling: Rammebehandling, sak: SakProps) =>
     (behandling.type === Rammebehandlingstype.SØKNADSBEHANDLING
         ? behandling.søknad.barnetillegg
-        : hentBarnetilleggPerioderMedBarn(
-              sak.tidslinje.elementer.map((e) => e.rammevedtak),
-              periode,
-          )
+        : hentBarnetilleggPerioderMedBarn(sak.tidslinje, periode)
     ).length > 0;
 
 type AntallBarnFraVedtak = {

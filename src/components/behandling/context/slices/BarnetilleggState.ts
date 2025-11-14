@@ -1,11 +1,7 @@
 import { Periode } from '~/types/Periode';
-
 import { forrigeDag, nesteDag } from '~/utils/date';
-
-import { periodiserBarnetilleggFraSøknad } from '~/components/behandling/felles/barnetillegg/utils/periodiserBarnetilleggFraSøknad';
 import { BehandlingSkjemaActionHandlers } from '~/components/behandling/context/BehandlingSkjemaReducer';
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';
-import { Søknad } from '~/types/Søknad';
 import { BarnetilleggPeriodeFormData } from '../../felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
 
 export type BarnetilleggState = {
@@ -20,7 +16,7 @@ export type BarnetilleggActions =
       }
     | {
           type: 'addBarnetilleggPeriode';
-          payload: { antallBarnFraSøknad: number };
+          payload: { antallBarn: number };
       }
     | {
           type: 'fjernBarnetilleggPeriode';
@@ -40,7 +36,7 @@ export type BarnetilleggActions =
       }
     | {
           type: 'nullstillBarnetilleggPerioder';
-          payload: { søknad: Søknad };
+          payload: { barnetilleggPerioder: BarnetilleggPeriodeFormData[] };
       };
 
 export const barnetilleggActionHandlers = {
@@ -49,7 +45,7 @@ export const barnetilleggActionHandlers = {
     },
 
     addBarnetilleggPeriode: (state, payload) => {
-        const { antallBarnFraSøknad } = payload;
+        const { antallBarn } = payload;
         const innvilgelsesPeriode = state.behandlingsperiode as Periode;
         const forrigeBarnetillegg = state.barnetilleggPerioder?.at(-1);
 
@@ -66,7 +62,7 @@ export const barnetilleggActionHandlers = {
 
         const nyBarnetilleggperiode: BarnetilleggPeriode = {
             // Antall barn må alltid være >=1
-            antallBarn: forrigeBarnetillegg?.antallBarn || antallBarnFraSøknad || 1,
+            antallBarn: forrigeBarnetillegg?.antallBarn || antallBarn || 1,
             periode: nestePeriode,
         };
 
@@ -86,10 +82,7 @@ export const barnetilleggActionHandlers = {
     nullstillBarnetilleggPerioder: (state, payload) => {
         return {
             ...state,
-            barnetilleggPerioder: periodiserBarnetilleggFraSøknad(
-                payload.søknad.barnetillegg,
-                state.behandlingsperiode as Periode,
-            ),
+            barnetilleggPerioder: payload.barnetilleggPerioder,
         };
     },
 

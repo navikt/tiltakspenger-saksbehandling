@@ -36,10 +36,7 @@ export const hentBarnetilleggForRevurdering = (
 ): BarnetilleggPeriode[] => {
     return (
         hentLagredePerioderMedBarn(behandling) ||
-        hentBarnetilleggPerioderMedBarn(
-            sak.tidslinje.elementer.map((e) => e.rammevedtak),
-            periode,
-        )
+        hentBarnetilleggPerioderMedBarn(sak.tidslinje, periode)
     );
 };
 
