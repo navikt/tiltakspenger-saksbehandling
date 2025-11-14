@@ -44,6 +44,15 @@ const revurderingskjemaTilBrevForhåndsvisningDTO = (
         barnetillegg: skjema.harBarnetillegg
             ? barnetilleggPeriodeFormDataTilBarnetilleggPeriode(skjema.barnetilleggPerioder)
             : null,
+        antallDagerPerMeldeperiodeForPerioder: skjema.antallDagerPerMeldeperiode
+            ? skjema.antallDagerPerMeldeperiode.map((dager) => ({
+                  antallDagerPerMeldeperiode: dager.antallDagerPerMeldeperiode!,
+                  periode: {
+                      fraOgMed: dager.periode!.fraOgMed!,
+                      tilOgMed: dager.periode!.tilOgMed!,
+                  },
+              }))
+            : null,
     };
 };
 
