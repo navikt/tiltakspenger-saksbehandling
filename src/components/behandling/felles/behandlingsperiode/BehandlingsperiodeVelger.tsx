@@ -1,7 +1,4 @@
-import { Datovelger } from '~/components/datovelger/Datovelger';
-
 import { dateTilISOTekst } from '~/utils/date';
-import { classNames } from '~/utils/classNames';
 import { useRolleForBehandling } from '~/context/saksbehandler/SaksbehandlerContext';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import {
@@ -9,16 +6,16 @@ import {
     useBehandlingSkjemaDispatch,
 } from '~/components/behandling/context/BehandlingSkjemaContext';
 
-import style from './BehandlingsperiodeVelger.module.css';
 import { Rammebehandling } from '~/types/Rammebehandling';
+import { VStack } from '@navikt/ds-react';
+import PeriodeForm from '~/components/periode/PeriodeForm';
 
 type Props = {
     behandling: Rammebehandling;
     label: string;
-    className?: string;
 };
 
-export const BehandlingsperiodeVelger = ({ behandling, label, className }: Props) => {
+export const BehandlingsperiodeVelger = ({ behandling, label }: Props) => {
     const { behandlingsperiode } = useBehandlingSkjema();
 
     const dispatch = useBehandlingSkjemaDispatch();
@@ -27,39 +24,40 @@ export const BehandlingsperiodeVelger = ({ behandling, label, className }: Props
         useRolleForBehandling(behandling) !== SaksbehandlerRolle.SAKSBEHANDLER;
 
     return (
-        <div className={classNames(style.datovelgere, className)}>
-            <Datovelger
-                label={`${label} fra og med`}
-                size={'small'}
-                defaultSelected={behandlingsperiode?.fraOgMed}
-                readOnly={erIkkeSaksbehandler}
-                onDateChange={(valgtDato) => {
-                    if (!valgtDato) {
-                        return;
-                    }
+        <VStack gap="2">
+            <PeriodeForm
+                fraOgMed={{
+                    label: `${label} fra og med`,
+                    value: behandlingsperiode?.fraOgMed ?? null,
+                    onChange: (valgtDato) => {
+                        if (!valgtDato) {
+                            return;
+                        }
 
-                    dispatch({
-                        type: 'oppdaterBehandlingsperiode',
-                        payload: { periode: { fraOgMed: dateTilISOTekst(valgtDato) } },
-                    });
+                        dispatch({
+                            type: 'oppdaterBehandlingsperiode',
+                            payload: { periode: { fraOgMed: dateTilISOTekst(valgtDato) } },
+                        });
+                    },
+                    error: null,
                 }}
-            />
-            <Datovelger
-                label={`${label} til og med`}
-                size={'small'}
-                defaultSelected={behandlingsperiode?.tilOgMed}
-                readOnly={erIkkeSaksbehandler}
-                onDateChange={(valgtDato) => {
-                    if (!valgtDato) {
-                        return;
-                    }
+                tilOgMed={{
+                    label: `${label} til og med`,
+                    value: behandlingsperiode?.tilOgMed ?? null,
+                    onChange: (valgtDato) => {
+                        if (!valgtDato) {
+                            return;
+                        }
 
-                    dispatch({
-                        type: 'oppdaterBehandlingsperiode',
-                        payload: { periode: { tilOgMed: dateTilISOTekst(valgtDato) } },
-                    });
+                        dispatch({
+                            type: 'oppdaterBehandlingsperiode',
+                            payload: { periode: { tilOgMed: dateTilISOTekst(valgtDato) } },
+                        });
+                    },
+                    error: null,
                 }}
+                readOnly={erIkkeSaksbehandler}
             />
-        </div>
+        </VStack>
     );
 };

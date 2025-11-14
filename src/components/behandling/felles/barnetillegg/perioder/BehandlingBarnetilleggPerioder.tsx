@@ -1,9 +1,8 @@
 import { Button, Select } from '@navikt/ds-react';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
-import { Datovelger } from '../../../../datovelger/Datovelger';
 
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
-import { dateTilISOTekst, datoTilDatoInputText } from '~/utils/date';
+import { dateTilISOTekst } from '~/utils/date';
 
 import {
     useBehandlingSkjema,
@@ -14,6 +13,7 @@ import { useBehandling } from '~/components/behandling/context/BehandlingContext
 import style from './BehandlingBarnetilleggPerioder.module.css';
 import { Rammebehandlingstype } from '~/types/Rammebehandling';
 import { BarnetilleggPeriodeFormData } from '../utils/hentBarnetilleggFraBehandling';
+import PeriodeForm from '~/components/periode/PeriodeForm';
 
 const BATCH_MED_BARN = 10;
 
@@ -93,58 +93,48 @@ const BarnetilleggPeriode = ({ periode, index, erSaksbehandler }: PeriodeProps) 
 
     return (
         <div className={style.periode}>
-            <Datovelger
-                selected={periode.periode.fraOgMed ?? undefined}
-                value={
-                    periode.periode.fraOgMed
-                        ? datoTilDatoInputText(periode.periode.fraOgMed)
-                        : undefined
-                }
+            <PeriodeForm
+                fraOgMed={{
+                    label: 'Fra og med',
+                    value: periode.periode.fraOgMed,
+                    onChange: (value) => {
+                        if (!value) {
+                            return;
+                        }
+
+                        const nyFraOgMed = dateTilISOTekst(value);
+                        if (nyFraOgMed !== periode.periode.fraOgMed) {
+                            dispatch({
+                                type: 'oppdaterBarnetilleggFraOgMed',
+                                payload: { fraOgMed: nyFraOgMed, index },
+                            });
+                        }
+                    },
+                    error: null,
+                }}
+                tilOgMed={{
+                    label: 'Til og med',
+                    value: periode.periode.tilOgMed,
+                    onChange: (value) => {
+                        if (!value) {
+                            return;
+                        }
+
+                        const nyTilOgMed = dateTilISOTekst(value);
+                        if (nyTilOgMed !== periode.periode.tilOgMed) {
+                            dispatch({
+                                type: 'oppdaterBarnetilleggTilOgMed',
+                                payload: { tilOgMed: nyTilOgMed, index },
+                            });
+                        }
+                    },
+                    error: null,
+                }}
+                readOnly={!erSaksbehandler}
                 minDate={innvilgelsesPeriode?.fraOgMed}
                 maxDate={innvilgelsesPeriode?.tilOgMed}
-                label={'Fra og med'}
-                size={'small'}
-                readOnly={!erSaksbehandler}
-                onDateChange={(value) => {
-                    if (!value) {
-                        return;
-                    }
-
-                    const nyFraOgMed = dateTilISOTekst(value);
-                    if (nyFraOgMed !== periode.periode.fraOgMed) {
-                        dispatch({
-                            type: 'oppdaterBarnetilleggFraOgMed',
-                            payload: { fraOgMed: nyFraOgMed, index },
-                        });
-                    }
-                }}
             />
-            <Datovelger
-                selected={periode.periode.tilOgMed ?? undefined}
-                minDate={innvilgelsesPeriode?.fraOgMed}
-                maxDate={innvilgelsesPeriode?.tilOgMed}
-                value={
-                    periode.periode.tilOgMed
-                        ? datoTilDatoInputText(periode.periode.tilOgMed)
-                        : undefined
-                }
-                label={'Til og med'}
-                size={'small'}
-                readOnly={!erSaksbehandler}
-                onDateChange={(value) => {
-                    if (!value) {
-                        return;
-                    }
 
-                    const nyTilOgMed = dateTilISOTekst(value);
-                    if (nyTilOgMed !== periode.periode.tilOgMed) {
-                        dispatch({
-                            type: 'oppdaterBarnetilleggTilOgMed',
-                            payload: { tilOgMed: nyTilOgMed, index },
-                        });
-                    }
-                }}
-            />
             <Select
                 label={'Antall barn'}
                 size={'small'}
@@ -173,7 +163,6 @@ const BarnetilleggPeriode = ({ periode, index, erSaksbehandler }: PeriodeProps) 
                     );
                 })}
             </Select>
-
             {erSaksbehandler && (
                 <Button
                     variant={'tertiary'}

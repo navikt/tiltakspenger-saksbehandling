@@ -1,6 +1,5 @@
 import { Button, HStack, Select, VStack } from '@navikt/ds-react';
-import { Datovelger } from '~/components/datovelger/Datovelger';
-import { dateTilISOTekst, datoTilDatoInputText } from '~/utils/date';
+import { dateTilISOTekst } from '~/utils/date';
 import {
     useBehandlingSkjema,
     useBehandlingSkjemaDispatch,
@@ -9,6 +8,7 @@ import { useBehandling } from '~/components/behandling/context/BehandlingContext
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 
 import styles from './AntallDagerForMeldeperiodeForm.module.css';
+import PeriodeForm from '~/components/periode/PeriodeForm';
 
 export const AntallDagerForMeldeperiodeForm = () => {
     const { behandlingsperiode, antallDagerPerMeldeperiode } = useBehandlingSkjema();
@@ -27,52 +27,41 @@ export const AntallDagerForMeldeperiodeForm = () => {
         <VStack gap={'5'}>
             {antallDagerPerMeldeperiode.map((periode, index) => (
                 <HStack gap={'5'} key={`${periode.periode?.fraOgMed}-${index}`}>
-                    <Datovelger
-                        label={'Fra og med'}
-                        size={'small'}
+                    <PeriodeForm
+                        fraOgMed={{
+                            label: 'Fra og med',
+                            value: periode.periode.fraOgMed ?? null,
+                            onChange: (date) => {
+                                if (!date) {
+                                    return;
+                                }
+
+                                dispatch({
+                                    type: 'oppdaterAntallDagerFraOgMed',
+                                    payload: { fraOgMed: dateTilISOTekst(date), index },
+                                });
+                            },
+                            error: null,
+                        }}
+                        tilOgMed={{
+                            label: 'Til og med',
+                            value: periode.periode.tilOgMed ?? null,
+                            onChange: (date) => {
+                                if (!date) {
+                                    return;
+                                }
+
+                                dispatch({
+                                    type: 'oppdaterAntallDagerTilOgMed',
+                                    payload: { tilOgMed: dateTilISOTekst(date), index },
+                                });
+                            },
+                            error: null,
+                        }}
                         minDate={behandlingsperiode?.fraOgMed}
                         maxDate={behandlingsperiode?.tilOgMed}
                         readOnly={!erSaksbehandler}
-                        value={
-                            periode.periode.fraOgMed
-                                ? datoTilDatoInputText(periode.periode.fraOgMed)
-                                : undefined
-                        }
-                        onDateChange={(date) => {
-                            if (!date) {
-                                return;
-                            }
-
-                            dispatch({
-                                type: 'oppdaterAntallDagerFraOgMed',
-                                payload: { fraOgMed: dateTilISOTekst(date), index },
-                            });
-                        }}
                     />
-
-                    <Datovelger
-                        label={'Til og med'}
-                        size={'small'}
-                        minDate={behandlingsperiode?.fraOgMed}
-                        maxDate={behandlingsperiode?.tilOgMed}
-                        readOnly={!erSaksbehandler}
-                        value={
-                            periode.periode.tilOgMed
-                                ? datoTilDatoInputText(periode.periode.tilOgMed)
-                                : undefined
-                        }
-                        onDateChange={(date) => {
-                            if (!date) {
-                                return;
-                            }
-
-                            dispatch({
-                                type: 'oppdaterAntallDagerTilOgMed',
-                                payload: { tilOgMed: dateTilISOTekst(date), index },
-                            });
-                        }}
-                    />
-
                     <Select
                         label="Antall dager"
                         size="small"
@@ -94,7 +83,6 @@ export const AntallDagerForMeldeperiodeForm = () => {
                             );
                         })}
                     </Select>
-
                     {antallDagerPerMeldeperiode.length > 1 && erSaksbehandler && (
                         <Button
                             className={styles.fjernMeldeperiodeKnapp}

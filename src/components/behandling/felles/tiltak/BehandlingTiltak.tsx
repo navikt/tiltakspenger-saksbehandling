@@ -3,7 +3,6 @@ import { Button, Select } from '@navikt/ds-react';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 
 import { Tiltaksdeltagelse } from '~/types/TiltakDeltagelseTypes';
-import { Datovelger } from '~/components/datovelger/Datovelger';
 import { dateTilISOTekst, periodeTilFormatertDatotekst } from '~/utils/date';
 import {
     deltarPaFlereTiltakMedStartOgSluttdatoIValgtInnvilgelsesperiode,
@@ -19,6 +18,7 @@ import { useBehandling } from '~/components/behandling/context/BehandlingContext
 
 import style from './BehandlingTiltak.module.css';
 import { TiltaksdeltakelsePeriodeFormData } from '../../context/slices/TiltaksdeltagelseState';
+import PeriodeForm from '~/components/periode/PeriodeForm';
 
 export const BehandlingTiltak = () => {
     const { behandling, rolleForBehandling } = useBehandling();
@@ -122,44 +122,44 @@ const TiltakPeriode = ({
                     </option>
                 ))}
             </Select>
-            <Datovelger
-                selected={periode.periode.fraOgMed ?? ''}
+
+            <PeriodeForm
+                fraOgMed={{
+                    label: 'Fra og med',
+                    value: periode.periode.fraOgMed,
+                    onChange: (value) => {
+                        if (!value) {
+                            return;
+                        }
+
+                        const nyFraOgMed = dateTilISOTekst(value);
+                        dispatch({
+                            type: 'oppdaterTiltaksdeltagelseFraOgMed',
+                            payload: { fraOgMed: nyFraOgMed, index },
+                        });
+                    },
+                    error: null,
+                }}
+                tilOgMed={{
+                    label: 'Til og med',
+                    value: periode.periode.tilOgMed,
+                    onChange: (value) => {
+                        if (!value) {
+                            return;
+                        }
+
+                        const nyTilOgMed = dateTilISOTekst(value);
+
+                        dispatch({
+                            type: 'oppdaterTiltaksdeltagelseTilOgMed',
+                            payload: { tilOgMed: nyTilOgMed, index },
+                        });
+                    },
+                    error: null,
+                }}
+                readOnly={!erSaksbehandler}
                 minDate={innvilgelsesPeriode?.fraOgMed}
                 maxDate={innvilgelsesPeriode?.tilOgMed}
-                label={'Fra og med'}
-                size={'small'}
-                readOnly={!erSaksbehandler}
-                onDateChange={(value) => {
-                    if (!value) {
-                        return;
-                    }
-
-                    const nyFraOgMed = dateTilISOTekst(value);
-                    dispatch({
-                        type: 'oppdaterTiltaksdeltagelseFraOgMed',
-                        payload: { fraOgMed: nyFraOgMed, index },
-                    });
-                }}
-            />
-            <Datovelger
-                selected={periode.periode.tilOgMed ?? ''}
-                minDate={innvilgelsesPeriode?.fraOgMed}
-                maxDate={innvilgelsesPeriode?.tilOgMed}
-                label={'Til og med'}
-                size={'small'}
-                readOnly={!erSaksbehandler}
-                onDateChange={(value) => {
-                    if (!value) {
-                        return;
-                    }
-
-                    const nyTilOgMed = dateTilISOTekst(value);
-
-                    dispatch({
-                        type: 'oppdaterTiltaksdeltagelseTilOgMed',
-                        payload: { tilOgMed: nyTilOgMed, index },
-                    });
-                }}
             />
 
             {erSaksbehandler && skalKunneFjernePeriode && (

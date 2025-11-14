@@ -1,7 +1,7 @@
 import { DatePicker, useDatepicker } from '@navikt/ds-react';
 import { ComponentProps, useEffect } from 'react';
 
-type DateOrString = Date | string;
+export type DateOrString = Date | string;
 
 type Props = {
     onDateChange: (date: Date | undefined) => void;
