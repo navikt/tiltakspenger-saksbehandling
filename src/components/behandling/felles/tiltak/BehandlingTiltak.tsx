@@ -1,5 +1,5 @@
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
-import { Button, Select } from '@navikt/ds-react';
+import { Select } from '@navikt/ds-react';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 
 import { Tiltaksdeltagelse } from '~/types/TiltakDeltagelseTypes';
@@ -17,8 +17,7 @@ import {
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
 
 import style from './BehandlingTiltak.module.css';
-import { TiltaksdeltakelsePeriodeFormData } from '../../context/slices/TiltaksdeltagelseState';
-import PeriodeForm from '~/components/periode/PeriodeForm';
+import MultiperiodeForm from '~/components/multiperiodeForm/MultiperiodeForm';
 
 export const BehandlingTiltak = () => {
     const { behandling, rolleForBehandling } = useBehandling();
@@ -36,33 +35,85 @@ export const BehandlingTiltak = () => {
         return null;
     }
 
+    const erSaksbehandler = rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER;
+
     return (
         <>
             <VedtakSeksjon>
                 <VedtakSeksjon.Venstre>
-                    {valgteTiltaksdeltakelser.map((periode, index) => {
-                        return (
-                            <TiltakPeriode
-                                periode={periode}
-                                tiltaksdeltakelser={tiltaksdeltakelser}
-                                index={index}
-                                rolle={rolleForBehandling}
-                                skalKunneFjernePeriode={valgteTiltaksdeltakelser.length > 1}
-                                key={`${periode.periode.fraOgMed}-${periode.eksternDeltagelseId}-${index}`}
-                            />
-                        );
-                    })}
-                    {rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER && (
-                        <Button
-                            variant={'secondary'}
-                            size={'small'}
-                            onClick={() => {
-                                dispatch({ type: 'addTiltakPeriode' });
-                            }}
-                        >
-                            Ny periode
-                        </Button>
-                    )}
+                    <MultiperiodeForm
+                        name={'valgteTiltaksdeltakelser'}
+                        perioder={valgteTiltaksdeltakelser}
+                        nyPeriodeButtonConfig={{
+                            onClick: () => dispatch({ type: 'addTiltakPeriode' }),
+                            hidden: rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER,
+                        }}
+                        fjernPeriodeButtonConfig={{
+                            text: 'Fjern',
+                            onClick: (index) =>
+                                dispatch({ type: 'fjernTiltakPeriode', payload: { index } }),
+                            hidden: !(erSaksbehandler && valgteTiltaksdeltakelser.length > 1),
+                        }}
+                        periodeConfig={{
+                            fraOgMed: {
+                                onChange: (value, index) => {
+                                    if (!value) {
+                                        return;
+                                    }
+
+                                    dispatch({
+                                        type: 'oppdaterTiltaksdeltagelseFraOgMed',
+                                        payload: { fraOgMed: dateTilISOTekst(value), index },
+                                    });
+                                },
+                            },
+                            tilOgMed: {
+                                onChange: (value, index) => {
+                                    if (!value) {
+                                        return;
+                                    }
+
+                                    dispatch({
+                                        type: 'oppdaterTiltaksdeltagelseTilOgMed',
+                                        payload: { tilOgMed: dateTilISOTekst(value), index },
+                                    });
+                                },
+                            },
+                            readOnly: !erSaksbehandler,
+                            minDate: behandlingsperiode?.fraOgMed,
+                            maxDate: behandlingsperiode?.tilOgMed,
+                        }}
+                        contentConfig={{
+                            position: 'before',
+                            content: (periode, index) => (
+                                <Select
+                                    label={'Velg tiltak'}
+                                    size={'small'}
+                                    className={style.tiltakstype}
+                                    defaultValue={periode.eksternDeltagelseId}
+                                    readOnly={!erSaksbehandler}
+                                    onChange={(event) => {
+                                        dispatch({
+                                            type: 'oppdaterTiltakId',
+                                            payload: {
+                                                eksternDeltagelseId: event.target.value,
+                                                index,
+                                            },
+                                        });
+                                    }}
+                                >
+                                    {tiltaksdeltakelser.map((tiltak, index) => (
+                                        <option
+                                            value={tiltak.eksternDeltagelseId}
+                                            key={`${tiltak.deltagelseFraOgMed}-${tiltak.eksternDeltagelseId}-${index}`}
+                                        >
+                                            {getVisningsnavn(tiltak, tiltaksdeltakelser)}
+                                        </option>
+                                    ))}
+                                </Select>
+                            ),
+                        }}
+                    />
                 </VedtakSeksjon.Venstre>
 
                 <VedtakSeksjon.Høyre>
@@ -75,108 +126,6 @@ export const BehandlingTiltak = () => {
             </VedtakSeksjon>
             <Separator />
         </>
-    );
-};
-
-type PeriodeProps = {
-    periode: TiltaksdeltakelsePeriodeFormData;
-    tiltaksdeltakelser: Tiltaksdeltagelse[];
-    index: number;
-    rolle: SaksbehandlerRolle | null;
-    skalKunneFjernePeriode: boolean;
-};
-
-const TiltakPeriode = ({
-    periode,
-    tiltaksdeltakelser,
-    index,
-    rolle,
-    skalKunneFjernePeriode,
-}: PeriodeProps) => {
-    const { behandlingsperiode: innvilgelsesPeriode } = useBehandlingSkjema();
-    const dispatch = useBehandlingSkjemaDispatch();
-
-    const erSaksbehandler = rolle === SaksbehandlerRolle.SAKSBEHANDLER;
-
-    return (
-        <div className={style.periode}>
-            <Select
-                label={'Velg tiltak'}
-                size={'small'}
-                className={style.tiltakstype}
-                defaultValue={periode.eksternDeltagelseId}
-                readOnly={!erSaksbehandler}
-                onChange={(event) => {
-                    dispatch({
-                        type: 'oppdaterTiltakId',
-                        payload: { eksternDeltagelseId: event.target.value, index },
-                    });
-                }}
-            >
-                {tiltaksdeltakelser.map((tiltak, index) => (
-                    <option
-                        value={tiltak.eksternDeltagelseId}
-                        key={`${tiltak.deltagelseFraOgMed}-${tiltak.eksternDeltagelseId}-${index}`}
-                    >
-                        {getVisningsnavn(tiltak, tiltaksdeltakelser)}
-                    </option>
-                ))}
-            </Select>
-
-            <PeriodeForm
-                fraOgMed={{
-                    label: 'Fra og med',
-                    value: periode.periode.fraOgMed,
-                    onChange: (value) => {
-                        if (!value) {
-                            return;
-                        }
-
-                        const nyFraOgMed = dateTilISOTekst(value);
-                        dispatch({
-                            type: 'oppdaterTiltaksdeltagelseFraOgMed',
-                            payload: { fraOgMed: nyFraOgMed, index },
-                        });
-                    },
-                    error: null,
-                }}
-                tilOgMed={{
-                    label: 'Til og med',
-                    value: periode.periode.tilOgMed,
-                    onChange: (value) => {
-                        if (!value) {
-                            return;
-                        }
-
-                        const nyTilOgMed = dateTilISOTekst(value);
-
-                        dispatch({
-                            type: 'oppdaterTiltaksdeltagelseTilOgMed',
-                            payload: { tilOgMed: nyTilOgMed, index },
-                        });
-                    },
-                    error: null,
-                }}
-                readOnly={!erSaksbehandler}
-                minDate={innvilgelsesPeriode?.fraOgMed}
-                maxDate={innvilgelsesPeriode?.tilOgMed}
-            />
-
-            {erSaksbehandler && skalKunneFjernePeriode && (
-                <Button
-                    variant={'tertiary'}
-                    size={'small'}
-                    onClick={() => {
-                        dispatch({
-                            type: 'fjernTiltakPeriode',
-                            payload: { index },
-                        });
-                    }}
-                >
-                    {'Fjern'}
-                </Button>
-            )}
-        </div>
     );
 };
 
