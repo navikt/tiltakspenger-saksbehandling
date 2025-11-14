@@ -60,9 +60,17 @@ export const AvsluttMeldekortbehandlingModal = (props: {
                 </HStack>
             </Modal.Header>
             <Modal.Body className={styles.modalBody}>
-                <BodyLong>
+                <BodyLong size={'small'}>
                     Hvis du avslutter meldekortbehandlingen må behandlingen startes på nytt for å
                     behandle meldekortet manuelt.
+                </BodyLong>
+                <BodyLong size={'small'}>
+                    {
+                        'Dersom det finnes ubehandlede korrigeringer fra bruker for denne perioden, vil '
+                    }
+                    {
+                        'varselet for disse fjernes fra "åpne behandlinger"-oversikten når du avslutter behandlingen.'
+                    }
                 </BodyLong>
                 <Textarea
                     ref={begrunnelseRef}
