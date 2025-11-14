@@ -9,7 +9,7 @@ import style from './BehandlingDagerPerMeldeperiode.module.css';
 export const BehandlingDagerPerMeldeperiode = () => {
     const { antallDagerPerMeldeperiode } = useBehandlingSkjema();
 
-    const skalViseAlert =
+    const antallDagerSettesIkkeAutomatiskIBrev =
         antallDagerPerMeldeperiode.length !== 1 ||
         antallDagerPerMeldeperiode[0].antallDagerPerMeldeperiode > 10 ||
         erOddetall(antallDagerPerMeldeperiode[0].antallDagerPerMeldeperiode);
@@ -24,7 +24,9 @@ export const BehandlingDagerPerMeldeperiode = () => {
                 <AntallDagerForMeldeperiodeForm />
             </VedtakSeksjon.Venstre>
 
-            <VedtakSeksjon.Høyre className={classNames(skalViseAlert && style.skjult)}>
+            <VedtakSeksjon.Høyre
+                className={classNames(!antallDagerSettesIkkeAutomatiskIBrev && style.skjult)}
+            >
                 <Alert variant={'info'} size={'small'}>
                     Husk å oppgi antall dager per uke det innvilges tiltakspenger for i
                     vedtaksbrevet.
