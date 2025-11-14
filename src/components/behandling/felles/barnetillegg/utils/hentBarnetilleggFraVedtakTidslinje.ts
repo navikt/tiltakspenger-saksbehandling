@@ -3,7 +3,6 @@ import { Periode } from '~/types/Periode';
 import { joinPerioder, perioderOverlapper } from '~/utils/periode';
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';
 import { datoMax, datoMin, nesteDag } from '~/utils/date';
-
 import { kunPerioderMedBarn } from '~/components/behandling/felles/barnetillegg/utils/barnetilleggUtils';
 import { BehandlingId } from '~/types/Rammebehandling';
 

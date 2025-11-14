@@ -6,9 +6,9 @@ import { useState } from 'react';
 import { classNames } from '~/utils/classNames';
 import Varsel from '../../../varsel/Varsel';
 import { formaterTidspunktMedSekunder } from '~/utils/date';
+import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 
 import style from './BehandlingOppdaterSaksopplysninger.module.css';
-import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 
 export const BehandlingOppdaterSaksopplysninger = () => {
     const [harOppdatert, setHarOppdatert] = useState(false);

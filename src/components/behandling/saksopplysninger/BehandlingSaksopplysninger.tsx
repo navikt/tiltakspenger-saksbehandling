@@ -28,6 +28,9 @@ export const BehandlingSaksopplysninger = () => {
 
     return (
         <>
+            <Heading size={'small'} level={'3'}>
+                {'Saksopplysninger'}
+            </Heading>
             <BehandlingOppdaterSaksopplysninger />
             <Separator />
 
