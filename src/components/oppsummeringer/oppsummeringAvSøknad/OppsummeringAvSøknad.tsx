@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { Periode } from '~/types/Periode';
 import { useConfig } from '~/context/ConfigContext';
 import {
@@ -7,11 +6,9 @@ import {
     BehandlingSaksopplysningMedPeriodeSpm,
 } from '../../behandling/saksopplysninger/BehandlingSaksopplysning';
 import { formaterDatotekst, periodeTilFormatertDatotekst } from '~/utils/date';
-import { SøknadOpplysningerPengestøtter } from '../../behandling/saksopplysninger/søknad/SøknadOpplysningerPengestøtter';
+import { SøknadOpplysningerSvar } from '../../behandling/saksopplysninger/søknad/SøknadOpplysningerSvar';
 import { SøknadOpplysningerBarn } from '../../behandling/saksopplysninger/søknad/SøknadOpplysningerBarn';
-import { Alert, Box, Heading, Link, VStack } from '@navikt/ds-react';
-
-import styles from './OppsummeringAvSøknad.module.css';
+import { Alert, Link, VStack } from '@navikt/ds-react';
 import { Søknad } from '~/types/Søknad';
 import { Nullable } from '~/types/UtilTypes';
 
@@ -19,14 +16,12 @@ interface Props {
     /** Behandlingens tiltaksperiode, eller det som er på søknad hvis behandling er enda ikke opprettet (null ved papirsøknad dersom saksbehandler ikke har fyllt inn)*/
     tiltaksperiode: Nullable<Periode>;
     søknad: Søknad;
-    medTittel?: boolean;
 }
 
-const OppsummeringAvSøknad = (props: Props) => {
+export const OppsummeringAvSøknad = ({ søknad, tiltaksperiode }: Props) => {
     const { gosysUrl } = useConfig();
 
-    const { opprettet, tiltak, tiltaksdeltakelseperiodeDetErSøktOm, antallVedlegg, svar } =
-        props.søknad;
+    const { opprettet, tiltak, tiltaksdeltakelseperiodeDetErSøktOm, antallVedlegg, svar } = søknad;
 
     const {
         kvp: kvp,
@@ -37,94 +32,79 @@ const OppsummeringAvSøknad = (props: Props) => {
     } = svar;
 
     return (
-        <Box>
-            {props.medTittel && (
-                <Heading className={styles.header} size={'small'} level={'4'}>
-                    Fra søknad
-                </Heading>
+        <VStack>
+            <BehandlingSaksopplysning
+                navn={'Kravdato'}
+                verdi={formaterDatotekst(opprettet)}
+                spacing={true}
+            />
+
+            <BehandlingSaksopplysning
+                navn={'Periode det er søkt om'}
+                verdi={
+                    !tiltaksdeltakelseperiodeDetErSøktOm
+                        ? 'Periode mangler'
+                        : periodeTilFormatertDatotekst({
+                              fraOgMed: tiltaksdeltakelseperiodeDetErSøktOm.fraOgMed,
+                              tilOgMed: tiltaksdeltakelseperiodeDetErSøktOm.tilOgMed,
+                          })
+                }
+                visVarsel={!tiltaksdeltakelseperiodeDetErSøktOm}
+            />
+
+            {tiltak && <BehandlingSaksopplysning navn={'Tiltak'} verdi={tiltak.typeNavn} />}
+            {tiltak?.fraOgMed && tiltak.tilOgMed && (
+                <BehandlingSaksopplysning
+                    navn={'Periode'}
+                    verdi={periodeTilFormatertDatotekst({
+                        fraOgMed: tiltak.fraOgMed,
+                        tilOgMed: tiltak.tilOgMed,
+                    })}
+                    spacing={true}
+                />
             )}
 
-            <VStack>
-                <BehandlingSaksopplysning
-                    navn={'Kravdato'}
-                    verdi={formaterDatotekst(opprettet)}
-                    spacing={true}
-                />
+            <BehandlingSaksopplysningMedPeriodeSpm
+                navn={'KVP'}
+                periodeSpm={kvp}
+                visVarsel={kvp.svar !== 'NEI'}
+            />
+            <BehandlingSaksopplysningMedPeriodeSpm
+                navn={'Intro'}
+                periodeSpm={intro}
+                visVarsel={intro.svar !== 'NEI'}
+            />
+            <BehandlingSaksopplysningMedPeriodeSpm
+                navn={'Institusjonsopphold'}
+                periodeSpm={institusjon}
+                visVarsel={institusjon.svar !== 'NEI'}
+            />
+            <BehandlingSaksopplysning
+                navn={'Etterlønn'}
+                verdi={etterlønn.svar}
+                visVarsel={etterlønn.svar !== 'NEI'}
+            />
+            <BehandlingSaksopplysningMedPeriodeSpm
+                navn={'Mottar sykepenger og fortsatt sykmeldt'}
+                periodeSpm={sykepenger}
+                spacing={true}
+                visVarsel={sykepenger.svar !== 'NEI'}
+            />
 
-                <BehandlingSaksopplysning
-                    navn={'Periode det er søkt om'}
-                    verdi={
-                        !tiltaksdeltakelseperiodeDetErSøktOm
-                            ? 'Periode mangler'
-                            : periodeTilFormatertDatotekst({
-                                  fraOgMed: tiltaksdeltakelseperiodeDetErSøktOm.fraOgMed,
-                                  tilOgMed: tiltaksdeltakelseperiodeDetErSøktOm.tilOgMed,
-                              })
-                    }
-                    visVarsel={!tiltaksdeltakelseperiodeDetErSøktOm}
-                />
+            <SøknadOpplysningerSvar pengestøtter={søknad.svar} />
 
-                {tiltak && <BehandlingSaksopplysning navn={'Tiltak'} verdi={tiltak.typeNavn} />}
-                {tiltak?.fraOgMed && tiltak.tilOgMed && (
-                    <BehandlingSaksopplysning
-                        navn={'Periode'}
-                        verdi={periodeTilFormatertDatotekst({
-                            fraOgMed: tiltak.fraOgMed,
-                            tilOgMed: tiltak.tilOgMed,
-                        })}
-                        spacing={true}
-                    />
-                )}
+            {/* TODO - kan vi se om vi kan støtte underkomponenten uten tiltaksperiode? Denne kan være viktig for papirsøknad @Henrik */}
+            {tiltaksperiode && (
+                <SøknadOpplysningerBarn tiltaksperiode={tiltaksperiode} søknad={søknad} />
+            )}
 
-                <BehandlingSaksopplysningMedPeriodeSpm
-                    navn={'KVP'}
-                    periodeSpm={kvp}
-                    visVarsel={kvp.svar !== 'NEI'}
-                />
-                <BehandlingSaksopplysningMedPeriodeSpm
-                    navn={'Intro'}
-                    periodeSpm={intro}
-                    visVarsel={intro.svar !== 'NEI'}
-                />
-                <BehandlingSaksopplysningMedPeriodeSpm
-                    navn={'Institusjonsopphold'}
-                    periodeSpm={institusjon}
-                    visVarsel={institusjon.svar !== 'NEI'}
-                />
-                <BehandlingSaksopplysning
-                    navn={'Etterlønn'}
-                    verdi={etterlønn.svar}
-                    visVarsel={etterlønn.svar !== 'NEI'}
-                />
-                <BehandlingSaksopplysningMedPeriodeSpm
-                    navn={'Mottar sykepenger og fortsatt sykmeldt'}
-                    periodeSpm={sykepenger}
-                    spacing={true}
-                    visVarsel={sykepenger.svar !== 'NEI'}
-                />
-
-                <SøknadOpplysningerPengestøtter pengestøtter={props.søknad.svar} />
-                {/* TODO - kan vi se om vi kan støtte underkomponenten uten tiltaksperiode? Denne kan være viktig for papirsøknad @Henrik */}
-                {props.tiltaksperiode && (
-                    <SøknadOpplysningerBarn
-                        tiltaksperiode={props.tiltaksperiode}
-                        søknad={props.søknad}
-                    />
-                )}
-
-                <BehandlingSaksopplysning
-                    navn={'Vedlegg'}
-                    verdi={antallVedlegg > 0 ? 'Ja' : 'Nei'}
-                />
-                {antallVedlegg > 0 && (
-                    <Alert variant={'warning'} inline={true} size={'small'}>
-                        {'Sjekk vedlegg i '}
-                        <Link href={gosysUrl}>{'gosys'}</Link>
-                    </Alert>
-                )}
-            </VStack>
-        </Box>
+            <BehandlingSaksopplysning navn={'Vedlegg'} verdi={antallVedlegg > 0 ? 'Ja' : 'Nei'} />
+            {antallVedlegg > 0 && (
+                <Alert variant={'warning'} inline={true} size={'small'}>
+                    {'Sjekk vedlegg i '}
+                    <Link href={gosysUrl}>{'gosys'}</Link>
+                </Alert>
+            )}
+        </VStack>
     );
 };
-
-export default OppsummeringAvSøknad;

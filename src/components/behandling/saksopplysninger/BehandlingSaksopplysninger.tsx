@@ -8,10 +8,11 @@ import { BehandlingSaksopplysning } from './BehandlingSaksopplysning';
 import { BehandlingTiltakOpplysninger } from './tiltak/BehandlingTiltakOpplysninger';
 import OppsummeringAvAttesteringer from '../../attestering/OppsummeringAvAttestering';
 import { hentTiltaksperiode } from '~/utils/behandling';
-import OppsummeringAvSøknad from '../../oppsummeringer/oppsummeringAvSøknad/OppsummeringAvSøknad';
+import { OppsummeringAvSøknad } from '../../oppsummeringer/oppsummeringAvSøknad/OppsummeringAvSøknad';
 import { BehandlingYtelserOpplysninger } from '~/components/behandling/saksopplysninger/ytelser/BehandlingYtelserOpplysninger';
 import { BehandlingTiltakspengerArenaOpplysninger } from '~/components/behandling/saksopplysninger/tiltakspenger-fra-arena/BehandlingTiltakspengerArenaOpplysninger';
 import { Rammebehandlingstype } from '~/types/Rammebehandling';
+import { SøknadOpplysningerVelger } from '~/components/behandling/saksopplysninger/søknad/SøknadOpplysningerVelger';
 
 import style from './BehandlingSaksopplysninger.module.css';
 
@@ -19,7 +20,7 @@ export const BehandlingSaksopplysninger = () => {
     const { behandling } = useBehandling();
 
     const { saksopplysninger, type, attesteringer } = behandling;
-    const { ytelser, tiltakspengevedtakFraArena, tiltaksdeltagelse, fødselsdato } =
+    const { ytelser, tiltakspengevedtakFraArena, tiltaksdeltagelse, fødselsdato, periode } =
         saksopplysninger;
 
     const harYtelser = ytelser.length > 0;
@@ -69,16 +70,21 @@ export const BehandlingSaksopplysninger = () => {
                 />
             </OpplysningerSeksjon>
 
-            {type === Rammebehandlingstype.SØKNADSBEHANDLING && (
-                <>
-                    <Separator />
-                    <OpplysningerSeksjon header={'Fra søknad'}>
-                        <OppsummeringAvSøknad
-                            tiltaksperiode={hentTiltaksperiode(behandling)}
-                            søknad={behandling.søknad}
-                        />
+            <Separator />
+
+            {type === Rammebehandlingstype.SØKNADSBEHANDLING ? (
+                <OpplysningerSeksjon header={'Fra søknad'}>
+                    <OppsummeringAvSøknad
+                        tiltaksperiode={hentTiltaksperiode(behandling)}
+                        søknad={behandling.søknad}
+                    />
+                </OpplysningerSeksjon>
+            ) : (
+                periode && (
+                    <OpplysningerSeksjon header={'Tidligere innvilgede søknader'}>
+                        <SøknadOpplysningerVelger periode={periode} />
                     </OpplysningerSeksjon>
-                </>
+                )
             )}
             {attesteringer.length > 0 && (
                 <>

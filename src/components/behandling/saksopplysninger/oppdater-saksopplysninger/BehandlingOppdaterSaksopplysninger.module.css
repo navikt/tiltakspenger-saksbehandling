@@ -1,12 +1,13 @@
 .knapp {
     margin-left: -0.5rem;
-    margin-bottom: 0.25rem;
 
     min-height: 32px;
 
     transition:
         background-color,
         color 300ms ease-in-out;
+
+    align-self: flex-start;
 }
 
 .loaded {

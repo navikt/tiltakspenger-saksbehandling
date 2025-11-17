@@ -1,11 +1,11 @@
-import { BodyShort, Button, Loader } from '@navikt/ds-react';
+import { BodyShort, Button, Loader, VStack } from '@navikt/ds-react';
 import { ArrowCirclepathIcon, CheckmarkIcon } from '@navikt/aksel-icons';
 import { useOppdaterSaksopplysninger } from './useOppdaterSaksopplysninger';
 import { useBehandling } from '../../context/BehandlingContext';
 import { useState } from 'react';
 import { classNames } from '~/utils/classNames';
 import Varsel from '../../../varsel/Varsel';
-import { formaterTidspunktMedSekunder } from '~/utils/date';
+import { formaterTidspunktMedSekunder, periodeTilFormatertDatotekst } from '~/utils/date';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 
 import style from './BehandlingOppdaterSaksopplysninger.module.css';
@@ -14,12 +14,21 @@ export const BehandlingOppdaterSaksopplysninger = () => {
     const [harOppdatert, setHarOppdatert] = useState(false);
 
     const { behandling, setBehandling, rolleForBehandling } = useBehandling();
-    const { oppslagstidspunkt } = behandling.saksopplysninger;
+    const { oppslagstidspunkt, periode } = behandling.saksopplysninger;
 
     const { oppdaterOgHentBehandling, isLoading, error } = useOppdaterSaksopplysninger(behandling);
 
     return (
-        <>
+        <VStack gap={'1'}>
+            <BodyShort
+                size={'small'}
+            >{`Sist oppdatert: ${formaterTidspunktMedSekunder(oppslagstidspunkt)}`}</BodyShort>
+
+            {periode && (
+                <BodyShort
+                    size={'small'}
+                >{`Innhentet for periode: ${periodeTilFormatertDatotekst(periode)}`}</BodyShort>
+            )}
             {rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER && (
                 <Button
                     variant={'tertiary'}
@@ -57,10 +66,6 @@ export const BehandlingOppdaterSaksopplysninger = () => {
                     melding={`Oppdatering av saksopplysninger feilet - [${error.status}] ${error.info?.melding || error.message}`}
                 />
             )}
-
-            <BodyShort
-                size={'small'}
-            >{`Sist oppdatert: ${formaterTidspunktMedSekunder(oppslagstidspunkt)}`}</BodyShort>
-        </>
+        </VStack>
     );
 };

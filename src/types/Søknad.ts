@@ -5,7 +5,7 @@ import { Nullable } from './UtilTypes';
 
 export type SøknadId = `soknad_${string}`;
 
-interface SøknadBase extends SøknadPengestøtter {
+interface SøknadBase {
     id: SøknadId;
     journalpostId: string;
     tiltak: Nullable<TiltaksdeltagelseFraSøknad>;
@@ -30,7 +30,7 @@ export interface IkkeInnvilgbarSøknad extends SøknadBase {
 
 export type Søknad = InnvilgbarSøknad | IkkeInnvilgbarSøknad;
 
-export interface SøknadPengestøtter {
+export interface SpørsmålsbesvarelserPengestøtter {
     alderspensjon: FraOgMedDatoSpm;
     gjenlevendepensjon: PeriodeSpm;
     supplerendeStønadAlder: PeriodeSpm;
@@ -39,7 +39,7 @@ export interface SøknadPengestøtter {
     jobbsjansen: PeriodeSpm;
 }
 
-export interface Spørsmålsbesvarelser extends SøknadPengestøtter {
+export interface Spørsmålsbesvarelser extends SpørsmålsbesvarelserPengestøtter {
     kvp: PeriodeSpm;
     intro: PeriodeSpm;
     institusjon: PeriodeSpm;

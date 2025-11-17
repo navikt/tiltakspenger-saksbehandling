@@ -5,14 +5,14 @@ import {
 } from '../BehandlingSaksopplysning';
 import { BodyShort } from '@navikt/ds-react';
 import { formaterDatotekst } from '~/utils/date';
-import { SøknadPengestøtter } from '~/types/Søknad';
+import { SpørsmålsbesvarelserPengestøtter } from '~/types/Søknad';
 
 type Props = {
     className?: string;
-    pengestøtter: SøknadPengestøtter;
+    pengestøtter: SpørsmålsbesvarelserPengestøtter;
 };
 
-export const SøknadOpplysningerPengestøtter = ({ className, pengestøtter }: Props) => {
+export const SøknadOpplysningerSvar = ({ className, pengestøtter }: Props) => {
     const {
         alderspensjon,
         gjenlevendepensjon,
