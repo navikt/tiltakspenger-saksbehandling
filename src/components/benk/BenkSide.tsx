@@ -18,8 +18,9 @@ import {
 } from '~/types/Behandlingssammendrag';
 import { BehandlingssammendragKolonner } from './BenkSideUtils';
 import styles from './BenkSide.module.css';
+import { BenkFiltreringContext } from '~/context/BenkFiltreringContext';
 
-type Filters = {
+export type BenkFilters = {
     benktype: BehandlingssammendragBenktype | 'Alle';
     type: BehandlingssammendragType | 'Alle';
     status: BehandlingssammendragStatus | 'Alle';
@@ -36,19 +37,13 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
     const searchParams = useSearchParams();
     const bannerRef = useRef<NotificationBannerRef>(null);
     const { innloggetSaksbehandler } = useSaksbehandler();
+    const { filters, setFilters } = React.useContext(BenkFiltreringContext);
 
     const benktypeParam = searchParams.get('benktype') as BehandlingssammendragBenktype | null;
     const typeParam = searchParams.get('type') as BehandlingssammendragType | null;
     const statusParam = searchParams.get('status') as BehandlingssammendragStatus | null;
     const saksbehandlerParam = searchParams.get('saksbehandler') as string | null;
     const sorteringRetningParam = searchParams.get('sortering') as 'ASC' | 'DESC' | null;
-
-    const [filters, setFilters] = useState<Filters>({
-        benktype: benktypeParam ?? 'Alle',
-        type: typeParam ?? 'Alle',
-        status: statusParam ?? 'Alle',
-        saksbehandler: saksbehandlerParam ?? 'Alle',
-    });
 
     const [filtrertBenkoversikt, setFiltrertBenkoversikt] =
         useState<BenkOversiktResponse>(benkOversikt);
@@ -75,7 +70,17 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
         }
     }, [fetchOversikt, filters, sorteringRetningParam]);
 
-    const handleOppdaterFilter = () => {
+    useEffect(() => {
+        setFilters({
+            benktype: benktypeParam ?? filters.benktype,
+            type: typeParam ?? filters.type,
+            status: statusParam ?? filters.status,
+            saksbehandler: saksbehandlerParam ?? filters.saksbehandler,
+        });
+        updateUrlWithSelectedFilters();
+    }, [benktypeParam, typeParam, statusParam, saksbehandlerParam]);
+
+    const updateUrlWithSelectedFilters = () => {
         const query = new URLSearchParams(searchParams.toString());
         if (filters.benktype !== 'Alle') {
             query.set('benktype', filters.benktype);
@@ -104,6 +109,10 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
         }
 
         router.push({ pathname: router.pathname, search: query.toString() });
+    };
+
+    const handleOppdaterFilter = () => {
+        updateUrlWithSelectedFilters();
         bannerRef.current?.clearMessage();
         fetchOversikt.trigger({
             benktype: filters.benktype === 'Alle' ? null : [filters.benktype],

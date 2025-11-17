@@ -11,17 +11,11 @@ import {
     behandlingstypeTextFormatter,
 } from '~/components/benk/BenkSideUtils';
 import { Saksbehandler } from '~/types/Saksbehandler';
-
-type Filters = {
-    benktype: BehandlingssammendragBenktype | 'Alle';
-    type: BehandlingssammendragType | 'Alle';
-    status: BehandlingssammendragStatus | 'Alle';
-    saksbehandler: string | 'Alle' | 'IKKE_TILDELT';
-};
+import { BenkFilters } from './BenkSide';
 
 type Props = {
-    filters: Filters;
-    setFilters: React.Dispatch<React.SetStateAction<Filters>>;
+    filters: BenkFilters;
+    setFilters: React.Dispatch<React.SetStateAction<BenkFilters>>;
     benkOversikt: BenkOversiktResponse;
     innloggetSaksbehandler: Saksbehandler;
     onOppdaterFilter: () => void;
