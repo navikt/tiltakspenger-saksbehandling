@@ -12,9 +12,9 @@ import {
     useBehandlingSkjemaDispatch,
 } from '~/components/behandling/context/BehandlingSkjemaContext';
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
+import { Periode } from '~/types/Periode';
 
 import style from './BehandlingBarnetillegg.module.css';
-import { Periode } from '~/types/Periode';
 
 type Props = {
     valgTekst: string;

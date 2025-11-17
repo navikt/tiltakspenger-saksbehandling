@@ -43,55 +43,49 @@ const MultiperiodeForm = <T extends Array<{ periode: PeriodeMedNullable }>>(prop
 }) => {
     return (
         <VStack gap="4" align="start">
-            <ul>
-                <VStack gap="4">
-                    {props.perioder.map((periode, index) => (
-                        <li key={`${props.name}-${index}`}>
-                            <HStack align="end" gap="4">
-                                {props.contentConfig.position === 'before' &&
-                                    props.contentConfig.content(periode, index)}
-                                <PeriodeForm
-                                    fraOgMed={{
-                                        label: 'Fra og med',
-                                        value: periode.periode.fraOgMed,
-                                        onChange: (date) =>
-                                            props.periodeConfig.fraOgMed.onChange(date, index),
-                                        error: props.periodeConfig.fraOgMed.error ?? null,
-                                    }}
-                                    tilOgMed={{
-                                        label: 'Til og med',
-                                        value: periode.periode.tilOgMed,
-                                        onChange: (date) =>
-                                            props.periodeConfig.tilOgMed.onChange(date, index),
-                                        error: props.periodeConfig.tilOgMed.error ?? null,
-                                    }}
-                                    minDate={props.periodeConfig.minDate}
-                                    maxDate={props.periodeConfig.maxDate}
-                                    size={props.periodeConfig.size}
-                                    readOnly={props.periodeConfig.readOnly}
-                                />
+            <VStack gap="4" as={'ul'}>
+                {props.perioder.map((periode, index) => (
+                    <HStack align="end" gap="4" key={`${props.name}-${index}`} as={'li'}>
+                        {props.contentConfig.position === 'before' &&
+                            props.contentConfig.content(periode, index)}
+                        <PeriodeForm
+                            fraOgMed={{
+                                label: 'Fra og med',
+                                value: periode.periode.fraOgMed,
+                                onChange: (date) =>
+                                    props.periodeConfig.fraOgMed.onChange(date, index),
+                                error: props.periodeConfig.fraOgMed.error ?? null,
+                            }}
+                            tilOgMed={{
+                                label: 'Til og med',
+                                value: periode.periode.tilOgMed,
+                                onChange: (date) =>
+                                    props.periodeConfig.tilOgMed.onChange(date, index),
+                                error: props.periodeConfig.tilOgMed.error ?? null,
+                            }}
+                            minDate={props.periodeConfig.minDate}
+                            maxDate={props.periodeConfig.maxDate}
+                            size={props.periodeConfig.size}
+                            readOnly={props.periodeConfig.readOnly}
+                        />
 
-                                {(props.contentConfig.position === 'after' ||
-                                    !props.contentConfig.position) &&
-                                    props.contentConfig.content(periode, index)}
+                        {(props.contentConfig.position === 'after' ||
+                            !props.contentConfig.position) &&
+                            props.contentConfig.content(periode, index)}
 
-                                {!props.fjernPeriodeButtonConfig.hidden && (
-                                    <Button
-                                        type={'button'}
-                                        variant={'tertiary'}
-                                        size={'small'}
-                                        onClick={() =>
-                                            props.fjernPeriodeButtonConfig.onClick(index)
-                                        }
-                                    >
-                                        {props.fjernPeriodeButtonConfig.text || 'Fjern periode'}
-                                    </Button>
-                                )}
-                            </HStack>
-                        </li>
-                    ))}
-                </VStack>
-            </ul>
+                        {!props.fjernPeriodeButtonConfig.hidden && (
+                            <Button
+                                type={'button'}
+                                variant={'tertiary'}
+                                size={'small'}
+                                onClick={() => props.fjernPeriodeButtonConfig.onClick(index)}
+                            >
+                                {props.fjernPeriodeButtonConfig.text || 'Fjern periode'}
+                            </Button>
+                        )}
+                    </HStack>
+                ))}
+            </VStack>
 
             <HStack gap="4">
                 {props.nyPeriodeButtonConfig.adjacentContent?.position === 'before' &&

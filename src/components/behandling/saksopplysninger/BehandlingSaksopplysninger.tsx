@@ -12,7 +12,7 @@ import { OppsummeringAvSøknad } from '../../oppsummeringer/oppsummeringAvSøkna
 import { BehandlingYtelserOpplysninger } from '~/components/behandling/saksopplysninger/ytelser/BehandlingYtelserOpplysninger';
 import { BehandlingTiltakspengerArenaOpplysninger } from '~/components/behandling/saksopplysninger/tiltakspenger-fra-arena/BehandlingTiltakspengerArenaOpplysninger';
 import { Rammebehandlingstype } from '~/types/Rammebehandling';
-import { SøknadOpplysningerVelger } from '~/components/behandling/saksopplysninger/søknad/SøknadOpplysningerVelger';
+import { SøknadOpplysningerFraVedtak } from '~/components/behandling/saksopplysninger/søknad/SøknadOpplysningerFraVedtak';
 
 import style from './BehandlingSaksopplysninger.module.css';
 
@@ -82,7 +82,7 @@ export const BehandlingSaksopplysninger = () => {
             ) : (
                 periode && (
                     <OpplysningerSeksjon header={'Tidligere innvilgede søknader'}>
-                        <SøknadOpplysningerVelger periode={periode} />
+                        <SøknadOpplysningerFraVedtak periode={periode} />
                     </OpplysningerSeksjon>
                 )
             )}

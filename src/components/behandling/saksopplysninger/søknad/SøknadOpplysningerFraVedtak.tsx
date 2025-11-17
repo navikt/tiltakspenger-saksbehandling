@@ -13,7 +13,7 @@ type Props = {
     periode: Periode;
 };
 
-export const SøknadOpplysningerVelger = ({ periode }: Props) => {
+export const SøknadOpplysningerFraVedtak = ({ periode }: Props) => {
     const { sak } = useSak();
     const { alleRammevedtak, behandlinger } = sak;
 
@@ -55,9 +55,11 @@ export const SøknadOpplysningerVelger = ({ periode }: Props) => {
                     <Link as={NextLink} href={behandlingUrl(valgtBehandling)}>
                         <BodyShort size={'small'}>{'Til behandlingen'}</BodyShort>
                     </Link>
+
                     <OppsummeringAvSøknad
                         tiltaksperiode={periode}
                         søknad={valgtBehandling.søknad}
+                        visBarnetilleggPeriodiseringKnapp={true}
                     />
                 </VStack>
             )}

@@ -17,7 +17,7 @@ import React, { useEffect } from 'react';
 import { Periodevelger } from '~/components/papirsøknad/Periodevelger';
 import { dateTilISOTekst } from '~/utils/date';
 import { VelgTiltak } from '~/components/papirsøknad/tiltak/VelgTiltak';
-import { Barnetillegg } from '~/components/papirsøknad/barnetillegg/Barnetillegg';
+import { PapirsøknadBarnetillegg } from '~/components/papirsøknad/barnetillegg/PapirsøknadBarnetillegg';
 import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
 import { useOpprettPapirsøknad } from '~/components/personoversikt/papirsøknad/useOpprettPapirsøknad';
 import router from 'next/router';
@@ -150,7 +150,7 @@ const PapirsøknadPage = (props: Props) => {
                                 periodeSpørsmål="I hvilken del av perioden bor brukeren på institusjon med gratis opphold, mat og drikke?"
                             />
 
-                            <Barnetillegg
+                            <PapirsøknadBarnetillegg
                                 sakId={props.sak.sakId}
                                 name="svar.harSøktOmBarnetillegg"
                                 legend="Har bruker søkt barnetillegg?"

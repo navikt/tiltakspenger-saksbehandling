@@ -21,7 +21,7 @@ type Props = {
     tittel?: string;
 };
 
-export const Barnetillegg = ({ sakId, name, legend }: Props) => {
+export const PapirsøknadBarnetillegg = ({ sakId, name, legend }: Props) => {
     const { control, setValue } = useFormContext<Papirsøknad>();
     const [skalHenteBarn, setSkalHenteBarn] = React.useState(false);
 

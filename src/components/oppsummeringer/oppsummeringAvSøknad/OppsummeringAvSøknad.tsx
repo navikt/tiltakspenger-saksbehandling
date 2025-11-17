@@ -16,9 +16,14 @@ interface Props {
     /** Behandlingens tiltaksperiode, eller det som er på søknad hvis behandling er enda ikke opprettet (null ved papirsøknad dersom saksbehandler ikke har fyllt inn)*/
     tiltaksperiode: Nullable<Periode>;
     søknad: Søknad;
+    visBarnetilleggPeriodiseringKnapp?: boolean;
 }
 
-export const OppsummeringAvSøknad = ({ søknad, tiltaksperiode }: Props) => {
+export const OppsummeringAvSøknad = ({
+    søknad,
+    tiltaksperiode,
+    visBarnetilleggPeriodiseringKnapp,
+}: Props) => {
     const { gosysUrl } = useConfig();
 
     const { opprettet, tiltak, tiltaksdeltakelseperiodeDetErSøktOm, antallVedlegg, svar } = søknad;
@@ -93,10 +98,11 @@ export const OppsummeringAvSøknad = ({ søknad, tiltaksperiode }: Props) => {
 
             <SøknadOpplysningerSvar pengestøtter={søknad.svar} />
 
-            {/* TODO - kan vi se om vi kan støtte underkomponenten uten tiltaksperiode? Denne kan være viktig for papirsøknad @Henrik */}
-            {tiltaksperiode && (
-                <SøknadOpplysningerBarn tiltaksperiode={tiltaksperiode} søknad={søknad} />
-            )}
+            <SøknadOpplysningerBarn
+                tiltaksperiode={tiltaksperiode}
+                søknad={søknad}
+                visBarnetilleggPeriodiseringKnapp={visBarnetilleggPeriodiseringKnapp}
+            />
 
             <BehandlingSaksopplysning navn={'Vedlegg'} verdi={antallVedlegg > 0 ? 'Ja' : 'Nei'} />
             {antallVedlegg > 0 && (
