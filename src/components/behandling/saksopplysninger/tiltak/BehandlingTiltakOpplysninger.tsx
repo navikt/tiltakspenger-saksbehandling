@@ -28,7 +28,8 @@ const TiltaksdeltagelseOpplysning = (props: { tiltaksdeltagelse: Tiltaksdeltagel
         deltagelseFraOgMed,
         typeNavn,
         kilde,
-        deltakelseProsentFraGjennomforing,
+        gjennomføringId,
+        gjennomforingsprosent,
     } = props.tiltaksdeltagelse;
 
     return (
@@ -51,22 +52,22 @@ const TiltaksdeltagelseOpplysning = (props: { tiltaksdeltagelse: Tiltaksdeltagel
             />
             <BehandlingSaksopplysning
                 navn={'Deltakelsesprosent'}
-                verdi={deltakelseProsentTekst(deltakelseProsent, deltakelseProsentFraGjennomforing)}
+                verdi={prosentTekst(deltakelseProsent)}
+            />
+            <BehandlingSaksopplysning
+                navn={'Gjennomføringsprosent'}
+                verdi={prosentTekst(gjennomforingsprosent) ?? 'Ukjent'}
+            />
+            <BehandlingSaksopplysning
+                navn={'Gjennomførings-id'}
+                verdi={gjennomføringId ?? 'Ukjent'}
             />
         </>
     );
 };
 
-const deltakelseProsentTekst = (
-    deltakelseProsent: number | null,
-    deltakelseProsentFraGjennomforing: boolean | null,
-) => {
-    const tekst = deltakelseProsent !== null ? `${deltakelseProsent}%` : 'Ukjent';
-    if (deltakelseProsentFraGjennomforing === true && deltakelseProsent !== null) {
-        return `${tekst} (fra tiltaksgjennomføringen)`;
-    } else {
-        return tekst;
-    }
+const prosentTekst = (prosent: number | null) => {
+    return prosent !== null && prosent !== undefined ? `${prosent}%` : 'Ukjent';
 };
 
 const kildeTekst: Record<string, string> = {
