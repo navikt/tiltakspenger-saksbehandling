@@ -6,6 +6,7 @@ import {
 import { BodyShort } from '@navikt/ds-react';
 import { formaterDatotekst } from '~/utils/date';
 import { SpørsmålsbesvarelserPengestøtter } from '~/types/Søknad';
+import { formaterSøknadsspørsmålSvar } from '~/utils/tekstformateringUtils';
 
 type Props = {
     className?: string;
@@ -43,7 +44,7 @@ export const SøknadOpplysningerSvar = ({ className, pengestøtter }: Props) => 
                             navn={'Alderspensjon fra'}
                             verdi={
                                 alderspensjon.svar === 'JA'
-                                    ? formaterDatotekst(alderspensjon.fraOgMed)
+                                    ? `${formaterSøknadsspørsmålSvar(alderspensjon.svar)} (${formaterDatotekst(alderspensjon.fraOgMed)})`
                                     : alderspensjon.svar
                             }
                             visVarsel

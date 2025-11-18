@@ -8,17 +8,17 @@ import styles from './Spørsmål.module.css';
 import { dateTilISOTekst } from '~/utils/date';
 
 type Props = {
-    spørsmålName: FieldPath<Papirsøknad>;
-    datoName: FieldPath<Papirsøknad>;
+    spørsmålFelt: FieldPath<Papirsøknad>;
+    datoFelt: FieldPath<Papirsøknad>;
     legend: string;
     tittel?: string;
 };
 
-export const SpørsmålMedDatovelger = ({ spørsmålName, datoName, legend, tittel }: Props) => {
+export const SpørsmålMedDatovelger = ({ spørsmålFelt, datoFelt, legend, tittel }: Props) => {
     const { control, resetField, setValue } = useFormContext<Papirsøknad>();
 
     const jaNeiSpørsmål = useController({
-        name: spørsmålName,
+        name: spørsmålFelt,
         control,
         defaultValue: undefined,
     });
@@ -26,11 +26,11 @@ export const SpørsmålMedDatovelger = ({ spørsmålName, datoName, legend, titt
     return (
         <div className={jaNeiSpørsmål.field.value === 'JA' ? styles.blokkUtvidet : ''}>
             <JaNeiSpørsmål
-                name={spørsmålName}
+                name={spørsmålFelt}
                 legend={legend}
                 onChange={(newValue) => {
                     if (newValue !== 'JA') {
-                        resetField(datoName);
+                        resetField(datoFelt);
                     }
                 }}
             />
@@ -44,10 +44,10 @@ export const SpørsmålMedDatovelger = ({ spørsmålName, datoName, legend, titt
                             </Heading>
                         )}
                         <Datovelger
-                            name={datoName}
+                            name={datoFelt}
                             label={'Fra og med (dd.mm.åååå)'}
                             onDateChange={(date) => {
-                                setValue(datoName, date ? dateTilISOTekst(date) : undefined);
+                                setValue(datoFelt, date ? dateTilISOTekst(date) : undefined);
                             }}
                         />
                     </VStack>

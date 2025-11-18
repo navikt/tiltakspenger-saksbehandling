@@ -103,8 +103,9 @@ const PapirsøknadPage = (props: Props) => {
                             />
 
                             <Periodevelger
-                                name="manueltSattSøknadsperiode"
-                                tittel="Periode"
+                                fraOgMedFelt="manueltSattSøknadsperiode.fraOgMed"
+                                tilOgMedFelt="manueltSattSøknadsperiode.tilOgMed"
+                                tittel="Hvilken periode er det søkt for?"
                                 rules={{
                                     fraOgMed: { required: 'Fra og med er påkrevd' },
                                     tilOgMed: { required: 'Til og med er påkrevd' },
@@ -118,22 +119,25 @@ const PapirsøknadPage = (props: Props) => {
                             />
 
                             <SpørsmålMedPeriodevelger
-                                spørsmålName="svar.kvp.svar"
-                                periodeName="svar.kvp.periode"
+                                spørsmålFelt="svar.kvp.svar"
+                                fraOgMedFelt="svar.kvp.fraOgMed"
+                                tilOgMedFelt="svar.kvp.tilOgMed"
                                 spørsmål="Mottar kvalifiseringsstønad"
                             />
 
                             <SpørsmålMedPeriodevelger
-                                spørsmålName="svar.intro.svar"
-                                periodeName="svar.intro.periode"
+                                spørsmålFelt="svar.intro.svar"
+                                fraOgMedFelt="svar.intro.fraOgMed"
+                                tilOgMedFelt="svar.intro.tilOgMed"
                                 spørsmål="Mottar introduksjonsstønad"
                             />
 
                             <JaNeiSpørsmål name="svar.etterlønn.svar" legend="Mottar etterlønn" />
 
                             <SpørsmålMedPeriodevelger
-                                spørsmålName="svar.sykepenger.svar"
-                                periodeName="svar.sykepenger.periode"
+                                spørsmålFelt="svar.sykepenger.svar"
+                                fraOgMedFelt="svar.sykepenger.fraOgMed"
+                                tilOgMedFelt="svar.sykepenger.tilOgMed"
                                 periodeSpørsmål="I hvilken del av perioden var bruker sykemeldt?"
                                 spørsmål="Har nylig mottatt sykepenger og er fortsatt sykemeldt"
                             />
@@ -144,8 +148,9 @@ const PapirsøknadPage = (props: Props) => {
                             />
 
                             <SpørsmålMedPeriodevelger
-                                spørsmålName="svar.institusjon.svar"
-                                periodeName="svar.institusjon.periode"
+                                spørsmålFelt="svar.institusjon.svar"
+                                fraOgMedFelt="svar.institusjon.fraOgMed"
+                                tilOgMedFelt="svar.institusjon.tilOgMed"
                                 spørsmål="Bor bruker i en institusjon med gratis opphold, mat og drikke i perioden "
                                 periodeSpørsmål="I hvilken del av perioden bor brukeren på institusjon med gratis opphold, mat og drikke?"
                             />

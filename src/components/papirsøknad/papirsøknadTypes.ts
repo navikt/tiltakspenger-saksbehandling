@@ -38,7 +38,8 @@ export interface FraOgMedDatoSpm {
 
 export interface PeriodeSpm {
     svar: JaNeiSvar;
-    periode: Periode;
+    fraOgMed?: string;
+    tilOgMed?: string;
 }
 
 export interface Spørsmålsbesvarelser {

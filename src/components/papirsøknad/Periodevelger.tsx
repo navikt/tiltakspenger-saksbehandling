@@ -7,7 +7,8 @@ import styles from './Spørsmål.module.css';
 import { dateTilISOTekst } from '~/utils/date';
 
 type Props = {
-    name: FieldPath<Papirsøknad>;
+    fraOgMedFelt: FieldPath<Papirsøknad>;
+    tilOgMedFelt: FieldPath<Papirsøknad>;
     tittel?: string;
     rules?: {
         fraOgMed?: RegisterOptions<Papirsøknad, FieldPath<Papirsøknad>>;
@@ -15,16 +16,16 @@ type Props = {
     };
 };
 
-export const Periodevelger = ({ name, tittel, rules }: Props) => {
+export const Periodevelger = ({ fraOgMedFelt, tilOgMedFelt, tittel, rules }: Props) => {
     const { control } = useFormContext<Papirsøknad>();
 
     const fraField = useController({
-        name: `${name}.fraOgMed` as FieldPath<Papirsøknad>,
+        name: fraOgMedFelt,
         control,
         rules: rules?.fraOgMed,
     });
     const tilField = useController({
-        name: `${name}.tilOgMed` as FieldPath<Papirsøknad>,
+        name: tilOgMedFelt,
         control,
         rules: rules?.tilOgMed,
     });
