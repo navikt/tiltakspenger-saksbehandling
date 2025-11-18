@@ -40,10 +40,13 @@ export const BehandlingSaksopplysningMedPeriodeSpm = ({
     return periodeSpm.periode && visVarsel ? (
         <BehandlingSaksopplysning
             navn={navn}
-            verdi={periodeTilFormatertDatotekst({
-                fraOgMed: periodeSpm.periode.fraOgMed,
-                tilOgMed: periodeSpm.periode.tilOgMed,
-            })}
+            verdi={`${formaterSøknadsspørsmålSvar(periodeSpm.svar)} (${periodeTilFormatertDatotekst(
+                {
+                    fraOgMed: periodeSpm.periode.fraOgMed,
+                    tilOgMed: periodeSpm.periode.tilOgMed,
+                },
+            )})
+            `}
             spacing={spacing}
             visVarsel={visVarsel}
         />

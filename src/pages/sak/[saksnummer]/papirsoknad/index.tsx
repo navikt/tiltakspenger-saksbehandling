@@ -105,7 +105,7 @@ const PapirsøknadPage = (props: Props) => {
                             <Periodevelger
                                 fraOgMedFelt="manueltSattSøknadsperiode.fraOgMed"
                                 tilOgMedFelt="manueltSattSøknadsperiode.tilOgMed"
-                                tittel="Periode"
+                                tittel="Hvilken periode er det søkt for?"
                                 rules={{
                                     fraOgMed: { required: 'Fra og med er påkrevd' },
                                     tilOgMed: { required: 'Til og med er påkrevd' },
