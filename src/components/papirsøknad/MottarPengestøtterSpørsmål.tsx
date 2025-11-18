@@ -24,12 +24,17 @@ export const MottarPengestøtterSpørsmål = ({ name, legend }: Props) => {
     });
 
     const nullstillPeriodeFelter = (): void => {
-        resetField('svar.gjenlevendepensjon.periode');
+        resetField('svar.gjenlevendepensjon.fraOgMed');
+        resetField('svar.gjenlevendepensjon.tilOgMed');
         resetField('svar.alderspensjon.fraOgMed');
-        resetField('svar.supplerendeStønadAlder.periode');
-        resetField('svar.supplerendeStønadFlyktning.periode');
-        resetField('svar.trygdOgPensjon.periode');
-        resetField('svar.jobbsjansen.periode');
+        resetField('svar.supplerendeStønadAlder.fraOgMed');
+        resetField('svar.supplerendeStønadAlder.tilOgMed');
+        resetField('svar.supplerendeStønadFlyktning.fraOgMed');
+        resetField('svar.supplerendeStønadFlyktning.tilOgMed');
+        resetField('svar.trygdOgPensjon.fraOgMed');
+        resetField('svar.trygdOgPensjon.tilOgMed');
+        resetField('svar.jobbsjansen.fraOgMed');
+        resetField('svar.jobbsjansen.tilOgMed');
     };
 
     // Svarer man JA på hovedspørsmålet, så nullstilles alle underspørsmålene i tilfelle man allerede har svart noe annet
@@ -79,43 +84,48 @@ export const MottarPengestøtterSpørsmål = ({ name, legend }: Props) => {
             {spørsmål.field.value === 'JA' && (
                 <>
                     <SpørsmålMedPeriodevelger
-                        spørsmålName="svar.gjenlevendepensjon.svar"
-                        periodeName="svar.gjenlevendepensjon.periode"
+                        spørsmålFelt="svar.gjenlevendepensjon.svar"
+                        fraOgMedFelt="svar.gjenlevendepensjon.fraOgMed"
+                        tilOgMedFelt="svar.gjenlevendepensjon.tilOgMed"
                         spørsmål="Mottar pengestøtte til gjenlevende ektefelle"
                         periodeSpørsmål="I hvilken del av perioden svar bruker pengestøtte til gjenlevende ektefelle?"
                     />
 
                     <SpørsmålMedDatovelger
-                        spørsmålName="svar.alderspensjon.svar"
-                        datoName="svar.alderspensjon.fraOgMed"
+                        spørsmålFelt="svar.alderspensjon.svar"
+                        datoFelt="svar.alderspensjon.fraOgMed"
                         tittel="Når begynner brukers alderspensjon?"
                         legend="Mottar alderspensjon"
                     />
 
                     <SpørsmålMedPeriodevelger
-                        spørsmålName="svar.supplerendeStønadAlder.svar"
-                        periodeName="svar.supplerendeStønadAlder.periode"
+                        spørsmålFelt="svar.supplerendeStønadAlder.svar"
+                        fraOgMedFelt="svar.supplerendeStønadAlder.fraOgMed"
+                        tilOgMedFelt="svar.supplerendeStønadAlder.tilOgMed"
                         spørsmål="Mottar supplerende stønad for personer over 67 år med kort botid i Norge i perioden"
                         periodeSpørsmål="I hvilken del av perioden svar bruker supplerende stønad for personer over 67 år med kort botid i Norge?"
                     />
 
                     <SpørsmålMedPeriodevelger
-                        spørsmålName="svar.supplerendeStønadFlyktning.svar"
-                        periodeName="svar.supplerendeStønadFlyktning.periode"
+                        spørsmålFelt="svar.supplerendeStønadFlyktning.svar"
+                        fraOgMedFelt="svar.supplerendeStønadFlyktning.fraOgMed"
+                        tilOgMedFelt="svar.supplerendeStønadFlyktning.tilOgMed"
                         spørsmål="Mottar supplerende stønad for uføre flyktninger i perioden"
                         periodeSpørsmål="I hvilken del av perioden svar bruker supplerende stønad for uføre flyktninger?"
                     />
 
                     <SpørsmålMedPeriodevelger
-                        spørsmålName="svar.trygdOgPensjon.svar"
-                        periodeName="svar.trygdOgPensjon.periode"
+                        spørsmålFelt="svar.trygdOgPensjon.svar"
+                        fraOgMedFelt="svar.trygdOgPensjon.fraOgMed"
+                        tilOgMedFelt="svar.trygdOgPensjon.tilOgMed"
                         spørsmål="Mottar pengestøtte fra andre trygde- eller pensjonsordninger"
                         periodeSpørsmål="I hvilken del av perioden svar bruker pengestøtte fra andre trygde- eller pensjonsordninger?"
                     />
 
                     <SpørsmålMedPeriodevelger
-                        spørsmålName="svar.jobbsjansen.svar"
-                        periodeName="svar.jobbsjansen.periode"
+                        spørsmålFelt="svar.jobbsjansen.svar"
+                        fraOgMedFelt="svar.jobbsjansen.fraOgMed"
+                        tilOgMedFelt="svar.jobbsjansen.tilOgMed"
                         spørsmål="Mottar stønad gjennom Jobbsjansen"
                         periodeSpørsmål="I hvilken del av perioden svar bruker stønad gjennom Jobbsjansen?"
                     />

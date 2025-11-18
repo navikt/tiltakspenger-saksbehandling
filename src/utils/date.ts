@@ -33,11 +33,14 @@ export function formaterTidspunktKort(dateString: string) {
 }
 
 export function formaterDatotekst(dateString: string) {
-    return dayjs(dateString).format('DD.MM.YYYY');
+    return dateString ? dayjs(dateString).format('DD.MM.YYYY') : 'ukjent';
 }
 
 export function periodeTilFormatertDatotekst({ fraOgMed, tilOgMed }: Periode) {
-    return `${formaterDatotekst(fraOgMed)} - ${formaterDatotekst(tilOgMed)}`;
+    const fraOgMedTekst = fraOgMed ? formaterDatotekst(fraOgMed) : 'ukjent';
+    const tilOgMedTekst = tilOgMed ? formaterDatotekst(tilOgMed) : 'ukjent';
+
+    return `${fraOgMedTekst} - ${tilOgMedTekst}`;
 }
 
 export const meldekortHeading = (periode: Periode): string => {

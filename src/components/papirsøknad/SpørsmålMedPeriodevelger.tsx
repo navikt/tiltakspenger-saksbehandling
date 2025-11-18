@@ -7,22 +7,24 @@ import { Periodevelger } from './Periodevelger';
 import styles from './Spørsmål.module.css';
 
 type Props = {
-    spørsmålName: FieldPath<Papirsøknad>;
-    periodeName: FieldPath<Papirsøknad>;
+    spørsmålFelt: FieldPath<Papirsøknad>;
+    fraOgMedFelt: FieldPath<Papirsøknad>;
+    tilOgMedFelt: FieldPath<Papirsøknad>;
     spørsmål: string;
     periodeSpørsmål?: string;
 };
 
 export const SpørsmålMedPeriodevelger = ({
-    spørsmålName,
-    periodeName,
+    spørsmålFelt,
+    fraOgMedFelt,
+    tilOgMedFelt,
     spørsmål,
     periodeSpørsmål,
 }: Props) => {
     const { control, resetField } = useFormContext<Papirsøknad>();
 
     const jaNeiSpørsmål = useController({
-        name: spørsmålName,
+        name: spørsmålFelt,
         control,
         defaultValue: undefined,
     });
@@ -30,22 +32,20 @@ export const SpørsmålMedPeriodevelger = ({
     return (
         <div className={jaNeiSpørsmål.field.value === 'JA' ? styles.blokkUtvidet : ''}>
             <JaNeiSpørsmål
-                name={spørsmålName}
+                name={spørsmålFelt}
                 legend={spørsmål}
                 onChange={(newValue) => {
                     if (newValue !== 'JA') {
-                        resetField(periodeName);
+                        resetField(fraOgMedFelt);
+                        resetField(tilOgMedFelt);
                     }
                 }}
             />
             {jaNeiSpørsmål.field.value === 'JA' && (
                 <Periodevelger
-                    name={periodeName}
+                    fraOgMedFelt={fraOgMedFelt}
+                    tilOgMedFelt={tilOgMedFelt}
                     tittel={periodeSpørsmål}
-                    rules={{
-                        fraOgMed: { required: 'Fra og med er påkrevd' },
-                        tilOgMed: { required: 'Til og med er påkrevd' },
-                    }}
                 />
             )}
         </div>
