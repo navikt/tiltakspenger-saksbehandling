@@ -9,6 +9,7 @@ export type ValiderJournalpostBody = {
 export type ValiderJournalpostResponse = {
     journalpostFinnes: boolean;
     gjelderInnsendtFnr?: boolean;
+    datoOpprettet?: string;
 };
 
 const fetcher = (body: ValiderJournalpostBody) =>

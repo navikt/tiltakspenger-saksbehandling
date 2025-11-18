@@ -5,6 +5,7 @@ import { Papirsøknad } from '~/components/papirsøknad/papirsøknadTypes';
 import { useValiderJournalpostId } from './useValiderJournalpostId';
 import { useDebounce } from 'use-debounce';
 import styles from './JournalpostId.module.css';
+import { formaterDatotekst } from '~/utils/date';
 
 const DEBOUNCE_MS = 500;
 const MIN_LENGDE_FØR_VALIDERING = 3;
@@ -15,6 +16,7 @@ export const JournalpostId = () => {
     const journalpostIdWatch = watch(journalpostIdFelt);
     const fnrWatch = watch('personopplysninger.ident');
     const [debouncedJournalpostId] = useDebounce(journalpostIdWatch, DEBOUNCE_MS);
+    const [datoOpprettet, setDatoOpprettet] = React.useState<string>('');
 
     const journalpostId =
         (journalpostIdWatch?.trim().length ?? 0) >= MIN_LENGDE_FØR_VALIDERING
@@ -32,6 +34,7 @@ export const JournalpostId = () => {
         if (!value) return;
         if (value.length < MIN_LENGDE_FØR_VALIDERING) {
             clearErrors(journalpostIdFelt);
+            setDatoOpprettet('');
             return;
         }
         if (isLoading) return;
@@ -40,6 +43,7 @@ export const JournalpostId = () => {
                 type: 'remote',
                 message: 'Feil ved validering av journalpostId.',
             });
+            setDatoOpprettet('');
             return;
         }
         if (data) {
@@ -48,9 +52,11 @@ export const JournalpostId = () => {
                     type: 'remote',
                     message: 'Journalpost finnes ikke.',
                 });
+                setDatoOpprettet('');
                 return;
             }
             clearErrors('journalpostId');
+            setDatoOpprettet(data.datoOpprettet ?? '');
         }
     }, [journalpostIdWatch, isLoading, error, data, clearErrors, setError]);
 
@@ -69,14 +75,14 @@ export const JournalpostId = () => {
             if (data.gjelderInnsendtFnr === false) {
                 return (
                     <Alert variant="warning" inline aria-live="polite">
-                        Journalposten tilhører en annen person, gjerne sjekk om journalposten
-                        tilhører søker eller om det er verge/fullmakt.
+                        Avsenderen av journalposten er en annen person enn søker, sjekk om
+                        journalposten tilhører søker eller om det er verge/fullmakt.
                     </Alert>
                 );
             }
             return (
                 <Alert variant="success" inline aria-live="polite">
-                    Journalpost finnes og tilhører søker.
+                    Journalpost finnes og søker står som avsender.
                 </Alert>
             );
         }
@@ -86,24 +92,33 @@ export const JournalpostId = () => {
     const fnrMatcherIkke = !!data && data.journalpostFinnes && data.gjelderInnsendtFnr === false;
 
     return (
-        <Controller
-            name={journalpostIdFelt}
-            control={control}
-            rules={{ required: 'JournalpostId er påkrevd' }}
-            render={({ field, fieldState }) => (
-                <div className={styles.blokk}>
-                    <TextField
-                        label="JournalpostId"
-                        value={field.value ?? ''}
-                        onChange={(e) => field.onChange(e.target.value)}
-                        error={fieldState.error?.message}
-                    />
-                    {valideringsInfo && (!fieldState.error || fnrMatcherIkke) && (
-                        <div className={styles.valideringsInfo}>{valideringsInfo}</div>
-                    )}
-                </div>
-            )}
-        />
+        <>
+            <Controller
+                name={journalpostIdFelt}
+                control={control}
+                rules={{ required: 'JournalpostId er påkrevd' }}
+                render={({ field, fieldState }) => (
+                    <div className={styles.blokk}>
+                        <TextField
+                            label="JournalpostId"
+                            value={field.value ?? ''}
+                            onChange={(e) => field.onChange(e.target.value)}
+                            error={fieldState.error?.message}
+                        />
+                        {valideringsInfo && (!fieldState.error || fnrMatcherIkke) && (
+                            <div className={styles.valideringsInfo}>{valideringsInfo}</div>
+                        )}
+                    </div>
+                )}
+            />
+            <div className={styles.blokk}>
+                <TextField
+                    label="Opprettet (fra journalpost)"
+                    value={formaterDatotekst(datoOpprettet)}
+                    readOnly
+                />
+            </div>
+        </>
     );
 };
 
