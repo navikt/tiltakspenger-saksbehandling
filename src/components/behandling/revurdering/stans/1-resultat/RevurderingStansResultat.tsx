@@ -3,7 +3,7 @@ import { useRevurderingBehandling } from '../../../context/BehandlingContext';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { Datovelger } from '../../../../datovelger/Datovelger';
-import { dateTilISOTekst } from '~/utils/date';
+import { dateTilISOTekst, datoMin } from '~/utils/date';
 import { useSak } from '~/context/sak/SakContext';
 import { useConfig } from '~/context/ConfigContext';
 
@@ -31,6 +31,8 @@ export const RevurderingStansResultat = () => {
     const modiaPersonoversiktLinkComponent = (
         <Link href={modiaPersonoversiktUrl}>Modia personoversikt</Link>
     );
+
+    const nåtid = new Date();
 
     return (
         <VedtakSeksjon>
@@ -67,6 +69,9 @@ export const RevurderingStansResultat = () => {
                         maxDate={sisteDagSomGirRett}
                         readOnly={!erSaksbehandler || harValgtStansFraFørsteDagSomGirRett}
                         defaultSelected={behandlingsperiode?.fraOgMed}
+                        defaultMonth={
+                            sisteDagSomGirRett ? datoMin(nåtid, sisteDagSomGirRett) : nåtid
+                        }
                         selected={behandlingsperiode?.fraOgMed}
                         className={style.dato}
                         onDateChange={(valgtDato) => {
