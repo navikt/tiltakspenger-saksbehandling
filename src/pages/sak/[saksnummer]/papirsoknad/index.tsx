@@ -1,6 +1,6 @@
 import styles from './PapirsøknadPage.module.css';
 import { Alert, Button, Heading, HStack, VStack } from '@navikt/ds-react';
-import { Controller, FormProvider, useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
 import { SakProvider } from '~/context/sak/SakContext';
 import { SakProps } from '~/types/Sak';
@@ -12,10 +12,8 @@ import defaultPapirsøknadFormValues, {
 } from '~/components/papirsøknad/papirsøknadTypes';
 import { JaNeiSpørsmål } from '~/components/papirsøknad/JaNeiSpørsmål';
 import { MottarPengestøtterSpørsmål } from '~/components/papirsøknad/MottarPengestøtterSpørsmål';
-import { Datovelger } from '~/components/datovelger/Datovelger';
 import React, { useEffect } from 'react';
 import { Periodevelger } from '~/components/papirsøknad/Periodevelger';
-import { dateTilISOTekst } from '~/utils/date';
 import { VelgTiltak } from '~/components/papirsøknad/tiltak/VelgTiltak';
 import { PapirsøknadBarnetillegg } from '~/components/papirsøknad/barnetillegg/PapirsøknadBarnetillegg';
 import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
@@ -37,7 +35,7 @@ const PapirsøknadPage = (props: Props) => {
         mode: 'onSubmit',
     });
 
-    const { handleSubmit, control, setValue } = formContext;
+    const { handleSubmit, setValue } = formContext;
 
     useEffect(() => {
         if (!personopplysninger) return;
@@ -83,24 +81,6 @@ const PapirsøknadPage = (props: Props) => {
                             </Heading>
 
                             <JournalpostId />
-
-                            <Controller
-                                name="kravDato"
-                                control={control}
-                                rules={{ required: 'Kravdato er påkrevd' }}
-                                render={({ field, fieldState }) => (
-                                    <div className={styles.blokk}>
-                                        <Datovelger
-                                            label="Kravdato"
-                                            selected={field.value || undefined}
-                                            onDateChange={(date) =>
-                                                field.onChange(date ? dateTilISOTekst(date) : '')
-                                            }
-                                            error={fieldState.error?.message}
-                                        />
-                                    </div>
-                                )}
-                            />
 
                             <Periodevelger
                                 fraOgMedFelt="manueltSattSøknadsperiode.fraOgMed"

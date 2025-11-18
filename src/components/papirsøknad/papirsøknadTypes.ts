@@ -3,7 +3,6 @@ import { Periode } from '~/types/Periode';
 export interface Papirsøknad {
     journalpostId: string;
     personopplysninger: PersonopplysningerSøker;
-    kravDato: string;
     manueltSattSøknadsperiode: Periode;
     svar: Spørsmålsbesvarelser;
     antallVedlegg: number;
@@ -76,7 +75,6 @@ export interface Barn {
 
 const defaultPapirsøknadFormValues = {
     journalpostId: '',
-    kravDato: '',
     manueltSattSøknadsperiode: { fraOgMed: '', tilOgMed: '' },
     antallVedlegg: 0,
     svar: {

@@ -39,7 +39,7 @@ export const OppsummeringAvSøknad = ({
     return (
         <VStack>
             <BehandlingSaksopplysning
-                navn={'Kravdato'}
+                navn={'Opprettet'}
                 verdi={formaterDatotekst(opprettet)}
                 spacing={true}
             />
