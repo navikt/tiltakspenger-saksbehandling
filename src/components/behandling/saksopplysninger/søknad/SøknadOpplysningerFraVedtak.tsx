@@ -1,6 +1,4 @@
-import { Periode } from '~/types/Periode';
 import { useSak } from '~/context/sak/SakContext';
-import { perioderOverlapper } from '~/utils/periode';
 import { SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
 import { OppsummeringAvSøknad } from '~/components/oppsummeringer/oppsummeringAvSøknad/OppsummeringAvSøknad';
 import { Alert, BodyShort, Link, Select, VStack } from '@navikt/ds-react';
@@ -8,19 +6,21 @@ import NextLink from 'next/link';
 import { behandlingUrl } from '~/utils/urls';
 import { useState } from 'react';
 import { formaterTidspunkt } from '~/utils/date';
+import { Rammebehandling } from '~/types/Rammebehandling';
+import { erRammebehandlingMedInnvilgelse } from '~/utils/behandling';
 
 type Props = {
-    periode: Periode;
+    behandling: Rammebehandling;
 };
 
-export const SøknadOpplysningerFraVedtak = ({ periode }: Props) => {
+export const SøknadOpplysningerFraVedtak = ({ behandling }: Props) => {
     const { sak } = useSak();
     const { alleRammevedtak, behandlinger } = sak;
+    const { saksopplysninger } = behandling;
 
     const vedtatteSøknadsbehandlinger = alleRammevedtak
-        .filter((vedtak) => perioderOverlapper(vedtak.periode, periode))
         .map((vedtak) => behandlinger.find((beh) => beh.id === vedtak.behandlingId)!)
-        .filter((behandling) => behandling.resultat === SøknadsbehandlingResultat.INNVILGELSE)
+        .filter((beh) => beh.resultat === SøknadsbehandlingResultat.INNVILGELSE)
         .toSorted((a, b) => (a.iverksattTidspunkt! > b.iverksattTidspunkt! ? -1 : 1));
 
     const [valgtBehandling, setValgtBehandling] = useState(vedtatteSøknadsbehandlinger.at(0));
@@ -57,9 +57,11 @@ export const SøknadOpplysningerFraVedtak = ({ periode }: Props) => {
                     </Link>
 
                     <OppsummeringAvSøknad
-                        tiltaksperiode={periode}
+                        tiltaksperiode={saksopplysninger.periode}
                         søknad={valgtBehandling.søknad}
-                        visBarnetilleggPeriodiseringKnapp={true}
+                        visBarnetilleggPeriodiseringKnapp={erRammebehandlingMedInnvilgelse(
+                            behandling,
+                        )}
                     />
                 </VStack>
             )}

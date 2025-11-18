@@ -20,7 +20,7 @@ export const BehandlingSaksopplysninger = () => {
     const { behandling } = useBehandling();
 
     const { saksopplysninger, type, attesteringer } = behandling;
-    const { ytelser, tiltakspengevedtakFraArena, tiltaksdeltagelse, fødselsdato, periode } =
+    const { ytelser, tiltakspengevedtakFraArena, tiltaksdeltagelse, fødselsdato } =
         saksopplysninger;
 
     const harYtelser = ytelser.length > 0;
@@ -80,12 +80,11 @@ export const BehandlingSaksopplysninger = () => {
                     />
                 </OpplysningerSeksjon>
             ) : (
-                periode && (
-                    <OpplysningerSeksjon header={'Tidligere innvilgede søknader'}>
-                        <SøknadOpplysningerFraVedtak periode={periode} />
-                    </OpplysningerSeksjon>
-                )
+                <OpplysningerSeksjon header={'Tidligere innvilgede søknader'}>
+                    <SøknadOpplysningerFraVedtak behandling={behandling} />
+                </OpplysningerSeksjon>
             )}
+
             {attesteringer.length > 0 && (
                 <>
                     <Separator />
