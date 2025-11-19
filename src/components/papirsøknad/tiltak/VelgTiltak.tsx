@@ -1,5 +1,5 @@
 import React from 'react';
-import { FieldPath, useController, useFormContext } from 'react-hook-form';
+import { FieldPath, useController, useFormContext, useWatch } from 'react-hook-form';
 import { JaNeiSpørsmål } from '~/components/papirsøknad/JaNeiSpørsmål';
 import { Papirsøknad, Tiltak } from '~/components/papirsøknad/papirsøknadTypes';
 import { Alert, Button, Radio, RadioGroup } from '@navikt/ds-react';
@@ -8,6 +8,7 @@ import { classNames } from '~/utils/classNames';
 import { formaterDatotekst } from '~/utils/date';
 import { useHentTiltaksdeltakelser } from '~/components/papirsøknad/tiltak/useHentTiltaksdeltakelser';
 import { SakId } from '~/types/Sak';
+import { Periode } from '~/types/Periode';
 
 type Props = {
     sakId: SakId;
@@ -36,11 +37,14 @@ export const VelgTiltak = ({ sakId, spørsmålName, legend }: Props) => {
         return `${tiltak.typeNavn}${arrangørNavn}${periodeTekst}`;
     };
 
+    const søknadsperiode = useWatch({ name: 'manueltSattSøknadsperiode' }) as Periode;
+    const fraOgMed = søknadsperiode?.fraOgMed;
+    const tilOgMed = søknadsperiode?.tilOgMed;
     const {
         data: tiltaksdeltakelser,
         isLoading,
         error,
-    } = useHentTiltaksdeltakelser(sakId, skalHenteTiltak);
+    } = useHentTiltaksdeltakelser(sakId, fraOgMed, tilOgMed, skalHenteTiltak);
 
     React.useEffect(() => {
         if (skalHenteTiltak && tiltaksdeltakelser) {
@@ -61,12 +65,18 @@ export const VelgTiltak = ({ sakId, spørsmålName, legend }: Props) => {
             />
             {spørsmål.field.value === 'JA' && (
                 <div className={styles.blokk}>
+                    {(!fraOgMed || !tilOgMed) && (
+                        <Alert variant="warning">
+                            Vi kan ikke hente tiltaksdeltakelser før søknadsperioden er satt.
+                        </Alert>
+                    )}
                     <Button
                         type="button"
                         className={styles.finnTiltakButton}
                         size="small"
                         loading={isLoading}
                         onClick={() => setSkalHenteTiltak(true)}
+                        disabled={!fraOgMed || !tilOgMed}
                     >
                         Finn tiltak
                     </Button>
