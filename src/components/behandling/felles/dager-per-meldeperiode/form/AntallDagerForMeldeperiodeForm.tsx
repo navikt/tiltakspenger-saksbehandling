@@ -29,12 +29,12 @@ export const AntallDagerForMeldeperiodeForm = () => {
                 perioder={antallDagerPerMeldeperiode}
                 nyPeriodeButtonConfig={{
                     onClick: () => dispatch({ type: 'leggTilAntallDagerPeriode' }),
-                    disabled: !kanLeggeTilNyPeriode,
+                    disabled: !kanLeggeTilNyPeriode || !erSaksbehandler,
                 }}
                 fjernPeriodeButtonConfig={{
                     onClick: (index) =>
                         dispatch({ type: 'fjernAntallDagerPeriode', payload: { index } }),
-                    hidden: antallDagerPerMeldeperiode.length > 1 && !erSaksbehandler,
+                    hidden: antallDagerPerMeldeperiode.length <= 1 || !erSaksbehandler,
                 }}
                 periodeConfig={{
                     fraOgMed: {
