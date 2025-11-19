@@ -27,7 +27,13 @@ export const BehandlingPage = () => {
                 {finnBehandlingStatusTag(status, false, ventestatus?.erSattPåVent)}
             </PersonaliaHeader>
 
-            <BehandlingSkjemaProvider>
+            {/* 
+            Veldig viktig at key ikke blir fjernet. På denne måten kan vi tvinge skjema-contextene til å rerendre seg når man 'bytter' behandling. For exempel ved å bruke 'Til behandling' 
+            lenken i SøknadOpplysningerFraVedtak komponenten. Uten denne keyen vil skjema-contextene beholde state fra forrige behandling, og dette vil føre til en error.
+
+            Raskeste, og enkleste fiks uten å endre for mye på eksisterende kode.
+            */}
+            <BehandlingSkjemaProvider key={behandlingsContext.behandling.id}>
                 <SideBarMain
                     sidebar={<BehandlingSaksopplysninger />}
                     main={

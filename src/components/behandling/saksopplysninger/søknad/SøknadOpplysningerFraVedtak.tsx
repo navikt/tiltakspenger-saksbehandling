@@ -49,7 +49,6 @@ export const SøknadOpplysningerFraVedtak = ({ behandling }: Props) => {
                     >{`Innvilget tidspunkt: ${formaterTidspunkt(behandling.iverksattTidspunkt!)}`}</option>
                 ))}
             </Select>
-
             {valgtBehandling && (
                 <VStack gap={'2'}>
                     <Link as={NextLink} href={behandlingUrl(valgtBehandling)}>
