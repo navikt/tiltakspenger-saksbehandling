@@ -13,28 +13,57 @@ type Props = {
     rules?: {
         fraOgMed?: RegisterOptions<Papirsøknad, FieldPath<Papirsøknad>>;
         tilOgMed?: RegisterOptions<Papirsøknad, FieldPath<Papirsøknad>>;
+        validateRange?: (
+            fraOgMed: string | undefined,
+            tilOgMed: string | undefined,
+        ) => string | true;
     };
 };
 
 export const Periodevelger = ({ fraOgMedFelt, tilOgMedFelt, tittel, rules }: Props) => {
-    const { control } = useFormContext<Papirsøknad>();
+    const { control, watch, setError, clearErrors } = useFormContext<Papirsøknad>();
+    const fraOgMedDatoWatch = watch(fraOgMedFelt) as string | undefined;
+    const tilOgMedDatoWatch = watch(tilOgMedFelt) as string | undefined;
 
-    const fraField = useController({
+    const fraOgMedDatoController = useController({
         name: fraOgMedFelt,
         control,
-        rules: rules?.fraOgMed,
+        rules: {
+            ...rules?.fraOgMed,
+            validate: () => {
+                if (!rules?.validateRange) return true;
+                const result = rules.validateRange(fraOgMedDatoWatch, tilOgMedDatoWatch);
+
+                if (result !== true) {
+                    setError(tilOgMedFelt, { type: 'validate', message: result as string });
+                    return result;
+                } else {
+                    clearErrors(tilOgMedFelt);
+                    return true;
+                }
+            },
+        },
     });
-    const tilField = useController({
+
+    const tilOgMedDatoController = useController({
         name: tilOgMedFelt,
         control,
-        rules: rules?.tilOgMed,
+        rules: {
+            ...rules?.tilOgMed,
+            validate: () => {
+                if (!rules?.validateRange) return true;
+                const result = rules.validateRange(fraOgMedDatoWatch, tilOgMedDatoWatch);
+
+                if (result !== true) {
+                    setError(fraOgMedFelt, { type: 'validate', message: result as string });
+                    return result;
+                } else {
+                    clearErrors(tilOgMedFelt);
+                    return true;
+                }
+            },
+        },
     });
-
-    const fraValue = fraField.field.value as string | undefined;
-    const tilValue = tilField.field.value as string | undefined;
-
-    const fraError = fraField.fieldState.error?.message as string | undefined;
-    const tilError = tilField.fieldState.error?.message as string | undefined;
 
     return (
         <div className={styles.blokk}>
@@ -47,19 +76,23 @@ export const Periodevelger = ({ fraOgMedFelt, tilOgMedFelt, tittel, rules }: Pro
                 <HStack gap="8">
                     <Datovelger
                         label="Fra og med"
-                        selected={fraValue || undefined}
+                        selected={fraOgMedDatoController.field.value as string | undefined}
                         onDateChange={(dato) =>
-                            fraField.field.onChange(dato ? dateTilISOTekst(dato) : '')
+                            fraOgMedDatoController.field.onChange(dato ? dateTilISOTekst(dato) : '')
                         }
-                        error={fraError}
+                        error={
+                            fraOgMedDatoController.fieldState.error?.message as string | undefined
+                        }
                     />
                     <Datovelger
                         label="Til og med"
-                        selected={tilValue || undefined}
+                        selected={tilOgMedDatoController.field.value as string | undefined}
                         onDateChange={(dato) =>
-                            tilField.field.onChange(dato ? dateTilISOTekst(dato) : '')
+                            tilOgMedDatoController.field.onChange(dato ? dateTilISOTekst(dato) : '')
                         }
-                        error={tilError}
+                        error={
+                            tilOgMedDatoController.fieldState.error?.message as string | undefined
+                        }
                     />
                 </HStack>
             </VStack>

@@ -89,6 +89,13 @@ const PapirsøknadPage = (props: Props) => {
                                 rules={{
                                     fraOgMed: { required: 'Fra og med er påkrevd' },
                                     tilOgMed: { required: 'Til og med er påkrevd' },
+                                    validateRange: (fraOgMed, tilOgMed) => {
+                                        if (!fraOgMed || !tilOgMed) return true;
+                                        return (
+                                            new Date(tilOgMed) >= new Date(fraOgMed) ||
+                                            'Ugyldig periode.'
+                                        );
+                                    },
                                 }}
                             />
 
