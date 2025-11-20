@@ -3,13 +3,21 @@ import { fetchJsonFraApiClientSide } from '~/utils/fetch/fetch';
 import { Tiltak } from '~/components/papirsøknad/papirsøknadTypes';
 import { SakId } from '~/types/Sak';
 
-export const useHentTiltaksdeltakelser = (sakId: SakId, enabled: boolean = true) => {
+export const useHentTiltaksdeltakelser = (
+    sakId: SakId,
+    fraOgMed?: string,
+    tilOgMed?: string,
+    enabled: boolean = true,
+) => {
+    const harPeriode = !!fraOgMed && !!tilOgMed;
     const { data, isLoading, error } = useSWR<Tiltak[]>(
-        enabled ? ['tiltaksdeltakelser', sakId] : null,
-        () => fetcher(sakId),
+        enabled && harPeriode ? ['tiltaksdeltakelser', sakId, fraOgMed, tilOgMed] : null,
+        () => fetcher(sakId, fraOgMed!, tilOgMed!),
     );
     return { data, isLoading, error, mutate };
 };
 
-const fetcher = async (sakId: SakId) =>
-    fetchJsonFraApiClientSide<Tiltak[]>(`/sak/${sakId}/tiltaksdeltakelser`);
+const fetcher = async (sakId: SakId, fraOgMed: string, tilOgMed: string) =>
+    fetchJsonFraApiClientSide<Tiltak[]>(
+        `/sak/${sakId}/tiltaksdeltakelser?fraOgMed=${encodeURIComponent(fraOgMed)}&tilOgMed=${encodeURIComponent(tilOgMed)}`,
+    );
