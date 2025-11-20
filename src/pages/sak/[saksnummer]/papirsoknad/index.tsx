@@ -102,7 +102,7 @@ const PapirsøknadPage = (props: Props) => {
                             <VelgTiltak
                                 sakId={props.sak.sakId}
                                 spørsmålName="svar.harTiltak"
-                                legend="Deltar i arbeidmarkedtiltak som gir rett til tiltakspenger?"
+                                legend="Har søkt på tiltak?"
                             />
 
                             <SpørsmålMedPeriodevelger

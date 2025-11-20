@@ -1,8 +1,8 @@
 import React from 'react';
-import { FieldPath, useController, useFormContext, useWatch } from 'react-hook-form';
+import { Controller, FieldPath, useController, useFormContext, useWatch } from 'react-hook-form';
 import { JaNeiSpørsmål } from '~/components/papirsøknad/JaNeiSpørsmål';
 import { Papirsøknad, Tiltak } from '~/components/papirsøknad/papirsøknadTypes';
-import { Alert, Button, Radio, RadioGroup } from '@navikt/ds-react';
+import { Alert, Button, Radio, RadioGroup, TextField, VStack } from '@navikt/ds-react';
 import styles from '../Spørsmål.module.css';
 import { classNames } from '~/utils/classNames';
 import { formaterDatotekst } from '~/utils/date';
@@ -100,27 +100,57 @@ export const VelgTiltak = ({ sakId, spørsmålName, legend }: Props) => {
                         </Alert>
                     )}
 
-                    {skalHenteTiltak && muligeTiltak.length > 0 && (
-                        <RadioGroup
-                            legend="Velg tiltak"
-                            onChange={(value) => setValue('svar.tiltak', value)}
-                        >
-                            {muligeTiltak.map((tiltak) => (
-                                <Radio
-                                    key={tiltak.eksternDeltakelseId}
-                                    value={{
-                                        eksternDeltakelseId: tiltak.eksternDeltakelseId,
-                                        deltakelseFraOgMed: tiltak.deltakelseFraOgMed,
-                                        deltakelseTilOgMed: tiltak.deltakelseTilOgMed,
-                                        typeKode: tiltak.typeKode,
-                                        typeNavn: tiltak.typeNavn,
-                                    }}
-                                >
-                                    {formatLabelForTiltakValg(tiltak)}
-                                </Radio>
-                            ))}
-                        </RadioGroup>
+                    {skalHenteTiltak && (
+                        <>
+                            {muligeTiltak.length === 0 && (
+                                <Alert variant="warning">
+                                    Fant ingen tiltaksdeltakelser for den angitte perioden. Du kan
+                                    skrive inn tiltaket manuelt under.
+                                </Alert>
+                            )}
+                            {muligeTiltak.length > 0 && (
+                                <VStack gap="2">
+                                    <Alert variant="info">
+                                        Dersom ingen av tiltakene under passer kan du skrive inn
+                                        tiltaket manuelt under.
+                                    </Alert>
+                                    <RadioGroup
+                                        legend="Velg tiltak"
+                                        onChange={(value) => setValue('svar.tiltak', value)}
+                                    >
+                                        {muligeTiltak.map((tiltak) => (
+                                            <Radio
+                                                key={tiltak.eksternDeltakelseId}
+                                                value={{
+                                                    eksternDeltakelseId: tiltak.eksternDeltakelseId,
+                                                    deltakelseFraOgMed: tiltak.deltakelseFraOgMed,
+                                                    deltakelseTilOgMed: tiltak.deltakelseTilOgMed,
+                                                    typeKode: tiltak.typeKode,
+                                                    typeNavn: tiltak.typeNavn,
+                                                }}
+                                            >
+                                                {formatLabelForTiltakValg(tiltak)}
+                                            </Radio>
+                                        ))}
+                                    </RadioGroup>
+                                </VStack>
+                            )}
+                        </>
                     )}
+                    <Controller
+                        name={'manueltSattTiltak'}
+                        control={control}
+                        render={({ field, fieldState }) => (
+                            <div className={styles.blokk}>
+                                <TextField
+                                    label="Annet tiltak"
+                                    value={field.value ?? ''}
+                                    onChange={(e) => field.onChange(e.target.value)}
+                                    error={fieldState.error?.message}
+                                />
+                            </div>
+                        )}
+                    />
                 </div>
             )}
         </div>

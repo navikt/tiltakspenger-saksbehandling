@@ -4,6 +4,7 @@ export interface Papirsøknad {
     journalpostId: string;
     personopplysninger: PersonopplysningerSøker;
     manueltSattSøknadsperiode: Periode;
+    manueltSattTiltak?: string;
     svar: Spørsmålsbesvarelser;
     antallVedlegg: number;
 }
