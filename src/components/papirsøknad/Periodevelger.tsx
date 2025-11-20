@@ -39,6 +39,7 @@ export const Periodevelger = ({ fraOgMedFelt, tilOgMedFelt, tittel, rules }: Pro
                     return result;
                 } else {
                     clearErrors(tilOgMedFelt);
+                    clearErrors(fraOgMedFelt);
                     return true;
                 }
             },
@@ -59,6 +60,7 @@ export const Periodevelger = ({ fraOgMedFelt, tilOgMedFelt, tittel, rules }: Pro
                     return result;
                 } else {
                     clearErrors(tilOgMedFelt);
+                    clearErrors(fraOgMedFelt);
                     return true;
                 }
             },
