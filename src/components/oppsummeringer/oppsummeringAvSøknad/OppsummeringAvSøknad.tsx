@@ -26,7 +26,14 @@ export const OppsummeringAvSøknad = ({
 }: Props) => {
     const { gosysUrl } = useConfig();
 
-    const { opprettet, tiltak, tiltaksdeltakelseperiodeDetErSøktOm, antallVedlegg, svar } = søknad;
+    const {
+        opprettet,
+        tiltak,
+        manueltSattTiltak,
+        tiltaksdeltakelseperiodeDetErSøktOm,
+        antallVedlegg,
+        svar,
+    } = søknad;
 
     const {
         kvp: kvp,
@@ -58,6 +65,13 @@ export const OppsummeringAvSøknad = ({
             />
 
             {tiltak && <BehandlingSaksopplysning navn={'Tiltak'} verdi={tiltak.typeNavn} />}
+            {manueltSattTiltak && (
+                <BehandlingSaksopplysning
+                    navn="Tiltak (uverifisert)"
+                    verdi={manueltSattTiltak}
+                    visVarsel
+                />
+            )}
             {tiltak?.fraOgMed && tiltak.tilOgMed && (
                 <BehandlingSaksopplysning
                     navn={'Periode'}

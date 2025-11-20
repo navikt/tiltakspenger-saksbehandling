@@ -9,6 +9,7 @@ interface SøknadBase {
     id: SøknadId;
     journalpostId: string;
     tiltak: Nullable<TiltaksdeltagelseFraSøknad>;
+    manueltSattTiltak?: string;
     tiltaksdeltakelseperiodeDetErSøktOm: Nullable<Periode>;
     barnetillegg: SøknadBarn[];
     opprettet: string;
