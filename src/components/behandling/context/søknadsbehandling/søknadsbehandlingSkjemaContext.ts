@@ -17,7 +17,7 @@ import {
     useBehandlingSkjemaDispatch,
 } from '~/components/behandling/context/BehandlingSkjemaContext';
 import {
-    BehandlingSkjemaActionSuperType,
+    BehandlingSkjemaType,
     erSøknadsbehandlingContext,
 } from '~/components/behandling/context/behandlingSkjemaUtils';
 
@@ -56,7 +56,7 @@ type Actions =
 
 export type SøknadsbehandlingActions = ReducerSuperAction<
     Actions,
-    BehandlingSkjemaActionSuperType.Søknadsbehandling
+    BehandlingSkjemaType.Søknadsbehandling
 >;
 
 export const søknadsbehandlingReducer: Reducer<SøknadsbehandlingState, SøknadsbehandlingActions> = (
@@ -154,5 +154,5 @@ export const useSøknadsbehandlingSkjemaDispatch = () => {
     const dispatch = useBehandlingSkjemaDispatch();
 
     return (action: Actions) =>
-        dispatch({ ...action, superType: BehandlingSkjemaActionSuperType.Søknadsbehandling });
+        dispatch({ ...action, superType: BehandlingSkjemaType.Søknadsbehandling });
 };

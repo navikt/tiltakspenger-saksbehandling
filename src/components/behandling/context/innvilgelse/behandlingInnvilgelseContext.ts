@@ -28,7 +28,7 @@ import {
 import { SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
 import { RevurderingResultat } from '~/types/Revurdering';
 import {
-    BehandlingSkjemaActionSuperType,
+    BehandlingSkjemaType,
     erRammebehandlingInnvilgelseContext,
 } from '~/components/behandling/context/behandlingSkjemaUtils';
 
@@ -113,7 +113,7 @@ export const useBehandlingInnvilgelseSkjemaDispatch = () => {
 };
 
 const reducerSuperType = {
-    [SøknadsbehandlingResultat.INNVILGELSE]: BehandlingSkjemaActionSuperType.Søknadsbehandling,
-    [RevurderingResultat.INNVILGELSE]: BehandlingSkjemaActionSuperType.RevurderingInnvilgelse,
-    [RevurderingResultat.OMGJØRING]: BehandlingSkjemaActionSuperType.RevurderingOmgjøring,
-} as const satisfies Record<RammebehandlingResultatMedInnvilgelse, BehandlingSkjemaActionSuperType>;
+    [SøknadsbehandlingResultat.INNVILGELSE]: BehandlingSkjemaType.Søknadsbehandling,
+    [RevurderingResultat.INNVILGELSE]: BehandlingSkjemaType.RevurderingInnvilgelse,
+    [RevurderingResultat.OMGJØRING]: BehandlingSkjemaType.RevurderingOmgjøring,
+} as const satisfies Record<RammebehandlingResultatMedInnvilgelse, BehandlingSkjemaType>;

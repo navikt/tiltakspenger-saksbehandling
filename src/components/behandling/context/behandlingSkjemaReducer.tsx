@@ -21,7 +21,7 @@ import {
     RevurderingOmgjøringState,
 } from '~/components/behandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import {
-    BehandlingSkjemaActionSuperType,
+    BehandlingSkjemaType,
     erSøknadsbehandlingContext,
 } from '~/components/behandling/context/behandlingSkjemaUtils';
 
@@ -45,7 +45,7 @@ export const behandlingSkjemaReducer: Reducer<BehandlingSkjemaState, BehandlingS
     const { superType, type } = action;
 
     switch (superType) {
-        case BehandlingSkjemaActionSuperType.Søknadsbehandling: {
+        case BehandlingSkjemaType.Søknadsbehandling: {
             if (!erSøknadsbehandlingContext(state)) {
                 throw Error(
                     `Action ${type} / ${superType} må tilhøre et søknadsbehandling resultat - var ${resultat}`,
@@ -55,7 +55,7 @@ export const behandlingSkjemaReducer: Reducer<BehandlingSkjemaState, BehandlingS
             return søknadsbehandlingReducer(state, action);
         }
 
-        case BehandlingSkjemaActionSuperType.RevurderingInnvilgelse: {
+        case BehandlingSkjemaType.RevurderingInnvilgelse: {
             if (resultat !== RevurderingResultat.INNVILGELSE) {
                 throw Error(
                     `Action ${type} / ${superType} må tilhøre en revurdering innvilgelse - var ${resultat}`,
@@ -65,7 +65,7 @@ export const behandlingSkjemaReducer: Reducer<BehandlingSkjemaState, BehandlingS
             return revurderingInnvilgelseReducer(state, action);
         }
 
-        case BehandlingSkjemaActionSuperType.RevurderingOmgjøring: {
+        case BehandlingSkjemaType.RevurderingOmgjøring: {
             if (resultat !== RevurderingResultat.OMGJØRING) {
                 throw Error(
                     `Action ${type} / ${superType} må tilhøre en revurdering omgjøring - var ${resultat}`,
@@ -75,7 +75,7 @@ export const behandlingSkjemaReducer: Reducer<BehandlingSkjemaState, BehandlingS
             return revurderingOmgjøringReducer(state, action);
         }
 
-        case BehandlingSkjemaActionSuperType.RevurderingStans: {
+        case BehandlingSkjemaType.RevurderingStans: {
             if (resultat !== RevurderingResultat.STANS) {
                 throw Error(
                     `Action ${type} / ${superType} må tilhøre en revurdering stans - var ${resultat}`,

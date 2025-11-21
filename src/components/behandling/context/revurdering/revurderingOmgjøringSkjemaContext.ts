@@ -11,7 +11,7 @@ import {
     useBehandlingSkjema,
     useBehandlingSkjemaDispatch,
 } from '~/components/behandling/context/BehandlingSkjemaContext';
-import { BehandlingSkjemaActionSuperType } from '~/components/behandling/context/behandlingSkjemaUtils';
+import { BehandlingSkjemaType } from '~/components/behandling/context/behandlingSkjemaUtils';
 
 // Dette er copy-paste av revurdering innvilgelse for nå, men denne må sannsynligvis divergeres etter hvert
 
@@ -21,7 +21,7 @@ export type RevurderingOmgjøringState = BehandlingInnvilgelseState & {
 
 export type RevurderingOmgjøringActions = ReducerSuperAction<
     BehandlingInnvilgelseActions,
-    BehandlingSkjemaActionSuperType.RevurderingOmgjøring
+    BehandlingSkjemaType.RevurderingOmgjøring
 >;
 
 export const revurderingOmgjøringReducer: Reducer<
@@ -47,5 +47,5 @@ export const useRevurderingOmgjøringSkjemaDispatch = () => {
     const dispatch = useBehandlingSkjemaDispatch();
 
     return (action: BehandlingInnvilgelseActions) =>
-        dispatch({ ...action, superType: BehandlingSkjemaActionSuperType.RevurderingOmgjøring });
+        dispatch({ ...action, superType: BehandlingSkjemaType.RevurderingOmgjøring });
 };

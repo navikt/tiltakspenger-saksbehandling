@@ -6,7 +6,7 @@ import {
     useBehandlingSkjema,
     useBehandlingSkjemaDispatch,
 } from '~/components/behandling/context/BehandlingSkjemaContext';
-import { BehandlingSkjemaActionSuperType } from '~/components/behandling/context/behandlingSkjemaUtils';
+import { BehandlingSkjemaType } from '~/components/behandling/context/behandlingSkjemaUtils';
 
 export type RevurderingStansState = {
     resultat: RevurderingResultat.STANS;
@@ -31,7 +31,7 @@ type Actions =
 
 export type RevurderingStansActions = ReducerSuperAction<
     Actions,
-    BehandlingSkjemaActionSuperType.RevurderingStans
+    BehandlingSkjemaType.RevurderingStans
 >;
 
 export const revurderingStansReducer: Reducer<RevurderingStansState, RevurderingStansActions> = (
@@ -79,5 +79,5 @@ export const useRevurderingStansSkjemaDispatch = () => {
     const dispatch = useBehandlingSkjemaDispatch();
 
     return (action: Actions) =>
-        dispatch({ ...action, superType: BehandlingSkjemaActionSuperType.RevurderingStans });
+        dispatch({ ...action, superType: BehandlingSkjemaType.RevurderingStans });
 };

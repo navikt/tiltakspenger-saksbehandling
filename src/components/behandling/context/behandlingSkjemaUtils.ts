@@ -18,7 +18,7 @@ export const erSøknadsbehandlingContext = (
     return erSøknadsbehandlingResultat(context.resultat);
 };
 
-export enum BehandlingSkjemaActionSuperType {
+export enum BehandlingSkjemaType {
     Søknadsbehandling = 'Søknadsbehandling',
     RevurderingInnvilgelse = 'RevurderingInnvilgelse',
     RevurderingOmgjøring = 'RevurderingOmgjøring',
