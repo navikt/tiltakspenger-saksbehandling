@@ -1,7 +1,6 @@
 import { useRevurderingBehandling } from '~/components/behandling/context/BehandlingContext';
 import { RevurderingInnvilgelseBrevForhåndsvisningDTO } from '~/components/behandling/felles/vedtaksbrev/forhåndsvisning/useHentVedtaksbrevForhåndsvisning';
 import { Vedtaksbrev } from '~/components/behandling/felles/vedtaksbrev/Vedtaksbrev';
-import { revurderingInnvilgelseValidering } from '~/components/behandling/revurdering/innvilgelse/revurderingInnvilgelseValidering';
 import { BodyLong } from '@navikt/ds-react';
 import { TekstListe } from '~/components/liste/TekstListe';
 import { Periode } from '~/types/Periode';
@@ -9,13 +8,18 @@ import { BarnetilleggPeriode } from '~/types/Barnetillegg';
 import { BarnetilleggPeriodeFormData } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
 import { RevurderingResultat } from '~/types/Revurdering';
 import {
-    RevurderingInnvilgelseContext,
-    useRevurderingInnvilgelseSkjema,
-} from '~/components/behandling/context/revurdering/revurderingInnvilgelseSkjemaContext';
+    BehandlingInnvilgelseContext,
+    useBehandlingInnvilgelseSkjema,
+} from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
+import { revurderingOmgjøringValidering } from '~/components/behandling/revurdering/omgjøring/revurderingInnvilgelseValidering';
+import { revurderingInnvilgelseValidering } from '~/components/behandling/revurdering/innvilgelse/revurderingInnvilgelseValidering';
+import { RevurderingInnvilgelseContext } from '~/components/behandling/context/revurdering/revurderingInnvilgelseSkjemaContext';
+import { RevurderingOmgjøringContext } from '~/components/behandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 
+// TODO: split denne for innvilgelse og omgjøring
 export const RevurderingInnvilgelseBrev = () => {
     const { behandling, rolleForBehandling } = useRevurderingBehandling();
-    const skjema = useRevurderingInnvilgelseSkjema();
+    const skjema = useBehandlingInnvilgelseSkjema();
 
     const { brevtekst } = skjema.textAreas;
 
@@ -25,7 +29,17 @@ export const RevurderingInnvilgelseBrev = () => {
             behandling={behandling}
             rolle={rolleForBehandling}
             tekstRef={brevtekst.ref}
-            validering={revurderingInnvilgelseValidering(behandling, skjema)}
+            validering={
+                skjema.resultat === RevurderingResultat.INNVILGELSE
+                    ? revurderingInnvilgelseValidering(
+                          behandling,
+                          skjema as RevurderingInnvilgelseContext,
+                      )
+                    : revurderingOmgjøringValidering(
+                          behandling,
+                          skjema as RevurderingOmgjøringContext,
+                      )
+            }
             hentDto={(): RevurderingInnvilgelseBrevForhåndsvisningDTO =>
                 revurderingskjemaTilBrevForhåndsvisningDTO(skjema)
             }
@@ -35,7 +49,7 @@ export const RevurderingInnvilgelseBrev = () => {
 };
 
 const revurderingskjemaTilBrevForhåndsvisningDTO = (
-    skjema: RevurderingInnvilgelseContext,
+    skjema: BehandlingInnvilgelseContext,
 ): RevurderingInnvilgelseBrevForhåndsvisningDTO => {
     return {
         resultat: RevurderingResultat.INNVILGELSE,
