@@ -37,7 +37,7 @@ export type BehandlingSkjemaActions =
     | RevurderingOmgjøringActions
     | RevurderingStansActions;
 
-export const BehandlingSkjemaReducer: Reducer<BehandlingSkjemaState, BehandlingSkjemaActions> = (
+export const behandlingSkjemaReducer: Reducer<BehandlingSkjemaState, BehandlingSkjemaActions> = (
     state,
     action,
 ): BehandlingSkjemaState => {

@@ -10,7 +10,7 @@ import {
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
 import {
     BehandlingSkjemaActions,
-    BehandlingSkjemaReducer,
+    behandlingSkjemaReducer,
     BehandlingSkjemaState,
 } from '~/components/behandling/context/behandlingSkjemaReducer';
 import { Rammebehandling, Rammebehandlingstype } from '~/types/Rammebehandling';
@@ -40,7 +40,7 @@ export const BehandlingSkjemaProvider = ({ children }: PropsWithChildren) => {
     const { behandling } = useBehandling();
 
     const [skjema, dispatch] = useReducer(
-        BehandlingSkjemaReducer,
+        behandlingSkjemaReducer,
         { behandling, sak },
         initialState,
     );
