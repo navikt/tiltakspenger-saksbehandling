@@ -4,21 +4,21 @@ import {
     TiltaksdeltagelseActions,
     tiltaksdeltagelseReducer,
     TiltaksdeltakelsePeriodeFormData,
-} from '~/components/behandling/context/innvilgelse/sub-reducers/tiltaksdeltagelseReducer';
+} from '~/components/behandling/context/innvilgelse/slices/tiltaksdeltagelseContext';
 import {
     AntallDagerPerMeldeperiodeActions,
     AntallDagerPerMeldeperiodeFormData,
     antallDagerPerMeldeperiodeReducer,
-} from '~/components/behandling/context/innvilgelse/sub-reducers/antallDagerPerMeldeperiodeReducer';
+} from '~/components/behandling/context/innvilgelse/slices/antallDagerPerMeldeperiodeContext';
 import { BarnetilleggPeriodeFormData } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
 import {
     BehandlingsperiodeAction,
     behandlingsperiodeReducer,
-} from '~/components/behandling/context/innvilgelse/sub-reducers/behandlingsperiodeReducer';
+} from '~/components/behandling/context/innvilgelse/slices/behandlingsperiodeContext';
 import {
     BarnetilleggActions,
     barnetilleggReducer,
-} from '~/components/behandling/context/innvilgelse/sub-reducers/barnetilleggReducer';
+} from '~/components/behandling/context/innvilgelse/slices/barnetilleggContext';
 import { Reducer } from 'react';
 import {
     BehandlingSkjemaMedFritekst,

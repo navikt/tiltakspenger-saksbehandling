@@ -17,7 +17,7 @@ import { RevurderingOmgjøringState } from '~/components/behandling/context/revu
 import { RevurderingInnvilgelseState } from '~/components/behandling/context/revurdering/revurderingInnvilgelseSkjemaContext';
 import { RammebehandlingMedInnvilgelse } from '~/types/Rammebehandling';
 import { Periode } from '~/types/Periode';
-import { TiltaksdeltakelsePeriodeFormData } from '~/components/behandling/context/innvilgelse/sub-reducers/tiltaksdeltagelseReducer';
+import { TiltaksdeltakelsePeriodeFormData } from '~/components/behandling/context/innvilgelse/slices/tiltaksdeltagelseContext';
 import { erDatoIPeriode } from '~/utils/periode';
 
 type RevurderingState =
