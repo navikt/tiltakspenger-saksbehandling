@@ -9,7 +9,7 @@ import {
 } from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
 
 export const AntallDagerForMeldeperiodeForm = () => {
-    const { behandlingsperiode, antallDagerPerMeldeperiode } = useBehandlingInnvilgelseSkjema();
+    const { innvilgelsesperiode, antallDagerPerMeldeperiode } = useBehandlingInnvilgelseSkjema();
     const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
 
     const { rolleForBehandling } = useBehandling();
@@ -62,8 +62,8 @@ export const AntallDagerForMeldeperiodeForm = () => {
                         },
                         error: null,
                     },
-                    minDate: behandlingsperiode?.fraOgMed,
-                    maxDate: behandlingsperiode?.tilOgMed,
+                    minDate: innvilgelsesperiode?.fraOgMed,
+                    maxDate: innvilgelsesperiode?.tilOgMed,
                 }}
                 contentConfig={{
                     content: (periode, index) => (

@@ -39,7 +39,7 @@ const tilDTO = (skjema: SøknadsbehandlingSkjemaContext): SøknadsbehandlingVedt
             return {
                 begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
                 fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
-                innvilgelsesperiode: skjema.behandlingsperiode as Periode,
+                innvilgelsesperiode: skjema.innvilgelsesperiode,
                 barnetillegg: skjema.harBarnetillegg
                     ? {
                           begrunnelse: skjema.textAreas.barnetilleggBegrunnelse.getValue(),

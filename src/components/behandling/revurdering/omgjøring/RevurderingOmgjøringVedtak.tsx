@@ -120,7 +120,7 @@ const tilDTO = (skjema: RevurderingOmgjøringContext): RevurderingVedtakOmgjøri
         resultat: RevurderingResultat.OMGJØRING,
         begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
         fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
-        innvilgelsesperiode: skjema.behandlingsperiode,
+        innvilgelsesperiode: skjema.innvilgelsesperiode,
         valgteTiltaksdeltakelser: tiltaksdeltakelsePeriodeFormToTiltaksdeltakelsePeriode(
             skjema.valgteTiltaksdeltakelser,
         ),

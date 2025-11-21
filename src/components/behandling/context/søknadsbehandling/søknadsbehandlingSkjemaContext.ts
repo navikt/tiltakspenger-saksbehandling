@@ -96,7 +96,7 @@ export const søknadsbehandlingReducer: Reducer<SøknadsbehandlingState, Søknad
             };
         }
 
-        case 'oppdaterBehandlingsperiode':
+        case 'oppdaterInnvilgelsesperiode':
         case 'leggTilAntallDagerPeriode':
         case 'fjernAntallDagerPeriode':
         case 'oppdaterAntallDagerFraOgMed':

@@ -12,9 +12,9 @@ import {
 } from '~/components/behandling/context/innvilgelse/slices/antallDagerPerMeldeperiodeContext';
 import { BarnetilleggPeriodeFormData } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
 import {
-    BehandlingsperiodeAction,
-    behandlingsperiodeReducer,
-} from '~/components/behandling/context/innvilgelse/slices/behandlingsperiodeContext';
+    InnvilgelsesperiodeAction,
+    innvilgelsesperiodeReducer,
+} from '~/components/behandling/context/innvilgelse/slices/innvilgelsesperiodeContext';
 import {
     BarnetilleggActions,
     barnetilleggReducer,
@@ -35,7 +35,7 @@ import {
 // Gjenbrukes ved alle behandlingsresultater som gir innvilgelse
 export type BehandlingInnvilgelseState = {
     resultat: RammebehandlingResultatMedInnvilgelse;
-    behandlingsperiode: Periode;
+    innvilgelsesperiode: Periode;
     valgteTiltaksdeltakelser: TiltaksdeltakelsePeriodeFormData[];
     harBarnetillegg: boolean;
     barnetilleggPerioder: BarnetilleggPeriodeFormData[];
@@ -43,7 +43,7 @@ export type BehandlingInnvilgelseState = {
 };
 
 export type BehandlingInnvilgelseActions =
-    | BehandlingsperiodeAction
+    | InnvilgelsesperiodeAction
     | TiltaksdeltagelseActions
     | BarnetilleggActions
     | AntallDagerPerMeldeperiodeActions;
@@ -55,8 +55,8 @@ export const behandlingInnvilgelseReducer = (<State extends BehandlingInnvilgels
     const { type } = action;
 
     switch (type) {
-        case 'oppdaterBehandlingsperiode': {
-            return behandlingsperiodeReducer(state, action);
+        case 'oppdaterInnvilgelsesperiode': {
+            return innvilgelsesperiodeReducer(state, action);
         }
 
         case 'leggTilAntallDagerPeriode':

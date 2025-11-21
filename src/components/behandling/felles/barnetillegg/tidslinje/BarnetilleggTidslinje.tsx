@@ -11,13 +11,13 @@ import { behandlingUrl } from '~/utils/urls';
 import style from './BarnetilleggTidslinje.module.css';
 
 type Props = {
-    behandlingsperiode: Periode;
+    innvilgelsesperiode: Periode;
 };
 
-export const BarnetilleggTidslinje = ({ behandlingsperiode }: Props) => {
+export const BarnetilleggTidslinje = ({ innvilgelsesperiode }: Props) => {
     const { sak } = useSak();
 
-    const barnetillegg = hentBarnetilleggFraVedtakTidslinje(sak.tidslinje, behandlingsperiode);
+    const barnetillegg = hentBarnetilleggFraVedtakTidslinje(sak.tidslinje, innvilgelsesperiode);
 
     if (barnetillegg.length === 0) {
         return (
@@ -27,8 +27,8 @@ export const BarnetilleggTidslinje = ({ behandlingsperiode }: Props) => {
         );
     }
 
-    const startDate = new Date(behandlingsperiode.fraOgMed);
-    const endDate = new Date(behandlingsperiode.tilOgMed);
+    const startDate = new Date(innvilgelsesperiode.fraOgMed);
+    const endDate = new Date(innvilgelsesperiode.tilOgMed);
 
     return (
         <Timeline startDate={startDate} endDate={endDate}>

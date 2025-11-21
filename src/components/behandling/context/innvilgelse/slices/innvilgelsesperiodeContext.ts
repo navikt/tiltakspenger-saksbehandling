@@ -4,24 +4,24 @@ import { datoMax, datoMin } from '~/utils/date';
 import { BehandlingInnvilgelseState } from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
 import { Reducer } from 'react';
 
-export type BehandlingsperiodeAction = {
-    type: 'oppdaterBehandlingsperiode';
+export type InnvilgelsesperiodeAction = {
+    type: 'oppdaterInnvilgelsesperiode';
     payload: { periode: Partial<Periode> };
 };
 
-export const behandlingsperiodeReducer = (<State extends BehandlingInnvilgelseState>(
+export const innvilgelsesperiodeReducer = (<State extends BehandlingInnvilgelseState>(
     state: State,
-    action: BehandlingsperiodeAction,
+    action: InnvilgelsesperiodeAction,
 ) => {
     const { type, payload } = action;
 
     switch (type) {
-        case 'oppdaterBehandlingsperiode': {
-            const nyBehandlingsperiode = { ...state.behandlingsperiode, ...payload.periode };
+        case 'oppdaterInnvilgelsesperiode': {
+            const nyInnvilgelsesperiode = { ...state.innvilgelsesperiode, ...payload.periode };
 
             return {
                 ...state,
-                behandlingsperiode: nyBehandlingsperiode,
+                innvilgelsesperiode: nyInnvilgelsesperiode,
                 /*
                     Pga papirsøknad kan vi ikke garantere at periodene har fraOgMed og tilOgMed satt
                     går for en enkel fiks der vi bare sjekker om alle periodene har fraOgMed og tilOgMed satt før vi oppdaterer periodiseringen
@@ -38,7 +38,7 @@ export const behandlingsperiodeReducer = (<State extends BehandlingInnvilgelseSt
                               },
                           })),
                           //den forstår ikke at peridoen er garantert pga if'en
-                          nyBehandlingsperiode as Periode,
+                          nyInnvilgelsesperiode as Periode,
                           true,
                       )
                     : state.valgteTiltaksdeltakelser,
@@ -59,7 +59,7 @@ export const behandlingsperiodeReducer = (<State extends BehandlingInnvilgelseSt
                               },
                           })),
                           //den forstår ikke at peridoen er garantert pga if'en
-                          nyBehandlingsperiode as Periode,
+                          nyInnvilgelsesperiode as Periode,
                           true,
                       )
                     : state.antallDagerPerMeldeperiode,
@@ -79,14 +79,14 @@ export const behandlingsperiodeReducer = (<State extends BehandlingInnvilgelseSt
                               },
                           })),
                           //den forstår ikke at peridoen er garantert pga if'en
-                          nyBehandlingsperiode as Periode,
+                          nyInnvilgelsesperiode as Periode,
                           false,
                       )
                     : state.barnetilleggPerioder,
             };
         }
     }
-}) satisfies Reducer<BehandlingInnvilgelseState, BehandlingsperiodeAction>;
+}) satisfies Reducer<BehandlingInnvilgelseState, InnvilgelsesperiodeAction>;
 
 type MedPeriode = {
     periode: Periode;
@@ -95,48 +95,48 @@ type MedPeriode = {
 // Denne må kanskje tweakes litt hvis vi får periodiserte innvilgelser i en behandling
 const oppdaterPeriodisering = <T extends MedPeriode>(
     periodisering: T[],
-    behandlingsperiode: Periode,
-    // Tiltaksdeltagelse og antall dager per meldeperiode skal alltid fylle hele behandlingsperioden ved innvilgelse,
+    innvilgelsesperiode: Periode,
+    // Tiltaksdeltagelse og antall dager per meldeperiode skal alltid fylle hele innvilgelsesperioden ved innvilgelse,
     // men barnetillegg kan omfatte kun deler av innvilgelsesperioden. Vi gjør en best-effort for å tilpasse for dette.
-    skalAlltidFylleBehandlingsperioden: boolean,
+    skalAlltidFylleInnvilgelsesperioden: boolean,
 ): T[] => {
-    const perioderInnenforBehandlingsperioden = periodisering.filter((p) =>
-        perioderOverlapper(behandlingsperiode, p.periode),
+    const perioderInnenforInnvilgelsesperioden = periodisering.filter((p) =>
+        perioderOverlapper(innvilgelsesperiode, p.periode),
     );
 
-    if (perioderInnenforBehandlingsperioden.length === 0) {
+    if (perioderInnenforInnvilgelsesperioden.length === 0) {
         return [];
     }
 
-    const førstePeriode = perioderInnenforBehandlingsperioden.at(0)!;
+    const førstePeriode = perioderInnenforInnvilgelsesperioden.at(0)!;
 
-    if (perioderInnenforBehandlingsperioden.length === 1) {
-        return perioderInnenforBehandlingsperioden.with(0, {
+    if (perioderInnenforInnvilgelsesperioden.length === 1) {
+        return perioderInnenforInnvilgelsesperioden.with(0, {
             ...førstePeriode,
-            periode: skalAlltidFylleBehandlingsperioden
-                ? behandlingsperiode
+            periode: skalAlltidFylleInnvilgelsesperioden
+                ? innvilgelsesperiode
                 : {
                       fraOgMed: datoMax(
-                          behandlingsperiode.fraOgMed,
+                          innvilgelsesperiode.fraOgMed,
                           førstePeriode.periode.fraOgMed,
                       ),
                       tilOgMed: datoMin(
-                          behandlingsperiode.tilOgMed,
+                          innvilgelsesperiode.tilOgMed,
                           førstePeriode.periode.tilOgMed,
                       ),
                   },
         });
     }
 
-    const sistePeriode = perioderInnenforBehandlingsperioden.at(-1)!;
+    const sistePeriode = perioderInnenforInnvilgelsesperioden.at(-1)!;
 
-    return perioderInnenforBehandlingsperioden
+    return perioderInnenforInnvilgelsesperioden
         .with(0, {
             ...førstePeriode,
             periode: {
-                fraOgMed: skalAlltidFylleBehandlingsperioden
-                    ? behandlingsperiode.fraOgMed
-                    : datoMax(behandlingsperiode.fraOgMed, førstePeriode.periode.fraOgMed),
+                fraOgMed: skalAlltidFylleInnvilgelsesperioden
+                    ? innvilgelsesperiode.fraOgMed
+                    : datoMax(innvilgelsesperiode.fraOgMed, førstePeriode.periode.fraOgMed),
                 tilOgMed: førstePeriode.periode.tilOgMed,
             },
         })
@@ -144,9 +144,9 @@ const oppdaterPeriodisering = <T extends MedPeriode>(
             ...sistePeriode,
             periode: {
                 fraOgMed: sistePeriode.periode.fraOgMed,
-                tilOgMed: skalAlltidFylleBehandlingsperioden
-                    ? behandlingsperiode.tilOgMed
-                    : datoMin(behandlingsperiode.tilOgMed, sistePeriode.periode.tilOgMed),
+                tilOgMed: skalAlltidFylleInnvilgelsesperioden
+                    ? innvilgelsesperiode.tilOgMed
+                    : datoMin(innvilgelsesperiode.tilOgMed, sistePeriode.periode.tilOgMed),
             },
         });
 };

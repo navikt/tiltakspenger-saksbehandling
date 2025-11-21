@@ -17,7 +17,7 @@ export const validerInnvilgelse = (
     };
 
     const {
-        behandlingsperiode,
+        innvilgelsesperiode,
         barnetilleggPerioder,
         harBarnetillegg,
         valgteTiltaksdeltakelser,
@@ -27,30 +27,30 @@ export const validerInnvilgelse = (
     const tiltaksperiode = hentHeleTiltaksdeltagelsesperioden(behandling);
 
     if (
-        behandlingsperiode?.fraOgMed &&
-        behandlingsperiode?.tilOgMed &&
-        erFullstendigPeriode(behandlingsperiode)
+        innvilgelsesperiode?.fraOgMed &&
+        innvilgelsesperiode?.tilOgMed &&
+        erFullstendigPeriode(innvilgelsesperiode)
     ) {
-        if (behandlingsperiode.fraOgMed > behandlingsperiode.tilOgMed) {
+        if (innvilgelsesperiode.fraOgMed > innvilgelsesperiode.tilOgMed) {
             validering.errors.push('Til og med-dato må være etter fra og med-dato');
         }
 
-        if (tiltaksperiode.fraOgMed > behandlingsperiode.fraOgMed) {
-            validering.errors.push('Behandlingsperioden starter før tiltaksperioden');
+        if (tiltaksperiode.fraOgMed > innvilgelsesperiode.fraOgMed) {
+            validering.errors.push('Innvilgelsesperioden starter før tiltaksperioden');
         }
 
-        if (tiltaksperiode.tilOgMed < behandlingsperiode.tilOgMed) {
-            validering.errors.push('Behandlingsperioden slutter etter tiltaksperioden');
+        if (tiltaksperiode.tilOgMed < innvilgelsesperiode.tilOgMed) {
+            validering.errors.push('Innvilgelsesperioden slutter etter tiltaksperioden');
         }
     } else {
-        validering.errors.push('Behandlingsperioden må være satt');
+        validering.errors.push('Innvilgelsesperioden må være satt');
         return validering;
     }
 
     if (harBarnetillegg) {
         const barnetilleggValidering = validerBarnetillegg(
             barnetilleggPerioder,
-            behandlingsperiode,
+            innvilgelsesperiode,
         );
         validering.warnings.push(...barnetilleggValidering.warnings);
         validering.errors.push(...barnetilleggValidering.errors);
@@ -59,14 +59,14 @@ export const validerInnvilgelse = (
     const tiltaksdeltagelseValidering = validerTiltaksdeltakelser(
         behandling,
         valgteTiltaksdeltakelser,
-        behandlingsperiode,
+        innvilgelsesperiode,
     );
     validering.warnings.push(...tiltaksdeltagelseValidering.warnings);
     validering.errors.push(...tiltaksdeltagelseValidering.errors);
 
     const antallDagerPerMeldeperiodeValidering = validerAntallDagerPerMeldeperiode(
         antallDagerPerMeldeperiode,
-        behandlingsperiode,
+        innvilgelsesperiode,
     );
     validering.warnings.push(...antallDagerPerMeldeperiodeValidering.warnings);
     validering.errors.push(...antallDagerPerMeldeperiodeValidering.errors);

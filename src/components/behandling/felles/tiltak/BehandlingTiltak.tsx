@@ -20,14 +20,14 @@ import style from './BehandlingTiltak.module.css';
 
 export const BehandlingTiltak = () => {
     const { behandling, rolleForBehandling } = useBehandling();
-    const { valgteTiltaksdeltakelser, behandlingsperiode } = useBehandlingInnvilgelseSkjema();
+    const { valgteTiltaksdeltakelser, innvilgelsesperiode } = useBehandlingInnvilgelseSkjema();
     const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
 
     const tiltaksdeltakelser = hentTiltaksdeltakelserMedStartOgSluttdato(behandling);
 
     const harFlereTiltak = deltarPaFlereTiltakMedStartOgSluttdatoIValgtInnvilgelsesperiode(
         behandling,
-        behandlingsperiode,
+        innvilgelsesperiode,
     );
 
     if (!harFlereTiltak) {
@@ -79,8 +79,8 @@ export const BehandlingTiltak = () => {
                                 },
                             },
                             readOnly: !erSaksbehandler,
-                            minDate: behandlingsperiode?.fraOgMed,
-                            maxDate: behandlingsperiode?.tilOgMed,
+                            minDate: innvilgelsesperiode?.fraOgMed,
+                            maxDate: innvilgelsesperiode?.tilOgMed,
                         }}
                         contentConfig={{
                             position: 'before',

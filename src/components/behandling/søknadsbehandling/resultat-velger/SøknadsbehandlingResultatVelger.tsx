@@ -2,7 +2,7 @@ import { Alert, Button, Radio, RadioGroup } from '@navikt/ds-react';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { useSøknadsbehandling } from '../../context/BehandlingContext';
-import { BehandlingsperiodeVelger } from '~/components/behandling/felles/behandlingsperiode/BehandlingsperiodeVelger';
+import { InnvilgelsesperiodeVelger } from '~/components/behandling/felles/innvilgelsesperiode/InnvilgelsesperiodeVelger';
 import { SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
 import {
     useSøknadsbehandlingSkjema,
@@ -60,7 +60,7 @@ export const SøknadsbehandlingResultatVelger = () => {
                     )}
                 </RadioGroup>
                 {resultat === SøknadsbehandlingResultat.INNVILGELSE && (
-                    <BehandlingsperiodeVelger behandling={behandling} label={'Innvilges'} />
+                    <InnvilgelsesperiodeVelger behandling={behandling} label={'Innvilges'} />
                 )}
 
                 {!kanInnvilges && (

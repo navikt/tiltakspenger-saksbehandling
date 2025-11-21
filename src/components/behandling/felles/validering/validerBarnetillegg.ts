@@ -5,7 +5,7 @@ import { BarnetilleggPeriodeFormData } from '../barnetillegg/utils/hentBarnetill
 
 export const validerBarnetillegg = (
     barnetilleggPerioder: BarnetilleggPeriodeFormData[],
-    behandlingsperiode: Periode,
+    innvilgelsesperiode: Periode,
 ): ValideringResultat => {
     const validering: ValideringResultat = {
         errors: [],
@@ -38,11 +38,11 @@ export const validerBarnetillegg = (
         validering.errors.push('Minst en periode må ha barn når barnetillegg er valgt');
     }
 
-    if (helePerioden.fraOgMed < behandlingsperiode.fraOgMed) {
+    if (helePerioden.fraOgMed < innvilgelsesperiode.fraOgMed) {
         validering.errors.push('Barnetillegg-perioden kan ikke starte før innvilgelsesperioden');
     }
 
-    if (helePerioden.tilOgMed > behandlingsperiode.tilOgMed) {
+    if (helePerioden.tilOgMed > innvilgelsesperiode.tilOgMed) {
         validering.errors.push('Barnetillegg-perioden kan ikke slutte etter innvilgelsesperioden');
     }
 

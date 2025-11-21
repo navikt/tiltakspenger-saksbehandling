@@ -5,7 +5,7 @@ import { AntallDagerPerMeldeperiodeFormData } from '~/components/behandling/cont
 
 export const validerAntallDagerPerMeldeperiode = (
     antallDagerPerMeldeperiode: AntallDagerPerMeldeperiodeFormData[],
-    behandlingsperiode: Periode,
+    innvilgelsesperiode: Periode,
 ): ValideringResultat => {
     const validering: ValideringResultat = {
         errors: [],
@@ -51,13 +51,13 @@ export const validerAntallDagerPerMeldeperiode = (
 
         const helePerioden = joinPerioder(perioder);
 
-        if (helePerioden.fraOgMed !== behandlingsperiode.fraOgMed) {
+        if (helePerioden.fraOgMed !== innvilgelsesperiode.fraOgMed) {
             validering.errors.push(
                 'Perioden for antall dager per meldeperiode må ha samme startdato som innvilgelsesperioden',
             );
         }
 
-        if (helePerioden.tilOgMed !== behandlingsperiode.tilOgMed) {
+        if (helePerioden.tilOgMed !== innvilgelsesperiode.tilOgMed) {
             validering.errors.push(
                 'Perioden for antall dager per meldeperiode må ha samme sluttdato som innvilgelsesperioden',
             );

@@ -21,7 +21,7 @@ const BATCH_MED_BARN = 10;
 export const BehandlingBarnetilleggPerioder = () => {
     const { sak } = useSak();
     const { behandling, rolleForBehandling } = useBehandling();
-    const { barnetilleggPerioder, behandlingsperiode } = useBehandlingInnvilgelseSkjema();
+    const { barnetilleggPerioder, innvilgelsesperiode } = useBehandlingInnvilgelseSkjema();
     const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
 
     const erSøknadsbehandling = behandling.type === Rammebehandlingstype.SØKNADSBEHANDLING;
@@ -55,7 +55,7 @@ export const BehandlingBarnetilleggPerioder = () => {
                                         payload: {
                                             barnetilleggPerioder: periodiserBarnetilleggFraSøknad(
                                                 behandling.søknad.barnetillegg,
-                                                behandlingsperiode as Periode,
+                                                innvilgelsesperiode as Periode,
                                             ),
                                         },
                                     })
@@ -74,7 +74,7 @@ export const BehandlingBarnetilleggPerioder = () => {
                                             barnetilleggPerioder:
                                                 hentBarnetilleggFraVedtakTidslinje(
                                                     sak.tidslinje,
-                                                    behandlingsperiode as Periode,
+                                                    innvilgelsesperiode as Periode,
                                                 ),
                                         },
                                     });
@@ -117,8 +117,8 @@ export const BehandlingBarnetilleggPerioder = () => {
                         },
                     },
                     readOnly: !erSaksbehandler,
-                    minDate: behandlingsperiode?.fraOgMed,
-                    maxDate: behandlingsperiode?.tilOgMed,
+                    minDate: innvilgelsesperiode?.fraOgMed,
+                    maxDate: innvilgelsesperiode?.tilOgMed,
                 }}
                 contentConfig={{
                     content: (periode, index) => {

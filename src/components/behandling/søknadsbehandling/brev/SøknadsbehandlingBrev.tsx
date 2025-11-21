@@ -50,7 +50,7 @@ const søknadsbehandlingSkjemaTilBrevForhåndsvisningDTO = (
         case SøknadsbehandlingResultat.INNVILGELSE: {
             return {
                 ...baseDTO,
-                virkningsperiode: skjema.behandlingsperiode,
+                virkningsperiode: skjema.innvilgelsesperiode,
                 barnetillegg: barnetilleggPeriodeFormDataTilBarnetilleggPeriode(
                     skjema.barnetilleggPerioder,
                 ),

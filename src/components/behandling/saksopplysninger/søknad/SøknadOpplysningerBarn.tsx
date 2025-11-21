@@ -168,7 +168,7 @@ const Barn = ({ barn, tiltaksperiode, personopplysninger }: BarnProps) => {
 const PeriodiserBarnetilleggKnapp = ({ søknad }: { søknad: Søknad }) => {
     const { rolleForBehandling } = useBehandling();
 
-    const { behandlingsperiode } = useBehandlingInnvilgelseSkjema();
+    const { innvilgelsesperiode } = useBehandlingInnvilgelseSkjema();
     const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
 
     if (rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER) {
@@ -187,7 +187,7 @@ const PeriodiserBarnetilleggKnapp = ({ søknad }: { søknad: Søknad }) => {
                     payload: {
                         barnetilleggPerioder: periodiserBarnetilleggFraSøknad(
                             søknad.barnetillegg,
-                            behandlingsperiode,
+                            innvilgelsesperiode,
                         ),
                     },
                 })

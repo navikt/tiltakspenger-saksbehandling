@@ -14,8 +14,8 @@ type Props = {
     label: string;
 };
 
-export const BehandlingsperiodeVelger = ({ behandling, label }: Props) => {
-    const { behandlingsperiode } = useBehandlingInnvilgelseSkjema();
+export const InnvilgelsesperiodeVelger = ({ behandling, label }: Props) => {
+    const { innvilgelsesperiode } = useBehandlingInnvilgelseSkjema();
 
     const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
 
@@ -27,14 +27,14 @@ export const BehandlingsperiodeVelger = ({ behandling, label }: Props) => {
             <PeriodeForm
                 fraOgMed={{
                     label: `${label} fra og med`,
-                    value: behandlingsperiode?.fraOgMed ?? null,
+                    value: innvilgelsesperiode?.fraOgMed ?? null,
                     onChange: (valgtDato) => {
                         if (!valgtDato) {
                             return;
                         }
 
                         dispatch({
-                            type: 'oppdaterBehandlingsperiode',
+                            type: 'oppdaterInnvilgelsesperiode',
                             payload: { periode: { fraOgMed: dateTilISOTekst(valgtDato) } },
                         });
                     },
@@ -42,14 +42,14 @@ export const BehandlingsperiodeVelger = ({ behandling, label }: Props) => {
                 }}
                 tilOgMed={{
                     label: `${label} til og med`,
-                    value: behandlingsperiode?.tilOgMed ?? null,
+                    value: innvilgelsesperiode?.tilOgMed ?? null,
                     onChange: (valgtDato) => {
                         if (!valgtDato) {
                             return;
                         }
 
                         dispatch({
-                            type: 'oppdaterBehandlingsperiode',
+                            type: 'oppdaterInnvilgelsesperiode',
                             payload: { periode: { tilOgMed: dateTilISOTekst(valgtDato) } },
                         });
                     },

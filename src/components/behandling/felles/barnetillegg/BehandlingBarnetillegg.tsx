@@ -24,7 +24,7 @@ export const BehandlingBarnetillegg = ({ valgTekst }: Props) => {
     const { sak } = useSak();
     const { behandling, rolleForBehandling } = useBehandling();
 
-    const { harBarnetillegg, behandlingsperiode } = useBehandlingInnvilgelseSkjema();
+    const { harBarnetillegg, innvilgelsesperiode } = useBehandlingInnvilgelseSkjema();
     const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
 
     return (
@@ -37,7 +37,7 @@ export const BehandlingBarnetillegg = ({ valgTekst }: Props) => {
                 </VedtakSeksjon.Venstre>
 
                 <VedtakSeksjon.FullBredde className={style.pølseSeksjon}>
-                    <BarnetilleggTidslinje behandlingsperiode={behandlingsperiode as Periode} />
+                    <BarnetilleggTidslinje innvilgelsesperiode={innvilgelsesperiode} />
                 </VedtakSeksjon.FullBredde>
 
                 <VedtakSeksjon.Venstre>
@@ -58,7 +58,7 @@ export const BehandlingBarnetillegg = ({ valgTekst }: Props) => {
                         <Radio value={false}>{'Nei'}</Radio>
                     </RadioGroup>
                     {!harBarnetillegg &&
-                        harSøktBarnetillegg(behandlingsperiode as Periode, behandling, sak) && (
+                        harSøktBarnetillegg(innvilgelsesperiode as Periode, behandling, sak) && (
                             <Alert className={style.infoboks} variant={'info'} size={'small'}>
                                 Husk å begrunne avslaget på barnetillegg i vedtaksbrevet.
                             </Alert>

@@ -10,7 +10,7 @@ import { Rammebehandling } from '~/types/Rammebehandling';
 export const validerTiltaksdeltakelser = (
     behandling: Rammebehandling,
     valgteTiltaksdeltakelser: TiltaksdeltakelsePeriodeFormData[],
-    behandlingsperiode: Periode,
+    innvilgelsesperiode: Periode,
 ): ValideringResultat => {
     const validering: ValideringResultat = {
         errors: [],
@@ -52,13 +52,13 @@ export const validerTiltaksdeltakelser = (
         );
     }
 
-    if (helePerioden.fraOgMed !== behandlingsperiode.fraOgMed) {
+    if (helePerioden.fraOgMed !== innvilgelsesperiode.fraOgMed) {
         validering.errors.push(
             'Tiltaksdeltakelse-perioden må ha samme startdato som innvilgelsesperioden',
         );
     }
 
-    if (helePerioden.tilOgMed !== behandlingsperiode.tilOgMed) {
+    if (helePerioden.tilOgMed !== innvilgelsesperiode.tilOgMed) {
         validering.errors.push(
             'Tiltaksdeltakelse-perioden må ha samme sluttdato som innvilgelsesperioden',
         );

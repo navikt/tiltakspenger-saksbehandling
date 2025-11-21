@@ -41,7 +41,7 @@ export const antallDagerPerMeldeperiodeReducer = (<State extends BehandlingInnvi
     switch (type) {
         case 'leggTilAntallDagerPeriode': {
             const sistePeriode = state.antallDagerPerMeldeperiode.at(-1);
-            const behandlingsperiode = state.behandlingsperiode as Periode;
+            const innvilgelsesperiode = state.innvilgelsesperiode as Periode;
 
             if (!sistePeriode?.periode?.fraOgMed || !sistePeriode?.periode?.tilOgMed) {
                 return {
@@ -49,7 +49,7 @@ export const antallDagerPerMeldeperiodeReducer = (<State extends BehandlingInnvi
                     antallDagerPerMeldeperiode: [
                         {
                             antallDagerPerMeldeperiode: ANTALL_DAGER_DEFAULT,
-                            periode: behandlingsperiode,
+                            periode: innvilgelsesperiode,
                         },
                     ],
                 };
@@ -60,9 +60,9 @@ export const antallDagerPerMeldeperiodeReducer = (<State extends BehandlingInnvi
                 periode: {
                     fraOgMed: datoMin(
                         nesteDag(sistePeriode.periode.tilOgMed),
-                        behandlingsperiode.tilOgMed,
+                        innvilgelsesperiode.tilOgMed,
                     ),
-                    tilOgMed: behandlingsperiode.tilOgMed,
+                    tilOgMed: innvilgelsesperiode.tilOgMed,
                 },
             };
 

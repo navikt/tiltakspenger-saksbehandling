@@ -48,7 +48,7 @@ export const barnetilleggReducer = (<State extends BehandlingInnvilgelseState>(
 
         case 'addBarnetilleggPeriode': {
             const { antallBarn } = payload;
-            const innvilgelsesPeriode = state.behandlingsperiode as Periode;
+            const innvilgelsesPeriode = state.innvilgelsesperiode as Periode;
             const forrigeBarnetillegg = state.barnetilleggPerioder?.at(-1);
 
             const nestePeriode: Periode = forrigeBarnetillegg

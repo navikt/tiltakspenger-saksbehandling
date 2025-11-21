@@ -38,7 +38,7 @@ export const tiltaksdeltagelseReducer = (<State extends BehandlingInnvilgelseSta
 
     switch (type) {
         case 'addTiltakPeriode': {
-            const innvilgelsesperiode = state.behandlingsperiode as Periode;
+            const innvilgelsesperiode = state.innvilgelsesperiode as Periode;
             const forrigeTiltakPeriode = state.valgteTiltaksdeltakelser.slice(-1)[0];
 
             const nesteTiltakPeriode = forrigeTiltakPeriode

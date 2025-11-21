@@ -54,7 +54,7 @@ const revurderingskjemaTilBrevForhåndsvisningDTO = (
     return {
         resultat: RevurderingResultat.INNVILGELSE,
         fritekst: skjema.textAreas.brevtekst.getValue(),
-        virkningsperiode: skjema.behandlingsperiode as Periode,
+        virkningsperiode: skjema.innvilgelsesperiode as Periode,
         barnetillegg: skjema.harBarnetillegg
             ? barnetilleggPeriodeFormDataTilBarnetilleggPeriode(skjema.barnetilleggPerioder)
             : null,

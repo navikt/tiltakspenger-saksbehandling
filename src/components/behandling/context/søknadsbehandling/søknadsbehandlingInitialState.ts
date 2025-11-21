@@ -39,7 +39,7 @@ const innvilgelseInitialState = (
     const { resultat, virkningsperiode, saksopplysninger } = behandling;
 
     // Det skal ikke være mulig å velge innvilgelse dersom det ikke finnes en saksopplysningsperiode/tiltaksperiode
-    const behandlingsperiode = virkningsperiode ?? saksopplysninger.periode!;
+    const innvilgelsesperiode = virkningsperiode ?? saksopplysninger.periode!;
 
     const barnetilleggPerioder = hentBarnetilleggForSøknadsbehandling(behandling);
 
@@ -48,7 +48,7 @@ const innvilgelseInitialState = (
     return resultat === SøknadsbehandlingResultat.INNVILGELSE
         ? {
               resultat: SøknadsbehandlingResultat.INNVILGELSE,
-              behandlingsperiode,
+              innvilgelsesperiode: innvilgelsesperiode,
               harBarnetillegg,
               barnetilleggPerioder,
               valgteTiltaksdeltakelser: behandling.valgteTiltaksdeltakelser,
@@ -57,20 +57,20 @@ const innvilgelseInitialState = (
                   : [
                         {
                             antallDagerPerMeldeperiode: ANTALL_DAGER_DEFAULT,
-                            periode: behandlingsperiode,
+                            periode: innvilgelsesperiode,
                         },
                     ],
           }
         : {
               resultat: SøknadsbehandlingResultat.INNVILGELSE,
-              behandlingsperiode,
+              innvilgelsesperiode: innvilgelsesperiode,
               harBarnetillegg,
               barnetilleggPerioder,
               valgteTiltaksdeltakelser: valgteTiltaksdeltakelserInitialState(behandling),
               antallDagerPerMeldeperiode: [
                   {
                       antallDagerPerMeldeperiode: ANTALL_DAGER_DEFAULT,
-                      periode: behandlingsperiode,
+                      periode: innvilgelsesperiode,
                   },
               ],
           };
@@ -90,7 +90,7 @@ const valgteTiltaksdeltakelserInitialState = (
     behandling: Søknadsbehandling,
 ): TiltaksdeltakelsePeriodeFormData[] => {
     const tiltakFraSøknad = hentTiltaksdeltagelseFraSøknad(behandling);
-    const behandlingsperiode =
+    const innvilgelsesperiode =
         behandling.virkningsperiode ?? hentTiltaksperiodeFraSøknad(behandling);
 
     return tiltakFraSøknad
@@ -98,8 +98,8 @@ const valgteTiltaksdeltakelserInitialState = (
               {
                   eksternDeltagelseId: tiltakFraSøknad.eksternDeltagelseId,
                   periode: {
-                      fraOgMed: behandlingsperiode?.fraOgMed ?? null,
-                      tilOgMed: behandlingsperiode?.tilOgMed ?? null,
+                      fraOgMed: innvilgelsesperiode?.fraOgMed ?? null,
+                      tilOgMed: innvilgelsesperiode?.tilOgMed ?? null,
                   },
               },
           ]
