@@ -61,6 +61,8 @@ export const revurderingStansReducer: Reducer<RevurderingStansState, Revurdering
                     state.harValgtStansFraFørsteDagSomGirRett,
             };
     }
+
+    throw Error(`Ugyldig action for revurdering stans: ${type satisfies never}`);
 };
 
 export type RevurderingStansContext = BehandlingSkjemaMedFritekst<RevurderingStansState>;

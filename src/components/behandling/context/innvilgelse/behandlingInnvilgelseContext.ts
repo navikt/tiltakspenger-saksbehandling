@@ -12,7 +12,7 @@ import {
 } from '~/components/behandling/context/innvilgelse/sub-reducers/antallDagerPerMeldeperiodeReducer';
 import { BarnetilleggPeriodeFormData } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
 import {
-    BehandlingsperiodeActions,
+    BehandlingsperiodeAction,
     behandlingsperiodeReducer,
 } from '~/components/behandling/context/innvilgelse/sub-reducers/behandlingsperiodeReducer';
 import {
@@ -43,7 +43,7 @@ export type BehandlingInnvilgelseState = {
 };
 
 export type BehandlingInnvilgelseActions =
-    | BehandlingsperiodeActions
+    | BehandlingsperiodeAction
     | TiltaksdeltagelseActions
     | BarnetilleggActions
     | AntallDagerPerMeldeperiodeActions;

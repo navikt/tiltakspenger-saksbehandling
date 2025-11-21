@@ -4,14 +4,14 @@ import { datoMax, datoMin } from '~/utils/date';
 import { BehandlingInnvilgelseState } from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
 import { Reducer } from 'react';
 
-export type BehandlingsperiodeActions = {
+export type BehandlingsperiodeAction = {
     type: 'oppdaterBehandlingsperiode';
     payload: { periode: Partial<Periode> };
 };
 
 export const behandlingsperiodeReducer = (<State extends BehandlingInnvilgelseState>(
     state: State,
-    action: BehandlingsperiodeActions,
+    action: BehandlingsperiodeAction,
 ) => {
     const { type, payload } = action;
 
@@ -86,7 +86,7 @@ export const behandlingsperiodeReducer = (<State extends BehandlingInnvilgelseSt
             };
         }
     }
-}) satisfies Reducer<BehandlingInnvilgelseState, BehandlingsperiodeActions>;
+}) satisfies Reducer<BehandlingInnvilgelseState, BehandlingsperiodeAction>;
 
 type MedPeriode = {
     periode: Periode;

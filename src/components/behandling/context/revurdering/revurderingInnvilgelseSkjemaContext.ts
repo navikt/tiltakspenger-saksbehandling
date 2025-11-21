@@ -13,9 +13,9 @@ import {
 } from '~/components/behandling/context/BehandlingSkjemaContext';
 import { BehandlingSkjemaType } from '~/components/behandling/context/behandlingSkjemaUtils';
 
-export interface RevurderingInnvilgelseState extends BehandlingInnvilgelseState {
+export type RevurderingInnvilgelseState = BehandlingInnvilgelseState & {
     resultat: RevurderingResultat.INNVILGELSE;
-}
+};
 
 export type RevurderingInnvilgelseActions = ReducerSuperAction<
     BehandlingInnvilgelseActions,
