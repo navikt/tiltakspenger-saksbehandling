@@ -1,14 +1,14 @@
 import { ValideringResultat } from '~/types/Validering';
 import { validerInnvilgelse } from '~/components/behandling/felles/validering/validerInnvilgelse';
-import { BehandlingSkjemaContext } from '~/components/behandling/context/BehandlingSkjemaContext';
 import { Revurdering } from '~/types/Revurdering';
+import { RevurderingOmgjøringState } from '~/components/behandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 
 /**
  * Omgjøring benytter seg av de samme reglene som innvilgelse
  */
 export const revurderingOmgjøringValidering = (
     behandling: Revurdering,
-    skjema: BehandlingSkjemaContext,
+    skjema: RevurderingOmgjøringState,
 ): ValideringResultat => {
     const validering: ValideringResultat = {
         errors: [],

@@ -1,11 +1,11 @@
 import { ValideringResultat } from '~/types/Validering';
 import { validerInnvilgelse } from '~/components/behandling/felles/validering/validerInnvilgelse';
-import { BehandlingSkjemaContext } from '~/components/behandling/context/BehandlingSkjemaContext';
 import { Revurdering } from '~/types/Revurdering';
+import { RevurderingInnvilgelseContext } from '~/components/behandling/context/revurdering/revurderingInnvilgelseSkjemaContext';
 
 export const revurderingInnvilgelseValidering = (
     behandling: Revurdering,
-    skjema: BehandlingSkjemaContext,
+    skjema: RevurderingInnvilgelseContext,
 ): ValideringResultat => {
     const validering: ValideringResultat = {
         errors: [],

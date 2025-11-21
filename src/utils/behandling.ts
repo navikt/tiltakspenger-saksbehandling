@@ -150,3 +150,13 @@ export const erRammebehandlingInnvilgelseResultat = (resultat: RammebehandlingRe
         resultat === RevurderingResultat.OMGJØRING
     );
 };
+
+export const erSøknadsbehandlingResultat = (
+    resultat: RammebehandlingResultat,
+): resultat is SøknadsbehandlingResultat => {
+    return (
+        resultat === SøknadsbehandlingResultat.INNVILGELSE ||
+        resultat === SøknadsbehandlingResultat.AVSLAG ||
+        resultat === SøknadsbehandlingResultat.IKKE_VALGT
+    );
+};

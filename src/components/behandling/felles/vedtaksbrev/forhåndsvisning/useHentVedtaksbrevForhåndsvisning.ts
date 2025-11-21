@@ -8,12 +8,12 @@ import { RevurderingResultat } from '~/types/Revurdering';
 import { AntallDagerForMeldeperiode } from '~/types/AntallDagerForMeldeperiode';
 
 export type SøknadsbehandlingBrevForhåndsvisningDTO = {
-    fritekst: string;
-    virkningsperiode: Periode;
-    barnetillegg: Nullable<BarnetilleggPeriode[]>;
     resultat: RammebehandlingResultat;
-    avslagsgrunner: Nullable<Avslagsgrunn[]>;
-    antallDagerPerMeldeperiodeForPerioder: Nullable<AntallDagerForMeldeperiode[]>;
+    fritekst: string;
+    virkningsperiode?: Periode;
+    barnetillegg?: BarnetilleggPeriode[];
+    avslagsgrunner?: Avslagsgrunn[];
+    antallDagerPerMeldeperiodeForPerioder?: AntallDagerForMeldeperiode[];
 };
 
 type StansFraOgMed =

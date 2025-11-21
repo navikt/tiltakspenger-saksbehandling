@@ -2,10 +2,6 @@ import { Button, Select } from '@navikt/ds-react';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { dateTilISOTekst } from '~/utils/date';
-import {
-    useBehandlingSkjema,
-    useBehandlingSkjemaDispatch,
-} from '~/components/behandling/context/BehandlingSkjemaContext';
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
 import { Rammebehandlingstype } from '~/types/Rammebehandling';
 import MultiperiodeForm from '~/components/multiperiodeForm/MultiperiodeForm';
@@ -13,6 +9,10 @@ import { periodiserBarnetilleggFraSøknad } from '../utils/periodiserBarnetilleg
 import { Periode } from '~/types/Periode';
 import { hentBarnetilleggFraVedtakTidslinje } from '../utils/hentBarnetilleggFraVedtakTidslinje';
 import { useSak } from '~/context/sak/SakContext';
+import {
+    useBehandlingInnvilgelseSkjema,
+    useBehandlingInnvilgelseSkjemaDispatch,
+} from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
 
 import style from './BehandlingBarnetilleggPerioder.module.css';
 
@@ -21,8 +21,8 @@ const BATCH_MED_BARN = 10;
 export const BehandlingBarnetilleggPerioder = () => {
     const { sak } = useSak();
     const { behandling, rolleForBehandling } = useBehandling();
-    const { barnetilleggPerioder, behandlingsperiode } = useBehandlingSkjema();
-    const dispatch = useBehandlingSkjemaDispatch();
+    const { barnetilleggPerioder, behandlingsperiode } = useBehandlingInnvilgelseSkjema();
+    const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
 
     const erSøknadsbehandling = behandling.type === Rammebehandlingstype.SØKNADSBEHANDLING;
     const erSaksbehandler = rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER;

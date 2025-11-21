@@ -4,7 +4,7 @@ import { ValideringResultat } from '~/types/Validering';
 import { joinPerioder, validerPeriodisering } from '~/utils/periode';
 import dayjs from 'dayjs';
 import { Periode } from '~/types/Periode';
-import { TiltaksdeltakelsePeriodeFormData } from '../../context/slices/TiltaksdeltagelseState';
+import { TiltaksdeltakelsePeriodeFormData } from '~/components/behandling/context/innvilgelse/reducers/tiltaksdeltagelseReducer';
 import { Rammebehandling } from '~/types/Rammebehandling';
 
 export const validerTiltaksdeltakelser = (

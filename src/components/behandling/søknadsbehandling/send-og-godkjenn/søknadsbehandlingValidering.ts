@@ -2,6 +2,7 @@ import { ValideringFunc, ValideringResultat } from '~/types/Validering';
 import { validerInnvilgelse } from '~/components/behandling/felles/validering/validerInnvilgelse';
 import { BehandlingSkjemaContext } from '~/components/behandling/context/BehandlingSkjemaContext';
 import { Søknadsbehandling, SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
+import { SøknadsbehandlingAvslagState } from '~/components/behandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
 
 export const søknadsbehandlingValidering =
     (behandling: Søknadsbehandling, skjema: BehandlingSkjemaContext): ValideringFunc =>
@@ -32,7 +33,7 @@ export const søknadsbehandlingValidering =
         return validering;
     };
 
-const validerAvslag = (skjema: BehandlingSkjemaContext): ValideringResultat => {
+const validerAvslag = (skjema: SøknadsbehandlingAvslagState): ValideringResultat => {
     const validering: ValideringResultat = {
         errors: [],
         warnings: [],

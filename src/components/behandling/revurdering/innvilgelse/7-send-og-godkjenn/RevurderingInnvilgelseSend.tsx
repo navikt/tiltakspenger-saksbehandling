@@ -2,18 +2,17 @@ import { useRevurderingBehandling } from '~/components/behandling/context/Behand
 import { BehandlingSendOgGodkjenn } from '~/components/behandling/felles/send-og-godkjenn/BehandlingSendOgGodkjenn';
 import { useHentBehandlingLagringProps } from '~/components/behandling/felles/send-og-godkjenn/lagre/useHentBehandlingLagringProps';
 import { revurderingInnvilgelseValidering } from '~/components/behandling/revurdering/innvilgelse/revurderingInnvilgelseValidering';
-import {
-    BehandlingSkjemaContext,
-    useBehandlingSkjema,
-} from '~/components/behandling/context/BehandlingSkjemaContext';
-import { Periode } from '~/types/Periode';
 import { RevurderingResultat, RevurderingVedtakInnvilgelseRequest } from '~/types/Revurdering';
 import { tiltaksdeltakelsePeriodeFormToTiltaksdeltakelsePeriode } from '~/components/behandling/søknadsbehandling/send-og-godkjenn/SøknadsbehandlingSend';
 import { barnetilleggPeriodeFormDataTilBarnetilleggPeriode } from '../6-brev/RevurderingInnvilgelseBrev';
+import {
+    RevurderingInnvilgelseContext,
+    useRevurderingInnvilgelseSkjema,
+} from '~/components/behandling/context/revurdering/revurderingInnvilgelseSkjemaContext';
 
 export const RevurderingInnvilgelseSend = () => {
     const { behandling } = useRevurderingBehandling();
-    const vedtak = useBehandlingSkjema();
+    const vedtak = useRevurderingInnvilgelseSkjema();
 
     const lagringProps = useHentBehandlingLagringProps({
         hentDTO: () => tilDTO(vedtak),
@@ -24,12 +23,12 @@ export const RevurderingInnvilgelseSend = () => {
     return <BehandlingSendOgGodkjenn behandling={behandling} lagringProps={lagringProps} />;
 };
 
-const tilDTO = (skjema: BehandlingSkjemaContext): RevurderingVedtakInnvilgelseRequest => {
+const tilDTO = (skjema: RevurderingInnvilgelseContext): RevurderingVedtakInnvilgelseRequest => {
     return {
         resultat: RevurderingResultat.INNVILGELSE,
         begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
         fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
-        innvilgelsesperiode: skjema.behandlingsperiode as Periode,
+        innvilgelsesperiode: skjema.behandlingsperiode,
         valgteTiltaksdeltakelser: tiltaksdeltakelsePeriodeFormToTiltaksdeltakelsePeriode(
             skjema.valgteTiltaksdeltakelser,
         ),

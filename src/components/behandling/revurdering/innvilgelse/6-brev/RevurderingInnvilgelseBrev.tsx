@@ -4,18 +4,18 @@ import { Vedtaksbrev } from '~/components/behandling/felles/vedtaksbrev/Vedtaksb
 import { revurderingInnvilgelseValidering } from '~/components/behandling/revurdering/innvilgelse/revurderingInnvilgelseValidering';
 import { BodyLong } from '@navikt/ds-react';
 import { TekstListe } from '~/components/liste/TekstListe';
-import {
-    BehandlingSkjemaContext,
-    useBehandlingSkjema,
-} from '~/components/behandling/context/BehandlingSkjemaContext';
 import { Periode } from '~/types/Periode';
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';
 import { BarnetilleggPeriodeFormData } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
 import { RevurderingResultat } from '~/types/Revurdering';
+import {
+    RevurderingInnvilgelseContext,
+    useRevurderingInnvilgelseSkjema,
+} from '~/components/behandling/context/revurdering/revurderingInnvilgelseSkjemaContext';
 
 export const RevurderingInnvilgelseBrev = () => {
     const { behandling, rolleForBehandling } = useRevurderingBehandling();
-    const skjema = useBehandlingSkjema();
+    const skjema = useRevurderingInnvilgelseSkjema();
 
     const { brevtekst } = skjema.textAreas;
 
@@ -35,7 +35,7 @@ export const RevurderingInnvilgelseBrev = () => {
 };
 
 const revurderingskjemaTilBrevForhåndsvisningDTO = (
-    skjema: BehandlingSkjemaContext,
+    skjema: RevurderingInnvilgelseContext,
 ): RevurderingInnvilgelseBrevForhåndsvisningDTO => {
     return {
         resultat: RevurderingResultat.INNVILGELSE,

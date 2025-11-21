@@ -8,17 +8,20 @@ import {
     useRef,
 } from 'react';
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
-import { getTextAreaRefValue, TextAreaInput } from '~/utils/textarea';
-import { behandlingSkjemaInitialValue } from '~/components/behandling/context/behandlingSkjemaInitialValue';
 import {
     BehandlingSkjemaActions,
     BehandlingSkjemaReducer,
     BehandlingSkjemaState,
-} from '~/components/behandling/context/BehandlingSkjemaReducer';
+} from '~/components/behandling/context/behandlingSkjemaReducer';
+import { Rammebehandling, Rammebehandlingstype } from '~/types/Rammebehandling';
 import { useSak } from '~/context/sak/SakContext';
+import { SakProps } from '~/types/Sak';
+import { getTextAreaRefValue, TextAreaInput } from '~/utils/textarea';
 import { rammebehandlingMedInnvilgelseEllerNull } from '~/utils/behandling';
+import { søknadsbehandlingInitialState } from '~/components/behandling/context/søknadsbehandling/søknadsbehandlingInitialState';
+import { revurderingInitialState } from '~/components/behandling/context/revurdering/revurderingInitialState';
 
-type Fritekstfelter = {
+export type BehandlingSkjemaMedFritekst<T> = T & {
     textAreas: {
         begrunnelse: TextAreaInput;
         brevtekst: TextAreaInput;
@@ -26,7 +29,7 @@ type Fritekstfelter = {
     };
 };
 
-export type BehandlingSkjemaContext = Fritekstfelter & BehandlingSkjemaState;
+export type BehandlingSkjemaContext = BehandlingSkjemaMedFritekst<BehandlingSkjemaState>;
 
 // Separate contexts for å hindre re-renders for komponenter som kun bruker dispatch
 const StateContext = createContext({} as BehandlingSkjemaContext);
@@ -39,7 +42,7 @@ export const BehandlingSkjemaProvider = ({ children }: PropsWithChildren) => {
     const [skjema, dispatch] = useReducer(
         BehandlingSkjemaReducer,
         { behandling, sak },
-        behandlingSkjemaInitialValue,
+        initialState,
     );
 
     const begrunnelseRef = useRef<HTMLTextAreaElement>(null);
@@ -88,6 +91,18 @@ export const BehandlingSkjemaProvider = ({ children }: PropsWithChildren) => {
             </StateContext.Provider>
         </DispatchContext.Provider>
     );
+};
+
+const initialState = ({
+    behandling,
+    sak,
+}: {
+    behandling: Rammebehandling;
+    sak: SakProps;
+}): BehandlingSkjemaState => {
+    return behandling.type === Rammebehandlingstype.SØKNADSBEHANDLING
+        ? søknadsbehandlingInitialState(behandling)
+        : revurderingInitialState(behandling, sak);
 };
 
 export const useBehandlingSkjema = () => {

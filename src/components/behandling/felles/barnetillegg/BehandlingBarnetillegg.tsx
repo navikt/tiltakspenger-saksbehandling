@@ -7,12 +7,12 @@ import { BarnetilleggBegrunnelse } from './begrunnelse/BarnetilleggBegrunnelse';
 import { BarnetilleggTidslinje } from '~/components/behandling/felles/barnetillegg/tidslinje/BarnetilleggTidslinje';
 import { harSøktBarnetillegg } from '~/components/behandling/felles/barnetillegg/utils/barnetilleggUtils';
 import { useSak } from '~/context/sak/SakContext';
-import {
-    useBehandlingSkjema,
-    useBehandlingSkjemaDispatch,
-} from '~/components/behandling/context/BehandlingSkjemaContext';
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
 import { Periode } from '~/types/Periode';
+import {
+    useBehandlingInnvilgelseSkjema,
+    useBehandlingInnvilgelseSkjemaDispatch,
+} from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
 
 import style from './BehandlingBarnetillegg.module.css';
 
@@ -22,9 +22,10 @@ type Props = {
 
 export const BehandlingBarnetillegg = ({ valgTekst }: Props) => {
     const { sak } = useSak();
-    const dispatch = useBehandlingSkjemaDispatch();
     const { behandling, rolleForBehandling } = useBehandling();
-    const { harBarnetillegg, behandlingsperiode } = useBehandlingSkjema();
+
+    const { harBarnetillegg, behandlingsperiode } = useBehandlingInnvilgelseSkjema();
+    const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
 
     return (
         <>

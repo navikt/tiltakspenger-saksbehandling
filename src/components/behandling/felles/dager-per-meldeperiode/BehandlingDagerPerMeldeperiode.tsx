@@ -2,12 +2,12 @@ import { classNames } from '~/utils/classNames';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { Alert, Heading } from '@navikt/ds-react';
 import { AntallDagerForMeldeperiodeForm } from '~/components/behandling/felles/dager-per-meldeperiode/form/AntallDagerForMeldeperiodeForm';
-import { useBehandlingSkjema } from '~/components/behandling/context/BehandlingSkjemaContext';
+import { useBehandlingInnvilgelseSkjema } from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
 
 import style from './BehandlingDagerPerMeldeperiode.module.css';
 
 export const BehandlingDagerPerMeldeperiode = () => {
-    const { antallDagerPerMeldeperiode } = useBehandlingSkjema();
+    const { antallDagerPerMeldeperiode } = useBehandlingInnvilgelseSkjema();
 
     const antallDagerSettesIkkeAutomatiskIBrev =
         antallDagerPerMeldeperiode.length !== 1 ||

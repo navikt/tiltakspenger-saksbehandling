@@ -1,7 +1,6 @@
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { Select } from '@navikt/ds-react';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
-
 import { Tiltaksdeltagelse } from '~/types/TiltakDeltagelseTypes';
 import { dateTilISOTekst, periodeTilFormatertDatotekst } from '~/utils/date';
 import {
@@ -10,19 +9,19 @@ import {
 } from '~/utils/behandling';
 import { Separator } from '~/components/separator/Separator';
 import { VedtakHjelpetekst } from '~/components/behandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
-import {
-    useBehandlingSkjema,
-    useBehandlingSkjemaDispatch,
-} from '~/components/behandling/context/BehandlingSkjemaContext';
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
+import MultiperiodeForm from '~/components/multiperiodeForm/MultiperiodeForm';
+import {
+    useBehandlingInnvilgelseSkjema,
+    useBehandlingInnvilgelseSkjemaDispatch,
+} from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
 
 import style from './BehandlingTiltak.module.css';
-import MultiperiodeForm from '~/components/multiperiodeForm/MultiperiodeForm';
 
 export const BehandlingTiltak = () => {
     const { behandling, rolleForBehandling } = useBehandling();
-    const { valgteTiltaksdeltakelser, behandlingsperiode } = useBehandlingSkjema();
-    const dispatch = useBehandlingSkjemaDispatch();
+    const { valgteTiltaksdeltakelser, behandlingsperiode } = useBehandlingInnvilgelseSkjema();
+    const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
 
     const tiltaksdeltakelser = hentTiltaksdeltakelserMedStartOgSluttdato(behandling);
 

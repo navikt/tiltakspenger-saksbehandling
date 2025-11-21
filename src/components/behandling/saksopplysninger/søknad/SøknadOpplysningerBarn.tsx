@@ -7,17 +7,17 @@ import { Søknad, SøknadBarn } from '~/types/Søknad';
 import { useHentPersonopplysningerBarn } from '~/components/papirsøknad/barnetillegg/useHentPersonopplysningerBarn';
 import { useSak } from '~/context/sak/SakContext';
 import { ChevronRightDoubleIcon } from '@navikt/aksel-icons';
-import {
-    useBehandlingSkjema,
-    useBehandlingSkjemaDispatch,
-} from '~/components/behandling/context/BehandlingSkjemaContext';
 import { periodiserBarnetilleggFraSøknad } from '~/components/behandling/felles/barnetillegg/utils/periodiserBarnetilleggFraSøknad';
 import { Personopplysninger } from '~/components/personaliaheader/useHentPersonopplysninger';
 import { Nullable } from '~/types/UtilTypes';
-
-import style from './SøknadOpplysningerBarn.module.css';
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
+import {
+    useBehandlingInnvilgelseSkjema,
+    useBehandlingInnvilgelseSkjemaDispatch,
+} from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
+
+import style from './SøknadOpplysningerBarn.module.css';
 
 type Props = {
     tiltaksperiode: Nullable<Periode>;
@@ -49,8 +49,8 @@ export const SøknadOpplysningerBarn = ({
 const MedBarn = ({ tiltaksperiode, søknad, visBarnetilleggPeriodiseringKnapp }: Props) => {
     const { sak } = useSak();
 
-    const dispatch = useBehandlingSkjemaDispatch();
-    const { behandlingsperiode } = useBehandlingSkjema();
+    const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
+    const { behandlingsperiode } = useBehandlingInnvilgelseSkjema();
 
     const { rolleForBehandling } = useBehandling();
 
@@ -101,7 +101,7 @@ const MedBarn = ({ tiltaksperiode, søknad, visBarnetilleggPeriodiseringKnapp }:
                                 payload: {
                                     barnetilleggPerioder: periodiserBarnetilleggFraSøknad(
                                         søknad.barnetillegg,
-                                        behandlingsperiode as Periode,
+                                        behandlingsperiode,
                                     ),
                                 },
                             })
