@@ -7,14 +7,14 @@ import { hentBarnetilleggPerioderMedBarn } from '~/components/behandling/felles/
 import { SakProps } from '~/types/Sak';
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';
 import { kunPerioderMedBarn } from '~/components/behandling/felles/barnetillegg/utils/barnetilleggUtils';
-import { Periode, PeriodeMedNullable } from '~/types/Periode';
+import { Periode } from '~/types/Periode';
 import { Søknadsbehandling } from '~/types/Søknadsbehandling';
 import { Revurdering } from '~/types/Revurdering';
 import { Rammebehandling } from '~/types/Rammebehandling';
 
 export interface BarnetilleggPeriodeFormData {
     antallBarn: number;
-    periode: PeriodeMedNullable;
+    periode: Periode;
 }
 
 export const hentBarnetilleggForSøknadsbehandling = (
@@ -24,7 +24,7 @@ export const hentBarnetilleggForSøknadsbehandling = (
         hentLagredePerioderMedBarn(behandling) ||
         periodiserBarnetilleggFraSøknad(
             behandling.søknad.barnetillegg,
-            behandling.virkningsperiode ?? hentTiltaksperiodeFraSøknad(behandling),
+            behandling.virkningsperiode ?? hentTiltaksperiodeFraSøknad(behandling)!,
         )
     );
 };

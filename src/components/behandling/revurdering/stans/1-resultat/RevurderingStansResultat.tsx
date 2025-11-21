@@ -6,22 +6,21 @@ import { Datovelger } from '../../../../datovelger/Datovelger';
 import { dateTilISOTekst, datoMin } from '~/utils/date';
 import { useSak } from '~/context/sak/SakContext';
 import { useConfig } from '~/context/ConfigContext';
-
+import { HjemmelForStans } from '~/types/Revurdering';
 import {
-    useBehandlingSkjema,
-    useBehandlingSkjemaDispatch,
-} from '~/components/behandling/context/BehandlingSkjemaContext';
+    useRevurderingStansSkjema,
+    useRevurderingStansSkjemaDispatch,
+} from '~/components/behandling/context/revurdering/revurderingStansSkjemaContext';
 
 import style from './RevurderingStansResultat.module.css';
-import { HjemmelForStans } from '~/types/Revurdering';
 
 export const RevurderingStansResultat = () => {
     const { rolleForBehandling } = useRevurderingBehandling();
     const { førsteDagSomGirRett, sisteDagSomGirRett } = useSak().sak;
 
-    const { hjemlerForStans, behandlingsperiode, harValgtStansFraFørsteDagSomGirRett } =
-        useBehandlingSkjema();
-    const dispatch = useBehandlingSkjemaDispatch();
+    const { hjemlerForStans, fraDato, harValgtStansFraFørsteDagSomGirRett } =
+        useRevurderingStansSkjema();
+    const dispatch = useRevurderingStansSkjemaDispatch();
 
     const { gosysUrl, modiaPersonoversiktUrl } = useConfig();
 
@@ -68,11 +67,11 @@ export const RevurderingStansResultat = () => {
                         minDate={førsteDagSomGirRett}
                         maxDate={sisteDagSomGirRett}
                         readOnly={!erSaksbehandler || harValgtStansFraFørsteDagSomGirRett}
-                        defaultSelected={behandlingsperiode?.fraOgMed}
+                        defaultSelected={fraDato}
                         defaultMonth={
                             sisteDagSomGirRett ? datoMin(nåtid, sisteDagSomGirRett) : nåtid
                         }
-                        selected={behandlingsperiode?.fraOgMed}
+                        selected={fraDato}
                         className={style.dato}
                         onDateChange={(valgtDato) => {
                             if (!valgtDato) {
@@ -80,11 +79,9 @@ export const RevurderingStansResultat = () => {
                             }
 
                             dispatch({
-                                type: 'oppdaterBehandlingsperiode',
+                                type: 'setStansFraDato',
                                 payload: {
-                                    periode: {
-                                        fraOgMed: dateTilISOTekst(valgtDato),
-                                    },
+                                    fraDato: dateTilISOTekst(valgtDato),
                                 },
                             });
                         }}
@@ -98,9 +95,9 @@ export const RevurderingStansResultat = () => {
 
                             if (checked) {
                                 dispatch({
-                                    type: 'oppdaterBehandlingsperiode',
+                                    type: 'setStansFraDato',
                                     payload: {
-                                        periode: { fraOgMed: førsteDagSomGirRett },
+                                        fraDato: førsteDagSomGirRett!,
                                     },
                                 });
                             }

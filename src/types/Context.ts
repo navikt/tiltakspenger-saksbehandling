@@ -3,9 +3,6 @@ export type ReducerAction = {
     payload?: Record<string, unknown>;
 };
 
-export type ReducerActionHandlers<State, Actions extends ReducerAction> = {
-    [Type in Actions['type']]: (
-        state: State,
-        payload: Extract<Actions, { type: Type }>['payload'],
-    ) => State;
-};
+export type ReducerSuperAction<Action extends ReducerAction, SuperType extends string> = {
+    superType: SuperType;
+} & Action;

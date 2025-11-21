@@ -3,11 +3,11 @@ import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { useSøknadsbehandling } from '../../context/BehandlingContext';
 import { BehandlingsperiodeVelger } from '~/components/behandling/felles/behandlingsperiode/BehandlingsperiodeVelger';
-import {
-    useBehandlingSkjema,
-    useBehandlingSkjemaDispatch,
-} from '~/components/behandling/context/BehandlingSkjemaContext';
 import { SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
+import {
+    useSøknadsbehandlingSkjema,
+    useSøknadsbehandlingSkjemaDispatch,
+} from '~/components/behandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
 
 import style from './SøknadsbehandlingResultatVelger.module.css';
 
@@ -15,10 +15,8 @@ export const SøknadsbehandlingResultatVelger = () => {
     const { rolleForBehandling, behandling } = useSøknadsbehandling();
     const { kanInnvilges } = behandling;
 
-    const skjemaContext = useBehandlingSkjema();
-    const dispatch = useBehandlingSkjemaDispatch();
-
-    const { resultat } = skjemaContext;
+    const { resultat } = useSøknadsbehandlingSkjema();
+    const dispatch = useSøknadsbehandlingSkjemaDispatch();
 
     const erIkkeSaksbehandler = rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER;
 
@@ -32,7 +30,10 @@ export const SøknadsbehandlingResultatVelger = () => {
                     value={resultat}
                     readOnly={erIkkeSaksbehandler}
                     onChange={(valgtResultat: SøknadsbehandlingResultat) => {
-                        dispatch({ type: 'setResultat', payload: { resultat: valgtResultat } });
+                        dispatch({
+                            type: 'setResultat',
+                            payload: { resultat: valgtResultat, behandling },
+                        });
                     }}
                 >
                     <Radio value={SøknadsbehandlingResultat.INNVILGELSE} disabled={!kanInnvilges}>
@@ -47,7 +48,10 @@ export const SøknadsbehandlingResultatVelger = () => {
                             onClick={() => {
                                 dispatch({
                                     type: 'setResultat',
-                                    payload: { resultat: SøknadsbehandlingResultat.IKKE_VALGT },
+                                    payload: {
+                                        resultat: SøknadsbehandlingResultat.IKKE_VALGT,
+                                        behandling,
+                                    },
                                 });
                             }}
                         >

@@ -4,22 +4,12 @@ import { erDatoIPeriode } from '~/utils/periode';
 import { removeDuplicates } from '~/utils/array';
 import { kunPerioderMedBarn } from '~/components/behandling/felles/barnetillegg/utils/barnetilleggUtils';
 import { SøknadBarn } from '~/types/Søknad';
-import { Nullable } from '~/types/UtilTypes';
 import { BarnetilleggPeriodeFormData } from './hentBarnetilleggFraBehandling';
 
 export const periodiserBarnetilleggFraSøknad = (
     barnFraSøknad: SøknadBarn[],
-    virkningsperiode: Nullable<Periode>,
+    virkningsperiode: Periode,
 ): BarnetilleggPeriodeFormData[] => {
-    if (!virkningsperiode) {
-        return [
-            {
-                antallBarn: barnFraSøknad.length,
-                periode: { fraOgMed: null, tilOgMed: null },
-            },
-        ];
-    }
-
     // Periodene med rett til barnetillegg for hvert barn, innenfor virkningsperioden
     const perioderPerBarn = barnFraSøknad.reduce<Periode[]>((acc, barn) => {
         const { fødselsdato, oppholderSegIEØSSpm } = barn;

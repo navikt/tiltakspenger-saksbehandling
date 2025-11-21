@@ -1,8 +1,8 @@
 import { ValideringResultat } from '~/types/Validering';
-import { BehandlingSkjemaContext } from '~/components/behandling/context/BehandlingSkjemaContext';
+import { RevurderingStansContext } from '~/components/behandling/context/revurdering/revurderingStansSkjemaContext';
 
-export const revurderingStansValidering = (skjema: BehandlingSkjemaContext): ValideringResultat => {
-    const { hjemlerForStans, behandlingsperiode } = skjema;
+export const revurderingStansValidering = (skjema: RevurderingStansContext): ValideringResultat => {
+    const { hjemlerForStans, fraDato } = skjema;
 
     const errors: string[] = [];
     const warnings: string[] = [];
@@ -11,7 +11,7 @@ export const revurderingStansValidering = (skjema: BehandlingSkjemaContext): Val
         errors.push('Du må velge en hjemmel som begrunnelse for hvorfor tiltakspengene stanses.');
     }
 
-    if (!behandlingsperiode?.fraOgMed) {
+    if (!fraDato) {
         errors.push('Du må velge en fra-dato for når tiltakspengene skal stanses.');
     }
 

@@ -3,14 +3,13 @@ import { Vedtaksbrev } from '~/components/behandling/felles/vedtaksbrev/Vedtaksb
 import { revurderingStansValidering } from '~/components/behandling/revurdering/stans/revurderingStansValidering';
 import { RevurderingStansBrevForhåndsvisningDTO } from '~/components/behandling/felles/vedtaksbrev/forhåndsvisning/useHentVedtaksbrevForhåndsvisning';
 import { HjelpetekstRevurdering } from '~/components/behandling/revurdering/innvilgelse/6-brev/RevurderingInnvilgelseBrev';
-import { useBehandlingSkjema } from '~/components/behandling/context/BehandlingSkjemaContext';
 import { RevurderingResultat } from '~/types/Revurdering';
+import { useRevurderingStansSkjema } from '~/components/behandling/context/revurdering/revurderingStansSkjemaContext';
 
 export const RevurderingStansBrev = () => {
-    const skjema = useBehandlingSkjema();
+    const skjema = useRevurderingStansSkjema();
 
-    const { hjemlerForStans, behandlingsperiode, textAreas, harValgtStansFraFørsteDagSomGirRett } =
-        skjema;
+    const { hjemlerForStans, fraDato, textAreas, harValgtStansFraFørsteDagSomGirRett } = skjema;
     const { brevtekst } = textAreas;
 
     const { behandling, rolleForBehandling } = useRevurderingBehandling();
@@ -29,7 +28,7 @@ export const RevurderingStansBrev = () => {
                       }
                     : {
                           harValgtStansFraFørsteDagSomGirRett,
-                          stansFraOgMed: behandlingsperiode!.fraOgMed!,
+                          stansFraOgMed: fraDato!,
                       }),
                 stansTilOgMed: null,
                 harValgtStansTilSisteDagSomGirRett: true,

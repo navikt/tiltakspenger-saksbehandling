@@ -1,12 +1,7 @@
 import { useSøknadsbehandling } from '../../context/BehandlingContext';
 import { søknadsbehandlingValidering } from './søknadsbehandlingValidering';
 import { BehandlingSendOgGodkjenn } from '~/components/behandling/felles/send-og-godkjenn/BehandlingSendOgGodkjenn';
-
 import { useHentBehandlingLagringProps } from '~/components/behandling/felles/send-og-godkjenn/lagre/useHentBehandlingLagringProps';
-import {
-    BehandlingSkjemaContext,
-    useBehandlingSkjema,
-} from '~/components/behandling/context/BehandlingSkjemaContext';
 import { Periode } from '~/types/Periode';
 import {
     SøknadsbehandlingResultat,
@@ -15,15 +10,17 @@ import {
     SøknadsbehandlingVedtakInnvilgelseRequest,
     SøknadsbehandlingVedtakRequest,
 } from '~/types/Søknadsbehandling';
-
-import { TiltaksdeltakelsePeriodeFormData } from '../../context/slices/TiltaksdeltagelseState';
+import { TiltaksdeltakelsePeriodeFormData } from '~/components/behandling/context/innvilgelse/slices/tiltaksdeltagelseContext';
 import { barnetilleggPeriodeFormDataTilBarnetilleggPeriode } from '../../revurdering/innvilgelse/6-brev/RevurderingInnvilgelseBrev';
 import { TiltaksdeltakelsePeriode } from '~/types/TiltakDeltagelseTypes';
-import { RevurderingResultat } from '~/types/Revurdering';
+import {
+    SøknadsbehandlingSkjemaContext,
+    useSøknadsbehandlingSkjema,
+} from '~/components/behandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
 
 export const SøknadsbehandlingSend = () => {
     const { behandling } = useSøknadsbehandling();
-    const skjema = useBehandlingSkjema();
+    const skjema = useSøknadsbehandlingSkjema();
 
     const lagringProps = useHentBehandlingLagringProps({
         hentDTO: () => tilDTO(skjema),
@@ -34,8 +31,10 @@ export const SøknadsbehandlingSend = () => {
     return <BehandlingSendOgGodkjenn behandling={behandling} lagringProps={lagringProps} />;
 };
 
-const tilDTO = (skjema: BehandlingSkjemaContext): SøknadsbehandlingVedtakRequest => {
-    switch (skjema.resultat) {
+const tilDTO = (skjema: SøknadsbehandlingSkjemaContext): SøknadsbehandlingVedtakRequest => {
+    const { resultat } = skjema;
+
+    switch (resultat) {
         case SøknadsbehandlingResultat.INNVILGELSE:
             return {
                 begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
@@ -66,6 +65,7 @@ const tilDTO = (skjema: BehandlingSkjemaContext): SøknadsbehandlingVedtakReques
                 ),
                 resultat: SøknadsbehandlingResultat.INNVILGELSE,
             } satisfies SøknadsbehandlingVedtakInnvilgelseRequest;
+
         case SøknadsbehandlingResultat.AVSLAG:
             return {
                 avslagsgrunner: skjema.avslagsgrunner!,
@@ -73,21 +73,16 @@ const tilDTO = (skjema: BehandlingSkjemaContext): SøknadsbehandlingVedtakReques
                 fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
                 resultat: SøknadsbehandlingResultat.AVSLAG,
             } satisfies SøknadsbehandlingVedtakAvslagRequest;
+
         case SøknadsbehandlingResultat.IKKE_VALGT:
             return {
                 begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
                 fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
                 resultat: SøknadsbehandlingResultat.IKKE_VALGT,
             } satisfies SøknadsbehandlingVedtakIkkeValgtRequest;
-        case RevurderingResultat.INNVILGELSE:
-        case RevurderingResultat.STANS:
-        case RevurderingResultat.OMGJØRING:
-            throw new Error(`Forventet søknadsbehandling men var revurdering - ${skjema.resultat}`);
     }
 
-    throw new Error(
-        `Ugyldig resultat for søknadsbehandling vedtak - ${skjema.resultat satisfies never}`,
-    );
+    throw new Error(`Ugyldig resultat for søknadsbehandling vedtak - ${resultat satisfies never}`);
 };
 
 export const tiltaksdeltakelsePeriodeFormToTiltaksdeltakelsePeriode = (

@@ -1,21 +1,19 @@
 import { useSøknadsbehandling } from '../../context/BehandlingContext';
-
 import { Vedtaksbrev } from '~/components/behandling/felles/vedtaksbrev/Vedtaksbrev';
 import { søknadsbehandlingValidering } from '~/components/behandling/søknadsbehandling/send-og-godkjenn/søknadsbehandlingValidering';
 import { SøknadsbehandlingBrevForhåndsvisningDTO } from '~/components/behandling/felles/vedtaksbrev/forhåndsvisning/useHentVedtaksbrevForhåndsvisning';
 import { BodyLong } from '@navikt/ds-react';
 import { TekstListe } from '~/components/liste/TekstListe';
-import {
-    BehandlingSkjemaContext,
-    useBehandlingSkjema,
-} from '~/components/behandling/context/BehandlingSkjemaContext';
-import { Periode } from '~/types/Periode';
 import { barnetilleggPeriodeFormDataTilBarnetilleggPeriode } from '../../revurdering/innvilgelse/6-brev/RevurderingInnvilgelseBrev';
 import { SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
+import {
+    SøknadsbehandlingSkjemaContext,
+    useSøknadsbehandlingSkjema,
+} from '~/components/behandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
 
 export const SøknadsbehandlingBrev = () => {
     const { behandling, rolleForBehandling } = useSøknadsbehandling();
-    const skjema = useBehandlingSkjema();
+    const skjema = useSøknadsbehandlingSkjema();
 
     const { brevtekst } = skjema.textAreas;
 
@@ -35,33 +33,40 @@ export const SøknadsbehandlingBrev = () => {
 };
 
 const søknadsbehandlingSkjemaTilBrevForhåndsvisningDTO = (
-    skjema: BehandlingSkjemaContext,
+    skjema: SøknadsbehandlingSkjemaContext,
 ): SøknadsbehandlingBrevForhåndsvisningDTO => {
-    return {
+    const { resultat } = skjema;
+
+    const baseDTO = {
         fritekst: skjema.textAreas.brevtekst.getValue(),
-        // Backend vil ignorere perioden dersom vedtaket er avslag, og hvis tilstanden er tilBeslutter (senere enn under behandling)
-        virkningsperiode: skjema.behandlingsperiode as Periode,
-        barnetillegg:
-            skjema.resultat === SøknadsbehandlingResultat.INNVILGELSE && skjema.harBarnetillegg
-                ? barnetilleggPeriodeFormDataTilBarnetilleggPeriode(skjema.barnetilleggPerioder)
-                : null,
         resultat: skjema.resultat,
-        avslagsgrunner:
-            skjema.resultat === SøknadsbehandlingResultat.AVSLAG && skjema.avslagsgrunner !== null
-                ? skjema.avslagsgrunner
-                : null,
-        antallDagerPerMeldeperiodeForPerioder:
-            skjema.resultat === SøknadsbehandlingResultat.INNVILGELSE &&
-            skjema.antallDagerPerMeldeperiode
-                ? skjema.antallDagerPerMeldeperiode.map((dager) => ({
-                      antallDagerPerMeldeperiode: dager.antallDagerPerMeldeperiode!,
-                      periode: {
-                          fraOgMed: dager.periode!.fraOgMed!,
-                          tilOgMed: dager.periode!.tilOgMed!,
-                      },
-                  }))
-                : null,
     };
+
+    switch (resultat) {
+        case SøknadsbehandlingResultat.AVSLAG: {
+            return { ...baseDTO, avslagsgrunner: skjema.avslagsgrunner };
+        }
+
+        case SøknadsbehandlingResultat.INNVILGELSE: {
+            return {
+                ...baseDTO,
+                virkningsperiode: skjema.behandlingsperiode,
+                barnetillegg: barnetilleggPeriodeFormDataTilBarnetilleggPeriode(
+                    skjema.barnetilleggPerioder,
+                ),
+                antallDagerPerMeldeperiodeForPerioder: skjema.antallDagerPerMeldeperiode.map(
+                    (dager) => ({
+                        antallDagerPerMeldeperiode: dager.antallDagerPerMeldeperiode!,
+                        periode: dager.periode,
+                    }),
+                ),
+            };
+        }
+
+        case SøknadsbehandlingResultat.IKKE_VALGT: {
+            throw Error('Kan ikke forhåndsvise uten valgt resuøtat');
+        }
+    }
 };
 
 const Hjelpetekst = () => {

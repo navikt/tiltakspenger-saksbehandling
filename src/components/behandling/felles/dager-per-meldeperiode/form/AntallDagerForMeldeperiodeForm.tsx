@@ -1,17 +1,16 @@
 import { Select, VStack } from '@navikt/ds-react';
 import { dateTilISOTekst } from '~/utils/date';
-import {
-    useBehandlingSkjema,
-    useBehandlingSkjemaDispatch,
-} from '~/components/behandling/context/BehandlingSkjemaContext';
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
-
 import MultiperiodeForm from '~/components/multiperiodeForm/MultiperiodeForm';
+import {
+    useBehandlingInnvilgelseSkjema,
+    useBehandlingInnvilgelseSkjemaDispatch,
+} from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
 
 export const AntallDagerForMeldeperiodeForm = () => {
-    const { behandlingsperiode, antallDagerPerMeldeperiode } = useBehandlingSkjema();
-    const dispatch = useBehandlingSkjemaDispatch();
+    const { behandlingsperiode, antallDagerPerMeldeperiode } = useBehandlingInnvilgelseSkjema();
+    const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
 
     const { rolleForBehandling } = useBehandling();
 

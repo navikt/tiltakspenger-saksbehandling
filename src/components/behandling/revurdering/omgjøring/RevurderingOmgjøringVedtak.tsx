@@ -19,21 +19,20 @@ import { TabsIcon } from '@navikt/aksel-icons';
 import { OppsummeringsPar } from '~/components/oppsummeringer/oppsummeringspar/OppsummeringsPar';
 import { BehandlingSendOgGodkjenn } from '../../felles/send-og-godkjenn/BehandlingSendOgGodkjenn';
 import { RevurderingResultat, RevurderingVedtakOmgjøringRequest } from '~/types/Revurdering';
-import { Periode } from '~/types/Periode';
 import { tiltaksdeltakelsePeriodeFormToTiltaksdeltakelsePeriode } from '~/components/behandling/søknadsbehandling/send-og-godkjenn/SøknadsbehandlingSend';
-import {
-    BehandlingSkjemaContext,
-    useBehandlingSkjema,
-} from '../../context/BehandlingSkjemaContext';
 import { revurderingOmgjøringValidering } from './revurderingInnvilgelseValidering';
 import { useHentBehandlingLagringProps } from '../../felles/send-og-godkjenn/lagre/useHentBehandlingLagringProps';
 import { erRammebehandlingMedInnvilgelse } from '~/utils/behandling';
 import { Rammebehandlingsstatus } from '~/types/Rammebehandling';
+import {
+    RevurderingOmgjøringContext,
+    useRevurderingOmgjøringSkjema,
+} from '~/components/behandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 
 export const RevurderingOmgjøringVedtak = () => {
     const { behandling } = useRevurderingOmgjøring();
     const { sak } = useSak();
-    const vedtak = useBehandlingSkjema();
+    const vedtak = useRevurderingOmgjøringSkjema();
 
     const omgjørVedtakId = behandling.omgjørVedtak;
 
@@ -53,77 +52,75 @@ export const RevurderingOmgjøringVedtak = () => {
 
     return (
         <div>
-            <>
+            <VStack gap="2">
+                <Heading size={'medium'} level={'3'}>
+                    Omgjøring
+                </Heading>
                 <VStack gap="2">
-                    <Heading size={'medium'} level={'3'}>
-                        Omgjøring
-                    </Heading>
-                    <VStack gap="2">
-                        {behandling.status === Rammebehandlingsstatus.VEDTATT ? null : (
-                            <>
-                                <BodyShort>
-                                    Omgjør vedtak med dato{' '}
-                                    {formaterTidspunkt(vedtakSomBlirOmgjort.iverksattTidspunkt!)} -
-                                    Dette vedtaket vil bli erstattet i sin helhet.
-                                </BodyShort>
-                                {erRammebehandlingMedInnvilgelse(vedtakSomBlirOmgjort) && (
-                                    <OppsummeringsPar
-                                        label="Innvilgelsesperiode"
-                                        verdi={periodeTilFormatertDatotekst(
-                                            vedtakSomBlirOmgjort.innvilgelsesperiode!,
-                                        )}
-                                        variant="inlineColon"
+                    {behandling.status === Rammebehandlingsstatus.VEDTATT ? null : (
+                        <>
+                            <BodyShort>
+                                Omgjør vedtak med dato{' '}
+                                {formaterTidspunkt(vedtakSomBlirOmgjort.iverksattTidspunkt!)} -
+                                Dette vedtaket vil bli erstattet i sin helhet.
+                            </BodyShort>
+                            {erRammebehandlingMedInnvilgelse(vedtakSomBlirOmgjort) && (
+                                <OppsummeringsPar
+                                    label="Innvilgelsesperiode"
+                                    verdi={periodeTilFormatertDatotekst(
+                                        vedtakSomBlirOmgjort.innvilgelsesperiode!,
+                                    )}
+                                    variant="inlineColon"
+                                />
+                            )}
+                            <Link
+                                href={behandlingUrl({
+                                    saksnummer: vedtakSomBlirOmgjort.saksnummer,
+                                    id: vedtakSomBlirOmgjort.id,
+                                })}
+                                target="_blank"
+                            >
+                                <HStack align="center" gap="2">
+                                    <BodyShort>Se vedtak (åpner i ny fane)</BodyShort>
+                                    <TabsIcon
+                                        title="Se vedtak (åpner i ny fane)"
+                                        fontSize="1.2rem"
                                     />
-                                )}
-                                <Link
-                                    href={behandlingUrl({
-                                        saksnummer: vedtakSomBlirOmgjort.saksnummer,
-                                        id: vedtakSomBlirOmgjort.id,
-                                    })}
-                                    target="_blank"
-                                >
-                                    <HStack align="center" gap="2">
-                                        <BodyShort>Se vedtak (åpner i ny fane)</BodyShort>
-                                        <TabsIcon
-                                            title="Se vedtak (åpner i ny fane)"
-                                            fontSize="1.2rem"
-                                        />
-                                    </HStack>
-                                </Link>
-                            </>
-                        )}
-                    </VStack>
+                                </HStack>
+                            </Link>
+                        </>
+                    )}
                 </VStack>
-                <Separator />
-                <RevurderingInnvilgelseBegrunnelse />
-                {behandling.status === Rammebehandlingsstatus.VEDTATT && (
-                    <OppsummeringsPar
-                        label={'Omgjøringsperiode'}
-                        verdi={periodeTilFormatertDatotekst(behandling.virkningsperiode!)}
-                        variant="inlineColon"
-                    />
-                )}
-                <RevurderingInnvilgelsesperiodeVelger />
-                <RevurderingDagerPerMeldeperiode />
-                <Separator />
-                <RevurderingInnvilgelseTiltak />
-                <RevurderingInnvilgelseBarnetillegg />
-                <Separator />
-                <RevurderingInnvilgelseBrev />
-                <Separator />
-                <BehandlingBeregningOgSimulering />
-                <BehandlingSendOgGodkjenn behandling={behandling} lagringProps={lagringProps} />
-            </>
+            </VStack>
+            <Separator />
+            <RevurderingInnvilgelseBegrunnelse />
+            {behandling.status === Rammebehandlingsstatus.VEDTATT && (
+                <OppsummeringsPar
+                    label={'Omgjøringsperiode'}
+                    verdi={periodeTilFormatertDatotekst(behandling.virkningsperiode!)}
+                    variant="inlineColon"
+                />
+            )}
+            <RevurderingInnvilgelsesperiodeVelger />
+            <RevurderingDagerPerMeldeperiode />
+            <Separator />
+            <RevurderingInnvilgelseTiltak />
+            <RevurderingInnvilgelseBarnetillegg />
+            <Separator />
+            <RevurderingInnvilgelseBrev />
+            <Separator />
+            <BehandlingBeregningOgSimulering />
+            <BehandlingSendOgGodkjenn behandling={behandling} lagringProps={lagringProps} />
         </div>
     );
 };
 
-const tilDTO = (skjema: BehandlingSkjemaContext): RevurderingVedtakOmgjøringRequest => {
+const tilDTO = (skjema: RevurderingOmgjøringContext): RevurderingVedtakOmgjøringRequest => {
     return {
         resultat: RevurderingResultat.OMGJØRING,
         begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
         fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
-        innvilgelsesperiode: skjema.behandlingsperiode as Periode,
+        innvilgelsesperiode: skjema.behandlingsperiode,
         valgteTiltaksdeltakelser: tiltaksdeltakelsePeriodeFormToTiltaksdeltakelsePeriode(
             skjema.valgteTiltaksdeltakelser,
         ),
@@ -139,11 +136,8 @@ const tilDTO = (skjema: BehandlingSkjemaContext): RevurderingVedtakOmgjøringReq
                   perioder: [],
               },
         antallDagerPerMeldeperiodeForPerioder: skjema.antallDagerPerMeldeperiode.map((periode) => ({
-            antallDagerPerMeldeperiode: periode.antallDagerPerMeldeperiode!,
-            periode: {
-                fraOgMed: periode.periode!.fraOgMed!,
-                tilOgMed: periode.periode!.tilOgMed!,
-            },
+            antallDagerPerMeldeperiode: periode.antallDagerPerMeldeperiode,
+            periode: periode.periode,
         })),
     };
 };

@@ -7,17 +7,19 @@ import { Søknad, SøknadBarn } from '~/types/Søknad';
 import { useHentPersonopplysningerBarn } from '~/components/papirsøknad/barnetillegg/useHentPersonopplysningerBarn';
 import { useSak } from '~/context/sak/SakContext';
 import { ChevronRightDoubleIcon } from '@navikt/aksel-icons';
-import {
-    useBehandlingSkjema,
-    useBehandlingSkjemaDispatch,
-} from '~/components/behandling/context/BehandlingSkjemaContext';
 import { periodiserBarnetilleggFraSøknad } from '~/components/behandling/felles/barnetillegg/utils/periodiserBarnetilleggFraSøknad';
 import { Personopplysninger } from '~/components/personaliaheader/useHentPersonopplysninger';
 import { Nullable } from '~/types/UtilTypes';
-
-import style from './SøknadOpplysningerBarn.module.css';
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
+import {
+    useBehandlingInnvilgelseSkjema,
+    useBehandlingInnvilgelseSkjemaDispatch,
+} from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
+import { useBehandlingSkjema } from '~/components/behandling/context/BehandlingSkjemaContext';
+import { erRammebehandlingInnvilgelseResultat } from '~/utils/behandling';
+
+import style from './SøknadOpplysningerBarn.module.css';
 
 type Props = {
     tiltaksperiode: Nullable<Periode>;
@@ -49,10 +51,7 @@ export const SøknadOpplysningerBarn = ({
 const MedBarn = ({ tiltaksperiode, søknad, visBarnetilleggPeriodiseringKnapp }: Props) => {
     const { sak } = useSak();
 
-    const dispatch = useBehandlingSkjemaDispatch();
-    const { behandlingsperiode } = useBehandlingSkjema();
-
-    const { rolleForBehandling } = useBehandling();
+    const { resultat } = useBehandlingSkjema();
 
     const personopplysningerBarn = useHentPersonopplysningerBarn(
         sak.sakId,
@@ -88,27 +87,8 @@ const MedBarn = ({ tiltaksperiode, søknad, visBarnetilleggPeriodiseringKnapp }:
                 })}
 
             {visBarnetilleggPeriodiseringKnapp &&
-                behandlingsperiode &&
-                rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER && (
-                    <Button
-                        variant={'tertiary'}
-                        size={'small'}
-                        icon={<ChevronRightDoubleIcon />}
-                        iconPosition={'right'}
-                        onClick={() =>
-                            dispatch({
-                                type: 'nullstillBarnetilleggPerioder',
-                                payload: {
-                                    barnetilleggPerioder: periodiserBarnetilleggFraSøknad(
-                                        søknad.barnetillegg,
-                                        behandlingsperiode as Periode,
-                                    ),
-                                },
-                            })
-                        }
-                    >
-                        {'Periodiser barnetillegg for disse barna'}
-                    </Button>
+                erRammebehandlingInnvilgelseResultat(resultat) && (
+                    <PeriodiserBarnetilleggKnapp søknad={søknad} />
                 )}
         </VStack>
     );
@@ -182,5 +162,38 @@ const Barn = ({ barn, tiltaksperiode, personopplysninger }: BarnProps) => {
                 />
             )}
         </div>
+    );
+};
+
+const PeriodiserBarnetilleggKnapp = ({ søknad }: { søknad: Søknad }) => {
+    const { rolleForBehandling } = useBehandling();
+
+    const { behandlingsperiode } = useBehandlingInnvilgelseSkjema();
+    const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
+
+    if (rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER) {
+        return null;
+    }
+
+    return (
+        <Button
+            variant={'tertiary'}
+            size={'small'}
+            icon={<ChevronRightDoubleIcon />}
+            iconPosition={'right'}
+            onClick={() =>
+                dispatch({
+                    type: 'nullstillBarnetilleggPerioder',
+                    payload: {
+                        barnetilleggPerioder: periodiserBarnetilleggFraSøknad(
+                            søknad.barnetillegg,
+                            behandlingsperiode,
+                        ),
+                    },
+                })
+            }
+        >
+            {'Periodiser barnetillegg for disse barna'}
+        </Button>
     );
 };

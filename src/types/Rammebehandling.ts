@@ -104,3 +104,5 @@ export type RammebehandlingMedInnvilgelse =
     | SøknadsbehandlingInnvilgelse
     | RevurderingInnvilgelse
     | RevurderingOmgjøring;
+
+export type RammebehandlingResultatMedInnvilgelse = RammebehandlingMedInnvilgelse['resultat'];

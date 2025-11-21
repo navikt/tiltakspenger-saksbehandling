@@ -1,14 +1,13 @@
 import { dateTilISOTekst } from '~/utils/date';
 import { useRolleForBehandling } from '~/context/saksbehandler/SaksbehandlerContext';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
-import {
-    useBehandlingSkjema,
-    useBehandlingSkjemaDispatch,
-} from '~/components/behandling/context/BehandlingSkjemaContext';
-
 import { Rammebehandling } from '~/types/Rammebehandling';
 import { VStack } from '@navikt/ds-react';
 import PeriodeForm from '~/components/periode/PeriodeForm';
+import {
+    useBehandlingInnvilgelseSkjema,
+    useBehandlingInnvilgelseSkjemaDispatch,
+} from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
 
 type Props = {
     behandling: Rammebehandling;
@@ -16,9 +15,9 @@ type Props = {
 };
 
 export const BehandlingsperiodeVelger = ({ behandling, label }: Props) => {
-    const { behandlingsperiode } = useBehandlingSkjema();
+    const { behandlingsperiode } = useBehandlingInnvilgelseSkjema();
 
-    const dispatch = useBehandlingSkjemaDispatch();
+    const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
 
     const erIkkeSaksbehandler =
         useRolleForBehandling(behandling) !== SaksbehandlerRolle.SAKSBEHANDLER;

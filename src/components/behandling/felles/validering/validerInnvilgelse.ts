@@ -2,14 +2,14 @@ import { ValideringResultat } from '~/types/Validering';
 import { validerBarnetillegg } from '~/components/behandling/felles/validering/validerBarnetillegg';
 import { validerTiltaksdeltakelser } from '~/components/behandling/felles/validering/validerTiltaksdeltakelser';
 import { validerAntallDagerPerMeldeperiode } from '~/components/behandling/felles/validering/validerAntallDagerPerMeldeperiode';
-import { BehandlingSkjemaContext } from '~/components/behandling/context/BehandlingSkjemaContext';
 import { erFullstendigPeriode } from '~/utils/periode';
 import { hentHeleTiltaksdeltagelsesperioden } from '~/utils/behandling';
 import { Rammebehandling } from '~/types/Rammebehandling';
+import { BehandlingInnvilgelseState } from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
 
 export const validerInnvilgelse = (
     behandling: Rammebehandling,
-    skjema: BehandlingSkjemaContext,
+    skjema: BehandlingInnvilgelseState,
 ): ValideringResultat => {
     const validering: ValideringResultat = {
         errors: [],
