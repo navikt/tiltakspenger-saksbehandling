@@ -1,7 +1,7 @@
 import { ValideringResultat } from '~/types/Validering';
-import { RevurderingStansState } from '~/components/behandling/context/revurdering/revurderingStansSkjemaContext';
+import { RevurderingStansContext } from '~/components/behandling/context/revurdering/revurderingStansSkjemaContext';
 
-export const revurderingStansValidering = (skjema: RevurderingStansState): ValideringResultat => {
+export const revurderingStansValidering = (skjema: RevurderingStansContext): ValideringResultat => {
     const { hjemlerForStans, fraDato } = skjema;
 
     const errors: string[] = [];
