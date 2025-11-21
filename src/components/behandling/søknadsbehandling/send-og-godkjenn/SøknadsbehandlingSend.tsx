@@ -10,7 +10,7 @@ import {
     SøknadsbehandlingVedtakInnvilgelseRequest,
     SøknadsbehandlingVedtakRequest,
 } from '~/types/Søknadsbehandling';
-import { TiltaksdeltakelsePeriodeFormData } from '~/components/behandling/context/innvilgelse/reducers/tiltaksdeltagelseReducer';
+import { TiltaksdeltakelsePeriodeFormData } from '~/components/behandling/context/innvilgelse/sub-reducers/tiltaksdeltagelseReducer';
 import { barnetilleggPeriodeFormDataTilBarnetilleggPeriode } from '../../revurdering/innvilgelse/6-brev/RevurderingInnvilgelseBrev';
 import { TiltaksdeltakelsePeriode } from '~/types/TiltakDeltagelseTypes';
 import {

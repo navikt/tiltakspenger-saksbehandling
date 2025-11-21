@@ -1,7 +1,7 @@
 import { ValideringResultat } from '~/types/Validering';
 import { Periode } from '~/types/Periode';
 import { joinPerioder, validerPeriodisering } from '~/utils/periode';
-import { AntallDagerPerMeldeperiodeFormData } from '~/components/behandling/context/innvilgelse/reducers/antallDagerPerMeldeperiodeReducer';
+import { AntallDagerPerMeldeperiodeFormData } from '~/components/behandling/context/innvilgelse/sub-reducers/antallDagerPerMeldeperiodeReducer';
 
 export const validerAntallDagerPerMeldeperiode = (
     antallDagerPerMeldeperiode: AntallDagerPerMeldeperiodeFormData[],

@@ -4,7 +4,6 @@ import {
     søknadsbehandlingReducer,
     SøknadsbehandlingState,
 } from '~/components/behandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
-import { SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
 import { RevurderingResultat } from '~/types/Revurdering';
 import {
     RevurderingStansActions,
@@ -21,7 +20,10 @@ import {
     revurderingOmgjøringReducer,
     RevurderingOmgjøringState,
 } from '~/components/behandling/context/revurdering/revurderingOmgjøringSkjemaContext';
-import { BehandlingSkjemaActionSuperType } from '~/components/behandling/context/behandlingSkjemaUtils';
+import {
+    BehandlingSkjemaActionSuperType,
+    erSøknadsbehandlingContext,
+} from '~/components/behandling/context/behandlingSkjemaUtils';
 
 export type BehandlingSkjemaState =
     | SøknadsbehandlingState
@@ -44,11 +46,7 @@ export const BehandlingSkjemaReducer: Reducer<BehandlingSkjemaState, BehandlingS
 
     switch (superType) {
         case BehandlingSkjemaActionSuperType.Søknadsbehandling: {
-            if (
-                resultat !== SøknadsbehandlingResultat.INNVILGELSE &&
-                resultat !== SøknadsbehandlingResultat.AVSLAG &&
-                resultat !== SøknadsbehandlingResultat.IKKE_VALGT
-            ) {
+            if (!erSøknadsbehandlingContext(state)) {
                 throw Error(
                     `Action ${type} / ${superType} må tilhøre et søknadsbehandling resultat - var ${resultat}`,
                 );

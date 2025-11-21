@@ -7,7 +7,7 @@ import {
     SøknadsbehandlingInnvilgelseState,
     SøknadsbehandlingState,
 } from '~/components/behandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
-import { TiltaksdeltakelsePeriodeFormData } from '~/components/behandling/context/innvilgelse/reducers/tiltaksdeltagelseReducer';
+import { TiltaksdeltakelsePeriodeFormData } from '~/components/behandling/context/innvilgelse/sub-reducers/tiltaksdeltagelseReducer';
 import { hentTiltaksdeltagelseFraSøknad, hentTiltaksperiodeFraSøknad } from '~/utils/behandling';
 
 export const søknadsbehandlingInitialState = (

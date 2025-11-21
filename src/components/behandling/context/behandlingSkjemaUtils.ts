@@ -1,25 +1,21 @@
-import { BehandlingSkjemaContext } from '~/components/behandling/context/BehandlingSkjemaContext';
 import {
     erRammebehandlingInnvilgelseResultat,
     erSøknadsbehandlingResultat,
 } from '~/utils/behandling';
-import { BehandlingInnvilgelseContext } from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
-import { SøknadsbehandlingSkjemaContext } from '~/components/behandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
+import { BehandlingInnvilgelseState } from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
+import { SøknadsbehandlingState } from '~/components/behandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
+import { BehandlingSkjemaState } from '~/components/behandling/context/behandlingSkjemaReducer';
 
 export const erRammebehandlingInnvilgelseContext = (
-    context: BehandlingSkjemaContext,
-): context is BehandlingInnvilgelseContext => {
-    const { resultat } = context;
-
-    return erRammebehandlingInnvilgelseResultat(resultat);
+    context: BehandlingSkjemaState,
+): context is BehandlingInnvilgelseState => {
+    return erRammebehandlingInnvilgelseResultat(context.resultat);
 };
 
 export const erSøknadsbehandlingContext = (
-    context: BehandlingSkjemaContext,
-): context is SøknadsbehandlingSkjemaContext => {
-    const { resultat } = context;
-
-    return erSøknadsbehandlingResultat(resultat);
+    context: BehandlingSkjemaState,
+): context is SøknadsbehandlingState => {
+    return erSøknadsbehandlingResultat(context.resultat);
 };
 
 export enum BehandlingSkjemaActionSuperType {
