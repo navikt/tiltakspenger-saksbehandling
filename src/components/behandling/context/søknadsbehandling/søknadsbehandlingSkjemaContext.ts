@@ -20,6 +20,7 @@ import {
     BehandlingSkjemaType,
     erSøknadsbehandlingContext,
 } from '~/components/behandling/context/behandlingSkjemaUtils';
+import { removeDuplicates } from '~/utils/array';
 
 export type SøknadsbehandlingIkkeValgtState = {
     resultat: SøknadsbehandlingResultat.IKKE_VALGT;
@@ -79,20 +80,9 @@ export const søknadsbehandlingReducer: Reducer<SøknadsbehandlingState, Søknad
 
             const { avslagsgrunn } = payload;
 
-            if (state.avslagsgrunner.length === 0) {
-                return {
-                    ...state,
-                    avslagsgrunner: [avslagsgrunn],
-                };
-            }
-
-            const eksistererAllerede = state.avslagsgrunner.includes(avslagsgrunn);
-
             return {
                 ...state,
-                avslagsgrunner: eksistererAllerede
-                    ? state.avslagsgrunner.filter((grunn) => grunn !== avslagsgrunn)
-                    : [...state.avslagsgrunner, avslagsgrunn],
+                avslagsgrunner: [...state.avslagsgrunner, avslagsgrunn].filter(removeDuplicates),
             };
         }
 

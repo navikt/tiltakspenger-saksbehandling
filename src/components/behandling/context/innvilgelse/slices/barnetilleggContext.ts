@@ -1,9 +1,9 @@
-import { Periode } from '~/types/Periode';
-import { forrigeDag, nesteDag } from '~/utils/date';
+import { nesteDag } from '~/utils/date';
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';
 import { BarnetilleggPeriodeFormData } from '../../../felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
 import { BehandlingInnvilgelseState } from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
 import { Reducer } from 'react';
+import { oppdaterPeriodiseringUtenOverlapp } from '~/components/behandling/context/behandlingSkjemaUtils';
 
 export type BarnetilleggActions =
     | {
@@ -48,31 +48,35 @@ export const barnetilleggReducer = (<State extends BehandlingInnvilgelseState>(
 
         case 'addBarnetilleggPeriode': {
             const { antallBarn } = payload;
-            const innvilgelsesPeriode = state.innvilgelsesperiode as Periode;
+            const innvilgelsesPeriode = state.innvilgelsesperiode;
             const forrigeBarnetillegg = state.barnetilleggPerioder?.at(-1);
 
-            const nestePeriode: Periode = forrigeBarnetillegg
-                ? {
-                      fraOgMed:
-                          forrigeBarnetillegg.periode?.tilOgMed &&
-                          innvilgelsesPeriode.tilOgMed > forrigeBarnetillegg.periode.tilOgMed
-                              ? nesteDag(forrigeBarnetillegg.periode.tilOgMed)
-                              : innvilgelsesPeriode.tilOgMed,
-                      tilOgMed: innvilgelsesPeriode.tilOgMed,
-                  }
-                : innvilgelsesPeriode;
+            if (!forrigeBarnetillegg) {
+                return {
+                    ...state,
+                    barnetilleggPerioder: [
+                        {
+                            antallBarn,
+                            periode: innvilgelsesPeriode,
+                        },
+                    ],
+                };
+            }
 
             const nyBarnetilleggperiode: BarnetilleggPeriode = {
-                antallBarn: forrigeBarnetillegg?.antallBarn || antallBarn || 1,
-                periode: nestePeriode,
+                antallBarn,
+                periode: {
+                    fraOgMed:
+                        innvilgelsesPeriode.tilOgMed > forrigeBarnetillegg.periode.tilOgMed
+                            ? nesteDag(forrigeBarnetillegg.periode.tilOgMed)
+                            : innvilgelsesPeriode.tilOgMed,
+                    tilOgMed: innvilgelsesPeriode.tilOgMed,
+                },
             };
 
             return {
                 ...state,
-                barnetilleggPerioder: [
-                    ...(state.barnetilleggPerioder || []),
-                    nyBarnetilleggperiode,
-                ],
+                barnetilleggPerioder: [...state.barnetilleggPerioder, nyBarnetilleggperiode],
             };
         }
 
@@ -91,81 +95,74 @@ export const barnetilleggReducer = (<State extends BehandlingInnvilgelseState>(
         }
 
         case 'oppdaterBarnetilleggAntall': {
+            const { index, antall } = payload;
+
+            const barnetilleggPeriode = state.barnetilleggPerioder.at(index);
+
+            if (!barnetilleggPeriode) {
+                return state;
+            }
+
             return {
                 ...state,
-                barnetilleggPerioder: state.barnetilleggPerioder.map((periode, index) =>
-                    index === payload.index ? { ...periode, antallBarn: payload.antall } : periode,
-                ),
+                barnetilleggPerioder: state.barnetilleggPerioder.with(index, {
+                    ...barnetilleggPeriode,
+                    antallBarn: antall,
+                }),
             };
         }
 
         case 'oppdaterBarnetilleggFraOgMed': {
-            const { index: oppdatertIndex, fraOgMed } = payload;
-            const forrigePeriode = state.barnetilleggPerioder[oppdatertIndex]?.periode ?? null;
+            const { index, fraOgMed } = payload;
+
+            const barnetilleggPeriode = state.barnetilleggPerioder.at(index);
+
+            if (!barnetilleggPeriode) {
+                return state;
+            }
+
+            const oppdatertPeriode = {
+                ...barnetilleggPeriode,
+                periode: {
+                    ...barnetilleggPeriode.periode,
+                    fraOgMed,
+                },
+            };
 
             return {
                 ...state,
-                barnetilleggPerioder: state.barnetilleggPerioder.map((barnetillegg, index) => {
-                    if (
-                        index === oppdatertIndex - 1 &&
-                        fraOgMed &&
-                        forrigePeriode?.fraOgMed &&
-                        fraOgMed < forrigePeriode.fraOgMed
-                    ) {
-                        return {
-                            ...barnetillegg,
-                            periode: {
-                                ...barnetillegg.periode,
-                                tilOgMed: forrigeDag(fraOgMed),
-                            },
-                        };
-                    }
-                    if (index === oppdatertIndex) {
-                        return {
-                            ...barnetillegg,
-                            periode: {
-                                ...barnetillegg.periode,
-                                fraOgMed,
-                            },
-                        };
-                    }
-                    return barnetillegg;
-                }),
+                barnetilleggPerioder: oppdaterPeriodiseringUtenOverlapp(
+                    state.barnetilleggPerioder,
+                    oppdatertPeriode,
+                    index,
+                ),
             };
         }
 
         case 'oppdaterBarnetilleggTilOgMed': {
-            const { index: oppdatertIndex, tilOgMed } = payload;
-            const forrigePeriode = state.barnetilleggPerioder[oppdatertIndex]?.periode ?? null;
+            const { index, tilOgMed } = payload;
+
+            const barnetilleggPeriode = state.barnetilleggPerioder.at(index);
+
+            if (!barnetilleggPeriode) {
+                return state;
+            }
+
+            const oppdatertPeriode = {
+                ...barnetilleggPeriode,
+                periode: {
+                    ...barnetilleggPeriode.periode,
+                    tilOgMed,
+                },
+            };
 
             return {
                 ...state,
-                barnetilleggPerioder: state.barnetilleggPerioder.map((barnetillegg, index) => {
-                    if (index === oppdatertIndex) {
-                        return {
-                            ...barnetillegg,
-                            periode: {
-                                ...barnetillegg.periode,
-                                tilOgMed,
-                            },
-                        };
-                    }
-                    if (
-                        index === oppdatertIndex + 1 &&
-                        tilOgMed &&
-                        forrigePeriode?.tilOgMed &&
-                        tilOgMed > forrigePeriode.tilOgMed
-                    ) {
-                        return {
-                            ...barnetillegg,
-                            periode: {
-                                ...barnetillegg.periode,
-                                fraOgMed: nesteDag(tilOgMed),
-                            },
-                        };
-                    }
-                    return barnetillegg;
-                }),
+                barnetilleggPerioder: oppdaterPeriodiseringUtenOverlapp(
+                    state.barnetilleggPerioder,
+                    oppdatertPeriode,
+                    index,
+                ),
             };
         }
     }

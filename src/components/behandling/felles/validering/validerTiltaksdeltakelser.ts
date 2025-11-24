@@ -1,15 +1,14 @@
 import { deltarPaFlereTiltakMedStartOgSluttdato, hentTiltaksdeltakelser } from '~/utils/behandling';
-
 import { ValideringResultat } from '~/types/Validering';
 import { joinPerioder, validerPeriodisering } from '~/utils/periode';
 import dayjs from 'dayjs';
 import { Periode } from '~/types/Periode';
-import { TiltaksdeltakelsePeriodeFormData } from '~/components/behandling/context/innvilgelse/slices/tiltaksdeltagelseContext';
 import { Rammebehandling } from '~/types/Rammebehandling';
+import { TiltaksdeltakelsePeriode } from '~/types/TiltakDeltagelseTypes';
 
 export const validerTiltaksdeltakelser = (
     behandling: Rammebehandling,
-    valgteTiltaksdeltakelser: TiltaksdeltakelsePeriodeFormData[],
+    valgteTiltaksdeltakelser: TiltaksdeltakelsePeriode[],
     innvilgelsesperiode: Periode,
 ): ValideringResultat => {
     const validering: ValideringResultat = {
@@ -44,9 +43,9 @@ export const validerTiltaksdeltakelser = (
 
     const tiltaksdeltakelserFraSaksopplysninger = hentTiltaksdeltakelser(behandling);
 
-    const helePerioden = joinPerioder(perioder as Periode[]);
+    const helePerioden = joinPerioder(perioder);
 
-    if (!validerPeriodisering(perioder as Periode[], false)) {
+    if (!validerPeriodisering(perioder, false)) {
         validering.errors.push(
             'Periodene for tiltaksdeltakelse må være sammenhengende og uten overlapp',
         );

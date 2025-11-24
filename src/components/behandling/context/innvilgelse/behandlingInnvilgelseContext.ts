@@ -3,14 +3,11 @@ import { Periode } from '~/types/Periode';
 import {
     TiltaksdeltagelseActions,
     tiltaksdeltagelseReducer,
-    TiltaksdeltakelsePeriodeFormData,
 } from '~/components/behandling/context/innvilgelse/slices/tiltaksdeltagelseContext';
 import {
     AntallDagerPerMeldeperiodeActions,
-    AntallDagerPerMeldeperiodeFormData,
     antallDagerPerMeldeperiodeReducer,
 } from '~/components/behandling/context/innvilgelse/slices/antallDagerPerMeldeperiodeContext';
-import { BarnetilleggPeriodeFormData } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
 import {
     InnvilgelsesperiodeAction,
     innvilgelsesperiodeReducer,
@@ -31,15 +28,18 @@ import {
     BehandlingSkjemaType,
     erRammebehandlingInnvilgelseContext,
 } from '~/components/behandling/context/behandlingSkjemaUtils';
+import { TiltaksdeltakelsePeriode } from '~/types/TiltakDeltagelseTypes';
+import { BarnetilleggPeriode } from '~/types/Barnetillegg';
+import { AntallDagerPerMeldeperiode } from '~/types/AntallDagerPerMeldeperiode';
 
 // Gjenbrukes ved alle behandlingsresultater som gir innvilgelse
 export type BehandlingInnvilgelseState = {
     resultat: RammebehandlingResultatMedInnvilgelse;
     innvilgelsesperiode: Periode;
-    valgteTiltaksdeltakelser: TiltaksdeltakelsePeriodeFormData[];
+    valgteTiltaksdeltakelser: TiltaksdeltakelsePeriode[];
     harBarnetillegg: boolean;
-    barnetilleggPerioder: BarnetilleggPeriodeFormData[];
-    antallDagerPerMeldeperiode: AntallDagerPerMeldeperiodeFormData[];
+    barnetilleggPerioder: BarnetilleggPeriode[];
+    antallDagerPerMeldeperiode: AntallDagerPerMeldeperiode[];
 };
 
 export type BehandlingInnvilgelseActions =

@@ -1,4 +1,4 @@
-import { AntallDagerForMeldeperiode } from './AntallDagerForMeldeperiode';
+import { AntallDagerPerMeldeperiode } from './AntallDagerPerMeldeperiode';
 import { Barnetillegg } from './Barnetillegg';
 import {
     Rammebehandlingstype,
@@ -28,7 +28,7 @@ export interface SøknadsbehandlingInnvilgelse extends SøknadsbehandlingBase {
     innvilgelsesperiode: Periode;
     valgteTiltaksdeltakelser: TiltaksdeltakelsePeriode[];
     barnetillegg: Nullable<Barnetillegg>;
-    antallDagerPerMeldeperiode: Nullable<AntallDagerForMeldeperiode[]>;
+    antallDagerPerMeldeperiode: Nullable<AntallDagerPerMeldeperiode[]>;
 }
 
 export interface SøknadsbehandlingAvslag extends SøknadsbehandlingBase {
@@ -51,7 +51,7 @@ export interface SøknadsbehandlingVedtakInnvilgelseRequest extends OppdaterBeha
     resultat: SøknadsbehandlingResultat.INNVILGELSE;
     innvilgelsesperiode: Periode;
     valgteTiltaksdeltakelser: TiltaksdeltakelsePeriode[];
-    antallDagerPerMeldeperiodeForPerioder: AntallDagerForMeldeperiode[];
+    antallDagerPerMeldeperiodeForPerioder: AntallDagerPerMeldeperiode[];
     barnetillegg: Barnetillegg;
 }
 

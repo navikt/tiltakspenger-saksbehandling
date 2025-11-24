@@ -17,8 +17,8 @@ import { RevurderingOmgjøringState } from '~/components/behandling/context/revu
 import { RevurderingInnvilgelseState } from '~/components/behandling/context/revurdering/revurderingInnvilgelseSkjemaContext';
 import { RammebehandlingMedInnvilgelse } from '~/types/Rammebehandling';
 import { Periode } from '~/types/Periode';
-import { TiltaksdeltakelsePeriodeFormData } from '~/components/behandling/context/innvilgelse/slices/tiltaksdeltagelseContext';
 import { erDatoIPeriode } from '~/utils/periode';
+import { TiltaksdeltakelsePeriode } from '~/types/TiltakDeltagelseTypes';
 
 type RevurderingState =
     | RevurderingInnvilgelseState
@@ -122,31 +122,26 @@ const omgjøringInitialState = (
 const valgteTiltaksdeltakelserInitialState = (
     behandling: RammebehandlingMedInnvilgelse,
     innvilgelsesperiode: Periode,
-): TiltaksdeltakelsePeriodeFormData[] => {
+): TiltaksdeltakelsePeriode[] => {
     if (behandling.valgteTiltaksdeltakelser) {
         return behandling.valgteTiltaksdeltakelser;
     }
 
-    const overlappendeDeltakelser: TiltaksdeltakelsePeriodeFormData[] = [];
+    const tiltakMedPeriode: TiltaksdeltakelsePeriode[] = hentTiltaksdeltakelserMedStartOgSluttdato(
+        behandling,
+    ).map((tiltaksdeltagelse) => ({
+        eksternDeltagelseId: tiltaksdeltagelse.eksternDeltagelseId,
+        periode: {
+            fraOgMed: tiltaksdeltagelse.deltagelseFraOgMed,
+            tilOgMed: tiltaksdeltagelse.deltagelseTilOgMed,
+        },
+    }));
 
-    const tiltak = hentTiltaksdeltakelserMedStartOgSluttdato(behandling).map(
-        (tiltaksdeltagelse) => ({
-            eksternDeltagelseId: tiltaksdeltagelse.eksternDeltagelseId,
-            periode: {
-                fraOgMed: tiltaksdeltagelse.deltagelseFraOgMed,
-                tilOgMed: tiltaksdeltagelse.deltagelseTilOgMed,
-            },
-        }),
-    );
-
-    // finner tiltaksdeltakelsene som overlapper med innvilgelsesperioden for at det skal bli riktig når man har flere tiltak, men bare et av dem gjelder valgt periode
-    tiltak.forEach((tiltaksdeltagelse) => {
-        if (
+    // finner tiltaksdeltakelsene som overlapper med innvilgelsesperioden for at det skal
+    // bli riktig når man har flere tiltak, men bare et av dem gjelder valgt periode
+    return tiltakMedPeriode.filter(
+        (tiltaksdeltagelse) =>
             erDatoIPeriode(innvilgelsesperiode.fraOgMed, tiltaksdeltagelse.periode) ||
-            erDatoIPeriode(innvilgelsesperiode.tilOgMed, tiltaksdeltagelse.periode)
-        ) {
-            overlappendeDeltakelser.push(tiltaksdeltagelse);
-        }
-    });
-    return overlappendeDeltakelser;
+            erDatoIPeriode(innvilgelsesperiode.tilOgMed, tiltaksdeltagelse.periode),
+    );
 };

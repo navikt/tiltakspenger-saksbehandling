@@ -7,8 +7,8 @@ import {
     SøknadsbehandlingInnvilgelseState,
     SøknadsbehandlingState,
 } from '~/components/behandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
-import { TiltaksdeltakelsePeriodeFormData } from '~/components/behandling/context/innvilgelse/slices/tiltaksdeltagelseContext';
 import { hentTiltaksdeltagelseFraSøknad, hentTiltaksperiodeFraSøknad } from '~/utils/behandling';
+import { TiltaksdeltakelsePeriode } from '~/types/TiltakDeltagelseTypes';
 
 export const søknadsbehandlingInitialState = (
     behandling: Søknadsbehandling,
@@ -88,7 +88,7 @@ const avslagInitialState = (behandling: Søknadsbehandling): SøknadsbehandlingA
 
 const valgteTiltaksdeltakelserInitialState = (
     behandling: Søknadsbehandling,
-): TiltaksdeltakelsePeriodeFormData[] => {
+): TiltaksdeltakelsePeriode[] => {
     const tiltakFraSøknad = hentTiltaksdeltagelseFraSøknad(behandling);
     const innvilgelsesperiode =
         behandling.virkningsperiode ?? hentTiltaksperiodeFraSøknad(behandling);
@@ -97,10 +97,8 @@ const valgteTiltaksdeltakelserInitialState = (
         ? [
               {
                   eksternDeltagelseId: tiltakFraSøknad.eksternDeltagelseId,
-                  periode: {
-                      fraOgMed: innvilgelsesperiode?.fraOgMed ?? null,
-                      tilOgMed: innvilgelsesperiode?.tilOgMed ?? null,
-                  },
+                  // Denne er alltid definert ved innvilgbar søknad
+                  periode: innvilgelsesperiode!,
               },
           ]
         : [];

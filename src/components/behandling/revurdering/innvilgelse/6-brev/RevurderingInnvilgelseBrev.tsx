@@ -3,9 +3,6 @@ import { RevurderingInnvilgelseBrevForhåndsvisningDTO } from '~/components/beha
 import { Vedtaksbrev } from '~/components/behandling/felles/vedtaksbrev/Vedtaksbrev';
 import { BodyLong } from '@navikt/ds-react';
 import { TekstListe } from '~/components/liste/TekstListe';
-import { Periode } from '~/types/Periode';
-import { BarnetilleggPeriode } from '~/types/Barnetillegg';
-import { BarnetilleggPeriodeFormData } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
 import { RevurderingResultat } from '~/types/Revurdering';
 import {
     BehandlingInnvilgelseContext,
@@ -54,32 +51,10 @@ const revurderingskjemaTilBrevForhåndsvisningDTO = (
     return {
         resultat: RevurderingResultat.INNVILGELSE,
         fritekst: skjema.textAreas.brevtekst.getValue(),
-        virkningsperiode: skjema.innvilgelsesperiode as Periode,
-        barnetillegg: skjema.harBarnetillegg
-            ? barnetilleggPeriodeFormDataTilBarnetilleggPeriode(skjema.barnetilleggPerioder)
-            : null,
-        antallDagerPerMeldeperiodeForPerioder: skjema.antallDagerPerMeldeperiode
-            ? skjema.antallDagerPerMeldeperiode.map((dager) => ({
-                  antallDagerPerMeldeperiode: dager.antallDagerPerMeldeperiode!,
-                  periode: {
-                      fraOgMed: dager.periode!.fraOgMed!,
-                      tilOgMed: dager.periode!.tilOgMed!,
-                  },
-              }))
-            : null,
+        virkningsperiode: skjema.innvilgelsesperiode,
+        barnetillegg: skjema.harBarnetillegg ? skjema.barnetilleggPerioder : null,
+        antallDagerPerMeldeperiodeForPerioder: skjema.antallDagerPerMeldeperiode,
     };
-};
-
-export const barnetilleggPeriodeFormDataTilBarnetilleggPeriode = (
-    barnetilleggPerioder: BarnetilleggPeriodeFormData[],
-): BarnetilleggPeriode[] => {
-    return barnetilleggPerioder.map((bt) => ({
-        antallBarn: bt.antallBarn,
-        periode: {
-            fraOgMed: bt.periode.fraOgMed!,
-            tilOgMed: bt.periode.tilOgMed!,
-        },
-    }));
 };
 
 export const HjelpetekstRevurdering = () => {

@@ -16,11 +16,6 @@ export const AntallDagerForMeldeperiodeForm = () => {
 
     const erSaksbehandler = rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER;
 
-    const sistePeriode = antallDagerPerMeldeperiode.at(-1);
-
-    const kanLeggeTilNyPeriode =
-        !sistePeriode || sistePeriode?.periode?.fraOgMed !== sistePeriode?.periode?.tilOgMed;
-
     return (
         <VStack gap={'5'}>
             <MultiperiodeForm
@@ -28,7 +23,7 @@ export const AntallDagerForMeldeperiodeForm = () => {
                 perioder={antallDagerPerMeldeperiode}
                 nyPeriodeButtonConfig={{
                     onClick: () => dispatch({ type: 'leggTilAntallDagerPeriode' }),
-                    disabled: !kanLeggeTilNyPeriode || !erSaksbehandler,
+                    disabled: !erSaksbehandler,
                 }}
                 fjernPeriodeButtonConfig={{
                     onClick: (index) =>

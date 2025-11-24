@@ -1,7 +1,7 @@
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { Select } from '@navikt/ds-react';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
-import { Tiltaksdeltagelse } from '~/types/TiltakDeltagelseTypes';
+import { TiltaksdeltagelseMedPeriode } from '~/types/TiltakDeltagelseTypes';
 import { dateTilISOTekst, periodeTilFormatertDatotekst } from '~/utils/date';
 import {
     deltarPaFlereTiltakMedStartOgSluttdatoIValgtInnvilgelsesperiode,
@@ -129,16 +129,16 @@ export const BehandlingTiltak = () => {
 };
 
 const getVisningsnavn = (
-    tiltaksdeltagelse: Tiltaksdeltagelse,
-    tiltaksdeltakelser: Tiltaksdeltagelse[],
+    tiltaksdeltagelse: TiltaksdeltagelseMedPeriode,
+    tiltaksdeltakelser: TiltaksdeltagelseMedPeriode[],
 ): string => {
     const deltakelserMedType = tiltaksdeltakelser.filter(
         (t) => t.typeKode === tiltaksdeltagelse.typeKode,
     );
     if (deltakelserMedType.length > 1) {
         return `${tiltaksdeltagelse.typeNavn} (${periodeTilFormatertDatotekst({
-            fraOgMed: tiltaksdeltagelse.deltagelseFraOgMed!,
-            tilOgMed: tiltaksdeltagelse.deltagelseTilOgMed!,
+            fraOgMed: tiltaksdeltagelse.deltagelseFraOgMed,
+            tilOgMed: tiltaksdeltagelse.deltagelseTilOgMed,
         })})`;
     } else {
         return tiltaksdeltagelse.typeNavn;

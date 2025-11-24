@@ -1,4 +1,4 @@
-import { AntallDagerForMeldeperiode } from './AntallDagerForMeldeperiode';
+import { AntallDagerPerMeldeperiode } from './AntallDagerPerMeldeperiode';
 import { Barnetillegg } from './Barnetillegg';
 import {
     Rammebehandlingstype,
@@ -29,7 +29,7 @@ export interface RevurderingInnvilgelse extends RevurderingBase {
     innvilgelsesperiode: Nullable<Periode>;
     valgteTiltaksdeltakelser: Nullable<TiltaksdeltakelsePeriode[]>;
     barnetillegg: Nullable<Barnetillegg>;
-    antallDagerPerMeldeperiode: Nullable<AntallDagerForMeldeperiode[]>;
+    antallDagerPerMeldeperiode: Nullable<AntallDagerPerMeldeperiode[]>;
 }
 
 export interface RevurderingOmgjøring extends RevurderingBase {
@@ -38,7 +38,7 @@ export interface RevurderingOmgjøring extends RevurderingBase {
     innvilgelsesperiode: Periode;
     valgteTiltaksdeltakelser: Nullable<TiltaksdeltakelsePeriode[]>;
     barnetillegg: Barnetillegg;
-    antallDagerPerMeldeperiode: AntallDagerForMeldeperiode[];
+    antallDagerPerMeldeperiode: AntallDagerPerMeldeperiode[];
 }
 
 export enum RevurderingResultat {
@@ -60,7 +60,7 @@ export interface RevurderingVedtakInnvilgelseRequest extends OppdaterBehandlingR
     resultat: RevurderingResultat.INNVILGELSE;
     innvilgelsesperiode: Periode;
     valgteTiltaksdeltakelser: TiltaksdeltakelsePeriode[];
-    antallDagerPerMeldeperiodeForPerioder: AntallDagerForMeldeperiode[];
+    antallDagerPerMeldeperiodeForPerioder: AntallDagerPerMeldeperiode[];
     barnetillegg: Barnetillegg;
 }
 
@@ -68,7 +68,7 @@ export interface RevurderingVedtakOmgjøringRequest extends OppdaterBehandlingRe
     resultat: RevurderingResultat.OMGJØRING;
     innvilgelsesperiode: Periode;
     valgteTiltaksdeltakelser: TiltaksdeltakelsePeriode[];
-    antallDagerPerMeldeperiodeForPerioder: AntallDagerForMeldeperiode[];
+    antallDagerPerMeldeperiodeForPerioder: AntallDagerPerMeldeperiode[];
     barnetillegg: Barnetillegg;
 }
 

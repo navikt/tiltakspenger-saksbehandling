@@ -8,7 +8,6 @@ import { BarnetilleggTidslinje } from '~/components/behandling/felles/barnetille
 import { harSøktBarnetillegg } from '~/components/behandling/felles/barnetillegg/utils/barnetilleggUtils';
 import { useSak } from '~/context/sak/SakContext';
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
-import { Periode } from '~/types/Periode';
 import {
     useBehandlingInnvilgelseSkjema,
     useBehandlingInnvilgelseSkjemaDispatch,
@@ -58,7 +57,7 @@ export const BehandlingBarnetillegg = ({ valgTekst }: Props) => {
                         <Radio value={false}>{'Nei'}</Radio>
                     </RadioGroup>
                     {!harBarnetillegg &&
-                        harSøktBarnetillegg(innvilgelsesperiode as Periode, behandling, sak) && (
+                        harSøktBarnetillegg(innvilgelsesperiode, behandling, sak) && (
                             <Alert className={style.infoboks} variant={'info'} size={'small'}>
                                 Husk å begrunne avslaget på barnetillegg i vedtaksbrevet.
                             </Alert>

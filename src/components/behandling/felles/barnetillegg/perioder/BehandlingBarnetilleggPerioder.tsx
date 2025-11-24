@@ -6,7 +6,6 @@ import { useBehandling } from '~/components/behandling/context/BehandlingContext
 import { Rammebehandlingstype } from '~/types/Rammebehandling';
 import MultiperiodeForm from '~/components/multiperiodeForm/MultiperiodeForm';
 import { periodiserBarnetilleggFraSøknad } from '../utils/periodiserBarnetilleggFraSøknad';
-import { Periode } from '~/types/Periode';
 import { hentBarnetilleggFraVedtakTidslinje } from '../utils/hentBarnetilleggFraVedtakTidslinje';
 import { useSak } from '~/context/sak/SakContext';
 import {
@@ -55,7 +54,7 @@ export const BehandlingBarnetilleggPerioder = () => {
                                         payload: {
                                             barnetilleggPerioder: periodiserBarnetilleggFraSøknad(
                                                 behandling.søknad.barnetillegg,
-                                                innvilgelsesperiode as Periode,
+                                                innvilgelsesperiode,
                                             ),
                                         },
                                     })
@@ -74,7 +73,7 @@ export const BehandlingBarnetilleggPerioder = () => {
                                             barnetilleggPerioder:
                                                 hentBarnetilleggFraVedtakTidslinje(
                                                     sak.tidslinje,
-                                                    innvilgelsesperiode as Periode,
+                                                    innvilgelsesperiode,
                                                 ),
                                         },
                                     });

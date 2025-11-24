@@ -1,12 +1,8 @@
-import { Periode, PeriodeMedNullable } from '~/types/Periode';
-import { leggTilDager } from '~/utils/date';
+import { datoMin, nesteDag } from '~/utils/date';
 import { BehandlingInnvilgelseState } from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
 import { Reducer } from 'react';
-
-export type TiltaksdeltakelsePeriodeFormData = {
-    eksternDeltagelseId: string;
-    periode: PeriodeMedNullable;
-};
+import { oppdaterPeriodiseringUtenOverlapp } from '~/components/behandling/context/behandlingSkjemaUtils';
+import { TiltaksdeltakelsePeriode } from '~/types/TiltakDeltagelseTypes';
 
 export type TiltaksdeltagelseActions =
     | {
@@ -38,29 +34,33 @@ export const tiltaksdeltagelseReducer = (<State extends BehandlingInnvilgelseSta
 
     switch (type) {
         case 'addTiltakPeriode': {
-            const innvilgelsesperiode = state.innvilgelsesperiode as Periode;
-            const forrigeTiltakPeriode = state.valgteTiltaksdeltakelser.slice(-1)[0];
+            const innvilgelsesperiode = state.innvilgelsesperiode;
+            const forrigeTiltakPeriode = state.valgteTiltaksdeltakelser.at(-1);
 
-            const nesteTiltakPeriode = forrigeTiltakPeriode
-                ? {
-                      fraOgMed: forrigeTiltakPeriode.periode.tilOgMed
-                          ? leggTilDager(forrigeTiltakPeriode.periode.tilOgMed, 1)
-                          : innvilgelsesperiode.fraOgMed,
-                      tilOgMed: innvilgelsesperiode.tilOgMed,
-                  }
-                : innvilgelsesperiode;
+            if (!forrigeTiltakPeriode) {
+                throw Error(
+                    'Det skal alltid være minst en tiltaksdeltagelse valgt ved innvilgelse',
+                );
+            }
 
-            const nyTiltakPeriode: TiltaksdeltakelsePeriodeFormData = {
-                eksternDeltagelseId: forrigeTiltakPeriode?.eksternDeltagelseId,
-                periode: nesteTiltakPeriode,
+            const nyTiltakPeriode: TiltaksdeltakelsePeriode = {
+                eksternDeltagelseId: forrigeTiltakPeriode.eksternDeltagelseId,
+                periode: {
+                    fraOgMed: datoMin(
+                        nesteDag(forrigeTiltakPeriode.periode.tilOgMed),
+                        innvilgelsesperiode.tilOgMed,
+                    ),
+                    tilOgMed: innvilgelsesperiode.tilOgMed,
+                },
             };
 
             return {
                 ...state,
-                valgteTiltaksdeltakelser: [
-                    ...(state.valgteTiltaksdeltakelser || []),
+                valgteTiltaksdeltakelser: oppdaterPeriodiseringUtenOverlapp(
+                    state.valgteTiltaksdeltakelser,
                     nyTiltakPeriode,
-                ],
+                    state.valgteTiltaksdeltakelser.length,
+                ),
             };
         }
 
@@ -75,40 +75,63 @@ export const tiltaksdeltagelseReducer = (<State extends BehandlingInnvilgelseSta
         }
 
         case 'oppdaterTiltakId': {
+            const { index, eksternDeltagelseId } = payload;
+
+            const tiltakPeriode = state.valgteTiltaksdeltakelser.at(index);
+
+            if (!tiltakPeriode) {
+                return state;
+            }
+
             return {
                 ...state,
-                valgteTiltaksdeltakelser: state.valgteTiltaksdeltakelser.map((periode, index) =>
-                    index === payload.index
-                        ? { ...periode, eksternDeltagelseId: payload.eksternDeltagelseId }
-                        : periode,
-                ),
+                valgteTiltaksdeltakelser: state.valgteTiltaksdeltakelser.with(index, {
+                    ...tiltakPeriode,
+                    eksternDeltagelseId,
+                }),
             };
         }
 
         case 'oppdaterTiltaksdeltagelseFraOgMed': {
+            const { index, fraOgMed } = payload;
+
+            const tiltakPeriode = state.valgteTiltaksdeltakelser.at(index);
+
+            if (!tiltakPeriode) {
+                return state;
+            }
+
             return {
                 ...state,
-                valgteTiltaksdeltakelser: state.valgteTiltaksdeltakelser.map((periode, index) =>
-                    index === payload.index
-                        ? {
-                              ...periode,
-                              periode: { ...periode.periode, fraOgMed: payload.fraOgMed },
-                          }
-                        : periode,
+                valgteTiltaksdeltakelser: oppdaterPeriodiseringUtenOverlapp(
+                    state.valgteTiltaksdeltakelser,
+                    {
+                        ...tiltakPeriode,
+                        periode: { ...tiltakPeriode.periode, fraOgMed },
+                    },
+                    index,
                 ),
             };
         }
 
         case 'oppdaterTiltaksdeltagelseTilOgMed': {
+            const { index, tilOgMed } = payload;
+
+            const tiltakPeriode = state.valgteTiltaksdeltakelser.at(index);
+
+            if (!tiltakPeriode) {
+                return state;
+            }
+
             return {
                 ...state,
-                valgteTiltaksdeltakelser: state.valgteTiltaksdeltakelser.map((periode, index) =>
-                    index === payload.index
-                        ? {
-                              ...periode,
-                              periode: { ...periode.periode, tilOgMed: payload.tilOgMed },
-                          }
-                        : periode,
+                valgteTiltaksdeltakelser: oppdaterPeriodiseringUtenOverlapp(
+                    state.valgteTiltaksdeltakelser,
+                    {
+                        ...tiltakPeriode,
+                        periode: { ...tiltakPeriode.periode, tilOgMed },
+                    },
+                    index,
                 ),
             };
         }

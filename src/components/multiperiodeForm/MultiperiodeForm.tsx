@@ -1,11 +1,11 @@
 import React from 'react';
 import PeriodeForm from '../periode/PeriodeForm';
 import { Button, HStack, VStack } from '@navikt/ds-react';
-import { PeriodeMedNullable } from '~/types/Periode';
+import { MedPeriode } from '~/types/Periode';
 import { Nullable } from '~/types/UtilTypes';
 import { DateOrString } from '../datovelger/Datovelger';
 
-const MultiperiodeForm = <T extends Array<{ periode: PeriodeMedNullable }>>(props: {
+const MultiperiodeForm = <T extends MedPeriode[]>(props: {
     name: string;
     perioder: T;
     nyPeriodeButtonConfig: {

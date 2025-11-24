@@ -2,7 +2,6 @@ import { useSøknadsbehandling } from '../../context/BehandlingContext';
 import { søknadsbehandlingValidering } from './søknadsbehandlingValidering';
 import { BehandlingSendOgGodkjenn } from '~/components/behandling/felles/send-og-godkjenn/BehandlingSendOgGodkjenn';
 import { useHentBehandlingLagringProps } from '~/components/behandling/felles/send-og-godkjenn/lagre/useHentBehandlingLagringProps';
-import { Periode } from '~/types/Periode';
 import {
     SøknadsbehandlingResultat,
     SøknadsbehandlingVedtakAvslagRequest,
@@ -10,9 +9,6 @@ import {
     SøknadsbehandlingVedtakInnvilgelseRequest,
     SøknadsbehandlingVedtakRequest,
 } from '~/types/Søknadsbehandling';
-import { TiltaksdeltakelsePeriodeFormData } from '~/components/behandling/context/innvilgelse/slices/tiltaksdeltagelseContext';
-import { barnetilleggPeriodeFormDataTilBarnetilleggPeriode } from '../../revurdering/innvilgelse/6-brev/RevurderingInnvilgelseBrev';
-import { TiltaksdeltakelsePeriode } from '~/types/TiltakDeltagelseTypes';
 import {
     SøknadsbehandlingSkjemaContext,
     useSøknadsbehandlingSkjema,
@@ -43,32 +39,20 @@ const tilDTO = (skjema: SøknadsbehandlingSkjemaContext): SøknadsbehandlingVedt
                 barnetillegg: skjema.harBarnetillegg
                     ? {
                           begrunnelse: skjema.textAreas.barnetilleggBegrunnelse.getValue(),
-                          perioder: barnetilleggPeriodeFormDataTilBarnetilleggPeriode(
-                              skjema.barnetilleggPerioder,
-                          ),
+                          perioder: skjema.barnetilleggPerioder,
                       }
                     : {
                           begrunnelse: null,
                           perioder: [],
                       },
-                valgteTiltaksdeltakelser: tiltaksdeltakelsePeriodeFormToTiltaksdeltakelsePeriode(
-                    skjema.valgteTiltaksdeltakelser,
-                ),
-                antallDagerPerMeldeperiodeForPerioder: skjema.antallDagerPerMeldeperiode.map(
-                    (dager) => ({
-                        antallDagerPerMeldeperiode: dager.antallDagerPerMeldeperiode!,
-                        periode: {
-                            fraOgMed: dager.periode!.fraOgMed!,
-                            tilOgMed: dager.periode!.tilOgMed!,
-                        },
-                    }),
-                ),
+                valgteTiltaksdeltakelser: skjema.valgteTiltaksdeltakelser,
+                antallDagerPerMeldeperiodeForPerioder: skjema.antallDagerPerMeldeperiode,
                 resultat: SøknadsbehandlingResultat.INNVILGELSE,
             } satisfies SøknadsbehandlingVedtakInnvilgelseRequest;
 
         case SøknadsbehandlingResultat.AVSLAG:
             return {
-                avslagsgrunner: skjema.avslagsgrunner!,
+                avslagsgrunner: skjema.avslagsgrunner,
                 begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
                 fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
                 resultat: SøknadsbehandlingResultat.AVSLAG,
@@ -83,14 +67,4 @@ const tilDTO = (skjema: SøknadsbehandlingSkjemaContext): SøknadsbehandlingVedt
     }
 
     throw new Error(`Ugyldig resultat for søknadsbehandling vedtak - ${resultat satisfies never}`);
-};
-
-export const tiltaksdeltakelsePeriodeFormToTiltaksdeltakelsePeriode = (
-    valgteTiltaksdeltakelser: TiltaksdeltakelsePeriodeFormData[],
-): TiltaksdeltakelsePeriode[] => {
-    return valgteTiltaksdeltakelser.map((periode) => ({
-        eksternDeltagelseId: periode.eksternDeltagelseId,
-        //validering skal fange at innholdet er utfylt
-        periode: periode.periode as Periode,
-    }));
 };

@@ -3,8 +3,6 @@ import { BehandlingSendOgGodkjenn } from '~/components/behandling/felles/send-og
 import { useHentBehandlingLagringProps } from '~/components/behandling/felles/send-og-godkjenn/lagre/useHentBehandlingLagringProps';
 import { revurderingInnvilgelseValidering } from '~/components/behandling/revurdering/innvilgelse/revurderingInnvilgelseValidering';
 import { RevurderingResultat, RevurderingVedtakInnvilgelseRequest } from '~/types/Revurdering';
-import { tiltaksdeltakelsePeriodeFormToTiltaksdeltakelsePeriode } from '~/components/behandling/søknadsbehandling/send-og-godkjenn/SøknadsbehandlingSend';
-import { barnetilleggPeriodeFormDataTilBarnetilleggPeriode } from '../6-brev/RevurderingInnvilgelseBrev';
 import {
     RevurderingInnvilgelseContext,
     useRevurderingInnvilgelseSkjema,
@@ -29,26 +27,16 @@ const tilDTO = (skjema: RevurderingInnvilgelseContext): RevurderingVedtakInnvilg
         begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
         fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
         innvilgelsesperiode: skjema.innvilgelsesperiode,
-        valgteTiltaksdeltakelser: tiltaksdeltakelsePeriodeFormToTiltaksdeltakelsePeriode(
-            skjema.valgteTiltaksdeltakelser,
-        ),
+        valgteTiltaksdeltakelser: skjema.valgteTiltaksdeltakelser,
         barnetillegg: skjema.harBarnetillegg
             ? {
                   begrunnelse: skjema.textAreas.barnetilleggBegrunnelse.getValue(),
-                  perioder: barnetilleggPeriodeFormDataTilBarnetilleggPeriode(
-                      skjema.barnetilleggPerioder,
-                  ),
+                  perioder: skjema.barnetilleggPerioder,
               }
             : {
                   begrunnelse: null,
                   perioder: [],
               },
-        antallDagerPerMeldeperiodeForPerioder: skjema.antallDagerPerMeldeperiode.map((periode) => ({
-            antallDagerPerMeldeperiode: periode.antallDagerPerMeldeperiode!,
-            periode: {
-                fraOgMed: periode.periode!.fraOgMed!,
-                tilOgMed: periode.periode!.tilOgMed!,
-            },
-        })),
+        antallDagerPerMeldeperiodeForPerioder: skjema.antallDagerPerMeldeperiode,
     };
 };

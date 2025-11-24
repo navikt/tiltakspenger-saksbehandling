@@ -43,31 +43,31 @@ export const hentTiltaksperiodeFraSøknad = (behandling: Søknadsbehandling): Nu
 
 export const deltarPaFlereTiltakMedStartOgSluttdatoIValgtInnvilgelsesperiode = (
     behandling: Rammebehandling,
-    innvilgelsesperiode: Nullable<Partial<Periode>>,
+    innvilgelsesperiode: Periode,
 ) => {
     const tiltak = hentTiltaksdeltakelserMedStartOgSluttdato(behandling);
+
     if (tiltak.length <= 1) {
         return false;
     }
 
-    if (innvilgelsesperiode?.fraOgMed && innvilgelsesperiode?.tilOgMed) {
-        const overlappendeDeltakelser: Tiltaksdeltagelse[] = [];
+    const overlappendeDeltakelser: Tiltaksdeltagelse[] = [];
 
-        tiltak.forEach((tiltaksdeltagelse) => {
-            const periode = {
-                fraOgMed: tiltaksdeltagelse.deltagelseFraOgMed!,
-                tilOgMed: tiltaksdeltagelse.deltagelseTilOgMed!,
-            };
-            if (
-                erDatoIPeriode(innvilgelsesperiode.fraOgMed!, periode) ||
-                erDatoIPeriode(innvilgelsesperiode.tilOgMed!, periode)
-            ) {
-                overlappendeDeltakelser.push(tiltaksdeltagelse);
-            }
-        });
-        return overlappendeDeltakelser.length > 1;
-    }
-    return tiltak.length > 1;
+    tiltak.forEach((tiltaksdeltagelse) => {
+        const periode: Periode = {
+            fraOgMed: tiltaksdeltagelse.deltagelseFraOgMed,
+            tilOgMed: tiltaksdeltagelse.deltagelseTilOgMed,
+        };
+
+        if (
+            erDatoIPeriode(innvilgelsesperiode.fraOgMed, periode) ||
+            erDatoIPeriode(innvilgelsesperiode.tilOgMed, periode)
+        ) {
+            overlappendeDeltakelser.push(tiltaksdeltagelse);
+        }
+    });
+
+    return overlappendeDeltakelser.length > 1;
 };
 
 export const deltarPaFlereTiltakMedStartOgSluttdato = (behandling: Rammebehandling) =>

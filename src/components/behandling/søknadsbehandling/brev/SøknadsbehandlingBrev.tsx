@@ -4,7 +4,6 @@ import { søknadsbehandlingValidering } from '~/components/behandling/søknadsbe
 import { SøknadsbehandlingBrevForhåndsvisningDTO } from '~/components/behandling/felles/vedtaksbrev/forhåndsvisning/useHentVedtaksbrevForhåndsvisning';
 import { BodyLong } from '@navikt/ds-react';
 import { TekstListe } from '~/components/liste/TekstListe';
-import { barnetilleggPeriodeFormDataTilBarnetilleggPeriode } from '../../revurdering/innvilgelse/6-brev/RevurderingInnvilgelseBrev';
 import { SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
 import {
     SøknadsbehandlingSkjemaContext,
@@ -51,15 +50,8 @@ const søknadsbehandlingSkjemaTilBrevForhåndsvisningDTO = (
             return {
                 ...baseDTO,
                 virkningsperiode: skjema.innvilgelsesperiode,
-                barnetillegg: barnetilleggPeriodeFormDataTilBarnetilleggPeriode(
-                    skjema.barnetilleggPerioder,
-                ),
-                antallDagerPerMeldeperiodeForPerioder: skjema.antallDagerPerMeldeperiode.map(
-                    (dager) => ({
-                        antallDagerPerMeldeperiode: dager.antallDagerPerMeldeperiode!,
-                        periode: dager.periode,
-                    }),
-                ),
+                barnetillegg: skjema.barnetilleggPerioder,
+                antallDagerPerMeldeperiodeForPerioder: skjema.antallDagerPerMeldeperiode,
             };
         }
 

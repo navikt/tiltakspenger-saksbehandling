@@ -1,14 +1,8 @@
-import { Periode } from '~/types/Periode';
 import { ANTALL_DAGER_DEFAULT } from '~/components/behandling/felles/dager-per-meldeperiode/BehandlingDagerPerMeldeperiode';
-import { inneholderHelePerioden } from '~/utils/periode';
-import { datoMax, datoMin, forrigeDag, nesteDag } from '~/utils/date';
+import { datoMin, nesteDag } from '~/utils/date';
 import { BehandlingInnvilgelseState } from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
 import { Reducer } from 'react';
-
-export type AntallDagerPerMeldeperiodeFormData = {
-    antallDagerPerMeldeperiode: number;
-    periode: Periode;
-};
+import { oppdaterPeriodiseringUtenOverlapp } from '~/components/behandling/context/behandlingSkjemaUtils';
 
 export type AntallDagerPerMeldeperiodeActions =
     | {
@@ -40,10 +34,11 @@ export const antallDagerPerMeldeperiodeReducer = (<State extends BehandlingInnvi
 
     switch (type) {
         case 'leggTilAntallDagerPeriode': {
-            const sistePeriode = state.antallDagerPerMeldeperiode.at(-1);
-            const innvilgelsesperiode = state.innvilgelsesperiode as Periode;
+            const { innvilgelsesperiode, antallDagerPerMeldeperiode } = state;
 
-            if (!sistePeriode?.periode?.fraOgMed || !sistePeriode?.periode?.tilOgMed) {
+            const forrigePeriode = antallDagerPerMeldeperiode.at(-1);
+
+            if (!forrigePeriode) {
                 return {
                     ...state,
                     antallDagerPerMeldeperiode: [
@@ -56,10 +51,10 @@ export const antallDagerPerMeldeperiodeReducer = (<State extends BehandlingInnvi
             }
 
             const nyPeriode = {
-                antallDagerPerMeldeperiode: ANTALL_DAGER_DEFAULT,
+                antallDagerPerMeldeperiode: forrigePeriode.antallDagerPerMeldeperiode,
                 periode: {
                     fraOgMed: datoMin(
-                        nesteDag(sistePeriode.periode.tilOgMed),
+                        nesteDag(forrigePeriode.periode.tilOgMed),
                         innvilgelsesperiode.tilOgMed,
                     ),
                     tilOgMed: innvilgelsesperiode.tilOgMed,
@@ -68,7 +63,7 @@ export const antallDagerPerMeldeperiodeReducer = (<State extends BehandlingInnvi
 
             return {
                 ...state,
-                antallDagerPerMeldeperiode: oppdaterUtenOverlapp(
+                antallDagerPerMeldeperiode: oppdaterPeriodiseringUtenOverlapp(
                     state.antallDagerPerMeldeperiode,
                     nyPeriode,
                     state.antallDagerPerMeldeperiode.length,
@@ -104,7 +99,7 @@ export const antallDagerPerMeldeperiodeReducer = (<State extends BehandlingInnvi
 
             return {
                 ...state,
-                antallDagerPerMeldeperiode: oppdaterUtenOverlapp(
+                antallDagerPerMeldeperiode: oppdaterPeriodiseringUtenOverlapp(
                     state.antallDagerPerMeldeperiode,
                     oppdatertPeriode,
                     index,
@@ -131,7 +126,7 @@ export const antallDagerPerMeldeperiodeReducer = (<State extends BehandlingInnvi
 
             return {
                 ...state,
-                antallDagerPerMeldeperiode: oppdaterUtenOverlapp(
+                antallDagerPerMeldeperiode: oppdaterPeriodiseringUtenOverlapp(
                     state.antallDagerPerMeldeperiode,
                     oppdatertPeriode,
                     index,
@@ -158,62 +153,3 @@ export const antallDagerPerMeldeperiodeReducer = (<State extends BehandlingInnvi
         }
     }
 }) satisfies Reducer<BehandlingInnvilgelseState, AntallDagerPerMeldeperiodeActions>;
-
-const oppdaterUtenOverlapp = (
-    perioder: AntallDagerPerMeldeperiodeFormData[],
-    oppdatertPeriode: AntallDagerPerMeldeperiodeFormData,
-    oppdatertIndex: number,
-): AntallDagerPerMeldeperiodeFormData[] => {
-    return perioder
-        .toSpliced(oppdatertIndex, 1, oppdatertPeriode)
-        .filter((it, index) => {
-            if (index === oppdatertIndex) {
-                return true;
-            }
-
-            return oppdatertPeriode.periode.fraOgMed &&
-                oppdatertPeriode.periode.tilOgMed &&
-                it.periode.fraOgMed &&
-                it.periode.tilOgMed
-                ? !inneholderHelePerioden(
-                      oppdatertPeriode.periode as Periode,
-                      it.periode as Periode,
-                  )
-                : true;
-        })
-        .map((it) => {
-            if (it === oppdatertPeriode) {
-                return it;
-            }
-
-            if (
-                !it.periode.fraOgMed ||
-                !it.periode.tilOgMed ||
-                !oppdatertPeriode.periode.fraOgMed ||
-                !oppdatertPeriode.periode.tilOgMed
-            ) {
-                return it;
-            }
-
-            const erTidligerePeriode = it.periode.fraOgMed < oppdatertPeriode.periode.fraOgMed;
-
-            return {
-                ...it,
-                periode: erTidligerePeriode
-                    ? {
-                          fraOgMed: it.periode.fraOgMed,
-                          tilOgMed: datoMin(
-                              it.periode.tilOgMed,
-                              forrigeDag(oppdatertPeriode.periode.fraOgMed),
-                          ),
-                      }
-                    : {
-                          fraOgMed: datoMax(
-                              it.periode.fraOgMed,
-                              nesteDag(oppdatertPeriode.periode.tilOgMed),
-                          ),
-                          tilOgMed: it.periode.tilOgMed,
-                      },
-            };
-        });
-};

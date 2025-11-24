@@ -1,6 +1,6 @@
 import { Periode } from './Periode';
 
-export type AntallDagerForMeldeperiode = {
+export type AntallDagerPerMeldeperiode = {
     antallDagerPerMeldeperiode: number;
     periode: Periode;
 };
