@@ -1,12 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { BodyShort, Dropdown, InternalHeader, Search, Spacer, VStack } from '@navikt/ds-react';
-import { Loader } from '@navikt/ds-react';
+import {
+    BodyShort,
+    Dropdown,
+    HStack,
+    InternalHeader,
+    Loader,
+    Search,
+    Spacer,
+    VStack,
+} from '@navikt/ds-react';
 import { LeaveIcon } from '@navikt/aksel-icons';
 import { useHentSakForFNR } from './useHentSakForFNR';
 import Varsel from '../varsel/Varsel';
 import Link from 'next/link';
 import { useSaksbehandler } from '../../context/saksbehandler/SaksbehandlerContext';
 import router from 'next/router';
+import Image from 'next/image';
+import styles from './InternDekoratør.module.css';
 
 export const InternDekoratør = () => {
     const { innloggetSaksbehandler } = useSaksbehandler();
@@ -27,27 +37,38 @@ export const InternDekoratør = () => {
                 <InternalHeader.Title as={Link} href="/">
                     Tiltakspenger
                 </InternalHeader.Title>
-                <form
-                    role="search"
-                    style={{ alignContent: 'center', marginLeft: '20px' }}
-                    onSubmit={(e) => {
-                        e.preventDefault();
-                        søk({ fnr: søketekst }).then((sak) => {
-                            if (sak) {
-                                router.push(`/sak/${sak.saksnummer}`);
-                            }
-                        });
-                    }}
-                >
-                    <Search
-                        label="InternalHeader søk"
-                        size="small"
-                        variant="simple"
-                        placeholder="Søk på fnr"
-                        value={søketekst}
-                        onChange={(e) => setSøketekst(e.trim())}
+                <HStack gap="8" align="center">
+                    <form
+                        role="search"
+                        style={{ alignContent: 'center', marginLeft: '20px' }}
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            søk({ fnr: søketekst }).then((sak) => {
+                                if (sak) {
+                                    router.push(`/sak/${sak.saksnummer}`);
+                                }
+                            });
+                        }}
+                    >
+                        <Search
+                            label="InternalHeader søk"
+                            size="small"
+                            variant="simple"
+                            placeholder="Søk på fnr"
+                            value={søketekst}
+                            onChange={(e) => setSøketekst(e.trim())}
+                        />
+                    </form>
+                    <Image
+                        src="/cozy-season.svg"
+                        alt="Cozy season"
+                        aria-hidden
+                        width={400}
+                        height={45}
+                        className={styles.logoResponsive}
+                        priority
                     />
-                </form>
+                </HStack>
                 <Spacer />
                 {innloggetSaksbehandler ? (
                     <Dropdown>
