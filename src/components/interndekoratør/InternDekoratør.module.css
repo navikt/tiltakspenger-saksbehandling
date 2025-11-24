@@ -1,0 +1,8 @@
+.logoResponsive {
+    display: inline-block;
+}
+@media (max-width: 1120px) {
+    .logoResponsive {
+        display: none;
+    }
+}
