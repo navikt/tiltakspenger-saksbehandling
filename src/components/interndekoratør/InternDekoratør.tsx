@@ -80,6 +80,7 @@ export const InternDekoratør = () => {
                         <Button
                             size={'small'}
                             type={'button'}
+                            className={styles.opprettSakButton}
                             onClick={() => modalRef.current?.showModal()}
                         >
                             Opprett sak

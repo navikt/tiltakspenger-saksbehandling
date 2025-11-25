@@ -6,3 +6,13 @@
         display: none;
     }
 }
+
+.opprettSakButton {
+    color: var(--a-white);
+    background: var(--a-surface-action);
+}
+
+.opprettSakButton:hover {
+    color: var(--a-white);
+    background: var(--a-surface-action-active);
+}
