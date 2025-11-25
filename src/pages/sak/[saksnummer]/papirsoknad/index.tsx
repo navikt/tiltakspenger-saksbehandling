@@ -16,7 +16,6 @@ import React, { useEffect } from 'react';
 import { Periodevelger } from '~/components/papirsøknad/Periodevelger';
 import { VelgTiltak } from '~/components/papirsøknad/tiltak/VelgTiltak';
 import { PapirsøknadBarnetillegg } from '~/components/papirsøknad/barnetillegg/PapirsøknadBarnetillegg';
-import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
 import { useOpprettPapirsøknad } from '~/components/personoversikt/papirsøknad/useOpprettPapirsøknad';
 import router from 'next/router';
 import { behandlingUrl } from '~/utils/urls';
@@ -28,7 +27,6 @@ interface Props {
 }
 
 const PapirsøknadPage = (props: Props) => {
-    const { papirsøknadToggle } = useFeatureToggles();
     const { personopplysninger } = useHentPersonopplysninger(props.sak.sakId);
     const formContext = useForm<Papirsøknad>({
         defaultValues: defaultPapirsøknadFormValues,
@@ -50,7 +48,6 @@ const PapirsøknadPage = (props: Props) => {
         useOpprettPapirsøknad(props.sak.saksnummer);
 
     const onSubmit = (data: Papirsøknad) => {
-        if (!papirsøknadToggle) return;
         if (!personopplysninger) return;
 
         const antallVedlegg = (data.svar.barnetilleggManuelle || []).reduce(
