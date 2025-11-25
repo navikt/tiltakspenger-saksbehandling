@@ -148,8 +148,11 @@ export const InternDekoratør = () => {
                                 return;
                             }
 
-                            hentEllerOpprettSak({ fnr }).then((saksnummer) => {
-                                router.push(`/sak/${saksnummer}`);
+                            hentEllerOpprettSak({ fnr }).then((response) => {
+                                if (response) {
+                                    lukkModal();
+                                    router.push(`/sak/${response.saksnummer}`);
+                                }
                             });
                         }}
                     >
