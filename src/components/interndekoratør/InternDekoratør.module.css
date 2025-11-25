@@ -1,7 +1,7 @@
 .logoResponsive {
     display: inline-block;
 }
-@media (max-width: 1120px) {
+@media (max-width: 1180px) {
     .logoResponsive {
         display: none;
     }
