@@ -1,4 +1,4 @@
-import { Button, Modal } from '@navikt/ds-react';
+import { Button, HStack, Modal } from '@navikt/ds-react';
 import React, { ReactNode, RefObject } from 'react';
 import Varsel from '../varsel/Varsel';
 import { FetcherError } from '~/utils/fetch/fetch';
@@ -37,20 +37,22 @@ export const BekreftelsesModal = ({
         >
             <Modal.Body>{children}</Modal.Body>
             <Modal.Footer>
-                {feil && (
-                    <Varsel
-                        variant={'error'}
-                        size={'small'}
-                        melding={`${feil.info?.melding || feil.message}`}
-                        key={Date.now()}
-                    />
-                )}
-                <div className={styles.knapper}>
-                    {bekreftKnapp}
-                    <Button variant={'secondary'} type={'button'} onClick={() => lukkModal()}>
-                        {'Avbryt'}
-                    </Button>
-                </div>
+                <HStack gap="4">
+                    {feil && (
+                        <Varsel
+                            variant={'error'}
+                            size={'small'}
+                            melding={`${feil.info?.melding || feil.message}`}
+                            key={Date.now()}
+                        />
+                    )}
+                    <div className={styles.knapper}>
+                        {bekreftKnapp}
+                        <Button variant={'secondary'} type={'button'} onClick={() => lukkModal()}>
+                            {'Avbryt'}
+                        </Button>
+                    </div>
+                </HStack>
             </Modal.Footer>
         </Modal>
     );
