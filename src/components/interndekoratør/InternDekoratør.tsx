@@ -150,6 +150,7 @@ export const InternDekoratør = () => {
 
                             hentEllerOpprettSak({ fnr }).then((response) => {
                                 if (response) {
+                                    setFnr('');
                                     lukkModal();
                                     router.push(`/sak/${response.saksnummer}`);
                                 }
@@ -160,15 +161,19 @@ export const InternDekoratør = () => {
                     </Button>
                 }
             >
-                <TextField
-                    label="Fødselsnummer"
-                    value={fnr}
-                    error={validationError}
-                    onChange={(e) => {
-                        if (e.target.value.length === 11) setValidationError('');
-                        setFnr(e.target.value);
-                    }}
-                />
+                <HStack gap="4">
+                    Her kan du opprette en sak for en person som ikke er registrert i systemet fra
+                    før ved å skrive inn fødselsnummeret.
+                    <TextField
+                        label="Fødselsnummer"
+                        value={fnr}
+                        error={validationError}
+                        onChange={(e) => {
+                            if (e.target.value.length === 11) setValidationError('');
+                            setFnr(e.target.value);
+                        }}
+                    />
+                </HStack>
             </BekreftelsesModal>
         </>
     );
