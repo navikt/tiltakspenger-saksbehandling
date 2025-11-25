@@ -16,12 +16,10 @@ import {
     Rammebehandlingstype,
 } from '~/types/Rammebehandling';
 import { OpprettPapirsøknad } from '~/components/personoversikt/papirsøknad/OpprettPapirsøknad';
-import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
 
 import styles from './Personoversikt.module.css';
 
 export const Personoversikt = () => {
-    const { papirsøknadToggle } = useFeatureToggles();
     const {
         sakId,
         saksnummer,
@@ -50,12 +48,10 @@ export const Personoversikt = () => {
                     </Heading>
                     <HStack gap="3">
                         <MeldekortHelgToggle />
-                        {papirsøknadToggle && (
-                            <OpprettPapirsøknad
-                                saksnummer={saksnummer}
-                                harVedtak={harVedtattSøknadsbehandling(behandlinger)}
-                            />
-                        )}
+                        <OpprettPapirsøknad
+                            saksnummer={saksnummer}
+                            harVedtak={harVedtattSøknadsbehandling(behandlinger)}
+                        />
                         <OpprettRevurdering
                             sakId={sakId}
                             harVedtak={harVedtattSøknadsbehandling(behandlinger)}
