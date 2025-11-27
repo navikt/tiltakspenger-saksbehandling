@@ -53,8 +53,8 @@ export const VedtatteBehandlingerTabell = ({ sakId, rammevedtakMedBehandlinger }
                             <Table.DataCell>{formaterTidspunkt(opprettet)}</Table.DataCell>
                             <Table.DataCell>
                                 <HStack gap="2">
-                                    {opprinneligInnvilgetPerioder.map((periode, index) => (
-                                        <span key={index}>
+                                    {opprinneligInnvilgetPerioder.map((periode) => (
+                                        <span key={`${periode.fraOgMed}-${periode.tilOgMed}`}>
                                             {periodeTilFormatertDatotekst(periode)}
                                         </span>
                                     ))}
@@ -62,8 +62,8 @@ export const VedtatteBehandlingerTabell = ({ sakId, rammevedtakMedBehandlinger }
                             </Table.DataCell>
                             <Table.DataCell>
                                 <HStack gap="2">
-                                    {gjeldendeInnvilgetPerioder.map((periode, index) => (
-                                        <span key={index}>
+                                    {gjeldendeInnvilgetPerioder.map((periode) => (
+                                        <span key={`${periode.fraOgMed}-${periode.tilOgMed}`}>
                                             {periodeTilFormatertDatotekst(periode)}
                                         </span>
                                     ))}
