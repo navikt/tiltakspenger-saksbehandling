@@ -67,14 +67,13 @@ export const BehandlingerTidslinje = ({ sak }: Props) => {
                     {tidslinje.elementer.map((tidslinjeElement) => {
                         const {
                             id,
-                            gjeldendePeriode,
                             vedtaksdato,
                             saksbehandler,
                             beslutter,
                             antallDagerPerMeldeperiode,
                         } = tidslinjeElement.rammevedtak;
 
-                        const { fraOgMed, tilOgMed } = gjeldendePeriode;
+                        const { fraOgMed, tilOgMed } = tidslinjeElement.periode;
 
                         const erInnvilgelse = erTidslinjeElementInnvilgelse(
                             tidslinjeElement.tidslinjeResultat,
@@ -131,7 +130,9 @@ export const BehandlingerTidslinje = ({ sak }: Props) => {
                                     <div>
                                         <InfoElement
                                             navn={'Gjeldende periode'}
-                                            verdi={periodeTilFormatertDatotekst(gjeldendePeriode)}
+                                            verdi={periodeTilFormatertDatotekst(
+                                                tidslinjeElement.periode,
+                                            )}
                                         />
                                         {erInnvilgelse && (
                                             <>
