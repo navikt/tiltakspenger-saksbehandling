@@ -1,5 +1,5 @@
 import { Søknadsbehandling, SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
-import { hentBarnetilleggForSøknadsbehandling } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
+import { hentLagredePerioderMedBarn } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
 import { ANTALL_DAGER_DEFAULT } from '~/components/behandling/felles/dager-per-meldeperiode/BehandlingDagerPerMeldeperiode';
 import {
     SøknadsbehandlingAvslagState,
@@ -9,6 +9,7 @@ import {
 } from '~/components/behandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
 import { hentTiltaksdeltagelseFraSøknad, hentTiltaksperiodeFraSøknad } from '~/utils/behandling';
 import { TiltaksdeltakelsePeriode } from '~/types/TiltakDeltagelseTypes';
+import { datoMin } from '~/utils/date';
 
 export const søknadsbehandlingInitialState = (
     behandling: Søknadsbehandling,
@@ -39,16 +40,21 @@ const innvilgelseInitialState = (
     const { resultat, virkningsperiode, saksopplysninger } = behandling;
 
     // Det skal ikke være mulig å velge innvilgelse dersom det ikke finnes en saksopplysningsperiode/tiltaksperiode
-    const innvilgelsesperiode = virkningsperiode ?? saksopplysninger.periode!;
+    const initialDatoDefault = datoMin(saksopplysninger.periode!.tilOgMed, new Date());
 
-    const barnetilleggPerioder = hentBarnetilleggForSøknadsbehandling(behandling);
+    const innvilgelsesperiode = virkningsperiode ?? {
+        fraOgMed: initialDatoDefault,
+        tilOgMed: initialDatoDefault,
+    };
 
-    const harBarnetillegg = barnetilleggPerioder.length > 0;
+    const barnetilleggPerioder = hentLagredePerioderMedBarn(behandling) ?? [];
+
+    const harBarnetillegg = barnetilleggPerioder ? barnetilleggPerioder.length > 0 : false;
 
     return resultat === SøknadsbehandlingResultat.INNVILGELSE
         ? {
               resultat: SøknadsbehandlingResultat.INNVILGELSE,
-              innvilgelsesperiode: innvilgelsesperiode,
+              innvilgelsesperiode,
               harBarnetillegg,
               barnetilleggPerioder,
               valgteTiltaksdeltakelser: behandling.valgteTiltaksdeltakelser,

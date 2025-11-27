@@ -1,8 +1,5 @@
 import { periodiserBarnetilleggFraSøknad } from '~/components/behandling/felles/barnetillegg/utils/periodiserBarnetilleggFraSøknad';
-import {
-    hentTiltaksperiodeFraSøknad,
-    rammebehandlingMedInnvilgelseEllerNull,
-} from '~/utils/behandling';
+import { rammebehandlingMedInnvilgelseEllerNull } from '~/utils/behandling';
 import { hentBarnetilleggPerioderMedBarn } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraVedtakTidslinje';
 import { SakProps } from '~/types/Sak';
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';
@@ -19,13 +16,11 @@ export interface BarnetilleggPeriodeFormData {
 
 export const hentBarnetilleggForSøknadsbehandling = (
     behandling: Søknadsbehandling,
+    innvilgelseperiode: Periode,
 ): BarnetilleggPeriodeFormData[] => {
     return (
         hentLagredePerioderMedBarn(behandling) ||
-        periodiserBarnetilleggFraSøknad(
-            behandling.søknad.barnetillegg,
-            behandling.virkningsperiode ?? hentTiltaksperiodeFraSøknad(behandling)!,
-        )
+        periodiserBarnetilleggFraSøknad(behandling.søknad.barnetillegg, innvilgelseperiode)
     );
 };
 
