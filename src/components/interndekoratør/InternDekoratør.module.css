@@ -8,11 +8,12 @@
 }
 
 .opprettSakButton {
+    margin-top: 0.6rem;
+    margin-bottom: 0.6rem;
     color: var(--a-white);
     background: var(--a-surface-action);
 }
 
 .opprettSakButton:hover {
-    color: var(--a-white);
     background: var(--a-surface-action-active);
 }

@@ -9,7 +9,6 @@ import {
     Search,
     Spacer,
     TextField,
-    VStack,
 } from '@navikt/ds-react';
 import { LeaveIcon } from '@navikt/aksel-icons';
 import { useHentSakForFNR } from './useHentSakForFNR';
@@ -46,56 +45,56 @@ export const InternDekoratør = () => {
 
     return (
         <>
-            <VStack gap="3">
-                <InternalHeader>
-                    <InternalHeader.Title as={Link} href="/">
-                        Tiltakspenger
-                    </InternalHeader.Title>
-                    <HStack gap="8" align="center">
-                        <form
-                            role="search"
-                            style={{
-                                alignContent: 'center',
-                                marginLeft: '20px',
-                                minWidth: '17rem',
-                            }}
-                            onSubmit={(e) => {
-                                e.preventDefault();
-                                søk({ fnr: søketekst }).then((sak) => {
-                                    if (sak) {
-                                        router.push(`/sak/${sak.saksnummer}`);
-                                    }
-                                });
-                            }}
-                        >
-                            <Search
-                                label="InternalHeader søk"
-                                size="small"
-                                variant="secondary"
-                                placeholder="Søk på fnr eller saksnummer"
-                                value={søketekst}
-                                onChange={(e) => setSøketekst(e.trim())}
-                            />
-                        </form>
-                        <Button
-                            size={'small'}
-                            type={'button'}
-                            className={styles.opprettSakButton}
-                            onClick={() => modalRef.current?.showModal()}
-                        >
-                            Opprett sak
-                        </Button>
-                        <Image
-                            src="/cozy-season.svg"
-                            alt="Cozy season"
-                            aria-hidden
-                            width={400}
-                            height={45}
-                            className={styles.logoResponsive}
-                            priority
+            <InternalHeader>
+                <InternalHeader.Title as={Link} href="/">
+                    Tiltakspenger
+                </InternalHeader.Title>
+                <HStack gap="8" align="center">
+                    <form
+                        role="search"
+                        style={{
+                            alignContent: 'center',
+                            marginLeft: '20px',
+                            minWidth: '17rem',
+                        }}
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            søk({ fnr: søketekst }).then((sak) => {
+                                if (sak) {
+                                    router.push(`/sak/${sak.saksnummer}`);
+                                }
+                            });
+                        }}
+                    >
+                        <Search
+                            label="InternalHeader søk"
+                            size="small"
+                            variant="secondary"
+                            placeholder="Søk på fnr eller saksnummer"
+                            value={søketekst}
+                            onChange={(e) => setSøketekst(e.trim())}
                         />
-                    </HStack>
-                    <Spacer />
+                    </form>
+                    <Image
+                        src="/cozy-season.svg"
+                        alt="Cozy season"
+                        aria-hidden
+                        width={400}
+                        height={45}
+                        className={styles.logoResponsive}
+                        priority
+                    />
+                </HStack>
+                <Spacer />
+                <HStack gap="4">
+                    <Button
+                        size={'small'}
+                        type={'button'}
+                        className={styles.opprettSakButton}
+                        onClick={() => modalRef.current?.showModal()}
+                    >
+                        Opprett sak
+                    </Button>
                     {innloggetSaksbehandler ? (
                         <Dropdown>
                             <InternalHeader.UserButton
@@ -121,18 +120,16 @@ export const InternDekoratør = () => {
                     ) : (
                         <Loader />
                     )}
-                </InternalHeader>
-                {error && (
-                    <Varsel
-                        melding={
-                            error.message ?? `Noe gikk galt ved henting av sak for "${søketekst}"`
-                        }
-                        variant="error"
-                        marginX
-                        key={Date.now()}
-                    />
-                )}
-            </VStack>
+                </HStack>
+            </InternalHeader>
+            {error && (
+                <Varsel
+                    melding={error.message ?? `Noe gikk galt ved henting av sak for "${søketekst}"`}
+                    variant="error"
+                    marginX
+                    key={Date.now()}
+                />
+            )}
             <BekreftelsesModal
                 modalRef={modalRef}
                 lukkModal={lukkModal}
