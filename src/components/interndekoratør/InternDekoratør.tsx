@@ -71,7 +71,7 @@ export const InternDekoratør = () => {
                             <Search
                                 label="InternalHeader søk"
                                 size="small"
-                                variant="simple"
+                                variant="secondary"
                                 placeholder="Søk på fnr eller saksnummer"
                                 value={søketekst}
                                 onChange={(e) => setSøketekst(e.trim())}
