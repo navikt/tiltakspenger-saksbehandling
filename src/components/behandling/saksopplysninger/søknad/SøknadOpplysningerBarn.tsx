@@ -13,7 +13,7 @@ import { Nullable } from '~/types/UtilTypes';
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import {
-    useBehandlingInnvilgelseSkjema,
+    useBehandlingInnvilgelseSteg2Skjema,
     useBehandlingInnvilgelseSkjemaDispatch,
 } from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
 import { useBehandlingSkjema } from '~/components/behandling/context/BehandlingSkjemaContext';
@@ -168,7 +168,7 @@ const Barn = ({ barn, tiltaksperiode, personopplysninger }: BarnProps) => {
 const PeriodiserBarnetilleggKnapp = ({ søknad }: { søknad: Søknad }) => {
     const { rolleForBehandling } = useBehandling();
 
-    const { innvilgelsesperiode } = useBehandlingInnvilgelseSkjema();
+    const { innvilgelsesperiode } = useBehandlingInnvilgelseSteg2Skjema().innvilgelse;
     const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
 
     if (rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER) {

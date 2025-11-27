@@ -14,6 +14,9 @@ import style from './SøknadsbehandlingVedtak.module.css';
 import { BehandlingDagerPerMeldeperiode } from '~/components/behandling/felles/dager-per-meldeperiode/BehandlingDagerPerMeldeperiode';
 import { BehandlingTiltak } from '~/components/behandling/felles/tiltak/BehandlingTiltak';
 import { BehandlingBarnetillegg } from '~/components/behandling/felles/barnetillegg/BehandlingBarnetillegg';
+import { useBehandlingInnvilgelseSkjema } from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
+import { InnvilgelsesperiodeVelger } from '~/components/behandling/felles/innvilgelsesperiode/InnvilgelsesperiodeVelger';
+import { useBehandling } from '~/components/behandling/context/BehandlingContext';
 
 export const SøknadsbehandlingVedtak = () => {
     const { resultat } = useBehandlingSkjema();
@@ -34,17 +37,25 @@ export const SøknadsbehandlingVedtak = () => {
 };
 
 const Innvilgelse = () => {
+    const { harValgtPeriode } = useBehandlingInnvilgelseSkjema().innvilgelse;
+    const { behandling } = useBehandling();
+
     return (
         <>
+            <InnvilgelsesperiodeVelger behandling={behandling} />
             <Separator />
-            <BehandlingDagerPerMeldeperiode />
-            <Separator />
-            <BehandlingTiltak />
-            <BehandlingBarnetillegg valgTekst={'Skal det innvilges barnetillegg?'} />
-            <Separator />
-            <SøknadsbehandlingBrev />
-            <Separator />
-            <BehandlingBeregningOgSimulering />
+            {harValgtPeriode && (
+                <>
+                    <BehandlingDagerPerMeldeperiode />
+                    <Separator />
+                    <BehandlingTiltak />
+                    <BehandlingBarnetillegg valgTekst={'Skal det innvilges barnetillegg?'} />
+                    <Separator />
+                    <SøknadsbehandlingBrev />
+                    <Separator />
+                    <BehandlingBeregningOgSimulering />
+                </>
+            )}
         </>
     );
 };

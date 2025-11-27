@@ -4,8 +4,8 @@ import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { Rammebehandling } from '~/types/Rammebehandling';
 import { VStack } from '@navikt/ds-react';
 import {
-    useBehandlingInnvilgelseSkjema,
     useBehandlingInnvilgelseSkjemaDispatch,
+    useBehandlingInnvilgelseSkjema,
 } from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
 import { PeriodeVelger } from '~/components/periode/PeriodeVelger';
 
@@ -14,7 +14,7 @@ type Props = {
 };
 
 export const InnvilgelsesperiodeVelger = ({ behandling }: Props) => {
-    const { innvilgelsesperiode } = useBehandlingInnvilgelseSkjema();
+    const { innvilgelsesperiode } = useBehandlingInnvilgelseSkjema().innvilgelse;
 
     const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
 
@@ -34,7 +34,10 @@ export const InnvilgelsesperiodeVelger = ({ behandling }: Props) => {
 
                         dispatch({
                             type: 'oppdaterInnvilgelsesperiode',
-                            payload: { periode: { fraOgMed: dateTilISOTekst(valgtDato) } },
+                            payload: {
+                                periode: { fraOgMed: dateTilISOTekst(valgtDato) },
+                                behandling,
+                            },
                         });
                     },
                 }}
@@ -48,7 +51,10 @@ export const InnvilgelsesperiodeVelger = ({ behandling }: Props) => {
 
                         dispatch({
                             type: 'oppdaterInnvilgelsesperiode',
-                            payload: { periode: { tilOgMed: dateTilISOTekst(valgtDato) } },
+                            payload: {
+                                periode: { tilOgMed: dateTilISOTekst(valgtDato) },
+                                behandling,
+                            },
                         });
                     },
                 }}

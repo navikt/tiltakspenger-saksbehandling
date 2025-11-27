@@ -2,17 +2,31 @@ import {
     erRammebehandlingInnvilgelseResultat,
     erSøknadsbehandlingResultat,
 } from '~/utils/behandling';
-import { BehandlingInnvilgelseState } from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
+import {
+    BehandlingInnvilgelseSteg2State,
+    BehandlingMedInnvilgelseState,
+    BehandlingMedInnvilgelseSteg2State,
+} from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
 import { SøknadsbehandlingState } from '~/components/behandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
 import { BehandlingSkjemaState } from '~/components/behandling/context/behandlingSkjemaReducer';
-import { inneholderHelePerioden } from '~/utils/periode';
+import { inneholderHelePerioden, perioderOverlapper } from '~/utils/periode';
 import { datoMax, datoMin, forrigeDag, nesteDag } from '~/utils/date';
-import { MedPeriode } from '~/types/Periode';
+import { MedPeriode, Periode } from '~/types/Periode';
+import { Rammebehandling, Saksopplysninger } from '~/types/Rammebehandling';
+import { ANTALL_DAGER_DEFAULT } from '~/components/behandling/felles/dager-per-meldeperiode/BehandlingDagerPerMeldeperiode';
+import { hentLagredePerioderMedBarn } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
+import { TiltaksdeltakelsePeriode } from '~/types/TiltakDeltagelseTypes';
 
 export const erRammebehandlingInnvilgelseContext = (
     context: BehandlingSkjemaState,
-): context is BehandlingInnvilgelseState => {
+): context is BehandlingMedInnvilgelseState => {
     return erRammebehandlingInnvilgelseResultat(context.resultat);
+};
+
+export const erRammebehandlingInnvilgelseMedPerioderContext = (
+    context: BehandlingSkjemaState,
+): context is BehandlingMedInnvilgelseSteg2State => {
+    return erRammebehandlingInnvilgelseContext(context) && context.innvilgelse.harValgtPeriode;
 };
 
 export const erSøknadsbehandlingContext = (
@@ -68,4 +82,52 @@ export const oppdaterPeriodiseringUtenOverlapp = <T extends MedPeriode>(
                       },
             };
         });
+};
+
+export const innvilgelseDefaultState = (
+    behandling: Rammebehandling,
+    innvilgelsesperiode: Periode,
+): BehandlingInnvilgelseSteg2State => {
+    const barnetilleggPerioder = hentLagredePerioderMedBarn(behandling) ?? [];
+
+    return {
+        harValgtPeriode: true,
+        innvilgelsesperiode: innvilgelsesperiode,
+        harBarnetillegg: barnetilleggPerioder.length > 0,
+        barnetilleggPerioder,
+        valgteTiltaksdeltakelser: tiltaksdeltagelserFraSaksopplysninger(
+            behandling.saksopplysninger,
+            innvilgelsesperiode,
+        ),
+        antallDagerPerMeldeperiode: [
+            {
+                antallDagerPerMeldeperiode: ANTALL_DAGER_DEFAULT,
+                periode: innvilgelsesperiode,
+            },
+        ],
+    };
+};
+
+const tiltaksdeltagelserFraSaksopplysninger = (
+    saksopplysninger: Saksopplysninger,
+    innvilgelsesperiode: Periode,
+): TiltaksdeltakelsePeriode[] => {
+    return saksopplysninger.tiltaksdeltagelse.reduce<TiltaksdeltakelsePeriode[]>((acc, td) => {
+        const { deltagelseFraOgMed, deltagelseTilOgMed, eksternDeltagelseId } = td;
+
+        if (!deltagelseFraOgMed || !deltagelseTilOgMed) {
+            return acc;
+        }
+
+        const deltagelsesPeriode: Periode = {
+            fraOgMed: deltagelseFraOgMed,
+            tilOgMed: deltagelseTilOgMed,
+        };
+
+        if (!perioderOverlapper(innvilgelsesperiode, deltagelsesPeriode)) {
+            return acc;
+        }
+
+        return [...acc, { eksternDeltagelseId, periode: deltagelsesPeriode }];
+    }, []);
 };

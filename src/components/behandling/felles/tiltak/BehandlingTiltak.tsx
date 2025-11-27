@@ -12,7 +12,7 @@ import { VedtakHjelpetekst } from '~/components/behandling/felles/layout/hjelpet
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
 import MultiperiodeForm from '~/components/periode/MultiperiodeForm';
 import {
-    useBehandlingInnvilgelseSkjema,
+    useBehandlingInnvilgelseSteg2Skjema,
     useBehandlingInnvilgelseSkjemaDispatch,
 } from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
 
@@ -20,7 +20,8 @@ import style from './BehandlingTiltak.module.css';
 
 export const BehandlingTiltak = () => {
     const { behandling, rolleForBehandling } = useBehandling();
-    const { valgteTiltaksdeltakelser, innvilgelsesperiode } = useBehandlingInnvilgelseSkjema();
+    const { valgteTiltaksdeltakelser, innvilgelsesperiode } =
+        useBehandlingInnvilgelseSteg2Skjema().innvilgelse;
     const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
 
     const tiltaksdeltakelser = hentTiltaksdeltakelserMedStartOgSluttdato(behandling);

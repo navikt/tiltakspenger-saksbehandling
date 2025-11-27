@@ -13,8 +13,9 @@ import {
 } from '~/components/behandling/context/BehandlingSkjemaContext';
 import { BehandlingSkjemaType } from '~/components/behandling/context/behandlingSkjemaUtils';
 
-export type RevurderingInnvilgelseState = BehandlingInnvilgelseState & {
+export type RevurderingInnvilgelseState = {
     resultat: RevurderingResultat.INNVILGELSE;
+    innvilgelse: BehandlingInnvilgelseState;
 };
 
 export type RevurderingInnvilgelseActions = ReducerSuperAction<
@@ -26,7 +27,7 @@ export const revurderingInnvilgelseReducer: Reducer<
     RevurderingInnvilgelseState,
     RevurderingInnvilgelseActions
 > = (state, action) => {
-    return behandlingInnvilgelseReducer(state, action);
+    return { ...state, innvilgelse: behandlingInnvilgelseReducer(state.innvilgelse, action) };
 };
 
 export type RevurderingInnvilgelseContext =

@@ -5,8 +5,8 @@ import { BodyLong } from '@navikt/ds-react';
 import { TekstListe } from '~/components/liste/TekstListe';
 import { RevurderingResultat } from '~/types/Revurdering';
 import {
-    BehandlingInnvilgelseContext,
-    useBehandlingInnvilgelseSkjema,
+    BehandlingMedInnvilgelseSteg2Context,
+    useBehandlingInnvilgelseSteg2Skjema,
 } from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
 import { revurderingOmgjøringValidering } from '~/components/behandling/revurdering/omgjøring/revurderingInnvilgelseValidering';
 import { revurderingInnvilgelseValidering } from '~/components/behandling/revurdering/innvilgelse/revurderingInnvilgelseValidering';
@@ -16,7 +16,7 @@ import { RevurderingOmgjøringContext } from '~/components/behandling/context/re
 // TODO: split denne for innvilgelse og omgjøring
 export const RevurderingInnvilgelseBrev = () => {
     const { behandling, rolleForBehandling } = useRevurderingBehandling();
-    const skjema = useBehandlingInnvilgelseSkjema();
+    const skjema = useBehandlingInnvilgelseSteg2Skjema();
 
     const { brevtekst } = skjema.textAreas;
 
@@ -46,14 +46,16 @@ export const RevurderingInnvilgelseBrev = () => {
 };
 
 const revurderingskjemaTilBrevForhåndsvisningDTO = (
-    skjema: BehandlingInnvilgelseContext,
+    skjema: BehandlingMedInnvilgelseSteg2Context,
 ): RevurderingInnvilgelseBrevForhåndsvisningDTO => {
+    const { innvilgelse, textAreas } = skjema;
+
     return {
         resultat: RevurderingResultat.INNVILGELSE,
-        fritekst: skjema.textAreas.brevtekst.getValue(),
-        virkningsperiode: skjema.innvilgelsesperiode,
-        barnetillegg: skjema.harBarnetillegg ? skjema.barnetilleggPerioder : null,
-        antallDagerPerMeldeperiodeForPerioder: skjema.antallDagerPerMeldeperiode,
+        fritekst: textAreas.brevtekst.getValue(),
+        virkningsperiode: innvilgelse.innvilgelsesperiode,
+        barnetillegg: innvilgelse.harBarnetillegg ? innvilgelse.barnetilleggPerioder : null,
+        antallDagerPerMeldeperiodeForPerioder: innvilgelse.antallDagerPerMeldeperiode,
     };
 };
 

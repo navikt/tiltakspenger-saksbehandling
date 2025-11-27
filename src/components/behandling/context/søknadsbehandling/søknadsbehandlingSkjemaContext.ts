@@ -31,8 +31,9 @@ export type SøknadsbehandlingAvslagState = {
     avslagsgrunner: Avslagsgrunn[];
 };
 
-export type SøknadsbehandlingInnvilgelseState = BehandlingInnvilgelseState & {
+export type SøknadsbehandlingInnvilgelseState = {
     resultat: SøknadsbehandlingResultat.INNVILGELSE;
+    innvilgelse: BehandlingInnvilgelseState;
 };
 
 export type SøknadsbehandlingState =
@@ -108,7 +109,10 @@ export const søknadsbehandlingReducer: Reducer<SøknadsbehandlingState, Søknad
                 throw Error(`Behandlingen må være en innvilgelse for action type ${type}`);
             }
 
-            return behandlingInnvilgelseReducer(state, action);
+            return {
+                ...state,
+                innvilgelse: behandlingInnvilgelseReducer(state.innvilgelse, action),
+            };
         }
     }
 

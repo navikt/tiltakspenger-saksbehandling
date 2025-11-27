@@ -22,21 +22,27 @@ export const RevurderingInnvilgelseSend = () => {
 };
 
 const tilDTO = (skjema: RevurderingInnvilgelseContext): RevurderingVedtakInnvilgelseRequest => {
+    const { innvilgelse } = skjema;
+
+    if (!innvilgelse.harValgtPeriode) {
+        throw Error('Innvilgelsesperioden må være valgt');
+    }
+
     return {
         resultat: RevurderingResultat.INNVILGELSE,
         begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
         fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
-        innvilgelsesperiode: skjema.innvilgelsesperiode,
-        valgteTiltaksdeltakelser: skjema.valgteTiltaksdeltakelser,
-        barnetillegg: skjema.harBarnetillegg
+        innvilgelsesperiode: innvilgelse.innvilgelsesperiode,
+        valgteTiltaksdeltakelser: innvilgelse.valgteTiltaksdeltakelser,
+        barnetillegg: innvilgelse.harBarnetillegg
             ? {
                   begrunnelse: skjema.textAreas.barnetilleggBegrunnelse.getValue(),
-                  perioder: skjema.barnetilleggPerioder,
+                  perioder: innvilgelse.barnetilleggPerioder,
               }
             : {
                   begrunnelse: null,
                   perioder: [],
               },
-        antallDagerPerMeldeperiodeForPerioder: skjema.antallDagerPerMeldeperiode,
+        antallDagerPerMeldeperiodeForPerioder: innvilgelse.antallDagerPerMeldeperiode,
     };
 };

@@ -1,49 +1,46 @@
 import { MedPeriode, Periode } from '~/types/Periode';
 import { perioderOverlapper } from '~/utils/periode';
 import { datoMax, datoMin } from '~/utils/date';
-import { BehandlingInnvilgelseState } from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
+import { BehandlingInnvilgelseSteg2State } from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
 import { Reducer } from 'react';
+import { Rammebehandling } from '~/types/Rammebehandling';
 
 export type InnvilgelsesperiodeAction = {
     type: 'oppdaterInnvilgelsesperiode';
-    payload: { periode: Partial<Periode> };
+    payload: { periode: Partial<Periode>; behandling: Rammebehandling };
 };
 
-export const innvilgelsesperiodeReducer = (<State extends BehandlingInnvilgelseState>(
+export const innvilgelsesperiodeReducer = (<State extends BehandlingInnvilgelseSteg2State>(
     state: State,
     action: InnvilgelsesperiodeAction,
 ) => {
-    const { type, payload } = action;
+    const { periode } = action.payload;
 
-    switch (type) {
-        case 'oppdaterInnvilgelsesperiode': {
-            const nyInnvilgelsesperiode = { ...state.innvilgelsesperiode, ...payload.periode };
+    const nyInnvilgelsesperiode = { ...state.innvilgelsesperiode, ...periode };
 
-            return {
-                ...state,
-                innvilgelsesperiode: nyInnvilgelsesperiode,
+    return {
+        ...state,
+        innvilgelsesperiode: nyInnvilgelsesperiode,
 
-                valgteTiltaksdeltakelser: oppdaterPeriodisering(
-                    state.valgteTiltaksdeltakelser,
-                    nyInnvilgelsesperiode,
-                    true,
-                ),
+        valgteTiltaksdeltakelser: oppdaterPeriodisering(
+            state.valgteTiltaksdeltakelser,
+            nyInnvilgelsesperiode,
+            true,
+        ),
 
-                antallDagerPerMeldeperiode: oppdaterPeriodisering(
-                    state.antallDagerPerMeldeperiode,
-                    nyInnvilgelsesperiode,
-                    true,
-                ),
+        antallDagerPerMeldeperiode: oppdaterPeriodisering(
+            state.antallDagerPerMeldeperiode,
+            nyInnvilgelsesperiode,
+            true,
+        ),
 
-                barnetilleggPerioder: oppdaterPeriodisering(
-                    state.barnetilleggPerioder,
-                    nyInnvilgelsesperiode,
-                    false,
-                ),
-            };
-        }
-    }
-}) satisfies Reducer<BehandlingInnvilgelseState, InnvilgelsesperiodeAction>;
+        barnetilleggPerioder: oppdaterPeriodisering(
+            state.barnetilleggPerioder,
+            nyInnvilgelsesperiode,
+            false,
+        ),
+    };
+}) satisfies Reducer<BehandlingInnvilgelseSteg2State, InnvilgelsesperiodeAction>;
 
 // Denne må kanskje tweakes litt hvis vi får periodiserte innvilgelser i en behandling
 const oppdaterPeriodisering = <T extends MedPeriode>(

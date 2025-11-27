@@ -47,11 +47,17 @@ const søknadsbehandlingSkjemaTilBrevForhåndsvisningDTO = (
         }
 
         case SøknadsbehandlingResultat.INNVILGELSE: {
+            const { innvilgelse } = skjema;
+
+            if (!innvilgelse.harValgtPeriode) {
+                throw Error('Innvilgelsesperioden må være valgt');
+            }
+
             return {
                 ...baseDTO,
-                virkningsperiode: skjema.innvilgelsesperiode,
-                barnetillegg: skjema.barnetilleggPerioder,
-                antallDagerPerMeldeperiodeForPerioder: skjema.antallDagerPerMeldeperiode,
+                virkningsperiode: innvilgelse.innvilgelsesperiode,
+                barnetillegg: innvilgelse.barnetilleggPerioder,
+                antallDagerPerMeldeperiodeForPerioder: innvilgelse.antallDagerPerMeldeperiode,
             };
         }
 

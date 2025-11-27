@@ -2,15 +2,21 @@ import { ValideringResultat } from '~/types/Validering';
 import { validerBarnetillegg } from '~/components/behandling/felles/validering/validerBarnetillegg';
 import { validerTiltaksdeltakelser } from '~/components/behandling/felles/validering/validerTiltaksdeltakelser';
 import { validerAntallDagerPerMeldeperiode } from '~/components/behandling/felles/validering/validerAntallDagerPerMeldeperiode';
-import { erFullstendigPeriode } from '~/utils/periode';
 import { hentHeleTiltaksdeltagelsesperioden } from '~/utils/behandling';
 import { Rammebehandling } from '~/types/Rammebehandling';
 import { BehandlingInnvilgelseState } from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
 
 export const validerInnvilgelse = (
     behandling: Rammebehandling,
-    skjema: BehandlingInnvilgelseState,
+    innvilgelse: BehandlingInnvilgelseState,
 ): ValideringResultat => {
+    if (!innvilgelse.harValgtPeriode) {
+        return {
+            errors: ['Fullstendig innvilgelsesperiode må være valgt'],
+            warnings: [],
+        };
+    }
+
     const validering: ValideringResultat = {
         errors: [],
         warnings: [],
@@ -22,25 +28,20 @@ export const validerInnvilgelse = (
         harBarnetillegg,
         valgteTiltaksdeltakelser,
         antallDagerPerMeldeperiode,
-    } = skjema;
+    } = innvilgelse;
 
     const tiltaksperiode = hentHeleTiltaksdeltagelsesperioden(behandling);
 
-    if (erFullstendigPeriode(innvilgelsesperiode)) {
-        if (innvilgelsesperiode.fraOgMed > innvilgelsesperiode.tilOgMed) {
-            validering.errors.push('Til og med-dato må være etter fra og med-dato');
-        }
+    if (innvilgelsesperiode.fraOgMed > innvilgelsesperiode.tilOgMed) {
+        validering.errors.push('Til og med-dato må være etter fra og med-dato');
+    }
 
-        if (tiltaksperiode.fraOgMed > innvilgelsesperiode.fraOgMed) {
-            validering.errors.push('Innvilgelsesperioden starter før tiltaksperioden');
-        }
+    if (tiltaksperiode.fraOgMed > innvilgelsesperiode.fraOgMed) {
+        validering.errors.push('Innvilgelsesperioden starter før tiltaksperioden');
+    }
 
-        if (tiltaksperiode.tilOgMed < innvilgelsesperiode.tilOgMed) {
-            validering.errors.push('Innvilgelsesperioden slutter etter tiltaksperioden');
-        }
-    } else {
-        validering.errors.push('Innvilgelsesperioden må være satt');
-        return validering;
+    if (tiltaksperiode.tilOgMed < innvilgelsesperiode.tilOgMed) {
+        validering.errors.push('Innvilgelsesperioden slutter etter tiltaksperioden');
     }
 
     if (harBarnetillegg) {

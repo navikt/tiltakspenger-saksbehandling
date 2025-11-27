@@ -72,22 +72,25 @@ const innvilgelseInitialState = (
 
     return {
         resultat: RevurderingResultat.INNVILGELSE,
-        innvilgelsesperiode: innvilgelsesperiode,
-        harBarnetillegg: barnetilleggPerioder.length > 0,
-        barnetilleggPerioder,
-        valgteTiltaksdeltakelser: valgteTiltaksdeltakelserInitialState(
-            behandling,
-            innvilgelsesperiode,
-        ),
-        antallDagerPerMeldeperiode: behandling.antallDagerPerMeldeperiode ?? [
-            {
-                antallDagerPerMeldeperiode: ANTALL_DAGER_DEFAULT,
-                periode: {
-                    fraOgMed: innvilgelsesperiode.fraOgMed,
-                    tilOgMed: innvilgelsesperiode.tilOgMed,
+        innvilgelse: {
+            harValgtPeriode: true,
+            innvilgelsesperiode: innvilgelsesperiode,
+            harBarnetillegg: barnetilleggPerioder.length > 0,
+            barnetilleggPerioder,
+            valgteTiltaksdeltakelser: valgteTiltaksdeltakelserInitialState(
+                behandling,
+                innvilgelsesperiode,
+            ),
+            antallDagerPerMeldeperiode: behandling.antallDagerPerMeldeperiode ?? [
+                {
+                    antallDagerPerMeldeperiode: ANTALL_DAGER_DEFAULT,
+                    periode: {
+                        fraOgMed: innvilgelsesperiode.fraOgMed,
+                        tilOgMed: innvilgelsesperiode.tilOgMed,
+                    },
                 },
-            },
-        ],
+            ],
+        },
     };
 };
 
@@ -108,14 +111,17 @@ const omgjøringInitialState = (
 
     return {
         resultat: RevurderingResultat.OMGJØRING,
-        innvilgelsesperiode: innvilgelsesperiode,
-        harBarnetillegg: barnetilleggPerioder.length > 0,
-        barnetilleggPerioder,
-        valgteTiltaksdeltakelser: valgteTiltaksdeltakelserInitialState(
-            behandling,
-            innvilgelsesperiode,
-        ),
-        antallDagerPerMeldeperiode: behandling.antallDagerPerMeldeperiode,
+        innvilgelse: {
+            harValgtPeriode: true,
+            innvilgelsesperiode: innvilgelsesperiode,
+            harBarnetillegg: barnetilleggPerioder.length > 0,
+            barnetilleggPerioder,
+            valgteTiltaksdeltakelser: valgteTiltaksdeltakelserInitialState(
+                behandling,
+                innvilgelsesperiode,
+            ),
+            antallDagerPerMeldeperiode: behandling.antallDagerPerMeldeperiode,
+        },
     };
 };
 

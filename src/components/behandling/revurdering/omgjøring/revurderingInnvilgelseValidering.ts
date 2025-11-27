@@ -15,7 +15,7 @@ export const revurderingOmgjøringValidering = (
         warnings: [],
     };
 
-    const innvilgelseValidering = validerInnvilgelse(behandling, skjema);
+    const innvilgelseValidering = validerInnvilgelse(behandling, skjema.innvilgelse);
 
     validering.errors.push(...innvilgelseValidering.errors);
     validering.warnings.push(...innvilgelseValidering.warnings);

@@ -9,7 +9,7 @@ import { periodiserBarnetilleggFraSøknad } from '../utils/periodiserBarnetilleg
 import { hentBarnetilleggFraVedtakTidslinje } from '../utils/hentBarnetilleggFraVedtakTidslinje';
 import { useSak } from '~/context/sak/SakContext';
 import {
-    useBehandlingInnvilgelseSkjema,
+    useBehandlingInnvilgelseSteg2Skjema,
     useBehandlingInnvilgelseSkjemaDispatch,
 } from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
 
@@ -20,7 +20,8 @@ const BATCH_MED_BARN = 10;
 export const BehandlingBarnetilleggPerioder = () => {
     const { sak } = useSak();
     const { behandling, rolleForBehandling } = useBehandling();
-    const { barnetilleggPerioder, innvilgelsesperiode } = useBehandlingInnvilgelseSkjema();
+    const { barnetilleggPerioder, innvilgelsesperiode } =
+        useBehandlingInnvilgelseSteg2Skjema().innvilgelse;
     const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
 
     const erSøknadsbehandling = behandling.type === Rammebehandlingstype.SØKNADSBEHANDLING;

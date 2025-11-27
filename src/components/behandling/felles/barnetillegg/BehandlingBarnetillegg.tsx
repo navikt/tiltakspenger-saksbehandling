@@ -9,7 +9,7 @@ import { harSøktBarnetillegg } from '~/components/behandling/felles/barnetilleg
 import { useSak } from '~/context/sak/SakContext';
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
 import {
-    useBehandlingInnvilgelseSkjema,
+    useBehandlingInnvilgelseSteg2Skjema,
     useBehandlingInnvilgelseSkjemaDispatch,
 } from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
 
@@ -23,7 +23,8 @@ export const BehandlingBarnetillegg = ({ valgTekst }: Props) => {
     const { sak } = useSak();
     const { behandling, rolleForBehandling } = useBehandling();
 
-    const { harBarnetillegg, innvilgelsesperiode } = useBehandlingInnvilgelseSkjema();
+    const { harBarnetillegg, innvilgelsesperiode } =
+        useBehandlingInnvilgelseSteg2Skjema().innvilgelse;
     const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
 
     return (
