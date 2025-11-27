@@ -60,7 +60,7 @@ export const SøknadsbehandlingResultatVelger = () => {
                     )}
                 </RadioGroup>
                 {resultat === SøknadsbehandlingResultat.INNVILGELSE && (
-                    <InnvilgelsesperiodeVelger behandling={behandling} label={'Innvilges'} />
+                    <InnvilgelsesperiodeVelger behandling={behandling} />
                 )}
 
                 {!kanInnvilges && (

@@ -1,9 +1,9 @@
 import React from 'react';
-import PeriodeForm from '../periode/PeriodeForm';
 import { Button, HStack, VStack } from '@navikt/ds-react';
 import { MedPeriode } from '~/types/Periode';
 import { Nullable } from '~/types/UtilTypes';
 import { DateOrString } from '../datovelger/Datovelger';
+import { PeriodeVelger } from '~/components/periode/PeriodeVelger';
 
 const MultiperiodeForm = <T extends MedPeriode[]>(props: {
     name: string;
@@ -48,23 +48,25 @@ const MultiperiodeForm = <T extends MedPeriode[]>(props: {
                     <HStack align="end" gap="4" key={`${props.name}-${index}`} as={'li'}>
                         {props.contentConfig.position === 'before' &&
                             props.contentConfig.content(periode, index)}
-                        <PeriodeForm
+                        <PeriodeVelger
                             fraOgMed={{
                                 label: 'Fra og med',
                                 value: periode.periode.fraOgMed,
-                                onChange: (date) =>
+                                onDateChange: (date) =>
                                     props.periodeConfig.fraOgMed.onChange(date, index),
-                                error: props.periodeConfig.fraOgMed.error ?? null,
+                                error: props.periodeConfig.fraOgMed.error,
+                                minDate: props.periodeConfig.minDate,
+                                maxDate: props.periodeConfig.maxDate,
                             }}
                             tilOgMed={{
                                 label: 'Til og med',
                                 value: periode.periode.tilOgMed,
-                                onChange: (date) =>
+                                onDateChange: (date) =>
                                     props.periodeConfig.tilOgMed.onChange(date, index),
-                                error: props.periodeConfig.tilOgMed.error ?? null,
+                                error: props.periodeConfig.tilOgMed.error,
+                                minDate: props.periodeConfig.minDate,
+                                maxDate: props.periodeConfig.maxDate,
                             }}
-                            minDate={props.periodeConfig.minDate}
-                            maxDate={props.periodeConfig.maxDate}
                             size={props.periodeConfig.size}
                             readOnly={props.periodeConfig.readOnly}
                         />

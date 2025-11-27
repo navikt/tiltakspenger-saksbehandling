@@ -10,7 +10,7 @@ import {
 import { Separator } from '~/components/separator/Separator';
 import { VedtakHjelpetekst } from '~/components/behandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
-import MultiperiodeForm from '~/components/multiperiodeForm/MultiperiodeForm';
+import MultiperiodeForm from '~/components/periode/MultiperiodeForm';
 import {
     useBehandlingInnvilgelseSkjema,
     useBehandlingInnvilgelseSkjemaDispatch,
@@ -79,8 +79,8 @@ export const BehandlingTiltak = () => {
                                 },
                             },
                             readOnly: !erSaksbehandler,
-                            minDate: innvilgelsesperiode?.fraOgMed,
-                            maxDate: innvilgelsesperiode?.tilOgMed,
+                            minDate: innvilgelsesperiode.fraOgMed,
+                            maxDate: innvilgelsesperiode.tilOgMed,
                         }}
                         contentConfig={{
                             position: 'before',

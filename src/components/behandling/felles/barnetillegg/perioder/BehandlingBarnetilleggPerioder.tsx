@@ -4,7 +4,7 @@ import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { dateTilISOTekst } from '~/utils/date';
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
 import { Rammebehandlingstype } from '~/types/Rammebehandling';
-import MultiperiodeForm from '~/components/multiperiodeForm/MultiperiodeForm';
+import MultiperiodeForm from '~/components/periode/MultiperiodeForm';
 import { periodiserBarnetilleggFraSøknad } from '../utils/periodiserBarnetilleggFraSøknad';
 import { hentBarnetilleggFraVedtakTidslinje } from '../utils/hentBarnetilleggFraVedtakTidslinje';
 import { useSak } from '~/context/sak/SakContext';
@@ -116,8 +116,8 @@ export const BehandlingBarnetilleggPerioder = () => {
                         },
                     },
                     readOnly: !erSaksbehandler,
-                    minDate: innvilgelsesperiode?.fraOgMed,
-                    maxDate: innvilgelsesperiode?.tilOgMed,
+                    minDate: innvilgelsesperiode.fraOgMed,
+                    maxDate: innvilgelsesperiode.tilOgMed,
                 }}
                 contentConfig={{
                     content: (periode, index) => {

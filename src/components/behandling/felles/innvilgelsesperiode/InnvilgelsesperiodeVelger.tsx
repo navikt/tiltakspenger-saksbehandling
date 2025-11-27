@@ -3,18 +3,17 @@ import { useRolleForBehandling } from '~/context/saksbehandler/SaksbehandlerCont
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { Rammebehandling } from '~/types/Rammebehandling';
 import { VStack } from '@navikt/ds-react';
-import PeriodeForm from '~/components/periode/PeriodeForm';
 import {
     useBehandlingInnvilgelseSkjema,
     useBehandlingInnvilgelseSkjemaDispatch,
 } from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
+import { PeriodeVelger } from '~/components/periode/PeriodeVelger';
 
 type Props = {
     behandling: Rammebehandling;
-    label: string;
 };
 
-export const InnvilgelsesperiodeVelger = ({ behandling, label }: Props) => {
+export const InnvilgelsesperiodeVelger = ({ behandling }: Props) => {
     const { innvilgelsesperiode } = useBehandlingInnvilgelseSkjema();
 
     const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
@@ -24,11 +23,11 @@ export const InnvilgelsesperiodeVelger = ({ behandling, label }: Props) => {
 
     return (
         <VStack gap="2">
-            <PeriodeForm
+            <PeriodeVelger
                 fraOgMed={{
-                    label: `${label} fra og med`,
-                    value: innvilgelsesperiode?.fraOgMed ?? null,
-                    onChange: (valgtDato) => {
+                    label: 'Innvilges fra og med',
+                    value: innvilgelsesperiode.fraOgMed,
+                    onDateChange: (valgtDato) => {
                         if (!valgtDato) {
                             return;
                         }
@@ -38,12 +37,11 @@ export const InnvilgelsesperiodeVelger = ({ behandling, label }: Props) => {
                             payload: { periode: { fraOgMed: dateTilISOTekst(valgtDato) } },
                         });
                     },
-                    error: null,
                 }}
                 tilOgMed={{
-                    label: `${label} til og med`,
-                    value: innvilgelsesperiode?.tilOgMed ?? null,
-                    onChange: (valgtDato) => {
+                    label: 'Innvilges til og med',
+                    value: innvilgelsesperiode.tilOgMed,
+                    onDateChange: (valgtDato) => {
                         if (!valgtDato) {
                             return;
                         }
@@ -53,7 +51,6 @@ export const InnvilgelsesperiodeVelger = ({ behandling, label }: Props) => {
                             payload: { periode: { tilOgMed: dateTilISOTekst(valgtDato) } },
                         });
                     },
-                    error: null,
                 }}
                 readOnly={erIkkeSaksbehandler}
             />

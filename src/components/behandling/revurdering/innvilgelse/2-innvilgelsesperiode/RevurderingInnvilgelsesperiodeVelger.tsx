@@ -10,7 +10,7 @@ export const RevurderingInnvilgelsesperiodeVelger = () => {
     return (
         <VedtakSeksjon className={style.velger}>
             <VedtakSeksjon.Venstre>
-                <InnvilgelsesperiodeVelger behandling={behandling} label={'Innvilges'} />
+                <InnvilgelsesperiodeVelger behandling={behandling} />
             </VedtakSeksjon.Venstre>
         </VedtakSeksjon>
     );

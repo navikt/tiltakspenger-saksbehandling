@@ -26,11 +26,7 @@ export const validerInnvilgelse = (
 
     const tiltaksperiode = hentHeleTiltaksdeltagelsesperioden(behandling);
 
-    if (
-        innvilgelsesperiode?.fraOgMed &&
-        innvilgelsesperiode?.tilOgMed &&
-        erFullstendigPeriode(innvilgelsesperiode)
-    ) {
+    if (erFullstendigPeriode(innvilgelsesperiode)) {
         if (innvilgelsesperiode.fraOgMed > innvilgelsesperiode.tilOgMed) {
             validering.errors.push('Til og med-dato må være etter fra og med-dato');
         }

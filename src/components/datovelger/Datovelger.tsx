@@ -3,14 +3,15 @@ import { ComponentProps, useEffect } from 'react';
 
 export type DateOrString = Date | string;
 
-type Props = {
+export type DatovelgerProps = {
     onDateChange: (date: Date | undefined) => void;
     defaultSelected?: DateOrString;
     selected?: DateOrString;
     minDate?: DateOrString;
     maxDate?: DateOrString;
     defaultMonth?: DateOrString;
-} & ComponentProps<typeof DatePicker.Input>;
+    label?: React.ReactNode;
+} & Omit<ComponentProps<typeof DatePicker.Input>, 'label'>;
 
 export const Datovelger = ({
     onDateChange,
@@ -19,8 +20,9 @@ export const Datovelger = ({
     maxDate,
     minDate,
     defaultMonth,
+    label,
     ...inputPropsCustom
-}: Props) => {
+}: DatovelgerProps) => {
     const { datepickerProps, inputProps, setSelected, selectedDay } = useDatepicker({
         onDateChange,
         fromDate: toDate(minDate),
@@ -40,7 +42,7 @@ export const Datovelger = ({
 
     return (
         <DatePicker {...datepickerProps}>
-            <DatePicker.Input {...inputProps} {...inputPropsCustom} />
+            <DatePicker.Input {...inputProps} {...inputPropsCustom} label={label ?? 'Velg dato'} />
         </DatePicker>
     );
 };

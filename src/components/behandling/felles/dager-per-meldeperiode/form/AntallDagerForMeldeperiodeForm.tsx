@@ -2,7 +2,7 @@ import { Select, VStack } from '@navikt/ds-react';
 import { dateTilISOTekst } from '~/utils/date';
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
-import MultiperiodeForm from '~/components/multiperiodeForm/MultiperiodeForm';
+import MultiperiodeForm from '~/components/periode/MultiperiodeForm';
 import {
     useBehandlingInnvilgelseSkjema,
     useBehandlingInnvilgelseSkjemaDispatch,
@@ -57,8 +57,8 @@ export const AntallDagerForMeldeperiodeForm = () => {
                         },
                         error: null,
                     },
-                    minDate: innvilgelsesperiode?.fraOgMed,
-                    maxDate: innvilgelsesperiode?.tilOgMed,
+                    minDate: innvilgelsesperiode.fraOgMed,
+                    maxDate: innvilgelsesperiode.tilOgMed,
                 }}
                 contentConfig={{
                     content: (periode, index) => (
