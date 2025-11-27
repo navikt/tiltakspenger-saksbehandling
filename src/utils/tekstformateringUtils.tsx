@@ -84,6 +84,7 @@ export const finnMeldeperiodeKjedeStatusTekst: Record<MeldeperiodeKjedeStatus, s
     [MeldeperiodeKjedeStatus.AUTOMATISK_BEHANDLET]: 'Automatisk behandlet',
     [MeldeperiodeKjedeStatus.AVBRUTT]: 'Avsluttet',
     [MeldeperiodeKjedeStatus.KORRIGERT_MELDEKORT]: 'Korrigert meldekort',
+    [MeldeperiodeKjedeStatus.VENTER_AUTOMATISK_BEHANDLING]: 'Venter på automatisk behandling',
 } as const;
 
 export const meldeperiodeKjedeStatusTag: Record<MeldeperiodeKjedeStatus, React.ReactElement> = {
@@ -140,6 +141,11 @@ export const meldeperiodeKjedeStatusTag: Record<MeldeperiodeKjedeStatus, React.R
     [MeldeperiodeKjedeStatus.KORRIGERT_MELDEKORT]: (
         <Tag variant="info">
             {finnMeldeperiodeKjedeStatusTekst[MeldeperiodeKjedeStatus.KORRIGERT_MELDEKORT]}
+        </Tag>
+    ),
+    [MeldeperiodeKjedeStatus.VENTER_AUTOMATISK_BEHANDLING]: (
+        <Tag variant="neutral">
+            {finnMeldeperiodeKjedeStatusTekst[MeldeperiodeKjedeStatus.VENTER_AUTOMATISK_BEHANDLING]}
         </Tag>
     ),
 } as const;

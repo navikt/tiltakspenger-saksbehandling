@@ -131,6 +131,7 @@ const meldekortStatusTagVariant: Record<
     MeldeperiodeKjedeStatus,
     ComponentProps<typeof Tag>['variant']
 > = {
+    VENTER_AUTOMATISK_BEHANDLING: 'neutral-moderate',
     AUTOMATISK_BEHANDLET: 'success-moderate',
     GODKJENT: 'success-moderate',
     IKKE_KLAR_TIL_BEHANDLING: 'warning-moderate',
@@ -145,6 +146,7 @@ const meldekortStatusTagVariant: Record<
 };
 
 const meldekortStatusIkon: Record<MeldeperiodeKjedeStatus, React.ReactNode> = {
+    [MeldeperiodeKjedeStatus.VENTER_AUTOMATISK_BEHANDLING]: <HourglassTopFilledIcon />,
     [MeldeperiodeKjedeStatus.IKKE_RETT_TIL_TILTAKSPENGER]: <CircleSlashIcon />,
     [MeldeperiodeKjedeStatus.IKKE_KLAR_TIL_BEHANDLING]: <CircleSlashIcon />,
     [MeldeperiodeKjedeStatus.KLAR_TIL_BEHANDLING]: <NotePencilDashIcon />,
