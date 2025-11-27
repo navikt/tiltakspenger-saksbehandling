@@ -25,6 +25,7 @@ export type Rammevedtak = {
     antallDagerPerMeldeperiode: number;
     // Inkluderer perioder med 0 barn
     barnetillegg: Nullable<Barnetillegg>;
+    erGjeldende: boolean;
 };
 
 export type RammevedtakMedBehandling = Rammevedtak & { behandling: Rammebehandling };
