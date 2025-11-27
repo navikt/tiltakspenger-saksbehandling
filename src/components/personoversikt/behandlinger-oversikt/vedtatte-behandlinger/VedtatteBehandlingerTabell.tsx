@@ -1,4 +1,4 @@
-import { ActionMenu, Button, Table } from '@navikt/ds-react';
+import { ActionMenu, Button, HStack, Table } from '@navikt/ds-react';
 import { behandlingResultatTilTag, finnBehandlingstypeTekst } from '~/utils/tekstformateringUtils';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '~/utils/date';
 import { ChevronDownIcon } from '@navikt/aksel-icons';
@@ -24,7 +24,12 @@ export const VedtatteBehandlingerTabell = ({ sakId, rammevedtakMedBehandlinger }
                     <Table.HeaderCell scope="col">Behandlingstype</Table.HeaderCell>
                     <Table.HeaderCell scope="col">Resultat</Table.HeaderCell>
                     <Table.HeaderCell scope="col">Tidspunkt iverksatt</Table.HeaderCell>
-                    <Table.HeaderCell scope="col">Behandlingsperiode</Table.HeaderCell>
+                    <Table.HeaderCell scope="col">
+                        Opprinnelig innvilgelsesperiode(r)
+                    </Table.HeaderCell>
+                    <Table.HeaderCell scope="col">
+                        Gjeldende innvilgelsesperiode(r)
+                    </Table.HeaderCell>
                     <Table.HeaderCell scope="col">Saksbehandler</Table.HeaderCell>
                     <Table.HeaderCell scope="col">Beslutter</Table.HeaderCell>
                     <Table.HeaderCell scope="col"></Table.HeaderCell>
@@ -32,7 +37,13 @@ export const VedtatteBehandlingerTabell = ({ sakId, rammevedtakMedBehandlinger }
             </Table.Header>
             <Table.Body>
                 {rammevedtakMedBehandlinger.map((vedtak) => {
-                    const { id, behandling, periode, opprettet } = vedtak;
+                    const {
+                        id,
+                        behandling,
+                        opprinneligInnvilgetPerioder,
+                        gjeldendeInnvilgetPerioder,
+                        opprettet,
+                    } = vedtak;
                     const { type, resultat } = behandling;
 
                     return (
@@ -40,7 +51,24 @@ export const VedtatteBehandlingerTabell = ({ sakId, rammevedtakMedBehandlinger }
                             <Table.DataCell>{finnBehandlingstypeTekst[type]}</Table.DataCell>
                             <Table.DataCell>{behandlingResultatTilTag[resultat]}</Table.DataCell>
                             <Table.DataCell>{formaterTidspunkt(opprettet)}</Table.DataCell>
-                            <Table.DataCell>{periodeTilFormatertDatotekst(periode)}</Table.DataCell>
+                            <Table.DataCell>
+                                <HStack gap="2">
+                                    {opprinneligInnvilgetPerioder.map((periode, index) => (
+                                        <span key={index}>
+                                            {periodeTilFormatertDatotekst(periode)}
+                                        </span>
+                                    ))}
+                                </HStack>
+                            </Table.DataCell>
+                            <Table.DataCell>
+                                <HStack gap="2">
+                                    {gjeldendeInnvilgetPerioder.map((periode, index) => (
+                                        <span key={index}>
+                                            {periodeTilFormatertDatotekst(periode)}
+                                        </span>
+                                    ))}
+                                </HStack>
+                            </Table.DataCell>
                             <Table.DataCell>{vedtak.saksbehandler}</Table.DataCell>
                             <Table.DataCell>{vedtak.beslutter}</Table.DataCell>
                             <Table.DataCell align={'right'}>
