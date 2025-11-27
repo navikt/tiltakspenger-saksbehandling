@@ -1,6 +1,7 @@
 import {
     erRammebehandlingInnvilgelseResultat,
     erSøknadsbehandlingResultat,
+    hentTiltaksdeltakelserMedStartOgSluttdato,
 } from '~/utils/behandling';
 import {
     BehandlingInnvilgelseSteg2State,
@@ -12,7 +13,7 @@ import { BehandlingSkjemaState } from '~/components/behandling/context/behandlin
 import { inneholderHelePerioden, perioderOverlapper } from '~/utils/periode';
 import { datoMax, datoMin, forrigeDag, nesteDag } from '~/utils/date';
 import { MedPeriode, Periode } from '~/types/Periode';
-import { Rammebehandling, Saksopplysninger } from '~/types/Rammebehandling';
+import { Rammebehandling } from '~/types/Rammebehandling';
 import { ANTALL_DAGER_DEFAULT } from '~/components/behandling/felles/dager-per-meldeperiode/BehandlingDagerPerMeldeperiode';
 import { hentLagredePerioderMedBarn } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
 import { TiltaksdeltakelsePeriode } from '~/types/TiltakDeltagelseTypes';
@@ -96,7 +97,7 @@ export const innvilgelseDefaultState = (
         harBarnetillegg: barnetilleggPerioder.length > 0,
         barnetilleggPerioder,
         valgteTiltaksdeltakelser: tiltaksdeltagelserFraSaksopplysninger(
-            behandling.saksopplysninger,
+            behandling,
             innvilgelsesperiode,
         ),
         antallDagerPerMeldeperiode: [
@@ -109,25 +110,39 @@ export const innvilgelseDefaultState = (
 };
 
 const tiltaksdeltagelserFraSaksopplysninger = (
-    saksopplysninger: Saksopplysninger,
+    behandling: Rammebehandling,
     innvilgelsesperiode: Periode,
 ): TiltaksdeltakelsePeriode[] => {
-    return saksopplysninger.tiltaksdeltagelse.reduce<TiltaksdeltakelsePeriode[]>((acc, td) => {
-        const { deltagelseFraOgMed, deltagelseTilOgMed, eksternDeltagelseId } = td;
+    return hentTiltaksdeltakelserMedStartOgSluttdato(behandling).reduce<TiltaksdeltakelsePeriode[]>(
+        (acc, td) => {
+            const { deltagelseFraOgMed, deltagelseTilOgMed, eksternDeltagelseId } = td;
 
-        if (!deltagelseFraOgMed || !deltagelseTilOgMed) {
-            return acc;
-        }
+            const deltagelsesPeriode: Periode = {
+                fraOgMed: deltagelseFraOgMed,
+                tilOgMed: deltagelseTilOgMed,
+            };
 
-        const deltagelsesPeriode: Periode = {
-            fraOgMed: deltagelseFraOgMed,
-            tilOgMed: deltagelseTilOgMed,
-        };
+            if (!perioderOverlapper(innvilgelsesperiode, deltagelsesPeriode)) {
+                return acc;
+            }
 
-        if (!perioderOverlapper(innvilgelsesperiode, deltagelsesPeriode)) {
-            return acc;
-        }
-
-        return [...acc, { eksternDeltagelseId, periode: deltagelsesPeriode }];
-    }, []);
+            return [
+                ...acc,
+                {
+                    eksternDeltagelseId,
+                    periode: {
+                        fraOgMed: datoMax(
+                            deltagelsesPeriode.fraOgMed,
+                            innvilgelsesperiode.fraOgMed,
+                        ),
+                        tilOgMed: datoMin(
+                            deltagelsesPeriode.tilOgMed,
+                            innvilgelsesperiode.tilOgMed,
+                        ),
+                    },
+                },
+            ];
+        },
+        [],
+    );
 };

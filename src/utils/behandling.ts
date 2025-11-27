@@ -1,5 +1,4 @@
 import { Periode } from '~/types/Periode';
-import { singleOrFirst } from './array';
 import { Tiltaksdeltagelse, TiltaksdeltagelseMedPeriode } from '~/types/TiltakDeltagelseTypes';
 import { erDatoIPeriode, joinPerioder } from './periode';
 import { Nullable } from '~/types/UtilTypes';
@@ -28,17 +27,6 @@ export const hentTiltaksperiode = (behandling: Søknadsbehandling): Nullable<Per
         };
     }
     return null;
-};
-
-export const hentTiltaksperiodeFraSøknad = (behandling: Søknadsbehandling): Nullable<Periode> => {
-    const tiltakFraSøknad = singleOrFirst(behandling.søknad.tiltak);
-
-    return tiltakFraSøknad?.fraOgMed && tiltakFraSøknad?.tilOgMed
-        ? {
-              fraOgMed: tiltakFraSøknad.fraOgMed,
-              tilOgMed: tiltakFraSøknad.tilOgMed,
-          }
-        : null;
 };
 
 export const deltarPaFlereTiltakMedStartOgSluttdatoIValgtInnvilgelsesperiode = (
@@ -72,23 +60,6 @@ export const deltarPaFlereTiltakMedStartOgSluttdatoIValgtInnvilgelsesperiode = (
 
 export const deltarPaFlereTiltakMedStartOgSluttdato = (behandling: Rammebehandling) =>
     hentTiltaksdeltakelserMedStartOgSluttdato(behandling).length > 1;
-
-export const hentTiltaksdeltagelseFraSøknad = (
-    behandling: Søknadsbehandling,
-): Nullable<TiltaksdeltagelseMedPeriode> => {
-    const tiltakFraSoknad = behandling.søknad.tiltak;
-    const tiltakFraSaksopplysninger = hentTiltaksdeltakelserMedStartOgSluttdato(behandling);
-
-    const tiltaksdeltagelser = tiltakFraSaksopplysninger.filter(
-        (t) => t.eksternDeltagelseId === tiltakFraSoknad?.id,
-    );
-    return (
-        singleOrFirst(tiltaksdeltagelser) ??
-        (behandling.saksopplysninger.tiltaksdeltagelse
-            ? singleOrFirst(behandling.saksopplysninger.tiltaksdeltagelse)
-            : null)
-    );
-};
 
 export const hentTiltaksdeltakelser = (behandling: Rammebehandling): Tiltaksdeltagelse[] =>
     behandling.saksopplysninger.tiltaksdeltagelse ?? [];

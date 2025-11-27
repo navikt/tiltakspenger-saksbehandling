@@ -8,6 +8,7 @@ import {
     useBehandlingInnvilgelseSkjema,
 } from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
 import { PeriodeVelger } from '~/components/periode/PeriodeVelger';
+import { hentHeleTiltaksdeltagelsesperioden } from '~/utils/behandling';
 
 type Props = {
     behandling: Rammebehandling;
@@ -21,12 +22,16 @@ export const InnvilgelsesperiodeVelger = ({ behandling }: Props) => {
     const erIkkeSaksbehandler =
         useRolleForBehandling(behandling) !== SaksbehandlerRolle.SAKSBEHANDLER;
 
+    const tiltaksdeltagelsesperiode = hentHeleTiltaksdeltagelsesperioden(behandling);
+
     return (
         <VStack gap="2">
             <PeriodeVelger
                 fraOgMed={{
                     label: 'Innvilges fra og med',
                     value: innvilgelsesperiode.fraOgMed,
+                    minDate: tiltaksdeltagelsesperiode.fraOgMed,
+                    maxDate: innvilgelsesperiode.tilOgMed ?? tiltaksdeltagelsesperiode.tilOgMed,
                     onDateChange: (valgtDato) => {
                         if (!valgtDato) {
                             return;
@@ -44,6 +49,8 @@ export const InnvilgelsesperiodeVelger = ({ behandling }: Props) => {
                 tilOgMed={{
                     label: 'Innvilges til og med',
                     value: innvilgelsesperiode.tilOgMed,
+                    minDate: innvilgelsesperiode.fraOgMed ?? tiltaksdeltagelsesperiode.fraOgMed,
+                    maxDate: tiltaksdeltagelsesperiode.tilOgMed,
                     onDateChange: (valgtDato) => {
                         if (!valgtDato) {
                             return;
