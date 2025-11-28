@@ -47,7 +47,7 @@ const innvilgelseInitialState = (
     }
 
     const barnetilleggPerioder = hentLagredePerioderMedBarn(behandling) ?? [];
-    const harBarnetillegg = barnetilleggPerioder ? barnetilleggPerioder.length > 0 : false;
+    const harBarnetillegg = barnetilleggPerioder.length > 0;
 
     return {
         resultat: SøknadsbehandlingResultat.INNVILGELSE,

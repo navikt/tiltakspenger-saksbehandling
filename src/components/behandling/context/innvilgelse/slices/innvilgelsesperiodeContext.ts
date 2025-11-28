@@ -1,20 +1,36 @@
 import { MedPeriode, Periode } from '~/types/Periode';
-import { perioderOverlapper } from '~/utils/periode';
+import { erFullstendigPeriode, perioderOverlapper } from '~/utils/periode';
 import { datoMax, datoMin } from '~/utils/date';
-import { InnvilgelseMedPerioderState } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
+import { InnvilgelseState } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 import { Reducer } from 'react';
 import { Rammebehandling } from '~/types/Rammebehandling';
+import { SakProps } from '~/types/Sak';
+import { hentForhåndsutfyltInnvilgelse } from '~/components/behandling/context/behandlingSkjemaUtils';
 
 export type InnvilgelsesperiodeAction = {
     type: 'oppdaterInnvilgelsesperiode';
-    payload: { periode: Partial<Periode>; behandling: Rammebehandling };
+    payload: { periode: Partial<Periode>; behandling: Rammebehandling; sak: SakProps };
 };
 
-export const innvilgelsesperiodeReducer = (<State extends InnvilgelseMedPerioderState>(
+export const innvilgelsesperiodeReducer = (<State extends InnvilgelseState>(
     state: State,
     action: InnvilgelsesperiodeAction,
 ) => {
-    const { periode } = action.payload;
+    const { harValgtPeriode } = state;
+    const { periode, behandling, sak } = action.payload;
+
+    if (!harValgtPeriode) {
+        const nyInnvilgelsesperiode = { ...state.innvilgelsesperiode, ...periode };
+
+        if (erFullstendigPeriode(nyInnvilgelsesperiode)) {
+            return hentForhåndsutfyltInnvilgelse(behandling, nyInnvilgelsesperiode, sak);
+        }
+
+        return {
+            ...state,
+            innvilgelsesperiode: nyInnvilgelsesperiode,
+        };
+    }
 
     const nyInnvilgelsesperiode = { ...state.innvilgelsesperiode, ...periode };
 
@@ -40,7 +56,7 @@ export const innvilgelsesperiodeReducer = (<State extends InnvilgelseMedPerioder
             false,
         ),
     };
-}) satisfies Reducer<InnvilgelseMedPerioderState, InnvilgelsesperiodeAction>;
+}) satisfies Reducer<InnvilgelseState, InnvilgelsesperiodeAction>;
 
 // Denne må kanskje tweakes litt hvis vi får periodiserte innvilgelser i en behandling
 const oppdaterPeriodisering = <T extends MedPeriode>(

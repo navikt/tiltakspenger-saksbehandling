@@ -15,8 +15,9 @@ import { datoMax, datoMin, forrigeDag, nesteDag } from '~/utils/date';
 import { MedPeriode, Periode } from '~/types/Periode';
 import { Rammebehandling } from '~/types/Rammebehandling';
 import { ANTALL_DAGER_DEFAULT } from '~/components/behandling/felles/dager-per-meldeperiode/BehandlingDagerPerMeldeperiode';
-import { hentLagredePerioderMedBarn } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
+import { hentBarnetilleggForBehandling } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
 import { TiltaksdeltakelsePeriode } from '~/types/TiltakDeltagelseTypes';
+import { SakProps } from '~/types/Sak';
 
 export const erRammebehandlingInnvilgelseContext = (
     context: BehandlingSkjemaState,
@@ -85,11 +86,17 @@ export const oppdaterPeriodiseringUtenOverlapp = <T extends MedPeriode>(
         });
 };
 
-export const innvilgelseDefaultState = (
+// Forhåndsutfyller andre perioder for en innvilgelse ut fra valgt innvilgelsesperiode
+export const hentForhåndsutfyltInnvilgelse = (
     behandling: Rammebehandling,
     innvilgelsesperiode: Periode,
+    sak: SakProps,
 ): InnvilgelseMedPerioderState => {
-    const barnetilleggPerioder = hentLagredePerioderMedBarn(behandling) ?? [];
+    const barnetilleggPerioder = hentBarnetilleggForBehandling(
+        behandling,
+        innvilgelsesperiode,
+        sak,
+    );
 
     return {
         harValgtPeriode: true,

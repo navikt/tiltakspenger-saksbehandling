@@ -1,10 +1,10 @@
 import { ValideringResultat } from '~/types/Validering';
 import { joinPerioder, validerPeriodisering } from '~/utils/periode';
 import { Periode } from '~/types/Periode';
-import { BarnetilleggPeriodeFormData } from '../barnetillegg/utils/hentBarnetilleggFraBehandling';
+import { BarnetilleggPeriode } from '~/types/Barnetillegg';
 
 export const validerBarnetillegg = (
-    barnetilleggPerioder: BarnetilleggPeriodeFormData[],
+    barnetilleggPerioder: BarnetilleggPeriode[],
     innvilgelsesperiode: Periode,
 ): ValideringResultat => {
     const validering: ValideringResultat = {

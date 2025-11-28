@@ -28,12 +28,10 @@ import {
     BehandlingSkjemaType,
     erRammebehandlingInnvilgelseContext,
     erRammebehandlingInnvilgelseMedPerioderContext,
-    innvilgelseDefaultState,
 } from '~/components/behandling/context/behandlingSkjemaUtils';
 import { TiltaksdeltakelsePeriode } from '~/types/TiltakDeltagelseTypes';
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';
 import { AntallDagerPerMeldeperiode } from '~/types/AntallDagerPerMeldeperiode';
-import { erFullstendigPeriode } from '~/utils/periode';
 
 export type InnvilgelseUtenPerioderState = {
     harValgtPeriode: false;
@@ -74,32 +72,15 @@ export const innvilgelseReducer: Reducer<InnvilgelseState, InnvilgelseActions> =
     const { type } = action;
     const { harValgtPeriode } = state;
 
+    if (type === 'oppdaterInnvilgelsesperiode') {
+        return innvilgelsesperiodeReducer(state, action);
+    }
+
     if (!harValgtPeriode) {
-        if (type !== 'oppdaterInnvilgelsesperiode') {
-            throw Error(
-                'Kan ikke endre andre deler av behandlingen før innvilgelsesperioden er valgt',
-            );
-        }
-
-        const { periode, behandling } = action.payload;
-
-        const innvilgelsesperiode = { ...state.innvilgelsesperiode, ...periode };
-
-        if (erFullstendigPeriode(innvilgelsesperiode)) {
-            return innvilgelseDefaultState(behandling, innvilgelsesperiode);
-        }
-
-        return {
-            ...state,
-            innvilgelsesperiode,
-        };
+        throw Error('Kan ikke endre andre deler av innvilgelsen før innvilgelsesperioden er valgt');
     }
 
     switch (type) {
-        case 'oppdaterInnvilgelsesperiode': {
-            return innvilgelsesperiodeReducer(state, action);
-        }
-
         case 'leggTilAntallDagerPeriode':
         case 'fjernAntallDagerPeriode':
         case 'oppdaterAntallDagerFraOgMed':

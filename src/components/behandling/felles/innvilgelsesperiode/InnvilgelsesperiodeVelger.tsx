@@ -9,12 +9,14 @@ import {
 } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 import { PeriodeVelger } from '~/components/periode/PeriodeVelger';
 import { hentHeleTiltaksdeltagelsesperioden } from '~/utils/behandling';
+import { useSak } from '~/context/sak/SakContext';
 
 type Props = {
     behandling: Rammebehandling;
 };
 
 export const InnvilgelsesperiodeVelger = ({ behandling }: Props) => {
+    const { sak } = useSak();
     const { innvilgelsesperiode } = useBehandlingInnvilgelseSkjema().innvilgelse;
 
     const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
@@ -42,6 +44,7 @@ export const InnvilgelsesperiodeVelger = ({ behandling }: Props) => {
                             payload: {
                                 periode: { fraOgMed: dateTilISOTekst(valgtDato) },
                                 behandling,
+                                sak,
                             },
                         });
                     },
@@ -61,6 +64,7 @@ export const InnvilgelsesperiodeVelger = ({ behandling }: Props) => {
                             payload: {
                                 periode: { tilOgMed: dateTilISOTekst(valgtDato) },
                                 behandling,
+                                sak,
                             },
                         });
                     },

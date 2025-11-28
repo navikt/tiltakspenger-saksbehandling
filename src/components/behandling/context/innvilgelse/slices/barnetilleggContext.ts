@@ -1,6 +1,5 @@
 import { nesteDag } from '~/utils/date';
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';
-import { BarnetilleggPeriodeFormData } from '../../../felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
 import { InnvilgelseMedPerioderState } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 import { Reducer } from 'react';
 import { oppdaterPeriodiseringUtenOverlapp } from '~/components/behandling/context/behandlingSkjemaUtils';
@@ -32,7 +31,7 @@ export type BarnetilleggActions =
       }
     | {
           type: 'nullstillBarnetilleggPerioder';
-          payload: { barnetilleggPerioder: BarnetilleggPeriodeFormData[] };
+          payload: { barnetilleggPerioder: BarnetilleggPeriode[] };
       };
 
 export const barnetilleggReducer = (<State extends InnvilgelseMedPerioderState>(
