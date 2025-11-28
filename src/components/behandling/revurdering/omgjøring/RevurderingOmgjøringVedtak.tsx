@@ -99,7 +99,7 @@ export const RevurderingOmgjøringVedtak = () => {
                 />
             )}
             <Separator />
-            <InnvilgelsesperiodeVelger behandling={behandling} />
+            <InnvilgelsesperiodeVelger />
             <Separator />
             <BehandlingDagerPerMeldeperiode />
             <Separator />

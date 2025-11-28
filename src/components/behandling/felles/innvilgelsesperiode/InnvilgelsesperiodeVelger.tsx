@@ -1,7 +1,6 @@
 import { dateTilISOTekst } from '~/utils/date';
 import { useRolleForBehandling } from '~/context/saksbehandler/SaksbehandlerContext';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
-import { Rammebehandling } from '~/types/Rammebehandling';
 import {
     useBehandlingInnvilgelseSkjemaDispatch,
     useBehandlingInnvilgelseSkjema,
@@ -11,13 +10,12 @@ import { hentHeleTiltaksdeltagelsesperioden } from '~/utils/behandling';
 import { useSak } from '~/context/sak/SakContext';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { Heading } from '@navikt/ds-react';
+import { useBehandling } from '~/components/behandling/context/BehandlingContext';
 
-type Props = {
-    behandling: Rammebehandling;
-};
-
-export const InnvilgelsesperiodeVelger = ({ behandling }: Props) => {
+export const InnvilgelsesperiodeVelger = () => {
     const { sak } = useSak();
+    const { behandling } = useBehandling();
+
     const { innvilgelsesperiode } = useBehandlingInnvilgelseSkjema().innvilgelse;
 
     const dispatch = useBehandlingInnvilgelseSkjemaDispatch();

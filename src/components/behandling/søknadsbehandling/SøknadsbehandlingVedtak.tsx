@@ -14,7 +14,6 @@ import { BehandlingTiltak } from '~/components/behandling/felles/tiltak/Behandli
 import { BehandlingBarnetillegg } from '~/components/behandling/felles/barnetillegg/BehandlingBarnetillegg';
 import { useBehandlingInnvilgelseSkjema } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 import { InnvilgelsesperiodeVelger } from '~/components/behandling/felles/innvilgelsesperiode/InnvilgelsesperiodeVelger';
-import { useBehandling } from '~/components/behandling/context/BehandlingContext';
 
 import style from './SøknadsbehandlingVedtak.module.css';
 
@@ -39,11 +38,10 @@ export const SøknadsbehandlingVedtak = () => {
 
 const Innvilgelse = () => {
     const { harValgtPeriode } = useBehandlingInnvilgelseSkjema().innvilgelse;
-    const { behandling } = useBehandling();
 
     return (
         <>
-            <InnvilgelsesperiodeVelger behandling={behandling} />
+            <InnvilgelsesperiodeVelger />
             <Separator />
             {harValgtPeriode && (
                 <>
