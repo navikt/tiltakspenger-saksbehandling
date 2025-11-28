@@ -25,11 +25,9 @@ export const VedtatteBehandlingerTabell = ({ sakId, rammevedtakMedBehandlinger }
                     <Table.HeaderCell scope="col">Resultat</Table.HeaderCell>
                     <Table.HeaderCell scope="col">Tidspunkt iverksatt</Table.HeaderCell>
                     <Table.HeaderCell scope="col">
-                        Opprinnelig innvilgelsesperiode(r)
+                        Opprinnelige innvilgelsesperioder
                     </Table.HeaderCell>
-                    <Table.HeaderCell scope="col">
-                        Gjeldende innvilgelsesperiode(r)
-                    </Table.HeaderCell>
+                    <Table.HeaderCell scope="col">Gjeldende innvilgelsesperioder</Table.HeaderCell>
                     <Table.HeaderCell scope="col">Saksbehandler</Table.HeaderCell>
                     <Table.HeaderCell scope="col">Beslutter</Table.HeaderCell>
                     <Table.HeaderCell scope="col"></Table.HeaderCell>

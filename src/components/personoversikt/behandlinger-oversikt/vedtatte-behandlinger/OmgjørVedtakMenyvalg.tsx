@@ -1,5 +1,5 @@
 import { RevurderingResultat } from '~/types/Revurdering';
-import { ArrowsCirclepathIcon } from '@navikt/aksel-icons';
+import { ArrowsCirclepathIcon, CircleSlashIcon } from '@navikt/aksel-icons';
 import { ActionMenu, Alert, Loader } from '@navikt/ds-react';
 import { RammevedtakMedBehandling } from '~/types/Rammevedtak';
 import { useOpprettRevurdering } from '~/components/personoversikt/opprett-revurdering/useOpprettRevurdering';
@@ -16,6 +16,8 @@ type Props = {
 export const OmgjørVedtakMenyvalg = ({ sakId, vedtak }: Props) => {
     const { opprettRevurdering, opprettRevurderingLaster, opprettRevurderingError } =
         useOpprettRevurdering(sakId);
+
+    const kanOmgjøre = !!vedtak.gyldigeKommandoer.OMGJØR;
 
     return (
         <>
@@ -36,13 +38,15 @@ export const OmgjørVedtakMenyvalg = ({ sakId, vedtak }: Props) => {
                 icon={
                     opprettRevurderingLaster ? (
                         <Loader size="xsmall" />
-                    ) : (
+                    ) : kanOmgjøre ? (
                         <ArrowsCirclepathIcon aria-hidden />
+                    ) : (
+                        <CircleSlashIcon aria-hidden />
                     )
                 }
-                disabled={opprettRevurderingLaster}
+                disabled={opprettRevurderingLaster || !kanOmgjøre}
             >
-                {'Omgjør'}
+                {kanOmgjøre ? 'Omgjør' : 'Kan ikke omgjøres'}
             </ActionMenu.Item>
             {opprettRevurderingError && (
                 <Alert variant={'error'} size={'small'}>

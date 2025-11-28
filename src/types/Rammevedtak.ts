@@ -26,6 +26,40 @@ export type Rammevedtak = {
     // Inkluderer perioder med 0 barn
     barnetillegg: Nullable<Barnetillegg>;
     erGjeldende: boolean;
+    gyldigeKommandoer: GyldigeKommandoerMap;
+};
+
+type GyldigeKommandoerMap = {
+    [Type in RammevedtakKommandoType]?: Extract<RammevedtakKommando, { type: Type }>;
 };
 
 export type RammevedtakMedBehandling = Rammevedtak & { behandling: Rammebehandling };
+
+export enum RammevedtakKommandoType {
+    OMGJØR = 'OMGJØR',
+    OPPHØR = 'OPPHØR',
+    STANS = 'STANS',
+}
+
+export type RammevedtakKommandoOmgjør = {
+    type: RammevedtakKommandoType.OMGJØR;
+    tvungenOmgjøringsperiode: Periode;
+};
+
+// Til fremtidig bruk
+export type RammevedtakKommandoOpphør = {
+    type: RammevedtakKommandoType.OPPHØR;
+    innvilgelsesperioder: Periode[];
+};
+
+// Til fremtidig bruk
+export type RammevedtakKommandoStans = {
+    type: RammevedtakKommandoType.STANS;
+    tidligsteFraOgMedDato: string;
+    tvungenStansTilOgMedDato: string;
+};
+
+export type RammevedtakKommando =
+    | RammevedtakKommandoOmgjør
+    | RammevedtakKommandoOpphør
+    | RammevedtakKommandoStans;
