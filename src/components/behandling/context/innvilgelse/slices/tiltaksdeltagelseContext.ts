@@ -26,10 +26,10 @@ export type TiltaksdeltagelseActions =
           payload: { tilOgMed: string; index: number };
       };
 
-export const tiltaksdeltagelseReducer = (<State extends InnvilgelseMedPerioderState>(
-    state: State,
-    action: TiltaksdeltagelseActions,
-): State => {
+export const tiltaksdeltagelseReducer: Reducer<
+    InnvilgelseMedPerioderState,
+    TiltaksdeltagelseActions
+> = (state, action) => {
     const { type, payload } = action;
 
     switch (type) {
@@ -136,4 +136,4 @@ export const tiltaksdeltagelseReducer = (<State extends InnvilgelseMedPerioderSt
             };
         }
     }
-}) satisfies Reducer<InnvilgelseMedPerioderState, TiltaksdeltagelseActions>;
+};

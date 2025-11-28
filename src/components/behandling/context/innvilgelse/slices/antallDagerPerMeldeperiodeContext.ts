@@ -26,10 +26,10 @@ export type AntallDagerPerMeldeperiodeActions =
           payload: { antallDager: number; index: number };
       };
 
-export const antallDagerPerMeldeperiodeReducer = (<State extends InnvilgelseMedPerioderState>(
-    state: State,
-    action: AntallDagerPerMeldeperiodeActions,
-): State => {
+export const antallDagerPerMeldeperiodeReducer: Reducer<
+    InnvilgelseMedPerioderState,
+    AntallDagerPerMeldeperiodeActions
+> = (state, action) => {
     const { type, payload } = action;
 
     switch (type) {
@@ -152,4 +152,4 @@ export const antallDagerPerMeldeperiodeReducer = (<State extends InnvilgelseMedP
             };
         }
     }
-}) satisfies Reducer<InnvilgelseMedPerioderState, AntallDagerPerMeldeperiodeActions>;
+};

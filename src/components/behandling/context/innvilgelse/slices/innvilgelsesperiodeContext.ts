@@ -12,9 +12,9 @@ export type InnvilgelsesperiodeAction = {
     payload: { periode: Partial<Periode>; behandling: Rammebehandling; sak: SakProps };
 };
 
-export const innvilgelsesperiodeReducer = (<State extends InnvilgelseState>(
-    state: State,
-    action: InnvilgelsesperiodeAction,
+export const innvilgelsesperiodeReducer: Reducer<InnvilgelseState, InnvilgelsesperiodeAction> = (
+    state,
+    action,
 ) => {
     const { harValgtPeriode } = state;
     const { periode, behandling, sak } = action.payload;
@@ -56,7 +56,7 @@ export const innvilgelsesperiodeReducer = (<State extends InnvilgelseState>(
             false,
         ),
     };
-}) satisfies Reducer<InnvilgelseState, InnvilgelsesperiodeAction>;
+};
 
 // Denne må kanskje tweakes litt hvis vi får periodiserte innvilgelser i en behandling
 const oppdaterPeriodisering = <T extends MedPeriode>(

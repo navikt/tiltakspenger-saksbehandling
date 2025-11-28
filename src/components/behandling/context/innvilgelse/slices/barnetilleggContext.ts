@@ -34,10 +34,10 @@ export type BarnetilleggActions =
           payload: { barnetilleggPerioder: BarnetilleggPeriode[] };
       };
 
-export const barnetilleggReducer = (<State extends InnvilgelseMedPerioderState>(
-    state: State,
-    action: BarnetilleggActions,
-): State => {
+export const barnetilleggReducer: Reducer<InnvilgelseMedPerioderState, BarnetilleggActions> = (
+    state,
+    action,
+) => {
     const { type, payload } = action;
 
     switch (type) {
@@ -166,4 +166,4 @@ export const barnetilleggReducer = (<State extends InnvilgelseMedPerioderState>(
             };
         }
     }
-}) satisfies Reducer<InnvilgelseMedPerioderState, BarnetilleggActions>;
+};
