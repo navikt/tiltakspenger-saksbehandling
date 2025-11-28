@@ -2,7 +2,7 @@ import { useRevurderingBehandling } from '../../../context/BehandlingContext';
 import { Vedtaksbrev } from '~/components/behandling/felles/vedtaksbrev/Vedtaksbrev';
 import { revurderingStansValidering } from '~/components/behandling/revurdering/stans/revurderingStansValidering';
 import { RevurderingStansBrevForhåndsvisningDTO } from '~/components/behandling/felles/vedtaksbrev/forhåndsvisning/useHentVedtaksbrevForhåndsvisning';
-import { HjelpetekstRevurdering } from '~/components/behandling/revurdering/innvilgelse/6-brev/RevurderingInnvilgelseBrev';
+import { HjelpetekstRevurdering } from '~/components/behandling/revurdering/innvilgelse/brev/RevurderingInnvilgelseBrev';
 import { RevurderingResultat } from '~/types/Revurdering';
 import { useRevurderingStansSkjema } from '~/components/behandling/context/revurdering/revurderingStansSkjemaContext';
 

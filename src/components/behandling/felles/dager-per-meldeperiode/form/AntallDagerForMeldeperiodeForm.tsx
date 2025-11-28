@@ -4,12 +4,13 @@ import { useBehandling } from '~/components/behandling/context/BehandlingContext
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import MultiperiodeForm from '~/components/periode/MultiperiodeForm';
 import {
-    useBehandlingInnvilgelseSkjema,
+    useBehandlingInnvilgelseMedPerioderSkjema,
     useBehandlingInnvilgelseSkjemaDispatch,
-} from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
+} from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 
 export const AntallDagerForMeldeperiodeForm = () => {
-    const { innvilgelsesperiode, antallDagerPerMeldeperiode } = useBehandlingInnvilgelseSkjema();
+    const { innvilgelsesperiode, antallDagerPerMeldeperiode } =
+        useBehandlingInnvilgelseMedPerioderSkjema().innvilgelse;
     const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
 
     const { rolleForBehandling } = useBehandling();

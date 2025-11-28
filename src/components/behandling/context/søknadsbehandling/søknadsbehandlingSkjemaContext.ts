@@ -4,10 +4,10 @@ import {
     SøknadsbehandlingResultat,
 } from '~/types/Søknadsbehandling';
 import {
-    BehandlingInnvilgelseActions,
-    behandlingInnvilgelseReducer,
-    BehandlingInnvilgelseState,
-} from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
+    InnvilgelseActions,
+    innvilgelseReducer,
+    InnvilgelseState,
+} from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 import { Reducer } from 'react';
 import { ReducerSuperAction } from '~/types/Context';
 import { søknadsbehandlingInitialState } from '~/components/behandling/context/søknadsbehandling/søknadsbehandlingInitialState';
@@ -31,8 +31,9 @@ export type SøknadsbehandlingAvslagState = {
     avslagsgrunner: Avslagsgrunn[];
 };
 
-export type SøknadsbehandlingInnvilgelseState = BehandlingInnvilgelseState & {
+export type SøknadsbehandlingInnvilgelseState = {
     resultat: SøknadsbehandlingResultat.INNVILGELSE;
+    innvilgelse: InnvilgelseState;
 };
 
 export type SøknadsbehandlingState =
@@ -53,7 +54,7 @@ type SøknadsbehandlingSetResultatAction = {
 type Actions =
     | SøknadsbehandlingSetResultatAction
     | SøknadsbehandlingAvslagAction
-    | BehandlingInnvilgelseActions;
+    | InnvilgelseActions;
 
 export type SøknadsbehandlingActions = ReducerSuperAction<
     Actions,
@@ -98,7 +99,7 @@ export const søknadsbehandlingReducer: Reducer<SøknadsbehandlingState, Søknad
         case 'oppdaterBarnetilleggAntall':
         case 'oppdaterBarnetilleggFraOgMed':
         case 'oppdaterBarnetilleggTilOgMed':
-        case 'nullstillBarnetilleggPerioder':
+        case 'settBarnetilleggPerioder':
         case 'addTiltakPeriode':
         case 'fjernTiltakPeriode':
         case 'oppdaterTiltakId':
@@ -108,7 +109,10 @@ export const søknadsbehandlingReducer: Reducer<SøknadsbehandlingState, Søknad
                 throw Error(`Behandlingen må være en innvilgelse for action type ${type}`);
             }
 
-            return behandlingInnvilgelseReducer(state, action);
+            return {
+                ...state,
+                innvilgelse: innvilgelseReducer(state.innvilgelse, action),
+            };
         }
     }
 

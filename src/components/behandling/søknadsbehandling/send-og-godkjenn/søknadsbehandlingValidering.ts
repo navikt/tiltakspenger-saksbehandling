@@ -23,7 +23,7 @@ export const søknadsbehandlingValidering =
             validering.errors.push(...avslagValidering.errors);
             validering.warnings.push(...avslagValidering.warnings);
         } else if (resultat === SøknadsbehandlingResultat.INNVILGELSE) {
-            const innvilgelseValidering = validerInnvilgelse(behandling, skjema);
+            const innvilgelseValidering = validerInnvilgelse(behandling, skjema.innvilgelse);
             validering.errors.push(...innvilgelseValidering.errors);
             validering.warnings.push(...innvilgelseValidering.warnings);
         } else {

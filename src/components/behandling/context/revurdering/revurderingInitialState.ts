@@ -7,18 +7,14 @@ import {
 } from '~/types/Revurdering';
 import { SakProps } from '~/types/Sak';
 import { RevurderingStansState } from '~/components/behandling/context/revurdering/revurderingStansSkjemaContext';
-import {
-    hentHeleTiltaksdeltagelsesperioden,
-    hentTiltaksdeltakelserMedStartOgSluttdato,
-} from '~/utils/behandling';
 import { hentBarnetilleggForRevurdering } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
 import { ANTALL_DAGER_DEFAULT } from '~/components/behandling/felles/dager-per-meldeperiode/BehandlingDagerPerMeldeperiode';
 import { RevurderingOmgjøringState } from '~/components/behandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import { RevurderingInnvilgelseState } from '~/components/behandling/context/revurdering/revurderingInnvilgelseSkjemaContext';
 import { RammebehandlingMedInnvilgelse } from '~/types/Rammebehandling';
 import { Periode } from '~/types/Periode';
-import { erDatoIPeriode } from '~/utils/periode';
 import { TiltaksdeltakelsePeriode } from '~/types/TiltakDeltagelseTypes';
+import { tiltaksdeltagelserFraSaksopplysninger } from '~/components/behandling/context/behandlingSkjemaUtils';
 
 type RevurderingState =
     | RevurderingInnvilgelseState
@@ -60,34 +56,38 @@ const innvilgelseInitialState = (
     behandling: RevurderingInnvilgelse,
     sak: SakProps,
 ): RevurderingInnvilgelseState => {
-    const tiltaksperiode = hentHeleTiltaksdeltagelsesperioden(behandling);
+    const { virkningsperiode } = behandling;
 
-    const innvilgelsesperiode = behandling.virkningsperiode ?? tiltaksperiode;
+    if (!virkningsperiode) {
+        return {
+            resultat: RevurderingResultat.INNVILGELSE,
+            innvilgelse: {
+                harValgtPeriode: false,
+                innvilgelsesperiode: {},
+            },
+        };
+    }
 
-    const barnetilleggPerioder = hentBarnetilleggForRevurdering(
-        innvilgelsesperiode,
-        behandling,
-        sak,
-    );
+    const barnetilleggPerioder = hentBarnetilleggForRevurdering(behandling, virkningsperiode, sak);
 
     return {
         resultat: RevurderingResultat.INNVILGELSE,
-        innvilgelsesperiode: innvilgelsesperiode,
-        harBarnetillegg: barnetilleggPerioder.length > 0,
-        barnetilleggPerioder,
-        valgteTiltaksdeltakelser: valgteTiltaksdeltakelserInitialState(
-            behandling,
-            innvilgelsesperiode,
-        ),
-        antallDagerPerMeldeperiode: behandling.antallDagerPerMeldeperiode ?? [
-            {
-                antallDagerPerMeldeperiode: ANTALL_DAGER_DEFAULT,
-                periode: {
-                    fraOgMed: innvilgelsesperiode.fraOgMed,
-                    tilOgMed: innvilgelsesperiode.tilOgMed,
+        innvilgelse: {
+            harValgtPeriode: true,
+            innvilgelsesperiode: virkningsperiode,
+            harBarnetillegg: barnetilleggPerioder.length > 0,
+            barnetilleggPerioder,
+            valgteTiltaksdeltakelser: valgteTiltaksdeltakelserInitialState(
+                behandling,
+                virkningsperiode,
+            ),
+            antallDagerPerMeldeperiode: behandling.antallDagerPerMeldeperiode ?? [
+                {
+                    antallDagerPerMeldeperiode: ANTALL_DAGER_DEFAULT,
+                    periode: virkningsperiode,
                 },
-            },
-        ],
+            ],
+        },
     };
 };
 
@@ -98,24 +98,27 @@ const omgjøringInitialState = (
     behandling: RevurderingOmgjøring,
     sak: SakProps,
 ): RevurderingOmgjøringState => {
-    const innvilgelsesperiode = behandling.innvilgelsesperiode;
+    const { innvilgelsesperiode } = behandling;
 
     const barnetilleggPerioder = hentBarnetilleggForRevurdering(
-        innvilgelsesperiode,
         behandling,
+        innvilgelsesperiode,
         sak,
     );
 
     return {
         resultat: RevurderingResultat.OMGJØRING,
-        innvilgelsesperiode: innvilgelsesperiode,
-        harBarnetillegg: barnetilleggPerioder.length > 0,
-        barnetilleggPerioder,
-        valgteTiltaksdeltakelser: valgteTiltaksdeltakelserInitialState(
-            behandling,
-            innvilgelsesperiode,
-        ),
-        antallDagerPerMeldeperiode: behandling.antallDagerPerMeldeperiode,
+        innvilgelse: {
+            harValgtPeriode: true,
+            innvilgelsesperiode: innvilgelsesperiode,
+            harBarnetillegg: barnetilleggPerioder.length > 0,
+            barnetilleggPerioder,
+            valgteTiltaksdeltakelser: valgteTiltaksdeltakelserInitialState(
+                behandling,
+                innvilgelsesperiode,
+            ),
+            antallDagerPerMeldeperiode: behandling.antallDagerPerMeldeperiode,
+        },
     };
 };
 
@@ -123,25 +126,8 @@ const valgteTiltaksdeltakelserInitialState = (
     behandling: RammebehandlingMedInnvilgelse,
     innvilgelsesperiode: Periode,
 ): TiltaksdeltakelsePeriode[] => {
-    if (behandling.valgteTiltaksdeltakelser) {
-        return behandling.valgteTiltaksdeltakelser;
-    }
-
-    const tiltakMedPeriode: TiltaksdeltakelsePeriode[] = hentTiltaksdeltakelserMedStartOgSluttdato(
-        behandling,
-    ).map((tiltaksdeltagelse) => ({
-        eksternDeltagelseId: tiltaksdeltagelse.eksternDeltagelseId,
-        periode: {
-            fraOgMed: tiltaksdeltagelse.deltagelseFraOgMed,
-            tilOgMed: tiltaksdeltagelse.deltagelseTilOgMed,
-        },
-    }));
-
-    // finner tiltaksdeltakelsene som overlapper med innvilgelsesperioden for at det skal
-    // bli riktig når man har flere tiltak, men bare et av dem gjelder valgt periode
-    return tiltakMedPeriode.filter(
-        (tiltaksdeltagelse) =>
-            erDatoIPeriode(innvilgelsesperiode.fraOgMed, tiltaksdeltagelse.periode) ||
-            erDatoIPeriode(innvilgelsesperiode.tilOgMed, tiltaksdeltagelse.periode),
+    return (
+        behandling.valgteTiltaksdeltakelser ??
+        tiltaksdeltagelserFraSaksopplysninger(behandling, innvilgelsesperiode)
     );
 };

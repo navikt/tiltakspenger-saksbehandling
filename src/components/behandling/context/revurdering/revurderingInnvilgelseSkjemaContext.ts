@@ -2,10 +2,10 @@ import { RevurderingResultat } from '~/types/Revurdering';
 import { Reducer } from 'react';
 import { ReducerSuperAction } from '~/types/Context';
 import {
-    BehandlingInnvilgelseActions,
-    behandlingInnvilgelseReducer,
-    BehandlingInnvilgelseState,
-} from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
+    InnvilgelseActions,
+    innvilgelseReducer,
+    InnvilgelseState,
+} from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 import {
     BehandlingSkjemaMedFritekst,
     useBehandlingSkjema,
@@ -13,12 +13,13 @@ import {
 } from '~/components/behandling/context/BehandlingSkjemaContext';
 import { BehandlingSkjemaType } from '~/components/behandling/context/behandlingSkjemaUtils';
 
-export type RevurderingInnvilgelseState = BehandlingInnvilgelseState & {
+export type RevurderingInnvilgelseState = {
     resultat: RevurderingResultat.INNVILGELSE;
+    innvilgelse: InnvilgelseState;
 };
 
 export type RevurderingInnvilgelseActions = ReducerSuperAction<
-    BehandlingInnvilgelseActions,
+    InnvilgelseActions,
     BehandlingSkjemaType.RevurderingInnvilgelse
 >;
 
@@ -26,7 +27,7 @@ export const revurderingInnvilgelseReducer: Reducer<
     RevurderingInnvilgelseState,
     RevurderingInnvilgelseActions
 > = (state, action) => {
-    return behandlingInnvilgelseReducer(state, action);
+    return { ...state, innvilgelse: innvilgelseReducer(state.innvilgelse, action) };
 };
 
 export type RevurderingInnvilgelseContext =
@@ -45,6 +46,6 @@ export const useRevurderingInnvilgelseSkjema = (): RevurderingInnvilgelseContext
 export const useRevurderingInnvilgelseSkjemaDispatch = () => {
     const dispatch = useBehandlingSkjemaDispatch();
 
-    return (action: BehandlingInnvilgelseActions) =>
+    return (action: InnvilgelseActions) =>
         dispatch({ ...action, superType: BehandlingSkjemaType.RevurderingInnvilgelse });
 };

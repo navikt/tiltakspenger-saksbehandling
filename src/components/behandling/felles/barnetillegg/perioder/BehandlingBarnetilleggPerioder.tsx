@@ -3,15 +3,15 @@ import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/Ved
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { dateTilISOTekst } from '~/utils/date';
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
-import { Rammebehandlingstype } from '~/types/Rammebehandling';
+import { Rammebehandlingsstatus, Rammebehandlingstype } from '~/types/Rammebehandling';
 import MultiperiodeForm from '~/components/periode/MultiperiodeForm';
 import { periodiserBarnetilleggFraSøknad } from '../utils/periodiserBarnetilleggFraSøknad';
 import { hentBarnetilleggFraVedtakTidslinje } from '../utils/hentBarnetilleggFraVedtakTidslinje';
 import { useSak } from '~/context/sak/SakContext';
 import {
-    useBehandlingInnvilgelseSkjema,
+    useBehandlingInnvilgelseMedPerioderSkjema,
     useBehandlingInnvilgelseSkjemaDispatch,
-} from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
+} from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 
 import style from './BehandlingBarnetilleggPerioder.module.css';
 
@@ -20,11 +20,15 @@ const BATCH_MED_BARN = 10;
 export const BehandlingBarnetilleggPerioder = () => {
     const { sak } = useSak();
     const { behandling, rolleForBehandling } = useBehandling();
-    const { barnetilleggPerioder, innvilgelsesperiode } = useBehandlingInnvilgelseSkjema();
+    const { barnetilleggPerioder, innvilgelsesperiode } =
+        useBehandlingInnvilgelseMedPerioderSkjema().innvilgelse;
     const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
 
     const erSøknadsbehandling = behandling.type === Rammebehandlingstype.SØKNADSBEHANDLING;
     const erSaksbehandler = rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER;
+    const erUnderBehandling = behandling.status === Rammebehandlingsstatus.UNDER_BEHANDLING;
+
+    const disableKnapper = !erSaksbehandler || !erUnderBehandling;
 
     const antallBarnFraSøknad = erSøknadsbehandling ? behandling.søknad.barnetillegg.length : 0;
 
@@ -42,15 +46,16 @@ export const BehandlingBarnetilleggPerioder = () => {
                             type: 'addBarnetilleggPeriode',
                             payload: { antallBarn: antallBarnForNyPeriode },
                         }),
-                    disabled: !erSaksbehandler,
+                    disabled: disableKnapper,
                     adjacentContent: {
                         content: erSøknadsbehandling ? (
                             <Button
                                 variant={'secondary'}
                                 size={'small'}
+                                disabled={disableKnapper}
                                 onClick={() =>
                                     dispatch({
-                                        type: 'nullstillBarnetilleggPerioder',
+                                        type: 'settBarnetilleggPerioder',
                                         payload: {
                                             barnetilleggPerioder: periodiserBarnetilleggFraSøknad(
                                                 behandling.søknad.barnetillegg,
@@ -66,9 +71,10 @@ export const BehandlingBarnetilleggPerioder = () => {
                             <Button
                                 variant={'secondary'}
                                 size={'small'}
+                                disabled={disableKnapper}
                                 onClick={() => {
                                     dispatch({
-                                        type: 'nullstillBarnetilleggPerioder',
+                                        type: 'settBarnetilleggPerioder',
                                         payload: {
                                             barnetilleggPerioder:
                                                 hentBarnetilleggFraVedtakTidslinje(
@@ -88,7 +94,7 @@ export const BehandlingBarnetilleggPerioder = () => {
                 fjernPeriodeButtonConfig={{
                     onClick: (index) =>
                         dispatch({ type: 'fjernBarnetilleggPeriode', payload: { index } }),
-                    hidden: !erSaksbehandler,
+                    hidden: disableKnapper,
                 }}
                 periodeConfig={{
                     fraOgMed: {
@@ -115,7 +121,7 @@ export const BehandlingBarnetilleggPerioder = () => {
                             });
                         },
                     },
-                    readOnly: !erSaksbehandler,
+                    readOnly: disableKnapper,
                     minDate: innvilgelsesperiode.fraOgMed,
                     maxDate: innvilgelsesperiode.tilOgMed,
                 }}

@@ -13,6 +13,7 @@ import {
     SøknadsbehandlingSkjemaContext,
     useSøknadsbehandlingSkjema,
 } from '~/components/behandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
+import { Nullable } from '~/types/UtilTypes';
 
 export const SøknadsbehandlingSend = () => {
     const { behandling } = useSøknadsbehandling();
@@ -27,43 +28,62 @@ export const SøknadsbehandlingSend = () => {
     return <BehandlingSendOgGodkjenn behandling={behandling} lagringProps={lagringProps} />;
 };
 
-const tilDTO = (skjema: SøknadsbehandlingSkjemaContext): SøknadsbehandlingVedtakRequest => {
+const tilDTO = (
+    skjema: SøknadsbehandlingSkjemaContext,
+): Nullable<SøknadsbehandlingVedtakRequest> => {
     const { resultat } = skjema;
 
     switch (resultat) {
-        case SøknadsbehandlingResultat.INNVILGELSE:
+        case SøknadsbehandlingResultat.INNVILGELSE: {
+            const { innvilgelse, textAreas } = skjema;
+
+            if (!innvilgelse.harValgtPeriode) {
+                return null;
+            }
+
+            const {
+                innvilgelsesperiode,
+                harBarnetillegg,
+                barnetilleggPerioder,
+                valgteTiltaksdeltakelser,
+                antallDagerPerMeldeperiode,
+            } = innvilgelse;
+
             return {
-                begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
-                fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
-                innvilgelsesperiode: skjema.innvilgelsesperiode,
-                barnetillegg: skjema.harBarnetillegg
+                begrunnelseVilkårsvurdering: textAreas.begrunnelse.getValue(),
+                fritekstTilVedtaksbrev: textAreas.brevtekst.getValue(),
+                innvilgelsesperiode: innvilgelsesperiode,
+                barnetillegg: harBarnetillegg
                     ? {
-                          begrunnelse: skjema.textAreas.barnetilleggBegrunnelse.getValue(),
-                          perioder: skjema.barnetilleggPerioder,
+                          begrunnelse: textAreas.barnetilleggBegrunnelse.getValue(),
+                          perioder: barnetilleggPerioder,
                       }
                     : {
                           begrunnelse: null,
                           perioder: [],
                       },
-                valgteTiltaksdeltakelser: skjema.valgteTiltaksdeltakelser,
-                antallDagerPerMeldeperiodeForPerioder: skjema.antallDagerPerMeldeperiode,
+                valgteTiltaksdeltakelser: valgteTiltaksdeltakelser,
+                antallDagerPerMeldeperiodeForPerioder: antallDagerPerMeldeperiode,
                 resultat: SøknadsbehandlingResultat.INNVILGELSE,
             } satisfies SøknadsbehandlingVedtakInnvilgelseRequest;
+        }
 
-        case SøknadsbehandlingResultat.AVSLAG:
+        case SøknadsbehandlingResultat.AVSLAG: {
             return {
                 avslagsgrunner: skjema.avslagsgrunner,
                 begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
                 fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
                 resultat: SøknadsbehandlingResultat.AVSLAG,
             } satisfies SøknadsbehandlingVedtakAvslagRequest;
+        }
 
-        case SøknadsbehandlingResultat.IKKE_VALGT:
+        case SøknadsbehandlingResultat.IKKE_VALGT: {
             return {
                 begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
                 fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
                 resultat: SøknadsbehandlingResultat.IKKE_VALGT,
             } satisfies SøknadsbehandlingVedtakIkkeValgtRequest;
+        }
     }
 
     throw new Error(`Ugyldig resultat for søknadsbehandling vedtak - ${resultat satisfies never}`);

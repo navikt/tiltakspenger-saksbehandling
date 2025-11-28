@@ -1,5 +1,4 @@
 .radioGroup {
-    margin-top: 2rem;
     margin-bottom: 1rem;
 
     & > :global(.navds-radio-buttons) {

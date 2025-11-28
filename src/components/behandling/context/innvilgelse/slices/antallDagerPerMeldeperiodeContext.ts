@@ -1,6 +1,6 @@
 import { ANTALL_DAGER_DEFAULT } from '~/components/behandling/felles/dager-per-meldeperiode/BehandlingDagerPerMeldeperiode';
 import { datoMin, nesteDag } from '~/utils/date';
-import { BehandlingInnvilgelseState } from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
+import { InnvilgelseMedPerioderState } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 import { Reducer } from 'react';
 import { oppdaterPeriodiseringUtenOverlapp } from '~/components/behandling/context/behandlingSkjemaUtils';
 
@@ -26,10 +26,10 @@ export type AntallDagerPerMeldeperiodeActions =
           payload: { antallDager: number; index: number };
       };
 
-export const antallDagerPerMeldeperiodeReducer = (<State extends BehandlingInnvilgelseState>(
-    state: State,
-    action: AntallDagerPerMeldeperiodeActions,
-): State => {
+export const antallDagerPerMeldeperiodeReducer: Reducer<
+    InnvilgelseMedPerioderState,
+    AntallDagerPerMeldeperiodeActions
+> = (state, action) => {
     const { type, payload } = action;
 
     switch (type) {
@@ -152,4 +152,4 @@ export const antallDagerPerMeldeperiodeReducer = (<State extends BehandlingInnvi
             };
         }
     }
-}) satisfies Reducer<BehandlingInnvilgelseState, AntallDagerPerMeldeperiodeActions>;
+};

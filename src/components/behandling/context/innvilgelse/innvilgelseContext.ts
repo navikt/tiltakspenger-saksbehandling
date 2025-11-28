@@ -27,14 +27,19 @@ import { RevurderingResultat } from '~/types/Revurdering';
 import {
     BehandlingSkjemaType,
     erRammebehandlingInnvilgelseContext,
+    erRammebehandlingInnvilgelseMedPerioderContext,
 } from '~/components/behandling/context/behandlingSkjemaUtils';
 import { TiltaksdeltakelsePeriode } from '~/types/TiltakDeltagelseTypes';
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';
 import { AntallDagerPerMeldeperiode } from '~/types/AntallDagerPerMeldeperiode';
 
-// Gjenbrukes ved alle behandlingsresultater som gir innvilgelse
-export type BehandlingInnvilgelseState = {
-    resultat: RammebehandlingResultatMedInnvilgelse;
+export type InnvilgelseUtenPerioderState = {
+    harValgtPeriode: false;
+    innvilgelsesperiode: Partial<Periode>;
+};
+
+export type InnvilgelseMedPerioderState = {
+    harValgtPeriode: true;
     innvilgelsesperiode: Periode;
     valgteTiltaksdeltakelser: TiltaksdeltakelsePeriode[];
     harBarnetillegg: boolean;
@@ -42,23 +47,40 @@ export type BehandlingInnvilgelseState = {
     antallDagerPerMeldeperiode: AntallDagerPerMeldeperiode[];
 };
 
-export type BehandlingInnvilgelseActions =
+export type InnvilgelseState = InnvilgelseUtenPerioderState | InnvilgelseMedPerioderState;
+
+export type BehandlingInnvilgelseState = {
+    resultat: RammebehandlingResultatMedInnvilgelse;
+    innvilgelse: InnvilgelseState;
+};
+
+export type BehandlingInnvilgelseMedPerioderState = {
+    resultat: RammebehandlingResultatMedInnvilgelse;
+    innvilgelse: InnvilgelseMedPerioderState;
+};
+
+export type InnvilgelseActions =
     | InnvilgelsesperiodeAction
     | TiltaksdeltagelseActions
     | BarnetilleggActions
     | AntallDagerPerMeldeperiodeActions;
 
-export const behandlingInnvilgelseReducer = (<State extends BehandlingInnvilgelseState>(
-    state: State,
-    action: BehandlingInnvilgelseActions,
-): State => {
+export const innvilgelseReducer: Reducer<InnvilgelseState, InnvilgelseActions> = (
+    state,
+    action,
+) => {
     const { type } = action;
+    const { harValgtPeriode } = state;
+
+    if (type === 'oppdaterInnvilgelsesperiode') {
+        return innvilgelsesperiodeReducer(state, action);
+    }
+
+    if (!harValgtPeriode) {
+        throw Error('Kan ikke endre andre deler av innvilgelsen før innvilgelsesperioden er valgt');
+    }
 
     switch (type) {
-        case 'oppdaterInnvilgelsesperiode': {
-            return innvilgelsesperiodeReducer(state, action);
-        }
-
         case 'leggTilAntallDagerPeriode':
         case 'fjernAntallDagerPeriode':
         case 'oppdaterAntallDagerFraOgMed':
@@ -73,7 +95,7 @@ export const behandlingInnvilgelseReducer = (<State extends BehandlingInnvilgels
         case 'oppdaterBarnetilleggAntall':
         case 'oppdaterBarnetilleggFraOgMed':
         case 'oppdaterBarnetilleggTilOgMed':
-        case 'nullstillBarnetilleggPerioder': {
+        case 'settBarnetilleggPerioder': {
             return barnetilleggReducer(state, action);
         }
 
@@ -87,7 +109,7 @@ export const behandlingInnvilgelseReducer = (<State extends BehandlingInnvilgels
     }
 
     throw Error(`Ugyldig action for behandling innvilgelse skjema: "${type satisfies never}"`);
-}) satisfies Reducer<BehandlingInnvilgelseState, BehandlingInnvilgelseActions>;
+};
 
 export type BehandlingInnvilgelseContext = BehandlingSkjemaMedFritekst<BehandlingInnvilgelseState>;
 
@@ -95,17 +117,33 @@ export const useBehandlingInnvilgelseSkjema = (): BehandlingInnvilgelseContext =
     const context = useBehandlingSkjema();
 
     if (!erRammebehandlingInnvilgelseContext(context)) {
-        throw Error(`Feil resultat for innvilgelse context: ${context.resultat}`);
+        throw Error(
+            `Feil resultat for innvilgelse context: ${context.resultat} - ${JSON.stringify(context)}`,
+        );
     }
 
     return context;
 };
 
+export type BehandlingInnvilgelseMedPerioderContext =
+    BehandlingSkjemaMedFritekst<BehandlingInnvilgelseMedPerioderState>;
+
+export const useBehandlingInnvilgelseMedPerioderSkjema =
+    (): BehandlingInnvilgelseMedPerioderContext => {
+        const context = useBehandlingSkjema();
+
+        if (!erRammebehandlingInnvilgelseMedPerioderContext(context)) {
+            throw Error(`Feil context for innvilgelse med perioder: ${JSON.stringify(context)}`);
+        }
+
+        return context;
+    };
+
 export const useBehandlingInnvilgelseSkjemaDispatch = () => {
     const dispatch = useBehandlingSkjemaDispatch();
     const { resultat } = useBehandlingInnvilgelseSkjema();
 
-    return (action: BehandlingInnvilgelseActions) =>
+    return (action: InnvilgelseActions) =>
         dispatch({
             ...action,
             superType: reducerSuperType[resultat],

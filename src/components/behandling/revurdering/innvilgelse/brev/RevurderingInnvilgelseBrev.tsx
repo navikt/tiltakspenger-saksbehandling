@@ -5,9 +5,9 @@ import { BodyLong } from '@navikt/ds-react';
 import { TekstListe } from '~/components/liste/TekstListe';
 import { RevurderingResultat } from '~/types/Revurdering';
 import {
-    BehandlingInnvilgelseContext,
-    useBehandlingInnvilgelseSkjema,
-} from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
+    BehandlingInnvilgelseMedPerioderContext,
+    useBehandlingInnvilgelseMedPerioderSkjema,
+} from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 import { revurderingOmgjøringValidering } from '~/components/behandling/revurdering/omgjøring/revurderingInnvilgelseValidering';
 import { revurderingInnvilgelseValidering } from '~/components/behandling/revurdering/innvilgelse/revurderingInnvilgelseValidering';
 import { RevurderingInnvilgelseContext } from '~/components/behandling/context/revurdering/revurderingInnvilgelseSkjemaContext';
@@ -16,7 +16,7 @@ import { RevurderingOmgjøringContext } from '~/components/behandling/context/re
 // TODO: split denne for innvilgelse og omgjøring
 export const RevurderingInnvilgelseBrev = () => {
     const { behandling, rolleForBehandling } = useRevurderingBehandling();
-    const skjema = useBehandlingInnvilgelseSkjema();
+    const skjema = useBehandlingInnvilgelseMedPerioderSkjema();
 
     const { brevtekst } = skjema.textAreas;
 
@@ -46,14 +46,16 @@ export const RevurderingInnvilgelseBrev = () => {
 };
 
 const revurderingskjemaTilBrevForhåndsvisningDTO = (
-    skjema: BehandlingInnvilgelseContext,
+    skjema: BehandlingInnvilgelseMedPerioderContext,
 ): RevurderingInnvilgelseBrevForhåndsvisningDTO => {
+    const { innvilgelse, textAreas } = skjema;
+
     return {
         resultat: RevurderingResultat.INNVILGELSE,
-        fritekst: skjema.textAreas.brevtekst.getValue(),
-        virkningsperiode: skjema.innvilgelsesperiode,
-        barnetillegg: skjema.harBarnetillegg ? skjema.barnetilleggPerioder : null,
-        antallDagerPerMeldeperiodeForPerioder: skjema.antallDagerPerMeldeperiode,
+        fritekst: textAreas.brevtekst.getValue(),
+        virkningsperiode: innvilgelse.innvilgelsesperiode,
+        barnetillegg: innvilgelse.harBarnetillegg ? innvilgelse.barnetilleggPerioder : null,
+        antallDagerPerMeldeperiodeForPerioder: innvilgelse.antallDagerPerMeldeperiode,
     };
 };
 

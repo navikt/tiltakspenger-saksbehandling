@@ -7,6 +7,7 @@ import {
     RevurderingInnvilgelseContext,
     useRevurderingInnvilgelseSkjema,
 } from '~/components/behandling/context/revurdering/revurderingInnvilgelseSkjemaContext';
+import { Nullable } from '~/types/UtilTypes';
 
 export const RevurderingInnvilgelseSend = () => {
     const { behandling } = useRevurderingBehandling();
@@ -21,22 +22,30 @@ export const RevurderingInnvilgelseSend = () => {
     return <BehandlingSendOgGodkjenn behandling={behandling} lagringProps={lagringProps} />;
 };
 
-const tilDTO = (skjema: RevurderingInnvilgelseContext): RevurderingVedtakInnvilgelseRequest => {
+const tilDTO = (
+    skjema: RevurderingInnvilgelseContext,
+): Nullable<RevurderingVedtakInnvilgelseRequest> => {
+    const { innvilgelse } = skjema;
+
+    if (!innvilgelse.harValgtPeriode) {
+        return null;
+    }
+
     return {
         resultat: RevurderingResultat.INNVILGELSE,
         begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
         fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
-        innvilgelsesperiode: skjema.innvilgelsesperiode,
-        valgteTiltaksdeltakelser: skjema.valgteTiltaksdeltakelser,
-        barnetillegg: skjema.harBarnetillegg
+        innvilgelsesperiode: innvilgelse.innvilgelsesperiode,
+        valgteTiltaksdeltakelser: innvilgelse.valgteTiltaksdeltakelser,
+        barnetillegg: innvilgelse.harBarnetillegg
             ? {
                   begrunnelse: skjema.textAreas.barnetilleggBegrunnelse.getValue(),
-                  perioder: skjema.barnetilleggPerioder,
+                  perioder: innvilgelse.barnetilleggPerioder,
               }
             : {
                   begrunnelse: null,
                   perioder: [],
               },
-        antallDagerPerMeldeperiodeForPerioder: skjema.antallDagerPerMeldeperiode,
+        antallDagerPerMeldeperiodeForPerioder: innvilgelse.antallDagerPerMeldeperiode,
     };
 };

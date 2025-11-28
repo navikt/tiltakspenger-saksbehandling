@@ -7,9 +7,6 @@ import {
     SøknadsbehandlingInnvilgelseState,
     SøknadsbehandlingState,
 } from '~/components/behandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
-import { hentTiltaksdeltagelseFraSøknad, hentTiltaksperiodeFraSøknad } from '~/utils/behandling';
-import { TiltaksdeltakelsePeriode } from '~/types/TiltakDeltagelseTypes';
-import { datoMin } from '~/utils/date';
 
 export const søknadsbehandlingInitialState = (
     behandling: Søknadsbehandling,
@@ -37,49 +34,41 @@ export const søknadsbehandlingInitialState = (
 const innvilgelseInitialState = (
     behandling: Søknadsbehandling,
 ): SøknadsbehandlingInnvilgelseState => {
-    const { resultat, virkningsperiode, saksopplysninger } = behandling;
+    const { resultat, virkningsperiode } = behandling;
 
-    // Det skal ikke være mulig å velge innvilgelse dersom det ikke finnes en saksopplysningsperiode/tiltaksperiode
-    const initialDatoDefault = datoMin(saksopplysninger.periode!.tilOgMed, new Date());
-
-    const innvilgelsesperiode = virkningsperiode ?? {
-        fraOgMed: initialDatoDefault,
-        tilOgMed: initialDatoDefault,
-    };
+    // Hvis den lagrede behandling ikke er en innvilgelse (dvs saksbehandler har endret resultat),
+    // så returnerer vi en blank innvilgelse uten perioder. Saksbehandler må velge innvilgelsesperioden
+    if (!virkningsperiode || resultat !== SøknadsbehandlingResultat.INNVILGELSE) {
+        return {
+            resultat: SøknadsbehandlingResultat.INNVILGELSE,
+            innvilgelse: {
+                harValgtPeriode: false,
+                innvilgelsesperiode: {},
+            },
+        };
+    }
 
     const barnetilleggPerioder = hentLagredePerioderMedBarn(behandling) ?? [];
+    const harBarnetillegg = barnetilleggPerioder.length > 0;
 
-    const harBarnetillegg = barnetilleggPerioder ? barnetilleggPerioder.length > 0 : false;
-
-    return resultat === SøknadsbehandlingResultat.INNVILGELSE
-        ? {
-              resultat: SøknadsbehandlingResultat.INNVILGELSE,
-              innvilgelsesperiode,
-              harBarnetillegg,
-              barnetilleggPerioder,
-              valgteTiltaksdeltakelser: behandling.valgteTiltaksdeltakelser,
-              antallDagerPerMeldeperiode: behandling.antallDagerPerMeldeperiode
-                  ? behandling.antallDagerPerMeldeperiode
-                  : [
-                        {
-                            antallDagerPerMeldeperiode: ANTALL_DAGER_DEFAULT,
-                            periode: innvilgelsesperiode,
-                        },
-                    ],
-          }
-        : {
-              resultat: SøknadsbehandlingResultat.INNVILGELSE,
-              innvilgelsesperiode: innvilgelsesperiode,
-              harBarnetillegg,
-              barnetilleggPerioder,
-              valgteTiltaksdeltakelser: valgteTiltaksdeltakelserInitialState(behandling),
-              antallDagerPerMeldeperiode: [
-                  {
-                      antallDagerPerMeldeperiode: ANTALL_DAGER_DEFAULT,
-                      periode: innvilgelsesperiode,
-                  },
-              ],
-          };
+    return {
+        resultat: SøknadsbehandlingResultat.INNVILGELSE,
+        innvilgelse: {
+            harValgtPeriode: true,
+            innvilgelsesperiode: virkningsperiode,
+            harBarnetillegg,
+            barnetilleggPerioder,
+            valgteTiltaksdeltakelser: behandling.valgteTiltaksdeltakelser,
+            antallDagerPerMeldeperiode: behandling.antallDagerPerMeldeperiode
+                ? behandling.antallDagerPerMeldeperiode
+                : [
+                      {
+                          antallDagerPerMeldeperiode: ANTALL_DAGER_DEFAULT,
+                          periode: virkningsperiode,
+                      },
+                  ],
+        },
+    };
 };
 
 const avslagInitialState = (behandling: Søknadsbehandling): SøknadsbehandlingAvslagState => {
@@ -90,22 +79,4 @@ const avslagInitialState = (behandling: Søknadsbehandling): SøknadsbehandlingA
                 ? behandling.avslagsgrunner
                 : [],
     };
-};
-
-const valgteTiltaksdeltakelserInitialState = (
-    behandling: Søknadsbehandling,
-): TiltaksdeltakelsePeriode[] => {
-    const tiltakFraSøknad = hentTiltaksdeltagelseFraSøknad(behandling);
-    const innvilgelsesperiode =
-        behandling.virkningsperiode ?? hentTiltaksperiodeFraSøknad(behandling);
-
-    return tiltakFraSøknad
-        ? [
-              {
-                  eksternDeltagelseId: tiltakFraSøknad.eksternDeltagelseId,
-                  // Denne er alltid definert ved innvilgbar søknad
-                  periode: innvilgelsesperiode!,
-              },
-          ]
-        : [];
 };

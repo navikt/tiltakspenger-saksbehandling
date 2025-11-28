@@ -9,21 +9,18 @@ import { harSøktBarnetillegg } from '~/components/behandling/felles/barnetilleg
 import { useSak } from '~/context/sak/SakContext';
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
 import {
-    useBehandlingInnvilgelseSkjema,
+    useBehandlingInnvilgelseMedPerioderSkjema,
     useBehandlingInnvilgelseSkjemaDispatch,
-} from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
+} from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 
 import style from './BehandlingBarnetillegg.module.css';
 
-type Props = {
-    valgTekst: string;
-};
-
-export const BehandlingBarnetillegg = ({ valgTekst }: Props) => {
+export const BehandlingBarnetillegg = () => {
     const { sak } = useSak();
     const { behandling, rolleForBehandling } = useBehandling();
 
-    const { harBarnetillegg, innvilgelsesperiode } = useBehandlingInnvilgelseSkjema();
+    const { harBarnetillegg, innvilgelsesperiode } =
+        useBehandlingInnvilgelseMedPerioderSkjema().innvilgelse;
     const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
 
     return (
@@ -41,10 +38,10 @@ export const BehandlingBarnetillegg = ({ valgTekst }: Props) => {
 
                 <VedtakSeksjon.Venstre>
                     <RadioGroup
-                        legend={valgTekst}
+                        legend={'Skal det innvilges barnetillegg?'}
                         size={'small'}
                         className={style.radioGroup}
-                        defaultValue={harBarnetillegg}
+                        value={harBarnetillegg}
                         readOnly={rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER}
                         onChange={(harSøkt: boolean) => {
                             dispatch({

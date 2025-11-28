@@ -1,7 +1,6 @@
 import { nesteDag } from '~/utils/date';
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';
-import { BarnetilleggPeriodeFormData } from '../../../felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
-import { BehandlingInnvilgelseState } from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
+import { InnvilgelseMedPerioderState } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 import { Reducer } from 'react';
 import { oppdaterPeriodiseringUtenOverlapp } from '~/components/behandling/context/behandlingSkjemaUtils';
 
@@ -31,14 +30,14 @@ export type BarnetilleggActions =
           payload: { tilOgMed: string; index: number };
       }
     | {
-          type: 'nullstillBarnetilleggPerioder';
-          payload: { barnetilleggPerioder: BarnetilleggPeriodeFormData[] };
+          type: 'settBarnetilleggPerioder';
+          payload: { barnetilleggPerioder: BarnetilleggPeriode[] };
       };
 
-export const barnetilleggReducer = (<State extends BehandlingInnvilgelseState>(
-    state: State,
-    action: BarnetilleggActions,
-): State => {
+export const barnetilleggReducer: Reducer<InnvilgelseMedPerioderState, BarnetilleggActions> = (
+    state,
+    action,
+) => {
     const { type, payload } = action;
 
     switch (type) {
@@ -87,10 +86,11 @@ export const barnetilleggReducer = (<State extends BehandlingInnvilgelseState>(
             };
         }
 
-        case 'nullstillBarnetilleggPerioder': {
+        case 'settBarnetilleggPerioder': {
             return {
                 ...state,
                 barnetilleggPerioder: payload.barnetilleggPerioder,
+                harBarnetillegg: payload.barnetilleggPerioder.length > 0,
             };
         }
 
@@ -166,4 +166,4 @@ export const barnetilleggReducer = (<State extends BehandlingInnvilgelseState>(
             };
         }
     }
-}) satisfies Reducer<BehandlingInnvilgelseState, BarnetilleggActions>;
+};
