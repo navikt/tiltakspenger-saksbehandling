@@ -3,6 +3,7 @@ import { BehandlingSaksopplysning } from '../../behandling/saksopplysninger/Beha
 import { periodeTilFormatertDatotekst } from '~/utils/date';
 import { VStack } from '@navikt/ds-react';
 import { Søknad } from '~/types/Søknad';
+import { formaterSøknadsspørsmålSvar } from '~/utils/tekstformateringUtils';
 
 interface Props {
     søknad: Søknad;
@@ -44,7 +45,12 @@ export const SøknadsopplysningerTiltak = ({ søknad }: Props) => {
         return (
             <BehandlingSaksopplysning
                 navn="Har søkt på tiltak"
-                verdi={harSøktPåTiltak!.svar}
+                verdi={
+                    harSøktPåTiltak!.svar === 'JA'
+                        ? formaterSøknadsspørsmålSvar(harSøktPåTiltak!.svar) +
+                          ' - tiltaksnavn ikke oppgitt'
+                        : formaterSøknadsspørsmålSvar(harSøktPåTiltak!.svar)!
+                }
                 visVarsel
             />
         );
