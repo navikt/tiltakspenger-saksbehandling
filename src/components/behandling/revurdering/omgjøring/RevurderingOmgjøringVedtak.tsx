@@ -98,7 +98,9 @@ export const RevurderingOmgjøringVedtak = () => {
                     variant="inlineColon"
                 />
             )}
+            <Separator />
             <InnvilgelsesperiodeVelger behandling={behandling} />
+            <Separator />
             <BehandlingDagerPerMeldeperiode />
             <Separator />
             <BehandlingTiltak />
