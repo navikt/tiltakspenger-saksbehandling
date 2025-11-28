@@ -42,7 +42,11 @@ export const SøknadOpplysningerBarn = ({
                     visBarnetilleggPeriodiseringKnapp={visBarnetilleggPeriodiseringKnapp}
                 />
             ) : (
-                <BodyShort size={'small'}>{'Har ikke søkt om barnetillegg'}</BodyShort>
+                <BehandlingSaksopplysning
+                    navn="Har søkt om barnetillegg"
+                    verdi={søknad.svar.harSøktOmBarnetillegg!.svar}
+                    visVarsel
+                />
             )}
         </div>
     );

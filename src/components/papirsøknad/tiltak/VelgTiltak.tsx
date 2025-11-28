@@ -55,7 +55,7 @@ export const VelgTiltak = ({ sakId, spørsmålName, legend }: Props) => {
     return (
         <div className={classNames(styles.informasjonsInnhentingBlokk, styles.blokk)}>
             <JaNeiSpørsmål
-                name="svar.harTiltak"
+                name="svar.harSøktPåTiltak.svar"
                 legend={legend}
                 onChange={(newValue) => {
                     if (newValue !== 'JA') {
