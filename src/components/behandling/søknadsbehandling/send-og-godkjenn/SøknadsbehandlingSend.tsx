@@ -13,6 +13,7 @@ import {
     SøknadsbehandlingSkjemaContext,
     useSøknadsbehandlingSkjema,
 } from '~/components/behandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
+import { Nullable } from '~/types/UtilTypes';
 
 export const SøknadsbehandlingSend = () => {
     const { behandling } = useSøknadsbehandling();
@@ -27,7 +28,9 @@ export const SøknadsbehandlingSend = () => {
     return <BehandlingSendOgGodkjenn behandling={behandling} lagringProps={lagringProps} />;
 };
 
-const tilDTO = (skjema: SøknadsbehandlingSkjemaContext): SøknadsbehandlingVedtakRequest => {
+const tilDTO = (
+    skjema: SøknadsbehandlingSkjemaContext,
+): Nullable<SøknadsbehandlingVedtakRequest> => {
     const { resultat } = skjema;
 
     switch (resultat) {
@@ -35,11 +38,7 @@ const tilDTO = (skjema: SøknadsbehandlingSkjemaContext): SøknadsbehandlingVedt
             const { innvilgelse, textAreas } = skjema;
 
             if (!innvilgelse.harValgtPeriode) {
-                return {
-                    begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
-                    fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
-                    resultat: SøknadsbehandlingResultat.IKKE_VALGT,
-                } satisfies SøknadsbehandlingVedtakIkkeValgtRequest;
+                return null;
             }
 
             const {

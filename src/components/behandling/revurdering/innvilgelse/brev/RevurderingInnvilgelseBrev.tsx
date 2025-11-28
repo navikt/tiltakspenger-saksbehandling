@@ -6,7 +6,7 @@ import { TekstListe } from '~/components/liste/TekstListe';
 import { RevurderingResultat } from '~/types/Revurdering';
 import {
     BehandlingInnvilgelseMedPerioderContext,
-    useBehandlingInnvilgelseSteg2Skjema,
+    useBehandlingInnvilgelseMedPerioderSkjema,
 } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 import { revurderingOmgjøringValidering } from '~/components/behandling/revurdering/omgjøring/revurderingInnvilgelseValidering';
 import { revurderingInnvilgelseValidering } from '~/components/behandling/revurdering/innvilgelse/revurderingInnvilgelseValidering';
@@ -16,7 +16,7 @@ import { RevurderingOmgjøringContext } from '~/components/behandling/context/re
 // TODO: split denne for innvilgelse og omgjøring
 export const RevurderingInnvilgelseBrev = () => {
     const { behandling, rolleForBehandling } = useRevurderingBehandling();
-    const skjema = useBehandlingInnvilgelseSteg2Skjema();
+    const skjema = useBehandlingInnvilgelseMedPerioderSkjema();
 
     const { brevtekst } = skjema.textAreas;
 

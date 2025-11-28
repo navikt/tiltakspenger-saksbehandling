@@ -1,4 +1,4 @@
-import { Alert, Button, Radio, RadioGroup } from '@navikt/ds-react';
+import { Alert, Button, Heading, Radio, RadioGroup } from '@navikt/ds-react';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { useSøknadsbehandling } from '../../context/BehandlingContext';
@@ -22,8 +22,12 @@ export const SøknadsbehandlingResultatVelger = () => {
     return (
         <VedtakSeksjon>
             <VedtakSeksjon.Venstre>
+                <Heading size={'small'} level={'2'} spacing={true}>
+                    {'Resultat'}
+                </Heading>
                 <RadioGroup
                     legend={'Resultat'}
+                    hideLegend={true}
                     size={'small'}
                     className={style.radioGroup}
                     value={resultat}

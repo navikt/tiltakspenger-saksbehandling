@@ -7,6 +7,7 @@ import {
     RevurderingInnvilgelseContext,
     useRevurderingInnvilgelseSkjema,
 } from '~/components/behandling/context/revurdering/revurderingInnvilgelseSkjemaContext';
+import { Nullable } from '~/types/UtilTypes';
 
 export const RevurderingInnvilgelseSend = () => {
     const { behandling } = useRevurderingBehandling();
@@ -21,11 +22,13 @@ export const RevurderingInnvilgelseSend = () => {
     return <BehandlingSendOgGodkjenn behandling={behandling} lagringProps={lagringProps} />;
 };
 
-const tilDTO = (skjema: RevurderingInnvilgelseContext): RevurderingVedtakInnvilgelseRequest => {
+const tilDTO = (
+    skjema: RevurderingInnvilgelseContext,
+): Nullable<RevurderingVedtakInnvilgelseRequest> => {
     const { innvilgelse } = skjema;
 
     if (!innvilgelse.harValgtPeriode) {
-        throw Error('Innvilgelsesperioden må være valgt');
+        return null;
     }
 
     return {

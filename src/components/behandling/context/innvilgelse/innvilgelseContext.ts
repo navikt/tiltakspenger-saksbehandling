@@ -95,7 +95,7 @@ export const innvilgelseReducer: Reducer<InnvilgelseState, InnvilgelseActions> =
         case 'oppdaterBarnetilleggAntall':
         case 'oppdaterBarnetilleggFraOgMed':
         case 'oppdaterBarnetilleggTilOgMed':
-        case 'nullstillBarnetilleggPerioder': {
+        case 'settBarnetilleggPerioder': {
             return barnetilleggReducer(state, action);
         }
 
@@ -128,15 +128,16 @@ export const useBehandlingInnvilgelseSkjema = (): BehandlingInnvilgelseContext =
 export type BehandlingInnvilgelseMedPerioderContext =
     BehandlingSkjemaMedFritekst<BehandlingInnvilgelseMedPerioderState>;
 
-export const useBehandlingInnvilgelseSteg2Skjema = (): BehandlingInnvilgelseMedPerioderContext => {
-    const context = useBehandlingSkjema();
+export const useBehandlingInnvilgelseMedPerioderSkjema =
+    (): BehandlingInnvilgelseMedPerioderContext => {
+        const context = useBehandlingSkjema();
 
-    if (!erRammebehandlingInnvilgelseMedPerioderContext(context)) {
-        throw Error(`Feil resultat for innvilgelse context: ${JSON.stringify(context)}`);
-    }
+        if (!erRammebehandlingInnvilgelseMedPerioderContext(context)) {
+            throw Error(`Feil context for innvilgelse med perioder: ${JSON.stringify(context)}`);
+        }
 
-    return context;
-};
+        return context;
+    };
 
 export const useBehandlingInnvilgelseSkjemaDispatch = () => {
     const dispatch = useBehandlingSkjemaDispatch();

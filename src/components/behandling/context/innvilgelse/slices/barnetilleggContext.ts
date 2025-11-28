@@ -30,7 +30,7 @@ export type BarnetilleggActions =
           payload: { tilOgMed: string; index: number };
       }
     | {
-          type: 'nullstillBarnetilleggPerioder';
+          type: 'settBarnetilleggPerioder';
           payload: { barnetilleggPerioder: BarnetilleggPeriode[] };
       };
 
@@ -86,10 +86,11 @@ export const barnetilleggReducer = (<State extends InnvilgelseMedPerioderState>(
             };
         }
 
-        case 'nullstillBarnetilleggPerioder': {
+        case 'settBarnetilleggPerioder': {
             return {
                 ...state,
                 barnetilleggPerioder: payload.barnetilleggPerioder,
+                harBarnetillegg: payload.barnetilleggPerioder.length > 0,
             };
         }
 

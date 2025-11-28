@@ -13,7 +13,7 @@ import { Nullable } from '~/types/UtilTypes';
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import {
-    useBehandlingInnvilgelseSteg2Skjema,
+    useBehandlingInnvilgelseSkjema,
     useBehandlingInnvilgelseSkjemaDispatch,
 } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 import { useBehandlingSkjema } from '~/components/behandling/context/BehandlingSkjemaContext';
@@ -168,7 +168,7 @@ const Barn = ({ barn, tiltaksperiode, personopplysninger }: BarnProps) => {
 const PeriodiserBarnetilleggKnapp = ({ søknad }: { søknad: Søknad }) => {
     const { rolleForBehandling } = useBehandling();
 
-    const { innvilgelsesperiode } = useBehandlingInnvilgelseSteg2Skjema().innvilgelse;
+    const { innvilgelsesperiode, harValgtPeriode } = useBehandlingInnvilgelseSkjema().innvilgelse;
     const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
 
     if (rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER) {
@@ -181,17 +181,22 @@ const PeriodiserBarnetilleggKnapp = ({ søknad }: { søknad: Søknad }) => {
             size={'small'}
             icon={<ChevronRightDoubleIcon />}
             iconPosition={'right'}
-            onClick={() =>
+            onClick={() => {
+                if (!harValgtPeriode) {
+                    return;
+                }
+
                 dispatch({
-                    type: 'nullstillBarnetilleggPerioder',
+                    type: 'settBarnetilleggPerioder',
                     payload: {
                         barnetilleggPerioder: periodiserBarnetilleggFraSøknad(
                             søknad.barnetillegg,
                             innvilgelsesperiode,
                         ),
                     },
-                })
-            }
+                });
+            }}
+            disabled={!harValgtPeriode}
         >
             {'Periodiser barnetillegg for disse barna'}
         </Button>

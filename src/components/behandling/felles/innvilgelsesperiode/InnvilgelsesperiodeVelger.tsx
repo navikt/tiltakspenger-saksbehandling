@@ -2,7 +2,6 @@ import { dateTilISOTekst } from '~/utils/date';
 import { useRolleForBehandling } from '~/context/saksbehandler/SaksbehandlerContext';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { Rammebehandling } from '~/types/Rammebehandling';
-import { VStack } from '@navikt/ds-react';
 import {
     useBehandlingInnvilgelseSkjemaDispatch,
     useBehandlingInnvilgelseSkjema,
@@ -10,6 +9,8 @@ import {
 import { PeriodeVelger } from '~/components/periode/PeriodeVelger';
 import { hentHeleTiltaksdeltagelsesperioden } from '~/utils/behandling';
 import { useSak } from '~/context/sak/SakContext';
+import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
+import { Heading } from '@navikt/ds-react';
 
 type Props = {
     behandling: Rammebehandling;
@@ -27,50 +28,55 @@ export const InnvilgelsesperiodeVelger = ({ behandling }: Props) => {
     const tiltaksdeltagelsesperiode = hentHeleTiltaksdeltagelsesperioden(behandling);
 
     return (
-        <VStack gap="2">
-            <PeriodeVelger
-                fraOgMed={{
-                    label: 'Innvilges fra og med',
-                    value: innvilgelsesperiode.fraOgMed,
-                    minDate: tiltaksdeltagelsesperiode.fraOgMed,
-                    maxDate: innvilgelsesperiode.tilOgMed ?? tiltaksdeltagelsesperiode.tilOgMed,
-                    onDateChange: (valgtDato) => {
-                        if (!valgtDato) {
-                            return;
-                        }
+        <VedtakSeksjon>
+            <VedtakSeksjon.Venstre>
+                <Heading size={'small'} level={'2'} spacing={true}>
+                    {'Innvilgelsesperiode'}
+                </Heading>
+                <PeriodeVelger
+                    fraOgMed={{
+                        label: 'Fra og med',
+                        value: innvilgelsesperiode.fraOgMed,
+                        minDate: tiltaksdeltagelsesperiode.fraOgMed,
+                        maxDate: innvilgelsesperiode.tilOgMed ?? tiltaksdeltagelsesperiode.tilOgMed,
+                        onDateChange: (valgtDato) => {
+                            if (!valgtDato) {
+                                return;
+                            }
 
-                        dispatch({
-                            type: 'oppdaterInnvilgelsesperiode',
-                            payload: {
-                                periode: { fraOgMed: dateTilISOTekst(valgtDato) },
-                                behandling,
-                                sak,
-                            },
-                        });
-                    },
-                }}
-                tilOgMed={{
-                    label: 'Innvilges til og med',
-                    value: innvilgelsesperiode.tilOgMed,
-                    minDate: innvilgelsesperiode.fraOgMed ?? tiltaksdeltagelsesperiode.fraOgMed,
-                    maxDate: tiltaksdeltagelsesperiode.tilOgMed,
-                    onDateChange: (valgtDato) => {
-                        if (!valgtDato) {
-                            return;
-                        }
+                            dispatch({
+                                type: 'oppdaterInnvilgelsesperiode',
+                                payload: {
+                                    periode: { fraOgMed: dateTilISOTekst(valgtDato) },
+                                    behandling,
+                                    sak,
+                                },
+                            });
+                        },
+                    }}
+                    tilOgMed={{
+                        label: 'Til og med',
+                        value: innvilgelsesperiode.tilOgMed,
+                        minDate: innvilgelsesperiode.fraOgMed ?? tiltaksdeltagelsesperiode.fraOgMed,
+                        maxDate: tiltaksdeltagelsesperiode.tilOgMed,
+                        onDateChange: (valgtDato) => {
+                            if (!valgtDato) {
+                                return;
+                            }
 
-                        dispatch({
-                            type: 'oppdaterInnvilgelsesperiode',
-                            payload: {
-                                periode: { tilOgMed: dateTilISOTekst(valgtDato) },
-                                behandling,
-                                sak,
-                            },
-                        });
-                    },
-                }}
-                readOnly={erIkkeSaksbehandler}
-            />
-        </VStack>
+                            dispatch({
+                                type: 'oppdaterInnvilgelsesperiode',
+                                payload: {
+                                    periode: { tilOgMed: dateTilISOTekst(valgtDato) },
+                                    behandling,
+                                    sak,
+                                },
+                            });
+                        },
+                    }}
+                    readOnly={erIkkeSaksbehandler}
+                />
+            </VedtakSeksjon.Venstre>
+        </VedtakSeksjon>
     );
 };

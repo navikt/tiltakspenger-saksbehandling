@@ -99,7 +99,7 @@ export const søknadsbehandlingReducer: Reducer<SøknadsbehandlingState, Søknad
         case 'oppdaterBarnetilleggAntall':
         case 'oppdaterBarnetilleggFraOgMed':
         case 'oppdaterBarnetilleggTilOgMed':
-        case 'nullstillBarnetilleggPerioder':
+        case 'settBarnetilleggPerioder':
         case 'addTiltakPeriode':
         case 'fjernTiltakPeriode':
         case 'oppdaterTiltakId':

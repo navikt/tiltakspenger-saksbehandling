@@ -116,7 +116,7 @@ export const hentForhåndsutfyltInnvilgelse = (
     };
 };
 
-const tiltaksdeltagelserFraSaksopplysninger = (
+export const tiltaksdeltagelserFraSaksopplysninger = (
     behandling: Rammebehandling,
     innvilgelsesperiode: Periode,
 ): TiltaksdeltakelsePeriode[] => {

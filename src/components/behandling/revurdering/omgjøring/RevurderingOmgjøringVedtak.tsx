@@ -1,11 +1,7 @@
 import { BodyShort, Heading, HStack, VStack } from '@navikt/ds-react';
-import { RevurderingInnvilgelseBegrunnelse } from '../innvilgelse/1-begrunnelse/RevurderingInnvilgelseBegrunnelse';
-import { RevurderingInnvilgelsesperiodeVelger } from '../innvilgelse/2-innvilgelsesperiode/RevurderingInnvilgelsesperiodeVelger';
-import { RevurderingDagerPerMeldeperiode } from '../innvilgelse/3-dager-per-meldeperiode/RevurderingDagerPerMeldeperiode';
+import { RevurderingInnvilgelseBegrunnelse } from '~/components/behandling/revurdering/innvilgelse/begrunnelse/RevurderingInnvilgelseBegrunnelse';
 import { Separator } from '~/components/separator/Separator';
-import { RevurderingInnvilgelseTiltak } from '../innvilgelse/4-tiltak/RevurderingInnvilgelseTiltak';
-import { RevurderingInnvilgelseBarnetillegg } from '../innvilgelse/5-barn/RevurderingInnvilgelseBarnetillegg';
-import { RevurderingInnvilgelseBrev } from '../innvilgelse/6-brev/RevurderingInnvilgelseBrev';
+import { RevurderingInnvilgelseBrev } from '~/components/behandling/revurdering/innvilgelse/brev/RevurderingInnvilgelseBrev';
 import { BehandlingBeregningOgSimulering } from '../../felles/beregning-og-simulering/BehandlingBeregningOgSimulering';
 import { useRevurderingOmgjøring } from '../../context/BehandlingContext';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '~/utils/date';
@@ -24,6 +20,11 @@ import {
     RevurderingOmgjøringContext,
     useRevurderingOmgjøringSkjema,
 } from '~/components/behandling/context/revurdering/revurderingOmgjøringSkjemaContext';
+import { InnvilgelsesperiodeVelger } from '~/components/behandling/felles/innvilgelsesperiode/InnvilgelsesperiodeVelger';
+import { Nullable } from '~/types/UtilTypes';
+import { BehandlingDagerPerMeldeperiode } from '~/components/behandling/felles/dager-per-meldeperiode/BehandlingDagerPerMeldeperiode';
+import { BehandlingTiltak } from '~/components/behandling/felles/tiltak/BehandlingTiltak';
+import { BehandlingBarnetillegg } from '~/components/behandling/felles/barnetillegg/BehandlingBarnetillegg';
 
 export const RevurderingOmgjøringVedtak = () => {
     const { behandling } = useRevurderingOmgjøring();
@@ -97,11 +98,11 @@ export const RevurderingOmgjøringVedtak = () => {
                     variant="inlineColon"
                 />
             )}
-            <RevurderingInnvilgelsesperiodeVelger />
-            <RevurderingDagerPerMeldeperiode />
+            <InnvilgelsesperiodeVelger behandling={behandling} />
+            <BehandlingDagerPerMeldeperiode />
             <Separator />
-            <RevurderingInnvilgelseTiltak />
-            <RevurderingInnvilgelseBarnetillegg />
+            <BehandlingTiltak />
+            <BehandlingBarnetillegg />
             <Separator />
             <RevurderingInnvilgelseBrev />
             <Separator />
@@ -111,11 +112,13 @@ export const RevurderingOmgjøringVedtak = () => {
     );
 };
 
-const tilDTO = (skjema: RevurderingOmgjøringContext): RevurderingVedtakOmgjøringRequest => {
+const tilDTO = (
+    skjema: RevurderingOmgjøringContext,
+): Nullable<RevurderingVedtakOmgjøringRequest> => {
     const { innvilgelse } = skjema;
 
     if (!innvilgelse.harValgtPeriode) {
-        throw Error('Innvilgelsesperioden må være valgt');
+        return null;
     }
 
     return {

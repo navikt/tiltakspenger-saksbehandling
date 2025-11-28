@@ -9,14 +9,14 @@ import { SøknadsbehandlingAutomatiskBehandling } from '~/components/behandling/
 import { BehandlingBeregningOgSimulering } from '~/components/behandling/felles/beregning-og-simulering/BehandlingBeregningOgSimulering';
 import { useBehandlingSkjema } from '~/components/behandling/context/BehandlingSkjemaContext';
 import { SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
-
-import style from './SøknadsbehandlingVedtak.module.css';
 import { BehandlingDagerPerMeldeperiode } from '~/components/behandling/felles/dager-per-meldeperiode/BehandlingDagerPerMeldeperiode';
 import { BehandlingTiltak } from '~/components/behandling/felles/tiltak/BehandlingTiltak';
 import { BehandlingBarnetillegg } from '~/components/behandling/felles/barnetillegg/BehandlingBarnetillegg';
 import { useBehandlingInnvilgelseSkjema } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 import { InnvilgelsesperiodeVelger } from '~/components/behandling/felles/innvilgelsesperiode/InnvilgelsesperiodeVelger';
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
+
+import style from './SøknadsbehandlingVedtak.module.css';
 
 export const SøknadsbehandlingVedtak = () => {
     const { resultat } = useBehandlingSkjema();
@@ -28,6 +28,7 @@ export const SøknadsbehandlingVedtak = () => {
             </Heading>
             <SøknadsbehandlingAutomatiskBehandling />
             <SøknadsbehandlingBegrunnelse />
+            <Separator />
             <SøknadsbehandlingResultatVelger />
             {resultat === SøknadsbehandlingResultat.INNVILGELSE && <Innvilgelse />}
             {resultat === SøknadsbehandlingResultat.AVSLAG && <Avslag />}
@@ -49,7 +50,7 @@ const Innvilgelse = () => {
                     <BehandlingDagerPerMeldeperiode />
                     <Separator />
                     <BehandlingTiltak />
-                    <BehandlingBarnetillegg valgTekst={'Skal det innvilges barnetillegg?'} />
+                    <BehandlingBarnetillegg />
                     <Separator />
                     <SøknadsbehandlingBrev />
                     <Separator />

@@ -1,30 +1,41 @@
 import { Heading } from '@navikt/ds-react';
-import { RevurderingInnvilgelseBegrunnelse } from '~/components/behandling/revurdering/innvilgelse/1-begrunnelse/RevurderingInnvilgelseBegrunnelse';
-import { RevurderingInnvilgelsesperiodeVelger } from '~/components/behandling/revurdering/innvilgelse/2-innvilgelsesperiode/RevurderingInnvilgelsesperiodeVelger';
+import { RevurderingInnvilgelseBegrunnelse } from '~/components/behandling/revurdering/innvilgelse/begrunnelse/RevurderingInnvilgelseBegrunnelse';
 import { Separator } from '~/components/separator/Separator';
-import { RevurderingInnvilgelseBrev } from '~/components/behandling/revurdering/innvilgelse/6-brev/RevurderingInnvilgelseBrev';
-import { RevurderingInnvilgelseSend } from '~/components/behandling/revurdering/innvilgelse/7-send-og-godkjenn/RevurderingInnvilgelseSend';
-import { RevurderingInnvilgelseBarnetillegg } from '~/components/behandling/revurdering/innvilgelse/5-barn/RevurderingInnvilgelseBarnetillegg';
-import { RevurderingDagerPerMeldeperiode } from './3-dager-per-meldeperiode/RevurderingDagerPerMeldeperiode';
-import { RevurderingInnvilgelseTiltak } from '~/components/behandling/revurdering/innvilgelse/4-tiltak/RevurderingInnvilgelseTiltak';
+import { RevurderingInnvilgelseBrev } from '~/components/behandling/revurdering/innvilgelse/brev/RevurderingInnvilgelseBrev';
+import { RevurderingInnvilgelseSend } from '~/components/behandling/revurdering/innvilgelse/send-og-godkjenn/RevurderingInnvilgelseSend';
 import { BehandlingBeregningOgSimulering } from '~/components/behandling/felles/beregning-og-simulering/BehandlingBeregningOgSimulering';
+import { useRevurderingInnvilgelseSkjema } from '~/components/behandling/context/revurdering/revurderingInnvilgelseSkjemaContext';
+import { InnvilgelsesperiodeVelger } from '~/components/behandling/felles/innvilgelsesperiode/InnvilgelsesperiodeVelger';
+import { useBehandling } from '~/components/behandling/context/BehandlingContext';
+import { BehandlingDagerPerMeldeperiode } from '~/components/behandling/felles/dager-per-meldeperiode/BehandlingDagerPerMeldeperiode';
+import { BehandlingTiltak } from '~/components/behandling/felles/tiltak/BehandlingTiltak';
+import { BehandlingBarnetillegg } from '~/components/behandling/felles/barnetillegg/BehandlingBarnetillegg';
 
 export const RevurderingInnvilgelseVedtak = () => {
+    const { innvilgelse } = useRevurderingInnvilgelseSkjema();
+    const { behandling } = useBehandling();
+
     return (
         <>
             <Heading size={'medium'} level={'1'}>
                 {'Revurdering av innvilgelse'}
             </Heading>
             <RevurderingInnvilgelseBegrunnelse />
-            <RevurderingInnvilgelsesperiodeVelger />
-            <RevurderingDagerPerMeldeperiode />
             <Separator />
-            <RevurderingInnvilgelseTiltak />
-            <RevurderingInnvilgelseBarnetillegg />
+            <InnvilgelsesperiodeVelger behandling={behandling} />
             <Separator />
-            <RevurderingInnvilgelseBrev />
-            <Separator />
-            <BehandlingBeregningOgSimulering />
+            {innvilgelse.harValgtPeriode && (
+                <>
+                    <BehandlingDagerPerMeldeperiode />
+                    <Separator />
+                    <BehandlingTiltak />
+                    <BehandlingBarnetillegg />
+                    <Separator />
+                    <RevurderingInnvilgelseBrev />
+                    <Separator />
+                    <BehandlingBeregningOgSimulering />
+                </>
+            )}
             <RevurderingInnvilgelseSend />
         </>
     );
