@@ -8,13 +8,15 @@ import {
 import { SakProps } from '~/types/Sak';
 import { RevurderingStansState } from '~/components/behandling/context/revurdering/revurderingStansSkjemaContext';
 import { hentBarnetilleggForRevurdering } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
-import { ANTALL_DAGER_DEFAULT } from '~/components/behandling/felles/dager-per-meldeperiode/BehandlingDagerPerMeldeperiode';
 import { RevurderingOmgjøringState } from '~/components/behandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import { RevurderingInnvilgelseState } from '~/components/behandling/context/revurdering/revurderingInnvilgelseSkjemaContext';
 import { RammebehandlingMedInnvilgelse } from '~/types/Rammebehandling';
 import { Periode } from '~/types/Periode';
 import { TiltaksdeltakelsePeriode } from '~/types/TiltakDeltagelseTypes';
-import { tiltaksdeltagelserFraSaksopplysninger } from '~/components/behandling/context/behandlingSkjemaUtils';
+import {
+    antallDagerPerMeldeperiodeForPeriode,
+    tiltaksdeltagelserFraSaksopplysningerForPeriode,
+} from '~/components/behandling/context/behandlingSkjemaUtils';
 
 type RevurderingState =
     | RevurderingInnvilgelseState
@@ -83,7 +85,10 @@ const innvilgelseInitialState = (
             ),
             antallDagerPerMeldeperiode: behandling.antallDagerPerMeldeperiode ?? [
                 {
-                    antallDagerPerMeldeperiode: ANTALL_DAGER_DEFAULT,
+                    antallDagerPerMeldeperiode: antallDagerPerMeldeperiodeForPeriode(
+                        behandling,
+                        virkningsperiode,
+                    ),
                     periode: virkningsperiode,
                 },
             ],
@@ -128,6 +133,6 @@ const valgteTiltaksdeltakelserInitialState = (
 ): TiltaksdeltakelsePeriode[] => {
     return (
         behandling.valgteTiltaksdeltakelser ??
-        tiltaksdeltagelserFraSaksopplysninger(behandling, innvilgelsesperiode)
+        tiltaksdeltagelserFraSaksopplysningerForPeriode(behandling, innvilgelsesperiode)
     );
 };

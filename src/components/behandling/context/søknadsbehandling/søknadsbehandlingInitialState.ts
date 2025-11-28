@@ -1,12 +1,12 @@
 import { Søknadsbehandling, SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
 import { hentLagredePerioderMedBarn } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
-import { ANTALL_DAGER_DEFAULT } from '~/components/behandling/felles/dager-per-meldeperiode/BehandlingDagerPerMeldeperiode';
 import {
     SøknadsbehandlingAvslagState,
     SøknadsbehandlingIkkeValgtState,
     SøknadsbehandlingInnvilgelseState,
     SøknadsbehandlingState,
 } from '~/components/behandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
+import { antallDagerPerMeldeperiodeForPeriode } from '~/components/behandling/context/behandlingSkjemaUtils';
 
 export const søknadsbehandlingInitialState = (
     behandling: Søknadsbehandling,
@@ -63,7 +63,10 @@ const innvilgelseInitialState = (
                 ? behandling.antallDagerPerMeldeperiode
                 : [
                       {
-                          antallDagerPerMeldeperiode: ANTALL_DAGER_DEFAULT,
+                          antallDagerPerMeldeperiode: antallDagerPerMeldeperiodeForPeriode(
+                              behandling,
+                              virkningsperiode,
+                          ),
                           periode: virkningsperiode,
                       },
                   ],

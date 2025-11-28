@@ -1,6 +1,6 @@
 import { Periode } from '~/types/Periode';
 import { Tiltaksdeltagelse, TiltaksdeltagelseMedPeriode } from '~/types/TiltakDeltagelseTypes';
-import { erDatoIPeriode, joinPerioder } from './periode';
+import { erDatoIPeriode, joinPerioder, perioderOverlapper } from './periode';
 import { Nullable } from '~/types/UtilTypes';
 import {
     Rammebehandling,
@@ -71,6 +71,25 @@ export const hentTiltaksdeltakelserMedStartOgSluttdato = (
         (t): t is TiltaksdeltagelseMedPeriode =>
             t.deltagelseFraOgMed != null && t.deltagelseTilOgMed != null,
     );
+
+export const hentTiltaksdeltagelserFraPeriode = (behandling: Rammebehandling, periode: Periode) => {
+    return hentTiltaksdeltakelserMedStartOgSluttdato(behandling).reduce<
+        TiltaksdeltagelseMedPeriode[]
+    >((acc, td) => {
+        const { deltagelseFraOgMed, deltagelseTilOgMed } = td;
+
+        const deltagelsesPeriode: Periode = {
+            fraOgMed: deltagelseFraOgMed,
+            tilOgMed: deltagelseTilOgMed,
+        };
+
+        if (perioderOverlapper(periode, deltagelsesPeriode)) {
+            acc.push(td);
+        }
+
+        return acc;
+    }, []);
+};
 
 export const hentHeleTiltaksdeltagelsesperioden = (behandling: Rammebehandling) => {
     const perioder = hentTiltaksdeltakelserMedStartOgSluttdato(behandling).map(

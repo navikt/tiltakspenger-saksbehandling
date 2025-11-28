@@ -1,7 +1,7 @@
 import {
     erRammebehandlingInnvilgelseResultat,
     erSøknadsbehandlingResultat,
-    hentTiltaksdeltakelserMedStartOgSluttdato,
+    hentTiltaksdeltagelserFraPeriode,
 } from '~/utils/behandling';
 import {
     InnvilgelseMedPerioderState,
@@ -10,7 +10,7 @@ import {
 } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 import { SøknadsbehandlingState } from '~/components/behandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
 import { BehandlingSkjemaState } from '~/components/behandling/context/behandlingSkjemaReducer';
-import { inneholderHelePerioden, perioderOverlapper } from '~/utils/periode';
+import { inneholderHelePerioden } from '~/utils/periode';
 import { datoMax, datoMin, forrigeDag, nesteDag } from '~/utils/date';
 import { MedPeriode, Periode } from '~/types/Periode';
 import { Rammebehandling } from '~/types/Rammebehandling';
@@ -100,56 +100,53 @@ export const hentForhåndsutfyltInnvilgelse = (
 
     return {
         harValgtPeriode: true,
-        innvilgelsesperiode: innvilgelsesperiode,
+        innvilgelsesperiode,
         harBarnetillegg: barnetilleggPerioder.length > 0,
         barnetilleggPerioder,
-        valgteTiltaksdeltakelser: tiltaksdeltagelserFraSaksopplysninger(
+        valgteTiltaksdeltakelser: tiltaksdeltagelserFraSaksopplysningerForPeriode(
             behandling,
             innvilgelsesperiode,
         ),
         antallDagerPerMeldeperiode: [
             {
-                antallDagerPerMeldeperiode: ANTALL_DAGER_DEFAULT,
+                antallDagerPerMeldeperiode: antallDagerPerMeldeperiodeForPeriode(
+                    behandling,
+                    innvilgelsesperiode,
+                ),
                 periode: innvilgelsesperiode,
             },
         ],
     };
 };
 
-export const tiltaksdeltagelserFraSaksopplysninger = (
+export const tiltaksdeltagelserFraSaksopplysningerForPeriode = (
     behandling: Rammebehandling,
-    innvilgelsesperiode: Periode,
+    periode: Periode,
 ): TiltaksdeltakelsePeriode[] => {
-    return hentTiltaksdeltakelserMedStartOgSluttdato(behandling).reduce<TiltaksdeltakelsePeriode[]>(
-        (acc, td) => {
-            const { deltagelseFraOgMed, deltagelseTilOgMed, eksternDeltagelseId } = td;
+    return hentTiltaksdeltagelserFraPeriode(behandling, periode).map((td) => {
+        const { deltagelseFraOgMed, deltagelseTilOgMed, eksternDeltagelseId } = td;
 
-            const deltagelsesPeriode: Periode = {
-                fraOgMed: deltagelseFraOgMed,
-                tilOgMed: deltagelseTilOgMed,
-            };
+        return {
+            eksternDeltagelseId,
+            periode: {
+                fraOgMed: datoMax(deltagelseFraOgMed, periode.fraOgMed),
+                tilOgMed: datoMin(deltagelseTilOgMed, periode.tilOgMed),
+            },
+        };
+    }, []);
+};
 
-            if (!perioderOverlapper(innvilgelsesperiode, deltagelsesPeriode)) {
-                return acc;
-            }
+// Henter det høyeste antall dager for en tiltaksdeltagelse fra saksopplysninger, eller default
+// antall dager dersom ingen tiltak har satt antall dager
+export const antallDagerPerMeldeperiodeForPeriode = (
+    behandling: Rammebehandling,
+    periode: Periode,
+): number => {
+    const dagerPerUke = hentTiltaksdeltagelserFraPeriode(behandling, periode).reduce((acc, td) => {
+        const { antallDagerPerUke } = td;
 
-            return [
-                ...acc,
-                {
-                    eksternDeltagelseId,
-                    periode: {
-                        fraOgMed: datoMax(
-                            deltagelsesPeriode.fraOgMed,
-                            innvilgelsesperiode.fraOgMed,
-                        ),
-                        tilOgMed: datoMin(
-                            deltagelsesPeriode.tilOgMed,
-                            innvilgelsesperiode.tilOgMed,
-                        ),
-                    },
-                },
-            ];
-        },
-        [],
-    );
+        return antallDagerPerUke ? Math.max(antallDagerPerUke, acc) : acc;
+    }, 0);
+
+    return dagerPerUke === 0 ? ANTALL_DAGER_DEFAULT : dagerPerUke * 2;
 };
