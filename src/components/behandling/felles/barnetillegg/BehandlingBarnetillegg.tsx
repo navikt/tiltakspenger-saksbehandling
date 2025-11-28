@@ -38,7 +38,7 @@ export const BehandlingBarnetillegg = () => {
 
                 <VedtakSeksjon.Venstre>
                     <RadioGroup
-                        legend={"Skal det innvilges barnetillegg?'"}
+                        legend={'Skal det innvilges barnetillegg?'}
                         size={'small'}
                         className={style.radioGroup}
                         value={harBarnetillegg}
