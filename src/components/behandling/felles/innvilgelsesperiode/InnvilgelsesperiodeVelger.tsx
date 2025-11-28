@@ -39,6 +39,7 @@ export const InnvilgelsesperiodeVelger = () => {
                         minDate: tiltaksdeltagelsesperiode.fraOgMed,
                         maxDate: innvilgelsesperiode.tilOgMed ?? tiltaksdeltagelsesperiode.tilOgMed,
                         defaultMonth: defaultDato,
+                        error: !innvilgelsesperiode.fraOgMed && 'Velg dato',
                         onDateChange: (valgtDato) => {
                             if (!valgtDato) {
                                 return;
@@ -60,6 +61,7 @@ export const InnvilgelsesperiodeVelger = () => {
                         minDate: innvilgelsesperiode.fraOgMed ?? tiltaksdeltagelsesperiode.fraOgMed,
                         maxDate: tiltaksdeltagelsesperiode.tilOgMed,
                         defaultMonth: defaultDato,
+                        error: !innvilgelsesperiode.tilOgMed && 'Velg dato',
                         onDateChange: (valgtDato) => {
                             if (!valgtDato) {
                                 return;
