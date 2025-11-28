@@ -1,4 +1,4 @@
-import { dateTilISOTekst } from '~/utils/date';
+import { dateTilISOTekst, datoMin } from '~/utils/date';
 import { useRolleForBehandling } from '~/context/saksbehandler/SaksbehandlerContext';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import {
@@ -24,6 +24,7 @@ export const InnvilgelsesperiodeVelger = () => {
         useRolleForBehandling(behandling) !== SaksbehandlerRolle.SAKSBEHANDLER;
 
     const tiltaksdeltagelsesperiode = hentHeleTiltaksdeltagelsesperioden(behandling);
+    const defaultDato = datoMin(new Date(), tiltaksdeltagelsesperiode.tilOgMed);
 
     return (
         <VedtakSeksjon>
@@ -37,6 +38,7 @@ export const InnvilgelsesperiodeVelger = () => {
                         value: innvilgelsesperiode.fraOgMed,
                         minDate: tiltaksdeltagelsesperiode.fraOgMed,
                         maxDate: innvilgelsesperiode.tilOgMed ?? tiltaksdeltagelsesperiode.tilOgMed,
+                        defaultMonth: defaultDato,
                         onDateChange: (valgtDato) => {
                             if (!valgtDato) {
                                 return;
@@ -57,6 +59,7 @@ export const InnvilgelsesperiodeVelger = () => {
                         value: innvilgelsesperiode.tilOgMed,
                         minDate: innvilgelsesperiode.fraOgMed ?? tiltaksdeltagelsesperiode.fraOgMed,
                         maxDate: tiltaksdeltagelsesperiode.tilOgMed,
+                        defaultMonth: defaultDato,
                         onDateChange: (valgtDato) => {
                             if (!valgtDato) {
                                 return;
