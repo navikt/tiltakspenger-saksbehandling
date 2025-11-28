@@ -4,10 +4,10 @@ import {
     hentTiltaksdeltakelserMedStartOgSluttdato,
 } from '~/utils/behandling';
 import {
-    BehandlingInnvilgelseSteg2State,
-    BehandlingMedInnvilgelseState,
-    BehandlingMedInnvilgelseSteg2State,
-} from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
+    InnvilgelseMedPerioderState,
+    BehandlingInnvilgelseState,
+    BehandlingInnvilgelseMedPerioderState,
+} from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 import { SøknadsbehandlingState } from '~/components/behandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
 import { BehandlingSkjemaState } from '~/components/behandling/context/behandlingSkjemaReducer';
 import { inneholderHelePerioden, perioderOverlapper } from '~/utils/periode';
@@ -20,13 +20,13 @@ import { TiltaksdeltakelsePeriode } from '~/types/TiltakDeltagelseTypes';
 
 export const erRammebehandlingInnvilgelseContext = (
     context: BehandlingSkjemaState,
-): context is BehandlingMedInnvilgelseState => {
+): context is BehandlingInnvilgelseState => {
     return erRammebehandlingInnvilgelseResultat(context.resultat);
 };
 
 export const erRammebehandlingInnvilgelseMedPerioderContext = (
     context: BehandlingSkjemaState,
-): context is BehandlingMedInnvilgelseSteg2State => {
+): context is BehandlingInnvilgelseMedPerioderState => {
     return erRammebehandlingInnvilgelseContext(context) && context.innvilgelse.harValgtPeriode;
 };
 
@@ -88,7 +88,7 @@ export const oppdaterPeriodiseringUtenOverlapp = <T extends MedPeriode>(
 export const innvilgelseDefaultState = (
     behandling: Rammebehandling,
     innvilgelsesperiode: Periode,
-): BehandlingInnvilgelseSteg2State => {
+): InnvilgelseMedPerioderState => {
     const barnetilleggPerioder = hentLagredePerioderMedBarn(behandling) ?? [];
 
     return {

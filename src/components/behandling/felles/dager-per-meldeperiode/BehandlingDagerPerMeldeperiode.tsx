@@ -2,7 +2,7 @@ import { classNames } from '~/utils/classNames';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { Alert, Heading } from '@navikt/ds-react';
 import { AntallDagerForMeldeperiodeForm } from '~/components/behandling/felles/dager-per-meldeperiode/form/AntallDagerForMeldeperiodeForm';
-import { useBehandlingInnvilgelseSteg2Skjema } from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
+import { useBehandlingInnvilgelseSteg2Skjema } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 
 import style from './BehandlingDagerPerMeldeperiode.module.css';
 

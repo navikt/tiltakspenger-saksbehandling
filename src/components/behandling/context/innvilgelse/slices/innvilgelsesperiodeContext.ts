@@ -1,7 +1,7 @@
 import { MedPeriode, Periode } from '~/types/Periode';
 import { perioderOverlapper } from '~/utils/periode';
 import { datoMax, datoMin } from '~/utils/date';
-import { BehandlingInnvilgelseSteg2State } from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
+import { InnvilgelseMedPerioderState } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 import { Reducer } from 'react';
 import { Rammebehandling } from '~/types/Rammebehandling';
 
@@ -10,7 +10,7 @@ export type InnvilgelsesperiodeAction = {
     payload: { periode: Partial<Periode>; behandling: Rammebehandling };
 };
 
-export const innvilgelsesperiodeReducer = (<State extends BehandlingInnvilgelseSteg2State>(
+export const innvilgelsesperiodeReducer = (<State extends InnvilgelseMedPerioderState>(
     state: State,
     action: InnvilgelsesperiodeAction,
 ) => {
@@ -40,7 +40,7 @@ export const innvilgelsesperiodeReducer = (<State extends BehandlingInnvilgelseS
             false,
         ),
     };
-}) satisfies Reducer<BehandlingInnvilgelseSteg2State, InnvilgelsesperiodeAction>;
+}) satisfies Reducer<InnvilgelseMedPerioderState, InnvilgelsesperiodeAction>;
 
 // Denne må kanskje tweakes litt hvis vi får periodiserte innvilgelser i en behandling
 const oppdaterPeriodisering = <T extends MedPeriode>(

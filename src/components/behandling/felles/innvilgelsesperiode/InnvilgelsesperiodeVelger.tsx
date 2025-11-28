@@ -6,7 +6,7 @@ import { VStack } from '@navikt/ds-react';
 import {
     useBehandlingInnvilgelseSkjemaDispatch,
     useBehandlingInnvilgelseSkjema,
-} from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
+} from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 import { PeriodeVelger } from '~/components/periode/PeriodeVelger';
 import { hentHeleTiltaksdeltagelsesperioden } from '~/utils/behandling';
 

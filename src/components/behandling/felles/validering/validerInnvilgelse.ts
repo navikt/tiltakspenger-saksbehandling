@@ -4,11 +4,11 @@ import { validerTiltaksdeltakelser } from '~/components/behandling/felles/valide
 import { validerAntallDagerPerMeldeperiode } from '~/components/behandling/felles/validering/validerAntallDagerPerMeldeperiode';
 import { hentHeleTiltaksdeltagelsesperioden } from '~/utils/behandling';
 import { Rammebehandling } from '~/types/Rammebehandling';
-import { BehandlingInnvilgelseState } from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
+import { InnvilgelseState } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 
 export const validerInnvilgelse = (
     behandling: Rammebehandling,
-    innvilgelse: BehandlingInnvilgelseState,
+    innvilgelse: InnvilgelseState,
 ): ValideringResultat => {
     if (!innvilgelse.harValgtPeriode) {
         return {

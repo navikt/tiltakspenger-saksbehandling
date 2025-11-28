@@ -14,7 +14,7 @@ import MultiperiodeForm from '~/components/periode/MultiperiodeForm';
 import {
     useBehandlingInnvilgelseSteg2Skjema,
     useBehandlingInnvilgelseSkjemaDispatch,
-} from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
+} from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 
 import style from './BehandlingTiltak.module.css';
 

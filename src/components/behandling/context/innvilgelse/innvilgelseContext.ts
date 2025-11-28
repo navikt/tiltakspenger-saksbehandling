@@ -35,12 +35,12 @@ import { BarnetilleggPeriode } from '~/types/Barnetillegg';
 import { AntallDagerPerMeldeperiode } from '~/types/AntallDagerPerMeldeperiode';
 import { erFullstendigPeriode } from '~/utils/periode';
 
-export type BehandlingInnvilgelseSteg1State = {
+export type InnvilgelseUtenPerioderState = {
     harValgtPeriode: false;
     innvilgelsesperiode: Partial<Periode>;
 };
 
-export type BehandlingInnvilgelseSteg2State = {
+export type InnvilgelseMedPerioderState = {
     harValgtPeriode: true;
     innvilgelsesperiode: Periode;
     valgteTiltaksdeltakelser: TiltaksdeltakelsePeriode[];
@@ -49,30 +49,28 @@ export type BehandlingInnvilgelseSteg2State = {
     antallDagerPerMeldeperiode: AntallDagerPerMeldeperiode[];
 };
 
-export type BehandlingInnvilgelseState =
-    | BehandlingInnvilgelseSteg1State
-    | BehandlingInnvilgelseSteg2State;
+export type InnvilgelseState = InnvilgelseUtenPerioderState | InnvilgelseMedPerioderState;
 
-export type BehandlingMedInnvilgelseState = {
+export type BehandlingInnvilgelseState = {
     resultat: RammebehandlingResultatMedInnvilgelse;
-    innvilgelse: BehandlingInnvilgelseState;
+    innvilgelse: InnvilgelseState;
 };
 
-export type BehandlingMedInnvilgelseSteg2State = {
+export type BehandlingInnvilgelseMedPerioderState = {
     resultat: RammebehandlingResultatMedInnvilgelse;
-    innvilgelse: BehandlingInnvilgelseSteg2State;
+    innvilgelse: InnvilgelseMedPerioderState;
 };
 
-export type BehandlingInnvilgelseActions =
+export type InnvilgelseActions =
     | InnvilgelsesperiodeAction
     | TiltaksdeltagelseActions
     | BarnetilleggActions
     | AntallDagerPerMeldeperiodeActions;
 
-export const behandlingInnvilgelseReducer: Reducer<
-    BehandlingInnvilgelseState,
-    BehandlingInnvilgelseActions
-> = (state, action) => {
+export const innvilgelseReducer: Reducer<InnvilgelseState, InnvilgelseActions> = (
+    state,
+    action,
+) => {
     const { type } = action;
     const { harValgtPeriode } = state;
 
@@ -132,10 +130,9 @@ export const behandlingInnvilgelseReducer: Reducer<
     throw Error(`Ugyldig action for behandling innvilgelse skjema: "${type satisfies never}"`);
 };
 
-export type BehandlingMedInnvilgelseContext =
-    BehandlingSkjemaMedFritekst<BehandlingMedInnvilgelseState>;
+export type BehandlingInnvilgelseContext = BehandlingSkjemaMedFritekst<BehandlingInnvilgelseState>;
 
-export const useBehandlingInnvilgelseSkjema = (): BehandlingMedInnvilgelseContext => {
+export const useBehandlingInnvilgelseSkjema = (): BehandlingInnvilgelseContext => {
     const context = useBehandlingSkjema();
 
     if (!erRammebehandlingInnvilgelseContext(context)) {
@@ -147,14 +144,14 @@ export const useBehandlingInnvilgelseSkjema = (): BehandlingMedInnvilgelseContex
     return context;
 };
 
-export type BehandlingMedInnvilgelseSteg2Context =
-    BehandlingSkjemaMedFritekst<BehandlingMedInnvilgelseSteg2State>;
+export type BehandlingInnvilgelseMedPerioderContext =
+    BehandlingSkjemaMedFritekst<BehandlingInnvilgelseMedPerioderState>;
 
-export const useBehandlingInnvilgelseSteg2Skjema = (): BehandlingMedInnvilgelseSteg2Context => {
+export const useBehandlingInnvilgelseSteg2Skjema = (): BehandlingInnvilgelseMedPerioderContext => {
     const context = useBehandlingSkjema();
 
     if (!erRammebehandlingInnvilgelseMedPerioderContext(context)) {
-        throw Error(`Feil resultat for innvilgelse context: ${context.resultat}`);
+        throw Error(`Feil resultat for innvilgelse context: ${JSON.stringify(context)}`);
     }
 
     return context;
@@ -164,7 +161,7 @@ export const useBehandlingInnvilgelseSkjemaDispatch = () => {
     const dispatch = useBehandlingSkjemaDispatch();
     const { resultat } = useBehandlingInnvilgelseSkjema();
 
-    return (action: BehandlingInnvilgelseActions) =>
+    return (action: InnvilgelseActions) =>
         dispatch({
             ...action,
             superType: reducerSuperType[resultat],

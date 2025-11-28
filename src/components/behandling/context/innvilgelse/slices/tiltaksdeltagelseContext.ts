@@ -1,5 +1,5 @@
 import { datoMin, nesteDag } from '~/utils/date';
-import { BehandlingInnvilgelseSteg2State } from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
+import { InnvilgelseMedPerioderState } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 import { Reducer } from 'react';
 import { oppdaterPeriodiseringUtenOverlapp } from '~/components/behandling/context/behandlingSkjemaUtils';
 import { TiltaksdeltakelsePeriode } from '~/types/TiltakDeltagelseTypes';
@@ -26,7 +26,7 @@ export type TiltaksdeltagelseActions =
           payload: { tilOgMed: string; index: number };
       };
 
-export const tiltaksdeltagelseReducer = (<State extends BehandlingInnvilgelseSteg2State>(
+export const tiltaksdeltagelseReducer = (<State extends InnvilgelseMedPerioderState>(
     state: State,
     action: TiltaksdeltagelseActions,
 ): State => {
@@ -136,4 +136,4 @@ export const tiltaksdeltagelseReducer = (<State extends BehandlingInnvilgelseSte
             };
         }
     }
-}) satisfies Reducer<BehandlingInnvilgelseSteg2State, TiltaksdeltagelseActions>;
+}) satisfies Reducer<InnvilgelseMedPerioderState, TiltaksdeltagelseActions>;

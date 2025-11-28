@@ -14,7 +14,7 @@ import style from './SøknadsbehandlingVedtak.module.css';
 import { BehandlingDagerPerMeldeperiode } from '~/components/behandling/felles/dager-per-meldeperiode/BehandlingDagerPerMeldeperiode';
 import { BehandlingTiltak } from '~/components/behandling/felles/tiltak/BehandlingTiltak';
 import { BehandlingBarnetillegg } from '~/components/behandling/felles/barnetillegg/BehandlingBarnetillegg';
-import { useBehandlingInnvilgelseSkjema } from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
+import { useBehandlingInnvilgelseSkjema } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 import { InnvilgelsesperiodeVelger } from '~/components/behandling/felles/innvilgelsesperiode/InnvilgelsesperiodeVelger';
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
 

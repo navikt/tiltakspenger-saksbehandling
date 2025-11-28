@@ -11,7 +11,7 @@ import { useBehandling } from '~/components/behandling/context/BehandlingContext
 import {
     useBehandlingInnvilgelseSteg2Skjema,
     useBehandlingInnvilgelseSkjemaDispatch,
-} from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
+} from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 
 import style from './BehandlingBarnetillegg.module.css';
 

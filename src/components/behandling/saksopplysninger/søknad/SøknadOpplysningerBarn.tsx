@@ -15,7 +15,7 @@ import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import {
     useBehandlingInnvilgelseSteg2Skjema,
     useBehandlingInnvilgelseSkjemaDispatch,
-} from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
+} from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 import { useBehandlingSkjema } from '~/components/behandling/context/BehandlingSkjemaContext';
 import { erRammebehandlingInnvilgelseResultat } from '~/utils/behandling';
 

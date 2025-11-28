@@ -4,10 +4,10 @@ import {
     SøknadsbehandlingResultat,
 } from '~/types/Søknadsbehandling';
 import {
-    BehandlingInnvilgelseActions,
-    behandlingInnvilgelseReducer,
-    BehandlingInnvilgelseState,
-} from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
+    InnvilgelseActions,
+    innvilgelseReducer,
+    InnvilgelseState,
+} from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 import { Reducer } from 'react';
 import { ReducerSuperAction } from '~/types/Context';
 import { søknadsbehandlingInitialState } from '~/components/behandling/context/søknadsbehandling/søknadsbehandlingInitialState';
@@ -33,7 +33,7 @@ export type SøknadsbehandlingAvslagState = {
 
 export type SøknadsbehandlingInnvilgelseState = {
     resultat: SøknadsbehandlingResultat.INNVILGELSE;
-    innvilgelse: BehandlingInnvilgelseState;
+    innvilgelse: InnvilgelseState;
 };
 
 export type SøknadsbehandlingState =
@@ -54,7 +54,7 @@ type SøknadsbehandlingSetResultatAction = {
 type Actions =
     | SøknadsbehandlingSetResultatAction
     | SøknadsbehandlingAvslagAction
-    | BehandlingInnvilgelseActions;
+    | InnvilgelseActions;
 
 export type SøknadsbehandlingActions = ReducerSuperAction<
     Actions,
@@ -111,7 +111,7 @@ export const søknadsbehandlingReducer: Reducer<SøknadsbehandlingState, Søknad
 
             return {
                 ...state,
-                innvilgelse: behandlingInnvilgelseReducer(state.innvilgelse, action),
+                innvilgelse: innvilgelseReducer(state.innvilgelse, action),
             };
         }
     }

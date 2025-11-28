@@ -5,9 +5,9 @@ import { BodyLong } from '@navikt/ds-react';
 import { TekstListe } from '~/components/liste/TekstListe';
 import { RevurderingResultat } from '~/types/Revurdering';
 import {
-    BehandlingMedInnvilgelseSteg2Context,
+    BehandlingInnvilgelseMedPerioderContext,
     useBehandlingInnvilgelseSteg2Skjema,
-} from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
+} from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 import { revurderingOmgjøringValidering } from '~/components/behandling/revurdering/omgjøring/revurderingInnvilgelseValidering';
 import { revurderingInnvilgelseValidering } from '~/components/behandling/revurdering/innvilgelse/revurderingInnvilgelseValidering';
 import { RevurderingInnvilgelseContext } from '~/components/behandling/context/revurdering/revurderingInnvilgelseSkjemaContext';
@@ -46,7 +46,7 @@ export const RevurderingInnvilgelseBrev = () => {
 };
 
 const revurderingskjemaTilBrevForhåndsvisningDTO = (
-    skjema: BehandlingMedInnvilgelseSteg2Context,
+    skjema: BehandlingInnvilgelseMedPerioderContext,
 ): RevurderingInnvilgelseBrevForhåndsvisningDTO => {
     const { innvilgelse, textAreas } = skjema;
 

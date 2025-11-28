@@ -11,7 +11,7 @@ import { useSak } from '~/context/sak/SakContext';
 import {
     useBehandlingInnvilgelseSteg2Skjema,
     useBehandlingInnvilgelseSkjemaDispatch,
-} from '~/components/behandling/context/innvilgelse/behandlingInnvilgelseContext';
+} from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 
 import style from './BehandlingBarnetilleggPerioder.module.css';
 
