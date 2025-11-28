@@ -20,6 +20,7 @@ import { useBehandlingSkjema } from '~/components/behandling/context/BehandlingS
 import { erRammebehandlingInnvilgelseResultat } from '~/utils/behandling';
 
 import style from './SøknadOpplysningerBarn.module.css';
+import { formaterSøknadsspørsmålSvar } from '~/utils/tekstformateringUtils';
 
 type Props = {
     tiltaksperiode: Nullable<Periode>;
@@ -44,7 +45,12 @@ export const SøknadOpplysningerBarn = ({
             ) : (
                 <BehandlingSaksopplysning
                     navn="Har søkt om barnetillegg"
-                    verdi={søknad.svar.harSøktOmBarnetillegg!.svar}
+                    verdi={
+                        søknad.svar.harSøktOmBarnetillegg!.svar === 'JA'
+                            ? formaterSøknadsspørsmålSvar(søknad.svar.harSøktOmBarnetillegg!.svar) +
+                              ' - barn ikke oppgitt'
+                            : formaterSøknadsspørsmålSvar(søknad.svar.harSøktOmBarnetillegg!.svar)!
+                    }
                     visVarsel
                 />
             )}
