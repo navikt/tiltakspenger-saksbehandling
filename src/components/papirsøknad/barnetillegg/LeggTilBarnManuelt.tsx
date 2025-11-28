@@ -15,6 +15,7 @@ const TOM_BARN_KLADD: Barn = {
     fornavn: '',
     etternavn: '',
     fødselsdato: '',
+    erSøktBarnetilleggFor: undefined,
     oppholdInnenforEøs: undefined,
     manueltRegistrertBarnAntallVedlegg: undefined,
 };
@@ -116,7 +117,7 @@ export const LeggTilBarnManuelt = ({ onAppend }: Props) => {
         if (!kanLeggeTilBarn) {
             return;
         }
-        onAppend({ ...kladd, uuid: uuidv4() });
+        onAppend({ ...kladd, uuid: uuidv4(), erSøktBarnetilleggFor: { svar: 'JA' } });
         skjulKladd();
     };
 

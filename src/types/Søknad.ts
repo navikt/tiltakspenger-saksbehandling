@@ -41,6 +41,8 @@ export interface SpørsmålsbesvarelserPengestøtter {
 }
 
 export interface Spørsmålsbesvarelser extends SpørsmålsbesvarelserPengestøtter {
+    harSøktPåTiltak: JaNeiSpm | undefined;
+    harSøktOmBarnetillegg: JaNeiSpm | undefined;
     kvp: PeriodeSpm;
     intro: PeriodeSpm;
     institusjon: PeriodeSpm;

@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from '../Spørsmål.module.css';
-import { FieldPath, useController, useFieldArray, useFormContext } from 'react-hook-form';
+import { FieldPath, useController, useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 import { Alert, Button, Heading, HStack, VStack } from '@navikt/ds-react';
 import { classNames } from '~/utils/classNames';
 import type { Barn, Papirsøknad } from '~/components/papirsøknad/papirsøknadTypes';
@@ -26,6 +26,11 @@ export const PapirsøknadBarnetillegg = ({ sakId, name, legend }: Props) => {
     const [skalHenteBarn, setSkalHenteBarn] = React.useState(false);
 
     const barnFraFolkeregisteret = useFieldArray<Papirsøknad>({
+        control,
+        name: 'svar.barnetilleggPdl',
+    });
+
+    const barnetilleggPdlWatch = useWatch({
         control,
         name: 'svar.barnetilleggPdl',
     });
@@ -60,6 +65,7 @@ export const PapirsøknadBarnetillegg = ({ sakId, name, legend }: Props) => {
                     mellomnavn: p.mellomnavn || undefined,
                     etternavn: p.etternavn,
                     fødselsdato: p.fødselsdato,
+                    erSøktBarnetilleggFor: undefined,
                     uuid: uuidv4(),
                     index,
                 }),
@@ -128,9 +134,17 @@ export const PapirsøknadBarnetillegg = ({ sakId, name, legend }: Props) => {
                                         søknadsperiode={periode.field.value as Periode}
                                     />
                                     <JaNeiSpørsmål
-                                        name={`svar.barnetilleggPdl.${index}.oppholdInnenforEøs.svar`}
-                                        legend={` Oppholder seg i EØS-land i tiltaksperioden`}
+                                        name={`svar.barnetilleggPdl.${index}.erSøktBarnetilleggFor.svar`}
+                                        legend="Er søkt om barnetillegg for?"
+                                        måVæreBesvart
                                     />
+                                    {barnetilleggPdlWatch?.[index]?.erSøktBarnetilleggFor?.svar ===
+                                        'JA' && (
+                                        <JaNeiSpørsmål
+                                            name={`svar.barnetilleggPdl.${index}.oppholdInnenforEøs.svar`}
+                                            legend="Oppholder seg i EØS-land i tiltaksperioden"
+                                        />
+                                    )}
                                 </div>
                             ))}
                         </div>
