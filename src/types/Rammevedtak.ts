@@ -27,6 +27,7 @@ export type Rammevedtak = {
     barnetillegg: Nullable<Barnetillegg>;
     erGjeldende: boolean;
     gyldigeKommandoer: GyldigeKommandoerMap;
+    omgjortGrad: Nullable<Omgjøringsgrad>;
 };
 
 type GyldigeKommandoerMap = {
@@ -63,3 +64,8 @@ export type RammevedtakKommando =
     | RammevedtakKommandoOmgjør
     | RammevedtakKommandoOpphør
     | RammevedtakKommandoStans;
+
+export enum Omgjøringsgrad {
+    HELT = 'HELT',
+    DELVIS = 'DELVIS',
+}

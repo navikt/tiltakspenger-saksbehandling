@@ -35,7 +35,7 @@ export const InnvilgelsesperiodeVelger = () => {
                 <PeriodeVelger
                     fraOgMed={{
                         label: 'Fra og med',
-                        value: innvilgelsesperiode.fraOgMed,
+                        defaultSelected: innvilgelsesperiode.fraOgMed,
                         minDate: tiltaksdeltagelsesperiode.fraOgMed,
                         maxDate: innvilgelsesperiode.tilOgMed ?? tiltaksdeltagelsesperiode.tilOgMed,
                         defaultMonth: defaultDato,
@@ -57,7 +57,7 @@ export const InnvilgelsesperiodeVelger = () => {
                     }}
                     tilOgMed={{
                         label: 'Til og med',
-                        value: innvilgelsesperiode.tilOgMed,
+                        defaultSelected: innvilgelsesperiode.tilOgMed,
                         minDate: innvilgelsesperiode.fraOgMed ?? tiltaksdeltagelsesperiode.fraOgMed,
                         maxDate: tiltaksdeltagelsesperiode.tilOgMed,
                         defaultMonth: defaultDato,

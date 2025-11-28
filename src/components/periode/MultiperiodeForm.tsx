@@ -4,6 +4,7 @@ import { MedPeriode } from '~/types/Periode';
 import { Nullable } from '~/types/UtilTypes';
 import { DateOrString } from '../datovelger/Datovelger';
 import { PeriodeVelger } from '~/components/periode/PeriodeVelger';
+import { datoTilDatoInputText } from '~/utils/date';
 
 const MultiperiodeForm = <T extends MedPeriode[]>(props: {
     name: string;
@@ -51,7 +52,8 @@ const MultiperiodeForm = <T extends MedPeriode[]>(props: {
                         <PeriodeVelger
                             fraOgMed={{
                                 label: 'Fra og med',
-                                value: periode.periode.fraOgMed,
+                                selected: periode.periode.fraOgMed,
+                                value: datoTilDatoInputText(periode.periode.fraOgMed),
                                 onDateChange: (date) =>
                                     props.periodeConfig.fraOgMed.onChange(date, index),
                                 error: props.periodeConfig.fraOgMed.error,
@@ -60,7 +62,8 @@ const MultiperiodeForm = <T extends MedPeriode[]>(props: {
                             }}
                             tilOgMed={{
                                 label: 'Til og med',
-                                value: periode.periode.tilOgMed,
+                                selected: periode.periode.tilOgMed,
+                                value: datoTilDatoInputText(periode.periode.tilOgMed),
                                 onDateChange: (date) =>
                                     props.periodeConfig.tilOgMed.onChange(date, index),
                                 error: props.periodeConfig.tilOgMed.error,
