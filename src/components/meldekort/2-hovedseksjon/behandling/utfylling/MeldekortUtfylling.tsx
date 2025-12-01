@@ -1,4 +1,13 @@
-import { Alert, BodyShort, Button, HStack, Textarea, VStack } from '@navikt/ds-react';
+import {
+    Alert,
+    BodyShort,
+    Button,
+    HelpText,
+    HStack,
+    InlineMessage,
+    Textarea,
+    VStack,
+} from '@navikt/ds-react';
 import { useSak } from '~/context/sak/SakContext';
 import {
     ForhåndsvisMeldekortbehandlingBrevRequest,
@@ -78,6 +87,7 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
     const hentMeldekortUtfylling = (): MeldekortBehandlingDTO => ({
         dager: formContext.getValues().dager,
         begrunnelse: formContext.getValues().begrunnelse,
+        tekstTilVedtaksbrev: formContext.getValues().tekstTilVedtaksbrev ?? null,
     });
 
     const customValidering = () => {
@@ -106,6 +116,7 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
                 brukersMeldekortForBehandling,
             ),
             begrunnelse: meldekortBehandling.begrunnelse,
+            tekstTilVedtaksbrev: meldekortBehandling.tekstTilVedtaksbrev,
         });
     }, [meldekortBehandling, tidligereMeldekortBehandlinger, brukersMeldekortForBehandling]);
 
@@ -138,21 +149,24 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
                             <Textarea
                                 label="Vedtaksbrev for behandling av meldekort"
                                 description={
-                                    <HStack gap="2">
+                                    <VStack gap="2">
                                         <BodyShort>
                                             Teksten vises i vedtaksbrevet til bruker.
                                         </BodyShort>
-                                        {/*
-                                            TODO - fjern når etter rebase med main og oppdater ds-react
-                                              {meldekortBehandling.tekstTilVedtaksbrev !==
+
+                                        {meldekortBehandling.tekstTilVedtaksbrev !==
                                             formContext.watch('tekstTilVedtaksbrev') && (
-                                            <InlineMessage status="warning">
-                                                Ingen registrert postadresse for bruker, sjekk
-                                                kontaktinformasjon
-                                            </InlineMessage>
+                                            <HStack gap="1">
+                                                <InlineMessage status="warning">
+                                                    Teksten er endret og ikke lagret.
+                                                </InlineMessage>
+                                                <HelpText>
+                                                    Endringene blir lagret ved &apos;Lagre og
+                                                    beregn&apos;, og &apos;Send til beslutter&apos;
+                                                </HelpText>
+                                            </HStack>
                                         )}
-                                            */}
-                                    </HStack>
+                                    </VStack>
                                 }
                                 minRows={5}
                                 resize={'vertical'}

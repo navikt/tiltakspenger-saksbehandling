@@ -100,4 +100,5 @@ type Beregningsdag = {
 export type MeldekortBehandlingDTO = {
     dager: MeldekortDagProps[];
     begrunnelse?: string;
+    tekstTilVedtaksbrev: Nullable<string>;
 };
