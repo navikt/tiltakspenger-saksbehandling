@@ -8,8 +8,11 @@ import React from 'react';
 import { behandlingUrl } from '~/utils/urls';
 import { SakId } from '~/types/Sak';
 import { SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
-import { RammevedtakMedBehandling } from '~/types/Rammevedtak';
+import { Omgjøringsgrad, RammevedtakMedBehandling } from '~/types/Rammevedtak';
 import { OmgjørVedtakMenyvalg } from '~/components/personoversikt/behandlinger-oversikt/vedtatte-behandlinger/OmgjørVedtakMenyvalg';
+import { classNames } from '~/utils/classNames';
+
+import style from './VedtatteBehandlinger.module.css';
 
 type Props = {
     sakId: SakId;
@@ -41,11 +44,16 @@ export const VedtatteBehandlingerTabell = ({ sakId, rammevedtakMedBehandlinger }
                         opprinneligInnvilgetPerioder,
                         gjeldendeInnvilgetPerioder,
                         opprettet,
+                        omgjortGrad,
                     } = vedtak;
                     const { type, resultat } = behandling;
 
                     return (
-                        <Table.Row shadeOnHover={false} key={id}>
+                        <Table.Row
+                            shadeOnHover={false}
+                            className={classNames(omgjortGrad && omgjortGradStyle[omgjortGrad])}
+                            key={id}
+                        >
                             <Table.DataCell>{finnBehandlingstypeTekst[type]}</Table.DataCell>
                             <Table.DataCell>{behandlingResultatTilTag[resultat]}</Table.DataCell>
                             <Table.DataCell>{formaterTidspunkt(opprettet)}</Table.DataCell>
@@ -103,4 +111,9 @@ export const VedtatteBehandlingerTabell = ({ sakId, rammevedtakMedBehandlinger }
             </Table.Body>
         </Table>
     );
+};
+
+const omgjortGradStyle: Record<Omgjøringsgrad | string, string> = {
+    DELVIS: style.delvisOmgjortBg,
+    HELT: style.heltOmgjortBg,
 };

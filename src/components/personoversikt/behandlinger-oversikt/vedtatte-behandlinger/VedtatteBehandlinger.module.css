@@ -1,0 +1,30 @@
+@value omgjortColor var(--a-gray-50);
+
+@value stripeSize 8px;
+
+.omgjortGroup {
+    & > :global(.navds-checkboxes) {
+        display: flex;
+        gap: 0.25rem;
+    }
+}
+
+.omgjortCheckbox {
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    border: 1px solid var(--a-gray-500);
+}
+
+.heltOmgjortBg {
+    background-color: omgjortColor;
+}
+
+.delvisOmgjortBg {
+    background-image: repeating-linear-gradient(
+        -45deg,
+        omgjortColor,
+        omgjortColor stripeSize,
+        transparent stripeSize,
+        transparent calc(stripeSize * 2)
+    );
+}

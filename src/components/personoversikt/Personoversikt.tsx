@@ -70,6 +70,7 @@ export const Personoversikt = () => {
                     sakId={sakId}
                     behandlinger={behandlinger}
                     alleRammevedtak={alleRammevedtak}
+                    className={styles.tabellwrapper}
                 />
 
                 <AvsluttedeBehandlinger behandlinger={behandlinger} saksnummer={saksnummer} />

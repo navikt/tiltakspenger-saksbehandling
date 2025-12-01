@@ -7,3 +7,10 @@ li {
     padding: 0;
     margin: 0;
 }
+
+/** secondary-varianten har transparent som default background
+*   vi ønsker "alltid" at denne skal være hvit
+*/
+.navds-button--secondary {
+    background-color: var(--a-white);
+}
