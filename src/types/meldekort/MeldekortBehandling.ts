@@ -70,6 +70,7 @@ export type MeldekortBehandlingProps = {
     beregning?: MeldekortBeregning;
     avbrutt?: Avbrutt;
     simulertBeregning: Nullable<SimulertBeregning>;
+    tekstTilVedtaksbrev: Nullable<string>;
 };
 
 export type MeldekortDagProps = {

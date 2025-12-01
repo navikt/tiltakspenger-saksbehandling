@@ -34,6 +34,7 @@ export const MeldekortUtfyllingLagre = ({
         <Button
             variant={'secondary'}
             type={'button'}
+            size="small"
             loading={sendLagreMeldekortLaster}
             onClick={() => {
                 formContext.trigger().then((isValid) => {

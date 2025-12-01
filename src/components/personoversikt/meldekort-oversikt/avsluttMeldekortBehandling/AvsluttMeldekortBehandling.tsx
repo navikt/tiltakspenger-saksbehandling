@@ -1,6 +1,16 @@
 import React, { FormEvent, useRef, useState } from 'react';
 import router from 'next/router';
-import { BodyLong, Button, ButtonProps, Heading, HStack, Modal, Textarea } from '@navikt/ds-react';
+import {
+    Alert,
+    BodyLong,
+    Button,
+    ButtonProps,
+    Heading,
+    HStack,
+    Modal,
+    Textarea,
+    VStack,
+} from '@navikt/ds-react';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { SakId } from '~/types/Sak';
 import {
@@ -87,21 +97,35 @@ export const AvsluttMeldekortbehandlingModal = (props: {
                 />
             </Modal.Body>
             <Modal.Footer>
-                <Button
-                    variant="danger"
-                    size="small"
-                    loading={avsluttMeldekortBehandlingApi.isMutating}
-                    type="submit"
-                    disabled={hasError}
-                    onClick={(e) => {
-                        submit(e);
-                    }}
-                >
-                    Avslutt behandling
-                </Button>
-                <Button variant="secondary" type="button" size="small" onClick={props.onClose}>
-                    Ikke avslutt behandling
-                </Button>
+                <VStack gap="4">
+                    <HStack gap="2">
+                        <Button
+                            variant="secondary"
+                            type="button"
+                            size="small"
+                            onClick={props.onClose}
+                        >
+                            Ikke avslutt behandling
+                        </Button>
+                        <Button
+                            variant="danger"
+                            size="small"
+                            loading={avsluttMeldekortBehandlingApi.isMutating}
+                            type="submit"
+                            disabled={hasError}
+                            onClick={(e) => {
+                                submit(e);
+                            }}
+                        >
+                            Avslutt behandling
+                        </Button>
+                    </HStack>
+                    {avsluttMeldekortBehandlingApi.error && (
+                        <Alert variant={'error'} size="small">
+                            {avsluttMeldekortBehandlingApi.error.message}
+                        </Alert>
+                    )}
+                </VStack>
             </Modal.Footer>
         </Modal>
     );

@@ -14,7 +14,7 @@ export const MeldekortSide = () => {
     const { sakId, saksnummer } = useSak().sak;
     const { brukersMeldekort, sisteMeldekortBehandling } = useMeldeperiodeKjede();
 
-    //kan være undefined - bruker har enda ikke har sendt inn meldekort, og saksbehandler oppretter meldekortbehandling uten meldekort
+    //kan være undefined - bruker har enda ikke sendt inn meldekort, og saksbehandler oppretter meldekortbehandling uten meldekort
     const sisteInnsendteMeldekort: BrukersMeldekortProps | undefined = brukersMeldekort.toSorted(
         (a, b) => b.mottatt.localeCompare(a.mottatt),
     )[0];

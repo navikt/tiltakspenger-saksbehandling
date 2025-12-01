@@ -1,11 +1,12 @@
-import { Alert, BodyShort, HStack, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, HStack, Textarea, VStack } from '@navikt/ds-react';
 import { useSak } from '~/context/sak/SakContext';
 import {
+    ForhåndsvisMeldekortbehandlingBrevRequest,
     hentMeldekortForhåndsutfylling,
     MeldekortBehandlingForm,
     tellDagerMedDeltattEllerFravær,
 } from './meldekortUtfyllingUtils';
-import { FormProvider, useForm } from 'react-hook-form';
+import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useMeldeperiodeKjede } from '../../../MeldeperiodeKjedeContext';
 import {
     MeldekortBehandlingDagStatus,
@@ -23,10 +24,23 @@ import { meldeperiodeUrl } from '~/utils/urls';
 import { MeldekortBeregningOgSimulering } from '~/components/meldekort/0-felles-komponenter/beregning-simulering/MeldekortBeregningOgSimulering';
 
 import styles from './MeldekortUtfylling.module.css';
+import Divider from '~/components/divider/Divider';
+import { useFetchBlobFraApi } from '~/utils/fetch/useFetchFraApi';
 
 type Props = {
     meldekortBehandling: MeldekortBehandlingProps;
 };
+
+/*
+TODO - se på å bruke dette som validering av formet istedenfor det vi har nå
+const useCustomValidering = (valideringscontext: { tillattAntallDager: number }) =>
+    React.useCallback(async (data: MeldekortBehandlingForm) => {
+        return {
+            data: data,
+            errors: {},
+        };
+    }, []);
+*/
 
 export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
     const [valideringsFeil, setValideringsFeil] = useState('');
@@ -51,6 +65,7 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
                 brukersMeldekortForBehandling,
             ),
             begrunnelse: meldekortBehandling.begrunnelse,
+            tekstTilVedtaksbrev: meldekortBehandling.tekstTilVedtaksbrev ?? null,
         },
     });
 
@@ -76,6 +91,11 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
         setValideringsFeil('');
         return true;
     };
+
+    const forhåndsvisBrev = useFetchBlobFraApi<ForhåndsvisMeldekortbehandlingBrevRequest>(
+        `/sak/${sakId}/meldekortbehandling/${meldekortBehandling.id}/forhandsvis`,
+        'POST',
+    );
 
     useEffect(() => {
         formContext.reset({
@@ -109,6 +129,71 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
                             formContext.setValue('begrunnelse', event.target.value);
                         }}
                     />
+
+                    <Divider orientation="horizontal" />
+                    <Controller
+                        name={'tekstTilVedtaksbrev'}
+                        control={formContext.control}
+                        render={({ field }) => (
+                            <Textarea
+                                label="Vedtaksbrev for behandling av meldekort"
+                                description={
+                                    <HStack gap="2">
+                                        <BodyShort>
+                                            Teksten vises i vedtaksbrevet til bruker.
+                                        </BodyShort>
+                                        {/*
+                                            TODO - fjern når etter rebase med main og oppdater ds-react
+                                              {meldekortBehandling.tekstTilVedtaksbrev !==
+                                            formContext.watch('tekstTilVedtaksbrev') && (
+                                            <InlineMessage status="warning">
+                                                Ingen registrert postadresse for bruker, sjekk
+                                                kontaktinformasjon
+                                            </InlineMessage>
+                                        )}
+                                            */}
+                                    </HStack>
+                                }
+                                minRows={5}
+                                resize={'vertical'}
+                                value={field.value ?? ''}
+                                onChange={field.onChange}
+                            />
+                        )}
+                    />
+                    <Button
+                        className={styles.forhåndsvisBrevButton}
+                        type="button"
+                        variant="secondary"
+                        size="small"
+                        loading={forhåndsvisBrev.isMutating}
+                        onClick={() => {
+                            forhåndsvisBrev.trigger(
+                                {
+                                    tekstTilVedtaksbrev: formContext.getValues(
+                                        'tekstTilVedtaksbrev',
+                                    )
+                                        ? formContext.getValues('tekstTilVedtaksbrev')
+                                        : null,
+                                },
+                                {
+                                    onSuccess: (blob) => {
+                                        console.log(blob);
+                                        window.open(URL.createObjectURL(blob!));
+                                    },
+                                },
+                            );
+                        }}
+                    >
+                        Forhåndsvis brev
+                    </Button>
+                    {forhåndsvisBrev.error && (
+                        <Alert variant="error" size="small">
+                            <BodyShort>Feil ved forhåndsvisning av brev</BodyShort>
+                            <BodyShort>{`[${forhåndsvisBrev.error.status}] ${forhåndsvisBrev.error.message}`}</BodyShort>
+                        </Alert>
+                    )}
+                    <Divider orientation="horizontal" />
                     <VStack gap={'2'}>
                         {valideringsFeil && (
                             <Alert variant={'error'} size={'small'}>
@@ -127,11 +212,9 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
                                     meldekortBehandling.periode,
                                 )}
                                 buttonProps={{
-                                    size: 'medium',
                                     variant: 'tertiary',
                                 }}
                             />
-
                             <HStack gap="2">
                                 <MeldekortUtfyllingLagre
                                     meldekortId={meldekortBehandling.id}

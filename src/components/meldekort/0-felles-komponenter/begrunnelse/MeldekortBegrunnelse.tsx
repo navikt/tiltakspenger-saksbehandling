@@ -1,4 +1,4 @@
-import { BodyLong, Heading, Textarea } from '@navikt/ds-react';
+import { Textarea } from '@navikt/ds-react';
 import { ComponentProps } from 'react';
 import { classNames } from '../../../../utils/classNames';
 
@@ -9,18 +9,10 @@ type Props = Partial<ComponentProps<typeof Textarea>>;
 export const MeldekortBegrunnelse = ({ readOnly, className, ...rest }: Props) => {
     return (
         <div>
-            <Heading size={'xsmall'} level={'2'} className={style.header}>
-                {'Begrunnelse (valgfri)'}
-            </Heading>
-            {!readOnly && (
-                <BodyLong size={'small'} className={style.personinfoVarsel}>
-                    {'Ikke skriv personsensitiv informasjon som ikke er relevant for saken.'}
-                </BodyLong>
-            )}
             <Textarea
                 {...rest}
-                label={'Begrunnelse'}
-                hideLabel={true}
+                label="Begrunnelse for meldekortbehandling (valgfri)"
+                description="Noter vurderingen. Ikke skriv personsensitive opplysninger som ikke er relevant for saken"
                 minRows={5}
                 resize={'vertical'}
                 readOnly={readOnly}

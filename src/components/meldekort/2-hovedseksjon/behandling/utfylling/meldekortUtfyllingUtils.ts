@@ -10,6 +10,7 @@ import {
 } from '~/types/meldekort/BrukersMeldekort';
 import { MeldeperiodeProps } from '~/types/meldekort/Meldeperiode';
 import { erLørdagEllerSøndag } from '~/utils/date';
+import { Nullable } from '~/types/UtilTypes';
 
 const hentDagerFraBehandling = (meldekortBehandling: MeldekortBehandlingProps) =>
     meldekortBehandling.beregning?.beregningForMeldekortetsPeriode.dager ??
@@ -102,4 +103,9 @@ const dagerMedDeltattEllerFravær: ReadonlySet<MeldekortBehandlingDagStatus> = n
 export type MeldekortBehandlingForm = {
     dager: MeldekortDagProps[];
     begrunnelse?: string;
+    tekstTilVedtaksbrev: Nullable<string>;
 };
+
+export interface ForhåndsvisMeldekortbehandlingBrevRequest {
+    tekstTilVedtaksbrev: Nullable<string>;
+}
