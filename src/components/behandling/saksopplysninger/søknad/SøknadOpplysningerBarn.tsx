@@ -95,7 +95,7 @@ const MedBarn = ({ tiltaksperiode, søknad, visBarnetilleggPeriodiseringKnapp }:
                     const { fnr, fødselsdato, fornavn } = barn;
 
                     const personopplysninger = fnr
-                        ? personopplysningerBarn.data?.find((p) => p.fnr)
+                        ? personopplysningerBarn.data?.find((p) => p.fnr === fnr)
                         : undefined;
 
                     return (
