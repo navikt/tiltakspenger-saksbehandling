@@ -46,18 +46,20 @@ export const validerBarnetillegg = (
 
         // Dersom søknaden ikke hadde barn, kan vi ikke vite noe om alder på evt barn som saksbehandler har lagt inn.
         // Vi viser en standard warning dersom barnetillegget saksbehandler har valgt ikke fyller hele innvilgelsesperioden
-        if (
-            søknad.barnetillegg.length === 0 &&
-            !perioderErLike(innvilgelsesperiode, totalBarnetilleggPeriode)
-        ) {
+        if (søknad.barnetillegg.length === 0) {
+            if (!perioderErLike(innvilgelsesperiode, totalBarnetilleggPeriode)) {
+                validering.warnings.push(
+                    `Den totale perioden for barnetillegg (${periodeTilFormatertDatotekst(totalBarnetilleggPeriode)}) fyller ikke hele innvilgelsesperioden (${periodeTilFormatertDatotekst(innvilgelsesperiode)})`,
+                );
+            }
             validering.warnings.push(
-                `Den totale perioden for barnetillegg (${periodeTilFormatertDatotekst(totalBarnetilleggPeriode)}) fyller ikke hele innvilgelsesperioden (${periodeTilFormatertDatotekst(innvilgelsesperiode)})`,
+                'Det er innvilget barnetillegg uten at vi har mottatt søknad med barn',
+            );
+        } else {
+            validering.warnings.push(
+                `Valgt barnetillegg stemmer ikke med barn fra siste søknad - Forventet barnetillegg fra søknad: ${formatterPeriodisering(periodiseringFraSøknad)}`,
             );
         }
-
-        validering.warnings.push(
-            `Valgt barnetillegg stemmer ikke med barn fra siste søknad - Forventet barnetillegg fra søknad: ${formatterPeriodisering(periodiseringFraSøknad)}`,
-        );
     }
 
     const perioderErUtenBarn = barnetilleggPerioder.every((bt) => bt.antallBarn === 0);
