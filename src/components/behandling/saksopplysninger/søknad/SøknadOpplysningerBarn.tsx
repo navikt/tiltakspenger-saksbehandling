@@ -33,6 +33,20 @@ export const SøknadOpplysningerBarn = ({
     søknad,
     visBarnetilleggPeriodiseringKnapp,
 }: Props) => {
+    const getBarnetilleggTekst = () => {
+        if (!søknad.svar.harSøktOmBarnetillegg) {
+            return 'Nei';
+        }
+        if (søknad.svar.harSøktOmBarnetillegg.svar === 'JA') {
+            return (
+                formaterSøknadsspørsmålSvar(søknad.svar.harSøktOmBarnetillegg.svar) +
+                ' - barn ikke oppgitt'
+            );
+        } else {
+            return formaterSøknadsspørsmålSvar(søknad.svar.harSøktOmBarnetillegg.svar);
+        }
+    };
+
     return (
         <div className={style.wrapper}>
             <BodyShort spacing={true}>{'Barn:'}</BodyShort>
@@ -45,13 +59,11 @@ export const SøknadOpplysningerBarn = ({
             ) : (
                 <BehandlingSaksopplysning
                     navn="Har søkt om barnetillegg"
-                    verdi={
-                        søknad.svar.harSøktOmBarnetillegg!.svar === 'JA'
-                            ? formaterSøknadsspørsmålSvar(søknad.svar.harSøktOmBarnetillegg!.svar) +
-                              ' - barn ikke oppgitt'
-                            : formaterSøknadsspørsmålSvar(søknad.svar.harSøktOmBarnetillegg!.svar)!
+                    verdi={getBarnetilleggTekst()}
+                    visVarsel={
+                        søknad.barnetillegg.length === 0 &&
+                        søknad.svar.harSøktOmBarnetillegg?.svar !== 'NEI'
                     }
-                    visVarsel
                 />
             )}
         </div>

@@ -50,7 +50,7 @@ const PapirsøknadPage = (props: Props) => {
     const onSubmit = (data: Papirsøknad) => {
         if (!personopplysninger) return;
 
-        // Sender ikke inn barn fra PDL som man har svar nei for.
+        // Sender ikke inn barn fra PDL som man har svart nei for.
         const pdlBarnDetErSøktBarnetilleggFor = data.svar.barnetilleggPdl.filter(
             (barn) => barn.erSøktBarnetilleggFor?.svar === 'JA',
         );
