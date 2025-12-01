@@ -11,6 +11,7 @@ import { SøknadOpplysningerBarn } from '../../behandling/saksopplysninger/søkn
 import { Alert, Link, VStack } from '@navikt/ds-react';
 import { Søknad } from '~/types/Søknad';
 import { Nullable } from '~/types/UtilTypes';
+import { SøknadsopplysningerTiltak } from '~/components/oppsummeringer/oppsummeringAvSøknad/SøknadsopplysningerTiltak';
 
 interface Props {
     /** Behandlingens tiltaksperiode, eller det som er på søknad hvis behandling er enda ikke opprettet (null ved papirsøknad dersom saksbehandler ikke har fyllt inn)*/
@@ -26,14 +27,7 @@ export const OppsummeringAvSøknad = ({
 }: Props) => {
     const { gosysUrl } = useConfig();
 
-    const {
-        opprettet,
-        tiltak,
-        manueltSattTiltak,
-        tiltaksdeltakelseperiodeDetErSøktOm,
-        antallVedlegg,
-        svar,
-    } = søknad;
+    const { opprettet, tiltaksdeltakelseperiodeDetErSøktOm, antallVedlegg, svar } = søknad;
 
     const {
         kvp: kvp,
@@ -64,24 +58,7 @@ export const OppsummeringAvSøknad = ({
                 visVarsel={!tiltaksdeltakelseperiodeDetErSøktOm}
             />
 
-            {tiltak && <BehandlingSaksopplysning navn={'Tiltak'} verdi={tiltak.typeNavn} />}
-            {manueltSattTiltak && (
-                <BehandlingSaksopplysning
-                    navn="Tiltak (uverifisert)"
-                    verdi={manueltSattTiltak}
-                    visVarsel
-                />
-            )}
-            {tiltak?.fraOgMed && tiltak.tilOgMed && (
-                <BehandlingSaksopplysning
-                    navn={'Periode'}
-                    verdi={periodeTilFormatertDatotekst({
-                        fraOgMed: tiltak.fraOgMed,
-                        tilOgMed: tiltak.tilOgMed,
-                    })}
-                    spacing={true}
-                />
-            )}
+            <SøknadsopplysningerTiltak søknad={søknad} />
 
             <BehandlingSaksopplysningMedPeriodeSpm
                 navn={'KVP'}
