@@ -37,15 +37,8 @@ export function formaterDatotekst(dateString: string) {
 }
 
 export function periodeTilFormatertDatotekst({ fraOgMed, tilOgMed }: Periode) {
-    const fraOgMedTekst = fraOgMed ? formaterDatotekst(fraOgMed) : 'ukjent';
-    const tilOgMedTekst = tilOgMed ? formaterDatotekst(tilOgMed) : 'ukjent';
-
-    return `${fraOgMedTekst} - ${tilOgMedTekst}`;
+    return `${formaterDatotekst(fraOgMed)} - ${formaterDatotekst(tilOgMed)}`;
 }
-
-export const meldekortHeading = (periode: Periode): string => {
-    return `Meldekort uke ${ukenummerFraDatotekst(periode.fraOgMed)} og ${ukenummerFraDatotekst(periode.tilOgMed)}`;
-};
 
 export function ukedagFraDatotekst(dato: string) {
     return ukedager[dayjs(dato).weekday()];
@@ -70,11 +63,6 @@ export const leggTilDager = (dato: string, dager: number) => {
 export const nesteDag = (dato: string) => leggTilDager(dato, 1);
 
 export const forrigeDag = (dato: string) => leggTilDager(dato, -1);
-
-export const overlapperMed = (dato: string | Date, periode: Periode) =>
-    dayjs(dato).isBetween(periode.fraOgMed, periode.tilOgMed) ||
-    dayjs(dato).isSame(periode.fraOgMed) ||
-    dayjs(dato).isSame(periode.tilOgMed);
 
 export const datoTilDatoInputText = (dato: string | Date): string => {
     return dayjs(dato).format('DD.MM.YYYY');

@@ -29,13 +29,7 @@ export const OppsummeringAvSøknad = ({
 
     const { opprettet, tiltaksdeltakelseperiodeDetErSøktOm, antallVedlegg, svar } = søknad;
 
-    const {
-        kvp: kvp,
-        intro: intro,
-        institusjon: institusjon,
-        etterlønn: etterlønn,
-        sykepenger: sykepenger,
-    } = svar;
+    const { kvp, intro, institusjon, etterlønn, sykepenger } = svar;
 
     return (
         <VStack>

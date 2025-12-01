@@ -1,10 +1,12 @@
-import { pageWithAuthentication } from '../../../../../auth/pageWithAuthentication';
-import { MeldeperiodeKjedeProps } from '../../../../../types/meldekort/Meldeperiode';
-import { SakProps } from '../../../../../types/Sak';
-import { fetchSak } from '../../../../../utils/fetch/fetch-server';
-import { MeldekortSide } from '../../../../../components/meldekort/MeldekortSide';
-import { SakProvider } from '../../../../../context/sak/SakContext';
-import { MeldeperiodeKjedeProvider } from '../../../../../components/meldekort/MeldeperiodeKjedeContext';
+import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
+import { MeldeperiodeKjedeProps } from '~/types/meldekort/Meldeperiode';
+import { SakProps } from '~/types/Sak';
+import { fetchSak } from '~/utils/fetch/fetch-server';
+import { MeldekortSide } from '~/components/meldekort/MeldekortSide';
+import { SakProvider } from '~/context/sak/SakContext';
+import { MeldeperiodeKjedeProvider } from '~/components/meldekort/MeldeperiodeKjedeContext';
+import { Periode } from '~/types/Periode';
+import { perioderErLike } from '~/utils/periode';
 
 type Props = {
     meldeperiodeKjede: MeldeperiodeKjedeProps;
@@ -24,11 +26,13 @@ const Meldeperiode = ({ meldeperiodeKjede, sak }: Props) => {
 export const getServerSideProps = pageWithAuthentication(async (context) => {
     const sak = await fetchSak(context.req, context.params!.saksnummer as string);
 
-    const fraOgMed = context.params!.fraOgMed;
-    const tilOgMed = context.params!.tilOgMed;
+    const periodeFraParam: Periode = {
+        fraOgMed: context.params!.fraOgMed as string,
+        tilOgMed: context.params!.tilOgMed as string,
+    };
 
-    const meldeperiodeKjede = sak.meldeperiodeKjeder.find(
-        (kjede) => kjede.periode.fraOgMed === fraOgMed && kjede.periode.tilOgMed === tilOgMed,
+    const meldeperiodeKjede = sak.meldeperiodeKjeder.find((kjede) =>
+        perioderErLike(kjede.periode, periodeFraParam),
     );
 
     if (!meldeperiodeKjede) {
