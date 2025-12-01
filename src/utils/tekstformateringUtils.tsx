@@ -254,6 +254,8 @@ export const formaterSøknadsspørsmålSvar = (value: string | undefined) => {
             return 'Nei';
         case 'IKKE_BESVART':
             return 'Ikke besvart';
+        case undefined:
+            return '-';
         default:
             return value;
     }

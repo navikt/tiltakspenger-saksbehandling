@@ -20,6 +20,7 @@ import { useBehandlingSkjema } from '~/components/behandling/context/BehandlingS
 import { erRammebehandlingInnvilgelseResultat } from '~/utils/behandling';
 
 import style from './SøknadOpplysningerBarn.module.css';
+import { formaterSøknadsspørsmålSvar } from '~/utils/tekstformateringUtils';
 
 type Props = {
     tiltaksperiode: Nullable<Periode>;
@@ -32,6 +33,20 @@ export const SøknadOpplysningerBarn = ({
     søknad,
     visBarnetilleggPeriodiseringKnapp,
 }: Props) => {
+    const getBarnetilleggTekst = () => {
+        if (!søknad.svar.harSøktOmBarnetillegg) {
+            return 'Nei';
+        }
+        if (søknad.svar.harSøktOmBarnetillegg.svar === 'JA') {
+            return (
+                formaterSøknadsspørsmålSvar(søknad.svar.harSøktOmBarnetillegg.svar) +
+                ' - barn ikke oppgitt'
+            );
+        } else {
+            return formaterSøknadsspørsmålSvar(søknad.svar.harSøktOmBarnetillegg.svar);
+        }
+    };
+
     return (
         <div className={style.wrapper}>
             <BodyShort spacing={true}>{'Barn:'}</BodyShort>
@@ -42,7 +57,14 @@ export const SøknadOpplysningerBarn = ({
                     visBarnetilleggPeriodiseringKnapp={visBarnetilleggPeriodiseringKnapp}
                 />
             ) : (
-                <BodyShort size={'small'}>{'Har ikke søkt om barnetillegg'}</BodyShort>
+                <BehandlingSaksopplysning
+                    navn="Har søkt om barnetillegg"
+                    verdi={getBarnetilleggTekst()}
+                    visVarsel={
+                        søknad.barnetillegg.length === 0 &&
+                        søknad.svar.harSøktOmBarnetillegg?.svar !== 'NEI'
+                    }
+                />
             )}
         </div>
     );

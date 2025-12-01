@@ -44,11 +44,11 @@ export interface PeriodeSpm {
 
 export interface Spørsmålsbesvarelser {
     tiltak: Tiltak;
-    harTiltak: boolean;
+    harSøktPåTiltak: JaNeiSpm | undefined;
     barnetilleggPdl: Barn[];
     barnetilleggManuelle: Barn[];
     barnetilleggKladd: Barn;
-    harSøktOmBarnetillegg: JaNeiSvar | undefined;
+    harSøktOmBarnetillegg: JaNeiSpm | undefined;
     kvp: PeriodeSpm;
     intro: PeriodeSpm;
     institusjon: PeriodeSpm;
@@ -71,6 +71,7 @@ export interface Barn {
     etternavn?: string;
     fødselsdato: string;
     oppholdInnenforEøs?: JaNeiSpm;
+    erSøktBarnetilleggFor: JaNeiSpm | undefined;
     manueltRegistrertBarnAntallVedlegg?: number;
 }
 
@@ -79,7 +80,7 @@ const defaultPapirsøknadFormValues = {
     manueltSattSøknadsperiode: { fraOgMed: '', tilOgMed: '' },
     antallVedlegg: 0,
     svar: {
-        harTiltak: undefined,
+        harSøktPåTiltak: undefined,
         tiltak: undefined,
         barnetilleggPdl: [],
         barnetilleggManuelle: [],

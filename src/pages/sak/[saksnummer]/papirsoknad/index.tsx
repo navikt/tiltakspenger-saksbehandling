@@ -50,12 +50,26 @@ const PapirsøknadPage = (props: Props) => {
     const onSubmit = (data: Papirsøknad) => {
         if (!personopplysninger) return;
 
+        // Sender ikke inn barn fra PDL som man har svart nei for.
+        const pdlBarnDetErSøktBarnetilleggFor = data.svar.barnetilleggPdl.filter(
+            (barn) => barn.erSøktBarnetilleggFor?.svar === 'JA',
+        );
+
         const antallVedlegg = (data.svar.barnetilleggManuelle || []).reduce(
             (sum, b) => sum + (b.manueltRegistrertBarnAntallVedlegg ?? 0),
             0,
         );
 
-        opprettPapirsøknad({ ...data, antallVedlegg }).then((behandling) => {
+        const payload = {
+            ...data,
+            svar: {
+                ...data.svar,
+                barnetilleggPdl: pdlBarnDetErSøktBarnetilleggFor,
+            },
+            antallVedlegg,
+        };
+
+        opprettPapirsøknad(payload).then((behandling) => {
             if (behandling) {
                 router.push(behandlingUrl(behandling));
             }
@@ -98,7 +112,7 @@ const PapirsøknadPage = (props: Props) => {
 
                             <VelgTiltak
                                 sakId={props.sak.sakId}
-                                spørsmålName="svar.harTiltak"
+                                spørsmålName="svar.harSøktPåTiltak.svar"
                                 legend="Har søkt på tiltak?"
                             />
 
@@ -141,7 +155,7 @@ const PapirsøknadPage = (props: Props) => {
 
                             <PapirsøknadBarnetillegg
                                 sakId={props.sak.sakId}
-                                name="svar.harSøktOmBarnetillegg"
+                                name="svar.harSøktOmBarnetillegg.svar"
                                 legend="Har bruker søkt barnetillegg?"
                             />
 
