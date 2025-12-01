@@ -27,6 +27,4 @@
         transparent stripeSize,
         transparent calc(stripeSize * 2)
     );
-    background-size: cover;
-    background-attachment: fixed;
 }
