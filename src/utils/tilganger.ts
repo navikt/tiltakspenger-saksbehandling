@@ -212,8 +212,14 @@ export const skalKunneGjenopptaBehandling = (
 ) => {
     const erRelevantMenyValgForStatus =
         behandling.status === Rammebehandlingsstatus.UNDER_AUTOMATISK_BEHANDLING ||
+        behandling.status === Rammebehandlingsstatus.KLAR_TIL_BEHANDLING ||
         behandling.status === Rammebehandlingsstatus.UNDER_BEHANDLING ||
+        behandling.status === Rammebehandlingsstatus.KLAR_TIL_BESLUTNING ||
         behandling.status === Rammebehandlingsstatus.UNDER_BESLUTNING;
+
+    const ikkeTildelt =
+        behandling.status === Rammebehandlingsstatus.KLAR_TIL_BEHANDLING ||
+        behandling.status === Rammebehandlingsstatus.KLAR_TIL_BESLUTNING;
 
     if ('ventestatus' in behandling) {
         return (
@@ -225,7 +231,7 @@ export const skalKunneGjenopptaBehandling = (
         return (
             erRelevantMenyValgForStatus &&
             behandling.erSattPåVent &&
-            eierBehandling(behandling, innloggetSaksbehandler)
+            (ikkeTildelt || eierBehandling(behandling, innloggetSaksbehandler))
         );
     }
 };
