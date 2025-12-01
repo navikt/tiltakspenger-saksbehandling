@@ -44,6 +44,15 @@ export const VedtatteBehandlinger = ({
 
     const antallVedtakUtenBehandling = alleRammevedtak.length - vedtakMedBehandling.length;
 
+    const antallHeltOmgjort = alleRammevedtak.reduce(
+        (acc, vedtak) => (vedtak.omgjortGrad === Omgjøringsgrad.HELT ? acc + 1 : acc),
+        0,
+    );
+    const antallDelvisOmgjort = alleRammevedtak.reduce(
+        (acc, vedtak) => (vedtak.omgjortGrad === Omgjøringsgrad.DELVIS ? acc + 1 : acc),
+        0,
+    );
+
     const vedtakSomSkalVises = vedtakMedBehandling.filter(
         (vedtak) => !vedtak.omgjortGrad || visOmgjorte.includes(vedtak.omgjortGrad),
     );
@@ -64,18 +73,22 @@ export const VedtatteBehandlinger = ({
                     }}
                     className={style.omgjortGroup}
                 >
-                    <Checkbox
-                        value={Omgjøringsgrad.HELT}
-                        className={classNames(style.omgjortCheckbox, style.heltOmgjortBg)}
-                    >
-                        {'Helt omgjort'}
-                    </Checkbox>
-                    <Checkbox
-                        value={Omgjøringsgrad.DELVIS}
-                        className={classNames(style.omgjortCheckbox, style.delvisOmgjortBg)}
-                    >
-                        {'Delvis omgjort'}
-                    </Checkbox>
+                    {antallHeltOmgjort > 0 && (
+                        <Checkbox
+                            value={Omgjøringsgrad.HELT}
+                            className={classNames(style.omgjortCheckbox, style.heltOmgjortBg)}
+                        >
+                            {`Helt omgjort (${antallHeltOmgjort})`}
+                        </Checkbox>
+                    )}
+                    {antallDelvisOmgjort > 0 && (
+                        <Checkbox
+                            value={Omgjøringsgrad.DELVIS}
+                            className={classNames(style.omgjortCheckbox, style.delvisOmgjortBg)}
+                        >
+                            {`Delvis omgjort (${antallDelvisOmgjort})`}
+                        </Checkbox>
+                    )}
                 </CheckboxGroup>
             </HStack>
             {antallVedtakUtenBehandling > 0 && (
