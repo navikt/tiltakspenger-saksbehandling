@@ -19,20 +19,14 @@ type Props = {
 };
 
 export const MeldekortUkeBehandling = ({ dager, ukeIndex }: Props) => {
-    const { control, watch, getFieldState, formState, clearErrors } =
-        useFormContext<MeldekortBehandlingForm>();
+    const { control, watch, formState } = useFormContext<MeldekortBehandlingForm>();
 
     return dager.map((dag, index) => {
         const { beregningsdag, dato } = dag;
         const dagIndex = index + ukeIndex * 7;
 
         const statusFieldPath: FieldPath<MeldekortBehandlingForm> = `dager.${dagIndex}.status`;
-        const dagFieldPath: FieldPath<MeldekortBehandlingForm> = `dager.${dagIndex}.dato`;
-
         const valgtStatus = watch(statusFieldPath);
-        const valgtDato = watch(dagFieldPath);
-
-        const error = getFieldState(statusFieldPath, formState).error;
 
         return (
             <Table.Row
@@ -51,26 +45,13 @@ export const MeldekortUkeBehandling = ({ dager, ukeIndex }: Props) => {
                         <Controller
                             name={statusFieldPath}
                             control={control}
-                            rules={{ validate: (value) => gyldigeStatusValg.includes(value) }}
-                            defaultValue={MeldekortBehandlingDagStatus.IkkeBesvart}
-                            render={({ field: { onChange, value } }) => (
+                            render={({ field, fieldState }) => (
                                 <Select
+                                    {...field}
                                     label={'Velg status for dag'}
-                                    id={valgtDato}
                                     size={'small'}
                                     hideLabel={true}
-                                    error={error ? 'Status må fylles ut' : ''}
-                                    value={value}
-                                    onChange={(e) => {
-                                        if (
-                                            e.target.value !==
-                                                MeldekortBehandlingDagStatus.IkkeBesvart &&
-                                            error
-                                        ) {
-                                            clearErrors(statusFieldPath);
-                                        }
-                                        onChange(e);
-                                    }}
+                                    error={fieldState.error?.message ? 'Status må fylles ut' : ''}
                                     className={styles.select}
                                 >
                                     <option value={MeldekortBehandlingDagStatus.IkkeBesvart}>
@@ -96,7 +77,7 @@ export const MeldekortUkeBehandling = ({ dager, ukeIndex }: Props) => {
     });
 };
 
-const gyldigeStatusValg = Object.values(MeldekortBehandlingDagStatus).filter(
+export const gyldigeStatusValg = Object.values(MeldekortBehandlingDagStatus).filter(
     (status) =>
         ![
             MeldekortBehandlingDagStatus.IkkeRettTilTiltakspenger,
@@ -104,7 +85,7 @@ const gyldigeStatusValg = Object.values(MeldekortBehandlingDagStatus).filter(
         ].includes(status),
 );
 
-const statusOptions = gyldigeStatusValg.map((meldekortStatus) => (
+export const statusOptions = gyldigeStatusValg.map((meldekortStatus) => (
     <option key={meldekortStatus} value={meldekortStatus}>
         {meldekortBehandlingDagStatusTekst[meldekortStatus]}
     </option>

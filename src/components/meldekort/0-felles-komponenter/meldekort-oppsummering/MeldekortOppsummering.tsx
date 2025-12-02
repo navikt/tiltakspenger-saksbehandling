@@ -33,7 +33,7 @@ export const MeldekortOppsummering = ({ meldekortBehandling }: Props) => {
             )}
             <MeldekortBeregningOgSimulering meldekortBehandling={meldekortBehandling} />
             {begrunnelse && <MeldekortBegrunnelse readOnly={true} defaultValue={begrunnelse} />}
-            <Divider orientation="horizontal" />
+            {begrunnelse || tekstTilVedtaksbrev ? <Divider orientation="horizontal" /> : null}
             {tekstTilVedtaksbrev && (
                 <>
                     <Textarea
@@ -55,7 +55,6 @@ export const MeldekortOppsummering = ({ meldekortBehandling }: Props) => {
                                 },
                                 {
                                     onSuccess: (blob) => {
-                                        console.log(blob);
                                         window.open(URL.createObjectURL(blob!));
                                     },
                                 },

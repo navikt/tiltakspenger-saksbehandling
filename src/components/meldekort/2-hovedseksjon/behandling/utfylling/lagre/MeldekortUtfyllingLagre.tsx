@@ -13,15 +13,9 @@ type Props = {
     meldekortId: MeldekortBehandlingId;
     sakId: SakId;
     hentMeldekortUtfylling: () => MeldekortBehandlingDTO;
-    customValidering: () => boolean;
 };
 
-export const MeldekortUtfyllingLagre = ({
-    meldekortId,
-    sakId,
-    hentMeldekortUtfylling,
-    customValidering,
-}: Props) => {
+export const MeldekortUtfyllingLagre = ({ meldekortId, sakId, hentMeldekortUtfylling }: Props) => {
     const { setMeldeperiodeKjede } = useMeldeperiodeKjede();
     const { sendLagreMeldekort, sendLagreMeldekortLaster } = useLagreOgBeregnMeldekort({
         meldekortId,
@@ -38,7 +32,7 @@ export const MeldekortUtfyllingLagre = ({
             loading={sendLagreMeldekortLaster}
             onClick={() => {
                 formContext.trigger().then((isValid) => {
-                    if (isValid && customValidering()) {
+                    if (isValid) {
                         sendLagreMeldekort(hentMeldekortUtfylling()).then((oppdatertKjede) => {
                             if (oppdatertKjede) {
                                 setMeldeperiodeKjede(oppdatertKjede);

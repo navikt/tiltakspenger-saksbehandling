@@ -15,7 +15,7 @@ import {
     MeldekortBehandlingForm,
     tellDagerMedDeltattEllerFravær,
 } from './meldekortUtfyllingUtils';
-import { Controller, FormProvider, useForm } from 'react-hook-form';
+import { Controller, FieldErrors, FormProvider, useForm } from 'react-hook-form';
 import { useMeldeperiodeKjede } from '../../../MeldeperiodeKjedeContext';
 import {
     MeldekortBehandlingDagStatus,
@@ -25,7 +25,7 @@ import {
 import { MeldekortUker } from '../../../0-felles-komponenter/uker/MeldekortUker';
 import { MeldekortUtfyllingLagre } from './lagre/MeldekortUtfyllingLagre';
 import { MeldekortSendTilBeslutning } from '../beslutning/MeldekortSendTilBeslutning';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { classNames } from '~/utils/classNames';
 import { MeldekortBegrunnelse } from '../../../0-felles-komponenter/begrunnelse/MeldekortBegrunnelse';
 import AvsluttMeldekortBehandling from '~/components/personoversikt/meldekort-oversikt/avsluttMeldekortBehandling/AvsluttMeldekortBehandling';
@@ -35,25 +35,62 @@ import { MeldekortBeregningOgSimulering } from '~/components/meldekort/0-felles-
 import styles from './MeldekortUtfylling.module.css';
 import Divider from '~/components/divider/Divider';
 import { useFetchBlobFraApi } from '~/utils/fetch/useFetchFraApi';
+import { gyldigeStatusValg } from '~/components/meldekort/0-felles-komponenter/uker/MeldekortUkeBehandling';
+import { formaterDatotekst } from '~/utils/date';
+import { hookFormErrorsTilFeiloppsummering } from '~/utils/ValideringUtils';
+
+const useCustomValidationResolver = () =>
+    React.useCallback(
+        async (
+            data: MeldekortBehandlingForm,
+            valideringscontext: { tillattAntallDager: number },
+        ) => {
+            const errors: FieldErrors<MeldekortBehandlingForm> = {};
+
+            if (
+                tellDagerMedDeltattEllerFravær(data.dager) > valideringscontext.tillattAntallDager
+            ) {
+                errors['dager'] = {
+                    type: 'dager',
+                    message: `For mange dager utfylt - Maks ${valideringscontext.tillattAntallDager} dager med tiltak for denne perioden.`,
+                };
+            }
+
+            data.dager.forEach((dag, index) => {
+                /*
+                Denne er fordi vi teller med dagene som saksbehandler ikke skal få lov til å endre
+                slik at feilmeldingene blir mappet til den riktige indeksen.
+                */
+                if (dag.status === MeldekortBehandlingDagStatus.IkkeRettTilTiltakspenger) {
+                    return;
+                }
+
+                if (!gyldigeStatusValg.includes(dag.status)) {
+                    //erorr objektet vårt må bygges opp dynamisk for å matche react-hook-form sitt format
+                    errors.dager = errors.dager ?? [];
+                    errors.dager[index] = errors.dager[index] ?? {};
+
+                    errors['dager'][index]['status'] = {
+                        type: `dager.${index}.status`,
+                        message: `Ugyldig status valgt for dag ${formaterDatotekst(dag.dato)}`,
+                    };
+                }
+            });
+
+            console.log('Validation errors:', errors);
+            return {
+                values: data,
+                errors: errors,
+            };
+        },
+        [],
+    );
 
 type Props = {
     meldekortBehandling: MeldekortBehandlingProps;
 };
 
-/*
-TODO - se på å bruke dette som validering av formet istedenfor det vi har nå
-const useCustomValidering = (valideringscontext: { tillattAntallDager: number }) =>
-    React.useCallback(async (data: MeldekortBehandlingForm) => {
-        return {
-            data: data,
-            errors: {},
-        };
-    }, []);
-*/
-
 export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
-    const [valideringsFeil, setValideringsFeil] = useState('');
-
     const { meldeperiodeKjede, tidligereMeldekortBehandlinger, sisteMeldeperiode } =
         useMeldeperiodeKjede();
     const { sakId, saksnummer } = useSak().sak;
@@ -65,7 +102,6 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
     const { antallDager } = sisteMeldeperiode;
 
     const formContext = useForm<MeldekortBehandlingForm>({
-        mode: 'onSubmit',
         defaultValues: {
             dager: hentMeldekortForhåndsutfylling(
                 meldekortBehandling,
@@ -76,6 +112,8 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
             begrunnelse: meldekortBehandling.begrunnelse,
             tekstTilVedtaksbrev: meldekortBehandling.tekstTilVedtaksbrev ?? null,
         },
+        resolver: useCustomValidationResolver(),
+        context: { tillattAntallDager: antallDager },
     });
 
     const skjemaErEndret = formContext.formState.isDirty;
@@ -90,22 +128,16 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
         tekstTilVedtaksbrev: formContext.getValues().tekstTilVedtaksbrev ?? null,
     });
 
-    const customValidering = () => {
-        if (tellDagerMedDeltattEllerFravær(formContext.getValues().dager) > antallDager) {
-            setValideringsFeil(
-                `For mange dager utfylt - Maks ${antallDager} dager med tiltak for denne perioden.`,
-            );
-            return false;
-        }
-
-        setValideringsFeil('');
-        return true;
-    };
+    const modalRef = useRef<HTMLDialogElement>(null);
 
     const forhåndsvisBrev = useFetchBlobFraApi<ForhåndsvisMeldekortbehandlingBrevRequest>(
         `/sak/${sakId}/meldekortbehandling/${meldekortBehandling.id}/forhandsvis`,
         'POST',
     );
+
+    const onSubmit = () => {
+        modalRef.current?.showModal();
+    };
 
     useEffect(() => {
         formContext.reset({
@@ -122,9 +154,9 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
 
     return (
         <FormProvider {...formContext}>
-            <form>
+            <form onSubmit={formContext.handleSubmit(onSubmit)}>
                 <VStack gap={'5'}>
-                    <MeldekortUker dager={formContext.getValues().dager} underBehandling={true} />
+                    <MeldekortUker dager={formContext.watch('dager')} underBehandling={true} />
                     {skalViseBeregningVarsel && (
                         <Alert inline={true} variant={'warning'}>
                             {'Trykk "lagre og beregn" for å oppdatere beregningene'}
@@ -192,7 +224,6 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
                                 },
                                 {
                                     onSuccess: (blob) => {
-                                        console.log(blob);
                                         window.open(URL.createObjectURL(blob!));
                                     },
                                 },
@@ -209,12 +240,20 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
                     )}
                     <Divider orientation="horizontal" />
                     <VStack gap={'2'}>
-                        {valideringsFeil && (
+                        {Object.values(formContext.formState.errors).length > 0 && (
                             <Alert variant={'error'} size={'small'}>
                                 <BodyShort weight={'semibold'} size={'small'}>
                                     {'Feil i utfyllingen'}
                                 </BodyShort>
-                                <BodyShort size={'small'}>{valideringsFeil}</BodyShort>
+                                <ul>
+                                    {hookFormErrorsTilFeiloppsummering(
+                                        formContext.formState.errors,
+                                    ).map((error, idx) => (
+                                        <li key={`${idx}-${error}`}>
+                                            <BodyShort size="small">{error}</BodyShort>
+                                        </li>
+                                    ))}
+                                </ul>
                             </Alert>
                         )}
                         <HStack justify={'space-between'}>
@@ -234,14 +273,13 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
                                     meldekortId={meldekortBehandling.id}
                                     sakId={sakId}
                                     hentMeldekortUtfylling={hentMeldekortUtfylling}
-                                    customValidering={customValidering}
                                 />
                                 <MeldekortSendTilBeslutning
                                     meldekortId={meldekortBehandling.id}
                                     sakId={sakId}
                                     hentMeldekortUtfylling={hentMeldekortUtfylling}
-                                    customValidering={customValidering}
                                     saksnummer={saksnummer}
+                                    modalRef={modalRef}
                                 />
                             </HStack>
                         </HStack>
