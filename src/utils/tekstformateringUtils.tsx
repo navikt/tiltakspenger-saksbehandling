@@ -19,7 +19,9 @@ export const finnBehandlingStatusTag = (
     erSattPåVent: boolean = false,
 ) => {
     if (
-        (status == Rammebehandlingsstatus.UNDER_BEHANDLING ||
+        (status === Rammebehandlingsstatus.KLAR_TIL_BEHANDLING ||
+            status == Rammebehandlingsstatus.UNDER_BEHANDLING ||
+            status === Rammebehandlingsstatus.KLAR_TIL_BESLUTNING ||
             status === Rammebehandlingsstatus.UNDER_BESLUTNING) &&
         erSattPåVent
     ) {
