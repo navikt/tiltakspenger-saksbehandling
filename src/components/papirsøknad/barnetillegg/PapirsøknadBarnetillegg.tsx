@@ -66,6 +66,7 @@ export const PapirsøknadBarnetillegg = ({ sakId, name, legend }: Props) => {
                     etternavn: p.etternavn,
                     fødselsdato: p.fødselsdato,
                     erSøktBarnetilleggFor: undefined,
+                    fnr: p.fnr,
                     uuid: uuidv4(),
                     index,
                 }),

@@ -70,6 +70,7 @@ export interface Barn {
     mellomnavn?: string;
     etternavn?: string;
     fødselsdato: string;
+    fnr?: string;
     oppholdInnenforEøs?: JaNeiSpm;
     erSøktBarnetilleggFor: JaNeiSpm | undefined;
     manueltRegistrertBarnAntallVedlegg?: number;
