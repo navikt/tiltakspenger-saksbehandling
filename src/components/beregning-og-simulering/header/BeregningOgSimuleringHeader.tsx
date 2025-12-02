@@ -3,7 +3,10 @@ import { Periode } from '~/types/Periode';
 import { periodeTilFormatertDatotekst } from '~/utils/date';
 import { UtbetalingStatus } from '~/components/utbetaling/status/UtbetalingStatus';
 import { UtbetalingBeløp } from '~/components/utbetaling/beløp/UtbetalingBeløp';
-import { SimulertBeregning } from '~/types/SimulertBeregningTypes';
+import {
+    KanIkkeIverksetteUtbetalingGrunn,
+    SimulertBeregning,
+} from '~/types/SimulertBeregningTypes';
 import { Utbetalingsstatus } from '~/types/Utbetaling';
 
 import style from './BeregningOgSimuleringHeader.module.css';
@@ -25,7 +28,7 @@ export const BeregningOgSimuleringHeader = ({
     erOmberegning,
     className,
 }: Props) => {
-    const { meldeperioder, beregning } = simulertBeregning;
+    const { meldeperioder, beregning, utbetalingValideringsfeil } = simulertBeregning;
     const { totalt } = beregning;
 
     const periode: Periode | undefined =
@@ -56,6 +59,12 @@ export const BeregningOgSimuleringHeader = ({
                 >{`Vedtaket endrer beregningen av ${meldeperioder.length} meldeperiode i perioden ${periodeTilFormatertDatotekst(periode)}`}</Alert>
             )}
 
+            {utbetalingValideringsfeil && (
+                <Alert variant={'error'} size={'small'}>
+                    {`Utbetalingen kan ikke iverksettes: ${utbetalingValideringsfeilTekst[utbetalingValideringsfeil]}`}
+                </Alert>
+            )}
+
             <UtbetalingBeløp
                 tekst={beløpTekst}
                 beløp={Math.abs(totalDiff)}
@@ -81,4 +90,12 @@ const beløpOmberegningTekst = (beløp: number): string => {
     }
 
     return 'Beløp (ingen endring)';
+};
+
+const utbetalingValideringsfeilTekst: Record<KanIkkeIverksetteUtbetalingGrunn, string> = {
+    [KanIkkeIverksetteUtbetalingGrunn.FeilutbetalingStøttesIkke]:
+        'Feilutbetaling støttes ikke ennå',
+    [KanIkkeIverksetteUtbetalingGrunn.JusteringStøttesIkke]:
+        'Justeringer på tvers av meldeperioder eller kalendermåneder støttes ikke ennå',
+    [KanIkkeIverksetteUtbetalingGrunn.SimuleringMangler]: 'Simulering mangler',
 };

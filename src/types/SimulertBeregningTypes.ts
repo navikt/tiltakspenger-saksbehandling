@@ -23,6 +23,7 @@ interface SimulertBeregningBase {
     simuleringTotalBeløp: Nullable<number>;
     simulerteBeløp: Nullable<SimulerteBeløp>;
     simuleringResultat: SimuleringResultat;
+    utbetalingValideringsfeil: Nullable<KanIkkeIverksetteUtbetalingGrunn>;
 }
 
 interface SimulertBeregningMedEndring extends SimulertBeregningBase {
@@ -78,4 +79,10 @@ export enum SimuleringResultat {
     ENDRING = 'ENDRING',
     INGEN_ENDRING = 'INGEN_ENDRING',
     IKKE_SIMULERT = 'IKKE_SIMULERT',
+}
+
+export enum KanIkkeIverksetteUtbetalingGrunn {
+    SimuleringMangler = 'SimuleringMangler',
+    FeilutbetalingStøttesIkke = 'FeilutbetalingStøttesIkke',
+    JusteringStøttesIkke = 'JusteringStøttesIkke',
 }
