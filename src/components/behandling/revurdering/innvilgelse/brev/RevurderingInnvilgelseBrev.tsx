@@ -8,15 +8,17 @@ import {
     BehandlingInnvilgelseMedPerioderContext,
     useBehandlingInnvilgelseMedPerioderSkjema,
 } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
-import { revurderingOmgjøringValidering } from '~/components/behandling/revurdering/omgjøring/revurderingInnvilgelseValidering';
+import { revurderingOmgjøringValidering } from '~/components/behandling/revurdering/omgjøring/revurderingOmgjøringValidering';
 import { revurderingInnvilgelseValidering } from '~/components/behandling/revurdering/innvilgelse/revurderingInnvilgelseValidering';
 import { RevurderingInnvilgelseContext } from '~/components/behandling/context/revurdering/revurderingInnvilgelseSkjemaContext';
 import { RevurderingOmgjøringContext } from '~/components/behandling/context/revurdering/revurderingOmgjøringSkjemaContext';
+import { useSak } from '~/context/sak/SakContext';
 
 // TODO: split denne for innvilgelse og omgjøring
 export const RevurderingInnvilgelseBrev = () => {
     const { behandling, rolleForBehandling } = useRevurderingBehandling();
     const skjema = useBehandlingInnvilgelseMedPerioderSkjema();
+    const { sak } = useSak();
 
     const { brevtekst } = skjema.textAreas;
 
@@ -31,10 +33,12 @@ export const RevurderingInnvilgelseBrev = () => {
                     ? revurderingInnvilgelseValidering(
                           behandling,
                           skjema as RevurderingInnvilgelseContext,
+                          sak,
                       )
                     : revurderingOmgjøringValidering(
                           behandling,
                           skjema as RevurderingOmgjøringContext,
+                          sak,
                       )
             }
             hentDto={(): RevurderingInnvilgelseBrevForhåndsvisningDTO =>

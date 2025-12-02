@@ -12,7 +12,7 @@ import { TabsIcon } from '@navikt/aksel-icons';
 import { OppsummeringsPar } from '~/components/oppsummeringer/oppsummeringspar/OppsummeringsPar';
 import { BehandlingSendOgGodkjenn } from '../../felles/send-og-godkjenn/BehandlingSendOgGodkjenn';
 import { RevurderingResultat, RevurderingVedtakOmgjøringRequest } from '~/types/Revurdering';
-import { revurderingOmgjøringValidering } from './revurderingInnvilgelseValidering';
+import { revurderingOmgjøringValidering } from './revurderingOmgjøringValidering';
 import { useHentBehandlingLagringProps } from '../../felles/send-og-godkjenn/lagre/useHentBehandlingLagringProps';
 import { erRammebehandlingMedInnvilgelse } from '~/utils/behandling';
 import { Rammebehandlingsstatus } from '~/types/Rammebehandling';
@@ -38,7 +38,7 @@ export const RevurderingOmgjøringVedtak = () => {
     const lagringProps = useHentBehandlingLagringProps({
         hentDTO: () => tilDTO(vedtak),
         skjema: vedtak,
-        validerSkjema: () => revurderingOmgjøringValidering(behandling, vedtak),
+        validerSkjema: () => revurderingOmgjøringValidering(behandling, vedtak, sak),
     });
 
     if (!vedtakSomBlirOmgjort) {

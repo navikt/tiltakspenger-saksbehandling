@@ -2,8 +2,8 @@ import { BodyShort, Heading, Tag, VStack } from '@navikt/ds-react';
 import {
     formaterDatotekst,
     formaterTidspunkt,
-    meldekortHeading,
     periodeTilFormatertDatotekst,
+    ukenummerFraDatotekst,
 } from '~/utils/date';
 import { MeldekortBehandlingOpprett } from './opprett-behandling/MeldekortBehandlingOpprett';
 import {
@@ -41,7 +41,7 @@ export const MeldekortVenstreSeksjon = () => {
     return (
         <VStack gap="3" className={styles.wrapper}>
             <Heading level={'2'} size={'medium'} className={styles.header}>
-                {meldekortHeading(periode)}
+                {`Meldekort uke ${ukenummerFraDatotekst(periode.fraOgMed)} og ${ukenummerFraDatotekst(periode.tilOgMed)}`}
             </Heading>
             <Tag
                 variant={meldekortStatusTagVariant[status]}

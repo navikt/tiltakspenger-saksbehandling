@@ -1,5 +1,4 @@
 import { useSak } from '~/context/sak/SakContext';
-import { SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
 import { OppsummeringAvSøknad } from '~/components/oppsummeringer/oppsummeringAvSøknad/OppsummeringAvSøknad';
 import { Alert, BodyShort, Link, Select, VStack } from '@navikt/ds-react';
 import NextLink from 'next/link';
@@ -8,6 +7,7 @@ import { useState } from 'react';
 import { formaterTidspunkt } from '~/utils/date';
 import { Rammebehandling } from '~/types/Rammebehandling';
 import { erRammebehandlingMedInnvilgelse } from '~/utils/behandling';
+import { hentVedtatteSøknadsbehandlinger } from '~/utils/sak';
 
 type Props = {
     behandling: Rammebehandling;
@@ -15,13 +15,9 @@ type Props = {
 
 export const SøknadOpplysningerFraVedtak = ({ behandling }: Props) => {
     const { sak } = useSak();
-    const { alleRammevedtak, behandlinger } = sak;
     const { saksopplysninger } = behandling;
 
-    const vedtatteSøknadsbehandlinger = alleRammevedtak
-        .map((vedtak) => behandlinger.find((beh) => beh.id === vedtak.behandlingId)!)
-        .filter((beh) => beh.resultat === SøknadsbehandlingResultat.INNVILGELSE)
-        .toSorted((a, b) => (a.iverksattTidspunkt! > b.iverksattTidspunkt! ? -1 : 1));
+    const vedtatteSøknadsbehandlinger = hentVedtatteSøknadsbehandlinger(sak);
 
     const [valgtBehandling, setValgtBehandling] = useState(vedtatteSøknadsbehandlinger.at(0));
 

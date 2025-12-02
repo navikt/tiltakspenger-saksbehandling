@@ -8,15 +8,17 @@ import {
     useRevurderingInnvilgelseSkjema,
 } from '~/components/behandling/context/revurdering/revurderingInnvilgelseSkjemaContext';
 import { Nullable } from '~/types/UtilTypes';
+import { useSak } from '~/context/sak/SakContext';
 
 export const RevurderingInnvilgelseSend = () => {
     const { behandling } = useRevurderingBehandling();
     const vedtak = useRevurderingInnvilgelseSkjema();
+    const { sak } = useSak();
 
     const lagringProps = useHentBehandlingLagringProps({
         hentDTO: () => tilDTO(vedtak),
         skjema: vedtak,
-        validerSkjema: () => revurderingInnvilgelseValidering(behandling, vedtak),
+        validerSkjema: () => revurderingInnvilgelseValidering(behandling, vedtak, sak),
     });
 
     return <BehandlingSendOgGodkjenn behandling={behandling} lagringProps={lagringProps} />;

@@ -5,10 +5,12 @@ import { validerAntallDagerPerMeldeperiode } from '~/components/behandling/felle
 import { hentHeleTiltaksdeltagelsesperioden } from '~/utils/behandling';
 import { Rammebehandling } from '~/types/Rammebehandling';
 import { InnvilgelseState } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
+import { Søknad } from '~/types/Søknad';
 
 export const validerInnvilgelse = (
     behandling: Rammebehandling,
     innvilgelse: InnvilgelseState,
+    søknad: Søknad,
 ): ValideringResultat => {
     if (!innvilgelse.harValgtPeriode) {
         return {
@@ -48,6 +50,7 @@ export const validerInnvilgelse = (
         const barnetilleggValidering = validerBarnetillegg(
             barnetilleggPerioder,
             innvilgelsesperiode,
+            søknad,
         );
         validering.warnings.push(...barnetilleggValidering.warnings);
         validering.errors.push(...barnetilleggValidering.errors);

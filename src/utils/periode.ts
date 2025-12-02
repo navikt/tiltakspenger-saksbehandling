@@ -1,4 +1,4 @@
-import { Periode } from '~/types/Periode';
+import { MedPeriode, Periode } from '~/types/Periode';
 import dayjs from 'dayjs';
 
 export const validerPeriodisering = (perioder: Periode[], tillatHull: boolean) => {
@@ -51,4 +51,25 @@ export const inneholderHelePerioden = (a: Periode, b: Periode) => {
 
 export const erFullstendigPeriode = (periode: Partial<Periode>): periode is Periode => {
     return !!periode.fraOgMed && !!periode.tilOgMed;
+};
+
+export const perioderErLike = (periode1: Periode, periode2: Periode) =>
+    periode1.fraOgMed === periode2.fraOgMed && periode1.tilOgMed == periode2.tilOgMed;
+
+export const periodiseringerErLike = <T>(
+    perioder1: MedPeriode<T>[],
+    perioder2: MedPeriode<T>[],
+    sammenlignVerdi: (p1: T, p2: T) => boolean,
+) => {
+    return (
+        perioder1.length === perioder2.length &&
+        perioder1.every((periode, index) => {
+            const periode2 = perioder2.at(index)!;
+
+            return (
+                perioderErLike(periode.periode, periode2.periode) &&
+                sammenlignVerdi(periode, periode2)
+            );
+        })
+    );
 };
