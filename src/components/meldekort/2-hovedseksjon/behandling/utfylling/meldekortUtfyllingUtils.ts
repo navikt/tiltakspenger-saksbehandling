@@ -48,7 +48,9 @@ export const hentMeldekortForhåndsutfylling = (
 ): MeldekortDagBeregnetProps[] => {
     return hentDager(meldekortBehandling, tidligereBehandlinger, brukersMeldekortForBehandling).map(
         (dag) => {
-            if (!meldeperiode.girRett[dag.dato]) {
+            const harRett = meldeperiode.girRett[dag.dato];
+
+            if (!harRett) {
                 return {
                     ...dag,
                     status: MeldekortBehandlingDagStatus.IkkeRettTilTiltakspenger,
@@ -60,6 +62,15 @@ export const hentMeldekortForhåndsutfylling = (
                 return {
                     ...dag,
                     status: MeldekortBehandlingDagStatus.IkkeTiltaksdag,
+                };
+            }
+
+            // Dersom forrige versjon av meldekortbehandlingen eller brukers meldekort ikke hadde rett på denne
+            // dagen, men meldeperioden for siste vedtak gir rett, så nuller vi ut statusen
+            if (harRett && dag.status === MeldekortBehandlingDagStatus.IkkeRettTilTiltakspenger) {
+                return {
+                    ...dag,
+                    status: MeldekortBehandlingDagStatus.IkkeBesvart,
                 };
             }
 
