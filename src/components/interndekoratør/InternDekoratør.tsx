@@ -73,7 +73,9 @@ export const InternDekoratør = () => {
                             placeholder="Søk på fnr eller saksnummer"
                             value={søketekst}
                             onChange={(e) => setSøketekst(e.trim())}
-                        />
+                        >
+                            <Search.Button className={styles.søkKnapp} />
+                        </Search>
                     </form>
                     <Image
                         src="/cozy-season.svg"

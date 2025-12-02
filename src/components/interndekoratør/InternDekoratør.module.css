@@ -17,3 +17,7 @@
 .opprettSakButton:hover {
     background: var(--a-surface-action-active);
 }
+
+.søkKnapp {
+    background-color: transparent;
+}
