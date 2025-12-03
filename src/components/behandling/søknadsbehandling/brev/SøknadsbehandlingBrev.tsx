@@ -37,7 +37,9 @@ const søknadsbehandlingSkjemaTilBrevForhåndsvisningDTO = (
     const { resultat } = skjema;
 
     const baseDTO = {
-        fritekst: skjema.textAreas.brevtekst.getValue(),
+        fritekst: skjema.textAreas.brevtekst.getValue()
+            ? skjema.textAreas.brevtekst.getValue()
+            : null,
         resultat: skjema.resultat,
     };
 

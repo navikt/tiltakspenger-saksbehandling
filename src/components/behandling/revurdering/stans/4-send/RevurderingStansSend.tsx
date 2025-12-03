@@ -25,7 +25,9 @@ const tilDTO = (skjema: RevurderingStansContext): RevurderingVedtakStansRequest 
     return {
         resultat: RevurderingResultat.STANS,
         begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
-        fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
+        fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue()
+            ? skjema.textAreas.brevtekst.getValue()
+            : null,
         stansFraOgMed: skjema.harValgtStansFraFørsteDagSomGirRett ? null : skjema.fraDato!,
         harValgtStansFraFørsteDagSomGirRett: skjema.harValgtStansFraFørsteDagSomGirRett,
         stansTilOgMed: null,

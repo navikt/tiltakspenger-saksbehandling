@@ -51,7 +51,9 @@ const tilDTO = (
 
             return {
                 begrunnelseVilkårsvurdering: textAreas.begrunnelse.getValue(),
-                fritekstTilVedtaksbrev: textAreas.brevtekst.getValue(),
+                fritekstTilVedtaksbrev: textAreas.brevtekst.getValue()
+                    ? textAreas.brevtekst.getValue()
+                    : null,
                 innvilgelsesperiode: innvilgelsesperiode,
                 barnetillegg: harBarnetillegg
                     ? {
@@ -72,7 +74,9 @@ const tilDTO = (
             return {
                 avslagsgrunner: skjema.avslagsgrunner,
                 begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
-                fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
+                fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue()
+                    ? skjema.textAreas.brevtekst.getValue()
+                    : null,
                 resultat: SøknadsbehandlingResultat.AVSLAG,
             } satisfies SøknadsbehandlingVedtakAvslagRequest;
         }
@@ -80,7 +84,9 @@ const tilDTO = (
         case SøknadsbehandlingResultat.IKKE_VALGT: {
             return {
                 begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
-                fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
+                fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue()
+                    ? skjema.textAreas.brevtekst.getValue()
+                    : null,
                 resultat: SøknadsbehandlingResultat.IKKE_VALGT,
             } satisfies SøknadsbehandlingVedtakIkkeValgtRequest;
         }
