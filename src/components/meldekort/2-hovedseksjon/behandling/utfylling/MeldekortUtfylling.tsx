@@ -77,11 +77,7 @@ const useCustomValidationResolver = () =>
                 }
             });
 
-            console.log('Validation errors:', errors);
-            return {
-                values: data,
-                errors: errors,
-            };
+            return { values: data, errors: errors };
         },
         [],
     );
