@@ -33,7 +33,7 @@ export const MeldekortOppsummering = ({ meldekortBehandling }: Props) => {
             )}
             <MeldekortBeregningOgSimulering meldekortBehandling={meldekortBehandling} />
             {begrunnelse && <MeldekortBegrunnelse readOnly={true} defaultValue={begrunnelse} />}
-            {begrunnelse || tekstTilVedtaksbrev ? <Divider orientation="horizontal" /> : null}
+            {begrunnelse && tekstTilVedtaksbrev ? <Divider orientation="horizontal" /> : null}
             {tekstTilVedtaksbrev && (
                 <>
                     <Textarea
