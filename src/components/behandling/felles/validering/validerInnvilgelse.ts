@@ -46,15 +46,14 @@ export const validerInnvilgelse = (
         validering.errors.push('Innvilgelsesperioden slutter etter tiltaksperioden');
     }
 
-    if (harBarnetillegg) {
-        const barnetilleggValidering = validerBarnetillegg(
-            barnetilleggPerioder,
-            innvilgelsesperiode,
-            søknad,
-        );
-        validering.warnings.push(...barnetilleggValidering.warnings);
-        validering.errors.push(...barnetilleggValidering.errors);
-    }
+    const barnetilleggValidering = validerBarnetillegg(
+        harBarnetillegg,
+        barnetilleggPerioder,
+        innvilgelsesperiode,
+        søknad,
+    );
+    validering.warnings.push(...barnetilleggValidering.warnings);
+    validering.errors.push(...barnetilleggValidering.errors);
 
     const tiltaksdeltagelseValidering = validerTiltaksdeltakelser(
         behandling,

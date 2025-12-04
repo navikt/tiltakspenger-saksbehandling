@@ -1,11 +1,11 @@
 import { Rammevedtak } from '~/types/Rammevedtak';
-import { Periode } from '~/types/Periode';
-import { joinPerioder, perioderOverlapper } from '~/utils/periode';
+import { joinPerioder, krympPeriodisering, utvidPeriodisering } from '~/utils/periode';
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';
-import { datoMax, datoMin, nesteDag } from '~/utils/date';
+import { nesteDag } from '~/utils/date';
 import { kunPerioderMedBarn } from '~/components/behandling/felles/barnetillegg/utils/barnetilleggUtils';
 import { BehandlingId } from '~/types/Rammebehandling';
 import { Tidslinje } from '~/types/Tidslinje';
+import { Periode } from '~/types/Periode';
 
 type VedtakMedBarnetillegg = Rammevedtak & {
     barnetillegg: NonNullable<Rammevedtak['barnetillegg']>;
@@ -13,24 +13,17 @@ type VedtakMedBarnetillegg = Rammevedtak & {
 
 type BarnetilleggMedBehandlingId = BarnetilleggPeriode & { behandlingId: BehandlingId };
 
-export const hentBarnetilleggFraVedtakTidslinje = (
+const hentBarnetilleggFraVedtakTidslinje = (
     tidslinje: Tidslinje,
-    periode: Periode,
 ): BarnetilleggMedBehandlingId[] => {
     const relevanteBarnetillegg: BarnetilleggMedBehandlingId[] = tidslinje.elementer
         .map((el) => el.rammevedtak)
         .filter((vedtak): vedtak is VedtakMedBarnetillegg => !!vedtak.barnetillegg)
         .flatMap((vedtak) =>
-            vedtak.barnetillegg.perioder
-                .filter((bt) => perioderOverlapper(bt.periode, periode))
-                .map((bt) => ({
-                    ...bt,
-                    behandlingId: vedtak.behandlingId,
-                    periode: {
-                        fraOgMed: datoMax(bt.periode.fraOgMed, periode.fraOgMed),
-                        tilOgMed: datoMin(bt.periode.tilOgMed, periode.tilOgMed),
-                    },
-                })),
+            vedtak.barnetillegg.perioder.map((bt) => ({
+                ...bt,
+                behandlingId: vedtak.behandlingId,
+            })),
         );
 
     return relevanteBarnetillegg.reduce<BarnetilleggMedBehandlingId[]>((acc, neste) => {
@@ -56,7 +49,32 @@ export const hentBarnetilleggFraVedtakTidslinje = (
 
 export const hentBarnetilleggPerioderMedBarn = (
     tidslinje: Tidslinje,
-    periode: Periode,
 ): BarnetilleggMedBehandlingId[] => {
-    return hentBarnetilleggFraVedtakTidslinje(tidslinje, periode).filter(kunPerioderMedBarn);
+    return hentBarnetilleggFraVedtakTidslinje(tidslinje).filter(kunPerioderMedBarn);
+};
+
+export const barnetilleggKrympetTilPeriode = (
+    tidslinje: Tidslinje,
+    periode: Periode,
+    kunMedBarn: boolean,
+): BarnetilleggMedBehandlingId[] => {
+    return krympPeriodisering(
+        kunMedBarn
+            ? hentBarnetilleggPerioderMedBarn(tidslinje)
+            : hentBarnetilleggFraVedtakTidslinje(tidslinje),
+        periode,
+    );
+};
+
+export const barnetilleggUtvidetTilPeriode = (
+    tidslinje: Tidslinje,
+    periode: Periode,
+    kunMedBarn: boolean,
+): BarnetilleggMedBehandlingId[] => {
+    return utvidPeriodisering(
+        kunMedBarn
+            ? hentBarnetilleggPerioderMedBarn(tidslinje)
+            : hentBarnetilleggFraVedtakTidslinje(tidslinje),
+        periode,
+    );
 };

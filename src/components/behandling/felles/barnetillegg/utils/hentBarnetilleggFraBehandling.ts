@@ -1,6 +1,6 @@
 import { periodiserBarnetilleggFraSøknad } from '~/components/behandling/felles/barnetillegg/utils/periodiserBarnetilleggFraSøknad';
 import { rammebehandlingMedInnvilgelseEllerNull } from '~/utils/behandling';
-import { hentBarnetilleggPerioderMedBarn } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraVedtakTidslinje';
+import { barnetilleggUtvidetTilPeriode } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraVedtakTidslinje';
 import { SakProps } from '~/types/Sak';
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';
 import { kunPerioderMedBarn } from '~/components/behandling/felles/barnetillegg/utils/barnetilleggUtils';
@@ -8,6 +8,7 @@ import { Periode } from '~/types/Periode';
 import { Søknadsbehandling } from '~/types/Søknadsbehandling';
 import { Revurdering } from '~/types/Revurdering';
 import { Rammebehandling, Rammebehandlingstype } from '~/types/Rammebehandling';
+import { Tidslinje } from '~/types/Tidslinje';
 
 export const hentBarnetilleggForSøknadsbehandling = (
     behandling: Søknadsbehandling,
@@ -21,23 +22,30 @@ export const hentBarnetilleggForSøknadsbehandling = (
 
 export const hentBarnetilleggForRevurdering = (
     behandling: Revurdering,
-    periode: Periode,
+    innvilgelsesperiode: Periode,
     sak: SakProps,
 ): BarnetilleggPeriode[] => {
     return (
         hentLagredePerioderMedBarn(behandling) ||
-        hentBarnetilleggPerioderMedBarn(sak.tidslinje, periode)
+        hentBarnetilleggForhåndsutfyltForRevurdering(sak.tidslinje, innvilgelsesperiode)
     );
+};
+
+export const hentBarnetilleggForhåndsutfyltForRevurdering = (
+    tidslinje: Tidslinje,
+    innvilgelsesperiode: Periode,
+) => {
+    return barnetilleggUtvidetTilPeriode(tidslinje, innvilgelsesperiode, true);
 };
 
 export const hentBarnetilleggForBehandling = (
     behandling: Rammebehandling,
-    periode: Periode,
+    innvilgelsesperiode: Periode,
     sak: SakProps,
 ): BarnetilleggPeriode[] => {
     return behandling.type === Rammebehandlingstype.SØKNADSBEHANDLING
-        ? hentBarnetilleggForSøknadsbehandling(behandling, periode)
-        : hentBarnetilleggForRevurdering(behandling, periode, sak);
+        ? hentBarnetilleggForSøknadsbehandling(behandling, innvilgelsesperiode)
+        : hentBarnetilleggForRevurdering(behandling, innvilgelsesperiode, sak);
 };
 
 export const hentLagredePerioderMedBarn = (

@@ -6,7 +6,7 @@ import { useBehandling } from '~/components/behandling/context/BehandlingContext
 import { Rammebehandlingsstatus, Rammebehandlingstype } from '~/types/Rammebehandling';
 import MultiperiodeForm from '~/components/periode/MultiperiodeForm';
 import { periodiserBarnetilleggFraSøknad } from '../utils/periodiserBarnetilleggFraSøknad';
-import { hentBarnetilleggFraVedtakTidslinje } from '../utils/hentBarnetilleggFraVedtakTidslinje';
+import { hentBarnetilleggForhåndsutfyltForRevurdering } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
 import { useSak } from '~/context/sak/SakContext';
 import {
     useBehandlingInnvilgelseMedPerioderSkjema,
@@ -77,7 +77,7 @@ export const BehandlingBarnetilleggPerioder = () => {
                                         type: 'settBarnetilleggPerioder',
                                         payload: {
                                             barnetilleggPerioder:
-                                                hentBarnetilleggFraVedtakTidslinje(
+                                                hentBarnetilleggForhåndsutfyltForRevurdering(
                                                     sak.tidslinje,
                                                     innvilgelsesperiode,
                                                 ),

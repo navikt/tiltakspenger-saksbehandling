@@ -12,6 +12,7 @@ import { periodiserBarnetilleggFraSøknad } from '~/components/behandling/felles
 import { Søknad } from '~/types/Søknad';
 
 export const validerBarnetillegg = (
+    harBarnetillegg: boolean,
     barnetilleggPerioder: BarnetilleggPeriode[],
     innvilgelsesperiode: Periode,
     søknad: Søknad,
@@ -21,17 +22,26 @@ export const validerBarnetillegg = (
         warnings: [],
     };
 
-    const perioder = barnetilleggPerioder.map((bt) => bt.periode);
-
-    if (perioder.length === 0) {
-        validering.errors.push('Minst en periode må spesifiseres når barnetillegg er valgt');
-        return validering;
-    }
-
     const periodiseringFraSøknad = periodiserBarnetilleggFraSøknad(
         søknad.barnetillegg,
         innvilgelsesperiode,
     );
+
+    if (!harBarnetillegg) {
+        if (periodiseringFraSøknad.length > 0) {
+            validering.warnings.push(
+                `Det er søkt om barnetillegg, men barnetillegg er ikke innvilget - Forventet barnetillegg fra søknad: ${formatterPeriodisering(periodiseringFraSøknad)}`,
+            );
+        }
+        return validering;
+    }
+
+    const perioder = barnetilleggPerioder.map((bt) => bt.periode);
+
+    if (perioder.length === 0) {
+        validering.errors.push('Minst en periode må spesifiseres når barnetillegg skal innvilges');
+        return validering;
+    }
 
     // Disse valideringene er ikke nødvendigvis presise, ettersom søknaden ikke alltid har
     // fullstendig informasjon om brukerens barn
@@ -57,7 +67,7 @@ export const validerBarnetillegg = (
             );
         } else {
             validering.warnings.push(
-                `Valgt barnetillegg stemmer ikke med barn fra siste søknad - Forventet barnetillegg fra søknad: ${formatterPeriodisering(periodiseringFraSøknad)}`,
+                `Innvilget barnetillegg stemmer ikke med barn fra siste søknad - Forventet barnetillegg fra søknad: ${formatterPeriodisering(periodiseringFraSøknad)}`,
             );
         }
     }

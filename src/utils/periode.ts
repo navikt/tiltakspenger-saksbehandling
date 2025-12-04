@@ -1,5 +1,6 @@
 import { MedPeriode, Periode } from '~/types/Periode';
 import dayjs from 'dayjs';
+import { datoMax, datoMin } from '~/utils/date';
 
 export const validerPeriodisering = (perioder: Periode[], tillatHull: boolean) => {
     return perioder.every((periode, index) => {
@@ -72,4 +73,117 @@ export const periodiseringerErLike = <T>(
             );
         })
     );
+};
+
+// Returnerer elementer med perioder som overlapper den angitte perioden, krympet til den angitte perioden
+// Returnerer tomt array hvis ingen elementer har perioder som overlapper med den angitte
+export const krympPeriodisering = <T>(
+    periodisering: MedPeriode<T>[],
+    krympTil: Periode,
+): MedPeriode<T>[] => {
+    const overlappendePerioder = periodisering.filter((p) =>
+        perioderOverlapper(p.periode, krympTil),
+    );
+
+    if (overlappendePerioder.length === 0) {
+        return [];
+    }
+
+    const førsteElement = overlappendePerioder.at(0)!;
+
+    if (overlappendePerioder.length === 1) {
+        return [
+            {
+                ...førsteElement,
+                periode: {
+                    fraOgMed: datoMax(førsteElement.periode.fraOgMed, krympTil.fraOgMed),
+                    tilOgMed: datoMin(førsteElement.periode.tilOgMed, krympTil.tilOgMed),
+                },
+            },
+        ];
+    }
+
+    const sisteElement = overlappendePerioder.at(-1)!;
+
+    return overlappendePerioder
+        .with(0, {
+            ...førsteElement,
+            periode: {
+                ...førsteElement.periode,
+                fraOgMed: datoMax(førsteElement.periode.fraOgMed, krympTil.fraOgMed),
+            },
+        })
+        .with(-1, {
+            ...sisteElement,
+            periode: {
+                ...sisteElement.periode,
+                tilOgMed: datoMin(sisteElement.periode.tilOgMed, krympTil.tilOgMed),
+            },
+        });
+};
+
+// Returnerer elementer med perioder som overlapper den angitte perioden, og setter første fraOgMed og siste tilOgMed lik angitt periode
+// Dersom ingen perioder overlapper med den angitte, returneres nærmeste element satt til angitt periode
+export const utvidPeriodisering = <T>(
+    periodisering: MedPeriode<T>[],
+    utvidTil: Periode,
+): MedPeriode<T>[] => {
+    if (periodisering.length === 0) {
+        return [];
+    }
+
+    const perioderSomSkalUtvides = finnOverlappendeEllerNærmestePeriode(periodisering, utvidTil);
+
+    const førsteElement = perioderSomSkalUtvides.at(0)!;
+
+    if (perioderSomSkalUtvides.length === 1) {
+        return [{ ...førsteElement, periode: utvidTil }];
+    }
+
+    const sisteElement = perioderSomSkalUtvides.at(-1)!;
+
+    return perioderSomSkalUtvides
+        .with(0, {
+            ...førsteElement,
+            periode: {
+                fraOgMed: utvidTil.fraOgMed,
+                tilOgMed: førsteElement.periode.tilOgMed,
+            },
+        })
+        .with(-1, {
+            ...sisteElement,
+            periode: {
+                fraOgMed: sisteElement.periode.fraOgMed,
+                tilOgMed: utvidTil.tilOgMed,
+            },
+        });
+};
+
+const finnOverlappendeEllerNærmestePeriode = <T>(
+    periodisering: MedPeriode<T>[],
+    skalOverlappeMed: Periode,
+): MedPeriode<T>[] => {
+    if (periodisering.length === 0) {
+        return [];
+    }
+
+    const førstePeriodeIndex = periodisering.findIndex((p) => {
+        return p.periode.tilOgMed >= skalOverlappeMed.fraOgMed;
+    });
+
+    // Dersom alle perioder er før den angitte perioden, er den siste perioden den nærmeste
+    if (førstePeriodeIndex === -1) {
+        return [periodisering.at(-1)!];
+    }
+
+    const sistePeriodeIndex = periodisering.findLastIndex((p) => {
+        return p.periode.fraOgMed <= skalOverlappeMed.tilOgMed;
+    });
+
+    // Dersom alle perioder er etter den angitte perioden, er den første perioden den nærmeste
+    if (sistePeriodeIndex === -1) {
+        return [periodisering.at(0)!];
+    }
+
+    return periodisering.slice(førstePeriodeIndex, sistePeriodeIndex + 1);
 };

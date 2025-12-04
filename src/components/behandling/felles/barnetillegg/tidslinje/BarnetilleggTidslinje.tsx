@@ -1,7 +1,7 @@
 import { Alert, BodyShort, Link, Timeline } from '@navikt/ds-react';
 import { Periode } from '~/types/Periode';
 import { useSak } from '~/context/sak/SakContext';
-import { hentBarnetilleggFraVedtakTidslinje } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraVedtakTidslinje';
+import { barnetilleggKrympetTilPeriode } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraVedtakTidslinje';
 import { ChildEyesIcon } from '@navikt/aksel-icons';
 import { periodeTilFormatertDatotekst } from '~/utils/date';
 import NextLink from 'next/link';
@@ -17,7 +17,7 @@ type Props = {
 export const BarnetilleggTidslinje = ({ innvilgelsesperiode }: Props) => {
     const { sak } = useSak();
 
-    const barnetillegg = hentBarnetilleggFraVedtakTidslinje(sak.tidslinje, innvilgelsesperiode);
+    const barnetillegg = barnetilleggKrympetTilPeriode(sak.tidslinje, innvilgelsesperiode, false);
 
     if (barnetillegg.length === 0) {
         return (
