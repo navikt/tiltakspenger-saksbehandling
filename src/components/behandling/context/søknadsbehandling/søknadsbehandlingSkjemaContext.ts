@@ -20,7 +20,6 @@ import {
     BehandlingSkjemaType,
     erSøknadsbehandlingContext,
 } from '~/components/behandling/context/behandlingSkjemaUtils';
-import { removeDuplicates } from '~/utils/array';
 
 export type SøknadsbehandlingIkkeValgtState = {
     resultat: SøknadsbehandlingResultat.IKKE_VALGT;
@@ -42,8 +41,8 @@ export type SøknadsbehandlingState =
     | SøknadsbehandlingInnvilgelseState;
 
 type SøknadsbehandlingAvslagAction = {
-    type: 'oppdaterAvslagsgrunn';
-    payload: { avslagsgrunn: Avslagsgrunn };
+    type: 'oppdaterAvslagsgrunner';
+    payload: { avslagsgrunner: Avslagsgrunn[] };
 };
 
 type SøknadsbehandlingSetResultatAction = {
@@ -74,16 +73,14 @@ export const søknadsbehandlingReducer: Reducer<SøknadsbehandlingState, Søknad
             return søknadsbehandlingInitialState(behandling, nyttResultat);
         }
 
-        case 'oppdaterAvslagsgrunn': {
+        case 'oppdaterAvslagsgrunner': {
             if (resultat !== SøknadsbehandlingResultat.AVSLAG) {
                 throw Error('Behandlingen må være et avslag for å sette avslagsgrunn');
             }
 
-            const { avslagsgrunn } = payload;
-
             return {
                 ...state,
-                avslagsgrunner: [...state.avslagsgrunner, avslagsgrunn].filter(removeDuplicates),
+                avslagsgrunner: payload.avslagsgrunner,
             };
         }
 

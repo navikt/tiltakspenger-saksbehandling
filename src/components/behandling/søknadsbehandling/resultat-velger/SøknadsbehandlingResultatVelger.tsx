@@ -7,17 +7,21 @@ import {
     useSøknadsbehandlingSkjema,
     useSøknadsbehandlingSkjemaDispatch,
 } from '~/components/behandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
+import { Rammebehandlingsstatus } from '~/types/Rammebehandling';
 
 import style from './SøknadsbehandlingResultatVelger.module.css';
 
 export const SøknadsbehandlingResultatVelger = () => {
     const { rolleForBehandling, behandling } = useSøknadsbehandling();
-    const { kanInnvilges } = behandling;
+    const { kanInnvilges, status } = behandling;
 
     const { resultat } = useSøknadsbehandlingSkjema();
     const dispatch = useSøknadsbehandlingSkjemaDispatch();
 
     const erIkkeSaksbehandler = rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER;
+    const erUnderBehandling = status === Rammebehandlingsstatus.UNDER_BEHANDLING;
+
+    const erReadonly = erIkkeSaksbehandler || !erUnderBehandling;
 
     return (
         <VedtakSeksjon>
@@ -31,7 +35,7 @@ export const SøknadsbehandlingResultatVelger = () => {
                     size={'small'}
                     className={style.radioGroup}
                     value={resultat}
-                    readOnly={erIkkeSaksbehandler}
+                    readOnly={erReadonly}
                     onChange={(valgtResultat: SøknadsbehandlingResultat) => {
                         dispatch({
                             type: 'setResultat',
@@ -40,10 +44,10 @@ export const SøknadsbehandlingResultatVelger = () => {
                     }}
                 >
                     <Radio value={SøknadsbehandlingResultat.INNVILGELSE} disabled={!kanInnvilges}>
-                        Innvilgelse
+                        {'Innvilgelse'}
                     </Radio>
                     <Radio value={SøknadsbehandlingResultat.AVSLAG}>Avslag</Radio>
-                    {resultat !== SøknadsbehandlingResultat.IKKE_VALGT && (
+                    {resultat !== SøknadsbehandlingResultat.IKKE_VALGT && !erReadonly && (
                         <Button
                             size={'xsmall'}
                             variant={'tertiary'}

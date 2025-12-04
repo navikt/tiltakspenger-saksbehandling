@@ -9,13 +9,16 @@ import {
     useSøknadsbehandlingSkjemaDispatch,
 } from '~/components/behandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
 import styles from './SøknadsbehandlingAvslagsgrunner.module.css';
+import { Rammebehandlingsstatus } from '~/types/Rammebehandling';
 import Divider from '~/components/divider/Divider';
 
 export const SøknadsbehandlingAvslagsgrunner = () => {
-    const { rolleForBehandling } = useSøknadsbehandling();
+    const { rolleForBehandling, behandling } = useSøknadsbehandling();
     const { avslagsgrunner } = useSøknadsbehandlingAvslagSkjema();
     const dispatch = useSøknadsbehandlingSkjemaDispatch();
+
     const erIkkeSaksbehandler = rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER;
+    const erUnderBehandling = behandling.status === Rammebehandlingsstatus.UNDER_BEHANDLING;
 
     return (
         <>
@@ -25,22 +28,18 @@ export const SøknadsbehandlingAvslagsgrunner = () => {
                         legend="Avslagsgrunner"
                         className={styles.checkboxGroup}
                         value={avslagsgrunner}
+                        readOnly={erIkkeSaksbehandler || !erUnderBehandling}
+                        onChange={(avslagsgrunner: Avslagsgrunn[]) => {
+                            dispatch({
+                                type: 'oppdaterAvslagsgrunner',
+                                payload: {
+                                    avslagsgrunner,
+                                },
+                            });
+                        }}
                     >
                         {Object.values(Avslagsgrunn).map((grunn) => (
-                            <Checkbox
-                                key={grunn}
-                                value={grunn}
-                                size={'small'}
-                                readOnly={erIkkeSaksbehandler}
-                                onChange={() => {
-                                    dispatch({
-                                        type: 'oppdaterAvslagsgrunn',
-                                        payload: {
-                                            avslagsgrunn: grunn,
-                                        },
-                                    });
-                                }}
-                            >
+                            <Checkbox key={grunn} value={grunn} size={'small'}>
                                 {AvslagsgrunnTekst[grunn]}
                             </Checkbox>
                         ))}
