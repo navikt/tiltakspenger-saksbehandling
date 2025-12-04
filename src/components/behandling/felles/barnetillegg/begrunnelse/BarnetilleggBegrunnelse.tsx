@@ -28,7 +28,7 @@ export const BarnetilleggBegrunnelse = () => {
             <VedtakSeksjon.Venstre>
                 <FritekstInput
                     label={'Begrunnelse vilkårsvurdering barnetillegg'}
-                    defaultValue={barnetilleggBegrunnelse.getValue()}
+                    defaultValue={barnetilleggBegrunnelse.getValue() ?? ''}
                     readOnly={rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER}
                     ref={barnetilleggBegrunnelse.ref}
                 />
