@@ -1,4 +1,4 @@
-import { BodyShort, Button, Textarea, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, Textarea, VStack } from '@navikt/ds-react';
 import { formaterTidspunktKort } from '~/utils/date';
 import { MeldekortBehandlingProps } from '~/types/meldekort/MeldekortBehandling';
 import { MeldekortUker } from '../uker/MeldekortUker';
@@ -33,37 +33,35 @@ export const MeldekortOppsummering = ({ meldekortBehandling }: Props) => {
             )}
             <MeldekortBeregningOgSimulering meldekortBehandling={meldekortBehandling} />
             {begrunnelse && <MeldekortBegrunnelse readOnly={true} defaultValue={begrunnelse} />}
-            {begrunnelse && tekstTilVedtaksbrev ? <Divider orientation="horizontal" /> : null}
+            {begrunnelse || tekstTilVedtaksbrev ? <Divider orientation="horizontal" /> : null}
             {tekstTilVedtaksbrev && (
-                <>
-                    <Textarea
-                        readOnly={true}
-                        value={tekstTilVedtaksbrev}
-                        label="Vedtaksbrev for behandling av meldekort"
-                        description="Teksten vises i vedtaksbrevet til bruker."
-                    />
-                    <Button
-                        className={styles.forhåndsvisBrevButton}
-                        type="button"
-                        variant="secondary"
-                        size="small"
-                        loading={forhåndsvisBrev.isMutating}
-                        onClick={() => {
-                            forhåndsvisBrev.trigger(
-                                {
-                                    tekstTilVedtaksbrev: tekstTilVedtaksbrev,
-                                },
-                                {
-                                    onSuccess: (blob) => {
-                                        window.open(URL.createObjectURL(blob!));
-                                    },
-                                },
-                            );
-                        }}
-                    >
-                        Forhåndsvis brev
-                    </Button>
-                </>
+                <Textarea
+                    readOnly={true}
+                    value={tekstTilVedtaksbrev}
+                    label="Vedtaksbrev for behandling av meldekort"
+                    description="Teksten vises i vedtaksbrevet til bruker."
+                />
+            )}
+            <Button
+                className={styles.forhåndsvisBrevButton}
+                type="button"
+                variant="secondary"
+                size="small"
+                loading={forhåndsvisBrev.isMutating}
+                onClick={() => {
+                    forhåndsvisBrev.trigger(
+                        { tekstTilVedtaksbrev: tekstTilVedtaksbrev },
+                        { onSuccess: (blob) => window.open(URL.createObjectURL(blob!)) },
+                    );
+                }}
+            >
+                Forhåndsvis brev
+            </Button>
+            {forhåndsvisBrev.error && (
+                <Alert variant="error" size="small">
+                    <BodyShort>Noe gikk galt ved forhåndsvisning av vedtaksbrev:</BodyShort>
+                    <BodyShort>{forhåndsvisBrev.error.message}</BodyShort>
+                </Alert>
             )}
         </VStack>
     );

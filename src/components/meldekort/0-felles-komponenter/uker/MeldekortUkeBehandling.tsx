@@ -57,7 +57,7 @@ export const MeldekortUkeBehandling = ({ dager, ukeIndex }: Props) => {
                                     <option value={MeldekortBehandlingDagStatus.IkkeBesvart}>
                                         {'- Velg status -'}
                                     </option>
-                                    {statusOptions}
+                                    {gyldigeMeldekortDagUtfyllingsvalgStatusOptions}
                                 </Select>
                             )}
                         />
@@ -77,7 +77,7 @@ export const MeldekortUkeBehandling = ({ dager, ukeIndex }: Props) => {
     });
 };
 
-export const gyldigeStatusValg = Object.values(MeldekortBehandlingDagStatus).filter(
+export const GyldigeMeldekortDagUfyllingsvalg = Object.values(MeldekortBehandlingDagStatus).filter(
     (status) =>
         ![
             MeldekortBehandlingDagStatus.IkkeRettTilTiltakspenger,
@@ -85,8 +85,10 @@ export const gyldigeStatusValg = Object.values(MeldekortBehandlingDagStatus).fil
         ].includes(status),
 );
 
-export const statusOptions = gyldigeStatusValg.map((meldekortStatus) => (
-    <option key={meldekortStatus} value={meldekortStatus}>
-        {meldekortBehandlingDagStatusTekst[meldekortStatus]}
-    </option>
-));
+export const gyldigeMeldekortDagUtfyllingsvalgStatusOptions = GyldigeMeldekortDagUfyllingsvalg.map(
+    (meldekortStatus) => (
+        <option key={meldekortStatus} value={meldekortStatus}>
+            {meldekortBehandlingDagStatusTekst[meldekortStatus]}
+        </option>
+    ),
+);

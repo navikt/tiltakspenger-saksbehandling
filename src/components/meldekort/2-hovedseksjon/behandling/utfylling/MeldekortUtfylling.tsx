@@ -35,7 +35,7 @@ import { MeldekortBeregningOgSimulering } from '~/components/meldekort/0-felles-
 import styles from './MeldekortUtfylling.module.css';
 import Divider from '~/components/divider/Divider';
 import { useFetchBlobFraApi } from '~/utils/fetch/useFetchFraApi';
-import { gyldigeStatusValg } from '~/components/meldekort/0-felles-komponenter/uker/MeldekortUkeBehandling';
+import { GyldigeMeldekortDagUfyllingsvalg } from '~/components/meldekort/0-felles-komponenter/uker/MeldekortUkeBehandling';
 import { formaterDatotekst } from '~/utils/date';
 import { hookFormErrorsTilFeiloppsummering } from '~/utils/ValideringUtils';
 
@@ -65,7 +65,7 @@ const useCustomValidationResolver = () =>
                     return;
                 }
 
-                if (!gyldigeStatusValg.includes(dag.status)) {
+                if (!GyldigeMeldekortDagUfyllingsvalg.includes(dag.status)) {
                     //erorr objektet vårt må bygges opp dynamisk for å matche react-hook-form sitt format
                     errors.dager = errors.dager ?? [];
                     errors.dager[index] = errors.dager[index] ?? {};
@@ -218,11 +218,7 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
                                         ? formContext.getValues('tekstTilVedtaksbrev')
                                         : null,
                                 },
-                                {
-                                    onSuccess: (blob) => {
-                                        window.open(URL.createObjectURL(blob!));
-                                    },
-                                },
+                                { onSuccess: (blob) => window.open(URL.createObjectURL(blob!)) },
                             );
                         }}
                     >
