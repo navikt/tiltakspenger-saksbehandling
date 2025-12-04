@@ -50,12 +50,18 @@ const tilDTO = (
             } = innvilgelse;
 
             return {
-                begrunnelseVilkårsvurdering: textAreas.begrunnelse.getValue(),
-                fritekstTilVedtaksbrev: textAreas.brevtekst.getValue(),
+                begrunnelseVilkårsvurdering: textAreas.begrunnelse.getValue()
+                    ? textAreas.begrunnelse.getValue()
+                    : null,
+                fritekstTilVedtaksbrev: textAreas.brevtekst.getValue()
+                    ? textAreas.brevtekst.getValue()
+                    : null,
                 innvilgelsesperiode: innvilgelsesperiode,
                 barnetillegg: harBarnetillegg
                     ? {
-                          begrunnelse: textAreas.barnetilleggBegrunnelse.getValue(),
+                          begrunnelse: skjema.textAreas.barnetilleggBegrunnelse.getValue()
+                              ? skjema.textAreas.barnetilleggBegrunnelse.getValue()
+                              : null,
                           perioder: barnetilleggPerioder,
                       }
                     : {
@@ -71,16 +77,24 @@ const tilDTO = (
         case SøknadsbehandlingResultat.AVSLAG: {
             return {
                 avslagsgrunner: skjema.avslagsgrunner,
-                begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
-                fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
+                begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue()
+                    ? skjema.textAreas.begrunnelse.getValue()
+                    : null,
+                fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue()
+                    ? skjema.textAreas.brevtekst.getValue()
+                    : null,
                 resultat: SøknadsbehandlingResultat.AVSLAG,
             } satisfies SøknadsbehandlingVedtakAvslagRequest;
         }
 
         case SøknadsbehandlingResultat.IKKE_VALGT: {
             return {
-                begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
-                fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
+                begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue()
+                    ? skjema.textAreas.begrunnelse.getValue()
+                    : null,
+                fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue()
+                    ? skjema.textAreas.brevtekst.getValue()
+                    : null,
                 resultat: SøknadsbehandlingResultat.IKKE_VALGT,
             } satisfies SøknadsbehandlingVedtakIkkeValgtRequest;
         }

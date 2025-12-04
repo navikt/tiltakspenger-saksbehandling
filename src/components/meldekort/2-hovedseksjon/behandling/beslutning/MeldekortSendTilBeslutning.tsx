@@ -1,7 +1,6 @@
 import { BekreftelsesModal } from '../../../../modaler/BekreftelsesModal';
 import { Button } from '@navikt/ds-react';
 import { useSendMeldekortTilBeslutter } from './useSendMeldekortTilBeslutter';
-import { useRef } from 'react';
 import {
     MeldekortBehandlingDTO,
     MeldekortBehandlingId,
@@ -17,7 +16,7 @@ type Props = {
     sakId: SakId;
     saksnummer: string;
     hentMeldekortUtfylling: () => MeldekortBehandlingDTO;
-    customValidering: () => boolean;
+    modalRef: React.RefObject<HTMLDialogElement | null>;
 };
 
 export const MeldekortSendTilBeslutning = ({
@@ -25,15 +24,13 @@ export const MeldekortSendTilBeslutning = ({
     sakId,
     saksnummer,
     hentMeldekortUtfylling,
-    customValidering,
+    modalRef,
 }: Props) => {
     const { navigateWithNotification } = useNotification();
 
     const formContext = useFormContext<MeldekortBehandlingForm>();
 
     const { setMeldeperiodeKjede } = useMeldeperiodeKjede();
-
-    const modalRef = useRef<HTMLDialogElement>(null);
 
     const {
         sendMeldekortTilBeslutter,
@@ -50,10 +47,10 @@ export const MeldekortSendTilBeslutning = ({
     return (
         <>
             <Button
-                type={'button'}
+                size="small"
                 onClick={() => {
                     formContext.trigger().then((isValid) => {
-                        if (isValid && customValidering()) {
+                        if (isValid) {
                             modalRef.current?.showModal();
                         }
                     });

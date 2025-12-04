@@ -11,6 +11,7 @@ import {
 import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
 
 import style from './MeldekortBehandling.module.css';
+import Divider from '~/components/divider/Divider';
 
 type Props = {
     meldekortBehandling: MeldekortBehandlingProps;
@@ -43,6 +44,7 @@ export const MeldekortBehandling = ({ meldekortBehandling }: Props) => {
             ) : (
                 <>
                     <MeldekortOppsummering meldekortBehandling={meldekortBehandling} />
+                    <Divider orientation="horizontal" />
                     {kanBeslutteForMeldekort(meldekortBehandling, innloggetSaksbehandler) && (
                         <MeldekortTaBeslutning meldekortBehandling={meldekortBehandling} />
                     )}

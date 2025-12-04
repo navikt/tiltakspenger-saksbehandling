@@ -2,7 +2,7 @@ import { VStack } from '@navikt/ds-react';
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { SimuleringDetaljer } from '~/components/beregning-og-simulering/detaljer/SimuleringDetaljer';
-import { Separator } from '~/components/separator/Separator';
+
 import { SimuleringOppsummering } from '~/components/beregning-og-simulering/simulering-oppsummering/SimuleringOppsummering';
 import { BeregningOppsummering } from '~/components/beregning-og-simulering/beregning-oppsummering/BeregningOppsummering';
 import { BeregningOgSimuleringHeader } from '~/components/beregning-og-simulering/header/BeregningOgSimuleringHeader';
@@ -11,6 +11,7 @@ import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
 import { Rammebehandling, Rammebehandlingsstatus } from '~/types/Rammebehandling';
 
 import style from './BehandlingBeregningOgSimulering.module.css';
+import Divider from '~/components/divider/Divider';
 
 export const BehandlingBeregningOgSimulering = () => {
     const { behandling, setBehandling } = useBehandling();
@@ -63,7 +64,7 @@ export const BehandlingBeregningOgSimulering = () => {
                     <SimuleringDetaljer simulertBeregning={simulertBeregning} />
                 </VedtakSeksjon.FullBredde>
             </VedtakSeksjon>
-            <Separator />
+            <Divider color="black" margin="1.25rem 0" />
         </>
     );
 };

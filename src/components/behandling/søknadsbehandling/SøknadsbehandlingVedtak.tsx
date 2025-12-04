@@ -2,7 +2,6 @@ import { Heading } from '@navikt/ds-react';
 import { SøknadsbehandlingBegrunnelse } from '~/components/behandling/søknadsbehandling/begrunnelse/SøknadsbehandlingBegrunnelse';
 import { SøknadsbehandlingResultatVelger } from '~/components/behandling/søknadsbehandling/resultat-velger/SøknadsbehandlingResultatVelger';
 import { SøknadsbehandlingBrev } from '~/components/behandling/søknadsbehandling/brev/SøknadsbehandlingBrev';
-import { Separator } from '../../separator/Separator';
 import { SøknadsbehandlingSend } from '~/components/behandling/søknadsbehandling/send-og-godkjenn/SøknadsbehandlingSend';
 import { SøknadsbehandlingAvslagsgrunner } from '~/components/behandling/søknadsbehandling/avslagsgrunner/SøknadsbehandlingAvslagsgrunner';
 import { SøknadsbehandlingAutomatiskBehandling } from '~/components/behandling/søknadsbehandling/automatisk-behandling/SøknadsbehandlingAutomatiskBehandling';
@@ -16,6 +15,7 @@ import { useBehandlingInnvilgelseSkjema } from '~/components/behandling/context/
 import { InnvilgelsesperiodeVelger } from '~/components/behandling/felles/innvilgelsesperiode/InnvilgelsesperiodeVelger';
 
 import style from './SøknadsbehandlingVedtak.module.css';
+import Divider from '~/components/divider/Divider';
 
 export const SøknadsbehandlingVedtak = () => {
     const { resultat } = useBehandlingSkjema();
@@ -27,7 +27,7 @@ export const SøknadsbehandlingVedtak = () => {
             </Heading>
             <SøknadsbehandlingAutomatiskBehandling />
             <SøknadsbehandlingBegrunnelse />
-            <Separator />
+            <Divider color="black" margin="1.25rem 0" />
             <SøknadsbehandlingResultatVelger />
             {resultat === SøknadsbehandlingResultat.INNVILGELSE && <Innvilgelse />}
             {resultat === SøknadsbehandlingResultat.AVSLAG && <Avslag />}
@@ -42,16 +42,16 @@ const Innvilgelse = () => {
     return (
         <>
             <InnvilgelsesperiodeVelger />
-            <Separator />
+            <Divider color="black" margin="1.25rem 0" />
             {harValgtPeriode && (
                 <>
                     <BehandlingDagerPerMeldeperiode />
-                    <Separator />
+                    <Divider color="black" margin="1.25rem 0" />
                     <BehandlingTiltak />
                     <BehandlingBarnetillegg />
-                    <Separator />
+                    <Divider color="black" margin="1.25rem 0" />
                     <SøknadsbehandlingBrev />
-                    <Separator />
+                    <Divider color="black" margin="1.25rem 0" />
                     <BehandlingBeregningOgSimulering />
                 </>
             )}

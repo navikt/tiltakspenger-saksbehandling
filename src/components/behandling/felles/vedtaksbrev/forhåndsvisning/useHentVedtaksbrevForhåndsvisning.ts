@@ -9,7 +9,7 @@ import { AntallDagerPerMeldeperiode } from '~/types/AntallDagerPerMeldeperiode';
 
 export type SøknadsbehandlingBrevForhåndsvisningDTO = {
     resultat: RammebehandlingResultat;
-    fritekst: string;
+    fritekst: Nullable<string>;
     virkningsperiode?: Periode;
     barnetillegg?: BarnetilleggPeriode[];
     avslagsgrunner?: Avslagsgrunn[];
@@ -37,14 +37,14 @@ type StansTilOgMed =
       };
 
 export type RevurderingStansBrevForhåndsvisningDTO = {
-    fritekst: string;
+    fritekst: Nullable<string>;
     valgteHjemler: string[];
     resultat: RevurderingResultat.STANS;
 } & StansFraOgMed &
     StansTilOgMed;
 
 export type RevurderingInnvilgelseBrevForhåndsvisningDTO = {
-    fritekst: string;
+    fritekst: Nullable<string>;
     virkningsperiode: Periode;
     resultat: RevurderingResultat.INNVILGELSE;
     barnetillegg: Nullable<BarnetilleggPeriode[]>;

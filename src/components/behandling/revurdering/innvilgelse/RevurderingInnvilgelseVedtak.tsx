@@ -1,6 +1,6 @@
 import { Heading } from '@navikt/ds-react';
 import { RevurderingInnvilgelseBegrunnelse } from '~/components/behandling/revurdering/innvilgelse/begrunnelse/RevurderingInnvilgelseBegrunnelse';
-import { Separator } from '~/components/separator/Separator';
+
 import { RevurderingInnvilgelseBrev } from '~/components/behandling/revurdering/innvilgelse/brev/RevurderingInnvilgelseBrev';
 import { RevurderingInnvilgelseSend } from '~/components/behandling/revurdering/innvilgelse/send-og-godkjenn/RevurderingInnvilgelseSend';
 import { BehandlingBeregningOgSimulering } from '~/components/behandling/felles/beregning-og-simulering/BehandlingBeregningOgSimulering';
@@ -9,6 +9,7 @@ import { InnvilgelsesperiodeVelger } from '~/components/behandling/felles/innvil
 import { BehandlingDagerPerMeldeperiode } from '~/components/behandling/felles/dager-per-meldeperiode/BehandlingDagerPerMeldeperiode';
 import { BehandlingTiltak } from '~/components/behandling/felles/tiltak/BehandlingTiltak';
 import { BehandlingBarnetillegg } from '~/components/behandling/felles/barnetillegg/BehandlingBarnetillegg';
+import Divider from '~/components/divider/Divider';
 
 export const RevurderingInnvilgelseVedtak = () => {
     const { innvilgelse } = useRevurderingInnvilgelseSkjema();
@@ -19,18 +20,18 @@ export const RevurderingInnvilgelseVedtak = () => {
                 {'Revurdering av innvilgelse'}
             </Heading>
             <RevurderingInnvilgelseBegrunnelse />
-            <Separator />
+            <Divider color="black" margin="1.25rem 0" />
             <InnvilgelsesperiodeVelger />
-            <Separator />
+            <Divider color="black" margin="1.25rem 0" />
             {innvilgelse.harValgtPeriode && (
                 <>
                     <BehandlingDagerPerMeldeperiode />
-                    <Separator />
+                    <Divider color="black" margin="1.25rem 0" />
                     <BehandlingTiltak />
                     <BehandlingBarnetillegg />
-                    <Separator />
+                    <Divider color="black" margin="1.25rem 0" />
                     <RevurderingInnvilgelseBrev />
-                    <Separator />
+                    <Divider color="black" margin="1.25rem 0" />
                     <BehandlingBeregningOgSimulering />
                 </>
             )}

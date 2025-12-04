@@ -70,6 +70,7 @@ export type MeldekortBehandlingProps = {
     beregning?: MeldekortBeregning;
     avbrutt?: Avbrutt;
     simulertBeregning: Nullable<SimulertBeregning>;
+    tekstTilVedtaksbrev: Nullable<string>;
 };
 
 export type MeldekortDagProps = {
@@ -99,4 +100,5 @@ type Beregningsdag = {
 export type MeldekortBehandlingDTO = {
     dager: MeldekortDagProps[];
     begrunnelse?: string;
+    tekstTilVedtaksbrev: Nullable<string>;
 };

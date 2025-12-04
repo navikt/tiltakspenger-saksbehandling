@@ -7,7 +7,7 @@ import {
     deltarPaFlereTiltakMedStartOgSluttdatoIValgtInnvilgelsesperiode,
     hentTiltaksdeltakelserMedStartOgSluttdato,
 } from '~/utils/behandling';
-import { Separator } from '~/components/separator/Separator';
+
 import { VedtakHjelpetekst } from '~/components/behandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
 import MultiperiodeForm from '~/components/periode/MultiperiodeForm';
@@ -17,6 +17,7 @@ import {
 } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 
 import style from './BehandlingTiltak.module.css';
+import Divider from '~/components/divider/Divider';
 
 export const BehandlingTiltak = () => {
     const { behandling, rolleForBehandling } = useBehandling();
@@ -124,7 +125,7 @@ export const BehandlingTiltak = () => {
                     </VedtakHjelpetekst>
                 </VedtakSeksjon.Høyre>
             </VedtakSeksjon>
-            <Separator />
+            <Divider color="black" margin="1.25rem 0" />
         </>
     );
 };
