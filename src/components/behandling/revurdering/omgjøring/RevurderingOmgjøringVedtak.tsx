@@ -126,7 +126,9 @@ const tilDTO = (
 
     return {
         resultat: RevurderingResultat.OMGJØRING,
-        begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
+        begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue()
+            ? skjema.textAreas.begrunnelse.getValue()
+            : null,
         fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue()
             ? skjema.textAreas.brevtekst.getValue()
             : null,
@@ -134,7 +136,9 @@ const tilDTO = (
         valgteTiltaksdeltakelser: innvilgelse.valgteTiltaksdeltakelser,
         barnetillegg: innvilgelse.harBarnetillegg
             ? {
-                  begrunnelse: skjema.textAreas.barnetilleggBegrunnelse.getValue(),
+                  begrunnelse: skjema.textAreas.barnetilleggBegrunnelse.getValue()
+                      ? skjema.textAreas.barnetilleggBegrunnelse.getValue()
+                      : null,
                   perioder: innvilgelse.barnetilleggPerioder,
               }
             : {

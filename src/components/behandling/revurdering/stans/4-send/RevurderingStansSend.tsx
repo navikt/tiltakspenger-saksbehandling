@@ -24,7 +24,9 @@ export const RevurderingStansSend = () => {
 const tilDTO = (skjema: RevurderingStansContext): RevurderingVedtakStansRequest => {
     return {
         resultat: RevurderingResultat.STANS,
-        begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
+        begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue()
+            ? skjema.textAreas.begrunnelse.getValue()
+            : null,
         fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue()
             ? skjema.textAreas.brevtekst.getValue()
             : null,
