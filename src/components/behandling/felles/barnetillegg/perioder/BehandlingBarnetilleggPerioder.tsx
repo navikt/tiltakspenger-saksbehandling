@@ -1,9 +1,8 @@
 import { Button, Select } from '@navikt/ds-react';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
-import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { dateTilISOTekst } from '~/utils/date';
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
-import { Rammebehandlingsstatus, Rammebehandlingstype } from '~/types/Rammebehandling';
+import { Rammebehandlingstype } from '~/types/Rammebehandling';
 import MultiperiodeForm from '~/components/periode/MultiperiodeForm';
 import { periodiserBarnetilleggFraSøknad } from '../utils/periodiserBarnetilleggFraSøknad';
 import { hentBarnetilleggForhåndsutfyltForRevurdering } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
@@ -19,16 +18,14 @@ const BATCH_MED_BARN = 10;
 
 export const BehandlingBarnetilleggPerioder = () => {
     const { sak } = useSak();
-    const { behandling, rolleForBehandling } = useBehandling();
-    const { barnetilleggPerioder, innvilgelsesperiode } =
-        useBehandlingInnvilgelseMedPerioderSkjema().innvilgelse;
+    const { behandling } = useBehandling();
+
+    const { innvilgelse, erReadonly } = useBehandlingInnvilgelseMedPerioderSkjema();
+    const { barnetilleggPerioder, innvilgelsesperiode } = innvilgelse;
+
     const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
 
     const erSøknadsbehandling = behandling.type === Rammebehandlingstype.SØKNADSBEHANDLING;
-    const erSaksbehandler = rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER;
-    const erUnderBehandling = behandling.status === Rammebehandlingsstatus.UNDER_BEHANDLING;
-
-    const disableKnapper = !erSaksbehandler || !erUnderBehandling;
 
     const antallBarnFraSøknad = erSøknadsbehandling ? behandling.søknad.barnetillegg.length : 0;
 
@@ -46,13 +43,13 @@ export const BehandlingBarnetilleggPerioder = () => {
                             type: 'addBarnetilleggPeriode',
                             payload: { antallBarn: antallBarnForNyPeriode },
                         }),
-                    disabled: disableKnapper,
+                    disabled: erReadonly,
                     adjacentContent: {
                         content: erSøknadsbehandling ? (
                             <Button
                                 variant={'secondary'}
                                 size={'small'}
-                                disabled={disableKnapper}
+                                disabled={erReadonly}
                                 onClick={() =>
                                     dispatch({
                                         type: 'settBarnetilleggPerioder',
@@ -71,7 +68,7 @@ export const BehandlingBarnetilleggPerioder = () => {
                             <Button
                                 variant={'secondary'}
                                 size={'small'}
-                                disabled={disableKnapper}
+                                disabled={erReadonly}
                                 onClick={() => {
                                     dispatch({
                                         type: 'settBarnetilleggPerioder',
@@ -94,7 +91,7 @@ export const BehandlingBarnetilleggPerioder = () => {
                 fjernPeriodeButtonConfig={{
                     onClick: (index) =>
                         dispatch({ type: 'fjernBarnetilleggPeriode', payload: { index } }),
-                    hidden: disableKnapper,
+                    hidden: erReadonly,
                 }}
                 periodeConfig={{
                     fraOgMed: {
@@ -121,7 +118,7 @@ export const BehandlingBarnetilleggPerioder = () => {
                             });
                         },
                     },
-                    readOnly: disableKnapper,
+                    readOnly: erReadonly,
                     minDate: innvilgelsesperiode.fraOgMed,
                     maxDate: innvilgelsesperiode.tilOgMed,
                 }}
@@ -140,7 +137,7 @@ export const BehandlingBarnetilleggPerioder = () => {
                                 size={'small'}
                                 className={style.antall}
                                 value={periode.antallBarn}
-                                readOnly={!erSaksbehandler}
+                                readOnly={erReadonly}
                                 error={erPeriodeMed0Barn && 'Perioden må ha minst ett barn'}
                                 onChange={(event) =>
                                     dispatch({

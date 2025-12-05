@@ -1,5 +1,4 @@
 import { useRevurderingBehandling } from '../../../context/BehandlingContext';
-import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { FritekstInput } from '~/components/fritekst/FritekstInput';
 import { VedtakHjelpetekst } from '~/components/behandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
@@ -10,13 +9,11 @@ import { useBehandlingSkjema } from '~/components/behandling/context/BehandlingS
 import style from './RevurderingStansBegrunnelse.module.css';
 
 export const RevurderingStansBegrunnelse = () => {
-    const { textAreas } = useBehandlingSkjema();
+    const { textAreas, erReadonly } = useBehandlingSkjema();
     const { begrunnelse } = textAreas;
 
-    const { behandling, rolleForBehandling } = useRevurderingBehandling();
+    const { behandling } = useRevurderingBehandling();
     const { begrunnelseVilkårsvurdering } = behandling;
-
-    const erSaksbehandler = rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER;
 
     return (
         <VedtakSeksjon>
@@ -28,7 +25,7 @@ export const RevurderingStansBegrunnelse = () => {
                         'Ikke skriv personsensitiv informasjon som ikke er relevant for saken. Husk at bruker har rett til innsyn.'
                     }
                     defaultValue={begrunnelseVilkårsvurdering ?? ''}
-                    readOnly={!erSaksbehandler}
+                    readOnly={erReadonly}
                     ref={begrunnelse.ref}
                 />
             </VedtakSeksjon.Venstre>

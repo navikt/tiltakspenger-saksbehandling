@@ -1,22 +1,16 @@
 import { Checkbox, CheckboxGroup } from '@navikt/ds-react';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
-import { useSøknadsbehandling } from '../../context/BehandlingContext';
-import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { Avslagsgrunn } from '~/types/Søknadsbehandling';
 import {
     useSøknadsbehandlingAvslagSkjema,
     useSøknadsbehandlingSkjemaDispatch,
 } from '~/components/behandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
-import { Rammebehandlingsstatus } from '~/types/Rammebehandling';
+
 import styles from './SøknadsbehandlingAvslagsgrunner.module.css';
 
 export const SøknadsbehandlingAvslagsgrunner = () => {
-    const { rolleForBehandling, behandling } = useSøknadsbehandling();
-    const { avslagsgrunner } = useSøknadsbehandlingAvslagSkjema();
+    const { avslagsgrunner, erReadonly } = useSøknadsbehandlingAvslagSkjema();
     const dispatch = useSøknadsbehandlingSkjemaDispatch();
-
-    const erIkkeSaksbehandler = rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER;
-    const erUnderBehandling = behandling.status === Rammebehandlingsstatus.UNDER_BEHANDLING;
 
     return (
         <VedtakSeksjon>
@@ -25,7 +19,7 @@ export const SøknadsbehandlingAvslagsgrunner = () => {
                     legend="Avslagsgrunner"
                     className={styles.checkboxGroup}
                     value={avslagsgrunner}
-                    readOnly={erIkkeSaksbehandler || !erUnderBehandling}
+                    readOnly={erReadonly}
                     onChange={(avslagsgrunner: Avslagsgrunn[]) => {
                         dispatch({
                             type: 'oppdaterAvslagsgrunner',

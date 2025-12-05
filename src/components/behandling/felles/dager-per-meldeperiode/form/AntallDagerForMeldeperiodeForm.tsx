@@ -1,7 +1,5 @@
 import { Select, VStack } from '@navikt/ds-react';
 import { dateTilISOTekst } from '~/utils/date';
-import { useBehandling } from '~/components/behandling/context/BehandlingContext';
-import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import MultiperiodeForm from '~/components/periode/MultiperiodeForm';
 import {
     useBehandlingInnvilgelseMedPerioderSkjema,
@@ -9,13 +7,10 @@ import {
 } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 
 export const AntallDagerForMeldeperiodeForm = () => {
-    const { innvilgelsesperiode, antallDagerPerMeldeperiode } =
-        useBehandlingInnvilgelseMedPerioderSkjema().innvilgelse;
+    const { innvilgelse, erReadonly } = useBehandlingInnvilgelseMedPerioderSkjema();
+    const { innvilgelsesperiode, antallDagerPerMeldeperiode } = innvilgelse;
+
     const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
-
-    const { rolleForBehandling } = useBehandling();
-
-    const erSaksbehandler = rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER;
 
     return (
         <VStack gap={'5'}>
@@ -24,12 +19,12 @@ export const AntallDagerForMeldeperiodeForm = () => {
                 perioder={antallDagerPerMeldeperiode}
                 nyPeriodeButtonConfig={{
                     onClick: () => dispatch({ type: 'leggTilAntallDagerPeriode' }),
-                    disabled: !erSaksbehandler,
+                    disabled: erReadonly,
                 }}
                 fjernPeriodeButtonConfig={{
                     onClick: (index) =>
                         dispatch({ type: 'fjernAntallDagerPeriode', payload: { index } }),
-                    hidden: antallDagerPerMeldeperiode.length <= 1 || !erSaksbehandler,
+                    hidden: antallDagerPerMeldeperiode.length <= 1 || erReadonly,
                 }}
                 periodeConfig={{
                     fraOgMed: {
@@ -66,7 +61,7 @@ export const AntallDagerForMeldeperiodeForm = () => {
                         <Select
                             label="Antall dager"
                             size="small"
-                            readOnly={!erSaksbehandler}
+                            readOnly={erReadonly}
                             value={periode.antallDagerPerMeldeperiode}
                             onChange={(event) =>
                                 dispatch({

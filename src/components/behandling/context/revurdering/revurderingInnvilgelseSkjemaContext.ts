@@ -7,7 +7,7 @@ import {
     InnvilgelseState,
 } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 import {
-    BehandlingSkjemaMedFritekst,
+    BehandlingSkjemaContextBase,
     useBehandlingSkjema,
     useBehandlingSkjemaDispatch,
 } from '~/components/behandling/context/BehandlingSkjemaContext';
@@ -31,7 +31,7 @@ export const revurderingInnvilgelseReducer: Reducer<
 };
 
 export type RevurderingInnvilgelseContext =
-    BehandlingSkjemaMedFritekst<RevurderingInnvilgelseState>;
+    BehandlingSkjemaContextBase<RevurderingInnvilgelseState>;
 
 export const useRevurderingInnvilgelseSkjema = (): RevurderingInnvilgelseContext => {
     const context = useBehandlingSkjema();

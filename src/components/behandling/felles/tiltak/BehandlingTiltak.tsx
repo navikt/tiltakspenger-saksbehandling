@@ -1,6 +1,5 @@
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { Select } from '@navikt/ds-react';
-import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { TiltaksdeltagelseMedPeriode } from '~/types/TiltakDeltagelseTypes';
 import { dateTilISOTekst, periodeTilFormatertDatotekst } from '~/utils/date';
 import {
@@ -19,9 +18,11 @@ import {
 import style from './BehandlingTiltak.module.css';
 
 export const BehandlingTiltak = () => {
-    const { behandling, rolleForBehandling } = useBehandling();
-    const { valgteTiltaksdeltakelser, innvilgelsesperiode } =
-        useBehandlingInnvilgelseMedPerioderSkjema().innvilgelse;
+    const { behandling } = useBehandling();
+
+    const { innvilgelse, erReadonly } = useBehandlingInnvilgelseMedPerioderSkjema();
+    const { valgteTiltaksdeltakelser, innvilgelsesperiode } = innvilgelse;
+
     const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
 
     const tiltaksdeltakelser = hentTiltaksdeltakelserMedStartOgSluttdato(behandling);
@@ -35,8 +36,6 @@ export const BehandlingTiltak = () => {
         return null;
     }
 
-    const erSaksbehandler = rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER;
-
     return (
         <>
             <VedtakSeksjon>
@@ -46,13 +45,13 @@ export const BehandlingTiltak = () => {
                         perioder={valgteTiltaksdeltakelser}
                         nyPeriodeButtonConfig={{
                             onClick: () => dispatch({ type: 'addTiltakPeriode' }),
-                            hidden: rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER,
+                            hidden: erReadonly,
                         }}
                         fjernPeriodeButtonConfig={{
                             text: 'Fjern',
                             onClick: (index) =>
                                 dispatch({ type: 'fjernTiltakPeriode', payload: { index } }),
-                            hidden: !(erSaksbehandler && valgteTiltaksdeltakelser.length > 1),
+                            hidden: erReadonly || valgteTiltaksdeltakelser.length <= 1,
                         }}
                         periodeConfig={{
                             fraOgMed: {
@@ -79,7 +78,7 @@ export const BehandlingTiltak = () => {
                                     });
                                 },
                             },
-                            readOnly: !erSaksbehandler,
+                            readOnly: erReadonly,
                             minDate: innvilgelsesperiode.fraOgMed,
                             maxDate: innvilgelsesperiode.tilOgMed,
                         }}
@@ -91,7 +90,7 @@ export const BehandlingTiltak = () => {
                                     size={'small'}
                                     className={style.tiltakstype}
                                     defaultValue={periode.eksternDeltagelseId}
-                                    readOnly={!erSaksbehandler}
+                                    readOnly={erReadonly}
                                     onChange={(event) => {
                                         dispatch({
                                             type: 'oppdaterTiltakId',

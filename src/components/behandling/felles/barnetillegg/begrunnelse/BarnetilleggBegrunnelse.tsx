@@ -1,17 +1,15 @@
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
-import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { VedtakHjelpetekst } from '~/components/behandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
 import { TekstListe } from '../../../../liste/TekstListe';
 import { BodyLong, Heading } from '@navikt/ds-react';
 import { FritekstInput } from '~/components/fritekst/FritekstInput';
-import { useBehandling } from '~/components/behandling/context/BehandlingContext';
 import { useBehandlingSkjema } from '~/components/behandling/context/BehandlingSkjemaContext';
 
 import style from './BarnetilleggBegrunnelse.module.css';
 
 export const BarnetilleggBegrunnelse = () => {
-    const { rolleForBehandling } = useBehandling();
-    const { barnetilleggBegrunnelse } = useBehandlingSkjema().textAreas;
+    const { textAreas, erReadonly } = useBehandlingSkjema();
+    const { barnetilleggBegrunnelse } = textAreas;
 
     return (
         <>
@@ -29,7 +27,7 @@ export const BarnetilleggBegrunnelse = () => {
                 <FritekstInput
                     label={'Begrunnelse vilkårsvurdering barnetillegg'}
                     defaultValue={barnetilleggBegrunnelse.getValue() ?? ''}
-                    readOnly={rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER}
+                    readOnly={erReadonly}
                     ref={barnetilleggBegrunnelse.ref}
                 />
             </VedtakSeksjon.Venstre>

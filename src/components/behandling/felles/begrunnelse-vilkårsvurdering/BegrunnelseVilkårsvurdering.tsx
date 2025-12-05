@@ -1,6 +1,5 @@
 import { BodyLong, BodyShort, Button, Heading } from '@navikt/ds-react';
 import { ParagraphIcon, TasklistIcon } from '@navikt/aksel-icons';
-import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { FunctionComponent, ReactNode } from 'react';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { VedtakHjelpetekst } from '~/components/behandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
@@ -12,10 +11,10 @@ import { useBehandlingSkjema } from '~/components/behandling/context/BehandlingS
 import style from './BegrunnelseVilkårsvurdering.module.css';
 
 export const BegrunnelseVilkårsvurdering = () => {
-    const { behandling, rolleForBehandling } = useBehandling();
-    const { begrunnelseVilkårsvurdering } = behandling;
+    const { begrunnelseVilkårsvurdering } = useBehandling().behandling;
 
-    const { begrunnelse } = useBehandlingSkjema().textAreas;
+    const { textAreas, erReadonly } = useBehandlingSkjema();
+    const { begrunnelse } = textAreas;
 
     return (
         <VedtakSeksjon>
@@ -52,7 +51,7 @@ export const BegrunnelseVilkårsvurdering = () => {
                 <FritekstInput
                     label={'Begrunnelse vilkårsvurdering'}
                     defaultValue={begrunnelse.getValue() ?? begrunnelseVilkårsvurdering ?? ''}
-                    readOnly={rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER}
+                    readOnly={erReadonly}
                     ref={begrunnelse.ref}
                 />
             </VedtakSeksjon.Venstre>

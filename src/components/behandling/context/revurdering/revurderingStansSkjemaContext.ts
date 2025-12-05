@@ -2,7 +2,7 @@ import { HjemmelForStans, RevurderingResultat } from '~/types/Revurdering';
 import { Reducer } from 'react';
 import { ReducerSuperAction } from '~/types/Context';
 import {
-    BehandlingSkjemaMedFritekst,
+    BehandlingSkjemaContextBase,
     useBehandlingSkjema,
     useBehandlingSkjemaDispatch,
 } from '~/components/behandling/context/BehandlingSkjemaContext';
@@ -65,7 +65,7 @@ export const revurderingStansReducer: Reducer<RevurderingStansState, Revurdering
     throw Error(`Ugyldig action for revurdering stans: ${type satisfies never}`);
 };
 
-export type RevurderingStansContext = BehandlingSkjemaMedFritekst<RevurderingStansState>;
+export type RevurderingStansContext = BehandlingSkjemaContextBase<RevurderingStansState>;
 
 export const useRevurderingStansSkjema = (): RevurderingStansContext => {
     const context = useBehandlingSkjema();

@@ -1,6 +1,4 @@
 import { dateTilISOTekst, datoMin } from '~/utils/date';
-import { useRolleForBehandling } from '~/context/saksbehandler/SaksbehandlerContext';
-import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import {
     useBehandlingInnvilgelseSkjemaDispatch,
     useBehandlingInnvilgelseSkjema,
@@ -16,12 +14,10 @@ export const InnvilgelsesperiodeVelger = () => {
     const { sak } = useSak();
     const { behandling } = useBehandling();
 
-    const { innvilgelsesperiode } = useBehandlingInnvilgelseSkjema().innvilgelse;
+    const { innvilgelse, erReadonly } = useBehandlingInnvilgelseSkjema();
+    const { innvilgelsesperiode } = innvilgelse;
 
     const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
-
-    const erIkkeSaksbehandler =
-        useRolleForBehandling(behandling) !== SaksbehandlerRolle.SAKSBEHANDLER;
 
     const tiltaksdeltagelsesperiode = hentHeleTiltaksdeltagelsesperioden(behandling);
     const defaultDato = datoMin(new Date(), tiltaksdeltagelsesperiode.tilOgMed);
@@ -77,7 +73,7 @@ export const InnvilgelsesperiodeVelger = () => {
                             });
                         },
                     }}
-                    readOnly={erIkkeSaksbehandler}
+                    readOnly={erReadonly}
                 />
             </VedtakSeksjon.Venstre>
         </VedtakSeksjon>

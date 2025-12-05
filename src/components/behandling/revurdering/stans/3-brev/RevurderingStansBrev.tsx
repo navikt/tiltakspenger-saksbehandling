@@ -1,4 +1,3 @@
-import { useRevurderingBehandling } from '../../../context/BehandlingContext';
 import { Vedtaksbrev } from '~/components/behandling/felles/vedtaksbrev/Vedtaksbrev';
 import { revurderingStansValidering } from '~/components/behandling/revurdering/stans/revurderingStansValidering';
 import { RevurderingStansBrevForhåndsvisningDTO } from '~/components/behandling/felles/vedtaksbrev/forhåndsvisning/useHentVedtaksbrevForhåndsvisning';
@@ -12,14 +11,9 @@ export const RevurderingStansBrev = () => {
     const { hjemlerForStans, fraDato, textAreas, harValgtStansFraFørsteDagSomGirRett } = skjema;
     const { brevtekst } = textAreas;
 
-    const { behandling, rolleForBehandling } = useRevurderingBehandling();
-
     return (
         <Vedtaksbrev
             header={'Vedtaksbrev for stans'}
-            behandling={behandling}
-            rolle={rolleForBehandling}
-            tekstRef={brevtekst.ref}
             validering={revurderingStansValidering(skjema)}
             hentDto={(): RevurderingStansBrevForhåndsvisningDTO => ({
                 ...(harValgtStansFraFørsteDagSomGirRett

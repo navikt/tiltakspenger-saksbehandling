@@ -21,9 +21,9 @@ import { BehandlingSettPåVent } from '~/components/behandling/felles/send-og-go
 import { BehandlingGjenoppta } from '~/components/behandling/felles/send-og-godkjenn/gjenoppta/BehandlingGjenoppta';
 import { skalKunneGjenopptaBehandling } from '~/utils/tilganger';
 import { formaterTidspunkt } from '~/utils/date';
+import { Rammebehandling, Rammebehandlingsstatus } from '~/types/Rammebehandling';
 
 import style from './BehandlingSendOgGodkjenn.module.css';
-import { Rammebehandling, Rammebehandlingsstatus } from '~/types/Rammebehandling';
 
 type Props = {
     behandling: Rammebehandling;

@@ -18,7 +18,7 @@ import {
 } from '~/components/behandling/context/innvilgelse/slices/barnetilleggContext';
 import { Reducer } from 'react';
 import {
-    BehandlingSkjemaMedFritekst,
+    BehandlingSkjemaContextBase,
     useBehandlingSkjema,
     useBehandlingSkjemaDispatch,
 } from '~/components/behandling/context/BehandlingSkjemaContext';
@@ -111,7 +111,7 @@ export const innvilgelseReducer: Reducer<InnvilgelseState, InnvilgelseActions> =
     throw Error(`Ugyldig action for behandling innvilgelse skjema: "${type satisfies never}"`);
 };
 
-export type BehandlingInnvilgelseContext = BehandlingSkjemaMedFritekst<BehandlingInnvilgelseState>;
+export type BehandlingInnvilgelseContext = BehandlingSkjemaContextBase<BehandlingInnvilgelseState>;
 
 export const useBehandlingInnvilgelseSkjema = (): BehandlingInnvilgelseContext => {
     const context = useBehandlingSkjema();
@@ -126,7 +126,7 @@ export const useBehandlingInnvilgelseSkjema = (): BehandlingInnvilgelseContext =
 };
 
 export type BehandlingInnvilgelseMedPerioderContext =
-    BehandlingSkjemaMedFritekst<BehandlingInnvilgelseMedPerioderState>;
+    BehandlingSkjemaContextBase<BehandlingInnvilgelseMedPerioderState>;
 
 export const useBehandlingInnvilgelseMedPerioderSkjema =
     (): BehandlingInnvilgelseMedPerioderContext => {

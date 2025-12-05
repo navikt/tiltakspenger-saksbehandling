@@ -11,17 +11,12 @@ import {
 } from '~/components/behandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
 
 export const SøknadsbehandlingBrev = () => {
-    const { behandling, rolleForBehandling } = useSøknadsbehandling();
+    const { behandling } = useSøknadsbehandling();
     const skjema = useSøknadsbehandlingSkjema();
-
-    const { brevtekst } = skjema.textAreas;
 
     return (
         <Vedtaksbrev
             header={'Vedtaksbrev for tiltakspenger og barnetillegg'}
-            behandling={behandling}
-            rolle={rolleForBehandling}
-            tekstRef={brevtekst.ref}
             validering={søknadsbehandlingValidering(behandling, skjema)('tilBeslutning')}
             hentDto={(): SøknadsbehandlingBrevForhåndsvisningDTO =>
                 søknadsbehandlingSkjemaTilBrevForhåndsvisningDTO(skjema)

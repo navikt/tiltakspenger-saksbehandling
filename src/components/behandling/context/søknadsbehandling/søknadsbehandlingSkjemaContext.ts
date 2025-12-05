@@ -12,7 +12,7 @@ import { Reducer } from 'react';
 import { ReducerSuperAction } from '~/types/Context';
 import { søknadsbehandlingInitialState } from '~/components/behandling/context/søknadsbehandling/søknadsbehandlingInitialState';
 import {
-    BehandlingSkjemaMedFritekst,
+    BehandlingSkjemaContextBase,
     useBehandlingSkjema,
     useBehandlingSkjemaDispatch,
 } from '~/components/behandling/context/BehandlingSkjemaContext';
@@ -116,7 +116,7 @@ export const søknadsbehandlingReducer: Reducer<SøknadsbehandlingState, Søknad
     throw Error(`Ugyldig action for søknadsbehandling: ${type satisfies never}`);
 };
 
-export type SøknadsbehandlingSkjemaContext = BehandlingSkjemaMedFritekst<SøknadsbehandlingState>;
+export type SøknadsbehandlingSkjemaContext = BehandlingSkjemaContextBase<SøknadsbehandlingState>;
 
 export const useSøknadsbehandlingSkjema = (): SøknadsbehandlingSkjemaContext => {
     const context = useBehandlingSkjema();
@@ -129,7 +129,7 @@ export const useSøknadsbehandlingSkjema = (): SøknadsbehandlingSkjemaContext =
 };
 
 export type SøknadsbehandlingAvslagContext =
-    BehandlingSkjemaMedFritekst<SøknadsbehandlingAvslagState>;
+    BehandlingSkjemaContextBase<SøknadsbehandlingAvslagState>;
 
 export const useSøknadsbehandlingAvslagSkjema = (): SøknadsbehandlingAvslagContext => {
     const context = useBehandlingSkjema();

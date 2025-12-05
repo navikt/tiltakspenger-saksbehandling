@@ -16,18 +16,13 @@ import { useSak } from '~/context/sak/SakContext';
 
 // TODO: split denne for innvilgelse og omgjøring
 export const RevurderingInnvilgelseBrev = () => {
-    const { behandling, rolleForBehandling } = useRevurderingBehandling();
+    const { behandling } = useRevurderingBehandling();
     const skjema = useBehandlingInnvilgelseMedPerioderSkjema();
     const { sak } = useSak();
-
-    const { brevtekst } = skjema.textAreas;
 
     return (
         <Vedtaksbrev
             header={'Vedtaksbrev for revurdering av innvilgelse'}
-            behandling={behandling}
-            rolle={rolleForBehandling}
-            tekstRef={brevtekst.ref}
             validering={
                 skjema.resultat === RevurderingResultat.INNVILGELSE
                     ? revurderingInnvilgelseValidering(

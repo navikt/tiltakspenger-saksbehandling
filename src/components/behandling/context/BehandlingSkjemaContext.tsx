@@ -13,15 +13,21 @@ import {
     behandlingSkjemaReducer,
     BehandlingSkjemaState,
 } from '~/components/behandling/context/behandlingSkjemaReducer';
-import { Rammebehandling, Rammebehandlingstype } from '~/types/Rammebehandling';
+import {
+    Rammebehandling,
+    Rammebehandlingsstatus,
+    Rammebehandlingstype,
+} from '~/types/Rammebehandling';
 import { useSak } from '~/context/sak/SakContext';
 import { SakProps } from '~/types/Sak';
 import { getTextAreaRefValue, TextAreaInput } from '~/utils/textarea';
 import { rammebehandlingMedInnvilgelseEllerNull } from '~/utils/behandling';
 import { søknadsbehandlingInitialState } from '~/components/behandling/context/søknadsbehandling/søknadsbehandlingInitialState';
 import { revurderingInitialState } from '~/components/behandling/context/revurdering/revurderingInitialState';
+import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 
-export type BehandlingSkjemaMedFritekst<T> = T & {
+export type BehandlingSkjemaContextBase<T> = T & {
+    erReadonly: boolean;
     textAreas: {
         begrunnelse: TextAreaInput;
         brevtekst: TextAreaInput;
@@ -29,7 +35,7 @@ export type BehandlingSkjemaMedFritekst<T> = T & {
     };
 };
 
-export type BehandlingSkjemaContext = BehandlingSkjemaMedFritekst<BehandlingSkjemaState>;
+export type BehandlingSkjemaContext = BehandlingSkjemaContextBase<BehandlingSkjemaState>;
 
 // Separate contexts for å hindre re-renders for komponenter som kun bruker dispatch
 const StateContext = createContext({} as BehandlingSkjemaContext);
@@ -37,7 +43,11 @@ const DispatchContext = createContext((() => ({})) as Dispatch<BehandlingSkjemaA
 
 export const BehandlingSkjemaProvider = ({ children }: PropsWithChildren) => {
     const { sak } = useSak();
-    const { behandling } = useBehandling();
+    const { behandling, rolleForBehandling } = useBehandling();
+
+    const erReadonly =
+        rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER ||
+        behandling.status !== Rammebehandlingsstatus.UNDER_BEHANDLING;
 
     const [skjema, dispatch] = useReducer(
         behandlingSkjemaReducer,
@@ -71,6 +81,7 @@ export const BehandlingSkjemaProvider = ({ children }: PropsWithChildren) => {
             <StateContext.Provider
                 value={{
                     ...skjema,
+                    erReadonly,
                     textAreas: {
                         begrunnelse: {
                             ref: begrunnelseRef,

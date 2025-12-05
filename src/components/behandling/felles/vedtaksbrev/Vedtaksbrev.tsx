@@ -1,38 +1,28 @@
 import { BodyLong, Heading } from '@navikt/ds-react';
-import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { VedtakHjelpetekst } from '~/components/behandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
 import { FritekstInput } from '~/components/fritekst/FritekstInput';
 import { VedtaksbrevForhåndsvisning } from './forhåndsvisning/VedtaksbrevForhåndsvisning';
-
-import { Nullable } from '~/types/UtilTypes';
-import { ReactNode, RefObject } from 'react';
+import { ReactNode } from 'react';
 import { BrevForhåndsvisningDTO } from '~/components/behandling/felles/vedtaksbrev/forhåndsvisning/useHentVedtaksbrevForhåndsvisning';
 import { ValideringResultat } from '~/types/Validering';
+import { useBehandling } from '~/components/behandling/context/BehandlingContext';
+import { useBehandlingSkjema } from '~/components/behandling/context/BehandlingSkjemaContext';
 
 import style from './Vedtaksbrev.module.css';
-import { Rammebehandling } from '~/types/Rammebehandling';
 
 type Props = {
     header: string;
-    behandling: Rammebehandling;
-    rolle: Nullable<SaksbehandlerRolle>;
-    tekstRef: RefObject<HTMLTextAreaElement | null>;
     hjelpetekst?: ReactNode;
     validering: ValideringResultat;
     hentDto: () => BrevForhåndsvisningDTO;
 };
 
-export const Vedtaksbrev = ({
-    header,
-    behandling,
-    rolle,
-    tekstRef,
-    hjelpetekst,
-    validering,
-    hentDto,
-}: Props) => {
+export const Vedtaksbrev = ({ header, hjelpetekst, validering, hentDto }: Props) => {
+    const { behandling } = useBehandling();
     const { fritekstTilVedtaksbrev } = behandling;
+
+    const { textAreas, erReadonly } = useBehandlingSkjema();
 
     return (
         <VedtakSeksjon>
@@ -47,8 +37,8 @@ export const Vedtaksbrev = ({
                     label={'Tekst til vedtaksbrev'}
                     description={'Teksten vises i vedtaksbrevet til bruker.'}
                     defaultValue={fritekstTilVedtaksbrev ?? ''}
-                    readOnly={rolle !== SaksbehandlerRolle.SAKSBEHANDLER}
-                    ref={tekstRef}
+                    readOnly={erReadonly}
+                    ref={textAreas.brevtekst.ref}
                 />
                 <VedtaksbrevForhåndsvisning
                     behandling={behandling}

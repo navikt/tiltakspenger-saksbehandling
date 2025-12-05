@@ -1,6 +1,4 @@
 import { Alert, Checkbox, HStack, Link, Select } from '@navikt/ds-react';
-import { useRevurderingBehandling } from '../../../context/BehandlingContext';
-import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { Datovelger } from '../../../../datovelger/Datovelger';
 import { dateTilISOTekst, datoMin } from '~/utils/date';
@@ -15,16 +13,13 @@ import {
 import style from './RevurderingStansResultat.module.css';
 
 export const RevurderingStansResultat = () => {
-    const { rolleForBehandling } = useRevurderingBehandling();
     const { førsteDagSomGirRett, sisteDagSomGirRett } = useSak().sak;
 
-    const { hjemlerForStans, fraDato, harValgtStansFraFørsteDagSomGirRett } =
+    const { hjemlerForStans, fraDato, harValgtStansFraFørsteDagSomGirRett, erReadonly } =
         useRevurderingStansSkjema();
     const dispatch = useRevurderingStansSkjemaDispatch();
 
     const { gosysUrl, modiaPersonoversiktUrl } = useConfig();
-
-    const erSaksbehandler = rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER;
 
     const gosysLinkComponent = <Link href={gosysUrl}>Gosys</Link>;
     const modiaPersonoversiktLinkComponent = (
@@ -43,7 +38,7 @@ export const RevurderingStansResultat = () => {
                 <Select
                     label={'Hjemmel for stans'}
                     size={'medium'}
-                    readOnly={!erSaksbehandler}
+                    readOnly={erReadonly}
                     defaultValue={hjemlerForStans.at(0) ?? defaultValue}
                     onChange={(event) => {
                         const valg = event.target.value as HjemmelForStans | typeof defaultValue;
@@ -66,7 +61,7 @@ export const RevurderingStansResultat = () => {
                         label={'Stans fra og med'}
                         minDate={førsteDagSomGirRett}
                         maxDate={sisteDagSomGirRett}
-                        readOnly={!erSaksbehandler || harValgtStansFraFørsteDagSomGirRett}
+                        readOnly={erReadonly || harValgtStansFraFørsteDagSomGirRett}
                         defaultSelected={fraDato}
                         defaultMonth={
                             sisteDagSomGirRett ? datoMin(nåtid, sisteDagSomGirRett) : nåtid
@@ -88,7 +83,7 @@ export const RevurderingStansResultat = () => {
                     />
 
                     <Checkbox
-                        readOnly={!erSaksbehandler}
+                        readOnly={erReadonly}
                         defaultChecked={harValgtStansFraFørsteDagSomGirRett}
                         onChange={(e) => {
                             const { checked } = e.target;

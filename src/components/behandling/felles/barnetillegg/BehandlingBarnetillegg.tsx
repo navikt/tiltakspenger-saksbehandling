@@ -1,6 +1,5 @@
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { Alert, Heading, Radio, RadioGroup } from '@navikt/ds-react';
-import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { classNames } from '~/utils/classNames';
 import { BehandlingBarnetilleggPerioder } from './perioder/BehandlingBarnetilleggPerioder';
 import { BarnetilleggBegrunnelse } from './begrunnelse/BarnetilleggBegrunnelse';
@@ -17,10 +16,11 @@ import style from './BehandlingBarnetillegg.module.css';
 
 export const BehandlingBarnetillegg = () => {
     const { sak } = useSak();
-    const { behandling, rolleForBehandling } = useBehandling();
+    const { behandling } = useBehandling();
 
-    const { harBarnetillegg, innvilgelsesperiode } =
-        useBehandlingInnvilgelseMedPerioderSkjema().innvilgelse;
+    const { innvilgelse, erReadonly } = useBehandlingInnvilgelseMedPerioderSkjema();
+    const { harBarnetillegg, innvilgelsesperiode } = innvilgelse;
+
     const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
 
     return (
@@ -42,7 +42,7 @@ export const BehandlingBarnetillegg = () => {
                         size={'small'}
                         className={style.radioGroup}
                         value={harBarnetillegg}
-                        readOnly={rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER}
+                        readOnly={erReadonly}
                         onChange={(harSøkt: boolean) => {
                             dispatch({
                                 type: 'setHarSøktBarnetillegg',
