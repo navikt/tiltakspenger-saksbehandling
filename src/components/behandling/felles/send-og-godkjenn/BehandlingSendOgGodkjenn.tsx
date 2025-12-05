@@ -105,6 +105,7 @@ export const BehandlingSendOgGodkjenn = ({ behandling, lagringProps }: Props) =>
                             <BehandlingSendTilBeslutning
                                 behandling={behandling}
                                 valider={validerTilBeslutning}
+                                valideringResultat={valideringResultat}
                                 disabled={valideringResultat.errors.length > 0 || isDirty}
                             />
                         </HStack>

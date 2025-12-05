@@ -1,19 +1,26 @@
 import { Button } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import { useBehandling } from '../../../context/BehandlingContext';
-
 import { BekreftelsesModal } from '../../../../modaler/BekreftelsesModal';
 import { useSendBehandlingTilBeslutning } from '~/components/behandling/felles/send-og-godkjenn/send-til-beslutning/useSendBehandlingTilBeslutning';
 import { useNotification } from '~/context/NotificationContext';
 import { Rammebehandling } from '~/types/Rammebehandling';
+import { ValideringResultat } from '~/types/Validering';
+import { BehandlingValideringVarsler } from '~/components/behandling/felles/send-og-godkjenn/varsler/BehandlingValideringVarsler';
 
 type Props = {
     behandling: Rammebehandling;
     valider: () => boolean;
+    valideringResultat: ValideringResultat;
     disabled: boolean;
 };
 
-export const BehandlingSendTilBeslutning = ({ behandling, valider, disabled }: Props) => {
+export const BehandlingSendTilBeslutning = ({
+    behandling,
+    valider,
+    valideringResultat,
+    disabled,
+}: Props) => {
     const { sendTilBeslutning, sendTilBeslutningLaster, sendTilBeslutningError } =
         useSendBehandlingTilBeslutning(behandling);
     const { navigateWithNotification } = useNotification();
@@ -58,7 +65,9 @@ export const BehandlingSendTilBeslutning = ({ behandling, valider, disabled }: P
                         {'Send til beslutning'}
                     </Button>
                 }
-            />
+            >
+                <BehandlingValideringVarsler resultat={valideringResultat} />
+            </BekreftelsesModal>
         </>
     );
 };
