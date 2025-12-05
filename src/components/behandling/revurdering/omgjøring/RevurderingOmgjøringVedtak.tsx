@@ -1,5 +1,4 @@
 import { BodyShort, Heading, HStack, VStack } from '@navikt/ds-react';
-import { RevurderingInnvilgelseBegrunnelse } from '~/components/behandling/revurdering/innvilgelse/begrunnelse/RevurderingInnvilgelseBegrunnelse';
 import { Separator } from '~/components/separator/Separator';
 import { RevurderingInnvilgelseBrev } from '~/components/behandling/revurdering/innvilgelse/brev/RevurderingInnvilgelseBrev';
 import { BehandlingBeregningOgSimulering } from '../../felles/beregning-og-simulering/BehandlingBeregningOgSimulering';
@@ -25,6 +24,7 @@ import { Nullable } from '~/types/UtilTypes';
 import { BehandlingDagerPerMeldeperiode } from '~/components/behandling/felles/dager-per-meldeperiode/BehandlingDagerPerMeldeperiode';
 import { BehandlingTiltak } from '~/components/behandling/felles/tiltak/BehandlingTiltak';
 import { BehandlingBarnetillegg } from '~/components/behandling/felles/barnetillegg/BehandlingBarnetillegg';
+import { BegrunnelseVilkårsvurdering } from '~/components/behandling/felles/begrunnelse-vilkårsvurdering/BegrunnelseVilkårsvurdering';
 
 export const RevurderingOmgjøringVedtak = () => {
     const { behandling } = useRevurderingOmgjøring();
@@ -50,7 +50,7 @@ export const RevurderingOmgjøringVedtak = () => {
     return (
         <div>
             <VStack gap="2">
-                <Heading size={'medium'} level={'3'}>
+                <Heading size={'medium'} level={'1'} spacing={true}>
                     Omgjøring
                 </Heading>
                 <VStack gap="2">
@@ -89,8 +89,6 @@ export const RevurderingOmgjøringVedtak = () => {
                     )}
                 </VStack>
             </VStack>
-            <Separator />
-            <RevurderingInnvilgelseBegrunnelse />
             {behandling.status === Rammebehandlingsstatus.VEDTATT && (
                 <OppsummeringsPar
                     label={'Omgjøringsperiode'}
@@ -100,6 +98,8 @@ export const RevurderingOmgjøringVedtak = () => {
             )}
             <Separator />
             <InnvilgelsesperiodeVelger />
+            <Separator />
+            <BegrunnelseVilkårsvurdering />
             <Separator />
             <BehandlingDagerPerMeldeperiode />
             <Separator />

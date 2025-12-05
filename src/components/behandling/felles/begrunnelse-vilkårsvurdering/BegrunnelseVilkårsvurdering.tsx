@@ -1,29 +1,24 @@
 import { BodyLong, BodyShort, Button, Heading } from '@navikt/ds-react';
 import { ParagraphIcon, TasklistIcon } from '@navikt/aksel-icons';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
-import { FunctionComponent, ReactNode, RefObject } from 'react';
+import { FunctionComponent, ReactNode } from 'react';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { VedtakHjelpetekst } from '~/components/behandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
 import { FritekstInput } from '~/components/fritekst/FritekstInput';
 import { TekstListe } from '../../../liste/TekstListe';
-
-import { Nullable } from '~/types/UtilTypes';
+import { useBehandling } from '~/components/behandling/context/BehandlingContext';
+import { useBehandlingSkjema } from '~/components/behandling/context/BehandlingSkjemaContext';
 
 import style from './BegrunnelseVilkårsvurdering.module.css';
-import { Rammebehandling } from '~/types/Rammebehandling';
 
-type Props = {
-    behandling: Rammebehandling;
-    rolle: Nullable<SaksbehandlerRolle>;
-    tekstRef: RefObject<HTMLTextAreaElement | null>;
-    className?: string;
-};
-
-export const BegrunnelseVilkårsvurdering = ({ behandling, rolle, tekstRef, className }: Props) => {
+export const BegrunnelseVilkårsvurdering = () => {
+    const { behandling, rolleForBehandling } = useBehandling();
     const { begrunnelseVilkårsvurdering } = behandling;
 
+    const { begrunnelse } = useBehandlingSkjema().textAreas;
+
     return (
-        <VedtakSeksjon className={className}>
+        <VedtakSeksjon>
             <VedtakSeksjon.Venstre>
                 <Heading size={'xsmall'} level={'2'} className={style.header}>
                     {'Begrunnelse vilkårsvurdering'}
@@ -56,9 +51,9 @@ export const BegrunnelseVilkårsvurdering = ({ behandling, rolle, tekstRef, clas
             <VedtakSeksjon.Venstre>
                 <FritekstInput
                     label={'Begrunnelse vilkårsvurdering'}
-                    defaultValue={begrunnelseVilkårsvurdering ?? ''}
-                    readOnly={rolle !== SaksbehandlerRolle.SAKSBEHANDLER}
-                    ref={tekstRef}
+                    defaultValue={begrunnelse.getValue() ?? begrunnelseVilkårsvurdering ?? ''}
+                    readOnly={rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER}
+                    ref={begrunnelse.ref}
                 />
             </VedtakSeksjon.Venstre>
             <VedtakSeksjon.Høyre>

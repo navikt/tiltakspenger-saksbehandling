@@ -1,5 +1,4 @@
 import { Heading } from '@navikt/ds-react';
-import { SøknadsbehandlingBegrunnelse } from '~/components/behandling/søknadsbehandling/begrunnelse/SøknadsbehandlingBegrunnelse';
 import { SøknadsbehandlingResultatVelger } from '~/components/behandling/søknadsbehandling/resultat-velger/SøknadsbehandlingResultatVelger';
 import { SøknadsbehandlingBrev } from '~/components/behandling/søknadsbehandling/brev/SøknadsbehandlingBrev';
 import { Separator } from '../../separator/Separator';
@@ -14,24 +13,31 @@ import { BehandlingTiltak } from '~/components/behandling/felles/tiltak/Behandli
 import { BehandlingBarnetillegg } from '~/components/behandling/felles/barnetillegg/BehandlingBarnetillegg';
 import { useBehandlingInnvilgelseSkjema } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 import { InnvilgelsesperiodeVelger } from '~/components/behandling/felles/innvilgelsesperiode/InnvilgelsesperiodeVelger';
-
-import style from './SøknadsbehandlingVedtak.module.css';
+import { BegrunnelseVilkårsvurdering } from '~/components/behandling/felles/begrunnelse-vilkårsvurdering/BegrunnelseVilkårsvurdering';
 
 export const SøknadsbehandlingVedtak = () => {
     const { resultat } = useBehandlingSkjema();
 
     return (
         <>
-            <Heading size={'medium'} level={'3'} className={style.header}>
+            <Heading size={'medium'} level={'1'} spacing={true}>
                 {'Vedtak (søknadsbehandling)'}
             </Heading>
             <SøknadsbehandlingAutomatiskBehandling />
-            <SøknadsbehandlingBegrunnelse />
-            <Separator />
             <SøknadsbehandlingResultatVelger />
+            {resultat === SøknadsbehandlingResultat.IKKE_VALGT && <IkkeValgt />}
             {resultat === SøknadsbehandlingResultat.INNVILGELSE && <Innvilgelse />}
             {resultat === SøknadsbehandlingResultat.AVSLAG && <Avslag />}
             <SøknadsbehandlingSend />
+        </>
+    );
+};
+
+const IkkeValgt = () => {
+    return (
+        <>
+            <Separator />
+            <BegrunnelseVilkårsvurdering />
         </>
     );
 };
@@ -42,6 +48,8 @@ const Innvilgelse = () => {
     return (
         <>
             <InnvilgelsesperiodeVelger />
+            <Separator />
+            <BegrunnelseVilkårsvurdering />
             <Separator />
             {harValgtPeriode && (
                 <>
@@ -63,6 +71,9 @@ const Avslag = () => {
     return (
         <>
             <SøknadsbehandlingAvslagsgrunner />
+            <Separator />
+            <BegrunnelseVilkårsvurdering />
+            <Separator />
             <SøknadsbehandlingBrev />
         </>
     );

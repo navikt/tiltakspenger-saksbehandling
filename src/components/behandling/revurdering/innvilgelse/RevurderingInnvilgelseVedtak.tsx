@@ -1,5 +1,4 @@
 import { Heading } from '@navikt/ds-react';
-import { RevurderingInnvilgelseBegrunnelse } from '~/components/behandling/revurdering/innvilgelse/begrunnelse/RevurderingInnvilgelseBegrunnelse';
 import { Separator } from '~/components/separator/Separator';
 import { RevurderingInnvilgelseBrev } from '~/components/behandling/revurdering/innvilgelse/brev/RevurderingInnvilgelseBrev';
 import { RevurderingInnvilgelseSend } from '~/components/behandling/revurdering/innvilgelse/send-og-godkjenn/RevurderingInnvilgelseSend';
@@ -9,18 +8,19 @@ import { InnvilgelsesperiodeVelger } from '~/components/behandling/felles/innvil
 import { BehandlingDagerPerMeldeperiode } from '~/components/behandling/felles/dager-per-meldeperiode/BehandlingDagerPerMeldeperiode';
 import { BehandlingTiltak } from '~/components/behandling/felles/tiltak/BehandlingTiltak';
 import { BehandlingBarnetillegg } from '~/components/behandling/felles/barnetillegg/BehandlingBarnetillegg';
+import { BegrunnelseVilkårsvurdering } from '~/components/behandling/felles/begrunnelse-vilkårsvurdering/BegrunnelseVilkårsvurdering';
 
 export const RevurderingInnvilgelseVedtak = () => {
     const { innvilgelse } = useRevurderingInnvilgelseSkjema();
 
     return (
         <>
-            <Heading size={'medium'} level={'1'}>
+            <Heading size={'medium'} level={'1'} spacing={true}>
                 {'Revurdering av innvilgelse'}
             </Heading>
-            <RevurderingInnvilgelseBegrunnelse />
-            <Separator />
             <InnvilgelsesperiodeVelger />
+            <Separator />
+            <BegrunnelseVilkårsvurdering />
             <Separator />
             {innvilgelse.harValgtPeriode && (
                 <>

@@ -1,6 +1,5 @@
 import { Checkbox, CheckboxGroup } from '@navikt/ds-react';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
-import { Separator } from '../../../separator/Separator';
 import { useSøknadsbehandling } from '../../context/BehandlingContext';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { Avslagsgrunn } from '~/types/Søknadsbehandling';
@@ -20,33 +19,30 @@ export const SøknadsbehandlingAvslagsgrunner = () => {
     const erUnderBehandling = behandling.status === Rammebehandlingsstatus.UNDER_BEHANDLING;
 
     return (
-        <>
-            <VedtakSeksjon>
-                <VedtakSeksjon.Venstre>
-                    <CheckboxGroup
-                        legend="Avslagsgrunner"
-                        className={styles.checkboxGroup}
-                        value={avslagsgrunner}
-                        readOnly={erIkkeSaksbehandler || !erUnderBehandling}
-                        onChange={(avslagsgrunner: Avslagsgrunn[]) => {
-                            dispatch({
-                                type: 'oppdaterAvslagsgrunner',
-                                payload: {
-                                    avslagsgrunner,
-                                },
-                            });
-                        }}
-                    >
-                        {Object.values(Avslagsgrunn).map((grunn) => (
-                            <Checkbox key={grunn} value={grunn} size={'small'}>
-                                {AvslagsgrunnTekst[grunn]}
-                            </Checkbox>
-                        ))}
-                    </CheckboxGroup>
-                </VedtakSeksjon.Venstre>
-            </VedtakSeksjon>
-            <Separator />
-        </>
+        <VedtakSeksjon>
+            <VedtakSeksjon.Venstre>
+                <CheckboxGroup
+                    legend="Avslagsgrunner"
+                    className={styles.checkboxGroup}
+                    value={avslagsgrunner}
+                    readOnly={erIkkeSaksbehandler || !erUnderBehandling}
+                    onChange={(avslagsgrunner: Avslagsgrunn[]) => {
+                        dispatch({
+                            type: 'oppdaterAvslagsgrunner',
+                            payload: {
+                                avslagsgrunner,
+                            },
+                        });
+                    }}
+                >
+                    {Object.values(Avslagsgrunn).map((grunn) => (
+                        <Checkbox key={grunn} value={grunn} size={'small'}>
+                            {AvslagsgrunnTekst[grunn]}
+                        </Checkbox>
+                    ))}
+                </CheckboxGroup>
+            </VedtakSeksjon.Venstre>
+        </VedtakSeksjon>
     );
 };
 
