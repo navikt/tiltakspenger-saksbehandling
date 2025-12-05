@@ -2,6 +2,7 @@ import { BodyShort, Heading } from '@navikt/ds-react';
 import { alderFraDato, formaterDatotekst } from '~/utils/date';
 import { ReactNode } from 'react';
 import { useBehandling } from '../context/BehandlingContext';
+import { Separator } from '../../separator/Separator';
 import { BehandlingOppdaterSaksopplysninger } from './oppdater-saksopplysninger/BehandlingOppdaterSaksopplysninger';
 import { BehandlingSaksopplysning } from './BehandlingSaksopplysning';
 import { BehandlingTiltakOpplysninger } from './tiltak/BehandlingTiltakOpplysninger';
@@ -14,7 +15,6 @@ import { Rammebehandlingstype } from '~/types/Rammebehandling';
 import { SøknadOpplysningerFraVedtak } from '~/components/behandling/saksopplysninger/søknad/SøknadOpplysningerFraVedtak';
 
 import style from './BehandlingSaksopplysninger.module.css';
-import Divider from '~/components/divider/Divider';
 
 export const BehandlingSaksopplysninger = () => {
     const { behandling } = useBehandling();
@@ -33,7 +33,7 @@ export const BehandlingSaksopplysninger = () => {
                 {'Saksopplysninger'}
             </Heading>
             <BehandlingOppdaterSaksopplysninger />
-            <Divider color="black" margin="1.25rem 0" />
+            <Separator />
 
             <OpplysningerSeksjon header={'Tiltak registrert på bruker'}>
                 {harTiltaksdeltagelse ? (
@@ -41,7 +41,7 @@ export const BehandlingSaksopplysninger = () => {
                 ) : (
                     <BodyShort size={'small'}>Ingen relevante tiltaksdeltagelser</BodyShort>
                 )}
-                <Divider color="black" margin="1.25rem 0" />
+                <Separator />
             </OpplysningerSeksjon>
 
             <OpplysningerSeksjon header={'Andre ytelser'}>
@@ -50,7 +50,7 @@ export const BehandlingSaksopplysninger = () => {
                 ) : (
                     <BodyShort size={'small'}>Ingen relevante ytelser</BodyShort>
                 )}
-                <Divider color="black" margin="1.25rem 0" />
+                <Separator />
             </OpplysningerSeksjon>
 
             <OpplysningerSeksjon header={'Tiltakspengevedtak fra Arena'}>
@@ -59,7 +59,7 @@ export const BehandlingSaksopplysninger = () => {
                 ) : (
                     <BodyShort size={'small'}>Ingen relevante tiltakspengevedtak i Arena</BodyShort>
                 )}
-                <Divider color="black" margin="1.25rem 0" />
+                <Separator />
             </OpplysningerSeksjon>
 
             <OpplysningerSeksjon header={'Alder'}>
@@ -70,7 +70,7 @@ export const BehandlingSaksopplysninger = () => {
                 />
             </OpplysningerSeksjon>
 
-            <Divider color="black" margin="1.25rem 0" />
+            <Separator />
 
             {type === Rammebehandlingstype.SØKNADSBEHANDLING ? (
                 <OpplysningerSeksjon header={'Fra søknad'}>
@@ -87,7 +87,7 @@ export const BehandlingSaksopplysninger = () => {
 
             {attesteringer.length > 0 && (
                 <>
-                    <Divider color="black" margin="1.25rem 0" />
+                    <Separator />
                     <OppsummeringAvAttesteringer attesteringer={attesteringer} />
                 </>
             )}

@@ -1,6 +1,6 @@
 import { Checkbox, CheckboxGroup } from '@navikt/ds-react';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
-
+import { Separator } from '../../../separator/Separator';
 import { useSøknadsbehandling } from '../../context/BehandlingContext';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { Avslagsgrunn } from '~/types/Søknadsbehandling';
@@ -8,9 +8,8 @@ import {
     useSøknadsbehandlingAvslagSkjema,
     useSøknadsbehandlingSkjemaDispatch,
 } from '~/components/behandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
-import styles from './SøknadsbehandlingAvslagsgrunner.module.css';
 import { Rammebehandlingsstatus } from '~/types/Rammebehandling';
-import Divider from '~/components/divider/Divider';
+import styles from './SøknadsbehandlingAvslagsgrunner.module.css';
 
 export const SøknadsbehandlingAvslagsgrunner = () => {
     const { rolleForBehandling, behandling } = useSøknadsbehandling();
@@ -46,7 +45,7 @@ export const SøknadsbehandlingAvslagsgrunner = () => {
                     </CheckboxGroup>
                 </VedtakSeksjon.Venstre>
             </VedtakSeksjon>
-            <Divider color="black" margin="1.25rem 0" />
+            <Separator />
         </>
     );
 };

@@ -1,6 +1,6 @@
 import { BodyShort, Heading, HStack, VStack } from '@navikt/ds-react';
 import { RevurderingInnvilgelseBegrunnelse } from '~/components/behandling/revurdering/innvilgelse/begrunnelse/RevurderingInnvilgelseBegrunnelse';
-
+import { Separator } from '~/components/separator/Separator';
 import { RevurderingInnvilgelseBrev } from '~/components/behandling/revurdering/innvilgelse/brev/RevurderingInnvilgelseBrev';
 import { BehandlingBeregningOgSimulering } from '../../felles/beregning-og-simulering/BehandlingBeregningOgSimulering';
 import { useRevurderingOmgjøring } from '../../context/BehandlingContext';
@@ -25,7 +25,6 @@ import { Nullable } from '~/types/UtilTypes';
 import { BehandlingDagerPerMeldeperiode } from '~/components/behandling/felles/dager-per-meldeperiode/BehandlingDagerPerMeldeperiode';
 import { BehandlingTiltak } from '~/components/behandling/felles/tiltak/BehandlingTiltak';
 import { BehandlingBarnetillegg } from '~/components/behandling/felles/barnetillegg/BehandlingBarnetillegg';
-import Divider from '~/components/divider/Divider';
 
 export const RevurderingOmgjøringVedtak = () => {
     const { behandling } = useRevurderingOmgjøring();
@@ -90,7 +89,7 @@ export const RevurderingOmgjøringVedtak = () => {
                     )}
                 </VStack>
             </VStack>
-            <Divider color="black" margin="1.25rem 0" />
+            <Separator />
             <RevurderingInnvilgelseBegrunnelse />
             {behandling.status === Rammebehandlingsstatus.VEDTATT && (
                 <OppsummeringsPar
@@ -99,16 +98,16 @@ export const RevurderingOmgjøringVedtak = () => {
                     variant="inlineColon"
                 />
             )}
-            <Divider color="black" margin="1.25rem 0" />
+            <Separator />
             <InnvilgelsesperiodeVelger />
-            <Divider color="black" margin="1.25rem 0" />
+            <Separator />
             <BehandlingDagerPerMeldeperiode />
-            <Divider color="black" margin="1.25rem 0" />
+            <Separator />
             <BehandlingTiltak />
             <BehandlingBarnetillegg />
-            <Divider color="black" margin="1.25rem 0" />
+            <Separator />
             <RevurderingInnvilgelseBrev />
-            <Divider color="black" margin="1.25rem 0" />
+            <Separator />
             <BehandlingBeregningOgSimulering />
             <BehandlingSendOgGodkjenn behandling={behandling} lagringProps={lagringProps} />
         </div>
