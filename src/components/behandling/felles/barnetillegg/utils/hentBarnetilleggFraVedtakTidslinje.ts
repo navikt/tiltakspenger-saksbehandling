@@ -4,7 +4,7 @@ import { BarnetilleggPeriode } from '~/types/Barnetillegg';
 import { nesteDag } from '~/utils/date';
 import { kunPerioderMedBarn } from '~/components/behandling/felles/barnetillegg/utils/barnetilleggUtils';
 import { BehandlingId } from '~/types/Rammebehandling';
-import { Tidslinje } from '~/types/Tidslinje';
+import { TidslinjeRammevedtak } from '~/types/TidslinjeRammevedtak';
 import { Periode } from '~/types/Periode';
 
 type VedtakMedBarnetillegg = Rammevedtak & {
@@ -14,7 +14,7 @@ type VedtakMedBarnetillegg = Rammevedtak & {
 type BarnetilleggMedBehandlingId = BarnetilleggPeriode & { behandlingId: BehandlingId };
 
 const hentBarnetilleggFraVedtakTidslinje = (
-    tidslinje: Tidslinje,
+    tidslinje: TidslinjeRammevedtak,
 ): BarnetilleggMedBehandlingId[] => {
     const relevanteBarnetillegg: BarnetilleggMedBehandlingId[] = tidslinje.elementer
         .map((el) => el.rammevedtak)
@@ -48,13 +48,13 @@ const hentBarnetilleggFraVedtakTidslinje = (
 };
 
 export const hentBarnetilleggPerioderMedBarn = (
-    tidslinje: Tidslinje,
+    tidslinje: TidslinjeRammevedtak,
 ): BarnetilleggMedBehandlingId[] => {
     return hentBarnetilleggFraVedtakTidslinje(tidslinje).filter(kunPerioderMedBarn);
 };
 
 export const barnetilleggKrympetTilPeriode = (
-    tidslinje: Tidslinje,
+    tidslinje: TidslinjeRammevedtak,
     periode: Periode,
     kunMedBarn: boolean,
 ): BarnetilleggMedBehandlingId[] => {
@@ -67,7 +67,7 @@ export const barnetilleggKrympetTilPeriode = (
 };
 
 export const barnetilleggUtvidetTilPeriode = (
-    tidslinje: Tidslinje,
+    tidslinje: TidslinjeRammevedtak,
     periode: Periode,
     kunMedBarn: boolean,
 ): BarnetilleggMedBehandlingId[] => {

@@ -18,8 +18,11 @@ import {
 import { OpprettPapirsøknad } from '~/components/personoversikt/papirsøknad/OpprettPapirsøknad';
 
 import styles from './Personoversikt.module.css';
+import { Tidslinjer } from '~/components/tidslinjer/Tidslinjer';
 
 export const Personoversikt = () => {
+    const { sak } = useSak();
+
     const {
         sakId,
         saksnummer,
@@ -27,7 +30,7 @@ export const Personoversikt = () => {
         åpneBehandlinger,
         meldeperiodeKjeder,
         alleRammevedtak,
-    } = useSak().sak;
+    } = sak;
 
     const { meldeperiodeKjederIkkeKlare, meldeperiodeKjederKanBehandles } = Object.groupBy(
         meldeperiodeKjeder,
@@ -58,6 +61,8 @@ export const Personoversikt = () => {
                         />
                     </HStack>
                 </HStack>
+
+                <Tidslinjer sak={sak} className={styles.tabellwrapper} />
 
                 <Box className={styles.tabellwrapper}>
                     <Heading level={'3'} size={'small'}>

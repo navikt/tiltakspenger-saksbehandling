@@ -8,30 +8,35 @@ import {
     TasklistIcon,
     XMarkOctagonIcon,
 } from '@navikt/aksel-icons';
-import { BodyShort, Button, Heading, Link, Timeline } from '@navikt/ds-react';
+import { BodyShort, Button, Heading, Link, Timeline, VStack } from '@navikt/ds-react';
 import { SakProps } from '~/types/Sak';
 import NextLink from 'next/link';
 import { formaterDatotekst, periodeTilFormatertDatotekst } from '~/utils/date';
 import { formatterBeløp } from '~/utils/beløp';
 import { behandlingUrl, meldeperiodeUrl } from '~/utils/urls';
-import { useTidslinjeDateRange } from '~/components/behandling/tidslinje/useTidslinjeDateRange';
+import { useTidslinjeDateRange } from '~/components/tidslinjer/useTidslinjeDateRange';
+import {
+    erTidslinjeElementInnvilgelse,
+    tidslinjeResultatStatus,
+    tidslinjeResultatTekst,
+} from '~/utils/TidslinjeUtils';
 import { tellAntallBarnFraVedtak } from '~/components/behandling/felles/barnetillegg/utils/barnetilleggUtils';
+import { classNames } from '~/utils/classNames';
 
-import style from './BehandlingerTidslinje.module.css';
-import { TidslinjeResultat } from '~/types/Tidslinje';
-import { erTidslinjeElementInnvilgelse } from '~/utils/TidslinjeUtils';
+import style from './Tidslinjer.module.css';
 
 type Props = {
     sak: SakProps;
+    className?: string;
 };
 
-export const BehandlingerTidslinje = ({ sak }: Props) => {
+export const Tidslinjer = ({ sak, className }: Props) => {
     const { tidslinje, saksnummer, utbetalingstidslinje } = sak;
 
     const { startDate, endDate, scrollTidslinje } = useTidslinjeDateRange(tidslinje);
 
     return (
-        <div className={style.wrapper}>
+        <div className={classNames(style.wrapper, className)}>
             <div className={style.header}>
                 <Heading size={'small'} level={'2'}>
                     {'Gjeldende vedtak og utbetalinger'}
@@ -62,44 +67,34 @@ export const BehandlingerTidslinje = ({ sak }: Props) => {
                     </Button>
                 </div>
             </div>
+
+            {/* Obs hvis du vurderer å splitte denne i mindre komponenter: */}
+            {/* Timeline fra ds-react er avhengig av at komponentene i hierarkiet har direkte children/parent relasjoner uten wrappere mellom */}
             <Timeline startDate={startDate} endDate={endDate}>
                 <Timeline.Row label={'Vedtak'} icon={<TasklistIcon />}>
                     {tidslinje.elementer.map((tidslinjeElement) => {
+                        const { rammevedtak, tidslinjeResultat } = tidslinjeElement;
+
                         const {
                             id,
                             vedtaksdato,
                             saksbehandler,
                             beslutter,
                             antallDagerPerMeldeperiode,
-                        } = tidslinjeElement.rammevedtak;
+                        } = rammevedtak;
 
                         const { fraOgMed, tilOgMed } = tidslinjeElement.periode;
 
-                        const erInnvilgelse = erTidslinjeElementInnvilgelse(
-                            tidslinjeElement.tidslinjeResultat,
-                        );
+                        const erInnvilgelse = erTidslinjeElementInnvilgelse(tidslinjeResultat);
 
-                        const barn = tellAntallBarnFraVedtak(tidslinjeElement.rammevedtak);
+                        const barn = tellAntallBarnFraVedtak(rammevedtak);
 
                         return (
                             <Timeline.Period
                                 start={new Date(fraOgMed)}
                                 end={new Date(tilOgMed)}
-                                status={(() => {
-                                    switch (tidslinjeElement.tidslinjeResultat) {
-                                        case TidslinjeResultat.STANS:
-                                            return 'warning';
-                                        case TidslinjeResultat.OMGJØRING_OPPHØR:
-                                            return 'danger';
-                                        case TidslinjeResultat.FORLENGELSE:
-                                        case TidslinjeResultat.SØKNADSBEHANDLING_INNVILGELSE:
-                                        case TidslinjeResultat.REVURDERING_INNVILGELSE:
-                                        case TidslinjeResultat.OMGJØRING_INNVILGELSE:
-                                            return 'success';
-                                    }
-                                })()}
+                                status={tidslinjeResultatStatus[tidslinjeResultat]}
                                 icon={
-                                    //TODO - finn et fint ikon for stans
                                     erInnvilgelse ? (
                                         <CheckmarkCircleIcon className={style.innvilgetIkon} />
                                     ) : (
@@ -108,24 +103,9 @@ export const BehandlingerTidslinje = ({ sak }: Props) => {
                                 }
                                 key={id}
                             >
-                                <div className={style.behandlingPreview}>
+                                <VStack gap={'3'}>
                                     <Heading size={'xsmall'} level={'4'}>
-                                        {(() => {
-                                            switch (tidslinjeElement.tidslinjeResultat) {
-                                                case TidslinjeResultat.STANS:
-                                                    return 'Stanset';
-                                                case TidslinjeResultat.OMGJØRING_OPPHØR:
-                                                    return 'Omgjøring - opphørt';
-                                                case TidslinjeResultat.FORLENGELSE:
-                                                    return 'Forlengelse';
-                                                case TidslinjeResultat.SØKNADSBEHANDLING_INNVILGELSE:
-                                                    return 'Søknadsbehandling - innvilgelse';
-                                                case TidslinjeResultat.REVURDERING_INNVILGELSE:
-                                                    return 'Revurdering - innvilgelse';
-                                                case TidslinjeResultat.OMGJØRING_INNVILGELSE:
-                                                    return 'Omgjøring - innvilgelse';
-                                            }
-                                        })()}
+                                        {tidslinjeResultatTekst[tidslinjeResultat]}
                                     </Heading>
                                     <div>
                                         <InfoElement
@@ -173,7 +153,7 @@ export const BehandlingerTidslinje = ({ sak }: Props) => {
                                     >
                                         {'Til behandlingen'}
                                     </Link>
-                                </div>
+                                </VStack>
                             </Timeline.Period>
                         );
                     })}
@@ -193,7 +173,7 @@ export const BehandlingerTidslinje = ({ sak }: Props) => {
                                 icon={<CheckmarkIcon className={style.utbetalingIkon} />}
                                 key={kjedeId}
                             >
-                                <div className={style.behandlingPreview}>
+                                <VStack gap={'3'}>
                                     <InfoElement
                                         navn={'Meldeperiode'}
                                         verdi={`${formaterDatotekst(fraOgMed)} - ${formaterDatotekst(tilOgMed)}`}
@@ -223,7 +203,7 @@ export const BehandlingerTidslinje = ({ sak }: Props) => {
                                     >
                                         {'Til meldekortet'}
                                     </Link>
-                                </div>
+                                </VStack>
                             </Timeline.Period>
                         );
                     })}

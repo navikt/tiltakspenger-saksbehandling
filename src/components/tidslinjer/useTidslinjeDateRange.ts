@@ -1,11 +1,11 @@
 import dayjs from 'dayjs';
 import { useCallback, useState } from 'react';
-import { Tidslinje } from '~/types/Tidslinje';
+import { TidslinjeRammevedtak } from '~/types/TidslinjeRammevedtak';
 
 const MAX_RANGE_MONTHS = 6;
 const MONTHS_PER_STEP = 4;
 
-export const useTidslinjeDateRange = (tidslinje: Tidslinje) => {
+export const useTidslinjeDateRange = (tidslinje: TidslinjeRammevedtak) => {
     const førsteDato = dayjs(tidslinje.elementer.at(0)?.periode.fraOgMed);
     const sisteDato = dayjs(tidslinje.elementer.at(-1)?.periode.tilOgMed);
 

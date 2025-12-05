@@ -1,15 +1,15 @@
 import { Periode } from './Periode';
 import { Rammevedtak } from './Rammevedtak';
 
-export interface Tidslinje {
+export type TidslinjeRammevedtak = {
     elementer: TidslinjeElement[];
-}
+};
 
-export interface TidslinjeElement {
+type TidslinjeElement = {
     rammevedtak: Rammevedtak;
     periode: Periode;
     tidslinjeResultat: TidslinjeResultat;
-}
+};
 
 export enum TidslinjeResultat {
     STANS = 'STANS',

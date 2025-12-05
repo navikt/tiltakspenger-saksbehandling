@@ -8,7 +8,7 @@ import { Alert } from '@navikt/ds-react';
 import { finnBehandlingStatusTag } from '~/utils/tekstformateringUtils';
 import AvbruttOppsummering from '../oppsummeringer/oppsummeringAvAvbruttBehandling/OppsummeringAvAvbruttBehandling';
 import SideBarMain from '../../layouts/sidebar-main/SideBarMain';
-import { BehandlingerTidslinje } from '~/components/behandling/tidslinje/BehandlingerTidslinje';
+import { Tidslinjer } from '~/components/tidslinjer/Tidslinjer';
 import { useSak } from '~/context/sak/SakContext';
 import BehandlingSattPåVentOppsummering from '~/components/oppsummeringer/behandlingSattPåVent/OppsummeringBehandlingSattPåVent';
 import { BehandlingSkjemaProvider } from '~/components/behandling/context/BehandlingSkjemaContext';
@@ -41,7 +41,7 @@ export const BehandlingPage = () => {
                             {ventestatus && ventestatus.erSattPåVent && (
                                 <BehandlingSattPåVentOppsummering ventestatus={ventestatus} />
                             )}
-                            <BehandlingerTidslinje sak={sak} />
+                            <Tidslinjer sak={sak} />
                             {avbrutt && <AvbruttOppsummering avbrutt={avbrutt} withPanel={true} />}
                             <div className={style.vedtakContainer}>
                                 {type === Rammebehandlingstype.SØKNADSBEHANDLING ? (

@@ -3,7 +3,7 @@ import { MeldeperiodeKjedeProps } from './meldekort/Meldeperiode';
 import { Rammevedtak } from '~/types/Rammevedtak';
 import { UtbetalingstidslinjePeriode } from './Utbetaling';
 import { Rammebehandling } from './Rammebehandling';
-import { Tidslinje } from './Tidslinje';
+import { TidslinjeRammevedtak } from './TidslinjeRammevedtak';
 
 export type SakId = `sak_${string}`;
 
@@ -16,7 +16,7 @@ export type SakProps = {
     førsteDagSomGirRett?: string;
     sisteDagSomGirRett?: string;
     behandlinger: Rammebehandling[];
-    tidslinje: Tidslinje;
+    tidslinje: TidslinjeRammevedtak;
     // Alle rammevedtak på saken med opprinnelige perioder
     alleRammevedtak: Rammevedtak[];
     utbetalingstidslinje: UtbetalingstidslinjePeriode[];

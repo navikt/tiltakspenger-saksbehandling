@@ -8,7 +8,7 @@ import { Periode } from '~/types/Periode';
 import { Søknadsbehandling } from '~/types/Søknadsbehandling';
 import { Revurdering } from '~/types/Revurdering';
 import { Rammebehandling, Rammebehandlingstype } from '~/types/Rammebehandling';
-import { Tidslinje } from '~/types/Tidslinje';
+import { TidslinjeRammevedtak } from '~/types/TidslinjeRammevedtak';
 
 export const hentBarnetilleggForSøknadsbehandling = (
     behandling: Søknadsbehandling,
@@ -32,7 +32,7 @@ export const hentBarnetilleggForRevurdering = (
 };
 
 export const hentBarnetilleggForhåndsutfyltForRevurdering = (
-    tidslinje: Tidslinje,
+    tidslinje: TidslinjeRammevedtak,
     innvilgelsesperiode: Periode,
 ) => {
     return barnetilleggUtvidetTilPeriode(tidslinje, innvilgelsesperiode, true);
