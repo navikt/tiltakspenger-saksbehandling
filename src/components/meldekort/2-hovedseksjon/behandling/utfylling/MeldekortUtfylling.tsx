@@ -13,9 +13,10 @@ import {
     ForhåndsvisMeldekortbehandlingBrevRequest,
     hentMeldekortForhåndsutfylling,
     MeldekortBehandlingForm,
-    tellDagerMedDeltattEllerFravær,
+    meldekortBehandlingFormTilDto,
+    useCustomMeldekortUtfyllingValidationResolver,
 } from './meldekortUtfyllingUtils';
-import { Controller, FieldErrors, FormProvider, useForm } from 'react-hook-form';
+import { Controller, FormProvider, useForm, UseFormReturn } from 'react-hook-form';
 import { useMeldeperiodeKjede } from '../../../MeldeperiodeKjedeContext';
 import {
     MeldekortBehandlingDagStatus,
@@ -23,8 +24,6 @@ import {
     MeldekortBehandlingProps,
 } from '~/types/meldekort/MeldekortBehandling';
 import { MeldekortUker } from '../../../0-felles-komponenter/uker/MeldekortUker';
-import { MeldekortUtfyllingLagre } from './lagre/MeldekortUtfyllingLagre';
-import { MeldekortSendTilBeslutning } from '../beslutning/MeldekortSendTilBeslutning';
 import React, { useEffect, useRef } from 'react';
 import { classNames } from '~/utils/classNames';
 import { MeldekortBegrunnelse } from '../../../0-felles-komponenter/begrunnelse/MeldekortBegrunnelse';
@@ -34,62 +33,29 @@ import { MeldekortBeregningOgSimulering } from '~/components/meldekort/0-felles-
 
 import styles from './MeldekortUtfylling.module.css';
 import Divider from '~/components/divider/Divider';
-import { useFetchBlobFraApi } from '~/utils/fetch/useFetchFraApi';
-import { GyldigeMeldekortDagUfyllingsvalg } from '~/components/meldekort/0-felles-komponenter/uker/MeldekortUkeBehandling';
-import { formaterDatotekst } from '~/utils/date';
+import { useFetchBlobFraApi, useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { hookFormErrorsTilFeiloppsummering } from '~/utils/ValideringUtils';
-
-const useCustomValidationResolver = () =>
-    React.useCallback(
-        async (
-            data: MeldekortBehandlingForm,
-            valideringscontext: { tillattAntallDager: number },
-        ) => {
-            const errors: FieldErrors<MeldekortBehandlingForm> = {};
-
-            if (
-                tellDagerMedDeltattEllerFravær(data.dager) > valideringscontext.tillattAntallDager
-            ) {
-                errors['dager'] = {
-                    type: 'dager',
-                    message: `For mange dager utfylt - Maks ${valideringscontext.tillattAntallDager} dager med tiltak for denne perioden.`,
-                };
-            }
-
-            data.dager.forEach((dag, index) => {
-                /*
-                Denne er fordi vi teller med dagene som saksbehandler ikke skal få lov til å endre
-                slik at feilmeldingene blir mappet til den riktige indeksen.
-                */
-                if (dag.status === MeldekortBehandlingDagStatus.IkkeRettTilTiltakspenger) {
-                    return;
-                }
-
-                if (!GyldigeMeldekortDagUfyllingsvalg.includes(dag.status)) {
-                    //erorr objektet vårt må bygges opp dynamisk for å matche react-hook-form sitt format
-                    errors.dager = errors.dager ?? [];
-                    errors.dager[index] = errors.dager[index] ?? {};
-
-                    errors['dager'][index]['status'] = {
-                        type: `dager.${index}.status`,
-                        message: `Ugyldig status valgt for dag ${formaterDatotekst(dag.dato)}`,
-                    };
-                }
-            });
-
-            return { values: data, errors: errors };
-        },
-        [],
-    );
+import { Nullable } from '~/types/UtilTypes';
+import { MeldeperiodeKjedeProps } from '~/types/meldekort/Meldeperiode';
+import { useNotification } from '~/context/NotificationContext';
+import { BekreftelsesModal } from '~/components/modaler/BekreftelsesModal';
+import { SakId } from '~/types/Sak';
+import { FetcherError } from '~/utils/fetch/fetch';
 
 type Props = {
     meldekortBehandling: MeldekortBehandlingProps;
 };
 
 export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
-    const { meldeperiodeKjede, tidligereMeldekortBehandlinger, sisteMeldeperiode } =
-        useMeldeperiodeKjede();
     const { sakId, saksnummer } = useSak().sak;
+    const { navigateWithNotification } = useNotification();
+    const {
+        meldeperiodeKjede,
+        tidligereMeldekortBehandlinger,
+        sisteMeldeperiode,
+        setMeldeperiodeKjede,
+    } = useMeldeperiodeKjede();
+
     const brukersMeldekortForBehandling =
         meldeperiodeKjede.brukersMeldekort.find(
             (b) => b.id === meldekortBehandling.brukersMeldekortId,
@@ -105,10 +71,10 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
                 sisteMeldeperiode,
                 brukersMeldekortForBehandling,
             ),
-            begrunnelse: meldekortBehandling.begrunnelse,
-            tekstTilVedtaksbrev: meldekortBehandling.tekstTilVedtaksbrev ?? null,
+            begrunnelse: meldekortBehandling.begrunnelse ?? '',
+            tekstTilVedtaksbrev: meldekortBehandling.tekstTilVedtaksbrev ?? '',
         },
-        resolver: useCustomValidationResolver(),
+        resolver: useCustomMeldekortUtfyllingValidationResolver(),
         context: { tillattAntallDager: antallDager },
     });
 
@@ -118,21 +84,58 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
         .dager.every((dag) => dag.status !== MeldekortBehandlingDagStatus.IkkeBesvart);
     const skalViseBeregningVarsel = skjemaErEndret && skjemaErUtfylt;
 
-    const hentMeldekortUtfylling = (): MeldekortBehandlingDTO => ({
-        dager: formContext.getValues().dager,
-        begrunnelse: formContext.getValues().begrunnelse,
-        tekstTilVedtaksbrev: formContext.getValues().tekstTilVedtaksbrev ?? null,
-    });
-
-    const modalRef = useRef<HTMLDialogElement>(null);
-
     const forhåndsvisBrev = useFetchBlobFraApi<ForhåndsvisMeldekortbehandlingBrevRequest>(
         `/sak/${sakId}/meldekortbehandling/${meldekortBehandling.id}/forhandsvis`,
         'POST',
     );
 
-    const onSubmit = () => {
-        modalRef.current?.showModal();
+    const buttonActionRef =
+        useRef<Nullable<'lagreOgBeregn' | 'sendTilBeslutter' | 'åpneSendTilBeslutterModal'>>(null);
+
+    const lagreOgBeregnMeldekort = useFetchJsonFraApi<
+        MeldeperiodeKjedeProps,
+        MeldekortBehandlingDTO
+    >(`/sak/${sakId}/meldekort/${meldekortBehandling.id}/oppdater`, 'POST', {
+        onSuccess: (oppdatertKjede) => {
+            if (oppdatertKjede) {
+                setMeldeperiodeKjede(oppdatertKjede);
+            }
+        },
+    });
+
+    const modalRef = useRef<HTMLDialogElement>(null);
+
+    const sendMeldekortTilBeslutter = useFetchJsonFraApi<
+        MeldeperiodeKjedeProps,
+        MeldekortBehandlingDTO
+    >(`/sak/${sakId}/meldekort/${meldekortBehandling.id}`, 'POST', {
+        onSuccess: (oppdatertKjede) => {
+            if (oppdatertKjede) {
+                setMeldeperiodeKjede(oppdatertKjede);
+                navigateWithNotification(
+                    `/sak/${saksnummer}`,
+                    'Meldekortet er sendt til beslutter!',
+                );
+            }
+        },
+    });
+
+    const onSubmit = (data: MeldekortBehandlingForm) => {
+        switch (buttonActionRef.current) {
+            case 'åpneSendTilBeslutterModal':
+                modalRef.current?.showModal();
+                break;
+            case 'lagreOgBeregn':
+                //fordi brevet krever at beregning gjøres for å forhåndsvise, fjerner vi tidligere feil som kan ha oppstått
+                forhåndsvisBrev.reset();
+                lagreOgBeregnMeldekort.reset();
+                lagreOgBeregnMeldekort.trigger(meldekortBehandlingFormTilDto(data));
+                break;
+            case 'sendTilBeslutter':
+                sendMeldekortTilBeslutter.reset();
+                sendMeldekortTilBeslutter.trigger(meldekortBehandlingFormTilDto(data));
+                break;
+        }
     };
 
     useEffect(() => {
@@ -143,8 +146,8 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
                 sisteMeldeperiode,
                 brukersMeldekortForBehandling,
             ),
-            begrunnelse: meldekortBehandling.begrunnelse,
-            tekstTilVedtaksbrev: meldekortBehandling.tekstTilVedtaksbrev,
+            begrunnelse: meldekortBehandling.begrunnelse ?? '',
+            tekstTilVedtaksbrev: meldekortBehandling.tekstTilVedtaksbrev ?? '',
         });
     }, [meldekortBehandling, tidligereMeldekortBehandlinger, brukersMeldekortForBehandling]);
 
@@ -182,7 +185,7 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
                                             Teksten vises i vedtaksbrevet til bruker.
                                         </BodyShort>
 
-                                        {meldekortBehandling.tekstTilVedtaksbrev !==
+                                        {(meldekortBehandling.tekstTilVedtaksbrev ?? '') !==
                                             formContext.watch('tekstTilVedtaksbrev') && (
                                             <HStack gap="1">
                                                 <InlineMessage status="warning">
@@ -198,7 +201,7 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
                                 }
                                 minRows={5}
                                 resize={'vertical'}
-                                value={field.value ?? ''}
+                                value={field.value}
                                 onChange={field.onChange}
                             />
                         )}
@@ -210,6 +213,8 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
                         size="small"
                         loading={forhåndsvisBrev.isMutating}
                         onClick={() => {
+                            //resetter eventuelle tidligere feil før ny request
+                            forhåndsvisBrev.reset();
                             forhåndsvisBrev.trigger(
                                 {
                                     tekstTilVedtaksbrev: formContext.getValues(
@@ -227,57 +232,119 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
                     {forhåndsvisBrev.error && (
                         <Alert variant="error" size="small">
                             <BodyShort>Feil ved forhåndsvisning av brev</BodyShort>
-                            <BodyShort>{`[${forhåndsvisBrev.error.status}] ${forhåndsvisBrev.error.message}`}</BodyShort>
+                            <BodyShort>{forhåndsvisBrev.error.message}</BodyShort>
                         </Alert>
                     )}
                     <Divider orientation="horizontal" />
-                    <VStack gap={'2'}>
-                        {Object.values(formContext.formState.errors).length > 0 && (
-                            <Alert variant={'error'} size={'small'}>
-                                <BodyShort weight={'semibold'} size={'small'}>
-                                    {'Feil i utfyllingen'}
-                                </BodyShort>
-                                <ul>
-                                    {hookFormErrorsTilFeiloppsummering(
-                                        formContext.formState.errors,
-                                    ).map((error, idx) => (
-                                        <li key={`${idx}-${error}`}>
-                                            <BodyShort size="small">{error}</BodyShort>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </Alert>
-                        )}
-                        <HStack justify={'space-between'}>
-                            <AvsluttMeldekortBehandling
-                                sakId={sakId}
-                                meldekortBehandlingId={meldekortBehandling.id}
-                                personoversiktUrl={meldeperiodeUrl(
-                                    saksnummer,
-                                    meldekortBehandling.periode,
-                                )}
-                                buttonProps={{
-                                    variant: 'tertiary',
-                                }}
-                            />
-                            <HStack gap="2">
-                                <MeldekortUtfyllingLagre
-                                    meldekortId={meldekortBehandling.id}
-                                    sakId={sakId}
-                                    hentMeldekortUtfylling={hentMeldekortUtfylling}
-                                />
-                                <MeldekortSendTilBeslutning
-                                    meldekortId={meldekortBehandling.id}
-                                    sakId={sakId}
-                                    hentMeldekortUtfylling={hentMeldekortUtfylling}
-                                    saksnummer={saksnummer}
-                                    modalRef={modalRef}
-                                />
-                            </HStack>
-                        </HStack>
-                    </VStack>
+                    <MeldekortUtfyllingFooter
+                        sakId={sakId}
+                        saksnummer={saksnummer}
+                        meldekortBehandling={meldekortBehandling}
+                        lagreOgBeregnMeldekort={lagreOgBeregnMeldekort}
+                        sendMeldekortTilBeslutter={sendMeldekortTilBeslutter}
+                        modalRef={modalRef}
+                        buttonActionRef={buttonActionRef}
+                        form={formContext}
+                    />
                 </VStack>
             </form>
         </FormProvider>
+    );
+};
+
+const MeldekortUtfyllingFooter = (props: {
+    sakId: SakId;
+    saksnummer: string;
+    meldekortBehandling: MeldekortBehandlingProps;
+    lagreOgBeregnMeldekort: {
+        isMutating: boolean;
+        error?: FetcherError;
+    };
+    sendMeldekortTilBeslutter: {
+        isMutating: boolean;
+        error?: FetcherError;
+    };
+    modalRef: React.RefObject<Nullable<HTMLDialogElement>>;
+    buttonActionRef: React.RefObject<
+        Nullable<'lagreOgBeregn' | 'sendTilBeslutter' | 'åpneSendTilBeslutterModal'>
+    >;
+    form: UseFormReturn<MeldekortBehandlingForm>;
+}) => {
+    return (
+        <VStack gap={'2'}>
+            {Object.values(props.form.formState.errors).length > 0 && (
+                <Alert variant={'error'} size={'small'}>
+                    <BodyShort weight={'semibold'} size={'small'}>
+                        {'Feil i utfyllingen'}
+                    </BodyShort>
+                    <ul>
+                        {hookFormErrorsTilFeiloppsummering(props.form.formState.errors).map(
+                            (error, idx) => (
+                                <li key={`${idx}-${error}`}>
+                                    <BodyShort size="small">{error}</BodyShort>
+                                </li>
+                            ),
+                        )}
+                    </ul>
+                </Alert>
+            )}
+            <HStack justify={'space-between'}>
+                <AvsluttMeldekortBehandling
+                    sakId={props.sakId}
+                    meldekortBehandlingId={props.meldekortBehandling.id}
+                    personoversiktUrl={meldeperiodeUrl(
+                        props.saksnummer,
+                        props.meldekortBehandling.periode,
+                    )}
+                    buttonProps={{ variant: 'tertiary' }}
+                />
+                <HStack gap="2">
+                    <Button
+                        variant={'secondary'}
+                        size="small"
+                        loading={props.lagreOgBeregnMeldekort.isMutating}
+                        onClick={() => {
+                            props.buttonActionRef.current = 'lagreOgBeregn';
+                        }}
+                    >
+                        Lagre og beregn
+                    </Button>
+                    <Button
+                        size="small"
+                        onClick={() => {
+                            props.buttonActionRef.current = 'åpneSendTilBeslutterModal';
+                        }}
+                    >
+                        Send til beslutter
+                    </Button>
+                    <BekreftelsesModal
+                        modalRef={props.modalRef}
+                        tittel={'Send meldekort til beslutter'}
+                        feil={props.sendMeldekortTilBeslutter.error}
+                        lukkModal={() => props.modalRef.current?.close()}
+                        bekreftKnapp={
+                            <Button
+                                size={'small'}
+                                loading={props.sendMeldekortTilBeslutter.isMutating}
+                                onClick={() => {
+                                    props.buttonActionRef.current = 'sendTilBeslutter';
+                                }}
+                            >
+                                Send til beslutter
+                            </Button>
+                        }
+                    >
+                        Er du sikker på at meldekortet er ferdig utfylt og klart til å sendes til
+                        beslutter?
+                    </BekreftelsesModal>
+                </HStack>
+            </HStack>
+            {props.lagreOgBeregnMeldekort.error && (
+                <Alert variant="error" size="small">
+                    <BodyShort>Feil ved lagring og beregning</BodyShort>
+                    <BodyShort>{props.lagreOgBeregnMeldekort.error?.message}</BodyShort>
+                </Alert>
+            )}
+        </VStack>
     );
 };
