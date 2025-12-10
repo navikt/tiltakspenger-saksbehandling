@@ -78,8 +78,8 @@ export const InternDekoratør = () => {
                         </Search>
                     </form>
                     <Image
-                        src="/cozy-season.svg"
-                        alt="Cozy season"
+                        src="/christmas-season.svg"
+                        alt="God jul illustrasjon"
                         aria-hidden
                         width={400}
                         height={45}
