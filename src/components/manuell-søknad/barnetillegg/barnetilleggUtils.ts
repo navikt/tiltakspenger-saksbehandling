@@ -1,4 +1,4 @@
-import { Barn } from '~/components/papirsøknad/papirsøknadTypes';
+import { Barn } from '~/components/manuell-søknad/ManueltRegistrertSøknad';
 import { Personopplysninger } from '~/components/personaliaheader/useHentPersonopplysninger';
 import { formaterDatotekst } from '~/utils/date';
 

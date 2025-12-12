@@ -5,8 +5,11 @@ import { PlusIcon } from '@navikt/aksel-icons';
 import { Controller, FieldPath, useFormContext, useWatch } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
 import { Datovelger } from '~/components/datovelger/Datovelger';
-import { JaNeiSpørsmål } from '~/components/papirsøknad/JaNeiSpørsmål';
-import type { Barn, Papirsøknad } from '~/components/papirsøknad/papirsøknadTypes';
+import { JaNeiSpørsmål } from '~/components/manuell-søknad/JaNeiSpørsmål';
+import type {
+    Barn,
+    ManueltRegistrertSøknad,
+} from '~/components/manuell-søknad/ManueltRegistrertSøknad';
 import { dateTilISOTekst } from '~/utils/date';
 import dayjs from 'dayjs';
 
@@ -31,7 +34,7 @@ export const LeggTilBarnManuelt = ({ onAppend }: Props) => {
         setError,
         clearErrors,
         formState: { errors },
-    } = useFormContext<Papirsøknad>();
+    } = useFormContext<ManueltRegistrertSøknad>();
     const [visLeggTilBarnFelter, setVisLeggTilBarnFelt] = React.useState(false);
     const dagensDato = dayjs();
 
@@ -69,7 +72,10 @@ export const LeggTilBarnManuelt = ({ onAppend }: Props) => {
         let kanLeggeTilBarn = true;
         type Error = { type: 'remote'; message: string };
         const error = (message: string): Error => ({ type: 'remote', message });
-        const validationError = (fieldName: FieldPath<Papirsøknad>, message: string) => {
+        const validationError = (
+            fieldName: FieldPath<ManueltRegistrertSøknad>,
+            message: string,
+        ) => {
             setError(fieldName, error(message));
             kanLeggeTilBarn = false;
         };

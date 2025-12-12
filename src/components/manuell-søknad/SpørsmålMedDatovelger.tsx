@@ -1,21 +1,21 @@
 import React from 'react';
 import { FieldPath, useController, useFormContext } from 'react-hook-form';
-import { JaNeiSpørsmål } from '~/components/papirsøknad/JaNeiSpørsmål';
+import { JaNeiSpørsmål } from '~/components/manuell-søknad/JaNeiSpørsmål';
 import { Datovelger } from '~/components/datovelger/Datovelger';
-import type { Papirsøknad } from '~/components/papirsøknad/papirsøknadTypes';
+import type { ManueltRegistrertSøknad } from '~/components/manuell-søknad/ManueltRegistrertSøknad';
 import { Heading, VStack } from '@navikt/ds-react';
 import styles from './Spørsmål.module.css';
 import { dateTilISOTekst } from '~/utils/date';
 
 type Props = {
-    spørsmålFelt: FieldPath<Papirsøknad>;
-    datoFelt: FieldPath<Papirsøknad>;
+    spørsmålFelt: FieldPath<ManueltRegistrertSøknad>;
+    datoFelt: FieldPath<ManueltRegistrertSøknad>;
     legend: string;
     tittel?: string;
 };
 
 export const SpørsmålMedDatovelger = ({ spørsmålFelt, datoFelt, legend, tittel }: Props) => {
-    const { control, resetField, setValue } = useFormContext<Papirsøknad>();
+    const { control, resetField, setValue } = useFormContext<ManueltRegistrertSøknad>();
 
     const jaNeiSpørsmål = useController({
         name: spørsmålFelt,

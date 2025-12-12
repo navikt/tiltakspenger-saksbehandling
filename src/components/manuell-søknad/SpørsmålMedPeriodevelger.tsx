@@ -1,15 +1,15 @@
 import React from 'react';
 import { FieldPath, useController, useFormContext } from 'react-hook-form';
-import type { Papirsøknad } from '~/components/papirsøknad/papirsøknadTypes';
+import type { ManueltRegistrertSøknad } from '~/components/manuell-søknad/ManueltRegistrertSøknad';
 import { JaNeiSpørsmål } from './JaNeiSpørsmål';
 import { Periodevelger } from './Periodevelger';
 
 import styles from './Spørsmål.module.css';
 
 type Props = {
-    spørsmålFelt: FieldPath<Papirsøknad>;
-    fraOgMedFelt: FieldPath<Papirsøknad>;
-    tilOgMedFelt: FieldPath<Papirsøknad>;
+    spørsmålFelt: FieldPath<ManueltRegistrertSøknad>;
+    fraOgMedFelt: FieldPath<ManueltRegistrertSøknad>;
+    tilOgMedFelt: FieldPath<ManueltRegistrertSøknad>;
     spørsmål: string;
     periodeSpørsmål?: string;
 };
@@ -21,7 +21,7 @@ export const SpørsmålMedPeriodevelger = ({
     spørsmål,
     periodeSpørsmål,
 }: Props) => {
-    const { control, resetField } = useFormContext<Papirsøknad>();
+    const { control, resetField } = useFormContext<ManueltRegistrertSøknad>();
 
     const jaNeiSpørsmål = useController({
         name: spørsmålFelt,

@@ -2,17 +2,17 @@ import React from 'react';
 import { Heading, HStack, VStack } from '@navikt/ds-react';
 import { Datovelger } from '~/components/datovelger/Datovelger';
 import { FieldPath, RegisterOptions, useController, useFormContext } from 'react-hook-form';
-import { Papirsøknad } from '~/components/papirsøknad/papirsøknadTypes';
+import { ManueltRegistrertSøknad } from '~/components/manuell-søknad/ManueltRegistrertSøknad';
 import styles from './Spørsmål.module.css';
 import { dateTilISOTekst } from '~/utils/date';
 
 type Props = {
-    fraOgMedFelt: FieldPath<Papirsøknad>;
-    tilOgMedFelt: FieldPath<Papirsøknad>;
+    fraOgMedFelt: FieldPath<ManueltRegistrertSøknad>;
+    tilOgMedFelt: FieldPath<ManueltRegistrertSøknad>;
     tittel?: string;
     rules?: {
-        fraOgMed?: RegisterOptions<Papirsøknad, FieldPath<Papirsøknad>>;
-        tilOgMed?: RegisterOptions<Papirsøknad, FieldPath<Papirsøknad>>;
+        fraOgMed?: RegisterOptions<ManueltRegistrertSøknad, FieldPath<ManueltRegistrertSøknad>>;
+        tilOgMed?: RegisterOptions<ManueltRegistrertSøknad, FieldPath<ManueltRegistrertSøknad>>;
         validateRange?: (
             fraOgMed: string | undefined,
             tilOgMed: string | undefined,
@@ -21,7 +21,7 @@ type Props = {
 };
 
 export const Periodevelger = ({ fraOgMedFelt, tilOgMedFelt, tittel, rules }: Props) => {
-    const { control, watch, setError, clearErrors } = useFormContext<Papirsøknad>();
+    const { control, watch, setError, clearErrors } = useFormContext<ManueltRegistrertSøknad>();
     const fraOgMedDatoWatch = watch(fraOgMedFelt) as string | undefined;
     const tilOgMedDatoWatch = watch(tilOgMedFelt) as string | undefined;
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Heading, HStack, Tag, VStack } from '@navikt/ds-react';
-import { getNavnMedFødselsdato } from '~/components/papirsøknad/barnetillegg/barnetilleggUtils';
-import { Barn } from '~/components/papirsøknad/papirsøknadTypes';
+import { getNavnMedFødselsdato } from '~/components/manuell-søknad/barnetillegg/barnetilleggUtils';
+import { Barn } from '~/components/manuell-søknad/ManueltRegistrertSøknad';
 import { formaterSøknadsspørsmålSvar } from '~/utils/tekstformateringUtils';
 import { Periode } from '~/types/Periode';
 import { erDatoIPeriode } from '~/utils/periode';
