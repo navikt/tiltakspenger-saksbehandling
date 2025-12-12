@@ -2,7 +2,7 @@ import { SøknadsbehandlingVedtak } from '~/components/behandling/søknadsbehand
 import { BehandlingSaksopplysninger } from './saksopplysninger/BehandlingSaksopplysninger';
 import { RevurderingVedtak } from './revurdering/RevurderingVedtak';
 import { useBehandling } from './context/BehandlingContext';
-
+import { Rammebehandlingstype } from '~/types/Rammebehandling';
 import { PersonaliaHeader } from '../personaliaheader/PersonaliaHeader';
 import { Alert } from '@navikt/ds-react';
 import { finnBehandlingStatusTag } from '~/utils/tekstformateringUtils';
@@ -14,12 +14,20 @@ import BehandlingSattPåVentOppsummering from '~/components/oppsummeringer/behan
 import { BehandlingSkjemaProvider } from '~/components/behandling/context/BehandlingSkjemaContext';
 
 import style from './BehandlingPage.module.css';
-import { Rammebehandlingstype } from '~/types/Rammebehandling';
 
 export const BehandlingPage = () => {
     const { sak } = useSak();
-    const behandlingsContext = useBehandling();
-    const { type, sakId, saksnummer, status, avbrutt, ventestatus } = behandlingsContext.behandling;
+    const {
+        id,
+        sistEndret,
+        type,
+        sakId,
+        saksnummer,
+        status,
+        avbrutt,
+        ventestatus,
+        saksopplysninger,
+    } = useBehandling().behandling;
 
     return (
         <>
@@ -28,12 +36,15 @@ export const BehandlingPage = () => {
             </PersonaliaHeader>
 
             {/* 
-            Veldig viktig at key ikke blir fjernet. På denne måten kan vi tvinge skjema-contextene til å rerendre seg når man 'bytter' behandling. For exempel ved å bruke 'Til behandling' 
-            lenken i SøknadOpplysningerFraVedtak komponenten. Uten denne keyen vil skjema-contextene beholde state fra forrige behandling, og dette vil føre til en error.
+            Veldig viktig at key ikke blir fjernet. På denne måten kan vi tvinge skjema-contextene til å rerendre seg når man bytter eller oppdaterer behandlingen.
+            For exempel ved å bruke 'Til behandling' lenken i SøknadOpplysningerFraVedtak komponenten.
+            Uten denne keyen vil skjema-contextene beholde state fra forrige behandling, og dette kan føre til en error.
 
             Raskeste, og enkleste fiks uten å endre for mye på eksisterende kode.
             */}
-            <BehandlingSkjemaProvider key={behandlingsContext.behandling.id}>
+            <BehandlingSkjemaProvider
+                key={`${id}-${sistEndret}-${saksopplysninger.oppslagstidspunkt}`}
+            >
                 <SideBarMain
                     sidebar={<BehandlingSaksopplysninger />}
                     main={
