@@ -1,4 +1,4 @@
-import { BodyShort, Heading, HStack, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Heading, HStack, VStack } from '@navikt/ds-react';
 import { Separator } from '~/components/separator/Separator';
 import { RevurderingInnvilgelseBrev } from '~/components/behandling/revurdering/innvilgelse/brev/RevurderingInnvilgelseBrev';
 import { BehandlingBeregningOgSimulering } from '../../felles/beregning-og-simulering/BehandlingBeregningOgSimulering';
@@ -10,10 +10,17 @@ import { behandlingUrl } from '~/utils/urls';
 import { TabsIcon } from '@navikt/aksel-icons';
 import { OppsummeringsPar } from '~/components/oppsummeringer/oppsummeringspar/OppsummeringsPar';
 import { BehandlingSendOgGodkjenn } from '../../felles/send-og-godkjenn/BehandlingSendOgGodkjenn';
-import { RevurderingResultat, RevurderingVedtakOmgjøringRequest } from '~/types/Revurdering';
+import {
+    RevurderingOmgjøring,
+    RevurderingResultat,
+    RevurderingVedtakOmgjøringRequest,
+} from '~/types/Revurdering';
 import { revurderingOmgjøringValidering } from './revurderingOmgjøringValidering';
 import { useHentBehandlingLagringProps } from '../../felles/send-og-godkjenn/lagre/useHentBehandlingLagringProps';
-import { erRammebehandlingMedInnvilgelse } from '~/utils/behandling';
+import {
+    erRammebehandlingMedInnvilgelse,
+    hentTiltaksdeltakelserMedStartOgSluttdato,
+} from '~/utils/behandling';
 import { Rammebehandlingsstatus } from '~/types/Rammebehandling';
 import {
     RevurderingOmgjøringContext,
@@ -25,27 +32,26 @@ import { BehandlingDagerPerMeldeperiode } from '~/components/behandling/felles/d
 import { BehandlingTiltak } from '~/components/behandling/felles/tiltak/BehandlingTiltak';
 import { BehandlingBarnetillegg } from '~/components/behandling/felles/barnetillegg/BehandlingBarnetillegg';
 import { BegrunnelseVilkårsvurdering } from '~/components/behandling/felles/begrunnelse-vilkårsvurdering/BegrunnelseVilkårsvurdering';
+import { SakProps } from '~/types/Sak';
 
 export const RevurderingOmgjøringVedtak = () => {
     const { behandling } = useRevurderingOmgjøring();
     const { sak } = useSak();
-    const vedtak = useRevurderingOmgjøringSkjema();
+    const skjema = useRevurderingOmgjøringSkjema();
 
     const omgjørVedtakId = behandling.omgjørVedtak;
 
     const vedtakSomBlirOmgjort = sak.behandlinger.find((b) => b.rammevedtakId === omgjørVedtakId);
-
-    const lagringProps = useHentBehandlingLagringProps({
-        hentDTO: () => tilDTO(vedtak),
-        skjema: vedtak,
-        validerSkjema: () => revurderingOmgjøringValidering(behandling, vedtak, sak),
-    });
 
     if (!vedtakSomBlirOmgjort) {
         throw new Error(
             `Teknisk feil: Klarte ikke finne vedtak som skal omgjøres for revurdering-id: ${behandling.id} og omgjørVedtak-id: ${omgjørVedtakId}`,
         );
     }
+
+    // Kjapp fiks for å sjekke om det finnes tiltak det kan innvilges for. Dette bør avgjøres av backend.
+    // Vi burde kanskje ha en innvilgelse/opphør velger, tilsvarende som vi har for søknadsbehandling
+    const kanInnvilges = hentTiltaksdeltakelserMedStartOgSluttdato(behandling).length > 0;
 
     return (
         <div>
@@ -97,20 +103,52 @@ export const RevurderingOmgjøringVedtak = () => {
                 />
             )}
             <Separator />
+            {kanInnvilges ? (
+                <Innvilgelse skjema={skjema} behandling={behandling} sak={sak} />
+            ) : (
+                <Alert variant={'warning'}>
+                    {
+                        'Omgjøringen har ingen gyldige innvilgelsesperioder. Vi støtter ikke rent opphør ennå.'
+                    }
+                </Alert>
+            )}
+        </div>
+    );
+};
+
+type InnvilgelseProps = {
+    skjema: RevurderingOmgjøringContext;
+    behandling: RevurderingOmgjøring;
+    sak: SakProps;
+};
+
+const Innvilgelse = ({ skjema, behandling, sak }: InnvilgelseProps) => {
+    const lagringProps = useHentBehandlingLagringProps({
+        hentDTO: () => tilDTO(skjema),
+        skjema,
+        validerSkjema: () => revurderingOmgjøringValidering(behandling, skjema, sak),
+    });
+
+    return (
+        <>
             <InnvilgelsesperiodeVelger />
             <Separator />
             <BegrunnelseVilkårsvurdering />
             <Separator />
-            <BehandlingDagerPerMeldeperiode />
-            <Separator />
-            <BehandlingTiltak />
-            <BehandlingBarnetillegg />
-            <Separator />
-            <RevurderingInnvilgelseBrev />
-            <Separator />
-            <BehandlingBeregningOgSimulering />
+            {skjema.innvilgelse.harValgtPeriode && (
+                <>
+                    <BehandlingDagerPerMeldeperiode />
+                    <Separator />
+                    <BehandlingTiltak />
+                    <BehandlingBarnetillegg />
+                    <Separator />
+                    <RevurderingInnvilgelseBrev />
+                    <Separator />
+                    <BehandlingBeregningOgSimulering />{' '}
+                </>
+            )}
             <BehandlingSendOgGodkjenn behandling={behandling} lagringProps={lagringProps} />
-        </div>
+        </>
     );
 };
 

@@ -35,10 +35,10 @@ export interface RevurderingInnvilgelse extends RevurderingBase {
 export interface RevurderingOmgjøring extends RevurderingBase {
     resultat: RevurderingResultat.OMGJØRING;
     omgjørVedtak: VedtakId;
-    innvilgelsesperiode: Periode;
+    innvilgelsesperiode: Nullable<Periode>;
     valgteTiltaksdeltakelser: Nullable<TiltaksdeltakelsePeriode[]>;
-    barnetillegg: Barnetillegg;
-    antallDagerPerMeldeperiode: AntallDagerPerMeldeperiode[];
+    barnetillegg: Nullable<Barnetillegg>;
+    antallDagerPerMeldeperiode: Nullable<AntallDagerPerMeldeperiode[]>;
 }
 
 export enum RevurderingResultat {

@@ -17,6 +17,7 @@ import {
     antallDagerPerMeldeperiodeForPeriode,
     tiltaksdeltagelserFraSaksopplysningerForPeriode,
 } from '~/components/behandling/context/behandlingSkjemaUtils';
+import { AntallDagerPerMeldeperiode } from '~/types/AntallDagerPerMeldeperiode';
 
 type RevurderingState =
     | RevurderingInnvilgelseState
@@ -83,27 +84,26 @@ const innvilgelseInitialState = (
                 behandling,
                 virkningsperiode,
             ),
-            antallDagerPerMeldeperiode: behandling.antallDagerPerMeldeperiode ?? [
-                {
-                    antallDagerPerMeldeperiode: antallDagerPerMeldeperiodeForPeriode(
-                        behandling,
-                        virkningsperiode,
-                    ),
-                    periode: virkningsperiode,
-                },
-            ],
+            antallDagerPerMeldeperiode: antallDagerInitialState(behandling, virkningsperiode),
         },
     };
 };
 
-/*
- * Ved en omgjøring så skal all informasjon i behandlingen allerede være utfyllt fra før av.
- */
 const omgjøringInitialState = (
     behandling: RevurderingOmgjøring,
     sak: SakProps,
 ): RevurderingOmgjøringState => {
     const { innvilgelsesperiode } = behandling;
+
+    if (!innvilgelsesperiode) {
+        return {
+            resultat: RevurderingResultat.OMGJØRING,
+            innvilgelse: {
+                harValgtPeriode: false,
+                innvilgelsesperiode: {},
+            },
+        };
+    }
 
     const barnetilleggPerioder = hentBarnetilleggForRevurdering(
         behandling,
@@ -122,7 +122,7 @@ const omgjøringInitialState = (
                 behandling,
                 innvilgelsesperiode,
             ),
-            antallDagerPerMeldeperiode: behandling.antallDagerPerMeldeperiode,
+            antallDagerPerMeldeperiode: antallDagerInitialState(behandling, innvilgelsesperiode),
         },
     };
 };
@@ -134,5 +134,22 @@ const valgteTiltaksdeltakelserInitialState = (
     return (
         behandling.valgteTiltaksdeltakelser ??
         tiltaksdeltagelserFraSaksopplysningerForPeriode(behandling, innvilgelsesperiode)
+    );
+};
+
+const antallDagerInitialState = (
+    behandling: RammebehandlingMedInnvilgelse,
+    innvilgelsesperiode: Periode,
+): AntallDagerPerMeldeperiode[] => {
+    return (
+        behandling.antallDagerPerMeldeperiode ?? [
+            {
+                antallDagerPerMeldeperiode: antallDagerPerMeldeperiodeForPeriode(
+                    behandling,
+                    innvilgelsesperiode,
+                ),
+                periode: innvilgelsesperiode,
+            },
+        ]
     );
 };
