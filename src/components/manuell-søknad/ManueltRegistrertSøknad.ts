@@ -5,12 +5,16 @@ export interface ManueltRegistrertSøknad {
     personopplysninger: PersonopplysningerSøker;
     manueltSattSøknadsperiode: Periode;
     manueltSattTiltak?: string;
-    søknadstype: Søknadstype;
+    søknadstype: SøknadstypeManueltRegistrertSøknad;
     svar: Spørsmålsbesvarelser;
     antallVedlegg: number;
 }
 
-export type Søknadstype = 'PAPIR_SKJEMA' | 'PAPIR_FRIHÅND' | 'MODIA' | 'ANNET';
+export type SøknadstypeManueltRegistrertSøknad =
+    | 'PAPIR_SKJEMA'
+    | 'PAPIR_FRIHÅND'
+    | 'MODIA'
+    | 'ANNET';
 
 export interface PersonopplysningerSøker {
     ident: string;

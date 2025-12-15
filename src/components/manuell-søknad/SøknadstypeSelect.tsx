@@ -1,12 +1,16 @@
 import { Select } from '@navikt/ds-react';
 import { Controller, useFormContext } from 'react-hook-form';
-import type { ManueltRegistrertSøknad, Søknadstype } from './ManueltRegistrertSøknad';
+import type {
+    ManueltRegistrertSøknad,
+    SøknadstypeManueltRegistrertSøknad,
+} from './ManueltRegistrertSøknad';
+import { formaterSøknadstype } from '~/utils/tekstformateringUtils';
 
-const søknadstypeValg: { value: Søknadstype; label: string }[] = [
-    { value: 'PAPIR_SKJEMA', label: 'Papirsøknad - skjema' },
-    { value: 'PAPIR_FRIHÅND', label: 'Papirsøknad - frihånd' },
-    { value: 'MODIA', label: 'Søknad fra modia' },
-    { value: 'ANNET', label: 'Annet' },
+const søknadstypeValg: { value: SøknadstypeManueltRegistrertSøknad; label: string }[] = [
+    { value: 'PAPIR_SKJEMA', label: formaterSøknadstype('PAPIR_SKJEMA') },
+    { value: 'PAPIR_FRIHÅND', label: formaterSøknadstype('PAPIR_FRIHÅND') },
+    { value: 'MODIA', label: formaterSøknadstype('MODIA') },
+    { value: 'ANNET', label: formaterSøknadstype('ANNET') },
 ];
 
 export const SøknadstypeSelect = () => {
@@ -16,12 +20,14 @@ export const SøknadstypeSelect = () => {
         <Controller
             name="søknadstype"
             control={control}
-            rules={{ required: 'Søknadstype er påkrevd' }}
+            rules={{ required: 'SøknadstypeManueltRegistrertSøknad er påkrevd' }}
             render={({ field, fieldState }) => (
                 <Select
                     label="Søknadstype"
                     value={field.value ?? ''}
-                    onChange={(event) => field.onChange(event.target.value as Søknadstype)}
+                    onChange={(event) =>
+                        field.onChange(event.target.value as SøknadstypeManueltRegistrertSøknad)
+                    }
                     onBlur={field.onBlur}
                     error={fieldState.error?.message}
                 >

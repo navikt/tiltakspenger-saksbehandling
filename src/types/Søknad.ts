@@ -12,6 +12,7 @@ interface SøknadBase {
     manueltSattTiltak?: string;
     tiltaksdeltakelseperiodeDetErSøktOm: Nullable<Periode>;
     barnetillegg: SøknadBarn[];
+    søknadstype: Søknadstype;
     opprettet: string;
     tidsstempelHosOss: string;
     antallVedlegg: number;
@@ -88,3 +89,5 @@ export interface PeriodeSpm {
     svar: JaNeiSvar;
     periode: Periode;
 }
+
+export type Søknadstype = 'DIGITAL' | 'PAPIR_SKJEMA' | 'PAPIR_FRIHÅND' | 'MODIA' | 'ANNET';

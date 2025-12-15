@@ -12,6 +12,7 @@ import { Alert, Link, VStack } from '@navikt/ds-react';
 import { Søknad } from '~/types/Søknad';
 import { Nullable } from '~/types/UtilTypes';
 import { SøknadsopplysningerTiltak } from '~/components/oppsummeringer/oppsummeringAvSøknad/SøknadsopplysningerTiltak';
+import { formaterSøknadstype } from '~/utils/tekstformateringUtils';
 
 interface Props {
     /** Behandlingens tiltaksperiode, eller det som er på søknad hvis behandling er enda ikke opprettet (null ved papirsøknad dersom saksbehandler ikke har fyllt inn)*/
@@ -27,7 +28,9 @@ export const OppsummeringAvSøknad = ({
 }: Props) => {
     const { gosysUrl } = useConfig();
 
-    const { opprettet, tiltaksdeltakelseperiodeDetErSøktOm, antallVedlegg, svar } = søknad;
+    const { opprettet, søknadstype, tiltaksdeltakelseperiodeDetErSøktOm, antallVedlegg, svar } =
+        søknad;
+    console.log(søknadstype);
 
     const { kvp, intro, institusjon, etterlønn, sykepenger } = svar;
 
@@ -37,6 +40,11 @@ export const OppsummeringAvSøknad = ({
                 navn={'Opprettet'}
                 verdi={formaterDatotekst(opprettet)}
                 spacing={true}
+            />
+
+            <BehandlingSaksopplysning
+                navn={'Søknadstype'}
+                verdi={formaterSøknadstype(søknadstype)}
             />
 
             <BehandlingSaksopplysning

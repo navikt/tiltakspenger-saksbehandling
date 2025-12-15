@@ -12,6 +12,8 @@ import { Utbetalingsstatus } from '~/types/Utbetaling';
 import { ManueltBehandlesGrunn, SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
 import { RevurderingResultat } from '~/types/Revurdering';
 import { ÅpenBehandlingForOversiktType } from '~/types/ÅpenBehandlingForOversikt';
+import { Søknadstype } from '~/types/Søknad';
+import { SøknadstypeManueltRegistrertSøknad } from '~/components/manuell-søknad/ManueltRegistrertSøknad';
 
 export const finnBehandlingStatusTag = (
     status: Rammebehandlingsstatus,
@@ -258,5 +260,20 @@ export const formaterSøknadsspørsmålSvar = (value: string | undefined) => {
             return '-';
         default:
             return value;
+    }
+};
+
+export const formaterSøknadstype = (value: Søknadstype | SøknadstypeManueltRegistrertSøknad) => {
+    switch (value) {
+        case 'DIGITAL':
+            return 'Digital';
+        case 'PAPIR_SKJEMA':
+            return 'Papirsøknad (skjema)';
+        case 'PAPIR_FRIHÅND':
+            return 'Papirsøknad (frihånd)';
+        case 'MODIA':
+            return 'Modia';
+        case 'ANNET':
+            return 'Annet';
     }
 };
