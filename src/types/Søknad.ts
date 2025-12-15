@@ -90,4 +90,4 @@ export interface PeriodeSpm {
     periode: Periode;
 }
 
-export type Søknadstype = 'DIGITAL' | 'PAPIR_SKJEMA' | 'PAPIR_FRIHÅND' | 'MODIA' | 'ANNET';
+export type Søknadstype = 'DIGITAL' | 'PAPIR_SKJEMA' | 'PAPIR_FRIHAND' | 'MODIA' | 'ANNET';

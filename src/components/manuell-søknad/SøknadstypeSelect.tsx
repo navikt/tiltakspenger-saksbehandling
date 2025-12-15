@@ -8,7 +8,7 @@ import { formaterSøknadstype } from '~/utils/tekstformateringUtils';
 
 const søknadstypeValg: { value: SøknadstypeManueltRegistrertSøknad; label: string }[] = [
     { value: 'PAPIR_SKJEMA', label: formaterSøknadstype('PAPIR_SKJEMA') },
-    { value: 'PAPIR_FRIHÅND', label: formaterSøknadstype('PAPIR_FRIHÅND') },
+    { value: 'PAPIR_FRIHAND', label: formaterSøknadstype('PAPIR_FRIHAND') },
     { value: 'MODIA', label: formaterSøknadstype('MODIA') },
     { value: 'ANNET', label: formaterSøknadstype('ANNET') },
 ];

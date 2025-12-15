@@ -269,7 +269,7 @@ export const formaterSøknadstype = (value: Søknadstype | SøknadstypeManueltRe
             return 'Digital';
         case 'PAPIR_SKJEMA':
             return 'Papirsøknad (skjema)';
-        case 'PAPIR_FRIHÅND':
+        case 'PAPIR_FRIHAND':
             return 'Papirsøknad (frihånd)';
         case 'MODIA':
             return 'Modia';

@@ -12,7 +12,7 @@ export interface ManueltRegistrertSøknad {
 
 export type SøknadstypeManueltRegistrertSøknad =
     | 'PAPIR_SKJEMA'
-    | 'PAPIR_FRIHÅND'
+    | 'PAPIR_FRIHAND'
     | 'MODIA'
     | 'ANNET';
 
