@@ -1,23 +1,26 @@
 import React from 'react';
 import { Controller, FieldPath, useController, useFormContext, useWatch } from 'react-hook-form';
-import { JaNeiSpørsmål } from '~/components/papirsøknad/JaNeiSpørsmål';
-import { Papirsøknad, Tiltak } from '~/components/papirsøknad/papirsøknadTypes';
+import { JaNeiSpørsmål } from '~/components/manuell-søknad/JaNeiSpørsmål';
+import {
+    ManueltRegistrertSøknad,
+    Tiltak,
+} from '~/components/manuell-søknad/ManueltRegistrertSøknad';
 import { Alert, Button, Radio, RadioGroup, TextField, VStack } from '@navikt/ds-react';
 import styles from '../Spørsmål.module.css';
 import { classNames } from '~/utils/classNames';
 import { formaterDatotekst } from '~/utils/date';
-import { useHentTiltaksdeltakelser } from '~/components/papirsøknad/tiltak/useHentTiltaksdeltakelser';
+import { useHentTiltaksdeltakelser } from '~/components/manuell-søknad/tiltak/useHentTiltaksdeltakelser';
 import { SakId } from '~/types/Sak';
 import { Periode } from '~/types/Periode';
 
 type Props = {
     sakId: SakId;
-    spørsmålName: FieldPath<Papirsøknad>;
+    spørsmålName: FieldPath<ManueltRegistrertSøknad>;
     legend: string;
 };
 
 export const VelgTiltak = ({ sakId, spørsmålName, legend }: Props) => {
-    const { control, setValue, resetField } = useFormContext<Papirsøknad>();
+    const { control, setValue, resetField } = useFormContext<ManueltRegistrertSøknad>();
     const [muligeTiltak, setMuligeTiltak] = React.useState<Tiltak[]>([]);
 
     const spørsmål = useController({

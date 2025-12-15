@@ -4,7 +4,7 @@ import { alderFraDato, finn16årsdag, formaterDatotekst } from '~/utils/date';
 import { erDatoIPeriode } from '~/utils/periode';
 import { Periode } from '~/types/Periode';
 import { Søknad, SøknadBarn } from '~/types/Søknad';
-import { useHentPersonopplysningerBarn } from '~/components/papirsøknad/barnetillegg/useHentPersonopplysningerBarn';
+import { useHentPersonopplysningerBarn } from '~/components/manuell-søknad/barnetillegg/useHentPersonopplysningerBarn';
 import { useSak } from '~/context/sak/SakContext';
 import { ChevronRightDoubleIcon } from '@navikt/aksel-icons';
 import { periodiserBarnetilleggFraSøknad } from '~/components/behandling/felles/barnetillegg/utils/periodiserBarnetilleggFraSøknad';

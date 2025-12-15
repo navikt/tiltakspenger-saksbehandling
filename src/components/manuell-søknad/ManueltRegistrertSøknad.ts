@@ -1,13 +1,20 @@
 import { Periode } from '~/types/Periode';
 
-export interface Papirsøknad {
+export interface ManueltRegistrertSøknad {
     journalpostId: string;
     personopplysninger: PersonopplysningerSøker;
     manueltSattSøknadsperiode: Periode;
     manueltSattTiltak?: string;
+    søknadstype: SøknadstypeManueltRegistrertSøknad;
     svar: Spørsmålsbesvarelser;
     antallVedlegg: number;
 }
+
+export type SøknadstypeManueltRegistrertSøknad =
+    | 'PAPIR_SKJEMA'
+    | 'PAPIR_FRIHAND'
+    | 'MODIA'
+    | 'ANNET';
 
 export interface PersonopplysningerSøker {
     ident: string;
@@ -76,10 +83,11 @@ export interface Barn {
     manueltRegistrertBarnAntallVedlegg?: number;
 }
 
-const defaultPapirsøknadFormValues = {
+const defaultRegistrerSøknadManueltFormValues = {
     journalpostId: '',
     manueltSattSøknadsperiode: { fraOgMed: '', tilOgMed: '' },
     antallVedlegg: 0,
+    søknadstype: undefined,
     svar: {
         harSøktPåTiltak: undefined,
         tiltak: undefined,
@@ -101,4 +109,4 @@ const defaultPapirsøknadFormValues = {
     },
 };
 
-export default defaultPapirsøknadFormValues;
+export default defaultRegistrerSøknadManueltFormValues;

@@ -1,7 +1,7 @@
 import { Alert, Loader, TextField } from '@navikt/ds-react';
 import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
-import { Papirsøknad } from '~/components/papirsøknad/papirsøknadTypes';
+import { ManueltRegistrertSøknad } from '~/components/manuell-søknad/ManueltRegistrertSøknad';
 import { useValiderJournalpostId } from './useValiderJournalpostId';
 import { useDebounce } from 'use-debounce';
 import styles from './JournalpostId.module.css';
@@ -11,7 +11,7 @@ const DEBOUNCE_MS = 500;
 const MIN_LENGDE_FØR_VALIDERING = 3;
 
 export const JournalpostId = () => {
-    const { control, watch, setError, clearErrors } = useFormContext<Papirsøknad>();
+    const { control, watch, setError, clearErrors } = useFormContext<ManueltRegistrertSøknad>();
     const journalpostIdFelt = 'journalpostId';
     const journalpostIdWatch = watch(journalpostIdFelt);
     const fnrWatch = watch('personopplysninger.ident');

@@ -3,29 +3,32 @@ import styles from '../Spørsmål.module.css';
 import { FieldPath, useController, useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 import { Alert, Button, Heading, HStack, VStack } from '@navikt/ds-react';
 import { classNames } from '~/utils/classNames';
-import type { Barn, Papirsøknad } from '~/components/papirsøknad/papirsøknadTypes';
-import { LeggTilBarnManuelt } from '~/components/papirsøknad/barnetillegg/LeggTilBarnManuelt';
-import { JaNeiSpørsmål } from '~/components/papirsøknad/JaNeiSpørsmål';
-import { useHentPersonopplysningerBarn } from '~/components/papirsøknad/barnetillegg/useHentPersonopplysningerBarn';
+import type {
+    Barn,
+    ManueltRegistrertSøknad,
+} from '~/components/manuell-søknad/ManueltRegistrertSøknad';
+import { LeggTilBarnManuelt } from '~/components/manuell-søknad/barnetillegg/LeggTilBarnManuelt';
+import { JaNeiSpørsmål } from '~/components/manuell-søknad/JaNeiSpørsmål';
+import { useHentPersonopplysningerBarn } from '~/components/manuell-søknad/barnetillegg/useHentPersonopplysningerBarn';
 import { v4 as uuidv4 } from 'uuid';
 import { SakId } from '~/types/Sak';
-import { InformasjonOmBarnPDL } from '~/components/papirsøknad/barnetillegg/InformasjonOmBarnPDL';
-import { InformasjonOmBarnManuell } from '~/components/papirsøknad/barnetillegg/InformasjonOmBarnManuell';
+import { InformasjonOmBarnPDL } from '~/components/manuell-søknad/barnetillegg/InformasjonOmBarnPDL';
+import { InformasjonOmBarnManuell } from '~/components/manuell-søknad/barnetillegg/InformasjonOmBarnManuell';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { Periode } from '~/types/Periode';
 
 type Props = {
     sakId: SakId;
-    name: FieldPath<Papirsøknad>;
+    name: FieldPath<ManueltRegistrertSøknad>;
     legend: string;
     tittel?: string;
 };
 
-export const PapirsøknadBarnetillegg = ({ sakId, name, legend }: Props) => {
-    const { control, setValue } = useFormContext<Papirsøknad>();
+export const ManueltRegistrertSøknadBarnetillegg = ({ sakId, name, legend }: Props) => {
+    const { control, setValue } = useFormContext<ManueltRegistrertSøknad>();
     const [skalHenteBarn, setSkalHenteBarn] = React.useState(false);
 
-    const barnFraFolkeregisteret = useFieldArray<Papirsøknad>({
+    const barnFraFolkeregisteret = useFieldArray<ManueltRegistrertSøknad>({
         control,
         name: 'svar.barnetilleggPdl',
     });
@@ -35,12 +38,12 @@ export const PapirsøknadBarnetillegg = ({ sakId, name, legend }: Props) => {
         name: 'svar.barnetilleggPdl',
     });
 
-    const manuelleBarn = useFieldArray<Papirsøknad>({
+    const manuelleBarn = useFieldArray<ManueltRegistrertSøknad>({
         control,
         name: 'svar.barnetilleggManuelle',
     });
 
-    const periode = useController<Papirsøknad>({
+    const periode = useController<ManueltRegistrertSøknad>({
         control,
         name: 'manueltSattSøknadsperiode',
     });

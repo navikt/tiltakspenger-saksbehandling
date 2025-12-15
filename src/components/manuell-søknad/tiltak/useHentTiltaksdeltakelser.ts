@@ -1,6 +1,6 @@
 import useSWR, { mutate } from 'swr';
 import { fetchJsonFraApiClientSide } from '~/utils/fetch/fetch';
-import { Tiltak } from '~/components/papirsøknad/papirsøknadTypes';
+import { Tiltak } from '~/components/manuell-søknad/ManueltRegistrertSøknad';
 import { SakId } from '~/types/Sak';
 
 export const useHentTiltaksdeltakelser = (

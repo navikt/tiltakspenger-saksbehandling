@@ -2,14 +2,14 @@ import { Button } from '@navikt/ds-react';
 import { useRef } from 'react';
 import router from 'next/router';
 import { BekreftelsesModal } from '~/components/modaler/BekreftelsesModal';
-import { papirsøknadUrl } from '~/utils/urls';
+import { registrerSoknadUrl } from '~/utils/urls';
 
 type Props = {
     saksnummer: string;
     harVedtak: boolean;
 };
 
-export const OpprettPapirsøknad = ({ saksnummer }: Props) => {
+export const OpprettSøknad = ({ saksnummer }: Props) => {
     const modalRef = useRef<HTMLDialogElement>(null);
     const lukkModal = () => {
         modalRef.current?.close();
@@ -23,21 +23,21 @@ export const OpprettPapirsøknad = ({ saksnummer }: Props) => {
                 type={'button'}
                 onClick={() => modalRef.current?.showModal()}
             >
-                {'Registrere papirsøknad'}
+                {'Registrer søknad manuelt'}
             </Button>
             <BekreftelsesModal
                 modalRef={modalRef}
                 lukkModal={lukkModal}
-                tittel={'Registrer papirsøknad?'}
+                tittel={'Registrer søknad manuelt?'}
                 bekreftKnapp={
                     <Button
                         variant={'primary'}
                         type={'button'}
                         onClick={() => {
-                            router.push(papirsøknadUrl(saksnummer));
+                            router.push(registrerSoknadUrl(saksnummer));
                         }}
                     >
-                        {`Registrer papirsøknad`}
+                        {`Registrer søknad manuelt`}
                     </Button>
                 }
             />

@@ -1,35 +1,36 @@
-import styles from './PapirsøknadPage.module.css';
+import styles from './RegistrerSøknadManueltPage.module.css';
 import { Alert, Button, Heading, HStack, VStack } from '@navikt/ds-react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
 import { SakProvider } from '~/context/sak/SakContext';
 import { SakProps } from '~/types/Sak';
 import { fetchSak } from '~/utils/fetch/fetch-server';
-import { SpørsmålMedPeriodevelger } from '~/components/papirsøknad/SpørsmålMedPeriodevelger';
+import { SpørsmålMedPeriodevelger } from '~/components/manuell-søknad/SpørsmålMedPeriodevelger';
 import { PersonaliaHeader } from '~/components/personaliaheader/PersonaliaHeader';
-import defaultPapirsøknadFormValues, {
-    Papirsøknad,
-} from '~/components/papirsøknad/papirsøknadTypes';
-import { JaNeiSpørsmål } from '~/components/papirsøknad/JaNeiSpørsmål';
-import { MottarPengestøtterSpørsmål } from '~/components/papirsøknad/MottarPengestøtterSpørsmål';
+import defaultManuellSøknadFormValues, {
+    ManueltRegistrertSøknad,
+} from '~/components/manuell-søknad/ManueltRegistrertSøknad';
+import { JaNeiSpørsmål } from '~/components/manuell-søknad/JaNeiSpørsmål';
+import { MottarPengestøtterSpørsmål } from '~/components/manuell-søknad/MottarPengestøtterSpørsmål';
 import React, { useEffect } from 'react';
-import { Periodevelger } from '~/components/papirsøknad/Periodevelger';
-import { VelgTiltak } from '~/components/papirsøknad/tiltak/VelgTiltak';
-import { PapirsøknadBarnetillegg } from '~/components/papirsøknad/barnetillegg/PapirsøknadBarnetillegg';
-import { useOpprettPapirsøknad } from '~/components/personoversikt/papirsøknad/useOpprettPapirsøknad';
+import { Periodevelger } from '~/components/manuell-søknad/Periodevelger';
+import { VelgTiltak } from '~/components/manuell-søknad/tiltak/VelgTiltak';
+import { ManueltRegistrertSøknadBarnetillegg } from '~/components/manuell-søknad/barnetillegg/ManueltRegistrertSøknadBarnetillegg';
+import { useOpprettSøknad } from '~/components/personoversikt/manuell-søknad/useOpprettSøknad';
 import router from 'next/router';
 import { behandlingUrl } from '~/utils/urls';
 import { useHentPersonopplysninger } from '~/components/personaliaheader/useHentPersonopplysninger';
-import { JournalpostId } from '~/components/papirsøknad/journalpostId/JournalpostId';
+import { JournalpostId } from '~/components/manuell-søknad/journalpostId/JournalpostId';
+import { SøknadstypeSelect } from '~/components/manuell-søknad/SøknadstypeSelect';
 
 interface Props {
     sak: SakProps;
 }
 
-const PapirsøknadPage = (props: Props) => {
+const RegistrerSøknadManueltPage = (props: Props) => {
     const { personopplysninger } = useHentPersonopplysninger(props.sak.sakId);
-    const formContext = useForm<Papirsøknad>({
-        defaultValues: defaultPapirsøknadFormValues,
+    const formContext = useForm<ManueltRegistrertSøknad>({
+        defaultValues: defaultManuellSøknadFormValues,
         mode: 'onSubmit',
     });
 
@@ -44,10 +45,11 @@ const PapirsøknadPage = (props: Props) => {
         });
     }, [personopplysninger, setValue]);
 
-    const { opprettPapirsøknad, opprettPapirsøknadLaster, opprettPapirsøknadError } =
-        useOpprettPapirsøknad(props.sak.saksnummer);
+    const { opprettSøknad, opprettSøknadLaster, opprettSøknadError } = useOpprettSøknad(
+        props.sak.saksnummer,
+    );
 
-    const onSubmit = (data: Papirsøknad) => {
+    const onSubmit = (data: ManueltRegistrertSøknad) => {
         if (!personopplysninger) return;
 
         // Sender ikke inn barn fra PDL som man har svart nei for.
@@ -69,7 +71,7 @@ const PapirsøknadPage = (props: Props) => {
             antallVedlegg,
         };
 
-        opprettPapirsøknad(payload).then((behandling) => {
+        opprettSøknad(payload).then((behandling) => {
             if (behandling) {
                 router.push(behandlingUrl(behandling));
             }
@@ -88,10 +90,12 @@ const PapirsøknadPage = (props: Props) => {
                     <div className={styles.main}>
                         <VStack gap="4">
                             <Heading size="medium" level="2" spacing>
-                                Registrere papirsøknad
+                                Manuell registrering av søknad
                             </Heading>
 
                             <JournalpostId />
+
+                            <SøknadstypeSelect />
 
                             <Periodevelger
                                 fraOgMedFelt="manueltSattSøknadsperiode.fraOgMed"
@@ -153,13 +157,13 @@ const PapirsøknadPage = (props: Props) => {
                                 periodeSpørsmål="I hvilken del av perioden bor brukeren på institusjon med gratis opphold, mat og drikke?"
                             />
 
-                            <PapirsøknadBarnetillegg
+                            <ManueltRegistrertSøknadBarnetillegg
                                 sakId={props.sak.sakId}
                                 name="svar.harSøktOmBarnetillegg.svar"
                                 legend="Har bruker søkt barnetillegg?"
                             />
 
-                            {opprettPapirsøknadError && (
+                            {opprettSøknadError && (
                                 <Alert variant="error">
                                     Noe gikk galt ved registrering av papirsøknad. Vennligst prøv
                                     igjen litt senere.
@@ -170,7 +174,7 @@ const PapirsøknadPage = (props: Props) => {
                                 <Button variant="secondary" type="reset">
                                     Avbryt
                                 </Button>
-                                <Button type="submit" loading={opprettPapirsøknadLaster}>
+                                <Button type="submit" loading={opprettSøknadLaster}>
                                     Start behandling
                                 </Button>
                             </HStack>
@@ -194,4 +198,4 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
     return { props: { sak } satisfies Props };
 });
 
-export default PapirsøknadPage;
+export default RegistrerSøknadManueltPage;

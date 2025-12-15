@@ -1,11 +1,14 @@
 import React from 'react';
 import { Radio, RadioGroup, Stack } from '@navikt/ds-react';
 import { FieldPath, useController, useFormContext } from 'react-hook-form';
-import { JaNeiSvar, Papirsøknad } from '~/components/papirsøknad/papirsøknadTypes';
+import {
+    JaNeiSvar,
+    ManueltRegistrertSøknad,
+} from '~/components/manuell-søknad/ManueltRegistrertSøknad';
 import styles from './Spørsmål.module.css';
 
 type Props = {
-    name: FieldPath<Papirsøknad>;
+    name: FieldPath<ManueltRegistrertSøknad>;
     legend: string;
     details?: React.ReactNode;
     onChange?: (value: JaNeiSvar | undefined) => void;
@@ -19,7 +22,7 @@ export const JaNeiSpørsmål = ({
     onChange,
     måVæreBesvart = false,
 }: Props) => {
-    const { control } = useFormContext<Papirsøknad>();
+    const { control } = useFormContext<ManueltRegistrertSøknad>();
 
     const controller = useController({
         name,

@@ -15,7 +15,7 @@ import {
     Rammebehandlingsstatus,
     Rammebehandlingstype,
 } from '~/types/Rammebehandling';
-import { OpprettPapirsøknad } from '~/components/personoversikt/papirsøknad/OpprettPapirsøknad';
+import { OpprettSøknad } from '~/components/personoversikt/manuell-søknad/OpprettSøknad';
 
 import styles from './Personoversikt.module.css';
 import { Tidslinjer } from '~/components/tidslinjer/Tidslinjer';
@@ -51,7 +51,7 @@ export const Personoversikt = () => {
                     </Heading>
                     <HStack gap="3">
                         <MeldekortHelgToggle />
-                        <OpprettPapirsøknad
+                        <OpprettSøknad
                             saksnummer={saksnummer}
                             harVedtak={harVedtattSøknadsbehandling(behandlinger)}
                         />
