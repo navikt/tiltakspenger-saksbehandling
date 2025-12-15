@@ -14,7 +14,8 @@ export type SøknadstypeManueltRegistrertSøknad =
     | 'PAPIR_SKJEMA'
     | 'PAPIR_FRIHAND'
     | 'MODIA'
-    | 'ANNET';
+    | 'ANNET'
+    | 'PAPIR'; // TODO Deprecated, men må migrere gamle søknader først
 
 export interface PersonopplysningerSøker {
     ident: string;

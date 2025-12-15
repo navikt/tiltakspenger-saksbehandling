@@ -273,6 +273,8 @@ export const formaterSøknadstype = (value: Søknadstype | SøknadstypeManueltRe
             return 'Papirsøknad (frihånd)';
         case 'MODIA':
             return 'Modia';
+        case 'PAPIR':
+            return 'Papirsøknad';
         case 'ANNET':
             return 'Annet';
     }
