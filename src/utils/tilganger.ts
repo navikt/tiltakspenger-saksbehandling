@@ -120,7 +120,7 @@ export const eierMeldekortBehandling = (
 };
 
 export const skalKunneTaBehandling = (
-    behandling: ÅpenRammebehandlingForOversikt,
+    behandling: ÅpenRammebehandlingForOversikt | Rammebehandling,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     const { status, saksbehandler } = behandling;
@@ -139,7 +139,7 @@ export const skalKunneTaBehandling = (
 };
 
 export const skalKunneOvertaBehandling = (
-    behandling: ÅpenRammebehandlingForOversikt,
+    behandling: ÅpenRammebehandlingForOversikt | Rammebehandling,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     const { status, saksbehandler, beslutter } = behandling;
@@ -153,6 +153,7 @@ export const skalKunneOvertaBehandling = (
                 innloggetSaksbehandler.navIdent !== saksbehandler
             );
         case Rammebehandlingsstatus.UNDER_BEHANDLING:
+        case Rammebehandlingsstatus.UNDER_AUTOMATISK_BEHANDLING:
             return (
                 saksbehandler &&
                 erSaksbehandler(innloggetSaksbehandler) &&
@@ -210,28 +211,17 @@ export const skalKunneGjenopptaBehandling = (
     behandling: Rammebehandling | ÅpenRammebehandlingForOversikt,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
-    const erRelevantMenyValgForStatus =
-        behandling.status === Rammebehandlingsstatus.UNDER_AUTOMATISK_BEHANDLING ||
-        behandling.status === Rammebehandlingsstatus.KLAR_TIL_BEHANDLING ||
-        behandling.status === Rammebehandlingsstatus.UNDER_BEHANDLING ||
-        behandling.status === Rammebehandlingsstatus.KLAR_TIL_BESLUTNING ||
-        behandling.status === Rammebehandlingsstatus.UNDER_BESLUTNING;
+    return (
+        erSattPaVent(behandling) &&
+        (skalKunneTaBehandling(behandling, innloggetSaksbehandler) ||
+            skalKunneOvertaBehandling(behandling, innloggetSaksbehandler))
+    );
+};
 
-    const ikkeTildelt =
-        behandling.status === Rammebehandlingsstatus.KLAR_TIL_BEHANDLING ||
-        behandling.status === Rammebehandlingsstatus.KLAR_TIL_BESLUTNING;
-
+export const erSattPaVent = (behandling: Rammebehandling | ÅpenRammebehandlingForOversikt) => {
     if ('ventestatus' in behandling) {
-        return (
-            erRelevantMenyValgForStatus &&
-            behandling.ventestatus &&
-            behandling.ventestatus.erSattPåVent
-        );
+        return behandling.ventestatus && behandling.ventestatus.erSattPåVent;
     } else {
-        return (
-            erRelevantMenyValgForStatus &&
-            behandling.erSattPåVent &&
-            (ikkeTildelt || eierBehandling(behandling, innloggetSaksbehandler))
-        );
+        return behandling.erSattPåVent;
     }
 };
