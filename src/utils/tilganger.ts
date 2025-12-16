@@ -153,6 +153,7 @@ export const skalKunneOvertaBehandling = (
                 innloggetSaksbehandler.navIdent !== saksbehandler
             );
         case Rammebehandlingsstatus.UNDER_BEHANDLING:
+        case Rammebehandlingsstatus.UNDER_AUTOMATISK_BEHANDLING:
             return (
                 saksbehandler &&
                 erSaksbehandler(innloggetSaksbehandler) &&
@@ -210,15 +211,7 @@ export const skalKunneGjenopptaBehandling = (
     behandling: Rammebehandling | ÅpenRammebehandlingForOversikt,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
-    const erRelevantMenyValgForStatus =
-        behandling.status === Rammebehandlingsstatus.UNDER_AUTOMATISK_BEHANDLING ||
-        behandling.status === Rammebehandlingsstatus.KLAR_TIL_BEHANDLING ||
-        behandling.status === Rammebehandlingsstatus.UNDER_BEHANDLING ||
-        behandling.status === Rammebehandlingsstatus.KLAR_TIL_BESLUTNING ||
-        behandling.status === Rammebehandlingsstatus.UNDER_BESLUTNING;
-
     return (
-        erRelevantMenyValgForStatus &&
         erSattPaVent(behandling) &&
         (skalKunneTaBehandling(behandling, innloggetSaksbehandler) ||
             skalKunneOvertaBehandling(behandling, innloggetSaksbehandler))
