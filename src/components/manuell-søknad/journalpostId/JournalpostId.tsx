@@ -8,7 +8,7 @@ import styles from './JournalpostId.module.css';
 import { formaterDatotekst } from '~/utils/date';
 
 const DEBOUNCE_MS = 500;
-const MIN_LENGDE_FØR_VALIDERING = 3;
+const MIN_LENGDE_FØR_VALIDERING = 5;
 
 export const JournalpostId = () => {
     const { control, watch, setError, clearErrors } = useFormContext<ManueltRegistrertSøknad>();
@@ -18,26 +18,28 @@ export const JournalpostId = () => {
     const [debouncedJournalpostId] = useDebounce(journalpostIdWatch, DEBOUNCE_MS);
     const [datoOpprettet, setDatoOpprettet] = React.useState<string>('');
 
-    const journalpostId =
-        (journalpostIdWatch?.trim().length ?? 0) >= MIN_LENGDE_FØR_VALIDERING
-            ? debouncedJournalpostId
-            : '';
+    const inneholderKunTall = (value: string) => /^[0-9]*$/.test(value);
+    const journalpostId = (debouncedJournalpostId ?? '').trim();
+    const shouldValidate =
+        inneholderKunTall(journalpostId) && journalpostId.length >= MIN_LENGDE_FØR_VALIDERING;
 
     const { data, isLoading, error } = useValiderJournalpostId({
         fnr: fnrWatch ?? '',
-        journalpostId: journalpostId ?? '',
+        journalpostId: shouldValidate ? journalpostId : '',
     });
 
     // Valideringsfeil som skal stoppe innsending av skjema
     React.useEffect(() => {
         const value = journalpostIdWatch?.trim() || '';
-        if (!value) return;
+        if (!value || isLoading) return;
+
+        // Ikke kjør remote-validering før vi har nok tegn, men la lokal
+        // validering i onChange styre feilmeldingen om at feltet kun kan inneholde tall
         if (value.length < MIN_LENGDE_FØR_VALIDERING) {
-            clearErrors(journalpostIdFelt);
             setDatoOpprettet('');
             return;
         }
-        if (isLoading) return;
+
         if (error) {
             setError(journalpostIdFelt, {
                 type: 'remote',
@@ -55,14 +57,15 @@ export const JournalpostId = () => {
                 setDatoOpprettet('');
                 return;
             }
-            clearErrors('journalpostId');
+            clearErrors(journalpostIdFelt);
             setDatoOpprettet(data.datoOpprettet ?? '');
         }
-    }, [journalpostIdWatch, isLoading, error, data, clearErrors, setError]);
+    }, [journalpostIdWatch, shouldValidate, isLoading, error, data, clearErrors, setError]);
 
     const valideringsInfo = React.useMemo(() => {
-        if (!journalpostIdWatch || !fnrWatch) return null;
-        if ((journalpostIdWatch?.trim().length ?? 0) < MIN_LENGDE_FØR_VALIDERING) return null;
+        const value = (journalpostIdWatch ?? '').trim();
+        if (!value || !fnrWatch || !shouldValidate) return null;
+
         if (isLoading) {
             return (
                 <>
@@ -72,6 +75,14 @@ export const JournalpostId = () => {
         }
         if (data) {
             // Skal bare advare saksbehandler om mismatch, ikke hindre innsending
+            if (data.journalpostFinnes) {
+                return (
+                    <Alert variant="success" inline aria-live="polite">
+                        Journalpost finnes og søker står som avsender.
+                    </Alert>
+                );
+            }
+
             if (data.gjelderInnsendtFnr === false) {
                 return (
                     <Alert variant="warning" inline aria-live="polite">
@@ -80,14 +91,9 @@ export const JournalpostId = () => {
                     </Alert>
                 );
             }
-            return (
-                <Alert variant="success" inline aria-live="polite">
-                    Journalpost finnes og søker står som avsender.
-                </Alert>
-            );
         }
         return null;
-    }, [journalpostIdWatch, fnrWatch, isLoading, data]);
+    }, [journalpostIdWatch, fnrWatch, shouldValidate, isLoading, data]);
 
     const fnrMatcherIkke = !!data && data.journalpostFinnes && data.gjelderInnsendtFnr === false;
 
@@ -102,8 +108,20 @@ export const JournalpostId = () => {
                         <TextField
                             label="JournalpostId"
                             value={field.value ?? ''}
-                            onChange={(e) => field.onChange(e.target.value)}
+                            onChange={(e) => {
+                                const value = e.target.value;
+                                if (!inneholderKunTall(value)) {
+                                    setError(journalpostIdFelt, {
+                                        type: 'format',
+                                        message: 'JournalpostId kan kun inneholde tall.',
+                                    });
+                                } else {
+                                    clearErrors(journalpostIdFelt);
+                                }
+                                field.onChange(value);
+                            }}
                             error={fieldState.error?.message}
+                            inputMode="numeric"
                         />
                         {valideringsInfo && (!fieldState.error || fnrMatcherIkke) && (
                             <div className={styles.valideringsInfo}>{valideringsInfo}</div>

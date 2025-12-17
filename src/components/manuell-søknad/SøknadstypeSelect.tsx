@@ -20,7 +20,7 @@ export const SøknadstypeSelect = () => {
         <Controller
             name="søknadstype"
             control={control}
-            rules={{ required: 'SøknadstypeManueltRegistrertSøknad er påkrevd' }}
+            rules={{ required: 'Søknadstype er påkrevd' }}
             render={({ field, fieldState }) => (
                 <Select
                     label="Søknadstype"
