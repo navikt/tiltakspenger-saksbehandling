@@ -1,23 +1,15 @@
 import React from 'react';
 import { ActionMenu } from '@navikt/ds-react';
 import { ÅpenRammebehandlingForOversikt } from '~/types/ÅpenBehandlingForOversikt';
-import { eierBehandling } from '~/utils/tilganger';
+import { skalKunneSetteBehandlingPaVent } from '~/utils/tilganger';
 import { Saksbehandler } from '~/types/Saksbehandler';
 import { PauseIcon } from '@navikt/aksel-icons';
-import { Rammebehandlingsstatus } from '~/types/Rammebehandling';
 
 export const visSettBehandlingPåVentMenyvalg = (
     behandling: ÅpenRammebehandlingForOversikt,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
-    const erRelevantMenyValgForStatus =
-        behandling.status == Rammebehandlingsstatus.UNDER_BEHANDLING ||
-        behandling.status === Rammebehandlingsstatus.UNDER_BESLUTNING;
-    return (
-        erRelevantMenyValgForStatus &&
-        !behandling.erSattPåVent &&
-        eierBehandling(behandling, innloggetSaksbehandler)
-    );
+    return skalKunneSetteBehandlingPaVent(behandling, innloggetSaksbehandler);
 };
 
 type Props = {

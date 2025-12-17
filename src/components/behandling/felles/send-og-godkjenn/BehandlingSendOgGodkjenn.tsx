@@ -19,7 +19,11 @@ import { BehandlingLagringProps } from '~/components/behandling/felles/send-og-g
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { BehandlingSettPåVent } from '~/components/behandling/felles/send-og-godkjenn/sett-på-vent/BehandlingSettPåVent';
 import { BehandlingGjenoppta } from '~/components/behandling/felles/send-og-godkjenn/gjenoppta/BehandlingGjenoppta';
-import { skalKunneGjenopptaBehandling } from '~/utils/tilganger';
+import {
+    erSattPaVent,
+    skalKunneGjenopptaBehandling,
+    skalKunneSetteBehandlingPaVent,
+} from '~/utils/tilganger';
 import { formaterTidspunkt } from '~/utils/date';
 import { Rammebehandling, Rammebehandlingsstatus } from '~/types/Rammebehandling';
 
@@ -62,8 +66,10 @@ export const BehandlingSendOgGodkjenn = ({ behandling, lagringProps }: Props) =>
         (behandling.status === Rammebehandlingsstatus.KLAR_TIL_BEHANDLING ||
             behandling.status === Rammebehandlingsstatus.UNDER_BEHANDLING) &&
         behandling.avbrutt === null &&
+        !erSattPaVent(behandling) &&
         erSaksbehandler;
 
+    const kanSettePaVent = skalKunneSetteBehandlingPaVent(behandling, innloggetSaksbehandler);
     const kanGjenopptaBehandling = skalKunneGjenopptaBehandling(behandling, innloggetSaksbehandler);
 
     if (!erSaksbehandler && !erBeslutter) {
@@ -82,7 +88,7 @@ export const BehandlingSendOgGodkjenn = ({ behandling, lagringProps }: Props) =>
                 <HStack justify="space-between" className={style.knapper}>
                     <HStack gap={'2'}>
                         {kanAvslutteBehandling && <BehandlingAvslutt behandling={behandling} />}
-                        {!kanGjenopptaBehandling && (
+                        {kanSettePaVent && (
                             <BehandlingSettPåVent behandling={behandling} disabled={isDirty} />
                         )}
                     </HStack>

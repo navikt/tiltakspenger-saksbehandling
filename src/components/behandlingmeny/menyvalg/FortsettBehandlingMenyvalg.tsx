@@ -2,7 +2,7 @@ import { ActionMenu } from '@navikt/ds-react';
 import { ÅpenRammebehandlingForOversikt } from '~/types/ÅpenBehandlingForOversikt';
 import React from 'react';
 import Link from 'next/link';
-import { eierBehandling } from '~/utils/tilganger';
+import { eierBehandling, erSattPaVent } from '~/utils/tilganger';
 import { Saksbehandler } from '~/types/Saksbehandler';
 import { ArrowRightIcon } from '@navikt/aksel-icons';
 import { behandlingUrl } from '~/utils/urls';
@@ -18,7 +18,7 @@ export const visFortsettBehandlingMenyvalg = (
 
     return (
         erReleventMenyValgForStatus &&
-        !behandling.erSattPåVent &&
+        !erSattPaVent(behandling) &&
         eierBehandling(behandling, innloggetSaksbehandler)
     );
 };
