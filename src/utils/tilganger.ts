@@ -213,7 +213,22 @@ export const skalKunneGjenopptaBehandling = (
     return (
         erSattPaVent(behandling) &&
         (skalKunneTaBehandling(behandling, innloggetSaksbehandler) ||
-            skalKunneOvertaBehandling(behandling, innloggetSaksbehandler))
+            skalKunneOvertaBehandling(behandling, innloggetSaksbehandler) ||
+            eierBehandling(behandling, innloggetSaksbehandler))
+    );
+};
+
+export const skalKunneSetteBehandlingPaVent = (
+    behandling: Rammebehandling | ÅpenRammebehandlingForOversikt,
+    innloggetSaksbehandler: Saksbehandler,
+) => {
+    const erRelevantMenyValgForStatus =
+        behandling.status == Rammebehandlingsstatus.UNDER_BEHANDLING ||
+        behandling.status === Rammebehandlingsstatus.UNDER_BESLUTNING;
+    return (
+        erRelevantMenyValgForStatus &&
+        !erSattPaVent(behandling) &&
+        eierBehandling(behandling, innloggetSaksbehandler)
     );
 };
 

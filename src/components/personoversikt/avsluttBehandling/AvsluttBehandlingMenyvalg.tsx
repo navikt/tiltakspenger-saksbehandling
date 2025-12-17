@@ -3,7 +3,7 @@ import React from 'react';
 import { AvsluttBehandlingProps } from '~/components/personoversikt/avsluttBehandling/AvsluttBehandlingProps';
 import { ÅpenRammebehandlingForOversikt } from '~/types/ÅpenBehandlingForOversikt';
 import { XMarkOctagonIcon } from '@navikt/aksel-icons';
-import { eierBehandling } from '~/utils/tilganger';
+import { eierBehandling, erSattPaVent } from '~/utils/tilganger';
 import { Saksbehandler } from '~/types/Saksbehandler';
 import { Rammebehandlingsstatus } from '~/types/Rammebehandling';
 import { Nullable } from '~/types/UtilTypes';
@@ -18,7 +18,8 @@ export const visAvsluttBehandlingMenyvalg = (
     return (
         behandlingKanAvsluttes &&
         erRelevantMenyValgForStatus &&
-        eierBehandling(behandling, innloggetSaksbehandler)
+        eierBehandling(behandling, innloggetSaksbehandler) &&
+        !erSattPaVent(behandling)
     );
 };
 
