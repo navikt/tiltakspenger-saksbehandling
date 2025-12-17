@@ -61,7 +61,6 @@ export const eierBehandling = (
     const { status, saksbehandler, beslutter } = behandling;
     switch (status) {
         case Rammebehandlingsstatus.UNDER_AUTOMATISK_BEHANDLING:
-            return saksbehandler === 'tp-sak';
         case Rammebehandlingsstatus.UNDER_BEHANDLING:
             return innloggetSaksbehandler.navIdent === saksbehandler;
         case Rammebehandlingsstatus.UNDER_BESLUTNING:
