@@ -6,7 +6,7 @@ import {
     SøknadsbehandlingInnvilgelseState,
     SøknadsbehandlingState,
 } from '~/components/behandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
-import { antallDagerPerMeldeperiodeForPeriode } from '~/components/behandling/context/behandlingSkjemaUtils';
+import { ANTALL_DAGER_DEFAULT } from '~/components/behandling/felles/dager-per-meldeperiode/BehandlingDagerPerMeldeperiode';
 
 export const søknadsbehandlingInitialState = (
     behandling: Søknadsbehandling,
@@ -43,7 +43,13 @@ const innvilgelseInitialState = (
             resultat: SøknadsbehandlingResultat.INNVILGELSE,
             innvilgelse: {
                 harValgtPeriode: false,
-                innvilgelsesperiode: {},
+                innvilgelsesperioder: [
+                    {
+                        periode: {},
+                        antallDagerPerMeldeperiode: ANTALL_DAGER_DEFAULT,
+                        tiltaksdeltakelseId: 'lol',
+                    },
+                ],
             },
         };
     }
@@ -55,21 +61,15 @@ const innvilgelseInitialState = (
         resultat: SøknadsbehandlingResultat.INNVILGELSE,
         innvilgelse: {
             harValgtPeriode: true,
-            innvilgelsesperiode: virkningsperiode,
+            innvilgelsesperioder: [
+                {
+                    periode: virkningsperiode,
+                    antallDagerPerMeldeperiode: ANTALL_DAGER_DEFAULT,
+                    tiltaksdeltakelseId: 'lol',
+                },
+            ],
             harBarnetillegg,
             barnetilleggPerioder,
-            valgteTiltaksdeltakelser: behandling.valgteTiltaksdeltakelser,
-            antallDagerPerMeldeperiode: behandling.antallDagerPerMeldeperiode
-                ? behandling.antallDagerPerMeldeperiode
-                : [
-                      {
-                          antallDagerPerMeldeperiode: antallDagerPerMeldeperiodeForPeriode(
-                              behandling,
-                              virkningsperiode,
-                          ),
-                          periode: virkningsperiode,
-                      },
-                  ],
         },
     };
 };

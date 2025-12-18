@@ -190,7 +190,7 @@ const Barn = ({ barn, tiltaksperiode, personopplysninger }: BarnProps) => {
 const PeriodiserBarnetilleggKnapp = ({ søknad }: { søknad: Søknad }) => {
     const { rolleForBehandling } = useBehandling();
 
-    const { innvilgelsesperiode, harValgtPeriode } = useBehandlingInnvilgelseSkjema().innvilgelse;
+    const { innvilgelsesperioder, harValgtPeriode } = useBehandlingInnvilgelseSkjema().innvilgelse;
     const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
 
     if (rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER) {

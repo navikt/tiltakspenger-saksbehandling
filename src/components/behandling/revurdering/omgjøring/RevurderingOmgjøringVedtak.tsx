@@ -28,8 +28,6 @@ import {
 } from '~/components/behandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import { InnvilgelsesperiodeVelger } from '~/components/behandling/felles/innvilgelsesperiode/InnvilgelsesperiodeVelger';
 import { Nullable } from '~/types/UtilTypes';
-import { BehandlingDagerPerMeldeperiode } from '~/components/behandling/felles/dager-per-meldeperiode/BehandlingDagerPerMeldeperiode';
-import { BehandlingTiltak } from '~/components/behandling/felles/tiltak/BehandlingTiltak';
 import { BehandlingBarnetillegg } from '~/components/behandling/felles/barnetillegg/BehandlingBarnetillegg';
 import { BegrunnelseVilkårsvurdering } from '~/components/behandling/felles/begrunnelse-vilkårsvurdering/BegrunnelseVilkårsvurdering';
 import { SakProps } from '~/types/Sak';
@@ -137,9 +135,6 @@ const Innvilgelse = ({ skjema, behandling, sak }: InnvilgelseProps) => {
             <Separator />
             {skjema.innvilgelse.harValgtPeriode && (
                 <>
-                    <BehandlingDagerPerMeldeperiode />
-                    <Separator />
-                    <BehandlingTiltak />
                     <BehandlingBarnetillegg />
                     <Separator />
                     <RevurderingInnvilgelseBrev />
@@ -165,8 +160,7 @@ const tilDTO = (
         resultat: RevurderingResultat.OMGJØRING,
         begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
         fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
-        innvilgelsesperiode: innvilgelse.innvilgelsesperiode,
-        valgteTiltaksdeltakelser: innvilgelse.valgteTiltaksdeltakelser,
+        innvilgelsesperioder: innvilgelse.innvilgelsesperioder,
         barnetillegg: innvilgelse.harBarnetillegg
             ? {
                   begrunnelse: skjema.textAreas.barnetilleggBegrunnelse.getValue(),
@@ -176,6 +170,5 @@ const tilDTO = (
                   begrunnelse: null,
                   perioder: [],
               },
-        antallDagerPerMeldeperiodeForPerioder: innvilgelse.antallDagerPerMeldeperiode,
     };
 };

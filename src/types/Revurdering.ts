@@ -9,6 +9,7 @@ import { Periode } from './Periode';
 import { TiltaksdeltakelsePeriode } from './TiltakDeltagelseTypes';
 import { Nullable } from './UtilTypes';
 import { VedtakId } from './Rammevedtak';
+import { Innvilgelsesperiode } from '~/types/Innvilgelsesperiode';
 
 interface RevurderingBase extends RammebehandlingBase {
     type: Rammebehandlingstype.REVURDERING;
@@ -58,17 +59,13 @@ export interface RevurderingVedtakStansRequest extends OppdaterBehandlingRequest
 
 export interface RevurderingVedtakInnvilgelseRequest extends OppdaterBehandlingRequestBase {
     resultat: RevurderingResultat.INNVILGELSE;
-    innvilgelsesperiode: Periode;
-    valgteTiltaksdeltakelser: TiltaksdeltakelsePeriode[];
-    antallDagerPerMeldeperiodeForPerioder: AntallDagerPerMeldeperiode[];
+    innvilgelsesperioder: Innvilgelsesperiode[];
     barnetillegg: Barnetillegg;
 }
 
 export interface RevurderingVedtakOmgjøringRequest extends OppdaterBehandlingRequestBase {
     resultat: RevurderingResultat.OMGJØRING;
-    innvilgelsesperiode: Periode;
-    valgteTiltaksdeltakelser: TiltaksdeltakelsePeriode[];
-    antallDagerPerMeldeperiodeForPerioder: AntallDagerPerMeldeperiode[];
+    innvilgelsesperioder: Innvilgelsesperiode[];
     barnetillegg: Barnetillegg;
 }
 

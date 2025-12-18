@@ -1,28 +1,22 @@
 import { classNames } from '~/utils/classNames';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { Alert, Heading } from '@navikt/ds-react';
-import { AntallDagerForMeldeperiodeForm } from '~/components/behandling/felles/dager-per-meldeperiode/form/AntallDagerForMeldeperiodeForm';
 import { useBehandlingInnvilgelseMedPerioderSkjema } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 
 import style from './BehandlingDagerPerMeldeperiode.module.css';
 
 export const BehandlingDagerPerMeldeperiode = () => {
-    const { antallDagerPerMeldeperiode } = useBehandlingInnvilgelseMedPerioderSkjema().innvilgelse;
 
-    const antallDagerSettesIkkeAutomatiskIBrev =
-        antallDagerPerMeldeperiode.length !== 1 ||
-        antallDagerPerMeldeperiode[0].antallDagerPerMeldeperiode > 10 ||
-        erOddetall(antallDagerPerMeldeperiode[0].antallDagerPerMeldeperiode);
+    const antallDagerSettesIkkeAutomatiskIBrev = true
+        // antallDagerPerMeldeperiode.length !== 1 ||
+        // antallDagerPerMeldeperiode[0].antallDagerPerMeldeperiode > 10 ||
+        // erOddetall(antallDagerPerMeldeperiode[0].antallDagerPerMeldeperiode);
 
     return (
         <VedtakSeksjon>
             <Heading size={'small'} level={'4'} spacing={true}>
                 Antall dager per meldeperiode
             </Heading>
-
-            <VedtakSeksjon.Venstre>
-                <AntallDagerForMeldeperiodeForm />
-            </VedtakSeksjon.Venstre>
 
             <VedtakSeksjon.Høyre
                 className={classNames(!antallDagerSettesIkkeAutomatiskIBrev && style.skjult)}

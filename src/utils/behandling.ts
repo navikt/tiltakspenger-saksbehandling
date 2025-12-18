@@ -72,7 +72,10 @@ export const hentTiltaksdeltakelserMedStartOgSluttdato = (
             t.deltagelseFraOgMed != null && t.deltagelseTilOgMed != null,
     );
 
-export const hentTiltaksdeltagelserFraPeriode = (behandling: Rammebehandling, periode: Periode) => {
+export const hentTiltaksdeltagelserFraPeriode = (
+    behandling: Rammebehandling,
+    periode: Periode,
+): TiltaksdeltagelseMedPeriode[] => {
     return hentTiltaksdeltakelserMedStartOgSluttdato(behandling).reduce<
         TiltaksdeltagelseMedPeriode[]
     >((acc, td) => {

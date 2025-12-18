@@ -1,16 +1,7 @@
 import { RammebehandlingResultatMedInnvilgelse } from '~/types/Rammebehandling';
-import { Periode } from '~/types/Periode';
 import {
-    TiltaksdeltagelseActions,
-    tiltaksdeltagelseReducer,
-} from '~/components/behandling/context/innvilgelse/slices/tiltaksdeltagelseContext';
-import {
-    AntallDagerPerMeldeperiodeActions,
-    antallDagerPerMeldeperiodeReducer,
-} from '~/components/behandling/context/innvilgelse/slices/antallDagerPerMeldeperiodeContext';
-import {
-    InnvilgelsesperiodeAction,
-    innvilgelsesperiodeReducer,
+    InnvilgelsesperioderActions,
+    innvilgelsesperioderReducer,
 } from '~/components/behandling/context/innvilgelse/slices/innvilgelsesperiodeContext';
 import {
     BarnetilleggActions,
@@ -29,22 +20,19 @@ import {
     erRammebehandlingInnvilgelseContext,
     erRammebehandlingInnvilgelseMedPerioderContext,
 } from '~/components/behandling/context/behandlingSkjemaUtils';
-import { TiltaksdeltakelsePeriode } from '~/types/TiltakDeltagelseTypes';
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';
-import { AntallDagerPerMeldeperiode } from '~/types/AntallDagerPerMeldeperiode';
+import { Innvilgelsesperiode, InnvilgelsesperiodePartial } from '~/types/Innvilgelsesperiode';
 
 export type InnvilgelseUtenPerioderState = {
     harValgtPeriode: false;
-    innvilgelsesperiode: Partial<Periode>;
+    innvilgelsesperioder: [InnvilgelsesperiodePartial];
 };
 
 export type InnvilgelseMedPerioderState = {
     harValgtPeriode: true;
-    innvilgelsesperiode: Periode;
-    valgteTiltaksdeltakelser: TiltaksdeltakelsePeriode[];
+    innvilgelsesperioder: Innvilgelsesperiode[];
     harBarnetillegg: boolean;
     barnetilleggPerioder: BarnetilleggPeriode[];
-    antallDagerPerMeldeperiode: AntallDagerPerMeldeperiode[];
 };
 
 export type InnvilgelseState = InnvilgelseUtenPerioderState | InnvilgelseMedPerioderState;
@@ -59,11 +47,7 @@ export type BehandlingInnvilgelseMedPerioderState = {
     innvilgelse: InnvilgelseMedPerioderState;
 };
 
-export type InnvilgelseActions =
-    | InnvilgelsesperiodeAction
-    | TiltaksdeltagelseActions
-    | BarnetilleggActions
-    | AntallDagerPerMeldeperiodeActions;
+export type InnvilgelseActions = InnvilgelsesperioderActions | BarnetilleggActions;
 
 export const innvilgelseReducer: Reducer<InnvilgelseState, InnvilgelseActions> = (
     state,
@@ -72,8 +56,14 @@ export const innvilgelseReducer: Reducer<InnvilgelseState, InnvilgelseActions> =
     const { type } = action;
     const { harValgtPeriode } = state;
 
-    if (type === 'oppdaterInnvilgelsesperiode') {
-        return innvilgelsesperiodeReducer(state, action);
+    switch (type) {
+        case 'oppdaterInnvilgelsesperiode':
+        case 'leggTilInnvilgelsesperiode':
+        case 'fjernInnvilgelsesperiode':
+        case 'settAntallDager':
+        case 'settTiltaksdeltakelse': {
+            return innvilgelsesperioderReducer(state, action);
+        }
     }
 
     if (!harValgtPeriode) {
@@ -81,14 +71,6 @@ export const innvilgelseReducer: Reducer<InnvilgelseState, InnvilgelseActions> =
     }
 
     switch (type) {
-        case 'leggTilAntallDagerPeriode':
-        case 'fjernAntallDagerPeriode':
-        case 'oppdaterAntallDagerFraOgMed':
-        case 'oppdaterAntallDagerTilOgMed':
-        case 'settAntallDagerForPeriode': {
-            return antallDagerPerMeldeperiodeReducer(state, action);
-        }
-
         case 'setHarSøktBarnetillegg':
         case 'addBarnetilleggPeriode':
         case 'fjernBarnetilleggPeriode':
@@ -97,14 +79,6 @@ export const innvilgelseReducer: Reducer<InnvilgelseState, InnvilgelseActions> =
         case 'oppdaterBarnetilleggTilOgMed':
         case 'settBarnetilleggPerioder': {
             return barnetilleggReducer(state, action);
-        }
-
-        case 'addTiltakPeriode':
-        case 'fjernTiltakPeriode':
-        case 'oppdaterTiltakId':
-        case 'oppdaterTiltaksdeltagelseFraOgMed':
-        case 'oppdaterTiltaksdeltagelseTilOgMed': {
-            return tiltaksdeltagelseReducer(state, action);
         }
     }
 

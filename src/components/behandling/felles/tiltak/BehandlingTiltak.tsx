@@ -21,7 +21,7 @@ export const BehandlingTiltak = () => {
     const { behandling } = useBehandling();
 
     const { innvilgelse, erReadonly } = useBehandlingInnvilgelseMedPerioderSkjema();
-    const { valgteTiltaksdeltakelser, innvilgelsesperiode } = innvilgelse;
+    const { valgteTiltaksdeltakelser, innvilgelsesperioder } = innvilgelse;
 
     const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
 
@@ -29,7 +29,7 @@ export const BehandlingTiltak = () => {
 
     const harFlereTiltak = deltarPaFlereTiltakMedStartOgSluttdatoIValgtInnvilgelsesperiode(
         behandling,
-        innvilgelsesperiode,
+        innvilgelsesperioder,
     );
 
     if (!harFlereTiltak) {
@@ -79,8 +79,8 @@ export const BehandlingTiltak = () => {
                                 },
                             },
                             readOnly: erReadonly,
-                            minDate: innvilgelsesperiode.fraOgMed,
-                            maxDate: innvilgelsesperiode.tilOgMed,
+                            minDate: innvilgelsesperioder.fraOgMed,
+                            maxDate: innvilgelsesperioder.tilOgMed,
                         }}
                         contentConfig={{
                             position: 'before',

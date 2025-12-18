@@ -21,7 +21,7 @@ export const BehandlingBarnetilleggPerioder = () => {
     const { behandling } = useBehandling();
 
     const { innvilgelse, erReadonly } = useBehandlingInnvilgelseMedPerioderSkjema();
-    const { barnetilleggPerioder, innvilgelsesperiode } = innvilgelse;
+    const { barnetilleggPerioder, innvilgelsesperioder } = innvilgelse;
 
     const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
 
@@ -56,7 +56,7 @@ export const BehandlingBarnetilleggPerioder = () => {
                                         payload: {
                                             barnetilleggPerioder: periodiserBarnetilleggFraSøknad(
                                                 behandling.søknad.barnetillegg,
-                                                innvilgelsesperiode,
+                                                innvilgelsesperioder,
                                             ),
                                         },
                                     })
@@ -76,7 +76,7 @@ export const BehandlingBarnetilleggPerioder = () => {
                                             barnetilleggPerioder:
                                                 hentBarnetilleggForhåndsutfyltForRevurdering(
                                                     sak.tidslinje,
-                                                    innvilgelsesperiode,
+                                                    innvilgelsesperioder,
                                                 ),
                                         },
                                     });
@@ -119,8 +119,8 @@ export const BehandlingBarnetilleggPerioder = () => {
                         },
                     },
                     readOnly: erReadonly,
-                    minDate: innvilgelsesperiode.fraOgMed,
-                    maxDate: innvilgelsesperiode.tilOgMed,
+                    minDate: innvilgelsesperioder.fraOgMed,
+                    maxDate: innvilgelsesperioder.tilOgMed,
                 }}
                 contentConfig={{
                     content: (periode, index) => {

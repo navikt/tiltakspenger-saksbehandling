@@ -5,8 +5,6 @@ import { RevurderingInnvilgelseSend } from '~/components/behandling/revurdering/
 import { BehandlingBeregningOgSimulering } from '~/components/behandling/felles/beregning-og-simulering/BehandlingBeregningOgSimulering';
 import { useRevurderingInnvilgelseSkjema } from '~/components/behandling/context/revurdering/revurderingInnvilgelseSkjemaContext';
 import { InnvilgelsesperiodeVelger } from '~/components/behandling/felles/innvilgelsesperiode/InnvilgelsesperiodeVelger';
-import { BehandlingDagerPerMeldeperiode } from '~/components/behandling/felles/dager-per-meldeperiode/BehandlingDagerPerMeldeperiode';
-import { BehandlingTiltak } from '~/components/behandling/felles/tiltak/BehandlingTiltak';
 import { BehandlingBarnetillegg } from '~/components/behandling/felles/barnetillegg/BehandlingBarnetillegg';
 import { BegrunnelseVilkårsvurdering } from '~/components/behandling/felles/begrunnelse-vilkårsvurdering/BegrunnelseVilkårsvurdering';
 
@@ -24,9 +22,6 @@ export const RevurderingInnvilgelseVedtak = () => {
             <Separator />
             {innvilgelse.harValgtPeriode && (
                 <>
-                    <BehandlingDagerPerMeldeperiode />
-                    <Separator />
-                    <BehandlingTiltak />
                     <BehandlingBarnetillegg />
                     <Separator />
                     <RevurderingInnvilgelseBrev />

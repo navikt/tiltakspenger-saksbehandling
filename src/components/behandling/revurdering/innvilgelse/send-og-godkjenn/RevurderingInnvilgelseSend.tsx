@@ -37,7 +37,7 @@ const tilDTO = (
         resultat: RevurderingResultat.INNVILGELSE,
         begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
         fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
-        innvilgelsesperiode: innvilgelse.innvilgelsesperiode,
+        innvilgelsesperiode: innvilgelse.innvilgelsesperioder,
         valgteTiltaksdeltakelser: innvilgelse.valgteTiltaksdeltakelser,
         barnetillegg: innvilgelse.harBarnetillegg
             ? {

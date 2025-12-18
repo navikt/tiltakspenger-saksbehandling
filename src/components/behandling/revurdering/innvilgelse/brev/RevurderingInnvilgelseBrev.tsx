@@ -52,7 +52,7 @@ const revurderingskjemaTilBrevForhåndsvisningDTO = (
     return {
         resultat: RevurderingResultat.INNVILGELSE,
         fritekst: textAreas.brevtekst.getValue(),
-        virkningsperiode: innvilgelse.innvilgelsesperiode,
+        virkningsperiode: innvilgelse.innvilgelsesperioder,
         barnetillegg: innvilgelse.harBarnetillegg ? innvilgelse.barnetilleggPerioder : null,
         antallDagerPerMeldeperiodeForPerioder: innvilgelse.antallDagerPerMeldeperiode,
     };
