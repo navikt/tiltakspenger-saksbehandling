@@ -57,6 +57,7 @@ export const JournalpostId = () => {
                 setDatoOpprettet('');
                 return;
             }
+
             clearErrors(journalpostIdFelt);
             setDatoOpprettet(data.datoOpprettet ?? '');
         }
@@ -102,23 +103,20 @@ export const JournalpostId = () => {
             <Controller
                 name={journalpostIdFelt}
                 control={control}
-                rules={{ required: 'JournalpostId er påkrevd' }}
+                rules={{
+                    required: 'JournalpostId er påkrevd.',
+                    pattern: {
+                        value: /^\d+$/,
+                        message: 'JournalpostId kan kun inneholde tall.',
+                    },
+                }}
                 render={({ field, fieldState }) => (
                     <div className={styles.blokk}>
                         <TextField
                             label="JournalpostId"
                             value={field.value ?? ''}
                             onChange={(e) => {
-                                const value = e.target.value;
-                                if (!inneholderKunTall(value)) {
-                                    setError(journalpostIdFelt, {
-                                        type: 'format',
-                                        message: 'JournalpostId kan kun inneholde tall.',
-                                    });
-                                } else {
-                                    clearErrors(journalpostIdFelt);
-                                }
-                                field.onChange(value);
+                                field.onChange(e.target.value);
                             }}
                             error={fieldState.error?.message}
                             inputMode="numeric"
