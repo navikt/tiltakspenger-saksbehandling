@@ -15,6 +15,7 @@ import { useBehandling } from '~/components/behandling/context/BehandlingContext
 import { Innvilgelsesperiode } from '~/types/Innvilgelsesperiode';
 
 import style from './InnvilgelsesperioderVelger.module.css';
+import { XMarkIcon } from '@navikt/aksel-icons';
 
 export const InnvilgelsesperiodeVelger = () => {
     const { innvilgelse } = useBehandlingInnvilgelseSkjema();
@@ -66,7 +67,7 @@ const MedValgtPeriode = ({ innvilgelsesperioder }: MedValgtPeriodeProps) => {
                     });
                 }}
             >
-                {'Legg til'}
+                {'Ny periode'}
             </Button>
         </VStack>
     );
@@ -82,7 +83,9 @@ const Valg = ({ innvilgelsesperiode, index }: ValgProps) => {
     const { behandling } = useBehandling();
 
     const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
-    const { erReadonly } = useBehandlingInnvilgelseSkjema();
+    const { erReadonly, innvilgelse } = useBehandlingInnvilgelseSkjema();
+
+    const { innvilgelsesperioder } = innvilgelse;
 
     const tiltaksdeltagelsesperiode = hentHeleTiltaksdeltagelsesperioden(behandling);
     const defaultDato = datoMin(new Date(), tiltaksdeltagelsesperiode.tilOgMed);
@@ -202,14 +205,30 @@ const Valg = ({ innvilgelsesperiode, index }: ValgProps) => {
                 })}
             </Select>
             {!harValgtGyldigTiltak && (
-                <Alert
-                    variant={'error'}
-                    size={'small'}
-                    inline={true}
-                    className={style.ugyldigTiltakAlert}
-                >
+                <Alert variant={'error'} size={'small'} inline={true} className={style.alignBunn}>
                     {'Kan ikke innvilge for dette tiltaket'}
                 </Alert>
+            )}
+            {innvilgelsesperioder.length > 1 && (
+                <Button
+                    type={'button'}
+                    variant={'tertiary'}
+                    size={'small'}
+                    icon={<XMarkIcon />}
+                    className={style.alignBunn}
+                    onClick={() => {
+                        dispatch({
+                            type: 'fjernInnvilgelsesperiode',
+                            payload: {
+                                index,
+                                behandling,
+                                sak,
+                            },
+                        });
+                    }}
+                >
+                    {'Fjern'}
+                </Button>
             )}
         </HStack>
     );

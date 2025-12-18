@@ -4,7 +4,8 @@ import { hentHeleTiltaksdeltagelsesperioden } from '~/utils/behandling';
 import { Rammebehandling } from '~/types/Rammebehandling';
 import { InnvilgelseState } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 import { Søknad } from '~/types/Søknad';
-import { joinPerioder } from '~/utils/periode';
+
+import { periodiseringTotalPeriode } from '~/utils/periode';
 
 export const validerInnvilgelse = (
     behandling: Rammebehandling,
@@ -31,7 +32,7 @@ export const validerInnvilgelse = (
 
     const tiltaksperiode = hentHeleTiltaksdeltagelsesperioden(behandling);
 
-    const innvilgelsesperiodeTotal = joinPerioder(innvilgelsesperioder.map((p) => p.periode))
+    const innvilgelsesperiodeTotal = periodiseringTotalPeriode(innvilgelsesperioder)
 
     if (innvilgelsesperiodeTotal.fraOgMed > innvilgelsesperiodeTotal.tilOgMed) {
         validering.errors.push('Til og med-dato må være etter fra og med-dato');
@@ -48,7 +49,7 @@ export const validerInnvilgelse = (
     const barnetilleggValidering = validerBarnetillegg(
         harBarnetillegg,
         barnetilleggPerioder,
-        innvilgelsesperiodeTotal,
+        innvilgelsesperioder,
         søknad,
     );
     validering.warnings.push(...barnetilleggValidering.warnings);

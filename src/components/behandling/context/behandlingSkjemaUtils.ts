@@ -15,11 +15,9 @@ import { datoMax, datoMin, forrigeDag, nesteDag } from '~/utils/date';
 import { MedPeriode, Periode } from '~/types/Periode';
 import { Rammebehandling } from '~/types/Rammebehandling';
 import { ANTALL_DAGER_DEFAULT } from '~/components/behandling/felles/dager-per-meldeperiode/BehandlingDagerPerMeldeperiode';
-import { hentBarnetilleggForBehandling } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
-import { TiltaksdeltakelsePeriode } from '~/types/TiltakDeltagelseTypes';
 import { SakProps } from '~/types/Sak';
 import { Innvilgelsesperiode } from '~/types/Innvilgelsesperiode';
-import { Barnetillegg, BarnetilleggPeriode } from '~/types/Barnetillegg';
+import { BarnetilleggPeriode } from '~/types/Barnetillegg';
 
 export const erRammebehandlingInnvilgelseContext = (
     context: BehandlingSkjemaState,
@@ -107,23 +105,6 @@ export const hentForhåndsutfyltInnvilgelse = (
         harBarnetillegg: barnetilleggPerioder.length > 0,
         barnetilleggPerioder,
     };
-};
-
-export const tiltaksdeltagelserFraSaksopplysningerForPeriode = (
-    behandling: Rammebehandling,
-    periode: Periode,
-): TiltaksdeltakelsePeriode[] => {
-    return hentTiltaksdeltagelserFraPeriode(behandling, periode).map((td) => {
-        const { deltagelseFraOgMed, deltagelseTilOgMed, eksternDeltagelseId } = td;
-
-        return {
-            eksternDeltagelseId,
-            periode: {
-                fraOgMed: datoMax(deltagelseFraOgMed, periode.fraOgMed),
-                tilOgMed: datoMin(deltagelseTilOgMed, periode.tilOgMed),
-            },
-        };
-    }, []);
 };
 
 // Henter det høyeste antall dager for en tiltaksdeltagelse fra saksopplysninger, eller default

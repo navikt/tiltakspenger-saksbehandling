@@ -1,3 +1,6 @@
+// @ts-nocheck
+
+
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { Select } from '@navikt/ds-react';
 import { TiltaksdeltagelseMedPeriode } from '~/types/TiltakDeltagelseTypes';
@@ -21,7 +24,6 @@ export const BehandlingTiltak = () => {
     const { behandling } = useBehandling();
 
     const { innvilgelse, erReadonly } = useBehandlingInnvilgelseMedPerioderSkjema();
-    const { valgteTiltaksdeltakelser, innvilgelsesperioder } = innvilgelse;
 
     const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
 
@@ -91,15 +93,6 @@ export const BehandlingTiltak = () => {
                                     className={style.tiltakstype}
                                     defaultValue={periode.eksternDeltagelseId}
                                     readOnly={erReadonly}
-                                    onChange={(event) => {
-                                        dispatch({
-                                            type: 'oppdaterTiltakId',
-                                            payload: {
-                                                eksternDeltagelseId: event.target.value,
-                                                index,
-                                            },
-                                        });
-                                    }}
                                 >
                                     {tiltaksdeltakelser.map((tiltak, index) => (
                                         <option

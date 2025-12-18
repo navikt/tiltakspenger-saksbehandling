@@ -1,15 +1,13 @@
-import { AntallDagerPerMeldeperiode } from './AntallDagerPerMeldeperiode';
 import { Barnetillegg } from './Barnetillegg';
 import {
     Rammebehandlingstype,
     OppdaterBehandlingRequestBase,
     RammebehandlingBase,
 } from './Rammebehandling';
-import { Periode } from './Periode';
-import { TiltaksdeltakelsePeriode } from './TiltakDeltagelseTypes';
 import { Nullable } from './UtilTypes';
 import { VedtakId } from './Rammevedtak';
 import { Innvilgelsesperiode } from '~/types/Innvilgelsesperiode';
+import { Periode } from '~/types/Periode';
 
 interface RevurderingBase extends RammebehandlingBase {
     type: Rammebehandlingstype.REVURDERING;
@@ -27,19 +25,16 @@ export interface RevurderingStans extends RevurderingBase {
 
 export interface RevurderingInnvilgelse extends RevurderingBase {
     resultat: RevurderingResultat.INNVILGELSE;
-    innvilgelsesperiode: Nullable<Periode>;
-    valgteTiltaksdeltakelser: Nullable<TiltaksdeltakelsePeriode[]>;
+    innvilgelsesperioder: Nullable<Innvilgelsesperiode[]>;
     barnetillegg: Nullable<Barnetillegg>;
-    antallDagerPerMeldeperiode: Nullable<AntallDagerPerMeldeperiode[]>;
 }
 
 export interface RevurderingOmgjøring extends RevurderingBase {
     resultat: RevurderingResultat.OMGJØRING;
+    vedtaksperiode: Periode;
     omgjørVedtak: VedtakId;
-    innvilgelsesperiode: Nullable<Periode>;
-    valgteTiltaksdeltakelser: Nullable<TiltaksdeltakelsePeriode[]>;
+    innvilgelsesperioder: Nullable<Innvilgelsesperiode[]>;
     barnetillegg: Nullable<Barnetillegg>;
-    antallDagerPerMeldeperiode: Nullable<AntallDagerPerMeldeperiode[]>;
 }
 
 export enum RevurderingResultat {

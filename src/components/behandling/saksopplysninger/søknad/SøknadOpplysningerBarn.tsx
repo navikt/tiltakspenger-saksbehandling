@@ -18,9 +18,9 @@ import {
 } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 import { useBehandlingSkjema } from '~/components/behandling/context/BehandlingSkjemaContext';
 import { erRammebehandlingInnvilgelseResultat } from '~/utils/behandling';
+import { formaterSøknadsspørsmålSvar } from '~/utils/tekstformateringUtils';
 
 import style from './SøknadOpplysningerBarn.module.css';
-import { formaterSøknadsspørsmålSvar } from '~/utils/tekstformateringUtils';
 
 type Props = {
     tiltaksperiode: Nullable<Periode>;
@@ -213,7 +213,7 @@ const PeriodiserBarnetilleggKnapp = ({ søknad }: { søknad: Søknad }) => {
                     payload: {
                         barnetilleggPerioder: periodiserBarnetilleggFraSøknad(
                             søknad.barnetillegg,
-                            innvilgelsesperiode,
+                            innvilgelsesperioder,
                         ),
                     },
                 });

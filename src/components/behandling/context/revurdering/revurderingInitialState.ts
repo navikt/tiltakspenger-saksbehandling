@@ -11,6 +11,10 @@ import { hentBarnetilleggForRevurdering } from '~/components/behandling/felles/b
 import { RevurderingOmgjøringState } from '~/components/behandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import { RevurderingInnvilgelseState } from '~/components/behandling/context/revurdering/revurderingInnvilgelseSkjemaContext';
 import { ANTALL_DAGER_DEFAULT } from '~/components/behandling/felles/dager-per-meldeperiode/BehandlingDagerPerMeldeperiode';
+import {
+    hentTiltaksdeltagelserFraPeriode,
+    hentTiltaksdeltakelserMedStartOgSluttdato,
+} from '~/utils/behandling';
 
 type RevurderingState =
     | RevurderingInnvilgelseState
@@ -41,7 +45,7 @@ export const revurderingInitialState = (
 const stansInitialState = (behandling: RevurderingStans): RevurderingStansState => {
     return {
         resultat: RevurderingResultat.STANS,
-        fraDato: behandling.virkningsperiode?.fraOgMed,
+        fraDato: behandling.vedtaksperiode?.fraOgMed,
         hjemlerForStans: behandling.valgtHjemmelHarIkkeRettighet ?? [],
         harValgtStansFraFørsteDagSomGirRett:
             behandling.harValgtStansFraFørsteDagSomGirRett ?? false,
@@ -52,9 +56,10 @@ const innvilgelseInitialState = (
     behandling: RevurderingInnvilgelse,
     sak: SakProps,
 ): RevurderingInnvilgelseState => {
-    const { virkningsperiode } = behandling;
+    const { innvilgelsesperioder } = behandling;
+    const tiltaksdeltakelser = hentTiltaksdeltakelserMedStartOgSluttdato(behandling)
 
-    if (!virkningsperiode) {
+    if (!innvilgelsesperioder) {
         return {
             resultat: RevurderingResultat.INNVILGELSE,
             innvilgelse: {
@@ -63,26 +68,20 @@ const innvilgelseInitialState = (
                     {
                         periode: {},
                         antallDagerPerMeldeperiode: ANTALL_DAGER_DEFAULT,
-                        tiltaksdeltakelseId: 'lol',
+                        tiltaksdeltakelseId: tiltaksdeltakelser.at(0)?.eksternDeltagelseId,
                     },
                 ],
             },
         };
     }
 
-    const barnetilleggPerioder = hentBarnetilleggForRevurdering(behandling, virkningsperiode, sak);
+    const barnetilleggPerioder = hentBarnetilleggForRevurdering(behandling, innvilgelsesperioder, sak);
 
     return {
         resultat: RevurderingResultat.INNVILGELSE,
         innvilgelse: {
             harValgtPeriode: true,
-            innvilgelsesperioder: [
-                {
-                    periode: virkningsperiode,
-                    antallDagerPerMeldeperiode: ANTALL_DAGER_DEFAULT,
-                    tiltaksdeltakelseId: 'lol',
-                },
-            ],
+            innvilgelsesperioder,
             harBarnetillegg: barnetilleggPerioder.length > 0,
             barnetilleggPerioder,
         },
@@ -93,9 +92,11 @@ const omgjøringInitialState = (
     behandling: RevurderingOmgjøring,
     sak: SakProps,
 ): RevurderingOmgjøringState => {
-    const { innvilgelsesperiode } = behandling;
+    const { innvilgelsesperioder, vedtaksperiode } = behandling;
 
-    if (!innvilgelsesperiode) {
+    if (!innvilgelsesperioder) {
+        const tiltaksdeltakelser = hentTiltaksdeltagelserFraPeriode(behandling, vedtaksperiode)
+
         return {
             resultat: RevurderingResultat.OMGJØRING,
             innvilgelse: {
@@ -104,7 +105,7 @@ const omgjøringInitialState = (
                     {
                         periode: {},
                         antallDagerPerMeldeperiode: ANTALL_DAGER_DEFAULT,
-                        tiltaksdeltakelseId: 'lol',
+                        tiltaksdeltakelseId: tiltaksdeltakelser.at(0)?.eksternDeltagelseId,
                     },
                 ],
             },
@@ -113,7 +114,7 @@ const omgjøringInitialState = (
 
     const barnetilleggPerioder = hentBarnetilleggForRevurdering(
         behandling,
-        innvilgelsesperiode,
+        innvilgelsesperioder,
         sak,
     );
 
@@ -121,13 +122,7 @@ const omgjøringInitialState = (
         resultat: RevurderingResultat.OMGJØRING,
         innvilgelse: {
             harValgtPeriode: true,
-            innvilgelsesperioder: [
-                {
-                    periode: innvilgelsesperiode,
-                    antallDagerPerMeldeperiode: ANTALL_DAGER_DEFAULT,
-                    tiltaksdeltakelseId: 'lol',
-                },
-            ],
+            innvilgelsesperioder,
             harBarnetillegg: barnetilleggPerioder.length > 0,
             barnetilleggPerioder,
         },

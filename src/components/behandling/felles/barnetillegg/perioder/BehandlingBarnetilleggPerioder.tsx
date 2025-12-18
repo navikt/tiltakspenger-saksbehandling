@@ -11,6 +11,7 @@ import {
     useBehandlingInnvilgelseMedPerioderSkjema,
     useBehandlingInnvilgelseSkjemaDispatch,
 } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
+import { periodiseringTotalPeriode } from '~/utils/periode';
 
 import style from './BehandlingBarnetilleggPerioder.module.css';
 
@@ -31,6 +32,8 @@ export const BehandlingBarnetilleggPerioder = () => {
 
     const antallBarnForNyPeriode =
         barnetilleggPerioder.at(-1)?.antallBarn || antallBarnFraSøknad || 1;
+
+    const innvilgelseTotalPeriode = periodiseringTotalPeriode(innvilgelsesperioder)
 
     return (
         <VedtakSeksjon.Venstre className={style.wrapper}>
@@ -119,8 +122,8 @@ export const BehandlingBarnetilleggPerioder = () => {
                         },
                     },
                     readOnly: erReadonly,
-                    minDate: innvilgelsesperioder.fraOgMed,
-                    maxDate: innvilgelsesperioder.tilOgMed,
+                    minDate: innvilgelseTotalPeriode.fraOgMed,
+                    maxDate: innvilgelseTotalPeriode.tilOgMed,
                 }}
                 contentConfig={{
                     content: (periode, index) => {

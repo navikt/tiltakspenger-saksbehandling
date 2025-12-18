@@ -32,6 +32,8 @@ import { BehandlingBarnetillegg } from '~/components/behandling/felles/barnetill
 import { BegrunnelseVilkårsvurdering } from '~/components/behandling/felles/begrunnelse-vilkårsvurdering/BegrunnelseVilkårsvurdering';
 import { SakProps } from '~/types/Sak';
 
+import { periodiseringTotalPeriode } from '~/utils/periode';
+
 export const RevurderingOmgjøringVedtak = () => {
     const { behandling } = useRevurderingOmgjøring();
     const { sak } = useSak();
@@ -69,7 +71,7 @@ export const RevurderingOmgjøringVedtak = () => {
                                 <OppsummeringsPar
                                     label="Innvilgelsesperiode"
                                     verdi={periodeTilFormatertDatotekst(
-                                        vedtakSomBlirOmgjort.innvilgelsesperiode!,
+                                        periodiseringTotalPeriode(vedtakSomBlirOmgjort.innvilgelsesperioder!),
                                     )}
                                     variant="inlineColon"
                                 />
@@ -96,7 +98,7 @@ export const RevurderingOmgjøringVedtak = () => {
             {behandling.status === Rammebehandlingsstatus.VEDTATT && (
                 <OppsummeringsPar
                     label={'Omgjøringsperiode'}
-                    verdi={periodeTilFormatertDatotekst(behandling.virkningsperiode!)}
+                    verdi={periodeTilFormatertDatotekst(behandling.vedtaksperiode!)}
                     variant="inlineColon"
                 />
             )}

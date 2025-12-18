@@ -87,6 +87,8 @@ export const søknadsbehandlingReducer: Reducer<SøknadsbehandlingState, Søknad
         case 'oppdaterInnvilgelsesperiode':
         case 'fjernInnvilgelsesperiode':
         case 'leggTilInnvilgelsesperiode':
+        case 'settTiltaksdeltakelse':
+        case 'settAntallDager':
         case 'setHarSøktBarnetillegg':
         case 'addBarnetilleggPeriode':
         case 'fjernBarnetilleggPeriode':

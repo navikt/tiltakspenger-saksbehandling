@@ -5,15 +5,15 @@ import { Rammebehandling, RammebehandlingResultat } from '~/types/Rammebehandlin
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';
 import { Avslagsgrunn } from '~/types/Søknadsbehandling';
 import { RevurderingResultat } from '~/types/Revurdering';
-import { AntallDagerPerMeldeperiode } from '~/types/AntallDagerPerMeldeperiode';
+import { Innvilgelsesperiode } from '~/types/Innvilgelsesperiode';
 
 export type SøknadsbehandlingBrevForhåndsvisningDTO = {
     resultat: RammebehandlingResultat;
     fritekst: Nullable<string>;
-    virkningsperiode?: Periode;
+    vedtaksperiode?: Periode;
     barnetillegg?: BarnetilleggPeriode[];
     avslagsgrunner?: Avslagsgrunn[];
-    antallDagerPerMeldeperiodeForPerioder?: AntallDagerPerMeldeperiode[];
+    innvilgelsesperioder?: Innvilgelsesperiode[];
 };
 
 type StansFraOgMed =
@@ -45,10 +45,10 @@ export type RevurderingStansBrevForhåndsvisningDTO = {
 
 export type RevurderingInnvilgelseBrevForhåndsvisningDTO = {
     fritekst: Nullable<string>;
-    virkningsperiode: Periode;
+    vedtaksperiode: Periode;
     resultat: RevurderingResultat.INNVILGELSE;
     barnetillegg: Nullable<BarnetilleggPeriode[]>;
-    antallDagerPerMeldeperiodeForPerioder: Nullable<AntallDagerPerMeldeperiode[]>;
+    innvilgelsesperioder: Nullable<Innvilgelsesperiode[]>;
 };
 
 export type BrevForhåndsvisningDTO =

@@ -1,5 +1,3 @@
-import { Periode } from './Periode';
-
 enum Kilde {
     KOMET = 'Komet',
     ARENA = 'Arena',
@@ -22,9 +20,4 @@ export type Tiltaksdeltagelse = {
 export type TiltaksdeltagelseMedPeriode = Tiltaksdeltagelse & {
     deltagelseFraOgMed: string;
     deltagelseTilOgMed: string;
-};
-
-export type TiltaksdeltakelsePeriode = {
-    eksternDeltagelseId: string;
-    periode: Periode;
 };

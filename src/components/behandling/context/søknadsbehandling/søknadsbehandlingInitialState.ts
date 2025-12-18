@@ -34,11 +34,11 @@ export const søknadsbehandlingInitialState = (
 const innvilgelseInitialState = (
     behandling: Søknadsbehandling,
 ): SøknadsbehandlingInnvilgelseState => {
-    const { resultat, virkningsperiode } = behandling;
+    const { resultat, vedtaksperiode } = behandling;
 
     // Hvis den lagrede behandling ikke er en innvilgelse (dvs saksbehandler har endret resultat),
     // så returnerer vi en blank innvilgelse uten perioder. Saksbehandler må velge innvilgelsesperioden
-    if (!virkningsperiode || resultat !== SøknadsbehandlingResultat.INNVILGELSE) {
+    if (!vedtaksperiode || resultat !== SøknadsbehandlingResultat.INNVILGELSE) {
         return {
             resultat: SøknadsbehandlingResultat.INNVILGELSE,
             innvilgelse: {
@@ -63,7 +63,7 @@ const innvilgelseInitialState = (
             harValgtPeriode: true,
             innvilgelsesperioder: [
                 {
-                    periode: virkningsperiode,
+                    periode: vedtaksperiode,
                     antallDagerPerMeldeperiode: ANTALL_DAGER_DEFAULT,
                     tiltaksdeltakelseId: 'lol',
                 },

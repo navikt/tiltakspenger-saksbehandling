@@ -75,6 +75,10 @@ export const periodiseringerErLike = <T>(
     );
 };
 
+export const periodiseringTotalPeriode = (periodisering: MedPeriode[]): Periode => {
+    return joinPerioder(periodisering.map((it) => it.periode));
+};
+
 // Returnerer elementer med perioder som overlapper den angitte perioden, krympet til den angitte perioden
 // Returnerer tomt array hvis ingen elementer har perioder som overlapper med den angitte
 export const krympPeriodisering = <T>(

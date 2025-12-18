@@ -8,6 +8,6 @@ export type Innvilgelsesperiode = {
 
 export type InnvilgelsesperiodePartial = {
     periode: Partial<Periode>;
-    antallDagerPerMeldeperiode: number;
-    tiltaksdeltakelseId: string;
+    antallDagerPerMeldeperiode?: number;
+    tiltaksdeltakelseId?: string;
 };
