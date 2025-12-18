@@ -26,7 +26,7 @@ import {
     RevurderingOmgjøringContext,
     useRevurderingOmgjøringSkjema,
 } from '~/components/behandling/context/revurdering/revurderingOmgjøringSkjemaContext';
-import { InnvilgelsesperiodeVelger } from '~/components/behandling/felles/innvilgelsesperiode/InnvilgelsesperiodeVelger';
+import { InnvilgelsesperioderVelger } from '~/components/behandling/felles/innvilgelsesperiode/InnvilgelsesperioderVelger';
 import { Nullable } from '~/types/UtilTypes';
 import { BehandlingBarnetillegg } from '~/components/behandling/felles/barnetillegg/BehandlingBarnetillegg';
 import { BegrunnelseVilkårsvurdering } from '~/components/behandling/felles/begrunnelse-vilkårsvurdering/BegrunnelseVilkårsvurdering';
@@ -71,7 +71,9 @@ export const RevurderingOmgjøringVedtak = () => {
                                 <OppsummeringsPar
                                     label="Innvilgelsesperiode"
                                     verdi={periodeTilFormatertDatotekst(
-                                        periodiseringTotalPeriode(vedtakSomBlirOmgjort.innvilgelsesperioder!),
+                                        periodiseringTotalPeriode(
+                                            vedtakSomBlirOmgjort.innvilgelsesperioder!,
+                                        ),
                                     )}
                                     variant="inlineColon"
                                 />
@@ -131,7 +133,7 @@ const Innvilgelse = ({ skjema, behandling, sak }: InnvilgelseProps) => {
 
     return (
         <>
-            <InnvilgelsesperiodeVelger />
+            <InnvilgelsesperioderVelger />
             <Separator />
             <BegrunnelseVilkårsvurdering />
             <Separator />

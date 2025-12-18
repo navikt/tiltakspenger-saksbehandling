@@ -1,16 +1,14 @@
 import { classNames } from '~/utils/classNames';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { Alert, Heading } from '@navikt/ds-react';
-import { useBehandlingInnvilgelseMedPerioderSkjema } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 
 import style from './BehandlingDagerPerMeldeperiode.module.css';
 
 export const BehandlingDagerPerMeldeperiode = () => {
-
-    const antallDagerSettesIkkeAutomatiskIBrev = true
-        // antallDagerPerMeldeperiode.length !== 1 ||
-        // antallDagerPerMeldeperiode[0].antallDagerPerMeldeperiode > 10 ||
-        // erOddetall(antallDagerPerMeldeperiode[0].antallDagerPerMeldeperiode);
+    const antallDagerSettesIkkeAutomatiskIBrev = true;
+    // antallDagerPerMeldeperiode.length !== 1 ||
+    // antallDagerPerMeldeperiode[0].antallDagerPerMeldeperiode > 10 ||
+    // erOddetall(antallDagerPerMeldeperiode[0].antallDagerPerMeldeperiode);
 
     return (
         <VedtakSeksjon>
@@ -31,7 +29,3 @@ export const BehandlingDagerPerMeldeperiode = () => {
 };
 
 export const ANTALL_DAGER_DEFAULT = 10;
-
-function erOddetall(antallDager: number) {
-    return Math.abs(antallDager % 2) === 1;
-}

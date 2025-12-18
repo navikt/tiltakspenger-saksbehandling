@@ -1,3 +1,5 @@
+import { Periode } from '~/types/Periode';
+
 enum Kilde {
     KOMET = 'Komet',
     ARENA = 'Arena',
@@ -20,4 +22,5 @@ export type Tiltaksdeltagelse = {
 export type TiltaksdeltagelseMedPeriode = Tiltaksdeltagelse & {
     deltagelseFraOgMed: string;
     deltagelseTilOgMed: string;
+    periode: Periode;
 };

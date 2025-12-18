@@ -4,8 +4,7 @@ import { hentHeleTiltaksdeltagelsesperioden } from '~/utils/behandling';
 import { Rammebehandling } from '~/types/Rammebehandling';
 import { InnvilgelseState } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 import { Søknad } from '~/types/Søknad';
-
-import { periodiseringTotalPeriode } from '~/utils/periode';
+import { periodiseringTotalPeriode, validerPeriodisering } from '~/utils/periode';
 
 export const validerInnvilgelse = (
     behandling: Rammebehandling,
@@ -14,7 +13,7 @@ export const validerInnvilgelse = (
 ): ValideringResultat => {
     if (!innvilgelse.harValgtPeriode) {
         return {
-            errors: ['Fullstendig innvilgelsesperiode må være valgt'],
+            errors: ['Minst en fullstendig innvilgelsesperiode må være valgt'],
             warnings: [],
         };
     }
@@ -24,15 +23,17 @@ export const validerInnvilgelse = (
         warnings: [],
     };
 
-    const {
-        innvilgelsesperioder,
-        barnetilleggPerioder,
-        harBarnetillegg,
-    } = innvilgelse;
+    const { innvilgelsesperioder, barnetilleggPerioder, harBarnetillegg } = innvilgelse;
+
+    if (!validerPeriodisering(innvilgelsesperioder, false)) {
+        validering.errors.push(
+            'Innvilgelsesperiodene må være sammenhengende uten hull eller overlapp',
+        );
+    }
 
     const tiltaksperiode = hentHeleTiltaksdeltagelsesperioden(behandling);
 
-    const innvilgelsesperiodeTotal = periodiseringTotalPeriode(innvilgelsesperioder)
+    const innvilgelsesperiodeTotal = periodiseringTotalPeriode(innvilgelsesperioder);
 
     if (innvilgelsesperiodeTotal.fraOgMed > innvilgelsesperiodeTotal.tilOgMed) {
         validering.errors.push('Til og med-dato må være etter fra og med-dato');

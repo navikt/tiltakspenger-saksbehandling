@@ -2,18 +2,20 @@ import { MedPeriode, Periode } from '~/types/Periode';
 import dayjs from 'dayjs';
 import { datoMax, datoMin } from '~/utils/date';
 
-export const validerPeriodisering = (perioder: Periode[], tillatHull: boolean) => {
-    return perioder.every((periode, index) => {
-        if (index === 0) {
-            return true;
-        }
+export const validerPeriodisering = (periodisering: MedPeriode[], tillatHull: boolean) => {
+    return periodisering
+        .map((it) => it.periode)
+        .every((periode, index, array) => {
+            if (index === 0) {
+                return true;
+            }
 
-        const forrigePeriode = perioder[index - 1];
+            const forrigePeriode = array[index - 1];
 
-        return tillatHull
-            ? dayjs(periode.fraOgMed).isAfter(forrigePeriode.tilOgMed)
-            : dayjs(periode.fraOgMed).subtract(1, 'day').isSame(forrigePeriode.tilOgMed);
-    });
+            return tillatHull
+                ? dayjs(periode.fraOgMed).isAfter(forrigePeriode.tilOgMed)
+                : dayjs(periode.fraOgMed).subtract(1, 'day').isSame(forrigePeriode.tilOgMed);
+        });
 };
 
 export const joinPerioder = (perioder: Periode[]): Periode => {

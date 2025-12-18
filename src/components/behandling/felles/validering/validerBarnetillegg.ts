@@ -78,7 +78,7 @@ export const validerBarnetillegg = (
     const perioderErUtenBarn = barnetilleggPerioder.every((bt) => bt.antallBarn === 0);
     const helePerioden = joinPerioder(perioder);
 
-    if (!validerPeriodisering(perioder, true)) {
+    if (!validerPeriodisering(barnetilleggPerioder, true)) {
         validering.errors.push('Periodene for barnetillegg kan ikke ha overlapp');
     }
 

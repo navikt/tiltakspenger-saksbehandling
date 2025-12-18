@@ -10,7 +10,7 @@ import { useBehandlingSkjema } from '~/components/behandling/context/BehandlingS
 import { SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
 import { BehandlingBarnetillegg } from '~/components/behandling/felles/barnetillegg/BehandlingBarnetillegg';
 import { useBehandlingInnvilgelseSkjema } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
-import { InnvilgelsesperiodeVelger } from '~/components/behandling/felles/innvilgelsesperiode/InnvilgelsesperiodeVelger';
+import { InnvilgelsesperioderVelger } from '~/components/behandling/felles/innvilgelsesperiode/InnvilgelsesperioderVelger';
 import { BegrunnelseVilkårsvurdering } from '~/components/behandling/felles/begrunnelse-vilkårsvurdering/BegrunnelseVilkårsvurdering';
 
 export const SøknadsbehandlingVedtak = () => {
@@ -45,7 +45,7 @@ const Innvilgelse = () => {
 
     return (
         <>
-            <InnvilgelsesperiodeVelger />
+            <InnvilgelsesperioderVelger />
             <Separator />
             <BegrunnelseVilkårsvurdering />
             <Separator />

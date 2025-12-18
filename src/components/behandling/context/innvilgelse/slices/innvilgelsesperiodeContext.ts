@@ -1,20 +1,13 @@
 import { Periode } from '~/types/Periode';
-import {
-    erFullstendigPeriode,
-    joinPerioder,
-    periodiseringerErLike,
-    utvidPeriodisering,
-} from '~/utils/periode';
+import { erFullstendigPeriode } from '~/utils/periode';
 import { InnvilgelseState } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 import { Reducer } from 'react';
 import { Rammebehandling } from '~/types/Rammebehandling';
 import { SakProps } from '~/types/Sak';
 import {
-    antallDagerPerMeldeperiodeForPeriode,
-    hentForhåndsutfyltInnvilgelse,
+    lagForhåndsutfyltInnvilgelse,
     oppdaterPeriodiseringUtenOverlapp,
 } from '~/components/behandling/context/behandlingSkjemaUtils';
-import { Innvilgelsesperiode, InnvilgelsesperiodePartial } from '~/types/Innvilgelsesperiode';
 
 export type InnvilgelsesperioderActions =
     | {
@@ -56,13 +49,6 @@ export type InnvilgelsesperioderActions =
           };
       };
 
-const erFullstendigUtfylt = (
-    innvilgelsesperiode: InnvilgelsesperiodePartial,
-): innvilgelsesperiode is Innvilgelsesperiode => {
-    const { periode, tiltaksdeltakelseId } = innvilgelsesperiode;
-    return erFullstendigPeriode(periode) && !!tiltaksdeltakelseId;
-};
-
 export const innvilgelsesperioderReducer: Reducer<InnvilgelseState, InnvilgelsesperioderActions> = (
     state,
     action,
@@ -74,7 +60,7 @@ export const innvilgelsesperioderReducer: Reducer<InnvilgelseState, Innvilgelses
     if (!harValgtPeriode) {
         if (type !== 'oppdaterInnvilgelsesperiode') {
             throw Error(
-                'Første innvilgelsesperiode må være fullstendig utfylt før andre deler handlinger kan utføres',
+                'Første innvilgelsesperiode må være fullstendig utfylt før andre handlinger kan utføres',
             );
         }
 
@@ -82,22 +68,20 @@ export const innvilgelsesperioderReducer: Reducer<InnvilgelseState, Innvilgelses
 
         const { periode, behandling, sak } = payload;
 
-        const nyInnvilgelsesperiode: InnvilgelsesperiodePartial = {
-            ...innvilgelsesperiode,
-            periode: { ...innvilgelsesperiode.periode, ...periode },
-        };
+        const nyPeriode = { ...innvilgelsesperiode.periode, ...periode };
 
-        if (erFullstendigUtfylt(nyInnvilgelsesperiode)) {
-            return hentForhåndsutfyltInnvilgelse(
-                behandling,
-                [nyInnvilgelsesperiode],
-                sak,
-            );
+        if (erFullstendigPeriode(nyPeriode)) {
+            return lagForhåndsutfyltInnvilgelse(behandling, nyPeriode, sak);
         }
 
         return {
             harValgtPeriode: false,
-            innvilgelsesperioder: [innvilgelsesperiode],
+            innvilgelsesperioder: [
+                {
+                    ...innvilgelsesperiode,
+                    periode: nyPeriode,
+                },
+            ],
         };
     }
 
@@ -193,6 +177,8 @@ export const innvilgelsesperioderReducer: Reducer<InnvilgelseState, Innvilgelses
             };
         }
     }
+
+    throw new Error(`Ugyldig action: ${type satisfies never}`);
 };
 
 // Barnetillegg fyller ikke nødvendigvis hele innvilgelsesperioden, men vi forsøker å tilpasse for ny periode

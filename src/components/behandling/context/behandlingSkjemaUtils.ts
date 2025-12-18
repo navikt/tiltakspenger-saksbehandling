@@ -18,6 +18,7 @@ import { ANTALL_DAGER_DEFAULT } from '~/components/behandling/felles/dager-per-m
 import { SakProps } from '~/types/Sak';
 import { Innvilgelsesperiode } from '~/types/Innvilgelsesperiode';
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';
+import { hentBarnetilleggForBehandling } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
 
 export const erRammebehandlingInnvilgelseContext = (
     context: BehandlingSkjemaState,
@@ -87,17 +88,29 @@ export const oppdaterPeriodiseringUtenOverlapp = <T extends MedPeriode>(
 };
 
 // Forhåndsutfyller andre perioder for en innvilgelse ut fra valgt innvilgelsesperiode
-export const hentForhåndsutfyltInnvilgelse = (
+export const lagForhåndsutfyltInnvilgelse = (
     behandling: Rammebehandling,
-    innvilgelsesperioder: Innvilgelsesperiode[],
+    førsteInnvilgelsesperiode: Periode,
     sak: SakProps,
 ): InnvilgelseMedPerioderState => {
-    const barnetilleggPerioder: BarnetilleggPeriode[] = []
-    //     hentBarnetilleggForBehandling(
-    //     behandling,
-    //     innvilgelsesperiode,
-    //     sak,
-    // );
+    const tiltak = hentTiltaksdeltagelserFraPeriode(behandling, førsteInnvilgelsesperiode);
+
+    const innvilgelsesperioder: Innvilgelsesperiode[] = [
+        {
+            periode: førsteInnvilgelsesperiode,
+            antallDagerPerMeldeperiode: antallDagerPerMeldeperiodeForPeriode(
+                behandling,
+                førsteInnvilgelsesperiode,
+            ),
+            tiltaksdeltakelseId: tiltak.at(0)!.eksternDeltagelseId,
+        },
+    ];
+
+    const barnetilleggPerioder: BarnetilleggPeriode[] = hentBarnetilleggForBehandling(
+        behandling,
+        innvilgelsesperioder,
+        sak,
+    );
 
     return {
         harValgtPeriode: true,
