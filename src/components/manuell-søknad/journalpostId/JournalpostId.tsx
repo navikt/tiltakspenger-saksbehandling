@@ -75,7 +75,7 @@ export const JournalpostId = () => {
         }
         if (data) {
             // Skal bare advare saksbehandler om mismatch, ikke hindre innsending
-            if (data.journalpostFinnes) {
+            if (data.journalpostFinnes && data.gjelderInnsendtFnr) {
                 return (
                     <Alert variant="success" inline aria-live="polite">
                         Journalpost finnes og søker står som avsender.
