@@ -54,8 +54,12 @@ export const BehandlingTiltakOpplysninger = ({ tiltaksdeltakelser }: Props) => {
                             verdi={prosentTekst(gjennomforingsprosent) ?? 'Ukjent'}
                         />
                         <BehandlingSaksopplysning
-                            navn={'Gjennomførings-id'}
+                            navn={'Gjennomføring-id'}
                             verdi={gjennomføringId ?? 'Ukjent'}
+                        />
+                        <BehandlingSaksopplysning
+                            navn={'Deltakelse-id'}
+                            verdi={eksternDeltagelseId ?? 'Ukjent'}
                         />
                     </div>
                 );

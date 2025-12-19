@@ -16,9 +16,10 @@ import { TiltaksdeltakelseMedPeriode } from '~/types/TiltakDeltakelse';
 import { InnvilgelsesperiodeDatovelgere } from '~/components/behandling/felles/innvilgelsesperiode/datovelgere/InnvilgelsesperiodeDatoVelgere';
 import { Rammebehandling } from '~/types/Rammebehandling';
 import { SakProps } from '~/types/Sak';
-import { InnvilgelsesperioderAntallDagerVarsel } from '~/components/behandling/felles/innvilgelsesperiode/InnvilgelsesperioderAntallDagerVarsel';
+import { InnvilgelsesperioderVarsler } from '~/components/behandling/felles/innvilgelsesperiode/InnvilgelsesperioderVarsler';
 
 import style from './InnvilgelsesperioderVelger.module.css';
+import { periodeTilFormatertDatotekst } from '~/utils/date';
 
 export const InnvilgelsesperioderVelger = () => {
     const { sak } = useSak();
@@ -74,8 +75,9 @@ export const InnvilgelsesperioderVelger = () => {
                             </Button>
                         )}
 
-                        <InnvilgelsesperioderAntallDagerVarsel
+                        <InnvilgelsesperioderVarsler
                             innvilgelsesperioder={innvilgelsesperioder}
+                            behandling={behandling}
                         />
                     </VStack>
                 ) : (
@@ -113,7 +115,7 @@ const Valg = ({ innvilgelsesperioder, tiltaksdeltakelser, behandling, sak, index
     );
 
     return (
-        <HStack gap={'5'}>
+        <HStack gap={'3'}>
             <InnvilgelsesperiodeDatovelgere
                 periode={periode}
                 tiltaksdeltakelsesperiode={tiltaksdeltakelsesperiode}
@@ -160,13 +162,17 @@ const Valg = ({ innvilgelsesperioder, tiltaksdeltakelser, behandling, sak, index
                     })
                 }
             >
-                {!harValgtGyldigTiltak && <option disabled={true}>{tiltaksdeltakelseId}</option>}
+                {!harValgtGyldigTiltak && (
+                    <option
+                        disabled={true}
+                    >{`Ugyldig tiltak med id: ${tiltaksdeltakelseId}`}</option>
+                )}
                 {tiltaksdeltakelser.map((tiltak) => {
-                    const { eksternDeltagelseId, typeNavn } = tiltak;
+                    const { eksternDeltagelseId } = tiltak;
 
                     return (
                         <option value={eksternDeltagelseId} key={eksternDeltagelseId}>
-                            {typeNavn}
+                            {tiltakVisningsnavn(tiltak, tiltaksdeltakelser)}
                         </option>
                     );
                 })}
@@ -201,4 +207,22 @@ const Valg = ({ innvilgelsesperioder, tiltaksdeltakelser, behandling, sak, index
             )}
         </HStack>
     );
+};
+
+export const tiltakVisningsnavn = (
+    tiltaksdeltakelse: TiltaksdeltakelseMedPeriode,
+    tiltaksdeltakelser: TiltaksdeltakelseMedPeriode[],
+): string => {
+    const deltakelserMedType = tiltaksdeltakelser.filter(
+        (t) => t.typeKode === tiltaksdeltakelse.typeKode,
+    );
+
+    if (deltakelserMedType.length > 1) {
+        return `${tiltaksdeltakelse.typeNavn} (${periodeTilFormatertDatotekst({
+            fraOgMed: tiltaksdeltakelse.deltagelseFraOgMed,
+            tilOgMed: tiltaksdeltakelse.deltagelseTilOgMed,
+        })})`;
+    } else {
+        return tiltaksdeltakelse.typeNavn;
+    }
 };

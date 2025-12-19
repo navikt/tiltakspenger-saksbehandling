@@ -5,8 +5,9 @@ import {
 import { useSak } from '~/context/sak/SakContext';
 import { Periode } from '~/types/Periode';
 import { dateTilISOTekst, datoMin } from '~/utils/date';
-import { PeriodeVelger } from '~/components/periode/PeriodeVelger';
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
+import { Datovelger } from '~/components/datovelger/Datovelger';
+import React from 'react';
 
 type Props = {
     periode: Partial<Periode>;
@@ -28,15 +29,17 @@ export const InnvilgelsesperiodeDatovelgere = ({
     const defaultDato = datoMin(new Date(), tiltaksdeltakelsesperiode.tilOgMed);
 
     return (
-        <PeriodeVelger
-            fraOgMed={{
-                label: 'Fra og med',
-                defaultSelected: periode.fraOgMed,
-                minDate: tiltaksdeltakelsesperiode.fraOgMed,
-                maxDate: periode.tilOgMed ?? tiltaksdeltakelsesperiode.tilOgMed,
-                defaultMonth: defaultDato,
-                error: !periode.fraOgMed && 'Velg dato',
-                onDateChange: (valgtDato) => {
+        <>
+            <Datovelger
+                label={'Fra og med'}
+                defaultSelected={periode.fraOgMed}
+                minDate={tiltaksdeltakelsesperiode.fraOgMed}
+                maxDate={periode.tilOgMed ?? tiltaksdeltakelsesperiode.tilOgMed}
+                defaultMonth={defaultDato}
+                error={!periode.fraOgMed && 'Velg dato'}
+                readOnly={erReadonly}
+                size={'small'}
+                onDateChange={(valgtDato) => {
                     if (!valgtDato) {
                         return;
                     }
@@ -50,16 +53,19 @@ export const InnvilgelsesperiodeDatovelgere = ({
                             sak,
                         },
                     });
-                },
-            }}
-            tilOgMed={{
-                label: 'Til og med',
-                defaultSelected: periode.tilOgMed,
-                minDate: periode.fraOgMed ?? tiltaksdeltakelsesperiode.fraOgMed,
-                maxDate: tiltaksdeltakelsesperiode.tilOgMed,
-                defaultMonth: defaultDato,
-                error: !periode.tilOgMed && 'Velg dato',
-                onDateChange: (valgtDato) => {
+                }}
+            />
+
+            <Datovelger
+                label={'Til og med'}
+                defaultSelected={periode.tilOgMed}
+                minDate={periode.fraOgMed ?? tiltaksdeltakelsesperiode.fraOgMed}
+                maxDate={tiltaksdeltakelsesperiode.tilOgMed}
+                defaultMonth={defaultDato}
+                error={!periode.tilOgMed && 'Velg dato'}
+                readOnly={erReadonly}
+                size={'small'}
+                onDateChange={(valgtDato) => {
                     if (!valgtDato) {
                         return;
                     }
@@ -73,9 +79,8 @@ export const InnvilgelsesperiodeDatovelgere = ({
                             sak,
                         },
                     });
-                },
-            }}
-            readOnly={erReadonly}
-        />
+                }}
+            />
+        </>
     );
 };
