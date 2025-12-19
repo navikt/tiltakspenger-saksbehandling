@@ -1,89 +1,231 @@
 import { Periode } from '~/types/Periode';
 import {
     erFullstendigPeriode,
-    joinPerioder,
     periodiseringerErLike,
+    periodiseringTotalPeriode,
     utvidPeriodisering,
 } from '~/utils/periode';
 import { InnvilgelseState } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 import { Reducer } from 'react';
 import { Rammebehandling, Rammebehandlingstype } from '~/types/Rammebehandling';
 import { SakProps } from '~/types/Sak';
-import { hentForhåndsutfyltInnvilgelse } from '~/components/behandling/context/behandlingSkjemaUtils';
+import {
+    lagForhåndsutfyltInnvilgelse,
+    oppdaterPeriodiseringUtenOverlapp,
+} from '~/components/behandling/context/behandlingSkjemaUtils';
+import { Innvilgelsesperiode } from '~/types/Innvilgelsesperiode';
+import { BarnetilleggPeriode } from '~/types/Barnetillegg';
 import { hentVedtatteSøknadsbehandlinger } from '~/utils/sak';
 import { periodiserBarnetilleggFraSøknad } from '~/components/behandling/felles/barnetillegg/utils/periodiserBarnetilleggFraSøknad';
-import { Søknad } from '~/types/Søknad';
 import { datoMax, datoMin } from '~/utils/date';
-import { BarnetilleggPeriode } from '~/types/Barnetillegg';
 
-export type InnvilgelsesperiodeAction = {
-    type: 'oppdaterInnvilgelsesperiode';
-    payload: { periode: Partial<Periode>; behandling: Rammebehandling; sak: SakProps };
-};
+export type InnvilgelsesperioderActions =
+    | {
+          type: 'oppdaterInnvilgelsesperiode';
+          payload: {
+              periode: Partial<Periode>;
+              index: number;
+              behandling: Rammebehandling;
+              sak: SakProps;
+          };
+      }
+    | {
+          type: 'settAntallDager';
+          payload: {
+              antallDager: number;
+              index: number;
+          };
+      }
+    | {
+          type: 'settTiltaksdeltakelse';
+          payload: {
+              tiltaksdeltakelseId: string;
+              index: number;
+          };
+      }
+    | {
+          type: 'leggTilInnvilgelsesperiode';
+          payload: {
+              behandling: Rammebehandling;
+              sak: SakProps;
+          };
+      }
+    | {
+          type: 'fjernInnvilgelsesperiode';
+          payload: {
+              index: number;
+              behandling: Rammebehandling;
+              sak: SakProps;
+          };
+      };
 
-export const innvilgelsesperiodeReducer: Reducer<InnvilgelseState, InnvilgelsesperiodeAction> = (
+export const innvilgelsesperioderReducer: Reducer<InnvilgelseState, InnvilgelsesperioderActions> = (
     state,
     action,
 ) => {
+    const { type, payload } = action;
+
     const { harValgtPeriode } = state;
-    const { periode, behandling, sak } = action.payload;
 
     if (!harValgtPeriode) {
-        const nyInnvilgelsesperiode = { ...state.innvilgelsesperiode, ...periode };
+        if (type !== 'oppdaterInnvilgelsesperiode') {
+            throw Error(
+                'Første innvilgelsesperiode må være fullstendig utfylt før andre handlinger kan utføres',
+            );
+        }
 
-        if (erFullstendigPeriode(nyInnvilgelsesperiode)) {
-            return hentForhåndsutfyltInnvilgelse(behandling, nyInnvilgelsesperiode, sak);
+        const innvilgelsesperiode = state.innvilgelsesperioder.at(0)!;
+
+        const { periode, behandling, sak } = payload;
+
+        const nyPeriode = { ...innvilgelsesperiode.periode, ...periode };
+
+        if (erFullstendigPeriode(nyPeriode)) {
+            return lagForhåndsutfyltInnvilgelse(behandling, nyPeriode, sak);
         }
 
         return {
-            ...state,
-            innvilgelsesperiode: nyInnvilgelsesperiode,
+            harValgtPeriode: false,
+            innvilgelsesperioder: [
+                {
+                    ...innvilgelsesperiode,
+                    periode: nyPeriode,
+                },
+            ],
         };
     }
 
-    const nyInnvilgelsesperiode = { ...state.innvilgelsesperiode, ...periode };
+    switch (type) {
+        case 'oppdaterInnvilgelsesperiode': {
+            const { periode, index, behandling, sak } = payload;
 
-    const mestRelevanteSøknad =
-        behandling.type === Rammebehandlingstype.SØKNADSBEHANDLING
-            ? behandling.søknad
-            : hentVedtatteSøknadsbehandlinger(sak).at(0)!.søknad;
+            const innvilgelsesperiode = state.innvilgelsesperioder.at(index)!;
 
-    return {
-        ...state,
-        innvilgelsesperiode: nyInnvilgelsesperiode,
+            const nyInnvilgelsesperiode = {
+                ...innvilgelsesperiode,
+                periode: { ...innvilgelsesperiode.periode, ...periode },
+            };
 
-        // Valgte tiltaksdeltagelser må alltid fylle hele innvilgelsesperioden
-        valgteTiltaksdeltakelser: utvidPeriodisering(
-            state.valgteTiltaksdeltakelser,
-            nyInnvilgelsesperiode,
-        ),
+            const nyePerioder = oppdaterPeriodiseringUtenOverlapp(
+                state.innvilgelsesperioder,
+                nyInnvilgelsesperiode,
+                index,
+            );
 
-        // Antall dager per meldeperiode må alltid fylle hele innvilgelsesperioden
-        antallDagerPerMeldeperiode: utvidPeriodisering(
-            state.antallDagerPerMeldeperiode,
-            nyInnvilgelsesperiode,
-        ),
+            return {
+                ...state,
+                innvilgelsesperioder: nyePerioder,
+                barnetilleggPerioder: periodiserBarnetillegg(
+                    nyePerioder,
+                    state.innvilgelsesperioder,
+                    state.barnetilleggPerioder,
+                    behandling,
+                    sak,
+                ),
+            };
+        }
 
-        barnetilleggPerioder: periodiserBarnetillegg(
-            nyInnvilgelsesperiode,
-            state.innvilgelsesperiode,
-            state.barnetilleggPerioder,
-            mestRelevanteSøknad,
-        ),
-    };
+        case 'leggTilInnvilgelsesperiode': {
+            const sisteInnvilgelsesperiode = state.innvilgelsesperioder.at(-1);
+            if (!sisteInnvilgelsesperiode) {
+                throw Error('Skal alltid finnes minst en innvilgelsesperiode');
+            }
+
+            const { behandling, sak } = payload;
+
+            const sistePeriode = sisteInnvilgelsesperiode.periode;
+
+            const nyInnvilgelsesperiode = {
+                ...sisteInnvilgelsesperiode,
+                periode: { fraOgMed: sistePeriode.tilOgMed, tilOgMed: sistePeriode.tilOgMed },
+            };
+
+            const nyeInnvilgelsesperioder = oppdaterPeriodiseringUtenOverlapp(
+                state.innvilgelsesperioder,
+                nyInnvilgelsesperiode,
+                state.innvilgelsesperioder.length,
+            );
+
+            return {
+                ...state,
+                innvilgelsesperioder: nyeInnvilgelsesperioder,
+                barnetilleggPerioder: periodiserBarnetillegg(
+                    nyeInnvilgelsesperioder,
+                    state.innvilgelsesperioder,
+                    state.barnetilleggPerioder,
+                    behandling,
+                    sak,
+                ),
+            };
+        }
+
+        case 'fjernInnvilgelsesperiode': {
+            const { index, behandling, sak } = payload;
+
+            const nyeInnvilgelsesperioder = state.innvilgelsesperioder.toSpliced(index, 1);
+
+            return {
+                ...state,
+                innvilgelsesperioder: nyeInnvilgelsesperioder,
+                barnetilleggPerioder: periodiserBarnetillegg(
+                    nyeInnvilgelsesperioder,
+                    state.innvilgelsesperioder,
+                    state.barnetilleggPerioder,
+                    behandling,
+                    sak,
+                ),
+            };
+        }
+
+        case 'settAntallDager': {
+            const { index, antallDager } = payload;
+
+            const innvilgelsesperiode = state.innvilgelsesperioder.at(index)!;
+
+            return {
+                ...state,
+                innvilgelsesperioder: state.innvilgelsesperioder.with(index, {
+                    ...innvilgelsesperiode,
+                    antallDagerPerMeldeperiode: antallDager,
+                }),
+            };
+        }
+
+        case 'settTiltaksdeltakelse': {
+            const { index, tiltaksdeltakelseId } = payload;
+
+            const innvilgelsesperiode = state.innvilgelsesperioder.at(index)!;
+
+            return {
+                ...state,
+                innvilgelsesperioder: state.innvilgelsesperioder.with(index, {
+                    ...innvilgelsesperiode,
+                    tiltaksdeltakelseId: tiltaksdeltakelseId,
+                }),
+            };
+        }
+    }
+
+    throw new Error(`Ugyldig action: ${type satisfies never}`);
 };
 
 // Barnetillegg fyller ikke nødvendigvis hele innvilgelsesperioden, men vi forsøker å tilpasse for ny periode
 // Vi har ikke alltid nok informasjon om barn til å gjøre dette perfekt, så det blir en en best-effort :|
 const periodiserBarnetillegg = (
-    nyPeriode: Periode,
-    forrigePeriode: Periode,
+    nyeInnvilgelsesperioder: Innvilgelsesperiode[],
+    forrigeInnvilgelsesperioder: Innvilgelsesperiode[],
     forrigeBarnetillegg: BarnetilleggPeriode[],
-    søknad: Søknad,
+    behandling: Rammebehandling,
+    sak: SakProps,
 ) => {
+    const mestRelevanteSøknad =
+        behandling.type === Rammebehandlingstype.SØKNADSBEHANDLING
+            ? behandling.søknad
+            : hentVedtatteSøknadsbehandlinger(sak).at(0)!.søknad;
+
     const barnetilleggFraSøknadForForrigePeriode = periodiserBarnetilleggFraSøknad(
-        søknad.barnetillegg,
-        forrigePeriode,
+        mestRelevanteSøknad.barnetillegg,
+        forrigeInnvilgelsesperioder,
     );
 
     const harUendretPeriodisering = periodiseringerErLike(
@@ -96,19 +238,24 @@ const periodiserBarnetillegg = (
     // en ny periodisering fra søknaden med den nye perioden.
     // Samme dersom saksbehandler ikke hadde valgt noen barnetilleggsperioder
     if (harUendretPeriodisering || forrigeBarnetillegg.length === 0) {
-        return periodiserBarnetilleggFraSøknad(søknad.barnetillegg, nyPeriode);
+        return periodiserBarnetilleggFraSøknad(
+            mestRelevanteSøknad.barnetillegg,
+            nyeInnvilgelsesperioder,
+        );
     }
 
     const barnetilleggFraSøknad = periodiserBarnetilleggFraSøknad(
-        søknad.barnetillegg,
-        joinPerioder([nyPeriode, forrigePeriode]),
+        mestRelevanteSøknad.barnetillegg,
+        [...nyeInnvilgelsesperioder, ...forrigeInnvilgelsesperioder],
     );
+
+    const nyTotalperiode = periodiseringTotalPeriode(nyeInnvilgelsesperioder);
 
     // Dersom det ikke finnes noen barn i søknaden for ny eller forrige periode, må vi anta at alle evt barn
     // har blitt lagt til manuelt av saksbehandler
     // Vi utvider bare eksisterende barnetillegg til ny periode
     if (barnetilleggFraSøknad.length === 0) {
-        return utvidPeriodisering(forrigeBarnetillegg, nyPeriode);
+        return utvidPeriodisering(forrigeBarnetillegg, nyTotalperiode);
     }
 
     const forrigeFraOgMed = forrigeBarnetillegg.at(0)!.periode.fraOgMed;
@@ -124,11 +271,11 @@ const periodiserBarnetillegg = (
     return utvidPeriodisering(forrigeBarnetillegg, {
         fraOgMed:
             forrigeFraOgMed < fraOgMedFraSøknad
-                ? nyPeriode.fraOgMed
-                : datoMax(fraOgMedFraSøknad, nyPeriode.fraOgMed),
+                ? nyTotalperiode.fraOgMed
+                : datoMax(fraOgMedFraSøknad, nyTotalperiode.fraOgMed),
         tilOgMed:
             forrigeTilOgMed > tilOgMedFraSøknad
-                ? nyPeriode.tilOgMed
-                : datoMin(tilOgMedFraSøknad, nyPeriode.tilOgMed),
+                ? nyTotalperiode.tilOgMed
+                : datoMin(tilOgMedFraSøknad, nyTotalperiode.tilOgMed),
     });
 };

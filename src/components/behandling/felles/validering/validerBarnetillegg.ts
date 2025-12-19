@@ -3,18 +3,19 @@ import {
     joinPerioder,
     perioderErLike,
     periodiseringerErLike,
+    periodiseringTotalPeriode,
     validerPeriodisering,
 } from '~/utils/periode';
-import { Periode } from '~/types/Periode';
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';
 import { periodeTilFormatertDatotekst } from '~/utils/date';
 import { periodiserBarnetilleggFraSøknad } from '~/components/behandling/felles/barnetillegg/utils/periodiserBarnetilleggFraSøknad';
 import { Søknad } from '~/types/Søknad';
+import { Innvilgelsesperiode } from '~/types/Innvilgelsesperiode';
 
 export const validerBarnetillegg = (
     harBarnetillegg: boolean,
     barnetilleggPerioder: BarnetilleggPeriode[],
-    innvilgelsesperiode: Periode,
+    innvilgelsesperioder: Innvilgelsesperiode[],
     søknad: Søknad,
 ): ValideringResultat => {
     const validering: ValideringResultat = {
@@ -24,7 +25,7 @@ export const validerBarnetillegg = (
 
     const periodiseringFraSøknad = periodiserBarnetilleggFraSøknad(
         søknad.barnetillegg,
-        innvilgelsesperiode,
+        innvilgelsesperioder,
     );
 
     if (!harBarnetillegg) {
@@ -43,6 +44,8 @@ export const validerBarnetillegg = (
         return validering;
     }
 
+    const totalInnvilgelsesperiode = periodiseringTotalPeriode(innvilgelsesperioder);
+
     // Disse valideringene er ikke nødvendigvis presise, ettersom søknaden ikke alltid har
     // fullstendig informasjon om brukerens barn
     if (
@@ -57,9 +60,9 @@ export const validerBarnetillegg = (
         // Dersom søknaden ikke hadde barn, kan vi ikke vite noe om alder på evt barn som saksbehandler har lagt inn.
         // Vi viser en standard warning dersom barnetillegget saksbehandler har valgt ikke fyller hele innvilgelsesperioden
         if (søknad.barnetillegg.length === 0) {
-            if (!perioderErLike(innvilgelsesperiode, totalBarnetilleggPeriode)) {
+            if (!perioderErLike(totalInnvilgelsesperiode, totalBarnetilleggPeriode)) {
                 validering.warnings.push(
-                    `Den totale perioden for barnetillegg (${periodeTilFormatertDatotekst(totalBarnetilleggPeriode)}) fyller ikke hele innvilgelsesperioden (${periodeTilFormatertDatotekst(innvilgelsesperiode)})`,
+                    `Den totale perioden for barnetillegg (${periodeTilFormatertDatotekst(totalBarnetilleggPeriode)}) fyller ikke hele innvilgelsesperioden (${periodeTilFormatertDatotekst(totalInnvilgelsesperiode)})`,
                 );
             }
             validering.warnings.push(
@@ -75,7 +78,7 @@ export const validerBarnetillegg = (
     const perioderErUtenBarn = barnetilleggPerioder.every((bt) => bt.antallBarn === 0);
     const helePerioden = joinPerioder(perioder);
 
-    if (!validerPeriodisering(perioder, true)) {
+    if (!validerPeriodisering(barnetilleggPerioder, true)) {
         validering.errors.push('Periodene for barnetillegg kan ikke ha overlapp');
     }
 
@@ -83,11 +86,11 @@ export const validerBarnetillegg = (
         validering.errors.push('Minst en periode må ha barn når barnetillegg er valgt');
     }
 
-    if (helePerioden.fraOgMed < innvilgelsesperiode.fraOgMed) {
+    if (helePerioden.fraOgMed < totalInnvilgelsesperiode.fraOgMed) {
         validering.errors.push('Barnetillegg-perioden kan ikke starte før innvilgelsesperioden');
     }
 
-    if (helePerioden.tilOgMed > innvilgelsesperiode.tilOgMed) {
+    if (helePerioden.tilOgMed > totalInnvilgelsesperiode.tilOgMed) {
         validering.errors.push('Barnetillegg-perioden kan ikke slutte etter innvilgelsesperioden');
     }
 

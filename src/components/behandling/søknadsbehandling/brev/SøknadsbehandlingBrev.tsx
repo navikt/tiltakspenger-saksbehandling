@@ -10,6 +10,8 @@ import {
     useSøknadsbehandlingSkjema,
 } from '~/components/behandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
 
+import { periodiseringTotalPeriode } from '~/utils/periode';
+
 export const SøknadsbehandlingBrev = () => {
     const { behandling } = useSøknadsbehandling();
     const skjema = useSøknadsbehandlingSkjema();
@@ -38,7 +40,10 @@ const søknadsbehandlingSkjemaTilBrevForhåndsvisningDTO = (
 
     switch (resultat) {
         case SøknadsbehandlingResultat.AVSLAG: {
-            return { ...baseDTO, avslagsgrunner: skjema.avslagsgrunner };
+            return {
+                ...baseDTO,
+                avslagsgrunner: skjema.avslagsgrunner,
+            };
         }
 
         case SøknadsbehandlingResultat.INNVILGELSE: {
@@ -50,14 +55,14 @@ const søknadsbehandlingSkjemaTilBrevForhåndsvisningDTO = (
 
             return {
                 ...baseDTO,
-                virkningsperiode: innvilgelse.innvilgelsesperiode,
+                vedtaksperiode: periodiseringTotalPeriode(innvilgelse.innvilgelsesperioder),
+                innvilgelsesperioder: innvilgelse.innvilgelsesperioder,
                 barnetillegg: innvilgelse.barnetilleggPerioder,
-                antallDagerPerMeldeperiodeForPerioder: innvilgelse.antallDagerPerMeldeperiode,
             };
         }
 
         case SøknadsbehandlingResultat.IKKE_VALGT: {
-            throw Error('Kan ikke forhåndsvise uten valgt resuøtat');
+            throw Error('Kan ikke forhåndsvise uten valgt resultat');
         }
     }
 };

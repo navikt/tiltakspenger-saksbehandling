@@ -26,13 +26,13 @@ import {
     RevurderingOmgjøringContext,
     useRevurderingOmgjøringSkjema,
 } from '~/components/behandling/context/revurdering/revurderingOmgjøringSkjemaContext';
-import { InnvilgelsesperiodeVelger } from '~/components/behandling/felles/innvilgelsesperiode/InnvilgelsesperiodeVelger';
+import { InnvilgelsesperioderVelger } from '~/components/behandling/felles/innvilgelsesperiode/InnvilgelsesperioderVelger';
 import { Nullable } from '~/types/UtilTypes';
-import { BehandlingDagerPerMeldeperiode } from '~/components/behandling/felles/dager-per-meldeperiode/BehandlingDagerPerMeldeperiode';
-import { BehandlingTiltak } from '~/components/behandling/felles/tiltak/BehandlingTiltak';
 import { BehandlingBarnetillegg } from '~/components/behandling/felles/barnetillegg/BehandlingBarnetillegg';
 import { BegrunnelseVilkårsvurdering } from '~/components/behandling/felles/begrunnelse-vilkårsvurdering/BegrunnelseVilkårsvurdering';
 import { SakProps } from '~/types/Sak';
+
+import { periodiseringTotalPeriode } from '~/utils/periode';
 
 export const RevurderingOmgjøringVedtak = () => {
     const { behandling } = useRevurderingOmgjøring();
@@ -71,7 +71,9 @@ export const RevurderingOmgjøringVedtak = () => {
                                 <OppsummeringsPar
                                     label="Innvilgelsesperiode"
                                     verdi={periodeTilFormatertDatotekst(
-                                        vedtakSomBlirOmgjort.innvilgelsesperiode!,
+                                        periodiseringTotalPeriode(
+                                            vedtakSomBlirOmgjort.innvilgelsesperioder!,
+                                        ),
                                     )}
                                     variant="inlineColon"
                                 />
@@ -98,7 +100,7 @@ export const RevurderingOmgjøringVedtak = () => {
             {behandling.status === Rammebehandlingsstatus.VEDTATT && (
                 <OppsummeringsPar
                     label={'Omgjøringsperiode'}
-                    verdi={periodeTilFormatertDatotekst(behandling.virkningsperiode!)}
+                    verdi={periodeTilFormatertDatotekst(behandling.vedtaksperiode!)}
                     variant="inlineColon"
                 />
             )}
@@ -131,15 +133,12 @@ const Innvilgelse = ({ skjema, behandling, sak }: InnvilgelseProps) => {
 
     return (
         <>
-            <InnvilgelsesperiodeVelger />
+            <InnvilgelsesperioderVelger />
             <Separator />
             <BegrunnelseVilkårsvurdering />
             <Separator />
             {skjema.innvilgelse.harValgtPeriode && (
                 <>
-                    <BehandlingDagerPerMeldeperiode />
-                    <Separator />
-                    <BehandlingTiltak />
                     <BehandlingBarnetillegg />
                     <Separator />
                     <RevurderingInnvilgelseBrev />
@@ -165,8 +164,7 @@ const tilDTO = (
         resultat: RevurderingResultat.OMGJØRING,
         begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
         fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
-        innvilgelsesperiode: innvilgelse.innvilgelsesperiode,
-        valgteTiltaksdeltakelser: innvilgelse.valgteTiltaksdeltakelser,
+        innvilgelsesperioder: innvilgelse.innvilgelsesperioder,
         barnetillegg: innvilgelse.harBarnetillegg
             ? {
                   begrunnelse: skjema.textAreas.barnetilleggBegrunnelse.getValue(),
@@ -176,6 +174,5 @@ const tilDTO = (
                   begrunnelse: null,
                   perioder: [],
               },
-        antallDagerPerMeldeperiodeForPerioder: innvilgelse.antallDagerPerMeldeperiode,
     };
 };

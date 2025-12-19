@@ -6,7 +6,6 @@ import {
     SøknadsbehandlingInnvilgelseState,
     SøknadsbehandlingState,
 } from '~/components/behandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
-import { antallDagerPerMeldeperiodeForPeriode } from '~/components/behandling/context/behandlingSkjemaUtils';
 
 export const søknadsbehandlingInitialState = (
     behandling: Søknadsbehandling,
@@ -34,42 +33,33 @@ export const søknadsbehandlingInitialState = (
 const innvilgelseInitialState = (
     behandling: Søknadsbehandling,
 ): SøknadsbehandlingInnvilgelseState => {
-    const { resultat, virkningsperiode } = behandling;
+    const { resultat, vedtaksperiode } = behandling;
 
     // Hvis den lagrede behandling ikke er en innvilgelse (dvs saksbehandler har endret resultat),
     // så returnerer vi en blank innvilgelse uten perioder. Saksbehandler må velge innvilgelsesperioden
-    if (!virkningsperiode || resultat !== SøknadsbehandlingResultat.INNVILGELSE) {
+    if (!vedtaksperiode || resultat !== SøknadsbehandlingResultat.INNVILGELSE) {
         return {
             resultat: SøknadsbehandlingResultat.INNVILGELSE,
             innvilgelse: {
                 harValgtPeriode: false,
-                innvilgelsesperiode: {},
+                innvilgelsesperioder: [
+                    {
+                        periode: {},
+                    },
+                ],
             },
         };
     }
 
     const barnetilleggPerioder = hentLagredePerioderMedBarn(behandling) ?? [];
-    const harBarnetillegg = barnetilleggPerioder.length > 0;
 
     return {
         resultat: SøknadsbehandlingResultat.INNVILGELSE,
         innvilgelse: {
             harValgtPeriode: true,
-            innvilgelsesperiode: virkningsperiode,
-            harBarnetillegg,
+            innvilgelsesperioder: behandling.innvilgelsesperioder,
+            harBarnetillegg: barnetilleggPerioder.length > 0,
             barnetilleggPerioder,
-            valgteTiltaksdeltakelser: behandling.valgteTiltaksdeltakelser,
-            antallDagerPerMeldeperiode: behandling.antallDagerPerMeldeperiode
-                ? behandling.antallDagerPerMeldeperiode
-                : [
-                      {
-                          antallDagerPerMeldeperiode: antallDagerPerMeldeperiodeForPeriode(
-                              behandling,
-                              virkningsperiode,
-                          ),
-                          periode: virkningsperiode,
-                      },
-                  ],
         },
     };
 };

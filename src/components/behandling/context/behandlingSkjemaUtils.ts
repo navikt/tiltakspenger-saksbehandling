@@ -14,10 +14,12 @@ import { inneholderHelePerioden } from '~/utils/periode';
 import { datoMax, datoMin, forrigeDag, nesteDag } from '~/utils/date';
 import { MedPeriode, Periode } from '~/types/Periode';
 import { Rammebehandling } from '~/types/Rammebehandling';
-import { ANTALL_DAGER_DEFAULT } from '~/components/behandling/felles/dager-per-meldeperiode/BehandlingDagerPerMeldeperiode';
-import { hentBarnetilleggForBehandling } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
-import { TiltaksdeltakelsePeriode } from '~/types/TiltakDeltagelseTypes';
 import { SakProps } from '~/types/Sak';
+import { Innvilgelsesperiode } from '~/types/Innvilgelsesperiode';
+import { BarnetilleggPeriode } from '~/types/Barnetillegg';
+import { hentBarnetilleggForBehandling } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
+
+export const ANTALL_DAGER_DEFAULT = 10;
 
 export const erRammebehandlingInnvilgelseContext = (
     context: BehandlingSkjemaState,
@@ -87,53 +89,36 @@ export const oppdaterPeriodiseringUtenOverlapp = <T extends MedPeriode>(
 };
 
 // Forhåndsutfyller andre perioder for en innvilgelse ut fra valgt innvilgelsesperiode
-export const hentForhåndsutfyltInnvilgelse = (
+export const lagForhåndsutfyltInnvilgelse = (
     behandling: Rammebehandling,
-    innvilgelsesperiode: Periode,
+    førsteInnvilgelsesperiode: Periode,
     sak: SakProps,
 ): InnvilgelseMedPerioderState => {
-    const barnetilleggPerioder = hentBarnetilleggForBehandling(
+    const tiltak = hentTiltaksdeltagelserFraPeriode(behandling, førsteInnvilgelsesperiode);
+
+    const innvilgelsesperioder: Innvilgelsesperiode[] = [
+        {
+            periode: førsteInnvilgelsesperiode,
+            antallDagerPerMeldeperiode: antallDagerPerMeldeperiodeForPeriode(
+                behandling,
+                førsteInnvilgelsesperiode,
+            ),
+            tiltaksdeltakelseId: tiltak.at(0)!.eksternDeltagelseId,
+        },
+    ];
+
+    const barnetilleggPerioder: BarnetilleggPeriode[] = hentBarnetilleggForBehandling(
         behandling,
-        innvilgelsesperiode,
+        innvilgelsesperioder,
         sak,
     );
 
     return {
         harValgtPeriode: true,
-        innvilgelsesperiode,
+        innvilgelsesperioder,
         harBarnetillegg: barnetilleggPerioder.length > 0,
         barnetilleggPerioder,
-        valgteTiltaksdeltakelser: tiltaksdeltagelserFraSaksopplysningerForPeriode(
-            behandling,
-            innvilgelsesperiode,
-        ),
-        antallDagerPerMeldeperiode: [
-            {
-                antallDagerPerMeldeperiode: antallDagerPerMeldeperiodeForPeriode(
-                    behandling,
-                    innvilgelsesperiode,
-                ),
-                periode: innvilgelsesperiode,
-            },
-        ],
     };
-};
-
-export const tiltaksdeltagelserFraSaksopplysningerForPeriode = (
-    behandling: Rammebehandling,
-    periode: Periode,
-): TiltaksdeltakelsePeriode[] => {
-    return hentTiltaksdeltagelserFraPeriode(behandling, periode).map((td) => {
-        const { deltagelseFraOgMed, deltagelseTilOgMed, eksternDeltagelseId } = td;
-
-        return {
-            eksternDeltagelseId,
-            periode: {
-                fraOgMed: datoMax(deltagelseFraOgMed, periode.fraOgMed),
-                tilOgMed: datoMin(deltagelseTilOgMed, periode.tilOgMed),
-            },
-        };
-    }, []);
 };
 
 // Henter det høyeste antall dager for en tiltaksdeltagelse fra saksopplysninger, eller default

@@ -1,14 +1,18 @@
 import { describe, expect, test } from '@jest/globals';
-
-import { Periode } from '~/types/Periode';
 import { periodiserBarnetilleggFraSøknad } from './periodiserBarnetilleggFraSøknad';
 import { finn16årsdag, forrigeDag } from '~/utils/date';
 import { SøknadBarn, SøknadBarnKilde } from '~/types/Søknad';
 
-const virkningsperiode: Periode = {
+const vedtaksperiode = {
     fraOgMed: '2024-07-01',
     tilOgMed: '2025-06-30',
 };
+
+const innvilgelsesperioder = [
+    {
+        periode: vedtaksperiode,
+    },
+];
 
 const barnSomBlir16FørPerioden: SøknadBarn = {
     fødselsdato: '2008-06-30',
@@ -126,15 +130,15 @@ describe('Periodiserer barnetillegg fra søknaden', () => {
                 barnSomErUnder16HelePerioden,
                 barnSomErUnder16HelePerioden,
             ],
-            virkningsperiode,
+            innvilgelsesperioder,
         );
 
         expect(barnetillegg).toEqual([
             {
                 antallBarn: 3,
                 periode: {
-                    fraOgMed: virkningsperiode.fraOgMed,
-                    tilOgMed: virkningsperiode.tilOgMed,
+                    fraOgMed: vedtaksperiode.fraOgMed,
+                    tilOgMed: vedtaksperiode.tilOgMed,
                 },
             },
         ]);
@@ -147,14 +151,14 @@ describe('Periodiserer barnetillegg fra søknaden', () => {
                 barnSomErUnder16HelePerioden,
                 barnSomBlirFødtMidtIPerioden,
             ],
-            virkningsperiode,
+            innvilgelsesperioder,
         );
 
         expect(barnetillegg).toEqual([
             {
                 antallBarn: 2,
                 periode: {
-                    fraOgMed: virkningsperiode.fraOgMed,
+                    fraOgMed: vedtaksperiode.fraOgMed,
                     tilOgMed: forrigeDag(barnSomBlirFødtMidtIPerioden.fødselsdato),
                 },
             },
@@ -162,7 +166,7 @@ describe('Periodiserer barnetillegg fra søknaden', () => {
                 antallBarn: 3,
                 periode: {
                     fraOgMed: barnSomBlirFødtMidtIPerioden.fødselsdato,
-                    tilOgMed: virkningsperiode.tilOgMed,
+                    tilOgMed: vedtaksperiode.tilOgMed,
                 },
             },
         ]);
@@ -171,7 +175,7 @@ describe('Periodiserer barnetillegg fra søknaden', () => {
     test('1 fødsel i løpet av perioden', () => {
         const barnetillegg = periodiserBarnetilleggFraSøknad(
             [barnSomBlirFødtMidtIPerioden],
-            virkningsperiode,
+            innvilgelsesperioder,
         );
 
         expect(barnetillegg).toEqual([
@@ -179,7 +183,7 @@ describe('Periodiserer barnetillegg fra søknaden', () => {
                 antallBarn: 1,
                 periode: {
                     fraOgMed: barnSomBlirFødtMidtIPerioden.fødselsdato,
-                    tilOgMed: virkningsperiode.tilOgMed,
+                    tilOgMed: vedtaksperiode.tilOgMed,
                 },
             },
         ]);
@@ -188,14 +192,14 @@ describe('Periodiserer barnetillegg fra søknaden', () => {
     test('1 barn som blir 16 i løpet av perioden', () => {
         const barnetillegg = periodiserBarnetilleggFraSøknad(
             [barnSomBlir16SentIPerioden],
-            virkningsperiode,
+            innvilgelsesperioder,
         );
 
         expect(barnetillegg).toEqual([
             {
                 antallBarn: 1,
                 periode: {
-                    fraOgMed: virkningsperiode.fraOgMed,
+                    fraOgMed: vedtaksperiode.fraOgMed,
                     tilOgMed: forrigeDag(finn16årsdag(barnSomBlir16SentIPerioden.fødselsdato)),
                 },
             },
@@ -210,14 +214,14 @@ describe('Periodiserer barnetillegg fra søknaden', () => {
                 barnSomBlirFødtTidligIPerioden,
                 barnSomBlir16SentIPerioden,
             ],
-            virkningsperiode,
+            innvilgelsesperioder,
         );
 
         expect(barnetillegg).toEqual([
             {
                 antallBarn: 3,
                 periode: {
-                    fraOgMed: virkningsperiode.fraOgMed,
+                    fraOgMed: vedtaksperiode.fraOgMed,
                     tilOgMed: forrigeDag(barnSomBlirFødtTidligIPerioden.fødselsdato),
                 },
             },
@@ -232,7 +236,7 @@ describe('Periodiserer barnetillegg fra søknaden', () => {
                 antallBarn: 3,
                 periode: {
                     fraOgMed: finn16årsdag(barnSomBlir16SentIPerioden.fødselsdato),
-                    tilOgMed: virkningsperiode.tilOgMed,
+                    tilOgMed: vedtaksperiode.tilOgMed,
                 },
             },
         ]);
@@ -241,14 +245,14 @@ describe('Periodiserer barnetillegg fra søknaden', () => {
     test('1 barn blir 16 år, og 1 blir senere født', () => {
         const barnetillegg = periodiserBarnetilleggFraSøknad(
             [barnSomBlir16TidligIPerioden, barnSomBlirFødtSentIPerioden],
-            virkningsperiode,
+            innvilgelsesperioder,
         );
 
         expect(barnetillegg).toEqual([
             {
                 antallBarn: 1,
                 periode: {
-                    fraOgMed: virkningsperiode.fraOgMed,
+                    fraOgMed: vedtaksperiode.fraOgMed,
                     tilOgMed: forrigeDag(finn16årsdag(barnSomBlir16TidligIPerioden.fødselsdato)),
                 },
             },
@@ -256,7 +260,7 @@ describe('Periodiserer barnetillegg fra søknaden', () => {
                 antallBarn: 1,
                 periode: {
                     fraOgMed: barnSomBlirFødtSentIPerioden.fødselsdato,
-                    tilOgMed: virkningsperiode.tilOgMed,
+                    tilOgMed: vedtaksperiode.tilOgMed,
                 },
             },
         ]);
@@ -271,14 +275,14 @@ describe('Periodiserer barnetillegg fra søknaden', () => {
                 barnSomBlir16MidtIPerioden,
                 barnSomBlirFødtSentIPerioden,
             ],
-            virkningsperiode,
+            innvilgelsesperioder,
         );
 
         expect(barnetillegg).toEqual([
             {
                 antallBarn: 2,
                 periode: {
-                    fraOgMed: virkningsperiode.fraOgMed,
+                    fraOgMed: vedtaksperiode.fraOgMed,
                     tilOgMed: forrigeDag(finn16årsdag(barnSomBlir16MidtIPerioden.fødselsdato)),
                 },
             },
@@ -293,7 +297,7 @@ describe('Periodiserer barnetillegg fra søknaden', () => {
                 antallBarn: 2,
                 periode: {
                     fraOgMed: barnSomBlirFødtSentIPerioden.fødselsdato,
-                    tilOgMed: virkningsperiode.tilOgMed,
+                    tilOgMed: vedtaksperiode.tilOgMed,
                 },
             },
         ]);
@@ -302,15 +306,15 @@ describe('Periodiserer barnetillegg fra søknaden', () => {
     test('1 barn i EØS hele periode, 1 barn utenfor EØS', () => {
         const barnetillegg = periodiserBarnetilleggFraSøknad(
             [barnSomErUnder16HelePerioden, barnSomIkkeOppholderSegIEØS],
-            virkningsperiode,
+            innvilgelsesperioder,
         );
 
         expect(barnetillegg).toEqual([
             {
                 antallBarn: 1,
                 periode: {
-                    fraOgMed: virkningsperiode.fraOgMed,
-                    tilOgMed: virkningsperiode.tilOgMed,
+                    fraOgMed: vedtaksperiode.fraOgMed,
+                    tilOgMed: vedtaksperiode.tilOgMed,
                 },
             },
         ]);

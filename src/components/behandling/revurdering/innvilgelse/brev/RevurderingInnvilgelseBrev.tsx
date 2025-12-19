@@ -14,6 +14,8 @@ import { RevurderingInnvilgelseContext } from '~/components/behandling/context/r
 import { RevurderingOmgjøringContext } from '~/components/behandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import { useSak } from '~/context/sak/SakContext';
 
+import { periodiseringTotalPeriode } from '~/utils/periode';
+
 // TODO: split denne for innvilgelse og omgjøring
 export const RevurderingInnvilgelseBrev = () => {
     const { behandling } = useRevurderingBehandling();
@@ -52,9 +54,9 @@ const revurderingskjemaTilBrevForhåndsvisningDTO = (
     return {
         resultat: RevurderingResultat.INNVILGELSE,
         fritekst: textAreas.brevtekst.getValue(),
-        virkningsperiode: innvilgelse.innvilgelsesperiode,
+        vedtaksperiode: periodiseringTotalPeriode(innvilgelse.innvilgelsesperioder),
+        innvilgelsesperioder: innvilgelse.innvilgelsesperioder,
         barnetillegg: innvilgelse.harBarnetillegg ? innvilgelse.barnetilleggPerioder : null,
-        antallDagerPerMeldeperiodeForPerioder: innvilgelse.antallDagerPerMeldeperiode,
     };
 };
 

@@ -18,9 +18,9 @@ import {
 } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 import { useBehandlingSkjema } from '~/components/behandling/context/BehandlingSkjemaContext';
 import { erRammebehandlingInnvilgelseResultat } from '~/utils/behandling';
+import { formaterSøknadsspørsmålSvar } from '~/utils/tekstformateringUtils';
 
 import style from './SøknadOpplysningerBarn.module.css';
-import { formaterSøknadsspørsmålSvar } from '~/utils/tekstformateringUtils';
 
 type Props = {
     tiltaksperiode: Nullable<Periode>;
@@ -190,7 +190,7 @@ const Barn = ({ barn, tiltaksperiode, personopplysninger }: BarnProps) => {
 const PeriodiserBarnetilleggKnapp = ({ søknad }: { søknad: Søknad }) => {
     const { rolleForBehandling } = useBehandling();
 
-    const { innvilgelsesperiode, harValgtPeriode } = useBehandlingInnvilgelseSkjema().innvilgelse;
+    const { innvilgelsesperioder, harValgtPeriode } = useBehandlingInnvilgelseSkjema().innvilgelse;
     const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
 
     if (rolleForBehandling !== SaksbehandlerRolle.SAKSBEHANDLER) {
@@ -213,7 +213,7 @@ const PeriodiserBarnetilleggKnapp = ({ søknad }: { søknad: Søknad }) => {
                     payload: {
                         barnetilleggPerioder: periodiserBarnetilleggFraSøknad(
                             søknad.barnetillegg,
-                            innvilgelsesperiode,
+                            innvilgelsesperioder,
                         ),
                     },
                 });

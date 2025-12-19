@@ -1,14 +1,11 @@
-import { AntallDagerPerMeldeperiode } from './AntallDagerPerMeldeperiode';
 import { Barnetillegg } from './Barnetillegg';
 import {
     Rammebehandlingstype,
     OppdaterBehandlingRequestBase,
     RammebehandlingBase,
 } from './Rammebehandling';
-import { Periode } from './Periode';
 import { Søknad } from './Søknad';
-import { TiltaksdeltakelsePeriode } from './TiltakDeltagelseTypes';
-import { Nullable } from '~/types/UtilTypes';
+import { Innvilgelsesperiode } from '~/types/Innvilgelsesperiode';
 
 interface SøknadsbehandlingBase extends RammebehandlingBase {
     type: Rammebehandlingstype.SØKNADSBEHANDLING;
@@ -25,10 +22,8 @@ export interface SøknadsbehandlingIkkeValgt extends SøknadsbehandlingBase {
 
 export interface SøknadsbehandlingInnvilgelse extends SøknadsbehandlingBase {
     resultat: SøknadsbehandlingResultat.INNVILGELSE;
-    innvilgelsesperiode: Periode;
-    valgteTiltaksdeltakelser: TiltaksdeltakelsePeriode[];
-    barnetillegg: Nullable<Barnetillegg>;
-    antallDagerPerMeldeperiode: Nullable<AntallDagerPerMeldeperiode[]>;
+    innvilgelsesperioder: Innvilgelsesperiode[];
+    barnetillegg: Barnetillegg;
 }
 
 export interface SøknadsbehandlingAvslag extends SøknadsbehandlingBase {
@@ -49,9 +44,7 @@ export enum SøknadsbehandlingResultat {
 
 export interface SøknadsbehandlingVedtakInnvilgelseRequest extends OppdaterBehandlingRequestBase {
     resultat: SøknadsbehandlingResultat.INNVILGELSE;
-    innvilgelsesperiode: Periode;
-    valgteTiltaksdeltakelser: TiltaksdeltakelsePeriode[];
-    antallDagerPerMeldeperiodeForPerioder: AntallDagerPerMeldeperiode[];
+    innvilgelsesperioder: Innvilgelsesperiode[];
     barnetillegg: Barnetillegg;
 }
 

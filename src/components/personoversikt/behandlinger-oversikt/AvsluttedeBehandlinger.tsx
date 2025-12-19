@@ -40,7 +40,7 @@ const avbruttBehandlingToDataCellInfo = (
 
     return {
         id: behandling.id,
-        behandlingsperiode: behandling.virkningsperiode,
+        behandlingsperiode: behandling.vedtaksperiode,
         resultat: behandling.resultat,
         behandlingstype: behandling.type,
         tidspunktAvsluttet: tidspunktAvsluttet,

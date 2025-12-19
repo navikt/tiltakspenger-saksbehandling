@@ -30,7 +30,6 @@ export const OppsummeringAvSøknad = ({
 
     const { opprettet, søknadstype, tiltaksdeltakelseperiodeDetErSøktOm, antallVedlegg, svar } =
         søknad;
-    console.log(søknadstype);
 
     const { kvp, intro, institusjon, etterlønn, sykepenger } = svar;
 

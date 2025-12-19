@@ -13,13 +13,16 @@ import {
 } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 
 import style from './BehandlingBarnetillegg.module.css';
+import { periodiseringTotalPeriode } from '~/utils/periode';
 
 export const BehandlingBarnetillegg = () => {
     const { sak } = useSak();
     const { behandling } = useBehandling();
 
     const { innvilgelse, erReadonly } = useBehandlingInnvilgelseMedPerioderSkjema();
-    const { harBarnetillegg, innvilgelsesperiode } = innvilgelse;
+    const { harBarnetillegg, innvilgelsesperioder } = innvilgelse;
+
+    const innvilgelseTotalPeriode = periodiseringTotalPeriode(innvilgelsesperioder);
 
     const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
 
@@ -33,7 +36,7 @@ export const BehandlingBarnetillegg = () => {
                 </VedtakSeksjon.Venstre>
 
                 <VedtakSeksjon.FullBredde className={style.pølseSeksjon}>
-                    <BarnetilleggTidslinje innvilgelsesperiode={innvilgelsesperiode} />
+                    <BarnetilleggTidslinje vedtaksperiode={innvilgelseTotalPeriode} />
                 </VedtakSeksjon.FullBredde>
 
                 <VedtakSeksjon.Venstre>
@@ -54,7 +57,7 @@ export const BehandlingBarnetillegg = () => {
                         <Radio value={false}>{'Nei'}</Radio>
                     </RadioGroup>
                     {!harBarnetillegg &&
-                        harSøktBarnetillegg(innvilgelsesperiode, behandling, sak) && (
+                        harSøktBarnetillegg(innvilgelseTotalPeriode, behandling, sak) && (
                             <Alert className={style.infoboks} variant={'info'} size={'small'}>
                                 Husk å begrunne avslaget på barnetillegg i vedtaksbrevet.
                             </Alert>

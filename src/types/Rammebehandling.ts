@@ -37,7 +37,7 @@ export interface RammebehandlingBase {
     beslutter: Nullable<string>;
     saksopplysninger: Saksopplysninger;
     attesteringer: Attestering[];
-    virkningsperiode: Nullable<Periode>;
+    vedtaksperiode: Nullable<Periode>;
     fritekstTilVedtaksbrev: Nullable<string>;
     begrunnelseVilkårsvurdering: Nullable<string>;
     avbrutt: Nullable<Avbrutt>;

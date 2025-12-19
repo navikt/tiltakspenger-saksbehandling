@@ -11,6 +11,7 @@ import {
     useBehandlingInnvilgelseMedPerioderSkjema,
     useBehandlingInnvilgelseSkjemaDispatch,
 } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
+import { periodiseringTotalPeriode } from '~/utils/periode';
 
 import style from './BehandlingBarnetilleggPerioder.module.css';
 
@@ -21,7 +22,7 @@ export const BehandlingBarnetilleggPerioder = () => {
     const { behandling } = useBehandling();
 
     const { innvilgelse, erReadonly } = useBehandlingInnvilgelseMedPerioderSkjema();
-    const { barnetilleggPerioder, innvilgelsesperiode } = innvilgelse;
+    const { barnetilleggPerioder, innvilgelsesperioder } = innvilgelse;
 
     const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
 
@@ -31,6 +32,8 @@ export const BehandlingBarnetilleggPerioder = () => {
 
     const antallBarnForNyPeriode =
         barnetilleggPerioder.at(-1)?.antallBarn || antallBarnFraSøknad || 1;
+
+    const innvilgelseTotalPeriode = periodiseringTotalPeriode(innvilgelsesperioder)
 
     return (
         <VedtakSeksjon.Venstre className={style.wrapper}>
@@ -56,7 +59,7 @@ export const BehandlingBarnetilleggPerioder = () => {
                                         payload: {
                                             barnetilleggPerioder: periodiserBarnetilleggFraSøknad(
                                                 behandling.søknad.barnetillegg,
-                                                innvilgelsesperiode,
+                                                innvilgelsesperioder,
                                             ),
                                         },
                                     })
@@ -76,7 +79,7 @@ export const BehandlingBarnetilleggPerioder = () => {
                                             barnetilleggPerioder:
                                                 hentBarnetilleggForhåndsutfyltForRevurdering(
                                                     sak.tidslinje,
-                                                    innvilgelsesperiode,
+                                                    innvilgelsesperioder,
                                                 ),
                                         },
                                     });
@@ -119,8 +122,8 @@ export const BehandlingBarnetilleggPerioder = () => {
                         },
                     },
                     readOnly: erReadonly,
-                    minDate: innvilgelsesperiode.fraOgMed,
-                    maxDate: innvilgelsesperiode.tilOgMed,
+                    minDate: innvilgelseTotalPeriode.fraOgMed,
+                    maxDate: innvilgelseTotalPeriode.tilOgMed,
                 }}
                 contentConfig={{
                     content: (periode, index) => {

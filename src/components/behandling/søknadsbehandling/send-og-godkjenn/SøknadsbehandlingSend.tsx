@@ -42,17 +42,15 @@ const tilDTO = (
             }
 
             const {
-                innvilgelsesperiode,
+                innvilgelsesperioder,
                 harBarnetillegg,
                 barnetilleggPerioder,
-                valgteTiltaksdeltakelser,
-                antallDagerPerMeldeperiode,
             } = innvilgelse;
 
             return {
                 begrunnelseVilkårsvurdering: textAreas.begrunnelse.getValue(),
                 fritekstTilVedtaksbrev: textAreas.brevtekst.getValue(),
-                innvilgelsesperiode: innvilgelsesperiode,
+                innvilgelsesperioder,
                 barnetillegg: harBarnetillegg
                     ? {
                           begrunnelse: skjema.textAreas.barnetilleggBegrunnelse.getValue(),
@@ -62,8 +60,6 @@ const tilDTO = (
                           begrunnelse: null,
                           perioder: [],
                       },
-                valgteTiltaksdeltakelser: valgteTiltaksdeltakelser,
-                antallDagerPerMeldeperiodeForPerioder: antallDagerPerMeldeperiode,
                 resultat: SøknadsbehandlingResultat.INNVILGELSE,
             } satisfies SøknadsbehandlingVedtakInnvilgelseRequest;
         }

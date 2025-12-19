@@ -8,11 +8,9 @@ import { SøknadsbehandlingAutomatiskBehandling } from '~/components/behandling/
 import { BehandlingBeregningOgSimulering } from '~/components/behandling/felles/beregning-og-simulering/BehandlingBeregningOgSimulering';
 import { useBehandlingSkjema } from '~/components/behandling/context/BehandlingSkjemaContext';
 import { SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
-import { BehandlingDagerPerMeldeperiode } from '~/components/behandling/felles/dager-per-meldeperiode/BehandlingDagerPerMeldeperiode';
-import { BehandlingTiltak } from '~/components/behandling/felles/tiltak/BehandlingTiltak';
 import { BehandlingBarnetillegg } from '~/components/behandling/felles/barnetillegg/BehandlingBarnetillegg';
 import { useBehandlingInnvilgelseSkjema } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
-import { InnvilgelsesperiodeVelger } from '~/components/behandling/felles/innvilgelsesperiode/InnvilgelsesperiodeVelger';
+import { InnvilgelsesperioderVelger } from '~/components/behandling/felles/innvilgelsesperiode/InnvilgelsesperioderVelger';
 import { BegrunnelseVilkårsvurdering } from '~/components/behandling/felles/begrunnelse-vilkårsvurdering/BegrunnelseVilkårsvurdering';
 
 export const SøknadsbehandlingVedtak = () => {
@@ -47,15 +45,12 @@ const Innvilgelse = () => {
 
     return (
         <>
-            <InnvilgelsesperiodeVelger />
+            <InnvilgelsesperioderVelger />
             <Separator />
             <BegrunnelseVilkårsvurdering />
             <Separator />
             {harValgtPeriode && (
                 <>
-                    <BehandlingDagerPerMeldeperiode />
-                    <Separator />
-                    <BehandlingTiltak />
                     <BehandlingBarnetillegg />
                     <Separator />
                     <SøknadsbehandlingBrev />

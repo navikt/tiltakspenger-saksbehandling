@@ -85,23 +85,17 @@ export const søknadsbehandlingReducer: Reducer<SøknadsbehandlingState, Søknad
         }
 
         case 'oppdaterInnvilgelsesperiode':
-        case 'leggTilAntallDagerPeriode':
-        case 'fjernAntallDagerPeriode':
-        case 'oppdaterAntallDagerFraOgMed':
-        case 'oppdaterAntallDagerTilOgMed':
-        case 'settAntallDagerForPeriode':
+        case 'fjernInnvilgelsesperiode':
+        case 'leggTilInnvilgelsesperiode':
+        case 'settTiltaksdeltakelse':
+        case 'settAntallDager':
         case 'setHarSøktBarnetillegg':
         case 'addBarnetilleggPeriode':
         case 'fjernBarnetilleggPeriode':
         case 'oppdaterBarnetilleggAntall':
         case 'oppdaterBarnetilleggFraOgMed':
         case 'oppdaterBarnetilleggTilOgMed':
-        case 'settBarnetilleggPerioder':
-        case 'addTiltakPeriode':
-        case 'fjernTiltakPeriode':
-        case 'oppdaterTiltakId':
-        case 'oppdaterTiltaksdeltagelseFraOgMed':
-        case 'oppdaterTiltaksdeltagelseTilOgMed': {
+        case 'settBarnetilleggPerioder': {
             if (resultat !== SøknadsbehandlingResultat.INNVILGELSE) {
                 throw Error(`Behandlingen må være en innvilgelse for action type ${type}`);
             }

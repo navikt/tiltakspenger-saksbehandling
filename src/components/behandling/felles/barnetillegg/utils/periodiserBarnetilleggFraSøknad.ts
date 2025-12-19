@@ -1,6 +1,6 @@
 import { finn16årsdag, forrigeDag, nesteDag } from '~/utils/date';
-import { Periode } from '~/types/Periode';
-import { erDatoIPeriode } from '~/utils/periode';
+import { MedPeriode, Periode } from '~/types/Periode';
+import { erDatoIPeriode, periodiseringTotalPeriode } from '~/utils/periode';
 import { removeDuplicates } from '~/utils/array';
 import { kunPerioderMedBarn } from '~/components/behandling/felles/barnetillegg/utils/barnetilleggUtils';
 import { SøknadBarn } from '~/types/Søknad';
@@ -8,9 +8,12 @@ import { BarnetilleggPeriode } from '~/types/Barnetillegg';
 
 export const periodiserBarnetilleggFraSøknad = (
     barnFraSøknad: SøknadBarn[],
-    virkningsperiode: Periode,
+    innvilgelsesperioder: MedPeriode[],
 ): BarnetilleggPeriode[] => {
-    // Periodene med rett til barnetillegg for hvert barn, innenfor virkningsperioden
+    // TODO: denne må oppdateres når vi skal tillate innvilgelse med hull
+    const innvilgelsesperiode = periodiseringTotalPeriode(innvilgelsesperioder);
+
+    // Periodene med rett til barnetillegg for hvert barn, innenfor innvilgelsesperioden
     const perioderPerBarn = barnFraSøknad.reduce<Periode[]>((acc, barn) => {
         const { fødselsdato, oppholderSegIEØSSpm } = barn;
 
@@ -21,19 +24,19 @@ export const periodiserBarnetilleggFraSøknad = (
         const sisteDagFør16År = forrigeDag(finn16årsdag(fødselsdato));
 
         const kanFåBarnetillegg =
-            fødselsdato <= virkningsperiode.tilOgMed &&
-            sisteDagFør16År >= virkningsperiode.fraOgMed;
+            fødselsdato <= innvilgelsesperiode.tilOgMed &&
+            sisteDagFør16År >= innvilgelsesperiode.fraOgMed;
 
         if (kanFåBarnetillegg) {
             acc.push({
                 fraOgMed:
-                    fødselsdato > virkningsperiode.fraOgMed
+                    fødselsdato > innvilgelsesperiode.fraOgMed
                         ? fødselsdato
-                        : virkningsperiode.fraOgMed,
+                        : innvilgelsesperiode.fraOgMed,
                 tilOgMed:
-                    sisteDagFør16År < virkningsperiode.tilOgMed
+                    sisteDagFør16År < innvilgelsesperiode.tilOgMed
                         ? sisteDagFør16År
-                        : virkningsperiode.tilOgMed,
+                        : innvilgelsesperiode.tilOgMed,
             });
         }
 
@@ -43,7 +46,7 @@ export const periodiserBarnetilleggFraSøknad = (
     const avgrensningsdatoer = perioderPerBarn
         .flatMap((periode) => [
             periode.fraOgMed,
-            ...(periode.tilOgMed === virkningsperiode?.tilOgMed
+            ...(periode.tilOgMed === innvilgelsesperiode?.tilOgMed
                 ? []
                 : [nesteDag(periode.tilOgMed)]),
         ])
@@ -61,7 +64,7 @@ export const periodiserBarnetilleggFraSøknad = (
                 antallBarn,
                 periode: {
                     fraOgMed,
-                    tilOgMed: nesteDato ? forrigeDag(nesteDato) : virkningsperiode.tilOgMed,
+                    tilOgMed: nesteDato ? forrigeDag(nesteDato) : innvilgelsesperiode.tilOgMed,
                 },
             };
         })
