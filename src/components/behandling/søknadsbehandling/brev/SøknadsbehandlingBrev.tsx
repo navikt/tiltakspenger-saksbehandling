@@ -40,7 +40,10 @@ const søknadsbehandlingSkjemaTilBrevForhåndsvisningDTO = (
 
     switch (resultat) {
         case SøknadsbehandlingResultat.AVSLAG: {
-            return { ...baseDTO, avslagsgrunner: skjema.avslagsgrunner };
+            return {
+                ...baseDTO,
+                avslagsgrunner: skjema.avslagsgrunner,
+            };
         }
 
         case SøknadsbehandlingResultat.INNVILGELSE: {
@@ -53,12 +56,13 @@ const søknadsbehandlingSkjemaTilBrevForhåndsvisningDTO = (
             return {
                 ...baseDTO,
                 vedtaksperiode: periodiseringTotalPeriode(innvilgelse.innvilgelsesperioder),
+                innvilgelsesperioder: innvilgelse.innvilgelsesperioder,
                 barnetillegg: innvilgelse.barnetilleggPerioder,
             };
         }
 
         case SøknadsbehandlingResultat.IKKE_VALGT: {
-            throw Error('Kan ikke forhåndsvise uten valgt resuøtat');
+            throw Error('Kan ikke forhåndsvise uten valgt resultat');
         }
     }
 };

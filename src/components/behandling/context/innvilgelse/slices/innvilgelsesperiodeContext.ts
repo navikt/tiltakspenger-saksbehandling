@@ -140,7 +140,7 @@ export const innvilgelsesperioderReducer: Reducer<InnvilgelseState, Innvilgelses
                 periode: { fraOgMed: sistePeriode.tilOgMed, tilOgMed: sistePeriode.tilOgMed },
             };
 
-            const nyePerioder = oppdaterPeriodiseringUtenOverlapp(
+            const nyeInnvilgelsesperioder = oppdaterPeriodiseringUtenOverlapp(
                 state.innvilgelsesperioder,
                 nyInnvilgelsesperiode,
                 state.innvilgelsesperioder.length,
@@ -148,9 +148,9 @@ export const innvilgelsesperioderReducer: Reducer<InnvilgelseState, Innvilgelses
 
             return {
                 ...state,
-                innvilgelsesperioder: nyePerioder,
+                innvilgelsesperioder: nyeInnvilgelsesperioder,
                 barnetilleggPerioder: periodiserBarnetillegg(
-                    nyePerioder,
+                    nyeInnvilgelsesperioder,
                     state.innvilgelsesperioder,
                     state.barnetilleggPerioder,
                     behandling,
@@ -180,12 +180,12 @@ export const innvilgelsesperioderReducer: Reducer<InnvilgelseState, Innvilgelses
         case 'settAntallDager': {
             const { index, antallDager } = payload;
 
-            const innvilgelsesperioder = state.innvilgelsesperioder.at(index)!;
+            const innvilgelsesperiode = state.innvilgelsesperioder.at(index)!;
 
             return {
                 ...state,
                 innvilgelsesperioder: state.innvilgelsesperioder.with(index, {
-                    ...innvilgelsesperioder,
+                    ...innvilgelsesperiode,
                     antallDagerPerMeldeperiode: antallDager,
                 }),
             };
@@ -194,12 +194,12 @@ export const innvilgelsesperioderReducer: Reducer<InnvilgelseState, Innvilgelses
         case 'settTiltaksdeltakelse': {
             const { index, tiltaksdeltakelseId } = payload;
 
-            const innvilgelsesperioder = state.innvilgelsesperioder.at(index)!;
+            const innvilgelsesperiode = state.innvilgelsesperioder.at(index)!;
 
             return {
                 ...state,
                 innvilgelsesperioder: state.innvilgelsesperioder.with(index, {
-                    ...innvilgelsesperioder,
+                    ...innvilgelsesperiode,
                     tiltaksdeltakelseId: tiltaksdeltakelseId,
                 }),
             };

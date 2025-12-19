@@ -10,6 +10,7 @@ export const periodiserBarnetilleggFraSøknad = (
     barnFraSøknad: SøknadBarn[],
     innvilgelsesperioder: MedPeriode[],
 ): BarnetilleggPeriode[] => {
+    // TODO: denne må oppdateres når vi skal tillate innvilgelse med hull
     const innvilgelsesperiode = periodiseringTotalPeriode(innvilgelsesperioder);
 
     // Periodene med rett til barnetillegg for hvert barn, innenfor innvilgelsesperioden
