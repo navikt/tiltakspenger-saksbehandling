@@ -6,7 +6,6 @@ import {
     SøknadsbehandlingInnvilgelseState,
     SøknadsbehandlingState,
 } from '~/components/behandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
-import { ANTALL_DAGER_DEFAULT } from '~/components/behandling/felles/dager-per-meldeperiode/BehandlingDagerPerMeldeperiode';
 
 export const søknadsbehandlingInitialState = (
     behandling: Søknadsbehandling,
@@ -46,8 +45,6 @@ const innvilgelseInitialState = (
                 innvilgelsesperioder: [
                     {
                         periode: {},
-                        antallDagerPerMeldeperiode: ANTALL_DAGER_DEFAULT,
-                        tiltaksdeltakelseId: 'lol',
                     },
                 ],
             },
@@ -55,20 +52,13 @@ const innvilgelseInitialState = (
     }
 
     const barnetilleggPerioder = hentLagredePerioderMedBarn(behandling) ?? [];
-    const harBarnetillegg = barnetilleggPerioder.length > 0;
 
     return {
         resultat: SøknadsbehandlingResultat.INNVILGELSE,
         innvilgelse: {
             harValgtPeriode: true,
-            innvilgelsesperioder: [
-                {
-                    periode: vedtaksperiode,
-                    antallDagerPerMeldeperiode: ANTALL_DAGER_DEFAULT,
-                    tiltaksdeltakelseId: 'lol',
-                },
-            ],
-            harBarnetillegg,
+            innvilgelsesperioder: behandling.innvilgelsesperioder,
+            harBarnetillegg: barnetilleggPerioder.length > 0,
             barnetilleggPerioder,
         },
     };

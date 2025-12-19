@@ -10,11 +10,6 @@ import { RevurderingStansState } from '~/components/behandling/context/revurderi
 import { hentBarnetilleggForRevurdering } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
 import { RevurderingOmgjøringState } from '~/components/behandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import { RevurderingInnvilgelseState } from '~/components/behandling/context/revurdering/revurderingInnvilgelseSkjemaContext';
-import { ANTALL_DAGER_DEFAULT } from '~/components/behandling/felles/dager-per-meldeperiode/BehandlingDagerPerMeldeperiode';
-import {
-    hentTiltaksdeltagelserFraPeriode,
-    hentTiltaksdeltakelserMedStartOgSluttdato,
-} from '~/utils/behandling';
 
 type RevurderingState =
     | RevurderingInnvilgelseState
@@ -57,7 +52,6 @@ const innvilgelseInitialState = (
     sak: SakProps,
 ): RevurderingInnvilgelseState => {
     const { innvilgelsesperioder } = behandling;
-    const tiltaksdeltakelser = hentTiltaksdeltakelserMedStartOgSluttdato(behandling)
 
     if (!innvilgelsesperioder) {
         return {
@@ -67,15 +61,17 @@ const innvilgelseInitialState = (
                 innvilgelsesperioder: [
                     {
                         periode: {},
-                        antallDagerPerMeldeperiode: ANTALL_DAGER_DEFAULT,
-                        tiltaksdeltakelseId: tiltaksdeltakelser.at(0)?.eksternDeltagelseId,
                     },
                 ],
             },
         };
     }
 
-    const barnetilleggPerioder = hentBarnetilleggForRevurdering(behandling, innvilgelsesperioder, sak);
+    const barnetilleggPerioder = hentBarnetilleggForRevurdering(
+        behandling,
+        innvilgelsesperioder,
+        sak,
+    );
 
     return {
         resultat: RevurderingResultat.INNVILGELSE,
@@ -92,11 +88,9 @@ const omgjøringInitialState = (
     behandling: RevurderingOmgjøring,
     sak: SakProps,
 ): RevurderingOmgjøringState => {
-    const { innvilgelsesperioder, vedtaksperiode } = behandling;
+    const { innvilgelsesperioder } = behandling;
 
     if (!innvilgelsesperioder) {
-        const tiltaksdeltakelser = hentTiltaksdeltagelserFraPeriode(behandling, vedtaksperiode)
-
         return {
             resultat: RevurderingResultat.OMGJØRING,
             innvilgelse: {
@@ -104,8 +98,6 @@ const omgjøringInitialState = (
                 innvilgelsesperioder: [
                     {
                         periode: {},
-                        antallDagerPerMeldeperiode: ANTALL_DAGER_DEFAULT,
-                        tiltaksdeltakelseId: tiltaksdeltakelser.at(0)?.eksternDeltagelseId,
                     },
                 ],
             },
