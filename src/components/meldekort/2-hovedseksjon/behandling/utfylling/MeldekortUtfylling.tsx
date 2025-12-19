@@ -34,7 +34,7 @@ import { MeldekortBeregningOgSimulering } from '~/components/meldekort/0-felles-
 import styles from './MeldekortUtfylling.module.css';
 import Divider from '~/components/divider/Divider';
 import { useFetchBlobFraApi, useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
-import { hookFormErrorsTilFeiloppsummering } from '~/utils/ValideringUtils';
+import { hookFormErrorsTilFeiloppsummering } from '~/utils/validering';
 import { Nullable } from '~/types/UtilTypes';
 import { MeldeperiodeKjedeProps } from '~/types/meldekort/Meldeperiode';
 import { useNotification } from '~/context/NotificationContext';

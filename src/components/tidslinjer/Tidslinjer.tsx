@@ -17,11 +17,13 @@ import { behandlingUrl, meldeperiodeUrl } from '~/utils/urls';
 import { useTidslinjeDateRange } from '~/components/tidslinjer/useTidslinjeDateRange';
 import {
     erTidslinjeElementInnvilgelse,
+    tellAntallBarnFraVedtak,
+    tellAntallDagerFraVedtak,
     tidslinjeResultatStatus,
     tidslinjeResultatTekst,
-} from '~/utils/TidslinjeUtils';
-import { tellAntallBarnFraVedtak } from '~/components/behandling/felles/barnetillegg/utils/barnetilleggUtils';
+} from '~/utils/tidslinje';
 import { classNames } from '~/utils/classNames';
+import { numberRangeToString } from '~/utils/tall';
 
 import style from './Tidslinjer.module.css';
 
@@ -75,19 +77,14 @@ export const Tidslinjer = ({ sak, className }: Props) => {
                     {tidslinje.elementer.map((tidslinjeElement) => {
                         const { rammevedtak, tidslinjeResultat } = tidslinjeElement;
 
-                        const {
-                            id,
-                            vedtaksdato,
-                            saksbehandler,
-                            beslutter,
-                            antallDagerPerMeldeperiode,
-                        } = rammevedtak;
+                        const { id, vedtaksdato, saksbehandler, beslutter } = rammevedtak;
 
                         const { fraOgMed, tilOgMed } = tidslinjeElement.periode;
 
                         const erInnvilgelse = erTidslinjeElementInnvilgelse(tidslinjeResultat);
 
-                        const barn = tellAntallBarnFraVedtak(rammevedtak);
+                        const antallBarn = tellAntallBarnFraVedtak(rammevedtak);
+                        const antallDager = tellAntallDagerFraVedtak(rammevedtak);
 
                         return (
                             <Timeline.Period
@@ -118,13 +115,13 @@ export const Tidslinjer = ({ sak, className }: Props) => {
                                             <>
                                                 <InfoElement
                                                     navn={'Antall dager per meldeperiode'}
-                                                    verdi={antallDagerPerMeldeperiode.toString()}
+                                                    verdi={numberRangeToString(antallDager)}
                                                 />
                                                 <InfoElement
                                                     navn={'Har barnetillegg'}
                                                     verdi={
-                                                        barn.maxBarn > 0
-                                                            ? `Ja (${barn.minBarn}${barn.minBarn != barn.maxBarn ? ` - ${barn.maxBarn}` : ''} barn)`
+                                                        antallBarn.max > 0
+                                                            ? `Ja (${numberRangeToString(antallBarn)} barn)`
                                                             : 'Nei'
                                                     }
                                                 />

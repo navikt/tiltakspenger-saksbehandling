@@ -6,7 +6,7 @@ import { useSak } from '~/context/sak/SakContext';
 import { MeldekortHøyreSeksjon } from './3-høyre-seksjon/MeldekortHøyreSeksjon';
 import { useMeldeperiodeKjede } from './MeldeperiodeKjedeContext';
 import { BrukersMeldekortProps } from '~/types/meldekort/BrukersMeldekort';
-import { erMeldekortBehandlingUnderAktivBehandling } from '~/utils/MeldekortBehandlingUtils';
+import { erMeldekortBehandlingUnderAktivBehandling } from '~/utils/meldekortBehandling';
 
 import style from './MeldekortSide.module.css';
 

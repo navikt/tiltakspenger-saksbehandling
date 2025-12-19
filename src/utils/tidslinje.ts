@@ -1,5 +1,7 @@
 import { TidslinjeResultat } from '~/types/TidslinjeRammevedtak';
 import { TimelinePeriodProps } from '@navikt/ds-react';
+import { Rammevedtak } from '~/types/Rammevedtak';
+import { minOgMax, NumberRange } from '~/utils/tall';
 
 export const erTidslinjeElementInnvilgelse = (r: TidslinjeResultat): boolean => {
     switch (r) {
@@ -29,3 +31,29 @@ export const tidslinjeResultatStatus: Record<TidslinjeResultat, TimelinePeriodPr
     [TidslinjeResultat.REVURDERING_INNVILGELSE]: 'success',
     [TidslinjeResultat.OMGJØRING_INNVILGELSE]: 'success',
 } as const;
+
+export const tellAntallBarnFraVedtak = (vedtak: Rammevedtak): NumberRange => {
+    if (!vedtak.barnetillegg) {
+        return {
+            min: 0,
+            max: 0,
+        };
+    }
+
+    const antallBarnFraAllePerioder = vedtak.barnetillegg.perioder.map((bt) => bt.antallBarn);
+
+    return minOgMax(antallBarnFraAllePerioder);
+};
+
+export const tellAntallDagerFraVedtak = (vedtak: Rammevedtak): NumberRange => {
+    if (!vedtak.innvilgelsesperioder) {
+        return {
+            min: 0,
+            max: 0,
+        };
+    }
+
+    const fraAllePerioder = vedtak.innvilgelsesperioder.map((it) => it.antallDagerPerMeldeperiode);
+
+    return minOgMax(fraAllePerioder);
+};

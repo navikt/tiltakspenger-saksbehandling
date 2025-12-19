@@ -29,7 +29,7 @@ import {
 import { OvertaMeldekortbehandlingModal } from './OvertaMeldekortBehandling';
 import { AvsluttMeldekortbehandlingModal } from './avsluttMeldekortBehandling/AvsluttMeldekortBehandling';
 import React, { useState } from 'react';
-import { erMeldekortBehandlingUnderAktivBehandling } from '~/utils/MeldekortBehandlingUtils';
+import { erMeldekortBehandlingUnderAktivBehandling } from '~/utils/meldekortBehandling';
 import {
     ArrowLeftIcon,
     ArrowRightIcon,

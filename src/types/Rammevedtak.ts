@@ -2,6 +2,7 @@ import { Nullable } from '~/types/UtilTypes';
 import { Periode } from './Periode';
 import { Barnetillegg } from './Barnetillegg';
 import { BehandlingId, Rammebehandling, RammebehandlingResultat } from './Rammebehandling';
+import { Innvilgelsesperiode } from '~/types/Innvilgelsesperiode';
 
 export type VedtakId = `vedtak_${string}`;
 
@@ -21,8 +22,7 @@ export type Rammevedtak = {
     gjeldendeInnvilgetPerioder: Periode[];
     saksbehandler: string;
     beslutter: string;
-    // TODO jah: Denne blir en periodisering. På samme måte som behandlingen. Brukes for å vises i tidslinja.
-    antallDagerPerMeldeperiode: number;
+    innvilgelsesperioder: Innvilgelsesperiode[];
     // Inkluderer perioder med 0 barn
     barnetillegg: Nullable<Barnetillegg>;
     erGjeldende: boolean;
