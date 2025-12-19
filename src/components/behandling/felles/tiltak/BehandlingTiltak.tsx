@@ -1,5 +1,5 @@
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
-import { TiltaksdeltagelseMedPeriode } from '~/types/TiltakDeltagelseTypes';
+import { TiltaksdeltakelseMedPeriode } from '~/types/TiltakDeltakelse';
 import { periodeTilFormatertDatotekst } from '~/utils/date';
 import { Separator } from '~/components/separator/Separator';
 import { VedtakHjelpetekst } from '~/components/behandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
@@ -22,8 +22,8 @@ export const BehandlingTiltak = () => {
 };
 
 export const getVisningsnavn = (
-    tiltaksdeltagelse: TiltaksdeltagelseMedPeriode,
-    tiltaksdeltakelser: TiltaksdeltagelseMedPeriode[],
+    tiltaksdeltagelse: TiltaksdeltakelseMedPeriode,
+    tiltaksdeltakelser: TiltaksdeltakelseMedPeriode[],
 ): string => {
     const deltakelserMedType = tiltaksdeltakelser.filter(
         (t) => t.typeKode === tiltaksdeltagelse.typeKode,

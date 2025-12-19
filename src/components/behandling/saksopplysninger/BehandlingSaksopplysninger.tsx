@@ -25,7 +25,7 @@ export const BehandlingSaksopplysninger = () => {
 
     const harYtelser = ytelser.length > 0;
     const harTiltakspengevedtakFraArena = tiltakspengevedtakFraArena.length > 0;
-    const harTiltaksdeltagelse = tiltaksdeltagelse.length > 0;
+    const harTiltaksdeltakelse = tiltaksdeltagelse.length > 0;
 
     return (
         <>
@@ -36,10 +36,10 @@ export const BehandlingSaksopplysninger = () => {
             <Separator />
 
             <OpplysningerSeksjon header={'Tiltak registrert på bruker'}>
-                {harTiltaksdeltagelse ? (
-                    <BehandlingTiltakOpplysninger tiltaksdeltagelse={tiltaksdeltagelse} />
+                {harTiltaksdeltakelse ? (
+                    <BehandlingTiltakOpplysninger tiltaksdeltakelser={tiltaksdeltagelse} />
                 ) : (
-                    <BodyShort size={'small'}>Ingen relevante tiltaksdeltagelser</BodyShort>
+                    <BodyShort size={'small'}>Ingen relevante tiltaksdeltakelser</BodyShort>
                 )}
                 <Separator />
             </OpplysningerSeksjon>

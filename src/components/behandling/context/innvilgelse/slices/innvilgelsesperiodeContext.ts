@@ -18,6 +18,7 @@ import { BarnetilleggPeriode } from '~/types/Barnetillegg';
 import { hentVedtatteSøknadsbehandlinger } from '~/utils/sak';
 import { periodiserBarnetilleggFraSøknad } from '~/components/behandling/felles/barnetillegg/utils/periodiserBarnetilleggFraSøknad';
 import { datoMax, datoMin } from '~/utils/date';
+import { hentHeleTiltaksdeltakelsesperioden } from '~/utils/behandling';
 
 export type InnvilgelsesperioderActions =
     | {
@@ -135,9 +136,14 @@ export const innvilgelsesperioderReducer: Reducer<InnvilgelseState, Innvilgelses
 
             const sistePeriode = sisteInnvilgelsesperiode.periode;
 
+            const tiltaksdeltakelsesperiode = hentHeleTiltaksdeltakelsesperioden(behandling);
+
             const nyInnvilgelsesperiode = {
                 ...sisteInnvilgelsesperiode,
-                periode: { fraOgMed: sistePeriode.tilOgMed, tilOgMed: sistePeriode.tilOgMed },
+                periode: {
+                    fraOgMed: sistePeriode.tilOgMed,
+                    tilOgMed: datoMax(tiltaksdeltakelsesperiode.tilOgMed, sistePeriode.tilOgMed),
+                },
             };
 
             const nyeInnvilgelsesperioder = oppdaterPeriodiseringUtenOverlapp(

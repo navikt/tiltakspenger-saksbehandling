@@ -1,4 +1,4 @@
-import { SimulerteBeløp } from '~/types/SimulertBeregningTypes';
+import { SimulerteBeløp } from '~/types/SimulertBeregning';
 import { Alert, Heading } from '@navikt/ds-react';
 import { UtbetalingBeløp } from '~/components/utbetaling/beløp/UtbetalingBeløp';
 import { classNames } from '~/utils/classNames';

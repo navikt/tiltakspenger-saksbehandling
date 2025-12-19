@@ -3,7 +3,7 @@ import {
     useBehandlingInnvilgelseSkjema,
 } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 import {
-    hentHeleTiltaksdeltagelsesperioden,
+    hentHeleTiltaksdeltakelsesperioden,
     hentTiltaksdeltakelserMedStartOgSluttdato,
 } from '~/utils/behandling';
 import { useSak } from '~/context/sak/SakContext';
@@ -12,13 +12,13 @@ import { Alert, Button, Heading, HStack, Select, VStack } from '@navikt/ds-react
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
 import { Innvilgelsesperiode } from '~/types/Innvilgelsesperiode';
 import { XMarkIcon } from '@navikt/aksel-icons';
-import { TiltaksdeltagelseMedPeriode } from '~/types/TiltakDeltagelseTypes';
+import { TiltaksdeltakelseMedPeriode } from '~/types/TiltakDeltakelse';
 import { InnvilgelsesperiodeDatovelgere } from '~/components/behandling/felles/innvilgelsesperiode/datovelgere/InnvilgelsesperiodeDatoVelgere';
 import { Rammebehandling } from '~/types/Rammebehandling';
 import { SakProps } from '~/types/Sak';
+import { InnvilgelsesperioderAntallDagerVarsel } from '~/components/behandling/felles/innvilgelsesperiode/InnvilgelsesperioderAntallDagerVarsel';
 
 import style from './InnvilgelsesperioderVelger.module.css';
-import { InnvilgelsesperioderAntallDagerVarsel } from '~/components/behandling/felles/innvilgelsesperiode/InnvilgelsesperioderAntallDagerVarsel';
 
 export const InnvilgelsesperioderVelger = () => {
     const { sak } = useSak();
@@ -34,7 +34,7 @@ export const InnvilgelsesperioderVelger = () => {
     }
 
     const tiltaksdeltakelser = hentTiltaksdeltakelserMedStartOgSluttdato(behandling);
-    const tiltaksdeltagelsesperiode = hentHeleTiltaksdeltagelsesperioden(behandling);
+    const tiltaksdeltakelsesperiode = hentHeleTiltaksdeltakelsesperioden(behandling);
 
     return (
         <VedtakSeksjon>
@@ -81,7 +81,7 @@ export const InnvilgelsesperioderVelger = () => {
                 ) : (
                     <InnvilgelsesperiodeDatovelgere
                         periode={innvilgelsesperioder.at(0)!.periode}
-                        tiltaksdeltakelsesperiode={tiltaksdeltagelsesperiode}
+                        tiltaksdeltakelsesperiode={tiltaksdeltakelsesperiode}
                         index={0}
                     />
                 )}
@@ -92,7 +92,7 @@ export const InnvilgelsesperioderVelger = () => {
 
 type ValgProps = {
     innvilgelsesperioder: Innvilgelsesperiode[];
-    tiltaksdeltakelser: TiltaksdeltagelseMedPeriode[];
+    tiltaksdeltakelser: TiltaksdeltakelseMedPeriode[];
     behandling: Rammebehandling;
     sak: SakProps;
     index: number;
@@ -104,7 +104,7 @@ const Valg = ({ innvilgelsesperioder, tiltaksdeltakelser, behandling, sak, index
 
     const innvilgelsesperiode = innvilgelsesperioder.at(index)!;
 
-    const tiltaksdeltagelsesperiode = hentHeleTiltaksdeltagelsesperioden(behandling);
+    const tiltaksdeltakelsesperiode = hentHeleTiltaksdeltakelsesperioden(behandling);
 
     const { periode, antallDagerPerMeldeperiode, tiltaksdeltakelseId } = innvilgelsesperiode;
 
@@ -116,7 +116,7 @@ const Valg = ({ innvilgelsesperioder, tiltaksdeltakelser, behandling, sak, index
         <HStack gap={'5'}>
             <InnvilgelsesperiodeDatovelgere
                 periode={periode}
-                tiltaksdeltakelsesperiode={tiltaksdeltagelsesperiode}
+                tiltaksdeltakelsesperiode={tiltaksdeltakelsesperiode}
                 index={index}
             />
 

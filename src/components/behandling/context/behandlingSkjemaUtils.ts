@@ -1,7 +1,7 @@
 import {
     erRammebehandlingInnvilgelseResultat,
     erSøknadsbehandlingResultat,
-    hentTiltaksdeltagelserFraPeriode,
+    hentTiltaksdeltakelserFraPeriode,
 } from '~/utils/behandling';
 import {
     InnvilgelseMedPerioderState,
@@ -94,7 +94,7 @@ export const lagForhåndsutfyltInnvilgelse = (
     førsteInnvilgelsesperiode: Periode,
     sak: SakProps,
 ): InnvilgelseMedPerioderState => {
-    const tiltak = hentTiltaksdeltagelserFraPeriode(behandling, førsteInnvilgelsesperiode);
+    const tiltak = hentTiltaksdeltakelserFraPeriode(behandling, førsteInnvilgelsesperiode);
 
     const innvilgelsesperioder: Innvilgelsesperiode[] = [
         {
@@ -121,13 +121,13 @@ export const lagForhåndsutfyltInnvilgelse = (
     };
 };
 
-// Henter det høyeste antall dager for en tiltaksdeltagelse fra saksopplysninger, eller default
+// Henter det høyeste antall dager for en tiltaksdeltakelse fra saksopplysninger, eller default
 // antall dager dersom ingen tiltak har satt antall dager
 export const antallDagerPerMeldeperiodeForPeriode = (
     behandling: Rammebehandling,
     periode: Periode,
 ): number => {
-    const dagerPerUke = hentTiltaksdeltagelserFraPeriode(behandling, periode).reduce((acc, td) => {
+    const dagerPerUke = hentTiltaksdeltakelserFraPeriode(behandling, periode).reduce((acc, td) => {
         const { antallDagerPerUke } = td;
 
         return antallDagerPerUke ? Math.max(antallDagerPerUke, acc) : acc;

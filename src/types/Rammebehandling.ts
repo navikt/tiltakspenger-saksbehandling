@@ -7,14 +7,14 @@ import {
     RevurderingResultat,
     RevurderingVedtakRequest,
 } from './Revurdering';
-import { SimulertBeregning } from './SimulertBeregningTypes';
+import { SimulertBeregning } from './SimulertBeregning';
 import {
     Søknadsbehandling,
     SøknadsbehandlingInnvilgelse,
     SøknadsbehandlingResultat,
     SøknadsbehandlingVedtakRequest,
 } from './Søknadsbehandling';
-import { Tiltaksdeltagelse } from './TiltakDeltagelseTypes';
+import { Tiltaksdeltakelse } from './TiltakDeltakelse';
 import { Utbetalingsstatus } from './Utbetaling';
 import { Nullable } from './UtilTypes';
 import { Ytelse } from './Ytelse';
@@ -83,7 +83,7 @@ export type BehandlingUtbetalingProps = {
 
 export type Saksopplysninger = {
     fødselsdato: string;
-    tiltaksdeltagelse: Tiltaksdeltagelse[];
+    tiltaksdeltagelse: Tiltaksdeltakelse[];
     periode: Nullable<Periode>;
     ytelser: Ytelse[];
     tiltakspengevedtakFraArena: ArenaTPVedtak[];

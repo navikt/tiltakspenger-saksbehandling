@@ -1,6 +1,6 @@
 import { Periode } from '~/types/Periode';
-import { Tiltaksdeltagelse, TiltaksdeltagelseMedPeriode } from '~/types/TiltakDeltagelseTypes';
-import { erDatoIPeriode, joinPerioder, perioderOverlapper } from './periode';
+import { Tiltaksdeltakelse, TiltaksdeltakelseMedPeriode } from '~/types/TiltakDeltakelse';
+import { joinPerioder, perioderOverlapper } from './periode';
 import { Nullable } from '~/types/UtilTypes';
 import {
     Rammebehandling,
@@ -29,47 +29,18 @@ export const hentTiltaksperiode = (behandling: Søknadsbehandling): Nullable<Per
     return null;
 };
 
-export const deltarPaFlereTiltakMedStartOgSluttdatoIValgtInnvilgelsesperiode = (
-    behandling: Rammebehandling,
-    innvilgelsesperiode: Periode,
-) => {
-    const tiltak = hentTiltaksdeltakelserMedStartOgSluttdato(behandling);
-
-    if (tiltak.length <= 1) {
-        return false;
-    }
-
-    const overlappendeDeltakelser: Tiltaksdeltagelse[] = [];
-
-    tiltak.forEach((tiltaksdeltagelse) => {
-        const periode: Periode = {
-            fraOgMed: tiltaksdeltagelse.deltagelseFraOgMed,
-            tilOgMed: tiltaksdeltagelse.deltagelseTilOgMed,
-        };
-
-        if (
-            erDatoIPeriode(innvilgelsesperiode.fraOgMed, periode) ||
-            erDatoIPeriode(innvilgelsesperiode.tilOgMed, periode)
-        ) {
-            overlappendeDeltakelser.push(tiltaksdeltagelse);
-        }
-    });
-
-    return overlappendeDeltakelser.length > 1;
-};
-
 export const deltarPaFlereTiltakMedStartOgSluttdato = (behandling: Rammebehandling) =>
     hentTiltaksdeltakelserMedStartOgSluttdato(behandling).length > 1;
 
-export const hentTiltaksdeltakelser = (behandling: Rammebehandling): Tiltaksdeltagelse[] =>
+export const hentTiltaksdeltakelser = (behandling: Rammebehandling): Tiltaksdeltakelse[] =>
     behandling.saksopplysninger.tiltaksdeltagelse ?? [];
 
 export const hentTiltaksdeltakelserMedStartOgSluttdato = (
     behandling: Rammebehandling,
-): TiltaksdeltagelseMedPeriode[] =>
+): TiltaksdeltakelseMedPeriode[] =>
     hentTiltaksdeltakelser(behandling)
         .filter(
-            (t): t is TiltaksdeltagelseMedPeriode =>
+            (t): t is TiltaksdeltakelseMedPeriode =>
                 t.deltagelseFraOgMed != null && t.deltagelseTilOgMed != null,
         )
         .map((t) => {
@@ -82,33 +53,33 @@ export const hentTiltaksdeltakelserMedStartOgSluttdato = (
             };
         });
 
-export const hentTiltaksdeltagelserFraPeriode = (
+export const hentTiltaksdeltakelserFraPeriode = (
     behandling: Rammebehandling,
     periode: Periode,
-): TiltaksdeltagelseMedPeriode[] => {
+): TiltaksdeltakelseMedPeriode[] => {
     return hentTiltaksdeltakelserMedStartOgSluttdato(behandling).reduce<
-        TiltaksdeltagelseMedPeriode[]
+        TiltaksdeltakelseMedPeriode[]
     >((acc, td) => {
         const { deltagelseFraOgMed, deltagelseTilOgMed } = td;
 
-        const deltagelsesPeriode: Periode = {
+        const deltakelsesperiode: Periode = {
             fraOgMed: deltagelseFraOgMed,
             tilOgMed: deltagelseTilOgMed,
         };
 
-        if (perioderOverlapper(periode, deltagelsesPeriode)) {
-            acc.push({ ...td, periode: deltagelsesPeriode });
+        if (perioderOverlapper(periode, deltakelsesperiode)) {
+            acc.push({ ...td, periode: deltakelsesperiode });
         }
 
         return acc;
     }, []);
 };
 
-export const hentHeleTiltaksdeltagelsesperioden = (behandling: Rammebehandling) => {
+export const hentHeleTiltaksdeltakelsesperioden = (behandling: Rammebehandling) => {
     const perioder = hentTiltaksdeltakelserMedStartOgSluttdato(behandling).map(
-        (tiltaksdeltagelse) => ({
-            fraOgMed: tiltaksdeltagelse.deltagelseFraOgMed,
-            tilOgMed: tiltaksdeltagelse.deltagelseTilOgMed,
+        (tiltaksdeltakelse) => ({
+            fraOgMed: tiltaksdeltakelse.deltagelseFraOgMed,
+            tilOgMed: tiltaksdeltakelse.deltagelseTilOgMed,
         }),
     );
     return joinPerioder(perioder);

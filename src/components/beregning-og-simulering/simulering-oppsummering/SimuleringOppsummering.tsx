@@ -1,6 +1,6 @@
 import { Alert, BodyShort, Heading, HStack, VStack } from '@navikt/ds-react';
 import { UtbetalingBeløp } from '~/components/utbetaling/beløp/UtbetalingBeløp';
-import { SimuleringResultat, SimulertBeregning } from '~/types/SimulertBeregningTypes';
+import { SimuleringResultat, SimulertBeregning } from '~/types/SimulertBeregning';
 import {
     OppdaterSimuleringKnapp,
     OppdaterSimuleringProps,

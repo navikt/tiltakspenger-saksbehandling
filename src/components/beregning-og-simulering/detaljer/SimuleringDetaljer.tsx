@@ -1,4 +1,4 @@
-import { SimulertBeregning } from '~/types/SimulertBeregningTypes';
+import { SimulertBeregning } from '~/types/SimulertBeregning';
 import { Button, Table } from '@navikt/ds-react';
 import { Fragment, useState } from 'react';
 import { classNames } from '~/utils/classNames';

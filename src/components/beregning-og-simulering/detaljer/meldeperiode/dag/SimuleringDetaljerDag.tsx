@@ -1,4 +1,4 @@
-import { SimulertBeregningDag, SimulerteBeløp } from '~/types/SimulertBeregningTypes';
+import { SimulertBeregningDag, SimulerteBeløp } from '~/types/SimulertBeregning';
 import { BodyShort, Button, Table, Tooltip } from '@navikt/ds-react';
 import { classNames } from '~/utils/classNames';
 import { formaterDatotekst } from '~/utils/date';

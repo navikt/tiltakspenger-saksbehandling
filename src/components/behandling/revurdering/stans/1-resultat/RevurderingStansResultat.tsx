@@ -115,7 +115,7 @@ const defaultValue = '';
 
 const options: Record<HjemmelForStans, string> = {
     [HjemmelForStans.DELTAR_IKKE_PÅ_ARBEIDSMARKEDSTILTAK]:
-        'Ingen deltagelse - tiltakspengeforskriften § 2',
+        'Ingen deltakelse - tiltakspengeforskriften § 2',
     [HjemmelForStans.ALDER]: 'Alder - tiltakspengeforskriften § 3',
     [HjemmelForStans.LIVSOPPHOLDYTELSER]:
         'Andre livsoppholdsytelser - tiltakspengeforskriften § 7, første ledd',

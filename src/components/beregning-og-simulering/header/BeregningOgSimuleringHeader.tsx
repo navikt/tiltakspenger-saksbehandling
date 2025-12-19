@@ -3,10 +3,7 @@ import { Periode } from '~/types/Periode';
 import { periodeTilFormatertDatotekst } from '~/utils/date';
 import { UtbetalingStatus } from '~/components/utbetaling/status/UtbetalingStatus';
 import { UtbetalingBeløp } from '~/components/utbetaling/beløp/UtbetalingBeløp';
-import {
-    KanIkkeIverksetteUtbetalingGrunn,
-    SimulertBeregning,
-} from '~/types/SimulertBeregningTypes';
+import { KanIkkeIverksetteUtbetalingGrunn, SimulertBeregning } from '~/types/SimulertBeregning';
 import { Utbetalingsstatus } from '~/types/Utbetaling';
 
 import style from './BeregningOgSimuleringHeader.module.css';

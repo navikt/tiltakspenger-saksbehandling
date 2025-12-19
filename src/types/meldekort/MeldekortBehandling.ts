@@ -5,7 +5,7 @@ import { Avbrutt } from '../Avbrutt';
 import { Nullable } from '~/types/UtilTypes';
 import { BeløpProps, MeldeperiodeBeregningProps } from '~/types/Beregning';
 import { SakId } from '../Sak';
-import { SimulertBeregning } from '~/types/SimulertBeregningTypes';
+import { SimulertBeregning } from '~/types/SimulertBeregning';
 import { Utbetalingsstatus } from '../Utbetaling';
 import { Attestering } from '../Attestering';
 

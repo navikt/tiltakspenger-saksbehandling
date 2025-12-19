@@ -1,6 +1,6 @@
 import { ValideringResultat } from '~/types/Validering';
 import { validerBarnetillegg } from '~/components/behandling/felles/validering/validerBarnetillegg';
-import { hentHeleTiltaksdeltagelsesperioden } from '~/utils/behandling';
+import { hentHeleTiltaksdeltakelsesperioden } from '~/utils/behandling';
 import { Rammebehandling } from '~/types/Rammebehandling';
 import { InnvilgelseState } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 import { Søknad } from '~/types/Søknad';
@@ -31,7 +31,7 @@ export const validerInnvilgelse = (
         );
     }
 
-    const tiltaksperiode = hentHeleTiltaksdeltagelsesperioden(behandling);
+    const tiltaksperiode = hentHeleTiltaksdeltakelsesperioden(behandling);
 
     const innvilgelsesperiodeTotal = periodiseringTotalPeriode(innvilgelsesperioder);
 

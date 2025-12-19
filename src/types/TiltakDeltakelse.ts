@@ -1,11 +1,11 @@
 import { Periode } from '~/types/Periode';
 
-enum Kilde {
+export enum TiltaksdeltakelseKilde {
     KOMET = 'Komet',
     ARENA = 'Arena',
 }
 
-export type Tiltaksdeltagelse = {
+export type Tiltaksdeltakelse = {
     eksternDeltagelseId: string;
     gjennomføringId: string | null;
     typeNavn: string;
@@ -15,11 +15,11 @@ export type Tiltaksdeltagelse = {
     deltakelseStatus: string;
     deltakelseProsent: number | null;
     antallDagerPerUke: number | null;
-    kilde: Kilde;
+    kilde: TiltaksdeltakelseKilde;
     gjennomforingsprosent: number | null;
 };
 
-export type TiltaksdeltagelseMedPeriode = Tiltaksdeltagelse & {
+export type TiltaksdeltakelseMedPeriode = Tiltaksdeltakelse & {
     deltagelseFraOgMed: string;
     deltagelseTilOgMed: string;
     periode: Periode;

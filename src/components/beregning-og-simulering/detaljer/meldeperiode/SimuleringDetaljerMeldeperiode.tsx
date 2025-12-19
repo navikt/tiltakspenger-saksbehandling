@@ -1,5 +1,5 @@
 import { Table } from '@navikt/ds-react';
-import { SimulertBeregningPerMeldeperiode } from '~/types/SimulertBeregningTypes';
+import { SimulertBeregningPerMeldeperiode } from '~/types/SimulertBeregning';
 import { classNames } from '~/utils/classNames';
 import { useState } from 'react';
 import { SimuleringOppsummeringDetaljert } from '~/components/beregning-og-simulering/detaljer/meldeperiode/oppsummering/SimuleringOppsummeringDetaljert';

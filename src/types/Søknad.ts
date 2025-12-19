@@ -8,7 +8,7 @@ export type SøknadId = `soknad_${string}`;
 interface SøknadBase {
     id: SøknadId;
     journalpostId: string;
-    tiltak: Nullable<TiltaksdeltagelseFraSøknad>;
+    tiltak: Nullable<TiltaksdeltakelseFraSøknad>;
     manueltSattTiltak?: string;
     tiltaksdeltakelseperiodeDetErSøktOm: Nullable<Periode>;
     barnetillegg: SøknadBarn[];
@@ -22,7 +22,7 @@ interface SøknadBase {
 }
 
 export interface InnvilgbarSøknad extends SøknadBase {
-    tiltak: TiltaksdeltagelseFraSøknad;
+    tiltak: TiltaksdeltakelseFraSøknad;
     kanInnvilges: true;
 }
 
@@ -51,7 +51,7 @@ export interface Spørsmålsbesvarelser extends SpørsmålsbesvarelserPengestøt
     etterlønn: JaNeiSpm;
 }
 
-export interface TiltaksdeltagelseFraSøknad {
+export interface TiltaksdeltakelseFraSøknad {
     id: string;
     fraOgMed: Nullable<string>;
     tilOgMed: Nullable<string>;
