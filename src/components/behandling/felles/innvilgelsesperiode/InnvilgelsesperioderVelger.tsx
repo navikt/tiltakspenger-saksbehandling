@@ -14,16 +14,18 @@ import { Innvilgelsesperiode } from '~/types/Innvilgelsesperiode';
 import { XMarkIcon } from '@navikt/aksel-icons';
 import { TiltaksdeltagelseMedPeriode } from '~/types/TiltakDeltagelseTypes';
 import { InnvilgelsesperiodeDatovelgere } from '~/components/behandling/felles/innvilgelsesperiode/datovelgere/InnvilgelsesperiodeDatoVelgere';
-
-import style from './InnvilgelsesperioderVelger.module.css';
 import { Rammebehandling } from '~/types/Rammebehandling';
 import { SakProps } from '~/types/Sak';
+
+import style from './InnvilgelsesperioderVelger.module.css';
 
 export const InnvilgelsesperioderVelger = () => {
     const { sak } = useSak();
     const { behandling } = useBehandling();
 
-    const { innvilgelsesperioder, harValgtPeriode } = useBehandlingInnvilgelseSkjema().innvilgelse;
+    const { innvilgelse, erReadonly } = useBehandlingInnvilgelseSkjema();
+    const { innvilgelsesperioder, harValgtPeriode } = innvilgelse;
+
     const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
 
     if (innvilgelsesperioder.length === 0) {
@@ -52,22 +54,24 @@ export const InnvilgelsesperioderVelger = () => {
                             />
                         ))}
 
-                        <Button
-                            type={'button'}
-                            variant={'secondary'}
-                            size={'small'}
-                            onClick={() => {
-                                dispatch({
-                                    type: 'leggTilInnvilgelsesperiode',
-                                    payload: {
-                                        sak,
-                                        behandling,
-                                    },
-                                });
-                            }}
-                        >
-                            {'Ny periode'}
-                        </Button>
+                        {!erReadonly && (
+                            <Button
+                                type={'button'}
+                                variant={'secondary'}
+                                size={'small'}
+                                onClick={() => {
+                                    dispatch({
+                                        type: 'leggTilInnvilgelsesperiode',
+                                        payload: {
+                                            sak,
+                                            behandling,
+                                        },
+                                    });
+                                }}
+                            >
+                                {'Ny periode'}
+                            </Button>
+                        )}
                     </VStack>
                 ) : (
                     <InnvilgelsesperiodeDatovelgere
