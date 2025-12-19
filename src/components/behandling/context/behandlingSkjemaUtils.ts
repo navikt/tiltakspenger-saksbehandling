@@ -14,11 +14,12 @@ import { inneholderHelePerioden } from '~/utils/periode';
 import { datoMax, datoMin, forrigeDag, nesteDag } from '~/utils/date';
 import { MedPeriode, Periode } from '~/types/Periode';
 import { Rammebehandling } from '~/types/Rammebehandling';
-import { ANTALL_DAGER_DEFAULT } from '~/components/behandling/felles/dager-per-meldeperiode/BehandlingDagerPerMeldeperiode';
 import { SakProps } from '~/types/Sak';
 import { Innvilgelsesperiode } from '~/types/Innvilgelsesperiode';
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';
 import { hentBarnetilleggForBehandling } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
+
+export const ANTALL_DAGER_DEFAULT = 10;
 
 export const erRammebehandlingInnvilgelseContext = (
     context: BehandlingSkjemaState,

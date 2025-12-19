@@ -18,6 +18,7 @@ import { Rammebehandling } from '~/types/Rammebehandling';
 import { SakProps } from '~/types/Sak';
 
 import style from './InnvilgelsesperioderVelger.module.css';
+import { InnvilgelsesperioderAntallDagerVarsel } from '~/components/behandling/felles/innvilgelsesperiode/InnvilgelsesperioderAntallDagerVarsel';
 
 export const InnvilgelsesperioderVelger = () => {
     const { sak } = useSak();
@@ -72,6 +73,10 @@ export const InnvilgelsesperioderVelger = () => {
                                 {'Ny periode'}
                             </Button>
                         )}
+
+                        <InnvilgelsesperioderAntallDagerVarsel
+                            innvilgelsesperioder={innvilgelsesperioder}
+                        />
                     </VStack>
                 ) : (
                     <InnvilgelsesperiodeDatovelgere
