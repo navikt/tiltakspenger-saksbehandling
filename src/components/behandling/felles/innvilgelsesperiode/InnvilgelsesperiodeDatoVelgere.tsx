@@ -1,7 +1,7 @@
 import { useBehandlingInnvilgelseSkjemaDispatch } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 import { useSak } from '~/context/sak/SakContext';
 import { Periode } from '~/types/Periode';
-import { dateTilISOTekst, datoMin } from '~/utils/date';
+import { dateTilISOTekst, datoMin, datoTilDatoInputText } from '~/utils/date';
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
 import { Datovelger } from '~/components/datovelger/Datovelger';
 import React from 'react';
@@ -30,7 +30,8 @@ export const InnvilgelsesperiodeDatovelgere = ({
         <>
             <Datovelger
                 label={'Fra og med'}
-                defaultSelected={periode.fraOgMed}
+                selected={periode.fraOgMed}
+                value={periode.fraOgMed ? datoTilDatoInputText(periode.fraOgMed) : undefined}
                 minDate={tiltaksdeltakelsesperiode.fraOgMed}
                 maxDate={periode.tilOgMed ?? tiltaksdeltakelsesperiode.tilOgMed}
                 defaultMonth={defaultDato}
@@ -56,7 +57,8 @@ export const InnvilgelsesperiodeDatovelgere = ({
 
             <Datovelger
                 label={'Til og med'}
-                defaultSelected={periode.tilOgMed}
+                selected={periode.tilOgMed}
+                value={periode.tilOgMed ? datoTilDatoInputText(periode.tilOgMed) : undefined}
                 minDate={periode.fraOgMed ?? tiltaksdeltakelsesperiode.fraOgMed}
                 maxDate={tiltaksdeltakelsesperiode.tilOgMed}
                 defaultMonth={defaultDato}

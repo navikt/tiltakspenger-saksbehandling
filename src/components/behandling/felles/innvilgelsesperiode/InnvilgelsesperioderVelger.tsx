@@ -80,12 +80,14 @@ export const InnvilgelsesperioderVelger = () => {
                         />
                     </VStack>
                 ) : (
-                    <InnvilgelsesperiodeDatovelgere
-                        periode={innvilgelsesperioder.at(0)!.periode}
-                        tiltaksdeltakelsesperiode={tiltaksdeltakelsesperiode}
-                        index={0}
-                        readOnly={erReadonly}
-                    />
+                    <HStack gap={'3'}>
+                        <InnvilgelsesperiodeDatovelgere
+                            periode={innvilgelsesperioder.at(0)!.periode}
+                            tiltaksdeltakelsesperiode={tiltaksdeltakelsesperiode}
+                            index={0}
+                            readOnly={erReadonly}
+                        />
+                    </HStack>
                 )}
             </VedtakSeksjon.FullBredde>
         </VedtakSeksjon>
