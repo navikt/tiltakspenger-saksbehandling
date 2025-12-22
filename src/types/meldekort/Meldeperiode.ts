@@ -33,6 +33,7 @@ export type MeldeperiodeProps = {
     opprettet: string;
     antallDager: number;
     girRett: Record<string, boolean>;
+    ingenDagerGirRett: boolean;
 };
 
 export type MeldeperiodeKjedeProps = {

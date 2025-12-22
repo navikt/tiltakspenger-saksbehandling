@@ -61,7 +61,7 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
             (b) => b.id === meldekortBehandling.brukersMeldekortId,
         ) ?? meldeperiodeKjede.brukersMeldekort.at(-1); // Bruk siste brukers meldekort som fallback
 
-    const { antallDager } = sisteMeldeperiode;
+    const { antallDager, ingenDagerGirRett } = sisteMeldeperiode;
 
     const formContext = useForm<MeldekortBehandlingForm>({
         defaultValues: {
@@ -245,6 +245,7 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
                         modalRef={modalRef}
                         buttonActionRef={buttonActionRef}
                         form={formContext}
+                        ingenDagerGirRett={ingenDagerGirRett}
                     />
                 </VStack>
             </form>
@@ -269,6 +270,7 @@ const MeldekortUtfyllingFooter = (props: {
         Nullable<'lagreOgBeregn' | 'sendTilBeslutter' | 'åpneSendTilBeslutterModal'>
     >;
     form: UseFormReturn<MeldekortBehandlingForm>;
+    ingenDagerGirRett: boolean;
 }) => {
     return (
         <VStack gap={'2'}>
@@ -306,6 +308,7 @@ const MeldekortUtfyllingFooter = (props: {
                         onClick={() => {
                             props.buttonActionRef.current = 'lagreOgBeregn';
                         }}
+                        disabled={props.ingenDagerGirRett}
                     >
                         Lagre og beregn
                     </Button>
@@ -314,6 +317,7 @@ const MeldekortUtfyllingFooter = (props: {
                         onClick={() => {
                             props.buttonActionRef.current = 'åpneSendTilBeslutterModal';
                         }}
+                        disabled={props.ingenDagerGirRett}
                     >
                         Send til beslutter
                     </Button>
@@ -339,6 +343,13 @@ const MeldekortUtfyllingFooter = (props: {
                     </BekreftelsesModal>
                 </HStack>
             </HStack>
+            {props.ingenDagerGirRett && (
+                <Alert variant={'warning'} size={'small'}>
+                    {
+                        'Ingen dager gir rett til tiltakspenger i denne meldeperioden. Behandlingen kan kun avsluttes.'
+                    }
+                </Alert>
+            )}
             {props.lagreOgBeregnMeldekort.error && (
                 <Alert variant="error" size="small">
                     <BodyShort>Feil ved lagring og beregning</BodyShort>
