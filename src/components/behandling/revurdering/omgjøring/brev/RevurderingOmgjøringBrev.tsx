@@ -1,24 +1,24 @@
 import { useRevurderingBehandling } from '~/components/behandling/context/BehandlingContext';
-import { RevurderingInnvilgelseBrevForhåndsvisningDTO } from '~/components/behandling/felles/vedtaksbrev/forhåndsvisning/useHentVedtaksbrevForhåndsvisning';
+import { RevurderingOmgjøringBrevForhåndsvisningDTO } from '~/components/behandling/felles/vedtaksbrev/forhåndsvisning/useHentVedtaksbrevForhåndsvisning';
 import { Vedtaksbrev } from '~/components/behandling/felles/vedtaksbrev/Vedtaksbrev';
 import { RevurderingResultat } from '~/types/Revurdering';
-import { revurderingInnvilgelseValidering } from '~/components/behandling/revurdering/innvilgelse/revurderingInnvilgelseValidering';
+import { revurderingOmgjøringValidering } from '~/components/behandling/revurdering/omgjøring/revurderingOmgjøringValidering';
 import {
-    RevurderingInnvilgelseContext,
-    useRevurderingInnvilgelseSkjema,
-} from '~/components/behandling/context/revurdering/revurderingInnvilgelseSkjemaContext';
+    RevurderingOmgjøringContext,
+    useRevurderingOmgjøringSkjema,
+} from '~/components/behandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import { useSak } from '~/context/sak/SakContext';
 import { RevurderingBrevHjelpetekst } from '~/components/behandling/revurdering/felles/RevurderingBrevHjelpetekst';
 
-export const RevurderingInnvilgelseBrev = () => {
+export const RevurderingOmgjøringBrev = () => {
     const { behandling } = useRevurderingBehandling();
-    const skjema = useRevurderingInnvilgelseSkjema();
+    const skjema = useRevurderingOmgjøringSkjema();
     const { sak } = useSak();
 
     return (
         <Vedtaksbrev
             header={'Vedtaksbrev for revurdering av innvilgelse'}
-            validering={revurderingInnvilgelseValidering(behandling, skjema, sak)}
+            validering={revurderingOmgjøringValidering(behandling, skjema, sak)}
             hentDto={() => tilForhåndsvisningDTO(skjema)}
             hjelpetekst={<RevurderingBrevHjelpetekst />}
         />
@@ -26,8 +26,8 @@ export const RevurderingInnvilgelseBrev = () => {
 };
 
 const tilForhåndsvisningDTO = (
-    skjema: RevurderingInnvilgelseContext,
-): RevurderingInnvilgelseBrevForhåndsvisningDTO => {
+    skjema: RevurderingOmgjøringContext,
+): RevurderingOmgjøringBrevForhåndsvisningDTO => {
     const { innvilgelse, textAreas } = skjema;
 
     if (!innvilgelse.harValgtPeriode) {
@@ -35,7 +35,7 @@ const tilForhåndsvisningDTO = (
     }
 
     return {
-        resultat: RevurderingResultat.INNVILGELSE,
+        resultat: RevurderingResultat.OMGJØRING,
         fritekst: textAreas.brevtekst.getValue(),
         innvilgelsesperioder: innvilgelse.innvilgelsesperioder,
         barnetillegg: innvilgelse.harBarnetillegg ? innvilgelse.barnetilleggPerioder : null,

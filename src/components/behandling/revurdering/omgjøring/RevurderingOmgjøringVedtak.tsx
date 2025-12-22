@@ -1,6 +1,5 @@
 import { Alert, BodyShort, Heading, HStack, VStack } from '@navikt/ds-react';
 import { Separator } from '~/components/separator/Separator';
-import { RevurderingInnvilgelseBrev } from '~/components/behandling/revurdering/innvilgelse/brev/RevurderingInnvilgelseBrev';
 import { BehandlingBeregningOgSimulering } from '../../felles/beregning-og-simulering/BehandlingBeregningOgSimulering';
 import { useRevurderingOmgjøring } from '../../context/BehandlingContext';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '~/utils/date';
@@ -31,8 +30,8 @@ import { Nullable } from '~/types/UtilTypes';
 import { BehandlingBarnetillegg } from '~/components/behandling/felles/barnetillegg/BehandlingBarnetillegg';
 import { BegrunnelseVilkårsvurdering } from '~/components/behandling/felles/begrunnelse-vilkårsvurdering/BegrunnelseVilkårsvurdering';
 import { SakProps } from '~/types/Sak';
-
 import { periodiseringTotalPeriode } from '~/utils/periode';
+import { RevurderingOmgjøringBrev } from '~/components/behandling/revurdering/omgjøring/brev/RevurderingOmgjøringBrev';
 
 export const RevurderingOmgjøringVedtak = () => {
     const { behandling } = useRevurderingOmgjøring();
@@ -141,7 +140,7 @@ const Innvilgelse = ({ skjema, behandling, sak }: InnvilgelseProps) => {
                 <>
                     <BehandlingBarnetillegg />
                     <Separator />
-                    <RevurderingInnvilgelseBrev />
+                    <RevurderingOmgjøringBrev />
                     <Separator />
                     <BehandlingBeregningOgSimulering />{' '}
                 </>

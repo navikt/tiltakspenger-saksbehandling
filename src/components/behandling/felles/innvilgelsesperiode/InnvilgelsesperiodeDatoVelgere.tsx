@@ -1,7 +1,4 @@
-import {
-    useBehandlingInnvilgelseSkjema,
-    useBehandlingInnvilgelseSkjemaDispatch,
-} from '~/components/behandling/context/innvilgelse/innvilgelseContext';
+import { useBehandlingInnvilgelseSkjemaDispatch } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 import { useSak } from '~/context/sak/SakContext';
 import { Periode } from '~/types/Periode';
 import { dateTilISOTekst, datoMin } from '~/utils/date';
@@ -13,17 +10,18 @@ type Props = {
     periode: Partial<Periode>;
     tiltaksdeltakelsesperiode: Periode;
     index: number;
+    readOnly: boolean;
 };
 
 export const InnvilgelsesperiodeDatovelgere = ({
     periode,
     tiltaksdeltakelsesperiode,
     index,
+    readOnly,
 }: Props) => {
     const { sak } = useSak();
     const { behandling } = useBehandling();
 
-    const { erReadonly } = useBehandlingInnvilgelseSkjema();
     const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
 
     const defaultDato = datoMin(new Date(), tiltaksdeltakelsesperiode.tilOgMed);
@@ -37,7 +35,7 @@ export const InnvilgelsesperiodeDatovelgere = ({
                 maxDate={periode.tilOgMed ?? tiltaksdeltakelsesperiode.tilOgMed}
                 defaultMonth={defaultDato}
                 error={!periode.fraOgMed && 'Velg dato'}
-                readOnly={erReadonly}
+                readOnly={readOnly}
                 size={'small'}
                 onDateChange={(valgtDato) => {
                     if (!valgtDato) {
@@ -63,7 +61,7 @@ export const InnvilgelsesperiodeDatovelgere = ({
                 maxDate={tiltaksdeltakelsesperiode.tilOgMed}
                 defaultMonth={defaultDato}
                 error={!periode.tilOgMed && 'Velg dato'}
-                readOnly={erReadonly}
+                readOnly={readOnly}
                 size={'small'}
                 onDateChange={(valgtDato) => {
                     if (!valgtDato) {

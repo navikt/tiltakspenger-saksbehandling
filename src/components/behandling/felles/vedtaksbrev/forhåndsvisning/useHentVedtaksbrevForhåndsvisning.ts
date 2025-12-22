@@ -1,60 +1,63 @@
 import { useFetchBlobFraApi } from '~/utils/fetch/useFetchFraApi';
-import { Periode } from '~/types/Periode';
 import { Nullable } from '~/types/UtilTypes';
-import { Rammebehandling, RammebehandlingResultat } from '~/types/Rammebehandling';
+import { Rammebehandling } from '~/types/Rammebehandling';
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';
-import { Avslagsgrunn } from '~/types/Søknadsbehandling';
+import { Avslagsgrunn, SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
 import { RevurderingResultat } from '~/types/Revurdering';
 import { Innvilgelsesperiode } from '~/types/Innvilgelsesperiode';
 
-export type SøknadsbehandlingBrevForhåndsvisningDTO = {
-    resultat: RammebehandlingResultat;
+export type SøknadsbehandlingInnvilgelseBrevForhåndsvisningDTO = {
+    resultat: SøknadsbehandlingResultat.INNVILGELSE;
     fritekst: Nullable<string>;
-    vedtaksperiode?: Periode;
+    innvilgelsesperioder: Innvilgelsesperiode[];
     barnetillegg?: BarnetilleggPeriode[];
-    avslagsgrunner?: Avslagsgrunn[];
-    innvilgelsesperioder?: Innvilgelsesperiode[];
 };
 
-type StansFraOgMed =
+export type SøknadsbehandlingAvslagBrevForhåndsvisningDTO = {
+    resultat: SøknadsbehandlingResultat.AVSLAG;
+    fritekst: Nullable<string>;
+    avslagsgrunner: Avslagsgrunn[];
+};
+
+export type SøknadsbehandlingBrevForhåndsvisningDTO =
+    | SøknadsbehandlingInnvilgelseBrevForhåndsvisningDTO
+    | SøknadsbehandlingAvslagBrevForhåndsvisningDTO;
+
+export type RevurderingStansBrevForhåndsvisningDTO = {
+    resultat: RevurderingResultat.STANS;
+    fritekst: Nullable<string>;
+    valgteHjemler: string[];
+} & (
     | {
-          stansFraOgMed?: null;
+          stansFraOgMed: null;
           harValgtStansFraFørsteDagSomGirRett: true;
       }
     | {
           stansFraOgMed: string;
           harValgtStansFraFørsteDagSomGirRett: false;
-      };
-
-type StansTilOgMed =
-    | {
-          stansTilOgMed?: null;
-          harValgtStansTilSisteDagSomGirRett: true;
       }
-    | {
-          stansTilOgMed: string;
-          harValgtStansTilSisteDagSomGirRett: false;
-      };
-
-export type RevurderingStansBrevForhåndsvisningDTO = {
-    fritekst: Nullable<string>;
-    valgteHjemler: string[];
-    resultat: RevurderingResultat.STANS;
-} & StansFraOgMed &
-    StansTilOgMed;
+);
 
 export type RevurderingInnvilgelseBrevForhåndsvisningDTO = {
-    fritekst: Nullable<string>;
-    vedtaksperiode: Periode;
     resultat: RevurderingResultat.INNVILGELSE;
+    fritekst: Nullable<string>;
+    innvilgelsesperioder: Innvilgelsesperiode[];
     barnetillegg: Nullable<BarnetilleggPeriode[]>;
-    innvilgelsesperioder: Nullable<Innvilgelsesperiode[]>;
+};
+
+export type RevurderingOmgjøringBrevForhåndsvisningDTO = {
+    resultat: RevurderingResultat.OMGJØRING;
+    fritekst: Nullable<string>;
+    innvilgelsesperioder: Innvilgelsesperiode[];
+    barnetillegg: Nullable<BarnetilleggPeriode[]>;
 };
 
 export type BrevForhåndsvisningDTO =
-    | SøknadsbehandlingBrevForhåndsvisningDTO
+    | SøknadsbehandlingInnvilgelseBrevForhåndsvisningDTO
+    | SøknadsbehandlingAvslagBrevForhåndsvisningDTO
     | RevurderingStansBrevForhåndsvisningDTO
-    | RevurderingInnvilgelseBrevForhåndsvisningDTO;
+    | RevurderingInnvilgelseBrevForhåndsvisningDTO
+    | RevurderingOmgjøringBrevForhåndsvisningDTO;
 
 export const useHentVedtaksbrevForhåndsvisning = (behandling: Rammebehandling) => {
     const { trigger, error, isMutating } = useFetchBlobFraApi<BrevForhåndsvisningDTO>(

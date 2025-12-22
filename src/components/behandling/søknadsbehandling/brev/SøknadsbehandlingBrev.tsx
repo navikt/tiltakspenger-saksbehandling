@@ -1,7 +1,6 @@
 import { useSøknadsbehandling } from '../../context/BehandlingContext';
 import { Vedtaksbrev } from '~/components/behandling/felles/vedtaksbrev/Vedtaksbrev';
 import { søknadsbehandlingValidering } from '~/components/behandling/søknadsbehandling/send-og-godkjenn/søknadsbehandlingValidering';
-import { SøknadsbehandlingBrevForhåndsvisningDTO } from '~/components/behandling/felles/vedtaksbrev/forhåndsvisning/useHentVedtaksbrevForhåndsvisning';
 import { BodyLong } from '@navikt/ds-react';
 import { TekstListe } from '~/components/liste/TekstListe';
 import { SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
@@ -9,8 +8,7 @@ import {
     SøknadsbehandlingSkjemaContext,
     useSøknadsbehandlingSkjema,
 } from '~/components/behandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
-
-import { periodiseringTotalPeriode } from '~/utils/periode';
+import { SøknadsbehandlingBrevForhåndsvisningDTO } from '~/components/behandling/felles/vedtaksbrev/forhåndsvisning/useHentVedtaksbrevForhåndsvisning';
 
 export const SøknadsbehandlingBrev = () => {
     const { behandling } = useSøknadsbehandling();
@@ -20,28 +18,22 @@ export const SøknadsbehandlingBrev = () => {
         <Vedtaksbrev
             header={'Vedtaksbrev for tiltakspenger og barnetillegg'}
             validering={søknadsbehandlingValidering(behandling, skjema)('tilBeslutning')}
-            hentDto={(): SøknadsbehandlingBrevForhåndsvisningDTO =>
-                søknadsbehandlingSkjemaTilBrevForhåndsvisningDTO(skjema)
-            }
+            hentDto={() => tilForhåndsvisningDTO(skjema)}
             hjelpetekst={<Hjelpetekst />}
         />
     );
 };
 
-const søknadsbehandlingSkjemaTilBrevForhåndsvisningDTO = (
+const tilForhåndsvisningDTO = (
     skjema: SøknadsbehandlingSkjemaContext,
 ): SøknadsbehandlingBrevForhåndsvisningDTO => {
     const { resultat } = skjema;
 
-    const baseDTO = {
-        fritekst: skjema.textAreas.brevtekst.getValue(),
-        resultat: skjema.resultat,
-    };
-
     switch (resultat) {
         case SøknadsbehandlingResultat.AVSLAG: {
             return {
-                ...baseDTO,
+                resultat: SøknadsbehandlingResultat.AVSLAG,
+                fritekst: skjema.textAreas.brevtekst.getValue(),
                 avslagsgrunner: skjema.avslagsgrunner,
             };
         }
@@ -54,8 +46,8 @@ const søknadsbehandlingSkjemaTilBrevForhåndsvisningDTO = (
             }
 
             return {
-                ...baseDTO,
-                vedtaksperiode: periodiseringTotalPeriode(innvilgelse.innvilgelsesperioder),
+                resultat: SøknadsbehandlingResultat.INNVILGELSE,
+                fritekst: skjema.textAreas.brevtekst.getValue(),
                 innvilgelsesperioder: innvilgelse.innvilgelsesperioder,
                 barnetillegg: innvilgelse.barnetilleggPerioder,
             };

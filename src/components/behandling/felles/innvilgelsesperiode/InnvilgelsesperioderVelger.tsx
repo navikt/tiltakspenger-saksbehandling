@@ -10,16 +10,14 @@ import { useSak } from '~/context/sak/SakContext';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { Alert, Button, Heading, HStack, Select, VStack } from '@navikt/ds-react';
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
-import { Innvilgelsesperiode } from '~/types/Innvilgelsesperiode';
+import { InnvilgelsesperiodeDatovelgere } from '~/components/behandling/felles/innvilgelsesperiode/InnvilgelsesperiodeDatoVelgere';
+import { InnvilgelsesperioderVarsler } from '~/components/behandling/felles/innvilgelsesperiode/InnvilgelsesperioderVarsler';
 import { XMarkIcon } from '@navikt/aksel-icons';
 import { TiltaksdeltakelseMedPeriode } from '~/types/TiltakDeltakelse';
-import { InnvilgelsesperiodeDatovelgere } from '~/components/behandling/felles/innvilgelsesperiode/datovelgere/InnvilgelsesperiodeDatoVelgere';
+import { periodeTilFormatertDatotekst } from '~/utils/date';
+import { Innvilgelsesperiode } from '~/types/Innvilgelsesperiode';
 import { Rammebehandling } from '~/types/Rammebehandling';
 import { SakProps } from '~/types/Sak';
-import { InnvilgelsesperioderVarsler } from '~/components/behandling/felles/innvilgelsesperiode/InnvilgelsesperioderVarsler';
-
-import style from './InnvilgelsesperioderVelger.module.css';
-import { periodeTilFormatertDatotekst } from '~/utils/date';
 
 export const InnvilgelsesperioderVelger = () => {
     const { sak } = useSak();
@@ -46,12 +44,13 @@ export const InnvilgelsesperioderVelger = () => {
                 {harValgtPeriode ? (
                     <VStack gap={'2'} align={'start'}>
                         {innvilgelsesperioder.map((it, index) => (
-                            <Valg
+                            <InnvilgelsesperiodeVelgerFull
                                 innvilgelsesperioder={innvilgelsesperioder}
                                 index={index}
                                 tiltaksdeltakelser={tiltaksdeltakelser}
                                 behandling={behandling}
                                 sak={sak}
+                                readOnly={erReadonly}
                                 key={`${it.periode.fraOgMed}-${it.periode.tilOgMed}`}
                             />
                         ))}
@@ -85,6 +84,7 @@ export const InnvilgelsesperioderVelger = () => {
                         periode={innvilgelsesperioder.at(0)!.periode}
                         tiltaksdeltakelsesperiode={tiltaksdeltakelsesperiode}
                         index={0}
+                        readOnly={erReadonly}
                     />
                 )}
             </VedtakSeksjon.FullBredde>
@@ -92,16 +92,23 @@ export const InnvilgelsesperioderVelger = () => {
     );
 };
 
-type ValgProps = {
+type VelgerFullProps = {
     innvilgelsesperioder: Innvilgelsesperiode[];
     tiltaksdeltakelser: TiltaksdeltakelseMedPeriode[];
     behandling: Rammebehandling;
     sak: SakProps;
     index: number;
+    readOnly: boolean;
 };
 
-const Valg = ({ innvilgelsesperioder, tiltaksdeltakelser, behandling, sak, index }: ValgProps) => {
-    const { erReadonly } = useBehandlingInnvilgelseSkjema();
+export const InnvilgelsesperiodeVelgerFull = ({
+    innvilgelsesperioder,
+    tiltaksdeltakelser,
+    behandling,
+    sak,
+    index,
+    readOnly,
+}: VelgerFullProps) => {
     const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
 
     const innvilgelsesperiode = innvilgelsesperioder.at(index)!;
@@ -115,17 +122,18 @@ const Valg = ({ innvilgelsesperioder, tiltaksdeltakelser, behandling, sak, index
     );
 
     return (
-        <HStack gap={'3'}>
+        <HStack gap={'3'} align={'end'}>
             <InnvilgelsesperiodeDatovelgere
                 periode={periode}
                 tiltaksdeltakelsesperiode={tiltaksdeltakelsesperiode}
                 index={index}
+                readOnly={readOnly}
             />
 
             <Select
                 label={'Antall dager'}
                 size={'small'}
-                readOnly={erReadonly}
+                readOnly={readOnly}
                 value={antallDagerPerMeldeperiode}
                 onChange={(event) =>
                     dispatch({
@@ -150,7 +158,7 @@ const Valg = ({ innvilgelsesperioder, tiltaksdeltakelser, behandling, sak, index
             <Select
                 label={'Tiltak'}
                 size={'small'}
-                readOnly={erReadonly || (tiltaksdeltakelser.length === 1 && harValgtGyldigTiltak)}
+                readOnly={readOnly || (tiltaksdeltakelser.length === 1 && harValgtGyldigTiltak)}
                 value={tiltaksdeltakelseId}
                 onChange={(event) =>
                     dispatch({
@@ -179,18 +187,17 @@ const Valg = ({ innvilgelsesperioder, tiltaksdeltakelser, behandling, sak, index
             </Select>
 
             {!harValgtGyldigTiltak && (
-                <Alert variant={'error'} size={'small'} inline={true} className={style.alignBunn}>
+                <Alert variant={'error'} size={'small'} inline={true}>
                     {'Kan ikke innvilge for dette tiltaket'}
                 </Alert>
             )}
 
-            {innvilgelsesperioder.length > 1 && !erReadonly && (
+            {innvilgelsesperioder.length > 1 && !readOnly && (
                 <Button
                     type={'button'}
                     variant={'tertiary'}
                     size={'small'}
                     icon={<XMarkIcon />}
-                    className={style.alignBunn}
                     onClick={() => {
                         dispatch({
                             type: 'fjernInnvilgelsesperiode',
@@ -209,7 +216,7 @@ const Valg = ({ innvilgelsesperioder, tiltaksdeltakelser, behandling, sak, index
     );
 };
 
-export const tiltakVisningsnavn = (
+const tiltakVisningsnavn = (
     tiltaksdeltakelse: TiltaksdeltakelseMedPeriode,
     tiltaksdeltakelser: TiltaksdeltakelseMedPeriode[],
 ): string => {
