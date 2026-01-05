@@ -11,7 +11,7 @@ import {
     BrukersMeldekortProps,
 } from '~/types/meldekort/BrukersMeldekort';
 import { MeldeperiodeProps } from '~/types/meldekort/Meldeperiode';
-import { erLørdagEllerSøndag, formaterDatotekst } from '~/utils/date';
+import { formaterDatotekst } from '~/utils/date';
 import { Nullable } from '~/types/UtilTypes';
 import { GyldigeMeldekortDagUfyllingsvalg } from '~/components/meldekort/0-felles-komponenter/uker/MeldekortUkeBehandling';
 import { FieldErrors } from 'react-hook-form';
@@ -59,14 +59,6 @@ export const hentMeldekortForhåndsutfylling = (
                 return {
                     ...dag,
                     status: MeldekortBehandlingDagStatus.IkkeRettTilTiltakspenger,
-                };
-            }
-
-            // Pga bugs i OS ved utbetaling av helgedager kan vi ikke støtte dette ennå
-            if (erLørdagEllerSøndag(dag.dato)) {
-                return {
-                    ...dag,
-                    status: MeldekortBehandlingDagStatus.IkkeTiltaksdag,
                 };
             }
 
