@@ -5,6 +5,7 @@ import { Rammebehandling } from '~/types/Rammebehandling';
 import { InnvilgelseState } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 import { Søknad } from '~/types/Søknad';
 import { periodiseringTotalPeriode, validerPeriodisering } from '~/utils/periode';
+import { validerTiltaksdeltakelser } from '~/components/behandling/felles/validering/validerTiltaksdeltakelser';
 
 export const validerInnvilgelse = (
     behandling: Rammebehandling,
@@ -30,6 +31,13 @@ export const validerInnvilgelse = (
             'Innvilgelsesperiodene må være sammenhengende uten hull eller overlapp',
         );
     }
+
+    const tiltaksdeltakelserValidering = validerTiltaksdeltakelser(
+        behandling,
+        innvilgelsesperioder,
+    );
+    validering.errors.push(...tiltaksdeltakelserValidering.errors);
+    validering.warnings.push(...tiltaksdeltakelserValidering.warnings);
 
     const tiltaksperiode = hentHeleTiltaksdeltakelsesperioden(behandling);
 
