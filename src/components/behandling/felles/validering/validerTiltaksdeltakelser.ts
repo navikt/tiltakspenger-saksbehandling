@@ -39,23 +39,15 @@ export const validerTiltaksdeltakelser = (
         }
 
         if (deltakelse && deltakelse.deltagelseFraOgMed && deltakelse.deltagelseTilOgMed) {
-            if (
-                dayjs(it.periode.fraOgMed).isBefore(
-                    dayjs(deltakelse.deltagelseFraOgMed),
-                )
-            ) {
+            if (dayjs(it.periode.fraOgMed).isBefore(dayjs(deltakelse.deltagelseFraOgMed))) {
                 validering.errors.push(
-                    'Valgt periode for tiltaksdeltakelse kan ikke starte før tiltaksdeltakelsens startdato',
+                    'Valgt innvilgelsesperiode kan ikke starte før tiltaksdeltakelsens startdato',
                 );
             }
 
-            if (
-                dayjs(it.periode.tilOgMed).isAfter(
-                    dayjs(deltakelse.deltagelseTilOgMed),
-                )
-            ) {
+            if (dayjs(it.periode.tilOgMed).isAfter(dayjs(deltakelse.deltagelseTilOgMed))) {
                 validering.errors.push(
-                    'Valgt periode for tiltaksdeltakelse kan ikke slutte etter tiltaksdeltakelsens sluttdato',
+                    'Valgt innvilgelsesperiode kan ikke slutte etter tiltaksdeltakelsens sluttdato',
                 );
             }
         }
