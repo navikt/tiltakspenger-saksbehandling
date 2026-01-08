@@ -77,47 +77,44 @@ export const hentMeldekortForhåndsutfylling = (
 };
 
 export const useCustomMeldekortUtfyllingValidationResolver = () =>
-    useCallback(
-        async (
-            data: MeldekortBehandlingForm,
-            valideringscontext: { tillattAntallDager: number },
-        ) => {
-            const errors: FieldErrors<MeldekortBehandlingForm> = {};
+    useCallback(meldekortUtfyllingValidation, []);
 
-            if (
-                tellDagerMedDeltattEllerFravær(data.dager) > valideringscontext.tillattAntallDager
-            ) {
-                errors['dager'] = {
-                    type: 'dager',
-                    message: `For mange dager utfylt - Maks ${valideringscontext.tillattAntallDager} dager med tiltak for denne perioden.`,
-                };
-            }
+export const meldekortUtfyllingValidation = (
+    data: MeldekortBehandlingForm,
+    valideringscontext: { tillattAntallDager: number },
+) => {
+    const errors: FieldErrors<MeldekortBehandlingForm> = {};
 
-            data.dager.forEach((dag, index) => {
-                /*
+    if (tellDagerMedDeltattEllerFravær(data.dager) > valideringscontext.tillattAntallDager) {
+        errors['dager'] = {
+            type: 'dager',
+            message: `For mange dager utfylt - Maks ${valideringscontext.tillattAntallDager} dager med tiltak for denne perioden.`,
+        };
+    }
+
+    data.dager.forEach((dag, index) => {
+        /*
                 Denne er fordi vi teller med dagene som saksbehandler ikke skal få lov til å endre
                 slik at feilmeldingene blir mappet til den riktige indeksen.
                 */
-                if (dag.status === MeldekortBehandlingDagStatus.IkkeRettTilTiltakspenger) {
-                    return;
-                }
+        if (dag.status === MeldekortBehandlingDagStatus.IkkeRettTilTiltakspenger) {
+            return;
+        }
 
-                if (!GyldigeMeldekortDagUfyllingsvalg.includes(dag.status)) {
-                    //erorr objektet vårt må bygges opp dynamisk for å matche react-hook-form sitt format
-                    errors.dager = errors.dager ?? [];
-                    errors.dager[index] = errors.dager[index] ?? {};
+        if (!GyldigeMeldekortDagUfyllingsvalg.includes(dag.status)) {
+            //erorr objektet vårt må bygges opp dynamisk for å matche react-hook-form sitt format
+            errors.dager = errors.dager ?? [];
+            errors.dager[index] = errors.dager[index] ?? {};
 
-                    errors['dager'][index]['status'] = {
-                        type: `dager.${index}.status`,
-                        message: `Ugyldig status valgt for dag ${formaterDatotekst(dag.dato)}`,
-                    };
-                }
-            });
+            errors['dager'][index]['status'] = {
+                type: `dager.${index}.status`,
+                message: `Ugyldig status valgt for dag ${formaterDatotekst(dag.dato)}`,
+            };
+        }
+    });
 
-            return { values: data, errors: errors };
-        },
-        [],
-    );
+    return { values: data, errors: errors };
+};
 
 const brukersStatusTilBehandlingsStatus: Record<
     BrukersMeldekortDagStatus,

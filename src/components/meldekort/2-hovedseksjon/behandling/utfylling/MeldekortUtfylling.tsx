@@ -1,19 +1,11 @@
-import {
-    Alert,
-    BodyShort,
-    Button,
-    HelpText,
-    HStack,
-    InlineMessage,
-    Textarea,
-    VStack,
-} from '@navikt/ds-react';
+import { Alert, BodyShort, Button, HStack, Textarea, VStack } from '@navikt/ds-react';
 import { useSak } from '~/context/sak/SakContext';
 import {
     ForhåndsvisMeldekortbehandlingBrevRequest,
     hentMeldekortForhåndsutfylling,
     MeldekortBehandlingForm,
     meldekortBehandlingFormTilDto,
+    meldekortUtfyllingValidation,
     useCustomMeldekortUtfyllingValidationResolver,
 } from './meldekortUtfyllingUtils';
 import { Controller, FormProvider, useForm, UseFormReturn } from 'react-hook-form';
@@ -84,13 +76,25 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
         .dager.every((dag) => dag.status !== MeldekortBehandlingDagStatus.IkkeBesvart);
     const skalViseBeregningVarsel = skjemaErEndret && skjemaErUtfylt;
 
+    useEffect(() => {
+        formContext.reset({
+            dager: hentMeldekortForhåndsutfylling(
+                meldekortBehandling,
+                tidligereMeldekortBehandlinger,
+                sisteMeldeperiode,
+                brukersMeldekortForBehandling,
+            ),
+            begrunnelse: meldekortBehandling.begrunnelse ?? '',
+            tekstTilVedtaksbrev: meldekortBehandling.tekstTilVedtaksbrev ?? '',
+        });
+        //Vi ønsker kun å resette form hvis disse feltene endres
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [meldekortBehandling, tidligereMeldekortBehandlinger, brukersMeldekortForBehandling]);
+
     const forhåndsvisBrev = useFetchBlobFraApi<ForhåndsvisMeldekortbehandlingBrevRequest>(
         `/sak/${sakId}/meldekortbehandling/${meldekortBehandling.id}/forhandsvis`,
         'POST',
     );
-
-    const buttonActionRef =
-        useRef<Nullable<'lagreOgBeregn' | 'sendTilBeslutter' | 'åpneSendTilBeslutterModal'>>(null);
 
     const lagreOgBeregnMeldekort = useFetchJsonFraApi<
         MeldeperiodeKjedeProps,
@@ -102,8 +106,6 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
             }
         },
     });
-
-    const modalRef = useRef<HTMLDialogElement>(null);
 
     const sendMeldekortTilBeslutter = useFetchJsonFraApi<
         MeldeperiodeKjedeProps,
@@ -119,6 +121,11 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
             }
         },
     });
+
+    const modalRef = useRef<HTMLDialogElement>(null);
+
+    const buttonActionRef =
+        useRef<Nullable<'lagreOgBeregn' | 'sendTilBeslutter' | 'åpneSendTilBeslutterModal'>>(null);
 
     const onSubmit = (data: MeldekortBehandlingForm) => {
         switch (buttonActionRef.current) {
@@ -138,18 +145,16 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
         }
     };
 
-    useEffect(() => {
-        formContext.reset({
-            dager: hentMeldekortForhåndsutfylling(
-                meldekortBehandling,
-                tidligereMeldekortBehandlinger,
-                sisteMeldeperiode,
-                brukersMeldekortForBehandling,
-            ),
-            begrunnelse: meldekortBehandling.begrunnelse ?? '',
-            tekstTilVedtaksbrev: meldekortBehandling.tekstTilVedtaksbrev ?? '',
-        });
-    }, [meldekortBehandling, tidligereMeldekortBehandlinger, brukersMeldekortForBehandling]);
+    const harValideringsFeil =
+        Object.values(
+            meldekortUtfyllingValidation(formContext.getValues(), {
+                tillattAntallDager: antallDager,
+            }).errors,
+        ).length > 0;
+
+    //Vi er interesert i å disable 'send til beslutter' hvis formet ikke er i en tilstand som kan sendes videre
+    const kanSendeTilBeslutning =
+        !skjemaErEndret && !harValideringsFeil && meldekortBehandling.beregning !== null;
 
     return (
         <FormProvider {...formContext}>
@@ -165,11 +170,10 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
                         meldekortBehandling={meldekortBehandling}
                         className={classNames(skjemaErEndret && styles.utdatertBeregning)}
                     />
-                    <MeldekortBegrunnelse
-                        defaultValue={meldekortBehandling.begrunnelse}
-                        onChange={(event) => {
-                            formContext.setValue('begrunnelse', event.target.value);
-                        }}
+                    <Controller
+                        name={'begrunnelse'}
+                        control={formContext.control}
+                        render={({ field }) => <MeldekortBegrunnelse {...field} />}
                     />
 
                     <Divider orientation="horizontal" />
@@ -179,26 +183,7 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
                         render={({ field }) => (
                             <Textarea
                                 label="Vedtaksbrev for behandling av meldekort"
-                                description={
-                                    <VStack gap="2">
-                                        <BodyShort>
-                                            Teksten vises i vedtaksbrevet til bruker.
-                                        </BodyShort>
-
-                                        {(meldekortBehandling.tekstTilVedtaksbrev ?? '') !==
-                                            formContext.watch('tekstTilVedtaksbrev') && (
-                                            <HStack gap="1">
-                                                <InlineMessage status="warning">
-                                                    Teksten er endret og ikke lagret.
-                                                </InlineMessage>
-                                                <HelpText>
-                                                    Endringene blir lagret ved &apos;Lagre og
-                                                    beregn&apos;, og &apos;Send til beslutter&apos;
-                                                </HelpText>
-                                            </HStack>
-                                        )}
-                                    </VStack>
-                                }
+                                description="Teksten vises i vedtaksbrevet til bruker."
                                 minRows={5}
                                 resize={'vertical'}
                                 value={field.value}
@@ -246,6 +231,7 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
                         buttonActionRef={buttonActionRef}
                         form={formContext}
                         ingenDagerGirRett={ingenDagerGirRett}
+                        kanSendeTilBeslutning={kanSendeTilBeslutning}
                     />
                 </VStack>
             </form>
@@ -271,6 +257,7 @@ const MeldekortUtfyllingFooter = (props: {
     >;
     form: UseFormReturn<MeldekortBehandlingForm>;
     ingenDagerGirRett: boolean;
+    kanSendeTilBeslutning: boolean;
 }) => {
     return (
         <VStack gap={'2'}>
@@ -317,7 +304,7 @@ const MeldekortUtfyllingFooter = (props: {
                         onClick={() => {
                             props.buttonActionRef.current = 'åpneSendTilBeslutterModal';
                         }}
-                        disabled={props.ingenDagerGirRett}
+                        disabled={props.ingenDagerGirRett || !props.kanSendeTilBeslutning}
                     >
                         Send til beslutter
                     </Button>
