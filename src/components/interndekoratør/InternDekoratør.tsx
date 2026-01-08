@@ -16,7 +16,6 @@ import Varsel from '../varsel/Varsel';
 import Link from 'next/link';
 import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
 import router from 'next/router';
-import Image from 'next/image';
 import styles from './InternDekoratør.module.css';
 import { BekreftelsesModal } from '~/components/modaler/BekreftelsesModal';
 import { useHentEllerOpprettSak } from '~/components/interndekoratør/useHentEllerOpprettSak';
@@ -77,15 +76,6 @@ export const InternDekoratør = () => {
                             <Search.Button className={styles.søkKnapp} />
                         </Search>
                     </form>
-                    <Image
-                        src="/christmas-season.svg"
-                        alt="God jul illustrasjon"
-                        aria-hidden
-                        width={400}
-                        height={45}
-                        className={styles.logoResponsive}
-                        priority
-                    />
                 </HStack>
                 <Spacer />
                 <HStack gap="4">
