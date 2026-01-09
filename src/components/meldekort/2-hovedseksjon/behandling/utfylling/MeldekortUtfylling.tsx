@@ -207,6 +207,15 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
                                     )
                                         ? formContext.getValues('tekstTilVedtaksbrev')
                                         : null,
+                                    dager: formContext
+                                        .getValues('dager')
+                                        .every(
+                                            (dag) =>
+                                                dag.status !==
+                                                MeldekortBehandlingDagStatus.IkkeBesvart,
+                                        )
+                                        ? formContext.getValues('dager')
+                                        : null,
                                 },
                                 { onSuccess: (blob) => window.open(URL.createObjectURL(blob!)) },
                             );

@@ -154,6 +154,7 @@ export type MeldekortBehandlingForm = {
 };
 
 export interface ForhåndsvisMeldekortbehandlingBrevRequest {
+    dager: Nullable<MeldekortDagProps[]>;
     tekstTilVedtaksbrev: Nullable<string>;
 }
 

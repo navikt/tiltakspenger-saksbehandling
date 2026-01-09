@@ -50,7 +50,7 @@ export const MeldekortOppsummering = ({ meldekortBehandling }: Props) => {
                 loading={forhåndsvisBrev.isMutating}
                 onClick={() => {
                     forhåndsvisBrev.trigger(
-                        { tekstTilVedtaksbrev: tekstTilVedtaksbrev },
+                        { tekstTilVedtaksbrev: tekstTilVedtaksbrev, dager: dager },
                         { onSuccess: (blob) => window.open(URL.createObjectURL(blob!)) },
                     );
                 }}
