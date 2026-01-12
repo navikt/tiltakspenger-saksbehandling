@@ -52,7 +52,7 @@ const OprettKlagePage = ({ sak }: Props) => {
         {
             onSuccess: (klagebehandling) => {
                 console.log('Klage opprettet:', klagebehandling);
-                router.push(`/sak/${sak.saksnummer}/klage/${klagebehandling!.id}/vurdering`);
+                router.push(`/sak/${sak.saksnummer}/klage/${klagebehandling!.id}/brev`);
             },
         },
     );
