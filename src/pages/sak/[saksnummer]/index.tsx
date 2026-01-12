@@ -6,13 +6,12 @@ import { SakProvider } from '~/context/sak/SakContext';
 
 type Props = {
     sak: SakProps;
-    isLocalOrDev: boolean;
 };
 
-const Saksside = ({ sak, isLocalOrDev }: Props) => {
+const Saksside = ({ sak }: Props) => {
     return (
         <SakProvider sak={sak}>
-            <Personoversikt isLocalOrDev={isLocalOrDev} />
+            <Personoversikt />
         </SakProvider>
     );
 };
@@ -20,15 +19,13 @@ const Saksside = ({ sak, isLocalOrDev }: Props) => {
 export const getServerSideProps = pageWithAuthentication(async (context) => {
     const sak = await fetchSak(context.req, context.params!.saksnummer as string);
 
-    const isLocalOrDev = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
-
     if (!sak) {
         return {
             notFound: true,
         };
     }
 
-    return { props: { sak, isLocalOrDev } satisfies Props };
+    return { props: { sak } satisfies Props };
 });
 
 export default Saksside;

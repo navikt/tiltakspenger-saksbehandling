@@ -20,9 +20,11 @@ import { OpprettSøknad } from '~/components/personoversikt/manuell-søknad/Oppr
 import styles from './Personoversikt.module.css';
 import { Tidslinjer } from '~/components/tidslinjer/Tidslinjer';
 import router from 'next/router';
+import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
 
-export const Personoversikt = (props: { isLocalOrDev: boolean }) => {
+export const Personoversikt = () => {
     const { sak } = useSak();
+    const featureToggle = useFeatureToggles();
 
     const {
         sakId,
@@ -52,7 +54,7 @@ export const Personoversikt = (props: { isLocalOrDev: boolean }) => {
                     </Heading>
                     <HStack gap="3">
                         <MeldekortHelgToggle />
-                        {props.isLocalOrDev && (
+                        {featureToggle.klageToggle && (
                             <Button
                                 type="button"
                                 variant="secondary"
