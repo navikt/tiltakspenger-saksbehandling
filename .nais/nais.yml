@@ -15,8 +15,6 @@ spec:
   replicas:
     min: {{ replicas }}
     max: {{ replicas }}
-  secureLogs:
-    enabled: true
   env:
   {{#each envs}}
     - name: {{name}}
