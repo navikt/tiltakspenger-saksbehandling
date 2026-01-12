@@ -7,6 +7,8 @@ import {
     behandlingResultatTilTag,
     finnBehandlingStatusTag,
     finnTypeBehandlingTekstForOversikt,
+    klagebehandlingResultatTilTag,
+    klagebehandlingStatusTilTag,
     meldeperiodeKjedeStatusTag,
 } from '~/utils/tekstformateringUtils';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '~/utils/date';
@@ -17,6 +19,7 @@ import { SakProps } from '~/types/Sak';
 import { Periode } from '~/types/Periode';
 import { useSak } from '~/context/sak/SakContext';
 import { Nullable } from '~/types/UtilTypes';
+import KlageMeny from '~/components/behandlingmeny/KlageMeny';
 
 type Props = {
     åpneBehandlinger: ÅpenBehandlingForOversikt[];
@@ -159,6 +162,21 @@ const propsForRad = (
                         meldeperiodeUrl={meldeperiodeUrl(saksnummer, periode)}
                     />
                 ),
+            };
+        }
+        case ÅpenBehandlingForOversiktType.KLAGE: {
+            const klagebehandling = sak.klageBehandlinger.find(
+                (klage) => klage.id === åpenBehandling.id,
+            )!;
+
+            return {
+                typeTekst,
+                statusTag: klagebehandlingStatusTilTag[åpenBehandling.status],
+                resultatTag: åpenBehandling.resultat
+                    ? klagebehandlingResultatTilTag[åpenBehandling.resultat]
+                    : undefined,
+                saksbehandler: åpenBehandling.saksbehandler,
+                meny: <KlageMeny klage={klagebehandling} />,
             };
         }
     }

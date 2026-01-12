@@ -3,6 +3,15 @@ import { Nullable } from './UtilTypes';
 
 export type KlageId = `klage_${string}`;
 
+export enum KlagebehandlingResultat {
+    AVVIST = 'AVVIST',
+}
+
+export enum KlagebehandlingStatus {
+    KLAR_TIL_BEHANDLING = 'KLAR_TIL_BEHANDLING',
+    UNDER_BEHANDLING = 'UNDER_BEHANDLING',
+}
+
 export interface Klagebehandling {
     id: KlageId;
     sakId: string;
@@ -14,7 +23,7 @@ export interface Klagebehandling {
     journalpostId: string;
     journalpostOpprettet: string;
     status: string;
-    resultat: Nullable<string>;
+    resultat: Nullable<KlagebehandlingResultat>;
     vedtakDetKlagesPå: Nullable<VedtakId>;
     erKlagerPartISaken: boolean;
     klagesDetPåKonkreteElementerIVedtaket: boolean;

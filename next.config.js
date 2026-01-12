@@ -6,10 +6,6 @@ export default {
         optimizePackageImports: ['@navikt/ds-react', '@navikt/aksel-icons'],
     },
     output: 'standalone',
-    //TODO - fjern når vi har faktisk kan sende ut klagebrev
-    images: {
-        domains: ['media1.giphy.com'],
-    },
     async headers() {
         const ContentSecurityPolicy = `
           default-src 'self';

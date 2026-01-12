@@ -7,17 +7,20 @@ import { SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
 import { Nullable } from '~/types/UtilTypes';
 import { MeldeperiodeKjedeId, MeldeperiodeKjedeStatus } from '~/types/meldekort/Meldeperiode';
 import { MeldekortBehandlingId } from '~/types/meldekort/MeldekortBehandling';
+import { KlagebehandlingResultat, KlagebehandlingStatus, KlageId } from './Klage';
 
 // Kan være:
 // 1. Søknad uten opprettet behandling
 // 2. Åpen rammebehandling (søknadsbehandling eller revurdering)
 // 3. Åpen meldekortbehandling
 // 4. Meldeperiodekjede med et brukers meldekort som ikke er behandlet
+// 5. klage
 export type ÅpenBehandlingForOversikt =
     | SøknadUtenBehandling
     | ÅpenSøknadsbehandling
     | ÅpenRevurdering
-    | MeldeperiodeKjedeSomMåBehandles;
+    | MeldeperiodeKjedeSomMåBehandles
+    | KlageBehandlingForOversikt;
 
 export type ÅpenRammebehandlingForOversikt = ÅpenSøknadsbehandling | ÅpenRevurdering;
 
@@ -26,10 +29,11 @@ export enum ÅpenBehandlingForOversiktType {
     SØKNADSBEHANDLING = 'SØKNADSBEHANDLING',
     REVURDERING = 'REVURDERING',
     MELDEKORT = 'MELDEKORT',
+    KLAGE = 'KLAGE',
 }
 
 interface ÅpenBehandlingBase {
-    id: SøknadId | BehandlingId | MeldeperiodeKjedeId;
+    id: SøknadId | BehandlingId | MeldeperiodeKjedeId | KlageId;
     sakId: SakId;
     saksnummer: string;
     opprettet: string;
@@ -76,4 +80,11 @@ export interface MeldeperiodeKjedeSomMåBehandles extends ÅpenBehandlingBase {
     status: MeldeperiodeKjedeStatus;
     saksbehandler?: Nullable<string>;
     beslutter?: Nullable<string>;
+}
+
+export interface KlageBehandlingForOversikt extends ÅpenBehandlingBase {
+    type: ÅpenBehandlingForOversiktType.KLAGE;
+    saksbehandler: Nullable<string>;
+    resultat: Nullable<KlagebehandlingResultat>;
+    status: KlagebehandlingStatus;
 }

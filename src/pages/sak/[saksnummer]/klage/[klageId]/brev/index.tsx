@@ -84,6 +84,17 @@ const BrevKlagePage = ({ sak, klage }: Props) => {
                             />
                         )}
                     />
+                    <Button
+                        variant={'secondary'}
+                        size={'small'}
+                        as={'a'}
+                        href={
+                            'https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=RDdQw4w9WgXcQ&start_radio=1'
+                        }
+                        target={'_blank'}
+                    >
+                        Forhåndsvis brev
+                    </Button>
 
                     <HStack gap="4">
                         <Button
@@ -95,15 +106,17 @@ const BrevKlagePage = ({ sak, klage }: Props) => {
                         >
                             Tilbake
                         </Button>
-                        <Button type="submit">Send </Button>
+                        <Button type="submit">Send</Button>
                     </HStack>
 
                     {harSendt && (
                         <Image
-                            src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExamwxMXI1bnI4dG1zcjkxNGk3eTIza2oxa2I1MGN3cDB0dHpvdWZ6dyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/CuHO2q0lorhBieOEMp/giphy.gif"
-                            alt="alt"
+                            src="/giphy.gif"
+                            alt="hund som gir deg et brev"
+                            aria-hidden
                             width="400"
                             height="400"
+                            priority
                         />
                     )}
                 </VStack>

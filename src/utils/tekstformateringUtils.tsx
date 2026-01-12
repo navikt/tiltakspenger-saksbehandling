@@ -14,6 +14,7 @@ import { RevurderingResultat } from '~/types/Revurdering';
 import { ÅpenBehandlingForOversiktType } from '~/types/ÅpenBehandlingForOversikt';
 import { Søknadstype } from '~/types/Søknad';
 import { SøknadstypeManueltRegistrertSøknad } from '~/components/manuell-søknad/ManueltRegistrertSøknad';
+import { KlagebehandlingResultat, KlagebehandlingStatus } from '~/types/Klage';
 
 export const finnBehandlingStatusTag = (
     status: Rammebehandlingsstatus,
@@ -164,6 +165,7 @@ export const finnTypeBehandlingTekstForOversikt: Record<ÅpenBehandlingForOversi
     [ÅpenBehandlingForOversiktType.REVURDERING]: 'Revurdering',
     [ÅpenBehandlingForOversiktType.SØKNAD]: 'Søknad',
     [ÅpenBehandlingForOversiktType.MELDEKORT]: 'Meldekort',
+    [ÅpenBehandlingForOversiktType.KLAGE]: 'Klage',
 } as const;
 
 export const behandlingResultatTilText: Record<RammebehandlingResultat, string> = {
@@ -197,6 +199,34 @@ export const behandlingResultatTilTag: Record<RammebehandlingResultat, ReactElem
     ),
     [RevurderingResultat.OMGJØRING]: (
         <Tag variant="alt1">{behandlingResultatTilText[RevurderingResultat.OMGJØRING]}</Tag>
+    ),
+};
+
+export const klagebehandlingStatusTilText: Record<KlagebehandlingStatus, string> = {
+    [KlagebehandlingStatus.KLAR_TIL_BEHANDLING]: 'Klar til behandling',
+    [KlagebehandlingStatus.UNDER_BEHANDLING]: 'Under behandling',
+};
+
+export const klagebehandlingStatusTilTag: Record<KlagebehandlingStatus, ReactElement> = {
+    [KlagebehandlingStatus.KLAR_TIL_BEHANDLING]: (
+        <Tag variant="neutral">
+            {klagebehandlingStatusTilText[KlagebehandlingStatus.KLAR_TIL_BEHANDLING]}
+        </Tag>
+    ),
+    [KlagebehandlingStatus.UNDER_BEHANDLING]: (
+        <Tag variant="neutral">
+            {klagebehandlingStatusTilText[KlagebehandlingStatus.UNDER_BEHANDLING]}
+        </Tag>
+    ),
+};
+
+export const klagebehandlingResultatTilText: Record<KlagebehandlingResultat, string> = {
+    [KlagebehandlingResultat.AVVIST]: 'Avvist',
+};
+
+export const klagebehandlingResultatTilTag: Record<KlagebehandlingResultat, ReactElement> = {
+    [KlagebehandlingResultat.AVVIST]: (
+        <Tag variant="error">{klagebehandlingResultatTilText[KlagebehandlingResultat.AVVIST]}</Tag>
     ),
 };
 
