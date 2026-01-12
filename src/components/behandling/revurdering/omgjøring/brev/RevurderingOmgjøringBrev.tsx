@@ -1,4 +1,4 @@
-import { useRevurderingBehandling } from '~/components/behandling/context/BehandlingContext';
+import { useRevurderingOmgjøring } from '~/components/behandling/context/BehandlingContext';
 import { RevurderingOmgjøringBrevForhåndsvisningDTO } from '~/components/behandling/felles/vedtaksbrev/forhåndsvisning/useHentVedtaksbrevForhåndsvisning';
 import { Vedtaksbrev } from '~/components/behandling/felles/vedtaksbrev/Vedtaksbrev';
 import { RevurderingResultat } from '~/types/Revurdering';
@@ -11,7 +11,7 @@ import { useSak } from '~/context/sak/SakContext';
 import { RevurderingBrevHjelpetekst } from '~/components/behandling/revurdering/felles/RevurderingBrevHjelpetekst';
 
 export const RevurderingOmgjøringBrev = () => {
-    const { behandling } = useRevurderingBehandling();
+    const { behandling } = useRevurderingOmgjøring();
     const skjema = useRevurderingOmgjøringSkjema();
     const { sak } = useSak();
 

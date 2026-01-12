@@ -6,13 +6,13 @@ import { Nullable } from '~/types/UtilTypes';
 import { RevurderingResultat, RevurderingVedtakOmgjøringRequest } from '~/types/Revurdering';
 import { useHentBehandlingLagringProps } from '~/components/behandling/felles/send-og-godkjenn/lagre/useHentBehandlingLagringProps';
 import { revurderingOmgjøringValidering } from '~/components/behandling/revurdering/omgjøring/revurderingOmgjøringValidering';
-import { useRevurderingBehandling } from '~/components/behandling/context/BehandlingContext';
+import { useRevurderingOmgjøring } from '~/components/behandling/context/BehandlingContext';
 import { useSak } from '~/context/sak/SakContext';
 import { BehandlingSendOgGodkjenn } from '~/components/behandling/felles/send-og-godkjenn/BehandlingSendOgGodkjenn';
 
 export const RevurderingOmgjøringSend = () => {
     const { sak } = useSak();
-    const { behandling } = useRevurderingBehandling();
+    const { behandling } = useRevurderingOmgjøring();
     const skjema = useRevurderingOmgjøringSkjema();
 
     const lagringProps = useHentBehandlingLagringProps({
