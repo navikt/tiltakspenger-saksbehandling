@@ -1,0 +1,9 @@
+.loaderContainer {
+    --ds-react-header-height: 3rem;
+    --custom-extra-header-space: 0.6rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - var(--ds-react-header-height) - var(--custom-extra-header-space));
+}

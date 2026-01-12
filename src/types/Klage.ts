@@ -1,0 +1,32 @@
+import { VedtakId } from './Rammevedtak';
+import { Nullable } from './UtilTypes';
+
+export type KlageId = `klage_${string}`;
+
+export interface Klagebehandling {
+    id: KlageId;
+    sakId: string;
+    saksnummer: string;
+    fnr: string;
+    opprettet: string;
+    sistEndret: string;
+    saksbehandler: Nullable<string>;
+    journalpostId: string;
+    journalpostOpprettet: string;
+    status: string;
+    resultat: Nullable<string>;
+    vedtakDetKlagesPå: Nullable<VedtakId>;
+    erKlagerPartISaken: boolean;
+    klagesDetPåKonkreteElementerIVedtaket: boolean;
+    erKlagefristenOverholdt: boolean;
+    erKlagenSignert: boolean;
+}
+
+export interface OpprettKlageRequest {
+    journalpostId: string;
+    vedtakDetKlagesPå: Nullable<string>;
+    erKlagerPartISaken: boolean;
+    klagesDetPåKonkreteElementerIVedtaket: boolean;
+    erKlagefristenOverholdt: boolean;
+    erKlagenSignert: boolean;
+}

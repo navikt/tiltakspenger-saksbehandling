@@ -1,6 +1,6 @@
 import '../styles/global.css';
 
-import React from 'react';
+import React, { ReactElement, ReactNode } from 'react';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { SWRConfig } from 'swr';
@@ -10,8 +10,19 @@ import { SaksbehandlerProvider } from '../context/saksbehandler/SaksbehandlerCon
 import { ConfigProvider } from '../context/ConfigContext';
 import { NotificationProvider } from '~/context/NotificationContext';
 import { BenkFiltreringProvider } from '~/context/BenkFiltreringContext';
+import { NextPage } from 'next';
 
-export default function MyApp({ Component, pageProps }: AppProps) {
+export type NextPageWithLayout<P = Record<string, unknown>, IP = P> = NextPage<P, IP> & {
+    getLayout?: (page: ReactElement) => ReactNode;
+};
+
+type AppPropsWithLayout = AppProps & {
+    Component: NextPageWithLayout;
+};
+
+export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
+    const getLayout = Component.getLayout ?? ((page) => page);
+
     return (
         <>
             <Head>
@@ -33,9 +44,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
                                     }}
                                 >
                                     <InternDekoratør />
-                                    <main>
-                                        <Component {...pageProps} />
-                                    </main>
+                                    <main>{getLayout(<Component {...pageProps} />)}</main>
                                 </SWRConfig>
                             </BenkFiltreringProvider>
                         </NotificationProvider>

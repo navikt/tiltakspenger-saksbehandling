@@ -1,4 +1,4 @@
-import { Box, Heading, HStack } from '@navikt/ds-react';
+import { Box, Button, Heading, HStack } from '@navikt/ds-react';
 import { MeldekortOversikt } from './meldekort-oversikt/MeldekortOversikt';
 import { ApneBehandlingerOversikt } from './behandlinger-oversikt/ApneBehandlingerOversikt';
 import { OpprettRevurdering } from './opprett-revurdering/OpprettRevurdering';
@@ -19,8 +19,9 @@ import { OpprettSøknad } from '~/components/personoversikt/manuell-søknad/Oppr
 
 import styles from './Personoversikt.module.css';
 import { Tidslinjer } from '~/components/tidslinjer/Tidslinjer';
+import router from 'next/router';
 
-export const Personoversikt = () => {
+export const Personoversikt = (props: { isLocalOrDev: boolean }) => {
     const { sak } = useSak();
 
     const {
@@ -51,6 +52,15 @@ export const Personoversikt = () => {
                     </Heading>
                     <HStack gap="3">
                         <MeldekortHelgToggle />
+                        {props.isLocalOrDev && (
+                            <Button
+                                type="button"
+                                variant="secondary"
+                                onClick={() => router.push(`/sak/${saksnummer}/klage/opprett`)}
+                            >
+                                Registrer klage
+                            </Button>
+                        )}
                         <OpprettSøknad
                             saksnummer={saksnummer}
                             harVedtak={harVedtattSøknadsbehandling(behandlinger)}

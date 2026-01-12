@@ -4,6 +4,7 @@ import { Rammevedtak } from '~/types/Rammevedtak';
 import { UtbetalingstidslinjePeriode } from './Utbetaling';
 import { Rammebehandling } from './Rammebehandling';
 import { TidslinjeRammevedtak } from './TidslinjeRammevedtak';
+import { Klagebehandling } from './Klage';
 
 export type SakId = `sak_${string}`;
 
@@ -16,6 +17,7 @@ export type SakProps = {
     førsteDagSomGirRett?: string;
     sisteDagSomGirRett?: string;
     behandlinger: Rammebehandling[];
+    klageBehandlinger: Klagebehandling[];
     tidslinje: TidslinjeRammevedtak;
     // Alle rammevedtak på saken med opprinnelige perioder
     alleRammevedtak: Rammevedtak[];
