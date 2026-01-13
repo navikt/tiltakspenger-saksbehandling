@@ -12,6 +12,7 @@ import {
 } from '~/components/benk/BenkSideUtils';
 import { Saksbehandler } from '~/types/Saksbehandler';
 import { BenkFilters } from './BenkSide';
+import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
 
 type Props = {
     filters: BenkFilters;
@@ -30,6 +31,8 @@ const BenkFilter = ({
     onOppdaterFilter,
     onNullstillFilter,
 }: Props) => {
+    const featureToggle = useFeatureToggles();
+
     const sortedSaksbehandlere = useMemo(() => {
         return benkOversikt.behandlingssammendrag
             .flatMap((behandling) => [behandling.saksbehandler, behandling.beslutter])
@@ -71,11 +74,18 @@ const BenkFilter = ({
                     }
                 >
                     <option value="Alle">Alle</option>
-                    {Object.entries(BehandlingssammendragType).map(([key, value]) => (
-                        <option key={key} value={value}>
-                            {behandlingstypeTextFormatter[value]}
-                        </option>
-                    ))}
+                    {Object.entries(BehandlingssammendragType)
+                        .filter(
+                            (k) =>
+                                k[1] !== BehandlingssammendragType.KLAGEBEHANDLING ||
+                                (featureToggle.klageToggle &&
+                                    k[1] === BehandlingssammendragType.KLAGEBEHANDLING),
+                        )
+                        .map(([key, value]) => (
+                            <option key={key} value={value}>
+                                {behandlingstypeTextFormatter[value]}
+                            </option>
+                        ))}
                 </Select>
                 <Select
                     label="Status"

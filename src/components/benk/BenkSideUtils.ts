@@ -9,6 +9,7 @@ export const behandlingstypeTextFormatter: Record<BehandlingssammendragType, str
     [BehandlingssammendragType.MELDEKORTBEHANDLING]: 'Meldekortbehandling',
     [BehandlingssammendragType.INNSENDT_MELDEKORT]: 'Innsendt meldekort',
     [BehandlingssammendragType.KORRIGERT_MELDEKORT]: 'Korrigert meldekort',
+    [BehandlingssammendragType.KLAGEBEHANDLING]: 'Klagebehandling',
 };
 
 export const behandlingsstatusTextFormatter: Record<BehandlingssammendragStatus, string> = {
