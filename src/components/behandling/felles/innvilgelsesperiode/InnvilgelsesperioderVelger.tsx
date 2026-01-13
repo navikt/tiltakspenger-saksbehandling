@@ -14,10 +14,12 @@ import { InnvilgelsesperiodeDatovelgere } from '~/components/behandling/felles/i
 import { InnvilgelsesperioderVarsler } from '~/components/behandling/felles/innvilgelsesperiode/InnvilgelsesperioderVarsler';
 import { XMarkIcon } from '@navikt/aksel-icons';
 import { TiltaksdeltakelseMedPeriode } from '~/types/TiltakDeltakelse';
-import { periodeTilFormatertDatotekst } from '~/utils/date';
+import { forrigeDag, nesteDag, periodeTilFormatertDatotekst } from '~/utils/date';
 import { Innvilgelsesperiode } from '~/types/Innvilgelsesperiode';
 import { Rammebehandling } from '~/types/Rammebehandling';
 import { SakProps } from '~/types/Sak';
+import { Fragment } from 'react';
+import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
 
 export const InnvilgelsesperioderVelger = () => {
     const { sak } = useSak();
@@ -35,6 +37,8 @@ export const InnvilgelsesperioderVelger = () => {
     const tiltaksdeltakelser = hentTiltaksdeltakelserMedStartOgSluttdato(behandling);
     const tiltaksdeltakelsesperiode = hentHeleTiltaksdeltakelsesperioden(behandling);
 
+    const { innvilgelseMedHullToggle } = useFeatureToggles();
+
     return (
         <VedtakSeksjon>
             <VedtakSeksjon.FullBredde>
@@ -43,17 +47,38 @@ export const InnvilgelsesperioderVelger = () => {
                 </Heading>
                 {harValgtPeriode ? (
                     <VStack gap={'2'} align={'start'}>
-                        {innvilgelsesperioder.map((it, index) => (
-                            <InnvilgelsesperiodeVelgerFull
-                                innvilgelsesperioder={innvilgelsesperioder}
-                                index={index}
-                                tiltaksdeltakelser={tiltaksdeltakelser}
-                                behandling={behandling}
-                                sak={sak}
-                                readOnly={erReadonly}
-                                key={`${it.periode.fraOgMed}-${it.periode.tilOgMed}`}
-                            />
-                        ))}
+                        {innvilgelsesperioder.map((it, index, array) => {
+                            const nesteDagEtterPerioden = nesteDag(it.periode.tilOgMed);
+                            const fraOgMedNestePeriode = array.at(index + 1)?.periode.fraOgMed;
+
+                            const periodeUtenInnvilgelse = !!fraOgMedNestePeriode &&
+                                nesteDagEtterPerioden < fraOgMedNestePeriode && {
+                                    fraOgMed: nesteDagEtterPerioden,
+                                    tilOgMed: forrigeDag(fraOgMedNestePeriode),
+                                };
+
+                            return (
+                                <Fragment key={`${it.periode.fraOgMed}-${it.periode.tilOgMed}`}>
+                                    <InnvilgelsesperiodeVelgerFull
+                                        innvilgelsesperioder={innvilgelsesperioder}
+                                        index={index}
+                                        tiltaksdeltakelser={tiltaksdeltakelser}
+                                        behandling={behandling}
+                                        sak={sak}
+                                        readOnly={erReadonly}
+                                    />
+                                    {periodeUtenInnvilgelse && (
+                                        <Alert
+                                            variant={innvilgelseMedHullToggle ? 'warning' : 'error'}
+                                            size={'small'}
+                                            inline={true}
+                                        >
+                                            {`Ikke innvilget for perioden ${periodeTilFormatertDatotekst(periodeUtenInnvilgelse)}`}
+                                        </Alert>
+                                    )}
+                                </Fragment>
+                            );
+                        })}
 
                         {!erReadonly && (
                             <Button
@@ -103,7 +128,7 @@ type VelgerFullProps = {
     readOnly: boolean;
 };
 
-export const InnvilgelsesperiodeVelgerFull = ({
+const InnvilgelsesperiodeVelgerFull = ({
     innvilgelsesperioder,
     tiltaksdeltakelser,
     behandling,
