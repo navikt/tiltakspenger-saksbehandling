@@ -9,16 +9,20 @@ import { revurderingOmgjøringValidering } from '~/components/behandling/revurde
 import { useRevurderingOmgjøring } from '~/components/behandling/context/BehandlingContext';
 import { useSak } from '~/context/sak/SakContext';
 import { BehandlingSendOgGodkjenn } from '~/components/behandling/felles/send-og-godkjenn/BehandlingSendOgGodkjenn';
+import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
 
 export const RevurderingOmgjøringSend = () => {
     const { sak } = useSak();
     const { behandling } = useRevurderingOmgjøring();
     const skjema = useRevurderingOmgjøringSkjema();
 
+    const { innvilgelseMedHullToggle } = useFeatureToggles();
+
     const lagringProps = useHentBehandlingLagringProps({
         hentDTO: () => tilDTO(skjema),
         skjema,
-        validerSkjema: () => revurderingOmgjøringValidering(behandling, skjema, sak),
+        validerSkjema: () =>
+            revurderingOmgjøringValidering(behandling, skjema, sak, innvilgelseMedHullToggle),
     });
 
     return <BehandlingSendOgGodkjenn behandling={behandling} lagringProps={lagringProps} />;

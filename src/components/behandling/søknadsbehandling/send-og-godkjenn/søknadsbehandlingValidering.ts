@@ -5,7 +5,11 @@ import { Søknadsbehandling, SøknadsbehandlingResultat } from '~/types/Søknads
 import { SøknadsbehandlingAvslagContext } from '~/components/behandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
 
 export const søknadsbehandlingValidering =
-    (behandling: Søknadsbehandling, skjema: BehandlingSkjemaContext): ValideringFunc =>
+    (
+        behandling: Søknadsbehandling,
+        skjema: BehandlingSkjemaContext,
+        kanHaHull: boolean,
+    ): ValideringFunc =>
     (type): ValideringResultat => {
         const validering: ValideringResultat = {
             errors: [],
@@ -27,6 +31,7 @@ export const søknadsbehandlingValidering =
                 behandling,
                 skjema.innvilgelse,
                 behandling.søknad,
+                kanHaHull,
             );
             validering.errors.push(...innvilgelseValidering.errors);
             validering.warnings.push(...innvilgelseValidering.warnings);

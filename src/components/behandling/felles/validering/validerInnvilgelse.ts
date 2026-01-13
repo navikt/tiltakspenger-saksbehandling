@@ -11,6 +11,7 @@ export const validerInnvilgelse = (
     behandling: Rammebehandling,
     innvilgelse: InnvilgelseState,
     søknad: Søknad,
+    kanHaHull: boolean,
 ): ValideringResultat => {
     if (!innvilgelse.harValgtPeriode) {
         return {
@@ -26,9 +27,9 @@ export const validerInnvilgelse = (
 
     const { innvilgelsesperioder, barnetilleggPerioder, harBarnetillegg } = innvilgelse;
 
-    if (!validerPeriodisering(innvilgelsesperioder, false)) {
+    if (!validerPeriodisering(innvilgelsesperioder, kanHaHull)) {
         validering.errors.push(
-            'Innvilgelsesperiodene må være sammenhengende uten hull eller overlapp',
+            `Innvilgelsesperiodene må være sammenhengende uten ${kanHaHull ? '' : 'hull eller '}overlapp`,
         );
     }
 

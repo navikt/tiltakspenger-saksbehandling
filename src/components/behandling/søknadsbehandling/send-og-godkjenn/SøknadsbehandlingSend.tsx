@@ -14,15 +14,18 @@ import {
     useSøknadsbehandlingSkjema,
 } from '~/components/behandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
 import { Nullable } from '~/types/UtilTypes';
+import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
 
 export const SøknadsbehandlingSend = () => {
     const { behandling } = useSøknadsbehandling();
     const skjema = useSøknadsbehandlingSkjema();
 
+    const { innvilgelseMedHullToggle } = useFeatureToggles();
+
     const lagringProps = useHentBehandlingLagringProps({
         hentDTO: () => tilDTO(skjema),
         skjema: skjema,
-        validerSkjema: søknadsbehandlingValidering(behandling, skjema),
+        validerSkjema: søknadsbehandlingValidering(behandling, skjema, innvilgelseMedHullToggle),
     });
 
     return <BehandlingSendOgGodkjenn behandling={behandling} lagringProps={lagringProps} />;
@@ -41,11 +44,7 @@ const tilDTO = (
                 return null;
             }
 
-            const {
-                innvilgelsesperioder,
-                harBarnetillegg,
-                barnetilleggPerioder,
-            } = innvilgelse;
+            const { innvilgelsesperioder, harBarnetillegg, barnetilleggPerioder } = innvilgelse;
 
             return {
                 begrunnelseVilkårsvurdering: textAreas.begrunnelse.getValue(),
