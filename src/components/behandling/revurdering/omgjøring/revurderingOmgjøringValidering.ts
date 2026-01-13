@@ -64,7 +64,7 @@ export const revurderingOmgjøringValidering = (
 
         if (vedtakSomOmgjøres.length > 1) {
             validering.errors.push(
-                `Valgte innvilgesesperioder omgjør ${vedtakSomOmgjøres.length} tidligere vedtak - Vi støtter foreløpig kun å omgjøre ett vedtak av gangen`,
+                `Valgte innvilgelsesperioder omgjør ${vedtakSomOmgjøres.length} tidligere vedtak - Vi støtter foreløpig kun å omgjøre ett vedtak av gangen`,
             );
         } else if (vedtakSomOmgjøres.length === 0) {
             validering.errors.push('Valgte innvilgelsesperioder omgjør ingen tidligere vedtak');
