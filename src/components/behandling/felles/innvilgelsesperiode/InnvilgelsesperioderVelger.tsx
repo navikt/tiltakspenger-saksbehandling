@@ -20,6 +20,7 @@ import { Rammebehandling } from '~/types/Rammebehandling';
 import { SakProps } from '~/types/Sak';
 import { Fragment } from 'react';
 import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
+import { perioderErSammenhengende } from '~/utils/periode';
 
 export const InnvilgelsesperioderVelger = () => {
     const { sak } = useSak();
@@ -48,13 +49,12 @@ export const InnvilgelsesperioderVelger = () => {
                 {harValgtPeriode ? (
                     <VStack gap={'3'} align={'start'}>
                         {innvilgelsesperioder.map((it, index, array) => {
-                            const nesteDagEtterPerioden = nesteDag(it.periode.tilOgMed);
-                            const fraOgMedNestePeriode = array.at(index + 1)?.periode.fraOgMed;
+                            const nestePeriode = array.at(index + 1)?.periode;
 
-                            const periodeUtenInnvilgelse = !!fraOgMedNestePeriode &&
-                                nesteDagEtterPerioden < fraOgMedNestePeriode && {
-                                    fraOgMed: nesteDagEtterPerioden,
-                                    tilOgMed: forrigeDag(fraOgMedNestePeriode),
+                            const periodeUtenInnvilgelse = nestePeriode &&
+                                !perioderErSammenhengende(it.periode, nestePeriode) && {
+                                    fraOgMed: nesteDag(it.periode.tilOgMed),
+                                    tilOgMed: forrigeDag(nestePeriode.fraOgMed),
                                 };
 
                             return (

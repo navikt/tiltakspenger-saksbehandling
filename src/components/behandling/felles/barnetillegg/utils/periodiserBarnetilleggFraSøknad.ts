@@ -1,6 +1,6 @@
 import { finn16årsdag, forrigeDag, nesteDag } from '~/utils/date';
 import { MedPeriode, Periode } from '~/types/Periode';
-import { erDatoIPeriode, periodiseringTotalPeriode } from '~/utils/periode';
+import { erDatoIPeriode, slåSammenPeriodisering } from '~/utils/periode';
 import { removeDuplicates } from '~/utils/array';
 import { kunPerioderMedBarn } from '~/components/behandling/felles/barnetillegg/utils/barnetilleggUtils';
 import { SøknadBarn } from '~/types/Søknad';
@@ -10,9 +10,17 @@ export const periodiserBarnetilleggFraSøknad = (
     barnFraSøknad: SøknadBarn[],
     innvilgelsesperioder: MedPeriode[],
 ): BarnetilleggPeriode[] => {
-    // TODO: denne må oppdateres når vi skal tillate innvilgelse med hull
-    const innvilgelsesperiode = periodiseringTotalPeriode(innvilgelsesperioder);
+    const barnetillegg = innvilgelsesperioder.flatMap((innvilgelsesperiode) => {
+        return periodiserBarnetilleggForPeriode(barnFraSøknad, innvilgelsesperiode.periode);
+    });
 
+    return slåSammenPeriodisering(barnetillegg, (a, b) => a.antallBarn === b.antallBarn);
+};
+
+const periodiserBarnetilleggForPeriode = (
+    barnFraSøknad: SøknadBarn[],
+    innvilgelsesperiode: Periode,
+): BarnetilleggPeriode[] => {
     // Periodene med rett til barnetillegg for hvert barn, innenfor innvilgelsesperioden
     const perioderPerBarn = barnFraSøknad.reduce<Periode[]>((acc, barn) => {
         const { fødselsdato, oppholderSegIEØSSpm } = barn;
@@ -23,11 +31,11 @@ export const periodiserBarnetilleggFraSøknad = (
 
         const sisteDagFør16År = forrigeDag(finn16årsdag(fødselsdato));
 
-        const kanFåBarnetillegg =
+        const erFødtOgUnder16 =
             fødselsdato <= innvilgelsesperiode.tilOgMed &&
             sisteDagFør16År >= innvilgelsesperiode.fraOgMed;
 
-        if (kanFåBarnetillegg) {
+        if (erFødtOgUnder16) {
             acc.push({
                 fraOgMed:
                     fødselsdato > innvilgelsesperiode.fraOgMed

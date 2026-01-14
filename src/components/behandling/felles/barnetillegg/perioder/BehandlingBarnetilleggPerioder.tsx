@@ -72,7 +72,6 @@ export const BehandlingBarnetilleggPerioder = () => {
                             <Button
                                 variant={'secondary'}
                                 size={'small'}
-                                disabled={erReadonly}
                                 onClick={() =>
                                     dispatch({
                                         type: 'settBarnetilleggPerioder',
@@ -91,7 +90,6 @@ export const BehandlingBarnetilleggPerioder = () => {
                             <Button
                                 variant={'secondary'}
                                 size={'small'}
-                                disabled={erReadonly}
                                 onClick={() => {
                                     dispatch({
                                         type: 'settBarnetilleggPerioder',
@@ -181,7 +179,7 @@ const PeriodeVelger = ({ btPeriode, index, readOnly }: PeriodeVelgerProps) => {
             <Datovelger
                 label={'Til og med'}
                 selected={periode.tilOgMed}
-                value={periode.tilOgMed ? datoTilDatoInputText(periode.tilOgMed) : undefined}
+                value={datoTilDatoInputText(periode.tilOgMed)}
                 minDate={periode.fraOgMed ?? innvilgelseTotalPeriode.fraOgMed}
                 maxDate={innvilgelseTotalPeriode.tilOgMed}
                 error={!periode.tilOgMed && 'Velg dato'}

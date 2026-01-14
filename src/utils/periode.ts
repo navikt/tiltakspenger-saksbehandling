@@ -59,6 +59,10 @@ export const erFullstendigPeriode = (periode: Partial<Periode>): periode is Peri
 export const perioderErLike = (periode1: Periode, periode2: Periode) =>
     periode1.fraOgMed === periode2.fraOgMed && periode1.tilOgMed == periode2.tilOgMed;
 
+export const perioderErSammenhengende = (periode1: Periode, periode2: Periode) => {
+    return nesteDag(periode1.tilOgMed) === periode2.fraOgMed;
+};
+
 export const periodiseringerErLike = <T>(
     perioder1: MedPeriode<T>[],
     perioder2: MedPeriode<T>[],
@@ -199,7 +203,7 @@ export const finnPeriodiseringHull = (periodisering: MedPeriode[]): Periode[] =>
         const nesteDagEtterPerioden = nesteDag(periode.tilOgMed);
         const nestePeriode = array.at(index + 1)?.periode;
 
-        if (nestePeriode && nesteDagEtterPerioden !== nestePeriode.fraOgMed) {
+        if (nestePeriode && !perioderErSammenhengende(periode, nestePeriode)) {
             acc.push({
                 fraOgMed: nesteDagEtterPerioden,
                 tilOgMed: forrigeDag(nestePeriode.fraOgMed),
@@ -207,5 +211,30 @@ export const finnPeriodiseringHull = (periodisering: MedPeriode[]): Periode[] =>
         }
 
         return acc;
+    }, []);
+};
+
+export const slåSammenPeriodisering = <T>(
+    periodisering: MedPeriode<T>[],
+    sammenlignVerdi: (p1: T, p2: T) => boolean,
+): MedPeriode<T>[] => {
+    return periodisering.reduce<MedPeriode<T>[]>((acc, it) => {
+        if (acc.length === 0) {
+            return [it];
+        }
+
+        const forrige = acc.at(-1)!;
+
+        if (perioderErSammenhengende(forrige.periode, it.periode) && sammenlignVerdi(forrige, it)) {
+            return acc.toSpliced(-1, 1, {
+                ...it,
+                periode: {
+                    fraOgMed: forrige.periode.fraOgMed,
+                    tilOgMed: it.periode.tilOgMed,
+                },
+            });
+        }
+
+        return [...acc, it];
     }, []);
 };
