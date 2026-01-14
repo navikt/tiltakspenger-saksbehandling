@@ -1,7 +1,7 @@
 import { ReactElement } from 'react';
 import KlageLayout from '../layout';
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
-import { Button, Heading, HStack, VStack } from '@navikt/ds-react';
+import { Button, Heading, HStack, LocalAlert, VStack } from '@navikt/ds-react';
 import { useForm } from 'react-hook-form';
 import { Rammevedtak } from '~/types/Rammevedtak';
 import { Rammebehandling } from '~/types/Rammebehandling';
@@ -17,6 +17,9 @@ import {
     formkravValidation,
 } from '~/components/forms/formkrav/FormkravFormUtils';
 import { Klagebehandling, OpprettKlageRequest } from '~/types/Klage';
+import { KlageSteg } from '../KlageLayoutUtils';
+import WarningCircleIcon from '~/icons/WarningCircleIcon';
+import OppsummeringAvJournalførtKlage from '~/components/oppsummeringer/oppsummeringAvJournalførtKlage/OppsummeringAvJournalførtKlage';
 
 type Props = {
     sak: SakProps;
@@ -52,7 +55,7 @@ const OprettKlagePage = ({ sak }: Props) => {
         {
             onSuccess: (klagebehandling) => {
                 console.log('Klage opprettet:', klagebehandling);
-                router.push(`/sak/${sak.saksnummer}/klage/${klagebehandling!.id}/brev`);
+                router.push(`/sak/${sak.saksnummer}/klage/${klagebehandling!.id}/formkrav`);
             },
         },
     );
@@ -62,47 +65,67 @@ const OprettKlagePage = ({ sak }: Props) => {
     };
 
     return (
-        <VStack>
-            <Heading size="medium">Formkrav</Heading>
-
-            <form onSubmit={form.handleSubmit(onSubmit)}>
-                <VStack gap="4">
-                    <FormkravForm
-                        control={form.control}
-                        vedtakOgBehandling={
-                            sak.alleRammevedtak
-                                .map((vedtak) => {
-                                    const behandling = sak.behandlinger.find(
-                                        (behandling) => behandling.id === vedtak.behandlingId,
-                                    );
-                                    return { vedtak, behandling };
-                                })
-                                .filter(({ behandling }) => behandling !== undefined) as Array<{
-                                vedtak: Rammevedtak;
-                                behandling: Rammebehandling;
-                            }>
-                        }
-                    />
-
-                    <HStack gap="4">
-                        <Button
-                            type="button"
-                            variant="secondary"
-                            onClick={() => router.push(`/sak/${sak.saksnummer}`)}
+        <HStack margin="10" gap="24">
+            <FormkravInfoDisplay />
+            <VStack>
+                <form onSubmit={form.handleSubmit(onSubmit)}>
+                    <VStack gap="4">
+                        <FormkravForm
+                            control={form.control}
+                            vedtakOgBehandling={
+                                sak.alleRammevedtak
+                                    .map((vedtak) => {
+                                        const behandling = sak.behandlinger.find(
+                                            (behandling) => behandling.id === vedtak.behandlingId,
+                                        );
+                                        return { vedtak, behandling };
+                                    })
+                                    .filter(({ behandling }) => behandling !== undefined) as Array<{
+                                    vedtak: Rammevedtak;
+                                    behandling: Rammebehandling;
+                                }>
+                            }
                         >
-                            Tilbake
-                        </Button>
-                        <Button>Neste</Button>
-                    </HStack>
-                </VStack>
-            </form>
+                            {opprettKlage.error && (
+                                <LocalAlert status="error">
+                                    <LocalAlert.Header>
+                                        <LocalAlert.Title>
+                                            Feil ved oppretting av klage
+                                        </LocalAlert.Title>
+                                    </LocalAlert.Header>
+                                    <LocalAlert.Content>
+                                        {opprettKlage.error.message}
+                                    </LocalAlert.Content>
+                                </LocalAlert>
+                            )}
+                            <Button>Lagre</Button>
+                        </FormkravForm>
+                    </VStack>
+                </form>
+            </VStack>
+        </HStack>
+    );
+};
+
+const FormkravInfoDisplay = () => {
+    return (
+        <VStack gap="3">
+            <HStack gap="2">
+                <WarningCircleIcon />
+                <Heading size="small">Formkrav</Heading>
+            </HStack>
+            <OppsummeringAvJournalførtKlage journalføringsdato={null} />
         </VStack>
     );
 };
 
 OprettKlagePage.getLayout = function getLayout(page: ReactElement) {
     const { sak } = page.props as Props;
-    return <KlageLayout saksnummer={sak.saksnummer}>{page}</KlageLayout>;
+    return (
+        <KlageLayout saksnummer={sak.saksnummer} activeTab={KlageSteg.FORMKRAV} klage={null}>
+            {page}
+        </KlageLayout>
+    );
 };
 
 export default OprettKlagePage;

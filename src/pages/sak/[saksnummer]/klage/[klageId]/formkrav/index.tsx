@@ -1,7 +1,7 @@
 import { ReactElement } from 'react';
 
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
-import { Button, Heading, HStack, VStack } from '@navikt/ds-react';
+import { Button, Heading, VStack } from '@navikt/ds-react';
 import { useForm } from 'react-hook-form';
 import { Rammevedtak } from '~/types/Rammevedtak';
 import { Rammebehandling } from '~/types/Rammebehandling';
@@ -17,6 +17,7 @@ import {
 } from '~/components/forms/formkrav/FormkravFormUtils';
 import { Klagebehandling, KlageId } from '~/types/Klage';
 import KlageLayout from '../../layout';
+import { KlageSteg } from '../../KlageLayoutUtils';
 
 type Props = {
     sak: SakProps;
@@ -79,18 +80,9 @@ const FormkravKlagePage = ({ sak, klage }: Props) => {
                                 behandling: Rammebehandling;
                             }>
                         }
-                    />
-
-                    <HStack gap="4">
-                        <Button
-                            type="button"
-                            variant="secondary"
-                            onClick={() => router.push(`/sak/${sak.saksnummer}`)}
-                        >
-                            Tilbake
-                        </Button>
+                    >
                         <Button>Neste</Button>
-                    </HStack>
+                    </FormkravForm>
                 </VStack>
             </form>
         </VStack>
@@ -98,8 +90,12 @@ const FormkravKlagePage = ({ sak, klage }: Props) => {
 };
 
 FormkravKlagePage.getLayout = function getLayout(page: ReactElement) {
-    const { sak } = page.props as Props;
-    return <KlageLayout saksnummer={sak.saksnummer}>{page}</KlageLayout>;
+    const { sak, klage } = page.props as Props;
+    return (
+        <KlageLayout saksnummer={sak.saksnummer} activeTab={KlageSteg.FORMKRAV} klage={klage}>
+            {page}
+        </KlageLayout>
+    );
 };
 
 export default FormkravKlagePage;

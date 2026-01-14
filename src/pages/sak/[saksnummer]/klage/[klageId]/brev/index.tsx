@@ -10,6 +10,7 @@ import router from 'next/router';
 import { Klagebehandling, KlageId } from '~/types/Klage';
 import KlageLayout from '../../layout';
 import Image from 'next/image';
+import { KlageSteg } from '../../KlageLayoutUtils';
 
 type Props = {
     sak: SakProps;
@@ -126,8 +127,12 @@ const BrevKlagePage = ({ sak, klage }: Props) => {
 };
 
 BrevKlagePage.getLayout = function getLayout(page: ReactElement) {
-    const { sak } = page.props as Props;
-    return <KlageLayout saksnummer={sak.saksnummer}>{page}</KlageLayout>;
+    const { sak, klage } = page.props as Props;
+    return (
+        <KlageLayout saksnummer={sak.saksnummer} activeTab={KlageSteg.BREV} klage={klage}>
+            {page}
+        </KlageLayout>
+    );
 };
 
 export default BrevKlagePage;

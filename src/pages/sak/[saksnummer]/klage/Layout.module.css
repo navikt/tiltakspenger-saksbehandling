@@ -7,3 +7,35 @@
     align-items: center;
     height: calc(100vh - var(--ds-react-header-height) - var(--custom-extra-header-space));
 }
+
+.klageHeader {
+    border-bottom: 1px solid var(--a-border-default);
+}
+
+.tabs {
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--a-border-default);
+
+    /* tabs inneholder en list-wrapper som første (og eneste) child  */
+    > :first-child {
+        box-shadow: none;
+    }
+}
+
+.tabsList {
+    justify-content: space-around;
+}
+
+.tab {
+    height: 2rem;
+    min-height: 0;
+}
+
+.tabDisabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.tabDisabled:hover {
+    box-shadow: none;
+}
