@@ -34,7 +34,6 @@ const FormkravForm = (props: {
                 render={({ field, fieldState }) => (
                     <Select
                         {...field}
-                        readOnly
                         label="Vedtaket som er påklaget"
                         size="small"
                         error={fieldState.error?.message}
