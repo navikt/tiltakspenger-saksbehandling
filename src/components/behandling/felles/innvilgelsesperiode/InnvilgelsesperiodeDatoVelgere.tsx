@@ -4,7 +4,6 @@ import { Periode } from '~/types/Periode';
 import { dateTilISOTekst, datoMin, datoTilDatoInputText } from '~/utils/date';
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
 import { Datovelger } from '~/components/datovelger/Datovelger';
-import React from 'react';
 
 type Props = {
     periode: Partial<Periode>;
@@ -38,6 +37,7 @@ export const InnvilgelsesperiodeDatovelgere = ({
                 error={!periode.fraOgMed && 'Velg dato'}
                 readOnly={readOnly}
                 size={'small'}
+                dropdownCaption={true}
                 onDateChange={(valgtDato) => {
                     if (!valgtDato) {
                         return;
@@ -65,6 +65,7 @@ export const InnvilgelsesperiodeDatovelgere = ({
                 error={!periode.tilOgMed && 'Velg dato'}
                 readOnly={readOnly}
                 size={'small'}
+                dropdownCaption={true}
                 onDateChange={(valgtDato) => {
                     if (!valgtDato) {
                         return;

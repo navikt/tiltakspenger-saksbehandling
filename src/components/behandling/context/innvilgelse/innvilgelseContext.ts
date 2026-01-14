@@ -75,8 +75,7 @@ export const innvilgelseReducer: Reducer<InnvilgelseState, InnvilgelseActions> =
         case 'addBarnetilleggPeriode':
         case 'fjernBarnetilleggPeriode':
         case 'oppdaterBarnetilleggAntall':
-        case 'oppdaterBarnetilleggFraOgMed':
-        case 'oppdaterBarnetilleggTilOgMed':
+        case 'oppdaterBarnetilleggPeriode':
         case 'settBarnetilleggPerioder': {
             return barnetilleggReducer(state, action);
         }

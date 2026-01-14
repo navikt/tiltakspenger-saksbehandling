@@ -11,9 +11,9 @@ import {
     useBehandlingInnvilgelseMedPerioderSkjema,
     useBehandlingInnvilgelseSkjemaDispatch,
 } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
+import { periodiseringTotalPeriode } from '~/utils/periode';
 
 import style from './BehandlingBarnetillegg.module.css';
-import { periodiseringTotalPeriode } from '~/utils/periode';
 
 export const BehandlingBarnetillegg = () => {
     const { sak } = useSak();
@@ -30,7 +30,7 @@ export const BehandlingBarnetillegg = () => {
         <>
             <VedtakSeksjon>
                 <VedtakSeksjon.Venstre>
-                    <Heading level={'3'} size={'xsmall'} className={style.header}>
+                    <Heading level={'3'} size={'small'} className={style.header}>
                         {'Barnetillegg'}
                     </Heading>
                 </VedtakSeksjon.Venstre>

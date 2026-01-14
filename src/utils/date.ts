@@ -12,6 +12,8 @@ dayjs.extend(isBetween);
 dayjs.extend(minMax);
 dayjs.locale('nb');
 
+export type DateOrString = Date | string;
+
 const DATO_FORMAT = 'YYYY-MM-DD';
 
 const ukedager = ['Man', 'Tir', 'Ons', 'Tor', 'Fre', 'Lør', 'Søn'] as const;
@@ -76,6 +78,5 @@ export const datoMax = (...datoer: Array<string | Date>): string => {
     return dayjs.max(datoer.map(dayjs))!.format(DATO_FORMAT);
 };
 
-export const erLørdagEllerSøndag = (dato: string | Date): boolean => {
-    return dayjs(dato).weekday() >= 5;
-};
+export const tilDate = (date?: DateOrString): Date | undefined =>
+    date ? (date instanceof Date ? date : new Date(date)) : undefined;

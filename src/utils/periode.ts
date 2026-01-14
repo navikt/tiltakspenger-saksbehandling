@@ -1,6 +1,6 @@
 import { MedPeriode, Periode } from '~/types/Periode';
 import dayjs from 'dayjs';
-import { datoMax, datoMin } from '~/utils/date';
+import { datoMax, datoMin, forrigeDag, nesteDag } from '~/utils/date';
 
 export const validerPeriodisering = (periodisering: MedPeriode[], tillatHull: boolean) => {
     return periodisering
@@ -192,4 +192,20 @@ const finnOverlappendeEllerNærmestePeriode = <T>(
     }
 
     return periodisering.slice(førstePeriodeIndex, sistePeriodeIndex + 1);
+};
+
+export const finnPeriodiseringHull = (periodisering: MedPeriode[]): Periode[] => {
+    return periodisering.reduce<Periode[]>((acc, { periode }, index, array) => {
+        const nesteDagEtterPerioden = nesteDag(periode.tilOgMed);
+        const nestePeriode = array.at(index + 1)?.periode;
+
+        if (nestePeriode && nesteDagEtterPerioden !== nestePeriode.fraOgMed) {
+            acc.push({
+                fraOgMed: nesteDagEtterPerioden,
+                tilOgMed: forrigeDag(nestePeriode.fraOgMed),
+            });
+        }
+
+        return acc;
+    }, []);
 };

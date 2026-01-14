@@ -46,7 +46,7 @@ export const InnvilgelsesperioderVelger = () => {
                     {'Innvilgelsesperioder'}
                 </Heading>
                 {harValgtPeriode ? (
-                    <VStack gap={'2'} align={'start'}>
+                    <VStack gap={'3'} align={'start'}>
                         {innvilgelsesperioder.map((it, index, array) => {
                             const nesteDagEtterPerioden = nesteDag(it.periode.tilOgMed);
                             const fraOgMedNestePeriode = array.at(index + 1)?.periode.fraOgMed;

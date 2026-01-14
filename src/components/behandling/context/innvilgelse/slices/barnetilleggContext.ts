@@ -3,6 +3,7 @@ import { BarnetilleggPeriode } from '~/types/Barnetillegg';
 import { InnvilgelseMedPerioderState } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 import { Reducer } from 'react';
 import { oppdaterPeriodiseringUtenOverlapp } from '~/components/behandling/context/behandlingSkjemaUtils';
+import { Periode } from '~/types/Periode';
 
 export type BarnetilleggActions =
     | {
@@ -22,12 +23,8 @@ export type BarnetilleggActions =
           payload: { antall: number; index: number };
       }
     | {
-          type: 'oppdaterBarnetilleggFraOgMed';
-          payload: { fraOgMed: string; index: number };
-      }
-    | {
-          type: 'oppdaterBarnetilleggTilOgMed';
-          payload: { tilOgMed: string; index: number };
+          type: 'oppdaterBarnetilleggPeriode';
+          payload: { periode: Partial<Periode>; index: number };
       }
     | {
           type: 'settBarnetilleggPerioder';
@@ -97,11 +94,7 @@ export const barnetilleggReducer: Reducer<InnvilgelseMedPerioderState, Barnetill
         case 'oppdaterBarnetilleggAntall': {
             const { index, antall } = payload;
 
-            const barnetilleggPeriode = state.barnetilleggPerioder.at(index);
-
-            if (!barnetilleggPeriode) {
-                return state;
-            }
+            const barnetilleggPeriode = state.barnetilleggPerioder.at(index)!;
 
             return {
                 ...state,
@@ -112,47 +105,16 @@ export const barnetilleggReducer: Reducer<InnvilgelseMedPerioderState, Barnetill
             };
         }
 
-        case 'oppdaterBarnetilleggFraOgMed': {
-            const { index, fraOgMed } = payload;
+        case 'oppdaterBarnetilleggPeriode': {
+            const { index, periode } = payload;
 
-            const barnetilleggPeriode = state.barnetilleggPerioder.at(index);
-
-            if (!barnetilleggPeriode) {
-                return state;
-            }
+            const barnetilleggPeriode = state.barnetilleggPerioder.at(index)!;
 
             const oppdatertPeriode = {
                 ...barnetilleggPeriode,
                 periode: {
                     ...barnetilleggPeriode.periode,
-                    fraOgMed,
-                },
-            };
-
-            return {
-                ...state,
-                barnetilleggPerioder: oppdaterPeriodiseringUtenOverlapp(
-                    state.barnetilleggPerioder,
-                    oppdatertPeriode,
-                    index,
-                ),
-            };
-        }
-
-        case 'oppdaterBarnetilleggTilOgMed': {
-            const { index, tilOgMed } = payload;
-
-            const barnetilleggPeriode = state.barnetilleggPerioder.at(index);
-
-            if (!barnetilleggPeriode) {
-                return state;
-            }
-
-            const oppdatertPeriode = {
-                ...barnetilleggPeriode,
-                periode: {
-                    ...barnetilleggPeriode.periode,
-                    tilOgMed,
+                    ...periode,
                 },
             };
 

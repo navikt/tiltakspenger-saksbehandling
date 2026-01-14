@@ -1,7 +1,8 @@
 import { DatePicker, useDatepicker } from '@navikt/ds-react';
 import { ComponentProps, useEffect } from 'react';
+import { DateOrString, tilDate } from '~/utils/date';
 
-export type DateOrString = Date | string;
+type MatcherProps = ComponentProps<typeof DatePicker>['disabled'];
 
 export type DatovelgerProps = {
     onDateChange: (date: Date | undefined) => void;
@@ -11,6 +12,8 @@ export type DatovelgerProps = {
     maxDate?: DateOrString;
     defaultMonth?: DateOrString;
     label?: React.ReactNode;
+    dropdownCaption?: boolean;
+    disabledMatcher?: MatcherProps;
 } & Omit<ComponentProps<typeof DatePicker.Input>, 'label'>;
 
 export const Datovelger = ({
@@ -21,18 +24,20 @@ export const Datovelger = ({
     minDate,
     defaultMonth,
     label,
+    dropdownCaption,
+    disabledMatcher,
     ...inputPropsCustom
 }: DatovelgerProps) => {
     const { datepickerProps, inputProps, setSelected, selectedDay } = useDatepicker({
         onDateChange,
-        fromDate: toDate(minDate),
-        defaultMonth: toDate(defaultMonth ?? minDate),
-        toDate: toDate(maxDate),
-        defaultSelected: toDate(defaultSelected),
+        fromDate: tilDate(minDate),
+        defaultMonth: tilDate(defaultMonth ?? minDate),
+        toDate: tilDate(maxDate),
+        defaultSelected: tilDate(defaultSelected),
     });
 
     useEffect(() => {
-        const newSelectedDay = toDate(selected);
+        const newSelectedDay = tilDate(selected);
 
         // Oppdaterer ikke når verdien ikke endres, for å hindre infinite loop i noen tilfeller ved bruk som controlled component
         if (newSelectedDay && newSelectedDay.getTime() !== selectedDay?.getTime()) {
@@ -41,11 +46,12 @@ export const Datovelger = ({
     }, [selected]);
 
     return (
-        <DatePicker {...datepickerProps}>
+        <DatePicker
+            {...datepickerProps}
+            dropdownCaption={dropdownCaption}
+            disabled={disabledMatcher}
+        >
             <DatePicker.Input {...inputProps} {...inputPropsCustom} label={label ?? 'Velg dato'} />
         </DatePicker>
     );
 };
-
-const toDate = (date?: DateOrString): Date | undefined =>
-    date ? (date instanceof Date ? date : new Date(date)) : undefined;
