@@ -13,6 +13,11 @@ import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import router from 'next/router';
 import { kanNavigereTilKlageSteg, KlageSteg } from '../../../../utils/KlageLayoutUtils';
 import { classNames } from '~/utils/classNames';
+import {
+    klagebehandlingResultatTilText,
+    klagebehandlingStatusTilText,
+} from '~/utils/tekstformateringUtils';
+import { formaterTidspunkt } from '~/utils/date';
 
 type Props = {
     children: ReactElement;
@@ -55,15 +60,23 @@ const KlageHeader = (props: { saksnummer: string; klage: Nullable<Klagebehandlin
             <HStack margin="4" align="center" justify="space-between">
                 <Heading size="medium">Klage</Heading>
 
-                <HStack align="end" gap="4">
+                <HStack align="end" gap="6">
                     <BodyShort>
-                        Behandlingsstatus {props.klage ? props.klage.status : 'utredes'}
+                        Behandlingsstatus{' '}
+                        {props.klage ? klagebehandlingStatusTilText[props.klage.status] : 'utredes'}
                     </BodyShort>
                     <BodyShort>
-                        Behandlingsresultat {props.klage ? props.klage.resultat : 'ikke satt'}
+                        Behandlingsresultat{' '}
+                        {props.klage
+                            ? klagebehandlingResultatTilText[props.klage.resultat!]
+                            : 'ikke satt'}
                     </BodyShort>
-                    <BodyShort>Opprettet {props.klage ? props.klage.opprettet : '-'}</BodyShort>
-                    <BodyShort>Sist endret {props.klage ? props.klage.sistEndret : '-'}</BodyShort>
+                    <BodyShort>
+                        Opprettet {props.klage ? formaterTidspunkt(props.klage.opprettet) : '-'}
+                    </BodyShort>
+                    <BodyShort>
+                        Sist endret {props.klage ? formaterTidspunkt(props.klage.sistEndret) : '-'}
+                    </BodyShort>
                     <Link href={`/sak/${props.saksnummer}`} target="_blank">
                         <HStack align="start" gap="1">
                             <BodyShort>Gå til personoversikt</BodyShort>

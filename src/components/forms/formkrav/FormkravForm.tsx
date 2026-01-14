@@ -9,6 +9,7 @@ import { datoTilDatoInputText } from '~/utils/date';
 const FormkravForm = (props: {
     control: Control<FormkravFormData>;
     vedtakOgBehandling: Array<{ vedtak: Rammevedtak; behandling: Rammebehandling }>;
+    readonly?: boolean;
 }) => {
     return (
         <VStack gap="8" align="start">
@@ -21,6 +22,7 @@ const FormkravForm = (props: {
                         label="Journalpost ID"
                         size="small"
                         error={fieldState.error?.message}
+                        readOnly={props.readonly}
                     />
                 )}
             />
@@ -36,6 +38,7 @@ const FormkravForm = (props: {
                         size="small"
                         error={fieldState.error?.message}
                         maxDate={new Date()}
+                        readOnly={props.readonly}
                     />
                 )}
             />
@@ -48,6 +51,7 @@ const FormkravForm = (props: {
                         label="Vedtaket som er påklaget"
                         size="small"
                         error={fieldState.error?.message}
+                        readOnly={props.readonly}
                     >
                         <option value="">Ikke valgt</option>
                         <option value={INGEN_VEDTAK}>Har ikke klaget på et vedtak</option>
@@ -69,6 +73,7 @@ const FormkravForm = (props: {
                         legend="Er klager part i saken?"
                         size="small"
                         error={fieldState.error?.message}
+                        readOnly={props.readonly}
                     >
                         <HStack gap="6">
                             <Radio value={true}>Ja</Radio>
@@ -86,6 +91,7 @@ const FormkravForm = (props: {
                         legend="Klages det på konkrete elementer i vedtaket?"
                         size="small"
                         error={fieldState.error?.message}
+                        readOnly={props.readonly}
                     >
                         <HStack gap="6">
                             <Radio value={true}>Ja</Radio>
@@ -103,6 +109,7 @@ const FormkravForm = (props: {
                         legend="Er klagefristen overholdt?"
                         size="small"
                         error={fieldState.error?.message}
+                        readOnly={props.readonly}
                     >
                         <HStack gap="6">
                             <Radio value={true}>Ja</Radio>
@@ -120,6 +127,7 @@ const FormkravForm = (props: {
                         legend="Er klagen signert?"
                         size="small"
                         error={fieldState.error?.message}
+                        readOnly={props.readonly}
                     >
                         <HStack gap="6">
                             <Radio value={true}>Ja</Radio>

@@ -23,7 +23,7 @@ export interface Klagebehandling {
     journalpostId: string;
     mottattFraJournalpost: string;
     journalpostOpprettet: string;
-    status: string;
+    status: KlagebehandlingStatus;
     resultat: Nullable<KlagebehandlingResultat>;
     vedtakDetKlagesPå: Nullable<VedtakId>;
     erKlagerPartISaken: boolean;

@@ -1,7 +1,7 @@
-import { ReactElement } from 'react';
+import { ReactElement, useState } from 'react';
 
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
-import { Button, HStack, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, Heading, HStack, VStack } from '@navikt/ds-react';
 import { useForm } from 'react-hook-form';
 import { Rammevedtak } from '~/types/Rammevedtak';
 import { Rammebehandling } from '~/types/Rammebehandling';
@@ -18,6 +18,7 @@ import {
 import { Klagebehandling, KlageId } from '~/types/Klage';
 import KlageLayout from '../../layout';
 import { KlageSteg } from '../../../../../../utils/KlageLayoutUtils';
+import { CheckmarkCircleIcon, PencilIcon, TrashIcon } from '@navikt/aksel-icons';
 
 type Props = {
     sak: SakProps;
@@ -47,6 +48,8 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
 });
 
 const FormkravKlagePage = ({ sak, klage }: Props) => {
+    const [formTilstand, setFormTilstand] = useState<'REDIGERER' | 'LAGRET'>('LAGRET');
+
     const form = useForm<FormkravFormData>({
         defaultValues: klageTilFormkravFormData(klage),
         resolver: formkravValidation,
@@ -55,34 +58,70 @@ const FormkravKlagePage = ({ sak, klage }: Props) => {
     const onSubmit = (data: FormkravFormData) => {
         console.log('----------------');
         console.log('Dette er data vi skal oppdatere klage med:', data);
+        setFormTilstand('LAGRET');
         console.log('----------------');
-        router.push(`/sak/${sak.saksnummer}/klage/${klage.id}/brev`);
     };
 
     return (
-        <HStack margin="10" gap="24">
-            <form onSubmit={form.handleSubmit(onSubmit)}>
-                <VStack gap="4">
-                    <FormkravForm
-                        control={form.control}
-                        vedtakOgBehandling={
-                            sak.alleRammevedtak
-                                .map((vedtak) => {
-                                    const behandling = sak.behandlinger.find(
-                                        (behandling) => behandling.id === vedtak.behandlingId,
-                                    );
-                                    return { vedtak, behandling };
-                                })
-                                .filter(({ behandling }) => behandling !== undefined) as Array<{
-                                vedtak: Rammevedtak;
-                                behandling: Rammebehandling;
-                            }>
-                        }
-                    />
-                    <Button>Neste</Button>
-                </VStack>
-            </form>
-        </HStack>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+            <VStack gap="8" marginInline="16" marginBlock="8" align="start">
+                <HStack gap="2">
+                    <CheckmarkCircleIcon title="Sjekk ikon" fontSize="1.5rem" color="green" />
+                    <Heading size="small">Formkrav</Heading>
+                </HStack>
+                <FormkravForm
+                    readonly={formTilstand === 'LAGRET'}
+                    control={form.control}
+                    vedtakOgBehandling={
+                        sak.alleRammevedtak
+                            .map((vedtak) => {
+                                const behandling = sak.behandlinger.find(
+                                    (behandling) => behandling.id === vedtak.behandlingId,
+                                );
+                                return { vedtak, behandling };
+                            })
+                            .filter(({ behandling }) => behandling !== undefined) as Array<{
+                            vedtak: Rammevedtak;
+                            behandling: Rammebehandling;
+                        }>
+                    }
+                />
+                {formTilstand === 'REDIGERER' ? (
+                    <Button>Lagre</Button>
+                ) : (
+                    <HStack gap="4">
+                        <Button
+                            type="button"
+                            variant="tertiary"
+                            onClick={() => console.log('Avslutter klage')}
+                        >
+                            <HStack>
+                                <TrashIcon title="Søppelbøtte ikon" fontSize="1.5rem" />
+                                <BodyShort>Avslutt</BodyShort>
+                            </HStack>
+                        </Button>
+                        <Button
+                            type="button"
+                            variant="tertiary"
+                            onClick={() => setFormTilstand('REDIGERER')}
+                        >
+                            <HStack>
+                                <PencilIcon title="Rediger ikon" fontSize="1.5rem" />
+                                <BodyShort>Rediger</BodyShort>
+                            </HStack>
+                        </Button>
+                        <Button
+                            type="button"
+                            onClick={() =>
+                                router.push(`/sak/${sak.saksnummer}/klage/${klage.id}/brev`)
+                            }
+                        >
+                            Fortsett
+                        </Button>
+                    </HStack>
+                )}
+            </VStack>
+        </form>
     );
 };
 
