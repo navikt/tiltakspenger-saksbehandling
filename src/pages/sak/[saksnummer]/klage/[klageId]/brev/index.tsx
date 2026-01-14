@@ -10,7 +10,7 @@ import router from 'next/router';
 import { Klagebehandling, KlageId } from '~/types/Klage';
 import KlageLayout from '../../layout';
 import Image from 'next/image';
-import { KlageSteg } from '../../KlageLayoutUtils';
+import { KlageSteg } from '../../../../../../utils/KlageLayoutUtils';
 
 type Props = {
     sak: SakProps;

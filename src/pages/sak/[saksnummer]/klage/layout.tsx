@@ -11,7 +11,7 @@ import Link from 'next/link';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 
 import router from 'next/router';
-import { kanNavigereTilKlageSteg, KlageSteg } from './KlageLayoutUtils';
+import { kanNavigereTilKlageSteg, KlageSteg } from '../../../../utils/KlageLayoutUtils';
 import { classNames } from '~/utils/classNames';
 
 type Props = {

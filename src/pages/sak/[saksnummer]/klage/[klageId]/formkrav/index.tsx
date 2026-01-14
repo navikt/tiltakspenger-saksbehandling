@@ -1,7 +1,7 @@
 import { ReactElement } from 'react';
 
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
-import { Button, Heading, VStack } from '@navikt/ds-react';
+import { Button, HStack, VStack } from '@navikt/ds-react';
 import { useForm } from 'react-hook-form';
 import { Rammevedtak } from '~/types/Rammevedtak';
 import { Rammebehandling } from '~/types/Rammebehandling';
@@ -17,7 +17,8 @@ import {
 } from '~/components/forms/formkrav/FormkravFormUtils';
 import { Klagebehandling, KlageId } from '~/types/Klage';
 import KlageLayout from '../../layout';
-import { KlageSteg } from '../../KlageLayoutUtils';
+import { KlageSteg } from '../../../../../../utils/KlageLayoutUtils';
+import FormkravInfoDisplay from '~/components/info-display/FormkravInfoDisplay';
 
 type Props = {
     sak: SakProps;
@@ -60,8 +61,8 @@ const FormkravKlagePage = ({ sak, klage }: Props) => {
     };
 
     return (
-        <VStack>
-            <Heading size="medium">Formkrav</Heading>
+        <HStack margin="10" gap="24">
+            <FormkravInfoDisplay />
 
             <form onSubmit={form.handleSubmit(onSubmit)}>
                 <VStack gap="4">
@@ -85,7 +86,7 @@ const FormkravKlagePage = ({ sak, klage }: Props) => {
                     </FormkravForm>
                 </VStack>
             </form>
-        </VStack>
+        </HStack>
     );
 };
 
