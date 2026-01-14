@@ -54,7 +54,6 @@ const OprettKlagePage = ({ sak }: Props) => {
         'POST',
         {
             onSuccess: (klagebehandling) => {
-                console.log('Klage opprettet:', klagebehandling);
                 router.push(`/sak/${sak.saksnummer}/klage/${klagebehandling!.id}/formkrav`);
             },
         },

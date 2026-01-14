@@ -2,6 +2,7 @@ import { FieldErrors } from 'react-hook-form';
 import { Klagebehandling, OpprettKlageRequest } from '~/types/Klage';
 import { VedtakId } from '~/types/Rammevedtak';
 import { Nullable } from '~/types/UtilTypes';
+import { dateTilISOTekst } from '~/utils/date';
 
 export const INGEN_VEDTAK = 'INGEN_VEDTAK' as const;
 
@@ -75,6 +76,7 @@ export const formkravFormDataTilOpprettKlageRequest = (
 ): OpprettKlageRequest => {
     return {
         journalpostId: formData.journalpostId,
+        mottattFraJournalpost: dateTilISOTekst(formData.mottattFraJournalpost),
         vedtakDetKlagesPå:
             formData.vedtakDetPåklages === INGEN_VEDTAK ? null : formData.vedtakDetPåklages,
         erKlagerPartISaken: formData.erKlagerPartISaken!,

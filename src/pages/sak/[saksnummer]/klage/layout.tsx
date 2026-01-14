@@ -106,6 +106,9 @@ const KlageStedIndikator = (props: { activeTab: KlageSteg; klage: Nullable<Klage
                 }
                 return;
             }
+            default: {
+                return;
+            }
         }
     };
 
@@ -118,9 +121,14 @@ const KlageStedIndikator = (props: { activeTab: KlageSteg; klage: Nullable<Klage
             <Tabs.List className={styles.tabsList}>
                 <Tabs.Tab className={styles.tab} value={KlageSteg.FORMKRAV} label="1. Formkrav" />
                 <Tabs.Tab
+                    className={classNames(styles.tab, styles.tabDisabled)}
+                    value={''}
+                    label="2. Vurdering"
+                />
+                <Tabs.Tab
                     className={classNames(styles.tab, kanNavigereTilBrev ? '' : styles.tabDisabled)}
                     value={KlageSteg.BREV}
-                    label="2. Brev"
+                    label="3. Brev"
                 />
             </Tabs.List>
         </Tabs>
