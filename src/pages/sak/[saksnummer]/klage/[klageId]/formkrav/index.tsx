@@ -18,7 +18,6 @@ import {
 import { Klagebehandling, KlageId } from '~/types/Klage';
 import KlageLayout from '../../layout';
 import { KlageSteg } from '../../../../../../utils/KlageLayoutUtils';
-import FormkravInfoDisplay from '~/components/info-display/FormkravInfoDisplay';
 
 type Props = {
     sak: SakProps;
@@ -62,8 +61,6 @@ const FormkravKlagePage = ({ sak, klage }: Props) => {
 
     return (
         <HStack margin="10" gap="24">
-            <FormkravInfoDisplay />
-
             <form onSubmit={form.handleSubmit(onSubmit)}>
                 <VStack gap="4">
                     <FormkravForm
@@ -81,9 +78,8 @@ const FormkravKlagePage = ({ sak, klage }: Props) => {
                                 behandling: Rammebehandling;
                             }>
                         }
-                    >
-                        <Button>Neste</Button>
-                    </FormkravForm>
+                    />
+                    <Button>Neste</Button>
                 </VStack>
             </form>
         </HStack>

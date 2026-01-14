@@ -1,7 +1,7 @@
 import { ReactElement } from 'react';
 import KlageLayout from '../layout';
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
-import { Button, HStack, LocalAlert, VStack } from '@navikt/ds-react';
+import { Button, Heading, HStack, LocalAlert, VStack } from '@navikt/ds-react';
 import { useForm } from 'react-hook-form';
 import { Rammevedtak } from '~/types/Rammevedtak';
 import { Rammebehandling } from '~/types/Rammebehandling';
@@ -18,7 +18,7 @@ import {
 } from '~/components/forms/formkrav/FormkravFormUtils';
 import { Klagebehandling, OpprettKlageRequest } from '~/types/Klage';
 import { KlageSteg } from '../../../../../utils/KlageLayoutUtils';
-import FormkravInfoDisplay from '~/components/info-display/FormkravInfoDisplay';
+import WarningCircleIcon from '~/icons/WarningCircleIcon';
 
 type Props = {
     sak: SakProps;
@@ -39,6 +39,7 @@ const OprettKlagePage = ({ sak }: Props) => {
     const form = useForm<FormkravFormData>({
         defaultValues: {
             journalpostId: '',
+            mottattFraJournalpost: '',
             vedtakDetPåklages: '',
             erKlagerPartISaken: null,
             klagesDetPåKonkreteElementer: null,
@@ -64,44 +65,39 @@ const OprettKlagePage = ({ sak }: Props) => {
     };
 
     return (
-        <HStack margin="10" gap="24">
-            <FormkravInfoDisplay />
-
-            <form onSubmit={form.handleSubmit(onSubmit)}>
-                <VStack gap="4">
-                    <FormkravForm
-                        control={form.control}
-                        vedtakOgBehandling={
-                            sak.alleRammevedtak
-                                .map((vedtak) => {
-                                    const behandling = sak.behandlinger.find(
-                                        (behandling) => behandling.id === vedtak.behandlingId,
-                                    );
-                                    return { vedtak, behandling };
-                                })
-                                .filter(({ behandling }) => behandling !== undefined) as Array<{
-                                vedtak: Rammevedtak;
-                                behandling: Rammebehandling;
-                            }>
-                        }
-                    >
-                        {opprettKlage.error && (
-                            <LocalAlert status="error">
-                                <LocalAlert.Header>
-                                    <LocalAlert.Title>
-                                        Feil ved oppretting av klage
-                                    </LocalAlert.Title>
-                                </LocalAlert.Header>
-                                <LocalAlert.Content>
-                                    {opprettKlage.error.message}
-                                </LocalAlert.Content>
-                            </LocalAlert>
-                        )}
-                        <Button>Lagre</Button>
-                    </FormkravForm>
-                </VStack>
-            </form>
-        </HStack>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+            <VStack gap="8" marginInline="16" marginBlock="8" align="start">
+                <HStack gap="2">
+                    <WarningCircleIcon />
+                    <Heading size="small">Formkrav</Heading>
+                </HStack>
+                <FormkravForm
+                    control={form.control}
+                    vedtakOgBehandling={
+                        sak.alleRammevedtak
+                            .map((vedtak) => {
+                                const behandling = sak.behandlinger.find(
+                                    (behandling) => behandling.id === vedtak.behandlingId,
+                                );
+                                return { vedtak, behandling };
+                            })
+                            .filter(({ behandling }) => behandling !== undefined) as Array<{
+                            vedtak: Rammevedtak;
+                            behandling: Rammebehandling;
+                        }>
+                    }
+                />
+                {opprettKlage.error && (
+                    <LocalAlert status="error">
+                        <LocalAlert.Header>
+                            <LocalAlert.Title>Feil ved opprettelse av klage</LocalAlert.Title>
+                        </LocalAlert.Header>
+                        <LocalAlert.Content>{opprettKlage.error.message}</LocalAlert.Content>
+                    </LocalAlert>
+                )}
+                <Button>Lagre</Button>
+            </VStack>
+        </form>
     );
 };
 

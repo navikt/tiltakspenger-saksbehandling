@@ -7,6 +7,7 @@ export const INGEN_VEDTAK = 'INGEN_VEDTAK' as const;
 
 export interface FormkravFormData {
     journalpostId: string;
+    mottattFraJournalpost: string;
     vedtakDetPåklages: typeof INGEN_VEDTAK | VedtakId | '';
     erKlagerPartISaken: Nullable<boolean>;
     klagesDetPåKonkreteElementer: Nullable<boolean>;
@@ -21,6 +22,13 @@ export const formkravValidation = (data: FormkravFormData) => {
         errors.journalpostId = {
             type: 'required',
             message: 'Journalpost ID er påkrevd',
+        };
+    }
+
+    if (!data.mottattFraJournalpost) {
+        errors.mottattFraJournalpost = {
+            type: 'required',
+            message: 'Mottatt fra journalpost er påkrevd',
         };
     }
 
@@ -79,6 +87,7 @@ export const formkravFormDataTilOpprettKlageRequest = (
 export const klageTilFormkravFormData = (klage: Klagebehandling): FormkravFormData => {
     return {
         journalpostId: klage.journalpostId,
+        mottattFraJournalpost: klage.mottattFraJournalpost,
         vedtakDetPåklages: klage.vedtakDetKlagesPå ?? INGEN_VEDTAK,
         erKlagerPartISaken: klage.erKlagerPartISaken,
         klagesDetPåKonkreteElementer: klage.klagesDetPåKonkreteElementerIVedtaket,

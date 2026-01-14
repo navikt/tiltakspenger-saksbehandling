@@ -21,6 +21,7 @@ export interface Klagebehandling {
     sistEndret: string;
     saksbehandler: Nullable<string>;
     journalpostId: string;
+    mottattFraJournalpost: string;
     journalpostOpprettet: string;
     status: string;
     resultat: Nullable<KlagebehandlingResultat>;
