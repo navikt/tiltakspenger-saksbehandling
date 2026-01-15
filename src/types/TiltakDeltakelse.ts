@@ -17,6 +17,7 @@ export type Tiltaksdeltakelse = {
     antallDagerPerUke: number | null;
     kilde: TiltaksdeltakelseKilde;
     gjennomforingsprosent: number | null;
+    internDeltakelseId: string;
 };
 
 export type TiltaksdeltakelseMedPeriode = Tiltaksdeltakelse & {

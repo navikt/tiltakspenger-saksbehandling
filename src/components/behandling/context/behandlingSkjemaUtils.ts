@@ -103,7 +103,7 @@ export const lagForhåndsutfyltInnvilgelse = (
                 behandling,
                 førsteInnvilgelsesperiode,
             ),
-            tiltaksdeltakelseId: tiltak.at(0)!.eksternDeltagelseId,
+            internDeltakelseId: tiltak.at(0)!.internDeltakelseId,
         },
     ];
 
