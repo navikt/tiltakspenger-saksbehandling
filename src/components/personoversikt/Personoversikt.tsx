@@ -31,6 +31,7 @@ export const Personoversikt = () => {
         saksnummer,
         behandlinger,
         åpneBehandlinger,
+        klageBehandlinger,
         meldeperiodeKjeder,
         alleRammevedtak,
     } = sak;
@@ -90,7 +91,11 @@ export const Personoversikt = () => {
                     className={styles.tabellwrapper}
                 />
 
-                <AvsluttedeBehandlinger behandlinger={behandlinger} saksnummer={saksnummer} />
+                <AvsluttedeBehandlinger
+                    behandlinger={behandlinger}
+                    saksnummer={saksnummer}
+                    klageBehandlinger={klageBehandlinger}
+                />
 
                 <Box className={styles.tabellwrapper}>
                     <div className={styles.meldekortHeaderRad}>

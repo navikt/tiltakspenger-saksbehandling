@@ -1,9 +1,12 @@
-import { AvbruttBehandlingCellInfo } from './AvsluttedeBehandlingerUtils';
+import {
+    AvbruttBehandlingCellInfo,
+    avbruttbehandlingstypeTekst,
+} from './AvsluttedeBehandlingerUtils';
 import { Button, Table } from '@navikt/ds-react';
-import { finnTypeBehandlingTekstForOversikt } from '~/utils/tekstformateringUtils';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '~/utils/date';
 import Link from 'next/link';
 import { behandlingUrl } from '~/utils/urls';
+import { BehandlingId, Rammebehandlingstype } from '~/types/Rammebehandling';
 
 export const AvbrutteBehandlingerTabell = (props: {
     saksnummer: string;
@@ -29,7 +32,7 @@ export const AvbrutteBehandlingerTabell = (props: {
                 {props.avbrutteBehandlinger.map((avsluttet, idx) => (
                     <Table.Row shadeOnHover={false} key={`${avsluttet.tidspunktAvsluttet}-${idx}`}>
                         <Table.DataCell>
-                            {finnTypeBehandlingTekstForOversikt[avsluttet.behandlingstype]}
+                            {avbruttbehandlingstypeTekst[avsluttet.behandlingstype]}
                         </Table.DataCell>
                         <Table.DataCell>
                             {formaterTidspunkt(avsluttet.tidspunktAvsluttet)}
@@ -42,18 +45,34 @@ export const AvbrutteBehandlingerTabell = (props: {
                         <Table.DataCell>{avsluttet.saksbehandler ?? 'Ikke tildelt'}</Table.DataCell>
                         <Table.DataCell>{avsluttet.beslutter ?? 'Ikke tildelt'}</Table.DataCell>
                         <Table.DataCell align={'right'}>
-                            <Button
-                                style={{ minWidth: '50%' }}
-                                size="small"
-                                variant={'secondary'}
-                                as={Link}
-                                href={behandlingUrl({
-                                    saksnummer: props.saksnummer,
-                                    id: avsluttet.id,
-                                })}
-                            >
-                                {'Se behandling'}
-                            </Button>
+                            {avsluttet.behandlingstype === Rammebehandlingstype.REVURDERING ||
+                                (avsluttet.behandlingstype ===
+                                    Rammebehandlingstype.SØKNADSBEHANDLING && (
+                                    <Button
+                                        style={{ minWidth: '50%' }}
+                                        size="small"
+                                        variant={'secondary'}
+                                        as={Link}
+                                        href={behandlingUrl({
+                                            saksnummer: props.saksnummer,
+                                            id: avsluttet.id as BehandlingId,
+                                        })}
+                                    >
+                                        {'Se behandling'}
+                                    </Button>
+                                ))}
+
+                            {avsluttet.behandlingstype === 'KLAGEBEHANDLING' && (
+                                <Button
+                                    style={{ minWidth: '50%' }}
+                                    size="small"
+                                    variant={'secondary'}
+                                    as={Link}
+                                    href={`/sak/${props.saksnummer}/klage/${avsluttet.id}/formkrav`}
+                                >
+                                    Se behandling
+                                </Button>
+                            )}
                         </Table.DataCell>
                     </Table.Row>
                 ))}

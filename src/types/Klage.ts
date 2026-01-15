@@ -10,6 +10,7 @@ export enum KlagebehandlingResultat {
 export enum KlagebehandlingStatus {
     KLAR_TIL_BEHANDLING = 'KLAR_TIL_BEHANDLING',
     UNDER_BEHANDLING = 'UNDER_BEHANDLING',
+    AVBRUTT = 'AVBRUTT',
 }
 
 export interface Klagebehandling {
@@ -30,6 +31,7 @@ export interface Klagebehandling {
     klagesDetPåKonkreteElementerIVedtaket: boolean;
     erKlagefristenOverholdt: boolean;
     erKlagenSignert: boolean;
+    erAvbrutt: boolean;
 }
 
 export interface OpprettKlageRequest {

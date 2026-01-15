@@ -205,6 +205,7 @@ export const behandlingResultatTilTag: Record<RammebehandlingResultat, ReactElem
 export const klagebehandlingStatusTilText: Record<KlagebehandlingStatus, string> = {
     [KlagebehandlingStatus.KLAR_TIL_BEHANDLING]: 'Klar til behandling',
     [KlagebehandlingStatus.UNDER_BEHANDLING]: 'Under behandling',
+    [KlagebehandlingStatus.AVBRUTT]: 'Avbrutt',
 };
 
 export const klagebehandlingStatusTilTag: Record<KlagebehandlingStatus, ReactElement> = {
@@ -217,6 +218,9 @@ export const klagebehandlingStatusTilTag: Record<KlagebehandlingStatus, ReactEle
         <Tag variant="neutral">
             {klagebehandlingStatusTilText[KlagebehandlingStatus.UNDER_BEHANDLING]}
         </Tag>
+    ),
+    [KlagebehandlingStatus.AVBRUTT]: (
+        <Tag variant="neutral">{klagebehandlingStatusTilText[KlagebehandlingStatus.AVBRUTT]}</Tag>
     ),
 };
 

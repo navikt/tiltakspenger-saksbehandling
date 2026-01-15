@@ -4,15 +4,25 @@ import { AvbrutteBehandlingerTabell } from './AvbrutteBehandlingerTabell';
 import { Rammebehandling } from '~/types/Rammebehandling';
 
 import styles from '../Personoversikt.module.css';
+import { Klagebehandling, KlagebehandlingResultat } from '~/types/Klage';
 
 export const AvsluttedeBehandlinger = (props: {
     saksnummer: string;
     behandlinger: Rammebehandling[];
+    klageBehandlinger: Klagebehandling[];
 }) => {
-    const avbrutteBehandlinger = props.behandlinger
+    const avbrutteRammebehandlinger = props.behandlinger
         .filter((behandling) => behandling.avbrutt)
-        .map(avbruttBehandlingToDataCellInfo)
-        .toSorted((a, b) => b.tidspunktAvsluttet.localeCompare(a.tidspunktAvsluttet));
+        .map(avbruttBehandlingToDataCellInfo);
+
+    const avbrutteKlagebehandlinger = props.klageBehandlinger
+        .filter((klage) => klage.erAvbrutt)
+        .map(avbruttKlageToDataCellInfo);
+
+    const avbrutteBehandlinger = [
+        ...avbrutteRammebehandlinger,
+        ...avbrutteKlagebehandlinger,
+    ].toSorted((a, b) => b.tidspunktAvsluttet.localeCompare(a.tidspunktAvsluttet));
 
     if (avbrutteBehandlinger.length === 0) {
         return null;
@@ -47,5 +57,18 @@ const avbruttBehandlingToDataCellInfo = (
         avsluttetPga: behandling.avbrutt ? 'avbrutt' : 'ferdigBehandlet',
         saksbehandler: behandling.saksbehandler,
         beslutter: behandling.beslutter,
+    };
+};
+
+const avbruttKlageToDataCellInfo = (klage: Klagebehandling): AvbruttBehandlingCellInfo => {
+    return {
+        id: klage.id,
+        behandlingsperiode: null,
+        resultat: klage.resultat ? klage.resultat : KlagebehandlingResultat.AVVIST,
+        behandlingstype: 'KLAGEBEHANDLING',
+        tidspunktAvsluttet: klage.sistEndret,
+        avsluttetPga: 'avbrutt',
+        saksbehandler: klage.saksbehandler ? klage.saksbehandler : 'Ukjent',
+        beslutter: null,
     };
 };
