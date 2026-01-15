@@ -2,7 +2,8 @@ import { MedPeriode, Periode } from '~/types/Periode';
 import dayjs from 'dayjs';
 import { datoMax, datoMin, forrigeDag, nesteDag } from '~/utils/date';
 
-export const validerPeriodisering = (periodisering: MedPeriode[], tillatHull: boolean) => {
+// Sjekker at periodiseringen er i kronologisk rekkefølge uten overlapp
+export const validerPeriodisering = (periodisering: MedPeriode[], tillatHull: boolean): boolean => {
     return periodisering
         .map((it) => it.periode)
         .every((periode, index, array) => {
@@ -18,7 +19,8 @@ export const validerPeriodisering = (periodisering: MedPeriode[], tillatHull: bo
         });
 };
 
-export const joinPerioder = (perioder: Periode[]): Periode => {
+// Returnerer en ny periode med tidligste fraOgMed og seneste tilOgMed fra de angitte periodene
+export const totalPeriode = (perioder: Periode[]): Periode => {
     if (perioder.length === 0) {
         throw Error('Må ha minst en periode');
     }
@@ -35,11 +37,11 @@ export const joinPerioder = (perioder: Periode[]): Periode => {
     return { fraOgMed: førsteFraOgMed, tilOgMed: sisteTilOgMed };
 };
 
-export const erDatoIPeriode = (dato: string, periode: Periode) => {
+export const erDatoIPeriode = (dato: string, periode: Periode): boolean => {
     return dato >= periode.fraOgMed && dato <= periode.tilOgMed;
 };
 
-export const perioderOverlapper = (a: Periode, b: Periode) => {
+export const perioderOverlapper = (a: Periode, b: Periode): boolean => {
     return (
         erDatoIPeriode(a.fraOgMed, b) ||
         erDatoIPeriode(a.tilOgMed, b) ||
@@ -48,6 +50,7 @@ export const perioderOverlapper = (a: Periode, b: Periode) => {
     );
 };
 
+// Sjekker om den første perioden inneholder hele den andre perioden
 export const inneholderHelePerioden = (a: Periode, b: Periode) => {
     return erDatoIPeriode(b.fraOgMed, a) && erDatoIPeriode(b.tilOgMed, a);
 };
@@ -70,19 +73,19 @@ export const periodiseringerErLike = <T>(
 ) => {
     return (
         perioder1.length === perioder2.length &&
-        perioder1.every((periode, index) => {
+        perioder1.every((periode1, index) => {
             const periode2 = perioder2.at(index)!;
 
             return (
-                perioderErLike(periode.periode, periode2.periode) &&
-                sammenlignVerdi(periode, periode2)
+                perioderErLike(periode1.periode, periode2.periode) &&
+                sammenlignVerdi(periode1, periode2)
             );
         })
     );
 };
 
 export const periodiseringTotalPeriode = (periodisering: MedPeriode[]): Periode => {
-    return joinPerioder(periodisering.map((it) => it.periode));
+    return totalPeriode(periodisering.map((it) => it.periode));
 };
 
 // Returnerer elementer med perioder som overlapper den angitte perioden, krympet til den angitte perioden
@@ -214,6 +217,7 @@ export const finnPeriodiseringHull = (periodisering: MedPeriode[]): Periode[] =>
     }, []);
 };
 
+// Slår sammen perioder dersom de tilstøter hverandre og har samme verdi (ut fra sammenlignVerdi predikatet)
 export const slåSammenPeriodisering = <T>(
     periodisering: MedPeriode<T>[],
     sammenlignVerdi: (p1: T, p2: T) => boolean,

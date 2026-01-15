@@ -1,14 +1,12 @@
 import { FieldErrors } from 'react-hook-form';
-import { Klagebehandling, OpprettKlageRequest } from '~/types/Klage';
+import { Klagebehandling, OppdaterKlageFormkravRequest, OpprettKlageRequest } from '~/types/Klage';
 import { VedtakId } from '~/types/Rammevedtak';
 import { Nullable } from '~/types/UtilTypes';
-import { dateTilISOTekst } from '~/utils/date';
 
 export const INGEN_VEDTAK = 'INGEN_VEDTAK' as const;
 
 export interface FormkravFormData {
     journalpostId: string;
-    mottattFraJournalpost: string;
     vedtakDetPåklages: typeof INGEN_VEDTAK | VedtakId | '';
     erKlagerPartISaken: Nullable<boolean>;
     klagesDetPåKonkreteElementer: Nullable<boolean>;
@@ -26,10 +24,10 @@ export const formkravValidation = (data: FormkravFormData) => {
         };
     }
 
-    if (!data.mottattFraJournalpost) {
-        errors.mottattFraJournalpost = {
-            type: 'required',
-            message: 'Mottatt fra journalpost er påkrevd',
+    if (data.journalpostId && !/^[0-9]+$/.test(data.journalpostId)) {
+        errors.journalpostId = {
+            type: 'pattern',
+            message: 'Journalpost ID kan kun inneholde tall',
         };
     }
 
@@ -76,7 +74,20 @@ export const formkravFormDataTilOpprettKlageRequest = (
 ): OpprettKlageRequest => {
     return {
         journalpostId: formData.journalpostId,
-        mottattFraJournalpost: dateTilISOTekst(formData.mottattFraJournalpost),
+        vedtakDetKlagesPå:
+            formData.vedtakDetPåklages === INGEN_VEDTAK ? null : formData.vedtakDetPåklages,
+        erKlagerPartISaken: formData.erKlagerPartISaken!,
+        klagesDetPåKonkreteElementerIVedtaket: formData.klagesDetPåKonkreteElementer!,
+        erKlagefristenOverholdt: formData.erKlagefristOverholdt!,
+        erKlagenSignert: formData.erKlagenSignert!,
+    };
+};
+
+export const formkravFormDataTilOppdaterKlageFormkravRequest = (
+    formData: FormkravFormData,
+): OppdaterKlageFormkravRequest => {
+    return {
+        journalpostId: formData.journalpostId,
         vedtakDetKlagesPå:
             formData.vedtakDetPåklages === INGEN_VEDTAK ? null : formData.vedtakDetPåklages,
         erKlagerPartISaken: formData.erKlagerPartISaken!,
@@ -89,7 +100,6 @@ export const formkravFormDataTilOpprettKlageRequest = (
 export const klageTilFormkravFormData = (klage: Klagebehandling): FormkravFormData => {
     return {
         journalpostId: klage.journalpostId,
-        mottattFraJournalpost: klage.mottattFraJournalpost,
         vedtakDetPåklages: klage.vedtakDetKlagesPå ?? INGEN_VEDTAK,
         erKlagerPartISaken: klage.erKlagerPartISaken,
         klagesDetPåKonkreteElementer: klage.klagesDetPåKonkreteElementerIVedtaket,

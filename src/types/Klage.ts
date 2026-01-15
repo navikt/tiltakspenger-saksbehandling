@@ -10,6 +10,8 @@ export enum KlagebehandlingResultat {
 export enum KlagebehandlingStatus {
     KLAR_TIL_BEHANDLING = 'KLAR_TIL_BEHANDLING',
     UNDER_BEHANDLING = 'UNDER_BEHANDLING',
+    AVBRUTT = 'AVBRUTT',
+    IVERKSATT = 'IVERKSATT',
 }
 
 export interface Klagebehandling {
@@ -30,14 +32,38 @@ export interface Klagebehandling {
     klagesDetPåKonkreteElementerIVedtaket: boolean;
     erKlagefristenOverholdt: boolean;
     erKlagenSignert: boolean;
+    brevtekst: Brevtekst[];
+    erAvbrutt: boolean;
+    kanIverksette: boolean;
+}
+
+export interface Brevtekst {
+    tittel: string;
+    tekst: string;
 }
 
 export interface OpprettKlageRequest {
     journalpostId: string;
-    mottattFraJournalpost: string;
     vedtakDetKlagesPå: Nullable<string>;
     erKlagerPartISaken: boolean;
     klagesDetPåKonkreteElementerIVedtaket: boolean;
     erKlagefristenOverholdt: boolean;
     erKlagenSignert: boolean;
+}
+
+export interface OppdaterKlageFormkravRequest {
+    journalpostId: string;
+    vedtakDetKlagesPå: Nullable<string>;
+    erKlagerPartISaken: boolean;
+    klagesDetPåKonkreteElementerIVedtaket: boolean;
+    erKlagefristenOverholdt: boolean;
+    erKlagenSignert: boolean;
+}
+
+export interface ForhåndsvisBrevKlageRequest {
+    tekstTilVedtaksbrev: Brevtekst[];
+}
+
+export interface LagreBrevtekstKlageRequest {
+    tekstTilVedtaksbrev: Brevtekst[];
 }

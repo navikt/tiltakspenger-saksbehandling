@@ -1,0 +1,13 @@
+.journalpostIdInputContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+
+    /* ideelt sett skal ikke selve formet bestemme maxwidthen - denne burde styres av parent container. med det ender opp med enda et lag med props */
+    max-width: 30rem;
+
+    > * {
+        padding: 0;
+    }
+}

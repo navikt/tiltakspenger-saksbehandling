@@ -2,7 +2,6 @@ import { Periode } from '~/types/Periode';
 
 export interface ManueltRegistrertSøknad {
     journalpostId: string;
-    personopplysninger: PersonopplysningerSøker;
     manueltSattSøknadsperiode: Periode;
     manueltSattTiltak?: string;
     søknadstype: SøknadstypeManueltRegistrertSøknad;
@@ -16,12 +15,6 @@ export type SøknadstypeManueltRegistrertSøknad =
     | 'MODIA'
     | 'ANNET'
     | 'PAPIR'; // TODO Deprecated, men må migrere gamle søknader først
-
-export interface PersonopplysningerSøker {
-    ident: string;
-    fornavn: string;
-    etternavn: string;
-}
 
 export interface Tiltak {
     eksternDeltakelseId: string;

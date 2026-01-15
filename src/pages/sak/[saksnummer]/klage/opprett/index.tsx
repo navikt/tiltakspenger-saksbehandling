@@ -2,7 +2,7 @@ import { ReactElement } from 'react';
 import KlageLayout from '../layout';
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
 import { Button, Heading, HStack, LocalAlert, VStack } from '@navikt/ds-react';
-import { useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import { Rammevedtak } from '~/types/Rammevedtak';
 import { Rammebehandling } from '~/types/Rammebehandling';
 import { fetchSak } from '~/utils/fetch/fetch-server';
@@ -19,6 +19,7 @@ import {
 import { Klagebehandling, OpprettKlageRequest } from '~/types/Klage';
 import { KlageSteg } from '../../../../../utils/KlageLayoutUtils';
 import WarningCircleIcon from '~/icons/WarningCircleIcon';
+import { useHentPersonopplysninger } from '~/components/personaliaheader/useHentPersonopplysninger';
 
 type Props = {
     sak: SakProps;
@@ -36,10 +37,11 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
 });
 
 const OprettKlagePage = ({ sak }: Props) => {
+    const { personopplysninger } = useHentPersonopplysninger(sak.sakId);
+
     const form = useForm<FormkravFormData>({
         defaultValues: {
             journalpostId: '',
-            mottattFraJournalpost: '',
             vedtakDetPåklages: '',
             erKlagerPartISaken: null,
             klagesDetPåKonkreteElementer: null,
@@ -54,7 +56,7 @@ const OprettKlagePage = ({ sak }: Props) => {
         'POST',
         {
             onSuccess: (klagebehandling) => {
-                router.push(`/sak/${sak.saksnummer}/klage/${klagebehandling!.id}/formkrav`);
+                router.push(`/sak/${sak.sakId}/klage/${klagebehandling!.id}/formkrav`);
             },
         },
     );
@@ -64,39 +66,43 @@ const OprettKlagePage = ({ sak }: Props) => {
     };
 
     return (
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-            <VStack gap="8" marginInline="16" marginBlock="8" align="start">
-                <HStack gap="2">
-                    <WarningCircleIcon />
-                    <Heading size="small">Formkrav</Heading>
-                </HStack>
-                <FormkravForm
-                    control={form.control}
-                    vedtakOgBehandling={
-                        sak.alleRammevedtak
-                            .map((vedtak) => {
-                                const behandling = sak.behandlinger.find(
-                                    (behandling) => behandling.id === vedtak.behandlingId,
-                                );
-                                return { vedtak, behandling };
-                            })
-                            .filter(({ behandling }) => behandling !== undefined) as Array<{
-                            vedtak: Rammevedtak;
-                            behandling: Rammebehandling;
-                        }>
-                    }
-                />
-                {opprettKlage.error && (
-                    <LocalAlert status="error">
-                        <LocalAlert.Header>
-                            <LocalAlert.Title>Feil ved opprettelse av klage</LocalAlert.Title>
-                        </LocalAlert.Header>
-                        <LocalAlert.Content>{opprettKlage.error.message}</LocalAlert.Content>
-                    </LocalAlert>
-                )}
-                <Button>Lagre</Button>
-            </VStack>
-        </form>
+        //vi har formprovider fordi journalpostid komponenten bruker useformcontext. merk at bruken av useformcontext gir oss ikke compile feil dersom endrer på form-interfacet
+        <FormProvider {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+                <VStack gap="8" marginInline="16" marginBlock="8" align="start">
+                    <HStack gap="2">
+                        <WarningCircleIcon />
+                        <Heading size="small">Formkrav</Heading>
+                    </HStack>
+                    <FormkravForm
+                        control={form.control}
+                        fnrFraPersonopplysninger={personopplysninger?.fnr ?? null}
+                        vedtakOgBehandling={
+                            sak.alleRammevedtak
+                                .map((vedtak) => {
+                                    const behandling = sak.behandlinger.find(
+                                        (behandling) => behandling.id === vedtak.behandlingId,
+                                    );
+                                    return { vedtak, behandling };
+                                })
+                                .filter(({ behandling }) => behandling !== undefined) as Array<{
+                                vedtak: Rammevedtak;
+                                behandling: Rammebehandling;
+                            }>
+                        }
+                    />
+                    {opprettKlage.error && (
+                        <LocalAlert status="error">
+                            <LocalAlert.Header>
+                                <LocalAlert.Title>Feil ved opprettelse av klage</LocalAlert.Title>
+                            </LocalAlert.Header>
+                            <LocalAlert.Content>{opprettKlage.error.message}</LocalAlert.Content>
+                        </LocalAlert>
+                    )}
+                    <Button loading={opprettKlage.isMutating}>Lagre</Button>
+                </VStack>
+            </form>
+        </FormProvider>
     );
 };
 

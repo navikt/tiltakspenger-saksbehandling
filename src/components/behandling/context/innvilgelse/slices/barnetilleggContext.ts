@@ -4,6 +4,7 @@ import { InnvilgelseMedPerioderState } from '~/components/behandling/context/inn
 import { Reducer } from 'react';
 import { oppdaterPeriodiseringUtenOverlapp } from '~/components/behandling/context/behandlingSkjemaUtils';
 import { Periode } from '~/types/Periode';
+import { periodiseringTotalPeriode } from '~/utils/periode';
 
 export type BarnetilleggActions =
     | {
@@ -44,7 +45,6 @@ export const barnetilleggReducer: Reducer<InnvilgelseMedPerioderState, Barnetill
 
         case 'addBarnetilleggPeriode': {
             const { antallBarn } = payload;
-            const innvilgelsesPeriode = state.innvilgelsesperioder.at(0)!.periode;
             const forrigeBarnetillegg = state.barnetilleggPerioder?.at(-1);
 
             if (!forrigeBarnetillegg) {
@@ -53,20 +53,22 @@ export const barnetilleggReducer: Reducer<InnvilgelseMedPerioderState, Barnetill
                     barnetilleggPerioder: [
                         {
                             antallBarn,
-                            periode: innvilgelsesPeriode,
+                            periode: periodiseringTotalPeriode(state.innvilgelsesperioder),
                         },
                     ],
                 };
             }
 
+            const sisteInnvilgelsesperiode = state.innvilgelsesperioder.at(-1)!.periode;
+
             const nyBarnetilleggperiode: BarnetilleggPeriode = {
                 antallBarn,
                 periode: {
                     fraOgMed:
-                        innvilgelsesPeriode.tilOgMed > forrigeBarnetillegg.periode.tilOgMed
+                        sisteInnvilgelsesperiode.tilOgMed > forrigeBarnetillegg.periode.tilOgMed
                             ? nesteDag(forrigeBarnetillegg.periode.tilOgMed)
-                            : innvilgelsesPeriode.tilOgMed,
-                    tilOgMed: innvilgelsesPeriode.tilOgMed,
+                            : sisteInnvilgelsesperiode.tilOgMed,
+                    tilOgMed: sisteInnvilgelsesperiode.tilOgMed,
                 },
             };
 

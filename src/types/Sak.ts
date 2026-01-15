@@ -19,6 +19,7 @@ export type SakProps = {
     behandlinger: Rammebehandling[];
     klageBehandlinger: Klagebehandling[];
     tidslinje: TidslinjeRammevedtak;
+    innvilgetTidslinje: TidslinjeRammevedtak;
     // Alle rammevedtak på saken med opprinnelige perioder
     alleRammevedtak: Rammevedtak[];
     utbetalingstidslinje: UtbetalingstidslinjePeriode[];

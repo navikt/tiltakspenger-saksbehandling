@@ -1,8 +1,8 @@
 import { ReactElement, useState } from 'react';
 
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
-import { BodyShort, Button, Heading, HStack, VStack } from '@navikt/ds-react';
-import { useForm } from 'react-hook-form';
+import { BodyShort, Button, Heading, HStack, LocalAlert, VStack } from '@navikt/ds-react';
+import { FormProvider, useForm } from 'react-hook-form';
 import { Rammevedtak } from '~/types/Rammevedtak';
 import { Rammebehandling } from '~/types/Rammebehandling';
 import { fetchSak } from '~/utils/fetch/fetch-server';
@@ -12,13 +12,17 @@ import router from 'next/router';
 import FormkravForm from '~/components/forms/formkrav/FormkravForm';
 import {
     FormkravFormData,
+    formkravFormDataTilOppdaterKlageFormkravRequest,
     formkravValidation,
     klageTilFormkravFormData,
 } from '~/components/forms/formkrav/FormkravFormUtils';
-import { Klagebehandling, KlageId } from '~/types/Klage';
+import { Klagebehandling, KlageId, OppdaterKlageFormkravRequest } from '~/types/Klage';
 import KlageLayout from '../../layout';
 import { KlageSteg } from '../../../../../../utils/KlageLayoutUtils';
 import { CheckmarkCircleIcon, PencilIcon, TrashIcon } from '@navikt/aksel-icons';
+import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
+import { useHentPersonopplysninger } from '~/components/personaliaheader/useHentPersonopplysninger';
+import { kanBehandleKlage } from '~/utils/klageUtils';
 
 type Props = {
     sak: SakProps;
@@ -48,6 +52,7 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
 });
 
 const FormkravKlagePage = ({ sak, klage }: Props) => {
+    const { personopplysninger } = useHentPersonopplysninger(sak.sakId);
     const [formTilstand, setFormTilstand] = useState<'REDIGERER' | 'LAGRET'>('LAGRET');
 
     const form = useForm<FormkravFormData>({
@@ -55,73 +60,125 @@ const FormkravKlagePage = ({ sak, klage }: Props) => {
         resolver: formkravValidation,
     });
 
+    const oppdaterFormkrav = useFetchJsonFraApi<Klagebehandling, OppdaterKlageFormkravRequest>(
+        `/sak/${sak.sakId}/klage/${klage.id}/formkrav`,
+        'PUT',
+        {
+            onSuccess: (klage) => {
+                form.reset(klageTilFormkravFormData(klage!));
+                setFormTilstand('LAGRET');
+            },
+        },
+    );
+
+    const avbrytKlageBehandling = useFetchJsonFraApi<Klagebehandling>(
+        `/sak/${sak.sakId}/klage/${klage.id}/avbryt`,
+        'PATCH',
+        {
+            onSuccess: () => {
+                router.push(`/sak/${sak.saksnummer}`);
+            },
+        },
+    );
+
     const onSubmit = (data: FormkravFormData) => {
-        console.log('----------------');
-        console.log('Dette er data vi skal oppdatere klage med:', data);
-        setFormTilstand('LAGRET');
-        console.log('----------------');
+        oppdaterFormkrav.trigger(formkravFormDataTilOppdaterKlageFormkravRequest(data));
     };
 
     return (
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-            <VStack gap="8" marginInline="16" marginBlock="8" align="start">
-                <HStack gap="2">
-                    <CheckmarkCircleIcon title="Sjekk ikon" fontSize="1.5rem" color="green" />
-                    <Heading size="small">Formkrav</Heading>
-                </HStack>
-                <FormkravForm
-                    readonly={formTilstand === 'LAGRET'}
-                    control={form.control}
-                    vedtakOgBehandling={
-                        sak.alleRammevedtak
-                            .map((vedtak) => {
-                                const behandling = sak.behandlinger.find(
-                                    (behandling) => behandling.id === vedtak.behandlingId,
-                                );
-                                return { vedtak, behandling };
-                            })
-                            .filter(({ behandling }) => behandling !== undefined) as Array<{
-                            vedtak: Rammevedtak;
-                            behandling: Rammebehandling;
-                        }>
-                    }
-                />
-                {formTilstand === 'REDIGERER' ? (
-                    <Button>Lagre</Button>
-                ) : (
-                    <HStack gap="4">
-                        <Button
-                            type="button"
-                            variant="tertiary"
-                            onClick={() => console.log('Avslutter klage')}
-                        >
-                            <HStack>
-                                <TrashIcon title="Søppelbøtte ikon" fontSize="1.5rem" />
-                                <BodyShort>Avslutt</BodyShort>
-                            </HStack>
-                        </Button>
-                        <Button
-                            type="button"
-                            variant="tertiary"
-                            onClick={() => setFormTilstand('REDIGERER')}
-                        >
-                            <HStack>
-                                <PencilIcon title="Rediger ikon" fontSize="1.5rem" />
-                                <BodyShort>Rediger</BodyShort>
-                            </HStack>
-                        </Button>
-                        <Button
-                            type="button"
-                            onClick={() =>
-                                router.push(`/sak/${sak.saksnummer}/klage/${klage.id}/brev`)
-                            }
-                        >
-                            Fortsett
-                        </Button>
+        //vi har formprovider fordi journalpostid komponenten bruker useformcontext. merk at bruken av useformcontext gir oss ikke compile feil dersom endrer på form-interfacet
+        <FormProvider {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+                <VStack gap="8" marginInline="16" marginBlock="8" align="start">
+                    <HStack gap="2">
+                        <CheckmarkCircleIcon title="Sjekk ikon" fontSize="1.5rem" color="green" />
+                        <Heading size="small">Formkrav</Heading>
                     </HStack>
-                )}
-            </VStack>
-        </form>
+                    <FormkravForm
+                        readonly={formTilstand === 'LAGRET'}
+                        fnrFraPersonopplysninger={personopplysninger?.fnr ?? null}
+                        control={form.control}
+                        vedtakOgBehandling={
+                            sak.alleRammevedtak
+                                .map((vedtak) => {
+                                    const behandling = sak.behandlinger.find(
+                                        (behandling) => behandling.id === vedtak.behandlingId,
+                                    );
+                                    return { vedtak, behandling };
+                                })
+                                .filter(({ behandling }) => behandling !== undefined) as Array<{
+                                vedtak: Rammevedtak;
+                                behandling: Rammebehandling;
+                            }>
+                        }
+                    />
+
+                    {oppdaterFormkrav.error && (
+                        <LocalAlert status="error">
+                            <LocalAlert.Header>
+                                <LocalAlert.Title>Feil ved oppdatering av klage</LocalAlert.Title>
+                            </LocalAlert.Header>
+                            <LocalAlert.Content>
+                                {oppdaterFormkrav.error.message}
+                            </LocalAlert.Content>
+                        </LocalAlert>
+                    )}
+
+                    {avbrytKlageBehandling.error && (
+                        <LocalAlert status="error">
+                            <LocalAlert.Header>
+                                <LocalAlert.Title>
+                                    Feil ved avbrytelse av klagebehandling
+                                </LocalAlert.Title>
+                            </LocalAlert.Header>
+                            <LocalAlert.Content>
+                                {avbrytKlageBehandling.error.message}
+                            </LocalAlert.Content>
+                        </LocalAlert>
+                    )}
+
+                    {formTilstand === 'REDIGERER' ? (
+                        <Button loading={oppdaterFormkrav.isMutating}>Lagre</Button>
+                    ) : (
+                        <HStack gap="4">
+                            {kanBehandleKlage(klage) && (
+                                <>
+                                    <Button
+                                        type="button"
+                                        variant="tertiary"
+                                        onClick={() => avbrytKlageBehandling.trigger()}
+                                        loading={avbrytKlageBehandling.isMutating}
+                                    >
+                                        <HStack>
+                                            <TrashIcon title="Søppelbøtte ikon" fontSize="1.5rem" />
+                                            <BodyShort>Avslutt</BodyShort>
+                                        </HStack>
+                                    </Button>
+                                    <Button
+                                        type="button"
+                                        variant="tertiary"
+                                        onClick={() => setFormTilstand('REDIGERER')}
+                                    >
+                                        <HStack>
+                                            <PencilIcon title="Rediger ikon" fontSize="1.5rem" />
+                                            <BodyShort>Rediger</BodyShort>
+                                        </HStack>
+                                    </Button>
+                                </>
+                            )}
+                            <Button
+                                type="button"
+                                onClick={() =>
+                                    router.push(`/sak/${sak.saksnummer}/klage/${klage.id}/brev`)
+                                }
+                            >
+                                Fortsett
+                            </Button>
+                        </HStack>
+                    )}
+                </VStack>
+            </form>
+        </FormProvider>
     );
 };
 

@@ -1,5 +1,5 @@
 import { Rammevedtak } from '~/types/Rammevedtak';
-import { joinPerioder, krympPeriodisering, utvidPeriodisering } from '~/utils/periode';
+import { totalPeriode, krympPeriodisering, utvidPeriodisering } from '~/utils/periode';
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';
 import { nesteDag } from '~/utils/date';
 import { kunPerioderMedBarn } from '~/components/behandling/felles/barnetillegg/utils/barnetilleggUtils';
@@ -39,7 +39,7 @@ const hentBarnetilleggFraVedtakTidslinje = (
         if (erSammenhengedePerioder) {
             return acc.with(-1, {
                 ...forrige,
-                periode: joinPerioder([forrige.periode, neste.periode]),
+                periode: totalPeriode([forrige.periode, neste.periode]),
             });
         }
 

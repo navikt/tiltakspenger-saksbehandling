@@ -1,0 +1,16 @@
+.fieldsList {
+    margin-bottom: 2rem;
+}
+
+.seperatorMargins {
+    margin: 2rem 0;
+}
+
+.fjernTekstfeltKnapp {
+    padding: 0;
+}
+
+.leggTilTekstfeltKnapp {
+    align-self: flex-start;
+    margin: 0 64px;
+}

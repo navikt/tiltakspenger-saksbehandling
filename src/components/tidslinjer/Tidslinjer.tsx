@@ -77,7 +77,13 @@ export const Tidslinjer = ({ sak, className }: Props) => {
                     {tidslinje.elementer.map((tidslinjeElement) => {
                         const { rammevedtak, tidslinjeResultat } = tidslinjeElement;
 
-                        const { id, vedtaksdato, saksbehandler, beslutter } = rammevedtak;
+                        const {
+                            id,
+                            vedtaksdato,
+                            saksbehandler,
+                            beslutter,
+                            gjeldendeInnvilgetPerioder,
+                        } = rammevedtak;
 
                         const { fraOgMed, tilOgMed } = tidslinjeElement.periode;
 
@@ -106,11 +112,21 @@ export const Tidslinjer = ({ sak, className }: Props) => {
                                     </Heading>
                                     <div>
                                         <InfoElement
-                                            navn={'Gjeldende periode'}
+                                            navn={'Gjeldende vedtaksperiode'}
                                             verdi={periodeTilFormatertDatotekst(
                                                 tidslinjeElement.periode,
                                             )}
                                         />
+                                        {gjeldendeInnvilgetPerioder.length > 1 && (
+                                            <InfoElement
+                                                navn={'Gjeldende innvilgelsesperioder'}
+                                                verdi={gjeldendeInnvilgetPerioder
+                                                    .map((it) => periodeTilFormatertDatotekst(it))
+                                                    .join(', ')}
+                                            />
+                                        )}
+                                    </div>
+                                    <div>
                                         {erInnvilgelse && (
                                             <>
                                                 <InfoElement

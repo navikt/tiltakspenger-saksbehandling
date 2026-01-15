@@ -1,4 +1,4 @@
-import { ActionMenu, Button, HStack, Table } from '@navikt/ds-react';
+import { ActionMenu, Button, Table } from '@navikt/ds-react';
 import { behandlingResultatTilTag, finnBehandlingstypeTekst } from '~/utils/tekstformateringUtils';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '~/utils/date';
 import { ChevronDownIcon } from '@navikt/aksel-icons';
@@ -58,22 +58,14 @@ export const VedtatteBehandlingerTabell = ({ sakId, rammevedtakMedBehandlinger }
                             <Table.DataCell>{behandlingResultatTilTag[resultat]}</Table.DataCell>
                             <Table.DataCell>{formaterTidspunkt(opprettet)}</Table.DataCell>
                             <Table.DataCell>
-                                <HStack gap="2">
-                                    {opprinneligInnvilgetPerioder.map((periode) => (
-                                        <span key={`${periode.fraOgMed}-${periode.tilOgMed}`}>
-                                            {periodeTilFormatertDatotekst(periode)}
-                                        </span>
-                                    ))}
-                                </HStack>
+                                {opprinneligInnvilgetPerioder
+                                    .map((periode) => periodeTilFormatertDatotekst(periode))
+                                    .join(', ')}
                             </Table.DataCell>
                             <Table.DataCell>
-                                <HStack gap="2">
-                                    {gjeldendeInnvilgetPerioder.map((periode) => (
-                                        <span key={`${periode.fraOgMed}-${periode.tilOgMed}`}>
-                                            {periodeTilFormatertDatotekst(periode)}
-                                        </span>
-                                    ))}
-                                </HStack>
+                                {gjeldendeInnvilgetPerioder
+                                    .map((periode) => periodeTilFormatertDatotekst(periode))
+                                    .join(', ')}
                             </Table.DataCell>
                             <Table.DataCell>{vedtak.saksbehandler}</Table.DataCell>
                             <Table.DataCell>{vedtak.beslutter}</Table.DataCell>

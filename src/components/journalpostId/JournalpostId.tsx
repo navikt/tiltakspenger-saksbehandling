@@ -1,20 +1,25 @@
-import { Alert, Loader, TextField } from '@navikt/ds-react';
+import { InlineMessage, Loader, TextField } from '@navikt/ds-react';
 import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
-import { ManueltRegistrertSøknad } from '~/components/manuell-søknad/ManueltRegistrertSøknad';
 import { useValiderJournalpostId } from './useValiderJournalpostId';
 import { useDebounce } from 'use-debounce';
 import styles from './JournalpostId.module.css';
 import { formaterDatotekst } from '~/utils/date';
+import { Nullable } from '~/types/UtilTypes';
 
 const DEBOUNCE_MS = 500;
 const MIN_LENGDE_FØR_VALIDERING = 5;
 
-export const JournalpostId = () => {
-    const { control, watch, setError, clearErrors } = useFormContext<ManueltRegistrertSøknad>();
+export const JournalpostId = (props: {
+    className?: string;
+    fnrFraPersonopplysninger: Nullable<string>;
+    readonly?: boolean;
+    size?: 'small' | 'medium';
+}) => {
+    const { control, watch, setError, clearErrors } = useFormContext();
     const journalpostIdFelt = 'journalpostId';
     const journalpostIdWatch = watch(journalpostIdFelt);
-    const fnrWatch = watch('personopplysninger.ident');
+
     const [debouncedJournalpostId] = useDebounce(journalpostIdWatch, DEBOUNCE_MS);
     const [datoOpprettet, setDatoOpprettet] = React.useState<string>('');
 
@@ -24,7 +29,7 @@ export const JournalpostId = () => {
         inneholderKunTall(journalpostId) && journalpostId.length >= MIN_LENGDE_FØR_VALIDERING;
 
     const { data, isLoading, error } = useValiderJournalpostId({
-        fnr: fnrWatch ?? '',
+        fnr: props.fnrFraPersonopplysninger ?? '',
         journalpostId: shouldValidate ? journalpostId : '',
     });
 
@@ -65,7 +70,7 @@ export const JournalpostId = () => {
 
     const valideringsInfo = React.useMemo(() => {
         const value = (journalpostIdWatch ?? '').trim();
-        if (!value || !fnrWatch || !shouldValidate) return null;
+        if (!value || !props.fnrFraPersonopplysninger || !shouldValidate) return null;
 
         if (isLoading) {
             return (
@@ -78,28 +83,28 @@ export const JournalpostId = () => {
             // Skal bare advare saksbehandler om mismatch, ikke hindre innsending
             if (data.journalpostFinnes && data.gjelderInnsendtFnr) {
                 return (
-                    <Alert variant="success" inline aria-live="polite">
+                    <InlineMessage status="warning" aria-live="polite" size="small">
                         Journalpost finnes og søker står som avsender.
-                    </Alert>
+                    </InlineMessage>
                 );
             }
 
             if (data.gjelderInnsendtFnr === false) {
                 return (
-                    <Alert variant="warning" inline aria-live="polite">
+                    <InlineMessage status="warning" aria-live="polite" size="small">
                         Avsenderen av journalposten er en annen person enn søker, sjekk om
                         journalposten tilhører søker eller om det er verge/fullmakt.
-                    </Alert>
+                    </InlineMessage>
                 );
             }
         }
         return null;
-    }, [journalpostIdWatch, fnrWatch, shouldValidate, isLoading, data]);
+    }, [journalpostIdWatch, props.fnrFraPersonopplysninger, shouldValidate, isLoading, data]);
 
     const fnrMatcherIkke = !!data && data.journalpostFinnes && data.gjelderInnsendtFnr === false;
 
     return (
-        <>
+        <div className={props.className}>
             <Controller
                 name={journalpostIdFelt}
                 control={control}
@@ -120,6 +125,8 @@ export const JournalpostId = () => {
                             }}
                             error={fieldState.error?.message}
                             inputMode="numeric"
+                            readOnly={props.readonly}
+                            size={props.size}
                         />
                         {valideringsInfo && (!fieldState.error || fnrMatcherIkke) && (
                             <div className={styles.valideringsInfo}>{valideringsInfo}</div>
@@ -132,9 +139,10 @@ export const JournalpostId = () => {
                     label="Opprettet (fra journalpost)"
                     value={formaterDatotekst(datoOpprettet)}
                     readOnly
+                    size={props.size}
                 />
             </div>
-        </>
+        </div>
     );
 };
 
