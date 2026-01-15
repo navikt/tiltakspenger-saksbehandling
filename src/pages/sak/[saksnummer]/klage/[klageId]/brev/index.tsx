@@ -15,7 +15,7 @@ import WarningCircleIcon from '~/icons/WarningCircleIcon';
 import { Avsnitt, BrevFormData, brevFormValidation } from '~/components/forms/brev/BrevFormUtils';
 import BrevForm from '~/components/forms/brev/BrevForm';
 import styles from './index.module.css';
-import { useFetchBlobFraApi } from '~/utils/fetch/useFetchFraApi';
+import { useFetchBlobFraApi, useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 
 type Props = {
     sak: SakProps;
@@ -58,11 +58,6 @@ const BrevKlagePage = ({ sak, klage }: Props) => {
         resolver: brevFormValidation,
     });
 
-    const onSubmit = (data: BrevFormData) => {
-        console.log('Form data sendt inn:', data);
-        setHarSendt(true);
-    };
-
     const forhåndsvis = useFetchBlobFraApi<ForhåndsvisBrevKlageRequest>(
         `/sak/${sak.sakId}/klage/${klage.id}/forhandsvis`,
         'POST',
@@ -75,6 +70,13 @@ const BrevKlagePage = ({ sak, klage }: Props) => {
         },
     );
 
+    const lagreBrev = useFetchJsonFraApi(`/sak/${sak.sakId}/klage/${klage.id}/brevtekst`, 'PUT');
+
+    const onSubmit = (data: BrevFormData) => {
+        console.log('Form data sendt inn:', data);
+        setHarSendt(true);
+    };
+
     return (
         <form onSubmit={form.handleSubmit(onSubmit)}>
             <VStack>
@@ -85,34 +87,56 @@ const BrevKlagePage = ({ sak, klage }: Props) => {
 
                 <BrevForm control={form.control} className={styles.brevformContainer} />
 
-                <VStack gap="4" marginInline="16" marginBlock="8" align="start">
-                    {forhåndsvis.error && (
-                        <LocalAlert status="error">
-                            <LocalAlert.Header>
-                                <LocalAlert.Title>
-                                    Feil ved forhåndsvisning av brev
-                                </LocalAlert.Title>
-                            </LocalAlert.Header>
-                            <LocalAlert.Content>{forhåndsvis.error.message}</LocalAlert.Content>
-                        </LocalAlert>
-                    )}
-                    <HStack gap="4">
-                        <Button
-                            type="button"
-                            variant="secondary"
-                            size="small"
-                            loading={forhåndsvis.isMutating}
-                            onClick={() => {
-                                forhåndsvis.trigger(form.getValues());
-                            }}
-                        >
-                            <HStack gap="1">
-                                <EnvelopeOpenIcon title="Åpent brev ikon" fontSize="1.5rem" />
-                                <BodyShort>Forhåndsvis brev</BodyShort>
-                            </HStack>
-                        </Button>
-                        <Button>Ferdigstill behandling og send brev</Button>
-                    </HStack>
+                <VStack gap="8" marginInline="16" marginBlock="8" align="start">
+                    <VStack gap="4" align="start">
+                        {forhåndsvis.error && (
+                            <LocalAlert status="error">
+                                <LocalAlert.Header>
+                                    <LocalAlert.Title>
+                                        Feil ved forhåndsvisning av brev
+                                    </LocalAlert.Title>
+                                </LocalAlert.Header>
+                                <LocalAlert.Content>{forhåndsvis.error.message}</LocalAlert.Content>
+                            </LocalAlert>
+                        )}
+                        {lagreBrev.error && (
+                            <LocalAlert status="error">
+                                <LocalAlert.Header>
+                                    <LocalAlert.Title>Feil ved lagring av brev</LocalAlert.Title>
+                                </LocalAlert.Header>
+                                <LocalAlert.Content>{lagreBrev.error.message}</LocalAlert.Content>
+                            </LocalAlert>
+                        )}
+                        <HStack gap="4">
+                            <Button
+                                type="button"
+                                variant="secondary"
+                                loading={lagreBrev.isMutating}
+                                onClick={() => {
+                                    forhåndsvis.reset();
+
+                                    lagreBrev.trigger();
+                                }}
+                            >
+                                Lagre
+                            </Button>
+                            <Button
+                                type="button"
+                                variant="secondary"
+                                loading={forhåndsvis.isMutating}
+                                onClick={() => {
+                                    lagreBrev.reset();
+                                    forhåndsvis.trigger(form.getValues());
+                                }}
+                            >
+                                <HStack gap="1">
+                                    <EnvelopeOpenIcon title="Åpent brev ikon" fontSize="1.5rem" />
+                                    <BodyShort>Forhåndsvis brev</BodyShort>
+                                </HStack>
+                            </Button>
+                        </HStack>
+                    </VStack>
+                    <Button>Ferdigstill behandling og send brev</Button>
 
                     {harSendt && (
                         <Image
