@@ -85,7 +85,11 @@ const BrevKlagePage = ({ sak, klage }: Props) => {
                     <Heading size="small">Brev</Heading>
                 </HStack>
 
-                <BrevForm control={form.control} className={styles.brevformContainer} />
+                <BrevForm
+                    control={form.control}
+                    className={styles.brevformContainer}
+                    readOnly={klage.erAvbrutt}
+                />
 
                 <VStack gap="8" marginInline="16" marginBlock="8" align="start">
                     <VStack gap="4" align="start">
@@ -108,18 +112,20 @@ const BrevKlagePage = ({ sak, klage }: Props) => {
                             </LocalAlert>
                         )}
                         <HStack gap="4">
-                            <Button
-                                type="button"
-                                variant="secondary"
-                                loading={lagreBrev.isMutating}
-                                onClick={() => {
-                                    forhåndsvis.reset();
+                            {!klage.erAvbrutt && (
+                                <Button
+                                    type="button"
+                                    variant="secondary"
+                                    loading={lagreBrev.isMutating}
+                                    onClick={() => {
+                                        forhåndsvis.reset();
 
-                                    lagreBrev.trigger();
-                                }}
-                            >
-                                Lagre
-                            </Button>
+                                        lagreBrev.trigger();
+                                    }}
+                                >
+                                    Lagre
+                                </Button>
+                            )}
                             <Button
                                 type="button"
                                 variant="secondary"
@@ -136,7 +142,7 @@ const BrevKlagePage = ({ sak, klage }: Props) => {
                             </Button>
                         </HStack>
                     </VStack>
-                    <Button>Ferdigstill behandling og send brev</Button>
+                    {!klage.erAvbrutt && <Button>Ferdigstill behandling og send brev</Button>}
 
                     {harSendt && (
                         <Image

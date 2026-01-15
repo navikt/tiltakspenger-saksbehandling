@@ -139,27 +139,31 @@ const FormkravKlagePage = ({ sak, klage }: Props) => {
                         <Button loading={oppdaterFormkrav.isMutating}>Lagre</Button>
                     ) : (
                         <HStack gap="4">
-                            <Button
-                                type="button"
-                                variant="tertiary"
-                                onClick={() => avbrytKlageBehandling.trigger()}
-                                loading={avbrytKlageBehandling.isMutating}
-                            >
-                                <HStack>
-                                    <TrashIcon title="Søppelbøtte ikon" fontSize="1.5rem" />
-                                    <BodyShort>Avslutt</BodyShort>
-                                </HStack>
-                            </Button>
-                            <Button
-                                type="button"
-                                variant="tertiary"
-                                onClick={() => setFormTilstand('REDIGERER')}
-                            >
-                                <HStack>
-                                    <PencilIcon title="Rediger ikon" fontSize="1.5rem" />
-                                    <BodyShort>Rediger</BodyShort>
-                                </HStack>
-                            </Button>
+                            {klage.status !== 'AVBRUTT' && (
+                                <>
+                                    <Button
+                                        type="button"
+                                        variant="tertiary"
+                                        onClick={() => avbrytKlageBehandling.trigger()}
+                                        loading={avbrytKlageBehandling.isMutating}
+                                    >
+                                        <HStack>
+                                            <TrashIcon title="Søppelbøtte ikon" fontSize="1.5rem" />
+                                            <BodyShort>Avslutt</BodyShort>
+                                        </HStack>
+                                    </Button>
+                                    <Button
+                                        type="button"
+                                        variant="tertiary"
+                                        onClick={() => setFormTilstand('REDIGERER')}
+                                    >
+                                        <HStack>
+                                            <PencilIcon title="Rediger ikon" fontSize="1.5rem" />
+                                            <BodyShort>Rediger</BodyShort>
+                                        </HStack>
+                                    </Button>
+                                </>
+                            )}
                             <Button
                                 type="button"
                                 onClick={() =>
