@@ -11,6 +11,7 @@ export enum KlagebehandlingStatus {
     KLAR_TIL_BEHANDLING = 'KLAR_TIL_BEHANDLING',
     UNDER_BEHANDLING = 'UNDER_BEHANDLING',
     AVBRUTT = 'AVBRUTT',
+    IVERKSATT = 'IVERKSATT',
 }
 
 export interface Klagebehandling {
@@ -33,6 +34,7 @@ export interface Klagebehandling {
     erKlagenSignert: boolean;
     brevtekst: Brevtekst[];
     erAvbrutt: boolean;
+    kanIverksette: boolean;
 }
 
 export interface Brevtekst {

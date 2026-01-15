@@ -27,6 +27,7 @@ import {
 import BrevForm from '~/components/forms/brev/BrevForm';
 import styles from './index.module.css';
 import { useFetchBlobFraApi, useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
+import { kanBehandleKlage } from '~/utils/klageUtils';
 
 type Props = {
     sak: SakProps;
@@ -78,11 +79,26 @@ const BrevKlagePage = ({ sak, klage }: Props) => {
     const lagreBrev = useFetchJsonFraApi<Klagebehandling, LagreBrevtekstKlageRequest>(
         `/sak/${sak.sakId}/klage/${klage.id}/brevtekst`,
         'PUT',
+        {
+            onSuccess: (klage) => {
+                form.reset(klageTilBrevFormData(klage!));
+            },
+        },
     );
 
-    const onSubmit = (data: BrevFormData) => {
-        console.log('Form data sendt inn:', data);
-        setHarSendt(true);
+    const iverksett = useFetchJsonFraApi<Klagebehandling>(
+        `/sak/${sak.sakId}/klage/${klage.id}/iverksett`,
+        'PATCH',
+        {
+            onSuccess: (oppdatertKlage) => {
+                console.log('Klage iverksatt:', oppdatertKlage);
+                setHarSendt(true);
+            },
+        },
+    );
+
+    const onSubmit = () => {
+        iverksett.trigger();
     };
 
     return (
@@ -162,7 +178,11 @@ const BrevKlagePage = ({ sak, klage }: Props) => {
                             </Button>
                         </HStack>
                     </VStack>
-                    {!klage.erAvbrutt && <Button>Ferdigstill behandling og send brev</Button>}
+                    {kanBehandleKlage(klage) && (
+                        <Button disabled={!klage.kanIverksette || form.formState.isDirty}>
+                            Ferdigstill behandling og send brev
+                        </Button>
+                    )}
 
                     {harSendt && (
                         <Image

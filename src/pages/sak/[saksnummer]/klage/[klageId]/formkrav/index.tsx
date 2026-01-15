@@ -22,6 +22,7 @@ import { KlageSteg } from '../../../../../../utils/KlageLayoutUtils';
 import { CheckmarkCircleIcon, PencilIcon, TrashIcon } from '@navikt/aksel-icons';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { useHentPersonopplysninger } from '~/components/personaliaheader/useHentPersonopplysninger';
+import { kanBehandleKlage } from '~/utils/klageUtils';
 
 type Props = {
     sak: SakProps;
@@ -63,7 +64,8 @@ const FormkravKlagePage = ({ sak, klage }: Props) => {
         `/sak/${sak.sakId}/klage/${klage.id}/formkrav`,
         'PUT',
         {
-            onSuccess: () => {
+            onSuccess: (klage) => {
+                form.reset(klageTilFormkravFormData(klage!));
                 setFormTilstand('LAGRET');
             },
         },
@@ -139,7 +141,7 @@ const FormkravKlagePage = ({ sak, klage }: Props) => {
                         <Button loading={oppdaterFormkrav.isMutating}>Lagre</Button>
                     ) : (
                         <HStack gap="4">
-                            {klage.status !== 'AVBRUTT' && (
+                            {kanBehandleKlage(klage) && (
                                 <>
                                     <Button
                                         type="button"
