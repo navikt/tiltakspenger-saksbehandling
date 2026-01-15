@@ -31,7 +31,13 @@ export interface Klagebehandling {
     klagesDetPåKonkreteElementerIVedtaket: boolean;
     erKlagefristenOverholdt: boolean;
     erKlagenSignert: boolean;
+    brevtekst: Brevtekst[];
     erAvbrutt: boolean;
+}
+
+export interface Brevtekst {
+    tittel: string;
+    tekst: string;
 }
 
 export interface OpprettKlageRequest {
@@ -50,4 +56,12 @@ export interface OppdaterKlageFormkravRequest {
     klagesDetPåKonkreteElementerIVedtaket: boolean;
     erKlagefristenOverholdt: boolean;
     erKlagenSignert: boolean;
+}
+
+export interface ForhåndsvisBrevKlageRequest {
+    tekstTilVedtaksbrev: Brevtekst[];
+}
+
+export interface LagreBrevtekstKlageRequest {
+    tekstTilVedtaksbrev: Brevtekst[];
 }

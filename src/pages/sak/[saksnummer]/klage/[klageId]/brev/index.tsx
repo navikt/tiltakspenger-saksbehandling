@@ -6,13 +6,24 @@ import { useForm } from 'react-hook-form';
 import { fetchSak } from '~/utils/fetch/fetch-server';
 import { logger } from '@navikt/next-logger';
 import { SakProps } from '~/types/Sak';
-import { Klagebehandling, KlageId } from '~/types/Klage';
+import {
+    ForhåndsvisBrevKlageRequest,
+    Klagebehandling,
+    KlageId,
+    LagreBrevtekstKlageRequest,
+} from '~/types/Klage';
 import KlageLayout from '../../layout';
 import Image from 'next/image';
 import { KlageSteg } from '../../../../../../utils/KlageLayoutUtils';
-import { EnvelopeOpenIcon } from '@navikt/aksel-icons';
+import { CheckmarkCircleIcon, EnvelopeOpenIcon } from '@navikt/aksel-icons';
 import WarningCircleIcon from '~/icons/WarningCircleIcon';
-import { Avsnitt, BrevFormData, brevFormValidation } from '~/components/forms/brev/BrevFormUtils';
+import {
+    BrevFormData,
+    brevFormDataTilForhåndsvisBrevKlageRequest,
+    brevFormDataTilLagreBrevtekstKlageRequest,
+    brevFormValidation,
+    klageTilBrevFormData,
+} from '~/components/forms/brev/BrevFormUtils';
 import BrevForm from '~/components/forms/brev/BrevForm';
 import styles from './index.module.css';
 import { useFetchBlobFraApi, useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
@@ -44,17 +55,11 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
     return { props: { sak, klage } };
 });
 
-interface ForhåndsvisBrevKlageRequest {
-    tekstfelter: Avsnitt[];
-}
-
 const BrevKlagePage = ({ sak, klage }: Props) => {
     const [harSendt, setHarSendt] = useState<boolean>(false);
 
     const form = useForm<BrevFormData>({
-        defaultValues: {
-            tekstfelter: [{ tittel: '', tekst: '' }],
-        },
+        defaultValues: klageTilBrevFormData(klage),
         resolver: brevFormValidation,
     });
 
@@ -70,7 +75,10 @@ const BrevKlagePage = ({ sak, klage }: Props) => {
         },
     );
 
-    const lagreBrev = useFetchJsonFraApi(`/sak/${sak.sakId}/klage/${klage.id}/brevtekst`, 'PUT');
+    const lagreBrev = useFetchJsonFraApi<Klagebehandling, LagreBrevtekstKlageRequest>(
+        `/sak/${sak.sakId}/klage/${klage.id}/brevtekst`,
+        'PUT',
+    );
 
     const onSubmit = (data: BrevFormData) => {
         console.log('Form data sendt inn:', data);
@@ -81,7 +89,11 @@ const BrevKlagePage = ({ sak, klage }: Props) => {
         <form onSubmit={form.handleSubmit(onSubmit)}>
             <VStack>
                 <HStack gap="2" marginInline="16" marginBlock="8" align="start">
-                    <WarningCircleIcon />
+                    {form.formState.isDirty ? (
+                        <WarningCircleIcon />
+                    ) : (
+                        <CheckmarkCircleIcon fontSize="1.5rem" color="green" />
+                    )}
                     <Heading size="small">Brev</Heading>
                 </HStack>
 
@@ -120,7 +132,11 @@ const BrevKlagePage = ({ sak, klage }: Props) => {
                                     onClick={() => {
                                         forhåndsvis.reset();
 
-                                        lagreBrev.trigger();
+                                        lagreBrev.trigger(
+                                            brevFormDataTilLagreBrevtekstKlageRequest(
+                                                form.getValues(),
+                                            ),
+                                        );
                                     }}
                                 >
                                     Lagre
@@ -132,7 +148,11 @@ const BrevKlagePage = ({ sak, klage }: Props) => {
                                 loading={forhåndsvis.isMutating}
                                 onClick={() => {
                                     lagreBrev.reset();
-                                    forhåndsvis.trigger(form.getValues());
+                                    forhåndsvis.trigger(
+                                        brevFormDataTilForhåndsvisBrevKlageRequest(
+                                            form.getValues(),
+                                        ),
+                                    );
                                 }}
                             >
                                 <HStack gap="1">

@@ -1,4 +1,5 @@
 import { FieldErrors } from 'react-hook-form';
+import { ForhåndsvisBrevKlageRequest, Klagebehandling } from '~/types/Klage';
 
 export interface BrevFormData {
     tekstfelter: Avsnitt[];
@@ -46,4 +47,22 @@ export const brevFormValidation = (data: BrevFormData) => {
     });
 
     return { values: data, errors };
+};
+
+export const klageTilBrevFormData = (klage: Klagebehandling): BrevFormData => {
+    return {
+        tekstfelter: klage.brevtekst.length > 0 ? klage.brevtekst : [{ tittel: '', tekst: '' }],
+    };
+};
+
+export const brevFormDataTilForhåndsvisBrevKlageRequest = (
+    data: BrevFormData,
+): ForhåndsvisBrevKlageRequest => {
+    return { tekstTilVedtaksbrev: data.tekstfelter };
+};
+
+export const brevFormDataTilLagreBrevtekstKlageRequest = (
+    data: BrevFormData,
+): ForhåndsvisBrevKlageRequest => {
+    return { tekstTilVedtaksbrev: data.tekstfelter };
 };
