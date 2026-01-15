@@ -12,7 +12,7 @@ import defaultManuellSøknadFormValues, {
 } from '~/components/manuell-søknad/ManueltRegistrertSøknad';
 import { JaNeiSpørsmål } from '~/components/manuell-søknad/JaNeiSpørsmål';
 import { MottarPengestøtterSpørsmål } from '~/components/manuell-søknad/MottarPengestøtterSpørsmål';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Periodevelger } from '~/components/manuell-søknad/Periodevelger';
 import { VelgTiltak } from '~/components/manuell-søknad/tiltak/VelgTiltak';
 import { ManueltRegistrertSøknadBarnetillegg } from '~/components/manuell-søknad/barnetillegg/ManueltRegistrertSøknadBarnetillegg';
@@ -34,16 +34,7 @@ const RegistrerSøknadManueltPage = (props: Props) => {
         mode: 'onSubmit',
     });
 
-    const { handleSubmit, setValue } = formContext;
-
-    useEffect(() => {
-        if (!personopplysninger) return;
-        setValue('personopplysninger', {
-            fornavn: personopplysninger.fornavn,
-            etternavn: personopplysninger.etternavn,
-            ident: personopplysninger.fnr,
-        });
-    }, [personopplysninger, setValue]);
+    const { handleSubmit } = formContext;
 
     const { opprettSøknad, opprettSøknadLaster, opprettSøknadError } = useOpprettSøknad(
         props.sak.saksnummer,
@@ -93,7 +84,9 @@ const RegistrerSøknadManueltPage = (props: Props) => {
                                 Manuell registrering av søknad
                             </Heading>
 
-                            <JournalpostId />
+                            <JournalpostId
+                                fnrFraPersonopplysninger={personopplysninger?.fnr ?? null}
+                            />
 
                             <SøknadstypeSelect />
 

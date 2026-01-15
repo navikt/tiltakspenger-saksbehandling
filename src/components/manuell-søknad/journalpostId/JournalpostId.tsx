@@ -6,15 +6,16 @@ import { useValiderJournalpostId } from './useValiderJournalpostId';
 import { useDebounce } from 'use-debounce';
 import styles from './JournalpostId.module.css';
 import { formaterDatotekst } from '~/utils/date';
+import { Nullable } from '~/types/UtilTypes';
 
 const DEBOUNCE_MS = 500;
 const MIN_LENGDE_FØR_VALIDERING = 5;
 
-export const JournalpostId = () => {
+export const JournalpostId = (props: { fnrFraPersonopplysninger: Nullable<string> }) => {
     const { control, watch, setError, clearErrors } = useFormContext<ManueltRegistrertSøknad>();
     const journalpostIdFelt = 'journalpostId';
     const journalpostIdWatch = watch(journalpostIdFelt);
-    const fnrWatch = watch('personopplysninger.ident');
+
     const [debouncedJournalpostId] = useDebounce(journalpostIdWatch, DEBOUNCE_MS);
     const [datoOpprettet, setDatoOpprettet] = React.useState<string>('');
 
@@ -24,7 +25,7 @@ export const JournalpostId = () => {
         inneholderKunTall(journalpostId) && journalpostId.length >= MIN_LENGDE_FØR_VALIDERING;
 
     const { data, isLoading, error } = useValiderJournalpostId({
-        fnr: fnrWatch ?? '',
+        fnr: props.fnrFraPersonopplysninger ?? '',
         journalpostId: shouldValidate ? journalpostId : '',
     });
 
@@ -65,7 +66,7 @@ export const JournalpostId = () => {
 
     const valideringsInfo = React.useMemo(() => {
         const value = (journalpostIdWatch ?? '').trim();
-        if (!value || !fnrWatch || !shouldValidate) return null;
+        if (!value || !props.fnrFraPersonopplysninger || !shouldValidate) return null;
 
         if (isLoading) {
             return (
@@ -94,7 +95,7 @@ export const JournalpostId = () => {
             }
         }
         return null;
-    }, [journalpostIdWatch, fnrWatch, shouldValidate, isLoading, data]);
+    }, [journalpostIdWatch, props.fnrFraPersonopplysninger, shouldValidate, isLoading, data]);
 
     const fnrMatcherIkke = !!data && data.journalpostFinnes && data.gjelderInnsendtFnr === false;
 
