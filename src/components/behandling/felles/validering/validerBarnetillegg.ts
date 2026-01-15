@@ -5,6 +5,8 @@ import {
     periodiseringerErLike,
     periodiseringTotalPeriode,
     validerPeriodisering,
+    slåSammenPeriodisering,
+    inneholderHelePerioden,
 } from '~/utils/periode';
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';
 import { periodeTilFormatertDatotekst } from '~/utils/date';
@@ -75,23 +77,31 @@ export const validerBarnetillegg = (
         }
     }
 
-    const perioderErUtenBarn = barnetilleggPerioder.every((bt) => bt.antallBarn === 0);
-    const helePerioden = totalPeriode(perioder);
-
     if (!validerPeriodisering(barnetilleggPerioder, true)) {
         validering.errors.push('Periodene for barnetillegg kan ikke ha overlapp');
     }
+
+    const perioderErUtenBarn = barnetilleggPerioder.every((bt) => bt.antallBarn === 0);
 
     if (perioderErUtenBarn) {
         validering.errors.push('Minst en periode må ha barn når barnetillegg er valgt');
     }
 
-    if (helePerioden.fraOgMed < totalInnvilgelsesperiode.fraOgMed) {
-        validering.errors.push('Barnetillegg-perioden kan ikke starte før innvilgelsesperioden');
-    }
+    const sammenhengendeInnvilgelsesperioder = slåSammenPeriodisering(
+        innvilgelsesperioder,
+        () => true,
+    );
 
-    if (helePerioden.tilOgMed > totalInnvilgelsesperiode.tilOgMed) {
-        validering.errors.push('Barnetillegg-perioden kan ikke slutte etter innvilgelsesperioden');
+    const alleBarnetilleggErInnenforInnvilgelsen = barnetilleggPerioder.every((bt) =>
+        sammenhengendeInnvilgelsesperioder.some((ip) =>
+            inneholderHelePerioden(ip.periode, bt.periode),
+        ),
+    );
+
+    if (!alleBarnetilleggErInnenforInnvilgelsen) {
+        validering.errors.push(
+            'Alle barnetilleggsperiodene må være innenfor en innvilgelsesperiode',
+        );
     }
 
     return validering;

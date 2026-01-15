@@ -50,6 +50,7 @@ export const perioderOverlapper = (a: Periode, b: Periode): boolean => {
     );
 };
 
+// Sjekker om den første perioden inneholder hele den andre perioden
 export const inneholderHelePerioden = (a: Periode, b: Periode) => {
     return erDatoIPeriode(b.fraOgMed, a) && erDatoIPeriode(b.tilOgMed, a);
 };
