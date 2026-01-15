@@ -58,7 +58,11 @@ export const klageTilBrevFormData = (klage: Klagebehandling): BrevFormData => {
 export const brevFormDataTilForhåndsvisBrevKlageRequest = (
     data: BrevFormData,
 ): ForhåndsvisBrevKlageRequest => {
-    return { tekstTilVedtaksbrev: data.tekstfelter };
+    return {
+        tekstTilVedtaksbrev: data.tekstfelter.filter(
+            (avsnitt) => avsnitt.tittel.trim().length > 0 && avsnitt.tekst.trim().length > 0,
+        ),
+    };
 };
 
 export const brevFormDataTilLagreBrevtekstKlageRequest = (

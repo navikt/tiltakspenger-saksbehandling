@@ -2,6 +2,7 @@ import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { ActionMenu, Button } from '@navikt/ds-react';
 import router from 'next/router';
 import { Klagebehandling } from '~/types/Klage';
+import { finnUrlForKlageSteg } from '~/utils/klageUtils';
 
 const KlageMeny = (props: { klage: Klagebehandling }) => {
     return (
@@ -18,13 +19,7 @@ const KlageMeny = (props: { klage: Klagebehandling }) => {
                     </Button>
                 </ActionMenu.Trigger>
                 <ActionMenu.Content>
-                    <ActionMenu.Item
-                        onSelect={() =>
-                            router.push(
-                                `/sak/${props.klage.saksnummer}/klage/${props.klage.id}/brev`,
-                            )
-                        }
-                    >
+                    <ActionMenu.Item onSelect={() => router.push(finnUrlForKlageSteg(props.klage))}>
                         Åpne
                     </ActionMenu.Item>
                 </ActionMenu.Content>
