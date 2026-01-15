@@ -54,7 +54,7 @@ const OprettKlagePage = ({ sak }: Props) => {
         'POST',
         {
             onSuccess: (klagebehandling) => {
-                router.push(`/sak/${sak.saksnummer}/klage/${klagebehandling!.id}/formkrav`);
+                router.push(`/sak/${sak.sakId}/klage/${klagebehandling!.id}/formkrav`);
             },
         },
     );
@@ -94,7 +94,7 @@ const OprettKlagePage = ({ sak }: Props) => {
                         <LocalAlert.Content>{opprettKlage.error.message}</LocalAlert.Content>
                     </LocalAlert>
                 )}
-                <Button>Lagre</Button>
+                <Button loading={opprettKlage.isMutating}>Lagre</Button>
             </VStack>
         </form>
     );

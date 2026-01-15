@@ -1,5 +1,5 @@
 import { FieldErrors } from 'react-hook-form';
-import { Klagebehandling, OpprettKlageRequest } from '~/types/Klage';
+import { Klagebehandling, OppdaterKlageFormkravRequest, OpprettKlageRequest } from '~/types/Klage';
 import { VedtakId } from '~/types/Rammevedtak';
 import { Nullable } from '~/types/UtilTypes';
 import { dateTilISOTekst } from '~/utils/date';
@@ -77,6 +77,20 @@ export const formkravFormDataTilOpprettKlageRequest = (
     return {
         journalpostId: formData.journalpostId,
         mottattFraJournalpost: dateTilISOTekst(formData.mottattFraJournalpost),
+        vedtakDetKlagesPå:
+            formData.vedtakDetPåklages === INGEN_VEDTAK ? null : formData.vedtakDetPåklages,
+        erKlagerPartISaken: formData.erKlagerPartISaken!,
+        klagesDetPåKonkreteElementerIVedtaket: formData.klagesDetPåKonkreteElementer!,
+        erKlagefristenOverholdt: formData.erKlagefristOverholdt!,
+        erKlagenSignert: formData.erKlagenSignert!,
+    };
+};
+
+export const formkravFormDataTilOppdaterKlageFormkravRequest = (
+    formData: FormkravFormData,
+): OppdaterKlageFormkravRequest => {
+    return {
+        journalpostId: formData.journalpostId,
         vedtakDetKlagesPå:
             formData.vedtakDetPåklages === INGEN_VEDTAK ? null : formData.vedtakDetPåklages,
         erKlagerPartISaken: formData.erKlagerPartISaken!,

@@ -41,3 +41,12 @@ export interface OpprettKlageRequest {
     erKlagefristenOverholdt: boolean;
     erKlagenSignert: boolean;
 }
+
+export interface OppdaterKlageFormkravRequest {
+    journalpostId: string;
+    vedtakDetKlagesPå: Nullable<string>;
+    erKlagerPartISaken: boolean;
+    klagesDetPåKonkreteElementerIVedtaket: boolean;
+    erKlagefristenOverholdt: boolean;
+    erKlagenSignert: boolean;
+}

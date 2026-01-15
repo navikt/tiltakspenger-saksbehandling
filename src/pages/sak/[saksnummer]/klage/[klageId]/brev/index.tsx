@@ -101,6 +101,7 @@ const BrevKlagePage = ({ sak, klage }: Props) => {
                             type="button"
                             variant="secondary"
                             size="small"
+                            loading={forhåndsvis.isMutating}
                             onClick={() => {
                                 forhåndsvis.trigger(form.getValues());
                             }}
