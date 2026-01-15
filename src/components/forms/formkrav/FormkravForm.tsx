@@ -1,31 +1,26 @@
 import { Control, Controller } from 'react-hook-form';
 import { FormkravFormData, INGEN_VEDTAK } from './FormkravFormUtils';
-import { HStack, Radio, RadioGroup, Select, TextField, VStack } from '@navikt/ds-react';
+import { HStack, Radio, RadioGroup, Select, VStack } from '@navikt/ds-react';
 import { Rammevedtak } from '~/types/Rammevedtak';
 import { Rammebehandling } from '~/types/Rammebehandling';
+import JournalpostId from '~/components/journalpostId/JournalpostId';
+import { Nullable } from '~/types/UtilTypes';
+import styles from './FormkravForm.module.css';
 
 const FormkravForm = (props: {
     control: Control<FormkravFormData>;
     vedtakOgBehandling: Array<{ vedtak: Rammevedtak; behandling: Rammebehandling }>;
+    fnrFraPersonopplysninger: Nullable<string>;
     readonly?: boolean;
 }) => {
     return (
         <VStack gap="8" align="start">
-            <Controller
-                control={props.control}
-                name="journalpostId"
-                render={({ field, fieldState }) => (
-                    <TextField
-                        {...field}
-                        label="Journalpost ID"
-                        size="small"
-                        error={fieldState.error?.message}
-                        readOnly={props.readonly}
-                    />
-                )}
+            <JournalpostId
+                fnrFraPersonopplysninger={props.fnrFraPersonopplysninger}
+                size="small"
+                readonly={props.readonly}
+                className={styles.journalpostIdInputContainer}
             />
-
-            <TextField label="Opprettet (fra journalpost)" size="small" readOnly />
 
             <Controller
                 control={props.control}

@@ -19,6 +19,7 @@ import {
 import { Klagebehandling, OpprettKlageRequest } from '~/types/Klage';
 import { KlageSteg } from '../../../../../utils/KlageLayoutUtils';
 import WarningCircleIcon from '~/icons/WarningCircleIcon';
+import { useHentPersonopplysninger } from '~/components/personaliaheader/useHentPersonopplysninger';
 
 type Props = {
     sak: SakProps;
@@ -36,6 +37,8 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
 });
 
 const OprettKlagePage = ({ sak }: Props) => {
+    const { personopplysninger } = useHentPersonopplysninger(sak.sakId);
+
     const form = useForm<FormkravFormData>({
         defaultValues: {
             journalpostId: '',
@@ -63,6 +66,7 @@ const OprettKlagePage = ({ sak }: Props) => {
     };
 
     return (
+        //vi har formprovider fordi journalpostid komponenten bruker useformcontext. merk at bruken av useformcontext gir oss ikke compile feil dersom endrer på form-interfacet
         <FormProvider {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
                 <VStack gap="8" marginInline="16" marginBlock="8" align="start">
@@ -72,6 +76,7 @@ const OprettKlagePage = ({ sak }: Props) => {
                     </HStack>
                     <FormkravForm
                         control={form.control}
+                        fnrFraPersonopplysninger={personopplysninger?.fnr ?? null}
                         vedtakOgBehandling={
                             sak.alleRammevedtak
                                 .map((vedtak) => {

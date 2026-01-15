@@ -20,7 +20,7 @@ import { useOpprettSøknad } from '~/components/personoversikt/manuell-søknad/u
 import router from 'next/router';
 import { behandlingUrl } from '~/utils/urls';
 import { useHentPersonopplysninger } from '~/components/personaliaheader/useHentPersonopplysninger';
-import { JournalpostId } from '~/components/manuell-søknad/journalpostId/JournalpostId';
+import { JournalpostId } from '~/components/journalpostId/JournalpostId';
 import { SøknadstypeSelect } from '~/components/manuell-søknad/SøknadstypeSelect';
 
 interface Props {

@@ -24,6 +24,13 @@ export const formkravValidation = (data: FormkravFormData) => {
         };
     }
 
+    if (data.journalpostId && !/^[0-9]+$/.test(data.journalpostId)) {
+        errors.journalpostId = {
+            type: 'pattern',
+            message: 'Journalpost ID kan kun inneholde tall',
+        };
+    }
+
     if (data.vedtakDetPåklages === '') {
         errors.vedtakDetPåklages = {
             type: 'required',
