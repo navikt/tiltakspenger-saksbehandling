@@ -1,16 +1,21 @@
 import { ReactElement, useState } from 'react';
 
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
-import { Button, Heading, HStack, Textarea, VStack } from '@navikt/ds-react';
-import { Controller, FieldErrors, useForm } from 'react-hook-form';
+import { BodyShort, Button, Heading, HStack, LocalAlert, VStack } from '@navikt/ds-react';
+import { useForm } from 'react-hook-form';
 import { fetchSak } from '~/utils/fetch/fetch-server';
 import { logger } from '@navikt/next-logger';
 import { SakProps } from '~/types/Sak';
-import router from 'next/router';
 import { Klagebehandling, KlageId } from '~/types/Klage';
 import KlageLayout from '../../layout';
 import Image from 'next/image';
 import { KlageSteg } from '../../../../../../utils/KlageLayoutUtils';
+import { EnvelopeOpenIcon } from '@navikt/aksel-icons';
+import WarningCircleIcon from '~/icons/WarningCircleIcon';
+import { Avsnitt, BrevFormData, brevFormValidation } from '~/components/forms/brev/BrevFormUtils';
+import BrevForm from '~/components/forms/brev/BrevForm';
+import styles from './index.module.css';
+import { useFetchBlobFraApi } from '~/utils/fetch/useFetchFraApi';
 
 type Props = {
     sak: SakProps;
@@ -39,75 +44,73 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
     return { props: { sak, klage } };
 });
 
+interface ForhåndsvisBrevKlageRequest {
+    tekstfelter: Avsnitt[];
+}
+
 const BrevKlagePage = ({ sak, klage }: Props) => {
     const [harSendt, setHarSendt] = useState<boolean>(false);
 
-    const form = useForm<{
-        brevtekst: string;
-    }>({
+    const form = useForm<BrevFormData>({
         defaultValues: {
-            brevtekst: '',
+            tekstfelter: [{ tittel: '', tekst: '' }],
         },
-        resolver: (data) => {
-            const errors: FieldErrors<{ brevtekst: string }> = {};
-
-            if (!data.brevtekst) {
-                errors.brevtekst = {
-                    type: 'required',
-                    message: 'Brevtekst er påkrevd',
-                };
-            }
-
-            return { values: data, errors };
-        },
+        resolver: brevFormValidation,
     });
 
-    const onSubmit = (data: { brevtekst: string }) => {
+    const onSubmit = (data: BrevFormData) => {
         console.log('Form data sendt inn:', data);
         setHarSendt(true);
     };
 
+    const forhåndsvis = useFetchBlobFraApi<ForhåndsvisBrevKlageRequest>(
+        `/sak/${sak.sakId}/klage/${klage.id}/forhandsvis`,
+        'POST',
+        {
+            onSuccess: (blob) => {
+                if (blob) {
+                    window.open(URL.createObjectURL(blob));
+                }
+            },
+        },
+    );
+
     return (
-        <VStack>
-            <Heading size="medium">Brev</Heading>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+            <VStack>
+                <HStack gap="2" marginInline="16" marginBlock="8" align="start">
+                    <WarningCircleIcon />
+                    <Heading size="small">Brev</Heading>
+                </HStack>
 
-            <form onSubmit={form.handleSubmit(onSubmit)}>
-                <VStack gap="4" align="start">
-                    <Controller
-                        control={form.control}
-                        name="brevtekst"
-                        render={({ field, fieldState }) => (
-                            <Textarea
-                                {...field}
-                                label="Brevtekst"
-                                description="Skriv inn teksten som skal være med i klagebrevet."
-                                error={fieldState.error?.message}
-                            />
-                        )}
-                    />
-                    <Button
-                        variant={'secondary'}
-                        size={'small'}
-                        as={'a'}
-                        href={
-                            'https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=RDdQw4w9WgXcQ&start_radio=1'
-                        }
-                        target={'_blank'}
-                    >
-                        Forhåndsvis brev
-                    </Button>
+                <BrevForm control={form.control} className={styles.brevformContainer} />
 
+                <VStack gap="4" marginInline="16" marginBlock="8" align="start">
+                    {forhåndsvis.error && (
+                        <LocalAlert status="error">
+                            <LocalAlert.Header>
+                                <LocalAlert.Title>
+                                    Feil ved forhåndsvisning av brev
+                                </LocalAlert.Title>
+                            </LocalAlert.Header>
+                            <LocalAlert.Content>{forhåndsvis.error.message}</LocalAlert.Content>
+                        </LocalAlert>
+                    )}
                     <HStack gap="4">
                         <Button
                             type="button"
                             variant="secondary"
-                            onClick={() =>
-                                router.push(`/sak/${sak.saksnummer}/klage/${klage.id}/formkrav`)
-                            }
+                            size="small"
+                            onClick={() => {
+                                forhåndsvis.trigger(form.getValues());
+                            }}
                         >
-                            Tilbake
+                            <HStack gap="1">
+                                <EnvelopeOpenIcon title="Åpent brev ikon" fontSize="1.5rem" />
+                                <BodyShort>Forhåndsvis brev</BodyShort>
+                            </HStack>
                         </Button>
-                        <Button type="submit">Send</Button>
+                        <Button>Ferdigstill behandling og send brev</Button>
                     </HStack>
 
                     {harSendt && (
@@ -121,8 +124,8 @@ const BrevKlagePage = ({ sak, klage }: Props) => {
                         />
                     )}
                 </VStack>
-            </form>
-        </VStack>
+            </VStack>
+        </form>
     );
 };
 
