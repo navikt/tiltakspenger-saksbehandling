@@ -3,8 +3,6 @@ import { FormkravFormData, INGEN_VEDTAK } from './FormkravFormUtils';
 import { HStack, Radio, RadioGroup, Select, TextField, VStack } from '@navikt/ds-react';
 import { Rammevedtak } from '~/types/Rammevedtak';
 import { Rammebehandling } from '~/types/Rammebehandling';
-import { Datovelger } from '~/components/datovelger/Datovelger';
-import { datoTilDatoInputText } from '~/utils/date';
 
 const FormkravForm = (props: {
     control: Control<FormkravFormData>;
@@ -26,22 +24,9 @@ const FormkravForm = (props: {
                     />
                 )}
             />
-            <Controller
-                control={props.control}
-                name="mottattFraJournalpost"
-                render={({ field, fieldState }) => (
-                    <Datovelger
-                        {...field}
-                        onDateChange={field.onChange}
-                        value={field.value ? datoTilDatoInputText(field.value) : undefined}
-                        label="Opprettet (fra journalpost)"
-                        size="small"
-                        error={fieldState.error?.message}
-                        maxDate={new Date()}
-                        readOnly={props.readonly}
-                    />
-                )}
-            />
+
+            <TextField label="Opprettet (fra journalpost)" size="small" readOnly />
+
             <Controller
                 control={props.control}
                 name="vedtakDetPåklages"
@@ -63,7 +48,6 @@ const FormkravForm = (props: {
                     </Select>
                 )}
             />
-
             <Controller
                 control={props.control}
                 name="erKlagerPartISaken"

@@ -34,7 +34,6 @@ export interface Klagebehandling {
 
 export interface OpprettKlageRequest {
     journalpostId: string;
-    mottattFraJournalpost: string;
     vedtakDetKlagesPå: Nullable<string>;
     erKlagerPartISaken: boolean;
     klagesDetPåKonkreteElementerIVedtaket: boolean;
