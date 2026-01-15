@@ -1,6 +1,6 @@
 import { Periode } from '~/types/Periode';
 import { Tiltaksdeltakelse, TiltaksdeltakelseMedPeriode } from '~/types/TiltakDeltakelse';
-import { joinPerioder, perioderOverlapper } from './periode';
+import { totalPeriode, perioderOverlapper } from './periode';
 import { Nullable } from '~/types/UtilTypes';
 import {
     Rammebehandling,
@@ -82,7 +82,7 @@ export const hentHeleTiltaksdeltakelsesperioden = (behandling: Rammebehandling) 
             tilOgMed: tiltaksdeltakelse.deltagelseTilOgMed,
         }),
     );
-    return joinPerioder(perioder);
+    return totalPeriode(perioder);
 };
 
 export const finnForsteStartdatoForTiltaksdeltakelse = (

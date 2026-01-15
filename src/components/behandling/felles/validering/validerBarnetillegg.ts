@@ -1,6 +1,6 @@
 import { ValideringResultat } from '~/types/Validering';
 import {
-    joinPerioder,
+    totalPeriode,
     perioderErLike,
     periodiseringerErLike,
     periodiseringTotalPeriode,
@@ -55,7 +55,7 @@ export const validerBarnetillegg = (
             (p1, p2) => p1.antallBarn === p2.antallBarn,
         )
     ) {
-        const totalBarnetilleggPeriode = joinPerioder(perioder);
+        const totalBarnetilleggPeriode = totalPeriode(perioder);
 
         // Dersom søknaden ikke hadde barn, kan vi ikke vite noe om alder på evt barn som saksbehandler har lagt inn.
         // Vi viser en standard warning dersom barnetillegget saksbehandler har valgt ikke fyller hele innvilgelsesperioden
@@ -76,7 +76,7 @@ export const validerBarnetillegg = (
     }
 
     const perioderErUtenBarn = barnetilleggPerioder.every((bt) => bt.antallBarn === 0);
-    const helePerioden = joinPerioder(perioder);
+    const helePerioden = totalPeriode(perioder);
 
     if (!validerPeriodisering(barnetilleggPerioder, true)) {
         validering.errors.push('Periodene for barnetillegg kan ikke ha overlapp');
