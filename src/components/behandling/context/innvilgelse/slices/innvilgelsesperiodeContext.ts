@@ -40,7 +40,7 @@ export type InnvilgelsesperioderActions =
     | {
           type: 'settTiltaksdeltakelse';
           payload: {
-              tiltaksdeltakelseId: string;
+              internDeltakelseId: string;
               index: number;
           };
       }
@@ -198,7 +198,7 @@ export const innvilgelsesperioderReducer: Reducer<InnvilgelseState, Innvilgelses
         }
 
         case 'settTiltaksdeltakelse': {
-            const { index, tiltaksdeltakelseId } = payload;
+            const { index, internDeltakelseId } = payload;
 
             const innvilgelsesperiode = state.innvilgelsesperioder.at(index)!;
 
@@ -206,7 +206,7 @@ export const innvilgelsesperioderReducer: Reducer<InnvilgelseState, Innvilgelses
                 ...state,
                 innvilgelsesperioder: state.innvilgelsesperioder.with(index, {
                     ...innvilgelsesperiode,
-                    tiltaksdeltakelseId: tiltaksdeltakelseId,
+                    internDeltakelseId: internDeltakelseId,
                 }),
             };
         }

@@ -23,7 +23,7 @@ export const validerTiltaksdeltakelser = (
 
     innvilgelsesperioder.forEach((it) => {
         const deltakelse = tiltaksdeltakelserFraSaksopplysninger.find(
-            (td) => td.eksternDeltagelseId === it.tiltaksdeltakelseId,
+            (td) => td.internDeltakelseId === it.internDeltakelseId,
         );
 
         if (!deltakelse) {

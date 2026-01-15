@@ -142,10 +142,10 @@ const InnvilgelsesperiodeVelgerFull = ({
 
     const tiltaksdeltakelsesperiode = hentHeleTiltaksdeltakelsesperioden(behandling);
 
-    const { periode, antallDagerPerMeldeperiode, tiltaksdeltakelseId } = innvilgelsesperiode;
+    const { periode, antallDagerPerMeldeperiode, internDeltakelseId } = innvilgelsesperiode;
 
     const harValgtGyldigTiltak = tiltaksdeltakelser.some(
-        (tiltak) => tiltak.eksternDeltagelseId === tiltaksdeltakelseId,
+        (tiltak) => tiltak.internDeltakelseId === internDeltakelseId,
     );
 
     return (
@@ -186,12 +186,12 @@ const InnvilgelsesperiodeVelgerFull = ({
                 label={'Tiltak'}
                 size={'small'}
                 readOnly={readOnly || (tiltaksdeltakelser.length === 1 && harValgtGyldigTiltak)}
-                value={tiltaksdeltakelseId}
+                value={internDeltakelseId}
                 onChange={(event) =>
                     dispatch({
                         type: 'settTiltaksdeltakelse',
                         payload: {
-                            tiltaksdeltakelseId: event.target.value,
+                            internDeltakelseId: event.target.value,
                             index,
                         },
                     })
@@ -200,13 +200,13 @@ const InnvilgelsesperiodeVelgerFull = ({
                 {!harValgtGyldigTiltak && (
                     <option
                         disabled={true}
-                    >{`Ugyldig tiltak med id: ${tiltaksdeltakelseId}`}</option>
+                    >{`Ugyldig tiltak med id: ${internDeltakelseId}`}</option>
                 )}
                 {tiltaksdeltakelser.map((tiltak) => {
-                    const { eksternDeltagelseId } = tiltak;
+                    const { internDeltakelseId } = tiltak;
 
                     return (
-                        <option value={eksternDeltagelseId} key={eksternDeltagelseId}>
+                        <option value={internDeltakelseId} key={internDeltakelseId}>
                             {tiltakVisningsnavn(tiltak, tiltaksdeltakelser)}
                         </option>
                     );
