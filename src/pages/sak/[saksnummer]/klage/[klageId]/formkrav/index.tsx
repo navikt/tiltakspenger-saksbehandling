@@ -16,13 +16,14 @@ import {
     formkravValidation,
     klageTilFormkravFormData,
 } from '~/components/forms/formkrav/FormkravFormUtils';
-import { Klagebehandling, KlageId, OppdaterKlageFormkravRequest } from '~/types/Klage';
+import { Klagebehandling, KlageId } from '~/types/Klage';
 import KlageLayout, { KlageProvider } from '../../layout';
 import { KlageSteg } from '../../../../../../utils/KlageLayoutUtils';
 import { CheckmarkCircleIcon, PencilIcon, TrashIcon } from '@navikt/aksel-icons';
-import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { useHentPersonopplysninger } from '~/components/personaliaheader/useHentPersonopplysninger';
 import { kanBehandleKlage } from '~/utils/klageUtils';
+import { useAvbrytKlagebehandling, useOppdaterFormkrav } from '~/api/KlageApi';
+import AvsluttBehandlingModal from '~/components/modaler/AvsluttBehandlingModal';
 
 type Props = {
     sak: SakProps;
@@ -53,6 +54,7 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
 
 const FormkravKlagePage = ({ sak, klage }: Props) => {
     const { personopplysninger } = useHentPersonopplysninger(sak.sakId);
+    const [vilAvslutteBehandlingModal, setVilAvslutteBehandlingModal] = useState(false);
     const [formTilstand, setFormTilstand] = useState<'REDIGERER' | 'LAGRET'>('LAGRET');
 
     const form = useForm<FormkravFormData>({
@@ -60,26 +62,22 @@ const FormkravKlagePage = ({ sak, klage }: Props) => {
         resolver: formkravValidation,
     });
 
-    const oppdaterFormkrav = useFetchJsonFraApi<Klagebehandling, OppdaterKlageFormkravRequest>(
-        `/sak/${sak.sakId}/klage/${klage.id}/formkrav`,
-        'PUT',
-        {
-            onSuccess: (klage) => {
-                form.reset(klageTilFormkravFormData(klage!));
-                setFormTilstand('LAGRET');
-            },
+    const oppdaterFormkrav = useOppdaterFormkrav({
+        sakId: sak.sakId,
+        klageId: klage.id,
+        onSuccess: (klage) => {
+            form.reset(klageTilFormkravFormData(klage!));
+            setFormTilstand('LAGRET');
         },
-    );
+    });
 
-    const avbrytKlageBehandling = useFetchJsonFraApi<SakProps>(
-        `/sak/${sak.sakId}/klage/${klage.id}/avbryt`,
-        'PATCH',
-        {
-            onSuccess: () => {
-                router.push(`/sak/${sak.saksnummer}`);
-            },
+    const avbrytKlageBehandling = useAvbrytKlagebehandling({
+        sakId: klage.sakId,
+        klageId: klage.id,
+        onSuccess: () => {
+            router.push(`/sak/${sak.saksnummer}`);
         },
-    );
+    });
 
     const onSubmit = (data: FormkravFormData) => {
         oppdaterFormkrav.trigger(formkravFormDataTilOppdaterKlageFormkravRequest(data));
@@ -146,8 +144,9 @@ const FormkravKlagePage = ({ sak, klage }: Props) => {
                                     <Button
                                         type="button"
                                         variant="tertiary"
-                                        onClick={() => avbrytKlageBehandling.trigger()}
-                                        loading={avbrytKlageBehandling.isMutating}
+                                        onClick={() => {
+                                            setVilAvslutteBehandlingModal(true);
+                                        }}
                                     >
                                         <HStack>
                                             <TrashIcon title="Søppelbøtte ikon" fontSize="1.5rem" />
@@ -178,6 +177,21 @@ const FormkravKlagePage = ({ sak, klage }: Props) => {
                     )}
                 </VStack>
             </form>
+            {vilAvslutteBehandlingModal && (
+                <AvsluttBehandlingModal
+                    åpen={vilAvslutteBehandlingModal}
+                    onClose={() => setVilAvslutteBehandlingModal(false)}
+                    tittel={`Avslutt klagebehandling`}
+                    tekst={`Er du sikker på at du vil avslutte klagebehandlingen?`}
+                    textareaLabel={`Hvorfor avsluttes klagebehandlingen? (obligatorisk)`}
+                    onSubmit={(begrunnelse: string) => {
+                        avbrytKlageBehandling.trigger({ begrunnelse });
+                    }}
+                    footer={{
+                        isMutating: avbrytKlageBehandling.isMutating,
+                    }}
+                />
+            )}
         </FormProvider>
     );
 };

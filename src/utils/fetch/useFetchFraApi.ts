@@ -12,15 +12,15 @@ type Method = 'GET' | 'POST' | 'PATCH' | 'DELETE' | 'PUT';
 export const useFetchJsonFraApi = <ResponseType = unknown, BodyType = undefined>(
     url: string,
     method: Method,
-    swrOptions?: SWRMutationConfiguration<ResponseType | undefined, FetcherError, string, BodyType>,
+    swrOptions?: SWRMutationConfiguration<ResponseType, FetcherError, string, BodyType>,
 ) => {
     const fetcher = async (_url: string, { arg }: SWRArg<BodyType>) =>
-        fetchJsonFraApiClientSide<ResponseType | undefined>(_url, {
+        fetchJsonFraApiClientSide<ResponseType>(_url, {
             method,
             body: arg ? JSON.stringify(arg) : undefined,
         });
 
-    return useSWRMutation<ResponseType | undefined, FetcherError, string, BodyType>(url, fetcher, {
+    return useSWRMutation<ResponseType, FetcherError, string, BodyType>(url, fetcher, {
         throwOnError: false,
         ...swrOptions,
     });

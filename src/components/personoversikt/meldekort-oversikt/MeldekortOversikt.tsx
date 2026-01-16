@@ -353,7 +353,7 @@ const TildelMegButton = (props: {
     isMeldekortBehandlingMutating: boolean;
     meldeperiodeUrl: string;
     taMeldekortBehandling: TriggerWithOptionsArgs<
-        MeldekortBehandlingProps | undefined,
+        MeldekortBehandlingProps,
         FetcherError,
         string,
         undefined

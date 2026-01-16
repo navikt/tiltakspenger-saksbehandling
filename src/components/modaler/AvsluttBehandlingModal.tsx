@@ -2,46 +2,30 @@ import { TrashIcon } from '@navikt/aksel-icons';
 import { Alert, BodyLong, Button, Heading, HStack, Modal, Textarea } from '@navikt/ds-react';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { useSak } from '~/context/sak/SakContext';
-import { useAvsluttBehandling } from '~/components/behandlingmeny/useAvsluttBehandling';
-import { SøknadIdEllerBehandlingId } from '~/components/personoversikt/avsluttBehandling/AvsluttBehandlingProps';
 
 import styles from './AvsluttBehandlingModal.module.css';
 
 type Props = {
-    saksnummer: string;
     åpen: boolean;
     onClose: () => void;
-    onSuccess?: () => void;
+    onSubmit: (begrunnelse: string) => void;
     tittel?: string;
     tekst?: string;
     textareaLabel?: string;
     footer?: {
         primaryButtonText?: string;
         secondaryButtonText?: string;
+        isMutating: boolean;
     };
-} & SøknadIdEllerBehandlingId;
+};
 
 const AvsluttBehandlingModal = (props: Props) => {
-    const { setSak } = useSak();
     const form = useForm<{ begrunnelse: string }>({ defaultValues: { begrunnelse: '' } });
-    const { avsluttBehandling, avsluttBehandlingIsMutating } = useAvsluttBehandling(
-        props.saksnummer,
-    );
-
-    const { søknadId, behandlingId } = props;
 
     return (
         <form
             onSubmit={form.handleSubmit((values) => {
-                avsluttBehandling({
-                    ...(søknadId ? { søknadId } : { behandlingId }),
-                    begrunnelse: values.begrunnelse,
-                }).then((sak) => {
-                    props.onSuccess?.();
-                    setSak(sak!);
-                    props.onClose();
-                });
+                props.onSubmit(values.begrunnelse);
             })}
         >
             <Modal
@@ -91,7 +75,7 @@ const AvsluttBehandlingModal = (props: Props) => {
                     <Button
                         variant="danger"
                         size="small"
-                        loading={avsluttBehandlingIsMutating}
+                        loading={props.footer?.isMutating}
                         type="submit"
                     >
                         {props.footer?.primaryButtonText ?? 'Avslutt behandling'}

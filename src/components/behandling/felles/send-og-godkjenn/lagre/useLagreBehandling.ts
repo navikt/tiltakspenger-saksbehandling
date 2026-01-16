@@ -7,7 +7,7 @@ import { Rammebehandling, RammebehandlingVedtakRequest } from '~/types/Rammebeha
 type Props = {
     behandling: Rammebehandling;
     options?: SWRMutationConfiguration<
-        Rammebehandling | undefined,
+        Rammebehandling,
         FetcherError,
         string,
         RammebehandlingVedtakRequest
