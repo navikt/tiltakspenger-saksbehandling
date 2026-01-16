@@ -93,8 +93,7 @@ const BrevKlagePage = ({ sak }: Props) => {
         'PATCH',
         {
             onSuccess: (oppdatertKlage) => {
-                console.log('Klage iverksatt:', oppdatertKlage);
-                setKlage(klage!);
+                setKlage(oppdatertKlage!);
                 setHarSendt(true);
             },
         },
@@ -103,8 +102,6 @@ const BrevKlagePage = ({ sak }: Props) => {
     const onSubmit = () => {
         iverksett.trigger();
     };
-
-    console.log(klage.kanIverksette, form.formState.isDirty);
 
     return (
         <form onSubmit={form.handleSubmit(onSubmit)}>

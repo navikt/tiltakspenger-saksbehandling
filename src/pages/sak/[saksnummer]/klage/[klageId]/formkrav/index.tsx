@@ -71,7 +71,7 @@ const FormkravKlagePage = ({ sak, klage }: Props) => {
         },
     );
 
-    const avbrytKlageBehandling = useFetchJsonFraApi<Klagebehandling>(
+    const avbrytKlageBehandling = useFetchJsonFraApi<SakProps>(
         `/sak/${sak.sakId}/klage/${klage.id}/avbryt`,
         'PATCH',
         {
