@@ -140,7 +140,7 @@ const BrevKlagePage = ({ sak, klage }: Props) => {
                             </LocalAlert>
                         )}
                         <HStack gap="4">
-                            {!klage.erAvbrutt && (
+                            {kanBehandleKlage(klage) && (
                                 <Button
                                     type="button"
                                     variant="secondary"
