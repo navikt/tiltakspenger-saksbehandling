@@ -1,4 +1,4 @@
-import { ReactElement } from 'react';
+import { createContext, ReactElement, useContext, useEffect, useState } from 'react';
 import { SakProps } from '~/types/Sak';
 import useSWR from 'swr';
 import Error from 'next/error';
@@ -18,6 +18,7 @@ import {
     klagebehandlingStatusTilText,
 } from '~/utils/tekstformateringUtils';
 import { formaterTidspunkt } from '~/utils/date';
+import { fetchJsonFraApiClientSide } from '~/utils/fetch/fetch';
 
 type Props = {
     children: ReactElement;
@@ -26,10 +27,44 @@ type Props = {
     klage: Nullable<Klagebehandling>;
 };
 
-const fetcher = (...args: Parameters<typeof fetch>) => fetch(...args).then((res) => res.json());
+type KlageContext = {
+    klage: Klagebehandling;
+    setKlage: React.Dispatch<React.SetStateAction<Klagebehandling>>;
+};
+
+const Context = createContext<KlageContext>({} as KlageContext);
+
+type ContextProps = React.PropsWithChildren<{
+    klage: Klagebehandling;
+}>;
+
+export const KlageProvider = ({ klage: initialKlage, children }: ContextProps) => {
+    const [klage, setKlage] = useState<Klagebehandling>(initialKlage);
+    useEffect(() => {
+        setKlage(initialKlage);
+    }, [initialKlage]);
+
+    return (
+        <Context.Provider
+            value={{
+                klage,
+                setKlage,
+            }}
+        >
+            {children}
+        </Context.Provider>
+    );
+};
+
+export const useKlage = () => {
+    return useContext(Context);
+};
 
 const KlageLayout = ({ children, saksnummer, activeTab, klage }: Props) => {
-    const { data, error, isLoading } = useSWR<SakProps>(`/api/sak/${saksnummer}`, fetcher);
+    const { data, error, isLoading } = useSWR<SakProps>(
+        `/sak/${saksnummer}`,
+        fetchJsonFraApiClientSide,
+    );
 
     if (isLoading)
         return (

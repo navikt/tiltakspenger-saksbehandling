@@ -12,7 +12,7 @@ import {
     KlageId,
     LagreBrevtekstKlageRequest,
 } from '~/types/Klage';
-import KlageLayout from '../../layout';
+import KlageLayout, { KlageProvider, useKlage } from '../../layout';
 import Image from 'next/image';
 import { KlageSteg } from '../../../../../../utils/KlageLayoutUtils';
 import { CheckmarkCircleIcon, EnvelopeOpenIcon } from '@navikt/aksel-icons';
@@ -56,8 +56,9 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
     return { props: { sak, klage } };
 });
 
-const BrevKlagePage = ({ sak, klage }: Props) => {
+const BrevKlagePage = ({ sak }: Props) => {
     const [harSendt, setHarSendt] = useState<boolean>(false);
+    const { klage, setKlage } = useKlage();
 
     const form = useForm<BrevFormData>({
         defaultValues: klageTilBrevFormData(klage),
@@ -82,6 +83,7 @@ const BrevKlagePage = ({ sak, klage }: Props) => {
         {
             onSuccess: (klage) => {
                 form.reset(klageTilBrevFormData(klage!));
+                setKlage(klage!);
             },
         },
     );
@@ -92,6 +94,7 @@ const BrevKlagePage = ({ sak, klage }: Props) => {
         {
             onSuccess: (oppdatertKlage) => {
                 console.log('Klage iverksatt:', oppdatertKlage);
+                setKlage(klage!);
                 setHarSendt(true);
             },
         },
@@ -100,6 +103,8 @@ const BrevKlagePage = ({ sak, klage }: Props) => {
     const onSubmit = () => {
         iverksett.trigger();
     };
+
+    console.log(klage.kanIverksette, form.formState.isDirty);
 
     return (
         <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -147,12 +152,15 @@ const BrevKlagePage = ({ sak, klage }: Props) => {
                                     loading={lagreBrev.isMutating}
                                     onClick={() => {
                                         forhåndsvis.reset();
-
-                                        lagreBrev.trigger(
-                                            brevFormDataTilLagreBrevtekstKlageRequest(
-                                                form.getValues(),
-                                            ),
-                                        );
+                                        form.trigger().then((isValid) => {
+                                            if (isValid) {
+                                                lagreBrev.trigger(
+                                                    brevFormDataTilLagreBrevtekstKlageRequest(
+                                                        form.getValues(),
+                                                    ),
+                                                );
+                                            }
+                                        });
                                     }}
                                 >
                                     Lagre
@@ -203,9 +211,11 @@ const BrevKlagePage = ({ sak, klage }: Props) => {
 BrevKlagePage.getLayout = function getLayout(page: ReactElement) {
     const { sak, klage } = page.props as Props;
     return (
-        <KlageLayout saksnummer={sak.saksnummer} activeTab={KlageSteg.BREV} klage={klage}>
-            {page}
-        </KlageLayout>
+        <KlageProvider klage={klage}>
+            <KlageLayout saksnummer={sak.saksnummer} activeTab={KlageSteg.BREV} klage={klage}>
+                {page}
+            </KlageLayout>
+        </KlageProvider>
     );
 };
 

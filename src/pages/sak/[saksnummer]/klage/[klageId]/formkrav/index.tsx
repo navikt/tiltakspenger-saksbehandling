@@ -17,7 +17,7 @@ import {
     klageTilFormkravFormData,
 } from '~/components/forms/formkrav/FormkravFormUtils';
 import { Klagebehandling, KlageId, OppdaterKlageFormkravRequest } from '~/types/Klage';
-import KlageLayout from '../../layout';
+import KlageLayout, { KlageProvider } from '../../layout';
 import { KlageSteg } from '../../../../../../utils/KlageLayoutUtils';
 import { CheckmarkCircleIcon, PencilIcon, TrashIcon } from '@navikt/aksel-icons';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
@@ -185,9 +185,11 @@ const FormkravKlagePage = ({ sak, klage }: Props) => {
 FormkravKlagePage.getLayout = function getLayout(page: ReactElement) {
     const { sak, klage } = page.props as Props;
     return (
-        <KlageLayout saksnummer={sak.saksnummer} activeTab={KlageSteg.FORMKRAV} klage={klage}>
-            {page}
-        </KlageLayout>
+        <KlageProvider klage={klage}>
+            <KlageLayout saksnummer={sak.saksnummer} activeTab={KlageSteg.FORMKRAV} klage={klage}>
+                {page}
+            </KlageLayout>
+        </KlageProvider>
     );
 };
 
