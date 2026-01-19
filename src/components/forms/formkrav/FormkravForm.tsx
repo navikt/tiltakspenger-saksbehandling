@@ -1,11 +1,19 @@
-import { Control, Controller } from 'react-hook-form';
-import { FormkravFormData, INGEN_VEDTAK } from './FormkravFormUtils';
+import { Control, Controller, useWatch } from 'react-hook-form';
+import {
+    FormkravFormData,
+    KlagefristUnntakSvarordFormData,
+    KlagefristUnntakSvarordFormDataTekstMapper,
+    INGEN_VEDTAK,
+} from './FormkravFormUtils';
 import { HStack, Radio, RadioGroup, Select, VStack } from '@navikt/ds-react';
 import { Rammevedtak } from '~/types/Rammevedtak';
 import { Rammebehandling } from '~/types/Rammebehandling';
 import JournalpostId from '~/components/journalpostId/JournalpostId';
 import { Nullable } from '~/types/UtilTypes';
 import styles from './FormkravForm.module.css';
+import { formaterTidspunktKort } from '~/utils/date';
+import { behandlingstypeTextFormatter } from '~/components/benk/BenkSideUtils';
+import { behandlingResultatTilText } from '~/utils/tekstformateringUtils';
 
 const FormkravForm = (props: {
     control: Control<FormkravFormData>;
@@ -13,6 +21,11 @@ const FormkravForm = (props: {
     fnrFraPersonopplysninger: Nullable<string>;
     readonly?: boolean;
 }) => {
+    const erKlagefristOverholdt = useWatch({
+        control: props.control,
+        name: 'erKlagefristOverholdt',
+    });
+
     return (
         <VStack gap="8" align="start">
             <JournalpostId
@@ -37,7 +50,9 @@ const FormkravForm = (props: {
                         <option value={INGEN_VEDTAK}>Har ikke klaget på et vedtak</option>
                         {props.vedtakOgBehandling.map(({ vedtak, behandling }) => (
                             <option key={`${vedtak.id}-${behandling.id}`} value={vedtak.id}>
-                                {behandling.type} - {vedtak.resultat} - {vedtak.opprettet}
+                                {behandlingstypeTextFormatter[behandling.type]} -{' '}
+                                {behandlingResultatTilText[vedtak.resultat]} -{' '}
+                                {formaterTidspunktKort(vedtak.opprettet)}
                             </option>
                         ))}
                     </Select>
@@ -97,6 +112,29 @@ const FormkravForm = (props: {
                     </RadioGroup>
                 )}
             />
+
+            {erKlagefristOverholdt === false && (
+                <Controller
+                    control={props.control}
+                    name="erUnntakForKlagefrist"
+                    render={({ field, fieldState }) => (
+                        <RadioGroup
+                            {...field}
+                            legend="Er unntak for klagefristen oppfylt?"
+                            size="small"
+                            error={fieldState.error?.message}
+                            readOnly={props.readonly}
+                        >
+                            {Object.values(KlagefristUnntakSvarordFormData).map((svarord) => (
+                                <Radio key={svarord} value={svarord}>
+                                    {KlagefristUnntakSvarordFormDataTekstMapper[svarord]}
+                                </Radio>
+                            ))}
+                        </RadioGroup>
+                    )}
+                />
+            )}
+
             <Controller
                 control={props.control}
                 name="erKlagenSignert"

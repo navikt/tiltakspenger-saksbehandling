@@ -32,6 +32,7 @@ export interface Klagebehandling {
     erKlagerPartISaken: boolean;
     klagesDetPåKonkreteElementerIVedtaket: boolean;
     erKlagefristenOverholdt: boolean;
+    erUnntakForKlagefrist: Nullable<KlagefristUnntakSvarord>;
     erKlagenSignert: boolean;
     brevtekst: Brevtekst[];
     avbrutt: Nullable<Avbrutt>;
@@ -43,12 +44,20 @@ export interface Brevtekst {
     tekst: string;
 }
 
+export enum KlagefristUnntakSvarord {
+    JA = 'JA',
+    JA_KLAGER_KAN_IKKE_LASTES_FOR_Å_HA_SENDT_INN_ETTER_FRISTEN = 'JA_KLAGER_KAN_IKKE_LASTES_FOR_Å_HA_SENDT_INN_ETTER_FRISTEN',
+    JA_AV_SÆRLIGE_GRUNNER = 'JA_AV_SÆRLIGE_GRUNNER',
+    NEI = 'NEI',
+}
+
 export interface OpprettKlageRequest {
     journalpostId: string;
     vedtakDetKlagesPå: Nullable<string>;
     erKlagerPartISaken: boolean;
     klagesDetPåKonkreteElementerIVedtaket: boolean;
     erKlagefristenOverholdt: boolean;
+    erUnntakForKlagefrist: Nullable<KlagefristUnntakSvarord>;
     erKlagenSignert: boolean;
 }
 
@@ -58,6 +67,7 @@ export interface OppdaterKlageFormkravRequest {
     erKlagerPartISaken: boolean;
     klagesDetPåKonkreteElementerIVedtaket: boolean;
     erKlagefristenOverholdt: boolean;
+    erUnntakForKlagefrist: Nullable<KlagefristUnntakSvarord>;
     erKlagenSignert: boolean;
 }
 
