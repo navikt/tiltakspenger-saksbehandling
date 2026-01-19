@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Heading, HStack, VStack } from '@navikt/ds-react';
 
-import styles from './OppsummeringAvAvbruttBehandling.module.css';
+import styles from './OppsummeringAvAvbrutt.module.css';
 
 import { formaterTidspunkt } from '../../../utils/date';
 import { OppsummeringsPar } from '../oppsummeringspar/OppsummeringsPar';

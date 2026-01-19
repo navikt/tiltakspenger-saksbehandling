@@ -6,7 +6,7 @@ import { Rammebehandlingstype } from '~/types/Rammebehandling';
 import { PersonaliaHeader } from '../personaliaheader/PersonaliaHeader';
 import { Alert } from '@navikt/ds-react';
 import { finnBehandlingStatusTag } from '~/utils/tekstformateringUtils';
-import AvbruttOppsummering from '../oppsummeringer/oppsummeringAvAvbruttBehandling/OppsummeringAvAvbruttBehandling';
+import AvbruttOppsummering from '../oppsummeringer/oppsummeringAvAvbrutt/OppsummeringAvAvbrutt';
 import SideBarMain from '../../layouts/sidebar-main/SideBarMain';
 import { Tidslinjer } from '~/components/tidslinjer/Tidslinjer';
 import { useSak } from '~/context/sak/SakContext';

@@ -118,7 +118,7 @@ const BrevKlagePage = ({ sak }: Props) => {
                 <BrevForm
                     control={form.control}
                     className={styles.brevformContainer}
-                    readOnly={klage.erAvbrutt}
+                    readOnly={!kanBehandleKlage(klage)}
                 />
 
                 <VStack gap="8" marginInline="16" marginBlock="8" align="start">

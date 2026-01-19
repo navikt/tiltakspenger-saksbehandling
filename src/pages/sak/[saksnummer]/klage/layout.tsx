@@ -4,8 +4,8 @@ import useSWR from 'swr';
 import Error from 'next/error';
 import { PersonaliaHeader } from '~/components/personaliaheader/PersonaliaHeader';
 import styles from './Layout.module.css';
-import { BodyShort, Heading, HStack, Loader, Tabs } from '@navikt/ds-react';
-import { Klagebehandling } from '~/types/Klage';
+import { BodyShort, Heading, HStack, Loader, Tabs, VStack } from '@navikt/ds-react';
+import { Klagebehandling, KlagebehandlingStatus } from '~/types/Klage';
 import { Nullable } from '~/types/UtilTypes';
 import Link from 'next/link';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
@@ -19,6 +19,7 @@ import {
 } from '~/utils/tekstformateringUtils';
 import { formaterTidspunkt } from '~/utils/date';
 import { fetchJsonFraApiClientSide } from '~/utils/fetch/fetch';
+import AvbruttOppsummering from '~/components/oppsummeringer/oppsummeringAvAvbrutt/OppsummeringAvAvbrutt';
 
 type Props = {
     children: ReactElement;
@@ -82,6 +83,11 @@ const KlageLayout = ({ children, saksnummer, activeTab, klage }: Props) => {
             <PersonaliaHeader sakId={data!.sakId!} saksnummer={data!.saksnummer} />
             <KlageHeader saksnummer={data!.saksnummer} klage={klage} />
             <KlageStedIndikator activeTab={activeTab} klage={klage} />
+            {klage?.status === KlagebehandlingStatus.AVBRUTT && (
+                <VStack marginInline="10">
+                    <AvbruttOppsummering avbrutt={klage.avbrutt!} />
+                </VStack>
+            )}
             <main>{children}</main>
         </div>
     );

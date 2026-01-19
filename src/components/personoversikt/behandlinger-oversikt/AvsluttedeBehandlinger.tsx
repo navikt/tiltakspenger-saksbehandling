@@ -4,7 +4,7 @@ import { AvbrutteBehandlingerTabell } from './AvbrutteBehandlingerTabell';
 import { Rammebehandling } from '~/types/Rammebehandling';
 
 import styles from '../Personoversikt.module.css';
-import { Klagebehandling, KlagebehandlingResultat } from '~/types/Klage';
+import { Klagebehandling, KlagebehandlingResultat, KlagebehandlingStatus } from '~/types/Klage';
 
 export const AvsluttedeBehandlinger = (props: {
     saksnummer: string;
@@ -16,7 +16,7 @@ export const AvsluttedeBehandlinger = (props: {
         .map(avbruttBehandlingToDataCellInfo);
 
     const avbrutteKlagebehandlinger = props.klageBehandlinger
-        .filter((klage) => klage.erAvbrutt)
+        .filter((klage) => klage.status === KlagebehandlingStatus.AVBRUTT)
         .map(avbruttKlageToDataCellInfo);
 
     const avbrutteBehandlinger = [

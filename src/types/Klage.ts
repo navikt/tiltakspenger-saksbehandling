@@ -1,3 +1,4 @@
+import { Avbrutt } from './Avbrutt';
 import { VedtakId } from './Rammevedtak';
 import { Nullable } from './UtilTypes';
 
@@ -33,7 +34,7 @@ export interface Klagebehandling {
     erKlagefristenOverholdt: boolean;
     erKlagenSignert: boolean;
     brevtekst: Brevtekst[];
-    erAvbrutt: boolean;
+    avbrutt: Nullable<Avbrutt>;
     kanIverksette: boolean;
 }
 
