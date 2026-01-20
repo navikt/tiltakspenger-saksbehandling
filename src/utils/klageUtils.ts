@@ -5,9 +5,13 @@ export const kanBehandleKlage = (k: Klagebehandling): boolean => {
 };
 
 export const finnUrlForKlageSteg = (k: Klagebehandling): string => {
-    if (k.resultat === KlagebehandlingResultat.AVVIST) {
-        return `/sak/${k.saksnummer}/klage/${k.id}/brev`;
-    }
+    switch (k.resultat) {
+        case KlagebehandlingResultat.AVVIST: {
+            return `/sak/${k.saksnummer}/klage/${k.id}/brev`;
+        }
 
-    return `/sak/${k.saksnummer}/klage/${k.id}/formkrav`;
+        case null: {
+            throw new Error(`Kunne ikke finne url for klagebehandling ${k.id} uten resultat`);
+        }
+    }
 };

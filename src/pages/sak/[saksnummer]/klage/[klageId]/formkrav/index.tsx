@@ -21,7 +21,7 @@ import KlageLayout, { KlageProvider } from '../../layout';
 import { KlageSteg } from '../../../../../../utils/KlageLayoutUtils';
 import { CheckmarkCircleIcon, PencilIcon, TrashIcon } from '@navikt/aksel-icons';
 import { useHentPersonopplysninger } from '~/components/personaliaheader/useHentPersonopplysninger';
-import { kanBehandleKlage } from '~/utils/klageUtils';
+import { finnUrlForKlageSteg, kanBehandleKlage } from '~/utils/klageUtils';
 import { useAvbrytKlagebehandling, useOppdaterFormkrav } from '~/api/KlageApi';
 import AvsluttBehandlingModal from '~/components/modaler/AvsluttBehandlingModal';
 
@@ -167,9 +167,7 @@ const FormkravKlagePage = ({ sak, klage }: Props) => {
                             )}
                             <Button
                                 type="button"
-                                onClick={() =>
-                                    router.push(`/sak/${sak.saksnummer}/klage/${klage.id}/brev`)
-                                }
+                                onClick={() => router.push(finnUrlForKlageSteg(klage))}
                             >
                                 Fortsett
                             </Button>
