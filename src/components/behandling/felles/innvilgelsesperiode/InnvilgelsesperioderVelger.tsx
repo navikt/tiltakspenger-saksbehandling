@@ -14,13 +14,12 @@ import { InnvilgelsesperiodeDatovelgere } from '~/components/behandling/felles/i
 import { InnvilgelsesperioderVarsler } from '~/components/behandling/felles/innvilgelsesperiode/InnvilgelsesperioderVarsler';
 import { XMarkIcon } from '@navikt/aksel-icons';
 import { TiltaksdeltakelseMedPeriode } from '~/types/TiltakDeltakelse';
-import { forrigeDag, nesteDag, periodeTilFormatertDatotekst } from '~/utils/date';
+import { periodeTilFormatertDatotekst } from '~/utils/date';
 import { Innvilgelsesperiode } from '~/types/Innvilgelsesperiode';
 import { Rammebehandling } from '~/types/Rammebehandling';
 import { SakProps } from '~/types/Sak';
 import { Fragment } from 'react';
-import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
-import { perioderErSammenhengende } from '~/utils/periode';
+import { InnvilgelseHullVarsel } from '~/components/behandling/felles/innvilgelsesperiode/InnvilgelseHullVarsel';
 
 export const InnvilgelsesperioderVelger = () => {
     const { sak } = useSak();
@@ -38,8 +37,6 @@ export const InnvilgelsesperioderVelger = () => {
     const tiltaksdeltakelser = hentTiltaksdeltakelserMedStartOgSluttdato(behandling);
     const tiltaksdeltakelsesperiode = hentHeleTiltaksdeltakelsesperioden(behandling);
 
-    const { innvilgelseMedHullToggle } = useFeatureToggles();
-
     return (
         <VedtakSeksjon>
             <VedtakSeksjon.FullBredde>
@@ -51,12 +48,6 @@ export const InnvilgelsesperioderVelger = () => {
                         {innvilgelsesperioder.map((it, index, array) => {
                             const nestePeriode = array.at(index + 1)?.periode;
 
-                            const periodeUtenInnvilgelse = nestePeriode &&
-                                !perioderErSammenhengende(it.periode, nestePeriode) && {
-                                    fraOgMed: nesteDag(it.periode.tilOgMed),
-                                    tilOgMed: forrigeDag(nestePeriode.fraOgMed),
-                                };
-
                             return (
                                 <Fragment key={`${it.periode.fraOgMed}-${it.periode.tilOgMed}`}>
                                     <InnvilgelsesperiodeVelgerFull
@@ -67,15 +58,10 @@ export const InnvilgelsesperioderVelger = () => {
                                         sak={sak}
                                         readOnly={erReadonly}
                                     />
-                                    {periodeUtenInnvilgelse && (
-                                        <Alert
-                                            variant={innvilgelseMedHullToggle ? 'warning' : 'error'}
-                                            size={'small'}
-                                            inline={true}
-                                        >
-                                            {`Ikke innvilget for perioden ${periodeTilFormatertDatotekst(periodeUtenInnvilgelse)}`}
-                                        </Alert>
-                                    )}
+                                    <InnvilgelseHullVarsel
+                                        forrigePeriode={it.periode}
+                                        nestePeriode={nestePeriode}
+                                    />
                                 </Fragment>
                             );
                         })}
