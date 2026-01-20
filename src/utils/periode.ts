@@ -37,6 +37,15 @@ export const totalPeriode = (perioder: Periode[]): Periode => {
     return { fraOgMed: førsteFraOgMed, tilOgMed: sisteTilOgMed };
 };
 
+export const overlappendePeriode = (periode1: Periode, periode2: Periode): Periode | null => {
+    return perioderOverlapper(periode1, periode2)
+        ? {
+              fraOgMed: datoMax(periode1.fraOgMed, periode2.fraOgMed),
+              tilOgMed: datoMin(periode1.tilOgMed, periode2.tilOgMed),
+          }
+        : null;
+};
+
 export const erDatoIPeriode = (dato: string, periode: Periode): boolean => {
     return dato >= periode.fraOgMed && dato <= periode.tilOgMed;
 };
@@ -108,10 +117,7 @@ export const krympPeriodisering = <T>(
         return [
             {
                 ...førsteElement,
-                periode: {
-                    fraOgMed: datoMax(førsteElement.periode.fraOgMed, krympTil.fraOgMed),
-                    tilOgMed: datoMin(førsteElement.periode.tilOgMed, krympTil.tilOgMed),
-                },
+                periode: overlappendePeriode(førsteElement.periode, krympTil)!,
             },
         ];
     }

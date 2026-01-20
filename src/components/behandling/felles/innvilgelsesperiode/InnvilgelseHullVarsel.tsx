@@ -1,11 +1,12 @@
-import { Alert } from '@navikt/ds-react';
+import { Alert, BodyShort } from '@navikt/ds-react';
 import { forrigeDag, nesteDag, periodeTilFormatertDatotekst } from '~/utils/date';
 import { Periode } from '~/types/Periode';
 import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
-import { krympPeriodisering, perioderErSammenhengende, perioderOverlapper } from '~/utils/periode';
+import { overlappendePeriode, perioderErSammenhengende } from '~/utils/periode';
 import { useSak } from '~/context/sak/SakContext';
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
 import { RevurderingResultat } from '~/types/Revurdering';
+import { finnGjeldendeInnvilgelserIPeriode } from '~/components/behandling/context/behandlingSkjemaUtils';
 
 type Props = {
     forrigePeriode: Periode;
@@ -28,28 +29,35 @@ export const InnvilgelseHullVarsel = ({ forrigePeriode, nestePeriode }: Props) =
         return null;
     }
 
-    const harGjeldendeInnvilgelseIHullet = krympPeriodisering(
-        sak.innvilgetTidslinje.elementer,
+    const gjeldendeInnvilgelserIHullet = finnGjeldendeInnvilgelserIPeriode(
+        sak,
         hullMellomPeriodene,
-    )
-        .flatMap((it) => it.rammevedtak.gjeldendeInnvilgetPerioder)
-        .some((it) => perioderOverlapper(it, hullMellomPeriodene));
+    );
 
+    const erOpphør = gjeldendeInnvilgelserIHullet.length > 0;
     const kanOpphøre = behandling.resultat === RevurderingResultat.OMGJØRING;
 
     return (
         <Alert
-            variant={
-                !innvilgelseMedHullToggle || (harGjeldendeInnvilgelseIHullet && !kanOpphøre)
-                    ? 'error'
-                    : 'warning'
-            }
+            variant={!innvilgelseMedHullToggle || (erOpphør && !kanOpphøre) ? 'error' : 'warning'}
             size={'small'}
             inline={true}
         >
-            {`Innvilges ikke for ${periodeTilFormatertDatotekst(hullMellomPeriodene)}`}
-            {harGjeldendeInnvilgelseIHullet &&
-                ' - Dette fører til et opphør av en tidligere innvilgelse i perioden!'}
+            <BodyShort
+                size={'small'}
+                spacing={erOpphør}
+            >{`Innvilges ikke for perioden ${periodeTilFormatertDatotekst(hullMellomPeriodene)}`}</BodyShort>
+            {erOpphør && (
+                <BodyShort size={'small'}>
+                    {`Dette fører til et opphør av innvilgelse i perioden${gjeldendeInnvilgelserIHullet.length > 1 ? 'e' : ''} ${gjeldendeInnvilgelserIHullet
+                        .map((p) =>
+                            periodeTilFormatertDatotekst(
+                                overlappendePeriode(p, hullMellomPeriodene)!,
+                            ),
+                        )
+                        .join(', ')}`}
+                </BodyShort>
+            )}
         </Alert>
     );
 };

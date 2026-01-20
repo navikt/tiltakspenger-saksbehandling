@@ -10,7 +10,7 @@ import {
 } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 import { SøknadsbehandlingState } from '~/components/behandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
 import { BehandlingSkjemaState } from '~/components/behandling/context/behandlingSkjemaReducer';
-import { inneholderHelePerioden } from '~/utils/periode';
+import { inneholderHelePerioden, krympPeriodisering, perioderOverlapper } from '~/utils/periode';
 import { datoMax, datoMin, forrigeDag, nesteDag } from '~/utils/date';
 import { MedPeriode, Periode } from '~/types/Periode';
 import { Rammebehandling } from '~/types/Rammebehandling';
@@ -134,4 +134,10 @@ export const antallDagerPerMeldeperiodeForPeriode = (
     }, 0);
 
     return dagerPerUke === 0 ? ANTALL_DAGER_DEFAULT : dagerPerUke * 2;
+};
+
+export const finnGjeldendeInnvilgelserIPeriode = (sak: SakProps, periode: Periode): Periode[] => {
+    return krympPeriodisering(sak.innvilgetTidslinje.elementer, periode)
+        .flatMap((it) => it.rammevedtak.gjeldendeInnvilgetPerioder)
+        .filter((it) => perioderOverlapper(it, periode));
 };

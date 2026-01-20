@@ -4,10 +4,19 @@ import { hentHeleTiltaksdeltakelsesperioden } from '~/utils/behandling';
 import { Rammebehandling } from '~/types/Rammebehandling';
 import { InnvilgelseState } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 import { Søknad } from '~/types/Søknad';
-import { periodiseringTotalPeriode, validerPeriodisering } from '~/utils/periode';
+import {
+    finnPeriodiseringHull,
+    perioderOverlapper,
+    periodiseringTotalPeriode,
+    validerPeriodisering,
+} from '~/utils/periode';
 import { validerTiltaksdeltakelser } from '~/components/behandling/felles/validering/validerTiltaksdeltakelser';
+import { SakProps } from '~/types/Sak';
+import { finnGjeldendeInnvilgelserIPeriode } from '~/components/behandling/context/behandlingSkjemaUtils';
+import { RevurderingResultat } from '~/types/Revurdering';
 
 export const validerInnvilgelse = (
+    sak: SakProps,
     behandling: Rammebehandling,
     innvilgelse: InnvilgelseState,
     søknad: Søknad,
@@ -31,6 +40,26 @@ export const validerInnvilgelse = (
         validering.errors.push(
             `Innvilgelsesperiodene må være sammenhengende uten ${kanHaHull ? '' : 'hull eller '}overlapp`,
         );
+    }
+
+    const hullPerioder = finnPeriodiseringHull(innvilgelsesperioder);
+
+    const gjeldendeInnvilgelserSomOpphøres = hullPerioder.flatMap((hullPeriode) =>
+        finnGjeldendeInnvilgelserIPeriode(sak, hullPeriode).filter((ip) =>
+            perioderOverlapper(hullPeriode, ip),
+        ),
+    );
+
+    if (gjeldendeInnvilgelserSomOpphøres.length > 0) {
+        const msgPrefix = 'Valgte innvilgelsesperioder fører til et delvis opphør';
+
+        if (behandling.resultat === RevurderingResultat.OMGJØRING) {
+            validering.warnings.push(msgPrefix);
+        } else {
+            validering.errors.push(
+                `${msgPrefix} - Vi støtter kun opphør ved omgjøring eller stans`,
+            );
+        }
     }
 
     const tiltaksdeltakelserValidering = validerTiltaksdeltakelser(

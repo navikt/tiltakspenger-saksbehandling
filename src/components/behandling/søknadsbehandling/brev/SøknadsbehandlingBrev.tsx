@@ -10,8 +10,10 @@ import {
 } from '~/components/behandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
 import { SøknadsbehandlingBrevForhåndsvisningDTO } from '~/components/behandling/felles/vedtaksbrev/forhåndsvisning/useHentVedtaksbrevForhåndsvisning';
 import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
+import { useSak } from '~/context/sak/SakContext';
 
 export const SøknadsbehandlingBrev = () => {
+    const { sak } = useSak();
     const { behandling } = useSøknadsbehandling();
     const skjema = useSøknadsbehandlingSkjema();
 
@@ -21,6 +23,7 @@ export const SøknadsbehandlingBrev = () => {
         <Vedtaksbrev
             header={'Vedtaksbrev for tiltakspenger og barnetillegg'}
             validering={søknadsbehandlingValidering(
+                sak,
                 behandling,
                 skjema,
                 innvilgelseMedHullToggle,

@@ -25,6 +25,7 @@ export const revurderingOmgjøringValidering = (
     const sisteSøknad = hentVedtatteSøknadsbehandlinger(sak).at(0)!.søknad;
 
     const innvilgelseValidering = validerInnvilgelse(
+        sak,
         behandling,
         skjema.innvilgelse,
         sisteSøknad,

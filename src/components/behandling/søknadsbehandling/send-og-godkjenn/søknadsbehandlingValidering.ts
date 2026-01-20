@@ -3,9 +3,11 @@ import { validerInnvilgelse } from '~/components/behandling/felles/validering/va
 import { BehandlingSkjemaContext } from '~/components/behandling/context/BehandlingSkjemaContext';
 import { Søknadsbehandling, SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
 import { SøknadsbehandlingAvslagContext } from '~/components/behandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
+import { SakProps } from '~/types/Sak';
 
 export const søknadsbehandlingValidering =
     (
+        sak: SakProps,
         behandling: Søknadsbehandling,
         skjema: BehandlingSkjemaContext,
         kanHaHull: boolean,
@@ -28,6 +30,7 @@ export const søknadsbehandlingValidering =
             validering.warnings.push(...avslagValidering.warnings);
         } else if (resultat === SøknadsbehandlingResultat.INNVILGELSE) {
             const innvilgelseValidering = validerInnvilgelse(
+                sak,
                 behandling,
                 skjema.innvilgelse,
                 behandling.søknad,
