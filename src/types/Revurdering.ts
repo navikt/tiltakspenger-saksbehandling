@@ -48,8 +48,6 @@ export interface RevurderingVedtakStansRequest extends OppdaterBehandlingRequest
     valgteHjemler: HjemmelForStans[];
     stansFraOgMed: Nullable<string>;
     harValgtStansFraFørsteDagSomGirRett: Nullable<boolean>;
-    stansTilOgMed: Nullable<string>;
-    harValgtStansTilSisteDagSomGirRett: Nullable<boolean>;
 }
 
 export interface RevurderingVedtakInnvilgelseRequest extends OppdaterBehandlingRequestBase {
