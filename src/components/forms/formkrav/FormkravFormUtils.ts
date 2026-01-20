@@ -21,7 +21,6 @@ export interface FormkravFormData {
 }
 
 export enum KlagefristUnntakSvarordFormData {
-    JA = 'JA',
     JA_KLAGER_KAN_IKKE_LASTES_FOR_Å_HA_SENDT_INN_ETTER_FRISTEN = 'JA_KLAGER_KAN_IKKE_LASTES_FOR_Å_HA_SENDT_INN_ETTER_FRISTEN',
     JA_AV_SÆRLIGE_GRUNNER = 'JA_AV_SÆRLIGE_GRUNNER',
     NEI = 'NEI',
@@ -31,7 +30,6 @@ export const KlagefristUnntakSvarordFormDataTekstMapper: Record<
     KlagefristUnntakSvarordFormData,
     string
 > = {
-    [KlagefristUnntakSvarordFormData.JA]: 'Ja',
     [KlagefristUnntakSvarordFormData.JA_KLAGER_KAN_IKKE_LASTES_FOR_Å_HA_SENDT_INN_ETTER_FRISTEN]:
         'Ja, klager kan ikke lastes for å ha sendt inn etter fristen',
     [KlagefristUnntakSvarordFormData.JA_AV_SÆRLIGE_GRUNNER]:
@@ -143,8 +141,6 @@ export const klagefristUnntakSvarordFormDataTilKlagebehandlingKlagefristUnntakSv
     svarord: KlagefristUnntakSvarordFormData,
 ): KlagefristUnntakSvarord => {
     switch (svarord) {
-        case KlagefristUnntakSvarordFormData.JA:
-            return KlagefristUnntakSvarord.JA;
         case KlagefristUnntakSvarordFormData.JA_KLAGER_KAN_IKKE_LASTES_FOR_Å_HA_SENDT_INN_ETTER_FRISTEN:
             return KlagefristUnntakSvarord.JA_KLAGER_KAN_IKKE_LASTES_FOR_Å_HA_SENDT_INN_ETTER_FRISTEN;
         case KlagefristUnntakSvarordFormData.JA_AV_SÆRLIGE_GRUNNER:
@@ -174,8 +170,6 @@ export const klagebehandlingKlagefristUnntakSvarordTilKlagefristUnntakSvarordFor
     svarord: KlagefristUnntakSvarord,
 ): KlagefristUnntakSvarordFormData => {
     switch (svarord) {
-        case KlagefristUnntakSvarord.JA:
-            return KlagefristUnntakSvarordFormData.JA;
         case KlagefristUnntakSvarord.JA_KLAGER_KAN_IKKE_LASTES_FOR_Å_HA_SENDT_INN_ETTER_FRISTEN:
             return KlagefristUnntakSvarordFormData.JA_KLAGER_KAN_IKKE_LASTES_FOR_Å_HA_SENDT_INN_ETTER_FRISTEN;
         case KlagefristUnntakSvarord.JA_AV_SÆRLIGE_GRUNNER:

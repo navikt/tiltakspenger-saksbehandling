@@ -45,7 +45,6 @@ export interface Brevtekst {
 }
 
 export enum KlagefristUnntakSvarord {
-    JA = 'JA',
     JA_KLAGER_KAN_IKKE_LASTES_FOR_Å_HA_SENDT_INN_ETTER_FRISTEN = 'JA_KLAGER_KAN_IKKE_LASTES_FOR_Å_HA_SENDT_INN_ETTER_FRISTEN',
     JA_AV_SÆRLIGE_GRUNNER = 'JA_AV_SÆRLIGE_GRUNNER',
     NEI = 'NEI',
