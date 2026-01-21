@@ -119,6 +119,6 @@ export const omgjøringÅrsakFormDataTilTekst: Record<OmgjøringÅrsakFormData, 
     [OmgjøringÅrsakFormData.FEIL_ELLER_ENDRET_FAKTA]: 'Feil eller endret fakta',
     [OmgjøringÅrsakFormData.FEIL_LOVANVENDELSE]: 'Feil lovanvendelse',
     [OmgjøringÅrsakFormData.FEIL_REGELVERKSFORSTÅELSE]: 'Feil regelverksforståelse',
-    [OmgjøringÅrsakFormData.PROSESSUELL_FEIL]: 'Prosessuel feil',
+    [OmgjøringÅrsakFormData.PROSESSUELL_FEIL]: 'Prosessuell feil',
     [OmgjøringÅrsakFormData.ANNET]: 'Annet',
 };
