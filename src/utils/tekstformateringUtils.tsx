@@ -230,11 +230,15 @@ export const klagebehandlingStatusTilTag: Record<KlagebehandlingStatus, ReactEle
 
 export const klagebehandlingResultatTilText: Record<KlagebehandlingResultat, string> = {
     [KlagebehandlingResultat.AVVIST]: 'Avvist',
+    [KlagebehandlingResultat.OMGJØR]: 'Omgjør',
 };
 
 export const klagebehandlingResultatTilTag: Record<KlagebehandlingResultat, ReactElement> = {
     [KlagebehandlingResultat.AVVIST]: (
         <Tag variant="error">{klagebehandlingResultatTilText[KlagebehandlingResultat.AVVIST]}</Tag>
+    ),
+    [KlagebehandlingResultat.OMGJØR]: (
+        <Tag variant="alt1">{klagebehandlingResultatTilText[KlagebehandlingResultat.OMGJØR]}</Tag>
     ),
 };
 

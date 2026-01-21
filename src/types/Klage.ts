@@ -6,6 +6,7 @@ export type KlageId = `klage_${string}`;
 
 export enum KlagebehandlingResultat {
     AVVIST = 'AVVIST',
+    OMGJØR = 'OMGJØR',
 }
 
 export enum KlagebehandlingStatus {
@@ -22,6 +23,7 @@ export interface Klagebehandling {
     fnr: string;
     opprettet: string;
     sistEndret: string;
+    iverksattTidspunkt: Nullable<string>;
     saksbehandler: Nullable<string>;
     journalpostId: string;
     mottattFraJournalpost: string;
@@ -68,6 +70,19 @@ export interface OppdaterKlageFormkravRequest {
     erKlagefristenOverholdt: boolean;
     erUnntakForKlagefrist: Nullable<KlagefristUnntakSvarord>;
     erKlagenSignert: boolean;
+}
+
+export enum OmgjøringÅrsak {
+    FEIL_ELLER_ENDRET_FAKTA = 'FEIL_ELLER_ENDRET_FAKTA',
+    FEIL_LOVANVENDELSE = 'FEIL_LOVANVENDELSE',
+    FEIL_REGELVERKSFORSTAAELSE = 'FEIL_REGELVERKSFORSTAAELSE',
+    PROSESSUEL_FEIL = 'PROSESSUEL_FEIL',
+    ANNET = 'ANNET',
+}
+
+export interface VurderKlageRequest {
+    årsak: OmgjøringÅrsak;
+    begrunnelse: string;
 }
 
 export interface ForhåndsvisBrevKlageRequest {

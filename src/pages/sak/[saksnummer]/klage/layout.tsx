@@ -132,6 +132,10 @@ const KlageHeader = (props: { saksnummer: string; klage: Nullable<Klagebehandlin
 
 const KlageStedIndikator = (props: { activeTab: KlageSteg; klage: Nullable<Klagebehandling> }) => {
     const kanNavigereTilBrev = props.klage && kanNavigereTilKlageSteg(props.klage, KlageSteg.BREV);
+    const kanNavigereTilVurdering =
+        props.klage && kanNavigereTilKlageSteg(props.klage, KlageSteg.VURDERING);
+    const kanNavigereTilResultat =
+        props.klage && kanNavigereTilKlageSteg(props.klage, KlageSteg.RESULTAT);
 
     const onChange = (value: KlageSteg) => {
         switch (value) {
@@ -141,16 +145,29 @@ const KlageStedIndikator = (props: { activeTab: KlageSteg; klage: Nullable<Klage
                 }
                 return;
             }
+            case KlageSteg.VURDERING: {
+                if (props.klage && kanNavigereTilKlageSteg(props.klage, value)) {
+                    router.push(`/sak/${props.klage.saksnummer}/klage/${props.klage.id}/vurdering`);
+                }
+                return;
+            }
+
             case KlageSteg.BREV: {
                 if (props.klage && kanNavigereTilBrev) {
                     router.push(`/sak/${props.klage.saksnummer}/klage/${props.klage.id}/brev`);
                 }
                 return;
             }
-            default: {
+            case KlageSteg.RESULTAT: {
+                if (props.klage && kanNavigereTilResultat) {
+                    router.push(`/sak/${props.klage.saksnummer}/klage/${props.klage.id}/resultat`);
+                }
                 return;
             }
         }
+
+        //hvis denne fjernes vil ikke funksjonen få compile error dersom en case mangler
+        throw value satisfies never;
     };
 
     return (
@@ -162,14 +179,25 @@ const KlageStedIndikator = (props: { activeTab: KlageSteg; klage: Nullable<Klage
             <Tabs.List className={styles.tabsList}>
                 <Tabs.Tab className={styles.tab} value={KlageSteg.FORMKRAV} label="1. Formkrav" />
                 <Tabs.Tab
-                    className={classNames(styles.tab, styles.tabDisabled)}
-                    value={''}
+                    className={classNames(
+                        styles.tab,
+                        kanNavigereTilVurdering ? '' : styles.tabDisabled,
+                    )}
+                    value={KlageSteg.VURDERING}
                     label="2. Vurdering"
                 />
                 <Tabs.Tab
                     className={classNames(styles.tab, kanNavigereTilBrev ? '' : styles.tabDisabled)}
                     value={KlageSteg.BREV}
                     label="3. Brev"
+                />
+                <Tabs.Tab
+                    className={classNames(
+                        styles.tab,
+                        kanNavigereTilResultat ? '' : styles.tabDisabled,
+                    )}
+                    value={KlageSteg.RESULTAT}
+                    label="4. Resultat"
                 />
             </Tabs.List>
         </Tabs>

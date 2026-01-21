@@ -1,4 +1,9 @@
-import { Klagebehandling, KlageId, OppdaterKlageFormkravRequest } from '~/types/Klage';
+import {
+    Klagebehandling,
+    KlageId,
+    OppdaterKlageFormkravRequest,
+    VurderKlageRequest,
+} from '~/types/Klage';
 import { SakProps } from '~/types/Sak';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 
@@ -13,6 +18,28 @@ export const useOppdaterFormkrav = (args: {
         {
             onSuccess: args.onSuccess,
         },
+    );
+
+export const useVurderKlage = (args: {
+    sakId: string;
+    klageId: KlageId;
+    onSuccess: (klage: Klagebehandling) => void;
+}) =>
+    useFetchJsonFraApi<Klagebehandling, VurderKlageRequest>(
+        `/sak/${args.sakId}/klage/${args.klageId}/vurder`,
+        'PATCH',
+        { onSuccess: args.onSuccess },
+    );
+
+export const useFerdigstillOmgjortKlage = (args: {
+    sakId: string;
+    klageId: KlageId;
+    onSuccess: (klage: Klagebehandling) => void;
+}) =>
+    useFetchJsonFraApi<Klagebehandling>(
+        `/sak/${args.sakId}/klage/${args.klageId}/ferdigstill`,
+        'PUT',
+        { onSuccess: args.onSuccess },
     );
 
 export const useAvbrytKlagebehandling = (args: {
