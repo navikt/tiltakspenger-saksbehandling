@@ -7,6 +7,7 @@ import { SakId } from '~/types/Sak';
 import router from 'next/router';
 import { behandlingUrl } from '~/utils/urls';
 import { finnFetchFeilmelding } from '~/utils/feilmeldinger';
+import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
 
 type Props = {
     sakId: SakId;
@@ -17,7 +18,11 @@ export const OmgjørVedtakMenyvalg = ({ sakId, vedtak }: Props) => {
     const { opprettRevurdering, opprettRevurderingLaster, opprettRevurderingError } =
         useOpprettRevurdering(sakId);
 
-    const kanOmgjøre = !!vedtak.gyldigeKommandoer.OMGJØR;
+    const { omgjørStansToggle } = useFeatureToggles();
+
+    const kanOmgjøre =
+        !!vedtak.gyldigeKommandoer.OMGJØR &&
+        (vedtak.resultat !== RevurderingResultat.STANS || omgjørStansToggle);
 
     return (
         <>
