@@ -1,4 +1,4 @@
-import { ReactElement, useState } from 'react';
+import { ReactElement } from 'react';
 
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
 import { BodyShort, Button, Heading, HStack, LocalAlert, VStack } from '@navikt/ds-react';
@@ -13,7 +13,6 @@ import {
     LagreBrevtekstKlageRequest,
 } from '~/types/Klage';
 import KlageLayout, { KlageProvider, useKlage } from '../../layout';
-import Image from 'next/image';
 import { KlageSteg } from '../../../../../../utils/KlageLayoutUtils';
 import { CheckmarkCircleIcon, EnvelopeOpenIcon } from '@navikt/aksel-icons';
 import WarningCircleIcon from '~/icons/WarningCircleIcon';
@@ -28,6 +27,7 @@ import BrevForm from '~/components/forms/brev/BrevForm';
 import styles from './index.module.css';
 import { useFetchBlobFraApi, useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { kanBehandleKlage } from '~/utils/klageUtils';
+import router from 'next/router';
 
 type Props = {
     sak: SakProps;
@@ -57,7 +57,6 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
 });
 
 const BrevKlagePage = ({ sak }: Props) => {
-    const [harSendt, setHarSendt] = useState<boolean>(false);
     const { klage, setKlage } = useKlage();
 
     const form = useForm<BrevFormData>({
@@ -94,7 +93,7 @@ const BrevKlagePage = ({ sak }: Props) => {
         {
             onSuccess: (oppdatertKlage) => {
                 setKlage(oppdatertKlage!);
-                setHarSendt(true);
+                router.push(`/sak/${sak.saksnummer}`);
             },
         },
     );
@@ -187,17 +186,6 @@ const BrevKlagePage = ({ sak }: Props) => {
                         <Button disabled={!klage.kanIverksette || form.formState.isDirty}>
                             Ferdigstill behandling og send brev
                         </Button>
-                    )}
-
-                    {harSendt && (
-                        <Image
-                            src="/giphy.gif"
-                            alt="hund som gir deg et brev"
-                            aria-hidden
-                            width="400"
-                            height="400"
-                            priority
-                        />
                     )}
                 </VStack>
             </VStack>
