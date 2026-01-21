@@ -5,7 +5,7 @@ export enum OmgjøringÅrsakFormData {
     FEIL_ELLER_ENDRET_FAKTA = 'FEIL_ELLER_ENDRET_FAKTA',
     FEIL_LOVANVENDELSE = 'FEIL_LOVANVENDELSE',
     FEIL_REGELVERKSFORSTÅELSE = 'FEIL_REGELVERKSFORSTÅELSE',
-    PROSESSUEL_FEIL = 'PROSESSUEL_FEIL',
+    PROSESSUELL_FEIL = 'PROSESSUELL_FEIL',
     ANNET = 'ANNET',
 }
 
@@ -54,8 +54,8 @@ const omgjøringsårsakFormDataTilOmgjøringÅrsak = (
             return OmgjøringÅrsak.FEIL_LOVANVENDELSE;
         case OmgjøringÅrsakFormData.FEIL_REGELVERKSFORSTÅELSE:
             return OmgjøringÅrsak.FEIL_REGELVERKSFORSTAAELSE;
-        case OmgjøringÅrsakFormData.PROSESSUEL_FEIL:
-            return OmgjøringÅrsak.PROSESSUEL_FEIL;
+        case OmgjøringÅrsakFormData.PROSESSUELL_FEIL:
+            return OmgjøringÅrsak.PROSESSUELL_FEIL;
         case OmgjøringÅrsakFormData.ANNET:
             return OmgjøringÅrsak.ANNET;
     }
@@ -119,6 +119,6 @@ export const omgjøringÅrsakFormDataTilTekst: Record<OmgjøringÅrsakFormData, 
     [OmgjøringÅrsakFormData.FEIL_ELLER_ENDRET_FAKTA]: 'Feil eller endret fakta',
     [OmgjøringÅrsakFormData.FEIL_LOVANVENDELSE]: 'Feil lovanvendelse',
     [OmgjøringÅrsakFormData.FEIL_REGELVERKSFORSTÅELSE]: 'Feil regelverksforståelse',
-    [OmgjøringÅrsakFormData.PROSESSUEL_FEIL]: 'Prosessuel feil',
+    [OmgjøringÅrsakFormData.PROSESSUELL_FEIL]: 'Prosessuel feil',
     [OmgjøringÅrsakFormData.ANNET]: 'Annet',
 };
