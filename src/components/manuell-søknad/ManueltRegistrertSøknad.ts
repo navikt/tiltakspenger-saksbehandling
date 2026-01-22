@@ -18,12 +18,11 @@ export type SøknadstypeManueltRegistrertSøknad =
 
 export interface Tiltak {
     eksternDeltakelseId: string;
-    arrangør?: string;
     typeKode: string;
     typeNavn: string;
     deltakelseFraOgMed?: string;
     deltakelseTilOgMed?: string;
-    arrangørnavn?: string;
+    visningsnavn: string;
 }
 
 export type JaNeiSvar = 'JA' | 'NEI' | 'IKKE_BESVART';
