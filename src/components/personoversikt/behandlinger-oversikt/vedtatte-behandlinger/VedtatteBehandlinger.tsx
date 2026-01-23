@@ -2,23 +2,29 @@ import { Alert, Checkbox, CheckboxGroup, Heading, HStack, VStack } from '@navikt
 import { VedtatteBehandlingerTabell } from './VedtatteBehandlingerTabell';
 import { Rammebehandling } from '~/types/Rammebehandling';
 import { SakId } from '~/types/Sak';
-import { Omgjøringsgrad, Rammevedtak, RammevedtakMedBehandling } from '~/types/Rammevedtak';
+import { Omgjøringsgrad, Rammevedtak } from '~/types/Rammevedtak';
 import { useState } from 'react';
 import { classNames } from '~/utils/classNames';
 
 import style from './VedtatteBehandlinger.module.css';
+import { Klagevedtak } from '~/types/Klagevedtak';
+import { Klagebehandling } from '~/types/Klage';
 
 type Props = {
     sakId: SakId;
-    behandlinger: Rammebehandling[];
+    rammebehandlinger: Rammebehandling[];
     alleRammevedtak: Rammevedtak[];
+    klagebehandlinger: Klagebehandling[];
+    alleKlagevedtak: Klagevedtak[];
     className?: string;
 };
 
 export const VedtatteBehandlinger = ({
     sakId,
-    behandlinger,
+    rammebehandlinger,
     alleRammevedtak,
+    klagebehandlinger,
+    alleKlagevedtak,
     className,
 }: Props) => {
     const [visOmgjorte, setVisOmgjorte] = useState<Omgjøringsgrad[]>([
@@ -26,23 +32,34 @@ export const VedtatteBehandlinger = ({
         Omgjøringsgrad.DELVIS,
     ]);
 
-    if (alleRammevedtak.length === 0) {
+    if (alleRammevedtak.length === 0 && alleKlagevedtak.length === 0) {
         return null;
     }
 
-    const vedtakMedBehandling = alleRammevedtak
-        .map((vedtak) => {
-            return {
-                ...vedtak,
-                behandling: behandlinger.find(
-                    (behandling) => behandling.id === vedtak.behandlingId,
-                ),
-            };
-        })
-        .filter((vedtak): vedtak is RammevedtakMedBehandling => !!vedtak.behandling)
-        .toSorted((a, b) => b.opprettet.localeCompare(a.opprettet));
+    const rammevedtakMedBehandling = alleRammevedtak.map((vedtak) => {
+        return {
+            type: 'rammevedtak',
+            ...vedtak,
+            behandling: rammebehandlinger.find(
+                (behandling) => behandling.id === vedtak.behandlingId,
+            ),
+        };
+    }) as Array<{ type: 'rammevedtak' } & Rammevedtak & { behandling: Rammebehandling }>;
 
-    const antallVedtakUtenBehandling = alleRammevedtak.length - vedtakMedBehandling.length;
+    const klagevedtakMedBehandling = alleKlagevedtak.map((vedtak) => {
+        return {
+            type: 'klagevedtak',
+            ...vedtak,
+            behandling: klagebehandlinger.find((klage) => klage.id === vedtak.klagebehandlingId),
+        };
+    }) as Array<{ type: 'klagevedtak' } & Klagevedtak & { behandling: Klagebehandling }>;
+
+    const vedtakMedBehandling = [...rammevedtakMedBehandling, ...klagevedtakMedBehandling].toSorted(
+        (a, b) => b.opprettet.localeCompare(a.opprettet),
+    );
+
+    const antallVedtakUtenBehandling =
+        alleRammevedtak.length + alleKlagevedtak.length - vedtakMedBehandling.length;
 
     const antallHeltOmgjort = alleRammevedtak.reduce(
         (acc, vedtak) => (vedtak.omgjortGrad === Omgjøringsgrad.HELT ? acc + 1 : acc),
@@ -54,7 +71,12 @@ export const VedtatteBehandlinger = ({
     );
 
     const vedtakSomSkalVises = vedtakMedBehandling.filter(
-        (vedtak) => !vedtak.omgjortGrad || visOmgjorte.includes(vedtak.omgjortGrad),
+        (vedtak) =>
+            !(
+                vedtak.type === 'rammevedtak' &&
+                vedtak.omgjortGrad &&
+                !visOmgjorte.includes(vedtak.omgjortGrad)
+            ),
     );
 
     return (
@@ -96,10 +118,7 @@ export const VedtatteBehandlinger = ({
                     variant={'error'}
                 >{`Teknisk feil: ${antallVedtakUtenBehandling} vedtak mangler behandling på denne saken`}</Alert>
             )}
-            <VedtatteBehandlingerTabell
-                sakId={sakId}
-                rammevedtakMedBehandlinger={vedtakSomSkalVises}
-            />
+            <VedtatteBehandlingerTabell sakId={sakId} vedtakMedBehandling={vedtakSomSkalVises} />
         </VStack>
     );
 };

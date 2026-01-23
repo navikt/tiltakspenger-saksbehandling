@@ -1,25 +1,43 @@
 import { ActionMenu, Button, Table } from '@navikt/ds-react';
-import { behandlingResultatTilTag, finnBehandlingstypeTekst } from '~/utils/tekstformateringUtils';
+import {
+    behandlingResultatTilTag,
+    finnBehandlingstypeTekst,
+    klagebehandlingResultatTilText,
+} from '~/utils/tekstformateringUtils';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '~/utils/date';
-import { ChevronDownIcon } from '@navikt/aksel-icons';
+import { ChevronDownIcon, FileIcon } from '@navikt/aksel-icons';
 import MenyValgBehandleSøknadPåNytt from '~/components/behandlingmeny/menyvalg/MenyValgBehandleSøknadPåNytt';
 import SeBehandlingMenyvalg from '~/components/behandlingmeny/menyvalg/SeBehandlingMenyvalg';
 import React from 'react';
 import { behandlingUrl } from '~/utils/urls';
 import { SakId } from '~/types/Sak';
-import { SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
-import { Omgjøringsgrad, RammevedtakMedBehandling } from '~/types/Rammevedtak';
+import { Søknadsbehandling, SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
+import { Omgjøringsgrad, Rammevedtak } from '~/types/Rammevedtak';
 import { OmgjørVedtakMenyvalg } from '~/components/personoversikt/behandlinger-oversikt/vedtatte-behandlinger/OmgjørVedtakMenyvalg';
 import { classNames } from '~/utils/classNames';
 
 import style from './VedtatteBehandlinger.module.css';
+import { Rammebehandling } from '~/types/Rammebehandling';
+import { Klagebehandling } from '~/types/Klage';
+import { Klagevedtak } from '~/types/Klagevedtak';
+import Link from 'next/link';
 
 type Props = {
     sakId: SakId;
-    rammevedtakMedBehandlinger: RammevedtakMedBehandling[];
+    vedtakMedBehandling: VedtakMedBehandling[];
 };
 
-export const VedtatteBehandlingerTabell = ({ sakId, rammevedtakMedBehandlinger }: Props) => {
+type VedtattRammevedtakMedBehandling = { type: 'rammevedtak' } & Rammevedtak & {
+        behandling: Rammebehandling;
+    };
+
+type VedtattKlagevedtakMedBehandling = { type: 'klagevedtak' } & Klagevedtak & {
+        behandling: Klagebehandling;
+    };
+
+type VedtakMedBehandling = VedtattRammevedtakMedBehandling | VedtattKlagevedtakMedBehandling;
+
+export const VedtatteBehandlingerTabell = ({ vedtakMedBehandling }: Props) => {
     return (
         <Table>
             <Table.Header>
@@ -37,68 +55,25 @@ export const VedtatteBehandlingerTabell = ({ sakId, rammevedtakMedBehandlinger }
                 </Table.Row>
             </Table.Header>
             <Table.Body>
-                {rammevedtakMedBehandlinger.map((vedtak) => {
-                    const {
-                        id,
-                        behandling,
-                        opprinneligInnvilgetPerioder,
-                        gjeldendeInnvilgetPerioder,
-                        opprettet,
-                        omgjortGrad,
-                    } = vedtak;
-                    const { type, resultat } = behandling;
+                {vedtakMedBehandling.map((vedtak) => {
+                    const { type } = vedtak;
+                    switch (type) {
+                        case 'rammevedtak':
+                            return (
+                                <RammevedtakMedBehandlingRad key={vedtak.id} rammevedtak={vedtak} />
+                            );
 
-                    return (
-                        <Table.Row
-                            shadeOnHover={false}
-                            className={classNames(omgjortGrad && omgjortGradStyle[omgjortGrad])}
-                            key={id}
-                        >
-                            <Table.DataCell>{finnBehandlingstypeTekst[type]}</Table.DataCell>
-                            <Table.DataCell>{behandlingResultatTilTag[resultat]}</Table.DataCell>
-                            <Table.DataCell>{formaterTidspunkt(opprettet)}</Table.DataCell>
-                            <Table.DataCell>
-                                {opprinneligInnvilgetPerioder
-                                    .map((periode) => periodeTilFormatertDatotekst(periode))
-                                    .join(', ')}
-                            </Table.DataCell>
-                            <Table.DataCell>
-                                {gjeldendeInnvilgetPerioder
-                                    .map((periode) => periodeTilFormatertDatotekst(periode))
-                                    .join(', ')}
-                            </Table.DataCell>
-                            <Table.DataCell>{vedtak.saksbehandler}</Table.DataCell>
-                            <Table.DataCell>{vedtak.beslutter}</Table.DataCell>
-                            <Table.DataCell align={'right'}>
-                                <ActionMenu>
-                                    <ActionMenu.Trigger>
-                                        <Button
-                                            variant="secondary"
-                                            iconPosition="right"
-                                            icon={<ChevronDownIcon title="Menyvalg" />}
-                                            size="small"
-                                        >
-                                            {'Velg'}
-                                        </Button>
-                                    </ActionMenu.Trigger>
-                                    <ActionMenu.Content>
-                                        {resultat === SøknadsbehandlingResultat.AVSLAG ? (
-                                            <MenyValgBehandleSøknadPåNytt
-                                                sakId={sakId}
-                                                søknadId={behandling.søknad.id}
-                                            />
-                                        ) : (
-                                            <OmgjørVedtakMenyvalg vedtak={vedtak} sakId={sakId} />
-                                        )}
-                                        <ActionMenu.Divider />
-                                        <SeBehandlingMenyvalg
-                                            behandlingHref={behandlingUrl(behandling)}
-                                        />
-                                    </ActionMenu.Content>
-                                </ActionMenu>
-                            </Table.DataCell>
-                        </Table.Row>
-                    );
+                        case 'klagevedtak':
+                            return (
+                                <KlagevedtakMedBehandlingRad
+                                    key={vedtak.klagevedtakId}
+                                    klagevedtak={vedtak}
+                                />
+                            );
+                    }
+
+                    //hvis denne fjernes vil ikke funksjonen få compile error dersom en case mangler
+                    throw type satisfies never;
                 })}
             </Table.Body>
         </Table>
@@ -108,4 +83,106 @@ export const VedtatteBehandlingerTabell = ({ sakId, rammevedtakMedBehandlinger }
 const omgjortGradStyle: Record<Omgjøringsgrad | string, string> = {
     DELVIS: style.delvisOmgjortBg,
     HELT: style.heltOmgjortBg,
+};
+
+const RammevedtakMedBehandlingRad = (props: { rammevedtak: VedtattRammevedtakMedBehandling }) => {
+    return (
+        <Table.Row
+            shadeOnHover={false}
+            className={classNames(
+                props.rammevedtak.omgjortGrad && omgjortGradStyle[props.rammevedtak.omgjortGrad],
+            )}
+            key={props.rammevedtak.id}
+        >
+            <Table.DataCell>
+                {finnBehandlingstypeTekst[props.rammevedtak.behandling.type]}
+            </Table.DataCell>
+            <Table.DataCell>{behandlingResultatTilTag[props.rammevedtak.resultat]}</Table.DataCell>
+            <Table.DataCell>{formaterTidspunkt(props.rammevedtak.opprettet)}</Table.DataCell>
+            <Table.DataCell>
+                {props.rammevedtak.opprinneligInnvilgetPerioder
+                    .map((periode) => periodeTilFormatertDatotekst(periode))
+                    .join(', ')}
+            </Table.DataCell>
+            <Table.DataCell>
+                {props.rammevedtak.gjeldendeInnvilgetPerioder
+                    .map((periode) => periodeTilFormatertDatotekst(periode))
+                    .join(', ')}
+            </Table.DataCell>
+            <Table.DataCell>{props.rammevedtak.saksbehandler}</Table.DataCell>
+            <Table.DataCell>{props.rammevedtak.beslutter}</Table.DataCell>
+            <Table.DataCell align={'right'}>
+                <ActionMenu>
+                    <ActionMenu.Trigger>
+                        <Button
+                            variant="secondary"
+                            iconPosition="right"
+                            icon={<ChevronDownIcon title="Menyvalg" />}
+                            size="small"
+                        >
+                            {'Velg'}
+                        </Button>
+                    </ActionMenu.Trigger>
+                    <ActionMenu.Content>
+                        {props.rammevedtak.resultat === SøknadsbehandlingResultat.AVSLAG ? (
+                            <MenyValgBehandleSøknadPåNytt
+                                sakId={props.rammevedtak.behandling.sakId}
+                                søknadId={
+                                    (props.rammevedtak.behandling as Søknadsbehandling).søknad.id
+                                }
+                            />
+                        ) : (
+                            <OmgjørVedtakMenyvalg
+                                vedtak={props.rammevedtak}
+                                sakId={props.rammevedtak.behandling.sakId}
+                            />
+                        )}
+                        <ActionMenu.Divider />
+                        <SeBehandlingMenyvalg
+                            behandlingHref={behandlingUrl(props.rammevedtak.behandling)}
+                        />
+                    </ActionMenu.Content>
+                </ActionMenu>
+            </Table.DataCell>
+        </Table.Row>
+    );
+};
+
+const KlagevedtakMedBehandlingRad = (props: { klagevedtak: VedtattKlagevedtakMedBehandling }) => {
+    return (
+        <Table.Row shadeOnHover={false} key={props.klagevedtak.klagevedtakId}>
+            <Table.DataCell>Klage</Table.DataCell>
+            <Table.DataCell>
+                {klagebehandlingResultatTilText[props.klagevedtak.resultat]}
+            </Table.DataCell>
+            <Table.DataCell>{formaterTidspunkt(props.klagevedtak.opprettet)}</Table.DataCell>
+            <Table.DataCell>-</Table.DataCell>
+            <Table.DataCell>-</Table.DataCell>
+            <Table.DataCell>{props.klagevedtak.behandling.saksbehandler}</Table.DataCell>
+            <Table.DataCell>-</Table.DataCell>
+            <Table.DataCell align={'right'}>
+                <ActionMenu>
+                    <ActionMenu.Trigger>
+                        <Button
+                            variant="secondary"
+                            iconPosition="right"
+                            icon={<ChevronDownIcon title="Menyvalg" />}
+                            size="small"
+                        >
+                            Velg
+                        </Button>
+                    </ActionMenu.Trigger>
+                    <ActionMenu.Content>
+                        <ActionMenu.Item
+                            as={Link}
+                            href={`/sak/${props.klagevedtak.behandling.saksnummer}/klage/${props.klagevedtak.behandling.id}/formkrav`}
+                            icon={<FileIcon aria-hidden />}
+                        >
+                            Se vedtak
+                        </ActionMenu.Item>
+                    </ActionMenu.Content>
+                </ActionMenu>
+            </Table.DataCell>
+        </Table.Row>
+    );
 };

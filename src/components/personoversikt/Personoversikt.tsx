@@ -34,6 +34,7 @@ export const Personoversikt = () => {
         klageBehandlinger,
         meldeperiodeKjeder,
         alleRammevedtak,
+        alleKlagevedtak,
     } = sak;
 
     const { meldeperiodeKjederIkkeKlare, meldeperiodeKjederKanBehandles } = Object.groupBy(
@@ -86,8 +87,10 @@ export const Personoversikt = () => {
 
                 <VedtatteBehandlinger
                     sakId={sakId}
-                    behandlinger={behandlinger}
+                    rammebehandlinger={behandlinger}
                     alleRammevedtak={alleRammevedtak}
+                    klagebehandlinger={klageBehandlinger}
+                    alleKlagevedtak={alleKlagevedtak}
                     className={styles.tabellwrapper}
                 />
 

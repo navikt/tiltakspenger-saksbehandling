@@ -5,6 +5,7 @@ import { UtbetalingstidslinjePeriode } from './Utbetaling';
 import { Rammebehandling } from './Rammebehandling';
 import { TidslinjeRammevedtak } from './TidslinjeRammevedtak';
 import { Klagebehandling } from './Klage';
+import { Klagevedtak } from './Klagevedtak';
 
 export type SakId = `sak_${string}`;
 
@@ -22,6 +23,7 @@ export type SakProps = {
     innvilgetTidslinje: TidslinjeRammevedtak;
     // Alle rammevedtak på saken med opprinnelige perioder
     alleRammevedtak: Rammevedtak[];
+    alleKlagevedtak: Klagevedtak[];
     utbetalingstidslinje: UtbetalingstidslinjePeriode[];
     kanSendeInnHelgForMeldekort: boolean;
 };
