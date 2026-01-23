@@ -82,7 +82,7 @@ const Omgjøringsresultat = ({ klage }: Props) => {
 ResultatPage.getLayout = function getLayout(page: ReactElement) {
     const { sak, klage } = page.props as Props;
     return (
-        <KlageProvider klage={klage}>
+        <KlageProvider initialKlage={klage}>
             <KlageLayout saksnummer={sak.saksnummer} activeTab={KlageSteg.RESULTAT}>
                 {page}
             </KlageLayout>

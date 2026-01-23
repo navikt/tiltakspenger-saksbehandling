@@ -1,7 +1,7 @@
 import { createContext, ReactElement, useContext, useEffect, useState } from 'react';
 import { SakProps } from '~/types/Sak';
 import useSWR from 'swr';
-import Error from 'next/error';
+import NextError from 'next/error';
 import { PersonaliaHeader } from '~/components/personaliaheader/PersonaliaHeader';
 import styles from './Layout.module.css';
 import { BodyShort, Heading, HStack, Loader, Tabs, VStack } from '@navikt/ds-react';
@@ -27,18 +27,23 @@ type Props = {
     activeTab: KlageSteg;
 };
 
-type KlageContext = {
+type OptionalKlageContext = {
     klage: Nullable<Klagebehandling>;
     setKlage: React.Dispatch<React.SetStateAction<Nullable<Klagebehandling>>>;
 };
 
-const Context = createContext<KlageContext>({} as KlageContext);
+type KlageContext = {
+    klage: Klagebehandling;
+    setKlage: React.Dispatch<React.SetStateAction<Klagebehandling>>;
+};
+
+const Context = createContext<OptionalKlageContext>({} as OptionalKlageContext);
 
 type ContextProps = React.PropsWithChildren<{
-    klage: Nullable<Klagebehandling>;
+    initialKlage: Nullable<Klagebehandling>;
 }>;
 
-export const KlageProvider = ({ klage: initialKlage, children }: ContextProps) => {
+export const KlageProvider = ({ initialKlage, children }: ContextProps) => {
     const [klage, setKlage] = useState<Nullable<Klagebehandling>>(initialKlage);
     useEffect(() => {
         setKlage(initialKlage);
@@ -56,17 +61,29 @@ export const KlageProvider = ({ klage: initialKlage, children }: ContextProps) =
     );
 };
 
-export const useKlage = () => {
+export const useOptionalKlage = () => {
     return useContext(Context);
 };
+
+export function useKlage(): KlageContext {
+    const klageContext = useContext(Context);
+
+    if (!klageContext.klage) {
+        throw new Error('useKlage() was called outside of a Klage context where klage exists');
+    }
+
+    return {
+        klage: klageContext.klage,
+        setKlage: klageContext.setKlage as React.Dispatch<React.SetStateAction<Klagebehandling>>,
+    };
+}
 
 /**
  * Layouts i /pages er strukturelle komponenter og ikke reaktive. Derfor må vi bruke en Context for å dele klagebehandlingsdataene
  * Dette er for at layouten skal oppdatere seg når klagebehandlingsdataene endres i de ulike stegene
- *
  */
 const KlageLayout = ({ children, saksnummer, activeTab }: Props) => {
-    const { klage } = useKlage();
+    const { klage } = useOptionalKlage();
 
     const { data, error, isLoading } = useSWR<SakProps>(
         `/sak/${saksnummer}`,
@@ -81,7 +98,7 @@ const KlageLayout = ({ children, saksnummer, activeTab }: Props) => {
         );
 
     if (error) {
-        return <Error statusCode={500} />;
+        return <NextError statusCode={500} />;
     }
 
     return (

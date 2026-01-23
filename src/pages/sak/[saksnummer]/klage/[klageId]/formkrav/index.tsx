@@ -27,7 +27,7 @@ import AvsluttBehandlingModal from '~/components/modaler/AvsluttBehandlingModal'
 
 type Props = {
     sak: SakProps;
-    klage: Klagebehandling;
+    initialKlage: Klagebehandling;
 };
 
 export const getServerSideProps = pageWithAuthentication(async (context) => {
@@ -39,9 +39,9 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
         throw e;
     });
 
-    const klage = sak.klageBehandlinger.find((klage) => klage.id === klageId);
+    const initialKlage = sak.klageBehandlinger.find((klage) => klage.id === klageId);
 
-    if (!klage) {
+    if (!initialKlage) {
         logger.error(`Fant ikke klage ${klageId} på sak ${sak.sakId}`);
 
         return {
@@ -49,11 +49,12 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
         };
     }
 
-    return { props: { sak, klage } };
+    return { props: { sak, initialKlage } };
 });
 
-const FormkravKlagePage = ({ sak, klage }: Props) => {
-    const { setKlage } = useKlage();
+const FormkravKlagePage = ({ sak }: Props) => {
+    const { klage, setKlage } = useKlage();
+
     const { personopplysninger } = useHentPersonopplysninger(sak.sakId);
     const [vilAvslutteBehandlingModal, setVilAvslutteBehandlingModal] = useState(false);
     const [formTilstand, setFormTilstand] = useState<'REDIGERER' | 'LAGRET'>('LAGRET');
@@ -197,10 +198,10 @@ const FormkravKlagePage = ({ sak, klage }: Props) => {
 };
 
 FormkravKlagePage.getLayout = function getLayout(page: ReactElement) {
-    const { sak, klage } = page.props as Props;
+    const { sak, initialKlage: klage } = page.props as Props;
 
     return (
-        <KlageProvider klage={klage}>
+        <KlageProvider initialKlage={klage}>
             <KlageLayout saksnummer={sak.saksnummer} activeTab={KlageSteg.FORMKRAV}>
                 {page}
             </KlageLayout>

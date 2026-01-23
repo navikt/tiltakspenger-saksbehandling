@@ -30,7 +30,7 @@ import Link from 'next/link';
 
 type Props = {
     sak: SakProps;
-    klage: Klagebehandling;
+    initialKlage: Klagebehandling;
 };
 
 export const getServerSideProps = pageWithAuthentication(async (context) => {
@@ -42,9 +42,9 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
         throw e;
     });
 
-    const klage = sak.klageBehandlinger.find((klage) => klage.id === klageId);
+    const initialKlage = sak.klageBehandlinger.find((klage) => klage.id === klageId);
 
-    if (!klage) {
+    if (!initialKlage) {
         logger.error(`Fant ikke klage ${klageId} på sak ${sak.sakId}`);
 
         return {
@@ -52,11 +52,11 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
         };
     }
 
-    return { props: { sak, klage } };
+    return { props: { sak, initialKlage } };
 });
 
-const VurderingKlagePage = ({ sak, klage }: Props) => {
-    const { setKlage } = useKlage();
+const VurderingKlagePage = ({ sak }: Props) => {
+    const { klage, setKlage } = useKlage();
     const [vilAvslutteBehandlingModal, setVilAvslutteBehandlingModal] = useState(false);
     const [formTilstand, setFormTilstand] = useState<'REDIGERER' | 'LAGRET'>(
         !kanBehandleKlage(klage) ? 'LAGRET' : 'REDIGERER',
@@ -249,9 +249,9 @@ const VurderingKlagePage = ({ sak, klage }: Props) => {
 };
 
 VurderingKlagePage.getLayout = function getLayout(page: ReactElement) {
-    const { sak, klage } = page.props as Props;
+    const { sak, initialKlage: klage } = page.props as Props;
     return (
-        <KlageProvider klage={klage}>
+        <KlageProvider initialKlage={klage}>
             <KlageLayout saksnummer={sak.saksnummer} activeTab={KlageSteg.VURDERING}>
                 {page}
             </KlageLayout>

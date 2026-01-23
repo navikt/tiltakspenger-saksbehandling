@@ -31,7 +31,7 @@ import router from 'next/router';
 
 type Props = {
     sak: SakProps;
-    klage: Klagebehandling;
+    initialKlage: Klagebehandling;
 };
 
 export const getServerSideProps = pageWithAuthentication(async (context) => {
@@ -43,9 +43,9 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
         throw e;
     });
 
-    const klage = sak.klageBehandlinger.find((klage) => klage.id === klageId);
+    const initialKlage = sak.klageBehandlinger.find((klage) => klage.id === klageId);
 
-    if (!klage) {
+    if (!initialKlage) {
         logger.error(`Fant ikke klage ${klageId} på sak ${sak.sakId}`);
 
         return {
@@ -53,11 +53,11 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
         };
     }
 
-    return { props: { sak, klage } };
+    return { props: { sak, initialKlage } };
 });
 
-const BrevKlagePage = ({ sak, klage }: Props) => {
-    const { setKlage } = useKlage();
+const BrevKlagePage = ({ sak }: Props) => {
+    const { klage, setKlage } = useKlage();
 
     const form = useForm<BrevFormData>({
         defaultValues: klageTilBrevFormData(klage),
@@ -194,9 +194,9 @@ const BrevKlagePage = ({ sak, klage }: Props) => {
 };
 
 BrevKlagePage.getLayout = function getLayout(page: ReactElement) {
-    const { sak, klage } = page.props as Props;
+    const { sak, initialKlage: klage } = page.props as Props;
     return (
-        <KlageProvider klage={klage}>
+        <KlageProvider initialKlage={klage}>
             <KlageLayout saksnummer={sak.saksnummer} activeTab={KlageSteg.BREV}>
                 {page}
             </KlageLayout>
