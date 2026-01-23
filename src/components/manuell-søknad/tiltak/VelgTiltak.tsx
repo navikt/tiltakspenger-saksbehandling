@@ -36,8 +36,7 @@ export const VelgTiltak = ({ sakId, spørsmålName, legend }: Props) => {
             tiltak.deltakelseFraOgMed && tiltak.deltakelseTilOgMed
                 ? ` (${formaterDatotekst(tiltak.deltakelseFraOgMed)} - ${formaterDatotekst(tiltak.deltakelseTilOgMed)})`
                 : '';
-        const arrangørNavn = tiltak.arrangørnavn ? ` - ${tiltak.arrangørnavn}` : '';
-        return `${tiltak.typeNavn}${arrangørNavn}${periodeTekst}`;
+        return `${tiltak.visningsnavn}${periodeTekst}`;
     };
 
     const søknadsperiode = useWatch({ name: 'manueltSattSøknadsperiode' }) as Periode;
