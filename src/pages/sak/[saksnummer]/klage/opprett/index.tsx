@@ -109,7 +109,7 @@ const OprettKlagePage = ({ sak }: Props) => {
 OprettKlagePage.getLayout = function getLayout(page: ReactElement) {
     const { sak } = page.props as Props;
     return (
-        <KlageLayout saksnummer={sak.saksnummer} activeTab={KlageSteg.FORMKRAV} klage={null}>
+        <KlageLayout saksnummer={sak.saksnummer} activeTab={KlageSteg.FORMKRAV}>
             {page}
         </KlageLayout>
     );

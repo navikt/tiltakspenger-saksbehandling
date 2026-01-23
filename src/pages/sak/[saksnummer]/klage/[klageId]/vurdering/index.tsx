@@ -252,7 +252,7 @@ VurderingKlagePage.getLayout = function getLayout(page: ReactElement) {
     const { sak, klage } = page.props as Props;
     return (
         <KlageProvider klage={klage}>
-            <KlageLayout saksnummer={sak.saksnummer} activeTab={KlageSteg.VURDERING} klage={klage}>
+            <KlageLayout saksnummer={sak.saksnummer} activeTab={KlageSteg.VURDERING}>
                 {page}
             </KlageLayout>
         </KlageProvider>

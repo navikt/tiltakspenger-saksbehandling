@@ -56,8 +56,8 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
     return { props: { sak, klage } };
 });
 
-const BrevKlagePage = ({ sak }: Props) => {
-    const { klage, setKlage } = useKlage();
+const BrevKlagePage = ({ sak, klage }: Props) => {
+    const { setKlage } = useKlage();
 
     const form = useForm<BrevFormData>({
         defaultValues: klageTilBrevFormData(klage),
@@ -197,7 +197,7 @@ BrevKlagePage.getLayout = function getLayout(page: ReactElement) {
     const { sak, klage } = page.props as Props;
     return (
         <KlageProvider klage={klage}>
-            <KlageLayout saksnummer={sak.saksnummer} activeTab={KlageSteg.BREV} klage={klage}>
+            <KlageLayout saksnummer={sak.saksnummer} activeTab={KlageSteg.BREV}>
                 {page}
             </KlageLayout>
         </KlageProvider>

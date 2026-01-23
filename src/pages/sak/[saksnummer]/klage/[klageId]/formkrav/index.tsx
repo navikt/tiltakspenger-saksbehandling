@@ -17,7 +17,7 @@ import {
     klageTilFormkravFormData,
 } from '~/components/forms/formkrav/FormkravFormUtils';
 import { Klagebehandling, KlageId } from '~/types/Klage';
-import KlageLayout, { KlageProvider } from '../../layout';
+import KlageLayout, { KlageProvider, useKlage } from '../../layout';
 import { KlageSteg } from '../../../../../../utils/KlageLayoutUtils';
 import { CheckmarkCircleIcon, PencilIcon, TrashIcon } from '@navikt/aksel-icons';
 import { useHentPersonopplysninger } from '~/components/personaliaheader/useHentPersonopplysninger';
@@ -53,6 +53,7 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
 });
 
 const FormkravKlagePage = ({ sak, klage }: Props) => {
+    const { setKlage } = useKlage();
     const { personopplysninger } = useHentPersonopplysninger(sak.sakId);
     const [vilAvslutteBehandlingModal, setVilAvslutteBehandlingModal] = useState(false);
     const [formTilstand, setFormTilstand] = useState<'REDIGERER' | 'LAGRET'>('LAGRET');
@@ -66,7 +67,8 @@ const FormkravKlagePage = ({ sak, klage }: Props) => {
         sakId: sak.sakId,
         klageId: klage.id,
         onSuccess: (klage) => {
-            form.reset(klageTilFormkravFormData(klage!));
+            setKlage(klage);
+            form.reset(klageTilFormkravFormData(klage));
             setFormTilstand('LAGRET');
         },
     });
@@ -196,9 +198,10 @@ const FormkravKlagePage = ({ sak, klage }: Props) => {
 
 FormkravKlagePage.getLayout = function getLayout(page: ReactElement) {
     const { sak, klage } = page.props as Props;
+
     return (
         <KlageProvider klage={klage}>
-            <KlageLayout saksnummer={sak.saksnummer} activeTab={KlageSteg.FORMKRAV} klage={klage}>
+            <KlageLayout saksnummer={sak.saksnummer} activeTab={KlageSteg.FORMKRAV}>
                 {page}
             </KlageLayout>
         </KlageProvider>

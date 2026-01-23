@@ -25,22 +25,21 @@ type Props = {
     children: ReactElement;
     saksnummer: string;
     activeTab: KlageSteg;
-    klage: Nullable<Klagebehandling>;
 };
 
 type KlageContext = {
-    klage: Klagebehandling;
-    setKlage: React.Dispatch<React.SetStateAction<Klagebehandling>>;
+    klage: Nullable<Klagebehandling>;
+    setKlage: React.Dispatch<React.SetStateAction<Nullable<Klagebehandling>>>;
 };
 
 const Context = createContext<KlageContext>({} as KlageContext);
 
 type ContextProps = React.PropsWithChildren<{
-    klage: Klagebehandling;
+    klage: Nullable<Klagebehandling>;
 }>;
 
 export const KlageProvider = ({ klage: initialKlage, children }: ContextProps) => {
-    const [klage, setKlage] = useState<Klagebehandling>(initialKlage);
+    const [klage, setKlage] = useState<Nullable<Klagebehandling>>(initialKlage);
     useEffect(() => {
         setKlage(initialKlage);
     }, [initialKlage]);
@@ -48,8 +47,8 @@ export const KlageProvider = ({ klage: initialKlage, children }: ContextProps) =
     return (
         <Context.Provider
             value={{
-                klage,
-                setKlage,
+                klage: klage,
+                setKlage: setKlage,
             }}
         >
             {children}
@@ -61,7 +60,14 @@ export const useKlage = () => {
     return useContext(Context);
 };
 
-const KlageLayout = ({ children, saksnummer, activeTab, klage }: Props) => {
+/**
+ * Layouts i /pages er strukturelle komponenter og ikke reaktive. Derfor må vi bruke en Context for å dele klagebehandlingsdataene
+ * Dette er for at layouten skal oppdatere seg når klagebehandlingsdataene endres i de ulike stegene
+ *
+ */
+const KlageLayout = ({ children, saksnummer, activeTab }: Props) => {
+    const { klage } = useKlage();
+
     const { data, error, isLoading } = useSWR<SakProps>(
         `/sak/${saksnummer}`,
         fetchJsonFraApiClientSide,
