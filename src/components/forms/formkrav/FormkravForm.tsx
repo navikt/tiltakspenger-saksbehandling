@@ -119,6 +119,7 @@ const FormkravForm = (props: {
                     name="erUnntakForKlagefrist"
                     render={({ field, fieldState }) => (
                         <RadioGroup
+                            className={styles.erUnntakForKlagefristRadioGroup}
                             {...field}
                             legend="Er unntak for klagefristen oppfylt?"
                             size="small"

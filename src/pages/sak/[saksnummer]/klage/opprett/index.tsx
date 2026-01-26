@@ -46,6 +46,7 @@ const OprettKlagePage = ({ sak }: Props) => {
             erKlagerPartISaken: null,
             klagesDetPåKonkreteElementer: null,
             erKlagefristOverholdt: null,
+            erUnntakForKlagefrist: null,
             erKlagenSignert: null,
         },
         resolver: formkravValidation,
