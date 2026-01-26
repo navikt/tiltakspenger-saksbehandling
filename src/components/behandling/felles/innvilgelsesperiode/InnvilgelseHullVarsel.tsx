@@ -1,7 +1,6 @@
 import { Alert, BodyShort } from '@navikt/ds-react';
 import { forrigeDag, nesteDag, periodeTilFormatertDatotekst } from '~/utils/date';
 import { Periode } from '~/types/Periode';
-import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
 import { overlappendePeriode, perioderErSammenhengende } from '~/utils/periode';
 import { useSak } from '~/context/sak/SakContext';
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
@@ -16,8 +15,6 @@ type Props = {
 export const InnvilgelseHullVarsel = ({ forrigePeriode, nestePeriode }: Props) => {
     const { behandling } = useBehandling();
     const { sak } = useSak();
-
-    const { innvilgelseMedHullToggle } = useFeatureToggles();
 
     const hullMellomPeriodene = nestePeriode &&
         !perioderErSammenhengende(forrigePeriode, nestePeriode) && {
@@ -38,11 +35,7 @@ export const InnvilgelseHullVarsel = ({ forrigePeriode, nestePeriode }: Props) =
     const kanOpphøre = behandling.resultat === RevurderingResultat.OMGJØRING;
 
     return (
-        <Alert
-            variant={!innvilgelseMedHullToggle || (erOpphør && !kanOpphøre) ? 'error' : 'warning'}
-            size={'small'}
-            inline={true}
-        >
+        <Alert variant={erOpphør && !kanOpphøre ? 'error' : 'warning'} size={'small'} inline={true}>
             <BodyShort
                 size={'small'}
                 spacing={erOpphør}

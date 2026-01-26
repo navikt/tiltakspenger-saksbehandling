@@ -14,7 +14,6 @@ import {
     useSøknadsbehandlingSkjema,
 } from '~/components/behandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
 import { Nullable } from '~/types/UtilTypes';
-import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
 import { useSak } from '~/context/sak/SakContext';
 
 export const SøknadsbehandlingSend = () => {
@@ -22,17 +21,10 @@ export const SøknadsbehandlingSend = () => {
     const { behandling } = useSøknadsbehandling();
     const skjema = useSøknadsbehandlingSkjema();
 
-    const { innvilgelseMedHullToggle } = useFeatureToggles();
-
     const lagringProps = useHentBehandlingLagringProps({
         hentDTO: () => tilDTO(skjema),
         skjema: skjema,
-        validerSkjema: søknadsbehandlingValidering(
-            sak,
-            behandling,
-            skjema,
-            innvilgelseMedHullToggle,
-        ),
+        validerSkjema: søknadsbehandlingValidering(sak, behandling, skjema),
     });
 
     return <BehandlingSendOgGodkjenn behandling={behandling} lagringProps={lagringProps} />;

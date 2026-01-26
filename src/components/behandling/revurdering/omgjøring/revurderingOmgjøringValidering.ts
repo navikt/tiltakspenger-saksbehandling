@@ -15,7 +15,6 @@ export const revurderingOmgjøringValidering = (
     behandling: RevurderingOmgjøring,
     skjema: RevurderingOmgjøringState,
     sak: SakProps,
-    kanHaHull: boolean,
 ): ValideringResultat => {
     const validering: ValideringResultat = {
         errors: [],
@@ -29,7 +28,6 @@ export const revurderingOmgjøringValidering = (
         behandling,
         skjema.innvilgelse,
         sisteSøknad,
-        kanHaHull,
     );
 
     validering.errors.push(...innvilgelseValidering.errors);

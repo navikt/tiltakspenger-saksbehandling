@@ -9,24 +9,16 @@ import {
 } from '~/components/behandling/context/revurdering/revurderingInnvilgelseSkjemaContext';
 import { useSak } from '~/context/sak/SakContext';
 import { RevurderingBrevHjelpetekst } from '~/components/behandling/revurdering/felles/RevurderingBrevHjelpetekst';
-import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
 
 export const RevurderingInnvilgelseBrev = () => {
     const { behandling } = useRevurderingBehandling();
     const skjema = useRevurderingInnvilgelseSkjema();
     const { sak } = useSak();
 
-    const { innvilgelseMedHullToggle } = useFeatureToggles();
-
     return (
         <Vedtaksbrev
             header={'Vedtaksbrev for revurdering av innvilgelse'}
-            validering={revurderingInnvilgelseValidering(
-                behandling,
-                skjema,
-                sak,
-                innvilgelseMedHullToggle,
-            )}
+            validering={revurderingInnvilgelseValidering(behandling, skjema, sak)}
             hentDto={() => tilForhåndsvisningDTO(skjema)}
             hjelpetekst={<RevurderingBrevHjelpetekst />}
         />

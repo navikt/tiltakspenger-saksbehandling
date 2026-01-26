@@ -10,7 +10,6 @@ export const søknadsbehandlingValidering =
         sak: SakProps,
         behandling: Søknadsbehandling,
         skjema: BehandlingSkjemaContext,
-        kanHaHull: boolean,
     ): ValideringFunc =>
     (type): ValideringResultat => {
         const validering: ValideringResultat = {
@@ -34,7 +33,6 @@ export const søknadsbehandlingValidering =
                 behandling,
                 skjema.innvilgelse,
                 behandling.søknad,
-                kanHaHull,
             );
             validering.errors.push(...innvilgelseValidering.errors);
             validering.warnings.push(...innvilgelseValidering.warnings);

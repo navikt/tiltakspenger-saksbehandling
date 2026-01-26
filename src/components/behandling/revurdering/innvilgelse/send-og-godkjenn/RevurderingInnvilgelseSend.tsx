@@ -9,20 +9,16 @@ import {
 } from '~/components/behandling/context/revurdering/revurderingInnvilgelseSkjemaContext';
 import { Nullable } from '~/types/UtilTypes';
 import { useSak } from '~/context/sak/SakContext';
-import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
 
 export const RevurderingInnvilgelseSend = () => {
     const { behandling } = useRevurderingBehandling();
     const vedtak = useRevurderingInnvilgelseSkjema();
     const { sak } = useSak();
 
-    const { innvilgelseMedHullToggle } = useFeatureToggles();
-
     const lagringProps = useHentBehandlingLagringProps({
         hentDTO: () => tilDTO(vedtak),
         skjema: vedtak,
-        validerSkjema: () =>
-            revurderingInnvilgelseValidering(behandling, vedtak, sak, innvilgelseMedHullToggle),
+        validerSkjema: () => revurderingInnvilgelseValidering(behandling, vedtak, sak),
     });
 
     return <BehandlingSendOgGodkjenn behandling={behandling} lagringProps={lagringProps} />;
