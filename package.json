@@ -17,7 +17,7 @@
     },
     "dependencies": {
         "@navikt/aksel-icons": "7.35.0",
-        "@navikt/ds-css": "7.35.0",
+        "@navikt/ds-css": "7.36.0",
         "@navikt/ds-react": "7.35.0",
         "@navikt/ds-tokens": "7.35.0",
         "@navikt/next-logger": "4.4.1",
