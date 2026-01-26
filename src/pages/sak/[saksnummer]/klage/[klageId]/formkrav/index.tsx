@@ -21,7 +21,11 @@ import KlageLayout, { KlageProvider, useKlage } from '../../layout';
 import { KlageSteg } from '../../../../../../utils/KlageLayoutUtils';
 import { CheckmarkCircleIcon, PencilIcon, TrashIcon } from '@navikt/aksel-icons';
 import { useHentPersonopplysninger } from '~/components/personaliaheader/useHentPersonopplysninger';
-import { finnUrlForKlageSteg, kanBehandleKlage } from '~/utils/klageUtils';
+import {
+    erKlageUnderAktivOmgjøring,
+    finnUrlForKlageSteg,
+    kanBehandleKlage,
+} from '~/utils/klageUtils';
 import { useAvbrytKlagebehandling, useOppdaterFormkrav } from '~/api/KlageApi';
 import AvsluttBehandlingModal from '~/components/modaler/AvsluttBehandlingModal';
 
@@ -96,7 +100,7 @@ const FormkravKlagePage = ({ sak }: Props) => {
                         <Heading size="small">Formkrav</Heading>
                     </HStack>
                     <FormkravForm
-                        readonly={formTilstand === 'LAGRET'}
+                        readonly={formTilstand === 'LAGRET' || erKlageUnderAktivOmgjøring(klage)}
                         fnrFraPersonopplysninger={personopplysninger?.fnr ?? null}
                         control={form.control}
                         vedtakOgBehandling={
@@ -142,7 +146,7 @@ const FormkravKlagePage = ({ sak }: Props) => {
                         <Button loading={oppdaterFormkrav.isMutating}>Lagre</Button>
                     ) : (
                         <HStack gap="4">
-                            {kanBehandleKlage(klage) && (
+                            {kanBehandleKlage(klage) && !erKlageUnderAktivOmgjøring(klage) && (
                                 <>
                                     <Button
                                         type="button"

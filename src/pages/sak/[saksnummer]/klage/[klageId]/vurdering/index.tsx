@@ -9,6 +9,7 @@ import KlageLayout, { KlageProvider, useKlage } from '../../layout';
 import { useForm } from 'react-hook-form';
 import VurderingForm from '~/components/forms/klage-vurdering/VurderingForm';
 import {
+    harKlagevurderingsstegUtfylt,
     klagebehandlingTilVurderingFormData,
     VurderingFormData,
     vurderingFormDataTilVurderKlageRequest,
@@ -18,15 +19,21 @@ import { BodyShort, Button, Heading, HStack, LocalAlert, VStack } from '@navikt/
 import { CheckmarkCircleIcon, PencilIcon, TrashIcon } from '@navikt/aksel-icons';
 import {
     useAvbrytKlagebehandling,
-    useFerdigstillOmgjortKlage,
+    useOpprettRammebehandlingForKlage,
     useVurderKlage,
 } from '~/api/KlageApi';
 import WarningCircleIcon from '~/icons/WarningCircleIcon';
 import router from 'next/router';
-import { erKlageAvsluttet, finnUrlForKlageSteg, kanBehandleKlage } from '~/utils/klageUtils';
+import {
+    erKlageAvsluttet,
+    erKlageUnderAktivOmgjøring,
+    finnUrlForKlageSteg,
+    kanBehandleKlage,
+} from '~/utils/klageUtils';
 import AvsluttBehandlingModal from '~/components/modaler/AvsluttBehandlingModal';
 import styles from './index.module.css';
 import Link from 'next/link';
+import { behandlingUrl } from '~/utils/urls';
 
 type Props = {
     sak: SakProps;
@@ -59,11 +66,11 @@ const VurderingKlagePage = ({ sak }: Props) => {
     const { klage, setKlage } = useKlage();
     const [vilAvslutteBehandlingModal, setVilAvslutteBehandlingModal] = useState(false);
     const [formTilstand, setFormTilstand] = useState<'REDIGERER' | 'LAGRET'>(
-        !kanBehandleKlage(klage) ? 'LAGRET' : 'REDIGERER',
+        !kanBehandleKlage(klage) || harKlagevurderingsstegUtfylt(klage) ? 'LAGRET' : 'REDIGERER',
     );
 
     const form = useForm<VurderingFormData>({
-        defaultValues: klagebehandlingTilVurderingFormData(),
+        defaultValues: klagebehandlingTilVurderingFormData(klage),
         resolver: vurderingFormValidation,
     });
 
@@ -76,11 +83,11 @@ const VurderingKlagePage = ({ sak }: Props) => {
         },
     });
 
-    const ferdigstillKlage = useFerdigstillOmgjortKlage({
+    const opprettRammebehandling = useOpprettRammebehandlingForKlage({
         sakId: sak.sakId,
         klageId: klage.id,
-        onSuccess: (oppdatertKlage) => {
-            setKlage(oppdatertKlage);
+        onSuccess: (rammebehandling) => {
+            router.push(behandlingUrl({ saksnummer: sak.saksnummer, id: rammebehandling.id }));
         },
     });
 
@@ -99,7 +106,7 @@ const VurderingKlagePage = ({ sak }: Props) => {
     return (
         <div>
             <form onSubmit={form.handleSubmit(onSubmit)}>
-                <VStack gap="8" marginInline="16" marginBlock="8" maxWidth="30rem">
+                <VStack gap="8" marginInline="16" marginBlock="8" maxWidth="35rem">
                     <HStack gap="2">
                         {formTilstand === 'LAGRET' ? (
                             <CheckmarkCircleIcon
@@ -136,15 +143,15 @@ const VurderingKlagePage = ({ sak }: Props) => {
                         </LocalAlert>
                     )}
 
-                    {ferdigstillKlage.error && (
+                    {opprettRammebehandling.error && (
                         <LocalAlert status="error">
                             <LocalAlert.Header>
                                 <LocalAlert.Title>
-                                    Feil ved ferdigstilling av klagebehandling
+                                    Feil ved oppretting av rammebehandling
                                 </LocalAlert.Title>
                             </LocalAlert.Header>
                             <LocalAlert.Content>
-                                {ferdigstillKlage.error.message}
+                                {opprettRammebehandling.error.message}
                             </LocalAlert.Content>
                         </LocalAlert>
                     )}
@@ -179,20 +186,32 @@ const VurderingKlagePage = ({ sak }: Props) => {
                                             <BodyShort>Rediger</BodyShort>
                                         </HStack>
                                     </Button>
-                                    <Button
-                                        type="button"
-                                        onClick={() => {
-                                            ferdigstillKlage.trigger();
-                                        }}
-                                    >
-                                        Ferdigstill behandling
-                                    </Button>
+                                    {erKlageUnderAktivOmgjøring(klage) ? (
+                                        <Button
+                                            as={Link}
+                                            href={behandlingUrl({
+                                                saksnummer: sak.saksnummer,
+                                                id: klage.rammebehandlingId,
+                                            })}
+                                        >
+                                            Gå til omgjøringsbehandling
+                                        </Button>
+                                    ) : (
+                                        <Button
+                                            type="button"
+                                            onClick={() => {
+                                                opprettRammebehandling.trigger();
+                                            }}
+                                        >
+                                            Opprett omgjøringsbehandling
+                                        </Button>
+                                    )}
                                 </>
                             )}
                         </HStack>
                     )}
 
-                    {ferdigstillKlage.data && (
+                    {opprettRammebehandling.data && (
                         <>
                             <LocalAlert status="warning">
                                 <LocalAlert.Header>

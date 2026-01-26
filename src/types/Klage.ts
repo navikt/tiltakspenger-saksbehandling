@@ -1,4 +1,5 @@
 import { Avbrutt } from './Avbrutt';
+import { BehandlingId } from './Rammebehandling';
 import { VedtakId } from './Rammevedtak';
 import { Nullable } from './UtilTypes';
 
@@ -39,6 +40,9 @@ export interface Klagebehandling {
     brevtekst: Brevtekst[];
     avbrutt: Nullable<Avbrutt>;
     kanIverksette: boolean;
+    årsak: Nullable<OmgjøringÅrsak>;
+    begrunnelse: Nullable<string>;
+    rammebehandlingId: Nullable<BehandlingId>;
 }
 
 export interface Brevtekst {

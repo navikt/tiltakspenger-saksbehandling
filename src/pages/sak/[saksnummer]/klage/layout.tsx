@@ -61,10 +61,16 @@ export const KlageProvider = ({ initialKlage, children }: ContextProps) => {
     );
 };
 
+/**
+ * Bruk denne for å få tilgang til klagebehandlingsdataene i en komponent hvor klage kan være null
+ */
 export const useOptionalKlage = () => {
     return useContext(Context);
 };
 
+/**
+ * Bruk denne for å få tilgang til klagebehandlingsdataene i en komponent hvor klage alltid eksisterer - typisk under /[klageId]/* ruter
+ */
 export function useKlage(): KlageContext {
     const klageContext = useContext(Context);
 

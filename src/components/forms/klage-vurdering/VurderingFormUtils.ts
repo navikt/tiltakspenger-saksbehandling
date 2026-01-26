@@ -1,5 +1,5 @@
 import { FieldErrors } from 'react-hook-form';
-import { OmgjøringÅrsak, VurderKlageRequest } from '~/types/Klage';
+import { Klagebehandling, OmgjøringÅrsak, VurderKlageRequest } from '~/types/Klage';
 
 export enum OmgjøringÅrsakFormData {
     FEIL_ELLER_ENDRET_FAKTA = 'FEIL_ELLER_ENDRET_FAKTA',
@@ -23,12 +23,12 @@ export interface VurderingFormData {
     omgjør: OmgjøringFormData;
 }
 
-export const klagebehandlingTilVurderingFormData = (): VurderingFormData => {
+export const klagebehandlingTilVurderingFormData = (k: Klagebehandling): VurderingFormData => {
     return {
         klageVurderingType: KlageVurderingTypeFormData.OMGJØR,
         omgjør: {
-            årsak: '',
-            begrunnelse: '',
+            årsak: k.årsak ? omgjøringsårsakTilFormData(k.årsak) : '',
+            begrunnelse: k.begrunnelse ?? '',
         },
     };
 };
@@ -58,6 +58,21 @@ const omgjøringsårsakFormDataTilOmgjøringÅrsak = (
             return OmgjøringÅrsak.PROSESSUELL_FEIL;
         case OmgjøringÅrsakFormData.ANNET:
             return OmgjøringÅrsak.ANNET;
+    }
+};
+
+export const omgjøringsårsakTilFormData = (årsak: OmgjøringÅrsak): OmgjøringÅrsakFormData => {
+    switch (årsak) {
+        case OmgjøringÅrsak.FEIL_ELLER_ENDRET_FAKTA:
+            return OmgjøringÅrsakFormData.FEIL_ELLER_ENDRET_FAKTA;
+        case OmgjøringÅrsak.FEIL_LOVANVENDELSE:
+            return OmgjøringÅrsakFormData.FEIL_LOVANVENDELSE;
+        case OmgjøringÅrsak.FEIL_REGELVERKSFORSTAAELSE:
+            return OmgjøringÅrsakFormData.FEIL_REGELVERKSFORSTÅELSE;
+        case OmgjøringÅrsak.PROSESSUELL_FEIL:
+            return OmgjøringÅrsakFormData.PROSESSUELL_FEIL;
+        case OmgjøringÅrsak.ANNET:
+            return OmgjøringÅrsakFormData.ANNET;
     }
 };
 
@@ -121,4 +136,8 @@ export const omgjøringÅrsakFormDataTilTekst: Record<OmgjøringÅrsakFormData, 
     [OmgjøringÅrsakFormData.FEIL_REGELVERKSFORSTÅELSE]: 'Feil regelverksforståelse',
     [OmgjøringÅrsakFormData.PROSESSUELL_FEIL]: 'Prosessuell feil',
     [OmgjøringÅrsakFormData.ANNET]: 'Annet',
+};
+
+export const harKlagevurderingsstegUtfylt = (k: Klagebehandling): boolean => {
+    return k.årsak !== null && k.begrunnelse !== null && k.begrunnelse.trim() !== '';
 };

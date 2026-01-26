@@ -27,6 +27,14 @@ export const erKlagefristenOverholdt = (k: Klagebehandling): boolean => {
     );
 };
 
+/**
+ * En aktiv omgjøringsbehandling betyr at det finnes en rammebehandling som er opprettet for å omgjøre vedtaket som klages på.
+ */
+export const erKlageUnderAktivOmgjøring = (
+    k: Klagebehandling,
+): k is Klagebehandling & { rammebehandlingId: string } =>
+    k.resultat === KlagebehandlingResultat.OMGJØR && !!k.rammebehandlingId;
+
 export const finnUrlForKlageSteg = (k: Klagebehandling): string => {
     switch (k.resultat) {
         case KlagebehandlingResultat.AVVIST: {
@@ -42,7 +50,10 @@ export const finnUrlForKlageSteg = (k: Klagebehandling): string => {
         }
 
         case KlagebehandlingResultat.OMGJØR: {
-            return `/sak/${k.saksnummer}/klage/${k.id}/resultat`;
+            return `/sak/${k.saksnummer}/klage/${k.id}/vurdering`;
         }
     }
+
+    //verifiserer at switch er exhaustive
+    throw k.resultat satisfies never;
 };
