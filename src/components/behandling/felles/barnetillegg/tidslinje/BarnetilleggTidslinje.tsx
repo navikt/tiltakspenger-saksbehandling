@@ -11,65 +11,70 @@ import { behandlingUrl } from '~/utils/urls';
 import style from './BarnetilleggTidslinje.module.css';
 
 type Props = {
-    vedtaksperiode: Periode;
+    innvilgelsesperiode: Periode;
 };
 
-export const BarnetilleggTidslinje = ({ vedtaksperiode }: Props) => {
+export const BarnetilleggTidslinje = ({ innvilgelsesperiode }: Props) => {
     const { sak } = useSak();
 
-    const barnetillegg = barnetilleggKrympetTilPeriode(sak.tidslinje, vedtaksperiode, false);
+    const barnetillegg = barnetilleggKrympetTilPeriode(sak.tidslinje, innvilgelsesperiode, false);
 
     if (barnetillegg.length === 0) {
         return (
-            <Alert variant={'info'} size={'small'} inline={true}>
+            <Alert variant={'info'} size={'small'} inline={true} className={style.info}>
                 {'Ingen tidligere vedtak om barnetillegg innenfor valgt innvilgelsesperiode'}
             </Alert>
         );
     }
 
-    const startDate = new Date(vedtaksperiode.fraOgMed);
-    const endDate = new Date(vedtaksperiode.tilOgMed);
+    const startDate = new Date(innvilgelsesperiode.fraOgMed);
+    const endDate = new Date(innvilgelsesperiode.tilOgMed);
 
     return (
-        <Timeline startDate={startDate} endDate={endDate}>
-            <Timeline.Row label={'Gjeldende vedtak:'}>
-                {barnetillegg.map((bt) => {
-                    const { periode, antallBarn, behandlingId } = bt;
+        <div>
+            <Alert variant={'info'} inline={true} size={'small'} className={style.info}>
+                {`Gjeldende barnetillegg innenfor valgt innvilgelsesperiode (${periodeTilFormatertDatotekst(innvilgelsesperiode)}):`}
+            </Alert>
+            <Timeline startDate={startDate} endDate={endDate}>
+                <Timeline.Row label={''}>
+                    {barnetillegg.map((bt) => {
+                        const { periode, antallBarn, behandlingId } = bt;
 
-                    const start = new Date(periode.fraOgMed);
-                    const end = new Date(periode.tilOgMed);
+                        const start = new Date(periode.fraOgMed);
+                        const end = new Date(periode.tilOgMed);
 
-                    const harBarnetillegg = antallBarn > 0;
+                        const harBarnetillegg = antallBarn > 0;
 
-                    return (
-                        <Timeline.Period
-                            start={start}
-                            end={end}
-                            status={harBarnetillegg ? 'success' : 'neutral'}
-                            icon={
-                                <span className={style.ikon}>
-                                    {harBarnetillegg && <ChildEyesIcon />}
-                                    <BodyShort size={'small'}>{antallBarn}</BodyShort>
-                                </span>
-                            }
-                            key={periode.fraOgMed}
-                        >
-                            <BodyShort size={'small'} className={style.detaljer}>
-                                {`${harBarnetillegg ? `${antallBarn} barn` : 'Ikke barnetillegg'} i perioden: ${periodeTilFormatertDatotekst(periode)}`}
-                                <Link
-                                    as={NextLink}
-                                    href={behandlingUrl({
-                                        saksnummer: sak.saksnummer,
-                                        id: behandlingId,
-                                    })}
-                                >
-                                    {'Til behandlingen'}
-                                </Link>
-                            </BodyShort>
-                        </Timeline.Period>
-                    );
-                })}
-            </Timeline.Row>
-        </Timeline>
+                        return (
+                            <Timeline.Period
+                                start={start}
+                                end={end}
+                                status={harBarnetillegg ? 'success' : 'neutral'}
+                                icon={
+                                    <span className={style.ikon}>
+                                        {harBarnetillegg && <ChildEyesIcon />}
+                                        <BodyShort size={'small'}>{antallBarn}</BodyShort>
+                                    </span>
+                                }
+                                key={periode.fraOgMed}
+                            >
+                                <BodyShort size={'small'} className={style.detaljer}>
+                                    {`${harBarnetillegg ? `${antallBarn} barn` : 'Ikke barnetillegg'} i perioden: ${periodeTilFormatertDatotekst(periode)}`}
+                                    <Link
+                                        as={NextLink}
+                                        href={behandlingUrl({
+                                            saksnummer: sak.saksnummer,
+                                            id: behandlingId,
+                                        })}
+                                    >
+                                        {'Til behandlingen'}
+                                    </Link>
+                                </BodyShort>
+                            </Timeline.Period>
+                        );
+                    })}
+                </Timeline.Row>
+            </Timeline>
+        </div>
     );
 };

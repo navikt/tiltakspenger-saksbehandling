@@ -9,3 +9,7 @@
     flex-direction: column;
     gap: 0.25rem;
 }
+
+.info {
+    margin: 1rem 0;
+}

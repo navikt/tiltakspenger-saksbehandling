@@ -36,7 +36,7 @@ export const BehandlingBarnetillegg = () => {
                 </VedtakSeksjon.Venstre>
 
                 <VedtakSeksjon.FullBredde className={style.pølseSeksjon}>
-                    <BarnetilleggTidslinje vedtaksperiode={innvilgelseTotalPeriode} />
+                    <BarnetilleggTidslinje innvilgelsesperiode={innvilgelseTotalPeriode} />
                 </VedtakSeksjon.FullBredde>
 
                 <VedtakSeksjon.Venstre>
