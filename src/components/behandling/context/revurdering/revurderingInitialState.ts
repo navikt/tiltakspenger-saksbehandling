@@ -101,6 +101,10 @@ const omgjøringInitialState = (
                     },
                 ],
             },
+            vedtaksperiode: {
+                skalOmgjøreHeleVedtaket: true,
+                periode: null,
+            },
         };
     }
 
@@ -117,6 +121,10 @@ const omgjøringInitialState = (
             innvilgelsesperioder,
             harBarnetillegg: barnetilleggPerioder.length > 0,
             barnetilleggPerioder,
+        },
+        vedtaksperiode: {
+            skalOmgjøreHeleVedtaket: true,
+            periode: null,
         },
     };
 };

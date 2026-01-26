@@ -47,5 +47,14 @@ const tilDTO = (
                   begrunnelse: null,
                   perioder: [],
               },
+        ...(skjema.vedtaksperiode.skalOmgjøreHeleVedtaket
+            ? {
+                  skalOmgjøreHeleVedtaket: true,
+                  vedtaksperiode: null,
+              }
+            : {
+                  skalOmgjøreHeleVedtaket: false,
+                  vedtaksperiode: skjema.vedtaksperiode.periode,
+              }),
     };
 };

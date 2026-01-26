@@ -43,24 +43,40 @@ export enum RevurderingResultat {
     OMGJØRING = 'OMGJØRING',
 }
 
-export interface RevurderingVedtakStansRequest extends OppdaterBehandlingRequestBase {
+export type RevurderingVedtakStansRequest = OppdaterBehandlingRequestBase & {
     resultat: RevurderingResultat.STANS;
     valgteHjemler: HjemmelForStans[];
-    stansFraOgMed: Nullable<string>;
-    harValgtStansFraFørsteDagSomGirRett: Nullable<boolean>;
-}
+} & (
+        | {
+              stansFraOgMed: null;
+              harValgtStansFraFørsteDagSomGirRett: true;
+          }
+        | {
+              stansFraOgMed: string;
+              harValgtStansFraFørsteDagSomGirRett: false;
+          }
+    );
 
-export interface RevurderingVedtakInnvilgelseRequest extends OppdaterBehandlingRequestBase {
+export type RevurderingVedtakInnvilgelseRequest = OppdaterBehandlingRequestBase & {
     resultat: RevurderingResultat.INNVILGELSE;
     innvilgelsesperioder: Innvilgelsesperiode[];
     barnetillegg: Barnetillegg;
-}
+};
 
-export interface RevurderingVedtakOmgjøringRequest extends OppdaterBehandlingRequestBase {
+export type RevurderingVedtakOmgjøringRequest = OppdaterBehandlingRequestBase & {
     resultat: RevurderingResultat.OMGJØRING;
     innvilgelsesperioder: Innvilgelsesperiode[];
     barnetillegg: Barnetillegg;
-}
+} & (
+        | {
+              skalOmgjøreHeleVedtaket: true;
+              vedtaksperiode: null;
+          }
+        | {
+              skalOmgjøreHeleVedtaket: false;
+              vedtaksperiode: Periode;
+          }
+    );
 
 export type RevurderingVedtakRequest =
     | RevurderingVedtakStansRequest

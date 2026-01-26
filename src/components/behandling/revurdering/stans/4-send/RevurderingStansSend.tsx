@@ -26,8 +26,15 @@ const tilDTO = (skjema: RevurderingStansContext): RevurderingVedtakStansRequest 
         resultat: RevurderingResultat.STANS,
         begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
         fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
-        stansFraOgMed: skjema.harValgtStansFraFørsteDagSomGirRett ? null : skjema.fraDato!,
-        harValgtStansFraFørsteDagSomGirRett: skjema.harValgtStansFraFørsteDagSomGirRett,
         valgteHjemler: skjema.hjemlerForStans!,
+        ...(skjema.harValgtStansFraFørsteDagSomGirRett
+            ? {
+                  stansFraOgMed: null,
+                  harValgtStansFraFørsteDagSomGirRett: true,
+              }
+            : {
+                  stansFraOgMed: skjema.fraDato!,
+                  harValgtStansFraFørsteDagSomGirRett: false,
+              }),
     };
 };

@@ -5,8 +5,8 @@ import {
 } from '~/utils/behandling';
 import {
     InnvilgelseMedPerioderState,
-    BehandlingInnvilgelseState,
-    BehandlingInnvilgelseMedPerioderState,
+    BehandlingMedInnvilgelseState,
+    BehandlingMedInnvilgelsesperioderState,
 } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 import { SøknadsbehandlingState } from '~/components/behandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
 import { BehandlingSkjemaState } from '~/components/behandling/context/behandlingSkjemaReducer';
@@ -23,13 +23,13 @@ export const ANTALL_DAGER_DEFAULT = 10;
 
 export const erRammebehandlingInnvilgelseContext = (
     context: BehandlingSkjemaState,
-): context is BehandlingInnvilgelseState => {
+): context is BehandlingMedInnvilgelseState => {
     return erRammebehandlingInnvilgelseResultat(context.resultat);
 };
 
 export const erRammebehandlingInnvilgelseMedPerioderContext = (
     context: BehandlingSkjemaState,
-): context is BehandlingInnvilgelseMedPerioderState => {
+): context is BehandlingMedInnvilgelsesperioderState => {
     return erRammebehandlingInnvilgelseContext(context) && context.innvilgelse.harValgtPeriode;
 };
 

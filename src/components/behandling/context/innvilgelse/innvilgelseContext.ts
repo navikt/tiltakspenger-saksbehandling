@@ -22,6 +22,9 @@ import {
 } from '~/components/behandling/context/behandlingSkjemaUtils';
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';
 import { Innvilgelsesperiode, InnvilgelsesperiodePartial } from '~/types/Innvilgelsesperiode';
+import { RevurderingOmgjøringState } from '~/components/behandling/context/revurdering/revurderingOmgjøringSkjemaContext';
+import { RevurderingInnvilgelseState } from '~/components/behandling/context/revurdering/revurderingInnvilgelseSkjemaContext';
+import { SøknadsbehandlingInnvilgelseState } from '~/components/behandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
 
 export type InnvilgelseUtenPerioderState = {
     harValgtPeriode: false;
@@ -37,15 +40,14 @@ export type InnvilgelseMedPerioderState = {
 
 export type InnvilgelseState = InnvilgelseUtenPerioderState | InnvilgelseMedPerioderState;
 
-export type BehandlingInnvilgelseState = {
-    resultat: RammebehandlingResultatMedInnvilgelse;
-    innvilgelse: InnvilgelseState;
-};
+export type BehandlingMedInnvilgelseState =
+    | RevurderingOmgjøringState
+    | RevurderingInnvilgelseState
+    | SøknadsbehandlingInnvilgelseState;
 
-export type BehandlingInnvilgelseMedPerioderState = {
-    resultat: RammebehandlingResultatMedInnvilgelse;
+export type BehandlingMedInnvilgelsesperioderState = {
     innvilgelse: InnvilgelseMedPerioderState;
-};
+} & BehandlingMedInnvilgelseState;
 
 export type InnvilgelseActions = InnvilgelsesperioderActions | BarnetilleggActions;
 
@@ -84,7 +86,8 @@ export const innvilgelseReducer: Reducer<InnvilgelseState, InnvilgelseActions> =
     throw Error(`Ugyldig action for behandling innvilgelse skjema: "${type satisfies never}"`);
 };
 
-export type BehandlingInnvilgelseContext = BehandlingSkjemaContextBase<BehandlingInnvilgelseState>;
+export type BehandlingInnvilgelseContext =
+    BehandlingSkjemaContextBase<BehandlingMedInnvilgelseState>;
 
 export const useBehandlingInnvilgelseSkjema = (): BehandlingInnvilgelseContext => {
     const context = useBehandlingSkjema();
@@ -99,7 +102,7 @@ export const useBehandlingInnvilgelseSkjema = (): BehandlingInnvilgelseContext =
 };
 
 export type BehandlingInnvilgelseMedPerioderContext =
-    BehandlingSkjemaContextBase<BehandlingInnvilgelseMedPerioderState>;
+    BehandlingSkjemaContextBase<BehandlingMedInnvilgelsesperioderState>;
 
 export const useBehandlingInnvilgelseMedPerioderSkjema =
     (): BehandlingInnvilgelseMedPerioderContext => {

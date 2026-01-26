@@ -12,12 +12,20 @@ import {
     useBehandlingSkjemaDispatch,
 } from '~/components/behandling/context/BehandlingSkjemaContext';
 import { BehandlingSkjemaType } from '~/components/behandling/context/behandlingSkjemaUtils';
-
-// Dette er copy-paste av revurdering innvilgelse for nå, men denne må sannsynligvis divergeres etter hvert
+import { Periode } from '~/types/Periode';
 
 export type RevurderingOmgjøringState = {
     resultat: RevurderingResultat.OMGJØRING;
     innvilgelse: InnvilgelseState;
+    vedtaksperiode:
+        | {
+              skalOmgjøreHeleVedtaket: true;
+              periode: null;
+          }
+        | {
+              skalOmgjøreHeleVedtaket: false;
+              periode: Periode;
+          };
 };
 
 export type RevurderingOmgjøringActions = ReducerSuperAction<
