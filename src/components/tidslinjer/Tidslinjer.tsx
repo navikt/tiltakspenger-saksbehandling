@@ -26,6 +26,7 @@ import { classNames } from '~/utils/classNames';
 import { numberRangeToString } from '~/utils/tall';
 
 import style from './Tidslinjer.module.css';
+import { perioderOverlapper } from '~/utils/periode';
 
 type Props = {
     sak: SakProps;
@@ -92,6 +93,10 @@ export const Tidslinjer = ({ sak, className }: Props) => {
                         const antallBarn = tellAntallBarnFraVedtak(rammevedtak);
                         const antallDager = tellAntallDagerFraVedtak(rammevedtak);
 
+                        const innvilgelsesperioder = gjeldendeInnvilgetPerioder.filter((it) =>
+                            perioderOverlapper(it, tidslinjeElement.periode),
+                        );
+
                         return (
                             <Timeline.Period
                                 start={new Date(fraOgMed)}
@@ -117,7 +122,7 @@ export const Tidslinjer = ({ sak, className }: Props) => {
                                                 tidslinjeElement.periode,
                                             )}
                                         />
-                                        {gjeldendeInnvilgetPerioder.length > 1 && (
+                                        {innvilgelsesperioder.length > 0 && (
                                             <InfoElement
                                                 navn={'Gjeldende innvilgelsesperioder'}
                                                 verdi={gjeldendeInnvilgetPerioder
