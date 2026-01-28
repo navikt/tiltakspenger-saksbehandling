@@ -96,3 +96,9 @@ export interface ForhåndsvisBrevKlageRequest {
 export interface LagreBrevtekstKlageRequest {
     tekstTilVedtaksbrev: Brevtekst[];
 }
+
+export interface OpprettOmgjøringsbehandlingForKlageRequest {
+    type: 'SØKNADSBEHANDLING_INNVILGELSE' | 'REVURDERING_INNVILGELSE' | 'REVURDERING_OMGJØRING';
+    søknadId: Nullable<string>;
+    vedtakIdSomOmgjøres: Nullable<string>;
+}

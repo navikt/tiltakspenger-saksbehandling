@@ -1,7 +1,7 @@
 import { ReactElement, useState } from 'react';
 
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
-import { BodyShort, Button, Heading, HStack, LocalAlert, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, Heading, HStack, InfoCard, LocalAlert, VStack } from '@navikt/ds-react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Rammevedtak } from '~/types/Rammevedtak';
 import { Rammebehandling } from '~/types/Rammebehandling';
@@ -22,16 +22,21 @@ import { KlageSteg } from '../../../../../../utils/KlageLayoutUtils';
 import { CheckmarkCircleIcon, PencilIcon, TrashIcon } from '@navikt/aksel-icons';
 import { useHentPersonopplysninger } from '~/components/personaliaheader/useHentPersonopplysninger';
 import {
+    erKlageKnyttetTilRammebehandling,
+    erKlageOmgjøring,
     erKlageUnderAktivOmgjøring,
     finnUrlForKlageSteg,
     kanBehandleKlage,
 } from '~/utils/klageUtils';
 import { useAvbrytKlagebehandling, useOppdaterFormkrav } from '~/api/KlageApi';
 import AvsluttBehandlingModal from '~/components/modaler/AvsluttBehandlingModal';
+import { Nullable } from '~/types/UtilTypes';
+import { erRammebehandlingUnderAktivOmgjøring } from '~/utils/behandling';
 
 type Props = {
     sak: SakProps;
     initialKlage: Klagebehandling;
+    omgjøringsbehandling: Nullable<Rammebehandling>;
 };
 
 export const getServerSideProps = pageWithAuthentication(async (context) => {
@@ -53,10 +58,15 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
         };
     }
 
-    return { props: { sak, initialKlage } };
+    const omgjøringsbehandling =
+        sak.behandlinger.find((behandling) =>
+            sak.klageBehandlinger.some((klage) => klage.rammebehandlingId === behandling.id),
+        ) || null;
+
+    return { props: { sak, initialKlage, omgjøringsbehandling } };
 });
 
-const FormkravKlagePage = ({ sak }: Props) => {
+const FormkravKlagePage = ({ sak, omgjøringsbehandling }: Props) => {
     const { klage, setKlage } = useKlage();
 
     const { personopplysninger } = useHentPersonopplysninger(sak.sakId);
@@ -94,13 +104,31 @@ const FormkravKlagePage = ({ sak }: Props) => {
         //vi har formprovider fordi journalpostid komponenten bruker useformcontext. merk at bruken av useformcontext gir oss ikke compile feil dersom endrer på form-interfacet
         <FormProvider {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
-                <VStack gap="8" marginInline="16" marginBlock="8" align="start">
+                <VStack gap="8" marginInline="16" marginBlock="8" align="start" maxWidth="35rem">
                     <HStack gap="2">
                         <CheckmarkCircleIcon title="Sjekk ikon" fontSize="1.5rem" color="green" />
                         <Heading size="small">Formkrav</Heading>
                     </HStack>
+                    {erKlageOmgjøring(klage) && erKlageKnyttetTilRammebehandling(klage) && (
+                        <InfoCard data-color="info" size="small">
+                            <InfoCard.Header>
+                                <InfoCard.Title>Informasjon om formkrav</InfoCard.Title>
+                            </InfoCard.Header>
+                            <InfoCard.Content>
+                                Det er en åpen rammebehandling knyttet til klagen. Du kan kun gjøre
+                                endringer som ikke påvirker resultatet, som å endre begrunnelse,
+                                årsak og endre formkravene på en slik måte at de fremdeles er
+                                oppfylt.
+                            </InfoCard.Content>
+                        </InfoCard>
+                    )}
                     <FormkravForm
-                        readonly={formTilstand === 'LAGRET' || erKlageUnderAktivOmgjøring(klage)}
+                        readonly={
+                            formTilstand === 'LAGRET' ||
+                            erKlageUnderAktivOmgjøring(klage) ||
+                            (!!omgjøringsbehandling &&
+                                !erRammebehandlingUnderAktivOmgjøring(omgjøringsbehandling))
+                        }
                         fnrFraPersonopplysninger={personopplysninger?.fnr ?? null}
                         control={form.control}
                         vedtakOgBehandling={
@@ -146,7 +174,7 @@ const FormkravKlagePage = ({ sak }: Props) => {
                         <Button loading={oppdaterFormkrav.isMutating}>Lagre</Button>
                     ) : (
                         <HStack gap="4">
-                            {kanBehandleKlage(klage) && !erKlageUnderAktivOmgjøring(klage) && (
+                            {kanBehandleKlage(klage, omgjøringsbehandling) && (
                                 <>
                                     <Button
                                         type="button"
@@ -202,10 +230,10 @@ const FormkravKlagePage = ({ sak }: Props) => {
 };
 
 FormkravKlagePage.getLayout = function getLayout(page: ReactElement) {
-    const { sak, initialKlage: klage } = page.props as Props;
+    const { sak, initialKlage } = page.props as Props;
 
     return (
-        <KlageProvider initialKlage={klage}>
+        <KlageProvider initialKlage={initialKlage}>
             <KlageLayout saksnummer={sak.saksnummer} activeTab={KlageSteg.FORMKRAV}>
                 {page}
             </KlageLayout>

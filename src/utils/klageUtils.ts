@@ -1,7 +1,29 @@
 import { Klagebehandling, KlagebehandlingResultat, KlagefristUnntakSvarord } from '~/types/Klage';
+import { Rammebehandling } from '~/types/Rammebehandling';
+import { Nullable } from '~/types/UtilTypes';
+import { erRammebehandlingUnderAktivOmgjøring } from './behandling';
 
-export const kanBehandleKlage = (k: Klagebehandling): boolean => {
-    return k.status === 'KLAR_TIL_BEHANDLING' || k.status === 'UNDER_BEHANDLING';
+/**
+ *
+ * en klage som fører til omgjøring og har kommet til det steget hvor en rammebehandling er opprettet - så vil rammebehandlingens status ha noe å si om klagen kan behandles videre.
+ *
+ * I alle andre tilfeller så vil klagens egen status gjelde.
+ *
+ * @param omgjøringsbehandling - burde sendes inn dersom klage er omgjøring og rammebehandling er opprettet - null ellers
+ */
+export const kanBehandleKlage = (
+    k: Klagebehandling,
+    omgjøringsbehandling: Nullable<Rammebehandling>,
+): boolean => {
+    if (k.status === 'KLAR_TIL_BEHANDLING' || k.status === 'UNDER_BEHANDLING') {
+        if (k.resultat === KlagebehandlingResultat.OMGJØR && !!omgjøringsbehandling) {
+            return erRammebehandlingUnderAktivOmgjøring(omgjøringsbehandling);
+        }
+
+        return true;
+    }
+
+    return false;
 };
 
 export const erKlageAvsluttet = (k: Klagebehandling): boolean => {
@@ -25,6 +47,14 @@ export const erKlagefristenOverholdt = (k: Klagebehandling): boolean => {
         k.erUnntakForKlagefrist ===
             KlagefristUnntakSvarord.JA_KLAGER_KAN_IKKE_LASTES_FOR_Å_HA_SENDT_INN_ETTER_FRISTEN
     );
+};
+
+export const erKlageOmgjøring = (k: Klagebehandling): boolean => {
+    return k.resultat === KlagebehandlingResultat.OMGJØR;
+};
+
+export const erKlageKnyttetTilRammebehandling = (k: Klagebehandling): boolean => {
+    return k.rammebehandlingId !== null;
 };
 
 /**

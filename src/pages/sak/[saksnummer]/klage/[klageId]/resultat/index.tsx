@@ -1,17 +1,27 @@
 import { logger } from '@navikt/next-logger';
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useState } from 'react';
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
 import { Klagebehandling, KlagebehandlingResultat, KlageId } from '~/types/Klage';
 import { SakProps } from '~/types/Sak';
 import { fetchSak } from '~/utils/fetch/fetch-server';
 import { KlageSteg } from '~/utils/KlageLayoutUtils';
-import KlageLayout, { KlageProvider } from '../../layout';
+import KlageLayout, { KlageProvider, useKlage } from '../../layout';
 import { Button, LocalAlert, VStack } from '@navikt/ds-react';
-import { erKlageAvsluttet } from '~/utils/klageUtils';
+import { erKlageAvsluttet, erKlageUnderAktivOmgjøring } from '~/utils/klageUtils';
+import { Rammebehandling } from '~/types/Rammebehandling';
+import { Nullable } from '~/types/UtilTypes';
+import { behandlingUrl } from '~/utils/urls';
+import { VelgOmgjøringsbehandlingModal } from '~/components/forms/velg-omgjøringsbehandling/VelgOmgjøringsbehandlingForm';
+import { Søknad } from '~/types/Søknad';
+import { Rammevedtak } from '~/types/Rammevedtak';
+import Link from 'next/link';
 
 type Props = {
     sak: SakProps;
-    klage: Klagebehandling;
+    initialKlage: Klagebehandling;
+    omgjøringsbehandling: Nullable<Rammebehandling>;
+    vedtakOgBehandling: Array<{ vedtak: Rammevedtak; behandling: Rammebehandling }>;
+    søknader: Søknad[];
 };
 
 export const getServerSideProps = pageWithAuthentication(async (context) => {
@@ -33,14 +43,43 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
         };
     }
 
-    return { props: { sak, klage } };
+    const rammevedtakOgBehandling = sak.alleRammevedtak.map((vedtak) => {
+        const behandling = sak.behandlinger.find(
+            (behandling) => behandling.id === vedtak.behandlingId,
+        ) as Rammebehandling;
+
+        return { vedtak, behandling };
+    });
+
+    const omgjøringsbehandling =
+        sak.behandlinger.find((behandling) =>
+            sak.klageBehandlinger.some((klage) => klage.rammebehandlingId === behandling.id),
+        ) || null;
+
+    return {
+        props: {
+            sak,
+            initialKlage: klage,
+            omgjøringsbehandling,
+            vedtakOgBehandling: rammevedtakOgBehandling,
+            søknader: sak.søknader,
+        },
+    };
 });
 
-const ResultatPage = ({ sak, klage }: Props) => {
+const ResultatPage = ({ sak, omgjøringsbehandling, vedtakOgBehandling, søknader }: Props) => {
+    const { klage } = useKlage();
+
     return (
         <VStack gap="8" marginInline="16" marginBlock="8" maxWidth="30rem">
             {klage.resultat === KlagebehandlingResultat.OMGJØR ? (
-                <Omgjøringsresultat sak={sak} klage={klage} />
+                <Omgjøringsresultat
+                    sak={sak}
+                    klage={klage}
+                    omgjøringsbehandling={omgjøringsbehandling}
+                    vedtakOgBehandling={vedtakOgBehandling}
+                    søknader={søknader}
+                />
             ) : (
                 <>Ukjent resultat for klage</>
             )}
@@ -48,8 +87,17 @@ const ResultatPage = ({ sak, klage }: Props) => {
     );
 };
 
-const Omgjøringsresultat = ({ klage }: Props) => {
-    if (erKlageAvsluttet(klage)) {
+const Omgjøringsresultat = (props: {
+    sak: SakProps;
+    klage: Klagebehandling;
+    omgjøringsbehandling: Nullable<Rammebehandling>;
+    vedtakOgBehandling: Array<{ vedtak: Rammevedtak; behandling: Rammebehandling }>;
+    søknader: Søknad[];
+}) => {
+    const [vilVelgeOmgjøringsbehandlingModal, setVilVelgeOmgjøringsbehandlingModal] =
+        useState(false);
+
+    if (erKlageAvsluttet(props.klage)) {
         return null;
     }
 
@@ -66,23 +114,42 @@ const Omgjøringsresultat = ({ klage }: Props) => {
                 </LocalAlert.Content>
             </LocalAlert>
 
-            <Button
-                type="button"
-                variant="primary"
-                onClick={() => {
-                    console.log('skal trigge en omgjøringsbehandling');
-                }}
-            >
-                Opprett omgjøringsbehandling
-            </Button>
+            {erKlageUnderAktivOmgjøring(props.klage) ? (
+                <Button
+                    as={Link}
+                    variant="secondary"
+                    href={behandlingUrl({
+                        saksnummer: props.sak.saksnummer,
+                        id: props.klage.rammebehandlingId,
+                    })}
+                >
+                    Gå til omgjøringsbehandling
+                </Button>
+            ) : (
+                <Button type="button" onClick={() => setVilVelgeOmgjøringsbehandlingModal(true)}>
+                    Velg omgjøringsbehandling
+                </Button>
+            )}
+            {vilVelgeOmgjøringsbehandlingModal && (
+                <VelgOmgjøringsbehandlingModal
+                    sakId={props.sak.sakId}
+                    saksnummer={props.sak.saksnummer}
+                    klageId={props.klage.id}
+                    vedtakOgBehandling={props.vedtakOgBehandling}
+                    søknader={props.søknader}
+                    åpen={vilVelgeOmgjøringsbehandlingModal}
+                    onClose={() => setVilVelgeOmgjøringsbehandlingModal(false)}
+                />
+            )}
         </VStack>
     );
 };
 
 ResultatPage.getLayout = function getLayout(page: ReactElement) {
-    const { sak, klage } = page.props as Props;
+    const { sak, initialKlage } = page.props as Props;
+
     return (
-        <KlageProvider initialKlage={klage}>
+        <KlageProvider initialKlage={initialKlage}>
             <KlageLayout saksnummer={sak.saksnummer} activeTab={KlageSteg.RESULTAT}>
                 {page}
             </KlageLayout>

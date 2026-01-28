@@ -1,7 +1,7 @@
 import { logger } from '@navikt/next-logger';
 import { ReactElement, useState } from 'react';
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
-import { Klagebehandling, KlageId } from '~/types/Klage';
+import { Klagebehandling, KlagebehandlingResultat, KlageId } from '~/types/Klage';
 import { SakProps } from '~/types/Sak';
 import { fetchSak } from '~/utils/fetch/fetch-server';
 import { KlageSteg } from '~/utils/KlageLayoutUtils';
@@ -15,17 +15,15 @@ import {
     vurderingFormDataTilVurderKlageRequest,
     vurderingFormValidation,
 } from '~/components/forms/klage-vurdering/VurderingFormUtils';
-import { BodyShort, Button, Heading, HStack, LocalAlert, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, Heading, HStack, InfoCard, LocalAlert, VStack } from '@navikt/ds-react';
 import { CheckmarkCircleIcon, PencilIcon, TrashIcon } from '@navikt/aksel-icons';
-import {
-    useAvbrytKlagebehandling,
-    useOpprettRammebehandlingForKlage,
-    useVurderKlage,
-} from '~/api/KlageApi';
+import { useAvbrytKlagebehandling, useVurderKlage } from '~/api/KlageApi';
 import WarningCircleIcon from '~/icons/WarningCircleIcon';
 import router from 'next/router';
 import {
     erKlageAvsluttet,
+    erKlageKnyttetTilRammebehandling,
+    erKlageOmgjøring,
     erKlageUnderAktivOmgjøring,
     finnUrlForKlageSteg,
     kanBehandleKlage,
@@ -34,10 +32,19 @@ import AvsluttBehandlingModal from '~/components/modaler/AvsluttBehandlingModal'
 import styles from './index.module.css';
 import Link from 'next/link';
 import { behandlingUrl } from '~/utils/urls';
+import { VelgOmgjøringsbehandlingModal } from '~/components/forms/velg-omgjøringsbehandling/VelgOmgjøringsbehandlingForm';
+import { Søknad } from '~/types/Søknad';
+import { Rammevedtak } from '~/types/Rammevedtak';
+import { Rammebehandling } from '~/types/Rammebehandling';
+import { Nullable } from '~/types/UtilTypes';
+import { erRammebehandlingUnderAktivOmgjøring } from '~/utils/behandling';
 
 type Props = {
     sak: SakProps;
     initialKlage: Klagebehandling;
+    omgjøringsbehandling: Nullable<Rammebehandling>;
+    vedtakOgBehandling: Array<{ vedtak: Rammevedtak; behandling: Rammebehandling }>;
+    søknader: Søknad[];
 };
 
 export const getServerSideProps = pageWithAuthentication(async (context) => {
@@ -59,15 +66,40 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
         };
     }
 
-    return { props: { sak, initialKlage } };
+    const rammevedtakOgBehandling = sak.alleRammevedtak.map((vedtak) => {
+        const behandling = sak.behandlinger.find(
+            (behandling) => behandling.id === vedtak.behandlingId,
+        ) as Rammebehandling;
+
+        return { vedtak, behandling };
+    });
+
+    const omgjøringsbehandling =
+        sak.behandlinger.find((behandling) =>
+            sak.klageBehandlinger.some((klage) => klage.rammebehandlingId === behandling.id),
+        ) || null;
+
+    return {
+        props: {
+            sak,
+            initialKlage,
+            vedtakOgBehandling: rammevedtakOgBehandling,
+            søknader: sak.søknader,
+            omgjøringsbehandling: omgjøringsbehandling,
+        },
+    };
 });
 
-const VurderingKlagePage = ({ sak }: Props) => {
+const VurderingKlagePage = ({ sak, vedtakOgBehandling, søknader, omgjøringsbehandling }: Props) => {
     const { klage, setKlage } = useKlage();
     const [vilAvslutteBehandlingModal, setVilAvslutteBehandlingModal] = useState(false);
     const [formTilstand, setFormTilstand] = useState<'REDIGERER' | 'LAGRET'>(
-        !kanBehandleKlage(klage) || harKlagevurderingsstegUtfylt(klage) ? 'LAGRET' : 'REDIGERER',
+        !kanBehandleKlage(klage, omgjøringsbehandling) || harKlagevurderingsstegUtfylt(klage)
+            ? 'LAGRET'
+            : 'REDIGERER',
     );
+    const [vilVelgeOmgjøringsbehandlingModal, setVilVelgeOmgjøringsbehandlingModal] =
+        useState(false);
 
     const form = useForm<VurderingFormData>({
         defaultValues: klagebehandlingTilVurderingFormData(klage),
@@ -80,14 +112,6 @@ const VurderingKlagePage = ({ sak }: Props) => {
         onSuccess: (oppdatertKlage) => {
             setKlage(oppdatertKlage);
             setFormTilstand('LAGRET');
-        },
-    });
-
-    const opprettRammebehandling = useOpprettRammebehandlingForKlage({
-        sakId: sak.sakId,
-        klageId: klage.id,
-        onSuccess: (rammebehandling) => {
-            router.push(behandlingUrl({ saksnummer: sak.saksnummer, id: rammebehandling.id }));
         },
     });
 
@@ -119,7 +143,29 @@ const VurderingKlagePage = ({ sak }: Props) => {
                         )}
                         <Heading size="small">Vurdering</Heading>
                     </HStack>
-                    <VurderingForm control={form.control} readonly={formTilstand === 'LAGRET'} />
+
+                    {erKlageOmgjøring(klage) && erKlageKnyttetTilRammebehandling(klage) && (
+                        <InfoCard data-color="info" size="small">
+                            <InfoCard.Header>
+                                <InfoCard.Title>Informasjon om formkrav</InfoCard.Title>
+                            </InfoCard.Header>
+                            <InfoCard.Content>
+                                Det er en åpen rammebehandling knyttet til klagen. Du kan kun gjøre
+                                endringer som ikke påvirker resultatet, som å endre begrunnelse,
+                                årsak og endre formkravene på en slik måte at de fremdeles er
+                                oppfylt.
+                            </InfoCard.Content>
+                        </InfoCard>
+                    )}
+
+                    <VurderingForm
+                        control={form.control}
+                        readonly={
+                            formTilstand === 'LAGRET' ||
+                            (!!omgjøringsbehandling &&
+                                !erRammebehandlingUnderAktivOmgjøring(omgjøringsbehandling))
+                        }
+                    />
 
                     {vurderKlage.error && (
                         <LocalAlert status="error">
@@ -143,26 +189,13 @@ const VurderingKlagePage = ({ sak }: Props) => {
                         </LocalAlert>
                     )}
 
-                    {opprettRammebehandling.error && (
-                        <LocalAlert status="error">
-                            <LocalAlert.Header>
-                                <LocalAlert.Title>
-                                    Feil ved oppretting av rammebehandling
-                                </LocalAlert.Title>
-                            </LocalAlert.Header>
-                            <LocalAlert.Content>
-                                {opprettRammebehandling.error.message}
-                            </LocalAlert.Content>
-                        </LocalAlert>
-                    )}
-
                     {formTilstand === 'REDIGERER' ? (
                         <Button className={styles.lagreKnapp} loading={vurderKlage.isMutating}>
                             Lagre
                         </Button>
                     ) : (
                         <HStack gap="4">
-                            {kanBehandleKlage(klage) && (
+                            {kanBehandleKlage(klage, omgjøringsbehandling) && (
                                 <>
                                     <Button
                                         type="button"
@@ -186,55 +219,41 @@ const VurderingKlagePage = ({ sak }: Props) => {
                                             <BodyShort>Rediger</BodyShort>
                                         </HStack>
                                     </Button>
-                                    {erKlageUnderAktivOmgjøring(klage) ? (
-                                        <Button
-                                            as={Link}
-                                            href={behandlingUrl({
-                                                saksnummer: sak.saksnummer,
-                                                id: klage.rammebehandlingId,
-                                            })}
-                                        >
-                                            Gå til omgjøringsbehandling
-                                        </Button>
-                                    ) : (
-                                        <Button
-                                            type="button"
-                                            onClick={() => {
-                                                opprettRammebehandling.trigger();
-                                            }}
-                                        >
-                                            Opprett omgjøringsbehandling
-                                        </Button>
-                                    )}
                                 </>
+                            )}
+                            {erKlageUnderAktivOmgjøring(klage) ? (
+                                <Button
+                                    as={Link}
+                                    variant="secondary"
+                                    href={behandlingUrl({
+                                        saksnummer: sak.saksnummer,
+                                        id: klage.rammebehandlingId,
+                                    })}
+                                >
+                                    Gå til omgjøringsbehandling
+                                </Button>
+                            ) : (
+                                <Button
+                                    type="button"
+                                    onClick={() => setVilVelgeOmgjøringsbehandlingModal(true)}
+                                >
+                                    Velg omgjøringsbehandling
+                                </Button>
                             )}
                         </HStack>
                     )}
 
-                    {opprettRammebehandling.data && (
-                        <>
-                            <LocalAlert status="warning">
-                                <LocalAlert.Header>
-                                    <LocalAlert.Title>Omgjøring av vedtak</LocalAlert.Title>
-                                </LocalAlert.Header>
-                                <LocalAlert.Content>
-                                    Resultatet av klagebehandlingen er at påklaget vedtak skal
-                                    omgjøres. En behandling for å fatte nytt vedtak blir ikke
-                                    automatisk opprettet. Dette må gjøres manuelt.
-                                </LocalAlert.Content>
-                            </LocalAlert>
-
-                            <Button
-                                className={styles.opprettOmgjøringKnapp}
-                                type="button"
-                                variant="primary"
-                                onClick={() => {
-                                    console.log('skal trigge en omgjøringsbehandling');
-                                }}
-                            >
-                                Opprett omgjøringsbehandling
-                            </Button>
-                        </>
+                    {klage.resultat === KlagebehandlingResultat.OMGJØR && (
+                        <LocalAlert status="warning">
+                            <LocalAlert.Header>
+                                <LocalAlert.Title>Omgjøring av vedtak</LocalAlert.Title>
+                            </LocalAlert.Header>
+                            <LocalAlert.Content>
+                                Resultatet av klagebehandlingen er at påklaget vedtak skal omgjøres.
+                                Klagebehandlingen blir automatisk ferdigstilt etter
+                                omgjøringsbehandlingen er iverksatt.
+                            </LocalAlert.Content>
+                        </LocalAlert>
                     )}
 
                     {erKlageAvsluttet(klage) && (
@@ -263,14 +282,25 @@ const VurderingKlagePage = ({ sak }: Props) => {
                     }}
                 />
             )}
+            {vilVelgeOmgjøringsbehandlingModal && (
+                <VelgOmgjøringsbehandlingModal
+                    sakId={sak.sakId}
+                    saksnummer={sak.saksnummer}
+                    klageId={klage.id}
+                    vedtakOgBehandling={vedtakOgBehandling}
+                    søknader={søknader}
+                    åpen={vilVelgeOmgjøringsbehandlingModal}
+                    onClose={() => setVilVelgeOmgjøringsbehandlingModal(false)}
+                />
+            )}
         </div>
     );
 };
 
 VurderingKlagePage.getLayout = function getLayout(page: ReactElement) {
-    const { sak, initialKlage: klage } = page.props as Props;
+    const { sak, initialKlage } = page.props as Props;
     return (
-        <KlageProvider initialKlage={klage}>
+        <KlageProvider initialKlage={initialKlage}>
             <KlageLayout saksnummer={sak.saksnummer} activeTab={KlageSteg.VURDERING}>
                 {page}
             </KlageLayout>

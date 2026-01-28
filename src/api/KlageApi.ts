@@ -2,6 +2,7 @@ import {
     Klagebehandling,
     KlageId,
     OppdaterKlageFormkravRequest,
+    OpprettOmgjøringsbehandlingForKlageRequest,
     VurderKlageRequest,
 } from '~/types/Klage';
 import { Rammebehandling } from '~/types/Rammebehandling';
@@ -37,7 +38,7 @@ export const useOpprettRammebehandlingForKlage = (args: {
     klageId: KlageId;
     onSuccess: (rammebehandling: Rammebehandling) => void;
 }) =>
-    useFetchJsonFraApi<Rammebehandling>(
+    useFetchJsonFraApi<Rammebehandling, OpprettOmgjøringsbehandlingForKlageRequest>(
         `/sak/${args.sakId}/klage/${args.klageId}/opprettRammebehandling`,
         'POST',
         { onSuccess: args.onSuccess },

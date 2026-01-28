@@ -6,6 +6,7 @@ import {
     Rammebehandling,
     RammebehandlingMedInnvilgelse,
     RammebehandlingResultat,
+    Rammebehandlingsstatus,
 } from '~/types/Rammebehandling';
 import { Søknadsbehandling, SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
 import { RevurderingResultat } from '~/types/Revurdering';
@@ -134,3 +135,12 @@ export const erSøknadsbehandlingResultat = (
         resultat === SøknadsbehandlingResultat.IKKE_VALGT
     );
 };
+
+/**
+ * Med 'under aktiv omgjøring' så mener vi at rammebehandlingen er opprettet som en omgjøringsbehandling for en klage - og den ikke er fortsatt er i en tilstand saksbehandler kan fritt redigere på.
+ *
+ * @param rb - nullable fordi klage ikke alltid har en tilknyttet rammebehandling & fordi det blirr litt cleanere kode fra klage-sidene sin side :-)
+ */
+export const erRammebehandlingUnderAktivOmgjøring = (rb: Rammebehandling): boolean =>
+    rb.status == Rammebehandlingsstatus.KLAR_TIL_BEHANDLING ||
+    rb.status == Rammebehandlingsstatus.UNDER_BEHANDLING;

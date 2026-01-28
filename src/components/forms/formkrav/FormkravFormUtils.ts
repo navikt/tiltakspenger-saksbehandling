@@ -112,9 +112,11 @@ export const formkravFormDataTilOpprettKlageRequest = (
         klagesDetPåKonkreteElementerIVedtaket: formData.klagesDetPåKonkreteElementer!,
         erKlagefristenOverholdt: formData.erKlagefristOverholdt!,
         erUnntakForKlagefrist:
-            klagefristUnntakSvarordFormDataTilKlagebehandlingKlagefristUnntakSvarord(
-                formData.erUnntakForKlagefrist!,
-            ),
+            formData.erKlagefristOverholdt === false
+                ? klagefristUnntakSvarordFormDataTilKlagebehandlingKlagefristUnntakSvarord(
+                      formData.erUnntakForKlagefrist!,
+                  )
+                : null,
         erKlagenSignert: formData.erKlagenSignert!,
     };
 };
@@ -130,9 +132,11 @@ export const formkravFormDataTilOppdaterKlageFormkravRequest = (
         klagesDetPåKonkreteElementerIVedtaket: formData.klagesDetPåKonkreteElementer!,
         erKlagefristenOverholdt: formData.erKlagefristOverholdt!,
         erUnntakForKlagefrist:
-            klagefristUnntakSvarordFormDataTilKlagebehandlingKlagefristUnntakSvarord(
-                formData.erUnntakForKlagefrist!,
-            ),
+            formData.erKlagefristOverholdt === false
+                ? klagefristUnntakSvarordFormDataTilKlagebehandlingKlagefristUnntakSvarord(
+                      formData.erUnntakForKlagefrist!,
+                  )
+                : null,
         erKlagenSignert: formData.erKlagenSignert!,
     };
 };

@@ -117,7 +117,7 @@ const BrevKlagePage = ({ sak }: Props) => {
                 <BrevForm
                     control={form.control}
                     className={styles.brevformContainer}
-                    readOnly={!kanBehandleKlage(klage)}
+                    readOnly={!kanBehandleKlage(klage, null)}
                 />
 
                 <VStack gap="8" marginInline="16" marginBlock="8" align="start">
@@ -141,7 +141,7 @@ const BrevKlagePage = ({ sak }: Props) => {
                             </LocalAlert>
                         )}
                         <HStack gap="4">
-                            {kanBehandleKlage(klage) && (
+                            {kanBehandleKlage(klage, null) && (
                                 <Button
                                     type="button"
                                     variant="secondary"
@@ -182,7 +182,7 @@ const BrevKlagePage = ({ sak }: Props) => {
                             </Button>
                         </HStack>
                     </VStack>
-                    {kanBehandleKlage(klage) && (
+                    {kanBehandleKlage(klage, null) && (
                         <Button disabled={!klage.kanIverksette || form.formState.isDirty}>
                             Ferdigstill behandling og send brev
                         </Button>
