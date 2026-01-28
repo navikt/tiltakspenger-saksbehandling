@@ -32,7 +32,7 @@ import styles from './MeldekortVenstreSeksjon.module.css';
 
 export const MeldekortVenstreSeksjon = () => {
     const { sak } = useSak();
-    const { sisteDagSomGirRett, kanSendeInnHelgForMeldekort } = sak;
+    const { førsteDagSomGirRett, sisteDagSomGirRett, kanSendeInnHelgForMeldekort } = sak;
 
     const { meldeperiodeKjede, sisteMeldeperiode, sisteMeldekortBehandling } =
         useMeldeperiodeKjede();
@@ -53,6 +53,10 @@ export const MeldekortVenstreSeksjon = () => {
             <MeldekortDetalj
                 header={'Meldekortperiode'}
                 tekst={periodeTilFormatertDatotekst(periode)}
+            />
+            <MeldekortDetalj
+                header={'Første dag med rett'}
+                tekst={førsteDagSomGirRett ? formaterDatotekst(førsteDagSomGirRett) : 'Ukjent'}
             />
             <MeldekortDetalj
                 header={'Siste dag med rett'}
