@@ -10,6 +10,8 @@ import { RevurderingStansState } from '~/components/behandling/context/revurderi
 import { hentBarnetilleggForRevurdering } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
 import { RevurderingOmgjøringState } from '~/components/behandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import { RevurderingInnvilgelseState } from '~/components/behandling/context/revurdering/revurderingInnvilgelseSkjemaContext';
+import { hentRammevedtak } from '~/utils/sak';
+import { totalPeriode } from '~/utils/periode';
 
 type RevurderingState =
     | RevurderingInnvilgelseState
@@ -88,7 +90,20 @@ const omgjøringInitialState = (
     behandling: RevurderingOmgjøring,
     sak: SakProps,
 ): RevurderingOmgjøringState => {
-    const { innvilgelsesperioder } = behandling;
+    const {
+        innvilgelsesperioder,
+        omgjørVedtak,
+        valgtOmgjøringsperiode,
+        harValgtSkalOmgjøreHeleVedtaksperioden,
+    } = behandling;
+    const vedtak = hentRammevedtak(sak, omgjørVedtak)!;
+
+    const gjeldendeTotalPeriode = totalPeriode(vedtak.gjeldendeVedtaksperioder);
+
+    const omgjøring = {
+        skalOmgjøreHeleVedtaket: harValgtSkalOmgjøreHeleVedtaksperioden,
+        periode: valgtOmgjøringsperiode ?? gjeldendeTotalPeriode,
+    };
 
     if (!innvilgelsesperioder) {
         return {
@@ -101,10 +116,7 @@ const omgjøringInitialState = (
                     },
                 ],
             },
-            vedtaksperiode: {
-                skalOmgjøreHeleVedtaket: true,
-                periode: null,
-            },
+            omgjøring,
         };
     }
 
@@ -122,9 +134,6 @@ const omgjøringInitialState = (
             harBarnetillegg: barnetilleggPerioder.length > 0,
             barnetilleggPerioder,
         },
-        vedtaksperiode: {
-            skalOmgjøreHeleVedtaket: true,
-            periode: null,
-        },
+        omgjøring,
     };
 };

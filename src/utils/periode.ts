@@ -208,9 +208,13 @@ const finnOverlappendeEllerNærmestePeriode = <T>(
 };
 
 export const finnPeriodiseringHull = (periodisering: MedPeriode[]): Periode[] => {
-    return periodisering.reduce<Periode[]>((acc, { periode }, index, array) => {
+    return finnPerioderHull(periodisering.map((it) => it.periode));
+};
+
+export const finnPerioderHull = (perioder: Periode[]): Periode[] => {
+    return perioder.toSorted(sorterPerioder).reduce<Periode[]>((acc, periode, index, array) => {
         const nesteDagEtterPerioden = nesteDag(periode.tilOgMed);
-        const nestePeriode = array.at(index + 1)?.periode;
+        const nestePeriode = array.at(index + 1);
 
         if (nestePeriode && !perioderErSammenhengende(periode, nestePeriode)) {
             acc.push({
@@ -251,25 +255,30 @@ export const slåSammenPeriodisering = <T>(
 
 // Slår sammen perioder dersom de tilstøter hverandre eller overlapper
 export const slåSammenPerioder = (perioder: Periode[]): Periode[] => {
-    return perioder
-        .toSorted((a, b) => (a.fraOgMed > b.fraOgMed ? 1 : -1))
-        .reduce<Periode[]>((acc, periode) => {
-            if (acc.length === 0) {
-                return [periode];
-            }
+    return perioder.toSorted(sorterPerioder).reduce<Periode[]>((acc, periode) => {
+        if (acc.length === 0) {
+            return [periode];
+        }
 
-            const forrige = acc.at(-1)!;
+        const forrige = acc.at(-1)!;
 
-            if (
-                perioderErSammenhengende(forrige, periode) ||
-                perioderOverlapper(forrige, periode)
-            ) {
-                return acc.toSpliced(-1, 1, {
-                    fraOgMed: forrige.fraOgMed,
-                    tilOgMed: datoMax(periode.tilOgMed, forrige.tilOgMed),
-                });
-            }
+        if (perioderErSammenhengende(forrige, periode) || perioderOverlapper(forrige, periode)) {
+            return acc.toSpliced(-1, 1, {
+                fraOgMed: forrige.fraOgMed,
+                tilOgMed: datoMax(periode.tilOgMed, forrige.tilOgMed),
+            });
+        }
 
-            return [...acc, periode];
-        }, []);
+        return [...acc, periode];
+    }, []);
+};
+
+export const sorterPerioder = (a: Periode, b: Periode): number => {
+    if (a.fraOgMed < b.fraOgMed) {
+        return -1;
+    }
+    if (a.fraOgMed > b.fraOgMed) {
+        return 1;
+    }
+    return a.tilOgMed > b.tilOgMed ? 1 : a.tilOgMed < b.tilOgMed ? -1 : 0;
 };

@@ -44,7 +44,7 @@ export enum RammevedtakKommandoType {
 
 export type RammevedtakKommandoOmgjør = {
     type: RammevedtakKommandoType.OMGJØR;
-    tvungenOmgjøringsperiode: Periode;
+    perioderSomKanOmgjøres: Periode[];
 };
 
 // Til fremtidig bruk

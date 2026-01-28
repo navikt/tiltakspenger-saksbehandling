@@ -13,6 +13,7 @@ import { BegrunnelseVilkårsvurdering } from '~/components/behandling/felles/beg
 import { RevurderingOmgjøringBrev } from '~/components/behandling/revurdering/omgjøring/brev/RevurderingOmgjøringBrev';
 import { RevurderingOmgjøringSend } from '~/components/behandling/revurdering/omgjøring/send-og-godkjenn/RevurderingOmgjøringSend';
 import { RevurderingOmgjøringHeader } from '~/components/behandling/revurdering/omgjøring/header/RevurderingOmgjøringHeader';
+import { RevurderingOmgjøringsperiodeVelger } from '~/components/behandling/revurdering/omgjøring/omgjøringsperiode/RevurderingOmgjøringsperiodeVelger';
 import { Klagebehandling } from '~/types/Klage';
 import { Nullable } from '~/types/UtilTypes';
 
@@ -27,6 +28,8 @@ export const RevurderingOmgjøringVedtak = (props: { klage: Nullable<Klagebehand
     return (
         <>
             <RevurderingOmgjøringHeader klage={props.klage} />
+            <Separator />
+            <RevurderingOmgjøringsperiodeVelger />
             <Separator />
             {kanInnvilges ? (
                 <Innvilgelse skjema={skjema} />
