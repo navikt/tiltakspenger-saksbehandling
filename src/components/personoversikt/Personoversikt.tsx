@@ -53,6 +53,14 @@ export const Personoversikt = () => {
         avsluttedeBehandlinger: 'avsluttede-behandlinger',
     };
 
+    const labelWithCounter = (label: string, count?: number) => {
+        if (count && count > 0) {
+            return `${label} (${count})`;
+        } else {
+            return label;
+        }
+    };
+
     return (
         <>
             <NotificationBanner />
@@ -90,12 +98,12 @@ export const Personoversikt = () => {
                     <Tabs.List>
                         <Tabs.Tab
                             value={tabs.apneBehandlinger}
-                            label={`Åpne behandlinger (${åpneBehandlinger.length})`}
+                            label={labelWithCounter('Åpne behandlinger', åpneBehandlinger.length)}
                             icon={<FileIcon aria-hidden />}
                         />
                         <Tabs.Tab
                             value={tabs.meldekort}
-                            label={`Meldekort (${meldeperiodeKjederKanBehandles?.length ?? 0})`}
+                            label={'Meldekort'}
                             icon={<InboxIcon aria-hidden />}
                         />
                         <Tabs.Tab
