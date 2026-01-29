@@ -29,7 +29,7 @@ export const AvsluttedeBehandlinger = (props: {
     }
 
     return (
-        <Box className={styles.tabellwrapper}>
+        <Box className={styles.panel}>
             <Heading level="3" size="small">
                 Avsluttede behandlinger
             </Heading>

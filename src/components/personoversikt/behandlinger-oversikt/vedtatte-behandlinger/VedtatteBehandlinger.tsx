@@ -80,7 +80,7 @@ export const VedtatteBehandlinger = ({
     );
 
     return (
-        <VStack className={className} gap={'2'}>
+        <VStack className={className}>
             <HStack justify={'space-between'}>
                 <Heading level="3" size="small">
                     {'Vedtatte behandlinger'}
