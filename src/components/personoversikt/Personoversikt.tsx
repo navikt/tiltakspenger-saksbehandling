@@ -1,4 +1,4 @@
-import { Box, Button, Heading, HStack } from '@navikt/ds-react';
+import { Box, Button, Heading, HStack, Tabs } from '@navikt/ds-react';
 import { MeldekortOversikt } from './meldekort-oversikt/MeldekortOversikt';
 import { ApneBehandlingerOversikt } from './behandlinger-oversikt/ApneBehandlingerOversikt';
 import { OpprettRevurdering } from './opprett-revurdering/OpprettRevurdering';
@@ -21,6 +21,7 @@ import styles from './Personoversikt.module.css';
 import { Tidslinjer } from '~/components/tidslinjer/Tidslinjer';
 import router from 'next/router';
 import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
+import { FileCheckmarkIcon, FileIcon, FileXMarkIcon, InboxIcon } from '@navikt/aksel-icons';
 
 export const Personoversikt = () => {
     const { sak } = useSak();
@@ -44,6 +45,13 @@ export const Personoversikt = () => {
                 ? 'meldeperiodeKjederIkkeKlare'
                 : 'meldeperiodeKjederKanBehandles',
     );
+
+    const tabs = {
+        apneBehandlinger: 'apne-behandlinger',
+        meldekort: 'meldekort',
+        vedtatteBehandlinger: 'vedtatte-behandlinger',
+        avsluttedeBehandlinger: 'avsluttede-behandlinger',
+    };
 
     return (
         <>
@@ -78,47 +86,71 @@ export const Personoversikt = () => {
 
                 <Tidslinjer sak={sak} className={styles.tabellwrapper} />
 
-                <Box className={styles.tabellwrapper}>
-                    <Heading level={'3'} size={'small'}>
-                        {'Åpne behandlinger'}
-                    </Heading>
-                    <ApneBehandlingerOversikt åpneBehandlinger={åpneBehandlinger} />
-                </Box>
-
-                <VedtatteBehandlinger
-                    sakId={sakId}
-                    rammebehandlinger={behandlinger}
-                    alleRammevedtak={alleRammevedtak}
-                    klagebehandlinger={klageBehandlinger}
-                    alleKlagevedtak={alleKlagevedtak}
-                    className={styles.tabellwrapper}
-                />
-
-                <AvsluttedeBehandlinger
-                    behandlinger={behandlinger}
-                    saksnummer={saksnummer}
-                    klageBehandlinger={klageBehandlinger}
-                />
-
-                <Box className={styles.tabellwrapper}>
-                    <div className={styles.meldekortHeaderRad}>
+                <Tabs defaultValue={tabs.apneBehandlinger} className={styles.tabellwrapper}>
+                    <Tabs.List>
+                        <Tabs.Tab
+                            value={tabs.apneBehandlinger}
+                            label={`Åpne behandlinger (${åpneBehandlinger.length})`}
+                            icon={<FileIcon aria-hidden />}
+                        />
+                        <Tabs.Tab
+                            value={tabs.meldekort}
+                            label={`Meldekort (${meldeperiodeKjederKanBehandles?.length ?? 0})`}
+                            icon={<InboxIcon aria-hidden />}
+                        />
+                        <Tabs.Tab
+                            value={tabs.vedtatteBehandlinger}
+                            label={`Vedtatte behandlinger`}
+                            icon={<FileCheckmarkIcon aria-hidden />}
+                        />
+                        <Tabs.Tab
+                            value={tabs.avsluttedeBehandlinger}
+                            label="Avsluttede behandlinger"
+                            icon={<FileXMarkIcon aria-hidden />}
+                        />
+                    </Tabs.List>
+                    <Tabs.Panel value={tabs.apneBehandlinger} className={styles.panel}>
                         <Heading level={'3'} size={'small'}>
-                            {'Meldekort'}
+                            {'Åpne behandlinger'}
                         </Heading>
-                        {meldeperiodeKjederIkkeKlare && (
-                            <MeldekortOversiktIkkeKlar
-                                meldeperiodeKjeder={meldeperiodeKjederIkkeKlare}
+                        <ApneBehandlingerOversikt åpneBehandlinger={åpneBehandlinger} />
+                    </Tabs.Panel>
+                    <Tabs.Panel value={tabs.meldekort} className={styles.panel}>
+                        <div className={styles.meldekortHeaderRad}>
+                            <Heading level={'3'} size={'small'}>
+                                {'Meldekort'}
+                            </Heading>
+                            {meldeperiodeKjederIkkeKlare && (
+                                <MeldekortOversiktIkkeKlar
+                                    meldeperiodeKjeder={meldeperiodeKjederIkkeKlare}
+                                />
+                            )}
+                        </div>
+                        {meldeperiodeKjederKanBehandles && (
+                            <MeldekortOversikt
+                                meldeperiodeKjeder={meldeperiodeKjederKanBehandles}
+                                saksnummer={saksnummer}
+                                sakId={sakId}
                             />
                         )}
-                    </div>
-                    {meldeperiodeKjederKanBehandles && (
-                        <MeldekortOversikt
-                            meldeperiodeKjeder={meldeperiodeKjederKanBehandles}
-                            saksnummer={saksnummer}
+                    </Tabs.Panel>
+                    <Tabs.Panel value={tabs.vedtatteBehandlinger} className={styles.panel}>
+                        <VedtatteBehandlinger
                             sakId={sakId}
+                            rammebehandlinger={behandlinger}
+                            alleRammevedtak={alleRammevedtak}
+                            klagebehandlinger={klageBehandlinger}
+                            alleKlagevedtak={alleKlagevedtak}
                         />
-                    )}
-                </Box>
+                    </Tabs.Panel>
+                    <Tabs.Panel value={tabs.avsluttedeBehandlinger}>
+                        <AvsluttedeBehandlinger
+                            behandlinger={behandlinger}
+                            saksnummer={saksnummer}
+                            klageBehandlinger={klageBehandlinger}
+                        />
+                    </Tabs.Panel>
+                </Tabs>
             </Box>
         </>
     );
