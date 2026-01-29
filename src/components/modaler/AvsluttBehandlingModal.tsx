@@ -1,9 +1,19 @@
 import { TrashIcon } from '@navikt/aksel-icons';
-import { Alert, BodyLong, Button, Heading, HStack, Modal, Textarea } from '@navikt/ds-react';
+import {
+    Alert,
+    BodyLong,
+    Button,
+    Heading,
+    HStack,
+    LocalAlert,
+    Modal,
+    Textarea,
+} from '@navikt/ds-react';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import styles from './AvsluttBehandlingModal.module.css';
+import { Nullable } from '~/types/UtilTypes';
 
 type Props = {
     åpen: boolean;
@@ -16,6 +26,7 @@ type Props = {
         primaryButtonText?: string;
         secondaryButtonText?: string;
         isMutating: boolean;
+        error: Nullable<string>;
     };
 };
 
@@ -65,24 +76,41 @@ const AvsluttBehandlingModal = (props: Props) => {
                         )}
                         name={'begrunnelse'}
                     />
-                    <Alert variant={'info'}>
+                    <Alert variant={'info'} size="small">
                         Bruker får ikke innsyn eller informasjon når behandlingen avsluttes i
                         tiltakspenger-saksbehandling. Du må vurdere å informere bruker i Modia om
                         hvorfor behandlingen er avsluttet, og hva det vil bety for bruker.
                     </Alert>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button
-                        variant="danger"
-                        size="small"
-                        loading={props.footer?.isMutating}
-                        type="submit"
-                    >
-                        {props.footer?.primaryButtonText ?? 'Avslutt behandling'}
-                    </Button>
-                    <Button variant="secondary" type="button" size="small" onClick={props.onClose}>
-                        {props.footer?.secondaryButtonText ?? 'Ikke avslutt behandling'}
-                    </Button>
+                    {props.footer?.error && (
+                        <LocalAlert status="error" size="small">
+                            <LocalAlert.Header>
+                                <LocalAlert.Title>
+                                    Feil ved avbrytelse av behandling
+                                </LocalAlert.Title>
+                            </LocalAlert.Header>
+                            <LocalAlert.Content>{props.footer.error}</LocalAlert.Content>
+                        </LocalAlert>
+                    )}
+                    <HStack gap="4">
+                        <Button
+                            variant="secondary"
+                            type="button"
+                            size="small"
+                            onClick={props.onClose}
+                        >
+                            {props.footer?.secondaryButtonText ?? 'Ikke avslutt behandling'}
+                        </Button>
+                        <Button
+                            variant="danger"
+                            size="small"
+                            loading={props.footer?.isMutating}
+                            type="submit"
+                        >
+                            {props.footer?.primaryButtonText ?? 'Avslutt behandling'}
+                        </Button>
+                    </HStack>
                 </Modal.Footer>
             </Modal>
         </form>

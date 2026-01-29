@@ -222,6 +222,9 @@ const FormkravKlagePage = ({ sak, omgjøringsbehandling }: Props) => {
                     }}
                     footer={{
                         isMutating: avbrytKlageBehandling.isMutating,
+                        error: avbrytKlageBehandling.error
+                            ? avbrytKlageBehandling.error.message
+                            : null,
                     }}
                 />
             )}

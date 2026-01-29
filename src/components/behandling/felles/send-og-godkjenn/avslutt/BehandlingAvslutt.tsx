@@ -15,9 +15,8 @@ export const BehandlingAvslutt = ({ behandling }: Props) => {
     const { setSak } = useSak();
     const [vilAvslutteBehandling, setVilAvslutteBehandling] = useState(false);
 
-    const { avsluttBehandling, avsluttBehandlingIsMutating } = useAvsluttBehandling(
-        behandling.saksnummer,
-    );
+    const { avsluttBehandling, avsluttBehandlingIsMutating, avsluttBehandlingError } =
+        useAvsluttBehandling(behandling.saksnummer);
 
     return (
         <>
@@ -44,6 +43,7 @@ export const BehandlingAvslutt = ({ behandling }: Props) => {
                     }}
                     footer={{
                         isMutating: avsluttBehandlingIsMutating,
+                        error: avsluttBehandlingError ? avsluttBehandlingError.message : null,
                     }}
                 />
             )}

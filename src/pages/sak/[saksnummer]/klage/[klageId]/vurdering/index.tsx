@@ -279,6 +279,9 @@ const VurderingKlagePage = ({ sak, vedtakOgBehandling, søknader, omgjøringsbeh
                     }}
                     footer={{
                         isMutating: avbrytKlageBehandling.isMutating,
+                        error: avbrytKlageBehandling.error
+                            ? avbrytKlageBehandling.error.message
+                            : null,
                     }}
                 />
             )}

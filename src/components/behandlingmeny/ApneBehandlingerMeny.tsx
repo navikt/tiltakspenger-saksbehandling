@@ -92,9 +92,8 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
         visGjenopptaBehandling ||
         visAvsluttBehandling;
 
-    const { avsluttBehandling, avsluttBehandlingIsMutating } = useAvsluttBehandling(
-        behandling.saksnummer,
-    );
+    const { avsluttBehandling, avsluttBehandlingIsMutating, avsluttBehandlingError } =
+        useAvsluttBehandling(behandling.saksnummer);
 
     if (!menySkalVises) {
         return (
@@ -172,6 +171,7 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
                     textareaLabel={`Hvorfor avsluttes ${erRevurdering ? 'revurderingen' : 'behandlingen'}? (obligatorisk)`}
                     footer={{
                         isMutating: avsluttBehandlingIsMutating,
+                        error: avsluttBehandlingError ? avsluttBehandlingError.message : null,
                     }}
                 />
             )}
