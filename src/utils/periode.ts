@@ -248,3 +248,28 @@ export const slåSammenPeriodisering = <T>(
         return [...acc, it];
     }, []);
 };
+
+// Slår sammen perioder dersom de tilstøter hverandre eller overlapper
+export const slåSammenPerioder = (perioder: Periode[]): Periode[] => {
+    return perioder
+        .toSorted((a, b) => (a.fraOgMed > b.fraOgMed ? 1 : -1))
+        .reduce<Periode[]>((acc, periode) => {
+            if (acc.length === 0) {
+                return [periode];
+            }
+
+            const forrige = acc.at(-1)!;
+
+            if (
+                perioderErSammenhengende(forrige, periode) ||
+                perioderOverlapper(forrige, periode)
+            ) {
+                return acc.toSpliced(-1, 1, {
+                    fraOgMed: forrige.fraOgMed,
+                    tilOgMed: datoMax(periode.tilOgMed, forrige.tilOgMed),
+                });
+            }
+
+            return [...acc, periode];
+        }, []);
+};
