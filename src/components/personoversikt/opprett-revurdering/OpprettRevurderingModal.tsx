@@ -1,5 +1,5 @@
-import { ActionMenu, Button, Radio, RadioGroup } from '@navikt/ds-react';
-import { useRef, useState } from 'react';
+import { Button, Radio, RadioGroup } from '@navikt/ds-react';
+import { useState } from 'react';
 import { SakId } from '~/types/Sak';
 import router from 'next/router';
 import { useOpprettRevurdering } from './useOpprettRevurdering';
@@ -7,37 +7,28 @@ import { BekreftelsesModal } from '~/components/modaler/BekreftelsesModal';
 import { behandlingUrl } from '~/utils/urls';
 import { behandlingResultatTilText } from '~/utils/tekstformateringUtils';
 import { RevurderingResultat } from '~/types/Revurdering';
-import { ArrowsCirclepathIcon } from '@navikt/aksel-icons';
 
 type Props = {
     sakId: SakId;
-    harVedtak: boolean;
+    åpen: boolean;
+    setÅpen: (åpen: boolean) => void;
 };
 
-export const OpprettRevurderingMenuItem = ({ sakId, harVedtak }: Props) => {
+export const OpprettRevurderingModal = ({ sakId, åpen, setÅpen }: Props) => {
     const [valgtType, setValgtType] = useState<RevurderingResultat | null>(null);
 
     const { opprettRevurdering, opprettRevurderingLaster, opprettRevurderingError } =
         useOpprettRevurdering(sakId);
 
-    const modalRef = useRef<HTMLDialogElement>(null);
-
     const lukkModal = () => {
-        modalRef.current?.close();
+        setÅpen(false);
         setValgtType(null);
     };
 
     return (
         <>
-            <ActionMenu.Item
-                icon={<ArrowsCirclepathIcon aria-hidden />}
-                onClick={() => modalRef.current?.showModal()}
-                disabled={!harVedtak}
-            >
-                {'Opprett revurdering'}
-            </ActionMenu.Item>
             <BekreftelsesModal
-                modalRef={modalRef}
+                åpen={åpen}
                 lukkModal={lukkModal}
                 feil={opprettRevurderingError}
                 tittel={'Opprett revurdering'}
@@ -57,6 +48,7 @@ export const OpprettRevurderingMenuItem = ({ sakId, harVedtak }: Props) => {
                                 rammevedtakIdSomOmgjøres: null,
                             }).then((behandling) => {
                                 if (behandling) {
+                                    lukkModal();
                                     router.push(behandlingUrl(behandling));
                                 }
                             });
