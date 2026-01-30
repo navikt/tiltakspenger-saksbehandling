@@ -2,7 +2,7 @@ import styles from './Personoversikt.module.css';
 import { ActionMenu, Box, Button, Heading, HStack, Tabs } from '@navikt/ds-react';
 import { MeldekortOversikt } from './meldekort-oversikt/MeldekortOversikt';
 import { ApneBehandlingerOversikt } from './behandlinger-oversikt/ApneBehandlingerOversikt';
-import { OpprettRevurderingMenuItem } from './opprett-revurdering/OpprettRevurderingMenuItem';
+import { OpprettRevurderingModal } from './opprett-revurdering/OpprettRevurderingModal';
 import { PersonaliaHeader } from '../personaliaheader/PersonaliaHeader';
 import { useSak } from '~/context/sak/SakContext';
 import { AvsluttedeBehandlinger } from './behandlinger-oversikt/AvsluttedeBehandlinger';
@@ -16,23 +16,28 @@ import {
     Rammebehandlingsstatus,
     Rammebehandlingstype,
 } from '~/types/Rammebehandling';
-import { OpprettSøknadMenuItem } from '~/components/personoversikt/manuell-søknad/OpprettSøknadMenuItem';
 import { Tidslinjer } from '~/components/tidslinjer/Tidslinjer';
 import router from 'next/router';
 import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
 import {
+    ArrowsCirclepathIcon,
     ChevronDownIcon,
     FileCheckmarkIcon,
     FileIcon,
     FilePlusIcon,
     FileXMarkIcon,
     InboxIcon,
+    TasklistSaveIcon,
 } from '@navikt/aksel-icons';
 import Divider from '~/components/divider/Divider';
+import { useState } from 'react';
+import { OpprettSøknadModal } from '~/components/personoversikt/manuell-søknad/OpprettSøknadModal';
 
 export const Personoversikt = () => {
     const { sak } = useSak();
     const featureToggle = useFeatureToggles();
+    const [opprettRevurderingModalÅpen, setOpprettRevurderingModalÅpen] = useState(false);
+    const [registrerSøknadManueltModalÅpen, setRegistrerSøknadManueltModalÅpen] = useState(false);
 
     const {
         sakId,
@@ -130,14 +135,20 @@ export const Personoversikt = () => {
                                         Registrer klage
                                     </ActionMenu.Item>
                                 )}
-                                <OpprettSøknadMenuItem
-                                    saksnummer={saksnummer}
-                                    harVedtak={harVedtattSøknadsbehandling(behandlinger)}
-                                />
-                                <OpprettRevurderingMenuItem
-                                    sakId={sakId}
-                                    harVedtak={harVedtattSøknadsbehandling(behandlinger)}
-                                />
+                                <ActionMenu.Item
+                                    icon={<TasklistSaveIcon aria-hidden />}
+                                    onClick={() => setRegistrerSøknadManueltModalÅpen(true)}
+                                >
+                                    {'Registrer søknad manuelt'}
+                                </ActionMenu.Item>
+
+                                <ActionMenu.Item
+                                    icon={<ArrowsCirclepathIcon aria-hidden />}
+                                    onClick={() => setOpprettRevurderingModalÅpen(true)}
+                                    disabled={!harVedtattSøknadsbehandling(behandlinger)}
+                                >
+                                    {'Opprett revurdering'}
+                                </ActionMenu.Item>
                             </ActionMenu.Content>
                         </ActionMenu>
                     </Tabs.List>
@@ -180,6 +191,16 @@ export const Personoversikt = () => {
                     </Tabs.Panel>
                 </Tabs>
             </Box>
+            <OpprettSøknadModal
+                saksnummer={saksnummer}
+                åpen={registrerSøknadManueltModalÅpen}
+                setÅpen={setRegistrerSøknadManueltModalÅpen}
+            />
+            <OpprettRevurderingModal
+                sakId={sakId}
+                åpen={opprettRevurderingModalÅpen}
+                setÅpen={setOpprettRevurderingModalÅpen}
+            />
         </>
     );
 };
