@@ -16,8 +16,8 @@ import {
 } from '~/utils/periode';
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';
 import { XMarkIcon } from '@navikt/aksel-icons';
-import { Datovelger } from '~/components/datovelger/Datovelger';
-import { dateTilISOTekst, datoTilDatoInputText, tilDate } from '~/utils/date';
+import { Datovelger, generateMatcherProps } from '~/components/datovelger/Datovelger';
+import { dateTilISOTekst, datoTilDatoInputText } from '~/utils/date';
 import { classNames } from '~/utils/classNames';
 
 import style from './BehandlingBarnetilleggPerioder.module.css';
@@ -136,12 +136,7 @@ const PeriodeVelger = ({ btPeriode, index, readOnly }: PeriodeVelgerProps) => {
 
     const innvilgelseHull = finnPeriodiseringHull(innvilgelse.innvilgelsesperioder);
 
-    const disabledDager = innvilgelseHull.map((p) => {
-        return {
-            from: tilDate(p.fraOgMed),
-            to: tilDate(p.tilOgMed),
-        };
-    });
+    const disabledDager = generateMatcherProps(innvilgelseHull);
 
     const erIkkeInnvilgetPeriode = innvilgelseHull.some((p) => perioderOverlapper(p, periode));
 
