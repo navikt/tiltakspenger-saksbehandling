@@ -1,4 +1,4 @@
-import { Button, Radio, RadioGroup } from '@navikt/ds-react';
+import { ActionMenu, Button, Radio, RadioGroup } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
 import { SakId } from '~/types/Sak';
 import router from 'next/router';
@@ -7,13 +7,14 @@ import { BekreftelsesModal } from '~/components/modaler/BekreftelsesModal';
 import { behandlingUrl } from '~/utils/urls';
 import { behandlingResultatTilText } from '~/utils/tekstformateringUtils';
 import { RevurderingResultat } from '~/types/Revurdering';
+import { ArrowsCirclepathIcon } from '@navikt/aksel-icons';
 
 type Props = {
     sakId: SakId;
     harVedtak: boolean;
 };
 
-export const OpprettRevurdering = ({ sakId, harVedtak }: Props) => {
+export const OpprettRevurderingMenuItem = ({ sakId, harVedtak }: Props) => {
     const [valgtType, setValgtType] = useState<RevurderingResultat | null>(null);
 
     const { opprettRevurdering, opprettRevurderingLaster, opprettRevurderingError } =
@@ -28,15 +29,13 @@ export const OpprettRevurdering = ({ sakId, harVedtak }: Props) => {
 
     return (
         <>
-            <Button
-                size={'small'}
-                variant={'secondary'}
-                type={'button'}
+            <ActionMenu.Item
+                icon={<ArrowsCirclepathIcon aria-hidden />}
                 onClick={() => modalRef.current?.showModal()}
                 disabled={!harVedtak}
             >
                 {'Opprett revurdering'}
-            </Button>
+            </ActionMenu.Item>
             <BekreftelsesModal
                 modalRef={modalRef}
                 lukkModal={lukkModal}

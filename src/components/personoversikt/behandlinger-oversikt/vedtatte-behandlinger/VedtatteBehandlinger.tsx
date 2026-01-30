@@ -1,4 +1,4 @@
-import { Alert, Checkbox, CheckboxGroup, Heading, HStack, VStack } from '@navikt/ds-react';
+import { Alert, Checkbox, CheckboxGroup, HStack, VStack } from '@navikt/ds-react';
 import { VedtatteBehandlingerTabell } from './VedtatteBehandlingerTabell';
 import { Rammebehandling } from '~/types/Rammebehandling';
 import { SakId } from '~/types/Sak';
@@ -82,9 +82,6 @@ export const VedtatteBehandlinger = ({
     return (
         <VStack className={className}>
             <HStack justify={'space-between'}>
-                <Heading level="3" size="small">
-                    {'Vedtatte behandlinger'}
-                </Heading>
                 <CheckboxGroup
                     legend={'Vis omgjorte vedtak'}
                     hideLegend={true}
