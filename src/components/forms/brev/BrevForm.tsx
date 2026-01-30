@@ -21,7 +21,7 @@ const BrevForm = (props: {
             <ul className={styles.fieldsList}>
                 {fields.map((field, index) => (
                     <li key={field.id}>
-                        <VStack gap="4" maxWidth="30rem" marginInline="16">
+                        <VStack gap="space-16" maxWidth="30rem" marginInline="space-64">
                             <Controller
                                 name={`tekstfelter.${index}.tittel` as const}
                                 control={props.control}
@@ -30,7 +30,7 @@ const BrevForm = (props: {
                                         {...field}
                                         readOnly={props.readOnly}
                                         label={
-                                            <HStack gap="2" align="center">
+                                            <HStack gap="space-8" align="center">
                                                 <Label>Tittel</Label>
                                                 {index > 0 && !props.readOnly && (
                                                     <Button
@@ -73,7 +73,6 @@ const BrevForm = (props: {
                     </li>
                 ))}
             </ul>
-
             {!props.readOnly && (
                 <Button
                     className={styles.leggTilTekstfeltKnapp}
@@ -82,7 +81,7 @@ const BrevForm = (props: {
                     size="small"
                     onClick={() => append({ tittel: '', tekst: '' })}
                 >
-                    <HStack gap="1">
+                    <HStack gap="space-4">
                         <PlusCircleIcon title="Plus ikon" fontSize="1.5rem" />
                         <BodyShort>Legg til tekstfelter</BodyShort>
                     </HStack>

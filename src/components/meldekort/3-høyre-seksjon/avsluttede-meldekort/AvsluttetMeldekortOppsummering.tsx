@@ -15,8 +15,8 @@ export const AvsluttetMeldekortOppsummering = ({ meldekortBehandling }: Props) =
 
     return (
         avbrutt && (
-            <VStack gap={'5'}>
-                <HStack gap="6">
+            <VStack gap={'space-20'}>
+                <HStack gap="space-24">
                     <OppsummeringsPar
                         label={'Avsluttet av'}
                         verdi={avbrutt.avbruttAv}

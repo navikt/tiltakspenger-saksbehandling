@@ -17,7 +17,7 @@ export const UtbetalingBeløp = ({ tekst, beløp, beløpForrige, className }: Pr
     const diff = typeof beløpForrige !== 'number' ? undefined : beløp - beløpForrige;
 
     return (
-        <HStack gap={'5'} className={classNames(fellesStyle.rad, className)}>
+        <HStack gap={'space-20'} className={classNames(fellesStyle.rad, className)}>
             <BodyShort>{tekst}</BodyShort>
             <div className={style.beløp}>
                 <BodyShort weight={'semibold'}>{formatterBeløp(beløp)}</BodyShort>

@@ -42,10 +42,10 @@ const MultiperiodeForm = <T extends MedPeriode[]>(props: {
     };
 }) => {
     return (
-        <VStack gap="4" align="start">
-            <VStack gap="4" as={'ul'}>
+        <VStack gap="space-16" align="start">
+            <VStack gap="space-16" as={'ul'}>
                 {props.perioder.map((periode, index) => (
-                    <HStack align="end" gap="4" key={`${props.name}-${index}`} as={'li'}>
+                    <HStack align="end" gap="space-16" key={`${props.name}-${index}`} as={'li'}>
                         {props.contentConfig.position === 'before' &&
                             props.contentConfig.content(periode, index)}
                         <PeriodeVelger
@@ -90,8 +90,7 @@ const MultiperiodeForm = <T extends MedPeriode[]>(props: {
                     </HStack>
                 ))}
             </VStack>
-
-            <HStack gap="4">
+            <HStack gap="space-16">
                 {props.nyPeriodeButtonConfig.adjacentContent?.position === 'before' &&
                     props.nyPeriodeButtonConfig.adjacentContent.content}
 

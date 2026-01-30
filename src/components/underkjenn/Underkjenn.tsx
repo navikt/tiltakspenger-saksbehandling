@@ -86,7 +86,7 @@ const UnderkjennModal = (props: {
                     {props.onUnderkjenn.error && (
                         <Alert variant={'error'}>{props.onUnderkjenn.error.message}</Alert>
                     )}
-                    <HStack gap="2">
+                    <HStack gap="space-8">
                         <Button type="button" variant="secondary" onClick={props.onClose}>
                             Avbryt
                         </Button>

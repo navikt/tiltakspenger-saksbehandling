@@ -15,14 +15,14 @@ const AvbruttOppsummering = (props: {
 }) => {
     return (
         <Box
-            background={props.withPanel ? 'surface-default' : undefined}
+            background={props.withPanel ? 'default' : undefined}
             className={classNames(styles.box, props.wrapperClassName)}
         >
-            <VStack gap="6">
+            <VStack gap="space-24">
                 <Heading size="medium" level="3">
                     Behandling er avsluttet
                 </Heading>
-                <HStack gap="6">
+                <HStack gap="space-24">
                     <OppsummeringsPar
                         label={'Avsluttet av'}
                         verdi={props.avbrutt.avbruttAv}

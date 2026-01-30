@@ -12,7 +12,7 @@ type Props = {
 
 export const BehandlingTiltakspengerArenaOpplysninger = ({ vedtak }: Props) => {
     return (
-        <VStack gap="2">
+        <VStack gap="space-8">
             {vedtak.map((tpvedtak) => (
                 <div key={`${tpvedtak.rettighet}-${tpvedtak.fraOgMed}`}>
                     <TiltakspengerArenaOpplysning vedtak={tpvedtak} />

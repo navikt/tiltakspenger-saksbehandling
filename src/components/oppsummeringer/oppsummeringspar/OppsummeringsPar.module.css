@@ -1,12 +1,12 @@
 .spaceBetween {
     display: flex;
     justify-content: space-between;
-    gap: var(--a-spacing-8);
+    gap: var(--ax-space-32);
 }
 
 .inlineColon {
     display: flex;
-    gap: var(--a-spacing-1);
+    gap: var(--ax-space-4);
 }
 
 .vertikalt {

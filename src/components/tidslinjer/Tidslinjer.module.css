@@ -1,7 +1,7 @@
 .wrapper {
     background: white;
     padding: 1rem;
-    border-radius: var(--a-border-radius-medium);
+    border-radius: var(--ax-radius-4);
 
     & :global(.navds-timeline__axislabels) {
         overflow: hidden;
@@ -18,7 +18,7 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    gap: var(--a-spacing-3);
+    gap: var(--ax-space-12);
 
     .periode {
         margin-right: 0.5rem;
@@ -33,17 +33,17 @@
 }
 
 .innvilgetIkon {
-    color: var(--a-border-success);
+    color: var(--ax-border-success);
 }
 
 .stansetIkon {
-    color: var(--a-border-danger);
+    color: var(--ax-border-danger);
 }
 
 .utbetalingIkon {
-    color: var(--a-border-info);
+    color: var(--ax-border-info);
 }
 
 .behandlingLink {
-    font-size: var(--a-font-size-medium);
+    font-size: var(--ax-font-size-medium);
 }

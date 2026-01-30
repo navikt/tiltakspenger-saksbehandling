@@ -48,7 +48,7 @@ export const InternDekoratør = () => {
                 <InternalHeader.Title as={Link} href="/">
                     Tiltakspenger
                 </InternalHeader.Title>
-                <HStack gap="8" align="center">
+                <HStack gap="space-32" align="center">
                     <form
                         role="search"
                         style={{
@@ -78,7 +78,7 @@ export const InternDekoratør = () => {
                     </form>
                 </HStack>
                 <Spacer />
-                <HStack gap="4">
+                <HStack gap="space-16">
                     <Button
                         size={'small'}
                         type={'button'}
@@ -151,7 +151,7 @@ export const InternDekoratør = () => {
                     </Button>
                 }
             >
-                <HStack gap="4">
+                <HStack gap="space-16">
                     Her kan du opprette en sak for en person som ikke er registrert i systemet fra
                     før ved å skrive inn fødselsnummeret.
                     <TextField

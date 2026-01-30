@@ -53,8 +53,8 @@ export const SimuleringOppsummering = <BehId extends BehandlingIdFelles>({
     } = simulerteBeløp;
 
     return (
-        <VStack gap={'1'}>
-            <HStack gap={'5'} justify={'space-between'}>
+        <VStack gap={'space-4'}>
+            <HStack gap={'space-20'} justify={'space-between'}>
                 <Heading size={'xsmall'} level={'4'} spacing={true}>
                     {'Simulering oppsummert'}
                 </Heading>

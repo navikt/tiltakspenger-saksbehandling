@@ -50,7 +50,7 @@ export const MeldekortBeregningOgSimulering = ({ meldekortBehandling, className 
         sisteMeldekortBehandling === meldekortBehandling;
 
     return (
-        <VStack className={className} gap={'5'}>
+        <VStack className={className} gap={'space-20'}>
             <BeregningOgSimuleringHeader
                 utbetalingsstatus={erIverksatt ? utbetalingsstatus : undefined}
                 navkontor={navkontor}
@@ -58,13 +58,11 @@ export const MeldekortBeregningOgSimulering = ({ meldekortBehandling, className 
                 simulertBeregning={simulertBeregning}
                 erOmberegning={type === MeldekortBehandlingType.KORRIGERING}
             />
-
             {skalViseUtfallVarsel && (
                 <Alert variant={'warning'} size={'small'}>
                     {utfallTekst(beløpDiff)}
                 </Alert>
             )}
-
             <BeregningOppsummering beregninger={beregning} />
             <SimuleringOppsummering
                 simulertBeregning={simulertBeregning}
@@ -77,7 +75,6 @@ export const MeldekortBeregningOgSimulering = ({ meldekortBehandling, className 
                     innloggetSaksbehandler,
                 )}
             />
-
             <SimuleringDetaljer simulertBeregning={simulertBeregning} />
         </VStack>
     );

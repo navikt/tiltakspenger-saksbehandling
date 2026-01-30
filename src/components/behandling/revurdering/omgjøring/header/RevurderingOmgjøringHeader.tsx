@@ -26,11 +26,10 @@ export const RevurderingOmgjøringHeader = () => {
     }
 
     return (
-        <VStack gap="2">
+        <VStack gap="space-8">
             <Heading size={'medium'} level={'1'} spacing={true}>
                 {'Omgjøring'}
             </Heading>
-
             {behandling.status === Rammebehandlingsstatus.VEDTATT ? (
                 <OppsummeringsPar
                     label={'Omgjøringsperiode'}
@@ -38,7 +37,7 @@ export const RevurderingOmgjøringHeader = () => {
                     variant="inlineColon"
                 />
             ) : (
-                <VStack gap={'2'} align={'start'}>
+                <VStack gap={'space-8'} align={'start'}>
                     <BodyShort>
                         {`Omgjør vedtak med dato ${formaterTidspunkt(vedtakSomBlirOmgjort.iverksattTidspunkt!)} - Dette
                         vedtaket vil bli erstattet i sin helhet.`}

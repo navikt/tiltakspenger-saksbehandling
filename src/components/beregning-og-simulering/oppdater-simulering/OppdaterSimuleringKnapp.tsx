@@ -23,7 +23,7 @@ export const OppdaterSimuleringKnapp = <BehId extends BehandlingIdFelles>({
         useOppdaterSimulering(sakId, behandlingId);
 
     return (
-        <HStack gap={'5'} align={'center'}>
+        <HStack gap={'space-20'} align={'center'}>
             {oppdaterSimuleringError && (
                 <Alert variant={'error'} size={'small'} inline={true}>
                     {oppdaterSimuleringError.message}

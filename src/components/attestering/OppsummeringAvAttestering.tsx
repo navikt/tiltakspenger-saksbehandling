@@ -20,20 +20,20 @@ const OppsummeringAvAttesteringer = (props: { attesteringer: Attestering[] }) =>
                         key={`attestering-${attestering.endretTidspunkt}`}
                         className={styles.attesteringContainer}
                     >
-                        <VStack gap="2">
-                            <HStack gap="1" align={'center'}>
+                        <VStack gap="space-8">
+                            <HStack gap="space-4" align={'center'}>
                                 {attestering.status === Attesteringsstatus.SENDT_TILBAKE && (
                                     <ExclamationmarkTriangleFillIcon
                                         title="Advarsel-trekant"
                                         fontSize="1.5rem"
-                                        color="var(--a-orange-500)"
+                                        color="var(--ax-warning-500)"
                                     />
                                 )}
                                 {attestering.status === Attesteringsstatus.GODKJENT && (
                                     <CheckmarkCircleFillIcon
                                         title="sjekk-merke-ikon"
                                         fontSize="1.5rem"
-                                        color="var(--a-green-500)"
+                                        color="var(--ax-success-500)"
                                     />
                                 )}
                                 <BodyShort size={'small'}>

@@ -16,7 +16,7 @@ const VurderingForm = (props: { control: Control<VurderingFormData>; readonly?: 
     });
 
     return (
-        <VStack gap="8">
+        <VStack gap="space-32">
             <Controller
                 control={props.control}
                 name={'klageVurderingType'}
@@ -30,7 +30,6 @@ const VurderingForm = (props: { control: Control<VurderingFormData>; readonly?: 
                     </Select>
                 )}
             />
-
             {klagevurderingstype === KlageVurderingTypeFormData.OMGJØR && (
                 <>
                     <Controller

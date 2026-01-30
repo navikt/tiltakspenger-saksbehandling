@@ -4,7 +4,7 @@ export default function Custom404() {
     return (
         <Page>
             <Page.Block as="main" width="2xl">
-                <Box paddingBlock="20 16" data-aksel-template="404-v2">
+                <Box paddingBlock="space-80 space-64" data-aksel-template="404-v2">
                     <div>
                         <Heading level="1" size="large" spacing>
                             Beklager, vi fant ikke siden
@@ -13,11 +13,13 @@ export default function Custom404() {
                             Denne siden kan være slettet eller flyttet, eller det er en feil i
                             lenken.
                         </BodyShort>
-                        <List>
-                            <List.Item>
-                                <Link href="/">Gå til forsiden</Link>
-                            </List.Item>
-                        </List>
+                        <Box marginBlock="space-16" asChild>
+                            <List>
+                                <List.Item>
+                                    <Link href="/">Gå til forsiden</Link>
+                                </List.Item>
+                            </List>
+                        </Box>
                     </div>
                 </Box>
             </Page.Block>

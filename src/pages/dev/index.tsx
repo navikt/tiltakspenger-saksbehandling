@@ -142,7 +142,7 @@ const NySøknadModal = (props: { open: boolean; onClose: () => void }) => {
                     <Heading size="medium">Lag ny søknad</Heading>
                 </Modal.Header>
                 <Modal.Body>
-                    <VStack gap="5">
+                    <VStack gap="space-20">
                         <Controller
                             render={({ field }) => (
                                 <TextField
@@ -173,7 +173,7 @@ const NySøknadModal = (props: { open: boolean; onClose: () => void }) => {
                             control={form.control}
                         />
 
-                        <VStack gap="2">
+                        <VStack gap="space-8">
                             <Controller
                                 render={({ field }) => (
                                     <RadioGroup
@@ -189,15 +189,15 @@ const NySøknadModal = (props: { open: boolean; onClose: () => void }) => {
                                 control={form.control}
                             />
                             {form.watch('vilHaBarn') && (
-                                <VStack gap="4">
+                                <VStack gap="space-16">
                                     {fields.map((item, index) => {
                                         return (
                                             <Box
                                                 key={item.id}
-                                                background="bg-subtle"
+                                                background="neutral-soft"
                                                 style={{ padding: '16px' }}
                                             >
-                                                <VStack gap="4">
+                                                <VStack gap="space-16">
                                                     <Controller
                                                         render={({ field }) => (
                                                             <TextField
@@ -222,7 +222,7 @@ const NySøknadModal = (props: { open: boolean; onClose: () => void }) => {
                                                         name={`barnetillegg.${index}.fødselsdato`}
                                                         control={form.control}
                                                     />
-                                                    <HStack gap="2">
+                                                    <HStack gap="space-8">
                                                         <Controller
                                                             render={({ field }) => (
                                                                 <TextField
@@ -299,11 +299,11 @@ const NySøknadModal = (props: { open: boolean; onClose: () => void }) => {
                     </VStack>
                 </Modal.Body>
                 <Modal.Footer>
-                    <VStack gap="4">
+                    <VStack gap="space-16">
                         {fetchNysøknad.error && (
                             <Alert variant="error">{fetchNysøknad.error.message}</Alert>
                         )}
-                        <HStack gap="4">
+                        <HStack gap="space-16">
                             <Button
                                 variant="secondary"
                                 type="button"
@@ -346,7 +346,7 @@ export const RangePickerDate = (props: {
         <VStack>
             <Label>Deltakelsesperiode</Label>
             <Detail>Default periode er 1.april 2025 - 10.april 2025</Detail>
-            <HStack gap={'4'}>
+            <HStack gap={'space-16'}>
                 <DatePicker {...datepickerProps} dropdownCaption>
                     <DatePicker.Input
                         {...fromInputProps}

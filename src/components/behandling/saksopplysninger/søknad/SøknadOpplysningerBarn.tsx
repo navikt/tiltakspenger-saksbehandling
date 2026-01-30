@@ -81,14 +81,13 @@ const MedBarn = ({ tiltaksperiode, søknad, visBarnetilleggPeriodiseringKnapp }:
     );
 
     return (
-        <VStack gap={'4'}>
+        <VStack gap={'space-16'}>
             {personopplysningerBarn.isLoading && (
-                <HStack gap="2" align="center">
+                <HStack gap="space-8" align="center">
                     <Loader size="small" title="Henter skjermingsinformasjon for barn..." />
                     <BodyShort size="small">Henter skjermingsinformasjon for barn...</BodyShort>
                 </HStack>
             )}
-
             {søknad.barnetillegg
                 .toSorted((a, b) => (a.fødselsdato > b.fødselsdato ? 1 : -1))
                 .map((barn) => {
@@ -107,7 +106,6 @@ const MedBarn = ({ tiltaksperiode, søknad, visBarnetilleggPeriodiseringKnapp }:
                         />
                     );
                 })}
-
             {visBarnetilleggPeriodiseringKnapp &&
                 erRammebehandlingInnvilgelseResultat(resultat) && (
                     <PeriodiserBarnetilleggKnapp søknad={søknad} />

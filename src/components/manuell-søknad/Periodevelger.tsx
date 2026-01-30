@@ -69,13 +69,13 @@ export const Periodevelger = ({ fraOgMedFelt, tilOgMedFelt, tittel, rules }: Pro
 
     return (
         <div className={styles.blokk}>
-            <VStack gap="4">
+            <VStack gap="space-16">
                 {tittel && (
                     <Heading size="xsmall" level="3">
                         {tittel}
                     </Heading>
                 )}
-                <HStack gap="8">
+                <HStack gap="space-32">
                     <Datovelger
                         label="Fra og med"
                         selected={fraOgMedDatoController.field.value as string | undefined}

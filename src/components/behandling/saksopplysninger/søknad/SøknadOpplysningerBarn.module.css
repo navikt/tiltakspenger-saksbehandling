@@ -1,6 +1,6 @@
 .wrapper {
     margin-bottom: 1rem;
     padding: 1rem 0;
-    border-top: dashed 1px var(--a-gray-500);
-    border-bottom: dashed 1px var(--a-gray-500);
+    border-top: dashed 1px var(--ax-neutral-500);
+    border-bottom: dashed 1px var(--ax-neutral-500);
 }

@@ -298,7 +298,7 @@ const MeldekortBehandlingMenyKnapper = (props: {
             }
 
             return (
-                <VStack align="start" gap="2">
+                <VStack align="start" gap="space-8">
                     <ActionMenu.Item
                         icon={<ArrowRightIcon aria-hidden />}
                         onClick={() => router.push(props.meldeperiodeUrl)}
@@ -316,7 +316,6 @@ const MeldekortBehandlingMenyKnapper = (props: {
                     >
                         {isLeggTilbakeMeldekortBehandlingMutating ? <Loader /> : 'Legg tilbake'}
                     </ActionMenu.Item>
-
                     <ActionMenu.Item
                         variant={'danger'}
                         icon={<XMarkOctagonIcon aria-hidden />}

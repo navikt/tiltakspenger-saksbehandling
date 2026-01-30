@@ -23,7 +23,7 @@ export const MeldekortBehandling = ({ meldekortBehandling }: Props) => {
     const { type, status, erAvsluttet } = meldekortBehandling;
 
     return (
-        <VStack gap={'5'}>
+        <VStack gap={'space-20'}>
             <div className={style.toppRad}>
                 <Heading level={'3'} size={'medium'}>
                     {erAvsluttet ? 'Siste behandling' : 'Pågående behandling'}

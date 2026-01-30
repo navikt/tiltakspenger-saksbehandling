@@ -41,7 +41,7 @@ export const MeldekortTaBeslutning = ({ meldekortBehandling }: Props) => {
 
     return (
         <>
-            <HStack justify="start" gap="3" align="end">
+            <HStack justify="start" gap="space-12" align="end">
                 <Underkjenn
                     size="small"
                     onUnderkjenn={{

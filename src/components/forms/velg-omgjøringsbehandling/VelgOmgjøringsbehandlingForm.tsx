@@ -81,7 +81,7 @@ export const VelgOmgjøringsbehandlingModal = (props: {
                             </LocalAlert.Content>
                         </LocalAlert>
                     )}
-                    <HStack gap="4">
+                    <HStack gap="space-16">
                         <Button variant="secondary" onClick={props.onClose}>
                             Lukk
                         </Button>
@@ -106,7 +106,7 @@ const VelgOmgjøringsbehandlingForm = (props: {
     });
 
     return (
-        <VStack gap="4">
+        <VStack gap="space-16">
             <Controller
                 name={'behandlingstype'}
                 control={props.control}
@@ -125,7 +125,6 @@ const VelgOmgjøringsbehandlingForm = (props: {
                     </Select>
                 )}
             />
-
             {behandlingstype === VelgOmgjøringsbehandlingTyper.SØKNADSBEHANDLING_INNVILGELSE && (
                 <Controller
                     name={'søknadId'}
@@ -142,7 +141,6 @@ const VelgOmgjøringsbehandlingForm = (props: {
                     )}
                 />
             )}
-
             {behandlingstype === 'REVURDERING_OMGJØRING' && (
                 <Controller
                     name={'vedtakId'}

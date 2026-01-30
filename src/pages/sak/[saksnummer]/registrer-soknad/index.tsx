@@ -79,7 +79,7 @@ const RegistrerSøknadManueltPage = (props: Props) => {
                 />
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className={styles.main}>
-                        <VStack gap="4">
+                        <VStack gap="space-16">
                             <Heading size="medium" level="2" spacing>
                                 Manuell registrering av søknad
                             </Heading>
@@ -163,7 +163,7 @@ const RegistrerSøknadManueltPage = (props: Props) => {
                                 </Alert>
                             )}
 
-                            <HStack gap="4">
+                            <HStack gap="space-16">
                                 <Button variant="secondary" type="reset">
                                     Avbryt
                                 </Button>

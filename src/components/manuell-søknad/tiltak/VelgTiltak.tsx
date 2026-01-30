@@ -111,7 +111,7 @@ export const VelgTiltak = ({ sakId, spørsmålName, legend }: Props) => {
                                 </Alert>
                             )}
                             {muligeTiltak.length > 0 && (
-                                <VStack gap="2">
+                                <VStack gap="space-8">
                                     <Alert variant="info">
                                         Dersom ingen av tiltakene under passer kan du skrive inn
                                         tiltaket manuelt under.

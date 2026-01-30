@@ -23,7 +23,7 @@
 
 .ikkeOppdatertBeregning {
     .beregning {
-        color: var(--a-gray-400);
+        color: var(--ax-neutral-400);
         cursor: not-allowed;
     }
 }

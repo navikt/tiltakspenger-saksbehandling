@@ -92,7 +92,7 @@ export const MeldekortBehandlingKnappForOversikt = ({
             }
 
             return (
-                <VStack align="start" gap="2">
+                <VStack align="start" gap="space-8">
                     <Button
                         className={style.knapp}
                         size="small"

@@ -54,7 +54,7 @@ const SortableTable = <Kolonner extends Record<string, string>>({
 
     return (
         <div>
-            <HStack gap="4">
+            <HStack gap="space-16">
                 <BodyShort>Antall behandlinger: {antallRader}</BodyShort>
                 {antallRaderFiltrertVekk > 0 && (
                     <BodyShort>

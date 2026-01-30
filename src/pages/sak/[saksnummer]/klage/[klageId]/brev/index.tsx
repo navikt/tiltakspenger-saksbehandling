@@ -109,7 +109,7 @@ const BrevKlagePage = ({ sak }: Props) => {
     return (
         <form onSubmit={form.handleSubmit(onSubmit)}>
             <VStack>
-                <HStack gap="2" marginInline="16" marginBlock="8" align="start">
+                <HStack gap="space-8" marginInline="space-64" marginBlock="space-32" align="start">
                     {form.formState.isDirty ? (
                         <WarningCircleIcon />
                     ) : (
@@ -124,8 +124,8 @@ const BrevKlagePage = ({ sak }: Props) => {
                     readOnly={erReadonlyForSaksbehandler || !kanBehandleKlage(klage, null)}
                 />
 
-                <VStack gap="8" marginInline="16" marginBlock="8" align="start">
-                    <VStack gap="4" align="start">
+                <VStack gap="space-32" marginInline="space-64" marginBlock="space-32" align="start">
+                    <VStack gap="space-16" align="start">
                         {forhåndsvis.error && (
                             <LocalAlert status="error">
                                 <LocalAlert.Header>
@@ -144,7 +144,7 @@ const BrevKlagePage = ({ sak }: Props) => {
                                 <LocalAlert.Content>{lagreBrev.error.message}</LocalAlert.Content>
                             </LocalAlert>
                         )}
-                        <HStack gap="4">
+                        <HStack gap="space-16">
                             {!erReadonlyForSaksbehandler && kanBehandleKlage(klage, null) && (
                                 <Button
                                     type="button"
@@ -179,7 +179,7 @@ const BrevKlagePage = ({ sak }: Props) => {
                                     );
                                 }}
                             >
-                                <HStack gap="1">
+                                <HStack gap="space-4">
                                     <EnvelopeOpenIcon title="Åpent brev ikon" fontSize="1.5rem" />
                                     <BodyShort>Forhåndsvis brev</BodyShort>
                                 </HStack>

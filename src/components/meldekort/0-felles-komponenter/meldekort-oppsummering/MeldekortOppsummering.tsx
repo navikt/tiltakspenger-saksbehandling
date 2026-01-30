@@ -23,7 +23,7 @@ export const MeldekortOppsummering = ({ meldekortBehandling }: Props) => {
     );
 
     return (
-        <VStack gap={'5'}>
+        <VStack gap={'space-20'}>
             <MeldekortUker dager={beregning?.beregningForMeldekortetsPeriode.dager ?? dager} />
             {godkjentTidspunkt && (
                 <BodyShort size={'small'}>

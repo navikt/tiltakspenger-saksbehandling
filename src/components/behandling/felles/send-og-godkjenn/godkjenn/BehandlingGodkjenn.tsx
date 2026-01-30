@@ -34,7 +34,7 @@ export const BehandlingGodkjenn = ({ behandling }: Props) => {
 
     return (
         <>
-            <HStack gap="2">
+            <HStack gap="space-8">
                 <Underkjenn
                     onUnderkjenn={{
                         click: (begrunnelse) => underkjennApi.trigger({ begrunnelse }),

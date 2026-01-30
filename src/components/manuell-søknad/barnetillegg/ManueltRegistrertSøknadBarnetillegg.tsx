@@ -84,7 +84,6 @@ export const ManueltRegistrertSøknadBarnetillegg = ({ sakId, name, legend }: Pr
     return (
         <div className={harSøktOmBarnetillegg.field.value === 'JA' ? styles.blokkUtvidet : ''}>
             <JaNeiSpørsmål name={name} legend={legend} />
-
             {harSøktOmBarnetillegg.field.value === 'JA' && (
                 <div className={styles.blokk}>
                     {søknadsperiodeErTom && (
@@ -159,9 +158,9 @@ export const ManueltRegistrertSøknadBarnetillegg = ({ sakId, name, legend }: Pr
                             <Heading size="medium" level="3" spacing>
                                 Barn lagt til manuelt
                             </Heading>
-                            <VStack gap="4">
+                            <VStack gap="space-16">
                                 {manuelleBarn.fields.map((barn: Barn, index: number) => (
-                                    <HStack key={barn.uuid} gap="4" justify="space-between">
+                                    <HStack key={barn.uuid} gap="space-16" justify="space-between">
                                         <InformasjonOmBarnManuell
                                             barn={barn}
                                             søknadsperiode={periode.field.value as Periode}

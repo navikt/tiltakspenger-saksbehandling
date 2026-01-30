@@ -1,6 +1,6 @@
 import {
-    ÅpenBehandlingForOversiktType,
     ÅpenBehandlingForOversikt,
+    ÅpenBehandlingForOversiktType,
 } from '~/types/ÅpenBehandlingForOversikt';
 import { Alert, Table, Tag } from '@navikt/ds-react';
 import {
@@ -104,7 +104,11 @@ const propsForRad = (
         case ÅpenBehandlingForOversiktType.SØKNAD: {
             return {
                 typeTekst,
-                statusTag: <Tag variant="neutral">{'Søknad'}</Tag>,
+                statusTag: (
+                    <Tag data-color="neutral" variant="outline">
+                        {'Søknad'}
+                    </Tag>
+                ),
                 kravtidspunkt: formaterTidspunkt(åpenBehandling.kravtidspunkt),
                 meny: (
                     <Alert variant={'info'} size={'small'} inline={true}>

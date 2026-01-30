@@ -10,7 +10,7 @@ type Props = {
 
 export const BehandlingLagringVarsler = ({ isDirty, resultat }: Props) => {
     return (
-        <VStack gap={'2'}>
+        <VStack gap={'space-8'}>
             {isDirty ? (
                 <Alert variant={'info'} size={'small'}>
                     {'Endringer må lagres før behandlingen kan sendes til beslutter'}

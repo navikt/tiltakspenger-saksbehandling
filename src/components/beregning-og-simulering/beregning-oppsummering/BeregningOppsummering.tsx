@@ -10,7 +10,7 @@ export const BeregningOppsummering = ({ beregninger }: Props) => {
     const { totalt, ordinært, barnetillegg } = beregninger;
 
     return (
-        <VStack gap={'1'}>
+        <VStack gap={'space-4'}>
             <Heading size={'xsmall'} level={'4'} spacing={true}>
                 {'Beregning oppsummert'}
             </Heading>

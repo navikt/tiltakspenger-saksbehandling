@@ -42,7 +42,7 @@ export const BehandlingBarnetilleggPerioder = () => {
 
     return (
         <VedtakSeksjon.FullBredde className={style.wrapper}>
-            <VStack gap={'3'} align={'start'}>
+            <VStack gap={'space-12'} align={'start'}>
                 {barnetilleggPerioder.map((bt, index) => (
                     <PeriodeVelger
                         btPeriode={bt}
@@ -53,7 +53,7 @@ export const BehandlingBarnetilleggPerioder = () => {
                 ))}
 
                 {!erReadonly && (
-                    <HStack gap={'3'}>
+                    <HStack gap={'space-12'}>
                         <Button
                             type={'button'}
                             variant={'secondary'}
@@ -147,7 +147,7 @@ const PeriodeVelger = ({ btPeriode, index, readOnly }: PeriodeVelgerProps) => {
 
     return (
         <HStack
-            gap={'3'}
+            gap={'space-12'}
             align={'end'}
             className={classNames(erIkkeInnvilgetPeriode && style.feilPeriode)}
         >
@@ -175,7 +175,6 @@ const PeriodeVelger = ({ btPeriode, index, readOnly }: PeriodeVelgerProps) => {
                     });
                 }}
             />
-
             <Datovelger
                 label={'Til og med'}
                 selected={periode.tilOgMed}
@@ -201,7 +200,6 @@ const PeriodeVelger = ({ btPeriode, index, readOnly }: PeriodeVelgerProps) => {
                     });
                 }}
             />
-
             <Select
                 label={'Antall barn'}
                 size={'small'}
@@ -230,7 +228,6 @@ const PeriodeVelger = ({ btPeriode, index, readOnly }: PeriodeVelgerProps) => {
                     );
                 })}
             </Select>
-
             {!readOnly && (
                 <Button
                     type={'button'}
@@ -247,7 +244,6 @@ const PeriodeVelger = ({ btPeriode, index, readOnly }: PeriodeVelgerProps) => {
                     {'Fjern'}
                 </Button>
             )}
-
             {erIkkeInnvilgetPeriode && (
                 <Alert variant={'error'} size={'small'} inline={true}>
                     {'Perioden inneholder dager som ikke er innvilget'}

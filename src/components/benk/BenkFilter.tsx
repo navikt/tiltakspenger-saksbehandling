@@ -45,8 +45,8 @@ const BenkFilter = ({
     }, [benkOversikt.behandlingssammendrag, innloggetSaksbehandler.navIdent]);
 
     return (
-        <VStack gap="4">
-            <HStack gap="4">
+        <VStack gap="space-16">
+            <HStack gap="space-16">
                 <Select
                     label="Benk"
                     size="small"
@@ -127,7 +127,7 @@ const BenkFilter = ({
                     ))}
                 </Select>
             </HStack>
-            <HStack gap="4">
+            <HStack gap="space-16">
                 <Button type="button" size="small" onClick={onOppdaterFilter}>
                     Oppdater filtre
                 </Button>

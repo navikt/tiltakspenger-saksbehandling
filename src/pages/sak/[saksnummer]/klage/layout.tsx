@@ -113,7 +113,7 @@ const KlageLayout = ({ children, saksnummer, activeTab }: Props) => {
             <KlageHeader saksnummer={data!.saksnummer} klage={klage} />
             <KlageStedIndikator activeTab={activeTab} klage={klage} />
             {klage?.status === KlagebehandlingStatus.AVBRUTT && (
-                <VStack marginInline="10">
+                <VStack marginInline="space-40">
                     <AvbruttOppsummering avbrutt={klage.avbrutt!} />
                 </VStack>
             )}
@@ -127,10 +127,10 @@ export default KlageLayout;
 const KlageHeader = (props: { saksnummer: string; klage: Nullable<Klagebehandling> }) => {
     return (
         <div className={styles.klageHeader}>
-            <HStack margin="4" align="center" justify="space-between">
+            <HStack margin="space-16" align="center" justify="space-between">
                 <Heading size="medium">Klage</Heading>
 
-                <HStack align="end" gap="6">
+                <HStack align="end" gap="space-24">
                     <BodyShort>
                         Behandlingsstatus{' '}
                         {props.klage ? klagebehandlingStatusTilText[props.klage.status] : 'utredes'}
@@ -148,7 +148,7 @@ const KlageHeader = (props: { saksnummer: string; klage: Nullable<Klagebehandlin
                         Sist endret {props.klage ? formaterTidspunkt(props.klage.sistEndret) : '-'}
                     </BodyShort>
                     <Link href={`/sak/${props.saksnummer}`} target="_blank">
-                        <HStack align="start" gap="1">
+                        <HStack align="start" gap="space-4">
                             <BodyShort>Gå til personoversikt</BodyShort>
                             <ExternalLinkIcon title="ny fane" fontSize="1.4rem" />
                         </HStack>

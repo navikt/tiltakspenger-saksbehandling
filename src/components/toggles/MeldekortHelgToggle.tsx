@@ -19,7 +19,7 @@ const MeldekortHelgToggle = () => {
     });
 
     return (
-        <HStack gap="2">
+        <HStack gap="space-8">
             {toggleBrukerSendInnHelgMeldekort.error && !closed && (
                 <Alert variant="error" size="small" closeButton onClose={() => setIsClosed(true)}>
                     {toggleBrukerSendInnHelgMeldekort?.error?.message}

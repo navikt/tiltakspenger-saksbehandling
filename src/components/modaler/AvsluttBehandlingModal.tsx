@@ -93,7 +93,7 @@ const AvsluttBehandlingModal = (props: Props) => {
                             <LocalAlert.Content>{props.footer.error}</LocalAlert.Content>
                         </LocalAlert>
                     )}
-                    <HStack gap="4">
+                    <HStack gap="space-16">
                         <Button
                             variant="secondary"
                             type="button"
@@ -103,7 +103,8 @@ const AvsluttBehandlingModal = (props: Props) => {
                             {props.footer?.secondaryButtonText ?? 'Ikke avslutt behandling'}
                         </Button>
                         <Button
-                            variant="danger"
+                            data-color="danger"
+                            variant="primary"
                             size="small"
                             loading={props.footer?.isMutating}
                             type="submit"

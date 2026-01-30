@@ -48,7 +48,7 @@ export const PersonaliaHeader = ({
     }, []);
 
     return (
-        <HStack gap="3" align="center" className={styles.personaliaHeader}>
+        <HStack gap="space-12" align="center" className={styles.personaliaHeader}>
             <PersonCircleIcon className={styles.personIcon} />
             {!isPersonopplysningerLoading && personopplysninger ? (
                 <PersonaliaInnhold
@@ -87,9 +87,21 @@ const PersonaliaInnhold = ({ saksnummer, personopplysninger }: PersonaliaInnhold
             </Link>
             <BodyShort>{fnr}</BodyShort>
             <CopyButton copyText={fnr} variant="action" size="small" />
-            {strengtFortrolig && <Tag variant="error">Søker har strengt fortrolig adresse</Tag>}
-            {fortrolig && <Tag variant="error">Søker har fortrolig adresse</Tag>}
-            {skjerming && <Tag variant="error">Søker er skjermet</Tag>}
+            {strengtFortrolig && (
+                <Tag data-color="danger" variant="outline">
+                    Søker har strengt fortrolig adresse
+                </Tag>
+            )}
+            {fortrolig && (
+                <Tag data-color="danger" variant="outline">
+                    Søker har fortrolig adresse
+                </Tag>
+            )}
+            {skjerming && (
+                <Tag data-color="danger" variant="outline">
+                    Søker er skjermet
+                </Tag>
+            )}
         </>
     );
 };

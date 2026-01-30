@@ -20,14 +20,20 @@ export const InformasjonOmBarnManuell = ({ barn, søknadsperiode }: Props) => {
         ? erDatoIPeriode(finn16årsdag(barn.fødselsdato), søknadsperiode)
         : false;
     return (
-        <VStack gap="2">
-            <HStack gap="4">
+        <VStack gap="space-8">
+            <HStack gap="space-16">
                 <Heading size="small" level="4">
                     {getNavnMedFødselsdato(barn, false)}
                 </Heading>
-                {bleFødtITiltaksperioden && <Tag variant="warning">Født i søknadsperioden</Tag>}
+                {bleFødtITiltaksperioden && (
+                    <Tag data-color="warning" variant="outline">
+                        Født i søknadsperioden
+                    </Tag>
+                )}
                 {fyller16ITiltaksperioden && (
-                    <Tag variant="warning">Fyller 16 år i søknadsperioden</Tag>
+                    <Tag data-color="warning" variant="outline">
+                        Fyller 16 år i søknadsperioden
+                    </Tag>
                 )}
             </HStack>
             <div>

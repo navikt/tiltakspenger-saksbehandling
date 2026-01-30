@@ -16,7 +16,7 @@ export const PeriodeVelger = ({
     tilOgMed,
 }: PeriodeVelgerProps) => {
     return (
-        <HStack gap="4">
+        <HStack gap="space-16">
             <Datovelger readOnly={readOnly} size={size} {...fraOgMed} />
             <Datovelger readOnly={readOnly} size={size} {...tilOgMed} />
         </HStack>

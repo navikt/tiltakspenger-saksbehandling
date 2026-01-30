@@ -74,7 +74,7 @@ const ResultatPage = ({ sak, omgjøringsbehandling, vedtakOgBehandling, søknade
     const { innloggetSaksbehandler } = useSaksbehandler();
 
     return (
-        <VStack gap="8" marginInline="16" marginBlock="8" maxWidth="30rem">
+        <VStack gap="space-32" marginInline="space-64" marginBlock="space-32" maxWidth="30rem">
             {klage.resultat === KlagebehandlingResultat.OMGJØR ? (
                 <Omgjøringsresultat
                     sak={sak}
@@ -110,7 +110,7 @@ const Omgjøringsresultat = (props: {
     }
 
     return (
-        <VStack align="start" gap="8">
+        <VStack align="start" gap="space-32">
             <LocalAlert status="warning">
                 <LocalAlert.Header>
                     <LocalAlert.Title>Omgjøring av vedtak</LocalAlert.Title>
@@ -121,7 +121,6 @@ const Omgjøringsresultat = (props: {
                     gjøres manuelt.
                 </LocalAlert.Content>
             </LocalAlert>
-
             {erKlageUnderAktivOmgjøring(props.klage) ? (
                 <Button
                     as={Link}
