@@ -29,6 +29,15 @@ export const BehandlingSaksopplysninger = () => {
 
     return (
         <>
+            <BehandlingSaksopplysning
+                navn="Saksbehandler"
+                verdi={behandling.saksbehandler ?? 'Ikke tildelt'}
+            />
+            <BehandlingSaksopplysning
+                navn="Beslutter"
+                verdi={behandling?.beslutter ?? 'Ikke tildelt'}
+            />
+            <Separator />
             <Heading size={'small'} level={'3'}>
                 {'Saksopplysninger'}
             </Heading>
