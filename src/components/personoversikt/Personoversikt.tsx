@@ -1,7 +1,8 @@
-import { Box, Button, Heading, HStack, Tabs } from '@navikt/ds-react';
+import styles from './Personoversikt.module.css';
+import { ActionMenu, Box, Button, Heading, HStack, Tabs } from '@navikt/ds-react';
 import { MeldekortOversikt } from './meldekort-oversikt/MeldekortOversikt';
 import { ApneBehandlingerOversikt } from './behandlinger-oversikt/ApneBehandlingerOversikt';
-import { OpprettRevurdering } from './opprett-revurdering/OpprettRevurdering';
+import { OpprettRevurderingMenuItem } from './opprett-revurdering/OpprettRevurderingMenuItem';
 import { PersonaliaHeader } from '../personaliaheader/PersonaliaHeader';
 import { useSak } from '~/context/sak/SakContext';
 import { AvsluttedeBehandlinger } from './behandlinger-oversikt/AvsluttedeBehandlinger';
@@ -15,13 +16,19 @@ import {
     Rammebehandlingsstatus,
     Rammebehandlingstype,
 } from '~/types/Rammebehandling';
-import { OpprettSøknad } from '~/components/personoversikt/manuell-søknad/OpprettSøknad';
-
-import styles from './Personoversikt.module.css';
+import { OpprettSøknadMenuItem } from '~/components/personoversikt/manuell-søknad/OpprettSøknadMenuItem';
 import { Tidslinjer } from '~/components/tidslinjer/Tidslinjer';
 import router from 'next/router';
 import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
-import { FileCheckmarkIcon, FileIcon, FileXMarkIcon, InboxIcon } from '@navikt/aksel-icons';
+import {
+    ChevronDownIcon,
+    FileCheckmarkIcon,
+    FileIcon,
+    FilePlusIcon,
+    FileXMarkIcon,
+    InboxIcon,
+} from '@navikt/aksel-icons';
+import Divider from '~/components/divider/Divider';
 
 export const Personoversikt = () => {
     const { sak } = useSak();
@@ -66,68 +73,81 @@ export const Personoversikt = () => {
             <NotificationBanner />
             <PersonaliaHeader sakId={sakId} saksnummer={saksnummer} />
             <Box className={styles.wrapper}>
-                <HStack align={'center'} justify={'space-between'} className={styles.spacing}>
+                <HStack align={'center'} justify={'space-between'} className={styles.tittelRad}>
                     <Heading spacing size={'medium'} level={'2'}>
                         {'Personoversikt'}
                     </Heading>
-                    <HStack gap="3">
-                        <MeldekortHelgToggle />
-                        {featureToggle.klageToggle && (
-                            <Button
-                                type="button"
-                                variant="secondary"
-                                onClick={() => router.push(`/sak/${saksnummer}/klage/opprett`)}
-                            >
-                                Registrer klage
-                            </Button>
-                        )}
-                        <OpprettSøknad
-                            saksnummer={saksnummer}
-                            harVedtak={harVedtattSøknadsbehandling(behandlinger)}
-                        />
-                        <OpprettRevurdering
-                            sakId={sakId}
-                            harVedtak={harVedtattSøknadsbehandling(behandlinger)}
-                        />
-                    </HStack>
                 </HStack>
 
-                <Tidslinjer sak={sak} className={styles.tabellwrapper} />
-
-                <Tabs defaultValue={tabs.apneBehandlinger} className={styles.tabellwrapper}>
-                    <Tabs.List>
+                <Tidslinjer sak={sak} heading={false} className={styles.tabellwrapper} />
+                <Divider />
+                <Tabs defaultValue={tabs.apneBehandlinger} className={styles.tabs}>
+                    <Tabs.List className={styles.tabsList}>
                         <Tabs.Tab
                             value={tabs.apneBehandlinger}
                             label={labelWithCounter('Åpne behandlinger', åpneBehandlinger.length)}
                             icon={<FileIcon aria-hidden />}
+                            className={styles.tab}
                         />
                         <Tabs.Tab
                             value={tabs.meldekort}
                             label={'Meldekort'}
                             icon={<InboxIcon aria-hidden />}
+                            className={styles.tab}
                         />
                         <Tabs.Tab
                             value={tabs.vedtatteBehandlinger}
                             label={`Vedtatte behandlinger`}
                             icon={<FileCheckmarkIcon aria-hidden />}
+                            className={styles.tab}
                         />
                         <Tabs.Tab
                             value={tabs.avsluttedeBehandlinger}
                             label="Avsluttede behandlinger"
                             icon={<FileXMarkIcon aria-hidden />}
+                            className={styles.tab}
                         />
+                        <ActionMenu>
+                            <ActionMenu.Trigger>
+                                <Button
+                                    data-color="neutral"
+                                    variant="tertiary"
+                                    icon={<ChevronDownIcon aria-hidden />}
+                                    iconPosition="right"
+                                    className={styles.tab}
+                                >
+                                    Opprett behandling
+                                </Button>
+                            </ActionMenu.Trigger>
+                            <ActionMenu.Content>
+                                {featureToggle.klageToggle && (
+                                    <ActionMenu.Item
+                                        icon={<FilePlusIcon aria-hidden />}
+                                        onSelect={() =>
+                                            router.push(`/sak/${saksnummer}/klage/opprett`)
+                                        }
+                                    >
+                                        Registrer klage
+                                    </ActionMenu.Item>
+                                )}
+                                <OpprettSøknadMenuItem
+                                    saksnummer={saksnummer}
+                                    harVedtak={harVedtattSøknadsbehandling(behandlinger)}
+                                />
+                                <OpprettRevurderingMenuItem
+                                    sakId={sakId}
+                                    harVedtak={harVedtattSøknadsbehandling(behandlinger)}
+                                />
+                            </ActionMenu.Content>
+                        </ActionMenu>
                     </Tabs.List>
+
                     <Tabs.Panel value={tabs.apneBehandlinger} className={styles.panel}>
-                        <Heading level={'3'} size={'small'}>
-                            {'Åpne behandlinger'}
-                        </Heading>
                         <ApneBehandlingerOversikt åpneBehandlinger={åpneBehandlinger} />
                     </Tabs.Panel>
                     <Tabs.Panel value={tabs.meldekort} className={styles.panel}>
                         <div className={styles.meldekortHeaderRad}>
-                            <Heading level={'3'} size={'small'}>
-                                {'Meldekort'}
-                            </Heading>
+                            <MeldekortHelgToggle />
                             {meldeperiodeKjederIkkeKlare && (
                                 <MeldekortOversiktIkkeKlar
                                     meldeperiodeKjeder={meldeperiodeKjederIkkeKlare}

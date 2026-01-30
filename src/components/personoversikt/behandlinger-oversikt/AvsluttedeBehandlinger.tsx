@@ -1,4 +1,4 @@
-import { Box, Heading } from '@navikt/ds-react';
+import { Box } from '@navikt/ds-react';
 import { AvbruttBehandlingCellInfo } from './AvsluttedeBehandlingerUtils';
 import { AvbrutteBehandlingerTabell } from './AvbrutteBehandlingerTabell';
 import { Rammebehandling } from '~/types/Rammebehandling';
@@ -30,9 +30,6 @@ export const AvsluttedeBehandlinger = (props: {
 
     return (
         <Box className={styles.panel}>
-            <Heading level="3" size="small">
-                Avsluttede behandlinger
-            </Heading>
             <AvbrutteBehandlingerTabell
                 avbrutteBehandlinger={avbrutteBehandlinger}
                 saksnummer={props.saksnummer}

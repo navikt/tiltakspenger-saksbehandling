@@ -15,8 +15,10 @@
 }
 
 .scroll {
-    display: inline-flex;
+    display: flex;
+    justify-content: flex-end;
     align-items: center;
+    gap: var(--a-spacing-3);
 
     .periode {
         margin-right: 0.5rem;

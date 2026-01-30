@@ -30,10 +30,11 @@ import { perioderOverlapper } from '~/utils/periode';
 
 type Props = {
     sak: SakProps;
+    heading?: boolean;
     className?: string;
 };
 
-export const Tidslinjer = ({ sak, className }: Props) => {
+export const Tidslinjer = ({ sak, heading = true, className }: Props) => {
     const { tidslinje, saksnummer, utbetalingstidslinje } = sak;
 
     const { startDate, endDate, scrollTidslinje } = useTidslinjeDateRange(tidslinje);
@@ -41,36 +42,12 @@ export const Tidslinjer = ({ sak, className }: Props) => {
     return (
         <div className={classNames(style.wrapper, className)}>
             <div className={style.header}>
-                <Heading size={'small'} level={'2'}>
-                    {'Gjeldende vedtak og utbetalinger'}
-                </Heading>
-                <div className={style.scroll}>
-                    <BodyShort size={'small'} className={style.periode}>
-                        {periodeTilFormatertDatotekst({
-                            fraOgMed: startDate.toString(),
-                            tilOgMed: endDate.toString(),
-                        })}
-                    </BodyShort>
-                    <Button
-                        size={'small'}
-                        variant={'tertiary'}
-                        onClick={() => scrollTidslinje(-1)}
-                        icon={<ChevronLeftIcon />}
-                    >
-                        {'Forrige'}
-                    </Button>
-                    <Button
-                        size={'small'}
-                        variant={'tertiary'}
-                        onClick={() => scrollTidslinje(1)}
-                        icon={<ChevronRightIcon />}
-                        iconPosition={'right'}
-                    >
-                        {'Neste'}
-                    </Button>
-                </div>
+                {heading && (
+                    <Heading size={'small'} level={'2'}>
+                        {'Gjeldende vedtak og utbetalinger'}
+                    </Heading>
+                )}
             </div>
-
             {/* Obs hvis du vurderer å splitte denne i mindre komponenter: */}
             {/* Timeline fra ds-react er avhengig av at komponentene i hierarkiet har direkte children/parent relasjoner uten wrappere mellom */}
             <Timeline startDate={startDate} endDate={endDate}>
@@ -227,6 +204,31 @@ export const Tidslinjer = ({ sak, className }: Props) => {
                     })}
                 </Timeline.Row>
             </Timeline>
+            <div className={style.scroll}>
+                <BodyShort size={'small'} className={style.periode}>
+                    {periodeTilFormatertDatotekst({
+                        fraOgMed: startDate.toString(),
+                        tilOgMed: endDate.toString(),
+                    })}
+                </BodyShort>
+                <Button
+                    size={'small'}
+                    variant={'tertiary'}
+                    onClick={() => scrollTidslinje(-1)}
+                    icon={<ChevronLeftIcon />}
+                >
+                    {'Forrige'}
+                </Button>
+                <Button
+                    size={'small'}
+                    variant={'tertiary'}
+                    onClick={() => scrollTidslinje(1)}
+                    icon={<ChevronRightIcon />}
+                    iconPosition={'right'}
+                >
+                    {'Neste'}
+                </Button>
+            </div>
         </div>
     );
 };

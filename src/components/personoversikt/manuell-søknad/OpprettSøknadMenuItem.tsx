@@ -1,15 +1,16 @@
-import { Button } from '@navikt/ds-react';
+import { ActionMenu, Button } from '@navikt/ds-react';
 import { useRef } from 'react';
 import router from 'next/router';
 import { BekreftelsesModal } from '~/components/modaler/BekreftelsesModal';
 import { registrerSoknadUrl } from '~/utils/urls';
+import { TasklistSaveIcon } from '@navikt/aksel-icons';
 
 type Props = {
     saksnummer: string;
     harVedtak: boolean;
 };
 
-export const OpprettSøknad = ({ saksnummer }: Props) => {
+export const OpprettSøknadMenuItem = ({ saksnummer }: Props) => {
     const modalRef = useRef<HTMLDialogElement>(null);
     const lukkModal = () => {
         modalRef.current?.close();
@@ -17,14 +18,12 @@ export const OpprettSøknad = ({ saksnummer }: Props) => {
 
     return (
         <>
-            <Button
-                size={'small'}
-                variant={'secondary'}
-                type={'button'}
+            <ActionMenu.Item
+                icon={<TasklistSaveIcon aria-hidden />}
                 onClick={() => modalRef.current?.showModal()}
             >
                 {'Registrer søknad manuelt'}
-            </Button>
+            </ActionMenu.Item>
             <BekreftelsesModal
                 modalRef={modalRef}
                 lukkModal={lukkModal}
