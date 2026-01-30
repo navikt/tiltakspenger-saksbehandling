@@ -24,7 +24,6 @@ import { useHentPersonopplysninger } from '~/components/personaliaheader/useHent
 import {
     erKlageKnyttetTilRammebehandling,
     erKlageOmgjøring,
-    erKlageUnderAktivOmgjøring,
     finnUrlForKlageSteg,
     kanBehandleKlage,
 } from '~/utils/klageUtils';
@@ -125,7 +124,6 @@ const FormkravKlagePage = ({ sak, omgjøringsbehandling }: Props) => {
                     <FormkravForm
                         readonly={
                             formTilstand === 'LAGRET' ||
-                            erKlageUnderAktivOmgjøring(klage) ||
                             (!!omgjøringsbehandling &&
                                 !erRammebehandlingUnderAktivOmgjøring(omgjøringsbehandling))
                         }
