@@ -15,6 +15,8 @@ import { VelgOmgjøringsbehandlingModal } from '~/components/forms/velg-omgjøri
 import { Søknad } from '~/types/Søknad';
 import { Rammevedtak } from '~/types/Rammevedtak';
 import Link from 'next/link';
+import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
+import { Saksbehandler } from '~/types/Saksbehandler';
 
 type Props = {
     sak: SakProps;
@@ -69,6 +71,7 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
 
 const ResultatPage = ({ sak, omgjøringsbehandling, vedtakOgBehandling, søknader }: Props) => {
     const { klage } = useKlage();
+    const { innloggetSaksbehandler } = useSaksbehandler();
 
     return (
         <VStack gap="8" marginInline="16" marginBlock="8" maxWidth="30rem">
@@ -79,6 +82,7 @@ const ResultatPage = ({ sak, omgjøringsbehandling, vedtakOgBehandling, søknade
                     omgjøringsbehandling={omgjøringsbehandling}
                     vedtakOgBehandling={vedtakOgBehandling}
                     søknader={søknader}
+                    innloggetSaksbehandler={innloggetSaksbehandler}
                 />
             ) : (
                 <>Ukjent resultat for klage</>
@@ -93,7 +97,11 @@ const Omgjøringsresultat = (props: {
     omgjøringsbehandling: Nullable<Rammebehandling>;
     vedtakOgBehandling: Array<{ vedtak: Rammevedtak; behandling: Rammebehandling }>;
     søknader: Søknad[];
+    innloggetSaksbehandler: Saksbehandler;
 }) => {
+    const erReadonlyForSaksbehandler =
+        props.innloggetSaksbehandler.navIdent !== props.klage.saksbehandler;
+
     const [vilVelgeOmgjøringsbehandlingModal, setVilVelgeOmgjøringsbehandlingModal] =
         useState(false);
 
@@ -125,11 +133,11 @@ const Omgjøringsresultat = (props: {
                 >
                     Gå til omgjøringsbehandling
                 </Button>
-            ) : (
+            ) : !erReadonlyForSaksbehandler ? (
                 <Button type="button" onClick={() => setVilVelgeOmgjøringsbehandlingModal(true)}>
                     Velg omgjøringsbehandling
                 </Button>
-            )}
+            ) : null}
             {vilVelgeOmgjøringsbehandlingModal && (
                 <VelgOmgjøringsbehandlingModal
                     sakId={props.sak.sakId}

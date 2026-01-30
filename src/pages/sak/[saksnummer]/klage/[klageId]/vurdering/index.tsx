@@ -38,6 +38,7 @@ import { Rammevedtak } from '~/types/Rammevedtak';
 import { Rammebehandling } from '~/types/Rammebehandling';
 import { Nullable } from '~/types/UtilTypes';
 import { erRammebehandlingUnderAktivOmgjøring } from '~/utils/behandling';
+import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
 
 type Props = {
     sak: SakProps;
@@ -92,6 +93,7 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
 
 const VurderingKlagePage = ({ sak, vedtakOgBehandling, søknader, omgjøringsbehandling }: Props) => {
     const { klage, setKlage } = useKlage();
+    const { innloggetSaksbehandler } = useSaksbehandler();
     const [vilAvslutteBehandlingModal, setVilAvslutteBehandlingModal] = useState(false);
     const [formTilstand, setFormTilstand] = useState<'REDIGERER' | 'LAGRET'>(
         !kanBehandleKlage(klage, omgjøringsbehandling) || harKlagevurderingsstegUtfylt(klage)
@@ -100,6 +102,8 @@ const VurderingKlagePage = ({ sak, vedtakOgBehandling, søknader, omgjøringsbeh
     );
     const [vilVelgeOmgjøringsbehandlingModal, setVilVelgeOmgjøringsbehandlingModal] =
         useState(false);
+
+    const erReadonlyForSaksbehandler = innloggetSaksbehandler.navIdent !== klage.saksbehandler;
 
     const form = useForm<VurderingFormData>({
         defaultValues: klagebehandlingTilVurderingFormData(klage),
@@ -161,6 +165,7 @@ const VurderingKlagePage = ({ sak, vedtakOgBehandling, søknader, omgjøringsbeh
                     <VurderingForm
                         control={form.control}
                         readonly={
+                            erReadonlyForSaksbehandler ||
                             formTilstand === 'LAGRET' ||
                             (!!omgjøringsbehandling &&
                                 !erRammebehandlingUnderAktivOmgjøring(omgjøringsbehandling))
@@ -195,32 +200,40 @@ const VurderingKlagePage = ({ sak, vedtakOgBehandling, søknader, omgjøringsbeh
                         </Button>
                     ) : (
                         <HStack gap="4">
-                            {kanBehandleKlage(klage, omgjøringsbehandling) && (
-                                <>
-                                    <Button
-                                        type="button"
-                                        variant="tertiary"
-                                        onClick={() => {
-                                            setVilAvslutteBehandlingModal(true);
-                                        }}
-                                    >
-                                        <HStack>
-                                            <TrashIcon title="Søppelbøtte ikon" fontSize="1.5rem" />
-                                            <BodyShort>Avslutt</BodyShort>
-                                        </HStack>
-                                    </Button>
-                                    <Button
-                                        type="button"
-                                        variant="tertiary"
-                                        onClick={() => setFormTilstand('REDIGERER')}
-                                    >
-                                        <HStack>
-                                            <PencilIcon title="Rediger ikon" fontSize="1.5rem" />
-                                            <BodyShort>Rediger</BodyShort>
-                                        </HStack>
-                                    </Button>
-                                </>
-                            )}
+                            {!erReadonlyForSaksbehandler &&
+                                kanBehandleKlage(klage, omgjøringsbehandling) && (
+                                    <>
+                                        <Button
+                                            type="button"
+                                            variant="tertiary"
+                                            onClick={() => {
+                                                setVilAvslutteBehandlingModal(true);
+                                            }}
+                                        >
+                                            <HStack>
+                                                <TrashIcon
+                                                    title="Søppelbøtte ikon"
+                                                    fontSize="1.5rem"
+                                                />
+                                                <BodyShort>Avslutt</BodyShort>
+                                            </HStack>
+                                        </Button>
+                                        <Button
+                                            type="button"
+                                            variant="tertiary"
+                                            onClick={() => setFormTilstand('REDIGERER')}
+                                        >
+                                            <HStack>
+                                                <PencilIcon
+                                                    title="Rediger ikon"
+                                                    fontSize="1.5rem"
+                                                />
+                                                <BodyShort>Rediger</BodyShort>
+                                            </HStack>
+                                        </Button>
+                                    </>
+                                )}
+
                             {erKlageUnderAktivOmgjøring(klage) ? (
                                 <Button
                                     as={Link}
@@ -232,14 +245,14 @@ const VurderingKlagePage = ({ sak, vedtakOgBehandling, søknader, omgjøringsbeh
                                 >
                                     Gå til omgjøringsbehandling
                                 </Button>
-                            ) : (
+                            ) : !erReadonlyForSaksbehandler ? (
                                 <Button
                                     type="button"
                                     onClick={() => setVilVelgeOmgjøringsbehandlingModal(true)}
                                 >
                                     Velg omgjøringsbehandling
                                 </Button>
-                            )}
+                            ) : null}
                         </HStack>
                     )}
 

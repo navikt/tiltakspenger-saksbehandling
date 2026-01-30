@@ -31,6 +31,7 @@ import { useAvbrytKlagebehandling, useOppdaterFormkrav } from '~/api/KlageApi';
 import AvsluttBehandlingModal from '~/components/modaler/AvsluttBehandlingModal';
 import { Nullable } from '~/types/UtilTypes';
 import { erRammebehandlingUnderAktivOmgjøring } from '~/utils/behandling';
+import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
 
 type Props = {
     sak: SakProps;
@@ -67,10 +68,12 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
 
 const FormkravKlagePage = ({ sak, omgjøringsbehandling }: Props) => {
     const { klage, setKlage } = useKlage();
-
+    const { innloggetSaksbehandler } = useSaksbehandler();
     const { personopplysninger } = useHentPersonopplysninger(sak.sakId);
     const [vilAvslutteBehandlingModal, setVilAvslutteBehandlingModal] = useState(false);
     const [formTilstand, setFormTilstand] = useState<'REDIGERER' | 'LAGRET'>('LAGRET');
+
+    const erReadonlyForSaksbehandler = innloggetSaksbehandler.navIdent !== klage.saksbehandler;
 
     const form = useForm<FormkravFormData>({
         defaultValues: klageTilFormkravFormData(klage),
@@ -123,6 +126,7 @@ const FormkravKlagePage = ({ sak, omgjøringsbehandling }: Props) => {
                     )}
                     <FormkravForm
                         readonly={
+                            erReadonlyForSaksbehandler ||
                             formTilstand === 'LAGRET' ||
                             (!!omgjøringsbehandling &&
                                 !erRammebehandlingUnderAktivOmgjøring(omgjøringsbehandling))
@@ -172,32 +176,39 @@ const FormkravKlagePage = ({ sak, omgjøringsbehandling }: Props) => {
                         <Button loading={oppdaterFormkrav.isMutating}>Lagre</Button>
                     ) : (
                         <HStack gap="4">
-                            {kanBehandleKlage(klage, omgjøringsbehandling) && (
-                                <>
-                                    <Button
-                                        type="button"
-                                        variant="tertiary"
-                                        onClick={() => {
-                                            setVilAvslutteBehandlingModal(true);
-                                        }}
-                                    >
-                                        <HStack>
-                                            <TrashIcon title="Søppelbøtte ikon" fontSize="1.5rem" />
-                                            <BodyShort>Avslutt</BodyShort>
-                                        </HStack>
-                                    </Button>
-                                    <Button
-                                        type="button"
-                                        variant="tertiary"
-                                        onClick={() => setFormTilstand('REDIGERER')}
-                                    >
-                                        <HStack>
-                                            <PencilIcon title="Rediger ikon" fontSize="1.5rem" />
-                                            <BodyShort>Rediger</BodyShort>
-                                        </HStack>
-                                    </Button>
-                                </>
-                            )}
+                            {!erReadonlyForSaksbehandler &&
+                                kanBehandleKlage(klage, omgjøringsbehandling) && (
+                                    <>
+                                        <Button
+                                            type="button"
+                                            variant="tertiary"
+                                            onClick={() => {
+                                                setVilAvslutteBehandlingModal(true);
+                                            }}
+                                        >
+                                            <HStack>
+                                                <TrashIcon
+                                                    title="Søppelbøtte ikon"
+                                                    fontSize="1.5rem"
+                                                />
+                                                <BodyShort>Avslutt</BodyShort>
+                                            </HStack>
+                                        </Button>
+                                        <Button
+                                            type="button"
+                                            variant="tertiary"
+                                            onClick={() => setFormTilstand('REDIGERER')}
+                                        >
+                                            <HStack>
+                                                <PencilIcon
+                                                    title="Rediger ikon"
+                                                    fontSize="1.5rem"
+                                                />
+                                                <BodyShort>Rediger</BodyShort>
+                                            </HStack>
+                                        </Button>
+                                    </>
+                                )}
                             <Button
                                 type="button"
                                 onClick={() => router.push(finnUrlForKlageSteg(klage))}

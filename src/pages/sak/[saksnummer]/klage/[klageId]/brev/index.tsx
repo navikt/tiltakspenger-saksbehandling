@@ -28,6 +28,7 @@ import styles from './index.module.css';
 import { useFetchBlobFraApi, useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { kanBehandleKlage } from '~/utils/klageUtils';
 import router from 'next/router';
+import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
 
 type Props = {
     sak: SakProps;
@@ -58,6 +59,9 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
 
 const BrevKlagePage = ({ sak }: Props) => {
     const { klage, setKlage } = useKlage();
+    const { innloggetSaksbehandler } = useSaksbehandler();
+
+    const erReadonlyForSaksbehandler = innloggetSaksbehandler.navIdent !== klage.saksbehandler;
 
     const form = useForm<BrevFormData>({
         defaultValues: klageTilBrevFormData(klage),
@@ -117,7 +121,7 @@ const BrevKlagePage = ({ sak }: Props) => {
                 <BrevForm
                     control={form.control}
                     className={styles.brevformContainer}
-                    readOnly={!kanBehandleKlage(klage, null)}
+                    readOnly={erReadonlyForSaksbehandler || !kanBehandleKlage(klage, null)}
                 />
 
                 <VStack gap="8" marginInline="16" marginBlock="8" align="start">
@@ -141,7 +145,7 @@ const BrevKlagePage = ({ sak }: Props) => {
                             </LocalAlert>
                         )}
                         <HStack gap="4">
-                            {kanBehandleKlage(klage, null) && (
+                            {!erReadonlyForSaksbehandler && kanBehandleKlage(klage, null) && (
                                 <Button
                                     type="button"
                                     variant="secondary"
@@ -182,7 +186,7 @@ const BrevKlagePage = ({ sak }: Props) => {
                             </Button>
                         </HStack>
                     </VStack>
-                    {kanBehandleKlage(klage, null) && (
+                    {!erReadonlyForSaksbehandler && kanBehandleKlage(klage, null) && (
                         <Button disabled={!klage.kanIverksette || form.formState.isDirty}>
                             Ferdigstill behandling og send brev
                         </Button>
