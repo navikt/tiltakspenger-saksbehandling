@@ -7,14 +7,16 @@ import { useRevurderingInnvilgelseSkjema } from '~/components/behandling/context
 import { InnvilgelsesperioderVelger } from '~/components/behandling/felles/innvilgelsesperiode/InnvilgelsesperioderVelger';
 import { BehandlingBarnetillegg } from '~/components/behandling/felles/barnetillegg/BehandlingBarnetillegg';
 import { BegrunnelseVilkårsvurdering } from '~/components/behandling/felles/begrunnelse-vilkårsvurdering/BegrunnelseVilkårsvurdering';
+import { Klagebehandling } from '~/types/Klage';
+import { Nullable } from '~/types/UtilTypes';
 
-export const RevurderingInnvilgelseVedtak = () => {
+export const RevurderingInnvilgelseVedtak = (props: { klage: Nullable<Klagebehandling> }) => {
     const { innvilgelse } = useRevurderingInnvilgelseSkjema();
 
     return (
         <>
             <Heading size={'medium'} level={'1'} spacing={true}>
-                {'Revurdering av innvilgelse'}
+                {props.klage ? 'Omgjøring etter klage - ' : ''}Revurdering av innvilgelse
             </Heading>
             <InnvilgelsesperioderVelger />
             <Separator />

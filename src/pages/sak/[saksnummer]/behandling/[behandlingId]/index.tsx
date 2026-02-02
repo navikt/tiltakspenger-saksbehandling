@@ -8,17 +8,20 @@ import { logger } from '@navikt/next-logger';
 import { SakProvider } from '~/context/sak/SakContext';
 import { SakProps } from '~/types/Sak';
 import { BehandlingId, Rammebehandling as BehandlingType } from '~/types/Rammebehandling';
+import { Klagebehandling } from '~/types/Klage';
+import { Nullable } from '~/types/UtilTypes';
 
 type Props = {
     behandling: BehandlingType;
     sak: SakProps;
+    klage: Nullable<Klagebehandling>;
 };
 
-const Behandling = ({ behandling, sak }: Props) => {
+const Behandling = ({ behandling, sak, klage }: Props) => {
     return (
         <BehandlingProvider behandling={behandling}>
             <SakProvider sak={sak}>
-                <BehandlingPage />
+                <BehandlingPage klage={klage} />
             </SakProvider>
         </BehandlingProvider>
     );
@@ -43,8 +46,13 @@ export const getServerSideProps: GetServerSideProps = pageWithAuthentication(asy
         };
     }
 
+    const behandlingensKlage =
+        sak.klageBehandlinger.find((klage) => klage.id === behandling.klagebehandlingId) ?? null;
+
     return {
-        props: { behandling, sak } satisfies ComponentProps<typeof Behandling>,
+        props: { behandling, sak, klage: behandlingensKlage } satisfies ComponentProps<
+            typeof Behandling
+        >,
     };
 });
 

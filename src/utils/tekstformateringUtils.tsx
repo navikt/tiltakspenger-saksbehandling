@@ -14,7 +14,7 @@ import { RevurderingResultat } from '~/types/Revurdering';
 import { ÅpenBehandlingForOversiktType } from '~/types/ÅpenBehandlingForOversikt';
 import { Søknadstype } from '~/types/Søknad';
 import { SøknadstypeManueltRegistrertSøknad } from '~/components/manuell-søknad/ManueltRegistrertSøknad';
-import { KlagebehandlingResultat, KlagebehandlingStatus } from '~/types/Klage';
+import { KlagebehandlingResultat, KlagebehandlingStatus, OmgjøringÅrsak } from '~/types/Klage';
 
 export const finnBehandlingStatusTag = (
     status: Rammebehandlingsstatus,
@@ -310,6 +310,14 @@ export const klagebehandlingResultatTilTag: Record<KlagebehandlingResultat, Reac
             {klagebehandlingResultatTilText[KlagebehandlingResultat.OMGJØR]}
         </Tag>
     ),
+};
+
+export const omgjøringsårsakTilText: Record<OmgjøringÅrsak, string> = {
+    [OmgjøringÅrsak.ANNET]: 'Annet',
+    [OmgjøringÅrsak.FEIL_ELLER_ENDRET_FAKTA]: 'Feil eller endret fakta',
+    [OmgjøringÅrsak.FEIL_LOVANVENDELSE]: 'Feil lovanvendelse',
+    [OmgjøringÅrsak.FEIL_REGELVERKSFORSTAAELSE]: 'Feil regelverksforståelse',
+    [OmgjøringÅrsak.PROSESSUELL_FEIL]: 'Prosessuelt feil',
 };
 
 export const utbetalingsstatusTekst: Record<Utbetalingsstatus, string> = {

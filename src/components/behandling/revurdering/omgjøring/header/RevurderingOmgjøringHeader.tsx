@@ -8,8 +8,10 @@ import { behandlingUrl } from '~/utils/urls';
 import { TabsIcon } from '@navikt/aksel-icons';
 import { useRevurderingOmgjøring } from '~/components/behandling/context/BehandlingContext';
 import { useSak } from '~/context/sak/SakContext';
+import { Klagebehandling } from '~/types/Klage';
+import { Nullable } from '~/types/UtilTypes';
 
-export const RevurderingOmgjøringHeader = () => {
+export const RevurderingOmgjøringHeader = (props: { klage: Nullable<Klagebehandling> }) => {
     const { behandling } = useRevurderingOmgjøring();
     const { sak } = useSak();
 
@@ -28,7 +30,7 @@ export const RevurderingOmgjøringHeader = () => {
     return (
         <VStack gap="space-8">
             <Heading size={'medium'} level={'1'} spacing={true}>
-                {'Omgjøring'}
+                {props.klage ? 'Omgjøring etter klage - ' : ''}Omgjøring
             </Heading>
             {behandling.status === Rammebehandlingsstatus.VEDTATT ? (
                 <OppsummeringsPar

@@ -4,8 +4,8 @@ import { RevurderingVedtak } from './revurdering/RevurderingVedtak';
 import { useBehandling } from './context/BehandlingContext';
 import { Rammebehandlingstype } from '~/types/Rammebehandling';
 import { PersonaliaHeader } from '../personaliaheader/PersonaliaHeader';
-import { Alert } from '@navikt/ds-react';
-import { finnBehandlingStatusTag } from '~/utils/tekstformateringUtils';
+import { Alert, Box, Heading, VStack } from '@navikt/ds-react';
+import { finnBehandlingStatusTag, omgjøringsårsakTilText } from '~/utils/tekstformateringUtils';
 import AvbruttOppsummering from '../oppsummeringer/oppsummeringAvAvbrutt/OppsummeringAvAvbrutt';
 import SideBarMain from '../../layouts/sidebar-main/SideBarMain';
 import { Tidslinjer } from '~/components/tidslinjer/Tidslinjer';
@@ -14,8 +14,11 @@ import BehandlingSattPåVentOppsummering from '~/components/oppsummeringer/behan
 import { BehandlingSkjemaProvider } from '~/components/behandling/context/BehandlingSkjemaContext';
 
 import style from './BehandlingPage.module.css';
+import { Klagebehandling } from '~/types/Klage';
+import { Nullable } from '~/types/UtilTypes';
+import { OppsummeringsPar } from '../oppsummeringer/oppsummeringspar/OppsummeringsPar';
 
-export const BehandlingPage = () => {
+export const BehandlingPage = (props: { klage: Nullable<Klagebehandling> }) => {
     const { sak } = useSak();
     const {
         id,
@@ -54,11 +57,14 @@ export const BehandlingPage = () => {
                             )}
                             <Tidslinjer sak={sak} />
                             {avbrutt && <AvbruttOppsummering avbrutt={avbrutt} withPanel={true} />}
+                            {props.klage && (
+                                <OppsummeringAvKlageForRammebehandling klage={props.klage} />
+                            )}
                             <div className={style.vedtakContainer}>
                                 {type === Rammebehandlingstype.SØKNADSBEHANDLING ? (
-                                    <SøknadsbehandlingVedtak />
+                                    <SøknadsbehandlingVedtak klagebehandling={props.klage} />
                                 ) : type === Rammebehandlingstype.REVURDERING ? (
-                                    <RevurderingVedtak />
+                                    <RevurderingVedtak klage={props.klage} />
                                 ) : (
                                     <Alert
                                         variant={'error'}
@@ -70,5 +76,25 @@ export const BehandlingPage = () => {
                 />
             </BehandlingSkjemaProvider>
         </>
+    );
+};
+
+const OppsummeringAvKlageForRammebehandling = (props: { klage: Klagebehandling }) => {
+    return (
+        <Box background="default" padding="space-16">
+            <Heading size="small">Informasjon fra klagen</Heading>
+            <VStack gap="space-4">
+                <OppsummeringsPar
+                    retning="vertikal"
+                    label="Årsak"
+                    verdi={omgjøringsårsakTilText[props.klage.årsak!]}
+                />
+                <OppsummeringsPar
+                    retning="vertikal"
+                    label="Begrunnelse"
+                    verdi={props.klage.begrunnelse}
+                />
+            </VStack>
+        </Box>
     );
 };

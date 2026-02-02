@@ -12,14 +12,16 @@ import { BehandlingBarnetillegg } from '~/components/behandling/felles/barnetill
 import { useBehandlingInnvilgelseSkjema } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 import { InnvilgelsesperioderVelger } from '~/components/behandling/felles/innvilgelsesperiode/InnvilgelsesperioderVelger';
 import { BegrunnelseVilkårsvurdering } from '~/components/behandling/felles/begrunnelse-vilkårsvurdering/BegrunnelseVilkårsvurdering';
+import { Klagebehandling } from '~/types/Klage';
+import { Nullable } from '~/types/UtilTypes';
 
-export const SøknadsbehandlingVedtak = () => {
+export const SøknadsbehandlingVedtak = (props: { klagebehandling: Nullable<Klagebehandling> }) => {
     const { resultat } = useBehandlingSkjema();
 
     return (
         <>
             <Heading size={'medium'} level={'1'} spacing={true}>
-                {'Vedtak (søknadsbehandling)'}
+                {props.klagebehandling ? 'Omgjøring etter klage - ' : ''}Vedtak (søknadsbehandling)
             </Heading>
             <SøknadsbehandlingAutomatiskBehandling />
             <SøknadsbehandlingResultatVelger />
