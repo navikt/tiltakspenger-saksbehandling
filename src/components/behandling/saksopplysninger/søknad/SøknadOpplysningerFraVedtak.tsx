@@ -30,7 +30,7 @@ export const SøknadOpplysningerFraVedtak = ({ behandling }: Props) => {
     }
 
     return (
-        <VStack gap={'4'}>
+        <VStack gap={'space-16'}>
             <Select
                 label={'Velg søknad'}
                 size={'small'}
@@ -46,7 +46,7 @@ export const SøknadOpplysningerFraVedtak = ({ behandling }: Props) => {
                 ))}
             </Select>
             {valgtBehandling && (
-                <VStack gap={'2'}>
+                <VStack gap={'space-8'}>
                     <Link as={NextLink} href={behandlingUrl(valgtBehandling)}>
                         <BodyShort size={'small'}>{'Til behandlingen'}</BodyShort>
                     </Link>

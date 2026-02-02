@@ -46,11 +46,11 @@ const OvertabehandlingModal = (props: {
                 </BodyShort>
             </Modal.Body>
             <Modal.Footer>
-                <VStack gap="4">
+                <VStack gap="space-16">
                     {overtaBehandlingApi.error && (
                         <Alert variant={'error'}>{overtaBehandlingApi.error.message}</Alert>
                     )}
-                    <HStack gap="2">
+                    <HStack gap="space-8">
                         <Button type="button" variant="secondary" onClick={props.onClose}>
                             Avbryt
                         </Button>

@@ -12,5 +12,5 @@ li {
 *   vi ønsker "alltid" at denne skal være hvit
 */
 .navds-button--secondary {
-    background-color: var(--a-white);
+    background-color: var(--ax-neutral-000);
 }

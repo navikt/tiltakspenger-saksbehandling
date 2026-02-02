@@ -44,7 +44,7 @@ export const InnvilgelsesperioderVelger = () => {
                     {'Innvilgelsesperioder'}
                 </Heading>
                 {harValgtPeriode ? (
-                    <VStack gap={'3'} align={'start'}>
+                    <VStack gap={'space-12'} align={'start'}>
                         {innvilgelsesperioder.map((it, index, array) => {
                             const nestePeriode = array.at(index + 1)?.periode;
 
@@ -91,7 +91,7 @@ export const InnvilgelsesperioderVelger = () => {
                         />
                     </VStack>
                 ) : (
-                    <HStack gap={'3'}>
+                    <HStack gap={'space-12'}>
                         <InnvilgelsesperiodeDatovelgere
                             periode={innvilgelsesperioder.at(0)!.periode}
                             tiltaksdeltakelsesperiode={tiltaksdeltakelsesperiode}
@@ -135,14 +135,13 @@ const InnvilgelsesperiodeVelgerFull = ({
     );
 
     return (
-        <HStack gap={'3'} align={'end'}>
+        <HStack gap={'space-12'} align={'end'}>
             <InnvilgelsesperiodeDatovelgere
                 periode={periode}
                 tiltaksdeltakelsesperiode={tiltaksdeltakelsesperiode}
                 index={index}
                 readOnly={readOnly}
             />
-
             <Select
                 label={'Antall dager'}
                 size={'small'}
@@ -167,7 +166,6 @@ const InnvilgelsesperiodeVelgerFull = ({
                     );
                 })}
             </Select>
-
             <Select
                 label={'Tiltak'}
                 size={'small'}
@@ -198,13 +196,11 @@ const InnvilgelsesperiodeVelgerFull = ({
                     );
                 })}
             </Select>
-
             {!harValgtGyldigTiltak && (
                 <Alert variant={'error'} size={'small'} inline={true}>
                     {'Kan ikke innvilge for dette tiltaket'}
                 </Alert>
             )}
-
             {innvilgelsesperioder.length > 1 && !readOnly && (
                 <Button
                     type={'button'}

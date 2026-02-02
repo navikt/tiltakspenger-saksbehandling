@@ -39,7 +39,7 @@ export const MeldekortVenstreSeksjon = () => {
     const { periode, tiltaksnavn, brukersMeldekort, status } = meldeperiodeKjede;
 
     return (
-        <VStack gap="3" className={styles.wrapper}>
+        <VStack gap="space-12" className={styles.wrapper}>
             <Heading level={'2'} size={'medium'} className={styles.header}>
                 {`Meldekort uke ${ukenummerFraDatotekst(periode.fraOgMed)} og ${ukenummerFraDatotekst(periode.tilOgMed)}`}
             </Heading>
@@ -79,13 +79,11 @@ export const MeldekortVenstreSeksjon = () => {
                         : 'Ikke mottatt'
                 }
             />
-
             {sisteMeldekortBehandling ? (
                 <MeldekortBehandlingDetaljer {...sisteMeldekortBehandling} />
             ) : (
                 <MeldekortBehandlingOpprett type={MeldekortBehandlingType.FØRSTE_BEHANDLING} />
             )}
-
             {sisteMeldekortBehandling?.attesteringer && (
                 <OppsummeringAvAttesteringer
                     attesteringer={sisteMeldekortBehandling.attesteringer}

@@ -9,7 +9,7 @@ const Divider = ({
     thickness?: 1 | 2 | 3;
     margin?: string;
 }) => {
-    const colorValue = color === 'gray' ? 'var(--a-gray-300)' : 'var(--a-gray-900)';
+    const colorValue = color === 'gray' ? 'var(--ax-neutral-300)' : 'var(--ax-neutral-900)';
 
     const style: React.CSSProperties = {
         backgroundColor: colorValue,

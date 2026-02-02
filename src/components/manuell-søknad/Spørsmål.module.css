@@ -1,5 +1,5 @@
 .blokkUtvidet {
-    background-color: var(--a-gray-50);
+    background-color: var(--ax-neutral-100);
 }
 
 .blokk {
@@ -7,8 +7,8 @@
 }
 
 .informasjonsInnhentingBlokk {
-    background-color: var(--a-blue-50);
-    border: 1px solid var(--a-border-default);
+    background-color: var(--ax-accent-200);
+    border: 1px solid var(--ax-border-neutral-subtle);
 }
 
 .finnTiltakButton {
@@ -16,5 +16,5 @@
 }
 
 .leggTilBarnButton {
-    background: var(--a-bg-default);
+    background: var(--ax-bg-default);
 }

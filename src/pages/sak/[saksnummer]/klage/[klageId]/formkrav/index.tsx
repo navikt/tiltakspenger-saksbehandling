@@ -106,8 +106,14 @@ const FormkravKlagePage = ({ sak, omgjøringsbehandling }: Props) => {
         //vi har formprovider fordi journalpostid komponenten bruker useformcontext. merk at bruken av useformcontext gir oss ikke compile feil dersom endrer på form-interfacet
         <FormProvider {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
-                <VStack gap="8" marginInline="16" marginBlock="8" align="start" maxWidth="35rem">
-                    <HStack gap="2">
+                <VStack
+                    gap="space-32"
+                    marginInline="space-64"
+                    marginBlock="space-32"
+                    align="start"
+                    maxWidth="35rem"
+                >
+                    <HStack gap="space-8">
                         <CheckmarkCircleIcon title="Sjekk ikon" fontSize="1.5rem" color="green" />
                         <Heading size="small">Formkrav</Heading>
                     </HStack>
@@ -175,7 +181,7 @@ const FormkravKlagePage = ({ sak, omgjøringsbehandling }: Props) => {
                     {formTilstand === 'REDIGERER' ? (
                         <Button loading={oppdaterFormkrav.isMutating}>Lagre</Button>
                     ) : (
-                        <HStack gap="4">
+                        <HStack gap="space-16">
                             {!erReadonlyForSaksbehandler &&
                                 kanBehandleKlage(klage, omgjøringsbehandling) && (
                                     <>

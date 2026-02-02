@@ -10,7 +10,7 @@ type Props = {
 
 export const MeldekortUker = ({ dager, underBehandling, className }: Props) => {
     return (
-        <VStack gap={'1'} className={className}>
+        <VStack gap={'space-4'} className={className}>
             <MeldekortUke
                 dager={dager.slice(0, 7)}
                 ukeIndex={0}

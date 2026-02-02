@@ -20,19 +20,39 @@ export const InformasjonOmBarnPDL = ({ barn, søknadsperiode }: Props) => {
         : false;
     return (
         <>
-            <HStack gap="2">
+            <HStack gap="space-8">
                 <Heading size="small" level="4">
                     {getNavnMedFødselsdato(barn, barn.fortrolig || barn.strengtFortrolig)}
                 </Heading>
-                {barn.strengtFortrolig && <Tag variant="error">Strengt fortrolig adresse</Tag>}
-                {barn.fortrolig && <Tag variant="error">Fortrolig adresse</Tag>}
-                {barn.skjerming && <Tag variant="error">Skjermet</Tag>}
-                {barn.dødsdato && (
-                    <Tag variant="warning">Død {formaterDatotekst(barn.dødsdato)}</Tag>
+                {barn.strengtFortrolig && (
+                    <Tag data-color="danger" variant="outline">
+                        Strengt fortrolig adresse
+                    </Tag>
                 )}
-                {bleFødtITiltaksperioden && <Tag variant="warning">Født i søknadsperioden</Tag>}
+                {barn.fortrolig && (
+                    <Tag data-color="danger" variant="outline">
+                        Fortrolig adresse
+                    </Tag>
+                )}
+                {barn.skjerming && (
+                    <Tag data-color="danger" variant="outline">
+                        Skjermet
+                    </Tag>
+                )}
+                {barn.dødsdato && (
+                    <Tag data-color="warning" variant="outline">
+                        Død {formaterDatotekst(barn.dødsdato)}
+                    </Tag>
+                )}
+                {bleFødtITiltaksperioden && (
+                    <Tag data-color="warning" variant="outline">
+                        Født i søknadsperioden
+                    </Tag>
+                )}
                 {fyller16ITiltaksperioden && (
-                    <Tag variant="warning">Fyller 16 år i søknadsperioden</Tag>
+                    <Tag data-color="warning" variant="outline">
+                        Fyller 16 år i søknadsperioden
+                    </Tag>
                 )}
             </HStack>
         </>

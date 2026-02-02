@@ -56,7 +56,7 @@ export const RevurderingStansResultat = () => {
                     ))}
                 </Select>
 
-                <HStack align={'end'} gap={'4'}>
+                <HStack align={'end'} gap={'space-16'}>
                     <Datovelger
                         label={'Stans fra og med'}
                         minDate={førsteDagSomGirRett}

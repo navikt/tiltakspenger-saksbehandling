@@ -3,9 +3,9 @@
 }
 
 .etterbetalingBeløp {
-    border: 2px solid var(--a-green-500);
+    border: 2px solid var(--ax-success-500);
 }
 
 .tilbakekrevingBeløp {
-    border: 2px solid var(--a-red-500);
+    border: 2px solid var(--ax-danger-700);
 }

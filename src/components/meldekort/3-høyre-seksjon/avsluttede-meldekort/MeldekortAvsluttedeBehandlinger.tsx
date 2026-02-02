@@ -20,7 +20,7 @@ export const MeldekortAvsluttedeBehandlinger = () => {
     const valgtBehandling = avbrutteMeldekortBehandlinger.at(valgtIndex);
 
     return (
-        <VStack gap={'5'}>
+        <VStack gap={'space-20'}>
             <HStack className={style.toppRad}>
                 <Select
                     label={'Velg avsluttet behandling'}

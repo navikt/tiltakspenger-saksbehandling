@@ -21,7 +21,7 @@ export const BrukersMeldekortVisning = ({ brukersMeldekort }: Props) => {
     const uke2 = dager.slice(7, 14);
 
     return (
-        <VStack gap={'1'}>
+        <VStack gap={'space-4'}>
             <BodyShort size={'small'} className={styles.mottatt}>
                 {'Mottatt fra bruker: '}
                 <strong>{formaterTidspunkt(mottatt)}</strong>
@@ -57,7 +57,7 @@ const Uke = ({ dager }: UkeProps) => {
                                 <Table.DataCell>{ukedagFraDatotekst(dato)}</Table.DataCell>
                                 <Table.DataCell>{formaterDatotekst(dato)}</Table.DataCell>
                                 <Table.DataCell>
-                                    <HStack align="center" gap="3" wrap={false}>
+                                    <HStack align="center" gap="space-12" wrap={false}>
                                         {ikonForBrukersMeldekortDagStatus[status]}
                                         {`${brukersMeldekortDagStatusTekst[status]}`}
                                     </HStack>

@@ -19,11 +19,10 @@ export const BehandlingOppdaterSaksopplysninger = () => {
     const { oppdaterOgHentBehandling, isLoading, error } = useOppdaterSaksopplysninger(behandling);
 
     return (
-        <VStack gap={'1'}>
+        <VStack gap={'space-4'}>
             <BodyShort
                 size={'small'}
             >{`Sist oppdatert: ${formaterTidspunktMedSekunder(oppslagstidspunkt)}`}</BodyShort>
-
             {periode && (
                 <BodyShort
                     size={'small'}
@@ -56,7 +55,6 @@ export const BehandlingOppdaterSaksopplysninger = () => {
                     {'Hent oppdaterte saksopplysninger'}
                 </Button>
             )}
-
             {error && (
                 <Varsel
                     variant={'error'}

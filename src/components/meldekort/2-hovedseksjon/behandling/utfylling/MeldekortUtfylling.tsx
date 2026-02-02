@@ -159,7 +159,7 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
     return (
         <FormProvider {...formContext}>
             <form onSubmit={formContext.handleSubmit(onSubmit)}>
-                <VStack gap={'5'}>
+                <VStack gap={'space-20'}>
                     <MeldekortUker dager={formContext.watch('dager')} underBehandling={true} />
                     {skalViseBeregningVarsel && (
                         <Alert inline={true} variant={'warning'}>
@@ -269,7 +269,7 @@ const MeldekortUtfyllingFooter = (props: {
     kanSendeTilBeslutning: boolean;
 }) => {
     return (
-        <VStack gap={'2'}>
+        <VStack gap={'space-8'}>
             {Object.values(props.form.formState.errors).length > 0 && (
                 <Alert variant={'error'} size={'small'}>
                     <BodyShort weight={'semibold'} size={'small'}>
@@ -296,7 +296,7 @@ const MeldekortUtfyllingFooter = (props: {
                     )}
                     buttonProps={{ variant: 'tertiary' }}
                 />
-                <HStack gap="2">
+                <HStack gap="space-8">
                     <Button
                         variant={'secondary'}
                         size="small"

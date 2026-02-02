@@ -27,14 +27,13 @@ const FormkravForm = (props: {
     });
 
     return (
-        <VStack gap="8" align="start">
+        <VStack gap="space-32" align="start">
             <JournalpostId
                 fnrFraPersonopplysninger={props.fnrFraPersonopplysninger}
                 size="small"
                 readonly={props.readonly}
                 className={styles.journalpostIdInputContainer}
             />
-
             <Controller
                 control={props.control}
                 name="vedtakDetPåklages"
@@ -69,7 +68,7 @@ const FormkravForm = (props: {
                         error={fieldState.error?.message}
                         readOnly={props.readonly}
                     >
-                        <HStack gap="6">
+                        <HStack gap="space-24">
                             <Radio value={true}>Ja</Radio>
                             <Radio value={false}>Nei</Radio>
                         </HStack>
@@ -87,7 +86,7 @@ const FormkravForm = (props: {
                         error={fieldState.error?.message}
                         readOnly={props.readonly}
                     >
-                        <HStack gap="6">
+                        <HStack gap="space-24">
                             <Radio value={true}>Ja</Radio>
                             <Radio value={false}>Nei</Radio>
                         </HStack>
@@ -105,14 +104,13 @@ const FormkravForm = (props: {
                         error={fieldState.error?.message}
                         readOnly={props.readonly}
                     >
-                        <HStack gap="6">
+                        <HStack gap="space-24">
                             <Radio value={true}>Ja</Radio>
                             <Radio value={false}>Nei</Radio>
                         </HStack>
                     </RadioGroup>
                 )}
             />
-
             {erKlagefristOverholdt === false && (
                 <Controller
                     control={props.control}
@@ -135,7 +133,6 @@ const FormkravForm = (props: {
                     )}
                 />
             )}
-
             <Controller
                 control={props.control}
                 name="erKlagenSignert"
@@ -147,7 +144,7 @@ const FormkravForm = (props: {
                         error={fieldState.error?.message}
                         readOnly={props.readonly}
                     >
-                        <HStack gap="6">
+                        <HStack gap="space-24">
                             <Radio value={true}>Ja</Radio>
                             <Radio value={false}>Nei</Radio>
                         </HStack>

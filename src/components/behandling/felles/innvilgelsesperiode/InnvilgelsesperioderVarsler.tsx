@@ -26,7 +26,7 @@ export const InnvilgelsesperioderVarsler = ({ innvilgelsesperioder, behandling }
     }
 
     return (
-        <VStack gap={'1'}>
+        <VStack gap={'space-4'}>
             {antallDagerSettesIkkeAutomatiskIBrev && (
                 <Alert variant={'info'} size={'small'}>
                     {

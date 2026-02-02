@@ -145,7 +145,6 @@ export const LeggTilBarnManuelt = ({ onAppend }: Props) => {
             >
                 Legg til barn
             </Button>
-
             {visLeggTilBarnFelter && (
                 <div className={styles.blokk}>
                     <Heading size="small" level="4" spacing>
@@ -162,7 +161,7 @@ export const LeggTilBarnManuelt = ({ onAppend }: Props) => {
                                 uuid: '',
                             };
                             return (
-                                <VStack gap="2">
+                                <VStack gap="space-8">
                                     <TextField
                                         label="Fornavn"
                                         value={value.fornavn ?? ''}
@@ -224,7 +223,7 @@ export const LeggTilBarnManuelt = ({ onAppend }: Props) => {
                                         }
                                         min={0}
                                     />
-                                    <HStack gap="4">
+                                    <HStack gap="space-16">
                                         <Button
                                             className={styles.avbrytButton}
                                             type="button"

@@ -97,8 +97,8 @@ export const AvsluttMeldekortbehandlingModal = (props: {
                 />
             </Modal.Body>
             <Modal.Footer>
-                <VStack gap="4">
-                    <HStack gap="2">
+                <VStack gap="space-16">
+                    <HStack gap="space-8">
                         <Button
                             variant="secondary"
                             type="button"
@@ -108,7 +108,8 @@ export const AvsluttMeldekortbehandlingModal = (props: {
                             Ikke avslutt behandling
                         </Button>
                         <Button
-                            variant="danger"
+                            data-color="danger"
+                            variant="primary"
                             size="small"
                             loading={avsluttMeldekortBehandlingApi.isMutating}
                             type="submit"

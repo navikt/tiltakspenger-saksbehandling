@@ -115,7 +115,6 @@ export const Personoversikt = () => {
                         <ActionMenu>
                             <ActionMenu.Trigger>
                                 <Button
-                                    data-color="neutral"
                                     variant="tertiary"
                                     icon={<ChevronDownIcon aria-hidden />}
                                     iconPosition="right"

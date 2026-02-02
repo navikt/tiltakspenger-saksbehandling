@@ -134,8 +134,13 @@ const VurderingKlagePage = ({ sak, vedtakOgBehandling, søknader, omgjøringsbeh
     return (
         <div>
             <form onSubmit={form.handleSubmit(onSubmit)}>
-                <VStack gap="8" marginInline="16" marginBlock="8" maxWidth="35rem">
-                    <HStack gap="2">
+                <VStack
+                    gap="space-32"
+                    marginInline="space-64"
+                    marginBlock="space-32"
+                    maxWidth="35rem"
+                >
+                    <HStack gap="space-8">
                         {formTilstand === 'LAGRET' ? (
                             <CheckmarkCircleIcon
                                 title="Sjekk ikon"
@@ -199,7 +204,7 @@ const VurderingKlagePage = ({ sak, vedtakOgBehandling, søknader, omgjøringsbeh
                             Lagre
                         </Button>
                     ) : (
-                        <HStack gap="4">
+                        <HStack gap="space-16">
                             {!erReadonlyForSaksbehandler &&
                                 kanBehandleKlage(klage, omgjøringsbehandling) && (
                                     <>

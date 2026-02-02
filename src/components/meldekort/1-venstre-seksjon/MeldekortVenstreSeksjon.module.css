@@ -1,7 +1,7 @@
 .wrapper {
-    border-right: 1px solid var(--a-gray-300);
+    border-right: 1px solid var(--ax-neutral-300);
     padding: 1rem;
-    background-color: var(--a-blue-50);
+    background-color: var(--ax-accent-200);
 }
 
 .behandlingTag {

@@ -6,11 +6,11 @@
 
 .sidebar {
     padding: 2rem;
-    background-color: var(--a-blue-50);
+    background-color: var(--ax-accent-200);
 }
 
 .main {
-    background-color: var(--a-gray-50);
+    background-color: var(--ax-neutral-100);
     padding: 2rem;
 }
 

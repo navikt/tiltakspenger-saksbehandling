@@ -32,8 +32,9 @@ export const SimuleringDetaljerMeldeperiodeHeader = ({
     return (
         <div className={style.header}>
             <Button
+                data-color="neutral"
                 onClick={() => setErÅpen(!erÅpen)}
-                variant={'tertiary-neutral'}
+                variant={'tertiary'}
                 size={'medium'}
                 type={'button'}
                 icon={
@@ -43,7 +44,6 @@ export const SimuleringDetaljerMeldeperiodeHeader = ({
                 }
                 className={style.knapp}
             >{`Meldeperiode uke ${ukerString} (${periodeString})`}</Button>
-
             <div className={style.headerBeregning}>
                 {beregningOgSimuleringAvviker ? (
                     <Alert variant={'warning'} size={'small'}>

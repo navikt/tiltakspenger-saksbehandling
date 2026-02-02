@@ -31,7 +31,7 @@ export const BehandlingBeregningOgSimulering = () => {
         <>
             <VedtakSeksjon>
                 <VedtakSeksjon.Venstre>
-                    <VStack gap={'5'}>
+                    <VStack gap={'space-20'}>
                         <BeregningOgSimuleringHeader
                             simulertBeregning={simulertBeregning}
                             navkontor={navkontor}

@@ -28,27 +28,61 @@ export const finnBehandlingStatusTag = (
             status === Rammebehandlingsstatus.UNDER_BESLUTNING) &&
         erSattPåVent
     ) {
-        return <Tag variant="warning">Satt på vent</Tag>;
+        return (
+            <Tag data-color="warning" variant="outline">
+                Satt på vent
+            </Tag>
+        );
     }
     if (
         (status === Rammebehandlingsstatus.KLAR_TIL_BEHANDLING ||
             status === Rammebehandlingsstatus.UNDER_BEHANDLING) &&
         underkjent
     ) {
-        return <Tag variant="warning">Underkjent</Tag>;
+        return (
+            <Tag data-color="warning" variant="outline">
+                Underkjent
+            </Tag>
+        );
     }
     return behandlingStatusTag[status];
 };
 
 const behandlingStatusTag: Record<Rammebehandlingsstatus, React.ReactElement> = {
-    [Rammebehandlingsstatus.VEDTATT]: <Tag variant="success">Vedtatt</Tag>,
-    [Rammebehandlingsstatus.KLAR_TIL_BEHANDLING]: <Tag variant="info">Klar til behandling</Tag>,
-    [Rammebehandlingsstatus.KLAR_TIL_BESLUTNING]: <Tag variant="info">Klar til beslutning</Tag>,
-    [Rammebehandlingsstatus.UNDER_BEHANDLING]: <Tag variant="info">Under behandling</Tag>,
-    [Rammebehandlingsstatus.UNDER_BESLUTNING]: <Tag variant="info">Under beslutning</Tag>,
-    [Rammebehandlingsstatus.AVBRUTT]: <Tag variant="neutral">Avsluttet</Tag>,
+    [Rammebehandlingsstatus.VEDTATT]: (
+        <Tag data-color="success" variant="outline">
+            Vedtatt
+        </Tag>
+    ),
+    [Rammebehandlingsstatus.KLAR_TIL_BEHANDLING]: (
+        <Tag data-color="info" variant="outline">
+            Klar til behandling
+        </Tag>
+    ),
+    [Rammebehandlingsstatus.KLAR_TIL_BESLUTNING]: (
+        <Tag data-color="info" variant="outline">
+            Klar til beslutning
+        </Tag>
+    ),
+    [Rammebehandlingsstatus.UNDER_BEHANDLING]: (
+        <Tag data-color="info" variant="outline">
+            Under behandling
+        </Tag>
+    ),
+    [Rammebehandlingsstatus.UNDER_BESLUTNING]: (
+        <Tag data-color="info" variant="outline">
+            Under beslutning
+        </Tag>
+    ),
+    [Rammebehandlingsstatus.AVBRUTT]: (
+        <Tag data-color="neutral" variant="outline">
+            Avsluttet
+        </Tag>
+    ),
     [Rammebehandlingsstatus.UNDER_AUTOMATISK_BEHANDLING]: (
-        <Tag variant="neutral">Under automatisk behandling</Tag>
+        <Tag data-color="neutral" variant="outline">
+            Under automatisk behandling
+        </Tag>
     ),
 };
 
@@ -94,62 +128,62 @@ export const finnMeldeperiodeKjedeStatusTekst: Record<MeldeperiodeKjedeStatus, s
 
 export const meldeperiodeKjedeStatusTag: Record<MeldeperiodeKjedeStatus, React.ReactElement> = {
     [MeldeperiodeKjedeStatus.GODKJENT]: (
-        <Tag variant="success">
+        <Tag data-color="success" variant="outline">
             {finnMeldeperiodeKjedeStatusTekst[MeldeperiodeKjedeStatus.GODKJENT]}
         </Tag>
     ),
     [MeldeperiodeKjedeStatus.AUTOMATISK_BEHANDLET]: (
-        <Tag variant="success">
+        <Tag data-color="success" variant="outline">
             {finnMeldeperiodeKjedeStatusTekst[MeldeperiodeKjedeStatus.AUTOMATISK_BEHANDLET]}
         </Tag>
     ),
     [MeldeperiodeKjedeStatus.KLAR_TIL_BEHANDLING]: (
-        <Tag variant="info">
+        <Tag data-color="info" variant="outline">
             {finnMeldeperiodeKjedeStatusTekst[MeldeperiodeKjedeStatus.KLAR_TIL_BEHANDLING]}
         </Tag>
     ),
     [MeldeperiodeKjedeStatus.KLAR_TIL_BESLUTNING]: (
-        <Tag variant="info">
+        <Tag data-color="info" variant="outline">
             {finnMeldeperiodeKjedeStatusTekst[MeldeperiodeKjedeStatus.KLAR_TIL_BESLUTNING]}
         </Tag>
     ),
     [MeldeperiodeKjedeStatus.UNDER_BEHANDLING]: (
-        <Tag variant="info">
+        <Tag data-color="info" variant="outline">
             {finnMeldeperiodeKjedeStatusTekst[MeldeperiodeKjedeStatus.UNDER_BEHANDLING]}
         </Tag>
     ),
     [MeldeperiodeKjedeStatus.UNDER_BESLUTNING]: (
-        <Tag variant="info">
+        <Tag data-color="info" variant="outline">
             {finnMeldeperiodeKjedeStatusTekst[MeldeperiodeKjedeStatus.UNDER_BESLUTNING]}
         </Tag>
     ),
     [MeldeperiodeKjedeStatus.AVBRUTT]: (
-        <Tag variant="neutral">
+        <Tag data-color="neutral" variant="outline">
             {finnMeldeperiodeKjedeStatusTekst[MeldeperiodeKjedeStatus.AVBRUTT]}
         </Tag>
     ),
     [MeldeperiodeKjedeStatus.AVVENTER_MELDEKORT]: (
-        <Tag variant="neutral">
+        <Tag data-color="neutral" variant="outline">
             {finnMeldeperiodeKjedeStatusTekst[MeldeperiodeKjedeStatus.AVVENTER_MELDEKORT]}
         </Tag>
     ),
     [MeldeperiodeKjedeStatus.IKKE_RETT_TIL_TILTAKSPENGER]: (
-        <Tag variant="neutral">
+        <Tag data-color="neutral" variant="outline">
             {finnMeldeperiodeKjedeStatusTekst[MeldeperiodeKjedeStatus.IKKE_RETT_TIL_TILTAKSPENGER]}
         </Tag>
     ),
     [MeldeperiodeKjedeStatus.IKKE_KLAR_TIL_BEHANDLING]: (
-        <Tag variant="neutral">
+        <Tag data-color="neutral" variant="outline">
             {finnMeldeperiodeKjedeStatusTekst[MeldeperiodeKjedeStatus.IKKE_KLAR_TIL_BEHANDLING]}
         </Tag>
     ),
     [MeldeperiodeKjedeStatus.KORRIGERT_MELDEKORT]: (
-        <Tag variant="info">
+        <Tag data-color="info" variant="outline">
             {finnMeldeperiodeKjedeStatusTekst[MeldeperiodeKjedeStatus.KORRIGERT_MELDEKORT]}
         </Tag>
     ),
     [MeldeperiodeKjedeStatus.VENTER_AUTOMATISK_BEHANDLING]: (
-        <Tag variant="neutral">
+        <Tag data-color="neutral" variant="outline">
             {finnMeldeperiodeKjedeStatusTekst[MeldeperiodeKjedeStatus.VENTER_AUTOMATISK_BEHANDLING]}
         </Tag>
     ),
@@ -179,26 +213,34 @@ export const behandlingResultatTilText: Record<RammebehandlingResultat, string> 
 
 export const behandlingResultatTilTag: Record<RammebehandlingResultat, ReactElement> = {
     [SøknadsbehandlingResultat.AVSLAG]: (
-        <Tag variant="error">{behandlingResultatTilText[SøknadsbehandlingResultat.AVSLAG]}</Tag>
+        <Tag data-color="danger" variant="outline">
+            {behandlingResultatTilText[SøknadsbehandlingResultat.AVSLAG]}
+        </Tag>
     ),
     [SøknadsbehandlingResultat.INNVILGELSE]: (
-        <Tag variant="success">
+        <Tag data-color="success" variant="outline">
             {behandlingResultatTilText[SøknadsbehandlingResultat.INNVILGELSE]}
         </Tag>
     ),
     [RevurderingResultat.STANS]: (
-        <Tag variant="warning">{behandlingResultatTilText[RevurderingResultat.STANS]}</Tag>
+        <Tag data-color="warning" variant="outline">
+            {behandlingResultatTilText[RevurderingResultat.STANS]}
+        </Tag>
     ),
     [RevurderingResultat.INNVILGELSE]: (
-        <Tag variant="info">{behandlingResultatTilText[RevurderingResultat.INNVILGELSE]}</Tag>
+        <Tag data-color="info" variant="outline">
+            {behandlingResultatTilText[RevurderingResultat.INNVILGELSE]}
+        </Tag>
     ),
     [SøknadsbehandlingResultat.IKKE_VALGT]: (
-        <Tag variant="neutral">
+        <Tag data-color="neutral" variant="outline">
             {behandlingResultatTilText[SøknadsbehandlingResultat.IKKE_VALGT]}
         </Tag>
     ),
     [RevurderingResultat.OMGJØRING]: (
-        <Tag variant="alt1">{behandlingResultatTilText[RevurderingResultat.OMGJØRING]}</Tag>
+        <Tag data-color="meta-purple" variant="outline">
+            {behandlingResultatTilText[RevurderingResultat.OMGJØRING]}
+        </Tag>
     ),
 };
 
@@ -211,20 +253,24 @@ export const klagebehandlingStatusTilText: Record<KlagebehandlingStatus, string>
 
 export const klagebehandlingStatusTilTag: Record<KlagebehandlingStatus, ReactElement> = {
     [KlagebehandlingStatus.KLAR_TIL_BEHANDLING]: (
-        <Tag variant="info">
+        <Tag data-color="info" variant="outline">
             {klagebehandlingStatusTilText[KlagebehandlingStatus.KLAR_TIL_BEHANDLING]}
         </Tag>
     ),
     [KlagebehandlingStatus.UNDER_BEHANDLING]: (
-        <Tag variant="info">
+        <Tag data-color="info" variant="outline">
             {klagebehandlingStatusTilText[KlagebehandlingStatus.UNDER_BEHANDLING]}
         </Tag>
     ),
     [KlagebehandlingStatus.AVBRUTT]: (
-        <Tag variant="neutral">{klagebehandlingStatusTilText[KlagebehandlingStatus.AVBRUTT]}</Tag>
+        <Tag data-color="neutral" variant="outline">
+            {klagebehandlingStatusTilText[KlagebehandlingStatus.AVBRUTT]}
+        </Tag>
     ),
     [KlagebehandlingStatus.IVERKSATT]: (
-        <Tag variant="success">{klagebehandlingStatusTilText[KlagebehandlingStatus.IVERKSATT]}</Tag>
+        <Tag data-color="success" variant="outline">
+            {klagebehandlingStatusTilText[KlagebehandlingStatus.IVERKSATT]}
+        </Tag>
     ),
 };
 
@@ -235,10 +281,14 @@ export const klagebehandlingResultatTilText: Record<KlagebehandlingResultat, str
 
 export const klagebehandlingResultatTilTag: Record<KlagebehandlingResultat, ReactElement> = {
     [KlagebehandlingResultat.AVVIST]: (
-        <Tag variant="error">{klagebehandlingResultatTilText[KlagebehandlingResultat.AVVIST]}</Tag>
+        <Tag data-color="danger" variant="outline">
+            {klagebehandlingResultatTilText[KlagebehandlingResultat.AVVIST]}
+        </Tag>
     ),
     [KlagebehandlingResultat.OMGJØR]: (
-        <Tag variant="alt1">{klagebehandlingResultatTilText[KlagebehandlingResultat.OMGJØR]}</Tag>
+        <Tag data-color="meta-purple" variant="outline">
+            {klagebehandlingResultatTilText[KlagebehandlingResultat.OMGJØR]}
+        </Tag>
     ),
 };
 

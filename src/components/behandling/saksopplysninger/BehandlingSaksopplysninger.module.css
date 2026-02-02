@@ -1,6 +1,6 @@
 .saksopplysninger {
     padding: 2rem;
-    background-color: var(--a-blue-50);
+    background-color: var(--ax-accent-200);
 }
 
 .saksopplysninger > :not(:last-child):not(hr) {

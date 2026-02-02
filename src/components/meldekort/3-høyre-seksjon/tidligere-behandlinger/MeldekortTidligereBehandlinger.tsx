@@ -57,7 +57,7 @@ export const MeldekortTidligereBehandlinger = () => {
     const valgtBehandling = behandlingerOgKorrigeringer.at(valgtIndex);
 
     return (
-        <VStack gap={'5'}>
+        <VStack gap={'space-20'}>
             <HStack className={style.toppRad}>
                 <Select
                     label={'Velg tidligere behandling'}

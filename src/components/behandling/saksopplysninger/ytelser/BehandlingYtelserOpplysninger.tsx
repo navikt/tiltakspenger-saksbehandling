@@ -14,7 +14,7 @@ type Props = {
 
 export const BehandlingYtelserOpplysninger = ({ ytelser }: Props) => {
     return (
-        <VStack gap="2">
+        <VStack gap="space-8">
             {ytelser.map((ytelse) => {
                 const { ytelsetype, perioder } = ytelse;
                 const flerePerioder = perioder.length > 1;

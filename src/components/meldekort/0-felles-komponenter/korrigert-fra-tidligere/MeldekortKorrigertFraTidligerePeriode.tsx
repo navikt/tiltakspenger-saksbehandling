@@ -22,7 +22,7 @@ export const MeldekortKorrigertFraTidligerePeriode = ({ korrigering, headerTekst
         ?.beregning?.beregningForMeldekortetsPeriode.beløp;
 
     return (
-        <VStack gap={'5'}>
+        <VStack gap={'space-20'}>
             {headerTekst && <Heading size={'medium'}>{headerTekst}</Heading>}
             <Alert size={'small'} inline={true} variant={'warning'}>
                 {'Korrigering av meldeperioden '}

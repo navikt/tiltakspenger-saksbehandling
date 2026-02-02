@@ -88,7 +88,7 @@ export const Tidslinjer = ({ sak, heading = true, className }: Props) => {
                                 }
                                 key={id}
                             >
-                                <VStack gap={'3'}>
+                                <VStack gap={'space-12'}>
                                     <Heading size={'xsmall'} level={'4'}>
                                         {tidslinjeResultatTekst[tidslinjeResultat]}
                                     </Heading>
@@ -168,7 +168,7 @@ export const Tidslinjer = ({ sak, heading = true, className }: Props) => {
                                 icon={<CheckmarkIcon className={style.utbetalingIkon} />}
                                 key={kjedeId}
                             >
-                                <VStack gap={'3'}>
+                                <VStack gap={'space-12'}>
                                     <InfoElement
                                         navn={'Meldeperiode'}
                                         verdi={`${formaterDatotekst(fraOgMed)} - ${formaterDatotekst(tilOgMed)}`}

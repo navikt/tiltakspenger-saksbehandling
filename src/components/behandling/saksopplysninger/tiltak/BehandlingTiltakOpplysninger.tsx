@@ -9,7 +9,7 @@ type Props = {
 
 export const BehandlingTiltakOpplysninger = ({ tiltaksdeltakelser }: Props) => {
     return (
-        <VStack gap="2">
+        <VStack gap="space-8">
             {tiltaksdeltakelser.map((tiltak) => {
                 const {
                     antallDagerPerUke,

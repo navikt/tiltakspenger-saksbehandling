@@ -1,7 +1,7 @@
 .personaliaHeader {
     display: flex;
     padding: 1rem;
-    border-bottom: 1px solid var(--a-gray-300);
+    border-bottom: 1px solid var(--ax-neutral-300);
 }
 
 .personIcon {

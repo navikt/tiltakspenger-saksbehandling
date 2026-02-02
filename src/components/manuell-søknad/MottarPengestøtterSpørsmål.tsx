@@ -8,7 +8,7 @@ import { JaNeiSpørsmål } from './JaNeiSpørsmål';
 
 import styles from './Spørsmål.module.css';
 import { SpørsmålMedPeriodevelger } from '~/components/manuell-søknad/SpørsmålMedPeriodevelger';
-import { List } from '@navikt/ds-react';
+import { Box, List } from '@navikt/ds-react';
 import { SpørsmålMedDatovelger } from '~/components/manuell-søknad/SpørsmålMedDatovelger';
 
 type Props = {
@@ -74,14 +74,18 @@ export const MottarPengestøtterSpørsmål = ({ name, legend }: Props) => {
                     }
                 }}
                 details={
-                    <List as="ul">
-                        <List.Item>Pengestøtte til gjenlevende ektefelle</List.Item>
-                        <List.Item>Alderspensjon</List.Item>
-                        <List.Item>Supplerende stønad for personer over 67 år</List.Item>
-                        <List.Item>Supplerende stønad for uføre flyktninger</List.Item>
-                        <List.Item>Pengestøtte fra andre trygde- eller pensjonsordninger</List.Item>
-                        <List.Item>Stønad via Jobbsjansen</List.Item>
-                    </List>
+                    <Box marginBlock="space-16" asChild>
+                        <List data-aksel-migrated-v8 as="ul">
+                            <List.Item>Pengestøtte til gjenlevende ektefelle</List.Item>
+                            <List.Item>Alderspensjon</List.Item>
+                            <List.Item>Supplerende stønad for personer over 67 år</List.Item>
+                            <List.Item>Supplerende stønad for uføre flyktninger</List.Item>
+                            <List.Item>
+                                Pengestøtte fra andre trygde- eller pensjonsordninger
+                            </List.Item>
+                            <List.Item>Stønad via Jobbsjansen</List.Item>
+                        </List>
+                    </Box>
                 }
             />
             {spørsmål.field.value === 'JA' && (

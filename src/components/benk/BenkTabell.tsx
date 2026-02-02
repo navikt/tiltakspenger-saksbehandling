@@ -79,7 +79,7 @@ const BenkTabell = ({ data, sorteringRetning, onSortChange }: Props) => {
                                 </HStack>
                             </Table.HeaderCell>
                             <Table.DataCell>
-                                <HStack gap="2">
+                                <HStack gap="space-8">
                                     <BodyShort>
                                         {behandlingstypeTextFormatter[behandling.behandlingstype]}
                                     </BodyShort>
@@ -88,7 +88,11 @@ const BenkTabell = ({ data, sorteringRetning, onSortChange }: Props) => {
                                         behandling.behandlingstype ===
                                             BehandlingssammendragType.REVURDERING) &&
                                         behandling.erSattPåVent && (
-                                            <Tag size="small" variant={'error-moderate'}>
+                                            <Tag
+                                                data-color="danger"
+                                                size="small"
+                                                variant={'moderate'}
+                                            >
                                                 Venter
                                             </Tag>
                                         )}
@@ -97,12 +101,12 @@ const BenkTabell = ({ data, sorteringRetning, onSortChange }: Props) => {
                             <Table.DataCell>
                                 {behandling.status ===
                                 BehandlingssammendragStatus.KLAR_TIL_BEHANDLING ? (
-                                    <Tag variant="success">
+                                    <Tag data-color="success" variant="outline">
                                         {behandlingsstatusTextFormatter[behandling.status]}
                                     </Tag>
                                 ) : behandling.status ===
                                   BehandlingssammendragStatus.KLAR_TIL_BESLUTNING ? (
-                                    <Tag variant="alt2">
+                                    <Tag data-color="meta-lime" variant="outline">
                                         {behandlingsstatusTextFormatter[behandling.status]}
                                     </Tag>
                                 ) : behandling.status ? (

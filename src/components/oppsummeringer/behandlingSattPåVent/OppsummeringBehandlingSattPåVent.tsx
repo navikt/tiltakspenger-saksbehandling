@@ -12,11 +12,11 @@ const BehandlingSattPåVentOppsummering = (props: {
 }) => {
     return (
         <Box className={classNames(styles.box, props.wrapperClassName)}>
-            <VStack gap="6">
+            <VStack gap="space-24">
                 <Heading size="medium" level="3">
                     Behandlingen er satt på vent
                 </Heading>
-                <HStack gap="6">
+                <HStack gap="space-24">
                     <OppsummeringsPar
                         label={'Satt på vent av'}
                         verdi={props.ventestatus.sattPåVentAv}

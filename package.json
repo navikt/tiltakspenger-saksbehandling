@@ -16,10 +16,10 @@
         "test": "jest"
     },
     "dependencies": {
-        "@navikt/aksel-icons": "7.35.0",
-        "@navikt/ds-css": "7.35.0",
-        "@navikt/ds-react": "7.35.0",
-        "@navikt/ds-tokens": "7.35.0",
+        "@navikt/aksel-icons": "8.2.0",
+        "@navikt/ds-css": "8.2.0",
+        "@navikt/ds-react": "8.2.0",
+        "@navikt/ds-tokens": "8.2.0",
         "@navikt/next-logger": "4.4.1",
         "@navikt/oasis": "4.1.1",
         "dayjs": "1.11.13",

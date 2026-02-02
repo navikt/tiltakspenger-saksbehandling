@@ -37,7 +37,7 @@ export const BekreftelsesModal = ({
         >
             <Modal.Body>{children}</Modal.Body>
             <Modal.Footer>
-                <HStack gap="4">
+                <HStack gap="space-16">
                     {feil && (
                         <Varsel
                             variant={'error'}

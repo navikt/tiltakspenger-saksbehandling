@@ -80,13 +80,13 @@ export const BehandlingSendOgGodkjenn = ({ behandling, lagringProps }: Props) =>
         <VedtakSeksjon>
             <VedtakSeksjon.Venstre>
                 {erSaksbehandler && (
-                    <VStack className={style.varsler} gap={'2'}>
+                    <VStack className={style.varsler} gap={'space-8'}>
                         <BehandlingValideringVarsler resultat={valideringResultat} />
                         <BehandlingLagringVarsler isDirty={isDirty} resultat={lagringResultat} />
                     </VStack>
                 )}
                 <HStack justify="space-between" className={style.knapper}>
-                    <HStack gap={'2'}>
+                    <HStack gap={'space-8'}>
                         {kanAvslutteBehandling && <BehandlingAvslutt behandling={behandling} />}
                         {kanSettePaVent && (
                             <BehandlingSettPåVent behandling={behandling} disabled={isDirty} />
@@ -95,7 +95,7 @@ export const BehandlingSendOgGodkjenn = ({ behandling, lagringProps }: Props) =>
                     {kanGjenopptaBehandling ? (
                         <BehandlingGjenoppta behandling={behandling} />
                     ) : erSaksbehandler ? (
-                        <HStack gap={'5'}>
+                        <HStack gap={'space-20'}>
                             {isDirty && (
                                 <BehandlingLagreKnapp
                                     behandling={behandling}

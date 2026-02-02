@@ -12,7 +12,7 @@ export const MeldekortBeløp = ({ beløp, forrigeBeløp, totalBeløp }: Props) =
     const harDiffPåTotalBeløp = totalBeløp && totalBeløp.totalt != beløp.totalt;
 
     return (
-        <VStack gap={'1'}>
+        <VStack gap={'space-4'}>
             <UtbetalingBeløp
                 tekst={'Ordinært beløp for perioden:'}
                 beløp={beløp.ordinært}

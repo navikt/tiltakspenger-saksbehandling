@@ -19,8 +19,8 @@
 }
 
 .feilPeriode {
-    border: var(--a-border-danger) 2px solid;
-    border-radius: var(--a-border-radius-medium);
+    border: var(--ax-border-danger) 2px solid;
+    border-radius: var(--ax-radius-8);
     padding: 0.5rem;
     margin: 0 -0.5rem;
 }

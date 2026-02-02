@@ -40,13 +40,13 @@ export const OvertaMeldekortbehandlingModal = (props: {
                 </BodyShort>
             </Modal.Body>
             <Modal.Footer>
-                <VStack gap="4">
+                <VStack gap="space-16">
                     {overtaMeldekortBehandlingApi.error && (
                         <Alert variant={'error'}>
                             {overtaMeldekortBehandlingApi.error.message}
                         </Alert>
                     )}
-                    <HStack gap="2">
+                    <HStack gap="space-8">
                         <Button type="button" variant="secondary" onClick={props.onClose}>
                             Avbryt
                         </Button>

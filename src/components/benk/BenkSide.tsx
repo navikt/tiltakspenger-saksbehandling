@@ -141,7 +141,7 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
     };
 
     return (
-        <VStack gap="5" style={{ padding: '1rem' }}>
+        <VStack gap="space-20" style={{ padding: '1rem' }}>
             <NotificationBanner ref={bannerRef} />
             <Heading size="medium" level="2">
                 Oversikt over behandlinger og søknader

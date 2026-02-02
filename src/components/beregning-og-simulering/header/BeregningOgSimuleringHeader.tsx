@@ -43,11 +43,10 @@ export const BeregningOgSimuleringHeader = ({
     const beløpTekst = erOmberegning ? beløpOmberegningTekst(totalDiff) : 'Beløp';
 
     return (
-        <VStack gap={'1'} className={className}>
+        <VStack gap={'space-4'} className={className}>
             <Heading size={'small'} level={'3'} className={style.header}>
                 {'Utbetaling'}
             </Heading>
-
             {erOmberegning && periode && (
                 <Alert
                     variant={'info'}
@@ -55,19 +54,16 @@ export const BeregningOgSimuleringHeader = ({
                     size={'small'}
                 >{`Vedtaket endrer beregningen av ${meldeperioder.length} meldeperiode i perioden ${periodeTilFormatertDatotekst(periode)}`}</Alert>
             )}
-
             {utbetalingValideringsfeil && (
                 <Alert variant={'error'} size={'small'}>
                     {`Utbetalingen kan ikke iverksettes: ${utbetalingValideringsfeilTekst[utbetalingValideringsfeil]}`}
                 </Alert>
             )}
-
             <UtbetalingBeløp
                 tekst={beløpTekst}
                 beløp={Math.abs(totalDiff)}
                 className={erFeilutbetaling ? style.tilbakekrevingBeløp : style.etterbetalingBeløp}
             />
-
             <UtbetalingStatus
                 navkontor={navkontor}
                 navkontorNavn={navkontorNavn}

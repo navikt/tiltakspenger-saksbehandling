@@ -1,8 +1,8 @@
 .headerCell {
     border: none;
-    border-top-left-radius: var(--a-border-radius-medium);
-    border-top-right-radius: var(--a-border-radius-medium);
-    background-color: var(--a-gray-50);
+    border-top-left-radius: var(--ax-radius-4);
+    border-top-right-radius: var(--ax-radius-4);
+    background-color: var(--ax-neutral-100);
 }
 
 .lukket {
@@ -10,7 +10,7 @@
 }
 
 .tabellHeaderOver {
-    background-color: var(--a-gray-50);
+    background-color: var(--ax-neutral-100);
 
     th {
         border: none;
@@ -18,18 +18,18 @@
 }
 
 .tabellHeaderUnder {
-    border-bottom: 1px solid var(--a-gray-500);
+    border-bottom: 1px solid var(--ax-neutral-500);
 
     th {
-        font-size: var(--a-font-size-medium);
+        font-size: var(--ax-font-size-medium);
         font-weight: lighter;
         border: none;
     }
 }
 
 .periodeSum {
-    border-top: 1px solid var(--a-gray-500);
-    border-bottom: 2px solid var(--a-gray-500);
+    border-top: 1px solid var(--ax-neutral-500);
+    border-bottom: 2px solid var(--ax-neutral-500);
 }
 
 .simuleringCell {

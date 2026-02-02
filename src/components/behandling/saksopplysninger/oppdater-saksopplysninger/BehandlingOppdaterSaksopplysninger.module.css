@@ -11,15 +11,15 @@
 }
 
 .loaded {
-    color: var(--a-text-default);
-    background-color: var(--a-green-100);
+    color: var(--ax-neutral-1000);
+    background-color: var(--ax-success-100);
 
     &:hover {
-        background-color: var(--a-green-100);
+        background-color: var(--ax-success-100);
     }
 
     & svg {
-        color: var(--a-green-500);
+        color: var(--ax-success-500);
     }
 }
 

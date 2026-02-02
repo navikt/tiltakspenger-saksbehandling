@@ -1,7 +1,7 @@
 .wrapper {
-    border-left: solid var(--a-gray-300) 1px;
-    border-right: solid var(--a-gray-300) 1px;
-    background-color: var(--a-bg-default);
+    border-left: solid var(--ax-neutral-300) 1px;
+    border-right: solid var(--ax-neutral-300) 1px;
+    background-color: var(--ax-bg-default);
 }
 
 .panel {
@@ -9,17 +9,17 @@
 }
 
 .brukersMeldekortPanel > :not(:last-child) {
-    margin-bottom: var(--a-spacing-8);
+    margin-bottom: var(--ax-space-32);
 }
 
 .tabDisabled {
     pointer-events: none;
-    color: var(--a-gray-400);
+    color: var(--ax-neutral-400);
 }
 
 .tabs {
-    background-color: var(--a-bg-default);
-    border-bottom: solid 1px var(--a-gray-300);
+    background-color: var(--ax-bg-default);
+    border-bottom: solid 1px var(--ax-neutral-300);
 
     & svg {
         margin-right: 0.25rem;

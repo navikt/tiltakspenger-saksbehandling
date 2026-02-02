@@ -18,7 +18,7 @@ export const BehandlingValideringVarsler = ({ resultat, className }: Props) => {
     }
 
     return (
-        <VStack className={className} gap={'2'}>
+        <VStack className={className} gap={'space-8'}>
             {harWarnings && (
                 <Alert variant={'warning'} size={'small'}>
                     <Heading size={'small'} level={'2'}>

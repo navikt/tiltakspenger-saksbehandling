@@ -7,11 +7,11 @@
 }
 
 .readonly {
-    background-color: var(--a-white);
-    border: 1px var(--a-gray-500) solid;
-    border-radius: var(--a-border-radius-medium);
+    background-color: var(--ax-neutral-000);
+    border: 1px var(--ax-neutral-500) solid;
+    border-radius: var(--ax-radius-4);
 
     && > textarea {
-        background-color: var(--a-white);
+        background-color: var(--ax-neutral-000);
     }
 }

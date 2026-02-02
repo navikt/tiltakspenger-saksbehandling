@@ -34,10 +34,9 @@ export const SpørsmålMedDatovelger = ({ spørsmålFelt, datoFelt, legend, titt
                     }
                 }}
             />
-
             {jaNeiSpørsmål.field.value === 'JA' && (
                 <div className={styles.blokk}>
-                    <VStack gap="2">
+                    <VStack gap="space-8">
                         {tittel && (
                             <Heading size="xsmall" level="4">
                                 {tittel}
