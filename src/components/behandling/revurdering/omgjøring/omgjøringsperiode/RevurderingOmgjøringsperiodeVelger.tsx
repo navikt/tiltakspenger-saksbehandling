@@ -11,9 +11,9 @@ import { Checkbox, Heading, HStack, VStack } from '@navikt/ds-react';
 import { hentRammevedtak } from '~/utils/sak';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { VedtakHjelpetekst } from '~/components/behandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
+import { classNames } from '~/utils/classNames';
 
 import style from './RevurderingOmgjøringsperiodeVelger.module.css';
-import { classNames } from '~/utils/classNames';
 
 export const RevurderingOmgjøringsperiodeVelger = () => {
     const { sak } = useSak();
@@ -30,7 +30,7 @@ export const RevurderingOmgjøringsperiodeVelger = () => {
     const defaultDato = datoMin(new Date(), gjeldendeTotalPeriode.tilOgMed);
 
     const hullMellomGjeldendePerioder = finnPerioderHull(vedtak.gjeldendeVedtaksperioder);
-    const harHull = hullMellomGjeldendePerioder.length > 0;
+    const gjeldendeVedtakHarHull = hullMellomGjeldendePerioder.length > 0;
     const harValgtMedOverlappOverHull = hullMellomGjeldendePerioder.some((hull) =>
         perioderOverlapper(hull, valgtPeriode),
     );
@@ -96,30 +96,28 @@ export const RevurderingOmgjøringsperiodeVelger = () => {
                                 });
                             }}
                         />
-                        <Checkbox
-                            readOnly={erReadonly}
-                            disabled={harHull}
-                            checked={skalOmgjøreHeleVedtaket}
-                            size={'small'}
-                            onChange={(e) => {
-                                const { checked } = e.target;
+                        {!gjeldendeVedtakHarHull && (
+                            <Checkbox
+                                readOnly={erReadonly}
+                                checked={skalOmgjøreHeleVedtaket}
+                                size={'small'}
+                                onChange={(e) => {
+                                    const { checked } = e.target;
 
-                                dispatch({
-                                    type: 'setSkalOmgjøreHeleVedtaket',
-                                    payload: {
-                                        skalOmgjøreHeleVedtaket: checked,
-                                        gjeldendePeriode: gjeldendeTotalPeriode,
-                                    },
-                                });
-                            }}
-                        >
-                            {'Omgjør hele vedtaket'}
-                        </Checkbox>
+                                    dispatch({
+                                        type: 'setSkalOmgjøreHeleVedtaket',
+                                        payload: {
+                                            skalOmgjøreHeleVedtaket: checked,
+                                            gjeldendePeriode: gjeldendeTotalPeriode,
+                                        },
+                                    });
+                                }}
+                            >
+                                {'Omgjør hele vedtaket'}
+                            </Checkbox>
+                        )}
                     </HStack>
-                </VStack>
-            </VedtakSeksjon.Venstre>
-            <VedtakSeksjon.Høyre>
-                <VStack gap={'space-4'}>
+
                     {harValgtMedOverlappOverHull && (
                         <VedtakHjelpetekst variant={'error'}>
                             {
@@ -127,6 +125,18 @@ export const RevurderingOmgjøringsperiodeVelger = () => {
                             }
                         </VedtakHjelpetekst>
                     )}
+
+                    {gjeldendeVedtakHarHull && (
+                        <VedtakHjelpetekst variant={'warning'}>
+                            {
+                                'Vedtaket som omgjøres har flere gjeldende perioder. Du må velge en omgjøringsperiode innenfor en av de gjeldende periodene.'
+                            }
+                        </VedtakHjelpetekst>
+                    )}
+                </VStack>
+            </VedtakSeksjon.Venstre>
+            <VedtakSeksjon.Høyre>
+                <VStack gap={'space-4'}>
                     <VedtakHjelpetekst>
                         {'Velg perioden av det opprinnelige vedtaket som skal omgjøres. Du kan forlenge innvilgelsesperiodene utover det opprinnelige vedtaket, ' +
                             'så lenge det ikke overlapper med andre gjeldende vedtak.'}
