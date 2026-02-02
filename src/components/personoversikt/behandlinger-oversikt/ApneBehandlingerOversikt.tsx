@@ -175,9 +175,9 @@ const propsForRad = (
 
             return {
                 typeTekst,
-                statusTag: klagebehandlingStatusTilTag[åpenBehandling.status],
+                statusTag: klagebehandlingStatusTilTag({ status: åpenBehandling.status }),
                 resultatTag: åpenBehandling.resultat
-                    ? klagebehandlingResultatTilTag[åpenBehandling.resultat]
+                    ? klagebehandlingResultatTilTag({ resultat: åpenBehandling.resultat })
                     : undefined,
                 saksbehandler: åpenBehandling.saksbehandler,
                 meny: <KlageMeny klage={klagebehandling} />,

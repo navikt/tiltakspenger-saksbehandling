@@ -14,8 +14,8 @@ import router from 'next/router';
 import { kanNavigereTilKlageSteg, KlageSteg } from '../../../../utils/KlageLayoutUtils';
 import { classNames } from '~/utils/classNames';
 import {
-    klagebehandlingResultatTilText,
-    klagebehandlingStatusTilText,
+    klagebehandlingResultatTilTag,
+    klagebehandlingStatusTilTag,
 } from '~/utils/tekstformateringUtils';
 import { formaterTidspunkt } from '~/utils/date';
 import { fetchJsonFraApiClientSide } from '~/utils/fetch/fetch';
@@ -133,12 +133,20 @@ const KlageHeader = (props: { saksnummer: string; klage: Nullable<Klagebehandlin
                 <HStack align="end" gap="space-24">
                     <BodyShort>
                         Behandlingsstatus{' '}
-                        {props.klage ? klagebehandlingStatusTilText[props.klage.status] : 'utredes'}
+                        {props.klage
+                            ? klagebehandlingStatusTilTag({
+                                  status: props.klage.status,
+                                  size: 'small',
+                              })
+                            : 'utredes'}
                     </BodyShort>
                     <BodyShort>
                         Behandlingsresultat{' '}
                         {props.klage
-                            ? klagebehandlingResultatTilText[props.klage.resultat!]
+                            ? klagebehandlingResultatTilTag({
+                                  resultat: props.klage.resultat!,
+                                  size: 'small',
+                              })
                             : 'ikke satt'}
                     </BodyShort>
                     <BodyShort>

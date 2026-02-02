@@ -271,27 +271,37 @@ export const klagebehandlingStatusTilText: Record<KlagebehandlingStatus, string>
     [KlagebehandlingStatus.IVERKSATT]: 'Iverksatt',
 };
 
-export const klagebehandlingStatusTilTag: Record<KlagebehandlingStatus, ReactElement> = {
-    [KlagebehandlingStatus.KLAR_TIL_BEHANDLING]: (
-        <Tag data-color="info" variant="outline">
-            {klagebehandlingStatusTilText[KlagebehandlingStatus.KLAR_TIL_BEHANDLING]}
-        </Tag>
-    ),
-    [KlagebehandlingStatus.UNDER_BEHANDLING]: (
-        <Tag data-color="info" variant="outline">
-            {klagebehandlingStatusTilText[KlagebehandlingStatus.UNDER_BEHANDLING]}
-        </Tag>
-    ),
-    [KlagebehandlingStatus.AVBRUTT]: (
-        <Tag data-color="neutral" variant="outline">
-            {klagebehandlingStatusTilText[KlagebehandlingStatus.AVBRUTT]}
-        </Tag>
-    ),
-    [KlagebehandlingStatus.IVERKSATT]: (
-        <Tag data-color="success" variant="outline">
-            {klagebehandlingStatusTilText[KlagebehandlingStatus.IVERKSATT]}
-        </Tag>
-    ),
+export const klagebehandlingStatusTilTag = (args: {
+    status: KlagebehandlingStatus;
+    size?: 'small' | 'medium';
+}): ReactElement => {
+    switch (args.status) {
+        case KlagebehandlingStatus.KLAR_TIL_BEHANDLING:
+            return (
+                <Tag data-color="info" variant="outline" size={args.size}>
+                    {klagebehandlingStatusTilText[KlagebehandlingStatus.KLAR_TIL_BEHANDLING]}
+                </Tag>
+            );
+        case KlagebehandlingStatus.UNDER_BEHANDLING:
+            return (
+                <Tag data-color="info" variant="outline" size={args.size}>
+                    {klagebehandlingStatusTilText[KlagebehandlingStatus.UNDER_BEHANDLING]}
+                </Tag>
+            );
+        case KlagebehandlingStatus.AVBRUTT:
+            return (
+                <Tag data-color="neutral" variant="outline" size={args.size}>
+                    {klagebehandlingStatusTilText[KlagebehandlingStatus.AVBRUTT]}
+                </Tag>
+            );
+        case KlagebehandlingStatus.IVERKSATT:
+            return (
+                <Tag data-color="success" variant="outline" size={args.size}>
+                    {klagebehandlingStatusTilText[KlagebehandlingStatus.IVERKSATT]}
+                </Tag>
+            );
+    }
+    throw args.status satisfies never;
 };
 
 export const klagebehandlingResultatTilText: Record<KlagebehandlingResultat, string> = {
@@ -299,17 +309,25 @@ export const klagebehandlingResultatTilText: Record<KlagebehandlingResultat, str
     [KlagebehandlingResultat.OMGJØR]: 'Omgjør',
 };
 
-export const klagebehandlingResultatTilTag: Record<KlagebehandlingResultat, ReactElement> = {
-    [KlagebehandlingResultat.AVVIST]: (
-        <Tag data-color="danger" variant="outline">
-            {klagebehandlingResultatTilText[KlagebehandlingResultat.AVVIST]}
-        </Tag>
-    ),
-    [KlagebehandlingResultat.OMGJØR]: (
-        <Tag data-color="meta-purple" variant="outline">
-            {klagebehandlingResultatTilText[KlagebehandlingResultat.OMGJØR]}
-        </Tag>
-    ),
+export const klagebehandlingResultatTilTag = (args: {
+    resultat: KlagebehandlingResultat;
+    size?: 'small' | 'medium';
+}): ReactElement => {
+    switch (args.resultat) {
+        case KlagebehandlingResultat.AVVIST:
+            return (
+                <Tag data-color="danger" variant="outline" size={args.size}>
+                    {klagebehandlingResultatTilText[KlagebehandlingResultat.AVVIST]}
+                </Tag>
+            );
+        case KlagebehandlingResultat.OMGJØR:
+            return (
+                <Tag data-color="meta-purple" variant="outline" size={args.size}>
+                    {klagebehandlingResultatTilText[KlagebehandlingResultat.OMGJØR]}
+                </Tag>
+            );
+    }
+    throw args.resultat satisfies never;
 };
 
 export const omgjøringsårsakTilText: Record<OmgjøringÅrsak, string> = {
