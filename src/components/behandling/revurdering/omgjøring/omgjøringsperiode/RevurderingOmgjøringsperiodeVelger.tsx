@@ -41,13 +41,13 @@ export const RevurderingOmgjøringsperiodeVelger = () => {
         <VedtakSeksjon>
             <VedtakSeksjon.Venstre>
                 <VStack
-                    gap={'5'}
+                    gap={'space-8'}
                     className={classNames(harValgtMedOverlappOverHull && style.feilPeriode)}
                 >
                     <Heading size={'small'} level={'3'}>
                         {'Omgjøringsperiode'}
                     </Heading>
-                    <HStack gap={'3'} align={'end'}>
+                    <HStack gap={'space-6'} align={'end'}>
                         <Datovelger
                             label={'Fra og med'}
                             selected={valgtPeriode.fraOgMed}
@@ -119,7 +119,7 @@ export const RevurderingOmgjøringsperiodeVelger = () => {
                 </VStack>
             </VedtakSeksjon.Venstre>
             <VedtakSeksjon.Høyre>
-                <VStack gap={'2'}>
+                <VStack gap={'space-4'}>
                     {harValgtMedOverlappOverHull && (
                         <VedtakHjelpetekst variant={'error'}>
                             {

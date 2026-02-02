@@ -6,22 +6,20 @@ import { behandlingUrl } from '~/utils/urls';
 import { TabsIcon } from '@navikt/aksel-icons';
 import { useRevurderingOmgjøring } from '~/components/behandling/context/BehandlingContext';
 import { useSak } from '~/context/sak/SakContext';
-import { Klagebehandling } from '~/types/Klage';
-import { Nullable } from '~/types/UtilTypes';
 import { hentRammevedtak } from '~/utils/sak';
 
-export const RevurderingOmgjøringHeader = (props: { klage: Nullable<Klagebehandling> }) => {
+export const RevurderingOmgjøringHeader = () => {
     const { behandling } = useRevurderingOmgjøring();
     const { sak } = useSak();
 
-    const omgjørVedtakId = behandling.omgjørVedtak;
+    const { omgjørVedtak, klagebehandlingId } = behandling;
 
-    const vedtakSomBlirOmgjort = hentRammevedtak(sak, omgjørVedtakId);
+    const vedtakSomBlirOmgjort = hentRammevedtak(sak, omgjørVedtak);
 
     if (!vedtakSomBlirOmgjort) {
         return (
             <Alert variant={'error'}>
-                {`Teknisk feil: Klarte ikke finne vedtak som skal omgjøres for revurdering-id: ${behandling.id} og omgjørVedtak-id: ${omgjørVedtakId}`}
+                {`Teknisk feil: Klarte ikke finne vedtak som skal omgjøres for revurdering-id: ${behandling.id} og omgjørVedtak-id: ${omgjørVedtak}`}
             </Alert>
         );
     }
@@ -29,7 +27,7 @@ export const RevurderingOmgjøringHeader = (props: { klage: Nullable<Klagebehand
     return (
         <VStack gap="space-8">
             <Heading size={'medium'} level={'1'} spacing={true}>
-                {props.klage ? 'Omgjøring etter klage - ' : ''}Omgjøring
+                {klagebehandlingId ? 'Omgjøring etter klage' : 'Omgjøring'}
             </Heading>
 
             {behandling.status === Rammebehandlingsstatus.VEDTATT ? (
