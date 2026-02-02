@@ -83,7 +83,7 @@ export const JournalpostId = (props: {
             // Skal bare advare saksbehandler om mismatch, ikke hindre innsending
             if (data.journalpostFinnes && data.gjelderInnsendtFnr) {
                 return (
-                    <InlineMessage status="warning" aria-live="polite" size="small">
+                    <InlineMessage status="success" aria-live="polite" size="small">
                         Journalpost finnes og søker står som avsender.
                     </InlineMessage>
                 );
