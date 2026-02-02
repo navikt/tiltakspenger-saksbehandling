@@ -40,7 +40,10 @@ export const RevurderingOmgjøringsperiodeVelger = () => {
     return (
         <VedtakSeksjon>
             <VedtakSeksjon.Venstre>
-                <VStack gap={'5'} className={classNames(style.feilPeriode)}>
+                <VStack
+                    gap={'5'}
+                    className={classNames(harValgtMedOverlappOverHull && style.feilPeriode)}
+                >
                     <Heading size={'small'} level={'3'}>
                         {'Omgjøringsperiode'}
                     </Heading>
