@@ -1,32 +1,19 @@
-import { Alert, BodyShort, Button, Heading, HStack, Modal, VStack } from '@navikt/ds-react';
-
-import { SakId } from '~/types/Sak';
-import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
-import router from 'next/router';
-import { behandlingUrl } from '~/utils/urls';
+import { BodyShort, Button, Heading, HStack, LocalAlert, Modal, VStack } from '@navikt/ds-react';
 
 import styles from './OvertaBehandlingModal.module.css';
-import { Rammebehandling, BehandlingId } from '~/types/Rammebehandling';
+import { FetcherError } from '~/utils/fetch/fetch';
+import { Nullable } from '~/types/UtilTypes';
 
 const OvertabehandlingModal = (props: {
-    sakId: SakId;
-    behandlingId: BehandlingId;
     overtarFra: string;
     åpen: boolean;
     onClose: () => void;
+    api: {
+        trigger: (data: { overtarFra: string }) => void;
+        isMutating: boolean;
+        error: Nullable<FetcherError>;
+    };
 }) => {
-    const overtaBehandlingApi = useFetchJsonFraApi<Rammebehandling, { overtarFra: string }>(
-        `/sak/${props.sakId}/behandling/${props.behandlingId}/overta`,
-        'PATCH',
-        {
-            onSuccess: (behandling) => {
-                if (behandling) {
-                    router.push(behandlingUrl(behandling));
-                }
-            },
-        },
-    );
-
     return (
         <Modal
             width={480}
@@ -47,8 +34,15 @@ const OvertabehandlingModal = (props: {
             </Modal.Body>
             <Modal.Footer>
                 <VStack gap="space-16">
-                    {overtaBehandlingApi.error && (
-                        <Alert variant={'error'}>{overtaBehandlingApi.error.message}</Alert>
+                    {props.api?.error && (
+                        <LocalAlert status="error" size="small">
+                            <LocalAlert.Header>
+                                <LocalAlert.Title>
+                                    Feil ved overtakelse av behandling
+                                </LocalAlert.Title>
+                            </LocalAlert.Header>
+                            <LocalAlert.Content>{props.api.error.message}</LocalAlert.Content>
+                        </LocalAlert>
                     )}
                     <HStack gap="space-8">
                         <Button type="button" variant="secondary" onClick={props.onClose}>
@@ -56,10 +50,8 @@ const OvertabehandlingModal = (props: {
                         </Button>
                         <Button
                             type="button"
-                            onClick={() =>
-                                overtaBehandlingApi.trigger({ overtarFra: props.overtarFra })
-                            }
-                            loading={overtaBehandlingApi.isMutating}
+                            onClick={() => props.api.trigger({ overtarFra: props.overtarFra })}
+                            loading={props.api.isMutating}
                         >
                             Overta behandling
                         </Button>

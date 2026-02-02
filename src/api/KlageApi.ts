@@ -55,3 +55,15 @@ export const useAvbrytKlagebehandling = (args: {
         { onSuccess: args.onSuccess },
     );
 };
+
+export const useOvertaKlagebehandling = (args: {
+    sakId: string;
+    klageId: KlageId;
+    onSuccess: (sak: SakProps) => void;
+}) => {
+    return useFetchJsonFraApi<SakProps, { overtarFra: string }>(
+        `/sak/${args.sakId}/klage/${args.klageId}/overta`,
+        'PATCH',
+        { onSuccess: args.onSuccess },
+    );
+};

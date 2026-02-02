@@ -4,9 +4,7 @@ import {
     ÅpenBehandlingForOversiktType,
     ÅpenRammebehandlingForOversikt,
 } from '~/types/ÅpenBehandlingForOversikt';
-import OvertaBehandlingMenyvalg, {
-    visOvertaBehandlingMenyvalg,
-} from './menyvalg/OvertaBehandlingMenyvalg';
+import { visOvertaBehandlingMenyvalg } from './menyvalg/OvertaBehandlingMenyvalg';
 import AvsluttBehandlingMenyvalg from '~/components/personoversikt/avsluttBehandling/AvsluttBehandlingMenyvalg';
 import FortsettBehandlingMenyvalg, {
     visFortsettBehandlingMenyvalg,
@@ -17,7 +15,7 @@ import LeggTilbakeBehandlingMenyValg, {
 import TildelMegMenyvalg, {
     visTildelMegMenyvalg,
 } from '~/components/behandlingmeny/menyvalg/TildelMegMenyvalg';
-import { ChevronDownIcon } from '@navikt/aksel-icons';
+import { ArrowRightIcon, ChevronDownIcon } from '@navikt/aksel-icons';
 import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
 import SeBehandlingMenyvalg from '~/components/behandlingmeny/menyvalg/SeBehandlingMenyvalg';
 import AvsluttBehandlingModal from '~/components/modaler/AvsluttBehandlingModal';
@@ -31,11 +29,13 @@ import GjenopptaBehandlingMenyvalg, {
 } from '~/components/behandlingmeny/menyvalg/GjenopptaBehandlingMenyvalg';
 import SettBehandlingPåVentModal from '~/components/modaler/SettBehandlingPåVentModal';
 import { behandlingUrl } from '~/utils/urls';
-import { Rammebehandlingsstatus } from '~/types/Rammebehandling';
+import { Rammebehandling, Rammebehandlingsstatus } from '~/types/Rammebehandling';
 import { useAvsluttBehandling } from './useAvsluttBehandling';
 import { useSak } from '~/context/sak/SakContext';
 import { Saksbehandler } from '~/types/Saksbehandler';
 import { eierBehandling, erSattPaVent } from '~/utils/tilganger';
+import router from 'next/router';
+import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 
 type Props = {
     behandling: ÅpenRammebehandlingForOversikt;
@@ -59,7 +59,7 @@ const visAvsluttBehandlingMenyvalg = (
 
 export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props) => {
     const { id } = behandling;
-    const { setSak } = useSak();
+    const { sak, setSak } = useSak();
     const { innloggetSaksbehandler } = useSaksbehandler();
     const [visAvsluttBehandlingModal, setVisAvsluttBehandlingModal] = React.useState(false);
     const [visOvertaBehandlingModal, setVisOvertaBehandlingModal] = useState(false);
@@ -95,6 +95,18 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
     const { avsluttBehandling, avsluttBehandlingIsMutating, avsluttBehandlingError } =
         useAvsluttBehandling(behandling.saksnummer);
 
+    const overtaBehandlingApi = useFetchJsonFraApi<Rammebehandling, { overtarFra: string }>(
+        `/sak/${sak.sakId}/behandling/${behandling.id}/overta`,
+        'PATCH',
+        {
+            onSuccess: (behandling) => {
+                if (behandling) {
+                    router.push(behandlingUrl(behandling));
+                }
+            },
+        },
+    );
+
     if (!menySkalVises) {
         return (
             <Button variant={'secondary'} as={Link} href={behandlingUrl(behandling)} size={'small'}>
@@ -120,9 +132,14 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
                 </ActionMenu.Trigger>
                 <ActionMenu.Content>
                     {visOvertaBehandling && (
-                        <OvertaBehandlingMenyvalg
-                            setVisOvertaBehandlingModal={setVisOvertaBehandlingModal}
-                        />
+                        <ActionMenu.Item
+                            icon={<ArrowRightIcon aria-hidden />}
+                            onClick={() => {
+                                setVisOvertaBehandlingModal(true);
+                            }}
+                        >
+                            Overta behandling
+                        </ActionMenu.Item>
                     )}
                     {visFortsettBehandling && (
                         <FortsettBehandlingMenyvalg behandling={behandling} />
@@ -179,8 +196,6 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
                 <OvertabehandlingModal
                     åpen={visOvertaBehandlingModal}
                     onClose={() => setVisOvertaBehandlingModal(false)}
-                    sakId={behandling.sakId}
-                    behandlingId={behandling.id}
                     overtarFra={
                         behandling.status === Rammebehandlingsstatus.UNDER_BEHANDLING
                             ? behandling.saksbehandler!
@@ -188,6 +203,11 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
                               ? behandling.beslutter!
                               : 'Ukjent saksbehandler/beslutter'
                     }
+                    api={{
+                        trigger: overtaBehandlingApi.trigger,
+                        isMutating: overtaBehandlingApi.isMutating,
+                        error: overtaBehandlingApi.error ?? null,
+                    }}
                 />
             )}
             {visSettBehandlingPåVentModal && (

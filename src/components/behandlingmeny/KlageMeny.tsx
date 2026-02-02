@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChevronDownIcon } from '@navikt/aksel-icons';
+import { ArrowRightIcon, ChevronDownIcon, FileIcon } from '@navikt/aksel-icons';
 import { ActionMenu, Button } from '@navikt/ds-react';
 import router from 'next/router';
 import { Klagebehandling } from '~/types/Klage';
@@ -7,11 +7,18 @@ import { finnUrlForKlageSteg } from '~/utils/klageUtils';
 import AvsluttBehandlingMenyvalg from '../personoversikt/avsluttBehandling/AvsluttBehandlingMenyvalg';
 import AvsluttBehandlingModal from '../modaler/AvsluttBehandlingModal';
 import { useSak } from '~/context/sak/SakContext';
-import { useAvbrytKlagebehandling } from '~/api/KlageApi';
+import { useAvbrytKlagebehandling, useOvertaKlagebehandling } from '~/api/KlageApi';
+import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
+import OvertabehandlingModal from './OvertaBehandlingModal';
 
 const KlageMeny = (props: { klage: Klagebehandling }) => {
     const { setSak } = useSak();
+    const { innloggetSaksbehandler } = useSaksbehandler();
     const [visAvsluttBehandlingModal, setVisAvsluttBehandlingModal] = React.useState(false);
+    const [visVilOvertaModal, setVisVilOvertaModal] = React.useState(false);
+
+    const eierInnloggetSaksbehandlerBehandlingen =
+        innloggetSaksbehandler.navIdent === props.klage.saksbehandler;
 
     const avbrytKlageBehandling = useAvbrytKlagebehandling({
         sakId: props.klage.sakId,
@@ -19,6 +26,15 @@ const KlageMeny = (props: { klage: Klagebehandling }) => {
         onSuccess: (sak) => {
             setSak(sak);
             setVisAvsluttBehandlingModal(false);
+        },
+    });
+
+    const overtaKlageBehandling = useOvertaKlagebehandling({
+        sakId: props.klage.sakId,
+        klageId: props.klage.id,
+        onSuccess: (sak) => {
+            setSak(sak);
+            setVisVilOvertaModal(false);
         },
     });
 
@@ -36,14 +52,43 @@ const KlageMeny = (props: { klage: Klagebehandling }) => {
                     </Button>
                 </ActionMenu.Trigger>
                 <ActionMenu.Content>
-                    <ActionMenu.Item onSelect={() => router.push(finnUrlForKlageSteg(props.klage))}>
-                        Åpne
+                    <ActionMenu.Item
+                        onSelect={() => router.push(finnUrlForKlageSteg(props.klage))}
+                        icon={
+                            eierInnloggetSaksbehandlerBehandlingen ? (
+                                <ArrowRightIcon aria-hidden />
+                            ) : (
+                                <FileIcon aria-hidden />
+                            )
+                        }
+                    >
+                        {eierInnloggetSaksbehandlerBehandlingen ? 'Fortsett' : 'Se behandling'}
                     </ActionMenu.Item>
 
-                    <ActionMenu.Divider />
-                    <AvsluttBehandlingMenyvalg
-                        setVisAvsluttBehandlingModal={setVisAvsluttBehandlingModal}
-                    />
+                    {eierInnloggetSaksbehandlerBehandlingen && (
+                        <>
+                            <ActionMenu.Divider />
+                            <AvsluttBehandlingMenyvalg
+                                setVisAvsluttBehandlingModal={setVisAvsluttBehandlingModal}
+                            />
+                        </>
+                    )}
+
+                    {!eierInnloggetSaksbehandlerBehandlingen && (
+                        <>
+                            <ActionMenu.Divider />
+                            {props.klage.saksbehandler && (
+                                <ActionMenu.Item
+                                    icon={<ArrowRightIcon aria-hidden />}
+                                    onClick={() => {
+                                        setVisVilOvertaModal(true);
+                                    }}
+                                >
+                                    Overta behandling
+                                </ActionMenu.Item>
+                            )}
+                        </>
+                    )}
                 </ActionMenu.Content>
             </ActionMenu>
             {visAvsluttBehandlingModal && (
@@ -61,6 +106,19 @@ const KlageMeny = (props: { klage: Klagebehandling }) => {
                         error: avbrytKlageBehandling.error
                             ? avbrytKlageBehandling.error.message
                             : null,
+                    }}
+                />
+            )}
+            {visVilOvertaModal && (
+                <OvertabehandlingModal
+                    åpen={visVilOvertaModal}
+                    onClose={() => setVisVilOvertaModal(false)}
+                    //knappen for å overta rendres kun dersom saksbehandler finnes
+                    overtarFra={props.klage.saksbehandler!}
+                    api={{
+                        trigger: overtaKlageBehandling.trigger,
+                        isMutating: overtaKlageBehandling.isMutating,
+                        error: overtaKlageBehandling.error ?? null,
                     }}
                 />
             )}
