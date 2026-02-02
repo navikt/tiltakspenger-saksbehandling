@@ -22,6 +22,7 @@ import { SakId } from '~/types/Sak';
 import { Attestering } from '~/types/Attestering';
 import { Avbrutt } from '~/types/Avbrutt';
 import { VedtakId } from '~/types/Rammevedtak';
+import { KlageId } from './Klage';
 
 export type BehandlingId = `beh_${string}`;
 
@@ -45,6 +46,7 @@ export interface RammebehandlingBase {
     iverksattTidspunkt: Nullable<string>;
     ventestatus: Nullable<VentestatusHendelse>;
     utbetaling: Nullable<BehandlingUtbetalingProps>;
+    klagebehandlingId: Nullable<KlageId>;
 }
 
 export type Rammebehandling = Søknadsbehandling | Revurdering;

@@ -97,7 +97,12 @@ const RammevedtakMedBehandlingRad = (props: { rammevedtak: VedtattRammevedtakMed
             <Table.DataCell>
                 {finnBehandlingstypeTekst[props.rammevedtak.behandling.type]}
             </Table.DataCell>
-            <Table.DataCell>{behandlingResultatTilTag[props.rammevedtak.resultat]}</Table.DataCell>
+            <Table.DataCell>
+                {behandlingResultatTilTag(
+                    props.rammevedtak.resultat,
+                    props.rammevedtak.behandling.klagebehandlingId ? 'Klage - ' : undefined,
+                )}
+            </Table.DataCell>
             <Table.DataCell>{formaterTidspunkt(props.rammevedtak.opprettet)}</Table.DataCell>
             <Table.DataCell>
                 {props.rammevedtak.opprinneligInnvilgetPerioder

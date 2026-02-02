@@ -211,38 +211,58 @@ export const behandlingResultatTilText: Record<RammebehandlingResultat, string> 
     [RevurderingResultat.OMGJØRING]: 'Omgjøring',
 };
 
-export const behandlingResultatTilTag: Record<RammebehandlingResultat, ReactElement> = {
-    [SøknadsbehandlingResultat.AVSLAG]: (
-        <Tag data-color="danger" variant="outline">
-            {behandlingResultatTilText[SøknadsbehandlingResultat.AVSLAG]}
-        </Tag>
-    ),
-    [SøknadsbehandlingResultat.INNVILGELSE]: (
-        <Tag data-color="success" variant="outline">
-            {behandlingResultatTilText[SøknadsbehandlingResultat.INNVILGELSE]}
-        </Tag>
-    ),
-    [RevurderingResultat.STANS]: (
-        <Tag data-color="warning" variant="outline">
-            {behandlingResultatTilText[RevurderingResultat.STANS]}
-        </Tag>
-    ),
-    [RevurderingResultat.INNVILGELSE]: (
-        <Tag data-color="info" variant="outline">
-            {behandlingResultatTilText[RevurderingResultat.INNVILGELSE]}
-        </Tag>
-    ),
-    [SøknadsbehandlingResultat.IKKE_VALGT]: (
-        <Tag data-color="neutral" variant="outline">
-            {behandlingResultatTilText[SøknadsbehandlingResultat.IKKE_VALGT]}
-        </Tag>
-    ),
-    [RevurderingResultat.OMGJØRING]: (
-        <Tag data-color="meta-purple" variant="outline">
-            {behandlingResultatTilText[RevurderingResultat.OMGJØRING]}
-        </Tag>
-    ),
-};
+export function behandlingResultatTilTag(
+    resultat: RammebehandlingResultat,
+    ekstraTekst?: string,
+): ReactElement {
+    const resultatText = behandlingResultatTilText[resultat];
+
+    switch (resultat) {
+        case SøknadsbehandlingResultat.AVSLAG:
+            return (
+                <Tag data-color="danger" variant="outline">
+                    {ekstraTekst} {resultatText}
+                </Tag>
+            );
+
+        case SøknadsbehandlingResultat.INNVILGELSE:
+            return (
+                <Tag data-color="success" variant="outline">
+                    {ekstraTekst} {resultatText}
+                </Tag>
+            );
+
+        case RevurderingResultat.STANS:
+            return (
+                <Tag data-color="warning" variant="outline">
+                    {ekstraTekst} {resultatText}
+                </Tag>
+            );
+
+        case RevurderingResultat.INNVILGELSE:
+            return (
+                <Tag data-color="info" variant="outline">
+                    {ekstraTekst} {resultatText}
+                </Tag>
+            );
+
+        case SøknadsbehandlingResultat.IKKE_VALGT:
+            return (
+                <Tag data-color="neutral" variant="outline">
+                    {ekstraTekst} {resultatText}
+                </Tag>
+            );
+
+        case RevurderingResultat.OMGJØRING:
+            return (
+                <Tag data-color="meta-purple" variant="outline">
+                    {ekstraTekst} {resultatText}
+                </Tag>
+            );
+    }
+    //trigger compile feil dersom switch ikke er exhaustive
+    throw resultat satisfies never;
+}
 
 export const klagebehandlingStatusTilText: Record<KlagebehandlingStatus, string> = {
     [KlagebehandlingStatus.KLAR_TIL_BEHANDLING]: 'Klar til behandling',

@@ -123,7 +123,7 @@ const propsForRad = (
 
             return {
                 typeTekst,
-                resultatTag: behandlingResultatTilTag[resultat],
+                resultatTag: behandlingResultatTilTag(resultat),
                 statusTag: finnBehandlingStatusTag(
                     åpenBehandling.status,
                     åpenBehandling.underkjent,
