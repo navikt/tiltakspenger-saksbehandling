@@ -35,8 +35,6 @@ export interface RevurderingOmgjøring extends RevurderingBase {
     innvilgelsesperioder: Nullable<Innvilgelsesperiode[]>;
     barnetillegg: Nullable<Barnetillegg>;
     omgjørVedtak: VedtakId;
-    harValgtSkalOmgjøreHeleVedtaksperioden: boolean;
-    valgtOmgjøringsperiode: Nullable<Periode>;
 }
 
 export enum RevurderingResultat {
@@ -69,16 +67,8 @@ export type RevurderingVedtakOmgjøringRequest = OppdaterBehandlingRequestBase &
     resultat: RevurderingResultat.OMGJØRING;
     innvilgelsesperioder: Innvilgelsesperiode[];
     barnetillegg: Barnetillegg;
-} & (
-        | {
-              skalOmgjøreHeleVedtaket: true;
-              omgjøringsperiode: null;
-          }
-        | {
-              skalOmgjøreHeleVedtaket: false;
-              omgjøringsperiode: Periode;
-          }
-    );
+    vedtaksperiode: Periode;
+};
 
 export type RevurderingVedtakRequest =
     | RevurderingVedtakStansRequest

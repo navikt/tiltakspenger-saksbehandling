@@ -17,28 +17,17 @@ import { Periode } from '~/types/Periode';
 export type RevurderingOmgjøringState = {
     resultat: RevurderingResultat.OMGJØRING;
     innvilgelse: InnvilgelseState;
-    omgjøring: {
-        skalOmgjøreHeleVedtaket: boolean;
-        periode: Periode;
+    vedtaksperiode: Periode;
+};
+
+type VedtaksperiodeActions = {
+    type: 'oppdaterVedtaksperiode';
+    payload: {
+        periode: Partial<Periode>;
     };
 };
 
-type OmgjøringsperiodeActions =
-    | {
-          type: 'oppdaterOmgjøringsperiode';
-          payload: {
-              periode: Partial<Periode>;
-          };
-      }
-    | {
-          type: 'setSkalOmgjøreHeleVedtaket';
-          payload: {
-              skalOmgjøreHeleVedtaket: boolean;
-              gjeldendePeriode: Periode;
-          };
-      };
-
-type Actions = InnvilgelseActions | OmgjøringsperiodeActions;
+type Actions = InnvilgelseActions | VedtaksperiodeActions;
 
 export type RevurderingOmgjøringActions = ReducerSuperAction<
     Actions,
@@ -52,27 +41,12 @@ export const revurderingOmgjøringReducer: Reducer<
     const { type, payload } = action;
 
     switch (type) {
-        case 'oppdaterOmgjøringsperiode':
+        case 'oppdaterVedtaksperiode':
             return {
                 ...state,
-                omgjøring: {
-                    ...state.omgjøring,
-                    periode: {
-                        ...state.omgjøring.periode,
-                        ...payload.periode,
-                    },
-                },
-            };
-
-        case 'setSkalOmgjøreHeleVedtaket':
-            const { skalOmgjøreHeleVedtaket, gjeldendePeriode } = payload;
-
-            return {
-                ...state,
-                omgjøring: {
-                    ...state.omgjøring,
-                    skalOmgjøreHeleVedtaket,
-                    periode: skalOmgjøreHeleVedtaket ? gjeldendePeriode : state.omgjøring.periode,
+                vedtaksperiode: {
+                    ...state.vedtaksperiode,
+                    ...payload.periode,
                 },
             };
 
@@ -112,6 +86,6 @@ export const useRevurderingOmgjøringSkjema = (): RevurderingOmgjøringContext =
 export const useRevurderingOmgjøringSkjemaDispatch = () => {
     const dispatch = useBehandlingSkjemaDispatch();
 
-    return (action: OmgjøringsperiodeActions) =>
+    return (action: VedtaksperiodeActions) =>
         dispatch({ ...action, superType: BehandlingSkjemaType.RevurderingOmgjøring });
 };

@@ -13,7 +13,7 @@ import { BegrunnelseVilkårsvurdering } from '~/components/behandling/felles/beg
 import { RevurderingOmgjøringBrev } from '~/components/behandling/revurdering/omgjøring/brev/RevurderingOmgjøringBrev';
 import { RevurderingOmgjøringSend } from '~/components/behandling/revurdering/omgjøring/send-og-godkjenn/RevurderingOmgjøringSend';
 import { RevurderingOmgjøringHeader } from '~/components/behandling/revurdering/omgjøring/header/RevurderingOmgjøringHeader';
-import { RevurderingOmgjøringsperiodeVelger } from '~/components/behandling/revurdering/omgjøring/omgjøringsperiode/RevurderingOmgjøringsperiodeVelger';
+import { VedtaksperiodeVelger } from '~/components/behandling/revurdering/omgjøring/vedtaksperiode/VedtaksperiodeVelger';
 
 export const RevurderingOmgjøringVedtak = () => {
     const { behandling } = useRevurderingOmgjøring();
@@ -27,7 +27,7 @@ export const RevurderingOmgjøringVedtak = () => {
         <>
             <RevurderingOmgjøringHeader />
             <Separator />
-            <RevurderingOmgjøringsperiodeVelger />
+            <VedtaksperiodeVelger />
             <Separator />
             {kanInnvilges ? (
                 <Innvilgelse skjema={skjema} />

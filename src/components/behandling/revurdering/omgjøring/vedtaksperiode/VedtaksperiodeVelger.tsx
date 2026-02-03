@@ -7,20 +7,19 @@ import {
 import { useRevurderingOmgjøring } from '~/components/behandling/context/BehandlingContext';
 import { useSak } from '~/context/sak/SakContext';
 import { finnPerioderHull, perioderOverlapper, totalPeriode } from '~/utils/periode';
-import { Checkbox, Heading, HStack, VStack } from '@navikt/ds-react';
+import { Heading, HStack, VStack } from '@navikt/ds-react';
 import { hentRammevedtak } from '~/utils/sak';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { VedtakHjelpetekst } from '~/components/behandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
 import { classNames } from '~/utils/classNames';
 
-import style from './RevurderingOmgjøringsperiodeVelger.module.css';
+import style from './VedtaksperiodeVelger.module.css';
 
-export const RevurderingOmgjøringsperiodeVelger = () => {
+export const VedtaksperiodeVelger = () => {
     const { sak } = useSak();
     const { behandling } = useRevurderingOmgjøring();
 
-    const { omgjøring, erReadonly } = useRevurderingOmgjøringSkjema();
-    const { periode: valgtPeriode, skalOmgjøreHeleVedtaket } = omgjøring;
+    const { vedtaksperiode, erReadonly } = useRevurderingOmgjøringSkjema();
 
     const dispatch = useRevurderingOmgjøringSkjemaDispatch();
 
@@ -32,7 +31,7 @@ export const RevurderingOmgjøringsperiodeVelger = () => {
     const hullMellomGjeldendePerioder = finnPerioderHull(vedtak.gjeldendeVedtaksperioder);
     const gjeldendeVedtakHarHull = hullMellomGjeldendePerioder.length > 0;
     const harValgtMedOverlappOverHull = hullMellomGjeldendePerioder.some((hull) =>
-        perioderOverlapper(hull, valgtPeriode),
+        perioderOverlapper(hull, vedtaksperiode),
     );
 
     const disabledMatcher = generateMatcherProps(hullMellomGjeldendePerioder);
@@ -45,17 +44,17 @@ export const RevurderingOmgjøringsperiodeVelger = () => {
                     className={classNames(harValgtMedOverlappOverHull && style.feilPeriode)}
                 >
                     <Heading size={'small'} level={'3'}>
-                        {'Omgjøringsperiode'}
+                        {'Vedtaksperiode'}
                     </Heading>
                     <HStack gap={'space-6'} align={'end'}>
                         <Datovelger
                             label={'Fra og med'}
-                            selected={valgtPeriode.fraOgMed}
-                            value={datoTilDatoInputText(valgtPeriode.fraOgMed)}
+                            selected={vedtaksperiode.fraOgMed}
+                            value={datoTilDatoInputText(vedtaksperiode.fraOgMed)}
                             minDate={gjeldendeTotalPeriode.fraOgMed}
-                            maxDate={valgtPeriode.tilOgMed}
+                            maxDate={vedtaksperiode.tilOgMed}
                             defaultMonth={defaultDato}
-                            readOnly={erReadonly || skalOmgjøreHeleVedtaket}
+                            readOnly={erReadonly}
                             size={'small'}
                             dropdownCaption={true}
                             disabledMatcher={disabledMatcher}
@@ -65,7 +64,7 @@ export const RevurderingOmgjøringsperiodeVelger = () => {
                                 }
 
                                 dispatch({
-                                    type: 'oppdaterOmgjøringsperiode',
+                                    type: 'oppdaterVedtaksperiode',
                                     payload: {
                                         periode: { fraOgMed: dateTilISOTekst(valgtDato) },
                                     },
@@ -74,12 +73,12 @@ export const RevurderingOmgjøringsperiodeVelger = () => {
                         />
                         <Datovelger
                             label={'Til og med'}
-                            selected={valgtPeriode.tilOgMed}
-                            value={datoTilDatoInputText(valgtPeriode.tilOgMed)}
-                            minDate={valgtPeriode.fraOgMed}
+                            selected={vedtaksperiode.tilOgMed}
+                            value={datoTilDatoInputText(vedtaksperiode.tilOgMed)}
+                            minDate={vedtaksperiode.fraOgMed}
                             maxDate={gjeldendeTotalPeriode.tilOgMed}
                             defaultMonth={defaultDato}
-                            readOnly={erReadonly || skalOmgjøreHeleVedtaket}
+                            readOnly={erReadonly}
                             size={'small'}
                             dropdownCaption={true}
                             disabledMatcher={disabledMatcher}
@@ -89,33 +88,13 @@ export const RevurderingOmgjøringsperiodeVelger = () => {
                                 }
 
                                 dispatch({
-                                    type: 'oppdaterOmgjøringsperiode',
+                                    type: 'oppdaterVedtaksperiode',
                                     payload: {
                                         periode: { tilOgMed: dateTilISOTekst(valgtDato) },
                                     },
                                 });
                             }}
                         />
-                        {!gjeldendeVedtakHarHull && (
-                            <Checkbox
-                                readOnly={erReadonly}
-                                checked={skalOmgjøreHeleVedtaket}
-                                size={'small'}
-                                onChange={(e) => {
-                                    const { checked } = e.target;
-
-                                    dispatch({
-                                        type: 'setSkalOmgjøreHeleVedtaket',
-                                        payload: {
-                                            skalOmgjøreHeleVedtaket: checked,
-                                            gjeldendePeriode: gjeldendeTotalPeriode,
-                                        },
-                                    });
-                                }}
-                            >
-                                {'Omgjør hele vedtaket'}
-                            </Checkbox>
-                        )}
                     </HStack>
 
                     {harValgtMedOverlappOverHull && (
@@ -129,7 +108,7 @@ export const RevurderingOmgjøringsperiodeVelger = () => {
                     {gjeldendeVedtakHarHull && (
                         <VedtakHjelpetekst variant={'warning'}>
                             {
-                                'Vedtaket som omgjøres har flere gjeldende perioder. Du må velge en omgjøringsperiode innenfor en av de gjeldende periodene.'
+                                'Vedtaket som omgjøres har flere gjeldende perioder. Du må velge en vedtaksperiode for omgjøring innenfor en av de gjeldende periodene.'
                             }
                         </VedtakHjelpetekst>
                     )}
@@ -137,9 +116,11 @@ export const RevurderingOmgjøringsperiodeVelger = () => {
             </VedtakSeksjon.Venstre>
             <VedtakSeksjon.Høyre>
                 <VStack gap={'space-4'}>
-                    <VedtakHjelpetekst>
-                        {'Velg perioden av det opprinnelige vedtaket som skal omgjøres. Du kan forlenge innvilgelsesperiodene utover det opprinnelige vedtaket, ' +
-                            'så lenge det ikke overlapper med andre gjeldende vedtak.'}
+                    <VedtakHjelpetekst header={'Velg ny vedtaksperiode'}>
+                        {'Du kan omgjøre hele eller deler av den opprinnelige vedtaksperioden.'}
+                        {
+                            ' Du kan også forlenge vedtaksperioden utover det opprinnelige vedtaket, så lenge det ikke overlapper med andre gjeldende vedtak.'
+                        }
                     </VedtakHjelpetekst>
                 </VStack>
             </VedtakSeksjon.Høyre>

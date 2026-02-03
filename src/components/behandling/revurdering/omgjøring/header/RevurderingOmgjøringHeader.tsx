@@ -32,9 +32,9 @@ export const RevurderingOmgjøringHeader = () => {
 
             {behandling.status === Rammebehandlingsstatus.VEDTATT ? (
                 <OppsummeringsPar
-                    label={'Omgjøringsperiode'}
+                    label={'Vedtaksperiode'}
                     verdi={periodeTilFormatertDatotekst(behandling.vedtaksperiode!)}
-                    variant="inlineColon"
+                    variant={'inlineColon'}
                 />
             ) : (
                 <VStack gap={'space-8'} align={'start'}>
