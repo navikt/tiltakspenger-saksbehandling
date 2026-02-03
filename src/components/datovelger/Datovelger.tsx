@@ -1,6 +1,7 @@
 import { DatePicker, useDatepicker } from '@navikt/ds-react';
 import { ComponentProps, useEffect } from 'react';
 import { DateOrString, tilDate } from '~/utils/date';
+import { Periode } from '~/types/Periode';
 
 type MatcherProps = ComponentProps<typeof DatePicker>['disabled'];
 
@@ -54,4 +55,15 @@ export const Datovelger = ({
             <DatePicker.Input {...inputProps} {...inputPropsCustom} label={label ?? 'Velg dato'} />
         </DatePicker>
     );
+};
+
+export const generateMatcherProps = (perioder: Periode[]): MatcherProps => {
+    return perioder.length > 0
+        ? perioder.map((p) => {
+              return {
+                  from: tilDate(p.fraOgMed),
+                  to: tilDate(p.tilOgMed),
+              };
+          })
+        : undefined;
 };

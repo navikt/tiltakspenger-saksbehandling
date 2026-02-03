@@ -88,11 +88,12 @@ const omgjøringInitialState = (
     behandling: RevurderingOmgjøring,
     sak: SakProps,
 ): RevurderingOmgjøringState => {
-    const { innvilgelsesperioder } = behandling;
+    const { innvilgelsesperioder, vedtaksperiode } = behandling;
 
     if (!innvilgelsesperioder) {
         return {
             resultat: RevurderingResultat.OMGJØRING,
+            vedtaksperiode,
             innvilgelse: {
                 harValgtPeriode: false,
                 innvilgelsesperioder: [
@@ -100,10 +101,6 @@ const omgjøringInitialState = (
                         periode: {},
                     },
                 ],
-            },
-            vedtaksperiode: {
-                skalOmgjøreHeleVedtaket: true,
-                periode: null,
             },
         };
     }
@@ -116,15 +113,12 @@ const omgjøringInitialState = (
 
     return {
         resultat: RevurderingResultat.OMGJØRING,
+        vedtaksperiode,
         innvilgelse: {
             harValgtPeriode: true,
             innvilgelsesperioder,
             harBarnetillegg: barnetilleggPerioder.length > 0,
             barnetilleggPerioder,
-        },
-        vedtaksperiode: {
-            skalOmgjøreHeleVedtaket: true,
-            periode: null,
         },
     };
 };

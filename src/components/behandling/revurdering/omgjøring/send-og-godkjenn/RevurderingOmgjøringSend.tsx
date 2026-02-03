@@ -27,7 +27,7 @@ export const RevurderingOmgjøringSend = () => {
 const tilDTO = (
     skjema: RevurderingOmgjøringContext,
 ): Nullable<RevurderingVedtakOmgjøringRequest> => {
-    const { innvilgelse } = skjema;
+    const { innvilgelse, vedtaksperiode } = skjema;
 
     if (!innvilgelse.harValgtPeriode) {
         return null;
@@ -38,6 +38,7 @@ const tilDTO = (
         begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
         fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
         innvilgelsesperioder: innvilgelse.innvilgelsesperioder,
+        vedtaksperiode,
         barnetillegg: innvilgelse.harBarnetillegg
             ? {
                   begrunnelse: skjema.textAreas.barnetilleggBegrunnelse.getValue(),
@@ -47,14 +48,5 @@ const tilDTO = (
                   begrunnelse: null,
                   perioder: [],
               },
-        ...(skjema.vedtaksperiode.skalOmgjøreHeleVedtaket
-            ? {
-                  skalOmgjøreHeleVedtaket: true,
-                  vedtaksperiode: null,
-              }
-            : {
-                  skalOmgjøreHeleVedtaket: false,
-                  vedtaksperiode: skjema.vedtaksperiode.periode,
-              }),
     };
 };
