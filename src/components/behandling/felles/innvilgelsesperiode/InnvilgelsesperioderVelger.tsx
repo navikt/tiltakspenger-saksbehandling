@@ -1,6 +1,7 @@
 import {
-    useBehandlingInnvilgelseSkjemaDispatch,
+    BehandlingInnvilgelseContext,
     useBehandlingInnvilgelseSkjema,
+    useBehandlingInnvilgelseSkjemaDispatch,
 } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 import {
     hentHeleTiltaksdeltakelsesperioden,
@@ -11,7 +12,7 @@ import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/Ved
 import { Alert, Button, Heading, HStack, Select, VStack } from '@navikt/ds-react';
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
 import { InnvilgelsesperiodeDatovelgere } from '~/components/behandling/felles/innvilgelsesperiode/InnvilgelsesperiodeDatoVelgere';
-import { InnvilgelsesperioderVarsler } from '~/components/behandling/felles/innvilgelsesperiode/InnvilgelsesperioderVarsler';
+import { InnvilgelsesperioderVarsler } from '~/components/behandling/felles/innvilgelsesperiode/varsler/InnvilgelsesperioderVarsler';
 import { XMarkIcon } from '@navikt/aksel-icons';
 import { TiltaksdeltakelseMedPeriode } from '~/types/TiltakDeltakelse';
 import { periodeTilFormatertDatotekst } from '~/utils/date';
@@ -19,7 +20,16 @@ import { Innvilgelsesperiode } from '~/types/Innvilgelsesperiode';
 import { Rammebehandling } from '~/types/Rammebehandling';
 import { SakProps } from '~/types/Sak';
 import { Fragment } from 'react';
-import { InnvilgelseHullVarsel } from '~/components/behandling/felles/innvilgelsesperiode/InnvilgelseHullVarsel';
+import {
+    InnvilgelseHullVarsel,
+    VedtaksperioderUtenInnvilgelseVarsel,
+} from '~/components/behandling/felles/innvilgelsesperiode/varsler/InnvilgelseHullVarsel';
+import { RevurderingResultat } from '~/types/Revurdering';
+import { inneholderHelePerioden } from '~/utils/periode';
+import { Periode } from '~/types/Periode';
+
+import style from './InnvilgelsesperioderVelger.module.css';
+import { classNames } from '~/utils/classNames';
 
 export const InnvilgelsesperioderVelger = () => {
     const { sak } = useSak();
@@ -45,26 +55,28 @@ export const InnvilgelsesperioderVelger = () => {
                 </Heading>
                 {harValgtPeriode ? (
                     <VStack gap={'space-12'} align={'start'}>
-                        {innvilgelsesperioder.map((it, index, array) => {
-                            const nestePeriode = array.at(index + 1)?.periode;
+                        <VedtaksperioderUtenInnvilgelseVarsel>
+                            {innvilgelsesperioder.map((it, index, array) => {
+                                const nestePeriode = array.at(index + 1)?.periode;
 
-                            return (
-                                <Fragment key={`${it.periode.fraOgMed}-${it.periode.tilOgMed}`}>
-                                    <InnvilgelsesperiodeVelgerFull
-                                        innvilgelsesperioder={innvilgelsesperioder}
-                                        index={index}
-                                        tiltaksdeltakelser={tiltaksdeltakelser}
-                                        behandling={behandling}
-                                        sak={sak}
-                                        readOnly={erReadonly}
-                                    />
-                                    <InnvilgelseHullVarsel
-                                        forrigePeriode={it.periode}
-                                        nestePeriode={nestePeriode}
-                                    />
-                                </Fragment>
-                            );
-                        })}
+                                return (
+                                    <Fragment key={`${it.periode.fraOgMed}-${it.periode.tilOgMed}`}>
+                                        <InnvilgelsesperiodeVelgerFull
+                                            innvilgelsesperioder={innvilgelsesperioder}
+                                            index={index}
+                                            tiltaksdeltakelser={tiltaksdeltakelser}
+                                            behandling={behandling}
+                                            sak={sak}
+                                            readOnly={erReadonly}
+                                        />
+                                        <InnvilgelseHullVarsel
+                                            forrigePeriode={it.periode}
+                                            nestePeriode={nestePeriode}
+                                        />
+                                    </Fragment>
+                                );
+                            })}
+                        </VedtaksperioderUtenInnvilgelseVarsel>
 
                         {!erReadonly && (
                             <Button
@@ -122,6 +134,7 @@ const InnvilgelsesperiodeVelgerFull = ({
     index,
     readOnly,
 }: VelgerFullProps) => {
+    const skjemaContext = useBehandlingInnvilgelseSkjema();
     const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
 
     const innvilgelsesperiode = innvilgelsesperioder.at(index)!;
@@ -134,94 +147,111 @@ const InnvilgelsesperiodeVelgerFull = ({
         (tiltak) => tiltak.internDeltakelseId === internDeltakelseId,
     );
 
-    return (
-        <HStack gap={'space-12'} align={'end'}>
-            <InnvilgelsesperiodeDatovelgere
-                periode={periode}
-                tiltaksdeltakelsesperiode={tiltaksdeltakelsesperiode}
-                index={index}
-                readOnly={readOnly}
-            />
-            <Select
-                label={'Antall dager'}
-                size={'small'}
-                readOnly={readOnly}
-                value={antallDagerPerMeldeperiode}
-                onChange={(event) =>
-                    dispatch({
-                        type: 'settAntallDager',
-                        payload: {
-                            antallDager: Number(event.target.value),
-                            index,
-                        },
-                    })
-                }
-            >
-                {Array.from({ length: 14 }).map((_, index) => {
-                    const verdi = index + 1;
-                    return (
-                        <option value={verdi} key={verdi}>
-                            {verdi}
-                        </option>
-                    );
-                })}
-            </Select>
-            <Select
-                label={'Tiltak'}
-                size={'small'}
-                readOnly={readOnly || (tiltaksdeltakelser.length === 1 && harValgtGyldigTiltak)}
-                value={internDeltakelseId}
-                onChange={(event) =>
-                    dispatch({
-                        type: 'settTiltaksdeltakelse',
-                        payload: {
-                            internDeltakelseId: event.target.value,
-                            index,
-                        },
-                    })
-                }
-            >
-                {!harValgtGyldigTiltak && (
-                    <option
-                        disabled={true}
-                    >{`Ugyldig tiltak med id: ${internDeltakelseId}`}</option>
-                )}
-                {tiltaksdeltakelser.map((tiltak) => {
-                    const { internDeltakelseId } = tiltak;
+    const harValgtUgyldigPeriodeForOmgjøring = harValgtUtenforVedtaksperiodeForOmgjøring(
+        skjemaContext,
+        periode,
+    );
 
-                    return (
-                        <option value={internDeltakelseId} key={internDeltakelseId}>
-                            {tiltakVisningsnavn(tiltak, tiltaksdeltakelser)}
-                        </option>
-                    );
-                })}
-            </Select>
+    const harFeil = !harValgtGyldigTiltak || harValgtUgyldigPeriodeForOmgjøring;
+
+    return (
+        <VStack gap={'space-8'} className={classNames(harFeil && style.feilOmriss)}>
+            <HStack gap={'space-12'} align={'end'}>
+                <InnvilgelsesperiodeDatovelgere
+                    periode={periode}
+                    tiltaksdeltakelsesperiode={tiltaksdeltakelsesperiode}
+                    index={index}
+                    readOnly={readOnly}
+                />
+                <Select
+                    label={'Antall dager'}
+                    size={'small'}
+                    readOnly={readOnly}
+                    value={antallDagerPerMeldeperiode}
+                    onChange={(event) =>
+                        dispatch({
+                            type: 'settAntallDager',
+                            payload: {
+                                antallDager: Number(event.target.value),
+                                index,
+                            },
+                        })
+                    }
+                >
+                    {Array.from({ length: 14 }).map((_, index) => {
+                        const verdi = index + 1;
+                        return (
+                            <option value={verdi} key={verdi}>
+                                {verdi}
+                            </option>
+                        );
+                    })}
+                </Select>
+                <Select
+                    label={'Tiltak'}
+                    size={'small'}
+                    readOnly={readOnly || (tiltaksdeltakelser.length === 1 && harValgtGyldigTiltak)}
+                    value={internDeltakelseId}
+                    onChange={(event) =>
+                        dispatch({
+                            type: 'settTiltaksdeltakelse',
+                            payload: {
+                                internDeltakelseId: event.target.value,
+                                index,
+                            },
+                        })
+                    }
+                >
+                    {!harValgtGyldigTiltak && (
+                        <option
+                            disabled={true}
+                        >{`Ugyldig tiltak med id: ${internDeltakelseId}`}</option>
+                    )}
+                    {tiltaksdeltakelser.map((tiltak) => {
+                        const { internDeltakelseId } = tiltak;
+
+                        return (
+                            <option value={internDeltakelseId} key={internDeltakelseId}>
+                                {tiltakVisningsnavn(tiltak, tiltaksdeltakelser)}
+                            </option>
+                        );
+                    })}
+                </Select>
+
+                {innvilgelsesperioder.length > 1 && !readOnly && (
+                    <Button
+                        type={'button'}
+                        variant={'tertiary'}
+                        size={'small'}
+                        icon={<XMarkIcon />}
+                        onClick={() => {
+                            dispatch({
+                                type: 'fjernInnvilgelsesperiode',
+                                payload: {
+                                    index,
+                                    behandling,
+                                    sak,
+                                },
+                            });
+                        }}
+                    >
+                        {'Fjern'}
+                    </Button>
+                )}
+            </HStack>
+
             {!harValgtGyldigTiltak && (
                 <Alert variant={'error'} size={'small'} inline={true}>
                     {'Kan ikke innvilge for dette tiltaket'}
                 </Alert>
             )}
-            {innvilgelsesperioder.length > 1 && !readOnly && (
-                <Button
-                    type={'button'}
-                    variant={'tertiary'}
-                    size={'small'}
-                    icon={<XMarkIcon />}
-                    onClick={() => {
-                        dispatch({
-                            type: 'fjernInnvilgelsesperiode',
-                            payload: {
-                                index,
-                                behandling,
-                                sak,
-                            },
-                        });
-                    }}
-                >
-                    {'Fjern'}
-                </Button>
+
+            {harValgtUgyldigPeriodeForOmgjøring && (
+                <Alert variant={'error'} size={'small'} inline={true}>
+                    {'Innvilgelsesperioden må være innenfor valgt vedtaksperiode'}
+                </Alert>
             )}
-        </HStack>
+        </VStack>
     );
 };
 
@@ -241,4 +271,14 @@ const tiltakVisningsnavn = (
     } else {
         return tiltaksdeltakelse.typeNavn;
     }
+};
+
+const harValgtUtenforVedtaksperiodeForOmgjøring = (
+    skjemaContext: BehandlingInnvilgelseContext,
+    valgtPeriode: Periode,
+) => {
+    return (
+        skjemaContext.resultat === RevurderingResultat.OMGJØRING &&
+        !inneholderHelePerioden(skjemaContext.vedtaksperiode, valgtPeriode)
+    );
 };

@@ -1,0 +1,6 @@
+.feilOmriss {
+    border: var(--ax-border-danger) 2px solid;
+    border-radius: var(--ax-radius-4);
+    padding: 0.5rem;
+    margin: 0 -0.5rem;
+}

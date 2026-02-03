@@ -100,7 +100,7 @@ export const VedtaksperiodeVelger = () => {
                     {harValgtMedOverlappOverHull && (
                         <VedtakHjelpetekst variant={'error'}>
                             {
-                                'Valgt periode overlapper med med et annet vedtak enn det som skal omgjøres.'
+                                'Valgt periode overlapper med et annet vedtak enn det som skal omgjøres.'
                             }
                         </VedtakHjelpetekst>
                     )}
