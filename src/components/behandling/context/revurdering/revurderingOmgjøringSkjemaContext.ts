@@ -13,6 +13,7 @@ import {
 } from '~/components/behandling/context/BehandlingSkjemaContext';
 import { BehandlingSkjemaType } from '~/components/behandling/context/behandlingSkjemaUtils';
 import { Periode } from '~/types/Periode';
+import { krympPeriodisering } from '~/utils/periode';
 
 export type RevurderingOmgjøringState = {
     resultat: RevurderingResultat.OMGJØRING;
@@ -42,12 +43,27 @@ export const revurderingOmgjøringReducer: Reducer<
 
     switch (type) {
         case 'oppdaterVedtaksperiode':
+            const nyVedtaksperiode = {
+                ...state.vedtaksperiode,
+                ...payload.periode,
+            };
+
             return {
                 ...state,
-                vedtaksperiode: {
-                    ...state.vedtaksperiode,
-                    ...payload.periode,
-                },
+                innvilgelse: state.innvilgelse.harValgtPeriode
+                    ? {
+                          ...state.innvilgelse,
+                          innvilgelsesperioder: krympPeriodisering(
+                              state.innvilgelse.innvilgelsesperioder,
+                              nyVedtaksperiode,
+                          ),
+                          barnetilleggPerioder: krympPeriodisering(
+                              state.innvilgelse.barnetilleggPerioder,
+                              nyVedtaksperiode,
+                          ),
+                      }
+                    : state.innvilgelse,
+                vedtaksperiode: nyVedtaksperiode,
             };
 
         case 'oppdaterInnvilgelsesperiode':

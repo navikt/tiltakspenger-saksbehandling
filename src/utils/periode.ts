@@ -147,21 +147,23 @@ export const utvidPeriodisering = <T>(
     periodisering: MedPeriode<T>[],
     utvidTil: Periode,
 ): MedPeriode<T>[] => {
-    if (periodisering.length === 0) {
+    const overlappendePerioder = periodisering.filter((p) =>
+        perioderOverlapper(p.periode, utvidTil),
+    );
+
+    if (overlappendePerioder.length === 0) {
         return [];
     }
 
-    const perioderSomSkalUtvides = finnOverlappendeEllerNærmestePeriode(periodisering, utvidTil);
+    const førsteElement = overlappendePerioder.at(0)!;
 
-    const førsteElement = perioderSomSkalUtvides.at(0)!;
-
-    if (perioderSomSkalUtvides.length === 1) {
+    if (overlappendePerioder.length === 1) {
         return [{ ...førsteElement, periode: utvidTil }];
     }
 
-    const sisteElement = perioderSomSkalUtvides.at(-1)!;
+    const sisteElement = overlappendePerioder.at(-1)!;
 
-    return perioderSomSkalUtvides
+    return overlappendePerioder
         .with(0, {
             ...førsteElement,
             periode: {
@@ -176,35 +178,6 @@ export const utvidPeriodisering = <T>(
                 tilOgMed: utvidTil.tilOgMed,
             },
         });
-};
-
-const finnOverlappendeEllerNærmestePeriode = <T>(
-    periodisering: MedPeriode<T>[],
-    skalOverlappeMed: Periode,
-): MedPeriode<T>[] => {
-    if (periodisering.length === 0) {
-        return [];
-    }
-
-    const førstePeriodeIndex = periodisering.findIndex((p) => {
-        return p.periode.tilOgMed >= skalOverlappeMed.fraOgMed;
-    });
-
-    // Dersom alle perioder er før den angitte perioden, er den siste perioden den nærmeste
-    if (førstePeriodeIndex === -1) {
-        return [periodisering.at(-1)!];
-    }
-
-    const sistePeriodeIndex = periodisering.findLastIndex((p) => {
-        return p.periode.fraOgMed <= skalOverlappeMed.tilOgMed;
-    });
-
-    // Dersom alle perioder er etter den angitte perioden, er den første perioden den nærmeste
-    if (sistePeriodeIndex === -1) {
-        return [periodisering.at(0)!];
-    }
-
-    return periodisering.slice(førstePeriodeIndex, sistePeriodeIndex + 1);
 };
 
 export const finnPeriodiseringHull = (periodisering: MedPeriode[]): Periode[] => {
