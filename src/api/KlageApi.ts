@@ -7,6 +7,7 @@ import {
 } from '~/types/Klage';
 import { Rammebehandling } from '~/types/Rammebehandling';
 import { SakProps } from '~/types/Sak';
+import { FetcherError } from '~/utils/fetch/fetch';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 
 export const useOppdaterFormkrav = (args: {
@@ -56,6 +57,16 @@ export const useAvbrytKlagebehandling = (args: {
     );
 };
 
+export const useTaKlagebehandling = (args: {
+    sakId: string;
+    klageId: KlageId;
+    onSuccess: (sak: SakProps) => void;
+}) => {
+    return useFetchJsonFraApi<SakProps>(`/sak/${args.sakId}/klage/${args.klageId}/ta`, 'PATCH', {
+        onSuccess: args.onSuccess,
+    });
+};
+
 export const useOvertaKlagebehandling = (args: {
     sakId: string;
     klageId: KlageId;
@@ -65,5 +76,43 @@ export const useOvertaKlagebehandling = (args: {
         `/sak/${args.sakId}/klage/${args.klageId}/overta`,
         'PATCH',
         { onSuccess: args.onSuccess },
+    );
+};
+
+export const useLeggKlagebehandlingTilbake = (args: {
+    sakId: string;
+    klageId: KlageId;
+    onSuccess: (sak: SakProps) => void;
+    onError?: (error: FetcherError) => void;
+}) => {
+    return useFetchJsonFraApi<SakProps>(
+        `/sak/${args.sakId}/klage/${args.klageId}/legg-tilbake`,
+        'PATCH',
+        { onSuccess: args.onSuccess, onError: args.onError },
+    );
+};
+
+export const useSettKlagebehandlingPåVent = (args: {
+    sakId: string;
+    klageId: KlageId;
+    onSuccess: (sak: SakProps) => void;
+}) => {
+    return useFetchJsonFraApi<SakProps, { begrunnelse: string }>(
+        `/sak/${args.sakId}/klage/${args.klageId}/vent`,
+        'PATCH',
+        { onSuccess: args.onSuccess },
+    );
+};
+
+export const useGjenopptaKlagebehandling = (args: {
+    sakId: string;
+    klageId: KlageId;
+    onSuccess: (sak: SakProps) => void;
+    onError?: (error: FetcherError) => void;
+}) => {
+    return useFetchJsonFraApi<SakProps>(
+        `/sak/${args.sakId}/klage/${args.klageId}/gjenoppta`,
+        'PATCH',
+        { onSuccess: args.onSuccess, onError: args.onError },
     );
 };

@@ -23,6 +23,7 @@ import { Attestering } from '~/types/Attestering';
 import { Avbrutt } from '~/types/Avbrutt';
 import { VedtakId } from '~/types/Rammevedtak';
 import { KlageId } from './Klage';
+import { VentestatusHendelse } from './Ventestatus';
 
 export type BehandlingId = `beh_${string}`;
 
@@ -67,14 +68,6 @@ export enum Rammebehandlingsstatus {
     VEDTATT = 'VEDTATT',
     AVBRUTT = 'AVBRUTT',
 }
-
-export type VentestatusHendelse = {
-    sattPåVentAv: string;
-    tidspunkt: string;
-    begrunnelse: string;
-    erSattPåVent: boolean;
-    behandlingStatus: Rammebehandlingsstatus;
-};
 
 export type BehandlingUtbetalingProps = {
     navkontor: string;

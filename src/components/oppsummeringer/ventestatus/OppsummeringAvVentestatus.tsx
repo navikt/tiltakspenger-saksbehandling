@@ -1,12 +1,12 @@
 import React from 'react';
-import styles from './OppsummeringBehandlingSattPåVent.module.css';
+import styles from './OppsummeringAvVentestatus.module.css';
 import { Box, Heading, HStack, VStack } from '@navikt/ds-react';
 import { formaterTidspunkt } from '~/utils/date';
 import { OppsummeringsPar } from '../oppsummeringspar/OppsummeringsPar';
 import { classNames } from '~/utils/classNames';
-import { VentestatusHendelse } from '~/types/Rammebehandling';
+import { VentestatusHendelse } from '~/types/Ventestatus';
 
-const BehandlingSattPåVentOppsummering = (props: {
+const OppsummeringAvVentestatus = (props: {
     ventestatus: VentestatusHendelse;
     wrapperClassName?: string;
 }) => {
@@ -38,4 +38,4 @@ const BehandlingSattPåVentOppsummering = (props: {
     );
 };
 
-export default BehandlingSattPåVentOppsummering;
+export default OppsummeringAvVentestatus;

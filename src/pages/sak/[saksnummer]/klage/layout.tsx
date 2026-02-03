@@ -20,6 +20,7 @@ import {
 import { formaterTidspunkt } from '~/utils/date';
 import { fetchJsonFraApiClientSide } from '~/utils/fetch/fetch';
 import AvbruttOppsummering from '~/components/oppsummeringer/oppsummeringAvAvbrutt/OppsummeringAvAvbrutt';
+import OppsummeringAvVentestatus from '~/components/oppsummeringer/ventestatus/OppsummeringAvVentestatus';
 
 type Props = {
     children: ReactElement;
@@ -112,11 +113,15 @@ const KlageLayout = ({ children, saksnummer, activeTab }: Props) => {
             <PersonaliaHeader sakId={data!.sakId!} saksnummer={data!.saksnummer} />
             <KlageHeader saksnummer={data!.saksnummer} klage={klage} />
             <KlageStedIndikator activeTab={activeTab} klage={klage} />
-            {klage?.status === KlagebehandlingStatus.AVBRUTT && (
-                <VStack marginInline="space-40">
+            <VStack marginInline="space-40">
+                {klage?.status === KlagebehandlingStatus.AVBRUTT && (
                     <AvbruttOppsummering avbrutt={klage.avbrutt!} />
-                </VStack>
-            )}
+                )}
+                {klage?.ventestatus?.erSattPåVent && (
+                    <OppsummeringAvVentestatus ventestatus={klage.ventestatus} />
+                )}
+            </VStack>
+
             <main>{children}</main>
         </div>
     );

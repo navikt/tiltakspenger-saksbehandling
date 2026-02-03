@@ -1,5 +1,7 @@
 import { Button } from '@navikt/ds-react';
+import router from 'next/router';
 import React, { useState } from 'react';
+import { useSettBehandlingPåVent } from '~/components/behandlingmeny/useSettBehandlingPåVent';
 import SettBehandlingPåVentModal from '~/components/modaler/SettBehandlingPåVentModal';
 import { Rammebehandling } from '~/types/Rammebehandling';
 
@@ -10,6 +12,9 @@ type Props = {
 
 export const BehandlingSettPåVent = ({ behandling, disabled }: Props) => {
     const [modalÅpen, setModalÅpen] = useState(false);
+
+    const { settBehandlingPåVent, isSettBehandlingPåVentMutating, settBehandlingPåVentError } =
+        useSettBehandlingPåVent(behandling.sakId, behandling.id);
 
     return (
         <>
@@ -22,11 +27,23 @@ export const BehandlingSettPåVent = ({ behandling, disabled }: Props) => {
                 {'Sett på vent'}
             </Button>
             <SettBehandlingPåVentModal
-                sakId={behandling.sakId}
-                behandlingId={behandling.id}
-                saksnummer={behandling.saksnummer}
                 åpen={modalÅpen}
                 onClose={() => setModalÅpen(false)}
+                api={{
+                    trigger: (begrunnelse) =>
+                        settBehandlingPåVent({
+                            sakId: behandling.sakId,
+                            behandlingId: behandling.id,
+                            begrunnelse: begrunnelse,
+                        }).then((oppdaterBehandling) => {
+                            if (oppdaterBehandling) {
+                                setModalÅpen(false);
+                                router.push(`/sak/${oppdaterBehandling.saksnummer}`);
+                            }
+                        }),
+                    isMutating: isSettBehandlingPåVentMutating,
+                    error: settBehandlingPåVentError ?? null,
+                }}
             />
         </>
     );

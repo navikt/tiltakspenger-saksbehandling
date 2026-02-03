@@ -10,7 +10,7 @@ import AvbruttOppsummering from '../oppsummeringer/oppsummeringAvAvbrutt/Oppsumm
 import SideBarMain from '../../layouts/sidebar-main/SideBarMain';
 import { Tidslinjer } from '~/components/tidslinjer/Tidslinjer';
 import { useSak } from '~/context/sak/SakContext';
-import BehandlingSattPåVentOppsummering from '~/components/oppsummeringer/behandlingSattPåVent/OppsummeringBehandlingSattPåVent';
+import OppsummeringAvVentestatus from '~/components/oppsummeringer/ventestatus/OppsummeringAvVentestatus';
 import { BehandlingSkjemaProvider } from '~/components/behandling/context/BehandlingSkjemaContext';
 
 import style from './BehandlingPage.module.css';
@@ -53,7 +53,7 @@ export const BehandlingPage = (props: { klage: Nullable<Klagebehandling> }) => {
                     main={
                         <div className={style.main}>
                             {ventestatus && ventestatus.erSattPåVent && (
-                                <BehandlingSattPåVentOppsummering ventestatus={ventestatus} />
+                                <OppsummeringAvVentestatus ventestatus={ventestatus} />
                             )}
                             <Tidslinjer sak={sak} />
                             {avbrutt && <AvbruttOppsummering avbrutt={avbrutt} withPanel={true} />}

@@ -36,6 +36,7 @@ import { Saksbehandler } from '~/types/Saksbehandler';
 import { eierBehandling, erSattPaVent } from '~/utils/tilganger';
 import router from 'next/router';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
+import { useSettBehandlingPåVent } from './useSettBehandlingPåVent';
 
 type Props = {
     behandling: ÅpenRammebehandlingForOversikt;
@@ -94,6 +95,9 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
 
     const { avsluttBehandling, avsluttBehandlingIsMutating, avsluttBehandlingError } =
         useAvsluttBehandling(behandling.saksnummer);
+
+    const { settBehandlingPåVent, isSettBehandlingPåVentMutating, settBehandlingPåVentError } =
+        useSettBehandlingPåVent(behandling.sakId, behandling.id);
 
     const overtaBehandlingApi = useFetchJsonFraApi<Rammebehandling, { overtarFra: string }>(
         `/sak/${sak.sakId}/behandling/${behandling.id}/overta`,
@@ -212,11 +216,23 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
             )}
             {visSettBehandlingPåVentModal && (
                 <SettBehandlingPåVentModal
-                    sakId={behandling.sakId}
-                    behandlingId={behandling.id}
-                    saksnummer={behandling.saksnummer}
                     åpen={visSettBehandlingPåVentModal}
                     onClose={() => setVisSettBehandlingPåVentModal(false)}
+                    api={{
+                        trigger: (begrunnelse) =>
+                            settBehandlingPåVent({
+                                sakId: behandling.sakId,
+                                behandlingId: behandling.id,
+                                begrunnelse: begrunnelse,
+                            }).then((oppdaterBehandling) => {
+                                if (oppdaterBehandling) {
+                                    setVisSettBehandlingPåVentModal(false);
+                                    router.push(`/sak/${oppdaterBehandling.saksnummer}`);
+                                }
+                            }),
+                        isMutating: isSettBehandlingPåVentMutating,
+                        error: settBehandlingPåVentError ?? null,
+                    }}
                 />
             )}
         </>

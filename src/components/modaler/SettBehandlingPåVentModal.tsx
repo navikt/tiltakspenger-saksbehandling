@@ -1,40 +1,27 @@
 import { PauseIcon } from '@navikt/aksel-icons';
-import { Button, Heading, HStack, Modal, Textarea } from '@navikt/ds-react';
+import { Button, Heading, HStack, LocalAlert, Modal, Textarea } from '@navikt/ds-react';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import styles from './AvsluttBehandlingModal.module.css';
 
-import { useSettBehandlingPåVent } from '~/components/behandlingmeny/useSettBehandlingPåVent';
-import { SakId } from '~/types/Sak';
-import router from 'next/router';
-import { BehandlingId } from '~/types/Rammebehandling';
+import { Nullable } from '~/types/UtilTypes';
+import { FetcherError } from '~/utils/fetch/fetch';
 
 const SettBehandlingPåVentModal = (props: {
-    sakId: SakId;
-    behandlingId: BehandlingId;
-    saksnummer: string;
     åpen: boolean;
     onClose: () => void;
+    api: {
+        trigger: (begrunnelse: string) => void;
+        isMutating: boolean;
+        error: Nullable<FetcherError>;
+    };
 }) => {
     const form = useForm<{ begrunnelse: string }>({ defaultValues: { begrunnelse: '' } });
-    const { settBehandlingPåVent, isSettBehandlingPåVentMutating } = useSettBehandlingPåVent(
-        props.sakId,
-        props.behandlingId,
-    );
 
     return (
         <form
             onSubmit={form.handleSubmit((values) => {
-                settBehandlingPåVent({
-                    sakId: props.sakId,
-                    behandlingId: props.behandlingId,
-                    begrunnelse: values.begrunnelse,
-                }).then((oppdaterBehandling) => {
-                    if (oppdaterBehandling) {
-                        props.onClose();
-                        router.push(`/sak/${oppdaterBehandling.saksnummer}`);
-                    }
-                });
+                props.api.trigger(values.begrunnelse);
             })}
         >
             <Modal
@@ -69,16 +56,24 @@ const SettBehandlingPåVentModal = (props: {
                     />
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button
-                        variant="primary"
-                        loading={isSettBehandlingPåVentMutating}
-                        type="submit"
-                    >
-                        Sett behandling på vent
-                    </Button>
-                    <Button variant="secondary" type="button" onClick={props.onClose}>
-                        Avbryt
-                    </Button>
+                    {props.api.error && (
+                        <LocalAlert status="error" size="small">
+                            <LocalAlert.Header>
+                                <LocalAlert.Title>
+                                    Kunne ikke sette behandling på vent
+                                </LocalAlert.Title>
+                            </LocalAlert.Header>
+                            <LocalAlert.Content>{props.api.error.message}</LocalAlert.Content>
+                        </LocalAlert>
+                    )}
+                    <HStack gap="space-16">
+                        <Button variant="secondary" type="button" onClick={props.onClose}>
+                            Avbryt
+                        </Button>
+                        <Button variant="primary" loading={props.api.isMutating} type="submit">
+                            Sett behandling på vent
+                        </Button>
+                    </HStack>
                 </Modal.Footer>
             </Modal>
         </form>
