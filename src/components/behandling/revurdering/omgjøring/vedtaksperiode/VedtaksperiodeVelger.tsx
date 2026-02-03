@@ -1,5 +1,5 @@
 import { Datovelger, generateMatcherProps } from '~/components/datovelger/Datovelger';
-import { dateTilISOTekst, datoMin, datoTilDatoInputText } from '~/utils/date';
+import { dateTilISOTekst, datoMax, datoMin, datoTilDatoInputText } from '~/utils/date';
 import {
     useRevurderingOmgjøringSkjema,
     useRevurderingOmgjøringSkjemaDispatch,
@@ -8,7 +8,7 @@ import { useRevurderingOmgjøring } from '~/components/behandling/context/Behand
 import { useSak } from '~/context/sak/SakContext';
 import { finnPerioderHull, perioderOverlapper, totalPeriode } from '~/utils/periode';
 import { Heading, HStack, VStack } from '@navikt/ds-react';
-import { hentRammevedtak } from '~/utils/sak';
+import { hentGjeldendeRammevedtakIPeriode, hentRammevedtak } from '~/utils/sak';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { VedtakHjelpetekst } from '~/components/behandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
 import { classNames } from '~/utils/classNames';
@@ -26,13 +26,14 @@ export const VedtaksperiodeVelger = () => {
     const vedtak = hentRammevedtak(sak, behandling.omgjørVedtak)!;
     const gjeldendeTotalPeriode = totalPeriode(vedtak.gjeldendeVedtaksperioder);
 
-    const defaultDato = datoMin(new Date(), gjeldendeTotalPeriode.tilOgMed);
-
     const hullMellomGjeldendePerioder = finnPerioderHull(vedtak.gjeldendeVedtaksperioder);
     const gjeldendeVedtakHarHull = hullMellomGjeldendePerioder.length > 0;
     const harValgtMedOverlappOverHull = hullMellomGjeldendePerioder.some((hull) =>
         perioderOverlapper(hull, vedtaksperiode),
     );
+
+    const overlappendeVedtak = hentGjeldendeRammevedtakIPeriode(sak, vedtaksperiode);
+    const harValgtOmgjøringAvFlereVedtak = overlappendeVedtak.length > 1;
 
     const disabledMatcher = generateMatcherProps(hullMellomGjeldendePerioder);
 
@@ -41,7 +42,10 @@ export const VedtaksperiodeVelger = () => {
             <VedtakSeksjon.Venstre>
                 <VStack
                     gap={'space-8'}
-                    className={classNames(harValgtMedOverlappOverHull && style.feilPeriode)}
+                    className={classNames(
+                        (harValgtMedOverlappOverHull || harValgtOmgjøringAvFlereVedtak) &&
+                            style.feilPeriode,
+                    )}
                 >
                     <Heading size={'small'} level={'3'}>
                         {'Vedtaksperiode'}
@@ -51,9 +55,11 @@ export const VedtaksperiodeVelger = () => {
                             label={'Fra og med'}
                             selected={vedtaksperiode.fraOgMed}
                             value={datoTilDatoInputText(vedtaksperiode.fraOgMed)}
-                            minDate={gjeldendeTotalPeriode.fraOgMed}
-                            maxDate={vedtaksperiode.tilOgMed}
-                            defaultMonth={defaultDato}
+                            maxDate={datoMin(
+                                vedtaksperiode.tilOgMed,
+                                gjeldendeTotalPeriode.tilOgMed,
+                            )}
+                            defaultMonth={datoMin(new Date(), gjeldendeTotalPeriode.fraOgMed)}
                             readOnly={erReadonly}
                             size={'small'}
                             dropdownCaption={true}
@@ -75,9 +81,11 @@ export const VedtaksperiodeVelger = () => {
                             label={'Til og med'}
                             selected={vedtaksperiode.tilOgMed}
                             value={datoTilDatoInputText(vedtaksperiode.tilOgMed)}
-                            minDate={vedtaksperiode.fraOgMed}
-                            maxDate={gjeldendeTotalPeriode.tilOgMed}
-                            defaultMonth={defaultDato}
+                            minDate={datoMax(
+                                vedtaksperiode.fraOgMed,
+                                gjeldendeTotalPeriode.fraOgMed,
+                            )}
+                            defaultMonth={datoMin(new Date(), gjeldendeTotalPeriode.tilOgMed)}
                             readOnly={erReadonly}
                             size={'small'}
                             dropdownCaption={true}
@@ -110,6 +118,12 @@ export const VedtaksperiodeVelger = () => {
                             {
                                 'Vedtaket som omgjøres har flere gjeldende perioder. Du må velge en vedtaksperiode for omgjøring innenfor en av de gjeldende periodene.'
                             }
+                        </VedtakHjelpetekst>
+                    )}
+
+                    {overlappendeVedtak.length > 1 && (
+                        <VedtakHjelpetekst variant={'error'}>
+                            {`Den valgte perioden overlapper med ${overlappendeVedtak.length} vedtak. Du må velge en periode som kun overlapper med vedtaket som skal omgjøres.`}
                         </VedtakHjelpetekst>
                     )}
                 </VStack>

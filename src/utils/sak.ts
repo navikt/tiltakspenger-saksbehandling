@@ -1,6 +1,8 @@
 import { SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
 import { SakProps } from '~/types/Sak';
 import { VedtakId } from '~/types/Rammevedtak';
+import { Periode } from '~/types/Periode';
+import { perioderOverlapper } from '~/utils/periode';
 
 export const hentVedtatteSøknadsbehandlinger = (sak: SakProps) => {
     const { alleRammevedtak, behandlinger } = sak;
@@ -13,4 +15,12 @@ export const hentVedtatteSøknadsbehandlinger = (sak: SakProps) => {
 
 export const hentRammevedtak = (sak: SakProps, vedtakId: VedtakId) => {
     return sak.alleRammevedtak.find((vedtak) => vedtak.id === vedtakId);
+};
+
+export const hentGjeldendeRammevedtak = (sak: SakProps, vedtakId: VedtakId) => {
+    return sak.tidslinje.elementer.find((el) => el.rammevedtak.id === vedtakId)?.rammevedtak;
+};
+
+export const hentGjeldendeRammevedtakIPeriode = (sak: SakProps, periode: Periode) => {
+    return sak.tidslinje.elementer.filter((el) => perioderOverlapper(el.periode, periode));
 };
