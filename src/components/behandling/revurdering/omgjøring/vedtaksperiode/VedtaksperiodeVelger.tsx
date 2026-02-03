@@ -12,6 +12,7 @@ import { hentGjeldendeRammevedtakIPeriode, hentRammevedtak } from '~/utils/sak';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { VedtakHjelpetekst } from '~/components/behandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
 import { classNames } from '~/utils/classNames';
+import { VedtaksperiodeVelgerGjeldende } from '~/components/behandling/revurdering/omgjøring/vedtaksperiode/gjeldende-perioder/VedtaksperiodeVelgerGjeldende';
 
 import style from './VedtaksperiodeVelger.module.css';
 
@@ -24,7 +25,13 @@ export const VedtaksperiodeVelger = () => {
     const dispatch = useRevurderingOmgjøringSkjemaDispatch();
 
     const vedtak = hentRammevedtak(sak, behandling.omgjørVedtak)!;
-    const gjeldendeTotalPeriode = totalPeriode(vedtak.gjeldendeVedtaksperioder);
+
+    const gjeldendeTotalPeriode =
+        // Hindrer uventet oppførsel dersom vedtaket allerede er omgjort. Kan oppstå dersom flere omgjøringer
+        // for samme periode var åpne samtidig, og den ene ble iverksatt.
+        vedtak.erGjeldende && behandling.status !== 'VEDTATT'
+            ? totalPeriode(vedtak.gjeldendeVedtaksperioder)
+            : behandling.vedtaksperiode;
 
     const hullMellomGjeldendePerioder = finnPerioderHull(vedtak.gjeldendeVedtaksperioder);
     const gjeldendeVedtakHarHull = hullMellomGjeldendePerioder.length > 0;
@@ -50,6 +57,12 @@ export const VedtaksperiodeVelger = () => {
                     <Heading size={'small'} level={'3'}>
                         {'Vedtaksperiode'}
                     </Heading>
+
+                    <VedtaksperiodeVelgerGjeldende
+                        gjeldendeVedtaksperioder={vedtak.gjeldendeVedtaksperioder}
+                        className={style.gjeldendePerioder}
+                    />
+
                     <HStack gap={'space-6'} align={'end'}>
                         <Datovelger
                             label={'Fra og med'}
@@ -131,7 +144,7 @@ export const VedtaksperiodeVelger = () => {
             <VedtakSeksjon.Høyre>
                 <VStack gap={'space-4'}>
                     <VedtakHjelpetekst header={'Velg ny vedtaksperiode'}>
-                        {'Du kan omgjøre hele eller deler av den opprinnelige vedtaksperioden.'}
+                        {'Du kan omgjøre hele eller deler av de gjeldende vedtaksperiodene.'}
                         {
                             ' Du kan også forlenge vedtaksperioden utover det opprinnelige vedtaket, så lenge det ikke overlapper med andre gjeldende vedtak.'
                         }

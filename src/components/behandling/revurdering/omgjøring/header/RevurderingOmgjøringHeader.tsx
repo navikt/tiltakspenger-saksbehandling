@@ -6,7 +6,7 @@ import { behandlingUrl } from '~/utils/urls';
 import { TabsIcon } from '@navikt/aksel-icons';
 import { useRevurderingOmgjøring } from '~/components/behandling/context/BehandlingContext';
 import { useSak } from '~/context/sak/SakContext';
-import { hentRammevedtak } from '~/utils/sak';
+import { hentGjeldendeRammevedtak, hentRammevedtak } from '~/utils/sak';
 
 export const RevurderingOmgjøringHeader = () => {
     const { behandling } = useRevurderingOmgjøring();
@@ -14,7 +14,11 @@ export const RevurderingOmgjøringHeader = () => {
 
     const { omgjørVedtak, klagebehandlingId } = behandling;
 
-    const vedtakSomBlirOmgjort = hentRammevedtak(sak, omgjørVedtak);
+    const erVedtatt = behandling.status === Rammebehandlingsstatus.VEDTATT;
+
+    const vedtakSomBlirOmgjort = erVedtatt
+        ? hentRammevedtak(sak, omgjørVedtak)
+        : hentGjeldendeRammevedtak(sak, omgjørVedtak);
 
     if (!vedtakSomBlirOmgjort) {
         return (
@@ -30,46 +34,26 @@ export const RevurderingOmgjøringHeader = () => {
                 {klagebehandlingId ? 'Omgjøring etter klage' : 'Omgjøring'}
             </Heading>
 
-            {behandling.status === Rammebehandlingsstatus.VEDTATT ? (
+            {erVedtatt ? (
                 <OppsummeringsPar
                     label={'Vedtaksperiode'}
                     verdi={periodeTilFormatertDatotekst(behandling.vedtaksperiode!)}
                     variant={'inlineColon'}
                 />
             ) : (
-                <VStack gap={'space-8'} align={'start'}>
-                    <BodyShort>
-                        {`Omgjør vedtak med dato ${formaterTidspunkt(vedtakSomBlirOmgjort.opprettet)} - `}
-                        <Link
-                            href={behandlingUrl({
-                                saksnummer: sak.saksnummer,
-                                id: vedtakSomBlirOmgjort.behandlingId,
-                            })}
-                            target={'_blank'}
-                        >
-                            {'Se vedtak (åpner i ny fane)'}
-                            <TabsIcon title={'Se vedtak (åpner i ny fane)'} />
-                        </Link>
-                    </BodyShort>
-
-                    <OppsummeringsPar
-                        label={'Gjeldende vedtaksperioder'}
-                        verdi={vedtakSomBlirOmgjort.gjeldendeVedtaksperioder
-                            .map(periodeTilFormatertDatotekst)
-                            .join(', ')}
-                        variant={'inlineColon'}
-                    />
-
-                    {vedtakSomBlirOmgjort.gjeldendeInnvilgetPerioder.length > 0 && (
-                        <OppsummeringsPar
-                            label={'Gjeldende innvilgelsesperioder'}
-                            verdi={vedtakSomBlirOmgjort.gjeldendeInnvilgetPerioder
-                                .map(periodeTilFormatertDatotekst)
-                                .join(', ')}
-                            variant={'inlineColon'}
-                        />
-                    )}
-                </VStack>
+                <BodyShort>
+                    {`Omgjør vedtak med dato ${formaterTidspunkt(vedtakSomBlirOmgjort.opprettet)} - `}
+                    <Link
+                        href={behandlingUrl({
+                            saksnummer: sak.saksnummer,
+                            id: vedtakSomBlirOmgjort.behandlingId,
+                        })}
+                        target={'_blank'}
+                    >
+                        {'Se opprinnelig vedtak (åpner i ny fane)'}
+                        <TabsIcon title={'Se vedtak (åpner i ny fane)'} />
+                    </Link>
+                </BodyShort>
             )}
         </VStack>
     );
