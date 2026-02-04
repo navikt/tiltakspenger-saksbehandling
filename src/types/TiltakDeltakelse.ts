@@ -3,6 +3,7 @@ import { Periode } from '~/types/Periode';
 export enum TiltaksdeltakelseKilde {
     KOMET = 'Komet',
     ARENA = 'Arena',
+    TEAM_TILTAK = 'Team Tiltak',
 }
 
 export type Tiltaksdeltakelse = {

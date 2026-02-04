@@ -72,7 +72,10 @@ const prosentTekst = (prosent: number | null) => {
     return prosent !== null && prosent !== undefined ? `${prosent}%` : 'Ukjent';
 };
 
+const modiaTekst = 'Modia arbeidsrettet oppfølging';
+
 const kildeTekst: Record<TiltaksdeltakelseKilde, string> = {
     [TiltaksdeltakelseKilde.ARENA]: 'Arena',
-    [TiltaksdeltakelseKilde.KOMET]: 'Modia arbeidsrettet oppfølging',
+    [TiltaksdeltakelseKilde.KOMET]: modiaTekst,
+    [TiltaksdeltakelseKilde.TEAM_TILTAK]: modiaTekst,
 } as const;
