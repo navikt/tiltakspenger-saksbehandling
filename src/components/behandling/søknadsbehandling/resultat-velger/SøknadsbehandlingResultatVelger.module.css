@@ -1,7 +1,7 @@
 .radioGroup {
     margin-bottom: 1rem;
 
-    & > :global(.navds-radio-buttons) {
+    & > :global(.aksel-radio-buttons) {
         display: flex;
         gap: 2rem;
     }
