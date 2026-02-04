@@ -6,7 +6,7 @@
     text-wrap: nowrap;
 }
 
-.ikon:global(.navds-table__data-cell) {
+.ikon:global(.aksel-table__data-cell) {
     padding-right: 0;
     text-align: center;
     min-width: 2rem;
