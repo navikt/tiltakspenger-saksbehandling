@@ -3,9 +3,8 @@ import { validerInnvilgelse } from '~/components/behandling/felles/validering/va
 import { RevurderingOmgjøring } from '~/types/Revurdering';
 import { RevurderingOmgjøringState } from '~/components/behandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import { SakProps } from '~/types/Sak';
-import { hentVedtatteSøknadsbehandlinger } from '~/utils/sak';
-import { perioderOverlapper } from '~/utils/periode';
-import { periodeTilFormatertDatotekst } from '~/utils/date';
+import { hentGjeldendeRammevedtak, hentVedtatteSøknadsbehandlinger } from '~/utils/sak';
+import { perioderOverlapper, periodiseringTotalPeriode, totalPeriode } from '~/utils/periode';
 import { Rammevedtak } from '~/types/Rammevedtak';
 
 /**
@@ -33,9 +32,7 @@ export const revurderingOmgjøringValidering = (
     validering.errors.push(...innvilgelseValidering.errors);
     validering.warnings.push(...innvilgelseValidering.warnings);
 
-    const valgtVedtak = sak.tidslinje.elementer.find(
-        (vedtak) => vedtak.rammevedtak.id === behandling.omgjørVedtak,
-    )?.rammevedtak;
+    const valgtVedtak = hentGjeldendeRammevedtak(sak, behandling.omgjørVedtak);
 
     if (!valgtVedtak) {
         validering.errors.push(
@@ -62,18 +59,42 @@ export const revurderingOmgjøringValidering = (
 
     if (vedtakSomOmgjøres.length > 1) {
         validering.errors.push(
-            `Valgte innvilgelsesperioder omgjør ${vedtakSomOmgjøres.length} tidligere vedtak - Vi støtter foreløpig kun å omgjøre ett vedtak av gangen`,
+            `Valgt vedtaksperiode omgjør ${vedtakSomOmgjøres.length} tidligere vedtak - Vi støtter foreløpig kun å omgjøre ett vedtak av gangen`,
         );
     } else if (vedtakSomOmgjøres.length === 0) {
-        validering.errors.push('Valgte innvilgelsesperioder omgjør ingen tidligere vedtak');
+        validering.errors.push('Valgt vedtaksperiode omgjør ingen tidligere vedtak');
     } else if (vedtakSomOmgjøres.at(0)!.id !== behandling.omgjørVedtak) {
-        const perioderSomKanOmgjøresTekst = valgtVedtak.gjeldendeVedtaksperioder
-            .map((periode) => periodeTilFormatertDatotekst(periode))
-            .join(', ');
-
         validering.errors.push(
-            `Valgte innvilgelsesperioder omgjør perioden til et annet vedtak enn det valgte - må innvilge i perioden ${perioderSomKanOmgjøresTekst}`,
+            'Valgt vedtaksperiode omgjør perioden til et annet vedtak enn det valgte vedtaket',
         );
+    }
+
+    if (skjema.innvilgelse.harValgtPeriode) {
+        const { vedtaksperiode } = skjema;
+
+        const innvilgelsesperiodeTotal = periodiseringTotalPeriode(
+            skjema.innvilgelse.innvilgelsesperioder,
+        );
+
+        const gjeldendePeriodeTotal = totalPeriode(valgtVedtak.gjeldendeVedtaksperioder);
+
+        if (
+            vedtaksperiode.fraOgMed < gjeldendePeriodeTotal.fraOgMed &&
+            innvilgelsesperiodeTotal.fraOgMed > vedtaksperiode.fraOgMed
+        ) {
+            validering.errors.push(
+                'Dersom ny vedtaksperiode starter før gjeldende vedtaksperiode, må det innvilges fra samme dato.',
+            );
+        }
+
+        if (
+            vedtaksperiode.tilOgMed > gjeldendePeriodeTotal.tilOgMed &&
+            innvilgelsesperiodeTotal.tilOgMed < vedtaksperiode.tilOgMed
+        ) {
+            validering.errors.push(
+                'Dersom ny vedtaksperiode slutter etter gjeldende vedtaksperiode, må det innvilges til samme dato.',
+            );
+        }
     }
 
     return validering;
