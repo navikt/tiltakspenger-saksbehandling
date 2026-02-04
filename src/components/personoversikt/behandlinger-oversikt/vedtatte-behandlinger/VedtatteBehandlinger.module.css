@@ -3,7 +3,7 @@
 @value stripeSize 8px;
 
 .omgjortGroup {
-    & > :global(.navds-checkboxes) {
+    & > :global(.aksel-checkboxes) {
         display: flex;
         gap: 0.25rem;
     }

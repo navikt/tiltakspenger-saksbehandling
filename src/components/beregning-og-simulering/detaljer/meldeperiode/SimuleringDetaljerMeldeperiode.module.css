@@ -33,7 +33,7 @@
 }
 
 .simuleringCell {
-    /* Overstyrer navds spesifisitet */
+    /* Overstyrer aksel spesifisitet */
     && {
         padding: 0.5rem 0;
         border: 0;

@@ -11,6 +11,6 @@ li {
 /** secondary-varianten har transparent som default background
 *   vi ønsker "alltid" at denne skal være hvit
 */
-.navds-button--secondary {
+.aksel-button--secondary {
     background-color: var(--ax-neutral-000);
 }
