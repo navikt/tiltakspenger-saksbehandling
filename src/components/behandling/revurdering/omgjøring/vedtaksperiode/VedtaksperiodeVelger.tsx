@@ -118,18 +118,18 @@ export const VedtaksperiodeVelger = () => {
                         />
                     </HStack>
 
-                    {harValgtMedOverlappOverHull && (
-                        <VedtakHjelpetekst variant={'error'}>
-                            {
-                                'Valgt periode overlapper med et annet vedtak enn det som skal omgjøres.'
-                            }
-                        </VedtakHjelpetekst>
-                    )}
-
                     {gjeldendeVedtakHarHull && (
                         <VedtakHjelpetekst variant={'warning'}>
                             {
                                 'Vedtaket som omgjøres har flere gjeldende perioder. Du må velge en vedtaksperiode for omgjøring innenfor en av de gjeldende periodene.'
+                            }
+                        </VedtakHjelpetekst>
+                    )}
+
+                    {harValgtMedOverlappOverHull && (
+                        <VedtakHjelpetekst variant={'error'}>
+                            {
+                                'Valgt periode overlapper med et annet vedtak enn det som skal omgjøres.'
                             }
                         </VedtakHjelpetekst>
                     )}

@@ -3,6 +3,7 @@ import { SakProps } from '~/types/Sak';
 import { VedtakId } from '~/types/Rammevedtak';
 import { Periode } from '~/types/Periode';
 import { perioderOverlapper } from '~/utils/periode';
+import { removeDuplicates } from '~/utils/array';
 
 export const hentVedtatteSøknadsbehandlinger = (sak: SakProps) => {
     const { alleRammevedtak, behandlinger } = sak;
@@ -22,5 +23,8 @@ export const hentGjeldendeRammevedtak = (sak: SakProps, vedtakId: VedtakId) => {
 };
 
 export const hentGjeldendeRammevedtakIPeriode = (sak: SakProps, periode: Periode) => {
-    return sak.tidslinje.elementer.filter((el) => perioderOverlapper(el.periode, periode));
+    return sak.tidslinje.elementer
+        .filter((el) => perioderOverlapper(el.periode, periode))
+        .map((el) => el.rammevedtak)
+        .filter(removeDuplicates);
 };
