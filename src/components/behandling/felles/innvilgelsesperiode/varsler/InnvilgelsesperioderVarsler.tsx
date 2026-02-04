@@ -1,6 +1,6 @@
 import { Innvilgelsesperiode } from '~/types/Innvilgelsesperiode';
 import { Alert, VStack } from '@navikt/ds-react';
-import { removeDuplicates } from '~/utils/array';
+import { removeDuplicatesFilter } from '~/utils/array';
 import { Rammebehandling } from '~/types/Rammebehandling';
 import { deltarPaFlereTiltakMedStartOgSluttdato } from '~/utils/behandling';
 
@@ -12,7 +12,7 @@ type Props = {
 export const InnvilgelsesperioderVarsler = ({ innvilgelsesperioder, behandling }: Props) => {
     const antallDagerPerMeldeperiode = innvilgelsesperioder
         .map((it) => it.antallDagerPerMeldeperiode)
-        .filter(removeDuplicates);
+        .filter(removeDuplicatesFilter());
 
     const antallDagerSettesIkkeAutomatiskIBrev =
         antallDagerPerMeldeperiode.length > 1 ||

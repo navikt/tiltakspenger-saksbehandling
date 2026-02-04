@@ -1,7 +1,7 @@
 import { finn16årsdag, forrigeDag, nesteDag } from '~/utils/date';
 import { MedPeriode, Periode } from '~/types/Periode';
 import { erDatoIPeriode, slåSammenPeriodisering } from '~/utils/periode';
-import { removeDuplicates } from '~/utils/array';
+import { removeDuplicatesFilter } from '~/utils/array';
 import { kunPerioderMedBarn } from '~/components/behandling/felles/barnetillegg/utils/barnetilleggUtils';
 import { SøknadBarn } from '~/types/Søknad';
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';
@@ -58,7 +58,7 @@ const periodiserBarnetilleggForPeriode = (
                 ? []
                 : [nesteDag(periode.tilOgMed)]),
         ])
-        .filter(removeDuplicates)
+        .filter(removeDuplicatesFilter())
         .toSorted();
 
     return avgrensningsdatoer
