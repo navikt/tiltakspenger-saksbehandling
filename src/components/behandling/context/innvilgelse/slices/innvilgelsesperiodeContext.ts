@@ -17,7 +17,7 @@ import { Innvilgelsesperiode } from '~/types/Innvilgelsesperiode';
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';
 import { hentVedtatteSøknadsbehandlinger } from '~/utils/sak';
 import { periodiserBarnetilleggFraSøknad } from '~/components/behandling/felles/barnetillegg/utils/periodiserBarnetilleggFraSøknad';
-import { datoMax, datoMin } from '~/utils/date';
+import { datoMax, datoMin, nesteDag } from '~/utils/date';
 import { hentHeleTiltaksdeltakelsesperioden } from '~/utils/behandling';
 
 export type InnvilgelsesperioderActions =
@@ -138,11 +138,13 @@ export const innvilgelsesperioderReducer: Reducer<InnvilgelseState, Innvilgelses
 
             const tiltaksdeltakelsesperiode = hentHeleTiltaksdeltakelsesperioden(behandling)!;
 
+            const nyTilOgMed = tiltaksdeltakelsesperiode.tilOgMed;
+
             const nyInnvilgelsesperiode = {
                 ...sisteInnvilgelsesperiode,
                 periode: {
-                    fraOgMed: sistePeriode.tilOgMed,
-                    tilOgMed: datoMax(tiltaksdeltakelsesperiode.tilOgMed, sistePeriode.tilOgMed),
+                    fraOgMed: datoMin(nesteDag(sistePeriode.tilOgMed), nyTilOgMed),
+                    tilOgMed: nyTilOgMed,
                 },
             };
 
