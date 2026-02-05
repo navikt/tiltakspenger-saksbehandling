@@ -25,11 +25,11 @@ import {
     VedtaksperioderUtenInnvilgelseVarsel,
 } from '~/components/behandling/felles/innvilgelsesperiode/varsler/InnvilgelseHullVarsel';
 import { RevurderingResultat } from '~/types/Revurdering';
-import { inneholderHelePerioden } from '~/utils/periode';
+import { inneholderHelePerioden, periodiseringTotalPeriode } from '~/utils/periode';
 import { Periode } from '~/types/Periode';
+import { classNames } from '~/utils/classNames';
 
 import style from './InnvilgelsesperioderVelger.module.css';
-import { classNames } from '~/utils/classNames';
 
 export const InnvilgelsesperioderVelger = () => {
     const { sak } = useSak();
@@ -46,6 +46,14 @@ export const InnvilgelsesperioderVelger = () => {
 
     const tiltaksdeltakelser = hentTiltaksdeltakelserMedStartOgSluttdato(behandling);
     const tiltaksdeltakelsesperiode = hentHeleTiltaksdeltakelsesperioden(behandling);
+
+    if (!tiltaksdeltakelsesperiode) {
+        return (
+            <Alert variant={'error'} size={'small'}>
+                {'Ingen tiltaksdeltakelser i saksopplysninger som kan innvilges'}
+            </Alert>
+        );
+    }
 
     return (
         <VedtakSeksjon>
@@ -139,7 +147,7 @@ const InnvilgelsesperiodeVelgerFull = ({
 
     const innvilgelsesperiode = innvilgelsesperioder.at(index)!;
 
-    const tiltaksdeltakelsesperiode = hentHeleTiltaksdeltakelsesperioden(behandling);
+    const tiltaksdeltakelsesperiode = periodiseringTotalPeriode(tiltaksdeltakelser);
 
     const { periode, antallDagerPerMeldeperiode, internDeltakelseId } = innvilgelsesperiode;
 

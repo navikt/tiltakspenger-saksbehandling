@@ -68,6 +68,13 @@ export const validerInnvilgelse = (
 
     const tiltaksperiode = hentHeleTiltaksdeltakelsesperioden(behandling);
 
+    if (!tiltaksperiode) {
+        validering.errors.push(
+            'Fant ingen tiltaksdeltakelser som kan innvilges i saksopplysningene.',
+        );
+        return validering;
+    }
+
     const innvilgelsesperiodeTotal = periodiseringTotalPeriode(innvilgelsesperioder);
 
     if (innvilgelsesperiodeTotal.fraOgMed > innvilgelsesperiodeTotal.tilOgMed) {

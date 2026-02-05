@@ -76,14 +76,14 @@ export const hentTiltaksdeltakelserFraPeriode = (
     }, []);
 };
 
-export const hentHeleTiltaksdeltakelsesperioden = (behandling: Rammebehandling) => {
+export const hentHeleTiltaksdeltakelsesperioden = (behandling: Rammebehandling): Periode | null => {
     const perioder = hentTiltaksdeltakelserMedStartOgSluttdato(behandling).map(
         (tiltaksdeltakelse) => ({
             fraOgMed: tiltaksdeltakelse.deltagelseFraOgMed,
             tilOgMed: tiltaksdeltakelse.deltagelseTilOgMed,
         }),
     );
-    return totalPeriode(perioder);
+    return perioder.length > 0 ? totalPeriode(perioder) : null;
 };
 
 export const finnForsteStartdatoForTiltaksdeltakelse = (

@@ -136,7 +136,7 @@ export const innvilgelsesperioderReducer: Reducer<InnvilgelseState, Innvilgelses
 
             const sistePeriode = sisteInnvilgelsesperiode.periode;
 
-            const tiltaksdeltakelsesperiode = hentHeleTiltaksdeltakelsesperioden(behandling);
+            const tiltaksdeltakelsesperiode = hentHeleTiltaksdeltakelsesperioden(behandling)!;
 
             const nyInnvilgelsesperiode = {
                 ...sisteInnvilgelsesperiode,
