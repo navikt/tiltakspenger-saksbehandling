@@ -3,11 +3,11 @@ import { forrigeDag, nesteDag, periodeTilFormatertDatotekst } from '~/utils/date
 import { Periode } from '~/types/Periode';
 import { overlappendePeriode, perioderErSammenhengende } from '~/utils/periode';
 import { useSak } from '~/context/sak/SakContext';
-import { useBehandling } from '~/components/behandling/context/BehandlingContext';
 import { RevurderingResultat } from '~/types/Revurdering';
 import { finnGjeldendeInnvilgelserIPeriode } from '~/components/behandling/context/behandlingSkjemaUtils';
 import { PropsWithChildren } from 'react';
 import { useBehandlingInnvilgelseSkjema } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
+import { useBehandlingSkjema } from '~/components/behandling/context/BehandlingSkjemaContext';
 
 type InnvilgelseHullVarselProps = {
     forrigePeriode: Periode;
@@ -72,12 +72,12 @@ export const VedtaksperioderUtenInnvilgelseVarsel = ({ children }: PropsWithChil
 
 const PeriodeUtenInnvilgelseVarsel = ({ periode }: { periode: Periode }) => {
     const { sak } = useSak();
-    const { behandling } = useBehandling();
+    const { resultat } = useBehandlingSkjema();
 
     const gjeldendeInnvilgelserIHullet = finnGjeldendeInnvilgelserIPeriode(sak, periode);
 
     const erOpphør = gjeldendeInnvilgelserIHullet.length > 0;
-    const kanOpphøre = behandling.resultat === RevurderingResultat.OMGJØRING;
+    const kanOpphøre = resultat === RevurderingResultat.OMGJØRING;
 
     return (
         <Alert variant={erOpphør && !kanOpphøre ? 'error' : 'warning'} size={'small'} inline={true}>
