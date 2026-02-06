@@ -1,4 +1,5 @@
 import {
+    erOmgjøringResultat,
     erRammebehandlingInnvilgelseResultat,
     erSøknadsbehandlingResultat,
     hentTiltaksdeltakelserFraPeriode,
@@ -18,6 +19,7 @@ import { SakProps } from '~/types/Sak';
 import { Innvilgelsesperiode } from '~/types/Innvilgelsesperiode';
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';
 import { hentBarnetilleggForBehandling } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
+import { OmgjøringContext } from '~/components/behandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 
 export const ANTALL_DAGER_DEFAULT = 10;
 
@@ -37,6 +39,10 @@ export const erSøknadsbehandlingContext = (
     context: BehandlingSkjemaState,
 ): context is SøknadsbehandlingState => {
     return erSøknadsbehandlingResultat(context.resultat);
+};
+
+export const erOmgjøringContext = (context: BehandlingSkjemaState): context is OmgjøringContext => {
+    return erOmgjøringResultat(context.resultat);
 };
 
 export enum BehandlingSkjemaType {

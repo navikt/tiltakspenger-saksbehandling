@@ -16,25 +16,26 @@ import {
     RevurderingInnvilgelseState,
 } from '~/components/behandling/context/revurdering/revurderingInnvilgelseSkjemaContext';
 import {
-    RevurderingOmgjøringActions,
-    revurderingOmgjøringReducer,
-    RevurderingOmgjøringState,
+    OmgjøringActions,
+    omgjøringReducer,
+    OmgjøringState,
 } from '~/components/behandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import {
     BehandlingSkjemaType,
+    erOmgjøringContext,
     erSøknadsbehandlingContext,
 } from '~/components/behandling/context/behandlingSkjemaUtils';
 
 export type BehandlingSkjemaState =
     | SøknadsbehandlingState
     | RevurderingInnvilgelseState
-    | RevurderingOmgjøringState
-    | RevurderingStansState;
+    | RevurderingStansState
+    | OmgjøringState;
 
 export type BehandlingSkjemaActions =
     | SøknadsbehandlingActions
     | RevurderingInnvilgelseActions
-    | RevurderingOmgjøringActions
+    | OmgjøringActions
     | RevurderingStansActions;
 
 export const behandlingSkjemaReducer: Reducer<BehandlingSkjemaState, BehandlingSkjemaActions> = (
@@ -66,13 +67,13 @@ export const behandlingSkjemaReducer: Reducer<BehandlingSkjemaState, BehandlingS
         }
 
         case BehandlingSkjemaType.RevurderingOmgjøring: {
-            if (resultat !== RevurderingResultat.OMGJØRING) {
+            if (!erOmgjøringContext(state)) {
                 throw Error(
                     `Action ${type} / ${superType} må tilhøre en revurdering omgjøring - var ${resultat}`,
                 );
             }
 
-            return revurderingOmgjøringReducer(state, action);
+            return omgjøringReducer(state, action);
         }
 
         case BehandlingSkjemaType.RevurderingStans: {

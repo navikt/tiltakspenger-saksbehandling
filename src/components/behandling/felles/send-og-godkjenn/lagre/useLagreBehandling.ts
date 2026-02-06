@@ -2,7 +2,7 @@ import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 
 import { SWRMutationConfiguration } from 'swr/mutation';
 import { FetcherError } from '~/utils/fetch/fetch';
-import { Rammebehandling, RammebehandlingVedtakRequest } from '~/types/Rammebehandling';
+import { Rammebehandling, OppdaterBehandlingDTO } from '~/types/Rammebehandling';
 
 type Props = {
     behandling: Rammebehandling;
@@ -10,14 +10,14 @@ type Props = {
         Rammebehandling,
         FetcherError,
         string,
-        RammebehandlingVedtakRequest
+        OppdaterBehandlingDTO
     >;
 };
 
 export const useLagreBehandling = ({ behandling, options }: Props) => {
     const { trigger, isMutating, error } = useFetchJsonFraApi<
         Rammebehandling,
-        RammebehandlingVedtakRequest
+        OppdaterBehandlingDTO
     >(`/sak/${behandling.sakId}/behandling/${behandling.id}/oppdater`, 'POST', options);
 
     return {

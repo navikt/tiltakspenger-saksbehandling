@@ -1,9 +1,15 @@
 import {
-    RevurderingOmgjøringContext,
-    useRevurderingOmgjøringSkjema,
+    OmgjøringContext,
+    useOmgjøringSkjema,
 } from '~/components/behandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import { Nullable } from '~/types/UtilTypes';
-import { RevurderingResultat, RevurderingVedtakOmgjøringRequest } from '~/types/Revurdering';
+import {
+    RevurderingResultat,
+    OppdaterOmgjøringInnvilgelseDTO,
+    OppdaterOmgjøringDTO,
+    OppdaterOmgjøringOpphørDTO,
+    OppdaterOmgjøringIkkeValgtDTO,
+} from '~/types/Revurdering';
 import { useHentBehandlingLagringProps } from '~/components/behandling/felles/send-og-godkjenn/lagre/useHentBehandlingLagringProps';
 import { revurderingOmgjøringValidering } from '~/components/behandling/revurdering/omgjøring/revurderingOmgjøringValidering';
 import { useRevurderingOmgjøring } from '~/components/behandling/context/BehandlingContext';
@@ -13,7 +19,7 @@ import { BehandlingSendOgGodkjenn } from '~/components/behandling/felles/send-og
 export const RevurderingOmgjøringSend = () => {
     const { sak } = useSak();
     const { behandling } = useRevurderingOmgjøring();
-    const skjema = useRevurderingOmgjøringSkjema();
+    const skjema = useOmgjøringSkjema();
 
     const lagringProps = useHentBehandlingLagringProps({
         hentDTO: () => tilDTO(skjema),
@@ -24,29 +30,50 @@ export const RevurderingOmgjøringSend = () => {
     return <BehandlingSendOgGodkjenn behandling={behandling} lagringProps={lagringProps} />;
 };
 
-const tilDTO = (
-    skjema: RevurderingOmgjøringContext,
-): Nullable<RevurderingVedtakOmgjøringRequest> => {
-    const { innvilgelse, vedtaksperiode } = skjema;
+const tilDTO = (skjema: OmgjøringContext): Nullable<OppdaterOmgjøringDTO> => {
+    switch (skjema.resultat) {
+        case RevurderingResultat.OMGJØRING: {
+            const { innvilgelse, vedtaksperiode, textAreas } = skjema;
 
-    if (!innvilgelse.harValgtPeriode) {
-        return null;
+            if (!innvilgelse.harValgtPeriode) {
+                return null;
+            }
+
+            return {
+                resultat: RevurderingResultat.OMGJØRING,
+                begrunnelseVilkårsvurdering: textAreas.begrunnelse.getValue(),
+                fritekstTilVedtaksbrev: textAreas.brevtekst.getValue(),
+                innvilgelsesperioder: innvilgelse.innvilgelsesperioder,
+                vedtaksperiode,
+                barnetillegg: innvilgelse.harBarnetillegg
+                    ? {
+                          begrunnelse: textAreas.barnetilleggBegrunnelse.getValue(),
+                          perioder: innvilgelse.barnetilleggPerioder,
+                      }
+                    : {
+                          begrunnelse: null,
+                          perioder: [],
+                      },
+            } satisfies OppdaterOmgjøringInnvilgelseDTO;
+        }
+
+        case RevurderingResultat.OMGJØRING_OPPHØR: {
+            const { vedtaksperiode, textAreas } = skjema;
+
+            return {
+                resultat: RevurderingResultat.OMGJØRING_OPPHØR,
+                fritekstTilVedtaksbrev: textAreas.brevtekst.getValue(),
+                begrunnelseVilkårsvurdering: textAreas.begrunnelse.getValue(),
+                vedtaksperiode,
+            } satisfies OppdaterOmgjøringOpphørDTO;
+        }
+
+        case RevurderingResultat.OMGJØRING_IKKE_VALGT: {
+            return {
+                resultat: RevurderingResultat.OMGJØRING_IKKE_VALGT,
+                fritekstTilVedtaksbrev: null,
+                begrunnelseVilkårsvurdering: null,
+            } satisfies OppdaterOmgjøringIkkeValgtDTO;
+        }
     }
-
-    return {
-        resultat: RevurderingResultat.OMGJØRING,
-        begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
-        fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
-        innvilgelsesperioder: innvilgelse.innvilgelsesperioder,
-        vedtaksperiode,
-        barnetillegg: innvilgelse.harBarnetillegg
-            ? {
-                  begrunnelse: skjema.textAreas.barnetilleggBegrunnelse.getValue(),
-                  perioder: innvilgelse.barnetilleggPerioder,
-              }
-            : {
-                  begrunnelse: null,
-                  perioder: [],
-              },
-    };
 };

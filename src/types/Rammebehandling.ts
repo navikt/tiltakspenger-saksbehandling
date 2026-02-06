@@ -3,16 +3,16 @@ import { Periode } from './Periode';
 import {
     Revurdering,
     RevurderingInnvilgelse,
-    RevurderingOmgjøring,
+    OmgjøringInnvilgelse,
     RevurderingResultat,
-    RevurderingVedtakRequest,
+    OppdaterRevurderingDTO,
 } from './Revurdering';
 import { SimulertBeregning } from './SimulertBeregning';
 import {
     Søknadsbehandling,
     SøknadsbehandlingInnvilgelse,
     SøknadsbehandlingResultat,
-    SøknadsbehandlingVedtakRequest,
+    OppdaterSøknadsbehandlingDTO,
 } from './Søknadsbehandling';
 import { Tiltaksdeltakelse } from './TiltakDeltakelse';
 import { Utbetalingsstatus } from './Utbetaling';
@@ -85,20 +85,18 @@ export type Saksopplysninger = {
     oppslagstidspunkt: string;
 };
 
-export type RammebehandlingVedtakRequest =
-    | SøknadsbehandlingVedtakRequest
-    | RevurderingVedtakRequest;
+export type OppdaterBehandlingDTO = OppdaterSøknadsbehandlingDTO | OppdaterRevurderingDTO;
 
-export interface OppdaterBehandlingRequestBase {
+export type OppdaterBehandlingBaseDTO = {
     resultat: RammebehandlingResultat;
     fritekstTilVedtaksbrev: Nullable<string>;
     begrunnelseVilkårsvurdering: Nullable<string>;
-}
+};
 
 export type RammebehandlingMedInnvilgelse =
     | SøknadsbehandlingInnvilgelse
     | RevurderingInnvilgelse
-    | RevurderingOmgjøring;
+    | OmgjøringInnvilgelse;
 
 export type RammebehandlingResultatMedInnvilgelse = RammebehandlingMedInnvilgelse['resultat'];
 

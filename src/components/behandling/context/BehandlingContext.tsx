@@ -3,7 +3,8 @@ import { useRolleForBehandling } from '~/context/saksbehandler/SaksbehandlerCont
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { Rammebehandlingstype, Rammebehandling } from '~/types/Rammebehandling';
 import { Søknadsbehandling } from '~/types/Søknadsbehandling';
-import { Revurdering, RevurderingOmgjøring, RevurderingResultat } from '~/types/Revurdering';
+import { Revurdering, Omgjøring } from '~/types/Revurdering';
+import { erOmgjøringResultat } from '~/utils/behandling';
 
 type BehandlingContext<Rammebehandling> = {
     behandling: Rammebehandling;
@@ -67,11 +68,11 @@ export const useRevurderingBehandling = () => {
 export const useRevurderingOmgjøring = () => {
     const context = useRevurderingBehandling();
 
-    if (context.behandling.resultat !== RevurderingResultat.OMGJØRING) {
+    if (!erOmgjøringResultat(context.behandling.resultat)) {
         throw Error(
-            `Feil context for revurdering omgjøring med behandling id ${context.behandling.id}: ${context.behandling.resultat}`,
+            `Feil context for omgjøring med behandling id ${context.behandling.id}: ${context.behandling.resultat}`,
         );
     }
 
-    return context as BehandlingContext<RevurderingOmgjøring>;
+    return context as BehandlingContext<Omgjøring>;
 };
