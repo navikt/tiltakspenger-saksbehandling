@@ -1,4 +1,4 @@
-import { BodyLong, Button, Heading, Radio, RadioGroup } from '@navikt/ds-react';
+import { Alert, BodyLong, Button, Heading, Radio, RadioGroup } from '@navikt/ds-react';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import {
     useOmgjøringSkjema,
@@ -26,18 +26,17 @@ export const OmgjøringResultatVelger = () => {
                 <Heading size={'small'} level={'2'} spacing={true}>
                     {'Resultat'}
                 </Heading>
-                <BodyLong spacing={true}>
-                    {
-                        'Velg innvilgelse dersom hele eller deler av perioden som omgjøres skal innvilges.'
-                    }
-                    {' Velg opphør dersom hele perioden skal opphøres.'}
-                </BodyLong>
 
-                {!opphørToggle && (
-                    <BodyLong size={'small'} spacing={true}>
-                        {' (Opphør er foreløpig ikke tilgjengelig i produksjon.)'}
-                    </BodyLong>
-                )}
+                <Alert variant={'info'} size={'small'} inline={true} className={style.infoVarsel}>
+                    {'Velg innvilgelse dersom hele eller deler av perioden som omgjøres skal innvilges.' +
+                        ' Velg opphør dersom hele perioden skal opphøres.'}
+                    {!opphørToggle && (
+                        <BodyLong size={'small'}>
+                            {'(Opphør er foreløpig ikke tilgjengelig i produksjon.)'}
+                        </BodyLong>
+                    )}
+                </Alert>
+
                 <RadioGroup
                     legend={'Resultat'}
                     hideLegend={true}
