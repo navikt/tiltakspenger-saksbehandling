@@ -274,30 +274,42 @@ export const klagebehandlingStatusTilText: Record<KlagebehandlingStatus, string>
 export const klagebehandlingStatusTilTag = (args: {
     status: KlagebehandlingStatus;
     size?: 'small' | 'medium';
+    extraContent?: {
+        before?: string;
+        after?: string;
+    };
 }): ReactElement => {
     switch (args.status) {
         case KlagebehandlingStatus.KLAR_TIL_BEHANDLING:
             return (
                 <Tag data-color="info" variant="outline" size={args.size}>
+                    {args.extraContent?.before}
                     {klagebehandlingStatusTilText[KlagebehandlingStatus.KLAR_TIL_BEHANDLING]}
+                    {args.extraContent?.after}
                 </Tag>
             );
         case KlagebehandlingStatus.UNDER_BEHANDLING:
             return (
                 <Tag data-color="info" variant="outline" size={args.size}>
+                    {args.extraContent?.before}
                     {klagebehandlingStatusTilText[KlagebehandlingStatus.UNDER_BEHANDLING]}
+                    {args.extraContent?.after}
                 </Tag>
             );
         case KlagebehandlingStatus.AVBRUTT:
             return (
                 <Tag data-color="neutral" variant="outline" size={args.size}>
+                    {args.extraContent?.before}
                     {klagebehandlingStatusTilText[KlagebehandlingStatus.AVBRUTT]}
+                    {args.extraContent?.after}
                 </Tag>
             );
         case KlagebehandlingStatus.IVERKSATT:
             return (
                 <Tag data-color="success" variant="outline" size={args.size}>
+                    {args.extraContent?.before}
                     {klagebehandlingStatusTilText[KlagebehandlingStatus.IVERKSATT]}
+                    {args.extraContent?.after}
                 </Tag>
             );
     }
@@ -312,18 +324,26 @@ export const klagebehandlingResultatTilText: Record<KlagebehandlingResultat, str
 export const klagebehandlingResultatTilTag = (args: {
     resultat: KlagebehandlingResultat;
     size?: 'small' | 'medium';
+    extraContent?: {
+        before?: string;
+        after?: string;
+    };
 }): ReactElement => {
     switch (args.resultat) {
         case KlagebehandlingResultat.AVVIST:
             return (
                 <Tag data-color="danger" variant="outline" size={args.size}>
+                    {args.extraContent?.before}
                     {klagebehandlingResultatTilText[KlagebehandlingResultat.AVVIST]}
+                    {args.extraContent?.after}
                 </Tag>
             );
         case KlagebehandlingResultat.OMGJØR:
             return (
                 <Tag data-color="meta-purple" variant="outline" size={args.size}>
+                    {args.extraContent?.before}
                     {klagebehandlingResultatTilText[KlagebehandlingResultat.OMGJØR]}
+                    {args.extraContent?.after}
                 </Tag>
             );
     }

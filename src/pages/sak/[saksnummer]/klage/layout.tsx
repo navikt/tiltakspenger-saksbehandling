@@ -4,7 +4,7 @@ import useSWR from 'swr';
 import NextError from 'next/error';
 import { PersonaliaHeader } from '~/components/personaliaheader/PersonaliaHeader';
 import styles from './Layout.module.css';
-import { BodyShort, Heading, HStack, Loader, Tabs, VStack } from '@navikt/ds-react';
+import { BodyShort, Heading, HStack, Loader, Tabs, Tag, VStack } from '@navikt/ds-react';
 import { Klagebehandling, KlagebehandlingStatus } from '~/types/Klage';
 import { Nullable } from '~/types/UtilTypes';
 import Link from 'next/link';
@@ -137,22 +137,34 @@ const KlageHeader = (props: { saksnummer: string; klage: Nullable<Klagebehandlin
 
                 <HStack align="end" gap="space-24">
                     <BodyShort>
-                        Behandlingsstatus{' '}
-                        {props.klage
-                            ? klagebehandlingStatusTilTag({
-                                  status: props.klage.status,
-                                  size: 'small',
-                              })
-                            : 'utredes'}
+                        {props.klage?.status ? (
+                            klagebehandlingStatusTilTag({
+                                status: props.klage.status,
+                                size: 'small',
+                                extraContent: {
+                                    before: 'Behandlingsstatus: ',
+                                },
+                            })
+                        ) : (
+                            <Tag data-color="info" size="small" variant="outline">
+                                Behandlingsstatus utredes
+                            </Tag>
+                        )}
                     </BodyShort>
                     <BodyShort>
-                        Behandlingsresultat{' '}
-                        {props.klage
-                            ? klagebehandlingResultatTilTag({
-                                  resultat: props.klage.resultat!,
-                                  size: 'small',
-                              })
-                            : 'ikke satt'}
+                        {props.klage?.resultat ? (
+                            klagebehandlingResultatTilTag({
+                                resultat: props.klage.resultat!,
+                                size: 'small',
+                                extraContent: {
+                                    before: 'Behandlingsresultat: ',
+                                },
+                            })
+                        ) : (
+                            <Tag data-color="warning" size="small" variant="outline">
+                                Behandlingsresultat ikke satt
+                            </Tag>
+                        )}
                     </BodyShort>
                     <BodyShort>
                         Opprettet {props.klage ? formaterTidspunkt(props.klage.opprettet) : '-'}
