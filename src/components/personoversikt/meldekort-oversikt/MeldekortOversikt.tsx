@@ -37,6 +37,7 @@ import {
     PersonIcon,
     XMarkOctagonIcon,
 } from '@navikt/aksel-icons';
+import { PERSONOVERSIKT_TABS } from '~/components/personoversikt/Personoversikt';
 
 type Props = {
     meldeperiodeKjeder: MeldeperiodeKjedeProps[];
@@ -310,7 +311,9 @@ const MeldekortBehandlingMenyKnapper = (props: {
                         onClick={(e) => {
                             e.preventDefault();
                             leggTilbakeMeldekortBehandling().then(() => {
-                                router.push(`/sak/${props.saksnummer}`);
+                                router.push(
+                                    `/sak/${props.saksnummer}#${PERSONOVERSIKT_TABS.meldekort}`,
+                                );
                             });
                         }}
                     >

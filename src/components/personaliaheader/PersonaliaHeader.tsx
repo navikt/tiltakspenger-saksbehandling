@@ -15,10 +15,12 @@ import { SakId } from '~/types/Sak';
 import NextLink from 'next/link';
 
 import styles from './PersonaliaHeader.module.css';
+import { PERSONOVERSIKT_TABS } from '~/components/personoversikt/Personoversikt';
 
 type PersonaliaHeaderProps = PropsWithChildren<{
     sakId: SakId;
     saksnummer: string;
+    aktivTab?: string;
     visTilbakeKnapp?: boolean;
 }>;
 
@@ -26,6 +28,7 @@ export const PersonaliaHeader = ({
     sakId,
     saksnummer,
     visTilbakeKnapp,
+    aktivTab = PERSONOVERSIKT_TABS.apneBehandlinger,
     children,
 }: PersonaliaHeaderProps) => {
     const { personopplysninger, isPersonopplysningerLoading } = useHentPersonopplysninger(sakId);
@@ -62,7 +65,12 @@ export const PersonaliaHeader = ({
             <strong>{visSakId ? 'Sak-id:' : 'Saksnr:'}</strong> {idSomVises}
             <CopyButton copyText={idSomVises} variant="action" size="small" />
             {visTilbakeKnapp && (
-                <Button as={NextLink} href={`/sak/${saksnummer}`} type="submit" size="small">
+                <Button
+                    as={NextLink}
+                    href={`/sak/${saksnummer}#${aktivTab}`}
+                    type="submit"
+                    size="small"
+                >
                     Tilbake til personoversikt
                 </Button>
             )}

@@ -21,6 +21,7 @@ import { useLeggTilbakeMeldekortBehandling } from './useLeggTilbakeMeldekortBeha
 import { TriggerWithOptionsArgs } from 'swr/mutation';
 import { FetcherError } from '~/utils/fetch/fetch';
 import AvsluttMeldekortBehandling from './avsluttMeldekortBehandling/AvsluttMeldekortBehandling';
+import { PERSONOVERSIKT_TABS } from '~/components/personoversikt/Personoversikt';
 
 type Props = {
     meldekortBehandling: MeldekortBehandlingProps;
@@ -111,7 +112,7 @@ export const MeldekortBehandlingKnappForOversikt = ({
                         onClick={(e) => {
                             e.preventDefault();
                             leggTilbakeMeldekortBehandling().then(() => {
-                                router.push(`/sak/${saksnummer}`);
+                                router.push(`/sak/${saksnummer}#${PERSONOVERSIKT_TABS.meldekort}`);
                             });
                         }}
                     >

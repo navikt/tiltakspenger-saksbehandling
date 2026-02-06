@@ -17,7 +17,7 @@ import {
     Rammebehandlingstype,
 } from '~/types/Rammebehandling';
 import { Tidslinjer } from '~/components/tidslinjer/Tidslinjer';
-import router from 'next/router';
+import { useRouter } from 'next/router';
 import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
 import {
     ArrowsCirclepathIcon,
@@ -33,7 +33,15 @@ import Divider from '~/components/divider/Divider';
 import { useState } from 'react';
 import { OpprettSøknadModal } from '~/components/personoversikt/manuell-søknad/OpprettSøknadModal';
 
+export const PERSONOVERSIKT_TABS = {
+    apneBehandlinger: 'apne-behandlinger',
+    meldekort: 'meldekort',
+    vedtatteBehandlinger: 'vedtatte-behandlinger',
+    avsluttedeBehandlinger: 'avsluttede-behandlinger',
+};
+
 export const Personoversikt = () => {
+    const router = useRouter();
     const { sak } = useSak();
     const featureToggle = useFeatureToggles();
     const [opprettRevurderingModalÅpen, setOpprettRevurderingModalÅpen] = useState(false);
@@ -58,12 +66,14 @@ export const Personoversikt = () => {
                 : 'meldeperiodeKjederKanBehandles',
     );
 
-    const tabs = {
-        apneBehandlinger: 'apne-behandlinger',
-        meldekort: 'meldekort',
-        vedtatteBehandlinger: 'vedtatte-behandlinger',
-        avsluttedeBehandlinger: 'avsluttede-behandlinger',
+    const hentAktivTabFraUrl = (asPath: string) => {
+        const tab = asPath.split('#')[1];
+        return tab && Object.values(PERSONOVERSIKT_TABS).includes(tab)
+            ? tab
+            : PERSONOVERSIKT_TABS.apneBehandlinger;
     };
+
+    const [aktivTab, setAktivTab] = useState<string>(() => hentAktivTabFraUrl(router.asPath ?? ''));
 
     const labelWithCounter = (label: string, count?: number) => {
         if (count && count > 0) {
@@ -86,28 +96,35 @@ export const Personoversikt = () => {
 
                 <Tidslinjer sak={sak} heading={false} className={styles.tabellwrapper} />
                 <Divider />
-                <Tabs defaultValue={tabs.apneBehandlinger} className={styles.tabs}>
+                <Tabs
+                    value={aktivTab}
+                    className={styles.tabs}
+                    onChange={(value) => {
+                        setAktivTab(value);
+                        router.replace(`/sak/${saksnummer}#${value}`, undefined, { shallow: true });
+                    }}
+                >
                     <Tabs.List className={styles.tabsList}>
                         <Tabs.Tab
-                            value={tabs.apneBehandlinger}
+                            value={PERSONOVERSIKT_TABS.apneBehandlinger}
                             label={labelWithCounter('Åpne behandlinger', åpneBehandlinger.length)}
                             icon={<FileIcon aria-hidden />}
                             className={styles.tab}
                         />
                         <Tabs.Tab
-                            value={tabs.meldekort}
+                            value={PERSONOVERSIKT_TABS.meldekort}
                             label={'Meldekort'}
                             icon={<InboxIcon aria-hidden />}
                             className={styles.tab}
                         />
                         <Tabs.Tab
-                            value={tabs.vedtatteBehandlinger}
+                            value={PERSONOVERSIKT_TABS.vedtatteBehandlinger}
                             label={`Vedtatte behandlinger`}
                             icon={<FileCheckmarkIcon aria-hidden />}
                             className={styles.tab}
                         />
                         <Tabs.Tab
-                            value={tabs.avsluttedeBehandlinger}
+                            value={PERSONOVERSIKT_TABS.avsluttedeBehandlinger}
                             label="Avsluttede behandlinger"
                             icon={<FileXMarkIcon aria-hidden />}
                             className={styles.tab}
@@ -152,10 +169,13 @@ export const Personoversikt = () => {
                         </ActionMenu>
                     </Tabs.List>
 
-                    <Tabs.Panel value={tabs.apneBehandlinger} className={styles.panel}>
+                    <Tabs.Panel
+                        value={PERSONOVERSIKT_TABS.apneBehandlinger}
+                        className={styles.panel}
+                    >
                         <ApneBehandlingerOversikt åpneBehandlinger={åpneBehandlinger} />
                     </Tabs.Panel>
-                    <Tabs.Panel value={tabs.meldekort} className={styles.panel}>
+                    <Tabs.Panel value={PERSONOVERSIKT_TABS.meldekort} className={styles.panel}>
                         <div className={styles.meldekortHeaderRad}>
                             <MeldekortHelgToggle />
                             {meldeperiodeKjederIkkeKlare && (
@@ -172,7 +192,10 @@ export const Personoversikt = () => {
                             />
                         )}
                     </Tabs.Panel>
-                    <Tabs.Panel value={tabs.vedtatteBehandlinger} className={styles.panel}>
+                    <Tabs.Panel
+                        value={PERSONOVERSIKT_TABS.vedtatteBehandlinger}
+                        className={styles.panel}
+                    >
                         <VedtatteBehandlinger
                             sakId={sakId}
                             rammebehandlinger={behandlinger}
@@ -181,7 +204,7 @@ export const Personoversikt = () => {
                             alleKlagevedtak={alleKlagevedtak}
                         />
                     </Tabs.Panel>
-                    <Tabs.Panel value={tabs.avsluttedeBehandlinger}>
+                    <Tabs.Panel value={PERSONOVERSIKT_TABS.avsluttedeBehandlinger}>
                         <AvsluttedeBehandlinger
                             behandlinger={behandlinger}
                             saksnummer={saksnummer}

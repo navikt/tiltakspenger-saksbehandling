@@ -10,10 +10,12 @@ import { formaterTidspunkt } from '~/utils/date';
 import NextLink from 'next/link';
 import { ValueOf } from 'next/dist/shared/lib/constants';
 import {
+    Behandlingssammendrag,
     BehandlingssammendragStatus,
     BehandlingssammendragType,
     BenkOversiktResponse,
 } from '~/types/Behandlingssammendrag';
+import { PERSONOVERSIKT_TABS } from '~/components/personoversikt/Personoversikt';
 
 type Props = {
     data: BenkOversiktResponse;
@@ -25,6 +27,14 @@ type Props = {
 };
 
 const BenkTabell = ({ data, sorteringRetning, onSortChange }: Props) => {
+    const urlMedValgtTab = (behandling: Behandlingssammendrag) => {
+        if (behandling.behandlingstype === BehandlingssammendragType.MELDEKORTBEHANDLING) {
+            return `/sak/${behandling.saksnummer}#${PERSONOVERSIKT_TABS.meldekort}`;
+        }
+
+        return `/sak/${behandling.saksnummer}`;
+    };
+
     return (
         <SortableTable
             kolonnerConfig={{
@@ -133,7 +143,7 @@ const BenkTabell = ({ data, sorteringRetning, onSortChange }: Props) => {
                                     variant="secondary"
                                     size="small"
                                     as={NextLink}
-                                    href={`/sak/${behandling.saksnummer}`}
+                                    href={urlMedValgtTab(behandling)}
                                 >
                                     Se sak
                                 </Button>

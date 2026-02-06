@@ -33,6 +33,7 @@ import { useNotification } from '~/context/NotificationContext';
 import { BekreftelsesModal } from '~/components/modaler/BekreftelsesModal';
 import { SakId } from '~/types/Sak';
 import { FetcherError } from '~/utils/fetch/fetch';
+import { PERSONOVERSIKT_TABS } from '~/components/personoversikt/Personoversikt';
 
 type Props = {
     meldekortBehandling: MeldekortBehandlingProps;
@@ -115,7 +116,7 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
             if (oppdatertKjede) {
                 setMeldeperiodeKjede(oppdatertKjede);
                 navigateWithNotification(
-                    `/sak/${saksnummer}`,
+                    `/sak/${saksnummer}#${PERSONOVERSIKT_TABS.meldekort}`,
                     'Meldekortet er sendt til beslutter!',
                 );
             }

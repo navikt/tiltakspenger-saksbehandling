@@ -9,6 +9,7 @@ import { Underkjenn } from '../../../../underkjenn/Underkjenn';
 import { useFetchJsonFraApi } from '../../../../../utils/fetch/useFetchFraApi';
 import router from 'next/router';
 import { useNotification } from '~/context/NotificationContext';
+import { PERSONOVERSIKT_TABS } from '~/components/personoversikt/Personoversikt';
 
 type Props = {
     meldekortBehandling: MeldekortBehandlingProps;
@@ -27,7 +28,7 @@ export const MeldekortTaBeslutning = ({ meldekortBehandling }: Props) => {
         'POST',
         {
             onSuccess: () => {
-                router.push(`/sak/${saksnummer}`);
+                router.push(`/sak/${saksnummer}#${PERSONOVERSIKT_TABS.meldekort}`);
             },
         },
     );
