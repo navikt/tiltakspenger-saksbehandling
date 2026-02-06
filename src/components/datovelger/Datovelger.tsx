@@ -51,6 +51,7 @@ export const Datovelger = ({
             {...datepickerProps}
             dropdownCaption={dropdownCaption}
             disabled={disabledMatcher}
+            fixedWeeks={true}
         >
             <DatePicker.Input {...inputProps} {...inputPropsCustom} label={label ?? 'Velg dato'} />
         </DatePicker>
