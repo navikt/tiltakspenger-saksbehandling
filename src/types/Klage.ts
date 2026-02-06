@@ -3,6 +3,7 @@ import { BehandlingId } from './Rammebehandling';
 import { VedtakId } from './Rammevedtak';
 import { Nullable } from './UtilTypes';
 import { VentestatusHendelse } from './Ventestatus';
+import { Klagevedtak } from '~/types/Klagevedtak';
 
 export type KlageId = `klage_${string}`;
 
@@ -104,3 +105,7 @@ export interface OpprettOmgjøringsbehandlingForKlageRequest {
     søknadId: Nullable<string>;
     vedtakIdSomOmgjøres: Nullable<string>;
 }
+
+export type VedtattKlagevedtakMedBehandling = { type: 'klagevedtak' } & Klagevedtak & {
+        behandling: Klagebehandling;
+    };

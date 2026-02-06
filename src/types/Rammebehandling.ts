@@ -21,7 +21,7 @@ import { Ytelse } from './Ytelse';
 import { SakId } from '~/types/Sak';
 import { Attestering } from '~/types/Attestering';
 import { Avbrutt } from '~/types/Avbrutt';
-import { VedtakId } from '~/types/Rammevedtak';
+import { Rammevedtak, VedtakId } from '~/types/Rammevedtak';
 import { KlageId } from './Klage';
 import { VentestatusHendelse } from './Ventestatus';
 
@@ -101,3 +101,7 @@ export type RammebehandlingMedInnvilgelse =
     | RevurderingOmgjøring;
 
 export type RammebehandlingResultatMedInnvilgelse = RammebehandlingMedInnvilgelse['resultat'];
+
+export type VedtattRammevedtakMedBehandling = { type: 'rammevedtak' } & Rammevedtak & {
+        behandling: Rammebehandling;
+    };

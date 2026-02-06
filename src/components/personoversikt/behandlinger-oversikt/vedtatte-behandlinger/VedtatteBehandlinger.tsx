@@ -1,6 +1,6 @@
 import { Alert, Checkbox, CheckboxGroup, HStack, VStack } from '@navikt/ds-react';
 import { VedtatteBehandlingerTabell } from './VedtatteBehandlingerTabell';
-import { Rammebehandling } from '~/types/Rammebehandling';
+import { Rammebehandling, VedtattRammevedtakMedBehandling } from '~/types/Rammebehandling';
 import { SakId } from '~/types/Sak';
 import { Omgjøringsgrad, Rammevedtak } from '~/types/Rammevedtak';
 import { useState } from 'react';
@@ -8,7 +8,7 @@ import { classNames } from '~/utils/classNames';
 
 import style from './VedtatteBehandlinger.module.css';
 import { Klagevedtak } from '~/types/Klagevedtak';
-import { Klagebehandling } from '~/types/Klage';
+import { Klagebehandling, VedtattKlagevedtakMedBehandling } from '~/types/Klage';
 
 type Props = {
     sakId: SakId;
@@ -44,7 +44,7 @@ export const VedtatteBehandlinger = ({
                 (behandling) => behandling.id === vedtak.behandlingId,
             ),
         };
-    }) as Array<{ type: 'rammevedtak' } & Rammevedtak & { behandling: Rammebehandling }>;
+    }) as VedtattRammevedtakMedBehandling[];
 
     const klagevedtakMedBehandling = alleKlagevedtak.map((vedtak) => {
         return {
@@ -52,7 +52,7 @@ export const VedtatteBehandlinger = ({
             ...vedtak,
             behandling: klagebehandlinger.find((klage) => klage.id === vedtak.klagebehandlingId),
         };
-    }) as Array<{ type: 'klagevedtak' } & Klagevedtak & { behandling: Klagebehandling }>;
+    }) as VedtattKlagevedtakMedBehandling[];
 
     const vedtakMedBehandling = [...rammevedtakMedBehandling, ...klagevedtakMedBehandling].toSorted(
         (a, b) => b.opprettet.localeCompare(a.opprettet),

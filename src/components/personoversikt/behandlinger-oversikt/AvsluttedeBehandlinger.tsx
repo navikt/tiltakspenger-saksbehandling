@@ -4,20 +4,20 @@ import { AvbrutteBehandlingerTabell } from './AvbrutteBehandlingerTabell';
 import { Rammebehandling } from '~/types/Rammebehandling';
 
 import styles from '../Personoversikt.module.css';
-import { Klagebehandling, KlagebehandlingResultat, KlagebehandlingStatus } from '~/types/Klage';
+import { Klagebehandling, KlagebehandlingResultat } from '~/types/Klage';
 
 export const AvsluttedeBehandlinger = (props: {
     saksnummer: string;
-    behandlinger: Rammebehandling[];
-    klageBehandlinger: Klagebehandling[];
+    avbrutteBehandlinger: Rammebehandling[];
+    avbrutteKlageBehandlinger: Klagebehandling[];
 }) => {
-    const avbrutteRammebehandlinger = props.behandlinger
-        .filter((behandling) => behandling.avbrutt)
-        .map(avbruttBehandlingToDataCellInfo);
+    const avbrutteRammebehandlinger = props.avbrutteBehandlinger.map(
+        avbruttBehandlingToDataCellInfo,
+    );
 
-    const avbrutteKlagebehandlinger = props.klageBehandlinger
-        .filter((klage) => klage.status === KlagebehandlingStatus.AVBRUTT)
-        .map(avbruttKlageToDataCellInfo);
+    const avbrutteKlagebehandlinger = props.avbrutteKlageBehandlinger.map(
+        avbruttKlageToDataCellInfo,
+    );
 
     const avbrutteBehandlinger = [
         ...avbrutteRammebehandlinger,
