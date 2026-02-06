@@ -28,7 +28,11 @@ type Props = {
 
 const BenkTabell = ({ data, sorteringRetning, onSortChange }: Props) => {
     const urlMedValgtTab = (behandling: Behandlingssammendrag) => {
-        if (behandling.behandlingstype === BehandlingssammendragType.MELDEKORTBEHANDLING) {
+        if (
+            behandling.behandlingstype === BehandlingssammendragType.MELDEKORTBEHANDLING ||
+            behandling.behandlingstype === BehandlingssammendragType.INNSENDT_MELDEKORT ||
+            behandling.behandlingstype === BehandlingssammendragType.KORRIGERT_MELDEKORT
+        ) {
             return `/sak/${behandling.saksnummer}#${PERSONOVERSIKT_TABS.meldekort}`;
         }
 
