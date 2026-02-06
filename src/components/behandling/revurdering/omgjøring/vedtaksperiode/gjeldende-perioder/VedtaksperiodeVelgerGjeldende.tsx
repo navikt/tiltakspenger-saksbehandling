@@ -1,7 +1,7 @@
 import { BodyShort, Button, HStack, VStack } from '@navikt/ds-react';
 import { periodeTilFormatertDatotekst } from '~/utils/date';
 import {
-    useOmgjøringInnvilgelseSkjema,
+    useOmgjøringSkjema,
     useOmgjøringSkjemaDispatch,
 } from '~/components/behandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import { Periode } from '~/types/Periode';
@@ -39,7 +39,7 @@ export const VedtaksperiodeVelgerGjeldende = ({ gjeldendeVedtaksperioder, classN
 };
 
 const PeriodeMedVelgKnapp = ({ periode }: { periode: Periode }) => {
-    const { erReadonly } = useOmgjøringInnvilgelseSkjema();
+    const { erReadonly } = useOmgjøringSkjema();
     const dispatch = useOmgjøringSkjemaDispatch();
 
     return (

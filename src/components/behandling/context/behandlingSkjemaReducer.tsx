@@ -22,6 +22,7 @@ import {
 } from '~/components/behandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import {
     BehandlingSkjemaType,
+    erOmgjøringContext,
     erSøknadsbehandlingContext,
 } from '~/components/behandling/context/behandlingSkjemaUtils';
 
@@ -66,7 +67,7 @@ export const behandlingSkjemaReducer: Reducer<BehandlingSkjemaState, BehandlingS
         }
 
         case BehandlingSkjemaType.RevurderingOmgjøring: {
-            if (resultat !== RevurderingResultat.OMGJØRING) {
+            if (!erOmgjøringContext(state)) {
                 throw Error(
                     `Action ${type} / ${superType} må tilhøre en revurdering omgjøring - var ${resultat}`,
                 );

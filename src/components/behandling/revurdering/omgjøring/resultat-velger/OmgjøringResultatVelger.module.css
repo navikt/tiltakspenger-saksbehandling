@@ -1,0 +1,16 @@
+.radioGroup {
+    margin-bottom: 1rem;
+
+    & > :global(.aksel-radio-buttons) {
+        display: flex;
+        gap: 2rem;
+    }
+}
+
+.datovelgere {
+    margin-top: 1rem;
+}
+
+.ikkeInnvilgbarVarsel {
+    margin-bottom: 1rem;
+}

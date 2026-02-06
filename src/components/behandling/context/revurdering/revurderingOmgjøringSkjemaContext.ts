@@ -11,7 +11,10 @@ import {
     useBehandlingSkjema,
     useBehandlingSkjemaDispatch,
 } from '~/components/behandling/context/BehandlingSkjemaContext';
-import { BehandlingSkjemaType } from '~/components/behandling/context/behandlingSkjemaUtils';
+import {
+    BehandlingSkjemaType,
+    erOmgjøringContext,
+} from '~/components/behandling/context/behandlingSkjemaUtils';
 import { Periode } from '~/types/Periode';
 import { omgjøringInitialState } from '~/components/behandling/context/revurdering/revurderingInitialState';
 import { SakProps } from '~/types/Sak';
@@ -113,28 +116,27 @@ export const omgjøringReducer: Reducer<OmgjøringState, OmgjøringActions> = (s
 };
 
 export type OmgjøringContext = BehandlingSkjemaContextBase<OmgjøringState>;
-
-export type OmgjøringInnvilgelseContext = BehandlingSkjemaContextBase<OmgjøringInnvilgelseState>;
+export type OmgjøringMedValgtResultatContext = BehandlingSkjemaContextBase<
+    OmgjøringInnvilgelseState | OmgjøringOpphørState
+>;
 
 export const useOmgjøringSkjema = (): OmgjøringContext => {
     const context = useBehandlingSkjema();
 
-    if (
-        context.resultat !== RevurderingResultat.OMGJØRING &&
-        context.resultat !== RevurderingResultat.OMGJØRING_OPPHØR &&
-        context.resultat !== RevurderingResultat.OMGJØRING_IKKE_VALGT
-    ) {
+    if (!erOmgjøringContext(context)) {
         throw Error(`Feil resultat for omgjøring context: ${context.resultat}`);
     }
 
     return context;
 };
 
-export const useOmgjøringInnvilgelseSkjema = (): OmgjøringInnvilgelseContext => {
-    const context = useBehandlingSkjema();
+export const useOmgjøringMedValgtResultatSkjema = (): OmgjøringMedValgtResultatContext => {
+    const context = useOmgjøringSkjema();
 
-    if (context.resultat !== RevurderingResultat.OMGJØRING) {
-        throw Error(`Feil resultat for omgjøring innvilgelse context: ${context.resultat}`);
+    if (context.resultat === RevurderingResultat.OMGJØRING_IKKE_VALGT) {
+        throw Error(
+            'Resultat for omgjøring er ikke valgt, og kan derfor ikke brukes i komponenter som krever valgt resultat',
+        );
     }
 
     return context;

@@ -10,8 +10,9 @@ import { BegrunnelseVilkårsvurdering } from '~/components/behandling/felles/beg
 import { RevurderingOmgjøringBrev } from '~/components/behandling/revurdering/omgjøring/brev/RevurderingOmgjøringBrev';
 import { RevurderingOmgjøringSend } from '~/components/behandling/revurdering/omgjøring/send-og-godkjenn/RevurderingOmgjøringSend';
 import { RevurderingOmgjøringHeader } from '~/components/behandling/revurdering/omgjøring/header/RevurderingOmgjøringHeader';
-import { VedtaksperiodeVelger } from '~/components/behandling/revurdering/omgjøring/vedtaksperiode/VedtaksperiodeVelger';
+import { OmgjøringVedtaksperiodeVelger } from '~/components/behandling/revurdering/omgjøring/vedtaksperiode/OmgjøringVedtaksperiodeVelger';
 import { RevurderingResultat } from '~/types/Revurdering';
+import { OmgjøringResultatVelger } from '~/components/behandling/revurdering/omgjøring/resultat-velger/OmgjøringResultatVelger';
 
 export const RevurderingOmgjøringVedtak = () => {
     const skjema = useOmgjøringSkjema();
@@ -21,6 +22,7 @@ export const RevurderingOmgjøringVedtak = () => {
         <>
             <RevurderingOmgjøringHeader />
             <Separator />
+            <OmgjøringResultatVelger />
             {resultat === RevurderingResultat.OMGJØRING ? (
                 <Innvilgelse harValgtPeriode={skjema.innvilgelse.harValgtPeriode} />
             ) : resultat === RevurderingResultat.OMGJØRING_OPPHØR ? (
@@ -50,7 +52,8 @@ const Innvilgelse = ({ harValgtPeriode }: { harValgtPeriode: boolean }) => {
 
     return (
         <>
-            <VedtaksperiodeVelger />
+            <Separator />
+            <OmgjøringVedtaksperiodeVelger />
             <Separator />
             <InnvilgelsesperioderVelger />
             <Separator />
@@ -65,7 +68,6 @@ const Innvilgelse = ({ harValgtPeriode }: { harValgtPeriode: boolean }) => {
                     <BehandlingBeregningOgSimulering />
                 </>
             )}
-            <RevurderingOmgjøringSend />
         </>
     );
 };
@@ -73,14 +75,14 @@ const Innvilgelse = ({ harValgtPeriode }: { harValgtPeriode: boolean }) => {
 const Opphør = () => {
     return (
         <>
-            <VedtaksperiodeVelger />
+            <Separator />
+            <OmgjøringVedtaksperiodeVelger />
             <Separator />
             <BegrunnelseVilkårsvurdering />
             <Separator />
             <RevurderingOmgjøringBrev />
             <Separator />
             <BehandlingBeregningOgSimulering />
-            <RevurderingOmgjøringSend />
         </>
     );
 };

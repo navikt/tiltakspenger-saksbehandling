@@ -9,7 +9,7 @@ import {
     Rammebehandlingsstatus,
 } from '~/types/Rammebehandling';
 import { Søknadsbehandling, SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
-import { RevurderingResultat } from '~/types/Revurdering';
+import { OmgjøringResultat, RevurderingResultat } from '~/types/Revurdering';
 
 export const hentTiltaksperiode = (behandling: Søknadsbehandling): Nullable<Periode> => {
     const forsteStartdatoForDeltakelse = finnForsteStartdatoForTiltaksdeltakelse(behandling);
@@ -133,6 +133,16 @@ export const erSøknadsbehandlingResultat = (
         resultat === SøknadsbehandlingResultat.INNVILGELSE ||
         resultat === SøknadsbehandlingResultat.AVSLAG ||
         resultat === SøknadsbehandlingResultat.IKKE_VALGT
+    );
+};
+
+export const erOmgjøringResultat = (
+    resultat: RammebehandlingResultat,
+): resultat is OmgjøringResultat => {
+    return (
+        resultat === RevurderingResultat.OMGJØRING ||
+        resultat === RevurderingResultat.OMGJØRING_OPPHØR ||
+        resultat === RevurderingResultat.OMGJØRING_IKKE_VALGT
     );
 };
 

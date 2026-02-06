@@ -5,14 +5,14 @@ import { RevurderingResultat } from '~/types/Revurdering';
 import { revurderingOmgjøringValidering } from '~/components/behandling/revurdering/omgjøring/revurderingOmgjøringValidering';
 import {
     OmgjøringContext,
-    useOmgjøringInnvilgelseSkjema,
+    useOmgjøringSkjema,
 } from '~/components/behandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import { useSak } from '~/context/sak/SakContext';
 import { RevurderingBrevHjelpetekst } from '~/components/behandling/revurdering/felles/RevurderingBrevHjelpetekst';
 
 export const RevurderingOmgjøringBrev = () => {
     const { behandling } = useRevurderingOmgjøring();
-    const skjema = useOmgjøringInnvilgelseSkjema();
+    const skjema = useOmgjøringSkjema();
     const { sak } = useSak();
 
     return (

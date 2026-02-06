@@ -1,6 +1,6 @@
 import {
     OmgjøringContext,
-    useOmgjøringInnvilgelseSkjema,
+    useOmgjøringSkjema,
 } from '~/components/behandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import { Nullable } from '~/types/UtilTypes';
 import {
@@ -19,7 +19,7 @@ import { BehandlingSendOgGodkjenn } from '~/components/behandling/felles/send-og
 export const RevurderingOmgjøringSend = () => {
     const { sak } = useSak();
     const { behandling } = useRevurderingOmgjøring();
-    const skjema = useOmgjøringInnvilgelseSkjema();
+    const skjema = useOmgjøringSkjema();
 
     const lagringProps = useHentBehandlingLagringProps({
         hentDTO: () => tilDTO(skjema),

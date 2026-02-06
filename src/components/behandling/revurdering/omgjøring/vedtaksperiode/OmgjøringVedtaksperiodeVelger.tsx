@@ -1,7 +1,7 @@
 import { Datovelger, generateMatcherProps } from '~/components/datovelger/Datovelger';
 import { dateTilISOTekst, datoMax, datoMin, datoTilDatoInputText } from '~/utils/date';
 import {
-    useOmgjøringInnvilgelseSkjema,
+    useOmgjøringMedValgtResultatSkjema,
     useOmgjøringSkjemaDispatch,
 } from '~/components/behandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import { useRevurderingOmgjøring } from '~/components/behandling/context/BehandlingContext';
@@ -14,13 +14,13 @@ import { VedtakHjelpetekst } from '~/components/behandling/felles/layout/hjelpet
 import { classNames } from '~/utils/classNames';
 import { VedtaksperiodeVelgerGjeldende } from '~/components/behandling/revurdering/omgjøring/vedtaksperiode/gjeldende-perioder/VedtaksperiodeVelgerGjeldende';
 
-import style from './VedtaksperiodeVelger.module.css';
+import style from './OmgjøringVedtaksperiodeVelger.module.css';
 
-export const VedtaksperiodeVelger = () => {
+export const OmgjøringVedtaksperiodeVelger = () => {
     const { sak } = useSak();
     const { behandling } = useRevurderingOmgjøring();
 
-    const { vedtaksperiode, erReadonly } = useOmgjøringInnvilgelseSkjema();
+    const { vedtaksperiode, erReadonly } = useOmgjøringMedValgtResultatSkjema();
 
     const dispatch = useOmgjøringSkjemaDispatch();
 
@@ -31,7 +31,7 @@ export const VedtaksperiodeVelger = () => {
         // for samme periode var åpne samtidig, og den ene ble iverksatt.
         vedtak.erGjeldende && behandling.status !== 'VEDTATT'
             ? totalPeriode(vedtak.gjeldendeVedtaksperioder)
-            : behandling.vedtaksperiode;
+            : behandling.vedtaksperiode!;
 
     const hullMellomGjeldendePerioder = finnPerioderHull(vedtak.gjeldendeVedtaksperioder);
     const gjeldendeVedtakHarHull = hullMellomGjeldendePerioder.length > 0;
