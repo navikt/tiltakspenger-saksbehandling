@@ -2,7 +2,7 @@ import styles from './Personoversikt.module.css';
 import { ActionMenu, Box, Button, Heading, HStack, Tabs } from '@navikt/ds-react';
 import { MeldekortOversikt } from './meldekort-oversikt/MeldekortOversikt';
 import { ApneBehandlingerOversikt } from './behandlinger-oversikt/ApneBehandlingerOversikt';
-import { OpprettRevurderingModal } from './opprett-revurdering/OpprettRevurderingModal';
+import { StartRevurderingModal } from './opprett-revurdering/StartRevurderingModal';
 import { PersonaliaHeader } from '../personaliaheader/PersonaliaHeader';
 import { useSak } from '~/context/sak/SakContext';
 import { AvsluttedeBehandlinger } from './behandlinger-oversikt/AvsluttedeBehandlinger';
@@ -45,7 +45,7 @@ export const Personoversikt = () => {
     const router = useRouter();
     const { sak } = useSak();
     const featureToggle = useFeatureToggles();
-    const [opprettRevurderingModalÅpen, setOpprettRevurderingModalÅpen] = useState(false);
+    const [startRevurderingModalÅpen, setStartRevurderingModalÅpen] = useState(false);
     const [registrerSøknadManueltModalÅpen, setRegistrerSøknadManueltModalÅpen] = useState(false);
 
     const {
@@ -179,7 +179,7 @@ export const Personoversikt = () => {
 
                                 <ActionMenu.Item
                                     icon={<ArrowsCirclepathIcon aria-hidden />}
-                                    onClick={() => setOpprettRevurderingModalÅpen(true)}
+                                    onClick={() => setStartRevurderingModalÅpen(true)}
                                     disabled={!harVedtattSøknadsbehandling(behandlinger)}
                                 >
                                     {'Opprett revurdering'}
@@ -237,10 +237,10 @@ export const Personoversikt = () => {
                 åpen={registrerSøknadManueltModalÅpen}
                 setÅpen={setRegistrerSøknadManueltModalÅpen}
             />
-            <OpprettRevurderingModal
+            <StartRevurderingModal
                 sakId={sakId}
-                åpen={opprettRevurderingModalÅpen}
-                setÅpen={setOpprettRevurderingModalÅpen}
+                åpen={startRevurderingModalÅpen}
+                setÅpen={setStartRevurderingModalÅpen}
             />
         </>
     );

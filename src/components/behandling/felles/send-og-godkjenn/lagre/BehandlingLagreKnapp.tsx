@@ -4,11 +4,11 @@ import { useBehandling } from '~/components/behandling/context/BehandlingContext
 
 import { Nullable } from '~/types/UtilTypes';
 import { FetcherError } from '~/utils/fetch/fetch';
-import { Rammebehandling, RammebehandlingVedtakRequest } from '~/types/Rammebehandling';
+import { Rammebehandling, OppdaterBehandlingDTO } from '~/types/Rammebehandling';
 
 type Props = {
     behandling: Rammebehandling;
-    hentVedtakDTO: () => Nullable<RammebehandlingVedtakRequest>;
+    hentVedtakDTO: () => Nullable<OppdaterBehandlingDTO>;
     onSuccess?: () => void;
     onError?: (error: FetcherError) => void;
 };

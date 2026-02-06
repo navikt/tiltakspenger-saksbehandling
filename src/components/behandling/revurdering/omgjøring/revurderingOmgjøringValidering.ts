@@ -1,7 +1,7 @@
 import { ValideringResultat } from '~/types/Validering';
 import { validerInnvilgelse } from '~/components/behandling/felles/validering/validerInnvilgelse';
-import { RevurderingOmgjøring } from '~/types/Revurdering';
-import { RevurderingOmgjøringState } from '~/components/behandling/context/revurdering/revurderingOmgjøringSkjemaContext';
+import { OmgjøringInnvilgelse } from '~/types/Revurdering';
+import { OmgjøringInnvilgelseState } from '~/components/behandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import { SakProps } from '~/types/Sak';
 import { hentGjeldendeRammevedtak, hentVedtatteSøknadsbehandlinger } from '~/utils/sak';
 import { perioderOverlapper, periodiseringTotalPeriode, totalPeriode } from '~/utils/periode';
@@ -11,8 +11,8 @@ import { Rammevedtak } from '~/types/Rammevedtak';
  * Omgjøring benytter seg av de samme reglene som innvilgelse
  */
 export const revurderingOmgjøringValidering = (
-    behandling: RevurderingOmgjøring,
-    skjema: RevurderingOmgjøringState,
+    behandling: OmgjøringInnvilgelse,
+    skjema: OmgjøringInnvilgelseState,
     sak: SakProps,
 ): ValideringResultat => {
     const validering: ValideringResultat = {

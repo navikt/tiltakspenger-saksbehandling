@@ -4,15 +4,15 @@ import { Vedtaksbrev } from '~/components/behandling/felles/vedtaksbrev/Vedtaksb
 import { RevurderingResultat } from '~/types/Revurdering';
 import { revurderingOmgjøringValidering } from '~/components/behandling/revurdering/omgjøring/revurderingOmgjøringValidering';
 import {
-    RevurderingOmgjøringContext,
-    useRevurderingOmgjøringSkjema,
+    OmgjøringContext,
+    useOmgjøringInnvilgelseSkjema,
 } from '~/components/behandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import { useSak } from '~/context/sak/SakContext';
 import { RevurderingBrevHjelpetekst } from '~/components/behandling/revurdering/felles/RevurderingBrevHjelpetekst';
 
 export const RevurderingOmgjøringBrev = () => {
     const { behandling } = useRevurderingOmgjøring();
-    const skjema = useRevurderingOmgjøringSkjema();
+    const skjema = useOmgjøringInnvilgelseSkjema();
     const { sak } = useSak();
 
     return (
@@ -26,8 +26,12 @@ export const RevurderingOmgjøringBrev = () => {
 };
 
 const tilForhåndsvisningDTO = (
-    skjema: RevurderingOmgjøringContext,
+    skjema: OmgjøringContext,
 ): RevurderingOmgjøringBrevForhåndsvisningDTO => {
+    if (skjema.resultat !== RevurderingResultat.OMGJØRING) {
+        throw Error('Brev for opphør er ikke klart ennå');
+    }
+
     const { innvilgelse, textAreas } = skjema;
 
     if (!innvilgelse.harValgtPeriode) {

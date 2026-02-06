@@ -1,8 +1,8 @@
 import { Datovelger, generateMatcherProps } from '~/components/datovelger/Datovelger';
 import { dateTilISOTekst, datoMax, datoMin, datoTilDatoInputText } from '~/utils/date';
 import {
-    useRevurderingOmgjøringSkjema,
-    useRevurderingOmgjøringSkjemaDispatch,
+    useOmgjøringInnvilgelseSkjema,
+    useOmgjøringSkjemaDispatch,
 } from '~/components/behandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import { useRevurderingOmgjøring } from '~/components/behandling/context/BehandlingContext';
 import { useSak } from '~/context/sak/SakContext';
@@ -20,9 +20,9 @@ export const VedtaksperiodeVelger = () => {
     const { sak } = useSak();
     const { behandling } = useRevurderingOmgjøring();
 
-    const { vedtaksperiode, erReadonly } = useRevurderingOmgjøringSkjema();
+    const { vedtaksperiode, erReadonly } = useOmgjøringInnvilgelseSkjema();
 
-    const dispatch = useRevurderingOmgjøringSkjemaDispatch();
+    const dispatch = useOmgjøringSkjemaDispatch();
 
     const vedtak = hentRammevedtak(sak, behandling.omgjørVedtak)!;
 

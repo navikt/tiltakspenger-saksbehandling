@@ -1,8 +1,8 @@
 import { BodyShort, Button, HStack, VStack } from '@navikt/ds-react';
 import { periodeTilFormatertDatotekst } from '~/utils/date';
 import {
-    useRevurderingOmgjøringSkjema,
-    useRevurderingOmgjøringSkjemaDispatch,
+    useOmgjøringInnvilgelseSkjema,
+    useOmgjøringSkjemaDispatch,
 } from '~/components/behandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import { Periode } from '~/types/Periode';
 
@@ -39,8 +39,8 @@ export const VedtaksperiodeVelgerGjeldende = ({ gjeldendeVedtaksperioder, classN
 };
 
 const PeriodeMedVelgKnapp = ({ periode }: { periode: Periode }) => {
-    const { erReadonly } = useRevurderingOmgjøringSkjema();
-    const dispatch = useRevurderingOmgjøringSkjemaDispatch();
+    const { erReadonly } = useOmgjøringInnvilgelseSkjema();
+    const dispatch = useOmgjøringSkjemaDispatch();
 
     return (
         <HStack gap={'space-8'} align={'center'}>

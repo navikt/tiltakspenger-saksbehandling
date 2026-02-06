@@ -16,9 +16,9 @@ import {
     RevurderingInnvilgelseState,
 } from '~/components/behandling/context/revurdering/revurderingInnvilgelseSkjemaContext';
 import {
-    RevurderingOmgjøringActions,
-    revurderingOmgjøringReducer,
-    RevurderingOmgjøringState,
+    OmgjøringActions,
+    omgjøringReducer,
+    OmgjøringState,
 } from '~/components/behandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import {
     BehandlingSkjemaType,
@@ -28,13 +28,13 @@ import {
 export type BehandlingSkjemaState =
     | SøknadsbehandlingState
     | RevurderingInnvilgelseState
-    | RevurderingOmgjøringState
-    | RevurderingStansState;
+    | RevurderingStansState
+    | OmgjøringState;
 
 export type BehandlingSkjemaActions =
     | SøknadsbehandlingActions
     | RevurderingInnvilgelseActions
-    | RevurderingOmgjøringActions
+    | OmgjøringActions
     | RevurderingStansActions;
 
 export const behandlingSkjemaReducer: Reducer<BehandlingSkjemaState, BehandlingSkjemaActions> = (
@@ -72,7 +72,7 @@ export const behandlingSkjemaReducer: Reducer<BehandlingSkjemaState, BehandlingS
                 );
             }
 
-            return revurderingOmgjøringReducer(state, action);
+            return omgjøringReducer(state, action);
         }
 
         case BehandlingSkjemaType.RevurderingStans: {

@@ -1,35 +1,35 @@
 import { Barnetillegg } from './Barnetillegg';
 import {
     Rammebehandlingstype,
-    OppdaterBehandlingRequestBase,
+    OppdaterBehandlingBaseDTO,
     RammebehandlingBase,
 } from './Rammebehandling';
 import { Søknad } from './Søknad';
 import { Innvilgelsesperiode } from '~/types/Innvilgelsesperiode';
 
-interface SøknadsbehandlingBase extends RammebehandlingBase {
+type SøknadsbehandlingBase = RammebehandlingBase & {
     type: Rammebehandlingstype.SØKNADSBEHANDLING;
     resultat: SøknadsbehandlingResultat;
     søknad: Søknad;
     automatiskSaksbehandlet: boolean;
     manueltBehandlesGrunner: ManueltBehandlesGrunn[];
     kanInnvilges: boolean;
-}
+};
 
-export interface SøknadsbehandlingIkkeValgt extends SøknadsbehandlingBase {
+export type SøknadsbehandlingIkkeValgt = SøknadsbehandlingBase & {
     resultat: SøknadsbehandlingResultat.IKKE_VALGT;
-}
+};
 
-export interface SøknadsbehandlingInnvilgelse extends SøknadsbehandlingBase {
+export type SøknadsbehandlingInnvilgelse = SøknadsbehandlingBase & {
     resultat: SøknadsbehandlingResultat.INNVILGELSE;
     innvilgelsesperioder: Innvilgelsesperiode[];
     barnetillegg: Barnetillegg;
-}
+};
 
-export interface SøknadsbehandlingAvslag extends SøknadsbehandlingBase {
+export type SøknadsbehandlingAvslag = SøknadsbehandlingBase & {
     resultat: SøknadsbehandlingResultat.AVSLAG;
     avslagsgrunner: Avslagsgrunn[];
-}
+};
 
 export type Søknadsbehandling =
     | SøknadsbehandlingInnvilgelse
@@ -42,25 +42,25 @@ export enum SøknadsbehandlingResultat {
     IKKE_VALGT = 'IKKE_VALGT',
 }
 
-export interface SøknadsbehandlingVedtakInnvilgelseRequest extends OppdaterBehandlingRequestBase {
+export type OppdaterSøknadsbehandlingInnvilgelseDTO = OppdaterBehandlingBaseDTO & {
     resultat: SøknadsbehandlingResultat.INNVILGELSE;
     innvilgelsesperioder: Innvilgelsesperiode[];
     barnetillegg: Barnetillegg;
-}
+};
 
-export interface SøknadsbehandlingVedtakAvslagRequest extends OppdaterBehandlingRequestBase {
+export type OppdaterSøknadsbehandlingAvslagDTO = OppdaterBehandlingBaseDTO & {
     resultat: SøknadsbehandlingResultat.AVSLAG;
     avslagsgrunner: Avslagsgrunn[];
-}
+};
 
-export interface SøknadsbehandlingVedtakIkkeValgtRequest extends OppdaterBehandlingRequestBase {
+export type OppdaterSøknadsbehandlingIkkeValgtDTO = OppdaterBehandlingBaseDTO & {
     resultat: SøknadsbehandlingResultat.IKKE_VALGT;
-}
+};
 
-export type SøknadsbehandlingVedtakRequest =
-    | SøknadsbehandlingVedtakInnvilgelseRequest
-    | SøknadsbehandlingVedtakAvslagRequest
-    | SøknadsbehandlingVedtakIkkeValgtRequest;
+export type OppdaterSøknadsbehandlingDTO =
+    | OppdaterSøknadsbehandlingInnvilgelseDTO
+    | OppdaterSøknadsbehandlingAvslagDTO
+    | OppdaterSøknadsbehandlingIkkeValgtDTO;
 
 /**
  * https://confluence.adeo.no/pages/viewpage.action?pageId=679150248

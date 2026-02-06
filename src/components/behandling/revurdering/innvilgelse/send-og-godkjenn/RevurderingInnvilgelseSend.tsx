@@ -2,7 +2,7 @@ import { useRevurderingBehandling } from '~/components/behandling/context/Behand
 import { BehandlingSendOgGodkjenn } from '~/components/behandling/felles/send-og-godkjenn/BehandlingSendOgGodkjenn';
 import { useHentBehandlingLagringProps } from '~/components/behandling/felles/send-og-godkjenn/lagre/useHentBehandlingLagringProps';
 import { revurderingInnvilgelseValidering } from '~/components/behandling/revurdering/innvilgelse/revurderingInnvilgelseValidering';
-import { RevurderingResultat, RevurderingVedtakInnvilgelseRequest } from '~/types/Revurdering';
+import { OppdaterRevurderingInnvilgelseDTO, RevurderingResultat } from '~/types/Revurdering';
 import {
     RevurderingInnvilgelseContext,
     useRevurderingInnvilgelseSkjema,
@@ -26,7 +26,7 @@ export const RevurderingInnvilgelseSend = () => {
 
 const tilDTO = (
     skjema: RevurderingInnvilgelseContext,
-): Nullable<RevurderingVedtakInnvilgelseRequest> => {
+): Nullable<OppdaterRevurderingInnvilgelseDTO> => {
     const { innvilgelse } = skjema;
 
     if (!innvilgelse.harValgtPeriode) {

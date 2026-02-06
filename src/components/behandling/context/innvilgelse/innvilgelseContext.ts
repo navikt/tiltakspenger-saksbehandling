@@ -22,7 +22,7 @@ import {
 } from '~/components/behandling/context/behandlingSkjemaUtils';
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';
 import { Innvilgelsesperiode, InnvilgelsesperiodePartial } from '~/types/Innvilgelsesperiode';
-import { RevurderingOmgjøringState } from '~/components/behandling/context/revurdering/revurderingOmgjøringSkjemaContext';
+import { OmgjøringInnvilgelseState } from '~/components/behandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import { RevurderingInnvilgelseState } from '~/components/behandling/context/revurdering/revurderingInnvilgelseSkjemaContext';
 import { SøknadsbehandlingInnvilgelseState } from '~/components/behandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
 
@@ -41,7 +41,7 @@ export type InnvilgelseMedPerioderState = {
 export type InnvilgelseState = InnvilgelseUtenPerioderState | InnvilgelseMedPerioderState;
 
 export type BehandlingMedInnvilgelseState =
-    | RevurderingOmgjøringState
+    | OmgjøringInnvilgelseState
     | RevurderingInnvilgelseState
     | SøknadsbehandlingInnvilgelseState;
 

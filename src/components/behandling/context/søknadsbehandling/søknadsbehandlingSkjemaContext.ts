@@ -121,9 +121,6 @@ export const useSøknadsbehandlingSkjema = (): SøknadsbehandlingSkjemaContext =
     return context;
 };
 
-export type SøknadsbehandlingInnvilgelseContext =
-    BehandlingSkjemaContextBase<SøknadsbehandlingInnvilgelseState>;
-
 export type SøknadsbehandlingAvslagContext =
     BehandlingSkjemaContextBase<SøknadsbehandlingAvslagState>;
 

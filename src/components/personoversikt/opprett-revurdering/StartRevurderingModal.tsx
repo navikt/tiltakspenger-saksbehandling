@@ -2,7 +2,7 @@ import { Button, Radio, RadioGroup } from '@navikt/ds-react';
 import { useState } from 'react';
 import { SakId } from '~/types/Sak';
 import router from 'next/router';
-import { useOpprettRevurdering } from './useOpprettRevurdering';
+import { useStartRevurdering } from './useStartRevurdering';
 import { BekreftelsesModal } from '~/components/modaler/BekreftelsesModal';
 import { behandlingUrl } from '~/utils/urls';
 import { behandlingResultatTilText } from '~/utils/tekstformateringUtils';
@@ -14,11 +14,11 @@ type Props = {
     setÅpen: (åpen: boolean) => void;
 };
 
-export const OpprettRevurderingModal = ({ sakId, åpen, setÅpen }: Props) => {
+export const StartRevurderingModal = ({ sakId, åpen, setÅpen }: Props) => {
     const [valgtType, setValgtType] = useState<RevurderingResultat | null>(null);
 
-    const { opprettRevurdering, opprettRevurderingLaster, opprettRevurderingError } =
-        useOpprettRevurdering(sakId);
+    const { startRevurdering, startRevurderingLaster, startRevurderingError } =
+        useStartRevurdering(sakId);
 
     const lukkModal = () => {
         setÅpen(false);
@@ -30,20 +30,20 @@ export const OpprettRevurderingModal = ({ sakId, åpen, setÅpen }: Props) => {
             <BekreftelsesModal
                 åpen={åpen}
                 lukkModal={lukkModal}
-                feil={opprettRevurderingError}
-                tittel={'Opprett revurdering'}
+                feil={startRevurderingError}
+                tittel={'Start revurdering'}
                 bekreftKnapp={
                     <Button
                         variant={'primary'}
                         type={'button'}
-                        loading={opprettRevurderingLaster}
+                        loading={startRevurderingLaster}
                         disabled={!valgtType}
                         onClick={() => {
                             if (!valgtType) {
                                 return;
                             }
 
-                            opprettRevurdering({
+                            startRevurdering({
                                 revurderingType: valgtType,
                                 rammevedtakIdSomOmgjøres: null,
                             }).then((behandling) => {

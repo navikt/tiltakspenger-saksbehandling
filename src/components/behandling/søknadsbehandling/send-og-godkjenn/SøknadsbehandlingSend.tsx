@@ -4,10 +4,10 @@ import { BehandlingSendOgGodkjenn } from '~/components/behandling/felles/send-og
 import { useHentBehandlingLagringProps } from '~/components/behandling/felles/send-og-godkjenn/lagre/useHentBehandlingLagringProps';
 import {
     SøknadsbehandlingResultat,
-    SøknadsbehandlingVedtakAvslagRequest,
-    SøknadsbehandlingVedtakIkkeValgtRequest,
-    SøknadsbehandlingVedtakInnvilgelseRequest,
-    SøknadsbehandlingVedtakRequest,
+    OppdaterSøknadsbehandlingAvslagDTO,
+    OppdaterSøknadsbehandlingIkkeValgtDTO,
+    OppdaterSøknadsbehandlingInnvilgelseDTO,
+    OppdaterSøknadsbehandlingDTO,
 } from '~/types/Søknadsbehandling';
 import {
     SøknadsbehandlingSkjemaContext,
@@ -30,9 +30,7 @@ export const SøknadsbehandlingSend = () => {
     return <BehandlingSendOgGodkjenn behandling={behandling} lagringProps={lagringProps} />;
 };
 
-const tilDTO = (
-    skjema: SøknadsbehandlingSkjemaContext,
-): Nullable<SøknadsbehandlingVedtakRequest> => {
+const tilDTO = (skjema: SøknadsbehandlingSkjemaContext): Nullable<OppdaterSøknadsbehandlingDTO> => {
     const { resultat } = skjema;
 
     switch (resultat) {
@@ -59,7 +57,7 @@ const tilDTO = (
                           perioder: [],
                       },
                 resultat: SøknadsbehandlingResultat.INNVILGELSE,
-            } satisfies SøknadsbehandlingVedtakInnvilgelseRequest;
+            } satisfies OppdaterSøknadsbehandlingInnvilgelseDTO;
         }
 
         case SøknadsbehandlingResultat.AVSLAG: {
@@ -68,7 +66,7 @@ const tilDTO = (
                 begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
                 fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
                 resultat: SøknadsbehandlingResultat.AVSLAG,
-            } satisfies SøknadsbehandlingVedtakAvslagRequest;
+            } satisfies OppdaterSøknadsbehandlingAvslagDTO;
         }
 
         case SøknadsbehandlingResultat.IKKE_VALGT: {
@@ -76,7 +74,7 @@ const tilDTO = (
                 begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
                 fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
                 resultat: SøknadsbehandlingResultat.IKKE_VALGT,
-            } satisfies SøknadsbehandlingVedtakIkkeValgtRequest;
+            } satisfies OppdaterSøknadsbehandlingIkkeValgtDTO;
         }
     }
 

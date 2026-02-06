@@ -1,4 +1,4 @@
-import { RevurderingResultat } from '~/types/Revurdering';
+import { Omgjøring, OmgjøringResultat, RevurderingResultat } from '~/types/Revurdering';
 import { Reducer } from 'react';
 import { ReducerSuperAction } from '~/types/Context';
 import {
@@ -13,35 +13,67 @@ import {
 } from '~/components/behandling/context/BehandlingSkjemaContext';
 import { BehandlingSkjemaType } from '~/components/behandling/context/behandlingSkjemaUtils';
 import { Periode } from '~/types/Periode';
+import { omgjøringInitialState } from '~/components/behandling/context/revurdering/revurderingInitialState';
+import { SakProps } from '~/types/Sak';
 
-export type RevurderingOmgjøringState = {
+export type OmgjøringIkkeValgtState = {
+    resultat: RevurderingResultat.OMGJØRING_IKKE_VALGT;
+};
+
+export type OmgjøringOpphørState = {
+    resultat: RevurderingResultat.OMGJØRING_OPPHØR;
+    vedtaksperiode: Periode;
+};
+
+export type OmgjøringInnvilgelseState = {
     resultat: RevurderingResultat.OMGJØRING;
     innvilgelse: InnvilgelseState;
     vedtaksperiode: Periode;
 };
 
-type VedtaksperiodeActions = {
+export type OmgjøringState =
+    | OmgjøringIkkeValgtState
+    | OmgjøringOpphørState
+    | OmgjøringInnvilgelseState;
+
+type OmgjøringSetResultatAction = {
+    type: 'setResultat';
+    payload: {
+        resultat: OmgjøringResultat;
+        behandling: Omgjøring;
+        sak: SakProps;
+    };
+};
+
+type VedtaksperiodeAction = {
     type: 'oppdaterVedtaksperiode';
     payload: {
         periode: Partial<Periode>;
     };
 };
 
-type Actions = InnvilgelseActions | VedtaksperiodeActions;
+type Actions = InnvilgelseActions | VedtaksperiodeAction | OmgjøringSetResultatAction;
 
-export type RevurderingOmgjøringActions = ReducerSuperAction<
+export type OmgjøringActions = ReducerSuperAction<
     Actions,
     BehandlingSkjemaType.RevurderingOmgjøring
 >;
 
-export const revurderingOmgjøringReducer: Reducer<
-    RevurderingOmgjøringState,
-    RevurderingOmgjøringActions
-> = (state, action) => {
+export const omgjøringReducer: Reducer<OmgjøringState, OmgjøringActions> = (state, action) => {
+    const { resultat } = state;
     const { type, payload } = action;
 
     switch (type) {
-        case 'oppdaterVedtaksperiode':
+        case 'setResultat': {
+            const { resultat: nyttResultat, behandling, sak } = payload;
+            return omgjøringInitialState(behandling, sak, nyttResultat);
+        }
+
+        case 'oppdaterVedtaksperiode': {
+            if (resultat === RevurderingResultat.OMGJØRING_IKKE_VALGT) {
+                throw Error('Kan ikke sette vedtaksperiode før omgjøringstype er valgt');
+            }
+
             const nyVedtaksperiode = {
                 ...state.vedtaksperiode,
                 ...payload.periode,
@@ -51,6 +83,7 @@ export const revurderingOmgjøringReducer: Reducer<
                 ...state,
                 vedtaksperiode: nyVedtaksperiode,
             };
+        }
 
         case 'oppdaterInnvilgelsesperiode':
         case 'fjernInnvilgelsesperiode':
@@ -63,6 +96,12 @@ export const revurderingOmgjøringReducer: Reducer<
         case 'oppdaterBarnetilleggAntall':
         case 'oppdaterBarnetilleggPeriode':
         case 'settBarnetilleggPerioder': {
+            if (resultat !== RevurderingResultat.OMGJØRING) {
+                throw Error(
+                    `Behandlingen må være en omgjøring innvilgelse for action type ${type}`,
+                );
+            }
+
             return {
                 ...state,
                 innvilgelse: innvilgelseReducer(state.innvilgelse, action),
@@ -73,21 +112,37 @@ export const revurderingOmgjøringReducer: Reducer<
     throw Error(`Ugyldig action for omgjøring: ${type satisfies never}`);
 };
 
-export type RevurderingOmgjøringContext = BehandlingSkjemaContextBase<RevurderingOmgjøringState>;
+export type OmgjøringContext = BehandlingSkjemaContextBase<OmgjøringState>;
 
-export const useRevurderingOmgjøringSkjema = (): RevurderingOmgjøringContext => {
+export type OmgjøringInnvilgelseContext = BehandlingSkjemaContextBase<OmgjøringInnvilgelseState>;
+
+export const useOmgjøringSkjema = (): OmgjøringContext => {
     const context = useBehandlingSkjema();
 
-    if (context.resultat !== RevurderingResultat.OMGJØRING) {
-        throw Error(`Feil resultat for revurdering omgjøring context: ${context.resultat}`);
+    if (
+        context.resultat !== RevurderingResultat.OMGJØRING &&
+        context.resultat !== RevurderingResultat.OMGJØRING_OPPHØR &&
+        context.resultat !== RevurderingResultat.OMGJØRING_IKKE_VALGT
+    ) {
+        throw Error(`Feil resultat for omgjøring context: ${context.resultat}`);
     }
 
     return context;
 };
 
-export const useRevurderingOmgjøringSkjemaDispatch = () => {
+export const useOmgjøringInnvilgelseSkjema = (): OmgjøringInnvilgelseContext => {
+    const context = useBehandlingSkjema();
+
+    if (context.resultat !== RevurderingResultat.OMGJØRING) {
+        throw Error(`Feil resultat for omgjøring innvilgelse context: ${context.resultat}`);
+    }
+
+    return context;
+};
+
+export const useOmgjøringSkjemaDispatch = () => {
     const dispatch = useBehandlingSkjemaDispatch();
 
-    return (action: VedtaksperiodeActions) =>
+    return (action: Actions) =>
         dispatch({ ...action, superType: BehandlingSkjemaType.RevurderingOmgjøring });
 };

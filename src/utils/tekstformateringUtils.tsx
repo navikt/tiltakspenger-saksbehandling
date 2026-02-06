@@ -208,7 +208,9 @@ export const behandlingResultatTilText: Record<RammebehandlingResultat, string> 
     [SøknadsbehandlingResultat.IKKE_VALGT]: 'Ikke valgt',
     [RevurderingResultat.STANS]: 'Stans',
     [RevurderingResultat.INNVILGELSE]: 'Innvilgelse',
-    [RevurderingResultat.OMGJØRING]: 'Omgjøring',
+    [RevurderingResultat.OMGJØRING]: 'Omgjøring med innvilgelse',
+    [RevurderingResultat.OMGJØRING_OPPHØR]: 'Opphør',
+    [RevurderingResultat.OMGJØRING_IKKE_VALGT]: 'Ikke valgt',
 };
 
 export function behandlingResultatTilTag(
@@ -233,6 +235,7 @@ export function behandlingResultatTilTag(
             );
 
         case RevurderingResultat.STANS:
+        case RevurderingResultat.OMGJØRING_OPPHØR:
             return (
                 <Tag data-color="warning" variant="outline">
                     {ekstraTekst} {resultatText}
@@ -247,6 +250,7 @@ export function behandlingResultatTilTag(
             );
 
         case SøknadsbehandlingResultat.IKKE_VALGT:
+        case RevurderingResultat.OMGJØRING_IKKE_VALGT:
             return (
                 <Tag data-color="neutral" variant="outline">
                     {ekstraTekst} {resultatText}
@@ -260,6 +264,7 @@ export function behandlingResultatTilTag(
                 </Tag>
             );
     }
+
     //trigger compile feil dersom switch ikke er exhaustive
     throw resultat satisfies never;
 }

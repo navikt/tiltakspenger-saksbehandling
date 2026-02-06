@@ -2,7 +2,7 @@ import { useRevurderingBehandling } from '../../../context/BehandlingContext';
 import { revurderingStansValidering } from '../revurderingStansValidering';
 import { BehandlingSendOgGodkjenn } from '~/components/behandling/felles/send-og-godkjenn/BehandlingSendOgGodkjenn';
 import { useHentBehandlingLagringProps } from '~/components/behandling/felles/send-og-godkjenn/lagre/useHentBehandlingLagringProps';
-import { RevurderingResultat, RevurderingVedtakStansRequest } from '~/types/Revurdering';
+import { RevurderingResultat, OppdaterRevurderingStansDTO } from '~/types/Revurdering';
 import {
     RevurderingStansContext,
     useRevurderingStansSkjema,
@@ -21,7 +21,7 @@ export const RevurderingStansSend = () => {
     return <BehandlingSendOgGodkjenn behandling={behandling} lagringProps={lagringProps} />;
 };
 
-const tilDTO = (skjema: RevurderingStansContext): RevurderingVedtakStansRequest => {
+const tilDTO = (skjema: RevurderingStansContext): OppdaterRevurderingStansDTO => {
     return {
         resultat: RevurderingResultat.STANS,
         begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),

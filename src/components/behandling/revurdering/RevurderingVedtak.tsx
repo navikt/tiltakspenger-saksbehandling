@@ -16,6 +16,8 @@ export const RevurderingVedtak = (props: { klage: Nullable<Klagebehandling> }) =
         case RevurderingResultat.INNVILGELSE:
             return <RevurderingInnvilgelseVedtak klage={props.klage} />;
         case RevurderingResultat.OMGJØRING:
+        case RevurderingResultat.OMGJØRING_OPPHØR:
+        case RevurderingResultat.OMGJØRING_IKKE_VALGT:
             return <RevurderingOmgjøringVedtak />;
     }
 

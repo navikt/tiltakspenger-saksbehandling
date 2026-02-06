@@ -3,7 +3,7 @@ import { useRolleForBehandling } from '~/context/saksbehandler/SaksbehandlerCont
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 import { Rammebehandlingstype, Rammebehandling } from '~/types/Rammebehandling';
 import { Søknadsbehandling } from '~/types/Søknadsbehandling';
-import { Revurdering, RevurderingOmgjøring, RevurderingResultat } from '~/types/Revurdering';
+import { Revurdering, OmgjøringInnvilgelse, RevurderingResultat } from '~/types/Revurdering';
 
 type BehandlingContext<Rammebehandling> = {
     behandling: Rammebehandling;
@@ -73,5 +73,5 @@ export const useRevurderingOmgjøring = () => {
         );
     }
 
-    return context as BehandlingContext<RevurderingOmgjøring>;
+    return context as BehandlingContext<OmgjøringInnvilgelse>;
 };
