@@ -7,7 +7,6 @@ import { SakId } from '~/types/Sak';
 import router from 'next/router';
 import { behandlingUrl } from '~/utils/urls';
 import { finnFetchFeilmelding } from '~/utils/feilmeldinger';
-import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
 
 type Props = {
     sakId: SakId;
@@ -17,8 +16,6 @@ type Props = {
 export const OmgjørVedtakMenyvalg = ({ sakId, vedtak }: Props) => {
     const { startRevurdering, startRevurderingLaster, startRevurderingError } =
         useStartRevurdering(sakId);
-
-    const { opphørToggle } = useFeatureToggles();
 
     const kanOmgjøre = !!vedtak.gyldigeKommandoer.OMGJØR;
 
@@ -30,7 +27,7 @@ export const OmgjørVedtakMenyvalg = ({ sakId, vedtak }: Props) => {
                     startRevurdering({
                         revurderingType: RevurderingResultat.OMGJØRING,
                         rammevedtakIdSomOmgjøres: vedtak.id,
-                        nyOmgjøring: opphørToggle,
+                        nyOmgjøring: true,
                     }).then((omgjøringBehandling) => {
                         if (!omgjøringBehandling) {
                             return;
