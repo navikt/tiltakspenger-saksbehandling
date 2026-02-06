@@ -114,8 +114,6 @@ export type OppdaterRevurderingDTO =
 export type StartRevurderingDTO = {
     revurderingType: RevurderingResultat;
     rammevedtakIdSomOmgjøres: Nullable<VedtakId>;
-    // TODO: kan fjernes når gammel funksjonalitet for omgjøring er fjernet i backend
-    nyOmgjøring?: boolean;
 };
 
 export enum HjemmelForStans {

@@ -27,7 +27,6 @@ export const OmgjørVedtakMenyvalg = ({ sakId, vedtak }: Props) => {
                     startRevurdering({
                         revurderingType: RevurderingResultat.OMGJØRING,
                         rammevedtakIdSomOmgjøres: vedtak.id,
-                        nyOmgjøring: true,
                     }).then((omgjøringBehandling) => {
                         if (!omgjøringBehandling) {
                             return;
