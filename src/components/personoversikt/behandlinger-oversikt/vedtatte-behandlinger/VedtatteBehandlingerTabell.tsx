@@ -12,28 +12,19 @@ import React from 'react';
 import { behandlingUrl } from '~/utils/urls';
 import { SakId } from '~/types/Sak';
 import { Søknadsbehandling, SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
-import { Omgjøringsgrad, Rammevedtak } from '~/types/Rammevedtak';
+import { Omgjøringsgrad } from '~/types/Rammevedtak';
 import { OmgjørVedtakMenyvalg } from '~/components/personoversikt/behandlinger-oversikt/vedtatte-behandlinger/OmgjørVedtakMenyvalg';
 import { classNames } from '~/utils/classNames';
 
 import style from './VedtatteBehandlinger.module.css';
-import { Rammebehandling } from '~/types/Rammebehandling';
-import { Klagebehandling } from '~/types/Klage';
-import { Klagevedtak } from '~/types/Klagevedtak';
+import { VedtattRammevedtakMedBehandling } from '~/types/Rammebehandling';
+import { VedtattKlagevedtakMedBehandling } from '~/types/Klage';
 import Link from 'next/link';
 
 type Props = {
     sakId: SakId;
     vedtakMedBehandling: VedtakMedBehandling[];
 };
-
-type VedtattRammevedtakMedBehandling = { type: 'rammevedtak' } & Rammevedtak & {
-        behandling: Rammebehandling;
-    };
-
-type VedtattKlagevedtakMedBehandling = { type: 'klagevedtak' } & Klagevedtak & {
-        behandling: Klagebehandling;
-    };
 
 type VedtakMedBehandling = VedtattRammevedtakMedBehandling | VedtattKlagevedtakMedBehandling;
 

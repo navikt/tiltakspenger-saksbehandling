@@ -30,8 +30,9 @@ import {
     TasklistSaveIcon,
 } from '@navikt/aksel-icons';
 import Divider from '~/components/divider/Divider';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { OpprettSøknadModal } from '~/components/personoversikt/manuell-søknad/OpprettSøknadModal';
+import { KlagebehandlingStatus } from '~/types/Klage';
 
 export const PERSONOVERSIKT_TABS = {
     apneBehandlinger: 'apne-behandlinger',
@@ -66,14 +67,23 @@ export const Personoversikt = () => {
                 : 'meldeperiodeKjederKanBehandles',
     );
 
-    const hentAktivTabFraUrl = (asPath: string) => {
-        const tab = asPath.split('#')[1];
+    const avbrutteRammebehandlinger = behandlinger.filter((behandling) => behandling.avbrutt);
+    const avbrutteKlagebehandlinger = klageBehandlinger.filter(
+        (klage) => klage.status === KlagebehandlingStatus.AVBRUTT,
+    );
+
+    const hentAktivTabFraHash = (hash: string) => {
+        const tab = hash.replace(/^#/, '');
         return tab && Object.values(PERSONOVERSIKT_TABS).includes(tab)
             ? tab
             : PERSONOVERSIKT_TABS.apneBehandlinger;
     };
 
-    const [aktivTab, setAktivTab] = useState<string>(() => hentAktivTabFraUrl(router.asPath ?? ''));
+    const [aktivTab, setAktivTab] = useState<string>(PERSONOVERSIKT_TABS.apneBehandlinger);
+
+    useEffect(() => {
+        setAktivTab(hentAktivTabFraHash(window.location.hash));
+    }, []);
 
     const labelWithCounter = (label: string, count?: number) => {
         if (count && count > 0) {
@@ -113,19 +123,28 @@ export const Personoversikt = () => {
                         />
                         <Tabs.Tab
                             value={PERSONOVERSIKT_TABS.meldekort}
-                            label={'Meldekort'}
+                            label={labelWithCounter(
+                                'Meldekort',
+                                meldeperiodeKjederKanBehandles?.length ?? 0,
+                            )}
                             icon={<InboxIcon aria-hidden />}
                             className={styles.tab}
                         />
                         <Tabs.Tab
                             value={PERSONOVERSIKT_TABS.vedtatteBehandlinger}
-                            label={`Vedtatte behandlinger`}
+                            label={labelWithCounter(
+                                `Vedtatte behandlinger`,
+                                alleRammevedtak.length + alleKlagevedtak.length,
+                            )}
                             icon={<FileCheckmarkIcon aria-hidden />}
                             className={styles.tab}
                         />
                         <Tabs.Tab
                             value={PERSONOVERSIKT_TABS.avsluttedeBehandlinger}
-                            label="Avsluttede behandlinger"
+                            label={labelWithCounter(
+                                'Avsluttede behandlinger',
+                                avbrutteRammebehandlinger.length + avbrutteKlagebehandlinger.length,
+                            )}
                             icon={<FileXMarkIcon aria-hidden />}
                             className={styles.tab}
                         />
@@ -206,9 +225,9 @@ export const Personoversikt = () => {
                     </Tabs.Panel>
                     <Tabs.Panel value={PERSONOVERSIKT_TABS.avsluttedeBehandlinger}>
                         <AvsluttedeBehandlinger
-                            behandlinger={behandlinger}
                             saksnummer={saksnummer}
-                            klageBehandlinger={klageBehandlinger}
+                            avbrutteBehandlinger={avbrutteRammebehandlinger}
+                            avbrutteKlageBehandlinger={avbrutteKlagebehandlinger}
                         />
                     </Tabs.Panel>
                 </Tabs>
