@@ -2,7 +2,7 @@ import { SøknadsbehandlingVedtak } from '~/components/behandling/søknadsbehand
 import { BehandlingSaksopplysninger } from './saksopplysninger/BehandlingSaksopplysninger';
 import { RevurderingVedtak } from './revurdering/RevurderingVedtak';
 import { useBehandling } from './context/BehandlingContext';
-import { Rammebehandlingstype } from '~/types/Rammebehandling';
+import { Rammebehandlingsstatus, Rammebehandlingstype } from '~/types/Rammebehandling';
 import { PersonaliaHeader } from '../personaliaheader/PersonaliaHeader';
 import { Alert, Box, Heading, VStack } from '@navikt/ds-react';
 import { finnBehandlingStatusTag, omgjøringsårsakTilText } from '~/utils/tekstformateringUtils';
@@ -17,6 +17,7 @@ import style from './BehandlingPage.module.css';
 import { Klagebehandling } from '~/types/Klage';
 import { Nullable } from '~/types/UtilTypes';
 import { OppsummeringsPar } from '../oppsummeringer/oppsummeringspar/OppsummeringsPar';
+import { PERSONOVERSIKT_TABS } from '~/components/personoversikt/Personoversikt';
 
 export const BehandlingPage = (props: { klage: Nullable<Klagebehandling> }) => {
     const { sak } = useSak();
@@ -34,13 +35,22 @@ export const BehandlingPage = (props: { klage: Nullable<Klagebehandling> }) => {
 
     return (
         <>
-            <PersonaliaHeader sakId={sakId} saksnummer={saksnummer} visTilbakeKnapp={true}>
+            <PersonaliaHeader
+                sakId={sakId}
+                saksnummer={saksnummer}
+                visTilbakeKnapp={true}
+                aktivTab={
+                    status === Rammebehandlingsstatus.VEDTATT
+                        ? PERSONOVERSIKT_TABS.vedtatteBehandlinger
+                        : PERSONOVERSIKT_TABS.apneBehandlinger
+                }
+            >
                 {finnBehandlingStatusTag(status, false, ventestatus?.erSattPåVent)}
             </PersonaliaHeader>
 
-            {/* 
+            {/*
             Veldig viktig at key ikke blir fjernet. På denne måten kan vi tvinge skjema-contextene til å rerendre seg når man bytter eller oppdaterer behandlingen.
-            For exempel ved å bruke 'Til behandling' lenken i SøknadOpplysningerFraVedtak komponenten.
+            For eksempel ved å bruke 'Til behandling' lenken i SøknadOpplysningerFraVedtak komponenten.
             Uten denne keyen vil skjema-contextene beholde state fra forrige behandling, og dette kan føre til en error.
 
             Raskeste, og enkleste fiks uten å endre for mye på eksisterende kode.

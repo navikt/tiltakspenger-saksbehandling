@@ -9,6 +9,7 @@ import { BrukersMeldekortProps } from '~/types/meldekort/BrukersMeldekort';
 import { erMeldekortBehandlingUnderAktivBehandling } from '~/utils/meldekortBehandling';
 
 import style from './MeldekortSide.module.css';
+import { PERSONOVERSIKT_TABS } from '~/components/personoversikt/Personoversikt';
 
 export const MeldekortSide = () => {
     const { sakId, saksnummer } = useSak().sak;
@@ -28,7 +29,12 @@ export const MeldekortSide = () => {
 
     return (
         <VStack>
-            <PersonaliaHeader sakId={sakId} saksnummer={saksnummer} visTilbakeKnapp={true} />
+            <PersonaliaHeader
+                sakId={sakId}
+                saksnummer={saksnummer}
+                visTilbakeKnapp={true}
+                aktivTab={PERSONOVERSIKT_TABS.meldekort}
+            />
             {erSisteMeldekortEtterMeldekortBehandling && (
                 <Alert variant="warning" size="small">
                     Det har kommet inn et nytt korrigert meldekort etter opprettelsen av
