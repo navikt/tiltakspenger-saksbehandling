@@ -31,7 +31,7 @@ export const søknadsbehandlingValidering =
             const innvilgelseValidering = validerInnvilgelse(
                 sak,
                 behandling,
-                skjema.innvilgelse,
+                skjema,
                 behandling.søknad,
             );
             validering.errors.push(...innvilgelseValidering.errors);

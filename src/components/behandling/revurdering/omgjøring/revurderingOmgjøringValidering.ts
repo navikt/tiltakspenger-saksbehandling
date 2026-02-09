@@ -36,12 +36,7 @@ export const revurderingOmgjøringValidering = (
     if (skjema.resultat === RevurderingResultat.OMGJØRING) {
         const sisteSøknad = hentVedtatteSøknadsbehandlinger(sak).at(0)!.søknad;
 
-        const innvilgelseValidering = validerInnvilgelse(
-            sak,
-            behandling,
-            skjema.innvilgelse,
-            sisteSøknad,
-        );
+        const innvilgelseValidering = validerInnvilgelse(sak, behandling, skjema, sisteSøknad);
 
         validering.errors.push(...innvilgelseValidering.errors);
         validering.warnings.push(...innvilgelseValidering.warnings);

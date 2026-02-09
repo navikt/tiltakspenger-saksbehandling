@@ -2,7 +2,7 @@ import { ValideringResultat } from '~/types/Validering';
 import { validerBarnetillegg } from '~/components/behandling/felles/validering/validerBarnetillegg';
 import { hentHeleTiltaksdeltakelsesperioden } from '~/utils/behandling';
 import { Rammebehandling } from '~/types/Rammebehandling';
-import { InnvilgelseState } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
+import { BehandlingMedInnvilgelseState } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 import { Søknad } from '~/types/Søknad';
 import {
     finnPeriodiseringHull,
@@ -18,9 +18,11 @@ import { RevurderingResultat } from '~/types/Revurdering';
 export const validerInnvilgelse = (
     sak: SakProps,
     behandling: Rammebehandling,
-    innvilgelse: InnvilgelseState,
+    skjema: BehandlingMedInnvilgelseState,
     søknad: Søknad,
 ): ValideringResultat => {
+    const { innvilgelse, resultat } = skjema;
+
     if (!innvilgelse.harValgtPeriode) {
         return {
             errors: ['Minst en fullstendig innvilgelsesperiode må være valgt'],
@@ -50,7 +52,7 @@ export const validerInnvilgelse = (
     if (gjeldendeInnvilgelserSomOpphøres.length > 0) {
         const msgPrefix = 'Valgte innvilgelsesperioder fører til et delvis opphør';
 
-        if (behandling.resultat === RevurderingResultat.OMGJØRING) {
+        if (resultat === RevurderingResultat.OMGJØRING) {
             validering.warnings.push(msgPrefix);
         } else {
             validering.errors.push(
