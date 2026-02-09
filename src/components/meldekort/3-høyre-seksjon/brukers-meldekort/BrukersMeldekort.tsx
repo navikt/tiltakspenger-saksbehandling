@@ -11,6 +11,8 @@ import { useMeldekortBehandlingForm } from '~/components/meldekort/context/Melde
 import { ChevronLeftDoubleIcon } from '@navikt/aksel-icons';
 import { useMeldeperiodeKjede } from '~/components/meldekort/context/MeldeperiodeKjedeContext';
 import { hentMeldekortForhåndsutfyllingFraBrukersMeldekort } from '~/components/meldekort/0-felles-komponenter/meldekortForhåndsutfyllingUtils';
+import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
+import { kanSaksbehandleForMeldekort } from '~/utils/tilganger';
 
 import styles from './BrukersMeldekort.module.css';
 
@@ -19,7 +21,13 @@ type Props = {
 };
 
 export const BrukersMeldekortVisning = ({ brukersMeldekort }: Props) => {
-    const { sisteMeldeperiode } = useMeldeperiodeKjede();
+    const { sisteMeldeperiode, sisteMeldekortBehandling } = useMeldeperiodeKjede();
+    const { innloggetSaksbehandler } = useSaksbehandler();
+
+    const kanBehandle =
+        sisteMeldekortBehandling &&
+        kanSaksbehandleForMeldekort(sisteMeldekortBehandling, innloggetSaksbehandler);
+
     const formContext = useMeldekortBehandlingForm();
 
     const { dager, behandletAutomatiskStatus, mottatt } = brukersMeldekort;
@@ -35,7 +43,7 @@ export const BrukersMeldekortVisning = ({ brukersMeldekort }: Props) => {
                 justify={'space-between'}
                 className={styles.toppRad}
             >
-                {formContext && (
+                {kanBehandle && formContext && (
                     <Button
                         variant={'tertiary'}
                         size={'xsmall'}
