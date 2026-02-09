@@ -8,9 +8,9 @@ import { useRevurderingOmgjøring } from '~/components/behandling/context/Behand
 import { OmgjøringResultat, RevurderingResultat } from '~/types/Revurdering';
 import { useSak } from '~/context/sak/SakContext';
 import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
+import { hentRammevedtak } from '~/utils/sak';
 
 import style from './OmgjøringResultatVelger.module.css';
-import { hentRammevedtak } from '~/utils/sak';
 
 export const OmgjøringResultatVelger = () => {
     const { behandling } = useRevurderingOmgjøring();

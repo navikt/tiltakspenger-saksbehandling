@@ -23,7 +23,7 @@ export const RevurderingOmgjøringHeader = () => {
     if (!vedtakSomBlirOmgjort) {
         return (
             <Alert variant={'error'}>
-                {`Teknisk feil: Klarte ikke finne vedtak som skal omgjøres for revurdering-id: ${behandling.id} og omgjørVedtak-id: ${omgjørVedtak}`}
+                {`Teknisk feil: Fant ikke vedtak som skal omgjøres for behandling-id: ${behandling.id} og omgjørVedtak-id: ${omgjørVedtak}`}
             </Alert>
         );
     }

@@ -5,30 +5,45 @@ import {
     useOmgjøringSkjemaDispatch,
 } from '~/components/behandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import { Periode } from '~/types/Periode';
+import { Rammevedtak } from '~/types/Rammevedtak';
+import { OmgjøringResultat, RevurderingResultat } from '~/types/Revurdering';
 
 type Props = {
-    gjeldendeVedtaksperioder: Periode[];
+    vedtakSomOmgjøres: Rammevedtak;
+    valgtResultat: OmgjøringResultat;
     className?: string;
 };
 
-export const VedtaksperiodeVelgerGjeldende = ({ gjeldendeVedtaksperioder, className }: Props) => {
-    if (gjeldendeVedtaksperioder.length === 0) {
+export const VedtaksperiodeVelgerGjeldende = ({
+    vedtakSomOmgjøres,
+    valgtResultat,
+    className,
+}: Props) => {
+    const { gjeldendeVedtaksperioder, gjeldendeInnvilgetPerioder } = vedtakSomOmgjøres;
+
+    const erOpphør = valgtResultat === RevurderingResultat.OMGJØRING_OPPHØR;
+
+    const perioderSomKanOmgjøres = erOpphør ? gjeldendeInnvilgetPerioder : gjeldendeVedtaksperioder;
+
+    const periodeTekst = erOpphør ? 'innvilgelsesperiode' : 'vedtaksperiode';
+
+    if (perioderSomKanOmgjøres.length === 0) {
         return null;
     }
 
-    if (gjeldendeVedtaksperioder.length === 1) {
+    if (perioderSomKanOmgjøres.length === 1) {
         return (
             <HStack gap={'space-4'} align={'center'} className={className}>
-                <BodyShort size={'small'}>{'Gjeldende vedtaksperiode: '}</BodyShort>
-                <PeriodeMedVelgKnapp periode={gjeldendeVedtaksperioder.at(0)!} />
+                <BodyShort size={'small'}>{`Gjeldende ${periodeTekst}: `}</BodyShort>
+                <PeriodeMedVelgKnapp periode={perioderSomKanOmgjøres.at(0)!} />
             </HStack>
         );
     }
 
     return (
         <VStack gap={'space-4'} align={'start'} className={className}>
-            <BodyShort size={'small'}>{'Gjeldende vedtaksperioder:'}</BodyShort>
-            {gjeldendeVedtaksperioder.map((periode) => (
+            <BodyShort size={'small'}>{`Gjeldende ${periodeTekst}r:`}</BodyShort>
+            {perioderSomKanOmgjøres.map((periode) => (
                 <PeriodeMedVelgKnapp
                     periode={periode}
                     key={`${periode.fraOgMed}-${periode.tilOgMed}`}
@@ -57,7 +72,7 @@ const PeriodeMedVelgKnapp = ({ periode }: { periode: Periode }) => {
                         });
                     }}
                 >
-                    {'Velg'}
+                    {'Fyll inn periode'}
                 </Button>
             )}
         </HStack>
