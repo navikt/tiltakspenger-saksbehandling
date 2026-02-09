@@ -83,7 +83,10 @@ const KlageMeny = (props: { klage: Klagebehandling }) => {
     const settPåVent = useSettKlagebehandlingPåVent({
         sakId: props.klage.sakId,
         klageId: props.klage.id,
-        onSuccess: (sak) => setSak(sak),
+        onSuccess: (sak) => {
+            setSak(sak);
+            setVisSettBehandlingPåVentModal(false);
+        },
     });
 
     const gjenoppta = useGjenopptaKlagebehandling({
