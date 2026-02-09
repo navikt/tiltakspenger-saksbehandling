@@ -1,0 +1,9 @@
+.kommentar {
+    min-width: 0;
+    width: 20%;
+    overflow: hidden;
+}
+
+.handlinger {
+    width: 5%;
+}
