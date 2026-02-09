@@ -1,5 +1,6 @@
 import React from 'react';
 import { BodyShort, Button, CopyButton, HStack, Table, Tag } from '@navikt/ds-react';
+import styles from './BenkTabell.module.css';
 import SortableTable from '../tabell/SortableTable';
 import {
     BehandlingssammendragKolonner,
@@ -16,6 +17,7 @@ import {
     BenkOversiktResponse,
 } from '~/types/Behandlingssammendrag';
 import { PERSONOVERSIKT_TABS } from '~/components/personoversikt/Personoversikt';
+import VisMerTekst from '~/components/benk/VisMerTekst';
 
 type Props = {
     data: BenkOversiktResponse;
@@ -56,6 +58,9 @@ const BenkTabell = ({ data, sorteringRetning, onSortChange }: Props) => {
                     <Table.Row>
                         <Table.HeaderCell scope="col">Fødselsnummer</Table.HeaderCell>
                         <Table.HeaderCell scope="col">Type</Table.HeaderCell>
+                        <Table.HeaderCell scope="col" className={styles.kommentar}>
+                            Kommentar
+                        </Table.HeaderCell>
                         <Table.HeaderCell scope="col">Status</Table.HeaderCell>
                         <Table.ColumnHeader
                             sortKey={BehandlingssammendragKolonner.startet}
@@ -71,7 +76,10 @@ const BenkTabell = ({ data, sorteringRetning, onSortChange }: Props) => {
                         </Table.ColumnHeader>
                         <Table.HeaderCell scope="col">Saksbehandler</Table.HeaderCell>
                         <Table.HeaderCell scope="col">Beslutter</Table.HeaderCell>
-                        <Table.HeaderCell scope="col"></Table.HeaderCell>
+                        <Table.HeaderCell
+                            scope="col"
+                            className={styles.handlinger}
+                        ></Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
             }
@@ -112,6 +120,12 @@ const BenkTabell = ({ data, sorteringRetning, onSortChange }: Props) => {
                                         )}
                                 </HStack>
                             </Table.DataCell>
+                            <Table.DataCell className={styles.kommentar}>
+                                <VisMerTekst
+                                    tekst={behandling?.sattPåVentBegrunnelse}
+                                    antallTegnFørVisMer={40}
+                                />
+                            </Table.DataCell>
                             <Table.DataCell>
                                 {behandling.status ===
                                 BehandlingssammendragStatus.KLAR_TIL_BEHANDLING ? (
@@ -141,7 +155,7 @@ const BenkTabell = ({ data, sorteringRetning, onSortChange }: Props) => {
                             <Table.DataCell>
                                 {behandling.beslutter ?? 'Ikke tildelt'}
                             </Table.DataCell>
-                            <Table.DataCell>
+                            <Table.DataCell className={styles.handlinger}>
                                 <Button
                                     type="button"
                                     variant="secondary"
