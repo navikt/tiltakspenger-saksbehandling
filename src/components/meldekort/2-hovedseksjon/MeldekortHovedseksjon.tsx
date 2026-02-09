@@ -1,6 +1,6 @@
 import { MeldekortBehandling } from './behandling/MeldekortBehandling';
 import { MeldekortKorrigertFraTidligerePeriode } from '../0-felles-komponenter/korrigert-fra-tidligere/MeldekortKorrigertFraTidligerePeriode';
-import { useMeldeperiodeKjede } from '../MeldeperiodeKjedeContext';
+import { useMeldeperiodeKjede } from '../context/MeldeperiodeKjedeContext';
 
 import styles from './MeldekortHovedseksjon.module.css';
 

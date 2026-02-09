@@ -1,10 +1,10 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { MeldeperiodeKjedeProps, MeldeperiodeProps } from '../../types/meldekort/Meldeperiode';
+import { MeldeperiodeKjedeProps, MeldeperiodeProps } from '~/types/meldekort/Meldeperiode';
 import {
     MeldekortBehandlingId,
     MeldekortBehandlingProps,
-} from '../../types/meldekort/MeldekortBehandling';
-import { sorterMeldekortBehandlingerAsc } from '../../utils/meldekort';
+} from '~/types/meldekort/MeldekortBehandling';
+import { sorterMeldekortBehandlingerAsc } from '~/utils/meldekort';
 import { BrukersMeldekortProps } from '~/types/meldekort/BrukersMeldekort';
 
 export type MeldeperioderContextState = {

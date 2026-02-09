@@ -8,8 +8,14 @@
     padding: 1rem;
 }
 
-.brukersMeldekortPanel > :not(:last-child) {
-    margin-bottom: var(--ax-space-32);
+.brukersMeldekortPanel {
+    & > * {
+        padding: var(--ax-space-16) 0;
+    }
+
+    & > :not(:last-child) {
+        border-bottom: dashed var(--ax-neutral-600) 1px;
+    }
 }
 
 .tabDisabled {

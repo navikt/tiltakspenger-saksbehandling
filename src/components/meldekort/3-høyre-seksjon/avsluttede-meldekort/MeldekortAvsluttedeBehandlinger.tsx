@@ -1,9 +1,9 @@
 import { HStack, Select, VStack } from '@navikt/ds-react';
-import { MeldekortBehandlingProps } from '../../../../types/meldekort/MeldekortBehandling';
+import { MeldekortBehandlingProps } from '~/types/meldekort/MeldekortBehandling';
 import React, { useEffect, useState } from 'react';
-import { formaterTidspunktKort } from '../../../../utils/date';
-import { MeldeperiodeKorrigering } from '../../../../types/meldekort/Meldeperiode';
-import { useMeldeperiodeKjede } from '../../MeldeperiodeKjedeContext';
+import { formaterTidspunktKort } from '~/utils/date';
+import { MeldeperiodeKorrigering } from '~/types/meldekort/Meldeperiode';
+import { useMeldeperiodeKjede } from '../../context/MeldeperiodeKjedeContext';
 
 import style from './MeldekortAvsluttedeBehandlinger.module.css';
 import { AvsluttetMeldekortOppsummering } from './AvsluttetMeldekortOppsummering';

@@ -2,28 +2,24 @@ import { Alert, BodyShort, Button, HStack, Textarea, VStack } from '@navikt/ds-r
 import { useSak } from '~/context/sak/SakContext';
 import {
     ForhåndsvisMeldekortbehandlingBrevRequest,
-    hentMeldekortForhåndsutfylling,
     MeldekortBehandlingForm,
     meldekortBehandlingFormTilDto,
     meldekortUtfyllingValidation,
-    useCustomMeldekortUtfyllingValidationResolver,
 } from './meldekortUtfyllingUtils';
-import { Controller, FormProvider, useForm, UseFormReturn } from 'react-hook-form';
-import { useMeldeperiodeKjede } from '../../../MeldeperiodeKjedeContext';
+import { Controller, UseFormReturn } from 'react-hook-form';
+import { useMeldeperiodeKjede } from '../../../context/MeldeperiodeKjedeContext';
 import {
     MeldekortBehandlingDagStatus,
     MeldekortBehandlingDTO,
     MeldekortBehandlingProps,
 } from '~/types/meldekort/MeldekortBehandling';
 import { MeldekortUker } from '../../../0-felles-komponenter/uker/MeldekortUker';
-import React, { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { classNames } from '~/utils/classNames';
 import { MeldekortBegrunnelse } from '../../../0-felles-komponenter/begrunnelse/MeldekortBegrunnelse';
 import AvsluttMeldekortBehandling from '~/components/personoversikt/meldekort-oversikt/avsluttMeldekortBehandling/AvsluttMeldekortBehandling';
 import { meldeperiodeUrl } from '~/utils/urls';
 import { MeldekortBeregningOgSimulering } from '~/components/meldekort/0-felles-komponenter/beregning-simulering/MeldekortBeregningOgSimulering';
-
-import styles from './MeldekortUtfylling.module.css';
 import Divider from '~/components/divider/Divider';
 import { useFetchBlobFraApi, useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { hookFormErrorsTilFeiloppsummering } from '~/utils/validering';
@@ -34,6 +30,9 @@ import { BekreftelsesModal } from '~/components/modaler/BekreftelsesModal';
 import { SakId } from '~/types/Sak';
 import { FetcherError } from '~/utils/fetch/fetch';
 import { PERSONOVERSIKT_TABS } from '~/components/personoversikt/Personoversikt';
+import { useMeldekortUtfyllingForm } from '~/components/meldekort/context/MeldekortUtfyllingFormContext';
+
+import styles from './MeldekortUtfylling.module.css';
 
 type Props = {
     meldekortBehandling: MeldekortBehandlingProps;
@@ -42,55 +41,17 @@ type Props = {
 export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
     const { sakId, saksnummer } = useSak().sak;
     const { navigateWithNotification } = useNotification();
-    const {
-        meldeperiodeKjede,
-        tidligereMeldekortBehandlinger,
-        sisteMeldeperiode,
-        setMeldeperiodeKjede,
-    } = useMeldeperiodeKjede();
-
-    const brukersMeldekortForBehandling =
-        meldeperiodeKjede.brukersMeldekort.find(
-            (b) => b.id === meldekortBehandling.brukersMeldekortId,
-        ) ?? meldeperiodeKjede.brukersMeldekort.at(-1); // Bruk siste brukers meldekort som fallback
+    const { sisteMeldeperiode, setMeldeperiodeKjede } = useMeldeperiodeKjede();
 
     const { antallDager, ingenDagerGirRett } = sisteMeldeperiode;
 
-    const formContext = useForm<MeldekortBehandlingForm>({
-        defaultValues: {
-            dager: hentMeldekortForhåndsutfylling(
-                meldekortBehandling,
-                tidligereMeldekortBehandlinger,
-                sisteMeldeperiode,
-                brukersMeldekortForBehandling,
-            ),
-            begrunnelse: meldekortBehandling.begrunnelse ?? '',
-            tekstTilVedtaksbrev: meldekortBehandling.tekstTilVedtaksbrev ?? '',
-        },
-        resolver: useCustomMeldekortUtfyllingValidationResolver(),
-        context: { tillattAntallDager: antallDager },
-    });
+    const formContext = useMeldekortUtfyllingForm();
 
     const skjemaErEndret = formContext.formState.isDirty;
     const skjemaErUtfylt = formContext
         .getValues()
         .dager.every((dag) => dag.status !== MeldekortBehandlingDagStatus.IkkeBesvart);
     const skalViseBeregningVarsel = skjemaErEndret && skjemaErUtfylt;
-
-    useEffect(() => {
-        formContext.reset({
-            dager: hentMeldekortForhåndsutfylling(
-                meldekortBehandling,
-                tidligereMeldekortBehandlinger,
-                sisteMeldeperiode,
-                brukersMeldekortForBehandling,
-            ),
-            begrunnelse: meldekortBehandling.begrunnelse ?? '',
-            tekstTilVedtaksbrev: meldekortBehandling.tekstTilVedtaksbrev ?? '',
-        });
-        //Vi ønsker kun å resette form hvis disse feltene endres
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [meldekortBehandling, tidligereMeldekortBehandlinger, brukersMeldekortForBehandling]);
 
     const forhåndsvisBrev = useFetchBlobFraApi<ForhåndsvisMeldekortbehandlingBrevRequest>(
         `/sak/${sakId}/meldekortbehandling/${meldekortBehandling.id}/forhandsvis`,
@@ -158,94 +119,89 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
         !skjemaErEndret && !harValideringsFeil && meldekortBehandling.beregning !== null;
 
     return (
-        <FormProvider {...formContext}>
-            <form onSubmit={formContext.handleSubmit(onSubmit)}>
-                <VStack gap={'space-20'}>
-                    <MeldekortUker dager={formContext.watch('dager')} underBehandling={true} />
-                    {skalViseBeregningVarsel && (
-                        <Alert inline={true} variant={'warning'}>
-                            {'Trykk "lagre og beregn" for å oppdatere beregningene'}
-                        </Alert>
-                    )}
-                    <MeldekortBeregningOgSimulering
-                        meldekortBehandling={meldekortBehandling}
-                        className={classNames(skjemaErEndret && styles.utdatertBeregning)}
-                    />
-                    <Controller
-                        name={'begrunnelse'}
-                        control={formContext.control}
-                        render={({ field }) => <MeldekortBegrunnelse {...field} />}
-                    />
+        <form onSubmit={formContext.handleSubmit(onSubmit)}>
+            <VStack gap={'space-20'}>
+                <MeldekortUker dager={formContext.watch('dager')} underBehandling={true} />
+                {skalViseBeregningVarsel && (
+                    <Alert inline={true} variant={'warning'}>
+                        {'Trykk "lagre og beregn" for å oppdatere beregningene'}
+                    </Alert>
+                )}
+                <MeldekortBeregningOgSimulering
+                    meldekortBehandling={meldekortBehandling}
+                    className={classNames(skjemaErEndret && styles.utdatertBeregning)}
+                />
+                <Controller
+                    name={'begrunnelse'}
+                    control={formContext.control}
+                    render={({ field }) => <MeldekortBegrunnelse {...field} />}
+                />
 
-                    <Divider orientation="horizontal" />
-                    <Controller
-                        name={'tekstTilVedtaksbrev'}
-                        control={formContext.control}
-                        render={({ field }) => (
-                            <Textarea
-                                label="Vedtaksbrev for behandling av meldekort"
-                                description="Teksten vises i vedtaksbrevet til bruker."
-                                minRows={5}
-                                resize={'vertical'}
-                                value={field.value}
-                                onChange={field.onChange}
-                            />
-                        )}
-                    />
-                    <Button
-                        className={styles.forhåndsvisBrevButton}
-                        type="button"
-                        variant="secondary"
-                        size="small"
-                        loading={forhåndsvisBrev.isMutating}
-                        onClick={() => {
-                            //resetter eventuelle tidligere feil før ny request
-                            forhåndsvisBrev.reset();
-                            forhåndsvisBrev.trigger(
-                                {
-                                    tekstTilVedtaksbrev: formContext.getValues(
-                                        'tekstTilVedtaksbrev',
-                                    )
-                                        ? formContext.getValues('tekstTilVedtaksbrev')
-                                        : null,
-                                    dager: formContext
-                                        .getValues('dager')
-                                        .every(
-                                            (dag) =>
-                                                dag.status !==
-                                                MeldekortBehandlingDagStatus.IkkeBesvart,
-                                        )
-                                        ? formContext.getValues('dager')
-                                        : null,
-                                },
-                                { onSuccess: (blob) => window.open(URL.createObjectURL(blob!)) },
-                            );
-                        }}
-                    >
-                        Forhåndsvis brev
-                    </Button>
-                    {forhåndsvisBrev.error && (
-                        <Alert variant="error" size="small">
-                            <BodyShort>Feil ved forhåndsvisning av brev</BodyShort>
-                            <BodyShort>{forhåndsvisBrev.error.message}</BodyShort>
-                        </Alert>
+                <Divider orientation="horizontal" />
+                <Controller
+                    name={'tekstTilVedtaksbrev'}
+                    control={formContext.control}
+                    render={({ field }) => (
+                        <Textarea
+                            label="Vedtaksbrev for behandling av meldekort"
+                            description="Teksten vises i vedtaksbrevet til bruker."
+                            minRows={5}
+                            resize={'vertical'}
+                            value={field.value}
+                            onChange={field.onChange}
+                        />
                     )}
-                    <Divider orientation="horizontal" />
-                    <MeldekortUtfyllingFooter
-                        sakId={sakId}
-                        saksnummer={saksnummer}
-                        meldekortBehandling={meldekortBehandling}
-                        lagreOgBeregnMeldekort={lagreOgBeregnMeldekort}
-                        sendMeldekortTilBeslutter={sendMeldekortTilBeslutter}
-                        modalRef={modalRef}
-                        buttonActionRef={buttonActionRef}
-                        form={formContext}
-                        ingenDagerGirRett={ingenDagerGirRett}
-                        kanSendeTilBeslutning={kanSendeTilBeslutning}
-                    />
-                </VStack>
-            </form>
-        </FormProvider>
+                />
+                <Button
+                    className={styles.forhåndsvisBrevButton}
+                    type="button"
+                    variant="secondary"
+                    size="small"
+                    loading={forhåndsvisBrev.isMutating}
+                    onClick={() => {
+                        //resetter eventuelle tidligere feil før ny request
+                        forhåndsvisBrev.reset();
+                        forhåndsvisBrev.trigger(
+                            {
+                                tekstTilVedtaksbrev: formContext.getValues('tekstTilVedtaksbrev')
+                                    ? formContext.getValues('tekstTilVedtaksbrev')
+                                    : null,
+                                dager: formContext
+                                    .getValues('dager')
+                                    .every(
+                                        (dag) =>
+                                            dag.status !== MeldekortBehandlingDagStatus.IkkeBesvart,
+                                    )
+                                    ? formContext.getValues('dager')
+                                    : null,
+                            },
+                            { onSuccess: (blob) => window.open(URL.createObjectURL(blob!)) },
+                        );
+                    }}
+                >
+                    Forhåndsvis brev
+                </Button>
+                {forhåndsvisBrev.error && (
+                    <Alert variant="error" size="small">
+                        <BodyShort>Feil ved forhåndsvisning av brev</BodyShort>
+                        <BodyShort>{forhåndsvisBrev.error.message}</BodyShort>
+                    </Alert>
+                )}
+                <Divider orientation="horizontal" />
+                <MeldekortUtfyllingFooter
+                    sakId={sakId}
+                    saksnummer={saksnummer}
+                    meldekortBehandling={meldekortBehandling}
+                    lagreOgBeregnMeldekort={lagreOgBeregnMeldekort}
+                    sendMeldekortTilBeslutter={sendMeldekortTilBeslutter}
+                    modalRef={modalRef}
+                    buttonActionRef={buttonActionRef}
+                    form={formContext}
+                    ingenDagerGirRett={ingenDagerGirRett}
+                    kanSendeTilBeslutning={kanSendeTilBeslutning}
+                />
+            </VStack>
+        </form>
     );
 };
 

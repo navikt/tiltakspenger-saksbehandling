@@ -2,79 +2,12 @@ import { useCallback } from 'react';
 import {
     MeldekortBehandlingDagStatus,
     MeldekortBehandlingDTO,
-    MeldekortBehandlingProps,
-    MeldekortDagBeregnetProps,
     MeldekortDagProps,
 } from '~/types/meldekort/MeldekortBehandling';
-import {
-    BrukersMeldekortDagStatus,
-    BrukersMeldekortProps,
-} from '~/types/meldekort/BrukersMeldekort';
-import { MeldeperiodeProps } from '~/types/meldekort/Meldeperiode';
 import { formaterDatotekst } from '~/utils/date';
 import { Nullable } from '~/types/UtilTypes';
 import { GyldigeMeldekortDagUfyllingsvalg } from '~/components/meldekort/0-felles-komponenter/uker/MeldekortUkeBehandling';
 import { FieldErrors } from 'react-hook-form';
-
-const hentDagerFraBehandling = (meldekortBehandling: MeldekortBehandlingProps) =>
-    meldekortBehandling.beregning?.beregningForMeldekortetsPeriode.dager ??
-    meldekortBehandling.dager;
-
-const hentDager = (
-    meldekortBehandling: MeldekortBehandlingProps,
-    tidligereBehandlinger: MeldekortBehandlingProps[],
-    brukersMeldekortForBehandling?: BrukersMeldekortProps,
-): MeldekortDagBeregnetProps[] => {
-    if (meldekortBehandling.beregning) {
-        return hentDagerFraBehandling(meldekortBehandling);
-    }
-
-    const forrigeBehandling = tidligereBehandlinger.at(0);
-
-    if (forrigeBehandling) {
-        return hentDagerFraBehandling(forrigeBehandling);
-    }
-
-    if (brukersMeldekortForBehandling) {
-        return brukersMeldekortForBehandling.dager.map((dag) => ({
-            dato: dag.dato,
-            status: brukersStatusTilBehandlingsStatus[dag.status],
-        }));
-    }
-
-    return meldekortBehandling.dager;
-};
-
-export const hentMeldekortForhåndsutfylling = (
-    meldekortBehandling: MeldekortBehandlingProps,
-    tidligereBehandlinger: MeldekortBehandlingProps[],
-    meldeperiode: MeldeperiodeProps,
-    brukersMeldekortForBehandling?: BrukersMeldekortProps,
-): MeldekortDagBeregnetProps[] => {
-    return hentDager(meldekortBehandling, tidligereBehandlinger, brukersMeldekortForBehandling).map(
-        (dag) => {
-            const harRett = meldeperiode.girRett[dag.dato];
-
-            if (!harRett) {
-                return {
-                    ...dag,
-                    status: MeldekortBehandlingDagStatus.IkkeRettTilTiltakspenger,
-                };
-            }
-
-            // Dersom forrige versjon av meldekortbehandlingen eller brukers meldekort ikke hadde rett på denne
-            // dagen, men meldeperioden for siste vedtak gir rett, så nuller vi ut statusen
-            if (harRett && dag.status === MeldekortBehandlingDagStatus.IkkeRettTilTiltakspenger) {
-                return {
-                    ...dag,
-                    status: MeldekortBehandlingDagStatus.IkkeBesvart,
-                };
-            }
-
-            return dag;
-        },
-    );
-};
 
 export const useCustomMeldekortUtfyllingValidationResolver = () =>
     useCallback(meldekortUtfyllingValidation, []);
@@ -115,25 +48,6 @@ export const meldekortUtfyllingValidation = (
 
     return { values: data, errors: errors };
 };
-
-const brukersStatusTilBehandlingsStatus: Record<
-    BrukersMeldekortDagStatus,
-    MeldekortBehandlingDagStatus
-> = {
-    [BrukersMeldekortDagStatus.DELTATT_UTEN_LØNN_I_TILTAKET]:
-        MeldekortBehandlingDagStatus.DeltattUtenLønnITiltaket,
-    [BrukersMeldekortDagStatus.DELTATT_MED_LØNN_I_TILTAKET]:
-        MeldekortBehandlingDagStatus.DeltattMedLønnITiltaket,
-    [BrukersMeldekortDagStatus.FRAVÆR_SYK]: MeldekortBehandlingDagStatus.FraværSyk,
-    [BrukersMeldekortDagStatus.FRAVÆR_SYKT_BARN]: MeldekortBehandlingDagStatus.FraværSyktBarn,
-    [BrukersMeldekortDagStatus.FRAVÆR_GODKJENT_AV_NAV]:
-        MeldekortBehandlingDagStatus.FraværGodkjentAvNav,
-    [BrukersMeldekortDagStatus.FRAVÆR_ANNET]: MeldekortBehandlingDagStatus.FraværAnnet,
-    [BrukersMeldekortDagStatus.IKKE_BESVART]: MeldekortBehandlingDagStatus.IkkeBesvart,
-    [BrukersMeldekortDagStatus.IKKE_RETT_TIL_TILTAKSPENGER]:
-        MeldekortBehandlingDagStatus.IkkeRettTilTiltakspenger,
-    [BrukersMeldekortDagStatus.IKKE_TILTAKSDAG]: MeldekortBehandlingDagStatus.IkkeTiltaksdag,
-} as const;
 
 export const tellDagerMedDeltattEllerFravær = (dager: MeldekortDagProps[]) =>
     dager.filter((dag) => dagerMedDeltattEllerFravær.has(dag.status)).length;

@@ -4,12 +4,13 @@ import { MeldekortVenstreSeksjon } from './1-venstre-seksjon/MeldekortVenstreSek
 import { MeldekortHovedseksjon } from './2-hovedseksjon/MeldekortHovedseksjon';
 import { useSak } from '~/context/sak/SakContext';
 import { MeldekortHøyreSeksjon } from './3-høyre-seksjon/MeldekortHøyreSeksjon';
-import { useMeldeperiodeKjede } from './MeldeperiodeKjedeContext';
+import { useMeldeperiodeKjede } from './context/MeldeperiodeKjedeContext';
 import { BrukersMeldekortProps } from '~/types/meldekort/BrukersMeldekort';
 import { erMeldekortBehandlingUnderAktivBehandling } from '~/utils/meldekortBehandling';
+import { PERSONOVERSIKT_TABS } from '~/components/personoversikt/Personoversikt';
+import { MeldekortUtfyllingFormProvider } from '~/components/meldekort/context/MeldekortUtfyllingFormContext';
 
 import style from './MeldekortSide.module.css';
-import { PERSONOVERSIKT_TABS } from '~/components/personoversikt/Personoversikt';
 
 export const MeldekortSide = () => {
     const { sakId, saksnummer } = useSak().sak;
@@ -43,8 +44,10 @@ export const MeldekortSide = () => {
             )}
             <div className={style.behandlingLayout}>
                 <MeldekortVenstreSeksjon />
-                <MeldekortHovedseksjon />
-                <MeldekortHøyreSeksjon />
+                <MeldekortUtfyllingFormProvider>
+                    <MeldekortHovedseksjon />
+                    <MeldekortHøyreSeksjon />
+                </MeldekortUtfyllingFormProvider>
             </div>
         </VStack>
     );

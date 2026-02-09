@@ -14,7 +14,7 @@ import {
 import { useSak } from '~/context/sak/SakContext';
 import { ArrayOrSingle } from '~/types/UtilTypes';
 import { forceArray } from '~/utils/array';
-import { useMeldeperiodeKjede } from '../MeldeperiodeKjedeContext';
+import { useMeldeperiodeKjede } from '../context/MeldeperiodeKjedeContext';
 import OppsummeringAvAttesteringer from '../../attestering/OppsummeringAvAttestering';
 import { finnMeldeperiodeKjedeStatusTekst } from '~/utils/tekstformateringUtils';
 import { MeldeperiodeKjedeStatus } from '~/types/meldekort/Meldeperiode';

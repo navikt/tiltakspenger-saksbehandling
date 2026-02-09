@@ -7,7 +7,7 @@ import { Alert, VStack } from '@navikt/ds-react';
 import { BeregningOppsummering } from '~/components/beregning-og-simulering/beregning-oppsummering/BeregningOppsummering';
 import { SimuleringOppsummering } from '~/components/beregning-og-simulering/simulering-oppsummering/SimuleringOppsummering';
 import { SimuleringDetaljer } from '~/components/beregning-og-simulering/detaljer/SimuleringDetaljer';
-import { useMeldeperiodeKjede } from '~/components/meldekort/MeldeperiodeKjedeContext';
+import { useMeldeperiodeKjede } from '~/components/meldekort/context/MeldeperiodeKjedeContext';
 import { MeldeperiodeKjedeProps } from '~/types/meldekort/Meldeperiode';
 import { BeregningOgSimuleringHeader } from '~/components/beregning-og-simulering/header/BeregningOgSimuleringHeader';
 import { kanBehandle, kanSaksbehandleForMeldekort } from '~/utils/tilganger';
