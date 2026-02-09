@@ -10,6 +10,7 @@ import { useSak } from '~/context/sak/SakContext';
 import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
 
 import style from './OmgjøringResultatVelger.module.css';
+import { hentRammevedtak } from '~/utils/sak';
 
 export const OmgjøringResultatVelger = () => {
     const { behandling } = useRevurderingOmgjøring();
@@ -20,6 +21,12 @@ export const OmgjøringResultatVelger = () => {
 
     const { opphørToggle } = useFeatureToggles();
 
+    const vedtak = hentRammevedtak(sak, behandling.omgjørVedtak)!;
+
+    const kanInnvilge =
+        !!vedtak.gyldigeKommandoer.OMGJØR && vedtak.gjeldendeVedtaksperioder.length > 0;
+    const kanOpphøre = opphørToggle && !!vedtak.gyldigeKommandoer.OPPHØR;
+
     return (
         <VedtakSeksjon>
             <VedtakSeksjon.Venstre>
@@ -28,8 +35,10 @@ export const OmgjøringResultatVelger = () => {
                 </Heading>
 
                 <Alert variant={'info'} size={'small'} inline={true} className={style.infoVarsel}>
-                    {'Velg innvilgelse dersom hele eller deler av perioden som omgjøres skal innvilges.' +
-                        ' Velg opphør dersom hele perioden skal opphøres.'}
+                    {'Velg innvilgelse dersom hele eller deler av omgjøringen skal være en innvilgelse.' +
+                        ' Velg opphør dersom omgjøringen skal være et rent opphør.'}
+                    {!kanOpphøre &&
+                        ` Vedtaket kan kun opphøres dersom det har gjeldende innvilgelsesperioder.`}
                     {!opphørToggle && (
                         <BodyLong size={'small'}>
                             {'(Opphør er foreløpig ikke tilgjengelig i produksjon.)'}
@@ -51,8 +60,10 @@ export const OmgjøringResultatVelger = () => {
                         });
                     }}
                 >
-                    <Radio value={RevurderingResultat.OMGJØRING}>{'Innvilgelse'}</Radio>
-                    <Radio value={RevurderingResultat.OMGJØRING_OPPHØR} disabled={!opphørToggle}>
+                    <Radio value={RevurderingResultat.OMGJØRING} disabled={!kanInnvilge}>
+                        {'Innvilgelse'}
+                    </Radio>
+                    <Radio value={RevurderingResultat.OMGJØRING_OPPHØR} disabled={!kanOpphøre}>
                         {'Opphør'}
                     </Radio>
                     {resultat !== RevurderingResultat.OMGJØRING_IKKE_VALGT && !erReadonly && (
