@@ -175,7 +175,11 @@ const propsForRad = (
 
             return {
                 typeTekst,
-                statusTag: klagebehandlingStatusTilTag({ status: åpenBehandling.status }),
+                statusTag: klagebehandling.ventestatus?.erSattPåVent ? (
+                    <Tag data-color="warning">Satt på vent</Tag>
+                ) : (
+                    klagebehandlingStatusTilTag({ status: åpenBehandling.status })
+                ),
                 resultatTag: åpenBehandling.resultat
                     ? klagebehandlingResultatTilTag({ resultat: åpenBehandling.resultat })
                     : undefined,
