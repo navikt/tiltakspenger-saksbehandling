@@ -59,7 +59,7 @@ const BenkTabell = ({ data, sorteringRetning, onSortChange }: Props) => {
                         <Table.HeaderCell scope="col">Fødselsnummer</Table.HeaderCell>
                         <Table.HeaderCell scope="col">Type</Table.HeaderCell>
                         <Table.HeaderCell scope="col" className={styles.kommentar}>
-                            Kommentar
+                            Satt på vent begrunnelse
                         </Table.HeaderCell>
                         <Table.HeaderCell scope="col">Status</Table.HeaderCell>
                         <Table.ColumnHeader
