@@ -6,6 +6,7 @@ import {
     FileIcon,
     PauseIcon,
     PersonIcon,
+    PlayIcon,
 } from '@navikt/aksel-icons';
 import { ActionMenu, Button, LocalAlert, Modal } from '@navikt/ds-react';
 import router from 'next/router';
@@ -42,7 +43,8 @@ const KlageMeny = (props: { klage: Klagebehandling }) => {
     const eierInnloggetSaksbehandlerBehandlingen =
         props.klage.saksbehandler && props.klage.saksbehandler === innloggetSaksbehandler.navIdent;
 
-    const eierIkkeInngloggetSaksbehandlerBehandlingen = !eierInnloggetSaksbehandlerBehandlingen;
+    const eierIkkeInngloggetSaksbehandlerBehandlingen =
+        !eierInnloggetSaksbehandlerBehandlingen && props.klage.saksbehandler;
 
     const ingenEierBehandling = !props.klage.saksbehandler;
 
@@ -92,7 +94,10 @@ const KlageMeny = (props: { klage: Klagebehandling }) => {
     const gjenoppta = useGjenopptaKlagebehandling({
         sakId: props.klage.sakId,
         klageId: props.klage.id,
-        onSuccess: (sak) => setSak(sak),
+        onSuccess: (sak) => {
+            setSak(sak);
+            router.push(finnUrlForKlageSteg(props.klage));
+        },
         onError: (error) => setApiError({ visFeilModal: true, feil: error }),
     });
 
@@ -134,6 +139,17 @@ const KlageMeny = (props: { klage: Klagebehandling }) => {
                             >
                                 Tildel meg
                             </ActionMenu.Item>
+
+                            {props.klage.ventestatus?.erSattPåVent && (
+                                <ActionMenu.Item
+                                    icon={<PlayIcon aria-hidden />}
+                                    onClick={() => {
+                                        gjenoppta.trigger();
+                                    }}
+                                >
+                                    Gjenoppta
+                                </ActionMenu.Item>
+                            )}
                         </>
                     )}
 
@@ -150,7 +166,7 @@ const KlageMeny = (props: { klage: Klagebehandling }) => {
 
                             {props.klage.ventestatus?.erSattPåVent ? (
                                 <ActionMenu.Item
-                                    icon={<PauseIcon aria-hidden />}
+                                    icon={<PlayIcon aria-hidden />}
                                     onClick={() => {
                                         gjenoppta.trigger();
                                     }}
