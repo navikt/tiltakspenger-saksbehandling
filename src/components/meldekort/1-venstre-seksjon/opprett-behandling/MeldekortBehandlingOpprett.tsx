@@ -2,13 +2,13 @@ import { Alert, Button, Loader, Link } from '@navikt/ds-react';
 import { useOpprettMeldekortBehandling } from './useOpprettMeldekortBehandling';
 import { BekreftelsesModal } from '../../../modaler/BekreftelsesModal';
 import { useRef } from 'react';
-import { useSak } from '../../../../context/sak/SakContext';
-import { useMeldeperiodeKjede } from '../../MeldeperiodeKjedeContext';
-import { MeldekortBehandlingType } from '../../../../types/meldekort/MeldekortBehandling';
-import { MeldeperiodeKjedeStatus } from '../../../../types/meldekort/Meldeperiode';
+import { useSak } from '~/context/sak/SakContext';
+import { useMeldeperiodeKjede } from '../../context/MeldeperiodeKjedeContext';
+import { MeldekortBehandlingType } from '~/types/meldekort/MeldekortBehandling';
+import { MeldeperiodeKjedeStatus } from '~/types/meldekort/Meldeperiode';
 import NextLink from 'next/link';
-import { meldeperiodeUrl } from '../../../../utils/urls';
-import { periodeTilFormatertDatotekst } from '../../../../utils/date';
+import { meldeperiodeUrl } from '~/utils/urls';
+import { periodeTilFormatertDatotekst } from '~/utils/date';
 
 import styles from './MeldekortBehandlingOpprett.module.css';
 

@@ -1,7 +1,7 @@
 import { Tabs } from '@navikt/ds-react';
 import { MeldekortTidligereBehandlinger } from './tidligere-behandlinger/MeldekortTidligereBehandlinger';
 import { BrukersMeldekortVisning } from './brukers-meldekort/BrukersMeldekort';
-import { useMeldeperiodeKjede } from '../MeldeperiodeKjedeContext';
+import { useMeldeperiodeKjede } from '../context/MeldeperiodeKjedeContext';
 import { classNames } from '~/utils/classNames';
 import { CircleSlashIcon, DocPencilIcon, PersonPencilIcon } from '@navikt/aksel-icons';
 import { MeldekortAvsluttedeBehandlinger } from './avsluttede-meldekort/MeldekortAvsluttedeBehandlinger';

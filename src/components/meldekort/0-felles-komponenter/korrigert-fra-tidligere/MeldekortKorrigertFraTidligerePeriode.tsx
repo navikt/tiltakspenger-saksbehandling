@@ -6,7 +6,7 @@ import { MeldekortUker } from '../uker/MeldekortUker';
 import { useSak } from '~/context/sak/SakContext';
 import { MeldeperiodeKorrigering } from '~/types/meldekort/Meldeperiode';
 import { MeldekortBeløp } from '../beløp/MeldekortBeløp';
-import { useMeldeperiodeKjede } from '../../MeldeperiodeKjedeContext';
+import { useMeldeperiodeKjede } from '../../context/MeldeperiodeKjedeContext';
 
 type Props = {
     korrigering: MeldeperiodeKorrigering;

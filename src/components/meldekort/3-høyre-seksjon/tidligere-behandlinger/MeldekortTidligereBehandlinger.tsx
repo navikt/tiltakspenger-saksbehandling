@@ -9,7 +9,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { formaterTidspunktKort, periodeTilFormatertDatotekst } from '~/utils/date';
 import { MeldeperiodeKorrigering } from '~/types/meldekort/Meldeperiode';
 import { MeldekortKorrigertFraTidligerePeriode } from '../../0-felles-komponenter/korrigert-fra-tidligere/MeldekortKorrigertFraTidligerePeriode';
-import { useMeldeperiodeKjede } from '../../MeldeperiodeKjedeContext';
+import { useMeldeperiodeKjede } from '../../context/MeldeperiodeKjedeContext';
 
 import style from './MeldekortTidligereBehandlinger.module.css';
 
