@@ -43,6 +43,15 @@ export const SimuleringOppsummering = <BehId extends BehandlingIdFelles>({
         );
     }
 
+    if (!simulerteBeløp) {
+        return (
+            <Alert variant={'warning'} className={style.varsel}>
+                <BodyShort>{'Simuleringen har ingen simulerte beløp'}</BodyShort>
+                {oppdaterKnapp}
+            </Alert>
+        );
+    }
+
     const {
         tidligereUtbetaling,
         nyUtbetaling,

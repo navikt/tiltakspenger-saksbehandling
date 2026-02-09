@@ -29,7 +29,7 @@ interface SimulertBeregningBase {
 interface SimulertBeregningMedEndring extends SimulertBeregningBase {
     simuleringsdato: string;
     simuleringTotalBeløp: number;
-    simulerteBeløp: SimulerteBeløp;
+    simulerteBeløp: Nullable<SimulerteBeløp>;
     simuleringResultat: SimuleringResultat.ENDRING;
 }
 
