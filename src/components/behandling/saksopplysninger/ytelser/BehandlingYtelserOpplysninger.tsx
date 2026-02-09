@@ -5,7 +5,7 @@ import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
 import styles from './BehandlingYtelserOpplysninger.module.css';
 import { periodeTilFormatertDatotekst } from '~/utils/date';
 import { Periode } from '~/types/Periode';
-import { slåSammenPerioder } from '~/utils/periode';
+import { sorterPerioder, totalPeriode } from '~/utils/periode';
 import React, { useState } from 'react';
 
 type Props = {
@@ -26,7 +26,7 @@ export const BehandlingYtelserOpplysninger = ({ ytelser }: Props) => {
                             <ExclamationmarkTriangleFillIcon />
                         </div>
                         {flerePerioder ? (
-                            <BehandlingSaksopplysningMedFlerePerioder perioder={perioder} />
+                            <YtelseMedFlerePerioder perioder={perioder} />
                         ) : (
                             <BehandlingSaksopplysning
                                 navn={'Periode'}
@@ -43,36 +43,40 @@ export const BehandlingYtelserOpplysninger = ({ ytelser }: Props) => {
     );
 };
 
-export const BehandlingSaksopplysningMedFlerePerioder = ({ perioder }: { perioder: Periode[] }) => {
-    const perioderSlåttSammen = slåSammenPerioder(perioder);
-    const harSammenslåttePerioder = perioderSlåttSammen.length !== perioder.length;
+const YtelseMedFlerePerioder = ({ perioder }: { perioder: Periode[] }) => {
+    const totalPeriodeForYtelse = totalPeriode(perioder);
+    const antall = perioder.length;
 
-    const [visSammenslått, setVisSammenslått] = useState(harSammenslåttePerioder);
+    const sortertePerioder = perioder.toSorted(sorterPerioder());
 
-    const perioderSomVises = visSammenslått ? perioderSlåttSammen : perioder;
+    const [visAllePerioder, setVisAllePerioder] = useState(false);
 
     return (
         <VStack>
-            {harSammenslåttePerioder && (
-                <Checkbox
-                    size={'small'}
-                    checked={visSammenslått}
-                    onChange={() => setVisSammenslått(!visSammenslått)}
-                >
-                    {'Vis sammenslåtte perioder'}
-                </Checkbox>
-            )}
-            <BodyShort size={'small'}>{'Perioder:'}</BodyShort>
-            <ul>
-                {perioderSomVises.map((periode) => {
-                    const periodeTekst = periodeTilFormatertDatotekst({
-                        fraOgMed: periode.fraOgMed,
-                        tilOgMed: periode.tilOgMed,
-                    });
+            <BodyShort
+                size={'small'}
+            >{`${periodeTilFormatertDatotekst(totalPeriodeForYtelse)} (${antall} perioder)`}</BodyShort>
 
-                    return <li key={periodeTekst}>{periodeTekst}</li>;
-                })}
-            </ul>
+            <Checkbox
+                size={'small'}
+                checked={visAllePerioder}
+                onChange={() => setVisAllePerioder(!visAllePerioder)}
+            >
+                {'Vis enkelt-perioder'}
+            </Checkbox>
+
+            {visAllePerioder ? (
+                <ul>
+                    {sortertePerioder.map((periode) => {
+                        const periodeTekst = periodeTilFormatertDatotekst({
+                            fraOgMed: periode.fraOgMed,
+                            tilOgMed: periode.tilOgMed,
+                        });
+
+                        return <li key={periodeTekst}>{periodeTekst}</li>;
+                    })}
+                </ul>
+            ) : null}
         </VStack>
     );
 };

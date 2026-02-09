@@ -185,7 +185,7 @@ export const finnPeriodiseringHull = (periodisering: MedPeriode[]): Periode[] =>
 };
 
 export const finnPerioderHull = (perioder: Periode[]): Periode[] => {
-    return perioder.toSorted(sorterPerioder).reduce<Periode[]>((acc, periode, index, array) => {
+    return perioder.toSorted(sorterPerioder()).reduce<Periode[]>((acc, periode, index, array) => {
         const nesteDagEtterPerioden = nesteDag(periode.tilOgMed);
         const nestePeriode = array.at(index + 1);
 
@@ -228,7 +228,7 @@ export const slåSammenPeriodisering = <T>(
 
 // Slår sammen perioder dersom de tilstøter hverandre eller overlapper
 export const slåSammenPerioder = (perioder: Periode[]): Periode[] => {
-    return perioder.toSorted(sorterPerioder).reduce<Periode[]>((acc, periode) => {
+    return perioder.toSorted(sorterPerioder()).reduce<Periode[]>((acc, periode) => {
         if (acc.length === 0) {
             return [periode];
         }
@@ -246,12 +246,16 @@ export const slåSammenPerioder = (perioder: Periode[]): Periode[] => {
     }, []);
 };
 
-export const sorterPerioder = (a: Periode, b: Periode): number => {
-    if (a.fraOgMed < b.fraOgMed) {
-        return -1;
-    }
-    if (a.fraOgMed > b.fraOgMed) {
-        return 1;
-    }
-    return a.tilOgMed > b.tilOgMed ? 1 : a.tilOgMed < b.tilOgMed ? -1 : 0;
-};
+export const sorterPerioder =
+    (order: 'asc' | 'desc' = 'asc') =>
+    (a: Periode, b: Periode): number => {
+        const unit = order === 'asc' ? 1 : -1;
+
+        if (a.fraOgMed < b.fraOgMed) {
+            return -unit;
+        }
+        if (a.fraOgMed > b.fraOgMed) {
+            return unit;
+        }
+        return a.tilOgMed > b.tilOgMed ? unit : a.tilOgMed < b.tilOgMed ? -unit : 0;
+    };
