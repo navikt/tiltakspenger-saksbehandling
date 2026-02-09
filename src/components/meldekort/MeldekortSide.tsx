@@ -8,7 +8,7 @@ import { useMeldeperiodeKjede } from './context/MeldeperiodeKjedeContext';
 import { BrukersMeldekortProps } from '~/types/meldekort/BrukersMeldekort';
 import { erMeldekortBehandlingUnderAktivBehandling } from '~/utils/meldekortBehandling';
 import { PERSONOVERSIKT_TABS } from '~/components/personoversikt/Personoversikt';
-import { MeldekortUtfyllingFormProvider } from '~/components/meldekort/context/MeldekortUtfyllingFormContext';
+import { MeldekortBehandlingFormProvider } from '~/components/meldekort/context/MeldekortUtfyllingFormContext';
 
 import style from './MeldekortSide.module.css';
 
@@ -44,10 +44,10 @@ export const MeldekortSide = () => {
             )}
             <div className={style.behandlingLayout}>
                 <MeldekortVenstreSeksjon />
-                <MeldekortUtfyllingFormProvider>
+                <MeldekortBehandlingFormProvider>
                     <MeldekortHovedseksjon />
                     <MeldekortHøyreSeksjon />
-                </MeldekortUtfyllingFormProvider>
+                </MeldekortBehandlingFormProvider>
             </div>
         </VStack>
     );

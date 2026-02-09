@@ -7,7 +7,7 @@ import { formaterDatotekst, formaterTidspunkt, ukedagFraDatotekst } from '~/util
 import { ikonForBrukersMeldekortDagStatus } from '../../0-felles-komponenter/MeldekortIkoner';
 import { brukersMeldekortDagStatusTekst } from '~/utils/tekstformateringUtils';
 import { BrukersMeldekortAutomatiskBehandlingStatus } from '~/components/meldekort/3-høyre-seksjon/brukers-meldekort/automatisk-behandling-status/BrukersMeldekortAutomatiskBehandlingStatus';
-import { useMeldekortUtfyllingForm } from '~/components/meldekort/context/MeldekortUtfyllingFormContext';
+import { useMeldekortBehandlingForm } from '~/components/meldekort/context/MeldekortUtfyllingFormContext';
 import { ChevronLeftDoubleIcon } from '@navikt/aksel-icons';
 import { useMeldeperiodeKjede } from '~/components/meldekort/context/MeldeperiodeKjedeContext';
 import { hentMeldekortForhåndsutfyllingFraBrukersMeldekort } from '~/components/meldekort/0-felles-komponenter/meldekortForhåndsutfyllingUtils';
@@ -20,7 +20,7 @@ type Props = {
 
 export const BrukersMeldekortVisning = ({ brukersMeldekort }: Props) => {
     const { sisteMeldeperiode } = useMeldeperiodeKjede();
-    const { setValue } = useMeldekortUtfyllingForm();
+    const formContext = useMeldekortBehandlingForm();
 
     const { dager, behandletAutomatiskStatus, mottatt } = brukersMeldekort;
 
@@ -35,22 +35,24 @@ export const BrukersMeldekortVisning = ({ brukersMeldekort }: Props) => {
                 justify={'space-between'}
                 className={styles.toppRad}
             >
-                <Button
-                    variant={'tertiary'}
-                    size={'xsmall'}
-                    icon={<ChevronLeftDoubleIcon />}
-                    onClick={() =>
-                        setValue(
-                            'dager',
-                            hentMeldekortForhåndsutfyllingFraBrukersMeldekort(
-                                brukersMeldekort,
-                                sisteMeldeperiode,
-                            ),
-                        )
-                    }
-                >
-                    {'Fyll inn disse dagene'}
-                </Button>
+                {formContext && (
+                    <Button
+                        variant={'tertiary'}
+                        size={'xsmall'}
+                        icon={<ChevronLeftDoubleIcon />}
+                        onClick={() =>
+                            formContext.setValue(
+                                'dager',
+                                hentMeldekortForhåndsutfyllingFraBrukersMeldekort(
+                                    brukersMeldekort,
+                                    sisteMeldeperiode,
+                                ),
+                            )
+                        }
+                    >
+                        {'Fyll inn disse dagene'}
+                    </Button>
+                )}
                 <BodyShort size={'small'}>
                     {'Mottatt fra bruker: '}
                     <strong>{formaterTidspunkt(mottatt)}</strong>

@@ -7,8 +7,9 @@ import { MeldekortBehandlingProps } from '~/types/meldekort/MeldekortBehandling'
 import { useMeldeperiodeKjede } from '~/components/meldekort/context/MeldeperiodeKjedeContext';
 import { PropsWithChildren, useEffect } from 'react';
 import { hentMeldekortForhåndsutfylling } from '~/components/meldekort/0-felles-komponenter/meldekortForhåndsutfyllingUtils';
+import { Nullable } from '~/types/UtilTypes';
 
-export const MeldekortUtfyllingFormProvider = ({ children }: PropsWithChildren) => {
+export const MeldekortBehandlingFormProvider = ({ children }: PropsWithChildren) => {
     const { sisteMeldekortBehandling } = useMeldeperiodeKjede();
 
     if (!sisteMeldekortBehandling) {
@@ -16,9 +17,9 @@ export const MeldekortUtfyllingFormProvider = ({ children }: PropsWithChildren) 
     }
 
     return (
-        <MeldekortUtfyllingFormProviderInner meldekortBehandling={sisteMeldekortBehandling}>
+        <MeldekortBehandlingFormProviderInner meldekortBehandling={sisteMeldekortBehandling}>
             {children}
-        </MeldekortUtfyllingFormProviderInner>
+        </MeldekortBehandlingFormProviderInner>
     );
 };
 
@@ -26,7 +27,7 @@ type Props = PropsWithChildren<{
     meldekortBehandling: MeldekortBehandlingProps;
 }>;
 
-const MeldekortUtfyllingFormProviderInner = ({ meldekortBehandling, children }: Props) => {
+const MeldekortBehandlingFormProviderInner = ({ meldekortBehandling, children }: Props) => {
     const { meldeperiodeKjede, tidligereMeldekortBehandlinger, sisteMeldeperiode } =
         useMeldeperiodeKjede();
 
@@ -70,6 +71,9 @@ const MeldekortUtfyllingFormProviderInner = ({ meldekortBehandling, children }: 
     return <FormProvider {...formContext}>{children}</FormProvider>;
 };
 
-export const useMeldekortUtfyllingForm = () => {
-    return useFormContext<MeldekortBehandlingForm>();
+export type MeldekortBehandlingFormContext = ReturnType<typeof useForm<MeldekortBehandlingForm>>;
+
+// Returnerer null dersom den kalles i en komponent som ikke er descendant av MeldekortBehandlingFormProvider
+export const useMeldekortBehandlingForm = (): Nullable<MeldekortBehandlingFormContext> => {
+    return useFormContext<MeldekortBehandlingForm>() ?? null;
 };

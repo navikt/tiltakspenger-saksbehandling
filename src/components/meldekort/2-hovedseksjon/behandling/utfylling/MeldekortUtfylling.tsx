@@ -30,7 +30,7 @@ import { BekreftelsesModal } from '~/components/modaler/BekreftelsesModal';
 import { SakId } from '~/types/Sak';
 import { FetcherError } from '~/utils/fetch/fetch';
 import { PERSONOVERSIKT_TABS } from '~/components/personoversikt/Personoversikt';
-import { useMeldekortUtfyllingForm } from '~/components/meldekort/context/MeldekortUtfyllingFormContext';
+import { useMeldekortBehandlingForm } from '~/components/meldekort/context/MeldekortUtfyllingFormContext';
 
 import styles from './MeldekortUtfylling.module.css';
 
@@ -45,7 +45,7 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
 
     const { antallDager, ingenDagerGirRett } = sisteMeldeperiode;
 
-    const formContext = useMeldekortUtfyllingForm();
+    const formContext = useMeldekortBehandlingForm()!;
 
     const skjemaErEndret = formContext.formState.isDirty;
     const skjemaErUtfylt = formContext

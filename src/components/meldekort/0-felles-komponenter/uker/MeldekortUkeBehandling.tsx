@@ -10,7 +10,7 @@ import {
 import { Controller, FieldPath } from 'react-hook-form';
 import { MeldekortBehandlingForm } from '../../2-hovedseksjon/behandling/utfylling/meldekortUtfyllingUtils';
 import { classNames } from '~/utils/classNames';
-import { useMeldekortUtfyllingForm } from '~/components/meldekort/context/MeldekortUtfyllingFormContext';
+import { useMeldekortBehandlingForm } from '~/components/meldekort/context/MeldekortUtfyllingFormContext';
 
 import styles from './MeldekortUke.module.css';
 
@@ -20,7 +20,7 @@ type Props = {
 };
 
 export const MeldekortUkeBehandling = ({ dager, ukeIndex }: Props) => {
-    const { control, watch, formState } = useMeldekortUtfyllingForm();
+    const { control, watch, formState } = useMeldekortBehandlingForm()!;
 
     return dager.map((dag, index) => {
         const { beregningsdag, dato } = dag;
