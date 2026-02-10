@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './OppsummeringAvVentestatus.module.css';
 import { Box, Heading, HStack, VStack } from '@navikt/ds-react';
-import { formaterTidspunkt } from '~/utils/date';
+import { formaterDatotekst, formaterTidspunkt } from '~/utils/date';
 import { OppsummeringsPar } from '../oppsummeringspar/OppsummeringsPar';
 import { classNames } from '~/utils/classNames';
 import { VentestatusHendelse } from '~/types/Ventestatus';
@@ -27,6 +27,13 @@ const OppsummeringAvVentestatus = (props: {
                         verdi={formaterTidspunkt(props.ventestatus.tidspunkt)}
                         retning="vertikal"
                     />
+                    {props.ventestatus.frist && (
+                        <OppsummeringsPar
+                            label={'Frist'}
+                            verdi={formaterDatotekst(props.ventestatus.frist)}
+                            retning="vertikal"
+                        />
+                    )}
                 </HStack>
                 <OppsummeringsPar
                     label={'Begrunnelse'}

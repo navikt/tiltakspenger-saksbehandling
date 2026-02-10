@@ -219,11 +219,12 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
                     åpen={visSettBehandlingPåVentModal}
                     onClose={() => setVisSettBehandlingPåVentModal(false)}
                     api={{
-                        trigger: (begrunnelse) =>
+                        trigger: (begrunnelse, frist) =>
                             settBehandlingPåVent({
                                 sakId: behandling.sakId,
                                 behandlingId: behandling.id,
                                 begrunnelse: begrunnelse,
+                                frist: frist,
                             }).then((oppdaterBehandling) => {
                                 if (oppdaterBehandling) {
                                     setVisSettBehandlingPåVentModal(false);

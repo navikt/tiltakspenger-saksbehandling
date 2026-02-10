@@ -1,12 +1,13 @@
 import { SakId } from '~/types/Sak';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { Nullable } from '~/types/UtilTypes';
-import { Rammebehandling, BehandlingId } from '~/types/Rammebehandling';
+import { BehandlingId, Rammebehandling } from '~/types/Rammebehandling';
 
 export type SettBehandlingPåVentDTO = {
     sakId: Nullable<string>;
     behandlingId: Nullable<string>;
     begrunnelse: string;
+    frist: Nullable<string>;
 };
 
 export const useSettBehandlingPåVent = (sakId: SakId, behandlingId: BehandlingId) => {

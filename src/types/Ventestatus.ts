@@ -3,4 +3,5 @@ export type VentestatusHendelse = {
     tidspunkt: string;
     begrunnelse: string;
     erSattPåVent: boolean;
+    frist?: string;
 };

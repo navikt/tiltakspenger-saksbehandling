@@ -9,6 +9,7 @@ import { Rammebehandling } from '~/types/Rammebehandling';
 import { SakProps } from '~/types/Sak';
 import { FetcherError } from '~/utils/fetch/fetch';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
+import { Nullable } from '~/types/UtilTypes';
 
 export const useOppdaterFormkrav = (args: {
     sakId: string;
@@ -97,7 +98,7 @@ export const useSettKlagebehandlingPåVent = (args: {
     klageId: KlageId;
     onSuccess: (sak: SakProps) => void;
 }) => {
-    return useFetchJsonFraApi<SakProps, { begrunnelse: string }>(
+    return useFetchJsonFraApi<SakProps, { begrunnelse: string; frist: Nullable<string> }>(
         `/sak/${args.sakId}/klage/${args.klageId}/vent`,
         'PATCH',
         { onSuccess: args.onSuccess },
