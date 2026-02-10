@@ -243,7 +243,7 @@ const KlageMeny = (props: { klage: Klagebehandling }) => {
                     åpen={visSettBehandlingPåVentModal}
                     onClose={() => setVisSettBehandlingPåVentModal(false)}
                     api={{
-                        trigger: (begrunnelse) => settPåVent.trigger({ begrunnelse }),
+                        trigger: (begrunnelse, frist) => settPåVent.trigger({ begrunnelse, frist }),
                         isMutating: settPåVent.isMutating,
                         error: settPåVent.error ?? null,
                     }}

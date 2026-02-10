@@ -6,22 +6,26 @@ import styles from './AvsluttBehandlingModal.module.css';
 
 import { Nullable } from '~/types/UtilTypes';
 import { FetcherError } from '~/utils/fetch/fetch';
+import { Datovelger } from '~/components/datovelger/Datovelger';
+import { dateTilISOTekst, datoTilDatoInputText } from '~/utils/date';
 
 const SettBehandlingPåVentModal = (props: {
     åpen: boolean;
     onClose: () => void;
     api: {
-        trigger: (begrunnelse: string) => void;
+        trigger: (begrunnelse: string, frist: Nullable<string>) => void;
         isMutating: boolean;
         error: Nullable<FetcherError>;
     };
 }) => {
-    const form = useForm<{ begrunnelse: string }>({ defaultValues: { begrunnelse: '' } });
+    const form = useForm<{ begrunnelse: string; frist: Nullable<string> }>({
+        defaultValues: { begrunnelse: '', frist: '' },
+    });
 
     return (
         <form
             onSubmit={form.handleSubmit((values) => {
-                props.api.trigger(values.begrunnelse);
+                props.api.trigger(values.begrunnelse, values.frist);
             })}
         >
             <Modal
@@ -53,6 +57,21 @@ const SettBehandlingPåVentModal = (props: {
                             />
                         )}
                         name={'begrunnelse'}
+                    />
+                    <Controller
+                        control={form.control}
+                        render={({ field, fieldState }) => (
+                            <Datovelger
+                                {...field}
+                                error={fieldState.error?.message}
+                                className={styles.textarea}
+                                onDateChange={(dato) =>
+                                    field.onChange(dato ? dateTilISOTekst(dato) : '')
+                                }
+                                value={field.value ? datoTilDatoInputText(field.value) : ''}
+                            />
+                        )}
+                        name={'frist'}
                     />
                 </Modal.Body>
                 <Modal.Footer>

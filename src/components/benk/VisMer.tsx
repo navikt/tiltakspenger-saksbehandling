@@ -1,25 +1,25 @@
 import React from 'react';
 import { Button } from '@navikt/ds-react';
-import { Nullable } from '~/types/UtilTypes';
 
 type Props = {
-    tekst?: Nullable<string>;
-    antallTegnFørVisMer: number;
+    tekst: string;
+    visEllipsis?: boolean;
+    antallTegnFørVisMer?: number;
 };
 
-const VisMerTekst = ({ tekst, antallTegnFørVisMer }: Props) => {
+const VisMer = ({ tekst, visEllipsis = true, antallTegnFørVisMer = 0 }: Props) => {
     const [visMer, setVisMer] = React.useState(false);
 
     if (!tekst) {
         return null;
     }
 
-    const truncateWithEllipsis = (tekst: Nullable<string>, visTegnInntil = 40): string => {
-        if (tekst && tekst.length <= visTegnInntil) {
+    const truncateWithEllipsis = (tekst: string, visTegnInntil: number): string => {
+        if (tekst.length <= visTegnInntil) {
             return tekst;
         }
         // Skjuler litt mer enn visTegnInntil siste del av teksten for å få plass til "Vis mer"-knappen.
-        return tekst?.slice(0, visTegnInntil - visTegnInntil / 4) + '...';
+        return tekst?.slice(0, visTegnInntil - visTegnInntil / 4) + (visEllipsis ? '...' : '');
     };
 
     const tekstOverskriderMaksAntall = tekst.length > antallTegnFørVisMer;
@@ -43,4 +43,4 @@ const VisMerTekst = ({ tekst, antallTegnFørVisMer }: Props) => {
     );
 };
 
-export default VisMerTekst;
+export default VisMer;

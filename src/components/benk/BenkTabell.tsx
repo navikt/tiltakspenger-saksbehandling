@@ -7,7 +7,11 @@ import {
     behandlingsstatusTextFormatter,
     behandlingstypeTextFormatter,
 } from './BenkSideUtils';
-import { formaterTidspunkt } from '~/utils/date';
+import {
+    antallKalenderDagerUnnaDagensDato,
+    formaterDatotekst,
+    formaterTidspunkt,
+} from '~/utils/date';
 import NextLink from 'next/link';
 import { ValueOf } from 'next/dist/shared/lib/constants';
 import {
@@ -17,7 +21,8 @@ import {
     BenkOversiktResponse,
 } from '~/types/Behandlingssammendrag';
 import { PERSONOVERSIKT_TABS } from '~/components/personoversikt/Personoversikt';
-import VisMerTekst from '~/components/benk/VisMerTekst';
+import VisMer from '~/components/benk/VisMer';
+import { AkselColor } from '@navikt/ds-react/types/theme';
 
 type Props = {
     data: BenkOversiktResponse;
@@ -41,6 +46,34 @@ const BenkTabell = ({ data, sorteringRetning, onSortChange }: Props) => {
         return `/sak/${behandling.saksnummer}`;
     };
 
+    const venteTagFormatter = (behandling: Behandlingssammendrag) => {
+        if (behandling.erSattPåVent) {
+            if (behandling.sattPåVentFrist) {
+                const antallDager = antallKalenderDagerUnnaDagensDato(behandling.sattPåVentFrist);
+                let farge: AkselColor;
+                if (antallDager <= 0) {
+                    farge = 'danger';
+                } else if (antallDager <= 3) {
+                    farge = 'warning';
+                } else {
+                    farge = 'info';
+                }
+
+                return (
+                    <Tag data-color={farge} size="small" variant={'moderate'}>
+                        Venter til {formaterDatotekst(behandling.sattPåVentFrist)}
+                    </Tag>
+                );
+            }
+
+            return (
+                <Tag data-color="danger" size="small" variant={'moderate'}>
+                    Venter
+                </Tag>
+            );
+        }
+    };
+
     return (
         <SortableTable
             kolonnerConfig={{
@@ -59,7 +92,7 @@ const BenkTabell = ({ data, sorteringRetning, onSortChange }: Props) => {
                         <Table.HeaderCell scope="col">Fødselsnummer</Table.HeaderCell>
                         <Table.HeaderCell scope="col">Type</Table.HeaderCell>
                         <Table.HeaderCell scope="col" className={styles.kommentar}>
-                            Satt på vent begrunnelse
+                            Ventestatus
                         </Table.HeaderCell>
                         <Table.HeaderCell scope="col">Status</Table.HeaderCell>
                         <Table.ColumnHeader
@@ -105,26 +138,18 @@ const BenkTabell = ({ data, sorteringRetning, onSortChange }: Props) => {
                                     <BodyShort>
                                         {behandlingstypeTextFormatter[behandling.behandlingstype]}
                                     </BodyShort>
-                                    {(behandling.behandlingstype ===
-                                        BehandlingssammendragType.SØKNADSBEHANDLING ||
-                                        behandling.behandlingstype ===
-                                            BehandlingssammendragType.REVURDERING) &&
-                                        behandling.erSattPåVent && (
-                                            <Tag
-                                                data-color="danger"
-                                                size="small"
-                                                variant={'moderate'}
-                                            >
-                                                Venter
-                                            </Tag>
-                                        )}
                                 </HStack>
                             </Table.DataCell>
                             <Table.DataCell className={styles.kommentar}>
-                                <VisMerTekst
-                                    tekst={behandling?.sattPåVentBegrunnelse}
-                                    antallTegnFørVisMer={40}
-                                />
+                                <HStack gap="space-4">
+                                    {venteTagFormatter(behandling)}
+                                    {behandling?.sattPåVentBegrunnelse && (
+                                        <VisMer
+                                            tekst={behandling?.sattPåVentBegrunnelse}
+                                            visEllipsis={false}
+                                        />
+                                    )}
+                                </HStack>
                             </Table.DataCell>
                             <Table.DataCell>
                                 {behandling.status ===

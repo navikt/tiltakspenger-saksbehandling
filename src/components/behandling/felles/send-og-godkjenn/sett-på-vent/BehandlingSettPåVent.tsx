@@ -30,11 +30,12 @@ export const BehandlingSettPåVent = ({ behandling, disabled }: Props) => {
                 åpen={modalÅpen}
                 onClose={() => setModalÅpen(false)}
                 api={{
-                    trigger: (begrunnelse) =>
+                    trigger: (begrunnelse, frist) =>
                         settBehandlingPåVent({
                             sakId: behandling.sakId,
                             behandlingId: behandling.id,
                             begrunnelse: begrunnelse,
+                            frist: frist,
                         }).then((oppdaterBehandling) => {
                             if (oppdaterBehandling) {
                                 setModalÅpen(false);

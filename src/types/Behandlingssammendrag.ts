@@ -27,6 +27,7 @@ export interface Behandlingssammendrag {
     sistEndret?: string;
     erSattPåVent: boolean;
     sattPåVentBegrunnelse: Nullable<string>;
+    sattPåVentFrist: Nullable<string>;
 }
 
 export enum BehandlingssammendragType {

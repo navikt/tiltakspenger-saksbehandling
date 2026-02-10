@@ -54,6 +54,10 @@ export const alderFraDato = (dato: string) => {
     return dayjs().diff(dato, 'years');
 };
 
+export const antallKalenderDagerUnnaDagensDato = (dato: string) => {
+    return dayjs(dato).startOf('day').diff(dayjs().startOf('day'), 'day');
+};
+
 export const finn16årsdag = (fødselsdato: string) => {
     return dayjs(fødselsdato).add(16, 'years').format(DATO_FORMAT);
 };
