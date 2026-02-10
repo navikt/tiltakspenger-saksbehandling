@@ -69,6 +69,7 @@ const SettBehandlingPåVentModal = (props: {
                                     field.onChange(dato ? dateTilISOTekst(dato) : '')
                                 }
                                 value={field.value ? datoTilDatoInputText(field.value) : ''}
+                                label={'Når burde behandlingen gjenopptas? (valgfritt)'}
                             />
                         )}
                         name={'frist'}
