@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../Spørsmål.module.css';
+import styles from './ManueltRegistrertSøknadBarnetillegg.module.css';
 import { FieldPath, useController, useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 import { Alert, Button, Heading, HStack, VStack } from '@navikt/ds-react';
 import { classNames } from '~/utils/classNames';

@@ -9,6 +9,7 @@ import { formaterTidspunktMedSekunder, periodeTilFormatertDatotekst } from '~/ut
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 
 import style from './BehandlingOppdaterSaksopplysninger.module.css';
+import { randomUUID } from 'node:crypto';
 
 export const BehandlingOppdaterSaksopplysninger = () => {
     const [harOppdatert, setHarOppdatert] = useState(false);
@@ -60,7 +61,7 @@ export const BehandlingOppdaterSaksopplysninger = () => {
                     variant={'error'}
                     size={'small'}
                     className={style.varsel}
-                    key={Date.now()}
+                    key={`error-${randomUUID()}`}
                     melding={`Oppdatering av saksopplysninger feilet - [${error.status}] ${error.info?.melding || error.message}`}
                 />
             )}

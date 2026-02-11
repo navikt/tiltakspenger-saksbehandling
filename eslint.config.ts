@@ -14,7 +14,7 @@ const parserOptions = {
 
 export default [
     {
-        ignores: ['dist', '*.cjs', '*.mjs', '*.js', 'tests'],
+        ignores: ['dist', '*.cjs', '*.mjs', '*.js', 'tests', '.next'],
     },
 
     {
@@ -54,6 +54,13 @@ export default [
             ],
             'react/react-in-jsx-scope': 'off',
             '@typescript-eslint/ban-ts-comment': 'off',
+        },
+    },
+    // For at eslint ikke skal klage på getServerSideProps for next-pages.
+    {
+        files: ['src/pages/**/*.{ts,tsx,js,jsx}'],
+        rules: {
+            'react-refresh/only-export-components': 'off',
         },
     },
 ];

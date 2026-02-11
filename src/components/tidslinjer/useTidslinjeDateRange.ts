@@ -28,7 +28,7 @@ export const useTidslinjeDateRange = (tidslinje: TidslinjeRammevedtak) => {
                 ),
             );
         },
-        [månederScroll],
+        [månederScroll, numMånederMedVedtak],
     );
 
     const start = dayjs(førsteDato).add(månederScroll, 'months');

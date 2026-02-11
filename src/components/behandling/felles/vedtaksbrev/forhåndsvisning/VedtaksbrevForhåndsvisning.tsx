@@ -27,6 +27,8 @@ export const VedtaksbrevForhåndsvisning = ({ behandling, hentDto, validering }:
 
     useEffect(() => {
         if (!harValideringsfeil) {
+            // TODO Gjorde lintingen strengere ved oppgradering til Next 16. Fikset bare åpenbare feil, denne burde undersøkes.
+            /* eslint-disable-next-line react-hooks/set-state-in-effect */
             setShowValidationError(false);
         }
     }, [harValideringsfeil]);

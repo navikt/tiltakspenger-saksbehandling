@@ -1,12 +1,3 @@
-.logoResponsive {
-    display: inline-block;
-}
-@media (max-width: 1180px) {
-    .logoResponsive {
-        display: none;
-    }
-}
-
 .opprettSakButton {
     margin-top: 0.6rem;
     margin-bottom: 0.6rem;

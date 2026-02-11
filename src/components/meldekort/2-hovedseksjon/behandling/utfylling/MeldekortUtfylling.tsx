@@ -119,6 +119,8 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
         !skjemaErEndret && !harValideringsFeil && meldekortBehandling.beregning !== null;
 
     return (
+        // TODO Gjorde lintingen strengere ved oppgradering til Next 16. Fikset bare åpenbare feil, denne burde undersøkes.
+        /* eslint-disable-next-line react-hooks/refs */
         <form onSubmit={formContext.handleSubmit(onSubmit)}>
             <VStack gap={'space-20'}>
                 <MeldekortUker dager={formContext.watch('dager')} underBehandling={true} />
@@ -259,6 +261,8 @@ const MeldekortUtfyllingFooter = (props: {
                         size="small"
                         loading={props.lagreOgBeregnMeldekort.isMutating}
                         onClick={() => {
+                            // TODO Gjorde lintingen strengere ved oppgradering til Next 16. Fikset bare åpenbare feil, denne burde undersøkes.
+                            /* eslint-disable-next-line react-hooks/immutability */
                             props.buttonActionRef.current = 'lagreOgBeregn';
                         }}
                         disabled={props.ingenDagerGirRett}
@@ -268,6 +272,8 @@ const MeldekortUtfyllingFooter = (props: {
                     <Button
                         size="small"
                         onClick={() => {
+                            // TODO Gjorde lintingen strengere ved oppgradering til Next 16. Fikset bare åpenbare feil, denne burde undersøkes.
+                            /* eslint-disable-next-line react-hooks/immutability */
                             props.buttonActionRef.current = 'åpneSendTilBeslutterModal';
                         }}
                         disabled={props.ingenDagerGirRett || !props.kanSendeTilBeslutning}
@@ -284,6 +290,8 @@ const MeldekortUtfyllingFooter = (props: {
                                 size={'small'}
                                 loading={props.sendMeldekortTilBeslutter.isMutating}
                                 onClick={() => {
+                                    // TODO Gjorde lintingen strengere ved oppgradering til Next 16. Fikset bare åpenbare feil, denne burde undersøkes.
+                                    /* eslint-disable-next-line react-hooks/immutability */
                                     props.buttonActionRef.current = 'sendTilBeslutter';
                                 }}
                             >

@@ -2,20 +2,8 @@
     margin-top: 1rem;
 }
 
-.periode {
-    display: flex;
-    gap: 1rem;
-    align-items: flex-end;
-    margin-bottom: 1rem;
-}
-
 .antall {
     width: 100px;
-}
-
-.perioderKnapper {
-    display: flex;
-    gap: 1rem;
 }
 
 .feilPeriode {

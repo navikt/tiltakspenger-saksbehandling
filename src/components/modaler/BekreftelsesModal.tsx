@@ -4,6 +4,7 @@ import Varsel from '../varsel/Varsel';
 import { FetcherError } from '~/utils/fetch/fetch';
 
 import styles from './BekreftelsesModal.module.css';
+import { randomUUID } from 'node:crypto';
 
 type Props = {
     modalRef?: RefObject<HTMLDialogElement | null>;
@@ -43,7 +44,7 @@ export const BekreftelsesModal = ({
                             variant={'error'}
                             size={'small'}
                             melding={`${feil.info?.melding || feil.message}`}
-                            key={Date.now()}
+                            key={`error-${randomUUID()}`}
                         />
                     )}
                     <div className={styles.knapper}>

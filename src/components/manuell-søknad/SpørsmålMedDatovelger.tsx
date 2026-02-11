@@ -4,7 +4,7 @@ import { JaNeiSpørsmål } from '~/components/manuell-søknad/JaNeiSpørsmål';
 import { Datovelger } from '~/components/datovelger/Datovelger';
 import type { ManueltRegistrertSøknad } from '~/components/manuell-søknad/ManueltRegistrertSøknad';
 import { Heading, VStack } from '@navikt/ds-react';
-import styles from './Spørsmål.module.css';
+import styles from './SpørsmålMedDatoVelger.module.css';
 import { dateTilISOTekst } from '~/utils/date';
 
 type Props = {

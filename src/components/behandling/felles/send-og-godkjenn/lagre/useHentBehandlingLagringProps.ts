@@ -67,6 +67,8 @@ export const useHentBehandlingLagringProps = ({
     }, [skjema.textAreas]);
 
     useEffect(() => {
+        // TODO Gjorde lintingen strengere ved oppgradering til Next 16. Fikset bare åpenbare feil, denne burde undersøkes.
+        /* eslint-disable-next-line react-hooks/set-state-in-effect */
         updateDirtyState();
     }, [skjema]);
 
