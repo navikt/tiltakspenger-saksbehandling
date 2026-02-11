@@ -58,13 +58,14 @@ const tilDTO = (skjema: OmgjøringContext): Nullable<OppdaterOmgjøringDTO> => {
         }
 
         case RevurderingResultat.OMGJØRING_OPPHØR: {
-            const { vedtaksperiode, textAreas } = skjema;
+            const { vedtaksperiode, textAreas, valgteHjemler } = skjema;
 
             return {
                 resultat: RevurderingResultat.OMGJØRING_OPPHØR,
                 fritekstTilVedtaksbrev: textAreas.brevtekst.getValue(),
                 begrunnelseVilkårsvurdering: textAreas.begrunnelse.getValue(),
                 vedtaksperiode,
+                valgteHjemler,
             } satisfies OppdaterOmgjøringOpphørDTO;
         }
 

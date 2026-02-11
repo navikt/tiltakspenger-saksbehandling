@@ -1,4 +1,9 @@
-import { Omgjøring, OmgjøringResultat, RevurderingResultat } from '~/types/Revurdering';
+import {
+    HjemmelForStansOgOpphør,
+    Omgjøring,
+    OmgjøringResultat,
+    RevurderingResultat,
+} from '~/types/Revurdering';
 import { Reducer } from 'react';
 import { ReducerSuperAction } from '~/types/Context';
 import {
@@ -26,6 +31,7 @@ export type OmgjøringIkkeValgtState = {
 export type OmgjøringOpphørState = {
     resultat: RevurderingResultat.OMGJØRING_OPPHØR;
     vedtaksperiode: Periode;
+    valgteHjemler: HjemmelForStansOgOpphør[];
 };
 
 export type OmgjøringInnvilgelseState = {
@@ -48,6 +54,11 @@ type OmgjøringSetResultatAction = {
     };
 };
 
+type OmgjøringOpphørAction = {
+    type: 'setHjemlerForOpphør';
+    payload: { hjemler: HjemmelForStansOgOpphør[] };
+};
+
 type VedtaksperiodeAction = {
     type: 'oppdaterVedtaksperiode';
     payload: {
@@ -55,7 +66,11 @@ type VedtaksperiodeAction = {
     };
 };
 
-type Actions = InnvilgelseActions | VedtaksperiodeAction | OmgjøringSetResultatAction;
+type Actions =
+    | InnvilgelseActions
+    | VedtaksperiodeAction
+    | OmgjøringSetResultatAction
+    | OmgjøringOpphørAction;
 
 export type OmgjøringActions = ReducerSuperAction<
     Actions,
@@ -85,6 +100,17 @@ export const omgjøringReducer: Reducer<OmgjøringState, OmgjøringActions> = (s
             return {
                 ...state,
                 vedtaksperiode: nyVedtaksperiode,
+            };
+        }
+
+        case 'setHjemlerForOpphør': {
+            if (resultat !== RevurderingResultat.OMGJØRING_OPPHØR) {
+                throw Error('Kan kun sette valgt hjemmel ved opphør');
+            }
+
+            return {
+                ...state,
+                valgteHjemler: payload.hjemler,
             };
         }
 
@@ -147,4 +173,14 @@ export const useOmgjøringSkjemaDispatch = () => {
 
     return (action: Actions) =>
         dispatch({ ...action, superType: BehandlingSkjemaType.RevurderingOmgjøring });
+};
+
+export const useOmgjøringOpphørSkjema = () => {
+    const context = useOmgjøringSkjema();
+
+    if (context.resultat !== RevurderingResultat.OMGJØRING_OPPHØR) {
+        throw Error(`Feil resultat for omgjøring opphør: ${context.resultat}`);
+    }
+
+    return context;
 };

@@ -13,6 +13,7 @@ import { RevurderingOmgjøringHeader } from '~/components/behandling/revurdering
 import { OmgjøringVedtaksperiodeVelger } from '~/components/behandling/revurdering/omgjøring/vedtaksperiode/OmgjøringVedtaksperiodeVelger';
 import { RevurderingResultat } from '~/types/Revurdering';
 import { OmgjøringResultatVelger } from '~/components/behandling/revurdering/omgjøring/resultat-velger/OmgjøringResultatVelger';
+import { OmgjøringOpphørVelger } from '~/components/behandling/revurdering/omgjøring/opphør/OmgjøringOpphørVelger';
 
 export const RevurderingOmgjøringVedtak = () => {
     const skjema = useOmgjøringSkjema();
@@ -76,7 +77,7 @@ const Opphør = () => {
     return (
         <>
             <Separator />
-            <OmgjøringVedtaksperiodeVelger />
+            <OmgjøringOpphørVelger />
             <Separator />
             <BegrunnelseVilkårsvurdering />
             <Separator />

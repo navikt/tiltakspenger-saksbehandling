@@ -195,6 +195,7 @@ const omgjøringOpphørInitialState = (
         return {
             resultat: RevurderingResultat.OMGJØRING_OPPHØR,
             vedtaksperiode,
+            valgteHjemler: [],
         };
     }
 
@@ -208,5 +209,6 @@ const omgjøringOpphørInitialState = (
     return {
         resultat: RevurderingResultat.OMGJØRING_OPPHØR,
         vedtaksperiode: totalPeriode(perioderSomKanOpphøres),
+        valgteHjemler: [],
     };
 };
