@@ -10,6 +10,7 @@ export type KlageId = `klage_${string}`;
 export enum KlagebehandlingResultat {
     AVVIST = 'AVVIST',
     OMGJØR = 'OMGJØR',
+    OPPRETTHOLDT = 'OPPRETTHOLDT',
 }
 
 export enum KlagebehandlingStatus {
@@ -46,6 +47,7 @@ export interface Klagebehandling {
     begrunnelse: Nullable<string>;
     rammebehandlingId: Nullable<BehandlingId>;
     ventestatus: Nullable<VentestatusHendelse>;
+    hjemler: Nullable<Klagehjemmel[]>;
 }
 
 export interface Brevtekst {
@@ -88,8 +90,10 @@ export enum OmgjøringÅrsak {
 }
 
 export interface VurderKlageRequest {
-    årsak: OmgjøringÅrsak;
-    begrunnelse: string;
+    vurderingstype: 'OMGJØR' | 'OPPRETTHOLD';
+    årsak: Nullable<OmgjøringÅrsak>;
+    begrunnelse: Nullable<string>;
+    hjemler: Nullable<Klagehjemmel[]>;
 }
 
 export interface ForhåndsvisBrevKlageRequest {
@@ -109,3 +113,21 @@ export interface OpprettOmgjøringsbehandlingForKlageRequest {
 export type VedtattKlagevedtakMedBehandling = { type: 'klagevedtak' } & Klagevedtak & {
         behandling: Klagebehandling;
     };
+
+export enum Klagehjemmel {
+    ARBEIDSMARKEDSLOVEN_2 = 'ARBEIDSMARKEDSLOVEN_2',
+    ARBEIDSMARKEDSLOVEN_13 = 'ARBEIDSMARKEDSLOVEN_13',
+    ARBEIDSMARKEDSLOVEN_13_LØNN = 'ARBEIDSMARKEDSLOVEN_13_LØNN',
+    ARBEIDSMARKEDSLOVEN_13_FJERDE_LEDD = 'ARBEIDSMARKEDSLOVEN_13_FJERDE_LEDD',
+    ARBEIDSMARKEDSLOVEN_15 = 'ARBEIDSMARKEDSLOVEN_15',
+    ARBEIDSMARKEDSLOVEN_17 = 'ARBEIDSMARKEDSLOVEN_17',
+    TILTAKSPENGEFORSKRIFTEN_2 = 'TILTAKSPENGEFORSKRIFTEN_2',
+    TILTAKSPENGEFORSKRIFTEN_3 = 'TILTAKSPENGEFORSKRIFTEN_3',
+    TILTAKSPENGEFORSKRIFTEN_5 = 'TILTAKSPENGEFORSKRIFTEN_5',
+    TILTAKSPENGEFORSKRIFTEN_6 = 'TILTAKSPENGEFORSKRIFTEN_6',
+    TILTAKSPENGEFORSKRIFTEN_7 = 'TILTAKSPENGEFORSKRIFTEN_7',
+    TILTAKSPENGEFORSKRIFTEN_8 = 'TILTAKSPENGEFORSKRIFTEN_8',
+    TILTAKSPENGEFORSKRIFTEN_9 = 'TILTAKSPENGEFORSKRIFTEN_9',
+    TILTAKSPENGEFORSKRIFTEN_10 = 'TILTAKSPENGEFORSKRIFTEN_10',
+    TILTAKSPENGEFORSKRIFTEN_11 = 'TILTAKSPENGEFORSKRIFTEN_11',
+}

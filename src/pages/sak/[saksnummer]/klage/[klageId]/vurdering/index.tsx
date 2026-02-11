@@ -24,6 +24,7 @@ import {
     erKlageAvsluttet,
     erKlageKnyttetTilRammebehandling,
     erKlageOmgjøring,
+    erKlageOpprettholdelse,
     erKlageUnderAktivOmgjøring,
     finnUrlForKlageSteg,
     kanBehandleKlage,
@@ -250,7 +251,7 @@ const VurderingKlagePage = ({ sak, vedtakOgBehandling, søknader, omgjøringsbeh
                                 >
                                     Gå til omgjøringsbehandling
                                 </Button>
-                            ) : !erReadonlyForSaksbehandler ? (
+                            ) : !erReadonlyForSaksbehandler && erKlageOmgjøring(klage) ? (
                                 <Button
                                     type="button"
                                     onClick={() => setVilVelgeOmgjøringsbehandlingModal(true)}
@@ -258,6 +259,15 @@ const VurderingKlagePage = ({ sak, vedtakOgBehandling, søknader, omgjøringsbeh
                                     Velg omgjøringsbehandling
                                 </Button>
                             ) : null}
+
+                            {erKlageOpprettholdelse(klage) && (
+                                <Button
+                                    as={Link}
+                                    href={`/sak/${sak.saksnummer}/klage/${klage.id}/brev`}
+                                >
+                                    Fortsett
+                                </Button>
+                            )}
                         </HStack>
                     )}
 

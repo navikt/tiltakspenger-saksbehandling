@@ -57,6 +57,9 @@ export const erKlageKnyttetTilRammebehandling = (k: Klagebehandling): boolean =>
     return k.rammebehandlingId !== null;
 };
 
+export const erKlageOpprettholdelse = (k: Klagebehandling): boolean =>
+    k.resultat === KlagebehandlingResultat.OPPRETTHOLDT;
+
 /**
  * En aktiv omgjøringsbehandling betyr at det finnes en rammebehandling som er opprettet for å omgjøre vedtaket som klages på.
  */
@@ -81,6 +84,10 @@ export const finnUrlForKlageSteg = (k: Klagebehandling): string => {
 
         case KlagebehandlingResultat.OMGJØR: {
             return `/sak/${k.saksnummer}/klage/${k.id}/vurdering`;
+        }
+
+        case KlagebehandlingResultat.OPPRETTHOLDT: {
+            return `/sak/${k.saksnummer}/klage/${k.id}/brev`;
         }
     }
 

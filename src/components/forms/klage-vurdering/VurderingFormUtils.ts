@@ -1,5 +1,11 @@
 import { FieldErrors } from 'react-hook-form';
-import { Klagebehandling, OmgjøringÅrsak, VurderKlageRequest } from '~/types/Klage';
+import {
+    Klagebehandling,
+    KlagebehandlingResultat,
+    Klagehjemmel,
+    OmgjøringÅrsak,
+    VurderKlageRequest,
+} from '~/types/Klage';
 
 export enum OmgjøringÅrsakFormData {
     FEIL_ELLER_ENDRET_FAKTA = 'FEIL_ELLER_ENDRET_FAKTA',
@@ -16,19 +22,37 @@ export interface OmgjøringFormData {
 
 export enum KlageVurderingTypeFormData {
     OMGJØR = 'OMGJØR',
+    OPPRETTHOLD = 'OPPRETTHOLD',
+}
+
+export interface OpprettholdFormData {
+    hjemler: string[];
 }
 
 export interface VurderingFormData {
-    klageVurderingType: KlageVurderingTypeFormData;
+    klageVurderingType: KlageVurderingTypeFormData | '';
     omgjør: OmgjøringFormData;
+    oppretthold: OpprettholdFormData;
 }
 
 export const klagebehandlingTilVurderingFormData = (k: Klagebehandling): VurderingFormData => {
     return {
-        klageVurderingType: KlageVurderingTypeFormData.OMGJØR,
+        klageVurderingType:
+            k.resultat === KlagebehandlingResultat.OMGJØR
+                ? KlageVurderingTypeFormData.OMGJØR
+                : k.resultat === KlagebehandlingResultat.OPPRETTHOLDT
+                  ? KlageVurderingTypeFormData.OPPRETTHOLD
+                  : '',
         omgjør: {
             årsak: k.årsak ? omgjøringsårsakTilFormData(k.årsak) : '',
             begrunnelse: k.begrunnelse ?? '',
+        },
+        oppretthold: {
+            hjemler:
+                k.hjemler?.map(
+                    //combobox bruker skiller ikke mellom tekst og verdi, så vi map'er hjemmel til tekst her
+                    (h) => klageHjemlerFormDataTilTekst[klagehjemmelTilKlagehjemmelFormData(h)],
+                ) ?? [],
         },
     };
 };
@@ -37,10 +61,26 @@ export const vurderingFormDataTilVurderKlageRequest = (
     data: VurderingFormData,
 ): VurderKlageRequest => {
     return {
-        årsak: omgjøringsårsakFormDataTilOmgjøringÅrsak(
-            data.omgjør.årsak as OmgjøringÅrsakFormData,
-        ),
-        begrunnelse: data.omgjør.begrunnelse,
+        vurderingstype:
+            data.klageVurderingType === KlageVurderingTypeFormData.OMGJØR
+                ? 'OMGJØR'
+                : 'OPPRETTHOLD',
+        årsak:
+            data.klageVurderingType === KlageVurderingTypeFormData.OMGJØR
+                ? omgjøringsårsakFormDataTilOmgjøringÅrsak(
+                      data.omgjør.årsak as OmgjøringÅrsakFormData,
+                  )
+                : null,
+        begrunnelse:
+            data.klageVurderingType === KlageVurderingTypeFormData.OMGJØR
+                ? data.omgjør.begrunnelse
+                : null,
+        hjemler:
+            data.klageVurderingType === KlageVurderingTypeFormData.OPPRETTHOLD
+                ? data.oppretthold.hjemler.map((h) =>
+                      klagehjemmelFormDataTilKlagehjemmel(klagehjemmelTekstTilFormData[h]),
+                  )
+                : null,
     };
 };
 
@@ -79,13 +119,12 @@ export const omgjøringsårsakTilFormData = (årsak: OmgjøringÅrsak): Omgjøri
 export const vurderingFormValidation = (data: VurderingFormData) => {
     const errors: FieldErrors<VurderingFormData> = {};
 
-    //Per dags dato har vi kun støtte for omgjøring - ved omgjøring skal saksbehandler velge alternativ
-    // if (data.klageVurderingType === '') {
-    //     errors.klageVurderingType = {
-    //         type: 'required',
-    //         message: 'Du må velge et alternativ',
-    //     };
-    // }
+    if (data.klageVurderingType === '') {
+        errors.klageVurderingType = {
+            type: 'required',
+            message: 'Du må velge et alternativ',
+        };
+    }
 
     if (data.klageVurderingType === KlageVurderingTypeFormData.OMGJØR) {
         const omgjøringErrors = validerOmgjøringForm(data.omgjør);
@@ -93,6 +132,17 @@ export const vurderingFormValidation = (data: VurderingFormData) => {
             errors.omgjør = {
                 årsak: omgjøringErrors.errors.årsak,
                 begrunnelse: omgjøringErrors.errors.begrunnelse,
+            };
+        }
+    }
+
+    if (data.klageVurderingType === KlageVurderingTypeFormData.OPPRETTHOLD) {
+        if (data.oppretthold.hjemler.length === 0) {
+            errors.oppretthold = {
+                hjemler: {
+                    type: 'required',
+                    message: 'Du må velge minst én hjemmel',
+                },
             };
         }
     }
@@ -128,6 +178,7 @@ const validerOmgjøringForm = (data: OmgjøringFormData) => {
 
 export const klageVurderingTypeFormDataTilTekst: Record<KlageVurderingTypeFormData, string> = {
     [KlageVurderingTypeFormData.OMGJØR]: 'Omgjør vedtak',
+    [KlageVurderingTypeFormData.OPPRETTHOLD]: 'Oppretthold vedtak',
 };
 
 export const omgjøringÅrsakFormDataTilTekst: Record<OmgjøringÅrsakFormData, string> = {
@@ -139,5 +190,129 @@ export const omgjøringÅrsakFormDataTilTekst: Record<OmgjøringÅrsakFormData, 
 };
 
 export const harKlagevurderingsstegUtfylt = (k: Klagebehandling): boolean => {
-    return k.årsak !== null && k.begrunnelse !== null && k.begrunnelse.trim() !== '';
+    return (
+        (k.årsak !== null && k.begrunnelse !== null && k.begrunnelse.trim() !== '') ||
+        k.hjemler !== null
+    );
+};
+
+export enum KlagehjemmelFormData {
+    ARBEIDSMARKEDSLOVEN_2 = 'ARBEIDSMARKEDSLOVEN_2',
+    ARBEIDSMARKEDSLOVEN_13 = 'ARBEIDSMARKEDSLOVEN_13',
+    ARBEIDSMARKEDSLOVEN_13_LØNN = 'ARBEIDSMARKEDSLOVEN_13_LØNN',
+    ARBEIDSMARKEDSLOVEN_13_FJERDE_LEDD = 'ARBEIDSMARKEDSLOVEN_13_FJERDE_LEDD',
+    ARBEIDSMARKEDSLOVEN_15 = 'ARBEIDSMARKEDSLOVEN_15',
+    ARBEIDSMARKEDSLOVEN_17 = 'ARBEIDSMARKEDSLOVEN_17',
+    TILTAKSPENGEFORSKRIFTEN_2 = 'TILTAKSPENGEFORSKRIFTEN_2',
+    TILTAKSPENGEFORSKRIFTEN_3 = 'TILTAKSPENGEFORSKRIFTEN_3',
+    TILTAKSPENGEFORSKRIFTEN_5 = 'TILTAKSPENGEFORSKRIFTEN_5',
+    TILTAKSPENGEFORSKRIFTEN_6 = 'TILTAKSPENGEFORSKRIFTEN_6',
+    TILTAKSPENGEFORSKRIFTEN_7 = 'TILTAKSPENGEFORSKRIFTEN_7',
+    TILTAKSPENGEFORSKRIFTEN_8 = 'TILTAKSPENGEFORSKRIFTEN_8',
+    TILTAKSPENGEFORSKRIFTEN_9 = 'TILTAKSPENGEFORSKRIFTEN_9',
+    TILTAKSPENGEFORSKRIFTEN_10 = 'TILTAKSPENGEFORSKRIFTEN_10',
+    TILTAKSPENGEFORSKRIFTEN_11 = 'TILTAKSPENGEFORSKRIFTEN_11',
+}
+
+export const klageHjemlerFormDataTilTekst: Record<KlagehjemmelFormData, string> = {
+    [KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_2]: 'Arb.mark.lov §2',
+    [KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_13]: 'Arb.mark.lov §13',
+    [KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_13_LØNN]: 'Arb.mark.lov §13 - lønn',
+    [KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_13_FJERDE_LEDD]: 'Arb.mark.lov §13 fjerde ledd',
+    [KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_15]: 'Arb.mark.lov §15',
+    [KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_17]: 'Arb.mark.lov §17',
+    [KlagehjemmelFormData.TILTAKSPENGEFORSKRIFTEN_2]: 'Til.png.for §2',
+    [KlagehjemmelFormData.TILTAKSPENGEFORSKRIFTEN_3]: 'Til.png.for §3',
+    [KlagehjemmelFormData.TILTAKSPENGEFORSKRIFTEN_5]: 'Til.png.for §5',
+    [KlagehjemmelFormData.TILTAKSPENGEFORSKRIFTEN_6]: 'Til.png.for §6',
+    [KlagehjemmelFormData.TILTAKSPENGEFORSKRIFTEN_7]: 'Til.png.for §7',
+    [KlagehjemmelFormData.TILTAKSPENGEFORSKRIFTEN_8]: 'Til.png.for §8',
+    [KlagehjemmelFormData.TILTAKSPENGEFORSKRIFTEN_9]: 'Til.png.for §9',
+    [KlagehjemmelFormData.TILTAKSPENGEFORSKRIFTEN_10]: 'Til.png.for §10',
+    [KlagehjemmelFormData.TILTAKSPENGEFORSKRIFTEN_11]: 'Til.png.for §11',
+};
+
+//comboboxen skiller ikke mellom tekst og verdi, så vi trenger en mapping fra tekst-verdi til enum typen.
+const klagehjemmelTekstTilFormData: Record<string, KlagehjemmelFormData> = Object.entries(
+    klageHjemlerFormDataTilTekst,
+).reduce(
+    (acc, [key, value]) => {
+        acc[value] = key as KlagehjemmelFormData;
+        return acc;
+    },
+    {} as Record<string, KlagehjemmelFormData>,
+);
+
+export const klagehjemmelTilKlagehjemmelFormData = (
+    hjemmel: Klagehjemmel,
+): KlagehjemmelFormData => {
+    switch (hjemmel) {
+        case Klagehjemmel.ARBEIDSMARKEDSLOVEN_2:
+            return KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_2;
+        case Klagehjemmel.ARBEIDSMARKEDSLOVEN_13:
+            return KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_13;
+        case Klagehjemmel.ARBEIDSMARKEDSLOVEN_13_LØNN:
+            return KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_13_LØNN;
+        case Klagehjemmel.ARBEIDSMARKEDSLOVEN_13_FJERDE_LEDD:
+            return KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_13_FJERDE_LEDD;
+        case Klagehjemmel.ARBEIDSMARKEDSLOVEN_15:
+            return KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_15;
+        case Klagehjemmel.ARBEIDSMARKEDSLOVEN_17:
+            return KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_17;
+        case Klagehjemmel.TILTAKSPENGEFORSKRIFTEN_2:
+            return KlagehjemmelFormData.TILTAKSPENGEFORSKRIFTEN_2;
+        case Klagehjemmel.TILTAKSPENGEFORSKRIFTEN_3:
+            return KlagehjemmelFormData.TILTAKSPENGEFORSKRIFTEN_3;
+        case Klagehjemmel.TILTAKSPENGEFORSKRIFTEN_5:
+            return KlagehjemmelFormData.TILTAKSPENGEFORSKRIFTEN_5;
+        case Klagehjemmel.TILTAKSPENGEFORSKRIFTEN_6:
+            return KlagehjemmelFormData.TILTAKSPENGEFORSKRIFTEN_6;
+        case Klagehjemmel.TILTAKSPENGEFORSKRIFTEN_7:
+            return KlagehjemmelFormData.TILTAKSPENGEFORSKRIFTEN_7;
+        case Klagehjemmel.TILTAKSPENGEFORSKRIFTEN_8:
+            return KlagehjemmelFormData.TILTAKSPENGEFORSKRIFTEN_8;
+        case Klagehjemmel.TILTAKSPENGEFORSKRIFTEN_9:
+            return KlagehjemmelFormData.TILTAKSPENGEFORSKRIFTEN_9;
+        case Klagehjemmel.TILTAKSPENGEFORSKRIFTEN_10:
+            return KlagehjemmelFormData.TILTAKSPENGEFORSKRIFTEN_10;
+        case Klagehjemmel.TILTAKSPENGEFORSKRIFTEN_11:
+            return KlagehjemmelFormData.TILTAKSPENGEFORSKRIFTEN_11;
+    }
+};
+
+export const klagehjemmelFormDataTilKlagehjemmel = (
+    hjemmel: KlagehjemmelFormData,
+): Klagehjemmel => {
+    switch (hjemmel) {
+        case KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_2:
+            return Klagehjemmel.ARBEIDSMARKEDSLOVEN_2;
+        case KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_13:
+            return Klagehjemmel.ARBEIDSMARKEDSLOVEN_13;
+        case KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_13_LØNN:
+            return Klagehjemmel.ARBEIDSMARKEDSLOVEN_13_LØNN;
+        case KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_13_FJERDE_LEDD:
+            return Klagehjemmel.ARBEIDSMARKEDSLOVEN_13_FJERDE_LEDD;
+        case KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_15:
+            return Klagehjemmel.ARBEIDSMARKEDSLOVEN_15;
+        case KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_17:
+            return Klagehjemmel.ARBEIDSMARKEDSLOVEN_17;
+        case KlagehjemmelFormData.TILTAKSPENGEFORSKRIFTEN_2:
+            return Klagehjemmel.TILTAKSPENGEFORSKRIFTEN_2;
+        case KlagehjemmelFormData.TILTAKSPENGEFORSKRIFTEN_3:
+            return Klagehjemmel.TILTAKSPENGEFORSKRIFTEN_3;
+        case KlagehjemmelFormData.TILTAKSPENGEFORSKRIFTEN_5:
+            return Klagehjemmel.TILTAKSPENGEFORSKRIFTEN_5;
+        case KlagehjemmelFormData.TILTAKSPENGEFORSKRIFTEN_6:
+            return Klagehjemmel.TILTAKSPENGEFORSKRIFTEN_6;
+        case KlagehjemmelFormData.TILTAKSPENGEFORSKRIFTEN_7:
+            return Klagehjemmel.TILTAKSPENGEFORSKRIFTEN_7;
+        case KlagehjemmelFormData.TILTAKSPENGEFORSKRIFTEN_8:
+            return Klagehjemmel.TILTAKSPENGEFORSKRIFTEN_8;
+        case KlagehjemmelFormData.TILTAKSPENGEFORSKRIFTEN_9:
+            return Klagehjemmel.TILTAKSPENGEFORSKRIFTEN_9;
+        case KlagehjemmelFormData.TILTAKSPENGEFORSKRIFTEN_10:
+            return Klagehjemmel.TILTAKSPENGEFORSKRIFTEN_10;
+        case KlagehjemmelFormData.TILTAKSPENGEFORSKRIFTEN_11:
+            return Klagehjemmel.TILTAKSPENGEFORSKRIFTEN_11;
+    }
 };

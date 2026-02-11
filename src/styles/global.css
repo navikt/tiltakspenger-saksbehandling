@@ -1,8 +1,13 @@
 @import '@navikt/ds-css';
 
-ul,
-ol,
-li {
+/*
+* Vi har ikke lyst å ha default styling på lister, da det er veldig sjeldent (kanskje aldri, med mindre vi har custom styling for hvert av de) at vi faktisk ønsker det.
+* 
+* Derimot så er det slik at combobox fra aksel bruker ul/ol/li for å rendre options, og disse har role listbox/option/listitem, så vi må sørge for at disse ikke blir påvirket av denne regelen
+*/
+ul:not([role='listbox']),
+ol:not([role='listbox']),
+li:not([role='option']):not([role='listitem']) {
     list-style: none;
     padding: 0;
     margin: 0;
