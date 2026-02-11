@@ -189,18 +189,16 @@ const omgjøringOpphørInitialState = (
     behandling: Omgjøring,
     sak: SakProps,
 ): OmgjøringOpphørState => {
-    const { vedtaksperiode, omgjørVedtak, resultat } = behandling;
-
-    if (resultat === RevurderingResultat.OMGJØRING_OPPHØR) {
+    if (behandling.resultat === RevurderingResultat.OMGJØRING_OPPHØR) {
         return {
             resultat: RevurderingResultat.OMGJØRING_OPPHØR,
-            vedtaksperiode,
+            vedtaksperiode: behandling.vedtaksperiode,
             valgteHjemler: behandling.valgteHjemler,
         };
     }
 
-    const perioderSomKanOpphøres = hentRammevedtak(sak, omgjørVedtak)?.gyldigeKommandoer.OPPHØR
-        ?.innvilgelsesperioder;
+    const perioderSomKanOpphøres = hentRammevedtak(sak, behandling.omgjørVedtak)?.gyldigeKommandoer
+        .OPPHØR?.innvilgelsesperioder;
 
     if (!perioderSomKanOpphøres) {
         throw Error('Kan ikke opphøre et vedtak som ikke har gjeldende innvilgelsesperioder');

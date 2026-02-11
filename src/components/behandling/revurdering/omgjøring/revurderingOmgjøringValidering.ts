@@ -70,6 +70,12 @@ export const revurderingOmgjøringValidering = (
         }
     }
 
+    if (skjema.resultat === RevurderingResultat.OMGJØRING_OPPHØR) {
+        if (skjema.valgteHjemler.length === 0) {
+            validering.errors.push('Må velge en hjemmel for opphør');
+        }
+    }
+
     const vedtakSomOmgjøres = sak.tidslinje.elementer.reduce<Rammevedtak[]>(
         (acc, tidslinjeElement) => {
             const overlapper = perioderOverlapper(skjema.vedtaksperiode, tidslinjeElement.periode);
