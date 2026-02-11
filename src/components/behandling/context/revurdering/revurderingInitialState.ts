@@ -189,13 +189,13 @@ const omgjøringOpphørInitialState = (
     behandling: Omgjøring,
     sak: SakProps,
 ): OmgjøringOpphørState => {
-    const { vedtaksperiode, omgjørVedtak } = behandling;
+    const { vedtaksperiode, omgjørVedtak, resultat } = behandling;
 
-    if (vedtaksperiode) {
+    if (resultat === RevurderingResultat.OMGJØRING_OPPHØR) {
         return {
             resultat: RevurderingResultat.OMGJØRING_OPPHØR,
             vedtaksperiode,
-            valgteHjemler: [],
+            valgteHjemler: behandling.valgteHjemler,
         };
     }
 
