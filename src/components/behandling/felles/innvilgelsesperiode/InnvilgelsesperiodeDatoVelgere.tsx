@@ -3,18 +3,20 @@ import { useSak } from '~/context/sak/SakContext';
 import { Periode } from '~/types/Periode';
 import { dateTilISOTekst, datoMin, datoTilDatoInputText } from '~/utils/date';
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
-import { Datovelger } from '~/components/datovelger/Datovelger';
+import { Datovelger, DatovelgerProps } from '~/components/datovelger/Datovelger';
+import { TiltaksdeltakelseMedPeriode } from '~/types/TiltakDeltakelse';
+import { periodiseringTotalPeriode } from '~/utils/periode';
 
 type Props = {
     periode: Partial<Periode>;
-    tiltaksdeltakelsesperiode: Periode;
+    tiltaksdeltakelser: TiltaksdeltakelseMedPeriode[];
     index: number;
     readOnly: boolean;
 };
 
 export const InnvilgelsesperiodeDatovelgere = ({
     periode,
-    tiltaksdeltakelsesperiode,
+    tiltaksdeltakelser,
     index,
     readOnly,
 }: Props) => {
@@ -23,21 +25,27 @@ export const InnvilgelsesperiodeDatovelgere = ({
 
     const dispatch = useBehandlingInnvilgelseSkjemaDispatch();
 
+    const tiltaksdeltakelsesperiode = periodiseringTotalPeriode(tiltaksdeltakelser);
+
     const defaultDato = datoMin(new Date(), tiltaksdeltakelsesperiode.tilOgMed);
+
+    const commonProps: Partial<DatovelgerProps> = {
+        minDate: tiltaksdeltakelsesperiode.fraOgMed,
+        maxDate: tiltaksdeltakelsesperiode.tilOgMed,
+        defaultMonth: defaultDato,
+        readOnly,
+        size: 'small',
+        dropdownCaption: true,
+    };
 
     return (
         <>
             <Datovelger
+                {...commonProps}
                 label={'Fra og med'}
                 selected={periode.fraOgMed}
                 value={periode.fraOgMed ? datoTilDatoInputText(periode.fraOgMed) : undefined}
-                minDate={tiltaksdeltakelsesperiode.fraOgMed}
-                maxDate={periode.tilOgMed ?? tiltaksdeltakelsesperiode.tilOgMed}
-                defaultMonth={defaultDato}
                 error={!periode.fraOgMed && 'Velg dato'}
-                readOnly={readOnly}
-                size={'small'}
-                dropdownCaption={true}
                 onDateChange={(valgtDato) => {
                     if (!valgtDato) {
                         return;
@@ -46,7 +54,7 @@ export const InnvilgelsesperiodeDatovelgere = ({
                     dispatch({
                         type: 'oppdaterInnvilgelsesperiode',
                         payload: {
-                            periode: { fraOgMed: dateTilISOTekst(valgtDato) },
+                            periodeOppdatering: { fraOgMed: dateTilISOTekst(valgtDato) },
                             index,
                             behandling,
                             sak,
@@ -56,16 +64,11 @@ export const InnvilgelsesperiodeDatovelgere = ({
             />
 
             <Datovelger
+                {...commonProps}
                 label={'Til og med'}
                 selected={periode.tilOgMed}
                 value={periode.tilOgMed ? datoTilDatoInputText(periode.tilOgMed) : undefined}
-                minDate={periode.fraOgMed ?? tiltaksdeltakelsesperiode.fraOgMed}
-                maxDate={tiltaksdeltakelsesperiode.tilOgMed}
-                defaultMonth={defaultDato}
                 error={!periode.tilOgMed && 'Velg dato'}
-                readOnly={readOnly}
-                size={'small'}
-                dropdownCaption={true}
                 onDateChange={(valgtDato) => {
                     if (!valgtDato) {
                         return;
@@ -74,7 +77,7 @@ export const InnvilgelsesperiodeDatovelgere = ({
                     dispatch({
                         type: 'oppdaterInnvilgelsesperiode',
                         payload: {
-                            periode: { tilOgMed: dateTilISOTekst(valgtDato) },
+                            periodeOppdatering: { tilOgMed: dateTilISOTekst(valgtDato) },
                             index,
                             behandling,
                             sak,

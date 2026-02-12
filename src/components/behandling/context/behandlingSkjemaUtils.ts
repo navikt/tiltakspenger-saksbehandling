@@ -11,7 +11,12 @@ import {
 } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
 import { SøknadsbehandlingState } from '~/components/behandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
 import { BehandlingSkjemaState } from '~/components/behandling/context/behandlingSkjemaReducer';
-import { inneholderHelePerioden, krympPeriodisering, perioderOverlapper } from '~/utils/periode';
+import {
+    inneholderHelePerioden,
+    krympPeriodisering,
+    perioderOverlapper,
+    sorterPeriodisering,
+} from '~/utils/periode';
 import { datoMax, datoMin, forrigeDag, nesteDag } from '~/utils/date';
 import { MedPeriode, Periode } from '~/types/Periode';
 import { Rammebehandling } from '~/types/Rammebehandling';
@@ -91,7 +96,8 @@ export const oppdaterPeriodiseringUtenOverlapp = <T extends MedPeriode>(
                           tilOgMed: it.periode.tilOgMed,
                       },
             };
-        });
+        })
+        .toSorted(sorterPeriodisering());
 };
 
 // Forhåndsutfyller andre perioder for en innvilgelse ut fra valgt innvilgelsesperiode

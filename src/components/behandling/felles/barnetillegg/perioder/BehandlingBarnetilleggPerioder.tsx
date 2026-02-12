@@ -16,7 +16,11 @@ import {
 } from '~/utils/periode';
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';
 import { XMarkIcon } from '@navikt/aksel-icons';
-import { Datovelger, generateMatcherProps } from '~/components/datovelger/Datovelger';
+import {
+    Datovelger,
+    DatovelgerProps,
+    generateMatcherProps,
+} from '~/components/datovelger/Datovelger';
 import { dateTilISOTekst, datoTilDatoInputText } from '~/utils/date';
 import { classNames } from '~/utils/classNames';
 
@@ -140,6 +144,15 @@ const PeriodeVelger = ({ btPeriode, index, readOnly }: PeriodeVelgerProps) => {
 
     const erIkkeInnvilgetPeriode = innvilgelseHull.some((p) => perioderOverlapper(p, periode));
 
+    const commonProps: Partial<DatovelgerProps> = {
+        minDate: innvilgelseTotalPeriode.fraOgMed,
+        maxDate: innvilgelseTotalPeriode.tilOgMed,
+        readOnly,
+        size: 'small',
+        dropdownCaption: true,
+        disabledMatcher: disabledDager,
+    };
+
     return (
         <HStack
             gap={'space-12'}
@@ -147,15 +160,11 @@ const PeriodeVelger = ({ btPeriode, index, readOnly }: PeriodeVelgerProps) => {
             className={classNames(erIkkeInnvilgetPeriode && style.feilPeriode)}
         >
             <Datovelger
+                {...commonProps}
                 label={'Fra og med'}
                 selected={periode.fraOgMed}
                 value={datoTilDatoInputText(periode.fraOgMed)}
-                minDate={innvilgelseTotalPeriode.fraOgMed}
-                maxDate={periode.tilOgMed}
-                readOnly={readOnly}
-                size={'small'}
-                dropdownCaption={true}
-                disabledMatcher={disabledDager}
+                error={!periode.fraOgMed && 'Velg dato'}
                 onDateChange={(valgtDato) => {
                     if (!valgtDato) {
                         return;
@@ -164,23 +173,18 @@ const PeriodeVelger = ({ btPeriode, index, readOnly }: PeriodeVelgerProps) => {
                     dispatch({
                         type: 'oppdaterBarnetilleggPeriode',
                         payload: {
-                            periode: { fraOgMed: dateTilISOTekst(valgtDato) },
+                            periodeOppdatering: { fraOgMed: dateTilISOTekst(valgtDato) },
                             index,
                         },
                     });
                 }}
             />
             <Datovelger
+                {...commonProps}
                 label={'Til og med'}
                 selected={periode.tilOgMed}
                 value={datoTilDatoInputText(periode.tilOgMed)}
-                minDate={periode.fraOgMed ?? innvilgelseTotalPeriode.fraOgMed}
-                maxDate={innvilgelseTotalPeriode.tilOgMed}
                 error={!periode.tilOgMed && 'Velg dato'}
-                readOnly={readOnly}
-                size={'small'}
-                dropdownCaption={true}
-                disabledMatcher={disabledDager}
                 onDateChange={(valgtDato) => {
                     if (!valgtDato) {
                         return;
@@ -189,7 +193,7 @@ const PeriodeVelger = ({ btPeriode, index, readOnly }: PeriodeVelgerProps) => {
                     dispatch({
                         type: 'oppdaterBarnetilleggPeriode',
                         payload: {
-                            periode: { tilOgMed: dateTilISOTekst(valgtDato) },
+                            periodeOppdatering: { tilOgMed: dateTilISOTekst(valgtDato) },
                             index,
                         },
                     });

@@ -259,3 +259,54 @@ export const sorterPerioder =
         }
         return a.tilOgMed > b.tilOgMed ? unit : a.tilOgMed < b.tilOgMed ? -unit : 0;
     };
+
+export const sorterPeriodisering =
+    (order: 'asc' | 'desc' = 'asc') =>
+    (a: MedPeriode, b: MedPeriode): number => {
+        const unit = order === 'asc' ? 1 : -1;
+
+        if (a.periode.fraOgMed < b.periode.fraOgMed) {
+            return -unit;
+        }
+        if (a.periode.fraOgMed > b.periode.fraOgMed) {
+            return unit;
+        }
+        return a.periode.tilOgMed > b.periode.tilOgMed
+            ? unit
+            : a.periode.tilOgMed < b.periode.tilOgMed
+              ? -unit
+              : 0;
+    };
+
+export const oppdaterPeriode = (periode: Periode, oppdatering: Partial<Periode>): Periode => {
+    return {
+        fraOgMed:
+            oppdatering.fraOgMed ??
+            (oppdatering.tilOgMed
+                ? datoMin(periode.fraOgMed, oppdatering.tilOgMed)
+                : periode.fraOgMed),
+        tilOgMed:
+            oppdatering.tilOgMed ??
+            (oppdatering.fraOgMed
+                ? datoMax(periode.tilOgMed, oppdatering.fraOgMed)
+                : periode.tilOgMed),
+    };
+};
+
+export const oppdaterPartialPeriode = (
+    periode: Partial<Periode>,
+    oppdatering: Partial<Periode>,
+): Partial<Periode> => {
+    return {
+        fraOgMed:
+            oppdatering.fraOgMed ??
+            (oppdatering.tilOgMed && periode.fraOgMed
+                ? datoMin(periode.fraOgMed, oppdatering.tilOgMed)
+                : periode.fraOgMed),
+        tilOgMed:
+            oppdatering.tilOgMed ??
+            (oppdatering.fraOgMed && periode.tilOgMed
+                ? datoMax(periode.tilOgMed, oppdatering.fraOgMed)
+                : periode.tilOgMed),
+    };
+};

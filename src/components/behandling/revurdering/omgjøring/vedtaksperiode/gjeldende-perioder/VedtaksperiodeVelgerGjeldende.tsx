@@ -68,7 +68,7 @@ const PeriodeMedVelgKnapp = ({ periode }: { periode: Periode }) => {
                     onClick={() => {
                         dispatch({
                             type: 'oppdaterVedtaksperiode',
-                            payload: { periode },
+                            payload: { periodeOppdatering: periode },
                         });
                     }}
                 >

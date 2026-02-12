@@ -1,6 +1,8 @@
 import { Periode } from '~/types/Periode';
 import {
     erFullstendigPeriode,
+    oppdaterPartialPeriode,
+    oppdaterPeriode,
     periodiseringerErLike,
     periodiseringTotalPeriode,
     utvidPeriodisering,
@@ -24,7 +26,7 @@ export type InnvilgelsesperioderActions =
     | {
           type: 'oppdaterInnvilgelsesperiode';
           payload: {
-              periode: Partial<Periode>;
+              periodeOppdatering: Partial<Periode>;
               index: number;
               behandling: Rammebehandling;
               sak: SakProps;
@@ -77,9 +79,9 @@ export const innvilgelsesperioderReducer: Reducer<InnvilgelseState, Innvilgelses
 
         const innvilgelsesperiode = state.innvilgelsesperioder.at(0)!;
 
-        const { periode, behandling, sak } = payload;
+        const { periodeOppdatering, behandling, sak } = payload;
 
-        const nyPeriode = { ...innvilgelsesperiode.periode, ...periode };
+        const nyPeriode = oppdaterPartialPeriode(innvilgelsesperiode.periode, periodeOppdatering);
 
         if (erFullstendigPeriode(nyPeriode)) {
             return lagForhåndsutfyltInnvilgelse(behandling, nyPeriode, sak);
@@ -98,13 +100,13 @@ export const innvilgelsesperioderReducer: Reducer<InnvilgelseState, Innvilgelses
 
     switch (type) {
         case 'oppdaterInnvilgelsesperiode': {
-            const { periode, index, behandling, sak } = payload;
+            const { periodeOppdatering, index, behandling, sak } = payload;
 
             const innvilgelsesperiode = state.innvilgelsesperioder.at(index)!;
 
             const nyInnvilgelsesperiode = {
                 ...innvilgelsesperiode,
-                periode: { ...innvilgelsesperiode.periode, ...periode },
+                periode: oppdaterPeriode(innvilgelsesperiode.periode, periodeOppdatering),
             };
 
             const nyePerioder = oppdaterPeriodiseringUtenOverlapp(

@@ -4,7 +4,7 @@ import { InnvilgelseMedPerioderState } from '~/components/behandling/context/inn
 import { Reducer } from 'react';
 import { oppdaterPeriodiseringUtenOverlapp } from '~/components/behandling/context/behandlingSkjemaUtils';
 import { Periode } from '~/types/Periode';
-import { periodiseringTotalPeriode } from '~/utils/periode';
+import { oppdaterPeriode, periodiseringTotalPeriode } from '~/utils/periode';
 
 export type BarnetilleggActions =
     | {
@@ -25,7 +25,7 @@ export type BarnetilleggActions =
       }
     | {
           type: 'oppdaterBarnetilleggPeriode';
-          payload: { periode: Partial<Periode>; index: number };
+          payload: { periodeOppdatering: Partial<Periode>; index: number };
       }
     | {
           type: 'settBarnetilleggPerioder';
@@ -108,16 +108,13 @@ export const barnetilleggReducer: Reducer<InnvilgelseMedPerioderState, Barnetill
         }
 
         case 'oppdaterBarnetilleggPeriode': {
-            const { index, periode } = payload;
+            const { index, periodeOppdatering } = payload;
 
             const barnetilleggPeriode = state.barnetilleggPerioder.at(index)!;
 
             const oppdatertPeriode = {
                 ...barnetilleggPeriode,
-                periode: {
-                    ...barnetilleggPeriode.periode,
-                    ...periode,
-                },
+                periode: oppdaterPeriode(barnetilleggPeriode.periode, periodeOppdatering),
             };
 
             return {

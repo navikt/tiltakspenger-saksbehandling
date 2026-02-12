@@ -45,9 +45,12 @@ const Innvilgelse = ({ harValgtPeriode }: { harValgtPeriode: boolean }) => {
 
     if (!kanInnvilges) {
         return (
-            <Alert variant={'warning'}>
-                {'Ingen perioder kan innvilges - Vi støtter ikke rent opphør ennå.'}
-            </Alert>
+            <>
+                <Alert variant={'warning'}>
+                    {'Fant ingen tiltaksdeltakelser det kan innvilges for.'}
+                </Alert>
+                <Separator />
+            </>
         );
     }
 

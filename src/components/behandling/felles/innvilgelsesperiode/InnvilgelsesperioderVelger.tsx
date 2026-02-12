@@ -3,10 +3,7 @@ import {
     useBehandlingInnvilgelseSkjema,
     useBehandlingInnvilgelseSkjemaDispatch,
 } from '~/components/behandling/context/innvilgelse/innvilgelseContext';
-import {
-    hentHeleTiltaksdeltakelsesperioden,
-    hentTiltaksdeltakelserMedStartOgSluttdato,
-} from '~/utils/behandling';
+import { hentTiltaksdeltakelserMedStartOgSluttdato } from '~/utils/behandling';
 import { useSak } from '~/context/sak/SakContext';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { Alert, Button, Heading, HStack, Select, VStack } from '@navikt/ds-react';
@@ -25,7 +22,7 @@ import {
     VedtaksperioderUtenInnvilgelseVarsel,
 } from '~/components/behandling/felles/innvilgelsesperiode/varsler/InnvilgelseHullVarsel';
 import { RevurderingResultat } from '~/types/Revurdering';
-import { inneholderHelePerioden, periodiseringTotalPeriode } from '~/utils/periode';
+import { inneholderHelePerioden } from '~/utils/periode';
 import { Periode } from '~/types/Periode';
 import { classNames } from '~/utils/classNames';
 
@@ -45,12 +42,11 @@ export const InnvilgelsesperioderVelger = () => {
     }
 
     const tiltaksdeltakelser = hentTiltaksdeltakelserMedStartOgSluttdato(behandling);
-    const tiltaksdeltakelsesperiode = hentHeleTiltaksdeltakelsesperioden(behandling);
 
-    if (!tiltaksdeltakelsesperiode) {
+    if (tiltaksdeltakelser.length === 0) {
         return (
             <Alert variant={'error'} size={'small'}>
-                {'Ingen tiltaksdeltakelser i saksopplysninger som kan innvilges'}
+                {'Ingen tiltaksdeltakelser i saksopplysningene kan innvilges'}
             </Alert>
         );
     }
@@ -114,7 +110,7 @@ export const InnvilgelsesperioderVelger = () => {
                     <HStack gap={'space-12'}>
                         <InnvilgelsesperiodeDatovelgere
                             periode={innvilgelsesperioder.at(0)!.periode}
-                            tiltaksdeltakelsesperiode={tiltaksdeltakelsesperiode}
+                            tiltaksdeltakelser={tiltaksdeltakelser}
                             index={0}
                             readOnly={erReadonly}
                         />
@@ -147,8 +143,6 @@ const InnvilgelsesperiodeVelgerFull = ({
 
     const innvilgelsesperiode = innvilgelsesperioder.at(index)!;
 
-    const tiltaksdeltakelsesperiode = periodiseringTotalPeriode(tiltaksdeltakelser);
-
     const { periode, antallDagerPerMeldeperiode, internDeltakelseId } = innvilgelsesperiode;
 
     const harValgtGyldigTiltak = tiltaksdeltakelser.some(
@@ -167,7 +161,7 @@ const InnvilgelsesperiodeVelgerFull = ({
             <HStack gap={'space-12'} align={'end'}>
                 <InnvilgelsesperiodeDatovelgere
                     periode={periode}
-                    tiltaksdeltakelsesperiode={tiltaksdeltakelsesperiode}
+                    tiltaksdeltakelser={tiltaksdeltakelser}
                     index={index}
                     readOnly={readOnly}
                 />

@@ -23,6 +23,7 @@ import {
 import { Periode } from '~/types/Periode';
 import { omgjøringInitialState } from '~/components/behandling/context/revurdering/revurderingInitialState';
 import { SakProps } from '~/types/Sak';
+import { oppdaterPeriode } from '~/utils/periode';
 
 export type OmgjøringIkkeValgtState = {
     resultat: RevurderingResultat.OMGJØRING_IKKE_VALGT;
@@ -62,7 +63,7 @@ type OmgjøringOpphørAction = {
 type VedtaksperiodeAction = {
     type: 'oppdaterVedtaksperiode';
     payload: {
-        periode: Partial<Periode>;
+        periodeOppdatering: Partial<Periode>;
     };
 };
 
@@ -92,10 +93,10 @@ export const omgjøringReducer: Reducer<OmgjøringState, OmgjøringActions> = (s
                 throw Error('Kan ikke sette vedtaksperiode før omgjøringstype er valgt');
             }
 
-            const nyVedtaksperiode = {
-                ...state.vedtaksperiode,
-                ...payload.periode,
-            };
+            const nyVedtaksperiode = oppdaterPeriode(
+                state.vedtaksperiode,
+                payload.periodeOppdatering,
+            );
 
             return {
                 ...state,

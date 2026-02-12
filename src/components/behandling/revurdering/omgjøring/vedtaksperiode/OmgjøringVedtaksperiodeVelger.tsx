@@ -1,5 +1,9 @@
-import { Datovelger, generateMatcherProps } from '~/components/datovelger/Datovelger';
-import { dateTilISOTekst, datoMax, datoMin, datoTilDatoInputText } from '~/utils/date';
+import {
+    Datovelger,
+    DatovelgerProps,
+    generateMatcherProps,
+} from '~/components/datovelger/Datovelger';
+import { dateTilISOTekst, datoTilDatoInputText } from '~/utils/date';
 import {
     useOmgjøringMedValgtResultatSkjema,
     useOmgjøringSkjemaDispatch,
@@ -47,6 +51,13 @@ export const OmgjøringVedtaksperiodeVelger = () => {
 
     const periodeSomMåOmgjøresInnenfor = gyldigTotalOmgjøringsperiode(behandling, vedtak);
 
+    const commonProps: Partial<DatovelgerProps> = {
+        readOnly: erReadonly,
+        size: 'small',
+        dropdownCaption: true,
+        disabledMatcher,
+    };
+
     return (
         <VedtakSeksjon>
             <VedtakSeksjon.Venstre>
@@ -69,19 +80,13 @@ export const OmgjøringVedtaksperiodeVelger = () => {
 
                     <HStack gap={'space-6'} align={'end'}>
                         <Datovelger
+                            {...commonProps}
                             label={'Fra og med'}
                             selected={vedtaksperiode.fraOgMed}
                             value={datoTilDatoInputText(vedtaksperiode.fraOgMed)}
                             minDate={erOpphør ? perioderSomKanOmgjøres.at(0)?.fraOgMed : undefined}
-                            maxDate={datoMin(
-                                vedtaksperiode.tilOgMed,
-                                periodeSomMåOmgjøresInnenfor.tilOgMed,
-                            )}
+                            maxDate={periodeSomMåOmgjøresInnenfor.tilOgMed}
                             defaultMonth={vedtaksperiode.fraOgMed}
-                            readOnly={erReadonly}
-                            size={'small'}
-                            dropdownCaption={true}
-                            disabledMatcher={disabledMatcher}
                             onDateChange={(valgtDato) => {
                                 if (!valgtDato) {
                                     return;
@@ -90,25 +95,21 @@ export const OmgjøringVedtaksperiodeVelger = () => {
                                 dispatch({
                                     type: 'oppdaterVedtaksperiode',
                                     payload: {
-                                        periode: { fraOgMed: dateTilISOTekst(valgtDato) },
+                                        periodeOppdatering: {
+                                            fraOgMed: dateTilISOTekst(valgtDato),
+                                        },
                                     },
                                 });
                             }}
                         />
                         <Datovelger
+                            {...commonProps}
                             label={'Til og med'}
                             selected={vedtaksperiode.tilOgMed}
                             value={datoTilDatoInputText(vedtaksperiode.tilOgMed)}
-                            minDate={datoMax(
-                                vedtaksperiode.fraOgMed,
-                                periodeSomMåOmgjøresInnenfor.fraOgMed,
-                            )}
+                            minDate={periodeSomMåOmgjøresInnenfor.fraOgMed}
                             maxDate={erOpphør ? perioderSomKanOmgjøres.at(-1)?.tilOgMed : undefined}
                             defaultMonth={vedtaksperiode.tilOgMed}
-                            readOnly={erReadonly}
-                            size={'small'}
-                            dropdownCaption={true}
-                            disabledMatcher={disabledMatcher}
                             onDateChange={(valgtDato) => {
                                 if (!valgtDato) {
                                     return;
@@ -117,7 +118,9 @@ export const OmgjøringVedtaksperiodeVelger = () => {
                                 dispatch({
                                     type: 'oppdaterVedtaksperiode',
                                     payload: {
-                                        periode: { tilOgMed: dateTilISOTekst(valgtDato) },
+                                        periodeOppdatering: {
+                                            tilOgMed: dateTilISOTekst(valgtDato),
+                                        },
                                     },
                                 });
                             }}
