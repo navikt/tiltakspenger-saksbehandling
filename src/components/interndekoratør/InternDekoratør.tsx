@@ -19,7 +19,7 @@ import router from 'next/router';
 import styles from './InternDekoratør.module.css';
 import { BekreftelsesModal } from '~/components/modaler/BekreftelsesModal';
 import { useHentEllerOpprettSak } from '~/components/interndekoratør/useHentEllerOpprettSak';
-import { randomUUID } from 'node:crypto';
+import { v4 as uuidv4 } from 'uuid';
 
 export const InternDekoratør = () => {
     const { innloggetSaksbehandler } = useSaksbehandler();
@@ -122,7 +122,7 @@ export const InternDekoratør = () => {
                     melding={error.message ?? `Noe gikk galt ved henting av sak for "${søketekst}"`}
                     variant="error"
                     marginX
-                    key={`error-${randomUUID()}`}
+                    key={`error-${uuidv4()}`}
                 />
             )}
             <BekreftelsesModal
