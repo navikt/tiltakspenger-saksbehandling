@@ -19,7 +19,7 @@ export const BegrunnelseVilkårsvurdering = () => {
     return (
         <VedtakSeksjon>
             <VedtakSeksjon.Venstre>
-                <Heading size={'xsmall'} level={'2'} className={style.header}>
+                <Heading size={'xsmall'} level={'2'}>
                     {'Begrunnelse vilkårsvurdering'}
                 </Heading>
                 <BodyLong size={'small'}>{'Noter ned vurderingen.'}</BodyLong>
