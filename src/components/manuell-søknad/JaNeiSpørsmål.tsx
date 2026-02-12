@@ -30,9 +30,7 @@ export const JaNeiSpørsmål = ({
         defaultValue: undefined,
         rules: {
             validate: (v) => {
-                if (!måVæreBesvart && v === undefined) {
-                    return 'Du må velge et svar.';
-                }
+                if (v === undefined) return 'Du må velge et svar.';
                 return true;
             },
         },
