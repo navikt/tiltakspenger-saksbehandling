@@ -12,8 +12,11 @@ import { Utbetalingsstatus } from '~/types/Utbetaling';
 import { ManueltBehandlesGrunn, SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
 import { RevurderingResultat } from '~/types/Revurdering';
 import { ÅpenBehandlingForOversiktType } from '~/types/ÅpenBehandlingForOversikt';
-import { Søknadstype } from '~/types/Søknad';
-import { SøknadstypeManueltRegistrertSøknad } from '~/components/manuell-søknad/ManueltRegistrertSøknad';
+import { Behandlingsårsak, Søknadstype } from '~/types/Søknad';
+import {
+    SøknadBehandlingsårsakManueltRegistrertSøknad,
+    SøknadstypeManueltRegistrertSøknad,
+} from '~/components/manuell-søknad/ManueltRegistrertSøknad';
 import { KlagebehandlingResultat, KlagebehandlingStatus, OmgjøringÅrsak } from '~/types/Klage';
 
 export const finnBehandlingStatusTag = (
@@ -447,6 +450,21 @@ export const formaterSøknadstype = (value: Søknadstype | SøknadstypeManueltRe
             return 'Modia';
         case 'PAPIR':
             return 'Papirsøknad';
+        case 'ANNET':
+            return 'Annet';
+    }
+};
+
+export const formaterSøknadBehandlingsårsak = (
+    value: Behandlingsårsak | SøknadBehandlingsårsakManueltRegistrertSøknad,
+) => {
+    switch (value) {
+        case 'FORLENGELSE_FRA_ARENA':
+            return 'Forlengelse fra Arena';
+        case 'SOKNADSBEHANDLING_FRA_ARENA':
+            return 'Søknadsbehandling fra Arena';
+        case 'OVERLAPPENDE_TILTAK_I_ARENA':
+            return 'Overlappende tiltak i Arena';
         case 'ANNET':
             return 'Annet';
     }

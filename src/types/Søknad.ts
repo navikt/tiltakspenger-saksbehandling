@@ -13,6 +13,7 @@ interface SøknadBase {
     tiltaksdeltakelseperiodeDetErSøktOm: Nullable<Periode>;
     barnetillegg: SøknadBarn[];
     søknadstype: Søknadstype;
+    behandlingsarsak: Nullable<Behandlingsårsak>;
     opprettet: string;
     tidsstempelHosOss: string;
     antallVedlegg: number;
@@ -91,3 +92,9 @@ export interface PeriodeSpm {
 }
 
 export type Søknadstype = 'DIGITAL' | 'PAPIR_SKJEMA' | 'PAPIR_FRIHAND' | 'MODIA' | 'ANNET';
+
+export type Behandlingsårsak =
+    | 'FORLENGELSE_FRA_ARENA'
+    | 'SOKNADSBEHANDLING_FRA_ARENA'
+    | 'OVERLAPPENDE_TILTAK_I_ARENA'
+    | 'ANNET';

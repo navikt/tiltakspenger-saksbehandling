@@ -39,13 +39,14 @@ export const JaNeiSpørsmål = ({
     });
 
     const errorMessage = controller.fieldState.error?.message;
+    const valgtSvar = (controller.field.value as JaNeiSvar | undefined) ?? '';
 
     return (
         <div className={styles.blokk}>
             <RadioGroup
                 key={`${name}-${måVæreBesvart ? 'required' : 'optional'}`}
                 legend={legend}
-                value={controller.field.value}
+                value={valgtSvar}
                 error={errorMessage}
                 onChange={(value: JaNeiSvar) => {
                     controller.field.onChange(value);
