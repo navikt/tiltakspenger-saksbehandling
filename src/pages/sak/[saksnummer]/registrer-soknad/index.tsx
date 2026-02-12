@@ -22,6 +22,7 @@ import { behandlingUrl } from '~/utils/urls';
 import { useHentPersonopplysninger } from '~/components/personaliaheader/useHentPersonopplysninger';
 import { JournalpostId } from '~/components/journalpostId/JournalpostId';
 import { SøknadstypeSelect } from '~/components/manuell-søknad/SøknadstypeSelect';
+import { OverførtFraArenaSpørsmål } from '~/components/manuell-søknad/OverførtFraArenaSpørsmål';
 
 interface Props {
     sak: SakProps;
@@ -89,6 +90,7 @@ const RegistrerSøknadManueltPage = (props: Props) => {
                             />
 
                             <SøknadstypeSelect />
+                            <OverførtFraArenaSpørsmål />
 
                             <Periodevelger
                                 fraOgMedFelt="manueltSattSøknadsperiode.fraOgMed"

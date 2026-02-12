@@ -5,16 +5,25 @@ export interface ManueltRegistrertSøknad {
     manueltSattSøknadsperiode: Periode;
     manueltSattTiltak?: string;
     søknadstype: SøknadstypeManueltRegistrertSøknad;
+    overfortFraArena: JaNeiSpm | undefined;
+    behandlingsarsak?: SøknadBehandlingsårsakManueltRegistrertSøknad;
     svar: Spørsmålsbesvarelser;
     antallVedlegg: number;
 }
 
 export type SøknadstypeManueltRegistrertSøknad =
+    | 'DIGITAL'
     | 'PAPIR_SKJEMA'
     | 'PAPIR_FRIHAND'
     | 'MODIA'
     | 'ANNET'
     | 'PAPIR'; // TODO Deprecated, men må migrere gamle søknader først
+
+export type SøknadBehandlingsårsakManueltRegistrertSøknad =
+    | 'FORLENGELSE_FRA_ARENA'
+    | 'SOKNADSBEHANDLING_FRA_ARENA'
+    | 'OVERLAPPENDE_TILTAK_I_ARENA'
+    | 'ANNET';
 
 export interface Tiltak {
     eksternDeltakelseId: string;
@@ -81,6 +90,7 @@ const defaultRegistrerSøknadManueltFormValues = {
     manueltSattSøknadsperiode: { fraOgMed: '', tilOgMed: '' },
     antallVedlegg: 0,
     søknadstype: undefined,
+    overfortFraArena: undefined,
     svar: {
         harSøktPåTiltak: undefined,
         tiltak: undefined,
