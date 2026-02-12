@@ -70,16 +70,6 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
         }
     }, [fetchOversikt, filters, sorteringRetningParam]);
 
-    useEffect(() => {
-        setFilters({
-            benktype: benktypeParam ?? filters.benktype,
-            type: typeParam ?? filters.type,
-            status: statusParam ?? filters.status,
-            saksbehandler: saksbehandlerParam ?? filters.saksbehandler,
-        });
-        updateUrlWithSelectedFilters();
-    }, [benktypeParam, typeParam, statusParam, saksbehandlerParam]);
-
     const updateUrlWithSelectedFilters = () => {
         const query = new URLSearchParams(searchParams.toString());
         if (filters.benktype !== 'Alle') {
@@ -139,6 +129,16 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
             sortering: 'ASC',
         });
     };
+
+    useEffect(() => {
+        setFilters({
+            benktype: benktypeParam ?? filters.benktype,
+            type: typeParam ?? filters.type,
+            status: statusParam ?? filters.status,
+            saksbehandler: saksbehandlerParam ?? filters.saksbehandler,
+        });
+        updateUrlWithSelectedFilters();
+    }, [benktypeParam, typeParam, statusParam, saksbehandlerParam]);
 
     return (
         <VStack gap="space-20" style={{ padding: '1rem' }}>

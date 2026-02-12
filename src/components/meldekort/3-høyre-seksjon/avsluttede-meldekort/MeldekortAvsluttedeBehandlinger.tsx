@@ -1,6 +1,6 @@
 import { HStack, Select, VStack } from '@navikt/ds-react';
 import { MeldekortBehandlingProps } from '~/types/meldekort/MeldekortBehandling';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { formaterTidspunktKort } from '~/utils/date';
 import { MeldeperiodeKorrigering } from '~/types/meldekort/Meldeperiode';
 import { useMeldeperiodeKjede } from '../../context/MeldeperiodeKjedeContext';
@@ -13,11 +13,12 @@ export const MeldekortAvsluttedeBehandlinger = () => {
 
     const { avbrutteMeldekortBehandlinger } = useMeldeperiodeKjede();
 
-    useEffect(() => {
-        setValgtIndex(0);
-    }, [avbrutteMeldekortBehandlinger]);
+    const safeValgtIndex =
+        avbrutteMeldekortBehandlinger.length === 0
+            ? 0
+            : Math.min(valgtIndex, avbrutteMeldekortBehandlinger.length - 1);
 
-    const valgtBehandling = avbrutteMeldekortBehandlinger.at(valgtIndex);
+    const valgtBehandling = avbrutteMeldekortBehandlinger.at(safeValgtIndex);
 
     return (
         <VStack gap={'space-20'}>
@@ -28,7 +29,7 @@ export const MeldekortAvsluttedeBehandlinger = () => {
                     onChange={(event) => {
                         setValgtIndex(Number(event.target.value));
                     }}
-                    value={valgtIndex}
+                    value={safeValgtIndex}
                     size={'small'}
                 >
                     {avbrutteMeldekortBehandlinger.map((mbeh, index) => {

@@ -6,7 +6,7 @@ import type {
 } from '~/components/manuell-søknad/ManueltRegistrertSøknad';
 import { JaNeiSpørsmål } from './JaNeiSpørsmål';
 
-import styles from './Spørsmål.module.css';
+import styles from './MottarPengestøtterSpørsmål.module.css';
 import { SpørsmålMedPeriodevelger } from '~/components/manuell-søknad/SpørsmålMedPeriodevelger';
 import { Box, List } from '@navikt/ds-react';
 import { SpørsmålMedDatovelger } from '~/components/manuell-søknad/SpørsmålMedDatovelger';

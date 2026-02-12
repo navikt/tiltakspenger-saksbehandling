@@ -6,7 +6,7 @@ import {
     Tiltak,
 } from '~/components/manuell-søknad/ManueltRegistrertSøknad';
 import { Alert, Button, Radio, RadioGroup, TextField, VStack } from '@navikt/ds-react';
-import styles from '../Spørsmål.module.css';
+import styles from './VelgTiltak.module.css';
 import { classNames } from '~/utils/classNames';
 import { formaterDatotekst } from '~/utils/date';
 import { useHentTiltaksdeltakelser } from '~/components/manuell-søknad/tiltak/useHentTiltaksdeltakelser';

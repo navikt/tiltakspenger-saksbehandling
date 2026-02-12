@@ -10,7 +10,11 @@ import { GyldigeMeldekortDagUfyllingsvalg } from '~/components/meldekort/0-felle
 import { FieldErrors } from 'react-hook-form';
 
 export const useCustomMeldekortUtfyllingValidationResolver = () =>
-    useCallback(meldekortUtfyllingValidation, []);
+    useCallback(
+        (data: MeldekortBehandlingForm, valideringscontext: { tillattAntallDager: number }) =>
+            meldekortUtfyllingValidation(data, valideringscontext),
+        [],
+    );
 
 export const meldekortUtfyllingValidation = (
     data: MeldekortBehandlingForm,

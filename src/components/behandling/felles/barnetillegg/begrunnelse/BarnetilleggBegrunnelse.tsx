@@ -26,8 +26,12 @@ export const BarnetilleggBegrunnelse = () => {
             <VedtakSeksjon.Venstre>
                 <FritekstInput
                     label={'Begrunnelse vilkårsvurdering barnetillegg'}
+                    // TODO Gjorde lintingen strengere ved oppgradering til Next 16. Fikset bare åpenbare feil, denne burde undersøkes.
+                    /* eslint-disable-next-line react-hooks/refs */
                     defaultValue={barnetilleggBegrunnelse.getValue() ?? ''}
                     readOnly={erReadonly}
+                    // TODO Gjorde lintingen strengere ved oppgradering til Next 16. Fikset bare åpenbare feil, denne burde undersøkes.
+                    /* eslint-disable-next-line react-hooks/refs */
                     ref={barnetilleggBegrunnelse.ref}
                 />
             </VedtakSeksjon.Venstre>

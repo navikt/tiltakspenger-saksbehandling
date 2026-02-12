@@ -5,7 +5,7 @@ import {
     MeldekortBehandlingType,
 } from '~/types/meldekort/MeldekortBehandling';
 import { MeldekortOppsummering } from '../../0-felles-komponenter/meldekort-oppsummering/MeldekortOppsummering';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { formaterTidspunktKort, periodeTilFormatertDatotekst } from '~/utils/date';
 import { MeldeperiodeKorrigering } from '~/types/meldekort/Meldeperiode';
 import { MeldekortKorrigertFraTidligerePeriode } from '../../0-felles-komponenter/korrigert-fra-tidligere/MeldekortKorrigertFraTidligerePeriode';
@@ -42,10 +42,6 @@ export const MeldekortTidligereBehandlinger = () => {
         ],
     );
 
-    useEffect(() => {
-        setValgtIndex(0);
-    }, [behandlingerOgKorrigeringer]);
-
     if (behandlingerOgKorrigeringer.length === 0) {
         return (
             <Alert variant={'info'} inline={true}>
@@ -54,7 +50,8 @@ export const MeldekortTidligereBehandlinger = () => {
         );
     }
 
-    const valgtBehandling = behandlingerOgKorrigeringer.at(valgtIndex);
+    const safeValgtIndex = Math.min(valgtIndex, behandlingerOgKorrigeringer.length - 1);
+    const valgtBehandling = behandlingerOgKorrigeringer.at(safeValgtIndex);
 
     return (
         <VStack gap={'space-20'}>
@@ -65,7 +62,7 @@ export const MeldekortTidligereBehandlinger = () => {
                     onChange={(event) => {
                         setValgtIndex(Number(event.target.value));
                     }}
-                    value={valgtIndex}
+                    value={safeValgtIndex}
                     size={'small'}
                 >
                     {behandlingerOgKorrigeringer.map((mbeh, index) => {

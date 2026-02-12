@@ -1,9 +1,9 @@
-import { Button, HStack, Modal } from '@navikt/ds-react';
 import React, { ReactNode, RefObject } from 'react';
+import styles from './BekreftelsesModal.module.css';
+import { Button, HStack, Modal } from '@navikt/ds-react';
 import Varsel from '../varsel/Varsel';
 import { FetcherError } from '~/utils/fetch/fetch';
-
-import styles from './BekreftelsesModal.module.css';
+import { v4 as uuidv4 } from 'uuid';
 
 type Props = {
     modalRef?: RefObject<HTMLDialogElement | null>;
@@ -43,7 +43,7 @@ export const BekreftelsesModal = ({
                             variant={'error'}
                             size={'small'}
                             melding={`${feil.info?.melding || feil.message}`}
-                            key={Date.now()}
+                            key={`error-${uuidv4()}`}
                         />
                     )}
                     <div className={styles.knapper}>

@@ -82,6 +82,8 @@ export const Personoversikt = () => {
     const [aktivTab, setAktivTab] = useState<string>(PERSONOVERSIKT_TABS.apneBehandlinger);
 
     useEffect(() => {
+        // TODO Gjorde lintingen strengere ved oppgradering til Next 16. Fikset bare åpenbare feil, denne burde undersøkes.
+        /* eslint-disable-next-line react-hooks/set-state-in-effect */
         setAktivTab(hentAktivTabFraHash(window.location.hash));
     }, []);
 

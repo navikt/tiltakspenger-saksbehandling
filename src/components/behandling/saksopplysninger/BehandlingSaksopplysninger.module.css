@@ -1,12 +1,3 @@
-.saksopplysninger {
-    padding: 2rem;
-    background-color: var(--ax-accent-200);
-}
-
-.saksopplysninger > :not(:last-child):not(hr) {
-    margin-bottom: 1.25rem;
-}
-
 .header {
     font-weight: normal;
     margin-bottom: 0.5rem;

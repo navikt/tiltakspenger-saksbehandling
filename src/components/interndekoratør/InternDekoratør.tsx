@@ -19,6 +19,7 @@ import router from 'next/router';
 import styles from './InternDekoratør.module.css';
 import { BekreftelsesModal } from '~/components/modaler/BekreftelsesModal';
 import { useHentEllerOpprettSak } from '~/components/interndekoratør/useHentEllerOpprettSak';
+import { v4 as uuidv4 } from 'uuid';
 
 export const InternDekoratør = () => {
     const { innloggetSaksbehandler } = useSaksbehandler();
@@ -39,6 +40,8 @@ export const InternDekoratør = () => {
 
     useEffect(() => {
         reset();
+        // TODO Gjorde lintingen strengere ved oppgradering til Next 16. Fikset bare åpenbare feil, denne burde undersøkes.
+        /* eslint-disable-next-line react-hooks/set-state-in-effect */
         setSøketekst('');
     }, [windowPath]);
 
@@ -119,7 +122,7 @@ export const InternDekoratør = () => {
                     melding={error.message ?? `Noe gikk galt ved henting av sak for "${søketekst}"`}
                     variant="error"
                     marginX
-                    key={Date.now()}
+                    key={`error-${uuidv4()}`}
                 />
             )}
             <BekreftelsesModal

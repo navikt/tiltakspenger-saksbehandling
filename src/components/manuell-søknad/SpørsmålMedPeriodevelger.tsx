@@ -4,7 +4,7 @@ import type { ManueltRegistrertSøknad } from '~/components/manuell-søknad/Manu
 import { JaNeiSpørsmål } from './JaNeiSpørsmål';
 import { Periodevelger } from './Periodevelger';
 
-import styles from './Spørsmål.module.css';
+import styles from './SpørsmålMedPeriodeVelger.module.css';
 
 type Props = {
     spørsmålFelt: FieldPath<ManueltRegistrertSøknad>;

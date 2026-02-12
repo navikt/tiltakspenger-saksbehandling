@@ -5,7 +5,7 @@ import {
     JaNeiSvar,
     ManueltRegistrertSøknad,
 } from '~/components/manuell-søknad/ManueltRegistrertSøknad';
-import styles from './Spørsmål.module.css';
+import styles from './JaNeiSpørsmål.module.css';
 
 type Props = {
     name: FieldPath<ManueltRegistrertSøknad>;

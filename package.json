@@ -8,8 +8,8 @@
         "dev": "next dev | pino-pretty",
         "build": "next build",
         "start": "node .next/standalone/server.js",
-        "lint": "next lint",
-        "lint:fix": "next lint --fix",
+        "lint": "eslint",
+        "lint:fix": "eslint --fix",
         "format:check": "prettier --check .",
         "format:all": "prettier --write .",
         "prepare": "husky",
@@ -24,34 +24,45 @@
         "@navikt/oasis": "4.1.1",
         "dayjs": "1.11.13",
         "lodash.debounce": "4.0.8",
-        "next": "15.5.9",
+        "next": "16.1.6",
         "pino": "10.1.0",
-        "react": "19.2.3",
-        "react-dom": "19.2.3",
+        "react": "19.2.4",
+        "react-dom": "19.2.4",
         "react-hook-form": "^7.62.0",
         "swr": "2.3.6",
         "use-debounce": "^10.0.6",
         "uuid": "^13.0.0"
     },
     "devDependencies": {
+        "@eslint/css": "^0.14.1",
+        "@eslint/js": "^9.39.2",
+        "@eslint/json": "^0.14.0",
         "@testing-library/dom": "^10.4.1",
         "@testing-library/jest-dom": "^6.9.1",
         "@types/lodash": "4.17.21",
         "@types/node": "^24.2.0",
-        "@types/react": "19.2.3",
+        "@types/react": "19.2.13",
         "@types/react-dom": "19.2.3",
-        "@typescript-eslint/eslint-plugin": "^8.39.1",
-        "eslint-config-next": "15.5.4",
+        "@typescript-eslint/eslint-plugin": "^8.55.0",
+        "@typescript-eslint/parser": "^8.55.0",
+        "eslint": "^9.39.2",
+        "eslint-config-next": "16.1.6",
         "eslint-config-prettier": "10.1.8",
-        "eslint-plugin-css-modules": "2.12.0",
+        "eslint-plugin-css-modules": "^2.12.0",
+        "eslint-plugin-react": "^7.37.5",
+        "eslint-plugin-react-hooks": "^7.0.1",
+        "eslint-plugin-react-refresh": "^0.5.0",
+        "globals": "^17.3.0",
         "husky": "9.1.7",
         "jest": "^29.7.0",
         "jest-environment-jsdom": "^29.7.0",
+        "jiti": "^2.6.1",
         "lint-staged": "^16.1.4",
         "pino-pretty": "13.0.0",
         "prettier": "3.6.2",
         "ts-node": "^10.9.2",
-        "typescript": "5.9.3"
+        "typescript": "5.9.3",
+        "typescript-eslint": "^8.55.0"
     },
     "lint-staged": {
         "*.{ts,tsx,css}": [
@@ -60,5 +71,9 @@
         "*.{ts,tsx}": [
             "eslint"
         ]
+    },
+    "overrides": {
+        "@types/react": "19.2.13",
+        "@types/react-dom": "19.2.3"
     }
 }

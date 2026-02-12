@@ -1,0 +1,12 @@
+.blokk {
+    padding: 0.5rem;
+}
+
+.informasjonsInnhentingBlokk {
+    background-color: var(--ax-accent-200);
+    border: 1px solid var(--ax-border-neutral-subtle);
+}
+
+.finnTiltakButton {
+    margin: 1rem 1rem 1rem 0;
+}
