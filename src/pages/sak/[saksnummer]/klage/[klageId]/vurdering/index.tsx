@@ -77,8 +77,9 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
     });
 
     const omgjøringsbehandling =
-        sak.behandlinger.find((behandling) =>
-            sak.klageBehandlinger.some((klage) => klage.rammebehandlingId === behandling.id),
+        sak.behandlinger.find(
+            (behandling) =>
+                behandling.id === initialKlage.rammebehandlingId && behandling.avbrutt === null,
         ) || null;
 
     return {
