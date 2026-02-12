@@ -55,6 +55,9 @@ export const BrukersMeldekortVisning = ({ brukersMeldekort }: Props) => {
                                     brukersMeldekort,
                                     sisteMeldeperiode,
                                 ),
+                                {
+                                    shouldDirty: true,
+                                },
                             )
                         }
                     >
