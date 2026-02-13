@@ -84,3 +84,8 @@ export const datoMax = (...datoer: Array<string | Date>): string => {
 
 export const tilDate = (date?: DateOrString): Date | undefined =>
     date ? (date instanceof Date ? date : new Date(date)) : undefined;
+
+export const erHelg = (dato: string) => {
+    const ukedag = dayjs(dato).weekday();
+    return ukedag === 5 || ukedag === 6;
+};

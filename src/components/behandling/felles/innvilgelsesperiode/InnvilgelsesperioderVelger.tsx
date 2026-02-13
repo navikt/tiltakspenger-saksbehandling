@@ -12,7 +12,7 @@ import { InnvilgelsesperiodeDatovelgere } from '~/components/behandling/felles/i
 import { InnvilgelsesperioderVarsler } from '~/components/behandling/felles/innvilgelsesperiode/varsler/InnvilgelsesperioderVarsler';
 import { XMarkIcon } from '@navikt/aksel-icons';
 import { TiltaksdeltakelseMedPeriode } from '~/types/TiltakDeltakelse';
-import { periodeTilFormatertDatotekst } from '~/utils/date';
+import { erHelg, periodeTilFormatertDatotekst } from '~/utils/date';
 import { Innvilgelsesperiode } from '~/types/Innvilgelsesperiode';
 import { Rammebehandling } from '~/types/Rammebehandling';
 import { SakProps } from '~/types/Sak';
@@ -156,6 +156,8 @@ const InnvilgelsesperiodeVelgerFull = ({
 
     const harFeil = !harValgtGyldigTiltak || harValgtUgyldigPeriodeForOmgjøring;
 
+    const innvilgelsesperiodeStarterIHelgen = periode?.fraOgMed && erHelg(periode.fraOgMed);
+
     return (
         <VStack gap={'space-8'} className={classNames(harFeil && style.feilOmriss)}>
             <HStack gap={'space-12'} align={'end'}>
@@ -241,6 +243,20 @@ const InnvilgelsesperiodeVelgerFull = ({
                     </Button>
                 )}
             </HStack>
+
+            {/*
+                Varselet vises selv om de foregående dagene i meldeperioden til innvilgelsesperioden
+                er innvilget. Her kunne man gjort varselet smartere ved å faktisk sjekke at de eneste
+                dagene med innvilgelse for en meldeperiode er helgedager. Det er valgt å holde det
+                holde sjekken enkel ved å bare sjekke om første dag i innvilgelsesperioden er en helgedag,
+                da dette uansett prøver å tette hullene i skru-på-helg toggelen.
+                https://nav-it.slack.com/archives/C02CPSB47JL/p1770989740471839
+            */}
+            {innvilgelsesperiodeStarterIHelgen && (
+                <Alert variant={'warning'} size={'small'}>
+                    {`Innvilgelsesperioden starter i en helg. Husk å "skru på meldekort helg" i personoversikten hvis bruker skal kunne melde helg i meldekortet.`}
+                </Alert>
+            )}
 
             {!harValgtGyldigTiltak && (
                 <Alert variant={'error'} size={'small'} inline={true}>
