@@ -12,7 +12,6 @@ export interface ManueltRegistrertSøknad {
 }
 
 export type SøknadstypeManueltRegistrertSøknad =
-    | 'DIGITAL'
     | 'PAPIR_SKJEMA'
     | 'PAPIR_FRIHAND'
     | 'MODIA'
