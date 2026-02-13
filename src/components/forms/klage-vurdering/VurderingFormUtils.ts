@@ -50,7 +50,7 @@ export const klagebehandlingTilVurderingFormData = (k: Klagebehandling): Vurderi
         oppretthold: {
             hjemler:
                 k.hjemler?.map(
-                    //combobox bruker skiller ikke mellom tekst og verdi, så vi map'er hjemmel til tekst her
+                    //combobox bruker skiller ikke mellom tekst og verdi, så vi map'er hjemmel til tekst her. ideelt sett skulle combobox støtte value + label
                     (h) => klageHjemlerFormDataTilTekst[klagehjemmelTilKlagehjemmelFormData(h)],
                 ) ?? [],
         },
@@ -139,18 +139,12 @@ export const vurderingFormValidation = (data: VurderingFormData) => {
     if (data.klageVurderingType === KlageVurderingTypeFormData.OPPRETTHOLD) {
         if (data.oppretthold.hjemler.length === 0) {
             errors.oppretthold = {
-                hjemler: {
-                    type: 'required',
-                    message: 'Du må velge minst én hjemmel',
-                },
+                hjemler: { type: 'required', message: 'Du må velge minst én hjemmel' },
             };
         }
     }
 
-    return {
-        values: data,
-        errors: errors,
-    };
+    return { values: data, errors: errors };
 };
 
 const validerOmgjøringForm = (data: OmgjøringFormData) => {
@@ -170,10 +164,7 @@ const validerOmgjøringForm = (data: OmgjøringFormData) => {
         };
     }
 
-    return {
-        data: data,
-        errors: errors,
-    };
+    return { data: data, errors: errors };
 };
 
 export const klageVurderingTypeFormDataTilTekst: Record<KlageVurderingTypeFormData, string> = {
@@ -196,13 +187,35 @@ export const harKlagevurderingsstegUtfylt = (k: Klagebehandling): boolean => {
     );
 };
 
+/**
+ * De hjemlene som saksbehandler skal kunne velge mellom
+ */
 export enum KlagehjemmelFormData {
     ARBEIDSMARKEDSLOVEN_2 = 'ARBEIDSMARKEDSLOVEN_2',
     ARBEIDSMARKEDSLOVEN_13 = 'ARBEIDSMARKEDSLOVEN_13',
-    ARBEIDSMARKEDSLOVEN_13_LØNN = 'ARBEIDSMARKEDSLOVEN_13_LØNN',
-    ARBEIDSMARKEDSLOVEN_13_FJERDE_LEDD = 'ARBEIDSMARKEDSLOVEN_13_FJERDE_LEDD',
+    ARBEIDSMARKEDSLOVEN_13_L1 = 'ARBEIDSMARKEDSLOVEN_13_L1',
+    ARBEIDSMARKEDSLOVEN_13_L4 = 'ARBEIDSMARKEDSLOVEN_13_L4',
     ARBEIDSMARKEDSLOVEN_15 = 'ARBEIDSMARKEDSLOVEN_15',
     ARBEIDSMARKEDSLOVEN_17 = 'ARBEIDSMARKEDSLOVEN_17',
+    ARBEIDSMARKEDSLOVEN_22 = 'ARBEIDSMARKEDSLOVEN_22',
+
+    FOLKETRYGDLOVEN_22_15 = 'FOLKETRYGDLOVEN_22_15',
+    FOLKETRYGDLOVEN_22_17_A = 'FOLKETRYGDLOVEN_22_17_A',
+
+    FORELDELSESLOVEN_10 = 'FORELDELSESLOVEN_10',
+    FORELDELSESLOVEN_2_OG_3 = 'FORELDELSESLOVEN_2_OG_3',
+
+    FORVALTNINGSLOVEN_11 = 'FORVALTNINGSLOVEN_11',
+    FORVALTNINGSLOVEN_17 = 'FORVALTNINGSLOVEN_17',
+    FORVALTNINGSLOVEN_18_OG_19 = 'FORVALTNINGSLOVEN_18_OG_19',
+    FORVALTNINGSLOVEN_28 = 'FORVALTNINGSLOVEN_28',
+    FORVALTNINGSLOVEN_30 = 'FORVALTNINGSLOVEN_30',
+    FORVALTNINGSLOVEN_31 = 'FORVALTNINGSLOVEN_31',
+    FORVALTNINGSLOVEN_32 = 'FORVALTNINGSLOVEN_32',
+    FORVALTNINGSLOVEN_35 = 'FORVALTNINGSLOVEN_35',
+    FORVALTNINGSLOVEN_41 = 'FORVALTNINGSLOVEN_41',
+    FORVALTNINGSLOVEN_42 = 'FORVALTNINGSLOVEN_42',
+
     TILTAKSPENGEFORSKRIFTEN_2 = 'TILTAKSPENGEFORSKRIFTEN_2',
     TILTAKSPENGEFORSKRIFTEN_3 = 'TILTAKSPENGEFORSKRIFTEN_3',
     TILTAKSPENGEFORSKRIFTEN_5 = 'TILTAKSPENGEFORSKRIFTEN_5',
@@ -217,10 +230,29 @@ export enum KlagehjemmelFormData {
 export const klageHjemlerFormDataTilTekst: Record<KlagehjemmelFormData, string> = {
     [KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_2]: 'Arb.mark.lov §2',
     [KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_13]: 'Arb.mark.lov §13',
-    [KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_13_LØNN]: 'Arb.mark.lov §13 - lønn',
-    [KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_13_FJERDE_LEDD]: 'Arb.mark.lov §13 fjerde ledd',
+    [KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_13_L1]: 'Arb.mark.lov §13 - lønn',
+    [KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_13_L4]: 'Arb.mark.lov §13 fjerde ledd',
     [KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_15]: 'Arb.mark.lov §15',
     [KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_17]: 'Arb.mark.lov §17',
+    [KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_22]: 'Arb.mark.lov §22',
+
+    [KlagehjemmelFormData.FOLKETRYGDLOVEN_22_15]: 'Folketrygdloven §22-15',
+    [KlagehjemmelFormData.FOLKETRYGDLOVEN_22_17_A]: 'Folketrygdloven §22-17 a',
+
+    [KlagehjemmelFormData.FORELDELSESLOVEN_10]: 'Foreldelsesloven §10',
+    [KlagehjemmelFormData.FORELDELSESLOVEN_2_OG_3]: 'Foreldelsesloven §§2 og 3',
+
+    [KlagehjemmelFormData.FORVALTNINGSLOVEN_11]: 'Forvaltningsloven §11',
+    [KlagehjemmelFormData.FORVALTNINGSLOVEN_17]: 'Forvaltningsloven §17',
+    [KlagehjemmelFormData.FORVALTNINGSLOVEN_18_OG_19]: 'Forvaltningsloven §§18 og 19',
+    [KlagehjemmelFormData.FORVALTNINGSLOVEN_28]: 'Forvaltningsloven §28',
+    [KlagehjemmelFormData.FORVALTNINGSLOVEN_30]: 'Forvaltningsloven §30',
+    [KlagehjemmelFormData.FORVALTNINGSLOVEN_31]: 'Forvaltningsloven §31',
+    [KlagehjemmelFormData.FORVALTNINGSLOVEN_32]: 'Forvaltningsloven §32',
+    [KlagehjemmelFormData.FORVALTNINGSLOVEN_35]: 'Forvaltningsloven §35',
+    [KlagehjemmelFormData.FORVALTNINGSLOVEN_41]: 'Forvaltningsloven §41',
+    [KlagehjemmelFormData.FORVALTNINGSLOVEN_42]: 'Forvaltningsloven §42',
+
     [KlagehjemmelFormData.TILTAKSPENGEFORSKRIFTEN_2]: 'Tiltakspengeforskriften §2',
     [KlagehjemmelFormData.TILTAKSPENGEFORSKRIFTEN_3]: 'Tiltakspengeforskriften §3',
     [KlagehjemmelFormData.TILTAKSPENGEFORSKRIFTEN_5]: 'Tiltakspengeforskriften §5',
@@ -251,14 +283,44 @@ export const klagehjemmelTilKlagehjemmelFormData = (
             return KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_2;
         case Klagehjemmel.ARBEIDSMARKEDSLOVEN_13:
             return KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_13;
-        case Klagehjemmel.ARBEIDSMARKEDSLOVEN_13_LØNN:
-            return KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_13_LØNN;
-        case Klagehjemmel.ARBEIDSMARKEDSLOVEN_13_FJERDE_LEDD:
-            return KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_13_FJERDE_LEDD;
+        case Klagehjemmel.ARBEIDSMARKEDSLOVEN_13_L1:
+            return KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_13_L1;
+        case Klagehjemmel.ARBEIDSMARKEDSLOVEN_13_L4:
+            return KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_13_L4;
         case Klagehjemmel.ARBEIDSMARKEDSLOVEN_15:
             return KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_15;
         case Klagehjemmel.ARBEIDSMARKEDSLOVEN_17:
             return KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_17;
+        case Klagehjemmel.ARBEIDSMARKEDSLOVEN_22:
+            return KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_22;
+        case Klagehjemmel.FOLKETRYGDLOVEN_22_15:
+            return KlagehjemmelFormData.FOLKETRYGDLOVEN_22_15;
+        case Klagehjemmel.FOLKETRYGDLOVEN_22_17_A:
+            return KlagehjemmelFormData.FOLKETRYGDLOVEN_22_17_A;
+        case Klagehjemmel.FORELDELSESLOVEN_10:
+            return KlagehjemmelFormData.FORELDELSESLOVEN_10;
+        case Klagehjemmel.FORELDELSESLOVEN_2_OG_3:
+            return KlagehjemmelFormData.FORELDELSESLOVEN_2_OG_3;
+        case Klagehjemmel.FORVALTNINGSLOVEN_11:
+            return KlagehjemmelFormData.FORVALTNINGSLOVEN_11;
+        case Klagehjemmel.FORVALTNINGSLOVEN_17:
+            return KlagehjemmelFormData.FORVALTNINGSLOVEN_17;
+        case Klagehjemmel.FORVALTNINGSLOVEN_18_OG_19:
+            return KlagehjemmelFormData.FORVALTNINGSLOVEN_18_OG_19;
+        case Klagehjemmel.FORVALTNINGSLOVEN_28:
+            return KlagehjemmelFormData.FORVALTNINGSLOVEN_28;
+        case Klagehjemmel.FORVALTNINGSLOVEN_30:
+            return KlagehjemmelFormData.FORVALTNINGSLOVEN_30;
+        case Klagehjemmel.FORVALTNINGSLOVEN_31:
+            return KlagehjemmelFormData.FORVALTNINGSLOVEN_31;
+        case Klagehjemmel.FORVALTNINGSLOVEN_32:
+            return KlagehjemmelFormData.FORVALTNINGSLOVEN_32;
+        case Klagehjemmel.FORVALTNINGSLOVEN_35:
+            return KlagehjemmelFormData.FORVALTNINGSLOVEN_35;
+        case Klagehjemmel.FORVALTNINGSLOVEN_41:
+            return KlagehjemmelFormData.FORVALTNINGSLOVEN_41;
+        case Klagehjemmel.FORVALTNINGSLOVEN_42:
+            return KlagehjemmelFormData.FORVALTNINGSLOVEN_42;
         case Klagehjemmel.TILTAKSPENGEFORSKRIFTEN_2:
             return KlagehjemmelFormData.TILTAKSPENGEFORSKRIFTEN_2;
         case Klagehjemmel.TILTAKSPENGEFORSKRIFTEN_3:
@@ -288,14 +350,44 @@ export const klagehjemmelFormDataTilKlagehjemmel = (
             return Klagehjemmel.ARBEIDSMARKEDSLOVEN_2;
         case KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_13:
             return Klagehjemmel.ARBEIDSMARKEDSLOVEN_13;
-        case KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_13_LØNN:
-            return Klagehjemmel.ARBEIDSMARKEDSLOVEN_13_LØNN;
-        case KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_13_FJERDE_LEDD:
-            return Klagehjemmel.ARBEIDSMARKEDSLOVEN_13_FJERDE_LEDD;
+        case KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_13_L1:
+            return Klagehjemmel.ARBEIDSMARKEDSLOVEN_13_L1;
+        case KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_13_L4:
+            return Klagehjemmel.ARBEIDSMARKEDSLOVEN_13_L4;
         case KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_15:
             return Klagehjemmel.ARBEIDSMARKEDSLOVEN_15;
         case KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_17:
             return Klagehjemmel.ARBEIDSMARKEDSLOVEN_17;
+        case KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_22:
+            return Klagehjemmel.ARBEIDSMARKEDSLOVEN_22;
+        case KlagehjemmelFormData.FOLKETRYGDLOVEN_22_15:
+            return Klagehjemmel.FOLKETRYGDLOVEN_22_15;
+        case KlagehjemmelFormData.FOLKETRYGDLOVEN_22_17_A:
+            return Klagehjemmel.FOLKETRYGDLOVEN_22_17_A;
+        case KlagehjemmelFormData.FORELDELSESLOVEN_10:
+            return Klagehjemmel.FORELDELSESLOVEN_10;
+        case KlagehjemmelFormData.FORELDELSESLOVEN_2_OG_3:
+            return Klagehjemmel.FORELDELSESLOVEN_2_OG_3;
+        case KlagehjemmelFormData.FORVALTNINGSLOVEN_11:
+            return Klagehjemmel.FORVALTNINGSLOVEN_11;
+        case KlagehjemmelFormData.FORVALTNINGSLOVEN_17:
+            return Klagehjemmel.FORVALTNINGSLOVEN_17;
+        case KlagehjemmelFormData.FORVALTNINGSLOVEN_18_OG_19:
+            return Klagehjemmel.FORVALTNINGSLOVEN_18_OG_19;
+        case KlagehjemmelFormData.FORVALTNINGSLOVEN_28:
+            return Klagehjemmel.FORVALTNINGSLOVEN_28;
+        case KlagehjemmelFormData.FORVALTNINGSLOVEN_30:
+            return Klagehjemmel.FORVALTNINGSLOVEN_30;
+        case KlagehjemmelFormData.FORVALTNINGSLOVEN_31:
+            return Klagehjemmel.FORVALTNINGSLOVEN_31;
+        case KlagehjemmelFormData.FORVALTNINGSLOVEN_32:
+            return Klagehjemmel.FORVALTNINGSLOVEN_32;
+        case KlagehjemmelFormData.FORVALTNINGSLOVEN_35:
+            return Klagehjemmel.FORVALTNINGSLOVEN_35;
+        case KlagehjemmelFormData.FORVALTNINGSLOVEN_41:
+            return Klagehjemmel.FORVALTNINGSLOVEN_41;
+        case KlagehjemmelFormData.FORVALTNINGSLOVEN_42:
+            return Klagehjemmel.FORVALTNINGSLOVEN_42;
         case KlagehjemmelFormData.TILTAKSPENGEFORSKRIFTEN_2:
             return Klagehjemmel.TILTAKSPENGEFORSKRIFTEN_2;
         case KlagehjemmelFormData.TILTAKSPENGEFORSKRIFTEN_3:
