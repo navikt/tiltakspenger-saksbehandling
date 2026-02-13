@@ -107,7 +107,6 @@ export interface LagreBrevtekstKlageRequest {
 export interface OpprettOmgjøringsbehandlingForKlageRequest {
     type: 'SØKNADSBEHANDLING_INNVILGELSE' | 'REVURDERING_INNVILGELSE' | 'REVURDERING_OMGJØRING';
     søknadId: Nullable<string>;
-    vedtakIdSomOmgjøres: Nullable<string>;
 }
 
 export type VedtattKlagevedtakMedBehandling = { type: 'klagevedtak' } & Klagevedtak & {

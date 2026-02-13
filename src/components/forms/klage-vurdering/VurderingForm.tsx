@@ -9,9 +9,21 @@ import {
     omgjøringÅrsakFormDataTilTekst,
     VurderingFormData,
 } from './VurderingFormUtils';
-import { Select, Textarea, UNSAFE_Combobox, VStack } from '@navikt/ds-react';
+import {
+    HelpText,
+    HStack,
+    Label,
+    Select,
+    Textarea,
+    UNSAFE_Combobox,
+    VStack,
+} from '@navikt/ds-react';
 
-const VurderingForm = (props: { control: Control<VurderingFormData>; readonly?: boolean }) => {
+const VurderingForm = (props: {
+    control: Control<VurderingFormData>;
+    kanOmgjøre: boolean;
+    readonly?: boolean;
+}) => {
     const klagevurderingstype = useWatch({
         control: props.control,
         name: 'klageVurderingType',
@@ -25,13 +37,28 @@ const VurderingForm = (props: { control: Control<VurderingFormData>; readonly?: 
                 render={({ field, fieldState }) => (
                     <Select
                         {...field}
-                        label="Vedtak"
+                        label={
+                            <HStack gap="space-4">
+                                <Label>Vedtak</Label>
+                                {!props.kanOmgjøre && (
+                                    <HelpText>
+                                        En søknad må være registrert, før man kan gjøre en omgjøring
+                                    </HelpText>
+                                )}
+                            </HStack>
+                        }
                         readOnly={props.readonly}
                         error={fieldState.error?.message}
                     >
                         <option value="">Velg</option>
                         {Object.values(KlageVurderingTypeFormData).map((type) => (
-                            <option key={type} value={type}>
+                            <option
+                                key={type}
+                                value={type}
+                                disabled={
+                                    type === KlageVurderingTypeFormData.OMGJØR && !props.kanOmgjøre
+                                }
+                            >
                                 {klageVurderingTypeFormDataTilTekst[type]}
                             </option>
                         ))}

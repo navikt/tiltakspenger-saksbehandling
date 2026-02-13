@@ -22,7 +22,7 @@ type Props = {
     sak: SakProps;
     initialKlage: Klagebehandling;
     omgjøringsbehandling: Nullable<Rammebehandling>;
-    vedtakOgBehandling: Array<{ vedtak: Rammevedtak; behandling: Rammebehandling }>;
+    vedtakSomPåklages: Nullable<Rammevedtak>;
     søknader: Søknad[];
 };
 
@@ -45,13 +45,8 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
         };
     }
 
-    const rammevedtakOgBehandling = sak.alleRammevedtak.map((vedtak) => {
-        const behandling = sak.behandlinger.find(
-            (behandling) => behandling.id === vedtak.behandlingId,
-        ) as Rammebehandling;
-
-        return { vedtak, behandling };
-    });
+    const vedtakSomPåklages =
+        sak.alleRammevedtak.find((vedtak) => vedtak.id === initialKlage.vedtakDetKlagesPå) ?? null;
 
     const omgjøringsbehandling =
         sak.behandlinger.find(
@@ -64,13 +59,13 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
             sak,
             initialKlage: initialKlage,
             omgjøringsbehandling,
-            vedtakOgBehandling: rammevedtakOgBehandling,
+            vedtakSomPåklages: vedtakSomPåklages,
             søknader: sak.søknader,
         },
     };
 });
 
-const ResultatPage = ({ sak, omgjøringsbehandling, vedtakOgBehandling, søknader }: Props) => {
+const ResultatPage = ({ sak, omgjøringsbehandling, vedtakSomPåklages, søknader }: Props) => {
     const { klage } = useKlage();
     const { innloggetSaksbehandler } = useSaksbehandler();
 
@@ -81,7 +76,7 @@ const ResultatPage = ({ sak, omgjøringsbehandling, vedtakOgBehandling, søknade
                     sak={sak}
                     klage={klage}
                     omgjøringsbehandling={omgjøringsbehandling}
-                    vedtakOgBehandling={vedtakOgBehandling}
+                    vedtakSomPåklages={vedtakSomPåklages}
                     søknader={søknader}
                     innloggetSaksbehandler={innloggetSaksbehandler}
                 />
@@ -96,7 +91,7 @@ const Omgjøringsresultat = (props: {
     sak: SakProps;
     klage: Klagebehandling;
     omgjøringsbehandling: Nullable<Rammebehandling>;
-    vedtakOgBehandling: Array<{ vedtak: Rammevedtak; behandling: Rammebehandling }>;
+    vedtakSomPåklages: Nullable<Rammevedtak>;
     søknader: Søknad[];
     innloggetSaksbehandler: Saksbehandler;
 }) => {
@@ -143,7 +138,7 @@ const Omgjøringsresultat = (props: {
                     sakId={props.sak.sakId}
                     saksnummer={props.sak.saksnummer}
                     klageId={props.klage.id}
-                    vedtakOgBehandling={props.vedtakOgBehandling}
+                    vedtakSomPåklages={props.vedtakSomPåklages}
                     søknader={props.søknader}
                     åpen={vilVelgeOmgjøringsbehandlingModal}
                     onClose={() => setVilVelgeOmgjøringsbehandlingModal(false)}

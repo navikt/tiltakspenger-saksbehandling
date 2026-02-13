@@ -45,7 +45,7 @@ type Props = {
     sak: SakProps;
     initialKlage: Klagebehandling;
     omgjøringsbehandling: Nullable<Rammebehandling>;
-    vedtakOgBehandling: Array<{ vedtak: Rammevedtak; behandling: Rammebehandling }>;
+    vedtakSomPåklages: Nullable<Rammevedtak>;
     søknader: Søknad[];
 };
 
@@ -68,13 +68,8 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
         };
     }
 
-    const rammevedtakOgBehandling = sak.alleRammevedtak.map((vedtak) => {
-        const behandling = sak.behandlinger.find(
-            (behandling) => behandling.id === vedtak.behandlingId,
-        ) as Rammebehandling;
-
-        return { vedtak, behandling };
-    });
+    const vedtakSomPåklages =
+        sak.alleRammevedtak.find((vedtak) => vedtak.id === initialKlage.vedtakDetKlagesPå) ?? null;
 
     const omgjøringsbehandling =
         sak.behandlinger.find(
@@ -86,14 +81,14 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
         props: {
             sak,
             initialKlage,
-            vedtakOgBehandling: rammevedtakOgBehandling,
+            vedtakSomPåklages: vedtakSomPåklages,
             søknader: sak.søknader,
             omgjøringsbehandling: omgjøringsbehandling,
         },
     };
 });
 
-const VurderingKlagePage = ({ sak, vedtakOgBehandling, søknader, omgjøringsbehandling }: Props) => {
+const VurderingKlagePage = ({ sak, vedtakSomPåklages, søknader, omgjøringsbehandling }: Props) => {
     const { klage, setKlage } = useKlage();
     const { innloggetSaksbehandler } = useSaksbehandler();
     const [vilAvslutteBehandlingModal, setVilAvslutteBehandlingModal] = useState(false);
@@ -171,6 +166,7 @@ const VurderingKlagePage = ({ sak, vedtakOgBehandling, søknader, omgjøringsbeh
 
                     <VurderingForm
                         control={form.control}
+                        kanOmgjøre={søknader.length > 0}
                         readonly={
                             erReadonlyForSaksbehandler ||
                             formTilstand === 'LAGRET' ||
@@ -319,7 +315,7 @@ const VurderingKlagePage = ({ sak, vedtakOgBehandling, søknader, omgjøringsbeh
                     sakId={sak.sakId}
                     saksnummer={sak.saksnummer}
                     klageId={klage.id}
-                    vedtakOgBehandling={vedtakOgBehandling}
+                    vedtakSomPåklages={vedtakSomPåklages}
                     søknader={søknader}
                     åpen={vilVelgeOmgjøringsbehandlingModal}
                     onClose={() => setVilVelgeOmgjøringsbehandlingModal(false)}

@@ -20,7 +20,7 @@ export const velgOmgjøringsbehandlingFormValidation = (data: VelgOmgjøringsbeh
     }
 
     if (
-        data.behandlingstype === VelgOmgjøringsbehandlingTyper.SØKNADSBEHANDLING_INNVILGELSE &&
+        data.behandlingstype === VelgOmgjøringsbehandlingTyper.SØKNADSBEHANDLING &&
         data.søknadId === ''
     ) {
         errors.søknadId = {
@@ -28,25 +28,11 @@ export const velgOmgjøringsbehandlingFormValidation = (data: VelgOmgjøringsbeh
             message: 'Du må velge en søknad',
         };
     }
-
-    if (
-        data.behandlingstype === VelgOmgjøringsbehandlingTyper.REVURDERING_OMGJØRING &&
-        data.vedtakId === ''
-    ) {
-        errors.vedtakId = {
-            type: 'required',
-            message: 'Du må velge et vedtak',
-        };
-    }
-
-    return {
-        values: data,
-        errors: errors,
-    };
+    return { values: data, errors: errors };
 };
 
 export enum VelgOmgjøringsbehandlingTyper {
-    SØKNADSBEHANDLING_INNVILGELSE = 'SØKNADSBEHANDLING_INNVILGELSE',
+    SØKNADSBEHANDLING = 'SØKNADSBEHANDLING_INNVILGELSE',
     REVURDERING_INNVILGELSE = 'REVURDERING_INNVILGELSE',
     REVURDERING_OMGJØRING = 'REVURDERING_OMGJØRING',
 }
@@ -57,13 +43,8 @@ export const velgOmgjøringsbehandlingFormDataTilOpprettRammebehandlingRequest =
     return {
         type: formdata.behandlingstype as VelgOmgjøringsbehandlingTyper,
         søknadId:
-            formdata.behandlingstype === VelgOmgjøringsbehandlingTyper.SØKNADSBEHANDLING_INNVILGELSE
+            formdata.behandlingstype === VelgOmgjøringsbehandlingTyper.SØKNADSBEHANDLING
                 ? formdata.søknadId
-                : null,
-        vedtakIdSomOmgjøres:
-            formdata.behandlingstype === VelgOmgjøringsbehandlingTyper.REVURDERING_INNVILGELSE ||
-            formdata.behandlingstype === VelgOmgjøringsbehandlingTyper.REVURDERING_OMGJØRING
-                ? formdata.vedtakId
                 : null,
     };
 };

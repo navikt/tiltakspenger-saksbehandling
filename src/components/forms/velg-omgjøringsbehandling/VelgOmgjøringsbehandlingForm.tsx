@@ -17,12 +17,14 @@ import { useOpprettRammebehandlingForKlage } from '~/api/KlageApi';
 import router from 'next/router';
 import { behandlingUrl } from '~/utils/urls';
 import { KlageId } from '~/types/Klage';
+import { Nullable } from '~/types/UtilTypes';
+import { SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
 
 export const VelgOmgjøringsbehandlingModal = (props: {
     sakId: string;
     saksnummer: string;
     klageId: KlageId;
-    vedtakOgBehandling: Array<{ vedtak: Rammevedtak; behandling: Rammebehandling }>;
+    vedtakSomPåklages: Nullable<Rammevedtak>;
     søknader: Søknad[];
     åpen: boolean;
     onClose: () => void;
@@ -31,7 +33,6 @@ export const VelgOmgjøringsbehandlingModal = (props: {
         defaultValues: {
             behandlingstype: '',
             søknadId: '',
-            vedtakId: '',
         },
         resolver: velgOmgjøringsbehandlingFormValidation,
     });
@@ -64,7 +65,7 @@ export const VelgOmgjøringsbehandlingModal = (props: {
                 <Modal.Body>
                     <VelgOmgjøringsbehandlingForm
                         control={form.control}
-                        vedtakOgBehandling={props.vedtakOgBehandling}
+                        vedtakSomPåklages={props.vedtakSomPåklages}
                         søknader={props.søknader}
                     />
                 </Modal.Body>
@@ -97,7 +98,7 @@ export const VelgOmgjøringsbehandlingModal = (props: {
 
 const VelgOmgjøringsbehandlingForm = (props: {
     control: Control<VelgOmgjøringsbehandlingFormData>;
-    vedtakOgBehandling: Array<{ vedtak: Rammevedtak; behandling: Rammebehandling }>;
+    vedtakSomPåklages: Nullable<Rammevedtak>;
     søknader: Søknad[];
 }) => {
     const behandlingstype = useWatch({
@@ -113,19 +114,31 @@ const VelgOmgjøringsbehandlingForm = (props: {
                 render={({ field, fieldState }) => (
                     <Select label="Behandlingstype" {...field} error={fieldState.error?.message}>
                         <option value="">-- Velg behandlingstype --</option>
-                        <option value={VelgOmgjøringsbehandlingTyper.SØKNADSBEHANDLING_INNVILGELSE}>
-                            Søknadsbehandling - Innvilgelse
+                        <option
+                            value={VelgOmgjøringsbehandlingTyper.SØKNADSBEHANDLING}
+                            disabled={props.søknader.length === 0}
+                        >
+                            Søknadsbehandling
                         </option>
-                        <option value={VelgOmgjøringsbehandlingTyper.REVURDERING_INNVILGELSE}>
+                        <option
+                            value={VelgOmgjøringsbehandlingTyper.REVURDERING_INNVILGELSE}
+                            disabled={
+                                props.vedtakSomPåklages?.resultat !==
+                                SøknadsbehandlingResultat.INNVILGELSE
+                            }
+                        >
                             Revurdering - Innvilgelse
                         </option>
-                        <option value={VelgOmgjøringsbehandlingTyper.REVURDERING_OMGJØRING}>
+                        <option
+                            value={VelgOmgjøringsbehandlingTyper.REVURDERING_OMGJØRING}
+                            disabled={!props.vedtakSomPåklages?.gyldigeKommandoer.OMGJØR}
+                        >
                             Revurdering - Omgjøring
                         </option>
                     </Select>
                 )}
             />
-            {behandlingstype === VelgOmgjøringsbehandlingTyper.SØKNADSBEHANDLING_INNVILGELSE && (
+            {behandlingstype === VelgOmgjøringsbehandlingTyper.SØKNADSBEHANDLING && (
                 <Controller
                     name={'søknadId'}
                     control={props.control}
@@ -135,24 +148,6 @@ const VelgOmgjøringsbehandlingForm = (props: {
                             {props.søknader.map((søknad) => (
                                 <option key={søknad.id} value={søknad.id}>
                                     {formaterTidspunkt(søknad.opprettet)}
-                                </option>
-                            ))}
-                        </Select>
-                    )}
-                />
-            )}
-            {behandlingstype === 'REVURDERING_OMGJØRING' && (
-                <Controller
-                    name={'vedtakId'}
-                    control={props.control}
-                    render={({ field, fieldState }) => (
-                        <Select {...field} label="Velg vedtak" error={fieldState.error?.message}>
-                            <option value="">-- Velg vedtak --</option>
-                            {props.vedtakOgBehandling.map(({ vedtak, behandling }) => (
-                                <option key={`${vedtak.id}-${behandling.id}`} value={vedtak.id}>
-                                    {behandlingstypeTextFormatter[behandling.type]} -{' '}
-                                    {behandlingResultatTilText[vedtak.resultat]} -{' '}
-                                    {formaterTidspunktKort(vedtak.opprettet)}
                                 </option>
                             ))}
                         </Select>
