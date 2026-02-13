@@ -15,6 +15,7 @@ import { behandlingUrl } from '~/utils/urls';
 import { KlageId } from '~/types/Klage';
 import { Nullable } from '~/types/UtilTypes';
 import { SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
+import { RevurderingResultat } from '~/types/Revurdering';
 
 export const VelgOmgjøringsbehandlingModal = (props: {
     sakId: string;
@@ -102,6 +103,11 @@ const VelgOmgjøringsbehandlingForm = (props: {
         name: 'behandlingstype',
     });
 
+    const erVedtakSomPåKlagesInnvilgelse =
+        props.vedtakSomPåklages?.resultat &&
+        (props.vedtakSomPåklages.resultat === SøknadsbehandlingResultat.INNVILGELSE ||
+            props.vedtakSomPåklages.resultat === RevurderingResultat.INNVILGELSE);
+
     return (
         <VStack gap="space-16">
             <Controller
@@ -118,10 +124,7 @@ const VelgOmgjøringsbehandlingForm = (props: {
                         </option>
                         <option
                             value={VelgOmgjøringsbehandlingTyper.REVURDERING_INNVILGELSE}
-                            disabled={
-                                props.vedtakSomPåklages?.resultat !==
-                                SøknadsbehandlingResultat.INNVILGELSE
-                            }
+                            disabled={!erVedtakSomPåKlagesInnvilgelse}
                         >
                             Revurdering - Innvilgelse
                         </option>
