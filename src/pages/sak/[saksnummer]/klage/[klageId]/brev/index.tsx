@@ -1,7 +1,7 @@
 import { ReactElement } from 'react';
 
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
-import { BodyShort, Button, Heading, HStack, LocalAlert, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, Heading, HStack, Label, LocalAlert, VStack } from '@navikt/ds-react';
 import { useForm } from 'react-hook-form';
 import { fetchSak } from '~/utils/fetch/fetch-server';
 import { logger } from '@navikt/next-logger';
@@ -109,14 +109,21 @@ const BrevKlagePage = ({ sak }: Props) => {
     return (
         <form onSubmit={form.handleSubmit(onSubmit)}>
             <VStack>
-                <HStack gap="space-8" marginInline="space-64" marginBlock="space-32" align="start">
-                    {form.formState.isDirty ? (
-                        <WarningCircleIcon />
-                    ) : (
-                        <CheckmarkCircleIcon fontSize="1.5rem" color="green" />
+                <VStack marginInline="space-64" marginBlock="space-32" gap="space-16">
+                    <HStack gap="space-8" align="start">
+                        {form.formState.isDirty ? (
+                            <WarningCircleIcon />
+                        ) : (
+                            <CheckmarkCircleIcon fontSize="1.5rem" color="green" />
+                        )}
+                        <Heading size="small">Brev</Heading>
+                    </HStack>
+                    {klage.resultat === 'OPPRETTHOLDT' && (
+                        <Label>
+                            Innstilling til Nav klageinstans (kommer med i brev til bruker)
+                        </Label>
                     )}
-                    <Heading size="small">Brev</Heading>
-                </HStack>
+                </VStack>
 
                 <BrevForm
                     control={form.control}

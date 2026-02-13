@@ -17,7 +17,7 @@ const BrevForm = (props: {
     });
 
     return (
-        <VStack className={props.className}>
+        <VStack className={props.className} gap="space-32">
             <ul className={styles.fieldsList}>
                 {fields.map((field, index) => (
                     <li key={field.id}>
