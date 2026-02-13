@@ -114,6 +114,28 @@ export const JournalpostId = (props: {
                         value: /^\d+$/,
                         message: 'JournalpostId kan kun inneholde tall.',
                     },
+                    validate: (value: string | undefined) => {
+                        const trimmed = (value ?? '').trim();
+                        if (!trimmed) {
+                            return true;
+                        }
+
+                        if (trimmed.length >= MIN_LENGDE_FØR_VALIDERING) {
+                            if (isLoading) {
+                                return 'Validering av journalpostId pågår.';
+                            }
+                            if (error) {
+                                return 'Feil ved validering av journalpostId.';
+                            }
+                            if (data && data?.journalpostFinnes === false) {
+                                return 'Journalpost finnes ikke.';
+                            }
+                        } else {
+                            return `JournalpostId må inneholde minst ${MIN_LENGDE_FØR_VALIDERING} tegn.`;
+                        }
+
+                        return true;
+                    },
                 }}
                 render={({ field, fieldState }) => (
                     <div className={styles.blokk}>
