@@ -1,12 +1,8 @@
 import { Modal, Select, Button, VStack, Heading, HStack, LocalAlert } from '@navikt/ds-react';
-import React from 'react';
 import { Control, useWatch, Controller, useForm } from 'react-hook-form';
-import { behandlingstypeTextFormatter } from '~/components/benk/BenkSideUtils';
-import { Rammebehandling } from '~/types/Rammebehandling';
 import { Rammevedtak } from '~/types/Rammevedtak';
 import { Søknad } from '~/types/Søknad';
-import { formaterTidspunkt, formaterTidspunktKort } from '~/utils/date';
-import { behandlingResultatTilText } from '~/utils/tekstformateringUtils';
+import { formaterTidspunkt } from '~/utils/date';
 import {
     VelgOmgjøringsbehandlingFormData,
     velgOmgjøringsbehandlingFormDataTilOpprettRammebehandlingRequest,
