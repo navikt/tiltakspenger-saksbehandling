@@ -222,7 +222,7 @@ const PeriodeVelger = ({ btPeriode, index, readOnly }: PeriodeVelgerProps) => {
                     const verdi = index + 1;
                     return (
                         <option value={verdi} key={verdi}>
-                            {verdi}
+                            {verdi === maksAntall ? `${verdi}+` : verdi}
                         </option>
                     );
                 })}

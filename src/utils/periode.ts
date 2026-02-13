@@ -1,5 +1,4 @@
 import { MedPeriode, Periode } from '~/types/Periode';
-import dayjs from 'dayjs';
 import { datoMax, datoMin, forrigeDag, nesteDag } from '~/utils/date';
 
 // Sjekker at periodiseringen er i kronologisk rekkefølge uten overlapp
@@ -14,8 +13,8 @@ export const validerPeriodisering = (periodisering: MedPeriode[], tillatHull: bo
             const forrigePeriode = array[index - 1];
 
             return tillatHull
-                ? dayjs(periode.fraOgMed).isAfter(forrigePeriode.tilOgMed)
-                : dayjs(periode.fraOgMed).subtract(1, 'day').isSame(forrigePeriode.tilOgMed);
+                ? periode.fraOgMed > forrigePeriode.tilOgMed
+                : forrigeDag(periode.fraOgMed) === forrigePeriode.tilOgMed;
         });
 };
 

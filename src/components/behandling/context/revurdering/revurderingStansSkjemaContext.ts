@@ -1,4 +1,4 @@
-import { HjemmelForStansOgOpphør, RevurderingResultat } from '~/types/Revurdering';
+import { HjemmelForStansEllerOpphør, RevurderingResultat } from '~/types/Revurdering';
 import { Reducer } from 'react';
 import { ReducerSuperAction } from '~/types/Context';
 import {
@@ -12,7 +12,7 @@ export type RevurderingStansState = {
     resultat: RevurderingResultat.STANS;
     fraDato?: string;
     harValgtStansFraFørsteDagSomGirRett: boolean;
-    hjemlerForStans: HjemmelForStansOgOpphør[];
+    hjemlerForStans: HjemmelForStansEllerOpphør[];
 };
 
 type Actions =
@@ -22,7 +22,7 @@ type Actions =
       }
     | {
           type: 'setHjemlerForStans';
-          payload: { hjemler: HjemmelForStansOgOpphør[] };
+          payload: { hjemler: HjemmelForStansEllerOpphør[] };
       }
     | {
           type: 'setHarValgtFørsteDagSomGirRett';

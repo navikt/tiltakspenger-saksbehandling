@@ -3,8 +3,9 @@ import { Nullable } from '~/types/UtilTypes';
 import { Rammebehandling } from '~/types/Rammebehandling';
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';
 import { Avslagsgrunn, SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
-import { RevurderingResultat } from '~/types/Revurdering';
+import { HjemmelForStansEllerOpphør, RevurderingResultat } from '~/types/Revurdering';
 import { Innvilgelsesperiode } from '~/types/Innvilgelsesperiode';
+import { Periode } from '~/types/Periode';
 
 export type SøknadsbehandlingInnvilgelseBrevForhåndsvisningDTO = {
     resultat: SøknadsbehandlingResultat.INNVILGELSE;
@@ -26,7 +27,7 @@ export type SøknadsbehandlingBrevForhåndsvisningDTO =
 export type RevurderingStansBrevForhåndsvisningDTO = {
     resultat: RevurderingResultat.STANS;
     fritekst: Nullable<string>;
-    valgteHjemler: string[];
+    valgteHjemler: HjemmelForStansEllerOpphør[];
 } & (
     | {
           stansFraOgMed: null;
@@ -45,19 +46,30 @@ export type RevurderingInnvilgelseBrevForhåndsvisningDTO = {
     barnetillegg: Nullable<BarnetilleggPeriode[]>;
 };
 
-export type RevurderingOmgjøringBrevForhåndsvisningDTO = {
+export type OmgjøringInnvilgelseBrevForhåndsvisningDTO = {
     resultat: RevurderingResultat.OMGJØRING;
     fritekst: Nullable<string>;
     innvilgelsesperioder: Innvilgelsesperiode[];
     barnetillegg: Nullable<BarnetilleggPeriode[]>;
 };
 
+export type OmgjøringOpphørBrevForhåndsvisningDTO = {
+    resultat: RevurderingResultat.OMGJØRING_OPPHØR;
+    fritekst: Nullable<string>;
+    valgteHjemler: HjemmelForStansEllerOpphør[];
+    vedtaksperiode: Periode;
+};
+
+export type OmgjøringBrevForhåndsvisningDTO =
+    | OmgjøringInnvilgelseBrevForhåndsvisningDTO
+    | OmgjøringOpphørBrevForhåndsvisningDTO;
+
 export type BrevForhåndsvisningDTO =
     | SøknadsbehandlingInnvilgelseBrevForhåndsvisningDTO
     | SøknadsbehandlingAvslagBrevForhåndsvisningDTO
     | RevurderingStansBrevForhåndsvisningDTO
     | RevurderingInnvilgelseBrevForhåndsvisningDTO
-    | RevurderingOmgjøringBrevForhåndsvisningDTO;
+    | OmgjøringBrevForhåndsvisningDTO;
 
 export const useHentVedtaksbrevForhåndsvisning = (behandling: Rammebehandling) => {
     const { trigger, error, isMutating } = useFetchBlobFraApi<BrevForhåndsvisningDTO>(

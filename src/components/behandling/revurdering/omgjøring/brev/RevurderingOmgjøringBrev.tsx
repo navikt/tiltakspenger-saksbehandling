@@ -1,5 +1,9 @@
 import { useRevurderingOmgjøring } from '~/components/behandling/context/BehandlingContext';
-import { RevurderingOmgjøringBrevForhåndsvisningDTO } from '~/components/behandling/felles/vedtaksbrev/forhåndsvisning/useHentVedtaksbrevForhåndsvisning';
+import {
+    OmgjøringBrevForhåndsvisningDTO,
+    OmgjøringInnvilgelseBrevForhåndsvisningDTO,
+    OmgjøringOpphørBrevForhåndsvisningDTO,
+} from '~/components/behandling/felles/vedtaksbrev/forhåndsvisning/useHentVedtaksbrevForhåndsvisning';
 import { Vedtaksbrev } from '~/components/behandling/felles/vedtaksbrev/Vedtaksbrev';
 import { RevurderingResultat } from '~/types/Revurdering';
 import { revurderingOmgjøringValidering } from '~/components/behandling/revurdering/omgjøring/revurderingOmgjøringValidering';
@@ -25,23 +29,36 @@ export const RevurderingOmgjøringBrev = () => {
     );
 };
 
-const tilForhåndsvisningDTO = (
-    skjema: OmgjøringContext,
-): RevurderingOmgjøringBrevForhåndsvisningDTO => {
-    if (skjema.resultat !== RevurderingResultat.OMGJØRING) {
-        throw Error('Brev for opphør er ikke klart ennå');
+const tilForhåndsvisningDTO = (skjema: OmgjøringContext): OmgjøringBrevForhåndsvisningDTO => {
+    const { resultat, textAreas } = skjema;
+
+    switch (resultat) {
+        case RevurderingResultat.OMGJØRING_OPPHØR: {
+            return {
+                resultat: RevurderingResultat.OMGJØRING_OPPHØR,
+                fritekst: textAreas.brevtekst.getValue(),
+                valgteHjemler: skjema.valgteHjemler,
+                vedtaksperiode: skjema.vedtaksperiode,
+            } satisfies OmgjøringOpphørBrevForhåndsvisningDTO;
+        }
+
+        case RevurderingResultat.OMGJØRING: {
+            const { innvilgelse } = skjema;
+
+            if (!innvilgelse.harValgtPeriode) {
+                throw Error('Kan ikke forhåndsvise brev før innvilgelsesperioder er valgt');
+            }
+
+            return {
+                resultat: RevurderingResultat.OMGJØRING,
+                fritekst: textAreas.brevtekst.getValue(),
+                innvilgelsesperioder: innvilgelse.innvilgelsesperioder,
+                barnetillegg: innvilgelse.harBarnetillegg ? innvilgelse.barnetilleggPerioder : null,
+            } satisfies OmgjøringInnvilgelseBrevForhåndsvisningDTO;
+        }
+
+        case RevurderingResultat.OMGJØRING_IKKE_VALGT: {
+            throw Error('Kan ikke forhåndsvise brev før resultat er valgt');
+        }
     }
-
-    const { innvilgelse, textAreas } = skjema;
-
-    if (!innvilgelse.harValgtPeriode) {
-        throw Error('Kan ikke forhåndsvise brev før innvilgelsesperioder er valgt');
-    }
-
-    return {
-        resultat: RevurderingResultat.OMGJØRING,
-        fritekst: textAreas.brevtekst.getValue(),
-        innvilgelsesperioder: innvilgelse.innvilgelsesperioder,
-        barnetillegg: innvilgelse.harBarnetillegg ? innvilgelse.barnetilleggPerioder : null,
-    };
 };

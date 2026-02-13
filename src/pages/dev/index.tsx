@@ -188,6 +188,7 @@ const NySøknadModal = (props: { open: boolean; onClose: () => void }) => {
                                 name="vilHaBarn"
                                 control={form.control}
                             />
+                            {/* eslint-disable-next-line */}
                             {form.watch('vilHaBarn') && (
                                 <VStack gap="space-16">
                                     {fields.map((item, index) => {

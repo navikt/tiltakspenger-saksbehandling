@@ -16,7 +16,7 @@ type RevurderingBase = RammebehandlingBase & {
 
 export type RevurderingStans = RevurderingBase & {
     resultat: RevurderingResultat.STANS;
-    valgtHjemmelHarIkkeRettighet: Nullable<HjemmelForStansOgOpphør[]>;
+    valgtHjemmelHarIkkeRettighet: Nullable<HjemmelForStansEllerOpphør[]>;
     harValgtStansFraFørsteDagSomGirRett: Nullable<boolean>;
     harValgtStansTilSisteDagSomGirRett: Nullable<boolean>;
 };
@@ -38,7 +38,7 @@ export type OmgjøringInnvilgelse = RevurderingBase & {
 export type OmgjøringOpphør = RevurderingBase & {
     resultat: RevurderingResultat.OMGJØRING_OPPHØR;
     vedtaksperiode: Periode;
-    valgteHjemler: HjemmelForStansOgOpphør[];
+    valgteHjemler: HjemmelForStansEllerOpphør[];
     omgjørVedtak: VedtakId;
 };
 
@@ -66,7 +66,7 @@ export type OmgjøringResultat =
 
 export type OppdaterRevurderingStansDTO = OppdaterBehandlingBaseDTO & {
     resultat: RevurderingResultat.STANS;
-    valgteHjemler: HjemmelForStansOgOpphør[];
+    valgteHjemler: HjemmelForStansEllerOpphør[];
 } & (
         | {
               stansFraOgMed: null;
@@ -94,7 +94,7 @@ export type OppdaterOmgjøringInnvilgelseDTO = OppdaterBehandlingBaseDTO & {
 export type OppdaterOmgjøringOpphørDTO = OppdaterBehandlingBaseDTO & {
     resultat: RevurderingResultat.OMGJØRING_OPPHØR;
     vedtaksperiode: Periode;
-    valgteHjemler: HjemmelForStansOgOpphør[];
+    valgteHjemler: HjemmelForStansEllerOpphør[];
 };
 
 export type OppdaterOmgjøringIkkeValgtDTO = OppdaterBehandlingBaseDTO & {
@@ -118,7 +118,7 @@ export type StartRevurderingDTO = {
     rammevedtakIdSomOmgjøres: Nullable<VedtakId>;
 };
 
-export enum HjemmelForStansOgOpphør {
+export enum HjemmelForStansEllerOpphør {
     DELTAR_IKKE_PÅ_ARBEIDSMARKEDSTILTAK = 'DeltarIkkePåArbeidsmarkedstiltak',
     ALDER = 'Alder',
     LIVSOPPHOLDYTELSER = 'Livsoppholdytelser',
