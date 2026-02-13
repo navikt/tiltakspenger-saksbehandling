@@ -1,4 +1,4 @@
-import { Alert, BodyLong, Button, Heading, Radio, RadioGroup } from '@navikt/ds-react';
+import { BodyLong, Button, Heading, Radio, RadioGroup } from '@navikt/ds-react';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import {
     useOmgjøringSkjema,
@@ -9,6 +9,7 @@ import { OmgjøringResultat, RevurderingResultat } from '~/types/Revurdering';
 import { useSak } from '~/context/sak/SakContext';
 import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
 import { hentRammevedtak } from '~/utils/sak';
+import { VedtakHjelpetekst } from '~/components/behandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
 
 import style from './OmgjøringResultatVelger.module.css';
 
@@ -33,18 +34,6 @@ export const OmgjøringResultatVelger = () => {
                 <Heading size={'small'} level={'2'} spacing={true}>
                     {'Resultat'}
                 </Heading>
-
-                <Alert variant={'info'} size={'small'} inline={true} className={style.infoVarsel}>
-                    {'Velg innvilgelse dersom hele eller deler av omgjøringen skal være en innvilgelse.' +
-                        ' Velg opphør dersom omgjøringen skal være et rent opphør.'}
-                    {!kanOpphøre &&
-                        ` Vedtaket kan kun opphøres dersom det har gjeldende innvilgelsesperioder.`}
-                    {!opphørToggle && (
-                        <BodyLong size={'small'}>
-                            {'(Opphør er foreløpig ikke tilgjengelig i produksjon.)'}
-                        </BodyLong>
-                    )}
-                </Alert>
 
                 <RadioGroup
                     legend={'Resultat'}
@@ -87,6 +76,19 @@ export const OmgjøringResultatVelger = () => {
                     )}
                 </RadioGroup>
             </VedtakSeksjon.Venstre>
+            <VedtakSeksjon.Høyre>
+                <VedtakHjelpetekst variant={'info'}>
+                    {'Velg innvilgelse dersom hele eller deler av omgjøringen skal være en innvilgelse.' +
+                        ' Velg opphør dersom omgjøringen skal være et rent opphør.'}
+                    {!kanOpphøre &&
+                        ` Vedtaket kan kun opphøres dersom det har gjeldende innvilgelsesperioder.`}
+                    {!opphørToggle && (
+                        <BodyLong size={'small'}>
+                            {'(Opphør er foreløpig ikke tilgjengelig i produksjon.)'}
+                        </BodyLong>
+                    )}
+                </VedtakHjelpetekst>
+            </VedtakSeksjon.Høyre>
         </VedtakSeksjon>
     );
 };

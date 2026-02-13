@@ -10,10 +10,10 @@ import { BegrunnelseVilkårsvurdering } from '~/components/behandling/felles/beg
 import { RevurderingOmgjøringBrev } from '~/components/behandling/revurdering/omgjøring/brev/RevurderingOmgjøringBrev';
 import { RevurderingOmgjøringSend } from '~/components/behandling/revurdering/omgjøring/send-og-godkjenn/RevurderingOmgjøringSend';
 import { RevurderingOmgjøringHeader } from '~/components/behandling/revurdering/omgjøring/header/RevurderingOmgjøringHeader';
-import { OmgjøringVedtaksperiodeVelger } from '~/components/behandling/revurdering/omgjøring/vedtaksperiode/OmgjøringVedtaksperiodeVelger';
 import { RevurderingResultat } from '~/types/Revurdering';
 import { OmgjøringResultatVelger } from '~/components/behandling/revurdering/omgjøring/resultat-velger/OmgjøringResultatVelger';
 import { OmgjøringOpphørVelger } from '~/components/behandling/revurdering/omgjøring/opphør/OmgjøringOpphørVelger';
+import { OmgjøringInnvilgelseVedtaksperiodeVelger } from '~/components/behandling/revurdering/omgjøring/innvilgelse/OmgjøringInnvilgelseVedtaksperiodeVelger';
 
 export const RevurderingOmgjøringVedtak = () => {
     const skjema = useOmgjøringSkjema();
@@ -40,7 +40,6 @@ const Innvilgelse = ({ harValgtPeriode }: { harValgtPeriode: boolean }) => {
     const { behandling } = useRevurderingOmgjøring();
 
     // Kjapp fiks for å sjekke om det finnes tiltak det kan innvilges for. Dette bør avgjøres av backend.
-    // Vi burde kanskje ha en innvilgelse/opphør velger, tilsvarende som vi har for søknadsbehandling
     const kanInnvilges = hentTiltaksdeltakelserMedStartOgSluttdato(behandling).length > 0;
 
     if (!kanInnvilges) {
@@ -57,7 +56,7 @@ const Innvilgelse = ({ harValgtPeriode }: { harValgtPeriode: boolean }) => {
     return (
         <>
             <Separator />
-            <OmgjøringVedtaksperiodeVelger />
+            <OmgjøringInnvilgelseVedtaksperiodeVelger />
             <Separator />
             <InnvilgelsesperioderVelger />
             <Separator />

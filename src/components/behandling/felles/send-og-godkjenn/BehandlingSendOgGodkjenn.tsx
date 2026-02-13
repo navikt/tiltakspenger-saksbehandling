@@ -124,7 +124,6 @@ export const BehandlingSendOgGodkjenn = ({ behandling, lagringProps }: Props) =>
                 <Alert
                     variant={'info'}
                     inline={true}
-                    size={'small'}
                 >{`Sist lagret: ${formaterTidspunkt(behandling.sistEndret)}`}</Alert>
             </VedtakSeksjon.Høyre>
         </VedtakSeksjon>

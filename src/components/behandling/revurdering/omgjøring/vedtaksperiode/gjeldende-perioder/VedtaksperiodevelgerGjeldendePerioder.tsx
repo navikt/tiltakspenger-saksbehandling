@@ -14,7 +14,7 @@ type Props = {
     className?: string;
 };
 
-export const VedtaksperiodeVelgerGjeldende = ({
+export const VedtaksperiodevelgerGjeldendePerioder = ({
     vedtakSomOmgjøres,
     valgtResultat,
     className,

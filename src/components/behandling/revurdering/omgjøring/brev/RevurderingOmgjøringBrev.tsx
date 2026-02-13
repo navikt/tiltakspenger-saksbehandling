@@ -21,7 +21,7 @@ export const RevurderingOmgjøringBrev = () => {
 
     return (
         <Vedtaksbrev
-            header={'Vedtaksbrev for revurdering av innvilgelse'}
+            header={'Vedtaksbrev for opphør'}
             validering={revurderingOmgjøringValidering(behandling, skjema, sak)}
             hentDto={() => tilForhåndsvisningDTO(skjema)}
             hjelpetekst={<RevurderingBrevHjelpetekst />}

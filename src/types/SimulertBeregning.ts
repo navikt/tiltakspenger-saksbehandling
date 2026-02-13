@@ -18,7 +18,7 @@ interface SimulertBeregningBase {
     meldeperioder: SimulertBeregningPerMeldeperiode[];
     beregningstidspunkt: null;
     beregning: BeregningerSummert;
-    simuleringstidspunkt: null;
+    simuleringstidspunkt: Nullable<string>;
     simuleringsdato: Nullable<string>;
     simuleringTotalBeløp: Nullable<number>;
     simulerteBeløp: Nullable<SimulerteBeløp>;

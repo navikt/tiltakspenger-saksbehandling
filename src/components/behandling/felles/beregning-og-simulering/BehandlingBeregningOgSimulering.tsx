@@ -1,4 +1,4 @@
-import { VStack } from '@navikt/ds-react';
+import { Alert, VStack } from '@navikt/ds-react';
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { SimuleringDetaljer } from '~/components/beregning-og-simulering/detaljer/SimuleringDetaljer';
@@ -9,6 +9,7 @@ import { BeregningOgSimuleringHeader } from '~/components/beregning-og-simulerin
 import { kanSaksbehandleForBehandling } from '~/utils/tilganger';
 import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
 import { Rammebehandling, Rammebehandlingsstatus } from '~/types/Rammebehandling';
+import { formaterTidspunkt } from '~/utils/date';
 
 import style from './BehandlingBeregningOgSimulering.module.css';
 
@@ -23,9 +24,7 @@ export const BehandlingBeregningOgSimulering = () => {
     }
 
     const { simulertBeregning, status: utbetalingsstatus, navkontor, navkontorNavn } = utbetaling;
-    const { beregning } = simulertBeregning;
-
-    kanSaksbehandleForBehandling(behandling, innloggetSaksbehandler);
+    const { beregning, simuleringstidspunkt } = simulertBeregning;
 
     return (
         <>
@@ -58,6 +57,12 @@ export const BehandlingBeregningOgSimulering = () => {
                         />
                     </VStack>
                 </VedtakSeksjon.Venstre>
+                <VedtakSeksjon.Høyre>
+                    <Alert
+                        variant={'info'}
+                        inline={true}
+                    >{`Sist simulert: ${simuleringstidspunkt ? formaterTidspunkt(simuleringstidspunkt) : 'ukjent'}`}</Alert>
+                </VedtakSeksjon.Høyre>
 
                 <VedtakSeksjon.FullBredde className={style.detaljer}>
                     <SimuleringDetaljer simulertBeregning={simulertBeregning} />

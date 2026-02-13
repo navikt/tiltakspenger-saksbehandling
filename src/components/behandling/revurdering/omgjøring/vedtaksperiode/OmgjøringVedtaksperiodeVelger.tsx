@@ -13,15 +13,16 @@ import { useSak } from '~/context/sak/SakContext';
 import { finnPerioderHull, perioderOverlapper, totalPeriode } from '~/utils/periode';
 import { Heading, HStack, VStack } from '@navikt/ds-react';
 import { hentGjeldendeRammevedtakIPeriode, hentRammevedtak } from '~/utils/sak';
-import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { VedtakHjelpetekst } from '~/components/behandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
 import { classNames } from '~/utils/classNames';
-import { VedtaksperiodeVelgerGjeldende } from '~/components/behandling/revurdering/omgjøring/vedtaksperiode/gjeldende-perioder/VedtaksperiodeVelgerGjeldende';
+import { VedtaksperiodevelgerGjeldendePerioder } from '~/components/behandling/revurdering/omgjøring/vedtaksperiode/gjeldende-perioder/VedtaksperiodevelgerGjeldendePerioder';
 import { Omgjøring, RevurderingResultat } from '~/types/Revurdering';
 import { Rammevedtak } from '~/types/Rammevedtak';
 import { Periode } from '~/types/Periode';
 
 import style from './OmgjøringVedtaksperiodeVelger.module.css';
+
+// TODO: flytt feilhåndering til de separate komponentene for opphør og innvilgelse, ettersom ikke alle feil er relevante for begge deler
 
 export const OmgjøringVedtaksperiodeVelger = () => {
     const { sak } = useSak();
@@ -47,139 +48,102 @@ export const OmgjøringVedtaksperiodeVelger = () => {
     const overlappendeVedtak = hentGjeldendeRammevedtakIPeriode(sak, vedtaksperiode);
     const harValgtOmgjøringAvFlereVedtak = overlappendeVedtak.length > 1;
 
-    const disabledMatcher = generateMatcherProps(hullMellomGjeldendePerioder);
-
     const periodeSomMåOmgjøresInnenfor = gyldigTotalOmgjøringsperiode(behandling, vedtak);
 
     const commonProps: Partial<DatovelgerProps> = {
         readOnly: erReadonly,
         size: 'small',
         dropdownCaption: true,
-        disabledMatcher,
+        disabledMatcher: generateMatcherProps(hullMellomGjeldendePerioder),
     };
 
     return (
-        <VedtakSeksjon>
-            <VedtakSeksjon.Venstre>
-                <VStack
-                    gap={'space-8'}
-                    className={classNames(
-                        (harValgtMedOverlappOverHull || harValgtOmgjøringAvFlereVedtak) &&
-                            style.feilPeriode,
-                    )}
-                >
-                    <Heading size={'small'} level={'3'}>
-                        {'Vedtaksperiode'}
-                    </Heading>
+        <VStack
+            gap={'space-8'}
+            className={classNames(
+                (harValgtMedOverlappOverHull || harValgtOmgjøringAvFlereVedtak) &&
+                    style.feilPeriode,
+            )}
+        >
+            <Heading size={'small'} level={'3'}>
+                {'Vedtaksperiode'}
+            </Heading>
 
-                    <VedtaksperiodeVelgerGjeldende
-                        vedtakSomOmgjøres={vedtak}
-                        valgtResultat={resultat}
-                        className={style.gjeldendePerioder}
-                    />
+            <VedtaksperiodevelgerGjeldendePerioder
+                vedtakSomOmgjøres={vedtak}
+                valgtResultat={resultat}
+                className={style.gjeldendePerioder}
+            />
 
-                    <HStack gap={'space-6'} align={'end'}>
-                        <Datovelger
-                            {...commonProps}
-                            label={'Fra og med'}
-                            selected={vedtaksperiode.fraOgMed}
-                            value={datoTilDatoInputText(vedtaksperiode.fraOgMed)}
-                            minDate={erOpphør ? perioderSomKanOmgjøres.at(0)?.fraOgMed : undefined}
-                            maxDate={periodeSomMåOmgjøresInnenfor.tilOgMed}
-                            defaultMonth={vedtaksperiode.fraOgMed}
-                            onDateChange={(valgtDato) => {
-                                if (!valgtDato) {
-                                    return;
-                                }
+            <HStack gap={'space-6'} align={'end'}>
+                <Datovelger
+                    {...commonProps}
+                    label={'Fra og med'}
+                    selected={vedtaksperiode.fraOgMed}
+                    value={datoTilDatoInputText(vedtaksperiode.fraOgMed)}
+                    minDate={erOpphør ? perioderSomKanOmgjøres.at(0)?.fraOgMed : undefined}
+                    maxDate={periodeSomMåOmgjøresInnenfor.tilOgMed}
+                    defaultMonth={vedtaksperiode.fraOgMed}
+                    onDateChange={(valgtDato) => {
+                        if (!valgtDato) {
+                            return;
+                        }
 
-                                dispatch({
-                                    type: 'oppdaterVedtaksperiode',
-                                    payload: {
-                                        periodeOppdatering: {
-                                            fraOgMed: dateTilISOTekst(valgtDato),
-                                        },
-                                    },
-                                });
-                            }}
-                        />
-                        <Datovelger
-                            {...commonProps}
-                            label={'Til og med'}
-                            selected={vedtaksperiode.tilOgMed}
-                            value={datoTilDatoInputText(vedtaksperiode.tilOgMed)}
-                            minDate={periodeSomMåOmgjøresInnenfor.fraOgMed}
-                            maxDate={erOpphør ? perioderSomKanOmgjøres.at(-1)?.tilOgMed : undefined}
-                            defaultMonth={vedtaksperiode.tilOgMed}
-                            onDateChange={(valgtDato) => {
-                                if (!valgtDato) {
-                                    return;
-                                }
+                        dispatch({
+                            type: 'oppdaterVedtaksperiode',
+                            payload: {
+                                periodeOppdatering: {
+                                    fraOgMed: dateTilISOTekst(valgtDato),
+                                },
+                            },
+                        });
+                    }}
+                />
+                <Datovelger
+                    {...commonProps}
+                    label={'Til og med'}
+                    selected={vedtaksperiode.tilOgMed}
+                    value={datoTilDatoInputText(vedtaksperiode.tilOgMed)}
+                    minDate={periodeSomMåOmgjøresInnenfor.fraOgMed}
+                    maxDate={erOpphør ? perioderSomKanOmgjøres.at(-1)?.tilOgMed : undefined}
+                    defaultMonth={vedtaksperiode.tilOgMed}
+                    onDateChange={(valgtDato) => {
+                        if (!valgtDato) {
+                            return;
+                        }
 
-                                dispatch({
-                                    type: 'oppdaterVedtaksperiode',
-                                    payload: {
-                                        periodeOppdatering: {
-                                            tilOgMed: dateTilISOTekst(valgtDato),
-                                        },
-                                    },
-                                });
-                            }}
-                        />
-                    </HStack>
+                        dispatch({
+                            type: 'oppdaterVedtaksperiode',
+                            payload: {
+                                periodeOppdatering: {
+                                    tilOgMed: dateTilISOTekst(valgtDato),
+                                },
+                            },
+                        });
+                    }}
+                />
+            </HStack>
 
-                    {gjeldendeVedtakHarHull && (
-                        <VedtakHjelpetekst variant={'warning'}>
-                            {
-                                'Vedtaket som omgjøres har flere gjeldende perioder. Du må velge en vedtaksperiode for omgjøring innenfor en av de gjeldende periodene.'
-                            }
-                        </VedtakHjelpetekst>
-                    )}
+            {gjeldendeVedtakHarHull && (
+                <VedtakHjelpetekst variant={'warning'}>
+                    {
+                        'Vedtaket som omgjøres har flere gjeldende perioder. Du må velge en vedtaksperiode for omgjøring innenfor en av de gjeldende periodene.'
+                    }
+                </VedtakHjelpetekst>
+            )}
 
-                    {harValgtMedOverlappOverHull && (
-                        <VedtakHjelpetekst variant={'error'}>
-                            {
-                                'Valgt periode overlapper med et annet vedtak enn det som skal omgjøres.'
-                            }
-                        </VedtakHjelpetekst>
-                    )}
+            {harValgtMedOverlappOverHull && (
+                <VedtakHjelpetekst variant={'error'}>
+                    {'Valgt periode overlapper med et annet vedtak enn det som skal omgjøres.'}
+                </VedtakHjelpetekst>
+            )}
 
-                    {overlappendeVedtak.length > 1 && (
-                        <VedtakHjelpetekst variant={'error'}>
-                            {`Den valgte perioden overlapper med ${overlappendeVedtak.length} vedtak. Du må velge en periode som kun overlapper med vedtaket som skal omgjøres.`}
-                        </VedtakHjelpetekst>
-                    )}
-                </VStack>
-            </VedtakSeksjon.Venstre>
-            <VedtakSeksjon.Høyre>
-                <VStack gap={'space-4'}>
-                    {resultat === RevurderingResultat.OMGJØRING_OPPHØR ? (
-                        <HjelpetekstOpphør />
-                    ) : (
-                        <HjelpetekstInnvilgelse />
-                    )}
-                </VStack>
-            </VedtakSeksjon.Høyre>
-        </VedtakSeksjon>
-    );
-};
-
-const HjelpetekstOpphør = () => {
-    return (
-        <VedtakHjelpetekst header={'Velg periode for opphør'}>
-            {'Du kan opphøre hele eller deler av de gjeldende innvilgelsesperiodene.'}
-            {' Opphørsperioden må starte og slutte innenfor innvilgelsesperiodene.'}
-        </VedtakHjelpetekst>
-    );
-};
-
-const HjelpetekstInnvilgelse = () => {
-    return (
-        <VedtakHjelpetekst header={'Velg ny vedtaksperiode'}>
-            {'Du kan omgjøre hele eller deler av de gjeldende vedtaksperiodene.'}
-            {
-                ' Ved innvilgelse kan du forlenge vedtaksperioden utover det opprinnelige vedtaket, så lenge det ikke overlapper med andre gjeldende vedtak.'
-            }
-        </VedtakHjelpetekst>
+            {overlappendeVedtak.length > 1 && (
+                <VedtakHjelpetekst variant={'error'}>
+                    {`Den valgte perioden overlapper med ${overlappendeVedtak.length} vedtak. Du må velge en periode som kun overlapper med vedtaket som skal omgjøres.`}
+                </VedtakHjelpetekst>
+            )}
+        </VStack>
     );
 };
 
