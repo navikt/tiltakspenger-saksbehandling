@@ -15,13 +15,15 @@ import { useSak } from '~/context/sak/SakContext';
 import { RevurderingBrevHjelpetekst } from '~/components/behandling/revurdering/felles/RevurderingBrevHjelpetekst';
 
 export const RevurderingOmgjøringBrev = () => {
-    const { behandling } = useRevurderingOmgjøring();
-    const skjema = useOmgjøringSkjema();
     const { sak } = useSak();
+    const { behandling } = useRevurderingOmgjøring();
+
+    const skjema = useOmgjøringSkjema();
+    const { resultat } = skjema;
 
     return (
         <Vedtaksbrev
-            header={'Vedtaksbrev for opphør'}
+            header={`Vedtaksbrev for ${resultat === RevurderingResultat.OMGJØRING ? 'revurdering av innvilgelse' : 'opphør'}`}
             validering={revurderingOmgjøringValidering(behandling, skjema, sak)}
             hentDto={() => tilForhåndsvisningDTO(skjema)}
             hjelpetekst={<RevurderingBrevHjelpetekst />}
