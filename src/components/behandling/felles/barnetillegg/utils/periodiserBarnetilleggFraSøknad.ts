@@ -1,8 +1,11 @@
 import { finn16årsdag, forrigeDag, nesteDag } from '~/utils/date';
 import { MedPeriode, Periode } from '~/types/Periode';
-import { erDatoIPeriode, slåSammenPeriodisering } from '~/utils/periode';
+import { erDatoIPeriode } from '~/utils/periode';
 import { removeDuplicatesFilter } from '~/utils/array';
-import { kunPerioderMedBarn } from '~/components/behandling/felles/barnetillegg/utils/barnetilleggUtils';
+import {
+    kunPerioderMedBarn,
+    slåSammenBarnetillegg,
+} from '~/components/behandling/felles/barnetillegg/utils/barnetilleggUtils';
 import { SøknadBarn } from '~/types/Søknad';
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';
 
@@ -14,7 +17,7 @@ export const periodiserBarnetilleggFraSøknad = (
         return periodiserBarnetilleggForPeriode(barnFraSøknad, innvilgelsesperiode.periode);
     });
 
-    return slåSammenPeriodisering(barnetillegg, (a, b) => a.antallBarn === b.antallBarn);
+    return slåSammenBarnetillegg(barnetillegg);
 };
 
 const periodiserBarnetilleggForPeriode = (

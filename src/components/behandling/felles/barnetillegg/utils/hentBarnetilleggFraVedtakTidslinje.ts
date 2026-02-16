@@ -1,8 +1,10 @@
 import { Rammevedtak } from '~/types/Rammevedtak';
-import { totalPeriode, krympPeriodisering, utvidPeriodisering } from '~/utils/periode';
+import { krympPeriodisering, utvidPeriodisering } from '~/utils/periode';
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';
-import { nesteDag } from '~/utils/date';
-import { kunPerioderMedBarn } from '~/components/behandling/felles/barnetillegg/utils/barnetilleggUtils';
+import {
+    kunPerioderMedBarn,
+    slåSammenBarnetillegg,
+} from '~/components/behandling/felles/barnetillegg/utils/barnetilleggUtils';
 import { BehandlingId } from '~/types/Rammebehandling';
 import { TidslinjeRammevedtak } from '~/types/TidslinjeRammevedtak';
 import { Periode } from '~/types/Periode';
@@ -13,7 +15,7 @@ type VedtakMedBarnetillegg = Rammevedtak & {
 
 type BarnetilleggMedBehandlingId = BarnetilleggPeriode & { behandlingId: BehandlingId };
 
-const hentBarnetilleggFraVedtakTidslinje = (
+const hentBarnetilleggFraVedtak = (
     tidslinje: TidslinjeRammevedtak,
 ): BarnetilleggMedBehandlingId[] => {
     const relevanteBarnetillegg: BarnetilleggMedBehandlingId[] = tidslinje.elementer
@@ -26,31 +28,13 @@ const hentBarnetilleggFraVedtakTidslinje = (
             })),
         );
 
-    return relevanteBarnetillegg.reduce<BarnetilleggMedBehandlingId[]>((acc, neste) => {
-        const forrige = acc.at(-1);
-        if (!forrige) {
-            return [neste];
-        }
-
-        const erSammenhengedePerioder =
-            forrige.antallBarn == neste.antallBarn &&
-            nesteDag(forrige.periode.tilOgMed) === neste.periode.fraOgMed;
-
-        if (erSammenhengedePerioder) {
-            return acc.with(-1, {
-                ...forrige,
-                periode: totalPeriode([forrige.periode, neste.periode]),
-            });
-        }
-
-        return [...acc, neste];
-    }, []);
+    return slåSammenBarnetillegg(relevanteBarnetillegg);
 };
 
-export const hentBarnetilleggPerioderMedBarn = (
+export const hentBarnetilleggFraVedtakKunMedBarn = (
     tidslinje: TidslinjeRammevedtak,
 ): BarnetilleggMedBehandlingId[] => {
-    return hentBarnetilleggFraVedtakTidslinje(tidslinje).filter(kunPerioderMedBarn);
+    return hentBarnetilleggFraVedtak(tidslinje).filter(kunPerioderMedBarn);
 };
 
 export const barnetilleggKrympetTilPeriode = (
@@ -60,8 +44,8 @@ export const barnetilleggKrympetTilPeriode = (
 ): BarnetilleggMedBehandlingId[] => {
     return krympPeriodisering(
         kunMedBarn
-            ? hentBarnetilleggPerioderMedBarn(tidslinje)
-            : hentBarnetilleggFraVedtakTidslinje(tidslinje),
+            ? hentBarnetilleggFraVedtakKunMedBarn(tidslinje)
+            : hentBarnetilleggFraVedtak(tidslinje),
         periode,
     );
 };
@@ -73,8 +57,8 @@ export const barnetilleggUtvidetTilPeriode = (
 ): BarnetilleggMedBehandlingId[] => {
     return utvidPeriodisering(
         kunMedBarn
-            ? hentBarnetilleggPerioderMedBarn(tidslinje)
-            : hentBarnetilleggFraVedtakTidslinje(tidslinje),
+            ? hentBarnetilleggFraVedtakKunMedBarn(tidslinje)
+            : hentBarnetilleggFraVedtak(tidslinje),
         periode,
     );
 };

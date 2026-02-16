@@ -49,6 +49,9 @@ export default [
             'react/react-in-jsx-scope': 'off',
             '@typescript-eslint/ban-ts-comment': 'off',
         },
+        linterOptions: {
+            reportUnusedDisableDirectives: 'off',
+        },
     },
     {
         files: ['src/**/*.css'],

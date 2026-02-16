@@ -1,16 +1,18 @@
 import { periodiserBarnetilleggFraSøknad } from '~/components/behandling/felles/barnetillegg/utils/periodiserBarnetilleggFraSøknad';
 import { rammebehandlingMedInnvilgelseEllerNull } from '~/utils/behandling';
-import { barnetilleggUtvidetTilPeriode } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraVedtakTidslinje';
+import { hentBarnetilleggFraVedtakKunMedBarn } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraVedtakTidslinje';
 import { SakProps } from '~/types/Sak';
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';
-import { kunPerioderMedBarn } from '~/components/behandling/felles/barnetillegg/utils/barnetilleggUtils';
+import {
+    kunPerioderMedBarn,
+    slåSammenBarnetillegg,
+} from '~/components/behandling/felles/barnetillegg/utils/barnetilleggUtils';
 import { Søknadsbehandling } from '~/types/Søknadsbehandling';
 import { Revurdering } from '~/types/Revurdering';
 import { Rammebehandling, Rammebehandlingstype } from '~/types/Rammebehandling';
 import { TidslinjeRammevedtak } from '~/types/TidslinjeRammevedtak';
 import { Innvilgelsesperiode } from '~/types/Innvilgelsesperiode';
-
-import { periodiseringTotalPeriode } from '~/utils/periode';
+import { utvidPeriodisering } from '~/utils/periode';
 
 export const hentBarnetilleggForSøknadsbehandling = (
     behandling: Søknadsbehandling,
@@ -37,11 +39,11 @@ export const hentBarnetilleggForhåndsutfyltForRevurdering = (
     tidslinje: TidslinjeRammevedtak,
     innvilgelsesperioder: Innvilgelsesperiode[],
 ) => {
-    return barnetilleggUtvidetTilPeriode(
-        tidslinje,
-        periodiseringTotalPeriode(innvilgelsesperioder),
-        true,
+    const btPerioder = innvilgelsesperioder.flatMap((ip) =>
+        utvidPeriodisering(hentBarnetilleggFraVedtakKunMedBarn(tidslinje), ip.periode, true),
     );
+
+    return slåSammenBarnetillegg(btPerioder);
 };
 
 export const hentBarnetilleggForBehandling = (

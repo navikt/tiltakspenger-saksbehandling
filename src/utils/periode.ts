@@ -140,18 +140,27 @@ export const krympPeriodisering = <T>(
         });
 };
 
-// Returnerer elementer med perioder som overlapper den angitte perioden, og setter første fraOgMed og siste tilOgMed lik angitt periode
-// Dersom ingen perioder overlapper med den angitte, returneres nærmeste element satt til angitt periode
+/**
+ *  Returnerer elementer med perioder som overlapper den angitte perioden, og setter første fraOgMed og siste tilOgMed lik angitt periode
+ *  [finnNærmesteHvisIngenOverlapp] - Hvis true, hentes første eller siste element i periodiseringen dersom det ikke er noe overlapp med angitt periode
+ * */
 export const utvidPeriodisering = <T>(
     periodisering: MedPeriode<T>[],
     utvidTil: Periode,
+    finnNærmesteHvisIngenOverlapp: boolean = false,
 ): MedPeriode<T>[] => {
+    if (periodisering.length === 0) {
+        return [];
+    }
+
     const overlappendePerioder = periodisering.filter((p) =>
         perioderOverlapper(p.periode, utvidTil),
     );
 
     if (overlappendePerioder.length === 0) {
-        return [];
+        return finnNærmesteHvisIngenOverlapp
+            ? [{ ...finnNærmestePeriodeIPeriodisering(periodisering, utvidTil), periode: utvidTil }]
+            : [];
     }
 
     const førsteElement = overlappendePerioder.at(0)!;
@@ -177,6 +186,29 @@ export const utvidPeriodisering = <T>(
                 tilOgMed: utvidTil.tilOgMed,
             },
         });
+};
+
+const finnNærmestePeriodeIPeriodisering = <T>(
+    periodisering: MedPeriode<T>[],
+    periode: Periode,
+): MedPeriode<T> => {
+    if (periodisering.length === 0) {
+        throw Error('Må ha minst en periode i periodiseringen');
+    }
+
+    const førstePeriode = periodisering.at(0)!;
+
+    if (periode.tilOgMed < førstePeriode.periode.fraOgMed) {
+        return førstePeriode;
+    }
+
+    const sistePeriode = periodisering.at(-1)!;
+
+    if (periode.fraOgMed > sistePeriode.periode.tilOgMed) {
+        return sistePeriode;
+    }
+
+    throw Error('Perioden overlapper allerede med periodiseringen');
 };
 
 export const finnPeriodiseringHull = (periodisering: MedPeriode[]): Periode[] => {
