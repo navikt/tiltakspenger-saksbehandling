@@ -39,8 +39,10 @@ export const hentBarnetilleggForhåndsutfyltForRevurdering = (
     tidslinje: TidslinjeRammevedtak,
     innvilgelsesperioder: Innvilgelsesperiode[],
 ) => {
+    const btFraVedtak = hentBarnetilleggFraVedtakKunMedBarn(tidslinje);
+
     const btPerioder = innvilgelsesperioder.flatMap((ip) =>
-        utvidPeriodisering(hentBarnetilleggFraVedtakKunMedBarn(tidslinje), ip.periode, true),
+        utvidPeriodisering(btFraVedtak, ip.periode, true),
     );
 
     return slåSammenBarnetillegg(btPerioder);
