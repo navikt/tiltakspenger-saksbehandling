@@ -112,6 +112,8 @@ const brukersStatusTilBehandlingsStatus: Record<
         MeldekortBehandlingDagStatus.DeltattMedLønnITiltaket,
     [BrukersMeldekortDagStatus.FRAVÆR_SYK]: MeldekortBehandlingDagStatus.FraværSyk,
     [BrukersMeldekortDagStatus.FRAVÆR_SYKT_BARN]: MeldekortBehandlingDagStatus.FraværSyktBarn,
+    [BrukersMeldekortDagStatus.FRAVÆR_STERKE_VELFERDSGRUNNER_ELLER_JOBBINTERVJU]:
+        MeldekortBehandlingDagStatus.FraværSterkeVelferdsgrunnerEllerJobbintervju,
     [BrukersMeldekortDagStatus.FRAVÆR_GODKJENT_AV_NAV]:
         MeldekortBehandlingDagStatus.FraværGodkjentAvNav,
     [BrukersMeldekortDagStatus.FRAVÆR_ANNET]: MeldekortBehandlingDagStatus.FraværAnnet,

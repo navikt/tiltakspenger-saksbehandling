@@ -33,6 +33,7 @@ export enum MeldekortBehandlingDagStatus {
     IkkeTiltaksdag = 'IKKE_TILTAKSDAG',
     FraværSyk = 'FRAVÆR_SYK',
     FraværSyktBarn = 'FRAVÆR_SYKT_BARN',
+    FraværSterkeVelferdsgrunnerEllerJobbintervju = 'FRAVÆR_STERKE_VELFERDSGRUNNER_ELLER_JOBBINTERVJU',
     FraværGodkjentAvNav = 'FRAVÆR_GODKJENT_AV_NAV',
     FraværAnnet = 'FRAVÆR_ANNET',
 }
