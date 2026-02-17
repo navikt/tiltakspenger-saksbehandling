@@ -52,4 +52,6 @@ const hjemler: Record<HjemmelForStansEllerOpphør, string> = {
         'Lønn fra tiltaksarrangør - tiltakspengeforskriften § 8',
     [HjemmelForStansEllerOpphør.LØNN_FRA_ANDRE]: 'Lønn fra andre - arbeidsmarkedsloven § 13',
     [HjemmelForStansEllerOpphør.INSTITUSJONSOPPHOLD]: 'Institusjon - tiltakspengeforskriften § 9',
+    [HjemmelForStansEllerOpphør.IKKE_LOVLIG_OPPHOLD]:
+        'Ikke lovlig opphold - arbeidsmarkedsloven § 2',
 } as const;

@@ -127,4 +127,5 @@ export enum HjemmelForStansEllerOpphør {
     LØNN_FRA_TILTAKSARRANGØR = 'LønnFraTiltaksarrangør',
     LØNN_FRA_ANDRE = 'LønnFraAndre',
     INSTITUSJONSOPPHOLD = 'Institusjonsopphold',
+    IKKE_LOVLIG_OPPHOLD = 'IkkeLovligOpphold',
 }
