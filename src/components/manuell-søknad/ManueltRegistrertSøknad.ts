@@ -16,8 +16,7 @@ export type SøknadstypeManueltRegistrertSøknad =
     | 'PAPIR_SKJEMA'
     | 'PAPIR_FRIHAND'
     | 'MODIA'
-    | 'ANNET'
-    | 'PAPIR'; // TODO Deprecated, men må migrere gamle søknader først
+    | 'ANNET';
 
 export type SøknadBehandlingsårsakManueltRegistrertSøknad =
     | 'FORLENGELSE_FRA_ARENA'
