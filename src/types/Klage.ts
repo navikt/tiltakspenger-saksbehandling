@@ -40,6 +40,8 @@ export interface Klagebehandling {
     erKlagefristenOverholdt: boolean;
     erUnntakForKlagefrist: Nullable<KlagefristUnntakSvarord>;
     erKlagenSignert: boolean;
+    innsendingsdato: string;
+    innsendingskilde: KlageInnsendingskilde;
     brevtekst: Brevtekst[];
     avbrutt: Nullable<Avbrutt>;
     kanIverksette: boolean;
@@ -53,6 +55,13 @@ export interface Klagebehandling {
 export interface Brevtekst {
     tittel: string;
     tekst: string;
+}
+
+export enum KlageInnsendingskilde {
+    DIGITAL = 'DIGITAL',
+    PAPIR = 'PAPIR',
+    MODIA = 'MODIA',
+    ANNET = 'ANNET',
 }
 
 export enum KlagefristUnntakSvarord {
@@ -69,6 +78,8 @@ export interface OpprettKlageRequest {
     erKlagefristenOverholdt: boolean;
     erUnntakForKlagefrist: Nullable<KlagefristUnntakSvarord>;
     erKlagenSignert: boolean;
+    innsendingsdato: string;
+    innsendingskilde: KlageInnsendingskilde;
 }
 
 export interface OppdaterKlageFormkravRequest {
@@ -79,6 +90,8 @@ export interface OppdaterKlageFormkravRequest {
     erKlagefristenOverholdt: boolean;
     erUnntakForKlagefrist: Nullable<KlagefristUnntakSvarord>;
     erKlagenSignert: boolean;
+    innsendingsdato: string;
+    innsendingskilde: KlageInnsendingskilde;
 }
 
 export enum OmgjøringÅrsak {
