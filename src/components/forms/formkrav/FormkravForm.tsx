@@ -4,6 +4,8 @@ import {
     KlagefristUnntakSvarordFormData,
     KlagefristUnntakSvarordFormDataTekstMapper,
     INGEN_VEDTAK,
+    KlageInnsendingskildeFormData,
+    KlageInnsendingskildeFormDataTekstMapper,
 } from './FormkravFormUtils';
 import { HStack, Radio, RadioGroup, Select, VStack } from '@navikt/ds-react';
 import { Rammevedtak } from '~/types/Rammevedtak';
@@ -14,6 +16,7 @@ import styles from './FormkravForm.module.css';
 import { formaterTidspunktKort } from '~/utils/date';
 import { behandlingstypeTextFormatter } from '~/components/benk/BenkSideUtils';
 import { behandlingResultatTilText } from '~/utils/tekstformateringUtils';
+import { Datovelger } from '~/components/datovelger/Datovelger';
 
 const FormkravForm = (props: {
     control: Control<FormkravFormData>;
@@ -57,6 +60,46 @@ const FormkravForm = (props: {
                     </Select>
                 )}
             />
+
+            <Controller
+                control={props.control}
+                name={'innsendingsdato'}
+                render={({ field, fieldState }) => (
+                    <Datovelger
+                        onDateChange={(date) => {
+                            field.onChange(date);
+                        }}
+                        maxDate={new Date()}
+                        selected={field.value ?? undefined}
+                        error={fieldState.error?.message}
+                        label="Innsendingsdato for klagen"
+                        size="small"
+                        readOnly={props.readonly}
+                    />
+                )}
+            />
+
+            <Controller
+                control={props.control}
+                name={'innsendingskilde'}
+                render={({ field, fieldState }) => (
+                    <Select
+                        {...field}
+                        label="Innsendingskilde for klagen"
+                        size="small"
+                        error={fieldState.error?.message}
+                        readOnly={props.readonly}
+                    >
+                        <option value="">Ikke valgt</option>
+                        {Object.values(KlageInnsendingskildeFormData).map((kilde) => (
+                            <option key={kilde} value={kilde}>
+                                {KlageInnsendingskildeFormDataTekstMapper[kilde]}
+                            </option>
+                        ))}
+                    </Select>
+                )}
+            />
+
             <Controller
                 control={props.control}
                 name="erKlagerPartISaken"

@@ -20,6 +20,7 @@ import { Klagebehandling, OpprettKlageRequest } from '~/types/Klage';
 import { KlageSteg } from '../../../../../utils/KlageLayoutUtils';
 import WarningCircleIcon from '~/icons/WarningCircleIcon';
 import { useHentPersonopplysninger } from '~/components/personaliaheader/useHentPersonopplysninger';
+import { useOpprettKlage } from '~/api/KlageApi';
 
 type Props = {
     sak: SakProps;
@@ -48,19 +49,18 @@ const OprettKlagePage = ({ sak }: Props) => {
             erKlagefristOverholdt: null,
             erUnntakForKlagefrist: null,
             erKlagenSignert: null,
+            innsendingsdato: null,
+            innsendingskilde: '',
         },
         resolver: formkravValidation,
     });
 
-    const opprettKlage = useFetchJsonFraApi<Klagebehandling, OpprettKlageRequest>(
-        `/sak/${sak.sakId}/klage`,
-        'POST',
-        {
-            onSuccess: (klagebehandling) => {
-                router.push(`/sak/${sak.saksnummer}/klage/${klagebehandling!.id}/formkrav`);
-            },
+    const opprettKlage = useOpprettKlage({
+        sakId: sak.sakId,
+        onSuccess: (klagebehandling) => {
+            router.push(`/sak/${sak.saksnummer}/klage/${klagebehandling!.id}/formkrav`);
         },
-    );
+    });
 
     const onSubmit = (data: FormkravFormData) => {
         opprettKlage.trigger(formkravFormDataTilOpprettKlageRequest(data));

@@ -4,9 +4,11 @@ import {
     Klagebehandling,
     OppdaterKlageFormkravRequest,
     OpprettKlageRequest,
+    KlageInnsendingskilde,
 } from '~/types/Klage';
 import { VedtakId } from '~/types/Rammevedtak';
 import { Nullable } from '~/types/UtilTypes';
+import { dateTilISOTekst } from '~/utils/date';
 
 export const INGEN_VEDTAK = 'INGEN_VEDTAK' as const;
 
@@ -18,7 +20,26 @@ export interface FormkravFormData {
     erKlagefristOverholdt: Nullable<boolean>;
     erUnntakForKlagefrist: Nullable<KlagefristUnntakSvarordFormData>;
     erKlagenSignert: Nullable<boolean>;
+    innsendingsdato: Nullable<Date>;
+    innsendingskilde: '' | KlageInnsendingskildeFormData;
 }
+
+export enum KlageInnsendingskildeFormData {
+    DIGITAL = 'DIGITAL',
+    PAPIR = 'PAPIR',
+    MODIA = 'MODIA',
+    ANNET = 'ANNET',
+}
+
+export const KlageInnsendingskildeFormDataTekstMapper: Record<
+    KlageInnsendingskildeFormData,
+    string
+> = {
+    [KlageInnsendingskildeFormData.DIGITAL]: 'Digitalt',
+    [KlageInnsendingskildeFormData.PAPIR]: 'Papir',
+    [KlageInnsendingskildeFormData.MODIA]: 'Modia',
+    [KlageInnsendingskildeFormData.ANNET]: 'Annet',
+};
 
 export enum KlagefristUnntakSvarordFormData {
     JA_KLAGER_KAN_IKKE_LASTES_FOR_Å_HA_SENDT_INN_ETTER_FRISTEN = 'JA_KLAGER_KAN_IKKE_LASTES_FOR_Å_HA_SENDT_INN_ETTER_FRISTEN',
@@ -98,6 +119,37 @@ export const formkravValidation = (data: FormkravFormData) => {
         };
     }
 
+    if (!data.innsendingsdato) {
+        errors.innsendingsdato = {
+            type: 'required',
+            message: 'Du må velge en dato',
+        };
+    }
+
+    if (data.innsendingsdato && data.innsendingsdato > new Date()) {
+        errors.innsendingsdato = {
+            type: 'max',
+            message: 'Innsendingsdato kan ikke være i fremtiden',
+        };
+    }
+
+    if (!data.innsendingskilde) {
+        errors.innsendingskilde = {
+            type: 'required',
+            message: 'Du må velge et alternativ',
+        };
+    }
+
+    if (
+        data.innsendingskilde &&
+        !Object.values(KlageInnsendingskildeFormData).includes(data.innsendingskilde)
+    ) {
+        errors.innsendingskilde = {
+            type: 'pattern',
+            message: 'Ugyldig innsendingskilde',
+        };
+    }
+
     return { values: data, errors: errors };
 };
 
@@ -118,6 +170,10 @@ export const formkravFormDataTilOpprettKlageRequest = (
                   )
                 : null,
         erKlagenSignert: formData.erKlagenSignert!,
+        innsendingsdato: dateTilISOTekst(formData.innsendingsdato!),
+        innsendingskilde: klageInnsendingskildeFormDataToKlageInnsendingskilde(
+            formData.innsendingskilde as KlageInnsendingskildeFormData,
+        ),
     };
 };
 
@@ -138,6 +194,10 @@ export const formkravFormDataTilOppdaterKlageFormkravRequest = (
                   )
                 : null,
         erKlagenSignert: formData.erKlagenSignert!,
+        innsendingsdato: dateTilISOTekst(formData.innsendingsdato!),
+        innsendingskilde: klageInnsendingskildeFormDataToKlageInnsendingskilde(
+            formData.innsendingskilde as KlageInnsendingskildeFormData,
+        ),
     };
 };
 
@@ -167,7 +227,39 @@ export const klageTilFormkravFormData = (klage: Klagebehandling): FormkravFormDa
               )
             : null,
         erKlagenSignert: klage.erKlagenSignert,
+        innsendingsdato: klage.innsendingsdato ? new Date(klage.innsendingsdato) : null,
+        innsendingskilde: klageInnsendingskildeToFormData(klage.innsendingskilde),
     };
+};
+
+export const klageInnsendingskildeToFormData = (
+    innsendingskilde: KlageInnsendingskilde,
+): KlageInnsendingskildeFormData => {
+    switch (innsendingskilde) {
+        case KlageInnsendingskilde.DIGITAL:
+            return KlageInnsendingskildeFormData.DIGITAL;
+        case KlageInnsendingskilde.PAPIR:
+            return KlageInnsendingskildeFormData.PAPIR;
+        case KlageInnsendingskilde.MODIA:
+            return KlageInnsendingskildeFormData.MODIA;
+        case KlageInnsendingskilde.ANNET:
+            return KlageInnsendingskildeFormData.ANNET;
+    }
+};
+
+export const klageInnsendingskildeFormDataToKlageInnsendingskilde = (
+    innsendingskilde: KlageInnsendingskildeFormData,
+): KlageInnsendingskilde => {
+    switch (innsendingskilde) {
+        case KlageInnsendingskildeFormData.DIGITAL:
+            return KlageInnsendingskilde.DIGITAL;
+        case KlageInnsendingskildeFormData.PAPIR:
+            return KlageInnsendingskilde.PAPIR;
+        case KlageInnsendingskildeFormData.MODIA:
+            return KlageInnsendingskilde.MODIA;
+        case KlageInnsendingskildeFormData.ANNET:
+            return KlageInnsendingskilde.ANNET;
+    }
 };
 
 export const klagebehandlingKlagefristUnntakSvarordTilKlagefristUnntakSvarordFormData = (

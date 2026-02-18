@@ -2,6 +2,7 @@ import {
     Klagebehandling,
     KlageId,
     OppdaterKlageFormkravRequest,
+    OpprettKlageRequest,
     OpprettOmgjøringsbehandlingForKlageRequest,
     VurderKlageRequest,
 } from '~/types/Klage';
@@ -10,6 +11,14 @@ import { SakProps } from '~/types/Sak';
 import { FetcherError } from '~/utils/fetch/fetch';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { Nullable } from '~/types/UtilTypes';
+
+export const useOpprettKlage = (args: {
+    sakId: string;
+    onSuccess: (klagebehandling: Klagebehandling) => void;
+}) =>
+    useFetchJsonFraApi<Klagebehandling, OpprettKlageRequest>(`/sak/${args.sakId}/klage`, 'POST', {
+        onSuccess: args.onSuccess,
+    });
 
 export const useOppdaterFormkrav = (args: {
     sakId: string;
