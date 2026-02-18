@@ -94,6 +94,8 @@ export const brukersMeldekortDagStatusTekst: Record<BrukersMeldekortDagStatus, s
     [BrukersMeldekortDagStatus.DELTATT_MED_LØNN_I_TILTAKET]: 'Deltatt med lønn',
     [BrukersMeldekortDagStatus.FRAVÆR_SYK]: 'Syk',
     [BrukersMeldekortDagStatus.FRAVÆR_SYKT_BARN]: 'Sykt barn eller syk barnepasser',
+    [BrukersMeldekortDagStatus.FRAVÆR_STERKE_VELFERDSGRUNNER_ELLER_JOBBINTERVJU]:
+        'Sterke velferdsgrunner eller jobbintervju',
     [BrukersMeldekortDagStatus.FRAVÆR_GODKJENT_AV_NAV]: 'Fravær godkjent av Nav',
     [BrukersMeldekortDagStatus.FRAVÆR_ANNET]: 'Annet fravær',
     [BrukersMeldekortDagStatus.IKKE_BESVART]: 'Ikke besvart',
@@ -108,7 +110,9 @@ export const meldekortBehandlingDagStatusTekst: Record<MeldekortBehandlingDagSta
     [MeldekortBehandlingDagStatus.DeltattUtenLønnITiltaket]: 'Deltatt',
     [MeldekortBehandlingDagStatus.FraværSyk]: 'Syk',
     [MeldekortBehandlingDagStatus.FraværSyktBarn]: 'Sykt barn eller syk barnepasser',
-    [MeldekortBehandlingDagStatus.FraværGodkjentAvNav]: 'Fravær godkjent av Nav',
+    [MeldekortBehandlingDagStatus.FraværSterkeVelferdsgrunnerEllerJobbintervju]:
+        'Sterke velferdsgrunner eller jobbintervju',
+    [MeldekortBehandlingDagStatus.FraværGodkjentAvNav]: 'Fravær godkjent av Nav (utfaset)',
     [MeldekortBehandlingDagStatus.FraværAnnet]: 'Annet fravær',
     [MeldekortBehandlingDagStatus.IkkeBesvart]: 'Ikke besvart',
     [MeldekortBehandlingDagStatus.IkkeTiltaksdag]: 'Ikke tiltaksdag',

@@ -39,6 +39,8 @@ export const ikonForBrukersMeldekortDagStatus: Record<
 > = {
     [BrukersMeldekortDagStatus.DELTATT_UTEN_LØNN_I_TILTAKET]: Ikoner.checkmarkCircleFill,
     [BrukersMeldekortDagStatus.DELTATT_MED_LØNN_I_TILTAKET]: Ikoner.minusCircleFill,
+    [BrukersMeldekortDagStatus.FRAVÆR_STERKE_VELFERDSGRUNNER_ELLER_JOBBINTERVJU]:
+        Ikoner.minusCircleFill,
     [BrukersMeldekortDagStatus.FRAVÆR_GODKJENT_AV_NAV]: Ikoner.minusCircleFill,
     [BrukersMeldekortDagStatus.FRAVÆR_SYK]: Ikoner.firstAidKitFill,
     [BrukersMeldekortDagStatus.FRAVÆR_SYKT_BARN]: Ikoner.firstAidKitFill,
@@ -56,6 +58,8 @@ export const ikonForMeldekortBehandlingDagStatus: Record<
     [MeldekortBehandlingDagStatus.DeltattUtenLønnITiltaket]: Ikoner.checkmarkCircleFill,
     [MeldekortBehandlingDagStatus.FraværSyk]: Ikoner.firstAidKitFill,
     [MeldekortBehandlingDagStatus.FraværSyktBarn]: Ikoner.firstAidKitFill,
+    [MeldekortBehandlingDagStatus.FraværSterkeVelferdsgrunnerEllerJobbintervju]:
+        Ikoner.checkmarkCircleFill,
     [MeldekortBehandlingDagStatus.FraværGodkjentAvNav]: Ikoner.checkmarkCircleFill,
     [MeldekortBehandlingDagStatus.FraværAnnet]: Ikoner.minusCircleFill,
     [MeldekortBehandlingDagStatus.IkkeTiltaksdag]: Ikoner.minusCircleFill,

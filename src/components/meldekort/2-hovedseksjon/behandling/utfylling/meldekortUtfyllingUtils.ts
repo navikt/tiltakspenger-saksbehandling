@@ -61,6 +61,7 @@ const dagerMedDeltattEllerFravær: ReadonlySet<MeldekortBehandlingDagStatus> = n
     MeldekortBehandlingDagStatus.DeltattMedLønnITiltaket,
     MeldekortBehandlingDagStatus.FraværSyk,
     MeldekortBehandlingDagStatus.FraværSyktBarn,
+    MeldekortBehandlingDagStatus.FraværSterkeVelferdsgrunnerEllerJobbintervju,
     MeldekortBehandlingDagStatus.FraværGodkjentAvNav,
     MeldekortBehandlingDagStatus.FraværAnnet,
 ]);
