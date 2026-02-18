@@ -173,6 +173,11 @@ const propsForRad = (
                 (klage) => klage.id === åpenBehandling.id,
             )!;
 
+            const omgjøringsbehandling =
+                sak.behandlinger.find(
+                    (omgjøring) => omgjøring.klagebehandlingId === klagebehandling.id,
+                ) ?? null;
+
             return {
                 typeTekst,
                 statusTag: klagebehandling.ventestatus?.erSattPåVent ? (
@@ -184,7 +189,12 @@ const propsForRad = (
                     ? klagebehandlingResultatTilTag({ resultat: åpenBehandling.resultat })
                     : undefined,
                 saksbehandler: åpenBehandling.saksbehandler,
-                meny: <KlageMeny klage={klagebehandling} />,
+                meny: (
+                    <KlageMeny
+                        klage={klagebehandling}
+                        omgjøringsbehandling={omgjøringsbehandling}
+                    />
+                ),
             };
         }
     }

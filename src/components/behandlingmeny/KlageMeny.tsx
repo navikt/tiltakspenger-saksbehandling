@@ -11,7 +11,7 @@ import {
 import { ActionMenu, Button, LocalAlert, Modal } from '@navikt/ds-react';
 import router from 'next/router';
 import { Klagebehandling } from '~/types/Klage';
-import { finnUrlForKlageSteg } from '~/utils/klageUtils';
+import { finnUrlForKlageSteg, kanBehandleKlage } from '~/utils/klageUtils';
 import AvsluttBehandlingMenyvalg from '../personoversikt/avsluttBehandling/AvsluttBehandlingMenyvalg';
 import AvsluttBehandlingModal from '../modaler/AvsluttBehandlingModal';
 import { useSak } from '~/context/sak/SakContext';
@@ -28,8 +28,12 @@ import OvertabehandlingModal from './OvertaBehandlingModal';
 import SettBehandlingPåVentModal from '../modaler/SettBehandlingPåVentModal';
 import { FetcherError } from '~/utils/fetch/fetch';
 import { Nullable } from '~/types/UtilTypes';
+import { Rammebehandling } from '~/types/Rammebehandling';
 
-const KlageMeny = (props: { klage: Klagebehandling }) => {
+const KlageMeny = (props: {
+    klage: Klagebehandling;
+    omgjøringsbehandling: Nullable<Rammebehandling>;
+}) => {
     const { setSak } = useSak();
     const { innloggetSaksbehandler } = useSaksbehandler();
     const [visVilOvertaModal, setVisVilOvertaModal] = React.useState(false);
@@ -125,86 +129,92 @@ const KlageMeny = (props: { klage: Klagebehandling }) => {
                             )
                         }
                     >
-                        {eierInnloggetSaksbehandlerBehandlingen ? 'Fortsett' : 'Se behandling'}
+                        {eierInnloggetSaksbehandlerBehandlingen &&
+                        kanBehandleKlage(props.klage, props.omgjøringsbehandling)
+                            ? 'Fortsett'
+                            : 'Se behandling'}
                     </ActionMenu.Item>
 
-                    {ingenEierBehandling && (
-                        <>
-                            <ActionMenu.Divider />
-                            <ActionMenu.Item
-                                onClick={() => {
-                                    taKlagebehandling.trigger();
-                                }}
-                                icon={<PersonIcon aria-hidden />}
-                            >
-                                Tildel meg
-                            </ActionMenu.Item>
-
-                            {props.klage.ventestatus?.erSattPåVent && (
+                    {ingenEierBehandling &&
+                        kanBehandleKlage(props.klage, props.omgjøringsbehandling) && (
+                            <>
+                                <ActionMenu.Divider />
                                 <ActionMenu.Item
-                                    icon={<PlayIcon aria-hidden />}
                                     onClick={() => {
-                                        gjenoppta.trigger();
+                                        taKlagebehandling.trigger();
+                                    }}
+                                    icon={<PersonIcon aria-hidden />}
+                                >
+                                    Tildel meg
+                                </ActionMenu.Item>
+
+                                {props.klage.ventestatus?.erSattPåVent && (
+                                    <ActionMenu.Item
+                                        icon={<PlayIcon aria-hidden />}
+                                        onClick={() => {
+                                            gjenoppta.trigger();
+                                        }}
+                                    >
+                                        Gjenoppta
+                                    </ActionMenu.Item>
+                                )}
+                            </>
+                        )}
+
+                    {eierInnloggetSaksbehandlerBehandlingen &&
+                        kanBehandleKlage(props.klage, props.omgjøringsbehandling) && (
+                            <>
+                                <ActionMenu.Item
+                                    icon={<ArrowLeftIcon aria-hidden />}
+                                    onClick={() => {
+                                        leggTilbake.trigger();
                                     }}
                                 >
-                                    Gjenoppta
+                                    Legg tilbake
                                 </ActionMenu.Item>
-                            )}
-                        </>
-                    )}
 
-                    {eierInnloggetSaksbehandlerBehandlingen && (
-                        <>
-                            <ActionMenu.Item
-                                icon={<ArrowLeftIcon aria-hidden />}
-                                onClick={() => {
-                                    leggTilbake.trigger();
-                                }}
-                            >
-                                Legg tilbake
-                            </ActionMenu.Item>
+                                {props.klage.ventestatus?.erSattPåVent ? (
+                                    <ActionMenu.Item
+                                        icon={<PlayIcon aria-hidden />}
+                                        onClick={() => {
+                                            gjenoppta.trigger();
+                                        }}
+                                    >
+                                        Gjenoppta
+                                    </ActionMenu.Item>
+                                ) : (
+                                    <ActionMenu.Item
+                                        icon={<PauseIcon aria-hidden />}
+                                        onClick={() => {
+                                            setVisSettBehandlingPåVentModal(true);
+                                        }}
+                                    >
+                                        Sett på vent
+                                    </ActionMenu.Item>
+                                )}
+                                <ActionMenu.Divider />
+                                <AvsluttBehandlingMenyvalg
+                                    setVisAvsluttBehandlingModal={setVisAvsluttBehandlingModal}
+                                />
+                            </>
+                        )}
 
-                            {props.klage.ventestatus?.erSattPåVent ? (
-                                <ActionMenu.Item
-                                    icon={<PlayIcon aria-hidden />}
-                                    onClick={() => {
-                                        gjenoppta.trigger();
-                                    }}
-                                >
-                                    Gjenoppta
-                                </ActionMenu.Item>
-                            ) : (
-                                <ActionMenu.Item
-                                    icon={<PauseIcon aria-hidden />}
-                                    onClick={() => {
-                                        setVisSettBehandlingPåVentModal(true);
-                                    }}
-                                >
-                                    Sett på vent
-                                </ActionMenu.Item>
-                            )}
-                            <ActionMenu.Divider />
-                            <AvsluttBehandlingMenyvalg
-                                setVisAvsluttBehandlingModal={setVisAvsluttBehandlingModal}
-                            />
-                        </>
-                    )}
-
-                    {eierIkkeInngloggetSaksbehandlerBehandlingen && (
-                        <>
-                            <ActionMenu.Divider />
-                            {props.klage.saksbehandler && (
-                                <ActionMenu.Item
-                                    icon={<ArrowRightIcon aria-hidden />}
-                                    onClick={() => {
-                                        setVisVilOvertaModal(true);
-                                    }}
-                                >
-                                    Overta behandling
-                                </ActionMenu.Item>
-                            )}
-                        </>
-                    )}
+                    {eierIkkeInngloggetSaksbehandlerBehandlingen &&
+                        kanBehandleKlage(props.klage, props.omgjøringsbehandling) && (
+                            <>
+                                <ActionMenu.Divider />
+                                {props.klage.saksbehandler && (
+                                    <ActionMenu.Item
+                                        icon={<ArrowRightIcon aria-hidden />}
+                                        onClick={() => {
+                                            setVisVilOvertaModal(true);
+                                        }}
+                                    >
+                                        Overta behandling
+                                    </ActionMenu.Item>
+                                )}
+                            </>
+                        )}
                 </ActionMenu.Content>
             </ActionMenu>
             {visAvsluttBehandlingModal && (
