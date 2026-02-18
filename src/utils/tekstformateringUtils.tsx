@@ -112,7 +112,7 @@ export const meldekortBehandlingDagStatusTekst: Record<MeldekortBehandlingDagSta
     [MeldekortBehandlingDagStatus.FraværSyktBarn]: 'Sykt barn eller syk barnepasser',
     [MeldekortBehandlingDagStatus.FraværSterkeVelferdsgrunnerEllerJobbintervju]:
         'Sterke velferdsgrunner eller jobbintervju',
-    [MeldekortBehandlingDagStatus.FraværGodkjentAvNav]: 'Fravær godkjent av Nav',
+    [MeldekortBehandlingDagStatus.FraværGodkjentAvNav]: 'Fravær godkjent av Nav (utfaset)',
     [MeldekortBehandlingDagStatus.FraværAnnet]: 'Annet fravær',
     [MeldekortBehandlingDagStatus.IkkeBesvart]: 'Ikke besvart',
     [MeldekortBehandlingDagStatus.IkkeTiltaksdag]: 'Ikke tiltaksdag',
