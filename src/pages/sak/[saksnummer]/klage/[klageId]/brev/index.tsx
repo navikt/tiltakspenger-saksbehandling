@@ -6,12 +6,7 @@ import { useForm } from 'react-hook-form';
 import { fetchSak } from '~/utils/fetch/fetch-server';
 import { logger } from '@navikt/next-logger';
 import { SakProps } from '~/types/Sak';
-import {
-    ForhåndsvisBrevKlageRequest,
-    Klagebehandling,
-    KlageId,
-    LagreBrevtekstKlageRequest,
-} from '~/types/Klage';
+import { Klagebehandling, KlagebehandlingResultat, KlageId } from '~/types/Klage';
 import KlageLayout, { KlageProvider, useKlage } from '../../layout';
 import { KlageSteg } from '../../../../../../utils/KlageLayoutUtils';
 import { CheckmarkCircleIcon, EnvelopeOpenIcon } from '@navikt/aksel-icons';
@@ -25,10 +20,16 @@ import {
 } from '~/components/forms/brev/BrevFormUtils';
 import BrevForm from '~/components/forms/brev/BrevForm';
 import styles from './index.module.css';
-import { useFetchBlobFraApi, useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
+
 import { kanBehandleKlage } from '~/utils/klageUtils';
 import router from 'next/router';
 import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
+import {
+    useForhåndsvisKlagebrev,
+    useIverksettKlage,
+    useLagreKlagebrev,
+    useOpprettholdKlage,
+} from '~/api/KlageApi';
 
 type Props = {
     sak: SakProps;
@@ -68,42 +69,49 @@ const BrevKlagePage = ({ sak }: Props) => {
         resolver: brevFormValidation,
     });
 
-    const forhåndsvis = useFetchBlobFraApi<ForhåndsvisBrevKlageRequest>(
-        `/sak/${sak.sakId}/klage/${klage.id}/forhandsvis`,
-        'POST',
-        {
-            onSuccess: (blob) => {
-                if (blob) {
-                    window.open(URL.createObjectURL(blob));
-                }
-            },
+    const forhåndsvis = useForhåndsvisKlagebrev({
+        sakId: sak.sakId,
+        klageId: klage.id,
+        onSuccess: (blob) => {
+            if (blob) {
+                window.open(URL.createObjectURL(blob));
+            }
         },
-    );
+    });
 
-    const lagreBrev = useFetchJsonFraApi<Klagebehandling, LagreBrevtekstKlageRequest>(
-        `/sak/${sak.sakId}/klage/${klage.id}/brevtekst`,
-        'PUT',
-        {
-            onSuccess: (klage) => {
-                form.reset(klageTilBrevFormData(klage!));
-                setKlage(klage!);
-            },
+    const lagreBrev = useLagreKlagebrev({
+        sakId: sak.sakId,
+        klageId: klage.id,
+        onSuccess: (klage) => {
+            form.reset(klageTilBrevFormData(klage!));
+            setKlage(klage!);
         },
-    );
+    });
 
-    const iverksett = useFetchJsonFraApi<Klagebehandling>(
-        `/sak/${sak.sakId}/klage/${klage.id}/iverksett`,
-        'PATCH',
-        {
-            onSuccess: (oppdatertKlage) => {
-                setKlage(oppdatertKlage!);
-                router.push(`/sak/${sak.saksnummer}`);
-            },
+    const iverksett = useIverksettKlage({
+        sakId: sak.sakId,
+        klageId: klage.id,
+        onSuccess: (oppdatertKlage) => {
+            setKlage(oppdatertKlage!);
+            router.push(`/sak/${sak.saksnummer}`);
         },
-    );
+    });
+
+    const oppretthold = useOpprettholdKlage({
+        sakId: sak.sakId,
+        klageId: klage.id,
+        onSuccess: (oppdatertKlage) => {
+            setKlage(oppdatertKlage!);
+            router.push(`/sak/${sak.saksnummer}`);
+        },
+    });
 
     const onSubmit = () => {
-        iverksett.trigger();
+        if (klage.resultat === KlagebehandlingResultat.OPPRETTHOLDT) {
+            oppretthold.trigger();
+        } else {
+            iverksett.trigger();
+        }
     };
 
     return (

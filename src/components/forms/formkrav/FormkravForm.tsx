@@ -7,7 +7,7 @@ import {
     KlageInnsendingskildeFormData,
     KlageInnsendingskildeFormDataTekstMapper,
 } from './FormkravFormUtils';
-import { HStack, Radio, RadioGroup, Select, VStack } from '@navikt/ds-react';
+import { HStack, LocalAlert, Radio, RadioGroup, Select, VStack } from '@navikt/ds-react';
 import { Rammevedtak } from '~/types/Rammevedtak';
 import { Rammebehandling } from '~/types/Rammebehandling';
 import JournalpostId from '~/components/journalpostId/JournalpostId';
@@ -27,6 +27,20 @@ const FormkravForm = (props: {
     const erKlagefristOverholdt = useWatch({
         control: props.control,
         name: 'erKlagefristOverholdt',
+    });
+
+    const valgtVedtakId = useWatch({
+        control: props.control,
+        name: 'vedtakDetPåklages',
+    });
+
+    const valgtVedtak = props.vedtakOgBehandling.find(
+        ({ vedtak }) => vedtak.id === valgtVedtakId,
+    )?.vedtak;
+
+    const valgtInnsendingsdato = useWatch({
+        control: props.control,
+        name: 'innsendingsdato',
     });
 
     return (
@@ -78,6 +92,20 @@ const FormkravForm = (props: {
                     />
                 )}
             />
+
+            {valgtVedtak &&
+                valgtInnsendingsdato &&
+                valgtInnsendingsdato < new Date(valgtVedtak.opprettet) && (
+                    <LocalAlert status="warning" size="small">
+                        <LocalAlert.Header>
+                            <LocalAlert.Title>Verifiser innsendingsdato for klage</LocalAlert.Title>
+                        </LocalAlert.Header>
+                        <LocalAlert.Content>
+                            Innsendingsdato for klagen er før vedtaket som er påklaget. Vennligst
+                            sjekk at du har valgt riktig vedtak.
+                        </LocalAlert.Content>
+                    </LocalAlert>
+                )}
 
             <Controller
                 control={props.control}

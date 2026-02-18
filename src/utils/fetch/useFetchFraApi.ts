@@ -29,7 +29,7 @@ export const useFetchJsonFraApi = <ResponseType = unknown, BodyType = undefined>
 export const useFetchBlobFraApi = <BodyType = undefined>(
     url: string,
     method: Method,
-    swrOptions?: SWRMutationConfiguration<Blob | undefined, FetcherError, string, BodyType>,
+    swrOptions?: SWRMutationConfiguration<Blob, FetcherError, string, BodyType>,
 ) => {
     const fetcher = async (_url: string, { arg }: SWRArg<BodyType>) =>
         fetchBlobFraApiClientSide(_url, {
@@ -37,7 +37,7 @@ export const useFetchBlobFraApi = <BodyType = undefined>(
             body: arg ? JSON.stringify(arg) : undefined,
         });
 
-    return useSWRMutation<Blob | undefined, FetcherError, string, BodyType>(url, fetcher, {
+    return useSWRMutation<Blob, FetcherError, string, BodyType>(url, fetcher, {
         throwOnError: false,
         ...swrOptions,
     });
