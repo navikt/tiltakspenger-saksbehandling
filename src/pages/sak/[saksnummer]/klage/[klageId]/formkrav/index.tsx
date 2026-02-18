@@ -18,13 +18,12 @@ import {
 } from '~/components/forms/formkrav/FormkravFormUtils';
 import { Klagebehandling, KlageId } from '~/types/Klage';
 import KlageLayout, { KlageProvider, useKlage } from '../../layout';
-import { KlageSteg } from '../../../../../../utils/KlageLayoutUtils';
+import { finnNesteKlageSteg, KlageSteg } from '../../../../../../utils/KlageLayoutUtils';
 import { CheckmarkCircleIcon, PencilIcon, TrashIcon } from '@navikt/aksel-icons';
 import { useHentPersonopplysninger } from '~/components/personaliaheader/useHentPersonopplysninger';
 import {
     erKlageKnyttetTilRammebehandling,
     erKlageOmgjøring,
-    finnUrlForKlageSteg,
     kanBehandleKlage,
 } from '~/utils/klageUtils';
 import { useAvbrytKlagebehandling, useOppdaterFormkrav } from '~/api/KlageApi';
@@ -218,7 +217,9 @@ const FormkravKlagePage = ({ sak, omgjøringsbehandling }: Props) => {
                                 )}
                             <Button
                                 type="button"
-                                onClick={() => router.push(finnUrlForKlageSteg(klage))}
+                                onClick={() =>
+                                    router.push(finnNesteKlageSteg(klage, KlageSteg.FORMKRAV))
+                                }
                             >
                                 Fortsett
                             </Button>

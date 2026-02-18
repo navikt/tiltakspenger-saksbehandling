@@ -11,7 +11,7 @@ import {
 import { ActionMenu, Button, LocalAlert, Modal } from '@navikt/ds-react';
 import router from 'next/router';
 import { Klagebehandling } from '~/types/Klage';
-import { finnUrlForKlageSteg, kanBehandleKlage } from '~/utils/klageUtils';
+import { finnSisteGyldigeStegForKlage, kanBehandleKlage } from '~/utils/klageUtils';
 import AvsluttBehandlingMenyvalg from '../personoversikt/avsluttBehandling/AvsluttBehandlingMenyvalg';
 import AvsluttBehandlingModal from '../modaler/AvsluttBehandlingModal';
 import { useSak } from '~/context/sak/SakContext';
@@ -66,7 +66,7 @@ const KlageMeny = (props: {
         klageId: props.klage.id,
         onSuccess: (sak) => {
             setSak(sak);
-            router.push(finnUrlForKlageSteg(props.klage));
+            router.push(finnSisteGyldigeStegForKlage(props.klage));
         },
     });
 
@@ -75,7 +75,7 @@ const KlageMeny = (props: {
         klageId: props.klage.id,
         onSuccess: (sak) => {
             setSak(sak);
-            router.push(finnUrlForKlageSteg(props.klage));
+            router.push(finnSisteGyldigeStegForKlage(props.klage));
         },
     });
 
@@ -100,7 +100,7 @@ const KlageMeny = (props: {
         klageId: props.klage.id,
         onSuccess: (sak) => {
             setSak(sak);
-            router.push(finnUrlForKlageSteg(props.klage));
+            router.push(finnSisteGyldigeStegForKlage(props.klage));
         },
         onError: (error) => setApiError({ visFeilModal: true, feil: error }),
     });
@@ -120,7 +120,7 @@ const KlageMeny = (props: {
                 </ActionMenu.Trigger>
                 <ActionMenu.Content>
                     <ActionMenu.Item
-                        onSelect={() => router.push(finnUrlForKlageSteg(props.klage))}
+                        onSelect={() => router.push(finnSisteGyldigeStegForKlage(props.klage))}
                         icon={
                             eierInnloggetSaksbehandlerBehandlingen ? (
                                 <ArrowRightIcon aria-hidden />

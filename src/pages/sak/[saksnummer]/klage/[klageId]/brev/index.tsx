@@ -21,7 +21,11 @@ import {
 import BrevForm from '~/components/forms/brev/BrevForm';
 import styles from './index.module.css';
 
-import { kanBehandleKlage } from '~/utils/klageUtils';
+import {
+    erKlageOpprettholdelse,
+    erKlageOpprettholdtEllerEtter,
+    kanBehandleKlage,
+} from '~/utils/klageUtils';
 import router from 'next/router';
 import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
 import {
@@ -32,6 +36,7 @@ import {
 } from '~/api/KlageApi';
 import { Rammevedtak } from '~/types/Rammevedtak';
 import { Nullable } from '~/types/UtilTypes';
+import Link from 'next/link';
 
 type Props = {
     sak: SakProps;
@@ -191,6 +196,10 @@ const BrevKlagePage = ({ sak, påklagetVedtak }: Props) => {
                                 type="button"
                                 variant="secondary"
                                 loading={forhåndsvis.isMutating}
+                                icon={
+                                    <EnvelopeOpenIcon title="Åpent brev ikon" fontSize="1.5rem" />
+                                }
+                                iconPosition="left"
                                 onClick={() => {
                                     lagreBrev.reset();
                                     forhåndsvis.trigger(
@@ -200,11 +209,18 @@ const BrevKlagePage = ({ sak, påklagetVedtak }: Props) => {
                                     );
                                 }}
                             >
-                                <HStack gap="space-4">
-                                    <EnvelopeOpenIcon title="Åpent brev ikon" fontSize="1.5rem" />
-                                    <BodyShort>Forhåndsvis brev</BodyShort>
-                                </HStack>
+                                Forhåndsvis brev
                             </Button>
+
+                            {erKlageOpprettholdelse(klage) &&
+                                erKlageOpprettholdtEllerEtter(klage.status) && (
+                                    <Button
+                                        as={Link}
+                                        href={`/sak/${sak.saksnummer}/klage/${klage.id}/resultat`}
+                                    >
+                                        Fortsett
+                                    </Button>
+                                )}
                         </HStack>
                     </VStack>
                     {!erReadonlyForSaksbehandler && kanBehandleKlage(klage, null) && (

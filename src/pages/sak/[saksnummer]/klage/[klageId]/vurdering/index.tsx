@@ -26,7 +26,7 @@ import {
     erKlageOmgjøring,
     erKlageOpprettholdelse,
     erKlageUnderAktivOmgjøring,
-    finnUrlForKlageSteg,
+    finnSisteGyldigeStegForKlage,
     kanBehandleKlage,
 } from '~/utils/klageUtils';
 import AvsluttBehandlingModal from '~/components/modaler/AvsluttBehandlingModal';
@@ -285,7 +285,7 @@ const VurderingKlagePage = ({ sak, vedtakSomPåklages, søknader, omgjøringsbeh
                         <Button
                             className={styles.fortsettKnapp}
                             as={Link}
-                            href={finnUrlForKlageSteg(klage)}
+                            href={finnSisteGyldigeStegForKlage(klage)}
                         >
                             Fortsett
                         </Button>

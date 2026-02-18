@@ -35,15 +35,12 @@ export const erKlageAvsluttet = (k: Klagebehandling): boolean => {
     return k.status === 'AVBRUTT' || k.status === 'IVERKSATT';
 };
 
-export const kanVurdereKlage = (k: Klagebehandling): boolean => {
-    return (
-        k.vedtakDetKlagesPå !== null &&
-        k.erKlagerPartISaken &&
-        k.klagesDetPåKonkreteElementerIVedtaket &&
-        erKlagefristenOverholdt(k) &&
-        k.erKlagenSignert
-    );
-};
+export const kanVurdereKlage = (k: Klagebehandling): boolean =>
+    k.vedtakDetKlagesPå !== null &&
+    k.erKlagerPartISaken &&
+    k.klagesDetPåKonkreteElementerIVedtaket &&
+    erKlagefristenOverholdt(k) &&
+    k.erKlagenSignert;
 
 export const erKlagefristenOverholdt = (k: Klagebehandling): boolean => {
     return (
@@ -73,7 +70,7 @@ export const erKlageUnderAktivOmgjøring = (
 ): k is Klagebehandling & { rammebehandlingId: string } =>
     k.resultat === KlagebehandlingResultat.OMGJØR && !!k.rammebehandlingId;
 
-export const finnUrlForKlageSteg = (k: Klagebehandling): string => {
+export const finnSisteGyldigeStegForKlage = (k: Klagebehandling): string => {
     switch (k.resultat) {
         case KlagebehandlingResultat.AVVIST: {
             return `/sak/${k.saksnummer}/klage/${k.id}/brev`;
@@ -88,7 +85,7 @@ export const finnUrlForKlageSteg = (k: Klagebehandling): string => {
         }
 
         case KlagebehandlingResultat.OMGJØR: {
-            return `/sak/${k.saksnummer}/klage/${k.id}/vurdering`;
+            return `/sak/${k.saksnummer}/klage/${k.id}/resultat`;
         }
 
         case KlagebehandlingResultat.OPPRETTHOLDT: {
@@ -104,7 +101,10 @@ export const finnUrlForKlageSteg = (k: Klagebehandling): string => {
     }
 
     //verifiserer at switch er exhaustive
-    throw k.resultat satisfies never;
+    throw new Error(
+        'Fikk en klagebehandling med et resultat som ikke er håndtert i finnSisteGyldigeStegForKlage',
+        k.resultat satisfies never,
+    );
 };
 
 export const erKlageOpprettholdtEllerEtter = (s: KlagebehandlingStatus) =>
