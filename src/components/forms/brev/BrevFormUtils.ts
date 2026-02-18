@@ -4,6 +4,9 @@ import {
     Klagebehandling,
     KlagebehandlingResultat,
 } from '~/types/Klage';
+import { Rammevedtak } from '~/types/Rammevedtak';
+import { Nullable } from '~/types/UtilTypes';
+import { formaterDatotekst } from '~/utils/date';
 
 export interface BrevFormData {
     tekstfelter: Avsnitt[];
@@ -53,14 +56,25 @@ export const brevFormValidation = (data: BrevFormData) => {
     return { values: data, errors };
 };
 
-export const klageTilBrevFormData = (klage: Klagebehandling): BrevFormData => {
+/**
+ *
+ * @param påKlagetVedtak påkrevd for å kunne fylle in default tekst i klagebrev for opprettholdelse. Kaster exception hvis man sender null ved opprettholdelse
+ */
+export const klageTilBrevFormData = (
+    klage: Klagebehandling,
+    påKlagetVedtak: Nullable<Rammevedtak>,
+): BrevFormData => {
     return {
         tekstfelter:
             klage.brevtekst.length > 0
                 ? klage.brevtekst
                 : klage.resultat === KlagebehandlingResultat.OPPRETTHOLDT
                   ? [
-                        { tittel: 'Klagens anførsler', tekst: '' },
+                        {
+                            tittel: 'Hva klagesaken gjelder',
+                            tekst: `Vi viser til klage av ${formaterDatotekst(klage.innsendingsdato)} på vedtak av ${formaterDatotekst(påKlagetVedtak!.opprettet)} der <kort om resultatet i vedtaket>`,
+                        },
+                        { tittel: 'Klagers anførsler', tekst: '' },
                         { tittel: 'Vurdering av klagen', tekst: '' },
                     ]
                   : [{ tittel: '', tekst: '' }],

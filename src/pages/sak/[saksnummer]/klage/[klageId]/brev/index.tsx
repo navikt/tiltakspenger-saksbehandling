@@ -30,10 +30,13 @@ import {
     useLagreKlagebrev,
     useOpprettholdKlage,
 } from '~/api/KlageApi';
+import { Rammevedtak } from '~/types/Rammevedtak';
+import { Nullable } from '~/types/UtilTypes';
 
 type Props = {
     sak: SakProps;
     initialKlage: Klagebehandling;
+    påklagetVedtak: Nullable<Rammevedtak>;
 };
 
 export const getServerSideProps = pageWithAuthentication(async (context) => {
@@ -55,17 +58,20 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
         };
     }
 
-    return { props: { sak, initialKlage } };
+    const påklagetVedtak =
+        sak.alleRammevedtak.find((vedtak) => vedtak.id === initialKlage.vedtakDetKlagesPå) ?? null;
+
+    return { props: { sak, initialKlage, påklagetVedtak } };
 });
 
-const BrevKlagePage = ({ sak }: Props) => {
+const BrevKlagePage = ({ sak, påklagetVedtak }: Props) => {
     const { klage, setKlage } = useKlage();
     const { innloggetSaksbehandler } = useSaksbehandler();
 
     const erReadonlyForSaksbehandler = innloggetSaksbehandler.navIdent !== klage.saksbehandler;
 
     const form = useForm<BrevFormData>({
-        defaultValues: klageTilBrevFormData(klage),
+        defaultValues: klageTilBrevFormData(klage, påklagetVedtak),
         resolver: brevFormValidation,
     });
 
@@ -83,7 +89,7 @@ const BrevKlagePage = ({ sak }: Props) => {
         sakId: sak.sakId,
         klageId: klage.id,
         onSuccess: (klage) => {
-            form.reset(klageTilBrevFormData(klage!));
+            form.reset(klageTilBrevFormData(klage!, påklagetVedtak));
             setKlage(klage!);
         },
     });
