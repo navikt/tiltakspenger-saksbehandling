@@ -1,4 +1,9 @@
-import { Klagebehandling, KlagebehandlingResultat, KlagefristUnntakSvarord } from '~/types/Klage';
+import {
+    Klagebehandling,
+    KlagebehandlingResultat,
+    KlagebehandlingStatus,
+    KlagefristUnntakSvarord,
+} from '~/types/Klage';
 import { Rammebehandling } from '~/types/Rammebehandling';
 import { Nullable } from '~/types/UtilTypes';
 import { erRammebehandlingUnderAktivOmgjøring } from './behandling';
@@ -87,6 +92,13 @@ export const finnUrlForKlageSteg = (k: Klagebehandling): string => {
         }
 
         case KlagebehandlingResultat.OPPRETTHOLDT: {
+            if (
+                k.status === KlagebehandlingStatus.OPPRETTHOLDT ||
+                k.status === KlagebehandlingStatus.OVERSENDT
+            ) {
+                return `/sak/${k.saksnummer}/klage/${k.id}/resultat`;
+            }
+
             return `/sak/${k.saksnummer}/klage/${k.id}/brev`;
         }
     }
@@ -94,3 +106,6 @@ export const finnUrlForKlageSteg = (k: Klagebehandling): string => {
     //verifiserer at switch er exhaustive
     throw k.resultat satisfies never;
 };
+
+export const erKlageOpprettholdtEllerEtter = (s: KlagebehandlingStatus) =>
+    s === KlagebehandlingStatus.OPPRETTHOLDT || s === KlagebehandlingStatus.OVERSENDT;

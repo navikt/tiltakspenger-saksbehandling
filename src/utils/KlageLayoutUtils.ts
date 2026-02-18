@@ -1,5 +1,10 @@
 import { Klagebehandling, KlagebehandlingResultat } from '~/types/Klage';
-import { erKlageOmgjøring, erKlageOpprettholdelse, kanVurdereKlage } from './klageUtils';
+import {
+    erKlageOmgjøring,
+    erKlageOpprettholdelse,
+    erKlageOpprettholdtEllerEtter,
+    kanVurdereKlage,
+} from './klageUtils';
 
 export enum KlageSteg {
     FORMKRAV = 'FORMKRAV',
@@ -19,7 +24,7 @@ export const kanNavigereTilKlageSteg = (klage: Klagebehandling, steg: KlageSteg)
                 klage.resultat === KlagebehandlingResultat.AVVIST || erKlageOpprettholdelse(klage)
             );
         case KlageSteg.RESULTAT:
-            return erKlageOmgjøring(klage);
+            return erKlageOmgjøring(klage) || erKlageOpprettholdtEllerEtter(klage.status);
         default:
             return false;
     }
