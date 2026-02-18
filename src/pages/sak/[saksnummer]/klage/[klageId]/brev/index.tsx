@@ -1,7 +1,7 @@
 import { ReactElement } from 'react';
 
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
-import { BodyShort, Button, Heading, HStack, Label, LocalAlert, VStack } from '@navikt/ds-react';
+import { Button, Heading, HStack, Label, LocalAlert, VStack } from '@navikt/ds-react';
 import { useForm } from 'react-hook-form';
 import { fetchSak } from '~/utils/fetch/fetch-server';
 import { logger } from '@navikt/next-logger';

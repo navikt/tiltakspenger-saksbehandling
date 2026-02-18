@@ -13,7 +13,7 @@ import { Rammebehandling } from '~/types/Rammebehandling';
 import JournalpostId from '~/components/journalpostId/JournalpostId';
 import { Nullable } from '~/types/UtilTypes';
 import styles from './FormkravForm.module.css';
-import { formaterTidspunktKort } from '~/utils/date';
+import { formaterTidspunktKort, startOfDay } from '~/utils/date';
 import { behandlingstypeTextFormatter } from '~/components/benk/BenkSideUtils';
 import { behandlingResultatTilText } from '~/utils/tekstformateringUtils';
 import { Datovelger } from '~/components/datovelger/Datovelger';
@@ -95,7 +95,7 @@ const FormkravForm = (props: {
 
             {valgtVedtak &&
                 valgtInnsendingsdato &&
-                valgtInnsendingsdato < new Date(valgtVedtak.opprettet) && (
+                valgtInnsendingsdato < startOfDay(valgtVedtak.opprettet) && (
                     <LocalAlert status="warning" size="small">
                         <LocalAlert.Header>
                             <LocalAlert.Title>Verifiser innsendingsdato for klage</LocalAlert.Title>

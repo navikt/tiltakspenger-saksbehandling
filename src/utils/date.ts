@@ -89,3 +89,5 @@ export const erHelg = (dato: string) => {
     const ukedag = dayjs(dato).weekday();
     return ukedag === 5 || ukedag === 6;
 };
+
+export const startOfDay = (dato: DateOrString) => dayjs(dato).startOf('day').toDate();

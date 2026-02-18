@@ -68,7 +68,13 @@ const OprettKlagePage = ({ sak }: Props) => {
         //vi har formprovider fordi journalpostid komponenten bruker useformcontext. merk at bruken av useformcontext gir oss ikke compile feil dersom endrer på form-interfacet
         <FormProvider {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
-                <VStack gap="space-32" marginInline="space-64" marginBlock="space-32" align="start">
+                <VStack
+                    gap="space-32"
+                    marginInline="space-64"
+                    marginBlock="space-32"
+                    align="start"
+                    maxWidth="35rem"
+                >
                     <HStack gap="space-8">
                         <WarningCircleIcon />
                         <Heading size="small">Formkrav</Heading>
