@@ -208,7 +208,15 @@ const BrevKlagePage = ({ sak, påklagetVedtak }: Props) => {
                         </HStack>
                     </VStack>
                     {!erReadonlyForSaksbehandler && kanBehandleKlage(klage, null) && (
-                        <Button disabled={!klage.kanIverksette || form.formState.isDirty}>
+                        <Button
+                            disabled={
+                                (klage.resultat === KlagebehandlingResultat.AVVIST &&
+                                    !klage.kanIverksetteVedtak) ||
+                                (klage.resultat === KlagebehandlingResultat.OPPRETTHOLDT &&
+                                    !klage.kanIverksetteOpprettholdelse) ||
+                                form.formState.isDirty
+                            }
+                        >
                             Ferdigstill behandling og send brev
                         </Button>
                     )}

@@ -18,6 +18,8 @@ export enum KlagebehandlingStatus {
     UNDER_BEHANDLING = 'UNDER_BEHANDLING',
     AVBRUTT = 'AVBRUTT',
     IVERKSATT = 'IVERKSATT',
+    OPPRETTHOLDT = 'OPPRETTHOLDT',
+    OVERSENDT = 'OVERSENDT',
 }
 
 export interface Klagebehandling {
@@ -44,7 +46,8 @@ export interface Klagebehandling {
     innsendingskilde: KlageInnsendingskilde;
     brevtekst: Brevtekst[];
     avbrutt: Nullable<Avbrutt>;
-    kanIverksette: boolean;
+    kanIverksetteVedtak: Nullable<boolean>;
+    kanIverksetteOpprettholdelse: boolean;
     årsak: Nullable<OmgjøringÅrsak>;
     begrunnelse: Nullable<string>;
     rammebehandlingId: Nullable<BehandlingId>;

@@ -271,9 +271,6 @@ export function behandlingResultatTilTag(
                 </Tag>
             );
     }
-
-    //trigger compile feil dersom switch ikke er exhaustive
-    throw resultat satisfies never;
 }
 
 export const klagebehandlingStatusTilText: Record<KlagebehandlingStatus, string> = {
@@ -281,6 +278,8 @@ export const klagebehandlingStatusTilText: Record<KlagebehandlingStatus, string>
     [KlagebehandlingStatus.UNDER_BEHANDLING]: 'Under behandling',
     [KlagebehandlingStatus.AVBRUTT]: 'Avbrutt',
     [KlagebehandlingStatus.IVERKSATT]: 'Iverksatt',
+    [KlagebehandlingStatus.OPPRETTHOLDT]: 'Opprettholdt',
+    [KlagebehandlingStatus.OVERSENDT]: 'Oversendt',
 };
 
 export const klagebehandlingStatusTilTag = (args: {
@@ -324,8 +323,26 @@ export const klagebehandlingStatusTilTag = (args: {
                     {args.extraContent?.after}
                 </Tag>
             );
+
+        case KlagebehandlingStatus.OPPRETTHOLDT:
+            return (
+                <Tag data-color="success" variant="outline" size={args.size}>
+                    {args.extraContent?.before}
+                    {klagebehandlingStatusTilText[KlagebehandlingStatus.OPPRETTHOLDT]}
+                    {args.extraContent?.after}
+                </Tag>
+            );
+
+        case KlagebehandlingStatus.OVERSENDT:
+            return (
+                <Tag data-color="success" variant="outline" size={args.size}>
+                    {args.extraContent?.before}
+                    {klagebehandlingStatusTilText[KlagebehandlingStatus.OVERSENDT]}
+                    {args.extraContent?.after}
+                </Tag>
+            );
     }
-    throw args.status satisfies never;
+    throw new Error('Manglende status håndtering: ' + (args.status satisfies never));
 };
 
 export const klagebehandlingResultatTilText: Record<KlagebehandlingResultat, string> = {
@@ -368,7 +385,7 @@ export const klagebehandlingResultatTilTag = (args: {
                 </Tag>
             );
     }
-    throw args.resultat satisfies never;
+    throw new Error('Manglende resultat håndtering: ' + (args.resultat satisfies never));
 };
 
 export const omgjøringsårsakTilText: Record<OmgjøringÅrsak, string> = {
