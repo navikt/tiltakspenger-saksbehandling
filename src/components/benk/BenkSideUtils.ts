@@ -24,6 +24,7 @@ export enum BehandlingssammendragKolonner {
     fnr = 'fnr',
     behandlingstype = 'behandlingstype',
     status = 'status',
+    ventestatus = 'frist',
     startet = 'startet',
     saksbehandler = 'saksbehandler',
     beslutter = 'beslutter',

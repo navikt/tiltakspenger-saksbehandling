@@ -91,9 +91,14 @@ const BenkTabell = ({ data, sorteringRetning, onSortChange }: Props) => {
                     <Table.Row>
                         <Table.HeaderCell scope="col">Fødselsnummer</Table.HeaderCell>
                         <Table.HeaderCell scope="col">Type</Table.HeaderCell>
-                        <Table.HeaderCell scope="col" className={styles.kommentar}>
+                        <Table.ColumnHeader
+                            scope="col"
+                            className={styles.kommentar}
+                            sortKey={BehandlingssammendragKolonner.ventestatus}
+                            sortable
+                        >
                             Ventestatus
-                        </Table.HeaderCell>
+                        </Table.ColumnHeader>
                         <Table.HeaderCell scope="col">Status</Table.HeaderCell>
                         <Table.ColumnHeader
                             sortKey={BehandlingssammendragKolonner.startet}
