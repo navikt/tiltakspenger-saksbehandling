@@ -6,7 +6,7 @@ import { SakProps } from '~/types/Sak';
 import { fetchSak } from '~/utils/fetch/fetch-server';
 import { KlageSteg } from '~/utils/KlageLayoutUtils';
 import KlageLayout, { KlageProvider, useKlage } from '../../layout';
-import { Button, LocalAlert, VStack } from '@navikt/ds-react';
+import { Button, Heading, HStack, LocalAlert, Process, VStack } from '@navikt/ds-react';
 import { erKlageAvsluttet, erKlageUnderAktivOmgjøring } from '~/utils/klageUtils';
 import { Rammebehandling } from '~/types/Rammebehandling';
 import { Nullable } from '~/types/UtilTypes';
@@ -17,6 +17,15 @@ import { Rammevedtak } from '~/types/Rammevedtak';
 import Link from 'next/link';
 import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
 import { Saksbehandler } from '~/types/Saksbehandler';
+import {
+    ArchiveIcon,
+    CheckmarkCircleIcon,
+    EnvelopeClosedIcon,
+    PaperplaneIcon,
+    PersonHeadsetIcon,
+} from '@navikt/aksel-icons';
+import WarningCircleIcon from '~/icons/WarningCircleIcon';
+import { formaterTidspunkt } from '~/utils/date';
 
 type Props = {
     sak: SakProps;
@@ -80,6 +89,8 @@ const ResultatPage = ({ sak, omgjøringsbehandling, vedtakSomPåklages, søknade
                     søknader={søknader}
                     innloggetSaksbehandler={innloggetSaksbehandler}
                 />
+            ) : klage.resultat === KlagebehandlingResultat.OPPRETTHOLDT ? (
+                <OpprettholdResultat sak={sak} klage={klage} />
             ) : (
                 <>Ukjent resultat for klage</>
             )}
@@ -144,6 +155,122 @@ const Omgjøringsresultat = (props: {
                     onClose={() => setVilVelgeOmgjøringsbehandlingModal(false)}
                 />
             )}
+        </VStack>
+    );
+};
+
+const OpprettholdResultat = (props: { sak: SakProps; klage: Klagebehandling }) => {
+    //behov for klagebehandling_avsluttet hendelse
+    const erFullført = false;
+
+    const journalført = !!props.klage.journalføringstidspunktInnstillingsbrev;
+    const distribuert = !!props.klage.distribusjonstidspunktInnstillingsbrev;
+    const oversendt = !!props.klage.oversendtKlageinstansenTidspunkt;
+
+    const journalfører = !journalført && !distribuert && !oversendt;
+    const distribuer = journalført && !distribuert && !oversendt;
+
+    const journalførtEllerEtter = journalført || distribuert || oversendt;
+
+    const distribuertEllerEtter = distribuert || oversendt;
+
+    const oversendtEllerEtter = oversendt || erFullført;
+
+    return (
+        <VStack gap="space-48">
+            <HStack gap="space-8">
+                {erFullført ? (
+                    <CheckmarkCircleIcon title="Sjekk ikon" fontSize="1.5rem" color="green" />
+                ) : (
+                    <WarningCircleIcon />
+                )}
+                <Heading size="small">Resultat</Heading>
+            </HStack>
+
+            <Process>
+                <Process.Event
+                    status="completed"
+                    title="Iverksettelse av opprettholdelse"
+                    timestamp={formaterTidspunkt(props.klage.iverksattOpprettholdelseTidspunkt!)}
+                    bullet={
+                        <PaperplaneIcon
+                            title="Iverksettelse av opprettholdelse"
+                            fontSize="1.5rem"
+                        />
+                    }
+                />
+                <Process.Event
+                    status={
+                        journalførtEllerEtter
+                            ? 'completed'
+                            : journalfører
+                              ? 'active'
+                              : 'uncompleted'
+                    }
+                    title={
+                        props.klage.journalføringstidspunktInnstillingsbrev
+                            ? 'Journalført innstillingsbrev'
+                            : 'Venter på journalføring av innstillingsbrev'
+                    }
+                    timestamp={
+                        props.klage.journalføringstidspunktInnstillingsbrev
+                            ? formaterTidspunkt(props.klage.journalføringstidspunktInnstillingsbrev)
+                            : undefined
+                    }
+                    bullet={
+                        <ArchiveIcon title="Journalføring av innstillingsbrev" fontSize="1.5rem" />
+                    }
+                />
+
+                <Process.Event
+                    status={
+                        distribuertEllerEtter ? 'completed' : distribuer ? 'active' : 'uncompleted'
+                    }
+                    title={
+                        props.klage.distribusjonstidspunktInnstillingsbrev
+                            ? 'Distribuert innstillingsbrev'
+                            : 'Venter på distribusjon av innstillingsbrev'
+                    }
+                    timestamp={
+                        props.klage.distribusjonstidspunktInnstillingsbrev
+                            ? formaterTidspunkt(props.klage.distribusjonstidspunktInnstillingsbrev)
+                            : undefined
+                    }
+                    bullet={
+                        <EnvelopeClosedIcon
+                            title="Distribusjon av innstillingsbrev"
+                            fontSize="1.5rem"
+                        />
+                    }
+                />
+
+                <Process.Event
+                    status={
+                        oversendtEllerEtter ? 'completed' : oversendt ? 'active' : 'uncompleted'
+                    }
+                    title={
+                        props.klage.oversendtKlageinstansenTidspunkt
+                            ? 'Overført til Nav Klageinstans'
+                            : 'Venter på overførsel til Nav Klageinstans'
+                    }
+                    timestamp={
+                        props.klage.oversendtKlageinstansenTidspunkt
+                            ? formaterTidspunkt(props.klage.oversendtKlageinstansenTidspunkt)
+                            : undefined
+                    }
+                    bullet={
+                        <PersonHeadsetIcon
+                            title="Overførsel til klageinstansen"
+                            fontSize="1.5rem"
+                        />
+                    }
+                />
+                <Process.Event
+                    title="Fullført"
+                    status={erFullført ? 'completed' : 'uncompleted'}
+                    bullet={<CheckmarkCircleIcon title="Fullført" fontSize="1.5rem" />}
+                />
+            </Process>
         </VStack>
     );
 };

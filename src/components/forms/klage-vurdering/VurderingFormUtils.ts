@@ -193,7 +193,7 @@ export const harKlagevurderingsstegUtfylt = (k: Klagebehandling): boolean => {
 export enum KlagehjemmelFormData {
     ARBEIDSMARKEDSLOVEN_2 = 'ARBEIDSMARKEDSLOVEN_2',
     ARBEIDSMARKEDSLOVEN_13 = 'ARBEIDSMARKEDSLOVEN_13',
-    ARBEIDSMARKEDSLOVEN_13_L1 = 'ARBEIDSMARKEDSLOVEN_13_L1',
+    ARBEIDSMARKEDSLOVEN_13_LØNN = 'ARBEIDSMARKEDSLOVEN_13_LØNN',
     ARBEIDSMARKEDSLOVEN_13_L4 = 'ARBEIDSMARKEDSLOVEN_13_L4',
     ARBEIDSMARKEDSLOVEN_15 = 'ARBEIDSMARKEDSLOVEN_15',
     ARBEIDSMARKEDSLOVEN_17 = 'ARBEIDSMARKEDSLOVEN_17',
@@ -230,7 +230,7 @@ export enum KlagehjemmelFormData {
 export const klageHjemlerFormDataTilTekst: Record<KlagehjemmelFormData, string> = {
     [KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_2]: 'Arb.mark.lov §2',
     [KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_13]: 'Arb.mark.lov §13',
-    [KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_13_L1]: 'Arb.mark.lov §13 - lønn',
+    [KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_13_LØNN]: 'Arb.mark.lov §13 - lønn',
     [KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_13_L4]: 'Arb.mark.lov §13 fjerde ledd',
     [KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_15]: 'Arb.mark.lov §15',
     [KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_17]: 'Arb.mark.lov §17',
@@ -283,8 +283,8 @@ export const klagehjemmelTilKlagehjemmelFormData = (
             return KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_2;
         case Klagehjemmel.ARBEIDSMARKEDSLOVEN_13:
             return KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_13;
-        case Klagehjemmel.ARBEIDSMARKEDSLOVEN_13_L1:
-            return KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_13_L1;
+        case Klagehjemmel.ARBEIDSMARKEDSLOVEN_13_LØNN:
+            return KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_13_LØNN;
         case Klagehjemmel.ARBEIDSMARKEDSLOVEN_13_L4:
             return KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_13_L4;
         case Klagehjemmel.ARBEIDSMARKEDSLOVEN_15:
@@ -350,8 +350,8 @@ export const klagehjemmelFormDataTilKlagehjemmel = (
             return Klagehjemmel.ARBEIDSMARKEDSLOVEN_2;
         case KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_13:
             return Klagehjemmel.ARBEIDSMARKEDSLOVEN_13;
-        case KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_13_L1:
-            return Klagehjemmel.ARBEIDSMARKEDSLOVEN_13_L1;
+        case KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_13_LØNN:
+            return Klagehjemmel.ARBEIDSMARKEDSLOVEN_13_LØNN;
         case KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_13_L4:
             return Klagehjemmel.ARBEIDSMARKEDSLOVEN_13_L4;
         case KlagehjemmelFormData.ARBEIDSMARKEDSLOVEN_15:

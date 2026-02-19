@@ -53,6 +53,10 @@ export interface Klagebehandling {
     rammebehandlingId: Nullable<BehandlingId>;
     ventestatus: Nullable<VentestatusHendelse>;
     hjemler: Nullable<Klagehjemmel[]>;
+    iverksattOpprettholdelseTidspunkt: Nullable<string>;
+    journalføringstidspunktInnstillingsbrev: Nullable<string>;
+    distribusjonstidspunktInnstillingsbrev: Nullable<string>;
+    oversendtKlageinstansenTidspunkt: Nullable<string>;
 }
 
 export interface Brevtekst {
@@ -132,7 +136,7 @@ export type VedtattKlagevedtakMedBehandling = { type: 'klagevedtak' } & Klageved
 export enum Klagehjemmel {
     ARBEIDSMARKEDSLOVEN_2 = 'ARBEIDSMARKEDSLOVEN_2',
     ARBEIDSMARKEDSLOVEN_13 = 'ARBEIDSMARKEDSLOVEN_13',
-    ARBEIDSMARKEDSLOVEN_13_L1 = 'ARBEIDSMARKEDSLOVEN_13_L1',
+    ARBEIDSMARKEDSLOVEN_13_LØNN = 'ARBEIDSMARKEDSLOVEN_13_LØNN',
     ARBEIDSMARKEDSLOVEN_13_L4 = 'ARBEIDSMARKEDSLOVEN_13_L4',
     ARBEIDSMARKEDSLOVEN_15 = 'ARBEIDSMARKEDSLOVEN_15',
     ARBEIDSMARKEDSLOVEN_17 = 'ARBEIDSMARKEDSLOVEN_17',
