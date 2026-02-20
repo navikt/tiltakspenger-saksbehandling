@@ -1,5 +1,5 @@
 import { BodyShort, Heading } from '@navikt/ds-react';
-import { alderFraDato, formaterDatotekst } from '~/utils/date';
+import { alderFraDato, finn18årsdag, formaterDatotekst } from '~/utils/date';
 import { ReactNode } from 'react';
 import { useBehandling } from '../context/BehandlingContext';
 import { Separator } from '../../separator/Separator';
@@ -15,9 +15,13 @@ import { Rammebehandlingstype } from '~/types/Rammebehandling';
 import { SøknadOpplysningerFraVedtak } from '~/components/behandling/saksopplysninger/søknad/SøknadOpplysningerFraVedtak';
 
 import style from './BehandlingSaksopplysninger.module.css';
+import { erDatoIPeriode, totalPeriode } from '~/utils/periode';
+import { hentVedtatteSøknadsbehandlinger } from '~/utils/sak';
+import { useSak } from '~/context/sak/SakContext';
 
 export const BehandlingSaksopplysninger = () => {
     const { behandling } = useBehandling();
+    const sak = useSak().sak;
 
     const { saksopplysninger, type, attesteringer } = behandling;
     const { ytelser, tiltakspengevedtakFraArena, tiltaksdeltagelse, fødselsdato } =
@@ -26,6 +30,24 @@ export const BehandlingSaksopplysninger = () => {
     const harYtelser = ytelser.length > 0;
     const harTiltakspengevedtakFraArena = tiltakspengevedtakFraArena.length > 0;
     const harTiltaksdeltakelse = tiltaksdeltagelse.length > 0;
+
+    const fyller18ÅrISøknadsperioden = (): boolean => {
+        const attendeBursdag = finn18årsdag(fødselsdato);
+
+        if (behandling.type === Rammebehandlingstype.SØKNADSBEHANDLING) {
+            const søknadsperiode = behandling.søknad.tiltaksdeltakelseperiodeDetErSøktOm;
+            return søknadsperiode ? erDatoIPeriode(attendeBursdag, søknadsperiode) : false;
+        }
+
+        // For revurderinger: Sjekk mot alle vedtatte søknadsbehandlinger
+        const perioderDetErSøktOm = hentVedtatteSøknadsbehandlinger(sak)
+            .map((beh) => beh.søknad.tiltaksdeltakelseperiodeDetErSøktOm)
+            .filter((periode) => periode !== null);
+
+        if (!perioderDetErSøktOm || perioderDetErSøktOm.length === 0) return false;
+
+        return erDatoIPeriode(attendeBursdag, totalPeriode(perioderDetErSøktOm));
+    };
 
     return (
         <>
@@ -77,6 +99,12 @@ export const BehandlingSaksopplysninger = () => {
                     navn={'Fødselsdato'}
                     verdi={formaterDatotekst(fødselsdato)}
                 />
+                {fyller18ÅrISøknadsperioden() && (
+                    <BehandlingSaksopplysning
+                        navn={'Fyller 18 i perioden bruker har søkt om'}
+                        visVarsel
+                    />
+                )}
             </OpplysningerSeksjon>
 
             <Separator />
