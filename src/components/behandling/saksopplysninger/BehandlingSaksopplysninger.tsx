@@ -35,14 +35,16 @@ export const BehandlingSaksopplysninger = () => {
         const attendeBursdag = finn18årsdag(fødselsdato);
 
         if (behandling.type === Rammebehandlingstype.SØKNADSBEHANDLING) {
-            const tiltaksperiode = hentTiltaksperiode(behandling);
-            return tiltaksperiode ? erDatoIPeriode(attendeBursdag, tiltaksperiode) : false;
+            const søknadsperiode = behandling.søknad.tiltaksdeltakelseperiodeDetErSøktOm;
+            return søknadsperiode ? erDatoIPeriode(attendeBursdag, søknadsperiode) : false;
         }
 
         // For revurderinger: Sjekk mot alle vedtatte søknadsbehandlinger
         const perioderDetErSøktOm = hentVedtatteSøknadsbehandlinger(sak)
             .map((beh) => beh.søknad.tiltaksdeltakelseperiodeDetErSøktOm)
             .filter((periode) => periode !== null);
+
+        console.log(perioderDetErSøktOm);
 
         if (!perioderDetErSøktOm || perioderDetErSøktOm.length === 0) return false;
 
@@ -100,7 +102,10 @@ export const BehandlingSaksopplysninger = () => {
                     verdi={formaterDatotekst(fødselsdato)}
                 />
                 {fyller18ÅrISøknadsperioden() && (
-                    <BehandlingSaksopplysning navn={'Fyller 18 i søknadsperioden'} visVarsel />
+                    <BehandlingSaksopplysning
+                        navn={'Fyller 18 i perioden bruker har søkt om'}
+                        visVarsel
+                    />
                 )}
             </OpplysningerSeksjon>
 

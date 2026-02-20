@@ -1,6 +1,6 @@
 import { Periode } from '~/types/Periode';
 import { Tiltaksdeltakelse, TiltaksdeltakelseMedPeriode } from '~/types/TiltakDeltakelse';
-import { totalPeriode, perioderOverlapper } from './periode';
+import { perioderOverlapper, totalPeriode } from './periode';
 import { Nullable } from '~/types/UtilTypes';
 import {
     Rammebehandling,
@@ -15,7 +15,6 @@ export const hentTiltaksperiode = (behandling: Søknadsbehandling): Nullable<Per
     const forsteStartdatoForDeltakelse = finnForsteStartdatoForTiltaksdeltakelse(behandling);
     const sisteSluttdatoForDeltakelse = finnSisteSluttdatoForTiltaksdeltakelse(behandling);
     const tiltakFraSøknad = behandling.søknad.tiltak;
-
     if (forsteStartdatoForDeltakelse && sisteSluttdatoForDeltakelse) {
         return {
             fraOgMed: forsteStartdatoForDeltakelse,
@@ -26,10 +25,7 @@ export const hentTiltaksperiode = (behandling: Søknadsbehandling): Nullable<Per
             fraOgMed: tiltakFraSøknad.fraOgMed,
             tilOgMed: tiltakFraSøknad.tilOgMed,
         };
-    } else if (behandling.søknad.tiltaksdeltakelseperiodeDetErSøktOm) {
-        return behandling.søknad.tiltaksdeltakelseperiodeDetErSøktOm;
     }
-
     return null;
 };
 
