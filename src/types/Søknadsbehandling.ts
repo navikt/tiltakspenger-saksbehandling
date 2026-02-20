@@ -4,7 +4,7 @@ import {
     OppdaterBehandlingBaseDTO,
     RammebehandlingBase,
 } from './Rammebehandling';
-import { Søknad } from './Søknad';
+import { InnvilgbarSøknad, Søknad } from './Søknad';
 import { Innvilgelsesperiode } from '~/types/Innvilgelsesperiode';
 
 type SøknadsbehandlingBase = RammebehandlingBase & {
@@ -24,6 +24,7 @@ export type SøknadsbehandlingInnvilgelse = SøknadsbehandlingBase & {
     resultat: SøknadsbehandlingResultat.INNVILGELSE;
     innvilgelsesperioder: Innvilgelsesperiode[];
     barnetillegg: Barnetillegg;
+    søknad: InnvilgbarSøknad;
 };
 
 export type SøknadsbehandlingAvslag = SøknadsbehandlingBase & {
