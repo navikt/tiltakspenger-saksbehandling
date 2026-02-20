@@ -40,11 +40,11 @@ export const BehandlingSaksopplysninger = () => {
         }
 
         // For revurderinger: Sjekk mot alle vedtatte søknadsbehandlinger
-        const perioderDetErSøktOm = hentVedtatteSøknadsbehandlinger(sak).map(
-            (beh) => beh.søknad.tiltaksdeltakelseperiodeDetErSøktOm,
-        );
+        const perioderDetErSøktOm = hentVedtatteSøknadsbehandlinger(sak)
+            .map((beh) => beh.søknad.tiltaksdeltakelseperiodeDetErSøktOm)
+            .filter((periode) => periode !== null);
 
-        if (perioderDetErSøktOm) return false;
+        if (!perioderDetErSøktOm || perioderDetErSøktOm.length === 0) return false;
 
         return erDatoIPeriode(attendeBursdag, totalPeriode(perioderDetErSøktOm));
     };
