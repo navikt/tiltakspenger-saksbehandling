@@ -118,6 +118,7 @@ export type StartRevurderingDTO = {
     rammevedtakIdSomOmgjøres: Nullable<VedtakId>;
 };
 
+// TODO: split i separate enums for stans og opphør
 export enum HjemmelForStansEllerOpphør {
     DELTAR_IKKE_PÅ_ARBEIDSMARKEDSTILTAK = 'DeltarIkkePåArbeidsmarkedstiltak',
     ALDER = 'Alder',
@@ -128,4 +129,5 @@ export enum HjemmelForStansEllerOpphør {
     LØNN_FRA_ANDRE = 'LønnFraAndre',
     INSTITUSJONSOPPHOLD = 'Institusjonsopphold',
     IKKE_LOVLIG_OPPHOLD = 'IkkeLovligOpphold',
+    FREMMET_FOR_SENT = 'FremmetForSent',
 }

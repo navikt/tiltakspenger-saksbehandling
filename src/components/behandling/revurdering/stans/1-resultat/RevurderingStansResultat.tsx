@@ -11,6 +11,7 @@ import {
 import { StansOgOpphørHjemmelVelger } from '~/components/behandling/revurdering/felles/opphør-hjemmel-velger/StansOgOpphørHjemmelVelger';
 
 import style from './RevurderingStansResultat.module.css';
+import { HjemmelForStansEllerOpphør } from '~/types/Revurdering';
 
 export const RevurderingStansResultat = () => {
     const { førsteDagSomGirRett, sisteDagSomGirRett } = useSak().sak;
@@ -38,6 +39,7 @@ export const RevurderingStansResultat = () => {
 
                 <StansOgOpphørHjemmelVelger
                     label={'Hjemmel for stans'}
+                    aktuelleHjemler={aktuelleHjemler}
                     valgteHjemler={hjemlerForStans}
                     onChange={(hjemler) =>
                         dispatch({
@@ -101,3 +103,15 @@ export const RevurderingStansResultat = () => {
         </VedtakSeksjon>
     );
 };
+
+const aktuelleHjemler: HjemmelForStansEllerOpphør[] = [
+    HjemmelForStansEllerOpphør.DELTAR_IKKE_PÅ_ARBEIDSMARKEDSTILTAK,
+    HjemmelForStansEllerOpphør.ALDER,
+    HjemmelForStansEllerOpphør.LIVSOPPHOLDYTELSER,
+    HjemmelForStansEllerOpphør.KVALIFISERINGSPROGRAMMET,
+    HjemmelForStansEllerOpphør.INTRODUKSJONSPROGRAMMET,
+    HjemmelForStansEllerOpphør.LØNN_FRA_TILTAKSARRANGØR,
+    HjemmelForStansEllerOpphør.LØNN_FRA_ANDRE,
+    HjemmelForStansEllerOpphør.INSTITUSJONSOPPHOLD,
+    HjemmelForStansEllerOpphør.IKKE_LOVLIG_OPPHOLD,
+];

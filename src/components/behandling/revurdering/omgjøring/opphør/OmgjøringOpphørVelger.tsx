@@ -8,12 +8,17 @@ import {
 } from '~/components/behandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import { OmgjøringVedtaksperiodeVelger } from '~/components/behandling/revurdering/omgjøring/vedtaksperiode/OmgjøringVedtaksperiodeVelger';
 import { VedtakHjelpetekst } from '~/components/behandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
+import { HjemmelForStansEllerOpphør } from '~/types/Revurdering';
 
 export const OmgjøringOpphørVelger = () => {
     const { valgteHjemler } = useOmgjøringOpphørSkjema();
     const dispatch = useOmgjøringSkjemaDispatch();
 
     const { gosysUrl, modiaPersonoversiktUrl } = useConfig();
+
+    const måHaFritekst = valgteHjemler.some((hjemmel) =>
+        hjemlerForOpphørSomMåHaFritekst.has(hjemmel),
+    );
 
     return (
         <VedtakSeksjon>
@@ -22,6 +27,7 @@ export const OmgjøringOpphørVelger = () => {
 
                 <StansOgOpphørHjemmelVelger
                     label={'Hjemmel for opphør'}
+                    aktuelleHjemler={hjemlerForOpphør}
                     valgteHjemler={valgteHjemler}
                     onChange={(hjemler) =>
                         dispatch({
@@ -44,7 +50,20 @@ export const OmgjøringOpphørVelger = () => {
                     <Link href={gosysUrl}>{'Gosys'}</Link> {' eller '}
                     <Link href={modiaPersonoversiktUrl}>{'Modia personoversikt.'}</Link>
                 </VedtakHjelpetekst>
+
+                {måHaFritekst && (
+                    <VedtakHjelpetekst variant={'warning'}>
+                        {'Valgt hjemmel for må begrunnes med fritekst'}
+                    </VedtakHjelpetekst>
+                )}
             </VedtakSeksjon.Høyre>
         </VedtakSeksjon>
     );
 };
+
+const hjemlerForOpphør: HjemmelForStansEllerOpphør[] = Object.values(HjemmelForStansEllerOpphør);
+
+export const hjemlerForOpphørSomMåHaFritekst: ReadonlySet<HjemmelForStansEllerOpphør> = new Set([
+    HjemmelForStansEllerOpphør.FREMMET_FOR_SENT,
+    HjemmelForStansEllerOpphør.ALDER,
+]);

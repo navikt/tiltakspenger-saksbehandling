@@ -1,7 +1,7 @@
 import { ValideringResultat } from '~/types/Validering';
 import { validerInnvilgelse } from '~/components/behandling/felles/validering/validerInnvilgelse';
 import { Omgjøring, RevurderingResultat } from '~/types/Revurdering';
-import { OmgjøringState } from '~/components/behandling/context/revurdering/revurderingOmgjøringSkjemaContext';
+import { OmgjøringContext } from '~/components/behandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import { SakProps } from '~/types/Sak';
 import { hentGjeldendeRammevedtak, hentVedtatteSøknadsbehandlinger } from '~/utils/sak';
 import { perioderOverlapper, periodiseringTotalPeriode, totalPeriode } from '~/utils/periode';
@@ -12,7 +12,7 @@ import { Rammevedtak } from '~/types/Rammevedtak';
  */
 export const revurderingOmgjøringValidering = (
     behandling: Omgjøring,
-    skjema: OmgjøringState,
+    skjema: OmgjøringContext,
     sak: SakProps,
 ): ValideringResultat => {
     const validering: ValideringResultat = {
@@ -74,6 +74,15 @@ export const revurderingOmgjøringValidering = (
         if (skjema.valgteHjemler.length === 0) {
             validering.errors.push('Må velge en hjemmel for opphør');
         }
+
+        // TODO: må skrive om håndtering av fritekst-validering litt for at dette skal fungerer intuitivt for saksbehandler
+        // const måHaFritekst = skjema.valgteHjemler.some((hjemmel) =>
+        //     hjemlerForOpphørSomMåHaFritekst.has(hjemmel),
+        // );
+        //
+        // if (måHaFritekst && !skjema.textAreas.brevtekst.getValue()) {
+        //     validering.errors.push('Valgt hjemmel for opphør må begrunnes med fritekst');
+        // }
     }
 
     const vedtakSomOmgjøres = sak.tidslinje.elementer.reduce<Rammevedtak[]>(
