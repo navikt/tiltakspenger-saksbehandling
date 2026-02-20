@@ -1,5 +1,5 @@
 import { BodyShort, Heading } from '@navikt/ds-react';
-import { alderFraDato, datoMax, datoMin, finn18årsdag, formaterDatotekst } from '~/utils/date';
+import { alderFraDato, finn18årsdag, formaterDatotekst } from '~/utils/date';
 import { ReactNode } from 'react';
 import { useBehandling } from '../context/BehandlingContext';
 import { Separator } from '../../separator/Separator';
@@ -15,10 +15,9 @@ import { Rammebehandlingstype } from '~/types/Rammebehandling';
 import { SøknadOpplysningerFraVedtak } from '~/components/behandling/saksopplysninger/søknad/SøknadOpplysningerFraVedtak';
 
 import style from './BehandlingSaksopplysninger.module.css';
-import { erDatoIPeriode } from '~/utils/periode';
+import { erDatoIPeriode, totalPeriode } from '~/utils/periode';
 import { hentVedtatteSøknadsbehandlinger } from '~/utils/sak';
 import { useSak } from '~/context/sak/SakContext';
-import { Periode } from '~/types/Periode';
 
 export const BehandlingSaksopplysninger = () => {
     const { behandling } = useBehandling();
@@ -44,13 +43,10 @@ export const BehandlingSaksopplysninger = () => {
         const perioderDetErSøktOm = hentVedtatteSøknadsbehandlinger(sak).map(
             (beh) => beh.søknad.tiltaksdeltakelseperiodeDetErSøktOm,
         );
-        
-        if (perioderDetErSøktOm.length === 0) return false
 
-        return erDatoIPeriode(
-            attendeBursdag,
-            totalPeriode(perioderDetErSøktOm)
-        );
+        if (perioderDetErSøktOm) return false;
+
+        return erDatoIPeriode(attendeBursdag, totalPeriode(perioderDetErSøktOm));
     };
 
     return (
