@@ -25,6 +25,7 @@ interface SøknadBase {
 export interface InnvilgbarSøknad extends SøknadBase {
     tiltak: TiltaksdeltakelseFraSøknad;
     kanInnvilges: true;
+    tiltaksdeltakelseperiodeDetErSøktOm: Periode;
 }
 
 export interface IkkeInnvilgbarSøknad extends SøknadBase {
