@@ -44,8 +44,6 @@ export const BehandlingSaksopplysninger = () => {
             .map((beh) => beh.søknad.tiltaksdeltakelseperiodeDetErSøktOm)
             .filter((periode) => periode !== null);
 
-        console.log(perioderDetErSøktOm);
-
         if (!perioderDetErSøktOm || perioderDetErSøktOm.length === 0) return false;
 
         return erDatoIPeriode(attendeBursdag, totalPeriode(perioderDetErSøktOm));
