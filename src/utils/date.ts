@@ -62,6 +62,10 @@ export const finn16årsdag = (fødselsdato: string) => {
     return dayjs(fødselsdato).add(16, 'years').format(DATO_FORMAT);
 };
 
+export const finn18årsdag = (fødselsdato: string) => {
+    return dayjs(fødselsdato).add(18, 'years').format(DATO_FORMAT);
+};
+
 export const leggTilDager = (dato: string, dager: number) => {
     return dayjs(dato).add(dager, 'day').format(DATO_FORMAT);
 };

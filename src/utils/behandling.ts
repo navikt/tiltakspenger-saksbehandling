@@ -26,7 +26,10 @@ export const hentTiltaksperiode = (behandling: Søknadsbehandling): Nullable<Per
             fraOgMed: tiltakFraSøknad.fraOgMed,
             tilOgMed: tiltakFraSøknad.tilOgMed,
         };
+    } else if (behandling.søknad.tiltaksdeltakelseperiodeDetErSøktOm) {
+        return behandling.søknad.tiltaksdeltakelseperiodeDetErSøktOm;
     }
+
     return null;
 };
 

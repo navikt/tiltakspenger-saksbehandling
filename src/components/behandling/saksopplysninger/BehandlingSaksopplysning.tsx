@@ -9,7 +9,7 @@ import { formaterSøknadsspørsmålSvar } from '~/utils/tekstformateringUtils';
 
 type Props = {
     navn: string;
-    verdi: string;
+    verdi?: string;
     spacing?: boolean;
     visVarsel?: boolean;
 };
@@ -21,8 +21,14 @@ export const BehandlingSaksopplysning = ({ navn, verdi, spacing, visVarsel = fal
                 size={'small'}
                 className={classNames(style.opplysning, spacing && style.spacing)}
             >
-                {`${navn}: `}
-                <strong>{formaterSøknadsspørsmålSvar(verdi)}</strong>
+                {verdi ? (
+                    <>
+                        {`${navn}: `}
+                        <strong>{formaterSøknadsspørsmålSvar(verdi)}</strong>
+                    </>
+                ) : (
+                    <>{`${navn}`}</>
+                )}
             </BodyShort>
             {visVarsel && <ExclamationmarkTriangleFillIcon />}
         </div>

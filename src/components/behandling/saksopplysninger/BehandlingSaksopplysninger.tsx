@@ -1,5 +1,5 @@
 import { BodyShort, Heading } from '@navikt/ds-react';
-import { alderFraDato, formaterDatotekst } from '~/utils/date';
+import { alderFraDato, datoMax, datoMin, finn18årsdag, formaterDatotekst } from '~/utils/date';
 import { ReactNode } from 'react';
 import { useBehandling } from '../context/BehandlingContext';
 import { Separator } from '../../separator/Separator';
@@ -15,9 +15,14 @@ import { Rammebehandlingstype } from '~/types/Rammebehandling';
 import { SøknadOpplysningerFraVedtak } from '~/components/behandling/saksopplysninger/søknad/SøknadOpplysningerFraVedtak';
 
 import style from './BehandlingSaksopplysninger.module.css';
+import { erDatoIPeriode } from '~/utils/periode';
+import { hentVedtatteSøknadsbehandlinger } from '~/utils/sak';
+import { useSak } from '~/context/sak/SakContext';
+import { Periode } from '~/types/Periode';
 
 export const BehandlingSaksopplysninger = () => {
     const { behandling } = useBehandling();
+    const sak = useSak().sak;
 
     const { saksopplysninger, type, attesteringer } = behandling;
     const { ytelser, tiltakspengevedtakFraArena, tiltaksdeltagelse, fødselsdato } =
@@ -26,6 +31,36 @@ export const BehandlingSaksopplysninger = () => {
     const harYtelser = ytelser.length > 0;
     const harTiltakspengevedtakFraArena = tiltakspengevedtakFraArena.length > 0;
     const harTiltaksdeltakelse = tiltaksdeltagelse.length > 0;
+
+    const fyller18ÅrISøknadsperioden = (): boolean => {
+        const attendeBursdag = finn18årsdag(fødselsdato);
+
+        if (behandling.type === Rammebehandlingstype.SØKNADSBEHANDLING) {
+            const tiltaksperiode = hentTiltaksperiode(behandling);
+            return tiltaksperiode ? erDatoIPeriode(attendeBursdag, tiltaksperiode) : false;
+        }
+
+        // For revurderinger: Sjekk mot alle vedtatte søknadsbehandlinger
+        const vedtatteSøknadsbehandlinger = hentVedtatteSøknadsbehandlinger(sak);
+        if (vedtatteSøknadsbehandlinger.length === 0) return false;
+
+        const fraOgMedDatoer = vedtatteSøknadsbehandlinger
+            .map((beh) => beh.søknad?.tiltaksdeltakelseperiodeDetErSøktOm?.fraOgMed)
+            .filter((dato): dato is string => dato !== undefined);
+
+        const tilOgMedDatoer = vedtatteSøknadsbehandlinger
+            .map((beh) => beh.søknad?.tiltaksdeltakelseperiodeDetErSøktOm?.tilOgMed)
+            .filter((dato): dato is string => dato !== undefined);
+
+        if (fraOgMedDatoer.length === 0 || tilOgMedDatoer.length === 0) return false;
+
+        const totalTiltaksperiode: Periode = {
+            fraOgMed: datoMin(...fraOgMedDatoer),
+            tilOgMed: datoMax(...tilOgMedDatoer),
+        };
+
+        return erDatoIPeriode(attendeBursdag, totalTiltaksperiode);
+    };
 
     return (
         <>
@@ -77,6 +112,9 @@ export const BehandlingSaksopplysninger = () => {
                     navn={'Fødselsdato'}
                     verdi={formaterDatotekst(fødselsdato)}
                 />
+                {fyller18ÅrISøknadsperioden() && (
+                    <BehandlingSaksopplysning navn={'Fyller 18 i søknadsperioden'} visVarsel />
+                )}
             </OpplysningerSeksjon>
 
             <Separator />
