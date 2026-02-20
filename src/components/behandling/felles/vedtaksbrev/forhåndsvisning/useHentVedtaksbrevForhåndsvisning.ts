@@ -11,7 +11,7 @@ export type SøknadsbehandlingInnvilgelseBrevForhåndsvisningDTO = {
     resultat: SøknadsbehandlingResultat.INNVILGELSE;
     fritekst: Nullable<string>;
     innvilgelsesperioder: Innvilgelsesperiode[];
-    barnetillegg?: BarnetilleggPeriode[];
+    barnetillegg: Nullable<BarnetilleggPeriode[]>;
 };
 
 export type SøknadsbehandlingAvslagBrevForhåndsvisningDTO = {

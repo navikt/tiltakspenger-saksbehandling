@@ -8,7 +8,11 @@ import {
     SøknadsbehandlingSkjemaContext,
     useSøknadsbehandlingSkjema,
 } from '~/components/behandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
-import { SøknadsbehandlingBrevForhåndsvisningDTO } from '~/components/behandling/felles/vedtaksbrev/forhåndsvisning/useHentVedtaksbrevForhåndsvisning';
+import {
+    SøknadsbehandlingAvslagBrevForhåndsvisningDTO,
+    SøknadsbehandlingBrevForhåndsvisningDTO,
+    SøknadsbehandlingInnvilgelseBrevForhåndsvisningDTO,
+} from '~/components/behandling/felles/vedtaksbrev/forhåndsvisning/useHentVedtaksbrevForhåndsvisning';
 import { useSak } from '~/context/sak/SakContext';
 
 export const SøknadsbehandlingBrev = () => {
@@ -37,7 +41,7 @@ const tilForhåndsvisningDTO = (
                 resultat: SøknadsbehandlingResultat.AVSLAG,
                 fritekst: skjema.textAreas.brevtekst.getValue(),
                 avslagsgrunner: skjema.avslagsgrunner,
-            };
+            } satisfies SøknadsbehandlingAvslagBrevForhåndsvisningDTO;
         }
 
         case SøknadsbehandlingResultat.INNVILGELSE: {
@@ -51,8 +55,8 @@ const tilForhåndsvisningDTO = (
                 resultat: SøknadsbehandlingResultat.INNVILGELSE,
                 fritekst: skjema.textAreas.brevtekst.getValue(),
                 innvilgelsesperioder: innvilgelse.innvilgelsesperioder,
-                barnetillegg: innvilgelse.barnetilleggPerioder,
-            };
+                barnetillegg: innvilgelse.harBarnetillegg ? innvilgelse.barnetilleggPerioder : null,
+            } satisfies SøknadsbehandlingInnvilgelseBrevForhåndsvisningDTO;
         }
 
         case SøknadsbehandlingResultat.IKKE_VALGT: {
