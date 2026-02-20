@@ -33,6 +33,8 @@ export const JournalpostId = (props: {
         journalpostId: shouldValidate ? journalpostId : '',
     });
 
+    const fnrMatcherIkke = !!data && data.journalpostFinnes && data.gjelderInnsendtFnr === false;
+
     // Valideringsfeil som skal stoppe innsending av skjema
     React.useEffect(() => {
         const value = journalpostIdWatch?.trim() || '';
@@ -62,11 +64,28 @@ export const JournalpostId = (props: {
                 setDatoOpprettet('');
                 return;
             }
+            if (fnrMatcherIkke) {
+                setError(journalpostIdFelt, {
+                    type: 'remote',
+                    message: 'Journalposten tilhører en annen person enn søker.',
+                });
+                setDatoOpprettet('');
+                return;
+            }
 
             clearErrors(journalpostIdFelt);
             setDatoOpprettet(data.datoOpprettet ?? '');
         }
-    }, [journalpostIdWatch, shouldValidate, isLoading, error, data, clearErrors, setError]);
+    }, [
+        journalpostIdWatch,
+        shouldValidate,
+        isLoading,
+        error,
+        data,
+        fnrMatcherIkke,
+        clearErrors,
+        setError,
+    ]);
 
     const valideringsInfo = React.useMemo(() => {
         const value = (journalpostIdWatch ?? '').trim();
@@ -80,28 +99,25 @@ export const JournalpostId = (props: {
             );
         }
         if (data) {
-            // Skal bare advare saksbehandler om mismatch, ikke hindre innsending
             if (data.journalpostFinnes && data.gjelderInnsendtFnr) {
                 return (
                     <InlineMessage status="success" aria-live="polite" size="small">
-                        Journalpost finnes og søker står som avsender.
+                        Journalpost finnes og tilhører søker.
                     </InlineMessage>
                 );
             }
 
-            if (data.gjelderInnsendtFnr === false) {
+            if (data.gjelderInnsendtFnr === undefined) {
                 return (
                     <InlineMessage status="warning" aria-live="polite" size="small">
-                        Avsenderen av journalposten er en annen person enn søker, sjekk om
-                        journalposten tilhører søker eller om det er verge/fullmakt.
+                        Klarte ikke finne ut hvem journalposten tilhører. Sjekk om journalposten
+                        tilhører søker.
                     </InlineMessage>
                 );
             }
         }
         return null;
     }, [journalpostIdWatch, props.fnrFraPersonopplysninger, shouldValidate, isLoading, data]);
-
-    const fnrMatcherIkke = !!data && data.journalpostFinnes && data.gjelderInnsendtFnr === false;
 
     return (
         <div className={props.className}>
@@ -129,6 +145,9 @@ export const JournalpostId = (props: {
                             }
                             if (data && data?.journalpostFinnes === false) {
                                 return 'Journalpost finnes ikke.';
+                            }
+                            if (data && data?.gjelderInnsendtFnr === false) {
+                                return 'Journalposten tilhører en annen person enn søker.';
                             }
                         } else {
                             return `JournalpostId må inneholde minst ${MIN_LENGDE_FØR_VALIDERING} tegn.`;
