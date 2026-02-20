@@ -41,25 +41,16 @@ export const BehandlingSaksopplysninger = () => {
         }
 
         // For revurderinger: Sjekk mot alle vedtatte søknadsbehandlinger
-        const vedtatteSøknadsbehandlinger = hentVedtatteSøknadsbehandlinger(sak);
-        if (vedtatteSøknadsbehandlinger.length === 0) return false;
+        const perioderDetErSøktOm = hentVedtatteSøknadsbehandlinger(sak).map(
+            (beh) => beh.søknad.tiltaksdeltakelseperiodeDetErSøktOm,
+        );
+        
+        if (perioderDetErSøktOm.length === 0) return false
 
-        const fraOgMedDatoer = vedtatteSøknadsbehandlinger
-            .map((beh) => beh.søknad?.tiltaksdeltakelseperiodeDetErSøktOm?.fraOgMed)
-            .filter((dato): dato is string => dato !== undefined);
-
-        const tilOgMedDatoer = vedtatteSøknadsbehandlinger
-            .map((beh) => beh.søknad?.tiltaksdeltakelseperiodeDetErSøktOm?.tilOgMed)
-            .filter((dato): dato is string => dato !== undefined);
-
-        if (fraOgMedDatoer.length === 0 || tilOgMedDatoer.length === 0) return false;
-
-        const totalTiltaksperiode: Periode = {
-            fraOgMed: datoMin(...fraOgMedDatoer),
-            tilOgMed: datoMax(...tilOgMedDatoer),
-        };
-
-        return erDatoIPeriode(attendeBursdag, totalTiltaksperiode);
+        return erDatoIPeriode(
+            attendeBursdag,
+            totalPeriode(perioderDetErSøktOm)
+        );
     };
 
     return (
