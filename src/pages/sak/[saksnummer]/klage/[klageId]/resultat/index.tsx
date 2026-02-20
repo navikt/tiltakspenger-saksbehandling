@@ -169,6 +169,7 @@ const OpprettholdResultat = (props: { sak: SakProps; klage: Klagebehandling }) =
 
     const journalfører = !journalført && !distribuert && !oversendt;
     const distribuer = journalført && !distribuert && !oversendt;
+    const oversender = journalført && distribuert && !oversendt;
 
     const journalførtEllerEtter = journalført || distribuert || oversendt;
 
@@ -208,13 +209,15 @@ const OpprettholdResultat = (props: { sak: SakProps; klage: Klagebehandling }) =
                               : 'uncompleted'
                     }
                     title={
-                        props.klage.journalføringstidspunktInnstillingsbrev
+                        journalført
                             ? 'Journalført innstillingsbrev'
                             : 'Venter på journalføring av innstillingsbrev'
                     }
                     timestamp={
-                        props.klage.journalføringstidspunktInnstillingsbrev
-                            ? formaterTidspunkt(props.klage.journalføringstidspunktInnstillingsbrev)
+                        journalført
+                            ? formaterTidspunkt(
+                                  props.klage.journalføringstidspunktInnstillingsbrev!,
+                              )
                             : undefined
                     }
                     bullet={
@@ -227,13 +230,13 @@ const OpprettholdResultat = (props: { sak: SakProps; klage: Klagebehandling }) =
                         distribuertEllerEtter ? 'completed' : distribuer ? 'active' : 'uncompleted'
                     }
                     title={
-                        props.klage.distribusjonstidspunktInnstillingsbrev
+                        distribuert
                             ? 'Distribuert innstillingsbrev'
                             : 'Venter på distribusjon av innstillingsbrev'
                     }
                     timestamp={
-                        props.klage.distribusjonstidspunktInnstillingsbrev
-                            ? formaterTidspunkt(props.klage.distribusjonstidspunktInnstillingsbrev)
+                        distribuert
+                            ? formaterTidspunkt(props.klage.distribusjonstidspunktInnstillingsbrev!)
                             : undefined
                     }
                     bullet={
@@ -246,16 +249,16 @@ const OpprettholdResultat = (props: { sak: SakProps; klage: Klagebehandling }) =
 
                 <Process.Event
                     status={
-                        oversendtEllerEtter ? 'completed' : oversendt ? 'active' : 'uncompleted'
+                        oversendtEllerEtter ? 'completed' : oversender ? 'active' : 'uncompleted'
                     }
                     title={
-                        props.klage.oversendtKlageinstansenTidspunkt
+                        oversendtEllerEtter
                             ? 'Overført til Nav Klageinstans'
                             : 'Venter på overførsel til Nav Klageinstans'
                     }
                     timestamp={
-                        props.klage.oversendtKlageinstansenTidspunkt
-                            ? formaterTidspunkt(props.klage.oversendtKlageinstansenTidspunkt)
+                        oversendtEllerEtter
+                            ? formaterTidspunkt(props.klage.oversendtKlageinstansenTidspunkt!)
                             : undefined
                     }
                     bullet={
