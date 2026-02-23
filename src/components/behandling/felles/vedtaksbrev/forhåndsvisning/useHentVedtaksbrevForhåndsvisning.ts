@@ -3,7 +3,7 @@ import { Nullable } from '~/types/UtilTypes';
 import { Rammebehandling } from '~/types/Rammebehandling';
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';
 import { Avslagsgrunn, SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
-import { HjemmelForStansEllerOpphør, RevurderingResultat } from '~/types/Revurdering';
+import { HjemmelForOpphør, HjemmelForStans, RevurderingResultat } from '~/types/Revurdering';
 import { Innvilgelsesperiode } from '~/types/Innvilgelsesperiode';
 import { Periode } from '~/types/Periode';
 
@@ -27,7 +27,7 @@ export type SøknadsbehandlingBrevForhåndsvisningDTO =
 export type RevurderingStansBrevForhåndsvisningDTO = {
     resultat: RevurderingResultat.STANS;
     fritekst: Nullable<string>;
-    valgteHjemler: HjemmelForStansEllerOpphør[];
+    valgteHjemler: HjemmelForStans[];
 } & (
     | {
           stansFraOgMed: null;
@@ -56,7 +56,7 @@ export type OmgjøringInnvilgelseBrevForhåndsvisningDTO = {
 export type OmgjøringOpphørBrevForhåndsvisningDTO = {
     resultat: RevurderingResultat.OMGJØRING_OPPHØR;
     fritekst: Nullable<string>;
-    valgteHjemler: HjemmelForStansEllerOpphør[];
+    valgteHjemler: HjemmelForOpphør[];
     vedtaksperiode: Periode;
 };
 

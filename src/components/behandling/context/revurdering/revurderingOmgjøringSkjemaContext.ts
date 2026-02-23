@@ -1,5 +1,5 @@
 import {
-    HjemmelForStansEllerOpphør,
+    HjemmelForOpphør,
     Omgjøring,
     OmgjøringResultat,
     RevurderingResultat,
@@ -32,7 +32,7 @@ export type OmgjøringIkkeValgtState = {
 export type OmgjøringOpphørState = {
     resultat: RevurderingResultat.OMGJØRING_OPPHØR;
     vedtaksperiode: Periode;
-    valgteHjemler: HjemmelForStansEllerOpphør[];
+    valgteHjemler: HjemmelForOpphør[];
 };
 
 export type OmgjøringInnvilgelseState = {
@@ -57,7 +57,7 @@ type OmgjøringSetResultatAction = {
 
 type OmgjøringOpphørAction = {
     type: 'setHjemlerForOpphør';
-    payload: { hjemler: HjemmelForStansEllerOpphør[] };
+    payload: { hjemler: HjemmelForOpphør[] };
 };
 
 type VedtaksperiodeAction = {

@@ -16,7 +16,7 @@ type RevurderingBase = RammebehandlingBase & {
 
 export type RevurderingStans = RevurderingBase & {
     resultat: RevurderingResultat.STANS;
-    valgtHjemmelHarIkkeRettighet: Nullable<HjemmelForStansEllerOpphør[]>;
+    valgtHjemmelHarIkkeRettighet: Nullable<HjemmelForStans[]>;
     harValgtStansFraFørsteDagSomGirRett: Nullable<boolean>;
     harValgtStansTilSisteDagSomGirRett: Nullable<boolean>;
 };
@@ -38,7 +38,7 @@ export type OmgjøringInnvilgelse = RevurderingBase & {
 export type OmgjøringOpphør = RevurderingBase & {
     resultat: RevurderingResultat.OMGJØRING_OPPHØR;
     vedtaksperiode: Periode;
-    valgteHjemler: HjemmelForStansEllerOpphør[];
+    valgteHjemler: HjemmelForOpphør[];
     omgjørVedtak: VedtakId;
 };
 
@@ -66,7 +66,7 @@ export type OmgjøringResultat =
 
 export type OppdaterRevurderingStansDTO = OppdaterBehandlingBaseDTO & {
     resultat: RevurderingResultat.STANS;
-    valgteHjemler: HjemmelForStansEllerOpphør[];
+    valgteHjemler: HjemmelForStans[];
 } & (
         | {
               stansFraOgMed: null;
@@ -94,7 +94,7 @@ export type OppdaterOmgjøringInnvilgelseDTO = OppdaterBehandlingBaseDTO & {
 export type OppdaterOmgjøringOpphørDTO = OppdaterBehandlingBaseDTO & {
     resultat: RevurderingResultat.OMGJØRING_OPPHØR;
     vedtaksperiode: Periode;
-    valgteHjemler: HjemmelForStansEllerOpphør[];
+    valgteHjemler: HjemmelForOpphør[];
 };
 
 export type OppdaterOmgjøringIkkeValgtDTO = OppdaterBehandlingBaseDTO & {
@@ -118,16 +118,27 @@ export type StartRevurderingDTO = {
     rammevedtakIdSomOmgjøres: Nullable<VedtakId>;
 };
 
-// TODO: split i separate enums for stans og opphør
-export enum HjemmelForStansEllerOpphør {
-    DELTAR_IKKE_PÅ_ARBEIDSMARKEDSTILTAK = 'DeltarIkkePåArbeidsmarkedstiltak',
-    ALDER = 'Alder',
-    LIVSOPPHOLDYTELSER = 'Livsoppholdytelser',
-    KVALIFISERINGSPROGRAMMET = 'Kvalifiseringsprogrammet',
-    INTRODUKSJONSPROGRAMMET = 'Introduksjonsprogrammet',
-    LØNN_FRA_TILTAKSARRANGØR = 'LønnFraTiltaksarrangør',
-    LØNN_FRA_ANDRE = 'LønnFraAndre',
-    INSTITUSJONSOPPHOLD = 'Institusjonsopphold',
-    IKKE_LOVLIG_OPPHOLD = 'IkkeLovligOpphold',
-    FREMMET_FOR_SENT = 'FremmetForSent',
+export enum HjemmelForStans {
+    DeltarIkkePåArbeidsmarkedstiltak = 'DeltarIkkePåArbeidsmarkedstiltak',
+    Alder = 'Alder',
+    Livsoppholdytelser = 'Livsoppholdytelser',
+    Kvalifiseringsprogrammet = 'Kvalifiseringsprogrammet',
+    Introduksjonsprogrammet = 'Introduksjonsprogrammet',
+    LønnFraTiltaksarrangør = 'LønnFraTiltaksarrangør',
+    LønnFraAndre = 'LønnFraAndre',
+    Institusjonsopphold = 'Institusjonsopphold',
+    IkkeLovligOpphold = 'IkkeLovligOpphold',
+}
+
+export enum HjemmelForOpphør {
+    DeltarIkkePåArbeidsmarkedstiltak = 'DeltarIkkePåArbeidsmarkedstiltak',
+    Alder = 'Alder',
+    Livsoppholdytelser = 'Livsoppholdytelser',
+    Kvalifiseringsprogrammet = 'Kvalifiseringsprogrammet',
+    Introduksjonsprogrammet = 'Introduksjonsprogrammet',
+    LønnFraTiltaksarrangør = 'LønnFraTiltaksarrangør',
+    LønnFraAndre = 'LønnFraAndre',
+    Institusjonsopphold = 'Institusjonsopphold',
+    IkkeLovligOpphold = 'IkkeLovligOpphold',
+    FremmetForSent = 'FremmetForSent',
 }

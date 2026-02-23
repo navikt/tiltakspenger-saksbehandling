@@ -8,7 +8,7 @@ import {
 } from '~/components/behandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import { OmgjøringVedtaksperiodeVelger } from '~/components/behandling/revurdering/omgjøring/vedtaksperiode/OmgjøringVedtaksperiodeVelger';
 import { VedtakHjelpetekst } from '~/components/behandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
-import { HjemmelForStansEllerOpphør } from '~/types/Revurdering';
+import { HjemmelForOpphør } from '~/types/Revurdering';
 
 export const OmgjøringOpphørVelger = () => {
     const { valgteHjemler } = useOmgjøringOpphørSkjema();
@@ -61,9 +61,9 @@ export const OmgjøringOpphørVelger = () => {
     );
 };
 
-const hjemlerForOpphør: HjemmelForStansEllerOpphør[] = Object.values(HjemmelForStansEllerOpphør);
+const hjemlerForOpphør: HjemmelForOpphør[] = Object.values(HjemmelForOpphør);
 
-export const hjemlerForOpphørSomMåHaFritekst: ReadonlySet<HjemmelForStansEllerOpphør> = new Set([
-    HjemmelForStansEllerOpphør.FREMMET_FOR_SENT,
-    HjemmelForStansEllerOpphør.ALDER,
+export const hjemlerForOpphørSomMåHaFritekst: ReadonlySet<HjemmelForOpphør> = new Set([
+    HjemmelForOpphør.FremmetForSent,
+    HjemmelForOpphør.Alder,
 ]);
