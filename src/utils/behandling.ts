@@ -153,3 +153,7 @@ export const erOmgjøringResultat = (
 export const erRammebehandlingUnderAktivOmgjøring = (rb: Rammebehandling): boolean =>
     rb.status == Rammebehandlingsstatus.KLAR_TIL_BEHANDLING ||
     rb.status == Rammebehandlingsstatus.UNDER_BEHANDLING;
+
+export const erAvsluttet = (behandling: Rammebehandling): boolean =>
+    behandling.status === Rammebehandlingsstatus.AVBRUTT ||
+    behandling.status === Rammebehandlingsstatus.VEDTATT;
