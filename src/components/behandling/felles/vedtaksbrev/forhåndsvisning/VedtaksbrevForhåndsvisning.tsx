@@ -10,6 +10,7 @@ import React, { useEffect, useState } from 'react';
 
 import style from './VedtaksbrevForhåndsvisning.module.css';
 import { Rammebehandling } from '~/types/Rammebehandling';
+import { erAvsluttet } from '~/utils/behandling';
 
 type Props = {
     behandling: Rammebehandling;
@@ -42,6 +43,7 @@ export const VedtaksbrevForhåndsvisning = ({ behandling, hentDto, validering }:
                 icon={<EnvelopeOpenIcon />}
                 className={style.knapp}
                 loading={forhåndsvisningLaster}
+                disabled={erAvsluttet(behandling)}
                 onClick={async () => {
                     if (harValideringsfeil) {
                         setShowValidationError(true);

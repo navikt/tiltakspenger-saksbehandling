@@ -160,6 +160,7 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
                     variant="secondary"
                     size="small"
                     loading={forhåndsvisBrev.isMutating}
+                    disabled={meldekortBehandling.erAvsluttet}
                     onClick={() => {
                         //resetter eventuelle tidligere feil før ny request
                         forhåndsvisBrev.reset();

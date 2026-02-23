@@ -48,6 +48,7 @@ export const MeldekortOppsummering = ({ meldekortBehandling }: Props) => {
                 variant="secondary"
                 size="small"
                 loading={forhåndsvisBrev.isMutating}
+                disabled={meldekortBehandling.erAvsluttet}
                 onClick={() => {
                     forhåndsvisBrev.trigger(
                         { tekstTilVedtaksbrev: tekstTilVedtaksbrev, dager: dager },
