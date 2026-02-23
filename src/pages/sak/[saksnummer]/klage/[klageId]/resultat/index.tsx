@@ -269,7 +269,7 @@ const OpprettholdResultat = (props: { sak: SakProps; klage: Klagebehandling }) =
                     }
                 />
                 <Process.Event
-                    title="Fullført"
+                    title="Svar fra klageinstans"
                     status={erFullført ? 'completed' : 'uncompleted'}
                     bullet={<CheckmarkCircleIcon title="Fullført" fontSize="1.5rem" />}
                 />
