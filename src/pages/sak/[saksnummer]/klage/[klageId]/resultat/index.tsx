@@ -26,10 +26,7 @@ import {
 } from '@navikt/aksel-icons';
 import WarningCircleIcon from '~/icons/WarningCircleIcon';
 import { formaterTidspunkt } from '~/utils/date';
-import {
-    skalKunneFerdigstilleKlagen,
-    skalKunneOppretteNyRammebehandling,
-} from '~/utils/KlageinstanshendelseUtils';
+import { skalKunneOppretteNyRammebehandling } from '~/utils/KlageinstanshendelseUtils';
 import { useFerdigstillKlage } from '~/api/KlageApi';
 import router from 'next/router';
 
@@ -200,8 +197,6 @@ const OpprettholdResultat = (props: {
     const fåttSvarFraKA = (props.klage.klageinstanshendelser?.length ?? 0) > 0;
     const oversendtEllerEtter = oversendt || fåttSvarFraKA;
 
-    const kanFerdigstilleKlagen =
-        fåttSvarFraKA && skalKunneFerdigstilleKlagen(props.klage.klageinstanshendelser);
     const kanOppretteNyRammebehandling =
         fåttSvarFraKA && skalKunneOppretteNyRammebehandling(props.klage.klageinstanshendelser);
 
@@ -323,7 +318,15 @@ const OpprettholdResultat = (props: {
                 </LocalAlert>
             )}
 
-            {kanFerdigstilleKlagen && (
+            {kanOppretteNyRammebehandling ? (
+                <Button
+                    type="button"
+                    variant="secondary"
+                    onClick={() => setVilOppretteNyBehandling(true)}
+                >
+                    Opprett ny behandling
+                </Button>
+            ) : (
                 <Button
                     type="button"
                     loading={ferdigstillKlage.isMutating}
@@ -333,15 +336,6 @@ const OpprettholdResultat = (props: {
                 </Button>
             )}
 
-            {kanOppretteNyRammebehandling && (
-                <Button
-                    type="button"
-                    variant="secondary"
-                    onClick={() => setVilOppretteNyBehandling(true)}
-                >
-                    Opprett ny behandling
-                </Button>
-            )}
             {vilOppretteNyBehandling && (
                 <VelgOmgjøringsbehandlingModal
                     sakId={props.sak.sakId}

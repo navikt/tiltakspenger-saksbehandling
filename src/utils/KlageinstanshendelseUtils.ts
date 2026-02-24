@@ -23,19 +23,6 @@ export const erKlageinstanshendelseFeilregistrert = (
 ): h is BehandlingFeilregistrertHendelse =>
     h.hendelsestype === KlageHendelsestype.BEHANDLING_FEILREGISTRERT;
 
-export const skalKunneFerdigstilleKlagen = (hendelser: Nullable<Klageinstanshendelse[]>) => {
-    const sisteHendelse = hendelser?.at(-1);
-    if (!sisteHendelse) return false;
-
-    return (
-        erKlageinstanshendelseAvsluttet(sisteHendelse) &&
-        (sisteHendelse.utfall === KlageHendelseKlagebehandlingAvsluttetUtfall.TRUKKET ||
-            sisteHendelse.utfall === KlageHendelseKlagebehandlingAvsluttetUtfall.STADFESTELSE ||
-            sisteHendelse.utfall === KlageHendelseKlagebehandlingAvsluttetUtfall.AVVIST ||
-            sisteHendelse.utfall === KlageHendelseKlagebehandlingAvsluttetUtfall.HENLAGT)
-    );
-};
-
 export const skalKunneOppretteNyRammebehandling = (hendelser: Nullable<Klageinstanshendelse[]>) => {
     const sisteHendelse = hendelser?.at(-1);
     if (!sisteHendelse) return false;
