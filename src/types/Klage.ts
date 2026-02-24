@@ -1,4 +1,5 @@
 import { Avbrutt } from './Avbrutt';
+import { Klageinstanshendelse } from './Klageinstanshendelse';
 import { BehandlingId } from './Rammebehandling';
 import { VedtakId } from './Rammevedtak';
 import { Nullable } from './UtilTypes';
@@ -57,6 +58,7 @@ export interface Klagebehandling {
     journalføringstidspunktInnstillingsbrev: Nullable<string>;
     distribusjonstidspunktInnstillingsbrev: Nullable<string>;
     oversendtKlageinstansenTidspunkt: Nullable<string>;
+    klageinstanshendelser: Nullable<Klageinstanshendelse[]>;
 }
 
 export interface Brevtekst {

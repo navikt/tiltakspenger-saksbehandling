@@ -7,9 +7,11 @@ import {
     Heading,
     HStack,
     Label,
+    LocalAlert,
     Modal,
     Radio,
     RadioGroup,
+    Select,
     TextField,
     useRangeDatepicker,
     VStack,
@@ -22,28 +24,255 @@ import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { dateTilISOTekst } from '../../utils/date';
 
 import { Nullable } from '~/types/UtilTypes';
+import {
+    KlageHendelseFeilregistrertType,
+    KlageHendelseKlagebehandlingAvsluttetUtfall,
+    OmgjøringskravbehandlingAvsluttetUtfall,
+} from '~/types/Klageinstanshendelse';
 
 export const getServerSideProps = pageWithAuthentication(async () => {
     if (process?.env.NEXT_PUBLIC_DEVROUTES && process.env.NEXT_PUBLIC_DEVROUTES === 'true') {
         return { props: {} };
     }
 
-    return {
-        notFound: true,
-    };
+    return { notFound: true };
 });
 
 const LocalDevPage = () => {
     return (
         <VStack justify={'center'} align={'center'} style={{ height: '70vh' }}>
-            <HStack>
+            <HStack gap="space-6">
                 <NySøknad />
+                <KlageHendelse />
             </HStack>
         </VStack>
     );
 };
 
 export default LocalDevPage;
+
+const KlageHendelse = () => {
+    const [vilOppretteKlageHendelse, setVilOppretteKlageHendelse] = React.useState(false);
+
+    return (
+        <div>
+            {vilOppretteKlageHendelse && (
+                <KlageHendelseModal
+                    open={vilOppretteKlageHendelse}
+                    onClose={() => setVilOppretteKlageHendelse(false)}
+                />
+            )}
+            <Button variant="secondary" onClick={() => setVilOppretteKlageHendelse(true)}>
+                Ny klagehendelse
+            </Button>
+        </div>
+    );
+};
+
+interface KlageHendelseFormData {
+    klagebehandlingId: string;
+    type: LokalHendelseType | '';
+    utfall: LokalHendelseUtfall | '';
+}
+
+enum LokalHendelseType {
+    KLAGEBEHANDLING_AVSLUTTET = 'KLAGEBEHANDLING_AVSLUTTET',
+    OMGJOERINGSKRAVBEHANDLING_AVSLUTTET = 'OMGJOERINGSKRAVBEHANDLING_AVSLUTTET',
+    BEHANDLING_FEILREGISTRERT = 'BEHANDLING_FEILREGISTRERT',
+}
+
+type LokalHendelseUtfall =
+    | KlageHendelseKlagebehandlingAvsluttetUtfall
+    | OmgjøringskravbehandlingAvsluttetUtfall
+    | KlageHendelseFeilregistrertType;
+
+const KlageHendelseModal = (props: { open: boolean; onClose: () => void }) => {
+    const nyKlageHendelse = useFetchJsonFraApi<void, KlageHendelseFormData>(
+        '/dev/klage/hendelse',
+        'POST',
+    );
+
+    const form = useForm<KlageHendelseFormData>({
+        defaultValues: {
+            klagebehandlingId: '',
+            type: '',
+            utfall: '',
+        },
+        resolver: async (values) => {
+            const errors: Record<string, { message: string }> = {};
+            if (!values.klagebehandlingId) {
+                errors.klagebehandlingId = { message: 'Klagebehandling ID er påkrevd' };
+            }
+            if (!values.type) {
+                errors.type = { message: 'Type er påkrevd' };
+            }
+            if (!values.utfall) {
+                errors.utfall = { message: 'Utfall er påkrevd' };
+            }
+
+            if (values.type && values.utfall) {
+                if (values.type === LokalHendelseType.KLAGEBEHANDLING_AVSLUTTET) {
+                    if (
+                        !Object.values(KlageHendelseKlagebehandlingAvsluttetUtfall).includes(
+                            values.utfall as KlageHendelseKlagebehandlingAvsluttetUtfall,
+                        )
+                    ) {
+                        errors.utfall = { message: 'Ugyldig utfall for klagebehandling avsluttet' };
+                    }
+                } else if (values.type === LokalHendelseType.OMGJOERINGSKRAVBEHANDLING_AVSLUTTET) {
+                    if (
+                        !Object.values(OmgjøringskravbehandlingAvsluttetUtfall).includes(
+                            values.utfall as OmgjøringskravbehandlingAvsluttetUtfall,
+                        )
+                    ) {
+                        errors.utfall = {
+                            message: 'Ugyldig utfall for omgjøringskravbehandling avsluttet',
+                        };
+                    }
+                } else if (values.type === LokalHendelseType.BEHANDLING_FEILREGISTRERT) {
+                    if (
+                        !Object.values(KlageHendelseFeilregistrertType).includes(
+                            values.utfall as KlageHendelseFeilregistrertType,
+                        )
+                    ) {
+                        errors.utfall = { message: 'Ugyldig utfall for behandling feilregistrert' };
+                    }
+                }
+            }
+
+            return { values, errors };
+        },
+    });
+
+    const type = form.watch('type');
+
+    const onSubmit = (values: KlageHendelseFormData) => {
+        nyKlageHendelse.trigger(values);
+        props.onClose();
+    };
+
+    return (
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+            <Modal aria-label="Lag ny klagehendelse" open={props.open} onClose={props.onClose}>
+                <Modal.Header>
+                    <Heading size="medium">Lag ny klagehendelse</Heading>
+                </Modal.Header>
+                <Modal.Body>
+                    <VStack gap="space-20">
+                        <Controller
+                            control={form.control}
+                            name={'klagebehandlingId'}
+                            render={({ field, fieldState }) => (
+                                <TextField
+                                    {...field}
+                                    error={fieldState.error?.message}
+                                    label="Klagebehandling ID"
+                                    description="IDen til klagebehandlingen hendelsen skal knyttes til"
+                                    size="small"
+                                />
+                            )}
+                        />
+                        <Controller
+                            control={form.control}
+                            name={'type'}
+                            render={({ field, fieldState }) => (
+                                <Select
+                                    {...field}
+                                    label="Type"
+                                    size="small"
+                                    error={fieldState.error?.message}
+                                    onChange={(e) => {
+                                        field.onChange(e);
+                                        form.setValue('utfall', '');
+                                    }}
+                                >
+                                    <option value="">Velg type</option>
+                                    <option value={LokalHendelseType.KLAGEBEHANDLING_AVSLUTTET}>
+                                        Klagebehandling avsluttet
+                                    </option>
+                                    <option
+                                        value={
+                                            LokalHendelseType.OMGJOERINGSKRAVBEHANDLING_AVSLUTTET
+                                        }
+                                    >
+                                        Omgjøringskravbehandling avsluttet
+                                    </option>
+                                    <option value={LokalHendelseType.BEHANDLING_FEILREGISTRERT}>
+                                        Behandling feilregistrert
+                                    </option>
+                                </Select>
+                            )}
+                        />
+                        {type && (
+                            <Controller
+                                control={form.control}
+                                name={'utfall'}
+                                render={({ field, fieldState }) => (
+                                    <Select
+                                        {...field}
+                                        label="Utfall"
+                                        size="small"
+                                        error={fieldState.error?.message}
+                                    >
+                                        <option value="">Velg utfall</option>
+                                        {type === LokalHendelseType.KLAGEBEHANDLING_AVSLUTTET &&
+                                            Object.values(
+                                                KlageHendelseKlagebehandlingAvsluttetUtfall,
+                                            ).map((utfall) => (
+                                                <option key={utfall} value={utfall}>
+                                                    {utfall}
+                                                </option>
+                                            ))}
+                                        {type ===
+                                            LokalHendelseType.OMGJOERINGSKRAVBEHANDLING_AVSLUTTET &&
+                                            Object.values(
+                                                OmgjøringskravbehandlingAvsluttetUtfall,
+                                            ).map((utfall) => (
+                                                <option key={utfall} value={utfall}>
+                                                    {utfall}
+                                                </option>
+                                            ))}
+                                        {type === LokalHendelseType.BEHANDLING_FEILREGISTRERT &&
+                                            Object.values(KlageHendelseFeilregistrertType).map(
+                                                (utfall) => (
+                                                    <option key={utfall} value={utfall}>
+                                                        {utfall}
+                                                    </option>
+                                                ),
+                                            )}
+                                    </Select>
+                                )}
+                            />
+                        )}
+                    </VStack>
+                </Modal.Body>
+                <Modal.Footer>
+                    {nyKlageHendelse.error && (
+                        <LocalAlert status="error">
+                            <LocalAlert.Header>
+                                <LocalAlert.Title>En feil skjedde</LocalAlert.Title>
+                            </LocalAlert.Header>
+                            <LocalAlert.Content>{nyKlageHendelse.error.message}</LocalAlert.Content>
+                        </LocalAlert>
+                    )}
+                    <HStack gap="space-16">
+                        <Button
+                            variant="secondary"
+                            type="button"
+                            onClick={props.onClose}
+                            size="small"
+                        >
+                            Avbryt
+                        </Button>
+                        <Button variant="primary" type="submit" size="small">
+                            Lag klagehendelse
+                        </Button>
+                    </HStack>
+                </Modal.Footer>
+            </Modal>
+        </form>
+    );
+};
 
 const NySøknad = () => {
     const [vilOppretteNySøknad, setVilOppretteNySøknad] = React.useState(false);

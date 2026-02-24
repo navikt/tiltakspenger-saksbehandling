@@ -160,8 +160,7 @@ const Omgjøringsresultat = (props: {
 };
 
 const OpprettholdResultat = (props: { sak: SakProps; klage: Klagebehandling }) => {
-    //behov for klagebehandling_avsluttet hendelse
-    const erFullført = false;
+    const erFullført = (props.klage.klageinstanshendelser?.length ?? 0) > 0;
 
     const journalført = !!props.klage.journalføringstidspunktInnstillingsbrev;
     const distribuert = !!props.klage.distribusjonstidspunktInnstillingsbrev;
@@ -272,7 +271,17 @@ const OpprettholdResultat = (props: { sak: SakProps; klage: Klagebehandling }) =
                     title="Svar fra klageinstans"
                     status={erFullført ? 'completed' : 'uncompleted'}
                     bullet={<CheckmarkCircleIcon title="Fullført" fontSize="1.5rem" />}
-                />
+                >
+                    <Heading size="xsmall">Hendelseslogg</Heading>
+                    <VStack>
+                        {props.klage.klageinstanshendelser?.map((hendelse) => (
+                            <VStack key={hendelse.id} align="start" gap="space-8">
+                                <Heading size="xsmall">{hendelse.id}</Heading>
+                                <span>{formaterTidspunkt(hendelse.opprettet)}</span>
+                            </VStack>
+                        ))}
+                    </VStack>
+                </Process.Event>
             </Process>
         </VStack>
     );

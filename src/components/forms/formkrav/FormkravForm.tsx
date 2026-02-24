@@ -47,7 +47,6 @@ const FormkravForm = (props: {
         <VStack gap="space-32" align="start">
             <JournalpostId
                 fnrFraPersonopplysninger={props.fnrFraPersonopplysninger}
-                size="small"
                 readonly={props.readonly}
                 className={styles.journalpostIdInputContainer}
             />
@@ -58,7 +57,6 @@ const FormkravForm = (props: {
                     <Select
                         {...field}
                         label="Vedtaket som er påklaget"
-                        size="small"
                         error={fieldState.error?.message}
                         readOnly={props.readonly}
                     >
@@ -87,7 +85,6 @@ const FormkravForm = (props: {
                         selected={field.value ?? undefined}
                         error={fieldState.error?.message}
                         label="Innsendingsdato for klagen"
-                        size="small"
                         readOnly={props.readonly}
                     />
                 )}
@@ -114,7 +111,6 @@ const FormkravForm = (props: {
                     <Select
                         {...field}
                         label="Innsendingskilde for klagen"
-                        size="small"
                         error={fieldState.error?.message}
                         readOnly={props.readonly}
                     >
@@ -135,7 +131,6 @@ const FormkravForm = (props: {
                     <RadioGroup
                         {...field}
                         legend="Er klager part i saken?"
-                        size="small"
                         error={fieldState.error?.message}
                         readOnly={props.readonly}
                     >
@@ -153,7 +148,6 @@ const FormkravForm = (props: {
                     <RadioGroup
                         {...field}
                         legend="Klages det på konkrete elementer i vedtaket?"
-                        size="small"
                         error={fieldState.error?.message}
                         readOnly={props.readonly}
                     >
@@ -171,7 +165,6 @@ const FormkravForm = (props: {
                     <RadioGroup
                         {...field}
                         legend="Er klagefristen overholdt?"
-                        size="small"
                         error={fieldState.error?.message}
                         readOnly={props.readonly}
                     >
@@ -191,7 +184,6 @@ const FormkravForm = (props: {
                             className={styles.erUnntakForKlagefristRadioGroup}
                             {...field}
                             legend="Er unntak for klagefristen oppfylt?"
-                            size="small"
                             error={fieldState.error?.message}
                             readOnly={props.readonly}
                         >
@@ -211,7 +203,6 @@ const FormkravForm = (props: {
                     <RadioGroup
                         {...field}
                         legend="Er klagen signert?"
-                        size="small"
                         error={fieldState.error?.message}
                         readOnly={props.readonly}
                     >
