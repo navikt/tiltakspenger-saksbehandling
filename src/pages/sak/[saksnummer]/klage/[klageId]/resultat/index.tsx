@@ -96,6 +96,7 @@ const ResultatPage = ({ sak, omgjøringsbehandling, vedtakSomPåklages, søknade
                 <OpprettholdResultat
                     sak={sak}
                     klage={klage}
+                    omgjøringsbehandling={omgjøringsbehandling}
                     vedtakSomPåklages={vedtakSomPåklages}
                     søknader={søknader}
                 />
@@ -171,6 +172,7 @@ const OpprettholdResultat = (props: {
     sak: SakProps;
     klage: Klagebehandling;
     vedtakSomPåklages: Nullable<Rammevedtak>;
+    omgjøringsbehandling: Nullable<Rammebehandling>;
     søknader: Søknad[];
 }) => {
     const [vilOppretteNyBehandling, setVilOppretteNyBehandling] = useState(false);
@@ -198,7 +200,9 @@ const OpprettholdResultat = (props: {
     const oversendtEllerEtter = oversendt || fåttSvarFraKA;
 
     const kanOppretteNyRammebehandling =
-        fåttSvarFraKA && skalKunneOppretteNyRammebehandling(props.klage.klageinstanshendelser);
+        fåttSvarFraKA &&
+        skalKunneOppretteNyRammebehandling(props.klage.klageinstanshendelser) &&
+        !props.klage.rammebehandlingId;
 
     return (
         <VStack gap="space-48" align="start">
