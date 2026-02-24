@@ -1,4 +1,4 @@
-import { BodyLong, Button, Heading, Radio, RadioGroup } from '@navikt/ds-react';
+import { Button, Heading, Radio, RadioGroup } from '@navikt/ds-react';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import {
     useOmgjøringSkjema,
@@ -7,7 +7,6 @@ import {
 import { useRevurderingOmgjøring } from '~/components/behandling/context/BehandlingContext';
 import { OmgjøringResultat, RevurderingResultat } from '~/types/Revurdering';
 import { useSak } from '~/context/sak/SakContext';
-import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
 import { hentRammevedtak } from '~/utils/sak';
 import { VedtakHjelpetekst } from '~/components/behandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
 
@@ -20,13 +19,11 @@ export const OmgjøringResultatVelger = () => {
     const { resultat, erReadonly } = useOmgjøringSkjema();
     const dispatch = useOmgjøringSkjemaDispatch();
 
-    const { opphørToggle } = useFeatureToggles();
-
     const vedtak = hentRammevedtak(sak, behandling.omgjørVedtak)!;
 
     const kanInnvilge =
         !!vedtak.gyldigeKommandoer.OMGJØR && vedtak.gjeldendeVedtaksperioder.length > 0;
-    const kanOpphøre = opphørToggle && !!vedtak.gyldigeKommandoer.OPPHØR;
+    const kanOpphøre = !!vedtak.gyldigeKommandoer.OPPHØR;
 
     return (
         <VedtakSeksjon>
@@ -82,11 +79,6 @@ export const OmgjøringResultatVelger = () => {
                         ' Velg opphør dersom omgjøringen skal være et rent opphør.'}
                     {!kanOpphøre &&
                         ` Vedtaket kan kun opphøres dersom det har gjeldende innvilgelsesperioder.`}
-                    {!opphørToggle && (
-                        <BodyLong size={'small'}>
-                            {'(Opphør er foreløpig ikke tilgjengelig i produksjon.)'}
-                        </BodyLong>
-                    )}
                 </VedtakHjelpetekst>
             </VedtakSeksjon.Høyre>
         </VedtakSeksjon>
