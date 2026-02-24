@@ -1,4 +1,5 @@
 import { Nullable } from '~/types/UtilTypes';
+import { RammebehandlingResultat } from '~/types/Rammebehandling';
 
 export interface BenkOversiktRequest {
     benktype: Nullable<BehandlingssammendragBenktype[]>;
@@ -28,6 +29,7 @@ export interface Behandlingssammendrag {
     erSattPåVent: boolean;
     sattPåVentBegrunnelse: Nullable<string>;
     sattPåVentFrist: Nullable<string>;
+    resultat: Nullable<RammebehandlingResultat>;
 }
 
 export enum BehandlingssammendragType {

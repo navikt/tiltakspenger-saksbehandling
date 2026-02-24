@@ -23,6 +23,7 @@ import {
 import { PERSONOVERSIKT_TABS } from '~/components/personoversikt/Personoversikt';
 import VisMer from '~/components/benk/VisMer';
 import { AkselColor } from '@navikt/ds-react/types/theme';
+import { behandlingResultatTilTag } from '~/utils/tekstformateringUtils';
 
 type Props = {
     data: BenkOversiktResponse;
@@ -139,10 +140,12 @@ const BenkTabell = ({ data, sorteringRetning, onSortChange }: Props) => {
                                 </HStack>
                             </Table.HeaderCell>
                             <Table.DataCell>
-                                <HStack gap="space-8">
+                                <HStack gap="space-16">
                                     <BodyShort>
                                         {behandlingstypeTextFormatter[behandling.behandlingstype]}
                                     </BodyShort>
+                                    {behandling.resultat &&
+                                        behandlingResultatTilTag(behandling.resultat)}
                                 </HStack>
                             </Table.DataCell>
                             <Table.DataCell className={styles.kommentar}>
