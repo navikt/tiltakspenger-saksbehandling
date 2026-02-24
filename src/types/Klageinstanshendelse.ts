@@ -4,7 +4,7 @@ import { Nullable } from './UtilTypes';
 export type KlageinstanshendelseId = `klagehendelse_${string}`;
 
 export interface Klageinstanshendelse {
-    id: KlageinstanshendelseId;
+    klagehendelseId: KlageinstanshendelseId;
     klagebehandlingId: KlageId;
     opprettet: string;
     sistEndret: string;

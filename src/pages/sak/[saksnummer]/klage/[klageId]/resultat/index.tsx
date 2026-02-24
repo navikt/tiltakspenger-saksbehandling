@@ -90,7 +90,12 @@ const ResultatPage = ({ sak, omgjøringsbehandling, vedtakSomPåklages, søknade
                     innloggetSaksbehandler={innloggetSaksbehandler}
                 />
             ) : klage.resultat === KlagebehandlingResultat.OPPRETTHOLDT ? (
-                <OpprettholdResultat sak={sak} klage={klage} />
+                <OpprettholdResultat
+                    sak={sak}
+                    klage={klage}
+                    vedtakSomPåklages={vedtakSomPåklages}
+                    søknader={søknader}
+                />
             ) : (
                 <>Ukjent resultat for klage</>
             )}
@@ -159,7 +164,14 @@ const Omgjøringsresultat = (props: {
     );
 };
 
-const OpprettholdResultat = (props: { sak: SakProps; klage: Klagebehandling }) => {
+const OpprettholdResultat = (props: {
+    sak: SakProps;
+    klage: Klagebehandling;
+    vedtakSomPåklages: Nullable<Rammevedtak>;
+    søknader: Søknad[];
+}) => {
+    const [vilOppretteNyBehandling, setVilOppretteNyBehandling] = useState(false);
+
     const erFullført = (props.klage.klageinstanshendelser?.length ?? 0) > 0;
 
     const journalført = !!props.klage.journalføringstidspunktInnstillingsbrev;
@@ -171,13 +183,11 @@ const OpprettholdResultat = (props: { sak: SakProps; klage: Klagebehandling }) =
     const oversender = journalført && distribuert && !oversendt;
 
     const journalførtEllerEtter = journalført || distribuert || oversendt;
-
     const distribuertEllerEtter = distribuert || oversendt;
-
     const oversendtEllerEtter = oversendt || erFullført;
 
     return (
-        <VStack gap="space-48">
+        <VStack gap="space-48" align="start">
             <HStack gap="space-8">
                 {erFullført ? (
                     <CheckmarkCircleIcon title="Sjekk ikon" fontSize="1.5rem" color="green" />
@@ -273,16 +283,36 @@ const OpprettholdResultat = (props: { sak: SakProps; klage: Klagebehandling }) =
                     bullet={<CheckmarkCircleIcon title="Fullført" fontSize="1.5rem" />}
                 >
                     <Heading size="xsmall">Hendelseslogg</Heading>
-                    <VStack>
+                    <ul>
                         {props.klage.klageinstanshendelser?.map((hendelse) => (
-                            <VStack key={hendelse.id} align="start" gap="space-8">
-                                <Heading size="xsmall">{hendelse.id}</Heading>
+                            <li key={hendelse.klagehendelseId}>
                                 <span>{formaterTidspunkt(hendelse.opprettet)}</span>
-                            </VStack>
+                            </li>
                         ))}
-                    </VStack>
+                    </ul>
                 </Process.Event>
             </Process>
+
+            {erFullført && (
+                <Button
+                    type="button"
+                    variant="secondary"
+                    onClick={() => setVilOppretteNyBehandling(true)}
+                >
+                    Opprett ny behandling
+                </Button>
+            )}
+            {vilOppretteNyBehandling && (
+                <VelgOmgjøringsbehandlingModal
+                    sakId={props.sak.sakId}
+                    saksnummer={props.sak.saksnummer}
+                    klageId={props.klage.id}
+                    vedtakSomPåklages={props.vedtakSomPåklages}
+                    søknader={props.søknader}
+                    åpen={vilOppretteNyBehandling}
+                    onClose={() => setVilOppretteNyBehandling(false)}
+                />
+            )}
         </VStack>
     );
 };
