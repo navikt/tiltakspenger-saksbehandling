@@ -26,6 +26,12 @@ import {
 } from '@navikt/aksel-icons';
 import WarningCircleIcon from '~/icons/WarningCircleIcon';
 import { formaterTidspunkt } from '~/utils/date';
+import {
+    skalKunneFerdigstilleKlagen,
+    skalKunneOppretteNyRammebehandling,
+} from '~/utils/KlageinstanshendelseUtils';
+import { useFerdigstillKlage } from '~/api/KlageApi';
+import router from 'next/router';
 
 type Props = {
     sak: SakProps;
@@ -172,7 +178,13 @@ const OpprettholdResultat = (props: {
 }) => {
     const [vilOppretteNyBehandling, setVilOppretteNyBehandling] = useState(false);
 
-    const erFullført = (props.klage.klageinstanshendelser?.length ?? 0) > 0;
+    const ferdigstillKlage = useFerdigstillKlage({
+        sakId: props.sak.sakId,
+        klageId: props.klage.id,
+        onSuccess: (klage) => {
+            router.push(`/sak/${klage.saksnummer}`);
+        },
+    });
 
     const journalført = !!props.klage.journalføringstidspunktInnstillingsbrev;
     const distribuert = !!props.klage.distribusjonstidspunktInnstillingsbrev;
@@ -184,12 +196,19 @@ const OpprettholdResultat = (props: {
 
     const journalførtEllerEtter = journalført || distribuert || oversendt;
     const distribuertEllerEtter = distribuert || oversendt;
-    const oversendtEllerEtter = oversendt || erFullført;
+
+    const fåttSvarFraKA = (props.klage.klageinstanshendelser?.length ?? 0) > 0;
+    const oversendtEllerEtter = oversendt || fåttSvarFraKA;
+
+    const kanFerdigstilleKlagen =
+        fåttSvarFraKA && skalKunneFerdigstilleKlagen(props.klage.klageinstanshendelser);
+    const kanOppretteNyRammebehandling =
+        fåttSvarFraKA && skalKunneOppretteNyRammebehandling(props.klage.klageinstanshendelser);
 
     return (
         <VStack gap="space-48" align="start">
             <HStack gap="space-8">
-                {erFullført ? (
+                {fåttSvarFraKA ? (
                     <CheckmarkCircleIcon title="Sjekk ikon" fontSize="1.5rem" color="green" />
                 ) : (
                     <WarningCircleIcon />
@@ -279,7 +298,7 @@ const OpprettholdResultat = (props: {
                 />
                 <Process.Event
                     title="Svar fra klageinstans"
-                    status={erFullført ? 'completed' : 'uncompleted'}
+                    status={fåttSvarFraKA ? 'completed' : 'uncompleted'}
                     bullet={<CheckmarkCircleIcon title="Fullført" fontSize="1.5rem" />}
                 >
                     <Heading size="xsmall">Hendelseslogg</Heading>
@@ -293,7 +312,28 @@ const OpprettholdResultat = (props: {
                 </Process.Event>
             </Process>
 
-            {erFullført && (
+            {ferdigstillKlage.error && (
+                <LocalAlert status="error" size="small">
+                    <LocalAlert.Header>
+                        <LocalAlert.Title>
+                            En feil skjedde under ferdigstilling av klage
+                        </LocalAlert.Title>
+                    </LocalAlert.Header>
+                    <LocalAlert.Content>{ferdigstillKlage.error.message}</LocalAlert.Content>
+                </LocalAlert>
+            )}
+
+            {kanFerdigstilleKlagen && (
+                <Button
+                    type="button"
+                    loading={ferdigstillKlage.isMutating}
+                    onClick={() => ferdigstillKlage.trigger()}
+                >
+                    Ferdigstill klagen
+                </Button>
+            )}
+
+            {kanOppretteNyRammebehandling && (
                 <Button
                     type="button"
                     variant="secondary"

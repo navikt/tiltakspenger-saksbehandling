@@ -113,7 +113,7 @@ const BrevKlagePage = ({ sak, påklagetVedtak }: Props) => {
         klageId: klage.id,
         onSuccess: (oppdatertKlage) => {
             setKlage(oppdatertKlage!);
-            router.push(`/sak/${sak.saksnummer}`);
+            router.push(`/sak/${sak.saksnummer}/klage/${klage.id}/resultat`);
         },
     });
 
