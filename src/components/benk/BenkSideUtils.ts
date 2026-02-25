@@ -18,6 +18,7 @@ export const behandlingsstatusTextFormatter: Record<BehandlingssammendragStatus,
     [BehandlingssammendragStatus.UNDER_BEHANDLING]: 'Under behandling',
     [BehandlingssammendragStatus.KLAR_TIL_BESLUTNING]: 'Klar til beslutning',
     [BehandlingssammendragStatus.UNDER_BESLUTNING]: 'Under beslutning',
+    [BehandlingssammendragStatus.KLAR_TIL_FERDIGSTILLING]: 'Klar til ferdigstilling',
 };
 
 export enum BehandlingssammendragKolonner {

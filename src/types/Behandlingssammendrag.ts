@@ -47,6 +47,7 @@ export enum BehandlingssammendragStatus {
     UNDER_BEHANDLING = 'UNDER_BEHANDLING',
     KLAR_TIL_BESLUTNING = 'KLAR_TIL_BESLUTNING',
     UNDER_BESLUTNING = 'UNDER_BESLUTNING',
+    KLAR_TIL_FERDIGSTILLING = 'KLAR_TIL_FERDIGSTILLING',
 }
 
 export enum BehandlingssammendragBenktype {
