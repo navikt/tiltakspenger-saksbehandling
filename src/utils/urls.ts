@@ -8,3 +8,6 @@ export const behandlingUrl = ({ saksnummer, id }: Pick<Rammebehandling, 'saksnum
     `/sak/${saksnummer}/behandling/${id}`;
 
 export const registrerSoknadUrl = (saksnummer: string) => `/sak/${saksnummer}/registrer-soknad`;
+
+export const personoversiktUrl = ({ saksnummer }: Pick<Rammebehandling, 'saksnummer'>) =>
+    `/sak/${saksnummer}`;

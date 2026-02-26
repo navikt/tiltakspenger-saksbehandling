@@ -7,6 +7,7 @@ import { eierBehandling } from '~/utils/tilganger';
 import { Saksbehandler } from '~/types/Saksbehandler';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
 import { Rammebehandlingsstatus } from '~/types/Rammebehandling';
+import { personoversiktUrl } from '~/utils/urls';
 
 export const visLeggTilbakeMenyvalg = (
     behandling: ÅpenRammebehandlingForOversikt,
@@ -32,7 +33,7 @@ const LeggTilbakeMenyvalg = ({ behandling }: Props) => {
             onClick={(e) => {
                 e.preventDefault();
                 leggTilbakeBehandling().then(() => {
-                    router.push(`/sak/${behandling.saksnummer}`);
+                    router.push(personoversiktUrl(behandling));
                 });
             }}
         >

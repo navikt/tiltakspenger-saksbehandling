@@ -6,6 +6,7 @@ import router from 'next/router';
 import { Rammebehandling } from '~/types/Rammebehandling';
 import { useAvsluttBehandling } from '~/components/behandlingmeny/useAvsluttBehandling';
 import { useSak } from '~/context/sak/SakContext';
+import { personoversiktUrl } from '~/utils/urls';
 
 type Props = {
     behandling: Rammebehandling;
@@ -38,7 +39,7 @@ export const BehandlingAvslutt = ({ behandling }: Props) => {
                             begrunnelse: begrunnelse,
                         }).then((sak) => {
                             setSak(sak!);
-                            router.push(`/sak/${behandling.saksnummer}`);
+                            router.push(personoversiktUrl(behandling));
                         });
                     }}
                     footer={{

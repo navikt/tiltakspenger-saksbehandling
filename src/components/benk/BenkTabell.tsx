@@ -17,13 +17,12 @@ import { ValueOf } from 'next/dist/shared/lib/constants';
 import {
     Behandlingssammendrag,
     BehandlingssammendragStatus,
-    BehandlingssammendragType,
     BenkOversiktResponse,
 } from '~/types/Behandlingssammendrag';
-import { PERSONOVERSIKT_TABS } from '~/components/personoversikt/Personoversikt';
 import VisMer from '~/components/benk/VisMer';
 import { AkselColor } from '@navikt/ds-react/types/theme';
 import { behandlingResultatTilTag } from '~/utils/tekstformateringUtils';
+import { personoversiktUrl } from '~/utils/urls';
 
 type Props = {
     data: BenkOversiktResponse;
@@ -35,18 +34,6 @@ type Props = {
 };
 
 const BenkTabell = ({ data, sorteringRetning, onSortChange }: Props) => {
-    const urlMedValgtTab = (behandling: Behandlingssammendrag) => {
-        if (
-            behandling.behandlingstype === BehandlingssammendragType.MELDEKORTBEHANDLING ||
-            behandling.behandlingstype === BehandlingssammendragType.INNSENDT_MELDEKORT ||
-            behandling.behandlingstype === BehandlingssammendragType.KORRIGERT_MELDEKORT
-        ) {
-            return `/sak/${behandling.saksnummer}#${PERSONOVERSIKT_TABS.meldekort}`;
-        }
-
-        return `/sak/${behandling.saksnummer}`;
-    };
-
     const venteTagFormatter = (behandling: Behandlingssammendrag) => {
         if (behandling.erSattPåVent) {
             if (behandling.sattPåVentFrist) {
@@ -194,7 +181,7 @@ const BenkTabell = ({ data, sorteringRetning, onSortChange }: Props) => {
                                     variant="secondary"
                                     size="small"
                                     as={NextLink}
-                                    href={urlMedValgtTab(behandling)}
+                                    href={personoversiktUrl(behandling)}
                                 >
                                     Se sak
                                 </Button>
