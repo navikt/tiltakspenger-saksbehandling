@@ -1,6 +1,5 @@
 import { finnFetchFeilmelding } from '../feilmeldinger';
 import { stripLeadingSlash } from '../string';
-import { Rammebehandling } from '~/types/Rammebehandling';
 
 type ErrorContructorProps<Data = unknown> = {
     status: number;
@@ -26,14 +25,14 @@ export class FetcherError<Data = unknown> extends Error {
     }
 }
 
-export const errorFraApiResponse = async <Data = unknown>(res: Response) => {
+export const errorFraApiResponse = async (res: Response) => {
     try {
         const json = await res.json();
 
         return new FetcherError({
             status: res.status,
             message: finnFetchFeilmelding(json),
-            data: json.data
+            data: json.data,
         });
     } catch {
         return new FetcherError({

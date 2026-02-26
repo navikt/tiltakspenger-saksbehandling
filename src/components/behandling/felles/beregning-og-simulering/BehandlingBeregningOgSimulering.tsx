@@ -30,15 +30,20 @@ export const BehandlingBeregningOgSimulering = () => {
     return (
         <>
             {utbetaling && (
-                <BeregningOgSimuleringSeksjon behandling={behandling} utbetaling={utbetaling} />
+                <>
+                    <BeregningOgSimuleringSeksjon behandling={behandling} utbetaling={utbetaling} />
+                    <Separator />
+                </>
             )}
             {utbetalingskontroll?.harEndringer && (
-                <UtbetalingskontrollSeksjon
-                    utbetalingskontroll={utbetalingskontroll}
-                    behandlingsstatus={behandling.status}
-                />
+                <>
+                    <UtbetalingskontrollSeksjon
+                        utbetalingskontroll={utbetalingskontroll}
+                        behandlingsstatus={behandling.status}
+                    />
+                    <Separator />
+                </>
             )}
-            <Separator />
         </>
     );
 };
@@ -77,6 +82,7 @@ const BeregningOgSimuleringSeksjon = ({
                     />
 
                     <BeregningOppsummering beregninger={beregning} />
+
                     <SimuleringOppsummering
                         simulertBeregning={simulertBeregning}
                         behandlingId={behandling.id}
@@ -91,22 +97,22 @@ const BeregningOgSimuleringSeksjon = ({
                 </VStack>
             </VedtakSeksjon.Venstre>
             <VedtakSeksjon.Høyre gap={'space-16'}>
-                <Alert variant={'info'} inline={true}>
-                    <BodyShort>{`Simulering sist utført`}</BodyShort>
-                    <BodyShort weight={'semibold'}>
-                        {simuleringstidspunkt
-                            ? formaterTidspunkt(simuleringstidspunkt)
-                            : 'ikke simulert'}
-                    </BodyShort>
-                </Alert>
+                {simuleringstidspunkt ? (
+                    <AlertMedTidspunkt
+                        tekst={'Simulering sist utført'}
+                        tidspunkt={simuleringstidspunkt}
+                    />
+                ) : (
+                    <Alert variant={'info'} inline={true}>
+                        {'Ikke simulert'}
+                    </Alert>
+                )}
 
                 {utbetalingskontroll && (
-                    <Alert variant={'info'} inline={true}>
-                        <BodyShort>{`Kontroll-simulering sist utført (${utbetalingskontroll.harEndringer ? 'med' : 'uten'} endring)`}</BodyShort>
-                        <BodyShort weight={'semibold'}>
-                            {formaterTidspunkt(utbetalingskontroll.tidspunkt)}
-                        </BodyShort>
-                    </Alert>
+                    <AlertMedTidspunkt
+                        tekst={`Kontroll-simulering sist utført (${utbetalingskontroll.harEndringer ? 'med' : 'uten'} endring)`}
+                        tidspunkt={utbetalingskontroll.tidspunkt}
+                    />
                 )}
             </VedtakSeksjon.Høyre>
 
@@ -126,7 +132,7 @@ const UtbetalingskontrollSeksjon = ({ utbetalingskontroll, behandlingsstatus }: 
     const { tidspunkt, simulertBeregning } = utbetalingskontroll;
 
     return (
-        <VedtakSeksjon>
+        <VedtakSeksjon className={style.kontrollMedEndring}>
             <VedtakSeksjon.Venstre gap={'space-16'}>
                 <Heading size={'small'} level={'4'}>
                     {'Kontroll-simulering'}
@@ -137,6 +143,8 @@ const UtbetalingskontrollSeksjon = ({ utbetalingskontroll, behandlingsstatus }: 
                     {behandlingsstatusTekst[behandlingsstatus]}
                 </Alert>
 
+                <BeregningOppsummering beregninger={simulertBeregning.beregning} />
+
                 <SimuleringOppsummering
                     simulertBeregning={simulertBeregning}
                     visOppdaterKnapp={false}
@@ -144,10 +152,10 @@ const UtbetalingskontrollSeksjon = ({ utbetalingskontroll, behandlingsstatus }: 
             </VedtakSeksjon.Venstre>
 
             <VedtakSeksjon.Høyre>
-                <Alert
-                    variant={'info'}
-                    inline={true}
-                >{`Kontroll-simulering utført: ${formaterTidspunkt(tidspunkt)}`}</Alert>
+                <AlertMedTidspunkt
+                    tekst={'Kontroll-simulering sist utført:'}
+                    tidspunkt={tidspunkt}
+                />
             </VedtakSeksjon.Høyre>
 
             <VedtakSeksjon.FullBredde className={style.detaljer}>
@@ -162,4 +170,18 @@ const behandlingsstatusTekst: PartialRecord<Rammebehandlingsstatus, string> = {
         'Behandlingen må simuleres på nytt og utbetalingen må vurderes på nytt før den sendes til beslutning.',
     [Rammebehandlingsstatus.UNDER_BESLUTNING]:
         'Behandlingen må underkjennes og saksbehandler må vurdere utbetalingen på nytt.',
+};
+
+type AlertMedTidspunktProps = {
+    tekst: string;
+    tidspunkt: string;
+};
+
+const AlertMedTidspunkt = ({ tekst, tidspunkt }: AlertMedTidspunktProps) => {
+    return (
+        <Alert variant={'info'} inline={true}>
+            <BodyShort>{tekst}</BodyShort>
+            <BodyShort weight={'semibold'}>{formaterTidspunkt(tidspunkt)}</BodyShort>
+        </Alert>
+    );
 };

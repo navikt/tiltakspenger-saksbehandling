@@ -6,7 +6,6 @@ import { useStartRevurdering } from '~/components/personoversikt/opprett-revurde
 import { SakId } from '~/types/Sak';
 import router from 'next/router';
 import { behandlingUrl } from '~/utils/urls';
-import { finnFetchFeilmelding } from '~/utils/feilmeldinger';
 
 type Props = {
     sakId: SakId;
