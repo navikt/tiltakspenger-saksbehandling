@@ -1,3 +1,7 @@
+.formContainer {
+    margin-left: 12rem;
+}
+
 .lagreKnapp {
     align-self: flex-start;
 }

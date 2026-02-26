@@ -31,6 +31,7 @@ import AvsluttBehandlingModal from '~/components/modaler/AvsluttBehandlingModal'
 import { Nullable } from '~/types/UtilTypes';
 import { erRammebehandlingUnderAktivOmgjøring } from '~/utils/behandling';
 import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
+import styles from './index.module.css';
 
 type Props = {
     sak: SakProps;
@@ -107,8 +108,8 @@ const FormkravKlagePage = ({ sak, omgjøringsbehandling }: Props) => {
         <FormProvider {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
                 <VStack
+                    className={styles.formContainer}
                     gap="space-32"
-                    marginInline="space-64"
                     marginBlock="space-32"
                     align="start"
                     maxWidth="35rem"

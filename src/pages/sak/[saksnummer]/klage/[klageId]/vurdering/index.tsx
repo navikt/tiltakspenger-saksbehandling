@@ -132,8 +132,8 @@ const VurderingKlagePage = ({ sak, vedtakSomPåklages, søknader, omgjøringsbeh
         <div>
             <form onSubmit={form.handleSubmit(onSubmit)}>
                 <VStack
+                    className={styles.formContainer}
                     gap="space-32"
-                    marginInline="space-64"
                     marginBlock="space-32"
                     maxWidth="35rem"
                 >

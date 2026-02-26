@@ -21,7 +21,7 @@ const BrevForm = (props: {
             <ul className={styles.fieldsList}>
                 {fields.map((field, index) => (
                     <li key={field.id}>
-                        <VStack gap="space-16" maxWidth="30rem" marginInline="space-64">
+                        <VStack gap="space-16" maxWidth="30rem">
                             <Controller
                                 name={`tekstfelter.${index}.tittel` as const}
                                 control={props.control}

@@ -19,6 +19,7 @@ import { KlageSteg } from '../../../../../utils/KlageLayoutUtils';
 import WarningCircleIcon from '~/icons/WarningCircleIcon';
 import { useHentPersonopplysninger } from '~/components/personaliaheader/useHentPersonopplysninger';
 import { useOpprettKlage } from '~/api/KlageApi';
+import styles from './index.module.css';
 
 type Props = {
     sak: SakProps;
@@ -69,8 +70,8 @@ const OprettKlagePage = ({ sak }: Props) => {
         <FormProvider {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
                 <VStack
+                    className={styles.formContainer}
                     gap="space-32"
-                    marginInline="space-64"
                     marginBlock="space-32"
                     align="start"
                     maxWidth="35rem"

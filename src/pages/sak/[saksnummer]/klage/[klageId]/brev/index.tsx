@@ -127,8 +127,8 @@ const BrevKlagePage = ({ sak, påklagetVedtak }: Props) => {
 
     return (
         <form onSubmit={form.handleSubmit(onSubmit)}>
-            <VStack>
-                <VStack marginInline="space-64" marginBlock="space-32" gap="space-16">
+            <VStack className={styles.formContainer}>
+                <VStack marginBlock="space-32" gap="space-16">
                     <HStack gap="space-8" align="start">
                         {form.formState.isDirty ? (
                             <WarningCircleIcon />
@@ -150,7 +150,7 @@ const BrevKlagePage = ({ sak, påklagetVedtak }: Props) => {
                     readOnly={erReadonlyForSaksbehandler || !kanBehandleKlage(klage, null)}
                 />
 
-                <VStack gap="space-32" marginInline="space-64" marginBlock="space-32" align="start">
+                <VStack gap="space-32" marginBlock="space-32" align="start">
                     <VStack gap="space-16" align="start">
                         {forhåndsvis.error && (
                             <LocalAlert status="error">

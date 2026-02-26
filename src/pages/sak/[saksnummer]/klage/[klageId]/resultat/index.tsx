@@ -29,6 +29,7 @@ import { formaterTidspunkt } from '~/utils/date';
 import { skalKunneOppretteNyRammebehandling } from '~/utils/KlageinstanshendelseUtils';
 import { useFerdigstillKlage } from '~/api/KlageApi';
 import router from 'next/router';
+import styles from './index.module.css';
 
 type Props = {
     sak: SakProps;
@@ -82,7 +83,12 @@ const ResultatPage = ({ sak, omgjøringsbehandling, vedtakSomPåklages, søknade
     const { innloggetSaksbehandler } = useSaksbehandler();
 
     return (
-        <VStack gap="space-32" marginInline="space-64" marginBlock="space-32" maxWidth="30rem">
+        <VStack
+            className={styles.formContainer}
+            gap="space-32"
+            marginBlock="space-32"
+            maxWidth="30rem"
+        >
             {klage.resultat === KlagebehandlingResultat.OMGJØR ? (
                 <Omgjøringsresultat
                     sak={sak}
