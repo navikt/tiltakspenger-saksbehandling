@@ -58,6 +58,8 @@ export const BehandlingSendTilBeslutning = ({
                                         'Vedtaket er sendt til beslutning!',
                                     );
                                     setVisSendTilBeslutningModal(false);
+                                } else if (sendTilBeslutningError?.data) {
+                                    setBehandling(sendTilBeslutningError.data);
                                 }
                             });
                         }}

@@ -33,7 +33,7 @@ export const BehandlingBeregningOgSimulering = () => {
                 <BeregningOgSimuleringSeksjon behandling={behandling} utbetaling={utbetaling} />
             )}
             {utbetalingskontroll?.harEndringer && (
-                <UtbetalingskontrollEndring
+                <UtbetalingskontrollSeksjon
                     utbetalingskontroll={utbetalingskontroll}
                     behandlingsstatus={behandling.status}
                 />
@@ -122,17 +122,14 @@ type KontrollProps = {
     behandlingsstatus: Rammebehandlingsstatus;
 };
 
-const UtbetalingskontrollEndring = ({
-    utbetalingskontroll,
-    behandlingsstatus,
-}: KontrollProps) => {
+const UtbetalingskontrollSeksjon = ({ utbetalingskontroll, behandlingsstatus }: KontrollProps) => {
     const { tidspunkt, simulertBeregning } = utbetalingskontroll;
 
     return (
         <VedtakSeksjon>
             <VedtakSeksjon.Venstre gap={'space-16'}>
                 <Heading size={'small'} level={'4'}>
-                    {'Kontroll-simuleringen'}
+                    {'Kontroll-simulering'}
                 </Heading>
 
                 <Alert variant={'error'} size={'small'}>
@@ -152,6 +149,10 @@ const UtbetalingskontrollEndring = ({
                     inline={true}
                 >{`Kontroll-simulering utført: ${formaterTidspunkt(tidspunkt)}`}</Alert>
             </VedtakSeksjon.Høyre>
+
+            <VedtakSeksjon.FullBredde className={style.detaljer}>
+                <SimuleringDetaljer simulertBeregning={simulertBeregning} />
+            </VedtakSeksjon.FullBredde>
         </VedtakSeksjon>
     );
 };
