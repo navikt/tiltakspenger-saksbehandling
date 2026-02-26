@@ -18,7 +18,7 @@ import { classNames } from '~/utils/classNames';
 
 import style from './VedtatteBehandlinger.module.css';
 import { VedtattRammevedtakMedBehandling } from '~/types/Rammebehandling';
-import { VedtattKlagevedtakMedBehandling } from '~/types/Klage';
+import { KlagevedtakMedBehandling } from '~/types/Klage';
 import Link from 'next/link';
 
 type Props = {
@@ -26,7 +26,7 @@ type Props = {
     vedtakMedBehandling: VedtakMedBehandling[];
 };
 
-type VedtakMedBehandling = VedtattRammevedtakMedBehandling | VedtattKlagevedtakMedBehandling;
+type VedtakMedBehandling = VedtattRammevedtakMedBehandling | KlagevedtakMedBehandling;
 
 export const VedtatteBehandlingerTabell = ({ vedtakMedBehandling }: Props) => {
     return (
@@ -144,7 +144,7 @@ const RammevedtakMedBehandlingRad = (props: { rammevedtak: VedtattRammevedtakMed
     );
 };
 
-const KlagevedtakMedBehandlingRad = (props: { klagevedtak: VedtattKlagevedtakMedBehandling }) => {
+const KlagevedtakMedBehandlingRad = (props: { klagevedtak: KlagevedtakMedBehandling }) => {
     return (
         <Table.Row shadeOnHover={false} key={props.klagevedtak.klagevedtakId}>
             <Table.DataCell>Klage</Table.DataCell>

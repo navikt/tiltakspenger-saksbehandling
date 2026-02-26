@@ -132,7 +132,7 @@ export interface OpprettOmgjøringsbehandlingForKlageRequest {
     søknadId: Nullable<string>;
 }
 
-export type VedtattKlagevedtakMedBehandling = { type: 'klagevedtak' } & Klagevedtak & {
+export type KlagevedtakMedBehandling = { type: 'klagevedtak' } & Klagevedtak & {
         behandling: Klagebehandling;
     };
 

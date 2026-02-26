@@ -8,7 +8,7 @@ import { classNames } from '~/utils/classNames';
 
 import style from './VedtatteBehandlinger.module.css';
 import { Klagevedtak } from '~/types/Klagevedtak';
-import { Klagebehandling, VedtattKlagevedtakMedBehandling } from '~/types/Klage';
+import { Klagebehandling, KlagevedtakMedBehandling } from '~/types/Klage';
 
 type Props = {
     sakId: SakId;
@@ -52,7 +52,7 @@ export const VedtatteBehandlinger = ({
             ...vedtak,
             behandling: klagebehandlinger.find((klage) => klage.id === vedtak.klagebehandlingId),
         };
-    }) as VedtattKlagevedtakMedBehandling[];
+    }) as KlagevedtakMedBehandling[];
 
     const vedtakMedBehandling = [...rammevedtakMedBehandling, ...klagevedtakMedBehandling].toSorted(
         (a, b) => b.opprettet.localeCompare(a.opprettet),

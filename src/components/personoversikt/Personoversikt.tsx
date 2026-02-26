@@ -22,6 +22,7 @@ import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesConte
 import {
     ArrowsCirclepathIcon,
     ChevronDownIcon,
+    EnvelopeClosedIcon,
     FileCheckmarkIcon,
     FileIcon,
     FilePlusIcon,
@@ -32,13 +33,17 @@ import {
 import Divider from '~/components/divider/Divider';
 import { useEffect, useState } from 'react';
 import { OpprettSøknadModal } from '~/components/personoversikt/manuell-søknad/OpprettSøknadModal';
-import { KlagebehandlingStatus } from '~/types/Klage';
+import { KlagebehandlingStatus, KlagevedtakMedBehandling } from '~/types/Klage';
+import Klageoversikt, {
+    KlagebehandlingerMedOmgjøringsbehandling,
+} from './klageoversikt/Klageoversikt';
 
 export const PERSONOVERSIKT_TABS = {
     apneBehandlinger: 'apne-behandlinger',
     meldekort: 'meldekort',
     vedtatteBehandlinger: 'vedtatte-behandlinger',
     avsluttedeBehandlinger: 'avsluttede-behandlinger',
+    klage: 'klage',
 };
 
 export const Personoversikt = () => {
@@ -71,6 +76,30 @@ export const Personoversikt = () => {
     const avbrutteKlagebehandlinger = klageBehandlinger.filter(
         (klage) => klage.status === KlagebehandlingStatus.AVBRUTT,
     );
+
+    const klagevedtakMedBehandling: KlagevedtakMedBehandling[] = alleKlagevedtak.map((vedtak) => {
+        return {
+            type: 'klagevedtak',
+            ...vedtak,
+            behandling: klageBehandlinger.find((klage) => klage.id === vedtak.klagebehandlingId)!,
+        };
+    });
+
+    const klagebehandlingerMedOmgjøringsbehandling: KlagebehandlingerMedOmgjøringsbehandling[] =
+        klageBehandlinger
+            .filter(
+                (klage) =>
+                    !klagevedtakMedBehandling.some((vedtak) => vedtak.behandling.id === klage.id),
+            )
+            .map((klage) => {
+                return {
+                    klagebehandling: klage,
+                    omgjøringsbehandling:
+                        behandlinger.find(
+                            (behandling) => behandling.klagebehandlingId === klage.id,
+                        ) ?? null,
+                };
+            });
 
     const hentAktivTabFraHash = (hash: string) => {
         const tab = hash.replace(/^#/, '');
@@ -150,6 +179,12 @@ export const Personoversikt = () => {
                             icon={<FileXMarkIcon aria-hidden />}
                             className={styles.tab}
                         />
+                        <Tabs.Tab
+                            value={PERSONOVERSIKT_TABS.klage}
+                            label={labelWithCounter('Klage', klageBehandlinger.length)}
+                            icon={<EnvelopeClosedIcon aria-hidden />}
+                            className={styles.tab}
+                        />
                         <ActionMenu>
                             <ActionMenu.Trigger>
                                 <Button
@@ -225,11 +260,22 @@ export const Personoversikt = () => {
                             alleKlagevedtak={alleKlagevedtak}
                         />
                     </Tabs.Panel>
-                    <Tabs.Panel value={PERSONOVERSIKT_TABS.avsluttedeBehandlinger}>
+                    <Tabs.Panel
+                        value={PERSONOVERSIKT_TABS.avsluttedeBehandlinger}
+                        className={styles.panel}
+                    >
                         <AvsluttedeBehandlinger
                             saksnummer={saksnummer}
                             avbrutteBehandlinger={avbrutteRammebehandlinger}
                             avbrutteKlageBehandlinger={avbrutteKlagebehandlinger}
+                        />
+                    </Tabs.Panel>
+                    <Tabs.Panel value={PERSONOVERSIKT_TABS.klage} className={styles.panel}>
+                        <Klageoversikt
+                            klagebehandlingerMedOmgjøringsbehandling={
+                                klagebehandlingerMedOmgjøringsbehandling
+                            }
+                            klagevedtakMedBehandling={klagevedtakMedBehandling}
                         />
                     </Tabs.Panel>
                 </Tabs>
