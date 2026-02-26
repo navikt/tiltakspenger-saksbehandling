@@ -203,6 +203,10 @@ const OpprettholdResultat = (props: {
         fåttSvarFraKA &&
         skalKunneOppretteNyRammebehandling(props.klage.klageinstanshendelser) &&
         !props.klage.rammebehandlingId;
+    const kanFerdigstilleKlage =
+        fåttSvarFraKA &&
+        !skalKunneOppretteNyRammebehandling(props.klage.klageinstanshendelser) &&
+        !props.klage.rammebehandlingId;
 
     return (
         <VStack gap="space-48" align="start">
@@ -330,7 +334,7 @@ const OpprettholdResultat = (props: {
                 >
                     Opprett ny behandling
                 </Button>
-            ) : (
+            ) : kanFerdigstilleKlage ? (
                 <Button
                     type="button"
                     loading={ferdigstillKlage.isMutating}
@@ -338,7 +342,7 @@ const OpprettholdResultat = (props: {
                 >
                     Ferdigstill klagen
                 </Button>
-            )}
+            ) : null}
 
             {vilOppretteNyBehandling && (
                 <VelgOmgjøringsbehandlingModal

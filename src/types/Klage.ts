@@ -21,6 +21,7 @@ export enum KlagebehandlingStatus {
     IVERKSATT = 'IVERKSATT',
     OPPRETTHOLDT = 'OPPRETTHOLDT',
     OVERSENDT = 'OVERSENDT',
+    FERDIGSTILT = 'FERDIGSTILT',
 }
 
 export interface Klagebehandling {

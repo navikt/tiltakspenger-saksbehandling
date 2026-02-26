@@ -280,6 +280,7 @@ export const klagebehandlingStatusTilText: Record<KlagebehandlingStatus, string>
     [KlagebehandlingStatus.IVERKSATT]: 'Iverksatt',
     [KlagebehandlingStatus.OPPRETTHOLDT]: 'Opprettholdt',
     [KlagebehandlingStatus.OVERSENDT]: 'Oversendt',
+    [KlagebehandlingStatus.FERDIGSTILT]: 'Ferdigstilt',
 };
 
 export const klagebehandlingStatusTilTag = (args: {
@@ -338,6 +339,15 @@ export const klagebehandlingStatusTilTag = (args: {
                 <Tag data-color="success" variant="outline" size={args.size}>
                     {args.extraContent?.before}
                     {klagebehandlingStatusTilText[KlagebehandlingStatus.OVERSENDT]}
+                    {args.extraContent?.after}
+                </Tag>
+            );
+
+        case KlagebehandlingStatus.FERDIGSTILT:
+            return (
+                <Tag data-color="success" variant="outline" size={args.size}>
+                    {args.extraContent?.before}
+                    {klagebehandlingStatusTilText[KlagebehandlingStatus.FERDIGSTILT]}
                     {args.extraContent?.after}
                 </Tag>
             );
