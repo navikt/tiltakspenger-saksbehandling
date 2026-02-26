@@ -50,7 +50,7 @@ export const OmgjørVedtakMenyvalg = ({ sakId, vedtak }: Props) => {
             </ActionMenu.Item>
             {startRevurderingError && (
                 <Alert variant={'error'} size={'small'}>
-                    {`Kunne ikke opprette omgjøring: ${finnFetchFeilmelding(startRevurderingError)}`}
+                    {`Kunne ikke opprette omgjøring: ${startRevurderingError.message}`}
                 </Alert>
             )}
         </>

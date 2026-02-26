@@ -15,7 +15,7 @@ import {
     OppdaterSøknadsbehandlingDTO,
 } from './Søknadsbehandling';
 import { Tiltaksdeltakelse } from './TiltakDeltakelse';
-import { Utbetalingsstatus } from './Utbetaling';
+import { Utbetalingskontroll, Utbetalingsstatus } from './Utbetaling';
 import { Nullable } from './UtilTypes';
 import { Ytelse } from './Ytelse';
 import { SakId } from '~/types/Sak';
@@ -47,6 +47,7 @@ export interface RammebehandlingBase {
     iverksattTidspunkt: Nullable<string>;
     ventestatus: Nullable<VentestatusHendelse>;
     utbetaling: Nullable<BehandlingUtbetalingProps>;
+    utbetalingskontroll: Nullable<Utbetalingskontroll>;
     klagebehandlingId: Nullable<KlageId>;
 }
 

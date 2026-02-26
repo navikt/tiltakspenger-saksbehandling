@@ -7,12 +7,14 @@ type SWRArg<BodyType> = {
 
 type Method = 'GET' | 'POST' | 'PATCH' | 'DELETE' | 'PUT';
 
-// TODO: vurder å skrive oss vekk fra SWRMutation her. Unødvendig overhead for vårt bruk, og lite intuitiv feilhåndtering.
-
-export const useFetchJsonFraApi = <ResponseType = unknown, BodyType = undefined>(
+export const useFetchJsonFraApi = <
+    ResponseType = unknown,
+    BodyType = undefined,
+    ErrorBody extends FetcherError = FetcherError,
+>(
     url: string,
     method: Method,
-    swrOptions?: SWRMutationConfiguration<ResponseType, FetcherError, string, BodyType>,
+    swrOptions?: SWRMutationConfiguration<ResponseType, ErrorBody, string, BodyType>,
 ) => {
     const fetcher = async (_url: string, { arg }: SWRArg<BodyType>) =>
         fetchJsonFraApiClientSide<ResponseType>(_url, {
@@ -20,7 +22,7 @@ export const useFetchJsonFraApi = <ResponseType = unknown, BodyType = undefined>
             body: arg ? JSON.stringify(arg) : undefined,
         });
 
-    return useSWRMutation<ResponseType, FetcherError, string, BodyType>(url, fetcher, {
+    return useSWRMutation<ResponseType, ErrorBody, string, BodyType>(url, fetcher, {
         throwOnError: false,
         ...swrOptions,
     });

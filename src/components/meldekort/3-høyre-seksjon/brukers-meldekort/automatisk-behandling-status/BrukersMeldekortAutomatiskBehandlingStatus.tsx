@@ -1,6 +1,7 @@
 import { MeldekortBehandletAutomatiskStatus } from '~/types/meldekort/BrukersMeldekort';
 import { Alert } from '@navikt/ds-react';
 import { ComponentProps } from 'react';
+import { PartialRecord } from '~/types/UtilTypes';
 
 enum MetaStatus {
     Behandlet = 'Behandlet',
@@ -38,7 +39,7 @@ const alertVariant: Record<MetaStatus, ComponentProps<typeof Alert>['variant']> 
     [MetaStatus.TekniskFeil]: 'error',
 } as const;
 
-const tilMetaTekst: { [key in MetaStatus]?: string } = {
+const tilMetaTekst: PartialRecord<MetaStatus, string> = {
     [MetaStatus.SkalIkkeBehandles]: 'Behandles ikke automatisk',
     [MetaStatus.MeldekortFeil]: 'Tilstand på meldekortet stoppet automatisk behandling',
     [MetaStatus.SakFeil]: 'Tilstand på saken stoppet automatisk behandling',

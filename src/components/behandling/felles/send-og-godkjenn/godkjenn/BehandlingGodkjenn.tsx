@@ -57,6 +57,8 @@ export const BehandlingGodkjenn = ({ behandling }: Props) => {
                         loading={godkjennBehandlingLaster}
                         onClick={() => {
                             godkjennBehandling().then((oppdatertBehandling) => {
+                                console.log("lol", oppdatertBehandling)
+
                                 if (oppdatertBehandling) {
                                     setBehandling(oppdatertBehandling);
                                     setVisGodkjennVedtakModal(false);

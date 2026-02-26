@@ -11,19 +11,20 @@ import style from './SimuleringOppsummering.module.css';
 
 type Props<BehId extends BehandlingIdFelles> = {
     simulertBeregning: SimulertBeregning;
-    visOppdaterKnapp: boolean;
-} & OppdaterSimuleringProps<BehId>;
+} & (
+    | ({
+          visOppdaterKnapp: true;
+      } & OppdaterSimuleringProps<BehId>)
+    | {
+          visOppdaterKnapp: false;
+      }
+);
 
-export const SimuleringOppsummering = <BehId extends BehandlingIdFelles>({
-    simulertBeregning,
-    visOppdaterKnapp,
-    ...oppdaterSimuleringProps
-}: Props<BehId>) => {
+export const SimuleringOppsummering = <BehId extends BehandlingIdFelles>(props: Props<BehId>) => {
+    const { simulertBeregning, visOppdaterKnapp } = props;
     const { simuleringResultat, simulerteBeløp } = simulertBeregning;
 
-    const oppdaterKnapp = visOppdaterKnapp && (
-        <OppdaterSimuleringKnapp {...oppdaterSimuleringProps} />
-    );
+    const oppdaterKnapp = visOppdaterKnapp && <OppdaterSimuleringKnapp {...props} />;
 
     if (simuleringResultat === SimuleringResultat.IKKE_SIMULERT) {
         return (

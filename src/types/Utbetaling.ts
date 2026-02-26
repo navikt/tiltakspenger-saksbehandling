@@ -1,6 +1,7 @@
 import { BeløpProps } from './Beregning';
 import { MeldeperiodeKjedeId } from './meldekort/Meldeperiode';
 import { Periode } from './Periode';
+import { SimulertBeregning } from '~/types/SimulertBeregning';
 
 export enum Utbetalingsstatus {
     SENDT_TIL_HELVED = 'SENDT_TIL_HELVED',
@@ -19,3 +20,16 @@ export type UtbetalingstidslinjePeriode = {
     beløp: BeløpProps;
     status: Utbetalingsstatus;
 };
+
+export type UtbetalingskontrollMedEndring = {
+    simulertBeregning: SimulertBeregning;
+    harEndringer: true;
+    tidspunkt: string;
+};
+
+export type UtbetalingskontrollUtenEndring = {
+    harEndringer: false;
+    tidspunkt: string;
+};
+
+export type Utbetalingskontroll = UtbetalingskontrollMedEndring | UtbetalingskontrollUtenEndring;
