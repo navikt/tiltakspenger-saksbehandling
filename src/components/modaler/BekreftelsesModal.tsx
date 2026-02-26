@@ -42,7 +42,7 @@ export const BekreftelsesModal = ({
                         <Varsel
                             variant={'error'}
                             size={'small'}
-                            melding={`${feil.info?.melding || feil.message}`}
+                            melding={feil.message}
                             key={`error-${uuidv4()}`}
                         />
                     )}

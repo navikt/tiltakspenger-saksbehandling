@@ -1,3 +1,10 @@
 .detaljer {
     margin-top: 0.25rem;
 }
+
+.kontrollMedEndring {
+    border: var(--ax-border-danger) 2px solid;
+    border-radius: var(--ax-radius-8);
+    margin: 0 -0.75rem;
+    padding: 0.75rem;
+}

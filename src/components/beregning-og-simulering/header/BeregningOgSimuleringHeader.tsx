@@ -52,7 +52,7 @@ export const BeregningOgSimuleringHeader = ({
                     variant={'info'}
                     inline={true}
                     size={'small'}
-                >{`Vedtaket endrer beregningen av ${meldeperioder.length} meldeperiode i perioden ${periodeTilFormatertDatotekst(periode)}`}</Alert>
+                >{`Vedtaket endrer beregningen av ${meldeperioder.length} meldeperiode${meldeperioder.length > 1 ? 'r' : ''} i perioden ${periodeTilFormatertDatotekst(periode)}`}</Alert>
             )}
             {utbetalingValideringsfeil && (
                 <Alert variant={'error'} size={'small'}>

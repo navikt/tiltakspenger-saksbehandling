@@ -62,7 +62,7 @@ export const BehandlingOppdaterSaksopplysninger = () => {
                     size={'small'}
                     className={style.varsel}
                     key={`error-${uuidv4()}`}
-                    melding={`Oppdatering av saksopplysninger feilet - [${error.status}] ${error.info?.melding || error.message}`}
+                    melding={`Oppdatering av saksopplysninger feilet - [${error.status}] ${error.message}`}
                 />
             )}
         </VStack>

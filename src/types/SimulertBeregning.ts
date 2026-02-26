@@ -29,6 +29,7 @@ interface SimulertBeregningBase {
 interface SimulertBeregningMedEndring extends SimulertBeregningBase {
     simuleringsdato: string;
     simuleringTotalBeløp: number;
+    simuleringstidspunkt: string;
     simulerteBeløp: Nullable<SimulerteBeløp>;
     simuleringResultat: SimuleringResultat.ENDRING;
 }
@@ -37,6 +38,7 @@ interface SimulertBeregningIngenEndring extends SimulertBeregningBase {
     simuleringsdato: null;
     simuleringTotalBeløp: null;
     simulerteBeløp: null;
+    simuleringstidspunkt: string;
     simuleringResultat: SimuleringResultat.INGEN_ENDRING;
 }
 
@@ -44,6 +46,7 @@ interface SimulertBeregningUtenSimulering extends SimulertBeregningBase {
     simuleringsdato: null;
     simuleringTotalBeløp: null;
     simulerteBeløp: null;
+    simuleringstidspunkt: null;
     simuleringResultat: SimuleringResultat.IKKE_SIMULERT;
 }
 

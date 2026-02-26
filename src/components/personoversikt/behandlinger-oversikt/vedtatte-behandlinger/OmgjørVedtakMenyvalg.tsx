@@ -6,7 +6,6 @@ import { useStartRevurdering } from '~/components/personoversikt/opprett-revurde
 import { SakId } from '~/types/Sak';
 import router from 'next/router';
 import { behandlingUrl } from '~/utils/urls';
-import { finnFetchFeilmelding } from '~/utils/feilmeldinger';
 
 type Props = {
     sakId: SakId;
@@ -50,7 +49,7 @@ export const OmgjørVedtakMenyvalg = ({ sakId, vedtak }: Props) => {
             </ActionMenu.Item>
             {startRevurderingError && (
                 <Alert variant={'error'} size={'small'}>
-                    {`Kunne ikke opprette omgjøring: ${finnFetchFeilmelding(startRevurderingError)}`}
+                    {`Kunne ikke opprette omgjøring: ${startRevurderingError.message}`}
                 </Alert>
             )}
         </>

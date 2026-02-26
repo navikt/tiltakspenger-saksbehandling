@@ -1,6 +1,5 @@
 import { Button, HStack } from '@navikt/ds-react';
 import React, { useState } from 'react';
-
 import { useBehandling } from '../../../context/BehandlingContext';
 import { BekreftelsesModal } from '../../../../modaler/BekreftelsesModal';
 import { Underkjenn } from '../../../../underkjenn/Underkjenn';
@@ -61,11 +60,13 @@ export const BehandlingGodkjenn = ({ behandling }: Props) => {
                                     setBehandling(oppdatertBehandling);
                                     setVisGodkjennVedtakModal(false);
                                     navigateWithNotification('/', 'Vedtaket er godkjent!');
+                                } else if (godkjennBehandlingError?.data) {
+                                    setBehandling(godkjennBehandlingError.data);
                                 }
                             });
                         }}
                     >
-                        Godkjenn vedtaket
+                        {'Godkjenn vedtaket'}
                     </Button>
                 }
             />

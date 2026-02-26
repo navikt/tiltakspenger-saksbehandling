@@ -1,4 +1,4 @@
-import { FetcherError } from './fetch/fetch';
+import { JsonError } from './fetch/fetch';
 
 const feilmeldinger: Record<string, string> = {
     fant_ikke_fnr: 'Fant ikke fødselsnummeret',
@@ -28,10 +28,6 @@ const feilmeldinger: Record<string, string> = {
     meldeperioden_er_utdatert: 'Meldeperioden er utdatert',
 } as const;
 
-export const finnFetchFeilmelding = (error: FetcherError): string => {
-    if (!error.info) {
-        return feilmeldinger.server_feil;
-    }
-    const { kode, melding } = error.info;
-    return feilmeldinger[kode] ?? melding;
+export const finnFetchFeilmelding = (error?: JsonError): string => {
+    return error ? (feilmeldinger[error.kode] ?? error.melding) : feilmeldinger.server_feil;
 };
