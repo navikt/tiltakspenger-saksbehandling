@@ -14,12 +14,14 @@ import OppsummeringAvVentestatus from '~/components/oppsummeringer/ventestatus/O
 import { BehandlingSkjemaProvider } from '~/components/behandling/context/BehandlingSkjemaContext';
 
 import style from './BehandlingPage.module.css';
-import { Klagebehandling } from '~/types/Klage';
+import { Klagebehandling, KlagebehandlingsresultatOmgjør } from '~/types/Klage';
 import { Nullable } from '~/types/UtilTypes';
 import { OppsummeringsPar } from '../oppsummeringer/oppsummeringspar/OppsummeringsPar';
 import { PERSONOVERSIKT_TABS } from '~/components/personoversikt/Personoversikt';
 
-export const BehandlingPage = (props: { klage: Nullable<Klagebehandling> }) => {
+export const BehandlingPage = (props: {
+    klage: Nullable<Klagebehandling & { resultat: KlagebehandlingsresultatOmgjør }>;
+}) => {
     const { sak } = useSak();
     const {
         id,
@@ -89,7 +91,9 @@ export const BehandlingPage = (props: { klage: Nullable<Klagebehandling> }) => {
     );
 };
 
-const OppsummeringAvKlageForRammebehandling = (props: { klage: Klagebehandling }) => {
+const OppsummeringAvKlageForRammebehandling = (props: {
+    klage: Klagebehandling & { resultat: KlagebehandlingsresultatOmgjør };
+}) => {
     return (
         <Box background="default" padding="space-16">
             <Heading size="small">Informasjon fra klagen</Heading>
@@ -97,12 +101,12 @@ const OppsummeringAvKlageForRammebehandling = (props: { klage: Klagebehandling }
                 <OppsummeringsPar
                     retning="vertikal"
                     label="Årsak"
-                    verdi={omgjøringsårsakTilText[props.klage.årsak!]}
+                    verdi={omgjøringsårsakTilText[props.klage.resultat.årsak]}
                 />
                 <OppsummeringsPar
                     retning="vertikal"
                     label="Begrunnelse"
-                    verdi={props.klage.begrunnelse}
+                    verdi={props.klage.resultat.begrunnelse}
                 />
             </VStack>
         </Box>

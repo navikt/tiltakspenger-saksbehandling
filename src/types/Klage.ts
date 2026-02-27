@@ -33,11 +33,18 @@ export interface Klagebehandling {
     sistEndret: string;
     iverksattTidspunkt: Nullable<string>;
     saksbehandler: Nullable<string>;
-    journalpostId: string;
-    mottattFraJournalpost: string;
-    journalpostOpprettet: string;
+    klagensJournalpostId: string;
+    klagensJournalpostOpprettet: string;
     status: KlagebehandlingStatus;
-    resultat: Nullable<KlagebehandlingResultat>;
+    resultat: Nullable<KlagebehandlingsresultatDTO>;
+    avbrutt: Nullable<Avbrutt>;
+    kanIverksetteVedtak: Nullable<boolean>;
+    kanIverksetteOpprettholdelse: boolean;
+    ventestatus: Nullable<VentestatusHendelse>;
+    formkrav: KlageFormkrav;
+}
+
+export interface KlageFormkrav {
     vedtakDetKlagesPå: Nullable<VedtakId>;
     erKlagerPartISaken: boolean;
     klagesDetPåKonkreteElementerIVedtaket: boolean;
@@ -46,20 +53,36 @@ export interface Klagebehandling {
     erKlagenSignert: boolean;
     innsendingsdato: string;
     innsendingskilde: KlageInnsendingskilde;
+}
+
+export type KlagebehandlingsresultatDTO =
+    | KlagebehandlingsresultatAvvist
+    | KlagebehandlingsresultatOmgjør
+    | KlagebehandlingsresultatOpprettholdt;
+
+export interface KlagebehandlingsresultatAvvist {
+    type: KlagebehandlingResultat.AVVIST;
     brevtekst: Brevtekst[];
-    avbrutt: Nullable<Avbrutt>;
-    kanIverksetteVedtak: Nullable<boolean>;
-    kanIverksetteOpprettholdelse: boolean;
-    årsak: Nullable<OmgjøringÅrsak>;
-    begrunnelse: Nullable<string>;
+}
+
+export interface KlagebehandlingsresultatOmgjør {
+    type: KlagebehandlingResultat.OMGJØR;
+    årsak: OmgjøringÅrsak;
+    begrunnelse: string;
     rammebehandlingId: Nullable<BehandlingId>;
-    ventestatus: Nullable<VentestatusHendelse>;
-    hjemler: Nullable<Klagehjemmel[]>;
+}
+
+export interface KlagebehandlingsresultatOpprettholdt {
+    type: KlagebehandlingResultat.OPPRETTHOLDT;
+    brevtekst: Brevtekst[];
+    hjemler: Klagehjemmel[];
     iverksattOpprettholdelseTidspunkt: Nullable<string>;
     journalføringstidspunktInnstillingsbrev: Nullable<string>;
     distribusjonstidspunktInnstillingsbrev: Nullable<string>;
     oversendtKlageinstansenTidspunkt: Nullable<string>;
-    klageinstanshendelser: Nullable<Klageinstanshendelse[]>;
+    klageinstanshendelser: Klageinstanshendelse[];
+    ferdigstiltTidspunkt: Nullable<string>;
+    rammebehandlingId: Nullable<BehandlingId>;
 }
 
 export interface Brevtekst {

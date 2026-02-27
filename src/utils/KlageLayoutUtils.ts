@@ -16,7 +16,7 @@ export enum KlageSteg {
 export const finnNesteKlageSteg = (k: Klagebehandling, fra: KlageSteg): string => {
     switch (fra) {
         case KlageSteg.FORMKRAV: {
-            if (k.resultat === KlagebehandlingResultat.AVVIST) {
+            if (k.resultat?.type === KlagebehandlingResultat.AVVIST) {
                 return `/sak/${k.saksnummer}/klage/${k.id}/brev`;
             }
 
@@ -24,11 +24,11 @@ export const finnNesteKlageSteg = (k: Klagebehandling, fra: KlageSteg): string =
         }
 
         case KlageSteg.VURDERING: {
-            if (k.resultat === KlagebehandlingResultat.OMGJØR) {
+            if (k.resultat?.type === KlagebehandlingResultat.OMGJØR) {
                 return `/sak/${k.saksnummer}/klage/${k.id}/resultat`;
             }
 
-            if (k.resultat === KlagebehandlingResultat.OPPRETTHOLDT) {
+            if (k.resultat?.type === KlagebehandlingResultat.OPPRETTHOLDT) {
                 return `/sak/${k.saksnummer}/klage/${k.id}/brev`;
             }
 
@@ -51,7 +51,8 @@ export const kanNavigereTilKlageSteg = (klage: Klagebehandling, steg: KlageSteg)
             return kanVurdereKlage(klage);
         case KlageSteg.BREV:
             return (
-                klage.resultat === KlagebehandlingResultat.AVVIST || erKlageOpprettholdelse(klage)
+                klage.resultat?.type === KlagebehandlingResultat.AVVIST ||
+                erKlageOpprettholdelse(klage)
             );
         case KlageSteg.RESULTAT:
             return erKlageOmgjøring(klage) || erKlageOpprettholdtEllerEtter(klage.status);

@@ -58,11 +58,14 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
         };
     }
 
-    const omgjøringsbehandling =
-        sak.behandlinger.find(
-            (behandling) =>
-                behandling.id === initialKlage.rammebehandlingId && behandling.avbrutt === null,
-        ) || null;
+    const omgjørResultat = initialKlage.resultat?.type === 'OMGJØR' ? initialKlage.resultat : null;
+
+    const omgjøringsbehandling = omgjørResultat
+        ? (sak.behandlinger.find(
+              (behandling) =>
+                  behandling.id === omgjørResultat.rammebehandlingId && behandling.avbrutt === null,
+          ) ?? null)
+        : null;
 
     return { props: { sak, initialKlage, omgjøringsbehandling } };
 });

@@ -61,11 +61,12 @@ const avbruttKlageToDataCellInfo = (klage: Klagebehandling): AvbruttBehandlingCe
     return {
         id: klage.id,
         behandlingsperiode: null,
-        resultat: klage.resultat ? klage.resultat : KlagebehandlingResultat.AVVIST,
+        resultat: (klage.resultat?.type ??
+            KlagebehandlingResultat.AVVIST) as KlagebehandlingResultat,
         behandlingstype: 'KLAGEBEHANDLING',
         tidspunktAvsluttet: klage.sistEndret,
         avsluttetPga: 'avbrutt',
-        saksbehandler: klage.saksbehandler ? klage.saksbehandler : 'Ukjent',
+        saksbehandler: klage.saksbehandler ?? 'Ukjent',
         beslutter: null,
     };
 };

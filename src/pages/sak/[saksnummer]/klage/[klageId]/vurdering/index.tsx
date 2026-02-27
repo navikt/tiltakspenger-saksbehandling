@@ -1,7 +1,13 @@
 import { logger } from '@navikt/next-logger';
 import { ReactElement, useState } from 'react';
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
-import { Klagebehandling, KlagebehandlingResultat, KlageId } from '~/types/Klage';
+import {
+    Klagebehandling,
+    KlagebehandlingResultat,
+    KlagebehandlingsresultatOmgjør,
+    KlagebehandlingsresultatOpprettholdt,
+    KlageId,
+} from '~/types/Klage';
 import { SakProps } from '~/types/Sak';
 import { fetchSak } from '~/utils/fetch/fetch-server';
 import { KlageSteg } from '~/utils/KlageLayoutUtils';
@@ -43,7 +49,9 @@ import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
 
 type Props = {
     sak: SakProps;
-    initialKlage: Klagebehandling;
+    initialKlage: Klagebehandling & {
+        resultat: KlagebehandlingsresultatOmgjør | KlagebehandlingsresultatOpprettholdt | null;
+    };
     omgjøringsbehandling: Nullable<Rammebehandling>;
     vedtakSomPåklages: Nullable<Rammevedtak>;
     søknader: Søknad[];
@@ -69,14 +77,18 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
     }
 
     const vedtakSomPåklages =
-        sak.alleRammevedtak.find((vedtak) => vedtak.id === initialKlage.vedtakDetKlagesPå) ?? null;
+        sak.alleRammevedtak.find(
+            (vedtak) => vedtak.id === initialKlage.formkrav.vedtakDetKlagesPå,
+        ) ?? null;
 
-    const omgjøringsbehandling =
-        sak.behandlinger.find(
-            (behandling) =>
-                behandling.id === initialKlage.rammebehandlingId && behandling.avbrutt === null,
-        ) || null;
+    const omgjørResultat = initialKlage.resultat?.type === 'OMGJØR' ? initialKlage.resultat : null;
 
+    const omgjøringsbehandling = omgjørResultat
+        ? (sak.behandlinger.find(
+              (behandling) =>
+                  behandling.id === omgjørResultat.rammebehandlingId && behandling.avbrutt === null,
+          ) ?? null)
+        : null;
     return {
         props: {
             sak,
@@ -243,7 +255,7 @@ const VurderingKlagePage = ({ sak, vedtakSomPåklages, søknader, omgjøringsbeh
                                     variant="secondary"
                                     href={behandlingUrl({
                                         saksnummer: sak.saksnummer,
-                                        id: klage.rammebehandlingId,
+                                        id: klage.resultat.rammebehandlingId,
                                     })}
                                 >
                                     Gå til omgjøringsbehandling
@@ -268,7 +280,7 @@ const VurderingKlagePage = ({ sak, vedtakSomPåklages, søknader, omgjøringsbeh
                         </HStack>
                     )}
 
-                    {klage.resultat === KlagebehandlingResultat.OMGJØR && (
+                    {klage.resultat?.type === KlagebehandlingResultat.OMGJØR && (
                         <LocalAlert status="warning">
                             <LocalAlert.Header>
                                 <LocalAlert.Title>Omgjøring av vedtak</LocalAlert.Title>
