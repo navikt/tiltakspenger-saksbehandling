@@ -22,9 +22,12 @@ export const InformasjonOmBarnPDL = ({ barn, søknadsperiode }: Props) => {
         <>
             <HStack gap="space-8">
                 <Heading size="small" level="4">
-                    {getNavnMedFødselsdato(barn, barn.fortrolig || barn.strengtFortrolig)}
+                    {getNavnMedFødselsdato(
+                        barn,
+                        barn.fortrolig || barn.strengtFortrolig || barn.strengtFortroligUtland,
+                    )}
                 </Heading>
-                {barn.strengtFortrolig && (
+                {(barn.strengtFortrolig || barn.strengtFortroligUtland) && (
                     <Tag data-color="danger" variant="outline">
                         Strengt fortrolig adresse
                     </Tag>
@@ -34,7 +37,7 @@ export const InformasjonOmBarnPDL = ({ barn, søknadsperiode }: Props) => {
                         Fortrolig adresse
                     </Tag>
                 )}
-                {barn.skjerming && (
+                {barn.skjermet && (
                     <Tag data-color="danger" variant="outline">
                         Skjermet
                     </Tag>

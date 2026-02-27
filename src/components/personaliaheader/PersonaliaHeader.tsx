@@ -85,8 +85,16 @@ type PersonaliaInnholdProps = {
 };
 
 const PersonaliaInnhold = ({ saksnummer, personopplysninger }: PersonaliaInnholdProps) => {
-    const { fornavn, mellomnavn, etternavn, fnr, skjerming, strengtFortrolig, fortrolig } =
-        personopplysninger || {};
+    const {
+        fornavn,
+        mellomnavn,
+        etternavn,
+        fnr,
+        skjermet,
+        strengtFortrolig,
+        strengtFortroligUtland,
+        fortrolig,
+    } = personopplysninger || {};
 
     return (
         <>
@@ -95,7 +103,7 @@ const PersonaliaInnhold = ({ saksnummer, personopplysninger }: PersonaliaInnhold
             </Link>
             <BodyShort>{fnr}</BodyShort>
             <CopyButton copyText={fnr} variant="action" size="small" />
-            {strengtFortrolig && (
+            {(strengtFortrolig || strengtFortroligUtland) && (
                 <Tag data-color="danger" variant="outline">
                     Søker har strengt fortrolig adresse
                 </Tag>
@@ -105,7 +113,7 @@ const PersonaliaInnhold = ({ saksnummer, personopplysninger }: PersonaliaInnhold
                     Søker har fortrolig adresse
                 </Tag>
             )}
-            {skjerming && (
+            {skjermet && (
                 <Tag data-color="danger" variant="outline">
                     Søker er skjermet
                 </Tag>
