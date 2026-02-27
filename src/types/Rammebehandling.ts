@@ -7,7 +7,6 @@ import {
     RevurderingResultat,
     OppdaterRevurderingDTO,
 } from './Revurdering';
-import { SimulertBeregning } from './SimulertBeregning';
 import {
     Søknadsbehandling,
     SøknadsbehandlingInnvilgelse,
@@ -15,7 +14,7 @@ import {
     OppdaterSøknadsbehandlingDTO,
 } from './Søknadsbehandling';
 import { Tiltaksdeltakelse } from './TiltakDeltakelse';
-import { Utbetalingskontroll, Utbetalingsstatus } from './Utbetaling';
+import { BehandlingUtbetalingProps, Utbetalingskontroll } from './Utbetaling';
 import { Nullable } from './UtilTypes';
 import { Ytelse } from './Ytelse';
 import { SakId } from '~/types/Sak';
@@ -69,13 +68,6 @@ export enum Rammebehandlingsstatus {
     VEDTATT = 'VEDTATT',
     AVBRUTT = 'AVBRUTT',
 }
-
-export type BehandlingUtbetalingProps = {
-    navkontor: string;
-    navkontorNavn?: string;
-    status: Utbetalingsstatus;
-    simulertBeregning: SimulertBeregning;
-};
 
 export type Saksopplysninger = {
     fødselsdato: string;

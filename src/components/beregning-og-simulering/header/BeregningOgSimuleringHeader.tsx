@@ -3,8 +3,9 @@ import { Periode } from '~/types/Periode';
 import { periodeTilFormatertDatotekst } from '~/utils/date';
 import { UtbetalingStatus } from '~/components/utbetaling/status/UtbetalingStatus';
 import { UtbetalingBeløp } from '~/components/utbetaling/beløp/UtbetalingBeløp';
-import { KanIkkeIverksetteUtbetalingGrunn, SimulertBeregning } from '~/types/SimulertBeregning';
-import { Utbetalingsstatus } from '~/types/Utbetaling';
+import { SimulertBeregning } from '~/types/SimulertBeregning';
+import { KanIkkeIverksetteUtbetalingGrunn, Utbetalingsstatus } from '~/types/Utbetaling';
+import { Nullable } from '~/types/UtilTypes';
 
 import style from './BeregningOgSimuleringHeader.module.css';
 
@@ -13,6 +14,7 @@ type Props = {
     navkontorNavn?: string;
     simulertBeregning: SimulertBeregning;
     utbetalingsstatus?: Utbetalingsstatus;
+    kanIkkeIverksetteUtbetaling: Nullable<KanIkkeIverksetteUtbetalingGrunn>;
     erOmberegning: boolean;
     className?: string;
 };
@@ -22,10 +24,11 @@ export const BeregningOgSimuleringHeader = ({
     navkontorNavn,
     simulertBeregning,
     utbetalingsstatus,
+    kanIkkeIverksetteUtbetaling,
     erOmberegning,
     className,
 }: Props) => {
-    const { meldeperioder, beregning, utbetalingValideringsfeil } = simulertBeregning;
+    const { meldeperioder, beregning } = simulertBeregning;
     const { totalt } = beregning;
 
     const periode: Periode | undefined =
@@ -54,9 +57,9 @@ export const BeregningOgSimuleringHeader = ({
                     size={'small'}
                 >{`Vedtaket endrer beregningen av ${meldeperioder.length} meldeperiode${meldeperioder.length > 1 ? 'r' : ''} i perioden ${periodeTilFormatertDatotekst(periode)}`}</Alert>
             )}
-            {utbetalingValideringsfeil && (
+            {kanIkkeIverksetteUtbetaling && (
                 <Alert variant={'error'} size={'small'}>
-                    {`Utbetalingen kan ikke iverksettes: ${utbetalingValideringsfeilTekst[utbetalingValideringsfeil]}`}
+                    {`Utbetalingen kan ikke iverksettes: ${utbetalingValideringsfeilTekst[kanIkkeIverksetteUtbetaling]}`}
                 </Alert>
             )}
             <UtbetalingBeløp
@@ -91,4 +94,5 @@ const utbetalingValideringsfeilTekst: Record<KanIkkeIverksetteUtbetalingGrunn, s
     [KanIkkeIverksetteUtbetalingGrunn.JusteringStøttesIkke]:
         'Justeringer på tvers av meldeperioder eller kalendermåneder støttes ikke ennå',
     [KanIkkeIverksetteUtbetalingGrunn.SimuleringMangler]: 'Simulering mangler',
+    [KanIkkeIverksetteUtbetalingGrunn.SimuleringHarEndringer]: 'Kontroll-simulering har endringer',
 };

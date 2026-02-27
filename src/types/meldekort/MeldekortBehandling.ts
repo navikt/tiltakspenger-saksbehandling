@@ -6,7 +6,7 @@ import { Nullable } from '~/types/UtilTypes';
 import { BeløpProps, MeldeperiodeBeregningProps } from '~/types/Beregning';
 import { SakId } from '../Sak';
 import { SimulertBeregning } from '~/types/SimulertBeregning';
-import { Utbetalingsstatus } from '../Utbetaling';
+import { KanIkkeIverksetteUtbetalingGrunn, Utbetalingsstatus } from '../Utbetaling';
 import { Attestering } from '../Attestering';
 
 // "_behandling"-suffixen er ikke reell, er kun for at typescript ikke skal se denne som ekvivalent med BrukersMeldekortId
@@ -71,6 +71,7 @@ export type MeldekortBehandlingProps = {
     beregning?: MeldekortBeregning;
     avbrutt?: Avbrutt;
     simulertBeregning: Nullable<SimulertBeregning>;
+    kanIkkeIverksetteUtbetaling: Nullable<KanIkkeIverksetteUtbetalingGrunn>;
     tekstTilVedtaksbrev: Nullable<string>;
 };
 

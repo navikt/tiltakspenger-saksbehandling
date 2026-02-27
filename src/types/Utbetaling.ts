@@ -2,6 +2,7 @@ import { BeløpProps } from './Beregning';
 import { MeldeperiodeKjedeId } from './meldekort/Meldeperiode';
 import { Periode } from './Periode';
 import { SimulertBeregning } from '~/types/SimulertBeregning';
+import { Nullable } from '~/types/UtilTypes';
 
 export enum Utbetalingsstatus {
     SENDT_TIL_HELVED = 'SENDT_TIL_HELVED',
@@ -33,3 +34,18 @@ export type UtbetalingskontrollUtenEndring = {
 };
 
 export type Utbetalingskontroll = UtbetalingskontrollMedEndring | UtbetalingskontrollUtenEndring;
+
+export type BehandlingUtbetalingProps = {
+    navkontor: string;
+    navkontorNavn?: string;
+    status: Utbetalingsstatus;
+    simulertBeregning: SimulertBeregning;
+    kanIkkeIverksetteUtbetaling: Nullable<KanIkkeIverksetteUtbetalingGrunn>;
+};
+
+export enum KanIkkeIverksetteUtbetalingGrunn {
+    SimuleringMangler = 'SimuleringMangler',
+    FeilutbetalingStøttesIkke = 'FeilutbetalingStøttesIkke',
+    JusteringStøttesIkke = 'JusteringStøttesIkke',
+    SimuleringHarEndringer = 'SimuleringHarEndringer',
+}

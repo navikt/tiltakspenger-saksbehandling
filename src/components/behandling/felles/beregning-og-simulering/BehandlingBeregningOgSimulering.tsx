@@ -8,13 +8,9 @@ import { BeregningOppsummering } from '~/components/beregning-og-simulering/bere
 import { BeregningOgSimuleringHeader } from '~/components/beregning-og-simulering/header/BeregningOgSimuleringHeader';
 import { kanSaksbehandleForBehandling } from '~/utils/tilganger';
 import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
-import {
-    BehandlingUtbetalingProps,
-    Rammebehandling,
-    Rammebehandlingsstatus,
-} from '~/types/Rammebehandling';
+import { Rammebehandling, Rammebehandlingsstatus } from '~/types/Rammebehandling';
 import { formaterTidspunkt } from '~/utils/date';
-import { UtbetalingskontrollMedEndring } from '~/types/Utbetaling';
+import { BehandlingUtbetalingProps, UtbetalingskontrollMedEndring } from '~/types/Utbetaling';
 import { PartialRecord } from '~/types/UtilTypes';
 
 import style from './BehandlingBeregningOgSimulering.module.css';
@@ -62,7 +58,13 @@ const BeregningOgSimuleringSeksjon = ({
 
     const { status, utbetalingskontroll } = behandling;
 
-    const { simulertBeregning, status: utbetalingsstatus, navkontor, navkontorNavn } = utbetaling;
+    const {
+        simulertBeregning,
+        status: utbetalingsstatus,
+        navkontor,
+        navkontorNavn,
+        kanIkkeIverksetteUtbetaling,
+    } = utbetaling;
     const { beregning, simuleringstidspunkt } = simulertBeregning;
 
     return (
@@ -78,6 +80,7 @@ const BeregningOgSimuleringSeksjon = ({
                                 ? utbetalingsstatus
                                 : undefined
                         }
+                        kanIkkeIverksetteUtbetaling={kanIkkeIverksetteUtbetaling}
                         erOmberegning={true}
                     />
 
