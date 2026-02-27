@@ -71,11 +71,14 @@ export const SimuleringOppsummering = <BehId extends BehandlingIdFelles>(props: 
                 {oppdaterKnapp}
             </HStack>
             <UtbetalingBeløp
-                tekst={'Ny utbetaling'}
+                tekst={'Nytt beløp for endrede dager'}
                 beløp={nyUtbetaling}
                 beløpForrige={tidligereUtbetaling}
             />
-            <UtbetalingBeløp tekst={'Tidligere utbetaling'} beløp={tidligereUtbetaling} />
+            <UtbetalingBeløp
+                tekst={'Tidligere utbetalt for endrede dager'}
+                beløp={tidligereUtbetaling}
+            />
             {feilutbetaling !== 0 && (
                 <UtbetalingBeløp tekst={'Feilutbetaling'} beløp={feilutbetaling} />
             )}

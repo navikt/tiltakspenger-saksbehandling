@@ -6,6 +6,6 @@
     border: 2px solid var(--ax-success-500);
 }
 
-.tilbakekrevingBeløp {
+.feilutbetalingBeløp {
     border: 2px solid var(--ax-danger-700);
 }

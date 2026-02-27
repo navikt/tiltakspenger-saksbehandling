@@ -93,31 +93,3 @@ const utfallTekst = (beløpDiff: number) => {
 
     return 'Husk å informere bruker om utfallet av korrigeringen i Modia selv om det ikke vil ha en praktisk betydning for utbetalingen.';
 };
-
-// TODO: reimplementer disse?
-// const OppsummeringAvSimulering = () => {
-//     const erFeilutbetalingStørreEnn0 =
-//         erSimuleringEndring(props.simulering) && props.simulering.totalFeilutbetaling > 0;
-//
-//     return (
-//         <VStack gap="6">
-//             {erFeilutbetalingStørreEnn0 && (
-//                 <Alert variant={'warning'} size="small">
-//                     Denne behandlingen vil føre til feilutbetaling eller trekk for bruker.
-//                     Saksbehandler bør se nøye over simuleringen for å vurdere konsekvensen for
-//                     bruker og i noen tilfeller må man opprette en JIRA-sak hos Økonomi slik at de
-//                     får endret utbetalingen til ønsket resultat.
-//                 </Alert>
-//             )}
-//             {props.simulering.type === 'IngenEndring' && <OppsummeringAvSimuleringIngenEndring />}
-//         </VStack>
-//     );
-// };
-//
-// const OppsummeringAvSimuleringIngenEndring = () => {
-//     return (
-//         <div>
-//             <BodyShort>Simuleringen har ført til ingen endring</BodyShort>
-//         </div>
-//     );
-// };

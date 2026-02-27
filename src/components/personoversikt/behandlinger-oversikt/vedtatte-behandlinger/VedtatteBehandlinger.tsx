@@ -97,7 +97,7 @@ export const VedtatteBehandlinger = ({
                             value={Omgjøringsgrad.HELT}
                             className={classNames(style.omgjortCheckbox, style.heltOmgjortBg)}
                         >
-                            {`Helt omgjort (${antallHeltOmgjort})`}
+                            {`Vis helt omgjort (${antallHeltOmgjort})`}
                         </Checkbox>
                     )}
                     {antallDelvisOmgjort > 0 && (
@@ -105,7 +105,7 @@ export const VedtatteBehandlinger = ({
                             value={Omgjøringsgrad.DELVIS}
                             className={classNames(style.omgjortCheckbox, style.delvisOmgjortBg)}
                         >
-                            {`Delvis omgjort (${antallDelvisOmgjort})`}
+                            {`Vis delvis omgjort (${antallDelvisOmgjort})`}
                         </Checkbox>
                     )}
                 </CheckboxGroup>

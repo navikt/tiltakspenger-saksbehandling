@@ -28,7 +28,7 @@ export const BeregningOgSimuleringHeader = ({
     erOmberegning,
     className,
 }: Props) => {
-    const { meldeperioder, beregning } = simulertBeregning;
+    const { meldeperioder, beregning, simulerteBeløp } = simulertBeregning;
     const { totalt } = beregning;
 
     const periode: Periode | undefined =
@@ -39,13 +39,17 @@ export const BeregningOgSimuleringHeader = ({
               }
             : undefined;
 
-    const totalDiff = totalt.nå - (totalt.før ?? 0);
+    const beregnetDiff = totalt.nå - (totalt.før ?? 0);
+
+    const harNegativBeregningUtenFeilutbetaling =
+        beregnetDiff < 0 && !simulerteBeløp?.feilutbetaling;
 
     return (
         <VStack gap={'space-4'} className={className}>
             <Heading size={'small'} level={'3'} className={style.header}>
                 {'Beregnet utbetaling'}
             </Heading>
+
             {erOmberegning && periode && (
                 <Alert
                     variant={'info'}
@@ -53,16 +57,31 @@ export const BeregningOgSimuleringHeader = ({
                     size={'small'}
                 >{`Vedtaket påvirker beregningen av ${meldeperioder.length} meldeperiode${meldeperioder.length > 1 ? 'r' : ''} i perioden ${periodeTilFormatertDatotekst(periode)}`}</Alert>
             )}
+
             {kanIkkeIverksetteUtbetaling && (
-                <Alert variant={'error'} size={'small'}>
+                <Alert variant={'error'}>
                     {`Utbetalingen kan ikke iverksettes: ${utbetalingValideringsfeilTekst[kanIkkeIverksetteUtbetaling]}`}
                 </Alert>
             )}
+
+            {harNegativBeregningUtenFeilutbetaling && (
+                <Alert variant={'warning'}>
+                    {
+                        'Beregningen viser negativt endret beløp, men simulering viser ingen feilutbetaling.'
+                    }
+                    {' Dette betyr som regel at forrige utbetaling ikke har blitt kjørt ennå.'}
+                    {
+                        ' Dersom denne behandlingen iverksettes før forrige utbetaling kjøres, vil dette ikke føre til feilutbetaling.'
+                    }
+                </Alert>
+            )}
+
             <UtbetalingBeløp
                 tekst={erOmberegning ? 'Beregnet endring i utbetalingen' : 'Beregnet beløp'}
-                beløp={totalDiff}
-                className={totalDiff < 0 ? style.tilbakekrevingBeløp : style.etterbetalingBeløp}
+                beløp={beregnetDiff}
+                className={beregnetDiff < 0 ? style.feilutbetalingBeløp : style.etterbetalingBeløp}
             />
+
             <UtbetalingStatus
                 navkontor={navkontor}
                 navkontorNavn={navkontorNavn}
@@ -74,7 +93,7 @@ export const BeregningOgSimuleringHeader = ({
 
 const utbetalingValideringsfeilTekst: Record<KanIkkeIverksetteUtbetalingGrunn, string> = {
     [KanIkkeIverksetteUtbetalingGrunn.FeilutbetalingStøttesIkke]:
-        'Negativt endret beløp kan føre til feilutbetaling, som vi ikke støtter ennå',
+        'Negativt endret beløp fører til feilutbetaling, som vi ikke støtter ennå',
     [KanIkkeIverksetteUtbetalingGrunn.JusteringStøttesIkke]:
         'Justeringer på tvers av meldeperioder eller kalendermåneder støttes ikke ennå',
     [KanIkkeIverksetteUtbetalingGrunn.SimuleringMangler]: 'Simulering mangler',
