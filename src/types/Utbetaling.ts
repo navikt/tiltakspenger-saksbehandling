@@ -22,18 +22,28 @@ export type UtbetalingstidslinjePeriode = {
     status: Utbetalingsstatus;
 };
 
-export type UtbetalingskontrollMedEndring = {
+type UtbetalingskontrollBase = {
+    tidspunkt: string;
+    status: UtbetalingskontrollStatus;
+};
+
+export type UtbetalingskontrollMedEndring = UtbetalingskontrollBase & {
     simulertBeregning: SimulertBeregning;
-    harEndringer: true;
-    tidspunkt: string;
+    status: UtbetalingskontrollStatus.ENDRET;
 };
 
-export type UtbetalingskontrollUtenEndring = {
-    harEndringer: false;
-    tidspunkt: string;
+export type UtbetalingskontrollUtenEndring = UtbetalingskontrollBase & {
+    status: UtbetalingskontrollStatus.UENDRET;
 };
 
-export type Utbetalingskontroll = UtbetalingskontrollMedEndring | UtbetalingskontrollUtenEndring;
+export type UtbetalingskontrollUtdatert = UtbetalingskontrollBase & {
+    status: UtbetalingskontrollStatus.UTDATERT;
+};
+
+export type Utbetalingskontroll =
+    | UtbetalingskontrollMedEndring
+    | UtbetalingskontrollUtenEndring
+    | UtbetalingskontrollUtdatert;
 
 export type BehandlingUtbetalingProps = {
     navkontor: string;
@@ -48,4 +58,10 @@ export enum KanIkkeIverksetteUtbetalingGrunn {
     FeilutbetalingStøttesIkke = 'FeilutbetalingStøttesIkke',
     JusteringStøttesIkke = 'JusteringStøttesIkke',
     SimuleringHarEndringer = 'SimuleringHarEndringer',
+}
+
+export enum UtbetalingskontrollStatus {
+    ENDRET = 'ENDRET',
+    UENDRET = 'UENDRET',
+    UTDATERT = 'UTDATERT',
 }

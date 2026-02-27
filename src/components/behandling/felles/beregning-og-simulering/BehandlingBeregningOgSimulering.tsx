@@ -10,7 +10,11 @@ import { kanSaksbehandleForBehandling } from '~/utils/tilganger';
 import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
 import { Rammebehandling, Rammebehandlingsstatus } from '~/types/Rammebehandling';
 import { formaterTidspunkt } from '~/utils/date';
-import { BehandlingUtbetalingProps, UtbetalingskontrollMedEndring } from '~/types/Utbetaling';
+import {
+    BehandlingUtbetalingProps,
+    UtbetalingskontrollMedEndring,
+    UtbetalingskontrollStatus,
+} from '~/types/Utbetaling';
 import { PartialRecord } from '~/types/UtilTypes';
 
 import style from './BehandlingBeregningOgSimulering.module.css';
@@ -19,7 +23,10 @@ export const BehandlingBeregningOgSimulering = () => {
     const { behandling } = useBehandling();
     const { utbetaling, utbetalingskontroll } = behandling;
 
-    if (!utbetaling && !utbetalingskontroll?.harEndringer) {
+    const harUtbetalingskontrollMedEndringer =
+        utbetalingskontroll?.status === UtbetalingskontrollStatus.ENDRET;
+
+    if (!utbetaling && !harUtbetalingskontrollMedEndringer) {
         return null;
     }
 
@@ -31,7 +38,7 @@ export const BehandlingBeregningOgSimulering = () => {
                     <Separator />
                 </>
             )}
-            {utbetalingskontroll?.harEndringer && (
+            {harUtbetalingskontrollMedEndringer && (
                 <>
                     <UtbetalingskontrollSeksjon
                         utbetalingskontroll={utbetalingskontroll}
@@ -113,7 +120,7 @@ const BeregningOgSimuleringSeksjon = ({
 
                 {utbetalingskontroll && (
                     <AlertMedTidspunkt
-                        tekst={`Kontroll-simulering sist utført (${utbetalingskontroll.harEndringer ? 'med' : 'uten'} endring)`}
+                        tekst={`Kontroll-simulering sist utført (${utbetalingskontrollStatusTekst[utbetalingskontroll.status]})`}
                         tidspunkt={utbetalingskontroll.tidspunkt}
                     />
                 )}
@@ -168,13 +175,6 @@ const UtbetalingskontrollSeksjon = ({ utbetalingskontroll, behandlingsstatus }: 
     );
 };
 
-const behandlingsstatusTekst: PartialRecord<Rammebehandlingsstatus, string> = {
-    [Rammebehandlingsstatus.UNDER_BEHANDLING]:
-        'Behandlingen må simuleres på nytt og utbetalingen må vurderes på nytt før den sendes til beslutning.',
-    [Rammebehandlingsstatus.UNDER_BESLUTNING]:
-        'Behandlingen må underkjennes og saksbehandler må vurdere utbetalingen på nytt.',
-};
-
 type AlertMedTidspunktProps = {
     tekst: string;
     tidspunkt: string;
@@ -188,3 +188,16 @@ const AlertMedTidspunkt = ({ tekst, tidspunkt }: AlertMedTidspunktProps) => {
         </Alert>
     );
 };
+
+const behandlingsstatusTekst: PartialRecord<Rammebehandlingsstatus, string> = {
+    [Rammebehandlingsstatus.UNDER_BEHANDLING]:
+        'Behandlingen må simuleres på nytt og utbetalingen må vurderes på nytt før den sendes til beslutning.',
+    [Rammebehandlingsstatus.UNDER_BESLUTNING]:
+        'Behandlingen må underkjennes og saksbehandler må vurdere utbetalingen på nytt.',
+} as const;
+
+const utbetalingskontrollStatusTekst: Record<UtbetalingskontrollStatus, string> = {
+    [UtbetalingskontrollStatus.ENDRET]: 'med endringer',
+    [UtbetalingskontrollStatus.UENDRET]: 'uten endringer',
+    [UtbetalingskontrollStatus.UTDATERT]: 'utdatert',
+} as const;
