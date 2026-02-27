@@ -5,12 +5,13 @@ import { fetchJsonFraApiClientSide } from '../../utils/fetch/fetch';
 export type Personopplysninger = {
     fnr: string;
     fødselsdato: string;
-    fornavn: string;
-    mellomnavn: string;
-    etternavn: string;
-    skjerming: boolean;
-    strengtFortrolig: boolean;
+    fornavn?: string;
+    mellomnavn?: string;
+    etternavn?: string;
     fortrolig: boolean;
+    strengtFortrolig: boolean;
+    strengtFortroligUtland: boolean;
+    skjermet: boolean;
     dødsdato?: string;
 };
 

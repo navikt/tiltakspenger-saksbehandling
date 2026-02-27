@@ -135,7 +135,8 @@ const Barn = ({ barn, tiltaksperiode, personopplysninger }: BarnProps) => {
         ? erDatoIPeriode(fyller16dato, tiltaksperiode)
         : false;
 
-    const { fortrolig, strengtFortrolig, dødsdato } = personopplysninger || {};
+    const { fortrolig, strengtFortrolig, strengtFortroligUtland, dødsdato } =
+        personopplysninger || {};
 
     const dødeITiltaksperioden =
         dødsdato && tiltaksperiode ? erDatoIPeriode(dødsdato, tiltaksperiode) : false;
@@ -174,10 +175,10 @@ const Barn = ({ barn, tiltaksperiode, personopplysninger }: BarnProps) => {
             />
             <BehandlingSaksopplysning navn={'Kilde'} verdi={kilde} />
 
-            {(fortrolig || strengtFortrolig) && (
+            {(fortrolig || strengtFortrolig || strengtFortroligUtland) && (
                 <BehandlingSaksopplysning
                     navn={'Adressebeskyttelse'}
-                    verdi={`Barnet har ${strengtFortrolig ? 'strengt ' : ''}fortrolig adresse`}
+                    verdi={`Barnet har ${strengtFortrolig || strengtFortroligUtland ? 'strengt ' : ''}fortrolig adresse`}
                     visVarsel
                 />
             )}
