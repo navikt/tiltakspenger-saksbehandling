@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useSettBehandlingPåVent } from '~/components/behandlingmeny/useSettBehandlingPåVent';
 import SettBehandlingPåVentModal from '~/components/modaler/SettBehandlingPåVentModal';
 import { Rammebehandling } from '~/types/Rammebehandling';
+import { personoversiktUrl } from '~/utils/urls';
 
 type Props = {
     behandling: Rammebehandling;
@@ -36,10 +37,10 @@ export const BehandlingSettPåVent = ({ behandling, disabled }: Props) => {
                             behandlingId: behandling.id,
                             begrunnelse: begrunnelse,
                             frist: frist,
-                        }).then((oppdaterBehandling) => {
-                            if (oppdaterBehandling) {
+                        }).then((oppdatertSak) => {
+                            if (oppdatertSak) {
                                 setModalÅpen(false);
-                                router.push(`/sak/${oppdaterBehandling.saksnummer}`);
+                                router.push(personoversiktUrl(oppdatertSak));
                             }
                         }),
                     isMutating: isSettBehandlingPåVentMutating,

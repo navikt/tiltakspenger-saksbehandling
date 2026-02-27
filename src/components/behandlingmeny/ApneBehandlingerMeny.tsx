@@ -182,9 +182,11 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
                         avsluttBehandling({
                             behandlingId: id,
                             begrunnelse: begrunnelse,
-                        }).then((sak) => {
-                            setSak(sak!);
-                            setVisAvsluttBehandlingModal(false);
+                        }).then((oppdatertSak) => {
+                            if (oppdatertSak) {
+                                setSak(oppdatertSak);
+                                setVisAvsluttBehandlingModal(false);
+                            }
                         })
                     }
                     tittel={`Avslutt ${erRevurdering ? 'revurdering' : 'behandling'}`}
@@ -225,10 +227,10 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
                                 behandlingId: behandling.id,
                                 begrunnelse: begrunnelse,
                                 frist: frist,
-                            }).then((oppdaterBehandling) => {
-                                if (oppdaterBehandling) {
+                            }).then((oppdatertSak) => {
+                                if (oppdatertSak) {
+                                    setSak(oppdatertSak);
                                     setVisSettBehandlingPåVentModal(false);
-                                    router.push(`/sak/${oppdaterBehandling.saksnummer}`);
                                 }
                             }),
                         isMutating: isSettBehandlingPåVentMutating,
