@@ -30,6 +30,7 @@ export interface Behandlingssammendrag {
     sattPåVentBegrunnelse: Nullable<string>;
     sattPåVentFrist: Nullable<string>;
     resultat: Nullable<RammebehandlingResultat>;
+    erUnderkjent: boolean;
 }
 
 export enum BehandlingssammendragType {
