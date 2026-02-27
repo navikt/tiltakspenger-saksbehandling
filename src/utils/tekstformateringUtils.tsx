@@ -64,7 +64,7 @@ export const finnBehandlingssammendragStatusTag = (
         underkjent
     ) {
         return (
-            <Tag data-color={underkjent ? 'warning' : 'info'} variant="outline">
+            <Tag data-color={'warning'} variant="outline">
                 Underkjent
             </Tag>
         );
