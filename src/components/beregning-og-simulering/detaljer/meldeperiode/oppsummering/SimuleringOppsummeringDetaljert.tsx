@@ -14,8 +14,8 @@ type Props = {
 export const SimuleringOppsummeringDetaljert = ({ headerTekst, simulerteBeløp }: Props) => {
     if (!simulerteBeløp) {
         return (
-            <Alert variant={'warning'} size={'small'}>
-                {'Simulering mangler!'}
+            <Alert variant={'info'} size={'small'}>
+                {'Simuleringen viser ingen endringer for denne perioden'}
             </Alert>
         );
     }

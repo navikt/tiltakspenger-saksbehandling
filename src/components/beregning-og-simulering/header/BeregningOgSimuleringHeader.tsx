@@ -41,21 +41,17 @@ export const BeregningOgSimuleringHeader = ({
 
     const totalDiff = totalt.nå - (totalt.før ?? 0);
 
-    const erFeilutbetaling = totalDiff < 0;
-
-    const beløpTekst = erOmberegning ? beløpOmberegningTekst(totalDiff) : 'Beløp';
-
     return (
         <VStack gap={'space-4'} className={className}>
             <Heading size={'small'} level={'3'} className={style.header}>
-                {'Utbetaling'}
+                {'Beregnet utbetaling'}
             </Heading>
             {erOmberegning && periode && (
                 <Alert
                     variant={'info'}
                     inline={true}
                     size={'small'}
-                >{`Vedtaket endrer beregningen av ${meldeperioder.length} meldeperiode${meldeperioder.length > 1 ? 'r' : ''} i perioden ${periodeTilFormatertDatotekst(periode)}`}</Alert>
+                >{`Vedtaket påvirker beregningen av ${meldeperioder.length} meldeperiode${meldeperioder.length > 1 ? 'r' : ''} i perioden ${periodeTilFormatertDatotekst(periode)}`}</Alert>
             )}
             {kanIkkeIverksetteUtbetaling && (
                 <Alert variant={'error'} size={'small'}>
@@ -63,9 +59,9 @@ export const BeregningOgSimuleringHeader = ({
                 </Alert>
             )}
             <UtbetalingBeløp
-                tekst={beløpTekst}
-                beløp={Math.abs(totalDiff)}
-                className={erFeilutbetaling ? style.tilbakekrevingBeløp : style.etterbetalingBeløp}
+                tekst={erOmberegning ? 'Beregnet endring i utbetalingen' : 'Beregnet beløp'}
+                beløp={totalDiff}
+                className={totalDiff < 0 ? style.tilbakekrevingBeløp : style.etterbetalingBeløp}
             />
             <UtbetalingStatus
                 navkontor={navkontor}
@@ -76,21 +72,9 @@ export const BeregningOgSimuleringHeader = ({
     );
 };
 
-const beløpOmberegningTekst = (beløp: number): string => {
-    if (beløp > 0) {
-        return 'Beløp (etterbetaling)';
-    }
-
-    if (beløp < 0) {
-        return 'Beløp (feilutbetaling)';
-    }
-
-    return 'Beløp (ingen endring)';
-};
-
 const utbetalingValideringsfeilTekst: Record<KanIkkeIverksetteUtbetalingGrunn, string> = {
     [KanIkkeIverksetteUtbetalingGrunn.FeilutbetalingStøttesIkke]:
-        'Feilutbetaling støttes ikke ennå',
+        'Negativt endret beløp kan føre til feilutbetaling, som vi ikke støtter ennå',
     [KanIkkeIverksetteUtbetalingGrunn.JusteringStøttesIkke]:
         'Justeringer på tvers av meldeperioder eller kalendermåneder støttes ikke ennå',
     [KanIkkeIverksetteUtbetalingGrunn.SimuleringMangler]: 'Simulering mangler',

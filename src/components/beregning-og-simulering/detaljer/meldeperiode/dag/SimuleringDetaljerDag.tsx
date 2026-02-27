@@ -23,11 +23,11 @@ export const SimuleringDetaljerDag = ({ dag, className }: Props) => {
 
     const beregnetDiffDag = beregning.totalt.nå - (beregning.totalt.før ?? 0);
 
-    const harSimulering = simulerteBeløp !== null;
+    const harSimulertBeløp = simulerteBeløp !== null;
 
-    const simulertDiffDag = harSimulering
+    const simulertDiffDag = harSimulertBeløp
         ? simulerteBeløp.nyUtbetaling - simulerteBeløp.tidligereUtbetaling
-        : undefined;
+        : 0;
 
     return (
         <>
@@ -53,7 +53,7 @@ export const SimuleringDetaljerDag = ({ dag, className }: Props) => {
                     {beregnetDiffDag}
                 </Table.DataCell>
                 <Table.DataCell className={style.simuleringCell}>
-                    {harSimulering ? (
+                    {harSimulertBeløp ? (
                         <>
                             <span className={beløpStyle(simulertDiffDag)}>{simulertDiffDag}</span>
                             <Tooltip
@@ -69,7 +69,7 @@ export const SimuleringDetaljerDag = ({ dag, className }: Props) => {
                             </Tooltip>
                         </>
                     ) : (
-                        <BodyShort size={'small'}>{'Ikke simulert'}</BodyShort>
+                        <BodyShort size={'small'}>{'Ingen endring'}</BodyShort>
                     )}
                 </Table.DataCell>
             </Table.Row>

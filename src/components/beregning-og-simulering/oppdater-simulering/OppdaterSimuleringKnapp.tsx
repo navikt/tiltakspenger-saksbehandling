@@ -39,7 +39,7 @@ export const OppdaterSimuleringKnapp = <BehId extends BehandlingIdFelles>({
                         oppdaterBehandlingEllerKjede(oppdatertBehandlingEllerKjede);
                     })
                 }
-                variant={'tertiary'}
+                variant={'secondary'}
                 size={'small'}
                 type={'button'}
                 loading={oppdaterSimuleringLaster}

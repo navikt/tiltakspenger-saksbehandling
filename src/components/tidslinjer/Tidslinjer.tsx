@@ -44,7 +44,7 @@ export const Tidslinjer = ({ sak, heading = true, className }: Props) => {
             <div className={style.header}>
                 {heading && (
                     <Heading size={'small'} level={'2'}>
-                        {'Gjeldende vedtak og utbetalinger'}
+                        {'Gjeldende vedtak og siste beregnede utbetalinger'}
                     </Heading>
                 )}
             </div>
@@ -154,7 +154,7 @@ export const Tidslinjer = ({ sak, heading = true, className }: Props) => {
                     })}
                 </Timeline.Row>
 
-                <Timeline.Row label={'Utbetalinger'} icon={<SackKronerIcon />}>
+                <Timeline.Row label={'Beregninger'} icon={<SackKronerIcon />}>
                     {utbetalingstidslinje.map((beregning) => {
                         const { kjedeId, periode, beløp } = beregning;
                         const { fraOgMed, tilOgMed } = periode;
@@ -177,17 +177,17 @@ export const Tidslinjer = ({ sak, heading = true, className }: Props) => {
                                         {barnetillegg > 0 && (
                                             <>
                                                 <InfoElement
-                                                    navn={'Utbetalt ordinært'}
+                                                    navn={'Beregnet beløp, tiltakspenger'}
                                                     verdi={formatterBeløp(ordinært)}
                                                 />
                                                 <InfoElement
-                                                    navn={'Utbetalt barnetillegg'}
+                                                    navn={'Beregnet beløp, barnetillegg'}
                                                     verdi={formatterBeløp(barnetillegg)}
                                                 />
                                             </>
                                         )}
                                         <InfoElement
-                                            navn={'Utbetalt totalt'}
+                                            navn={'Beregnet totalbeløp'}
                                             verdi={formatterBeløp(totalt)}
                                         />
                                     </div>
