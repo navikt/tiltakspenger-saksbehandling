@@ -2,11 +2,7 @@ import React from 'react';
 import { BodyShort, Button, CopyButton, HStack, Table, Tag } from '@navikt/ds-react';
 import styles from './BenkTabell.module.css';
 import SortableTable from '../tabell/SortableTable';
-import {
-    BehandlingssammendragKolonner,
-    behandlingsstatusTextFormatter,
-    behandlingstypeTextFormatter,
-} from './BenkSideUtils';
+import { BehandlingssammendragKolonner, behandlingstypeTextFormatter } from './BenkSideUtils';
 import {
     antallKalenderDagerUnnaDagensDato,
     formaterDatotekst,
@@ -14,14 +10,13 @@ import {
 } from '~/utils/date';
 import NextLink from 'next/link';
 import { ValueOf } from 'next/dist/shared/lib/constants';
-import {
-    Behandlingssammendrag,
-    BehandlingssammendragStatus,
-    BenkOversiktResponse,
-} from '~/types/Behandlingssammendrag';
+import { Behandlingssammendrag, BenkOversiktResponse } from '~/types/Behandlingssammendrag';
 import VisMer from '~/components/benk/VisMer';
 import { AkselColor } from '@navikt/ds-react/types/theme';
-import { behandlingResultatTilTag } from '~/utils/tekstformateringUtils';
+import {
+    behandlingResultatTilTag,
+    finnBehandlingssammendragStatusTag,
+} from '~/utils/tekstformateringUtils';
 import { personoversiktUrl } from '~/utils/urls';
 
 type Props = {
@@ -147,20 +142,9 @@ const BenkTabell = ({ data, sorteringRetning, onSortChange }: Props) => {
                                 </HStack>
                             </Table.DataCell>
                             <Table.DataCell>
-                                {behandling.status ===
-                                BehandlingssammendragStatus.KLAR_TIL_BEHANDLING ? (
-                                    <Tag data-color="success" variant="outline">
-                                        {behandlingsstatusTextFormatter[behandling.status]}
-                                    </Tag>
-                                ) : behandling.status ===
-                                  BehandlingssammendragStatus.KLAR_TIL_BESLUTNING ? (
-                                    <Tag data-color="meta-lime" variant="outline">
-                                        {behandlingsstatusTextFormatter[behandling.status]}
-                                    </Tag>
-                                ) : behandling.status ? (
-                                    behandlingsstatusTextFormatter[behandling.status]
-                                ) : (
-                                    '-'
+                                {finnBehandlingssammendragStatusTag(
+                                    behandling?.status,
+                                    behandling.erUnderkjent,
                                 )}
                             </Table.DataCell>
                             <Table.DataCell>{formaterTidspunkt(behandling.startet)}</Table.DataCell>
