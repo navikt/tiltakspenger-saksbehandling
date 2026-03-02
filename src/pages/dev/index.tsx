@@ -144,6 +144,7 @@ const KlageHendelseModal = (props: { open: boolean; onClose: () => void }) => {
         },
     });
 
+    /* eslint-disable-next-line */
     const type = form.watch('type');
 
     const onSubmit = (values: KlageHendelseFormData) => {

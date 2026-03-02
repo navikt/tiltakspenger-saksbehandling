@@ -16,6 +16,7 @@ import {
     UtbetalingskontrollStatus,
 } from '~/types/Utbetaling';
 import { PartialRecord } from '~/types/UtilTypes';
+import { OppdaterSimuleringKnapp } from '~/components/beregning-og-simulering/oppdater-simulering/OppdaterSimuleringKnapp';
 
 import style from './BehandlingBeregningOgSimulering.module.css';
 
@@ -32,12 +33,12 @@ export const BehandlingBeregningOgSimulering = () => {
 
     return (
         <>
-            {utbetaling && (
-                <>
-                    <BeregningOgSimuleringSeksjon behandling={behandling} utbetaling={utbetaling} />
-                    <Separator />
-                </>
+            {utbetaling ? (
+                <BeregningOgSimuleringSeksjon behandling={behandling} utbetaling={utbetaling} />
+            ) : (
+                <UtenBeregnetUtbetaling />
             )}
+            <Separator />
             {harUtbetalingskontrollMedEndringer && (
                 <>
                     <UtbetalingskontrollSeksjon
@@ -129,6 +130,24 @@ const BeregningOgSimuleringSeksjon = ({
             <VedtakSeksjon.FullBredde className={style.detaljer}>
                 <SimuleringDetaljer simulertBeregning={simulertBeregning} />
             </VedtakSeksjon.FullBredde>
+        </VedtakSeksjon>
+    );
+};
+
+const UtenBeregnetUtbetaling = () => {
+    const { behandling, setBehandling } = useBehandling();
+
+    return (
+        <VedtakSeksjon>
+            <VedtakSeksjon.Venstre gap={'space-16'}>
+                <Alert variant={'info'} inline={true}>
+                    {'Ingen beregning/simulering av utbetaling tilgjengelig'}
+                </Alert>
+                <OppdaterSimuleringKnapp
+                    behandlingId={behandling.id}
+                    oppdaterBehandlingEllerKjede={setBehandling}
+                />
+            </VedtakSeksjon.Venstre>
         </VedtakSeksjon>
     );
 };
