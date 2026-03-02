@@ -14,7 +14,9 @@ export const useFetchJsonFraApi = <
 >(
     url: string,
     method: Method,
-    swrOptions?: SWRMutationConfiguration<ResponseType, ErrorBody, string, BodyType>,
+    swrOptions?: SWRMutationConfiguration<ResponseType, ErrorBody, string, BodyType> & {
+        throwOnError?: boolean;
+    },
 ) => {
     const fetcher = async (_url: string, { arg }: SWRArg<BodyType>) =>
         fetchJsonFraApiClientSide<ResponseType>(_url, {

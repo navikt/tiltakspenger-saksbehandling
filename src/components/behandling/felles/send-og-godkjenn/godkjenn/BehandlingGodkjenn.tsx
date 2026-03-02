@@ -7,6 +7,7 @@ import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { useGodkjennBehandling } from '~/components/behandling/felles/send-og-godkjenn/godkjenn/useGodkjennBehandling';
 import { useNotification } from '~/context/NotificationContext';
 import { Rammebehandling } from '~/types/Rammebehandling';
+import { FetcherError } from '~/utils/fetch/fetch';
 
 type Props = {
     behandling: Rammebehandling;
@@ -25,8 +26,10 @@ export const BehandlingGodkjenn = ({ behandling }: Props) => {
         'POST',
         {
             onSuccess: (oppdatertBehandling) => {
-                setBehandling(oppdatertBehandling!);
-                navigateWithNotification('/', 'Vedtaket har blitt underkjent!');
+                if (oppdatertBehandling) {
+                    setBehandling(oppdatertBehandling);
+                    navigateWithNotification('/', 'Vedtaket har blitt underkjent!');
+                }
             },
         },
     );
@@ -55,15 +58,21 @@ export const BehandlingGodkjenn = ({ behandling }: Props) => {
                         variant={'primary'}
                         loading={godkjennBehandlingLaster}
                         onClick={() => {
-                            godkjennBehandling().then((oppdatertBehandling) => {
-                                if (oppdatertBehandling) {
+                            godkjennBehandling()
+                                .then((oppdatertBehandling) => {
                                     setBehandling(oppdatertBehandling);
                                     setVisGodkjennVedtakModal(false);
                                     navigateWithNotification('/', 'Vedtaket er godkjent!');
-                                } else if (godkjennBehandlingError?.data) {
-                                    setBehandling(godkjennBehandlingError.data);
-                                }
-                            });
+                                })
+                                .catch((error: FetcherError<Rammebehandling>) => {
+                                    if (error.data) {
+                                        setBehandling(error.data);
+                                    } else {
+                                        console.error(
+                                            'Forventet oppdatert behandling ved feil fra backend',
+                                        );
+                                    }
+                                });
                         }}
                     >
                         {'Godkjenn vedtaket'}

@@ -7,7 +7,9 @@ export const useGodkjennBehandling = (behandling: Rammebehandling) => {
         Rammebehandling,
         undefined,
         FetcherError<Rammebehandling>
-    >(`/sak/${behandling.sakId}/behandling/${behandling.id}/iverksett`, 'POST');
+    >(`/sak/${behandling.sakId}/behandling/${behandling.id}/iverksett`, 'POST', {
+        throwOnError: true,
+    });
 
     return {
         godkjennBehandling: trigger,
