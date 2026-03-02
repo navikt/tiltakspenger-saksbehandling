@@ -7,13 +7,11 @@ import { useRevurderingInnvilgelseSkjema } from '~/components/behandling/context
 import { InnvilgelsesperioderVelger } from '~/components/behandling/felles/innvilgelsesperiode/InnvilgelsesperioderVelger';
 import { BehandlingBarnetillegg } from '~/components/behandling/felles/barnetillegg/BehandlingBarnetillegg';
 import { BegrunnelseVilkårsvurdering } from '~/components/behandling/felles/begrunnelse-vilkårsvurdering/BegrunnelseVilkårsvurdering';
-import { Klagebehandling } from '~/types/Klage';
-import { Nullable } from '~/types/UtilTypes';
 import { hentTiltaksdeltakelserMedStartOgSluttdato } from '~/utils/behandling';
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
 
-export const RevurderingInnvilgelseVedtak = (props: { klage: Nullable<Klagebehandling> }) => {
-    const { behandling } = useBehandling();
+export const RevurderingInnvilgelseVedtak = () => {
+    const { behandling, klagebehandling } = useBehandling();
     const { innvilgelse } = useRevurderingInnvilgelseSkjema();
 
     // Kjapp fiks for å sjekke om det finnes tiltak det kan innvilges for. Dette bør avgjøres av backend.
@@ -22,7 +20,8 @@ export const RevurderingInnvilgelseVedtak = (props: { klage: Nullable<Klagebehan
     return (
         <>
             <Heading size={'medium'} level={'1'} spacing={true}>
-                {props.klage ? 'Omgjøring etter klage - ' : ''}Revurdering av innvilgelse
+                {klagebehandling ? 'Omgjøring etter klage - ' : ''}
+                {'Revurdering av innvilgelse'}
             </Heading>
             {kanInnvilges ? (
                 <>

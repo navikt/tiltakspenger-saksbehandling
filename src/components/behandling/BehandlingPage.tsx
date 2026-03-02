@@ -12,17 +12,16 @@ import { Tidslinjer } from '~/components/tidslinjer/Tidslinjer';
 import { useSak } from '~/context/sak/SakContext';
 import OppsummeringAvVentestatus from '~/components/oppsummeringer/ventestatus/OppsummeringAvVentestatus';
 import { BehandlingSkjemaProvider } from '~/components/behandling/context/BehandlingSkjemaContext';
-
-import style from './BehandlingPage.module.css';
-import { Klagebehandling, KlagebehandlingsresultatOmgjør } from '~/types/Klage';
-import { Nullable } from '~/types/UtilTypes';
+import { KlagebehandlingResultat } from '~/types/Klage';
 import { OppsummeringsPar } from '../oppsummeringer/oppsummeringspar/OppsummeringsPar';
 import { PERSONOVERSIKT_TABS } from '~/components/personoversikt/Personoversikt';
 
-export const BehandlingPage = (props: {
-    klage: Nullable<Klagebehandling & { resultat: KlagebehandlingsresultatOmgjør }>;
-}) => {
+import style from './BehandlingPage.module.css';
+
+export const BehandlingPage = () => {
     const { sak } = useSak();
+    const { behandling } = useBehandling();
+
     const {
         id,
         sistEndret,
@@ -33,7 +32,7 @@ export const BehandlingPage = (props: {
         avbrutt,
         ventestatus,
         saksopplysninger,
-    } = useBehandling().behandling;
+    } = behandling;
 
     return (
         <>
@@ -69,14 +68,12 @@ export const BehandlingPage = (props: {
                             )}
                             <Tidslinjer sak={sak} />
                             {avbrutt && <AvbruttOppsummering avbrutt={avbrutt} withPanel={true} />}
-                            {props.klage && (
-                                <OppsummeringAvKlageForRammebehandling klage={props.klage} />
-                            )}
+                            <OppsummeringAvKlageForRammebehandling />
                             <div className={style.vedtakContainer}>
                                 {type === Rammebehandlingstype.SØKNADSBEHANDLING ? (
-                                    <SøknadsbehandlingVedtak klagebehandling={props.klage} />
+                                    <SøknadsbehandlingVedtak />
                                 ) : type === Rammebehandlingstype.REVURDERING ? (
-                                    <RevurderingVedtak klage={props.klage} />
+                                    <RevurderingVedtak />
                                 ) : (
                                     <Alert
                                         variant={'error'}
@@ -91,9 +88,21 @@ export const BehandlingPage = (props: {
     );
 };
 
-const OppsummeringAvKlageForRammebehandling = (props: {
-    klage: Klagebehandling & { resultat: KlagebehandlingsresultatOmgjør };
-}) => {
+const OppsummeringAvKlageForRammebehandling = () => {
+    const { behandling, klagebehandling } = useBehandling();
+
+    if (!behandling.klagebehandlingId) {
+        return null;
+    }
+
+    if (klagebehandling?.resultat?.type !== KlagebehandlingResultat.OMGJØR) {
+        return (
+            <Alert
+                variant={'error'}
+            >{`Forventet en tilknyttet klagebehandling med resultat 'OMGJØR' men fikk resultat: ${klagebehandling?.resultat?.type}`}</Alert>
+        );
+    }
+
     return (
         <Box background="default" padding="space-16">
             <Heading size="small">Informasjon fra klagen</Heading>
@@ -101,12 +110,12 @@ const OppsummeringAvKlageForRammebehandling = (props: {
                 <OppsummeringsPar
                     retning="vertikal"
                     label="Årsak"
-                    verdi={omgjøringsårsakTilText[props.klage.resultat.årsak]}
+                    verdi={omgjøringsårsakTilText[klagebehandling.resultat.årsak]}
                 />
                 <OppsummeringsPar
                     retning="vertikal"
                     label="Begrunnelse"
-                    verdi={props.klage.resultat.begrunnelse}
+                    verdi={klagebehandling.resultat.begrunnelse}
                 />
             </VStack>
         </Box>

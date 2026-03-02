@@ -5,21 +5,29 @@ import { Rammebehandlingstype, Rammebehandling } from '~/types/Rammebehandling';
 import { Søknadsbehandling } from '~/types/Søknadsbehandling';
 import { Revurdering, Omgjøring } from '~/types/Revurdering';
 import { erOmgjøringResultat } from '~/utils/behandling';
+import { Klagebehandling } from '~/types/Klage';
+import { Nullable } from '~/types/UtilTypes';
 
 type BehandlingContext<Rammebehandling> = {
     behandling: Rammebehandling;
     setBehandling: (behandling: Rammebehandling) => void;
     rolleForBehandling: SaksbehandlerRolle.SAKSBEHANDLER | SaksbehandlerRolle.BESLUTTER | null;
+    klagebehandling: Nullable<Klagebehandling>;
 };
 
 const Context = createContext({} as BehandlingContext<Rammebehandling>);
 
 type Props = {
     behandling: Rammebehandling;
+    klagebehandling: Nullable<Klagebehandling>;
     children: ReactNode;
 };
 
-export const BehandlingProvider = ({ behandling: initialBehandling, children }: Props) => {
+export const BehandlingProvider = ({
+    behandling: initialBehandling,
+    klagebehandling,
+    children,
+}: Props) => {
     const [behandling, setBehandling] = useState<Rammebehandling>(initialBehandling);
 
     const rolleForBehandling = useRolleForBehandling(behandling);
@@ -34,6 +42,7 @@ export const BehandlingProvider = ({ behandling: initialBehandling, children }: 
                 behandling,
                 setBehandling,
                 rolleForBehandling,
+                klagebehandling,
             }}
         >
             {children}

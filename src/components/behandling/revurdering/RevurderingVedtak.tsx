@@ -4,17 +4,15 @@ import { RevurderingInnvilgelseVedtak } from '~/components/behandling/revurderin
 import { Alert } from '@navikt/ds-react';
 import { RevurderingOmgjøringVedtak } from './omgjøring/RevurderingOmgjøringVedtak';
 import { RevurderingResultat } from '~/types/Revurdering';
-import { Klagebehandling } from '~/types/Klage';
-import { Nullable } from '~/types/UtilTypes';
 
-export const RevurderingVedtak = (props: { klage: Nullable<Klagebehandling> }) => {
+export const RevurderingVedtak = () => {
     const { resultat } = useRevurderingBehandling().behandling;
 
     switch (resultat) {
         case RevurderingResultat.STANS:
             return <RevurderingStansVedtak />;
         case RevurderingResultat.INNVILGELSE:
-            return <RevurderingInnvilgelseVedtak klage={props.klage} />;
+            return <RevurderingInnvilgelseVedtak />;
         case RevurderingResultat.OMGJØRING:
         case RevurderingResultat.OMGJØRING_OPPHØR:
         case RevurderingResultat.OMGJØRING_IKKE_VALGT:
