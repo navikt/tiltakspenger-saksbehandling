@@ -216,19 +216,21 @@ export const klagefristUnntakSvarordFormDataTilKlagebehandlingKlagefristUnntakSv
 
 export const klageTilFormkravFormData = (klage: Klagebehandling): FormkravFormData => {
     return {
-        journalpostId: klage.journalpostId,
-        vedtakDetPåklages: klage.vedtakDetKlagesPå ?? INGEN_VEDTAK,
-        erKlagerPartISaken: klage.erKlagerPartISaken,
-        klagesDetPåKonkreteElementer: klage.klagesDetPåKonkreteElementerIVedtaket,
-        erKlagefristOverholdt: klage.erKlagefristenOverholdt,
-        erUnntakForKlagefrist: klage.erUnntakForKlagefrist
+        journalpostId: klage.klagensJournalpostId,
+        vedtakDetPåklages: klage.formkrav.vedtakDetKlagesPå ?? INGEN_VEDTAK,
+        erKlagerPartISaken: klage.formkrav.erKlagerPartISaken,
+        klagesDetPåKonkreteElementer: klage.formkrav.klagesDetPåKonkreteElementerIVedtaket,
+        erKlagefristOverholdt: klage.formkrav.erKlagefristenOverholdt,
+        erUnntakForKlagefrist: klage.formkrav.erUnntakForKlagefrist
             ? klagebehandlingKlagefristUnntakSvarordTilKlagefristUnntakSvarordFormData(
-                  klage.erUnntakForKlagefrist,
+                  klage.formkrav.erUnntakForKlagefrist,
               )
             : null,
-        erKlagenSignert: klage.erKlagenSignert,
-        innsendingsdato: klage.innsendingsdato ? new Date(klage.innsendingsdato) : null,
-        innsendingskilde: klageInnsendingskildeToFormData(klage.innsendingskilde),
+        erKlagenSignert: klage.formkrav.erKlagenSignert,
+        innsendingsdato: klage.formkrav.innsendingsdato
+            ? new Date(klage.formkrav.innsendingsdato)
+            : null,
+        innsendingskilde: klageInnsendingskildeToFormData(klage.formkrav.innsendingskilde),
     };
 };
 

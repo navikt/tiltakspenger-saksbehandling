@@ -62,7 +62,7 @@ const Klageoversikt = (props: {
                     klagebehandlingStatusTilTag({ status: klagebehandling.status })
                 ),
                 resultat: klagebehandling.resultat
-                    ? klagebehandlingResultatTilTag({ resultat: klagebehandling.resultat })
+                    ? klagebehandlingResultatTilTag({ resultat: klagebehandling.resultat.type })
                     : '-',
                 opprettet: formaterTidspunkt(klagebehandling.opprettet),
                 ferdigstilt:

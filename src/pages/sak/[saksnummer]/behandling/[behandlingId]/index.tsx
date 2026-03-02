@@ -8,13 +8,13 @@ import { logger } from '@navikt/next-logger';
 import { SakProvider } from '~/context/sak/SakContext';
 import { SakProps } from '~/types/Sak';
 import { BehandlingId, Rammebehandling as BehandlingType } from '~/types/Rammebehandling';
-import { Klagebehandling } from '~/types/Klage';
+import { Klagebehandling, KlagebehandlingsresultatOmgjør } from '~/types/Klage';
 import { Nullable } from '~/types/UtilTypes';
 
 type Props = {
     behandling: BehandlingType;
     sak: SakProps;
-    klage: Nullable<Klagebehandling>;
+    klage: Nullable<Klagebehandling & { resultat: KlagebehandlingsresultatOmgjør }>;
 };
 
 const Behandling = ({ behandling, sak, klage }: Props) => {
@@ -46,13 +46,24 @@ export const getServerSideProps: GetServerSideProps = pageWithAuthentication(asy
         };
     }
 
-    const behandlingensKlage =
-        sak.klageBehandlinger.find((klage) => klage.id === behandling.klagebehandlingId) ?? null;
+    const behandlingensKlage = sak.klageBehandlinger.find(
+        (klage) => klage.id === behandling.klagebehandlingId,
+    );
+
+    if (!behandlingensKlage || behandlingensKlage.resultat?.type !== 'OMGJØR') {
+        throw new Error(
+            `Forventet en klagebehandling med resultat OMGJØR for behandling ${behandling.id}`,
+        );
+    }
 
     return {
-        props: { behandling, sak, klage: behandlingensKlage } satisfies ComponentProps<
-            typeof Behandling
-        >,
+        props: {
+            behandling,
+            sak,
+            klage: behandlingensKlage as Klagebehandling & {
+                resultat: KlagebehandlingsresultatOmgjør;
+            },
+        } satisfies ComponentProps<typeof Behandling>,
     };
 });
 

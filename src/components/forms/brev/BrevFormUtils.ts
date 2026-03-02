@@ -2,7 +2,8 @@ import { FieldErrors } from 'react-hook-form';
 import {
     ForhåndsvisBrevKlageRequest,
     Klagebehandling,
-    KlagebehandlingResultat,
+    KlagebehandlingsresultatAvvist,
+    KlagebehandlingsresultatOpprettholdt,
 } from '~/types/Klage';
 import { Rammevedtak } from '~/types/Rammevedtak';
 import { Nullable } from '~/types/UtilTypes';
@@ -57,22 +58,24 @@ export const brevFormValidation = (data: BrevFormData) => {
 };
 
 /**
- *
  * @param påKlagetVedtak påkrevd for å kunne fylle in default tekst i klagebrev for opprettholdelse. Kaster exception hvis man sender null ved opprettholdelse
  */
 export const klageTilBrevFormData = (
-    klage: Klagebehandling,
+    klage: Klagebehandling & {
+        resultat: KlagebehandlingsresultatOpprettholdt | KlagebehandlingsresultatAvvist;
+    },
     påKlagetVedtak: Nullable<Rammevedtak>,
 ): BrevFormData => {
+    const { resultat } = klage;
     return {
         tekstfelter:
-            klage.brevtekst.length > 0
-                ? klage.brevtekst
-                : klage.resultat === KlagebehandlingResultat.OPPRETTHOLDT
+            resultat.brevtekst.length > 0
+                ? resultat.brevtekst
+                : resultat.type === 'OPPRETTHOLDT'
                   ? [
                         {
                             tittel: 'Hva klagesaken gjelder',
-                            tekst: `Vi viser til klage av ${formaterDatotekst(klage.innsendingsdato)} på vedtak av ${formaterDatotekst(påKlagetVedtak!.opprettet)} der <kort om resultatet i vedtaket>`,
+                            tekst: `Vi viser til klage av ${formaterDatotekst(klage.formkrav.innsendingsdato)} på vedtak av ${formaterDatotekst(påKlagetVedtak!.opprettet)} der <kort om resultatet i vedtaket>`,
                         },
                         { tittel: 'Klagers anførsler', tekst: '' },
                         { tittel: 'Vurdering av klagen', tekst: '' },

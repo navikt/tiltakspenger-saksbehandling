@@ -6,7 +6,13 @@ import { useForm } from 'react-hook-form';
 import { fetchSak } from '~/utils/fetch/fetch-server';
 import { logger } from '@navikt/next-logger';
 import { SakProps } from '~/types/Sak';
-import { Klagebehandling, KlagebehandlingResultat, KlageId } from '~/types/Klage';
+import {
+    Klagebehandling,
+    KlagebehandlingResultat,
+    KlagebehandlingsresultatAvvist,
+    KlagebehandlingsresultatOpprettholdt,
+    KlageId,
+} from '~/types/Klage';
 import KlageLayout, { KlageProvider, useKlage } from '../../layout';
 import { KlageSteg } from '../../../../../../utils/KlageLayoutUtils';
 import { CheckmarkCircleIcon, EnvelopeOpenIcon } from '@navikt/aksel-icons';
@@ -40,7 +46,9 @@ import Link from 'next/link';
 
 type Props = {
     sak: SakProps;
-    initialKlage: Klagebehandling;
+    initialKlage: Klagebehandling & {
+        resultat: KlagebehandlingsresultatOpprettholdt | KlagebehandlingsresultatAvvist;
+    };
     påklagetVedtak: Nullable<Rammevedtak>;
 };
 
@@ -64,17 +72,26 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
     }
 
     const påklagetVedtak =
-        sak.alleRammevedtak.find((vedtak) => vedtak.id === initialKlage.vedtakDetKlagesPå) ?? null;
+        sak.alleRammevedtak.find(
+            (vedtak) => vedtak.id === initialKlage.formkrav.vedtakDetKlagesPå,
+        ) ?? null;
 
     return { props: { sak, initialKlage, påklagetVedtak } };
 });
 
 const BrevKlagePage = ({ sak, påklagetVedtak }: Props) => {
-    const { klage, setKlage } = useKlage();
+    const { klage: unarrowedKlage, setKlage } = useKlage();
+
+    if (!unarrowedKlage.resultat || unarrowedKlage.resultat.type === 'OMGJØR') {
+        throw new Error('BrevKlagePage krever klage med resultat OPPRETTHOLDT eller AVVIST');
+    }
+
+    const klage = unarrowedKlage as Klagebehandling & {
+        resultat: KlagebehandlingsresultatOpprettholdt | KlagebehandlingsresultatAvvist;
+    };
+
     const { innloggetSaksbehandler } = useSaksbehandler();
-
     const erReadonlyForSaksbehandler = innloggetSaksbehandler.navIdent !== klage.saksbehandler;
-
     const form = useForm<BrevFormData>({
         defaultValues: klageTilBrevFormData(klage, påklagetVedtak),
         resolver: brevFormValidation,
@@ -118,7 +135,7 @@ const BrevKlagePage = ({ sak, påklagetVedtak }: Props) => {
     });
 
     const onSubmit = () => {
-        if (klage.resultat === KlagebehandlingResultat.OPPRETTHOLDT) {
+        if (klage.resultat.type === KlagebehandlingResultat.OPPRETTHOLDT) {
             oppretthold.trigger();
         } else {
             iverksett.trigger();
@@ -137,7 +154,7 @@ const BrevKlagePage = ({ sak, påklagetVedtak }: Props) => {
                         )}
                         <Heading size="small">Brev</Heading>
                     </HStack>
-                    {klage.resultat === 'OPPRETTHOLDT' && (
+                    {klage.resultat.type === 'OPPRETTHOLDT' && (
                         <Label>
                             Innstilling til Nav klageinstans (kommer med i brev til bruker)
                         </Label>
@@ -226,9 +243,9 @@ const BrevKlagePage = ({ sak, påklagetVedtak }: Props) => {
                     {!erReadonlyForSaksbehandler && kanBehandleKlage(klage, null) && (
                         <Button
                             disabled={
-                                (klage.resultat === KlagebehandlingResultat.AVVIST &&
+                                (klage.resultat.type === KlagebehandlingResultat.AVVIST &&
                                     !klage.kanIverksetteVedtak) ||
-                                (klage.resultat === KlagebehandlingResultat.OPPRETTHOLDT &&
+                                (klage.resultat.type === KlagebehandlingResultat.OPPRETTHOLDT &&
                                     !klage.kanIverksetteOpprettholdelse) ||
                                 form.formState.isDirty
                             }

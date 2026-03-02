@@ -1,6 +1,8 @@
 import {
     ForhåndsvisBrevKlageRequest,
     Klagebehandling,
+    KlagebehandlingsresultatAvvist,
+    KlagebehandlingsresultatOpprettholdt,
     KlageId,
     LagreBrevtekstKlageRequest,
     OppdaterKlageFormkravRequest,
@@ -133,13 +135,18 @@ export const useForhåndsvisKlagebrev = (args: {
 export const useLagreKlagebrev = (args: {
     sakId: string;
     klageId: KlageId;
-    onSuccess: (klage: Klagebehandling) => void;
+    onSuccess: (
+        klage: Klagebehandling & {
+            resultat: KlagebehandlingsresultatOpprettholdt | KlagebehandlingsresultatAvvist;
+        },
+    ) => void;
 }) =>
-    useFetchJsonFraApi<Klagebehandling, LagreBrevtekstKlageRequest>(
-        `/sak/${args.sakId}/klage/${args.klageId}/brevtekst`,
-        'PUT',
-        { onSuccess: args.onSuccess },
-    );
+    useFetchJsonFraApi<
+        Klagebehandling & {
+            resultat: KlagebehandlingsresultatOpprettholdt | KlagebehandlingsresultatAvvist;
+        },
+        LagreBrevtekstKlageRequest
+    >(`/sak/${args.sakId}/klage/${args.klageId}/brevtekst`, 'PUT', { onSuccess: args.onSuccess });
 
 export const useIverksettKlage = (args: {
     sakId: string;

@@ -154,7 +154,7 @@ const KlageHeader = (props: { saksnummer: string; klage: Nullable<Klagebehandlin
                     <BodyShort>
                         {props.klage?.resultat ? (
                             klagebehandlingResultatTilTag({
-                                resultat: props.klage.resultat!,
+                                resultat: props.klage.resultat!.type,
                                 size: 'small',
                                 extraContent: {
                                     before: 'Behandlingsresultat: ',

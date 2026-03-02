@@ -36,23 +36,30 @@ export interface VurderingFormData {
 }
 
 export const klagebehandlingTilVurderingFormData = (k: Klagebehandling): VurderingFormData => {
+    const resultat = k.resultat;
     return {
         klageVurderingType:
-            k.resultat === KlagebehandlingResultat.OMGJØR
+            resultat?.type === KlagebehandlingResultat.OMGJØR
                 ? KlageVurderingTypeFormData.OMGJØR
-                : k.resultat === KlagebehandlingResultat.OPPRETTHOLDT
+                : resultat?.type === KlagebehandlingResultat.OPPRETTHOLDT
                   ? KlageVurderingTypeFormData.OPPRETTHOLD
                   : '',
         omgjør: {
-            årsak: k.årsak ? omgjøringsårsakTilFormData(k.årsak) : '',
-            begrunnelse: k.begrunnelse ?? '',
+            årsak:
+                resultat?.type === KlagebehandlingResultat.OMGJØR
+                    ? omgjøringsårsakTilFormData(resultat.årsak)
+                    : '',
+            begrunnelse:
+                resultat?.type === KlagebehandlingResultat.OMGJØR ? resultat.begrunnelse : '',
         },
         oppretthold: {
             hjemler:
-                k.hjemler?.map(
-                    //combobox bruker skiller ikke mellom tekst og verdi, så vi map'er hjemmel til tekst her. ideelt sett skulle combobox støtte value + label
-                    (h) => klageHjemlerFormDataTilTekst[klagehjemmelTilKlagehjemmelFormData(h)],
-                ) ?? [],
+                resultat?.type === KlagebehandlingResultat.OPPRETTHOLDT
+                    ? resultat.hjemler.map(
+                          (h) =>
+                              klageHjemlerFormDataTilTekst[klagehjemmelTilKlagehjemmelFormData(h)],
+                      )
+                    : [],
         },
     };
 };
@@ -181,10 +188,15 @@ export const omgjøringÅrsakFormDataTilTekst: Record<OmgjøringÅrsakFormData, 
 };
 
 export const harKlagevurderingsstegUtfylt = (k: Klagebehandling): boolean => {
-    return (
-        (k.årsak !== null && k.begrunnelse !== null && k.begrunnelse.trim() !== '') ||
-        k.hjemler !== null
-    );
+    if (!k.resultat) return false;
+    switch (k.resultat.type) {
+        case KlagebehandlingResultat.OMGJØR:
+            return k.resultat.begrunnelse.trim() !== '';
+        case KlagebehandlingResultat.OPPRETTHOLDT:
+            return k.resultat.hjemler.length > 0;
+        case KlagebehandlingResultat.AVVIST:
+            return false;
+    }
 };
 
 /**

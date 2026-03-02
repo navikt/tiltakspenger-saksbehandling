@@ -1,7 +1,13 @@
 import { logger } from '@navikt/next-logger';
 import React, { ReactElement, useState } from 'react';
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
-import { Klagebehandling, KlagebehandlingResultat, KlageId } from '~/types/Klage';
+import {
+    Klagebehandling,
+    KlagebehandlingResultat,
+    KlagebehandlingsresultatOmgjør,
+    KlagebehandlingsresultatOpprettholdt,
+    KlageId,
+} from '~/types/Klage';
 import { SakProps } from '~/types/Sak';
 import { fetchSak } from '~/utils/fetch/fetch-server';
 import { KlageSteg } from '~/utils/KlageLayoutUtils';
@@ -59,13 +65,18 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
     }
 
     const vedtakSomPåklages =
-        sak.alleRammevedtak.find((vedtak) => vedtak.id === initialKlage.vedtakDetKlagesPå) ?? null;
+        sak.alleRammevedtak.find(
+            (vedtak) => vedtak.id === initialKlage.formkrav.vedtakDetKlagesPå,
+        ) ?? null;
 
-    const omgjøringsbehandling =
-        sak.behandlinger.find(
-            (behandling) =>
-                behandling.id === initialKlage.rammebehandlingId && behandling.avbrutt === null,
-        ) || null;
+    const omgjørResultat = initialKlage.resultat?.type === 'OMGJØR' ? initialKlage.resultat : null;
+
+    const omgjøringsbehandling = omgjørResultat
+        ? (sak.behandlinger.find(
+              (behandling) =>
+                  behandling.id === omgjørResultat.rammebehandlingId && behandling.avbrutt === null,
+          ) ?? null)
+        : null;
 
     return {
         props: {
@@ -82,6 +93,12 @@ const ResultatPage = ({ sak, omgjøringsbehandling, vedtakSomPåklages, søknade
     const { klage } = useKlage();
     const { innloggetSaksbehandler } = useSaksbehandler();
 
+    const { resultat } = klage;
+
+    if (!resultat || resultat.type === 'AVVIST') {
+        return <>Ukjent resultat for klage</>;
+    }
+
     return (
         <VStack
             className={styles.formContainer}
@@ -89,25 +106,27 @@ const ResultatPage = ({ sak, omgjøringsbehandling, vedtakSomPåklages, søknade
             marginBlock="space-32"
             maxWidth="30rem"
         >
-            {klage.resultat === KlagebehandlingResultat.OMGJØR ? (
+            {resultat.type === KlagebehandlingResultat.OMGJØR ? (
                 <Omgjøringsresultat
                     sak={sak}
-                    klage={klage}
+                    klage={klage as Klagebehandling & { resultat: KlagebehandlingsresultatOmgjør }}
                     omgjøringsbehandling={omgjøringsbehandling}
                     vedtakSomPåklages={vedtakSomPåklages}
                     søknader={søknader}
                     innloggetSaksbehandler={innloggetSaksbehandler}
                 />
-            ) : klage.resultat === KlagebehandlingResultat.OPPRETTHOLDT ? (
+            ) : (
                 <OpprettholdResultat
                     sak={sak}
-                    klage={klage}
+                    klage={
+                        klage as Klagebehandling & {
+                            resultat: KlagebehandlingsresultatOpprettholdt;
+                        }
+                    }
                     omgjøringsbehandling={omgjøringsbehandling}
                     vedtakSomPåklages={vedtakSomPåklages}
                     søknader={søknader}
                 />
-            ) : (
-                <>Ukjent resultat for klage</>
             )}
         </VStack>
     );
@@ -115,7 +134,7 @@ const ResultatPage = ({ sak, omgjøringsbehandling, vedtakSomPåklages, søknade
 
 const Omgjøringsresultat = (props: {
     sak: SakProps;
-    klage: Klagebehandling;
+    klage: Klagebehandling & { resultat: KlagebehandlingsresultatOmgjør };
     omgjøringsbehandling: Nullable<Rammebehandling>;
     vedtakSomPåklages: Nullable<Rammevedtak>;
     søknader: Søknad[];
@@ -149,7 +168,7 @@ const Omgjøringsresultat = (props: {
                     variant="secondary"
                     href={behandlingUrl({
                         saksnummer: props.sak.saksnummer,
-                        id: props.klage.rammebehandlingId,
+                        id: props.klage.resultat.rammebehandlingId,
                     })}
                 >
                     Gå til omgjøringsbehandling
@@ -176,7 +195,7 @@ const Omgjøringsresultat = (props: {
 
 const OpprettholdResultat = (props: {
     sak: SakProps;
-    klage: Klagebehandling;
+    klage: Klagebehandling & { resultat: KlagebehandlingsresultatOpprettholdt };
     vedtakSomPåklages: Nullable<Rammevedtak>;
     omgjøringsbehandling: Nullable<Rammebehandling>;
     søknader: Søknad[];
@@ -191,9 +210,9 @@ const OpprettholdResultat = (props: {
         },
     });
 
-    const journalført = !!props.klage.journalføringstidspunktInnstillingsbrev;
-    const distribuert = !!props.klage.distribusjonstidspunktInnstillingsbrev;
-    const oversendt = !!props.klage.oversendtKlageinstansenTidspunkt;
+    const journalført = !!props.klage.resultat.journalføringstidspunktInnstillingsbrev;
+    const distribuert = !!props.klage.resultat.distribusjonstidspunktInnstillingsbrev;
+    const oversendt = !!props.klage.resultat.oversendtKlageinstansenTidspunkt;
 
     const journalfører = !journalført && !distribuert && !oversendt;
     const distribuer = journalført && !distribuert && !oversendt;
@@ -202,17 +221,17 @@ const OpprettholdResultat = (props: {
     const journalførtEllerEtter = journalført || distribuert || oversendt;
     const distribuertEllerEtter = distribuert || oversendt;
 
-    const fåttSvarFraKA = (props.klage.klageinstanshendelser?.length ?? 0) > 0;
+    const fåttSvarFraKA = (props.klage.resultat.klageinstanshendelser?.length ?? 0) > 0;
     const oversendtEllerEtter = oversendt || fåttSvarFraKA;
 
     const kanOppretteNyRammebehandling =
         fåttSvarFraKA &&
-        skalKunneOppretteNyRammebehandling(props.klage.klageinstanshendelser) &&
-        !props.klage.rammebehandlingId;
+        skalKunneOppretteNyRammebehandling(props.klage.resultat.klageinstanshendelser) &&
+        !props.klage.resultat.rammebehandlingId;
     const kanFerdigstilleKlage =
         fåttSvarFraKA &&
-        !skalKunneOppretteNyRammebehandling(props.klage.klageinstanshendelser) &&
-        !props.klage.rammebehandlingId;
+        !skalKunneOppretteNyRammebehandling(props.klage.resultat.klageinstanshendelser) &&
+        !props.klage.resultat.rammebehandlingId;
 
     return (
         <VStack gap="space-48" align="start">
@@ -229,7 +248,9 @@ const OpprettholdResultat = (props: {
                 <Process.Event
                     status="completed"
                     title="Iverksettelse av opprettholdelse"
-                    timestamp={formaterTidspunkt(props.klage.iverksattOpprettholdelseTidspunkt!)}
+                    timestamp={formaterTidspunkt(
+                        props.klage.resultat.iverksattOpprettholdelseTidspunkt!,
+                    )}
                     bullet={
                         <PaperplaneIcon
                             title="Iverksettelse av opprettholdelse"
@@ -253,7 +274,7 @@ const OpprettholdResultat = (props: {
                     timestamp={
                         journalført
                             ? formaterTidspunkt(
-                                  props.klage.journalføringstidspunktInnstillingsbrev!,
+                                  props.klage.resultat.journalføringstidspunktInnstillingsbrev!,
                               )
                             : undefined
                     }
@@ -273,7 +294,9 @@ const OpprettholdResultat = (props: {
                     }
                     timestamp={
                         distribuert
-                            ? formaterTidspunkt(props.klage.distribusjonstidspunktInnstillingsbrev!)
+                            ? formaterTidspunkt(
+                                  props.klage.resultat.distribusjonstidspunktInnstillingsbrev!,
+                              )
                             : undefined
                     }
                     bullet={
@@ -295,7 +318,9 @@ const OpprettholdResultat = (props: {
                     }
                     timestamp={
                         oversendtEllerEtter
-                            ? formaterTidspunkt(props.klage.oversendtKlageinstansenTidspunkt!)
+                            ? formaterTidspunkt(
+                                  props.klage.resultat.oversendtKlageinstansenTidspunkt!,
+                              )
                             : undefined
                     }
                     bullet={
@@ -312,7 +337,7 @@ const OpprettholdResultat = (props: {
                 >
                     <Heading size="xsmall">Hendelseslogg</Heading>
                     <ul>
-                        {props.klage.klageinstanshendelser?.map((hendelse) => (
+                        {props.klage.resultat.klageinstanshendelser?.map((hendelse) => (
                             <li key={hendelse.klagehendelseId}>
                                 <span>{formaterTidspunkt(hendelse.opprettet)}</span>
                             </li>
