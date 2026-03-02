@@ -50,11 +50,11 @@ export const getServerSideProps: GetServerSideProps = pageWithAuthentication(asy
         (klage) => klage.id === behandling.klagebehandlingId,
     );
 
-    if (!behandlingensKlage || behandlingensKlage.resultat?.type !== 'OMGJØR') {
-        throw new Error(
-            `Forventet en klagebehandling med resultat OMGJØR for behandling ${behandling.id}`,
-        );
-    }
+    // if (!behandlingensKlage || behandlingensKlage.resultat?.type !== 'OMGJØR') {
+    //     throw new Error(
+    //         `Forventet en klagebehandling med resultat OMGJØR for behandling ${behandling.id}`,
+    //     );
+    // }
 
     return {
         props: {
