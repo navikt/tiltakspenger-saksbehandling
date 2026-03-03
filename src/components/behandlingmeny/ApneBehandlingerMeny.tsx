@@ -12,10 +12,8 @@ import FortsettBehandlingMenyvalg, {
 import LeggTilbakeBehandlingMenyValg, {
     visLeggTilbakeMenyvalg,
 } from '~/components/behandlingmeny/menyvalg/LeggTilbakeBehandlingMenyvalg';
-import TildelMegMenyvalg, {
-    visTildelMegMenyvalg,
-} from '~/components/behandlingmeny/menyvalg/TildelMegMenyvalg';
-import { ArrowRightIcon, ChevronDownIcon } from '@navikt/aksel-icons';
+import { visTildelMegMenyvalg } from '~/components/behandlingmeny/menyvalg/TildelMegMenyvalg';
+import { ArrowRightIcon, ChevronDownIcon, PersonIcon } from '@navikt/aksel-icons';
 import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
 import SeBehandlingMenyvalg from '~/components/behandlingmeny/menyvalg/SeBehandlingMenyvalg';
 import AvsluttBehandlingModal from '~/components/modaler/AvsluttBehandlingModal';
@@ -37,6 +35,9 @@ import { eierBehandling, erSattPaVent } from '~/utils/tilganger';
 import router from 'next/router';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { useSettBehandlingPåVent } from './useSettBehandlingPåVent';
+import { Nullable } from '~/types/UtilTypes';
+import { FetcherError } from '~/utils/fetch/fetch';
+import { ApiErrorFeilModal } from './KlageMeny';
 
 type Props = {
     behandling: ÅpenRammebehandlingForOversikt;
@@ -65,6 +66,10 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
     const [visAvsluttBehandlingModal, setVisAvsluttBehandlingModal] = React.useState(false);
     const [visOvertaBehandlingModal, setVisOvertaBehandlingModal] = useState(false);
     const [visSettBehandlingPåVentModal, setVisSettBehandlingPåVentModal] = useState(false);
+    const [apiError, setApiError] = React.useState<{
+        visFeilModal: boolean;
+        feil: Nullable<FetcherError>;
+    }>({ visFeilModal: false, feil: null });
 
     const visTildelMeg = visTildelMegMenyvalg(behandling, innloggetSaksbehandler);
     const visFortsettBehandling = visFortsettBehandlingMenyvalg(behandling, innloggetSaksbehandler);
@@ -108,6 +113,19 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
                     router.push(behandlingUrl(behandling));
                 }
             },
+        },
+    );
+
+    const behandlingLenke = behandlingUrl(behandling);
+
+    const taBehandling = useFetchJsonFraApi<Rammebehandling>(
+        `/sak/${behandling.sakId}/behandling/${behandling.id}/ta`,
+        'POST',
+        {
+            onSuccess: () => {
+                router.push(behandlingLenke);
+            },
+            onError: (error) => setApiError({ visFeilModal: true, feil: error }),
         },
     );
 
@@ -157,7 +175,19 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
                     {visGjenopptaBehandling && (
                         <GjenopptaBehandlingMenyvalg behandling={behandling} />
                     )}
-                    {visTildelMeg && <TildelMegMenyvalg behandling={behandling} />}
+                    {visTildelMeg && (
+                        <ActionMenu.Item
+                            as={Link}
+                            href={behandlingLenke}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                taBehandling.trigger();
+                            }}
+                            icon={<PersonIcon aria-hidden />}
+                        >
+                            {'Tildel meg'}
+                        </ActionMenu.Item>
+                    )}
                     {menySkalVises && !visFortsettBehandling && (
                         <>
                             <ActionMenu.Divider />
@@ -236,6 +266,14 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
                         isMutating: isSettBehandlingPåVentMutating,
                         error: settBehandlingPåVentError ?? null,
                     }}
+                />
+            )}
+
+            {apiError.visFeilModal && (
+                <ApiErrorFeilModal
+                    åpen={apiError.visFeilModal}
+                    onClose={() => setApiError({ visFeilModal: false, feil: null })}
+                    error={apiError.feil!}
                 />
             )}
         </>

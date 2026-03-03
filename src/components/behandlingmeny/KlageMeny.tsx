@@ -270,7 +270,11 @@ const KlageMeny = (props: {
     );
 };
 
-const ApiErrorFeilModal = (props: { åpen: boolean; onClose: () => void; error: FetcherError }) => {
+export const ApiErrorFeilModal = (props: {
+    åpen: boolean;
+    onClose: () => void;
+    error: FetcherError;
+}) => {
     return (
         <Modal aria-label="Feil ved handling" open={props.åpen} onClose={props.onClose}>
             <Modal.Body>
