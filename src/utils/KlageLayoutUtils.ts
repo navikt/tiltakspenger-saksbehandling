@@ -55,7 +55,7 @@ export const kanNavigereTilKlageSteg = (klage: Klagebehandling, steg: KlageSteg)
                 erKlageOpprettholdelse(klage)
             );
         case KlageSteg.RESULTAT:
-            return erKlageOmgjøring(klage) || erKlageOpprettholdtEllerEtter(klage.status);
+            return erKlageOmgjøring(klage) || erKlageOpprettholdtEllerEtter(klage);
         default:
             return false;
     }

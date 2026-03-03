@@ -118,7 +118,11 @@ export const finnSisteGyldigeStegForKlage = (k: Klagebehandling): string => {
     throw new Error(`Safe guard for making the switch exhaustive`, k.resultat satisfies never);
 };
 
-export const erKlageOpprettholdtEllerEtter = (s: KlagebehandlingStatus) =>
-    s === KlagebehandlingStatus.OPPRETTHOLDT ||
-    s === KlagebehandlingStatus.OVERSENDT ||
-    s === KlagebehandlingStatus.FERDIGSTILT;
+export const erKlageOpprettholdtEllerEtter = (k: Klagebehandling) =>
+    k.status === KlagebehandlingStatus.OPPRETTHOLDT ||
+    k.status === KlagebehandlingStatus.OVERSENDT ||
+    erKlageMottattFraKAEllerEtter(k);
+
+export const erKlageMottattFraKAEllerEtter = (k: Klagebehandling) =>
+    k.status === KlagebehandlingStatus.MOTTATT_FRA_KLAGEINSTANS ||
+    k.status === KlagebehandlingStatus.FERDIGSTILT;

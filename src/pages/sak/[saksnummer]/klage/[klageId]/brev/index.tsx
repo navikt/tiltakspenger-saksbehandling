@@ -230,7 +230,7 @@ const BrevKlagePage = ({ sak, påklagetVedtak }: Props) => {
                             </Button>
 
                             {erKlageOpprettholdelse(klage) &&
-                                erKlageOpprettholdtEllerEtter(klage.status) && (
+                                erKlageOpprettholdtEllerEtter(klage) && (
                                     <Button
                                         as={Link}
                                         href={`/sak/${sak.saksnummer}/klage/${klage.id}/resultat`}

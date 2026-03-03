@@ -6,7 +6,6 @@ import {
     KlagebehandlingResultat,
     KlagebehandlingsresultatOmgjør,
     KlagebehandlingsresultatOpprettholdt,
-    KlagebehandlingStatus,
     KlageId,
 } from '~/types/Klage';
 import { SakProps } from '~/types/Sak';
@@ -16,6 +15,7 @@ import KlageLayout, { KlageProvider, useKlage } from '../../layout';
 import { Button, Heading, HStack, LocalAlert, Process, VStack } from '@navikt/ds-react';
 import {
     erKlageAvsluttet,
+    erKlageMottattFraKAEllerEtter,
     erKlageOmgjøring,
     erKlageOpprettholdelse,
     erKlageUnderAktivOmgjøring,
@@ -235,7 +235,7 @@ const OpprettholdResultat = (props: {
     const journalførtEllerEtter = journalført || distribuert || oversendt;
     const distribuertEllerEtter = distribuert || oversendt;
 
-    const fåttSvarFraKA = props.klage.status === KlagebehandlingStatus.MOTTATT_FRA_KLAGEINSTANS;
+    const fåttSvarFraKA = erKlageMottattFraKAEllerEtter(props.klage);
     const oversendtEllerEtter = oversendt || fåttSvarFraKA;
 
     const kanOppretteNyRammebehandling =
