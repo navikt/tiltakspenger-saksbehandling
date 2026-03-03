@@ -1,3 +1,8 @@
 .formContainer {
     margin-left: 12rem;
 }
+
+/* bredden blir litt mindre enn 100% for en eller annen grunn :thinkies: */
+.process {
+    width: 100%;
+}

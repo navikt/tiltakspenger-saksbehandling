@@ -13,7 +13,12 @@ import { fetchSak } from '~/utils/fetch/fetch-server';
 import { KlageSteg } from '~/utils/KlageLayoutUtils';
 import KlageLayout, { KlageProvider, useKlage } from '../../layout';
 import { Button, Heading, HStack, LocalAlert, Process, VStack } from '@navikt/ds-react';
-import { erKlageAvsluttet, erKlageUnderAktivOmgjøring } from '~/utils/klageUtils';
+import {
+    erKlageAvsluttet,
+    erKlageOmgjøring,
+    erKlageOpprettholdelse,
+    erKlageUnderAktivOmgjøring,
+} from '~/utils/klageUtils';
 import { Rammebehandling } from '~/types/Rammebehandling';
 import { Nullable } from '~/types/UtilTypes';
 import { behandlingUrl } from '~/utils/urls';
@@ -32,10 +37,15 @@ import {
 } from '@navikt/aksel-icons';
 import WarningCircleIcon from '~/icons/WarningCircleIcon';
 import { formaterTidspunkt } from '~/utils/date';
-import { skalKunneOppretteNyRammebehandling } from '~/utils/KlageinstanshendelseUtils';
+import {
+    erKlageinstanshendelseAvsluttet,
+    skalKunneOppretteNyRammebehandling,
+} from '~/utils/KlageinstanshendelseUtils';
 import { useFerdigstillKlage } from '~/api/KlageApi';
 import router from 'next/router';
 import styles from './index.module.css';
+import OppsummeringAvKlageinstanshendelser from '~/components/oppsummeringer/klage/oppsummeringAvKlageinstanshendelser/OppsummeringAvKlageinstanshendelser';
+import { KlageHendelseKlagebehandlingAvsluttetUtfall } from '~/types/Klageinstanshendelse';
 
 type Props = {
     sak: SakProps;
@@ -69,12 +79,15 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
             (vedtak) => vedtak.id === initialKlage.formkrav.vedtakDetKlagesPå,
         ) ?? null;
 
-    const omgjørResultat = initialKlage.resultat?.type === 'OMGJØR' ? initialKlage.resultat : null;
+    const vurderingsResultat =
+        erKlageOmgjøring(initialKlage) || erKlageOpprettholdelse(initialKlage)
+            ? initialKlage.resultat
+            : null;
 
-    const omgjøringsbehandling = omgjørResultat
+    const omgjøringsbehandling = vurderingsResultat
         ? (sak.behandlinger.find(
               (behandling) =>
-                  behandling.id === omgjørResultat.rammebehandlingId && behandling.avbrutt === null,
+                  behandling.klagebehandlingId === initialKlage.id && behandling.avbrutt === null,
           ) ?? null)
         : null;
 
@@ -227,11 +240,19 @@ const OpprettholdResultat = (props: {
     const kanOppretteNyRammebehandling =
         fåttSvarFraKA &&
         skalKunneOppretteNyRammebehandling(props.klage.resultat.klageinstanshendelser) &&
-        !props.klage.resultat.rammebehandlingId;
+        !props.klage.resultat.rammebehandlingId &&
+        !props.omgjøringsbehandling;
+
     const kanFerdigstilleKlage =
         fåttSvarFraKA &&
         !skalKunneOppretteNyRammebehandling(props.klage.resultat.klageinstanshendelser) &&
         !props.klage.resultat.rammebehandlingId;
+
+    const inneholderHendelserRetur = !!props.klage.resultat.klageinstanshendelser.find(
+        (hendelse) =>
+            erKlageinstanshendelseAvsluttet(hendelse) &&
+            hendelse.utfall === KlageHendelseKlagebehandlingAvsluttetUtfall.RETUR,
+    );
 
     return (
         <VStack gap="space-48" align="start">
@@ -244,7 +265,7 @@ const OpprettholdResultat = (props: {
                 <Heading size="small">Resultat</Heading>
             </HStack>
 
-            <Process>
+            <Process className={styles.process}>
                 <Process.Event
                     status="completed"
                     title="Iverksettelse av opprettholdelse"
@@ -335,14 +356,10 @@ const OpprettholdResultat = (props: {
                     status={fåttSvarFraKA ? 'completed' : 'uncompleted'}
                     bullet={<CheckmarkCircleIcon title="Fullført" fontSize="1.5rem" />}
                 >
-                    <Heading size="xsmall">Hendelseslogg</Heading>
-                    <ul>
-                        {props.klage.resultat.klageinstanshendelser?.map((hendelse) => (
-                            <li key={hendelse.klagehendelseId}>
-                                <span>{formaterTidspunkt(hendelse.opprettet)}</span>
-                            </li>
-                        ))}
-                    </ul>
+                    <OppsummeringAvKlageinstanshendelser
+                        hendelser={props.klage.resultat.klageinstanshendelser}
+                        medTittel
+                    />
                 </Process.Event>
             </Process>
 
@@ -354,6 +371,18 @@ const OpprettholdResultat = (props: {
                         </LocalAlert.Title>
                     </LocalAlert.Header>
                     <LocalAlert.Content>{ferdigstillKlage.error.message}</LocalAlert.Content>
+                </LocalAlert>
+            )}
+
+            {inneholderHendelserRetur && (
+                <LocalAlert status="warning" size="small">
+                    <LocalAlert.Header>
+                        <LocalAlert.Title>Ny klagebehandling må opprettes</LocalAlert.Title>
+                    </LocalAlert.Header>
+                    <LocalAlert.Content>
+                        Klagen inneholder retur fra klageinstansen. Denne klagen må ferdigstilles,
+                        og en ny klagebehandling må opprettes.
+                    </LocalAlert.Content>
                 </LocalAlert>
             )}
 
@@ -374,6 +403,19 @@ const OpprettholdResultat = (props: {
                     Ferdigstill klagen
                 </Button>
             ) : null}
+
+            {props.omgjøringsbehandling && (
+                <Button
+                    as={Link}
+                    variant="secondary"
+                    href={behandlingUrl({
+                        saksnummer: props.sak.saksnummer,
+                        id: props.omgjøringsbehandling.id,
+                    })}
+                >
+                    Gå til omgjøringsbehandling
+                </Button>
+            )}
 
             {vilOppretteNyBehandling && (
                 <VelgOmgjøringsbehandlingModal

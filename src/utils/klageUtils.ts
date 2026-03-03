@@ -2,6 +2,7 @@ import {
     Klagebehandling,
     KlagebehandlingResultat,
     KlagebehandlingsresultatOmgjør,
+    KlagebehandlingsresultatOpprettholdt,
     KlagebehandlingStatus,
     KlagefristUnntakSvarord,
 } from '~/types/Klage';
@@ -61,7 +62,9 @@ export const erKlagefristenOverholdt = (k: Klagebehandling): boolean => {
     );
 };
 
-export const erKlageOmgjøring = (k: Klagebehandling): boolean => {
+export const erKlageOmgjøring = (
+    k: Klagebehandling,
+): k is Klagebehandling & { resultat: KlagebehandlingsresultatOmgjør } => {
     return k.resultat?.type === KlagebehandlingResultat.OMGJØR;
 };
 
@@ -73,7 +76,9 @@ export const erKlageKnyttetTilRammebehandling = (k: Klagebehandling): boolean =>
     );
 };
 
-export const erKlageOpprettholdelse = (k: Klagebehandling): boolean =>
+export const erKlageOpprettholdelse = (
+    k: Klagebehandling,
+): k is Klagebehandling & { resultat: KlagebehandlingsresultatOpprettholdt } =>
     k.resultat?.type === KlagebehandlingResultat.OPPRETTHOLDT;
 
 /**
@@ -102,7 +107,8 @@ export const finnSisteGyldigeStegForKlage = (k: Klagebehandling): string => {
         case KlagebehandlingResultat.OPPRETTHOLDT: {
             if (
                 k.status === KlagebehandlingStatus.OPPRETTHOLDT ||
-                k.status === KlagebehandlingStatus.OVERSENDT
+                k.status === KlagebehandlingStatus.OVERSENDT ||
+                k.status === KlagebehandlingStatus.FERDIGSTILT
             ) {
                 return `/sak/${k.saksnummer}/klage/${k.id}/resultat`;
             }
@@ -113,4 +119,6 @@ export const finnSisteGyldigeStegForKlage = (k: Klagebehandling): string => {
 };
 
 export const erKlageOpprettholdtEllerEtter = (s: KlagebehandlingStatus) =>
-    s === KlagebehandlingStatus.OPPRETTHOLDT || s === KlagebehandlingStatus.OVERSENDT;
+    s === KlagebehandlingStatus.OPPRETTHOLDT ||
+    s === KlagebehandlingStatus.OVERSENDT ||
+    s === KlagebehandlingStatus.FERDIGSTILT;

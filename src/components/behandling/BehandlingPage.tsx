@@ -4,19 +4,18 @@ import { RevurderingVedtak } from './revurdering/RevurderingVedtak';
 import { useBehandling } from './context/BehandlingContext';
 import { Rammebehandlingsstatus, Rammebehandlingstype } from '~/types/Rammebehandling';
 import { PersonaliaHeader } from '../personaliaheader/PersonaliaHeader';
-import { Alert, Box, Heading, VStack } from '@navikt/ds-react';
-import { finnBehandlingStatusTag, omgjøringsårsakTilText } from '~/utils/tekstformateringUtils';
+import { Alert } from '@navikt/ds-react';
+import { finnBehandlingStatusTag } from '~/utils/tekstformateringUtils';
 import AvbruttOppsummering from '../oppsummeringer/oppsummeringAvAvbrutt/OppsummeringAvAvbrutt';
 import SideBarMain from '../../layouts/sidebar-main/SideBarMain';
 import { Tidslinjer } from '~/components/tidslinjer/Tidslinjer';
 import { useSak } from '~/context/sak/SakContext';
 import OppsummeringAvVentestatus from '~/components/oppsummeringer/ventestatus/OppsummeringAvVentestatus';
 import { BehandlingSkjemaProvider } from '~/components/behandling/context/BehandlingSkjemaContext';
-import { KlagebehandlingResultat } from '~/types/Klage';
-import { OppsummeringsPar } from '../oppsummeringer/oppsummeringspar/OppsummeringsPar';
 import { PERSONOVERSIKT_TABS } from '~/components/personoversikt/Personoversikt';
 
 import style from './BehandlingPage.module.css';
+import OppsummeringAvKlageForRammebehandling from '../oppsummeringer/klage/oppsummeringAvKlageForRammebehandling/OppsummeringAvKlageForRammebehandling';
 
 export const BehandlingPage = () => {
     const { sak } = useSak();
@@ -85,39 +84,5 @@ export const BehandlingPage = () => {
                 />
             </BehandlingSkjemaProvider>
         </>
-    );
-};
-
-const OppsummeringAvKlageForRammebehandling = () => {
-    const { behandling, klagebehandling } = useBehandling();
-
-    if (!behandling.klagebehandlingId) {
-        return null;
-    }
-
-    if (klagebehandling?.resultat?.type !== KlagebehandlingResultat.OMGJØR) {
-        return (
-            <Alert
-                variant={'error'}
-            >{`Forventet en tilknyttet klagebehandling med resultat 'OMGJØR' men fikk resultat: ${klagebehandling?.resultat?.type}`}</Alert>
-        );
-    }
-
-    return (
-        <Box background="default" padding="space-16">
-            <Heading size="small">Informasjon fra klagen</Heading>
-            <VStack gap="space-4">
-                <OppsummeringsPar
-                    retning="vertikal"
-                    label="Årsak"
-                    verdi={omgjøringsårsakTilText[klagebehandling.resultat.årsak]}
-                />
-                <OppsummeringsPar
-                    retning="vertikal"
-                    label="Begrunnelse"
-                    verdi={klagebehandling.resultat.begrunnelse}
-                />
-            </VStack>
-        </Box>
     );
 };
