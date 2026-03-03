@@ -26,7 +26,8 @@ export interface FormkravFormData {
 
 export enum KlageInnsendingskildeFormData {
     DIGITAL = 'DIGITAL',
-    PAPIR = 'PAPIR',
+    PAPIR_SKJEMA = 'PAPIR_SKJEMA',
+    PAPIR_FRIHAND = 'PAPIR_FRIHAND',
     MODIA = 'MODIA',
     ANNET = 'ANNET',
 }
@@ -36,7 +37,8 @@ export const KlageInnsendingskildeFormDataTekstMapper: Record<
     string
 > = {
     [KlageInnsendingskildeFormData.DIGITAL]: 'Digitalt',
-    [KlageInnsendingskildeFormData.PAPIR]: 'Papir',
+    [KlageInnsendingskildeFormData.PAPIR_SKJEMA]: 'Papir skjema',
+    [KlageInnsendingskildeFormData.PAPIR_FRIHAND]: 'Papir frihånd',
     [KlageInnsendingskildeFormData.MODIA]: 'Modia',
     [KlageInnsendingskildeFormData.ANNET]: 'Annet',
 };
@@ -240,8 +242,10 @@ export const klageInnsendingskildeToFormData = (
     switch (innsendingskilde) {
         case KlageInnsendingskilde.DIGITAL:
             return KlageInnsendingskildeFormData.DIGITAL;
-        case KlageInnsendingskilde.PAPIR:
-            return KlageInnsendingskildeFormData.PAPIR;
+        case KlageInnsendingskilde.PAPIR_SKJEMA:
+            return KlageInnsendingskildeFormData.PAPIR_SKJEMA;
+        case KlageInnsendingskilde.PAPIR_FRIHAND:
+            return KlageInnsendingskildeFormData.PAPIR_FRIHAND;
         case KlageInnsendingskilde.MODIA:
             return KlageInnsendingskildeFormData.MODIA;
         case KlageInnsendingskilde.ANNET:
@@ -255,8 +259,10 @@ export const klageInnsendingskildeFormDataToKlageInnsendingskilde = (
     switch (innsendingskilde) {
         case KlageInnsendingskildeFormData.DIGITAL:
             return KlageInnsendingskilde.DIGITAL;
-        case KlageInnsendingskildeFormData.PAPIR:
-            return KlageInnsendingskilde.PAPIR;
+        case KlageInnsendingskildeFormData.PAPIR_SKJEMA:
+            return KlageInnsendingskilde.PAPIR_SKJEMA;
+        case KlageInnsendingskildeFormData.PAPIR_FRIHAND:
+            return KlageInnsendingskilde.PAPIR_FRIHAND;
         case KlageInnsendingskildeFormData.MODIA:
             return KlageInnsendingskilde.MODIA;
         case KlageInnsendingskildeFormData.ANNET:

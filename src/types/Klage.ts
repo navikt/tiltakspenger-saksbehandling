@@ -93,7 +93,8 @@ export interface Brevtekst {
 
 export enum KlageInnsendingskilde {
     DIGITAL = 'DIGITAL',
-    PAPIR = 'PAPIR',
+    PAPIR_SKJEMA = 'PAPIR_SKJEMA',
+    PAPIR_FRIHAND = 'PAPIR_FRIHAND',
     MODIA = 'MODIA',
     ANNET = 'ANNET',
 }
