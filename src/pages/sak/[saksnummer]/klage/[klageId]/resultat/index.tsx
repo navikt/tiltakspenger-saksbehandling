@@ -6,6 +6,7 @@ import {
     KlagebehandlingResultat,
     KlagebehandlingsresultatOmgjør,
     KlagebehandlingsresultatOpprettholdt,
+    KlagebehandlingStatus,
     KlageId,
 } from '~/types/Klage';
 import { SakProps } from '~/types/Sak';
@@ -234,7 +235,7 @@ const OpprettholdResultat = (props: {
     const journalførtEllerEtter = journalført || distribuert || oversendt;
     const distribuertEllerEtter = distribuert || oversendt;
 
-    const fåttSvarFraKA = (props.klage.resultat.klageinstanshendelser?.length ?? 0) > 0;
+    const fåttSvarFraKA = props.klage.status === KlagebehandlingStatus.MOTTATT_FRA_KLAGEINSTANS;
     const oversendtEllerEtter = oversendt || fåttSvarFraKA;
 
     const kanOppretteNyRammebehandling =

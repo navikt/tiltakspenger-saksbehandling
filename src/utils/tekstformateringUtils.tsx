@@ -317,6 +317,7 @@ export const klagebehandlingStatusTilText: Record<KlagebehandlingStatus, string>
     [KlagebehandlingStatus.OPPRETTHOLDT]: 'Opprettholdt',
     [KlagebehandlingStatus.OVERSENDT]: 'Oversendt',
     [KlagebehandlingStatus.FERDIGSTILT]: 'Ferdigstilt',
+    [KlagebehandlingStatus.MOTTATT_FRA_KLAGEINSTANS]: 'Mottatt fra klageinstans',
 };
 
 export const klagebehandlingStatusTilTag = (args: {
@@ -384,6 +385,15 @@ export const klagebehandlingStatusTilTag = (args: {
                 <Tag data-color="success" variant="outline" size={args.size}>
                     {args.extraContent?.before}
                     {klagebehandlingStatusTilText[KlagebehandlingStatus.FERDIGSTILT]}
+                    {args.extraContent?.after}
+                </Tag>
+            );
+
+        case KlagebehandlingStatus.MOTTATT_FRA_KLAGEINSTANS:
+            return (
+                <Tag data-color="info" variant="outline" size={args.size}>
+                    {args.extraContent?.before}
+                    {klagebehandlingStatusTilText[KlagebehandlingStatus.MOTTATT_FRA_KLAGEINSTANS]}
                     {args.extraContent?.after}
                 </Tag>
             );
