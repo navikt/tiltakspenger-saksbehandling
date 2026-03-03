@@ -14,9 +14,10 @@ const OppsummeringAvKlageinstanshendelser = (props: {
     hendelser: Klageinstanshendelse[];
     medTittel?: boolean;
 }) => {
+    const harHendelser = props.hendelser.length > 0;
     return (
         <>
-            {props.medTittel && <Heading size="xsmall">Hendelseslogg</Heading>}
+            {props.medTittel && harHendelser && <Heading size="xsmall">Hendelseslogg</Heading>}
             <ul>
                 {props.hendelser.map((h) => (
                     <li key={h.klagehendelseId}>
