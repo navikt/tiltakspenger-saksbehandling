@@ -6,6 +6,7 @@ import {
     KlagebehandlingResultat,
     KlagebehandlingsresultatOmgjør,
     KlagebehandlingsresultatOpprettholdt,
+    KlagebehandlingStatus,
     KlageId,
 } from '~/types/Klage';
 import { SakProps } from '~/types/Sak';
@@ -247,7 +248,8 @@ const OpprettholdResultat = (props: {
     const kanFerdigstilleKlage =
         fåttSvarFraKA &&
         !skalKunneOppretteNyRammebehandling(props.klage.resultat.klageinstanshendelser) &&
-        !props.klage.resultat.rammebehandlingId;
+        !props.klage.resultat.rammebehandlingId &&
+        props.klage.status !== KlagebehandlingStatus.FERDIGSTILT;
 
     const inneholderHendelserRetur = !!props.klage.resultat.klageinstanshendelser.find(
         (hendelse) =>
