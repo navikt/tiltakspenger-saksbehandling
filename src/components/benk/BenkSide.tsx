@@ -158,7 +158,8 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
                 <div className={styles.høytAntallBehandlingerContainer}>
                     <Alert variant="warning" size="small">
                         Det finnes et høyt antall behandlinger på benken. Oversikten er begrenset,
-                        og vil ikke vise alle behandlinger.
+                        og vil ikke vise alle behandlinger. Totalt antall behandlinger:{' '}
+                        {benkOversikt.totalAntall}.
                     </Alert>
                 </div>
             )}
