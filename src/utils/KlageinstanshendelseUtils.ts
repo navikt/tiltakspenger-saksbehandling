@@ -29,12 +29,19 @@ export const skalKunneOppretteNyRammebehandling = (hendelser: Nullable<Klageinst
     const sisteHendelse = hendelser?.at(-1);
     if (!sisteHendelse) return false;
 
-    return (
+    const erHendelseAvsluttetOgTillaterNyBehandling =
         erKlageinstanshendelseAvsluttet(sisteHendelse) &&
         (sisteHendelse.utfall === KlageHendelseKlagebehandlingAvsluttetUtfall.OPPHEVET ||
             sisteHendelse.utfall === KlageHendelseKlagebehandlingAvsluttetUtfall.MEDHOLD ||
             sisteHendelse.utfall === KlageHendelseKlagebehandlingAvsluttetUtfall.DELVIS_MEDHOLD ||
-            sisteHendelse.utfall === KlageHendelseKlagebehandlingAvsluttetUtfall.UGUNST)
+            sisteHendelse.utfall === KlageHendelseKlagebehandlingAvsluttetUtfall.UGUNST);
+
+    const erHendelseOmgjøringskravOgTillaterNyBehandling =
+        erKlageinstanshendelseOmgjøringskravbehandlingAvsluttet(sisteHendelse) &&
+        sisteHendelse.utfall === OmgjøringskravbehandlingAvsluttetUtfall.UGUNST;
+
+    return (
+        erHendelseAvsluttetOgTillaterNyBehandling || erHendelseOmgjøringskravOgTillaterNyBehandling
     );
 };
 

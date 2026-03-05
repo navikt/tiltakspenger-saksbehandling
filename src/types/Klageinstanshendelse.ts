@@ -49,6 +49,7 @@ export enum KlageHendelseKlagebehandlingAvsluttetUtfall {
 
 export enum OmgjøringskravbehandlingAvsluttetUtfall {
     MEDHOLD_ETTER_FVL_35 = 'MEDHOLD_ETTER_FVL_35',
+    UGUNST = 'UGUNST',
 }
 
 export enum KlageHendelseFeilregistrertType {
@@ -57,4 +58,5 @@ export enum KlageHendelseFeilregistrertType {
     ANKE_I_TRYGDERETTEN = 'ANKE_I_TRYGDERETTEN',
     BEHANDLING_ETTER_TRYGDERETTEN_OPPHEVET = 'BEHANDLING_ETTER_TRYGDERETTEN_OPPHEVET',
     OMGJOERINGSKRAV = 'OMGJOERINGSKRAV',
+    UGUNST = 'UGUNST',
 }
