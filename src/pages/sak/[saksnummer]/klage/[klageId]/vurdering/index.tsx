@@ -209,7 +209,7 @@ const VurderingKlagePage = ({ sak, vedtakSomPåklages, søknader, omgjøringsbeh
                         </LocalAlert>
                     )}
 
-                    {formTilstand === 'REDIGERER' ? (
+                    {!erReadonlyForSaksbehandler && formTilstand === 'REDIGERER' ? (
                         <Button className={styles.lagreKnapp} loading={vurderKlage.isMutating}>
                             Lagre
                         </Button>
