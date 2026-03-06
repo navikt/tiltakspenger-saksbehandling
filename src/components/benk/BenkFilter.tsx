@@ -35,12 +35,25 @@ const BenkFilter = ({
 
     const sortedSaksbehandlere = useMemo(() => {
         return benkOversikt.behandlingssammendrag
-            .flatMap((behandling) => [behandling.saksbehandler, behandling.beslutter])
-            .filter((value, index, self) => value && self.indexOf(value) === index)
+            .reduce(
+                (acc, { saksbehandler, beslutter }) => {
+                    if (saksbehandler) {
+                        acc.add(saksbehandler);
+                    }
+                    if (beslutter) {
+                        acc.add(beslutter);
+                    }
+
+                    return acc;
+                },
+                new Set<string>([innloggetSaksbehandler.navIdent]),
+            )
+            .values()
+            .toArray()
             .sort((a, b) => {
                 if (a === innloggetSaksbehandler.navIdent) return -1;
                 if (b === innloggetSaksbehandler.navIdent) return 1;
-                return a!.localeCompare(b!);
+                return a.localeCompare(b);
             });
     }, [benkOversikt.behandlingssammendrag, innloggetSaksbehandler.navIdent]);
 

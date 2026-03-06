@@ -122,7 +122,7 @@ const BenkTabell = ({ data, sorteringRetning, onSortChange }: Props) => {
                                 </HStack>
                             </Table.HeaderCell>
                             <Table.DataCell>
-                                <HStack gap="space-16">
+                                <HStack gap="space-16" align={'center'}>
                                     <BodyShort>
                                         {behandlingstypeTextFormatter[behandling.behandlingstype]}
                                     </BodyShort>
