@@ -313,7 +313,7 @@ export const klagebehandlingStatusTilText: Record<KlagebehandlingStatus, string>
     [KlagebehandlingStatus.KLAR_TIL_BEHANDLING]: 'Klar til behandling',
     [KlagebehandlingStatus.UNDER_BEHANDLING]: 'Under behandling',
     [KlagebehandlingStatus.AVBRUTT]: 'Avbrutt',
-    [KlagebehandlingStatus.IVERKSATT]: 'Iverksatt',
+    [KlagebehandlingStatus.VEDTATT]: 'Vedtatt',
     [KlagebehandlingStatus.OPPRETTHOLDT]: 'Opprettholdt',
     [KlagebehandlingStatus.OVERSENDT]: 'Oversendt',
     [KlagebehandlingStatus.FERDIGSTILT]: 'Ferdigstilt',
@@ -353,11 +353,11 @@ export const klagebehandlingStatusTilTag = (args: {
                     {args.extraContent?.after}
                 </Tag>
             );
-        case KlagebehandlingStatus.IVERKSATT:
+        case KlagebehandlingStatus.VEDTATT:
             return (
                 <Tag data-color="success" variant="outline" size={args.size}>
                     {args.extraContent?.before}
-                    {klagebehandlingStatusTilText[KlagebehandlingStatus.IVERKSATT]}
+                    {klagebehandlingStatusTilText[KlagebehandlingStatus.VEDTATT]}
                     {args.extraContent?.after}
                 </Tag>
             );

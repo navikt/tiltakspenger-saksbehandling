@@ -34,10 +34,12 @@ export const kanBehandleKlage = (
 };
 
 export const erKlageAvsluttet = (k: Klagebehandling): boolean =>
-    k.status === 'AVBRUTT' || k.status === 'IVERKSATT' || k.status === 'FERDIGSTILT';
+    k.status === 'AVBRUTT' ||
+    k.status === KlagebehandlingStatus.VEDTATT ||
+    k.status === 'FERDIGSTILT';
 
 export const erKlageFerdigbehandlet = (k: Klagebehandling): boolean =>
-    k.status === 'IVERKSATT' || k.status === 'FERDIGSTILT';
+    k.status === KlagebehandlingStatus.VEDTATT || k.status === 'FERDIGSTILT';
 
 //Merk at en klage som er åpen betyr ikke nødvendigvis at den kan behandles.
 export const erKlageÅpen = (k: Klagebehandling): boolean =>
