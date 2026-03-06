@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Alert, Heading, VStack } from '@navikt/ds-react';
+import { Alert, Heading, LocalAlert, VStack } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
@@ -60,15 +60,30 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
         if (firstLoadRef.current) {
             firstLoadRef.current = false;
             fetchOversikt.trigger({
-                benktype: filters.benktype === 'Alle' ? null : [filters.benktype],
-                behandlingstype: filters.type === 'Alle' ? null : [filters.type],
-                status: filters.status === 'Alle' ? null : [filters.status],
-                identer: filters.saksbehandler === 'Alle' ? null : [filters.saksbehandler],
+                benktype: benktypeParam ? [benktypeParam] : null,
+                behandlingstype: typeParam ? [typeParam] : null,
+                status: statusParam ? [statusParam] : null,
+                identer: saksbehandlerParam ? [saksbehandlerParam] : null,
                 sortering: sorteringRetningParam ?? 'ASC',
             });
             return;
         }
-    }, [fetchOversikt, filters, sorteringRetningParam]);
+        updateUrlWithSelectedFilters();
+        //ønsker kun å kjøre denne effekten på første innlastning
+        //eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
+        setFilters({
+            benktype: benktypeParam ?? filters.benktype,
+            type: typeParam ?? filters.type,
+            status: statusParam ?? filters.status,
+            saksbehandler: saksbehandlerParam ?? filters.saksbehandler,
+        });
+        updateUrlWithSelectedFilters();
+        //ønsker at denne effekten skal kjøre hver gang URL-parametrene endres. filter typene brukes kun som default fallback
+        //eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [benktypeParam, typeParam, statusParam, saksbehandlerParam]);
 
     const updateUrlWithSelectedFilters = () => {
         const query = new URLSearchParams(searchParams.toString());
@@ -130,16 +145,6 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
         });
     };
 
-    useEffect(() => {
-        setFilters({
-            benktype: benktypeParam ?? filters.benktype,
-            type: typeParam ?? filters.type,
-            status: statusParam ?? filters.status,
-            saksbehandler: saksbehandlerParam ?? filters.saksbehandler,
-        });
-        updateUrlWithSelectedFilters();
-    }, [benktypeParam, typeParam, statusParam, saksbehandlerParam]);
-
     return (
         <VStack gap="space-20" style={{ padding: '1rem' }}>
             <NotificationBanner ref={bannerRef} />
@@ -153,6 +158,7 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
                 innloggetSaksbehandler={innloggetSaksbehandler}
                 onOppdaterFilter={handleOppdaterFilter}
                 onNullstillFilter={handleNullstillFilter}
+                oppdaterFilterLoading={fetchOversikt.isMutating && firstLoadRef.current === false}
             />
             {benkOversikt.totalAntall > 500 && (
                 <div className={styles.høytAntallBehandlingerContainer}>
@@ -162,6 +168,14 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
                         {benkOversikt.totalAntall}.
                     </Alert>
                 </div>
+            )}
+            {fetchOversikt.error && (
+                <LocalAlert status="error" size="small" className={styles.fetchOversiktErrorAlert}>
+                    <LocalAlert.Header>
+                        <LocalAlert.Title>Feil ved filtering av benken</LocalAlert.Title>
+                    </LocalAlert.Header>
+                    <LocalAlert.Content>{fetchOversikt.error.message}</LocalAlert.Content>
+                </LocalAlert>
             )}
             <BenkTabell
                 data={filtrertBenkoversikt}

@@ -20,6 +20,7 @@ type Props = {
     benkOversikt: BenkOversiktResponse;
     innloggetSaksbehandler: Saksbehandler;
     onOppdaterFilter: () => void;
+    oppdaterFilterLoading: boolean;
     onNullstillFilter: () => void;
 };
 
@@ -29,6 +30,7 @@ const BenkFilter = ({
     benkOversikt,
     innloggetSaksbehandler,
     onOppdaterFilter,
+    oppdaterFilterLoading,
     onNullstillFilter,
 }: Props) => {
     const featureToggle = useFeatureToggles();
@@ -141,7 +143,12 @@ const BenkFilter = ({
                 </Select>
             </HStack>
             <HStack gap="space-16">
-                <Button type="button" size="small" onClick={onOppdaterFilter}>
+                <Button
+                    type="button"
+                    size="small"
+                    onClick={onOppdaterFilter}
+                    loading={oppdaterFilterLoading}
+                >
                     Oppdater filtre
                 </Button>
                 <Button type="button" size="small" variant="secondary" onClick={onNullstillFilter}>
