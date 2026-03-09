@@ -57,33 +57,26 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
     );
 
     useEffect(() => {
-        if (firstLoadRef.current) {
-            firstLoadRef.current = false;
-            fetchOversikt.trigger({
-                benktype: benktypeParam ? [benktypeParam] : null,
-                behandlingstype: typeParam ? [typeParam] : null,
-                status: statusParam ? [statusParam] : null,
-                identer: saksbehandlerParam ? [saksbehandlerParam] : null,
-                sortering: sorteringRetningParam ?? 'ASC',
-            });
-            return;
-        }
-        updateUrlWithSelectedFilters();
-        //ønsker kun å kjøre denne effekten på første innlastning
-        //eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+        firstLoadRef.current = false;
+        fetchOversikt.trigger({
+            benktype: benktypeParam ? [benktypeParam] : null,
+            behandlingstype: typeParam ? [typeParam] : null,
+            status: statusParam ? [statusParam] : null,
+            identer: saksbehandlerParam ? [saksbehandlerParam] : null,
+            sortering: sorteringRetningParam ?? 'ASC',
+        });
 
-    useEffect(() => {
         setFilters({
             benktype: benktypeParam ?? filters.benktype,
             type: typeParam ?? filters.type,
             status: statusParam ?? filters.status,
             saksbehandler: saksbehandlerParam ?? filters.saksbehandler,
         });
+
         updateUrlWithSelectedFilters();
-        //ønsker at denne effekten skal kjøre hver gang URL-parametrene endres. filter typene brukes kun som default fallback
+        //ønsker kun å kjøre denne effekten på første innlastning
         //eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [benktypeParam, typeParam, statusParam, saksbehandlerParam]);
+    }, [benktypeParam, typeParam, statusParam, saksbehandlerParam, sorteringRetningParam]);
 
     const updateUrlWithSelectedFilters = () => {
         const query = new URLSearchParams(searchParams.toString());
