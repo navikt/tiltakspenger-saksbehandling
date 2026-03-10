@@ -104,6 +104,14 @@ const OppsummeringOpprettholdelse = (props: {
                     </LocalAlert.Content>
                 </LocalAlert>
             )}
+            {visInnstillingsBrev.error && (
+                <LocalAlert status="error" size="small">
+                    <LocalAlert.Header>
+                        <LocalAlert.Title>Feil ved visning av innstillingsbrev</LocalAlert.Title>
+                    </LocalAlert.Header>
+                    <LocalAlert.Content>{visInnstillingsBrev.error.message}</LocalAlert.Content>
+                </LocalAlert>
+            )}
             <VStack>
                 <Heading size="small">Informasjon fra Klageinstansen</Heading>
                 <OppsummeringAvKlageinstanshendelser
