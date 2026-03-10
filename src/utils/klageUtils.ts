@@ -110,6 +110,7 @@ export const finnSisteGyldigeStegForKlage = (k: Klagebehandling): string => {
             if (
                 k.status === KlagebehandlingStatus.OPPRETTHOLDT ||
                 k.status === KlagebehandlingStatus.OVERSENDT ||
+                k.status === KlagebehandlingStatus.MOTTATT_FRA_KLAGEINSTANS ||
                 k.status === KlagebehandlingStatus.FERDIGSTILT
             ) {
                 return `/sak/${k.saksnummer}/klage/${k.id}/resultat`;
