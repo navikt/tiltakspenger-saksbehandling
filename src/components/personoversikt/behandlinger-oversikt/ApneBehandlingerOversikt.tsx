@@ -2,7 +2,7 @@ import {
     ÅpenBehandlingForOversikt,
     ÅpenBehandlingForOversiktType,
 } from '~/types/ÅpenBehandlingForOversikt';
-import { Alert, Table, Tag } from '@navikt/ds-react';
+import { Alert, HStack, Table, Tag } from '@navikt/ds-react';
 import {
     behandlingResultatTilTag,
     finnBehandlingStatusTag,
@@ -20,6 +20,13 @@ import { Periode } from '~/types/Periode';
 import { useSak } from '~/context/sak/SakContext';
 import { Nullable } from '~/types/UtilTypes';
 import KlageMeny from '~/components/behandlingmeny/KlageMeny';
+import { erKlageOpprettholdelse } from '~/utils/klageUtils';
+import {
+    erKlageinstanshendelseAvsluttet,
+    erKlageinstanshendelseFeilregistrert,
+    erKlageinstanshendelseOmgjøringskravbehandlingAvsluttet,
+    klagehendelseUtfallTilTag,
+} from '~/utils/KlageinstanshendelseUtils';
 
 type Props = {
     åpneBehandlinger: ÅpenBehandlingForOversikt[];
@@ -173,6 +180,21 @@ const propsForRad = (
                 (klage) => klage.id === åpenBehandling.id,
             )!;
 
+            const sisteKlagehendelse =
+                erKlageOpprettholdelse(klagebehandling) &&
+                klagebehandling.resultat.klageinstanshendelser.length > 0
+                    ? klagebehandling.resultat.klageinstanshendelser.at(-1)
+                    : null;
+
+            const utfall =
+                sisteKlagehendelse &&
+                (erKlageinstanshendelseAvsluttet(sisteKlagehendelse) ||
+                    erKlageinstanshendelseOmgjøringskravbehandlingAvsluttet(sisteKlagehendelse))
+                    ? sisteKlagehendelse.utfall
+                    : sisteKlagehendelse && erKlageinstanshendelseFeilregistrert(sisteKlagehendelse)
+                      ? sisteKlagehendelse.type
+                      : null;
+
             const omgjøringsbehandling =
                 sak.behandlinger.find(
                     (omgjøring) => omgjøring.klagebehandlingId === klagebehandling.id,
@@ -185,9 +207,12 @@ const propsForRad = (
                 ) : (
                     klagebehandlingStatusTilTag({ status: åpenBehandling.status })
                 ),
-                resultatTag: åpenBehandling.resultat
-                    ? klagebehandlingResultatTilTag({ resultat: åpenBehandling.resultat })
-                    : undefined,
+                resultatTag: åpenBehandling.resultat ? (
+                    <HStack gap="space-4">
+                        {klagebehandlingResultatTilTag({ resultat: åpenBehandling.resultat })}
+                        {utfall && klagehendelseUtfallTilTag({ utfall: utfall })}
+                    </HStack>
+                ) : undefined,
                 saksbehandler: åpenBehandling.saksbehandler,
                 meny: (
                     <KlageMeny
