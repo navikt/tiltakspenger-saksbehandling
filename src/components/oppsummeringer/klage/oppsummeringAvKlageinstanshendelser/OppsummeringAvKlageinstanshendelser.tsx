@@ -16,7 +16,7 @@ const OppsummeringAvKlageinstanshendelser = (props: {
 }) => {
     const harHendelser = props.hendelser.length > 0;
     return (
-        <>
+        <VStack>
             {props.medTittel && harHendelser && <Heading size="xsmall">Hendelseslogg</Heading>}
             <ul>
                 {props.hendelser.map((h) => (
@@ -47,7 +47,7 @@ const OppsummeringAvKlageinstanshendelser = (props: {
                     </li>
                 ))}
             </ul>
-        </>
+        </VStack>
     );
 };
 

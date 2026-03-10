@@ -1,4 +1,4 @@
-import { Alert, Box, Heading, VStack } from '@navikt/ds-react';
+import { Alert, Box, Button, Heading, LocalAlert, VStack } from '@navikt/ds-react';
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
 import {
     Klagebehandling,
@@ -10,6 +10,7 @@ import { omgjøringsårsakTilText } from '~/utils/tekstformateringUtils';
 import { OppsummeringsPar } from '../../oppsummeringspar/OppsummeringsPar';
 import { erKlageOmgjøring, erKlageOpprettholdelse } from '~/utils/klageUtils';
 import OppsummeringAvKlageinstanshendelser from '../oppsummeringAvKlageinstanshendelser/OppsummeringAvKlageinstanshendelser';
+import { useVisInnstillingsbrevKlagebehandling } from '~/api/KlageApi';
 
 const OppsummeringAvKlageForRammebehandling = () => {
     const { behandling, klagebehandling } = useBehandling();
@@ -30,13 +31,15 @@ const OppsummeringAvKlageForRammebehandling = () => {
 
     return (
         <Box background="default" padding="space-16">
-            <Heading size="small">Informasjon fra klagen</Heading>
-            {erKlageOmgjøring(klagebehandling) && (
-                <OppsummeringAvOmgjøring klagebehandling={klagebehandling} />
-            )}
-            {erKlageOpprettholdelse(klagebehandling) && (
-                <OppsummeringOpprettholdelse klagebehandling={klagebehandling} />
-            )}
+            <VStack gap="space-12">
+                <Heading size="medium">Informasjon fra klagen</Heading>
+                {erKlageOmgjøring(klagebehandling) && (
+                    <OppsummeringAvOmgjøring klagebehandling={klagebehandling} />
+                )}
+                {erKlageOpprettholdelse(klagebehandling) && (
+                    <OppsummeringOpprettholdelse klagebehandling={klagebehandling} />
+                )}
+            </VStack>
         </Box>
     );
 };
@@ -65,12 +68,49 @@ const OppsummeringAvOmgjøring = (props: {
 const OppsummeringOpprettholdelse = (props: {
     klagebehandling: Klagebehandling & { resultat: KlagebehandlingsresultatOpprettholdt };
 }) => {
+    const visInnstillingsBrev = useVisInnstillingsbrevKlagebehandling({
+        sakId: props.klagebehandling.sakId,
+        klageId: props.klagebehandling.id,
+        //denne er safe siden knappen rendres ikke dersom det ikke eksisterer dokumenter
+        dokumentInfoId: props.klagebehandling.resultat.dokumentInfoIder?.at(0) ?? '',
+        onSuccess: (blob) => {
+            window.open(URL.createObjectURL(blob));
+        },
+    });
+
     return (
-        <VStack gap="space-4" align="start">
-            <OppsummeringAvKlageinstanshendelser
-                hendelser={props.klagebehandling.resultat.klageinstanshendelser}
-                medTittel
-            />
+        <VStack gap="space-20" align="start">
+            {props.klagebehandling.resultat.dokumentInfoIder?.length === 0 && null}
+            {props.klagebehandling.resultat.dokumentInfoIder?.length === 1 && (
+                <Button
+                    size="small"
+                    variant="secondary"
+                    type="button"
+                    onClick={() => visInnstillingsBrev.trigger()}
+                    loading={visInnstillingsBrev.isMutating}
+                >
+                    Se innstillingsbrev
+                </Button>
+            )}
+            {(props.klagebehandling.resultat.dokumentInfoIder?.length ?? 0) > 1 && (
+                <LocalAlert status="announcement" size="small">
+                    <LocalAlert.Header>
+                        <LocalAlert.Title>Flere innstillingsbrev</LocalAlert.Title>
+                    </LocalAlert.Header>
+                    <LocalAlert.Content>
+                        Det er registrert flere dokumenter for klagens journalpost. Det er ikke
+                        mulig å vise innstillingsbrev i denne situasjonen. Du kan finne
+                        innstillingsbrevet ved å gå inn i Gosys
+                    </LocalAlert.Content>
+                </LocalAlert>
+            )}
+            <VStack>
+                <Heading size="small">Informasjon fra Klageinstansen</Heading>
+                <OppsummeringAvKlageinstanshendelser
+                    hendelser={props.klagebehandling.resultat.klageinstanshendelser}
+                    medTittel
+                />
+            </VStack>
         </VStack>
     );
 };

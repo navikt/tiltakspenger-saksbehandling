@@ -180,3 +180,15 @@ export const useFerdigstillKlage = (args: {
         'PATCH',
         { onSuccess: args.onSuccess },
     );
+
+export const useVisInnstillingsbrevKlagebehandling = (args: {
+    sakId: string;
+    klageId: KlageId;
+    dokumentInfoId: string;
+    onSuccess: (blob: Blob) => void;
+}) =>
+    useFetchBlobFraApi(
+        `/sak/${args.sakId}/klage/${args.klageId}/innstillingsbrev/${args.dokumentInfoId}`,
+        'GET',
+        { onSuccess: args.onSuccess },
+    );

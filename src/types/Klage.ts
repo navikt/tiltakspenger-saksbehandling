@@ -84,6 +84,8 @@ export interface KlagebehandlingsresultatOpprettholdt {
     klageinstanshendelser: Klageinstanshendelse[];
     ferdigstiltTidspunkt: Nullable<string>;
     rammebehandlingId: Nullable<BehandlingId>;
+    journalpostIdInnstillingsbrev: Nullable<string>;
+    dokumentInfoIder: Nullable<string[]>;
 }
 
 export interface Brevtekst {
