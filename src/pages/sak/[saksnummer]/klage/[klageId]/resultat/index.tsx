@@ -119,7 +119,7 @@ const ResultatPage = ({ sak, omgjøringsbehandling, vedtakSomPåklages, søknade
             className={styles.formContainer}
             gap="space-32"
             marginBlock="space-32"
-            maxWidth="30rem"
+            maxWidth="35rem"
         >
             {resultat.type === KlagebehandlingResultat.OMGJØR ? (
                 <Omgjøringsresultat
@@ -361,7 +361,6 @@ const OpprettholdResultat = (props: {
                 >
                     <OppsummeringAvKlageinstanshendelser
                         hendelser={props.klage.resultat.klageinstanshendelser}
-                        medTittel
                     />
                 </Process.Event>
             </Process>

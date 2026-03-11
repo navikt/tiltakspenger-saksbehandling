@@ -1,4 +1,4 @@
-import { Heading, VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react';
 import { Klageinstanshendelse } from '~/types/Klageinstanshendelse';
 import { OppsummeringsPar } from '../../oppsummeringspar/OppsummeringsPar';
 import {
@@ -10,44 +10,33 @@ import {
 } from '~/utils/KlageinstanshendelseUtils';
 import { formaterTidspunkt } from '~/utils/date';
 
-const OppsummeringAvKlageinstanshendelser = (props: {
-    hendelser: Klageinstanshendelse[];
-    medTittel?: boolean;
-}) => {
-    const harHendelser = props.hendelser.length > 0;
+const OppsummeringAvKlageinstanshendelser = (props: { hendelser: Klageinstanshendelse[] }) => {
     return (
-        <VStack>
-            {props.medTittel && harHendelser && <Heading size="xsmall">Hendelseslogg</Heading>}
-            <ul>
-                {props.hendelser.map((h) => (
-                    <li key={h.klagehendelseId}>
-                        <VStack gap="space-4">
-                            <VStack>
-                                <OppsummeringsPar
-                                    label={'Type'}
-                                    verdi={klagehendelseTypeTilTekst[h.hendelsestype]}
-                                />
-                                <OppsummeringsPar
-                                    label={'Utfall'}
-                                    verdi={
-                                        erKlageinstanshendelseAvsluttet(h) ||
-                                        erKlageinstanshendelseOmgjøringskravbehandlingAvsluttet(h)
-                                            ? klagehendelseUtfallTilTekst[h.utfall]
-                                            : erKlageinstanshendelseFeilregistrert(h)
-                                              ? klagehendelseUtfallTilTekst[h.type]
-                                              : '-'
-                                    }
-                                />
-                                <OppsummeringsPar
-                                    label={'Tidspunkt'}
-                                    verdi={formaterTidspunkt(h.opprettet)}
-                                />
-                            </VStack>
+        <ul>
+            {props.hendelser.map((h) => (
+                <li key={h.klagehendelseId}>
+                    <VStack gap="space-4">
+                        <VStack>
+                            <OppsummeringsPar
+                                label={'Status'}
+                                verdi={`${klagehendelseTypeTilTekst[h.hendelsestype]} ${formaterTidspunkt(h.opprettet)}`}
+                            />
+                            <OppsummeringsPar
+                                label={'Utfall'}
+                                verdi={
+                                    erKlageinstanshendelseAvsluttet(h) ||
+                                    erKlageinstanshendelseOmgjøringskravbehandlingAvsluttet(h)
+                                        ? klagehendelseUtfallTilTekst[h.utfall]
+                                        : erKlageinstanshendelseFeilregistrert(h)
+                                          ? klagehendelseUtfallTilTekst[h.type]
+                                          : '-'
+                                }
+                            />
                         </VStack>
-                    </li>
-                ))}
-            </ul>
-        </VStack>
+                    </VStack>
+                </li>
+            ))}
+        </ul>
     );
 };
 
