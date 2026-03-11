@@ -20,13 +20,8 @@ import { Periode } from '~/types/Periode';
 import { useSak } from '~/context/sak/SakContext';
 import { Nullable } from '~/types/UtilTypes';
 import KlageMeny from '~/components/behandlingmeny/KlageMeny';
-import { erKlageOpprettholdelse } from '~/utils/klageUtils';
-import {
-    erKlageinstanshendelseAvsluttet,
-    erKlageinstanshendelseFeilregistrert,
-    erKlageinstanshendelseOmgjøringskravbehandlingAvsluttet,
-    klagehendelseUtfallTilTag,
-} from '~/utils/KlageinstanshendelseUtils';
+import { hentSisteKlagehendelseUtfallFraKlagebehandling } from '~/utils/klageUtils';
+import { klagehendelseUtfallTilTag } from '~/utils/KlageinstanshendelseUtils';
 
 type Props = {
     åpneBehandlinger: ÅpenBehandlingForOversikt[];
@@ -180,20 +175,7 @@ const propsForRad = (
                 (klage) => klage.id === åpenBehandling.id,
             )!;
 
-            const sisteKlagehendelse =
-                erKlageOpprettholdelse(klagebehandling) &&
-                klagebehandling.resultat.klageinstanshendelser.length > 0
-                    ? klagebehandling.resultat.klageinstanshendelser.at(-1)
-                    : null;
-
-            const utfall =
-                sisteKlagehendelse &&
-                (erKlageinstanshendelseAvsluttet(sisteKlagehendelse) ||
-                    erKlageinstanshendelseOmgjøringskravbehandlingAvsluttet(sisteKlagehendelse))
-                    ? sisteKlagehendelse.utfall
-                    : sisteKlagehendelse && erKlageinstanshendelseFeilregistrert(sisteKlagehendelse)
-                      ? sisteKlagehendelse.type
-                      : null;
+            const utfall = hentSisteKlagehendelseUtfallFraKlagebehandling(klagebehandling);
 
             const omgjøringsbehandling =
                 sak.behandlinger.find(

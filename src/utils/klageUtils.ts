@@ -9,6 +9,12 @@ import {
 import { BehandlingId, Rammebehandling } from '~/types/Rammebehandling';
 import { Nullable } from '~/types/UtilTypes';
 import { erRammebehandlingUnderAktivOmgjøring } from './behandling';
+import { KlagehendelseUtfall } from '~/types/Klageinstanshendelse';
+import {
+    erKlageinstanshendelseAvsluttet,
+    erKlageinstanshendelseFeilregistrert,
+    erKlageinstanshendelseOmgjøringskravbehandlingAvsluttet,
+} from './KlageinstanshendelseUtils';
 
 /**
  *
@@ -129,3 +135,23 @@ export const erKlageOpprettholdtEllerEtter = (k: Klagebehandling) =>
 export const erKlageMottattFraKAEllerEtter = (k: Klagebehandling) =>
     k.status === KlagebehandlingStatus.MOTTATT_FRA_KLAGEINSTANS ||
     k.status === KlagebehandlingStatus.FERDIGSTILT;
+
+export const hentSisteKlagehendelseUtfallFraKlagebehandling = (
+    k: Klagebehandling,
+): Nullable<KlagehendelseUtfall> => {
+    const sisteKlagehendelse =
+        erKlageOpprettholdelse(k) && k.resultat.klageinstanshendelser.length > 0
+            ? k.resultat.klageinstanshendelser.at(-1)
+            : null;
+
+    const utfall =
+        sisteKlagehendelse &&
+        (erKlageinstanshendelseAvsluttet(sisteKlagehendelse) ||
+            erKlageinstanshendelseOmgjøringskravbehandlingAvsluttet(sisteKlagehendelse))
+            ? sisteKlagehendelse.utfall
+            : sisteKlagehendelse && erKlageinstanshendelseFeilregistrert(sisteKlagehendelse)
+              ? sisteKlagehendelse.type
+              : null;
+
+    return utfall;
+};

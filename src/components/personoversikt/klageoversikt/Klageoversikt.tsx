@@ -4,6 +4,8 @@ import { Klagebehandling, KlagevedtakMedBehandling, KlagebehandlingStatus } from
 import { Rammebehandling } from '~/types/Rammebehandling';
 import { Nullable } from '~/types/UtilTypes';
 import { formaterTidspunkt } from '~/utils/date';
+import { klagehendelseUtfallTilTag } from '~/utils/KlageinstanshendelseUtils';
+import { hentSisteKlagehendelseUtfallFraKlagebehandling } from '~/utils/klageUtils';
 import {
     klagebehandlingStatusTilTag,
     klagebehandlingResultatTilTag,
@@ -40,6 +42,7 @@ const Klageoversikt = (props: {
                 resultat: klagebehandlingResultatTilTag({
                     resultat: klagevedtakMedBehandling.resultat,
                 }),
+                utfallKlageinstans: '-',
                 opprettet: formaterTidspunkt(klagevedtakMedBehandling.opprettet),
                 ferdigstilt: '-',
                 saksbehandler: klagevedtakMedBehandling.behandling.saksbehandler!,
@@ -55,6 +58,8 @@ const Klageoversikt = (props: {
 
     const klagebehandlingerOversikt = props.klagebehandlingerMedOmgjøringsbehandling.map(
         ({ klagebehandling, omgjøringsbehandling }) => {
+            const utfall = hentSisteKlagehendelseUtfallFraKlagebehandling(klagebehandling);
+
             return {
                 status: klagebehandling.ventestatus?.erSattPåVent ? (
                     <Tag data-color="warning">Satt på vent</Tag>
@@ -64,6 +69,7 @@ const Klageoversikt = (props: {
                 resultat: klagebehandling.resultat
                     ? klagebehandlingResultatTilTag({ resultat: klagebehandling.resultat.type })
                     : '-',
+                utfallKlageinstans: utfall ? klagehendelseUtfallTilTag({ utfall: utfall }) : '-',
                 opprettet: formaterTidspunkt(klagebehandling.opprettet),
                 ferdigstilt:
                     klagebehandling.status === KlagebehandlingStatus.FERDIGSTILT
@@ -90,7 +96,8 @@ const Klageoversikt = (props: {
             <Table.Header>
                 <Table.Row>
                     <Table.HeaderCell scope="col">Status</Table.HeaderCell>
-                    <Table.HeaderCell scope="col">Resultat</Table.HeaderCell>
+                    <Table.HeaderCell scope="col">Utfall underinstans</Table.HeaderCell>
+                    <Table.HeaderCell scope="col">Utfall klageinstans</Table.HeaderCell>
                     <Table.HeaderCell scope="col">Opprettet</Table.HeaderCell>
                     <Table.HeaderCell scope="col">Ferdigstilt</Table.HeaderCell>
                     <Table.HeaderCell scope="col">Saksbehandler</Table.HeaderCell>
@@ -102,6 +109,7 @@ const Klageoversikt = (props: {
                     <Table.Row key={klage.opprettet}>
                         <Table.DataCell>{klage.status}</Table.DataCell>
                         <Table.DataCell>{klage.resultat}</Table.DataCell>
+                        <Table.DataCell>{klage.utfallKlageinstans}</Table.DataCell>
                         <Table.DataCell>{klage.opprettet}</Table.DataCell>
                         <Table.DataCell>{klage.ferdigstilt}</Table.DataCell>
                         <Table.DataCell>{klage.saksbehandler}</Table.DataCell>

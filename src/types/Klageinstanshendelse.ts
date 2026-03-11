@@ -35,6 +35,11 @@ export interface BehandlingFeilregistrertHendelse extends Klageinstanshendelse {
     type: KlageHendelseFeilregistrertType;
 }
 
+export type KlagehendelseUtfall =
+    | KlageHendelseKlagebehandlingAvsluttetUtfall
+    | OmgjøringskravbehandlingAvsluttetUtfall
+    | KlageHendelseFeilregistrertType;
+
 export enum KlageHendelseKlagebehandlingAvsluttetUtfall {
     TRUKKET = 'TRUKKET',
     RETUR = 'RETUR',

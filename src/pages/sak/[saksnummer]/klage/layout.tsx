@@ -21,6 +21,8 @@ import { formaterTidspunkt } from '~/utils/date';
 import { fetchJsonFraApiClientSide } from '~/utils/fetch/fetch';
 import AvbruttOppsummering from '~/components/oppsummeringer/oppsummeringAvAvbrutt/OppsummeringAvAvbrutt';
 import OppsummeringAvVentestatus from '~/components/oppsummeringer/ventestatus/OppsummeringAvVentestatus';
+import { hentSisteKlagehendelseUtfallFraKlagebehandling } from '~/utils/klageUtils';
+import { klagehendelseUtfallTilTag } from '~/utils/KlageinstanshendelseUtils';
 
 type Props = {
     children: ReactElement;
@@ -130,6 +132,8 @@ const KlageLayout = ({ children, saksnummer, activeTab }: Props) => {
 export default KlageLayout;
 
 const KlageHeader = (props: { saksnummer: string; klage: Nullable<Klagebehandling> }) => {
+    const utfall = props.klage ? hentSisteKlagehendelseUtfallFraKlagebehandling(props.klage) : null;
+
     return (
         <div className={styles.klageHeader}>
             <HStack margin="space-16" align="center" justify="space-between">
@@ -166,6 +170,15 @@ const KlageHeader = (props: { saksnummer: string; klage: Nullable<Klagebehandlin
                             </Tag>
                         )}
                     </BodyShort>
+                    {utfall && (
+                        <BodyShort size="small">
+                            {klagehendelseUtfallTilTag({
+                                utfall: utfall,
+                                size: 'small',
+                                extraContent: { before: 'Utfall: ' },
+                            })}
+                        </BodyShort>
+                    )}
                     <BodyShort>
                         Opprettet {props.klage ? formaterTidspunkt(props.klage.opprettet) : '-'}
                     </BodyShort>
