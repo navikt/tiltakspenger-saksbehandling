@@ -4,7 +4,7 @@ import styles from './OppsummeringsPar.module.css';
 import { classNames } from '../../../utils/classNames';
 
 type Retning = 'horisontal' | 'vertikal';
-type Variant = 'spaceBetween' | 'inlineColon';
+type Variant = 'spaceBetween' | 'inlineColon' | 'inline';
 
 interface Props {
     label: string;
@@ -56,10 +56,13 @@ const Horisontal = ({
 }: Omit<Props, 'retning'>) => {
     const size = textSomSmall ? 'small' : undefined;
 
-    if (variant === 'inlineColon') {
+    if (variant === 'inlineColon' || variant === 'inline') {
         return (
-            <div className={classNames(styles.inlineColon, className)}>
-                <BodyShort size={size}>{label}:</BodyShort>
+            <div className={classNames(styles.inline, className)}>
+                <BodyShort size={size}>
+                    {label}
+                    {variant === 'inlineColon' ? ':' : ''}
+                </BodyShort>
                 <Label className={styles.verdi} size={size}>
                     {verdi ?? ''}
                 </Label>

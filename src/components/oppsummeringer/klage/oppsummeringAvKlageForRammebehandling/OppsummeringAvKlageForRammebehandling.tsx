@@ -33,8 +33,9 @@ const OppsummeringAvKlageForRammebehandling = () => {
         <Box background="default" padding="space-16">
             <VStack gap="space-12">
                 <Heading size="small">
-                    Informasjon om klagen
-                    {erKlageOpprettholdelse(klagebehandling) ? ' - underinstans' : ''}
+                    {erKlageOpprettholdelse(klagebehandling)
+                        ? 'Behandling - underinstans'
+                        : 'Informasjon om klagen'}
                 </Heading>
                 {erKlageOmgjøring(klagebehandling) && (
                     <OppsummeringAvOmgjøring klagebehandling={klagebehandling} />
@@ -116,7 +117,7 @@ const OppsummeringOpprettholdelse = (props: {
                 </LocalAlert>
             )}
             <VStack>
-                <Heading size="small">Informasjon fra Klageinstansen</Heading>
+                <Heading size="small">Behandling - Klageinstansen</Heading>
                 <OppsummeringAvKlageinstanshendelser
                     hendelser={props.klagebehandling.resultat.klageinstanshendelser}
                 />

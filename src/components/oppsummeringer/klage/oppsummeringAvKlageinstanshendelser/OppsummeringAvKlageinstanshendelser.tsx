@@ -19,10 +19,12 @@ const OppsummeringAvKlageinstanshendelser = (props: { hendelser: Klageinstanshen
                         <VStack>
                             <OppsummeringsPar
                                 label={'Status'}
-                                verdi={`${klagehendelseTypeTilTekst[h.hendelsestype]} ${formaterTidspunkt(h.opprettet)}`}
+                                verdi={`${klagehendelseTypeTilTekst[h.hendelsestype]} - ${formaterTidspunkt(h.opprettet)}`}
+                                variant="inline"
                             />
                             <OppsummeringsPar
                                 label={'Utfall'}
+                                variant="inline"
                                 verdi={
                                     erKlageinstanshendelseAvsluttet(h) ||
                                     erKlageinstanshendelseOmgjøringskravbehandlingAvsluttet(h)
