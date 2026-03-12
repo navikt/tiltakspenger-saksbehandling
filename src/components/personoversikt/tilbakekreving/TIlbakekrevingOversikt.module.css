@@ -1,0 +1,10 @@
+.header {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--ax-border-neutral-subtle);
+}
+
+.seksjon {
+    &:not(:last-child) {
+        margin-bottom: 1rem;
+    }
+}

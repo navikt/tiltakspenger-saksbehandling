@@ -4,6 +4,8 @@ import { Periode } from './Periode';
 import { SimulertBeregning } from '~/types/SimulertBeregning';
 import { Nullable } from '~/types/UtilTypes';
 
+export type UtbetalingId = `utbetaling_${string}`;
+
 export enum Utbetalingsstatus {
     SENDT_TIL_HELVED = 'SENDT_TIL_HELVED',
     SENDT_TIL_OPPDRAG = 'SENDT_TIL_OPPDRAG',

@@ -21,6 +21,7 @@ import { useRouter } from 'next/router';
 import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
 import {
     ArrowsCirclepathIcon,
+    BankNoteIcon,
     ChevronDownIcon,
     EnvelopeClosedIcon,
     FileCheckmarkIcon,
@@ -37,6 +38,7 @@ import { KlagebehandlingStatus, KlagevedtakMedBehandling } from '~/types/Klage';
 import Klageoversikt, {
     KlagebehandlingerMedOmgjøringsbehandling,
 } from './klageoversikt/Klageoversikt';
+import { TilbakekrevingOversikt } from '~/components/personoversikt/tilbakekreving/TilbakekrevingOversikt';
 
 export const PERSONOVERSIKT_TABS = {
     apneBehandlinger: 'apne-behandlinger',
@@ -44,12 +46,13 @@ export const PERSONOVERSIKT_TABS = {
     vedtatteBehandlinger: 'vedtatte-behandlinger',
     avsluttedeBehandlinger: 'avsluttede-behandlinger',
     klage: 'klage',
+    tilbakekreving: 'tilbakekreving',
 };
 
 export const Personoversikt = () => {
     const router = useRouter();
     const { sak } = useSak();
-    const featureToggle = useFeatureToggles();
+    const { klageToggle, tilbakekrevingToggle } = useFeatureToggles();
     const [startRevurderingModalÅpen, setStartRevurderingModalÅpen] = useState(false);
     const [registrerSøknadManueltModalÅpen, setRegistrerSøknadManueltModalÅpen] = useState(false);
 
@@ -62,6 +65,7 @@ export const Personoversikt = () => {
         meldeperiodeKjeder,
         alleRammevedtak,
         alleKlagevedtak,
+        tilbakekrevinger,
     } = sak;
 
     const { meldeperiodeKjederIkkeKlare, meldeperiodeKjederKanBehandles } = Object.groupBy(
@@ -116,12 +120,8 @@ export const Personoversikt = () => {
         setAktivTab(hentAktivTabFraHash(window.location.hash));
     }, []);
 
-    const labelWithCounter = (label: string, count?: number) => {
-        if (count && count > 0) {
-            return `${label} (${count})`;
-        } else {
-            return label;
-        }
+    const labelWithCounter = (label: string, count: number) => {
+        return `${label} (${count})`;
     };
 
     return (
@@ -185,6 +185,14 @@ export const Personoversikt = () => {
                             icon={<EnvelopeClosedIcon aria-hidden />}
                             className={styles.tab}
                         />
+                        {tilbakekrevingToggle && (
+                            <Tabs.Tab
+                                value={PERSONOVERSIKT_TABS.tilbakekreving}
+                                label={labelWithCounter('Tilbakekreving', tilbakekrevinger.length)}
+                                icon={<BankNoteIcon aria-hidden />}
+                                className={styles.tab}
+                            />
+                        )}
                         <ActionMenu>
                             <ActionMenu.Trigger>
                                 <Button
@@ -197,7 +205,7 @@ export const Personoversikt = () => {
                                 </Button>
                             </ActionMenu.Trigger>
                             <ActionMenu.Content>
-                                {featureToggle.klageToggle && (
+                                {klageToggle && (
                                     <ActionMenu.Item
                                         icon={<FilePlusIcon aria-hidden />}
                                         onSelect={() =>
@@ -277,6 +285,9 @@ export const Personoversikt = () => {
                             }
                             klagevedtakMedBehandling={klagevedtakMedBehandling}
                         />
+                    </Tabs.Panel>
+                    <Tabs.Panel value={PERSONOVERSIKT_TABS.tilbakekreving} className={styles.panel}>
+                        <TilbakekrevingOversikt tilbakekrevinger={tilbakekrevinger} />
                     </Tabs.Panel>
                 </Tabs>
             </Box>
