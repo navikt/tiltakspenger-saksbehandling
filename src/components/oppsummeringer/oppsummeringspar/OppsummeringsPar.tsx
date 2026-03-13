@@ -1,14 +1,15 @@
 import { BodyShort, Label } from '@navikt/ds-react';
+import { classNames } from '~/utils/classNames';
+import { Nullable } from '~/types/UtilTypes';
 
 import styles from './OppsummeringsPar.module.css';
-import { classNames } from '../../../utils/classNames';
 
 type Retning = 'horisontal' | 'vertikal';
 type Variant = 'spaceBetween' | 'inlineColon' | 'inline';
 
 interface Props {
     label: string;
-    verdi: string | number | undefined | null;
+    verdi?: Nullable<React.ReactNode>;
     retning?: Retning;
     /**
      * Variant er hvordan vi ønsker å vise teksten gitt en retning

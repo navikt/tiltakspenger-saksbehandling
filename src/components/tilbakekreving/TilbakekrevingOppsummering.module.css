@@ -1,0 +1,11 @@
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, max-content);
+    justify-content: start;
+    gap: var(--ax-space-24);
+}
+
+.button {
+    align-self: flex-start;
+    width: fit-content;
+}

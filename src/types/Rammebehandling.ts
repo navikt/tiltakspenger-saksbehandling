@@ -23,6 +23,7 @@ import { Avbrutt } from '~/types/Avbrutt';
 import { Rammevedtak, VedtakId } from '~/types/Rammevedtak';
 import { KlageId } from './Klage';
 import { VentestatusHendelse } from './Ventestatus';
+import { TilbakekrevingId } from '~/types/Tilbakekreving';
 
 export type BehandlingId = `beh_${string}`;
 
@@ -48,6 +49,7 @@ export interface RammebehandlingBase {
     utbetaling: Nullable<BehandlingUtbetalingProps>;
     utbetalingskontroll: Nullable<Utbetalingskontroll>;
     klagebehandlingId: Nullable<KlageId>;
+    tilbakekrevingId: Nullable<TilbakekrevingId>;
 }
 
 export type Rammebehandling = Søknadsbehandling | Revurdering;

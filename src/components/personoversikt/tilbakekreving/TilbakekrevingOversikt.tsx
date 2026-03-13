@@ -1,5 +1,5 @@
 import { TilbakekrevingBehandling, TilbakekrevingBehandlingsstatus } from '~/types/Tilbakekreving';
-import { Alert, Button, Heading, Link, Table, VStack } from '@navikt/ds-react';
+import { Alert, Button, Heading, Table, VStack } from '@navikt/ds-react';
 import {
     formaterDatotekst,
     formaterTidspunktKort,
@@ -11,6 +11,7 @@ import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import NextLink from 'next/link';
 import { useSak } from '~/context/sak/SakContext';
 import { beregningKildeUrl } from '~/utils/urls';
+import { TilbakekrevingStatusTag } from '~/components/tilbakekreving/TilbakekrevingStatusTag';
 
 import style from './TIlbakekrevingOversikt.module.css';
 
@@ -108,7 +109,9 @@ const TilbakekrevingerTabell = ({ tilbakekrevinger }: TilbakekrevingerTabellProp
 
                     return (
                         <Table.Row shadeOnHover={false} key={id}>
-                            <Table.DataCell>{statusTekst[status]}</Table.DataCell>
+                            <Table.DataCell>
+                                <TilbakekrevingStatusTag status={status} />
+                            </Table.DataCell>
                             <Table.DataCell>
                                 {formatterBeløp(totaltFeilutbetaltBeløp)}
                             </Table.DataCell>
@@ -121,11 +124,17 @@ const TilbakekrevingerTabell = ({ tilbakekrevinger }: TilbakekrevingerTabellProp
                                 {varselSendt ? formaterDatotekst(varselSendt) : '-'}
                             </Table.DataCell>
                             <Table.DataCell>
-                                <Link as={NextLink} href={beregningKildeUrl(beregningKilde, sak)}>
+                                <Button
+                                    as={NextLink}
+                                    href={beregningKildeUrl(beregningKilde, sak)}
+                                    variant={'tertiary'}
+                                    size={'small'}
+                                    className={style.kildeKnapp}
+                                >
                                     {beregningKilde.type === BeregningKildeType.MELDEKORT
                                         ? 'Meldekort'
                                         : 'Rammebehandling'}
-                                </Link>
+                                </Button>
                             </Table.DataCell>
                             <Table.DataCell align={'right'}>
                                 <Button
@@ -147,10 +156,3 @@ const TilbakekrevingerTabell = ({ tilbakekrevinger }: TilbakekrevingerTabellProp
         </Table>
     );
 };
-
-const statusTekst: Record<TilbakekrevingBehandlingsstatus, string> = {
-    [TilbakekrevingBehandlingsstatus.OPPRETTET]: 'Opprettet',
-    [TilbakekrevingBehandlingsstatus.TIL_BEHANDLING]: 'Til behandling',
-    [TilbakekrevingBehandlingsstatus.TIL_GODKJENNING]: 'Til godkjenning',
-    [TilbakekrevingBehandlingsstatus.AVSLUTTET]: 'Avsluttet',
-} as const;

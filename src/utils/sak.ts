@@ -4,6 +4,7 @@ import { VedtakId } from '~/types/Rammevedtak';
 import { Periode } from '~/types/Periode';
 import { perioderOverlapper } from '~/utils/periode';
 import { removeDuplicatesFilter } from '~/utils/array';
+import { TilbakekrevingId } from '~/types/Tilbakekreving';
 
 export const hentVedtatteSøknadsbehandlinger = (sak: SakProps) => {
     const { alleRammevedtak, behandlinger } = sak;
@@ -27,4 +28,8 @@ export const hentGjeldendeRammevedtakIPeriode = (sak: SakProps, periode: Periode
         .filter((el) => perioderOverlapper(el.periode, periode))
         .map((el) => el.rammevedtak)
         .filter(removeDuplicatesFilter((a, b) => a.id === b.id));
+};
+
+export const hentTilbakekreving = (sak: SakProps, tilbakekrevingId: TilbakekrevingId) => {
+    return sak.tilbakekrevinger.find((tilbakekreving) => tilbakekreving.id === tilbakekrevingId);
 };

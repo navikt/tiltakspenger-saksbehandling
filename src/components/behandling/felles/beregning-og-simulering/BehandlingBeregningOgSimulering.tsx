@@ -17,6 +17,9 @@ import {
 } from '~/types/Utbetaling';
 import { PartialRecord } from '~/types/UtilTypes';
 import { OppdaterSimuleringKnapp } from '~/components/beregning-og-simulering/oppdater-simulering/OppdaterSimuleringKnapp';
+import { hentTilbakekreving } from '~/utils/sak';
+import { useSak } from '~/context/sak/SakContext';
+import { TilbakekrevingOppsummering } from '~/components/tilbakekreving/TilbakekrevingOppsummering';
 
 import style from './BehandlingBeregningOgSimulering.module.css';
 
@@ -61,10 +64,11 @@ const BeregningOgSimuleringSeksjon = ({
     behandling,
     utbetaling,
 }: BeregningOgSimuleringSeksjonProps) => {
+    const { sak } = useSak();
     const { setBehandling } = useBehandling();
     const { innloggetSaksbehandler } = useSaksbehandler();
 
-    const { status, utbetalingskontroll } = behandling;
+    const { status, utbetalingskontroll, tilbakekrevingId } = behandling;
 
     const {
         simulertBeregning,
@@ -73,10 +77,26 @@ const BeregningOgSimuleringSeksjon = ({
         navkontorNavn,
         kanIkkeIverksetteUtbetaling,
     } = utbetaling;
+
     const { beregning, simuleringstidspunkt } = simulertBeregning;
+
+    const tilbakekreving = tilbakekrevingId && hentTilbakekreving(sak, tilbakekrevingId);
 
     return (
         <VedtakSeksjon>
+            {tilbakekreving && (
+                <VedtakSeksjon.Venstre className={style.tilbakekreving} gap={'space-16'}>
+                    <Alert variant={'warning'} inline={true}>
+                        <Heading size={'small'} level={'3'}>
+                            {'Tilbakekreving'}
+                        </Heading>
+                        {'Det ble opprettet en tilbakekrevingssak for dette vedtaket.'}
+                    </Alert>
+
+                    <TilbakekrevingOppsummering tilbakekreving={tilbakekreving} />
+                </VedtakSeksjon.Venstre>
+            )}
+
             <VedtakSeksjon.Venstre>
                 <VStack gap={'space-20'}>
                     <BeregningOgSimuleringHeader
@@ -107,6 +127,7 @@ const BeregningOgSimuleringSeksjon = ({
                     />
                 </VStack>
             </VedtakSeksjon.Venstre>
+
             <VedtakSeksjon.Høyre gap={'space-16'}>
                 {simuleringstidspunkt ? (
                     <AlertMedTidspunkt
