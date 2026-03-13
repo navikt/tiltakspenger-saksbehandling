@@ -9,3 +9,9 @@
     align-self: flex-start;
     width: fit-content;
 }
+
+.tilbakekreving {
+    padding: 0.75rem;
+    border: 3px solid var(--ax-border-warning-subtle);
+    border-radius: var(--ax-radius-4);
+}

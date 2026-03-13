@@ -12,6 +12,7 @@ import { MeldeperiodeKjedeProps } from '~/types/meldekort/Meldeperiode';
 import { BeregningOgSimuleringHeader } from '~/components/beregning-og-simulering/header/BeregningOgSimuleringHeader';
 import { kanBehandle, kanSaksbehandleForMeldekort } from '~/utils/tilganger';
 import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
+import { TilbakekrevingOppsummering } from '~/components/tilbakekreving/TilbakekrevingOppsummering';
 
 type Props = {
     meldekortBehandling: MeldekortBehandlingProps;
@@ -31,6 +32,7 @@ export const MeldekortBeregningOgSimulering = ({ meldekortBehandling, className 
         saksbehandler,
         type,
         kanIkkeIverksetteUtbetaling,
+        tilbakekrevingId,
     } = meldekortBehandling;
 
     if (!simulertBeregning) {
@@ -52,6 +54,7 @@ export const MeldekortBeregningOgSimulering = ({ meldekortBehandling, className 
 
     return (
         <VStack className={className} gap={'space-20'}>
+            {tilbakekrevingId && <TilbakekrevingOppsummering tilbakekrevingId={tilbakekrevingId} />}
             <BeregningOgSimuleringHeader
                 utbetalingsstatus={erIverksatt ? utbetalingsstatus : undefined}
                 navkontor={navkontor}

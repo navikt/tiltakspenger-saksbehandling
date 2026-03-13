@@ -1,6 +1,6 @@
-import { Button, VStack } from '@navikt/ds-react';
+import { Alert, Button, Heading, VStack } from '@navikt/ds-react';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
-import { TilbakekrevingBehandling } from '~/types/Tilbakekreving';
+import { TilbakekrevingId } from '~/types/Tilbakekreving';
 import { OppsummeringsPar } from '~/components/oppsummeringer/oppsummeringspar/OppsummeringsPar';
 import {
     formaterDatotekst,
@@ -9,14 +9,28 @@ import {
 } from '~/utils/date';
 import { formatterBeløp } from '~/utils/beløp';
 import { TilbakekrevingStatusTag } from '~/components/tilbakekreving/TilbakekrevingStatusTag';
+import { useSak } from '~/context/sak/SakContext';
+import { hentTilbakekreving } from '~/utils/sak';
 
 import style from './TilbakekrevingOppsummering.module.css';
 
 type Props = {
-    tilbakekreving: TilbakekrevingBehandling;
+    tilbakekrevingId: TilbakekrevingId;
 };
 
-export const TilbakekrevingOppsummering = ({ tilbakekreving }: Props) => {
+export const TilbakekrevingOppsummering = ({ tilbakekrevingId }: Props) => {
+    const { sak } = useSak();
+
+    const tilbakekreving = hentTilbakekreving(sak, tilbakekrevingId);
+
+    if (!tilbakekreving) {
+        return (
+            <Alert
+                variant={'error'}
+            >{`Teknisk feil: fant ikke tilbakekreving for id ${tilbakekrevingId}`}</Alert>
+        );
+    }
+
     const {
         status,
         totaltFeilutbetaltBeløp,
@@ -28,7 +42,13 @@ export const TilbakekrevingOppsummering = ({ tilbakekreving }: Props) => {
     } = tilbakekreving;
 
     return (
-        <VStack gap={'space-24'}>
+        <VStack gap={'space-24'} className={style.tilbakekreving}>
+            <Alert variant={'warning'} inline={true}>
+                <Heading size={'small'} level={'3'}>
+                    {'Tilbakekreving'}
+                </Heading>
+                {'Det ble opprettet en tilbakekrevingssak for dette vedtaket.'}
+            </Alert>
             <div className={style.grid}>
                 <OppsummeringsPar
                     label={'Status'}

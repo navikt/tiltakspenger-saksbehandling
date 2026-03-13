@@ -8,6 +8,7 @@ import { SakId } from '../Sak';
 import { SimulertBeregning } from '~/types/SimulertBeregning';
 import { KanIkkeIverksetteUtbetalingGrunn, Utbetalingsstatus } from '../Utbetaling';
 import { Attestering } from '../Attestering';
+import { TilbakekrevingId } from '~/types/Tilbakekreving';
 
 // "_behandling"-suffixen er ikke reell, er kun for at typescript ikke skal se denne som ekvivalent med BrukersMeldekortId
 // Ikke gjør run-time typesjekk på denne!
@@ -73,6 +74,7 @@ export type MeldekortBehandlingProps = {
     simulertBeregning: Nullable<SimulertBeregning>;
     kanIkkeIverksetteUtbetaling: Nullable<KanIkkeIverksetteUtbetalingGrunn>;
     tekstTilVedtaksbrev: Nullable<string>;
+    tilbakekrevingId: Nullable<TilbakekrevingId>;
 };
 
 export type MeldekortDagProps = {
