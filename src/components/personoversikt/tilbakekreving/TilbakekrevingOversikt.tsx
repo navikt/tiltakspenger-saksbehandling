@@ -1,11 +1,16 @@
 import { TilbakekrevingBehandling, TilbakekrevingBehandlingsstatus } from '~/types/Tilbakekreving';
-import { Alert, Button, Heading, Table, VStack } from '@navikt/ds-react';
+import { Alert, Button, Heading, Link, Table, VStack } from '@navikt/ds-react';
 import {
     formaterDatotekst,
     formaterTidspunktKort,
     periodeTilFormatertDatotekst,
 } from '~/utils/date';
 import { formatterBeløp } from '~/utils/beløp';
+import { BeregningKildeType } from '~/types/Beregning';
+import { ExternalLinkIcon } from '@navikt/aksel-icons';
+import NextLink from 'next/link';
+import { useSak } from '~/context/sak/SakContext';
+import { beregningKildeUrl } from '~/utils/urls';
 
 import style from './TIlbakekrevingOversikt.module.css';
 
@@ -33,9 +38,9 @@ export const TilbakekrevingOversikt = ({ tilbakekrevinger }: Props) => {
             <Alert variant={'info'} inline={true}>
                 {'Tilbakekrevingssaker behandles i en separat saksbehandlingsløsning'}
             </Alert>
-            <TilbakekrevingSeksjon header={'Aktive behandlinger'} tilbakekrevinger={aktive} />
+            <TilbakekrevingSeksjon header={'Aktive tilbakekrevinger'} tilbakekrevinger={aktive} />
             <TilbakekrevingSeksjon
-                header={'Avsluttede behandlinger'}
+                header={'Avsluttede tilbakekrevinger'}
                 tilbakekrevinger={avsluttede}
             />
         </VStack>
@@ -69,6 +74,8 @@ type TilbakekrevingerTabellProps = {
 };
 
 const TilbakekrevingerTabell = ({ tilbakekrevinger }: TilbakekrevingerTabellProps) => {
+    const { sak } = useSak();
+
     return (
         <Table>
             <Table.Header>
@@ -81,6 +88,7 @@ const TilbakekrevingerTabell = ({ tilbakekrevinger }: TilbakekrevingerTabellProp
                     <Table.HeaderCell scope="col">{'Opprettet'}</Table.HeaderCell>
                     <Table.HeaderCell scope="col">{'Sist endret'}</Table.HeaderCell>
                     <Table.HeaderCell scope="col">{'Varsel sendt'}</Table.HeaderCell>
+                    <Table.HeaderCell scope="col">{'Kilde'}</Table.HeaderCell>
                     <Table.HeaderCell scope="col"></Table.HeaderCell>
                 </Table.Row>
             </Table.Header>
@@ -95,6 +103,7 @@ const TilbakekrevingerTabell = ({ tilbakekrevinger }: TilbakekrevingerTabellProp
                         url,
                         opprettet,
                         sistEndret,
+                        beregningKilde,
                     } = tilbakekreving;
 
                     return (
@@ -111,15 +120,24 @@ const TilbakekrevingerTabell = ({ tilbakekrevinger }: TilbakekrevingerTabellProp
                             <Table.DataCell>
                                 {varselSendt ? formaterDatotekst(varselSendt) : '-'}
                             </Table.DataCell>
+                            <Table.DataCell>
+                                <Link as={NextLink} href={beregningKildeUrl(beregningKilde, sak)}>
+                                    {beregningKilde.type === BeregningKildeType.MELDEKORT
+                                        ? 'Meldekort'
+                                        : 'Rammebehandling'}
+                                </Link>
+                            </Table.DataCell>
                             <Table.DataCell align={'right'}>
                                 <Button
                                     as={'a'}
                                     href={url}
                                     variant={'secondary'}
                                     size={'small'}
+                                    icon={<ExternalLinkIcon />}
+                                    iconPosition={'right'}
                                     target={'_blank'}
                                 >
-                                    {'Åpne behandlingen'}
+                                    {'Åpne tilbakekreving'}
                                 </Button>
                             </Table.DataCell>
                         </Table.Row>
