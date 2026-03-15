@@ -144,7 +144,9 @@ export const erKlageOpprettholdtEllerEtter = (k: Klagebehandling) =>
 export const erKlageMottattFraKAEllerEtter = (k: Klagebehandling) =>
     k.status === KlagebehandlingStatus.MOTTATT_FRA_KLAGEINSTANS ||
     k.status === KlagebehandlingStatus.OMGJØRING_ETTER_KLAGEINSTANS ||
-    k.status === KlagebehandlingStatus.FERDIGSTILT;
+    k.status === KlagebehandlingStatus.FERDIGSTILT ||
+    (k.status === KlagebehandlingStatus.VEDTATT &&
+        k.resultat?.type === KlagebehandlingResultat.OPPRETTHOLDT);
 
 export const hentSisteKlagehendelseUtfallFraKlagebehandling = (
     k: Klagebehandling,
