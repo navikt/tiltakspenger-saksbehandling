@@ -39,6 +39,14 @@ export const kanBehandleKlage = (
     return false;
 };
 
+export const kanVidereBehandleKlage = (
+    k: Klagebehandling,
+    omgjøringsbehandling: Nullable<Rammebehandling>,
+): boolean =>
+    k.status === KlagebehandlingStatus.OMGJØRING_ETTER_KLAGEINSTANS &&
+    !!omgjøringsbehandling &&
+    erRammebehandlingUnderAktivOmgjøring(omgjøringsbehandling);
+
 export const erKlageAvsluttet = (k: Klagebehandling): boolean =>
     k.status === 'AVBRUTT' ||
     k.status === KlagebehandlingStatus.VEDTATT ||
@@ -117,6 +125,7 @@ export const finnSisteGyldigeStegForKlage = (k: Klagebehandling): string => {
                 k.status === KlagebehandlingStatus.OPPRETTHOLDT ||
                 k.status === KlagebehandlingStatus.OVERSENDT ||
                 k.status === KlagebehandlingStatus.MOTTATT_FRA_KLAGEINSTANS ||
+                k.status === KlagebehandlingStatus.OMGJØRING_ETTER_KLAGEINSTANS ||
                 k.status === KlagebehandlingStatus.FERDIGSTILT
             ) {
                 return `/sak/${k.saksnummer}/klage/${k.id}/resultat`;
@@ -134,6 +143,7 @@ export const erKlageOpprettholdtEllerEtter = (k: Klagebehandling) =>
 
 export const erKlageMottattFraKAEllerEtter = (k: Klagebehandling) =>
     k.status === KlagebehandlingStatus.MOTTATT_FRA_KLAGEINSTANS ||
+    k.status === KlagebehandlingStatus.OMGJØRING_ETTER_KLAGEINSTANS ||
     k.status === KlagebehandlingStatus.FERDIGSTILT;
 
 export const hentSisteKlagehendelseUtfallFraKlagebehandling = (

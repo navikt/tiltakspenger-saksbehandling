@@ -23,6 +23,7 @@ export enum KlagebehandlingStatus {
     OVERSENDT = 'OVERSENDT',
     FERDIGSTILT = 'FERDIGSTILT',
     MOTTATT_FRA_KLAGEINSTANS = 'MOTTATT_FRA_KLAGEINSTANS',
+    OMGJØRING_ETTER_KLAGEINSTANS = 'OMGJØRING_ETTER_KLAGEINSTANS',
 }
 
 export interface Klagebehandling {

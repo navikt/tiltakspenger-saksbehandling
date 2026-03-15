@@ -115,12 +115,7 @@ const ResultatPage = ({ sak, omgjøringsbehandling, vedtakSomPåklages, søknade
     }
 
     return (
-        <VStack
-            className={styles.formContainer}
-            gap="space-32"
-            marginBlock="space-32"
-            maxWidth="35rem"
-        >
+        <VStack className={styles.formContainer} gap="space-32" marginBlock="space-32">
             {resultat.type === KlagebehandlingResultat.OMGJØR ? (
                 <Omgjøringsresultat
                     sak={sak}
@@ -243,7 +238,8 @@ const OpprettholdResultat = (props: {
         fåttSvarFraKA &&
         skalKunneOppretteNyRammebehandling(props.klage.resultat.klageinstanshendelser) &&
         !props.klage.resultat.rammebehandlingId &&
-        !props.omgjøringsbehandling;
+        !props.omgjøringsbehandling &&
+        props.klage.status !== KlagebehandlingStatus.OMGJØRING_ETTER_KLAGEINSTANS;
 
     const kanFerdigstilleKlage =
         fåttSvarFraKA &&

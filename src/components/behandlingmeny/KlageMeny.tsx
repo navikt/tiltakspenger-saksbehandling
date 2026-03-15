@@ -11,7 +11,11 @@ import {
 import { ActionMenu, Button, LocalAlert, Modal } from '@navikt/ds-react';
 import router from 'next/router';
 import { Klagebehandling } from '~/types/Klage';
-import { finnSisteGyldigeStegForKlage, kanBehandleKlage } from '~/utils/klageUtils';
+import {
+    finnSisteGyldigeStegForKlage,
+    kanBehandleKlage,
+    kanVidereBehandleKlage,
+} from '~/utils/klageUtils';
 import AvsluttBehandlingMenyvalg from '../personoversikt/avsluttBehandling/AvsluttBehandlingMenyvalg';
 import AvsluttBehandlingModal from '../modaler/AvsluttBehandlingModal';
 import { useSak } from '~/context/sak/SakContext';
@@ -130,13 +134,15 @@ const KlageMeny = (props: {
                         }
                     >
                         {eierInnloggetSaksbehandlerBehandlingen &&
-                        kanBehandleKlage(props.klage, props.omgjøringsbehandling)
+                        (kanBehandleKlage(props.klage, props.omgjøringsbehandling) ||
+                            kanVidereBehandleKlage(props.klage, props.omgjøringsbehandling))
                             ? 'Fortsett'
                             : 'Se behandling'}
                     </ActionMenu.Item>
 
                     {ingenEierBehandling &&
-                        kanBehandleKlage(props.klage, props.omgjøringsbehandling) && (
+                        (kanBehandleKlage(props.klage, props.omgjøringsbehandling) ||
+                            kanVidereBehandleKlage(props.klage, props.omgjøringsbehandling)) && (
                             <>
                                 <ActionMenu.Divider />
                                 <ActionMenu.Item
@@ -162,7 +168,8 @@ const KlageMeny = (props: {
                         )}
 
                     {eierInnloggetSaksbehandlerBehandlingen &&
-                        kanBehandleKlage(props.klage, props.omgjøringsbehandling) && (
+                        (kanBehandleKlage(props.klage, props.omgjøringsbehandling) ||
+                            kanVidereBehandleKlage(props.klage, props.omgjøringsbehandling)) && (
                             <>
                                 <ActionMenu.Item
                                     icon={<ArrowLeftIcon aria-hidden />}
@@ -200,7 +207,8 @@ const KlageMeny = (props: {
                         )}
 
                     {eierIkkeInngloggetSaksbehandlerBehandlingen &&
-                        kanBehandleKlage(props.klage, props.omgjøringsbehandling) && (
+                        (kanBehandleKlage(props.klage, props.omgjøringsbehandling) ||
+                            kanVidereBehandleKlage(props.klage, props.omgjøringsbehandling)) && (
                             <>
                                 <ActionMenu.Divider />
                                 {props.klage.saksbehandler && (
