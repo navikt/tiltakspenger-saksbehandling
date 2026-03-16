@@ -15,7 +15,6 @@ import { KlageSteg } from '~/utils/KlageLayoutUtils';
 import KlageLayout, { KlageProvider, useKlage } from '../../layout';
 import { Button, Heading, HStack, LocalAlert, Process, VStack } from '@navikt/ds-react';
 import {
-    erKlageAvsluttet,
     erKlageMottattFraKAEllerEtter,
     erKlageOmgjøring,
     erKlageOpprettholdelse,
@@ -136,6 +135,7 @@ const ResultatPage = ({ sak, omgjøringsbehandling, vedtakSomPåklages, søknade
                     omgjøringsbehandling={omgjøringsbehandling}
                     vedtakSomPåklages={vedtakSomPåklages}
                     søknader={søknader}
+                    innloggetSaksbehandler={innloggetSaksbehandler}
                 />
             )}
         </VStack>
@@ -156,12 +156,8 @@ const Omgjøringsresultat = (props: {
     const [vilVelgeOmgjøringsbehandlingModal, setVilVelgeOmgjøringsbehandlingModal] =
         useState(false);
 
-    if (erKlageAvsluttet(props.klage)) {
-        return null;
-    }
-
     return (
-        <VStack align="start" gap="space-32">
+        <VStack align="start" gap="space-32" maxWidth="30rem">
             <LocalAlert status="warning">
                 <LocalAlert.Header>
                     <LocalAlert.Title>Omgjøring av vedtak</LocalAlert.Title>
@@ -209,8 +205,11 @@ const OpprettholdResultat = (props: {
     vedtakSomPåklages: Nullable<Rammevedtak>;
     omgjøringsbehandling: Nullable<Rammebehandling>;
     søknader: Søknad[];
+    innloggetSaksbehandler: Saksbehandler;
 }) => {
     const [vilOppretteNyBehandling, setVilOppretteNyBehandling] = useState(false);
+    const erReadonlyForSaksbehandler =
+        props.innloggetSaksbehandler.navIdent !== props.klage.saksbehandler;
 
     const ferdigstillKlage = useFerdigstillKlage({
         sakId: props.sak.sakId,
@@ -239,13 +238,15 @@ const OpprettholdResultat = (props: {
         skalKunneOppretteNyRammebehandling(props.klage.resultat.klageinstanshendelser) &&
         !props.klage.resultat.rammebehandlingId &&
         !props.omgjøringsbehandling &&
-        props.klage.status !== KlagebehandlingStatus.OMGJØRING_ETTER_KLAGEINSTANS;
+        props.klage.status !== KlagebehandlingStatus.OMGJØRING_ETTER_KLAGEINSTANS &&
+        !erReadonlyForSaksbehandler;
 
     const kanFerdigstilleKlage =
         fåttSvarFraKA &&
         !skalKunneOppretteNyRammebehandling(props.klage.resultat.klageinstanshendelser) &&
         !props.klage.resultat.rammebehandlingId &&
-        props.klage.status !== KlagebehandlingStatus.FERDIGSTILT;
+        props.klage.status !== KlagebehandlingStatus.FERDIGSTILT &&
+        !erReadonlyForSaksbehandler;
 
     const inneholderHendelserRetur = !!props.klage.resultat.klageinstanshendelser.find(
         (hendelse) =>

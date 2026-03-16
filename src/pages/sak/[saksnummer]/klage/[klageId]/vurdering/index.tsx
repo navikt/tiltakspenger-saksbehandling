@@ -269,13 +269,23 @@ const VurderingKlagePage = ({ sak, vedtakSomPåklages, søknader, omgjøringsbeh
                                 </Button>
                             ) : null}
 
-                            {erKlageOpprettholdelse(klage) && (
+                            {erKlageOpprettholdelse(klage) ? (
                                 <Button
                                     as={Link}
                                     href={`/sak/${sak.saksnummer}/klage/${klage.id}/brev`}
                                 >
                                     Fortsett
                                 </Button>
+                            ) : (
+                                erKlageAvsluttet(klage) && (
+                                    <Button
+                                        className={styles.fortsettKnapp}
+                                        as={Link}
+                                        href={finnSisteGyldigeStegForKlage(klage)}
+                                    >
+                                        Fortsett
+                                    </Button>
+                                )
                             )}
                         </HStack>
                     )}
@@ -291,16 +301,6 @@ const VurderingKlagePage = ({ sak, vedtakSomPåklages, søknader, omgjøringsbeh
                                 omgjøringsbehandlingen er iverksatt.
                             </LocalAlert.Content>
                         </LocalAlert>
-                    )}
-
-                    {erKlageAvsluttet(klage) && (
-                        <Button
-                            className={styles.fortsettKnapp}
-                            as={Link}
-                            href={finnSisteGyldigeStegForKlage(klage)}
-                        >
-                            Fortsett
-                        </Button>
                     )}
                 </VStack>
             </form>
