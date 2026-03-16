@@ -52,7 +52,7 @@ export const PERSONOVERSIKT_TABS = {
 export const Personoversikt = () => {
     const router = useRouter();
     const { sak } = useSak();
-    const { klageToggle, tilbakekrevingToggle } = useFeatureToggles();
+    const { tilbakekrevingToggle } = useFeatureToggles();
     const [startRevurderingModalÅpen, setStartRevurderingModalÅpen] = useState(false);
     const [registrerSøknadManueltModalÅpen, setRegistrerSøknadManueltModalÅpen] = useState(false);
 
@@ -205,16 +205,13 @@ export const Personoversikt = () => {
                                 </Button>
                             </ActionMenu.Trigger>
                             <ActionMenu.Content>
-                                {klageToggle && (
-                                    <ActionMenu.Item
-                                        icon={<FilePlusIcon aria-hidden />}
-                                        onSelect={() =>
-                                            router.push(`/sak/${saksnummer}/klage/opprett`)
-                                        }
-                                    >
-                                        Registrer klage
-                                    </ActionMenu.Item>
-                                )}
+                                <ActionMenu.Item
+                                    icon={<FilePlusIcon aria-hidden />}
+                                    onSelect={() => router.push(`/sak/${saksnummer}/klage/opprett`)}
+                                >
+                                    Registrer klage
+                                </ActionMenu.Item>
+
                                 <ActionMenu.Item
                                     icon={<TasklistSaveIcon aria-hidden />}
                                     onClick={() => setRegistrerSøknadManueltModalÅpen(true)}
