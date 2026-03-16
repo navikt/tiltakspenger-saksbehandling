@@ -53,7 +53,12 @@ export const erKlageAvsluttet = (k: Klagebehandling): boolean =>
     k.status === 'FERDIGSTILT';
 
 export const erKlageFerdigbehandlet = (k: Klagebehandling): boolean =>
-    k.status === KlagebehandlingStatus.VEDTATT || k.status === 'FERDIGSTILT';
+    k.status === KlagebehandlingStatus.VEDTATT || erKlageFerdigstilt(k);
+
+export const erKlageFerdigstilt = (
+    k: Klagebehandling,
+): k is Klagebehandling & { resultat: KlagebehandlingsresultatOpprettholdt } =>
+    k.status === KlagebehandlingStatus.FERDIGSTILT;
 
 //Merk at en klage som er åpen betyr ikke nødvendigvis at den kan behandles.
 export const erKlageÅpen = (k: Klagebehandling): boolean =>

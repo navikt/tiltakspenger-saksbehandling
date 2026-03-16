@@ -1,11 +1,15 @@
 import { Tag, Table } from '@navikt/ds-react';
 import KlageMeny from '~/components/behandlingmeny/KlageMeny';
-import { Klagebehandling, KlagevedtakMedBehandling, KlagebehandlingStatus } from '~/types/Klage';
+import { Klagebehandling, KlagevedtakMedBehandling } from '~/types/Klage';
 import { Rammebehandling } from '~/types/Rammebehandling';
 import { Nullable } from '~/types/UtilTypes';
 import { formaterTidspunkt } from '~/utils/date';
 import { klagehendelseUtfallTilTag } from '~/utils/KlageinstanshendelseUtils';
-import { hentSisteKlagehendelseUtfallFraKlagebehandling } from '~/utils/klageUtils';
+import {
+    erKlageFerdigbehandlet,
+    erKlageFerdigstilt,
+    hentSisteKlagehendelseUtfallFraKlagebehandling,
+} from '~/utils/klageUtils';
 import {
     klagebehandlingStatusTilTag,
     klagebehandlingResultatTilTag,
@@ -43,8 +47,8 @@ const Klageoversikt = (props: {
                     resultat: klagevedtakMedBehandling.resultat,
                 }),
                 utfallKlageinstans: '-',
-                opprettet: formaterTidspunkt(klagevedtakMedBehandling.opprettet),
-                ferdigstilt: '-',
+                opprettet: formaterTidspunkt(klagevedtakMedBehandling.behandling.opprettet),
+                ferdigstilt: formaterTidspunkt(klagevedtakMedBehandling.opprettet),
                 saksbehandler: klagevedtakMedBehandling.behandling.saksbehandler!,
                 meny: (
                     <KlageMeny
@@ -71,10 +75,11 @@ const Klageoversikt = (props: {
                     : '-',
                 utfallKlageinstans: utfall ? klagehendelseUtfallTilTag({ utfall: utfall }) : '-',
                 opprettet: formaterTidspunkt(klagebehandling.opprettet),
-                ferdigstilt:
-                    klagebehandling.status === KlagebehandlingStatus.FERDIGSTILT
-                        ? formaterTidspunkt(klagebehandling.sistEndret)
-                        : '-',
+                ferdigstilt: erKlageFerdigstilt(klagebehandling)
+                    ? formaterTidspunkt(klagebehandling.resultat.ferdigstiltTidspunkt!)
+                    : erKlageFerdigbehandlet(klagebehandling)
+                      ? formaterTidspunkt(klagebehandling.iverksattTidspunkt!)
+                      : '-',
                 saksbehandler: klagebehandling.saksbehandler ?? 'Ikke tildelt',
                 meny: (
                     <KlageMeny
