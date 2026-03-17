@@ -63,9 +63,17 @@ export type SimulertBeregningPerMeldeperiode = {
 
 export type SimulertBeregningDag = {
     dato: string;
-    status: MeldekortBehandlingDagStatus;
     simulerteBeløp: Nullable<SimulerteBeløp>;
+} & (SimulertBeregningDagMedBeregning | SimulertBeregningDagUtenBeregning);
+
+export type SimulertBeregningDagMedBeregning = {
+    status: MeldekortBehandlingDagStatus;
     beregning: BeregningerSummert;
+};
+
+export type SimulertBeregningDagUtenBeregning = {
+    status: null;
+    beregning: null;
 };
 
 export type SimulerteBeløp = {

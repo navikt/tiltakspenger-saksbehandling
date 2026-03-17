@@ -22,3 +22,21 @@
         border: none;
     }
 }
+
+.ikkeBeregnet {
+    text-align: center;
+}
+
+.ikkeBeregnetTekst {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    &::before,
+    &::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background-color: var(--ax-border-neutral-subtle);
+    }
+}

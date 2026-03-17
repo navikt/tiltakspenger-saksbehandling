@@ -1,4 +1,8 @@
-import { SimulertBeregningDag, SimulerteBeløp } from '~/types/SimulertBeregning';
+import {
+    SimulertBeregningDag,
+    SimulertBeregningDagMedBeregning,
+    SimulerteBeløp,
+} from '~/types/SimulertBeregning';
 import { BodyShort, Button, Table, Tooltip } from '@navikt/ds-react';
 import { classNames } from '~/utils/classNames';
 import { formaterDatotekst } from '~/utils/date';
@@ -21,8 +25,6 @@ export const SimuleringDetaljerDag = ({ dag, className }: Props) => {
 
     const { beregning, simulerteBeløp, dato, status } = dag;
 
-    const beregnetDiffDag = beregning.totalt.nå - (beregning.totalt.før ?? 0);
-
     const harSimulertBeløp = simulerteBeløp !== null;
 
     const simulertDiffDag = harSimulertBeløp
@@ -33,25 +35,15 @@ export const SimuleringDetaljerDag = ({ dag, className }: Props) => {
         <>
             <Table.Row className={classNames(style.meldeperiodeDag, className)} key={dato}>
                 <Table.DataCell>{formaterDatotekst(dato)}</Table.DataCell>
-                <Table.DataCell className={style.statusIkon}>
-                    {ikonForMeldekortBehandlingDagStatus[status]}
-                </Table.DataCell>
-                <Table.DataCell>{meldekortBehandlingDagStatusTekst[status]}</Table.DataCell>
-                <Table.DataCell>{beregning.ordinært.før}</Table.DataCell>
-                <Table.DataCell>
-                    <strong>{beregning.ordinært.nå}</strong>
-                </Table.DataCell>
-                <Table.DataCell>{beregning.barnetillegg.før}</Table.DataCell>
-                <Table.DataCell>
-                    <strong>{beregning.barnetillegg.nå}</strong>
-                </Table.DataCell>
-                <Table.DataCell>{beregning.totalt.før}</Table.DataCell>
-                <Table.DataCell>
-                    <strong>{beregning.totalt.nå}</strong>
-                </Table.DataCell>
-                <Table.DataCell className={beløpStyle(beregnetDiffDag)}>
-                    {beregnetDiffDag}
-                </Table.DataCell>
+                {beregning ? (
+                    <BeregningCells beregning={beregning} status={status} />
+                ) : (
+                    <Table.DataCell colSpan={9} className={style.ikkeBeregnet}>
+                        <BodyShort size={'small'} className={style.ikkeBeregnetTekst}>
+                            {'Ikke beregnet'}
+                        </BodyShort>
+                    </Table.DataCell>
+                )}
                 <Table.DataCell className={style.simuleringCell}>
                     {harSimulertBeløp ? (
                         <>
@@ -74,6 +66,34 @@ export const SimuleringDetaljerDag = ({ dag, className }: Props) => {
                 </Table.DataCell>
             </Table.Row>
             {visSimulering && simulerteBeløp && <SimuleringRow simulerteBeløp={simulerteBeløp} />}
+        </>
+    );
+};
+
+const BeregningCells = ({ beregning, status }: SimulertBeregningDagMedBeregning) => {
+    const beregnetDiffDag = beregning.totalt.nå - (beregning.totalt.før ?? 0);
+
+    return (
+        <>
+            <Table.DataCell className={style.statusIkon}>
+                {ikonForMeldekortBehandlingDagStatus[status]}
+            </Table.DataCell>
+            <Table.DataCell>{meldekortBehandlingDagStatusTekst[status]}</Table.DataCell>
+            <Table.DataCell>{beregning.ordinært.før}</Table.DataCell>
+            <Table.DataCell>
+                <strong>{beregning.ordinært.nå}</strong>
+            </Table.DataCell>
+            <Table.DataCell>{beregning.barnetillegg.før}</Table.DataCell>
+            <Table.DataCell>
+                <strong>{beregning.barnetillegg.nå}</strong>
+            </Table.DataCell>
+            <Table.DataCell>{beregning.totalt.før}</Table.DataCell>
+            <Table.DataCell>
+                <strong>{beregning.totalt.nå}</strong>
+            </Table.DataCell>
+            <Table.DataCell className={beløpStyle(beregnetDiffDag)}>
+                {beregnetDiffDag}
+            </Table.DataCell>
         </>
     );
 };
