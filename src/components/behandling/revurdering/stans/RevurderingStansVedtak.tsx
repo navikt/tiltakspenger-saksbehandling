@@ -17,13 +17,13 @@ export const RevurderingStansVedtak = () => {
         <>
             <Heading size={'medium'} level={'1'} className={style.heading}>
                 {'Revurdering til stans av tiltakspenger'}
-            </Heading>{' '}
+            </Heading>
             {automatiskOpprettetGrunn && (
                 <>
-                    <Separator />
                     <RevurderingAutomatiskOpprettetGrunn
                         automatiskOpprettetGrunn={automatiskOpprettetGrunn}
                     />
+                    <Separator />
                 </>
             )}
             <RevurderingStansResultat />

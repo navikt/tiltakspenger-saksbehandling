@@ -28,10 +28,10 @@ export const RevurderingInnvilgelseVedtak = () => {
             </Heading>
             {automatiskOpprettetGrunn && (
                 <>
-                    <Separator />
                     <RevurderingAutomatiskOpprettetGrunn
                         automatiskOpprettetGrunn={automatiskOpprettetGrunn}
                     />
+                    <Separator />
                 </>
             )}
             {kanInnvilges ? (
