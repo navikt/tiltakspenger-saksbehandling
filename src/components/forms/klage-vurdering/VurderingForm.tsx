@@ -94,6 +94,7 @@ const VurderingForm = (props: {
                             <Textarea
                                 {...field}
                                 label="Begrunnelse"
+                                description="Dette er interne opplysninger om saken. Teksten skal ikke deles med bruker eller andre eksterne konsumenter."
                                 error={fieldState.error?.message}
                                 readOnly={props.readonly}
                             />

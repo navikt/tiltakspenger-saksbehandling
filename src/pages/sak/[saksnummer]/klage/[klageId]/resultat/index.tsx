@@ -13,7 +13,7 @@ import { SakProps } from '~/types/Sak';
 import { fetchSak } from '~/utils/fetch/fetch-server';
 import { KlageSteg } from '~/utils/KlageLayoutUtils';
 import KlageLayout, { KlageProvider, useKlage } from '../../layout';
-import { Button, Heading, HStack, LocalAlert, Process, VStack } from '@navikt/ds-react';
+import { Button, Heading, HStack, InfoCard, LocalAlert, Process, VStack } from '@navikt/ds-react';
 import {
     erKlageMottattFraKAEllerEtter,
     erKlageOmgjøring,
@@ -158,16 +158,16 @@ const Omgjøringsresultat = (props: {
 
     return (
         <VStack align="start" gap="space-32" maxWidth="30rem">
-            <LocalAlert status="warning">
-                <LocalAlert.Header>
-                    <LocalAlert.Title>Omgjøring av vedtak</LocalAlert.Title>
-                </LocalAlert.Header>
-                <LocalAlert.Content>
-                    Resultatet av klagebehandlingen er at påklaget vedtak skal omgjøres. En
-                    behandling for å fatte nytt vedtak blir ikke automatisk opprettet. Dette må
-                    gjøres manuelt.
-                </LocalAlert.Content>
-            </LocalAlert>
+            <InfoCard data-color="info">
+                <InfoCard.Header>
+                    <InfoCard.Title>Omgjøring av vedtak</InfoCard.Title>
+                </InfoCard.Header>
+                <InfoCard.Content>
+                    Resultatet av klagebehandlingen er at påklaget vedtak skal omgjøres.
+                    Klagebehandlingen blir automatisk ferdigstilt etter omgjøringsbehandlingen er
+                    iverksatt.
+                </InfoCard.Content>
+            </InfoCard>
             {erKlageUnderAktivOmgjøring(props.klage) ? (
                 <Button
                     as={Link}

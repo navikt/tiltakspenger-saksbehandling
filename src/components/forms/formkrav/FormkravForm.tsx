@@ -17,6 +17,7 @@ import { formaterTidspunktKort, startOfDay } from '~/utils/date';
 import { behandlingstypeTextFormatter } from '~/components/benk/BenkSideUtils';
 import { behandlingResultatTilText } from '~/utils/tekstformateringUtils';
 import { Datovelger } from '~/components/datovelger/Datovelger';
+import dayjs from 'dayjs';
 
 const FormkravForm = (props: {
     control: Control<FormkravFormData>;
@@ -42,6 +43,11 @@ const FormkravForm = (props: {
         control: props.control,
         name: 'innsendingsdato',
     });
+
+    const overstigerKlagedato6UkersFristForVedtak =
+        valgtVedtak &&
+        valgtInnsendingsdato &&
+        dayjs(valgtVedtak.opprettet).add(6, 'week').isBefore(dayjs(valgtInnsendingsdato));
 
     return (
         <VStack gap="space-32" align="start">
@@ -90,6 +96,18 @@ const FormkravForm = (props: {
                 )}
             />
 
+            {overstigerKlagedato6UkersFristForVedtak && (
+                <LocalAlert status="warning" size="small">
+                    <LocalAlert.Header>
+                        <LocalAlert.Title>Valgt dato overstiger 6 ukers frist</LocalAlert.Title>
+                    </LocalAlert.Header>
+                    <LocalAlert.Content>
+                        Innsendingsdato for klagen overstiger 6 ukers frist for det valgte vedtaket.
+                        Vennligst sjekk at du har valgt riktig vedtak og dato.
+                    </LocalAlert.Content>
+                </LocalAlert>
+            )}
+
             {valgtVedtak &&
                 valgtInnsendingsdato &&
                 valgtInnsendingsdato < startOfDay(valgtVedtak.opprettet) && (
@@ -99,7 +117,7 @@ const FormkravForm = (props: {
                         </LocalAlert.Header>
                         <LocalAlert.Content>
                             Innsendingsdato for klagen er før vedtaket som er påklaget. Vennligst
-                            sjekk at du har valgt riktig vedtak.
+                            sjekk at du har valgt riktig vedtak og dato.
                         </LocalAlert.Content>
                     </LocalAlert>
                 )}

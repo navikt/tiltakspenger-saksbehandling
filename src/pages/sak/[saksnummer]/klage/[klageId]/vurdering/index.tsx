@@ -291,16 +291,16 @@ const VurderingKlagePage = ({ sak, vedtakSomPåklages, søknader, omgjøringsbeh
                     )}
 
                     {klage.resultat?.type === KlagebehandlingResultat.OMGJØR && (
-                        <LocalAlert status="warning">
-                            <LocalAlert.Header>
-                                <LocalAlert.Title>Omgjøring av vedtak</LocalAlert.Title>
-                            </LocalAlert.Header>
-                            <LocalAlert.Content>
+                        <InfoCard data-color="info">
+                            <InfoCard.Header>
+                                <InfoCard.Title>Omgjøring av vedtak</InfoCard.Title>
+                            </InfoCard.Header>
+                            <InfoCard.Content>
                                 Resultatet av klagebehandlingen er at påklaget vedtak skal omgjøres.
                                 Klagebehandlingen blir automatisk ferdigstilt etter
                                 omgjøringsbehandlingen er iverksatt.
-                            </LocalAlert.Content>
-                        </LocalAlert>
+                            </InfoCard.Content>
+                        </InfoCard>
                     )}
                 </VStack>
             </form>
