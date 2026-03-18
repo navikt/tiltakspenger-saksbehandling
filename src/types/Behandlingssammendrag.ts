@@ -40,6 +40,7 @@ export enum BehandlingssammendragType {
     INNSENDT_MELDEKORT = 'INNSENDT_MELDEKORT',
     KORRIGERT_MELDEKORT = 'KORRIGERT_MELDEKORT',
     KLAGEBEHANDLING = 'KLAGEBEHANDLING',
+    TILBAKEKREVING = 'TILBAKEKREVING',
 }
 
 export enum BehandlingssammendragStatus {

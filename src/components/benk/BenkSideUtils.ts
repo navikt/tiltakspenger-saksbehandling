@@ -10,7 +10,8 @@ export const behandlingstypeTextFormatter: Record<BehandlingssammendragType, str
     [BehandlingssammendragType.INNSENDT_MELDEKORT]: 'Innsendt meldekort',
     [BehandlingssammendragType.KORRIGERT_MELDEKORT]: 'Korrigert meldekort',
     [BehandlingssammendragType.KLAGEBEHANDLING]: 'Klagebehandling',
-};
+    [BehandlingssammendragType.TILBAKEKREVING]: 'Tilbakekreving',
+} as const;
 
 export const behandlingsstatusTextFormatter: Record<BehandlingssammendragStatus, string> = {
     [BehandlingssammendragStatus.UNDER_AUTOMATISK_BEHANDLING]: 'Under automatisk behandling',
@@ -19,7 +20,7 @@ export const behandlingsstatusTextFormatter: Record<BehandlingssammendragStatus,
     [BehandlingssammendragStatus.KLAR_TIL_BESLUTNING]: 'Klar til beslutning',
     [BehandlingssammendragStatus.UNDER_BESLUTNING]: 'Under beslutning',
     [BehandlingssammendragStatus.KLAR_TIL_FERDIGSTILLING]: 'Klar til ferdigstilling',
-};
+} as const;
 
 export enum BehandlingssammendragKolonner {
     fnr = 'fnr',
