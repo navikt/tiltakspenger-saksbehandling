@@ -11,7 +11,7 @@ import { useBehandling } from '~/components/behandling/context/BehandlingContext
 import { InnvilgelsesperiodeDatovelgere } from '~/components/behandling/felles/innvilgelsesperiode/InnvilgelsesperiodeDatoVelgere';
 import { InnvilgelsesperioderVarsler } from '~/components/behandling/felles/innvilgelsesperiode/varsler/InnvilgelsesperioderVarsler';
 import { XMarkIcon } from '@navikt/aksel-icons';
-import { TiltaksdeltakelseMedPeriode } from '~/types/TiltakDeltakelse';
+import { TiltaksdeltakelseMedPeriode } from '~/types/Tiltaksdeltakelse';
 import { erHelg, periodeTilFormatertDatotekst } from '~/utils/date';
 import { Innvilgelsesperiode } from '~/types/Innvilgelsesperiode';
 import { Rammebehandling } from '~/types/Rammebehandling';

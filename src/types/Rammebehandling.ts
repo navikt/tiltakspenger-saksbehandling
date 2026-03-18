@@ -13,7 +13,7 @@ import {
     SøknadsbehandlingResultat,
     OppdaterSøknadsbehandlingDTO,
 } from './Søknadsbehandling';
-import { Tiltaksdeltakelse } from './TiltakDeltakelse';
+import { Tiltaksdeltakelse } from './Tiltaksdeltakelse';
 import { BehandlingUtbetalingProps, Utbetalingskontroll } from './Utbetaling';
 import { Nullable } from './UtilTypes';
 import { Ytelse } from './Ytelse';

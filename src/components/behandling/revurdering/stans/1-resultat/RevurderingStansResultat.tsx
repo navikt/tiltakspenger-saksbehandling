@@ -8,7 +8,7 @@ import {
     useRevurderingStansSkjema,
     useRevurderingStansSkjemaDispatch,
 } from '~/components/behandling/context/revurdering/revurderingStansSkjemaContext';
-import { StansOgOpphørHjemmelVelger } from '~/components/behandling/revurdering/felles/opphør-hjemmel-velger/StansOgOpphørHjemmelVelger';
+import { StansOgOpphørHjemmelVelger } from '~/components/behandling/revurdering/felles/hjemmel-velger/StansOgOpphørHjemmelVelger';
 import { HjemmelForStans } from '~/types/Revurdering';
 
 import style from './RevurderingStansResultat.module.css';

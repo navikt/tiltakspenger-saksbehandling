@@ -1,7 +1,7 @@
 import { Alert } from '@navikt/ds-react';
 import { Separator } from '~/components/separator/Separator';
 import { BehandlingBeregningOgSimulering } from '../../felles/beregning-og-simulering/BehandlingBeregningOgSimulering';
-import { useRevurderingOmgjøring } from '../../context/BehandlingContext';
+import { useRevurderingBehandling, useRevurderingOmgjøring } from '../../context/BehandlingContext';
 import { hentTiltaksdeltakelserMedStartOgSluttdato } from '~/utils/behandling';
 import { useOmgjøringSkjema } from '~/components/behandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import { InnvilgelsesperioderVelger } from '~/components/behandling/felles/innvilgelsesperiode/InnvilgelsesperioderVelger';
@@ -14,14 +14,25 @@ import { RevurderingResultat } from '~/types/Revurdering';
 import { OmgjøringResultatVelger } from '~/components/behandling/revurdering/omgjøring/resultat-velger/OmgjøringResultatVelger';
 import { OmgjøringOpphørVelger } from '~/components/behandling/revurdering/omgjøring/opphør/OmgjøringOpphørVelger';
 import { OmgjøringInnvilgelseVedtaksperiodeVelger } from '~/components/behandling/revurdering/omgjøring/innvilgelse/OmgjøringInnvilgelseVedtaksperiodeVelger';
+import { RevurderingAutomatiskOpprettetGrunn } from '~/components/behandling/revurdering/felles/automatisk-opprettet-grunn/RevurderingAutomatiskOpprettetGrunn';
 
 export const RevurderingOmgjøringVedtak = () => {
     const skjema = useOmgjøringSkjema();
     const { resultat } = skjema;
 
+    const { automatiskOpprettetGrunn } = useRevurderingBehandling().behandling;
+
     return (
         <>
             <RevurderingOmgjøringHeader />
+            {automatiskOpprettetGrunn && (
+                <>
+                    <Separator />
+                    <RevurderingAutomatiskOpprettetGrunn
+                        automatiskOpprettetGrunn={automatiskOpprettetGrunn}
+                    />
+                </>
+            )}
             <Separator />
             <OmgjøringResultatVelger />
             {resultat === RevurderingResultat.OMGJØRING ? (

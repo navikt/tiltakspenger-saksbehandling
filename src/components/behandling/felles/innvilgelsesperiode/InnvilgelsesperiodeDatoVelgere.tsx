@@ -4,7 +4,7 @@ import { Periode } from '~/types/Periode';
 import { dateTilISOTekst, datoMin, datoTilDatoInputText } from '~/utils/date';
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
 import { Datovelger, DatovelgerProps } from '~/components/datovelger/Datovelger';
-import { TiltaksdeltakelseMedPeriode } from '~/types/TiltakDeltakelse';
+import { TiltaksdeltakelseMedPeriode } from '~/types/Tiltaksdeltakelse';
 import { periodiseringTotalPeriode } from '~/utils/periode';
 
 type Props = {

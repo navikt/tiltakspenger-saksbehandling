@@ -1,7 +1,7 @@
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { Link } from '@navikt/ds-react';
 import { useConfig } from '~/context/ConfigContext';
-import { StansOgOpphørHjemmelVelger } from '~/components/behandling/revurdering/felles/opphør-hjemmel-velger/StansOgOpphørHjemmelVelger';
+import { StansOgOpphørHjemmelVelger } from '~/components/behandling/revurdering/felles/hjemmel-velger/StansOgOpphørHjemmelVelger';
 import {
     useOmgjøringOpphørSkjema,
     useOmgjøringSkjemaDispatch,

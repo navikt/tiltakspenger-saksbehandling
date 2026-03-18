@@ -2,7 +2,7 @@ import { TilbakekrevingBehandlingsstatus } from '~/types/Tilbakekreving';
 import { Tag } from '@navikt/ds-react';
 import { AkselColor } from '@navikt/ds-react/types/theme';
 
-export const tilbakekrevingStatusTekst: Record<TilbakekrevingBehandlingsstatus, string> = {
+const tilbakekrevingStatusTekst: Record<TilbakekrevingBehandlingsstatus, string> = {
     [TilbakekrevingBehandlingsstatus.OPPRETTET]: 'Opprettet',
     [TilbakekrevingBehandlingsstatus.TIL_BEHANDLING]: 'Under behandling',
     [TilbakekrevingBehandlingsstatus.TIL_GODKJENNING]: 'Under godkjenning',

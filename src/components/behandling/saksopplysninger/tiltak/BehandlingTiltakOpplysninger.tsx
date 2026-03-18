@@ -1,6 +1,6 @@
 import { BehandlingSaksopplysning } from '../BehandlingSaksopplysning';
 import { periodeTilFormatertDatotekst } from '~/utils/date';
-import { Tiltaksdeltakelse, TiltaksdeltakelseKilde } from '~/types/TiltakDeltakelse';
+import { Tiltaksdeltakelse, TiltaksdeltakelseKilde } from '~/types/Tiltaksdeltakelse';
 import { VStack } from '@navikt/ds-react';
 
 type Props = {

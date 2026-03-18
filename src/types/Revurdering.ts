@@ -9,9 +9,37 @@ import { VedtakId } from './Rammevedtak';
 import { Innvilgelsesperiode } from '~/types/Innvilgelsesperiode';
 import { Periode } from '~/types/Periode';
 
+export enum TiltaksdeltakerEndringType {
+    AVBRUTT_DELTAKELSE = 'AVBRUTT_DELTAKELSE',
+    IKKE_AKTUELL_DELTAKELSE = 'IKKE_AKTUELL_DELTAKELSE',
+    FORLENGELSE = 'FORLENGELSE',
+    ENDRET_SLUTTDATO = 'ENDRET_SLUTTDATO',
+    ENDRET_STARTDATO = 'ENDRET_STARTDATO',
+    ENDRET_DELTAKELSESMENGDE = 'ENDRET_DELTAKELSESMENGDE',
+    ENDRET_STATUS = 'ENDRET_STATUS',
+}
+
+export type TiltaksdeltakerEndring =
+    | { type: TiltaksdeltakerEndringType.AVBRUTT_DELTAKELSE }
+    | { type: TiltaksdeltakerEndringType.IKKE_AKTUELL_DELTAKELSE }
+    | { type: TiltaksdeltakerEndringType.FORLENGELSE; nySluttdato: string }
+    | { type: TiltaksdeltakerEndringType.ENDRET_SLUTTDATO; nySluttdato: Nullable<string> }
+    | { type: TiltaksdeltakerEndringType.ENDRET_STARTDATO; nyStartdato: Nullable<string> }
+    | {
+          type: TiltaksdeltakerEndringType.ENDRET_DELTAKELSESMENGDE;
+          nyDeltakelsesprosent: Nullable<number>;
+          nyDagerPerUke: Nullable<number>;
+      }
+    | { type: TiltaksdeltakerEndringType.ENDRET_STATUS; nyStatus: string };
+
+export type AutomatiskOpprettetGrunn = {
+    endringer: TiltaksdeltakerEndring[];
+};
+
 type RevurderingBase = RammebehandlingBase & {
     type: Rammebehandlingstype.REVURDERING;
     resultat: RevurderingResultat;
+    automatiskOpprettetGrunn: Nullable<AutomatiskOpprettetGrunn>;
 };
 
 export type RevurderingStans = RevurderingBase & {

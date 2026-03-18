@@ -8,14 +8,17 @@ import { InnvilgelsesperioderVelger } from '~/components/behandling/felles/innvi
 import { BehandlingBarnetillegg } from '~/components/behandling/felles/barnetillegg/BehandlingBarnetillegg';
 import { BegrunnelseVilkårsvurdering } from '~/components/behandling/felles/begrunnelse-vilkårsvurdering/BegrunnelseVilkårsvurdering';
 import { hentTiltaksdeltakelserMedStartOgSluttdato } from '~/utils/behandling';
-import { useBehandling } from '~/components/behandling/context/BehandlingContext';
+import { useRevurderingBehandling } from '~/components/behandling/context/BehandlingContext';
+import { RevurderingAutomatiskOpprettetGrunn } from '~/components/behandling/revurdering/felles/automatisk-opprettet-grunn/RevurderingAutomatiskOpprettetGrunn';
 
 export const RevurderingInnvilgelseVedtak = () => {
-    const { behandling, klagebehandling } = useBehandling();
+    const { behandling, klagebehandling } = useRevurderingBehandling();
     const { innvilgelse } = useRevurderingInnvilgelseSkjema();
 
     // Kjapp fiks for å sjekke om det finnes tiltak det kan innvilges for. Dette bør avgjøres av backend.
     const kanInnvilges = hentTiltaksdeltakelserMedStartOgSluttdato(behandling).length > 0;
+
+    const { automatiskOpprettetGrunn } = behandling;
 
     return (
         <>
@@ -23,6 +26,14 @@ export const RevurderingInnvilgelseVedtak = () => {
                 {klagebehandling ? 'Omgjøring etter klage - ' : ''}
                 {'Revurdering av innvilgelse'}
             </Heading>
+            {automatiskOpprettetGrunn && (
+                <>
+                    <Separator />
+                    <RevurderingAutomatiskOpprettetGrunn
+                        automatiskOpprettetGrunn={automatiskOpprettetGrunn}
+                    />
+                </>
+            )}
             {kanInnvilges ? (
                 <>
                     <InnvilgelsesperioderVelger />

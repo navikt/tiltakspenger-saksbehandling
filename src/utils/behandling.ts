@@ -1,5 +1,5 @@
 import { Periode } from '~/types/Periode';
-import { Tiltaksdeltakelse, TiltaksdeltakelseMedPeriode } from '~/types/TiltakDeltakelse';
+import { Tiltaksdeltakelse, TiltaksdeltakelseMedPeriode } from '~/types/Tiltaksdeltakelse';
 import { perioderOverlapper, totalPeriode } from './periode';
 import { Nullable } from '~/types/UtilTypes';
 import {
