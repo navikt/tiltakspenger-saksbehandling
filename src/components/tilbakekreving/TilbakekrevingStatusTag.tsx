@@ -4,8 +4,8 @@ import { AkselColor } from '@navikt/ds-react/types/theme';
 
 const tilbakekrevingStatusTekst: Record<TilbakekrevingBehandlingsstatus, string> = {
     [TilbakekrevingBehandlingsstatus.OPPRETTET]: 'Opprettet',
-    [TilbakekrevingBehandlingsstatus.TIL_BEHANDLING]: 'Under behandling',
-    [TilbakekrevingBehandlingsstatus.TIL_GODKJENNING]: 'Under godkjenning',
+    [TilbakekrevingBehandlingsstatus.TIL_BEHANDLING]: 'Klar til behandling',
+    [TilbakekrevingBehandlingsstatus.TIL_GODKJENNING]: 'Klar til godkjenning',
     [TilbakekrevingBehandlingsstatus.AVSLUTTET]: 'Avsluttet',
 } as const;
 
