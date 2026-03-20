@@ -14,7 +14,7 @@ import JournalpostId from '~/components/journalpostId/JournalpostId';
 import { Nullable } from '~/types/UtilTypes';
 import styles from './FormkravForm.module.css';
 import { formaterTidspunktKort, startOfDay } from '~/utils/date';
-import { behandlingstypeTextFormatter } from '~/components/benk/BenkSideUtils';
+import { behandlingstypeTextFormatter } from '~/components/benk/benkSideUtils';
 import { behandlingResultatTilText } from '~/utils/tekstformateringUtils';
 import { Datovelger } from '~/components/datovelger/Datovelger';
 import dayjs from 'dayjs';

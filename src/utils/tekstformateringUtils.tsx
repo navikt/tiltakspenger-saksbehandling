@@ -18,8 +18,8 @@ import {
     SøknadstypeManueltRegistrertSøknad,
 } from '~/components/manuell-søknad/ManueltRegistrertSøknad';
 import { KlagebehandlingResultat, KlagebehandlingStatus, OmgjøringÅrsak } from '~/types/Klage';
-import { BehandlingssammendragStatus } from '~/types/Behandlingssammendrag';
-import { behandlingsstatusTextFormatter } from '~/components/benk/BenkSideUtils';
+import { BenkBehandlingsstatus } from '~/types/Benk';
+import { behandlingsstatusTextFormatter } from '~/components/benk/benkSideUtils';
 import { Nullable } from '~/types/UtilTypes';
 
 export const finnBehandlingStatusTag = (
@@ -55,12 +55,12 @@ export const finnBehandlingStatusTag = (
 };
 
 export const finnBehandlingssammendragStatusTag = (
-    status: Nullable<BehandlingssammendragStatus>,
+    status: Nullable<BenkBehandlingsstatus>,
     underkjent: boolean,
 ) => {
     if (
-        (status === BehandlingssammendragStatus.KLAR_TIL_BEHANDLING ||
-            status === BehandlingssammendragStatus.UNDER_BEHANDLING) &&
+        (status === BenkBehandlingsstatus.KLAR_TIL_BEHANDLING ||
+            status === BenkBehandlingsstatus.UNDER_BEHANDLING) &&
         underkjent
     ) {
         return (
@@ -68,13 +68,13 @@ export const finnBehandlingssammendragStatusTag = (
                 Underkjent
             </Tag>
         );
-    } else if (status === BehandlingssammendragStatus.KLAR_TIL_BEHANDLING) {
+    } else if (status === BenkBehandlingsstatus.KLAR_TIL_BEHANDLING) {
         return (
             <Tag data-color="success" variant="outline">
                 {behandlingsstatusTextFormatter[status]}
             </Tag>
         );
-    } else if (status === BehandlingssammendragStatus.KLAR_TIL_BESLUTNING) {
+    } else if (status === BenkBehandlingsstatus.KLAR_TIL_BESLUTNING) {
         return (
             <Tag data-color="meta-lime" variant="outline">
                 {behandlingsstatusTextFormatter[status]}

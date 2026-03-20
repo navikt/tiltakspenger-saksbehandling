@@ -7,23 +7,27 @@ import { useSearchParams } from 'next/navigation';
 import NotificationBanner, {
     NotificationBannerRef,
 } from '../notificationBanner/NotificationBanner';
-import BenkTabell from '~/components/benk/BenkTabell';
-import BenkFilter from '~/components/benk/BenkFilter';
+import { BenkTabell } from '~/components/benk/tabell/BenkTabell';
+import { BenkFilter } from '~/components/benk/filter/BenkFilter';
 import {
     BehandlingssammendragBenktype,
-    BehandlingssammendragStatus,
-    BehandlingssammendragType,
+    BenkBehandlingsstatus,
+    BenkBehandlingstype,
+    BenkKolonne,
     BenkOversiktRequest,
     BenkOversiktResponse,
-} from '~/types/Behandlingssammendrag';
-import { BehandlingssammendragKolonner } from './BenkSideUtils';
-import styles from './BenkSide.module.css';
+    BenkSortering,
+    BenkSorteringRetning,
+} from '~/types/Benk';
 import { BenkFiltreringContext } from '~/context/BenkFiltreringContext';
+
+import styles from './BenkSide.module.css';
+import { Nullable } from '~/types/UtilTypes';
 
 export type BenkFilters = {
     benktype: BehandlingssammendragBenktype | 'Alle';
-    type: BehandlingssammendragType | 'Alle';
-    status: BehandlingssammendragStatus | 'Alle';
+    type: BenkBehandlingstype | 'Alle';
+    status: BenkBehandlingsstatus | 'Alle';
     saksbehandler: string | 'Alle' | 'IKKE_TILDELT';
 };
 
@@ -40,10 +44,10 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
     const { filters, setFilters } = React.useContext(BenkFiltreringContext);
 
     const benktypeParam = searchParams.get('benktype') as BehandlingssammendragBenktype | null;
-    const typeParam = searchParams.get('type') as BehandlingssammendragType | null;
-    const statusParam = searchParams.get('status') as BehandlingssammendragStatus | null;
+    const typeParam = searchParams.get('type') as BenkBehandlingstype | null;
+    const statusParam = searchParams.get('status') as BenkBehandlingsstatus | null;
     const saksbehandlerParam = searchParams.get('saksbehandler') as string | null;
-    const sorteringRetningParam = searchParams.get('sortering') as 'ASC' | 'DESC' | null;
+    const sorteringRetningParam = searchParams.get('sortering') as Nullable<BenkSorteringRetning>;
 
     const [filtrertBenkoversikt, setFiltrertBenkoversikt] =
         useState<BenkOversiktResponse>(benkOversikt);
@@ -129,6 +133,7 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
             saksbehandler: 'Alle',
         });
         router.push({ pathname: router.pathname });
+
         fetchOversikt.trigger({
             benktype: null,
             behandlingstype: null,
@@ -141,9 +146,11 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
     return (
         <VStack gap="space-20" style={{ padding: '1rem' }}>
             <NotificationBanner ref={bannerRef} />
+
             <Heading size="medium" level="2">
                 Oversikt over behandlinger og søknader
             </Heading>
+
             <BenkFilter
                 filters={filters}
                 setFilters={setFilters}
@@ -151,8 +158,9 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
                 innloggetSaksbehandler={innloggetSaksbehandler}
                 onOppdaterFilter={handleOppdaterFilter}
                 onNullstillFilter={handleNullstillFilter}
-                oppdaterFilterLoading={fetchOversikt.isMutating && firstLoadRef.current === false}
+                oppdaterFilterLoading={fetchOversikt.isMutating && !firstLoadRef.current}
             />
+
             {benkOversikt.totalAntall > 500 && (
                 <div className={styles.høytAntallBehandlingerContainer}>
                     <Alert variant="warning" size="small">
@@ -162,6 +170,7 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
                     </Alert>
                 </div>
             )}
+
             {fetchOversikt.error && (
                 <LocalAlert status="error" size="small" className={styles.fetchOversiktErrorAlert}>
                     <LocalAlert.Header>
@@ -170,16 +179,17 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
                     <LocalAlert.Content>{fetchOversikt.error.message}</LocalAlert.Content>
                 </LocalAlert>
             )}
+
             <BenkTabell
                 data={filtrertBenkoversikt}
-                sorteringRetning={sorteringRetningParam ?? 'ASC'}
+                sorteringRetningInitial={sorteringRetningParam ?? 'ASC'}
                 onSortChange={(kolonne, sorteringRetning) => {
-                    const sortering = `${kolonne},${sorteringRetning}`;
-                    const erDefaultSortering =
-                        kolonne === BehandlingssammendragKolonner.startet &&
-                        sorteringRetning === 'ASC';
+                    const sortering: BenkSortering = `${kolonne},${sorteringRetning}`;
+
+                    const erDefaultSortering = sortering === `${BenkKolonne.startet},ASC`;
 
                     const currentParams = new URLSearchParams(searchParams.toString());
+
                     if (erDefaultSortering) {
                         currentParams.delete('sortering');
                     } else {
@@ -196,9 +206,7 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
                         behandlingstype: filters.type === 'Alle' ? null : [filters.type],
                         status: filters.status === 'Alle' ? null : [filters.status],
                         identer: filters.saksbehandler === 'Alle' ? null : [filters.saksbehandler],
-                        sortering: erDefaultSortering
-                            ? `${BehandlingssammendragKolonner.startet},ASC`
-                            : sortering,
+                        sortering: sortering,
                     });
                 }}
             />

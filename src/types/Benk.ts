@@ -3,26 +3,26 @@ import { RammebehandlingResultat } from '~/types/Rammebehandling';
 
 export interface BenkOversiktRequest {
     benktype: Nullable<BehandlingssammendragBenktype[]>;
-    behandlingstype: Nullable<BehandlingssammendragType[]>;
-    status: Nullable<BehandlingssammendragStatus[]>;
-    sortering: string;
+    behandlingstype: Nullable<BenkBehandlingstype[]>;
+    status: Nullable<BenkBehandlingsstatus[]>;
+    sortering: BenkSortering;
     identer: Nullable<string[]>;
 }
 
 export interface BenkOversiktResponse {
-    behandlingssammendrag: Behandlingssammendrag[];
+    behandlingssammendrag: BenkBehandling[];
     totalAntall: number;
     antallFiltrertPgaTilgang: number;
 }
 
-export interface Behandlingssammendrag {
+export interface BenkBehandling {
     sakId: string;
     fnr: string;
     saksnummer: string;
     startet: string;
     kravtidspunkt?: string;
-    behandlingstype: BehandlingssammendragType;
-    status: Nullable<BehandlingssammendragStatus>;
+    behandlingstype: BenkBehandlingstype;
+    status: Nullable<BenkBehandlingsstatus>;
     saksbehandler: Nullable<string>;
     beslutter: Nullable<string>;
     sistEndret?: string;
@@ -33,7 +33,7 @@ export interface Behandlingssammendrag {
     erUnderkjent: boolean;
 }
 
-export enum BehandlingssammendragType {
+export enum BenkBehandlingstype {
     SØKNADSBEHANDLING = 'SØKNADSBEHANDLING',
     REVURDERING = 'REVURDERING',
     MELDEKORTBEHANDLING = 'MELDEKORTBEHANDLING',
@@ -43,7 +43,7 @@ export enum BehandlingssammendragType {
     TILBAKEKREVING = 'TILBAKEKREVING',
 }
 
-export enum BehandlingssammendragStatus {
+export enum BenkBehandlingsstatus {
     UNDER_AUTOMATISK_BEHANDLING = 'UNDER_AUTOMATISK_BEHANDLING',
     KLAR_TIL_BEHANDLING = 'KLAR_TIL_BEHANDLING',
     UNDER_BEHANDLING = 'UNDER_BEHANDLING',
@@ -56,3 +56,21 @@ export enum BehandlingssammendragBenktype {
     KLAR = 'KLAR',
     VENTER = 'VENTER',
 }
+
+export enum BenkKolonne {
+    fnr = 'fnr',
+    behandlingstype = 'behandlingstype',
+    status = 'status',
+    ventestatus = 'frist',
+    startet = 'startet',
+    saksbehandler = 'saksbehandler',
+    beslutter = 'beslutter',
+    sistEndret = 'sist_endret',
+}
+
+export type BenkSorteringRetning = 'ASC' | 'DESC';
+
+export type BenkSortering =
+    | `${BenkKolonne},${BenkSorteringRetning}`
+    | BenkKolonne
+    | BenkSorteringRetning;

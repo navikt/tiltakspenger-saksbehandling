@@ -7,7 +7,7 @@ type Props = {
     antallTegnFørVisMer?: number;
 };
 
-const VisMer = ({ tekst, visEllipsis = true, antallTegnFørVisMer = 0 }: Props) => {
+export const BenkTabellVisMer = ({ tekst, visEllipsis = true, antallTegnFørVisMer = 0 }: Props) => {
     const [visMer, setVisMer] = React.useState(false);
 
     if (!tekst) {
@@ -42,5 +42,3 @@ const VisMer = ({ tekst, visEllipsis = true, antallTegnFørVisMer = 0 }: Props) 
         </>
     );
 };
-
-export default VisMer;

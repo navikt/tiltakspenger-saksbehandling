@@ -5,7 +5,7 @@ import { SakProps } from '~/types/Sak';
 import { Saksbehandler } from '~/types/Saksbehandler';
 import { stripLeadingSlash } from '../string';
 import { errorFraApiResponse } from './fetch';
-import { BenkOversiktResponse } from '~/types/Behandlingssammendrag';
+import { BenkOversiktResponse } from '~/types/Benk';
 import { hentOboToken } from '~/auth/tokens';
 
 export type NextRequest = Request | IncomingMessage | NextApiRequest;

@@ -2,16 +2,16 @@ import React, { useMemo } from 'react';
 import { Button, HStack, Select, VStack } from '@navikt/ds-react';
 import {
     BehandlingssammendragBenktype,
-    BehandlingssammendragStatus,
-    BehandlingssammendragType,
+    BenkBehandlingsstatus,
+    BenkBehandlingstype,
     BenkOversiktResponse,
-} from '~/types/Behandlingssammendrag';
+} from '~/types/Benk';
 import {
     behandlingsstatusTextFormatter,
     behandlingstypeTextFormatter,
-} from '~/components/benk/BenkSideUtils';
+} from '~/components/benk/benkSideUtils';
 import { Saksbehandler } from '~/types/Saksbehandler';
-import { BenkFilters } from './BenkSide';
+import { BenkFilters } from '../BenkSide';
 
 type Props = {
     filters: BenkFilters;
@@ -23,7 +23,7 @@ type Props = {
     onNullstillFilter: () => void;
 };
 
-const BenkFilter = ({
+export const BenkFilter = ({
     filters,
     setFilters,
     benkOversikt,
@@ -81,12 +81,12 @@ const BenkFilter = ({
                     onChange={(e) =>
                         setFilters((prev) => ({
                             ...prev,
-                            type: e.target.value as BehandlingssammendragType | 'Alle',
+                            type: e.target.value as BenkBehandlingstype | 'Alle',
                         }))
                     }
                 >
                     <option value="Alle">Alle</option>
-                    {Object.entries(BehandlingssammendragType).map(([key, value]) => (
+                    {Object.entries(BenkBehandlingstype).map(([key, value]) => (
                         <option key={key} value={value}>
                             {behandlingstypeTextFormatter[value]}
                         </option>
@@ -99,12 +99,12 @@ const BenkFilter = ({
                     onChange={(e) =>
                         setFilters((prev) => ({
                             ...prev,
-                            status: e.target.value as BehandlingssammendragStatus | 'Alle',
+                            status: e.target.value as BenkBehandlingsstatus | 'Alle',
                         }))
                     }
                 >
                     <option value="Alle">Alle</option>
-                    {Object.values(BehandlingssammendragStatus).map((status) => (
+                    {Object.values(BenkBehandlingsstatus).map((status) => (
                         <option key={status} value={status}>
                             {behandlingsstatusTextFormatter[status]}
                         </option>
@@ -148,5 +148,3 @@ const BenkFilter = ({
         </VStack>
     );
 };
-
-export default BenkFilter;
