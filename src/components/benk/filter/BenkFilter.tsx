@@ -7,8 +7,8 @@ import {
     BenkOversiktResponse,
 } from '~/types/Benk';
 import {
-    behandlingsstatusTextFormatter,
-    behandlingstypeTextFormatter,
+    benkBehandlingsstatusTekst,
+    benkBehandlingstypeTekst,
 } from '~/components/benk/benkSideUtils';
 import { Saksbehandler } from '~/types/Saksbehandler';
 import { BenkFilters } from '../BenkSide';
@@ -88,7 +88,7 @@ export const BenkFilter = ({
                     <option value="Alle">Alle</option>
                     {Object.entries(BenkBehandlingstype).map(([key, value]) => (
                         <option key={key} value={value}>
-                            {behandlingstypeTextFormatter[value]}
+                            {benkBehandlingstypeTekst[value]}
                         </option>
                     ))}
                 </Select>
@@ -106,7 +106,7 @@ export const BenkFilter = ({
                     <option value="Alle">Alle</option>
                     {Object.values(BenkBehandlingsstatus).map((status) => (
                         <option key={status} value={status}>
-                            {behandlingsstatusTextFormatter[status]}
+                            {benkBehandlingsstatusTekst[status]}
                         </option>
                     ))}
                 </Select>

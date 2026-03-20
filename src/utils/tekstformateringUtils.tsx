@@ -18,9 +18,6 @@ import {
     SøknadstypeManueltRegistrertSøknad,
 } from '~/components/manuell-søknad/ManueltRegistrertSøknad';
 import { KlagebehandlingResultat, KlagebehandlingStatus, OmgjøringÅrsak } from '~/types/Klage';
-import { BenkBehandlingsstatus } from '~/types/Benk';
-import { behandlingsstatusTextFormatter } from '~/components/benk/benkSideUtils';
-import { Nullable } from '~/types/UtilTypes';
 
 export const finnBehandlingStatusTag = (
     status: Rammebehandlingsstatus,
@@ -52,39 +49,6 @@ export const finnBehandlingStatusTag = (
         );
     }
     return behandlingStatusTag[status];
-};
-
-export const finnBehandlingssammendragStatusTag = (
-    status: Nullable<BenkBehandlingsstatus>,
-    underkjent: boolean,
-) => {
-    if (
-        (status === BenkBehandlingsstatus.KLAR_TIL_BEHANDLING ||
-            status === BenkBehandlingsstatus.UNDER_BEHANDLING) &&
-        underkjent
-    ) {
-        return (
-            <Tag data-color={'warning'} variant="outline">
-                Underkjent
-            </Tag>
-        );
-    } else if (status === BenkBehandlingsstatus.KLAR_TIL_BEHANDLING) {
-        return (
-            <Tag data-color="success" variant="outline">
-                {behandlingsstatusTextFormatter[status]}
-            </Tag>
-        );
-    } else if (status === BenkBehandlingsstatus.KLAR_TIL_BESLUTNING) {
-        return (
-            <Tag data-color="meta-lime" variant="outline">
-                {behandlingsstatusTextFormatter[status]}
-            </Tag>
-        );
-    } else if (status) {
-        return behandlingsstatusTextFormatter[status];
-    } else {
-        return '-';
-    }
 };
 
 const behandlingStatusTag: Record<Rammebehandlingsstatus, React.ReactElement> = {

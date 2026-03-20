@@ -22,7 +22,7 @@ export interface BenkBehandling {
     startet: string;
     kravtidspunkt?: string;
     behandlingstype: BenkBehandlingstype;
-    status: Nullable<BenkBehandlingsstatus>;
+    status: BenkBehandlingsstatus;
     saksbehandler: Nullable<string>;
     beslutter: Nullable<string>;
     sistEndret?: string;

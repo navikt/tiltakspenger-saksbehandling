@@ -14,7 +14,7 @@ import JournalpostId from '~/components/journalpostId/JournalpostId';
 import { Nullable } from '~/types/UtilTypes';
 import styles from './FormkravForm.module.css';
 import { formaterTidspunktKort, startOfDay } from '~/utils/date';
-import { behandlingstypeTextFormatter } from '~/components/benk/benkSideUtils';
+import { benkBehandlingstypeTekst } from '~/components/benk/benkSideUtils';
 import { behandlingResultatTilText } from '~/utils/tekstformateringUtils';
 import { Datovelger } from '~/components/datovelger/Datovelger';
 import dayjs from 'dayjs';
@@ -70,7 +70,7 @@ const FormkravForm = (props: {
                         <option value={INGEN_VEDTAK}>Har ikke klaget på et vedtak</option>
                         {props.vedtakOgBehandling.map(({ vedtak, behandling }) => (
                             <option key={`${vedtak.id}-${behandling.id}`} value={vedtak.id}>
-                                {behandlingstypeTextFormatter[behandling.type]} -{' '}
+                                {benkBehandlingstypeTekst[behandling.type]} -{' '}
                                 {behandlingResultatTilText[vedtak.resultat]} -{' '}
                                 {formaterTidspunktKort(vedtak.opprettet)}
                             </option>

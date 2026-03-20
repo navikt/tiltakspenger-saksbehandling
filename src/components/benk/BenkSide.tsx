@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Alert, Heading, LocalAlert, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Heading, HStack, LocalAlert, VStack } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
@@ -59,6 +59,8 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
             onSuccess: (oversikt) => setFiltrertBenkoversikt(oversikt!),
         },
     );
+
+    const { behandlingssammendrag, antallFiltrertPgaTilgang } = filtrertBenkoversikt;
 
     useEffect(() => {
         firstLoadRef.current = false;
@@ -180,8 +182,17 @@ export const BenkOversiktSide = ({ benkOversikt }: Props) => {
                 </LocalAlert>
             )}
 
+            <HStack gap={'space-16'}>
+                <BodyShort>{`Antall behandlinger: ${behandlingssammendrag.length}`}</BodyShort>
+                {antallFiltrertPgaTilgang > 0 && (
+                    <BodyShort>
+                        {`Antall behandlinger filtrert vekk pga tilgang: ${antallFiltrertPgaTilgang}`}
+                    </BodyShort>
+                )}
+            </HStack>
+
             <BenkTabell
-                data={filtrertBenkoversikt}
+                behandlinger={filtrertBenkoversikt.behandlingssammendrag}
                 sorteringRetningInitial={sorteringRetningParam ?? 'ASC'}
                 onSortChange={(kolonne, sorteringRetning) => {
                     const sortering: BenkSortering = `${kolonne},${sorteringRetning}`;
