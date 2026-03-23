@@ -78,10 +78,10 @@ export enum BenkSorteringRetning {
 export type BenkSortering = `${BenkKolonne},${BenkSorteringRetning}`;
 
 export type BenkFilters = {
-    benktype: BenkBehandlingKlarEllerVenter | null;
-    type: BenkBehandlingstype | null;
-    status: BenkBehandlingsstatus | null;
-    saksbehandler: string | 'IKKE_TILDELT' | null;
+    benktype?: BenkBehandlingKlarEllerVenter | null;
+    type?: BenkBehandlingstype | null;
+    status?: BenkBehandlingsstatus | null;
+    saksbehandler?: string | 'IKKE_TILDELT' | null;
 };
 
 export type BenkFiltersQueryParams = {

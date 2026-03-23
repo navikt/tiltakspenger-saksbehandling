@@ -31,8 +31,9 @@ type Props = {
 export const BenkFilterVelger = ({ benkOversikt, onUpdateFilter }: Props) => {
     const router = useRouter();
     const searchParams = useSearchParams();
-
     const aktivtFilter = useMemo(() => benkFiltersFraSearchParams(searchParams), [searchParams]);
+
+    const [isLoading, setIsLoading] = useState(false);
 
     const [valgtFilter, setValgtFilter] = useState<BenkFilters>(aktivtFilter);
 
@@ -53,6 +54,22 @@ export const BenkFilterVelger = ({ benkOversikt, onUpdateFilter }: Props) => {
             ),
         [benkOversikt.behandlingssammendrag, innloggetSaksbehandler],
     );
+
+    const submitValgtFilter = (filters: BenkFilters) => {
+        onUpdateFilter(filters);
+        setIsLoading(true);
+
+        router
+            .push({
+                query: {
+                    ...queryUtenBenkFilter(router.query),
+                    ...benkFiltersTilQueryParams(valgtFilter),
+                },
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
+    };
 
     useEffect(() => {
         setValgtFilter(aktivtFilter);
@@ -141,16 +158,10 @@ export const BenkFilterVelger = ({ benkOversikt, onUpdateFilter }: Props) => {
                 <Button
                     type={'button'}
                     size={'small'}
+                    loading={isLoading}
                     onClick={() => {
                         setBenkFilterCookie(valgtFilter);
-                        onUpdateFilter(valgtFilter);
-
-                        router.push({
-                            query: {
-                                ...queryUtenBenkFilter(router.query),
-                                ...benkFiltersTilQueryParams(valgtFilter),
-                            },
-                        });
+                        submitValgtFilter(valgtFilter);
                     }}
                 >
                     {'Oppdater filtre'}
@@ -162,9 +173,7 @@ export const BenkFilterVelger = ({ benkOversikt, onUpdateFilter }: Props) => {
                     variant={'secondary'}
                     onClick={() => {
                         clearBenkFilterCookie();
-                        onUpdateFilter(valgtFilter);
-
-                        router.push({ query: queryUtenBenkFilter(router.query) });
+                        submitValgtFilter({});
                     }}
                 >
                     {'Nullstill filtre'}
