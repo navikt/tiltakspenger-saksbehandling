@@ -22,7 +22,7 @@ import { finnNesteKlageSteg, KlageSteg } from '../../../../../../utils/KlageLayo
 import { CheckmarkCircleIcon, PencilIcon, TrashIcon } from '@navikt/aksel-icons';
 import { useHentPersonopplysninger } from '~/components/personaliaheader/useHentPersonopplysninger';
 import {
-    erKlageKnyttetTilRammebehandling,
+    harKlageEnÅpenRammebehandling,
     erKlageOmgjøring,
     kanBehandleKlage,
 } from '~/utils/klageUtils';
@@ -58,14 +58,8 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
         };
     }
 
-    const omgjørResultat = initialKlage.resultat?.type === 'OMGJØR' ? initialKlage.resultat : null;
-
-    const omgjøringsbehandling = omgjørResultat
-        ? (sak.behandlinger.find(
-              (behandling) =>
-                  behandling.id === omgjørResultat.rammebehandlingId && behandling.avbrutt === null,
-          ) ?? null)
-        : null;
+    const omgjøringsbehandling =
+        sak.behandlinger.find((b) => initialKlage.åpenRammebehandlingId === b.id) ?? null;
 
     return { props: { sak, initialKlage, omgjøringsbehandling } };
 });
@@ -121,7 +115,7 @@ const FormkravKlagePage = ({ sak, omgjøringsbehandling }: Props) => {
                         <CheckmarkCircleIcon title="Sjekk ikon" fontSize="1.5rem" color="green" />
                         <Heading size="small">Formkrav</Heading>
                     </HStack>
-                    {erKlageOmgjøring(klage) && erKlageKnyttetTilRammebehandling(klage) && (
+                    {erKlageOmgjøring(klage) && harKlageEnÅpenRammebehandling(klage) && (
                         <InfoCard data-color="info" size="small">
                             <InfoCard.Header>
                                 <InfoCard.Title>Informasjon om formkrav</InfoCard.Title>
