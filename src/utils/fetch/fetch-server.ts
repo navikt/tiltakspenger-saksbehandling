@@ -2,10 +2,8 @@ import { logger } from '@navikt/next-logger';
 import { IncomingMessage } from 'node:http';
 import { NextApiRequest } from 'next';
 import { SakProps } from '~/types/Sak';
-import { Saksbehandler } from '~/types/Saksbehandler';
 import { stripLeadingSlash } from '../string';
 import { errorFraApiResponse } from './fetch';
-import { BenkOversiktResponse } from '~/types/Benk';
 import { hentOboToken } from '~/auth/tokens';
 
 export type NextRequest = Request | IncomingMessage | NextApiRequest;
@@ -44,7 +42,7 @@ export const fetchFraApiServerSide = async (
     });
 };
 
-const fetchJsonFraApi = async <JsonResponse>(
+export const fetchJsonFraApiServerSide = async <JsonResponse>(
     req: NextRequest,
     path: string,
     options?: RequestInit,
@@ -58,17 +56,4 @@ const fetchJsonFraApi = async <JsonResponse>(
 };
 
 export const fetchSak = async (req: NextRequest, saksnummer: string) =>
-    fetchJsonFraApi<SakProps>(req, `/sak/${saksnummer}`);
-
-export const fetchBenkOversikt = async (req: NextRequest) =>
-    fetchJsonFraApi<BenkOversiktResponse>(req, '/behandlinger', {
-        body: JSON.stringify({
-            behandlingstype: null,
-            status: null,
-            sortering: 'ASC',
-        }),
-        method: 'POST',
-    });
-
-export const fetchSaksbehandler = async (req: NextRequest) =>
-    fetchJsonFraApi<Saksbehandler>(req, '/saksbehandler');
+    fetchJsonFraApiServerSide<SakProps>(req, `/sak/${saksnummer}`);

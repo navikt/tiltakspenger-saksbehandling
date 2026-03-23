@@ -5,8 +5,9 @@ import {
     NextApiResponse,
 } from 'next';
 import { logger } from '@navikt/next-logger';
-import { fetchSaksbehandler } from '~/utils/fetch/fetch-server';
+import { fetchJsonFraApiServerSide, NextRequest } from '~/utils/fetch/fetch-server';
 import { validerToken } from '~/auth/tokens';
+import { Saksbehandler } from '~/types/Saksbehandler';
 
 const LOGIN_API_URL = `${process.env.WONDERWALL_ORIGIN || ''}/oauth2/login`;
 
@@ -82,3 +83,6 @@ export const withAuthenticatedApi = (handler: ApiHandler): ApiHandler => {
         return handler(req, res, ...rest);
     };
 };
+
+const fetchSaksbehandler = async (req: NextRequest) =>
+    fetchJsonFraApiServerSide<Saksbehandler>(req, '/saksbehandler');

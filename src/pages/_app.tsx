@@ -4,15 +4,15 @@ import React, { ReactElement, ReactNode } from 'react';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { SWRConfig } from 'swr';
-import { InternDekoratør } from '../components/interndekoratør/InternDekoratør';
-import { FeatureTogglesProvider } from '../context/feature-toggles/FeatureTogglesContext';
-import { SaksbehandlerProvider } from '../context/saksbehandler/SaksbehandlerContext';
-import { ConfigProvider } from '../context/ConfigContext';
+import { InternDekoratør } from '~/components/interndekoratør/InternDekoratør';
+import { FeatureTogglesProvider } from '~/context/feature-toggles/FeatureTogglesContext';
+import { SaksbehandlerProvider } from '~/context/saksbehandler/SaksbehandlerContext';
+import { ConfigProvider } from '~/context/ConfigContext';
 import { NotificationProvider } from '~/context/NotificationContext';
-import { BenkFiltreringProvider } from '~/context/BenkFiltreringContext';
+import { BenkFiltreringProvider } from '~/components/benk/filter/BenkFilterContext';
 import { NextPage } from 'next';
 
-export type NextPageWithLayout<P = Record<string, unknown>, IP = P> = NextPage<P, IP> & {
+type NextPageWithLayout<P = Record<string, unknown>, IP = P> = NextPage<P, IP> & {
     getLayout?: (page: ReactElement) => ReactNode;
 };
 
@@ -26,7 +26,7 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     return (
         <>
             <Head>
-                <title>Tiltakspenger saksbehandler</title>
+                <title>{'Tiltakspenger saksbehandling'}</title>
             </Head>
             <ConfigProvider
                 gosysUrl={pageProps.gosysUrl}
