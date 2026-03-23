@@ -13,7 +13,6 @@ import { useOpprettRammebehandlingForKlage } from '~/api/KlageApi';
 import router from 'next/router';
 import { behandlingUrl } from '~/utils/urls';
 import { KlageId } from '~/types/Klage';
-import { Nullable } from '~/types/UtilTypes';
 import { SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
 import { RevurderingResultat } from '~/types/Revurdering';
 
@@ -21,7 +20,7 @@ export const VelgOmgjøringsbehandlingModal = (props: {
     sakId: string;
     saksnummer: string;
     klageId: KlageId;
-    vedtakSomPåklages: Nullable<Rammevedtak>;
+    vedtak: Rammevedtak[];
     søknader: Søknad[];
     åpen: boolean;
     onClose: () => void;
@@ -62,7 +61,7 @@ export const VelgOmgjøringsbehandlingModal = (props: {
                 <Modal.Body>
                     <VelgOmgjøringsbehandlingForm
                         control={form.control}
-                        vedtakSomPåklages={props.vedtakSomPåklages}
+                        vedtak={props.vedtak}
                         søknader={props.søknader}
                     />
                 </Modal.Body>
@@ -95,7 +94,7 @@ export const VelgOmgjøringsbehandlingModal = (props: {
 
 const VelgOmgjøringsbehandlingForm = (props: {
     control: Control<VelgOmgjøringsbehandlingFormData>;
-    vedtakSomPåklages: Nullable<Rammevedtak>;
+    vedtak: Rammevedtak[];
     søknader: Søknad[];
 }) => {
     const behandlingstype = useWatch({
@@ -103,10 +102,15 @@ const VelgOmgjøringsbehandlingForm = (props: {
         name: 'behandlingstype',
     });
 
-    const erVedtakSomPåKlagesInnvilgelse =
-        props.vedtakSomPåklages?.resultat &&
-        (props.vedtakSomPåklages.resultat === SøknadsbehandlingResultat.INNVILGELSE ||
-            props.vedtakSomPåklages.resultat === RevurderingResultat.INNVILGELSE);
+    const harInnvilgelsesVedtak = !!props.vedtak.find(
+        (vedtak) =>
+            vedtak.resultat === SøknadsbehandlingResultat.INNVILGELSE ||
+            vedtak.resultat === RevurderingResultat.INNVILGELSE,
+    );
+
+    const harVedtakSomKanOmgjøres = !!props.vedtak.find((vedtak) =>
+        vedtak.gyldigeKommandoer.OMGJØR ? true : false,
+    );
 
     return (
         <VStack gap="space-16">
@@ -124,13 +128,13 @@ const VelgOmgjøringsbehandlingForm = (props: {
                         </option>
                         <option
                             value={VelgOmgjøringsbehandlingTyper.REVURDERING_INNVILGELSE}
-                            disabled={!erVedtakSomPåKlagesInnvilgelse}
+                            disabled={!harInnvilgelsesVedtak}
                         >
                             Revurdering - Innvilgelse
                         </option>
                         <option
                             value={VelgOmgjøringsbehandlingTyper.REVURDERING_OMGJØRING}
-                            disabled={!props.vedtakSomPåklages?.gyldigeKommandoer.OMGJØR}
+                            disabled={!harVedtakSomKanOmgjøres}
                         >
                             Revurdering - Omgjøring
                         </option>
@@ -149,6 +153,31 @@ const VelgOmgjøringsbehandlingForm = (props: {
                                     {formaterTidspunkt(søknad.opprettet)}
                                 </option>
                             ))}
+                        </Select>
+                    )}
+                />
+            )}
+
+            {behandlingstype === VelgOmgjøringsbehandlingTyper.REVURDERING_OMGJØRING && (
+                <Controller
+                    name={'vedtakSomSkalOmgjøres'}
+                    control={props.control}
+                    render={({ field, fieldState }) => (
+                        <Select
+                            {...field}
+                            label="Velg vedtak som skal omgjøres"
+                            error={fieldState.error?.message}
+                        >
+                            <option value="">-- Velg omgjøringsvedtak --</option>
+                            {props.vedtak
+                                .filter((vedtak) =>
+                                    vedtak.gyldigeKommandoer.OMGJØR ? true : false,
+                                )
+                                .map((vedtak) => (
+                                    <option key={vedtak.id} value={vedtak.id}>
+                                        {formaterTidspunkt(vedtak.opprettet)}
+                                    </option>
+                                ))}
                         </Select>
                     )}
                 />

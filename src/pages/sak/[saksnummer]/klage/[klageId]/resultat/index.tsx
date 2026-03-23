@@ -1,5 +1,5 @@
 import { logger } from '@navikt/next-logger';
-import React, { ReactElement, useState } from 'react';
+import { ReactElement, useState } from 'react';
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
 import {
     Klagebehandling,
@@ -15,6 +15,7 @@ import { KlageSteg } from '~/utils/KlageLayoutUtils';
 import KlageLayout, { KlageProvider, useKlage } from '../../layout';
 import { Button, Heading, HStack, InfoCard, LocalAlert, Process, VStack } from '@navikt/ds-react';
 import {
+    erKlageAvsluttet,
     erKlageMottattFraKAEllerEtter,
     erKlageOmgjøring,
     erKlageOpprettholdelse,
@@ -42,17 +43,16 @@ import {
     erKlageinstanshendelseAvsluttet,
     skalKunneOppretteNyRammebehandling,
 } from '~/utils/KlageinstanshendelseUtils';
-import { useFerdigstillKlage } from '~/api/KlageApi';
-import router from 'next/router';
 import styles from './index.module.css';
 import OppsummeringAvKlageinstanshendelser from '~/components/oppsummeringer/klage/oppsummeringAvKlageinstanshendelser/OppsummeringAvKlageinstanshendelser';
 import { KlageHendelseKlagebehandlingAvsluttetUtfall } from '~/types/Klageinstanshendelse';
+import FerdigstillKlageModalWrapper from '~/components/modaler/FerdigstillKlagebehandlingModal';
 
 type Props = {
     sak: SakProps;
     initialKlage: Klagebehandling;
     omgjøringsbehandling: Nullable<Rammebehandling>;
-    vedtakSomPåklages: Nullable<Rammevedtak>;
+    vedtak: Rammevedtak[];
     søknader: Søknad[];
 };
 
@@ -75,11 +75,6 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
         };
     }
 
-    const vedtakSomPåklages =
-        sak.alleRammevedtak.find(
-            (vedtak) => vedtak.id === initialKlage.formkrav.vedtakDetKlagesPå,
-        ) ?? null;
-
     const vurderingsResultat =
         erKlageOmgjøring(initialKlage) || erKlageOpprettholdelse(initialKlage)
             ? initialKlage.resultat
@@ -97,13 +92,13 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
             sak,
             initialKlage: initialKlage,
             omgjøringsbehandling,
-            vedtakSomPåklages: vedtakSomPåklages,
+            vedtak: sak.alleRammevedtak,
             søknader: sak.søknader,
         },
     };
 });
 
-const ResultatPage = ({ sak, omgjøringsbehandling, vedtakSomPåklages, søknader }: Props) => {
+const ResultatPage = ({ sak, omgjøringsbehandling, vedtak, søknader }: Props) => {
     const { klage } = useKlage();
     const { innloggetSaksbehandler } = useSaksbehandler();
 
@@ -120,7 +115,7 @@ const ResultatPage = ({ sak, omgjøringsbehandling, vedtakSomPåklages, søknade
                     sak={sak}
                     klage={klage as Klagebehandling & { resultat: KlagebehandlingsresultatOmgjør }}
                     omgjøringsbehandling={omgjøringsbehandling}
-                    vedtakSomPåklages={vedtakSomPåklages}
+                    vedtak={vedtak}
                     søknader={søknader}
                     innloggetSaksbehandler={innloggetSaksbehandler}
                 />
@@ -133,7 +128,7 @@ const ResultatPage = ({ sak, omgjøringsbehandling, vedtakSomPåklages, søknade
                         }
                     }
                     omgjøringsbehandling={omgjøringsbehandling}
-                    vedtakSomPåklages={vedtakSomPåklages}
+                    vedtak={vedtak}
                     søknader={søknader}
                     innloggetSaksbehandler={innloggetSaksbehandler}
                 />
@@ -146,7 +141,7 @@ const Omgjøringsresultat = (props: {
     sak: SakProps;
     klage: Klagebehandling & { resultat: KlagebehandlingsresultatOmgjør };
     omgjøringsbehandling: Nullable<Rammebehandling>;
-    vedtakSomPåklages: Nullable<Rammevedtak>;
+    vedtak: Rammevedtak[];
     søknader: Søknad[];
     innloggetSaksbehandler: Saksbehandler;
 }) => {
@@ -168,6 +163,7 @@ const Omgjøringsresultat = (props: {
                     iverksatt.
                 </InfoCard.Content>
             </InfoCard>
+
             {erKlageUnderAktivOmgjøring(props.klage) ? (
                 <Button
                     as={Link}
@@ -180,16 +176,28 @@ const Omgjøringsresultat = (props: {
                     Gå til omgjøringsbehandling
                 </Button>
             ) : !erReadonlyForSaksbehandler ? (
-                <Button type="button" onClick={() => setVilVelgeOmgjøringsbehandlingModal(true)}>
-                    Velg omgjøringsbehandling
-                </Button>
+                <HStack gap="space-16">
+                    <Button
+                        type="button"
+                        variant="secondary"
+                        onClick={() => setVilVelgeOmgjøringsbehandlingModal(true)}
+                    >
+                        Velg omgjøringsbehandling
+                    </Button>
+                    {!erKlageAvsluttet(props.klage) && (
+                        <FerdigstillKlageModalWrapper
+                            sakId={props.sak.sakId}
+                            klageId={props.klage.id}
+                        />
+                    )}
+                </HStack>
             ) : null}
             {vilVelgeOmgjøringsbehandlingModal && (
                 <VelgOmgjøringsbehandlingModal
                     sakId={props.sak.sakId}
                     saksnummer={props.sak.saksnummer}
                     klageId={props.klage.id}
-                    vedtakSomPåklages={props.vedtakSomPåklages}
+                    vedtak={props.vedtak}
                     søknader={props.søknader}
                     åpen={vilVelgeOmgjøringsbehandlingModal}
                     onClose={() => setVilVelgeOmgjøringsbehandlingModal(false)}
@@ -202,7 +210,7 @@ const Omgjøringsresultat = (props: {
 const OpprettholdResultat = (props: {
     sak: SakProps;
     klage: Klagebehandling & { resultat: KlagebehandlingsresultatOpprettholdt };
-    vedtakSomPåklages: Nullable<Rammevedtak>;
+    vedtak: Rammevedtak[];
     omgjøringsbehandling: Nullable<Rammebehandling>;
     søknader: Søknad[];
     innloggetSaksbehandler: Saksbehandler;
@@ -210,14 +218,6 @@ const OpprettholdResultat = (props: {
     const [vilOppretteNyBehandling, setVilOppretteNyBehandling] = useState(false);
     const erReadonlyForSaksbehandler =
         props.innloggetSaksbehandler.navIdent !== props.klage.saksbehandler;
-
-    const ferdigstillKlage = useFerdigstillKlage({
-        sakId: props.sak.sakId,
-        klageId: props.klage.id,
-        onSuccess: (klage) => {
-            router.push(`/sak/${klage.saksnummer}`);
-        },
-    });
 
     const journalført = !!props.klage.resultat.journalføringstidspunktInnstillingsbrev;
     const distribuert = !!props.klage.resultat.distribusjonstidspunktInnstillingsbrev;
@@ -243,9 +243,9 @@ const OpprettholdResultat = (props: {
 
     const kanFerdigstilleKlage =
         fåttSvarFraKA &&
-        !skalKunneOppretteNyRammebehandling(props.klage.resultat.klageinstanshendelser) &&
         !props.klage.resultat.rammebehandlingId &&
         props.klage.status !== KlagebehandlingStatus.FERDIGSTILT &&
+        props.klage.status !== KlagebehandlingStatus.VEDTATT &&
         !erReadonlyForSaksbehandler;
 
     const inneholderHendelserRetur = !!props.klage.resultat.klageinstanshendelser.find(
@@ -264,7 +264,6 @@ const OpprettholdResultat = (props: {
                 )}
                 <Heading size="small">Resultat</Heading>
             </HStack>
-
             <Process className={styles.process}>
                 <Process.Event
                     status="completed"
@@ -362,17 +361,6 @@ const OpprettholdResultat = (props: {
                 </Process.Event>
             </Process>
 
-            {ferdigstillKlage.error && (
-                <LocalAlert status="error" size="small">
-                    <LocalAlert.Header>
-                        <LocalAlert.Title>
-                            En feil skjedde under ferdigstilling av klage
-                        </LocalAlert.Title>
-                    </LocalAlert.Header>
-                    <LocalAlert.Content>{ferdigstillKlage.error.message}</LocalAlert.Content>
-                </LocalAlert>
-            )}
-
             {inneholderHendelserRetur && (
                 <LocalAlert status="warning" size="small">
                     <LocalAlert.Header>
@@ -384,44 +372,42 @@ const OpprettholdResultat = (props: {
                     </LocalAlert.Content>
                 </LocalAlert>
             )}
-
-            {kanOppretteNyRammebehandling ? (
-                <Button
-                    type="button"
-                    variant="secondary"
-                    onClick={() => setVilOppretteNyBehandling(true)}
-                >
-                    Opprett ny behandling
-                </Button>
-            ) : kanFerdigstilleKlage ? (
-                <Button
-                    type="button"
-                    loading={ferdigstillKlage.isMutating}
-                    onClick={() => ferdigstillKlage.trigger()}
-                >
-                    Ferdigstill klagen
-                </Button>
-            ) : null}
-
-            {props.omgjøringsbehandling && (
-                <Button
-                    as={Link}
-                    variant="secondary"
-                    href={behandlingUrl({
-                        saksnummer: props.sak.saksnummer,
-                        id: props.omgjøringsbehandling.id,
-                    })}
-                >
-                    Gå til omgjøringsbehandling
-                </Button>
-            )}
+            <HStack gap="space-16">
+                {kanOppretteNyRammebehandling && (
+                    <Button
+                        type="button"
+                        variant="secondary"
+                        onClick={() => setVilOppretteNyBehandling(true)}
+                    >
+                        Opprett ny behandling
+                    </Button>
+                )}
+                {props.omgjøringsbehandling && (
+                    <Button
+                        as={Link}
+                        variant="secondary"
+                        href={behandlingUrl({
+                            saksnummer: props.sak.saksnummer,
+                            id: props.omgjøringsbehandling.id,
+                        })}
+                    >
+                        Gå til omgjøringsbehandling
+                    </Button>
+                )}
+                {kanFerdigstilleKlage && (
+                    <FerdigstillKlageModalWrapper
+                        sakId={props.sak.sakId}
+                        klageId={props.klage.id}
+                    />
+                )}
+            </HStack>
 
             {vilOppretteNyBehandling && (
                 <VelgOmgjøringsbehandlingModal
                     sakId={props.sak.sakId}
                     saksnummer={props.sak.saksnummer}
                     klageId={props.klage.id}
-                    vedtakSomPåklages={props.vedtakSomPåklages}
+                    vedtak={props.vedtak}
                     søknader={props.søknader}
                     åpen={vilOppretteNyBehandling}
                     onClose={() => setVilOppretteNyBehandling(false)}
