@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button, HStack, Select, VStack } from '@navikt/ds-react';
 import {
     BehandlingssammendragBenktype,
@@ -12,22 +12,31 @@ import {
     benkBehandlingstypeTekst,
 } from '~/components/benk/benkSideUtils';
 import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
-import { useBenkFilter } from '~/components/benk/filter/BenkFilterContext';
-import router from 'next/router';
+import { useRouter } from 'next/router';
 import {
+    benkFiltersFraSearchParams,
     benkFiltersTilQueryParams,
+    clearBenkFilterCookie,
     hentSaksbehandlereTilFiltrering,
     queryUtenBenkFilter,
+    setBenkFilterCookie,
 } from '~/components/benk/filter/benkFilterUtils';
+import { useSearchParams } from 'next/navigation';
 
 type Props = {
     benkOversikt: BenkOversiktResponse;
 };
 
 export const BenkFilterVelger = ({ benkOversikt }: Props) => {
-    const { filters } = useBenkFilter();
+    const router = useRouter();
+    const searchParams = useSearchParams();
 
-    const [valgtFilter, setValgtFilter] = useState<BenkFilters>(filters);
+    const aktivtFilter = useCallback(
+        () => benkFiltersFraSearchParams(searchParams),
+        [searchParams],
+    );
+
+    const [valgtFilter, setValgtFilter] = useState<BenkFilters>(aktivtFilter);
 
     const oppdaterValgtFilter = (oppdatering: Partial<BenkFilters>) => {
         setValgtFilter({
@@ -48,8 +57,8 @@ export const BenkFilterVelger = ({ benkOversikt }: Props) => {
     );
 
     useEffect(() => {
-        setValgtFilter(filters);
-    }, [filters]);
+        setValgtFilter(aktivtFilter);
+    }, [aktivtFilter]);
 
     return (
         <VStack gap="space-16">
@@ -135,10 +144,11 @@ export const BenkFilterVelger = ({ benkOversikt }: Props) => {
                     type={'button'}
                     size={'small'}
                     onClick={() => {
-                        const query = queryUtenBenkFilter(router.query);
+                        setBenkFilterCookie(valgtFilter);
+
                         router.push({
                             query: {
-                                ...query,
+                                ...queryUtenBenkFilter(router.query),
                                 ...benkFiltersTilQueryParams(valgtFilter),
                             },
                         });
@@ -152,8 +162,9 @@ export const BenkFilterVelger = ({ benkOversikt }: Props) => {
                     size={'small'}
                     variant={'secondary'}
                     onClick={() => {
-                        const query = queryUtenBenkFilter(router.query);
-                        router.push({ query });
+                        clearBenkFilterCookie();
+
+                        router.push({ query: queryUtenBenkFilter(router.query) });
                     }}
                 >
                     {'Nullstill filtre'}

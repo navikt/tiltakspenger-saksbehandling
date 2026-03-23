@@ -21,7 +21,7 @@ type Props = {
     benkOversikt: BenkOversiktResponse;
 };
 
-export const BenkOversiktSide = ({ benkOversikt }: Props) => {
+export const BenkSide = ({ benkOversikt }: Props) => {
     const router = useRouter();
     const searchParams = useSearchParams();
     const bannerRef = useRef<NotificationBannerRef>(null);

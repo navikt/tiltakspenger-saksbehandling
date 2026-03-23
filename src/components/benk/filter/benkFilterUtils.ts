@@ -9,6 +9,9 @@ import {
 import { valueIsInRecord } from '~/utils/object';
 import { Saksbehandler } from '~/types/Saksbehandler';
 import { ParsedUrlQuery } from 'node:querystring';
+import Cookies from 'js-cookie';
+
+export const BENK_FILTER_COOKIE_NAME = 'benkFilters';
 
 export const benkFiltersTilQueryParams = (benkFilters: BenkFilters): BenkFilterQueryParams => {
     const queryParams: BenkFilterQueryParams = {};
@@ -83,4 +86,50 @@ export const queryUtenBenkFilter = (query: ParsedUrlQuery): ParsedUrlQuery => {
     /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
     const { benktype, type, status, saksbehandler, ...rest } = query;
     return rest;
+};
+
+export const benkFiltersFraQuery = (query: ParsedUrlQuery): BenkFilters => {
+    const { benktype, type, status, saksbehandler } = query;
+    return {
+        benktype: erBenktype(benktype) ? benktype : null,
+        type: erBenkBehandlingstype(type) ? type : null,
+        status: erBenkStatus(status) ? status : null,
+        saksbehandler: typeof saksbehandler === 'string' ? saksbehandler : null,
+    };
+};
+
+export const benkFiltersFraCookie = (cookieValue: string | undefined): BenkFilters | null => {
+    if (!cookieValue) {
+        return null;
+    }
+
+    try {
+        const parsed = JSON.parse(cookieValue) as BenkFilters;
+
+        return {
+            benktype: erBenktype(parsed.benktype) ? parsed.benktype : null,
+            type: erBenkBehandlingstype(parsed.type) ? parsed.type : null,
+            status: erBenkStatus(parsed.status) ? parsed.status : null,
+            saksbehandler: typeof parsed.saksbehandler === 'string' ? parsed.saksbehandler : null,
+        };
+    } catch {
+        return null;
+    }
+};
+
+export const benkFiltersTilCookieValue = (filters: BenkFilters): string => {
+    return JSON.stringify(filters);
+};
+
+export const harAktiveFiltre = (filters: BenkFilters | null): filters is BenkFilters => {
+    return !!filters && Object.values(filters).some(Boolean);
+};
+
+export const setBenkFilterCookie = (filters: BenkFilters): void => {
+    const value = benkFiltersTilCookieValue(filters);
+    Cookies.set(BENK_FILTER_COOKIE_NAME, value, { expires: 365 });
+};
+
+export const clearBenkFilterCookie = (): void => {
+    Cookies.remove(BENK_FILTER_COOKIE_NAME);
 };

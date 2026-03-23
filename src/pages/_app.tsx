@@ -9,7 +9,6 @@ import { FeatureTogglesProvider } from '~/context/feature-toggles/FeatureToggles
 import { SaksbehandlerProvider } from '~/context/saksbehandler/SaksbehandlerContext';
 import { ConfigProvider } from '~/context/ConfigContext';
 import { NotificationProvider } from '~/context/NotificationContext';
-import { BenkFiltreringProvider } from '~/components/benk/filter/BenkFilterContext';
 import { NextPage } from 'next';
 
 type NextPageWithLayout<P = Record<string, unknown>, IP = P> = NextPage<P, IP> & {
@@ -35,18 +34,16 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
                 <FeatureTogglesProvider deployEnv={pageProps.deployEnv}>
                     <SaksbehandlerProvider saksbehandler={pageProps.saksbehandler}>
                         <NotificationProvider>
-                            <BenkFiltreringProvider>
-                                <SWRConfig
-                                    value={{
-                                        shouldRetryOnError: false,
-                                        revalidateOnFocus: false,
-                                        revalidateOnReconnect: true,
-                                    }}
-                                >
-                                    <InternDekoratør />
-                                    <main>{getLayout(<Component {...pageProps} />)}</main>
-                                </SWRConfig>
-                            </BenkFiltreringProvider>
+                            <SWRConfig
+                                value={{
+                                    shouldRetryOnError: false,
+                                    revalidateOnFocus: false,
+                                    revalidateOnReconnect: true,
+                                }}
+                            >
+                                <InternDekoratør />
+                                <main>{getLayout(<Component {...pageProps} />)}</main>
+                            </SWRConfig>
                         </NotificationProvider>
                     </SaksbehandlerProvider>
                 </FeatureTogglesProvider>
