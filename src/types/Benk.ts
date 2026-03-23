@@ -1,21 +1,23 @@
-import { Nullable } from '~/types/UtilTypes';
+import { ArrayOrSingle, Nullable } from '~/types/UtilTypes';
 import { RammebehandlingResultat } from '~/types/Rammebehandling';
 
-export interface BenkOversiktRequest {
-    benktype: Nullable<BehandlingssammendragBenktype[]>;
-    behandlingstype: Nullable<BenkBehandlingstype[]>;
-    status: Nullable<BenkBehandlingsstatus[]>;
+export type BenkOversiktRequestBody = {
     sortering: BenkSortering;
-    identer: Nullable<string[]>;
-}
+    filters: {
+        benktype: ReadonlyArray<BenkBehandlingKlarEllerVenter> | null;
+        behandlingstype: ReadonlyArray<BenkBehandlingstype> | null;
+        status: ReadonlyArray<BenkBehandlingsstatus> | null;
+        identer: ReadonlyArray<string | 'IKKE_TILDELT'> | null;
+    };
+};
 
-export interface BenkOversiktResponse {
+export type BenkOversiktResponse = {
     behandlingssammendrag: BenkBehandling[];
     totalAntall: number;
     antallFiltrertPgaTilgang: number;
-}
+};
 
-export interface BenkBehandling {
+export type BenkBehandling = {
     sakId: string;
     fnr: string;
     saksnummer: string;
@@ -31,7 +33,7 @@ export interface BenkBehandling {
     sattPåVentFrist: Nullable<string>;
     resultat: Nullable<RammebehandlingResultat>;
     erUnderkjent: boolean;
-}
+};
 
 export enum BenkBehandlingstype {
     SØKNADSBEHANDLING = 'SØKNADSBEHANDLING',
@@ -52,7 +54,7 @@ export enum BenkBehandlingsstatus {
     KLAR_TIL_FERDIGSTILLING = 'KLAR_TIL_FERDIGSTILLING',
 }
 
-export enum BehandlingssammendragBenktype {
+export enum BenkBehandlingKlarEllerVenter {
     KLAR = 'KLAR',
     VENTER = 'VENTER',
 }
@@ -68,9 +70,23 @@ export enum BenkKolonne {
     sistEndret = 'sist_endret',
 }
 
-export type BenkSorteringRetning = 'ASC' | 'DESC';
+export enum BenkSorteringRetning {
+    ASC = 'ASC',
+    DESC = 'DESC',
+}
 
-export type BenkSortering =
-    | `${BenkKolonne},${BenkSorteringRetning}`
-    | BenkKolonne
-    | BenkSorteringRetning;
+export type BenkSortering = `${BenkKolonne},${BenkSorteringRetning}`;
+
+export type BenkFilters = {
+    benktype: BenkBehandlingKlarEllerVenter | null;
+    type: BenkBehandlingstype | null;
+    status: BenkBehandlingsstatus | null;
+    saksbehandler: string | 'IKKE_TILDELT' | null;
+};
+
+export type BenkFiltersQueryParams = {
+    benktype?: ArrayOrSingle<BenkBehandlingKlarEllerVenter>;
+    type?: ArrayOrSingle<BenkBehandlingstype>;
+    status?: ArrayOrSingle<BenkBehandlingsstatus>;
+    saksbehandler?: ArrayOrSingle<string | 'IKKE_TILDELT'>;
+};
