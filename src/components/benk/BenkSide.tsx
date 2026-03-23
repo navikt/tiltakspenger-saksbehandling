@@ -30,10 +30,6 @@ export const BenkSide = ({ benkOversikt }: Props) => {
 
     const { behandlingssammendrag, antallFiltrertPgaTilgang } = benkOversikt;
 
-    // const handleOppdaterFilter = () => {
-    //     bannerRef.current?.clearMessage();
-    // };
-
     return (
         <VStack gap="space-20" style={{ padding: '1rem' }}>
             <NotificationBanner ref={bannerRef} />
@@ -42,7 +38,12 @@ export const BenkSide = ({ benkOversikt }: Props) => {
                 Oversikt over behandlinger og søknader
             </Heading>
 
-            <BenkFilterVelger benkOversikt={benkOversikt} />
+            <BenkFilterVelger
+                benkOversikt={benkOversikt}
+                onUpdateFilter={() => {
+                    bannerRef.current?.clearMessage();
+                }}
+            />
 
             {benkOversikt.totalAntall > 500 && (
                 <div className={styles.høytAntallBehandlingerContainer}>

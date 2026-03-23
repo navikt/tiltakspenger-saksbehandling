@@ -25,9 +25,10 @@ import { useSearchParams } from 'next/navigation';
 
 type Props = {
     benkOversikt: BenkOversiktResponse;
+    onUpdateFilter: (filter: BenkFilters) => void;
 };
 
-export const BenkFilterVelger = ({ benkOversikt }: Props) => {
+export const BenkFilterVelger = ({ benkOversikt, onUpdateFilter }: Props) => {
     const router = useRouter();
     const searchParams = useSearchParams();
 
@@ -145,6 +146,7 @@ export const BenkFilterVelger = ({ benkOversikt }: Props) => {
                     size={'small'}
                     onClick={() => {
                         setBenkFilterCookie(valgtFilter);
+                        onUpdateFilter(valgtFilter);
 
                         router.push({
                             query: {
@@ -163,6 +165,7 @@ export const BenkFilterVelger = ({ benkOversikt }: Props) => {
                     variant={'secondary'}
                     onClick={() => {
                         clearBenkFilterCookie();
+                        onUpdateFilter(valgtFilter);
 
                         router.push({ query: queryUtenBenkFilter(router.query) });
                     }}
