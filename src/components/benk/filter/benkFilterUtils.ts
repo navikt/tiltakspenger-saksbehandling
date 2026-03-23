@@ -43,7 +43,7 @@ export const benkFiltersFraSearchParams = (searchParams: URLSearchParams): BenkF
     return {
         benktype: erBenkBehandlingKlarEllerVenter(benktype) ? benktype : null,
         type: erBenkBehandlingstype(type) ? type : null,
-        status: erBenkStatus(status) ? status : null,
+        status: erBenkBehandlingsstatus(status) ? status : null,
         saksbehandler: typeof saksbehandler === 'string' ? saksbehandler : null,
     };
 };
@@ -55,7 +55,7 @@ export const erBenkBehandlingKlarEllerVenter = (
 export const erBenkBehandlingstype = (value: unknown): value is BenkBehandlingstype =>
     isValueInRecord(value, BenkBehandlingstype);
 
-export const erBenkStatus = (value: unknown): value is BenkBehandlingsstatus =>
+export const erBenkBehandlingsstatus = (value: unknown): value is BenkBehandlingsstatus =>
     isValueInRecord(value, BenkBehandlingsstatus);
 
 export const hentSaksbehandlereTilFiltrering = (
@@ -92,13 +92,7 @@ export const queryUtenBenkFilter = (query: ParsedUrlQuery): ParsedUrlQuery => {
 };
 
 export const benkFiltersFraQuery = (query: ParsedUrlQuery): BenkFilters => {
-    const { benktype, type, status, saksbehandler } = query;
-    return {
-        benktype: erBenkBehandlingKlarEllerVenter(benktype) ? benktype : null,
-        type: erBenkBehandlingstype(type) ? type : null,
-        status: erBenkStatus(status) ? status : null,
-        saksbehandler: typeof saksbehandler === 'string' ? saksbehandler : null,
-    };
+    return validerBenkFilters(query);
 };
 
 export const benkFiltersFraCookie = (cookieValue: string | undefined): BenkFilters | null => {
@@ -107,32 +101,33 @@ export const benkFiltersFraCookie = (cookieValue: string | undefined): BenkFilte
     }
 
     try {
-        const parsed = JSON.parse(cookieValue) as BenkFilters;
+        const parsed = JSON.parse(cookieValue) as Record<string, unknown>;
 
-        return {
-            benktype: erBenkBehandlingKlarEllerVenter(parsed.benktype) ? parsed.benktype : null,
-            type: erBenkBehandlingstype(parsed.type) ? parsed.type : null,
-            status: erBenkStatus(parsed.status) ? parsed.status : null,
-            saksbehandler: typeof parsed.saksbehandler === 'string' ? parsed.saksbehandler : null,
-        };
+        return validerBenkFilters(parsed);
     } catch {
         return null;
     }
 };
 
-export const benkFiltersTilCookieValue = (filters: BenkFilters): string => {
-    return JSON.stringify(filters);
+const validerBenkFilters = (benkFilters: Record<string, unknown>): BenkFilters => {
+    const { benktype, type, status, saksbehandler } = benkFilters;
+
+    return {
+        benktype: erBenkBehandlingKlarEllerVenter(benktype) ? benktype : null,
+        type: erBenkBehandlingstype(type) ? type : null,
+        status: erBenkBehandlingsstatus(status) ? status : null,
+        saksbehandler: typeof saksbehandler === 'string' ? saksbehandler : null,
+    };
 };
 
 export const harAktiveFiltre = (filters: BenkFilters | null): filters is BenkFilters => {
     return !!filters && Object.values(filters).some(Boolean);
 };
 
-export const setBenkFilterCookie = (filters: BenkFilters): void => {
-    const value = benkFiltersTilCookieValue(filters);
-    Cookies.set(BENK_FILTER_COOKIE_NAME, value, { expires: 365 });
+export const setBenkFilterCookie = (filters: BenkFilters) => {
+    Cookies.set(BENK_FILTER_COOKIE_NAME, JSON.stringify(filters), { expires: 365 });
 };
 
-export const clearBenkFilterCookie = (): void => {
+export const clearBenkFilterCookie = () => {
     Cookies.remove(BENK_FILTER_COOKIE_NAME);
 };

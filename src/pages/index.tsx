@@ -10,10 +10,9 @@ import {
     BENK_FILTER_COOKIE_NAME,
     benkFiltersFraCookie,
     benkFiltersFraQuery,
-    benkFiltersTilCookieValue,
     benkFiltersTilQueryParams,
     erBenkBehandlingstype,
-    erBenkStatus,
+    erBenkBehandlingsstatus,
     erBenkBehandlingKlarEllerVenter,
     harAktiveFiltre,
 } from '~/components/benk/filter/benkFilterUtils';
@@ -22,7 +21,7 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
     const filtersFraQuery = benkFiltersFraQuery(context.query);
 
     if (harAktiveFiltre(filtersFraQuery)) {
-        const cookieValue = benkFiltersTilCookieValue(filtersFraQuery);
+        const cookieValue = JSON.stringify(filtersFraQuery);
         context.res.setHeader(
             'Set-Cookie',
             `${BENK_FILTER_COOKIE_NAME}=${encodeURIComponent(cookieValue)}; Path=/; Max-Age=31536000`,
@@ -72,7 +71,7 @@ const requestBodyFraQuery = (queryParams: ParsedUrlQuery): BenkOversiktRequestBo
         filters: {
             benktype: erBenkBehandlingKlarEllerVenter(benktype) ? forceArray(benktype) : null,
             behandlingstype: erBenkBehandlingstype(type) ? forceArray(type) : null,
-            status: erBenkStatus(status) ? forceArray(status) : null,
+            status: erBenkBehandlingsstatus(status) ? forceArray(status) : null,
             identer: saksbehandler ? forceArray(saksbehandler) : null,
         },
     };
