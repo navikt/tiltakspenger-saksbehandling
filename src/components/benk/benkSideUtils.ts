@@ -1,4 +1,10 @@
-import { BenkBehandlingsstatus, BenkBehandlingstype } from '~/types/Benk';
+import {
+    BenkBehandlingsstatus,
+    BenkBehandlingstype,
+    BenkKolonne,
+    BenkSortering,
+    BenkSorteringRetning,
+} from '~/types/Benk';
 import { AkselColor } from '@navikt/ds-react/types/theme';
 
 export const benkBehandlingstypeTekst: Record<BenkBehandlingstype, string> = {
@@ -28,3 +34,5 @@ export const benkBehandlingsstatusColor: Record<BenkBehandlingsstatus, AkselColo
     [BenkBehandlingsstatus.UNDER_BESLUTNING]: 'info',
     [BenkBehandlingsstatus.UNDER_AUTOMATISK_BEHANDLING]: 'info',
 } as const;
+
+export const BENK_SORTERING_DEFAULT: BenkSortering = `${BenkKolonne.sistEndret},${BenkSorteringRetning.ASC}`;

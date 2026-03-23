@@ -1,11 +1,10 @@
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
-import { fetchJsonFraApiServerSide } from '~/utils/fetch/fetch-server';
+import { fetchBenkOversikt } from '~/utils/fetch/fetch-server';
 import { BenkSide } from '~/components/benk/BenkSide';
 import { ComponentProps } from 'react';
-import { BenkOversiktRequestBody, BenkOversiktResponse, BenkSorteringRetning } from '~/types/Benk';
+import { BenkOversiktRequestBody, BenkSortering } from '~/types/Benk';
 import { forceArray } from '~/utils/array';
 import { ParsedUrlQuery } from 'node:querystring';
-import { isValueInRecord } from '~/utils/object';
 import {
     BENK_FILTER_COOKIE_NAME,
     benkFiltersFraCookie,
@@ -16,6 +15,7 @@ import {
     erBenkBehandlingKlarEllerVenter,
     harAktiveFiltre,
 } from '~/components/benk/filter/benkFilterUtils';
+import { BENK_SORTERING_DEFAULT } from '~/components/benk/benkSideUtils';
 
 export const getServerSideProps = pageWithAuthentication(async (context) => {
     const filtersFraQuery = benkFiltersFraQuery(context.query);
@@ -47,14 +47,7 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
         }
     }
 
-    const benkOversikt = await fetchJsonFraApiServerSide<BenkOversiktResponse>(
-        context.req,
-        '/behandlinger',
-        {
-            body: JSON.stringify(requestBodyFraQuery(context.query)),
-            method: 'POST',
-        },
-    );
+    const benkOversikt = await fetchBenkOversikt(context.req, requestBodyFraQuery(context.query));
 
     return {
         props: { benkOversikt } satisfies ComponentProps<typeof BenkSide>,
@@ -65,9 +58,7 @@ const requestBodyFraQuery = (queryParams: ParsedUrlQuery): BenkOversiktRequestBo
     const { benktype, type, status, saksbehandler, sortering } = queryParams;
 
     return {
-        sortering: isValueInRecord(sortering, BenkSorteringRetning)
-            ? sortering
-            : BenkSorteringRetning.ASC,
+        sortering: (sortering as BenkSortering) ?? BENK_SORTERING_DEFAULT,
         filters: {
             benktype: erBenkBehandlingKlarEllerVenter(benktype) ? forceArray(benktype) : null,
             behandlingstype: erBenkBehandlingstype(type) ? forceArray(type) : null,

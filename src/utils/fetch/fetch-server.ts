@@ -5,6 +5,8 @@ import { SakProps } from '~/types/Sak';
 import { stripLeadingSlash } from '../string';
 import { errorFraApiResponse } from './fetch';
 import { hentOboToken } from '~/auth/tokens';
+import { BenkOversiktRequestBody, BenkOversiktResponse } from '~/types/Benk';
+import { Saksbehandler } from '~/types/Saksbehandler';
 
 export type NextRequest = Request | IncomingMessage | NextApiRequest;
 
@@ -57,3 +59,12 @@ export const fetchJsonFraApiServerSide = async <JsonResponse>(
 
 export const fetchSak = async (req: NextRequest, saksnummer: string) =>
     fetchJsonFraApiServerSide<SakProps>(req, `/sak/${saksnummer}`);
+
+export const fetchBenkOversikt = async (req: NextRequest, body: BenkOversiktRequestBody) =>
+    fetchJsonFraApiServerSide<BenkOversiktResponse>(req, '/behandlinger', {
+        body: JSON.stringify(body),
+        method: 'POST',
+    });
+
+export const fetchSaksbehandler = async (req: NextRequest) =>
+    fetchJsonFraApiServerSide<Saksbehandler>(req, '/saksbehandler');

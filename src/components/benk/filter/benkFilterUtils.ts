@@ -3,7 +3,7 @@ import {
     BenkBehandling,
     BenkBehandlingsstatus,
     BenkBehandlingstype,
-    BenkFilterQueryParams,
+    BenkFiltersQueryParams,
     BenkFilters,
 } from '~/types/Benk';
 import { isValueInRecord } from '~/utils/object';
@@ -13,8 +13,8 @@ import Cookies from 'js-cookie';
 
 export const BENK_FILTER_COOKIE_NAME = 'benkFilters';
 
-export const benkFiltersTilQueryParams = (benkFilters: BenkFilters): BenkFilterQueryParams => {
-    const queryParams: BenkFilterQueryParams = {};
+export const benkFiltersTilQueryParams = (benkFilters: BenkFilters): BenkFiltersQueryParams => {
+    const queryParams: BenkFiltersQueryParams = {};
 
     const { benktype, type, status, saksbehandler } = benkFilters;
 

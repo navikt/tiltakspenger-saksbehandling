@@ -7,15 +7,11 @@ import NotificationBanner, {
 } from '../notificationBanner/NotificationBanner';
 import { BenkTabell } from '~/components/benk/tabell/BenkTabell';
 import { BenkFilterVelger } from '~/components/benk/filter/BenkFilterVelger';
-import {
-    BenkKolonne,
-    BenkOversiktResponse,
-    BenkSortering,
-    BenkSorteringRetning,
-} from '~/types/Benk';
+import { BenkOversiktResponse, BenkSortering, BenkSorteringRetning } from '~/types/Benk';
+import { isValueInRecord } from '~/utils/object';
+import { BENK_SORTERING_DEFAULT } from '~/components/benk/benkSideUtils';
 
 import styles from './BenkSide.module.css';
-import { isValueInRecord } from '~/utils/object';
 
 type Props = {
     benkOversikt: BenkOversiktResponse;
@@ -73,12 +69,9 @@ export const BenkSide = ({ benkOversikt }: Props) => {
                 onSortChange={(kolonne, sorteringRetning) => {
                     const sortering: BenkSortering = `${kolonne},${sorteringRetning}`;
 
-                    const erDefaultSortering =
-                        sortering === `${BenkKolonne.startet},${BenkSorteringRetning.ASC}`;
-
                     const currentParams = new URLSearchParams(searchParams.toString());
 
-                    if (erDefaultSortering) {
+                    if (sortering === BENK_SORTERING_DEFAULT) {
                         currentParams.delete('sortering');
                     } else {
                         currentParams.set('sortering', sortering);
