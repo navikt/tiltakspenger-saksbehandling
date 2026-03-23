@@ -6,6 +6,7 @@ import {
     BenkSorteringRetning,
 } from '~/types/Benk';
 import { AkselColor } from '@navikt/ds-react/types/theme';
+import { isValueInRecord } from '~/utils/object';
 
 export const benkBehandlingstypeTekst: Record<BenkBehandlingstype, string> = {
     [BenkBehandlingstype.SØKNADSBEHANDLING]: 'Søknadsbehandling',
@@ -35,4 +36,22 @@ export const benkBehandlingsstatusColor: Record<BenkBehandlingsstatus, AkselColo
     [BenkBehandlingsstatus.UNDER_AUTOMATISK_BEHANDLING]: 'info',
 } as const;
 
-export const BENK_SORTERING_DEFAULT: BenkSortering = `${BenkKolonne.sistEndret},${BenkSorteringRetning.ASC}`;
+const DEFAULT_KOLONNE = BenkKolonne.sistEndret;
+const DEFAULT_RETNING = BenkSorteringRetning.ASC;
+
+export const BENK_SORTERING_DEFAULT: BenkSortering = `${DEFAULT_KOLONNE},${DEFAULT_RETNING}`;
+
+export const parseBenkSortering = (
+    sortering: string | null,
+): [BenkKolonne, BenkSorteringRetning] => {
+    if (!sortering) {
+        return [DEFAULT_KOLONNE, DEFAULT_RETNING];
+    }
+
+    const [kolonne, retning] = sortering.split(',');
+
+    return [
+        isValueInRecord(kolonne, BenkKolonne) ? kolonne : DEFAULT_KOLONNE,
+        isValueInRecord(retning, BenkSorteringRetning) ? retning : DEFAULT_RETNING,
+    ];
+};

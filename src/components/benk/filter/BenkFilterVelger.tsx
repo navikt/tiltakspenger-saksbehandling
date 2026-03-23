@@ -55,15 +55,15 @@ export const BenkFilterVelger = ({ benkOversikt, onUpdateFilter }: Props) => {
         [benkOversikt.behandlingssammendrag, innloggetSaksbehandler],
     );
 
-    const submitValgtFilter = (filters: BenkFilters) => {
-        onUpdateFilter(filters);
+    const submitValgtFilter = (submittedFilters: BenkFilters) => {
+        onUpdateFilter(submittedFilters);
         setIsLoading(true);
 
         router
             .push({
                 query: {
                     ...queryUtenBenkFilter(router.query),
-                    ...benkFiltersTilQueryParams(valgtFilter),
+                    ...benkFiltersTilQueryParams(submittedFilters),
                 },
             })
             .finally(() => {

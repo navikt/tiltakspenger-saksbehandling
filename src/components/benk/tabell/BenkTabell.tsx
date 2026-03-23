@@ -1,30 +1,47 @@
 import { useState } from 'react';
-import { BodyShort, Button, CopyButton, HStack, Table, Tag } from '@navikt/ds-react';
 import {
+    BodyShort,
+    Button,
+    CopyButton,
+    HStack,
+    Loader,
+    Skeleton,
+    Table,
+    Tag,
+} from '@navikt/ds-react';
+import {
+    BENK_SORTERING_DEFAULT,
     benkBehandlingsstatusColor,
     benkBehandlingsstatusTekst,
     benkBehandlingstypeTekst,
+    parseBenkSortering,
 } from '../benkSideUtils';
 import { formaterTidspunkt } from '~/utils/date';
 import NextLink from 'next/link';
-import { BenkBehandling, BenkKolonne, BenkSorteringRetning } from '~/types/Benk';
+import { BenkBehandling, BenkKolonne, BenkSortering, BenkSorteringRetning } from '~/types/Benk';
 import { BenkVentestatus } from '~/components/benk/tabell/BenkVentestatus';
 import { behandlingResultatTilTag } from '~/utils/tekstformateringUtils';
 import { personoversiktUrl } from '~/utils/urls';
+import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/router';
 
 import styles from './BenkTabell.module.css';
 
 type Props = {
     behandlinger: BenkBehandling[];
-    sorteringRetningInitial: BenkSorteringRetning;
-    onSortChange: (kolonne: BenkKolonne, sorteringRetning: BenkSorteringRetning) => void;
 };
 
-export const BenkTabell = ({ behandlinger, sorteringRetningInitial, onSortChange }: Props) => {
-    const [sortertKolonne, setSortertKolonne] = useState<BenkKolonne>(BenkKolonne.startet);
+export const BenkTabell = ({ behandlinger }: Props) => {
+    const router = useRouter();
+    const searchParams = useSearchParams();
 
+    const [kolonneFraParams, retningFraParams] = parseBenkSortering(searchParams.get('sortering'));
+
+    const [sortertKolonne, setSortertKolonne] = useState<BenkKolonne>(kolonneFraParams);
     const [sorteringRetning, setSorteringRetning] =
-        useState<BenkSorteringRetning>(sorteringRetningInitial);
+        useState<BenkSorteringRetning>(retningFraParams);
+
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleSorterClick = (kolonne: BenkKolonne) => {
         const nyRetning =
@@ -36,7 +53,27 @@ export const BenkTabell = ({ behandlinger, sorteringRetningInitial, onSortChange
 
         setSorteringRetning(nyRetning);
         setSortertKolonne(kolonne);
-        onSortChange(kolonne, nyRetning);
+
+        const sortering: BenkSortering = `${kolonne},${sorteringRetning}`;
+
+        const currentParams = new URLSearchParams(searchParams.toString());
+
+        if (sortering === BENK_SORTERING_DEFAULT) {
+            currentParams.delete('sortering');
+        } else {
+            currentParams.set('sortering', sortering);
+        }
+
+        setIsLoading(true);
+
+        router
+            .push({
+                pathname: router.pathname,
+                search: currentParams.toString(),
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
     };
 
     return (
@@ -79,7 +116,19 @@ export const BenkTabell = ({ behandlinger, sorteringRetningInitial, onSortChange
             </Table.Header>
 
             <Table.Body>
-                {behandlinger.map((behandling, idx) => {
+                {isLoading && (
+                    <Table.Row>
+                        <Table.DataCell>
+                            <Loader />
+                        </Table.DataCell>
+                        <Table.DataCell>{'Oppdaterer sortering...'}</Table.DataCell>
+                        <Table.DataCell colSpan={7}>
+                            <Skeleton variant={'text'} />
+                        </Table.DataCell>
+                    </Table.Row>
+                )}
+
+                {behandlinger.map((behandling) => {
                     const {
                         status,
                         sakId,
@@ -94,7 +143,7 @@ export const BenkTabell = ({ behandlinger, sorteringRetningInitial, onSortChange
                     } = behandling;
 
                     return (
-                        <Table.Row shadeOnHover={false} key={`${sakId}-${startet}-${idx}`}>
+                        <Table.Row shadeOnHover={false} key={`${sakId}-${startet}`}>
                             <Table.HeaderCell scope="row">
                                 <HStack align={'center'} gap={'space-4'}>
                                     {fnr}
