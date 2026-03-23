@@ -5,7 +5,7 @@ import { ComponentProps } from 'react';
 import { BenkOversiktRequestBody, BenkOversiktResponse, BenkSorteringRetning } from '~/types/Benk';
 import { forceArray } from '~/utils/array';
 import { ParsedUrlQuery } from 'node:querystring';
-import { valueIsInRecord } from '~/utils/object';
+import { isValueInRecord } from '~/utils/object';
 import {
     BENK_FILTER_COOKIE_NAME,
     benkFiltersFraCookie,
@@ -14,7 +14,7 @@ import {
     benkFiltersTilQueryParams,
     erBenkBehandlingstype,
     erBenkStatus,
-    erBenktype,
+    erBenkBehandlingKlarEllerVenter,
     harAktiveFiltre,
 } from '~/components/benk/filter/benkFilterUtils';
 
@@ -66,11 +66,11 @@ const requestBodyFraQuery = (queryParams: ParsedUrlQuery): BenkOversiktRequestBo
     const { benktype, type, status, saksbehandler, sortering } = queryParams;
 
     return {
-        sortering: valueIsInRecord(sortering, BenkSorteringRetning)
+        sortering: isValueInRecord(sortering, BenkSorteringRetning)
             ? sortering
             : BenkSorteringRetning.ASC,
         filters: {
-            benktype: erBenktype(benktype) ? forceArray(benktype) : null,
+            benktype: erBenkBehandlingKlarEllerVenter(benktype) ? forceArray(benktype) : null,
             behandlingstype: erBenkBehandlingstype(type) ? forceArray(type) : null,
             status: erBenkStatus(status) ? forceArray(status) : null,
             identer: saksbehandler ? forceArray(saksbehandler) : null,

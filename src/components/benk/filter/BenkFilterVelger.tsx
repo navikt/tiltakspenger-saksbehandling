@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Button, HStack, Select, VStack } from '@navikt/ds-react';
 import {
-    BehandlingssammendragBenktype,
+    BenkBehandlingKlarEllerVenter,
     BenkBehandlingsstatus,
     BenkBehandlingstype,
     BenkFilters,
@@ -32,10 +32,7 @@ export const BenkFilterVelger = ({ benkOversikt, onUpdateFilter }: Props) => {
     const router = useRouter();
     const searchParams = useSearchParams();
 
-    const aktivtFilter = useCallback(
-        () => benkFiltersFraSearchParams(searchParams),
-        [searchParams],
-    );
+    const aktivtFilter = useMemo(() => benkFiltersFraSearchParams(searchParams), [searchParams]);
 
     const [valgtFilter, setValgtFilter] = useState<BenkFilters>(aktivtFilter);
 
@@ -70,13 +67,13 @@ export const BenkFilterVelger = ({ benkOversikt, onUpdateFilter }: Props) => {
                     value={valgtFilter.benktype ?? ''}
                     onChange={(e) =>
                         oppdaterValgtFilter({
-                            benktype: (e.target.value as BehandlingssammendragBenktype) || null,
+                            benktype: (e.target.value as BenkBehandlingKlarEllerVenter) || null,
                         })
                     }
                 >
                     <option value={''}>{'Alle'}</option>
-                    <option value={BehandlingssammendragBenktype.KLAR}>{'Klar'}</option>
-                    <option value={BehandlingssammendragBenktype.VENTER}>{'Venter'}</option>
+                    <option value={BenkBehandlingKlarEllerVenter.KLAR}>{'Klar'}</option>
+                    <option value={BenkBehandlingKlarEllerVenter.VENTER}>{'Venter'}</option>
                 </Select>
 
                 <Select

@@ -13,9 +13,9 @@ import {
     BenkSortering,
     BenkSorteringRetning,
 } from '~/types/Benk';
-import { Nullable } from '~/types/UtilTypes';
 
 import styles from './BenkSide.module.css';
+import { isValueInRecord } from '~/utils/object';
 
 type Props = {
     benkOversikt: BenkOversiktResponse;
@@ -26,7 +26,10 @@ export const BenkSide = ({ benkOversikt }: Props) => {
     const searchParams = useSearchParams();
     const bannerRef = useRef<NotificationBannerRef>(null);
 
-    const sorteringRetningParam = searchParams.get('sortering') as Nullable<BenkSorteringRetning>;
+    const sorteringRetningParam = searchParams.get('sortering');
+    const sorteringRetning = isValueInRecord(sorteringRetningParam, BenkSorteringRetning)
+        ? sorteringRetningParam
+        : BenkSorteringRetning.ASC;
 
     const { behandlingssammendrag, antallFiltrertPgaTilgang } = benkOversikt;
 
@@ -66,11 +69,12 @@ export const BenkSide = ({ benkOversikt }: Props) => {
 
             <BenkTabell
                 behandlinger={benkOversikt.behandlingssammendrag}
-                sorteringRetningInitial={sorteringRetningParam ?? BenkSorteringRetning.ASC}
+                sorteringRetningInitial={sorteringRetning}
                 onSortChange={(kolonne, sorteringRetning) => {
                     const sortering: BenkSortering = `${kolonne},${sorteringRetning}`;
 
-                    const erDefaultSortering = sortering === `${BenkKolonne.startet},ASC`;
+                    const erDefaultSortering =
+                        sortering === `${BenkKolonne.startet},${BenkSorteringRetning.ASC}`;
 
                     const currentParams = new URLSearchParams(searchParams.toString());
 

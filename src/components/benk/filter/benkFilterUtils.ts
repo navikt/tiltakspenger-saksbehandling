@@ -1,12 +1,12 @@
 import {
-    BehandlingssammendragBenktype,
+    BenkBehandlingKlarEllerVenter,
     BenkBehandling,
     BenkBehandlingsstatus,
     BenkBehandlingstype,
     BenkFilterQueryParams,
     BenkFilters,
 } from '~/types/Benk';
-import { valueIsInRecord } from '~/utils/object';
+import { isValueInRecord } from '~/utils/object';
 import { Saksbehandler } from '~/types/Saksbehandler';
 import { ParsedUrlQuery } from 'node:querystring';
 import Cookies from 'js-cookie';
@@ -41,19 +41,22 @@ export const benkFiltersFraSearchParams = (searchParams: URLSearchParams): BenkF
     const saksbehandler = searchParams.get('saksbehandler');
 
     return {
-        benktype: erBenktype(benktype) ? benktype : null,
+        benktype: erBenkBehandlingKlarEllerVenter(benktype) ? benktype : null,
         type: erBenkBehandlingstype(type) ? type : null,
         status: erBenkStatus(status) ? status : null,
         saksbehandler: typeof saksbehandler === 'string' ? saksbehandler : null,
     };
 };
 
-export const erBenktype = (value: unknown) => valueIsInRecord(value, BehandlingssammendragBenktype);
+export const erBenkBehandlingKlarEllerVenter = (
+    value: unknown,
+): value is BenkBehandlingKlarEllerVenter => isValueInRecord(value, BenkBehandlingKlarEllerVenter);
 
-export const erBenkBehandlingstype = (value: unknown) =>
-    valueIsInRecord(value, BenkBehandlingstype);
+export const erBenkBehandlingstype = (value: unknown): value is BenkBehandlingstype =>
+    isValueInRecord(value, BenkBehandlingstype);
 
-export const erBenkStatus = (value: unknown) => valueIsInRecord(value, BenkBehandlingsstatus);
+export const erBenkStatus = (value: unknown): value is BenkBehandlingsstatus =>
+    isValueInRecord(value, BenkBehandlingsstatus);
 
 export const hentSaksbehandlereTilFiltrering = (
     behandlinger: BenkBehandling[],
@@ -91,7 +94,7 @@ export const queryUtenBenkFilter = (query: ParsedUrlQuery): ParsedUrlQuery => {
 export const benkFiltersFraQuery = (query: ParsedUrlQuery): BenkFilters => {
     const { benktype, type, status, saksbehandler } = query;
     return {
-        benktype: erBenktype(benktype) ? benktype : null,
+        benktype: erBenkBehandlingKlarEllerVenter(benktype) ? benktype : null,
         type: erBenkBehandlingstype(type) ? type : null,
         status: erBenkStatus(status) ? status : null,
         saksbehandler: typeof saksbehandler === 'string' ? saksbehandler : null,
@@ -107,7 +110,7 @@ export const benkFiltersFraCookie = (cookieValue: string | undefined): BenkFilte
         const parsed = JSON.parse(cookieValue) as BenkFilters;
 
         return {
-            benktype: erBenktype(parsed.benktype) ? parsed.benktype : null,
+            benktype: erBenkBehandlingKlarEllerVenter(parsed.benktype) ? parsed.benktype : null,
             type: erBenkBehandlingstype(parsed.type) ? parsed.type : null,
             status: erBenkStatus(parsed.status) ? parsed.status : null,
             saksbehandler: typeof parsed.saksbehandler === 'string' ? parsed.saksbehandler : null,

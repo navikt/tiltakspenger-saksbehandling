@@ -4,7 +4,7 @@ import { RammebehandlingResultat } from '~/types/Rammebehandling';
 export type BenkOversiktRequestBody = {
     sortering: BenkSortering;
     filters: {
-        benktype: ReadonlyArray<BehandlingssammendragBenktype> | null;
+        benktype: ReadonlyArray<BenkBehandlingKlarEllerVenter> | null;
         behandlingstype: ReadonlyArray<BenkBehandlingstype> | null;
         status: ReadonlyArray<BenkBehandlingsstatus> | null;
         identer: ReadonlyArray<string | 'IKKE_TILDELT'> | null;
@@ -54,7 +54,7 @@ export enum BenkBehandlingsstatus {
     KLAR_TIL_FERDIGSTILLING = 'KLAR_TIL_FERDIGSTILLING',
 }
 
-export enum BehandlingssammendragBenktype {
+export enum BenkBehandlingKlarEllerVenter {
     KLAR = 'KLAR',
     VENTER = 'VENTER',
 }
@@ -81,14 +81,14 @@ export type BenkSortering =
     | BenkSorteringRetning;
 
 export type BenkFilters = {
-    benktype?: BehandlingssammendragBenktype | null;
+    benktype?: BenkBehandlingKlarEllerVenter | null;
     type?: BenkBehandlingstype | null;
     status?: BenkBehandlingsstatus | null;
     saksbehandler?: string | 'IKKE_TILDELT' | null;
 };
 
 export type BenkFilterQueryParams = {
-    benktype?: ArrayOrSingle<BehandlingssammendragBenktype>;
+    benktype?: ArrayOrSingle<BenkBehandlingKlarEllerVenter>;
     type?: ArrayOrSingle<BenkBehandlingstype>;
     status?: ArrayOrSingle<BenkBehandlingsstatus>;
     saksbehandler?: ArrayOrSingle<string | 'IKKE_TILDELT'>;
