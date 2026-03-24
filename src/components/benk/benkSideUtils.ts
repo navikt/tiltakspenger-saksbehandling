@@ -36,7 +36,7 @@ export const benkBehandlingsstatusColor: Record<BenkBehandlingsstatus, AkselColo
     [BenkBehandlingsstatus.UNDER_AUTOMATISK_BEHANDLING]: 'info',
 } as const;
 
-const DEFAULT_KOLONNE = BenkKolonne.sistEndret;
+const DEFAULT_KOLONNE = BenkKolonne.startet;
 const DEFAULT_RETNING = BenkSorteringRetning.ASC;
 
 export const BENK_SORTERING_DEFAULT: BenkSortering = `${DEFAULT_KOLONNE},${DEFAULT_RETNING}`;
