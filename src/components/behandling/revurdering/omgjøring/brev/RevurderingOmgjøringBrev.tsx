@@ -37,6 +37,7 @@ export const RevurderingOmgjøringBrev = () => {
                     </Heading>
                     {resultat === RevurderingResultat.OMGJØRING && (
                         <Checkbox
+                            readOnly={skjema.erReadonly}
                             onChange={(e) =>
                                 dispatch({
                                     type: 'setSkalSendeVedtaksbrev',
