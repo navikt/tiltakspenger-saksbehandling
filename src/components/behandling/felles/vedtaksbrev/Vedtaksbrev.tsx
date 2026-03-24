@@ -1,4 +1,4 @@
-import { BodyLong, Heading } from '@navikt/ds-react';
+import { BodyLong } from '@navikt/ds-react';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { VedtakHjelpetekst } from '~/components/behandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
 import { FritekstInput } from '~/components/fritekst/FritekstInput';
@@ -12,13 +12,14 @@ import { useBehandlingSkjema } from '~/components/behandling/context/BehandlingS
 import style from './Vedtaksbrev.module.css';
 
 type Props = {
-    header: string;
+    header: ReactNode;
     hjelpetekst?: ReactNode;
     validering: ValideringResultat;
     hentDto: () => BrevForhåndsvisningDTO;
+    readonly?: boolean;
 };
 
-export const Vedtaksbrev = ({ header, hjelpetekst, validering, hentDto }: Props) => {
+export const Vedtaksbrev = ({ header, hjelpetekst, validering, hentDto, readonly }: Props) => {
     const { behandling } = useBehandling();
     const { fritekstTilVedtaksbrev } = behandling;
 
@@ -27,9 +28,7 @@ export const Vedtaksbrev = ({ header, hjelpetekst, validering, hentDto }: Props)
     return (
         <VedtakSeksjon>
             <VedtakSeksjon.Venstre>
-                <Heading size={'xsmall'} level={'2'}>
-                    {header}
-                </Heading>
+                {header}
                 <BodyLong size={'small'}>{'Teksten vises i vedtaksbrevet til bruker.'}</BodyLong>
             </VedtakSeksjon.Venstre>
             <VedtakSeksjon.Venstre className={style.brev}>
@@ -37,7 +36,7 @@ export const Vedtaksbrev = ({ header, hjelpetekst, validering, hentDto }: Props)
                     label={'Tekst til vedtaksbrev'}
                     description={'Teksten vises i vedtaksbrevet til bruker.'}
                     defaultValue={fritekstTilVedtaksbrev ?? ''}
-                    readOnly={erReadonly}
+                    readOnly={readonly ?? erReadonly}
                     // TODO Gjorde lintingen strengere ved oppgradering til Next 16. Fikset bare åpenbare feil, denne burde undersøkes.
                     /* eslint-disable-next-line react-hooks/refs */
                     ref={textAreas.brevtekst.ref}
@@ -46,6 +45,7 @@ export const Vedtaksbrev = ({ header, hjelpetekst, validering, hentDto }: Props)
                     behandling={behandling}
                     hentDto={hentDto}
                     validering={validering}
+                    readonly={readonly}
                 />
             </VedtakSeksjon.Venstre>
             {hjelpetekst && (

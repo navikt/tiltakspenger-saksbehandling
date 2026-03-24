@@ -60,6 +60,7 @@ const innvilgelseInitialState = (
             innvilgelsesperioder: behandling.innvilgelsesperioder,
             harBarnetillegg: barnetilleggPerioder.length > 0,
             barnetilleggPerioder,
+            skalSendeVedtaksbrev: true,
         },
     };
 };

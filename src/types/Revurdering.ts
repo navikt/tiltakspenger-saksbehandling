@@ -61,6 +61,7 @@ export type OmgjøringInnvilgelse = RevurderingBase & {
     innvilgelsesperioder: Nullable<Innvilgelsesperiode[]>;
     barnetillegg: Nullable<Barnetillegg>;
     omgjørVedtak: VedtakId;
+    skalSendeVedtaksbrev: boolean;
 };
 
 export type OmgjøringOpphør = RevurderingBase & {
@@ -117,6 +118,7 @@ export type OppdaterOmgjøringInnvilgelseDTO = OppdaterBehandlingBaseDTO & {
     innvilgelsesperioder: Innvilgelsesperiode[];
     barnetillegg: Barnetillegg;
     vedtaksperiode: Periode;
+    skalSendeVedtaksbrev: boolean;
 };
 
 export type OppdaterOmgjøringOpphørDTO = OppdaterBehandlingBaseDTO & {

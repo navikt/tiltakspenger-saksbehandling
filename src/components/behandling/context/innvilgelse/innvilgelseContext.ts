@@ -36,6 +36,7 @@ export type InnvilgelseMedPerioderState = {
     innvilgelsesperioder: Innvilgelsesperiode[];
     harBarnetillegg: boolean;
     barnetilleggPerioder: BarnetilleggPeriode[];
+    skalSendeVedtaksbrev: boolean;
 };
 
 export type InnvilgelseState = InnvilgelseUtenPerioderState | InnvilgelseMedPerioderState;
@@ -63,7 +64,8 @@ export const innvilgelseReducer: Reducer<InnvilgelseState, InnvilgelseActions> =
         case 'leggTilInnvilgelsesperiode':
         case 'fjernInnvilgelsesperiode':
         case 'settAntallDager':
-        case 'settTiltaksdeltakelse': {
+        case 'settTiltaksdeltakelse':
+        case 'setSkalSendeVedtaksbrev': {
             return innvilgelsesperioderReducer(state, action);
         }
     }

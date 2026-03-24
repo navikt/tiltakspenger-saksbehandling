@@ -88,6 +88,7 @@ const innvilgelseInitialState = (
             innvilgelsesperioder,
             harBarnetillegg: barnetilleggPerioder.length > 0,
             barnetilleggPerioder,
+            skalSendeVedtaksbrev: true,
         },
     };
 };
@@ -173,6 +174,9 @@ const omgjøringInnvilgelseInitialState = (
         sak,
     );
 
+    console.log('OMGJØRING INNIVELSE INITIAL STATE', behandling);
+    console.log('skal sende vedtaksbrev', behandling.skalSendeVedtaksbrev);
+
     return {
         resultat: RevurderingResultat.OMGJØRING,
         vedtaksperiode,
@@ -181,6 +185,7 @@ const omgjøringInnvilgelseInitialState = (
             innvilgelsesperioder,
             harBarnetillegg: barnetilleggPerioder.length > 0,
             barnetilleggPerioder,
+            skalSendeVedtaksbrev: behandling.skalSendeVedtaksbrev,
         },
     };
 };

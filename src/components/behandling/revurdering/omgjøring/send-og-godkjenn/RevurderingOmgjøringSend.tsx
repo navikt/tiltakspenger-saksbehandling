@@ -54,6 +54,7 @@ const tilDTO = (skjema: OmgjøringContext): Nullable<OppdaterOmgjøringDTO> => {
                           begrunnelse: null,
                           perioder: [],
                       },
+                skalSendeVedtaksbrev: innvilgelse.skalSendeVedtaksbrev,
             } satisfies OppdaterOmgjøringInnvilgelseDTO;
         }
 

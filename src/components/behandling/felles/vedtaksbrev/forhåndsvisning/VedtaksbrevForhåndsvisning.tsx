@@ -16,9 +16,15 @@ type Props = {
     behandling: Rammebehandling;
     hentDto: () => BrevForhåndsvisningDTO;
     validering: ValideringResultat;
+    readonly?: boolean;
 };
 
-export const VedtaksbrevForhåndsvisning = ({ behandling, hentDto, validering }: Props) => {
+export const VedtaksbrevForhåndsvisning = ({
+    behandling,
+    hentDto,
+    validering,
+    readonly,
+}: Props) => {
     const { hentForhåndsvisning, forhåndsvisningLaster, forhåndsvisningError } =
         useHentVedtaksbrevForhåndsvisning(behandling);
 
@@ -43,7 +49,7 @@ export const VedtaksbrevForhåndsvisning = ({ behandling, hentDto, validering }:
                 icon={<EnvelopeOpenIcon />}
                 className={style.knapp}
                 loading={forhåndsvisningLaster}
-                disabled={erAvsluttet(behandling)}
+                disabled={erAvsluttet(behandling) || readonly}
                 onClick={async () => {
                     if (harValideringsfeil) {
                         setShowValidationError(true);

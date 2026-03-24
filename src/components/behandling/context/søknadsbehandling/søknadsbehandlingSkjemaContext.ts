@@ -94,7 +94,8 @@ export const søknadsbehandlingReducer: Reducer<SøknadsbehandlingState, Søknad
         case 'fjernBarnetilleggPeriode':
         case 'oppdaterBarnetilleggAntall':
         case 'oppdaterBarnetilleggPeriode':
-        case 'settBarnetilleggPerioder': {
+        case 'settBarnetilleggPerioder':
+        case 'setSkalSendeVedtaksbrev': {
             if (resultat !== SøknadsbehandlingResultat.INNVILGELSE) {
                 throw Error(`Behandlingen må være en innvilgelse for action type ${type}`);
             }

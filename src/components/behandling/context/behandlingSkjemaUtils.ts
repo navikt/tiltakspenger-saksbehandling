@@ -25,6 +25,7 @@ import { Innvilgelsesperiode } from '~/types/Innvilgelsesperiode';
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';
 import { hentBarnetilleggForBehandling } from '~/components/behandling/felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
 import { OmgjøringContext } from '~/components/behandling/context/revurdering/revurderingOmgjøringSkjemaContext';
+import { RevurderingResultat } from '~/types/Revurdering';
 
 export const ANTALL_DAGER_DEFAULT = 10;
 
@@ -130,6 +131,10 @@ export const lagForhåndsutfyltInnvilgelse = (
         innvilgelsesperioder,
         harBarnetillegg: barnetilleggPerioder.length > 0,
         barnetilleggPerioder,
+        skalSendeVedtaksbrev:
+            behandling.resultat === RevurderingResultat.OMGJØRING
+                ? behandling.skalSendeVedtaksbrev
+                : true,
     };
 };
 

@@ -60,6 +60,12 @@ export type InnvilgelsesperioderActions =
               behandling: Rammebehandling;
               sak: SakProps;
           };
+      }
+    | {
+          type: 'setSkalSendeVedtaksbrev';
+          payload: {
+              skalSendeVedtaksbrev: boolean;
+          };
       };
 
 export const innvilgelsesperioderReducer: Reducer<InnvilgelseState, InnvilgelsesperioderActions> = (
@@ -212,6 +218,15 @@ export const innvilgelsesperioderReducer: Reducer<InnvilgelseState, Innvilgelses
                     ...innvilgelsesperiode,
                     internDeltakelseId: internDeltakelseId,
                 }),
+            };
+        }
+
+        case 'setSkalSendeVedtaksbrev': {
+            const { skalSendeVedtaksbrev } = payload;
+
+            return {
+                ...state,
+                skalSendeVedtaksbrev: skalSendeVedtaksbrev,
             };
         }
     }

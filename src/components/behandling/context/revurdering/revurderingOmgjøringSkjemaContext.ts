@@ -125,7 +125,8 @@ export const omgjøringReducer: Reducer<OmgjøringState, OmgjøringActions> = (s
         case 'fjernBarnetilleggPeriode':
         case 'oppdaterBarnetilleggAntall':
         case 'oppdaterBarnetilleggPeriode':
-        case 'settBarnetilleggPerioder': {
+        case 'settBarnetilleggPerioder':
+        case 'setSkalSendeVedtaksbrev': {
             if (resultat !== RevurderingResultat.OMGJØRING) {
                 throw Error(
                     `Behandlingen må være en omgjøring innvilgelse for action type ${type}`,
