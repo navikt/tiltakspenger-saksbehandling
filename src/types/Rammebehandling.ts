@@ -50,6 +50,7 @@ export interface RammebehandlingBase {
     utbetalingskontroll: Nullable<Utbetalingskontroll>;
     klagebehandlingId: Nullable<KlageId>;
     tilbakekrevingId: Nullable<TilbakekrevingId>;
+    skalSendeVedtaksbrev: boolean;
 }
 
 export type Rammebehandling = Søknadsbehandling | Revurdering;

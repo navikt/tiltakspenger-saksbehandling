@@ -96,6 +96,7 @@ export type OmgjøringResultat =
 export type OppdaterRevurderingStansDTO = OppdaterBehandlingBaseDTO & {
     resultat: RevurderingResultat.STANS;
     valgteHjemler: HjemmelForStans[];
+    skalSendeVedtaksbrev: boolean;
 } & (
         | {
               stansFraOgMed: null;
@@ -111,6 +112,7 @@ export type OppdaterRevurderingInnvilgelseDTO = OppdaterBehandlingBaseDTO & {
     resultat: RevurderingResultat.INNVILGELSE;
     innvilgelsesperioder: Innvilgelsesperiode[];
     barnetillegg: Barnetillegg;
+    skalSendeVedtaksbrev: boolean;
 };
 
 export type OppdaterOmgjøringInnvilgelseDTO = OppdaterBehandlingBaseDTO & {
@@ -125,6 +127,7 @@ export type OppdaterOmgjøringOpphørDTO = OppdaterBehandlingBaseDTO & {
     resultat: RevurderingResultat.OMGJØRING_OPPHØR;
     vedtaksperiode: Periode;
     valgteHjemler: HjemmelForOpphør[];
+    skalSendeVedtaksbrev: boolean;
 };
 
 export type OppdaterOmgjøringIkkeValgtDTO = OppdaterBehandlingBaseDTO & {

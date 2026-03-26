@@ -47,5 +47,6 @@ const tilDTO = (
                   begrunnelse: null,
                   perioder: [],
               },
+        skalSendeVedtaksbrev: innvilgelse.skalSendeVedtaksbrev,
     };
 };

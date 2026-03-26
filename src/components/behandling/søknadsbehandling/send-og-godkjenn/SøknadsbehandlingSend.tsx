@@ -57,6 +57,7 @@ const tilDTO = (skjema: SøknadsbehandlingSkjemaContext): Nullable<OppdaterSøkn
                           perioder: [],
                       },
                 resultat: SøknadsbehandlingResultat.INNVILGELSE,
+                skalSendeVedtaksbrev: innvilgelse.skalSendeVedtaksbrev,
             } satisfies OppdaterSøknadsbehandlingInnvilgelseDTO;
         }
 
@@ -66,6 +67,7 @@ const tilDTO = (skjema: SøknadsbehandlingSkjemaContext): Nullable<OppdaterSøkn
                 begrunnelseVilkårsvurdering: skjema.textAreas.begrunnelse.getValue(),
                 fritekstTilVedtaksbrev: skjema.textAreas.brevtekst.getValue(),
                 resultat: SøknadsbehandlingResultat.AVSLAG,
+                skalSendeVedtaksbrev: skjema.skalSendeVedtaksbrev,
             } satisfies OppdaterSøknadsbehandlingAvslagDTO;
         }
 

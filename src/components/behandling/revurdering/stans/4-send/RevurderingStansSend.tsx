@@ -36,5 +36,6 @@ const tilDTO = (skjema: RevurderingStansContext): OppdaterRevurderingStansDTO =>
                   stansFraOgMed: skjema.fraDato!,
                   harValgtStansFraFørsteDagSomGirRett: false,
               }),
+        skalSendeVedtaksbrev: skjema.skalSendeVedtaksbrev,
     };
 };

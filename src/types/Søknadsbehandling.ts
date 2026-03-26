@@ -47,11 +47,13 @@ export type OppdaterSøknadsbehandlingInnvilgelseDTO = OppdaterBehandlingBaseDTO
     resultat: SøknadsbehandlingResultat.INNVILGELSE;
     innvilgelsesperioder: Innvilgelsesperiode[];
     barnetillegg: Barnetillegg;
+    skalSendeVedtaksbrev: boolean;
 };
 
 export type OppdaterSøknadsbehandlingAvslagDTO = OppdaterBehandlingBaseDTO & {
     resultat: SøknadsbehandlingResultat.AVSLAG;
     avslagsgrunner: Avslagsgrunn[];
+    skalSendeVedtaksbrev: boolean;
 };
 
 export type OppdaterSøknadsbehandlingIkkeValgtDTO = OppdaterBehandlingBaseDTO & {

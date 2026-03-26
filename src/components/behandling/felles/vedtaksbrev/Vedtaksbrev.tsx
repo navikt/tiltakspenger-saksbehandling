@@ -10,6 +10,7 @@ import { useBehandling } from '~/components/behandling/context/BehandlingContext
 import { useBehandlingSkjema } from '~/components/behandling/context/BehandlingSkjemaContext';
 
 import style from './Vedtaksbrev.module.css';
+import { Rammebehandlingsstatus } from '~/types/Rammebehandling';
 
 type Props = {
     header: ReactNode;
@@ -45,7 +46,12 @@ export const Vedtaksbrev = ({ header, hjelpetekst, validering, hentDto, readonly
                     behandling={behandling}
                     hentDto={hentDto}
                     validering={validering}
-                    readonly={readonly}
+                    readonly={
+                        behandling.status === Rammebehandlingsstatus.UNDER_BESLUTNING ||
+                        behandling.status === Rammebehandlingsstatus.KLAR_TIL_BESLUTNING
+                            ? !behandling.skalSendeVedtaksbrev
+                            : (readonly ?? erReadonly)
+                    }
                 />
             </VedtakSeksjon.Venstre>
             {hjelpetekst && (

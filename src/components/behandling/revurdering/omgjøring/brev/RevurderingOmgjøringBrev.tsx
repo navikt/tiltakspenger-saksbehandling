@@ -35,32 +35,37 @@ export const RevurderingOmgjøringBrev = () => {
                             ? 'revurdering av innvilgelse'
                             : 'opphør'}
                     </Heading>
-                    {resultat === RevurderingResultat.OMGJØRING && (
-                        <Checkbox
-                            readOnly={skjema.erReadonly}
-                            onChange={(e) =>
-                                dispatch({
-                                    type: 'setSkalSendeVedtaksbrev',
-                                    payload: { skalSendeVedtaksbrev: !e.target.checked },
-                                })
-                            }
-                            checked={
+
+                    <Checkbox
+                        readOnly={skjema.erReadonly}
+                        onChange={(e) =>
+                            dispatch({
+                                type: 'setSkalSendeVedtaksbrev',
+                                payload: { skalSendeVedtaksbrev: !e.target.checked },
+                            })
+                        }
+                        checked={
+                            (skjema.resultat === RevurderingResultat.OMGJØRING &&
                                 skjema.innvilgelse.harValgtPeriode &&
-                                !skjema.innvilgelse.skalSendeVedtaksbrev
-                            }
-                        >
-                            Ikke send vedtaksbrev
-                        </Checkbox>
-                    )}
+                                !skjema.innvilgelse.skalSendeVedtaksbrev) ||
+                            (skjema.resultat === RevurderingResultat.OMGJØRING_OPPHØR &&
+                                !skjema.skalSendeVedtaksbrev)
+                        }
+                    >
+                        Ikke send vedtaksbrev
+                    </Checkbox>
                 </HStack>
             }
             validering={revurderingOmgjøringValidering(behandling, skjema, sak)}
             hentDto={() => tilForhåndsvisningDTO(skjema)}
             hjelpetekst={<RevurderingBrevHjelpetekst />}
             readonly={
-                resultat === RevurderingResultat.OMGJØRING &&
-                skjema.innvilgelse.harValgtPeriode &&
-                !skjema.innvilgelse.skalSendeVedtaksbrev
+                skjema.erReadonly ||
+                (skjema.resultat === RevurderingResultat.OMGJØRING &&
+                    skjema.innvilgelse.harValgtPeriode &&
+                    !skjema.innvilgelse.skalSendeVedtaksbrev) ||
+                (skjema.resultat === RevurderingResultat.OMGJØRING_OPPHØR &&
+                    !skjema.skalSendeVedtaksbrev)
             }
         />
     );

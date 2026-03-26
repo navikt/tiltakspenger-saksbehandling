@@ -67,6 +67,7 @@ const tilDTO = (skjema: OmgjøringContext): Nullable<OppdaterOmgjøringDTO> => {
                 begrunnelseVilkårsvurdering: textAreas.begrunnelse.getValue(),
                 vedtaksperiode,
                 valgteHjemler,
+                skalSendeVedtaksbrev: skjema.skalSendeVedtaksbrev,
             } satisfies OppdaterOmgjøringOpphørDTO;
         }
 

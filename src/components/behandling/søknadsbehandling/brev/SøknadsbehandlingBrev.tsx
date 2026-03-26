@@ -1,12 +1,13 @@
 import { useSøknadsbehandling } from '../../context/BehandlingContext';
 import { Vedtaksbrev } from '~/components/behandling/felles/vedtaksbrev/Vedtaksbrev';
 import { søknadsbehandlingValidering } from '~/components/behandling/søknadsbehandling/send-og-godkjenn/søknadsbehandlingValidering';
-import { BodyLong } from '@navikt/ds-react';
+import { BodyLong, Checkbox, Heading, HStack } from '@navikt/ds-react';
 import { TekstListe } from '~/components/liste/TekstListe';
 import { SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
 import {
     SøknadsbehandlingSkjemaContext,
     useSøknadsbehandlingSkjema,
+    useSøknadsbehandlingSkjemaDispatch,
 } from '~/components/behandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
 import {
     SøknadsbehandlingAvslagBrevForhåndsvisningDTO,
@@ -20,12 +21,47 @@ export const SøknadsbehandlingBrev = () => {
     const { behandling } = useSøknadsbehandling();
     const skjema = useSøknadsbehandlingSkjema();
 
+    const dispatch = useSøknadsbehandlingSkjemaDispatch();
+
     return (
         <Vedtaksbrev
-            header={'Vedtaksbrev for tiltakspenger og barnetillegg'}
+            header={
+                <HStack justify="space-between" align="center">
+                    <Heading size={'xsmall'} level={'2'}>
+                        Vedtaksbrev for tiltakspenger og barnetillegg
+                    </Heading>
+
+                    <Checkbox
+                        readOnly={skjema.erReadonly}
+                        onChange={(e) =>
+                            dispatch({
+                                type: 'setSkalSendeVedtaksbrev',
+                                payload: { skalSendeVedtaksbrev: !e.target.checked },
+                            })
+                        }
+                        checked={
+                            (skjema.resultat === SøknadsbehandlingResultat.INNVILGELSE &&
+                                skjema.innvilgelse.harValgtPeriode &&
+                                !skjema.innvilgelse.skalSendeVedtaksbrev) ||
+                            (skjema.resultat === SøknadsbehandlingResultat.AVSLAG &&
+                                !skjema.skalSendeVedtaksbrev)
+                        }
+                    >
+                        Ikke send vedtaksbrev
+                    </Checkbox>
+                </HStack>
+            }
             validering={søknadsbehandlingValidering(sak, behandling, skjema)('tilBeslutning')}
             hentDto={() => tilForhåndsvisningDTO(skjema)}
             hjelpetekst={<Hjelpetekst />}
+            readonly={
+                skjema.erReadonly ||
+                (skjema.resultat === SøknadsbehandlingResultat.INNVILGELSE &&
+                    skjema.innvilgelse.harValgtPeriode &&
+                    !skjema.innvilgelse.skalSendeVedtaksbrev) ||
+                (skjema.resultat === SøknadsbehandlingResultat.AVSLAG &&
+                    !skjema.skalSendeVedtaksbrev)
+            }
         />
     );
 };

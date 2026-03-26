@@ -6,21 +6,51 @@ import { revurderingInnvilgelseValidering } from '~/components/behandling/revurd
 import {
     RevurderingInnvilgelseContext,
     useRevurderingInnvilgelseSkjema,
+    useRevurderingInnvilgelseSkjemaDispatch,
 } from '~/components/behandling/context/revurdering/revurderingInnvilgelseSkjemaContext';
 import { useSak } from '~/context/sak/SakContext';
 import { RevurderingBrevHjelpetekst } from '~/components/behandling/revurdering/felles/RevurderingBrevHjelpetekst';
+import { HStack, Heading, Checkbox } from '@navikt/ds-react';
 
 export const RevurderingInnvilgelseBrev = () => {
     const { behandling } = useRevurderingBehandling();
     const skjema = useRevurderingInnvilgelseSkjema();
     const { sak } = useSak();
 
+    const dispatch = useRevurderingInnvilgelseSkjemaDispatch();
+
     return (
         <Vedtaksbrev
-            header={'Vedtaksbrev for revurdering av innvilgelse'}
+            header={
+                <HStack justify="space-between" align="center">
+                    <Heading size={'xsmall'} level={'2'}>
+                        Vedtaksbrev for revurdering av innvilgelse
+                    </Heading>
+
+                    <Checkbox
+                        readOnly={skjema.erReadonly}
+                        onChange={(e) =>
+                            dispatch({
+                                type: 'setSkalSendeVedtaksbrev',
+                                payload: { skalSendeVedtaksbrev: !e.target.checked },
+                            })
+                        }
+                        checked={
+                            skjema.innvilgelse.harValgtPeriode &&
+                            !skjema.innvilgelse.skalSendeVedtaksbrev
+                        }
+                    >
+                        Ikke send vedtaksbrev
+                    </Checkbox>
+                </HStack>
+            }
             validering={revurderingInnvilgelseValidering(behandling, skjema, sak)}
             hentDto={() => tilForhåndsvisningDTO(skjema)}
             hjelpetekst={<RevurderingBrevHjelpetekst />}
+            readonly={
+                skjema.erReadonly ||
+                (skjema.innvilgelse.harValgtPeriode && !skjema.innvilgelse.skalSendeVedtaksbrev)
+            }
         />
     );
 };
