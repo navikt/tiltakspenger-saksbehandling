@@ -14,6 +14,8 @@ export type BenkOversiktRequestBody = {
 export type BenkOversiktResponse = {
     behandlingssammendrag: BenkBehandling[];
     totalAntall: number;
+    limit: number;
+    totalAntallUfiltrert: number;
     antallFiltrertPgaTilgang: number;
 };
 

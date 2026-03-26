@@ -43,18 +43,18 @@ export const BenkTabell = ({ behandlinger }: Props) => {
 
     const [isLoading, setIsLoading] = useState(false);
 
-    const handleSorterClick = (kolonne: BenkKolonne) => {
+    const handleSorterClick = (nyKolonne: BenkKolonne) => {
         const nyRetning =
-            sortertKolonne === kolonne
+            sortertKolonne === nyKolonne
                 ? sorteringRetning === BenkSorteringRetning.DESC
                     ? BenkSorteringRetning.ASC
                     : BenkSorteringRetning.DESC
                 : BenkSorteringRetning.ASC;
 
         setSorteringRetning(nyRetning);
-        setSortertKolonne(kolonne);
+        setSortertKolonne(nyKolonne);
 
-        const sortering: BenkSortering = `${kolonne},${sorteringRetning}`;
+        const sortering: BenkSortering = `${nyKolonne},${nyRetning}`;
 
         const currentParams = new URLSearchParams(searchParams.toString());
 
@@ -81,7 +81,8 @@ export const BenkTabell = ({ behandlinger }: Props) => {
             zebraStripes={true}
             sort={{
                 orderBy: sortertKolonne,
-                direction: sorteringRetning === 'ASC' ? 'ascending' : 'descending',
+                direction:
+                    sorteringRetning === BenkSorteringRetning.ASC ? 'ascending' : 'descending',
             }}
             onSortChange={(sortKey) => handleSorterClick(sortKey as BenkKolonne)}
         >
