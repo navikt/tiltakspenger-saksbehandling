@@ -17,8 +17,6 @@ import { Button, Heading, HStack, InfoCard, LocalAlert, Process, VStack } from '
 import {
     erKlageAvsluttet,
     erKlageMottattFraKAEllerEtter,
-    erKlageOmgjøring,
-    erKlageOpprettholdelse,
     erKlageUnderAktivOmgjøring,
 } from '~/utils/klageUtils';
 import { Rammebehandling } from '~/types/Rammebehandling';
@@ -75,17 +73,8 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
         };
     }
 
-    const vurderingsResultat =
-        erKlageOmgjøring(initialKlage) || erKlageOpprettholdelse(initialKlage)
-            ? initialKlage.resultat
-            : null;
-
-    const omgjøringsbehandling = vurderingsResultat
-        ? (sak.behandlinger.find(
-              (behandling) =>
-                  behandling.klagebehandlingId === initialKlage.id && behandling.avbrutt === null,
-          ) ?? null)
-        : null;
+    const omgjøringsbehandling =
+        sak.behandlinger.find((b) => initialKlage.åpenRammebehandlingId === b.id) ?? null;
 
     return {
         props: {
@@ -236,14 +225,14 @@ const OpprettholdResultat = (props: {
     const kanOppretteNyRammebehandling =
         fåttSvarFraKA &&
         skalKunneOppretteNyRammebehandling(props.klage.resultat.klageinstanshendelser) &&
-        !props.klage.resultat.rammebehandlingId &&
+        !props.klage.åpenRammebehandlingId &&
         !props.omgjøringsbehandling &&
         props.klage.status !== KlagebehandlingStatus.OMGJØRING_ETTER_KLAGEINSTANS &&
         !erReadonlyForSaksbehandler;
 
     const kanFerdigstilleKlage =
         fåttSvarFraKA &&
-        !props.klage.resultat.rammebehandlingId &&
+        !props.klage.åpenRammebehandlingId &&
         props.klage.status !== KlagebehandlingStatus.FERDIGSTILT &&
         props.klage.status !== KlagebehandlingStatus.VEDTATT &&
         !erReadonlyForSaksbehandler;

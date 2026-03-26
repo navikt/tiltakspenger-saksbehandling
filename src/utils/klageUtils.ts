@@ -89,11 +89,11 @@ export const erKlageOmgjøring = (
     return k.resultat?.type === KlagebehandlingResultat.OMGJØR;
 };
 
-export const erKlageKnyttetTilRammebehandling = (k: Klagebehandling): boolean => {
+export const harKlageEnÅpenRammebehandling = (k: Klagebehandling): boolean => {
     return (
         (k.resultat?.type === KlagebehandlingResultat.OMGJØR ||
             k.resultat?.type === KlagebehandlingResultat.OPPRETTHOLDT) &&
-        k.resultat.rammebehandlingId !== null
+        !!k.åpenRammebehandlingId
     );
 };
 
@@ -109,7 +109,7 @@ export const erKlageUnderAktivOmgjøring = (
     k: Klagebehandling,
 ): k is Klagebehandling & {
     resultat: KlagebehandlingsresultatOmgjør & { rammebehandlingId: BehandlingId };
-} => k.resultat?.type === KlagebehandlingResultat.OMGJØR && !!k.resultat.rammebehandlingId;
+} => k.resultat?.type === KlagebehandlingResultat.OMGJØR && !!k.åpenRammebehandlingId;
 
 export const finnSisteGyldigeStegForKlage = (k: Klagebehandling): string => {
     switch (k.resultat?.type) {

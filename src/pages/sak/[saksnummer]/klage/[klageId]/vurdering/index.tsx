@@ -28,7 +28,7 @@ import WarningCircleIcon from '~/icons/WarningCircleIcon';
 import router from 'next/router';
 import {
     erKlageAvsluttet,
-    erKlageKnyttetTilRammebehandling,
+    harKlageEnÅpenRammebehandling,
     erKlageOmgjøring,
     erKlageOpprettholdelse,
     erKlageUnderAktivOmgjøring,
@@ -77,14 +77,9 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
         };
     }
 
-    const omgjørResultat = initialKlage.resultat?.type === 'OMGJØR' ? initialKlage.resultat : null;
+    const omgjøringsbehandling =
+        sak.behandlinger.find((b) => initialKlage.åpenRammebehandlingId === b.id) ?? null;
 
-    const omgjøringsbehandling = omgjørResultat
-        ? (sak.behandlinger.find(
-              (behandling) =>
-                  behandling.id === omgjørResultat.rammebehandlingId && behandling.avbrutt === null,
-          ) ?? null)
-        : null;
     return {
         props: {
             sak,
@@ -158,7 +153,7 @@ const VurderingKlagePage = ({ sak, vedtak, søknader, omgjøringsbehandling }: P
                         <Heading size="small">Vurdering</Heading>
                     </HStack>
 
-                    {erKlageOmgjøring(klage) && erKlageKnyttetTilRammebehandling(klage) && (
+                    {erKlageOmgjøring(klage) && harKlageEnÅpenRammebehandling(klage) && (
                         <InfoCard data-color="info" size="small">
                             <InfoCard.Header>
                                 <InfoCard.Title>Informasjon om formkrav</InfoCard.Title>
