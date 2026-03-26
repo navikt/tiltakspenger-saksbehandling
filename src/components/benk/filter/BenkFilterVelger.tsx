@@ -5,7 +5,7 @@ import {
     BenkBehandlingsstatus,
     BenkBehandlingstype,
     BenkFilters,
-    BenkOversiktResponse,
+    BenkOversiktProps,
 } from '~/types/Benk';
 import {
     benkBehandlingsstatusTekst,
@@ -24,7 +24,7 @@ import {
 import { useSearchParams } from 'next/navigation';
 
 type Props = {
-    benkOversikt: BenkOversiktResponse;
+    benkOversikt: BenkOversiktProps;
     onUpdateFilter: (filter: BenkFilters) => void;
 };
 

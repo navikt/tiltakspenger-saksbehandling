@@ -1,22 +1,34 @@
 import React, { useRef } from 'react';
-import { Alert, BodyShort, Heading, HStack, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Heading, VStack } from '@navikt/ds-react';
 import NotificationBanner, {
     NotificationBannerRef,
 } from '../notificationBanner/NotificationBanner';
 import { BenkTabell } from '~/components/benk/tabell/BenkTabell';
 import { BenkFilterVelger } from '~/components/benk/filter/BenkFilterVelger';
-import { BenkOversiktResponse } from '~/types/Benk';
+import { BenkOversiktProps } from '~/types/Benk';
 
 import styles from './BenkSide.module.css';
 
 type Props = {
-    benkOversikt: BenkOversiktResponse;
+    benkOversikt: BenkOversiktProps;
 };
 
 export const BenkSide = ({ benkOversikt }: Props) => {
     const bannerRef = useRef<NotificationBannerRef>(null);
 
-    const { behandlingssammendrag, antallFiltrertPgaTilgang } = benkOversikt;
+    const {
+        behandlingssammendrag,
+        antallFiltrertPgaTilgang,
+        totalAntallUfiltrert,
+        totalAntall,
+        limit,
+    } = benkOversikt;
+
+    const antallBehandlinger = behandlingssammendrag.length;
+
+    const antallOverLimit = Math.max(totalAntall - limit, 0);
+
+    const antallFiltrertAvFiltervalg = totalAntallUfiltrert - totalAntall;
 
     return (
         <VStack gap={'space-20'} padding={'space-16'}>
@@ -33,24 +45,28 @@ export const BenkSide = ({ benkOversikt }: Props) => {
                 }}
             />
 
-            {benkOversikt.totalAntall > 500 && (
-                <div className={styles.høytAntallBehandlingerContainer}>
-                    <Alert variant="warning" size="small">
-                        Det finnes et høyt antall behandlinger på benken. Oversikten er begrenset,
-                        og vil ikke vise alle behandlinger. Totalt antall behandlinger:{' '}
-                        {benkOversikt.totalAntall}.
-                    </Alert>
-                </div>
+            {antallOverLimit > 0 && (
+                <Alert variant={'warning'} size={'small'} className={styles.høytAntallBehandlinger}>
+                    {`Det finnes et høyt antall behandlinger på benken, vi viser maks ${limit}. `}
+                    {`Totalt antall behandlinger: ${totalAntall}.`}
+                </Alert>
             )}
 
-            <HStack gap={'space-16'}>
-                <BodyShort>{`Antall behandlinger: ${behandlingssammendrag.length}`}</BodyShort>
-                {antallFiltrertPgaTilgang > 0 && (
-                    <BodyShort>
-                        {`Antall behandlinger filtrert vekk pga tilgang: ${antallFiltrertPgaTilgang}`}
-                    </BodyShort>
+            <VStack gap={'space-4'}>
+                <BodyShort>{`Viser ${antallBehandlinger} av ${totalAntallUfiltrert} behandlinger`}</BodyShort>
+
+                {antallFiltrertAvFiltervalg > 0 && (
+                    <Alert variant={'info'} size={'small'} inline={true}>
+                        {`${antallFiltrertAvFiltervalg} filtrert vekk av valgte filtre`}
+                    </Alert>
                 )}
-            </HStack>
+
+                {antallFiltrertPgaTilgang > 0 && (
+                    <Alert variant={'warning'} size={'small'} inline={true}>
+                        {`${antallFiltrertPgaTilgang} filtrert vekk pga manglende tilgang`}
+                    </Alert>
+                )}
+            </VStack>
 
             <BenkTabell behandlinger={benkOversikt.behandlingssammendrag} />
         </VStack>

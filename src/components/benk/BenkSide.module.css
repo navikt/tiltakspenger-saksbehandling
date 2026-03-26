@@ -1,8 +1,4 @@
-.høytAntallBehandlingerContainer {
+.høytAntallBehandlinger {
     display: flex;
-    align-self: flex-start;
-}
-
-.fetchOversiktErrorAlert {
     align-self: flex-start;
 }

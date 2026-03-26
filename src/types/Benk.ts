@@ -11,7 +11,7 @@ export type BenkOversiktRequestBody = {
     };
 };
 
-export type BenkOversiktResponse = {
+export type BenkOversiktProps = {
     behandlingssammendrag: BenkBehandling[];
     totalAntall: number;
     limit: number;
