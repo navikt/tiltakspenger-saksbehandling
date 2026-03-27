@@ -75,7 +75,7 @@ const BeregningOgSimuleringSeksjon = ({
         kanIkkeIverksetteUtbetaling,
     } = utbetaling;
 
-    const { beregning, simuleringstidspunkt } = simulertBeregning;
+    const { beregning, simuleringstidspunkt, beregningstidspunkt } = simulertBeregning;
 
     return (
         <VedtakSeksjon>
@@ -123,9 +123,10 @@ const BeregningOgSimuleringSeksjon = ({
                         tidspunkt={simuleringstidspunkt}
                     />
                 ) : (
-                    <Alert variant={'info'} inline={true}>
-                        {'Ikke simulert'}
-                    </Alert>
+                    <AlertMedTidspunkt
+                        tekst={'Beregning sist utført (ikke simulert)'}
+                        tidspunkt={beregningstidspunkt}
+                    />
                 )}
 
                 {utbetalingskontroll && (

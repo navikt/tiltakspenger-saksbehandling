@@ -16,7 +16,7 @@ interface SimulertBeregningBase {
     behandlingId: MeldekortBehandlingId | BehandlingId;
     behandlingstype: SimulerertBehandlingstype;
     meldeperioder: SimulertBeregningPerMeldeperiode[];
-    beregningstidspunkt: null;
+    beregningstidspunkt: string;
     beregning: BeregningerSummert;
     simuleringstidspunkt: Nullable<string>;
     simuleringsdato: Nullable<string>;
