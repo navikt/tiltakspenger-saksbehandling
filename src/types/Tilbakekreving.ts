@@ -3,6 +3,7 @@ import { Nullable } from '~/types/UtilTypes';
 import { SakId } from '~/types/Sak';
 import { UtbetalingId } from '~/types/Utbetaling';
 import { BeregningKilde } from '~/types/Beregning';
+import { SaksbehandlerBehandlingKommando } from '~/types/BehandlingFelles';
 
 export type TilbakekrevingId = `tilbakekreving_${string}`;
 
@@ -19,11 +20,16 @@ export interface TilbakekrevingBehandling {
     kravgrunnlagTotalPeriode: Periode;
     totaltFeilutbetaltBeløp: number;
     varselSendt: Nullable<string>;
+    saksbehandler: Nullable<string>;
+    beslutter: Nullable<string>;
+    gyldigeKommandoer: SaksbehandlerBehandlingKommando[];
 }
 
 export enum TilbakekrevingBehandlingsstatus {
     OPPRETTET = 'OPPRETTET',
     TIL_BEHANDLING = 'TIL_BEHANDLING',
+    UNDER_BEHANDLING = 'UNDER_BEHANDLING',
     TIL_GODKJENNING = 'TIL_GODKJENNING',
+    UNDER_GODKJENNING = 'UNDER_GODKJENNING',
     AVSLUTTET = 'AVSLUTTET',
 }

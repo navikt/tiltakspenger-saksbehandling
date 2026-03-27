@@ -1,5 +1,5 @@
 import { TilbakekrevingBehandling, TilbakekrevingBehandlingsstatus } from '~/types/Tilbakekreving';
-import { Alert, Button, Heading, Table, VStack } from '@navikt/ds-react';
+import { Alert, BodyLong, Button, Heading, HStack, Link, Table, VStack } from '@navikt/ds-react';
 import {
     formaterDatotekst,
     formaterTidspunktKort,
@@ -12,6 +12,7 @@ import NextLink from 'next/link';
 import { useSak } from '~/context/sak/SakContext';
 import { beregningKildeUrl } from '~/utils/urls';
 import { TilbakekrevingStatusTag } from '~/components/tilbakekreving/TilbakekrevingStatusTag';
+import { TilbakekrevingTildeling } from '~/components/personoversikt/tilbakekreving/TilbakekrevingTildeling';
 
 import style from './TIlbakekrevingOversikt.module.css';
 
@@ -36,36 +37,35 @@ export const TilbakekrevingOversikt = ({ tilbakekrevinger }: Props) => {
 
     return (
         <VStack gap={'space-16'}>
+            <VStack className={style.seksjon}>
+                <Heading size={'small'} level={'3'} className={style.header} spacing={true}>
+                    {'Aktive tilbakekrevingssaker'}
+                </Heading>
+
+                <TilbakekrevingerTabell tilbakekrevinger={aktive} />
+            </VStack>
+
             <Alert variant={'info'} inline={true}>
-                {'Tilbakekrevingssaker behandles i en separat saksbehandlingsløsning'}
+                <BodyLong spacing={true}>
+                    {'Tilbakekrevingssaker behandles i en separat saksbehandlingsløsning.'}
+                </BodyLong>
+                <BodyLong>
+                    {
+                        'Vær obs på at tildeling av behandlinger i TP-sak ikke overføres til tilbakekrevingsløsningen. '
+                    }
+                    {
+                        'Denne funksjonaliteten er kun ment for hjelp til oppgavefordeling, og påvirker ikke behandlingen av tilbakekrevingen.'
+                    }
+                </BodyLong>
             </Alert>
-            <TilbakekrevingSeksjon header={'Aktive tilbakekrevinger'} tilbakekrevinger={aktive} />
-            <TilbakekrevingSeksjon
-                header={'Avsluttede tilbakekrevinger'}
-                tilbakekrevinger={avsluttede}
-            />
-        </VStack>
-    );
-};
 
-type TilbakekrevingSeksjonProps = {
-    header: string;
-    tilbakekrevinger: TilbakekrevingBehandling[];
-};
+            <VStack className={style.seksjon}>
+                <Heading size={'small'} level={'3'} className={style.header} spacing={true}>
+                    {'Avsluttede tilbakekrevingssaker'}
+                </Heading>
 
-const TilbakekrevingSeksjon = ({ header, tilbakekrevinger }: TilbakekrevingSeksjonProps) => {
-    return (
-        <VStack className={style.seksjon}>
-            <Heading size={'small'} level={'3'} className={style.header} spacing={true}>
-                {header}
-            </Heading>
-            {tilbakekrevinger.length > 0 ? (
-                <TilbakekrevingerTabell tilbakekrevinger={tilbakekrevinger} />
-            ) : (
-                <Alert variant={'info'} inline={true} size={'small'}>
-                    {'Ingen behandlinger'}
-                </Alert>
-            )}
+                <TilbakekrevingerTabell tilbakekrevinger={avsluttede} />
+            </VStack>
         </VStack>
     );
 };
@@ -76,6 +76,14 @@ type TilbakekrevingerTabellProps = {
 
 const TilbakekrevingerTabell = ({ tilbakekrevinger }: TilbakekrevingerTabellProps) => {
     const { sak } = useSak();
+
+    if (tilbakekrevinger.length === 0) {
+        return (
+            <Alert variant={'info'} inline={true} size={'small'}>
+                {'Ingen behandlinger'}
+            </Alert>
+        );
+    }
 
     return (
         <Table>
@@ -90,6 +98,8 @@ const TilbakekrevingerTabell = ({ tilbakekrevinger }: TilbakekrevingerTabellProp
                     <Table.HeaderCell scope="col">{'Sist endret'}</Table.HeaderCell>
                     <Table.HeaderCell scope="col">{'Varsel sendt'}</Table.HeaderCell>
                     <Table.HeaderCell scope="col">{'Kilde'}</Table.HeaderCell>
+                    <Table.HeaderCell scope="col">{'Saksbehandler'}</Table.HeaderCell>
+                    <Table.HeaderCell scope="col">{'Beslutter'}</Table.HeaderCell>
                     <Table.HeaderCell scope="col"></Table.HeaderCell>
                 </Table.Row>
             </Table.Header>
@@ -105,6 +115,8 @@ const TilbakekrevingerTabell = ({ tilbakekrevinger }: TilbakekrevingerTabellProp
                         opprettet,
                         sistEndret,
                         beregningKilde,
+                        saksbehandler,
+                        beslutter,
                     } = tilbakekreving;
 
                     return (
@@ -124,30 +136,31 @@ const TilbakekrevingerTabell = ({ tilbakekrevinger }: TilbakekrevingerTabellProp
                                 {varselSendt ? formaterDatotekst(varselSendt) : '-'}
                             </Table.DataCell>
                             <Table.DataCell>
-                                <Button
-                                    as={NextLink}
-                                    href={beregningKildeUrl(beregningKilde, sak)}
-                                    variant={'tertiary'}
-                                    size={'small'}
-                                    className={style.kildeKnapp}
-                                >
+                                <Link as={NextLink} href={beregningKildeUrl(beregningKilde, sak)}>
                                     {beregningKilde.type === BeregningKildeType.MELDEKORT
                                         ? 'Meldekort'
                                         : 'Rammebehandling'}
-                                </Button>
+                                </Link>
                             </Table.DataCell>
+                            <Table.DataCell>{saksbehandler ?? '-'}</Table.DataCell>
+                            <Table.DataCell>{beslutter ?? '-'}</Table.DataCell>
+
                             <Table.DataCell align={'right'}>
-                                <Button
-                                    as={'a'}
-                                    href={url}
-                                    variant={'secondary'}
-                                    size={'small'}
-                                    icon={<ExternalLinkIcon />}
-                                    iconPosition={'right'}
-                                    target={'_blank'}
-                                >
-                                    {'Åpne tilbakekreving'}
-                                </Button>
+                                <HStack gap={'space-16'} align={'center'} justify={'end'}>
+                                    <TilbakekrevingTildeling tilbakekreving={tilbakekreving} />
+
+                                    <Button
+                                        as={'a'}
+                                        href={url}
+                                        variant={'primary'}
+                                        size={'small'}
+                                        icon={<ExternalLinkIcon />}
+                                        iconPosition={'right'}
+                                        target={'_blank'}
+                                    >
+                                        {'Åpne tilbakekreving'}
+                                    </Button>
+                                </HStack>
                             </Table.DataCell>
                         </Table.Row>
                     );
