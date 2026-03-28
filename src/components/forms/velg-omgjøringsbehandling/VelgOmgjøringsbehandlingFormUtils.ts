@@ -6,7 +6,7 @@ import { SøknadId } from '~/types/Søknad';
 export interface VelgOmgjøringsbehandlingFormData {
     behandlingstype: VelgOmgjøringsbehandlingTyper | '';
     søknadId: SøknadId | '';
-    vedtakId: VedtakId | '';
+    vedtakSomSkalOmgjøres: VedtakId | '';
 }
 
 export const velgOmgjøringsbehandlingFormValidation = (data: VelgOmgjøringsbehandlingFormData) => {

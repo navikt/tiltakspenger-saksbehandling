@@ -173,9 +173,10 @@ export const useOpprettholdKlage = (args: {
 export const useFerdigstillKlage = (args: {
     sakId: string;
     klageId: KlageId;
+    begrunnelse: Nullable<string>;
     onSuccess: (klage: Klagebehandling) => void;
 }) =>
-    useFetchJsonFraApi<Klagebehandling>(
+    useFetchJsonFraApi<Klagebehandling, { begrunnelse: Nullable<string> }>(
         `/sak/${args.sakId}/klage/${args.klageId}/ferdigstill`,
         'PATCH',
         { onSuccess: args.onSuccess },
