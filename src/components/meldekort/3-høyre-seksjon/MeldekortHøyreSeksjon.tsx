@@ -10,21 +10,21 @@ import style from './MeldekortHøyreSeksjon.module.css';
 
 export const MeldekortHøyreSeksjon = () => {
     const {
-        alleMeldekortBehandlinger,
-        tidligereMeldekortBehandlinger,
+        alleMeldekortbehandlinger,
+        tidligereMeldekortbehandlinger,
         meldeperiodeKjede,
-        avbrutteMeldekortBehandlinger,
+        avbrutteMeldekortbehandlinger,
     } = useMeldeperiodeKjede();
 
     const { brukersMeldekort, korrigeringFraTidligerePeriode } = meldeperiodeKjede;
 
     const antallTidligereBehandlinger = korrigeringFraTidligerePeriode
-        ? alleMeldekortBehandlinger.length
-        : tidligereMeldekortBehandlinger.length;
+        ? alleMeldekortbehandlinger.length
+        : tidligereMeldekortbehandlinger.length;
 
     const antallBrukersMeldekort = brukersMeldekort.length;
 
-    const antallAvbrutteMeldekortBehandlinger = avbrutteMeldekortBehandlinger.length;
+    const antallAvbrutteMeldekortbehandlinger = avbrutteMeldekortbehandlinger.length;
 
     const defaultTab =
         antallBrukersMeldekort > 0 && antallTidligereBehandlinger === 0
@@ -48,10 +48,10 @@ export const MeldekortHøyreSeksjon = () => {
                 />
                 <Tabs.Tab
                     value={'avsluttedeMeldekort'}
-                    label={`Avsluttede behandlinger (${antallAvbrutteMeldekortBehandlinger})`}
+                    label={`Avsluttede behandlinger (${antallAvbrutteMeldekortbehandlinger})`}
                     icon={<CircleSlashIcon />}
                     className={classNames(
-                        antallAvbrutteMeldekortBehandlinger === 0 && style.tabDisabled,
+                        antallAvbrutteMeldekortbehandlinger === 0 && style.tabDisabled,
                     )}
                 />
             </Tabs.List>
@@ -76,7 +76,7 @@ export const MeldekortHøyreSeksjon = () => {
             </Tabs.Panel>
 
             <Tabs.Panel value={'avsluttedeMeldekort'} lazy={false} className={style.panel}>
-                {antallAvbrutteMeldekortBehandlinger > 0 && <MeldekortAvsluttedeBehandlinger />}
+                {antallAvbrutteMeldekortbehandlinger > 0 && <MeldekortAvsluttedeBehandlinger />}
             </Tabs.Panel>
         </Tabs>
     );

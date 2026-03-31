@@ -1,7 +1,7 @@
 import {
-    MeldekortBehandlingDagStatus,
-    MeldekortBehandlingId,
-} from '~/types/meldekort/MeldekortBehandling';
+    MeldekortbehandlingDagStatus,
+    MeldekortbehandlingId,
+} from '~/types/meldekort/Meldekortbehandling';
 import { Nullable } from '~/types/UtilTypes';
 import { MeldeperiodeKjedeId } from '~/types/meldekort/Meldeperiode';
 import { BeregningerSummert } from '~/types/Beregning';
@@ -13,7 +13,7 @@ export enum SimulerertBehandlingstype {
 }
 
 interface SimulertBeregningBase {
-    behandlingId: MeldekortBehandlingId | BehandlingId;
+    behandlingId: MeldekortbehandlingId | BehandlingId;
     behandlingstype: SimulerertBehandlingstype;
     meldeperioder: SimulertBeregningPerMeldeperiode[];
     beregningstidspunkt: string;
@@ -67,7 +67,7 @@ export type SimulertBeregningDag = {
 } & (SimulertBeregningDagMedBeregning | SimulertBeregningDagUtenBeregning);
 
 export type SimulertBeregningDagMedBeregning = {
-    status: MeldekortBehandlingDagStatus;
+    status: MeldekortbehandlingDagStatus;
     beregning: BeregningerSummert;
 };
 

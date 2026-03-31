@@ -1,9 +1,9 @@
 import { useCallback } from 'react';
 import {
-    MeldekortBehandlingDagStatus,
-    MeldekortBehandlingDTO,
+    MeldekortbehandlingDagStatus,
+    MeldekortbehandlingDTO,
     MeldekortDagProps,
-} from '~/types/meldekort/MeldekortBehandling';
+} from '~/types/meldekort/Meldekortbehandling';
 import { formaterDatotekst } from '~/utils/date';
 import { Nullable } from '~/types/UtilTypes';
 import { GyldigeMeldekortDagUfyllingsvalg } from '~/components/meldekort/0-felles-komponenter/uker/MeldekortUkeBehandling';
@@ -11,16 +11,16 @@ import { FieldErrors } from 'react-hook-form';
 
 export const useCustomMeldekortUtfyllingValidationResolver = () =>
     useCallback(
-        (data: MeldekortBehandlingForm, valideringscontext: { tillattAntallDager: number }) =>
+        (data: MeldekortbehandlingForm, valideringscontext: { tillattAntallDager: number }) =>
             meldekortUtfyllingValidation(data, valideringscontext),
         [],
     );
 
 export const meldekortUtfyllingValidation = (
-    data: MeldekortBehandlingForm,
+    data: MeldekortbehandlingForm,
     valideringscontext: { tillattAntallDager: number },
 ) => {
-    const errors: FieldErrors<MeldekortBehandlingForm> = {};
+    const errors: FieldErrors<MeldekortbehandlingForm> = {};
 
     if (tellDagerMedDeltattEllerFravær(data.dager) > valideringscontext.tillattAntallDager) {
         errors['dager'] = {
@@ -34,7 +34,7 @@ export const meldekortUtfyllingValidation = (
                 Denne er fordi vi teller med dagene som saksbehandler ikke skal få lov til å endre
                 slik at feilmeldingene blir mappet til den riktige indeksen.
                 */
-        if (dag.status === MeldekortBehandlingDagStatus.IkkeRettTilTiltakspenger) {
+        if (dag.status === MeldekortbehandlingDagStatus.IkkeRettTilTiltakspenger) {
             return;
         }
 
@@ -56,17 +56,17 @@ export const meldekortUtfyllingValidation = (
 export const tellDagerMedDeltattEllerFravær = (dager: MeldekortDagProps[]) =>
     dager.filter((dag) => dagerMedDeltattEllerFravær.has(dag.status)).length;
 
-const dagerMedDeltattEllerFravær: ReadonlySet<MeldekortBehandlingDagStatus> = new Set([
-    MeldekortBehandlingDagStatus.DeltattUtenLønnITiltaket,
-    MeldekortBehandlingDagStatus.DeltattMedLønnITiltaket,
-    MeldekortBehandlingDagStatus.FraværSyk,
-    MeldekortBehandlingDagStatus.FraværSyktBarn,
-    MeldekortBehandlingDagStatus.FraværSterkeVelferdsgrunnerEllerJobbintervju,
-    MeldekortBehandlingDagStatus.FraværGodkjentAvNav,
-    MeldekortBehandlingDagStatus.FraværAnnet,
+const dagerMedDeltattEllerFravær: ReadonlySet<MeldekortbehandlingDagStatus> = new Set([
+    MeldekortbehandlingDagStatus.DeltattUtenLønnITiltaket,
+    MeldekortbehandlingDagStatus.DeltattMedLønnITiltaket,
+    MeldekortbehandlingDagStatus.FraværSyk,
+    MeldekortbehandlingDagStatus.FraværSyktBarn,
+    MeldekortbehandlingDagStatus.FraværSterkeVelferdsgrunnerEllerJobbintervju,
+    MeldekortbehandlingDagStatus.FraværGodkjentAvNav,
+    MeldekortbehandlingDagStatus.FraværAnnet,
 ]);
 
-export type MeldekortBehandlingForm = {
+export type MeldekortbehandlingForm = {
     dager: MeldekortDagProps[];
     begrunnelse: string;
     tekstTilVedtaksbrev: string;
@@ -77,9 +77,9 @@ export interface ForhåndsvisMeldekortbehandlingBrevRequest {
     tekstTilVedtaksbrev: Nullable<string>;
 }
 
-export const meldekortBehandlingFormTilDto = (
-    data: MeldekortBehandlingForm,
-): MeldekortBehandlingDTO => ({
+export const meldekortbehandlingFormTilDto = (
+    data: MeldekortbehandlingForm,
+): MeldekortbehandlingDTO => ({
     dager: data.dager,
     begrunnelse: data.begrunnelse.trim() || null,
     tekstTilVedtaksbrev: data.tekstTilVedtaksbrev.trim() || null,

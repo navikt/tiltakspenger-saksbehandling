@@ -1,5 +1,5 @@
 import { Periode } from '../Periode';
-import { MeldekortBehandlingId, MeldekortBehandlingProps } from './MeldekortBehandling';
+import { MeldekortbehandlingId, MeldekortbehandlingProps } from './Meldekortbehandling';
 import { BrukersMeldekortProps } from './BrukersMeldekort';
 import { MeldeperiodeBeregningProps } from '~/types/Beregning';
 
@@ -42,15 +42,15 @@ export type MeldeperiodeKjedeProps = {
     periodeMedÅpenBehandling?: Periode;
     tiltaksnavn: string[];
     meldeperioder: MeldeperiodeProps[];
-    meldekortBehandlinger: MeldekortBehandlingProps[];
+    meldekortbehandlinger: MeldekortbehandlingProps[];
     brukersMeldekort: BrukersMeldekortProps[];
     korrigeringFraTidligerePeriode?: MeldeperiodeKorrigering;
-    avbrutteMeldekortBehandlinger: MeldekortBehandlingProps[];
+    avbrutteMeldekortbehandlinger: MeldekortbehandlingProps[];
     sisteBeregning: MeldeperiodeBeregningProps;
 };
 
 export type MeldeperiodeKorrigering = {
-    meldekortId: MeldekortBehandlingId;
+    meldekortId: MeldekortbehandlingId;
     kjedeId: MeldeperiodeKjedeId;
     periode: Periode;
     iverksatt: string;

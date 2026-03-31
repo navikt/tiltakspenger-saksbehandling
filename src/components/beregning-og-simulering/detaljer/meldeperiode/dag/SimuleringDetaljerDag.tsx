@@ -6,8 +6,8 @@ import {
 import { BodyShort, Button, Table, Tooltip } from '@navikt/ds-react';
 import { classNames } from '~/utils/classNames';
 import { formaterDatotekst } from '~/utils/date';
-import { ikonForMeldekortBehandlingDagStatus } from '~/components/meldekort/0-felles-komponenter/MeldekortIkoner';
-import { meldekortBehandlingDagStatusTekst } from '~/utils/tekstformateringUtils';
+import { ikonForMeldekortbehandlingDagStatus } from '~/components/meldekort/0-felles-komponenter/MeldekortIkoner';
+import { meldekortbehandlingDagStatusTekst } from '~/utils/tekstformateringUtils';
 import { beløpStyle } from '~/components/utbetaling/beløp/beløpStyle';
 import { useState } from 'react';
 import { MinusIcon, PlusIcon } from '@navikt/aksel-icons';
@@ -76,9 +76,9 @@ const BeregningCells = ({ beregning, status }: SimulertBeregningDagMedBeregning)
     return (
         <>
             <Table.DataCell className={style.statusIkon}>
-                {ikonForMeldekortBehandlingDagStatus[status]}
+                {ikonForMeldekortbehandlingDagStatus[status]}
             </Table.DataCell>
-            <Table.DataCell>{meldekortBehandlingDagStatusTekst[status]}</Table.DataCell>
+            <Table.DataCell>{meldekortbehandlingDagStatusTekst[status]}</Table.DataCell>
             <Table.DataCell>{beregning.ordinært.før}</Table.DataCell>
             <Table.DataCell>
                 <strong>{beregning.ordinært.nå}</strong>

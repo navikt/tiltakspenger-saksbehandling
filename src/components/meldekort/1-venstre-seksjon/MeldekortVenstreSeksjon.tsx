@@ -5,12 +5,12 @@ import {
     periodeTilFormatertDatotekst,
     ukenummerFraDatotekst,
 } from '~/utils/date';
-import { MeldekortBehandlingOpprett } from './opprett-behandling/MeldekortBehandlingOpprett';
+import { MeldekortbehandlingOpprett } from './opprett-behandling/MeldekortbehandlingOpprett';
 import {
-    MeldekortBehandlingProps,
-    MeldekortBehandlingStatus,
-    MeldekortBehandlingType,
-} from '~/types/meldekort/MeldekortBehandling';
+    MeldekortbehandlingProps,
+    MeldekortbehandlingStatus,
+    MeldekortbehandlingType,
+} from '~/types/meldekort/Meldekortbehandling';
 import { useSak } from '~/context/sak/SakContext';
 import { ArrayOrSingle } from '~/types/UtilTypes';
 import { forceArray } from '~/utils/array';
@@ -34,7 +34,7 @@ export const MeldekortVenstreSeksjon = () => {
     const { sak } = useSak();
     const { førsteDagSomGirRett, sisteDagSomGirRett, kanSendeInnHelgForMeldekort } = sak;
 
-    const { meldeperiodeKjede, sisteMeldeperiode, sisteMeldekortBehandling } =
+    const { meldeperiodeKjede, sisteMeldeperiode, sisteMeldekortbehandling } =
         useMeldeperiodeKjede();
     const { periode, tiltaksnavn, brukersMeldekort, status } = meldeperiodeKjede;
 
@@ -79,29 +79,29 @@ export const MeldekortVenstreSeksjon = () => {
                         : 'Ikke mottatt'
                 }
             />
-            {sisteMeldekortBehandling ? (
-                <MeldekortBehandlingDetaljer {...sisteMeldekortBehandling} />
+            {sisteMeldekortbehandling ? (
+                <MeldekortbehandlingDetaljer {...sisteMeldekortbehandling} />
             ) : (
-                <MeldekortBehandlingOpprett type={MeldekortBehandlingType.FØRSTE_BEHANDLING} />
+                <MeldekortbehandlingOpprett type={MeldekortbehandlingType.FØRSTE_BEHANDLING} />
             )}
-            {sisteMeldekortBehandling?.attesteringer && (
+            {sisteMeldekortbehandling?.attesteringer && (
                 <OppsummeringAvAttesteringer
-                    attesteringer={sisteMeldekortBehandling.attesteringer}
+                    attesteringer={sisteMeldekortbehandling.attesteringer}
                 />
             )}
         </VStack>
     );
 };
 
-const MeldekortBehandlingDetaljer = ({
+const MeldekortbehandlingDetaljer = ({
     saksbehandler,
     beslutter,
     erAvsluttet,
     status,
-}: MeldekortBehandlingProps) => {
+}: MeldekortbehandlingProps) => {
     return (
         <>
-            {status !== MeldekortBehandlingStatus.AUTOMATISK_BEHANDLET && (
+            {status !== MeldekortbehandlingStatus.AUTOMATISK_BEHANDLET && (
                 <>
                     {saksbehandler && (
                         <MeldekortDetalj header={'Behandler'} tekst={saksbehandler} />
@@ -109,8 +109,8 @@ const MeldekortBehandlingDetaljer = ({
                     {beslutter && <MeldekortDetalj header={'Beslutter'} tekst={beslutter} />}
                 </>
             )}
-            {(erAvsluttet || status === MeldekortBehandlingStatus.KLAR_TIL_BEHANDLING) && (
-                <MeldekortBehandlingOpprett type={MeldekortBehandlingType.KORRIGERING} />
+            {(erAvsluttet || status === MeldekortbehandlingStatus.KLAR_TIL_BEHANDLING) && (
+                <MeldekortbehandlingOpprett type={MeldekortbehandlingType.KORRIGERING} />
             )}
         </>
     );

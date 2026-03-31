@@ -4,7 +4,7 @@ import { useMeldeperiodeKjede } from '../../../context/MeldeperiodeKjedeContext'
 import { useGodkjennMeldekort } from './useGodkjennMeldekort';
 import { useSak } from '~/context/sak/SakContext';
 import { useRef } from 'react';
-import { MeldekortBehandlingProps } from '~/types/meldekort/MeldekortBehandling';
+import { MeldekortbehandlingProps } from '~/types/meldekort/Meldekortbehandling';
 import { Underkjenn } from '../../../../underkjenn/Underkjenn';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import router from 'next/router';
@@ -12,19 +12,19 @@ import { useNotification } from '~/context/NotificationContext';
 import { PERSONOVERSIKT_TABS } from '~/components/personoversikt/Personoversikt';
 
 type Props = {
-    meldekortBehandling: MeldekortBehandlingProps;
+    meldekortbehandling: MeldekortbehandlingProps;
 };
 
-export const MeldekortTaBeslutning = ({ meldekortBehandling }: Props) => {
+export const MeldekortTaBeslutning = ({ meldekortbehandling }: Props) => {
     const { sakId, saksnummer } = useSak().sak;
     const { navigateWithNotification } = useNotification();
     const { setMeldeperiodeKjede } = useMeldeperiodeKjede();
 
     const { godkjennMeldekort, godkjennMeldekortLaster, reset, godkjennMeldekortFeil } =
-        useGodkjennMeldekort(meldekortBehandling.id, sakId);
+        useGodkjennMeldekort(meldekortbehandling.id, sakId);
 
-    const underkjennApi = useFetchJsonFraApi<MeldekortBehandlingProps, { begrunnelse: string }>(
-        `/sak/${sakId}/meldekort/${meldekortBehandling.id}/underkjenn`,
+    const underkjennApi = useFetchJsonFraApi<MeldekortbehandlingProps, { begrunnelse: string }>(
+        `/sak/${sakId}/meldekort/${meldekortbehandling.id}/underkjenn`,
         'POST',
         {
             onSuccess: () => {

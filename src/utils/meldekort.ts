@@ -1,6 +1,6 @@
-import { MeldekortBehandlingProps } from '../types/meldekort/MeldekortBehandling';
+import { MeldekortbehandlingProps } from '~/types/meldekort/Meldekortbehandling';
 
-export const sorterMeldekortBehandlingerAsc = (
-    a: MeldekortBehandlingProps,
-    b: MeldekortBehandlingProps,
+export const sorterMeldekortbehandlingerAsc = (
+    a: MeldekortbehandlingProps,
+    b: MeldekortbehandlingProps,
 ) => (a.opprettet > b.opprettet ? -1 : 1);

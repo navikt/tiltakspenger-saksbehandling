@@ -1,9 +1,9 @@
 import { Box, Table } from '@navikt/ds-react';
 import React from 'react';
 import { formaterDatotekst, ukedagFraDatotekst } from '~/utils/date';
-import { MeldekortDagBeregnetProps } from '~/types/meldekort/MeldekortBehandling';
-import { meldekortBehandlingDagStatusTekst } from '~/utils/tekstformateringUtils';
-import { ikonForMeldekortBehandlingDagStatus } from '../MeldekortIkoner';
+import { MeldekortDagBeregnetProps } from '~/types/meldekort/Meldekortbehandling';
+import { meldekortbehandlingDagStatusTekst } from '~/utils/tekstformateringUtils';
+import { ikonForMeldekortbehandlingDagStatus } from '../MeldekortIkoner';
 import { formatterBeløp } from '~/utils/beløp';
 import { MeldekortUkeBehandling } from './MeldekortUkeBehandling';
 
@@ -38,10 +38,10 @@ export const MeldekortUke = ({ dager, ukeIndex, underBehandling }: Props) => {
                                 <Table.DataCell>{ukedagFraDatotekst(dag.dato)}</Table.DataCell>
                                 <Table.DataCell>{formaterDatotekst(dag.dato)}</Table.DataCell>
                                 <Table.DataCell className={styles.ikon}>
-                                    {ikonForMeldekortBehandlingDagStatus[dag.status]}
+                                    {ikonForMeldekortbehandlingDagStatus[dag.status]}
                                 </Table.DataCell>
                                 <Table.DataCell>
-                                    {meldekortBehandlingDagStatusTekst[dag.status]}
+                                    {meldekortbehandlingDagStatusTekst[dag.status]}
                                 </Table.DataCell>
                                 <Table.DataCell>
                                     {dag.beregningsdag && `${dag.beregningsdag.prosent}%`}

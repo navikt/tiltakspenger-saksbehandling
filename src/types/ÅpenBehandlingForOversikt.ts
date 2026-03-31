@@ -6,7 +6,7 @@ import { RevurderingResultat } from '~/types/Revurdering';
 import { SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
 import { Nullable } from '~/types/UtilTypes';
 import { MeldeperiodeKjedeId, MeldeperiodeKjedeStatus } from '~/types/meldekort/Meldeperiode';
-import { MeldekortBehandlingId } from '~/types/meldekort/MeldekortBehandling';
+import { MeldekortbehandlingId } from '~/types/meldekort/Meldekortbehandling';
 import { KlagebehandlingResultat, KlagebehandlingStatus, KlageId } from './Klage';
 
 // Kan være:
@@ -74,7 +74,7 @@ export interface ÅpenRevurdering extends ÅpenRammebehandlingBase {
 export interface MeldeperiodeKjedeSomMåBehandles extends ÅpenBehandlingBase {
     id: MeldeperiodeKjedeId;
     // Definert dersom det er en åpen meldekortbehandling på kjeden
-    meldekortBehandlingId: Nullable<MeldekortBehandlingId>;
+    meldekortbehandlingId: Nullable<MeldekortbehandlingId>;
     type: ÅpenBehandlingForOversiktType.MELDEKORT;
     periode: Periode;
     status: MeldeperiodeKjedeStatus;

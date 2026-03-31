@@ -144,13 +144,13 @@ const propsForRad = (
             };
         }
         case ÅpenBehandlingForOversiktType.MELDEKORT: {
-            const { periode, meldekortBehandlingId, id, saksbehandler, beslutter, status } =
+            const { periode, meldekortbehandlingId, id, saksbehandler, beslutter, status } =
                 åpenBehandling;
 
-            const meldekortBehandling = meldekortBehandlingId
+            const meldekortbehandling = meldekortbehandlingId
                 ? sak.meldeperiodeKjeder
                       .find((kjede) => kjede.id === id)
-                      ?.meldekortBehandlinger.find((it) => it.id === meldekortBehandlingId)
+                      ?.meldekortbehandlinger.find((it) => it.id === meldekortbehandlingId)
                 : undefined;
 
             return {
@@ -164,7 +164,7 @@ const propsForRad = (
                         sakId={sakId}
                         saksnummer={saksnummer}
                         kjedePeriode={periode}
-                        meldekortBehandling={meldekortBehandling}
+                        meldekortbehandling={meldekortbehandling}
                         meldeperiodeUrl={meldeperiodeUrl(saksnummer, periode)}
                     />
                 ),

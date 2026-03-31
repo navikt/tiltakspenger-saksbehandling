@@ -1,8 +1,8 @@
 import {
-    MeldekortBehandlingProps,
-    MeldekortBehandlingStatus,
-    MeldekortBehandlingType,
-} from '~/types/meldekort/MeldekortBehandling';
+    MeldekortbehandlingProps,
+    MeldekortbehandlingStatus,
+    MeldekortbehandlingType,
+} from '~/types/meldekort/Meldekortbehandling';
 import { Alert, VStack } from '@navikt/ds-react';
 import { BeregningOppsummering } from '~/components/beregning-og-simulering/beregning-oppsummering/BeregningOppsummering';
 import { SimuleringOppsummering } from '~/components/beregning-og-simulering/simulering-oppsummering/SimuleringOppsummering';
@@ -15,13 +15,13 @@ import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
 import { TilbakekrevingOppsummering } from '~/components/tilbakekreving/TilbakekrevingOppsummering';
 
 type Props = {
-    meldekortBehandling: MeldekortBehandlingProps;
+    meldekortbehandling: MeldekortbehandlingProps;
     className?: string;
 };
 
-export const MeldekortBeregningOgSimulering = ({ meldekortBehandling, className }: Props) => {
+export const MeldekortBeregningOgSimulering = ({ meldekortbehandling, className }: Props) => {
     const { innloggetSaksbehandler } = useSaksbehandler();
-    const { setMeldeperiodeKjede, sisteMeldekortBehandling } = useMeldeperiodeKjede();
+    const { setMeldeperiodeKjede, sisteMeldekortbehandling } = useMeldeperiodeKjede();
 
     const {
         status,
@@ -33,7 +33,7 @@ export const MeldekortBeregningOgSimulering = ({ meldekortBehandling, className 
         type,
         kanIkkeIverksetteUtbetaling,
         tilbakekrevingId,
-    } = meldekortBehandling;
+    } = meldekortbehandling;
 
     if (!simulertBeregning) {
         return null;
@@ -44,13 +44,13 @@ export const MeldekortBeregningOgSimulering = ({ meldekortBehandling, className 
     const beløpDiff = beregning.totalt.nå - (beregning.totalt.før ?? 0);
 
     const erIverksatt =
-        status === MeldekortBehandlingStatus.AUTOMATISK_BEHANDLET ||
-        status === MeldekortBehandlingStatus.GODKJENT;
+        status === MeldekortbehandlingStatus.AUTOMATISK_BEHANDLET ||
+        status === MeldekortbehandlingStatus.GODKJENT;
 
     const skalViseUtfallVarsel =
         kanBehandle(innloggetSaksbehandler, saksbehandler) &&
-        type === MeldekortBehandlingType.KORRIGERING &&
-        sisteMeldekortBehandling === meldekortBehandling;
+        type === MeldekortbehandlingType.KORRIGERING &&
+        sisteMeldekortbehandling === meldekortbehandling;
 
     return (
         <VStack className={className} gap={'space-20'}>
@@ -61,7 +61,7 @@ export const MeldekortBeregningOgSimulering = ({ meldekortBehandling, className 
                 navkontorNavn={navkontorNavn}
                 simulertBeregning={simulertBeregning}
                 kanIkkeIverksetteUtbetaling={kanIkkeIverksetteUtbetaling}
-                erOmberegning={type === MeldekortBehandlingType.KORRIGERING}
+                erOmberegning={type === MeldekortbehandlingType.KORRIGERING}
             />
             {skalViseUtfallVarsel && (
                 <Alert variant={'warning'} size={'small'}>
@@ -71,12 +71,12 @@ export const MeldekortBeregningOgSimulering = ({ meldekortBehandling, className 
             <BeregningOppsummering beregninger={beregning} />
             <SimuleringOppsummering
                 simulertBeregning={simulertBeregning}
-                behandlingId={meldekortBehandling.id}
+                behandlingId={meldekortbehandling.id}
                 oppdaterBehandlingEllerKjede={(meldeperiodeKjede) =>
                     setMeldeperiodeKjede(meldeperiodeKjede as MeldeperiodeKjedeProps)
                 }
                 visOppdaterKnapp={kanSaksbehandleForMeldekort(
-                    meldekortBehandling,
+                    meldekortbehandling,
                     innloggetSaksbehandler,
                 )}
             />

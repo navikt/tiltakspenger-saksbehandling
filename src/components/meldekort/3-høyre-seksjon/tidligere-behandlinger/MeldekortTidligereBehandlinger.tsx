@@ -1,9 +1,9 @@
 import { Alert, HStack, Select, VStack } from '@navikt/ds-react';
 import {
-    MeldekortBehandlingProps,
-    MeldekortBehandlingStatus,
-    MeldekortBehandlingType,
-} from '~/types/meldekort/MeldekortBehandling';
+    MeldekortbehandlingProps,
+    MeldekortbehandlingStatus,
+    MeldekortbehandlingType,
+} from '~/types/meldekort/Meldekortbehandling';
 import { MeldekortOppsummering } from '../../0-felles-komponenter/meldekort-oppsummering/MeldekortOppsummering';
 import React, { useMemo, useState } from 'react';
 import { formaterTidspunktKort, periodeTilFormatertDatotekst } from '~/utils/date';
@@ -18,9 +18,9 @@ export const MeldekortTidligereBehandlinger = () => {
 
     const {
         meldeperiodeKjede,
-        sisteMeldekortBehandling,
-        tidligereMeldekortBehandlinger,
-        alleMeldekortBehandlinger,
+        sisteMeldekortbehandling,
+        tidligereMeldekortbehandlinger,
+        alleMeldekortbehandlinger,
     } = useMeldeperiodeKjede();
 
     const { korrigeringFraTidligerePeriode } = meldeperiodeKjede;
@@ -30,15 +30,15 @@ export const MeldekortTidligereBehandlinger = () => {
     const behandlingerOgKorrigeringer = useMemo(
         () =>
             korrigeringFraTidligerePeriode
-                ? sisteMeldekortBehandling?.erAvsluttet
-                    ? alleMeldekortBehandlinger
-                    : [korrigeringFraTidligerePeriode, ...tidligereMeldekortBehandlinger]
-                : tidligereMeldekortBehandlinger,
+                ? sisteMeldekortbehandling?.erAvsluttet
+                    ? alleMeldekortbehandlinger
+                    : [korrigeringFraTidligerePeriode, ...tidligereMeldekortbehandlinger]
+                : tidligereMeldekortbehandlinger,
         [
-            tidligereMeldekortBehandlinger,
+            tidligereMeldekortbehandlinger,
             korrigeringFraTidligerePeriode,
-            alleMeldekortBehandlinger,
-            sisteMeldekortBehandling,
+            alleMeldekortbehandlinger,
+            sisteMeldekortbehandling,
         ],
     );
 
@@ -85,27 +85,27 @@ export const MeldekortTidligereBehandlinger = () => {
                 (erKorrigeringFraTidligerePeriode(valgtBehandling) ? (
                     <MeldekortKorrigertFraTidligerePeriode korrigering={valgtBehandling} />
                 ) : (
-                    <MeldekortOppsummering meldekortBehandling={valgtBehandling} />
+                    <MeldekortOppsummering meldekortbehandling={valgtBehandling} />
                 ))}
         </VStack>
     );
 };
 
 const erKorrigeringFraTidligerePeriode = (
-    behandlingEllerTidligereKorrigering: MeldekortBehandlingProps | MeldeperiodeKorrigering,
+    behandlingEllerTidligereKorrigering: MeldekortbehandlingProps | MeldeperiodeKorrigering,
 ): behandlingEllerTidligereKorrigering is MeldeperiodeKorrigering =>
     !!(behandlingEllerTidligereKorrigering as MeldeperiodeKorrigering).meldekortId;
 
-const optionTekst = (mbeh: MeldekortBehandlingProps | MeldeperiodeKorrigering) => {
+const optionTekst = (mbeh: MeldekortbehandlingProps | MeldeperiodeKorrigering) => {
     if (erKorrigeringFraTidligerePeriode(mbeh)) {
         return `${formaterTidspunktKort(mbeh.iverksatt)} (korrigert via ${periodeTilFormatertDatotekst(mbeh.periode)})`;
     }
 
     const tidspunkt = formaterTidspunktKort(mbeh.godkjentTidspunkt!);
 
-    if (mbeh.type === MeldekortBehandlingType.KORRIGERING) {
+    if (mbeh.type === MeldekortbehandlingType.KORRIGERING) {
         return `${tidspunkt} (korrigering)`;
     }
 
-    return `${tidspunkt} (${mbeh.status === MeldekortBehandlingStatus.AUTOMATISK_BEHANDLET ? 'automatisk behandlet' : 'manuelt behandlet'})`;
+    return `${tidspunkt} (${mbeh.status === MeldekortbehandlingStatus.AUTOMATISK_BEHANDLET ? 'automatisk behandlet' : 'manuelt behandlet'})`;
 };

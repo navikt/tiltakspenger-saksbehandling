@@ -2,26 +2,26 @@ import { Alert, BodyShort, Button, Heading, HStack, Modal, VStack } from '@navik
 import { useState } from 'react';
 import router from 'next/router';
 import {
-    MeldekortBehandlingId,
-    MeldekortBehandlingProps,
-} from '~/types/meldekort/MeldekortBehandling';
+    MeldekortbehandlingId,
+    MeldekortbehandlingProps,
+} from '~/types/meldekort/Meldekortbehandling';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { SakId } from '~/types/Sak';
 
-import style from './MeldekortBehandlingKnapper.module.css';
+import style from './MeldekortbehandlingKnapper.module.css';
 
 export const OvertaMeldekortbehandlingModal = (props: {
     sakId: SakId;
-    meldekortBehandlingId: MeldekortBehandlingId;
+    meldekortbehandlingId: MeldekortbehandlingId;
     overtarFra: string;
     meldeperiodeUrl: string;
     åpen: boolean;
     onClose: () => void;
 }) => {
-    const overtaMeldekortBehandlingApi = useFetchJsonFraApi<
-        MeldekortBehandlingProps,
+    const overtaMeldekortbehandlingApi = useFetchJsonFraApi<
+        MeldekortbehandlingProps,
         { overtarFra: string }
-    >(`/sak/${props.sakId}/meldekort/${props.meldekortBehandlingId}/overta`, 'PATCH', {
+    >(`/sak/${props.sakId}/meldekort/${props.meldekortbehandlingId}/overta`, 'PATCH', {
         onSuccess: () => {
             router.push(props.meldeperiodeUrl);
         },
@@ -41,9 +41,9 @@ export const OvertaMeldekortbehandlingModal = (props: {
             </Modal.Body>
             <Modal.Footer>
                 <VStack gap="space-16">
-                    {overtaMeldekortBehandlingApi.error && (
+                    {overtaMeldekortbehandlingApi.error && (
                         <Alert variant={'error'}>
-                            {overtaMeldekortBehandlingApi.error.message}
+                            {overtaMeldekortbehandlingApi.error.message}
                         </Alert>
                     )}
                     <HStack gap="space-8">
@@ -53,11 +53,11 @@ export const OvertaMeldekortbehandlingModal = (props: {
                         <Button
                             type="button"
                             onClick={() =>
-                                overtaMeldekortBehandlingApi.trigger({
+                                overtaMeldekortbehandlingApi.trigger({
                                     overtarFra: props.overtarFra,
                                 })
                             }
-                            loading={overtaMeldekortBehandlingApi.isMutating}
+                            loading={overtaMeldekortbehandlingApi.isMutating}
                         >
                             Overta behandling
                         </Button>
@@ -68,9 +68,9 @@ export const OvertaMeldekortbehandlingModal = (props: {
     );
 };
 
-const OvertaMeldekortBehandling = (props: {
+const OvertaMeldekortbehandling = (props: {
     sakId: SakId;
-    meldekortBehandlingId: MeldekortBehandlingId;
+    meldekortbehandlingId: MeldekortbehandlingId;
     overtarFra: string;
     meldeperiodeUrl: string;
 }) => {
@@ -83,7 +83,7 @@ const OvertaMeldekortBehandling = (props: {
                     åpen={vilOvertaBehandling}
                     onClose={() => setVilOvertaBehandling(false)}
                     sakId={props.sakId}
-                    meldekortBehandlingId={props.meldekortBehandlingId}
+                    meldekortbehandlingId={props.meldekortbehandlingId}
                     overtarFra={props.overtarFra}
                     meldeperiodeUrl={props.meldeperiodeUrl}
                 />
@@ -102,4 +102,4 @@ const OvertaMeldekortBehandling = (props: {
     );
 };
 
-export default OvertaMeldekortBehandling;
+export default OvertaMeldekortbehandling;

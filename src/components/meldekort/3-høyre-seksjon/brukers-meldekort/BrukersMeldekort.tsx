@@ -7,7 +7,7 @@ import { formaterDatotekst, formaterTidspunkt, ukedagFraDatotekst } from '~/util
 import { ikonForBrukersMeldekortDagStatus } from '../../0-felles-komponenter/MeldekortIkoner';
 import { brukersMeldekortDagStatusTekst } from '~/utils/tekstformateringUtils';
 import { BrukersMeldekortAutomatiskBehandlingStatus } from '~/components/meldekort/3-høyre-seksjon/brukers-meldekort/automatisk-behandling-status/BrukersMeldekortAutomatiskBehandlingStatus';
-import { useMeldekortBehandlingForm } from '~/components/meldekort/context/MeldekortUtfyllingFormContext';
+import { useMeldekortbehandlingForm } from '~/components/meldekort/context/MeldekortUtfyllingFormContext';
 import { ChevronLeftDoubleIcon } from '@navikt/aksel-icons';
 import { useMeldeperiodeKjede } from '~/components/meldekort/context/MeldeperiodeKjedeContext';
 import { hentMeldekortForhåndsutfyllingFraBrukersMeldekort } from '~/components/meldekort/0-felles-komponenter/meldekortForhåndsutfyllingUtils';
@@ -21,14 +21,14 @@ type Props = {
 };
 
 export const BrukersMeldekortVisning = ({ brukersMeldekort }: Props) => {
-    const { sisteMeldeperiode, sisteMeldekortBehandling } = useMeldeperiodeKjede();
+    const { sisteMeldeperiode, sisteMeldekortbehandling } = useMeldeperiodeKjede();
     const { innloggetSaksbehandler } = useSaksbehandler();
 
     const kanBehandle =
-        sisteMeldekortBehandling &&
-        kanSaksbehandleForMeldekort(sisteMeldekortBehandling, innloggetSaksbehandler);
+        sisteMeldekortbehandling &&
+        kanSaksbehandleForMeldekort(sisteMeldekortbehandling, innloggetSaksbehandler);
 
-    const formContext = useMeldekortBehandlingForm();
+    const formContext = useMeldekortbehandlingForm();
 
     const { dager, behandletAutomatiskStatus, mottatt } = brukersMeldekort;
 

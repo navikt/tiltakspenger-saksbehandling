@@ -1,6 +1,6 @@
 import { Alert, BodyShort, Button, Textarea, VStack } from '@navikt/ds-react';
 import { formaterTidspunktKort } from '~/utils/date';
-import { MeldekortBehandlingProps } from '~/types/meldekort/MeldekortBehandling';
+import { MeldekortbehandlingProps } from '~/types/meldekort/Meldekortbehandling';
 import { MeldekortUker } from '../uker/MeldekortUker';
 import { MeldekortBegrunnelse } from '../begrunnelse/MeldekortBegrunnelse';
 import { MeldekortBeregningOgSimulering } from '~/components/meldekort/0-felles-komponenter/beregning-simulering/MeldekortBeregningOgSimulering';
@@ -10,12 +10,12 @@ import { ForhåndsvisMeldekortbehandlingBrevRequest } from '../../2-hovedseksjon
 import styles from './MeldekortOppsummering.module.css';
 
 type Props = {
-    meldekortBehandling: MeldekortBehandlingProps;
+    meldekortbehandling: MeldekortbehandlingProps;
 };
 
-export const MeldekortOppsummering = ({ meldekortBehandling }: Props) => {
+export const MeldekortOppsummering = ({ meldekortbehandling }: Props) => {
     const { sakId, id, beregning, begrunnelse, godkjentTidspunkt, dager, tekstTilVedtaksbrev } =
-        meldekortBehandling;
+        meldekortbehandling;
 
     const forhåndsvisBrev = useFetchBlobFraApi<ForhåndsvisMeldekortbehandlingBrevRequest>(
         `/sak/${sakId}/meldekortbehandling/${id}/forhandsvis`,
@@ -31,7 +31,7 @@ export const MeldekortOppsummering = ({ meldekortBehandling }: Props) => {
                     <strong>{formaterTidspunktKort(godkjentTidspunkt)}</strong>
                 </BodyShort>
             )}
-            <MeldekortBeregningOgSimulering meldekortBehandling={meldekortBehandling} />
+            <MeldekortBeregningOgSimulering meldekortbehandling={meldekortbehandling} />
             {begrunnelse && <MeldekortBegrunnelse readOnly={true} defaultValue={begrunnelse} />}
             {begrunnelse || tekstTilVedtaksbrev ? <Divider orientation="horizontal" /> : null}
             {tekstTilVedtaksbrev && (
@@ -48,7 +48,7 @@ export const MeldekortOppsummering = ({ meldekortBehandling }: Props) => {
                 variant="secondary"
                 size="small"
                 loading={forhåndsvisBrev.isMutating}
-                disabled={meldekortBehandling.erAvsluttet}
+                disabled={meldekortbehandling.erAvsluttet}
                 onClick={() => {
                     forhåndsvisBrev.trigger(
                         { tekstTilVedtaksbrev: tekstTilVedtaksbrev, dager: dager },

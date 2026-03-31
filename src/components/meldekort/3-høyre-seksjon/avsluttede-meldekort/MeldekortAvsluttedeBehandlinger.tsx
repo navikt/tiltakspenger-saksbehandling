@@ -1,5 +1,5 @@
 import { HStack, Select, VStack } from '@navikt/ds-react';
-import { MeldekortBehandlingProps } from '~/types/meldekort/MeldekortBehandling';
+import { MeldekortbehandlingProps } from '~/types/meldekort/Meldekortbehandling';
 import React, { useState } from 'react';
 import { formaterTidspunktKort } from '~/utils/date';
 import { MeldeperiodeKorrigering } from '~/types/meldekort/Meldeperiode';
@@ -11,14 +11,14 @@ import { AvsluttetMeldekortOppsummering } from './AvsluttetMeldekortOppsummering
 export const MeldekortAvsluttedeBehandlinger = () => {
     const [valgtIndex, setValgtIndex] = useState(0);
 
-    const { avbrutteMeldekortBehandlinger } = useMeldeperiodeKjede();
+    const { avbrutteMeldekortbehandlinger } = useMeldeperiodeKjede();
 
     const safeValgtIndex =
-        avbrutteMeldekortBehandlinger.length === 0
+        avbrutteMeldekortbehandlinger.length === 0
             ? 0
-            : Math.min(valgtIndex, avbrutteMeldekortBehandlinger.length - 1);
+            : Math.min(valgtIndex, avbrutteMeldekortbehandlinger.length - 1);
 
-    const valgtBehandling = avbrutteMeldekortBehandlinger.at(safeValgtIndex);
+    const valgtBehandling = avbrutteMeldekortbehandlinger.at(safeValgtIndex);
 
     return (
         <VStack gap={'space-20'}>
@@ -32,7 +32,7 @@ export const MeldekortAvsluttedeBehandlinger = () => {
                     value={safeValgtIndex}
                     size={'small'}
                 >
-                    {avbrutteMeldekortBehandlinger.map((mbeh, index) => {
+                    {avbrutteMeldekortbehandlinger.map((mbeh, index) => {
                         return (
                             <option
                                 value={index}
@@ -49,18 +49,18 @@ export const MeldekortAvsluttedeBehandlinger = () => {
                 </Select>
             </HStack>
             {valgtBehandling && (
-                <AvsluttetMeldekortOppsummering meldekortBehandling={valgtBehandling} />
+                <AvsluttetMeldekortOppsummering meldekortbehandling={valgtBehandling} />
             )}
         </VStack>
     );
 };
 
 const erKorrigeringFraTidligerePeriode = (
-    behandlingEllerTidligereKorrigering: MeldekortBehandlingProps | MeldeperiodeKorrigering,
+    behandlingEllerTidligereKorrigering: MeldekortbehandlingProps | MeldeperiodeKorrigering,
 ): behandlingEllerTidligereKorrigering is MeldeperiodeKorrigering =>
     !!(behandlingEllerTidligereKorrigering as MeldeperiodeKorrigering).meldekortId;
 
-const optionTekst = (mbeh: MeldekortBehandlingProps) => {
+const optionTekst = (mbeh: MeldekortbehandlingProps) => {
     const tidspunkt = formaterTidspunktKort(mbeh.avbrutt!.avbruttTidspunkt);
     return `Avsluttet ${tidspunkt}`;
 };

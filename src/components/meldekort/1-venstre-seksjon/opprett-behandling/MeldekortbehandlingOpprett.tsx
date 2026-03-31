@@ -1,28 +1,28 @@
 import { Alert, Button, Loader, Link } from '@navikt/ds-react';
-import { useOpprettMeldekortBehandling } from './useOpprettMeldekortBehandling';
+import { useOpprettMeldekortbehandling } from './useOpprettMeldekortbehandling';
 import { BekreftelsesModal } from '../../../modaler/BekreftelsesModal';
 import { useRef } from 'react';
 import { useSak } from '~/context/sak/SakContext';
 import { useMeldeperiodeKjede } from '../../context/MeldeperiodeKjedeContext';
-import { MeldekortBehandlingType } from '~/types/meldekort/MeldekortBehandling';
+import { MeldekortbehandlingType } from '~/types/meldekort/Meldekortbehandling';
 import { MeldeperiodeKjedeStatus } from '~/types/meldekort/Meldeperiode';
 import NextLink from 'next/link';
 import { meldeperiodeUrl } from '~/utils/urls';
 import { periodeTilFormatertDatotekst } from '~/utils/date';
 
-import styles from './MeldekortBehandlingOpprett.module.css';
+import styles from './MeldekortbehandlingOpprett.module.css';
 
 type Props = {
-    type: MeldekortBehandlingType;
+    type: MeldekortbehandlingType;
 };
 
-export const MeldekortBehandlingOpprett = ({ type }: Props) => {
+export const MeldekortbehandlingOpprett = ({ type }: Props) => {
     const { sakId, saksnummer } = useSak().sak;
     const { setMeldeperiodeKjede, meldeperiodeKjede } = useMeldeperiodeKjede();
 
     const { id: kjedeId, status: kjedeStatus, periodeMedÅpenBehandling } = meldeperiodeKjede;
 
-    const { opprett, laster, feil } = useOpprettMeldekortBehandling({
+    const { opprett, laster, feil } = useOpprettMeldekortbehandling({
         kjedeId,
         sakId,
     });
@@ -108,16 +108,16 @@ export const MeldekortBehandlingOpprett = ({ type }: Props) => {
 };
 
 const teksterForType = {
-    [MeldekortBehandlingType.FØRSTE_BEHANDLING]: {
+    [MeldekortbehandlingType.FØRSTE_BEHANDLING]: {
         start: 'Start behandling',
         kanIkkeStarte: 'Kan ikke starte behandling av meldekortet',
         modalTittel: 'Start behandling av meldekortet',
         modalTekst: 'Vil du starte behandling av dette meldekortet?',
     },
-    [MeldekortBehandlingType.KORRIGERING]: {
+    [MeldekortbehandlingType.KORRIGERING]: {
         start: 'Start korrigering',
         kanIkkeStarte: 'Kan ikke starte korrigering av meldekortet',
         modalTittel: 'Start korrigering av meldekortet',
         modalTekst: 'Vil du starte korrigering av dette meldekortet?',
     },
-} as const satisfies Record<MeldekortBehandlingType, Record<string, string>>;
+} as const satisfies Record<MeldekortbehandlingType, Record<string, string>>;

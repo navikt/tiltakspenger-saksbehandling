@@ -2,76 +2,76 @@ import React from 'react';
 import { Button, VStack } from '@navikt/ds-react';
 import Link from 'next/link';
 
-import style from './MeldekortBehandlingKnapper.module.css';
+import style from './MeldekortbehandlingKnapper.module.css';
 import {
-    MeldekortBehandlingProps,
-    MeldekortBehandlingStatus,
-} from '~/types/meldekort/MeldekortBehandling';
+    MeldekortbehandlingProps,
+    MeldekortbehandlingStatus,
+} from '~/types/meldekort/Meldekortbehandling';
 import {
-    eierMeldekortBehandling,
-    skalKunneOvertaMeldekortBehandling,
-    skalKunneTaMeldekortBehandling,
+    eierMeldekortbehandling,
+    skalKunneOvertaMeldekortbehandling,
+    skalKunneTaMeldekortbehandling,
 } from '~/utils/tilganger';
 import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
-import OvertaMeldekortBehandling from './OvertaMeldekortBehandling';
+import OvertaMeldekortbehandling from './OvertaMeldekortbehandling';
 import { SakId } from '~/types/Sak';
 import router from 'next/router';
-import { useTaMeldekortBehandling } from './useTaMeldekortBehandling';
-import { useLeggTilbakeMeldekortBehandling } from './useLeggTilbakeMeldekortBehandling';
+import { useTaMeldekortbehandling } from './useTaMeldekortbehandling';
+import { useLeggTilbakeMeldekortbehandling } from './useLeggTilbakeMeldekortbehandling';
 import { TriggerWithOptionsArgs } from 'swr/mutation';
 import { FetcherError } from '~/utils/fetch/fetch';
-import AvsluttMeldekortBehandling from './avsluttMeldekortBehandling/AvsluttMeldekortBehandling';
+import AvsluttMeldekortbehandling from './avsluttMeldekortbehandling/AvsluttMeldekortbehandling';
 import { PERSONOVERSIKT_TABS } from '~/components/personoversikt/Personoversikt';
 
 type Props = {
-    meldekortBehandling: MeldekortBehandlingProps;
+    meldekortbehandling: MeldekortbehandlingProps;
     sakId: SakId;
     meldeperiodeUrl: string;
     saksnummer: string;
 };
 
-export const MeldekortBehandlingKnappForOversikt = ({
-    meldekortBehandling,
+export const MeldekortbehandlingKnappForOversikt = ({
+    meldekortbehandling,
     sakId,
     meldeperiodeUrl,
     saksnummer,
 }: Props) => {
-    const { status, id } = meldekortBehandling;
+    const { status, id } = meldekortbehandling;
 
     const { innloggetSaksbehandler } = useSaksbehandler();
-    const { taMeldekortBehandling, isMeldekortBehandlingMutating } = useTaMeldekortBehandling(
+    const { taMeldekortbehandling, isMeldekortbehandlingMutating } = useTaMeldekortbehandling(
         sakId,
         id,
     );
-    const { leggTilbakeMeldekortBehandling, isLeggTilbakeMeldekortBehandlingMutating } =
-        useLeggTilbakeMeldekortBehandling(sakId, id);
+    const { leggTilbakeMeldekortbehandling, isLeggTilbakeMeldekortbehandlingMutating } =
+        useLeggTilbakeMeldekortbehandling(sakId, id);
 
     switch (status) {
-        case MeldekortBehandlingStatus.UNDER_BEHANDLING:
-        case MeldekortBehandlingStatus.UNDER_BESLUTNING:
-        case MeldekortBehandlingStatus.KLAR_TIL_BEHANDLING:
-            if (!eierMeldekortBehandling(meldekortBehandling, innloggetSaksbehandler)) {
+        case MeldekortbehandlingStatus.UNDER_BEHANDLING:
+        case MeldekortbehandlingStatus.UNDER_BESLUTNING:
+        case MeldekortbehandlingStatus.KLAR_TIL_BEHANDLING:
+            if (!eierMeldekortbehandling(meldekortbehandling, innloggetSaksbehandler)) {
                 if (
-                    innloggetSaksbehandler.navIdent === meldekortBehandling.saksbehandler ||
-                    innloggetSaksbehandler.navIdent === meldekortBehandling.beslutter
+                    innloggetSaksbehandler.navIdent === meldekortbehandling.saksbehandler ||
+                    innloggetSaksbehandler.navIdent === meldekortbehandling.beslutter
                 ) {
                     return null;
                 }
 
                 if (
-                    skalKunneOvertaMeldekortBehandling(meldekortBehandling, innloggetSaksbehandler)
+                    skalKunneOvertaMeldekortbehandling(meldekortbehandling, innloggetSaksbehandler)
                 ) {
                     return (
-                        <OvertaMeldekortBehandling
+                        <OvertaMeldekortbehandling
                             sakId={sakId}
-                            meldekortBehandlingId={id}
+                            meldekortbehandlingId={id}
                             overtarFra={
-                                meldekortBehandling.status ===
-                                MeldekortBehandlingStatus.UNDER_BEHANDLING
-                                    ? meldekortBehandling.saksbehandler!
-                                    : meldekortBehandling.status ===
-                                        MeldekortBehandlingStatus.UNDER_BESLUTNING
-                                      ? meldekortBehandling.beslutter!
+                                meldekortbehandling.status ===
+                                MeldekortbehandlingStatus.UNDER_BEHANDLING
+                                    ? meldekortbehandling.saksbehandler!
+                                    : meldekortbehandling.status ===
+                                        MeldekortbehandlingStatus.UNDER_BESLUTNING
+                                      ? meldekortbehandling.beslutter!
                                       : 'Ukjent saksbehandler/beslutter'
                             }
                             meldeperiodeUrl={meldeperiodeUrl}
@@ -79,12 +79,12 @@ export const MeldekortBehandlingKnappForOversikt = ({
                     );
                 }
 
-                if (skalKunneTaMeldekortBehandling(meldekortBehandling, innloggetSaksbehandler)) {
+                if (skalKunneTaMeldekortbehandling(meldekortbehandling, innloggetSaksbehandler)) {
                     return (
                         <TildelMegButton
-                            isMeldekortBehandlingMutating={isMeldekortBehandlingMutating}
+                            isMeldekortbehandlingMutating={isMeldekortbehandlingMutating}
                             meldeperiodeUrl={meldeperiodeUrl}
-                            taMeldekortBehandling={taMeldekortBehandling}
+                            taMeldekortbehandling={taMeldekortbehandling}
                         />
                     );
                 }
@@ -107,35 +107,35 @@ export const MeldekortBehandlingKnappForOversikt = ({
                         className={style.knapp}
                         size={'small'}
                         variant={'secondary'}
-                        loading={isLeggTilbakeMeldekortBehandlingMutating}
+                        loading={isLeggTilbakeMeldekortbehandlingMutating}
                         as={'a'}
                         onClick={(e) => {
                             e.preventDefault();
-                            leggTilbakeMeldekortBehandling().then(() => {
+                            leggTilbakeMeldekortbehandling().then(() => {
                                 router.push(`/sak/${saksnummer}#${PERSONOVERSIKT_TABS.meldekort}`);
                             });
                         }}
                     >
                         {'Legg tilbake'}
                     </Button>
-                    <AvsluttMeldekortBehandling
+                    <AvsluttMeldekortbehandling
                         sakId={sakId}
-                        meldekortBehandlingId={id}
+                        meldekortbehandlingId={id}
                         personoversiktUrl={`/sak/${saksnummer}`}
                     />
                 </VStack>
             );
 
-        case MeldekortBehandlingStatus.KLAR_TIL_BESLUTNING: {
-            if (!skalKunneTaMeldekortBehandling(meldekortBehandling, innloggetSaksbehandler)) {
+        case MeldekortbehandlingStatus.KLAR_TIL_BESLUTNING: {
+            if (!skalKunneTaMeldekortbehandling(meldekortbehandling, innloggetSaksbehandler)) {
                 break;
             }
 
             return (
                 <TildelMegButton
-                    isMeldekortBehandlingMutating={isMeldekortBehandlingMutating}
+                    isMeldekortbehandlingMutating={isMeldekortbehandlingMutating}
                     meldeperiodeUrl={meldeperiodeUrl}
-                    taMeldekortBehandling={taMeldekortBehandling}
+                    taMeldekortbehandling={taMeldekortbehandling}
                 />
             );
         }
@@ -145,10 +145,10 @@ export const MeldekortBehandlingKnappForOversikt = ({
 };
 
 const TildelMegButton = (props: {
-    isMeldekortBehandlingMutating: boolean;
+    isMeldekortbehandlingMutating: boolean;
     meldeperiodeUrl: string;
-    taMeldekortBehandling: TriggerWithOptionsArgs<
-        MeldekortBehandlingProps,
+    taMeldekortbehandling: TriggerWithOptionsArgs<
+        MeldekortbehandlingProps,
         FetcherError,
         string,
         undefined
@@ -160,12 +160,12 @@ const TildelMegButton = (props: {
                 className={style.knapp}
                 size={'small'}
                 variant={'primary'}
-                loading={props.isMeldekortBehandlingMutating}
+                loading={props.isMeldekortbehandlingMutating}
                 as={'a'}
                 href={props.meldeperiodeUrl}
                 onClick={(e) => {
                     e.preventDefault();
-                    props.taMeldekortBehandling().then(() => {
+                    props.taMeldekortbehandling().then(() => {
                         router.push(props.meldeperiodeUrl);
                     });
                 }}

@@ -6,27 +6,27 @@ import { useSak } from '~/context/sak/SakContext';
 import { MeldekortHøyreSeksjon } from './3-høyre-seksjon/MeldekortHøyreSeksjon';
 import { useMeldeperiodeKjede } from './context/MeldeperiodeKjedeContext';
 import { BrukersMeldekortProps } from '~/types/meldekort/BrukersMeldekort';
-import { erMeldekortBehandlingUnderAktivBehandling } from '~/utils/meldekortBehandling';
+import { erMeldekortbehandlingUnderAktivBehandling } from '~/utils/meldekortbehandling';
 import { PERSONOVERSIKT_TABS } from '~/components/personoversikt/Personoversikt';
-import { MeldekortBehandlingFormProvider } from '~/components/meldekort/context/MeldekortUtfyllingFormContext';
+import { MeldekortbehandlingFormProvider } from '~/components/meldekort/context/MeldekortUtfyllingFormContext';
 
 import style from './MeldekortSide.module.css';
 
 export const MeldekortSide = () => {
     const { sakId, saksnummer } = useSak().sak;
-    const { brukersMeldekort, sisteMeldekortBehandling } = useMeldeperiodeKjede();
+    const { brukersMeldekort, sisteMeldekortbehandling } = useMeldeperiodeKjede();
 
     //kan være undefined - bruker har enda ikke sendt inn meldekort, og saksbehandler oppretter meldekortbehandling uten meldekort
     const sisteInnsendteMeldekort: BrukersMeldekortProps | undefined = brukersMeldekort.toSorted(
         (a, b) => b.mottatt.localeCompare(a.mottatt),
     )[0];
 
-    const erSisteMeldekortEtterMeldekortBehandling =
+    const erSisteMeldekortEtterMeldekortbehandling =
         sisteInnsendteMeldekort &&
-        sisteMeldekortBehandling &&
+        sisteMeldekortbehandling &&
         new Date(sisteInnsendteMeldekort.mottatt).getTime() >
-            new Date(sisteMeldekortBehandling.opprettet).getTime() &&
-        erMeldekortBehandlingUnderAktivBehandling(sisteMeldekortBehandling);
+            new Date(sisteMeldekortbehandling.opprettet).getTime() &&
+        erMeldekortbehandlingUnderAktivBehandling(sisteMeldekortbehandling);
 
     return (
         <VStack>
@@ -36,7 +36,7 @@ export const MeldekortSide = () => {
                 visTilbakeKnapp={true}
                 aktivTab={PERSONOVERSIKT_TABS.meldekort}
             />
-            {erSisteMeldekortEtterMeldekortBehandling && (
+            {erSisteMeldekortEtterMeldekortbehandling && (
                 <Alert variant="warning" size="small">
                     Det har kommet inn et nytt korrigert meldekort etter opprettelsen av
                     meldekortbehandlingen.
@@ -44,10 +44,10 @@ export const MeldekortSide = () => {
             )}
             <div className={style.behandlingLayout}>
                 <MeldekortVenstreSeksjon />
-                <MeldekortBehandlingFormProvider>
+                <MeldekortbehandlingFormProvider>
                     <MeldekortHovedseksjon />
                     <MeldekortHøyreSeksjon />
-                </MeldekortBehandlingFormProvider>
+                </MeldekortbehandlingFormProvider>
             </div>
         </VStack>
     );

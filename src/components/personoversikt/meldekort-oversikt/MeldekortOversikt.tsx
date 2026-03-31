@@ -7,29 +7,29 @@ import { formaterTidspunkt, periodeTilFormatertDatotekst } from '~/utils/date';
 import { MeldeperiodeKjedeProps, MeldeperiodeKjedeStatus } from '~/types/meldekort/Meldeperiode';
 import { meldeperiodeUrl } from '~/utils/urls';
 import {
-    MeldekortBehandlingProps,
-    MeldekortBehandlingStatus,
-    MeldekortBehandlingType,
-} from '~/types/meldekort/MeldekortBehandling';
+    MeldekortbehandlingProps,
+    MeldekortbehandlingStatus,
+    MeldekortbehandlingType,
+} from '~/types/meldekort/Meldekortbehandling';
 import { formatterBeløp } from '~/utils/beløp';
-import { sorterMeldekortBehandlingerAsc } from '~/utils/meldekort';
+import { sorterMeldekortbehandlingerAsc } from '~/utils/meldekort';
 import { SakId } from '~/types/Sak';
 import router from 'next/router';
 import { Periode } from '~/types/Periode';
 import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
-import { useTaMeldekortBehandling } from './useTaMeldekortBehandling';
-import { useLeggTilbakeMeldekortBehandling } from './useLeggTilbakeMeldekortBehandling';
+import { useTaMeldekortbehandling } from './useTaMeldekortbehandling';
+import { useLeggTilbakeMeldekortbehandling } from './useLeggTilbakeMeldekortbehandling';
 import { TriggerWithOptionsArgs } from 'swr/mutation';
 import { FetcherError } from '~/utils/fetch/fetch';
 import {
-    eierMeldekortBehandling,
-    skalKunneOvertaMeldekortBehandling,
-    skalKunneTaMeldekortBehandling,
+    eierMeldekortbehandling,
+    skalKunneOvertaMeldekortbehandling,
+    skalKunneTaMeldekortbehandling,
 } from '~/utils/tilganger';
-import { OvertaMeldekortbehandlingModal } from './OvertaMeldekortBehandling';
-import { AvsluttMeldekortbehandlingModal } from './avsluttMeldekortBehandling/AvsluttMeldekortBehandling';
+import { OvertaMeldekortbehandlingModal } from './OvertaMeldekortbehandling';
+import { AvsluttMeldekortbehandlingModal } from './avsluttMeldekortbehandling/AvsluttMeldekortbehandling';
 import React, { useState } from 'react';
-import { erMeldekortBehandlingUnderAktivBehandling } from '~/utils/meldekortBehandling';
+import { erMeldekortbehandlingUnderAktivBehandling } from '~/utils/meldekortbehandling';
 import {
     ArrowLeftIcon,
     ArrowRightIcon,
@@ -65,7 +65,7 @@ export const MeldekortOversikt = ({ meldeperiodeKjeder, saksnummer, sakId }: Pro
                     .toSorted((a, b) => (a.periode.fraOgMed > b.periode.fraOgMed ? -1 : 1))
                     .map((kjede) => {
                         const {
-                            meldekortBehandlinger,
+                            meldekortbehandlinger,
                             id,
                             status,
                             periode,
@@ -76,21 +76,21 @@ export const MeldekortOversikt = ({ meldeperiodeKjeder, saksnummer, sakId }: Pro
                         //TODO - raq - vi er interessert i å vise mottatt - men fra hvilket meldekort egentlig?
                         const sisteBrukersMeldekort = brukersMeldekort.at(-1);
 
-                        const sisteMeldekortBehandling = meldekortBehandlinger
-                            .toSorted(sorterMeldekortBehandlingerAsc)
+                        const sisteMeldekortbehandling = meldekortbehandlinger
+                            .toSorted(sorterMeldekortbehandlingerAsc)
                             .at(0);
 
                         const beregnetBeløpForPeriode =
                             korrigeringFraTidligerePeriode?.beregning.beløp.totalt ??
-                            sisteMeldekortBehandling?.beregning?.beregningForMeldekortetsPeriode
+                            sisteMeldekortbehandling?.beregning?.beregningForMeldekortetsPeriode
                                 .beløp.totalt;
 
                         const erKorrigering =
                             status !== MeldeperiodeKjedeStatus.KORRIGERT_MELDEKORT &&
-                            sisteMeldekortBehandling?.type === MeldekortBehandlingType.KORRIGERING;
+                            sisteMeldekortbehandling?.type === MeldekortbehandlingType.KORRIGERING;
 
                         const korrigeringTekst =
-                            korrigeringFraTidligerePeriode && sisteMeldekortBehandling?.erAvsluttet
+                            korrigeringFraTidligerePeriode && sisteMeldekortbehandling?.erAvsluttet
                                 ? ` (korrigert via ${periodeTilFormatertDatotekst(korrigeringFraTidligerePeriode.periode)})`
                                 : erKorrigering
                                   ? ' (korrigering)'
@@ -108,9 +108,9 @@ export const MeldekortOversikt = ({ meldeperiodeKjeder, saksnummer, sakId }: Pro
                                         : '-'}
                                 </Table.DataCell>
                                 <Table.DataCell>
-                                    {sisteMeldekortBehandling?.utbetalingsstatus
+                                    {sisteMeldekortbehandling?.utbetalingsstatus
                                         ? utbetalingsstatusTekst[
-                                              sisteMeldekortBehandling.utbetalingsstatus
+                                              sisteMeldekortbehandling.utbetalingsstatus
                                           ]
                                         : '-'}
                                 </Table.DataCell>
@@ -121,12 +121,12 @@ export const MeldekortOversikt = ({ meldeperiodeKjeder, saksnummer, sakId }: Pro
                                 </Table.DataCell>
                                 <Table.DataCell>
                                     {(!(status === MeldeperiodeKjedeStatus.AUTOMATISK_BEHANDLET) &&
-                                        sisteMeldekortBehandling?.saksbehandler) ||
+                                        sisteMeldekortbehandling?.saksbehandler) ||
                                         '-'}
                                 </Table.DataCell>
                                 <Table.DataCell>
                                     {(!(status === MeldeperiodeKjedeStatus.AUTOMATISK_BEHANDLET) &&
-                                        sisteMeldekortBehandling?.beslutter) ||
+                                        sisteMeldekortbehandling?.beslutter) ||
                                         '-'}
                                 </Table.DataCell>
                                 <Table.DataCell scope="col" align="right">
@@ -134,7 +134,7 @@ export const MeldekortOversikt = ({ meldeperiodeKjeder, saksnummer, sakId }: Pro
                                         sakId={sakId}
                                         saksnummer={saksnummer}
                                         kjedePeriode={periode}
-                                        meldekortBehandling={sisteMeldekortBehandling}
+                                        meldekortbehandling={sisteMeldekortbehandling}
                                         meldeperiodeUrl={meldeperiodeUrl(saksnummer, periode)}
                                     />
                                 </Table.DataCell>
@@ -154,36 +154,36 @@ export const MeldeperiodeKjedeOversiktMeny = (props: {
     saksnummer: string;
     kjedePeriode: Periode;
     meldeperiodeUrl: string;
-    meldekortBehandling?: MeldekortBehandlingProps;
+    meldekortbehandling?: MeldekortbehandlingProps;
 }) => {
     const [vilAvslutteBehandling, setVilAvslutteBehandling] = useState(false);
     const [vilOvertaBehandling, setVilOvertaBehandling] = useState(false);
 
     return (
         <div>
-            {vilAvslutteBehandling && props.meldekortBehandling && (
+            {vilAvslutteBehandling && props.meldekortbehandling && (
                 <AvsluttMeldekortbehandlingModal
                     åpen={vilAvslutteBehandling}
                     onClose={() => setVilAvslutteBehandling(false)}
                     sakId={props.sakId}
-                    meldekortBehandlingId={props.meldekortBehandling.id}
+                    meldekortbehandlingId={props.meldekortbehandling.id}
                     personoversiktUrl={`/sak/${props.saksnummer}`}
                 />
             )}
 
-            {vilOvertaBehandling && props.meldekortBehandling && (
+            {vilOvertaBehandling && props.meldekortbehandling && (
                 <OvertaMeldekortbehandlingModal
                     åpen={vilOvertaBehandling}
                     onClose={() => setVilOvertaBehandling(false)}
                     sakId={props.sakId}
-                    meldekortBehandlingId={props.meldekortBehandling.id}
+                    meldekortbehandlingId={props.meldekortbehandling.id}
                     overtarFra={
-                        props.meldekortBehandling.status ===
-                        MeldekortBehandlingStatus.UNDER_BEHANDLING
-                            ? props.meldekortBehandling.saksbehandler!
-                            : props.meldekortBehandling.status ===
-                                MeldekortBehandlingStatus.UNDER_BESLUTNING
-                              ? props.meldekortBehandling.beslutter!
+                        props.meldekortbehandling.status ===
+                        MeldekortbehandlingStatus.UNDER_BEHANDLING
+                            ? props.meldekortbehandling.saksbehandler!
+                            : props.meldekortbehandling.status ===
+                                MeldekortbehandlingStatus.UNDER_BESLUTNING
+                              ? props.meldekortbehandling.beslutter!
                               : 'Ukjent saksbehandler/beslutter'
                     }
                     meldeperiodeUrl={props.meldeperiodeUrl}
@@ -210,14 +210,14 @@ export const MeldeperiodeKjedeOversiktMeny = (props: {
                         Åpne
                     </ActionMenu.Item>
 
-                    {props.meldekortBehandling && (
+                    {props.meldekortbehandling && (
                         <>
-                            {erMeldekortBehandlingUnderAktivBehandling(
-                                props.meldekortBehandling,
+                            {erMeldekortbehandlingUnderAktivBehandling(
+                                props.meldekortbehandling,
                             ) && <ActionMenu.Divider />}
-                            <MeldekortBehandlingMenyKnapper
+                            <MeldekortbehandlingMenyKnapper
                                 sakId={props.sakId}
-                                meldekortBehandling={props.meldekortBehandling}
+                                meldekortbehandling={props.meldekortbehandling}
                                 saksnummer={props.saksnummer}
                                 meldeperiodeUrl={meldeperiodeUrl(
                                     props.saksnummer,
@@ -234,37 +234,37 @@ export const MeldeperiodeKjedeOversiktMeny = (props: {
     );
 };
 
-const MeldekortBehandlingMenyKnapper = (props: {
+const MeldekortbehandlingMenyKnapper = (props: {
     sakId: SakId;
     saksnummer: string;
     meldeperiodeUrl: string;
-    meldekortBehandling: MeldekortBehandlingProps;
+    meldekortbehandling: MeldekortbehandlingProps;
     setVilAvslutteBehandling: (vilAvslutte: boolean) => void;
     setVilOvertaBehandling: (vilOverta: boolean) => void;
 }) => {
     const { innloggetSaksbehandler } = useSaksbehandler();
 
-    const { taMeldekortBehandling, isMeldekortBehandlingMutating } = useTaMeldekortBehandling(
+    const { taMeldekortbehandling, isMeldekortbehandlingMutating } = useTaMeldekortbehandling(
         props.sakId,
-        props.meldekortBehandling.id,
+        props.meldekortbehandling.id,
     );
-    const { leggTilbakeMeldekortBehandling, isLeggTilbakeMeldekortBehandlingMutating } =
-        useLeggTilbakeMeldekortBehandling(props.sakId, props.meldekortBehandling.id);
+    const { leggTilbakeMeldekortbehandling, isLeggTilbakeMeldekortbehandlingMutating } =
+        useLeggTilbakeMeldekortbehandling(props.sakId, props.meldekortbehandling.id);
 
-    switch (props.meldekortBehandling.status) {
-        case MeldekortBehandlingStatus.UNDER_BEHANDLING:
-        case MeldekortBehandlingStatus.UNDER_BESLUTNING:
-            if (!eierMeldekortBehandling(props.meldekortBehandling, innloggetSaksbehandler)) {
+    switch (props.meldekortbehandling.status) {
+        case MeldekortbehandlingStatus.UNDER_BEHANDLING:
+        case MeldekortbehandlingStatus.UNDER_BESLUTNING:
+            if (!eierMeldekortbehandling(props.meldekortbehandling, innloggetSaksbehandler)) {
                 if (
-                    innloggetSaksbehandler.navIdent === props.meldekortBehandling.saksbehandler ||
-                    innloggetSaksbehandler.navIdent === props.meldekortBehandling.beslutter
+                    innloggetSaksbehandler.navIdent === props.meldekortbehandling.saksbehandler ||
+                    innloggetSaksbehandler.navIdent === props.meldekortbehandling.beslutter
                 ) {
                     return null;
                 }
 
                 if (
-                    skalKunneOvertaMeldekortBehandling(
-                        props.meldekortBehandling,
+                    skalKunneOvertaMeldekortbehandling(
+                        props.meldekortbehandling,
                         innloggetSaksbehandler,
                     )
                 ) {
@@ -281,16 +281,16 @@ const MeldekortBehandlingMenyKnapper = (props: {
                 }
 
                 if (
-                    skalKunneTaMeldekortBehandling(
-                        props.meldekortBehandling,
+                    skalKunneTaMeldekortbehandling(
+                        props.meldekortbehandling,
                         innloggetSaksbehandler,
                     )
                 ) {
                     return (
                         <TildelMegButton
-                            isMeldekortBehandlingMutating={isMeldekortBehandlingMutating}
+                            isMeldekortbehandlingMutating={isMeldekortbehandlingMutating}
                             meldeperiodeUrl={props.meldeperiodeUrl}
-                            taMeldekortBehandling={taMeldekortBehandling}
+                            taMeldekortbehandling={taMeldekortbehandling}
                         />
                     );
                 }
@@ -310,14 +310,14 @@ const MeldekortBehandlingMenyKnapper = (props: {
                         icon={<ArrowLeftIcon aria-hidden />}
                         onClick={(e) => {
                             e.preventDefault();
-                            leggTilbakeMeldekortBehandling().then(() => {
+                            leggTilbakeMeldekortbehandling().then(() => {
                                 router.push(
                                     `/sak/${props.saksnummer}#${PERSONOVERSIKT_TABS.meldekort}`,
                                 );
                             });
                         }}
                     >
-                        {isLeggTilbakeMeldekortBehandlingMutating ? <Loader /> : 'Legg tilbake'}
+                        {isLeggTilbakeMeldekortbehandlingMutating ? <Loader /> : 'Legg tilbake'}
                     </ActionMenu.Item>
                     <ActionMenu.Item
                         variant={'danger'}
@@ -331,17 +331,17 @@ const MeldekortBehandlingMenyKnapper = (props: {
                 </VStack>
             );
 
-        case MeldekortBehandlingStatus.KLAR_TIL_BESLUTNING: {
+        case MeldekortbehandlingStatus.KLAR_TIL_BESLUTNING: {
             if (
-                !skalKunneTaMeldekortBehandling(props.meldekortBehandling, innloggetSaksbehandler)
+                !skalKunneTaMeldekortbehandling(props.meldekortbehandling, innloggetSaksbehandler)
             ) {
                 break;
             }
 
             return (
                 <TildelMegButton
-                    isMeldekortBehandlingMutating={isMeldekortBehandlingMutating}
-                    taMeldekortBehandling={taMeldekortBehandling}
+                    isMeldekortbehandlingMutating={isMeldekortbehandlingMutating}
+                    taMeldekortbehandling={taMeldekortbehandling}
                     meldeperiodeUrl={props.meldeperiodeUrl}
                 />
             );
@@ -352,10 +352,10 @@ const MeldekortBehandlingMenyKnapper = (props: {
 };
 
 const TildelMegButton = (props: {
-    isMeldekortBehandlingMutating: boolean;
+    isMeldekortbehandlingMutating: boolean;
     meldeperiodeUrl: string;
-    taMeldekortBehandling: TriggerWithOptionsArgs<
-        MeldekortBehandlingProps,
+    taMeldekortbehandling: TriggerWithOptionsArgs<
+        MeldekortbehandlingProps,
         FetcherError,
         string,
         undefined
@@ -366,12 +366,12 @@ const TildelMegButton = (props: {
             icon={<PersonIcon aria-hidden />}
             onClick={(e) => {
                 e.preventDefault();
-                props.taMeldekortBehandling().then(() => {
+                props.taMeldekortbehandling().then(() => {
                     router.push(props.meldeperiodeUrl);
                 });
             }}
         >
-            {props.isMeldekortBehandlingMutating ? <Loader /> : 'Tildel meg'}
+            {props.isMeldekortbehandlingMutating ? <Loader /> : 'Tildel meg'}
         </ActionMenu.Item>
     );
 };

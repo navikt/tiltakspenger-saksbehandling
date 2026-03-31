@@ -1,8 +1,8 @@
 import {
-    MeldekortBehandlingDagStatus,
-    MeldekortBehandlingProps,
+    MeldekortbehandlingDagStatus,
+    MeldekortbehandlingProps,
     MeldekortDagBeregnetProps,
-} from '~/types/meldekort/MeldekortBehandling';
+} from '~/types/meldekort/Meldekortbehandling';
 import { MeldeperiodeProps } from '~/types/meldekort/Meldeperiode';
 import {
     BrukersMeldekortDagStatus,
@@ -10,13 +10,13 @@ import {
 } from '~/types/meldekort/BrukersMeldekort';
 
 export const hentMeldekortForhåndsutfylling = (
-    meldekortBehandling: MeldekortBehandlingProps,
-    tidligereBehandlinger: MeldekortBehandlingProps[],
+    meldekortbehandling: MeldekortbehandlingProps,
+    tidligereBehandlinger: MeldekortbehandlingProps[],
     meldeperiode: MeldeperiodeProps,
     brukersMeldekortForBehandling?: BrukersMeldekortProps,
 ): MeldekortDagBeregnetProps[] => {
     return oppdaterDagerForMeldeperiode(
-        hentDager(meldekortBehandling, tidligereBehandlinger, brukersMeldekortForBehandling),
+        hentDager(meldekortbehandling, tidligereBehandlinger, brukersMeldekortForBehandling),
         meldeperiode,
     );
 };
@@ -31,8 +31,8 @@ export const hentMeldekortForhåndsutfyllingFraBrukersMeldekort = (
         hentDagerFraBrukersmeldekort(brukersMeldekort).map((dag) => ({
             ...dag,
             status:
-                dag.status === MeldekortBehandlingDagStatus.IkkeBesvart
-                    ? MeldekortBehandlingDagStatus.IkkeTiltaksdag
+                dag.status === MeldekortbehandlingDagStatus.IkkeBesvart
+                    ? MeldekortbehandlingDagStatus.IkkeTiltaksdag
                     : dag.status,
         })),
         sisteMeldeperiode,
@@ -40,12 +40,12 @@ export const hentMeldekortForhåndsutfyllingFraBrukersMeldekort = (
 };
 
 const hentDager = (
-    meldekortBehandling: MeldekortBehandlingProps,
-    tidligereBehandlinger: MeldekortBehandlingProps[],
+    meldekortbehandling: MeldekortbehandlingProps,
+    tidligereBehandlinger: MeldekortbehandlingProps[],
     brukersMeldekortForBehandling?: BrukersMeldekortProps,
 ): MeldekortDagBeregnetProps[] => {
-    if (meldekortBehandling.beregning) {
-        return hentDagerFraBehandling(meldekortBehandling);
+    if (meldekortbehandling.beregning) {
+        return hentDagerFraBehandling(meldekortbehandling);
     }
 
     const forrigeBehandling = tidligereBehandlinger.at(0);
@@ -58,12 +58,12 @@ const hentDager = (
         return hentDagerFraBrukersmeldekort(brukersMeldekortForBehandling);
     }
 
-    return meldekortBehandling.dager;
+    return meldekortbehandling.dager;
 };
 
-const hentDagerFraBehandling = (meldekortBehandling: MeldekortBehandlingProps) =>
-    meldekortBehandling.beregning?.beregningForMeldekortetsPeriode.dager ??
-    meldekortBehandling.dager;
+const hentDagerFraBehandling = (meldekortbehandling: MeldekortbehandlingProps) =>
+    meldekortbehandling.beregning?.beregningForMeldekortetsPeriode.dager ??
+    meldekortbehandling.dager;
 
 // Oppdaterer dagene på meldekortet ut fra hvorvidt de gir rett i angitt meldeperiode
 const oppdaterDagerForMeldeperiode = (
@@ -76,16 +76,16 @@ const oppdaterDagerForMeldeperiode = (
         if (!harRett) {
             return {
                 ...dag,
-                status: MeldekortBehandlingDagStatus.IkkeRettTilTiltakspenger,
+                status: MeldekortbehandlingDagStatus.IkkeRettTilTiltakspenger,
             };
         }
 
         // Dersom forrige versjon av meldekortbehandlingen eller brukers meldekort ikke hadde rett på denne
         // dagen, men meldeperioden for siste vedtak gir rett, så nuller vi ut statusen
-        if (harRett && dag.status === MeldekortBehandlingDagStatus.IkkeRettTilTiltakspenger) {
+        if (harRett && dag.status === MeldekortbehandlingDagStatus.IkkeRettTilTiltakspenger) {
             return {
                 ...dag,
-                status: MeldekortBehandlingDagStatus.IkkeBesvart,
+                status: MeldekortbehandlingDagStatus.IkkeBesvart,
             };
         }
 
@@ -104,21 +104,21 @@ const hentDagerFraBrukersmeldekort = (
 
 const brukersStatusTilBehandlingsStatus: Record<
     BrukersMeldekortDagStatus,
-    MeldekortBehandlingDagStatus
+    MeldekortbehandlingDagStatus
 > = {
     [BrukersMeldekortDagStatus.DELTATT_UTEN_LØNN_I_TILTAKET]:
-        MeldekortBehandlingDagStatus.DeltattUtenLønnITiltaket,
+        MeldekortbehandlingDagStatus.DeltattUtenLønnITiltaket,
     [BrukersMeldekortDagStatus.DELTATT_MED_LØNN_I_TILTAKET]:
-        MeldekortBehandlingDagStatus.DeltattMedLønnITiltaket,
-    [BrukersMeldekortDagStatus.FRAVÆR_SYK]: MeldekortBehandlingDagStatus.FraværSyk,
-    [BrukersMeldekortDagStatus.FRAVÆR_SYKT_BARN]: MeldekortBehandlingDagStatus.FraværSyktBarn,
+        MeldekortbehandlingDagStatus.DeltattMedLønnITiltaket,
+    [BrukersMeldekortDagStatus.FRAVÆR_SYK]: MeldekortbehandlingDagStatus.FraværSyk,
+    [BrukersMeldekortDagStatus.FRAVÆR_SYKT_BARN]: MeldekortbehandlingDagStatus.FraværSyktBarn,
     [BrukersMeldekortDagStatus.FRAVÆR_STERKE_VELFERDSGRUNNER_ELLER_JOBBINTERVJU]:
-        MeldekortBehandlingDagStatus.FraværSterkeVelferdsgrunnerEllerJobbintervju,
+        MeldekortbehandlingDagStatus.FraværSterkeVelferdsgrunnerEllerJobbintervju,
     [BrukersMeldekortDagStatus.FRAVÆR_GODKJENT_AV_NAV]:
-        MeldekortBehandlingDagStatus.FraværGodkjentAvNav,
-    [BrukersMeldekortDagStatus.FRAVÆR_ANNET]: MeldekortBehandlingDagStatus.FraværAnnet,
-    [BrukersMeldekortDagStatus.IKKE_BESVART]: MeldekortBehandlingDagStatus.IkkeBesvart,
+        MeldekortbehandlingDagStatus.FraværGodkjentAvNav,
+    [BrukersMeldekortDagStatus.FRAVÆR_ANNET]: MeldekortbehandlingDagStatus.FraværAnnet,
+    [BrukersMeldekortDagStatus.IKKE_BESVART]: MeldekortbehandlingDagStatus.IkkeBesvart,
     [BrukersMeldekortDagStatus.IKKE_RETT_TIL_TILTAKSPENGER]:
-        MeldekortBehandlingDagStatus.IkkeRettTilTiltakspenger,
-    [BrukersMeldekortDagStatus.IKKE_TILTAKSDAG]: MeldekortBehandlingDagStatus.IkkeTiltaksdag,
+        MeldekortbehandlingDagStatus.IkkeRettTilTiltakspenger,
+    [BrukersMeldekortDagStatus.IKKE_TILTAKSDAG]: MeldekortbehandlingDagStatus.IkkeTiltaksdag,
 } as const;

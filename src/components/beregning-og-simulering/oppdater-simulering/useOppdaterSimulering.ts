@@ -1,13 +1,13 @@
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { MeldeperiodeKjedeProps } from '~/types/meldekort/Meldeperiode';
-import { MeldekortBehandlingId } from '~/types/meldekort/MeldekortBehandling';
+import { MeldekortbehandlingId } from '~/types/meldekort/Meldekortbehandling';
 import { SakId } from '~/types/Sak';
 import { BehandlingIdFelles } from '~/types/BehandlingFelles';
 import { Rammebehandling, BehandlingId } from '~/types/Rammebehandling';
 
 type ResponseType<BehId extends BehandlingIdFelles> = BehId extends BehandlingId
     ? Rammebehandling
-    : BehId extends MeldekortBehandlingId
+    : BehId extends MeldekortbehandlingId
       ? MeldeperiodeKjedeProps
       : never;
 

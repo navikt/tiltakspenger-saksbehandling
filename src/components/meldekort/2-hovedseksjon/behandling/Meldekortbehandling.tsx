@@ -4,23 +4,23 @@ import { MeldekortUtfylling } from './utfylling/MeldekortUtfylling';
 import { MeldekortOppsummering } from '../../0-felles-komponenter/meldekort-oppsummering/MeldekortOppsummering';
 import { MeldekortTaBeslutning } from './beslutning/MeldekortTaBeslutning';
 import {
-    MeldekortBehandlingProps,
-    MeldekortBehandlingStatus,
-    MeldekortBehandlingType,
-} from '~/types/meldekort/MeldekortBehandling';
+    MeldekortbehandlingProps,
+    MeldekortbehandlingStatus,
+    MeldekortbehandlingType,
+} from '~/types/meldekort/Meldekortbehandling';
 import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
 
-import style from './MeldekortBehandling.module.css';
+import style from './Meldekortbehandling.module.css';
 import Divider from '~/components/divider/Divider';
 
 type Props = {
-    meldekortBehandling: MeldekortBehandlingProps;
+    meldekortbehandling: MeldekortbehandlingProps;
 };
 
-export const MeldekortBehandling = ({ meldekortBehandling }: Props) => {
+export const Meldekortbehandling = ({ meldekortbehandling }: Props) => {
     const { innloggetSaksbehandler } = useSaksbehandler();
 
-    const { type, status, erAvsluttet } = meldekortBehandling;
+    const { type, status, erAvsluttet } = meldekortbehandling;
 
     return (
         <VStack gap={'space-20'}>
@@ -28,25 +28,25 @@ export const MeldekortBehandling = ({ meldekortBehandling }: Props) => {
                 <Heading level={'3'} size={'medium'}>
                     {erAvsluttet ? 'Siste behandling' : 'Pågående behandling'}
                 </Heading>
-                {type === MeldekortBehandlingType.KORRIGERING && (
+                {type === MeldekortbehandlingType.KORRIGERING && (
                     <Alert variant={'info'} inline={true} size={'small'}>
                         {'Korrigering'}
                     </Alert>
                 )}
-                {status === MeldekortBehandlingStatus.AUTOMATISK_BEHANDLET && (
+                {status === MeldekortbehandlingStatus.AUTOMATISK_BEHANDLET && (
                     <Alert variant={'info'} inline={true} size={'small'}>
                         {'Automatisk behandlet'}
                     </Alert>
                 )}
             </div>
-            {kanSaksbehandleForMeldekort(meldekortBehandling, innloggetSaksbehandler) ? (
-                <MeldekortUtfylling meldekortBehandling={meldekortBehandling} />
+            {kanSaksbehandleForMeldekort(meldekortbehandling, innloggetSaksbehandler) ? (
+                <MeldekortUtfylling meldekortbehandling={meldekortbehandling} />
             ) : (
                 <>
-                    <MeldekortOppsummering meldekortBehandling={meldekortBehandling} />
+                    <MeldekortOppsummering meldekortbehandling={meldekortbehandling} />
                     <Divider orientation="horizontal" />
-                    {kanBeslutteForMeldekort(meldekortBehandling, innloggetSaksbehandler) && (
-                        <MeldekortTaBeslutning meldekortBehandling={meldekortBehandling} />
+                    {kanBeslutteForMeldekort(meldekortbehandling, innloggetSaksbehandler) && (
+                        <MeldekortTaBeslutning meldekortbehandling={meldekortbehandling} />
                     )}
                 </>
             )}

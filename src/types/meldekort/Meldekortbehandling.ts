@@ -12,9 +12,9 @@ import { TilbakekrevingId } from '~/types/Tilbakekreving';
 
 // "_behandling"-suffixen er ikke reell, er kun for at typescript ikke skal se denne som ekvivalent med BrukersMeldekortId
 // Ikke gjør run-time typesjekk på denne!
-export type MeldekortBehandlingId = `meldekort_${string}_behandling`;
+export type MeldekortbehandlingId = `meldekort_${string}_behandling`;
 
-export enum MeldekortBehandlingStatus {
+export enum MeldekortbehandlingStatus {
     KLAR_TIL_BEHANDLING = 'KLAR_TIL_BEHANDLING',
     UNDER_BEHANDLING = 'UNDER_BEHANDLING',
     KLAR_TIL_BESLUTNING = 'KLAR_TIL_BESLUTNING',
@@ -25,7 +25,7 @@ export enum MeldekortBehandlingStatus {
     AVBRUTT = 'AVBRUTT',
 }
 
-export enum MeldekortBehandlingDagStatus {
+export enum MeldekortbehandlingDagStatus {
     // OBS! Ved endring av disse kodene så burde tilsvarende endringer gjøres for tekstene som utledes for brevene!
     IkkeRettTilTiltakspenger = 'IKKE_RETT_TIL_TILTAKSPENGER',
     IkkeBesvart = 'IKKE_BESVART',
@@ -45,13 +45,13 @@ export enum ReduksjonAvYtelse {
     YTELSEN_FALLER_BORT = 'YTELSEN_FALLER_BORT',
 }
 
-export enum MeldekortBehandlingType {
+export enum MeldekortbehandlingType {
     FØRSTE_BEHANDLING = 'FØRSTE_BEHANDLING',
     KORRIGERING = 'KORRIGERING',
 }
 
-export type MeldekortBehandlingProps = {
-    id: MeldekortBehandlingId;
+export type MeldekortbehandlingProps = {
+    id: MeldekortbehandlingId;
     sakId: SakId;
     meldeperiodeId: MeldeperiodeId;
     brukersMeldekortId?: BrukersMeldekortId;
@@ -59,12 +59,12 @@ export type MeldekortBehandlingProps = {
     beslutter?: string;
     opprettet: string;
     godkjentTidspunkt?: string;
-    status: MeldekortBehandlingStatus;
+    status: MeldekortbehandlingStatus;
     erAvsluttet: boolean;
     navkontor: string;
     navkontorNavn?: string;
     begrunnelse?: string;
-    type: MeldekortBehandlingType;
+    type: MeldekortbehandlingType;
     attesteringer: Attestering[];
     utbetalingsstatus: Utbetalingsstatus;
     periode: Periode;
@@ -79,12 +79,12 @@ export type MeldekortBehandlingProps = {
 
 export type MeldekortDagProps = {
     dato: string;
-    status: MeldekortBehandlingDagStatus;
+    status: MeldekortbehandlingDagStatus;
 };
 
 export type MeldekortDagBeregnetProps = {
     dato: string;
-    status: MeldekortBehandlingDagStatus;
+    status: MeldekortbehandlingDagStatus;
     reduksjonAvYtelsePåGrunnAvFravær?: ReduksjonAvYtelse;
     beregningsdag?: Beregningsdag;
 };
@@ -101,7 +101,7 @@ type Beregningsdag = {
     barnetillegg: number;
 };
 
-export type MeldekortBehandlingDTO = {
+export type MeldekortbehandlingDTO = {
     dager: MeldekortDagProps[];
     begrunnelse: Nullable<string>;
     tekstTilVedtaksbrev: Nullable<string>;

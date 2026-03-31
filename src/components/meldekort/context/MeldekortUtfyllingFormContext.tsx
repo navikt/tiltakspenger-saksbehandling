@@ -1,53 +1,53 @@
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 import {
-    MeldekortBehandlingForm,
+    MeldekortbehandlingForm,
     useCustomMeldekortUtfyllingValidationResolver,
 } from '~/components/meldekort/2-hovedseksjon/behandling/utfylling/meldekortUtfyllingUtils';
-import { MeldekortBehandlingProps } from '~/types/meldekort/MeldekortBehandling';
+import { MeldekortbehandlingProps } from '~/types/meldekort/Meldekortbehandling';
 import { useMeldeperiodeKjede } from '~/components/meldekort/context/MeldeperiodeKjedeContext';
 import { PropsWithChildren, useEffect } from 'react';
 import { hentMeldekortForhåndsutfylling } from '~/components/meldekort/0-felles-komponenter/meldekortForhåndsutfyllingUtils';
 import { Nullable } from '~/types/UtilTypes';
 
-export const MeldekortBehandlingFormProvider = ({ children }: PropsWithChildren) => {
-    const { sisteMeldekortBehandling } = useMeldeperiodeKjede();
+export const MeldekortbehandlingFormProvider = ({ children }: PropsWithChildren) => {
+    const { sisteMeldekortbehandling } = useMeldeperiodeKjede();
 
-    if (!sisteMeldekortBehandling) {
+    if (!sisteMeldekortbehandling) {
         return children;
     }
 
     return (
-        <MeldekortBehandlingFormProviderInner meldekortBehandling={sisteMeldekortBehandling}>
+        <MeldekortbehandlingFormProviderInner meldekortbehandling={sisteMeldekortbehandling}>
             {children}
-        </MeldekortBehandlingFormProviderInner>
+        </MeldekortbehandlingFormProviderInner>
     );
 };
 
 type Props = PropsWithChildren<{
-    meldekortBehandling: MeldekortBehandlingProps;
+    meldekortbehandling: MeldekortbehandlingProps;
 }>;
 
-const MeldekortBehandlingFormProviderInner = ({ meldekortBehandling, children }: Props) => {
-    const { meldeperiodeKjede, tidligereMeldekortBehandlinger, sisteMeldeperiode } =
+const MeldekortbehandlingFormProviderInner = ({ meldekortbehandling, children }: Props) => {
+    const { meldeperiodeKjede, tidligereMeldekortbehandlinger, sisteMeldeperiode } =
         useMeldeperiodeKjede();
 
     const brukersMeldekortForBehandling =
         meldeperiodeKjede.brukersMeldekort.find(
-            (b) => b.id === meldekortBehandling.brukersMeldekortId,
+            (b) => b.id === meldekortbehandling.brukersMeldekortId,
         ) ?? meldeperiodeKjede.brukersMeldekort.at(-1); // Bruk siste brukers meldekort som fallback
 
     const { antallDager } = sisteMeldeperiode;
 
-    const formContext = useForm<MeldekortBehandlingForm>({
+    const formContext = useForm<MeldekortbehandlingForm>({
         defaultValues: {
             dager: hentMeldekortForhåndsutfylling(
-                meldekortBehandling,
-                tidligereMeldekortBehandlinger,
+                meldekortbehandling,
+                tidligereMeldekortbehandlinger,
                 sisteMeldeperiode,
                 brukersMeldekortForBehandling,
             ),
-            begrunnelse: meldekortBehandling.begrunnelse ?? '',
-            tekstTilVedtaksbrev: meldekortBehandling.tekstTilVedtaksbrev ?? '',
+            begrunnelse: meldekortbehandling.begrunnelse ?? '',
+            tekstTilVedtaksbrev: meldekortbehandling.tekstTilVedtaksbrev ?? '',
         },
         resolver: useCustomMeldekortUtfyllingValidationResolver(),
         context: { tillattAntallDager: antallDager },
@@ -56,24 +56,24 @@ const MeldekortBehandlingFormProviderInner = ({ meldekortBehandling, children }:
     useEffect(() => {
         formContext.reset({
             dager: hentMeldekortForhåndsutfylling(
-                meldekortBehandling,
-                tidligereMeldekortBehandlinger,
+                meldekortbehandling,
+                tidligereMeldekortbehandlinger,
                 sisteMeldeperiode,
                 brukersMeldekortForBehandling,
             ),
-            begrunnelse: meldekortBehandling.begrunnelse ?? '',
-            tekstTilVedtaksbrev: meldekortBehandling.tekstTilVedtaksbrev ?? '',
+            begrunnelse: meldekortbehandling.begrunnelse ?? '',
+            tekstTilVedtaksbrev: meldekortbehandling.tekstTilVedtaksbrev ?? '',
         });
         //Vi ønsker kun å resette form hvis disse feltene endres
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [meldekortBehandling, tidligereMeldekortBehandlinger, brukersMeldekortForBehandling]);
+    }, [meldekortbehandling, tidligereMeldekortbehandlinger, brukersMeldekortForBehandling]);
 
     return <FormProvider {...formContext}>{children}</FormProvider>;
 };
 
-export type MeldekortBehandlingFormContext = ReturnType<typeof useForm<MeldekortBehandlingForm>>;
+export type MeldekortbehandlingFormContext = ReturnType<typeof useForm<MeldekortbehandlingForm>>;
 
-// Returnerer null dersom den kalles i en komponent som ikke er descendant av MeldekortBehandlingFormProvider
-export const useMeldekortBehandlingForm = (): Nullable<MeldekortBehandlingFormContext> => {
-    return useFormContext<MeldekortBehandlingForm>() ?? null;
+// Returnerer null dersom den kalles i en komponent som ikke er descendant av MeldekortbehandlingFormProvider
+export const useMeldekortbehandlingForm = (): Nullable<MeldekortbehandlingFormContext> => {
+    return useFormContext<MeldekortbehandlingForm>() ?? null;
 };

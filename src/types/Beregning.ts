@@ -1,8 +1,8 @@
 import { MeldeperiodeKjedeId } from '~/types/meldekort/Meldeperiode';
 import { Periode } from '~/types/Periode';
-import { MeldekortDagBeregnetProps } from '~/types/meldekort/MeldekortBehandling';
+import { MeldekortDagBeregnetProps } from '~/types/meldekort/Meldekortbehandling';
 import { Nullable } from '~/types/UtilTypes';
-import { MeldekortBehandlingId } from '~/types/meldekort/MeldekortBehandling';
+import { MeldekortbehandlingId } from '~/types/meldekort/Meldekortbehandling';
 import { BehandlingId } from './Rammebehandling';
 
 export type BeløpProps = {
@@ -35,5 +35,5 @@ export enum BeregningKildeType {
 }
 
 export type BeregningKilde =
-    | { id: MeldekortBehandlingId; type: BeregningKildeType.MELDEKORT }
+    | { id: MeldekortbehandlingId; type: BeregningKildeType.MELDEKORT }
     | { id: BehandlingId; type: BeregningKildeType.RAMMEBEHANDLING };

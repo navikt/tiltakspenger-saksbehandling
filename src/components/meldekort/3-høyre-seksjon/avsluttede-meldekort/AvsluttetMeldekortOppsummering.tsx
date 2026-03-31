@@ -1,17 +1,17 @@
 import { HStack, VStack } from '@navikt/ds-react';
 import { formaterTidspunkt } from '~/utils/date';
-import { MeldekortBehandlingProps } from '~/types/meldekort/MeldekortBehandling';
+import { MeldekortbehandlingProps } from '~/types/meldekort/Meldekortbehandling';
 import { MeldekortUker } from '../../0-felles-komponenter/uker/MeldekortUker';
 import { MeldekortBegrunnelse } from '../../0-felles-komponenter/begrunnelse/MeldekortBegrunnelse';
 import { OppsummeringsPar } from '../../../oppsummeringer/oppsummeringspar/OppsummeringsPar';
 import { MeldekortBeregningOgSimulering } from '~/components/meldekort/0-felles-komponenter/beregning-simulering/MeldekortBeregningOgSimulering';
 
 type Props = {
-    meldekortBehandling: MeldekortBehandlingProps;
+    meldekortbehandling: MeldekortbehandlingProps;
 };
 
-export const AvsluttetMeldekortOppsummering = ({ meldekortBehandling }: Props) => {
-    const { beregning, begrunnelse, dager, avbrutt } = meldekortBehandling;
+export const AvsluttetMeldekortOppsummering = ({ meldekortbehandling }: Props) => {
+    const { beregning, begrunnelse, dager, avbrutt } = meldekortbehandling;
 
     return (
         avbrutt && (
@@ -34,7 +34,7 @@ export const AvsluttetMeldekortOppsummering = ({ meldekortBehandling }: Props) =
                     retning="vertikal"
                 />
                 <MeldekortUker dager={beregning?.beregningForMeldekortetsPeriode.dager ?? dager} />
-                <MeldekortBeregningOgSimulering meldekortBehandling={meldekortBehandling} />
+                <MeldekortBeregningOgSimulering meldekortbehandling={meldekortbehandling} />
                 {begrunnelse && <MeldekortBegrunnelse readOnly={true} defaultValue={begrunnelse} />}
             </VStack>
         )

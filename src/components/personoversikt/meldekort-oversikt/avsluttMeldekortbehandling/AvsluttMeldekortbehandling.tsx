@@ -14,15 +14,15 @@ import {
 import { TrashIcon } from '@navikt/aksel-icons';
 import { SakId } from '~/types/Sak';
 import {
-    MeldekortBehandlingId,
-    MeldekortBehandlingProps,
-} from '~/types/meldekort/MeldekortBehandling';
+    MeldekortbehandlingId,
+    MeldekortbehandlingProps,
+} from '~/types/meldekort/Meldekortbehandling';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
-import styles from './AvsluttMeldekortBehandling.module.css';
+import styles from './AvsluttMeldekortbehandling.module.css';
 
 export const AvsluttMeldekortbehandlingModal = (props: {
     sakId: SakId;
-    meldekortBehandlingId: MeldekortBehandlingId;
+    meldekortbehandlingId: MeldekortbehandlingId;
     personoversiktUrl: string;
     åpen: boolean;
     onClose: () => void;
@@ -31,10 +31,10 @@ export const AvsluttMeldekortbehandlingModal = (props: {
     const [error, setError] = useState<string>();
     const hasError = error !== undefined;
 
-    const avsluttMeldekortBehandlingApi = useFetchJsonFraApi<
-        MeldekortBehandlingProps,
+    const avsluttMeldekortbehandlingApi = useFetchJsonFraApi<
+        MeldekortbehandlingProps,
         { begrunnelse: string }
-    >(`/sak/${props.sakId}/meldekort/${props.meldekortBehandlingId}/avbryt`, 'POST', {
+    >(`/sak/${props.sakId}/meldekort/${props.meldekortbehandlingId}/avbryt`, 'POST', {
         onSuccess: () => {
             router.push(props.personoversiktUrl);
         },
@@ -46,7 +46,7 @@ export const AvsluttMeldekortbehandlingModal = (props: {
         if (!begrunnelse || begrunnelse === '') {
             setError('Du må fylle ut en begrunnelse');
         } else {
-            avsluttMeldekortBehandlingApi.trigger({
+            avsluttMeldekortbehandlingApi.trigger({
                 begrunnelse: begrunnelse,
             });
         }
@@ -111,7 +111,7 @@ export const AvsluttMeldekortbehandlingModal = (props: {
                             data-color="danger"
                             variant="primary"
                             size="small"
-                            loading={avsluttMeldekortBehandlingApi.isMutating}
+                            loading={avsluttMeldekortbehandlingApi.isMutating}
                             type="submit"
                             disabled={hasError}
                             onClick={(e) => {
@@ -121,9 +121,9 @@ export const AvsluttMeldekortbehandlingModal = (props: {
                             Avslutt behandling
                         </Button>
                     </HStack>
-                    {avsluttMeldekortBehandlingApi.error && (
+                    {avsluttMeldekortbehandlingApi.error && (
                         <Alert variant={'error'} size="small">
-                            {avsluttMeldekortBehandlingApi.error.message}
+                            {avsluttMeldekortbehandlingApi.error.message}
                         </Alert>
                     )}
                 </VStack>
@@ -132,9 +132,9 @@ export const AvsluttMeldekortbehandlingModal = (props: {
     );
 };
 
-const AvsluttMeldekortBehandling = (props: {
+const AvsluttMeldekortbehandling = (props: {
     sakId: SakId;
-    meldekortBehandlingId: MeldekortBehandlingId;
+    meldekortbehandlingId: MeldekortbehandlingId;
     personoversiktUrl: string;
     buttonProps?: {
         size?: ButtonProps['size'];
@@ -150,7 +150,7 @@ const AvsluttMeldekortBehandling = (props: {
                     åpen={vilAvslutteBehandling}
                     onClose={() => setVilAvslutteBehandling(false)}
                     sakId={props.sakId}
-                    meldekortBehandlingId={props.meldekortBehandlingId}
+                    meldekortbehandlingId={props.meldekortbehandlingId}
                     personoversiktUrl={props.personoversiktUrl}
                 />
             )}
@@ -169,4 +169,4 @@ const AvsluttMeldekortBehandling = (props: {
     );
 };
 
-export default AvsluttMeldekortBehandling;
+export default AvsluttMeldekortbehandling;

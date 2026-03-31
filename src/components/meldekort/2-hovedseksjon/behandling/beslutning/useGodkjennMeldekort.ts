@@ -1,9 +1,9 @@
-import { SakId } from '../../../../../types/Sak';
-import { MeldekortBehandlingId } from '../../../../../types/meldekort/MeldekortBehandling';
-import { MeldeperiodeKjedeProps } from '../../../../../types/meldekort/Meldeperiode';
-import { useFetchJsonFraApi } from '../../../../../utils/fetch/useFetchFraApi';
+import { SakId } from '~/types/Sak';
+import { MeldekortbehandlingId } from '~/types/meldekort/Meldekortbehandling';
+import { MeldeperiodeKjedeProps } from '~/types/meldekort/Meldeperiode';
+import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 
-export const useGodkjennMeldekort = (meldekortId: MeldekortBehandlingId, sakId: SakId) => {
+export const useGodkjennMeldekort = (meldekortId: MeldekortbehandlingId, sakId: SakId) => {
     const {
         trigger: godkjennMeldekort,
         isMutating: godkjennMeldekortLaster,

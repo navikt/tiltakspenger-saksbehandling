@@ -1,7 +1,7 @@
-import { MeldekortBehandlingId } from '~/types/meldekort/MeldekortBehandling';
+import { MeldekortbehandlingId } from '~/types/meldekort/Meldekortbehandling';
 import { BehandlingId } from './Rammebehandling';
 
-export type BehandlingIdFelles = BehandlingId | MeldekortBehandlingId;
+export type BehandlingIdFelles = BehandlingId | MeldekortbehandlingId;
 
 export enum SaksbehandlerBehandlingKommando {
     TildelSaksbehandler = 'TildelSaksbehandler',

@@ -1,16 +1,16 @@
 import { BodyShort, Select, Table } from '@navikt/ds-react';
 import { formaterDatotekst, ukedagFraDatotekst } from '~/utils/date';
-import { ikonForMeldekortBehandlingDagStatus } from '../MeldekortIkoner';
-import { meldekortBehandlingDagStatusTekst } from '~/utils/tekstformateringUtils';
+import { ikonForMeldekortbehandlingDagStatus } from '../MeldekortIkoner';
+import { meldekortbehandlingDagStatusTekst } from '~/utils/tekstformateringUtils';
 import { formatterBeløp } from '~/utils/beløp';
 import {
-    MeldekortBehandlingDagStatus,
+    MeldekortbehandlingDagStatus,
     MeldekortDagBeregnetProps,
-} from '~/types/meldekort/MeldekortBehandling';
+} from '~/types/meldekort/Meldekortbehandling';
 import { Controller, FieldPath } from 'react-hook-form';
-import { MeldekortBehandlingForm } from '../../2-hovedseksjon/behandling/utfylling/meldekortUtfyllingUtils';
+import { MeldekortbehandlingForm } from '../../2-hovedseksjon/behandling/utfylling/meldekortUtfyllingUtils';
 import { classNames } from '~/utils/classNames';
-import { useMeldekortBehandlingForm } from '~/components/meldekort/context/MeldekortUtfyllingFormContext';
+import { useMeldekortbehandlingForm } from '~/components/meldekort/context/MeldekortUtfyllingFormContext';
 
 import styles from './MeldekortUke.module.css';
 
@@ -20,13 +20,13 @@ type Props = {
 };
 
 export const MeldekortUkeBehandling = ({ dager, ukeIndex }: Props) => {
-    const { control, watch, formState } = useMeldekortBehandlingForm()!;
+    const { control, watch, formState } = useMeldekortbehandlingForm()!;
 
     return dager.map((dag, index) => {
         const { beregningsdag, dato } = dag;
         const dagIndex = index + ukeIndex * 7;
 
-        const statusFieldPath: FieldPath<MeldekortBehandlingForm> = `dager.${dagIndex}.status`;
+        const statusFieldPath: FieldPath<MeldekortbehandlingForm> = `dager.${dagIndex}.status`;
         const valgtStatus = watch(statusFieldPath);
 
         return (
@@ -37,11 +37,11 @@ export const MeldekortUkeBehandling = ({ dager, ukeIndex }: Props) => {
                 <Table.DataCell>{ukedagFraDatotekst(dato)}</Table.DataCell>
                 <Table.DataCell>{formaterDatotekst(dato)}</Table.DataCell>
                 <Table.DataCell className={styles.ikon}>
-                    {ikonForMeldekortBehandlingDagStatus[valgtStatus]}
+                    {ikonForMeldekortbehandlingDagStatus[valgtStatus]}
                 </Table.DataCell>
                 <Table.DataCell>
-                    {valgtStatus === MeldekortBehandlingDagStatus.IkkeRettTilTiltakspenger ? (
-                        <BodyShort>{meldekortBehandlingDagStatusTekst[valgtStatus]}</BodyShort>
+                    {valgtStatus === MeldekortbehandlingDagStatus.IkkeRettTilTiltakspenger ? (
+                        <BodyShort>{meldekortbehandlingDagStatusTekst[valgtStatus]}</BodyShort>
                     ) : (
                         <Controller
                             name={statusFieldPath}
@@ -55,7 +55,7 @@ export const MeldekortUkeBehandling = ({ dager, ukeIndex }: Props) => {
                                     error={fieldState.error?.message ? 'Status må fylles ut' : ''}
                                     className={styles.select}
                                 >
-                                    <option value={MeldekortBehandlingDagStatus.IkkeBesvart}>
+                                    <option value={MeldekortbehandlingDagStatus.IkkeBesvart}>
                                         {'- Velg status -'}
                                     </option>
                                     {gyldigeMeldekortDagUtfyllingsvalgStatusOptions}
@@ -78,18 +78,18 @@ export const MeldekortUkeBehandling = ({ dager, ukeIndex }: Props) => {
     });
 };
 
-export const GyldigeMeldekortDagUfyllingsvalg = Object.values(MeldekortBehandlingDagStatus).filter(
+export const GyldigeMeldekortDagUfyllingsvalg = Object.values(MeldekortbehandlingDagStatus).filter(
     (status) =>
         ![
-            MeldekortBehandlingDagStatus.IkkeRettTilTiltakspenger,
-            MeldekortBehandlingDagStatus.IkkeBesvart,
+            MeldekortbehandlingDagStatus.IkkeRettTilTiltakspenger,
+            MeldekortbehandlingDagStatus.IkkeBesvart,
         ].includes(status),
 );
 
 export const gyldigeMeldekortDagUtfyllingsvalgStatusOptions = GyldigeMeldekortDagUfyllingsvalg.map(
     (meldekortStatus) => (
         <option key={meldekortStatus} value={meldekortStatus}>
-            {meldekortBehandlingDagStatusTekst[meldekortStatus]}
+            {meldekortbehandlingDagStatusTekst[meldekortStatus]}
         </option>
     ),
 );

@@ -1,4 +1,4 @@
-// "_bruker"-suffixen er ikke reell, er kun for at typescript ikke skal se denne som ekvivalent med MeldekortBehandlingId
+// "_bruker"-suffixen er ikke reell, er kun for at typescript ikke skal se denne som ekvivalent med MeldekortbehandlingId
 // Ikke gjør run-time typesjekk på denne!
 export type BrukersMeldekortId = `meldekort_${string}_bruker`;
 

@@ -6,8 +6,8 @@ import {
     FirstAidKitFillIcon,
     NotePencilIcon,
 } from '@navikt/aksel-icons';
-import { MeldekortBehandlingDagStatus } from '../../../types/meldekort/MeldekortBehandling';
-import { BrukersMeldekortDagStatus } from '../../../types/meldekort/BrukersMeldekort';
+import { MeldekortbehandlingDagStatus } from '~/types/meldekort/Meldekortbehandling';
+import { BrukersMeldekortDagStatus } from '~/types/meldekort/BrukersMeldekort';
 
 const Ikoner = {
     circleSlash: <CircleSlashIcon title="Sperret" color="black" width="1.2em" height="1.2em" />,
@@ -50,19 +50,19 @@ export const ikonForBrukersMeldekortDagStatus: Record<
     [BrukersMeldekortDagStatus.IKKE_TILTAKSDAG]: Ikoner.circleSlash,
 } as const;
 
-export const ikonForMeldekortBehandlingDagStatus: Record<
-    MeldekortBehandlingDagStatus,
+export const ikonForMeldekortbehandlingDagStatus: Record<
+    MeldekortbehandlingDagStatus,
     React.JSX.Element
 > = {
-    [MeldekortBehandlingDagStatus.DeltattMedLønnITiltaket]: Ikoner.minusCircleFill,
-    [MeldekortBehandlingDagStatus.DeltattUtenLønnITiltaket]: Ikoner.checkmarkCircleFill,
-    [MeldekortBehandlingDagStatus.FraværSyk]: Ikoner.firstAidKitFill,
-    [MeldekortBehandlingDagStatus.FraværSyktBarn]: Ikoner.firstAidKitFill,
-    [MeldekortBehandlingDagStatus.FraværSterkeVelferdsgrunnerEllerJobbintervju]:
+    [MeldekortbehandlingDagStatus.DeltattMedLønnITiltaket]: Ikoner.minusCircleFill,
+    [MeldekortbehandlingDagStatus.DeltattUtenLønnITiltaket]: Ikoner.checkmarkCircleFill,
+    [MeldekortbehandlingDagStatus.FraværSyk]: Ikoner.firstAidKitFill,
+    [MeldekortbehandlingDagStatus.FraværSyktBarn]: Ikoner.firstAidKitFill,
+    [MeldekortbehandlingDagStatus.FraværSterkeVelferdsgrunnerEllerJobbintervju]:
         Ikoner.checkmarkCircleFill,
-    [MeldekortBehandlingDagStatus.FraværGodkjentAvNav]: Ikoner.checkmarkCircleFill,
-    [MeldekortBehandlingDagStatus.FraværAnnet]: Ikoner.minusCircleFill,
-    [MeldekortBehandlingDagStatus.IkkeTiltaksdag]: Ikoner.minusCircleFill,
-    [MeldekortBehandlingDagStatus.IkkeBesvart]: Ikoner.notePencil,
-    [MeldekortBehandlingDagStatus.IkkeRettTilTiltakspenger]: Ikoner.circleSlash,
+    [MeldekortbehandlingDagStatus.FraværGodkjentAvNav]: Ikoner.checkmarkCircleFill,
+    [MeldekortbehandlingDagStatus.FraværAnnet]: Ikoner.minusCircleFill,
+    [MeldekortbehandlingDagStatus.IkkeTiltaksdag]: Ikoner.minusCircleFill,
+    [MeldekortbehandlingDagStatus.IkkeBesvart]: Ikoner.notePencil,
+    [MeldekortbehandlingDagStatus.IkkeRettTilTiltakspenger]: Ikoner.circleSlash,
 } as const;

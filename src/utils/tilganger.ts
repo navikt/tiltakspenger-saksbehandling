@@ -1,9 +1,9 @@
 import { Rammebehandling, Rammebehandlingsstatus } from '~/types/Rammebehandling';
 import { ÅpenRammebehandlingForOversikt } from '~/types/ÅpenBehandlingForOversikt';
 import {
-    MeldekortBehandlingProps,
-    MeldekortBehandlingStatus,
-} from '~/types/meldekort/MeldekortBehandling';
+    MeldekortbehandlingProps,
+    MeldekortbehandlingStatus,
+} from '~/types/meldekort/Meldekortbehandling';
 import { Saksbehandler, SaksbehandlerRolle } from '~/types/Saksbehandler';
 
 export const erSaksbehandler = (saksbehandler: Saksbehandler) =>
@@ -83,14 +83,14 @@ export const erBehandlerEllerBeslutterAvBehandling = (
 };
 
 export const kanSaksbehandleForMeldekort = (
-    meldekortBehandling: MeldekortBehandlingProps,
+    meldekortbehandling: MeldekortbehandlingProps,
     innloggetSaksbehandler: Saksbehandler,
 ) =>
-    kanBehandle(innloggetSaksbehandler, meldekortBehandling.saksbehandler) &&
-    meldekortBehandling.status === MeldekortBehandlingStatus.UNDER_BEHANDLING;
+    kanBehandle(innloggetSaksbehandler, meldekortbehandling.saksbehandler) &&
+    meldekortbehandling.status === MeldekortbehandlingStatus.UNDER_BEHANDLING;
 
 export const kanBeslutteForMeldekort = (
-    meldekort: MeldekortBehandlingProps,
+    meldekort: MeldekortbehandlingProps,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     const { status, saksbehandler } = meldekort;
@@ -98,20 +98,20 @@ export const kanBeslutteForMeldekort = (
     return (
         erBeslutter(innloggetSaksbehandler) &&
         innloggetSaksbehandler.navIdent !== saksbehandler &&
-        status === MeldekortBehandlingStatus.UNDER_BESLUTNING
+        status === MeldekortbehandlingStatus.UNDER_BESLUTNING
     );
 };
 
-export const eierMeldekortBehandling = (
-    meldekortBehandling: MeldekortBehandlingProps,
+export const eierMeldekortbehandling = (
+    meldekortbehandling: MeldekortbehandlingProps,
     innloggetSaksbehandler: Saksbehandler,
 ): boolean => {
-    const { status, saksbehandler, beslutter } = meldekortBehandling;
+    const { status, saksbehandler, beslutter } = meldekortbehandling;
 
     switch (status) {
-        case MeldekortBehandlingStatus.UNDER_BEHANDLING:
+        case MeldekortbehandlingStatus.UNDER_BEHANDLING:
             return innloggetSaksbehandler.navIdent === saksbehandler;
-        case MeldekortBehandlingStatus.UNDER_BESLUTNING:
+        case MeldekortbehandlingStatus.UNDER_BESLUTNING:
             return innloggetSaksbehandler.navIdent === beslutter;
         default:
             return false;
@@ -163,16 +163,16 @@ export const skalKunneOvertaBehandling = (
     }
 };
 
-export const skalKunneTaMeldekortBehandling = (
-    meldekortBehandling: MeldekortBehandlingProps,
+export const skalKunneTaMeldekortbehandling = (
+    meldekortbehandling: MeldekortbehandlingProps,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
-    const { status, saksbehandler } = meldekortBehandling;
+    const { status, saksbehandler } = meldekortbehandling;
 
     switch (status) {
-        case MeldekortBehandlingStatus.KLAR_TIL_BEHANDLING:
+        case MeldekortbehandlingStatus.KLAR_TIL_BEHANDLING:
             return erSaksbehandler(innloggetSaksbehandler);
-        case MeldekortBehandlingStatus.KLAR_TIL_BESLUTNING:
+        case MeldekortbehandlingStatus.KLAR_TIL_BESLUTNING:
             return (
                 erBeslutter(innloggetSaksbehandler) &&
                 innloggetSaksbehandler.navIdent != saksbehandler
@@ -182,20 +182,20 @@ export const skalKunneTaMeldekortBehandling = (
     }
 };
 
-export const skalKunneOvertaMeldekortBehandling = (
-    meldekortBehandling: MeldekortBehandlingProps,
+export const skalKunneOvertaMeldekortbehandling = (
+    meldekortbehandling: MeldekortbehandlingProps,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
-    const { status, saksbehandler, beslutter } = meldekortBehandling;
+    const { status, saksbehandler, beslutter } = meldekortbehandling;
 
     switch (status) {
-        case MeldekortBehandlingStatus.UNDER_BESLUTNING:
+        case MeldekortbehandlingStatus.UNDER_BESLUTNING:
             return (
                 beslutter &&
                 erBeslutter(innloggetSaksbehandler) &&
                 innloggetSaksbehandler.navIdent != saksbehandler
             );
-        case MeldekortBehandlingStatus.UNDER_BEHANDLING:
+        case MeldekortbehandlingStatus.UNDER_BEHANDLING:
             return (
                 saksbehandler &&
                 erSaksbehandler(innloggetSaksbehandler) &&

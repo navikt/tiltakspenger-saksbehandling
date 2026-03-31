@@ -20,7 +20,7 @@ export const beregningKildeUrl = (beregningKilde: BeregningKilde, sak: SakProps)
     switch (beregningKilde.type) {
         case BeregningKildeType.MELDEKORT: {
             const meldeperiodeKjede = meldeperiodeKjeder.find((kjede) =>
-                kjede.meldekortBehandlinger.some((mkb) => mkb.id === beregningKilde.id),
+                kjede.meldekortbehandlinger.some((mkb) => mkb.id === beregningKilde.id),
             );
             if (!meldeperiodeKjede) {
                 throw new Error(`Fant ikke meldeperiodekjede med id ${beregningKilde.id}`);

@@ -14,11 +14,11 @@ type Props = {
 };
 
 export const MeldekortKorrigertFraTidligerePeriode = ({ korrigering, headerTekst }: Props) => {
-    const { alleMeldekortBehandlinger } = useMeldeperiodeKjede();
+    const { alleMeldekortbehandlinger } = useMeldeperiodeKjede();
     const { saksnummer } = useSak().sak;
     const { periode, beregning, iverksatt } = korrigering;
 
-    const forrigeGodkjenteBeløp = alleMeldekortBehandlinger.find((mbeh) => mbeh.erAvsluttet)
+    const forrigeGodkjenteBeløp = alleMeldekortbehandlinger.find((mbeh) => mbeh.erAvsluttet)
         ?.beregning?.beregningForMeldekortetsPeriode.beløp;
 
     return (

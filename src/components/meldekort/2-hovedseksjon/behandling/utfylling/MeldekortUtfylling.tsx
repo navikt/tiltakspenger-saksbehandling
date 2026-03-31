@@ -2,22 +2,22 @@ import { Alert, BodyShort, Button, HStack, Textarea, VStack } from '@navikt/ds-r
 import { useSak } from '~/context/sak/SakContext';
 import {
     ForhåndsvisMeldekortbehandlingBrevRequest,
-    MeldekortBehandlingForm,
-    meldekortBehandlingFormTilDto,
+    MeldekortbehandlingForm,
+    meldekortbehandlingFormTilDto,
     meldekortUtfyllingValidation,
 } from './meldekortUtfyllingUtils';
 import { Controller, UseFormReturn } from 'react-hook-form';
 import { useMeldeperiodeKjede } from '../../../context/MeldeperiodeKjedeContext';
 import {
-    MeldekortBehandlingDagStatus,
-    MeldekortBehandlingDTO,
-    MeldekortBehandlingProps,
-} from '~/types/meldekort/MeldekortBehandling';
+    MeldekortbehandlingDagStatus,
+    MeldekortbehandlingDTO,
+    MeldekortbehandlingProps,
+} from '~/types/meldekort/Meldekortbehandling';
 import { MeldekortUker } from '../../../0-felles-komponenter/uker/MeldekortUker';
 import { useRef } from 'react';
 import { classNames } from '~/utils/classNames';
 import { MeldekortBegrunnelse } from '../../../0-felles-komponenter/begrunnelse/MeldekortBegrunnelse';
-import AvsluttMeldekortBehandling from '~/components/personoversikt/meldekort-oversikt/avsluttMeldekortBehandling/AvsluttMeldekortBehandling';
+import AvsluttMeldekortbehandling from '~/components/personoversikt/meldekort-oversikt/avsluttMeldekortbehandling/AvsluttMeldekortbehandling';
 import { meldeperiodeUrl } from '~/utils/urls';
 import { MeldekortBeregningOgSimulering } from '~/components/meldekort/0-felles-komponenter/beregning-simulering/MeldekortBeregningOgSimulering';
 import Divider from '~/components/divider/Divider';
@@ -30,38 +30,38 @@ import { BekreftelsesModal } from '~/components/modaler/BekreftelsesModal';
 import { SakId } from '~/types/Sak';
 import { FetcherError } from '~/utils/fetch/fetch';
 import { PERSONOVERSIKT_TABS } from '~/components/personoversikt/Personoversikt';
-import { useMeldekortBehandlingForm } from '~/components/meldekort/context/MeldekortUtfyllingFormContext';
+import { useMeldekortbehandlingForm } from '~/components/meldekort/context/MeldekortUtfyllingFormContext';
 
 import styles from './MeldekortUtfylling.module.css';
 
 type Props = {
-    meldekortBehandling: MeldekortBehandlingProps;
+    meldekortbehandling: MeldekortbehandlingProps;
 };
 
-export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
+export const MeldekortUtfylling = ({ meldekortbehandling }: Props) => {
     const { sakId, saksnummer } = useSak().sak;
     const { navigateWithNotification } = useNotification();
     const { sisteMeldeperiode, setMeldeperiodeKjede } = useMeldeperiodeKjede();
 
     const { antallDager, ingenDagerGirRett } = sisteMeldeperiode;
 
-    const formContext = useMeldekortBehandlingForm()!;
+    const formContext = useMeldekortbehandlingForm()!;
 
     const skjemaErEndret = formContext.formState.isDirty;
     const skjemaErUtfylt = formContext
         .getValues()
-        .dager.every((dag) => dag.status !== MeldekortBehandlingDagStatus.IkkeBesvart);
+        .dager.every((dag) => dag.status !== MeldekortbehandlingDagStatus.IkkeBesvart);
     const skalViseBeregningVarsel = skjemaErEndret && skjemaErUtfylt;
 
     const forhåndsvisBrev = useFetchBlobFraApi<ForhåndsvisMeldekortbehandlingBrevRequest>(
-        `/sak/${sakId}/meldekortbehandling/${meldekortBehandling.id}/forhandsvis`,
+        `/sak/${sakId}/meldekortbehandling/${meldekortbehandling.id}/forhandsvis`,
         'POST',
     );
 
     const lagreOgBeregnMeldekort = useFetchJsonFraApi<
         MeldeperiodeKjedeProps,
-        MeldekortBehandlingDTO
-    >(`/sak/${sakId}/meldekort/${meldekortBehandling.id}/oppdater`, 'POST', {
+        MeldekortbehandlingDTO
+    >(`/sak/${sakId}/meldekort/${meldekortbehandling.id}/oppdater`, 'POST', {
         onSuccess: (oppdatertKjede) => {
             if (oppdatertKjede) {
                 setMeldeperiodeKjede(oppdatertKjede);
@@ -71,8 +71,8 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
 
     const sendMeldekortTilBeslutter = useFetchJsonFraApi<
         MeldeperiodeKjedeProps,
-        MeldekortBehandlingDTO
-    >(`/sak/${sakId}/meldekort/${meldekortBehandling.id}`, 'POST', {
+        MeldekortbehandlingDTO
+    >(`/sak/${sakId}/meldekort/${meldekortbehandling.id}`, 'POST', {
         onSuccess: (oppdatertKjede) => {
             if (oppdatertKjede) {
                 setMeldeperiodeKjede(oppdatertKjede);
@@ -89,7 +89,7 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
     const buttonActionRef =
         useRef<Nullable<'lagreOgBeregn' | 'sendTilBeslutter' | 'åpneSendTilBeslutterModal'>>(null);
 
-    const onSubmit = (data: MeldekortBehandlingForm) => {
+    const onSubmit = (data: MeldekortbehandlingForm) => {
         switch (buttonActionRef.current) {
             case 'åpneSendTilBeslutterModal':
                 modalRef.current?.showModal();
@@ -98,11 +98,11 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
                 //fordi brevet krever at beregning gjøres for å forhåndsvise, fjerner vi tidligere feil som kan ha oppstått
                 forhåndsvisBrev.reset();
                 lagreOgBeregnMeldekort.reset();
-                lagreOgBeregnMeldekort.trigger(meldekortBehandlingFormTilDto(data));
+                lagreOgBeregnMeldekort.trigger(meldekortbehandlingFormTilDto(data));
                 break;
             case 'sendTilBeslutter':
                 sendMeldekortTilBeslutter.reset();
-                sendMeldekortTilBeslutter.trigger(meldekortBehandlingFormTilDto(data));
+                sendMeldekortTilBeslutter.trigger(meldekortbehandlingFormTilDto(data));
                 break;
         }
     };
@@ -116,7 +116,7 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
 
     //Vi er interesert i å disable 'send til beslutter' hvis formet ikke er i en tilstand som kan sendes videre
     const kanSendeTilBeslutning =
-        !skjemaErEndret && !harValideringsFeil && meldekortBehandling.beregning !== null;
+        !skjemaErEndret && !harValideringsFeil && meldekortbehandling.beregning !== null;
 
     return (
         // TODO Gjorde lintingen strengere ved oppgradering til Next 16. Fikset bare åpenbare feil, denne burde undersøkes.
@@ -130,7 +130,7 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
                     </Alert>
                 )}
                 <MeldekortBeregningOgSimulering
-                    meldekortBehandling={meldekortBehandling}
+                    meldekortbehandling={meldekortbehandling}
                     className={classNames(skjemaErEndret && styles.utdatertBeregning)}
                 />
                 <Controller
@@ -160,7 +160,7 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
                     variant="secondary"
                     size="small"
                     loading={forhåndsvisBrev.isMutating}
-                    disabled={meldekortBehandling.erAvsluttet}
+                    disabled={meldekortbehandling.erAvsluttet}
                     onClick={() => {
                         //resetter eventuelle tidligere feil før ny request
                         forhåndsvisBrev.reset();
@@ -173,7 +173,7 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
                                     .getValues('dager')
                                     .every(
                                         (dag) =>
-                                            dag.status !== MeldekortBehandlingDagStatus.IkkeBesvart,
+                                            dag.status !== MeldekortbehandlingDagStatus.IkkeBesvart,
                                     )
                                     ? formContext.getValues('dager')
                                     : null,
@@ -194,7 +194,7 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
                 <MeldekortUtfyllingFooter
                     sakId={sakId}
                     saksnummer={saksnummer}
-                    meldekortBehandling={meldekortBehandling}
+                    meldekortbehandling={meldekortbehandling}
                     lagreOgBeregnMeldekort={lagreOgBeregnMeldekort}
                     sendMeldekortTilBeslutter={sendMeldekortTilBeslutter}
                     modalRef={modalRef}
@@ -211,7 +211,7 @@ export const MeldekortUtfylling = ({ meldekortBehandling }: Props) => {
 const MeldekortUtfyllingFooter = (props: {
     sakId: SakId;
     saksnummer: string;
-    meldekortBehandling: MeldekortBehandlingProps;
+    meldekortbehandling: MeldekortbehandlingProps;
     lagreOgBeregnMeldekort: {
         isMutating: boolean;
         error?: FetcherError;
@@ -224,7 +224,7 @@ const MeldekortUtfyllingFooter = (props: {
     buttonActionRef: React.RefObject<
         Nullable<'lagreOgBeregn' | 'sendTilBeslutter' | 'åpneSendTilBeslutterModal'>
     >;
-    form: UseFormReturn<MeldekortBehandlingForm>;
+    form: UseFormReturn<MeldekortbehandlingForm>;
     ingenDagerGirRett: boolean;
     kanSendeTilBeslutning: boolean;
 }) => {
@@ -247,12 +247,12 @@ const MeldekortUtfyllingFooter = (props: {
                 </Alert>
             )}
             <HStack justify={'space-between'}>
-                <AvsluttMeldekortBehandling
+                <AvsluttMeldekortbehandling
                     sakId={props.sakId}
-                    meldekortBehandlingId={props.meldekortBehandling.id}
+                    meldekortbehandlingId={props.meldekortbehandling.id}
                     personoversiktUrl={meldeperiodeUrl(
                         props.saksnummer,
-                        props.meldekortBehandling.periode,
+                        props.meldekortbehandling.periode,
                     )}
                     buttonProps={{ variant: 'tertiary' }}
                 />
