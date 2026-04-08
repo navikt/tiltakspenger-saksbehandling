@@ -17,7 +17,10 @@ export const BehandlingAvslutt = ({ behandling }: Props) => {
     const [vilAvslutteBehandling, setVilAvslutteBehandling] = useState(false);
 
     const { avsluttBehandling, avsluttBehandlingIsMutating, avsluttBehandlingError } =
-        useAvsluttBehandling(behandling.saksnummer);
+        useAvsluttBehandling(behandling.saksnummer, (sak) => {
+            setSak(sak!);
+            router.push(personoversiktUrl(behandling));
+        });
 
     return (
         <>
@@ -37,9 +40,6 @@ export const BehandlingAvslutt = ({ behandling }: Props) => {
                         avsluttBehandling({
                             behandlingId: behandling.id,
                             begrunnelse: begrunnelse,
-                        }).then((sak) => {
-                            setSak(sak!);
-                            router.push(personoversiktUrl(behandling));
                         });
                     }}
                     footer={{

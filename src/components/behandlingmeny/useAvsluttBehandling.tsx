@@ -7,7 +7,7 @@ type AvsluttBehandlingDTO = {
     behandlingId: BehandlingId;
 };
 
-export const useAvsluttBehandling = (saksnummer: string) => {
+export const useAvsluttBehandling = (saksnummer: string, onSuccess: (sak: SakProps) => void) => {
     const {
         trigger: avsluttBehandling,
         isMutating: avsluttBehandlingIsMutating,
@@ -15,6 +15,7 @@ export const useAvsluttBehandling = (saksnummer: string) => {
     } = useFetchJsonFraApi<SakProps, AvsluttBehandlingDTO>(
         `sak/${saksnummer}/avbryt-aktiv-behandling`,
         'POST',
+        { onSuccess: onSuccess },
     );
 
     return { avsluttBehandling, avsluttBehandlingIsMutating, avsluttBehandlingError };

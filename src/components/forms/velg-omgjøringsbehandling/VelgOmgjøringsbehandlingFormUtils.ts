@@ -57,7 +57,7 @@ export const velgOmgjøringsbehandlingFormDataTilOpprettRammebehandlingRequest =
             formdata.behandlingstype === VelgOmgjøringsbehandlingTyper.SØKNADSBEHANDLING
                 ? formdata.søknadId
                 : null,
-        vedtakSomSkalOmgjøres:
+        vedtakIdSomSkalOmgjøres:
             formdata.behandlingstype === VelgOmgjøringsbehandlingTyper.REVURDERING_OMGJØRING
                 ? formdata.vedtakSomSkalOmgjøres
                 : null,

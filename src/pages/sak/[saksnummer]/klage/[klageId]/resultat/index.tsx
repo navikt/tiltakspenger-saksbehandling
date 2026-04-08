@@ -233,8 +233,7 @@ const OpprettholdResultat = (props: {
     const kanFerdigstilleKlage =
         fåttSvarFraKA &&
         !props.klage.åpenRammebehandlingId &&
-        props.klage.status !== KlagebehandlingStatus.FERDIGSTILT &&
-        props.klage.status !== KlagebehandlingStatus.VEDTATT &&
+        !erKlageAvsluttet(props.klage) &&
         !erReadonlyForSaksbehandler;
 
     const inneholderHendelserRetur = !!props.klage.resultat.klageinstanshendelser.find(
