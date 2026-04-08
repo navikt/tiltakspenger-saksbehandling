@@ -18,7 +18,6 @@ import {
 } from '~/types/Rammebehandling';
 import { Tidslinjer } from '~/components/tidslinjer/Tidslinjer';
 import { useRouter } from 'next/router';
-import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
 import {
     ArrowsCirclepathIcon,
     BankNoteIcon,
@@ -52,7 +51,6 @@ export const PERSONOVERSIKT_TABS = {
 export const Personoversikt = () => {
     const router = useRouter();
     const { sak } = useSak();
-    const { tilbakekrevingToggle } = useFeatureToggles();
     const [startRevurderingModalÅpen, setStartRevurderingModalÅpen] = useState(false);
     const [registrerSøknadManueltModalÅpen, setRegistrerSøknadManueltModalÅpen] = useState(false);
 
@@ -185,14 +183,12 @@ export const Personoversikt = () => {
                             icon={<EnvelopeClosedIcon aria-hidden />}
                             className={styles.tab}
                         />
-                        {tilbakekrevingToggle && (
-                            <Tabs.Tab
-                                value={PERSONOVERSIKT_TABS.tilbakekreving}
-                                label={labelWithCounter('Tilbakekreving', tilbakekrevinger.length)}
-                                icon={<BankNoteIcon aria-hidden />}
-                                className={styles.tab}
-                            />
-                        )}
+                        <Tabs.Tab
+                            value={PERSONOVERSIKT_TABS.tilbakekreving}
+                            label={labelWithCounter('Tilbakekreving', tilbakekrevinger.length)}
+                            icon={<BankNoteIcon aria-hidden />}
+                            className={styles.tab}
+                        />
                         <ActionMenu>
                             <ActionMenu.Trigger>
                                 <Button

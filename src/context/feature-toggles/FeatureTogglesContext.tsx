@@ -2,9 +2,7 @@ import { createContext, ReactNode, useContext } from 'react';
 
 type TogglesRecord = Record<`${string}Toggle`, boolean>;
 
-const featureTogglesDefaultState = {
-    tilbakekrevingToggle: false,
-} as const satisfies TogglesRecord;
+const featureTogglesDefaultState = {} as const satisfies TogglesRecord;
 
 type FeatureTogglesState = Record<keyof typeof featureTogglesDefaultState, boolean>;
 
