@@ -4,7 +4,7 @@ import useSWR from 'swr';
 import NextError from 'next/error';
 import { PersonaliaHeader } from '~/components/personaliaheader/PersonaliaHeader';
 import styles from './Layout.module.css';
-import { BodyShort, Heading, HStack, Loader, Tabs, Tag, VStack } from '@navikt/ds-react';
+import { BodyShort, Box, Heading, HStack, Loader, Tabs, Tag, VStack } from '@navikt/ds-react';
 import { Klagebehandling, KlagebehandlingStatus } from '~/types/Klage';
 import { Nullable } from '~/types/UtilTypes';
 import Link from 'next/link';
@@ -23,6 +23,7 @@ import AvbruttOppsummering from '~/components/oppsummeringer/oppsummeringAvAvbru
 import OppsummeringAvVentestatus from '~/components/oppsummeringer/ventestatus/OppsummeringAvVentestatus';
 import { hentSisteKlagehendelseUtfallFraKlagebehandling } from '~/utils/klageUtils';
 import { klagehendelseUtfallTilTag } from '~/utils/KlageinstanshendelseUtils';
+import { OppsummeringsPar } from '~/components/oppsummeringer/oppsummeringspar/OppsummeringsPar';
 
 type Props = {
     children: ReactElement;
@@ -121,6 +122,15 @@ const KlageLayout = ({ children, saksnummer, activeTab }: Props) => {
                 )}
                 {klage?.ventestatus?.erSattPåVent && (
                     <OppsummeringAvVentestatus ventestatus={klage.ventestatus} />
+                )}
+                {klage?.resultat?.begrunnelseFerdigstilling && (
+                    <Box className={classNames(styles.box)}>
+                        <OppsummeringsPar
+                            label={'Begrunnelse ferdigstilling'}
+                            verdi={klage.resultat.begrunnelseFerdigstilling}
+                            retning="vertikal"
+                        />
+                    </Box>
                 )}
             </VStack>
             <main>{children}</main>

@@ -67,12 +67,14 @@ export type KlagebehandlingsresultatDTO =
 export interface KlagebehandlingsresultatAvvist {
     type: KlagebehandlingResultat.AVVIST;
     brevtekst: Brevtekst[];
+    begrunnelseFerdigstilling: Nullable<string>;
 }
 
 export interface KlagebehandlingsresultatOmgjør {
     type: KlagebehandlingResultat.OMGJØR;
     årsak: OmgjøringÅrsak;
     begrunnelse: string;
+    begrunnelseFerdigstilling: Nullable<string>;
 }
 
 export interface KlagebehandlingsresultatOpprettholdt {
@@ -87,6 +89,7 @@ export interface KlagebehandlingsresultatOpprettholdt {
     ferdigstiltTidspunkt: Nullable<string>;
     journalpostIdInnstillingsbrev: Nullable<string>;
     dokumentInfoIder: Nullable<string[]>;
+    begrunnelseFerdigstilling: Nullable<string>;
 }
 
 export interface Brevtekst {
