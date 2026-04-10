@@ -115,7 +115,7 @@ const KlageLayout = ({ children, saksnummer, activeTab }: Props) => {
             <PersonaliaHeader sakId={data!.sakId!} saksnummer={data!.saksnummer} />
             <KlageHeader saksnummer={data!.saksnummer} klage={klage} />
             <KlageStedIndikator activeTab={activeTab} klage={klage} />
-            <VStack marginInline="space-40">
+            <VStack className={styles.klageInfoContainer}>
                 {klage?.status === KlagebehandlingStatus.AVBRUTT && (
                     <AvbruttOppsummering avbrutt={klage.avbrutt!} />
                 )}
@@ -123,7 +123,6 @@ const KlageLayout = ({ children, saksnummer, activeTab }: Props) => {
                     <OppsummeringAvVentestatus ventestatus={klage.ventestatus} />
                 )}
             </VStack>
-
             <main>{children}</main>
         </div>
     );

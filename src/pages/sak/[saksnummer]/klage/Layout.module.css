@@ -39,3 +39,7 @@
 .tabDisabled:hover {
     box-shadow: none;
 }
+
+.klageInfoContainer {
+    margin-left: 10rem;
+}
