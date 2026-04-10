@@ -6,7 +6,7 @@ import { SøknadId } from '~/types/Søknad';
 export interface VelgOmgjøringsbehandlingFormData {
     behandlingstype: VelgOmgjøringsbehandlingTyper | '';
     søknadId: SøknadId | '';
-    vedtakId: VedtakId | '';
+    vedtakSomSkalOmgjøres: VedtakId | '';
 }
 
 export const velgOmgjøringsbehandlingFormValidation = (data: VelgOmgjøringsbehandlingFormData) => {
@@ -28,6 +28,17 @@ export const velgOmgjøringsbehandlingFormValidation = (data: VelgOmgjøringsbeh
             message: 'Du må velge en søknad',
         };
     }
+
+    if (
+        data.behandlingstype === VelgOmgjøringsbehandlingTyper.REVURDERING_OMGJØRING &&
+        data.vedtakSomSkalOmgjøres === ''
+    ) {
+        errors.vedtakSomSkalOmgjøres = {
+            type: 'required',
+            message: 'Du må velge et vedtak som skal omgjøres',
+        };
+    }
+
     return { values: data, errors: errors };
 };
 
@@ -45,6 +56,10 @@ export const velgOmgjøringsbehandlingFormDataTilOpprettRammebehandlingRequest =
         søknadId:
             formdata.behandlingstype === VelgOmgjøringsbehandlingTyper.SØKNADSBEHANDLING
                 ? formdata.søknadId
+                : null,
+        vedtakIdSomSkalOmgjøres:
+            formdata.behandlingstype === VelgOmgjøringsbehandlingTyper.REVURDERING_OMGJØRING
+                ? formdata.vedtakSomSkalOmgjøres
                 : null,
     };
 };

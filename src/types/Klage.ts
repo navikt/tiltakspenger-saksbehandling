@@ -44,6 +44,8 @@ export interface Klagebehandling {
     kanIverksetteOpprettholdelse: boolean;
     ventestatus: Nullable<VentestatusHendelse>;
     formkrav: KlageFormkrav;
+    tilknyttedeRammebehandlingIder: BehandlingId[];
+    åpenRammebehandlingId: Nullable<BehandlingId>;
 }
 
 export interface KlageFormkrav {
@@ -65,13 +67,14 @@ export type KlagebehandlingsresultatDTO =
 export interface KlagebehandlingsresultatAvvist {
     type: KlagebehandlingResultat.AVVIST;
     brevtekst: Brevtekst[];
+    begrunnelseFerdigstilling: Nullable<string>;
 }
 
 export interface KlagebehandlingsresultatOmgjør {
     type: KlagebehandlingResultat.OMGJØR;
     årsak: OmgjøringÅrsak;
     begrunnelse: string;
-    rammebehandlingId: Nullable<BehandlingId>;
+    begrunnelseFerdigstilling: Nullable<string>;
 }
 
 export interface KlagebehandlingsresultatOpprettholdt {
@@ -84,9 +87,9 @@ export interface KlagebehandlingsresultatOpprettholdt {
     oversendtKlageinstansenTidspunkt: Nullable<string>;
     klageinstanshendelser: Klageinstanshendelse[];
     ferdigstiltTidspunkt: Nullable<string>;
-    rammebehandlingId: Nullable<BehandlingId>;
     journalpostIdInnstillingsbrev: Nullable<string>;
     dokumentInfoIder: Nullable<string[]>;
+    begrunnelseFerdigstilling: Nullable<string>;
 }
 
 export interface Brevtekst {
@@ -158,6 +161,7 @@ export interface LagreBrevtekstKlageRequest {
 export interface OpprettOmgjøringsbehandlingForKlageRequest {
     type: 'SØKNADSBEHANDLING_INNVILGELSE' | 'REVURDERING_INNVILGELSE' | 'REVURDERING_OMGJØRING';
     søknadId: Nullable<string>;
+    vedtakIdSomSkalOmgjøres: Nullable<string>;
 }
 
 export type KlagevedtakMedBehandling = { type: 'klagevedtak' } & Klagevedtak & {

@@ -99,7 +99,10 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
         visAvsluttBehandling;
 
     const { avsluttBehandling, avsluttBehandlingIsMutating, avsluttBehandlingError } =
-        useAvsluttBehandling(behandling.saksnummer);
+        useAvsluttBehandling(behandling.saksnummer, (oppdatertSak) => {
+            setSak(oppdatertSak);
+            setVisAvsluttBehandlingModal(false);
+        });
 
     const { settBehandlingPåVent, isSettBehandlingPåVentMutating, settBehandlingPåVentError } =
         useSettBehandlingPåVent(behandling.sakId, behandling.id);
@@ -212,11 +215,6 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
                         avsluttBehandling({
                             behandlingId: id,
                             begrunnelse: begrunnelse,
-                        }).then((oppdatertSak) => {
-                            if (oppdatertSak) {
-                                setSak(oppdatertSak);
-                                setVisAvsluttBehandlingModal(false);
-                            }
                         })
                     }
                     tittel={`Avslutt ${erRevurdering ? 'revurdering' : 'behandling'}`}
