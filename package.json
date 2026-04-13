@@ -28,7 +28,7 @@
         "pino": "10.3.1",
         "react": "19.2.4",
         "react-dom": "19.2.4",
-        "react-hook-form": "7.62.0",
+        "react-hook-form": "7.72.0",
         "swr": "2.4.1",
         "use-debounce": "10.1.1",
         "uuid": "13.0.0"
