@@ -32,6 +32,8 @@ import { Nullable } from '~/types/UtilTypes';
 import { erRammebehandlingUnderAktivOmgjøring } from '~/utils/behandling';
 import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
 import styles from './index.module.css';
+import { MeldekortVedtak } from '~/types/meldekort/MeldekortVedtak';
+import { MeldekortbehandlingProps } from '~/types/meldekort/Meldekortbehandling';
 
 type Props = {
     sak: SakProps;
@@ -137,7 +139,7 @@ const FormkravKlagePage = ({ sak, omgjøringsbehandling }: Props) => {
                         }
                         fnrFraPersonopplysninger={personopplysninger?.fnr ?? null}
                         control={form.control}
-                        vedtakOgBehandling={
+                        rammevedtakOgBehandlinger={
                             sak.alleRammevedtak
                                 .map((vedtak) => {
                                     const behandling = sak.behandlinger.find(
@@ -148,6 +150,20 @@ const FormkravKlagePage = ({ sak, omgjøringsbehandling }: Props) => {
                                 .filter(({ behandling }) => behandling !== undefined) as Array<{
                                 vedtak: Rammevedtak;
                                 behandling: Rammebehandling;
+                            }>
+                        }
+                        meldekortvedtakOgBehandlinger={
+                            sak.meldekortvedtak
+                                .map((v) => {
+                                    const behandling = sak.meldeperiodeKjeder
+                                        .find((k) => k.id === v.kjedeId)
+                                        ?.meldekortbehandlinger.find((b) => b.id === v.meldekortId);
+
+                                    return { vedtak: v, behandling };
+                                })
+                                .filter(({ behandling }) => behandling !== undefined) as Array<{
+                                vedtak: MeldekortVedtak;
+                                behandling: MeldekortbehandlingProps;
                             }>
                         }
                     />

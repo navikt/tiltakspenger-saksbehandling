@@ -20,6 +20,8 @@ import WarningCircleIcon from '~/icons/WarningCircleIcon';
 import { useHentPersonopplysninger } from '~/components/personaliaheader/useHentPersonopplysninger';
 import { useOpprettKlage } from '~/api/KlageApi';
 import styles from './index.module.css';
+import { MeldekortVedtak } from '~/types/meldekort/MeldekortVedtak';
+import { MeldekortbehandlingProps } from '~/types/meldekort/Meldekortbehandling';
 
 type Props = {
     sak: SakProps;
@@ -83,7 +85,7 @@ const OprettKlagePage = ({ sak }: Props) => {
                     <FormkravForm
                         control={form.control}
                         fnrFraPersonopplysninger={personopplysninger?.fnr ?? null}
-                        vedtakOgBehandling={
+                        rammevedtakOgBehandlinger={
                             sak.alleRammevedtak
                                 .map((vedtak) => {
                                     const behandling = sak.behandlinger.find(
@@ -94,6 +96,20 @@ const OprettKlagePage = ({ sak }: Props) => {
                                 .filter(({ behandling }) => behandling !== undefined) as Array<{
                                 vedtak: Rammevedtak;
                                 behandling: Rammebehandling;
+                            }>
+                        }
+                        meldekortvedtakOgBehandlinger={
+                            sak.meldekortvedtak
+                                .map((v) => {
+                                    const behandling = sak.meldeperiodeKjeder
+                                        .find((k) => k.id === v.kjedeId)
+                                        ?.meldekortbehandlinger.find((b) => b.id === v.meldekortId);
+
+                                    return { vedtak: v, behandling };
+                                })
+                                .filter(({ behandling }) => behandling !== undefined) as Array<{
+                                vedtak: MeldekortVedtak;
+                                behandling: MeldekortbehandlingProps;
                             }>
                         }
                     />

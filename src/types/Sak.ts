@@ -8,6 +8,7 @@ import { Klagebehandling } from './Klage';
 import { Klagevedtak } from './Klagevedtak';
 import { Søknad } from './Søknad';
 import { TilbakekrevingBehandling } from '~/types/Tilbakekreving';
+import { MeldekortVedtak } from './meldekort/MeldekortVedtak';
 
 export type SakId = `sak_${string}`;
 
@@ -30,4 +31,5 @@ export type SakProps = {
     søknader: Søknad[];
     tilbakekrevinger: TilbakekrevingBehandling[];
     kanSendeInnHelgForMeldekort: boolean;
+    meldekortvedtak: MeldekortVedtak[];
 };

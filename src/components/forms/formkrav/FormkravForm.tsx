@@ -13,18 +13,33 @@ import { Rammebehandling } from '~/types/Rammebehandling';
 import JournalpostId from '~/components/journalpostId/JournalpostId';
 import { Nullable } from '~/types/UtilTypes';
 import styles from './FormkravForm.module.css';
-import { formaterTidspunktKort, startOfDay } from '~/utils/date';
+import { formaterTidspunktKort, startOfDay, ukenummerFraDatotekst } from '~/utils/date';
 import { benkBehandlingstypeTekst } from '~/components/benk/benkSideUtils';
 import { behandlingResultatTilText } from '~/utils/tekstformateringUtils';
 import { Datovelger } from '~/components/datovelger/Datovelger';
 import dayjs from 'dayjs';
+import { MeldekortVedtak } from '~/types/meldekort/MeldekortVedtak';
+import { MeldekortbehandlingProps } from '~/types/meldekort/Meldekortbehandling';
+import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
 
 const FormkravForm = (props: {
     control: Control<FormkravFormData>;
-    vedtakOgBehandling: Array<{ vedtak: Rammevedtak; behandling: Rammebehandling }>;
+    rammevedtakOgBehandlinger: Array<{ vedtak: Rammevedtak; behandling: Rammebehandling }>;
+    meldekortvedtakOgBehandlinger: Array<{
+        vedtak: MeldekortVedtak;
+        behandling: MeldekortbehandlingProps;
+    }>;
     fnrFraPersonopplysninger: Nullable<string>;
     readonly?: boolean;
 }) => {
+    const { meldekortvedtakKlageToggle } = useFeatureToggles();
+
+    const vedtakSomKanKlagesPå = (
+        meldekortvedtakKlageToggle
+            ? [...props.rammevedtakOgBehandlinger, ...props.meldekortvedtakOgBehandlinger]
+            : props.rammevedtakOgBehandlinger
+    ).toSorted((a, b) => dayjs(a.vedtak.opprettet).diff(dayjs(b.vedtak.opprettet)));
+
     const erKlagefristOverholdt = useWatch({
         control: props.control,
         name: 'erKlagefristOverholdt',
@@ -35,7 +50,7 @@ const FormkravForm = (props: {
         name: 'vedtakDetPåklages',
     });
 
-    const valgtVedtak = props.vedtakOgBehandling.find(
+    const valgtVedtak = vedtakSomKanKlagesPå.find(
         ({ vedtak }) => vedtak.id === valgtVedtakId,
     )?.vedtak;
 
@@ -48,6 +63,22 @@ const FormkravForm = (props: {
         valgtVedtak &&
         valgtInnsendingsdato &&
         dayjs(valgtVedtak.opprettet).add(6, 'week').isBefore(dayjs(valgtInnsendingsdato));
+
+    const isRammebehandling = (
+        b: Rammebehandling | MeldekortbehandlingProps,
+    ): b is Rammebehandling => {
+        return b.id.startsWith('beh_');
+    };
+
+    const isRammevedtak = (v: Rammevedtak | MeldekortVedtak): v is Rammevedtak => {
+        return 'behandlingId' in v;
+    };
+
+    const isMeldekortBehandling = (
+        b: Rammebehandling | MeldekortbehandlingProps,
+    ): b is MeldekortbehandlingProps => {
+        return b.id.startsWith('meldekort_');
+    };
 
     return (
         <VStack gap="space-32" align="start">
@@ -68,13 +99,28 @@ const FormkravForm = (props: {
                     >
                         <option value="">Ikke valgt</option>
                         <option value={INGEN_VEDTAK}>Har ikke klaget på et vedtak</option>
-                        {props.vedtakOgBehandling.map(({ vedtak, behandling }) => (
-                            <option key={`${vedtak.id}-${behandling.id}`} value={vedtak.id}>
-                                {benkBehandlingstypeTekst[behandling.type]} -{' '}
-                                {behandlingResultatTilText[vedtak.resultat]} -{' '}
-                                {formaterTidspunktKort(vedtak.opprettet)}
-                            </option>
-                        ))}
+                        {vedtakSomKanKlagesPå.map(({ vedtak, behandling }) => {
+                            const ukerString = isMeldekortBehandling(behandling)
+                                ? `${ukenummerFraDatotekst(behandling.periode.fraOgMed)} og ${ukenummerFraDatotekst(behandling.periode.tilOgMed)}`
+                                : null;
+
+                            return (
+                                <option key={`${vedtak.id}-${behandling.id}`} value={vedtak.id}>
+                                    {isRammebehandling(behandling)
+                                        ? benkBehandlingstypeTekst[behandling.type]
+                                        : isMeldekortBehandling(behandling)
+                                          ? 'Meldekortvedtak'
+                                          : ''}{' '}
+                                    -{' '}
+                                    {isRammevedtak(vedtak)
+                                        ? `${behandlingResultatTilText[vedtak.resultat]}`
+                                        : isMeldekortBehandling(behandling)
+                                          ? `Uke ${ukerString}`
+                                          : ''}{' '}
+                                    - {formaterTidspunktKort(vedtak.opprettet)}
+                                </option>
+                            );
+                        })}
                     </Select>
                 )}
             />
