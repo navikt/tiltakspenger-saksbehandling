@@ -9,7 +9,7 @@ import {
     KlagebehandlingStatus,
     KlageId,
 } from '~/types/Klage';
-import { SakProps } from '~/types/Sak';
+import { SakId, SakProps } from '~/types/Sak';
 import { fetchSak } from '~/utils/fetch/fetch-server';
 import { KlageSteg } from '~/utils/KlageLayoutUtils';
 import KlageLayout, { KlageProvider, useKlage } from '../../layout';
@@ -22,7 +22,7 @@ import {
 import { Rammebehandling } from '~/types/Rammebehandling';
 import { Nullable } from '~/types/UtilTypes';
 import { behandlingUrl } from '~/utils/urls';
-import { VelgOmgjøringsbehandlingModal } from '~/components/forms/velg-omgjøringsbehandling/VelgOmgjøringsbehandlingForm';
+import { OpprettNyBehandlingForKlageModal } from '~/components/forms/velg-omgjøringsbehandling/OpprettNyBehandlingForKlageForm';
 import { Søknad } from '~/types/Søknad';
 import { Rammevedtak } from '~/types/Rammevedtak';
 import Link from 'next/link';
@@ -45,6 +45,7 @@ import styles from './index.module.css';
 import OppsummeringAvKlageinstanshendelser from '~/components/oppsummeringer/klage/oppsummeringAvKlageinstanshendelser/OppsummeringAvKlageinstanshendelser';
 import { KlageHendelseKlagebehandlingAvsluttetUtfall } from '~/types/Klageinstanshendelse';
 import FerdigstillKlageModalWrapper from '~/components/modaler/FerdigstillKlagebehandlingModal';
+import { MeldekortVedtak } from '~/types/meldekort/MeldekortVedtak';
 
 type Props = {
     sak: SakProps;
@@ -101,11 +102,13 @@ const ResultatPage = ({ sak, omgjøringsbehandling, vedtak, søknader }: Props) 
         <VStack className={styles.formContainer} gap="space-32" marginBlock="space-32">
             {resultat.type === KlagebehandlingResultat.OMGJØR ? (
                 <Omgjøringsresultat
-                    sak={sak}
+                    sakId={sak.sakId}
+                    saksnummer={sak.saksnummer}
                     klage={klage as Klagebehandling & { resultat: KlagebehandlingsresultatOmgjør }}
                     omgjøringsbehandling={omgjøringsbehandling}
                     vedtak={vedtak}
                     søknader={søknader}
+                    meldekortvedtak={sak.meldekortvedtak}
                     innloggetSaksbehandler={innloggetSaksbehandler}
                 />
             ) : (
@@ -127,10 +130,12 @@ const ResultatPage = ({ sak, omgjøringsbehandling, vedtak, søknader }: Props) 
 };
 
 const Omgjøringsresultat = (props: {
-    sak: SakProps;
+    sakId: SakId;
+    saksnummer: string;
     klage: Klagebehandling & { resultat: KlagebehandlingsresultatOmgjør };
     omgjøringsbehandling: Nullable<Rammebehandling>;
     vedtak: Rammevedtak[];
+    meldekortvedtak: MeldekortVedtak[];
     søknader: Søknad[];
     innloggetSaksbehandler: Saksbehandler;
 }) => {
@@ -158,7 +163,7 @@ const Omgjøringsresultat = (props: {
                     as={Link}
                     variant="secondary"
                     href={behandlingUrl({
-                        saksnummer: props.sak.saksnummer,
+                        saksnummer: props.saksnummer,
                         id: props.klage.resultat.rammebehandlingId,
                     })}
                 >
@@ -175,21 +180,24 @@ const Omgjøringsresultat = (props: {
                     </Button>
                     {!erKlageAvsluttet(props.klage) && (
                         <FerdigstillKlageModalWrapper
-                            sakId={props.sak.sakId}
+                            sakId={props.sakId}
                             klageId={props.klage.id}
                         />
                     )}
                 </HStack>
             ) : null}
             {vilVelgeOmgjøringsbehandlingModal && (
-                <VelgOmgjøringsbehandlingModal
-                    sakId={props.sak.sakId}
-                    saksnummer={props.sak.saksnummer}
+                <OpprettNyBehandlingForKlageModal
+                    sakId={props.sakId}
+                    saksnummer={props.saksnummer}
                     klageId={props.klage.id}
                     vedtak={props.vedtak}
+                    meldekortvedtak={props.meldekortvedtak}
                     søknader={props.søknader}
                     åpen={vilVelgeOmgjøringsbehandlingModal}
                     onClose={() => setVilVelgeOmgjøringsbehandlingModal(false)}
+                    //vedtakId er påkrevd dersom klagen er til vurdering
+                    vedtakIdDetKlagesPå={props.klage.formkrav.vedtakDetKlagesPå!}
                 />
             )}
         </VStack>
@@ -391,7 +399,7 @@ const OpprettholdResultat = (props: {
             </HStack>
 
             {vilOppretteNyBehandling && (
-                <VelgOmgjøringsbehandlingModal
+                <OpprettNyBehandlingForKlageModal
                     sakId={props.sak.sakId}
                     saksnummer={props.sak.saksnummer}
                     klageId={props.klage.id}
@@ -399,6 +407,9 @@ const OpprettholdResultat = (props: {
                     søknader={props.søknader}
                     åpen={vilOppretteNyBehandling}
                     onClose={() => setVilOppretteNyBehandling(false)}
+                    //vedtakId er påkrevd dersom klagen er til vurdering
+                    vedtakIdDetKlagesPå={props.klage.formkrav.vedtakDetKlagesPå!}
+                    meldekortvedtak={props.sak.meldekortvedtak}
                 />
             )}
         </VStack>

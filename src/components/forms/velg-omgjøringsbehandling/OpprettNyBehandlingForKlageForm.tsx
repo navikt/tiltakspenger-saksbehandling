@@ -1,26 +1,38 @@
-import { Modal, Select, Button, VStack, Heading, HStack, LocalAlert } from '@navikt/ds-react';
+import {
+    Modal,
+    Select,
+    Button,
+    VStack,
+    Heading,
+    HStack,
+    LocalAlert,
+    BodyShort,
+} from '@navikt/ds-react';
 import { Control, useWatch, Controller, useForm } from 'react-hook-form';
-import { Rammevedtak } from '~/types/Rammevedtak';
+import { Rammevedtak, VedtakId } from '~/types/Rammevedtak';
 import { Søknad } from '~/types/Søknad';
-import { formaterTidspunkt } from '~/utils/date';
+import { formaterTidspunkt, ukenummerFraDatotekst } from '~/utils/date';
 import {
     VelgOmgjøringsbehandlingFormData,
     velgOmgjøringsbehandlingFormDataTilOpprettRammebehandlingRequest,
     velgOmgjøringsbehandlingFormValidation,
     VelgOmgjøringsbehandlingTyper,
-} from './VelgOmgjøringsbehandlingFormUtils';
+} from './OpprettNyBehandlingForKlageFormUtils';
 import { useOpprettRammebehandlingForKlage } from '~/api/KlageApi';
 import router from 'next/router';
 import { behandlingUrl } from '~/utils/urls';
 import { KlageId } from '~/types/Klage';
 import { SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
 import { RevurderingResultat } from '~/types/Revurdering';
+import { MeldekortVedtak } from '~/types/meldekort/MeldekortVedtak';
 
-export const VelgOmgjøringsbehandlingModal = (props: {
+export const OpprettNyBehandlingForKlageModal = (props: {
     sakId: string;
     saksnummer: string;
     klageId: KlageId;
+    vedtakIdDetKlagesPå: VedtakId;
     vedtak: Rammevedtak[];
+    meldekortvedtak: MeldekortVedtak[];
     søknader: Søknad[];
     åpen: boolean;
     onClose: () => void;
@@ -51,18 +63,20 @@ export const VelgOmgjøringsbehandlingModal = (props: {
         <form onSubmit={form.handleSubmit(onSubmit)}>
             <Modal
                 width={550}
-                aria-label="Velg omgjøringsbehandling"
+                aria-label="Velg ny behandling"
                 open={props.åpen}
                 onClose={props.onClose}
             >
                 <Modal.Header>
-                    <Heading size="medium">Velg omgjøringsbehandling</Heading>
+                    <Heading size="medium">Velg ny behandling</Heading>
                 </Modal.Header>
                 <Modal.Body>
-                    <VelgOmgjøringsbehandlingForm
+                    <OpprettNyBehandlingForKlageModalBody
                         control={form.control}
+                        vedtakIdDetKlagesPå={props.vedtakIdDetKlagesPå}
                         vedtak={props.vedtak}
                         søknader={props.søknader}
+                        meldekortVedtak={props.meldekortvedtak}
                     />
                 </Modal.Body>
                 <Modal.Footer>
@@ -70,7 +84,7 @@ export const VelgOmgjøringsbehandlingModal = (props: {
                         <LocalAlert status="error" size="small">
                             <LocalAlert.Header>
                                 <LocalAlert.Title>
-                                    Feil ved opprettelse av omgjøringsbehandling
+                                    Feil ved opprettelse av ny behandling
                                 </LocalAlert.Title>
                             </LocalAlert.Header>
                             <LocalAlert.Content>
@@ -83,7 +97,7 @@ export const VelgOmgjøringsbehandlingModal = (props: {
                             Lukk
                         </Button>
                         <Button variant="primary" loading={opprettRammebehandling.isMutating}>
-                            Opprett omgjøringsbehandling
+                            Opprett ny behandling
                         </Button>
                     </HStack>
                 </Modal.Footer>
@@ -92,10 +106,12 @@ export const VelgOmgjøringsbehandlingModal = (props: {
     );
 };
 
-const VelgOmgjøringsbehandlingForm = (props: {
+const OpprettNyBehandlingForKlageModalBody = (props: {
     control: Control<VelgOmgjøringsbehandlingFormData>;
     vedtak: Rammevedtak[];
+    meldekortVedtak: MeldekortVedtak[];
     søknader: Søknad[];
+    vedtakIdDetKlagesPå: VedtakId;
 }) => {
     const behandlingstype = useWatch({
         control: props.control,
@@ -110,6 +126,10 @@ const VelgOmgjøringsbehandlingForm = (props: {
 
     const harVedtakSomKanOmgjøres = !!props.vedtak.find((vedtak) =>
         vedtak.gyldigeKommandoer.OMGJØR ? true : false,
+    );
+
+    const meldekortVedtakSomPåklages = props.meldekortVedtak.find(
+        (vedtak) => vedtak.id === props.vedtakIdDetKlagesPå,
     );
 
     return (
@@ -138,6 +158,12 @@ const VelgOmgjøringsbehandlingForm = (props: {
                         >
                             Revurdering - Omgjøring
                         </option>
+                        <option
+                            value={VelgOmgjøringsbehandlingTyper.MELDEKORTBEHANDLING}
+                            disabled={!meldekortVedtakSomPåklages}
+                        >
+                            Meldekortbehandling
+                        </option>
                     </Select>
                 )}
             />
@@ -157,10 +183,9 @@ const VelgOmgjøringsbehandlingForm = (props: {
                     )}
                 />
             )}
-
             {behandlingstype === VelgOmgjøringsbehandlingTyper.REVURDERING_OMGJØRING && (
                 <Controller
-                    name={'vedtakSomSkalOmgjøres'}
+                    name={'vedtakId'}
                     control={props.control}
                     render={({ field, fieldState }) => (
                         <Select
@@ -182,7 +207,18 @@ const VelgOmgjøringsbehandlingForm = (props: {
                     )}
                 />
             )}
+
+            {behandlingstype === VelgOmgjøringsbehandlingTyper.MELDEKORTBEHANDLING &&
+                meldekortVedtakSomPåklages && (
+                    <VStack>
+                        <BodyShort>
+                            Ny meldekortbehandling kommer til å bli opprettet for uke{' '}
+                            {ukenummerFraDatotekst(meldekortVedtakSomPåklages.periode.fraOgMed)} og{' '}
+                            {ukenummerFraDatotekst(meldekortVedtakSomPåklages.periode.tilOgMed)}
+                        </BodyShort>
+                    </VStack>
+                )}
         </VStack>
     );
 };
-export default VelgOmgjøringsbehandlingForm;
+export default OpprettNyBehandlingForKlageModalBody;

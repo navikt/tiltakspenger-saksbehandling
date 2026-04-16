@@ -39,7 +39,7 @@ import AvsluttBehandlingModal from '~/components/modaler/AvsluttBehandlingModal'
 import styles from './index.module.css';
 import Link from 'next/link';
 import { behandlingUrl } from '~/utils/urls';
-import { VelgOmgjøringsbehandlingModal } from '~/components/forms/velg-omgjøringsbehandling/VelgOmgjøringsbehandlingForm';
+import { OpprettNyBehandlingForKlageModal } from '~/components/forms/velg-omgjøringsbehandling/OpprettNyBehandlingForKlageForm';
 import { Søknad } from '~/types/Søknad';
 import { Rammevedtak } from '~/types/Rammevedtak';
 import { Rammebehandling } from '~/types/Rammebehandling';
@@ -323,7 +323,7 @@ const VurderingKlagePage = ({ sak, vedtak, søknader, omgjøringsbehandling }: P
                 />
             )}
             {vilVelgeOmgjøringsbehandlingModal && (
-                <VelgOmgjøringsbehandlingModal
+                <OpprettNyBehandlingForKlageModal
                     sakId={sak.sakId}
                     saksnummer={sak.saksnummer}
                     klageId={klage.id}
@@ -331,6 +331,9 @@ const VurderingKlagePage = ({ sak, vedtak, søknader, omgjøringsbehandling }: P
                     søknader={søknader}
                     åpen={vilVelgeOmgjøringsbehandlingModal}
                     onClose={() => setVilVelgeOmgjøringsbehandlingModal(false)}
+                    meldekortvedtak={sak.meldekortvedtak}
+                    //vedtakId er påkrevd dersom klagen er til vurdering
+                    vedtakIdDetKlagesPå={klage.formkrav.vedtakDetKlagesPå!}
                 />
             )}
         </div>
