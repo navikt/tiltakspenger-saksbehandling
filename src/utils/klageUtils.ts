@@ -57,8 +57,9 @@ export const erKlageFerdigbehandlet = (k: Klagebehandling): boolean =>
 
 export const erKlageFerdigstilt = (
     k: Klagebehandling,
-): k is Klagebehandling & { resultat: KlagebehandlingsresultatOpprettholdt } =>
-    k.status === KlagebehandlingStatus.FERDIGSTILT;
+): k is Klagebehandling & {
+    resultat: KlagebehandlingsresultatOpprettholdt | KlagebehandlingsresultatOmgjør;
+} => k.status === KlagebehandlingStatus.FERDIGSTILT;
 
 export const erKlageVedtatt = (k: Klagebehandling): boolean =>
     k.status === KlagebehandlingStatus.VEDTATT;

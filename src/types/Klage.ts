@@ -76,6 +76,7 @@ export interface KlagebehandlingsresultatOmgjør {
     årsak: OmgjøringÅrsak;
     begrunnelse: string;
     begrunnelseFerdigstilling: Nullable<string>;
+    ferdigstiltTidspunkt: Nullable<string>;
 }
 
 export interface KlagebehandlingsresultatOpprettholdt {
