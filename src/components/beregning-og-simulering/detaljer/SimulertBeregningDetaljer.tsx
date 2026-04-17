@@ -1,21 +1,21 @@
-import { SimulertBeregning } from '~/types/SimulertBeregning';
+import { SimuleringResultat, SimulertBeregning } from '~/types/SimulertBeregning';
 import { Button, Table } from '@navikt/ds-react';
 import { Fragment, useState } from 'react';
 import { classNames } from '~/utils/classNames';
 import { ChevronDownIcon } from '@navikt/aksel-icons';
-import { SimuleringDetaljerMeldeperiode } from '~/components/beregning-og-simulering/detaljer/meldeperiode/SimuleringDetaljerMeldeperiode';
+import { SimulertBeregningMeldeperiodeDetaljer } from '~/components/beregning-og-simulering/detaljer/meldeperiode/SimulertBeregningMeldeperiodeDetaljer';
 
-import style from './SimuleringDetaljer.module.css';
+import style from './SimulertBeregningDetaljer.module.css';
 
 type Props = {
     simulertBeregning: SimulertBeregning;
     className?: string;
 };
 
-export const SimuleringDetaljer = ({ simulertBeregning, className }: Props) => {
+export const SimulertBeregningDetaljer = ({ simulertBeregning, className }: Props) => {
     const [åpen, setÅpen] = useState(false);
 
-    const { meldeperioder } = simulertBeregning;
+    const { meldeperioder, simuleringResultat } = simulertBeregning;
 
     return (
         <>
@@ -39,7 +39,12 @@ export const SimuleringDetaljer = ({ simulertBeregning, className }: Props) => {
                     <Table.Body>
                         {meldeperioder.map((meldeperiode, index) => (
                             <Fragment key={meldeperiode.kjedeId}>
-                                <SimuleringDetaljerMeldeperiode meldeperiode={meldeperiode} />
+                                <SimulertBeregningMeldeperiodeDetaljer
+                                    meldeperiode={meldeperiode}
+                                    harSimulering={
+                                        simuleringResultat !== SimuleringResultat.IKKE_SIMULERT
+                                    }
+                                />
                                 {index < meldeperioder.length - 1 && (
                                     <Table.Row className={style.spacer} shadeOnHover={false}>
                                         <Table.DataCell />

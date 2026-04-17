@@ -1,7 +1,7 @@
 import { Alert, BodyShort, Heading, VStack } from '@navikt/ds-react';
 import { useBehandling } from '~/components/behandling/context/BehandlingContext';
 import { VedtakSeksjon } from '~/components/behandling/felles/layout/seksjon/VedtakSeksjon';
-import { SimuleringDetaljer } from '~/components/beregning-og-simulering/detaljer/SimuleringDetaljer';
+import { SimulertBeregningDetaljer } from '~/components/beregning-og-simulering/detaljer/SimulertBeregningDetaljer';
 import { Separator } from '~/components/separator/Separator';
 import { SimuleringOppsummering } from '~/components/beregning-og-simulering/simulering-oppsummering/SimuleringOppsummering';
 import { BeregningOppsummering } from '~/components/beregning-og-simulering/beregning-oppsummering/BeregningOppsummering';
@@ -138,7 +138,7 @@ const BeregningOgSimuleringSeksjon = ({
             </VedtakSeksjon.Høyre>
 
             <VedtakSeksjon.FullBredde className={style.detaljer}>
-                <SimuleringDetaljer simulertBeregning={simulertBeregning} />
+                <SimulertBeregningDetaljer simulertBeregning={simulertBeregning} />
             </VedtakSeksjon.FullBredde>
         </VedtakSeksjon>
     );
@@ -198,7 +198,7 @@ const UtbetalingskontrollSeksjon = ({ utbetalingskontroll, behandlingsstatus }: 
             </VedtakSeksjon.Høyre>
 
             <VedtakSeksjon.FullBredde className={style.detaljer}>
-                <SimuleringDetaljer simulertBeregning={simulertBeregning} />
+                <SimulertBeregningDetaljer simulertBeregning={simulertBeregning} />
             </VedtakSeksjon.FullBredde>
         </VedtakSeksjon>
     );

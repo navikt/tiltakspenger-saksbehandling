@@ -13,23 +13,18 @@ import { useState } from 'react';
 import { MinusIcon, PlusIcon } from '@navikt/aksel-icons';
 import { SimuleringOppsummeringDetaljert } from '~/components/beregning-og-simulering/detaljer/meldeperiode/oppsummering/SimuleringOppsummeringDetaljert';
 
-import style from './SimuleringDetaljerDager.module.css';
+import style from './SimulertBeregningDagDetaljer.module.css';
 
 type Props = {
     dag: SimulertBeregningDag;
+    harSimulering: boolean;
     className?: string;
 };
 
-export const SimuleringDetaljerDag = ({ dag, className }: Props) => {
-    const [visSimulering, setVisSimulering] = useState(false);
+export const SimulertBeregningDagDetaljer = ({ dag, harSimulering, className }: Props) => {
+    const [visSimuleringDetaljer, setVisSimuleringDetaljer] = useState(false);
 
     const { beregning, simulerteBeløp, dato, status } = dag;
-
-    const harSimulertBeløp = simulerteBeløp !== null;
-
-    const simulertDiffDag = harSimulertBeløp
-        ? simulerteBeløp.nyUtbetaling - simulerteBeløp.tidligereUtbetaling
-        : 0;
 
     return (
         <>
@@ -44,28 +39,21 @@ export const SimuleringDetaljerDag = ({ dag, className }: Props) => {
                         </BodyShort>
                     </Table.DataCell>
                 )}
-                <Table.DataCell className={style.simuleringCell}>
-                    {harSimulertBeløp ? (
-                        <>
-                            <span className={beløpStyle(simulertDiffDag)}>{simulertDiffDag}</span>
-                            <Tooltip
-                                content={`${visSimulering ? 'Skjul' : 'Vis'} detaljer for simulering av dagen`}
-                            >
-                                <Button
-                                    variant={'tertiary'}
-                                    size={'xsmall'}
-                                    type={'button'}
-                                    icon={visSimulering ? <MinusIcon /> : <PlusIcon />}
-                                    onClick={() => setVisSimulering(!visSimulering)}
-                                />
-                            </Tooltip>
-                        </>
-                    ) : (
-                        <BodyShort size={'small'}>{'Ingen endring'}</BodyShort>
-                    )}
-                </Table.DataCell>
+                {harSimulering ? (
+                    <SimuleringCell
+                        dag={dag}
+                        visDetaljer={visSimuleringDetaljer}
+                        setVisDetaljer={setVisSimuleringDetaljer}
+                    />
+                ) : (
+                    <Table.DataCell>
+                        <BodyShort size={'small'}>{'Ikke simulert'}</BodyShort>
+                    </Table.DataCell>
+                )}
             </Table.Row>
-            {visSimulering && simulerteBeløp && <SimuleringRow simulerteBeløp={simulerteBeløp} />}
+            {visSimuleringDetaljer && simulerteBeløp && (
+                <SimuleringDetaljerRow simulerteBeløp={simulerteBeløp} />
+            )}
         </>
     );
 };
@@ -98,7 +86,48 @@ const BeregningCells = ({ beregning, status }: SimulertBeregningDagMedBeregning)
     );
 };
 
-const SimuleringRow = ({ simulerteBeløp }: { simulerteBeløp: SimulerteBeløp }) => {
+const SimuleringCell = ({
+    dag,
+    visDetaljer,
+    setVisDetaljer,
+}: {
+    dag: SimulertBeregningDag;
+    visDetaljer: boolean;
+    setVisDetaljer: (visSimulering: boolean) => void;
+}) => {
+    const { simulerteBeløp } = dag;
+
+    const harSimulertBeløp = simulerteBeløp !== null;
+
+    const simulertDiffDag = harSimulertBeløp
+        ? simulerteBeløp.nyUtbetaling - simulerteBeløp.tidligereUtbetaling
+        : 0;
+
+    return (
+        <Table.DataCell className={style.simuleringCell}>
+            {harSimulertBeløp ? (
+                <>
+                    <span className={beløpStyle(simulertDiffDag)}>{simulertDiffDag}</span>
+                    <Tooltip
+                        content={`${visDetaljer ? 'Skjul' : 'Vis'} detaljer for simulering av dagen`}
+                    >
+                        <Button
+                            variant={'tertiary'}
+                            size={'xsmall'}
+                            type={'button'}
+                            icon={visDetaljer ? <MinusIcon /> : <PlusIcon />}
+                            onClick={() => setVisDetaljer(!visDetaljer)}
+                        />
+                    </Tooltip>
+                </>
+            ) : (
+                <BodyShort size={'small'}>{'Ingen endring'}</BodyShort>
+            )}
+        </Table.DataCell>
+    );
+};
+
+const SimuleringDetaljerRow = ({ simulerteBeløp }: { simulerteBeløp: SimulerteBeløp }) => {
     return (
         <Table.Row className={style.detaljerRow} shadeOnHover={false}>
             <Table.DataCell />

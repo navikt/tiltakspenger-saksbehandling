@@ -6,7 +6,7 @@ import {
 import { Alert, VStack } from '@navikt/ds-react';
 import { BeregningOppsummering } from '~/components/beregning-og-simulering/beregning-oppsummering/BeregningOppsummering';
 import { SimuleringOppsummering } from '~/components/beregning-og-simulering/simulering-oppsummering/SimuleringOppsummering';
-import { SimuleringDetaljer } from '~/components/beregning-og-simulering/detaljer/SimuleringDetaljer';
+import { SimulertBeregningDetaljer } from '~/components/beregning-og-simulering/detaljer/SimulertBeregningDetaljer';
 import { useMeldeperiodeKjede } from '~/components/meldekort/context/MeldeperiodeKjedeContext';
 import { MeldeperiodeKjedeProps } from '~/types/meldekort/Meldeperiode';
 import { BeregningOgSimuleringHeader } from '~/components/beregning-og-simulering/header/BeregningOgSimuleringHeader';
@@ -80,7 +80,7 @@ export const MeldekortBeregningOgSimulering = ({ meldekortbehandling, className 
                     innloggetSaksbehandler,
                 )}
             />
-            <SimuleringDetaljer simulertBeregning={simulertBeregning} />
+            <SimulertBeregningDetaljer simulertBeregning={simulertBeregning} />
         </VStack>
     );
 };

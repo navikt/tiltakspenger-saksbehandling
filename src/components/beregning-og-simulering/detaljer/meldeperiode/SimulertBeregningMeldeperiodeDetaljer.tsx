@@ -1,19 +1,20 @@
-import { Table } from '@navikt/ds-react';
+import { Alert, Table } from '@navikt/ds-react';
 import { SimulertBeregningPerMeldeperiode } from '~/types/SimulertBeregning';
 import { classNames } from '~/utils/classNames';
 import { useState } from 'react';
 import { SimuleringOppsummeringDetaljert } from '~/components/beregning-og-simulering/detaljer/meldeperiode/oppsummering/SimuleringOppsummeringDetaljert';
 import { beløpStyle } from '~/components/utbetaling/beløp/beløpStyle';
-import { SimuleringDetaljerDag } from '~/components/beregning-og-simulering/detaljer/meldeperiode/dag/SimuleringDetaljerDag';
+import { SimulertBeregningDagDetaljer } from '~/components/beregning-og-simulering/detaljer/meldeperiode/dag/SimulertBeregningDagDetaljer';
 import { SimuleringDetaljerMeldeperiodeHeader } from '~/components/beregning-og-simulering/detaljer/meldeperiode/header/SimuleringDetaljerMeldeperiodeHeader';
 
-import style from './SimuleringDetaljerMeldeperiode.module.css';
+import style from './SimulertBeregningMeldeperiodeDetaljer.module.css';
 
 type Props = {
     meldeperiode: SimulertBeregningPerMeldeperiode;
+    harSimulering: boolean;
 };
 
-export const SimuleringDetaljerMeldeperiode = ({ meldeperiode }: Props) => {
+export const SimulertBeregningMeldeperiodeDetaljer = ({ meldeperiode, harSimulering }: Props) => {
     const [erÅpen, setErÅpen] = useState(false);
 
     const { dager, beregning, simulerteBeløp } = meldeperiode;
@@ -75,7 +76,12 @@ export const SimuleringDetaljerMeldeperiode = ({ meldeperiode }: Props) => {
             </Table.Row>
 
             {dager.map((dag) => (
-                <SimuleringDetaljerDag dag={dag} className={kanLukkesStyle} key={dag.dato} />
+                <SimulertBeregningDagDetaljer
+                    dag={dag}
+                    harSimulering={harSimulering}
+                    className={kanLukkesStyle}
+                    key={dag.dato}
+                />
             ))}
 
             <Table.Row className={classNames(style.periodeSum, kanLukkesStyle)}>
@@ -104,10 +110,16 @@ export const SimuleringDetaljerMeldeperiode = ({ meldeperiode }: Props) => {
 
             <Table.Row shadeOnHover={false} className={kanLukkesStyle}>
                 <Table.DataCell colSpan={11} className={style.simuleringCell}>
-                    <SimuleringOppsummeringDetaljert
-                        headerTekst={'Simulering for hele perioden'}
-                        simulerteBeløp={meldeperiode.simulerteBeløp}
-                    />
+                    {harSimulering ? (
+                        <SimuleringOppsummeringDetaljert
+                            headerTekst={'Simulering for hele perioden'}
+                            simulerteBeløp={meldeperiode.simulerteBeløp}
+                        />
+                    ) : (
+                        <Alert variant={'error'} size={'small'}>
+                            {'Simulering mangler'}
+                        </Alert>
+                    )}
                 </Table.DataCell>
             </Table.Row>
         </>
