@@ -3,7 +3,6 @@ import { ReactElement, useState } from 'react';
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
 import {
     Klagebehandling,
-    KlagebehandlingResultat,
     KlagebehandlingsresultatOmgjør,
     KlagebehandlingsresultatOpprettholdt,
     KlageId,
@@ -31,22 +30,19 @@ import {
     harKlageEnÅpenRammebehandling,
     erKlageOmgjøring,
     erKlageOpprettholdelse,
-    erKlageUnderAktivOmgjøring,
     finnSisteGyldigeStegForKlage,
     kanBehandleKlage,
 } from '~/utils/klageUtils';
 import AvsluttBehandlingModal from '~/components/modaler/AvsluttBehandlingModal';
 import styles from './index.module.css';
 import Link from 'next/link';
-import { behandlingUrl } from '~/utils/urls';
-import { VelgOmgjøringsbehandlingModal } from '~/components/forms/velg-omgjøringsbehandling/VelgOmgjøringsbehandlingForm';
 import { Søknad } from '~/types/Søknad';
 import { Rammevedtak } from '~/types/Rammevedtak';
 import { Rammebehandling } from '~/types/Rammebehandling';
 import { Nullable } from '~/types/UtilTypes';
 import { erRammebehandlingUnderAktivOmgjøring } from '~/utils/behandling';
 import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
-import FerdigstillKlageModalWrapper from '~/components/modaler/FerdigstillKlagebehandlingModal';
+import Omgjøringsresultat from '~/components/klage/Omgjøringsresultat';
 
 type Props = {
     sak: SakProps;
@@ -56,6 +52,7 @@ type Props = {
     omgjøringsbehandling: Nullable<Rammebehandling>;
     vedtak: Rammevedtak[];
     søknader: Søknad[];
+    rammebehandlinger: Rammebehandling[];
 };
 
 export const getServerSideProps = pageWithAuthentication(async (context) => {
@@ -87,11 +84,18 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
             vedtak: sak.alleRammevedtak,
             søknader: sak.søknader,
             omgjøringsbehandling: omgjøringsbehandling,
+            rammebehandlinger: sak.behandlinger,
         },
     };
 });
 
-const VurderingKlagePage = ({ sak, vedtak, søknader, omgjøringsbehandling }: Props) => {
+const VurderingKlagePage = ({
+    sak,
+    vedtak,
+    søknader,
+    omgjøringsbehandling,
+    rammebehandlinger,
+}: Props) => {
     const { klage, setKlage } = useKlage();
     const { innloggetSaksbehandler } = useSaksbehandler();
     const [vilAvslutteBehandlingModal, setVilAvslutteBehandlingModal] = useState(false);
@@ -100,8 +104,6 @@ const VurderingKlagePage = ({ sak, vedtak, søknader, omgjøringsbehandling }: P
             ? 'LAGRET'
             : 'REDIGERER',
     );
-    const [vilVelgeOmgjøringsbehandlingModal, setVilVelgeOmgjøringsbehandlingModal] =
-        useState(false);
 
     const erReadonlyForSaksbehandler = innloggetSaksbehandler.navIdent !== klage.saksbehandler;
 
@@ -239,71 +241,44 @@ const VurderingKlagePage = ({ sak, vedtak, søknader, omgjøringsbehandling }: P
                                         </Button>
                                     </>
                                 )}
-
-                            {klage.resultat?.type === KlagebehandlingResultat.OMGJØR && (
-                                <InfoCard data-color="info">
-                                    <InfoCard.Header>
-                                        <InfoCard.Title>Omgjøring av vedtak</InfoCard.Title>
-                                    </InfoCard.Header>
-                                    <InfoCard.Content>
-                                        Resultatet av klagebehandlingen er at påklaget vedtak skal
-                                        omgjøres. Klagebehandlingen blir automatisk ferdigstilt
-                                        etter omgjøringsbehandlingen er iverksatt.
-                                    </InfoCard.Content>
-                                </InfoCard>
-                            )}
-
-                            {erKlageUnderAktivOmgjøring(klage) ? (
-                                <Button
-                                    as={Link}
-                                    variant="secondary"
-                                    href={behandlingUrl({
-                                        saksnummer: sak.saksnummer,
-                                        id: klage.resultat.rammebehandlingId,
-                                    })}
-                                >
-                                    Gå til omgjøringsbehandling
-                                </Button>
-                            ) : !erReadonlyForSaksbehandler && erKlageOmgjøring(klage) ? (
-                                <>
-                                    <Button
-                                        type="button"
-                                        variant="secondary"
-                                        onClick={() => setVilVelgeOmgjøringsbehandlingModal(true)}
-                                    >
-                                        Velg omgjøringsbehandling
-                                    </Button>
-                                    {!erKlageAvsluttet(klage) && (
-                                        <FerdigstillKlageModalWrapper
-                                            sakId={sak.sakId}
-                                            klageId={klage.id}
-                                        />
-                                    )}
-                                </>
-                            ) : null}
-
-                            {erKlageOpprettholdelse(klage) ? (
-                                <Button
-                                    as={Link}
-                                    href={`/sak/${sak.saksnummer}/klage/${klage.id}/brev`}
-                                >
-                                    Fortsett
-                                </Button>
-                            ) : (
-                                (erKlageAvsluttet(klage) || erReadonlyForSaksbehandler) && (
-                                    <Button
-                                        className={styles.fortsettKnapp}
-                                        as={Link}
-                                        href={finnSisteGyldigeStegForKlage(klage)}
-                                    >
-                                        Fortsett
-                                    </Button>
-                                )
-                            )}
                         </HStack>
                     )}
                 </VStack>
             </form>
+            <VStack
+                className={styles.formContainer}
+                gap="space-32"
+                marginBlock="space-32"
+                maxWidth="35rem"
+                align="start"
+            >
+                {erKlageOmgjøring(klage) && (
+                    <Omgjøringsresultat
+                        klage={klage}
+                        vedtak={vedtak}
+                        søknader={søknader}
+                        rammebehandlinger={rammebehandlinger}
+                        innloggetSaksbehandler={innloggetSaksbehandler}
+                    />
+                )}
+
+                {erKlageOpprettholdelse(klage) ? (
+                    <Button as={Link} href={`/sak/${sak.saksnummer}/klage/${klage.id}/brev`}>
+                        Fortsett
+                    </Button>
+                ) : (
+                    (erKlageAvsluttet(klage) || erReadonlyForSaksbehandler) && (
+                        <Button
+                            className={styles.fortsettKnapp}
+                            as={Link}
+                            href={finnSisteGyldigeStegForKlage(klage)}
+                        >
+                            Fortsett
+                        </Button>
+                    )
+                )}
+            </VStack>
+
             {vilAvslutteBehandlingModal && (
                 <AvsluttBehandlingModal
                     åpen={vilAvslutteBehandlingModal}
@@ -320,17 +295,6 @@ const VurderingKlagePage = ({ sak, vedtak, søknader, omgjøringsbehandling }: P
                             ? avbrytKlageBehandling.error.message
                             : null,
                     }}
-                />
-            )}
-            {vilVelgeOmgjøringsbehandlingModal && (
-                <VelgOmgjøringsbehandlingModal
-                    sakId={sak.sakId}
-                    saksnummer={sak.saksnummer}
-                    klageId={klage.id}
-                    vedtak={vedtak}
-                    søknader={søknader}
-                    åpen={vilVelgeOmgjøringsbehandlingModal}
-                    onClose={() => setVilVelgeOmgjøringsbehandlingModal(false)}
                 />
             )}
         </div>

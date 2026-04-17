@@ -2,6 +2,7 @@ import { Avbrutt } from './Avbrutt';
 import { Klageinstanshendelse } from './Klageinstanshendelse';
 import { BehandlingId } from './Rammebehandling';
 import { VedtakId } from './Rammevedtak';
+import { SakId } from './Sak';
 import { Nullable } from './UtilTypes';
 import { VentestatusHendelse } from './Ventestatus';
 import { Klagevedtak } from '~/types/Klagevedtak';
@@ -28,7 +29,7 @@ export enum KlagebehandlingStatus {
 
 export interface Klagebehandling {
     id: KlageId;
-    sakId: string;
+    sakId: SakId;
     saksnummer: string;
     fnr: string;
     opprettet: string;

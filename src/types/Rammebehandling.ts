@@ -43,6 +43,7 @@ export interface RammebehandlingBase {
     fritekstTilVedtaksbrev: Nullable<string>;
     begrunnelseVilkårsvurdering: Nullable<string>;
     avbrutt: Nullable<Avbrutt>;
+    opprettet: string;
     sistEndret: string;
     iverksattTidspunkt: Nullable<string>;
     ventestatus: Nullable<VentestatusHendelse>;

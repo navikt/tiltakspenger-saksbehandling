@@ -6,7 +6,7 @@ import {
     KlagebehandlingStatus,
     KlagefristUnntakSvarord,
 } from '~/types/Klage';
-import { BehandlingId, Rammebehandling } from '~/types/Rammebehandling';
+import { Rammebehandling } from '~/types/Rammebehandling';
 import { Nullable } from '~/types/UtilTypes';
 import { erRammebehandlingUnderAktivOmgjøring } from './behandling';
 import { KlagehendelseUtfall } from '~/types/Klageinstanshendelse';
@@ -53,12 +53,15 @@ export const erKlageAvsluttet = (k: Klagebehandling): boolean =>
     k.status === 'FERDIGSTILT';
 
 export const erKlageFerdigbehandlet = (k: Klagebehandling): boolean =>
-    k.status === KlagebehandlingStatus.VEDTATT || erKlageFerdigstilt(k);
+    erKlageVedtatt(k) || erKlageFerdigstilt(k);
 
 export const erKlageFerdigstilt = (
     k: Klagebehandling,
 ): k is Klagebehandling & { resultat: KlagebehandlingsresultatOpprettholdt } =>
     k.status === KlagebehandlingStatus.FERDIGSTILT;
+
+export const erKlageVedtatt = (k: Klagebehandling): boolean =>
+    k.status === KlagebehandlingStatus.VEDTATT;
 
 //Merk at en klage som er åpen betyr ikke nødvendigvis at den kan behandles.
 export const erKlageÅpen = (k: Klagebehandling): boolean =>
@@ -108,7 +111,7 @@ export const erKlageOpprettholdelse = (
 export const erKlageUnderAktivOmgjøring = (
     k: Klagebehandling,
 ): k is Klagebehandling & {
-    resultat: KlagebehandlingsresultatOmgjør & { rammebehandlingId: BehandlingId };
+    resultat: KlagebehandlingsresultatOmgjør;
 } => k.resultat?.type === KlagebehandlingResultat.OMGJØR && !!k.åpenRammebehandlingId;
 
 export const finnSisteGyldigeStegForKlage = (k: Klagebehandling): string => {
