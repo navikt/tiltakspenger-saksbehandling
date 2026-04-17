@@ -43,9 +43,10 @@ export const kanVidereBehandleKlage = (
     k: Klagebehandling,
     omgjøringsbehandling: Nullable<Rammebehandling>,
 ): boolean =>
-    k.status === KlagebehandlingStatus.OMGJØRING_ETTER_KLAGEINSTANS &&
-    !!omgjøringsbehandling &&
-    erRammebehandlingUnderAktivOmgjøring(omgjøringsbehandling);
+    k.status === KlagebehandlingStatus.MOTTATT_FRA_KLAGEINSTANS ||
+    (k.status === KlagebehandlingStatus.OMGJØRING_ETTER_KLAGEINSTANS &&
+        !!omgjøringsbehandling &&
+        erRammebehandlingUnderAktivOmgjøring(omgjøringsbehandling));
 
 export const erKlageAvsluttet = (k: Klagebehandling): boolean =>
     k.status === 'AVBRUTT' ||
