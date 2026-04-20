@@ -131,7 +131,7 @@ const KlageOmgjøringsbehandlingAksjoner = (props: {
                             variant="secondary"
                             onClick={() => setVilVelgeOmgjøringsbehandlingModal(true)}
                         >
-                            Velg omgjøringsbehandling
+                            Opprett ny behandling
                         </Button>
                     )}
                     {!erKlageAvsluttet(props.klage) && !erReadonlyForSaksbehandler && (
