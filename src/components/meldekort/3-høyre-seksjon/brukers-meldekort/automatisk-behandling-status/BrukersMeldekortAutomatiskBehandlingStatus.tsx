@@ -10,6 +10,7 @@ enum MetaStatus {
     MeldekortFeil = 'MeldekortFeil',
     SakFeil = 'SakFeil',
     TekniskFeil = 'Teknisk',
+    UtbetalingFeil = 'Utbetaling',
 }
 
 type Props = {
@@ -37,6 +38,7 @@ const alertVariant: Record<MetaStatus, ComponentProps<typeof Alert>['variant']> 
     [MetaStatus.MeldekortFeil]: 'warning',
     [MetaStatus.SakFeil]: 'warning',
     [MetaStatus.TekniskFeil]: 'error',
+    [MetaStatus.UtbetalingFeil]: 'warning',
 } as const;
 
 const tilMetaTekst: PartialRecord<MetaStatus, string> = {
@@ -44,6 +46,7 @@ const tilMetaTekst: PartialRecord<MetaStatus, string> = {
     [MetaStatus.MeldekortFeil]: 'Tilstand på meldekortet stoppet automatisk behandling',
     [MetaStatus.SakFeil]: 'Tilstand på saken stoppet automatisk behandling',
     [MetaStatus.TekniskFeil]: 'Teknisk feil ved automatisk behandling',
+    [MetaStatus.UtbetalingFeil]: 'Utbetalingen kan ikke iverksettes automatisk',
 } as const;
 
 const tilMetaStatus: Record<MeldekortBehandletAutomatiskStatus, MetaStatus> = {
@@ -70,6 +73,9 @@ const tilMetaStatus: Record<MeldekortBehandletAutomatiskStatus, MetaStatus> = {
     [MeldekortBehandletAutomatiskStatus.BEHANDLING_FEILET_PÅ_SAK]: MetaStatus.TekniskFeil,
     [MeldekortBehandletAutomatiskStatus.UTBETALING_FEILET_PÅ_SAK]: MetaStatus.TekniskFeil,
     [MeldekortBehandletAutomatiskStatus.UKJENT_FEIL]: MetaStatus.TekniskFeil,
+
+    [MeldekortBehandletAutomatiskStatus.HAR_JUSTERING]: MetaStatus.UtbetalingFeil,
+    [MeldekortBehandletAutomatiskStatus.HAR_FEILUTBETALING]: MetaStatus.UtbetalingFeil,
 } as const;
 
 const tilStatusTekst: Record<MeldekortBehandletAutomatiskStatus, string> = {
@@ -100,4 +106,8 @@ const tilStatusTekst: Record<MeldekortBehandletAutomatiskStatus, string> = {
         'Forrige meldeperiode var ikke behandlet - periodene må alltid behandles i kronologisk rekkefølge',
     [MeldekortBehandletAutomatiskStatus.INGEN_DAGER_GIR_RETT]:
         'Ingen dager gir rett i denne meldeperioden',
+    [MeldekortBehandletAutomatiskStatus.HAR_JUSTERING]:
+        'Simulering av utbetalingen viser justeringer',
+    [MeldekortBehandletAutomatiskStatus.HAR_FEILUTBETALING]:
+        'Simulering av utbetalingen viser feilutbetaling',
 } as const;
