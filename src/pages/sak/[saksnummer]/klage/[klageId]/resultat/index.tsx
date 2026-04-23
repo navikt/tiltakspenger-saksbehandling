@@ -18,6 +18,8 @@ import {
     erKlageAvsluttet,
     erKlageFerdigstilt,
     erKlageMottattFraKAEllerEtter,
+    erKlageVedtatt,
+    harKlageEnÅpenRammebehandling,
 } from '~/utils/klageUtils';
 import { Rammebehandling } from '~/types/Rammebehandling';
 import { Nullable } from '~/types/UtilTypes';
@@ -166,14 +168,15 @@ const OpprettholdResultat = (props: {
     const kanOppretteNyRammebehandling =
         fåttSvarFraKA &&
         skalKunneOppretteNyRammebehandling(props.klage.resultat.klageinstanshendelser) &&
-        !props.klage.åpenRammebehandlingId &&
+        !harKlageEnÅpenRammebehandling(props.klage) &&
+        !erKlageVedtatt(props.klage) &&
         ((props.klage.status !== KlagebehandlingStatus.OMGJØRING_ETTER_KLAGEINSTANS &&
             !erReadonlyForSaksbehandler) ||
             erKlageFerdigstilt(props.klage));
 
     const kanFerdigstilleKlage =
         fåttSvarFraKA &&
-        !props.klage.åpenRammebehandlingId &&
+        !harKlageEnÅpenRammebehandling(props.klage) &&
         !erKlageAvsluttet(props.klage) &&
         !erReadonlyForSaksbehandler;
 
