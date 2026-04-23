@@ -8,7 +8,6 @@ import { BodyShort, Box, Heading, HStack, Loader, Tabs, Tag, VStack } from '@nav
 import { Klagebehandling, KlagebehandlingStatus } from '~/types/Klage';
 import { Nullable } from '~/types/UtilTypes';
 import Link from 'next/link';
-import { ExternalLinkIcon } from '@navikt/aksel-icons';
 
 import router from 'next/router';
 import { kanNavigereTilKlageSteg, KlageSteg } from '../../../../utils/KlageLayoutUtils';
@@ -194,10 +193,9 @@ const KlageHeader = (props: { saksnummer: string; klage: Nullable<Klagebehandlin
                     <BodyShort>
                         Sist endret {props.klage ? formaterTidspunkt(props.klage.sistEndret) : '-'}
                     </BodyShort>
-                    <Link href={`/sak/${props.saksnummer}`} target="_blank">
+                    <Link href={`/sak/${props.saksnummer}`}>
                         <HStack align="start" gap="space-4">
                             <BodyShort>Gå til personoversikt</BodyShort>
-                            <ExternalLinkIcon title="ny fane" fontSize="1.4rem" />
                         </HStack>
                     </Link>
                 </HStack>
