@@ -57,7 +57,8 @@ export type BehandlingUtbetalingProps = {
 
 export enum KanIkkeIverksetteUtbetalingGrunn {
     SimuleringMangler = 'SimuleringMangler',
-    FeilutbetalingStøttesIkke = 'FeilutbetalingStøttesIkke',
+    BehandlingstypeStøtterIkkeFeilutbetaling = 'BehandlingstypeStøtterIkkeFeilutbetaling',
+    BehandlingstypeStøtterIkkeJustering = 'BehandlingstypeStøtterIkkeJustering',
     JusteringStøttesIkke = 'JusteringStøttesIkke',
     SimuleringHarEndringer = 'SimuleringHarEndringer',
 }

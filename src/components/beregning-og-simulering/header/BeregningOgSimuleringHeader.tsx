@@ -92,10 +92,12 @@ export const BeregningOgSimuleringHeader = ({
 };
 
 const utbetalingValideringsfeilTekst: Record<KanIkkeIverksetteUtbetalingGrunn, string> = {
-    [KanIkkeIverksetteUtbetalingGrunn.FeilutbetalingStøttesIkke]:
-        'Negativt endret beløp fører til feilutbetaling, som vi ikke støtter ennå',
     [KanIkkeIverksetteUtbetalingGrunn.JusteringStøttesIkke]:
         'Justeringer på tvers av meldeperioder eller kalendermåneder støttes ikke ennå',
     [KanIkkeIverksetteUtbetalingGrunn.SimuleringMangler]: 'Simulering mangler',
     [KanIkkeIverksetteUtbetalingGrunn.SimuleringHarEndringer]: 'Kontroll-simulering har endringer',
+    [KanIkkeIverksetteUtbetalingGrunn.BehandlingstypeStøtterIkkeFeilutbetaling]:
+        'Behandlingstypen støtter ikke feilutbetaling',
+    [KanIkkeIverksetteUtbetalingGrunn.BehandlingstypeStøtterIkkeJustering]:
+        'Behandlingstypen støtter ikke justeringer',
 };
