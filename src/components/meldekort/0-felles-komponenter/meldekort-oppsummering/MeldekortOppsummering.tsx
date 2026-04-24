@@ -42,28 +42,37 @@ export const MeldekortOppsummering = ({ meldekortbehandling }: Props) => {
                     description="Teksten vises i vedtaksbrevet til bruker."
                 />
             )}
-            <Button
-                className={styles.forhåndsvisBrevButton}
-                type="button"
-                variant="secondary"
-                size="small"
-                loading={forhåndsvisBrev.isMutating}
-                disabled={meldekortbehandling.erAvsluttet}
-                onClick={() => {
-                    forhåndsvisBrev.trigger(
-                        { tekstTilVedtaksbrev: tekstTilVedtaksbrev, dager: dager },
-                        { onSuccess: (blob) => window.open(URL.createObjectURL(blob!)) },
-                    );
-                }}
-            >
-                Forhåndsvis brev
-            </Button>
-            {forhåndsvisBrev.error && (
-                <Alert variant="error" size="small">
-                    <BodyShort>Noe gikk galt ved forhåndsvisning av vedtaksbrev:</BodyShort>
-                    <BodyShort>{forhåndsvisBrev.error.message}</BodyShort>
-                </Alert>
-            )}
+            <VStack align="end" gap="space-16">
+                {!meldekortbehandling.skalSendeVedtaksbrev && (
+                    <Alert variant="info" size="small">
+                        Det skal ikke sendes vedtaksbrev for denne behandlingen.
+                    </Alert>
+                )}
+                <Button
+                    className={styles.forhåndsvisBrevButton}
+                    type="button"
+                    variant="secondary"
+                    size="small"
+                    loading={forhåndsvisBrev.isMutating}
+                    disabled={
+                        meldekortbehandling.erAvsluttet || !meldekortbehandling.skalSendeVedtaksbrev
+                    }
+                    onClick={() => {
+                        forhåndsvisBrev.trigger(
+                            { tekstTilVedtaksbrev: tekstTilVedtaksbrev, dager: dager },
+                            { onSuccess: (blob) => window.open(URL.createObjectURL(blob!)) },
+                        );
+                    }}
+                >
+                    Forhåndsvis brev
+                </Button>
+                {forhåndsvisBrev.error && (
+                    <Alert variant="error" size="small">
+                        <BodyShort>Noe gikk galt ved forhåndsvisning av vedtaksbrev:</BodyShort>
+                        <BodyShort>{forhåndsvisBrev.error.message}</BodyShort>
+                    </Alert>
+                )}
+            </VStack>
         </VStack>
     );
 };

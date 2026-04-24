@@ -64,7 +64,8 @@ const MeldekortbehandlingFormProviderInner = ({ meldekortbehandling, children }:
             ),
             begrunnelse: meldekortbehandling.begrunnelse ?? '',
             tekstTilVedtaksbrev: meldekortbehandling.tekstTilVedtaksbrev ?? '',
-        });
+            skalSendeVedtaksbrev: meldekortbehandling.skalSendeVedtaksbrev,
+        } satisfies MeldekortbehandlingForm);
         //Vi ønsker kun å resette form hvis disse feltene endres
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [meldekortbehandling, tidligereMeldekortbehandlinger, brukersMeldekortForBehandling]);

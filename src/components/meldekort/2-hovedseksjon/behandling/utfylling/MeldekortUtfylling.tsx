@@ -158,8 +158,8 @@ export const MeldekortUtfylling = ({ meldekortbehandling }: Props) => {
                         <Textarea
                             className={
                                 skalSendeVedtaksbrev
-                                    ? styles.vedtaksbrevTextareaReadOnly
-                                    : styles.vedtaksbrevTextarea
+                                    ? styles.vedtaksbrevTextarea
+                                    : styles.vedtaksbrevTextareaReadOnly
                             }
                             label={
                                 <HStack justify="space-between" align="center">
@@ -172,8 +172,8 @@ export const MeldekortUtfylling = ({ meldekortbehandling }: Props) => {
                                         name={'skalSendeVedtaksbrev'}
                                         render={({ field }) => (
                                             <Checkbox
-                                                onChange={(e) => field.onChange(e.target.checked)}
-                                                checked={field.value}
+                                                onChange={(e) => field.onChange(!e.target.checked)}
+                                                checked={!field.value}
                                             >
                                                 Ikke send vedtaksbrev
                                             </Checkbox>
@@ -186,7 +186,7 @@ export const MeldekortUtfylling = ({ meldekortbehandling }: Props) => {
                             resize={'vertical'}
                             value={field.value}
                             onChange={field.onChange}
-                            readOnly={skalSendeVedtaksbrev}
+                            readOnly={!skalSendeVedtaksbrev}
                         />
                     )}
                 />
@@ -196,7 +196,7 @@ export const MeldekortUtfylling = ({ meldekortbehandling }: Props) => {
                     variant="secondary"
                     size="small"
                     loading={forhåndsvisBrev.isMutating}
-                    disabled={meldekortbehandling.erAvsluttet || skalSendeVedtaksbrev}
+                    disabled={meldekortbehandling.erAvsluttet || !skalSendeVedtaksbrev}
                     onClick={() => {
                         //resetter eventuelle tidligere feil før ny request
                         forhåndsvisBrev.reset();
