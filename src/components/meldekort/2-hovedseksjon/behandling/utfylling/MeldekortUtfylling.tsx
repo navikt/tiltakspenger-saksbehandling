@@ -1,4 +1,13 @@
-import { Alert, BodyShort, Button, HStack, Textarea, VStack } from '@navikt/ds-react';
+import {
+    Alert,
+    BodyShort,
+    Button,
+    Checkbox,
+    Heading,
+    HStack,
+    Textarea,
+    VStack,
+} from '@navikt/ds-react';
 import { useSak } from '~/context/sak/SakContext';
 import {
     ForhåndsvisMeldekortbehandlingBrevRequest,
@@ -118,6 +127,8 @@ export const MeldekortUtfylling = ({ meldekortbehandling }: Props) => {
     const kanSendeTilBeslutning =
         !skjemaErEndret && !harValideringsFeil && meldekortbehandling.beregning !== null;
 
+    const skalSendeVedtaksbrev = formContext.watch('skalSendeVedtaksbrev');
+
     return (
         // TODO Gjorde lintingen strengere ved oppgradering til Next 16. Fikset bare åpenbare feil, denne burde undersøkes.
         /* eslint-disable-next-line react-hooks/refs */
@@ -145,12 +156,37 @@ export const MeldekortUtfylling = ({ meldekortbehandling }: Props) => {
                     control={formContext.control}
                     render={({ field }) => (
                         <Textarea
-                            label="Vedtaksbrev for behandling av meldekort"
+                            className={
+                                skalSendeVedtaksbrev
+                                    ? styles.vedtaksbrevTextareaReadOnly
+                                    : styles.vedtaksbrevTextarea
+                            }
+                            label={
+                                <HStack justify="space-between" align="center">
+                                    <Heading size={'xsmall'} level={'5'}>
+                                        Vedtaksbrev for behandling av meldekort
+                                    </Heading>
+
+                                    <Controller
+                                        control={formContext.control}
+                                        name={'skalSendeVedtaksbrev'}
+                                        render={({ field }) => (
+                                            <Checkbox
+                                                onChange={(e) => field.onChange(e.target.checked)}
+                                                checked={field.value}
+                                            >
+                                                Ikke send vedtaksbrev
+                                            </Checkbox>
+                                        )}
+                                    />
+                                </HStack>
+                            }
                             description="Teksten vises i vedtaksbrevet til bruker."
                             minRows={5}
                             resize={'vertical'}
                             value={field.value}
                             onChange={field.onChange}
+                            readOnly={skalSendeVedtaksbrev}
                         />
                     )}
                 />
@@ -160,7 +196,7 @@ export const MeldekortUtfylling = ({ meldekortbehandling }: Props) => {
                     variant="secondary"
                     size="small"
                     loading={forhåndsvisBrev.isMutating}
-                    disabled={meldekortbehandling.erAvsluttet}
+                    disabled={meldekortbehandling.erAvsluttet || skalSendeVedtaksbrev}
                     onClick={() => {
                         //resetter eventuelle tidligere feil før ny request
                         forhåndsvisBrev.reset();

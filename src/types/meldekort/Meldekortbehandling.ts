@@ -75,6 +75,7 @@ export type MeldekortbehandlingProps = {
     kanIkkeIverksetteUtbetaling: Nullable<KanIkkeIverksetteUtbetalingGrunn>;
     tekstTilVedtaksbrev: Nullable<string>;
     tilbakekrevingId: Nullable<TilbakekrevingId>;
+    skalSendeVedtaksbrev: boolean;
 };
 
 export type MeldekortDagProps = {
@@ -105,4 +106,5 @@ export type MeldekortbehandlingDTO = {
     dager: MeldekortDagProps[];
     begrunnelse: Nullable<string>;
     tekstTilVedtaksbrev: Nullable<string>;
+    skalSendeVedtaksbrev: boolean;
 };

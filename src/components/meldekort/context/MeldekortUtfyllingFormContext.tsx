@@ -48,6 +48,7 @@ const MeldekortbehandlingFormProviderInner = ({ meldekortbehandling, children }:
             ),
             begrunnelse: meldekortbehandling.begrunnelse ?? '',
             tekstTilVedtaksbrev: meldekortbehandling.tekstTilVedtaksbrev ?? '',
+            skalSendeVedtaksbrev: meldekortbehandling.skalSendeVedtaksbrev,
         },
         resolver: useCustomMeldekortUtfyllingValidationResolver(),
         context: { tillattAntallDager: antallDager },

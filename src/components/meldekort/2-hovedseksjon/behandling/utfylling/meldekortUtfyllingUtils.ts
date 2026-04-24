@@ -70,6 +70,7 @@ export type MeldekortbehandlingForm = {
     dager: MeldekortDagProps[];
     begrunnelse: string;
     tekstTilVedtaksbrev: string;
+    skalSendeVedtaksbrev: boolean;
 };
 
 export interface ForhåndsvisMeldekortbehandlingBrevRequest {
@@ -83,4 +84,5 @@ export const meldekortbehandlingFormTilDto = (
     dager: data.dager,
     begrunnelse: data.begrunnelse.trim() || null,
     tekstTilVedtaksbrev: data.tekstTilVedtaksbrev.trim() || null,
+    skalSendeVedtaksbrev: data.skalSendeVedtaksbrev,
 });
