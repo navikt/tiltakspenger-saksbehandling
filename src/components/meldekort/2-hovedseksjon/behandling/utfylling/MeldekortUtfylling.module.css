@@ -3,6 +3,29 @@
     cursor: not-allowed;
 }
 
+.vedtaksbrevTextarea {
+    label {
+        width: 100%;
+    }
+}
+
+.vedtaksbrevTextareaReadOnly {
+    label {
+        width: 100%;
+        display: flex;
+
+        > div {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        svg {
+            align-self: center;
+        }
+    }
+}
+
 .forhåndsvisBrevButton {
     align-self: flex-end;
 }
