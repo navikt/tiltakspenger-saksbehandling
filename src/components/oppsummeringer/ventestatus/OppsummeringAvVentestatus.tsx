@@ -1,4 +1,3 @@
-import React from 'react';
 import styles from './OppsummeringAvVentestatus.module.css';
 import { Box, Heading, HStack, VStack } from '@navikt/ds-react';
 import { formaterDatotekst, formaterTidspunkt } from '~/utils/date';
@@ -9,16 +8,27 @@ import { VentestatusHendelse } from '~/types/Ventestatus';
 const OppsummeringAvVentestatus = (props: {
     ventestatus: VentestatusHendelse;
     wrapperClassName?: string;
+    size?: 'medium' | 'small';
 }) => {
     return (
-        <Box className={classNames(styles.box, props.wrapperClassName)}>
-            <VStack gap="space-24">
-                <Heading size="medium" level="3">
-                    Behandlingen er satt på vent
+        <Box
+            className={classNames(
+                styles.box,
+                props.size === 'small' ? styles['box-small'] : styles['box-medium'],
+                props.wrapperClassName,
+            )}
+        >
+            <VStack gap={'space-24'}>
+                <Heading size={props.size ?? 'medium'} level="3">
+                    {props.ventestatus.erSattPåVent
+                        ? 'Behandlingen er satt på vent'
+                        : 'Behandlingen er gjenopptatt'}
                 </Heading>
-                <HStack gap="space-24">
+                <HStack gap={'space-24'}>
                     <OppsummeringsPar
-                        label={'Satt på vent av'}
+                        label={
+                            props.ventestatus.erSattPåVent ? 'Satt på vent av' : 'Gjenopptatt av'
+                        }
                         verdi={props.ventestatus.sattPåVentAv}
                         retning="vertikal"
                     />
@@ -35,11 +45,13 @@ const OppsummeringAvVentestatus = (props: {
                         />
                     )}
                 </HStack>
-                <OppsummeringsPar
-                    label={'Begrunnelse'}
-                    verdi={props.ventestatus.begrunnelse}
-                    retning="vertikal"
-                />
+                {props.ventestatus.begrunnelse && (
+                    <OppsummeringsPar
+                        label={'Begrunnelse'}
+                        verdi={props.ventestatus.begrunnelse}
+                        retning="vertikal"
+                    />
+                )}
             </VStack>
         </Box>
     );

@@ -1,4 +1,11 @@
 .box {
     background-color: var(--ax-neutral-000);
+}
+
+.box-medium {
     padding: 2rem;
+}
+
+.box-small {
+    padding: 1rem;
 }

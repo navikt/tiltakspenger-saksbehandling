@@ -50,7 +50,7 @@ export const BehandlingSaksopplysninger = () => {
     };
 
     return (
-        <>
+        <div>
             <BehandlingSaksopplysning
                 navn="Saksbehandler"
                 verdi={behandling.saksbehandler ?? 'Ikke tildelt'}
@@ -128,7 +128,7 @@ export const BehandlingSaksopplysninger = () => {
                     <OppsummeringAvAttesteringer attesteringer={attesteringer} />
                 </>
             )}
-        </>
+        </div>
     );
 };
 

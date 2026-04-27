@@ -234,7 +234,7 @@ export const skalKunneSetteBehandlingPaVent = (
 
 export const erSattPaVent = (behandling: Rammebehandling | ÅpenRammebehandlingForOversikt) => {
     if ('ventestatus' in behandling) {
-        return behandling.ventestatus && behandling.ventestatus.erSattPåVent;
+        return behandling.ventestatus && behandling.ventestatus.at(-1)?.erSattPåVent;
     } else {
         return behandling.erSattPåVent;
     }

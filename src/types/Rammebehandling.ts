@@ -46,7 +46,7 @@ export interface RammebehandlingBase {
     opprettet: string;
     sistEndret: string;
     iverksattTidspunkt: Nullable<string>;
-    ventestatus: Nullable<VentestatusHendelse>;
+    ventestatus: VentestatusHendelse[];
     utbetaling: Nullable<BehandlingUtbetalingProps>;
     utbetalingskontroll: Nullable<Utbetalingskontroll>;
     klagebehandlingId: Nullable<KlageId>;

@@ -4,7 +4,7 @@ import { RevurderingVedtak } from './revurdering/RevurderingVedtak';
 import { useBehandling } from './context/BehandlingContext';
 import { Rammebehandlingsstatus, Rammebehandlingstype } from '~/types/Rammebehandling';
 import { PersonaliaHeader } from '../personaliaheader/PersonaliaHeader';
-import { Alert } from '@navikt/ds-react';
+import { Alert, VStack } from '@navikt/ds-react';
 import { finnBehandlingStatusTag } from '~/utils/tekstformateringUtils';
 import AvbruttOppsummering from '../oppsummeringer/oppsummeringAvAvbrutt/OppsummeringAvAvbrutt';
 import SideBarMain from '../../layouts/sidebar-main/SideBarMain';
@@ -16,6 +16,8 @@ import { PERSONOVERSIKT_TABS } from '~/components/personoversikt/Personoversikt'
 
 import style from './BehandlingPage.module.css';
 import OppsummeringAvKlageForRammebehandling from '../oppsummeringer/klage/oppsummeringAvKlageForRammebehandling/OppsummeringAvKlageForRammebehandling';
+import { OppsummeringAvVentestatuserModal } from '../oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
+import { Separator } from '../separator/Separator';
 
 export const BehandlingPage = () => {
     const { sak } = useSak();
@@ -45,7 +47,7 @@ export const BehandlingPage = () => {
                         : PERSONOVERSIKT_TABS.apneBehandlinger
                 }
             >
-                {finnBehandlingStatusTag(status, false, ventestatus?.erSattPåVent)}
+                {finnBehandlingStatusTag(status, false, ventestatus.at(-1)?.erSattPåVent)}
             </PersonaliaHeader>
 
             {/*
@@ -59,11 +61,21 @@ export const BehandlingPage = () => {
                 key={`${id}-${sistEndret}-${saksopplysninger.oppslagstidspunkt}`}
             >
                 <SideBarMain
-                    sidebar={<BehandlingSaksopplysninger />}
+                    sidebar={
+                        <VStack gap="space-32">
+                            <BehandlingSaksopplysninger />
+                            {ventestatus.length > 0 && (
+                                <>
+                                    <Separator />
+                                    <OppsummeringAvVentestatuserModal ventestatuser={ventestatus} />
+                                </>
+                            )}
+                        </VStack>
+                    }
                     main={
                         <div className={style.main}>
-                            {ventestatus && ventestatus.erSattPåVent && (
-                                <OppsummeringAvVentestatus ventestatus={ventestatus} />
+                            {ventestatus.at(-1)?.erSattPåVent && (
+                                <OppsummeringAvVentestatus ventestatus={ventestatus.at(-1)!} />
                             )}
                             <Tidslinjer sak={sak} />
                             {avbrutt && <AvbruttOppsummering avbrutt={avbrutt} withPanel={true} />}
