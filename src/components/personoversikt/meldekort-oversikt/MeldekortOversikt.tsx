@@ -38,6 +38,7 @@ import {
     XMarkOctagonIcon,
 } from '@navikt/aksel-icons';
 import { PERSONOVERSIKT_TABS } from '~/components/personoversikt/Personoversikt';
+import NextLink from 'next/link';
 
 type Props = {
     meldeperiodeKjeder: MeldeperiodeKjedeProps[];
@@ -198,16 +199,15 @@ export const MeldeperiodeKjedeOversiktMeny = (props: {
                         icon={<ChevronDownIcon title="Menyvalg" />}
                         size="small"
                     >
-                        Velg
+                        {'Velg'}
                     </Button>
                 </ActionMenu.Trigger>
                 <ActionMenu.Content>
                     <ActionMenu.Item
-                        onSelect={() =>
-                            router.push(meldeperiodeUrl(props.saksnummer, props.kjedePeriode))
-                        }
+                        as={NextLink}
+                        href={meldeperiodeUrl(props.saksnummer, props.kjedePeriode)}
                     >
-                        Åpne
+                        {'Åpne'}
                     </ActionMenu.Item>
 
                     {props.meldekortbehandling && (

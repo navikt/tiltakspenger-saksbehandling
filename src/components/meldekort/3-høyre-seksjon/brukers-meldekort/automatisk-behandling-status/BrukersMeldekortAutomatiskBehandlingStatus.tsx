@@ -1,7 +1,11 @@
-import { MeldekortBehandletAutomatiskStatus } from '~/types/meldekort/BrukersMeldekort';
-import { Alert } from '@navikt/ds-react';
+import {
+    BrukersMeldekortProps,
+    MeldekortBehandletAutomatiskStatus,
+} from '~/types/meldekort/BrukersMeldekort';
+import { Alert, BodyShort } from '@navikt/ds-react';
 import { ComponentProps } from 'react';
 import { PartialRecord } from '~/types/UtilTypes';
+import { formaterTidspunktKort } from '~/utils/date';
 
 enum MetaStatus {
     Behandlet = 'Behandlet',
@@ -14,19 +18,29 @@ enum MetaStatus {
 }
 
 type Props = {
-    status: MeldekortBehandletAutomatiskStatus;
+    meldekort: BrukersMeldekortProps;
 };
 
-export const BrukersMeldekortAutomatiskBehandlingStatus = ({ status }: Props) => {
-    const metaStatus = tilMetaStatus[status];
+export const BrukersMeldekortAutomatiskBehandlingStatus = ({ meldekort }: Props) => {
+    const { behandletAutomatiskStatus, behandlesAutomatiskNesteForsøk } = meldekort;
+
+    const metaStatus = tilMetaStatus[behandletAutomatiskStatus];
     const metaTekst = tilMetaTekst[metaStatus];
 
-    const statusTekst = tilStatusTekst[status];
+    const statusTekst = tilStatusTekst[behandletAutomatiskStatus];
 
     return (
         <Alert variant={alertVariant[metaStatus]} size={'small'} inline={true}>
-            {metaTekst ? `${metaTekst}: ` : ''}
-            <strong>{statusTekst}</strong>
+            {metaTekst && <BodyShort size={'small'}>{metaTekst}</BodyShort>}
+            <BodyShort size={'small'} spacing={true} weight={'semibold'}>
+                {statusTekst}
+            </BodyShort>
+            {behandlesAutomatiskNesteForsøk && (
+                <BodyShort
+                    size={'small'}
+                    spacing={true}
+                >{`Neste forsøk for automatisk behandling: ${formaterTidspunktKort(behandlesAutomatiskNesteForsøk)}`}</BodyShort>
+            )}
         </Alert>
     );
 };

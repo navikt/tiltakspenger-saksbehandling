@@ -1,3 +1,5 @@
+import { Nullable } from '~/types/UtilTypes';
+
 // "_bruker"-suffixen er ikke reell, er kun for at typescript ikke skal se denne som ekvivalent med MeldekortbehandlingId
 // Ikke gjør run-time typesjekk på denne!
 export type BrukersMeldekortId = `meldekort_${string}_bruker`;
@@ -25,6 +27,7 @@ export type BrukersMeldekortProps = {
     mottatt: string;
     dager: BrukersMeldekortDagProps[];
     behandletAutomatiskStatus: MeldekortBehandletAutomatiskStatus;
+    behandlesAutomatiskNesteForsøk: Nullable<string>;
 };
 
 export enum MeldekortBehandletAutomatiskStatus {

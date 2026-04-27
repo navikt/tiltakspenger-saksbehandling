@@ -30,7 +30,7 @@ export const BrukersMeldekortVisning = ({ brukersMeldekort }: Props) => {
 
     const formContext = useMeldekortbehandlingForm();
 
-    const { dager, behandletAutomatiskStatus, mottatt } = brukersMeldekort;
+    const { dager, mottatt } = brukersMeldekort;
 
     const uke1 = dager.slice(0, 7);
     const uke2 = dager.slice(7, 14);
@@ -69,7 +69,7 @@ export const BrukersMeldekortVisning = ({ brukersMeldekort }: Props) => {
                     <strong>{formaterTidspunkt(mottatt)}</strong>
                 </BodyShort>
             </HStack>
-            <BrukersMeldekortAutomatiskBehandlingStatus status={behandletAutomatiskStatus} />
+            <BrukersMeldekortAutomatiskBehandlingStatus meldekort={brukersMeldekort} />
             <Uke dager={uke1} />
             <Uke dager={uke2} />
         </VStack>
