@@ -43,6 +43,7 @@ import { Nullable } from '~/types/UtilTypes';
 import { erRammebehandlingUnderAktivOmgjøring } from '~/lib/rammebehandling/rammebehandlingUtils';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import Omgjøringsresultat from '~/lib/klage/Omgjøringsresultat';
+import { OppsummeringAvVentestatuserModal } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
 
 type Props = {
     sak: SakProps;
@@ -276,6 +277,13 @@ const VurderingKlagePage = ({
                             Fortsett
                         </Button>
                     )
+                )}
+
+                {klage.ventestatus.length > 0 && (
+                    <OppsummeringAvVentestatuserModal
+                        ventestatuser={klage.ventestatus}
+                        button={{ variant: 'tertiary' }}
+                    />
                 )}
             </VStack>
 

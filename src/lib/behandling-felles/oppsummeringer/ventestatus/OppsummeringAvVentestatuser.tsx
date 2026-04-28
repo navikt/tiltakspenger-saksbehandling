@@ -7,11 +7,19 @@ import styles from './OppsummeringAvVentestatuser.module.css';
 
 export const OppsummeringAvVentestatuserModal = (props: {
     ventestatuser: VentestatusHendelse[];
+    button?: {
+        variant: 'primary' | 'secondary' | 'tertiary';
+    };
 }) => {
     const [åpen, setÅpen] = useState(false);
     return (
         <div>
-            <Button type="button" size="small" variant="secondary" onClick={() => setÅpen(true)}>
+            <Button
+                type="button"
+                size="small"
+                variant={props.button?.variant || 'secondary'}
+                onClick={() => setÅpen(true)}
+            >
                 Se ventestatus-historikk
             </Button>
             <Modal

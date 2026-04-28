@@ -34,6 +34,7 @@ import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import styles from './index.module.css';
 import { MeldekortVedtak } from '~/lib/meldekort/typer/MeldekortVedtak';
 import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
+import { OppsummeringAvVentestatuserModal } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
 
 type Props = {
     sak: SakProps;
@@ -238,6 +239,13 @@ const FormkravKlagePage = ({ sak, omgjøringsbehandling }: Props) => {
                                 Fortsett
                             </Button>
                         </HStack>
+                    )}
+
+                    {klage.ventestatus.length > 0 && (
+                        <OppsummeringAvVentestatuserModal
+                            ventestatuser={klage.ventestatus}
+                            button={{ variant: 'tertiary' }}
+                        />
                     )}
                 </VStack>
             </form>

@@ -43,6 +43,7 @@ import {
 import { Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { Nullable } from '~/types/UtilTypes';
 import Link from 'next/link';
+import { OppsummeringAvVentestatuserModal } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
 
 type Props = {
     sak: SakProps;
@@ -252,6 +253,10 @@ const BrevKlagePage = ({ sak, påklagetVedtak }: Props) => {
                         >
                             Ferdigstill behandling og send brev
                         </Button>
+                    )}
+
+                    {klage.ventestatus.length > 0 && (
+                        <OppsummeringAvVentestatuserModal ventestatuser={klage.ventestatus} />
                     )}
                 </VStack>
             </VStack>

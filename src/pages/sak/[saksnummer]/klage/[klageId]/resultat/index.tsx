@@ -49,6 +49,7 @@ import { KlageHendelseKlagebehandlingAvsluttetUtfall } from '~/lib/klage/typer/K
 import FerdigstillKlageModalWrapper from '~/lib/klage/modaler/FerdigstillKlagebehandlingModal';
 import Omgjøringsresultat from '~/lib/klage/Omgjøringsresultat';
 import KlageTilknyttedeBehandlingerInfoCard from '~/lib/klage/KlageTilknyttedeBehandlingerInfoCard';
+import { OppsummeringAvVentestatuserModal } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
 
 type Props = {
     sak: SakProps;
@@ -338,6 +339,13 @@ const OpprettholdResultat = (props: {
                     />
                 )}
             </HStack>
+
+            {props.klage.ventestatus.length > 0 && (
+                <OppsummeringAvVentestatuserModal
+                    ventestatuser={props.klage.ventestatus}
+                    button={{ variant: 'tertiary' }}
+                />
+            )}
 
             {vilOppretteNyBehandling && (
                 <VelgOmgjøringsbehandlingModal
