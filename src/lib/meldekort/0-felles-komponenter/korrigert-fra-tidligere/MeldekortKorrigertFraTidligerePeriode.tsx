@@ -1,0 +1,44 @@
+import { Alert, BodyShort, Heading, Link, VStack } from '@navikt/ds-react';
+import { meldeperiodeUrl } from '~/utils/urls';
+import NextLink from 'next/link';
+import { formaterTidspunktKort, periodeTilFormatertDatotekst } from '~/utils/date';
+import { MeldekortUker } from '../uker/MeldekortUker';
+import { useSak } from '~/lib/sak/SakContext';
+import { MeldeperiodeKorrigering } from '~/lib/meldekort/typer/Meldeperiode';
+import { MeldekortBeløp } from '../beløp/MeldekortBeløp';
+import { useMeldeperiodeKjede } from '../../context/MeldeperiodeKjedeContext';
+
+type Props = {
+    korrigering: MeldeperiodeKorrigering;
+    headerTekst?: string;
+};
+
+export const MeldekortKorrigertFraTidligerePeriode = ({ korrigering, headerTekst }: Props) => {
+    const { alleMeldekortbehandlinger } = useMeldeperiodeKjede();
+    const { saksnummer } = useSak().sak;
+    const { periode, beregning, iverksatt } = korrigering;
+
+    const forrigeGodkjenteBeløp = alleMeldekortbehandlinger.find((mbeh) => mbeh.erAvsluttet)
+        ?.beregning?.beregningForMeldekortetsPeriode.beløp;
+
+    return (
+        <VStack gap={'space-20'}>
+            {headerTekst && <Heading size={'medium'}>{headerTekst}</Heading>}
+            <Alert size={'small'} inline={true} variant={'warning'}>
+                {'Korrigering av meldeperioden '}
+                <Link href={meldeperiodeUrl(saksnummer, periode)} as={NextLink}>
+                    {periodeTilFormatertDatotekst(periode)}
+                </Link>
+                {' endret på den siste beregningen av dette meldekortet.'}
+            </Alert>
+            <MeldekortUker dager={beregning.dager} />
+            {iverksatt && (
+                <BodyShort size={'small'}>
+                    {'Iverksatt: '}
+                    <strong>{formaterTidspunktKort(iverksatt)}</strong>
+                </BodyShort>
+            )}
+            <MeldekortBeløp beløp={beregning.beløp} forrigeBeløp={forrigeGodkjenteBeløp} />
+        </VStack>
+    );
+};

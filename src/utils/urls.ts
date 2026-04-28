@@ -1,7 +1,7 @@
-import { Rammebehandling } from '~/types/Rammebehandling';
+import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { Periode } from '~/types/Periode';
-import { BeregningKilde, BeregningKildeType } from '~/types/Beregning';
-import { SakProps } from '~/types/Sak';
+import { BeregningKilde, BeregningKildeType } from '~/lib/beregning-og-simulering/typer/Beregning';
+import { SakProps } from '~/lib/sak/SakTyper';
 
 export const meldeperiodeUrl = (saksnummer: string, periode: Periode) =>
     `/sak/${saksnummer}/meldeperiode/${periode.fraOgMed}/${periode.tilOgMed}`;

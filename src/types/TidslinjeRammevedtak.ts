@@ -1,5 +1,5 @@
 import { Periode } from './Periode';
-import { Rammevedtak } from './Rammevedtak';
+import { Rammevedtak } from '../lib/rammebehandling/typer/Rammevedtak';
 
 export type TidslinjeRammevedtak = {
     elementer: TidslinjeElement[];

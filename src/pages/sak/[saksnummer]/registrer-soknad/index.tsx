@@ -2,27 +2,27 @@ import styles from './RegistrerSøknadManueltPage.module.css';
 import { Alert, Button, Heading, HStack, VStack } from '@navikt/ds-react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
-import { SakProvider } from '~/context/sak/SakContext';
-import { SakProps } from '~/types/Sak';
+import { SakProvider } from '~/lib/sak/SakContext';
+import { SakProps } from '~/lib/sak/SakTyper';
 import { fetchSak } from '~/utils/fetch/fetch-server';
-import { SpørsmålMedPeriodevelger } from '~/components/manuell-søknad/SpørsmålMedPeriodevelger';
-import { PersonaliaHeader } from '~/components/personaliaheader/PersonaliaHeader';
+import { SpørsmålMedPeriodevelger } from '~/lib/manuell-søknad/SpørsmålMedPeriodevelger';
+import { PersonaliaHeader } from '~/lib/personaliaheader/PersonaliaHeader';
 import defaultManuellSøknadFormValues, {
     ManueltRegistrertSøknad,
-} from '~/components/manuell-søknad/ManueltRegistrertSøknad';
-import { JaNeiSpørsmål } from '~/components/manuell-søknad/JaNeiSpørsmål';
-import { MottarPengestøtterSpørsmål } from '~/components/manuell-søknad/MottarPengestøtterSpørsmål';
+} from '~/lib/manuell-søknad/ManueltRegistrertSøknad';
+import { JaNeiSpørsmål } from '~/lib/manuell-søknad/JaNeiSpørsmål';
+import { MottarPengestøtterSpørsmål } from '~/lib/manuell-søknad/MottarPengestøtterSpørsmål';
 import React from 'react';
-import { Periodevelger } from '~/components/manuell-søknad/Periodevelger';
-import { VelgTiltak } from '~/components/manuell-søknad/tiltak/VelgTiltak';
-import { ManueltRegistrertSøknadBarnetillegg } from '~/components/manuell-søknad/barnetillegg/ManueltRegistrertSøknadBarnetillegg';
-import { useOpprettSøknad } from '~/components/personoversikt/manuell-søknad/useOpprettSøknad';
+import { Periodevelger } from '~/lib/manuell-søknad/Periodevelger';
+import { VelgTiltak } from '~/lib/manuell-søknad/tiltak/VelgTiltak';
+import { ManueltRegistrertSøknadBarnetillegg } from '~/lib/manuell-søknad/barnetillegg/ManueltRegistrertSøknadBarnetillegg';
+import { useOpprettSøknad } from '~/lib/personoversikt/manuell-søknad/useOpprettSøknad';
 import router from 'next/router';
 import { behandlingUrl } from '~/utils/urls';
-import { useHentPersonopplysninger } from '~/components/personaliaheader/useHentPersonopplysninger';
-import { JournalpostId } from '~/components/journalpostId/JournalpostId';
-import { SøknadstypeSelect } from '~/components/manuell-søknad/SøknadstypeSelect';
-import { OverførtFraArenaSpørsmål } from '~/components/manuell-søknad/OverførtFraArenaSpørsmål';
+import { useHentPersonopplysninger } from '~/lib/personaliaheader/useHentPersonopplysninger';
+import { JournalpostId } from '~/lib/_felles/journalpostId/JournalpostId';
+import { SøknadstypeSelect } from '~/lib/manuell-søknad/SøknadstypeSelect';
+import { OverførtFraArenaSpørsmål } from '~/lib/manuell-søknad/OverførtFraArenaSpørsmål';
 
 interface Props {
     sak: SakProps;

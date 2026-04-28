@@ -1,8 +1,8 @@
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
 import { fetchBenkOversikt } from '~/utils/fetch/fetch-server';
-import { BenkSide } from '~/components/benk/BenkSide';
+import { BenkSide } from '~/lib/benk/BenkSide';
 import { ComponentProps } from 'react';
-import { BenkOversiktRequestBody, BenkSortering } from '~/types/Benk';
+import { BenkOversiktRequestBody, BenkSortering } from '~/lib/benk/typer/Benk';
 import { forceArray } from '~/utils/array';
 import { ParsedUrlQuery } from 'node:querystring';
 import {
@@ -14,8 +14,8 @@ import {
     erBenkBehandlingsstatus,
     erBenkBehandlingKlarEllerVenter,
     harAktiveFiltre,
-} from '~/components/benk/filter/benkFilterUtils';
-import { BENK_SORTERING_DEFAULT } from '~/components/benk/benkSideUtils';
+} from '~/lib/benk/filter/benkFilterUtils';
+import { BENK_SORTERING_DEFAULT } from '~/lib/benk/benkSideUtils';
 
 export const getServerSideProps = pageWithAuthentication(async (context) => {
     const filtersFraQuery = benkFiltersFraQuery(context.query);

@@ -5,42 +5,42 @@ import { Button, Heading, HStack, Label, LocalAlert, VStack } from '@navikt/ds-r
 import { useForm } from 'react-hook-form';
 import { fetchSak } from '~/utils/fetch/fetch-server';
 import { logger } from '@navikt/next-logger';
-import { SakProps } from '~/types/Sak';
+import { SakProps } from '~/lib/sak/SakTyper';
 import {
     Klagebehandling,
     KlagebehandlingResultat,
     KlagebehandlingsresultatAvvist,
     KlagebehandlingsresultatOpprettholdt,
     KlageId,
-} from '~/types/Klage';
+} from '~/lib/klage/typer/Klage';
 import KlageLayout, { KlageProvider, useKlage } from '../../layout';
-import { KlageSteg } from '../../../../../../utils/KlageLayoutUtils';
+import { KlageSteg } from '../../../../../../lib/klage/utils/KlageLayoutUtils';
 import { CheckmarkCircleIcon, EnvelopeOpenIcon } from '@navikt/aksel-icons';
-import WarningCircleIcon from '~/icons/WarningCircleIcon';
+import WarningCircleIcon from '~/lib/_felles/icons/WarningCircleIcon';
 import {
     BrevFormData,
     brevFormDataTilForhåndsvisBrevKlageRequest,
     brevFormDataTilLagreBrevtekstKlageRequest,
     brevFormValidation,
     klageTilBrevFormData,
-} from '~/components/forms/brev/BrevFormUtils';
-import BrevForm from '~/components/forms/brev/BrevForm';
+} from '~/lib/klage/forms/brev/BrevFormUtils';
+import BrevForm from '~/lib/klage/forms/brev/BrevForm';
 import styles from './index.module.css';
 
 import {
     erKlageOpprettholdelse,
     erKlageOpprettholdtEllerEtter,
     kanBehandleKlage,
-} from '~/utils/klageUtils';
+} from '~/lib/klage/utils/klageUtils';
 import router from 'next/router';
-import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
+import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import {
     useForhåndsvisKlagebrev,
     useIverksettKlage,
     useLagreKlagebrev,
     useOpprettholdKlage,
-} from '~/api/KlageApi';
-import { Rammevedtak } from '~/types/Rammevedtak';
+} from '~/lib/klage/api/KlageApi';
+import { Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { Nullable } from '~/types/UtilTypes';
 import Link from 'next/link';
 

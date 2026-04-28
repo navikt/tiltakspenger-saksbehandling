@@ -1,0 +1,75 @@
+import { Button } from '@navikt/ds-react';
+import React, { useState } from 'react';
+import { useBehandling } from '../../../context/BehandlingContext';
+import { BekreftelsesModal } from '~/lib/_felles/modaler/BekreftelsesModal';
+import { useSendBehandlingTilBeslutning } from '~/lib/rammebehandling/felles/send-og-godkjenn/send-til-beslutning/useSendBehandlingTilBeslutning';
+import { useNotification } from '~/lib/_felles/notifications/NotificationContext';
+import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { ValideringResultat } from '~/lib/rammebehandling/typer/Validering';
+import { BehandlingValideringVarsler } from '~/lib/rammebehandling/felles/send-og-godkjenn/varsler/BehandlingValideringVarsler';
+
+type Props = {
+    behandling: Rammebehandling;
+    valider: () => boolean;
+    valideringResultat: ValideringResultat;
+    disabled: boolean;
+};
+
+export const BehandlingSendTilBeslutning = ({
+    behandling,
+    valider,
+    valideringResultat,
+    disabled,
+}: Props) => {
+    const { sendTilBeslutning, sendTilBeslutningLaster, sendTilBeslutningError } =
+        useSendBehandlingTilBeslutning(behandling);
+    const { navigateWithNotification } = useNotification();
+    const { setBehandling } = useBehandling();
+
+    const [visSendTilBeslutningModal, setVisSendTilBeslutningModal] = useState(false);
+
+    return (
+        <>
+            <Button
+                onClick={() => {
+                    if (valider()) {
+                        setVisSendTilBeslutningModal(true);
+                    }
+                }}
+                disabled={disabled}
+            >
+                {'Send til beslutter'}
+            </Button>
+            <BekreftelsesModal
+                åpen={visSendTilBeslutningModal}
+                tittel={'Send vedtaket til beslutning?'}
+                feil={sendTilBeslutningError}
+                lukkModal={() => setVisSendTilBeslutningModal(false)}
+                bekreftKnapp={
+                    <Button
+                        variant={'primary'}
+                        loading={sendTilBeslutningLaster}
+                        onClick={() => {
+                            sendTilBeslutning().then((oppdatertBehandling) => {
+                                if (oppdatertBehandling) {
+                                    setBehandling(oppdatertBehandling);
+                                    navigateWithNotification(
+                                        '/',
+                                        'Vedtaket er sendt til beslutning!',
+                                    );
+                                    setVisSendTilBeslutningModal(false);
+                                } else if (sendTilBeslutningError?.data) {
+                                    setBehandling(sendTilBeslutningError.data);
+                                }
+                            });
+                        }}
+                    >
+                        {'Send til beslutning'}
+                    </Button>
+                }
+            >
+                <BehandlingValideringVarsler resultat={valideringResultat} />
+            </BekreftelsesModal>
+        </>
+    );
+};

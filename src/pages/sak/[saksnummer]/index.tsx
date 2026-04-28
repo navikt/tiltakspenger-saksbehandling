@@ -1,8 +1,8 @@
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
-import { SakProps } from '~/types/Sak';
-import { Personoversikt } from '~/components/personoversikt/Personoversikt';
+import { SakProps } from '~/lib/sak/SakTyper';
+import { Personoversikt } from '~/lib/personoversikt/Personoversikt';
 import { fetchSak } from '~/utils/fetch/fetch-server';
-import { SakProvider } from '~/context/sak/SakContext';
+import { SakProvider } from '~/lib/sak/SakContext';
 
 type Props = {
     sak: SakProps;

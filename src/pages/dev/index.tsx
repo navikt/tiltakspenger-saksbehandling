@@ -28,7 +28,7 @@ import {
     KlageHendelseFeilregistrertType,
     KlageHendelseKlagebehandlingAvsluttetUtfall,
     OmgjøringskravbehandlingAvsluttetUtfall,
-} from '~/types/Klageinstanshendelse';
+} from '~/lib/klage/typer/Klageinstanshendelse';
 
 export const getServerSideProps = pageWithAuthentication(async () => {
     if (process?.env.NEXT_PUBLIC_DEVROUTES && process.env.NEXT_PUBLIC_DEVROUTES === 'true') {

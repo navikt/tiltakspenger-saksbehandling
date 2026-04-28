@@ -8,10 +8,10 @@ import {
     KlagebehandlingsresultatOpprettholdt,
     KlagebehandlingStatus,
     KlageId,
-} from '~/types/Klage';
-import { SakProps } from '~/types/Sak';
+} from '~/lib/klage/typer/Klage';
+import { SakProps } from '~/lib/sak/SakTyper';
 import { fetchSak } from '~/utils/fetch/fetch-server';
-import { KlageSteg } from '~/utils/KlageLayoutUtils';
+import { KlageSteg } from '~/lib/klage/utils/KlageLayoutUtils';
 import KlageLayout, { KlageProvider, useKlage } from '../../layout';
 import { Button, Heading, HStack, LocalAlert, Process, VStack } from '@navikt/ds-react';
 import {
@@ -20,16 +20,16 @@ import {
     erKlageMottattFraKAEllerEtter,
     erKlageVedtatt,
     harKlageEnÅpenRammebehandling,
-} from '~/utils/klageUtils';
-import { Rammebehandling } from '~/types/Rammebehandling';
+} from '~/lib/klage/utils/klageUtils';
+import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { Nullable } from '~/types/UtilTypes';
 import { behandlingUrl } from '~/utils/urls';
-import { VelgOmgjøringsbehandlingModal } from '~/components/forms/velg-omgjøringsbehandling/VelgOmgjøringsbehandlingForm';
+import { VelgOmgjøringsbehandlingModal } from '~/lib/klage/forms/velg-omgjøringsbehandling/VelgOmgjøringsbehandlingForm';
 import { Søknad } from '~/types/Søknad';
-import { Rammevedtak } from '~/types/Rammevedtak';
+import { Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
 import Link from 'next/link';
-import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
-import { Saksbehandler } from '~/types/Saksbehandler';
+import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
+import { SaksbehandlerTyper } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import {
     ArchiveIcon,
     CheckmarkCircleIcon,
@@ -37,18 +37,18 @@ import {
     PaperplaneIcon,
     PersonHeadsetIcon,
 } from '@navikt/aksel-icons';
-import WarningCircleIcon from '~/icons/WarningCircleIcon';
+import WarningCircleIcon from '~/lib/_felles/icons/WarningCircleIcon';
 import { formaterTidspunkt } from '~/utils/date';
 import {
     erKlageinstanshendelseAvsluttet,
     skalKunneOppretteNyRammebehandling,
-} from '~/utils/KlageinstanshendelseUtils';
+} from '~/lib/klage/utils/KlageinstanshendelseUtils';
 import styles from './index.module.css';
-import OppsummeringAvKlageinstanshendelser from '~/components/oppsummeringer/klage/oppsummeringAvKlageinstanshendelser/OppsummeringAvKlageinstanshendelser';
-import { KlageHendelseKlagebehandlingAvsluttetUtfall } from '~/types/Klageinstanshendelse';
-import FerdigstillKlageModalWrapper from '~/components/modaler/FerdigstillKlagebehandlingModal';
-import Omgjøringsresultat from '~/components/klage/Omgjøringsresultat';
-import KlageTilknyttedeBehandlingerInfoCard from '~/components/klage/KlageTilknyttedeBehandlingerInfoCard';
+import OppsummeringAvKlageinstanshendelser from '~/lib/behandling-felles/oppsummeringer/klage/oppsummeringAvKlageinstanshendelser/OppsummeringAvKlageinstanshendelser';
+import { KlageHendelseKlagebehandlingAvsluttetUtfall } from '~/lib/klage/typer/Klageinstanshendelse';
+import FerdigstillKlageModalWrapper from '~/lib/klage/modaler/FerdigstillKlagebehandlingModal';
+import Omgjøringsresultat from '~/lib/klage/Omgjøringsresultat';
+import KlageTilknyttedeBehandlingerInfoCard from '~/lib/klage/KlageTilknyttedeBehandlingerInfoCard';
 
 type Props = {
     sak: SakProps;
@@ -144,7 +144,7 @@ const OpprettholdResultat = (props: {
     vedtak: Rammevedtak[];
     omgjøringsbehandling: Nullable<Rammebehandling>;
     søknader: Søknad[];
-    innloggetSaksbehandler: Saksbehandler;
+    innloggetSaksbehandler: SaksbehandlerTyper;
     rammebehandlinger: Rammebehandling[];
 }) => {
     const [vilOppretteNyBehandling, setVilOppretteNyBehandling] = useState(false);

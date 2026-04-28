@@ -1,0 +1,87 @@
+import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+import { useRolleForBehandling } from '~/lib/saksbehandler/SaksbehandlerContext';
+import { SaksbehandlerRolle } from '~/lib/saksbehandler/SaksbehandlerTyper';
+import { Rammebehandlingstype, Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { Søknadsbehandling } from '~/lib/rammebehandling/typer/Søknadsbehandling';
+import { Revurdering, Omgjøring } from '~/lib/rammebehandling/typer/Revurdering';
+import { erOmgjøringResultat } from '~/lib/rammebehandling/rammebehandlingUtils';
+import { Klagebehandling } from '~/lib/klage/typer/Klage';
+import { Nullable } from '~/types/UtilTypes';
+
+type BehandlingContext<Rammebehandling> = {
+    behandling: Rammebehandling;
+    setBehandling: (behandling: Rammebehandling) => void;
+    rolleForBehandling: SaksbehandlerRolle.SAKSBEHANDLER | SaksbehandlerRolle.BESLUTTER | null;
+    klagebehandling: Nullable<Klagebehandling>;
+};
+
+const Context = createContext({} as BehandlingContext<Rammebehandling>);
+
+type Props = {
+    behandling: Rammebehandling;
+    klagebehandling: Nullable<Klagebehandling>;
+    children: ReactNode;
+};
+
+export const BehandlingProvider = ({
+    behandling: initialBehandling,
+    klagebehandling,
+    children,
+}: Props) => {
+    const [behandling, setBehandling] = useState<Rammebehandling>(initialBehandling);
+
+    const rolleForBehandling = useRolleForBehandling(behandling);
+
+    useEffect(() => {
+        setBehandling(initialBehandling);
+    }, [initialBehandling]);
+
+    return (
+        <Context.Provider
+            value={{
+                behandling,
+                setBehandling,
+                rolleForBehandling,
+                klagebehandling,
+            }}
+        >
+            {children}
+        </Context.Provider>
+    );
+};
+
+export const useBehandling = () => {
+    return useContext(Context);
+};
+
+export const useSøknadsbehandling = () => {
+    const context = useContext(Context);
+
+    if (context.behandling.type !== Rammebehandlingstype.SØKNADSBEHANDLING) {
+        throw Error(`Feil context for søknadsbehandling: ${context.behandling.type}`);
+    }
+
+    return context as BehandlingContext<Søknadsbehandling>;
+};
+
+export const useRevurderingBehandling = () => {
+    const context = useContext(Context);
+
+    if (context.behandling.type !== Rammebehandlingstype.REVURDERING) {
+        throw Error(`Feil context for revurdering: ${context.behandling.type}`);
+    }
+
+    return context as BehandlingContext<Revurdering>;
+};
+
+export const useRevurderingOmgjøring = () => {
+    const context = useRevurderingBehandling();
+
+    if (!erOmgjøringResultat(context.behandling.resultat)) {
+        throw Error(
+            `Feil context for omgjøring med behandling id ${context.behandling.id}: ${context.behandling.resultat}`,
+        );
+    }
+
+    return context as BehandlingContext<Omgjøring>;
+};

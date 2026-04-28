@@ -1,12 +1,12 @@
 import { logger } from '@navikt/next-logger';
 import { IncomingMessage } from 'node:http';
 import { NextApiRequest } from 'next';
-import { SakProps } from '~/types/Sak';
+import { SakProps } from '~/lib/sak/SakTyper';
 import { stripLeadingSlash } from '../string';
 import { errorFraApiResponse } from './fetch';
 import { hentOboToken } from '~/auth/tokens';
-import { BenkOversiktRequestBody, BenkOversiktProps } from '~/types/Benk';
-import { Saksbehandler } from '~/types/Saksbehandler';
+import { BenkOversiktRequestBody, BenkOversiktProps } from '~/lib/benk/typer/Benk';
+import { SaksbehandlerTyper } from '~/lib/saksbehandler/SaksbehandlerTyper';
 
 export type NextRequest = Request | IncomingMessage | NextApiRequest;
 
@@ -67,4 +67,4 @@ export const fetchBenkOversikt = async (req: NextRequest, body: BenkOversiktRequ
     });
 
 export const fetchSaksbehandler = async (req: NextRequest) =>
-    fetchJsonFraApiServerSide<Saksbehandler>(req, '/saksbehandler');
+    fetchJsonFraApiServerSide<SaksbehandlerTyper>(req, '/saksbehandler');

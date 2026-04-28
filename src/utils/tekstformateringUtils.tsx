@@ -1,23 +1,30 @@
-import { MeldekortbehandlingDagStatus } from '~/types/meldekort/Meldekortbehandling';
-import { BrukersMeldekortDagStatus } from '~/types/meldekort/BrukersMeldekort';
-import { MeldeperiodeKjedeStatus } from '~/types/meldekort/Meldeperiode';
+import { MeldekortbehandlingDagStatus } from '~/lib/meldekort/typer/Meldekortbehandling';
+import { BrukersMeldekortDagStatus } from '~/lib/meldekort/typer/BrukersMeldekort';
+import { MeldeperiodeKjedeStatus } from '~/lib/meldekort/typer/Meldeperiode';
 import React, { ReactElement } from 'react';
 import { Tag } from '@navikt/ds-react';
 import {
     RammebehandlingResultat,
     Rammebehandlingsstatus,
     Rammebehandlingstype,
-} from '~/types/Rammebehandling';
+} from '~/lib/rammebehandling/typer/Rammebehandling';
 import { Utbetalingsstatus } from '~/types/Utbetaling';
-import { ManueltBehandlesGrunn, SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
-import { RevurderingResultat } from '~/types/Revurdering';
-import { ÅpenBehandlingForOversiktType } from '~/types/ÅpenBehandlingForOversikt';
+import {
+    ManueltBehandlesGrunn,
+    SøknadsbehandlingResultat,
+} from '~/lib/rammebehandling/typer/Søknadsbehandling';
+import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
+import { ÅpenBehandlingForOversiktType } from '~/lib/personoversikt/typer/ÅpenBehandlingForOversikt';
 import { Behandlingsårsak, Søknadstype } from '~/types/Søknad';
 import {
     SøknadBehandlingsårsakManueltRegistrertSøknad,
     SøknadstypeManueltRegistrertSøknad,
-} from '~/components/manuell-søknad/ManueltRegistrertSøknad';
-import { KlagebehandlingResultat, KlagebehandlingStatus, OmgjøringÅrsak } from '~/types/Klage';
+} from '~/lib/manuell-søknad/ManueltRegistrertSøknad';
+import {
+    KlagebehandlingResultat,
+    KlagebehandlingStatus,
+    OmgjøringÅrsak,
+} from '~/lib/klage/typer/Klage';
 
 export const finnBehandlingStatusTag = (
     status: Rammebehandlingsstatus,

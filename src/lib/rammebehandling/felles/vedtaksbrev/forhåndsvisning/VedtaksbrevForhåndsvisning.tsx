@@ -1,0 +1,83 @@
+import { Alert, Button } from '@navikt/ds-react';
+import { EnvelopeOpenIcon } from '@navikt/aksel-icons';
+import {
+    BrevForhåndsvisningDTO,
+    useHentVedtaksbrevForhåndsvisning,
+} from './useHentVedtaksbrevForhåndsvisning';
+
+import { ValideringResultat } from '~/lib/rammebehandling/typer/Validering';
+import React, { useEffect, useState } from 'react';
+
+import style from './VedtaksbrevForhåndsvisning.module.css';
+import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { erAvsluttet } from '~/lib/rammebehandling/rammebehandlingUtils';
+
+type Props = {
+    behandling: Rammebehandling;
+    hentDto: () => BrevForhåndsvisningDTO;
+    validering: ValideringResultat;
+    readonly?: boolean;
+};
+
+export const VedtaksbrevForhåndsvisning = ({
+    behandling,
+    hentDto,
+    validering,
+    readonly,
+}: Props) => {
+    const { hentForhåndsvisning, forhåndsvisningLaster, forhåndsvisningError } =
+        useHentVedtaksbrevForhåndsvisning(behandling);
+
+    const [showValidationError, setShowValidationError] = useState(false);
+
+    const harValideringsfeil = validering.errors.length > 0;
+
+    useEffect(() => {
+        if (!harValideringsfeil) {
+            // TODO Gjorde lintingen strengere ved oppgradering til Next 16. Fikset bare åpenbare feil, denne burde undersøkes.
+            /* eslint-disable-next-line react-hooks/set-state-in-effect */
+            setShowValidationError(false);
+        }
+    }, [harValideringsfeil]);
+
+    return (
+        <>
+            <Button
+                size={'small'}
+                type={'button'}
+                variant={'secondary'}
+                icon={<EnvelopeOpenIcon />}
+                className={style.knapp}
+                loading={forhåndsvisningLaster}
+                disabled={erAvsluttet(behandling) || readonly}
+                onClick={async () => {
+                    if (harValideringsfeil) {
+                        setShowValidationError(true);
+                        return;
+                    }
+
+                    return hentForhåndsvisning(hentDto()).then((blob) => {
+                        if (blob) {
+                            window.open(URL.createObjectURL(blob));
+                        }
+                    });
+                }}
+            >
+                {'Forhåndsvis brev'}
+            </Button>
+            {showValidationError &&
+                validering.errors.map((error, index) => (
+                    <Alert key={index} variant={'error'} size={'small'} inline={true}>
+                        {error}
+                    </Alert>
+                ))}
+            {forhåndsvisningError && (
+                <Alert
+                    variant={'error'}
+                    size={'small'}
+                    inline={true}
+                >{`Feil ved forhåndsvisning av brev: [${forhåndsvisningError.status}] ${forhåndsvisningError.message}`}</Alert>
+            )}
+        </>
+    );
+};

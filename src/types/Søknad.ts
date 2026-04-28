@@ -1,4 +1,4 @@
-import { Avbrutt } from './Avbrutt';
+import { Avbrutt } from '../lib/behandling-felles/typer/Avbrutt';
 import { Periode } from './Periode';
 
 import { Nullable } from './UtilTypes';

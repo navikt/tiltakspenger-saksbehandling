@@ -6,24 +6,24 @@ import {
     KlagebehandlingsresultatOmgjør,
     KlagebehandlingsresultatOpprettholdt,
     KlageId,
-} from '~/types/Klage';
-import { SakProps } from '~/types/Sak';
+} from '~/lib/klage/typer/Klage';
+import { SakProps } from '~/lib/sak/SakTyper';
 import { fetchSak } from '~/utils/fetch/fetch-server';
-import { KlageSteg } from '~/utils/KlageLayoutUtils';
+import { KlageSteg } from '~/lib/klage/utils/KlageLayoutUtils';
 import KlageLayout, { KlageProvider, useKlage } from '../../layout';
 import { useForm } from 'react-hook-form';
-import VurderingForm from '~/components/forms/klage-vurdering/VurderingForm';
+import VurderingForm from '~/lib/klage/forms/klage-vurdering/VurderingForm';
 import {
     harKlagevurderingsstegUtfylt,
     klagebehandlingTilVurderingFormData,
     VurderingFormData,
     vurderingFormDataTilVurderKlageRequest,
     vurderingFormValidation,
-} from '~/components/forms/klage-vurdering/VurderingFormUtils';
+} from '~/lib/klage/forms/klage-vurdering/VurderingFormUtils';
 import { BodyShort, Button, Heading, HStack, InfoCard, LocalAlert, VStack } from '@navikt/ds-react';
 import { CheckmarkCircleIcon, PencilIcon, TrashIcon } from '@navikt/aksel-icons';
-import { useAvbrytKlagebehandling, useVurderKlage } from '~/api/KlageApi';
-import WarningCircleIcon from '~/icons/WarningCircleIcon';
+import { useAvbrytKlagebehandling, useVurderKlage } from '~/lib/klage/api/KlageApi';
+import WarningCircleIcon from '~/lib/_felles/icons/WarningCircleIcon';
 import router from 'next/router';
 import {
     erKlageAvsluttet,
@@ -32,17 +32,17 @@ import {
     erKlageOpprettholdelse,
     finnSisteGyldigeStegForKlage,
     kanBehandleKlage,
-} from '~/utils/klageUtils';
-import AvsluttBehandlingModal from '~/components/modaler/AvsluttBehandlingModal';
+} from '~/lib/klage/utils/klageUtils';
+import AvsluttBehandlingModal from '~/lib/_felles/modaler/AvsluttBehandlingModal';
 import styles from './index.module.css';
 import Link from 'next/link';
 import { Søknad } from '~/types/Søknad';
-import { Rammevedtak } from '~/types/Rammevedtak';
-import { Rammebehandling } from '~/types/Rammebehandling';
+import { Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
+import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { Nullable } from '~/types/UtilTypes';
-import { erRammebehandlingUnderAktivOmgjøring } from '~/utils/behandling';
-import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
-import Omgjøringsresultat from '~/components/klage/Omgjøringsresultat';
+import { erRammebehandlingUnderAktivOmgjøring } from '~/lib/rammebehandling/rammebehandlingUtils';
+import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
+import Omgjøringsresultat from '~/lib/klage/Omgjøringsresultat';
 
 type Props = {
     sak: SakProps;

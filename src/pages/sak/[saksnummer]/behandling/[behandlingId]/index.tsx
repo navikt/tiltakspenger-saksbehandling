@@ -1,14 +1,17 @@
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
-import { BehandlingPage } from '~/components/behandling/BehandlingPage';
+import { BehandlingPage } from '~/lib/rammebehandling/BehandlingPage';
 import React, { ComponentProps } from 'react';
 import { GetServerSideProps } from 'next';
-import { BehandlingProvider } from '~/components/behandling/context/BehandlingContext';
+import { BehandlingProvider } from '~/lib/rammebehandling/context/BehandlingContext';
 import { fetchSak } from '~/utils/fetch/fetch-server';
 import { logger } from '@navikt/next-logger';
-import { SakProvider } from '~/context/sak/SakContext';
-import { SakProps } from '~/types/Sak';
-import { BehandlingId, Rammebehandling as BehandlingType } from '~/types/Rammebehandling';
-import { Klagebehandling } from '~/types/Klage';
+import { SakProvider } from '~/lib/sak/SakContext';
+import { SakProps } from '~/lib/sak/SakTyper';
+import {
+    BehandlingId,
+    Rammebehandling as BehandlingType,
+} from '~/lib/rammebehandling/typer/Rammebehandling';
+import { Klagebehandling } from '~/lib/klage/typer/Klage';
 import { Nullable } from '~/types/UtilTypes';
 
 type Props = {

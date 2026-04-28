@@ -1,7 +1,7 @@
-import { BeløpProps } from './Beregning';
-import { MeldeperiodeKjedeId } from './meldekort/Meldeperiode';
+import { BeløpProps } from '../lib/beregning-og-simulering/typer/Beregning';
+import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
 import { Periode } from './Periode';
-import { SimulertBeregning } from '~/types/SimulertBeregning';
+import { SimulertBeregning } from '~/lib/beregning-og-simulering/typer/SimulertBeregning';
 import { Nullable } from '~/types/UtilTypes';
 
 export type UtbetalingId = `utbetaling_${string}`;
