@@ -4,8 +4,8 @@ import {
     Klagebehandling,
     KlagebehandlingsresultatAvvist,
     KlagebehandlingsresultatOpprettholdt,
-} from '~/types/Klage';
-import { Rammevedtak } from '~/types/Rammevedtak';
+} from '~/lib/klage/typer/Klage';
+import { Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { Nullable } from '~/types/UtilTypes';
 import { formaterDatotekst } from '~/utils/date';
 

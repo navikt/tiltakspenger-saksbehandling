@@ -1,13 +1,13 @@
 import { Alert, Button, Heading, Radio, RadioGroup } from '@navikt/ds-react';
-import { SaksbehandlerRolle } from '~/types/Saksbehandler';
+import { SaksbehandlerRolle } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import { VedtakSeksjon } from '~/lib/rammebehandling/felles/layout/seksjon/VedtakSeksjon';
 import { useSøknadsbehandling } from '../../context/BehandlingContext';
-import { SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
+import { SøknadsbehandlingResultat } from '~/lib/rammebehandling/typer/Søknadsbehandling';
 import {
     useSøknadsbehandlingSkjema,
     useSøknadsbehandlingSkjemaDispatch,
 } from '~/lib/rammebehandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
-import { Rammebehandlingsstatus } from '~/types/Rammebehandling';
+import { Rammebehandlingsstatus } from '~/lib/rammebehandling/typer/Rammebehandling';
 
 import style from './SøknadsbehandlingResultatVelger.module.css';
 

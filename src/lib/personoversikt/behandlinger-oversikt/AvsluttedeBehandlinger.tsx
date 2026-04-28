@@ -1,7 +1,7 @@
 import { AvbruttBehandlingCellInfo } from './AvsluttedeBehandlingerUtils';
 import { AvbrutteBehandlingerTabell } from './AvbrutteBehandlingerTabell';
-import { Rammebehandling } from '~/types/Rammebehandling';
-import { Klagebehandling, KlagebehandlingResultat } from '~/types/Klage';
+import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { Klagebehandling, KlagebehandlingResultat } from '~/lib/klage/typer/Klage';
 
 export const AvsluttedeBehandlinger = (props: {
     saksnummer: string;

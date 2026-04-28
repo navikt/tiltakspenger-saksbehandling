@@ -1,8 +1,11 @@
-import { deltarPaFlereTiltakMedStartOgSluttdato, hentTiltaksdeltakelser } from '~/utils/behandling';
-import { ValideringResultat } from '~/types/Validering';
+import {
+    deltarPaFlereTiltakMedStartOgSluttdato,
+    hentTiltaksdeltakelser,
+} from '~/lib/rammebehandling/rammebehandlingUtils';
+import { ValideringResultat } from '~/lib/rammebehandling/typer/Validering';
 import dayjs from 'dayjs';
-import { Rammebehandling } from '~/types/Rammebehandling';
-import { Innvilgelsesperiode } from '~/types/Innvilgelsesperiode';
+import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 
 export const validerTiltaksdeltakelser = (
     behandling: Rammebehandling,

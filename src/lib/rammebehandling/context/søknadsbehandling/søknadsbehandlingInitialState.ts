@@ -1,4 +1,7 @@
-import { Søknadsbehandling, SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
+import {
+    Søknadsbehandling,
+    SøknadsbehandlingResultat,
+} from '~/lib/rammebehandling/typer/Søknadsbehandling';
 import { hentLagredePerioderMedBarn } from '~/lib/rammebehandling/felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
 import {
     SøknadsbehandlingAvslagState,
@@ -36,7 +39,7 @@ const innvilgelseInitialState = (
     const { resultat, vedtaksperiode } = behandling;
 
     // Hvis den lagrede behandling ikke er en innvilgelse (dvs saksbehandler har endret resultat),
-    // så returnerer vi en blank innvilgelse uten perioder. Saksbehandler må velge innvilgelsesperioden
+    // så returnerer vi en blank innvilgelse uten perioder. SaksbehandlerTyper må velge innvilgelsesperioden
     if (!vedtaksperiode || resultat !== SøknadsbehandlingResultat.INNVILGELSE) {
         return {
             resultat: SøknadsbehandlingResultat.INNVILGELSE,

@@ -17,14 +17,14 @@ import {
     Rammebehandling,
     Rammebehandlingsstatus,
     Rammebehandlingstype,
-} from '~/types/Rammebehandling';
-import { useSak } from '~/context/sak/SakContext';
-import { SakProps } from '~/types/Sak';
+} from '~/lib/rammebehandling/typer/Rammebehandling';
+import { useSak } from '~/lib/sak/SakContext';
+import { SakProps } from '~/lib/sak/SakTyper';
 import { getTextAreaRefValue, TextAreaInput } from '~/utils/textarea';
-import { rammebehandlingMedInnvilgelseEllerNull } from '~/utils/behandling';
+import { rammebehandlingMedInnvilgelseEllerNull } from '~/lib/rammebehandling/rammebehandlingUtils';
 import { søknadsbehandlingInitialState } from '~/lib/rammebehandling/context/søknadsbehandling/søknadsbehandlingInitialState';
 import { revurderingInitialState } from '~/lib/rammebehandling/context/revurdering/revurderingInitialState';
-import { SaksbehandlerRolle } from '~/types/Saksbehandler';
+import { SaksbehandlerRolle } from '~/lib/saksbehandler/SaksbehandlerTyper';
 
 export type BehandlingSkjemaContextBase<T> = T & {
     erReadonly: boolean;

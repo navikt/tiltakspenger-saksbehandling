@@ -1,16 +1,16 @@
 import { createContext, ReactElement, useContext, useEffect, useState } from 'react';
-import { SakProps } from '~/types/Sak';
+import { SakProps } from '~/lib/sak/SakTyper';
 import useSWR from 'swr';
 import NextError from 'next/error';
 import { PersonaliaHeader } from '~/lib/personaliaheader/PersonaliaHeader';
 import styles from './Layout.module.css';
 import { BodyShort, Box, Heading, HStack, Loader, Tabs, Tag, VStack } from '@navikt/ds-react';
-import { Klagebehandling, KlagebehandlingStatus } from '~/types/Klage';
+import { Klagebehandling, KlagebehandlingStatus } from '~/lib/klage/typer/Klage';
 import { Nullable } from '~/types/UtilTypes';
 import Link from 'next/link';
 
 import router from 'next/router';
-import { kanNavigereTilKlageSteg, KlageSteg } from '../../../../utils/KlageLayoutUtils';
+import { kanNavigereTilKlageSteg, KlageSteg } from '../../../../lib/klage/utils/KlageLayoutUtils';
 import { classNames } from '~/utils/classNames';
 import {
     klagebehandlingResultatTilTag,
@@ -18,11 +18,11 @@ import {
 } from '~/utils/tekstformateringUtils';
 import { formaterTidspunkt } from '~/utils/date';
 import { fetchJsonFraApiClientSide } from '~/utils/fetch/fetch';
-import AvbruttOppsummering from '~/lib/oppsummeringer/oppsummeringAvAvbrutt/OppsummeringAvAvbrutt';
-import OppsummeringAvVentestatus from '~/lib/oppsummeringer/ventestatus/OppsummeringAvVentestatus';
-import { hentSisteKlagehendelseUtfallFraKlagebehandling } from '~/utils/klageUtils';
-import { klagehendelseUtfallTilTag } from '~/utils/KlageinstanshendelseUtils';
-import { OppsummeringsPar } from '~/lib/oppsummeringer/oppsummeringspar/OppsummeringsPar';
+import AvbruttOppsummering from '~/lib/behandling-felles/oppsummeringer/oppsummeringAvAvbrutt/OppsummeringAvAvbrutt';
+import OppsummeringAvVentestatus from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatus';
+import { hentSisteKlagehendelseUtfallFraKlagebehandling } from '~/lib/klage/utils/klageUtils';
+import { klagehendelseUtfallTilTag } from '~/lib/klage/utils/KlageinstanshendelseUtils';
+import { OppsummeringsPar } from '~/lib/behandling-felles/oppsummeringer/oppsummeringspar/OppsummeringsPar';
 
 type Props = {
     children: ReactElement;

@@ -1,5 +1,5 @@
 import { nesteDag } from '~/utils/date';
-import { BarnetilleggPeriode } from '~/types/Barnetillegg';
+import { BarnetilleggPeriode } from '~/lib/rammebehandling/typer/Barnetillegg';
 import { InnvilgelseMedPerioderState } from '~/lib/rammebehandling/context/innvilgelse/innvilgelseContext';
 import { Reducer } from 'react';
 import { oppdaterPeriodiseringUtenOverlapp } from '~/lib/rammebehandling/context/behandlingSkjemaUtils';

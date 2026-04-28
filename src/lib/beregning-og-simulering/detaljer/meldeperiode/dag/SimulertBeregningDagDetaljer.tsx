@@ -2,13 +2,13 @@ import {
     SimulertBeregningDag,
     SimulertBeregningDagMedBeregning,
     SimulerteBeløp,
-} from '~/types/SimulertBeregning';
+} from '~/lib/beregning-og-simulering/typer/SimulertBeregning';
 import { BodyShort, Button, Table, Tooltip } from '@navikt/ds-react';
 import { classNames } from '~/utils/classNames';
 import { formaterDatotekst } from '~/utils/date';
 import { ikonForMeldekortbehandlingDagStatus } from '~/lib/meldekort/0-felles-komponenter/MeldekortIkoner';
 import { meldekortbehandlingDagStatusTekst } from '~/utils/tekstformateringUtils';
-import { beløpStyle } from '~/lib/utbetaling/beløp/beløpStyle';
+import { beløpStyle } from '~/lib/_felles/utbetaling/beløp/beløpStyle';
 import { useState } from 'react';
 import { MinusIcon, PlusIcon } from '@navikt/aksel-icons';
 import { SimuleringOppsummeringDetaljert } from '~/lib/beregning-og-simulering/detaljer/meldeperiode/oppsummering/SimuleringOppsummeringDetaljert';

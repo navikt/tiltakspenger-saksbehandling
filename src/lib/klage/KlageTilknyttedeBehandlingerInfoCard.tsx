@@ -1,7 +1,7 @@
 import { BodyShort, InfoCard } from '@navikt/ds-react';
 import Link from 'next/link';
-import { Klagebehandling } from '~/types/Klage';
-import { Rammebehandling } from '~/types/Rammebehandling';
+import { Klagebehandling } from '~/lib/klage/typer/Klage';
+import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { formaterTidspunktKort } from '~/utils/date';
 import { finnBehandlingstypeTekst, behandlingResultatTilText } from '~/utils/tekstformateringUtils';
 import { behandlingUrl } from '~/utils/urls';

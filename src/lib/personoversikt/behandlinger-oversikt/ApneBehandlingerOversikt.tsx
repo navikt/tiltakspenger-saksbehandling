@@ -1,7 +1,7 @@
 import {
     ÅpenBehandlingForOversikt,
     ÅpenBehandlingForOversiktType,
-} from '~/types/ÅpenBehandlingForOversikt';
+} from '~/lib/personoversikt/typer/ÅpenBehandlingForOversikt';
 import { Alert, HStack, Table, Tag } from '@navikt/ds-react';
 import {
     behandlingResultatTilTag,
@@ -12,16 +12,16 @@ import {
     meldeperiodeKjedeStatusTag,
 } from '~/utils/tekstformateringUtils';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '~/utils/date';
-import { ApneBehandlingerMeny } from '~/lib/behandlingmeny/ApneBehandlingerMeny';
+import { ApneBehandlingerMeny } from '~/lib/behandling-felles/behandlingmeny/ApneBehandlingerMeny';
 import { meldeperiodeUrl } from '~/utils/urls';
 import { MeldeperiodeKjedeOversiktMeny } from '~/lib/personoversikt/meldekort-oversikt/MeldekortOversikt';
-import { SakProps } from '~/types/Sak';
+import { SakProps } from '~/lib/sak/SakTyper';
 import { Periode } from '~/types/Periode';
-import { useSak } from '~/context/sak/SakContext';
+import { useSak } from '~/lib/sak/SakContext';
 import { Nullable } from '~/types/UtilTypes';
-import KlageMeny from '~/lib/behandlingmeny/KlageMeny';
-import { hentSisteKlagehendelseUtfallFraKlagebehandling } from '~/utils/klageUtils';
-import { klagehendelseUtfallTilTag } from '~/utils/KlageinstanshendelseUtils';
+import KlageMeny from '~/lib/behandling-felles/behandlingmeny/KlageMeny';
+import { hentSisteKlagehendelseUtfallFraKlagebehandling } from '~/lib/klage/utils/klageUtils';
+import { klagehendelseUtfallTilTag } from '~/lib/klage/utils/KlageinstanshendelseUtils';
 
 type Props = {
     åpneBehandlinger: ÅpenBehandlingForOversikt[];

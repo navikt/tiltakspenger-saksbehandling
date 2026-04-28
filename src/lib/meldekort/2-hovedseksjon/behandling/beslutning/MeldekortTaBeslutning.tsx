@@ -1,14 +1,14 @@
 import { Button, HStack } from '@navikt/ds-react';
-import { BekreftelsesModal } from '../../../../modaler/BekreftelsesModal';
+import { BekreftelsesModal } from '~/lib/_felles/modaler/BekreftelsesModal';
 import { useMeldeperiodeKjede } from '../../../context/MeldeperiodeKjedeContext';
 import { useGodkjennMeldekort } from './useGodkjennMeldekort';
-import { useSak } from '~/context/sak/SakContext';
+import { useSak } from '~/lib/sak/SakContext';
 import { useRef } from 'react';
-import { MeldekortbehandlingProps } from '~/types/meldekort/Meldekortbehandling';
-import { Underkjenn } from '../../../../underkjenn/Underkjenn';
+import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
+import { Underkjenn } from '~/lib/behandling-felles/underkjenn/Underkjenn';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import router from 'next/router';
-import { useNotification } from '~/context/NotificationContext';
+import { useNotification } from '~/lib/_felles/notifications/NotificationContext';
 import { PERSONOVERSIKT_TABS } from '~/lib/personoversikt/Personoversikt';
 
 type Props = {

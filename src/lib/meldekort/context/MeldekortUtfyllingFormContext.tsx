@@ -3,7 +3,7 @@ import {
     MeldekortbehandlingForm,
     useCustomMeldekortUtfyllingValidationResolver,
 } from '~/lib/meldekort/2-hovedseksjon/behandling/utfylling/meldekortUtfyllingUtils';
-import { MeldekortbehandlingProps } from '~/types/meldekort/Meldekortbehandling';
+import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { useMeldeperiodeKjede } from '~/lib/meldekort/context/MeldeperiodeKjedeContext';
 import { PropsWithChildren, useEffect } from 'react';
 import { hentMeldekortForhåndsutfylling } from '~/lib/meldekort/0-felles-komponenter/meldekortForhåndsutfyllingUtils';

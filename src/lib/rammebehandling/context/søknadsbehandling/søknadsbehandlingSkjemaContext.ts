@@ -2,14 +2,14 @@ import {
     Avslagsgrunn,
     Søknadsbehandling,
     SøknadsbehandlingResultat,
-} from '~/types/Søknadsbehandling';
+} from '~/lib/rammebehandling/typer/Søknadsbehandling';
 import {
     InnvilgelseActions,
     innvilgelseReducer,
     InnvilgelseState,
 } from '~/lib/rammebehandling/context/innvilgelse/innvilgelseContext';
 import { Reducer } from 'react';
-import { ReducerSuperAction } from '~/types/Context';
+import { ReducerSuperAction } from '~/types/ReducerAction';
 import { søknadsbehandlingInitialState } from '~/lib/rammebehandling/context/søknadsbehandling/søknadsbehandlingInitialState';
 import {
     BehandlingSkjemaContextBase,

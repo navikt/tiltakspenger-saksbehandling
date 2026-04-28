@@ -1,6 +1,6 @@
-import { HjemmelForStans, RevurderingResultat } from '~/types/Revurdering';
+import { HjemmelForStans, RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 import { Reducer } from 'react';
-import { ReducerSuperAction } from '~/types/Context';
+import { ReducerSuperAction } from '~/types/ReducerAction';
 import {
     BehandlingSkjemaContextBase,
     useBehandlingSkjema,

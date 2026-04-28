@@ -1,14 +1,17 @@
 import { Alert, Checkbox, CheckboxGroup, HStack, VStack } from '@navikt/ds-react';
 import { VedtatteBehandlingerTabell } from './VedtatteBehandlingerTabell';
-import { Rammebehandling, VedtattRammevedtakMedBehandling } from '~/types/Rammebehandling';
-import { SakId } from '~/types/Sak';
-import { Omgjøringsgrad, Rammevedtak } from '~/types/Rammevedtak';
+import {
+    Rammebehandling,
+    VedtattRammevedtakMedBehandling,
+} from '~/lib/rammebehandling/typer/Rammebehandling';
+import { SakId } from '~/lib/sak/SakTyper';
+import { Omgjøringsgrad, Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { useState } from 'react';
 import { classNames } from '~/utils/classNames';
 
 import style from './VedtatteBehandlinger.module.css';
-import { Klagevedtak } from '~/types/Klagevedtak';
-import { Klagebehandling, KlagevedtakMedBehandling } from '~/types/Klage';
+import { Klagevedtak } from '~/lib/klage/typer/Klagevedtak';
+import { Klagebehandling, KlagevedtakMedBehandling } from '~/lib/klage/typer/Klage';
 
 type Props = {
     sakId: SakId;

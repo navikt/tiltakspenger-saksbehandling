@@ -1,4 +1,4 @@
-import { Ytelse } from '~/types/Ytelse';
+import { Ytelse } from '~/lib/rammebehandling/typer/Ytelse';
 import { BodyShort, Checkbox, VStack } from '@navikt/ds-react';
 import { BehandlingSaksopplysning } from '~/lib/rammebehandling/saksopplysninger/BehandlingSaksopplysning';
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';

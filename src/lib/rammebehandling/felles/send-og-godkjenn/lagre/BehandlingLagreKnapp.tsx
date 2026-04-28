@@ -4,7 +4,10 @@ import { useBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 
 import { Nullable } from '~/types/UtilTypes';
 import { FetcherError } from '~/utils/fetch/fetch';
-import { Rammebehandling, OppdaterBehandlingDTO } from '~/types/Rammebehandling';
+import {
+    Rammebehandling,
+    OppdaterBehandlingDTO,
+} from '~/lib/rammebehandling/typer/Rammebehandling';
 
 type Props = {
     behandling: Rammebehandling;

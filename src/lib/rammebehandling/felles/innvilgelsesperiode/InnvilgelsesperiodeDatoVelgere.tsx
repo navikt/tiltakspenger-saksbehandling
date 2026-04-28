@@ -1,10 +1,10 @@
 import { useBehandlingInnvilgelseSkjemaDispatch } from '~/lib/rammebehandling/context/innvilgelse/innvilgelseContext';
-import { useSak } from '~/context/sak/SakContext';
+import { useSak } from '~/lib/sak/SakContext';
 import { Periode } from '~/types/Periode';
 import { dateTilISOTekst, datoMin, datoTilDatoInputText } from '~/utils/date';
 import { useBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 import { Datovelger, DatovelgerProps } from '~/lib/_felles/datovelger/Datovelger';
-import { TiltaksdeltakelseMedPeriode } from '~/types/Tiltaksdeltakelse';
+import { TiltaksdeltakelseMedPeriode } from '~/lib/rammebehandling/typer/Tiltaksdeltakelse';
 import { periodiseringTotalPeriode } from '~/utils/periode';
 
 type Props = {

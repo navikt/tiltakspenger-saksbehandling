@@ -1,7 +1,10 @@
 import { Nullable } from '~/types/UtilTypes';
 import { Periode } from '~/types/Periode';
-import { RammebehandlingResultat, Rammebehandlingstype } from '~/types/Rammebehandling';
-import { KlagebehandlingResultat } from '~/types/Klage';
+import {
+    RammebehandlingResultat,
+    Rammebehandlingstype,
+} from '~/lib/rammebehandling/typer/Rammebehandling';
+import { KlagebehandlingResultat } from '~/lib/klage/typer/Klage';
 
 export type AvbruttBehandlingCellInfo = {
     id: string;

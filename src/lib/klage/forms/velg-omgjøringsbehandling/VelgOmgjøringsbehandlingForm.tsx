@@ -1,6 +1,6 @@
 import { Modal, Select, Button, VStack, Heading, HStack, LocalAlert } from '@navikt/ds-react';
 import { Control, useWatch, Controller, useForm } from 'react-hook-form';
-import { Rammevedtak } from '~/types/Rammevedtak';
+import { Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { Søknad } from '~/types/Søknad';
 import { formaterTidspunkt } from '~/utils/date';
 import {
@@ -12,9 +12,9 @@ import {
 import { useOpprettRammebehandlingForKlage } from '~/lib/klage/api/KlageApi';
 import router from 'next/router';
 import { behandlingUrl } from '~/utils/urls';
-import { KlageId } from '~/types/Klage';
-import { SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
-import { RevurderingResultat } from '~/types/Revurdering';
+import { KlageId } from '~/lib/klage/typer/Klage';
+import { SøknadsbehandlingResultat } from '~/lib/rammebehandling/typer/Søknadsbehandling';
+import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 
 export const VelgOmgjøringsbehandlingModal = (props: {
     sakId: string;

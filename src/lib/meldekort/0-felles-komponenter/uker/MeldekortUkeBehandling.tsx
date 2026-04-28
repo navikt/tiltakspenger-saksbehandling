@@ -6,7 +6,7 @@ import { formatterBeløp } from '~/utils/beløp';
 import {
     MeldekortbehandlingDagStatus,
     MeldekortDagBeregnetProps,
-} from '~/types/meldekort/Meldekortbehandling';
+} from '~/lib/meldekort/typer/Meldekortbehandling';
 import { Controller, FieldPath } from 'react-hook-form';
 import { MeldekortbehandlingForm } from '../../2-hovedseksjon/behandling/utfylling/meldekortUtfyllingUtils';
 import { classNames } from '~/utils/classNames';

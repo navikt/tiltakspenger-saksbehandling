@@ -6,15 +6,15 @@ import style from './MeldekortbehandlingKnapper.module.css';
 import {
     MeldekortbehandlingProps,
     MeldekortbehandlingStatus,
-} from '~/types/meldekort/Meldekortbehandling';
+} from '~/lib/meldekort/typer/Meldekortbehandling';
 import {
     eierMeldekortbehandling,
     skalKunneOvertaMeldekortbehandling,
     skalKunneTaMeldekortbehandling,
-} from '~/utils/tilganger';
-import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
+} from '~/lib/saksbehandler/tilganger';
+import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import OvertaMeldekortbehandling from './OvertaMeldekortbehandling';
-import { SakId } from '~/types/Sak';
+import { SakId } from '~/lib/sak/SakTyper';
 import router from 'next/router';
 import { useTaMeldekortbehandling } from './useTaMeldekortbehandling';
 import { useLeggTilbakeMeldekortbehandling } from './useLeggTilbakeMeldekortbehandling';

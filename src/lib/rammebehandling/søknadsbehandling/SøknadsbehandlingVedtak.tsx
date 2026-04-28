@@ -7,7 +7,7 @@ import { SøknadsbehandlingAvslagsgrunner } from '~/lib/rammebehandling/søknads
 import { SøknadsbehandlingAutomatiskBehandling } from '~/lib/rammebehandling/søknadsbehandling/automatisk-behandling/SøknadsbehandlingAutomatiskBehandling';
 import { BehandlingBeregningOgSimulering } from '~/lib/rammebehandling/felles/beregning-og-simulering/BehandlingBeregningOgSimulering';
 import { useBehandlingSkjema } from '~/lib/rammebehandling/context/BehandlingSkjemaContext';
-import { SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
+import { SøknadsbehandlingResultat } from '~/lib/rammebehandling/typer/Søknadsbehandling';
 import { BehandlingBarnetillegg } from '~/lib/rammebehandling/felles/barnetillegg/BehandlingBarnetillegg';
 import { useBehandlingInnvilgelseSkjema } from '~/lib/rammebehandling/context/innvilgelse/innvilgelseContext';
 import { InnvilgelsesperioderVelger } from '~/lib/rammebehandling/felles/innvilgelsesperiode/InnvilgelsesperioderVelger';

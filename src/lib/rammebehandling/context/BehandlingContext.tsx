@@ -1,11 +1,11 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
-import { useRolleForBehandling } from '~/context/saksbehandler/SaksbehandlerContext';
-import { SaksbehandlerRolle } from '~/types/Saksbehandler';
-import { Rammebehandlingstype, Rammebehandling } from '~/types/Rammebehandling';
-import { Søknadsbehandling } from '~/types/Søknadsbehandling';
-import { Revurdering, Omgjøring } from '~/types/Revurdering';
-import { erOmgjøringResultat } from '~/utils/behandling';
-import { Klagebehandling } from '~/types/Klage';
+import { useRolleForBehandling } from '~/lib/saksbehandler/SaksbehandlerContext';
+import { SaksbehandlerRolle } from '~/lib/saksbehandler/SaksbehandlerTyper';
+import { Rammebehandlingstype, Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { Søknadsbehandling } from '~/lib/rammebehandling/typer/Søknadsbehandling';
+import { Revurdering, Omgjøring } from '~/lib/rammebehandling/typer/Revurdering';
+import { erOmgjøringResultat } from '~/lib/rammebehandling/rammebehandlingUtils';
+import { Klagebehandling } from '~/lib/klage/typer/Klage';
 import { Nullable } from '~/types/UtilTypes';
 
 type BehandlingContext<Rammebehandling> = {

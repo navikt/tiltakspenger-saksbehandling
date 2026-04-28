@@ -1,4 +1,4 @@
-import { Rammebehandling } from '~/types/Rammebehandling';
+import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { useFetchJsonFraApi } from '../../../../utils/fetch/useFetchFraApi';
 
 export const useOppdaterSaksopplysninger = (behandling: Rammebehandling) => {

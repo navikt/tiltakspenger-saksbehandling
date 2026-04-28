@@ -1,11 +1,11 @@
 import { Button } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import { useBehandling } from '../../../context/BehandlingContext';
-import { BekreftelsesModal } from '../../../../modaler/BekreftelsesModal';
+import { BekreftelsesModal } from '~/lib/_felles/modaler/BekreftelsesModal';
 import { useSendBehandlingTilBeslutning } from '~/lib/rammebehandling/felles/send-og-godkjenn/send-til-beslutning/useSendBehandlingTilBeslutning';
-import { useNotification } from '~/context/NotificationContext';
-import { Rammebehandling } from '~/types/Rammebehandling';
-import { ValideringResultat } from '~/types/Validering';
+import { useNotification } from '~/lib/_felles/notifications/NotificationContext';
+import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { ValideringResultat } from '~/lib/rammebehandling/typer/Validering';
 import { BehandlingValideringVarsler } from '~/lib/rammebehandling/felles/send-og-godkjenn/varsler/BehandlingValideringVarsler';
 
 type Props = {

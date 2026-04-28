@@ -8,7 +8,7 @@ import { LeggTilBarnManuelt } from '~/lib/manuell-søknad/barnetillegg/LeggTilBa
 import { JaNeiSpørsmål } from '~/lib/manuell-søknad/JaNeiSpørsmål';
 import { useHentPersonopplysningerBarn } from '~/lib/manuell-søknad/barnetillegg/useHentPersonopplysningerBarn';
 import { v4 as uuidv4 } from 'uuid';
-import { SakId } from '~/types/Sak';
+import { SakId } from '~/lib/sak/SakTyper';
 import { InformasjonOmBarnPDL } from '~/lib/manuell-søknad/barnetillegg/InformasjonOmBarnPDL';
 import { InformasjonOmBarnManuell } from '~/lib/manuell-søknad/barnetillegg/InformasjonOmBarnManuell';
 import { TrashIcon } from '@navikt/aksel-icons';

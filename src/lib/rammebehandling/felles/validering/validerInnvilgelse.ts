@@ -1,7 +1,7 @@
-import { ValideringResultat } from '~/types/Validering';
+import { ValideringResultat } from '~/lib/rammebehandling/typer/Validering';
 import { validerBarnetillegg } from '~/lib/rammebehandling/felles/validering/validerBarnetillegg';
-import { hentHeleTiltaksdeltakelsesperioden } from '~/utils/behandling';
-import { Rammebehandling } from '~/types/Rammebehandling';
+import { hentHeleTiltaksdeltakelsesperioden } from '~/lib/rammebehandling/rammebehandlingUtils';
+import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { BehandlingMedInnvilgelseState } from '~/lib/rammebehandling/context/innvilgelse/innvilgelseContext';
 import { Søknad } from '~/types/Søknad';
 import {
@@ -11,9 +11,9 @@ import {
     validerPeriodisering,
 } from '~/utils/periode';
 import { validerTiltaksdeltakelser } from '~/lib/rammebehandling/felles/validering/validerTiltaksdeltakelser';
-import { SakProps } from '~/types/Sak';
+import { SakProps } from '~/lib/sak/SakTyper';
 import { finnGjeldendeInnvilgelserIPeriode } from '~/lib/rammebehandling/context/behandlingSkjemaUtils';
-import { RevurderingResultat } from '~/types/Revurdering';
+import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 
 export const validerInnvilgelse = (
     sak: SakProps,

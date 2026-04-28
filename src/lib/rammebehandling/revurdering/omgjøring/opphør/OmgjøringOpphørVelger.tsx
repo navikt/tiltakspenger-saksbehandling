@@ -8,7 +8,7 @@ import {
 } from '~/lib/rammebehandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import { OmgjøringVedtaksperiodeVelger } from '~/lib/rammebehandling/revurdering/omgjøring/vedtaksperiode/OmgjøringVedtaksperiodeVelger';
 import { VedtakHjelpetekst } from '~/lib/rammebehandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
-import { HjemmelForOpphør } from '~/types/Revurdering';
+import { HjemmelForOpphør } from '~/lib/rammebehandling/typer/Revurdering';
 
 export const OmgjøringOpphørVelger = () => {
     const { valgteHjemler } = useOmgjøringOpphørSkjema();

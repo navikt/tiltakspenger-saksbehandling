@@ -1,8 +1,8 @@
-import { Innvilgelsesperiode } from '~/types/Innvilgelsesperiode';
+import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 import { Alert, VStack } from '@navikt/ds-react';
 import { removeDuplicatesFilter } from '~/utils/array';
-import { Rammebehandling } from '~/types/Rammebehandling';
-import { deltarPaFlereTiltakMedStartOgSluttdato } from '~/utils/behandling';
+import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { deltarPaFlereTiltakMedStartOgSluttdato } from '~/lib/rammebehandling/rammebehandlingUtils';
 
 type Props = {
     innvilgelsesperioder: Innvilgelsesperiode[];

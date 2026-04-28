@@ -1,10 +1,17 @@
 import { useFetchBlobFraApi } from '~/utils/fetch/useFetchFraApi';
 import { Nullable } from '~/types/UtilTypes';
-import { Rammebehandling } from '~/types/Rammebehandling';
-import { BarnetilleggPeriode } from '~/types/Barnetillegg';
-import { Avslagsgrunn, SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
-import { HjemmelForOpphør, HjemmelForStans, RevurderingResultat } from '~/types/Revurdering';
-import { Innvilgelsesperiode } from '~/types/Innvilgelsesperiode';
+import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { BarnetilleggPeriode } from '~/lib/rammebehandling/typer/Barnetillegg';
+import {
+    Avslagsgrunn,
+    SøknadsbehandlingResultat,
+} from '~/lib/rammebehandling/typer/Søknadsbehandling';
+import {
+    HjemmelForOpphør,
+    HjemmelForStans,
+    RevurderingResultat,
+} from '~/lib/rammebehandling/typer/Revurdering';
+import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 import { Periode } from '~/types/Periode';
 
 export type SøknadsbehandlingInnvilgelseBrevForhåndsvisningDTO = {

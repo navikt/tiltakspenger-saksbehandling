@@ -12,11 +12,11 @@ import {
     VStack,
 } from '@navikt/ds-react';
 import { TrashIcon } from '@navikt/aksel-icons';
-import { SakId } from '~/types/Sak';
+import { SakId } from '~/lib/sak/SakTyper';
 import {
     MeldekortbehandlingId,
     MeldekortbehandlingProps,
-} from '~/types/meldekort/Meldekortbehandling';
+} from '~/lib/meldekort/typer/Meldekortbehandling';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import styles from './AvsluttMeldekortbehandling.module.css';
 

@@ -5,8 +5,8 @@ import {
     OppdaterKlageFormkravRequest,
     OpprettKlageRequest,
     KlageInnsendingskilde,
-} from '~/types/Klage';
-import { VedtakId } from '~/types/Rammevedtak';
+} from '~/lib/klage/typer/Klage';
+import { VedtakId } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { Nullable } from '~/types/UtilTypes';
 import { dateTilISOTekst } from '~/utils/date';
 

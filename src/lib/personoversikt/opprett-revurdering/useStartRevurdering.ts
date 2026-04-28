@@ -1,7 +1,7 @@
-import { SakId } from '~/types/Sak';
+import { SakId } from '~/lib/sak/SakTyper';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 
-import { Revurdering, StartRevurderingDTO } from '~/types/Revurdering';
+import { Revurdering, StartRevurderingDTO } from '~/lib/rammebehandling/typer/Revurdering';
 
 export const useStartRevurdering = (sakId: SakId) => {
     const {

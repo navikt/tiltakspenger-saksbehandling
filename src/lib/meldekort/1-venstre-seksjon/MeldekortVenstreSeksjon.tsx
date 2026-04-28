@@ -10,14 +10,14 @@ import {
     MeldekortbehandlingProps,
     MeldekortbehandlingStatus,
     MeldekortbehandlingType,
-} from '~/types/meldekort/Meldekortbehandling';
-import { useSak } from '~/context/sak/SakContext';
+} from '~/lib/meldekort/typer/Meldekortbehandling';
+import { useSak } from '~/lib/sak/SakContext';
 import { ArrayOrSingle } from '~/types/UtilTypes';
 import { forceArray } from '~/utils/array';
 import { useMeldeperiodeKjede } from '../context/MeldeperiodeKjedeContext';
-import OppsummeringAvAttesteringer from '~/lib/_felles/attestering/OppsummeringAvAttestering';
+import OppsummeringAvAttesteringer from '~/lib/behandling-felles/attestering/OppsummeringAvAttestering';
 import { finnMeldeperiodeKjedeStatusTekst } from '~/utils/tekstformateringUtils';
-import { MeldeperiodeKjedeStatus } from '~/types/meldekort/Meldeperiode';
+import { MeldeperiodeKjedeStatus } from '~/lib/meldekort/typer/Meldeperiode';
 import React, { ComponentProps } from 'react';
 import {
     CheckmarkIcon,

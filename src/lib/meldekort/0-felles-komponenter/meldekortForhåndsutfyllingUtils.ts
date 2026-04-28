@@ -2,12 +2,12 @@ import {
     MeldekortbehandlingDagStatus,
     MeldekortbehandlingProps,
     MeldekortDagBeregnetProps,
-} from '~/types/meldekort/Meldekortbehandling';
-import { MeldeperiodeProps } from '~/types/meldekort/Meldeperiode';
+} from '~/lib/meldekort/typer/Meldekortbehandling';
+import { MeldeperiodeProps } from '~/lib/meldekort/typer/Meldeperiode';
 import {
     BrukersMeldekortDagStatus,
     BrukersMeldekortProps,
-} from '~/types/meldekort/BrukersMeldekort';
+} from '~/lib/meldekort/typer/BrukersMeldekort';
 
 export const hentMeldekortForhåndsutfylling = (
     meldekortbehandling: MeldekortbehandlingProps,

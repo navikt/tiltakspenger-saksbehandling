@@ -1,7 +1,7 @@
 import {
     BrukersMeldekortProps,
     MeldekortBehandletAutomatiskStatus,
-} from '~/types/meldekort/BrukersMeldekort';
+} from '~/lib/meldekort/typer/BrukersMeldekort';
 import { Alert, BodyShort } from '@navikt/ds-react';
 import { ComponentProps } from 'react';
 import { PartialRecord } from '~/types/UtilTypes';

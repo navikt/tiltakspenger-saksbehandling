@@ -5,19 +5,19 @@ import { erDatoIPeriode } from '~/utils/periode';
 import { Periode } from '~/types/Periode';
 import { Søknad, SøknadBarn } from '~/types/Søknad';
 import { useHentPersonopplysningerBarn } from '~/lib/manuell-søknad/barnetillegg/useHentPersonopplysningerBarn';
-import { useSak } from '~/context/sak/SakContext';
+import { useSak } from '~/lib/sak/SakContext';
 import { ChevronRightDoubleIcon } from '@navikt/aksel-icons';
 import { periodiserBarnetilleggFraSøknad } from '~/lib/rammebehandling/felles/barnetillegg/utils/periodiserBarnetilleggFraSøknad';
 import { Personopplysninger } from '~/lib/personaliaheader/useHentPersonopplysninger';
 import { Nullable } from '~/types/UtilTypes';
 import { useBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
-import { SaksbehandlerRolle } from '~/types/Saksbehandler';
+import { SaksbehandlerRolle } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import {
     useBehandlingInnvilgelseSkjema,
     useBehandlingInnvilgelseSkjemaDispatch,
 } from '~/lib/rammebehandling/context/innvilgelse/innvilgelseContext';
 import { useBehandlingSkjema } from '~/lib/rammebehandling/context/BehandlingSkjemaContext';
-import { erRammebehandlingInnvilgelseResultat } from '~/utils/behandling';
+import { erRammebehandlingInnvilgelseResultat } from '~/lib/rammebehandling/rammebehandlingUtils';
 import { formaterSøknadsspørsmålSvar } from '~/utils/tekstformateringUtils';
 
 import style from './SøknadOpplysningerBarn.module.css';

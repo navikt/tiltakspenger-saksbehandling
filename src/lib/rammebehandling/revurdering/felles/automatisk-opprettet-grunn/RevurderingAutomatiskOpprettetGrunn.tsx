@@ -2,7 +2,7 @@ import {
     AutomatiskOpprettetGrunn,
     TiltaksdeltakerEndring,
     TiltaksdeltakerEndringType,
-} from '~/types/Revurdering';
+} from '~/lib/rammebehandling/typer/Revurdering';
 import { VedtakSeksjon } from '~/lib/rammebehandling/felles/layout/seksjon/VedtakSeksjon';
 import { Alert, Heading, List } from '@navikt/ds-react';
 import { formaterDatotekst } from '~/utils/date';

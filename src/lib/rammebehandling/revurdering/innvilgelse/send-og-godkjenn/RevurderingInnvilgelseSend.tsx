@@ -2,13 +2,16 @@ import { useRevurderingBehandling } from '~/lib/rammebehandling/context/Behandli
 import { BehandlingSendOgGodkjenn } from '~/lib/rammebehandling/felles/send-og-godkjenn/BehandlingSendOgGodkjenn';
 import { useHentBehandlingLagringProps } from '~/lib/rammebehandling/felles/send-og-godkjenn/lagre/useHentBehandlingLagringProps';
 import { revurderingInnvilgelseValidering } from '~/lib/rammebehandling/revurdering/innvilgelse/revurderingInnvilgelseValidering';
-import { OppdaterRevurderingInnvilgelseDTO, RevurderingResultat } from '~/types/Revurdering';
+import {
+    OppdaterRevurderingInnvilgelseDTO,
+    RevurderingResultat,
+} from '~/lib/rammebehandling/typer/Revurdering';
 import {
     RevurderingInnvilgelseContext,
     useRevurderingInnvilgelseSkjema,
 } from '~/lib/rammebehandling/context/revurdering/revurderingInnvilgelseSkjemaContext';
 import { Nullable } from '~/types/UtilTypes';
-import { useSak } from '~/context/sak/SakContext';
+import { useSak } from '~/lib/sak/SakContext';
 
 export const RevurderingInnvilgelseSend = () => {
     const { behandling } = useRevurderingBehandling();

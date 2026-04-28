@@ -3,9 +3,9 @@ import {
     Omgjøring,
     OmgjøringResultat,
     RevurderingResultat,
-} from '~/types/Revurdering';
+} from '~/lib/rammebehandling/typer/Revurdering';
 import { Reducer } from 'react';
-import { ReducerSuperAction } from '~/types/Context';
+import { ReducerSuperAction } from '~/types/ReducerAction';
 import {
     InnvilgelseActions,
     innvilgelseReducer,
@@ -22,7 +22,7 @@ import {
 } from '~/lib/rammebehandling/context/behandlingSkjemaUtils';
 import { Periode } from '~/types/Periode';
 import { omgjøringInitialState } from '~/lib/rammebehandling/context/revurdering/revurderingInitialState';
-import { SakProps } from '~/types/Sak';
+import { SakProps } from '~/lib/sak/SakTyper';
 import { oppdaterPeriode } from '~/utils/periode';
 
 export type OmgjøringIkkeValgtState = {

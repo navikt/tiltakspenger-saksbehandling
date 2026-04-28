@@ -9,11 +9,11 @@ import {
     OppdaterOmgjøringDTO,
     OppdaterOmgjøringOpphørDTO,
     OppdaterOmgjøringIkkeValgtDTO,
-} from '~/types/Revurdering';
+} from '~/lib/rammebehandling/typer/Revurdering';
 import { useHentBehandlingLagringProps } from '~/lib/rammebehandling/felles/send-og-godkjenn/lagre/useHentBehandlingLagringProps';
 import { revurderingOmgjøringValidering } from '~/lib/rammebehandling/revurdering/omgjøring/revurderingOmgjøringValidering';
 import { useRevurderingOmgjøring } from '~/lib/rammebehandling/context/BehandlingContext';
-import { useSak } from '~/context/sak/SakContext';
+import { useSak } from '~/lib/sak/SakContext';
 import { BehandlingSendOgGodkjenn } from '~/lib/rammebehandling/felles/send-og-godkjenn/BehandlingSendOgGodkjenn';
 
 export const RevurderingOmgjøringSend = () => {

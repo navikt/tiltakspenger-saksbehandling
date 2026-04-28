@@ -3,7 +3,7 @@ import { BehandlingSaksopplysning } from '~/lib/rammebehandling/saksopplysninger
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
 import React from 'react';
 import styles from './BehandlingTiltakspengerArenaOpplysninger.module.css';
-import { ArenaTPVedtak } from '~/types/ArenaTPVedtak';
+import { ArenaTPVedtak } from '~/lib/rammebehandling/typer/ArenaTPVedtak';
 import { formaterDatotekst } from '~/utils/date';
 
 type Props = {

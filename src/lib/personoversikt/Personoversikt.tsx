@@ -4,19 +4,19 @@ import { MeldekortOversikt } from './meldekort-oversikt/MeldekortOversikt';
 import { ApneBehandlingerOversikt } from './behandlinger-oversikt/ApneBehandlingerOversikt';
 import { StartRevurderingModal } from './opprett-revurdering/StartRevurderingModal';
 import { PersonaliaHeader } from '../personaliaheader/PersonaliaHeader';
-import { useSak } from '~/context/sak/SakContext';
+import { useSak } from '~/lib/sak/SakContext';
 import { AvsluttedeBehandlinger } from './behandlinger-oversikt/AvsluttedeBehandlinger';
-import { MeldeperiodeKjedeStatus } from '~/types/meldekort/Meldeperiode';
+import { MeldeperiodeKjedeStatus } from '~/lib/meldekort/typer/Meldeperiode';
 import { MeldekortOversiktIkkeKlar } from './meldekort-oversikt/ikke-klar/MeldekortOversiktIkkeKlar';
 import { VedtatteBehandlinger } from '~/lib/personoversikt/behandlinger-oversikt/vedtatte-behandlinger/VedtatteBehandlinger';
-import NotificationBanner from '~/lib/_felles/notificationBanner/NotificationBanner';
-import MeldekortHelgToggle from '../toggles/MeldekortHelgToggle';
+import NotificationBanner from '~/lib/_felles/notifications/NotificationBanner';
+import MeldekortHelgToggle from '~/lib/personoversikt/helg-toggle/MeldekortHelgToggle';
 import {
     Rammebehandling,
     Rammebehandlingsstatus,
     Rammebehandlingstype,
-} from '~/types/Rammebehandling';
-import { Tidslinjer } from '~/lib/tidslinjer/Tidslinjer';
+} from '~/lib/rammebehandling/typer/Rammebehandling';
+import { Tidslinjer } from '~/lib/_felles/tidslinjer/Tidslinjer';
 import { useRouter } from 'next/router';
 import {
     ArrowsCirclepathIcon,
@@ -33,7 +33,7 @@ import {
 import Divider from '~/lib/_felles/divider/Divider';
 import { useEffect, useState } from 'react';
 import { OpprettSøknadModal } from '~/lib/personoversikt/manuell-søknad/OpprettSøknadModal';
-import { KlagebehandlingStatus, KlagevedtakMedBehandling } from '~/types/Klage';
+import { KlagebehandlingStatus, KlagevedtakMedBehandling } from '~/lib/klage/typer/Klage';
 import Klageoversikt, {
     KlagebehandlingerMedOmgjøringsbehandling,
 } from './klageoversikt/Klageoversikt';

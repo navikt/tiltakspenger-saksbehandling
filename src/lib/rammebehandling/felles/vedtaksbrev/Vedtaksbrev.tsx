@@ -5,12 +5,12 @@ import { FritekstInput } from '~/lib/_felles/fritekst/FritekstInput';
 import { VedtaksbrevForhåndsvisning } from './forhåndsvisning/VedtaksbrevForhåndsvisning';
 import { ReactNode } from 'react';
 import { BrevForhåndsvisningDTO } from '~/lib/rammebehandling/felles/vedtaksbrev/forhåndsvisning/useHentVedtaksbrevForhåndsvisning';
-import { ValideringResultat } from '~/types/Validering';
+import { ValideringResultat } from '~/lib/rammebehandling/typer/Validering';
 import { useBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 import { useBehandlingSkjema } from '~/lib/rammebehandling/context/BehandlingSkjemaContext';
 
 import style from './Vedtaksbrev.module.css';
-import { Rammebehandlingsstatus } from '~/types/Rammebehandling';
+import { Rammebehandlingsstatus } from '~/lib/rammebehandling/typer/Rammebehandling';
 
 type Props = {
     header: ReactNode;

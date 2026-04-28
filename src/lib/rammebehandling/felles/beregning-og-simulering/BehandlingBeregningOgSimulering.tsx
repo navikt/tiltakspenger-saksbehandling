@@ -6,9 +6,12 @@ import { Separator } from '~/lib/_felles/separator/Separator';
 import { SimuleringOppsummering } from '~/lib/beregning-og-simulering/simulering-oppsummering/SimuleringOppsummering';
 import { BeregningOppsummering } from '~/lib/beregning-og-simulering/beregning-oppsummering/BeregningOppsummering';
 import { BeregningOgSimuleringHeader } from '~/lib/beregning-og-simulering/header/BeregningOgSimuleringHeader';
-import { kanSaksbehandleForBehandling } from '~/utils/tilganger';
-import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
-import { Rammebehandling, Rammebehandlingsstatus } from '~/types/Rammebehandling';
+import { kanSaksbehandleForBehandling } from '~/lib/saksbehandler/tilganger';
+import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
+import {
+    Rammebehandling,
+    Rammebehandlingsstatus,
+} from '~/lib/rammebehandling/typer/Rammebehandling';
 import { formaterTidspunkt } from '~/utils/date';
 import {
     BehandlingUtbetalingProps,

@@ -1,11 +1,11 @@
 import { Button } from '@navikt/ds-react';
 
-import { useGjenopptaBehandling } from '~/lib/behandlingmeny/useGjenopptaBehandling';
+import { useGjenopptaBehandling } from '~/lib/behandling-felles/behandlingmeny/useGjenopptaBehandling';
 import router from 'next/router';
-import { BekreftelsesModal } from '~/lib/modaler/BekreftelsesModal';
+import { BekreftelsesModal } from '~/lib/_felles/modaler/BekreftelsesModal';
 import { useRef } from 'react';
 import { behandlingUrl } from '~/utils/urls';
-import { Rammebehandling } from '~/types/Rammebehandling';
+import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 
 type Props = {
     behandling: Rammebehandling;

@@ -5,8 +5,8 @@ import {
     useOmgjøringSkjemaDispatch,
 } from '~/lib/rammebehandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import { Periode } from '~/types/Periode';
-import { Rammevedtak } from '~/types/Rammevedtak';
-import { OmgjøringResultat, RevurderingResultat } from '~/types/Revurdering';
+import { Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
+import { OmgjøringResultat, RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 
 type Props = {
     vedtakSomOmgjøres: Rammevedtak;

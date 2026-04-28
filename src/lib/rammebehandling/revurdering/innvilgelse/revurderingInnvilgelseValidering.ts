@@ -1,9 +1,9 @@
-import { ValideringResultat } from '~/types/Validering';
+import { ValideringResultat } from '~/lib/rammebehandling/typer/Validering';
 import { validerInnvilgelse } from '~/lib/rammebehandling/felles/validering/validerInnvilgelse';
-import { Revurdering } from '~/types/Revurdering';
+import { Revurdering } from '~/lib/rammebehandling/typer/Revurdering';
 import { RevurderingInnvilgelseContext } from '~/lib/rammebehandling/context/revurdering/revurderingInnvilgelseSkjemaContext';
-import { SakProps } from '~/types/Sak';
-import { hentVedtatteSøknadsbehandlinger } from '~/utils/sak';
+import { SakProps } from '~/lib/sak/SakTyper';
+import { hentVedtatteSøknadsbehandlinger } from '~/lib/sak/sakUtils';
 
 export const revurderingInnvilgelseValidering = (
     behandling: Revurdering,

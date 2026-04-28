@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { classNames } from '~/utils/classNames';
 import Varsel from '~/lib/_felles/varsel/Varsel';
 import { formaterTidspunktMedSekunder, periodeTilFormatertDatotekst } from '~/utils/date';
-import { SaksbehandlerRolle } from '~/types/Saksbehandler';
+import { SaksbehandlerRolle } from '~/lib/saksbehandler/SaksbehandlerTyper';
 
 import style from './BehandlingOppdaterSaksopplysninger.module.css';
 import { v4 as uuidv4 } from 'uuid';

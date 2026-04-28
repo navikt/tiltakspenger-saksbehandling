@@ -8,13 +8,13 @@ import {
     OppdaterSøknadsbehandlingIkkeValgtDTO,
     OppdaterSøknadsbehandlingInnvilgelseDTO,
     OppdaterSøknadsbehandlingDTO,
-} from '~/types/Søknadsbehandling';
+} from '~/lib/rammebehandling/typer/Søknadsbehandling';
 import {
     SøknadsbehandlingSkjemaContext,
     useSøknadsbehandlingSkjema,
 } from '~/lib/rammebehandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
 import { Nullable } from '~/types/UtilTypes';
-import { useSak } from '~/context/sak/SakContext';
+import { useSak } from '~/lib/sak/SakContext';
 
 export const SøknadsbehandlingSend = () => {
     const { sak } = useSak();

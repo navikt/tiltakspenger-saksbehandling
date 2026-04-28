@@ -1,6 +1,6 @@
 import { Button } from '@navikt/ds-react';
 import router from 'next/router';
-import { BekreftelsesModal } from '~/lib/modaler/BekreftelsesModal';
+import { BekreftelsesModal } from '~/lib/_felles/modaler/BekreftelsesModal';
 import { registrerSoknadUrl } from '~/utils/urls';
 
 type Props = {

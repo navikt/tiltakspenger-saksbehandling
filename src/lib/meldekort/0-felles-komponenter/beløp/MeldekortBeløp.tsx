@@ -1,6 +1,6 @@
 import { VStack } from '@navikt/ds-react';
-import { BeløpProps } from '~/types/Beregning';
-import { UtbetalingBeløp } from '~/lib/utbetaling/beløp/UtbetalingBeløp';
+import { BeløpProps } from '~/lib/beregning-og-simulering/typer/Beregning';
+import { UtbetalingBeløp } from '~/lib/_felles/utbetaling/beløp/UtbetalingBeløp';
 
 type Props = {
     beløp: BeløpProps;

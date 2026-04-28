@@ -3,11 +3,11 @@ import { ReactElement, useState } from 'react';
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
 import { BodyShort, Button, Heading, HStack, InfoCard, LocalAlert, VStack } from '@navikt/ds-react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { Rammevedtak } from '~/types/Rammevedtak';
-import { Rammebehandling } from '~/types/Rammebehandling';
+import { Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
+import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { fetchSak } from '~/utils/fetch/fetch-server';
 import { logger } from '@navikt/next-logger';
-import { SakProps } from '~/types/Sak';
+import { SakProps } from '~/lib/sak/SakTyper';
 import router from 'next/router';
 import FormkravForm from '~/lib/klage/forms/formkrav/FormkravForm';
 import {
@@ -16,24 +16,24 @@ import {
     formkravValidation,
     klageTilFormkravFormData,
 } from '~/lib/klage/forms/formkrav/FormkravFormUtils';
-import { Klagebehandling, KlageId } from '~/types/Klage';
+import { Klagebehandling, KlageId } from '~/lib/klage/typer/Klage';
 import KlageLayout, { KlageProvider, useKlage } from '../../layout';
-import { finnNesteKlageSteg, KlageSteg } from '../../../../../../utils/KlageLayoutUtils';
+import { finnNesteKlageSteg, KlageSteg } from '../../../../../../lib/klage/utils/KlageLayoutUtils';
 import { CheckmarkCircleIcon, PencilIcon, TrashIcon } from '@navikt/aksel-icons';
 import { useHentPersonopplysninger } from '~/lib/personaliaheader/useHentPersonopplysninger';
 import {
     harKlageEnÅpenRammebehandling,
     erKlageOmgjøring,
     kanBehandleKlage,
-} from '~/utils/klageUtils';
+} from '~/lib/klage/utils/klageUtils';
 import { useAvbrytKlagebehandling, useOppdaterFormkrav } from '~/lib/klage/api/KlageApi';
-import AvsluttBehandlingModal from '~/lib/modaler/AvsluttBehandlingModal';
+import AvsluttBehandlingModal from '~/lib/_felles/modaler/AvsluttBehandlingModal';
 import { Nullable } from '~/types/UtilTypes';
-import { erRammebehandlingUnderAktivOmgjøring } from '~/utils/behandling';
-import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
+import { erRammebehandlingUnderAktivOmgjøring } from '~/lib/rammebehandling/rammebehandlingUtils';
+import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import styles from './index.module.css';
-import { MeldekortVedtak } from '~/types/meldekort/MeldekortVedtak';
-import { MeldekortbehandlingProps } from '~/types/meldekort/Meldekortbehandling';
+import { MeldekortVedtak } from '~/lib/meldekort/typer/MeldekortVedtak';
+import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
 
 type Props = {
     sak: SakProps;

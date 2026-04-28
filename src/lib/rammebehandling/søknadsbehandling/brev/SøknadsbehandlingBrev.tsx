@@ -3,7 +3,7 @@ import { Vedtaksbrev } from '~/lib/rammebehandling/felles/vedtaksbrev/Vedtaksbre
 import { søknadsbehandlingValidering } from '~/lib/rammebehandling/søknadsbehandling/send-og-godkjenn/søknadsbehandlingValidering';
 import { BodyLong, Checkbox, Heading, HStack } from '@navikt/ds-react';
 import { TekstListe } from '~/lib/_felles/liste/TekstListe';
-import { SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
+import { SøknadsbehandlingResultat } from '~/lib/rammebehandling/typer/Søknadsbehandling';
 import {
     SøknadsbehandlingSkjemaContext,
     useSøknadsbehandlingSkjema,
@@ -14,7 +14,7 @@ import {
     SøknadsbehandlingBrevForhåndsvisningDTO,
     SøknadsbehandlingInnvilgelseBrevForhåndsvisningDTO,
 } from '~/lib/rammebehandling/felles/vedtaksbrev/forhåndsvisning/useHentVedtaksbrevForhåndsvisning';
-import { useSak } from '~/context/sak/SakContext';
+import { useSak } from '~/lib/sak/SakContext';
 
 export const SøknadsbehandlingBrev = () => {
     const { sak } = useSak();

@@ -1,12 +1,12 @@
 import { Alert, BodyShort, Heading, Link, VStack } from '@navikt/ds-react';
-import { Rammebehandlingsstatus } from '~/types/Rammebehandling';
+import { Rammebehandlingsstatus } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '~/utils/date';
-import { OppsummeringsPar } from '~/lib/oppsummeringer/oppsummeringspar/OppsummeringsPar';
+import { OppsummeringsPar } from '~/lib/behandling-felles/oppsummeringer/oppsummeringspar/OppsummeringsPar';
 import { behandlingUrl } from '~/utils/urls';
 import { TabsIcon } from '@navikt/aksel-icons';
 import { useRevurderingOmgjøring } from '~/lib/rammebehandling/context/BehandlingContext';
-import { useSak } from '~/context/sak/SakContext';
-import { hentGjeldendeRammevedtak, hentRammevedtak } from '~/utils/sak';
+import { useSak } from '~/lib/sak/SakContext';
+import { hentGjeldendeRammevedtak, hentRammevedtak } from '~/lib/sak/sakUtils';
 
 export const RevurderingOmgjøringHeader = () => {
     const { behandling } = useRevurderingOmgjøring();

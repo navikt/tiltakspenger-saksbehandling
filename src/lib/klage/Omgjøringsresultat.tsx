@@ -1,15 +1,15 @@
 import { VStack, InfoCard, Button, HStack } from '@navikt/ds-react';
 import Link from 'next/link';
 import { useState } from 'react';
-import { Klagebehandling, KlagebehandlingsresultatOmgjør } from '~/types/Klage';
-import { Rammebehandling } from '~/types/Rammebehandling';
-import { Rammevedtak } from '~/types/Rammevedtak';
-import { Saksbehandler } from '~/types/Saksbehandler';
+import { Klagebehandling, KlagebehandlingsresultatOmgjør } from '~/lib/klage/typer/Klage';
+import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
+import { SaksbehandlerTyper } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import { Søknad } from '~/types/Søknad';
-import { erKlageVedtatt, erKlageFerdigstilt, erKlageAvsluttet } from '~/utils/klageUtils';
+import { erKlageVedtatt, erKlageFerdigstilt, erKlageAvsluttet } from '~/lib/klage/utils/klageUtils';
 import { behandlingUrl } from '~/utils/urls';
 import { VelgOmgjøringsbehandlingModal } from '~/lib/klage/forms/velg-omgjøringsbehandling/VelgOmgjøringsbehandlingForm';
-import FerdigstillKlageModalWrapper from '../modaler/FerdigstillKlagebehandlingModal';
+import FerdigstillKlageModalWrapper from './modaler/FerdigstillKlagebehandlingModal';
 import KlageTilknyttedeBehandlingerInfoCard from './KlageTilknyttedeBehandlingerInfoCard';
 
 const Omgjøringsresultat = (props: {
@@ -17,7 +17,7 @@ const Omgjøringsresultat = (props: {
     vedtak: Rammevedtak[];
     søknader: Søknad[];
     rammebehandlinger: Rammebehandling[];
-    innloggetSaksbehandler: Saksbehandler;
+    innloggetSaksbehandler: SaksbehandlerTyper;
 }) => {
     return (
         <VStack align="start" gap="space-16" maxWidth="30rem">
@@ -99,7 +99,7 @@ const OmgjøringsresultatInfo = (props: {
 
 const KlageOmgjøringsbehandlingAksjoner = (props: {
     klage: Klagebehandling;
-    innloggetSaksbehandler: Saksbehandler;
+    innloggetSaksbehandler: SaksbehandlerTyper;
     vedtak: Rammevedtak[];
     søknader: Søknad[];
 }) => {

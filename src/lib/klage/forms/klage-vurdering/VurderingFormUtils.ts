@@ -5,7 +5,7 @@ import {
     Klagehjemmel,
     OmgjøringÅrsak,
     VurderKlageRequest,
-} from '~/types/Klage';
+} from '~/lib/klage/typer/Klage';
 
 export enum OmgjøringÅrsakFormData {
     FEIL_ELLER_ENDRET_FAKTA = 'FEIL_ELLER_ENDRET_FAKTA',

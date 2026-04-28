@@ -1,5 +1,5 @@
-import { MeldeperiodeKjedeId, MeldeperiodeKjedeProps } from '~/types/meldekort/Meldeperiode';
-import { SakId } from '~/types/Sak';
+import { MeldeperiodeKjedeId, MeldeperiodeKjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
+import { SakId } from '~/lib/sak/SakTyper';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 
 type Props = {

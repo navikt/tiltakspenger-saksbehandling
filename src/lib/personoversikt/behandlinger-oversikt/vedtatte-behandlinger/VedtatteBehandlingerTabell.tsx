@@ -6,19 +6,22 @@ import {
 } from '~/utils/tekstformateringUtils';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '~/utils/date';
 import { ChevronDownIcon, FileIcon } from '@navikt/aksel-icons';
-import MenyValgBehandleSøknadPåNytt from '~/lib/behandlingmeny/menyvalg/MenyValgBehandleSøknadPåNytt';
-import SeBehandlingMenyvalg from '~/lib/behandlingmeny/menyvalg/SeBehandlingMenyvalg';
+import MenyValgBehandleSøknadPåNytt from '~/lib/behandling-felles/behandlingmeny/menyvalg/MenyValgBehandleSøknadPåNytt';
+import SeBehandlingMenyvalg from '~/lib/behandling-felles/behandlingmeny/menyvalg/SeBehandlingMenyvalg';
 import React from 'react';
 import { behandlingUrl } from '~/utils/urls';
-import { SakId } from '~/types/Sak';
-import { Søknadsbehandling, SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
-import { Omgjøringsgrad } from '~/types/Rammevedtak';
+import { SakId } from '~/lib/sak/SakTyper';
+import {
+    Søknadsbehandling,
+    SøknadsbehandlingResultat,
+} from '~/lib/rammebehandling/typer/Søknadsbehandling';
+import { Omgjøringsgrad } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { OmgjørVedtakMenyvalg } from '~/lib/personoversikt/behandlinger-oversikt/vedtatte-behandlinger/OmgjørVedtakMenyvalg';
 import { classNames } from '~/utils/classNames';
 
 import style from './VedtatteBehandlinger.module.css';
-import { VedtattRammevedtakMedBehandling } from '~/types/Rammebehandling';
-import { KlagevedtakMedBehandling } from '~/types/Klage';
+import { VedtattRammevedtakMedBehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { KlagevedtakMedBehandling } from '~/lib/klage/typer/Klage';
 import Link from 'next/link';
 
 type Props = {

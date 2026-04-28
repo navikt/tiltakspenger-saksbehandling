@@ -2,10 +2,10 @@ import React, { useRef } from 'react';
 import { Alert, BodyShort, Heading, VStack } from '@navikt/ds-react';
 import NotificationBanner, {
     NotificationBannerRef,
-} from '~/lib/_felles/notificationBanner/NotificationBanner';
+} from '~/lib/_felles/notifications/NotificationBanner';
 import { BenkTabell } from '~/lib/benk/tabell/BenkTabell';
 import { BenkFilterVelger } from '~/lib/benk/filter/BenkFilterVelger';
-import { BenkOversiktProps } from '~/types/Benk';
+import { BenkOversiktProps } from '~/lib/benk/typer/Benk';
 
 import styles from './BenkSide.module.css';
 

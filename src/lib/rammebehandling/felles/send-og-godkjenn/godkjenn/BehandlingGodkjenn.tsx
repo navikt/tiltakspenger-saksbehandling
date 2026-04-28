@@ -1,12 +1,12 @@
 import { Button, HStack } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import { useBehandling } from '../../../context/BehandlingContext';
-import { BekreftelsesModal } from '../../../../modaler/BekreftelsesModal';
-import { Underkjenn } from '../../../../underkjenn/Underkjenn';
+import { BekreftelsesModal } from '~/lib/_felles/modaler/BekreftelsesModal';
+import { Underkjenn } from '~/lib/behandling-felles/underkjenn/Underkjenn';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { useGodkjennBehandling } from '~/lib/rammebehandling/felles/send-og-godkjenn/godkjenn/useGodkjennBehandling';
-import { useNotification } from '~/context/NotificationContext';
-import { Rammebehandling } from '~/types/Rammebehandling';
+import { useNotification } from '~/lib/_felles/notifications/NotificationContext';
+import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { FetcherError } from '~/utils/fetch/fetch';
 
 type Props = {

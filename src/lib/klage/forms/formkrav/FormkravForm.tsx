@@ -8,8 +8,8 @@ import {
     KlageInnsendingskildeFormDataTekstMapper,
 } from './FormkravFormUtils';
 import { HStack, LocalAlert, Radio, RadioGroup, Select, VStack } from '@navikt/ds-react';
-import { Rammevedtak } from '~/types/Rammevedtak';
-import { Rammebehandling } from '~/types/Rammebehandling';
+import { Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
+import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import JournalpostId from '~/lib/_felles/journalpostId/JournalpostId';
 import { Nullable } from '~/types/UtilTypes';
 import styles from './FormkravForm.module.css';
@@ -18,9 +18,9 @@ import { benkBehandlingstypeTekst } from '~/lib/benk/benkSideUtils';
 import { behandlingResultatTilText } from '~/utils/tekstformateringUtils';
 import { Datovelger } from '~/lib/_felles/datovelger/Datovelger';
 import dayjs from 'dayjs';
-import { MeldekortVedtak } from '~/types/meldekort/MeldekortVedtak';
-import { MeldekortbehandlingProps } from '~/types/meldekort/Meldekortbehandling';
-import { useFeatureToggles } from '~/context/feature-toggles/FeatureTogglesContext';
+import { MeldekortVedtak } from '~/lib/meldekort/typer/MeldekortVedtak';
+import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
+import { useFeatureToggles } from '~/context/FeatureTogglesContext';
 
 const FormkravForm = (props: {
     control: Control<FormkravFormData>;

@@ -6,8 +6,8 @@ import {
     FirstAidKitFillIcon,
     NotePencilIcon,
 } from '@navikt/aksel-icons';
-import { MeldekortbehandlingDagStatus } from '~/types/meldekort/Meldekortbehandling';
-import { BrukersMeldekortDagStatus } from '~/types/meldekort/BrukersMeldekort';
+import { MeldekortbehandlingDagStatus } from '~/lib/meldekort/typer/Meldekortbehandling';
+import { BrukersMeldekortDagStatus } from '~/lib/meldekort/typer/BrukersMeldekort';
 
 const Ikoner = {
     circleSlash: <CircleSlashIcon title="Sperret" color="black" width="1.2em" height="1.2em" />,

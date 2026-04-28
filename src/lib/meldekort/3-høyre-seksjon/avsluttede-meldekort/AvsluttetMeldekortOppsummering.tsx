@@ -1,9 +1,9 @@
 import { HStack, VStack } from '@navikt/ds-react';
 import { formaterTidspunkt } from '~/utils/date';
-import { MeldekortbehandlingProps } from '~/types/meldekort/Meldekortbehandling';
+import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { MeldekortUker } from '../../0-felles-komponenter/uker/MeldekortUker';
 import { MeldekortBegrunnelse } from '../../0-felles-komponenter/begrunnelse/MeldekortBegrunnelse';
-import { OppsummeringsPar } from '../../../oppsummeringer/oppsummeringspar/OppsummeringsPar';
+import { OppsummeringsPar } from '~/lib/behandling-felles/oppsummeringer/oppsummeringspar/OppsummeringsPar';
 import { MeldekortBeregningOgSimulering } from '~/lib/meldekort/0-felles-komponenter/beregning-simulering/MeldekortBeregningOgSimulering';
 
 type Props = {

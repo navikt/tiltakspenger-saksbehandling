@@ -1,5 +1,5 @@
 import { Select } from '@navikt/ds-react';
-import { HjemmelForOpphør, HjemmelForStans } from '~/types/Revurdering';
+import { HjemmelForOpphør, HjemmelForStans } from '~/lib/rammebehandling/typer/Revurdering';
 import { useBehandlingSkjema } from '~/lib/rammebehandling/context/BehandlingSkjemaContext';
 
 type HjemmelForStansEllerOpphør = HjemmelForStans | HjemmelForOpphør;

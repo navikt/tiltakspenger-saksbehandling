@@ -1,9 +1,9 @@
 import { Button } from '@navikt/ds-react';
 import router from 'next/router';
 import React, { useState } from 'react';
-import { useSettBehandlingPåVent } from '~/lib/behandlingmeny/useSettBehandlingPåVent';
-import SettBehandlingPåVentModal from '~/lib/modaler/SettBehandlingPåVentModal';
-import { Rammebehandling } from '~/types/Rammebehandling';
+import { useSettBehandlingPåVent } from '~/lib/behandling-felles/behandlingmeny/useSettBehandlingPåVent';
+import SettBehandlingPåVentModal from '~/lib/_felles/modaler/SettBehandlingPåVentModal';
+import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { personoversiktUrl } from '~/utils/urls';
 
 type Props = {

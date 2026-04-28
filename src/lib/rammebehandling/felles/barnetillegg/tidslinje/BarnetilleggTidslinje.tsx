@@ -1,6 +1,6 @@
 import { Alert, BodyShort, Link, Timeline } from '@navikt/ds-react';
 import { Periode } from '~/types/Periode';
-import { useSak } from '~/context/sak/SakContext';
+import { useSak } from '~/lib/sak/SakContext';
 import { barnetilleggKrympetTilPeriode } from '~/lib/rammebehandling/felles/barnetillegg/utils/hentBarnetilleggFraVedtakTidslinje';
 import { ChildEyesIcon } from '@navikt/aksel-icons';
 import { periodeTilFormatertDatotekst } from '~/utils/date';

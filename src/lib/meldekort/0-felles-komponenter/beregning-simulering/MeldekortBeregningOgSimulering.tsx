@@ -2,16 +2,16 @@ import {
     MeldekortbehandlingProps,
     MeldekortbehandlingStatus,
     MeldekortbehandlingType,
-} from '~/types/meldekort/Meldekortbehandling';
+} from '~/lib/meldekort/typer/Meldekortbehandling';
 import { Alert, VStack } from '@navikt/ds-react';
 import { BeregningOppsummering } from '~/lib/beregning-og-simulering/beregning-oppsummering/BeregningOppsummering';
 import { SimuleringOppsummering } from '~/lib/beregning-og-simulering/simulering-oppsummering/SimuleringOppsummering';
 import { SimulertBeregningDetaljer } from '~/lib/beregning-og-simulering/detaljer/SimulertBeregningDetaljer';
 import { useMeldeperiodeKjede } from '~/lib/meldekort/context/MeldeperiodeKjedeContext';
-import { MeldeperiodeKjedeProps } from '~/types/meldekort/Meldeperiode';
+import { MeldeperiodeKjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
 import { BeregningOgSimuleringHeader } from '~/lib/beregning-og-simulering/header/BeregningOgSimuleringHeader';
-import { kanBehandle, kanSaksbehandleForMeldekort } from '~/utils/tilganger';
-import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
+import { kanBehandle, kanSaksbehandleForMeldekort } from '~/lib/saksbehandler/tilganger';
+import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import { TilbakekrevingOppsummering } from '~/lib/tilbakekreving/TilbakekrevingOppsummering';
 
 type Props = {

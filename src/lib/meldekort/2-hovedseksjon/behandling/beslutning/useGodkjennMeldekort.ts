@@ -1,6 +1,6 @@
-import { SakId } from '~/types/Sak';
-import { MeldekortbehandlingId } from '~/types/meldekort/Meldekortbehandling';
-import { MeldeperiodeKjedeProps } from '~/types/meldekort/Meldeperiode';
+import { SakId } from '~/lib/sak/SakTyper';
+import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
+import { MeldeperiodeKjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 
 export const useGodkjennMeldekort = (meldekortId: MeldekortbehandlingId, sakId: SakId) => {

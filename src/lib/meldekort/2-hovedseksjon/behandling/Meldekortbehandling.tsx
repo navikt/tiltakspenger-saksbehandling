@@ -1,5 +1,8 @@
 import { Alert, Heading, VStack } from '@navikt/ds-react';
-import { kanBeslutteForMeldekort, kanSaksbehandleForMeldekort } from '~/utils/tilganger';
+import {
+    kanBeslutteForMeldekort,
+    kanSaksbehandleForMeldekort,
+} from '~/lib/saksbehandler/tilganger';
 import { MeldekortUtfylling } from './utfylling/MeldekortUtfylling';
 import { MeldekortOppsummering } from '../../0-felles-komponenter/meldekort-oppsummering/MeldekortOppsummering';
 import { MeldekortTaBeslutning } from './beslutning/MeldekortTaBeslutning';
@@ -7,8 +10,8 @@ import {
     MeldekortbehandlingProps,
     MeldekortbehandlingStatus,
     MeldekortbehandlingType,
-} from '~/types/meldekort/Meldekortbehandling';
-import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
+} from '~/lib/meldekort/typer/Meldekortbehandling';
+import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 
 import style from './Meldekortbehandling.module.css';
 import Divider from '~/lib/_felles/divider/Divider';

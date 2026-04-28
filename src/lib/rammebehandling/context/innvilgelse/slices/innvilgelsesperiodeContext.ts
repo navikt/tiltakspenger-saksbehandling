@@ -9,18 +9,18 @@ import {
 } from '~/utils/periode';
 import { InnvilgelseState } from '~/lib/rammebehandling/context/innvilgelse/innvilgelseContext';
 import { Reducer } from 'react';
-import { Rammebehandling, Rammebehandlingstype } from '~/types/Rammebehandling';
-import { SakProps } from '~/types/Sak';
+import { Rammebehandling, Rammebehandlingstype } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { SakProps } from '~/lib/sak/SakTyper';
 import {
     lagForhåndsutfyltInnvilgelse,
     oppdaterPeriodiseringUtenOverlapp,
 } from '~/lib/rammebehandling/context/behandlingSkjemaUtils';
-import { Innvilgelsesperiode } from '~/types/Innvilgelsesperiode';
-import { BarnetilleggPeriode } from '~/types/Barnetillegg';
-import { hentVedtatteSøknadsbehandlinger } from '~/utils/sak';
+import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
+import { BarnetilleggPeriode } from '~/lib/rammebehandling/typer/Barnetillegg';
+import { hentVedtatteSøknadsbehandlinger } from '~/lib/sak/sakUtils';
 import { periodiserBarnetilleggFraSøknad } from '~/lib/rammebehandling/felles/barnetillegg/utils/periodiserBarnetilleggFraSøknad';
 import { datoMax, datoMin, nesteDag } from '~/utils/date';
-import { hentHeleTiltaksdeltakelsesperioden } from '~/utils/behandling';
+import { hentHeleTiltaksdeltakelsesperioden } from '~/lib/rammebehandling/rammebehandlingUtils';
 
 export type InnvilgelsesperioderActions =
     | {

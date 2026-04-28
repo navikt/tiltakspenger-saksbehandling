@@ -1,4 +1,4 @@
-import { SakProps } from '../../types/Sak';
+import { SakProps } from '../sak/SakTyper';
 import { useFetchJsonFraApi } from '../../utils/fetch/useFetchFraApi';
 
 export const useHentSakForFNR = () => {

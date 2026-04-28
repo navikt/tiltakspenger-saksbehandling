@@ -4,7 +4,7 @@ import {
     søknadsbehandlingReducer,
     SøknadsbehandlingState,
 } from '~/lib/rammebehandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
-import { RevurderingResultat } from '~/types/Revurdering';
+import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 import {
     RevurderingStansActions,
     revurderingStansReducer,

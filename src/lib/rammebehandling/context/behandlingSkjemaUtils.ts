@@ -3,7 +3,7 @@ import {
     erRammebehandlingInnvilgelseResultat,
     erSøknadsbehandlingResultat,
     hentTiltaksdeltakelserFraPeriode,
-} from '~/utils/behandling';
+} from '~/lib/rammebehandling/rammebehandlingUtils';
 import {
     InnvilgelseMedPerioderState,
     BehandlingMedInnvilgelseState,
@@ -19,13 +19,13 @@ import {
 } from '~/utils/periode';
 import { datoMax, datoMin, forrigeDag, nesteDag } from '~/utils/date';
 import { MedPeriode, Periode } from '~/types/Periode';
-import { Rammebehandling } from '~/types/Rammebehandling';
-import { SakProps } from '~/types/Sak';
-import { Innvilgelsesperiode } from '~/types/Innvilgelsesperiode';
-import { BarnetilleggPeriode } from '~/types/Barnetillegg';
+import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { SakProps } from '~/lib/sak/SakTyper';
+import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
+import { BarnetilleggPeriode } from '~/lib/rammebehandling/typer/Barnetillegg';
 import { hentBarnetilleggForBehandling } from '~/lib/rammebehandling/felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
 import { OmgjøringContext } from '~/lib/rammebehandling/context/revurdering/revurderingOmgjøringSkjemaContext';
-import { RevurderingResultat } from '~/types/Revurdering';
+import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 
 export const ANTALL_DAGER_DEFAULT = 10;
 

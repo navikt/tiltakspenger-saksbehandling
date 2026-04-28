@@ -1,4 +1,4 @@
-import { ValideringResultat } from '~/types/Validering';
+import { ValideringResultat } from '~/lib/rammebehandling/typer/Validering';
 import { Alert, Heading, VStack } from '@navikt/ds-react';
 import { TekstListe } from '~/lib/_felles/liste/TekstListe';
 

@@ -3,7 +3,7 @@ import {
     MeldekortbehandlingDagStatus,
     MeldekortbehandlingDTO,
     MeldekortDagProps,
-} from '~/types/meldekort/Meldekortbehandling';
+} from '~/lib/meldekort/typer/Meldekortbehandling';
 import { formaterDatotekst } from '~/utils/date';
 import { Nullable } from '~/types/UtilTypes';
 import { GyldigeMeldekortDagUfyllingsvalg } from '~/lib/meldekort/0-felles-komponenter/uker/MeldekortUkeBehandling';

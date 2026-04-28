@@ -1,6 +1,6 @@
 import React from 'react';
 import { HelpText, HStack, Tag } from '@navikt/ds-react';
-import { BenkBehandling } from '~/types/Benk';
+import { BenkBehandling } from '~/lib/benk/typer/Benk';
 import { antallKalenderDagerUnnaDagensDato, formaterDatotekst } from '~/utils/date';
 import { AkselColor } from '@navikt/ds-react/types/theme';
 import { Nullable } from '~/types/UtilTypes';

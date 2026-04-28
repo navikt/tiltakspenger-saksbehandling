@@ -1,12 +1,12 @@
 import { Button, Radio, RadioGroup } from '@navikt/ds-react';
 import { useState } from 'react';
-import { SakId } from '~/types/Sak';
+import { SakId } from '~/lib/sak/SakTyper';
 import router from 'next/router';
 import { useStartRevurdering } from './useStartRevurdering';
-import { BekreftelsesModal } from '~/lib/modaler/BekreftelsesModal';
+import { BekreftelsesModal } from '~/lib/_felles/modaler/BekreftelsesModal';
 import { behandlingUrl } from '~/utils/urls';
 import { behandlingResultatTilText } from '~/utils/tekstformateringUtils';
-import { RevurderingResultat } from '~/types/Revurdering';
+import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 
 type Props = {
     sakId: SakId;

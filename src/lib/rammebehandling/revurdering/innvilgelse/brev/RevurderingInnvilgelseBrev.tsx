@@ -1,14 +1,14 @@
 import { useRevurderingBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 import { RevurderingInnvilgelseBrevForhåndsvisningDTO } from '~/lib/rammebehandling/felles/vedtaksbrev/forhåndsvisning/useHentVedtaksbrevForhåndsvisning';
 import { Vedtaksbrev } from '~/lib/rammebehandling/felles/vedtaksbrev/Vedtaksbrev';
-import { RevurderingResultat } from '~/types/Revurdering';
+import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 import { revurderingInnvilgelseValidering } from '~/lib/rammebehandling/revurdering/innvilgelse/revurderingInnvilgelseValidering';
 import {
     RevurderingInnvilgelseContext,
     useRevurderingInnvilgelseSkjema,
     useRevurderingInnvilgelseSkjemaDispatch,
 } from '~/lib/rammebehandling/context/revurdering/revurderingInnvilgelseSkjemaContext';
-import { useSak } from '~/context/sak/SakContext';
+import { useSak } from '~/lib/sak/SakContext';
 import { RevurderingBrevHjelpetekst } from '~/lib/rammebehandling/revurdering/felles/RevurderingBrevHjelpetekst';
 import { HStack, Heading, Checkbox } from '@navikt/ds-react';
 

@@ -1,8 +1,8 @@
-import { BarnetilleggPeriode } from '~/types/Barnetillegg';
-import { SakProps } from '~/types/Sak';
+import { BarnetilleggPeriode } from '~/lib/rammebehandling/typer/Barnetillegg';
+import { SakProps } from '~/lib/sak/SakTyper';
 import { barnetilleggKrympetTilPeriode } from '~/lib/rammebehandling/felles/barnetillegg/utils/hentBarnetilleggFraVedtakTidslinje';
 import { Periode } from '~/types/Periode';
-import { Rammebehandling, Rammebehandlingstype } from '~/types/Rammebehandling';
+import { Rammebehandling, Rammebehandlingstype } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { slåSammenPeriodisering } from '~/utils/periode';
 
 export const kunPerioderMedBarn = (it: BarnetilleggPeriode) => it.antallBarn > 0;

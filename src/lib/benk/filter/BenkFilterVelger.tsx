@@ -6,9 +6,9 @@ import {
     BenkBehandlingstype,
     BenkFilters,
     BenkOversiktProps,
-} from '~/types/Benk';
+} from '~/lib/benk/typer/Benk';
 import { benkBehandlingsstatusTekst, benkBehandlingstypeTekst } from '~/lib/benk/benkSideUtils';
-import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
+import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import { useRouter } from 'next/router';
 import {
     benkFiltersFraSearchParams,
@@ -127,7 +127,7 @@ export const BenkFilterVelger = ({ benkOversikt, onUpdateFilter }: Props) => {
                 </Select>
 
                 <Select
-                    label={'Saksbehandler/Beslutter'}
+                    label={'SaksbehandlerTyper/Beslutter'}
                     size={'small'}
                     value={valgtFilter.saksbehandler ?? ''}
                     onChange={(e) =>

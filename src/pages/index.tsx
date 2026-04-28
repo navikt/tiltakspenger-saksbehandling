@@ -2,7 +2,7 @@ import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
 import { fetchBenkOversikt } from '~/utils/fetch/fetch-server';
 import { BenkSide } from '~/lib/benk/BenkSide';
 import { ComponentProps } from 'react';
-import { BenkOversiktRequestBody, BenkSortering } from '~/types/Benk';
+import { BenkOversiktRequestBody, BenkSortering } from '~/lib/benk/typer/Benk';
 import { forceArray } from '~/utils/array';
 import { ParsedUrlQuery } from 'node:querystring';
 import {

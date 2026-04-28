@@ -6,7 +6,7 @@ import { Button, Table } from '@navikt/ds-react';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '~/utils/date';
 import Link from 'next/link';
 import { behandlingUrl } from '~/utils/urls';
-import { BehandlingId, Rammebehandlingstype } from '~/types/Rammebehandling';
+import { BehandlingId, Rammebehandlingstype } from '~/lib/rammebehandling/typer/Rammebehandling';
 
 export const AvbrutteBehandlingerTabell = (props: {
     saksnummer: string;

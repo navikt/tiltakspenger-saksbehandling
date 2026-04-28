@@ -1,14 +1,11 @@
-import {
-    useRolleForBehandling,
-    useSaksbehandler,
-} from '~/context/saksbehandler/SaksbehandlerContext';
+import { useRolleForBehandling, useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import { VedtakSeksjon } from '~/lib/rammebehandling/felles/layout/seksjon/VedtakSeksjon';
 import { Alert, HStack, VStack } from '@navikt/ds-react';
 import { BehandlingAvslutt } from '~/lib/rammebehandling/felles/send-og-godkjenn/avslutt/BehandlingAvslutt';
 import { BehandlingSendTilBeslutning } from '~/lib/rammebehandling/felles/send-og-godkjenn/send-til-beslutning/BehandlingSendTilBeslutning';
 import { BehandlingGodkjenn } from '~/lib/rammebehandling/felles/send-og-godkjenn/godkjenn/BehandlingGodkjenn';
 import { BehandlingLagreKnapp } from '~/lib/rammebehandling/felles/send-og-godkjenn/lagre/BehandlingLagreKnapp';
-import { ValideringResultat } from '~/types/Validering';
+import { ValideringResultat } from '~/lib/rammebehandling/typer/Validering';
 import React, { useState } from 'react';
 import { BehandlingValideringVarsler } from '~/lib/rammebehandling/felles/send-og-godkjenn/varsler/BehandlingValideringVarsler';
 import {
@@ -16,16 +13,19 @@ import {
     BehandlingLagringVarsler,
 } from '~/lib/rammebehandling/felles/send-og-godkjenn/varsler/BehandlingLagringVarsler';
 import { BehandlingLagringProps } from '~/lib/rammebehandling/felles/send-og-godkjenn/lagre/useHentBehandlingLagringProps';
-import { SaksbehandlerRolle } from '~/types/Saksbehandler';
+import { SaksbehandlerRolle } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import { BehandlingSettPåVent } from '~/lib/rammebehandling/felles/send-og-godkjenn/sett-på-vent/BehandlingSettPåVent';
 import { BehandlingGjenoppta } from '~/lib/rammebehandling/felles/send-og-godkjenn/gjenoppta/BehandlingGjenoppta';
 import {
     erSattPaVent,
     skalKunneGjenopptaBehandling,
     skalKunneSetteBehandlingPaVent,
-} from '~/utils/tilganger';
+} from '~/lib/saksbehandler/tilganger';
 import { formaterTidspunkt } from '~/utils/date';
-import { Rammebehandling, Rammebehandlingsstatus } from '~/types/Rammebehandling';
+import {
+    Rammebehandling,
+    Rammebehandlingsstatus,
+} from '~/lib/rammebehandling/typer/Rammebehandling';
 
 import style from './BehandlingSendOgGodkjenn.module.css';
 

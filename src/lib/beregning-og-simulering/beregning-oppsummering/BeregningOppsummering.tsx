@@ -1,6 +1,6 @@
 import { Heading, VStack } from '@navikt/ds-react';
-import { UtbetalingBeløp } from '~/lib/utbetaling/beløp/UtbetalingBeløp';
-import { BeregningerSummert } from '~/types/Beregning';
+import { UtbetalingBeløp } from '~/lib/_felles/utbetaling/beløp/UtbetalingBeløp';
+import { BeregningerSummert } from '~/lib/beregning-og-simulering/typer/Beregning';
 
 type Props = {
     beregninger: BeregningerSummert;

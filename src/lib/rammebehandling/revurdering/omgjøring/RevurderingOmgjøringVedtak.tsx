@@ -2,7 +2,7 @@ import { Alert } from '@navikt/ds-react';
 import { Separator } from '~/lib/_felles/separator/Separator';
 import { BehandlingBeregningOgSimulering } from '../../felles/beregning-og-simulering/BehandlingBeregningOgSimulering';
 import { useRevurderingBehandling, useRevurderingOmgjøring } from '../../context/BehandlingContext';
-import { hentTiltaksdeltakelserMedStartOgSluttdato } from '~/utils/behandling';
+import { hentTiltaksdeltakelserMedStartOgSluttdato } from '~/lib/rammebehandling/rammebehandlingUtils';
 import { useOmgjøringSkjema } from '~/lib/rammebehandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import { InnvilgelsesperioderVelger } from '~/lib/rammebehandling/felles/innvilgelsesperiode/InnvilgelsesperioderVelger';
 import { BehandlingBarnetillegg } from '~/lib/rammebehandling/felles/barnetillegg/BehandlingBarnetillegg';
@@ -10,7 +10,7 @@ import { BegrunnelseVilkårsvurdering } from '~/lib/rammebehandling/felles/begru
 import { RevurderingOmgjøringBrev } from '~/lib/rammebehandling/revurdering/omgjøring/brev/RevurderingOmgjøringBrev';
 import { RevurderingOmgjøringSend } from '~/lib/rammebehandling/revurdering/omgjøring/send-og-godkjenn/RevurderingOmgjøringSend';
 import { RevurderingOmgjøringHeader } from '~/lib/rammebehandling/revurdering/omgjøring/header/RevurderingOmgjøringHeader';
-import { RevurderingResultat } from '~/types/Revurdering';
+import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 import { OmgjøringResultatVelger } from '~/lib/rammebehandling/revurdering/omgjøring/resultat-velger/OmgjøringResultatVelger';
 import { OmgjøringOpphørVelger } from '~/lib/rammebehandling/revurdering/omgjøring/opphør/OmgjøringOpphørVelger';
 import { OmgjøringInnvilgelseVedtaksperiodeVelger } from '~/lib/rammebehandling/revurdering/omgjøring/innvilgelse/OmgjøringInnvilgelseVedtaksperiodeVelger';

@@ -1,17 +1,17 @@
 import { periodiserBarnetilleggFraSøknad } from '~/lib/rammebehandling/felles/barnetillegg/utils/periodiserBarnetilleggFraSøknad';
-import { rammebehandlingMedInnvilgelseEllerNull } from '~/utils/behandling';
+import { rammebehandlingMedInnvilgelseEllerNull } from '~/lib/rammebehandling/rammebehandlingUtils';
 import { hentBarnetilleggFraVedtakKunMedBarn } from '~/lib/rammebehandling/felles/barnetillegg/utils/hentBarnetilleggFraVedtakTidslinje';
-import { SakProps } from '~/types/Sak';
-import { BarnetilleggPeriode } from '~/types/Barnetillegg';
+import { SakProps } from '~/lib/sak/SakTyper';
+import { BarnetilleggPeriode } from '~/lib/rammebehandling/typer/Barnetillegg';
 import {
     kunPerioderMedBarn,
     slåSammenBarnetillegg,
 } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggUtils';
-import { Søknadsbehandling } from '~/types/Søknadsbehandling';
-import { Revurdering } from '~/types/Revurdering';
-import { Rammebehandling, Rammebehandlingstype } from '~/types/Rammebehandling';
+import { Søknadsbehandling } from '~/lib/rammebehandling/typer/Søknadsbehandling';
+import { Revurdering } from '~/lib/rammebehandling/typer/Revurdering';
+import { Rammebehandling, Rammebehandlingstype } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { TidslinjeRammevedtak } from '~/types/TidslinjeRammevedtak';
-import { Innvilgelsesperiode } from '~/types/Innvilgelsesperiode';
+import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 import { utvidPeriodisering } from '~/utils/periode';
 
 export const hentBarnetilleggForSøknadsbehandling = (

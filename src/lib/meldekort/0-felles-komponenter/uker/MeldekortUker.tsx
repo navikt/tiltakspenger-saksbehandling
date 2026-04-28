@@ -1,6 +1,6 @@
 import { VStack } from '@navikt/ds-react';
 import { MeldekortUke } from './MeldekortUke';
-import { MeldekortDagBeregnetProps } from '~/types/meldekort/Meldekortbehandling';
+import { MeldekortDagBeregnetProps } from '~/lib/meldekort/typer/Meldekortbehandling';
 
 type Props = {
     dager: MeldekortDagBeregnetProps[];

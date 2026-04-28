@@ -1,4 +1,7 @@
-import { TilbakekrevingBehandling, TilbakekrevingBehandlingsstatus } from '~/types/Tilbakekreving';
+import {
+    TilbakekrevingBehandling,
+    TilbakekrevingBehandlingsstatus,
+} from '~/lib/tilbakekreving/typer/Tilbakekreving';
 import { Alert, BodyLong, Button, Heading, HStack, Link, Table, VStack } from '@navikt/ds-react';
 import {
     formaterDatotekst,
@@ -6,10 +9,10 @@ import {
     periodeTilFormatertDatotekst,
 } from '~/utils/date';
 import { formatterBeløp } from '~/utils/beløp';
-import { BeregningKildeType } from '~/types/Beregning';
+import { BeregningKildeType } from '~/lib/beregning-og-simulering/typer/Beregning';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import NextLink from 'next/link';
-import { useSak } from '~/context/sak/SakContext';
+import { useSak } from '~/lib/sak/SakContext';
 import { beregningKildeUrl } from '~/utils/urls';
 import { TilbakekrevingStatusTag } from '~/lib/tilbakekreving/TilbakekrevingStatusTag';
 import { TilbakekrevingTildeling } from '~/lib/personoversikt/tilbakekreving/TilbakekrevingTildeling';
@@ -98,7 +101,7 @@ const TilbakekrevingerTabell = ({ tilbakekrevinger }: TilbakekrevingerTabellProp
                     <Table.HeaderCell scope="col">{'Sist endret'}</Table.HeaderCell>
                     <Table.HeaderCell scope="col">{'Varsel sendt'}</Table.HeaderCell>
                     <Table.HeaderCell scope="col">{'Kilde'}</Table.HeaderCell>
-                    <Table.HeaderCell scope="col">{'Saksbehandler'}</Table.HeaderCell>
+                    <Table.HeaderCell scope="col">{'SaksbehandlerTyper'}</Table.HeaderCell>
                     <Table.HeaderCell scope="col">{'Beslutter'}</Table.HeaderCell>
                     <Table.HeaderCell scope="col"></Table.HeaderCell>
                 </Table.Row>

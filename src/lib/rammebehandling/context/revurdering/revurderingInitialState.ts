@@ -5,8 +5,8 @@ import {
     RevurderingInnvilgelse,
     RevurderingResultat,
     RevurderingStans,
-} from '~/types/Revurdering';
-import { SakProps } from '~/types/Sak';
+} from '~/lib/rammebehandling/typer/Revurdering';
+import { SakProps } from '~/lib/sak/SakTyper';
 import { RevurderingStansState } from '~/lib/rammebehandling/context/revurdering/revurderingStansSkjemaContext';
 import { hentBarnetilleggForRevurdering } from '~/lib/rammebehandling/felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
 import {
@@ -15,7 +15,7 @@ import {
     OmgjøringState,
 } from '~/lib/rammebehandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import { RevurderingInnvilgelseState } from '~/lib/rammebehandling/context/revurdering/revurderingInnvilgelseSkjemaContext';
-import { hentRammevedtak } from '~/utils/sak';
+import { hentRammevedtak } from '~/lib/sak/sakUtils';
 import { totalPeriode } from '~/utils/periode';
 
 type RevurderingState = RevurderingInnvilgelseState | RevurderingStansState | OmgjøringState;

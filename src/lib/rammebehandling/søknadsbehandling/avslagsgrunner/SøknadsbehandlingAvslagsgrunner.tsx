@@ -1,6 +1,6 @@
 import { Checkbox, CheckboxGroup } from '@navikt/ds-react';
 import { VedtakSeksjon } from '~/lib/rammebehandling/felles/layout/seksjon/VedtakSeksjon';
-import { Avslagsgrunn } from '~/types/Søknadsbehandling';
+import { Avslagsgrunn } from '~/lib/rammebehandling/typer/Søknadsbehandling';
 import {
     useSøknadsbehandlingAvslagSkjema,
     useSøknadsbehandlingSkjemaDispatch,

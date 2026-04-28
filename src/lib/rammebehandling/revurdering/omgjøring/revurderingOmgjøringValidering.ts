@@ -1,11 +1,11 @@
-import { ValideringResultat } from '~/types/Validering';
+import { ValideringResultat } from '~/lib/rammebehandling/typer/Validering';
 import { validerInnvilgelse } from '~/lib/rammebehandling/felles/validering/validerInnvilgelse';
-import { Omgjøring, RevurderingResultat } from '~/types/Revurdering';
+import { Omgjøring, RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 import { OmgjøringContext } from '~/lib/rammebehandling/context/revurdering/revurderingOmgjøringSkjemaContext';
-import { SakProps } from '~/types/Sak';
-import { hentGjeldendeRammevedtak, hentVedtatteSøknadsbehandlinger } from '~/utils/sak';
+import { SakProps } from '~/lib/sak/SakTyper';
+import { hentGjeldendeRammevedtak, hentVedtatteSøknadsbehandlinger } from '~/lib/sak/sakUtils';
 import { perioderOverlapper, periodiseringTotalPeriode, totalPeriode } from '~/utils/periode';
-import { Rammevedtak } from '~/types/Rammevedtak';
+import { Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
 
 /**
  * Omgjøring benytter seg av de samme reglene som innvilgelse

@@ -1,11 +1,14 @@
 import { Alert, BodyShort, Heading, HStack, VStack } from '@navikt/ds-react';
-import { UtbetalingBeløp } from '~/lib/utbetaling/beløp/UtbetalingBeløp';
-import { SimuleringResultat, SimulertBeregning } from '~/types/SimulertBeregning';
+import { UtbetalingBeløp } from '~/lib/_felles/utbetaling/beløp/UtbetalingBeløp';
+import {
+    SimuleringResultat,
+    SimulertBeregning,
+} from '~/lib/beregning-og-simulering/typer/SimulertBeregning';
 import {
     OppdaterSimuleringKnapp,
     OppdaterSimuleringProps,
 } from '~/lib/beregning-og-simulering/oppdater-simulering/OppdaterSimuleringKnapp';
-import { BehandlingIdFelles } from '~/types/BehandlingFelles';
+import { BehandlingIdFelles } from '~/lib/behandling-felles/typer/BehandlingFelles';
 
 import style from './SimuleringOppsummering.module.css';
 

@@ -1,7 +1,7 @@
 import { Alert, Button, Heading, VStack } from '@navikt/ds-react';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
-import { TilbakekrevingId } from '~/types/Tilbakekreving';
-import { OppsummeringsPar } from '~/lib/oppsummeringer/oppsummeringspar/OppsummeringsPar';
+import { TilbakekrevingId } from '~/lib/tilbakekreving/typer/Tilbakekreving';
+import { OppsummeringsPar } from '~/lib/behandling-felles/oppsummeringer/oppsummeringspar/OppsummeringsPar';
 import {
     formaterDatotekst,
     formaterTidspunktKort,
@@ -9,8 +9,8 @@ import {
 } from '~/utils/date';
 import { formatterBeløp } from '~/utils/beløp';
 import { TilbakekrevingStatusTag } from '~/lib/tilbakekreving/TilbakekrevingStatusTag';
-import { useSak } from '~/context/sak/SakContext';
-import { hentTilbakekreving } from '~/utils/sak';
+import { useSak } from '~/lib/sak/SakContext';
+import { hentTilbakekreving } from '~/lib/sak/sakUtils';
 
 import style from './TilbakekrevingOppsummering.module.css';
 

@@ -1,11 +1,11 @@
-import { Rammevedtak } from '~/types/Rammevedtak';
+import { Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { krympPeriodisering, utvidPeriodisering } from '~/utils/periode';
-import { BarnetilleggPeriode } from '~/types/Barnetillegg';
+import { BarnetilleggPeriode } from '~/lib/rammebehandling/typer/Barnetillegg';
 import {
     kunPerioderMedBarn,
     slåSammenBarnetillegg,
 } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggUtils';
-import { BehandlingId } from '~/types/Rammebehandling';
+import { BehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { TidslinjeRammevedtak } from '~/types/TidslinjeRammevedtak';
 import { Periode } from '~/types/Periode';
 

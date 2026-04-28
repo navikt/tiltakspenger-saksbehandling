@@ -1,9 +1,9 @@
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
-import { MeldeperiodeKjedeProps } from '~/types/meldekort/Meldeperiode';
-import { MeldekortbehandlingId } from '~/types/meldekort/Meldekortbehandling';
-import { SakId } from '~/types/Sak';
-import { BehandlingIdFelles } from '~/types/BehandlingFelles';
-import { Rammebehandling, BehandlingId } from '~/types/Rammebehandling';
+import { MeldeperiodeKjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
+import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
+import { SakId } from '~/lib/sak/SakTyper';
+import { BehandlingIdFelles } from '~/lib/behandling-felles/typer/BehandlingFelles';
+import { Rammebehandling, BehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
 
 type ResponseType<BehId extends BehandlingIdFelles> = BehId extends BehandlingId
     ? Rammebehandling

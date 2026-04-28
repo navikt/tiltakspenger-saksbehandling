@@ -1,4 +1,4 @@
-import { RammebehandlingResultatMedInnvilgelse } from '~/types/Rammebehandling';
+import { RammebehandlingResultatMedInnvilgelse } from '~/lib/rammebehandling/typer/Rammebehandling';
 import {
     InnvilgelsesperioderActions,
     innvilgelsesperioderReducer,
@@ -13,15 +13,18 @@ import {
     useBehandlingSkjema,
     useBehandlingSkjemaDispatch,
 } from '~/lib/rammebehandling/context/BehandlingSkjemaContext';
-import { SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
-import { RevurderingResultat } from '~/types/Revurdering';
+import { SøknadsbehandlingResultat } from '~/lib/rammebehandling/typer/Søknadsbehandling';
+import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 import {
     BehandlingSkjemaType,
     erRammebehandlingInnvilgelseContext,
     erRammebehandlingInnvilgelseMedPerioderContext,
 } from '~/lib/rammebehandling/context/behandlingSkjemaUtils';
-import { BarnetilleggPeriode } from '~/types/Barnetillegg';
-import { Innvilgelsesperiode, InnvilgelsesperiodePartial } from '~/types/Innvilgelsesperiode';
+import { BarnetilleggPeriode } from '~/lib/rammebehandling/typer/Barnetillegg';
+import {
+    Innvilgelsesperiode,
+    InnvilgelsesperiodePartial,
+} from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 import { OmgjøringInnvilgelseState } from '~/lib/rammebehandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import { RevurderingInnvilgelseState } from '~/lib/rammebehandling/context/revurdering/revurderingInnvilgelseSkjemaContext';
 import { SøknadsbehandlingInnvilgelseState } from '~/lib/rammebehandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';

@@ -1,13 +1,13 @@
-import { useSak } from '~/context/sak/SakContext';
-import { OppsummeringAvSøknad } from '~/lib/oppsummeringer/oppsummeringAvSøknad/OppsummeringAvSøknad';
+import { useSak } from '~/lib/sak/SakContext';
+import { OppsummeringAvSøknad } from '~/lib/behandling-felles/oppsummeringer/oppsummeringAvSøknad/OppsummeringAvSøknad';
 import { Alert, BodyShort, Link, Select, VStack } from '@navikt/ds-react';
 import NextLink from 'next/link';
 import { behandlingUrl } from '~/utils/urls';
 import { useState } from 'react';
 import { formaterTidspunkt } from '~/utils/date';
-import { Rammebehandling } from '~/types/Rammebehandling';
-import { erRammebehandlingMedInnvilgelse } from '~/utils/behandling';
-import { hentVedtatteSøknadsbehandlinger } from '~/utils/sak';
+import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { erRammebehandlingMedInnvilgelse } from '~/lib/rammebehandling/rammebehandlingUtils';
+import { hentVedtatteSøknadsbehandlinger } from '~/lib/sak/sakUtils';
 
 type Props = {
     behandling: Rammebehandling;

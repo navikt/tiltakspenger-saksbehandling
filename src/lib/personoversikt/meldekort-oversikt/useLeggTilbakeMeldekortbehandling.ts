@@ -1,9 +1,9 @@
 import {
     MeldekortbehandlingId,
     MeldekortbehandlingProps,
-} from '~/types/meldekort/Meldekortbehandling';
+} from '~/lib/meldekort/typer/Meldekortbehandling';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
-import { SakId } from '~/types/Sak';
+import { SakId } from '~/lib/sak/SakTyper';
 
 export const useLeggTilbakeMeldekortbehandling = (
     sakId: SakId,

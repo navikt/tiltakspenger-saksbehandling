@@ -9,15 +9,15 @@ import {
     useOmgjøringSkjemaDispatch,
 } from '~/lib/rammebehandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import { useRevurderingOmgjøring } from '~/lib/rammebehandling/context/BehandlingContext';
-import { useSak } from '~/context/sak/SakContext';
+import { useSak } from '~/lib/sak/SakContext';
 import { finnPerioderHull, perioderOverlapper, totalPeriode } from '~/utils/periode';
 import { Heading, HStack, VStack } from '@navikt/ds-react';
-import { hentGjeldendeRammevedtakIPeriode, hentRammevedtak } from '~/utils/sak';
+import { hentGjeldendeRammevedtakIPeriode, hentRammevedtak } from '~/lib/sak/sakUtils';
 import { VedtakHjelpetekst } from '~/lib/rammebehandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
 import { classNames } from '~/utils/classNames';
 import { VedtaksperiodevelgerGjeldendePerioder } from '~/lib/rammebehandling/revurdering/omgjøring/vedtaksperiode/gjeldende-perioder/VedtaksperiodevelgerGjeldendePerioder';
-import { Omgjøring, RevurderingResultat } from '~/types/Revurdering';
-import { Rammevedtak } from '~/types/Rammevedtak';
+import { Omgjøring, RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
+import { Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { Periode } from '~/types/Periode';
 
 import style from './OmgjøringVedtaksperiodeVelger.module.css';

@@ -1,9 +1,9 @@
-import { TilbakekrevingBehandling } from '~/types/Tilbakekreving';
+import { TilbakekrevingBehandling } from '~/lib/tilbakekreving/typer/Tilbakekreving';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
-import { SakProps } from '~/types/Sak';
+import { SakProps } from '~/lib/sak/SakTyper';
 import { Alert, Button } from '@navikt/ds-react';
-import { SaksbehandlerBehandlingKommando } from '~/types/BehandlingFelles';
-import { useSak } from '~/context/sak/SakContext';
+import { SaksbehandlerBehandlingKommando } from '~/lib/behandling-felles/typer/BehandlingFelles';
+import { useSak } from '~/lib/sak/SakContext';
 
 type Props = {
     tilbakekreving: TilbakekrevingBehandling;

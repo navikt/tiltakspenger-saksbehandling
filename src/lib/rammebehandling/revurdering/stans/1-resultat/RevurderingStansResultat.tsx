@@ -2,14 +2,14 @@ import { Alert, Checkbox, HStack, Link } from '@navikt/ds-react';
 import { VedtakSeksjon } from '~/lib/rammebehandling/felles/layout/seksjon/VedtakSeksjon';
 import { Datovelger } from '~/lib/_felles/datovelger/Datovelger';
 import { dateTilISOTekst, datoMin } from '~/utils/date';
-import { useSak } from '~/context/sak/SakContext';
+import { useSak } from '~/lib/sak/SakContext';
 import { useConfig } from '~/context/ConfigContext';
 import {
     useRevurderingStansSkjema,
     useRevurderingStansSkjemaDispatch,
 } from '~/lib/rammebehandling/context/revurdering/revurderingStansSkjemaContext';
 import { StansOgOpphørHjemmelVelger } from '~/lib/rammebehandling/revurdering/felles/hjemmel-velger/StansOgOpphørHjemmelVelger';
-import { HjemmelForStans } from '~/types/Revurdering';
+import { HjemmelForStans } from '~/lib/rammebehandling/typer/Revurdering';
 
 import style from './RevurderingStansResultat.module.css';
 

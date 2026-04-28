@@ -3,11 +3,11 @@ import KlageLayout from '../layout';
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
 import { Button, Heading, HStack, LocalAlert, VStack } from '@navikt/ds-react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { Rammevedtak } from '~/types/Rammevedtak';
-import { Rammebehandling } from '~/types/Rammebehandling';
+import { Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
+import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { fetchSak } from '~/utils/fetch/fetch-server';
 import { logger } from '@navikt/next-logger';
-import { SakProps } from '~/types/Sak';
+import { SakProps } from '~/lib/sak/SakTyper';
 import router from 'next/router';
 import FormkravForm from '~/lib/klage/forms/formkrav/FormkravForm';
 import {
@@ -15,13 +15,13 @@ import {
     formkravFormDataTilOpprettKlageRequest,
     formkravValidation,
 } from '~/lib/klage/forms/formkrav/FormkravFormUtils';
-import { KlageSteg } from '../../../../../utils/KlageLayoutUtils';
+import { KlageSteg } from '../../../../../lib/klage/utils/KlageLayoutUtils';
 import WarningCircleIcon from '~/lib/_felles/icons/WarningCircleIcon';
 import { useHentPersonopplysninger } from '~/lib/personaliaheader/useHentPersonopplysninger';
 import { useOpprettKlage } from '~/lib/klage/api/KlageApi';
 import styles from './index.module.css';
-import { MeldekortVedtak } from '~/types/meldekort/MeldekortVedtak';
-import { MeldekortbehandlingProps } from '~/types/meldekort/Meldekortbehandling';
+import { MeldekortVedtak } from '~/lib/meldekort/typer/MeldekortVedtak';
+import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
 
 type Props = {
     sak: SakProps;

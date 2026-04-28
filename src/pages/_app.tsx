@@ -5,10 +5,10 @@ import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { SWRConfig } from 'swr';
 import { InternDekoratør } from '~/lib/interndekoratør/InternDekoratør';
-import { FeatureTogglesProvider } from '~/context/feature-toggles/FeatureTogglesContext';
-import { SaksbehandlerProvider } from '~/context/saksbehandler/SaksbehandlerContext';
+import { FeatureTogglesProvider } from '~/context/FeatureTogglesContext';
+import { SaksbehandlerProvider } from '~/lib/saksbehandler/SaksbehandlerContext';
 import { ConfigProvider } from '~/context/ConfigContext';
-import { NotificationProvider } from '~/context/NotificationContext';
+import { NotificationProvider } from '~/lib/_felles/notifications/NotificationContext';
 import { NextPage } from 'next';
 
 type NextPageWithLayout<P = Record<string, unknown>, IP = P> = NextPage<P, IP> & {

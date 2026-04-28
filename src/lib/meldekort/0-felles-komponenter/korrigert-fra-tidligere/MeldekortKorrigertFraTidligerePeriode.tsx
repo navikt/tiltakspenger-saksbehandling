@@ -3,8 +3,8 @@ import { meldeperiodeUrl } from '~/utils/urls';
 import NextLink from 'next/link';
 import { formaterTidspunktKort, periodeTilFormatertDatotekst } from '~/utils/date';
 import { MeldekortUker } from '../uker/MeldekortUker';
-import { useSak } from '~/context/sak/SakContext';
-import { MeldeperiodeKorrigering } from '~/types/meldekort/Meldeperiode';
+import { useSak } from '~/lib/sak/SakContext';
+import { MeldeperiodeKorrigering } from '~/lib/meldekort/typer/Meldeperiode';
 import { MeldekortBeløp } from '../beløp/MeldekortBeløp';
 import { useMeldeperiodeKjede } from '../../context/MeldeperiodeKjedeContext';
 

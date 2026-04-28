@@ -6,18 +6,18 @@ import { Separator } from '~/lib/_felles/separator/Separator';
 import { BehandlingOppdaterSaksopplysninger } from './oppdater-saksopplysninger/BehandlingOppdaterSaksopplysninger';
 import { BehandlingSaksopplysning } from './BehandlingSaksopplysning';
 import { BehandlingTiltakOpplysninger } from './tiltak/BehandlingTiltakOpplysninger';
-import OppsummeringAvAttesteringer from '~/lib/_felles/attestering/OppsummeringAvAttestering';
-import { hentTiltaksperiode } from '~/utils/behandling';
-import { OppsummeringAvSøknad } from '../../oppsummeringer/oppsummeringAvSøknad/OppsummeringAvSøknad';
+import OppsummeringAvAttesteringer from '~/lib/behandling-felles/attestering/OppsummeringAvAttestering';
+import { hentTiltaksperiode } from '~/lib/rammebehandling/rammebehandlingUtils';
+import { OppsummeringAvSøknad } from '~/lib/behandling-felles/oppsummeringer/oppsummeringAvSøknad/OppsummeringAvSøknad';
 import { BehandlingYtelserOpplysninger } from '~/lib/rammebehandling/saksopplysninger/ytelser/BehandlingYtelserOpplysninger';
 import { BehandlingTiltakspengerArenaOpplysninger } from '~/lib/rammebehandling/saksopplysninger/tiltakspenger-fra-arena/BehandlingTiltakspengerArenaOpplysninger';
-import { Rammebehandlingstype } from '~/types/Rammebehandling';
+import { Rammebehandlingstype } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { SøknadOpplysningerFraVedtak } from '~/lib/rammebehandling/saksopplysninger/søknad/SøknadOpplysningerFraVedtak';
 
 import style from './BehandlingSaksopplysninger.module.css';
 import { erDatoIPeriode, totalPeriode } from '~/utils/periode';
-import { hentVedtatteSøknadsbehandlinger } from '~/utils/sak';
-import { useSak } from '~/context/sak/SakContext';
+import { hentVedtatteSøknadsbehandlinger } from '~/lib/sak/sakUtils';
+import { useSak } from '~/lib/sak/SakContext';
 
 export const BehandlingSaksopplysninger = () => {
     const { behandling } = useBehandling();
@@ -52,7 +52,7 @@ export const BehandlingSaksopplysninger = () => {
     return (
         <div>
             <BehandlingSaksopplysning
-                navn="Saksbehandler"
+                navn="SaksbehandlerTyper"
                 verdi={behandling.saksbehandler ?? 'Ikke tildelt'}
             />
             <BehandlingSaksopplysning

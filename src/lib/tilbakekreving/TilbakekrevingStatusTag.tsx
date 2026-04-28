@@ -1,4 +1,4 @@
-import { TilbakekrevingBehandlingsstatus } from '~/types/Tilbakekreving';
+import { TilbakekrevingBehandlingsstatus } from '~/lib/tilbakekreving/typer/Tilbakekreving';
 import { Tag } from '@navikt/ds-react';
 import { AkselColor } from '@navikt/ds-react/types/theme';
 

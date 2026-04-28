@@ -6,10 +6,10 @@ import {
     KlagebehandlingsresultatOmgjør,
     KlagebehandlingsresultatOpprettholdt,
     KlageId,
-} from '~/types/Klage';
-import { SakProps } from '~/types/Sak';
+} from '~/lib/klage/typer/Klage';
+import { SakProps } from '~/lib/sak/SakTyper';
 import { fetchSak } from '~/utils/fetch/fetch-server';
-import { KlageSteg } from '~/utils/KlageLayoutUtils';
+import { KlageSteg } from '~/lib/klage/utils/KlageLayoutUtils';
 import KlageLayout, { KlageProvider, useKlage } from '../../layout';
 import { useForm } from 'react-hook-form';
 import VurderingForm from '~/lib/klage/forms/klage-vurdering/VurderingForm';
@@ -32,16 +32,16 @@ import {
     erKlageOpprettholdelse,
     finnSisteGyldigeStegForKlage,
     kanBehandleKlage,
-} from '~/utils/klageUtils';
-import AvsluttBehandlingModal from '~/lib/modaler/AvsluttBehandlingModal';
+} from '~/lib/klage/utils/klageUtils';
+import AvsluttBehandlingModal from '~/lib/_felles/modaler/AvsluttBehandlingModal';
 import styles from './index.module.css';
 import Link from 'next/link';
 import { Søknad } from '~/types/Søknad';
-import { Rammevedtak } from '~/types/Rammevedtak';
-import { Rammebehandling } from '~/types/Rammebehandling';
+import { Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
+import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { Nullable } from '~/types/UtilTypes';
-import { erRammebehandlingUnderAktivOmgjøring } from '~/utils/behandling';
-import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
+import { erRammebehandlingUnderAktivOmgjøring } from '~/lib/rammebehandling/rammebehandlingUtils';
+import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import Omgjøringsresultat from '~/lib/klage/Omgjøringsresultat';
 
 type Props = {

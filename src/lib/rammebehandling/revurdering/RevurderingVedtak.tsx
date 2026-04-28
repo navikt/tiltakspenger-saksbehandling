@@ -3,7 +3,7 @@ import { RevurderingStansVedtak } from '~/lib/rammebehandling/revurdering/stans/
 import { RevurderingInnvilgelseVedtak } from '~/lib/rammebehandling/revurdering/innvilgelse/RevurderingInnvilgelseVedtak';
 import { Alert } from '@navikt/ds-react';
 import { RevurderingOmgjøringVedtak } from './omgjøring/RevurderingOmgjøringVedtak';
-import { RevurderingResultat } from '~/types/Revurdering';
+import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 
 export const RevurderingVedtak = () => {
     const { resultat } = useRevurderingBehandling().behandling;

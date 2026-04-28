@@ -5,12 +5,12 @@ import {
     useHentVedtaksbrevForhåndsvisning,
 } from './useHentVedtaksbrevForhåndsvisning';
 
-import { ValideringResultat } from '~/types/Validering';
+import { ValideringResultat } from '~/lib/rammebehandling/typer/Validering';
 import React, { useEffect, useState } from 'react';
 
 import style from './VedtaksbrevForhåndsvisning.module.css';
-import { Rammebehandling } from '~/types/Rammebehandling';
-import { erAvsluttet } from '~/utils/behandling';
+import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { erAvsluttet } from '~/lib/rammebehandling/rammebehandlingUtils';
 
 type Props = {
     behandling: Rammebehandling;

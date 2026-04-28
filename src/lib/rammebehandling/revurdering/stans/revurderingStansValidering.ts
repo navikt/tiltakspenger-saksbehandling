@@ -1,4 +1,4 @@
-import { ValideringResultat } from '~/types/Validering';
+import { ValideringResultat } from '~/lib/rammebehandling/typer/Validering';
 import { RevurderingStansContext } from '~/lib/rammebehandling/context/revurdering/revurderingStansSkjemaContext';
 
 export const revurderingStansValidering = (skjema: RevurderingStansContext): ValideringResultat => {

@@ -5,9 +5,9 @@ import {
     useOmgjøringSkjemaDispatch,
 } from '~/lib/rammebehandling/context/revurdering/revurderingOmgjøringSkjemaContext';
 import { useRevurderingOmgjøring } from '~/lib/rammebehandling/context/BehandlingContext';
-import { OmgjøringResultat, RevurderingResultat } from '~/types/Revurdering';
-import { useSak } from '~/context/sak/SakContext';
-import { hentRammevedtak } from '~/utils/sak';
+import { OmgjøringResultat, RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
+import { useSak } from '~/lib/sak/SakContext';
+import { hentRammevedtak } from '~/lib/sak/sakUtils';
 import { VedtakHjelpetekst } from '~/lib/rammebehandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
 
 import style from './OmgjøringResultatVelger.module.css';

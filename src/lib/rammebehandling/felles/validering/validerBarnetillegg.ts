@@ -1,4 +1,4 @@
-import { ValideringResultat } from '~/types/Validering';
+import { ValideringResultat } from '~/lib/rammebehandling/typer/Validering';
 import {
     totalPeriode,
     perioderErLike,
@@ -8,11 +8,11 @@ import {
     slåSammenPeriodisering,
     inneholderHelePerioden,
 } from '~/utils/periode';
-import { BarnetilleggPeriode } from '~/types/Barnetillegg';
+import { BarnetilleggPeriode } from '~/lib/rammebehandling/typer/Barnetillegg';
 import { periodeTilFormatertDatotekst } from '~/utils/date';
 import { periodiserBarnetilleggFraSøknad } from '~/lib/rammebehandling/felles/barnetillegg/utils/periodiserBarnetilleggFraSøknad';
 import { Søknad } from '~/types/Søknad';
-import { Innvilgelsesperiode } from '~/types/Innvilgelsesperiode';
+import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 
 export const validerBarnetillegg = (
     harBarnetillegg: boolean,

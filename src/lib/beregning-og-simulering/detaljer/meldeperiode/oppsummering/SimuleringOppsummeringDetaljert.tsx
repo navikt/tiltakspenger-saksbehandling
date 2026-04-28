@@ -1,6 +1,6 @@
-import { SimulerteBeløp } from '~/types/SimulertBeregning';
+import { SimulerteBeløp } from '~/lib/beregning-og-simulering/typer/SimulertBeregning';
 import { Alert, Heading } from '@navikt/ds-react';
-import { UtbetalingBeløp } from '~/lib/utbetaling/beløp/UtbetalingBeløp';
+import { UtbetalingBeløp } from '~/lib/_felles/utbetaling/beløp/UtbetalingBeløp';
 import { classNames } from '~/utils/classNames';
 import { Nullable } from '~/types/UtilTypes';
 

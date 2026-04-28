@@ -2,21 +2,24 @@ import { SøknadsbehandlingVedtak } from '~/lib/rammebehandling/søknadsbehandli
 import { BehandlingSaksopplysninger } from './saksopplysninger/BehandlingSaksopplysninger';
 import { RevurderingVedtak } from './revurdering/RevurderingVedtak';
 import { useBehandling } from './context/BehandlingContext';
-import { Rammebehandlingsstatus, Rammebehandlingstype } from '~/types/Rammebehandling';
+import {
+    Rammebehandlingsstatus,
+    Rammebehandlingstype,
+} from '~/lib/rammebehandling/typer/Rammebehandling';
 import { PersonaliaHeader } from '../personaliaheader/PersonaliaHeader';
 import { Alert, VStack } from '@navikt/ds-react';
 import { finnBehandlingStatusTag } from '~/utils/tekstformateringUtils';
-import AvbruttOppsummering from '../oppsummeringer/oppsummeringAvAvbrutt/OppsummeringAvAvbrutt';
+import AvbruttOppsummering from '~/lib/behandling-felles/oppsummeringer/oppsummeringAvAvbrutt/OppsummeringAvAvbrutt';
 import SideBarMain from '~/lib/_felles/layouts/sidebar-main/SideBarMain';
-import { Tidslinjer } from '~/lib/tidslinjer/Tidslinjer';
-import { useSak } from '~/context/sak/SakContext';
-import OppsummeringAvVentestatus from '~/lib/oppsummeringer/ventestatus/OppsummeringAvVentestatus';
+import { Tidslinjer } from '~/lib/_felles/tidslinjer/Tidslinjer';
+import { useSak } from '~/lib/sak/SakContext';
+import OppsummeringAvVentestatus from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatus';
 import { BehandlingSkjemaProvider } from '~/lib/rammebehandling/context/BehandlingSkjemaContext';
 import { PERSONOVERSIKT_TABS } from '~/lib/personoversikt/Personoversikt';
 
 import style from './BehandlingPage.module.css';
-import OppsummeringAvKlageForRammebehandling from '../oppsummeringer/klage/oppsummeringAvKlageForRammebehandling/OppsummeringAvKlageForRammebehandling';
-import { OppsummeringAvVentestatuserModal } from '../oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
+import OppsummeringAvKlageForRammebehandling from '~/lib/behandling-felles/oppsummeringer/klage/oppsummeringAvKlageForRammebehandling/OppsummeringAvKlageForRammebehandling';
+import { OppsummeringAvVentestatuserModal } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
 import { Separator } from '~/lib/_felles/separator/Separator';
 
 export const BehandlingPage = () => {

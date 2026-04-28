@@ -1,5 +1,5 @@
 import { Alert } from '@navikt/ds-react';
-import { MeldeperiodeKjedeProps } from '~/types/meldekort/Meldeperiode';
+import { MeldeperiodeKjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
 import { periodeTilFormatertDatotekst } from '~/utils/date';
 
 type Props = {

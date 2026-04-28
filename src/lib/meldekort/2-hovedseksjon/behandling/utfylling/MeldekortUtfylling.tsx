@@ -8,7 +8,7 @@ import {
     Textarea,
     VStack,
 } from '@navikt/ds-react';
-import { useSak } from '~/context/sak/SakContext';
+import { useSak } from '~/lib/sak/SakContext';
 import {
     ForhåndsvisMeldekortbehandlingBrevRequest,
     MeldekortbehandlingForm,
@@ -21,7 +21,7 @@ import {
     MeldekortbehandlingDagStatus,
     MeldekortbehandlingDTO,
     MeldekortbehandlingProps,
-} from '~/types/meldekort/Meldekortbehandling';
+} from '~/lib/meldekort/typer/Meldekortbehandling';
 import { MeldekortUker } from '../../../0-felles-komponenter/uker/MeldekortUker';
 import { useRef } from 'react';
 import { classNames } from '~/utils/classNames';
@@ -33,10 +33,10 @@ import Divider from '~/lib/_felles/divider/Divider';
 import { useFetchBlobFraApi, useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { hookFormErrorsTilFeiloppsummering } from '~/utils/validering';
 import { Nullable } from '~/types/UtilTypes';
-import { MeldeperiodeKjedeProps } from '~/types/meldekort/Meldeperiode';
-import { useNotification } from '~/context/NotificationContext';
-import { BekreftelsesModal } from '~/lib/modaler/BekreftelsesModal';
-import { SakId } from '~/types/Sak';
+import { MeldeperiodeKjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
+import { useNotification } from '~/lib/_felles/notifications/NotificationContext';
+import { BekreftelsesModal } from '~/lib/_felles/modaler/BekreftelsesModal';
+import { SakId } from '~/lib/sak/SakTyper';
 import { FetcherError } from '~/utils/fetch/fetch';
 import { PERSONOVERSIKT_TABS } from '~/lib/personoversikt/Personoversikt';
 import { useMeldekortbehandlingForm } from '~/lib/meldekort/context/MeldekortUtfyllingFormContext';

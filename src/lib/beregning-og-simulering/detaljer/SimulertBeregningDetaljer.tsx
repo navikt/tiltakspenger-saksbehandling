@@ -1,4 +1,7 @@
-import { SimuleringResultat, SimulertBeregning } from '~/types/SimulertBeregning';
+import {
+    SimuleringResultat,
+    SimulertBeregning,
+} from '~/lib/beregning-og-simulering/typer/SimulertBeregning';
 import { Button, Table } from '@navikt/ds-react';
 import { Fragment, useState } from 'react';
 import { classNames } from '~/utils/classNames';

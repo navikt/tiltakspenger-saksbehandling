@@ -1,9 +1,12 @@
-import { ValideringFunc, ValideringResultat } from '~/types/Validering';
+import { ValideringFunc, ValideringResultat } from '~/lib/rammebehandling/typer/Validering';
 import { validerInnvilgelse } from '~/lib/rammebehandling/felles/validering/validerInnvilgelse';
 import { BehandlingSkjemaContext } from '~/lib/rammebehandling/context/BehandlingSkjemaContext';
-import { Søknadsbehandling, SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
+import {
+    Søknadsbehandling,
+    SøknadsbehandlingResultat,
+} from '~/lib/rammebehandling/typer/Søknadsbehandling';
 import { SøknadsbehandlingAvslagContext } from '~/lib/rammebehandling/context/søknadsbehandling/søknadsbehandlingSkjemaContext';
-import { SakProps } from '~/types/Sak';
+import { SakProps } from '~/lib/sak/SakTyper';
 
 export const søknadsbehandlingValidering =
     (

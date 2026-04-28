@@ -18,7 +18,12 @@ import {
 } from '../benkSideUtils';
 import { formaterTidspunkt } from '~/utils/date';
 import NextLink from 'next/link';
-import { BenkBehandling, BenkKolonne, BenkSortering, BenkSorteringRetning } from '~/types/Benk';
+import {
+    BenkBehandling,
+    BenkKolonne,
+    BenkSortering,
+    BenkSorteringRetning,
+} from '~/lib/benk/typer/Benk';
 import { BenkVentestatus } from '~/lib/benk/tabell/BenkVentestatus';
 import { behandlingResultatTilTag } from '~/utils/tekstformateringUtils';
 import { personoversiktUrl } from '~/utils/urls';
@@ -107,7 +112,7 @@ export const BenkTabell = ({ behandlinger }: Props) => {
                         {'Sist endret'}
                     </Table.ColumnHeader>
                     <Table.ColumnHeader sortable={true} sortKey={BenkKolonne.saksbehandler}>
-                        {'Saksbehandler'}
+                        {'SaksbehandlerTyper'}
                     </Table.ColumnHeader>
                     <Table.ColumnHeader sortable={true} sortKey={BenkKolonne.beslutter}>
                         {'Beslutter'}

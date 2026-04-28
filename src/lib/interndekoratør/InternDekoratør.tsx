@@ -14,10 +14,10 @@ import { LeaveIcon } from '@navikt/aksel-icons';
 import { useHentSakForFNR } from './useHentSakForFNR';
 import Varsel from '~/lib/_felles/varsel/Varsel';
 import Link from 'next/link';
-import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
+import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import router from 'next/router';
 import styles from './InternDekoratør.module.css';
-import { BekreftelsesModal } from '~/lib/modaler/BekreftelsesModal';
+import { BekreftelsesModal } from '~/lib/_felles/modaler/BekreftelsesModal';
 import { useHentEllerOpprettSak } from '~/lib/interndekoratør/useHentEllerOpprettSak';
 import { v4 as uuidv4 } from 'uuid';
 

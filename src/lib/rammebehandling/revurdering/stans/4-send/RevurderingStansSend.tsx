@@ -2,7 +2,10 @@ import { useRevurderingBehandling } from '../../../context/BehandlingContext';
 import { revurderingStansValidering } from '../revurderingStansValidering';
 import { BehandlingSendOgGodkjenn } from '~/lib/rammebehandling/felles/send-og-godkjenn/BehandlingSendOgGodkjenn';
 import { useHentBehandlingLagringProps } from '~/lib/rammebehandling/felles/send-og-godkjenn/lagre/useHentBehandlingLagringProps';
-import { RevurderingResultat, OppdaterRevurderingStansDTO } from '~/types/Revurdering';
+import {
+    RevurderingResultat,
+    OppdaterRevurderingStansDTO,
+} from '~/lib/rammebehandling/typer/Revurdering';
 import {
     RevurderingStansContext,
     useRevurderingStansSkjema,

@@ -1,10 +1,10 @@
 import { Alert, Button, HStack, Select, VStack } from '@navikt/ds-react';
 import { VedtakSeksjon } from '~/lib/rammebehandling/felles/layout/seksjon/VedtakSeksjon';
 import { useBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
-import { Rammebehandlingstype } from '~/types/Rammebehandling';
+import { Rammebehandlingstype } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { periodiserBarnetilleggFraSøknad } from '../utils/periodiserBarnetilleggFraSøknad';
 import { hentBarnetilleggForhåndsutfyltForRevurdering } from '~/lib/rammebehandling/felles/barnetillegg/utils/hentBarnetilleggFraBehandling';
-import { useSak } from '~/context/sak/SakContext';
+import { useSak } from '~/lib/sak/SakContext';
 import {
     useBehandlingInnvilgelseMedPerioderSkjema,
     useBehandlingInnvilgelseSkjemaDispatch,
@@ -14,7 +14,7 @@ import {
     perioderOverlapper,
     periodiseringTotalPeriode,
 } from '~/utils/periode';
-import { BarnetilleggPeriode } from '~/types/Barnetillegg';
+import { BarnetilleggPeriode } from '~/lib/rammebehandling/typer/Barnetillegg';
 import { XMarkIcon } from '@navikt/aksel-icons';
 import {
     Datovelger,

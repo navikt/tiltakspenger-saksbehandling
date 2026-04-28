@@ -9,9 +9,9 @@ import {
     OpprettKlageRequest,
     OpprettOmgjøringsbehandlingForKlageRequest,
     VurderKlageRequest,
-} from '~/types/Klage';
-import { Rammebehandling } from '~/types/Rammebehandling';
-import { SakProps } from '~/types/Sak';
+} from '~/lib/klage/typer/Klage';
+import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { SakProps } from '~/lib/sak/SakTyper';
 import { FetcherError } from '~/utils/fetch/fetch';
 import { useFetchBlobFraApi, useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { Nullable } from '~/types/UtilTypes';

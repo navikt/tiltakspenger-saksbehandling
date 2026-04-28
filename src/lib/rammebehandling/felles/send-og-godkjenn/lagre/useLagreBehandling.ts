@@ -2,7 +2,10 @@ import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 
 import { SWRMutationConfiguration } from 'swr/mutation';
 import { FetcherError } from '~/utils/fetch/fetch';
-import { Rammebehandling, OppdaterBehandlingDTO } from '~/types/Rammebehandling';
+import {
+    Rammebehandling,
+    OppdaterBehandlingDTO,
+} from '~/lib/rammebehandling/typer/Rammebehandling';
 
 type Props = {
     behandling: Rammebehandling;

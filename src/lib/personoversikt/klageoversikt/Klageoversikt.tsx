@@ -1,15 +1,15 @@
 import { Tag, Table } from '@navikt/ds-react';
-import KlageMeny from '~/lib/behandlingmeny/KlageMeny';
-import { Klagebehandling, KlagevedtakMedBehandling } from '~/types/Klage';
-import { Rammebehandling } from '~/types/Rammebehandling';
+import KlageMeny from '~/lib/behandling-felles/behandlingmeny/KlageMeny';
+import { Klagebehandling, KlagevedtakMedBehandling } from '~/lib/klage/typer/Klage';
+import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { Nullable } from '~/types/UtilTypes';
 import { formaterTidspunkt } from '~/utils/date';
-import { klagehendelseUtfallTilTag } from '~/utils/KlageinstanshendelseUtils';
+import { klagehendelseUtfallTilTag } from '~/lib/klage/utils/KlageinstanshendelseUtils';
 import {
     erKlageFerdigbehandlet,
     erKlageFerdigstilt,
     hentSisteKlagehendelseUtfallFraKlagebehandling,
-} from '~/utils/klageUtils';
+} from '~/lib/klage/utils/klageUtils';
 import {
     klagebehandlingStatusTilTag,
     klagebehandlingResultatTilTag,

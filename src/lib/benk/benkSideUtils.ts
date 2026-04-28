@@ -4,7 +4,7 @@ import {
     BenkKolonne,
     BenkSortering,
     BenkSorteringRetning,
-} from '~/types/Benk';
+} from '~/lib/benk/typer/Benk';
 import { AkselColor } from '@navikt/ds-react/types/theme';
 import { isValueInRecord } from '~/utils/object';
 

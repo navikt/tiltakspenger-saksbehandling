@@ -1,10 +1,14 @@
 import { useEffect, useState } from 'react';
 
 import { isEqualJson } from '~/utils/is-equal-json';
-import { ValideringFunc, ValideringResultat, ValideringType } from '~/types/Validering';
+import {
+    ValideringFunc,
+    ValideringResultat,
+    ValideringType,
+} from '~/lib/rammebehandling/typer/Validering';
 import { Nullable } from '~/types/UtilTypes';
 import { BehandlingSkjemaContext } from '~/lib/rammebehandling/context/BehandlingSkjemaContext';
-import { OppdaterBehandlingDTO } from '~/types/Rammebehandling';
+import { OppdaterBehandlingDTO } from '~/lib/rammebehandling/typer/Rammebehandling';
 
 type ValiderOgHentVedtakDTO = (type: ValideringType) => {
     valideringResultat: ValideringResultat;

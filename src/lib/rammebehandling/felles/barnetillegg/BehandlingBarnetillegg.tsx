@@ -5,7 +5,7 @@ import { BehandlingBarnetilleggPerioder } from './perioder/BehandlingBarnetilleg
 import { BarnetilleggBegrunnelse } from './begrunnelse/BarnetilleggBegrunnelse';
 import { BarnetilleggTidslinje } from '~/lib/rammebehandling/felles/barnetillegg/tidslinje/BarnetilleggTidslinje';
 import { harSøktBarnetillegg } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggUtils';
-import { useSak } from '~/context/sak/SakContext';
+import { useSak } from '~/lib/sak/SakContext';
 import { useBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 import {
     useBehandlingInnvilgelseMedPerioderSkjema,

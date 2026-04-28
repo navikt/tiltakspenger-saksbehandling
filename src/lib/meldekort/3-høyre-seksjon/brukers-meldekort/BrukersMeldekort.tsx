@@ -1,7 +1,7 @@
 import {
     BrukersMeldekortDagProps,
     BrukersMeldekortProps,
-} from '~/types/meldekort/BrukersMeldekort';
+} from '~/lib/meldekort/typer/BrukersMeldekort';
 import { BodyShort, Box, Button, HStack, Table, VStack } from '@navikt/ds-react';
 import { formaterDatotekst, formaterTidspunkt, ukedagFraDatotekst } from '~/utils/date';
 import { ikonForBrukersMeldekortDagStatus } from '../../0-felles-komponenter/MeldekortIkoner';
@@ -11,8 +11,8 @@ import { useMeldekortbehandlingForm } from '~/lib/meldekort/context/MeldekortUtf
 import { ChevronLeftDoubleIcon } from '@navikt/aksel-icons';
 import { useMeldeperiodeKjede } from '~/lib/meldekort/context/MeldeperiodeKjedeContext';
 import { hentMeldekortForhåndsutfyllingFraBrukersMeldekort } from '~/lib/meldekort/0-felles-komponenter/meldekortForhåndsutfyllingUtils';
-import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
-import { kanSaksbehandleForMeldekort } from '~/utils/tilganger';
+import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
+import { kanSaksbehandleForMeldekort } from '~/lib/saksbehandler/tilganger';
 
 import styles from './BrukersMeldekort.module.css';
 

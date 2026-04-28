@@ -4,19 +4,22 @@ import {
     utbetalingsstatusTekst,
 } from '~/utils/tekstformateringUtils';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '~/utils/date';
-import { MeldeperiodeKjedeProps, MeldeperiodeKjedeStatus } from '~/types/meldekort/Meldeperiode';
+import {
+    MeldeperiodeKjedeProps,
+    MeldeperiodeKjedeStatus,
+} from '~/lib/meldekort/typer/Meldeperiode';
 import { meldeperiodeUrl } from '~/utils/urls';
 import {
     MeldekortbehandlingProps,
     MeldekortbehandlingStatus,
     MeldekortbehandlingType,
-} from '~/types/meldekort/Meldekortbehandling';
+} from '~/lib/meldekort/typer/Meldekortbehandling';
 import { formatterBeløp } from '~/utils/beløp';
-import { sorterMeldekortbehandlingerAsc } from '~/utils/meldekort';
-import { SakId } from '~/types/Sak';
+import { sorterMeldekortbehandlingerAsc } from '~/lib/meldekort/utils/meldekort';
+import { SakId } from '~/lib/sak/SakTyper';
 import router from 'next/router';
 import { Periode } from '~/types/Periode';
-import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
+import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import { useTaMeldekortbehandling } from './useTaMeldekortbehandling';
 import { useLeggTilbakeMeldekortbehandling } from './useLeggTilbakeMeldekortbehandling';
 import { TriggerWithOptionsArgs } from 'swr/mutation';
@@ -25,11 +28,11 @@ import {
     eierMeldekortbehandling,
     skalKunneOvertaMeldekortbehandling,
     skalKunneTaMeldekortbehandling,
-} from '~/utils/tilganger';
+} from '~/lib/saksbehandler/tilganger';
 import { OvertaMeldekortbehandlingModal } from './OvertaMeldekortbehandling';
 import { AvsluttMeldekortbehandlingModal } from './avsluttMeldekortbehandling/AvsluttMeldekortbehandling';
 import React, { useState } from 'react';
-import { erMeldekortbehandlingUnderAktivBehandling } from '~/utils/meldekortbehandling';
+import { erMeldekortbehandlingUnderAktivBehandling } from '~/lib/meldekort/utils/meldekortbehandling';
 import {
     ArrowLeftIcon,
     ArrowRightIcon,

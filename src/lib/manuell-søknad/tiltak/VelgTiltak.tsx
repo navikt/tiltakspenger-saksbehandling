@@ -7,7 +7,7 @@ import styles from './VelgTiltak.module.css';
 import { classNames } from '~/utils/classNames';
 import { formaterDatotekst } from '~/utils/date';
 import { useHentTiltaksdeltakelser } from '~/lib/manuell-søknad/tiltak/useHentTiltaksdeltakelser';
-import { SakId } from '~/types/Sak';
+import { SakId } from '~/lib/sak/SakTyper';
 import { Periode } from '~/types/Periode';
 
 type Props = {

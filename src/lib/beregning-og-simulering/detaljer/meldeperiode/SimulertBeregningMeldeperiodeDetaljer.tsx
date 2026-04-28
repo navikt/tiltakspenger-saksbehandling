@@ -1,9 +1,9 @@
 import { Alert, Table } from '@navikt/ds-react';
-import { SimulertBeregningPerMeldeperiode } from '~/types/SimulertBeregning';
+import { SimulertBeregningPerMeldeperiode } from '~/lib/beregning-og-simulering/typer/SimulertBeregning';
 import { classNames } from '~/utils/classNames';
 import { useState } from 'react';
 import { SimuleringOppsummeringDetaljert } from '~/lib/beregning-og-simulering/detaljer/meldeperiode/oppsummering/SimuleringOppsummeringDetaljert';
-import { beløpStyle } from '~/lib/utbetaling/beløp/beløpStyle';
+import { beløpStyle } from '~/lib/_felles/utbetaling/beløp/beløpStyle';
 import { SimulertBeregningDagDetaljer } from '~/lib/beregning-og-simulering/detaljer/meldeperiode/dag/SimulertBeregningDagDetaljer';
 import { SimuleringDetaljerMeldeperiodeHeader } from '~/lib/beregning-og-simulering/detaljer/meldeperiode/header/SimuleringDetaljerMeldeperiodeHeader';
 

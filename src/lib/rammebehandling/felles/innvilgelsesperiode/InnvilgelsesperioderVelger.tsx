@@ -3,25 +3,25 @@ import {
     useBehandlingInnvilgelseSkjema,
     useBehandlingInnvilgelseSkjemaDispatch,
 } from '~/lib/rammebehandling/context/innvilgelse/innvilgelseContext';
-import { hentTiltaksdeltakelserMedStartOgSluttdato } from '~/utils/behandling';
-import { useSak } from '~/context/sak/SakContext';
+import { hentTiltaksdeltakelserMedStartOgSluttdato } from '~/lib/rammebehandling/rammebehandlingUtils';
+import { useSak } from '~/lib/sak/SakContext';
 import { VedtakSeksjon } from '~/lib/rammebehandling/felles/layout/seksjon/VedtakSeksjon';
 import { Alert, Button, Heading, HStack, Select, VStack } from '@navikt/ds-react';
 import { useBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 import { InnvilgelsesperiodeDatovelgere } from '~/lib/rammebehandling/felles/innvilgelsesperiode/InnvilgelsesperiodeDatoVelgere';
 import { InnvilgelsesperioderVarsler } from '~/lib/rammebehandling/felles/innvilgelsesperiode/varsler/InnvilgelsesperioderVarsler';
 import { XMarkIcon } from '@navikt/aksel-icons';
-import { TiltaksdeltakelseMedPeriode } from '~/types/Tiltaksdeltakelse';
+import { TiltaksdeltakelseMedPeriode } from '~/lib/rammebehandling/typer/Tiltaksdeltakelse';
 import { erHelg, periodeTilFormatertDatotekst } from '~/utils/date';
-import { Innvilgelsesperiode } from '~/types/Innvilgelsesperiode';
-import { Rammebehandling } from '~/types/Rammebehandling';
-import { SakProps } from '~/types/Sak';
+import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
+import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { SakProps } from '~/lib/sak/SakTyper';
 import { Fragment } from 'react';
 import {
     InnvilgelseHullVarsel,
     VedtaksperioderUtenInnvilgelseVarsel,
 } from '~/lib/rammebehandling/felles/innvilgelsesperiode/varsler/InnvilgelseHullVarsel';
-import { RevurderingResultat } from '~/types/Revurdering';
+import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 import { inneholderHelePerioden } from '~/utils/periode';
 import { Periode } from '~/types/Periode';
 import { classNames } from '~/utils/classNames';

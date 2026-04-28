@@ -2,11 +2,11 @@ import { Alert, VStack } from '@navikt/ds-react';
 import { PersonaliaHeader } from '../personaliaheader/PersonaliaHeader';
 import { MeldekortVenstreSeksjon } from './1-venstre-seksjon/MeldekortVenstreSeksjon';
 import { MeldekortHovedseksjon } from './2-hovedseksjon/MeldekortHovedseksjon';
-import { useSak } from '~/context/sak/SakContext';
+import { useSak } from '~/lib/sak/SakContext';
 import { MeldekortHøyreSeksjon } from './3-høyre-seksjon/MeldekortHøyreSeksjon';
 import { useMeldeperiodeKjede } from './context/MeldeperiodeKjedeContext';
-import { BrukersMeldekortProps } from '~/types/meldekort/BrukersMeldekort';
-import { erMeldekortbehandlingUnderAktivBehandling } from '~/utils/meldekortbehandling';
+import { BrukersMeldekortProps } from '~/lib/meldekort/typer/BrukersMeldekort';
+import { erMeldekortbehandlingUnderAktivBehandling } from '~/lib/meldekort/utils/meldekortbehandling';
 import { PERSONOVERSIKT_TABS } from '~/lib/personoversikt/Personoversikt';
 import { MeldekortbehandlingFormProvider } from '~/lib/meldekort/context/MeldekortUtfyllingFormContext';
 
