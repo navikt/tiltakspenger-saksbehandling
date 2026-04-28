@@ -1,0 +1,49 @@
+import { Button } from '@navikt/ds-react';
+import { useLagreBehandling } from '~/lib/behandling/felles/send-og-godkjenn/lagre/useLagreBehandling';
+import { useBehandling } from '~/lib/behandling/context/BehandlingContext';
+
+import { Nullable } from '~/types/UtilTypes';
+import { FetcherError } from '~/utils/fetch/fetch';
+import { Rammebehandling, OppdaterBehandlingDTO } from '~/types/Rammebehandling';
+
+type Props = {
+    behandling: Rammebehandling;
+    hentVedtakDTO: () => Nullable<OppdaterBehandlingDTO>;
+    onSuccess?: () => void;
+    onError?: (error: FetcherError) => void;
+};
+
+export const BehandlingLagreKnapp = ({ behandling, hentVedtakDTO, onSuccess, onError }: Props) => {
+    const { setBehandling } = useBehandling();
+    const { lagreBehandling, lagreBehandlingLaster } = useLagreBehandling({
+        behandling,
+        options: {
+            onSuccess,
+            onError,
+        },
+    });
+
+    return (
+        <Button
+            size={'medium'}
+            variant={'secondary'}
+            type={'button'}
+            loading={lagreBehandlingLaster}
+            onClick={() => {
+                const vedtakDto = hentVedtakDTO();
+
+                if (!vedtakDto) {
+                    return;
+                }
+
+                lagreBehandling(vedtakDto).then((behandling) => {
+                    if (behandling) {
+                        setBehandling(behandling);
+                    }
+                });
+            }}
+        >
+            {'Lagre'}
+        </Button>
+    );
+};

@@ -4,7 +4,7 @@ import React, { ReactElement, ReactNode } from 'react';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { SWRConfig } from 'swr';
-import { InternDekoratør } from '~/components/interndekoratør/InternDekoratør';
+import { InternDekoratør } from '~/lib/interndekoratør/InternDekoratør';
 import { FeatureTogglesProvider } from '~/context/feature-toggles/FeatureTogglesContext';
 import { SaksbehandlerProvider } from '~/context/saksbehandler/SaksbehandlerContext';
 import { ConfigProvider } from '~/context/ConfigContext';

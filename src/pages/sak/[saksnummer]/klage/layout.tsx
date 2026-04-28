@@ -2,7 +2,7 @@ import { createContext, ReactElement, useContext, useEffect, useState } from 're
 import { SakProps } from '~/types/Sak';
 import useSWR from 'swr';
 import NextError from 'next/error';
-import { PersonaliaHeader } from '~/components/personaliaheader/PersonaliaHeader';
+import { PersonaliaHeader } from '~/lib/personaliaheader/PersonaliaHeader';
 import styles from './Layout.module.css';
 import { BodyShort, Box, Heading, HStack, Loader, Tabs, Tag, VStack } from '@navikt/ds-react';
 import { Klagebehandling, KlagebehandlingStatus } from '~/types/Klage';
@@ -18,11 +18,11 @@ import {
 } from '~/utils/tekstformateringUtils';
 import { formaterTidspunkt } from '~/utils/date';
 import { fetchJsonFraApiClientSide } from '~/utils/fetch/fetch';
-import AvbruttOppsummering from '~/components/oppsummeringer/oppsummeringAvAvbrutt/OppsummeringAvAvbrutt';
-import OppsummeringAvVentestatus from '~/components/oppsummeringer/ventestatus/OppsummeringAvVentestatus';
+import AvbruttOppsummering from '~/lib/oppsummeringer/oppsummeringAvAvbrutt/OppsummeringAvAvbrutt';
+import OppsummeringAvVentestatus from '~/lib/oppsummeringer/ventestatus/OppsummeringAvVentestatus';
 import { hentSisteKlagehendelseUtfallFraKlagebehandling } from '~/utils/klageUtils';
 import { klagehendelseUtfallTilTag } from '~/utils/KlageinstanshendelseUtils';
-import { OppsummeringsPar } from '~/components/oppsummeringer/oppsummeringspar/OppsummeringsPar';
+import { OppsummeringsPar } from '~/lib/oppsummeringer/oppsummeringspar/OppsummeringsPar';
 
 type Props = {
     children: ReactElement;

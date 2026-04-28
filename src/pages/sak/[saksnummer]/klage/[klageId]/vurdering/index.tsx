@@ -12,18 +12,18 @@ import { fetchSak } from '~/utils/fetch/fetch-server';
 import { KlageSteg } from '~/utils/KlageLayoutUtils';
 import KlageLayout, { KlageProvider, useKlage } from '../../layout';
 import { useForm } from 'react-hook-form';
-import VurderingForm from '~/components/forms/klage-vurdering/VurderingForm';
+import VurderingForm from '~/lib/forms/klage-vurdering/VurderingForm';
 import {
     harKlagevurderingsstegUtfylt,
     klagebehandlingTilVurderingFormData,
     VurderingFormData,
     vurderingFormDataTilVurderKlageRequest,
     vurderingFormValidation,
-} from '~/components/forms/klage-vurdering/VurderingFormUtils';
+} from '~/lib/forms/klage-vurdering/VurderingFormUtils';
 import { BodyShort, Button, Heading, HStack, InfoCard, LocalAlert, VStack } from '@navikt/ds-react';
 import { CheckmarkCircleIcon, PencilIcon, TrashIcon } from '@navikt/aksel-icons';
-import { useAvbrytKlagebehandling, useVurderKlage } from '~/components/klage/api/KlageApi';
-import WarningCircleIcon from '~/components/icons/WarningCircleIcon';
+import { useAvbrytKlagebehandling, useVurderKlage } from '~/lib/klage/api/KlageApi';
+import WarningCircleIcon from '~/lib/icons/WarningCircleIcon';
 import router from 'next/router';
 import {
     erKlageAvsluttet,
@@ -33,7 +33,7 @@ import {
     finnSisteGyldigeStegForKlage,
     kanBehandleKlage,
 } from '~/utils/klageUtils';
-import AvsluttBehandlingModal from '~/components/modaler/AvsluttBehandlingModal';
+import AvsluttBehandlingModal from '~/lib/modaler/AvsluttBehandlingModal';
 import styles from './index.module.css';
 import Link from 'next/link';
 import { Søknad } from '~/types/Søknad';
@@ -42,7 +42,7 @@ import { Rammebehandling } from '~/types/Rammebehandling';
 import { Nullable } from '~/types/UtilTypes';
 import { erRammebehandlingUnderAktivOmgjøring } from '~/utils/behandling';
 import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
-import Omgjøringsresultat from '~/components/klage/Omgjøringsresultat';
+import Omgjøringsresultat from '~/lib/klage/Omgjøringsresultat';
 
 type Props = {
     sak: SakProps;

@@ -16,15 +16,15 @@ import {
 import KlageLayout, { KlageProvider, useKlage } from '../../layout';
 import { KlageSteg } from '../../../../../../utils/KlageLayoutUtils';
 import { CheckmarkCircleIcon, EnvelopeOpenIcon } from '@navikt/aksel-icons';
-import WarningCircleIcon from '~/components/icons/WarningCircleIcon';
+import WarningCircleIcon from '~/lib/icons/WarningCircleIcon';
 import {
     BrevFormData,
     brevFormDataTilForhåndsvisBrevKlageRequest,
     brevFormDataTilLagreBrevtekstKlageRequest,
     brevFormValidation,
     klageTilBrevFormData,
-} from '~/components/forms/brev/BrevFormUtils';
-import BrevForm from '~/components/forms/brev/BrevForm';
+} from '~/lib/forms/brev/BrevFormUtils';
+import BrevForm from '~/lib/forms/brev/BrevForm';
 import styles from './index.module.css';
 
 import {
@@ -39,7 +39,7 @@ import {
     useIverksettKlage,
     useLagreKlagebrev,
     useOpprettholdKlage,
-} from '~/components/klage/api/KlageApi';
+} from '~/lib/klage/api/KlageApi';
 import { Rammevedtak } from '~/types/Rammevedtak';
 import { Nullable } from '~/types/UtilTypes';
 import Link from 'next/link';

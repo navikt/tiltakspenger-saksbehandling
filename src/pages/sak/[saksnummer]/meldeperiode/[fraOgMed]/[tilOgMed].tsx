@@ -2,9 +2,9 @@ import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
 import { MeldeperiodeKjedeProps } from '~/types/meldekort/Meldeperiode';
 import { SakProps } from '~/types/Sak';
 import { fetchSak } from '~/utils/fetch/fetch-server';
-import { MeldekortSide } from '~/components/meldekort/MeldekortSide';
+import { MeldekortSide } from '~/lib/meldekort/MeldekortSide';
 import { SakProvider } from '~/context/sak/SakContext';
-import { MeldeperiodeKjedeProvider } from '~/components/meldekort/context/MeldeperiodeKjedeContext';
+import { MeldeperiodeKjedeProvider } from '~/lib/meldekort/context/MeldeperiodeKjedeContext';
 import { Periode } from '~/types/Periode';
 import { perioderErLike } from '~/utils/periode';
 

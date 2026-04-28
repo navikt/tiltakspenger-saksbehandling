@@ -9,16 +9,16 @@ import { fetchSak } from '~/utils/fetch/fetch-server';
 import { logger } from '@navikt/next-logger';
 import { SakProps } from '~/types/Sak';
 import router from 'next/router';
-import FormkravForm from '~/components/forms/formkrav/FormkravForm';
+import FormkravForm from '~/lib/forms/formkrav/FormkravForm';
 import {
     FormkravFormData,
     formkravFormDataTilOpprettKlageRequest,
     formkravValidation,
-} from '~/components/forms/formkrav/FormkravFormUtils';
+} from '~/lib/forms/formkrav/FormkravFormUtils';
 import { KlageSteg } from '../../../../../utils/KlageLayoutUtils';
-import WarningCircleIcon from '~/components/icons/WarningCircleIcon';
-import { useHentPersonopplysninger } from '~/components/personaliaheader/useHentPersonopplysninger';
-import { useOpprettKlage } from '~/components/klage/api/KlageApi';
+import WarningCircleIcon from '~/lib/icons/WarningCircleIcon';
+import { useHentPersonopplysninger } from '~/lib/personaliaheader/useHentPersonopplysninger';
+import { useOpprettKlage } from '~/lib/klage/api/KlageApi';
 import styles from './index.module.css';
 import { MeldekortVedtak } from '~/types/meldekort/MeldekortVedtak';
 import { MeldekortbehandlingProps } from '~/types/meldekort/Meldekortbehandling';

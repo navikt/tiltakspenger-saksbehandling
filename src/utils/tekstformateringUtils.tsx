@@ -16,7 +16,7 @@ import { Behandlingsårsak, Søknadstype } from '~/types/Søknad';
 import {
     SøknadBehandlingsårsakManueltRegistrertSøknad,
     SøknadstypeManueltRegistrertSøknad,
-} from '~/components/manuell-søknad/ManueltRegistrertSøknad';
+} from '~/lib/manuell-søknad/ManueltRegistrertSøknad';
 import { KlagebehandlingResultat, KlagebehandlingStatus, OmgjøringÅrsak } from '~/types/Klage';
 
 export const finnBehandlingStatusTag = (

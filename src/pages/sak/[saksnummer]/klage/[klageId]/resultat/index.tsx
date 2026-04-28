@@ -24,7 +24,7 @@ import {
 import { Rammebehandling } from '~/types/Rammebehandling';
 import { Nullable } from '~/types/UtilTypes';
 import { behandlingUrl } from '~/utils/urls';
-import { VelgOmgjøringsbehandlingModal } from '~/components/forms/velg-omgjøringsbehandling/VelgOmgjøringsbehandlingForm';
+import { VelgOmgjøringsbehandlingModal } from '~/lib/forms/velg-omgjøringsbehandling/VelgOmgjøringsbehandlingForm';
 import { Søknad } from '~/types/Søknad';
 import { Rammevedtak } from '~/types/Rammevedtak';
 import Link from 'next/link';
@@ -37,18 +37,18 @@ import {
     PaperplaneIcon,
     PersonHeadsetIcon,
 } from '@navikt/aksel-icons';
-import WarningCircleIcon from '~/components/icons/WarningCircleIcon';
+import WarningCircleIcon from '~/lib/icons/WarningCircleIcon';
 import { formaterTidspunkt } from '~/utils/date';
 import {
     erKlageinstanshendelseAvsluttet,
     skalKunneOppretteNyRammebehandling,
 } from '~/utils/KlageinstanshendelseUtils';
 import styles from './index.module.css';
-import OppsummeringAvKlageinstanshendelser from '~/components/oppsummeringer/klage/oppsummeringAvKlageinstanshendelser/OppsummeringAvKlageinstanshendelser';
+import OppsummeringAvKlageinstanshendelser from '~/lib/oppsummeringer/klage/oppsummeringAvKlageinstanshendelser/OppsummeringAvKlageinstanshendelser';
 import { KlageHendelseKlagebehandlingAvsluttetUtfall } from '~/types/Klageinstanshendelse';
-import FerdigstillKlageModalWrapper from '~/components/modaler/FerdigstillKlagebehandlingModal';
-import Omgjøringsresultat from '~/components/klage/Omgjøringsresultat';
-import KlageTilknyttedeBehandlingerInfoCard from '~/components/klage/KlageTilknyttedeBehandlingerInfoCard';
+import FerdigstillKlageModalWrapper from '~/lib/modaler/FerdigstillKlagebehandlingModal';
+import Omgjøringsresultat from '~/lib/klage/Omgjøringsresultat';
+import KlageTilknyttedeBehandlingerInfoCard from '~/lib/klage/KlageTilknyttedeBehandlingerInfoCard';
 
 type Props = {
     sak: SakProps;

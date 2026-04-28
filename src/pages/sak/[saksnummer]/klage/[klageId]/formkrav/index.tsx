@@ -9,25 +9,25 @@ import { fetchSak } from '~/utils/fetch/fetch-server';
 import { logger } from '@navikt/next-logger';
 import { SakProps } from '~/types/Sak';
 import router from 'next/router';
-import FormkravForm from '~/components/forms/formkrav/FormkravForm';
+import FormkravForm from '~/lib/forms/formkrav/FormkravForm';
 import {
     FormkravFormData,
     formkravFormDataTilOppdaterKlageFormkravRequest,
     formkravValidation,
     klageTilFormkravFormData,
-} from '~/components/forms/formkrav/FormkravFormUtils';
+} from '~/lib/forms/formkrav/FormkravFormUtils';
 import { Klagebehandling, KlageId } from '~/types/Klage';
 import KlageLayout, { KlageProvider, useKlage } from '../../layout';
 import { finnNesteKlageSteg, KlageSteg } from '../../../../../../utils/KlageLayoutUtils';
 import { CheckmarkCircleIcon, PencilIcon, TrashIcon } from '@navikt/aksel-icons';
-import { useHentPersonopplysninger } from '~/components/personaliaheader/useHentPersonopplysninger';
+import { useHentPersonopplysninger } from '~/lib/personaliaheader/useHentPersonopplysninger';
 import {
     harKlageEnÅpenRammebehandling,
     erKlageOmgjøring,
     kanBehandleKlage,
 } from '~/utils/klageUtils';
-import { useAvbrytKlagebehandling, useOppdaterFormkrav } from '~/components/klage/api/KlageApi';
-import AvsluttBehandlingModal from '~/components/modaler/AvsluttBehandlingModal';
+import { useAvbrytKlagebehandling, useOppdaterFormkrav } from '~/lib/klage/api/KlageApi';
+import AvsluttBehandlingModal from '~/lib/modaler/AvsluttBehandlingModal';
 import { Nullable } from '~/types/UtilTypes';
 import { erRammebehandlingUnderAktivOmgjøring } from '~/utils/behandling';
 import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
