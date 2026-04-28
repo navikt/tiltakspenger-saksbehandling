@@ -119,8 +119,8 @@ const KlageLayout = ({ children, saksnummer, activeTab }: Props) => {
                 {klage?.status === KlagebehandlingStatus.AVBRUTT && (
                     <AvbruttOppsummering avbrutt={klage.avbrutt!} />
                 )}
-                {klage?.ventestatus?.erSattPåVent && (
-                    <OppsummeringAvVentestatus ventestatus={klage.ventestatus} />
+                {klage?.ventestatus?.at(-1)?.erSattPåVent && (
+                    <OppsummeringAvVentestatus ventestatus={klage.ventestatus.at(-1)!} />
                 )}
                 {klage?.resultat?.begrunnelseFerdigstilling && (
                     <Box className={classNames(styles.box)}>

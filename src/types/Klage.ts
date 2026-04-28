@@ -43,7 +43,7 @@ export interface Klagebehandling {
     avbrutt: Nullable<Avbrutt>;
     kanIverksetteVedtak: Nullable<boolean>;
     kanIverksetteOpprettholdelse: boolean;
-    ventestatus: Nullable<VentestatusHendelse>;
+    ventestatus: VentestatusHendelse[];
     formkrav: KlageFormkrav;
     tilknyttedeRammebehandlingIder: BehandlingId[];
     åpenRammebehandlingId: Nullable<BehandlingId>;

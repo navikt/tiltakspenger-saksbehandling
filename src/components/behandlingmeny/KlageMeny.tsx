@@ -154,7 +154,7 @@ const KlageMeny = (props: {
                                     Tildel meg
                                 </ActionMenu.Item>
 
-                                {props.klage.ventestatus?.erSattPåVent && (
+                                {props.klage.ventestatus.at(-1)?.erSattPåVent && (
                                     <ActionMenu.Item
                                         icon={<PlayIcon aria-hidden />}
                                         onClick={() => {
@@ -180,7 +180,7 @@ const KlageMeny = (props: {
                                     Legg tilbake
                                 </ActionMenu.Item>
 
-                                {props.klage.ventestatus?.erSattPåVent ? (
+                                {props.klage.ventestatus.at(-1)?.erSattPåVent ? (
                                     <ActionMenu.Item
                                         icon={<PlayIcon aria-hidden />}
                                         onClick={() => {

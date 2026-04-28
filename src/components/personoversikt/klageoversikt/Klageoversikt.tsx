@@ -65,7 +65,7 @@ const Klageoversikt = (props: {
             const utfall = hentSisteKlagehendelseUtfallFraKlagebehandling(klagebehandling);
 
             return {
-                status: klagebehandling.ventestatus?.erSattPåVent ? (
+                status: klagebehandling.ventestatus.at(-1)?.erSattPåVent ? (
                     <Tag data-color="warning">Satt på vent</Tag>
                 ) : (
                     klagebehandlingStatusTilTag({ status: klagebehandling.status })
