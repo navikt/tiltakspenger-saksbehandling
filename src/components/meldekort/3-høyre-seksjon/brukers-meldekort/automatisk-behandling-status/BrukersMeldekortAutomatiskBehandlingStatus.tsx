@@ -31,7 +31,7 @@ export const BrukersMeldekortAutomatiskBehandlingStatus = ({ meldekort }: Props)
 
     return (
         <Alert variant={alertVariant[metaStatus]} size={'small'} inline={true}>
-            {metaTekst && <BodyShort size={'small'}>{metaTekst}</BodyShort>}
+            {metaTekst && <BodyShort size={'small'}>{`${metaTekst}: `}</BodyShort>}
             <BodyShort size={'small'} spacing={true} weight={'semibold'}>
                 {statusTekst}
             </BodyShort>

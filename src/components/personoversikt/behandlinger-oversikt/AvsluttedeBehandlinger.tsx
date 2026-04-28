@@ -1,9 +1,6 @@
-import { Box } from '@navikt/ds-react';
 import { AvbruttBehandlingCellInfo } from './AvsluttedeBehandlingerUtils';
 import { AvbrutteBehandlingerTabell } from './AvbrutteBehandlingerTabell';
 import { Rammebehandling } from '~/types/Rammebehandling';
-
-import styles from '../Personoversikt.module.css';
 import { Klagebehandling, KlagebehandlingResultat } from '~/types/Klage';
 
 export const AvsluttedeBehandlinger = (props: {
@@ -29,12 +26,10 @@ export const AvsluttedeBehandlinger = (props: {
     }
 
     return (
-        <Box className={styles.panel}>
-            <AvbrutteBehandlingerTabell
-                avbrutteBehandlinger={avbrutteBehandlinger}
-                saksnummer={props.saksnummer}
-            />
-        </Box>
+        <AvbrutteBehandlingerTabell
+            avbrutteBehandlinger={avbrutteBehandlinger}
+            saksnummer={props.saksnummer}
+        />
     );
 };
 
