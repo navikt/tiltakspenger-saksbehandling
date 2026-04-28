@@ -22,8 +22,8 @@ import {
 } from '~/components/forms/klage-vurdering/VurderingFormUtils';
 import { BodyShort, Button, Heading, HStack, InfoCard, LocalAlert, VStack } from '@navikt/ds-react';
 import { CheckmarkCircleIcon, PencilIcon, TrashIcon } from '@navikt/aksel-icons';
-import { useAvbrytKlagebehandling, useVurderKlage } from '~/api/KlageApi';
-import WarningCircleIcon from '~/icons/WarningCircleIcon';
+import { useAvbrytKlagebehandling, useVurderKlage } from '~/components/klage/api/KlageApi';
+import WarningCircleIcon from '~/components/icons/WarningCircleIcon';
 import router from 'next/router';
 import {
     erKlageAvsluttet,

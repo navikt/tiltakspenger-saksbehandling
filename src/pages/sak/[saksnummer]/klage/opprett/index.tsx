@@ -16,9 +16,9 @@ import {
     formkravValidation,
 } from '~/components/forms/formkrav/FormkravFormUtils';
 import { KlageSteg } from '../../../../../utils/KlageLayoutUtils';
-import WarningCircleIcon from '~/icons/WarningCircleIcon';
+import WarningCircleIcon from '~/components/icons/WarningCircleIcon';
 import { useHentPersonopplysninger } from '~/components/personaliaheader/useHentPersonopplysninger';
-import { useOpprettKlage } from '~/api/KlageApi';
+import { useOpprettKlage } from '~/components/klage/api/KlageApi';
 import styles from './index.module.css';
 import { MeldekortVedtak } from '~/types/meldekort/MeldekortVedtak';
 import { MeldekortbehandlingProps } from '~/types/meldekort/Meldekortbehandling';

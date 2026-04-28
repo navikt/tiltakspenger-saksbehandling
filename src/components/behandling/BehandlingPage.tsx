@@ -7,7 +7,7 @@ import { PersonaliaHeader } from '../personaliaheader/PersonaliaHeader';
 import { Alert, VStack } from '@navikt/ds-react';
 import { finnBehandlingStatusTag } from '~/utils/tekstformateringUtils';
 import AvbruttOppsummering from '../oppsummeringer/oppsummeringAvAvbrutt/OppsummeringAvAvbrutt';
-import SideBarMain from '../../layouts/sidebar-main/SideBarMain';
+import SideBarMain from '~/components/layouts/sidebar-main/SideBarMain';
 import { Tidslinjer } from '~/components/tidslinjer/Tidslinjer';
 import { useSak } from '~/context/sak/SakContext';
 import OppsummeringAvVentestatus from '~/components/oppsummeringer/ventestatus/OppsummeringAvVentestatus';

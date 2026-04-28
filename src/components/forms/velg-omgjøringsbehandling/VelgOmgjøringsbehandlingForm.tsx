@@ -9,7 +9,7 @@ import {
     velgOmgjøringsbehandlingFormValidation,
     VelgOmgjøringsbehandlingTyper,
 } from './VelgOmgjøringsbehandlingFormUtils';
-import { useOpprettRammebehandlingForKlage } from '~/api/KlageApi';
+import { useOpprettRammebehandlingForKlage } from '~/components/klage/api/KlageApi';
 import router from 'next/router';
 import { behandlingUrl } from '~/utils/urls';
 import { KlageId } from '~/types/Klage';

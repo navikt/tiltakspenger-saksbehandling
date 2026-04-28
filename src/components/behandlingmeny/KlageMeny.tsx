@@ -26,7 +26,7 @@ import {
     useOvertaKlagebehandling,
     useSettKlagebehandlingPåVent,
     useTaKlagebehandling,
-} from '~/api/KlageApi';
+} from '~/components/klage/api/KlageApi';
 import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
 import OvertabehandlingModal from './OvertaBehandlingModal';
 import SettBehandlingPåVentModal from '../modaler/SettBehandlingPåVentModal';

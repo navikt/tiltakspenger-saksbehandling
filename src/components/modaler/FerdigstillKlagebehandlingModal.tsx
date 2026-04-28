@@ -1,7 +1,7 @@
 import { Button, Modal, Heading, Textarea, VStack, LocalAlert, HStack } from '@navikt/ds-react';
 import router from 'next/router';
 import { useState } from 'react';
-import { useFerdigstillKlage } from '~/api/KlageApi';
+import { useFerdigstillKlage } from '~/components/klage/api/KlageApi';
 import { KlageId } from '~/types/Klage';
 import { SakId } from '~/types/Sak';
 

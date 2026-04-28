@@ -37,7 +37,7 @@ import {
     PaperplaneIcon,
     PersonHeadsetIcon,
 } from '@navikt/aksel-icons';
-import WarningCircleIcon from '~/icons/WarningCircleIcon';
+import WarningCircleIcon from '~/components/icons/WarningCircleIcon';
 import { formaterTidspunkt } from '~/utils/date';
 import {
     erKlageinstanshendelseAvsluttet,

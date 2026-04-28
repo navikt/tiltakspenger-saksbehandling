@@ -26,7 +26,7 @@ import {
     erKlageOmgjøring,
     kanBehandleKlage,
 } from '~/utils/klageUtils';
-import { useAvbrytKlagebehandling, useOppdaterFormkrav } from '~/api/KlageApi';
+import { useAvbrytKlagebehandling, useOppdaterFormkrav } from '~/components/klage/api/KlageApi';
 import AvsluttBehandlingModal from '~/components/modaler/AvsluttBehandlingModal';
 import { Nullable } from '~/types/UtilTypes';
 import { erRammebehandlingUnderAktivOmgjøring } from '~/utils/behandling';

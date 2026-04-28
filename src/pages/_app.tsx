@@ -1,4 +1,4 @@
-import '../styles/global.css';
+import '../global.css';
 
 import React, { ReactElement, ReactNode } from 'react';
 import { AppProps } from 'next/app';

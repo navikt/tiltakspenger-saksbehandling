@@ -10,7 +10,7 @@ import { omgjøringsårsakTilText } from '~/utils/tekstformateringUtils';
 import { OppsummeringsPar } from '../../oppsummeringspar/OppsummeringsPar';
 import { erKlageOmgjøring, erKlageOpprettholdelse } from '~/utils/klageUtils';
 import OppsummeringAvKlageinstanshendelser from '../oppsummeringAvKlageinstanshendelser/OppsummeringAvKlageinstanshendelser';
-import { useVisInnstillingsbrevKlagebehandling } from '~/api/KlageApi';
+import { useVisInnstillingsbrevKlagebehandling } from '~/components/klage/api/KlageApi';
 
 const OppsummeringAvKlageForRammebehandling = () => {
     const { behandling, klagebehandling } = useBehandling();
