@@ -9,14 +9,14 @@ import { fetchSak } from '~/utils/fetch/fetch-server';
 import { logger } from '@navikt/next-logger';
 import { SakProps } from '~/types/Sak';
 import router from 'next/router';
-import FormkravForm from '~/lib/forms/formkrav/FormkravForm';
+import FormkravForm from '~/lib/klage/forms/formkrav/FormkravForm';
 import {
     FormkravFormData,
     formkravFormDataTilOpprettKlageRequest,
     formkravValidation,
-} from '~/lib/forms/formkrav/FormkravFormUtils';
+} from '~/lib/klage/forms/formkrav/FormkravFormUtils';
 import { KlageSteg } from '../../../../../utils/KlageLayoutUtils';
-import WarningCircleIcon from '~/lib/icons/WarningCircleIcon';
+import WarningCircleIcon from '~/lib/_felles/icons/WarningCircleIcon';
 import { useHentPersonopplysninger } from '~/lib/personaliaheader/useHentPersonopplysninger';
 import { useOpprettKlage } from '~/lib/klage/api/KlageApi';
 import styles from './index.module.css';

@@ -12,7 +12,7 @@ import {
 } from '@navikt/ds-react';
 import { LeaveIcon } from '@navikt/aksel-icons';
 import { useHentSakForFNR } from './useHentSakForFNR';
-import Varsel from '../varsel/Varsel';
+import Varsel from '~/lib/_felles/varsel/Varsel';
 import Link from 'next/link';
 import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
 import router from 'next/router';

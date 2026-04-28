@@ -1,5 +1,5 @@
 import { Alert } from '@navikt/ds-react';
-import { Separator } from '~/lib/separator/Separator';
+import { Separator } from '~/lib/_felles/separator/Separator';
 import { BehandlingBeregningOgSimulering } from '../../felles/beregning-og-simulering/BehandlingBeregningOgSimulering';
 import { useRevurderingBehandling, useRevurderingOmgjøring } from '../../context/BehandlingContext';
 import { hentTiltaksdeltakelserMedStartOgSluttdato } from '~/utils/behandling';

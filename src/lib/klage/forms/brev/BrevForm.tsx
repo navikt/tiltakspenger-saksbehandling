@@ -4,7 +4,7 @@ import { Button, TextField, Label, HStack, VStack, BodyShort, Textarea } from '@
 
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import styles from './BrevForm.module.css';
-import { Separator } from '~/lib/separator/Separator';
+import { Separator } from '~/lib/_felles/separator/Separator';
 
 const BrevForm = (props: {
     control: Control<BrevFormData>;

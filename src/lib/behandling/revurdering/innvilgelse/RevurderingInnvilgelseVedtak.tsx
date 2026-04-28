@@ -1,5 +1,5 @@
 import { Alert, Heading } from '@navikt/ds-react';
-import { Separator } from '~/lib/separator/Separator';
+import { Separator } from '~/lib/_felles/separator/Separator';
 import { RevurderingInnvilgelseBrev } from '~/lib/behandling/revurdering/innvilgelse/brev/RevurderingInnvilgelseBrev';
 import { RevurderingInnvilgelseSend } from '~/lib/behandling/revurdering/innvilgelse/send-og-godkjenn/RevurderingInnvilgelseSend';
 import { BehandlingBeregningOgSimulering } from '~/lib/behandling/felles/beregning-og-simulering/BehandlingBeregningOgSimulering';

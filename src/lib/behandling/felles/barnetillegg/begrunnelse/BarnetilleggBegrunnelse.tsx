@@ -1,8 +1,8 @@
 import { VedtakSeksjon } from '~/lib/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { VedtakHjelpetekst } from '~/lib/behandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
-import { TekstListe } from '../../../../liste/TekstListe';
+import { TekstListe } from '~/lib/_felles/liste/TekstListe';
 import { BodyLong, Heading } from '@navikt/ds-react';
-import { FritekstInput } from '~/lib/fritekst/FritekstInput';
+import { FritekstInput } from '~/lib/_felles/fritekst/FritekstInput';
 import { useBehandlingSkjema } from '~/lib/behandling/context/BehandlingSkjemaContext';
 
 import style from './BarnetilleggBegrunnelse.module.css';

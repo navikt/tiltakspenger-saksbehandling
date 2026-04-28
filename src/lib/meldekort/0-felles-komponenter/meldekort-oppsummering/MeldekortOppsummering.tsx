@@ -4,7 +4,7 @@ import { MeldekortbehandlingProps } from '~/types/meldekort/Meldekortbehandling'
 import { MeldekortUker } from '../uker/MeldekortUker';
 import { MeldekortBegrunnelse } from '../begrunnelse/MeldekortBegrunnelse';
 import { MeldekortBeregningOgSimulering } from '~/lib/meldekort/0-felles-komponenter/beregning-simulering/MeldekortBeregningOgSimulering';
-import Divider from '~/lib/divider/Divider';
+import Divider from '~/lib/_felles/divider/Divider';
 import { useFetchBlobFraApi } from '~/utils/fetch/useFetchFraApi';
 import { ForhåndsvisMeldekortbehandlingBrevRequest } from '../../2-hovedseksjon/behandling/utfylling/meldekortUtfyllingUtils';
 import styles from './MeldekortOppsummering.module.css';

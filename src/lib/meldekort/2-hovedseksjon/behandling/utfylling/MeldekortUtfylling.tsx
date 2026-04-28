@@ -29,7 +29,7 @@ import { MeldekortBegrunnelse } from '../../../0-felles-komponenter/begrunnelse/
 import AvsluttMeldekortbehandling from '~/lib/personoversikt/meldekort-oversikt/avsluttMeldekortbehandling/AvsluttMeldekortbehandling';
 import { meldeperiodeUrl } from '~/utils/urls';
 import { MeldekortBeregningOgSimulering } from '~/lib/meldekort/0-felles-komponenter/beregning-simulering/MeldekortBeregningOgSimulering';
-import Divider from '~/lib/divider/Divider';
+import Divider from '~/lib/_felles/divider/Divider';
 import { useFetchBlobFraApi, useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { hookFormErrorsTilFeiloppsummering } from '~/utils/validering';
 import { Nullable } from '~/types/UtilTypes';

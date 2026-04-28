@@ -11,7 +11,7 @@ import {
 import { useSaksbehandler } from '~/context/saksbehandler/SaksbehandlerContext';
 
 import style from './Meldekortbehandling.module.css';
-import Divider from '~/lib/divider/Divider';
+import Divider from '~/lib/_felles/divider/Divider';
 
 type Props = {
     meldekortbehandling: MeldekortbehandlingProps;

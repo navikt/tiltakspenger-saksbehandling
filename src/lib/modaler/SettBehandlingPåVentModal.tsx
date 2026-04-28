@@ -6,7 +6,7 @@ import styles from './AvsluttBehandlingModal.module.css';
 
 import { Nullable } from '~/types/UtilTypes';
 import { FetcherError } from '~/utils/fetch/fetch';
-import { Datovelger } from '~/lib/datovelger/Datovelger';
+import { Datovelger } from '~/lib/_felles/datovelger/Datovelger';
 import { dateTilISOTekst, datoTilDatoInputText } from '~/utils/date';
 
 const SettBehandlingPåVentModal = (props: {

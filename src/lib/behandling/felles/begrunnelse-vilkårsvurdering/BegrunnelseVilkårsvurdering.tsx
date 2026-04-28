@@ -3,8 +3,8 @@ import { ParagraphIcon, TasklistIcon } from '@navikt/aksel-icons';
 import { FunctionComponent, ReactNode } from 'react';
 import { VedtakSeksjon } from '~/lib/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { VedtakHjelpetekst } from '~/lib/behandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
-import { FritekstInput } from '~/lib/fritekst/FritekstInput';
-import { TekstListe } from '../../../liste/TekstListe';
+import { FritekstInput } from '~/lib/_felles/fritekst/FritekstInput';
+import { TekstListe } from '~/lib/_felles/liste/TekstListe';
 import { useBehandling } from '~/lib/behandling/context/BehandlingContext';
 import { useBehandlingSkjema } from '~/lib/behandling/context/BehandlingSkjemaContext';
 

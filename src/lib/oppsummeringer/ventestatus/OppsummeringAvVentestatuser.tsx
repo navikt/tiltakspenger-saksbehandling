@@ -2,7 +2,7 @@ import { VentestatusHendelse } from '~/types/Ventestatus';
 import OppsummeringAvVentestatus from './OppsummeringAvVentestatus';
 import { Button, Heading, Modal } from '@navikt/ds-react';
 import { useState } from 'react';
-import { Separator } from '~/lib/separator/Separator';
+import { Separator } from '~/lib/_felles/separator/Separator';
 import styles from './OppsummeringAvVentestatuser.module.css';
 
 export const OppsummeringAvVentestatuserModal = (props: {

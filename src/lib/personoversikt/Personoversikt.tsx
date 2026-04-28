@@ -9,7 +9,7 @@ import { AvsluttedeBehandlinger } from './behandlinger-oversikt/AvsluttedeBehand
 import { MeldeperiodeKjedeStatus } from '~/types/meldekort/Meldeperiode';
 import { MeldekortOversiktIkkeKlar } from './meldekort-oversikt/ikke-klar/MeldekortOversiktIkkeKlar';
 import { VedtatteBehandlinger } from '~/lib/personoversikt/behandlinger-oversikt/vedtatte-behandlinger/VedtatteBehandlinger';
-import NotificationBanner from '../notificationBanner/NotificationBanner';
+import NotificationBanner from '~/lib/_felles/notificationBanner/NotificationBanner';
 import MeldekortHelgToggle from '../toggles/MeldekortHelgToggle';
 import {
     Rammebehandling,
@@ -30,7 +30,7 @@ import {
     InboxIcon,
     TasklistSaveIcon,
 } from '@navikt/aksel-icons';
-import Divider from '~/lib/divider/Divider';
+import Divider from '~/lib/_felles/divider/Divider';
 import { useEffect, useState } from 'react';
 import { OpprettSøknadModal } from '~/lib/personoversikt/manuell-søknad/OpprettSøknadModal';
 import { KlagebehandlingStatus, KlagevedtakMedBehandling } from '~/types/Klage';

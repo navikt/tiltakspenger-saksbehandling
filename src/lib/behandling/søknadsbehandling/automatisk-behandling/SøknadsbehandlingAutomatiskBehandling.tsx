@@ -2,7 +2,7 @@ import { useSøknadsbehandling } from '~/lib/behandling/context/BehandlingContex
 import { Alert } from '@navikt/ds-react';
 import React from 'react';
 import style from './SøknadsbehandlingAutomatiskBehandling.module.css';
-import { TekstListe } from '~/lib/liste/TekstListe';
+import { TekstListe } from '~/lib/_felles/liste/TekstListe';
 import { manueltBehandlesGrunnTekst } from '~/utils/tekstformateringUtils';
 
 export const SøknadsbehandlingAutomatiskBehandling = () => {

@@ -10,13 +10,13 @@ import {
 import { HStack, LocalAlert, Radio, RadioGroup, Select, VStack } from '@navikt/ds-react';
 import { Rammevedtak } from '~/types/Rammevedtak';
 import { Rammebehandling } from '~/types/Rammebehandling';
-import JournalpostId from '~/lib/journalpostId/JournalpostId';
+import JournalpostId from '~/lib/_felles/journalpostId/JournalpostId';
 import { Nullable } from '~/types/UtilTypes';
 import styles from './FormkravForm.module.css';
 import { formaterTidspunktKort, startOfDay, ukenummerFraDatotekst } from '~/utils/date';
 import { benkBehandlingstypeTekst } from '~/lib/benk/benkSideUtils';
 import { behandlingResultatTilText } from '~/utils/tekstformateringUtils';
-import { Datovelger } from '~/lib/datovelger/Datovelger';
+import { Datovelger } from '~/lib/_felles/datovelger/Datovelger';
 import dayjs from 'dayjs';
 import { MeldekortVedtak } from '~/types/meldekort/MeldekortVedtak';
 import { MeldekortbehandlingProps } from '~/types/meldekort/Meldekortbehandling';

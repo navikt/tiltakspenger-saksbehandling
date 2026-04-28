@@ -3,7 +3,7 @@ import { BodyShort, Heading, HStack, VStack } from '@navikt/ds-react';
 import { CheckmarkCircleFillIcon, ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
 
 import styles from './OppsummeringAvAttestering.module.css';
-import { formaterTidspunkt } from '../../utils/date';
+import { formaterTidspunkt } from '../../../utils/date';
 import { Attestering, Attesteringsstatus } from '~/types/Attestering';
 
 const OppsummeringAvAttesteringer = (props: { attesteringer: Attestering[] }) => {

@@ -1,6 +1,6 @@
 import { ValideringResultat } from '~/types/Validering';
 import { Alert, Heading, VStack } from '@navikt/ds-react';
-import { TekstListe } from '~/lib/liste/TekstListe';
+import { TekstListe } from '~/lib/_felles/liste/TekstListe';
 
 type Props = {
     resultat: ValideringResultat;

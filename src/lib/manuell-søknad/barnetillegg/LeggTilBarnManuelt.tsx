@@ -4,7 +4,7 @@ import { Button, Heading, HStack, TextField, VStack } from '@navikt/ds-react';
 import { PlusIcon } from '@navikt/aksel-icons';
 import { Controller, FieldPath, useFormContext, useWatch } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
-import { Datovelger } from '~/lib/datovelger/Datovelger';
+import { Datovelger } from '~/lib/_felles/datovelger/Datovelger';
 import { JaNeiSpørsmål } from '~/lib/manuell-søknad/JaNeiSpørsmål';
 import type { Barn, ManueltRegistrertSøknad } from '~/lib/manuell-søknad/ManueltRegistrertSøknad';
 import { dateTilISOTekst } from '~/utils/date';

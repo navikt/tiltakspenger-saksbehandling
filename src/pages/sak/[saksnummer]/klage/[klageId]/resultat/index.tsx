@@ -24,7 +24,7 @@ import {
 import { Rammebehandling } from '~/types/Rammebehandling';
 import { Nullable } from '~/types/UtilTypes';
 import { behandlingUrl } from '~/utils/urls';
-import { VelgOmgjøringsbehandlingModal } from '~/lib/forms/velg-omgjøringsbehandling/VelgOmgjøringsbehandlingForm';
+import { VelgOmgjøringsbehandlingModal } from '~/lib/klage/forms/velg-omgjøringsbehandling/VelgOmgjøringsbehandlingForm';
 import { Søknad } from '~/types/Søknad';
 import { Rammevedtak } from '~/types/Rammevedtak';
 import Link from 'next/link';
@@ -37,7 +37,7 @@ import {
     PaperplaneIcon,
     PersonHeadsetIcon,
 } from '@navikt/aksel-icons';
-import WarningCircleIcon from '~/lib/icons/WarningCircleIcon';
+import WarningCircleIcon from '~/lib/_felles/icons/WarningCircleIcon';
 import { formaterTidspunkt } from '~/utils/date';
 import {
     erKlageinstanshendelseAvsluttet,

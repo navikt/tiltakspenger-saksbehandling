@@ -4,7 +4,7 @@ import { useOppdaterSaksopplysninger } from './useOppdaterSaksopplysninger';
 import { useBehandling } from '../../context/BehandlingContext';
 import { useState } from 'react';
 import { classNames } from '~/utils/classNames';
-import Varsel from '../../../varsel/Varsel';
+import Varsel from '~/lib/_felles/varsel/Varsel';
 import { formaterTidspunktMedSekunder, periodeTilFormatertDatotekst } from '~/utils/date';
 import { SaksbehandlerRolle } from '~/types/Saksbehandler';
 

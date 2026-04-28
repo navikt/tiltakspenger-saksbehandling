@@ -7,7 +7,7 @@ import { PersonaliaHeader } from '../personaliaheader/PersonaliaHeader';
 import { Alert, VStack } from '@navikt/ds-react';
 import { finnBehandlingStatusTag } from '~/utils/tekstformateringUtils';
 import AvbruttOppsummering from '../oppsummeringer/oppsummeringAvAvbrutt/OppsummeringAvAvbrutt';
-import SideBarMain from '~/lib/layouts/sidebar-main/SideBarMain';
+import SideBarMain from '~/lib/_felles/layouts/sidebar-main/SideBarMain';
 import { Tidslinjer } from '~/lib/tidslinjer/Tidslinjer';
 import { useSak } from '~/context/sak/SakContext';
 import OppsummeringAvVentestatus from '~/lib/oppsummeringer/ventestatus/OppsummeringAvVentestatus';
@@ -17,7 +17,7 @@ import { PERSONOVERSIKT_TABS } from '~/lib/personoversikt/Personoversikt';
 import style from './BehandlingPage.module.css';
 import OppsummeringAvKlageForRammebehandling from '../oppsummeringer/klage/oppsummeringAvKlageForRammebehandling/OppsummeringAvKlageForRammebehandling';
 import { OppsummeringAvVentestatuserModal } from '../oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
-import { Separator } from '../separator/Separator';
+import { Separator } from '~/lib/_felles/separator/Separator';
 
 export const BehandlingPage = () => {
     const { sak } = useSak();

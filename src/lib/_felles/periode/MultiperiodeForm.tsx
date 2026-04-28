@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, HStack, VStack } from '@navikt/ds-react';
 import { MedPeriode } from '~/types/Periode';
 import { Nullable } from '~/types/UtilTypes';
-import { PeriodeVelger } from '~/lib/periode/PeriodeVelger';
+import { PeriodeVelger } from '~/lib/_felles/periode/PeriodeVelger';
 import { DateOrString, datoTilDatoInputText } from '~/utils/date';
 
 const MultiperiodeForm = <T extends MedPeriode[]>(props: {

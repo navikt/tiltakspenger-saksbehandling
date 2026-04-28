@@ -16,7 +16,11 @@ import {
 } from '~/utils/periode';
 import { BarnetilleggPeriode } from '~/types/Barnetillegg';
 import { XMarkIcon } from '@navikt/aksel-icons';
-import { Datovelger, DatovelgerProps, generateMatcherProps } from '~/lib/datovelger/Datovelger';
+import {
+    Datovelger,
+    DatovelgerProps,
+    generateMatcherProps,
+} from '~/lib/_felles/datovelger/Datovelger';
 import { dateTilISOTekst, datoTilDatoInputText } from '~/utils/date';
 import { classNames } from '~/utils/classNames';
 

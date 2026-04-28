@@ -1,6 +1,6 @@
 import { Heading } from '@navikt/ds-react';
 import { RevurderingStansSend } from './4-send/RevurderingStansSend';
-import { Separator } from '../../../separator/Separator';
+import { Separator } from '~/lib/_felles/separator/Separator';
 import { RevurderingStansResultat } from './1-resultat/RevurderingStansResultat';
 import { RevurderingStansBegrunnelse } from './2-begrunnelse/RevurderingStansBegrunnelse';
 import { RevurderingStansBrev } from './3-brev/RevurderingStansBrev';

@@ -1,7 +1,7 @@
 import { Heading } from '@navikt/ds-react';
 import { SøknadsbehandlingResultatVelger } from '~/lib/behandling/søknadsbehandling/resultat-velger/SøknadsbehandlingResultatVelger';
 import { SøknadsbehandlingBrev } from '~/lib/behandling/søknadsbehandling/brev/SøknadsbehandlingBrev';
-import { Separator } from '../../separator/Separator';
+import { Separator } from '~/lib/_felles/separator/Separator';
 import { SøknadsbehandlingSend } from '~/lib/behandling/søknadsbehandling/send-og-godkjenn/SøknadsbehandlingSend';
 import { SøknadsbehandlingAvslagsgrunner } from '~/lib/behandling/søknadsbehandling/avslagsgrunner/SøknadsbehandlingAvslagsgrunner';
 import { SøknadsbehandlingAutomatiskBehandling } from '~/lib/behandling/søknadsbehandling/automatisk-behandling/SøknadsbehandlingAutomatiskBehandling';

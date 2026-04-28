@@ -12,18 +12,18 @@ import { fetchSak } from '~/utils/fetch/fetch-server';
 import { KlageSteg } from '~/utils/KlageLayoutUtils';
 import KlageLayout, { KlageProvider, useKlage } from '../../layout';
 import { useForm } from 'react-hook-form';
-import VurderingForm from '~/lib/forms/klage-vurdering/VurderingForm';
+import VurderingForm from '~/lib/klage/forms/klage-vurdering/VurderingForm';
 import {
     harKlagevurderingsstegUtfylt,
     klagebehandlingTilVurderingFormData,
     VurderingFormData,
     vurderingFormDataTilVurderKlageRequest,
     vurderingFormValidation,
-} from '~/lib/forms/klage-vurdering/VurderingFormUtils';
+} from '~/lib/klage/forms/klage-vurdering/VurderingFormUtils';
 import { BodyShort, Button, Heading, HStack, InfoCard, LocalAlert, VStack } from '@navikt/ds-react';
 import { CheckmarkCircleIcon, PencilIcon, TrashIcon } from '@navikt/aksel-icons';
 import { useAvbrytKlagebehandling, useVurderKlage } from '~/lib/klage/api/KlageApi';
-import WarningCircleIcon from '~/lib/icons/WarningCircleIcon';
+import WarningCircleIcon from '~/lib/_felles/icons/WarningCircleIcon';
 import router from 'next/router';
 import {
     erKlageAvsluttet,

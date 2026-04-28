@@ -20,7 +20,7 @@ import { useOpprettSøknad } from '~/lib/personoversikt/manuell-søknad/useOppre
 import router from 'next/router';
 import { behandlingUrl } from '~/utils/urls';
 import { useHentPersonopplysninger } from '~/lib/personaliaheader/useHentPersonopplysninger';
-import { JournalpostId } from '~/lib/journalpostId/JournalpostId';
+import { JournalpostId } from '~/lib/_felles/journalpostId/JournalpostId';
 import { SøknadstypeSelect } from '~/lib/manuell-søknad/SøknadstypeSelect';
 import { OverførtFraArenaSpørsmål } from '~/lib/manuell-søknad/OverførtFraArenaSpørsmål';
 

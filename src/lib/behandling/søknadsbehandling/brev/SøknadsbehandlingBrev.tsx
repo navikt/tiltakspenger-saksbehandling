@@ -2,7 +2,7 @@ import { useSøknadsbehandling } from '../../context/BehandlingContext';
 import { Vedtaksbrev } from '~/lib/behandling/felles/vedtaksbrev/Vedtaksbrev';
 import { søknadsbehandlingValidering } from '~/lib/behandling/søknadsbehandling/send-og-godkjenn/søknadsbehandlingValidering';
 import { BodyLong, Checkbox, Heading, HStack } from '@navikt/ds-react';
-import { TekstListe } from '~/lib/liste/TekstListe';
+import { TekstListe } from '~/lib/_felles/liste/TekstListe';
 import { SøknadsbehandlingResultat } from '~/types/Søknadsbehandling';
 import {
     SøknadsbehandlingSkjemaContext,

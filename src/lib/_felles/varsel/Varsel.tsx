@@ -1,6 +1,6 @@
 import { Alert } from '@navikt/ds-react';
 import React, { useState } from 'react';
-import { classNames } from '../../utils/classNames';
+import { classNames } from '../../../utils/classNames';
 
 import styles from './Varsel.module.css';
 

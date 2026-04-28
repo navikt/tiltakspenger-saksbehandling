@@ -1,4 +1,8 @@
-import { Datovelger, DatovelgerProps, generateMatcherProps } from '~/lib/datovelger/Datovelger';
+import {
+    Datovelger,
+    DatovelgerProps,
+    generateMatcherProps,
+} from '~/lib/_felles/datovelger/Datovelger';
 import { dateTilISOTekst, datoTilDatoInputText } from '~/utils/date';
 import {
     useOmgjøringMedValgtResultatSkjema,

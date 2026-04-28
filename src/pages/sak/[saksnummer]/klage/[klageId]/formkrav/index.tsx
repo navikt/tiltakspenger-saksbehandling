@@ -9,13 +9,13 @@ import { fetchSak } from '~/utils/fetch/fetch-server';
 import { logger } from '@navikt/next-logger';
 import { SakProps } from '~/types/Sak';
 import router from 'next/router';
-import FormkravForm from '~/lib/forms/formkrav/FormkravForm';
+import FormkravForm from '~/lib/klage/forms/formkrav/FormkravForm';
 import {
     FormkravFormData,
     formkravFormDataTilOppdaterKlageFormkravRequest,
     formkravValidation,
     klageTilFormkravFormData,
-} from '~/lib/forms/formkrav/FormkravFormUtils';
+} from '~/lib/klage/forms/formkrav/FormkravFormUtils';
 import { Klagebehandling, KlageId } from '~/types/Klage';
 import KlageLayout, { KlageProvider, useKlage } from '../../layout';
 import { finnNesteKlageSteg, KlageSteg } from '../../../../../../utils/KlageLayoutUtils';

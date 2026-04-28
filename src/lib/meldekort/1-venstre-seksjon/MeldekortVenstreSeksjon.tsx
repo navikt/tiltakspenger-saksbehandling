@@ -15,7 +15,7 @@ import { useSak } from '~/context/sak/SakContext';
 import { ArrayOrSingle } from '~/types/UtilTypes';
 import { forceArray } from '~/utils/array';
 import { useMeldeperiodeKjede } from '../context/MeldeperiodeKjedeContext';
-import OppsummeringAvAttesteringer from '../../attestering/OppsummeringAvAttestering';
+import OppsummeringAvAttesteringer from '~/lib/_felles/attestering/OppsummeringAvAttestering';
 import { finnMeldeperiodeKjedeStatusTekst } from '~/utils/tekstformateringUtils';
 import { MeldeperiodeKjedeStatus } from '~/types/meldekort/Meldeperiode';
 import React, { ComponentProps } from 'react';

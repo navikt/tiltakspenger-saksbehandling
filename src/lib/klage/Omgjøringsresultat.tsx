@@ -8,7 +8,7 @@ import { Saksbehandler } from '~/types/Saksbehandler';
 import { Søknad } from '~/types/Søknad';
 import { erKlageVedtatt, erKlageFerdigstilt, erKlageAvsluttet } from '~/utils/klageUtils';
 import { behandlingUrl } from '~/utils/urls';
-import { VelgOmgjøringsbehandlingModal } from '../forms/velg-omgjøringsbehandling/VelgOmgjøringsbehandlingForm';
+import { VelgOmgjøringsbehandlingModal } from '~/lib/klage/forms/velg-omgjøringsbehandling/VelgOmgjøringsbehandlingForm';
 import FerdigstillKlageModalWrapper from '../modaler/FerdigstillKlagebehandlingModal';
 import KlageTilknyttedeBehandlingerInfoCard from './KlageTilknyttedeBehandlingerInfoCard';
 

@@ -1,7 +1,7 @@
 import React, { ReactNode, RefObject } from 'react';
 import styles from './BekreftelsesModal.module.css';
 import { Button, HStack, Modal } from '@navikt/ds-react';
-import Varsel from '../varsel/Varsel';
+import Varsel from '~/lib/_felles/varsel/Varsel';
 import { FetcherError } from '~/utils/fetch/fetch';
 import { v4 as uuidv4 } from 'uuid';
 

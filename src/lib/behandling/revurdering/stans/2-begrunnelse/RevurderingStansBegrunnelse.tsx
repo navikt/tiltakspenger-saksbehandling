@@ -1,9 +1,9 @@
 import { useRevurderingBehandling } from '../../../context/BehandlingContext';
 import { VedtakSeksjon } from '~/lib/behandling/felles/layout/seksjon/VedtakSeksjon';
-import { FritekstInput } from '~/lib/fritekst/FritekstInput';
+import { FritekstInput } from '~/lib/_felles/fritekst/FritekstInput';
 import { VedtakHjelpetekst } from '~/lib/behandling/felles/layout/hjelpetekst/VedtakHjelpetekst';
 import { BodyLong } from '@navikt/ds-react';
-import { TekstListe } from '../../../../liste/TekstListe';
+import { TekstListe } from '~/lib/_felles/liste/TekstListe';
 import { useBehandlingSkjema } from '~/lib/behandling/context/BehandlingSkjemaContext';
 
 import style from './RevurderingStansBegrunnelse.module.css';

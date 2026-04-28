@@ -1,6 +1,6 @@
 import { Alert, Checkbox, HStack, Link } from '@navikt/ds-react';
 import { VedtakSeksjon } from '~/lib/behandling/felles/layout/seksjon/VedtakSeksjon';
-import { Datovelger } from '../../../../datovelger/Datovelger';
+import { Datovelger } from '~/lib/_felles/datovelger/Datovelger';
 import { dateTilISOTekst, datoMin } from '~/utils/date';
 import { useSak } from '~/context/sak/SakContext';
 import { useConfig } from '~/context/ConfigContext';

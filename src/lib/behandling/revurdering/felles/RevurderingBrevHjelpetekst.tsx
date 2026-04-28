@@ -1,5 +1,5 @@
 import { BodyLong } from '@navikt/ds-react';
-import { TekstListe } from '~/lib/liste/TekstListe';
+import { TekstListe } from '~/lib/_felles/liste/TekstListe';
 
 export const RevurderingBrevHjelpetekst = () => {
     return (

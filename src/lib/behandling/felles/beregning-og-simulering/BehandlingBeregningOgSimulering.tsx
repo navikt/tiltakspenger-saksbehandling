@@ -2,7 +2,7 @@ import { Alert, BodyShort, Heading, VStack } from '@navikt/ds-react';
 import { useBehandling } from '~/lib/behandling/context/BehandlingContext';
 import { VedtakSeksjon } from '~/lib/behandling/felles/layout/seksjon/VedtakSeksjon';
 import { SimulertBeregningDetaljer } from '~/lib/beregning-og-simulering/detaljer/SimulertBeregningDetaljer';
-import { Separator } from '~/lib/separator/Separator';
+import { Separator } from '~/lib/_felles/separator/Separator';
 import { SimuleringOppsummering } from '~/lib/beregning-og-simulering/simulering-oppsummering/SimuleringOppsummering';
 import { BeregningOppsummering } from '~/lib/beregning-og-simulering/beregning-oppsummering/BeregningOppsummering';
 import { BeregningOgSimuleringHeader } from '~/lib/beregning-og-simulering/header/BeregningOgSimuleringHeader';
