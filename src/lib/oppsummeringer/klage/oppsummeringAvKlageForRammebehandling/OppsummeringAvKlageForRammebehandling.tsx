@@ -1,5 +1,5 @@
 import { Alert, Box, Button, Heading, LocalAlert, VStack } from '@navikt/ds-react';
-import { useBehandling } from '~/lib/behandling/context/BehandlingContext';
+import { useBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 import {
     Klagebehandling,
     KlagebehandlingResultat,

@@ -1,8 +1,8 @@
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
-import { BehandlingPage } from '~/lib/behandling/BehandlingPage';
+import { BehandlingPage } from '~/lib/rammebehandling/BehandlingPage';
 import React, { ComponentProps } from 'react';
 import { GetServerSideProps } from 'next';
-import { BehandlingProvider } from '~/lib/behandling/context/BehandlingContext';
+import { BehandlingProvider } from '~/lib/rammebehandling/context/BehandlingContext';
 import { fetchSak } from '~/utils/fetch/fetch-server';
 import { logger } from '@navikt/next-logger';
 import { SakProvider } from '~/context/sak/SakContext';

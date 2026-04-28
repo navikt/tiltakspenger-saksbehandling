@@ -1,5 +1,5 @@
 import React from 'react';
-import { BehandlingSaksopplysning } from '../../behandling/saksopplysninger/BehandlingSaksopplysning';
+import { BehandlingSaksopplysning } from '~/lib/rammebehandling/saksopplysninger/BehandlingSaksopplysning';
 import { periodeTilFormatertDatotekst } from '~/utils/date';
 import { VStack } from '@navikt/ds-react';
 import { Søknad } from '~/types/Søknad';

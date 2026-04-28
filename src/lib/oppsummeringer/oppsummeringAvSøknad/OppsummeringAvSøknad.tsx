@@ -4,10 +4,10 @@ import { useConfig } from '~/context/ConfigContext';
 import {
     BehandlingSaksopplysning,
     BehandlingSaksopplysningMedPeriodeSpm,
-} from '../../behandling/saksopplysninger/BehandlingSaksopplysning';
+} from '~/lib/rammebehandling/saksopplysninger/BehandlingSaksopplysning';
 import { formaterDatotekst, periodeTilFormatertDatotekst } from '~/utils/date';
-import { SøknadOpplysningerSvar } from '../../behandling/saksopplysninger/søknad/SøknadOpplysningerSvar';
-import { SøknadOpplysningerBarn } from '../../behandling/saksopplysninger/søknad/SøknadOpplysningerBarn';
+import { SøknadOpplysningerSvar } from '~/lib/rammebehandling/saksopplysninger/søknad/SøknadOpplysningerSvar';
+import { SøknadOpplysningerBarn } from '~/lib/rammebehandling/saksopplysninger/søknad/SøknadOpplysningerBarn';
 import { Alert, Link, VStack } from '@navikt/ds-react';
 import { Søknad } from '~/types/Søknad';
 import { Nullable } from '~/types/UtilTypes';
