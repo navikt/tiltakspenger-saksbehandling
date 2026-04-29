@@ -3,14 +3,14 @@ import { ÅpenRammebehandlingForOversikt } from '~/lib/personoversikt/typer/Åpe
 import React from 'react';
 import Link from 'next/link';
 import { eierBehandling, erSattPaVent } from '~/lib/saksbehandler/tilganger';
-import { SaksbehandlerTyper } from '~/lib/saksbehandler/SaksbehandlerTyper';
+import { Saksbehandler } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import { ArrowRightIcon } from '@navikt/aksel-icons';
 import { behandlingUrl } from '~/utils/urls';
 import { Rammebehandlingsstatus } from '~/lib/rammebehandling/typer/Rammebehandling';
 
 export const visFortsettBehandlingMenyvalg = (
     behandling: ÅpenRammebehandlingForOversikt,
-    innloggetSaksbehandler: SaksbehandlerTyper,
+    innloggetSaksbehandler: Saksbehandler,
 ) => {
     const erReleventMenyValgForStatus =
         behandling.status === Rammebehandlingsstatus.UNDER_BEHANDLING ||

@@ -1,17 +1,17 @@
 import React, { createContext, ReactNode, useContext } from 'react';
-import { SaksbehandlerTyper } from './SaksbehandlerTyper';
+import { Saksbehandler } from './SaksbehandlerTyper';
 import { hentRolleForBehandling } from '~/lib/saksbehandler/tilganger';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 
 type SaksbehandlerState = {
-    innloggetSaksbehandler: SaksbehandlerTyper;
+    innloggetSaksbehandler: Saksbehandler;
 };
 
 const Context = createContext<SaksbehandlerState>({} as SaksbehandlerState);
 
 type Props = {
     children: ReactNode;
-    saksbehandler: SaksbehandlerTyper;
+    saksbehandler: Saksbehandler;
 };
 
 export const SaksbehandlerProvider = ({ saksbehandler, children }: Props) => {

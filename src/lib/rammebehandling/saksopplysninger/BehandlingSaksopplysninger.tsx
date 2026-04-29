@@ -52,7 +52,7 @@ export const BehandlingSaksopplysninger = () => {
     return (
         <div>
             <BehandlingSaksopplysning
-                navn="SaksbehandlerTyper"
+                navn="Saksbehandler"
                 verdi={behandling.saksbehandler ?? 'Ikke tildelt'}
             />
             <BehandlingSaksopplysning

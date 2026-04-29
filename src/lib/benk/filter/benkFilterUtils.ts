@@ -7,7 +7,7 @@ import {
     BenkFilters,
 } from '~/lib/benk/typer/Benk';
 import { isValueInRecord } from '~/utils/object';
-import { SaksbehandlerTyper } from '~/lib/saksbehandler/SaksbehandlerTyper';
+import { Saksbehandler } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import { ParsedUrlQuery } from 'node:querystring';
 import Cookies from 'js-cookie';
 
@@ -60,7 +60,7 @@ export const erBenkBehandlingsstatus = (value: unknown): value is BenkBehandling
 
 export const hentSaksbehandlereTilFiltrering = (
     behandlinger: BenkBehandling[],
-    innloggetSaksbehandler: SaksbehandlerTyper,
+    innloggetSaksbehandler: Saksbehandler,
 ): string[] => {
     return behandlinger
         .reduce(

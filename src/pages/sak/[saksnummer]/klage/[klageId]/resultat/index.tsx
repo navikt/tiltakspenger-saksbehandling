@@ -29,7 +29,7 @@ import { Søknad } from '~/types/Søknad';
 import { Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
 import Link from 'next/link';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
-import { SaksbehandlerTyper } from '~/lib/saksbehandler/SaksbehandlerTyper';
+import { Saksbehandler } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import {
     ArchiveIcon,
     CheckmarkCircleIcon,
@@ -145,7 +145,7 @@ const OpprettholdResultat = (props: {
     vedtak: Rammevedtak[];
     omgjøringsbehandling: Nullable<Rammebehandling>;
     søknader: Søknad[];
-    innloggetSaksbehandler: SaksbehandlerTyper;
+    innloggetSaksbehandler: Saksbehandler;
     rammebehandlinger: Rammebehandling[];
 }) => {
     const [vilOppretteNyBehandling, setVilOppretteNyBehandling] = useState(false);

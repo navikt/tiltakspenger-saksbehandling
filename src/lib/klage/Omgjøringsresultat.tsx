@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Klagebehandling, KlagebehandlingsresultatOmgjør } from '~/lib/klage/typer/Klage';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
-import { SaksbehandlerTyper } from '~/lib/saksbehandler/SaksbehandlerTyper';
+import { Saksbehandler } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import { Søknad } from '~/types/Søknad';
 import { erKlageVedtatt, erKlageFerdigstilt, erKlageAvsluttet } from '~/lib/klage/utils/klageUtils';
 import { behandlingUrl } from '~/utils/urls';
@@ -17,7 +17,7 @@ const Omgjøringsresultat = (props: {
     vedtak: Rammevedtak[];
     søknader: Søknad[];
     rammebehandlinger: Rammebehandling[];
-    innloggetSaksbehandler: SaksbehandlerTyper;
+    innloggetSaksbehandler: Saksbehandler;
 }) => {
     return (
         <VStack align="start" gap="space-16" maxWidth="30rem">
@@ -99,7 +99,7 @@ const OmgjøringsresultatInfo = (props: {
 
 const KlageOmgjøringsbehandlingAksjoner = (props: {
     klage: Klagebehandling;
-    innloggetSaksbehandler: SaksbehandlerTyper;
+    innloggetSaksbehandler: Saksbehandler;
     vedtak: Rammevedtak[];
     søknader: Søknad[];
 }) => {

@@ -7,7 +7,7 @@ export enum SaksbehandlerRolle {
     DRIFT = 'DRIFT',
 }
 
-export type SaksbehandlerTyper = {
+export type Saksbehandler = {
     brukernavn: string;
     epost: string;
     navIdent: string;

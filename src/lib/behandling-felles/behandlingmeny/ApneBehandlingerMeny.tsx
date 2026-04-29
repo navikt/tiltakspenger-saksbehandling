@@ -33,7 +33,7 @@ import {
 } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { useAvsluttBehandling } from './useAvsluttBehandling';
 import { useSak } from '~/lib/sak/SakContext';
-import { SaksbehandlerTyper } from '~/lib/saksbehandler/SaksbehandlerTyper';
+import { Saksbehandler } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import { eierBehandling, erSattPaVent } from '~/lib/saksbehandler/tilganger';
 import router from 'next/router';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
@@ -49,7 +49,7 @@ type Props = {
 
 const visAvsluttBehandlingMenyvalg = (
     behandling: ÅpenRammebehandlingForOversikt,
-    innloggetSaksbehandler: SaksbehandlerTyper,
+    innloggetSaksbehandler: Saksbehandler,
     behandlingKanAvsluttes: boolean,
 ) => {
     const erRelevantMenyValgForStatus =

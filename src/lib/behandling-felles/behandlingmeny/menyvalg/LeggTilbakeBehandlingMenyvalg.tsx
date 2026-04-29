@@ -4,14 +4,14 @@ import { ActionMenu } from '@navikt/ds-react';
 import { ÅpenRammebehandlingForOversikt } from '~/lib/personoversikt/typer/ÅpenBehandlingForOversikt';
 import { useLeggTilbakeBehandling } from '~/lib/behandling-felles/behandlingmeny/useLeggTilbakeBehandling';
 import { eierBehandling } from '~/lib/saksbehandler/tilganger';
-import { SaksbehandlerTyper } from '~/lib/saksbehandler/SaksbehandlerTyper';
+import { Saksbehandler } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
 import { Rammebehandlingsstatus } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { personoversiktUrl } from '~/utils/urls';
 
 export const visLeggTilbakeMenyvalg = (
     behandling: ÅpenRammebehandlingForOversikt,
-    innloggetSaksbehandler: SaksbehandlerTyper,
+    innloggetSaksbehandler: Saksbehandler,
 ) => {
     const erRelevantMenyValgForStatus =
         behandling.status === Rammebehandlingsstatus.UNDER_BEHANDLING ||

@@ -127,7 +127,7 @@ export const BenkFilterVelger = ({ benkOversikt, onUpdateFilter }: Props) => {
                 </Select>
 
                 <Select
-                    label={'SaksbehandlerTyper/Beslutter'}
+                    label={'Saksbehandler/Beslutter'}
                     size={'small'}
                     value={valgtFilter.saksbehandler ?? ''}
                     onChange={(e) =>

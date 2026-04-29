@@ -6,7 +6,7 @@ import { stripLeadingSlash } from '../string';
 import { errorFraApiResponse } from './fetch';
 import { hentOboToken } from '~/auth/tokens';
 import { BenkOversiktRequestBody, BenkOversiktProps } from '~/lib/benk/typer/Benk';
-import { SaksbehandlerTyper } from '~/lib/saksbehandler/SaksbehandlerTyper';
+import { Saksbehandler } from '~/lib/saksbehandler/SaksbehandlerTyper';
 
 export type NextRequest = Request | IncomingMessage | NextApiRequest;
 
@@ -67,4 +67,4 @@ export const fetchBenkOversikt = async (req: NextRequest, body: BenkOversiktRequ
     });
 
 export const fetchSaksbehandler = async (req: NextRequest) =>
-    fetchJsonFraApiServerSide<SaksbehandlerTyper>(req, '/saksbehandler');
+    fetchJsonFraApiServerSide<Saksbehandler>(req, '/saksbehandler');

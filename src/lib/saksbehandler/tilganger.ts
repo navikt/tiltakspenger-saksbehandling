@@ -7,17 +7,17 @@ import {
     MeldekortbehandlingProps,
     MeldekortbehandlingStatus,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
-import { SaksbehandlerTyper, SaksbehandlerRolle } from '~/lib/saksbehandler/SaksbehandlerTyper';
+import { Saksbehandler, SaksbehandlerRolle } from '~/lib/saksbehandler/SaksbehandlerTyper';
 
-export const erSaksbehandler = (saksbehandler: SaksbehandlerTyper) =>
+export const erSaksbehandler = (saksbehandler: Saksbehandler) =>
     saksbehandler.roller.includes(SaksbehandlerRolle.SAKSBEHANDLER);
 
-export const erBeslutter = (saksbehandler: SaksbehandlerTyper) =>
+export const erBeslutter = (saksbehandler: Saksbehandler) =>
     saksbehandler.roller.includes(SaksbehandlerRolle.BESLUTTER);
 
 export const kanBeslutteForBehandling = (
     behandling: Rammebehandling,
-    innloggetSaksbehandler: SaksbehandlerTyper,
+    innloggetSaksbehandler: Saksbehandler,
 ) => {
     const { status, saksbehandler, beslutter } = behandling;
 
@@ -30,7 +30,7 @@ export const kanBeslutteForBehandling = (
 };
 
 export const kanBehandle = (
-    innloggetSaksbehandler: SaksbehandlerTyper,
+    innloggetSaksbehandler: Saksbehandler,
     saksbehandlerForBehandling?: string | null,
 ) =>
     erSaksbehandler(innloggetSaksbehandler) &&
@@ -38,7 +38,7 @@ export const kanBehandle = (
 
 export const kanSaksbehandleForBehandling = (
     behandling: Rammebehandling,
-    innloggetSaksbehandler: SaksbehandlerTyper,
+    innloggetSaksbehandler: Saksbehandler,
 ) => {
     return (
         kanBehandle(innloggetSaksbehandler, behandling.saksbehandler) &&
@@ -48,7 +48,7 @@ export const kanSaksbehandleForBehandling = (
 
 export const hentRolleForBehandling = (
     behandling: Rammebehandling,
-    innloggetSaksbehandler: SaksbehandlerTyper,
+    innloggetSaksbehandler: Saksbehandler,
 ) => {
     return kanSaksbehandleForBehandling(behandling, innloggetSaksbehandler)
         ? SaksbehandlerRolle.SAKSBEHANDLER
@@ -59,7 +59,7 @@ export const hentRolleForBehandling = (
 
 export const eierBehandling = (
     behandling: ÅpenRammebehandlingForOversikt | Rammebehandling,
-    innloggetSaksbehandler: SaksbehandlerTyper,
+    innloggetSaksbehandler: Saksbehandler,
 ): boolean => {
     const { status, saksbehandler, beslutter } = behandling;
     switch (status) {
@@ -75,14 +75,14 @@ export const eierBehandling = (
 
 export const kanSaksbehandleForMeldekort = (
     meldekortbehandling: MeldekortbehandlingProps,
-    innloggetSaksbehandler: SaksbehandlerTyper,
+    innloggetSaksbehandler: Saksbehandler,
 ) =>
     kanBehandle(innloggetSaksbehandler, meldekortbehandling.saksbehandler) &&
     meldekortbehandling.status === MeldekortbehandlingStatus.UNDER_BEHANDLING;
 
 export const kanBeslutteForMeldekort = (
     meldekort: MeldekortbehandlingProps,
-    innloggetSaksbehandler: SaksbehandlerTyper,
+    innloggetSaksbehandler: Saksbehandler,
 ) => {
     const { status, saksbehandler } = meldekort;
 
@@ -95,7 +95,7 @@ export const kanBeslutteForMeldekort = (
 
 export const eierMeldekortbehandling = (
     meldekortbehandling: MeldekortbehandlingProps,
-    innloggetSaksbehandler: SaksbehandlerTyper,
+    innloggetSaksbehandler: Saksbehandler,
 ): boolean => {
     const { status, saksbehandler, beslutter } = meldekortbehandling;
 
@@ -111,7 +111,7 @@ export const eierMeldekortbehandling = (
 
 export const skalKunneTaBehandling = (
     behandling: ÅpenRammebehandlingForOversikt | Rammebehandling,
-    innloggetSaksbehandler: SaksbehandlerTyper,
+    innloggetSaksbehandler: Saksbehandler,
 ) => {
     const { status, saksbehandler } = behandling;
 
@@ -130,7 +130,7 @@ export const skalKunneTaBehandling = (
 
 export const skalKunneOvertaBehandling = (
     behandling: ÅpenRammebehandlingForOversikt | Rammebehandling,
-    innloggetSaksbehandler: SaksbehandlerTyper,
+    innloggetSaksbehandler: Saksbehandler,
 ) => {
     const { status, saksbehandler, beslutter } = behandling;
 
@@ -156,7 +156,7 @@ export const skalKunneOvertaBehandling = (
 
 export const skalKunneTaMeldekortbehandling = (
     meldekortbehandling: MeldekortbehandlingProps,
-    innloggetSaksbehandler: SaksbehandlerTyper,
+    innloggetSaksbehandler: Saksbehandler,
 ) => {
     const { status, saksbehandler } = meldekortbehandling;
 
@@ -175,7 +175,7 @@ export const skalKunneTaMeldekortbehandling = (
 
 export const skalKunneOvertaMeldekortbehandling = (
     meldekortbehandling: MeldekortbehandlingProps,
-    innloggetSaksbehandler: SaksbehandlerTyper,
+    innloggetSaksbehandler: Saksbehandler,
 ) => {
     const { status, saksbehandler, beslutter } = meldekortbehandling;
 
@@ -199,7 +199,7 @@ export const skalKunneOvertaMeldekortbehandling = (
 
 export const skalKunneGjenopptaBehandling = (
     behandling: Rammebehandling | ÅpenRammebehandlingForOversikt,
-    innloggetSaksbehandler: SaksbehandlerTyper,
+    innloggetSaksbehandler: Saksbehandler,
 ) => {
     return (
         erSattPaVent(behandling) &&
@@ -211,7 +211,7 @@ export const skalKunneGjenopptaBehandling = (
 
 export const skalKunneSetteBehandlingPaVent = (
     behandling: Rammebehandling | ÅpenRammebehandlingForOversikt,
-    innloggetSaksbehandler: SaksbehandlerTyper,
+    innloggetSaksbehandler: Saksbehandler,
 ) => {
     const erRelevantMenyValgForStatus =
         behandling.status == Rammebehandlingsstatus.UNDER_BEHANDLING ||

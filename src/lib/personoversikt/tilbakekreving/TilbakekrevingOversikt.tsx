@@ -101,7 +101,7 @@ const TilbakekrevingerTabell = ({ tilbakekrevinger }: TilbakekrevingerTabellProp
                     <Table.HeaderCell scope="col">{'Sist endret'}</Table.HeaderCell>
                     <Table.HeaderCell scope="col">{'Varsel sendt'}</Table.HeaderCell>
                     <Table.HeaderCell scope="col">{'Kilde'}</Table.HeaderCell>
-                    <Table.HeaderCell scope="col">{'SaksbehandlerTyper'}</Table.HeaderCell>
+                    <Table.HeaderCell scope="col">{'Saksbehandler'}</Table.HeaderCell>
                     <Table.HeaderCell scope="col">{'Beslutter'}</Table.HeaderCell>
                     <Table.HeaderCell scope="col"></Table.HeaderCell>
                 </Table.Row>

@@ -135,10 +135,7 @@ export const Tidslinjer = ({ sak, heading = true, className }: Props) => {
                                                     : 'Brev ikke journalført enda'
                                             }
                                         />
-                                        <InfoElement
-                                            navn={'SaksbehandlerTyper'}
-                                            verdi={saksbehandler}
-                                        />
+                                        <InfoElement navn={'Saksbehandler'} verdi={saksbehandler} />
                                         <InfoElement navn={'Beslutter'} verdi={beslutter} />
                                     </div>
                                     <Link

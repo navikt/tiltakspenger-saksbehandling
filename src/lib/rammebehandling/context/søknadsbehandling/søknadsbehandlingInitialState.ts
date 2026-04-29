@@ -39,7 +39,7 @@ const innvilgelseInitialState = (
     const { resultat, vedtaksperiode } = behandling;
 
     // Hvis den lagrede behandling ikke er en innvilgelse (dvs saksbehandler har endret resultat),
-    // så returnerer vi en blank innvilgelse uten perioder. SaksbehandlerTyper må velge innvilgelsesperioden
+    // så returnerer vi en blank innvilgelse uten perioder. Saksbehandler må velge innvilgelsesperioden
     if (!vedtaksperiode || resultat !== SøknadsbehandlingResultat.INNVILGELSE) {
         return {
             resultat: SøknadsbehandlingResultat.INNVILGELSE,

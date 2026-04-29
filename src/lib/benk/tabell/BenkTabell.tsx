@@ -112,7 +112,7 @@ export const BenkTabell = ({ behandlinger }: Props) => {
                         {'Sist endret'}
                     </Table.ColumnHeader>
                     <Table.ColumnHeader sortable={true} sortKey={BenkKolonne.saksbehandler}>
-                        {'SaksbehandlerTyper'}
+                        {'Saksbehandler'}
                     </Table.ColumnHeader>
                     <Table.ColumnHeader sortable={true} sortKey={BenkKolonne.beslutter}>
                         {'Beslutter'}
