@@ -6,4 +6,5 @@ export type VentestatusHendelse = {
     begrunnelse: string;
     erSattPåVent: boolean;
     frist: Nullable<string>;
+    status: string;
 };

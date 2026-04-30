@@ -140,17 +140,42 @@ export const finnSisteGyldigeStegForKlage = (k: Klagebehandling): string => {
     throw new Error(`Safe guard for making the switch exhaustive`, k.resultat satisfies never);
 };
 
-export const erKlageOpprettholdtEllerEtter = (k: Klagebehandling) =>
-    k.status === KlagebehandlingStatus.OPPRETTHOLDT ||
-    k.status === KlagebehandlingStatus.OVERSENDT ||
-    erKlageMottattFraKAEllerEtter(k);
+export const erKlageOpprettholdtEllerEtter = (k: Klagebehandling) => {
+    const gyldigeStatuser = [
+        KlagebehandlingStatus.OPPRETTHOLDT.toString(),
+        KlagebehandlingStatus.OVERSENDT.toString(),
+    ];
 
-export const erKlageMottattFraKAEllerEtter = (k: Klagebehandling) =>
-    k.status === KlagebehandlingStatus.MOTTATT_FRA_KLAGEINSTANS ||
-    k.status === KlagebehandlingStatus.OMGJØRING_ETTER_KLAGEINSTANS ||
-    k.status === KlagebehandlingStatus.FERDIGSTILT ||
-    (k.status === KlagebehandlingStatus.VEDTATT &&
-        k.resultat?.type === KlagebehandlingResultat.OPPRETTHOLDT);
+    const sisteVenteHendelse = k.ventestatus.at(-1) ?? null;
+
+    return (
+        gyldigeStatuser.includes(k.status) ||
+        (!!sisteVenteHendelse &&
+            sisteVenteHendelse.erSattPåVent &&
+            gyldigeStatuser.includes(sisteVenteHendelse.status)) ||
+        erKlageMottattFraKAEllerEtter(k)
+    );
+};
+
+export const erKlageMottattFraKAEllerEtter = (k: Klagebehandling) => {
+    const gyldigeStatuser = [
+        KlagebehandlingStatus.MOTTATT_FRA_KLAGEINSTANS.toString(),
+        KlagebehandlingStatus.OMGJØRING_ETTER_KLAGEINSTANS.toString(),
+        KlagebehandlingStatus.FERDIGSTILT.toString(),
+        k.status === KlagebehandlingStatus.VEDTATT &&
+        k.resultat?.type === KlagebehandlingResultat.OPPRETTHOLDT
+            ? KlagebehandlingStatus.VEDTATT.toString()
+            : null,
+    ].filter((status) => status !== null);
+
+    const sisteVenteHendelse = k.ventestatus.at(-1) ?? null;
+    return (
+        gyldigeStatuser.includes(k.status) ||
+        (!!sisteVenteHendelse &&
+            sisteVenteHendelse.erSattPåVent &&
+            gyldigeStatuser.includes(sisteVenteHendelse.status))
+    );
+};
 
 export const hentSisteKlagehendelseUtfallFraKlagebehandling = (
     k: Klagebehandling,
