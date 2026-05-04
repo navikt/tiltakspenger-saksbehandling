@@ -14,6 +14,7 @@ import {
     erBenkBehandlingsstatus,
     erBenkBehandlingKlarEllerVenter,
     harAktiveFiltre,
+    benkFiltersTilCookieValue,
 } from '~/lib/benk/filter/benkFilterUtils';
 import { BENK_SORTERING_DEFAULT } from '~/lib/benk/benkSideUtils';
 
@@ -21,7 +22,8 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
     const filtersFraQuery = benkFiltersFraQuery(context.query);
 
     if (harAktiveFiltre(filtersFraQuery)) {
-        const cookieValue = JSON.stringify(filtersFraQuery);
+        const cookieValue = benkFiltersTilCookieValue(filtersFraQuery);
+
         context.res.setHeader(
             'Set-Cookie',
             `${BENK_FILTER_COOKIE_NAME}=${encodeURIComponent(cookieValue)}; Path=/; Max-Age=31536000`,
@@ -55,7 +57,8 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
 });
 
 const requestBodyFraQuery = (queryParams: ParsedUrlQuery): BenkOversiktRequestBody => {
-    const { benktype, type, status, saksbehandler, sortering } = queryParams;
+    const { benktype, type, status, saksbehandler, sortering, tilbakekrevingKunOverMinstebeløp } =
+        queryParams;
 
     return {
         sortering: (sortering as BenkSortering) ?? BENK_SORTERING_DEFAULT,
@@ -64,6 +67,7 @@ const requestBodyFraQuery = (queryParams: ParsedUrlQuery): BenkOversiktRequestBo
             behandlingstype: erBenkBehandlingstype(type) ? forceArray(type) : null,
             status: erBenkBehandlingsstatus(status) ? forceArray(status) : null,
             identer: saksbehandler ? forceArray(saksbehandler) : null,
+            tilbakekrevingKunOverMinstebeløp: tilbakekrevingKunOverMinstebeløp === 'true',
         },
     };
 };

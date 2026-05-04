@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Button, HStack, Select, VStack } from '@navikt/ds-react';
+import { Button, Checkbox, HelpText, HStack, Select, VStack } from '@navikt/ds-react';
 import {
     BenkBehandlingKlarEllerVenter,
     BenkBehandlingsstatus,
@@ -151,6 +151,27 @@ export const BenkFilterVelger = ({ benkOversikt, onUpdateFilter }: Props) => {
                 </Select>
             </HStack>
 
+            {valgtFilter.type === BenkBehandlingstype.TILBAKEKREVING && (
+                <HStack gap={'space-16'} align={'center'}>
+                    <Checkbox
+                        size={'small'}
+                        checked={!!valgtFilter.tilbakekrevingKunOverMinstebeløp}
+                        onChange={(e) => {
+                            oppdaterValgtFilter({
+                                tilbakekrevingKunOverMinstebeløp: e.target.checked,
+                            });
+                        }}
+                    >
+                        {'Vis kun tilbakekrevinger over minstebeløp'}
+                    </Checkbox>
+                    <HelpText>
+                        {
+                            'Minstebeløpet for tilbakekreving er 5 380 kroner (fire ganger rettsgebyr)'
+                        }
+                    </HelpText>
+                </HStack>
+            )}
+
             <HStack gap={'space-16'}>
                 <Button
                     type={'button'}
@@ -170,7 +191,13 @@ export const BenkFilterVelger = ({ benkOversikt, onUpdateFilter }: Props) => {
                     variant={'secondary'}
                     onClick={() => {
                         clearBenkFilterCookie();
-                        submitValgtFilter({});
+                        submitValgtFilter({
+                            benktype: null,
+                            saksbehandler: null,
+                            status: null,
+                            type: null,
+                            tilbakekrevingKunOverMinstebeløp: null,
+                        });
                     }}
                 >
                     {'Nullstill filtre'}

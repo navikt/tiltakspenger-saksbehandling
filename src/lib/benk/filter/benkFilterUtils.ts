@@ -11,24 +11,29 @@ import { Saksbehandler } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import { ParsedUrlQuery } from 'node:querystring';
 import Cookies from 'js-cookie';
 
-export const BENK_FILTER_COOKIE_NAME = 'benkFilters';
+export const BENK_FILTER_COOKIE_NAME = 'benkFilters-v2';
 
 export const benkFiltersTilQueryParams = (benkFilters: BenkFilters): BenkFiltersQueryParams => {
     const queryParams: BenkFiltersQueryParams = {};
 
-    const { benktype, type, status, saksbehandler } = benkFilters;
+    const { benktype, type, status, saksbehandler, tilbakekrevingKunOverMinstebeløp } = benkFilters;
 
     if (benktype) {
-        queryParams.benktype = [benktype];
+        queryParams.benktype = benktype;
     }
     if (type) {
-        queryParams.type = [type];
+        queryParams.type = type;
     }
     if (status) {
-        queryParams.status = [status];
+        queryParams.status = status;
     }
     if (saksbehandler) {
-        queryParams.saksbehandler = [saksbehandler];
+        queryParams.saksbehandler = saksbehandler;
+    }
+    if (tilbakekrevingKunOverMinstebeløp !== null) {
+        queryParams.tilbakekrevingKunOverMinstebeløp = tilbakekrevingKunOverMinstebeløp
+            ? 'true'
+            : 'false';
     }
 
     return queryParams;
@@ -39,12 +44,14 @@ export const benkFiltersFraSearchParams = (searchParams: URLSearchParams): BenkF
     const type = searchParams.get('type');
     const status = searchParams.get('status');
     const saksbehandler = searchParams.get('saksbehandler');
+    const tilbakekrevingKunOverMinstebeløp = searchParams.get('tilbakekrevingKunOverMinstebeløp');
 
     return {
         benktype: erBenkBehandlingKlarEllerVenter(benktype) ? benktype : null,
         type: erBenkBehandlingstype(type) ? type : null,
         status: erBenkBehandlingsstatus(status) ? status : null,
         saksbehandler: typeof saksbehandler === 'string' ? saksbehandler : null,
+        tilbakekrevingKunOverMinstebeløp: tilbakekrevingKunOverMinstebeløp === 'true',
     };
 };
 
@@ -85,9 +92,12 @@ export const hentSaksbehandlereTilFiltrering = (
         });
 };
 
-export const queryUtenBenkFilter = (query: ParsedUrlQuery): ParsedUrlQuery => {
+export const queryUtenBenkFilter = (
+    query: ParsedUrlQuery & BenkFiltersQueryParams,
+): ParsedUrlQuery => {
     /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-    const { benktype, type, status, saksbehandler, ...rest } = query;
+    const { benktype, type, status, saksbehandler, tilbakekrevingKunOverMinstebeløp, ...rest } =
+        query;
     return rest;
 };
 
@@ -110,13 +120,17 @@ export const benkFiltersFraCookie = (cookieValue: string | undefined): BenkFilte
 };
 
 const validerBenkFilters = (benkFilters: Record<string, unknown>): BenkFilters => {
-    const { benktype, type, status, saksbehandler } = benkFilters;
+    const { benktype, type, status, saksbehandler, tilbakekrevingKunOverMinstebeløp } = benkFilters;
 
     return {
         benktype: erBenkBehandlingKlarEllerVenter(benktype) ? benktype : null,
         type: erBenkBehandlingstype(type) ? type : null,
         status: erBenkBehandlingsstatus(status) ? status : null,
         saksbehandler: typeof saksbehandler === 'string' ? saksbehandler : null,
+        tilbakekrevingKunOverMinstebeløp:
+            typeof tilbakekrevingKunOverMinstebeløp === 'boolean'
+                ? tilbakekrevingKunOverMinstebeløp
+                : tilbakekrevingKunOverMinstebeløp === 'true',
     };
 };
 
@@ -124,8 +138,12 @@ export const harAktiveFiltre = (filters: BenkFilters | null): filters is BenkFil
     return !!filters && Object.values(filters).some(Boolean);
 };
 
+export const benkFiltersTilCookieValue = (filters: BenkFilters): string => {
+    return JSON.stringify(filters);
+};
+
 export const setBenkFilterCookie = (filters: BenkFilters) => {
-    Cookies.set(BENK_FILTER_COOKIE_NAME, JSON.stringify(filters), { expires: 365 });
+    Cookies.set(BENK_FILTER_COOKIE_NAME, benkFiltersTilCookieValue(filters), { expires: 365 });
 };
 
 export const clearBenkFilterCookie = () => {

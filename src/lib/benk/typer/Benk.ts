@@ -1,4 +1,4 @@
-import { ArrayOrSingle, Nullable } from '~/types/UtilTypes';
+import { Nullable } from '~/types/UtilTypes';
 import { RammebehandlingResultat } from '~/lib/rammebehandling/typer/Rammebehandling';
 
 export type BenkOversiktRequestBody = {
@@ -8,6 +8,7 @@ export type BenkOversiktRequestBody = {
         behandlingstype: ReadonlyArray<BenkBehandlingstype> | null;
         status: ReadonlyArray<BenkBehandlingsstatus> | null;
         identer: ReadonlyArray<string | 'IKKE_TILDELT'> | null;
+        tilbakekrevingKunOverMinstebeløp: boolean;
     };
 };
 
@@ -80,15 +81,17 @@ export enum BenkSorteringRetning {
 export type BenkSortering = `${BenkKolonne},${BenkSorteringRetning}`;
 
 export type BenkFilters = {
-    benktype?: BenkBehandlingKlarEllerVenter | null;
-    type?: BenkBehandlingstype | null;
-    status?: BenkBehandlingsstatus | null;
-    saksbehandler?: string | 'IKKE_TILDELT' | null;
+    benktype: BenkBehandlingKlarEllerVenter | null;
+    type: BenkBehandlingstype | null;
+    status: BenkBehandlingsstatus | null;
+    saksbehandler: string | 'IKKE_TILDELT' | null;
+    tilbakekrevingKunOverMinstebeløp: boolean | null;
 };
 
 export type BenkFiltersQueryParams = {
-    benktype?: ArrayOrSingle<BenkBehandlingKlarEllerVenter>;
-    type?: ArrayOrSingle<BenkBehandlingstype>;
-    status?: ArrayOrSingle<BenkBehandlingsstatus>;
-    saksbehandler?: ArrayOrSingle<string | 'IKKE_TILDELT'>;
+    benktype?: BenkBehandlingKlarEllerVenter;
+    type?: BenkBehandlingstype;
+    status?: BenkBehandlingsstatus;
+    saksbehandler?: string | 'IKKE_TILDELT';
+    tilbakekrevingKunOverMinstebeløp?: 'true' | 'false';
 };
