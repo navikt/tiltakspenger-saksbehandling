@@ -152,7 +152,7 @@ export const BenkFilterVelger = ({ benkOversikt, onUpdateFilter }: Props) => {
             </HStack>
 
             {valgtFilter.type === BenkBehandlingstype.TILBAKEKREVING && (
-                <HStack gap={'space-16'} align={'center'}>
+                <HStack gap={'space-4'} align={'center'}>
                     <Checkbox
                         size={'small'}
                         checked={!!valgtFilter.tilbakekrevingKunOverMinstebeløp}
