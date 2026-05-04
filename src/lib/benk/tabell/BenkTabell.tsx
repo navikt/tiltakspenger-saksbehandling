@@ -20,6 +20,7 @@ import { formaterTidspunkt } from '~/utils/date';
 import NextLink from 'next/link';
 import {
     BenkBehandling,
+    BenkBehandlingstype,
     BenkKolonne,
     BenkSortering,
     BenkSorteringRetning,
@@ -29,14 +30,16 @@ import { behandlingResultatTilTag } from '~/utils/tekstformateringUtils';
 import { personoversiktUrl } from '~/utils/urls';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
+import { formatterBeløp } from '~/utils/beløp';
 
 import styles from './BenkTabell.module.css';
 
 type Props = {
     behandlinger: BenkBehandling[];
+    valgtType: BenkBehandlingstype | null;
 };
 
-export const BenkTabell = ({ behandlinger }: Props) => {
+export const BenkTabell = ({ behandlinger, valgtType }: Props) => {
     const router = useRouter();
     const searchParams = useSearchParams();
 
@@ -99,6 +102,11 @@ export const BenkTabell = ({ behandlinger }: Props) => {
                     <Table.ColumnHeader sortable={true} sortKey={BenkKolonne.behandlingstype}>
                         {'Type'}
                     </Table.ColumnHeader>
+                    {valgtType === BenkBehandlingstype.TILBAKEKREVING && (
+                        <Table.ColumnHeader sortable={true} sortKey={BenkKolonne.beløp}>
+                            {'Beløp'}
+                        </Table.ColumnHeader>
+                    )}
                     <Table.ColumnHeader sortable={true} sortKey={BenkKolonne.ventestatus}>
                         {'Ventestatus'}
                     </Table.ColumnHeader>
@@ -146,6 +154,7 @@ export const BenkTabell = ({ behandlinger }: Props) => {
                         saksbehandler,
                         beslutter,
                         erUnderkjent,
+                        beløp,
                     } = behandling;
 
                     return (
@@ -168,6 +177,11 @@ export const BenkTabell = ({ behandlinger }: Props) => {
                                     {resultat && behandlingResultatTilTag(resultat)}
                                 </HStack>
                             </Table.DataCell>
+                            {valgtType === BenkBehandlingstype.TILBAKEKREVING && (
+                                <Table.DataCell align={'right'}>
+                                    {beløp ? formatterBeløp(beløp) : '-'}
+                                </Table.DataCell>
+                            )}
                             <Table.DataCell>
                                 <BenkVentestatus behandling={behandling} />
                             </Table.DataCell>

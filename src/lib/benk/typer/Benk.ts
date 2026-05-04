@@ -36,6 +36,7 @@ export type BenkBehandling = {
     sattPåVentFrist: Nullable<string>;
     resultat: Nullable<RammebehandlingResultat>;
     erUnderkjent: boolean;
+    beløp: Nullable<number>;
 };
 
 export enum BenkBehandlingstype {
@@ -71,6 +72,7 @@ export enum BenkKolonne {
     saksbehandler = 'saksbehandler',
     beslutter = 'beslutter',
     sistEndret = 'sist_endret',
+    beløp = 'beløp',
 }
 
 export enum BenkSorteringRetning {

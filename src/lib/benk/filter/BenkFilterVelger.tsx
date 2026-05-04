@@ -11,28 +11,29 @@ import { benkBehandlingsstatusTekst, benkBehandlingstypeTekst } from '~/lib/benk
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import { useRouter } from 'next/router';
 import {
-    benkFiltersFraSearchParams,
     benkFiltersTilQueryParams,
     clearBenkFilterCookie,
     hentSaksbehandlereTilFiltrering,
     queryUtenBenkFilter,
     setBenkFilterCookie,
 } from '~/lib/benk/filter/benkFilterUtils';
-import { useSearchParams } from 'next/navigation';
 
 type Props = {
     benkOversikt: BenkOversiktProps;
-    onUpdateFilter: (filter: BenkFilters) => void;
+    aktivtFilter: BenkFilters;
+    onSubmitFilter: (filter: BenkFilters) => void;
 };
 
-export const BenkFilterVelger = ({ benkOversikt, onUpdateFilter }: Props) => {
+export const BenkFilterVelger = ({ benkOversikt, aktivtFilter, onSubmitFilter }: Props) => {
     const router = useRouter();
-    const searchParams = useSearchParams();
-    const aktivtFilter = useMemo(() => benkFiltersFraSearchParams(searchParams), [searchParams]);
 
     const [isLoading, setIsLoading] = useState(false);
 
     const [valgtFilter, setValgtFilter] = useState<BenkFilters>(aktivtFilter);
+
+    useEffect(() => {
+        setValgtFilter(aktivtFilter);
+    }, [aktivtFilter]);
 
     const oppdaterValgtFilter = (oppdatering: Partial<BenkFilters>) => {
         setValgtFilter({
@@ -53,7 +54,7 @@ export const BenkFilterVelger = ({ benkOversikt, onUpdateFilter }: Props) => {
     );
 
     const submitValgtFilter = (submittedFilters: BenkFilters) => {
-        onUpdateFilter(submittedFilters);
+        onSubmitFilter(submittedFilters);
         setIsLoading(true);
 
         router
@@ -67,10 +68,6 @@ export const BenkFilterVelger = ({ benkOversikt, onUpdateFilter }: Props) => {
                 setIsLoading(false);
             });
     };
-
-    useEffect(() => {
-        setValgtFilter(aktivtFilter);
-    }, [aktivtFilter]);
 
     return (
         <VStack gap="space-16">

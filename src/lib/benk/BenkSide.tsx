@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { Alert, BodyShort, Heading, VStack } from '@navikt/ds-react';
 import NotificationBanner, {
     NotificationBannerRef,
@@ -6,6 +6,8 @@ import NotificationBanner, {
 import { BenkTabell } from '~/lib/benk/tabell/BenkTabell';
 import { BenkFilterVelger } from '~/lib/benk/filter/BenkFilterVelger';
 import { BenkOversiktProps } from '~/lib/benk/typer/Benk';
+import { benkFiltersFraSearchParams } from '~/lib/benk/filter/benkFilterUtils';
+import { useSearchParams } from 'next/navigation';
 
 import styles from './BenkSide.module.css';
 
@@ -15,6 +17,9 @@ type Props = {
 
 export const BenkSide = ({ benkOversikt }: Props) => {
     const bannerRef = useRef<NotificationBannerRef>(null);
+    const searchParams = useSearchParams();
+
+    const aktivtFilter = useMemo(() => benkFiltersFraSearchParams(searchParams), [searchParams]);
 
     const {
         behandlingssammendrag,
@@ -40,7 +45,8 @@ export const BenkSide = ({ benkOversikt }: Props) => {
 
             <BenkFilterVelger
                 benkOversikt={benkOversikt}
-                onUpdateFilter={() => {
+                aktivtFilter={aktivtFilter}
+                onSubmitFilter={() => {
                     bannerRef.current?.clearMessage();
                 }}
             />
@@ -68,7 +74,10 @@ export const BenkSide = ({ benkOversikt }: Props) => {
                 )}
             </VStack>
 
-            <BenkTabell behandlinger={benkOversikt.behandlingssammendrag} />
+            <BenkTabell
+                behandlinger={benkOversikt.behandlingssammendrag}
+                valgtType={aktivtFilter.type}
+            />
         </VStack>
     );
 };
