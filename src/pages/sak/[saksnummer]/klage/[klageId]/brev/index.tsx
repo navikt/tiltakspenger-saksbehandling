@@ -255,9 +255,13 @@ const BrevKlagePage = ({ sak, påklagetVedtak }: Props) => {
                         </Button>
                     )}
 
-                    {klage.ventestatus.length > 0 && (
-                        <OppsummeringAvVentestatuserModal ventestatuser={klage.ventestatus} />
-                    )}
+                    {klage.ventestatus.length > 0 &&
+                        klage.ventestatus.at(-1)?.erSattPåVent === false && (
+                            <OppsummeringAvVentestatuserModal
+                                ventestatuser={klage.ventestatus}
+                                button={{ variant: 'tertiary' }}
+                            />
+                        )}
                 </VStack>
             </VStack>
         </form>

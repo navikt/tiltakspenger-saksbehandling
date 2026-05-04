@@ -67,18 +67,34 @@ export const BehandlingPage = () => {
                     sidebar={
                         <VStack gap="space-32">
                             <BehandlingSaksopplysninger />
-                            {ventestatus.length > 0 && (
-                                <>
-                                    <Separator />
-                                    <OppsummeringAvVentestatuserModal ventestatuser={ventestatus} />
-                                </>
-                            )}
+                            {ventestatus.length > 0 &&
+                                ventestatus.at(-1)?.erSattPåVent === false && (
+                                    <>
+                                        <Separator />
+                                        <OppsummeringAvVentestatuserModal
+                                            ventestatuser={ventestatus}
+                                            button={{ variant: 'tertiary' }}
+                                        />
+                                    </>
+                                )}
                         </VStack>
                     }
                     main={
                         <div className={style.main}>
                             {ventestatus.at(-1)?.erSattPåVent && (
-                                <OppsummeringAvVentestatus ventestatus={ventestatus.at(-1)!} />
+                                <OppsummeringAvVentestatus
+                                    ventestatus={ventestatus.at(-1)!}
+                                    medHistorikkVisning={
+                                        ventestatus.length > 0
+                                            ? () => (
+                                                  <OppsummeringAvVentestatuserModal
+                                                      ventestatuser={ventestatus}
+                                                      button={{ variant: 'tertiary' }}
+                                                  />
+                                              )
+                                            : undefined
+                                    }
+                                />
                             )}
                             <Tidslinjer sak={sak} />
                             {avbrutt && <AvbruttOppsummering avbrutt={avbrutt} withPanel={true} />}

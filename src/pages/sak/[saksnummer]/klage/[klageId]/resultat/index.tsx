@@ -340,12 +340,13 @@ const OpprettholdResultat = (props: {
                 )}
             </HStack>
 
-            {props.klage.ventestatus.length > 0 && (
-                <OppsummeringAvVentestatuserModal
-                    ventestatuser={props.klage.ventestatus}
-                    button={{ variant: 'tertiary' }}
-                />
-            )}
+            {props.klage.ventestatus.length > 0 &&
+                props.klage.ventestatus.at(-1)?.erSattPåVent === false && (
+                    <OppsummeringAvVentestatuserModal
+                        ventestatuser={props.klage.ventestatus}
+                        button={{ variant: 'tertiary' }}
+                    />
+                )}
 
             {vilOppretteNyBehandling && (
                 <VelgOmgjøringsbehandlingModal

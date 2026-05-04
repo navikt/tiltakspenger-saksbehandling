@@ -279,12 +279,13 @@ const VurderingKlagePage = ({
                     )
                 )}
 
-                {klage.ventestatus.length > 0 && (
-                    <OppsummeringAvVentestatuserModal
-                        ventestatuser={klage.ventestatus}
-                        button={{ variant: 'tertiary' }}
-                    />
-                )}
+                {klage.ventestatus.length > 0 &&
+                    klage.ventestatus.at(-1)?.erSattPåVent === false && (
+                        <OppsummeringAvVentestatuserModal
+                            ventestatuser={klage.ventestatus}
+                            button={{ variant: 'tertiary' }}
+                        />
+                    )}
             </VStack>
 
             {vilAvslutteBehandlingModal && (

@@ -68,6 +68,7 @@ const SettBehandlingPåVentModal = (props: {
                                 onDateChange={(dato) =>
                                     field.onChange(dato ? dateTilISOTekst(dato) : '')
                                 }
+                                minDate={new Date()}
                                 value={field.value ? datoTilDatoInputText(field.value) : ''}
                                 label={'Når burde behandlingen gjenopptas? (valgfritt)'}
                             />

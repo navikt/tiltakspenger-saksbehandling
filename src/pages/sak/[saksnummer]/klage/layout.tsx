@@ -23,6 +23,7 @@ import OppsummeringAvVentestatus from '~/lib/behandling-felles/oppsummeringer/ve
 import { hentSisteKlagehendelseUtfallFraKlagebehandling } from '~/lib/klage/utils/klageUtils';
 import { klagehendelseUtfallTilTag } from '~/lib/klage/utils/KlageinstanshendelseUtils';
 import { OppsummeringsPar } from '~/lib/behandling-felles/oppsummeringer/oppsummeringspar/OppsummeringsPar';
+import { OppsummeringAvVentestatuserModal } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
 
 type Props = {
     children: ReactElement;
@@ -120,7 +121,19 @@ const KlageLayout = ({ children, saksnummer, activeTab }: Props) => {
                     <AvbruttOppsummering avbrutt={klage.avbrutt!} />
                 )}
                 {klage?.ventestatus?.at(-1)?.erSattPåVent && (
-                    <OppsummeringAvVentestatus ventestatus={klage.ventestatus.at(-1)!} />
+                    <OppsummeringAvVentestatus
+                        ventestatus={klage.ventestatus.at(-1)!}
+                        medHistorikkVisning={
+                            klage.ventestatus.length > 0
+                                ? () => (
+                                      <OppsummeringAvVentestatuserModal
+                                          ventestatuser={klage.ventestatus}
+                                          button={{ variant: 'tertiary' }}
+                                      />
+                                  )
+                                : undefined
+                        }
+                    />
                 )}
                 {klage?.resultat?.begrunnelseFerdigstilling && (
                     <Box className={classNames(styles.box)}>
