@@ -96,18 +96,16 @@ export const BehandlingSendOgGodkjenn = ({ behandling, lagringProps }: Props) =>
                         <BehandlingGjenoppta behandling={behandling} />
                     ) : erSaksbehandler ? (
                         <HStack gap={'space-20'}>
-                            {isDirty && (
-                                <BehandlingLagreKnapp
-                                    behandling={behandling}
-                                    hentVedtakDTO={validerOgHentDTO}
-                                    onSuccess={() => {
-                                        setLagringResultat('ok');
-                                    }}
-                                    onError={(error) => {
-                                        setLagringResultat(error);
-                                    }}
-                                />
-                            )}
+                            <BehandlingLagreKnapp
+                                behandling={behandling}
+                                hentVedtakDTO={validerOgHentDTO}
+                                onSuccess={() => {
+                                    setLagringResultat('ok');
+                                }}
+                                onError={(error) => {
+                                    setLagringResultat(error);
+                                }}
+                            />
                             <BehandlingSendTilBeslutning
                                 behandling={behandling}
                                 valider={validerTilBeslutning}
