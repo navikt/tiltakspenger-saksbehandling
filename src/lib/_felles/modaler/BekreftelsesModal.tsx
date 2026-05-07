@@ -1,9 +1,7 @@
 import React, { ReactNode, RefObject } from 'react';
 import styles from './BekreftelsesModal.module.css';
-import { Button, HStack, Modal } from '@navikt/ds-react';
-import Varsel from '~/lib/_felles/varsel/Varsel';
+import { Alert, Button, HStack, Modal } from '@navikt/ds-react';
 import { FetcherError } from '~/utils/fetch/fetch';
-import { v4 as uuidv4 } from 'uuid';
 
 type Props = {
     modalRef?: RefObject<HTMLDialogElement | null>;
@@ -39,12 +37,9 @@ export const BekreftelsesModal = ({
             <Modal.Footer>
                 <HStack gap="space-16">
                     {feil && (
-                        <Varsel
-                            variant={'error'}
-                            size={'small'}
-                            melding={feil.message}
-                            key={`error-${uuidv4()}`}
-                        />
+                        <Alert variant={'error'} size={'small'}>
+                            {feil.message}
+                        </Alert>
                     )}
                     <div className={styles.knapper}>
                         {bekreftKnapp}
