@@ -18,7 +18,6 @@ type Props = {
 
 export const VelgTiltak = ({ sakId, spørsmålName, legend }: Props) => {
     const { control, setValue, resetField } = useFormContext<ManueltRegistrertSøknad>();
-    const [muligeTiltak, setMuligeTiltak] = React.useState<Tiltak[]>([]);
 
     const spørsmål = useController({
         name: spørsmålName,
@@ -45,11 +44,7 @@ export const VelgTiltak = ({ sakId, spørsmålName, legend }: Props) => {
         error,
     } = useHentTiltaksdeltakelser(sakId, fraOgMed, tilOgMed, skalHenteTiltak);
 
-    React.useEffect(() => {
-        if (skalHenteTiltak && tiltaksdeltakelser) {
-            setMuligeTiltak(tiltaksdeltakelser);
-        }
-    }, [skalHenteTiltak, tiltaksdeltakelser, muligeTiltak]);
+    const muligeTiltak: Tiltak[] = skalHenteTiltak && tiltaksdeltakelser ? tiltaksdeltakelser : [];
 
     return (
         <div className={classNames(styles.informasjonsInnhentingBlokk, styles.blokk)}>

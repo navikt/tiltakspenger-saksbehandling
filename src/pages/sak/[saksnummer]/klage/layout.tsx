@@ -1,4 +1,4 @@
-import { createContext, ReactElement, useContext, useEffect, useState } from 'react';
+import { createContext, ReactElement, useContext } from 'react';
 import { SakProps } from '~/lib/sak/SakTyper';
 import useSWR from 'swr';
 import NextError from 'next/error';
@@ -8,9 +8,8 @@ import { BodyShort, Box, Heading, HStack, Loader, Tabs, Tag, VStack } from '@nav
 import { Klagebehandling, KlagebehandlingStatus } from '~/lib/klage/typer/Klage';
 import { Nullable } from '~/types/UtilTypes';
 import Link from 'next/link';
-
 import router from 'next/router';
-import { kanNavigereTilKlageSteg, KlageSteg } from '../../../../lib/klage/utils/KlageLayoutUtils';
+import { kanNavigereTilKlageSteg, KlageSteg } from '~/lib/klage/utils/KlageLayoutUtils';
 import { classNames } from '~/utils/classNames';
 import {
     klagebehandlingResultatTilTag,
@@ -24,6 +23,7 @@ import { hentSisteKlagehendelseUtfallFraKlagebehandling } from '~/lib/klage/util
 import { klagehendelseUtfallTilTag } from '~/lib/klage/utils/KlageinstanshendelseUtils';
 import { OppsummeringsPar } from '~/lib/behandling-felles/oppsummeringer/oppsummeringspar/OppsummeringsPar';
 import { OppsummeringAvVentestatuserModal } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
+import { useResettableState } from '~/hooks/useResettableState';
 
 type Props = {
     children: ReactElement;
@@ -48,10 +48,7 @@ type ContextProps = React.PropsWithChildren<{
 }>;
 
 export const KlageProvider = ({ initialKlage, children }: ContextProps) => {
-    const [klage, setKlage] = useState<Nullable<Klagebehandling>>(initialKlage);
-    useEffect(() => {
-        setKlage(initialKlage);
-    }, [initialKlage]);
+    const [klage, setKlage] = useResettableState<Nullable<Klagebehandling>>(initialKlage);
 
     return (
         <Context.Provider

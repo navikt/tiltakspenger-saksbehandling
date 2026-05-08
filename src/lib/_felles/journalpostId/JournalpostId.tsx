@@ -1,5 +1,5 @@
 import { InlineMessage, Loader, TextField } from '@navikt/ds-react';
-import React from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { useValiderJournalpostId } from './useValiderJournalpostId';
 import { useDebounce } from 'use-debounce';
@@ -16,12 +16,11 @@ export const JournalpostId = (props: {
     readonly?: boolean;
     size?: 'small' | 'medium';
 }) => {
-    const { control, watch, setError, clearErrors } = useFormContext();
+    const { control, watch, trigger } = useFormContext();
     const journalpostIdFelt = 'journalpostId';
     const journalpostIdWatch = watch(journalpostIdFelt);
 
     const [debouncedJournalpostId] = useDebounce(journalpostIdWatch, DEBOUNCE_MS);
-    const [datoOpprettet, setDatoOpprettet] = React.useState<string>('');
 
     const inneholderKunTall = (value: string) => /^[0-9]*$/.test(value);
     const journalpostId = (debouncedJournalpostId ?? '').trim();
@@ -35,69 +34,28 @@ export const JournalpostId = (props: {
 
     const fnrMatcherIkke = !!data && data.journalpostFinnes && data.gjelderInnsendtFnr === false;
 
-    // Valideringsfeil som skal stoppe innsending av skjema
-    React.useEffect(() => {
-        const value = journalpostIdWatch?.trim() || '';
-        if (!value || isLoading) return;
+    // Avledet fra valideringssvaret - vises kun når journalposten faktisk finnes og tilhører søker
+    const datoOpprettet =
+        shouldValidate && data?.journalpostFinnes && data?.gjelderInnsendtFnr
+            ? (data.datoOpprettet ?? '')
+            : '';
 
-        // Ikke kjør remote-validering før vi har nok tegn, men la lokal
-        // validering i onChange styre feilmeldingen om at feltet kun kan inneholde tall
-        if (value.length < MIN_LENGDE_FØR_VALIDERING) {
-            setDatoOpprettet('');
-            return;
+    // RHF kjører ikke `validate`-regelen på nytt når den asynkrone SWR-responsen endrer seg
+    // (bare når selve feltverdien endres), så vi trigger re-validering manuelt her.
+    useEffect(() => {
+        if (shouldValidate) {
+            trigger(journalpostIdFelt);
         }
+    }, [trigger, shouldValidate, isLoading, data, error]);
 
-        if (error) {
-            setError(journalpostIdFelt, {
-                type: 'remote',
-                message: 'Feil ved validering av journalpostId.',
-            });
-            setDatoOpprettet('');
-            return;
-        }
-        if (data) {
-            if (!data.journalpostFinnes) {
-                setError(journalpostIdFelt, {
-                    type: 'remote',
-                    message: 'Journalpost finnes ikke.',
-                });
-                setDatoOpprettet('');
-                return;
-            }
-            if (fnrMatcherIkke) {
-                setError(journalpostIdFelt, {
-                    type: 'remote',
-                    message: 'Journalposten tilhører en annen person enn søker.',
-                });
-                setDatoOpprettet('');
-                return;
-            }
-
-            clearErrors(journalpostIdFelt);
-            setDatoOpprettet(data.datoOpprettet ?? '');
-        }
-    }, [
-        journalpostIdWatch,
-        shouldValidate,
-        isLoading,
-        error,
-        data,
-        fnrMatcherIkke,
-        clearErrors,
-        setError,
-    ]);
-
-    const valideringsInfo = React.useMemo(() => {
+    const valideringsInfo = useMemo(() => {
         const value = (journalpostIdWatch ?? '').trim();
         if (!value || !props.fnrFraPersonopplysninger || !shouldValidate) return null;
 
         if (isLoading) {
-            return (
-                <>
-                    <Loader size="small" /> {'Validerer…'}
-                </>
-            );
+            return <Loader size="small" title={'Validerer…'} />;
         }
+
         if (data) {
             if (data.journalpostFinnes && data.gjelderInnsendtFnr) {
                 return (
@@ -131,26 +89,25 @@ export const JournalpostId = (props: {
                         message: 'JournalpostId kan kun inneholde tall.',
                     },
                     validate: (value: string | undefined) => {
-                        const trimmed = (value ?? '').trim();
+                        const trimmed = value?.trim();
                         if (!trimmed) {
                             return true;
                         }
 
-                        if (trimmed.length >= MIN_LENGDE_FØR_VALIDERING) {
-                            if (isLoading) {
-                                return 'Validering av journalpostId pågår.';
-                            }
-                            if (error) {
-                                return 'Feil ved validering av journalpostId.';
-                            }
-                            if (data && data?.journalpostFinnes === false) {
-                                return 'Journalpost finnes ikke.';
-                            }
-                            if (data && data?.gjelderInnsendtFnr === false) {
-                                return 'Journalposten tilhører en annen person enn søker.';
-                            }
-                        } else {
+                        if (trimmed.length < MIN_LENGDE_FØR_VALIDERING) {
                             return `JournalpostId må inneholde minst ${MIN_LENGDE_FØR_VALIDERING} tegn.`;
+                        }
+                        if (isLoading) {
+                            return 'Validering av journalpostId pågår.';
+                        }
+                        if (error) {
+                            return 'Feil ved validering av journalpostId.';
+                        }
+                        if (data?.journalpostFinnes === false) {
+                            return 'Journalpost finnes ikke.';
+                        }
+                        if (data?.gjelderInnsendtFnr === false) {
+                            return 'Journalposten tilhører en annen person enn søker.';
                         }
 
                         return true;

@@ -1,5 +1,6 @@
 import { SakProps } from '~/lib/sak/SakTyper';
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext } from 'react';
+import { useResettableState } from '~/hooks/useResettableState';
 
 type ContextState = {
     sak: SakProps;
@@ -13,11 +14,7 @@ type Props = React.PropsWithChildren<{
 }>;
 
 export const SakProvider = ({ sak: initialSak, children }: Props) => {
-    const [sak, setSak] = useState<SakProps>(initialSak);
-
-    useEffect(() => {
-        setSak(initialSak);
-    }, [initialSak]);
+    const [sak, setSak] = useResettableState<SakProps>(initialSak);
 
     return (
         <Context.Provider

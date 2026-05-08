@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+import { createContext, ReactNode, useContext } from 'react';
 import { useRolleForBehandling } from '~/lib/saksbehandler/SaksbehandlerContext';
 import { SaksbehandlerRolle } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import { Rammebehandlingstype, Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
@@ -7,6 +7,7 @@ import { Revurdering, Omgjøring } from '~/lib/rammebehandling/typer/Revurdering
 import { erOmgjøringResultat } from '~/lib/rammebehandling/rammebehandlingUtils';
 import { Klagebehandling } from '~/lib/klage/typer/Klage';
 import { Nullable } from '~/types/UtilTypes';
+import { useResettableState } from '~/hooks/useResettableState';
 
 type BehandlingContext<Rammebehandling> = {
     behandling: Rammebehandling;
@@ -28,13 +29,9 @@ export const BehandlingProvider = ({
     klagebehandling,
     children,
 }: Props) => {
-    const [behandling, setBehandling] = useState<Rammebehandling>(initialBehandling);
+    const [behandling, setBehandling] = useResettableState<Rammebehandling>(initialBehandling);
 
     const rolleForBehandling = useRolleForBehandling(behandling);
-
-    useEffect(() => {
-        setBehandling(initialBehandling);
-    }, [initialBehandling]);
 
     return (
         <Context.Provider

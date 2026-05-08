@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Button, Checkbox, HelpText, HStack, Select, VStack } from '@navikt/ds-react';
 import {
     BenkBehandlingKlarEllerVenter,
@@ -17,6 +17,7 @@ import {
     queryUtenBenkFilter,
     setBenkFilterCookie,
 } from '~/lib/benk/filter/benkFilterUtils';
+import { useResettableState } from '~/hooks/useResettableState';
 
 type Props = {
     benkOversikt: BenkOversiktProps;
@@ -29,11 +30,7 @@ export const BenkFilterVelger = ({ benkOversikt, aktivtFilter, onSubmitFilter }:
 
     const [isLoading, setIsLoading] = useState(false);
 
-    const [valgtFilter, setValgtFilter] = useState<BenkFilters>(aktivtFilter);
-
-    useEffect(() => {
-        setValgtFilter(aktivtFilter);
-    }, [aktivtFilter]);
+    const [valgtFilter, setValgtFilter] = useResettableState<BenkFilters>(aktivtFilter);
 
     const oppdaterValgtFilter = (oppdatering: Partial<BenkFilters>) => {
         setValgtFilter({

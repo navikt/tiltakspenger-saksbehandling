@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext } from 'react';
 import { MeldeperiodeKjedeProps, MeldeperiodeProps } from '~/lib/meldekort/typer/Meldeperiode';
 import {
     MeldekortbehandlingId,
@@ -6,6 +6,7 @@ import {
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { sorterMeldekortbehandlingerAsc } from '~/lib/meldekort/utils/meldekort';
 import { BrukersMeldekortProps } from '~/lib/meldekort/typer/BrukersMeldekort';
+import { useResettableState } from '~/hooks/useResettableState';
 
 export type MeldeperioderContextState = {
     meldeperiodeKjede: MeldeperiodeKjedeProps;
@@ -34,7 +35,7 @@ export const MeldeperiodeKjedeProvider = ({
     meldeperiodeKjede: meldeperiodeKjedeInitial,
     children,
 }: Props) => {
-    const [meldeperiodeKjede, setMeldeperiodeKjede] = useState(meldeperiodeKjedeInitial);
+    const [meldeperiodeKjede, setMeldeperiodeKjede] = useResettableState(meldeperiodeKjedeInitial);
 
     const { meldekortbehandlinger, avbrutteMeldekortbehandlinger } = meldeperiodeKjede;
 
@@ -52,10 +53,6 @@ export const MeldeperiodeKjedeProvider = ({
         const index = alleMeldekortbehandlinger.findIndex((mbeh) => mbeh.id === meldekortId);
         return alleMeldekortbehandlinger.at(index + 1);
     };
-
-    useEffect(() => {
-        setMeldeperiodeKjede(meldeperiodeKjedeInitial);
-    }, [meldeperiodeKjedeInitial]);
 
     return (
         <MeldeperiodeKjedeContext.Provider
