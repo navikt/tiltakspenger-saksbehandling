@@ -8,7 +8,7 @@ import {
     PersonIcon,
     PlayIcon,
 } from '@navikt/aksel-icons';
-import { ActionMenu, Button, LocalAlert, Modal } from '@navikt/ds-react';
+import { ActionMenu, Button } from '@navikt/ds-react';
 import router from 'next/router';
 import { Klagebehandling } from '~/lib/klage/typer/Klage';
 import {
@@ -30,9 +30,9 @@ import {
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import OvertabehandlingModal from './OvertaBehandlingModal';
 import SettBehandlingPåVentModal from '~/lib/_felles/modaler/SettBehandlingPåVentModal';
-import { FetcherError } from '~/utils/fetch/fetch';
 import { Nullable } from '~/types/UtilTypes';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { ApiErrorFeilModal, ApiErrorState } from '~/lib/_felles/modaler/ApiErrorFeilModal';
 
 const KlageMeny = (props: {
     klage: Klagebehandling;
@@ -43,10 +43,10 @@ const KlageMeny = (props: {
     const [visVilOvertaModal, setVisVilOvertaModal] = React.useState(false);
     const [visAvsluttBehandlingModal, setVisAvsluttBehandlingModal] = React.useState(false);
     const [visSettBehandlingPåVentModal, setVisSettBehandlingPåVentModal] = React.useState(false);
-    const [apiError, setApiError] = React.useState<{
-        visFeilModal: boolean;
-        feil: Nullable<FetcherError>;
-    }>({ visFeilModal: false, feil: null });
+    const [apiError, setApiError] = React.useState<ApiErrorState>({
+        visFeilModal: false,
+        feil: null,
+    });
 
     const eierInnloggetSaksbehandlerBehandlingen =
         props.klage.saksbehandler && props.klage.saksbehandler === innloggetSaksbehandler.navIdent;
@@ -275,32 +275,6 @@ const KlageMeny = (props: {
                 />
             )}
         </div>
-    );
-};
-
-export const ApiErrorFeilModal = (props: {
-    åpen: boolean;
-    onClose: () => void;
-    error: FetcherError;
-}) => {
-    return (
-        <Modal aria-label="Feil ved handling" open={props.åpen} onClose={props.onClose}>
-            <Modal.Body>
-                {props.error && (
-                    <LocalAlert status="error">
-                        <LocalAlert.Header>
-                            <LocalAlert.Title>En feil skjedde</LocalAlert.Title>
-                        </LocalAlert.Header>
-                        <LocalAlert.Content>{props.error.message}</LocalAlert.Content>
-                    </LocalAlert>
-                )}
-            </Modal.Body>
-            <Modal.Footer>
-                <Button variant="secondary" onClick={props.onClose} size="small">
-                    Lukk
-                </Button>
-            </Modal.Footer>
-        </Modal>
     );
 };
 

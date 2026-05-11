@@ -23,7 +23,7 @@ import {
     MeldekortbehandlingProps,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { MeldekortUker } from '../../../0-felles-komponenter/uker/MeldekortUker';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { classNames } from '~/utils/classNames';
 import { MeldekortBegrunnelse } from '../../../0-felles-komponenter/begrunnelse/MeldekortBegrunnelse';
 import AvsluttMeldekortbehandling from '~/lib/personoversikt/meldekort-oversikt/avsluttMeldekortbehandling/AvsluttMeldekortbehandling';
@@ -36,10 +36,17 @@ import { Nullable } from '~/types/UtilTypes';
 import { MeldeperiodeKjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
 import { useNotification } from '~/lib/_felles/notifications/NotificationContext';
 import { BekreftelsesModal } from '~/lib/_felles/modaler/BekreftelsesModal';
+import { OppsummeringAvVentestatuserModal } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
 import { SakId } from '~/lib/sak/SakTyper';
 import { FetcherError } from '~/utils/fetch/fetch';
 import { PERSONOVERSIKT_TABS } from '~/lib/personoversikt/Personoversikt';
 import { useMeldekortbehandlingForm } from '~/lib/meldekort/context/MeldekortUtfyllingFormContext';
+import SettBehandlingPåVentModal from '~/lib/_felles/modaler/SettBehandlingPåVentModal';
+import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
+import { skalKunneSetteMeldekortbehandlingPaVent } from '~/lib/meldekort/utils/MeldekortbehandlingUtils';
+import { oppdaterMeldeperiodeKjedeMedMeldekortbehandling } from '~/lib/meldekort/utils/MeldekortbehandlingUtils';
+import router from 'next/router';
+import { useSettMeldekortbehandlingPåVent } from '~/lib/meldekort/api/MeldekortApi';
 
 import styles from './MeldekortUtfylling.module.css';
 
@@ -50,11 +57,32 @@ type Props = {
 export const MeldekortUtfylling = ({ meldekortbehandling }: Props) => {
     const { sakId, saksnummer } = useSak().sak;
     const { navigateWithNotification } = useNotification();
-    const { sisteMeldeperiode, setMeldeperiodeKjede } = useMeldeperiodeKjede();
+    const { meldeperiodeKjede, sisteMeldeperiode, setMeldeperiodeKjede } = useMeldeperiodeKjede();
+    const { innloggetSaksbehandler } = useSaksbehandler();
+    const [visSettPåVentModal, setVisSettPåVentModal] = useState(false);
 
     const { antallDager, ingenDagerGirRett } = sisteMeldeperiode;
 
     const formContext = useMeldekortbehandlingForm()!;
+
+    const settMeldekortbehandlingPåVent = useSettMeldekortbehandlingPåVent({
+        sakId,
+        meldekortbehandlingId: meldekortbehandling.id,
+        onSuccess: (oppdatertMeldekortbehandling) => {
+            setMeldeperiodeKjede(
+                oppdaterMeldeperiodeKjedeMedMeldekortbehandling(
+                    meldeperiodeKjede,
+                    oppdatertMeldekortbehandling,
+                ),
+            );
+            router.push(`/sak/${saksnummer}`);
+        },
+    });
+
+    const kanSettePåVent = skalKunneSetteMeldekortbehandlingPaVent(
+        meldekortbehandling,
+        innloggetSaksbehandler,
+    );
 
     const skjemaErEndret = formContext.formState.isDirty;
     const skjemaErUtfylt = formContext
@@ -130,117 +158,139 @@ export const MeldekortUtfylling = ({ meldekortbehandling }: Props) => {
     const skalSendeVedtaksbrev = formContext.watch('skalSendeVedtaksbrev');
 
     return (
-        // TODO Gjorde lintingen strengere ved oppgradering til Next 16. Fikset bare åpenbare feil, denne burde undersøkes.
-        /* eslint-disable-next-line react-hooks/refs */
-        <form onSubmit={formContext.handleSubmit(onSubmit)}>
-            <VStack gap={'space-20'}>
-                <MeldekortUker dager={formContext.watch('dager')} underBehandling={true} />
-                {skalViseBeregningVarsel && (
-                    <Alert inline={true} variant={'warning'}>
-                        {'Trykk "lagre og beregn" for å oppdatere beregningene'}
-                    </Alert>
-                )}
-                <MeldekortBeregningOgSimulering
-                    meldekortbehandling={meldekortbehandling}
-                    className={classNames(skjemaErEndret && styles.utdatertBeregning)}
-                />
-                <Controller
-                    name={'begrunnelse'}
-                    control={formContext.control}
-                    render={({ field }) => <MeldekortBegrunnelse {...field} />}
-                />
-
-                <Divider orientation="horizontal" />
-                <Controller
-                    name={'tekstTilVedtaksbrev'}
-                    control={formContext.control}
-                    render={({ field }) => (
-                        <Textarea
-                            className={
-                                skalSendeVedtaksbrev
-                                    ? styles.vedtaksbrevTextarea
-                                    : styles.vedtaksbrevTextareaReadOnly
-                            }
-                            label={
-                                <HStack justify="space-between" align="center">
-                                    <Heading size={'xsmall'} level={'5'}>
-                                        Vedtaksbrev for behandling av meldekort
-                                    </Heading>
-
-                                    <Controller
-                                        control={formContext.control}
-                                        name={'skalSendeVedtaksbrev'}
-                                        render={({ field }) => (
-                                            <Checkbox
-                                                onChange={(e) => field.onChange(!e.target.checked)}
-                                                checked={!field.value}
-                                            >
-                                                Ikke send vedtaksbrev
-                                            </Checkbox>
-                                        )}
-                                    />
-                                </HStack>
-                            }
-                            description="Teksten vises i vedtaksbrevet til bruker."
-                            minRows={5}
-                            resize={'vertical'}
-                            value={field.value}
-                            onChange={field.onChange}
-                            readOnly={!skalSendeVedtaksbrev}
-                        />
-                    )}
-                />
-                <Button
-                    className={styles.forhåndsvisBrevButton}
-                    type="button"
-                    variant="secondary"
-                    size="small"
-                    loading={forhåndsvisBrev.isMutating}
-                    disabled={meldekortbehandling.erAvsluttet || !skalSendeVedtaksbrev}
-                    onClick={() => {
-                        //resetter eventuelle tidligere feil før ny request
-                        forhåndsvisBrev.reset();
-                        forhåndsvisBrev.trigger(
-                            {
-                                tekstTilVedtaksbrev: formContext.getValues('tekstTilVedtaksbrev')
-                                    ? formContext.getValues('tekstTilVedtaksbrev')
-                                    : null,
-                                dager: formContext
-                                    .getValues('dager')
-                                    .every(
-                                        (dag) =>
-                                            dag.status !== MeldekortbehandlingDagStatus.IkkeBesvart,
-                                    )
-                                    ? formContext.getValues('dager')
-                                    : null,
-                            },
-                            { onSuccess: (blob) => window.open(URL.createObjectURL(blob!)) },
-                        );
+        <>
+            {visSettPåVentModal && (
+                <SettBehandlingPåVentModal
+                    åpen={visSettPåVentModal}
+                    onClose={() => setVisSettPåVentModal(false)}
+                    api={{
+                        trigger: (begrunnelse, frist) => {
+                            settMeldekortbehandlingPåVent.trigger({ begrunnelse, frist });
+                        },
+                        isMutating: settMeldekortbehandlingPåVent.isMutating,
+                        error: settMeldekortbehandlingPåVent.error ?? null,
                     }}
-                >
-                    Forhåndsvis brev
-                </Button>
-                {forhåndsvisBrev.error && (
-                    <Alert variant="error" size="small">
-                        <BodyShort>Feil ved forhåndsvisning av brev</BodyShort>
-                        <BodyShort>{forhåndsvisBrev.error.message}</BodyShort>
-                    </Alert>
-                )}
-                <Divider orientation="horizontal" />
-                <MeldekortUtfyllingFooter
-                    sakId={sakId}
-                    saksnummer={saksnummer}
-                    meldekortbehandling={meldekortbehandling}
-                    lagreOgBeregnMeldekort={lagreOgBeregnMeldekort}
-                    sendMeldekortTilBeslutter={sendMeldekortTilBeslutter}
-                    modalRef={modalRef}
-                    buttonActionRef={buttonActionRef}
-                    form={formContext}
-                    ingenDagerGirRett={ingenDagerGirRett}
-                    kanSendeTilBeslutning={kanSendeTilBeslutning}
                 />
-            </VStack>
-        </form>
+            )}
+            {/* TODO Gjorde lintingen strengere ved oppgradering til Next 16. Fikset bare åpenbare feil, denne burde undersøkes. */}
+            {/* eslint-disable-next-line react-hooks/refs */}
+            <form onSubmit={formContext.handleSubmit(onSubmit)}>
+                <VStack gap={'space-20'}>
+                    <MeldekortUker dager={formContext.watch('dager')} underBehandling={true} />
+                    {skalViseBeregningVarsel && (
+                        <Alert inline={true} variant={'warning'}>
+                            {'Trykk "lagre og beregn" for å oppdatere beregningene'}
+                        </Alert>
+                    )}
+                    <MeldekortBeregningOgSimulering
+                        meldekortbehandling={meldekortbehandling}
+                        className={classNames(skjemaErEndret && styles.utdatertBeregning)}
+                    />
+                    <Controller
+                        name={'begrunnelse'}
+                        control={formContext.control}
+                        render={({ field }) => <MeldekortBegrunnelse {...field} />}
+                    />
+
+                    <Divider orientation="horizontal" />
+                    <Controller
+                        name={'tekstTilVedtaksbrev'}
+                        control={formContext.control}
+                        render={({ field }) => (
+                            <Textarea
+                                className={
+                                    skalSendeVedtaksbrev
+                                        ? styles.vedtaksbrevTextarea
+                                        : styles.vedtaksbrevTextareaReadOnly
+                                }
+                                label={
+                                    <HStack justify="space-between" align="center">
+                                        <Heading size={'xsmall'} level={'5'}>
+                                            Vedtaksbrev for behandling av meldekort
+                                        </Heading>
+
+                                        <Controller
+                                            control={formContext.control}
+                                            name={'skalSendeVedtaksbrev'}
+                                            render={({ field }) => (
+                                                <Checkbox
+                                                    onChange={(e) =>
+                                                        field.onChange(!e.target.checked)
+                                                    }
+                                                    checked={!field.value}
+                                                >
+                                                    Ikke send vedtaksbrev
+                                                </Checkbox>
+                                            )}
+                                        />
+                                    </HStack>
+                                }
+                                description="Teksten vises i vedtaksbrevet til bruker."
+                                minRows={5}
+                                resize={'vertical'}
+                                value={field.value}
+                                onChange={field.onChange}
+                                readOnly={!skalSendeVedtaksbrev}
+                            />
+                        )}
+                    />
+                    <Button
+                        className={styles.forhåndsvisBrevButton}
+                        type="button"
+                        variant="secondary"
+                        size="small"
+                        loading={forhåndsvisBrev.isMutating}
+                        disabled={meldekortbehandling.erAvsluttet || !skalSendeVedtaksbrev}
+                        onClick={() => {
+                            //resetter eventuelle tidligere feil før ny request
+                            forhåndsvisBrev.reset();
+                            forhåndsvisBrev.trigger(
+                                {
+                                    tekstTilVedtaksbrev: formContext.getValues(
+                                        'tekstTilVedtaksbrev',
+                                    )
+                                        ? formContext.getValues('tekstTilVedtaksbrev')
+                                        : null,
+                                    dager: formContext
+                                        .getValues('dager')
+                                        .every(
+                                            (dag) =>
+                                                dag.status !==
+                                                MeldekortbehandlingDagStatus.IkkeBesvart,
+                                        )
+                                        ? formContext.getValues('dager')
+                                        : null,
+                                },
+                                { onSuccess: (blob) => window.open(URL.createObjectURL(blob!)) },
+                            );
+                        }}
+                    >
+                        Forhåndsvis brev
+                    </Button>
+                    {forhåndsvisBrev.error && (
+                        <Alert variant="error" size="small">
+                            <BodyShort>Feil ved forhåndsvisning av brev</BodyShort>
+                            <BodyShort>{forhåndsvisBrev.error.message}</BodyShort>
+                        </Alert>
+                    )}
+                    <Divider orientation="horizontal" />
+                    <MeldekortUtfyllingFooter
+                        sakId={sakId}
+                        saksnummer={saksnummer}
+                        meldekortbehandling={meldekortbehandling}
+                        lagreOgBeregnMeldekort={lagreOgBeregnMeldekort}
+                        sendMeldekortTilBeslutter={sendMeldekortTilBeslutter}
+                        modalRef={modalRef}
+                        buttonActionRef={buttonActionRef}
+                        form={formContext}
+                        ingenDagerGirRett={ingenDagerGirRett}
+                        kanSendeTilBeslutning={kanSendeTilBeslutning}
+                        kanSettePåVent={kanSettePåVent}
+                        setVisSettPåVentModal={setVisSettPåVentModal}
+                    />
+                </VStack>
+            </form>
+        </>
     );
 };
 
@@ -263,9 +313,32 @@ const MeldekortUtfyllingFooter = (props: {
     form: UseFormReturn<MeldekortbehandlingForm>;
     ingenDagerGirRett: boolean;
     kanSendeTilBeslutning: boolean;
+    kanSettePåVent: boolean;
+    setVisSettPåVentModal: (vis: boolean) => void;
 }) => {
     return (
         <VStack gap={'space-8'}>
+            <BekreftelsesModal
+                modalRef={props.modalRef}
+                tittel={'Send meldekort til beslutter'}
+                feil={props.sendMeldekortTilBeslutter.error}
+                lukkModal={() => props.modalRef.current?.close()}
+                bekreftKnapp={
+                    <Button
+                        size={'small'}
+                        loading={props.sendMeldekortTilBeslutter.isMutating}
+                        onClick={() => {
+                            // TODO Gjorde lintingen strengere ved oppgradering til Next 16. Fikset bare åpenbare feil, denne burde undersøkes.
+                            /* eslint-disable-next-line react-hooks/immutability */
+                            props.buttonActionRef.current = 'sendTilBeslutter';
+                        }}
+                    >
+                        Send til beslutter
+                    </Button>
+                }
+            >
+                Er du sikker på at meldekortet er ferdig utfylt og klart til å sendes til beslutter?
+            </BekreftelsesModal>
             {Object.values(props.form.formState.errors).length > 0 && (
                 <Alert variant={'error'} size={'small'}>
                     <BodyShort weight={'semibold'} size={'small'}>
@@ -282,17 +355,36 @@ const MeldekortUtfyllingFooter = (props: {
                     </ul>
                 </Alert>
             )}
-            <HStack justify={'space-between'}>
-                <AvsluttMeldekortbehandling
-                    sakId={props.sakId}
-                    meldekortbehandlingId={props.meldekortbehandling.id}
-                    personoversiktUrl={meldeperiodeUrl(
-                        props.saksnummer,
-                        props.meldekortbehandling.periode,
-                    )}
-                    buttonProps={{ variant: 'tertiary' }}
-                />
+            <VStack gap="space-16">
                 <HStack gap="space-8">
+                    <AvsluttMeldekortbehandling
+                        sakId={props.sakId}
+                        meldekortbehandlingId={props.meldekortbehandling.id}
+                        personoversiktUrl={meldeperiodeUrl(
+                            props.saksnummer,
+                            props.meldekortbehandling.periode,
+                        )}
+                        buttonProps={{ variant: 'tertiary' }}
+                    />
+                    {props.kanSettePåVent && (
+                        <Button
+                            type="button"
+                            variant="tertiary"
+                            size="small"
+                            disabled={props.form.formState.isDirty}
+                            onClick={() => props.setVisSettPåVentModal(true)}
+                        >
+                            Sett på vent
+                        </Button>
+                    )}
+                    {props.meldekortbehandling.ventestatus.length > 0 && (
+                        <OppsummeringAvVentestatuserModal
+                            ventestatuser={props.meldekortbehandling.ventestatus}
+                            button={{ variant: 'tertiary' }}
+                        />
+                    )}
+                </HStack>
+                <HStack gap="space-8" justify="end">
                     <Button
                         variant={'secondary'}
                         size="small"
@@ -317,30 +409,8 @@ const MeldekortUtfyllingFooter = (props: {
                     >
                         Send til beslutter
                     </Button>
-                    <BekreftelsesModal
-                        modalRef={props.modalRef}
-                        tittel={'Send meldekort til beslutter'}
-                        feil={props.sendMeldekortTilBeslutter.error}
-                        lukkModal={() => props.modalRef.current?.close()}
-                        bekreftKnapp={
-                            <Button
-                                size={'small'}
-                                loading={props.sendMeldekortTilBeslutter.isMutating}
-                                onClick={() => {
-                                    // TODO Gjorde lintingen strengere ved oppgradering til Next 16. Fikset bare åpenbare feil, denne burde undersøkes.
-                                    /* eslint-disable-next-line react-hooks/immutability */
-                                    props.buttonActionRef.current = 'sendTilBeslutter';
-                                }}
-                            >
-                                Send til beslutter
-                            </Button>
-                        }
-                    >
-                        Er du sikker på at meldekortet er ferdig utfylt og klart til å sendes til
-                        beslutter?
-                    </BekreftelsesModal>
                 </HStack>
-            </HStack>
+            </VStack>
             {props.ingenDagerGirRett && (
                 <Alert variant={'warning'} size={'small'}>
                     {

@@ -4,7 +4,7 @@ import {
     MeldekortbehandlingId,
     MeldekortbehandlingProps,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
-import { sorterMeldekortbehandlingerAsc } from '~/lib/meldekort/utils/meldekort';
+import { sorterMeldekortbehandlingerAsc } from '~/lib/meldekort/utils/MeldekortbehandlingUtils';
 import { BrukersMeldekortProps } from '~/lib/meldekort/typer/BrukersMeldekort';
 
 export type MeldeperioderContextState = {

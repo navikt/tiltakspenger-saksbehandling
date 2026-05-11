@@ -6,7 +6,7 @@ import { useSak } from '~/lib/sak/SakContext';
 import { MeldekortHøyreSeksjon } from './3-høyre-seksjon/MeldekortHøyreSeksjon';
 import { useMeldeperiodeKjede } from './context/MeldeperiodeKjedeContext';
 import { BrukersMeldekortProps } from '~/lib/meldekort/typer/BrukersMeldekort';
-import { erMeldekortbehandlingUnderAktivBehandling } from '~/lib/meldekort/utils/meldekortbehandling';
+import { erMeldekortbehandlingUnderAktivBehandling } from '~/lib/meldekort/utils/MeldekortbehandlingUtils';
 import { PERSONOVERSIKT_TABS } from '~/lib/personoversikt/Personoversikt';
 import { MeldekortbehandlingFormProvider } from '~/lib/meldekort/context/MeldekortUtfyllingFormContext';
 

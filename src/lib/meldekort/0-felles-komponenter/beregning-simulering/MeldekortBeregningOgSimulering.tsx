@@ -10,9 +10,10 @@ import { SimulertBeregningDetaljer } from '~/lib/beregning-og-simulering/detalje
 import { useMeldeperiodeKjede } from '~/lib/meldekort/context/MeldeperiodeKjedeContext';
 import { MeldeperiodeKjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
 import { BeregningOgSimuleringHeader } from '~/lib/beregning-og-simulering/header/BeregningOgSimuleringHeader';
-import { kanBehandle, kanSaksbehandleForMeldekort } from '~/lib/saksbehandler/tilganger';
+import { kanBehandle } from '~/lib/saksbehandler/tilganger';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import { TilbakekrevingOppsummering } from '~/lib/tilbakekreving/TilbakekrevingOppsummering';
+import { kanSaksbehandleForMeldekort } from '~/lib/meldekort/utils/MeldekortbehandlingUtils';
 
 type Props = {
     meldekortbehandling: MeldekortbehandlingProps;

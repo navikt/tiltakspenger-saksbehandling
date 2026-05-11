@@ -27,6 +27,7 @@ import {
     NotePencilIcon,
     RobotSmileIcon,
 } from '@navikt/aksel-icons';
+import { erMeldekortbehandlingSattPaVent } from '~/lib/meldekort/utils/MeldekortbehandlingUtils';
 
 import styles from './MeldekortVenstreSeksjon.module.css';
 
@@ -37,6 +38,9 @@ export const MeldekortVenstreSeksjon = () => {
     const { meldeperiodeKjede, sisteMeldeperiode, sisteMeldekortbehandling } =
         useMeldeperiodeKjede();
     const { periode, tiltaksnavn, brukersMeldekort, status } = meldeperiodeKjede;
+    const erSattPåVent = sisteMeldekortbehandling
+        ? erMeldekortbehandlingSattPaVent(sisteMeldekortbehandling)
+        : false;
 
     return (
         <VStack gap="space-12" className={styles.wrapper}>
@@ -44,11 +48,11 @@ export const MeldekortVenstreSeksjon = () => {
                 {`Meldekort uke ${ukenummerFraDatotekst(periode.fraOgMed)} og ${ukenummerFraDatotekst(periode.tilOgMed)}`}
             </Heading>
             <Tag
-                variant={meldekortStatusTagVariant[status]}
-                icon={meldekortStatusIkon[status]}
+                variant={erSattPåVent ? 'warning-moderate' : meldekortStatusTagVariant[status]}
+                icon={erSattPåVent ? <HourglassTopFilledIcon /> : meldekortStatusIkon[status]}
                 className={styles.behandlingTag}
             >
-                {finnMeldeperiodeKjedeStatusTekst[status]}
+                {erSattPåVent ? 'Satt på vent' : finnMeldeperiodeKjedeStatusTekst[status]}
             </Tag>
             <MeldekortDetalj
                 header={'Meldekortperiode'}
@@ -97,6 +101,7 @@ const MeldekortbehandlingDetaljer = ({
     saksbehandler,
     beslutter,
     erAvsluttet,
+    ventestatus,
     status,
 }: MeldekortbehandlingProps) => {
     return (
@@ -109,7 +114,9 @@ const MeldekortbehandlingDetaljer = ({
                     {beslutter && <MeldekortDetalj header={'Beslutter'} tekst={beslutter} />}
                 </>
             )}
-            {(erAvsluttet || status === MeldekortbehandlingStatus.KLAR_TIL_BEHANDLING) && (
+            {(erAvsluttet ||
+                (status === MeldekortbehandlingStatus.KLAR_TIL_BEHANDLING &&
+                    !ventestatus.at(-1)?.erSattPåVent)) && (
                 <MeldekortbehandlingOpprett type={MeldekortbehandlingType.KORRIGERING} />
             )}
         </>
