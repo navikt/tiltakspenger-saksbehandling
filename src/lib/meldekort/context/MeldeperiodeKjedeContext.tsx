@@ -4,7 +4,7 @@ import {
     MeldekortbehandlingId,
     MeldekortbehandlingProps,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
-import { sorterMeldekortbehandlingerAsc } from '~/lib/meldekort/utils/MeldekortbehandlingUtils';
+import { sorterMeldekortbehandlingerDesc } from '~/lib/meldekort/utils/MeldekortbehandlingUtils';
 import { BrukersMeldekortProps } from '~/lib/meldekort/typer/BrukersMeldekort';
 
 export type MeldeperioderContextState = {
@@ -43,7 +43,7 @@ export const MeldeperiodeKjedeProvider = ({
     );
 
     const alleMeldekortbehandlinger = meldekortbehandlinger.toSorted(
-        sorterMeldekortbehandlingerAsc,
+        sorterMeldekortbehandlingerDesc,
     );
 
     const [sisteMeldekortbehandling, ...tidligereMeldekortbehandlinger] = alleMeldekortbehandlinger;

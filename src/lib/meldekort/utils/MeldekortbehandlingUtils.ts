@@ -12,7 +12,7 @@ export const erMeldekortbehandlingUnderAktivBehandling = (m: Meldekortbehandling
     m.status === MeldekortbehandlingStatus.KLAR_TIL_BESLUTNING ||
     m.status === MeldekortbehandlingStatus.UNDER_BESLUTNING;
 
-export const sorterMeldekortbehandlingerAsc = (
+export const sorterMeldekortbehandlingerDesc = (
     a: MeldekortbehandlingProps,
     b: MeldekortbehandlingProps,
 ) => (a.opprettet > b.opprettet ? -1 : 1);

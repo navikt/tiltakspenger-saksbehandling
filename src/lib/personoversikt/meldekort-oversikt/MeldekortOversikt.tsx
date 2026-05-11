@@ -27,7 +27,7 @@ import {
     skalKunneOvertaMeldekortbehandling,
     skalKunneSetteMeldekortbehandlingPaVent,
     skalKunneTaMeldekortbehandling,
-    sorterMeldekortbehandlingerAsc,
+    sorterMeldekortbehandlingerDesc,
 } from '~/lib/meldekort/utils/MeldekortbehandlingUtils';
 import OvertaMeldekortbehandlingModal from './OvertaMeldekortbehandling';
 import { AvsluttMeldekortbehandlingModal } from './avsluttMeldekortbehandling/AvsluttMeldekortbehandling';
@@ -91,7 +91,7 @@ export const MeldekortOversikt = ({ meldeperiodeKjeder, saksnummer, sakId }: Pro
                         const sisteBrukersMeldekort = brukersMeldekort.at(-1);
 
                         const sisteMeldekortbehandling = meldekortbehandlinger
-                            .toSorted(sorterMeldekortbehandlingerAsc)
+                            .toSorted(sorterMeldekortbehandlingerDesc)
                             .at(0);
 
                         const beregnetBeløpForPeriode =
@@ -165,7 +165,7 @@ export const MeldekortOversikt = ({ meldeperiodeKjeder, saksnummer, sakId }: Pro
 };
 
 /**
- * For at modalene ikke skal forsvinne når ActionMenu lukkes, så må dem rendres utenfor ActionMenu. Da trenger vi state håndtering av det ved siden av ActionMenu
+ * For at modalene ikke skal forsvinne når ActionMenu lukkes, så må de rendres utenfor ActionMenu. Da trenger vi state håndtering av det ved siden av ActionMenu
  */
 export const MeldeperiodeKjedeOversiktMeny = (props: {
     sakId: SakId;
