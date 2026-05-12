@@ -2,7 +2,7 @@ import {
     MeldekortbehandlingId,
     MeldekortbehandlingProps,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
-import { SakId } from '~/lib/sak/SakTyper';
+import { SakId, SakProps } from '~/lib/sak/SakTyper';
 import { Nullable } from '~/types/UtilTypes';
 import { FetcherError } from '~/utils/fetch/fetch';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
@@ -10,7 +10,7 @@ import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 export const useSettMeldekortbehandlingPåVent = (args: {
     sakId: SakId;
     meldekortbehandlingId: MeldekortbehandlingId;
-    onSuccess: (meldekortbehandling: MeldekortbehandlingProps) => void;
+    onSuccess?: (meldekortbehandling: MeldekortbehandlingProps) => void;
     onError?: (error: FetcherError) => void;
 }) =>
     useFetchJsonFraApi<MeldekortbehandlingProps, { begrunnelse: string; frist: Nullable<string> }>(
@@ -22,7 +22,7 @@ export const useSettMeldekortbehandlingPåVent = (args: {
 export const useGjenopptaMeldekortbehandling = (args: {
     sakId: SakId;
     meldekortbehandlingId: MeldekortbehandlingId;
-    onSuccess: (meldekortbehandling: MeldekortbehandlingProps) => void;
+    onSuccess?: (meldekortbehandling: MeldekortbehandlingProps) => void;
     onError?: (error: FetcherError) => void;
 }) =>
     useFetchJsonFraApi<MeldekortbehandlingProps>(
@@ -34,7 +34,7 @@ export const useGjenopptaMeldekortbehandling = (args: {
 export const useTaMeldekortbehandling = (args: {
     sakId: SakId;
     meldekortbehandlingId: MeldekortbehandlingId;
-    onSuccess: (meldekortbehandling: MeldekortbehandlingProps) => void;
+    onSuccess?: (meldekortbehandling: MeldekortbehandlingProps) => void;
     onError?: (error: FetcherError) => void;
 }) =>
     useFetchJsonFraApi<MeldekortbehandlingProps>(
@@ -46,10 +46,10 @@ export const useTaMeldekortbehandling = (args: {
 export const useLeggTilbakeMeldekortbehandling = (args: {
     sakId: SakId;
     meldekortbehandlingId: MeldekortbehandlingId;
-    onSuccess: (meldekortbehandling: MeldekortbehandlingProps) => void;
+    onSuccess?: (sak: SakProps) => void;
     onError?: (error: FetcherError) => void;
 }) =>
-    useFetchJsonFraApi<MeldekortbehandlingProps>(
+    useFetchJsonFraApi<SakProps>(
         `/sak/${args.sakId}/meldekort/${args.meldekortbehandlingId}/legg-tilbake`,
         'POST',
         { onSuccess: args.onSuccess, onError: args.onError },

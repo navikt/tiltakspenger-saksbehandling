@@ -3,8 +3,8 @@ import { useRef } from 'react';
 import { BekreftelsesModal } from '~/lib/_felles/modaler/BekreftelsesModal';
 import { useSak } from '~/lib/sak/SakContext';
 import { useMeldeperiodeKjede } from '../../context/MeldeperiodeKjedeContext';
-import { useTaMeldekortbehandling } from '~/lib/personoversikt/meldekort-oversikt/useTaMeldekortbehandling';
 import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
+import { useTaMeldekortbehandling } from '~/lib/meldekort/api/MeldekortApi';
 
 import styles from './MeldekortbehandlingTaKnapp.module.css';
 
@@ -17,17 +17,19 @@ export const MeldekortbehandlingTaKnapp = ({ meldekortbehandling }: Props) => {
 
     const { meldeperiodeKjede, setMeldeperiodeKjede } = useMeldeperiodeKjede();
 
-    const { taMeldekortbehandling, isMeldekortbehandlingMutating, taMeldekortbehandlingError } =
-        useTaMeldekortbehandling(sakId, meldekortbehandling.id);
+    const { trigger, isMutating, error } = useTaMeldekortbehandling({
+        sakId,
+        meldekortbehandlingId: meldekortbehandling.id,
+    });
 
     const modalRef = useRef<HTMLDialogElement>(null);
     const lukkModal = () => modalRef.current?.close();
 
     return (
         <div>
-            {taMeldekortbehandlingError && (
+            {error && (
                 <Alert variant={'error'} className={styles.varsel}>
-                    {taMeldekortbehandlingError.message}
+                    {error.message}
                 </Alert>
             )}
             <Button onClick={() => modalRef.current?.showModal()} className={styles.knapp}>
@@ -36,14 +38,14 @@ export const MeldekortbehandlingTaKnapp = ({ meldekortbehandling }: Props) => {
             <BekreftelsesModal
                 modalRef={modalRef}
                 tittel={'Ta meldekortbehandling'}
-                feil={taMeldekortbehandlingError}
+                feil={error}
                 lukkModal={lukkModal}
                 bekreftKnapp={
                     <Button
-                        icon={isMeldekortbehandlingMutating && <Loader />}
-                        disabled={isMeldekortbehandlingMutating}
+                        icon={isMutating && <Loader />}
+                        disabled={isMutating}
                         onClick={() => {
-                            taMeldekortbehandling().then((oppdatertBehandling) => {
+                            trigger().then((oppdatertBehandling) => {
                                 if (oppdatertBehandling) {
                                     setMeldeperiodeKjede({
                                         ...meldeperiodeKjede,
