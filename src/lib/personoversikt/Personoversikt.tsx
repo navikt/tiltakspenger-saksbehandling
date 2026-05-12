@@ -244,8 +244,6 @@ export const Personoversikt = () => {
                         {meldeperiodeKjederKanBehandles && (
                             <MeldekortOversikt
                                 meldeperiodeKjeder={meldeperiodeKjederKanBehandles}
-                                saksnummer={saksnummer}
-                                sakId={sakId}
                             />
                         )}
                     </Tabs.Panel>

@@ -1,5 +1,5 @@
 import { MeldeperiodeId } from './Meldeperiode';
-import { Periode } from '../../../types/Periode';
+import { Periode } from '~/types/Periode';
 import { BrukersMeldekortId } from './BrukersMeldekort';
 import { Avbrutt } from '../../behandling-felles/typer/Avbrutt';
 import { Nullable } from '~/types/UtilTypes';
@@ -9,7 +9,7 @@ import {
 } from '~/lib/beregning-og-simulering/typer/Beregning';
 import { SakId } from '../../sak/SakTyper';
 import { SimulertBeregning } from '~/lib/beregning-og-simulering/typer/SimulertBeregning';
-import { KanIkkeIverksetteUtbetalingGrunn, Utbetalingsstatus } from '../../../types/Utbetaling';
+import { KanIkkeIverksetteUtbetalingGrunn, Utbetalingsstatus } from '~/types/Utbetaling';
 import { Attestering } from '../../behandling-felles/typer/Attestering';
 import { TilbakekrevingId } from '~/lib/tilbakekreving/typer/Tilbakekreving';
 import { VentestatusHendelse } from '~/types/Ventestatus';
@@ -81,6 +81,7 @@ export type MeldekortbehandlingProps = {
     tilbakekrevingId: Nullable<TilbakekrevingId>;
     skalSendeVedtaksbrev: boolean;
     ventestatus: VentestatusHendelse[];
+    harFlereMeldeperioder: boolean;
 };
 
 export type MeldekortDagProps = {
@@ -111,5 +112,41 @@ export type MeldekortbehandlingDTO = {
     dager: MeldekortDagProps[];
     begrunnelse: Nullable<string>;
     tekstTilVedtaksbrev: Nullable<string>;
+    skalSendeVedtaksbrev: boolean;
+};
+
+export type MeldeperiodebehandlingProps = {
+    meldeperiodeId: MeldeperiodeId;
+    kjedeId: string;
+    brukersMeldekortId: Nullable<BrukersMeldekortId>;
+    periode: Periode;
+    dager: MeldekortDagProps[];
+};
+
+// Type for ny modell som kan ha flere meldeperioder i samme behandling
+export type MeldekortbehandlingPropsV2 = {
+    id: MeldekortbehandlingId;
+    sakId: SakId;
+    meldeperioder: MeldeperiodebehandlingProps[];
+    saksbehandler: Nullable<string>;
+    beslutter: Nullable<string>;
+    opprettet: string;
+    godkjentTidspunkt: Nullable<string>;
+    status: MeldekortbehandlingStatus;
+    erAvsluttet: boolean;
+    navkontor: string;
+    navkontorNavn: Nullable<string>;
+    begrunnelse: Nullable<string>;
+    type: MeldekortbehandlingType;
+    attesteringer: Attestering[];
+    utbetalingsstatus: Utbetalingsstatus;
+    /** Sammenhengende totalperiode på tvers av alle meldeperioder */
+    periode: Periode;
+    beregning: Nullable<MeldekortBeregning>;
+    avbrutt: Nullable<Avbrutt>;
+    simulertBeregning: Nullable<SimulertBeregning>;
+    kanIkkeIverksetteUtbetaling: Nullable<KanIkkeIverksetteUtbetalingGrunn>;
+    tekstTilVedtaksbrev: Nullable<string>;
+    tilbakekrevingId: Nullable<TilbakekrevingId>;
     skalSendeVedtaksbrev: boolean;
 };

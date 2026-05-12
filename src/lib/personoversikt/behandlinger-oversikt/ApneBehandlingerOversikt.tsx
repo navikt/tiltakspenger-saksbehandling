@@ -13,7 +13,6 @@ import {
 } from '~/utils/tekstformateringUtils';
 import { formaterTidspunkt, periodeTilFormatertDatotekst } from '~/utils/date';
 import { ApneBehandlingerMeny } from '~/lib/behandling-felles/behandlingmeny/ApneBehandlingerMeny';
-import { meldeperiodeUrl } from '~/utils/urls';
 import { MeldeperiodeKjedeOversiktMeny } from '~/lib/personoversikt/meldekort-oversikt/MeldekortOversikt';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { Periode } from '~/types/Periode';
@@ -99,7 +98,7 @@ const propsForRad = (
     åpenBehandling: ÅpenBehandlingForOversikt,
     sak: SakProps,
 ): ÅpenBehandlingOversiktRadProps => {
-    const { type, sakId, saksnummer } = åpenBehandling;
+    const { type } = åpenBehandling;
 
     const typeTekst = finnTypeBehandlingTekstForOversikt[type];
 
@@ -167,11 +166,8 @@ const propsForRad = (
                 periode,
                 meny: (
                     <MeldeperiodeKjedeOversiktMeny
-                        sakId={sakId}
-                        saksnummer={saksnummer}
                         kjedePeriode={periode}
                         meldekortbehandling={meldekortbehandling}
-                        meldeperiodeUrl={meldeperiodeUrl(saksnummer, periode)}
                     />
                 ),
             };

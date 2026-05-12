@@ -1,4 +1,4 @@
-import { ActionMenu, Button, Loader, Table } from '@navikt/ds-react';
+import { ActionMenu, Alert, Button, Loader, Table, VStack } from '@navikt/ds-react';
 import {
     finnMeldeperiodeKjedeStatusTekst,
     utbetalingsstatusTekst,
@@ -15,51 +15,36 @@ import {
     MeldekortbehandlingType,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { formatterBeløp } from '~/utils/beløp';
-import { SakId } from '~/lib/sak/SakTyper';
+import { sorterMeldekortbehandlingerAsc } from '~/lib/meldekort/utils/meldekort';
 import router from 'next/router';
 import { Periode } from '~/types/Periode';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
+import { useTaMeldekortbehandling } from './useTaMeldekortbehandling';
+import { useLeggTilbakeMeldekortbehandling } from './useLeggTilbakeMeldekortbehandling';
 import {
     eierMeldekortbehandling,
-    erMeldekortbehandlingSattPaVent,
-    oppdaterSakMedMeldekortbehandling,
-    skalKunneGjenopptaMeldekortbehandling,
     skalKunneOvertaMeldekortbehandling,
-    skalKunneSetteMeldekortbehandlingPaVent,
     skalKunneTaMeldekortbehandling,
-    sorterMeldekortbehandlingerDesc,
-} from '~/lib/meldekort/utils/MeldekortbehandlingUtils';
-import OvertaMeldekortbehandlingModal from './OvertaMeldekortbehandling';
+} from '~/lib/saksbehandler/tilganger';
+import { OvertaMeldekortbehandlingModal } from './OvertaMeldekortbehandling';
 import { AvsluttMeldekortbehandlingModal } from './avsluttMeldekortbehandling/AvsluttMeldekortbehandling';
 import React, { useState } from 'react';
+import { erMeldekortbehandlingUnderAktivBehandling } from '~/lib/meldekort/utils/meldekortbehandling';
 import {
     ArrowLeftIcon,
     ArrowRightIcon,
     ChevronDownIcon,
-    PauseIcon,
     PersonIcon,
-    PlayIcon,
     XMarkOctagonIcon,
 } from '@navikt/aksel-icons';
-import { PERSONOVERSIKT_TABS } from '~/lib/personoversikt/Personoversikt';
 import NextLink from 'next/link';
-import SettBehandlingPåVentModal from '~/lib/_felles/modaler/SettBehandlingPåVentModal';
 import { useSak } from '~/lib/sak/SakContext';
-import {
-    useGjenopptaMeldekortbehandling,
-    useLeggTilbakeMeldekortbehandling,
-    useSettMeldekortbehandlingPåVent,
-    useTaMeldekortbehandling,
-} from '~/lib/meldekort/api/MeldekortApi';
-import { ApiErrorFeilModal, ApiErrorState } from '~/lib/_felles/modaler/ApiErrorFeilModal';
 
 type Props = {
     meldeperiodeKjeder: MeldeperiodeKjedeProps[];
-    saksnummer: string;
-    sakId: SakId;
 };
 
-export const MeldekortOversikt = ({ meldeperiodeKjeder, saksnummer, sakId }: Props) => {
+export const MeldekortOversikt = ({ meldeperiodeKjeder }: Props) => {
     return (
         <Table>
             <Table.Header>
@@ -149,11 +134,8 @@ export const MeldekortOversikt = ({ meldeperiodeKjeder, saksnummer, sakId }: Pro
                                 </Table.DataCell>
                                 <Table.DataCell scope="col" align="right">
                                     <MeldeperiodeKjedeOversiktMeny
-                                        sakId={sakId}
-                                        saksnummer={saksnummer}
                                         kjedePeriode={periode}
                                         meldekortbehandling={sisteMeldekortbehandling}
-                                        meldeperiodeUrl={meldeperiodeUrl(saksnummer, periode)}
                                     />
                                 </Table.DataCell>
                             </Table.Row>
@@ -164,23 +146,57 @@ export const MeldekortOversikt = ({ meldeperiodeKjeder, saksnummer, sakId }: Pro
     );
 };
 
-/**
- * For at modalene ikke skal forsvinne når ActionMenu lukkes, så må de rendres utenfor ActionMenu. Da trenger vi state håndtering av det ved siden av ActionMenu
- */
-export const MeldeperiodeKjedeOversiktMeny = (props: {
-    sakId: SakId;
-    saksnummer: string;
+type MeldeperiodeKjedeOversiktMenyProps = {
     kjedePeriode: Periode;
-    meldeperiodeUrl: string;
     meldekortbehandling?: MeldekortbehandlingProps;
-}) => {
+};
+
+/**
+ * For at modalene ikke skal forsvinne når ActionMenu lukkes, så må dem rendres utenfor ActionMenu. Da trenger vi state håndtering av det på siden av ActionMenu
+ */
+export const MeldeperiodeKjedeOversiktMeny = ({
+    kjedePeriode,
+    meldekortbehandling,
+}: MeldeperiodeKjedeOversiktMenyProps) => {
+    const { sakId, saksnummer } = useSak().sak;
+
     const [vilAvslutteBehandling, setVilAvslutteBehandling] = useState(false);
     const [vilOvertaBehandling, setVilOvertaBehandling] = useState(false);
     const [vilSettePåVent, setVilSettePåVent] = useState(false);
     const [apiError, setApiError] = useState<ApiErrorState>({ visFeilModal: false, feil: null });
 
+    const url = meldeperiodeUrl(saksnummer, kjedePeriode);
+
     return (
         <div>
+            {vilAvslutteBehandling && meldekortbehandling && (
+                <AvsluttMeldekortbehandlingModal
+                    åpen={vilAvslutteBehandling}
+                    onClose={() => setVilAvslutteBehandling(false)}
+                    sakId={sakId}
+                    meldekortbehandlingId={meldekortbehandling.id}
+                    personoversiktUrl={`/sak/${saksnummer}`}
+                />
+            )}
+
+            {vilOvertaBehandling && meldekortbehandling && (
+                <OvertaMeldekortbehandlingModal
+                    åpen={vilOvertaBehandling}
+                    onClose={() => setVilOvertaBehandling(false)}
+                    sakId={sakId}
+                    meldekortbehandlingId={meldekortbehandling.id}
+                    overtarFra={
+                        meldekortbehandling.status === MeldekortbehandlingStatus.UNDER_BEHANDLING
+                            ? meldekortbehandling.saksbehandler!
+                            : meldekortbehandling.status ===
+                                MeldekortbehandlingStatus.UNDER_BESLUTNING
+                              ? meldekortbehandling.beslutter!
+                              : 'Ukjent saksbehandler/beslutter'
+                    }
+                    meldeperiodeUrl={url}
+                />
+            )}
+
             <ActionMenu>
                 <ActionMenu.Trigger>
                     <Button
@@ -193,24 +209,16 @@ export const MeldeperiodeKjedeOversiktMeny = (props: {
                     </Button>
                 </ActionMenu.Trigger>
                 <ActionMenu.Content>
-                    <ActionMenu.Item
-                        as={NextLink}
-                        href={meldeperiodeUrl(props.saksnummer, props.kjedePeriode)}
-                    >
+                    <ActionMenu.Item as={NextLink} href={url}>
                         {'Åpne'}
                     </ActionMenu.Item>
 
-                    {props.meldekortbehandling && (
+                    {meldekortbehandling && (
                         <>
                             <ActionMenu.Divider />
                             <MeldekortbehandlingMenyKnapper
-                                sakId={props.sakId}
-                                meldekortbehandling={props.meldekortbehandling}
-                                saksnummer={props.saksnummer}
-                                meldeperiodeUrl={meldeperiodeUrl(
-                                    props.saksnummer,
-                                    props.kjedePeriode,
-                                )}
+                                meldekortbehandling={meldekortbehandling}
+                                meldeperiodeUrl={url}
                                 setVilAvslutteBehandling={setVilAvslutteBehandling}
                                 setVilOvertaBehandling={setVilOvertaBehandling}
                                 setVilSettePåVent={setVilSettePåVent}
@@ -271,19 +279,28 @@ export const MeldeperiodeKjedeOversiktMeny = (props: {
     );
 };
 
-const MeldekortbehandlingMenyKnapper = (props: {
-    sakId: SakId;
-    saksnummer: string;
+type MeldekortbehandlingMenyKnapperProps = {
     meldeperiodeUrl: string;
     meldekortbehandling: MeldekortbehandlingProps;
     setVilAvslutteBehandling: (vilAvslutte: boolean) => void;
     setVilOvertaBehandling: (vilOverta: boolean) => void;
     setVilSettePåVent: (vilSettePåVent: boolean) => void;
     setApiError: (apiError: ApiErrorState) => void;
-}) => {
-    const { innloggetSaksbehandler } = useSaksbehandler();
-    const { sak, setSak } = useSak();
+};
 
+const MeldekortbehandlingMenyKnapper = ({
+    meldekortbehandling,
+    meldeperiodeUrl,
+    setVilAvslutteBehandling,
+    setVilOvertaBehandling,
+}: MeldekortbehandlingMenyKnapperProps) => {
+    const { sak, setSak } = useSak();
+    const { innloggetSaksbehandler } = useSaksbehandler();
+
+    const { sakId } = sak;
+
+    const { leggTilbakeMeldekortbehandling, isLeggTilbakeMeldekortbehandlingMutating } =
+        useLeggTilbakeMeldekortbehandling(sakId, meldekortbehandling.id);
     const taMeldekortbehandling = useTaMeldekortbehandling({
         sakId: props.sakId,
         meldekortbehandlingId: props.meldekortbehandling.id,
@@ -309,6 +326,66 @@ const MeldekortbehandlingMenyKnapper = (props: {
         onError: (error) => props.setApiError({ visFeilModal: true, feil: error }),
     });
 
+    switch (meldekortbehandling.status) {
+        case MeldekortbehandlingStatus.KLAR_TIL_BEHANDLING:
+        case MeldekortbehandlingStatus.UNDER_BEHANDLING:
+        case MeldekortbehandlingStatus.UNDER_BESLUTNING:
+            if (!eierMeldekortbehandling(meldekortbehandling, innloggetSaksbehandler)) {
+                if (
+                    innloggetSaksbehandler.navIdent === meldekortbehandling.saksbehandler ||
+                    innloggetSaksbehandler.navIdent === meldekortbehandling.beslutter
+                ) {
+                    return null;
+                }
+
+                if (
+                    skalKunneOvertaMeldekortbehandling(meldekortbehandling, innloggetSaksbehandler)
+                ) {
+                    return (
+                        <ActionMenu.Item
+                            icon={<ArrowRightIcon aria-hidden />}
+                            onSelect={() => {
+                                setVilOvertaBehandling(true);
+                            }}
+                        >
+                            Overta behandling
+                        </ActionMenu.Item>
+                    );
+                }
+
+                if (skalKunneTaMeldekortbehandling(meldekortbehandling, innloggetSaksbehandler)) {
+                    return (
+                        <TildelMegButton
+                            meldekortbehandling={meldekortbehandling}
+                            meldeperiodeUrl={meldeperiodeUrl}
+                        />
+                    );
+                }
+
+                return null;
+            }
+
+            return (
+                <VStack align="start" gap="space-8">
+                    <ActionMenu.Item
+                        icon={<ArrowRightIcon aria-hidden />}
+                        onClick={() => router.push(meldeperiodeUrl)}
+                    >
+                        Fortsett
+                    </ActionMenu.Item>
+                    <ActionMenu.Item
+                        icon={<ArrowLeftIcon aria-hidden />}
+                        onClick={(e) => {
+                            e.preventDefault();
+                            leggTilbakeMeldekortbehandling().then((sak) => {
+                                if (sak) {
+                                    setSak(sak);
+                                }
+                            });
+                        }}
+                    >
+                        {isLeggTilbakeMeldekortbehandlingMutating ? <Loader /> : 'Legg tilbake'}
+                    </ActionMenu.Item>
     const erSattPåVent = erMeldekortbehandlingSattPaVent(props.meldekortbehandling);
     const eierBehandlingen = eierMeldekortbehandling(
         props.meldekortbehandling,
@@ -375,7 +452,7 @@ const MeldekortbehandlingMenyKnapper = (props: {
                         variant={'danger'}
                         icon={<XMarkOctagonIcon aria-hidden />}
                         onSelect={() => {
-                            props.setVilAvslutteBehandling(true);
+                            setVilAvslutteBehandling(true);
                         }}
                     >
                         Avslutt behandling
@@ -416,6 +493,23 @@ const MeldekortbehandlingMenyKnapper = (props: {
     );
 };
 
+        case MeldekortbehandlingStatus.KLAR_TIL_BESLUTNING: {
+            if (!skalKunneTaMeldekortbehandling(meldekortbehandling, innloggetSaksbehandler)) {
+                break;
+            }
+
+            return (
+                <TildelMegButton
+                    meldekortbehandling={meldekortbehandling}
+                    meldeperiodeUrl={meldeperiodeUrl}
+                />
+            );
+        }
+    }
+
+    return null;
+};
+
 const SettMeldekortbehandlingPåVentModalForOversikt = (props: {
     åpen: boolean;
     onClose: () => void;
@@ -449,19 +543,35 @@ const SettMeldekortbehandlingPåVentModalForOversikt = (props: {
     );
 };
 
-const TildelMegButton = (props: {
-    isMeldekortbehandlingMutating: boolean;
-    taMeldekortbehandling: () => void;
-}) => {
+type TildelMegProps = {
+    meldekortbehandling: MeldekortbehandlingProps;
+    meldeperiodeUrl: string;
+};
+
+const TildelMegButton = ({ meldekortbehandling, meldeperiodeUrl }: TildelMegProps) => {
+    const { taMeldekortbehandling, isMeldekortbehandlingMutating, taMeldekortbehandlingError } =
+        useTaMeldekortbehandling(meldekortbehandling.sakId, meldekortbehandling.id);
+
     return (
-        <ActionMenu.Item
-            icon={<PersonIcon aria-hidden />}
-            onClick={(e) => {
-                e.preventDefault();
-                props.taMeldekortbehandling();
-            }}
-        >
-            {props.isMeldekortbehandlingMutating ? <Loader /> : 'Tildel meg'}
-        </ActionMenu.Item>
+        <>
+            {taMeldekortbehandlingError && (
+                <Alert variant={'error'} size={'small'} inline={true}>
+                    {`Feil ved tildeling: ${taMeldekortbehandlingError.message}`}
+                </Alert>
+            )}
+            <ActionMenu.Item
+                icon={<PersonIcon aria-hidden />}
+                onClick={(e) => {
+                    e.preventDefault();
+                    taMeldekortbehandling().then((oppdatertBehandling) => {
+                        if (oppdatertBehandling) {
+                            router.push(meldeperiodeUrl);
+                        }
+                    });
+                }}
+            >
+                {isMeldekortbehandlingMutating ? <Loader /> : 'Tildel meg'}
+            </ActionMenu.Item>
+        </>
     );
 };

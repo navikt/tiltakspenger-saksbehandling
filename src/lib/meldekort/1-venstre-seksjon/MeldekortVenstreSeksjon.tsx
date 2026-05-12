@@ -6,6 +6,7 @@ import {
     ukenummerFraDatotekst,
 } from '~/utils/date';
 import { MeldekortbehandlingOpprett } from './opprett-behandling/MeldekortbehandlingOpprett';
+import { MeldekortbehandlingTaKnapp } from './ta-behandling/MeldekortbehandlingTaKnapp';
 import {
     MeldekortbehandlingProps,
     MeldekortbehandlingStatus,
@@ -84,26 +85,21 @@ export const MeldekortVenstreSeksjon = () => {
                 }
             />
             {sisteMeldekortbehandling ? (
-                <MeldekortbehandlingDetaljer {...sisteMeldekortbehandling} />
+                <MeldekortbehandlingDetaljer meldekortbehandling={sisteMeldekortbehandling} />
             ) : (
                 <MeldekortbehandlingOpprett type={MeldekortbehandlingType.FØRSTE_BEHANDLING} />
-            )}
-            {sisteMeldekortbehandling?.attesteringer && (
-                <OppsummeringAvAttesteringer
-                    attesteringer={sisteMeldekortbehandling.attesteringer}
-                />
             )}
         </VStack>
     );
 };
 
 const MeldekortbehandlingDetaljer = ({
-    saksbehandler,
-    beslutter,
-    erAvsluttet,
-    ventestatus,
-    status,
-}: MeldekortbehandlingProps) => {
+    meldekortbehandling,
+}: {
+    meldekortbehandling: MeldekortbehandlingProps;
+}) => {
+    const { saksbehandler, beslutter, erAvsluttet, status, attesteringer } = meldekortbehandling;
+
     return (
         <>
             {status !== MeldekortbehandlingStatus.AUTOMATISK_BEHANDLET && (
@@ -114,11 +110,20 @@ const MeldekortbehandlingDetaljer = ({
                     {beslutter && <MeldekortDetalj header={'Beslutter'} tekst={beslutter} />}
                 </>
             )}
-            {(erAvsluttet ||
-                (status === MeldekortbehandlingStatus.KLAR_TIL_BEHANDLING &&
-                    !ventestatus.at(-1)?.erSattPåVent)) && (
+
+            {/*{(erAvsluttet ||*/}
+            {/*    (status === MeldekortbehandlingStatus.KLAR_TIL_BEHANDLING &&*/}
+            {/*        !ventestatus.at(-1)?.erSattPåVent)) && (*/}
+
+            {erAvsluttet && (
                 <MeldekortbehandlingOpprett type={MeldekortbehandlingType.KORRIGERING} />
             )}
+
+            {status === MeldekortbehandlingStatus.KLAR_TIL_BEHANDLING && (
+                <MeldekortbehandlingTaKnapp meldekortbehandling={meldekortbehandling} />
+            )}
+
+            {attesteringer && <OppsummeringAvAttesteringer attesteringer={attesteringer} />}
         </>
     );
 };
