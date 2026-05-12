@@ -12,7 +12,7 @@ import { ChevronLeftDoubleIcon } from '@navikt/aksel-icons';
 import { useMeldeperiodeKjede } from '~/lib/meldekort/context/MeldeperiodeKjedeContext';
 import { hentMeldekortForhåndsutfyllingFraBrukersMeldekort } from '~/lib/meldekort/0-felles-komponenter/meldekortForhåndsutfyllingUtils';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
-import { kanSaksbehandleForMeldekort } from '~/lib/saksbehandler/tilganger';
+import { kanSaksbehandleForMeldekort } from '~/lib/meldekort/utils/MeldekortbehandlingUtils';
 
 import styles from './BrukersMeldekort.module.css';
 

@@ -22,6 +22,7 @@ import { Nullable } from '~/types/UtilTypes';
 import KlageMeny from '~/lib/behandling-felles/behandlingmeny/KlageMeny';
 import { hentSisteKlagehendelseUtfallFraKlagebehandling } from '~/lib/klage/utils/klageUtils';
 import { klagehendelseUtfallTilTag } from '~/lib/klage/utils/KlageinstanshendelseUtils';
+import { erMeldekortbehandlingSattPaVent } from '~/lib/meldekort/utils/MeldekortbehandlingUtils';
 
 type Props = {
     åpneBehandlinger: ÅpenBehandlingForOversikt[];
@@ -155,7 +156,12 @@ const propsForRad = (
 
             return {
                 typeTekst,
-                statusTag: meldeperiodeKjedeStatusTag[status],
+                statusTag:
+                    meldekortbehandling && erMeldekortbehandlingSattPaVent(meldekortbehandling) ? (
+                        <Tag data-color="warning">Satt på vent</Tag>
+                    ) : (
+                        meldeperiodeKjedeStatusTag[status]
+                    ),
                 saksbehandler,
                 beslutter,
                 periode,

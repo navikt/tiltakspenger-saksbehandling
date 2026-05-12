@@ -1,5 +1,4 @@
 import { Alert, BodyShort, Button, Heading, HStack, Modal, VStack } from '@navikt/ds-react';
-import { useState } from 'react';
 import router from 'next/router';
 import {
     MeldekortbehandlingId,
@@ -8,9 +7,7 @@ import {
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { SakId } from '~/lib/sak/SakTyper';
 
-import style from './MeldekortbehandlingKnapper.module.css';
-
-export const OvertaMeldekortbehandlingModal = (props: {
+const OvertaMeldekortbehandlingModal = (props: {
     sakId: SakId;
     meldekortbehandlingId: MeldekortbehandlingId;
     overtarFra: string;
@@ -68,38 +65,4 @@ export const OvertaMeldekortbehandlingModal = (props: {
     );
 };
 
-const OvertaMeldekortbehandling = (props: {
-    sakId: SakId;
-    meldekortbehandlingId: MeldekortbehandlingId;
-    overtarFra: string;
-    meldeperiodeUrl: string;
-}) => {
-    const [vilOvertaBehandling, setVilOvertaBehandling] = useState(false);
-
-    return (
-        <div>
-            {vilOvertaBehandling && (
-                <OvertaMeldekortbehandlingModal
-                    åpen={vilOvertaBehandling}
-                    onClose={() => setVilOvertaBehandling(false)}
-                    sakId={props.sakId}
-                    meldekortbehandlingId={props.meldekortbehandlingId}
-                    overtarFra={props.overtarFra}
-                    meldeperiodeUrl={props.meldeperiodeUrl}
-                />
-            )}
-            <Button
-                className={style.knapp}
-                size="small"
-                variant="secondary"
-                onClick={() => {
-                    setVilOvertaBehandling(true);
-                }}
-            >
-                Overta behandling
-            </Button>
-        </div>
-    );
-};
-
-export default OvertaMeldekortbehandling;
+export default OvertaMeldekortbehandlingModal;

@@ -12,6 +12,7 @@ import { SimulertBeregning } from '~/lib/beregning-og-simulering/typer/SimulertB
 import { KanIkkeIverksetteUtbetalingGrunn, Utbetalingsstatus } from '../../../types/Utbetaling';
 import { Attestering } from '../../behandling-felles/typer/Attestering';
 import { TilbakekrevingId } from '~/lib/tilbakekreving/typer/Tilbakekreving';
+import { VentestatusHendelse } from '~/types/Ventestatus';
 
 // "_behandling"-suffixen er ikke reell, er kun for at typescript ikke skal se denne som ekvivalent med BrukersMeldekortId
 // Ikke gjør run-time typesjekk på denne!
@@ -79,6 +80,7 @@ export type MeldekortbehandlingProps = {
     tekstTilVedtaksbrev: Nullable<string>;
     tilbakekrevingId: Nullable<TilbakekrevingId>;
     skalSendeVedtaksbrev: boolean;
+    ventestatus: VentestatusHendelse[];
 };
 
 export type MeldekortDagProps = {

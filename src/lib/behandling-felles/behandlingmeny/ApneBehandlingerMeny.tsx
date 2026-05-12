@@ -38,9 +38,7 @@ import { eierBehandling, erSattPaVent } from '~/lib/saksbehandler/tilganger';
 import router from 'next/router';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { useSettBehandlingPåVent } from './useSettBehandlingPåVent';
-import { Nullable } from '~/types/UtilTypes';
-import { FetcherError } from '~/utils/fetch/fetch';
-import { ApiErrorFeilModal } from './KlageMeny';
+import { ApiErrorFeilModal, ApiErrorState } from '~/lib/_felles/modaler/ApiErrorFeilModal';
 
 type Props = {
     behandling: ÅpenRammebehandlingForOversikt;
@@ -69,10 +67,10 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
     const [visAvsluttBehandlingModal, setVisAvsluttBehandlingModal] = React.useState(false);
     const [visOvertaBehandlingModal, setVisOvertaBehandlingModal] = useState(false);
     const [visSettBehandlingPåVentModal, setVisSettBehandlingPåVentModal] = useState(false);
-    const [apiError, setApiError] = React.useState<{
-        visFeilModal: boolean;
-        feil: Nullable<FetcherError>;
-    }>({ visFeilModal: false, feil: null });
+    const [apiError, setApiError] = React.useState<ApiErrorState>({
+        visFeilModal: false,
+        feil: null,
+    });
 
     const visTildelMeg = visTildelMegMenyvalg(behandling, innloggetSaksbehandler);
     const visFortsettBehandling = visFortsettBehandlingMenyvalg(behandling, innloggetSaksbehandler);
