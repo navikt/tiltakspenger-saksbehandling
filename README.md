@@ -8,9 +8,10 @@ Frontend-koden for støtteverktøy til bruk i saksbehandling av Tiltakspenger.
 For å kjøre opp frontend i dev
 
 ```
-npm install
-npm run dev
+pnpm install
+pnpm dev
 ```
+
 ## Lokalt oppsett for hele verdikjeden
 Hele verdikjeden kan kjøres opp lokalt, med noen komponenter mocket ut. Det krever følgende oppsett
 
@@ -51,6 +52,27 @@ Du kan bytte fake-token/fake-bruker ved å sette i .env.local `LOKAL_FAKE_TOKEN=
 Gyldige verdier for lokal backend er `TokenMcTokenface` (default) og `TokenMcTokenface2`
 
 Dette kan være nyttig når du kjapt vil bytte mellom en saksbehandler og beslutter lokalt.
+
+---
+
+### pnpm how-to
+
+Repoet bruker [pnpm](https://pnpm.io/) som package manager, pinnet via `packageManager`-feltet i `package.json`
+og håndtert av [Corepack](https://nodejs.org/api/corepack.html) (som følger med Node.js).
+
+- **Førstegangsoppsett:** kjør `corepack enable` én gang per maskin. Deretter laster Corepack ned og
+  bruker akkurat den pnpm-versjonen som er pinnet i `package.json`, uten global installasjon. Slett node_modules
+  og kjør `pnpm i` dersom du har node_modules fra npm.
+- **Husky-hooks:** siden `.npmrc` har `ignore-scripts=true` kjøres ikke `prepare`-scriptet automatisk
+  etter `pnpm install`. Kjør `pnpm run prepare` én gang etter første installasjon for å sette opp
+  git-hookene.
+- **JetBrains IDE:** når du åpner prosjektet vil IntelliJ oppdage `pnpm-lock.yaml` og foreslå å bytte
+  package manager til pnpm under *Settings → Languages & Frameworks → Node.js → Package manager*.
+  Aksepter det.
+- **Oppgradering av pnpm:** endre versjonen i `packageManager`-feltet i `package.json` og commit.
+  Corepack plukker opp den nye versjonen automatisk hos alle utviklere og i CI.
+- **Dependabot** oppdaterer `pnpm-lock.yaml` på samme måte som tidligere — ingen konfigurasjonsendring
+  nødvendig.
 
 ---
 

@@ -1,2 +1,2 @@
-npm run lint
-tsc --noEmit
+pnpm run lint
+pnpm exec tsc --noEmit

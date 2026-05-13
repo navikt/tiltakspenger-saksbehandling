@@ -1,0 +1,6 @@
+# Tillat byggescript for spesifikke pakker selv om .npmrc har ignore-scripts=true.
+# sharp:          native bildebehandling brukt av Next.js sin next/image
+# unrs-resolver:  Rust-basert modulresolver brukt av eslint-config-next
+allowBuilds:
+  sharp: true
+  unrs-resolver: true
