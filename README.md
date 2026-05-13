@@ -61,7 +61,8 @@ Repoet bruker [pnpm](https://pnpm.io/) som package manager, pinnet via `packageM
 og håndtert av [Corepack](https://nodejs.org/api/corepack.html) (som følger med Node.js).
 
 - **Førstegangsoppsett:** kjør `corepack enable` én gang per maskin. Deretter laster Corepack ned og
-  bruker akkurat den pnpm-versjonen som er pinnet i `package.json`, uten global installasjon.
+  bruker akkurat den pnpm-versjonen som er pinnet i `package.json`, uten global installasjon. Slett node_modules
+  og kjør `pnpm i` dersom du har node_modules fra npm.
 - **Husky-hooks:** siden `.npmrc` har `ignore-scripts=true` kjøres ikke `prepare`-scriptet automatisk
   etter `pnpm install`. Kjør `pnpm run prepare` én gang etter første installasjon for å sette opp
   git-hookene.
