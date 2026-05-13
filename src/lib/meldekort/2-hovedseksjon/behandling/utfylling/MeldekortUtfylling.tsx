@@ -19,7 +19,6 @@ import { Controller, UseFormReturn } from 'react-hook-form';
 import { useMeldeperiodeKjede } from '../../../context/MeldeperiodeKjedeContext';
 import {
     MeldekortbehandlingDagStatus,
-    MeldekortbehandlingDTO,
     MeldekortbehandlingProps,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { MeldekortUker } from '../../../0-felles-komponenter/uker/MeldekortUker';
@@ -30,10 +29,9 @@ import AvsluttMeldekortbehandling from '~/lib/personoversikt/meldekort-oversikt/
 import { meldeperiodeUrl } from '~/utils/urls';
 import { MeldekortBeregningOgSimulering } from '~/lib/meldekort/0-felles-komponenter/beregning-simulering/MeldekortBeregningOgSimulering';
 import Divider from '~/lib/_felles/divider/Divider';
-import { useFetchBlobFraApi, useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
+import { useFetchBlobFraApi } from '~/utils/fetch/useFetchFraApi';
 import { hookFormErrorsTilFeiloppsummering } from '~/utils/validering';
 import { Nullable } from '~/types/UtilTypes';
-import { MeldeperiodeKjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
 import { useNotification } from '~/lib/_felles/notifications/NotificationContext';
 import { BekreftelsesModal } from '~/lib/_felles/modaler/BekreftelsesModal';
 import { OppsummeringAvVentestatuserModal } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
@@ -46,7 +44,11 @@ import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import { skalKunneSetteMeldekortbehandlingPaVent } from '~/lib/meldekort/utils/MeldekortbehandlingUtils';
 import { oppdaterMeldeperiodeKjedeMedMeldekortbehandling } from '~/lib/meldekort/utils/MeldekortbehandlingUtils';
 import router from 'next/router';
-import { useSettMeldekortbehandlingPåVent } from '~/lib/meldekort/api/MeldekortApi';
+import {
+    useOppdaterMeldekortbehandling,
+    useSendMeldekortbehandlingTilBeslutning,
+    useSettMeldekortbehandlingPåVent,
+} from '~/lib/meldekort/api/MeldekortApi';
 
 import styles from './MeldekortUtfylling.module.css';
 
@@ -63,11 +65,14 @@ export const MeldekortUtfylling = ({ meldekortbehandling }: Props) => {
 
     const { antallDager, ingenDagerGirRett } = sisteMeldeperiode;
 
+    const meldekortbehandlingId = meldekortbehandling.id;
+    const kjedeId = meldeperiodeKjede.id;
+
     const formContext = useMeldekortbehandlingForm()!;
 
     const settMeldekortbehandlingPåVent = useSettMeldekortbehandlingPåVent({
         sakId,
-        meldekortbehandlingId: meldekortbehandling.id,
+        meldekortbehandlingId,
         onSuccess: (oppdatertMeldekortbehandling) => {
             setMeldeperiodeKjede(
                 oppdaterMeldeperiodeKjedeMedMeldekortbehandling(
@@ -91,14 +96,13 @@ export const MeldekortUtfylling = ({ meldekortbehandling }: Props) => {
     const skalViseBeregningVarsel = skjemaErEndret && skjemaErUtfylt;
 
     const forhåndsvisBrev = useFetchBlobFraApi<ForhåndsvisMeldekortbehandlingBrevRequest>(
-        `/sak/${sakId}/meldekortbehandling/${meldekortbehandling.id}/forhandsvis`,
+        `/sak/${sakId}/meldekortbehandling/${meldekortbehandlingId}/forhandsvis`,
         'POST',
     );
 
-    const lagreOgBeregnMeldekort = useFetchJsonFraApi<
-        MeldeperiodeKjedeProps,
-        MeldekortbehandlingDTO
-    >(`/sak/${sakId}/meldekort/${meldekortbehandling.id}/oppdater`, 'POST', {
+    const oppdaterMeldekortbehandling = useOppdaterMeldekortbehandling({
+        sakId,
+        meldekortbehandlingId,
         onSuccess: (oppdatertKjede) => {
             if (oppdatertKjede) {
                 setMeldeperiodeKjede(oppdatertKjede);
@@ -106,10 +110,9 @@ export const MeldekortUtfylling = ({ meldekortbehandling }: Props) => {
         },
     });
 
-    const sendMeldekortTilBeslutter = useFetchJsonFraApi<
-        MeldeperiodeKjedeProps,
-        MeldekortbehandlingDTO
-    >(`/sak/${sakId}/meldekort/${meldekortbehandling.id}`, 'POST', {
+    const sendMeldekortTilBeslutter = useSendMeldekortbehandlingTilBeslutning({
+        sakId,
+        meldekortbehandlingId,
         onSuccess: (oppdatertKjede) => {
             if (oppdatertKjede) {
                 setMeldeperiodeKjede(oppdatertKjede);
@@ -134,12 +137,12 @@ export const MeldekortUtfylling = ({ meldekortbehandling }: Props) => {
             case 'lagreOgBeregn':
                 //fordi brevet krever at beregning gjøres for å forhåndsvise, fjerner vi tidligere feil som kan ha oppstått
                 forhåndsvisBrev.reset();
-                lagreOgBeregnMeldekort.reset();
-                lagreOgBeregnMeldekort.trigger(meldekortbehandlingFormTilDto(data));
+                oppdaterMeldekortbehandling.reset();
+                oppdaterMeldekortbehandling.trigger(meldekortbehandlingFormTilDto(data, kjedeId));
                 break;
             case 'sendTilBeslutter':
                 sendMeldekortTilBeslutter.reset();
-                sendMeldekortTilBeslutter.trigger(meldekortbehandlingFormTilDto(data));
+                sendMeldekortTilBeslutter.trigger();
                 break;
         }
     };
@@ -278,7 +281,7 @@ export const MeldekortUtfylling = ({ meldekortbehandling }: Props) => {
                         sakId={sakId}
                         saksnummer={saksnummer}
                         meldekortbehandling={meldekortbehandling}
-                        lagreOgBeregnMeldekort={lagreOgBeregnMeldekort}
+                        lagreOgBeregnMeldekort={oppdaterMeldekortbehandling}
                         sendMeldekortTilBeslutter={sendMeldekortTilBeslutter}
                         modalRef={modalRef}
                         buttonActionRef={buttonActionRef}

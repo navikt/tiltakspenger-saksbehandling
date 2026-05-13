@@ -1,13 +1,14 @@
 import { useCallback } from 'react';
 import {
     MeldekortbehandlingDagStatus,
-    MeldekortbehandlingDTO,
     MeldekortDagProps,
+    OppdaterMeldekortbehandlingDTO,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { formaterDatotekst } from '~/utils/date';
 import { Nullable } from '~/types/UtilTypes';
 import { GyldigeMeldekortDagUfyllingsvalg } from '~/lib/meldekort/0-felles-komponenter/uker/MeldekortUkeBehandling';
 import { FieldErrors } from 'react-hook-form';
+import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
 
 export const useCustomMeldekortUtfyllingValidationResolver = () =>
     useCallback(
@@ -80,8 +81,14 @@ export interface ForhåndsvisMeldekortbehandlingBrevRequest {
 
 export const meldekortbehandlingFormTilDto = (
     data: MeldekortbehandlingForm,
-): MeldekortbehandlingDTO => ({
-    dager: data.dager,
+    kjedeId: MeldeperiodeKjedeId,
+): OppdaterMeldekortbehandlingDTO => ({
+    meldeperioder: [
+        {
+            dager: data.dager,
+            kjedeId,
+        },
+    ],
     begrunnelse: data.begrunnelse.trim() || null,
     tekstTilVedtaksbrev: data.tekstTilVedtaksbrev.trim() || null,
     skalSendeVedtaksbrev: data.skalSendeVedtaksbrev,

@@ -1,4 +1,4 @@
-import { MeldeperiodeId } from './Meldeperiode';
+import { MeldeperiodeId, MeldeperiodeKjedeId } from './Meldeperiode';
 import { Periode } from '~/types/Periode';
 import { BrukersMeldekortId } from './BrukersMeldekort';
 import { Avbrutt } from '../../behandling-felles/typer/Avbrutt';
@@ -108,11 +108,21 @@ type Beregningsdag = {
     barnetillegg: number;
 };
 
-export type MeldekortbehandlingDTO = {
-    dager: MeldekortDagProps[];
+export type OppdaterMeldekortbehandlingDTO = {
+    meldeperioder: OppdatertMeldeperiodeDTO[];
     begrunnelse: Nullable<string>;
     tekstTilVedtaksbrev: Nullable<string>;
     skalSendeVedtaksbrev: boolean;
+};
+
+type OppdatertMeldeperiodeDTO = {
+    dager: OppdaterMeldekortdagDTO[];
+    kjedeId: MeldeperiodeKjedeId;
+};
+
+type OppdaterMeldekortdagDTO = {
+    dato: string;
+    status: MeldekortbehandlingDagStatus;
 };
 
 export type MeldeperiodebehandlingProps = {

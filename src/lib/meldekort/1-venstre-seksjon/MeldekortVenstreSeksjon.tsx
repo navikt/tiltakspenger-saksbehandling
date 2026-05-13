@@ -111,10 +111,6 @@ const MeldekortbehandlingDetaljer = ({
                 </>
             )}
 
-            {/*{(erAvsluttet ||*/}
-            {/*    (status === MeldekortbehandlingStatus.KLAR_TIL_BEHANDLING &&*/}
-            {/*        !ventestatus.at(-1)?.erSattPåVent)) && (*/}
-
             {erAvsluttet && (
                 <MeldekortbehandlingOpprett type={MeldekortbehandlingType.KORRIGERING} />
             )}
