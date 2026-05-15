@@ -8,6 +8,12 @@ metadata:
 spec:
   image: {{ image }}
   port: 3000
+  liveness:
+    path: /api/isAlive
+    initialDelay: 5
+  readiness:
+    path: /api/isReady
+    initialDelay: 5
   ingresses:
     {{#each ingress}}
       - {{ this }}
