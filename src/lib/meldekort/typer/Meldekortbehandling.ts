@@ -159,4 +159,5 @@ export type MeldekortbehandlingPropsV2 = {
     tekstTilVedtaksbrev: Nullable<string>;
     tilbakekrevingId: Nullable<TilbakekrevingId>;
     skalSendeVedtaksbrev: boolean;
+    ventestatus: VentestatusHendelse[];
 };

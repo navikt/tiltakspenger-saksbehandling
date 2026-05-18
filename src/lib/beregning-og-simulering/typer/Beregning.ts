@@ -16,6 +16,7 @@ export type MeldeperiodeBeregningProps = {
     periode: Periode;
     beløp: BeløpProps;
     dager: MeldekortDagBeregnetProps[];
+    beregningKilde: BeregningKilde;
 };
 
 export type BeregningerSummert = {

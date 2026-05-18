@@ -1,6 +1,10 @@
-import { Periode } from '../../../types/Periode';
-import { MeldekortbehandlingId, MeldekortbehandlingProps } from './Meldekortbehandling';
-import { BrukersMeldekortProps } from './BrukersMeldekort';
+import { Periode } from '~/types/Periode';
+import {
+    MeldekortbehandlingId,
+    MeldekortbehandlingProps,
+    MeldekortbehandlingStatus,
+} from './Meldekortbehandling';
+import { BrukersMeldekortKjedeStatus, BrukersMeldekortProps } from './BrukersMeldekort';
 import { MeldeperiodeBeregningProps } from '~/lib/beregning-og-simulering/typer/Beregning';
 
 type MeldeperiodeDato = `${number}-${number}-${number}`;
@@ -55,4 +59,16 @@ export type MeldeperiodeKorrigering = {
     periode: Periode;
     iverksatt: string;
     beregning: MeldeperiodeBeregningProps;
+};
+
+export type MeldeperiodeKjedePropsV2 = {
+    id: MeldeperiodeKjedeId;
+    periode: Periode;
+    tiltaksnavn: string[];
+    meldeperioder: MeldeperiodeProps[];
+    meldekortbehandlingIder: MeldekortbehandlingId[];
+    meldekortbehandlingStatus: MeldekortbehandlingStatus | null;
+    brukersMeldekort: BrukersMeldekortProps[];
+    brukersMeldekortStatus: BrukersMeldekortKjedeStatus;
+    gjeldendeBeregning: MeldeperiodeBeregningProps | null;
 };

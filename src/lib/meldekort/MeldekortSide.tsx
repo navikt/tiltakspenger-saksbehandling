@@ -5,7 +5,6 @@ import { MeldekortHovedseksjon } from './2-hovedseksjon/MeldekortHovedseksjon';
 import { useSak } from '~/lib/sak/SakContext';
 import { MeldekortHøyreSeksjon } from './3-høyre-seksjon/MeldekortHøyreSeksjon';
 import { useMeldeperiodeKjede } from './context/MeldeperiodeKjedeContext';
-import { BrukersMeldekortProps } from '~/lib/meldekort/typer/BrukersMeldekort';
 import { erMeldekortbehandlingUnderAktivBehandling } from '~/lib/meldekort/utils/MeldekortbehandlingUtils';
 import { PERSONOVERSIKT_TABS } from '~/lib/personoversikt/Personoversikt';
 import { MeldekortbehandlingFormProvider } from '~/lib/meldekort/context/MeldekortUtfyllingFormContext';
@@ -17,15 +16,14 @@ export const MeldekortSide = () => {
     const { brukersMeldekort, sisteMeldekortbehandling } = useMeldeperiodeKjede();
 
     //kan være undefined - bruker har enda ikke sendt inn meldekort, og saksbehandler oppretter meldekortbehandling uten meldekort
-    const sisteInnsendteMeldekort: BrukersMeldekortProps | undefined = brukersMeldekort.toSorted(
-        (a, b) => b.mottatt.localeCompare(a.mottatt),
-    )[0];
+    const sisteInnsendteMeldekort = brukersMeldekort
+        .toSorted((a, b) => b.mottatt.localeCompare(a.mottatt))
+        .at(0);
 
     const erSisteMeldekortEtterMeldekortbehandling =
         sisteInnsendteMeldekort &&
         sisteMeldekortbehandling &&
-        new Date(sisteInnsendteMeldekort.mottatt).getTime() >
-            new Date(sisteMeldekortbehandling.opprettet).getTime() &&
+        sisteInnsendteMeldekort.mottatt > sisteMeldekortbehandling.opprettet &&
         erMeldekortbehandlingUnderAktivBehandling(sisteMeldekortbehandling);
 
     return (

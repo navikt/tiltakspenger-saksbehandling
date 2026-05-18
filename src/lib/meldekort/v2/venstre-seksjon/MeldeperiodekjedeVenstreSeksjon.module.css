@@ -1,0 +1,5 @@
+.seksjon {
+    background-color: var(--ax-accent-200);
+    border-right: 1px solid var(--ax-neutral-300);
+    padding: 1rem;
+}

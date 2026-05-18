@@ -1,0 +1,17 @@
+.oppsummering {
+    border: 1px solid var(--ax-border-neutral-subtle);
+    border-radius: var(--ax-radius-8);
+    padding: var(--ax-space-16);
+    background-color: var(--ax-bg-default);
+}
+
+.header {
+    justify-content: space-between;
+    align-items: center;
+}
+
+.metadataGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--ax-space-8) var(--ax-space-24);
+}

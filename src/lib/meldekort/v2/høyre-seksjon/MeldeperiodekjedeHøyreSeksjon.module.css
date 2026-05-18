@@ -1,0 +1,15 @@
+.seksjon {
+    background-color: var(--ax-bg-default);
+    border-left: 1px solid var(--ax-neutral-300);
+    padding: 1rem;
+}
+
+.tabPanel {
+    padding-top: 1rem;
+}
+
+.meldekortbehandlinger {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}

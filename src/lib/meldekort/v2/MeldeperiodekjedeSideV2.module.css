@@ -1,0 +1,7 @@
+.layout {
+    display: grid;
+    grid-template-columns: 350px 800px;
+    min-height: 100vh;
+    background-color: var(--ax-bg-neutral-soft);
+    gap: 1rem;
+}

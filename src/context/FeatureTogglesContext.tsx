@@ -4,6 +4,7 @@ type TogglesRecord = Record<`${string}Toggle`, boolean>;
 
 const featureTogglesDefaultState = {
     meldekortvedtakKlageToggle: false,
+    meldekortbehandlingV2Toggle: false,
 } as const satisfies TogglesRecord;
 
 type FeatureTogglesState = Record<keyof typeof featureTogglesDefaultState, boolean>;
@@ -18,11 +19,14 @@ type Props = {
 export const FeatureTogglesProvider = ({ deployEnv, children }: Props) => {
     //eslint-disable-next-line @typescript-eslint/no-unused-vars
     const isProd = deployEnv === 'prod-gcp';
+    //eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const isLocal = !deployEnv;
 
     return (
         <Context.Provider
             value={{
                 meldekortvedtakKlageToggle: !isProd,
+                meldekortbehandlingV2Toggle: isLocal,
             }}
         >
             {children}

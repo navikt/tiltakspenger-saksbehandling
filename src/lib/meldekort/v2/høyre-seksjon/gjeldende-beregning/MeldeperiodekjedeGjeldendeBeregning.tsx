@@ -1,0 +1,47 @@
+import { Alert, BodyShort, Link, VStack } from '@navikt/ds-react';
+import { MeldekortUker } from '~/lib/meldekort/0-felles-komponenter/uker/MeldekortUker';
+import {
+    BeregningKildeType,
+    MeldeperiodeBeregningProps,
+} from '~/lib/beregning-og-simulering/typer/Beregning';
+import NextLink from 'next/link';
+import { beregningKildeUrl } from '~/utils/urls';
+import { useSak } from '~/lib/sak/SakContext';
+import { MeldekortBeløp } from '~/lib/meldekort/0-felles-komponenter/beløp/MeldekortBeløp';
+
+import style from './MeldeperiodekjedeGjeldendeBeregning.module.css';
+
+type Props = {
+    beregning: MeldeperiodeBeregningProps | null;
+};
+
+export const MeldeperiodekjedeGjeldendeBeregning = ({ beregning }: Props) => {
+    return beregning ? (
+        <GjeldendeBeregning {...beregning} />
+    ) : (
+        <Alert variant={'info'}>
+            {'Det finnes ingen beregninger for denne meldeperioden ennå'}
+        </Alert>
+    );
+};
+
+const GjeldendeBeregning = ({ dager, beregningKilde, beløp }: MeldeperiodeBeregningProps) => {
+    const { sak } = useSak();
+
+    return (
+        <VStack gap={'space-16'} className={style.beregning}>
+            <BodyShort>
+                {'Kilde for beregningen: '}
+                <Link as={NextLink} href={beregningKildeUrl(beregningKilde, sak)}>
+                    {beregningKilde.type === BeregningKildeType.MELDEKORT
+                        ? 'Meldekortbehandling'
+                        : 'Rammebehandling'}
+                </Link>
+            </BodyShort>
+
+            <MeldekortUker dager={dager} />
+
+            <MeldekortBeløp beløp={beløp} />
+        </VStack>
+    );
+};
