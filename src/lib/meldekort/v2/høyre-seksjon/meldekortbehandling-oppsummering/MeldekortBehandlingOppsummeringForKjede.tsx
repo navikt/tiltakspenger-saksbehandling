@@ -4,13 +4,15 @@ import {
     MeldekortbehandlingType,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { useSak } from '~/lib/sak/SakContext';
-import { Alert, Heading, HStack, Tag, VStack } from '@navikt/ds-react';
+import { Alert, Heading, HStack, Link, Tag, VStack } from '@navikt/ds-react';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
 import { MeldekortUker } from '~/lib/meldekort/0-felles-komponenter/uker/MeldekortUker';
 import { OppsummeringsPar } from '~/lib/behandling-felles/oppsummeringer/oppsummeringspar/OppsummeringsPar';
 import { formaterTidspunktKort } from '~/utils/date';
 import React from 'react';
 import { AkselColor } from '@navikt/ds-react/types/theme';
+import NextLink from 'next/link';
+import { meldekortbehandlingUrl } from '~/utils/urls';
 
 import style from './MeldekortBehandlingOppsummeringForKjede.module.css';
 
@@ -54,6 +56,12 @@ export const MeldekortBehandlingOppsummeringForKjede = ({
                 <Heading level={'3'} size={'small'}>
                     {meldekortbehandlingTypeTekst[type]}
                 </Heading>
+                <Link
+                    as={NextLink}
+                    href={meldekortbehandlingUrl(sak.saksnummer, meldekortbehandlingId)}
+                >
+                    {'Til meldekortbehandlingen'}
+                </Link>
                 <Tag
                     data-color={meldekortbehandlingStatusFarge[status]}
                     variant={'outline'}

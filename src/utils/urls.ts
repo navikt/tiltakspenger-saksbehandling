@@ -2,6 +2,7 @@ import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { Periode } from '~/types/Periode';
 import { BeregningKilde, BeregningKildeType } from '~/lib/beregning-og-simulering/typer/Beregning';
 import { SakProps } from '~/lib/sak/SakTyper';
+import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
 
 export const meldeperiodeUrl = (saksnummer: string, periode: Periode) =>
     `/sak/${saksnummer}/meldeperiode/${periode.fraOgMed}/${periode.tilOgMed}`;
@@ -30,4 +31,11 @@ export const beregningKildeUrl = (beregningKilde: BeregningKilde, sak: SakProps)
         case BeregningKildeType.RAMMEBEHANDLING:
             return behandlingUrl({ saksnummer, id: beregningKilde.id });
     }
+};
+
+export const meldekortbehandlingUrl = (
+    saksnummer: string,
+    meldekortbehandlingId: MeldekortbehandlingId,
+) => {
+    return `/sak/${saksnummer}/meldekortbehandling/${meldekortbehandlingId}`;
 };
