@@ -8,7 +8,7 @@ import {
     periodeTilFormatertDatotekst,
 } from '~/utils/date';
 import { formatterBeløp } from '~/utils/beløp';
-import { TilbakekrevingStatusTag } from '~/lib/tilbakekreving/TilbakekrevingStatusTag';
+import { TilbakekrevingStatusTags } from '~/lib/tilbakekreving/status-tags/TilbakekrevingStatusTags';
 import { useSak } from '~/lib/sak/SakContext';
 import { hentTilbakekreving } from '~/lib/sak/sakUtils';
 
@@ -39,6 +39,7 @@ export const TilbakekrevingOppsummering = ({ tilbakekrevingId }: Props) => {
         url,
         opprettet,
         sistEndret,
+        venter,
     } = tilbakekreving;
 
     return (
@@ -52,7 +53,7 @@ export const TilbakekrevingOppsummering = ({ tilbakekrevingId }: Props) => {
             <div className={style.grid}>
                 <OppsummeringsPar
                     label={'Status'}
-                    verdi={<TilbakekrevingStatusTag status={status} />}
+                    verdi={<TilbakekrevingStatusTags status={status} venter={venter} />}
                     retning={'vertikal'}
                 />
                 <OppsummeringsPar

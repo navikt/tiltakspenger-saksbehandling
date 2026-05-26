@@ -1,0 +1,10 @@
+.tags {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.venter {
+    display: flex;
+    gap: 0.5rem;
+}

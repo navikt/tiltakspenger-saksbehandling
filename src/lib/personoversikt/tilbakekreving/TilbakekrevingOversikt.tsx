@@ -14,7 +14,7 @@ import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import NextLink from 'next/link';
 import { useSak } from '~/lib/sak/SakContext';
 import { beregningKildeUrl } from '~/utils/urls';
-import { TilbakekrevingStatusTag } from '~/lib/tilbakekreving/TilbakekrevingStatusTag';
+import { TilbakekrevingStatusTags } from '~/lib/tilbakekreving/status-tags/TilbakekrevingStatusTags';
 import { TilbakekrevingTildeling } from '~/lib/personoversikt/tilbakekreving/TilbakekrevingTildeling';
 
 import style from './TIlbakekrevingOversikt.module.css';
@@ -94,9 +94,7 @@ const TilbakekrevingerTabell = ({ tilbakekrevinger }: TilbakekrevingerTabellProp
                 <Table.Row>
                     <Table.HeaderCell scope="col">{'Status'}</Table.HeaderCell>
                     <Table.HeaderCell scope="col">{'Feilutbetalt beløp'}</Table.HeaderCell>
-                    <Table.HeaderCell scope="col">
-                        {'Totalperiode for kravgrunnlag'}
-                    </Table.HeaderCell>
+                    <Table.HeaderCell scope="col">{'Kravgrunnlag totalperiode'}</Table.HeaderCell>
                     <Table.HeaderCell scope="col">{'Opprettet'}</Table.HeaderCell>
                     <Table.HeaderCell scope="col">{'Sist endret'}</Table.HeaderCell>
                     <Table.HeaderCell scope="col">{'Varsel sendt'}</Table.HeaderCell>
@@ -120,12 +118,13 @@ const TilbakekrevingerTabell = ({ tilbakekrevinger }: TilbakekrevingerTabellProp
                         beregningKilde,
                         saksbehandler,
                         beslutter,
+                        venter,
                     } = tilbakekreving;
 
                     return (
                         <Table.Row shadeOnHover={false} key={id}>
                             <Table.DataCell>
-                                <TilbakekrevingStatusTag status={status} />
+                                <TilbakekrevingStatusTags status={status} venter={venter} />
                             </Table.DataCell>
                             <Table.DataCell>
                                 {formatterBeløp(totaltFeilutbetaltBeløp)}
