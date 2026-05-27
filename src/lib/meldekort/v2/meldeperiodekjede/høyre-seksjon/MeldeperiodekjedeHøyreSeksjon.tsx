@@ -1,9 +1,9 @@
 import { Heading, Tabs, VStack } from '@navikt/ds-react';
-import { useMeldeperiodeKjedeV2 } from '~/lib/meldekort/v2/context/MeldeperiodeKjedeContextV2';
-import { MeldeperiodekjedeGjeldendeBeregning } from '~/lib/meldekort/v2/høyre-seksjon/gjeldende-beregning/MeldeperiodekjedeGjeldendeBeregning';
+import { useMeldeperiodeKjedeV2 } from '~/lib/meldekort/v2/meldeperiodekjede/context/MeldeperiodeKjedeContextV2';
+import { MeldeperiodekjedeGjeldendeBeregning } from '~/lib/meldekort/v2/meldeperiodekjede/høyre-seksjon/gjeldende-beregning/MeldeperiodekjedeGjeldendeBeregning';
 import { CurrencyExchangeIcon, DocPencilIcon, PersonPencilIcon } from '@navikt/aksel-icons';
 import { BrukersMeldekortVisning } from '~/lib/meldekort/3-høyre-seksjon/brukers-meldekort/BrukersMeldekort';
-import { MeldekortBehandlingOppsummeringForKjede } from '~/lib/meldekort/v2/høyre-seksjon/meldekortbehandling-oppsummering/MeldekortBehandlingOppsummeringForKjede';
+import { MeldekortBehandlingOppsummeringForKjede } from '~/lib/meldekort/v2/meldeperiodekjede/høyre-seksjon/meldekortbehandling-oppsummering/MeldekortBehandlingOppsummeringForKjede';
 
 import style from './MeldeperiodekjedeHøyreSeksjon.module.css';
 import { classNames } from '~/utils/classNames';

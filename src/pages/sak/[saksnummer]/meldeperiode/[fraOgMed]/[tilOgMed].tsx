@@ -13,7 +13,7 @@ import {
     MELDEPERIODE_V2_COOKIE_NAME,
     MeldeperiodeV2Velger,
 } from '~/lib/meldekort/v2/v2-velger/MeldeperiodeV2Velger';
-import { MeldeperiodekjedeSideV2 } from '~/lib/meldekort/v2/MeldeperiodekjedeSideV2';
+import { MeldeperiodekjedeSideV2 } from '~/lib/meldekort/v2/meldeperiodekjede/MeldeperiodekjedeSideV2';
 
 type Props = {
     meldeperiodeKjede: MeldeperiodeKjedeProps;

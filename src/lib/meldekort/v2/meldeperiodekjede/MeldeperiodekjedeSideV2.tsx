@@ -1,8 +1,8 @@
 import { PersonaliaHeader } from '~/lib/personaliaheader/PersonaliaHeader';
 import { useSak } from '~/lib/sak/SakContext';
-import { MeldeperiodekjedeVenstreSeksjon } from '~/lib/meldekort/v2/venstre-seksjon/MeldeperiodekjedeVenstreSeksjon';
-import { MeldeperiodekjedeHøyreSeksjon } from '~/lib/meldekort/v2/høyre-seksjon/MeldeperiodekjedeHøyreSeksjon';
-import { MeldeperiodeKjedeV2Provider } from '~/lib/meldekort/v2/context/MeldeperiodeKjedeContextV2';
+import { MeldeperiodekjedeVenstreSeksjon } from '~/lib/meldekort/v2/meldeperiodekjede/venstre-seksjon/MeldeperiodekjedeVenstreSeksjon';
+import { MeldeperiodekjedeHøyreSeksjon } from '~/lib/meldekort/v2/meldeperiodekjede/høyre-seksjon/MeldeperiodekjedeHøyreSeksjon';
+import { MeldeperiodeKjedeV2Provider } from '~/lib/meldekort/v2/meldeperiodekjede/context/MeldeperiodeKjedeContextV2';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
 import { Alert } from '@navikt/ds-react';
 

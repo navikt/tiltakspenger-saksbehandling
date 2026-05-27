@@ -6,7 +6,7 @@ import {
     MeldekortbehandlingId,
     MeldekortbehandlingPropsV2,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
-import { MeldekortbehandlingSide } from '~/lib/meldekort/v2/meldekortbehandling-side/MeldekortbehandlingSide';
+import { MeldekortbehandlingSide } from '~/lib/meldekort/v2/meldekortbehandling/MeldekortbehandlingSide';
 
 type Props = {
     sak: SakProps;

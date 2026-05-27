@@ -1,4 +1,3 @@
-import style from './MeldeperiodekjedeVenstreSeksjon.module.css';
 import { BodyShort, Heading, VStack } from '@navikt/ds-react';
 import {
     formaterDatotekst,
@@ -9,7 +8,9 @@ import {
 import React, { PropsWithChildren } from 'react';
 import { useSak } from '~/lib/sak/SakContext';
 import { Separator } from '~/lib/_felles/separator/Separator';
-import { useMeldeperiodeKjedeV2 } from '~/lib/meldekort/v2/context/MeldeperiodeKjedeContextV2';
+import { useMeldeperiodeKjedeV2 } from '~/lib/meldekort/v2/meldeperiodekjede/context/MeldeperiodeKjedeContextV2';
+
+import style from './MeldeperiodekjedeVenstreSeksjon.module.css';
 
 export const MeldeperiodekjedeVenstreSeksjon = () => {
     const { sak } = useSak();
