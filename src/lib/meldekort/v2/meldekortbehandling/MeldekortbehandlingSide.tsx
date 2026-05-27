@@ -3,6 +3,7 @@ import { PersonaliaHeader } from '~/lib/personaliaheader/PersonaliaHeader';
 import { useSak } from '~/lib/sak/SakContext';
 import { Heading } from '@navikt/ds-react';
 import { MeldekortbehandlingV2Provider } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2Context';
+import { Meldeperiodebehandlinger } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/Meldeperiodebehandlinger';
 
 import style from './MeldekortbehandlingSide.module.css';
 
@@ -21,6 +22,7 @@ export const MeldekortbehandlingSide = ({ meldekortbehandling }: Props) => {
                     size={'large'}
                     level={'1'}
                 >{`Meldekortbehandling ${meldekortbehandling.id}`}</Heading>
+                <Meldeperiodebehandlinger />
             </div>
         </MeldekortbehandlingV2Provider>
     );

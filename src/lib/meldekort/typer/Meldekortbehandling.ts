@@ -125,6 +125,15 @@ type OppdaterMeldekortdagDTO = {
     status: MeldekortbehandlingDagStatus;
 };
 
+export type OpprettMeldekortbehandlingDTO =
+    | {
+          v2: false;
+      }
+    | {
+          type: MeldekortbehandlingType;
+          v2: true;
+      };
+
 export type MeldeperiodebehandlingProps = {
     meldeperiodeId: MeldeperiodeId;
     kjedeId: string;

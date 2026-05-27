@@ -1,10 +1,8 @@
 import React, { createContext, useContext } from 'react';
 import { MeldeperiodeKjedePropsV2, MeldeperiodeProps } from '~/lib/meldekort/typer/Meldeperiode';
-import { useResettableState } from '~/hooks/useResettableState';
 
 type MeldeperioderContextState = {
     meldeperiodeKjede: MeldeperiodeKjedePropsV2;
-    setMeldeperiodeKjede: (meldeperiodeKjede: MeldeperiodeKjedePropsV2) => void;
     sisteMeldeperiode: MeldeperiodeProps;
 };
 
@@ -17,19 +15,13 @@ type Props = {
     children: React.ReactNode;
 };
 
-export const MeldeperiodeKjedeV2Provider = ({
-    meldeperiodeKjede: meldeperiodeKjedeInitial,
-    children,
-}: Props) => {
-    const [meldeperiodeKjede, setMeldeperiodeKjede] = useResettableState(meldeperiodeKjedeInitial);
-
+export const MeldeperiodeKjedeV2Provider = ({ meldeperiodeKjede, children }: Props) => {
     const sisteMeldeperiode = meldeperiodeKjede.meldeperioder.at(-1)!;
 
     return (
         <MeldeperiodeKjedeContext.Provider
             value={{
                 meldeperiodeKjede,
-                setMeldeperiodeKjede,
                 sisteMeldeperiode,
             }}
         >

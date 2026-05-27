@@ -1,16 +1,20 @@
-import { MeldeperiodeKjedeId, MeldeperiodeKjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
-import { SakId } from '~/lib/sak/SakTyper';
+import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
+import { SakId, SakProps } from '~/lib/sak/SakTyper';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
-import { OpprettMeldekortbehandlingDTO } from '~/lib/meldekort/typer/Meldekortbehandling';
+import {
+    MeldekortbehandlingType,
+    OpprettMeldekortbehandlingDTO,
+} from '~/lib/meldekort/typer/Meldekortbehandling';
 
 type Props = {
     kjedeId: MeldeperiodeKjedeId;
     sakId: SakId;
+    type: MeldekortbehandlingType;
 };
 
-export const useOpprettMeldekortbehandling = ({ kjedeId, sakId }: Props) => {
+export const useOpprettMeldekortbehandlingV2 = ({ kjedeId, sakId, type }: Props) => {
     const { trigger, isMutating, error } = useFetchJsonFraApi<
-        MeldeperiodeKjedeProps,
+        SakProps,
         OpprettMeldekortbehandlingDTO
     >(
         `/sak/${encodeURIComponent(sakId)}/meldeperiode/${encodeURIComponent(kjedeId)}/opprettBehandling`,
@@ -18,7 +22,7 @@ export const useOpprettMeldekortbehandling = ({ kjedeId, sakId }: Props) => {
     );
 
     return {
-        opprett: () => trigger({ v2: false }),
+        opprett: () => trigger({ v2: true, type }),
         laster: isMutating,
         feil: error,
     };
