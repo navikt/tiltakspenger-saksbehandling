@@ -1,11 +1,11 @@
 import {
     TilbakekrevingBehandling,
     TilbakekrevingBehandlingsstatus,
-    TilbakekrevingVentegrunn,
 } from '~/lib/tilbakekreving/typer/Tilbakekreving';
 import { BodyShort, HelpText, Tag } from '@navikt/ds-react';
 import { AkselColor } from '@navikt/ds-react/types/theme';
 import { formaterDatotekst } from '~/utils/date';
+import { tilbakekrevingVenterStatusTekst } from '~/lib/tilbakekreving/tilbakekrevingTekster';
 
 import style from './TilbakekrevingStatusTags.module.css';
 
@@ -20,7 +20,7 @@ export const TilbakekrevingStatusTags = ({ status, venter }: Props) => {
             {venter && (
                 <Tag data-color={'neutral'} variant={'moderate'} className={style.venter}>
                     <BodyShort size={'small'}>{'Venter'}</BodyShort>
-                    <HelpText>{`${venterStatusTekst[venter.grunn]} - Gjenopptas ${formaterDatotekst(venter.gjenopptas)}`}</HelpText>
+                    <HelpText>{`${tilbakekrevingVenterStatusTekst[venter.grunn]} - Gjenopptas ${formaterDatotekst(venter.gjenopptas)}`}</HelpText>
                 </Tag>
             )}
         </div>
@@ -47,8 +47,4 @@ const tilbakekrevingStatusFarge: Record<TilbakekrevingBehandlingsstatus, AkselCo
     [TilbakekrevingBehandlingsstatus.TIL_GODKJENNING]: 'brand-beige',
     [TilbakekrevingBehandlingsstatus.UNDER_GODKJENNING]: 'info',
     [TilbakekrevingBehandlingsstatus.AVSLUTTET]: 'success',
-} as const;
-
-const venterStatusTekst: Record<TilbakekrevingVentegrunn, string> = {
-    [TilbakekrevingVentegrunn.AVVENTER_BRUKERUTTALELSE]: 'Avventer brukeruttalelse',
 } as const;

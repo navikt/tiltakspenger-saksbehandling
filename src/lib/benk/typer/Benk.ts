@@ -1,5 +1,6 @@
 import { Nullable } from '~/types/UtilTypes';
 import { RammebehandlingResultat } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { TilbakekrevingVentegrunn } from '~/lib/tilbakekreving/typer/Tilbakekreving';
 
 export type BenkOversiktRequestBody = {
     sortering: BenkSortering;
@@ -20,7 +21,7 @@ export type BenkOversiktProps = {
     antallFiltrertPgaTilgang: number;
 };
 
-export type BenkBehandling = {
+type BenkBehandlingBase = {
     sakId: string;
     fnr: string;
     saksnummer: string;
@@ -38,6 +39,20 @@ export type BenkBehandling = {
     erUnderkjent: boolean;
     beløp: Nullable<number>;
 };
+
+type BenkBehandlingAndre = BenkBehandlingBase & {
+    behandlingstype: Exclude<BenkBehandlingstype, BenkBehandlingstype.TILBAKEKREVING>;
+    beløp: null;
+};
+
+type BenkTilbakekrevingBehandling = BenkBehandlingBase & {
+    behandlingstype: BenkBehandlingstype.TILBAKEKREVING;
+    sattPåVentBegrunnelse: Nullable<TilbakekrevingVentegrunn>;
+    beløp: number;
+};
+
+// TODO: Skal splitte dette opp på en ryddigere måte når vi skal redesigne benken
+export type BenkBehandling = BenkBehandlingAndre | BenkTilbakekrevingBehandling;
 
 export enum BenkBehandlingstype {
     SØKNADSBEHANDLING = 'SØKNADSBEHANDLING',
