@@ -8,6 +8,7 @@ import NextLink from 'next/link';
 import { beregningKildeUrl } from '~/utils/urls';
 import { useSak } from '~/lib/sak/SakContext';
 import { MeldekortBeløp } from '~/lib/meldekort/0-felles-komponenter/beløp/MeldekortBeløp';
+import { useFeatureToggles } from '~/context/FeatureTogglesContext';
 
 import style from './MeldeperiodekjedeGjeldendeBeregning.module.css';
 
@@ -27,12 +28,16 @@ export const MeldeperiodekjedeGjeldendeBeregning = ({ beregning }: Props) => {
 
 const GjeldendeBeregning = ({ dager, beregningKilde, beløp }: MeldeperiodeBeregningProps) => {
     const { sak } = useSak();
+    const { meldekortbehandlingV2Toggle } = useFeatureToggles();
 
     return (
         <VStack gap={'space-16'} className={style.beregning}>
             <BodyShort>
                 {'Kilde for beregningen: '}
-                <Link as={NextLink} href={beregningKildeUrl(beregningKilde, sak)}>
+                <Link
+                    as={NextLink}
+                    href={beregningKildeUrl(beregningKilde, sak, meldekortbehandlingV2Toggle)}
+                >
                     {beregningKilde.type === BeregningKildeType.MELDEKORT
                         ? 'Meldekortbehandling'
                         : 'Rammebehandling'}
