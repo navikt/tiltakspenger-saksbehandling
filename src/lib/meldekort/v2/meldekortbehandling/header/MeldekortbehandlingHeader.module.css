@@ -1,6 +1,9 @@
+.outer {
+    width: 750px;
+}
+
 .summary {
     border: 2px solid var(--ax-border-info);
     border-radius: var(--ax-radius-4);
     padding: var(--ax-space-12) var(--ax-space-16);
-    width: 750px;
 }

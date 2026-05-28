@@ -114,6 +114,7 @@ export type OppdaterMeldekortbehandlingDTO = {
     begrunnelse: Nullable<string>;
     tekstTilVedtaksbrev: Nullable<string>;
     skalSendeVedtaksbrev: boolean;
+    v2?: boolean;
 };
 
 type OppdatertMeldeperiodeDTO = {

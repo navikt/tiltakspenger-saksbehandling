@@ -3,18 +3,25 @@ import { useSak } from '~/lib/sak/SakContext';
 import { useMeldekortbehandling } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2Context';
 import { formaterDatotekst } from '~/utils/date';
 import { DetaljHorisontal } from '~/lib/_felles/detaljer/DetaljHorisontal';
+import React from 'react';
+import { MeldekortbehandlingStatusTags } from '~/lib/meldekort/v2/meldekortbehandling/header/status/MeldekortbehandlingStatusTags';
 
 import style from './MeldekortbehandlingHeader.module.css';
 
 export const MeldekortbehandlingHeader = () => {
     const { førsteDagSomGirRett, sisteDagSomGirRett, kanSendeInnHelgForMeldekort } = useSak().sak;
-    const { saksbehandler, beslutter } = useMeldekortbehandling();
+
+    const meldekortbehandling = useMeldekortbehandling();
+    const { saksbehandler, beslutter } = meldekortbehandling;
 
     return (
-        <VStack gap={'space-8'}>
-            <Heading size={'medium'} level={'1'}>
-                {'Meldekortbehandling'}
-            </Heading>
+        <VStack gap={'space-16'} className={style.outer}>
+            <HStack justify={'space-between'}>
+                <Heading size={'medium'} level={'1'}>
+                    {'Meldekortbehandling'}
+                </Heading>
+                <MeldekortbehandlingStatusTags meldekortbehandling={meldekortbehandling} />
+            </HStack>
 
             <VStack gap={'space-8'} className={style.summary}>
                 <HStack gap={'space-16'}>

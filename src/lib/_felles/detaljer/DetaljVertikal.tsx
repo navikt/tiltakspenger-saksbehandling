@@ -9,7 +9,7 @@ type Props = PropsWithChildren<
 
 export const DetaljVertikal = ({ navn, children, ...rest }: Props) => {
     return (
-        <BodyShort as={VStack} size={'small'} {...rest}>
+        <BodyShort as={VStack} {...rest}>
             <strong>{navn}</strong>
             {children}
         </BodyShort>

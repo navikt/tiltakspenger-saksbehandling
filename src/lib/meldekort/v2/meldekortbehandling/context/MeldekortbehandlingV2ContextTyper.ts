@@ -1,4 +1,7 @@
-import { MeldekortbehandlingDagStatus } from '~/lib/meldekort/typer/Meldekortbehandling';
+import {
+    MeldekortbehandlingDagStatus,
+    OppdaterMeldekortbehandlingDTO,
+} from '~/lib/meldekort/typer/Meldekortbehandling';
 import { MeldeperiodeKjedeId, MeldeperiodeKjedePropsV2 } from '~/lib/meldekort/typer/Meldeperiode';
 import { TextAreaInput } from '~/utils/textarea';
 import { ReducerAction } from '~/types/ReducerAction';
@@ -24,6 +27,7 @@ export type MeldekortbehandlingSkjemaContext = MeldekortbehandlingSkjemaState & 
         begrunnelse: TextAreaInput;
         brevtekst: TextAreaInput;
     };
+    tilDTO: () => OppdaterMeldekortbehandlingDTO;
 };
 
 export type MeldekortbehandlingSkjemaActions =

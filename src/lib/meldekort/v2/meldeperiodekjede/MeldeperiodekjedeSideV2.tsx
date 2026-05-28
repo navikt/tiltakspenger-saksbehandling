@@ -4,7 +4,7 @@ import { MeldeperiodekjedeVenstreSeksjon } from '~/lib/meldekort/v2/meldeperiode
 import { MeldeperiodekjedeHøyreSeksjon } from '~/lib/meldekort/v2/meldeperiodekjede/høyre-seksjon/MeldeperiodekjedeHøyreSeksjon';
 import { MeldeperiodeKjedeV2Provider } from '~/lib/meldekort/v2/meldeperiodekjede/context/MeldeperiodeKjedeContextV2';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
-import { Alert } from '@navikt/ds-react';
+import { InfokortEnkel } from '~/lib/_felles/infokort/InfokortEnkel';
 
 import style from './MeldeperiodekjedeSideV2.module.css';
 
@@ -17,17 +17,21 @@ export const MeldeperiodekjedeSideV2 = ({ kjedeId }: Props) => {
 
     const kjede = meldeperiodeKjederV2.find((it) => it.id === kjedeId);
 
-    if (!kjede) {
-        return <Alert variant={'error'}>{`Fant ikke meldeperiodekjede ${kjedeId}`}</Alert>;
-    }
-
     return (
-        <MeldeperiodeKjedeV2Provider meldeperiodeKjede={kjede}>
+        <>
             <PersonaliaHeader sakId={sakId} saksnummer={saksnummer} visTilbakeKnapp={true} />
-            <div className={style.layout}>
-                <MeldeperiodekjedeVenstreSeksjon />
-                <MeldeperiodekjedeHøyreSeksjon />
-            </div>
-        </MeldeperiodeKjedeV2Provider>
+            {kjede ? (
+                <MeldeperiodeKjedeV2Provider meldeperiodeKjede={kjede}>
+                    <div className={style.layout}>
+                        <MeldeperiodekjedeVenstreSeksjon />
+                        <MeldeperiodekjedeHøyreSeksjon />
+                    </div>
+                </MeldeperiodeKjedeV2Provider>
+            ) : (
+                <InfokortEnkel
+                    data-color={'danger'}
+                >{`Fant ikke meldeperiodekjede ${kjedeId}`}</InfokortEnkel>
+            )}
+        </>
     );
 };

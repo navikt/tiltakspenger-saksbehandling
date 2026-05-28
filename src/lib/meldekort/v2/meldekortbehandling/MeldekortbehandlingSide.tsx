@@ -7,6 +7,7 @@ import { Meldeperiodebehandlinger } from '~/lib/meldekort/v2/meldekortbehandling
 import { MeldekortbehandlingHeader } from '~/lib/meldekort/v2/meldekortbehandling/header/MeldekortbehandlingHeader';
 
 import style from './MeldekortbehandlingSide.module.css';
+import { MeldekortbehandlingLagre } from '~/lib/meldekort/v2/meldekortbehandling/handlinger/lagre/MeldekortbehandlingLagre';
 
 type Props = {
     meldekortbehandling: MeldekortbehandlingPropsV2;
@@ -22,6 +23,7 @@ export const MeldekortbehandlingSide = ({ meldekortbehandling }: Props) => {
             <VStack gap={'space-32'} className={style.meldekortbehandling}>
                 <MeldekortbehandlingHeader />
                 <Meldeperiodebehandlinger />
+                <MeldekortbehandlingLagre />
             </VStack>
         </MeldekortbehandlingV2Provider>
     );

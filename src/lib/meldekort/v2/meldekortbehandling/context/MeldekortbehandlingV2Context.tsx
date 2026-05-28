@@ -75,6 +75,18 @@ export const MeldekortbehandlingV2Provider = ({ meldekortbehandling, children }:
                                 getValue: getBrevtekst,
                             },
                         },
+                        tilDTO: () => {
+                            return {
+                                meldeperioder: skjema.meldeperioder.map((it) => ({
+                                    kjedeId: it.kjedeId,
+                                    dager: it.dager,
+                                })),
+                                begrunnelse: getBegrunnelse(),
+                                tekstTilVedtaksbrev: getBrevtekst(),
+                                skalSendeVedtaksbrev: true,
+                                v2: true,
+                            };
+                        },
                     }}
                 >
                     {children}

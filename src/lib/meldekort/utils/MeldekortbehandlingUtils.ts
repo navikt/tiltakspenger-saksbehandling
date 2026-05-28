@@ -1,5 +1,6 @@
 import {
     MeldekortbehandlingProps,
+    MeldekortbehandlingPropsV2,
     MeldekortbehandlingStatus,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { MeldeperiodeKjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
@@ -127,8 +128,9 @@ export const skalKunneOvertaMeldekortbehandling = (
     }
 };
 
-export const erMeldekortbehandlingSattPaVent = (meldekortbehandling: MeldekortbehandlingProps) =>
-    meldekortbehandling.ventestatus?.at(-1)?.erSattPåVent ?? false;
+export const erMeldekortbehandlingSattPaVent = (
+    meldekortbehandling: MeldekortbehandlingProps | MeldekortbehandlingPropsV2,
+) => meldekortbehandling.ventestatus?.at(-1)?.erSattPåVent ?? false;
 
 export const skalKunneGjenopptaMeldekortbehandling = (
     meldekortbehandling: MeldekortbehandlingProps,
