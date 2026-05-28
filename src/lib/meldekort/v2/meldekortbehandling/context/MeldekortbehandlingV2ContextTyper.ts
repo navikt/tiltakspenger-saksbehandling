@@ -3,18 +3,18 @@ import { MeldeperiodeKjedeId, MeldeperiodeKjedePropsV2 } from '~/lib/meldekort/t
 import { TextAreaInput } from '~/utils/textarea';
 import { ReducerAction } from '~/types/ReducerAction';
 
-export type MeldekortDagContext = {
+export type MeldekortDagSkjema = {
     dato: string;
     status: MeldekortbehandlingDagStatus;
 };
 
-export type MeldeperiodeContext = {
-    dager: MeldekortDagContext[];
+export type MeldeperiodeSkjema = {
+    dager: MeldekortDagSkjema[];
     kjedeId: MeldeperiodeKjedeId;
 };
 
 export type MeldekortbehandlingSkjemaState = {
-    meldeperioder: MeldeperiodeContext[];
+    meldeperioder: MeldeperiodeSkjema[];
     skalSendeVedtaksbrev: boolean;
 };
 

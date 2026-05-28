@@ -38,9 +38,8 @@ export const Meldeperiodebehandlinger = () => {
 
             {meldeperioder.map((meldeperiode, index) => (
                 <Meldeperiodebehandling
-                    key={`${meldeperiode.kjedeId}-${index}`}
-                    meldeperiode={meldeperiode}
-                    index={index}
+                    key={meldeperiode.kjedeId}
+                    meldeperiodeSkjema={meldeperiode}
                     onFjern={() => dispatch({ type: 'fjernMeldeperiode', payload: { index } })}
                 />
             ))}

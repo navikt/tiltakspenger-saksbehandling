@@ -6,6 +6,7 @@ import { Nullable } from '~/types/UtilTypes';
 import {
     BeløpProps,
     MeldeperiodeBeregningProps,
+    MeldeperiodeBeregningPropsV2,
 } from '~/lib/beregning-og-simulering/typer/Beregning';
 import { SakId } from '../../sak/SakTyper';
 import { SimulertBeregning } from '~/lib/beregning-og-simulering/typer/SimulertBeregning';
@@ -140,6 +141,7 @@ export type MeldeperiodebehandlingProps = {
     brukersMeldekortId: Nullable<BrukersMeldekortId>;
     periode: Periode;
     dager: MeldekortDagProps[];
+    beregning: Nullable<MeldeperiodeBeregningPropsV2>;
 };
 
 // Type for ny modell som kan ha flere meldeperioder i samme behandling

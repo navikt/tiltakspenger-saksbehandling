@@ -1,0 +1,25 @@
+.outer {
+    width: 750px;
+}
+
+.uke {
+    border: 1px var(--ax-border-neutral) solid;
+    border-radius: 4px;
+    padding: 1rem;
+    text-wrap: nowrap;
+}
+
+.ikon:global(.aksel-table__data-cell) {
+    padding-right: 0;
+    text-align: center;
+    min-width: 2rem;
+    & > svg {
+        vertical-align: middle;
+    }
+}
+
+.select {
+    && select {
+        min-height: 1.75rem;
+    }
+}

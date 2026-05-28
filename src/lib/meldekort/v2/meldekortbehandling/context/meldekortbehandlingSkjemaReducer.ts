@@ -2,8 +2,8 @@ import { Reducer } from 'react';
 import {
     MeldekortbehandlingSkjemaActions,
     MeldekortbehandlingSkjemaState,
-    MeldekortDagContext,
-    MeldeperiodeContext,
+    MeldekortDagSkjema,
+    MeldeperiodeSkjema,
 } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2ContextTyper';
 import {
     MeldekortbehandlingDagStatus,
@@ -14,7 +14,7 @@ import { MeldeperiodeKjedeId, MeldeperiodeKjedePropsV2 } from '~/lib/meldekort/t
 export const meldekortbehandlingSkjemaInitialState = (
     meldekortbehandling: MeldekortbehandlingPropsV2,
 ): MeldekortbehandlingSkjemaState => ({
-    meldeperioder: meldekortbehandling.meldeperioder.map<MeldeperiodeContext>((meldeperiode) => ({
+    meldeperioder: meldekortbehandling.meldeperioder.map<MeldeperiodeSkjema>((meldeperiode) => ({
         kjedeId: meldeperiode.kjedeId as MeldeperiodeKjedeId,
         dager: meldeperiode.dager.map((dag) => ({
             dato: dag.dato,
@@ -92,8 +92,8 @@ export const meldekortbehandlingSkjemaReducer: Reducer<
 
 const meldeperiodeKjedeTilContext = (
     meldeperiodeKjede: MeldeperiodeKjedePropsV2,
-): MeldeperiodeContext => {
-    const dager: MeldekortDagContext[] = Object.entries(
+): MeldeperiodeSkjema => {
+    const dager: MeldekortDagSkjema[] = Object.entries(
         meldeperiodeKjede.meldeperioder.at(-1)!.girRett,
     ).map(([dato, girRett]) => {
         return {

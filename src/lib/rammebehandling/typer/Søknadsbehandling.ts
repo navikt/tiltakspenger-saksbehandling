@@ -4,7 +4,7 @@ import {
     OppdaterBehandlingBaseDTO,
     RammebehandlingBase,
 } from './Rammebehandling';
-import { InnvilgbarSøknad, Søknad } from '../../../types/Søknad';
+import { InnvilgbarSøknad, Søknad } from '~/types/Søknad';
 import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 
 type SøknadsbehandlingBase = RammebehandlingBase & {
@@ -101,6 +101,7 @@ export enum ManueltBehandlesGrunn {
     SAKSOPPLYSNING_HAR_IKKE_DELTATT_PA_TILTAK = 'SAKSOPPLYSNING_HAR_IKKE_DELTATT_PA_TILTAK',
     SAKSOPPLYSNING_ANDRE_YTELSER = 'SAKSOPPLYSNING_ANDRE_YTELSER',
     SAKSOPPLYSNING_VEDTAK_I_ARENA = 'SAKSOPPLYSNING_VEDTAK_I_ARENA',
+    SAKSOPPLYSNING_MANGLER_FULLSTENDIG_PERIODE = 'SAKSOPPLYSNING_MANGLER_FULLSTENDIG_PERIODE',
 
     ANNET_APEN_BEHANDLING = 'ANNET_APEN_BEHANDLING',
     ANNET_VEDTAK_FOR_SAMME_PERIODE = 'ANNET_VEDTAK_FOR_SAMME_PERIODE',

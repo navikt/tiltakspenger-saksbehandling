@@ -1,4 +1,4 @@
-import { Alert, Button, Loader, Link, InlineMessage, BodyShort } from '@navikt/ds-react';
+import { Alert, Button, Loader, Link, InlineMessage, BodyShort, VStack } from '@navikt/ds-react';
 import { BekreftelsesModal } from '~/lib/_felles/modaler/BekreftelsesModal';
 import React, { useRef } from 'react';
 import { useSak } from '~/lib/sak/SakContext';
@@ -34,7 +34,7 @@ export const MeldekortbehandlingOpprettV2 = ({ type }: Props) => {
     const lukkModal = () => modalRef.current?.close();
 
     return (
-        <div>
+        <VStack gap={'space-16'}>
             {feil && (
                 <Alert variant={'error'} className={style.varsel}>
                     {feil.message}
@@ -85,7 +85,7 @@ export const MeldekortbehandlingOpprettV2 = ({ type }: Props) => {
             >
                 {tekster.modalTekst}
             </BekreftelsesModal>
-        </div>
+        </VStack>
     );
 };
 

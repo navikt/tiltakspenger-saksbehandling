@@ -23,8 +23,10 @@ import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import { kanBehandle } from '~/lib/saksbehandler/tilganger';
 import { getTextAreaRefValue } from '~/utils/textarea';
 
+const MeldekortbehandlingContext = createContext({} as MeldekortbehandlingPropsV2);
+
 // Separate contexts for å hindre re-renders for komponenter som kun bruker dispatch
-const StateContext = createContext({} as MeldekortbehandlingSkjemaContext);
+const SkjemaContext = createContext({} as MeldekortbehandlingSkjemaContext);
 const DispatchContext = createContext((() => ({})) as Dispatch<MeldekortbehandlingSkjemaActions>);
 
 type Props = PropsWithChildren<{
@@ -58,7 +60,7 @@ export const MeldekortbehandlingV2Provider = ({ meldekortbehandling, children }:
 
     return (
         <DispatchContext.Provider value={dispatch}>
-            <StateContext.Provider
+            <SkjemaContext.Provider
                 value={{
                     ...skjema,
                     erReadonly,
@@ -74,16 +76,22 @@ export const MeldekortbehandlingV2Provider = ({ meldekortbehandling, children }:
                     },
                 }}
             >
-                {children}
-            </StateContext.Provider>
+                <MeldekortbehandlingContext.Provider value={meldekortbehandling}>
+                    {children}
+                </MeldekortbehandlingContext.Provider>
+            </SkjemaContext.Provider>
         </DispatchContext.Provider>
     );
 };
 
 export const useMeldekortbehandlingSkjema = () => {
-    return useContext(StateContext);
+    return useContext(SkjemaContext);
 };
 
 export const useMeldekortbehandlingSkjemaDispatch = () => {
     return useContext(DispatchContext);
+};
+
+export const useMeldekortbehandling = () => {
+    return useContext(MeldekortbehandlingContext);
 };
