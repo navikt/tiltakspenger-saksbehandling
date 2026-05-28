@@ -94,7 +94,7 @@ export type MeldekortDagBeregnetProps = {
     dato: string;
     status: MeldekortbehandlingDagStatus;
     reduksjonAvYtelsePåGrunnAvFravær?: ReduksjonAvYtelse;
-    beregningsdag?: Beregningsdag;
+    beregningsdag?: MeldekortBeregningsdag;
 };
 
 export type MeldekortBeregning = {
@@ -103,7 +103,7 @@ export type MeldekortBeregning = {
     beregningerForPåfølgendePerioder: MeldeperiodeBeregningProps[];
 };
 
-type Beregningsdag = {
+export type MeldekortBeregningsdag = {
     beløp: number;
     prosent: number;
     barnetillegg: number;
@@ -137,7 +137,7 @@ export type OpprettMeldekortbehandlingDTO =
 
 export type MeldeperiodebehandlingProps = {
     meldeperiodeId: MeldeperiodeId;
-    kjedeId: string;
+    kjedeId: MeldeperiodeKjedeId;
     brukersMeldekortId: Nullable<BrukersMeldekortId>;
     periode: Periode;
     dager: MeldekortDagProps[];

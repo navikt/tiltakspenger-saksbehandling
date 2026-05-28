@@ -9,13 +9,13 @@ import {
     MeldekortbehandlingDagStatus,
     MeldekortbehandlingPropsV2,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
-import { MeldeperiodeKjedeId, MeldeperiodeKjedePropsV2 } from '~/lib/meldekort/typer/Meldeperiode';
+import { MeldeperiodeKjedePropsV2 } from '~/lib/meldekort/typer/Meldeperiode';
 
 export const meldekortbehandlingSkjemaInitialState = (
     meldekortbehandling: MeldekortbehandlingPropsV2,
 ): MeldekortbehandlingSkjemaState => ({
     meldeperioder: meldekortbehandling.meldeperioder.map<MeldeperiodeSkjema>((meldeperiode) => ({
-        kjedeId: meldeperiode.kjedeId as MeldeperiodeKjedeId,
+        kjedeId: meldeperiode.kjedeId,
         dager: meldeperiode.dager.map((dag) => ({
             dato: dag.dato,
             status: dag.status,
@@ -75,7 +75,7 @@ export const meldekortbehandlingSkjemaReducer: Reducer<
                 meldeperioder: [
                     ...state.meldeperioder,
                     meldeperiodeKjedeTilContext(meldeperiodeKjede),
-                ],
+                ].toSorted((a, b) => (a.kjedeId > b.kjedeId ? 1 : -1)),
             };
         }
 

@@ -1,4 +1,4 @@
-import { Heading, InfoCard, Tabs, VStack } from '@navikt/ds-react';
+import { Heading, Tabs, VStack } from '@navikt/ds-react';
 import { useMeldeperiodeKjedeV2 } from '~/lib/meldekort/v2/meldeperiodekjede/context/MeldeperiodeKjedeContextV2';
 import { MeldeperiodekjedeGjeldendeBeregning } from '~/lib/meldekort/v2/meldeperiodekjede/høyre-seksjon/gjeldende-beregning/MeldeperiodekjedeGjeldendeBeregning';
 import { CurrencyExchangeIcon, DocPencilIcon, PersonPencilIcon } from '@navikt/aksel-icons';
@@ -6,6 +6,7 @@ import { BrukersMeldekortVisning } from '~/lib/meldekort/3-høyre-seksjon/bruker
 import { MeldekortBehandlingOppsummeringForKjede } from '~/lib/meldekort/v2/meldeperiodekjede/høyre-seksjon/meldekortbehandling-oppsummering/MeldekortBehandlingOppsummeringForKjede';
 import { classNames } from '~/utils/classNames';
 import { useSak } from '~/lib/sak/SakContext';
+import { InfokortEnkel } from '~/lib/_felles/infokort/InfokortEnkel';
 
 import style from './MeldeperiodekjedeHøyreSeksjon.module.css';
 
@@ -26,11 +27,9 @@ export const MeldeperiodekjedeHøyreSeksjon = () => {
             </Heading>
 
             {harÅpenBehandling && (
-                <InfoCard data-color={'info'}>
-                    <InfoCard.Message icon={<DocPencilIcon />}>
-                        {'Saken har en åpen meldekortbehandling som omfatter denne meldeperioden'}
-                    </InfoCard.Message>
-                </InfoCard>
+                <InfokortEnkel icon={<DocPencilIcon />}>
+                    {'Saken har en åpen meldekortbehandling som omfatter denne meldeperioden'}
+                </InfokortEnkel>
             )}
 
             <Tabs defaultValue={harÅpenBehandling ? 'behandlinger' : 'beregning'} fill={false}>

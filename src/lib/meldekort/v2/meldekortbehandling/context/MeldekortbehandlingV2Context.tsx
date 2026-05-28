@@ -59,28 +59,28 @@ export const MeldekortbehandlingV2Provider = ({ meldekortbehandling, children }:
     );
 
     return (
-        <DispatchContext.Provider value={dispatch}>
-            <SkjemaContext.Provider
-                value={{
-                    ...skjema,
-                    erReadonly,
-                    textAreas: {
-                        begrunnelse: {
-                            ref: begrunnelseRef,
-                            getValue: getBegrunnelse,
+        <MeldekortbehandlingContext.Provider value={meldekortbehandling}>
+            <DispatchContext.Provider value={dispatch}>
+                <SkjemaContext.Provider
+                    value={{
+                        ...skjema,
+                        erReadonly,
+                        textAreas: {
+                            begrunnelse: {
+                                ref: begrunnelseRef,
+                                getValue: getBegrunnelse,
+                            },
+                            brevtekst: {
+                                ref: brevtekstRef,
+                                getValue: getBrevtekst,
+                            },
                         },
-                        brevtekst: {
-                            ref: brevtekstRef,
-                            getValue: getBrevtekst,
-                        },
-                    },
-                }}
-            >
-                <MeldekortbehandlingContext.Provider value={meldekortbehandling}>
+                    }}
+                >
                     {children}
-                </MeldekortbehandlingContext.Provider>
-            </SkjemaContext.Provider>
-        </DispatchContext.Provider>
+                </SkjemaContext.Provider>
+            </DispatchContext.Provider>
+        </MeldekortbehandlingContext.Provider>
     );
 };
 

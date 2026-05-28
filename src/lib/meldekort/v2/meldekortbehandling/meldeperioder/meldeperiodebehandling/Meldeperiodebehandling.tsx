@@ -1,5 +1,8 @@
-import { Box, Button, HStack, Heading, Select, Table, VStack, InfoCard } from '@navikt/ds-react';
-import { MeldekortbehandlingDagStatus } from '~/lib/meldekort/typer/Meldekortbehandling';
+import { Box, Button, HStack, Heading, Select, Table, VStack } from '@navikt/ds-react';
+import {
+    MeldekortbehandlingDagStatus,
+    MeldekortBeregningsdag,
+} from '~/lib/meldekort/typer/Meldekortbehandling';
 import {
     MeldekortDagSkjema,
     MeldeperiodeSkjema,
@@ -9,43 +12,38 @@ import {
     useMeldekortbehandlingSkjema,
     useMeldekortbehandlingSkjemaDispatch,
 } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2Context';
-import { formaterDatotekst, ukedagFraDatotekst } from '~/utils/date';
+import { formaterDatotekst, periodeTilFormatertDatotekst, ukedagFraDatotekst } from '~/utils/date';
 import { meldekortbehandlingDagStatusTekst } from '~/utils/tekstformateringUtils';
 import { formatterBeløp } from '~/utils/beløp';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
 import { ikonForMeldekortbehandlingDagStatusV2 } from './meldekortIkonerV2';
+import { useSak } from '~/lib/sak/SakContext';
+import { classNames } from '~/utils/classNames';
+import { InfokortEnkel } from '~/lib/_felles/infokort/InfokortEnkel';
 
 import style from './Meldeperiodebehandling.module.css';
-import { useSak } from '~/lib/sak/SakContext';
-
-type Beregningsdag = {
-    beløp: number;
-    prosent: number;
-    barnetillegg: number;
-};
 
 type Props = {
     meldeperiodeSkjema: MeldeperiodeSkjema;
     onFjern: () => void;
+    className?: string;
 };
 
-export const Meldeperiodebehandling = ({ meldeperiodeSkjema, onFjern }: Props) => {
+export const Meldeperiodebehandling = ({ meldeperiodeSkjema, onFjern, className }: Props) => {
     const { kjedeId, dager } = meldeperiodeSkjema;
 
     const { meldeperiodeKjederV2 } = useSak().sak;
-    const kjede = meldeperiodeKjederV2.find((it) => (it.id = kjedeId));
+    const kjede = meldeperiodeKjederV2.find((it) => it.id === kjedeId);
 
     const meldekortbehandling = useMeldekortbehandling();
     const { erReadonly } = useMeldekortbehandlingSkjema();
 
     if (!kjede) {
         return (
-            <InfoCard className={style.outer}>
-                <InfoCard.Message
-                    icon={null}
-                    data-color={'danger'}
-                >{`Fant ikke meldeperiodekjede med id ${kjedeId}`}</InfoCard.Message>
-            </InfoCard>
+            <InfokortEnkel
+                className={style.outer}
+                data-color={'danger'}
+            >{`Fant ikke meldeperiodekjede med id ${kjedeId}`}</InfokortEnkel>
         );
     }
 
@@ -53,7 +51,7 @@ export const Meldeperiodebehandling = ({ meldeperiodeSkjema, onFjern }: Props) =
         (it) => it.kjedeId === kjedeId,
     );
 
-    const beregningsdagPerDato = new Map<string, Beregningsdag>();
+    const beregningsdagPerDato = new Map<string, MeldekortBeregningsdag>();
     meldeperiodebehandling?.beregning?.dager.forEach((dag) => {
         if (dag.beregningsdag) {
             beregningsdagPerDato.set(dag.dato, dag.beregningsdag);
@@ -61,11 +59,12 @@ export const Meldeperiodebehandling = ({ meldeperiodeSkjema, onFjern }: Props) =
     });
 
     return (
-        <VStack gap={'space-16'} className={style.outer}>
+        <VStack gap={'space-16'} className={classNames(style.outer, className)}>
             <HStack justify={'space-between'} align={'center'}>
                 <Heading size={'small'} level={'3'}>
-                    {`Meldeperiode: ${kjedeId}`}
+                    {`Meldeperiode: ${periodeTilFormatertDatotekst(kjede.periode)}`}
                 </Heading>
+
                 {!erReadonly && (
                     <Button size={'small'} variant={'secondary'} onClick={onFjern}>
                         {'Fjern'}
@@ -97,7 +96,7 @@ type UkeProps = {
     dager: MeldekortDagSkjema[];
     dagIndexOffset: number;
     kjedeId: MeldeperiodeKjedeId;
-    beregningsdagPerDato: Map<string, Beregningsdag>;
+    beregningsdagPerDato: Map<string, MeldekortBeregningsdag>;
     erReadonly: boolean;
 };
 
