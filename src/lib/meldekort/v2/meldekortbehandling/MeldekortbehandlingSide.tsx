@@ -20,7 +20,7 @@ export const MeldekortbehandlingSide = ({ meldekortbehandling }: Props) => {
         <MeldekortbehandlingV2Provider meldekortbehandling={meldekortbehandling}>
             <PersonaliaHeader sakId={sakId} saksnummer={saksnummer} visTilbakeKnapp={true} />
 
-            <VStack gap={'space-32'} className={style.meldekortbehandling}>
+            <VStack gap={'space-24'} className={style.meldekortbehandling}>
                 <MeldekortbehandlingHeader />
                 <Meldeperiodebehandlinger />
                 <MeldekortbehandlingHandlinger />

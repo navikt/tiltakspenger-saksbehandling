@@ -2,11 +2,11 @@ import { Heading, Tabs, VStack } from '@navikt/ds-react';
 import { useMeldeperiodeKjedeV2 } from '~/lib/meldekort/v2/meldeperiodekjede/context/MeldeperiodeKjedeContextV2';
 import { MeldeperiodekjedeGjeldendeBeregning } from '~/lib/meldekort/v2/meldeperiodekjede/høyre-seksjon/gjeldende-beregning/MeldeperiodekjedeGjeldendeBeregning';
 import { CurrencyExchangeIcon, DocPencilIcon, PersonPencilIcon } from '@navikt/aksel-icons';
-import { BrukersMeldekortVisning } from '~/lib/meldekort/3-høyre-seksjon/brukers-meldekort/BrukersMeldekort';
 import { MeldekortBehandlingOppsummeringForKjede } from '~/lib/meldekort/v2/meldeperiodekjede/høyre-seksjon/meldekortbehandling-oppsummering/MeldekortBehandlingOppsummeringForKjede';
 import { classNames } from '~/utils/classNames';
 import { useSak } from '~/lib/sak/SakContext';
 import { InfokortEnkel } from '~/lib/_felles/infokort/InfokortEnkel';
+import { BrukersMeldekortVisningV2 } from '~/lib/meldekort/v2/brukers-meldekort/BrukersMeldekortVisningV2';
 
 import style from './MeldeperiodekjedeHøyreSeksjon.module.css';
 
@@ -32,34 +32,37 @@ export const MeldeperiodekjedeHøyreSeksjon = () => {
                 </InfokortEnkel>
             )}
 
-            <Tabs defaultValue={harÅpenBehandling ? 'behandlinger' : 'beregning'} fill={false}>
+            <Tabs
+                defaultValue={harÅpenBehandling ? TabVerdi.Behandlinger : TabVerdi.Beregning}
+                fill={false}
+            >
                 <Tabs.List>
                     <Tabs.Tab
-                        value={'beregning'}
+                        value={TabVerdi.Beregning}
                         label={'Gjeldende beregning'}
                         icon={<CurrencyExchangeIcon />}
                     />
                     <Tabs.Tab
-                        value={'behandlinger'}
+                        value={TabVerdi.Behandlinger}
                         label={`Meldekortbehandlinger (${meldekortbehandlingIder.length})`}
                         icon={<DocPencilIcon />}
                     />
                     <Tabs.Tab
-                        value={'brukersMeldekort'}
+                        value={TabVerdi.BrukersMeldekort}
                         label={`Meldekort fra bruker (${brukersMeldekort.length})`}
                         icon={<PersonPencilIcon />}
                     />
                 </Tabs.List>
 
-                <Tabs.Panel value={'beregning'} className={style.tabPanel}>
+                <Tabs.Panel value={TabVerdi.Beregning} className={style.tabPanel}>
                     <MeldeperiodekjedeGjeldendeBeregning beregning={gjeldendeBeregning} />
                 </Tabs.Panel>
 
                 <Tabs.Panel
-                    value={'behandlinger'}
+                    value={TabVerdi.Behandlinger}
                     className={classNames(style.tabPanel, style.meldekortbehandlinger)}
                 >
-                    {meldekortbehandlingIder.map((mkbId) => (
+                    {meldekortbehandlingIder.toReversed().map((mkbId) => (
                         <MeldekortBehandlingOppsummeringForKjede
                             meldekortbehandlingId={mkbId}
                             kjedeId={id}
@@ -68,11 +71,11 @@ export const MeldeperiodekjedeHøyreSeksjon = () => {
                     ))}
                 </Tabs.Panel>
 
-                <Tabs.Panel value={'brukersMeldekort'} className={style.tabPanel}>
+                <Tabs.Panel value={TabVerdi.BrukersMeldekort} className={style.tabPanel}>
                     {brukersMeldekort
                         .toSorted((a, b) => b.mottatt.localeCompare(a.mottatt))
                         .map((brukersMeldekort) => (
-                            <BrukersMeldekortVisning
+                            <BrukersMeldekortVisningV2
                                 key={brukersMeldekort.id}
                                 brukersMeldekort={brukersMeldekort}
                             />
@@ -82,3 +85,9 @@ export const MeldeperiodekjedeHøyreSeksjon = () => {
         </VStack>
     );
 };
+
+enum TabVerdi {
+    Beregning = 'Beregning',
+    Behandlinger = 'Behandlinger',
+    BrukersMeldekort = 'BrukersMeldekort',
+}

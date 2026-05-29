@@ -1,0 +1,13 @@
+.uker {
+    border: 1px var(--ax-border-neutral) solid;
+    border-radius: 4px;
+    padding: 0.5rem;
+}
+
+.spacerRow {
+    border-bottom: none;
+}
+
+.full {
+    width: 65%;
+}

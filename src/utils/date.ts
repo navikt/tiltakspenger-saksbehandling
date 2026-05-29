@@ -16,7 +16,8 @@ export type DateOrString = Date | string;
 
 const DATO_FORMAT = 'YYYY-MM-DD';
 
-const ukedager = ['Man', 'Tir', 'Ons', 'Tor', 'Fre', 'Lør', 'Søn'] as const;
+const ukedagerKort = ['Man', 'Tir', 'Ons', 'Tor', 'Fre', 'Lør', 'Søn'] as const;
+const ukedager = ['Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag', 'Søndag'] as const;
 
 export function dateTilISOTekst(date: Date | string | Dayjs) {
     return dayjs(date).format(DATO_FORMAT);
@@ -42,7 +43,11 @@ export function periodeTilFormatertDatotekst({ fraOgMed, tilOgMed }: Periode) {
     return `${formaterDatotekst(fraOgMed)} - ${formaterDatotekst(tilOgMed)}`;
 }
 
-export function ukedagFraDatotekst(dato: string) {
+export function ukedagFraDatoKort(dato: string) {
+    return ukedagerKort[dayjs(dato).weekday()];
+}
+
+export function ukedagFraDato(dato: string) {
     return ukedager[dayjs(dato).weekday()];
 }
 

@@ -1,6 +1,6 @@
 import { Box, Table } from '@navikt/ds-react';
 import React from 'react';
-import { formaterDatotekst, ukedagFraDatotekst } from '~/utils/date';
+import { formaterDatotekst, ukedagFraDatoKort } from '~/utils/date';
 import { MeldekortDagBeregnetProps } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { meldekortbehandlingDagStatusTekst } from '~/utils/tekstformateringUtils';
 import { ikonForMeldekortbehandlingDagStatus } from '../MeldekortIkoner';
@@ -35,7 +35,7 @@ export const MeldekortUke = ({ dager, ukeIndex, underBehandling }: Props) => {
                     ) : (
                         dager.map((dag) => (
                             <Table.Row key={dag.dato}>
-                                <Table.DataCell>{ukedagFraDatotekst(dag.dato)}</Table.DataCell>
+                                <Table.DataCell>{ukedagFraDatoKort(dag.dato)}</Table.DataCell>
                                 <Table.DataCell>{formaterDatotekst(dag.dato)}</Table.DataCell>
                                 <Table.DataCell className={styles.ikon}>
                                     {ikonForMeldekortbehandlingDagStatus[dag.status]}

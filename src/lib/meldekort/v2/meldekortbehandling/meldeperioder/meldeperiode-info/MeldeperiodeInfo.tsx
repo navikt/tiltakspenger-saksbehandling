@@ -7,6 +7,7 @@ import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { meldeperiodeUrl } from '~/utils/urls';
 import { useSak } from '~/lib/sak/SakContext';
 import { classNames } from '~/utils/classNames';
+import { BrukersMeldekortVisningV2 } from '~/lib/meldekort/v2/brukers-meldekort/BrukersMeldekortVisningV2';
 
 import style from './MeldeperiodeInfo.module.css';
 
@@ -44,6 +45,10 @@ export const MeldeperiodeInfo = ({ meldeperiodeKjede, className }: Props) => {
                     ? formaterTidspunkt(sisteBrukersMeldekort.mottatt)
                     : 'Ikke mottatt'}
             </DetaljVertikal>
+
+            {sisteBrukersMeldekort && (
+                <BrukersMeldekortVisningV2 brukersMeldekort={sisteBrukersMeldekort} />
+            )}
         </VStack>
     );
 };

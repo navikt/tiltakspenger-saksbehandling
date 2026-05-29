@@ -12,7 +12,7 @@ import {
     useMeldekortbehandlingSkjema,
     useMeldekortbehandlingSkjemaDispatch,
 } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2Context';
-import { formaterDatotekst, formatterMeldeperiode, ukedagFraDatotekst } from '~/utils/date';
+import { formaterDatotekst, formatterMeldeperiode, ukedagFraDatoKort } from '~/utils/date';
 import { meldekortbehandlingDagStatusTekst } from '~/utils/tekstformateringUtils';
 import { formatterBeløp } from '~/utils/beløp';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
@@ -23,7 +23,6 @@ import { hentMeldeperiodekjede } from '~/lib/sak/sakUtils';
 import { MeldeperiodeInfo } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/meldeperiode-info/MeldeperiodeInfo';
 
 import style from './Meldeperiodebehandling.module.css';
-import { Separator } from '~/lib/_felles/separator/Separator';
 
 type Props = {
     meldeperiodeSkjema: MeldeperiodeSkjema;
@@ -55,8 +54,6 @@ export const Meldeperiodebehandling = ({ meldeperiodeSkjema, onFjern, className 
 
     return (
         <VStack gap={'space-16'} className={classNames(style.outer, className)}>
-            <Separator className={style.full} />
-
             <HStack justify={'space-between'} align={'center'} className={style.venstre}>
                 <Heading size={'small'} level={'3'}>
                     {`Meldeperiode: ${formatterMeldeperiode(periode)}`}
@@ -127,7 +124,7 @@ const MeldeperiodeUke = ({
                         const beregningsdag = beregningsdagPerDato.get(dag.dato);
                         return (
                             <Table.Row key={dag.dato}>
-                                <Table.DataCell>{ukedagFraDatotekst(dag.dato)}</Table.DataCell>
+                                <Table.DataCell>{ukedagFraDatoKort(dag.dato)}</Table.DataCell>
                                 <Table.DataCell>{formaterDatotekst(dag.dato)}</Table.DataCell>
                                 <Table.DataCell className={style.ikon}>
                                     {ikonForMeldekortbehandlingDagStatusV2[dag.status]}

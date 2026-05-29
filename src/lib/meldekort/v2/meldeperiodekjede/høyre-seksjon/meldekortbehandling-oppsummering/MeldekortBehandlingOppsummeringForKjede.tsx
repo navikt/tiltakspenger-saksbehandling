@@ -1,7 +1,6 @@
 import {
     MeldekortbehandlingId,
     MeldekortbehandlingStatus,
-    MeldekortbehandlingType,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { useSak } from '~/lib/sak/SakContext';
 import { Alert, Heading, HStack, Tag, VStack } from '@navikt/ds-react';
@@ -13,6 +12,10 @@ import React from 'react';
 import { AkselColor } from '@navikt/ds-react/types/theme';
 import { meldekortbehandlingUrl } from '~/utils/urls';
 import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
+import {
+    meldekortbehandlingStatusTekst,
+    meldekortbehandlingTypeTekst,
+} from '~/lib/meldekort/v2/tekster';
 
 import style from './MeldekortBehandlingOppsummeringForKjede.module.css';
 
@@ -100,17 +103,6 @@ export const MeldekortBehandlingOppsummeringForKjede = ({
     );
 };
 
-const meldekortbehandlingStatusTekst: Record<MeldekortbehandlingStatus, string> = {
-    [MeldekortbehandlingStatus.KLAR_TIL_BEHANDLING]: 'Klar til behandling',
-    [MeldekortbehandlingStatus.UNDER_BEHANDLING]: 'Under behandling',
-    [MeldekortbehandlingStatus.KLAR_TIL_BESLUTNING]: 'Klar til beslutning',
-    [MeldekortbehandlingStatus.UNDER_BESLUTNING]: 'Under beslutning',
-    [MeldekortbehandlingStatus.GODKJENT]: 'Godkjent',
-    [MeldekortbehandlingStatus.IKKE_RETT_TIL_TILTAKSPENGER]: 'Ikke rett til tiltakspenger',
-    [MeldekortbehandlingStatus.AUTOMATISK_BEHANDLET]: 'Automatisk behandlet',
-    [MeldekortbehandlingStatus.AVBRUTT]: 'Avbrutt',
-} as const;
-
 const meldekortbehandlingStatusFarge: Record<MeldekortbehandlingStatus, AkselColor> = {
     [MeldekortbehandlingStatus.KLAR_TIL_BEHANDLING]: 'info',
     [MeldekortbehandlingStatus.UNDER_BEHANDLING]: 'info',
@@ -121,8 +113,3 @@ const meldekortbehandlingStatusFarge: Record<MeldekortbehandlingStatus, AkselCol
     [MeldekortbehandlingStatus.IKKE_RETT_TIL_TILTAKSPENGER]: 'warning',
     [MeldekortbehandlingStatus.AVBRUTT]: 'neutral',
 };
-
-const meldekortbehandlingTypeTekst: Record<MeldekortbehandlingType, string> = {
-    [MeldekortbehandlingType.FØRSTE_BEHANDLING]: 'Førstegangsbehandling',
-    [MeldekortbehandlingType.KORRIGERING]: 'Korrigering',
-} as const;

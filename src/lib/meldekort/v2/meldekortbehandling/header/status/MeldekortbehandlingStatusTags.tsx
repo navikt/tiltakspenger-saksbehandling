@@ -13,6 +13,7 @@ import {
     MeldekortbehandlingStatus,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { erMeldekortbehandlingSattPaVent } from '~/lib/meldekort/utils/MeldekortbehandlingUtils';
+import { meldekortbehandlingStatusTekst } from '~/lib/meldekort/v2/tekster';
 
 import style from './MeldekortbehandlingStatusTags.module.css';
 
@@ -41,7 +42,7 @@ export const MeldekortbehandlingStatusTags = ({ meldekortbehandling }: Props) =>
                 icon={meldekortStatusIkon[status]}
                 className={style.tag}
             >
-                {meldekortstatusTekst[status]}
+                {meldekortbehandlingStatusTekst[status]}
             </Tag>
         </HStack>
     );
@@ -70,15 +71,4 @@ const meldekortStatusIkon: Record<MeldekortbehandlingStatus, React.ReactNode> = 
     GODKJENT: <CheckmarkIcon />,
     AUTOMATISK_BEHANDLET: <RobotSmileIcon />,
     AVBRUTT: <CircleSlashIcon />,
-} as const;
-
-const meldekortstatusTekst: Record<MeldekortbehandlingStatus, string> = {
-    IKKE_RETT_TIL_TILTAKSPENGER: 'Ikke rett til tiltakspenger',
-    KLAR_TIL_BEHANDLING: 'Klar til behandling',
-    UNDER_BEHANDLING: 'Under behandling',
-    KLAR_TIL_BESLUTNING: 'Klar til beslutning',
-    UNDER_BESLUTNING: 'Under beslutning',
-    GODKJENT: 'Godkjent',
-    AUTOMATISK_BEHANDLET: 'Automatisk behandlet',
-    AVBRUTT: 'Avsluttet',
 } as const;

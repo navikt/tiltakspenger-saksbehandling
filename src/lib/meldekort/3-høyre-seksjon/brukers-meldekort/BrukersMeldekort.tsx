@@ -3,7 +3,7 @@ import {
     BrukersMeldekortProps,
 } from '~/lib/meldekort/typer/BrukersMeldekort';
 import { BodyShort, Box, Button, HStack, Table, VStack } from '@navikt/ds-react';
-import { formaterDatotekst, formaterTidspunkt, ukedagFraDatotekst } from '~/utils/date';
+import { formaterDatotekst, formaterTidspunkt, ukedagFraDatoKort } from '~/utils/date';
 import { ikonForBrukersMeldekortDagStatus } from '../../0-felles-komponenter/MeldekortIkoner';
 import { brukersMeldekortDagStatusTekst } from '~/utils/tekstformateringUtils';
 import { BrukersMeldekortAutomatiskBehandlingStatus } from '~/lib/meldekort/3-høyre-seksjon/brukers-meldekort/automatisk-behandling-status/BrukersMeldekortAutomatiskBehandlingStatus';
@@ -97,12 +97,12 @@ const Uke = ({ dager }: UkeProps) => {
 
                         return (
                             <Table.Row key={dato.toString()}>
-                                <Table.DataCell>{ukedagFraDatotekst(dato)}</Table.DataCell>
+                                <Table.DataCell>{ukedagFraDatoKort(dato)}</Table.DataCell>
                                 <Table.DataCell>{formaterDatotekst(dato)}</Table.DataCell>
                                 <Table.DataCell>
                                     <HStack align="center" gap="space-12" wrap={false}>
                                         {ikonForBrukersMeldekortDagStatus[status]}
-                                        {`${brukersMeldekortDagStatusTekst[status]}`}
+                                        {brukersMeldekortDagStatusTekst[status]}
                                     </HStack>
                                 </Table.DataCell>
                             </Table.Row>

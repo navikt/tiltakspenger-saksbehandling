@@ -1,5 +1,5 @@
 import { BodyShort, Select, Table } from '@navikt/ds-react';
-import { formaterDatotekst, ukedagFraDatotekst } from '~/utils/date';
+import { formaterDatotekst, ukedagFraDatoKort } from '~/utils/date';
 import { ikonForMeldekortbehandlingDagStatus } from '../MeldekortIkoner';
 import { meldekortbehandlingDagStatusTekst } from '~/utils/tekstformateringUtils';
 import { formatterBeløp } from '~/utils/beløp';
@@ -34,7 +34,7 @@ export const MeldekortUkeBehandling = ({ dager, ukeIndex }: Props) => {
                 key={dato}
                 className={classNames(formState.isDirty && styles.ikkeOppdatertBeregning)}
             >
-                <Table.DataCell>{ukedagFraDatotekst(dato)}</Table.DataCell>
+                <Table.DataCell>{ukedagFraDatoKort(dato)}</Table.DataCell>
                 <Table.DataCell>{formaterDatotekst(dato)}</Table.DataCell>
                 <Table.DataCell className={styles.ikon}>
                     {ikonForMeldekortbehandlingDagStatus[valgtStatus]}

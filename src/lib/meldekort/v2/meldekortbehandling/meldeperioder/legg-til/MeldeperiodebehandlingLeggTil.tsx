@@ -1,5 +1,5 @@
 import { Button, HStack, Select } from '@navikt/ds-react';
-import { periodeTilFormatertDatotekst } from '~/utils/date';
+import { formatterMeldeperiode } from '~/utils/date';
 import { useSak } from '~/lib/sak/SakContext';
 import { useState } from 'react';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
@@ -47,7 +47,7 @@ export const MeldeperiodebehandlingLeggTil = () => {
                 <option value={''}>{'- Velg meldeperiode -'}</option>
                 {tilgjengeligeKjeder.map((kjede) => (
                     <option key={kjede.id} value={kjede.id}>
-                        {periodeTilFormatertDatotekst(kjede.periode)}
+                        {formatterMeldeperiode(kjede.periode)}
                     </option>
                 ))}
             </Select>
