@@ -5,6 +5,7 @@ import { Periode } from '~/types/Periode';
 import { perioderOverlapper } from '~/utils/periode';
 import { removeDuplicatesFilter } from '~/utils/array';
 import { TilbakekrevingId } from '~/lib/tilbakekreving/typer/Tilbakekreving';
+import { MeldeperiodeKjedeId, MeldeperiodeKjedePropsV2 } from '~/lib/meldekort/typer/Meldeperiode';
 
 export const hentVedtatteSøknadsbehandlinger = (sak: SakProps) => {
     const { alleRammevedtak, behandlinger } = sak;
@@ -32,4 +33,18 @@ export const hentGjeldendeRammevedtakIPeriode = (sak: SakProps, periode: Periode
 
 export const hentTilbakekreving = (sak: SakProps, tilbakekrevingId: TilbakekrevingId) => {
     return sak.tilbakekrevinger.find((tilbakekreving) => tilbakekreving.id === tilbakekrevingId);
+};
+
+// Henter meldeperiodekjeden for kjedeId, eller kaster dersom den ikke finnes
+export const hentMeldeperiodekjede = (
+    sak: SakProps,
+    kjedeId: MeldeperiodeKjedeId,
+): MeldeperiodeKjedePropsV2 => {
+    const kjede = sak.meldeperiodeKjederV2.find((it) => it.id === kjedeId);
+
+    if (!kjede) {
+        throw Error(`Fant ikke meldeperiodekjede med id ${kjedeId}`);
+    }
+
+    return kjede;
 };

@@ -59,7 +59,7 @@ export const MeldeperiodekjedeHøyreSeksjon = () => {
                     value={'behandlinger'}
                     className={classNames(style.tabPanel, style.meldekortbehandlinger)}
                 >
-                    {meldekortbehandlingIder.reverse().map((mkbId) => (
+                    {meldekortbehandlingIder.map((mkbId) => (
                         <MeldekortBehandlingOppsummeringForKjede
                             meldekortbehandlingId={mkbId}
                             kjedeId={id}

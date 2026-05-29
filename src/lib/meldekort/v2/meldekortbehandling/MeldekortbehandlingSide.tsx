@@ -5,9 +5,9 @@ import { VStack } from '@navikt/ds-react';
 import { MeldekortbehandlingV2Provider } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2Context';
 import { Meldeperiodebehandlinger } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/Meldeperiodebehandlinger';
 import { MeldekortbehandlingHeader } from '~/lib/meldekort/v2/meldekortbehandling/header/MeldekortbehandlingHeader';
+import { MeldekortbehandlingHandlinger } from '~/lib/meldekort/v2/meldekortbehandling/handlinger/MeldekortbehandlingHandlinger';
 
 import style from './MeldekortbehandlingSide.module.css';
-import { MeldekortbehandlingLagre } from '~/lib/meldekort/v2/meldekortbehandling/handlinger/lagre/MeldekortbehandlingLagre';
 
 type Props = {
     meldekortbehandling: MeldekortbehandlingPropsV2;
@@ -23,7 +23,7 @@ export const MeldekortbehandlingSide = ({ meldekortbehandling }: Props) => {
             <VStack gap={'space-32'} className={style.meldekortbehandling}>
                 <MeldekortbehandlingHeader />
                 <Meldeperiodebehandlinger />
-                <MeldekortbehandlingLagre />
+                <MeldekortbehandlingHandlinger />
             </VStack>
         </MeldekortbehandlingV2Provider>
     );

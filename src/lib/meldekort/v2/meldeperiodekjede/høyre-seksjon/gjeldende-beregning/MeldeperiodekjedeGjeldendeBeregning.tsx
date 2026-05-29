@@ -1,14 +1,14 @@
-import { Alert, BodyShort, Link, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, VStack } from '@navikt/ds-react';
 import { MeldekortUker } from '~/lib/meldekort/0-felles-komponenter/uker/MeldekortUker';
 import {
     BeregningKildeType,
     MeldeperiodeBeregningProps,
 } from '~/lib/beregning-og-simulering/typer/Beregning';
-import NextLink from 'next/link';
 import { beregningKildeUrl } from '~/utils/urls';
 import { useSak } from '~/lib/sak/SakContext';
 import { MeldekortBeløp } from '~/lib/meldekort/0-felles-komponenter/beløp/MeldekortBeløp';
 import { useFeatureToggles } from '~/context/FeatureTogglesContext';
+import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 
 import style from './MeldeperiodekjedeGjeldendeBeregning.module.css';
 
@@ -34,14 +34,13 @@ const GjeldendeBeregning = ({ dager, beregningKilde, beløp }: MeldeperiodeBereg
         <VStack gap={'space-16'} className={style.beregning}>
             <BodyShort>
                 {'Kilde for beregningen: '}
-                <Link
-                    as={NextLink}
+                <InternLenke
                     href={beregningKildeUrl(beregningKilde, sak, meldekortbehandlingV2Toggle)}
                 >
                     {beregningKilde.type === BeregningKildeType.MELDEKORT
                         ? 'Meldekortbehandling'
                         : 'Rammebehandling'}
-                </Link>
+                </InternLenke>
             </BodyShort>
 
             <MeldekortUker dager={dager} />

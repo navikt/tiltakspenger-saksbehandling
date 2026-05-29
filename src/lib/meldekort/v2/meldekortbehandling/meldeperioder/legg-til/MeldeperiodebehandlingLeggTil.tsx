@@ -7,6 +7,7 @@ import {
     useMeldekortbehandlingSkjema,
     useMeldekortbehandlingSkjemaDispatch,
 } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2Context';
+import { hentMeldeperiodekjede } from '~/lib/sak/sakUtils';
 
 export const MeldeperiodebehandlingLeggTil = () => {
     const { sak } = useSak();
@@ -23,14 +24,13 @@ export const MeldeperiodebehandlingLeggTil = () => {
     );
 
     const leggTil = () => {
-        const kjede = sak.meldeperiodeKjederV2.find((k) => k.id === valgtKjedeId);
-        if (!kjede) {
+        if (!valgtKjedeId) {
             return;
         }
 
         dispatch({
             type: 'leggTilMeldeperiode',
-            payload: { meldeperiodeKjede: kjede },
+            payload: { meldeperiodeKjede: hentMeldeperiodekjede(sak, valgtKjedeId) },
         });
 
         setValgtKjedeId(undefined);

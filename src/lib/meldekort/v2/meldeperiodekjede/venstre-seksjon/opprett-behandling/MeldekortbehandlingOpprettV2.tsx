@@ -1,12 +1,12 @@
-import { Alert, Button, Loader, Link, InlineMessage, BodyShort, VStack } from '@navikt/ds-react';
+import { Alert, Button, Loader, InlineMessage, BodyShort, VStack } from '@navikt/ds-react';
 import { BekreftelsesModal } from '~/lib/_felles/modaler/BekreftelsesModal';
 import React, { useRef } from 'react';
 import { useSak } from '~/lib/sak/SakContext';
 import { MeldekortbehandlingType } from '~/lib/meldekort/typer/Meldekortbehandling';
-import NextLink from 'next/link';
 import { meldekortbehandlingUrl } from '~/utils/urls';
 import { useMeldeperiodeKjedeV2 } from '~/lib/meldekort/v2/meldeperiodekjede/context/MeldeperiodeKjedeContextV2';
 import { useOpprettMeldekortbehandlingV2 } from '~/lib/meldekort/v2/meldeperiodekjede/venstre-seksjon/opprett-behandling/useOpprettMeldekortbehandlingV2';
+import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 
 import style from './MeldekortbehandlingOpprettV2.module.css';
 
@@ -44,12 +44,11 @@ export const MeldekortbehandlingOpprettV2 = ({ type }: Props) => {
             {åpenMeldekortbehandlingId && (
                 <InlineMessage status={'info'}>
                     <BodyShort spacing={true}>{'Saken har en åpen meldekortbehandling'}</BodyShort>
-                    <Link
-                        as={NextLink}
+                    <InternLenke
                         href={meldekortbehandlingUrl(saksnummer, åpenMeldekortbehandlingId)}
                     >
                         {'Til behandlingen'}
-                    </Link>
+                    </InternLenke>
                 </InlineMessage>
             )}
 

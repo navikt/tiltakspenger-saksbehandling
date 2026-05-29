@@ -42,6 +42,7 @@ export const MeldeperiodekjedeVenstreSeksjon = () => {
             <DetaljVertikal navn={'Antall tiltaksdager'}>
                 {sisteMeldeperiode.antallDager.toString()}
             </DetaljVertikal>
+
             <DetaljVertikal navn={'Meldekort sist mottatt'}>
                 {sisteBrukersMeldekort
                     ? formaterTidspunkt(sisteBrukersMeldekort.mottatt)

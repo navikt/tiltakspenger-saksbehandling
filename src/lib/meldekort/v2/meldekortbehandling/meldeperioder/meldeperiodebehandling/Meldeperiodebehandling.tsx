@@ -12,16 +12,18 @@ import {
     useMeldekortbehandlingSkjema,
     useMeldekortbehandlingSkjemaDispatch,
 } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2Context';
-import { formaterDatotekst, periodeTilFormatertDatotekst, ukedagFraDatotekst } from '~/utils/date';
+import { formaterDatotekst, formatterMeldeperiode, ukedagFraDatotekst } from '~/utils/date';
 import { meldekortbehandlingDagStatusTekst } from '~/utils/tekstformateringUtils';
 import { formatterBeløp } from '~/utils/beløp';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
 import { ikonForMeldekortbehandlingDagStatusV2 } from './meldekortIkonerV2';
 import { useSak } from '~/lib/sak/SakContext';
 import { classNames } from '~/utils/classNames';
-import { InfokortEnkel } from '~/lib/_felles/infokort/InfokortEnkel';
+import { hentMeldeperiodekjede } from '~/lib/sak/sakUtils';
+import { MeldeperiodeInfo } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/meldeperiode-info/MeldeperiodeInfo';
 
 import style from './Meldeperiodebehandling.module.css';
+import { Separator } from '~/lib/_felles/separator/Separator';
 
 type Props = {
     meldeperiodeSkjema: MeldeperiodeSkjema;
@@ -32,20 +34,13 @@ type Props = {
 export const Meldeperiodebehandling = ({ meldeperiodeSkjema, onFjern, className }: Props) => {
     const { kjedeId, dager } = meldeperiodeSkjema;
 
-    const { meldeperiodeKjederV2 } = useSak().sak;
-    const kjede = meldeperiodeKjederV2.find((it) => it.id === kjedeId);
+    const { sak } = useSak();
+
+    const kjede = hentMeldeperiodekjede(sak, kjedeId);
+    const { periode } = kjede;
 
     const meldekortbehandling = useMeldekortbehandling();
     const { erReadonly } = useMeldekortbehandlingSkjema();
-
-    if (!kjede) {
-        return (
-            <InfokortEnkel
-                className={style.outer}
-                data-color={'danger'}
-            >{`Fant ikke meldeperiodekjede med id ${kjedeId}`}</InfokortEnkel>
-        );
-    }
 
     const meldeperiodebehandling = meldekortbehandling.meldeperioder.find(
         (it) => it.kjedeId === kjedeId,
@@ -60,9 +55,11 @@ export const Meldeperiodebehandling = ({ meldeperiodeSkjema, onFjern, className 
 
     return (
         <VStack gap={'space-16'} className={classNames(style.outer, className)}>
-            <HStack justify={'space-between'} align={'center'}>
+            <Separator className={style.full} />
+
+            <HStack justify={'space-between'} align={'center'} className={style.venstre}>
                 <Heading size={'small'} level={'3'}>
-                    {`Meldeperiode: ${periodeTilFormatertDatotekst(kjede.periode)}`}
+                    {`Meldeperiode: ${formatterMeldeperiode(periode)}`}
                 </Heading>
 
                 {!erReadonly && (
@@ -72,7 +69,7 @@ export const Meldeperiodebehandling = ({ meldeperiodeSkjema, onFjern, className 
                 )}
             </HStack>
 
-            <VStack gap={'space-4'}>
+            <VStack gap={'space-4'} className={style.venstre}>
                 <MeldeperiodeUke
                     dager={dager.slice(0, 7)}
                     dagIndexOffset={0}
@@ -88,6 +85,8 @@ export const Meldeperiodebehandling = ({ meldeperiodeSkjema, onFjern, className 
                     erReadonly={erReadonly}
                 />
             </VStack>
+
+            <MeldeperiodeInfo meldeperiodeKjede={kjede} className={style.høyre} />
         </VStack>
     );
 };

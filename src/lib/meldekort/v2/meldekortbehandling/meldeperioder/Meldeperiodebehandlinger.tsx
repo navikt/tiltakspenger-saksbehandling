@@ -6,8 +6,6 @@ import {
 import { Meldeperiodebehandling } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/meldeperiodebehandling/Meldeperiodebehandling';
 import { MeldeperiodebehandlingLeggTil } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/legg-til/MeldeperiodebehandlingLeggTil';
 
-import style from './Meldeperiodebehandlinger.module.css';
-
 export const Meldeperiodebehandlinger = () => {
     const { meldeperioder, erReadonly } = useMeldekortbehandlingSkjema();
 
@@ -17,14 +15,15 @@ export const Meldeperiodebehandlinger = () => {
         <VStack gap={'space-16'}>
             {!erReadonly && <MeldeperiodebehandlingLeggTil />}
 
-            {meldeperioder.map((meldeperiode, index) => (
-                <Meldeperiodebehandling
-                    key={meldeperiode.kjedeId}
-                    meldeperiodeSkjema={meldeperiode}
-                    onFjern={() => dispatch({ type: 'fjernMeldeperiode', payload: { index } })}
-                    className={style.meldeperiode}
-                />
-            ))}
+            {meldeperioder.map((meldeperiode, index) => {
+                return (
+                    <Meldeperiodebehandling
+                        meldeperiodeSkjema={meldeperiode}
+                        onFjern={() => dispatch({ type: 'fjernMeldeperiode', payload: { index } })}
+                        key={meldeperiode.kjedeId}
+                    />
+                );
+            })}
         </VStack>
     );
 };

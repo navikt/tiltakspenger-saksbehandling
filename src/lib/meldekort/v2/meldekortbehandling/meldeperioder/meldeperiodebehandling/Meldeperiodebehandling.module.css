@@ -1,5 +1,19 @@
 .outer {
-    width: 750px;
+    display: grid;
+    grid-template-columns: 750px 350px;
+    grid-column-gap: 1rem;
+}
+
+.venstre {
+    grid-column: 1;
+}
+
+.høyre {
+    grid-column: 2;
+}
+
+.full {
+    grid-column: span 2;
 }
 
 .uke {
