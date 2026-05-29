@@ -126,21 +126,15 @@ export const Meldekortbehandling = ({ meldekortbehandling }: Props) => {
 const MeldekortbehandlingSettPåVent = (props: {
     meldekortbehandling: MeldekortbehandlingProps;
 }) => {
-    const { sak } = useSak();
-    const { meldeperiodeKjede, setMeldeperiodeKjede } = useMeldeperiodeKjede();
+    const { setSak } = useSak();
     const [visSettPåVentModal, setVisSettPåVentModal] = useState(false);
 
     const settMeldekortbehandlingPåVent = useSettMeldekortbehandlingPåVent({
         sakId: props.meldekortbehandling.sakId,
         meldekortbehandlingId: props.meldekortbehandling.id,
-        onSuccess: (oppdatertMeldekortbehandling) => {
-            setMeldeperiodeKjede(
-                oppdaterMeldeperiodeKjedeMedMeldekortbehandling(
-                    meldeperiodeKjede,
-                    oppdatertMeldekortbehandling,
-                ),
-            );
-            router.push(`/sak/${sak.saksnummer}`);
+        onSuccess: (oppdatertSak) => {
+            setSak(oppdatertSak);
+            router.push(`/sak/${oppdatertSak.saksnummer}`);
         },
     });
 

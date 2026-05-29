@@ -1,6 +1,6 @@
 import { HStack, Select, VStack } from '@navikt/ds-react';
 import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { formaterTidspunktKort } from '~/utils/date';
 import { MeldeperiodeKorrigering } from '~/lib/meldekort/typer/Meldeperiode';
 import { useMeldeperiodeKjede } from '../../context/MeldeperiodeKjedeContext';

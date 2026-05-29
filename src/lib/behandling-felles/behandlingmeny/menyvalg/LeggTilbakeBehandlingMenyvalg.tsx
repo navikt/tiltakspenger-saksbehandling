@@ -1,4 +1,3 @@
-import React from 'react';
 import router from 'next/router';
 import { ActionMenu } from '@navikt/ds-react';
 import { ÅpenRammebehandlingForOversikt } from '~/lib/personoversikt/typer/ÅpenBehandlingForOversikt';

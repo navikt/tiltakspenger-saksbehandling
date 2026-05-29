@@ -1,9 +1,9 @@
-import { Rammebehandling, BehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { Rammebehandling, RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
 
 import { SakId } from '~/lib/sak/SakTyper';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 
-export const useGjenopptaBehandling = (sakId: SakId, behandlingId: BehandlingId) => {
+export const useGjenopptaBehandling = (sakId: SakId, behandlingId: RammebehandlingId) => {
     const {
         trigger: gjenopptaBehandling,
         isMutating: isGjennopptaBehandlingMutating,

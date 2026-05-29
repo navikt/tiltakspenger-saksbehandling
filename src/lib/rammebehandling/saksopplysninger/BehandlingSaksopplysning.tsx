@@ -1,4 +1,3 @@
-import React from 'react';
 import style from './BehandlingSaksopplysning.module.css';
 import { BodyShort } from '@navikt/ds-react';
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';

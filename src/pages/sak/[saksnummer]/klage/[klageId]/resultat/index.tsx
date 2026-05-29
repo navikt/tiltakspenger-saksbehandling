@@ -22,7 +22,7 @@ import {
     harKlageEnÅpenRammebehandling,
 } from '~/lib/klage/utils/klageUtils';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
-import { Nullable } from '~/types/UtilTypes';
+import { Nullable, PartialRecord } from '~/types/UtilTypes';
 import { behandlingUrl } from '~/utils/urls';
 import { VelgOmgjøringsbehandlingModal } from '~/lib/klage/forms/velg-omgjøringsbehandling/VelgOmgjøringsbehandlingForm';
 import { Søknad } from '~/types/Søknad';
@@ -50,14 +50,21 @@ import FerdigstillKlageModalWrapper from '~/lib/klage/modaler/FerdigstillKlagebe
 import Omgjøringsresultat from '~/lib/klage/Omgjøringsresultat';
 import KlageTilknyttedeBehandlingerInfoCard from '~/lib/klage/KlageTilknyttedeBehandlingerInfoCard';
 import { OppsummeringAvVentestatuserModal } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
+import {
+    MeldekortbehandlingId,
+    MeldekortbehandlingPropsV2,
+} from '~/lib/meldekort/typer/Meldekortbehandling';
+import { MeldekortVedtak } from '~/lib/meldekort/typer/MeldekortVedtak';
 
 type Props = {
     sak: SakProps;
     initialKlage: Klagebehandling;
     omgjøringsbehandling: Nullable<Rammebehandling>;
-    vedtak: Rammevedtak[];
+    rammevedtak: Rammevedtak[];
+    meldekortvedtak: MeldekortVedtak[];
     søknader: Søknad[];
     rammebehandlinger: Rammebehandling[];
+    meldekortbehandlinger: PartialRecord<MeldekortbehandlingId, MeldekortbehandlingPropsV2>;
 };
 
 export const getServerSideProps = pageWithAuthentication(async (context) => {
@@ -80,16 +87,18 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
     }
 
     const omgjøringsbehandling =
-        sak.behandlinger.find((b) => initialKlage.åpenRammebehandlingId === b.id) ?? null;
+        sak.behandlinger.find((b) => initialKlage.åpenBehandlingId === b.id) ?? null;
 
     return {
         props: {
             sak,
             initialKlage: initialKlage,
             omgjøringsbehandling,
-            vedtak: sak.alleRammevedtak,
+            rammevedtak: sak.alleRammevedtak,
+            meldekortvedtak: sak.meldekortvedtak,
             søknader: sak.søknader,
             rammebehandlinger: sak.behandlinger,
+            meldekortbehandlinger: sak.meldekortbehandlinger,
         },
     };
 });
@@ -97,9 +106,11 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
 const ResultatPage = ({
     sak,
     omgjøringsbehandling,
-    vedtak,
+    rammevedtak,
+    meldekortvedtak,
     søknader,
     rammebehandlinger,
+    meldekortbehandlinger,
 }: Props) => {
     const { klage } = useKlage();
     const { innloggetSaksbehandler } = useSaksbehandler();
@@ -115,10 +126,12 @@ const ResultatPage = ({
             {resultat.type === KlagebehandlingResultat.OMGJØR ? (
                 <Omgjøringsresultat
                     klage={klage as Klagebehandling & { resultat: KlagebehandlingsresultatOmgjør }}
-                    vedtak={vedtak}
+                    rammevedtak={rammevedtak}
                     søknader={søknader}
                     innloggetSaksbehandler={innloggetSaksbehandler}
                     rammebehandlinger={rammebehandlinger}
+                    meldekortbehandlinger={meldekortbehandlinger}
+                    meldekortvedtak={meldekortvedtak}
                 />
             ) : (
                 <OpprettholdResultat
@@ -129,10 +142,12 @@ const ResultatPage = ({
                         }
                     }
                     omgjøringsbehandling={omgjøringsbehandling}
-                    vedtak={vedtak}
+                    rammevedtak={rammevedtak}
                     søknader={søknader}
                     innloggetSaksbehandler={innloggetSaksbehandler}
                     rammebehandlinger={rammebehandlinger}
+                    meldekortbehandlinger={meldekortbehandlinger}
+                    meldekortvedtak={meldekortvedtak}
                 />
             )}
         </VStack>
@@ -142,11 +157,13 @@ const ResultatPage = ({
 const OpprettholdResultat = (props: {
     sak: SakProps;
     klage: Klagebehandling & { resultat: KlagebehandlingsresultatOpprettholdt };
-    vedtak: Rammevedtak[];
+    rammevedtak: Rammevedtak[];
+    meldekortvedtak: MeldekortVedtak[];
     omgjøringsbehandling: Nullable<Rammebehandling>;
     søknader: Søknad[];
     innloggetSaksbehandler: Saksbehandler;
     rammebehandlinger: Rammebehandling[];
+    meldekortbehandlinger: PartialRecord<MeldekortbehandlingId, MeldekortbehandlingPropsV2>;
 }) => {
     const [vilOppretteNyBehandling, setVilOppretteNyBehandling] = useState(false);
     const erReadonlyForSaksbehandler =
@@ -309,6 +326,7 @@ const OpprettholdResultat = (props: {
             <KlageTilknyttedeBehandlingerInfoCard
                 klage={props.klage}
                 rammebehandlinger={props.rammebehandlinger}
+                meldekortbehandlinger={props.meldekortbehandlinger}
             />
             <HStack gap="space-16">
                 {kanOppretteNyRammebehandling && (
@@ -352,8 +370,9 @@ const OpprettholdResultat = (props: {
                 <VelgOmgjøringsbehandlingModal
                     sakId={props.sak.sakId}
                     saksnummer={props.sak.saksnummer}
-                    klageId={props.klage.id}
-                    vedtak={props.vedtak}
+                    klagebehandling={props.klage}
+                    rammevedtak={props.rammevedtak}
+                    meldekortvedtak={props.meldekortvedtak}
                     søknader={props.søknader}
                     åpen={vilOppretteNyBehandling}
                     onClose={() => setVilOppretteNyBehandling(false)}

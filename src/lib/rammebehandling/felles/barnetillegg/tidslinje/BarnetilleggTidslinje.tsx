@@ -5,7 +5,6 @@ import { barnetilleggKrympetTilPeriode } from '~/lib/rammebehandling/felles/barn
 import { ChildEyesIcon } from '@navikt/aksel-icons';
 import { formaterPeriode } from '~/utils/date';
 import NextLink from 'next/link';
-import React from 'react';
 import { behandlingUrl } from '~/utils/urls';
 
 import style from './BarnetilleggTidslinje.module.css';

@@ -16,10 +16,8 @@ type MeldekortApiProps<Response> = {
     onError?: (error: FetcherError) => void;
 };
 
-export const useSettMeldekortbehandlingPåVent = (
-    args: MeldekortApiProps<MeldekortbehandlingProps>,
-) =>
-    useFetchJsonFraApi<MeldekortbehandlingProps, { begrunnelse: string; frist: Nullable<string> }>(
+export const useSettMeldekortbehandlingPåVent = (args: MeldekortApiProps<SakProps>) =>
+    useFetchJsonFraApi<SakProps, { begrunnelse: string; frist: Nullable<string> }>(
         `/sak/${args.sakId}/meldekort/${args.meldekortbehandlingId}/vent`,
         'PATCH',
         { onSuccess: args.onSuccess, onError: args.onError },

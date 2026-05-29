@@ -22,7 +22,6 @@ import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import {
     eierMeldekortbehandling,
     erMeldekortbehandlingSattPaVent,
-    oppdaterSakMedMeldekortbehandling,
     skalKunneGjenopptaMeldekortbehandling,
     skalKunneOvertaMeldekortbehandling,
     skalKunneSetteMeldekortbehandlingPaVent,
@@ -31,7 +30,7 @@ import {
 } from '~/lib/meldekort/utils/MeldekortbehandlingUtils';
 import OvertaMeldekortbehandlingModal from './OvertaMeldekortbehandling';
 import { AvsluttMeldekortbehandlingModal } from './avsluttMeldekortbehandling/AvsluttMeldekortbehandling';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
     ArrowLeftIcon,
     ArrowRightIcon,
@@ -421,12 +420,12 @@ const SettMeldekortbehandlingPåVentModalForOversikt = ({
     meldekortbehandling,
     setApiError,
 }: SettMeldekortbehandlingPåVentModalForOversiktProps) => {
-    const { sak, setSak } = useSak();
+    const { setSak } = useSak();
     const settMeldekortbehandlingPåVent = useSettMeldekortbehandlingPåVent({
         sakId,
         meldekortbehandlingId: meldekortbehandling.id,
-        onSuccess: (oppdatertMeldekortbehandling) => {
-            setSak(oppdaterSakMedMeldekortbehandling(sak, oppdatertMeldekortbehandling));
+        onSuccess: (oppdatertSak) => {
+            setSak(oppdatertSak);
             onClose();
         },
         onError: (error) => setApiError({ visFeilModal: true, feil: error }),

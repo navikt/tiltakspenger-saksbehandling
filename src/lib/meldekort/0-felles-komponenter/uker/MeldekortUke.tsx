@@ -1,5 +1,4 @@
 import { Box, Table } from '@navikt/ds-react';
-import React from 'react';
 import { formaterDatotekst, ukedagFraDatoKort } from '~/utils/date';
 import { MeldekortDagBeregnetProps } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { meldekortbehandlingDagStatusTekst } from '~/utils/tekstformateringUtils';

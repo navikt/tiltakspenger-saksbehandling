@@ -1,6 +1,5 @@
 import { useSøknadsbehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 import { Alert } from '@navikt/ds-react';
-import React from 'react';
 import style from './SøknadsbehandlingAutomatiskBehandling.module.css';
 import { TekstListe } from '~/lib/_felles/liste/TekstListe';
 import { ManueltBehandlesGrunn } from '~/lib/rammebehandling/typer/Søknadsbehandling';

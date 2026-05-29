@@ -1,4 +1,3 @@
-import React from 'react';
 import { Heading, HStack, Tag } from '@navikt/ds-react';
 import { finn16årsdag, formaterDatotekst } from '~/utils/date';
 import { Personopplysninger } from '~/lib/personaliaheader/useHentPersonopplysninger';

@@ -1,4 +1,3 @@
-import React from 'react';
 import { HelpText, HStack, Tag } from '@navikt/ds-react';
 import { BenkBehandling, BenkBehandlingstype } from '~/lib/benk/typer/Benk';
 import { antallKalenderDagerUnnaDagensDato, formaterDatotekst } from '~/utils/date';

@@ -39,11 +39,16 @@ import Link from 'next/link';
 import { Søknad } from '~/types/Søknad';
 import { Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
-import { Nullable } from '~/types/UtilTypes';
+import { Nullable, PartialRecord } from '~/types/UtilTypes';
 import { erRammebehandlingUnderAktivOmgjøring } from '~/lib/rammebehandling/rammebehandlingUtils';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import Omgjøringsresultat from '~/lib/klage/Omgjøringsresultat';
 import { OppsummeringAvVentestatuserModal } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
+import {
+    MeldekortbehandlingId,
+    MeldekortbehandlingPropsV2,
+} from '~/lib/meldekort/typer/Meldekortbehandling';
+import { MeldekortVedtak } from '~/lib/meldekort/typer/MeldekortVedtak';
 
 type Props = {
     sak: SakProps;
@@ -51,9 +56,11 @@ type Props = {
         resultat: KlagebehandlingsresultatOmgjør | KlagebehandlingsresultatOpprettholdt | null;
     };
     omgjøringsbehandling: Nullable<Rammebehandling>;
-    vedtak: Rammevedtak[];
+    rammevedtak: Rammevedtak[];
+    meldekortvedtak: MeldekortVedtak[];
     søknader: Søknad[];
     rammebehandlinger: Rammebehandling[];
+    meldekortbehandlinger: PartialRecord<MeldekortbehandlingId, MeldekortbehandlingPropsV2>;
 };
 
 export const getServerSideProps = pageWithAuthentication(async (context) => {
@@ -76,26 +83,35 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
     }
 
     const omgjøringsbehandling =
-        sak.behandlinger.find((b) => initialKlage.åpenRammebehandlingId === b.id) ?? null;
+        sak.behandlinger.find((b) => initialKlage.åpenBehandlingId === b.id) ?? null;
 
     return {
         props: {
             sak,
-            initialKlage,
-            vedtak: sak.alleRammevedtak,
+            initialKlage: initialKlage as Klagebehandling & {
+                resultat:
+                    | KlagebehandlingsresultatOmgjør
+                    | KlagebehandlingsresultatOpprettholdt
+                    | null;
+            },
+            rammevedtak: sak.alleRammevedtak,
+            meldekortvedtak: sak.meldekortvedtak,
             søknader: sak.søknader,
             omgjøringsbehandling: omgjøringsbehandling,
             rammebehandlinger: sak.behandlinger,
-        },
+            meldekortbehandlinger: sak.meldekortbehandlinger,
+        } satisfies Props,
     };
 });
 
 const VurderingKlagePage = ({
     sak,
-    vedtak,
+    rammevedtak,
+    meldekortvedtak,
     søknader,
     omgjøringsbehandling,
     rammebehandlinger,
+    meldekortbehandlinger,
 }: Props) => {
     const { klage, setKlage } = useKlage();
     const { innloggetSaksbehandler } = useSaksbehandler();
@@ -256,10 +272,12 @@ const VurderingKlagePage = ({
                 {erKlageOmgjøring(klage) && (
                     <Omgjøringsresultat
                         klage={klage}
-                        vedtak={vedtak}
+                        rammevedtak={rammevedtak}
                         søknader={søknader}
                         rammebehandlinger={rammebehandlinger}
                         innloggetSaksbehandler={innloggetSaksbehandler}
+                        meldekortvedtak={meldekortvedtak}
+                        meldekortbehandlinger={meldekortbehandlinger}
                     />
                 )}
 

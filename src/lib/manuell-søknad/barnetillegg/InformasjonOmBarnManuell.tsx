@@ -1,4 +1,3 @@
-import React from 'react';
 import { Heading, HStack, Tag, VStack } from '@navikt/ds-react';
 import { getNavnMedFødselsdato } from '~/lib/manuell-søknad/barnetillegg/barnetilleggUtils';
 import { Barn } from '~/lib/manuell-søknad/ManueltRegistrertSøknad';

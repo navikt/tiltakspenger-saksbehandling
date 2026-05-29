@@ -6,7 +6,10 @@ import { Button, Table } from '@navikt/ds-react';
 import { formaterTidspunkt, formaterPeriode } from '~/utils/date';
 import Link from 'next/link';
 import { behandlingUrl } from '~/utils/urls';
-import { BehandlingId, Rammebehandlingstype } from '~/lib/rammebehandling/typer/Rammebehandling';
+import {
+    RammebehandlingId,
+    Rammebehandlingstype,
+} from '~/lib/rammebehandling/typer/Rammebehandling';
 
 export const AvbrutteBehandlingerTabell = (props: {
     saksnummer: string;
@@ -55,7 +58,7 @@ export const AvbrutteBehandlingerTabell = (props: {
                                         as={Link}
                                         href={behandlingUrl({
                                             saksnummer: props.saksnummer,
-                                            id: avsluttet.id as BehandlingId,
+                                            id: avsluttet.id as RammebehandlingId,
                                         })}
                                     >
                                         {'Se behandling'}

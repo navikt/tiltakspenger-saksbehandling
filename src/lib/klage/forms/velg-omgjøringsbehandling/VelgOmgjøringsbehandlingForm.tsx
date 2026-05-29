@@ -2,26 +2,33 @@ import { Modal, Select, Button, VStack, Heading, HStack, LocalAlert } from '@nav
 import { Control, useWatch, Controller, useForm } from 'react-hook-form';
 import { Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { Søknad } from '~/types/Søknad';
-import { formaterTidspunkt } from '~/utils/date';
+import { formaterDatotekst, formaterTidspunkt } from '~/utils/date';
 import {
     VelgOmgjøringsbehandlingFormData,
-    velgOmgjøringsbehandlingFormDataTilOpprettRammebehandlingRequest,
+    velgOmgjøringsbehandlingFormDataTilOpprettBehandlingRequest,
     velgOmgjøringsbehandlingFormValidation,
     VelgOmgjøringsbehandlingTyper,
 } from './VelgOmgjøringsbehandlingFormUtils';
-import { useOpprettRammebehandlingForKlage } from '~/lib/klage/api/KlageApi';
+import { useOpprettRammebehandlingForKlage as useOpprettBehandlingForKlage } from '~/lib/klage/api/KlageApi';
 import router from 'next/router';
-import { behandlingUrl } from '~/utils/urls';
-import { KlageId } from '~/lib/klage/typer/Klage';
+import { behandlingUrl, meldeperiodeUrl } from '~/utils/urls';
+import { Klagebehandling } from '~/lib/klage/typer/Klage';
 import { SøknadsbehandlingResultat } from '~/lib/rammebehandling/typer/Søknadsbehandling';
 import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
+import {
+    erBehandlingIdMeldekortbehandling,
+    erBehandlingIdRammebehandling,
+} from '~/lib/behandling-felles/utils/BehandlingUtils';
+import { MeldekortVedtak } from '~/lib/meldekort/typer/MeldekortVedtak';
+import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/typer/Meldekortbehandling';
 
 export const VelgOmgjøringsbehandlingModal = (props: {
     sakId: string;
     saksnummer: string;
-    klageId: KlageId;
-    vedtak: Rammevedtak[];
+    klagebehandling: Klagebehandling;
+    rammevedtak: Rammevedtak[];
     søknader: Søknad[];
+    meldekortvedtak: MeldekortVedtak[];
     åpen: boolean;
     onClose: () => void;
 }) => {
@@ -33,17 +40,27 @@ export const VelgOmgjøringsbehandlingModal = (props: {
         resolver: velgOmgjøringsbehandlingFormValidation,
     });
 
-    const opprettRammebehandling = useOpprettRammebehandlingForKlage({
+    const opprettRammebehandling = useOpprettBehandlingForKlage({
         sakId: props.sakId,
-        klageId: props.klageId,
-        onSuccess: (rammebehandling) => {
-            router.push(behandlingUrl({ saksnummer: props.saksnummer, id: rammebehandling.id }));
+        klageId: props.klagebehandling.id,
+        onSuccess: (behandling) => {
+            if (erBehandlingIdRammebehandling(behandling.id)) {
+                router.push(behandlingUrl({ saksnummer: props.saksnummer, id: behandling.id }));
+            }
+            if (erBehandlingIdMeldekortbehandling(behandling.id)) {
+                router.push(
+                    meldeperiodeUrl(
+                        props.saksnummer,
+                        (behandling as MeldekortbehandlingPropsV2).periode,
+                    ),
+                );
+            }
         },
     });
 
     const onSubmit = (data: VelgOmgjøringsbehandlingFormData) => {
         opprettRammebehandling.trigger(
-            velgOmgjøringsbehandlingFormDataTilOpprettRammebehandlingRequest(data),
+            velgOmgjøringsbehandlingFormDataTilOpprettBehandlingRequest(data),
         );
     };
 
@@ -61,8 +78,10 @@ export const VelgOmgjøringsbehandlingModal = (props: {
                 <Modal.Body>
                     <VelgOmgjøringsbehandlingForm
                         control={form.control}
-                        vedtak={props.vedtak}
+                        rammevedtak={props.rammevedtak}
                         søknader={props.søknader}
+                        klagebehandling={props.klagebehandling}
+                        meldekortvedtak={props.meldekortvedtak}
                     />
                 </Modal.Body>
                 <Modal.Footer>
@@ -94,22 +113,28 @@ export const VelgOmgjøringsbehandlingModal = (props: {
 
 const VelgOmgjøringsbehandlingForm = (props: {
     control: Control<VelgOmgjøringsbehandlingFormData>;
-    vedtak: Rammevedtak[];
+    rammevedtak: Rammevedtak[];
     søknader: Søknad[];
+    klagebehandling: Klagebehandling;
+    meldekortvedtak: MeldekortVedtak[];
 }) => {
     const behandlingstype = useWatch({
         control: props.control,
         name: 'behandlingstype',
     });
 
-    const harInnvilgelsesVedtak = !!props.vedtak.find(
+    const harInnvilgelsesVedtak = !!props.rammevedtak.find(
         (vedtak) =>
             vedtak.resultat === SøknadsbehandlingResultat.INNVILGELSE ||
             vedtak.resultat === RevurderingResultat.INNVILGELSE,
     );
 
-    const harVedtakSomKanOmgjøres = !!props.vedtak.find((vedtak) =>
+    const harVedtakSomKanOmgjøres = !!props.rammevedtak.find((vedtak) =>
         vedtak.gyldigeKommandoer.OMGJØR ? true : false,
+    );
+
+    const klagerPåUtbetalingsvedtak = !!props.meldekortvedtak.find(
+        (v) => v.id === props.klagebehandling.formkrav.vedtakDetKlagesPå,
     );
 
     return (
@@ -137,6 +162,12 @@ const VelgOmgjøringsbehandlingForm = (props: {
                             disabled={!harVedtakSomKanOmgjøres}
                         >
                             Revurdering - Omgjøring
+                        </option>
+                        <option
+                            value={VelgOmgjøringsbehandlingTyper.MELDEKORTBEHANDLING}
+                            disabled={!klagerPåUtbetalingsvedtak}
+                        >
+                            Meldekortbehandling
                         </option>
                     </Select>
                 )}
@@ -169,7 +200,7 @@ const VelgOmgjøringsbehandlingForm = (props: {
                             error={fieldState.error?.message}
                         >
                             <option value="">-- Velg omgjøringsvedtak --</option>
-                            {props.vedtak
+                            {props.rammevedtak
                                 .filter((vedtak) =>
                                     vedtak.gyldigeKommandoer.OMGJØR ? true : false,
                                 )
@@ -178,6 +209,23 @@ const VelgOmgjøringsbehandlingForm = (props: {
                                         {formaterTidspunkt(vedtak.opprettet)}
                                     </option>
                                 ))}
+                        </Select>
+                    )}
+                />
+            )}
+            {behandlingstype === VelgOmgjøringsbehandlingTyper.MELDEKORTBEHANDLING && (
+                <Controller
+                    name={'kjedeId'}
+                    control={props.control}
+                    render={({ field, fieldState }) => (
+                        <Select {...field} label="Periode" error={fieldState.error?.message}>
+                            <option value="">-- Velg periode --</option>
+                            {props.meldekortvedtak.map((vedtak) => (
+                                <option key={vedtak.id} value={vedtak.kjedeId}>
+                                    {formaterDatotekst(vedtak.kjedeId.split('/')[0])} -{' '}
+                                    {formaterDatotekst(vedtak.kjedeId.split('/')[1])}
+                                </option>
+                            ))}
                         </Select>
                     )}
                 />

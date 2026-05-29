@@ -98,7 +98,7 @@ export const harKlageEnÅpenRammebehandling = (k: Klagebehandling): boolean => {
     return (
         (k.resultat?.type === KlagebehandlingResultat.OMGJØR ||
             k.resultat?.type === KlagebehandlingResultat.OPPRETTHOLDT) &&
-        !!k.åpenRammebehandlingId
+        !!k.åpenBehandlingId
     );
 };
 
@@ -114,7 +114,7 @@ export const erKlageUnderAktivOmgjøring = (
     k: Klagebehandling,
 ): k is Klagebehandling & {
     resultat: KlagebehandlingsresultatOmgjør;
-} => k.resultat?.type === KlagebehandlingResultat.OMGJØR && !!k.åpenRammebehandlingId;
+} => k.resultat?.type === KlagebehandlingResultat.OMGJØR && !!k.åpenBehandlingId;
 
 export const finnSisteGyldigeStegForKlage = (k: Klagebehandling): string => {
     switch (k.resultat?.type) {

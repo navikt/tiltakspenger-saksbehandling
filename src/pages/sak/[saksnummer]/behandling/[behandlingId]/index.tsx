@@ -1,6 +1,6 @@
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
 import { BehandlingPage } from '~/lib/rammebehandling/BehandlingPage';
-import React, { ComponentProps } from 'react';
+import { ComponentProps } from 'react';
 import { GetServerSideProps } from 'next';
 import { BehandlingProvider } from '~/lib/rammebehandling/context/BehandlingContext';
 import { fetchSak } from '~/utils/fetch/fetch-server';
@@ -8,7 +8,7 @@ import { logger } from '@navikt/next-logger';
 import { SakProvider } from '~/lib/sak/SakContext';
 import { SakProps } from '~/lib/sak/SakTyper';
 import {
-    BehandlingId,
+    RammebehandlingId,
     Rammebehandling as BehandlingType,
 } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { Klagebehandling } from '~/lib/klage/typer/Klage';
@@ -32,7 +32,7 @@ const Behandling = ({ behandling, sak, klage }: Props) => {
 
 export const getServerSideProps: GetServerSideProps = pageWithAuthentication(async (context) => {
     const saksnummer = context.params!.saksnummer as string;
-    const behandlingId = context.params!.behandlingId as BehandlingId;
+    const behandlingId = context.params!.behandlingId as RammebehandlingId;
 
     const sak = await fetchSak(context.req, context.params!.saksnummer as string).catch((e) => {
         logger.error(`Feil under henting av sak med saksnummer ${saksnummer} - ${e.toString()}`);

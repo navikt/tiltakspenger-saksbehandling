@@ -1,5 +1,4 @@
 import { ActionMenu } from '@navikt/ds-react';
-import React from 'react';
 import { XMarkOctagonIcon } from '@navikt/aksel-icons';
 
 type AvsluttBehandlingMenyvalgProps = {

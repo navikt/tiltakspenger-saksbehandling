@@ -1,4 +1,3 @@
-import React from 'react';
 import { ActionMenu } from '@navikt/ds-react';
 import { ÅpenRammebehandlingForOversikt } from '~/lib/personoversikt/typer/ÅpenBehandlingForOversikt';
 import { skalKunneSetteBehandlingPaVent } from '~/lib/saksbehandler/tilganger';

@@ -5,7 +5,7 @@ import {
     MeldekortbehandlingType,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { MeldekortOppsummering } from '../../0-felles-komponenter/meldekort-oppsummering/MeldekortOppsummering';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { formaterTidspunktKort, formaterPeriode } from '~/utils/date';
 import { MeldeperiodeKorrigering } from '~/lib/meldekort/typer/Meldeperiode';
 import { MeldekortKorrigertFraTidligerePeriode } from '../../0-felles-komponenter/korrigert-fra-tidligere/MeldekortKorrigertFraTidligerePeriode';

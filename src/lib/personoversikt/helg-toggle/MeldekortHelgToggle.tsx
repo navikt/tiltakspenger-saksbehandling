@@ -1,5 +1,5 @@
 import { Alert, HStack, Switch } from '@navikt/ds-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useSak } from '~/lib/sak/SakContext';
 import { SakProps } from '~/lib/sak/SakTyper';
 

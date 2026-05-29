@@ -12,7 +12,6 @@ import defaultManuellSøknadFormValues, {
 } from '~/lib/manuell-søknad/ManueltRegistrertSøknad';
 import { JaNeiSpørsmål } from '~/lib/manuell-søknad/JaNeiSpørsmål';
 import { MottarPengestøtterSpørsmål } from '~/lib/manuell-søknad/MottarPengestøtterSpørsmål';
-import React from 'react';
 import { Periodevelger } from '~/lib/manuell-søknad/Periodevelger';
 import { VelgTiltak } from '~/lib/manuell-søknad/tiltak/VelgTiltak';
 import { ManueltRegistrertSøknadBarnetillegg } from '~/lib/manuell-søknad/barnetillegg/ManueltRegistrertSøknadBarnetillegg';

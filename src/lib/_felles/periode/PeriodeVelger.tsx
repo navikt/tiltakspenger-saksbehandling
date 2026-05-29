@@ -1,4 +1,3 @@
-import React from 'react';
 import { Datovelger, DatovelgerProps } from '../datovelger/Datovelger';
 import { HStack } from '@navikt/ds-react';
 

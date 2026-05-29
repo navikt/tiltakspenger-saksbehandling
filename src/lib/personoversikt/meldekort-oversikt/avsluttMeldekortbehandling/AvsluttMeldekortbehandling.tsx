@@ -1,4 +1,4 @@
-import React, { FormEvent, useRef, useState } from 'react';
+import { FormEvent, useRef, useState } from 'react';
 import router from 'next/router';
 import {
     Alert,
