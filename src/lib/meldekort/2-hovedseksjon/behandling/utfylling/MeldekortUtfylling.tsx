@@ -59,10 +59,11 @@ type Props = {
 export const MeldekortUtfylling = ({ meldekortbehandling }: Props) => {
     const { sakId, saksnummer } = useSak().sak;
     const { navigateWithNotification } = useNotification();
-    const { meldeperiodeKjede, sisteMeldeperiode, setMeldeperiodeKjede } = useMeldeperiodeKjede();
+    const { meldeperiodeKjede, setMeldeperiodeKjede } = useMeldeperiodeKjede();
     const { innloggetSaksbehandler } = useSaksbehandler();
     const [visSettPåVentModal, setVisSettPåVentModal] = useState(false);
 
+    const { sisteMeldeperiode } = meldeperiodeKjede;
     const { antallDager, ingenDagerGirRett } = sisteMeldeperiode;
 
     const meldekortbehandlingId = meldekortbehandling.id;

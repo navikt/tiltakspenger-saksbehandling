@@ -1,5 +1,5 @@
 import React, { createContext, useContext } from 'react';
-import { MeldeperiodeKjedeProps, MeldeperiodeProps } from '~/lib/meldekort/typer/Meldeperiode';
+import { MeldeperiodeKjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
 import {
     MeldekortbehandlingId,
     MeldekortbehandlingProps,
@@ -14,7 +14,6 @@ export type MeldeperioderContextState = {
     finnForrigeMeldekortbehandling: (
         meldekortId: MeldekortbehandlingId,
     ) => MeldekortbehandlingProps | undefined;
-    sisteMeldeperiode: MeldeperiodeProps;
     alleMeldekortbehandlinger: MeldekortbehandlingProps[];
     sisteMeldekortbehandling?: MeldekortbehandlingProps;
     tidligereMeldekortbehandlinger: MeldekortbehandlingProps[];
@@ -39,10 +38,6 @@ export const MeldeperiodeKjedeProvider = ({
 
     const { meldekortbehandlinger, avbrutteMeldekortbehandlinger } = meldeperiodeKjede;
 
-    const sisteMeldeperiode = meldeperiodeKjede.meldeperioder.reduce((acc, meldeperiode) =>
-        meldeperiode.versjon > acc.versjon ? meldeperiode : acc,
-    );
-
     const alleMeldekortbehandlinger = meldekortbehandlinger.toSorted(
         sorterMeldekortbehandlingerDesc,
     );
@@ -60,7 +55,6 @@ export const MeldeperiodeKjedeProvider = ({
                 meldeperiodeKjede,
                 setMeldeperiodeKjede,
                 finnForrigeMeldekortbehandling,
-                sisteMeldeperiode,
                 alleMeldekortbehandlinger,
                 sisteMeldekortbehandling,
                 tidligereMeldekortbehandlinger,

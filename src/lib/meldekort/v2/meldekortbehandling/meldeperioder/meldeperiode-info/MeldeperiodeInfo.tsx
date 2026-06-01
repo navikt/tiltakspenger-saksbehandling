@@ -19,9 +19,8 @@ type Props = {
 export const MeldeperiodeInfo = ({ meldeperiodeKjede, className }: Props) => {
     const { saksnummer } = useSak().sak;
 
-    const { brukersMeldekort, tiltaksnavn, meldeperioder, periode } = meldeperiodeKjede;
+    const { brukersMeldekort, tiltaksnavn, sisteMeldeperiode, periode } = meldeperiodeKjede;
 
-    const sisteMeldeperiode = meldeperioder.at(-1)!;
     const sisteBrukersMeldekort = brukersMeldekort.at(-1);
 
     return (

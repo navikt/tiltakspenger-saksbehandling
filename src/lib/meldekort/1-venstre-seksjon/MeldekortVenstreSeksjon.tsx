@@ -36,9 +36,8 @@ export const MeldekortVenstreSeksjon = () => {
     const { sak } = useSak();
     const { førsteDagSomGirRett, sisteDagSomGirRett, kanSendeInnHelgForMeldekort } = sak;
 
-    const { meldeperiodeKjede, sisteMeldeperiode, sisteMeldekortbehandling } =
-        useMeldeperiodeKjede();
-    const { periode, tiltaksnavn, brukersMeldekort, status } = meldeperiodeKjede;
+    const { meldeperiodeKjede, sisteMeldekortbehandling } = useMeldeperiodeKjede();
+    const { periode, tiltaksnavn, brukersMeldekort, status, sisteMeldeperiode } = meldeperiodeKjede;
     const erSattPåVent = sisteMeldekortbehandling
         ? erMeldekortbehandlingSattPaVent(sisteMeldekortbehandling)
         : false;

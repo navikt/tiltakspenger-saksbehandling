@@ -21,7 +21,7 @@ type Props = {
 };
 
 export const BrukersMeldekortVisning = ({ brukersMeldekort }: Props) => {
-    const { sisteMeldeperiode, sisteMeldekortbehandling } = useMeldeperiodeKjede();
+    const { meldeperiodeKjede, sisteMeldekortbehandling } = useMeldeperiodeKjede();
     const { innloggetSaksbehandler } = useSaksbehandler();
 
     const kanBehandle =
@@ -30,6 +30,7 @@ export const BrukersMeldekortVisning = ({ brukersMeldekort }: Props) => {
 
     const formContext = useMeldekortbehandlingForm();
 
+    const { sisteMeldeperiode } = meldeperiodeKjede;
     const { dager, mottatt } = brukersMeldekort;
 
     const uke1 = dager.slice(0, 7);

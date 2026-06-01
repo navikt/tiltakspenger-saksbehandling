@@ -94,7 +94,7 @@ const meldeperiodeKjedeTilContext = (
     meldeperiodeKjede: MeldeperiodeKjedePropsV2,
 ): MeldeperiodeSkjema => {
     const dager: MeldekortDagSkjema[] = Object.entries(
-        meldeperiodeKjede.meldeperioder.at(-1)!.girRett,
+        meldeperiodeKjede.sisteMeldeperiode.girRett,
     ).map(([dato, girRett]) => {
         return {
             dato,

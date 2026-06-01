@@ -19,8 +19,9 @@ export const MeldeperiodekjedeVenstreSeksjon = () => {
     const { sak } = useSak();
     const { førsteDagSomGirRett, sisteDagSomGirRett, kanSendeInnHelgForMeldekort } = sak;
 
-    const { meldeperiodeKjede, sisteMeldeperiode } = useMeldeperiodeKjedeV2();
-    const { periode, brukersMeldekort, tiltaksnavn, meldekortbehandlingIder } = meldeperiodeKjede;
+    const { meldeperiodeKjede } = useMeldeperiodeKjedeV2();
+    const { periode, brukersMeldekort, tiltaksnavn, meldekortbehandlingIder, sisteMeldeperiode } =
+        meldeperiodeKjede;
 
     const sisteBrukersMeldekort = brukersMeldekort.at(-1);
 

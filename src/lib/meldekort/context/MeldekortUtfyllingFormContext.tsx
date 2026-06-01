@@ -28,15 +28,13 @@ type Props = PropsWithChildren<{
 }>;
 
 const MeldekortbehandlingFormProviderInner = ({ meldekortbehandling, children }: Props) => {
-    const { meldeperiodeKjede, tidligereMeldekortbehandlinger, sisteMeldeperiode } =
-        useMeldeperiodeKjede();
+    const { meldeperiodeKjede, tidligereMeldekortbehandlinger } = useMeldeperiodeKjede();
+    const { brukersMeldekort, sisteMeldeperiode } = meldeperiodeKjede;
+    const { antallDager } = sisteMeldeperiode;
 
     const brukersMeldekortForBehandling =
-        meldeperiodeKjede.brukersMeldekort.find(
-            (b) => b.id === meldekortbehandling.brukersMeldekortId,
-        ) ?? meldeperiodeKjede.brukersMeldekort.at(-1); // Bruk siste brukers meldekort som fallback
-
-    const { antallDager } = sisteMeldeperiode;
+        brukersMeldekort.find((b) => b.id === meldekortbehandling.brukersMeldekortId) ??
+        brukersMeldekort.at(-1); // Bruk siste brukers meldekort som fallback
 
     const formContext = useForm<MeldekortbehandlingForm>({
         defaultValues: {

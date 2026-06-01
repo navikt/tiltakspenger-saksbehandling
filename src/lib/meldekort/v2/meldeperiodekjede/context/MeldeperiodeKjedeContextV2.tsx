@@ -1,9 +1,8 @@
 import React, { createContext, useContext } from 'react';
-import { MeldeperiodeKjedePropsV2, MeldeperiodeProps } from '~/lib/meldekort/typer/Meldeperiode';
+import { MeldeperiodeKjedePropsV2 } from '~/lib/meldekort/typer/Meldeperiode';
 
 type MeldeperioderContextState = {
     meldeperiodeKjede: MeldeperiodeKjedePropsV2;
-    sisteMeldeperiode: MeldeperiodeProps;
 };
 
 const MeldeperiodeKjedeContext = createContext<MeldeperioderContextState>(
@@ -16,13 +15,10 @@ type Props = {
 };
 
 export const MeldeperiodeKjedeV2Provider = ({ meldeperiodeKjede, children }: Props) => {
-    const sisteMeldeperiode = meldeperiodeKjede.meldeperioder.at(-1)!;
-
     return (
         <MeldeperiodeKjedeContext.Provider
             value={{
                 meldeperiodeKjede,
-                sisteMeldeperiode,
             }}
         >
             {children}

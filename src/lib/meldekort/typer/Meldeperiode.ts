@@ -45,7 +45,7 @@ export type MeldeperiodeKjedeProps = {
     status: MeldeperiodeKjedeStatus;
     periodeMedÅpenBehandling?: Periode;
     tiltaksnavn: string[];
-    meldeperioder: MeldeperiodeProps[];
+    sisteMeldeperiode: MeldeperiodeProps;
     meldekortbehandlinger: MeldekortbehandlingProps[];
     brukersMeldekort: BrukersMeldekortProps[];
     korrigeringFraTidligerePeriode?: MeldeperiodeKorrigering;
@@ -65,7 +65,7 @@ export type MeldeperiodeKjedePropsV2 = {
     id: MeldeperiodeKjedeId;
     periode: Periode;
     tiltaksnavn: string[];
-    meldeperioder: MeldeperiodeProps[];
+    sisteMeldeperiode: MeldeperiodeProps;
     meldekortbehandlingIder: MeldekortbehandlingId[];
     meldekortbehandlingStatus: MeldekortbehandlingStatus | null;
     brukersMeldekort: BrukersMeldekortProps[];
