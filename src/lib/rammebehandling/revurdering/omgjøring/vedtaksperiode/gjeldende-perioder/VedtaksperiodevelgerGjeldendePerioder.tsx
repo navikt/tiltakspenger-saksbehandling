@@ -1,5 +1,5 @@
 import { BodyShort, Button, HStack, VStack } from '@navikt/ds-react';
-import { periodeTilFormatertDatotekst } from '~/utils/date';
+import { formaterPeriode } from '~/utils/date';
 import {
     useOmgjøringSkjema,
     useOmgjøringSkjemaDispatch,
@@ -59,7 +59,7 @@ const PeriodeMedVelgKnapp = ({ periode }: { periode: Periode }) => {
 
     return (
         <HStack gap={'space-8'} align={'center'}>
-            <BodyShort size={'small'}>{periodeTilFormatertDatotekst(periode)}</BodyShort>
+            <BodyShort size={'small'}>{formaterPeriode(periode)}</BodyShort>
             {!erReadonly && (
                 <Button
                     type={'button'}

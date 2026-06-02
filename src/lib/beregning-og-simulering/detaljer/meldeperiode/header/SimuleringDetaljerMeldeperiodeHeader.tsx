@@ -3,7 +3,7 @@ import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { classNames } from '~/utils/classNames';
 import { formatterBeløp } from '~/utils/beløp';
 import { beløpStyle } from '~/lib/_felles/utbetaling/beløp/beløpStyle';
-import { periodeTilFormatertDatotekst, ukenummerFraDatotekst } from '~/utils/date';
+import { formaterPeriode, ukenummerFraDatotekst } from '~/utils/date';
 import { Periode } from '~/types/Periode';
 
 import style from './SimuleringDetaljerMeldeperiodeHeader.module.css';
@@ -26,7 +26,7 @@ export const SimuleringDetaljerMeldeperiodeHeader = ({
     const beregningOgSimuleringAvviker =
         simulertDiff !== undefined && beregnetDiff !== simulertDiff;
 
-    const periodeString = periodeTilFormatertDatotekst(periode);
+    const periodeString = formaterPeriode(periode);
     const ukerString = `${ukenummerFraDatotekst(periode.fraOgMed)} og ${ukenummerFraDatotekst(periode.tilOgMed)}`;
 
     return (

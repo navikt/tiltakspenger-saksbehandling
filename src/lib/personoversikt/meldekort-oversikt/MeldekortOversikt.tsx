@@ -3,7 +3,7 @@ import {
     finnMeldeperiodeKjedeStatusTekst,
     utbetalingsstatusTekst,
 } from '~/utils/tekstformateringUtils';
-import { formaterTidspunkt, periodeTilFormatertDatotekst } from '~/utils/date';
+import { formaterTidspunkt, formaterPeriode } from '~/utils/date';
 import {
     MeldeperiodeKjedeProps,
     MeldeperiodeKjedeStatus,
@@ -106,7 +106,7 @@ export const MeldekortOversikt = ({ meldeperiodeKjeder }: Props) => {
 
                         const korrigeringTekst =
                             korrigeringFraTidligerePeriode && sisteMeldekortbehandling?.erAvsluttet
-                                ? ` (korrigert via ${periodeTilFormatertDatotekst(korrigeringFraTidligerePeriode.periode)})`
+                                ? ` (korrigert via ${formaterPeriode(korrigeringFraTidligerePeriode.periode)})`
                                 : erKorrigering
                                   ? ' (korrigering)'
                                   : '';
@@ -114,9 +114,7 @@ export const MeldekortOversikt = ({ meldeperiodeKjeder }: Props) => {
                         return (
                             <Table.Row shadeOnHover={false} key={id}>
                                 <Table.DataCell>{`${erSattPåVent ? 'Satt på vent' : finnMeldeperiodeKjedeStatusTekst[status]}${korrigeringTekst}`}</Table.DataCell>
-                                <Table.DataCell>
-                                    {periodeTilFormatertDatotekst(periode)}
-                                </Table.DataCell>
+                                <Table.DataCell>{formaterPeriode(periode)}</Table.DataCell>
                                 <Table.DataCell>
                                     {beregnetBeløpForPeriode !== undefined
                                         ? formatterBeløp(beregnetBeløpForPeriode)

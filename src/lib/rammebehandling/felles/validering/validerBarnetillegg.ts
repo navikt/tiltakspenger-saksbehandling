@@ -9,7 +9,7 @@ import {
     inneholderHelePerioden,
 } from '~/utils/periode';
 import { BarnetilleggPeriode } from '~/lib/rammebehandling/typer/Barnetillegg';
-import { periodeTilFormatertDatotekst } from '~/utils/date';
+import { formaterPeriode } from '~/utils/date';
 import { periodiserBarnetilleggFraSøknad } from '~/lib/rammebehandling/felles/barnetillegg/utils/periodiserBarnetilleggFraSøknad';
 import { Søknad } from '~/types/Søknad';
 import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
@@ -64,7 +64,7 @@ export const validerBarnetillegg = (
         if (søknad.barnetillegg.length === 0) {
             if (!perioderErLike(totalInnvilgelsesperiode, totalBarnetilleggPeriode)) {
                 validering.warnings.push(
-                    `Den totale perioden for barnetillegg (${periodeTilFormatertDatotekst(totalBarnetilleggPeriode)}) fyller ikke hele innvilgelsesperioden (${periodeTilFormatertDatotekst(totalInnvilgelsesperiode)})`,
+                    `Den totale perioden for barnetillegg (${formaterPeriode(totalBarnetilleggPeriode)}) fyller ikke hele innvilgelsesperioden (${formaterPeriode(totalInnvilgelsesperiode)})`,
                 );
             }
             validering.warnings.push(
@@ -109,6 +109,6 @@ export const validerBarnetillegg = (
 
 const formatterPeriodisering = (btPeriodisering: BarnetilleggPeriode[]) => {
     return btPeriodisering
-        .map((bt) => `${bt.antallBarn} barn i perioden ${periodeTilFormatertDatotekst(bt.periode)}`)
+        .map((bt) => `${bt.antallBarn} barn i perioden ${formaterPeriode(bt.periode)}`)
         .join(', ');
 };

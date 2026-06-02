@@ -4,7 +4,7 @@ import {
     finnBehandlingstypeTekst,
     klagebehandlingResultatTilText,
 } from '~/utils/tekstformateringUtils';
-import { formaterTidspunkt, periodeTilFormatertDatotekst } from '~/utils/date';
+import { formaterTidspunkt, formaterPeriode } from '~/utils/date';
 import { ChevronDownIcon, FileIcon } from '@navikt/aksel-icons';
 import MenyValgBehandleSøknadPåNytt from '~/lib/behandling-felles/behandlingmeny/menyvalg/MenyValgBehandleSøknadPåNytt';
 import SeBehandlingMenyvalg from '~/lib/behandling-felles/behandlingmeny/menyvalg/SeBehandlingMenyvalg';
@@ -100,12 +100,12 @@ const RammevedtakMedBehandlingRad = (props: { rammevedtak: VedtattRammevedtakMed
             <Table.DataCell>{formaterTidspunkt(props.rammevedtak.opprettet)}</Table.DataCell>
             <Table.DataCell>
                 {props.rammevedtak.opprinneligInnvilgetPerioder
-                    .map((periode) => periodeTilFormatertDatotekst(periode))
+                    .map((periode) => formaterPeriode(periode))
                     .join(', ')}
             </Table.DataCell>
             <Table.DataCell>
                 {props.rammevedtak.gjeldendeInnvilgetPerioder
-                    .map((periode) => periodeTilFormatertDatotekst(periode))
+                    .map((periode) => formaterPeriode(periode))
                     .join(', ')}
             </Table.DataCell>
             <Table.DataCell>{props.rammevedtak.saksbehandler}</Table.DataCell>

@@ -1,7 +1,7 @@
 import { Alert, BodyShort, Heading, Link, VStack } from '@navikt/ds-react';
 import { meldeperiodeUrl } from '~/utils/urls';
 import NextLink from 'next/link';
-import { formaterTidspunktKort, periodeTilFormatertDatotekst } from '~/utils/date';
+import { formaterTidspunktKort, formaterPeriode } from '~/utils/date';
 import { MeldekortUker } from '../uker/MeldekortUker';
 import { useSak } from '~/lib/sak/SakContext';
 import { MeldeperiodeKorrigering } from '~/lib/meldekort/typer/Meldeperiode';
@@ -27,7 +27,7 @@ export const MeldekortKorrigertFraTidligerePeriode = ({ korrigering, headerTekst
             <Alert size={'small'} inline={true} variant={'warning'}>
                 {'Korrigering av meldeperioden '}
                 <Link href={meldeperiodeUrl(saksnummer, periode)} as={NextLink}>
-                    {periodeTilFormatertDatotekst(periode)}
+                    {formaterPeriode(periode)}
                 </Link>
                 {' endret på den siste beregningen av dette meldekortet.'}
             </Alert>

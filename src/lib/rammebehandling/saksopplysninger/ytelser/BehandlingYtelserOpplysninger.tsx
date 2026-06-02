@@ -3,7 +3,7 @@ import { BodyShort, Checkbox, VStack } from '@navikt/ds-react';
 import { BehandlingSaksopplysning } from '~/lib/rammebehandling/saksopplysninger/BehandlingSaksopplysning';
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
 import styles from './BehandlingYtelserOpplysninger.module.css';
-import { periodeTilFormatertDatotekst } from '~/utils/date';
+import { formaterPeriode } from '~/utils/date';
 import { Periode } from '~/types/Periode';
 import { sorterPerioder, totalPeriode } from '~/utils/periode';
 import React, { useState } from 'react';
@@ -30,7 +30,7 @@ export const BehandlingYtelserOpplysninger = ({ ytelser }: Props) => {
                         ) : (
                             <BehandlingSaksopplysning
                                 navn={'Periode'}
-                                verdi={periodeTilFormatertDatotekst({
+                                verdi={formaterPeriode({
                                     tilOgMed: perioder[0].tilOgMed,
                                     fraOgMed: perioder[0].fraOgMed,
                                 })}
@@ -55,7 +55,7 @@ const YtelseMedFlerePerioder = ({ perioder }: { perioder: Periode[] }) => {
         <VStack>
             <BodyShort
                 size={'small'}
-            >{`${periodeTilFormatertDatotekst(totalPeriodeForYtelse)} (${antall} perioder)`}</BodyShort>
+            >{`${formaterPeriode(totalPeriodeForYtelse)} (${antall} perioder)`}</BodyShort>
 
             <Checkbox
                 size={'small'}
@@ -68,7 +68,7 @@ const YtelseMedFlerePerioder = ({ perioder }: { perioder: Periode[] }) => {
             {visAllePerioder ? (
                 <ul>
                     {sortertePerioder.map((periode) => {
-                        const periodeTekst = periodeTilFormatertDatotekst({
+                        const periodeTekst = formaterPeriode({
                             fraOgMed: periode.fraOgMed,
                             tilOgMed: periode.tilOgMed,
                         });

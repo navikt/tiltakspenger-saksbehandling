@@ -3,7 +3,7 @@ import style from './BehandlingSaksopplysning.module.css';
 import { BodyShort } from '@navikt/ds-react';
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
 import { PeriodeSpm } from '~/types/Søknad';
-import { periodeTilFormatertDatotekst } from '~/utils/date';
+import { formaterPeriode } from '~/utils/date';
 import { classNames } from '~/utils/classNames';
 import { formaterSøknadsspørsmålSvar } from '~/utils/tekstformateringUtils';
 
@@ -50,12 +50,10 @@ export const BehandlingSaksopplysningMedPeriodeSpm = ({
     return periodeSpm.periode && visVarsel ? (
         <BehandlingSaksopplysning
             navn={navn}
-            verdi={`${formaterSøknadsspørsmålSvar(periodeSpm.svar)} (${periodeTilFormatertDatotekst(
-                {
-                    fraOgMed: periodeSpm.periode.fraOgMed,
-                    tilOgMed: periodeSpm.periode.tilOgMed,
-                },
-            )})
+            verdi={`${formaterSøknadsspørsmålSvar(periodeSpm.svar)} (${formaterPeriode({
+                fraOgMed: periodeSpm.periode.fraOgMed,
+                tilOgMed: periodeSpm.periode.tilOgMed,
+            })})
             `}
             spacing={spacing}
             visVarsel={visVarsel}

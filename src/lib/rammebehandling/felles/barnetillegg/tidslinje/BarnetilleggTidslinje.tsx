@@ -3,7 +3,7 @@ import { Periode } from '~/types/Periode';
 import { useSak } from '~/lib/sak/SakContext';
 import { barnetilleggKrympetTilPeriode } from '~/lib/rammebehandling/felles/barnetillegg/utils/hentBarnetilleggFraVedtakTidslinje';
 import { ChildEyesIcon } from '@navikt/aksel-icons';
-import { periodeTilFormatertDatotekst } from '~/utils/date';
+import { formaterPeriode } from '~/utils/date';
 import NextLink from 'next/link';
 import React from 'react';
 import { behandlingUrl } from '~/utils/urls';
@@ -33,7 +33,7 @@ export const BarnetilleggTidslinje = ({ innvilgelsesperiode }: Props) => {
     return (
         <div>
             <Alert variant={'info'} inline={true} size={'small'} className={style.info}>
-                {`Gjeldende barnetillegg innenfor valgt innvilgelsesperiode (${periodeTilFormatertDatotekst(innvilgelsesperiode)}):`}
+                {`Gjeldende barnetillegg innenfor valgt innvilgelsesperiode (${formaterPeriode(innvilgelsesperiode)}):`}
             </Alert>
             <Timeline startDate={startDate} endDate={endDate}>
                 <Timeline.Row label={''}>
@@ -59,7 +59,7 @@ export const BarnetilleggTidslinje = ({ innvilgelsesperiode }: Props) => {
                                 key={periode.fraOgMed}
                             >
                                 <BodyShort size={'small'} className={style.detaljer}>
-                                    {`${harBarnetillegg ? `${antallBarn} barn` : 'Ikke barnetillegg'} i perioden: ${periodeTilFormatertDatotekst(periode)}`}
+                                    {`${harBarnetillegg ? `${antallBarn} barn` : 'Ikke barnetillegg'} i perioden: ${formaterPeriode(periode)}`}
                                     <Link
                                         as={NextLink}
                                         href={behandlingUrl({

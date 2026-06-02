@@ -1,6 +1,6 @@
 import React from 'react';
 import { BehandlingSaksopplysning } from '~/lib/rammebehandling/saksopplysninger/BehandlingSaksopplysning';
-import { periodeTilFormatertDatotekst } from '~/utils/date';
+import { formaterPeriode } from '~/utils/date';
 import { VStack } from '@navikt/ds-react';
 import { Søknad } from '~/types/Søknad';
 import { formaterSøknadsspørsmålSvar } from '~/utils/tekstformateringUtils';
@@ -22,7 +22,7 @@ export const SøknadsopplysningerTiltak = ({ søknad }: Props) => {
                         {tiltak?.fraOgMed && tiltak.tilOgMed && (
                             <BehandlingSaksopplysning
                                 navn={'Periode'}
-                                verdi={periodeTilFormatertDatotekst({
+                                verdi={formaterPeriode({
                                     fraOgMed: tiltak.fraOgMed,
                                     tilOgMed: tiltak.tilOgMed,
                                 })}

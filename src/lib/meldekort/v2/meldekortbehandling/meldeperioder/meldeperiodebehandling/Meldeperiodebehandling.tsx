@@ -26,10 +26,9 @@ import style from './Meldeperiodebehandling.module.css';
 
 type Props = {
     meldeperiodeSkjema: MeldeperiodeSkjema;
-    index: number;
 };
 
-export const Meldeperiodebehandling = ({ meldeperiodeSkjema, index }: Props) => {
+export const Meldeperiodebehandling = ({ meldeperiodeSkjema }: Props) => {
     const { kjedeId, dager } = meldeperiodeSkjema;
 
     const { sak } = useSak();
@@ -53,7 +52,7 @@ export const Meldeperiodebehandling = ({ meldeperiodeSkjema, index }: Props) => 
     return (
         <MeldekortbehandlingSeksjon>
             <MeldekortbehandlingSeksjon.Venstre gap={'space-12'} className={style.info}>
-                <MeldeperiodeInfo meldeperiodeKjede={kjede} index={index} />
+                <MeldeperiodeInfo meldeperiodeKjede={kjede} />
             </MeldekortbehandlingSeksjon.Venstre>
 
             <MeldekortbehandlingSeksjon.Høyre gap={'space-4'}>

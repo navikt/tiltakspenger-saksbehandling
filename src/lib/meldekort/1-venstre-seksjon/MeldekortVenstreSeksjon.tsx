@@ -2,7 +2,7 @@ import { BodyShort, Heading, Tag, VStack } from '@navikt/ds-react';
 import {
     formaterDatotekst,
     formaterTidspunkt,
-    periodeTilFormatertDatotekst,
+    formaterPeriode,
     ukenummerFraDatotekst,
 } from '~/utils/date';
 import { MeldekortbehandlingOpprett } from './opprett-behandling/MeldekortbehandlingOpprett';
@@ -54,10 +54,7 @@ export const MeldekortVenstreSeksjon = () => {
             >
                 {erSattPåVent ? 'Satt på vent' : finnMeldeperiodeKjedeStatusTekst[status]}
             </Tag>
-            <MeldekortDetalj
-                header={'Meldekortperiode'}
-                tekst={periodeTilFormatertDatotekst(periode)}
-            />
+            <MeldekortDetalj header={'Meldekortperiode'} tekst={formaterPeriode(periode)} />
             <MeldekortDetalj
                 header={'Første dag med rett'}
                 tekst={førsteDagSomGirRett ? formaterDatotekst(førsteDagSomGirRett) : 'Ukjent'}

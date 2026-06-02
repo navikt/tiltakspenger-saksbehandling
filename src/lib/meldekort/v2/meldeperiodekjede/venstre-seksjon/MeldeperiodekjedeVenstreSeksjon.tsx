@@ -2,7 +2,7 @@ import { BodyShort, Heading, VStack } from '@navikt/ds-react';
 import {
     formaterDatotekst,
     formaterTidspunkt,
-    periodeTilFormatertDatotekst,
+    formaterPeriode,
     ukenummerFraDatotekst,
 } from '~/utils/date';
 import React from 'react';
@@ -31,7 +31,7 @@ export const MeldeperiodekjedeVenstreSeksjon = () => {
                 <Heading level={'2'} size={'medium'}>
                     {'Meldeperiode'}
                 </Heading>
-                {`${periodeTilFormatertDatotekst(periode)} (uke ${ukenummerFraDatotekst(periode.fraOgMed)} og ${ukenummerFraDatotekst(periode.tilOgMed)})`}
+                {`${formaterPeriode(periode)} (uke ${ukenummerFraDatotekst(periode.fraOgMed)} og ${ukenummerFraDatotekst(periode.tilOgMed)})`}
             </div>
 
             <DetaljVertikal navn={'Tiltak'}>

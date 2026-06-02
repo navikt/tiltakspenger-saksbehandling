@@ -12,7 +12,7 @@ import { InnvilgelsesperiodeDatovelgere } from '~/lib/rammebehandling/felles/inn
 import { InnvilgelsesperioderVarsler } from '~/lib/rammebehandling/felles/innvilgelsesperiode/varsler/InnvilgelsesperioderVarsler';
 import { XMarkIcon } from '@navikt/aksel-icons';
 import { TiltaksdeltakelseMedPeriode } from '~/lib/rammebehandling/typer/Tiltaksdeltakelse';
-import { erHelg, periodeTilFormatertDatotekst } from '~/utils/date';
+import { erHelg, formaterPeriode } from '~/utils/date';
 import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { SakProps } from '~/lib/sak/SakTyper';
@@ -282,7 +282,7 @@ const tiltakVisningsnavn = (
     );
 
     if (deltakelserMedType.length > 1) {
-        return `${tiltaksdeltakelse.typeNavn} (${periodeTilFormatertDatotekst({
+        return `${tiltaksdeltakelse.typeNavn} (${formaterPeriode({
             fraOgMed: tiltaksdeltakelse.deltagelseFraOgMed,
             tilOgMed: tiltaksdeltakelse.deltagelseTilOgMed,
         })})`;

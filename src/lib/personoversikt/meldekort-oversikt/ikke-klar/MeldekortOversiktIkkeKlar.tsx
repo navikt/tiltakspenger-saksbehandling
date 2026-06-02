@@ -1,6 +1,6 @@
 import { Alert } from '@navikt/ds-react';
 import { MeldeperiodeKjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
-import { periodeTilFormatertDatotekst } from '~/utils/date';
+import { formaterPeriode } from '~/utils/date';
 
 type Props = {
     meldeperiodeKjeder: MeldeperiodeKjedeProps[];
@@ -14,7 +14,7 @@ export const MeldekortOversiktIkkeKlar = ({ meldeperiodeKjeder }: Props) => {
     const fraOgMed = meldeperiodeKjeder.at(0)!.periode.fraOgMed;
     const tilOgMed = meldeperiodeKjeder.at(-1)!.periode.tilOgMed;
 
-    const periodeTekst = periodeTilFormatertDatotekst({ fraOgMed, tilOgMed });
+    const periodeTekst = formaterPeriode({ fraOgMed, tilOgMed });
 
     return (
         <Alert

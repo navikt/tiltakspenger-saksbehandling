@@ -1,5 +1,5 @@
 import { BehandlingSaksopplysning } from '../BehandlingSaksopplysning';
-import { periodeTilFormatertDatotekst } from '~/utils/date';
+import { formaterPeriode } from '~/utils/date';
 import {
     Tiltaksdeltakelse,
     TiltaksdeltakelseKilde,
@@ -33,7 +33,7 @@ export const BehandlingTiltakOpplysninger = ({ tiltaksdeltakelser }: Props) => {
                         {deltagelseFraOgMed && deltagelseTilOgMed && (
                             <BehandlingSaksopplysning
                                 navn={'Periode'}
-                                verdi={periodeTilFormatertDatotekst({
+                                verdi={formaterPeriode({
                                     fraOgMed: deltagelseFraOgMed,
                                     tilOgMed: deltagelseTilOgMed,
                                 })}

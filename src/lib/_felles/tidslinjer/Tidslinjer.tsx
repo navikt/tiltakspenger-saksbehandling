@@ -11,7 +11,7 @@ import {
 import { BodyShort, Button, Heading, Link, Timeline, VStack } from '@navikt/ds-react';
 import { SakProps } from '~/lib/sak/SakTyper';
 import NextLink from 'next/link';
-import { formaterDatotekst, periodeTilFormatertDatotekst } from '~/utils/date';
+import { formaterDatotekst, formaterPeriode } from '~/utils/date';
 import { formatterBeløp } from '~/utils/beløp';
 import { behandlingUrl, meldeperiodeUrl } from '~/utils/urls';
 import { useTidslinjeDateRange } from '~/lib/_felles/tidslinjer/useTidslinjeDateRange';
@@ -95,15 +95,13 @@ export const Tidslinjer = ({ sak, heading = true, className }: Props) => {
                                     <div>
                                         <InfoElement
                                             navn={'Gjeldende vedtaksperiode'}
-                                            verdi={periodeTilFormatertDatotekst(
-                                                tidslinjeElement.periode,
-                                            )}
+                                            verdi={formaterPeriode(tidslinjeElement.periode)}
                                         />
                                         {innvilgelsesperioder.length > 0 && (
                                             <InfoElement
                                                 navn={'Gjeldende innvilgelsesperioder'}
                                                 verdi={gjeldendeInnvilgetPerioder
-                                                    .map((it) => periodeTilFormatertDatotekst(it))
+                                                    .map((it) => formaterPeriode(it))
                                                     .join(', ')}
                                             />
                                         )}
@@ -206,7 +204,7 @@ export const Tidslinjer = ({ sak, heading = true, className }: Props) => {
             </Timeline>
             <div className={style.scroll}>
                 <BodyShort size={'small'} className={style.periode}>
-                    {periodeTilFormatertDatotekst({
+                    {formaterPeriode({
                         fraOgMed: startDate.toString(),
                         tilOgMed: endDate.toString(),
                     })}

@@ -1,5 +1,5 @@
 import { Alert, BodyShort } from '@navikt/ds-react';
-import { forrigeDag, nesteDag, periodeTilFormatertDatotekst } from '~/utils/date';
+import { forrigeDag, nesteDag, formaterPeriode } from '~/utils/date';
 import { Periode } from '~/types/Periode';
 import { overlappendePeriode, perioderErSammenhengende } from '~/utils/periode';
 import { useSak } from '~/lib/sak/SakContext';
@@ -84,11 +84,11 @@ const PeriodeUtenInnvilgelseVarsel = ({ periode }: { periode: Periode }) => {
             <BodyShort
                 size={'small'}
                 spacing={erOpphør}
-            >{`Innvilges ikke for perioden ${periodeTilFormatertDatotekst(periode)}`}</BodyShort>
+            >{`Innvilges ikke for perioden ${formaterPeriode(periode)}`}</BodyShort>
             {erOpphør && (
                 <BodyShort size={'small'}>
                     {`Dette fører til et opphør av innvilgelse i perioden${gjeldendeInnvilgelserIHullet.length > 1 ? 'e' : ''} ${gjeldendeInnvilgelserIHullet
-                        .map((p) => periodeTilFormatertDatotekst(overlappendePeriode(p, periode)!))
+                        .map((p) => formaterPeriode(overlappendePeriode(p, periode)!))
                         .join(', ')}`}
                 </BodyShort>
             )}

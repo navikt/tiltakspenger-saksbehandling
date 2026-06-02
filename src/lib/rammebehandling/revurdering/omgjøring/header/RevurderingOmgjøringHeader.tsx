@@ -1,6 +1,6 @@
 import { Alert, BodyShort, Heading, Link, VStack } from '@navikt/ds-react';
 import { Rammebehandlingsstatus } from '~/lib/rammebehandling/typer/Rammebehandling';
-import { formaterTidspunkt, periodeTilFormatertDatotekst } from '~/utils/date';
+import { formaterTidspunkt, formaterPeriode } from '~/utils/date';
 import { OppsummeringsPar } from '~/lib/behandling-felles/oppsummeringer/oppsummeringspar/OppsummeringsPar';
 import { behandlingUrl } from '~/utils/urls';
 import { TabsIcon } from '@navikt/aksel-icons';
@@ -37,7 +37,7 @@ export const RevurderingOmgjøringHeader = () => {
             {erVedtatt ? (
                 <OppsummeringsPar
                     label={'Vedtaksperiode'}
-                    verdi={periodeTilFormatertDatotekst(behandling.vedtaksperiode!)}
+                    verdi={formaterPeriode(behandling.vedtaksperiode!)}
                     variant={'inlineColon'}
                 />
             ) : (

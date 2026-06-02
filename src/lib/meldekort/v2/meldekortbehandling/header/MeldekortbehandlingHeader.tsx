@@ -15,6 +15,7 @@ export const MeldekortbehandlingHeader = () => {
     const { førsteDagSomGirRett, sisteDagSomGirRett, kanSendeInnHelgForMeldekort } = useSak().sak;
 
     const meldekortbehandling = useMeldekortbehandling();
+
     const { saksbehandler, beslutter, type } = meldekortbehandling;
 
     return (

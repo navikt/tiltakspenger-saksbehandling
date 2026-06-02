@@ -1,6 +1,6 @@
 import { Alert, Heading, VStack } from '@navikt/ds-react';
 import { Periode } from '~/types/Periode';
-import { periodeTilFormatertDatotekst } from '~/utils/date';
+import { formaterPeriode } from '~/utils/date';
 import { UtbetalingStatus } from '~/lib/beregning-og-simulering/header/status/UtbetalingStatus';
 import { UtbetalingBeløp } from '~/lib/_felles/utbetaling/beløp/UtbetalingBeløp';
 import { SimulertBeregning } from '~/lib/beregning-og-simulering/typer/SimulertBeregning';
@@ -55,7 +55,7 @@ export const BeregningOgSimuleringHeader = ({
                     variant={'info'}
                     inline={true}
                     size={'small'}
-                >{`Vedtaket påvirker beregningen av ${meldeperioder.length} meldeperiode${meldeperioder.length > 1 ? 'r' : ''} i perioden ${periodeTilFormatertDatotekst(periode)}`}</Alert>
+                >{`Vedtaket påvirker beregningen av ${meldeperioder.length} meldeperiode${meldeperioder.length > 1 ? 'r' : ''} i perioden ${formaterPeriode(periode)}`}</Alert>
             )}
 
             {kanIkkeIverksetteUtbetaling && (

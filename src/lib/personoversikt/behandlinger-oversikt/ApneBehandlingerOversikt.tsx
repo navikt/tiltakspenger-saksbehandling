@@ -11,7 +11,7 @@ import {
     klagebehandlingStatusTilTag,
     meldeperiodeKjedeStatusTag,
 } from '~/utils/tekstformateringUtils';
-import { formaterTidspunkt, periodeTilFormatertDatotekst } from '~/utils/date';
+import { formaterTidspunkt, formaterPeriode } from '~/utils/date';
 import { ApneBehandlingerMeny } from '~/lib/behandling-felles/behandlingmeny/ApneBehandlingerMeny';
 import { MeldeperiodeKjedeOversiktMeny } from '~/lib/personoversikt/meldekort-oversikt/MeldekortOversikt';
 import { SakProps } from '~/lib/sak/SakTyper';
@@ -68,7 +68,7 @@ export const ApneBehandlingerOversikt = ({ åpneBehandlinger }: Props) => {
                             <Table.DataCell>{formaterTidspunkt(opprettet)}</Table.DataCell>
                             <Table.DataCell>{kravtidspunkt ?? '-'}</Table.DataCell>
                             <Table.DataCell>
-                                {periode ? `${periodeTilFormatertDatotekst(periode)}` : '-'}
+                                {periode ? `${formaterPeriode(periode)}` : '-'}
                             </Table.DataCell>
                             <Table.DataCell>{saksbehandler ?? 'Ikke tildelt'}</Table.DataCell>
                             <Table.DataCell>{beslutter ?? 'Ikke tildelt'}</Table.DataCell>

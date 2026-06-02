@@ -6,7 +6,7 @@ import {
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { MeldekortOppsummering } from '../../0-felles-komponenter/meldekort-oppsummering/MeldekortOppsummering';
 import React, { useMemo, useState } from 'react';
-import { formaterTidspunktKort, periodeTilFormatertDatotekst } from '~/utils/date';
+import { formaterTidspunktKort, formaterPeriode } from '~/utils/date';
 import { MeldeperiodeKorrigering } from '~/lib/meldekort/typer/Meldeperiode';
 import { MeldekortKorrigertFraTidligerePeriode } from '../../0-felles-komponenter/korrigert-fra-tidligere/MeldekortKorrigertFraTidligerePeriode';
 import { useMeldeperiodeKjede } from '../../context/MeldeperiodeKjedeContext';
@@ -98,7 +98,7 @@ const erKorrigeringFraTidligerePeriode = (
 
 const optionTekst = (mbeh: MeldekortbehandlingProps | MeldeperiodeKorrigering) => {
     if (erKorrigeringFraTidligerePeriode(mbeh)) {
-        return `${formaterTidspunktKort(mbeh.iverksatt)} (korrigert via ${periodeTilFormatertDatotekst(mbeh.periode)})`;
+        return `${formaterTidspunktKort(mbeh.iverksatt)} (korrigert via ${formaterPeriode(mbeh.periode)})`;
     }
 
     const tidspunkt = formaterTidspunktKort(mbeh.godkjentTidspunkt!);

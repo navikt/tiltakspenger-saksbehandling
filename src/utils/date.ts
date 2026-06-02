@@ -19,41 +19,53 @@ const DATO_FORMAT = 'YYYY-MM-DD';
 const ukedagerKort = ['Man', 'Tir', 'Ons', 'Tor', 'Fre', 'Lør', 'Søn'] as const;
 const ukedager = ['Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag', 'Søndag'] as const;
 
-export function dateTilISOTekst(date: Date | string | Dayjs) {
+export const dateTilISOTekst = (date: Date | string | Dayjs) => {
     return dayjs(date).format(DATO_FORMAT);
-}
+};
 
-export function formaterTidspunkt(dateString: string) {
+export const formaterTidspunkt = (dateString: string) => {
     return dayjs(dateString).format('DD.MM.YYYY kl. HH:mm');
-}
+};
 
-export function formaterTidspunktMedSekunder(dateString: string) {
+export const formaterTidspunktMedSekunder = (dateString: string) => {
     return dayjs(dateString).format('DD.MM.YYYY kl. HH:mm:ss');
-}
+};
 
-export function formaterTidspunktKort(dateString: string) {
+export const formaterTidspunktKort = (dateString: string) => {
     return dayjs(dateString).format('DD.MM.YY HH:mm');
-}
+};
 
-export function formaterDatotekst(dateString: string) {
+export const formaterDatotekst = (dateString: string) => {
     return dateString ? dayjs(dateString).format('DD.MM.YYYY') : 'ukjent';
-}
+};
 
-export function periodeTilFormatertDatotekst({ fraOgMed, tilOgMed }: Periode) {
+export const formaterPeriode = ({ fraOgMed, tilOgMed }: Periode) => {
     return `${formaterDatotekst(fraOgMed)} - ${formaterDatotekst(tilOgMed)}`;
-}
+};
 
-export function ukedagFraDatoKort(dato: string) {
+export const formaterPeriodeKort = ({ fraOgMed, tilOgMed }: Periode) => {
+    const fraOgMedDate = dayjs(fraOgMed);
+    const tilOgMedDate = dayjs(tilOgMed);
+
+    const fraOgMedFormatert =
+        fraOgMedDate.year() === tilOgMedDate.year()
+            ? fraOgMedDate.format('DD.MM')
+            : fraOgMedDate.format('DD.MM.YYYY');
+
+    return `${fraOgMedFormatert} - ${tilOgMedDate.format('DD.MM.YYYY')}`;
+};
+
+export const ukedagFraDatoKort = (dato: string) => {
     return ukedagerKort[dayjs(dato).weekday()];
-}
+};
 
-export function ukedagFraDato(dato: string) {
+export const ukedagFraDato = (dato: string) => {
     return ukedager[dayjs(dato).weekday()];
-}
+};
 
-export function ukenummerFraDatotekst(dato: string) {
+export const ukenummerFraDatotekst = (dato: string) => {
     return dayjs(dato).week();
-}
+};
 
 export const alderFraDato = (dato: string) => {
     return dayjs().diff(dato, 'years');
@@ -101,6 +113,6 @@ export const erHelg = (dato: string) => {
 
 export const startOfDay = (dato: DateOrString) => dayjs(dato).startOf('day').toDate();
 
-export const formatterMeldeperiode = (periode: Periode) => {
-    return `${periodeTilFormatertDatotekst(periode)} (uke ${ukenummerFraDatotekst(periode.fraOgMed)} og ${ukenummerFraDatotekst(periode.tilOgMed)})`;
+export const formaterMeldeperiode = (periode: Periode) => {
+    return `${formaterPeriode(periode)} (uke ${ukenummerFraDatotekst(periode.fraOgMed)} og ${ukenummerFraDatotekst(periode.tilOgMed)})`;
 };

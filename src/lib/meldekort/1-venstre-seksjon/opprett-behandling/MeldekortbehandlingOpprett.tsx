@@ -8,7 +8,7 @@ import { MeldekortbehandlingType } from '~/lib/meldekort/typer/Meldekortbehandli
 import { MeldeperiodeKjedeStatus } from '~/lib/meldekort/typer/Meldeperiode';
 import NextLink from 'next/link';
 import { meldeperiodeUrl } from '~/utils/urls';
-import { periodeTilFormatertDatotekst } from '~/utils/date';
+import { formaterPeriode } from '~/utils/date';
 
 import styles from './MeldekortbehandlingOpprett.module.css';
 
@@ -61,7 +61,7 @@ export const MeldekortbehandlingOpprett = ({ type }: Props) => {
                                     as={NextLink}
                                     href={meldeperiodeUrl(saksnummer, periodeMedÅpenBehandling)}
                                 >
-                                    {periodeTilFormatertDatotekst(periodeMedÅpenBehandling)}
+                                    {formaterPeriode(periodeMedÅpenBehandling)}
                                 </Link>
                             </Alert>
                         )}

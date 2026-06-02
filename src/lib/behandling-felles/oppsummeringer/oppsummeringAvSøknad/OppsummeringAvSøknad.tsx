@@ -5,7 +5,7 @@ import {
     BehandlingSaksopplysning,
     BehandlingSaksopplysningMedPeriodeSpm,
 } from '~/lib/rammebehandling/saksopplysninger/BehandlingSaksopplysning';
-import { formaterDatotekst, periodeTilFormatertDatotekst } from '~/utils/date';
+import { formaterDatotekst, formaterPeriode } from '~/utils/date';
 import { SøknadOpplysningerSvar } from '~/lib/rammebehandling/saksopplysninger/søknad/SøknadOpplysningerSvar';
 import { SøknadOpplysningerBarn } from '~/lib/rammebehandling/saksopplysninger/søknad/SøknadOpplysningerBarn';
 import { Alert, Link, VStack } from '@navikt/ds-react';
@@ -64,7 +64,7 @@ export const OppsummeringAvSøknad = ({
                 verdi={
                     !tiltaksdeltakelseperiodeDetErSøktOm
                         ? 'Periode mangler'
-                        : periodeTilFormatertDatotekst({
+                        : formaterPeriode({
                               fraOgMed: tiltaksdeltakelseperiodeDetErSøktOm.fraOgMed,
                               tilOgMed: tiltaksdeltakelseperiodeDetErSøktOm.tilOgMed,
                           })

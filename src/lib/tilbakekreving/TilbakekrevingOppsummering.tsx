@@ -2,11 +2,7 @@ import { Alert, Button, Heading, VStack } from '@navikt/ds-react';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { TilbakekrevingId } from '~/lib/tilbakekreving/typer/Tilbakekreving';
 import { OppsummeringsPar } from '~/lib/behandling-felles/oppsummeringer/oppsummeringspar/OppsummeringsPar';
-import {
-    formaterDatotekst,
-    formaterTidspunktKort,
-    periodeTilFormatertDatotekst,
-} from '~/utils/date';
+import { formaterDatotekst, formaterTidspunktKort, formaterPeriode } from '~/utils/date';
 import { formatterBeløp } from '~/utils/beløp';
 import { TilbakekrevingStatusTags } from '~/lib/tilbakekreving/status-tags/TilbakekrevingStatusTags';
 import { useSak } from '~/lib/sak/SakContext';
@@ -63,7 +59,7 @@ export const TilbakekrevingOppsummering = ({ tilbakekrevingId }: Props) => {
                 />
                 <OppsummeringsPar
                     label={'Totalperiode for kravgrunnlag'}
-                    verdi={periodeTilFormatertDatotekst(kravgrunnlagTotalPeriode)}
+                    verdi={formaterPeriode(kravgrunnlagTotalPeriode)}
                     retning={'vertikal'}
                 />
                 <OppsummeringsPar

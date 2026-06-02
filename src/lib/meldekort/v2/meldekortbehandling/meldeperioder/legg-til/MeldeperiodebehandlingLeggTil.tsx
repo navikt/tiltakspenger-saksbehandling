@@ -1,26 +1,26 @@
-import { Button, HStack, Select } from '@navikt/ds-react';
-import { formatterMeldeperiode } from '~/utils/date';
+import { Button, Dialog, Select } from '@navikt/ds-react';
+import { formaterMeldeperiode } from '~/utils/date';
 import { useSak } from '~/lib/sak/SakContext';
-import { useState } from 'react';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
 import {
     useMeldekortbehandlingSkjema,
     useMeldekortbehandlingSkjemaDispatch,
 } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2Context';
 import { hentMeldeperiodekjede } from '~/lib/sak/sakUtils';
-import { MeldekortbehandlingSeksjon } from '~/lib/meldekort/v2/meldekortbehandling/layout/seksjon/MeldekortbehandlingSeksjon';
+import { PlusIcon } from '@navikt/aksel-icons';
+import { useRef } from 'react';
 
 type Props = {
     onLeggTil: (kjedeId: MeldeperiodeKjedeId) => void;
 };
 
 export const MeldeperiodebehandlingLeggTil = ({ onLeggTil }: Props) => {
+    const selectRef = useRef<HTMLSelectElement>(null);
+
     const { sak } = useSak();
 
     const { meldeperioder } = useMeldekortbehandlingSkjema();
     const dispatch = useMeldekortbehandlingSkjemaDispatch();
-
-    const [valgtKjedeId, setValgtKjedeId] = useState<MeldeperiodeKjedeId>();
 
     const valgteKjedeIder = new Set<MeldeperiodeKjedeId>(meldeperioder.map((m) => m.kjedeId));
 
@@ -28,49 +28,61 @@ export const MeldeperiodebehandlingLeggTil = ({ onLeggTil }: Props) => {
         (kjede) => !valgteKjedeIder.has(kjede.id),
     );
 
-    const leggTil = () => {
-        if (!valgtKjedeId) {
-            return;
-        }
-
+    const leggTil = (valgtKjedeId: MeldeperiodeKjedeId) => {
         dispatch({
             type: 'leggTilMeldeperiode',
             payload: { meldeperiodeKjede: hentMeldeperiodekjede(sak, valgtKjedeId) },
         });
 
         onLeggTil(valgtKjedeId);
-
-        setValgtKjedeId(undefined);
     };
 
     return (
-        <MeldekortbehandlingSeksjon>
-            <MeldekortbehandlingSeksjon.FullBredde>
-                <HStack gap={'space-8'} align={'end'}>
+        <Dialog>
+            <Dialog.Trigger>
+                <Button size={'small'} variant={'tertiary'} icon={<PlusIcon />}>
+                    {'Legg til'}
+                </Button>
+            </Dialog.Trigger>
+
+            <Dialog.Popup>
+                <Dialog.Header>
+                    <strong>{'Legg til meldeperiode i behandlingen'}</strong>
+                </Dialog.Header>
+
+                <Dialog.Body>
                     <Select
                         label={'Legg til meldeperiode'}
                         hideLabel={true}
                         size={'small'}
-                        value={valgtKjedeId}
-                        onChange={(e) => setValgtKjedeId(e.target.value as MeldeperiodeKjedeId)}
+                        ref={selectRef}
                     >
-                        <option value={''}>{'- Velg meldeperiode -'}</option>
                         {tilgjengeligeKjeder.map((kjede) => (
                             <option key={kjede.id} value={kjede.id}>
-                                {formatterMeldeperiode(kjede.periode)}
+                                {formaterMeldeperiode(kjede.periode)}
                             </option>
                         ))}
                     </Select>
-                    <Button
-                        size={'small'}
-                        variant={'secondary'}
-                        onClick={leggTil}
-                        disabled={!valgtKjedeId}
-                    >
-                        {'Legg til'}
-                    </Button>
-                </HStack>
-            </MeldekortbehandlingSeksjon.FullBredde>
-        </MeldekortbehandlingSeksjon>
+                </Dialog.Body>
+
+                <Dialog.Footer>
+                    <Dialog.CloseTrigger>
+                        <Button
+                            size={'small'}
+                            variant={'primary'}
+                            onClick={() => leggTil(selectRef.current!.value as MeldeperiodeKjedeId)}
+                        >
+                            {'Legg til'}
+                        </Button>
+                    </Dialog.CloseTrigger>
+
+                    <Dialog.CloseTrigger>
+                        <Button size={'small'} variant={'secondary'}>
+                            {'Lukk'}
+                        </Button>
+                    </Dialog.CloseTrigger>
+                </Dialog.Footer>
+            </Dialog.Popup>
+        </Dialog>
     );
 };

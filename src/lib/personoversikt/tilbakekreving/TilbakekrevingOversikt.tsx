@@ -3,11 +3,7 @@ import {
     TilbakekrevingBehandlingsstatus,
 } from '~/lib/tilbakekreving/typer/Tilbakekreving';
 import { Alert, BodyLong, Button, Heading, HStack, Link, Table, VStack } from '@navikt/ds-react';
-import {
-    formaterDatotekst,
-    formaterTidspunktKort,
-    periodeTilFormatertDatotekst,
-} from '~/utils/date';
+import { formaterDatotekst, formaterTidspunktKort, formaterPeriode } from '~/utils/date';
 import { formatterBeløp } from '~/utils/beløp';
 import { BeregningKildeType } from '~/lib/beregning-og-simulering/typer/Beregning';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
@@ -130,7 +126,7 @@ const TilbakekrevingerTabell = ({ tilbakekrevinger }: TilbakekrevingerTabellProp
                                 {formatterBeløp(totaltFeilutbetaltBeløp)}
                             </Table.DataCell>
                             <Table.DataCell>
-                                {periodeTilFormatertDatotekst(kravgrunnlagTotalPeriode)}
+                                {formaterPeriode(kravgrunnlagTotalPeriode)}
                             </Table.DataCell>
                             <Table.DataCell>{formaterTidspunktKort(opprettet)}</Table.DataCell>
                             <Table.DataCell>{formaterTidspunktKort(sistEndret)}</Table.DataCell>

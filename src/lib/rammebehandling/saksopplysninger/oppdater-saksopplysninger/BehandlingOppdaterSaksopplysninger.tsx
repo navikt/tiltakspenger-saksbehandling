@@ -5,7 +5,7 @@ import { useBehandling } from '../../context/BehandlingContext';
 import { useState } from 'react';
 import { classNames } from '~/utils/classNames';
 import Varsel from '~/lib/_felles/varsel/Varsel';
-import { formaterTidspunktMedSekunder, periodeTilFormatertDatotekst } from '~/utils/date';
+import { formaterTidspunktMedSekunder, formaterPeriode } from '~/utils/date';
 import { SaksbehandlerRolle } from '~/lib/saksbehandler/SaksbehandlerTyper';
 
 import style from './BehandlingOppdaterSaksopplysninger.module.css';
@@ -27,7 +27,7 @@ export const BehandlingOppdaterSaksopplysninger = () => {
             {periode && (
                 <BodyShort
                     size={'small'}
-                >{`Innhentet for periode: ${periodeTilFormatertDatotekst(periode)}`}</BodyShort>
+                >{`Innhentet for periode: ${formaterPeriode(periode)}`}</BodyShort>
             )}
             {rolleForBehandling === SaksbehandlerRolle.SAKSBEHANDLER && (
                 <Button

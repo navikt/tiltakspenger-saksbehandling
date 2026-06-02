@@ -3,7 +3,7 @@ import {
     avbruttbehandlingstypeTekst,
 } from './AvsluttedeBehandlingerUtils';
 import { Button, Table } from '@navikt/ds-react';
-import { formaterTidspunkt, periodeTilFormatertDatotekst } from '~/utils/date';
+import { formaterTidspunkt, formaterPeriode } from '~/utils/date';
 import Link from 'next/link';
 import { behandlingUrl } from '~/utils/urls';
 import { BehandlingId, Rammebehandlingstype } from '~/lib/rammebehandling/typer/Rammebehandling';
@@ -39,7 +39,7 @@ export const AvbrutteBehandlingerTabell = (props: {
                         </Table.DataCell>
                         <Table.DataCell>
                             {avsluttet.behandlingsperiode
-                                ? periodeTilFormatertDatotekst(avsluttet.behandlingsperiode)
+                                ? formaterPeriode(avsluttet.behandlingsperiode)
                                 : 'Ingen periode'}
                         </Table.DataCell>
                         <Table.DataCell>{avsluttet.saksbehandler ?? 'Ikke tildelt'}</Table.DataCell>
