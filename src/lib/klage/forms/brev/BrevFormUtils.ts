@@ -5,7 +5,7 @@ import {
     KlagebehandlingsresultatAvvist,
     KlagebehandlingsresultatOpprettholdt,
 } from '~/lib/klage/typer/Klage';
-import { Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
+import { Vedtak } from '~/lib/vedtak/typer/Vedtak';
 import { Nullable } from '~/types/UtilTypes';
 import { formaterDatotekst } from '~/utils/date';
 
@@ -64,7 +64,7 @@ export const klageTilBrevFormData = (
     klage: Klagebehandling & {
         resultat: KlagebehandlingsresultatOpprettholdt | KlagebehandlingsresultatAvvist;
     },
-    påKlagetVedtak: Nullable<Rammevedtak>,
+    påKlagetVedtak: Nullable<Vedtak>,
 ): BrevFormData => {
     const { resultat } = klage;
     return {

@@ -220,10 +220,13 @@ const VelgOmgjøringsbehandlingForm = (props: {
                     render={({ field, fieldState }) => (
                         <Select {...field} label="Periode" error={fieldState.error?.message}>
                             <option value="">-- Velg periode --</option>
-                            {props.meldekortvedtak.map((vedtak) => (
-                                <option key={vedtak.id} value={vedtak.kjedeId}>
-                                    {formaterDatotekst(vedtak.kjedeId.split('/')[0])} -{' '}
-                                    {formaterDatotekst(vedtak.kjedeId.split('/')[1])}
+                            {[
+                                //dedupper kjede-id'er for å unngå duplikate perioder i dropdownen
+                                ...new Set(props.meldekortvedtak.map((vedtak) => vedtak.kjedeId)),
+                            ].map((kjedeId) => (
+                                <option key={kjedeId} value={kjedeId}>
+                                    {formaterDatotekst(kjedeId.split('/')[0])} -{' '}
+                                    {formaterDatotekst(kjedeId.split('/')[1])}
                                 </option>
                             ))}
                         </Select>
