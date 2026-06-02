@@ -10,7 +10,11 @@ import {
 import { hentMeldeperiodekjede } from '~/lib/sak/sakUtils';
 import { MeldekortbehandlingSeksjon } from '~/lib/meldekort/v2/meldekortbehandling/layout/seksjon/MeldekortbehandlingSeksjon';
 
-export const MeldeperiodebehandlingLeggTil = () => {
+type Props = {
+    onLeggTil: (kjedeId: MeldeperiodeKjedeId) => void;
+};
+
+export const MeldeperiodebehandlingLeggTil = ({ onLeggTil }: Props) => {
     const { sak } = useSak();
 
     const { meldeperioder } = useMeldekortbehandlingSkjema();
@@ -34,6 +38,8 @@ export const MeldeperiodebehandlingLeggTil = () => {
             payload: { meldeperiodeKjede: hentMeldeperiodekjede(sak, valgtKjedeId) },
         });
 
+        onLeggTil(valgtKjedeId);
+
         setValgtKjedeId(undefined);
     };
 
@@ -43,6 +49,7 @@ export const MeldeperiodebehandlingLeggTil = () => {
                 <HStack gap={'space-8'} align={'end'}>
                     <Select
                         label={'Legg til meldeperiode'}
+                        hideLabel={true}
                         size={'small'}
                         value={valgtKjedeId}
                         onChange={(e) => setValgtKjedeId(e.target.value as MeldeperiodeKjedeId)}

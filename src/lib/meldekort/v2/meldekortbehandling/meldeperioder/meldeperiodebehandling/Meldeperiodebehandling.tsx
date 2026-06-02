@@ -1,4 +1,4 @@
-import { Box, Button, HStack, Heading, Select, Table, BodyShort } from '@navikt/ds-react';
+import { Box, Select, Table, BodyShort } from '@navikt/ds-react';
 import {
     MeldekortbehandlingDagStatus,
     MeldekortBeregningsdag,
@@ -12,7 +12,7 @@ import {
     useMeldekortbehandlingSkjema,
     useMeldekortbehandlingSkjemaDispatch,
 } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2Context';
-import { formaterDatotekst, formatterMeldeperiode, ukedagFraDatoKort } from '~/utils/date';
+import { formaterDatotekst, ukedagFraDatoKort } from '~/utils/date';
 import { meldekortbehandlingDagStatusTekst } from '~/utils/tekstformateringUtils';
 import { formatterBeløp } from '~/utils/beløp';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
@@ -26,17 +26,15 @@ import style from './Meldeperiodebehandling.module.css';
 
 type Props = {
     meldeperiodeSkjema: MeldeperiodeSkjema;
-    onFjern: () => void;
-    className?: string;
+    index: number;
 };
 
-export const Meldeperiodebehandling = ({ meldeperiodeSkjema, onFjern }: Props) => {
+export const Meldeperiodebehandling = ({ meldeperiodeSkjema, index }: Props) => {
     const { kjedeId, dager } = meldeperiodeSkjema;
 
     const { sak } = useSak();
 
     const kjede = hentMeldeperiodekjede(sak, kjedeId);
-    const { periode } = kjede;
 
     const meldekortbehandling = useMeldekortbehandling();
     const { erReadonly } = useMeldekortbehandlingSkjema();
@@ -54,22 +52,8 @@ export const Meldeperiodebehandling = ({ meldeperiodeSkjema, onFjern }: Props) =
 
     return (
         <MeldekortbehandlingSeksjon>
-            <MeldekortbehandlingSeksjon.FullBredde className={style.header}>
-                <HStack justify={'space-between'} align={'center'}>
-                    <Heading size={'small'} level={'3'}>
-                        {`Meldeperiode: ${formatterMeldeperiode(periode)}`}
-                    </Heading>
-
-                    {!erReadonly && (
-                        <Button size={'small'} variant={'secondary'} onClick={onFjern}>
-                            {'Fjern'}
-                        </Button>
-                    )}
-                </HStack>
-            </MeldekortbehandlingSeksjon.FullBredde>
-
             <MeldekortbehandlingSeksjon.Venstre gap={'space-12'} className={style.info}>
-                <MeldeperiodeInfo meldeperiodeKjede={kjede} />
+                <MeldeperiodeInfo meldeperiodeKjede={kjede} index={index} />
             </MeldekortbehandlingSeksjon.Venstre>
 
             <MeldekortbehandlingSeksjon.Høyre gap={'space-4'}>
@@ -146,7 +130,7 @@ const MeldeperiodeUke = ({
                                             size={'small'}
                                             hideLabel={true}
                                             value={status}
-                                            className={style.select}
+                                            className={style.status}
                                             onChange={(e) =>
                                                 dispatch({
                                                     type: 'oppdaterDagStatus',
@@ -162,7 +146,7 @@ const MeldeperiodeUke = ({
                                             {dagStatusOptions}
                                         </Select>
                                     ) : (
-                                        <BodyShort>
+                                        <BodyShort className={style.statusReadonly}>
                                             {meldekortbehandlingDagStatusTekst[status]}
                                         </BodyShort>
                                     )}

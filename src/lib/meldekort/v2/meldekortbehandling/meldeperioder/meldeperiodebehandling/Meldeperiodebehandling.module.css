@@ -13,15 +13,20 @@
     padding-right: 0;
     text-align: center;
     min-width: 2rem;
+
     & > svg {
         vertical-align: middle;
     }
 }
 
-.select {
-    && select {
-        min-height: 1.75rem;
-    }
+.status {
+    min-height: 2rem;
+}
+
+.statusReadonly {
+    display: flex;
+    align-items: center;
+    min-height: 2rem;
 }
 
 .info {

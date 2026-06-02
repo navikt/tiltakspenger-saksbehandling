@@ -1,26 +1,23 @@
-import { HTMLAttributes } from 'react';
 import { classNames } from '~/utils/classNames';
 import { VStack, VStackProps } from '@navikt/ds-react';
 
 import style from './MeldekortbehandlingSeksjon.module.css';
 
-type Props = HTMLAttributes<HTMLDivElement>;
+type Props = VStackProps;
 
-type UnderSeksjonProps = VStackProps;
-
-export const MeldekortbehandlingSeksjon = ({ children, className }: Props) => {
-    return <div className={classNames(style.main, className)}>{children}</div>;
+export const MeldekortbehandlingSeksjon = ({ className, ...rest }: Props) => {
+    return <VStack {...rest} className={classNames(style.main, className)} />;
 };
 
-const Venstre = ({ className, ...rest }: UnderSeksjonProps) => {
+const Venstre = ({ className, ...rest }: Props) => {
     return <VStack {...rest} className={classNames(style.venstre, className)} />;
 };
 
-const Høyre = ({ className, ...rest }: UnderSeksjonProps) => {
+const Høyre = ({ className, ...rest }: Props) => {
     return <VStack {...rest} className={classNames(style.høyre, className)} />;
 };
 
-const FullBredde = ({ className, ...rest }: UnderSeksjonProps) => {
+const FullBredde = ({ className, ...rest }: Props) => {
     return <VStack {...rest} className={classNames(style.full, className)} />;
 };
 
