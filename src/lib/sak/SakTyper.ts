@@ -1,8 +1,5 @@
 import { ÅpenBehandlingForOversikt } from '../personoversikt/typer/ÅpenBehandlingForOversikt';
-import {
-    MeldeperiodeKjedeProps,
-    MeldeperiodeKjedePropsV2,
-} from '~/lib/meldekort/typer/Meldeperiode';
+import { MeldeperiodeKjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
 import { Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { UtbetalingstidslinjePeriode } from '~/types/Utbetaling';
 import { Rammebehandling } from '../rammebehandling/typer/Rammebehandling';
@@ -12,11 +9,9 @@ import { Klagevedtak } from '../klage/typer/Klagevedtak';
 import { Søknad } from '~/types/Søknad';
 import { TilbakekrevingBehandling } from '~/lib/tilbakekreving/typer/Tilbakekreving';
 import { MeldekortVedtak } from '~/lib/meldekort/typer/MeldekortVedtak';
-import {
-    MeldekortbehandlingId,
-    MeldekortbehandlingPropsV2,
-} from '~/lib/meldekort/typer/Meldekortbehandling';
+import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { Nullable, PartialRecord } from '~/types/UtilTypes';
+import { MeldekortbehandlingPropsV2, MeldeperiodeKjedePropsV2 } from '~/lib/meldekort/v2/typer';
 
 export type SakId = `sak_${string}`;
 

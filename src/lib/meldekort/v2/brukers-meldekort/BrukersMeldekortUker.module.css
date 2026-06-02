@@ -8,6 +8,6 @@
     border-bottom: none;
 }
 
-.full {
-    width: 65%;
+.status {
+    min-width: 65%;
 }

@@ -1,4 +1,9 @@
-.outer {
-    background-color: var(--ax-accent-100);
-    padding: 1rem;
+.tabPanel {
+    padding-top: 0.5rem;
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }

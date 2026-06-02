@@ -1,12 +1,12 @@
 import {
     MeldekortbehandlingProps,
-    MeldekortbehandlingPropsV2,
     MeldekortbehandlingStatus,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { MeldeperiodeKjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { erBeslutter, erSaksbehandler, kanBehandle } from '~/lib/saksbehandler/tilganger';
 import { Saksbehandler } from '~/lib/saksbehandler/SaksbehandlerTyper';
+import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
 
 export const erMeldekortbehandlingUnderAktivBehandling = (m: MeldekortbehandlingProps) =>
     m.status === MeldekortbehandlingStatus.UNDER_BEHANDLING ||

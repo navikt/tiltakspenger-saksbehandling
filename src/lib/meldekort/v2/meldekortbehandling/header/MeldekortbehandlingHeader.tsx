@@ -1,4 +1,4 @@
-import { Heading, HStack, InlineMessage, VStack } from '@navikt/ds-react';
+import { Heading, HStack, InlineMessage } from '@navikt/ds-react';
 import { useSak } from '~/lib/sak/SakContext';
 import { useMeldekortbehandling } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2Context';
 import { formaterDatotekst } from '~/utils/date';
@@ -6,6 +6,8 @@ import { DetaljHorisontal } from '~/lib/_felles/detaljer/DetaljHorisontal';
 import React from 'react';
 import { MeldekortbehandlingStatusTags } from '~/lib/meldekort/v2/meldekortbehandling/header/status/MeldekortbehandlingStatusTags';
 import { meldekortbehandlingTypeTekst } from '~/lib/meldekort/v2/tekster';
+import { MeldekortbehandlingSeksjon } from '~/lib/meldekort/v2/meldekortbehandling/layout/seksjon/MeldekortbehandlingSeksjon';
+import { Separator } from '~/lib/_felles/separator/Separator';
 
 import style from './MeldekortbehandlingHeader.module.css';
 
@@ -16,18 +18,18 @@ export const MeldekortbehandlingHeader = () => {
     const { saksbehandler, beslutter, type } = meldekortbehandling;
 
     return (
-        <VStack gap={'space-16'} className={style.outer}>
-            <HStack justify={'space-between'}>
+        <MeldekortbehandlingSeksjon className={style.outer}>
+            <MeldekortbehandlingSeksjon.Venstre gap={'space-8'}>
                 <Heading size={'medium'} level={'1'}>
                     {'Meldekortbehandling'}
                 </Heading>
-                <MeldekortbehandlingStatusTags meldekortbehandling={meldekortbehandling} />
-            </HStack>
 
-            <VStack gap={'space-8'} className={style.summary}>
                 <InlineMessage status={'info'}>{meldekortbehandlingTypeTekst[type]}</InlineMessage>
+            </MeldekortbehandlingSeksjon.Venstre>
 
-                <HStack gap={'space-16'}>
+            <MeldekortbehandlingSeksjon.Høyre gap={'space-8'}>
+                <HStack gap={'space-16'} align={'center'}>
+                    <MeldekortbehandlingStatusTags meldekortbehandling={meldekortbehandling} />
                     <DetaljHorisontal navn={'Saksbehandler:'}>
                         {saksbehandler ?? 'Ikke tildelt'}
                     </DetaljHorisontal>
@@ -47,7 +49,11 @@ export const MeldekortbehandlingHeader = () => {
                         {kanSendeInnHelgForMeldekort ? 'Ja' : 'Nei'}
                     </DetaljHorisontal>
                 </HStack>
-            </VStack>
-        </VStack>
+            </MeldekortbehandlingSeksjon.Høyre>
+
+            <MeldekortbehandlingSeksjon.FullBredde>
+                <Separator />
+            </MeldekortbehandlingSeksjon.FullBredde>
+        </MeldekortbehandlingSeksjon>
     );
 };

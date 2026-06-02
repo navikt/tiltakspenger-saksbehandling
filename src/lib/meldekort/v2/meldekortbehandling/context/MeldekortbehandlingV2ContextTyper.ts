@@ -2,9 +2,10 @@ import {
     MeldekortbehandlingDagStatus,
     OppdaterMeldekortbehandlingDTO,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
-import { MeldeperiodeKjedeId, MeldeperiodeKjedePropsV2 } from '~/lib/meldekort/typer/Meldeperiode';
+import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
 import { TextAreaInput } from '~/utils/textarea';
 import { ReducerAction } from '~/types/ReducerAction';
+import { MeldeperiodeKjedePropsV2 } from '~/lib/meldekort/v2/typer';
 
 export type MeldekortDagSkjema = {
     dato: string;
@@ -35,6 +36,7 @@ export type MeldekortbehandlingSkjemaActions =
           'oppdaterDagStatus',
           { kjedeId: MeldeperiodeKjedeId; dagIndex: number; status: MeldekortbehandlingDagStatus }
       >
+    | ReducerAction<'setDager', MeldeperiodeSkjema>
     | ReducerAction<'setSkalSendeVedtaksbrev', { skalSendeVedtaksbrev: boolean }>
     | ReducerAction<'leggTilMeldeperiode', { meldeperiodeKjede: MeldeperiodeKjedePropsV2 }>
     | ReducerAction<'fjernMeldeperiode', { index: number }>;

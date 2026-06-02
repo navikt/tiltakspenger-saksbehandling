@@ -2,11 +2,9 @@ import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
 import { fetchSak } from '~/utils/fetch/fetch-server';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { SakProvider } from '~/lib/sak/SakContext';
-import {
-    MeldekortbehandlingId,
-    MeldekortbehandlingPropsV2,
-} from '~/lib/meldekort/typer/Meldekortbehandling';
+import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { MeldekortbehandlingSide } from '~/lib/meldekort/v2/meldekortbehandling/MeldekortbehandlingSide';
+import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
 
 type Props = {
     sak: SakProps;

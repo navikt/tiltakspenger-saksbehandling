@@ -5,11 +5,9 @@ import {
     MeldekortDagSkjema,
     MeldeperiodeSkjema,
 } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2ContextTyper';
-import {
-    MeldekortbehandlingDagStatus,
-    MeldekortbehandlingPropsV2,
-} from '~/lib/meldekort/typer/Meldekortbehandling';
-import { MeldeperiodeKjedePropsV2 } from '~/lib/meldekort/typer/Meldeperiode';
+import { MeldekortbehandlingDagStatus } from '~/lib/meldekort/typer/Meldekortbehandling';
+
+import { MeldekortbehandlingPropsV2, MeldeperiodeKjedePropsV2 } from '~/lib/meldekort/v2/typer';
 
 export const meldekortbehandlingSkjemaInitialState = (
     meldekortbehandling: MeldekortbehandlingPropsV2,
@@ -50,6 +48,21 @@ export const meldekortbehandlingSkjemaReducer: Reducer<
                         status,
                     }),
                 }),
+            };
+        }
+
+        case 'setDager': {
+            const { kjedeId } = action.payload;
+
+            const meldeperiodeIndex = state.meldeperioder.findIndex((mp) => mp.kjedeId === kjedeId);
+
+            if (meldeperiodeIndex === -1) {
+                throw Error(`Fant ingen meldeperiode for kjede ${kjedeId}`);
+            }
+
+            return {
+                ...state,
+                meldeperioder: state.meldeperioder.with(meldeperiodeIndex, action.payload),
             };
         }
 

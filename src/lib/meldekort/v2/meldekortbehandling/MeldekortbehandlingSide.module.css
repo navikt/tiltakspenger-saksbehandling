@@ -1,5 +1,4 @@
 .meldekortbehandling {
-    background-color: var(--ax-bg-default);
-    padding: 1rem;
-    margin-bottom: 5rem;
+    background-color: var(--ax-bg-neutral-moderate);
+    padding-bottom: 5rem;
 }

@@ -1,5 +1,6 @@
 import React, { createContext, useContext } from 'react';
-import { MeldeperiodeKjedePropsV2 } from '~/lib/meldekort/typer/Meldeperiode';
+
+import { MeldeperiodeKjedePropsV2 } from '~/lib/meldekort/v2/typer';
 
 type MeldeperioderContextState = {
     meldeperiodeKjede: MeldeperiodeKjedePropsV2;

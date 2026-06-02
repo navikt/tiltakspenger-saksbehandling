@@ -8,6 +8,7 @@ import {
     useMeldekortbehandlingSkjemaDispatch,
 } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2Context';
 import { hentMeldeperiodekjede } from '~/lib/sak/sakUtils';
+import { MeldekortbehandlingSeksjon } from '~/lib/meldekort/v2/meldekortbehandling/layout/seksjon/MeldekortbehandlingSeksjon';
 
 export const MeldeperiodebehandlingLeggTil = () => {
     const { sak } = useSak();
@@ -37,23 +38,32 @@ export const MeldeperiodebehandlingLeggTil = () => {
     };
 
     return (
-        <HStack gap={'space-8'} align={'end'}>
-            <Select
-                label={'Legg til meldeperiode'}
-                size={'small'}
-                value={valgtKjedeId}
-                onChange={(e) => setValgtKjedeId(e.target.value as MeldeperiodeKjedeId)}
-            >
-                <option value={''}>{'- Velg meldeperiode -'}</option>
-                {tilgjengeligeKjeder.map((kjede) => (
-                    <option key={kjede.id} value={kjede.id}>
-                        {formatterMeldeperiode(kjede.periode)}
-                    </option>
-                ))}
-            </Select>
-            <Button size={'small'} variant={'secondary'} onClick={leggTil} disabled={!valgtKjedeId}>
-                {'Legg til'}
-            </Button>
-        </HStack>
+        <MeldekortbehandlingSeksjon>
+            <MeldekortbehandlingSeksjon.FullBredde>
+                <HStack gap={'space-8'} align={'end'}>
+                    <Select
+                        label={'Legg til meldeperiode'}
+                        size={'small'}
+                        value={valgtKjedeId}
+                        onChange={(e) => setValgtKjedeId(e.target.value as MeldeperiodeKjedeId)}
+                    >
+                        <option value={''}>{'- Velg meldeperiode -'}</option>
+                        {tilgjengeligeKjeder.map((kjede) => (
+                            <option key={kjede.id} value={kjede.id}>
+                                {formatterMeldeperiode(kjede.periode)}
+                            </option>
+                        ))}
+                    </Select>
+                    <Button
+                        size={'small'}
+                        variant={'secondary'}
+                        onClick={leggTil}
+                        disabled={!valgtKjedeId}
+                    >
+                        {'Legg til'}
+                    </Button>
+                </HStack>
+            </MeldekortbehandlingSeksjon.FullBredde>
+        </MeldekortbehandlingSeksjon>
     );
 };

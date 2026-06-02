@@ -11,10 +11,7 @@ import {
     MeldekortbehandlingSkjemaActions,
     MeldekortbehandlingSkjemaContext,
 } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2ContextTyper';
-import {
-    MeldekortbehandlingPropsV2,
-    MeldekortbehandlingStatus,
-} from '~/lib/meldekort/typer/Meldekortbehandling';
+import { MeldekortbehandlingStatus } from '~/lib/meldekort/typer/Meldekortbehandling';
 import {
     meldekortbehandlingSkjemaInitialState,
     meldekortbehandlingSkjemaReducer,
@@ -22,6 +19,7 @@ import {
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import { kanBehandle } from '~/lib/saksbehandler/tilganger';
 import { getTextAreaRefValue } from '~/utils/textarea';
+import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
 
 const MeldekortbehandlingContext = createContext({} as MeldekortbehandlingPropsV2);
 

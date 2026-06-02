@@ -1,0 +1,20 @@
+.main {
+    display: grid;
+    grid-template-columns: 350px 750px;
+    grid-column-gap: 1rem;
+    background-color: var(--ax-bg-default);
+    width: fit-content;
+    padding: 1rem;
+}
+
+.venstre {
+    grid-column: 1;
+}
+
+.høyre {
+    grid-column: 2;
+}
+
+.full {
+    grid-column: span 2;
+}

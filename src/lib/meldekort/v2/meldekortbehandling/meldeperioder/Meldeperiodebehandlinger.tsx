@@ -12,7 +12,7 @@ export const Meldeperiodebehandlinger = () => {
     const dispatch = useMeldekortbehandlingSkjemaDispatch();
 
     return (
-        <VStack gap={'space-24'}>
+        <VStack>
             {!erReadonly && <MeldeperiodebehandlingLeggTil />}
 
             {meldeperioder.map((meldeperiode, index) => {

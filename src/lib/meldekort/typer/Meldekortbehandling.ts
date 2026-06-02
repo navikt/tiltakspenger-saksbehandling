@@ -6,7 +6,6 @@ import { Nullable } from '~/types/UtilTypes';
 import {
     BeløpProps,
     MeldeperiodeBeregningProps,
-    MeldeperiodeBeregningPropsV2,
 } from '~/lib/beregning-og-simulering/typer/Beregning';
 import { SakId } from '../../sak/SakTyper';
 import { SimulertBeregning } from '~/lib/beregning-og-simulering/typer/SimulertBeregning';
@@ -135,41 +134,3 @@ export type OpprettMeldekortbehandlingDTO =
           type: MeldekortbehandlingType;
           v2: true;
       };
-
-export type MeldeperiodebehandlingProps = {
-    meldeperiodeId: MeldeperiodeId;
-    kjedeId: MeldeperiodeKjedeId;
-    brukersMeldekortId: Nullable<BrukersMeldekortId>;
-    periode: Periode;
-    dager: MeldekortDagProps[];
-    beregning: Nullable<MeldeperiodeBeregningPropsV2>;
-};
-
-// Type for ny modell som kan ha flere meldeperioder i samme behandling
-export type MeldekortbehandlingPropsV2 = {
-    id: MeldekortbehandlingId;
-    sakId: SakId;
-    meldeperioder: MeldeperiodebehandlingProps[];
-    saksbehandler: Nullable<string>;
-    beslutter: Nullable<string>;
-    opprettet: string;
-    godkjentTidspunkt: Nullable<string>;
-    status: MeldekortbehandlingStatus;
-    erAvsluttet: boolean;
-    navkontor: string;
-    navkontorNavn: Nullable<string>;
-    begrunnelse: Nullable<string>;
-    type: MeldekortbehandlingType;
-    attesteringer: Attestering[];
-    utbetalingsstatus: Utbetalingsstatus;
-    /** Sammenhengende totalperiode på tvers av alle meldeperioder */
-    periode: Periode;
-    beregning: Nullable<MeldekortBeregning>;
-    avbrutt: Nullable<Avbrutt>;
-    simulertBeregning: Nullable<SimulertBeregning>;
-    kanIkkeIverksetteUtbetaling: Nullable<KanIkkeIverksetteUtbetalingGrunn>;
-    tekstTilVedtaksbrev: Nullable<string>;
-    tilbakekrevingId: Nullable<TilbakekrevingId>;
-    skalSendeVedtaksbrev: boolean;
-    ventestatus: VentestatusHendelse[];
-};

@@ -8,14 +8,12 @@ import {
     NotePencilIcon,
     RobotSmileIcon,
 } from '@navikt/aksel-icons';
-import {
-    MeldekortbehandlingPropsV2,
-    MeldekortbehandlingStatus,
-} from '~/lib/meldekort/typer/Meldekortbehandling';
+import { MeldekortbehandlingStatus } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { erMeldekortbehandlingSattPaVent } from '~/lib/meldekort/utils/MeldekortbehandlingUtils';
 import { meldekortbehandlingStatusTekst } from '~/lib/meldekort/v2/tekster';
 
 import style from './MeldekortbehandlingStatusTags.module.css';
+import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
 
 type Props = {
     meldekortbehandling: MeldekortbehandlingPropsV2;

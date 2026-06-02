@@ -1,19 +1,5 @@
-.outer {
-    display: grid;
-    grid-template-columns: 750px 350px;
-    grid-column-gap: 1rem;
-}
-
-.venstre {
-    grid-column: 1;
-}
-
-.høyre {
-    grid-column: 2;
-}
-
-.full {
-    grid-column: span 2;
+.header {
+    margin-bottom: 0.5rem;
 }
 
 .uke {
@@ -36,4 +22,10 @@
     && select {
         min-height: 1.75rem;
     }
+}
+
+.info {
+    background-color: var(--ax-accent-200);
+    margin-left: -1rem;
+    padding-left: 1rem;
 }

@@ -5,7 +5,8 @@ import { Periode } from '~/types/Periode';
 import { perioderOverlapper } from '~/utils/periode';
 import { removeDuplicatesFilter } from '~/utils/array';
 import { TilbakekrevingId } from '~/lib/tilbakekreving/typer/Tilbakekreving';
-import { MeldeperiodeKjedeId, MeldeperiodeKjedePropsV2 } from '~/lib/meldekort/typer/Meldeperiode';
+import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
+import { MeldeperiodeKjedePropsV2 } from '~/lib/meldekort/v2/typer';
 
 export const hentVedtatteSøknadsbehandlinger = (sak: SakProps) => {
     const { alleRammevedtak, behandlinger } = sak;

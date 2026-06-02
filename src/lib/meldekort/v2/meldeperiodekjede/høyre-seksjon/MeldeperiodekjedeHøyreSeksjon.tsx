@@ -1,4 +1,4 @@
-import { Heading, Tabs, VStack } from '@navikt/ds-react';
+import { BodyShort, Heading, HStack, Tabs, VStack } from '@navikt/ds-react';
 import { useMeldeperiodeKjedeV2 } from '~/lib/meldekort/v2/meldeperiodekjede/context/MeldeperiodeKjedeContextV2';
 import { MeldeperiodekjedeGjeldendeBeregning } from '~/lib/meldekort/v2/meldeperiodekjede/høyre-seksjon/gjeldende-beregning/MeldeperiodekjedeGjeldendeBeregning';
 import { CurrencyExchangeIcon, DocPencilIcon, PersonPencilIcon } from '@navikt/aksel-icons';
@@ -6,7 +6,9 @@ import { MeldekortBehandlingOppsummeringForKjede } from '~/lib/meldekort/v2/meld
 import { classNames } from '~/utils/classNames';
 import { useSak } from '~/lib/sak/SakContext';
 import { InfokortEnkel } from '~/lib/_felles/infokort/InfokortEnkel';
-import { BrukersMeldekortVisningV2 } from '~/lib/meldekort/v2/brukers-meldekort/BrukersMeldekortVisningV2';
+import { BrukersMeldekortUker } from '~/lib/meldekort/v2/brukers-meldekort/BrukersMeldekortUker';
+import { formaterTidspunkt } from '~/utils/date';
+import { BrukersMeldekortAutomatiskBehandlingStatus } from '~/lib/meldekort/3-høyre-seksjon/brukers-meldekort/automatisk-behandling-status/BrukersMeldekortAutomatiskBehandlingStatus';
 
 import style from './MeldeperiodekjedeHøyreSeksjon.module.css';
 
@@ -75,10 +77,25 @@ export const MeldeperiodekjedeHøyreSeksjon = () => {
                     {brukersMeldekort
                         .toSorted((a, b) => b.mottatt.localeCompare(a.mottatt))
                         .map((brukersMeldekort) => (
-                            <BrukersMeldekortVisningV2
-                                key={brukersMeldekort.id}
-                                brukersMeldekort={brukersMeldekort}
-                            />
+                            <VStack gap={'space-8'} key={brukersMeldekort.id}>
+                                <HStack gap={'space-4'} align={'center'} justify={'space-between'}>
+                                    <BodyShort size={'small'}>
+                                        {'Mottatt: '}
+                                        <strong>
+                                            {formaterTidspunkt(brukersMeldekort.mottatt)}
+                                        </strong>
+                                    </BodyShort>
+                                    <BrukersMeldekortAutomatiskBehandlingStatus
+                                        meldekort={brukersMeldekort}
+                                    />
+                                </HStack>
+
+                                <BrukersMeldekortUker
+                                    key={brukersMeldekort.id}
+                                    brukersMeldekort={brukersMeldekort}
+                                    kompakt={true}
+                                />
+                            </VStack>
                         ))}
                 </Tabs.Panel>
             </Tabs>
