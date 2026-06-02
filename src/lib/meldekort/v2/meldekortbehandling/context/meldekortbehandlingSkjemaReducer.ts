@@ -6,6 +6,7 @@ import {
     MeldeperiodeSkjema,
 } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2ContextTyper';
 import { MeldekortbehandlingDagStatus } from '~/lib/meldekort/typer/Meldekortbehandling';
+import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
 
 import { MeldekortbehandlingPropsV2, MeldeperiodeKjedePropsV2 } from '~/lib/meldekort/v2/typer';
 
@@ -30,11 +31,7 @@ export const meldekortbehandlingSkjemaReducer: Reducer<
         case 'oppdaterDagStatus': {
             const { kjedeId, dagIndex, status } = action.payload;
 
-            const meldeperiodeIndex = state.meldeperioder.findIndex((mp) => mp.kjedeId === kjedeId);
-
-            if (meldeperiodeIndex === -1) {
-                throw Error(`Fant ingen meldeperiode for kjede ${kjedeId}`);
-            }
+            const meldeperiodeIndex = finnMeldeperiodeIndex(state.meldeperioder, kjedeId);
 
             const meldeperiode = state.meldeperioder.at(meldeperiodeIndex)!;
             const dag = meldeperiode.dager.at(dagIndex)!;
@@ -54,11 +51,7 @@ export const meldekortbehandlingSkjemaReducer: Reducer<
         case 'setDager': {
             const { kjedeId } = action.payload;
 
-            const meldeperiodeIndex = state.meldeperioder.findIndex((mp) => mp.kjedeId === kjedeId);
-
-            if (meldeperiodeIndex === -1) {
-                throw Error(`Fant ingen meldeperiode for kjede ${kjedeId}`);
-            }
+            const meldeperiodeIndex = finnMeldeperiodeIndex(state.meldeperioder, kjedeId);
 
             return {
                 ...state,
@@ -93,14 +86,29 @@ export const meldekortbehandlingSkjemaReducer: Reducer<
         }
 
         case 'fjernMeldeperiode': {
-            const { index } = action.payload;
+            const { kjedeId } = action.payload;
+
+            const meldeperiodeIndex = finnMeldeperiodeIndex(state.meldeperioder, kjedeId);
 
             return {
                 ...state,
-                meldeperioder: state.meldeperioder.toSpliced(index, 1),
+                meldeperioder: state.meldeperioder.toSpliced(meldeperiodeIndex, 1),
             };
         }
     }
+};
+
+const finnMeldeperiodeIndex = (
+    meldeperioder: MeldeperiodeSkjema[],
+    kjedeId: MeldeperiodeKjedeId,
+): number => {
+    const meldeperiodeIndex = meldeperioder.findIndex((mp) => mp.kjedeId === kjedeId);
+
+    if (meldeperiodeIndex === -1) {
+        throw Error(`Fant ingen meldeperiode for kjede ${kjedeId}`);
+    }
+
+    return meldeperiodeIndex;
 };
 
 const meldeperiodeKjedeTilContext = (

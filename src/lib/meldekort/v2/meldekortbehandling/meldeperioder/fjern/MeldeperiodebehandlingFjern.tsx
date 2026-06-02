@@ -2,10 +2,7 @@ import { Button, Dialog } from '@navikt/ds-react';
 import { formaterMeldeperiode } from '~/utils/date';
 import { useSak } from '~/lib/sak/SakContext';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
-import {
-    useMeldekortbehandlingSkjema,
-    useMeldekortbehandlingSkjemaDispatch,
-} from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2Context';
+import { useMeldekortbehandlingSkjemaDispatch } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2Context';
 import { hentMeldeperiodekjede } from '~/lib/sak/sakUtils';
 import { TrashIcon } from '@navikt/aksel-icons';
 
@@ -16,26 +13,19 @@ type Props = {
 export const MeldeperiodebehandlingFjern = ({ kjedeId }: Props) => {
     const { sak } = useSak();
 
-    const { meldeperioder } = useMeldekortbehandlingSkjema();
     const dispatch = useMeldekortbehandlingSkjemaDispatch();
-
-    const index = meldeperioder.findIndex((m) => m.kjedeId === kjedeId);
-
-    if (index < 0) {
-        return null;
-    }
 
     const { periode } = hentMeldeperiodekjede(sak, kjedeId);
 
     const fjern = () => {
-        dispatch({ type: 'fjernMeldeperiode', payload: { index } });
+        dispatch({ type: 'fjernMeldeperiode', payload: { kjedeId } });
     };
 
     return (
         <Dialog>
             <Dialog.Trigger>
                 <Button size={'small'} variant={'tertiary'} icon={<TrashIcon />}>
-                    {'Fjern'}
+                    {'Fjern valgt'}
                 </Button>
             </Dialog.Trigger>
 

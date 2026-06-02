@@ -39,4 +39,4 @@ export type MeldekortbehandlingSkjemaActions =
     | ReducerAction<'setDager', MeldeperiodeSkjema>
     | ReducerAction<'setSkalSendeVedtaksbrev', { skalSendeVedtaksbrev: boolean }>
     | ReducerAction<'leggTilMeldeperiode', { meldeperiodeKjede: MeldeperiodeKjedePropsV2 }>
-    | ReducerAction<'fjernMeldeperiode', { index: number }>;
+    | ReducerAction<'fjernMeldeperiode', { kjedeId: MeldeperiodeKjedeId }>;
