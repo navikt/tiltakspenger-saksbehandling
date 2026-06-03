@@ -28,9 +28,3 @@
     align-items: center;
     min-height: 2rem;
 }
-
-.info {
-    background-color: var(--ax-accent-200);
-    margin-left: -1rem;
-    padding-left: 1rem;
-}
