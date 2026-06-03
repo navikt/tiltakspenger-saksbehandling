@@ -1,12 +1,13 @@
 import { BodyShort, HStack, VStack } from '@navikt/ds-react';
 import { utbetalingsstatusTekst } from '~/utils/tekstformateringUtils';
+import { Utbetalingsstatus } from '~/types/Utbetaling';
+import { Nullable } from '~/types/UtilTypes';
 
 import style from '~/lib/_felles/utbetaling/UtbetalingFelles.module.css';
-import { Utbetalingsstatus } from '~/types/Utbetaling';
 
 export type UtbetalingStatusProps = {
     navkontor: string;
-    navkontorNavn?: string;
+    navkontorNavn?: Nullable<string>;
     utbetalingsstatus?: Utbetalingsstatus;
 };
 

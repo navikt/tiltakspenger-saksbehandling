@@ -176,8 +176,6 @@ export const MeldekortUtfylling = ({ meldekortbehandling }: Props) => {
                     }}
                 />
             )}
-            {/* TODO Gjorde lintingen strengere ved oppgradering til Next 16. Fikset bare åpenbare feil, denne burde undersøkes. */}
-            {/* eslint-disable-next-line react-hooks/refs */}
             <form onSubmit={formContext.handleSubmit(onSubmit)}>
                 <VStack gap={'space-20'}>
                     <MeldekortUker dager={formContext.watch('dager')} underBehandling={true} />

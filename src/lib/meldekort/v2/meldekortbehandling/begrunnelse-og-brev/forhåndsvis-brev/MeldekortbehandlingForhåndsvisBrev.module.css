@@ -1,0 +1,7 @@
+.outer {
+    align-items: flex-end;
+}
+
+.knapp {
+    width: fit-content;
+}

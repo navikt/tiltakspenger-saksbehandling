@@ -38,8 +38,6 @@ export const Vedtaksbrev = ({ header, hjelpetekst, validering, hentDto, readonly
                     description={'Teksten vises i vedtaksbrevet til bruker.'}
                     defaultValue={fritekstTilVedtaksbrev ?? ''}
                     readOnly={readonly ?? erReadonly}
-                    // TODO Gjorde lintingen strengere ved oppgradering til Next 16. Fikset bare åpenbare feil, denne burde undersøkes.
-                    /* eslint-disable-next-line react-hooks/refs */
                     ref={textAreas.brevtekst.ref}
                 />
                 <VedtaksbrevForhåndsvisning

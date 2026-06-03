@@ -3,7 +3,6 @@ import {
     MeldekortbehandlingId,
     MeldekortbehandlingStatus,
     MeldekortbehandlingType,
-    MeldekortBeregning,
     MeldekortDagProps,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 import {
@@ -53,7 +52,6 @@ export type MeldeperiodebehandlingProps = {
 export type MeldekortbehandlingPropsV2 = {
     id: MeldekortbehandlingId;
     sakId: SakId;
-    meldeperioder: MeldeperiodebehandlingProps[];
     saksbehandler: Nullable<string>;
     beslutter: Nullable<string>;
     opprettet: string;
@@ -68,7 +66,7 @@ export type MeldekortbehandlingPropsV2 = {
     utbetalingsstatus: Utbetalingsstatus;
     /** Sammenhengende totalperiode på tvers av alle meldeperioder */
     periode: Periode;
-    beregning: Nullable<MeldekortBeregning>;
+    meldeperioder: MeldeperiodebehandlingProps[];
     avbrutt: Nullable<Avbrutt>;
     simulertBeregning: Nullable<SimulertBeregning>;
     kanIkkeIverksetteUtbetaling: Nullable<KanIkkeIverksetteUtbetalingGrunn>;

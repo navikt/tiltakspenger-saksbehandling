@@ -10,9 +10,9 @@ import { MeldekortbehandlingSeksjon } from '~/lib/meldekort/v2/meldekortbehandli
 import { useState } from 'react';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
 import { Periode } from '~/types/Periode';
+import { MeldekortbehandlingLagre } from '~/lib/meldekort/v2/meldekortbehandling/lagre/MeldekortbehandlingLagre';
 
 import style from './Meldeperiodebehandlinger.module.css';
-import { MeldekortbehandlingLagre } from '~/lib/meldekort/v2/meldekortbehandling/handlinger/lagre/MeldekortbehandlingLagre';
 
 export const Meldeperiodebehandlinger = () => {
     const { meldeperioder, erReadonly } = useMeldekortbehandlingSkjema();
@@ -48,7 +48,7 @@ export const Meldeperiodebehandlinger = () => {
                             )}
                         </HStack>
 
-                        <MeldekortbehandlingLagre />
+                        <MeldekortbehandlingLagre tekst={'Lagre og beregn'} />
                     </HStack>
                 </MeldekortbehandlingSeksjon.FullBredde>
             </MeldekortbehandlingSeksjon>

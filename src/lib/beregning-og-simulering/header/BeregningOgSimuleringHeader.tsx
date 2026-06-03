@@ -11,7 +11,7 @@ import style from './BeregningOgSimuleringHeader.module.css';
 
 type Props = {
     navkontor: string;
-    navkontorNavn?: string;
+    navkontorNavn?: Nullable<string>;
     simulertBeregning: SimulertBeregning;
     utbetalingsstatus?: Utbetalingsstatus;
     kanIkkeIverksetteUtbetaling: Nullable<KanIkkeIverksetteUtbetalingGrunn>;
@@ -93,7 +93,7 @@ export const BeregningOgSimuleringHeader = ({
 
 const utbetalingValideringsfeilTekst: Record<KanIkkeIverksetteUtbetalingGrunn, string> = {
     [KanIkkeIverksetteUtbetalingGrunn.JusteringStøttesIkke]:
-        'Justeringer på tvers av meldeperioder eller kalendermåneder støttes ikke ennå',
+        'Justeringer på tvers av meldeperioder eller kalendermåneder støttes ikke',
     [KanIkkeIverksetteUtbetalingGrunn.SimuleringMangler]: 'Simulering mangler',
     [KanIkkeIverksetteUtbetalingGrunn.SimuleringHarEndringer]: 'Kontroll-simulering har endringer',
     [KanIkkeIverksetteUtbetalingGrunn.BehandlingstypeStøtterIkkeFeilutbetaling]:

@@ -10,6 +10,8 @@ import { InfokortEnkel } from '~/lib/_felles/infokort/InfokortEnkel';
 import { Separator } from '~/lib/_felles/separator/Separator';
 
 import style from './MeldekortbehandlingSide.module.css';
+import { MeldekortbehandlingBeregningOgSimulering } from '~/lib/meldekort/v2/meldekortbehandling/bereging/MeldekortbehandlingBeregningOgSimulering';
+import { MeldekortbehandlingBegrunnelseOgBrev } from '~/lib/meldekort/v2/meldekortbehandling/begrunnelse-og-brev/MeldekortbehandlingBegrunnelseOgBrev';
 
 type Props = {
     meldekortbehandling: MeldekortbehandlingPropsV2;
@@ -35,7 +37,7 @@ export const MeldekortbehandlingSide = ({ meldekortbehandling }: Props) => {
                     <Stepper.Step href="#">{'Meldeperioder'}</Stepper.Step>
                     <Stepper.Step href="#">{'Beregning og simulering'}</Stepper.Step>
                     <Stepper.Step href="#">{'Begrunnelse og brev'}</Stepper.Step>
-                    <Stepper.Step href="#">{'Valider og send inn'}</Stepper.Step>
+                    <Stepper.Step href="#">{'Oppsummering og send inn'}</Stepper.Step>
                 </Stepper>
 
                 <Separator />
@@ -51,9 +53,9 @@ const ComponentForStep = ({ steg }: { steg: number }) => {
         case 1:
             return <Meldeperiodebehandlinger />;
         case 2:
-            return 'Beregning og simulering goes here!';
+            return <MeldekortbehandlingBeregningOgSimulering />;
         case 3:
-            return 'Begrunnelse og brev goes here!';
+            return <MeldekortbehandlingBegrunnelseOgBrev />;
         case 4:
             return 'Validering og innsending goes here!';
     }

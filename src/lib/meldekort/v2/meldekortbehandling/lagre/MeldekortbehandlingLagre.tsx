@@ -1,5 +1,5 @@
 import { Button, VStack } from '@navikt/ds-react';
-import { useOppdaterMeldekortbehandlingV2 } from '~/lib/meldekort/v2/meldekortbehandling/handlinger/lagre/useOppdaterMeldekortbehandlingV2';
+import { useOppdaterMeldekortbehandlingV2 } from '~/lib/meldekort/v2/meldekortbehandling/lagre/useOppdaterMeldekortbehandlingV2';
 import { useSak } from '~/lib/sak/SakContext';
 import {
     useMeldekortbehandling,
@@ -9,7 +9,11 @@ import { InfokortEnkel } from '~/lib/_felles/infokort/InfokortEnkel';
 
 import style from './MeldekortbehandlingLagre.module.css';
 
-export const MeldekortbehandlingLagre = () => {
+type Props = {
+    tekst: string;
+};
+
+export const MeldekortbehandlingLagre = ({ tekst }: Props) => {
     const { sak, setSak } = useSak();
     const { id } = useMeldekortbehandling();
 
@@ -39,7 +43,7 @@ export const MeldekortbehandlingLagre = () => {
                 }}
                 className={style.knapp}
             >
-                {'Lagre og beregn'}
+                {tekst}
             </Button>
         </VStack>
     );
