@@ -25,10 +25,11 @@ export const MeldekortbehandlingLagre = () => {
             {error && (
                 <InfokortEnkel
                     data-color={'danger'}
-                >{`Feil ved lagring: ${error.message}`}</InfokortEnkel>
+                >{`Feil ved lagring: ${error.message} (kode ${error.status})`}</InfokortEnkel>
             )}
             <Button
                 loading={isMutating}
+                size={'small'}
                 onClick={() => {
                     trigger(tilDTO()).then((sak) => {
                         if (sak) {

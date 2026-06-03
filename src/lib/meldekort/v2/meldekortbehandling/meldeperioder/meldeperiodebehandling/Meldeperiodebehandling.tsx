@@ -168,7 +168,11 @@ const MeldeperiodeUke = ({
     );
 };
 
-const dagStatusOptions = Object.values(MeldekortbehandlingDagStatus).map((status) => (
+const gyldigeStatusValg = Object.values(MeldekortbehandlingDagStatus).filter(
+    (status) => status !== MeldekortbehandlingDagStatus.IkkeRettTilTiltakspenger,
+);
+
+const dagStatusOptions = gyldigeStatusValg.map((status) => (
     <option key={status} value={status}>
         {meldekortbehandlingDagStatusTekst[status]}
     </option>

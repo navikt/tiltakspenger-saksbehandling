@@ -1,3 +1,7 @@
 .meldeperiode {
     padding-top: 1rem;
 }
+
+.nobreak {
+    white-space: nowrap;
+}

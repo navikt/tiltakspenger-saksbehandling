@@ -10,6 +10,8 @@ import { hentMeldeperiodekjede } from '~/lib/sak/sakUtils';
 import { PlusIcon } from '@navikt/aksel-icons';
 import { useRef } from 'react';
 
+import style from './MeldeperiodebehandlingLeggTil.module.css';
+
 type Props = {
     onLeggTil: (kjedeId: MeldeperiodeKjedeId) => void;
 };
@@ -47,15 +49,15 @@ export const MeldeperiodebehandlingLeggTil = ({ onLeggTil }: Props) => {
 
             <Dialog.Popup>
                 <Dialog.Header>
-                    <strong>{'Legg til meldeperiode i behandlingen'}</strong>
+                    <strong>{'Legg til meldeperiode'}</strong>
                 </Dialog.Header>
 
                 <Dialog.Body>
                     <Select
                         label={'Legg til meldeperiode'}
                         hideLabel={true}
-                        size={'small'}
                         ref={selectRef}
+                        className={style.select}
                     >
                         {tilgjengeligeKjeder.map((kjede) => (
                             <option key={kjede.id} value={kjede.id}>
@@ -68,7 +70,6 @@ export const MeldeperiodebehandlingLeggTil = ({ onLeggTil }: Props) => {
                 <Dialog.Footer>
                     <Dialog.CloseTrigger>
                         <Button
-                            size={'small'}
                             variant={'primary'}
                             onClick={() => leggTil(selectRef.current!.value as MeldeperiodeKjedeId)}
                         >
@@ -77,9 +78,7 @@ export const MeldeperiodebehandlingLeggTil = ({ onLeggTil }: Props) => {
                     </Dialog.CloseTrigger>
 
                     <Dialog.CloseTrigger>
-                        <Button size={'small'} variant={'secondary'}>
-                            {'Lukk'}
-                        </Button>
+                        <Button variant={'secondary'}>{'Avbryt'}</Button>
                     </Dialog.CloseTrigger>
                 </Dialog.Footer>
             </Dialog.Popup>

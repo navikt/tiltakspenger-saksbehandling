@@ -5,12 +5,14 @@ import { MeldeperiodebehandlingLeggTil } from '~/lib/meldekort/v2/meldekortbehan
 import { MeldeperiodebehandlingFjern } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/fjern/MeldeperiodebehandlingFjern';
 import { useSak } from '~/lib/sak/SakContext';
 import { hentMeldeperiodekjede } from '~/lib/sak/sakUtils';
-import { formaterPeriodeKort } from '~/utils/date';
+import { formaterPeriodeKort, ukenummerFraPeriode } from '~/utils/date';
 import { MeldekortbehandlingSeksjon } from '~/lib/meldekort/v2/meldekortbehandling/layout/seksjon/MeldekortbehandlingSeksjon';
 import { useState } from 'react';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
+import { Periode } from '~/types/Periode';
 
 import style from './Meldeperiodebehandlinger.module.css';
+import { MeldekortbehandlingLagre } from '~/lib/meldekort/v2/meldekortbehandling/handlinger/lagre/MeldekortbehandlingLagre';
 
 export const Meldeperiodebehandlinger = () => {
     const { meldeperioder, erReadonly } = useMeldekortbehandlingSkjema();
@@ -31,16 +33,22 @@ export const Meldeperiodebehandlinger = () => {
         <VStack gap={'space-16'}>
             <MeldekortbehandlingSeksjon>
                 <MeldekortbehandlingSeksjon.FullBredde>
-                    <HStack gap={'space-16'}>
-                        <Heading size={'small'} level={'3'}>
-                            {'Behandlede meldeperioder'}
-                        </Heading>
+                    <HStack justify={'space-between'} align={'start'}>
+                        <HStack gap={'space-16'} align={'center'}>
+                            <Heading size={'small'} level={'3'}>
+                                {'Behandlede meldeperioder'}
+                            </Heading>
 
-                        {!erReadonly && <MeldeperiodebehandlingLeggTil onLeggTil={setValgtKjede} />}
+                            {!erReadonly && (
+                                <MeldeperiodebehandlingLeggTil onLeggTil={setValgtKjede} />
+                            )}
 
-                        {!erReadonly && meldeperioder.length > 1 && valgtKjede && (
-                            <MeldeperiodebehandlingFjern kjedeId={valgtKjede} />
-                        )}
+                            {!erReadonly && meldeperioder.length > 1 && valgtKjede && (
+                                <MeldeperiodebehandlingFjern kjedeId={valgtKjede} />
+                            )}
+                        </HStack>
+
+                        <MeldekortbehandlingLagre />
                     </HStack>
                 </MeldekortbehandlingSeksjon.FullBredde>
             </MeldekortbehandlingSeksjon>
@@ -64,7 +72,8 @@ export const Meldeperiodebehandlinger = () => {
                                         <Tabs.Tab
                                             key={meldeperiode.kjedeId}
                                             value={meldeperiode.kjedeId}
-                                            label={formaterPeriodeKort(periode)}
+                                            label={<TabLabel periode={periode} />}
+                                            className={style.tab}
                                         />
                                     );
                                 })}
@@ -86,3 +95,10 @@ export const Meldeperiodebehandlinger = () => {
         </VStack>
     );
 };
+
+const TabLabel = ({ periode }: { periode: Periode }) => (
+    <HStack gap={'space-4'}>
+        <span className={style.nobreak}>{`${formaterPeriodeKort(periode)}`}</span>
+        <span className={style.nobreak}>{`(uke ${ukenummerFraPeriode(periode)})`}</span>
+    </HStack>
+);

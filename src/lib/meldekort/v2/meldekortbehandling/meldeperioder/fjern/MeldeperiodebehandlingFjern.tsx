@@ -40,15 +40,13 @@ export const MeldeperiodebehandlingFjern = ({ kjedeId }: Props) => {
 
                 <Dialog.Footer>
                     <Dialog.CloseTrigger>
-                        <Button size={'small'} variant={'danger'} onClick={fjern}>
+                        <Button variant={'danger'} onClick={fjern}>
                             {'Fjern'}
                         </Button>
                     </Dialog.CloseTrigger>
 
                     <Dialog.CloseTrigger>
-                        <Button size={'small'} variant={'secondary'}>
-                            {'Avbryt'}
-                        </Button>
+                        <Button variant={'secondary'}>{'Avbryt'}</Button>
                     </Dialog.CloseTrigger>
                 </Dialog.Footer>
             </Dialog.Popup>

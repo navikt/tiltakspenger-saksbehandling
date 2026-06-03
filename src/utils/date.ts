@@ -116,3 +116,7 @@ export const startOfDay = (dato: DateOrString) => dayjs(dato).startOf('day').toD
 export const formaterMeldeperiode = (periode: Periode) => {
     return `${formaterPeriode(periode)} (uke ${ukenummerFraDatotekst(periode.fraOgMed)} og ${ukenummerFraDatotekst(periode.tilOgMed)})`;
 };
+
+export const ukenummerFraPeriode = (periode: Periode) => {
+    return `${ukenummerFraDatotekst(periode.fraOgMed)} - ${ukenummerFraDatotekst(periode.tilOgMed)}`;
+};
