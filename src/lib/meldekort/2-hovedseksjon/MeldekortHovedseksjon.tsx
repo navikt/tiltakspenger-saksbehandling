@@ -3,10 +3,17 @@ import { MeldekortKorrigertFraTidligerePeriode } from '../0-felles-komponenter/k
 import { useMeldeperiodeKjede } from '../context/MeldeperiodeKjedeContext';
 
 import styles from './MeldekortHovedseksjon.module.css';
+import { useSak } from '~/lib/sak/SakContext';
 
 export const MeldekortHovedseksjon = () => {
+    const { sak } = useSak();
     const { meldeperiodeKjede, sisteMeldekortbehandling } = useMeldeperiodeKjede();
     const { korrigeringFraTidligerePeriode } = meldeperiodeKjede;
+
+    const meldekortbehandlingensKlagebehandling =
+        sak.klageBehandlinger.find(
+            (klage) => klage.id === sisteMeldekortbehandling?.klagebehandlingId,
+        ) ?? null;
 
     // Hvis den siste behandlingen er godkjent, og beregningen senere er overstyrt av korrigering på en
     // tidligere periode, så viser vi korrigeringen som gjeldende beregning
@@ -26,7 +33,10 @@ export const MeldekortHovedseksjon = () => {
                 />
             ) : (
                 sisteMeldekortbehandling && (
-                    <Meldekortbehandling meldekortbehandling={sisteMeldekortbehandling} />
+                    <Meldekortbehandling
+                        meldekortbehandling={sisteMeldekortbehandling}
+                        klagebehandling={meldekortbehandlingensKlagebehandling}
+                    />
                 )
             )}
         </div>

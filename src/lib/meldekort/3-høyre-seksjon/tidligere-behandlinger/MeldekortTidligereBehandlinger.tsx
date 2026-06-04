@@ -12,8 +12,10 @@ import { MeldekortKorrigertFraTidligerePeriode } from '../../0-felles-komponente
 import { useMeldeperiodeKjede } from '../../context/MeldeperiodeKjedeContext';
 
 import style from './MeldekortTidligereBehandlinger.module.css';
+import { useSak } from '~/lib/sak/SakContext';
 
 export const MeldekortTidligereBehandlinger = () => {
+    const { sak } = useSak();
     const [valgtIndex, setValgtIndex] = useState(0);
 
     const {
@@ -53,6 +55,14 @@ export const MeldekortTidligereBehandlinger = () => {
     const safeValgtIndex = Math.min(valgtIndex, behandlingerOgKorrigeringer.length - 1);
     const valgtBehandling = behandlingerOgKorrigeringer.at(safeValgtIndex);
 
+    const valgtBehandlingsKlagebehandling =
+        sak.klageBehandlinger.find(
+            (kb) =>
+                valgtBehandling &&
+                'klagebehandlingId' in valgtBehandling &&
+                kb.id === valgtBehandling?.klagebehandlingId,
+        ) ?? null;
+
     return (
         <VStack gap={'space-20'}>
             <HStack className={style.toppRad}>
@@ -85,7 +95,10 @@ export const MeldekortTidligereBehandlinger = () => {
                 (erKorrigeringFraTidligerePeriode(valgtBehandling) ? (
                     <MeldekortKorrigertFraTidligerePeriode korrigering={valgtBehandling} />
                 ) : (
-                    <MeldekortOppsummering meldekortbehandling={valgtBehandling} />
+                    <MeldekortOppsummering
+                        meldekortbehandling={valgtBehandling}
+                        klagebehandling={valgtBehandlingsKlagebehandling}
+                    />
                 ))}
         </VStack>
     );

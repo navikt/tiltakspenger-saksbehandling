@@ -1,5 +1,4 @@
 import { Alert, Box, Button, Heading, LocalAlert, VStack } from '@navikt/ds-react';
-import { useBehandling } from '~/lib/rammebehandling/context/BehandlingContext';
 import {
     Klagebehandling,
     KlagebehandlingResultat,
@@ -12,19 +11,13 @@ import { erKlageOmgjøring, erKlageOpprettholdelse } from '~/lib/klage/utils/kla
 import OppsummeringAvKlageinstanshendelser from '../oppsummeringAvKlageinstanshendelser/OppsummeringAvKlageinstanshendelser';
 import { useVisInnstillingsbrevKlagebehandling } from '~/lib/klage/api/KlageApi';
 
-const OppsummeringAvKlageForRammebehandling = () => {
-    const { behandling, klagebehandling } = useBehandling();
-
-    if (!behandling.klagebehandlingId && !klagebehandling) {
-        return null;
-    }
-
-    if (!klagebehandling || klagebehandling?.resultat?.type === KlagebehandlingResultat.AVVIST) {
+const OppsummeringAvKlageForRammebehandling = (props: { klagebehandling: Klagebehandling }) => {
+    if (props.klagebehandling?.resultat?.type === KlagebehandlingResultat.AVVIST) {
         return (
             <Alert variant={'error'}>
                 Forventet at behandlingen har en tilknyttet klagebehandling med resultat
                 &apos;OMGJØR&apos; eller &apos;OPPRETTHOLD&apos;. men fikk resultat:{' '}
-                {klagebehandling?.resultat?.type}
+                {props.klagebehandling?.resultat?.type}
             </Alert>
         );
     }
@@ -33,15 +26,15 @@ const OppsummeringAvKlageForRammebehandling = () => {
         <Box background="default" padding="space-16">
             <VStack gap="space-12">
                 <Heading size="small">
-                    {erKlageOpprettholdelse(klagebehandling)
+                    {erKlageOpprettholdelse(props.klagebehandling)
                         ? 'Behandling - underinstans'
                         : 'Informasjon om klagen'}
                 </Heading>
-                {erKlageOmgjøring(klagebehandling) && (
-                    <OppsummeringAvOmgjøring klagebehandling={klagebehandling} />
+                {erKlageOmgjøring(props.klagebehandling) && (
+                    <OppsummeringAvOmgjøring klagebehandling={props.klagebehandling} />
                 )}
-                {erKlageOpprettholdelse(klagebehandling) && (
-                    <OppsummeringOpprettholdelse klagebehandling={klagebehandling} />
+                {erKlageOpprettholdelse(props.klagebehandling) && (
+                    <OppsummeringOpprettholdelse klagebehandling={props.klagebehandling} />
                 )}
             </VStack>
         </Box>

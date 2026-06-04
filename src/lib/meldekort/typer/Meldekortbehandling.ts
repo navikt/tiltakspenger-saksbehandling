@@ -82,6 +82,7 @@ export type MeldekortbehandlingProps = {
     skalSendeVedtaksbrev: boolean;
     ventestatus: VentestatusHendelse[];
     harFlereMeldeperioder: boolean;
+    klagebehandlingId: Nullable<string>;
 };
 
 export type MeldekortDagProps = {
