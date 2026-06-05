@@ -14,6 +14,7 @@ import {
     benkBehandlingsstatusColor,
     benkBehandlingsstatusTekst,
     benkBehandlingstypeTekst,
+    benkTilbakekrevingKildeTekst,
     parseBenkSortering,
 } from '../benkSideUtils';
 import { formaterTidspunkt } from '~/utils/date';
@@ -155,6 +156,7 @@ export const BenkTabell = ({ behandlinger, valgtType }: Props) => {
                         beslutter,
                         erUnderkjent,
                         beløp,
+                        tilbakekrevingKilde,
                     } = behandling;
 
                     return (
@@ -173,6 +175,8 @@ export const BenkTabell = ({ behandlinger, valgtType }: Props) => {
                                 <HStack gap={'space-16'} align={'center'}>
                                     <BodyShort>
                                         {benkBehandlingstypeTekst[behandlingstype]}
+                                        {tilbakekrevingKilde &&
+                                            ` (fra ${benkTilbakekrevingKildeTekst[tilbakekrevingKilde]})`}
                                     </BodyShort>
                                     {resultat && behandlingResultatTilTag(resultat)}
                                 </HStack>

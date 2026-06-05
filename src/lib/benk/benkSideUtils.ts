@@ -4,6 +4,7 @@ import {
     BenkKolonne,
     BenkSortering,
     BenkSorteringRetning,
+    BenkTilbakekrevingKilde,
 } from '~/lib/benk/typer/Benk';
 import { AkselColor } from '@navikt/ds-react/types/theme';
 import { isValueInRecord } from '~/utils/object';
@@ -34,6 +35,11 @@ export const benkBehandlingsstatusColor: Record<BenkBehandlingsstatus, AkselColo
     [BenkBehandlingsstatus.UNDER_BEHANDLING]: 'info',
     [BenkBehandlingsstatus.UNDER_BESLUTNING]: 'info',
     [BenkBehandlingsstatus.UNDER_AUTOMATISK_BEHANDLING]: 'info',
+} as const;
+
+export const benkTilbakekrevingKildeTekst: Record<BenkTilbakekrevingKilde, string> = {
+    [BenkTilbakekrevingKilde.MELDEKORT]: 'meldekort',
+    [BenkTilbakekrevingKilde.RAMMEVEDTAK]: 'rammevedtak',
 } as const;
 
 const DEFAULT_KOLONNE = BenkKolonne.startet;

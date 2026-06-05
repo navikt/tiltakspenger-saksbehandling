@@ -38,6 +38,7 @@ type BenkBehandlingBase = {
     resultat: Nullable<RammebehandlingResultat>;
     erUnderkjent: boolean;
     beløp: Nullable<number>;
+    tilbakekrevingKilde: Nullable<BenkTilbakekrevingKilde>;
 };
 
 type BenkBehandlingAndre = BenkBehandlingBase & {
@@ -49,6 +50,7 @@ type BenkTilbakekrevingBehandling = BenkBehandlingBase & {
     behandlingstype: BenkBehandlingstype.TILBAKEKREVING;
     sattPåVentBegrunnelse: Nullable<TilbakekrevingVentegrunn>;
     beløp: number;
+    tilbakekrevingKilde: BenkTilbakekrevingKilde;
 };
 
 // TODO: Skal splitte dette opp på en ryddigere måte når vi skal redesigne benken
@@ -112,3 +114,8 @@ export type BenkFiltersQueryParams = {
     saksbehandler?: string | 'IKKE_TILDELT';
     tilbakekrevingKunOverMinstebeløp?: 'true' | 'false';
 };
+
+export enum BenkTilbakekrevingKilde {
+    RAMMEVEDTAK = 'RAMMEVEDTAK',
+    MELDEKORT = 'MELDEKORT',
+}
