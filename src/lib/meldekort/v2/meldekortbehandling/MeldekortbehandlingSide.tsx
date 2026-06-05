@@ -4,7 +4,6 @@ import { Stepper, VStack } from '@navikt/ds-react';
 import { useMeldekortbehandling } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2Context';
 import { Meldeperiodebehandlinger } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/Meldeperiodebehandlinger';
 import { MeldekortbehandlingHeader } from '~/lib/meldekort/v2/meldekortbehandling/header/MeldekortbehandlingHeader';
-import { Separator } from '~/lib/_felles/separator/Separator';
 import { MeldekortbehandlingBeregningOgSimulering } from '~/lib/meldekort/v2/meldekortbehandling/bereging/MeldekortbehandlingBeregningOgSimulering';
 import { MeldekortbehandlingBegrunnelseOgBrev } from '~/lib/meldekort/v2/meldekortbehandling/begrunnelse-og-brev/MeldekortbehandlingBegrunnelseOgBrev';
 import { MeldekortbehandlingSeksjon } from '~/lib/meldekort/v2/meldekortbehandling/layout/seksjon/MeldekortbehandlingSeksjon';
@@ -36,24 +35,24 @@ export const MeldekortbehandlingSide = () => {
             <PersonaliaHeader sakId={sakId} saksnummer={saksnummer} visTilbakeKnapp={true} />
 
             <VStack className={style.meldekortbehandling}>
-                <MeldekortbehandlingHeader />
+                <VStack className={style.topp}>
+                    <MeldekortbehandlingHeader />
 
-                <MeldekortbehandlingSeksjon>
-                    <MeldekortbehandlingSeksjon.FullBredde className={style.stepperSeksjon}>
-                        <Stepper
-                            activeStep={aktivtSteg}
-                            orientation={'horizontal'}
-                            className={style.stepper}
-                        >
-                            <Steg steg={1}>{'Meldeperioder'}</Steg>
-                            <Steg steg={2}>{'Beregning og simulering'}</Steg>
-                            <Steg steg={3}>{'Begrunnelse og brev'}</Steg>
-                            <Steg steg={4}>{'Oppsummering og send inn'}</Steg>
-                        </Stepper>
-
-                        <Separator />
-                    </MeldekortbehandlingSeksjon.FullBredde>
-                </MeldekortbehandlingSeksjon>
+                    <MeldekortbehandlingSeksjon>
+                        <MeldekortbehandlingSeksjon.FullBredde className={style.stepperSeksjon}>
+                            <Stepper
+                                activeStep={aktivtSteg}
+                                orientation={'horizontal'}
+                                className={style.stepper}
+                            >
+                                <Steg steg={1}>{'Meldeperioder'}</Steg>
+                                <Steg steg={2}>{'Beregning og simulering'}</Steg>
+                                <Steg steg={3}>{'Begrunnelse og brev'}</Steg>
+                                <Steg steg={4}>{'Oppsummering og send inn'}</Steg>
+                            </Stepper>
+                        </MeldekortbehandlingSeksjon.FullBredde>
+                    </MeldekortbehandlingSeksjon>
+                </VStack>
 
                 <KomponentForSteg steg={aktivtSteg} />
             </VStack>

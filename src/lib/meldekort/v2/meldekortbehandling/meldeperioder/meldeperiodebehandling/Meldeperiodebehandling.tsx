@@ -24,6 +24,7 @@ import { MeldeperiodeInfo } from '~/lib/meldekort/v2/meldekortbehandling/meldepe
 import { MeldeperiodeBrukersMeldekort } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/meldeperiodebehandling/brukers-meldekort/MeldeperiodeBrukersMeldekort';
 import React from 'react';
 import { classNames } from '~/utils/classNames';
+import { MeldeperiodebehandlingBeregning } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/meldeperiodebehandling/beregning/MeldeperiodebehandlingBeregning';
 
 import style from './Meldeperiodebehandling.module.css';
 
@@ -38,12 +39,11 @@ export const Meldeperiodebehandling = ({ meldeperiodeSkjema }: Props) => {
 
     const kjede = hentMeldeperiodekjede(sak, kjedeId);
 
-    const meldekortbehandling = useMeldekortbehandling();
+    const { meldeperioder } = useMeldekortbehandling();
+
     const { erReadonly } = useMeldekortbehandlingSkjema();
 
-    const meldeperiodebehandling = meldekortbehandling.meldeperioder.find(
-        (it) => it.kjedeId === kjedeId,
-    );
+    const meldeperiodebehandling = meldeperioder.find((it) => it.kjedeId === kjedeId);
 
     const beregningsdagPerDato = new Map<string, MeldekortBeregningsdag>();
     meldeperiodebehandling?.beregning?.dager.forEach((dag) => {
@@ -53,13 +53,17 @@ export const Meldeperiodebehandling = ({ meldeperiodeSkjema }: Props) => {
     });
 
     return (
-        <MeldekortbehandlingSeksjon gap={'space-8'} className={style.outer}>
+        <MeldekortbehandlingSeksjon gap={'space-16'}>
             <MeldekortbehandlingSeksjon.Venstre
                 gap={'space-16'}
                 className={classNames(style.venstre, style.info)}
             >
                 <MeldeperiodeInfo meldeperiodeKjede={kjede} />
             </MeldekortbehandlingSeksjon.Venstre>
+
+            <MeldekortbehandlingSeksjon.Høyre>
+                <MeldeperiodebehandlingBeregning kjedeId={kjedeId} />
+            </MeldekortbehandlingSeksjon.Høyre>
 
             <MeldekortbehandlingSeksjon.Venstre
                 className={classNames(style.venstre, style.meldekort)}

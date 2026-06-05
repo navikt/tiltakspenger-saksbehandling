@@ -1,3 +1,6 @@
 .outer {
+    background-color: var(--ax-bg-brand-blue-moderate);
+    padding: 1rem;
+    margin: -1rem;
     margin-bottom: 2rem;
 }

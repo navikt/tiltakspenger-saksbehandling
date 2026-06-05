@@ -16,4 +16,11 @@
 main:has(.meldekortbehandling) {
     background-color: var(--ax-bg-neutral-soft);
     min-height: 100dvh;
+    padding-bottom: 1rem;
+}
+
+.topp {
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px dashed var(--ax-border-neutral);
 }
