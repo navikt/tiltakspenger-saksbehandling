@@ -1,5 +1,5 @@
-.header {
-    margin-bottom: 0.5rem;
+.outer {
+    padding-top: 1rem;
 }
 
 .uke {
@@ -27,4 +27,17 @@
     display: flex;
     align-items: center;
     min-height: 2rem;
+}
+
+.venstre {
+    margin-left: -1rem;
+    padding: 1rem;
+}
+
+.info {
+    background-color: var(--ax-bg-brand-blue-moderate);
+}
+
+.meldekort {
+    background-color: var(--ax-bg-brand-magenta-soft);
 }

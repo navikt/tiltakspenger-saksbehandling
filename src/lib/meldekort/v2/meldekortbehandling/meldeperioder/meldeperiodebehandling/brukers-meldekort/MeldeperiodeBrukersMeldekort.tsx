@@ -1,6 +1,7 @@
 import {
     BodyShort,
     Button,
+    Heading,
     HelpText,
     HStack,
     InlineMessage,
@@ -24,7 +25,7 @@ type Props = {
     meldeperiodeKjede: MeldeperiodeKjedePropsV2;
 };
 
-export const MeldeperiodeBrukersMeldekortPanel = ({ meldeperiodeKjede }: Props) => {
+export const MeldeperiodeBrukersMeldekort = ({ meldeperiodeKjede }: Props) => {
     const { brukersMeldekort, sisteMeldeperiode, id } = meldeperiodeKjede;
 
     const sisteBrukersMeldekort = brukersMeldekort.at(-1);
@@ -51,6 +52,10 @@ export const MeldeperiodeBrukersMeldekortPanel = ({ meldeperiodeKjede }: Props) 
     return (
         <VStack gap={'space-16'}>
             <HStack justify={'space-between'} align={'center'}>
+                <Heading size={'xsmall'} level={'4'} spacing={true}>
+                    {'Meldekort fra bruker'}
+                </Heading>
+
                 <Select
                     label={'Velg meldekort'}
                     hideLabel={true}

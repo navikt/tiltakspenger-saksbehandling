@@ -19,8 +19,11 @@ import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
 import { ikonForMeldekortbehandlingDagStatusV2 } from './meldekortIkonerV2';
 import { useSak } from '~/lib/sak/SakContext';
 import { hentMeldeperiodekjede } from '~/lib/sak/sakUtils';
-import { MeldeperiodeInfo } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/meldeperiode-info/MeldeperiodeInfo';
 import { MeldekortbehandlingSeksjon } from '~/lib/meldekort/v2/meldekortbehandling/layout/seksjon/MeldekortbehandlingSeksjon';
+import { MeldeperiodeInfo } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/meldeperiodebehandling/info-panel/MeldeperiodeInfo';
+import { MeldeperiodeBrukersMeldekort } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/meldeperiodebehandling/brukers-meldekort/MeldeperiodeBrukersMeldekort';
+import React from 'react';
+import { classNames } from '~/utils/classNames';
 
 import style from './Meldeperiodebehandling.module.css';
 
@@ -50,9 +53,18 @@ export const Meldeperiodebehandling = ({ meldeperiodeSkjema }: Props) => {
     });
 
     return (
-        <MeldekortbehandlingSeksjon>
-            <MeldekortbehandlingSeksjon.Venstre gap={'space-12'} className={style.info}>
+        <MeldekortbehandlingSeksjon gap={'space-8'} className={style.outer}>
+            <MeldekortbehandlingSeksjon.Venstre
+                gap={'space-16'}
+                className={classNames(style.venstre, style.info)}
+            >
                 <MeldeperiodeInfo meldeperiodeKjede={kjede} />
+            </MeldekortbehandlingSeksjon.Venstre>
+
+            <MeldekortbehandlingSeksjon.Venstre
+                className={classNames(style.venstre, style.meldekort)}
+            >
+                <MeldeperiodeBrukersMeldekort meldeperiodeKjede={kjede} />
             </MeldekortbehandlingSeksjon.Venstre>
 
             <MeldekortbehandlingSeksjon.Høyre gap={'space-4'}>

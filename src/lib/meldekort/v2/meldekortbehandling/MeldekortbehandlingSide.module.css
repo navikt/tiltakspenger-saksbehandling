@@ -1,7 +1,7 @@
 .meldekortbehandling {
-    padding: 1rem 1rem 5rem 1rem;
+    margin: 1rem;
+    padding: 1rem;
     width: fit-content;
-    min-height: 100dvh;
     background-color: var(--ax-bg-default);
 }
 
@@ -15,4 +15,5 @@
 
 main:has(.meldekortbehandling) {
     background-color: var(--ax-bg-neutral-soft);
+    min-height: 100dvh;
 }
