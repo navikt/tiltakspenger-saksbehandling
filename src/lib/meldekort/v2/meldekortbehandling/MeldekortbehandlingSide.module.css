@@ -1,9 +1,18 @@
 .meldekortbehandling {
     padding: 1rem 1rem 5rem 1rem;
     width: fit-content;
+    min-height: 100dvh;
+    background-color: var(--ax-bg-default);
+}
+
+.stepperSeksjon {
+    width: 100%;
 }
 
 .stepper {
-    width: 100%;
     white-space: nowrap;
+}
+
+main:has(.meldekortbehandling) {
+    background-color: var(--ax-bg-neutral-soft);
 }

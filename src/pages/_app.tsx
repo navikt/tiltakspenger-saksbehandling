@@ -11,6 +11,8 @@ import { ConfigProvider } from '~/context/ConfigContext';
 import { NotificationProvider } from '~/lib/_felles/notifications/NotificationContext';
 import { NextPage } from 'next';
 
+import style from './_app.module.css';
+
 type NextPageWithLayout<P = Record<string, unknown>, IP = P> = NextPage<P, IP> & {
     getLayout?: (page: ReactElement) => ReactNode;
 };
@@ -42,7 +44,9 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
                                 }}
                             >
                                 <InternDekoratør />
-                                <main>{getLayout(<Component {...pageProps} />)}</main>
+                                <main className={style.main}>
+                                    {getLayout(<Component {...pageProps} />)}
+                                </main>
                             </SWRConfig>
                         </NotificationProvider>
                     </SaksbehandlerProvider>

@@ -4,17 +4,19 @@ import { SakProps } from '~/lib/sak/SakTyper';
 import { SakProvider } from '~/lib/sak/SakContext';
 import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { MeldekortbehandlingSide } from '~/lib/meldekort/v2/meldekortbehandling/MeldekortbehandlingSide';
-import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
+import { MeldekortbehandlingV2Provider } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2Context';
 
 type Props = {
     sak: SakProps;
-    meldekortbehandling: MeldekortbehandlingPropsV2;
+    meldekortbehandlingId: MeldekortbehandlingId;
 };
 
-const Meldekortbehandling = ({ sak, meldekortbehandling }: Props) => {
+const Meldekortbehandling = ({ sak, meldekortbehandlingId }: Props) => {
     return (
         <SakProvider sak={sak}>
-            <MeldekortbehandlingSide meldekortbehandling={meldekortbehandling} />
+            <MeldekortbehandlingV2Provider id={meldekortbehandlingId}>
+                <MeldekortbehandlingSide />
+            </MeldekortbehandlingV2Provider>
         </SakProvider>
     );
 };
@@ -22,8 +24,8 @@ const Meldekortbehandling = ({ sak, meldekortbehandling }: Props) => {
 export const getServerSideProps = pageWithAuthentication(async (context) => {
     const sak = await fetchSak(context.req, context.params!.saksnummer as string);
 
-    const meldekortBehandlingId = context.params!.meldekortBehandlingId as MeldekortbehandlingId;
-    const meldekortbehandling = sak.meldekortbehandlinger[meldekortBehandlingId];
+    const meldekortbehandlingId = context.params!.id as MeldekortbehandlingId;
+    const meldekortbehandling = sak.meldekortbehandlinger[meldekortbehandlingId];
 
     if (!meldekortbehandling) {
         return {
@@ -34,7 +36,7 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
     return {
         props: {
             sak,
-            meldekortbehandling,
+            meldekortbehandlingId,
         } satisfies Props,
     };
 });

@@ -11,7 +11,10 @@ import {
     MeldekortbehandlingSkjemaActions,
     MeldekortbehandlingSkjemaContext,
 } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2ContextTyper';
-import { MeldekortbehandlingStatus } from '~/lib/meldekort/typer/Meldekortbehandling';
+import {
+    MeldekortbehandlingId,
+    MeldekortbehandlingStatus,
+} from '~/lib/meldekort/typer/Meldekortbehandling';
 import {
     meldekortbehandlingSkjemaInitialState,
     meldekortbehandlingSkjemaReducer,
@@ -20,6 +23,7 @@ import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import { kanBehandle } from '~/lib/saksbehandler/tilganger';
 import { getTextAreaRefValue } from '~/utils/textarea';
 import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
+import { useSak } from '~/lib/sak/SakContext';
 
 const MeldekortbehandlingContext = createContext({} as MeldekortbehandlingPropsV2);
 
@@ -28,10 +32,16 @@ const SkjemaContext = createContext({} as MeldekortbehandlingSkjemaContext);
 const DispatchContext = createContext((() => ({})) as Dispatch<MeldekortbehandlingSkjemaActions>);
 
 type Props = PropsWithChildren<{
-    meldekortbehandling: MeldekortbehandlingPropsV2;
+    id: MeldekortbehandlingId;
 }>;
 
-export const MeldekortbehandlingV2Provider = ({ meldekortbehandling, children }: Props) => {
+export const MeldekortbehandlingV2Provider = ({ id, children }: Props) => {
+    const meldekortbehandling = useSak().sak.meldekortbehandlinger[id];
+
+    if (!meldekortbehandling) {
+        throw Error(`Fant ikke meldekortbehandlingen med id ${id}`);
+    }
+
     const { innloggetSaksbehandler } = useSaksbehandler();
 
     const erReadonly =

@@ -7,6 +7,7 @@ import { meldekortbehandlingUrl } from '~/utils/urls';
 import { useMeldeperiodeKjedeV2 } from '~/lib/meldekort/v2/meldeperiodekjede/context/MeldeperiodeKjedeContextV2';
 import { useOpprettMeldekortbehandlingV2 } from '~/lib/meldekort/v2/meldeperiodekjede/venstre-seksjon/opprett-behandling/useOpprettMeldekortbehandlingV2';
 import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
+import { useRouter } from 'next/router';
 
 import style from './MeldekortbehandlingOpprettV2.module.css';
 
@@ -15,11 +16,8 @@ type Props = {
 };
 
 export const MeldekortbehandlingOpprettV2 = ({ type }: Props) => {
-    const { sak, setSak } = useSak();
-    const { sakId, saksnummer, åpenMeldekortbehandlingId } = sak;
-
-    const { meldeperiodeKjede } = useMeldeperiodeKjedeV2();
-    const { id: kjedeId } = meldeperiodeKjede;
+    const { sakId, saksnummer, åpenMeldekortbehandlingId } = useSak().sak;
+    const { id: kjedeId } = useMeldeperiodeKjedeV2().meldeperiodeKjede;
 
     const { opprett, laster, feil } = useOpprettMeldekortbehandlingV2({
         kjedeId,
@@ -27,9 +25,11 @@ export const MeldekortbehandlingOpprettV2 = ({ type }: Props) => {
         type,
     });
 
-    const tekster = teksterForType[type];
+    const router = useRouter();
 
     const modalRef = useRef<HTMLDialogElement>(null);
+
+    const tekster = teksterForType[type];
 
     const lukkModal = () => modalRef.current?.close();
 
@@ -70,10 +70,12 @@ export const MeldekortbehandlingOpprettV2 = ({ type }: Props) => {
                         icon={laster && <Loader />}
                         disabled={laster}
                         onClick={() => {
-                            opprett().then((oppdatertSak) => {
-                                if (oppdatertSak) {
-                                    setSak(oppdatertSak);
+                            opprett().then((meldekortbehandling) => {
+                                if (meldekortbehandling) {
                                     lukkModal();
+                                    router.push(
+                                        meldekortbehandlingUrl(saksnummer, meldekortbehandling.id),
+                                    );
                                 }
                             });
                         }}
