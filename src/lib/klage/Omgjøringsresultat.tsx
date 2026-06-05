@@ -15,12 +15,10 @@ import {
     erBehandlingIdMeldekortbehandling,
     erBehandlingIdRammebehandling,
 } from '../behandling-felles/utils/BehandlingUtils';
-import {
-    MeldekortbehandlingId,
-    MeldekortbehandlingPropsV2,
-} from '../meldekort/typer/Meldekortbehandling';
+import { MeldekortbehandlingId } from '../meldekort/typer/Meldekortbehandling';
 import { MeldekortVedtak } from '../meldekort/typer/MeldekortVedtak';
 import { Nullable, PartialRecord } from '~/types/UtilTypes';
+import { MeldekortbehandlingPropsV2 } from '../meldekort/v2/typer';
 
 const Omgjøringsresultat = (props: {
     klage: Klagebehandling & { resultat: KlagebehandlingsresultatOmgjør };

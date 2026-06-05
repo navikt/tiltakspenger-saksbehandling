@@ -3,7 +3,6 @@ import { useSak } from '~/lib/sak/SakContext';
 import { useMeldekortbehandling } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2Context';
 import { formaterDatotekst } from '~/utils/date';
 import { DetaljHorisontal } from '~/lib/_felles/detaljer/DetaljHorisontal';
-import React from 'react';
 import { MeldekortbehandlingStatusTags } from '~/lib/meldekort/v2/meldekortbehandling/header/status/MeldekortbehandlingStatusTags';
 import { MeldekortbehandlingSeksjon } from '~/lib/meldekort/v2/meldekortbehandling/layout/seksjon/MeldekortbehandlingSeksjon';
 

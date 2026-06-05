@@ -44,11 +44,9 @@ import { erRammebehandlingUnderAktivOmgjøring } from '~/lib/rammebehandling/ram
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import Omgjøringsresultat from '~/lib/klage/Omgjøringsresultat';
 import { OppsummeringAvVentestatuserModal } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
-import {
-    MeldekortbehandlingId,
-    MeldekortbehandlingPropsV2,
-} from '~/lib/meldekort/typer/Meldekortbehandling';
+import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { MeldekortVedtak } from '~/lib/meldekort/typer/MeldekortVedtak';
+import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
 
 type Props = {
     sak: SakProps;

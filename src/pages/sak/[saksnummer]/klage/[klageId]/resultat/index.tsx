@@ -50,11 +50,9 @@ import FerdigstillKlageModalWrapper from '~/lib/klage/modaler/FerdigstillKlagebe
 import Omgjøringsresultat from '~/lib/klage/Omgjøringsresultat';
 import KlageTilknyttedeBehandlingerInfoCard from '~/lib/klage/KlageTilknyttedeBehandlingerInfoCard';
 import { OppsummeringAvVentestatuserModal } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
-import {
-    MeldekortbehandlingId,
-    MeldekortbehandlingPropsV2,
-} from '~/lib/meldekort/typer/Meldekortbehandling';
+import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { MeldekortVedtak } from '~/lib/meldekort/typer/MeldekortVedtak';
+import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
 
 type Props = {
     sak: SakProps;

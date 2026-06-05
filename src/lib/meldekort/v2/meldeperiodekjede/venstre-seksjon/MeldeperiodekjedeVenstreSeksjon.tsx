@@ -5,7 +5,6 @@ import {
     formaterPeriode,
     ukenummerFraDatotekst,
 } from '~/utils/date';
-import React from 'react';
 import { useSak } from '~/lib/sak/SakContext';
 import { Separator } from '~/lib/_felles/separator/Separator';
 import { useMeldeperiodeKjedeV2 } from '~/lib/meldekort/v2/meldeperiodekjede/context/MeldeperiodeKjedeContextV2';

@@ -15,7 +15,7 @@ import { SakProps } from '~/lib/sak/SakTyper';
 import { FetcherError } from '~/utils/fetch/fetch';
 import { useFetchBlobFraApi, useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { Nullable } from '~/types/UtilTypes';
-import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/typer/Meldekortbehandling';
+import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
 
 export const useOpprettKlage = (args: {
     sakId: string;

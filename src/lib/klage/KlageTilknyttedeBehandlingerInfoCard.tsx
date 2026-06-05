@@ -5,12 +5,10 @@ import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { formaterTidspunktKort } from '~/utils/date';
 import { finnBehandlingstypeTekst, behandlingResultatTilText } from '~/utils/tekstformateringUtils';
 import { behandlingUrl, meldeperiodeUrl } from '~/utils/urls';
-import {
-    MeldekortbehandlingId,
-    MeldekortbehandlingPropsV2,
-} from '../meldekort/typer/Meldekortbehandling';
+import { MeldekortbehandlingId } from '../meldekort/typer/Meldekortbehandling';
 import { PartialRecord } from '~/types/UtilTypes';
 import { erBehandlingIdMeldekortbehandling } from '../behandling-felles/utils/BehandlingUtils';
+import { MeldekortbehandlingPropsV2 } from '../meldekort/v2/typer';
 
 const KlageTilknyttedeBehandlingerInfoCard = (props: {
     klage: Klagebehandling;

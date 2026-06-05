@@ -20,7 +20,7 @@ import {
     erBehandlingIdRammebehandling,
 } from '~/lib/behandling-felles/utils/BehandlingUtils';
 import { MeldekortVedtak } from '~/lib/meldekort/typer/MeldekortVedtak';
-import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/typer/Meldekortbehandling';
+import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
 
 export const VelgOmgjøringsbehandlingModal = (props: {
     sakId: string;
