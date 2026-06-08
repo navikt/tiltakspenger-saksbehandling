@@ -17,7 +17,7 @@ export const MeldekortbehandlingLagre = ({ tekst }: Props) => {
     const { sak, setSak } = useSak();
     const { id } = useMeldekortbehandling();
 
-    const { tilDTO } = useMeldekortbehandlingSkjema();
+    const { tilDTO, erReadonly } = useMeldekortbehandlingSkjema();
 
     const { trigger, error, isMutating } = useOppdaterMeldekortbehandlingV2({
         sakId: sak.sakId,
@@ -42,6 +42,7 @@ export const MeldekortbehandlingLagre = ({ tekst }: Props) => {
                     });
                 }}
                 className={style.knapp}
+                disabled={erReadonly}
             >
                 {tekst}
             </Button>

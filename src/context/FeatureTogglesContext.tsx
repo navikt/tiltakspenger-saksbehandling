@@ -26,7 +26,7 @@ export const FeatureTogglesProvider = ({ deployEnv, children }: Props) => {
         <Context.Provider
             value={{
                 meldekortvedtakKlageToggle: !isProd,
-                meldekortbehandlingV2Toggle: isLocal,
+                meldekortbehandlingV2Toggle: !isProd,
             }}
         >
             {children}

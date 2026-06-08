@@ -48,7 +48,7 @@ export const Meldeperiodebehandlinger = () => {
                             )}
                         </HStack>
 
-                        <MeldekortbehandlingLagre tekst={'Lagre og beregn'} />
+                        {!erReadonly && <MeldekortbehandlingLagre tekst={'Lagre og beregn'} />}
                     </HStack>
                 </MeldekortbehandlingSeksjon.FullBredde>
             </MeldekortbehandlingSeksjon>
