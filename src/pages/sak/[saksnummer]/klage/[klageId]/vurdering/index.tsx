@@ -25,6 +25,7 @@ import { CheckmarkCircleIcon, PencilIcon, TrashIcon } from '@navikt/aksel-icons'
 import { useAvbrytKlagebehandling, useVurderKlage } from '~/lib/klage/api/KlageApi';
 import WarningCircleIcon from '~/lib/_felles/icons/WarningCircleIcon';
 import router from 'next/router';
+import { personoversiktUrl } from '~/utils/urls';
 import {
     erKlageAvsluttet,
     harKlageEnÅpenRammebehandling,
@@ -140,7 +141,7 @@ const VurderingKlagePage = ({
         sakId: klage.sakId,
         klageId: klage.id,
         onSuccess: () => {
-            router.push(`/sak/${sak.saksnummer}`);
+            router.push(personoversiktUrl(sak.saksnummer));
         },
     });
 

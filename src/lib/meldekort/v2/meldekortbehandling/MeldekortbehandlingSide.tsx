@@ -5,12 +5,12 @@ import { useMeldekortbehandling } from '~/lib/meldekort/v2/meldekortbehandling/c
 import { Meldeperiodebehandlinger } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/Meldeperiodebehandlinger';
 import { MeldekortbehandlingHeader } from '~/lib/meldekort/v2/meldekortbehandling/header/MeldekortbehandlingHeader';
 import { MeldekortbehandlingBeregningOgSimulering } from '~/lib/meldekort/v2/meldekortbehandling/bereging/MeldekortbehandlingBeregningOgSimulering';
-import { MeldekortbehandlingBegrunnelseOgBrev } from '~/lib/meldekort/v2/meldekortbehandling/begrunnelse-og-brev/MeldekortbehandlingBegrunnelseOgBrev';
 import { MeldekortbehandlingSeksjon } from '~/lib/meldekort/v2/meldekortbehandling/layout/seksjon/MeldekortbehandlingSeksjon';
 import { useRouter } from 'next/router';
 import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { meldekortbehandlingUrl } from '~/utils/urls';
 import { useEffect, useState } from 'react';
+import { MeldekortbehandlingFritekstOgSendInn } from '~/lib/meldekort/v2/meldekortbehandling/fritekst-og-innsending/MeldekortbehandlingFritekstOgSendInn';
 
 import style from './MeldekortbehandlingSide.module.css';
 
@@ -47,8 +47,7 @@ export const MeldekortbehandlingSide = () => {
                             >
                                 <Steg steg={1}>{'Meldeperioder'}</Steg>
                                 <Steg steg={2}>{'Beregning og simulering'}</Steg>
-                                <Steg steg={3}>{'Begrunnelse og brev'}</Steg>
-                                <Steg steg={4}>{'Oppsummering og send inn'}</Steg>
+                                <Steg steg={3}>{'Begrunnelse, brev og innsending'}</Steg>
                             </Stepper>
                         </MeldekortbehandlingSeksjon.FullBredde>
                     </MeldekortbehandlingSeksjon>
@@ -67,9 +66,7 @@ const KomponentForSteg = ({ steg }: { steg: number }) => {
         case 2:
             return <MeldekortbehandlingBeregningOgSimulering />;
         case 3:
-            return <MeldekortbehandlingBegrunnelseOgBrev />;
-        case 4:
-            return 'Validering og innsending goes here!';
+            return <MeldekortbehandlingFritekstOgSendInn />;
     }
 
     return <KomponentForSteg steg={DEFAULT_STEG} />;

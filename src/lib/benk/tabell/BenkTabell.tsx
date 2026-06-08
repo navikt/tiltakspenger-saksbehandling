@@ -216,7 +216,7 @@ export const BenkTabell = ({ behandlinger, valgtType }: Props) => {
                                     variant={'secondary'}
                                     size={'small'}
                                     as={NextLink}
-                                    href={personoversiktUrl(behandling)}
+                                    href={personoversiktUrl(behandling.saksnummer)}
                                 >
                                     {'Se sak'}
                                 </Button>

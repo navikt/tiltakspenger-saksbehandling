@@ -22,6 +22,7 @@ import router from 'next/router';
 import { pageWithAuthentication } from '../../auth/pageWithAuthentication';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { dateTilISOTekst } from '../../utils/date';
+import { personoversiktUrl } from '~/utils/urls';
 
 import { Nullable } from '~/types/UtilTypes';
 import {
@@ -338,7 +339,7 @@ const NySøknadModal = (props: { open: boolean; onClose: () => void }) => {
         }
     >('/dev/soknad/ny', 'POST', {
         onSuccess: (data) => {
-            router.push(`/sak/${data}`);
+            router.push(personoversiktUrl(data));
         },
     });
 

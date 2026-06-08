@@ -24,6 +24,7 @@ import { klagehendelseUtfallTilTag } from '~/lib/klage/utils/Klageinstanshendels
 import { OppsummeringsPar } from '~/lib/behandling-felles/oppsummeringer/oppsummeringspar/OppsummeringsPar';
 import { OppsummeringAvVentestatuserModal } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
 import { useResettableState } from '~/hooks/useResettableState';
+import { personoversiktUrl } from '~/utils/urls';
 
 type Props = {
     children: ReactElement;
@@ -203,7 +204,7 @@ const KlageHeader = (props: { saksnummer: string; klage: Nullable<Klagebehandlin
                     <BodyShort>
                         Sist endret {props.klage ? formaterTidspunkt(props.klage.sistEndret) : '-'}
                     </BodyShort>
-                    <Link href={`/sak/${props.saksnummer}`}>
+                    <Link href={personoversiktUrl(props.saksnummer)}>
                         <HStack align="start" gap="space-4">
                             <BodyShort>Gå til personoversikt</BodyShort>
                         </HStack>

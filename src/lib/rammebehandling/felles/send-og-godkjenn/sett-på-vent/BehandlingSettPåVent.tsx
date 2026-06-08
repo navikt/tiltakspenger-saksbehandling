@@ -40,7 +40,7 @@ export const BehandlingSettPåVent = ({ behandling, disabled }: Props) => {
                         }).then((oppdatertSak) => {
                             if (oppdatertSak) {
                                 setModalÅpen(false);
-                                router.push(personoversiktUrl(oppdatertSak));
+                                router.push(personoversiktUrl(oppdatertSak.saksnummer));
                             }
                         }),
                     isMutating: isSettBehandlingPåVentMutating,

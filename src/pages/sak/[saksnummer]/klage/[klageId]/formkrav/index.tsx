@@ -21,6 +21,7 @@ import KlageLayout, { KlageProvider, useKlage } from '../../layout';
 import { finnNesteKlageSteg, KlageSteg } from '../../../../../../lib/klage/utils/KlageLayoutUtils';
 import { CheckmarkCircleIcon, PencilIcon, TrashIcon } from '@navikt/aksel-icons';
 import { useHentPersonopplysninger } from '~/lib/personaliaheader/useHentPersonopplysninger';
+import { personoversiktUrl } from '~/utils/urls';
 import {
     harKlageEnÅpenRammebehandling,
     erKlageOmgjøring,
@@ -95,7 +96,7 @@ const FormkravKlagePage = ({ sak, omgjøringsbehandling }: Props) => {
         sakId: klage.sakId,
         klageId: klage.id,
         onSuccess: () => {
-            router.push(`/sak/${sak.saksnummer}`);
+            router.push(personoversiktUrl(sak.saksnummer));
         },
     });
 

@@ -48,7 +48,7 @@ export const oppdaterSakMedMeldekortbehandling = (
 });
 
 export const kanSaksbehandleForMeldekort = (
-    meldekortbehandling: MeldekortbehandlingProps,
+    meldekortbehandling: MeldekortbehandlingProps | MeldekortbehandlingPropsV2,
     innloggetSaksbehandler: Saksbehandler,
 ) =>
     kanBehandle(innloggetSaksbehandler, meldekortbehandling.saksbehandler) &&

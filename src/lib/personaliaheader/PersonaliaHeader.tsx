@@ -15,12 +15,13 @@ import { SakId } from '~/lib/sak/SakTyper';
 import NextLink from 'next/link';
 
 import styles from './PersonaliaHeader.module.css';
-import { PERSONOVERSIKT_TABS } from '~/lib/personoversikt/Personoversikt';
+import { PersonoversiktTab } from '~/lib/personoversikt/Personoversikt';
+import { personoversiktUrl } from '~/utils/urls';
 
 type PersonaliaHeaderProps = PropsWithChildren<{
     sakId: SakId;
     saksnummer: string;
-    aktivTab?: string;
+    aktivTab?: PersonoversiktTab;
     visTilbakeKnapp?: boolean;
 }>;
 
@@ -28,7 +29,7 @@ export const PersonaliaHeader = ({
     sakId,
     saksnummer,
     visTilbakeKnapp,
-    aktivTab = PERSONOVERSIKT_TABS.apneBehandlinger,
+    aktivTab = PersonoversiktTab.ÅpneBehandlinger,
     children,
 }: PersonaliaHeaderProps) => {
     const { personopplysninger, isPersonopplysningerLoading } = useHentPersonopplysninger(sakId);
@@ -67,7 +68,7 @@ export const PersonaliaHeader = ({
             {visTilbakeKnapp && (
                 <Button
                     as={NextLink}
-                    href={`/sak/${saksnummer}#${aktivTab}`}
+                    href={personoversiktUrl(saksnummer, aktivTab)}
                     type="submit"
                     size="small"
                 >
@@ -98,7 +99,7 @@ const PersonaliaInnhold = ({ saksnummer, personopplysninger }: PersonaliaInnhold
 
     return (
         <>
-            <Link as={NextLink} href={`/sak/${saksnummer}`}>
+            <Link as={NextLink} href={personoversiktUrl(saksnummer)}>
                 {fornavn} {mellomnavn} {etternavn}
             </Link>
             <BodyShort>{fnr}</BodyShort>

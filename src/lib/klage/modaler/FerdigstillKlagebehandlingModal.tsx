@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useFerdigstillKlage } from '~/lib/klage/api/KlageApi';
 import { KlageId } from '~/lib/klage/typer/Klage';
 import { SakId } from '~/lib/sak/SakTyper';
+import { personoversiktUrl } from '~/utils/urls';
 
 const FerdigstillKlageModalWrapper = (props: { sakId: SakId; klageId: KlageId }) => {
     const [vilFerdigstille, setVilFerdigstille] = useState(false);
@@ -39,7 +40,7 @@ export const FerdigstillKlageModal = (props: {
         klageId: props.klageId,
         begrunnelse: begrunnelse.trim() || null,
         onSuccess: (klage) => {
-            router.push(`/sak/${klage.saksnummer}`);
+            router.push(personoversiktUrl(klage.saksnummer));
         },
     });
 

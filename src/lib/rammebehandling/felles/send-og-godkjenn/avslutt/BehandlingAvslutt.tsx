@@ -19,7 +19,7 @@ export const BehandlingAvslutt = ({ behandling }: Props) => {
     const { avsluttBehandling, avsluttBehandlingIsMutating, avsluttBehandlingError } =
         useAvsluttBehandling(behandling.saksnummer, (sak) => {
             setSak(sak!);
-            router.push(personoversiktUrl(behandling));
+            router.push(personoversiktUrl(behandling.saksnummer));
         });
 
     return (

@@ -34,6 +34,7 @@ import {
 } from '~/lib/klage/utils/klageUtils';
 import router from 'next/router';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
+import { personoversiktUrl } from '~/utils/urls';
 import {
     useForhåndsvisKlagebrev,
     useIverksettKlage,
@@ -126,7 +127,7 @@ const BrevKlagePage = ({ sak, påklagetVedtak }: Props) => {
         klageId: klage.id,
         onSuccess: (oppdatertKlage) => {
             setKlage(oppdatertKlage!);
-            router.push(`/sak/${sak.saksnummer}`);
+            router.push(personoversiktUrl(sak.saksnummer));
         },
     });
 

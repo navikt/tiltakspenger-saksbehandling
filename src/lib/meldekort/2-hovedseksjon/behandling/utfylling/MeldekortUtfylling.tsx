@@ -26,7 +26,7 @@ import { useRef, useState } from 'react';
 import { classNames } from '~/utils/classNames';
 import { MeldekortBegrunnelse } from '../../../0-felles-komponenter/begrunnelse/MeldekortBegrunnelse';
 import AvsluttMeldekortbehandling from '~/lib/personoversikt/meldekort-oversikt/avsluttMeldekortbehandling/AvsluttMeldekortbehandling';
-import { meldeperiodeUrl } from '~/utils/urls';
+import { meldeperiodeUrl, personoversiktUrl } from '~/utils/urls';
 import { MeldekortBeregningOgSimulering } from '~/lib/meldekort/0-felles-komponenter/beregning-simulering/MeldekortBeregningOgSimulering';
 import Divider from '~/lib/_felles/divider/Divider';
 import { useFetchBlobFraApi } from '~/utils/fetch/useFetchFraApi';
@@ -37,7 +37,7 @@ import { BekreftelsesModal } from '~/lib/_felles/modaler/BekreftelsesModal';
 import { OppsummeringAvVentestatuserModal } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
 import { SakId } from '~/lib/sak/SakTyper';
 import { FetcherError } from '~/utils/fetch/fetch';
-import { PERSONOVERSIKT_TABS } from '~/lib/personoversikt/Personoversikt';
+import { PersonoversiktTab } from '~/lib/personoversikt/Personoversikt';
 import { useMeldekortbehandlingForm } from '~/lib/meldekort/context/MeldekortUtfyllingFormContext';
 import SettBehandlingPåVentModal from '~/lib/_felles/modaler/SettBehandlingPåVentModal';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
@@ -77,7 +77,7 @@ export const MeldekortUtfylling = ({ meldekortbehandling }: Props) => {
         meldekortbehandlingId,
         onSuccess: (oppdatertSak) => {
             setSak(oppdatertSak);
-            router.push(`/sak/${saksnummer}`);
+            router.push(personoversiktUrl(saksnummer));
         },
     });
 
@@ -114,7 +114,7 @@ export const MeldekortUtfylling = ({ meldekortbehandling }: Props) => {
             if (oppdatertKjede) {
                 setMeldeperiodeKjede(oppdatertKjede);
                 navigateWithNotification(
-                    `/sak/${saksnummer}#${PERSONOVERSIKT_TABS.meldekort}`,
+                    personoversiktUrl(saksnummer, PersonoversiktTab.Meldekort),
                     'Meldekortet er sendt til beslutter!',
                 );
             }

@@ -33,6 +33,7 @@ import { useSak } from '~/lib/sak/SakContext';
 import router from 'next/router';
 import { Klagebehandling } from '~/lib/klage/typer/Klage';
 import { Nullable } from '~/types/UtilTypes';
+import { personoversiktUrl } from '~/utils/urls';
 import OppsummeringAvKlageForRammebehandling from '~/lib/behandling-felles/oppsummeringer/klage/oppsummeringAvKlageForRammebehandling/OppsummeringAvKlageForRammebehandling';
 
 type Props = {
@@ -149,7 +150,7 @@ const MeldekortbehandlingSettPåVent = (props: {
         meldekortbehandlingId: props.meldekortbehandling.id,
         onSuccess: (oppdatertSak) => {
             setSak(oppdatertSak);
-            router.push(`/sak/${oppdatertSak.saksnummer}`);
+            router.push(personoversiktUrl(oppdatertSak.saksnummer));
         },
     });
 

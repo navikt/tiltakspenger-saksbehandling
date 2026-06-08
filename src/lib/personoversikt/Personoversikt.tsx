@@ -38,15 +38,16 @@ import Klageoversikt, {
     KlagebehandlingerMedOmgjøringsbehandling,
 } from './klageoversikt/Klageoversikt';
 import { TilbakekrevingOversikt } from '~/lib/personoversikt/tilbakekreving/TilbakekrevingOversikt';
+import { personoversiktUrl } from '~/utils/urls';
 
-export const PERSONOVERSIKT_TABS = {
-    apneBehandlinger: 'apne-behandlinger',
-    meldekort: 'meldekort',
-    vedtatteBehandlinger: 'vedtatte-behandlinger',
-    avsluttedeBehandlinger: 'avsluttede-behandlinger',
-    klage: 'klage',
-    tilbakekreving: 'tilbakekreving',
-};
+export enum PersonoversiktTab {
+    ÅpneBehandlinger = 'apne-behandlinger',
+    Meldekort = 'Meldekort',
+    VedtatteBehandlinger = 'vedtatte-behandlinger',
+    AvsluttedeBehandlinger = 'avsluttede-behandlinger',
+    Klage = 'Klage',
+    Tilbakekreving = 'Tilbakekreving',
+}
 
 export const Personoversikt = () => {
     const router = useRouter();
@@ -105,12 +106,12 @@ export const Personoversikt = () => {
 
     const hentAktivTabFraHash = (hash: string) => {
         const tab = hash.replace(/^#/, '');
-        return tab && Object.values(PERSONOVERSIKT_TABS).includes(tab)
-            ? tab
-            : PERSONOVERSIKT_TABS.apneBehandlinger;
+        return Object.values(PersonoversiktTab).includes(tab as PersonoversiktTab)
+            ? (tab as PersonoversiktTab)
+            : PersonoversiktTab.ÅpneBehandlinger;
     };
 
-    const [aktivTab, setAktivTab] = useState<string>(PERSONOVERSIKT_TABS.apneBehandlinger);
+    const [aktivTab, setAktivTab] = useState<PersonoversiktTab>(PersonoversiktTab.ÅpneBehandlinger);
 
     useEffect(() => {
         // TODO Gjorde lintingen strengere ved oppgradering til Next 16. Fikset bare åpenbare feil, denne burde undersøkes.
@@ -139,19 +140,23 @@ export const Personoversikt = () => {
                     value={aktivTab}
                     className={styles.tabs}
                     onChange={(value) => {
-                        setAktivTab(value);
-                        router.replace(`/sak/${saksnummer}#${value}`, undefined, { shallow: true });
+                        setAktivTab(value as PersonoversiktTab);
+                        router.replace(
+                            personoversiktUrl(saksnummer, value as PersonoversiktTab),
+                            undefined,
+                            { shallow: true },
+                        );
                     }}
                 >
                     <Tabs.List className={styles.tabsList}>
                         <Tabs.Tab
-                            value={PERSONOVERSIKT_TABS.apneBehandlinger}
+                            value={PersonoversiktTab.ÅpneBehandlinger}
                             label={labelWithCounter('Åpne behandlinger', åpneBehandlinger.length)}
                             icon={<FileIcon aria-hidden />}
                             className={styles.tab}
                         />
                         <Tabs.Tab
-                            value={PERSONOVERSIKT_TABS.meldekort}
+                            value={PersonoversiktTab.Meldekort}
                             label={labelWithCounter(
                                 'Meldekort',
                                 meldeperiodeKjederKanBehandles?.length ?? 0,
@@ -160,7 +165,7 @@ export const Personoversikt = () => {
                             className={styles.tab}
                         />
                         <Tabs.Tab
-                            value={PERSONOVERSIKT_TABS.vedtatteBehandlinger}
+                            value={PersonoversiktTab.VedtatteBehandlinger}
                             label={labelWithCounter(
                                 `Vedtatte behandlinger`,
                                 alleRammevedtak.length + alleKlagevedtak.length,
@@ -169,7 +174,7 @@ export const Personoversikt = () => {
                             className={styles.tab}
                         />
                         <Tabs.Tab
-                            value={PERSONOVERSIKT_TABS.avsluttedeBehandlinger}
+                            value={PersonoversiktTab.AvsluttedeBehandlinger}
                             label={labelWithCounter(
                                 'Avsluttede behandlinger',
                                 avbrutteRammebehandlinger.length + avbrutteKlagebehandlinger.length,
@@ -178,13 +183,13 @@ export const Personoversikt = () => {
                             className={styles.tab}
                         />
                         <Tabs.Tab
-                            value={PERSONOVERSIKT_TABS.klage}
+                            value={PersonoversiktTab.Klage}
                             label={labelWithCounter('Klage', klageBehandlinger.length)}
                             icon={<EnvelopeClosedIcon aria-hidden />}
                             className={styles.tab}
                         />
                         <Tabs.Tab
-                            value={PERSONOVERSIKT_TABS.tilbakekreving}
+                            value={PersonoversiktTab.Tilbakekreving}
                             label={labelWithCounter('Tilbakekreving', tilbakekrevinger.length)}
                             icon={<BankNoteIcon aria-hidden />}
                             className={styles.tab}
@@ -226,13 +231,10 @@ export const Personoversikt = () => {
                         </ActionMenu>
                     </Tabs.List>
 
-                    <Tabs.Panel
-                        value={PERSONOVERSIKT_TABS.apneBehandlinger}
-                        className={styles.panel}
-                    >
+                    <Tabs.Panel value={PersonoversiktTab.ÅpneBehandlinger} className={styles.panel}>
                         <ApneBehandlingerOversikt åpneBehandlinger={åpneBehandlinger} />
                     </Tabs.Panel>
-                    <Tabs.Panel value={PERSONOVERSIKT_TABS.meldekort} className={styles.panel}>
+                    <Tabs.Panel value={PersonoversiktTab.Meldekort} className={styles.panel}>
                         <div className={styles.meldekortHeaderRad}>
                             <MeldekortHelgToggle />
                             {meldeperiodeKjederIkkeKlare && (
@@ -248,7 +250,7 @@ export const Personoversikt = () => {
                         )}
                     </Tabs.Panel>
                     <Tabs.Panel
-                        value={PERSONOVERSIKT_TABS.vedtatteBehandlinger}
+                        value={PersonoversiktTab.VedtatteBehandlinger}
                         className={styles.panel}
                     >
                         <VedtatteBehandlinger
@@ -260,7 +262,7 @@ export const Personoversikt = () => {
                         />
                     </Tabs.Panel>
                     <Tabs.Panel
-                        value={PERSONOVERSIKT_TABS.avsluttedeBehandlinger}
+                        value={PersonoversiktTab.AvsluttedeBehandlinger}
                         className={styles.panel}
                     >
                         <AvsluttedeBehandlinger
@@ -269,7 +271,7 @@ export const Personoversikt = () => {
                             avbrutteKlageBehandlinger={avbrutteKlagebehandlinger}
                         />
                     </Tabs.Panel>
-                    <Tabs.Panel value={PERSONOVERSIKT_TABS.klage} className={styles.panel}>
+                    <Tabs.Panel value={PersonoversiktTab.Klage} className={styles.panel}>
                         <Klageoversikt
                             klagebehandlingerMedOmgjøringsbehandling={
                                 klagebehandlingerMedOmgjøringsbehandling
@@ -277,7 +279,7 @@ export const Personoversikt = () => {
                             klagevedtakMedBehandling={klagevedtakMedBehandling}
                         />
                     </Tabs.Panel>
-                    <Tabs.Panel value={PERSONOVERSIKT_TABS.tilbakekreving} className={styles.panel}>
+                    <Tabs.Panel value={PersonoversiktTab.Tilbakekreving} className={styles.panel}>
                         <TilbakekrevingOversikt tilbakekrevinger={tilbakekrevinger} />
                     </Tabs.Panel>
                 </Tabs>

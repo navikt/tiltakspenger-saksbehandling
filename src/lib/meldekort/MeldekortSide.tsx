@@ -6,7 +6,7 @@ import { useSak } from '~/lib/sak/SakContext';
 import { MeldekortHøyreSeksjon } from './3-høyre-seksjon/MeldekortHøyreSeksjon';
 import { useMeldeperiodeKjede } from './context/MeldeperiodeKjedeContext';
 import { erMeldekortbehandlingUnderAktivBehandling } from '~/lib/meldekort/utils/MeldekortbehandlingUtils';
-import { PERSONOVERSIKT_TABS } from '~/lib/personoversikt/Personoversikt';
+import { PersonoversiktTab } from '~/lib/personoversikt/Personoversikt';
 import { MeldekortbehandlingFormProvider } from '~/lib/meldekort/context/MeldekortUtfyllingFormContext';
 
 import style from './MeldekortSide.module.css';
@@ -32,7 +32,7 @@ export const MeldekortSide = () => {
                 sakId={sakId}
                 saksnummer={saksnummer}
                 visTilbakeKnapp={true}
-                aktivTab={PERSONOVERSIKT_TABS.meldekort}
+                aktivTab={PersonoversiktTab.Meldekort}
             />
             {erSisteMeldekortEtterMeldekortbehandling && (
                 <Alert variant="warning" size="small">

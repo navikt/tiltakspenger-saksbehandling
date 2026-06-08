@@ -9,7 +9,8 @@ import { Underkjenn } from '~/lib/behandling-felles/underkjenn/Underkjenn';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import router from 'next/router';
 import { useNotification } from '~/lib/_felles/notifications/NotificationContext';
-import { PERSONOVERSIKT_TABS } from '~/lib/personoversikt/Personoversikt';
+import { PersonoversiktTab } from '~/lib/personoversikt/Personoversikt';
+import { personoversiktUrl } from '~/utils/urls';
 
 type Props = {
     meldekortbehandling: MeldekortbehandlingProps;
@@ -28,7 +29,7 @@ export const MeldekortTaBeslutning = ({ meldekortbehandling }: Props) => {
         'POST',
         {
             onSuccess: () => {
-                router.push(`/sak/${saksnummer}#${PERSONOVERSIKT_TABS.meldekort}`);
+                router.push(personoversiktUrl(saksnummer, PersonoversiktTab.Meldekort));
             },
         },
     );
@@ -73,7 +74,7 @@ export const MeldekortTaBeslutning = ({ meldekortbehandling }: Props) => {
                                 if (oppdatertKjede) {
                                     setMeldeperiodeKjede(oppdatertKjede);
                                     navigateWithNotification(
-                                        `/sak/${saksnummer}`,
+                                        personoversiktUrl(saksnummer),
                                         'Meldekortet er godkjent',
                                     );
                                 }

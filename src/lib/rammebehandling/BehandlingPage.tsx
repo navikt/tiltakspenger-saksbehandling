@@ -15,7 +15,7 @@ import { Tidslinjer } from '~/lib/_felles/tidslinjer/Tidslinjer';
 import { useSak } from '~/lib/sak/SakContext';
 import OppsummeringAvVentestatus from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatus';
 import { BehandlingSkjemaProvider } from '~/lib/rammebehandling/context/BehandlingSkjemaContext';
-import { PERSONOVERSIKT_TABS } from '~/lib/personoversikt/Personoversikt';
+import { PersonoversiktTab } from '~/lib/personoversikt/Personoversikt';
 
 import style from './BehandlingPage.module.css';
 import OppsummeringAvKlageForRammebehandling from '~/lib/behandling-felles/oppsummeringer/klage/oppsummeringAvKlageForRammebehandling/OppsummeringAvKlageForRammebehandling';
@@ -49,8 +49,8 @@ export const BehandlingPage = () => {
                 visTilbakeKnapp={true}
                 aktivTab={
                     status === Rammebehandlingsstatus.VEDTATT
-                        ? PERSONOVERSIKT_TABS.vedtatteBehandlinger
-                        : PERSONOVERSIKT_TABS.apneBehandlinger
+                        ? PersonoversiktTab.VedtatteBehandlinger
+                        : PersonoversiktTab.ÅpneBehandlinger
                 }
             >
                 {finnBehandlingStatusTag(status, false, ventestatus.at(-1)?.erSattPåVent)}

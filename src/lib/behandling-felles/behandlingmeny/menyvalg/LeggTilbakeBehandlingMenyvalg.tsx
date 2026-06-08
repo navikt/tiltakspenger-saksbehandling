@@ -32,7 +32,7 @@ const LeggTilbakeMenyvalg = ({ behandling }: Props) => {
             onClick={(e) => {
                 e.preventDefault();
                 leggTilbakeBehandling().then(() => {
-                    router.push(personoversiktUrl(behandling));
+                    router.push(personoversiktUrl(behandling.saksnummer));
                 });
             }}
         >

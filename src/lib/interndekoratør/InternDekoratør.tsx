@@ -18,6 +18,7 @@ import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import router from 'next/router';
 import styles from './InternDekoratør.module.css';
 import { BekreftelsesModal } from '~/lib/_felles/modaler/BekreftelsesModal';
+import { personoversiktUrl } from '~/utils/urls';
 import { useHentEllerOpprettSak } from '~/lib/interndekoratør/useHentEllerOpprettSak';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -63,7 +64,7 @@ export const InternDekoratør = () => {
                             e.preventDefault();
                             søk({ fnr: søketekst }).then((sak) => {
                                 if (sak) {
-                                    router.push(`/sak/${sak.saksnummer}`);
+                                    router.push(personoversiktUrl(sak.saksnummer));
                                 }
                             });
                         }}
@@ -145,7 +146,7 @@ export const InternDekoratør = () => {
                                 if (response) {
                                     setFnr('');
                                     lukkModal();
-                                    router.push(`/sak/${response.saksnummer}`);
+                                    router.push(personoversiktUrl(response.saksnummer));
                                 }
                             });
                         }}

@@ -8,7 +8,7 @@ import {
     MeldeperiodeKjedeProps,
     MeldeperiodeKjedeStatus,
 } from '~/lib/meldekort/typer/Meldeperiode';
-import { meldeperiodeUrl } from '~/utils/urls';
+import { meldeperiodeUrl, personoversiktUrl } from '~/utils/urls';
 import {
     MeldekortbehandlingProps,
     MeldekortbehandlingStatus,
@@ -216,7 +216,7 @@ export const MeldeperiodeKjedeOversiktMeny = ({
                     onClose={() => setVilAvslutteBehandling(false)}
                     sakId={sakId}
                     meldekortbehandlingId={meldekortbehandling.id}
-                    personoversiktUrl={`/sak/${saksnummer}`}
+                    personoversiktUrl={personoversiktUrl(saksnummer)}
                 />
             )}
 
