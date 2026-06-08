@@ -28,6 +28,8 @@
 .venstre {
     margin-left: -1rem;
     padding: 1rem;
+    border-top-right-radius: var(--ax-radius-4);
+    border-bottom-right-radius: var(--ax-radius-4);
 }
 
 .info {
@@ -35,5 +37,6 @@
 }
 
 .meldekort {
-    background-color: var(--ax-bg-brand-magenta-soft);
+    border: 2px solid var(--ax-border-info-subtle);
+    border-left: none;
 }

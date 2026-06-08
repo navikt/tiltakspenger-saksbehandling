@@ -36,10 +36,10 @@ export const MeldekortbehandlingHeader = () => {
                 </HStack>
 
                 <HStack gap={'space-16'}>
-                    <DetaljHorisontal navn={'Første dag som gir rett:'}>
+                    <DetaljHorisontal navn={'Første dag med rett:'}>
                         {førsteDagSomGirRett ? formaterDatotekst(førsteDagSomGirRett) : '-'}
                     </DetaljHorisontal>
-                    <DetaljHorisontal navn={'Siste dag som gir rett:'}>
+                    <DetaljHorisontal navn={'Siste dag med rett:'}>
                         {sisteDagSomGirRett ? formaterDatotekst(sisteDagSomGirRett) : '-'}
                     </DetaljHorisontal>
                 </HStack>
