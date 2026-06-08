@@ -32,7 +32,7 @@ const KlageTilknyttedeBehandlingerInfoCard = (props: {
                         {tilknyttedeIkkeÅpneBehandlinger.map((id) => {
                             const rammebehandling = props.rammebehandlinger.find(
                                 (b) => b.id === id,
-                            )!;
+                            );
                             const meldekortbehandling = erBehandlingIdMeldekortbehandling(id)
                                 ? props.meldekortbehandlinger[id as MeldekortbehandlingId]
                                 : null;
