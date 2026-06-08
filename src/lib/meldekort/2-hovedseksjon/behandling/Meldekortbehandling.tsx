@@ -1,4 +1,4 @@
-import { Alert, Button, Heading, HStack, VStack } from '@navikt/ds-react';
+import { Alert, Box, Button, Heading, HStack, VStack } from '@navikt/ds-react';
 import {
     erMeldekortbehandlingSattPaVent,
     kanBeslutteForMeldekort,
@@ -31,12 +31,16 @@ import {
 import SettBehandlingPåVentModal from '~/lib/_felles/modaler/SettBehandlingPåVentModal';
 import { useSak } from '~/lib/sak/SakContext';
 import router from 'next/router';
+import { Klagebehandling } from '~/lib/klage/typer/Klage';
+import { Nullable } from '~/types/UtilTypes';
+import OppsummeringAvKlageForRammebehandling from '~/lib/behandling-felles/oppsummeringer/klage/oppsummeringAvKlageForRammebehandling/OppsummeringAvKlageForRammebehandling';
 
 type Props = {
     meldekortbehandling: MeldekortbehandlingProps;
+    klagebehandling: Nullable<Klagebehandling>;
 };
 
-export const Meldekortbehandling = ({ meldekortbehandling }: Props) => {
+export const Meldekortbehandling = ({ meldekortbehandling, klagebehandling }: Props) => {
     const { innloggetSaksbehandler } = useSaksbehandler();
 
     const { type, status, erAvsluttet } = meldekortbehandling;
@@ -68,6 +72,11 @@ export const Meldekortbehandling = ({ meldekortbehandling }: Props) => {
                     </Alert>
                 )}
             </div>
+            {klagebehandling && (
+                <Box borderWidth="1">
+                    <OppsummeringAvKlageForRammebehandling klagebehandling={klagebehandling} />
+                </Box>
+            )}
             {erSattPåVent && sisteVentestatus ? (
                 <>
                     <OppsummeringAvVentestatus
@@ -83,7 +92,10 @@ export const Meldekortbehandling = ({ meldekortbehandling }: Props) => {
                                 : undefined
                         }
                     />
-                    <MeldekortOppsummering meldekortbehandling={meldekortbehandling} />
+                    <MeldekortOppsummering
+                        meldekortbehandling={meldekortbehandling}
+                        klagebehandling={null}
+                    />
                     {kanGjenoppta && (
                         <MeldekortbehandlingGjenoppta meldekortbehandling={meldekortbehandling} />
                     )}
@@ -92,7 +104,10 @@ export const Meldekortbehandling = ({ meldekortbehandling }: Props) => {
                 <MeldekortUtfylling meldekortbehandling={meldekortbehandling} />
             ) : (
                 <>
-                    <MeldekortOppsummering meldekortbehandling={meldekortbehandling} />
+                    <MeldekortOppsummering
+                        meldekortbehandling={meldekortbehandling}
+                        klagebehandling={null}
+                    />
                     <Divider orientation="horizontal" />
                     <VStack gap="space-16">
                         <HStack gap="space-8" align="end">
@@ -126,21 +141,15 @@ export const Meldekortbehandling = ({ meldekortbehandling }: Props) => {
 const MeldekortbehandlingSettPåVent = (props: {
     meldekortbehandling: MeldekortbehandlingProps;
 }) => {
-    const { sak } = useSak();
-    const { meldeperiodeKjede, setMeldeperiodeKjede } = useMeldeperiodeKjede();
+    const { setSak } = useSak();
     const [visSettPåVentModal, setVisSettPåVentModal] = useState(false);
 
     const settMeldekortbehandlingPåVent = useSettMeldekortbehandlingPåVent({
         sakId: props.meldekortbehandling.sakId,
         meldekortbehandlingId: props.meldekortbehandling.id,
-        onSuccess: (oppdatertMeldekortbehandling) => {
-            setMeldeperiodeKjede(
-                oppdaterMeldeperiodeKjedeMedMeldekortbehandling(
-                    meldeperiodeKjede,
-                    oppdatertMeldekortbehandling,
-                ),
-            );
-            router.push(`/sak/${sak.saksnummer}`);
+        onSuccess: (oppdatertSak) => {
+            setSak(oppdatertSak);
+            router.push(`/sak/${oppdatertSak.saksnummer}`);
         },
     });
 

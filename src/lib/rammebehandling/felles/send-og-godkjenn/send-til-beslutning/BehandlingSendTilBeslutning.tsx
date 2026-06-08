@@ -1,5 +1,5 @@
 import { Button } from '@navikt/ds-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { BekreftelsesModal } from '~/lib/_felles/modaler/BekreftelsesModal';
 import { useSendBehandlingTilBeslutning } from '~/lib/rammebehandling/felles/send-og-godkjenn/send-til-beslutning/useSendBehandlingTilBeslutning';

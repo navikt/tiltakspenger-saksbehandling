@@ -6,7 +6,7 @@ import {
 } from './useHentVedtaksbrevForhåndsvisning';
 
 import { ValideringResultat } from '~/lib/rammebehandling/typer/Validering';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import style from './VedtaksbrevForhåndsvisning.module.css';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';

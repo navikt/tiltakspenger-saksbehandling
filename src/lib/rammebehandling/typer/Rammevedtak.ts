@@ -1,14 +1,14 @@
 import { Nullable } from '~/types/UtilTypes';
 import { Periode } from '../../../types/Periode';
 import { Barnetillegg } from './Barnetillegg';
-import { BehandlingId, Rammebehandling, RammebehandlingResultat } from './Rammebehandling';
+import { RammebehandlingId, Rammebehandling, RammebehandlingResultat } from './Rammebehandling';
 import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
 
 export type VedtakId = `vedtak_${string}`;
 
 export type Rammevedtak = {
     id: VedtakId;
-    behandlingId: BehandlingId;
+    behandlingId: RammebehandlingId;
     opprettet: string;
     vedtaksdato: Nullable<string>;
     resultat: RammebehandlingResultat;

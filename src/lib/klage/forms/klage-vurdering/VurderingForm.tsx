@@ -1,4 +1,3 @@
-import React from 'react';
 import { Control, Controller, useWatch } from 'react-hook-form';
 import {
     KlagehjemmelFormData,

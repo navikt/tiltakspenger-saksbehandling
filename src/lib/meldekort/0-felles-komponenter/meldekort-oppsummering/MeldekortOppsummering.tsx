@@ -1,4 +1,4 @@
-import { Alert, BodyShort, Button, Textarea, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Box, Button, Textarea, VStack } from '@navikt/ds-react';
 import { formaterTidspunktKort } from '~/utils/date';
 import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { MeldekortUker } from '../uker/MeldekortUker';
@@ -8,12 +8,16 @@ import Divider from '~/lib/_felles/divider/Divider';
 import { useFetchBlobFraApi } from '~/utils/fetch/useFetchFraApi';
 import { ForhåndsvisMeldekortbehandlingBrevRequest } from '../../2-hovedseksjon/behandling/utfylling/meldekortUtfyllingUtils';
 import styles from './MeldekortOppsummering.module.css';
+import { Klagebehandling } from '~/lib/klage/typer/Klage';
+import { Nullable } from '~/types/UtilTypes';
+import OppsummeringAvKlageForRammebehandling from '~/lib/behandling-felles/oppsummeringer/klage/oppsummeringAvKlageForRammebehandling/OppsummeringAvKlageForRammebehandling';
 
 type Props = {
     meldekortbehandling: MeldekortbehandlingProps;
+    klagebehandling: Nullable<Klagebehandling>;
 };
 
-export const MeldekortOppsummering = ({ meldekortbehandling }: Props) => {
+export const MeldekortOppsummering = ({ meldekortbehandling, klagebehandling }: Props) => {
     const { sakId, id, beregning, begrunnelse, godkjentTidspunkt, dager, tekstTilVedtaksbrev } =
         meldekortbehandling;
 
@@ -24,6 +28,11 @@ export const MeldekortOppsummering = ({ meldekortbehandling }: Props) => {
 
     return (
         <VStack gap={'space-20'}>
+            {klagebehandling && (
+                <Box borderWidth="1">
+                    <OppsummeringAvKlageForRammebehandling klagebehandling={klagebehandling} />
+                </Box>
+            )}
             <MeldekortUker dager={beregning?.beregningForMeldekortetsPeriode.dager ?? dager} />
             {godkjentTidspunkt && (
                 <BodyShort size={'small'}>

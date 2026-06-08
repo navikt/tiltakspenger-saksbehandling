@@ -1,45 +1,33 @@
 import js from '@eslint/js';
-import react from 'eslint-plugin-react';
-import reactHooks from 'eslint-plugin-react-hooks';
-import tseslint from '@typescript-eslint/eslint-plugin';
-import tsParser from '@typescript-eslint/parser';
+import tseslint from 'typescript-eslint';
 import globals from 'globals';
 import css from '@eslint/css';
-
-const parserOptions = {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-};
+import nextConfig from 'eslint-config-next';
 
 export default [
     {
         ignores: ['dist', '*.cjs', '*.mjs', '*.js', 'tests', '.next'],
     },
+    ...nextConfig,
     {
         files: ['src/**/*.{ts,tsx,js,jsx}'],
         languageOptions: {
-            parser: tsParser,
-            parserOptions,
+            parser: tseslint.parser,
+            parserOptions: {
+                ecmaVersion: 'latest',
+                sourceType: 'module',
+            },
             globals: {
                 ...globals.browser,
                 ...globals.es2020,
             },
         },
         plugins: {
-            react,
-            '@typescript-eslint': tseslint,
-            'react-hooks': reactHooks,
-        },
-        settings: {
-            react: {
-                version: 'detect',
-            },
+            '@typescript-eslint': tseslint.plugin,
         },
         rules: {
             ...js.configs.recommended.rules,
-            ...react.configs.recommended.rules,
-            ...tseslint.configs.recommended.rules,
-            ...reactHooks.configs.recommended.rules,
+            ...tseslint.configs.recommended.reduce((acc, c) => ({ ...acc, ...c.rules }), {}),
             'no-undef': 'off',
             '@typescript-eslint/no-explicit-any': 'off',
             '@typescript-eslint/no-unused-vars': [

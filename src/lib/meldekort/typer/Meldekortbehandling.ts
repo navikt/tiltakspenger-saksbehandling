@@ -14,9 +14,9 @@ import { Attestering } from '../../behandling-felles/typer/Attestering';
 import { TilbakekrevingId } from '~/lib/tilbakekreving/typer/Tilbakekreving';
 import { VentestatusHendelse } from '~/types/Ventestatus';
 
-// "_behandling"-suffixen er ikke reell, er kun for at typescript ikke skal se denne som ekvivalent med BrukersMeldekortId
-// Ikke gjør run-time typesjekk på denne!
-export type MeldekortbehandlingId = `meldekort_${string}_behandling`;
+export const MeldekortbehandlingPrefix = 'meldekort_' as const;
+
+export type MeldekortbehandlingId = `${typeof MeldekortbehandlingPrefix}${string}`;
 
 export enum MeldekortbehandlingStatus {
     KLAR_TIL_BEHANDLING = 'KLAR_TIL_BEHANDLING',
@@ -82,6 +82,7 @@ export type MeldekortbehandlingProps = {
     skalSendeVedtaksbrev: boolean;
     ventestatus: VentestatusHendelse[];
     harFlereMeldeperioder: boolean;
+    klagebehandlingId: Nullable<string>;
 };
 
 export type MeldekortDagProps = {

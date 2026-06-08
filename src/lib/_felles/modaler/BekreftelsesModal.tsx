@@ -1,4 +1,4 @@
-import React, { ReactNode, RefObject } from 'react';
+import { ReactNode, RefObject } from 'react';
 import styles from './BekreftelsesModal.module.css';
 import { Alert, Button, HStack, Modal } from '@navikt/ds-react';
 import { FetcherError } from '~/utils/fetch/fetch';

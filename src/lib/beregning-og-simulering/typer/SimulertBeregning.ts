@@ -5,7 +5,7 @@ import {
 import { Nullable } from '~/types/UtilTypes';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
 import { BeregningerSummert } from '~/lib/beregning-og-simulering/typer/Beregning';
-import { BehandlingId } from '../../rammebehandling/typer/Rammebehandling';
+import { RammebehandlingId } from '../../rammebehandling/typer/Rammebehandling';
 
 export enum SimulerertBehandlingstype {
     RAMME = 'RAMME',
@@ -13,7 +13,7 @@ export enum SimulerertBehandlingstype {
 }
 
 interface SimulertBeregningBase {
-    behandlingId: MeldekortbehandlingId | BehandlingId;
+    behandlingId: MeldekortbehandlingId | RammebehandlingId;
     behandlingstype: SimulerertBehandlingstype;
     meldeperioder: SimulertBeregningPerMeldeperiode[];
     beregningstidspunkt: string;

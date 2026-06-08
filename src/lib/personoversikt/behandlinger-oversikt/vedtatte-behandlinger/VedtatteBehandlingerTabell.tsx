@@ -8,7 +8,6 @@ import { formaterTidspunkt, formaterPeriode } from '~/utils/date';
 import { ChevronDownIcon, FileIcon } from '@navikt/aksel-icons';
 import MenyValgBehandleSøknadPåNytt from '~/lib/behandling-felles/behandlingmeny/menyvalg/MenyValgBehandleSøknadPåNytt';
 import SeBehandlingMenyvalg from '~/lib/behandling-felles/behandlingmeny/menyvalg/SeBehandlingMenyvalg';
-import React from 'react';
 import { behandlingUrl } from '~/utils/urls';
 import { SakId } from '~/lib/sak/SakTyper';
 import {

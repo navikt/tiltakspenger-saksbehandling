@@ -1,4 +1,3 @@
-import React from 'react';
 import { BehandlingSaksopplysning } from '~/lib/rammebehandling/saksopplysninger/BehandlingSaksopplysning';
 import { formaterPeriode } from '~/utils/date';
 import { VStack } from '@navikt/ds-react';

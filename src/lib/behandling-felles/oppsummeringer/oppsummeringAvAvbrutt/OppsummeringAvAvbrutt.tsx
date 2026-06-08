@@ -1,4 +1,3 @@
-import React from 'react';
 import { Box, Heading, HStack, VStack } from '@navikt/ds-react';
 
 import styles from './OppsummeringAvAvbrutt.module.css';

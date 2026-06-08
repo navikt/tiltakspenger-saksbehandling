@@ -5,7 +5,7 @@ import {
     kunPerioderMedBarn,
     slåSammenBarnetillegg,
 } from '~/lib/rammebehandling/felles/barnetillegg/utils/barnetilleggUtils';
-import { BehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { TidslinjeRammevedtak } from '~/types/TidslinjeRammevedtak';
 import { Periode } from '~/types/Periode';
 
@@ -13,7 +13,7 @@ type VedtakMedBarnetillegg = Rammevedtak & {
     barnetillegg: NonNullable<Rammevedtak['barnetillegg']>;
 };
 
-type BarnetilleggMedBehandlingId = BarnetilleggPeriode & { behandlingId: BehandlingId };
+type BarnetilleggMedBehandlingId = BarnetilleggPeriode & { behandlingId: RammebehandlingId };
 
 const hentBarnetilleggFraVedtak = (
     tidslinje: TidslinjeRammevedtak,

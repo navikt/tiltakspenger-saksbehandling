@@ -1,10 +1,10 @@
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { SakProps } from '~/lib/sak/SakTyper';
-import { BehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
 
 type AvsluttBehandlingDTO = {
     begrunnelse: string;
-    behandlingId: BehandlingId;
+    behandlingId: RammebehandlingId;
 };
 
 export const useAvsluttBehandling = (saksnummer: string, onSuccess: (sak: SakProps) => void) => {

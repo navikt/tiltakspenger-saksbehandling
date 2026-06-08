@@ -1,7 +1,7 @@
 import { Periode } from '../../../types/Periode';
 import { SakId } from '../../sak/SakTyper';
 import {
-    BehandlingId,
+    RammebehandlingId,
     Rammebehandlingsstatus,
     RammebehandlingResultat,
 } from '../../rammebehandling/typer/Rammebehandling';
@@ -37,7 +37,7 @@ export enum ÅpenBehandlingForOversiktType {
 }
 
 interface ÅpenBehandlingBase {
-    id: SøknadId | BehandlingId | MeldeperiodeKjedeId | KlageId;
+    id: SøknadId | RammebehandlingId | MeldeperiodeKjedeId | KlageId;
     sakId: SakId;
     saksnummer: string;
     opprettet: string;
@@ -45,7 +45,7 @@ interface ÅpenBehandlingBase {
 }
 
 interface ÅpenRammebehandlingBase extends ÅpenBehandlingBase {
-    id: BehandlingId;
+    id: RammebehandlingId;
     type:
         | ÅpenBehandlingForOversiktType.SØKNADSBEHANDLING
         | ÅpenBehandlingForOversiktType.REVURDERING;

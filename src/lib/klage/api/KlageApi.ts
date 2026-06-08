@@ -15,6 +15,7 @@ import { SakProps } from '~/lib/sak/SakTyper';
 import { FetcherError } from '~/utils/fetch/fetch';
 import { useFetchBlobFraApi, useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { Nullable } from '~/types/UtilTypes';
+import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
 
 export const useOpprettKlage = (args: {
     sakId: string;
@@ -49,10 +50,10 @@ export const useVurderKlage = (args: {
 export const useOpprettRammebehandlingForKlage = (args: {
     sakId: string;
     klageId: KlageId;
-    onSuccess: (rammebehandling: Rammebehandling) => void;
+    onSuccess: (behandling: Rammebehandling | MeldekortbehandlingPropsV2) => void;
 }) =>
     useFetchJsonFraApi<Rammebehandling, OpprettOmgjøringsbehandlingForKlageRequest>(
-        `/sak/${args.sakId}/klage/${args.klageId}/opprettRammebehandling`,
+        `/sak/${args.sakId}/klage/${args.klageId}/opprettBehandling`,
         'POST',
         { onSuccess: args.onSuccess },
     );

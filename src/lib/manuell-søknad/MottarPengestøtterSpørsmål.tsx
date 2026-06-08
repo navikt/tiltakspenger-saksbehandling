@@ -1,4 +1,3 @@
-import React from 'react';
 import { FieldPath, useController, useFormContext } from 'react-hook-form';
 import type {
     JaNeiSvar,

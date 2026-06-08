@@ -1,6 +1,6 @@
 import { Alert, Button, Loader, InlineMessage, BodyShort, VStack } from '@navikt/ds-react';
 import { BekreftelsesModal } from '~/lib/_felles/modaler/BekreftelsesModal';
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import { useSak } from '~/lib/sak/SakContext';
 import { MeldekortbehandlingType } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { meldekortbehandlingUrl } from '~/utils/urls';

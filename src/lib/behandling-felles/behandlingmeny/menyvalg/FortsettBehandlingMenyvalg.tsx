@@ -1,6 +1,5 @@
 import { ActionMenu } from '@navikt/ds-react';
 import { ÅpenRammebehandlingForOversikt } from '~/lib/personoversikt/typer/ÅpenBehandlingForOversikt';
-import React from 'react';
 import Link from 'next/link';
 import { eierBehandling, erSattPaVent } from '~/lib/saksbehandler/tilganger';
 import { Saksbehandler } from '~/lib/saksbehandler/SaksbehandlerTyper';

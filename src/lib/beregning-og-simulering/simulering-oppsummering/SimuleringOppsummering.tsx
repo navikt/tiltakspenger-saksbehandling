@@ -8,11 +8,11 @@ import {
     OppdaterSimuleringKnapp,
     OppdaterSimuleringProps,
 } from '~/lib/beregning-og-simulering/oppdater-simulering/OppdaterSimuleringKnapp';
-import { BehandlingIdFelles } from '~/lib/behandling-felles/typer/BehandlingFelles';
+import { BehandlingId } from '~/lib/behandling-felles/typer/BehandlingFelles';
 
 import style from './SimuleringOppsummering.module.css';
 
-type Props<BehId extends BehandlingIdFelles> = {
+type Props<BehId extends BehandlingId> = {
     simulertBeregning: SimulertBeregning;
 } & (
     | ({
@@ -23,7 +23,7 @@ type Props<BehId extends BehandlingIdFelles> = {
       }
 );
 
-export const SimuleringOppsummering = <BehId extends BehandlingIdFelles>(props: Props<BehId>) => {
+export const SimuleringOppsummering = <BehId extends BehandlingId>(props: Props<BehId>) => {
     const { simulertBeregning, visOppdaterKnapp } = props;
     const { simuleringResultat, simulerteBeløp } = simulertBeregning;
 

@@ -1,6 +1,5 @@
 import { Button, VStack } from '@navikt/ds-react';
 import { EnvelopeOpenIcon } from '@navikt/aksel-icons';
-import React from 'react';
 import { useFetchBlobFraApi } from '~/utils/fetch/useFetchFraApi';
 import { ForhåndsvisMeldekortbehandlingBrevRequest } from '~/lib/meldekort/2-hovedseksjon/behandling/utfylling/meldekortUtfyllingUtils';
 import { useSak } from '~/lib/sak/SakContext';

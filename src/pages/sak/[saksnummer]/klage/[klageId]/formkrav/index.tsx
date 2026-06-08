@@ -62,7 +62,7 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
     }
 
     const omgjøringsbehandling =
-        sak.behandlinger.find((b) => initialKlage.åpenRammebehandlingId === b.id) ?? null;
+        sak.behandlinger.find((b) => initialKlage.åpenBehandlingId === b.id) ?? null;
 
     return { props: { sak, initialKlage, omgjøringsbehandling } };
 });

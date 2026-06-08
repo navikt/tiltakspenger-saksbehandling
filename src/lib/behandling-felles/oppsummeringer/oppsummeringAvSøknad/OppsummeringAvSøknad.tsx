@@ -1,4 +1,3 @@
-import React from 'react';
 import { Periode } from '~/types/Periode';
 import { useConfig } from '~/context/ConfigContext';
 import {

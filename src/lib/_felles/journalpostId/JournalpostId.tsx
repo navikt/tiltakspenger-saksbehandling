@@ -1,5 +1,5 @@
 import { InlineMessage, Loader, TextField } from '@navikt/ds-react';
-import React, { useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { useValiderJournalpostId } from './useValiderJournalpostId';
 import { useDebounce } from 'use-debounce';

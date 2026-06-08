@@ -25,10 +25,11 @@ import { KlageId } from '../../klage/typer/Klage';
 import { VentestatusHendelse } from '../../../types/Ventestatus';
 import { TilbakekrevingId } from '~/lib/tilbakekreving/typer/Tilbakekreving';
 
-export type BehandlingId = `beh_${string}`;
+export const RammebehandlingPrefix = 'beh_' as const;
+export type RammebehandlingId = `${typeof RammebehandlingPrefix}${string}`;
 
 export interface RammebehandlingBase {
-    id: BehandlingId;
+    id: RammebehandlingId;
     type: Rammebehandlingstype;
     status: Rammebehandlingsstatus;
     resultat: RammebehandlingResultat;

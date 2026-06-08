@@ -40,17 +40,17 @@ import {
     useLagreKlagebrev,
     useOpprettholdKlage,
 } from '~/lib/klage/api/KlageApi';
-import { Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { Nullable } from '~/types/UtilTypes';
 import Link from 'next/link';
 import { OppsummeringAvVentestatuserModal } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
+import { Vedtak } from '~/lib/vedtak/typer/Vedtak';
 
 type Props = {
     sak: SakProps;
     initialKlage: Klagebehandling & {
         resultat: KlagebehandlingsresultatOpprettholdt | KlagebehandlingsresultatAvvist;
     };
-    påklagetVedtak: Nullable<Rammevedtak>;
+    påklagetVedtak: Nullable<Vedtak>;
 };
 
 export const getServerSideProps = pageWithAuthentication(async (context) => {
@@ -75,7 +75,11 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
     const påklagetVedtak =
         sak.alleRammevedtak.find(
             (vedtak) => vedtak.id === initialKlage.formkrav.vedtakDetKlagesPå,
-        ) ?? null;
+        ) ??
+        sak.meldekortvedtak.find(
+            (vedtak) => vedtak.id === initialKlage.formkrav.vedtakDetKlagesPå,
+        ) ??
+        null;
 
     return { props: { sak, initialKlage, påklagetVedtak } };
 });

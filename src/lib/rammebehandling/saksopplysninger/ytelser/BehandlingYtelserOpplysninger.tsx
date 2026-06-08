@@ -6,7 +6,7 @@ import styles from './BehandlingYtelserOpplysninger.module.css';
 import { formaterPeriode } from '~/utils/date';
 import { Periode } from '~/types/Periode';
 import { sorterPerioder, totalPeriode } from '~/utils/periode';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 type Props = {
     ytelser: Ytelse[];

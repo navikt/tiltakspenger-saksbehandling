@@ -1,7 +1,7 @@
 import { SakId, SakProps } from '~/lib/sak/SakTyper';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { Nullable } from '~/types/UtilTypes';
-import { BehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
 
 export type SettBehandlingPåVentDTO = {
     sakId: Nullable<string>;
@@ -10,7 +10,7 @@ export type SettBehandlingPåVentDTO = {
     frist: Nullable<string>;
 };
 
-export const useSettBehandlingPåVent = (sakId: SakId, behandlingId: BehandlingId) => {
+export const useSettBehandlingPåVent = (sakId: SakId, behandlingId: RammebehandlingId) => {
     const {
         trigger: settBehandlingPåVent,
         isMutating: isSettBehandlingPåVentMutating,

@@ -2,7 +2,6 @@ import { Heading, VStack } from '@navikt/ds-react';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
 import { useMeldekortbehandling } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2Context';
 import { InfokortEnkel } from '~/lib/_felles/infokort/InfokortEnkel';
-import React from 'react';
 import { UtbetalingBeløp } from '~/lib/_felles/utbetaling/beløp/UtbetalingBeløp';
 
 type Props = {

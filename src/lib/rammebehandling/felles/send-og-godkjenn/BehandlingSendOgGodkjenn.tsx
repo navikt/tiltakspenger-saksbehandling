@@ -6,7 +6,7 @@ import { BehandlingSendTilBeslutning } from '~/lib/rammebehandling/felles/send-o
 import { BehandlingGodkjenn } from '~/lib/rammebehandling/felles/send-og-godkjenn/godkjenn/BehandlingGodkjenn';
 import { BehandlingLagreKnapp } from '~/lib/rammebehandling/felles/send-og-godkjenn/lagre/BehandlingLagreKnapp';
 import { ValideringResultat } from '~/lib/rammebehandling/typer/Validering';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { BehandlingValideringVarsler } from '~/lib/rammebehandling/felles/send-og-godkjenn/varsler/BehandlingValideringVarsler';
 import {
     BehandlingLagringResultat,

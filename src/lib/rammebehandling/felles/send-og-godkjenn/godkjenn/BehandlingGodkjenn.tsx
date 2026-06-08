@@ -1,5 +1,5 @@
 import { Button, HStack } from '@navikt/ds-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useBehandling } from '../../../context/BehandlingContext';
 import { BekreftelsesModal } from '~/lib/_felles/modaler/BekreftelsesModal';
 import { Underkjenn } from '~/lib/behandling-felles/underkjenn/Underkjenn';

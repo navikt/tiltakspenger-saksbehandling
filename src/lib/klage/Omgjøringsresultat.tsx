@@ -2,21 +2,31 @@ import { VStack, InfoCard, Button, HStack } from '@navikt/ds-react';
 import Link from 'next/link';
 import { useState } from 'react';
 import { Klagebehandling, KlagebehandlingsresultatOmgjør } from '~/lib/klage/typer/Klage';
-import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { Rammebehandling, RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { Saksbehandler } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import { Søknad } from '~/types/Søknad';
 import { erKlageVedtatt, erKlageFerdigstilt, erKlageAvsluttet } from '~/lib/klage/utils/klageUtils';
-import { behandlingUrl } from '~/utils/urls';
+import { behandlingUrl, meldeperiodeUrl } from '~/utils/urls';
 import { VelgOmgjøringsbehandlingModal } from '~/lib/klage/forms/velg-omgjøringsbehandling/VelgOmgjøringsbehandlingForm';
 import FerdigstillKlageModalWrapper from './modaler/FerdigstillKlagebehandlingModal';
 import KlageTilknyttedeBehandlingerInfoCard from './KlageTilknyttedeBehandlingerInfoCard';
+import {
+    erBehandlingIdMeldekortbehandling,
+    erBehandlingIdRammebehandling,
+} from '../behandling-felles/utils/BehandlingUtils';
+import { MeldekortbehandlingId } from '../meldekort/typer/Meldekortbehandling';
+import { MeldekortVedtak } from '../meldekort/typer/MeldekortVedtak';
+import { Nullable, PartialRecord } from '~/types/UtilTypes';
+import { MeldekortbehandlingPropsV2 } from '../meldekort/v2/typer';
 
 const Omgjøringsresultat = (props: {
     klage: Klagebehandling & { resultat: KlagebehandlingsresultatOmgjør };
-    vedtak: Rammevedtak[];
+    rammevedtak: Rammevedtak[];
+    meldekortvedtak: MeldekortVedtak[];
     søknader: Søknad[];
     rammebehandlinger: Rammebehandling[];
+    meldekortbehandlinger: PartialRecord<MeldekortbehandlingId, MeldekortbehandlingPropsV2>;
     innloggetSaksbehandler: Saksbehandler;
 }) => {
     return (
@@ -25,12 +35,21 @@ const Omgjøringsresultat = (props: {
             <KlageTilknyttedeBehandlingerInfoCard
                 klage={props.klage}
                 rammebehandlinger={props.rammebehandlinger}
+                meldekortbehandlinger={props.meldekortbehandlinger}
             />
             <KlageOmgjøringsbehandlingAksjoner
                 klage={props.klage}
                 innloggetSaksbehandler={props.innloggetSaksbehandler}
-                vedtak={props.vedtak}
+                rammevedtak={props.rammevedtak}
                 søknader={props.søknader}
+                meldekortvedtak={props.meldekortvedtak}
+                omgjøringsbehandling={
+                    props.meldekortbehandlinger[
+                        props.klage.åpenBehandlingId as MeldekortbehandlingId
+                    ] ??
+                    props.rammebehandlinger.find((b) => b.id === props.klage.åpenBehandlingId) ??
+                    null
+                }
             />
         </VStack>
     );
@@ -65,9 +84,9 @@ const OmgjøringsresultatInfo = (props: {
     }
 
     if (erKlagenFerdigstilt) {
-        const harTilknyttetBehandling = props.klage.tilknyttedeRammebehandlingIder.length > 0;
+        const harTilknyttetBehandling = props.klage.tilknyttedeBehandlingIder.length > 0;
 
-        const harÅpenBehandling = !!props.klage.åpenRammebehandlingId;
+        const harÅpenBehandling = !!props.klage.åpenBehandlingId;
 
         return (
             <InfoCard data-color="success">
@@ -100,12 +119,18 @@ const OmgjøringsresultatInfo = (props: {
 const KlageOmgjøringsbehandlingAksjoner = (props: {
     klage: Klagebehandling;
     innloggetSaksbehandler: Saksbehandler;
-    vedtak: Rammevedtak[];
+    rammevedtak: Rammevedtak[];
     søknader: Søknad[];
+    meldekortvedtak: MeldekortVedtak[];
+    omgjøringsbehandling: Nullable<MeldekortbehandlingPropsV2 | Rammebehandling>;
 }) => {
     const erReadonlyForSaksbehandler =
         props.innloggetSaksbehandler.navIdent !== props.klage.saksbehandler;
-    const harÅpenBehandling = !!props.klage.åpenRammebehandlingId;
+    const harÅpenBehandling = !!props.klage.åpenBehandlingId;
+    const klagerPåRammebehandling =
+        harÅpenBehandling && erBehandlingIdRammebehandling(props.klage.åpenBehandlingId!);
+    const klagerPåMeldekortbehandling =
+        harÅpenBehandling && erBehandlingIdMeldekortbehandling(props.klage.åpenBehandlingId!);
 
     const [vilVelgeOmgjøringsbehandlingModal, setVilVelgeOmgjøringsbehandlingModal] =
         useState(false);
@@ -113,16 +138,32 @@ const KlageOmgjøringsbehandlingAksjoner = (props: {
     return (
         <div>
             {harÅpenBehandling ? (
-                <Button
-                    as={Link}
-                    variant="secondary"
-                    href={behandlingUrl({
-                        saksnummer: props.klage.saksnummer,
-                        id: props.klage.åpenRammebehandlingId!,
-                    })}
-                >
-                    Gå til omgjøringsbehandling
-                </Button>
+                <>
+                    {klagerPåRammebehandling && (
+                        <Button
+                            as={Link}
+                            variant="secondary"
+                            href={behandlingUrl({
+                                saksnummer: props.klage.saksnummer,
+                                id: props.klage.åpenBehandlingId as RammebehandlingId,
+                            })}
+                        >
+                            Gå til omgjøringsbehandling
+                        </Button>
+                    )}
+                    {klagerPåMeldekortbehandling && (
+                        <Button
+                            as={Link}
+                            variant="secondary"
+                            href={meldeperiodeUrl(
+                                props.klage.saksnummer,
+                                (props.omgjøringsbehandling as MeldekortbehandlingPropsV2).periode,
+                            )}
+                        >
+                            Gå til omgjøringsbehandling
+                        </Button>
+                    )}
+                </>
             ) : (
                 <HStack gap="space-16">
                     {!erKlageVedtatt(props.klage) && (
@@ -142,14 +183,14 @@ const KlageOmgjøringsbehandlingAksjoner = (props: {
                     )}
                 </HStack>
             )}
-
             {vilVelgeOmgjøringsbehandlingModal && (
                 <VelgOmgjøringsbehandlingModal
                     sakId={props.klage.sakId}
                     saksnummer={props.klage.saksnummer}
-                    klageId={props.klage.id}
-                    vedtak={props.vedtak}
+                    klagebehandling={props.klage}
+                    rammevedtak={props.rammevedtak}
                     søknader={props.søknader}
+                    meldekortvedtak={props.meldekortvedtak}
                     åpen={vilVelgeOmgjøringsbehandlingModal}
                     onClose={() => setVilVelgeOmgjøringsbehandlingModal(false)}
                 />

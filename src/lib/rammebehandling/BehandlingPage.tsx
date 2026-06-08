@@ -7,7 +7,7 @@ import {
     Rammebehandlingstype,
 } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { PersonaliaHeader } from '../personaliaheader/PersonaliaHeader';
-import { Alert, VStack } from '@navikt/ds-react';
+import { Alert, Box, VStack } from '@navikt/ds-react';
 import { finnBehandlingStatusTag } from '~/utils/tekstformateringUtils';
 import AvbruttOppsummering from '~/lib/behandling-felles/oppsummeringer/oppsummeringAvAvbrutt/OppsummeringAvAvbrutt';
 import SideBarMain from '~/lib/_felles/layouts/sidebar-main/SideBarMain';
@@ -25,6 +25,9 @@ import { Separator } from '~/lib/_felles/separator/Separator';
 export const BehandlingPage = () => {
     const { sak } = useSak();
     const { behandling } = useBehandling();
+
+    const behandlingensKlage =
+        sak.klageBehandlinger.find((kb) => kb.id === behandling.klagebehandlingId) ?? null;
 
     const {
         id,
@@ -98,7 +101,13 @@ export const BehandlingPage = () => {
                             )}
                             <Tidslinjer sak={sak} />
                             {avbrutt && <AvbruttOppsummering avbrutt={avbrutt} withPanel={true} />}
-                            <OppsummeringAvKlageForRammebehandling />
+                            {behandlingensKlage && (
+                                <Box borderWidth="1">
+                                    <OppsummeringAvKlageForRammebehandling
+                                        klagebehandling={behandlingensKlage}
+                                    />
+                                </Box>
+                            )}
                             <div className={style.vedtakContainer}>
                                 {type === Rammebehandlingstype.SØKNADSBEHANDLING ? (
                                     <SøknadsbehandlingVedtak />

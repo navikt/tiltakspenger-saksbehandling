@@ -2,17 +2,19 @@ import { Alert, Button, HStack } from '@navikt/ds-react';
 import { useOppdaterSimulering } from './useOppdaterSimulering';
 import { MeldeperiodeKjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
 import { useSak } from '~/lib/sak/SakContext';
-import { BehandlingIdFelles } from '~/lib/behandling-felles/typer/BehandlingFelles';
-import { BehandlingId, Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { BehandlingId } from '~/lib/behandling-felles/typer/BehandlingFelles';
+import { RammebehandlingId, Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 
-export type OppdaterSimuleringProps<BehId extends BehandlingIdFelles> = {
+export type OppdaterSimuleringProps<BehId extends BehandlingId> = {
     behandlingId: BehId;
     oppdaterBehandlingEllerKjede: (
-        behandlingEllerKjede: BehId extends BehandlingId ? Rammebehandling : MeldeperiodeKjedeProps,
+        behandlingEllerKjede: BehId extends RammebehandlingId
+            ? Rammebehandling
+            : MeldeperiodeKjedeProps,
     ) => void;
 };
 
-export const OppdaterSimuleringKnapp = <BehId extends BehandlingIdFelles>({
+export const OppdaterSimuleringKnapp = <BehId extends BehandlingId>({
     behandlingId,
     oppdaterBehandlingEllerKjede,
 }: OppdaterSimuleringProps<BehId>) => {

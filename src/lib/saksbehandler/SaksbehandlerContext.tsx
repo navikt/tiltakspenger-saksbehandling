@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode, useContext } from 'react';
+import { createContext, ReactNode, useContext } from 'react';
 import { Saksbehandler } from './SaksbehandlerTyper';
 import { hentRolleForBehandling } from '~/lib/saksbehandler/tilganger';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';

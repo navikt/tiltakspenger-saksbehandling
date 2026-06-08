@@ -42,7 +42,7 @@ import { useMeldekortbehandlingForm } from '~/lib/meldekort/context/MeldekortUtf
 import SettBehandlingPåVentModal from '~/lib/_felles/modaler/SettBehandlingPåVentModal';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import { skalKunneSetteMeldekortbehandlingPaVent } from '~/lib/meldekort/utils/MeldekortbehandlingUtils';
-import { oppdaterMeldeperiodeKjedeMedMeldekortbehandling } from '~/lib/meldekort/utils/MeldekortbehandlingUtils';
+
 import router from 'next/router';
 import {
     useOppdaterMeldekortbehandling,
@@ -57,7 +57,8 @@ type Props = {
 };
 
 export const MeldekortUtfylling = ({ meldekortbehandling }: Props) => {
-    const { sakId, saksnummer } = useSak().sak;
+    const { sak, setSak } = useSak();
+    const { sakId, saksnummer } = sak;
     const { navigateWithNotification } = useNotification();
     const { meldeperiodeKjede, setMeldeperiodeKjede } = useMeldeperiodeKjede();
     const { innloggetSaksbehandler } = useSaksbehandler();
@@ -74,13 +75,8 @@ export const MeldekortUtfylling = ({ meldekortbehandling }: Props) => {
     const settMeldekortbehandlingPåVent = useSettMeldekortbehandlingPåVent({
         sakId,
         meldekortbehandlingId,
-        onSuccess: (oppdatertMeldekortbehandling) => {
-            setMeldeperiodeKjede(
-                oppdaterMeldeperiodeKjedeMedMeldekortbehandling(
-                    meldeperiodeKjede,
-                    oppdatertMeldekortbehandling,
-                ),
-            );
+        onSuccess: (oppdatertSak) => {
+            setSak(oppdatertSak);
             router.push(`/sak/${saksnummer}`);
         },
     });

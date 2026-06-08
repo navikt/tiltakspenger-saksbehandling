@@ -7,6 +7,7 @@ export interface VelgOmgjøringsbehandlingFormData {
     behandlingstype: VelgOmgjøringsbehandlingTyper | '';
     søknadId: SøknadId | '';
     vedtakSomSkalOmgjøres: VedtakId | '';
+    kjedeId: string;
 }
 
 export const velgOmgjøringsbehandlingFormValidation = (data: VelgOmgjøringsbehandlingFormData) => {
@@ -39,6 +40,16 @@ export const velgOmgjøringsbehandlingFormValidation = (data: VelgOmgjøringsbeh
         };
     }
 
+    if (
+        data.behandlingstype === VelgOmgjøringsbehandlingTyper.MELDEKORTBEHANDLING &&
+        data.kjedeId === ''
+    ) {
+        errors.kjedeId = {
+            type: 'required',
+            message: 'Du må velge en kjede',
+        };
+    }
+
     return { values: data, errors: errors };
 };
 
@@ -46,9 +57,10 @@ export enum VelgOmgjøringsbehandlingTyper {
     SØKNADSBEHANDLING = 'SØKNADSBEHANDLING_INNVILGELSE',
     REVURDERING_INNVILGELSE = 'REVURDERING_INNVILGELSE',
     REVURDERING_OMGJØRING = 'REVURDERING_OMGJØRING',
+    MELDEKORTBEHANDLING = 'MELDEKORTBEHANDLING',
 }
 
-export const velgOmgjøringsbehandlingFormDataTilOpprettRammebehandlingRequest = (
+export const velgOmgjøringsbehandlingFormDataTilOpprettBehandlingRequest = (
     formdata: VelgOmgjøringsbehandlingFormData,
 ): OpprettOmgjøringsbehandlingForKlageRequest => {
     return {
@@ -61,5 +73,6 @@ export const velgOmgjøringsbehandlingFormDataTilOpprettRammebehandlingRequest =
             formdata.behandlingstype === VelgOmgjøringsbehandlingTyper.REVURDERING_OMGJØRING
                 ? formdata.vedtakSomSkalOmgjøres
                 : null,
+        kjedeId: formdata.kjedeId ? formdata.kjedeId : null,
     };
 };

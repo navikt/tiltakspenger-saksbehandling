@@ -1,4 +1,3 @@
-import React from 'react';
 import { FieldPath, useController, useFormContext } from 'react-hook-form';
 import { JaNeiSpørsmål } from '~/lib/manuell-søknad/JaNeiSpørsmål';
 import { Datovelger } from '~/lib/_felles/datovelger/Datovelger';

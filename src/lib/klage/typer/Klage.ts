@@ -1,11 +1,11 @@
 import { Avbrutt } from '../../behandling-felles/typer/Avbrutt';
 import { Klageinstanshendelse } from './Klageinstanshendelse';
-import { BehandlingId } from '../../rammebehandling/typer/Rammebehandling';
 import { VedtakId } from '../../rammebehandling/typer/Rammevedtak';
 import { SakId } from '../../sak/SakTyper';
 import { Nullable } from '../../../types/UtilTypes';
 import { VentestatusHendelse } from '../../../types/Ventestatus';
 import { Klagevedtak } from '~/lib/klage/typer/Klagevedtak';
+import { BehandlingId } from '~/lib/behandling-felles/typer/BehandlingFelles';
 
 export type KlageId = `klage_${string}`;
 
@@ -45,8 +45,8 @@ export interface Klagebehandling {
     kanIverksetteOpprettholdelse: boolean;
     ventestatus: VentestatusHendelse[];
     formkrav: KlageFormkrav;
-    tilknyttedeRammebehandlingIder: BehandlingId[];
-    åpenRammebehandlingId: Nullable<BehandlingId>;
+    tilknyttedeBehandlingIder: BehandlingId[];
+    åpenBehandlingId: Nullable<BehandlingId>;
 }
 
 export interface KlageFormkrav {
@@ -161,9 +161,14 @@ export interface LagreBrevtekstKlageRequest {
 }
 
 export interface OpprettOmgjøringsbehandlingForKlageRequest {
-    type: 'SØKNADSBEHANDLING_INNVILGELSE' | 'REVURDERING_INNVILGELSE' | 'REVURDERING_OMGJØRING';
+    type:
+        | 'SØKNADSBEHANDLING_INNVILGELSE'
+        | 'REVURDERING_INNVILGELSE'
+        | 'REVURDERING_OMGJØRING'
+        | 'MELDEKORTBEHANDLING';
     søknadId: Nullable<string>;
     vedtakIdSomSkalOmgjøres: Nullable<string>;
+    kjedeId: Nullable<string>;
 }
 
 export type KlagevedtakMedBehandling = { type: 'klagevedtak' } & Klagevedtak & {

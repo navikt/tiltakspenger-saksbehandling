@@ -1,5 +1,5 @@
 import { Button } from '@navikt/ds-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import AvsluttBehandlingModal from '~/lib/_felles/modaler/AvsluttBehandlingModal';
 
 import router from 'next/router';
