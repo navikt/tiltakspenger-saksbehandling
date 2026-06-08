@@ -56,7 +56,7 @@ export const kanSaksbehandleForMeldekort = (
     !erMeldekortbehandlingSattPaVent(meldekortbehandling);
 
 export const kanBeslutteForMeldekort = (
-    meldekort: MeldekortbehandlingProps,
+    meldekort: MeldekortbehandlingProps | MeldekortbehandlingPropsV2,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     const { status, saksbehandler } = meldekort;

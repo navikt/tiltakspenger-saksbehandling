@@ -17,11 +17,11 @@ import {
     VStack,
 } from '@navikt/ds-react';
 import React from 'react';
-import { useFetchJsonFraApi } from '../../utils/fetch/useFetchFraApi';
+import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import router from 'next/router';
-import { pageWithAuthentication } from '../../auth/pageWithAuthentication';
+import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
-import { dateTilISOTekst } from '../../utils/date';
+import { dateTilISOTekst } from '~/utils/date';
 import { personoversiktUrl } from '~/utils/urls';
 
 import { Nullable } from '~/types/UtilTypes';

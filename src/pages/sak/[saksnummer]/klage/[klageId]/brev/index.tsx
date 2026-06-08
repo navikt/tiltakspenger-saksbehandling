@@ -14,7 +14,7 @@ import {
     KlageId,
 } from '~/lib/klage/typer/Klage';
 import KlageLayout, { KlageProvider, useKlage } from '../../layout';
-import { KlageSteg } from '../../../../../../lib/klage/utils/KlageLayoutUtils';
+import { KlageSteg } from '~/lib/klage/utils/KlageLayoutUtils';
 import { CheckmarkCircleIcon, EnvelopeOpenIcon } from '@navikt/aksel-icons';
 import WarningCircleIcon from '~/lib/_felles/icons/WarningCircleIcon';
 import {

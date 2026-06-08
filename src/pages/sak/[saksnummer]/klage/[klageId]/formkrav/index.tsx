@@ -18,7 +18,7 @@ import {
 } from '~/lib/klage/forms/formkrav/FormkravFormUtils';
 import { Klagebehandling, KlageId } from '~/lib/klage/typer/Klage';
 import KlageLayout, { KlageProvider, useKlage } from '../../layout';
-import { finnNesteKlageSteg, KlageSteg } from '../../../../../../lib/klage/utils/KlageLayoutUtils';
+import { finnNesteKlageSteg, KlageSteg } from '~/lib/klage/utils/KlageLayoutUtils';
 import { CheckmarkCircleIcon, PencilIcon, TrashIcon } from '@navikt/aksel-icons';
 import { useHentPersonopplysninger } from '~/lib/personaliaheader/useHentPersonopplysninger';
 import { personoversiktUrl } from '~/utils/urls';

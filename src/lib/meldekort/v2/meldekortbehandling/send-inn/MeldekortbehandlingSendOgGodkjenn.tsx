@@ -1,8 +1,14 @@
 import { MeldekortbehandlingSeksjon } from '~/lib/meldekort/v2/meldekortbehandling/layout/seksjon/MeldekortbehandlingSeksjon';
 import { MeldekortbehandlingTilBeslutning } from '~/lib/meldekort/v2/meldekortbehandling/fritekst-og-innsending/til-beslutning/MeldekortbehandlingTilBeslutning';
+import { MeldekortbehandlingGodkjenn } from '~/lib/meldekort/v2/meldekortbehandling/fritekst-og-innsending/godkjenn/MeldekortbehandlingGodkjenn';
+import { MeldekortbehandlingUnderkjenn } from '~/lib/meldekort/v2/meldekortbehandling/fritekst-og-innsending/underkjenn/MeldekortbehandlingUnderkjenn';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import { useMeldekortbehandling } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2Context';
-import { kanSaksbehandleForMeldekort } from '~/lib/meldekort/utils/MeldekortbehandlingUtils';
+import {
+    kanBeslutteForMeldekort,
+    kanSaksbehandleForMeldekort,
+} from '~/lib/meldekort/utils/MeldekortbehandlingUtils';
+import { HStack } from '@navikt/ds-react';
 
 export const MeldekortbehandlingSendOgGodkjenn = () => {
     const { innloggetSaksbehandler } = useSaksbehandler();
@@ -14,6 +20,12 @@ export const MeldekortbehandlingSendOgGodkjenn = () => {
             <MeldekortbehandlingSeksjon.FullBredde align={'end'}>
                 {kanSaksbehandleForMeldekort(meldekortbehandling, innloggetSaksbehandler) && (
                     <MeldekortbehandlingTilBeslutning />
+                )}
+                {kanBeslutteForMeldekort(meldekortbehandling, innloggetSaksbehandler) && (
+                    <HStack gap={'space-8'}>
+                        <MeldekortbehandlingUnderkjenn />
+                        <MeldekortbehandlingGodkjenn />
+                    </HStack>
                 )}
             </MeldekortbehandlingSeksjon.FullBredde>
         </MeldekortbehandlingSeksjon>
