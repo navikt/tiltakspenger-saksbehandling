@@ -4,7 +4,7 @@ import { BekreftelsesModal } from '~/lib/_felles/modaler/BekreftelsesModal';
 import { useRef } from 'react';
 import { useSak } from '~/lib/sak/SakContext';
 import { useMeldeperiodeKjede } from '../../context/MeldeperiodeKjedeContext';
-import { MeldekortbehandlingType } from '~/lib/meldekort/typer/Meldekortbehandling';
+import { MeldeperiodebehandlingType } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { MeldeperiodeKjedeStatus } from '~/lib/meldekort/typer/Meldeperiode';
 import NextLink from 'next/link';
 import { meldeperiodeUrl } from '~/utils/urls';
@@ -13,7 +13,7 @@ import { formaterPeriode } from '~/utils/date';
 import styles from './MeldekortbehandlingOpprett.module.css';
 
 type Props = {
-    type: MeldekortbehandlingType;
+    type: MeldeperiodebehandlingType;
 };
 
 export const MeldekortbehandlingOpprett = ({ type }: Props) => {
@@ -108,16 +108,16 @@ export const MeldekortbehandlingOpprett = ({ type }: Props) => {
 };
 
 const teksterForType = {
-    [MeldekortbehandlingType.FØRSTE_BEHANDLING]: {
+    [MeldeperiodebehandlingType.FØRSTE_BEHANDLING]: {
         start: 'Start behandling',
         kanIkkeStarte: 'Kan ikke starte behandling av meldekortet',
         modalTittel: 'Start behandling av meldekortet',
         modalTekst: 'Vil du starte behandling av dette meldekortet?',
     },
-    [MeldekortbehandlingType.KORRIGERING]: {
+    [MeldeperiodebehandlingType.KORRIGERING]: {
         start: 'Start korrigering',
         kanIkkeStarte: 'Kan ikke starte korrigering av meldekortet',
         modalTittel: 'Start korrigering av meldekortet',
         modalTekst: 'Vil du starte korrigering av dette meldekortet?',
     },
-} as const satisfies Record<MeldekortbehandlingType, Record<string, string>>;
+} as const satisfies Record<MeldeperiodebehandlingType, Record<string, string>>;

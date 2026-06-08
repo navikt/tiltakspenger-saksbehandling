@@ -1,11 +1,11 @@
 import {
     MeldekortbehandlingStatus,
-    MeldekortbehandlingType,
+    MeldeperiodebehandlingType,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 
-export const meldekortbehandlingTypeTekst: Record<MeldekortbehandlingType, string> = {
-    [MeldekortbehandlingType.FØRSTE_BEHANDLING]: 'Førstegangsbehandling',
-    [MeldekortbehandlingType.KORRIGERING]: 'Korrigering',
+export const meldeperiodebehandlingTypeTekst: Record<MeldeperiodebehandlingType, string> = {
+    [MeldeperiodebehandlingType.FØRSTE_BEHANDLING]: 'Førstegangsbehandling',
+    [MeldeperiodebehandlingType.KORRIGERING]: 'Korrigering',
 } as const;
 
 export const meldekortbehandlingStatusTekst: Record<MeldekortbehandlingStatus, string> = {

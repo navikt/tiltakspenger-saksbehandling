@@ -12,7 +12,7 @@ import { meldeperiodeUrl, personoversiktUrl } from '~/utils/urls';
 import {
     MeldekortbehandlingProps,
     MeldekortbehandlingStatus,
-    MeldekortbehandlingType,
+    MeldeperiodebehandlingType,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { formatterBeløp } from '~/utils/beløp';
 import { SakId } from '~/lib/sak/SakTyper';
@@ -97,7 +97,8 @@ export const MeldekortOversikt = ({ meldeperiodeKjeder }: Props) => {
 
                         const erKorrigering =
                             status !== MeldeperiodeKjedeStatus.KORRIGERT_MELDEKORT &&
-                            sisteMeldekortbehandling?.type === MeldekortbehandlingType.KORRIGERING;
+                            sisteMeldekortbehandling?.type ===
+                                MeldeperiodebehandlingType.KORRIGERING;
 
                         const erSattPåVent = sisteMeldekortbehandling
                             ? erMeldekortbehandlingSattPaVent(sisteMeldekortbehandling)

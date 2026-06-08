@@ -49,7 +49,7 @@ export enum ReduksjonAvYtelse {
     YTELSEN_FALLER_BORT = 'YTELSEN_FALLER_BORT',
 }
 
-export enum MeldekortbehandlingType {
+export enum MeldeperiodebehandlingType {
     FØRSTE_BEHANDLING = 'FØRSTE_BEHANDLING',
     KORRIGERING = 'KORRIGERING',
 }
@@ -68,7 +68,7 @@ export type MeldekortbehandlingProps = {
     navkontor: string;
     navkontorNavn?: string;
     begrunnelse?: string;
-    type: MeldekortbehandlingType;
+    type: MeldeperiodebehandlingType;
     attesteringer: Attestering[];
     utbetalingsstatus: Utbetalingsstatus;
     periode: Periode;
@@ -127,11 +127,6 @@ type OppdaterMeldekortdagDTO = {
     status: MeldekortbehandlingDagStatus;
 };
 
-export type OpprettMeldekortbehandlingDTO =
-    | {
-          v2: false;
-      }
-    | {
-          type: MeldekortbehandlingType;
-          v2: true;
-      };
+export type OpprettMeldekortbehandlingDTO = {
+    v2: boolean;
+};

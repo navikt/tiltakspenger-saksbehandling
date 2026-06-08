@@ -10,7 +10,7 @@ import { MeldekortbehandlingTaKnapp } from './ta-behandling/MeldekortbehandlingT
 import {
     MeldekortbehandlingProps,
     MeldekortbehandlingStatus,
-    MeldekortbehandlingType,
+    MeldeperiodebehandlingType,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { useSak } from '~/lib/sak/SakContext';
 import { ArrayOrSingle } from '~/types/UtilTypes';
@@ -83,7 +83,7 @@ export const MeldekortVenstreSeksjon = () => {
             {sisteMeldekortbehandling ? (
                 <MeldekortbehandlingDetaljer meldekortbehandling={sisteMeldekortbehandling} />
             ) : (
-                <MeldekortbehandlingOpprett type={MeldekortbehandlingType.FØRSTE_BEHANDLING} />
+                <MeldekortbehandlingOpprett type={MeldeperiodebehandlingType.FØRSTE_BEHANDLING} />
             )}
         </VStack>
     );
@@ -108,7 +108,7 @@ const MeldekortbehandlingDetaljer = ({
             )}
 
             {erAvsluttet && (
-                <MeldekortbehandlingOpprett type={MeldekortbehandlingType.KORRIGERING} />
+                <MeldekortbehandlingOpprett type={MeldeperiodebehandlingType.KORRIGERING} />
             )}
 
             {status === MeldekortbehandlingStatus.KLAR_TIL_BEHANDLING && (

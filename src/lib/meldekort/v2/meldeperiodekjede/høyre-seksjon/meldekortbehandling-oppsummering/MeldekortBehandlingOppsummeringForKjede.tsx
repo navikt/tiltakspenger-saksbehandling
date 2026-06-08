@@ -13,7 +13,7 @@ import { meldekortbehandlingUrl } from '~/utils/urls';
 import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import {
     meldekortbehandlingStatusTekst,
-    meldekortbehandlingTypeTekst,
+    meldeperiodebehandlingTypeTekst,
 } from '~/lib/meldekort/v2/tekster';
 
 import style from './MeldekortBehandlingOppsummeringForKjede.module.css';
@@ -39,7 +39,7 @@ export const MeldekortBehandlingOppsummeringForKjede = ({
         );
     }
 
-    const { status, meldeperioder, saksbehandler, beslutter, opprettet, godkjentTidspunkt, type } =
+    const { status, meldeperioder, saksbehandler, beslutter, opprettet, godkjentTidspunkt } =
         meldekortbehandling;
 
     const meldeperiodebehandlingForKjede = meldeperioder.find((it) => it.kjedeId === kjedeId);
@@ -57,7 +57,7 @@ export const MeldekortBehandlingOppsummeringForKjede = ({
             <HStack className={style.header} gap={'space-12'}>
                 <VStack>
                     <Heading level={'3'} size={'small'}>
-                        {meldekortbehandlingTypeTekst[type]}
+                        {meldeperiodebehandlingTypeTekst[meldeperiodebehandlingForKjede.type]}
                     </Heading>
                     <InternLenke
                         href={meldekortbehandlingUrl(sak.saksnummer, meldekortbehandlingId)}

@@ -1,4 +1,4 @@
-import { BodyShort, Heading, HStack, Tabs, VStack } from '@navikt/ds-react';
+import { BodyShort, HStack, Tabs, VStack } from '@navikt/ds-react';
 import { useMeldeperiodeKjedeV2 } from '~/lib/meldekort/v2/meldeperiodekjede/context/MeldeperiodeKjedeContextV2';
 import { MeldeperiodekjedeGjeldendeBeregning } from '~/lib/meldekort/v2/meldeperiodekjede/høyre-seksjon/gjeldende-beregning/MeldeperiodekjedeGjeldendeBeregning';
 import { CurrencyExchangeIcon, DocPencilIcon, PersonPencilIcon } from '@navikt/aksel-icons';
@@ -24,10 +24,6 @@ export const MeldeperiodekjedeHøyreSeksjon = () => {
 
     return (
         <VStack gap={'space-24'} className={style.seksjon}>
-            <Heading level={'2'} size={'medium'}>
-                {'Oversikt over behandlinger, meldekort, etc'}
-            </Heading>
-
             {harÅpenBehandling && (
                 <InfokortEnkel icon={<DocPencilIcon />}>
                     {'Saken har en åpen meldekortbehandling som omfatter denne meldeperioden'}

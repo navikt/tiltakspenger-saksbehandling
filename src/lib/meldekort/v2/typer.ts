@@ -2,7 +2,7 @@ import { Periode } from '~/types/Periode';
 import {
     MeldekortbehandlingId,
     MeldekortbehandlingStatus,
-    MeldekortbehandlingType,
+    MeldeperiodebehandlingType,
     MeldekortDagProps,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 import {
@@ -47,6 +47,7 @@ export type MeldeperiodebehandlingProps = {
     periode: Periode;
     dager: MeldekortDagProps[];
     beregning: Nullable<MeldeperiodeBeregningPropsV2>;
+    type: MeldeperiodebehandlingType;
 };
 
 export type MeldekortbehandlingPropsV2 = {
@@ -61,7 +62,6 @@ export type MeldekortbehandlingPropsV2 = {
     navkontor: string;
     navkontorNavn: Nullable<string>;
     begrunnelse: Nullable<string>;
-    type: MeldekortbehandlingType;
     attesteringer: Attestering[];
     utbetalingsstatus: Utbetalingsstatus;
     /** Sammenhengende totalperiode på tvers av alle meldeperioder */

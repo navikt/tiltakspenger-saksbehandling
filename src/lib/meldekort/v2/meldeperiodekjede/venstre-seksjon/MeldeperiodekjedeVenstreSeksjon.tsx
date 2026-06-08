@@ -8,7 +8,6 @@ import {
 import { useSak } from '~/lib/sak/SakContext';
 import { Separator } from '~/lib/_felles/separator/Separator';
 import { useMeldeperiodeKjedeV2 } from '~/lib/meldekort/v2/meldeperiodekjede/context/MeldeperiodeKjedeContextV2';
-import { MeldekortbehandlingType } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { MeldekortbehandlingOpprettV2 } from '~/lib/meldekort/v2/meldeperiodekjede/venstre-seksjon/opprett-behandling/MeldekortbehandlingOpprettV2';
 import { DetaljVertikal } from '~/lib/_felles/detaljer/DetaljVertikal';
 
@@ -19,8 +18,7 @@ export const MeldeperiodekjedeVenstreSeksjon = () => {
     const { førsteDagSomGirRett, sisteDagSomGirRett, kanSendeInnHelgForMeldekort } = sak;
 
     const { meldeperiodeKjede } = useMeldeperiodeKjedeV2();
-    const { periode, brukersMeldekort, tiltaksnavn, meldekortbehandlingIder, sisteMeldeperiode } =
-        meldeperiodeKjede;
+    const { periode, brukersMeldekort, tiltaksnavn, sisteMeldeperiode } = meldeperiodeKjede;
 
     const sisteBrukersMeldekort = brukersMeldekort.at(-1);
 
@@ -63,13 +61,7 @@ export const MeldeperiodekjedeVenstreSeksjon = () => {
 
             <Separator />
 
-            <MeldekortbehandlingOpprettV2
-                type={
-                    meldekortbehandlingIder.length === 0
-                        ? MeldekortbehandlingType.FØRSTE_BEHANDLING
-                        : MeldekortbehandlingType.KORRIGERING
-                }
-            />
+            <MeldekortbehandlingOpprettV2 />
         </VStack>
     );
 };

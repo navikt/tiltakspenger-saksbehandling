@@ -1,7 +1,7 @@
 import {
     MeldekortbehandlingProps,
     MeldekortbehandlingStatus,
-    MeldekortbehandlingType,
+    MeldeperiodebehandlingType,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { Alert, VStack } from '@navikt/ds-react';
 import { BeregningOppsummering } from '~/lib/beregning-og-simulering/beregning-oppsummering/BeregningOppsummering';
@@ -50,7 +50,7 @@ export const MeldekortBeregningOgSimulering = ({ meldekortbehandling, className 
 
     const skalViseUtfallVarsel =
         kanBehandle(innloggetSaksbehandler, saksbehandler) &&
-        type === MeldekortbehandlingType.KORRIGERING &&
+        type === MeldeperiodebehandlingType.KORRIGERING &&
         sisteMeldekortbehandling === meldekortbehandling;
 
     return (
@@ -62,7 +62,7 @@ export const MeldekortBeregningOgSimulering = ({ meldekortbehandling, className 
                 navkontorNavn={navkontorNavn}
                 simulertBeregning={simulertBeregning}
                 kanIkkeIverksetteUtbetaling={kanIkkeIverksetteUtbetaling}
-                erOmberegning={type === MeldekortbehandlingType.KORRIGERING}
+                erOmberegning={type === MeldeperiodebehandlingType.KORRIGERING}
             />
             {skalViseUtfallVarsel && (
                 <Alert variant={'warning'} size={'small'}>

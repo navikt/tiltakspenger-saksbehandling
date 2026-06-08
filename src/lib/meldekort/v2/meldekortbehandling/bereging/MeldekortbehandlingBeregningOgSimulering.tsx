@@ -6,7 +6,7 @@ import { InfokortEnkel } from '~/lib/_felles/infokort/InfokortEnkel';
 import { MeldekortbehandlingSeksjon } from '~/lib/meldekort/v2/meldekortbehandling/layout/seksjon/MeldekortbehandlingSeksjon';
 import {
     MeldekortbehandlingStatus,
-    MeldekortbehandlingType,
+    MeldeperiodebehandlingType,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { kanBehandle } from '~/lib/saksbehandler/tilganger';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
@@ -21,7 +21,6 @@ export const MeldekortbehandlingBeregningOgSimulering = () => {
 
     const {
         simulertBeregning,
-        type,
         saksbehandler,
         tilbakekrevingId,
         status,
@@ -30,6 +29,7 @@ export const MeldekortbehandlingBeregningOgSimulering = () => {
         navkontorNavn,
         navkontor,
         kanIkkeIverksetteUtbetaling,
+        meldeperioder,
     } = useMeldekortbehandling();
 
     const { innloggetSaksbehandler } = useSaksbehandler();
@@ -50,9 +50,12 @@ export const MeldekortbehandlingBeregningOgSimulering = () => {
         status === MeldekortbehandlingStatus.AUTOMATISK_BEHANDLET ||
         status === MeldekortbehandlingStatus.GODKJENT;
 
+    const harKorrigering = meldeperioder.some(
+        (it) => it.type === MeldeperiodebehandlingType.KORRIGERING,
+    );
+
     const skalViseUtfallVarsel =
-        kanBehandle(innloggetSaksbehandler, saksbehandler) &&
-        type === MeldekortbehandlingType.KORRIGERING;
+        harKorrigering && kanBehandle(innloggetSaksbehandler, saksbehandler);
 
     return (
         <MeldekortbehandlingSeksjon>
@@ -80,7 +83,7 @@ export const MeldekortbehandlingBeregningOgSimulering = () => {
                     navkontorNavn={navkontorNavn}
                     simulertBeregning={simulertBeregning}
                     kanIkkeIverksetteUtbetaling={kanIkkeIverksetteUtbetaling}
-                    erOmberegning={type === MeldekortbehandlingType.KORRIGERING}
+                    erOmberegning={harKorrigering}
                 />
                 <SimulertBeregningDetaljer simulertBeregning={simulertBeregning} />
             </MeldekortbehandlingSeksjon.Høyre>

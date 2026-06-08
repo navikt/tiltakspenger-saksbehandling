@@ -12,7 +12,7 @@ import { MeldekortTaBeslutning } from './beslutning/MeldekortTaBeslutning';
 import {
     MeldekortbehandlingProps,
     MeldekortbehandlingStatus,
-    MeldekortbehandlingType,
+    MeldeperiodebehandlingType,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 
@@ -62,7 +62,7 @@ export const Meldekortbehandling = ({ meldekortbehandling, klagebehandling }: Pr
                 <Heading level={'3'} size={'medium'}>
                     {erAvsluttet ? 'Siste behandling' : 'Pågående behandling'}
                 </Heading>
-                {type === MeldekortbehandlingType.KORRIGERING && (
+                {type === MeldeperiodebehandlingType.KORRIGERING && (
                     <Alert variant={'info'} inline={true} size={'small'}>
                         {'Korrigering'}
                     </Alert>

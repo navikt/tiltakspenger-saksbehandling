@@ -2,7 +2,7 @@ import { Alert, HStack, Select, VStack } from '@navikt/ds-react';
 import {
     MeldekortbehandlingProps,
     MeldekortbehandlingStatus,
-    MeldekortbehandlingType,
+    MeldeperiodebehandlingType,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { MeldekortOppsummering } from '../../0-felles-komponenter/meldekort-oppsummering/MeldekortOppsummering';
 import { useMemo, useState } from 'react';
@@ -116,7 +116,7 @@ const optionTekst = (mbeh: MeldekortbehandlingProps | MeldeperiodeKorrigering) =
 
     const tidspunkt = formaterTidspunktKort(mbeh.godkjentTidspunkt!);
 
-    if (mbeh.type === MeldekortbehandlingType.KORRIGERING) {
+    if (mbeh.type === MeldeperiodebehandlingType.KORRIGERING) {
         return `${tidspunkt} (korrigering)`;
     }
 
