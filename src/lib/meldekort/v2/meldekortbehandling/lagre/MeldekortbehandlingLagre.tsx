@@ -5,7 +5,7 @@ import {
     useMeldekortbehandling,
     useMeldekortbehandlingSkjema,
 } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2Context';
-import { InfokortEnkel } from '~/lib/_felles/infokort/InfokortEnkel';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
 
 import style from './MeldekortbehandlingLagre.module.css';
 
@@ -27,9 +27,9 @@ export const MeldekortbehandlingLagre = ({ tekst }: Props) => {
     return (
         <VStack align={'end'} gap={'space-8'}>
             {error && (
-                <InfokortEnkel
+                <Infokort
                     data-color={'danger'}
-                >{`Feil ved lagring: ${error.message} (kode ${error.status})`}</InfokortEnkel>
+                >{`Feil ved lagring: ${error.message} (kode ${error.status})`}</Infokort>
             )}
             <Button
                 loading={isMutating}

@@ -4,7 +4,7 @@ import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { MeldeperiodeKjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
 import { useSak } from '~/lib/sak/SakContext';
 import { useMeldekortbehandling } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2Context';
-import { InfokortEnkel } from '~/lib/_felles/infokort/InfokortEnkel';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { useNotification } from '~/lib/_felles/notifications/NotificationContext';
 import { personoversiktUrl } from '~/utils/urls';
 import { PersonoversiktTab } from '~/lib/personoversikt/Personoversikt';
@@ -47,10 +47,10 @@ export const MeldekortbehandlingTilBeslutning = () => {
                     {'Vis evt valideringsfeil her'}
 
                     {error && (
-                        <InfokortEnkel
+                        <Infokort
                             variant={'feil'}
                             header={'Feil ved send til beslutning'}
-                        >{`Feil: ${error.message} (kode ${error.status})`}</InfokortEnkel>
+                        >{`Feil: ${error.message} (kode ${error.status})`}</Infokort>
                     )}
                 </Dialog.Body>
 

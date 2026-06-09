@@ -7,7 +7,7 @@ import {
     useMeldekortbehandling,
     useMeldekortbehandlingSkjema,
 } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2Context';
-import { InfokortEnkel } from '~/lib/_felles/infokort/InfokortEnkel';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
 
 import style from './MeldekortbehandlingForhåndsvisBrev.module.css';
 
@@ -50,9 +50,9 @@ export const MeldekortbehandlingForhåndsvisBrev = () => {
                 {'Forhåndsvis brev'}
             </Button>
             {error && (
-                <InfokortEnkel
+                <Infokort
                     data-color={'danger'}
-                >{`Feil ved forhåndsvisning: ${error.message} (${error.status})`}</InfokortEnkel>
+                >{`Feil ved forhåndsvisning: ${error.message} (${error.status})`}</Infokort>
             )}
         </VStack>
     );

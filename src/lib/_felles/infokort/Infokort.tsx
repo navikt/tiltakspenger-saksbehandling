@@ -15,7 +15,7 @@ type Props = PropsWithChildren<
     Omit<InfocardMessageProps, 'icon'> & Partial<Pick<InfocardMessageProps, 'icon'>>
 > & { header?: string; variant?: InfokortVariant };
 
-export const InfokortEnkel = ({
+export const Infokort = ({
     header,
     variant,
     children,

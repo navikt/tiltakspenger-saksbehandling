@@ -1,7 +1,7 @@
 import { Heading, VStack } from '@navikt/ds-react';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
 import { useMeldekortbehandling } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2Context';
-import { InfokortEnkel } from '~/lib/_felles/infokort/InfokortEnkel';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { UtbetalingBeløp } from '~/lib/_felles/utbetaling/beløp/UtbetalingBeløp';
 
 type Props = {
@@ -17,9 +17,9 @@ export const MeldeperiodebehandlingBeregning = ({ kjedeId }: Props) => {
 
     if (!beregning) {
         return (
-            <InfokortEnkel header={'Beregning mangler'} variant={'advarsel'}>
+            <Infokort header={'Beregning mangler'} variant={'advarsel'}>
                 {'Lagre behandlingen for å beregne'}
-            </InfokortEnkel>
+            </Infokort>
         );
     }
 

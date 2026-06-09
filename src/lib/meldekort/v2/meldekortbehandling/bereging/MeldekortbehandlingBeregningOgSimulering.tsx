@@ -2,7 +2,7 @@ import {
     useMeldekortbehandling,
     useMeldekortbehandlingSkjema,
 } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2Context';
-import { InfokortEnkel } from '~/lib/_felles/infokort/InfokortEnkel';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { MeldekortbehandlingSeksjon } from '~/lib/meldekort/v2/meldekortbehandling/layout/seksjon/MeldekortbehandlingSeksjon';
 import {
     MeldekortbehandlingStatus,
@@ -36,9 +36,9 @@ export const MeldekortbehandlingBeregningOgSimulering = () => {
 
     if (!simulertBeregning) {
         return (
-            <InfokortEnkel>
+            <Infokort>
                 {'Beregning mangler. Behandlingen må lagres med gyldige data for å beregnes.'}
-            </InfokortEnkel>
+            </Infokort>
         );
     }
 
@@ -75,7 +75,7 @@ export const MeldekortbehandlingBeregningOgSimulering = () => {
                     <TilbakekrevingOppsummering tilbakekrevingId={tilbakekrevingId} />
                 )}
                 {skalViseUtfallVarsel && (
-                    <InfokortEnkel data-color={'warning'}>{utfallTekst(beløpDiff)}</InfokortEnkel>
+                    <Infokort data-color={'warning'}>{utfallTekst(beløpDiff)}</Infokort>
                 )}
                 <BeregningOgSimuleringHeader
                     utbetalingsstatus={erIverksatt ? utbetalingsstatus : undefined}

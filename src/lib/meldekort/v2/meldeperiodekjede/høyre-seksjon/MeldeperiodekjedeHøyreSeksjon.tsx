@@ -5,7 +5,7 @@ import { CurrencyExchangeIcon, DocPencilIcon, PersonPencilIcon } from '@navikt/a
 import { MeldekortBehandlingOppsummeringForKjede } from '~/lib/meldekort/v2/meldeperiodekjede/høyre-seksjon/meldekortbehandling-oppsummering/MeldekortBehandlingOppsummeringForKjede';
 import { classNames } from '~/utils/classNames';
 import { useSak } from '~/lib/sak/SakContext';
-import { InfokortEnkel } from '~/lib/_felles/infokort/InfokortEnkel';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { BrukersMeldekortUker } from '~/lib/meldekort/v2/brukers-meldekort/BrukersMeldekortUker';
 import { formaterTidspunkt } from '~/utils/date';
 import { BrukersMeldekortAutomatiskBehandlingStatus } from '~/lib/meldekort/3-høyre-seksjon/brukers-meldekort/automatisk-behandling-status/BrukersMeldekortAutomatiskBehandlingStatus';
@@ -25,9 +25,9 @@ export const MeldeperiodekjedeHøyreSeksjon = () => {
     return (
         <VStack gap={'space-24'} className={style.seksjon}>
             {harÅpenBehandling && (
-                <InfokortEnkel icon={<DocPencilIcon />}>
+                <Infokort icon={<DocPencilIcon />}>
                     {'Saken har en åpen meldekortbehandling som omfatter denne meldeperioden'}
-                </InfokortEnkel>
+                </Infokort>
             )}
 
             <Tabs

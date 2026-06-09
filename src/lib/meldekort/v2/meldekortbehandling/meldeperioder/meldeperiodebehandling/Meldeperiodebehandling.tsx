@@ -1,4 +1,4 @@
-import { Box, Select, Table, BodyShort } from '@navikt/ds-react';
+import { BodyShort, Box, Select, Table } from '@navikt/ds-react';
 import {
     MeldekortbehandlingDagStatus,
     MeldekortBeregningsdag,
@@ -57,7 +57,10 @@ export const Meldeperiodebehandling = ({ meldeperiodeSkjema }: Props) => {
                 gap={'space-16'}
                 className={classNames(style.venstre, style.info)}
             >
-                <MeldeperiodeInfo meldeperiodeKjede={kjede} />
+                <MeldeperiodeInfo
+                    meldeperiodeKjede={kjede}
+                    meldeperiodebehandling={meldeperiodebehandling}
+                />
             </MeldekortbehandlingSeksjon.Venstre>
 
             <MeldekortbehandlingSeksjon.Høyre>

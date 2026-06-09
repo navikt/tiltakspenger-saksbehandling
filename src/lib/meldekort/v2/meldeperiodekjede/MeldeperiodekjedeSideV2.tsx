@@ -4,7 +4,7 @@ import { MeldeperiodekjedeVenstreSeksjon } from '~/lib/meldekort/v2/meldeperiode
 import { MeldeperiodekjedeHøyreSeksjon } from '~/lib/meldekort/v2/meldeperiodekjede/høyre-seksjon/MeldeperiodekjedeHøyreSeksjon';
 import { MeldeperiodeKjedeV2Provider } from '~/lib/meldekort/v2/meldeperiodekjede/context/MeldeperiodeKjedeContextV2';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
-import { InfokortEnkel } from '~/lib/_felles/infokort/InfokortEnkel';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
 
 import style from './MeldeperiodekjedeSideV2.module.css';
 
@@ -28,9 +28,9 @@ export const MeldeperiodekjedeSideV2 = ({ kjedeId }: Props) => {
                     </div>
                 </MeldeperiodeKjedeV2Provider>
             ) : (
-                <InfokortEnkel
+                <Infokort
                     data-color={'danger'}
-                >{`Fant ikke meldeperiodekjede ${kjedeId}`}</InfokortEnkel>
+                >{`Fant ikke meldeperiodekjede ${kjedeId}`}</Infokort>
             )}
         </>
     );
