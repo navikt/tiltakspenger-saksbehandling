@@ -45,7 +45,7 @@ export const Meldekortbehandling = ({ meldekortbehandling, klagebehandling }: Pr
     const { innloggetSaksbehandler } = useSaksbehandler();
 
     const { type, status, erAvsluttet } = meldekortbehandling;
-    const sisteVentestatus = meldekortbehandling.ventestatus.at(-1);
+    const sisteVentestatus = meldekortbehandling.ventestatus.at(0);
     const erSattPåVent = erMeldekortbehandlingSattPaVent(meldekortbehandling);
     const kanGjenoppta = skalKunneGjenopptaMeldekortbehandling(
         meldekortbehandling,

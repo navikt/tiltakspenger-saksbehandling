@@ -261,7 +261,7 @@ const BrevKlagePage = ({ sak, påklagetVedtak }: Props) => {
                     )}
 
                     {klage.ventestatus.length > 0 &&
-                        klage.ventestatus.at(-1)?.erSattPåVent === false && (
+                        klage.ventestatus.at(0)?.erSattPåVent === false && (
                             <OppsummeringAvVentestatuserModal
                                 ventestatuser={klage.ventestatus}
                                 button={{ variant: 'tertiary' }}

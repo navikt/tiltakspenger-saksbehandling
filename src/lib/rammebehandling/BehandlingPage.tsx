@@ -53,7 +53,7 @@ export const BehandlingPage = () => {
                         : PersonoversiktTab.ÅpneBehandlinger
                 }
             >
-                {finnBehandlingStatusTag(status, false, ventestatus.at(-1)?.erSattPåVent)}
+                {finnBehandlingStatusTag(status, false, ventestatus.at(0)?.erSattPåVent)}
             </PersonaliaHeader>
 
             {/*
@@ -71,7 +71,7 @@ export const BehandlingPage = () => {
                         <VStack gap="space-32">
                             <BehandlingSaksopplysninger />
                             {ventestatus.length > 0 &&
-                                ventestatus.at(-1)?.erSattPåVent === false && (
+                                ventestatus.at(0)?.erSattPåVent === false && (
                                     <>
                                         <Separator />
                                         <OppsummeringAvVentestatuserModal
@@ -84,9 +84,9 @@ export const BehandlingPage = () => {
                     }
                     main={
                         <div className={style.main}>
-                            {ventestatus.at(-1)?.erSattPåVent && (
+                            {ventestatus.at(0)?.erSattPåVent && (
                                 <OppsummeringAvVentestatus
-                                    ventestatus={ventestatus.at(-1)!}
+                                    ventestatus={ventestatus.at(0)!}
                                     medHistorikkVisning={
                                         ventestatus.length > 0
                                             ? () => (

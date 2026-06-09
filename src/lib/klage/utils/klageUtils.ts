@@ -146,7 +146,7 @@ export const erKlageOpprettholdtEllerEtter = (k: Klagebehandling) => {
         KlagebehandlingStatus.OVERSENDT.toString(),
     ];
 
-    const sisteVenteHendelse = k.ventestatus.at(-1) ?? null;
+    const sisteVenteHendelse = k.ventestatus.at(0) ?? null;
 
     return (
         gyldigeStatuser.includes(k.status) ||
@@ -168,7 +168,7 @@ export const erKlageMottattFraKAEllerEtter = (k: Klagebehandling) => {
             : null,
     ].filter((status) => status !== null);
 
-    const sisteVenteHendelse = k.ventestatus.at(-1) ?? null;
+    const sisteVenteHendelse = k.ventestatus.at(0) ?? null;
     return (
         gyldigeStatuser.includes(k.status) ||
         (!!sisteVenteHendelse &&

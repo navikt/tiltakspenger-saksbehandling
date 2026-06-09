@@ -118,9 +118,9 @@ const KlageLayout = ({ children, saksnummer, activeTab }: Props) => {
                 {klage?.status === KlagebehandlingStatus.AVBRUTT && (
                     <AvbruttOppsummering avbrutt={klage.avbrutt!} />
                 )}
-                {klage?.ventestatus?.at(-1)?.erSattPåVent && (
+                {klage?.ventestatus?.at(0)?.erSattPåVent && (
                     <OppsummeringAvVentestatus
-                        ventestatus={klage.ventestatus.at(-1)!}
+                        ventestatus={klage.ventestatus.at(0)!}
                         medHistorikkVisning={
                             klage.ventestatus.length > 0
                                 ? () => (
