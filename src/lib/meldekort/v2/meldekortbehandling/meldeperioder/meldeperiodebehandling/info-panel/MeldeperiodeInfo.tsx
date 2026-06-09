@@ -6,6 +6,9 @@ import { MeldeperiodebehandlingProps, MeldeperiodeKjedePropsV2 } from '~/lib/mel
 import { DetaljHorisontal } from '~/lib/_felles/detaljer/DetaljHorisontal';
 import { meldeperiodebehandlingTypeTekst } from '~/lib/meldekort/v2/tekster';
 import { MeldeperiodebehandlingType } from '~/lib/meldekort/typer/Meldekortbehandling';
+import { meldeperiodebehandlingTypeIkoner } from '~/lib/meldekort/v2/ikoner';
+
+import style from './MeldeperiodeInfo.module.css';
 
 type Props = {
     meldeperiodeKjede: MeldeperiodeKjedePropsV2;
@@ -24,7 +27,8 @@ export const MeldeperiodeInfo = ({ meldeperiodeKjede, meldeperiodebehandling }: 
 
     return (
         <>
-            <Heading size={'small'} level={'3'}>
+            <Heading size={'small'} level={'3'} className={style.heading}>
+                {meldeperiodebehandlingTypeIkoner[type]}
                 {meldeperiodebehandlingTypeTekst[type]}
             </Heading>
 

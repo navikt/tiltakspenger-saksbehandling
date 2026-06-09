@@ -1,18 +1,23 @@
-import { Heading, HStack } from '@navikt/ds-react';
+import { Heading, HStack, VStack } from '@navikt/ds-react';
 import { useSak } from '~/lib/sak/SakContext';
-import { useMeldekortbehandling } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2Context';
+import {
+    useMeldekortbehandling,
+    useMeldekortbehandlingSkjema,
+} from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2Context';
 import { formaterDatotekst } from '~/utils/date';
 import { DetaljHorisontal } from '~/lib/_felles/detaljer/DetaljHorisontal';
 import { MeldekortbehandlingStatusTags } from '~/lib/meldekort/v2/meldekortbehandling/header/status/MeldekortbehandlingStatusTags';
 import { MeldekortbehandlingSeksjon } from '~/lib/meldekort/v2/meldekortbehandling/layout/seksjon/MeldekortbehandlingSeksjon';
+import { MeldekortbehandlingLagre } from '~/lib/meldekort/v2/meldekortbehandling/lagre/MeldekortbehandlingLagre';
 
 import style from './MeldekortbehandlingHeader.module.css';
 
 export const MeldekortbehandlingHeader = () => {
     const { førsteDagSomGirRett, sisteDagSomGirRett, kanSendeInnHelgForMeldekort } = useSak().sak;
 
-    const meldekortbehandling = useMeldekortbehandling();
+    const { erReadonly } = useMeldekortbehandlingSkjema();
 
+    const meldekortbehandling = useMeldekortbehandling();
     const { saksbehandler, beslutter } = meldekortbehandling;
 
     return (
@@ -25,28 +30,33 @@ export const MeldekortbehandlingHeader = () => {
                 <MeldekortbehandlingStatusTags meldekortbehandling={meldekortbehandling} />
             </MeldekortbehandlingSeksjon.Venstre>
 
-            <MeldekortbehandlingSeksjon.Høyre gap={'space-8'}>
-                <HStack gap={'space-16'}>
-                    <DetaljHorisontal navn={'Saksbehandler:'}>
-                        {saksbehandler ?? 'Ikke tildelt'}
-                    </DetaljHorisontal>
-                    <DetaljHorisontal navn={'Beslutter:'}>
-                        {beslutter ?? 'Ikke tildelt'}
-                    </DetaljHorisontal>
-                </HStack>
+            <MeldekortbehandlingSeksjon.Høyre>
+                <HStack gap={'space-16'} justify={'space-between'}>
+                    <VStack gap={'space-8'}>
+                        <HStack gap={'space-16'}>
+                            <DetaljHorisontal navn={'Saksbehandler:'}>
+                                {saksbehandler ?? 'Ikke tildelt'}
+                            </DetaljHorisontal>
+                            <DetaljHorisontal navn={'Beslutter:'}>
+                                {beslutter ?? 'Ikke tildelt'}
+                            </DetaljHorisontal>
+                        </HStack>
 
-                <HStack gap={'space-16'}>
-                    <DetaljHorisontal navn={'Første dag med rett:'}>
-                        {førsteDagSomGirRett ? formaterDatotekst(førsteDagSomGirRett) : '-'}
-                    </DetaljHorisontal>
-                    <DetaljHorisontal navn={'Siste dag med rett:'}>
-                        {sisteDagSomGirRett ? formaterDatotekst(sisteDagSomGirRett) : '-'}
-                    </DetaljHorisontal>
-                </HStack>
-                <HStack>
-                    <DetaljHorisontal navn={'Kan melde helg:'}>
-                        {kanSendeInnHelgForMeldekort ? 'Ja' : 'Nei'}
-                    </DetaljHorisontal>
+                        <HStack gap={'space-16'}>
+                            <DetaljHorisontal navn={'Første dag med rett:'}>
+                                {førsteDagSomGirRett ? formaterDatotekst(førsteDagSomGirRett) : '-'}
+                            </DetaljHorisontal>
+                            <DetaljHorisontal navn={'Siste dag med rett:'}>
+                                {sisteDagSomGirRett ? formaterDatotekst(sisteDagSomGirRett) : '-'}
+                            </DetaljHorisontal>
+                        </HStack>
+                        <HStack>
+                            <DetaljHorisontal navn={'Kan melde helg:'}>
+                                {kanSendeInnHelgForMeldekort ? 'Ja' : 'Nei'}
+                            </DetaljHorisontal>
+                        </HStack>
+                    </VStack>
+                    <VStack justify={'end'}>{!erReadonly && <MeldekortbehandlingLagre />}</VStack>
                 </HStack>
             </MeldekortbehandlingSeksjon.Høyre>
         </MeldekortbehandlingSeksjon>

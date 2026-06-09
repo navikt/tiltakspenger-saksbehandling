@@ -10,7 +10,6 @@ import { MeldekortbehandlingSeksjon } from '~/lib/meldekort/v2/meldekortbehandli
 import { useState } from 'react';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
 import { Periode } from '~/types/Periode';
-import { MeldekortbehandlingLagre } from '~/lib/meldekort/v2/meldekortbehandling/lagre/MeldekortbehandlingLagre';
 
 import style from './Meldeperiodebehandlinger.module.css';
 
@@ -33,22 +32,16 @@ export const Meldeperiodebehandlinger = () => {
         <VStack gap={'space-16'}>
             <MeldekortbehandlingSeksjon>
                 <MeldekortbehandlingSeksjon.FullBredde>
-                    <HStack justify={'space-between'} align={'start'}>
-                        <HStack gap={'space-16'} align={'center'}>
-                            <Heading size={'small'} level={'3'}>
-                                {'Behandlede meldeperioder'}
-                            </Heading>
+                    <HStack gap={'space-16'} align={'center'}>
+                        <Heading size={'small'} level={'3'}>
+                            {'Behandlede meldeperioder'}
+                        </Heading>
 
-                            {!erReadonly && (
-                                <MeldeperiodebehandlingLeggTil onLeggTil={setValgtKjede} />
-                            )}
+                        {!erReadonly && <MeldeperiodebehandlingLeggTil onLeggTil={setValgtKjede} />}
 
-                            {!erReadonly && meldeperioder.length > 1 && valgtKjede && (
-                                <MeldeperiodebehandlingFjern kjedeId={valgtKjede} />
-                            )}
-                        </HStack>
-
-                        {!erReadonly && <MeldekortbehandlingLagre tekst={'Lagre og beregn'} />}
+                        {!erReadonly && meldeperioder.length > 1 && valgtKjede && (
+                            <MeldeperiodebehandlingFjern kjedeId={valgtKjede} />
+                        )}
                     </HStack>
                 </MeldekortbehandlingSeksjon.FullBredde>
             </MeldekortbehandlingSeksjon>

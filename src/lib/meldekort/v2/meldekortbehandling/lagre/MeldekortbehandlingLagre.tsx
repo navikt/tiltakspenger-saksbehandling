@@ -9,11 +9,7 @@ import { Infokort } from '~/lib/_felles/infokort/Infokort';
 
 import style from './MeldekortbehandlingLagre.module.css';
 
-type Props = {
-    tekst: string;
-};
-
-export const MeldekortbehandlingLagre = ({ tekst }: Props) => {
+export const MeldekortbehandlingLagre = () => {
     const { sak, setSak } = useSak();
     const { id } = useMeldekortbehandling();
 
@@ -26,11 +22,6 @@ export const MeldekortbehandlingLagre = ({ tekst }: Props) => {
 
     return (
         <VStack align={'end'} gap={'space-8'}>
-            {error && (
-                <Infokort
-                    data-color={'danger'}
-                >{`Feil ved lagring: ${error.message} (kode ${error.status})`}</Infokort>
-            )}
             <Button
                 loading={isMutating}
                 size={'small'}
@@ -44,8 +35,13 @@ export const MeldekortbehandlingLagre = ({ tekst }: Props) => {
                 className={style.knapp}
                 disabled={erReadonly}
             >
-                {tekst}
+                {'Lagre og beregn'}
             </Button>
+            {error && (
+                <Infokort
+                    data-color={'danger'}
+                >{`Feil ved lagring: ${error.message} (kode ${error.status})`}</Infokort>
+            )}
         </VStack>
     );
 };
