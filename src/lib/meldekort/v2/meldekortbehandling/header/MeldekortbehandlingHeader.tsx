@@ -9,6 +9,7 @@ import { DetaljHorisontal } from '~/lib/_felles/detaljer/DetaljHorisontal';
 import { MeldekortbehandlingStatusTags } from '~/lib/meldekort/v2/meldekortbehandling/header/status/MeldekortbehandlingStatusTags';
 import { MeldekortbehandlingSeksjon } from '~/lib/meldekort/v2/meldekortbehandling/layout/seksjon/MeldekortbehandlingSeksjon';
 import { MeldekortbehandlingLagre } from '~/lib/meldekort/v2/meldekortbehandling/lagre/MeldekortbehandlingLagre';
+import { MeldekortbehandlingHandlingerMeny } from '~/lib/meldekort/v2/meldekortbehandling/handlinger-meny/MeldekortbehandlingHandlingerMeny';
 
 import style from './MeldekortbehandlingHeader.module.css';
 
@@ -56,7 +57,10 @@ export const MeldekortbehandlingHeader = () => {
                             </DetaljHorisontal>
                         </HStack>
                     </VStack>
-                    <VStack justify={'end'}>{!erReadonly && <MeldekortbehandlingLagre />}</VStack>
+                    <VStack justify={'end'} gap={'space-8'} className={style.handlinger}>
+                        <MeldekortbehandlingHandlingerMeny />
+                        {!erReadonly && <MeldekortbehandlingLagre />}
+                    </VStack>
                 </HStack>
             </MeldekortbehandlingSeksjon.Høyre>
         </MeldekortbehandlingSeksjon>

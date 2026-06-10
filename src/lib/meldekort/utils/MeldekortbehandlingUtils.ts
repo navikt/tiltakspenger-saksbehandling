@@ -70,7 +70,7 @@ export const kanBeslutteForMeldekort = (
 };
 
 export const eierMeldekortbehandling = (
-    meldekortbehandling: MeldekortbehandlingProps,
+    meldekortbehandling: MeldekortbehandlingProps | MeldekortbehandlingPropsV2,
     innloggetSaksbehandler: Saksbehandler,
 ): boolean => {
     const { status, saksbehandler, beslutter } = meldekortbehandling;
@@ -86,7 +86,7 @@ export const eierMeldekortbehandling = (
 };
 
 export const skalKunneTaMeldekortbehandling = (
-    meldekortbehandling: MeldekortbehandlingProps,
+    meldekortbehandling: MeldekortbehandlingProps | MeldekortbehandlingPropsV2,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     const { status, saksbehandler } = meldekortbehandling;
@@ -105,7 +105,7 @@ export const skalKunneTaMeldekortbehandling = (
 };
 
 export const skalKunneOvertaMeldekortbehandling = (
-    meldekortbehandling: MeldekortbehandlingProps,
+    meldekortbehandling: MeldekortbehandlingProps | MeldekortbehandlingPropsV2,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     const { status, saksbehandler, beslutter } = meldekortbehandling;
@@ -133,7 +133,7 @@ export const erMeldekortbehandlingSattPaVent = (
 ) => meldekortbehandling.ventestatus?.at(-1)?.erSattPåVent ?? false;
 
 export const skalKunneGjenopptaMeldekortbehandling = (
-    meldekortbehandling: MeldekortbehandlingProps,
+    meldekortbehandling: MeldekortbehandlingProps | MeldekortbehandlingPropsV2,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     return (
@@ -145,7 +145,7 @@ export const skalKunneGjenopptaMeldekortbehandling = (
 };
 
 export const skalKunneSetteMeldekortbehandlingPaVent = (
-    meldekortbehandling: MeldekortbehandlingProps,
+    meldekortbehandling: MeldekortbehandlingProps | MeldekortbehandlingPropsV2,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     const erRelevantMenyValgForStatus =
