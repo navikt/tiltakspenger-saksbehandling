@@ -22,10 +22,8 @@ import {
 } from '~/lib/klage/forms/klage-vurdering/VurderingFormUtils';
 import { BodyShort, Button, Heading, HStack, InfoCard, LocalAlert, VStack } from '@navikt/ds-react';
 import { CheckmarkCircleIcon, PencilIcon, TrashIcon } from '@navikt/aksel-icons';
-import { useAvbrytKlagebehandling, useVurderKlage } from '~/lib/klage/api/KlageApi';
+import { useVurderKlage } from '~/lib/klage/api/KlageApi';
 import WarningCircleIcon from '~/lib/_felles/icons/WarningCircleIcon';
-import router from 'next/router';
-import { personoversiktUrl } from '~/utils/urls';
 import {
     erKlageAvsluttet,
     harKlageEnÅpenRammebehandling,
@@ -34,7 +32,6 @@ import {
     finnSisteGyldigeStegForKlage,
     kanBehandleKlage,
 } from '~/lib/klage/utils/klageUtils';
-import AvsluttBehandlingModal from '~/lib/_felles/modaler/AvsluttBehandlingModal';
 import styles from './index.module.css';
 import Link from 'next/link';
 import { Søknad } from '~/types/Søknad';
@@ -48,6 +45,7 @@ import { OppsummeringAvVentestatuserModal } from '~/lib/behandling-felles/oppsum
 import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { MeldekortVedtak } from '~/lib/meldekort/typer/MeldekortVedtak';
 import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
+import AvbrytKlagebehandlingModal from '~/lib/klage/modaler/avbryt/AvbrytKlagebehandlingModal';
 
 type Props = {
     sak: SakProps;
@@ -137,14 +135,6 @@ const VurderingKlagePage = ({
         },
     });
 
-    const avbrytKlageBehandling = useAvbrytKlagebehandling({
-        sakId: klage.sakId,
-        klageId: klage.id,
-        onSuccess: () => {
-            router.push(personoversiktUrl(sak.saksnummer));
-        },
-    });
-
     const onSubmit = (data: VurderingFormData) => {
         vurderKlage.trigger(vurderingFormDataTilVurderKlageRequest(data));
     };
@@ -202,19 +192,6 @@ const VurderingKlagePage = ({
                                 <LocalAlert.Title>Feil ved oppdatering av klage</LocalAlert.Title>
                             </LocalAlert.Header>
                             <LocalAlert.Content>{vurderKlage.error.message}</LocalAlert.Content>
-                        </LocalAlert>
-                    )}
-
-                    {avbrytKlageBehandling.error && (
-                        <LocalAlert status="error">
-                            <LocalAlert.Header>
-                                <LocalAlert.Title>
-                                    Feil ved avbrytelse av klagebehandling
-                                </LocalAlert.Title>
-                            </LocalAlert.Header>
-                            <LocalAlert.Content>
-                                {avbrytKlageBehandling.error.message}
-                            </LocalAlert.Content>
                         </LocalAlert>
                     )}
 
@@ -306,21 +283,12 @@ const VurderingKlagePage = ({
             </VStack>
 
             {vilAvslutteBehandlingModal && (
-                <AvsluttBehandlingModal
+                <AvbrytKlagebehandlingModal
                     åpen={vilAvslutteBehandlingModal}
                     onClose={() => setVilAvslutteBehandlingModal(false)}
-                    tittel={`Avslutt klagebehandling`}
-                    tekst={`Er du sikker på at du vil avslutte klagebehandlingen?`}
-                    textareaLabel={`Hvorfor avsluttes klagebehandlingen? (obligatorisk)`}
-                    onSubmit={(begrunnelse: string) => {
-                        avbrytKlageBehandling.trigger({ begrunnelse });
-                    }}
-                    footer={{
-                        isMutating: avbrytKlageBehandling.isMutating,
-                        error: avbrytKlageBehandling.error
-                            ? avbrytKlageBehandling.error.message
-                            : null,
-                    }}
+                    sakId={sak.sakId}
+                    klageId={klage.id}
+                    saksnummer={sak.saksnummer}
                 />
             )}
         </div>

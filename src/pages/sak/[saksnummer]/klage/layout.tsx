@@ -17,7 +17,6 @@ import {
 } from '~/utils/tekstformateringUtils';
 import { formaterTidspunkt } from '~/utils/date';
 import { fetchJsonFraApiClientSide } from '~/utils/fetch/fetch';
-import AvbruttOppsummering from '~/lib/behandling-felles/oppsummeringer/oppsummeringAvAvbrutt/OppsummeringAvAvbrutt';
 import OppsummeringAvVentestatus from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatus';
 import { hentSisteKlagehendelseUtfallFraKlagebehandling } from '~/lib/klage/utils/klageUtils';
 import { klagehendelseUtfallTilTag } from '~/lib/klage/utils/KlageinstanshendelseUtils';
@@ -25,6 +24,7 @@ import { OppsummeringsPar } from '~/lib/behandling-felles/oppsummeringer/oppsumm
 import { OppsummeringAvVentestatuserModal } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
 import { useResettableState } from '~/hooks/useResettableState';
 import { personoversiktUrl } from '~/utils/urls';
+import OppsummeringAvAvbruttKlagebehandling from '~/lib/klage/oppsummering/avbrutt/OppsummeringAvAvbruttKlagebehandling';
 
 type Props = {
     children: ReactElement;
@@ -116,7 +116,7 @@ const KlageLayout = ({ children, saksnummer, activeTab }: Props) => {
             <KlageStedIndikator activeTab={activeTab} klage={klage} />
             <VStack className={styles.klageInfoContainer}>
                 {klage?.status === KlagebehandlingStatus.AVBRUTT && (
-                    <AvbruttOppsummering avbrutt={klage.avbrutt!} />
+                    <OppsummeringAvAvbruttKlagebehandling avbrutt={klage.avbrutt!} />
                 )}
                 {klage?.ventestatus?.at(0)?.erSattPåVent && (
                     <OppsummeringAvVentestatus
