@@ -1,4 +1,3 @@
-import { Avbrutt } from '../../behandling-felles/typer/Avbrutt';
 import { Klageinstanshendelse } from './Klageinstanshendelse';
 import { VedtakId } from '../../rammebehandling/typer/Rammevedtak';
 import { SakId } from '../../sak/SakTyper';
@@ -40,13 +39,20 @@ export interface Klagebehandling {
     klagensJournalpostOpprettet: string;
     status: KlagebehandlingStatus;
     resultat: Nullable<KlagebehandlingsresultatDTO>;
-    avbrutt: Nullable<Avbrutt>;
+    avbrutt: Nullable<KlagebehandlingAvbrutt>;
     kanIverksetteVedtak: Nullable<boolean>;
     kanIverksetteOpprettholdelse: boolean;
     ventestatus: VentestatusHendelse[];
     formkrav: KlageFormkrav;
     tilknyttedeBehandlingIder: BehandlingId[];
     åpenBehandlingId: Nullable<BehandlingId>;
+}
+
+export interface KlagebehandlingAvbrutt {
+    avbruttAv: string;
+    avbruttTidspunkt: string;
+    status: AvbrytKlagebehandlingStatus;
+    begrunnelse: Nullable<string>;
 }
 
 export interface KlageFormkrav {
@@ -210,4 +216,16 @@ export enum Klagehjemmel {
     TILTAKSPENGEFORSKRIFTEN_9 = 'TILTAKSPENGEFORSKRIFTEN_9',
     TILTAKSPENGEFORSKRIFTEN_10 = 'TILTAKSPENGEFORSKRIFTEN_10',
     TILTAKSPENGEFORSKRIFTEN_11 = 'TILTAKSPENGEFORSKRIFTEN_11',
+}
+
+export enum AvbrytKlagebehandlingStatus {
+    KLAGE_TRUKKET = 'KLAGE_TRUKKET',
+    FEILREGISTRER_KLAGE = 'FEILREGISTRER_KLAGE',
+    MANGLENDE_UTBETALING = 'MANGLENDE_UTBETALING',
+    ANNET = 'ANNET',
+}
+
+export interface AvbrytKlagebehandlingRequest {
+    status: AvbrytKlagebehandlingStatus;
+    begrunnelse: Nullable<string>;
 }

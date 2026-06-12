@@ -1,17 +1,6 @@
-import { FormEvent, useRef, useState } from 'react';
+import { useState } from 'react';
 import router from 'next/router';
-import {
-    Alert,
-    BodyLong,
-    Button,
-    ButtonProps,
-    Heading,
-    HStack,
-    Modal,
-    Textarea,
-    VStack,
-} from '@navikt/ds-react';
-import { TrashIcon } from '@navikt/aksel-icons';
+import { Button, ButtonProps, Textarea } from '@navikt/ds-react';
 import { SakId } from '~/lib/sak/SakTyper';
 import {
     MeldekortbehandlingId,
@@ -19,6 +8,8 @@ import {
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import styles from './AvsluttMeldekortbehandling.module.css';
+import AvbrytBehandlingModal from '~/lib/_felles/modaler/avbryt/AvbrytBehandlingModal';
+import { Controller, FieldErrors, useForm } from 'react-hook-form';
 
 export const AvsluttMeldekortbehandlingModal = (props: {
     sakId: SakId;
@@ -27,9 +18,17 @@ export const AvsluttMeldekortbehandlingModal = (props: {
     åpen: boolean;
     onClose: () => void;
 }) => {
-    const begrunnelseRef = useRef<HTMLTextAreaElement>(null);
-    const [error, setError] = useState<string>();
-    const hasError = error !== undefined;
+    const form = useForm<{ begrunnelse: string }>({
+        defaultValues: { begrunnelse: '' },
+        resolver: (values) => {
+            const errors: FieldErrors<{ begrunnelse: string }> = {};
+
+            if (!values.begrunnelse || values.begrunnelse.trim() === '') {
+                errors.begrunnelse = { type: 'required', message: 'Du må fylle ut en begrunnelse' };
+            }
+            return { values, errors };
+        },
+    });
 
     const avsluttMeldekortbehandlingApi = useFetchJsonFraApi<
         MeldekortbehandlingProps,
@@ -40,95 +39,31 @@ export const AvsluttMeldekortbehandlingModal = (props: {
         },
     });
 
-    const submit = (e: FormEvent<HTMLButtonElement>) => {
-        e.preventDefault();
-        const begrunnelse = begrunnelseRef.current?.value?.trim();
-        if (!begrunnelse || begrunnelse === '') {
-            setError('Du må fylle ut en begrunnelse');
-        } else {
-            avsluttMeldekortbehandlingApi.trigger({
-                begrunnelse: begrunnelse,
-            });
-        }
+    const onSubmit = (values: { begrunnelse: string }) => {
+        avsluttMeldekortbehandlingApi.trigger({ begrunnelse: values.begrunnelse });
     };
 
     return (
-        <Modal
-            className={styles.modal}
-            width={700}
-            aria-label="Avslutt behandling"
-            open={props.åpen}
-            onClose={props.onClose}
-            size="small"
-        >
-            <Modal.Header className={styles.modalHeader}>
-                <HStack>
-                    <TrashIcon title="Søppelbøtteikon" fontSize="1.5rem" />
-                    <Heading level="4" size="small">
-                        Avslutt behandling
-                    </Heading>
-                </HStack>
-            </Modal.Header>
-            <Modal.Body className={styles.modalBody}>
-                <BodyLong size={'small'}>
-                    Hvis du avslutter meldekortbehandlingen må behandlingen startes på nytt for å
-                    behandle meldekortet manuelt.
-                </BodyLong>
-                <BodyLong size={'small'}>
-                    {
-                        'Dersom det finnes ubehandlede korrigeringer fra bruker for denne perioden, vil '
-                    }
-                    {
-                        'varselet for disse fjernes fra "åpne behandlinger"-oversikten når du avslutter behandlingen.'
-                    }
-                </BodyLong>
-                <Textarea
-                    ref={begrunnelseRef}
-                    onChange={() => {
-                        setError(undefined);
-                    }}
-                    error={error}
-                    label={'Hvorfor avsluttes behandlingen? (obligatorisk)'}
-                    maxLength={200}
-                    id="begrunnelse"
-                    size="small"
-                    aria-label={'Begrunnelse'}
-                    disabled={false}
-                />
-            </Modal.Body>
-            <Modal.Footer>
-                <VStack gap="space-16">
-                    <HStack gap="space-8">
-                        <Button
-                            variant="secondary"
-                            type="button"
+        <AvbrytBehandlingModal
+            bodyInnhold={
+                <Controller
+                    name="begrunnelse"
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                        <Textarea
+                            {...field}
+                            error={fieldState.error?.message}
+                            label={'Hvorfor avsluttes behandlingen? (obligatorisk)'}
+                            maxLength={200}
                             size="small"
-                            onClick={props.onClose}
-                        >
-                            Ikke avslutt behandling
-                        </Button>
-                        <Button
-                            data-color="danger"
-                            variant="primary"
-                            size="small"
-                            loading={avsluttMeldekortbehandlingApi.isMutating}
-                            type="submit"
-                            disabled={hasError}
-                            onClick={(e) => {
-                                submit(e);
-                            }}
-                        >
-                            Avslutt behandling
-                        </Button>
-                    </HStack>
-                    {avsluttMeldekortbehandlingApi.error && (
-                        <Alert variant={'error'} size="small">
-                            {avsluttMeldekortbehandlingApi.error.message}
-                        </Alert>
+                        />
                     )}
-                </VStack>
-            </Modal.Footer>
-        </Modal>
+                />
+            }
+            åpen={props.åpen}
+            onClose={props.onClose}
+            onSubmit={form.handleSubmit(onSubmit)}
+        />
     );
 };
 

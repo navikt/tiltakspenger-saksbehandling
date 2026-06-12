@@ -17,10 +17,8 @@ import {
     kanVidereBehandleKlage,
 } from '~/lib/klage/utils/klageUtils';
 import AvsluttBehandlingMenyvalg from '../../personoversikt/avsluttBehandling/AvsluttBehandlingMenyvalg';
-import AvsluttBehandlingModal from '~/lib/_felles/modaler/AvsluttBehandlingModal';
 import { useSak } from '~/lib/sak/SakContext';
 import {
-    useAvbrytKlagebehandling,
     useGjenopptaKlagebehandling,
     useLeggKlagebehandlingTilbake,
     useOvertaKlagebehandling,
@@ -33,6 +31,7 @@ import SettBehandlingPåVentModal from '~/lib/_felles/modaler/SettBehandlingPåV
 import { Nullable } from '~/types/UtilTypes';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { ApiErrorFeilModal, ApiErrorState } from '~/lib/_felles/modaler/ApiErrorFeilModal';
+import AvbrytKlagebehandlingModal from '~/lib/klage/modaler/avbryt/AvbrytKlagebehandlingModal';
 
 const KlageMeny = (props: {
     klage: Klagebehandling;
@@ -55,15 +54,6 @@ const KlageMeny = (props: {
         !eierInnloggetSaksbehandlerBehandlingen && props.klage.saksbehandler;
 
     const ingenEierBehandling = !props.klage.saksbehandler;
-
-    const avbrytKlageBehandling = useAvbrytKlagebehandling({
-        sakId: props.klage.sakId,
-        klageId: props.klage.id,
-        onSuccess: (sak) => {
-            setSak(sak);
-            setVisAvsluttBehandlingModal(false);
-        },
-    });
 
     const taKlagebehandling = useTaKlagebehandling({
         sakId: props.klage.sakId,
@@ -226,21 +216,12 @@ const KlageMeny = (props: {
                 </ActionMenu.Content>
             </ActionMenu>
             {visAvsluttBehandlingModal && (
-                <AvsluttBehandlingModal
+                <AvbrytKlagebehandlingModal
+                    sakId={props.klage.sakId}
+                    klageId={props.klage.id}
+                    saksnummer={props.klage.saksnummer}
                     åpen={visAvsluttBehandlingModal}
                     onClose={() => setVisAvsluttBehandlingModal(false)}
-                    tittel={`Avslutt klagebehandling`}
-                    tekst={`Er du sikker på at du vil avslutte klagebehandlingen?`}
-                    textareaLabel={`Hvorfor avsluttes klagebehandlingen? (obligatorisk)`}
-                    onSubmit={(begrunnelse: string) => {
-                        avbrytKlageBehandling.trigger({ begrunnelse });
-                    }}
-                    footer={{
-                        isMutating: avbrytKlageBehandling.isMutating,
-                        error: avbrytKlageBehandling.error
-                            ? avbrytKlageBehandling.error.message
-                            : null,
-                    }}
                 />
             )}
             {visVilOvertaModal && (

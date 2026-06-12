@@ -1,4 +1,5 @@
 import {
+    AvbrytKlagebehandlingStatus,
     Klagebehandling,
     KlagebehandlingResultat,
     KlagebehandlingsresultatOmgjør,
@@ -195,4 +196,11 @@ export const hentSisteKlagehendelseUtfallFraKlagebehandling = (
               : null;
 
     return utfall;
+};
+
+export const avbrytKlagebehandlingStatusLabels: Record<AvbrytKlagebehandlingStatus, string> = {
+    [AvbrytKlagebehandlingStatus.KLAGE_TRUKKET]: 'Klagen er trukket',
+    [AvbrytKlagebehandlingStatus.FEILREGISTRER_KLAGE]: 'Feilregistrert klage',
+    [AvbrytKlagebehandlingStatus.MANGLENDE_UTBETALING]: 'Manglende utbetaling',
+    [AvbrytKlagebehandlingStatus.ANNET]: 'Annet',
 };

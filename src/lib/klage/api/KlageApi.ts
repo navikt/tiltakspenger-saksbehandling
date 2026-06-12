@@ -1,4 +1,5 @@
 import {
+    AvbrytKlagebehandlingStatus,
     ForhåndsvisBrevKlageRequest,
     Klagebehandling,
     KlagebehandlingsresultatAvvist,
@@ -63,11 +64,10 @@ export const useAvbrytKlagebehandling = (args: {
     klageId: KlageId;
     onSuccess: (sak: SakProps) => void;
 }) =>
-    useFetchJsonFraApi<SakProps, { begrunnelse: string }>(
-        `/sak/${args.sakId}/klage/${args.klageId}/avbryt`,
-        'PATCH',
-        { onSuccess: args.onSuccess },
-    );
+    useFetchJsonFraApi<
+        SakProps,
+        { status: AvbrytKlagebehandlingStatus; begrunnelse: Nullable<string> }
+    >(`/sak/${args.sakId}/klage/${args.klageId}/avbryt`, 'PATCH', { onSuccess: args.onSuccess });
 
 export const useTaKlagebehandling = (args: {
     sakId: string;

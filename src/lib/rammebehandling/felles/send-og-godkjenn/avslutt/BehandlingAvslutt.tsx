@@ -1,6 +1,6 @@
 import { Button } from '@navikt/ds-react';
 import { useState } from 'react';
-import AvsluttBehandlingModal from '~/lib/_felles/modaler/AvsluttBehandlingModal';
+import AvbrytRammebehandlingModal from '~/lib/rammebehandling/modaler/AvbrytRammebehandlingModal';
 
 import router from 'next/router';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
@@ -33,7 +33,7 @@ export const BehandlingAvslutt = ({ behandling }: Props) => {
                 {'Avslutt behandling'}
             </Button>
             {vilAvslutteBehandling && (
-                <AvsluttBehandlingModal
+                <AvbrytRammebehandlingModal
                     åpen={vilAvslutteBehandling}
                     onClose={() => setVilAvslutteBehandling(false)}
                     onSubmit={(begrunnelse) => {

@@ -34,7 +34,6 @@ import {
     finnSisteGyldigeStegForKlage,
     kanBehandleKlage,
 } from '~/lib/klage/utils/klageUtils';
-import AvsluttBehandlingModal from '~/lib/_felles/modaler/AvsluttBehandlingModal';
 import styles from './index.module.css';
 import Link from 'next/link';
 import { Søknad } from '~/types/Søknad';
@@ -48,6 +47,7 @@ import { OppsummeringAvVentestatuserModal } from '~/lib/behandling-felles/oppsum
 import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { MeldekortVedtak } from '~/lib/meldekort/typer/MeldekortVedtak';
 import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
+import AvbrytKlagebehandlingModal from '~/lib/klage/modaler/avbryt/AvbrytKlagebehandlingModal';
 
 type Props = {
     sak: SakProps;
@@ -306,21 +306,12 @@ const VurderingKlagePage = ({
             </VStack>
 
             {vilAvslutteBehandlingModal && (
-                <AvsluttBehandlingModal
+                <AvbrytKlagebehandlingModal
                     åpen={vilAvslutteBehandlingModal}
                     onClose={() => setVilAvslutteBehandlingModal(false)}
-                    tittel={`Avslutt klagebehandling`}
-                    tekst={`Er du sikker på at du vil avslutte klagebehandlingen?`}
-                    textareaLabel={`Hvorfor avsluttes klagebehandlingen? (obligatorisk)`}
-                    onSubmit={(begrunnelse: string) => {
-                        avbrytKlageBehandling.trigger({ begrunnelse });
-                    }}
-                    footer={{
-                        isMutating: avbrytKlageBehandling.isMutating,
-                        error: avbrytKlageBehandling.error
-                            ? avbrytKlageBehandling.error.message
-                            : null,
-                    }}
+                    sakId={sak.sakId}
+                    klageId={klage.id}
+                    saksnummer={sak.saksnummer}
                 />
             )}
         </div>

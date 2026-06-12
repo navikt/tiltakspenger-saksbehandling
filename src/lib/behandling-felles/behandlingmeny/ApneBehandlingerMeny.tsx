@@ -16,7 +16,7 @@ import { visTildelMegMenyvalg } from '~/lib/behandling-felles/behandlingmeny/men
 import { ArrowRightIcon, ChevronDownIcon, PersonIcon } from '@navikt/aksel-icons';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import SeBehandlingMenyvalg from '~/lib/behandling-felles/behandlingmeny/menyvalg/SeBehandlingMenyvalg';
-import AvsluttBehandlingModal from '~/lib/_felles/modaler/AvsluttBehandlingModal';
+
 import OvertabehandlingModal from '~/lib/behandling-felles/behandlingmeny/OvertaBehandlingModal';
 import Link from 'next/link';
 import SettBehandlingPåVentMenyvalg, {
@@ -39,6 +39,7 @@ import router from 'next/router';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { useSettBehandlingPåVent } from './useSettBehandlingPåVent';
 import { ApiErrorFeilModal, ApiErrorState } from '~/lib/_felles/modaler/ApiErrorFeilModal';
+import AvbrytRammebehandlingModal from '~/lib/rammebehandling/modaler/AvbrytRammebehandlingModal';
 
 type Props = {
     behandling: ÅpenRammebehandlingForOversikt;
@@ -209,7 +210,7 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
                 </ActionMenu.Content>
             </ActionMenu>
             {visAvsluttBehandlingModal && (
-                <AvsluttBehandlingModal
+                <AvbrytRammebehandlingModal
                     åpen={visAvsluttBehandlingModal}
                     onClose={() => setVisAvsluttBehandlingModal(false)}
                     onSubmit={(begrunnelse) =>

@@ -1,7 +1,7 @@
 import { PauseIcon } from '@navikt/aksel-icons';
 import { Button, Heading, HStack, LocalAlert, Modal, Textarea } from '@navikt/ds-react';
 import { Controller, useForm } from 'react-hook-form';
-import styles from './AvsluttBehandlingModal.module.css';
+import styles from './SettBehandlingPåVentModal.module.css';
 
 import { Nullable } from '~/types/UtilTypes';
 import { FetcherError } from '~/utils/fetch/fetch';

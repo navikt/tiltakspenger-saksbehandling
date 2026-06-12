@@ -28,7 +28,6 @@ import {
     kanBehandleKlage,
 } from '~/lib/klage/utils/klageUtils';
 import { useAvbrytKlagebehandling, useOppdaterFormkrav } from '~/lib/klage/api/KlageApi';
-import AvsluttBehandlingModal from '~/lib/_felles/modaler/AvsluttBehandlingModal';
 import { Nullable } from '~/types/UtilTypes';
 import { erRammebehandlingUnderAktivOmgjøring } from '~/lib/rammebehandling/rammebehandlingUtils';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
@@ -36,6 +35,7 @@ import styles from './index.module.css';
 import { MeldekortVedtak } from '~/lib/meldekort/typer/MeldekortVedtak';
 import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { OppsummeringAvVentestatuserModal } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
+import AvbrytKlagebehandlingModal from '~/lib/klage/modaler/avbryt/AvbrytKlagebehandlingModal';
 
 type Props = {
     sak: SakProps;
@@ -252,21 +252,12 @@ const FormkravKlagePage = ({ sak, omgjøringsbehandling }: Props) => {
                 </VStack>
             </form>
             {vilAvslutteBehandlingModal && (
-                <AvsluttBehandlingModal
+                <AvbrytKlagebehandlingModal
                     åpen={vilAvslutteBehandlingModal}
                     onClose={() => setVilAvslutteBehandlingModal(false)}
-                    tittel={`Avslutt klagebehandling`}
-                    tekst={`Er du sikker på at du vil avslutte klagebehandlingen?`}
-                    textareaLabel={`Hvorfor avsluttes klagebehandlingen? (obligatorisk)`}
-                    onSubmit={(begrunnelse: string) => {
-                        avbrytKlageBehandling.trigger({ begrunnelse });
-                    }}
-                    footer={{
-                        isMutating: avbrytKlageBehandling.isMutating,
-                        error: avbrytKlageBehandling.error
-                            ? avbrytKlageBehandling.error.message
-                            : null,
-                    }}
+                    sakId={sak.sakId}
+                    klageId={klage.id}
+                    saksnummer={sak.saksnummer}
                 />
             )}
         </FormProvider>
