@@ -10,7 +10,7 @@ import { MeldeperiodeKjedeStatus } from '~/lib/meldekort/typer/Meldeperiode';
 import { MeldekortOversiktIkkeKlar } from './meldekort-oversikt/ikke-klar/MeldekortOversiktIkkeKlar';
 import { VedtatteBehandlinger } from '~/lib/personoversikt/behandlinger-oversikt/vedtatte-behandlinger/VedtatteBehandlinger';
 import NotificationBanner from '~/lib/_felles/notifications/NotificationBanner';
-import MeldekortHelgToggle from '~/lib/personoversikt/helg-toggle/MeldekortHelgToggle';
+import { MeldekortHelgToggle } from '~/lib/personoversikt/helg-toggle/MeldekortHelgToggle';
 import {
     Rammebehandling,
     Rammebehandlingsstatus,

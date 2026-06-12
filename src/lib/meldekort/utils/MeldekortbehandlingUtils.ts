@@ -8,7 +8,7 @@ import { erBeslutter, erSaksbehandler, kanBehandle } from '~/lib/saksbehandler/t
 import { Saksbehandler } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
 
-export const erMeldekortbehandlingUnderAktivBehandling = (m: MeldekortbehandlingProps) =>
+export const erMeldekortbehandlingUnderAktivBehandling = (m: MeldekortbehandlingProps): boolean =>
     m.status === MeldekortbehandlingStatus.UNDER_BEHANDLING ||
     m.status === MeldekortbehandlingStatus.KLAR_TIL_BESLUTNING ||
     m.status === MeldekortbehandlingStatus.UNDER_BESLUTNING;
@@ -50,7 +50,7 @@ export const oppdaterSakMedMeldekortbehandling = (
 export const kanSaksbehandleForMeldekort = (
     meldekortbehandling: MeldekortbehandlingProps | MeldekortbehandlingPropsV2,
     innloggetSaksbehandler: Saksbehandler,
-) =>
+): boolean =>
     kanBehandle(innloggetSaksbehandler, meldekortbehandling.saksbehandler) &&
     meldekortbehandling.status === MeldekortbehandlingStatus.UNDER_BEHANDLING &&
     !erMeldekortbehandlingSattPaVent(meldekortbehandling);
@@ -58,7 +58,7 @@ export const kanSaksbehandleForMeldekort = (
 export const kanBeslutteForMeldekort = (
     meldekort: MeldekortbehandlingProps | MeldekortbehandlingPropsV2,
     innloggetSaksbehandler: Saksbehandler,
-) => {
+): boolean => {
     const { status, saksbehandler } = meldekort;
 
     return (
@@ -88,7 +88,7 @@ export const eierMeldekortbehandling = (
 export const skalKunneTaMeldekortbehandling = (
     meldekortbehandling: MeldekortbehandlingProps | MeldekortbehandlingPropsV2,
     innloggetSaksbehandler: Saksbehandler,
-) => {
+): boolean => {
     const { status, saksbehandler } = meldekortbehandling;
 
     switch (status) {
@@ -107,19 +107,19 @@ export const skalKunneTaMeldekortbehandling = (
 export const skalKunneOvertaMeldekortbehandling = (
     meldekortbehandling: MeldekortbehandlingProps | MeldekortbehandlingPropsV2,
     innloggetSaksbehandler: Saksbehandler,
-) => {
+): boolean => {
     const { status, saksbehandler, beslutter } = meldekortbehandling;
 
     switch (status) {
         case MeldekortbehandlingStatus.UNDER_BESLUTNING:
             return (
-                beslutter &&
+                !!beslutter &&
                 erBeslutter(innloggetSaksbehandler) &&
                 innloggetSaksbehandler.navIdent != saksbehandler
             );
         case MeldekortbehandlingStatus.UNDER_BEHANDLING:
             return (
-                saksbehandler &&
+                !!saksbehandler &&
                 erSaksbehandler(innloggetSaksbehandler) &&
                 innloggetSaksbehandler.navIdent != saksbehandler
             );
@@ -130,12 +130,12 @@ export const skalKunneOvertaMeldekortbehandling = (
 
 export const erMeldekortbehandlingSattPaVent = (
     meldekortbehandling: MeldekortbehandlingProps | MeldekortbehandlingPropsV2,
-) => meldekortbehandling.ventestatus?.at(-1)?.erSattPåVent ?? false;
+): boolean => meldekortbehandling.ventestatus?.at(-1)?.erSattPåVent ?? false;
 
 export const skalKunneGjenopptaMeldekortbehandling = (
     meldekortbehandling: MeldekortbehandlingProps | MeldekortbehandlingPropsV2,
     innloggetSaksbehandler: Saksbehandler,
-) => {
+): boolean => {
     return (
         erMeldekortbehandlingSattPaVent(meldekortbehandling) &&
         (skalKunneTaMeldekortbehandling(meldekortbehandling, innloggetSaksbehandler) ||
@@ -147,7 +147,7 @@ export const skalKunneGjenopptaMeldekortbehandling = (
 export const skalKunneSetteMeldekortbehandlingPaVent = (
     meldekortbehandling: MeldekortbehandlingProps | MeldekortbehandlingPropsV2,
     innloggetSaksbehandler: Saksbehandler,
-) => {
+): boolean => {
     const erRelevantMenyValgForStatus =
         meldekortbehandling.status === MeldekortbehandlingStatus.UNDER_BEHANDLING ||
         meldekortbehandling.status === MeldekortbehandlingStatus.UNDER_BESLUTNING;
