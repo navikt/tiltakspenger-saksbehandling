@@ -1,4 +1,4 @@
-import { Button, Dialog, Switch, VStack } from '@navikt/ds-react';
+import { BodyLong, Button, Dialog, Switch, VStack } from '@navikt/ds-react';
 import { CalendarIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
@@ -36,6 +36,12 @@ export const MeldekortHelgToggle = () => {
 
                     <Dialog.Body>
                         <VStack gap={'space-8'}>
+                            <BodyLong>
+                                {
+                                    'Dersom denne er skrudd på, får brukeren mulighet til å rapportere for lørdag og søndag i meldekortet sitt.'
+                                }
+                            </BodyLong>
+                            <BodyLong>{'Skal som regel være skrudd av.'}</BodyLong>
                             <Switch
                                 checked={kanSendeInnHelgForMeldekort}
                                 onChange={(e) =>
