@@ -21,13 +21,12 @@ import KlageLayout, { KlageProvider, useKlage } from '../../layout';
 import { finnNesteKlageSteg, KlageSteg } from '~/lib/klage/utils/KlageLayoutUtils';
 import { CheckmarkCircleIcon, PencilIcon, TrashIcon } from '@navikt/aksel-icons';
 import { useHentPersonopplysninger } from '~/lib/personaliaheader/useHentPersonopplysninger';
-import { personoversiktUrl } from '~/utils/urls';
 import {
     harKlageEnÅpenRammebehandling,
     erKlageOmgjøring,
     kanBehandleKlage,
 } from '~/lib/klage/utils/klageUtils';
-import { useAvbrytKlagebehandling, useOppdaterFormkrav } from '~/lib/klage/api/KlageApi';
+import { useOppdaterFormkrav } from '~/lib/klage/api/KlageApi';
 import { Nullable } from '~/types/UtilTypes';
 import { erRammebehandlingUnderAktivOmgjøring } from '~/lib/rammebehandling/rammebehandlingUtils';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
@@ -89,14 +88,6 @@ const FormkravKlagePage = ({ sak, omgjøringsbehandling }: Props) => {
             setKlage(klage);
             form.reset(klageTilFormkravFormData(klage));
             setFormTilstand('LAGRET');
-        },
-    });
-
-    const avbrytKlageBehandling = useAvbrytKlagebehandling({
-        sakId: klage.sakId,
-        klageId: klage.id,
-        onSuccess: () => {
-            router.push(personoversiktUrl(sak.saksnummer));
         },
     });
 
@@ -177,19 +168,6 @@ const FormkravKlagePage = ({ sak, omgjøringsbehandling }: Props) => {
                             </LocalAlert.Header>
                             <LocalAlert.Content>
                                 {oppdaterFormkrav.error.message}
-                            </LocalAlert.Content>
-                        </LocalAlert>
-                    )}
-
-                    {avbrytKlageBehandling.error && (
-                        <LocalAlert status="error">
-                            <LocalAlert.Header>
-                                <LocalAlert.Title>
-                                    Feil ved avbrytelse av klagebehandling
-                                </LocalAlert.Title>
-                            </LocalAlert.Header>
-                            <LocalAlert.Content>
-                                {avbrytKlageBehandling.error.message}
                             </LocalAlert.Content>
                         </LocalAlert>
                     )}

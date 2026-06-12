@@ -22,10 +22,8 @@ import {
 } from '~/lib/klage/forms/klage-vurdering/VurderingFormUtils';
 import { BodyShort, Button, Heading, HStack, InfoCard, LocalAlert, VStack } from '@navikt/ds-react';
 import { CheckmarkCircleIcon, PencilIcon, TrashIcon } from '@navikt/aksel-icons';
-import { useAvbrytKlagebehandling, useVurderKlage } from '~/lib/klage/api/KlageApi';
+import { useVurderKlage } from '~/lib/klage/api/KlageApi';
 import WarningCircleIcon from '~/lib/_felles/icons/WarningCircleIcon';
-import router from 'next/router';
-import { personoversiktUrl } from '~/utils/urls';
 import {
     erKlageAvsluttet,
     harKlageEnÅpenRammebehandling,
@@ -137,14 +135,6 @@ const VurderingKlagePage = ({
         },
     });
 
-    const avbrytKlageBehandling = useAvbrytKlagebehandling({
-        sakId: klage.sakId,
-        klageId: klage.id,
-        onSuccess: () => {
-            router.push(personoversiktUrl(sak.saksnummer));
-        },
-    });
-
     const onSubmit = (data: VurderingFormData) => {
         vurderKlage.trigger(vurderingFormDataTilVurderKlageRequest(data));
     };
@@ -202,19 +192,6 @@ const VurderingKlagePage = ({
                                 <LocalAlert.Title>Feil ved oppdatering av klage</LocalAlert.Title>
                             </LocalAlert.Header>
                             <LocalAlert.Content>{vurderKlage.error.message}</LocalAlert.Content>
-                        </LocalAlert>
-                    )}
-
-                    {avbrytKlageBehandling.error && (
-                        <LocalAlert status="error">
-                            <LocalAlert.Header>
-                                <LocalAlert.Title>
-                                    Feil ved avbrytelse av klagebehandling
-                                </LocalAlert.Title>
-                            </LocalAlert.Header>
-                            <LocalAlert.Content>
-                                {avbrytKlageBehandling.error.message}
-                            </LocalAlert.Content>
                         </LocalAlert>
                     )}
 

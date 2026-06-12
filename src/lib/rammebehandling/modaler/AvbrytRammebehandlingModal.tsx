@@ -12,8 +12,6 @@ type Props = {
     tekst?: string;
     textareaLabel?: string;
     footer?: {
-        primaryButtonText?: string;
-        secondaryButtonText?: string;
         isMutating: boolean;
         error: Nullable<string>;
     };

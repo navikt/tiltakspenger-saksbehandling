@@ -63,6 +63,10 @@ export const AvsluttMeldekortbehandlingModal = (props: {
             åpen={props.åpen}
             onClose={props.onClose}
             onSubmit={form.handleSubmit(onSubmit)}
+            footer={{
+                isMutating: avsluttMeldekortbehandlingApi.isMutating,
+                error: avsluttMeldekortbehandlingApi.error?.message ?? null,
+            }}
         />
     );
 };
