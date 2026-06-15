@@ -3,7 +3,6 @@ import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import { useMeldekortbehandling } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2Context';
-import { MeldekortbehandlingStatus } from '~/lib/meldekort/typer/Meldekortbehandling';
 import {
     eierMeldekortbehandling,
     erMeldekortbehandlingSattPaVent,
@@ -50,13 +49,6 @@ export const MeldekortbehandlingHandlingerMeny = () => {
     const skalViseEierMenyvalg = eierBehandlingen && !erSattPåVent;
     const skalViseLeggTilbakeMenyvalg = eierBehandlingen;
     const skalViseOvertaMenyvalg = kanOverta && !erSattPåVent && !erTilknyttetBehandlingen;
-
-    const overtarFra =
-        meldekortbehandling.status === MeldekortbehandlingStatus.UNDER_BEHANDLING
-            ? (meldekortbehandling.saksbehandler ?? 'Ukjent saksbehandler')
-            : meldekortbehandling.status === MeldekortbehandlingStatus.UNDER_BESLUTNING
-              ? (meldekortbehandling.beslutter ?? 'Ukjent beslutter')
-              : 'Ukjent saksbehandler/beslutter';
 
     const harHandlinger =
         kanTa ||
@@ -127,7 +119,6 @@ export const MeldekortbehandlingHandlingerMeny = () => {
                 <MeldekortbehandlingOverta
                     åpen={aktivDialog === 'overta'}
                     onClose={() => setAktivDialog(null)}
-                    overtarFra={overtarFra}
                 />
             )}
 

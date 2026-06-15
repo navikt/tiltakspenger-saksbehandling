@@ -7,29 +7,36 @@ import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { meldekortbehandlingUrl } from '~/utils/urls';
 import { useRouter } from 'next/router';
 import { SakProps } from '~/lib/sak/SakTyper';
+import { MeldekortbehandlingStatus } from '~/lib/meldekort/typer/Meldekortbehandling';
 
 type Props = {
     åpen: boolean;
     onClose: () => void;
-    overtarFra: string;
 };
 
-export const MeldekortbehandlingOverta = ({ åpen, onClose, overtarFra }: Props) => {
+export const MeldekortbehandlingOverta = ({ åpen, onClose }: Props) => {
     const { sak, setSak } = useSak();
-    const { id } = useMeldekortbehandling();
+    const meldekortbehandling = useMeldekortbehandling();
 
     const router = useRouter();
 
     const { trigger, error, isMutating } = useFetchJsonFraApi<SakProps, { overtarFra: string }>(
-        `/sak/${sak.sakId}/meldekort/${id}/overta`,
+        `/sak/${sak.sakId}/meldekort/${meldekortbehandling.id}/overta`,
         'PATCH',
     );
+
+    const overtarFra =
+        meldekortbehandling.status === MeldekortbehandlingStatus.UNDER_BEHANDLING
+            ? (meldekortbehandling.saksbehandler ?? 'Ukjent saksbehandler')
+            : meldekortbehandling.status === MeldekortbehandlingStatus.UNDER_BESLUTNING
+              ? (meldekortbehandling.beslutter ?? 'Ukjent beslutter')
+              : 'Ukjent saksbehandler/beslutter';
 
     const overta = () => {
         trigger({ overtarFra }).then((response) => {
             if (response) {
                 setSak(response);
-                router.push(meldekortbehandlingUrl(sak.saksnummer, id));
+                router.push(meldekortbehandlingUrl(sak.saksnummer, meldekortbehandling.id));
             }
         });
     };
