@@ -1,4 +1,4 @@
-import { ActionMenu, Loader } from '@navikt/ds-react';
+import { Button, Dialog } from '@navikt/ds-react';
 import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { SakProps } from '~/lib/sak/SakTyper';
@@ -9,7 +9,12 @@ import { useNotification } from '~/lib/_felles/notifications/NotificationContext
 import { personoversiktUrl } from '~/utils/urls';
 import { PersonoversiktTab } from '~/lib/personoversikt/Personoversikt';
 
-export const MeldekortbehandlingLeggTilbake = () => {
+type Props = {
+    åpen: boolean;
+    onClose: () => void;
+};
+
+export const MeldekortbehandlingLeggTilbake = ({ åpen, onClose }: Props) => {
     const { sak } = useSak();
     const { id } = useMeldekortbehandling();
     const { navigateWithNotification } = useNotification();
@@ -31,22 +36,38 @@ export const MeldekortbehandlingLeggTilbake = () => {
     };
 
     return (
-        <>
-            <ActionMenu.Item
-                icon={<ArrowUndoIcon aria-hidden />}
-                onClick={(event) => {
-                    event.preventDefault();
-                    leggTilbake();
-                }}
-            >
-                {isMutating ? <Loader /> : 'Legg tilbake'}
-            </ActionMenu.Item>
+        <Dialog open={åpen} onOpenChange={(nesteÅpen) => !nesteÅpen && onClose()}>
+            <Dialog.Popup>
+                <Dialog.Header>
+                    <strong>{'Legg tilbake meldekortbehandlingen?'}</strong>
+                </Dialog.Header>
 
-            {error && (
-                <Infokort
-                    variant={'feil'}
-                >{`Feil ved å legge tilbake: ${error.message} (kode ${error.status})`}</Infokort>
-            )}
-        </>
+                <Dialog.Body>
+                    {'Er du sikker på at du vil legge tilbake meldekortbehandlingen?'}
+
+                    {error && (
+                        <Infokort
+                            variant={'feil'}
+                            header={'Feil ved å legge tilbake'}
+                        >{`Feil: ${error.message} (kode ${error.status})`}</Infokort>
+                    )}
+                </Dialog.Body>
+
+                <Dialog.Footer>
+                    <Button
+                        variant={'primary'}
+                        icon={<ArrowUndoIcon aria-hidden />}
+                        loading={isMutating}
+                        onClick={leggTilbake}
+                    >
+                        {'Legg tilbake'}
+                    </Button>
+
+                    <Dialog.CloseTrigger>
+                        <Button variant={'secondary'}>{'Avbryt'}</Button>
+                    </Dialog.CloseTrigger>
+                </Dialog.Footer>
+            </Dialog.Popup>
+        </Dialog>
     );
 };

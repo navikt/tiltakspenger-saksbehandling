@@ -1,5 +1,13 @@
 import { ActionMenu, Button } from '@navikt/ds-react';
-import { ChevronDownIcon } from '@navikt/aksel-icons';
+import {
+    ArrowUndoIcon,
+    ArrowsSquarepathIcon,
+    ChevronDownIcon,
+    PauseIcon,
+    PersonIcon,
+    PlayIcon,
+    TrashIcon,
+} from '@navikt/aksel-icons';
 import { useState } from 'react';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import { useMeldekortbehandling } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2Context';
@@ -18,7 +26,7 @@ import { MeldekortbehandlingSettPåVent } from '~/lib/meldekort/v2/meldekortbeha
 import { MeldekortbehandlingOverta } from '~/lib/meldekort/v2/meldekortbehandling/handlinger-meny/handlinger/MeldekortbehandlingOverta';
 import { MeldekortbehandlingAvslutt } from '~/lib/meldekort/v2/meldekortbehandling/handlinger-meny/handlinger/MeldekortbehandlingAvslutt';
 
-type AktivDialog = 'settPåVent' | 'overta' | 'avslutt';
+type AktivDialog = 'tildelMeg' | 'gjenoppta' | 'leggTilbake' | 'settPåVent' | 'overta' | 'avslutt';
 
 export const MeldekortbehandlingHandlingerMeny = () => {
     const { innloggetSaksbehandler } = useSaksbehandler();
@@ -76,20 +84,47 @@ export const MeldekortbehandlingHandlingerMeny = () => {
                     </Button>
                 </ActionMenu.Trigger>
                 <ActionMenu.Content>
-                    {kanTa && <MeldekortbehandlingTildelMeg />}
+                    {kanTa && (
+                        <ActionMenu.Item
+                            icon={<PersonIcon aria-hidden />}
+                            onSelect={() => setAktivDialog('tildelMeg')}
+                        >
+                            {'Tildel meg'}
+                        </ActionMenu.Item>
+                    )}
 
-                    {kanGjenoppta && <MeldekortbehandlingGjenoppta />}
+                    {kanGjenoppta && (
+                        <ActionMenu.Item
+                            icon={<PlayIcon aria-hidden />}
+                            onSelect={() => setAktivDialog('gjenoppta')}
+                        >
+                            {'Gjenoppta'}
+                        </ActionMenu.Item>
+                    )}
 
-                    {skalViseLeggTilbakeMenyvalg && <MeldekortbehandlingLeggTilbake />}
+                    {skalViseLeggTilbakeMenyvalg && (
+                        <ActionMenu.Item
+                            icon={<ArrowUndoIcon aria-hidden />}
+                            onSelect={() => setAktivDialog('leggTilbake')}
+                        >
+                            {'Legg tilbake'}
+                        </ActionMenu.Item>
+                    )}
 
                     {kanSettePåVent && (
-                        <ActionMenu.Item onSelect={() => setAktivDialog('settPåVent')}>
+                        <ActionMenu.Item
+                            icon={<PauseIcon aria-hidden />}
+                            onSelect={() => setAktivDialog('settPåVent')}
+                        >
                             {'Sett på vent'}
                         </ActionMenu.Item>
                     )}
 
                     {skalViseOvertaMenyvalg && (
-                        <ActionMenu.Item onSelect={() => setAktivDialog('overta')}>
+                        <ActionMenu.Item
+                            icon={<ArrowsSquarepathIcon aria-hidden />}
+                            onSelect={() => setAktivDialog('overta')}
+                        >
                             {'Overta behandling'}
                         </ActionMenu.Item>
                     )}
@@ -99,6 +134,7 @@ export const MeldekortbehandlingHandlingerMeny = () => {
                             <ActionMenu.Divider />
                             <ActionMenu.Item
                                 variant={'danger'}
+                                icon={<TrashIcon aria-hidden />}
                                 onSelect={() => setAktivDialog('avslutt')}
                             >
                                 {'Avslutt behandling'}
@@ -107,6 +143,27 @@ export const MeldekortbehandlingHandlingerMeny = () => {
                     )}
                 </ActionMenu.Content>
             </ActionMenu>
+
+            {kanTa && (
+                <MeldekortbehandlingTildelMeg
+                    åpen={aktivDialog === 'tildelMeg'}
+                    onClose={() => setAktivDialog(null)}
+                />
+            )}
+
+            {kanGjenoppta && (
+                <MeldekortbehandlingGjenoppta
+                    åpen={aktivDialog === 'gjenoppta'}
+                    onClose={() => setAktivDialog(null)}
+                />
+            )}
+
+            {skalViseLeggTilbakeMenyvalg && (
+                <MeldekortbehandlingLeggTilbake
+                    åpen={aktivDialog === 'leggTilbake'}
+                    onClose={() => setAktivDialog(null)}
+                />
+            )}
 
             {kanSettePåVent && (
                 <MeldekortbehandlingSettPåVent

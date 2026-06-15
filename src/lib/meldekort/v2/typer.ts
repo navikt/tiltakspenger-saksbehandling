@@ -27,6 +27,7 @@ import { Avbrutt } from '~/lib/behandling-felles/typer/Avbrutt';
 import { SimulertBeregning } from '~/lib/beregning-og-simulering/typer/SimulertBeregning';
 import { TilbakekrevingId } from '~/lib/tilbakekreving/typer/Tilbakekreving';
 import { VentestatusHendelse } from '~/types/Ventestatus';
+import { SaksbehandlerBehandlingKommando } from '~/lib/behandling-felles/typer/BehandlingFelles';
 
 export type MeldeperiodeKjedePropsV2 = {
     id: MeldeperiodeKjedeId;
@@ -74,4 +75,5 @@ export type MeldekortbehandlingPropsV2 = {
     tilbakekrevingId: Nullable<TilbakekrevingId>;
     skalSendeVedtaksbrev: boolean;
     ventestatus: VentestatusHendelse[];
+    gyldigeKommandoer: SaksbehandlerBehandlingKommando[];
 };

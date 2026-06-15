@@ -1,4 +1,4 @@
-import { ActionMenu, Loader } from '@navikt/ds-react';
+import { Button, Dialog } from '@navikt/ds-react';
 import { PlayIcon } from '@navikt/aksel-icons';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { useSak } from '~/lib/sak/SakContext';
@@ -6,7 +6,12 @@ import { useMeldekortbehandling } from '~/lib/meldekort/v2/meldekortbehandling/c
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { SakProps } from '~/lib/sak/SakTyper';
 
-export const MeldekortbehandlingGjenoppta = () => {
+type Props = {
+    åpen: boolean;
+    onClose: () => void;
+};
+
+export const MeldekortbehandlingGjenoppta = ({ åpen, onClose }: Props) => {
     const { sak, setSak } = useSak();
     const { id } = useMeldekortbehandling();
 
@@ -19,27 +24,44 @@ export const MeldekortbehandlingGjenoppta = () => {
         trigger().then((oppdatertSak) => {
             if (oppdatertSak) {
                 setSak(oppdatertSak);
+                onClose();
             }
         });
     };
 
     return (
-        <>
-            <ActionMenu.Item
-                icon={<PlayIcon aria-hidden />}
-                onClick={(event) => {
-                    event.preventDefault();
-                    gjenoppta();
-                }}
-            >
-                {isMutating ? <Loader /> : 'Gjenoppta'}
-            </ActionMenu.Item>
+        <Dialog open={åpen} onOpenChange={(nesteÅpen) => !nesteÅpen && onClose()}>
+            <Dialog.Popup>
+                <Dialog.Header>
+                    <strong>{'Gjenoppta meldekortbehandlingen?'}</strong>
+                </Dialog.Header>
 
-            {error && (
-                <Infokort
-                    variant={'feil'}
-                >{`Feil ved gjenopptak: ${error.message} (kode ${error.status})`}</Infokort>
-            )}
-        </>
+                <Dialog.Body>
+                    {'Er du sikker på at du vil gjenoppta meldekortbehandlingen?'}
+
+                    {error && (
+                        <Infokort
+                            variant={'feil'}
+                            header={'Feil ved gjenopptak'}
+                        >{`Feil: ${error.message} (kode ${error.status})`}</Infokort>
+                    )}
+                </Dialog.Body>
+
+                <Dialog.Footer>
+                    <Button
+                        variant={'primary'}
+                        icon={<PlayIcon aria-hidden />}
+                        loading={isMutating}
+                        onClick={gjenoppta}
+                    >
+                        {'Gjenoppta'}
+                    </Button>
+
+                    <Dialog.CloseTrigger>
+                        <Button variant={'secondary'}>{'Avbryt'}</Button>
+                    </Dialog.CloseTrigger>
+                </Dialog.Footer>
+            </Dialog.Popup>
+        </Dialog>
     );
 };
