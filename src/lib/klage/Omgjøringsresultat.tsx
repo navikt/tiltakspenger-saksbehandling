@@ -6,7 +6,12 @@ import { Rammebehandling, RammebehandlingId } from '~/lib/rammebehandling/typer/
 import { Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { Saksbehandler } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import { Søknad } from '~/types/Søknad';
-import { erKlageVedtatt, erKlageFerdigstilt, erKlageAvsluttet } from '~/lib/klage/utils/klageUtils';
+import {
+    erKlageVedtatt,
+    erKlageFerdigstilt,
+    erKlageAvsluttet,
+    erKlagebehandlingSattPåVent,
+} from '~/lib/klage/utils/klageUtils';
 import { behandlingUrl, meldeperiodeUrl } from '~/utils/urls';
 import { VelgOmgjøringsbehandlingModal } from '~/lib/klage/forms/velg-omgjøringsbehandling/VelgOmgjøringsbehandlingForm';
 import FerdigstillKlageModalWrapper from './modaler/FerdigstillKlagebehandlingModal';
@@ -166,7 +171,7 @@ const KlageOmgjøringsbehandlingAksjoner = (props: {
                 </>
             ) : (
                 <HStack gap="space-16">
-                    {!erKlageVedtatt(props.klage) && (
+                    {!erKlageVedtatt(props.klage) && !erKlagebehandlingSattPåVent(props.klage) && (
                         <Button
                             type="button"
                             variant="secondary"
@@ -175,12 +180,14 @@ const KlageOmgjøringsbehandlingAksjoner = (props: {
                             Opprett ny behandling
                         </Button>
                     )}
-                    {!erKlageAvsluttet(props.klage) && !erReadonlyForSaksbehandler && (
-                        <FerdigstillKlageModalWrapper
-                            sakId={props.klage.sakId}
-                            klageId={props.klage.id}
-                        />
-                    )}
+                    {!erKlageAvsluttet(props.klage) &&
+                        !erReadonlyForSaksbehandler &&
+                        !erKlagebehandlingSattPåVent(props.klage) && (
+                            <FerdigstillKlageModalWrapper
+                                sakId={props.klage.sakId}
+                                klageId={props.klage.id}
+                            />
+                        )}
                 </HStack>
             )}
             {vilVelgeOmgjøringsbehandlingModal && (

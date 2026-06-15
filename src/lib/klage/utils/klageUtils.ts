@@ -68,10 +68,11 @@ export const erKlageVedtatt = (k: Klagebehandling): boolean =>
 
 //Merk at en klage som er åpen betyr ikke nødvendigvis at den kan behandles.
 export const erKlageÅpen = (k: Klagebehandling): boolean =>
-    k.status === KlagebehandlingStatus.KLAR_TIL_BEHANDLING ||
-    k.status === KlagebehandlingStatus.UNDER_BEHANDLING ||
-    k.status === KlagebehandlingStatus.OPPRETTHOLDT ||
-    k.status === KlagebehandlingStatus.OVERSENDT;
+    !erKlagebehandlingSattPåVent(k) &&
+    (k.status === KlagebehandlingStatus.KLAR_TIL_BEHANDLING ||
+        k.status === KlagebehandlingStatus.UNDER_BEHANDLING ||
+        k.status === KlagebehandlingStatus.OPPRETTHOLDT ||
+        k.status === KlagebehandlingStatus.OVERSENDT);
 
 export const kanVurdereKlage = (k: Klagebehandling): boolean =>
     k.formkrav.vedtakDetKlagesPå !== null &&
@@ -196,6 +197,11 @@ export const hentSisteKlagehendelseUtfallFraKlagebehandling = (
               : null;
 
     return utfall;
+};
+
+export const erKlagebehandlingSattPåVent = (k: Klagebehandling): boolean => {
+    const sisteVenteHendelse = k.ventestatus.at(0);
+    return !!sisteVenteHendelse && sisteVenteHendelse.erSattPåVent;
 };
 
 export const avbrytKlagebehandlingStatusLabels: Record<AvbrytKlagebehandlingStatus, string> = {

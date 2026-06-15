@@ -16,6 +16,7 @@ import KlageLayout, { KlageProvider, useKlage } from '../../layout';
 import { Button, Heading, HStack, LocalAlert, Process, VStack } from '@navikt/ds-react';
 import {
     erKlageAvsluttet,
+    erKlagebehandlingSattPåVent,
     erKlageFerdigstilt,
     erKlageMottattFraKAEllerEtter,
     erKlageVedtatt,
@@ -194,7 +195,8 @@ const OpprettholdResultat = (props: {
         fåttSvarFraKA &&
         !harKlageEnÅpenRammebehandling(props.klage) &&
         !erKlageAvsluttet(props.klage) &&
-        !erReadonlyForSaksbehandler;
+        !erReadonlyForSaksbehandler &&
+        !erKlagebehandlingSattPåVent(props.klage);
 
     const inneholderHendelserRetur = !!props.klage.resultat.klageinstanshendelser.find(
         (hendelse) =>
