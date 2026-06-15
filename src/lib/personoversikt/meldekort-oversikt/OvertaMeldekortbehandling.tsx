@@ -1,11 +1,8 @@
 import { Alert, BodyShort, Button, Heading, HStack, Modal, VStack } from '@navikt/ds-react';
 import router from 'next/router';
-import {
-    MeldekortbehandlingId,
-    MeldekortbehandlingProps,
-} from '~/lib/meldekort/typer/Meldekortbehandling';
+import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
-import { SakId } from '~/lib/sak/SakTyper';
+import { SakId, SakProps } from '~/lib/sak/SakTyper';
 
 const OvertaMeldekortbehandlingModal = (props: {
     sakId: SakId;
@@ -15,14 +12,15 @@ const OvertaMeldekortbehandlingModal = (props: {
     åpen: boolean;
     onClose: () => void;
 }) => {
-    const overtaMeldekortbehandlingApi = useFetchJsonFraApi<
-        MeldekortbehandlingProps,
-        { overtarFra: string }
-    >(`/sak/${props.sakId}/meldekort/${props.meldekortbehandlingId}/overta`, 'PATCH', {
-        onSuccess: () => {
-            router.push(props.meldeperiodeUrl);
+    const overtaMeldekortbehandlingApi = useFetchJsonFraApi<SakProps, { overtarFra: string }>(
+        `/sak/${props.sakId}/meldekort/${props.meldekortbehandlingId}/overta`,
+        'PATCH',
+        {
+            onSuccess: () => {
+                router.push(props.meldeperiodeUrl);
+            },
         },
-    });
+    );
 
     return (
         <Modal width={480} aria-label="Overta behandling" open={props.åpen} onClose={props.onClose}>

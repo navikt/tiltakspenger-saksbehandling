@@ -1,6 +1,5 @@
 import {
     MeldekortbehandlingId,
-    MeldekortbehandlingProps,
     OppdaterMeldekortbehandlingDTO,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { SakId, SakProps } from '~/lib/sak/SakTyper';
@@ -23,17 +22,15 @@ export const useSettMeldekortbehandlingPåVent = (args: MeldekortApiProps<SakPro
         { onSuccess: args.onSuccess, onError: args.onError },
     );
 
-export const useGjenopptaMeldekortbehandling = (
-    args: MeldekortApiProps<MeldekortbehandlingProps>,
-) =>
-    useFetchJsonFraApi<MeldekortbehandlingProps>(
+export const useGjenopptaMeldekortbehandling = (args: MeldekortApiProps<SakProps>) =>
+    useFetchJsonFraApi<SakProps>(
         `/sak/${args.sakId}/meldekort/${args.meldekortbehandlingId}/gjenoppta`,
         'PATCH',
         { onSuccess: args.onSuccess, onError: args.onError },
     );
 
-export const useTaMeldekortbehandling = (args: MeldekortApiProps<MeldekortbehandlingProps>) =>
-    useFetchJsonFraApi<MeldekortbehandlingProps>(
+export const useTaMeldekortbehandling = (args: MeldekortApiProps<SakProps>) =>
+    useFetchJsonFraApi<SakProps>(
         `/sak/${args.sakId}/meldekort/${args.meldekortbehandlingId}/ta`,
         'POST',
         { onSuccess: args.onSuccess, onError: args.onError },

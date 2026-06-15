@@ -1,31 +1,24 @@
 import { ActionMenu, Loader } from '@navikt/ds-react';
 import { PlayIcon } from '@navikt/aksel-icons';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
-import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { useSak } from '~/lib/sak/SakContext';
 import { useMeldekortbehandling } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2Context';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
-import { useNotification } from '~/lib/_felles/notifications/NotificationContext';
-import { personoversiktUrl } from '~/utils/urls';
-import { PersonoversiktTab } from '~/lib/personoversikt/Personoversikt';
+import { SakProps } from '~/lib/sak/SakTyper';
 
 export const MeldekortbehandlingGjenoppta = () => {
-    const { sak } = useSak();
+    const { sak, setSak } = useSak();
     const { id } = useMeldekortbehandling();
-    const { navigateWithNotification } = useNotification();
 
-    const { trigger, error, isMutating } = useFetchJsonFraApi<MeldekortbehandlingProps>(
+    const { trigger, error, isMutating } = useFetchJsonFraApi<SakProps>(
         `/sak/${sak.sakId}/meldekort/${id}/gjenoppta`,
         'PATCH',
     );
 
     const gjenoppta = () => {
-        trigger().then((response) => {
-            if (response) {
-                navigateWithNotification(
-                    personoversiktUrl(sak.saksnummer, PersonoversiktTab.Meldekort),
-                    'Meldekortbehandlingen er gjenopptatt',
-                );
+        trigger().then((oppdatertSak) => {
+            if (oppdatertSak) {
+                setSak(oppdatertSak);
             }
         });
     };

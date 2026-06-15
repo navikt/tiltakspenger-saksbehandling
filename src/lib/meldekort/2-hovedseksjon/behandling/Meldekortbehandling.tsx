@@ -20,10 +20,8 @@ import style from './Meldekortbehandling.module.css';
 import Divider from '~/lib/_felles/divider/Divider';
 import OppsummeringAvVentestatus from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatus';
 import { OppsummeringAvVentestatuserModal } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
-import { useMeldeperiodeKjede } from '~/lib/meldekort/context/MeldeperiodeKjedeContext';
 import { BekreftelsesModal } from '~/lib/_felles/modaler/BekreftelsesModal';
 import { useRef, useState } from 'react';
-import { oppdaterMeldeperiodeKjedeMedMeldekortbehandling } from '~/lib/meldekort/utils/MeldekortbehandlingUtils';
 import {
     useGjenopptaMeldekortbehandling,
     useSettMeldekortbehandlingPåVent,
@@ -182,20 +180,17 @@ const MeldekortbehandlingSettPåVent = (props: {
 };
 
 const MeldekortbehandlingGjenoppta = (props: { meldekortbehandling: MeldekortbehandlingProps }) => {
-    const { meldeperiodeKjede, setMeldeperiodeKjede } = useMeldeperiodeKjede();
+    const { setSak } = useSak();
     const modalRef = useRef<HTMLDialogElement>(null);
 
     const gjenopptaMeldekortbehandling = useGjenopptaMeldekortbehandling({
         sakId: props.meldekortbehandling.sakId,
         meldekortbehandlingId: props.meldekortbehandling.id,
-        onSuccess: (oppdatertMeldekortbehandling) => {
-            setMeldeperiodeKjede(
-                oppdaterMeldeperiodeKjedeMedMeldekortbehandling(
-                    meldeperiodeKjede,
-                    oppdatertMeldekortbehandling,
-                ),
-            );
-            lukkModal();
+        onSuccess: (response) => {
+            if (response) {
+                setSak(response);
+                lukkModal();
+            }
         },
     });
 

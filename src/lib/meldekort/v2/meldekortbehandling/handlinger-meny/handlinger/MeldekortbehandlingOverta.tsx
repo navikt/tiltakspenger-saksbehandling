@@ -1,13 +1,12 @@
 import { Button, Dialog } from '@navikt/ds-react';
 import { ArrowsSquarepathIcon } from '@navikt/aksel-icons';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
-import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { useSak } from '~/lib/sak/SakContext';
 import { useMeldekortbehandling } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2Context';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
-import { useNotification } from '~/lib/_felles/notifications/NotificationContext';
-import { personoversiktUrl } from '~/utils/urls';
-import { PersonoversiktTab } from '~/lib/personoversikt/Personoversikt';
+import { meldekortbehandlingUrl } from '~/utils/urls';
+import { useRouter } from 'next/router';
+import { SakProps } from '~/lib/sak/SakTyper';
 
 type Props = {
     åpen: boolean;
@@ -16,22 +15,21 @@ type Props = {
 };
 
 export const MeldekortbehandlingOverta = ({ åpen, onClose, overtarFra }: Props) => {
-    const { sak } = useSak();
+    const { sak, setSak } = useSak();
     const { id } = useMeldekortbehandling();
-    const { navigateWithNotification } = useNotification();
 
-    const { trigger, error, isMutating } = useFetchJsonFraApi<
-        MeldekortbehandlingProps,
-        { overtarFra: string }
-    >(`/sak/${sak.sakId}/meldekort/${id}/overta`, 'PATCH');
+    const router = useRouter();
+
+    const { trigger, error, isMutating } = useFetchJsonFraApi<SakProps, { overtarFra: string }>(
+        `/sak/${sak.sakId}/meldekort/${id}/overta`,
+        'PATCH',
+    );
 
     const overta = () => {
         trigger({ overtarFra }).then((response) => {
             if (response) {
-                navigateWithNotification(
-                    personoversiktUrl(sak.saksnummer, PersonoversiktTab.Meldekort),
-                    'Du har overtatt meldekortbehandlingen',
-                );
+                setSak(response);
+                router.push(meldekortbehandlingUrl(sak.saksnummer, id));
             }
         });
     };
