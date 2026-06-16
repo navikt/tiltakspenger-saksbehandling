@@ -9,7 +9,7 @@ import {
 } from '~/lib/klage/typer/Klage';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { fetchSak } from '~/utils/fetch/fetch-server';
-import { KlageSteg } from '~/lib/klage/utils/KlageLayoutUtils';
+import { kanNavigereTilKlageSteg, KlageSteg } from '~/lib/klage/utils/KlageLayoutUtils';
 import KlageLayout, { KlageProvider, useKlage } from '../../layout';
 import { useForm } from 'react-hook-form';
 import VurderingForm from '~/lib/klage/forms/klage-vurdering/VurderingForm';
@@ -31,6 +31,7 @@ import {
     erKlageOpprettholdelse,
     finnSisteGyldigeStegForKlage,
     kanBehandleKlage,
+    erKlageAvbrutt,
 } from '~/lib/klage/utils/klageUtils';
 import styles from './index.module.css';
 import Link from 'next/link';
@@ -139,6 +140,11 @@ const VurderingKlagePage = ({
         vurderKlage.trigger(vurderingFormDataTilVurderKlageRequest(data));
     };
 
+    const kanNavigereVidere =
+        (erKlageAvsluttet(klage) || erReadonlyForSaksbehandler) &&
+        (kanNavigereTilKlageSteg(klage, KlageSteg.BREV) ||
+            kanNavigereTilKlageSteg(klage, KlageSteg.RESULTAT));
+
     return (
         <div>
             <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -148,18 +154,20 @@ const VurderingKlagePage = ({
                     marginBlock="space-32"
                     maxWidth="35rem"
                 >
-                    <HStack gap="space-8">
-                        {formTilstand === 'LAGRET' ? (
-                            <CheckmarkCircleIcon
-                                title="Sjekk ikon"
-                                fontSize="1.5rem"
-                                color="green"
-                            />
-                        ) : (
-                            <WarningCircleIcon />
-                        )}
-                        <Heading size="small">Vurdering</Heading>
-                    </HStack>
+                    {!(klage.resultat === null && erKlageAvbrutt(klage)) && (
+                        <HStack gap="space-8">
+                            {formTilstand === 'LAGRET' ? (
+                                <CheckmarkCircleIcon
+                                    title="Sjekk ikon"
+                                    fontSize="1.5rem"
+                                    color="green"
+                                />
+                            ) : (
+                                <WarningCircleIcon />
+                            )}
+                            <Heading size="small">Vurdering</Heading>
+                        </HStack>
+                    )}
 
                     {erKlageOmgjøring(klage) && harKlageEnÅpenRammebehandling(klage) && (
                         <InfoCard data-color="info" size="small">
@@ -175,16 +183,18 @@ const VurderingKlagePage = ({
                         </InfoCard>
                     )}
 
-                    <VurderingForm
-                        control={form.control}
-                        kanOmgjøre={søknader.length > 0}
-                        readonly={
-                            erReadonlyForSaksbehandler ||
-                            formTilstand === 'LAGRET' ||
-                            (!!omgjøringsbehandling &&
-                                !erRammebehandlingUnderAktivOmgjøring(omgjøringsbehandling))
-                        }
-                    />
+                    {!(klage.resultat === null && erKlageAvbrutt(klage)) && (
+                        <VurderingForm
+                            control={form.control}
+                            kanOmgjøre={søknader.length > 0}
+                            readonly={
+                                erReadonlyForSaksbehandler ||
+                                formTilstand === 'LAGRET' ||
+                                (!!omgjøringsbehandling &&
+                                    !erRammebehandlingUnderAktivOmgjøring(omgjøringsbehandling))
+                            }
+                        />
+                    )}
 
                     {vurderKlage.error && (
                         <LocalAlert status="error">
@@ -238,50 +248,51 @@ const VurderingKlagePage = ({
                     )}
                 </VStack>
             </form>
-            <VStack
-                className={styles.formContainer}
-                gap="space-32"
-                marginBlock="space-32"
-                maxWidth="35rem"
-                align="start"
-            >
-                {erKlageOmgjøring(klage) && (
-                    <Omgjøringsresultat
-                        klage={klage}
-                        rammevedtak={rammevedtak}
-                        søknader={søknader}
-                        rammebehandlinger={rammebehandlinger}
-                        innloggetSaksbehandler={innloggetSaksbehandler}
-                        meldekortvedtak={meldekortvedtak}
-                        meldekortbehandlinger={meldekortbehandlinger}
-                    />
-                )}
 
-                {erKlageOpprettholdelse(klage) ? (
-                    <Button as={Link} href={`/sak/${sak.saksnummer}/klage/${klage.id}/brev`}>
-                        Fortsett
-                    </Button>
-                ) : (
-                    (erKlageAvsluttet(klage) || erReadonlyForSaksbehandler) && (
-                        <Button
-                            className={styles.fortsettKnapp}
-                            as={Link}
-                            href={finnSisteGyldigeStegForKlage(klage)}
-                        >
-                            Fortsett
-                        </Button>
-                    )
-                )}
-
-                {klage.ventestatus.length > 0 &&
-                    klage.ventestatus.at(0)?.erSattPåVent === false && (
-                        <OppsummeringAvVentestatuserModal
-                            ventestatuser={klage.ventestatus}
-                            button={{ variant: 'tertiary' }}
+            {formTilstand === 'LAGRET' && (
+                <VStack
+                    className={styles.formContainer}
+                    gap="space-32"
+                    marginBlock="space-32"
+                    maxWidth="35rem"
+                    align="start"
+                >
+                    {erKlageOmgjøring(klage) && (
+                        <Omgjøringsresultat
+                            klage={klage}
+                            rammevedtak={rammevedtak}
+                            søknader={søknader}
+                            rammebehandlinger={rammebehandlinger}
+                            innloggetSaksbehandler={innloggetSaksbehandler}
+                            meldekortvedtak={meldekortvedtak}
+                            meldekortbehandlinger={meldekortbehandlinger}
                         />
                     )}
-            </VStack>
 
+                    {erKlageOpprettholdelse(klage) ? (
+                        <Button as={Link} href={`/sak/${sak.saksnummer}/klage/${klage.id}/brev`}>
+                            Fortsett
+                        </Button>
+                    ) : (
+                        kanNavigereVidere && (
+                            <Button
+                                className={styles.fortsettKnapp}
+                                as={Link}
+                                href={finnSisteGyldigeStegForKlage(klage)}
+                            >
+                                Fortsett
+                            </Button>
+                        )
+                    )}
+                    {klage.ventestatus.length > 0 &&
+                        klage.ventestatus.at(0)?.erSattPåVent === false && (
+                            <OppsummeringAvVentestatuserModal
+                                ventestatuser={klage.ventestatus}
+                                button={{ variant: 'tertiary' }}
+                            />
+                        )}
+                </VStack>
+            )}
             {vilAvslutteBehandlingModal && (
                 <AvbrytKlagebehandlingModal
                     åpen={vilAvslutteBehandlingModal}

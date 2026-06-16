@@ -11,6 +11,7 @@ import {
     erKlageFerdigstilt,
     erKlageAvsluttet,
     erKlagebehandlingSattPåVent,
+    erKlageÅpen,
 } from '~/lib/klage/utils/klageUtils';
 import { behandlingUrl, meldeperiodeUrl } from '~/utils/urls';
 import { VelgOmgjøringsbehandlingModal } from '~/lib/klage/forms/velg-omgjøringsbehandling/VelgOmgjøringsbehandlingForm';
@@ -171,15 +172,17 @@ const KlageOmgjøringsbehandlingAksjoner = (props: {
                 </>
             ) : (
                 <HStack gap="space-16">
-                    {!erKlageVedtatt(props.klage) && !erKlagebehandlingSattPåVent(props.klage) && (
-                        <Button
-                            type="button"
-                            variant="secondary"
-                            onClick={() => setVilVelgeOmgjøringsbehandlingModal(true)}
-                        >
-                            Opprett ny behandling
-                        </Button>
-                    )}
+                    {!erKlageVedtatt(props.klage) &&
+                        !erKlagebehandlingSattPåVent(props.klage) &&
+                        erKlageÅpen(props.klage) && (
+                            <Button
+                                type="button"
+                                variant="secondary"
+                                onClick={() => setVilVelgeOmgjøringsbehandlingModal(true)}
+                            >
+                                Opprett ny behandling
+                            </Button>
+                        )}
                     {!erKlageAvsluttet(props.klage) &&
                         !erReadonlyForSaksbehandler &&
                         !erKlagebehandlingSattPåVent(props.klage) && (

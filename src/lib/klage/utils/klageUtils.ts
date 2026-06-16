@@ -74,6 +74,9 @@ export const erKlageÅpen = (k: Klagebehandling): boolean =>
         k.status === KlagebehandlingStatus.OPPRETTHOLDT ||
         k.status === KlagebehandlingStatus.OVERSENDT);
 
+export const erKlageAvbrutt = (k: Klagebehandling): boolean =>
+    k.status === KlagebehandlingStatus.AVBRUTT;
+
 export const kanVurdereKlage = (k: Klagebehandling): boolean =>
     k.formkrav.vedtakDetKlagesPå !== null &&
     k.formkrav.erKlagerPartISaken &&
