@@ -9,16 +9,8 @@ import {
     TrashIcon,
 } from '@navikt/aksel-icons';
 import { useState } from 'react';
-import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import { useMeldekortbehandling } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2Context';
-import {
-    eierMeldekortbehandling,
-    erMeldekortbehandlingSattPaVent,
-    skalKunneGjenopptaMeldekortbehandling,
-    skalKunneOvertaMeldekortbehandling,
-    skalKunneSetteMeldekortbehandlingPaVent,
-    skalKunneTaMeldekortbehandling,
-} from '~/lib/meldekort/utils/MeldekortbehandlingUtils';
+import { SaksbehandlerBehandlingKommando as Kommando } from '~/lib/behandling-felles/typer/BehandlingFelles';
 import { MeldekortbehandlingTildelMeg } from '~/lib/meldekort/v2/meldekortbehandling/handlinger-meny/handlinger/MeldekortbehandlingTildelMeg';
 import { MeldekortbehandlingGjenoppta } from '~/lib/meldekort/v2/meldekortbehandling/handlinger-meny/handlinger/MeldekortbehandlingGjenoppta';
 import { MeldekortbehandlingLeggTilbake } from '~/lib/meldekort/v2/meldekortbehandling/handlinger-meny/handlinger/MeldekortbehandlingLeggTilbake';
@@ -29,46 +21,28 @@ import { MeldekortbehandlingAvslutt } from '~/lib/meldekort/v2/meldekortbehandli
 type AktivDialog = 'tildelMeg' | 'gjenoppta' | 'leggTilbake' | 'settPåVent' | 'overta' | 'avslutt';
 
 export const MeldekortbehandlingHandlingerMeny = () => {
-    const { innloggetSaksbehandler } = useSaksbehandler();
     const meldekortbehandling = useMeldekortbehandling();
 
     const [aktivDialog, setAktivDialog] = useState<AktivDialog | null>(null);
 
-    const erSattPåVent = erMeldekortbehandlingSattPaVent(meldekortbehandling);
-    const eierBehandlingen = eierMeldekortbehandling(meldekortbehandling, innloggetSaksbehandler);
-    const kanTa = skalKunneTaMeldekortbehandling(meldekortbehandling, innloggetSaksbehandler);
-    const kanGjenoppta = skalKunneGjenopptaMeldekortbehandling(
-        meldekortbehandling,
-        innloggetSaksbehandler,
-    );
-    const kanOverta = skalKunneOvertaMeldekortbehandling(
-        meldekortbehandling,
-        innloggetSaksbehandler,
-    );
-    const kanSettePåVent = skalKunneSetteMeldekortbehandlingPaVent(
-        meldekortbehandling,
-        innloggetSaksbehandler,
-    );
+    const gyldigeKommandoer = meldekortbehandling.gyldigeKommandoer;
 
-    const erTilknyttetBehandlingen =
-        innloggetSaksbehandler.navIdent === meldekortbehandling.saksbehandler ||
-        innloggetSaksbehandler.navIdent === meldekortbehandling.beslutter;
-
-    const skalViseEierMenyvalg = eierBehandlingen && !erSattPåVent;
-    const skalViseLeggTilbakeMenyvalg = eierBehandlingen;
-    const skalViseOvertaMenyvalg = kanOverta && !erSattPåVent && !erTilknyttetBehandlingen;
-
-    const harHandlinger =
-        kanTa ||
-        kanGjenoppta ||
-        skalViseLeggTilbakeMenyvalg ||
-        kanSettePåVent ||
-        skalViseOvertaMenyvalg ||
-        skalViseEierMenyvalg;
-
-    if (!harHandlinger) {
+    if (gyldigeKommandoer.length === 0) {
         return null;
     }
+
+    const harKommando = (...kommandoer: Kommando[]) =>
+        kommandoer.some((kommando) => gyldigeKommandoer.includes(kommando));
+
+    const kanTa = harKommando(Kommando.TildelSaksbehandler, Kommando.TildelBeslutter);
+    const kanGjenoppta = harKommando(Kommando.Gjenoppta);
+    const kanLeggeTilbake = harKommando(
+        Kommando.LeggTilbakeSaksbehandler,
+        Kommando.LeggTilbakeBeslutter,
+    );
+    const kanSettePåVent = harKommando(Kommando.SettPåVent);
+    const kanOverta = harKommando(Kommando.OvertaSaksbehandler, Kommando.OvertaBeslutter);
+    const kanAvslutte = harKommando(Kommando.Avbryt);
 
     return (
         <>
@@ -102,7 +76,7 @@ export const MeldekortbehandlingHandlingerMeny = () => {
                         </ActionMenu.Item>
                     )}
 
-                    {skalViseLeggTilbakeMenyvalg && (
+                    {kanLeggeTilbake && (
                         <ActionMenu.Item
                             icon={<ArrowUndoIcon aria-hidden />}
                             onSelect={() => setAktivDialog('leggTilbake')}
@@ -120,7 +94,7 @@ export const MeldekortbehandlingHandlingerMeny = () => {
                         </ActionMenu.Item>
                     )}
 
-                    {skalViseOvertaMenyvalg && (
+                    {kanOverta && (
                         <ActionMenu.Item
                             icon={<ArrowsSquarepathIcon aria-hidden />}
                             onSelect={() => setAktivDialog('overta')}
@@ -129,7 +103,7 @@ export const MeldekortbehandlingHandlingerMeny = () => {
                         </ActionMenu.Item>
                     )}
 
-                    {skalViseEierMenyvalg && (
+                    {kanAvslutte && (
                         <>
                             <ActionMenu.Divider />
                             <ActionMenu.Item
@@ -158,7 +132,7 @@ export const MeldekortbehandlingHandlingerMeny = () => {
                 />
             )}
 
-            {skalViseLeggTilbakeMenyvalg && (
+            {kanLeggeTilbake && (
                 <MeldekortbehandlingLeggTilbake
                     åpen={aktivDialog === 'leggTilbake'}
                     onClose={() => setAktivDialog(null)}
@@ -172,14 +146,14 @@ export const MeldekortbehandlingHandlingerMeny = () => {
                 />
             )}
 
-            {skalViseOvertaMenyvalg && (
+            {kanOverta && (
                 <MeldekortbehandlingOverta
                     åpen={aktivDialog === 'overta'}
                     onClose={() => setAktivDialog(null)}
                 />
             )}
 
-            {skalViseEierMenyvalg && (
+            {kanAvslutte && (
                 <MeldekortbehandlingAvslutt
                     åpen={aktivDialog === 'avslutt'}
                     onClose={() => setAktivDialog(null)}

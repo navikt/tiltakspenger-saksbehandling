@@ -12,5 +12,5 @@ export enum SaksbehandlerBehandlingKommando {
     LeggTilbakeBeslutter = 'LeggTilbakeBeslutter',
     SettPåVent = 'SettPåVent',
     Gjenoppta = 'Gjenoppta',
-    Avslutt = 'Avslutt',
+    Avbryt = 'Avbryt',
 }
