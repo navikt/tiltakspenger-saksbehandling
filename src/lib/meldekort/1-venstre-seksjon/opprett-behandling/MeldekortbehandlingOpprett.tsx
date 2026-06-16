@@ -5,7 +5,6 @@ import { useRef } from 'react';
 import { useSak } from '~/lib/sak/SakContext';
 import { useMeldeperiodeKjede } from '../../context/MeldeperiodeKjedeContext';
 import { MeldeperiodebehandlingType } from '~/lib/meldekort/typer/Meldekortbehandling';
-import { MeldeperiodeKjedeStatus } from '~/lib/meldekort/typer/Meldeperiode';
 import NextLink from 'next/link';
 import { meldeperiodeUrl } from '~/utils/urls';
 import { formaterPeriode } from '~/utils/date';
@@ -20,7 +19,7 @@ export const MeldekortbehandlingOpprett = ({ type }: Props) => {
     const { sakId, saksnummer } = useSak().sak;
     const { setMeldeperiodeKjede, meldeperiodeKjede } = useMeldeperiodeKjede();
 
-    const { id: kjedeId, status: kjedeStatus, periodeMedÅpenBehandling } = meldeperiodeKjede;
+    const { id: kjedeId, periodeMedÅpenBehandling, sisteMeldeperiode } = meldeperiodeKjede;
 
     const { opprett, laster, feil } = useOpprettMeldekortbehandling({
         kjedeId,
@@ -40,45 +39,43 @@ export const MeldekortbehandlingOpprett = ({ type }: Props) => {
                     {feil.message}
                 </Alert>
             )}
-            {kjedeStatus === MeldeperiodeKjedeStatus.IKKE_RETT_TIL_TILTAKSPENGER ? (
+            {sisteMeldeperiode.ingenDagerGirRett && (
                 <Alert variant={'info'} className={styles.varsel}>
-                    {'Ikke rett til tiltakspenger for denne perioden'}
+                    {
+                        'Ikke rett til tiltakspenger for denne perioden. Behandlinger kan kun avsluttes.'
+                    }
                 </Alert>
-            ) : (
-                <>
-                    {periodeMedÅpenBehandling &&
-                        periodeMedÅpenBehandling.fraOgMed !== meldeperiodeKjede.periode.fraOgMed &&
-                        periodeMedÅpenBehandling.tilOgMed !==
-                            meldeperiodeKjede.periode.tilOgMed && (
-                            <Alert
-                                variant={'warning'}
-                                inline={true}
-                                size={'small'}
-                                className={styles.varsel}
-                            >
-                                {`Det finnes allerede en åpen meldekortbehandling på saken - se `}
-                                <Link
-                                    as={NextLink}
-                                    href={meldeperiodeUrl(saksnummer, periodeMedÅpenBehandling)}
-                                >
-                                    {formaterPeriode(periodeMedÅpenBehandling)}
-                                </Link>
-                            </Alert>
-                        )}
-                    <Button
-                        disabled={
-                            !!periodeMedÅpenBehandling &&
-                            periodeMedÅpenBehandling.fraOgMed !==
-                                meldeperiodeKjede.periode.fraOgMed &&
-                            periodeMedÅpenBehandling.tilOgMed !== meldeperiodeKjede.periode.tilOgMed
-                        }
-                        onClick={() => modalRef.current?.showModal()}
-                        className={styles.knapp}
-                    >
-                        {tekster.start}
-                    </Button>
-                </>
             )}
+            {periodeMedÅpenBehandling &&
+                periodeMedÅpenBehandling.fraOgMed !== meldeperiodeKjede.periode.fraOgMed &&
+                periodeMedÅpenBehandling.tilOgMed !== meldeperiodeKjede.periode.tilOgMed && (
+                    <Alert
+                        variant={'warning'}
+                        inline={true}
+                        size={'small'}
+                        className={styles.varsel}
+                    >
+                        {`Det finnes allerede en åpen meldekortbehandling på saken - se `}
+                        <Link
+                            as={NextLink}
+                            href={meldeperiodeUrl(saksnummer, periodeMedÅpenBehandling)}
+                        >
+                            {formaterPeriode(periodeMedÅpenBehandling)}
+                        </Link>
+                    </Alert>
+                )}
+            <Button
+                disabled={
+                    !!periodeMedÅpenBehandling &&
+                    periodeMedÅpenBehandling.fraOgMed !== meldeperiodeKjede.periode.fraOgMed &&
+                    periodeMedÅpenBehandling.tilOgMed !== meldeperiodeKjede.periode.tilOgMed
+                }
+                onClick={() => modalRef.current?.showModal()}
+                className={styles.knapp}
+            >
+                {tekster.start}
+            </Button>
+
             <BekreftelsesModal
                 modalRef={modalRef}
                 tittel={tekster.modalTittel}
