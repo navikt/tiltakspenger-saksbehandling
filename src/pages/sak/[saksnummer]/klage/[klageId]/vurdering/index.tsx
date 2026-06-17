@@ -32,6 +32,7 @@ import {
     finnSisteGyldigeStegForKlage,
     kanBehandleKlage,
     erKlageAvbrutt,
+    erKlagebehandlingSattPåVent,
 } from '~/lib/klage/utils/klageUtils';
 import styles from './index.module.css';
 import Link from 'next/link';
@@ -115,7 +116,9 @@ const VurderingKlagePage = ({
     const { innloggetSaksbehandler } = useSaksbehandler();
     const [vilAvslutteBehandlingModal, setVilAvslutteBehandlingModal] = useState(false);
     const [formTilstand, setFormTilstand] = useState<'REDIGERER' | 'LAGRET'>(
-        !kanBehandleKlage(klage, omgjøringsbehandling) || harKlagevurderingsstegUtfylt(klage)
+        !kanBehandleKlage(klage, omgjøringsbehandling) ||
+            harKlagevurderingsstegUtfylt(klage) ||
+            erKlagebehandlingSattPåVent(klage)
             ? 'LAGRET'
             : 'REDIGERER',
     );
@@ -212,7 +215,8 @@ const VurderingKlagePage = ({
                     ) : (
                         <HStack gap="space-16">
                             {!erReadonlyForSaksbehandler &&
-                                kanBehandleKlage(klage, omgjøringsbehandling) && (
+                                kanBehandleKlage(klage, omgjøringsbehandling) &&
+                                !erKlagebehandlingSattPåVent(klage) && (
                                     <>
                                         <Button
                                             type="button"

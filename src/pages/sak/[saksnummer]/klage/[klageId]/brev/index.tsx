@@ -1,4 +1,4 @@
-import { ReactElement } from 'react';
+import { ReactElement, useEffect, useRef } from 'react';
 
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
 import { Button, Heading, HStack, Label, LocalAlert, VStack } from '@navikt/ds-react';
@@ -28,6 +28,7 @@ import BrevForm from '~/lib/klage/forms/brev/BrevForm';
 import styles from './index.module.css';
 
 import {
+    erKlagebehandlingSattPåVent,
     erKlageOpprettholdelse,
     erKlageOpprettholdtEllerEtter,
     kanBehandleKlage,
@@ -87,6 +88,7 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
 
 const BrevKlagePage = ({ sak, påklagetVedtak }: Props) => {
     const { klage: unarrowedKlage, setKlage } = useKlage();
+    const submitErrorRef = useRef<HTMLDivElement>(null);
 
     if (!unarrowedKlage.resultat || unarrowedKlage.resultat.type === 'OMGJØR') {
         throw new Error('BrevKlagePage krever klage med resultat OPPRETTHOLDT eller AVVIST');
@@ -140,8 +142,15 @@ const BrevKlagePage = ({ sak, påklagetVedtak }: Props) => {
         },
     });
 
+    useEffect(() => {
+        if (oppretthold.error || iverksett.error) {
+            submitErrorRef.current?.scrollIntoView();
+        }
+    }, [oppretthold.error, iverksett.error]);
+
     const onSubmit = () => {
         if (klage.resultat.type === KlagebehandlingResultat.OPPRETTHOLDT) {
+            console.log('trigger oppretthold');
             oppretthold.trigger();
         } else {
             iverksett.trigger();
@@ -170,7 +179,11 @@ const BrevKlagePage = ({ sak, påklagetVedtak }: Props) => {
                 <BrevForm
                     control={form.control}
                     className={styles.brevformContainer}
-                    readOnly={erReadonlyForSaksbehandler || !kanBehandleKlage(klage, null)}
+                    readOnly={
+                        erReadonlyForSaksbehandler ||
+                        !kanBehandleKlage(klage, null) ||
+                        erKlagebehandlingSattPåVent(klage)
+                    }
                 />
 
                 <VStack gap="space-32" marginBlock="space-32" align="start">
@@ -194,27 +207,29 @@ const BrevKlagePage = ({ sak, påklagetVedtak }: Props) => {
                             </LocalAlert>
                         )}
                         <HStack gap="space-16">
-                            {!erReadonlyForSaksbehandler && kanBehandleKlage(klage, null) && (
-                                <Button
-                                    type="button"
-                                    variant="secondary"
-                                    loading={lagreBrev.isMutating}
-                                    onClick={() => {
-                                        forhåndsvis.reset();
-                                        form.trigger().then((isValid) => {
-                                            if (isValid) {
-                                                lagreBrev.trigger(
-                                                    brevFormDataTilLagreBrevtekstKlageRequest(
-                                                        form.getValues(),
-                                                    ),
-                                                );
-                                            }
-                                        });
-                                    }}
-                                >
-                                    Lagre
-                                </Button>
-                            )}
+                            {!erReadonlyForSaksbehandler &&
+                                kanBehandleKlage(klage, null) &&
+                                !erKlagebehandlingSattPåVent(klage) && (
+                                    <Button
+                                        type="button"
+                                        variant="secondary"
+                                        loading={lagreBrev.isMutating}
+                                        onClick={() => {
+                                            forhåndsvis.reset();
+                                            form.trigger().then((isValid) => {
+                                                if (isValid) {
+                                                    lagreBrev.trigger(
+                                                        brevFormDataTilLagreBrevtekstKlageRequest(
+                                                            form.getValues(),
+                                                        ),
+                                                    );
+                                                }
+                                            });
+                                        }}
+                                    >
+                                        Lagre
+                                    </Button>
+                                )}
                             <Button
                                 type="button"
                                 variant="secondary"
@@ -246,18 +261,40 @@ const BrevKlagePage = ({ sak, påklagetVedtak }: Props) => {
                                 )}
                         </HStack>
                     </VStack>
-                    {!erReadonlyForSaksbehandler && kanBehandleKlage(klage, null) && (
-                        <Button
-                            disabled={
-                                (klage.resultat.type === KlagebehandlingResultat.AVVIST &&
-                                    !klage.kanIverksetteVedtak) ||
-                                (klage.resultat.type === KlagebehandlingResultat.OPPRETTHOLDT &&
-                                    !klage.kanIverksetteOpprettholdelse) ||
-                                form.formState.isDirty
-                            }
-                        >
-                            Ferdigstill behandling og send brev
-                        </Button>
+                    {!erReadonlyForSaksbehandler &&
+                        kanBehandleKlage(klage, null) &&
+                        !erKlagebehandlingSattPåVent(klage) && (
+                            <Button
+                                disabled={
+                                    (klage.resultat.type === KlagebehandlingResultat.AVVIST &&
+                                        !klage.kanIverksetteVedtak) ||
+                                    (klage.resultat.type === KlagebehandlingResultat.OPPRETTHOLDT &&
+                                        !klage.kanIverksetteOpprettholdelse) ||
+                                    form.formState.isDirty
+                                }
+                            >
+                                Ferdigstill behandling og send brev
+                            </Button>
+                        )}
+
+                    {oppretthold.error && (
+                        <LocalAlert status="error" ref={submitErrorRef}>
+                            <LocalAlert.Header>
+                                <LocalAlert.Title>
+                                    Feil ved opprettholdelse av klage
+                                </LocalAlert.Title>
+                            </LocalAlert.Header>
+                            <LocalAlert.Content>{oppretthold.error.message}</LocalAlert.Content>
+                        </LocalAlert>
+                    )}
+
+                    {iverksett.error && (
+                        <LocalAlert status="error" ref={submitErrorRef}>
+                            <LocalAlert.Header>
+                                <LocalAlert.Title>Feil ved iverksettelse av klage</LocalAlert.Title>
+                            </LocalAlert.Header>
+                            <LocalAlert.Content>{iverksett.error.message}</LocalAlert.Content>
+                        </LocalAlert>
                     )}
 
                     {klage.ventestatus.length > 0 &&

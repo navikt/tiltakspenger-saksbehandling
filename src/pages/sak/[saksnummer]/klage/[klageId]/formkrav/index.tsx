@@ -25,6 +25,7 @@ import {
     harKlageEnÅpenRammebehandling,
     erKlageOmgjøring,
     kanBehandleKlage,
+    erKlagebehandlingSattPåVent,
 } from '~/lib/klage/utils/klageUtils';
 import { useOppdaterFormkrav } from '~/lib/klage/api/KlageApi';
 import { Nullable } from '~/types/UtilTypes';
@@ -177,6 +178,7 @@ const FormkravKlagePage = ({ sak, omgjøringsbehandling }: Props) => {
                     ) : (
                         <HStack gap="space-16">
                             {!erReadonlyForSaksbehandler &&
+                                !erKlagebehandlingSattPåVent(klage) &&
                                 kanBehandleKlage(klage, omgjøringsbehandling) && (
                                     <>
                                         <Button
