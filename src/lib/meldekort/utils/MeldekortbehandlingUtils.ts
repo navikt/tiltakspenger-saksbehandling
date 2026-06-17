@@ -157,3 +157,14 @@ export const skalKunneSetteMeldekortbehandlingPaVent = (
         eierMeldekortbehandling(meldekortbehandling, innloggetSaksbehandler)
     );
 };
+
+/**
+ * Med 'under aktiv omgjøring' så mener vi at meldekortbehandlingen er opprettet som en omgjøringsbehandling for en klage - og den ikke er fortsatt er i en tilstand saksbehandler kan fritt redigere på.
+ *
+ * @param mb - nullable fordi klage ikke alltid har en tilknyttet meldekortbehandling & fordi det blitt litt cleanere kode fra klage-sidene sin side :-)
+ */
+export const erMeldekortbehandlingUnderAktivOmgjøring = (
+    mb: MeldekortbehandlingProps | MeldekortbehandlingPropsV2,
+): boolean =>
+    mb.status == MeldekortbehandlingStatus.KLAR_TIL_BEHANDLING ||
+    mb.status == MeldekortbehandlingStatus.UNDER_BEHANDLING;

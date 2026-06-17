@@ -22,6 +22,7 @@ import KlageMeny from '~/lib/behandling-felles/behandlingmeny/KlageMeny';
 import { hentSisteKlagehendelseUtfallFraKlagebehandling } from '~/lib/klage/utils/klageUtils';
 import { klagehendelseUtfallTilTag } from '~/lib/klage/utils/KlageinstanshendelseUtils';
 import { erMeldekortbehandlingSattPaVent } from '~/lib/meldekort/utils/MeldekortbehandlingUtils';
+import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
 
 type Props = {
     åpneBehandlinger: ÅpenBehandlingForOversikt[];
@@ -181,8 +182,13 @@ const propsForRad = (
 
             const omgjøringsbehandling =
                 sak.behandlinger.find(
-                    (omgjøring) => omgjøring.klagebehandlingId === klagebehandling.id,
-                ) ?? null;
+                    (omgjøring) => omgjøring.id === klagebehandling.åpenBehandlingId,
+                ) ??
+                (klagebehandling.åpenBehandlingId &&
+                    sak.meldekortbehandlinger[
+                        klagebehandling.åpenBehandlingId as MeldekortbehandlingId
+                    ]) ??
+                null;
 
             return {
                 typeTekst,

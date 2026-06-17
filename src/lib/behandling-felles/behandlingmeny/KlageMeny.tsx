@@ -32,10 +32,11 @@ import { Nullable } from '~/types/UtilTypes';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { ApiErrorFeilModal, ApiErrorState } from '~/lib/_felles/modaler/ApiErrorFeilModal';
 import AvbrytKlagebehandlingModal from '~/lib/klage/modaler/avbryt/AvbrytKlagebehandlingModal';
+import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
 
 const KlageMeny = (props: {
     klage: Klagebehandling;
-    omgjøringsbehandling: Nullable<Rammebehandling>;
+    omgjøringsbehandling: Nullable<Rammebehandling | MeldekortbehandlingPropsV2>;
 }) => {
     const { setSak } = useSak();
     const { innloggetSaksbehandler } = useSaksbehandler();

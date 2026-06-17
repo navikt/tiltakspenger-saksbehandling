@@ -16,6 +16,12 @@ import {
     erKlageinstanshendelseFeilregistrert,
     erKlageinstanshendelseOmgjøringskravbehandlingAvsluttet,
 } from './KlageinstanshendelseUtils';
+import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
+import {
+    erBehandlingIdMeldekortbehandling,
+    erBehandlingIdRammebehandling,
+} from '~/lib/behandling-felles/utils/BehandlingUtils';
+import { erMeldekortbehandlingUnderAktivOmgjøring } from '~/lib/meldekort/utils/MeldekortbehandlingUtils';
 
 /**
  *
@@ -27,11 +33,11 @@ import {
  */
 export const kanBehandleKlage = (
     k: Klagebehandling,
-    omgjøringsbehandling: Nullable<Rammebehandling>,
+    omgjøringsbehandling: Nullable<Rammebehandling | MeldekortbehandlingPropsV2>,
 ): boolean => {
     if (k.status === 'KLAR_TIL_BEHANDLING' || k.status === 'UNDER_BEHANDLING') {
         if (k.resultat?.type === KlagebehandlingResultat.OMGJØR && !!omgjøringsbehandling) {
-            return erRammebehandlingUnderAktivOmgjøring(omgjøringsbehandling);
+            return erKlagebehandlingsOmgjøringsbehandlingUnderAktivOmgjøring(omgjøringsbehandling);
         }
 
         return true;
@@ -42,12 +48,11 @@ export const kanBehandleKlage = (
 
 export const kanVidereBehandleKlage = (
     k: Klagebehandling,
-    omgjøringsbehandling: Nullable<Rammebehandling>,
+    omgjøringsbehandling: Nullable<Rammebehandling | MeldekortbehandlingPropsV2>,
 ): boolean =>
     k.status === KlagebehandlingStatus.MOTTATT_FRA_KLAGEINSTANS ||
     (k.status === KlagebehandlingStatus.OMGJØRING_ETTER_KLAGEINSTANS &&
-        !!omgjøringsbehandling &&
-        erRammebehandlingUnderAktivOmgjøring(omgjøringsbehandling));
+        erKlagebehandlingsOmgjøringsbehandlingUnderAktivOmgjøring(omgjøringsbehandling));
 
 export const erKlageAvsluttet = (k: Klagebehandling): boolean =>
     k.status === 'AVBRUTT' ||
@@ -212,4 +217,26 @@ export const avbrytKlagebehandlingStatusLabels: Record<AvbrytKlagebehandlingStat
     [AvbrytKlagebehandlingStatus.FEILREGISTRER_KLAGE]: 'Feilregistrert klage',
     [AvbrytKlagebehandlingStatus.MANGLENDE_UTBETALING]: 'Manglende utbetaling',
     [AvbrytKlagebehandlingStatus.ANNET]: 'Annet',
+};
+
+export const erKlagebehandlingsOmgjøringsbehandlingUnderAktivOmgjøring = (
+    omgjøringsbehandling: Nullable<Rammebehandling | MeldekortbehandlingPropsV2>,
+): boolean => {
+    if (!omgjøringsbehandling) {
+        return false;
+    }
+
+    if (erBehandlingIdRammebehandling(omgjøringsbehandling.id)) {
+        return erRammebehandlingUnderAktivOmgjøring(omgjøringsbehandling as Rammebehandling);
+    }
+
+    if (erBehandlingIdMeldekortbehandling(omgjøringsbehandling.id)) {
+        return erMeldekortbehandlingUnderAktivOmgjøring(
+            omgjøringsbehandling as MeldekortbehandlingPropsV2,
+        );
+    }
+
+    throw new Error(
+        `Omgjøringsbehandling har en åpen behandling, men behandlingstypen er verken rammebehandling eller meldekortbehandling`,
+    );
 };

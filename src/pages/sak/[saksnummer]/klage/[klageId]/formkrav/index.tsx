@@ -26,21 +26,22 @@ import {
     erKlageOmgjøring,
     kanBehandleKlage,
     erKlagebehandlingSattPåVent,
+    erKlagebehandlingsOmgjøringsbehandlingUnderAktivOmgjøring,
 } from '~/lib/klage/utils/klageUtils';
 import { useOppdaterFormkrav } from '~/lib/klage/api/KlageApi';
 import { Nullable } from '~/types/UtilTypes';
-import { erRammebehandlingUnderAktivOmgjøring } from '~/lib/rammebehandling/rammebehandlingUtils';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import styles from './index.module.css';
 import { MeldekortVedtak } from '~/lib/meldekort/typer/MeldekortVedtak';
 import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { OppsummeringAvVentestatuserModal } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
 import AvbrytKlagebehandlingModal from '~/lib/klage/modaler/avbryt/AvbrytKlagebehandlingModal';
+import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
 
 type Props = {
     sak: SakProps;
     initialKlage: Klagebehandling;
-    omgjøringsbehandling: Nullable<Rammebehandling>;
+    omgjøringsbehandling: Nullable<Rammebehandling | MeldekortbehandlingPropsV2>;
 };
 
 export const getServerSideProps = pageWithAuthentication(async (context) => {
@@ -128,8 +129,9 @@ const FormkravKlagePage = ({ sak, omgjøringsbehandling }: Props) => {
                         readonly={
                             erReadonlyForSaksbehandler ||
                             formTilstand === 'LAGRET' ||
-                            (!!omgjøringsbehandling &&
-                                !erRammebehandlingUnderAktivOmgjøring(omgjøringsbehandling))
+                            erKlagebehandlingsOmgjøringsbehandlingUnderAktivOmgjøring(
+                                omgjøringsbehandling,
+                            )
                         }
                         fnrFraPersonopplysninger={personopplysninger?.fnr ?? null}
                         control={form.control}
