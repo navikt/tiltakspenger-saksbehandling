@@ -150,7 +150,6 @@ const BrevKlagePage = ({ sak, påklagetVedtak }: Props) => {
 
     const onSubmit = () => {
         if (klage.resultat.type === KlagebehandlingResultat.OPPRETTHOLDT) {
-            console.log('trigger oppretthold');
             oppretthold.trigger();
         } else {
             iverksett.trigger();
