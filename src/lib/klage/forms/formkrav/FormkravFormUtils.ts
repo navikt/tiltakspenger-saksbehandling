@@ -6,15 +6,23 @@ import {
     OpprettKlageRequest,
     KlageInnsendingskilde,
 } from '~/lib/klage/typer/Klage';
-import { VedtakId } from '~/lib/rammebehandling/typer/Rammevedtak';
+import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
+import { MeldekortVedtak } from '~/lib/meldekort/typer/MeldekortVedtak';
+import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { Rammevedtak, VedtakId } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { Nullable } from '~/types/UtilTypes';
 import { dateTilISOTekst } from '~/utils/date';
 
 export const INGEN_VEDTAK = 'INGEN_VEDTAK' as const;
+export enum VedtakstypeFormkravFormData {
+    RAMMEVEDTAK = 'RAMMEVEDTAK',
+    MELDEKORTVEDTAK = 'MELDEKORTVEDTAK',
+}
 
 export interface FormkravFormData {
     journalpostId: string;
-    vedtakDetPåklages: typeof INGEN_VEDTAK | VedtakId | '';
+    vedtakstype: typeof INGEN_VEDTAK | keyof typeof VedtakstypeFormkravFormData | '';
+    vedtakDetPåklages: VedtakId | '';
     erKlagerPartISaken: Nullable<boolean>;
     klagesDetPåKonkreteElementer: Nullable<boolean>;
     erKlagefristOverholdt: Nullable<boolean>;
@@ -77,11 +85,19 @@ export const formkravValidation = (data: FormkravFormData) => {
         };
     }
 
-    if (data.vedtakDetPåklages === '') {
-        errors.vedtakDetPåklages = {
+    if (data.vedtakstype === '') {
+        errors.vedtakstype = {
             type: 'required',
             message: 'Du må velge et alternativ',
         };
+    }
+
+    if (
+        (data.vedtakstype === VedtakstypeFormkravFormData.RAMMEVEDTAK ||
+            data.vedtakstype === VedtakstypeFormkravFormData.MELDEKORTVEDTAK) &&
+        data.vedtakDetPåklages === ''
+    ) {
+        errors.vedtakDetPåklages = { type: 'required', message: 'Du må velge et alternativ' };
     }
 
     if (data.erKlagerPartISaken === null) {
@@ -161,7 +177,7 @@ export const formkravFormDataTilOpprettKlageRequest = (
     return {
         journalpostId: formData.journalpostId,
         vedtakDetKlagesPå:
-            formData.vedtakDetPåklages === INGEN_VEDTAK ? null : formData.vedtakDetPåklages,
+            formData.vedtakstype === INGEN_VEDTAK ? null : formData.vedtakDetPåklages,
         erKlagerPartISaken: formData.erKlagerPartISaken!,
         klagesDetPåKonkreteElementerIVedtaket: formData.klagesDetPåKonkreteElementer!,
         erKlagefristenOverholdt: formData.erKlagefristOverholdt!,
@@ -185,7 +201,7 @@ export const formkravFormDataTilOppdaterKlageFormkravRequest = (
     return {
         journalpostId: formData.journalpostId,
         vedtakDetKlagesPå:
-            formData.vedtakDetPåklages === INGEN_VEDTAK ? null : formData.vedtakDetPåklages,
+            formData.vedtakstype === INGEN_VEDTAK ? null : formData.vedtakDetPåklages,
         erKlagerPartISaken: formData.erKlagerPartISaken!,
         klagesDetPåKonkreteElementerIVedtaket: formData.klagesDetPåKonkreteElementer!,
         erKlagefristenOverholdt: formData.erKlagefristOverholdt!,
@@ -216,10 +232,53 @@ export const klagefristUnntakSvarordFormDataTilKlagebehandlingKlagefristUnntakSv
     }
 };
 
-export const klageTilFormkravFormData = (klage: Klagebehandling): FormkravFormData => {
+export const klageTilFormkravFormData = (
+    klage: Klagebehandling,
+    rammevedtakOgBehandling: Array<{
+        vedtak: Rammevedtak;
+        behandling: Rammebehandling;
+    }>,
+    meldekortvedtakOgBehandling: Array<{
+        vedtak: MeldekortVedtak;
+        behandling: MeldekortbehandlingProps;
+    }>,
+): FormkravFormData => {
+    const vedtakDetKlagesPå = (() => {
+        if (!klage.formkrav.vedtakDetKlagesPå) {
+            return null;
+        }
+        const rammevedtak =
+            rammevedtakOgBehandling.find((v) => v.vedtak.id === klage.formkrav.vedtakDetKlagesPå) ??
+            null;
+
+        if (rammevedtak) {
+            return {
+                vedtakId: rammevedtak.vedtak.id,
+                behandlingstype: VedtakstypeFormkravFormData.RAMMEVEDTAK,
+            };
+        }
+
+        const meldekortvedtak =
+            meldekortvedtakOgBehandling.find(
+                (v) => v.vedtak.id === klage.formkrav.vedtakDetKlagesPå,
+            ) ?? null;
+
+        if (meldekortvedtak) {
+            return {
+                vedtakId: meldekortvedtak.vedtak.id,
+                behandlingstype: VedtakstypeFormkravFormData.MELDEKORTVEDTAK,
+            };
+        }
+
+        return null;
+    })();
+
     return {
         journalpostId: klage.klagensJournalpostId,
-        vedtakDetPåklages: klage.formkrav.vedtakDetKlagesPå ?? INGEN_VEDTAK,
+        vedtakstype: klage.formkrav.vedtakDetKlagesPå
+            ? (vedtakDetKlagesPå?.behandlingstype ?? '')
+            : INGEN_VEDTAK,
+        vedtakDetPåklages: vedtakDetKlagesPå?.vedtakId ?? '',
         erKlagerPartISaken: klage.formkrav.erKlagerPartISaken,
         klagesDetPåKonkreteElementer: klage.formkrav.klagesDetPåKonkreteElementerIVedtaket,
         erKlagefristOverholdt: klage.formkrav.erKlagefristenOverholdt,

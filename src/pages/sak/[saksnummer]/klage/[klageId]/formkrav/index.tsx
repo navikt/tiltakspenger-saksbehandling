@@ -42,6 +42,14 @@ type Props = {
     sak: SakProps;
     initialKlage: Klagebehandling;
     omgjøringsbehandling: Nullable<Rammebehandling | MeldekortbehandlingPropsV2>;
+    rammevedtakOgBehandling: Array<{
+        vedtak: Rammevedtak;
+        behandling: Rammebehandling;
+    }>;
+    meldekortvedtakOgBehandling: Array<{
+        vedtak: MeldekortVedtak;
+        behandling: MeldekortbehandlingProps;
+    }>;
 };
 
 export const getServerSideProps = pageWithAuthentication(async (context) => {
@@ -66,10 +74,44 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
     const omgjøringsbehandling =
         sak.behandlinger.find((b) => initialKlage.åpenBehandlingId === b.id) ?? null;
 
-    return { props: { sak, initialKlage, omgjøringsbehandling } };
+    return {
+        props: {
+            sak,
+            initialKlage,
+            omgjøringsbehandling,
+            rammevedtakOgBehandling: sak.alleRammevedtak
+                .map((vedtak) => {
+                    const behandling = sak.behandlinger.find(
+                        (behandling) => behandling.id === vedtak.behandlingId,
+                    );
+                    return { vedtak, behandling };
+                })
+                .filter(({ behandling }) => behandling !== undefined) as Array<{
+                vedtak: Rammevedtak;
+                behandling: Rammebehandling;
+            }>,
+            meldekortvedtakOgBehandling: sak.meldekortvedtak
+                .map((v) => {
+                    const behandling = sak.meldeperiodeKjeder
+                        .find((k) => k.id === v.kjedeId)
+                        ?.meldekortbehandlinger.find((b) => b.id === v.meldekortId);
+
+                    return { vedtak: v, behandling };
+                })
+                .filter(({ behandling }) => behandling !== undefined) as Array<{
+                vedtak: MeldekortVedtak;
+                behandling: MeldekortbehandlingProps;
+            }>,
+        } satisfies Props,
+    };
 });
 
-const FormkravKlagePage = ({ sak, omgjøringsbehandling }: Props) => {
+const FormkravKlagePage = ({
+    sak,
+    omgjøringsbehandling,
+    rammevedtakOgBehandling,
+    meldekortvedtakOgBehandling,
+}: Props) => {
     const { klage, setKlage } = useKlage();
     const { innloggetSaksbehandler } = useSaksbehandler();
     const { personopplysninger } = useHentPersonopplysninger(sak.sakId);
@@ -79,7 +121,11 @@ const FormkravKlagePage = ({ sak, omgjøringsbehandling }: Props) => {
     const erReadonlyForSaksbehandler = innloggetSaksbehandler.navIdent !== klage.saksbehandler;
 
     const form = useForm<FormkravFormData>({
-        defaultValues: klageTilFormkravFormData(klage),
+        defaultValues: klageTilFormkravFormData(
+            klage,
+            rammevedtakOgBehandling,
+            meldekortvedtakOgBehandling,
+        ),
         resolver: formkravValidation,
     });
 
@@ -88,7 +134,13 @@ const FormkravKlagePage = ({ sak, omgjøringsbehandling }: Props) => {
         klageId: klage.id,
         onSuccess: (klage) => {
             setKlage(klage);
-            form.reset(klageTilFormkravFormData(klage));
+            form.reset(
+                klageTilFormkravFormData(
+                    klage,
+                    rammevedtakOgBehandling,
+                    meldekortvedtakOgBehandling,
+                ),
+            );
             setFormTilstand('LAGRET');
         },
     });

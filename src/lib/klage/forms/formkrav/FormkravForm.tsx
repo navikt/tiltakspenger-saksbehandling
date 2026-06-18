@@ -6,6 +6,7 @@ import {
     INGEN_VEDTAK,
     KlageInnsendingskildeFormData,
     KlageInnsendingskildeFormDataTekstMapper,
+    VedtakstypeFormkravFormData,
 } from './FormkravFormUtils';
 import { HStack, LocalAlert, Radio, RadioGroup, Select, VStack } from '@navikt/ds-react';
 import { Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
@@ -59,26 +60,15 @@ const FormkravForm = (props: {
         name: 'innsendingsdato',
     });
 
+    const vedtakstype = useWatch({
+        control: props.control,
+        name: 'vedtakstype',
+    });
+
     const overstigerKlagedato6UkersFristForVedtak =
         valgtVedtak &&
         valgtInnsendingsdato &&
         dayjs(valgtVedtak.opprettet).add(6, 'week').isBefore(dayjs(valgtInnsendingsdato));
-
-    const isRammebehandling = (
-        b: Rammebehandling | MeldekortbehandlingProps,
-    ): b is Rammebehandling => {
-        return b.id.startsWith('beh_');
-    };
-
-    const isRammevedtak = (v: Rammevedtak | MeldekortVedtak): v is Rammevedtak => {
-        return 'behandlingId' in v;
-    };
-
-    const isMeldekortBehandling = (
-        b: Rammebehandling | MeldekortbehandlingProps,
-    ): b is MeldekortbehandlingProps => {
-        return b.id.startsWith('meldekort_');
-    };
 
     return (
         <VStack gap="space-32" align="start">
@@ -87,43 +77,75 @@ const FormkravForm = (props: {
                 readonly={props.readonly}
                 className={styles.journalpostIdInputContainer}
             />
+
             <Controller
                 control={props.control}
-                name="vedtakDetPåklages"
+                name="vedtakstype"
                 render={({ field, fieldState }) => (
                     <Select
+                        label="Vedtakstype"
                         {...field}
-                        label="Vedtaket som er påklaget"
                         error={fieldState.error?.message}
                         readOnly={props.readonly}
                     >
                         <option value="">Ikke valgt</option>
                         <option value={INGEN_VEDTAK}>Har ikke klaget på et vedtak</option>
-                        {vedtakSomKanKlagesPå.map(({ vedtak, behandling }) => {
-                            const ukerString = isMeldekortBehandling(behandling)
-                                ? `${ukenummerFraDatotekst(behandling.periode.fraOgMed)} og ${ukenummerFraDatotekst(behandling.periode.tilOgMed)}`
-                                : null;
-
-                            return (
-                                <option key={`${vedtak.id}-${behandling.id}`} value={vedtak.id}>
-                                    {isRammebehandling(behandling)
-                                        ? benkBehandlingstypeTekst[behandling.type]
-                                        : isMeldekortBehandling(behandling)
-                                          ? 'Meldekortvedtak'
-                                          : ''}{' '}
-                                    -{' '}
-                                    {isRammevedtak(vedtak)
-                                        ? `${behandlingResultatTilText[vedtak.resultat]}`
-                                        : isMeldekortBehandling(behandling)
-                                          ? `Uke ${ukerString}`
-                                          : ''}{' '}
-                                    - {formaterTidspunktKort(vedtak.opprettet)}
-                                </option>
-                            );
-                        })}
+                        <option value={VedtakstypeFormkravFormData.RAMMEVEDTAK}>Rammevedtak</option>
+                        {meldekortvedtakKlageToggle && (
+                            <option value={VedtakstypeFormkravFormData.MELDEKORTVEDTAK}>
+                                Meldekortvedtak
+                            </option>
+                        )}
                     </Select>
                 )}
             />
+            {(vedtakstype === VedtakstypeFormkravFormData.RAMMEVEDTAK ||
+                vedtakstype === VedtakstypeFormkravFormData.MELDEKORTVEDTAK) && (
+                <Controller
+                    control={props.control}
+                    name="vedtakDetPåklages"
+                    render={({ field, fieldState }) => (
+                        <Select
+                            {...field}
+                            label="Vedtaket som er påklaget"
+                            error={fieldState.error?.message}
+                            readOnly={props.readonly}
+                        >
+                            <option value="">Ikke valgt</option>
+                            {vedtakstype === VedtakstypeFormkravFormData.RAMMEVEDTAK &&
+                                props.rammevedtakOgBehandlinger.map(({ vedtak, behandling }) => {
+                                    return (
+                                        <option
+                                            key={`${vedtak.id}-${behandling.id}`}
+                                            value={vedtak.id}
+                                        >
+                                            {benkBehandlingstypeTekst[behandling.type]} -{' '}
+                                            {behandlingResultatTilText[vedtak.resultat]} -{' '}
+                                            {formaterTidspunktKort(vedtak.opprettet)}
+                                        </option>
+                                    );
+                                })}
+                            {meldekortvedtakKlageToggle &&
+                                vedtakstype === VedtakstypeFormkravFormData.MELDEKORTVEDTAK &&
+                                props.meldekortvedtakOgBehandlinger.map(
+                                    ({ vedtak, behandling }) => {
+                                        const ukerString = `${ukenummerFraDatotekst(behandling.periode.fraOgMed)} og ${ukenummerFraDatotekst(behandling.periode.tilOgMed)}`;
+
+                                        return (
+                                            <option
+                                                key={`${vedtak.id}-${behandling.id}`}
+                                                value={vedtak.id}
+                                            >
+                                                Uke {ukerString} -{' '}
+                                                {formaterTidspunktKort(vedtak.opprettet)}
+                                            </option>
+                                        );
+                                    },
+                                )}
+                        </Select>
+                    )}
+                />
+            )}
 
             <Controller
                 control={props.control}
