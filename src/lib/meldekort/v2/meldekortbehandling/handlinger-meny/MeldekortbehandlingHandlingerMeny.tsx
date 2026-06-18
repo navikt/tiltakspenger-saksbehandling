@@ -54,7 +54,7 @@ export const MeldekortbehandlingHandlingerMeny = () => {
                         iconPosition={'right'}
                         size={'small'}
                     >
-                        {'Handlinger'}
+                        {'Flere handlinger'}
                     </Button>
                 </ActionMenu.Trigger>
                 <ActionMenu.Content>

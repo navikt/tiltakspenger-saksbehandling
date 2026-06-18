@@ -24,6 +24,7 @@ import { kanBehandle } from '~/lib/saksbehandler/tilganger';
 import { getTextAreaRefValue } from '~/utils/textarea';
 import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
 import { useSak } from '~/lib/sak/SakContext';
+import { MeldekortbehandlingLagringProvider } from '~/lib/meldekort/v2/meldekortbehandling/lagre/MeldekortbehandlingLagringProvider';
 
 const MeldekortbehandlingContext = createContext({} as MeldekortbehandlingPropsV2);
 
@@ -83,21 +84,12 @@ export const MeldekortbehandlingV2Provider = ({ id, children }: Props) => {
                                 getValue: getBrevtekst,
                             },
                         },
-                        tilDTO: () => {
-                            return {
-                                meldeperioder: skjema.meldeperioder.map((it) => ({
-                                    kjedeId: it.kjedeId,
-                                    dager: it.dager,
-                                })),
-                                begrunnelse: getBegrunnelse(),
-                                tekstTilVedtaksbrev: getBrevtekst(),
-                                skalSendeVedtaksbrev: true,
-                                v2: true,
-                            };
-                        },
+
                     }}
                 >
-                    {children}
+                    <MeldekortbehandlingLagringProvider>
+                        {children}
+                    </MeldekortbehandlingLagringProvider>
                 </SkjemaContext.Provider>
             </DispatchContext.Provider>
         </MeldekortbehandlingContext.Provider>

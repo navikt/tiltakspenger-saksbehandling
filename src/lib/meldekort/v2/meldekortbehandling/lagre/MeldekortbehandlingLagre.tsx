@@ -24,7 +24,6 @@ export const MeldekortbehandlingLagre = () => {
         <VStack align={'end'} gap={'space-8'}>
             <Button
                 loading={isMutating}
-                size={'small'}
                 onClick={() => {
                     trigger(tilDTO()).then((sak) => {
                         if (sak) {

@@ -28,7 +28,6 @@ export type MeldekortbehandlingSkjemaContext = MeldekortbehandlingSkjemaState & 
         begrunnelse: TextAreaInput;
         brevtekst: TextAreaInput;
     };
-    tilDTO: () => OppdaterMeldekortbehandlingDTO;
 };
 
 export type MeldekortbehandlingSkjemaActions =
