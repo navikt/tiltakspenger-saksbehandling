@@ -15,7 +15,7 @@ export const MeldekortbehandlingForhåndsvisBrev = () => {
     const { sakId } = useSak().sak;
     const { id, erAvsluttet } = useMeldekortbehandling();
 
-    const { meldeperioder, textAreas, skalSendeVedtaksbrev } = useMeldekortbehandlingSkjema();
+    const { meldeperioder, brevtekst, skalSendeVedtaksbrev } = useMeldekortbehandlingSkjema();
 
     const { trigger, error, isMutating } =
         useFetchBlobFraApi<ForhåndsvisMeldekortbehandlingBrevRequest>(
@@ -39,7 +39,7 @@ export const MeldekortbehandlingForhåndsvisBrev = () => {
                 onClick={async () => {
                     return trigger({
                         dager: meldeperioder.at(0)!.dager,
-                        tekstTilVedtaksbrev: textAreas.brevtekst.getValue(),
+                        tekstTilVedtaksbrev: brevtekst.getValue(),
                     }).then((blob) => {
                         if (blob) {
                             window.open(URL.createObjectURL(blob));

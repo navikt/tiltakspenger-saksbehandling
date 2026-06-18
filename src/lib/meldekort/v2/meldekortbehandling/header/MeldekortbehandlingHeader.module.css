@@ -4,12 +4,3 @@
     margin: -1rem;
     margin-bottom: 2rem;
 }
-
-/* Lar handlinger-menyen og lagre-knappen alltid få samme bredde (bredden til det bredeste elementet) */
-.handlinger {
-    width: fit-content;
-}
-
-.handlinger button {
-    width: 100%;
-}

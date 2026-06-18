@@ -1,7 +1,10 @@
 import { PersonaliaHeader } from '~/lib/personaliaheader/PersonaliaHeader';
 import { useSak } from '~/lib/sak/SakContext';
 import { Stepper, VStack } from '@navikt/ds-react';
-import { useMeldekortbehandling } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2Context';
+import {
+    useMeldekortbehandling,
+    useMeldekortbehandlingSkjema,
+} from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2Context';
 import { Meldeperiodebehandlinger } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/Meldeperiodebehandlinger';
 import { MeldekortbehandlingHeader } from '~/lib/meldekort/v2/meldekortbehandling/header/MeldekortbehandlingHeader';
 import { MeldekortbehandlingBeregningOgSimulering } from '~/lib/meldekort/v2/meldekortbehandling/bereging/MeldekortbehandlingBeregningOgSimulering';
@@ -9,8 +12,17 @@ import { MeldekortbehandlingSeksjon } from '~/lib/meldekort/v2/meldekortbehandli
 import { useRouter } from 'next/router';
 import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { meldekortbehandlingUrl } from '~/utils/urls';
-import { useEffect, useState } from 'react';
+import { PropsWithChildren, useEffect, useState } from 'react';
 import { MeldekortbehandlingFritekstOgSendInn } from '~/lib/meldekort/v2/meldekortbehandling/fritekst-og-innsending/MeldekortbehandlingFritekstOgSendInn';
+import { classNames } from '~/utils/classNames';
+import { MeldekortbehandlingLagre } from '~/lib/meldekort/v2/meldekortbehandling/lagre/MeldekortbehandlingLagre';
+import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
+import { Saksbehandler } from '~/lib/saksbehandler/SaksbehandlerTyper';
+import {
+    kanBeslutteForMeldekort,
+    kanSaksbehandleForMeldekort,
+} from '~/lib/meldekort/utils/MeldekortbehandlingUtils';
+import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 
 import style from './MeldekortbehandlingSide.module.css';
 
@@ -30,6 +42,11 @@ export const MeldekortbehandlingSide = () => {
 
     const { sakId, saksnummer } = useSak().sak;
 
+    const { erReadonly } = useMeldekortbehandlingSkjema();
+
+    const meldekortbehandling = useMeldekortbehandling();
+    const { innloggetSaksbehandler } = useSaksbehandler();
+
     return (
         <>
             <PersonaliaHeader sakId={sakId} saksnummer={saksnummer} visTilbakeKnapp={true} />
@@ -47,29 +64,40 @@ export const MeldekortbehandlingSide = () => {
                             >
                                 <Steg steg={1}>{'Meldeperioder'}</Steg>
                                 <Steg steg={2}>{'Beregning og simulering'}</Steg>
-                                <Steg steg={3}>{'Begrunnelse, brev og innsending'}</Steg>
+                                <Steg steg={3}>
+                                    {sisteStegTekst(meldekortbehandling, innloggetSaksbehandler)}
+                                </Steg>
                             </Stepper>
                         </MeldekortbehandlingSeksjon.FullBredde>
                     </MeldekortbehandlingSeksjon>
                 </VStack>
 
-                <KomponentForSteg steg={aktivtSteg} />
+                {!erReadonly && <MeldekortbehandlingLagre />}
+
+                <StegKomponentWrapper steg={1} aktivtSteg={aktivtSteg}>
+                    <Meldeperiodebehandlinger />
+                </StegKomponentWrapper>
+                <StegKomponentWrapper steg={2} aktivtSteg={aktivtSteg}>
+                    <MeldekortbehandlingBeregningOgSimulering />
+                </StegKomponentWrapper>
+                <StegKomponentWrapper steg={3} aktivtSteg={aktivtSteg}>
+                    <MeldekortbehandlingFritekstOgSendInn />
+                </StegKomponentWrapper>
             </VStack>
         </>
     );
 };
 
-const KomponentForSteg = ({ steg }: { steg: number }) => {
-    switch (steg) {
-        case 1:
-            return <Meldeperiodebehandlinger />;
-        case 2:
-            return <MeldekortbehandlingBeregningOgSimulering />;
-        case 3:
-            return <MeldekortbehandlingFritekstOgSendInn />;
-    }
-
-    return <KomponentForSteg steg={DEFAULT_STEG} />;
+const StegKomponentWrapper = ({
+    steg,
+    aktivtSteg,
+    children,
+}: PropsWithChildren<{ steg: number; aktivtSteg: number }>) => {
+    return (
+        <div className={classNames(style.stegKomponent, steg === aktivtSteg && style.aktiv)}>
+            {children}
+        </div>
+    );
 };
 
 type StegProps = {
@@ -89,4 +117,19 @@ const Steg = ({ steg, children }: StegProps) => {
             {children}
         </Stepper.Step>
     );
+};
+
+const sisteStegTekst = (
+    behandling: MeldekortbehandlingPropsV2,
+    saksbehandler: Saksbehandler,
+): string => {
+    if (kanSaksbehandleForMeldekort(behandling, saksbehandler)) {
+        return 'Begrunnelse, brev og innsending';
+    }
+
+    if (kanBeslutteForMeldekort(behandling, saksbehandler)) {
+        return 'Begrunnelse, brev og godkjenning';
+    }
+
+    return 'Begrunnelse og brev';
 };

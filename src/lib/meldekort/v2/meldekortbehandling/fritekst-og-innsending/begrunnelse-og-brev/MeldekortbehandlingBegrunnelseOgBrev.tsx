@@ -10,8 +10,8 @@ import { MeldekortbehandlingForhåndsvisBrev } from '~/lib/meldekort/v2/meldekor
 import style from './MeldekortbehandlingBegrunnelseOgBrev.module.css';
 
 export const MeldekortbehandlingBegrunnelseOgBrev = () => {
-    const { textAreas, erReadonly, skalSendeVedtaksbrev } = useMeldekortbehandlingSkjema();
-    const { begrunnelse, brevtekst } = textAreas;
+    const { begrunnelse, brevtekst, erReadonly, skalSendeVedtaksbrev } =
+        useMeldekortbehandlingSkjema();
 
     const dispatch = useMeldekortbehandlingSkjemaDispatch();
 

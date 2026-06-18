@@ -1,8 +1,10 @@
-.uke {
-    border: 1px var(--ax-border-neutral) solid;
-    border-radius: 4px;
-    padding: 1rem;
+.uker {
     text-wrap: nowrap;
+}
+
+.ukerHeader {
+    border-bottom: 1px solid var(--ax-border-neutral-subtle);
+    padding-bottom: 0.375rem;
 }
 
 .ikon:global(.aksel-table__data-cell) {

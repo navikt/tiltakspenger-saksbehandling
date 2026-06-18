@@ -43,7 +43,7 @@ export const MeldeperiodebehandlingLeggTil = ({ onLeggTil }: Props) => {
         <Dialog>
             <Dialog.Trigger>
                 <Button size={'small'} variant={'tertiary'} icon={<PlusIcon />}>
-                    {'Legg til ny'}
+                    {'Legg til flere'}
                 </Button>
             </Dialog.Trigger>
 

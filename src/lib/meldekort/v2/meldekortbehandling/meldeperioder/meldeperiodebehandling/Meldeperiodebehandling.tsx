@@ -1,4 +1,4 @@
-import { BodyShort, Box, Select, Table } from '@navikt/ds-react';
+import { BodyShort, Heading, Select, Table, VStack } from '@navikt/ds-react';
 import {
     MeldekortbehandlingDagStatus,
     MeldekortBeregningsdag,
@@ -12,7 +12,7 @@ import {
     useMeldekortbehandlingSkjema,
     useMeldekortbehandlingSkjemaDispatch,
 } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2Context';
-import { formaterDatotekst, ukedagFraDatoKort } from '~/utils/date';
+import { formaterDatotekst, ukedagFraDatoKort, ukenummerFraDatotekst } from '~/utils/date';
 import { meldekortbehandlingDagStatusTekst } from '~/utils/tekstformateringUtils';
 import { formatterBeløp } from '~/utils/beløp';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
@@ -73,7 +73,11 @@ export const Meldeperiodebehandling = ({ meldeperiodeSkjema }: Props) => {
                 <MeldeperiodeBrukersMeldekort meldeperiodeKjede={kjede} />
             </MeldekortbehandlingSeksjon.Venstre>
 
-            <MeldekortbehandlingSeksjon.Høyre gap={'space-4'}>
+            <MeldekortbehandlingSeksjon.Høyre gap={'space-24'} className={style.uker}>
+                <Heading size={'small'} level={'3'} className={style.ukerHeader}>
+                    {'Behandling'}
+                </Heading>
+
                 <MeldeperiodeUke
                     dager={dager.slice(0, 7)}
                     dagIndexOffset={0}
@@ -81,6 +85,7 @@ export const Meldeperiodebehandling = ({ meldeperiodeSkjema }: Props) => {
                     beregningsdagPerDato={beregningsdagPerDato}
                     erReadonly={erReadonly}
                 />
+
                 <MeldeperiodeUke
                     dager={dager.slice(7, 14)}
                     dagIndexOffset={7}
@@ -111,7 +116,11 @@ const MeldeperiodeUke = ({
     const dispatch = useMeldekortbehandlingSkjemaDispatch();
 
     return (
-        <Box className={style.uke}>
+        <VStack gap={'space-8'}>
+            <Heading size={'xsmall'} level={'4'}>
+                {`Uke ${ukenummerFraDatotekst(dager.at(0)!.dato)}`}
+            </Heading>
+
             <Table size={'small'}>
                 <Table.Header>
                     <Table.Row>
@@ -182,7 +191,7 @@ const MeldeperiodeUke = ({
                     })}
                 </Table.Body>
             </Table>
-        </Box>
+        </VStack>
     );
 };
 

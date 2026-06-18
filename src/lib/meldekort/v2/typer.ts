@@ -57,6 +57,7 @@ export type MeldekortbehandlingPropsV2 = {
     saksbehandler: Nullable<string>;
     beslutter: Nullable<string>;
     opprettet: string;
+    sistEndret: string;
     godkjentTidspunkt: Nullable<string>;
     status: MeldekortbehandlingStatus;
     erAvsluttet: boolean;

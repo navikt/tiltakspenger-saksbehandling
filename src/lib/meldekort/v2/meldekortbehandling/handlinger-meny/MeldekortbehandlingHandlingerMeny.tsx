@@ -52,7 +52,6 @@ export const MeldekortbehandlingHandlingerMeny = () => {
                         variant={'secondary'}
                         icon={<ChevronDownIcon aria-hidden />}
                         iconPosition={'right'}
-                        size={'small'}
                     >
                         {'Handlinger'}
                     </Button>

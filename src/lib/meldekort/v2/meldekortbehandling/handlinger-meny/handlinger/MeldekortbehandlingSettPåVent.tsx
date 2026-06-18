@@ -1,4 +1,4 @@
-import { Button, Dialog, Textarea } from '@navikt/ds-react';
+import { Button, Dialog, Textarea, VStack } from '@navikt/ds-react';
 import { PauseIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
@@ -57,30 +57,32 @@ export const MeldekortbehandlingSettPåVent = ({ åpen, onClose }: Props) => {
                 </Dialog.Header>
 
                 <Dialog.Body>
-                    <Textarea
-                        label={'Hvorfor settes behandlingen på vent? (obligatorisk)'}
-                        value={begrunnelse}
-                        onChange={(event) => {
-                            setBegrunnelse(event.target.value);
-                            if (valideringsfeil) {
-                                setValideringsfeil(null);
-                            }
-                        }}
-                        error={valideringsfeil ?? undefined}
-                    />
+                    <VStack gap={'space-16'}>
+                        <Textarea
+                            label={'Hvorfor settes behandlingen på vent? (obligatorisk)'}
+                            value={begrunnelse}
+                            onChange={(event) => {
+                                setBegrunnelse(event.target.value);
+                                if (valideringsfeil) {
+                                    setValideringsfeil(null);
+                                }
+                            }}
+                            error={valideringsfeil ?? undefined}
+                        />
 
-                    <Datovelger
-                        label={'Når burde behandlingen gjenopptas? (valgfritt)'}
-                        minDate={new Date()}
-                        onDateChange={(dato) => setFrist(dato ? dateTilISOTekst(dato) : null)}
-                    />
+                        <Datovelger
+                            label={'Når burde behandlingen gjenopptas? (valgfritt)'}
+                            minDate={new Date()}
+                            onDateChange={(dato) => setFrist(dato ? dateTilISOTekst(dato) : null)}
+                        />
 
-                    {error && (
-                        <Infokort
-                            variant={'feil'}
-                            header={'Feil ved å sette på vent'}
-                        >{`Feil: ${error.message} (kode ${error.status})`}</Infokort>
-                    )}
+                        {error && (
+                            <Infokort
+                                variant={'feil'}
+                                header={'Feil ved å sette på vent'}
+                            >{`Feil: ${error.message} (kode ${error.status})`}</Infokort>
+                        )}
+                    </VStack>
                 </Dialog.Body>
 
                 <Dialog.Footer>
