@@ -54,6 +54,7 @@ import { OppsummeringAvVentestatuserModal } from '~/lib/behandling-felles/oppsum
 import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { MeldekortVedtak } from '~/lib/meldekort/typer/MeldekortVedtak';
 import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
+import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
 
 type Props = {
     sak: SakProps;
@@ -358,13 +359,12 @@ const OpprettholdResultat = (props: {
                 )}
             </HStack>
 
-            {props.klage.ventestatus.length > 0 &&
-                props.klage.ventestatus.at(0)?.erSattPåVent === false && (
-                    <OppsummeringAvVentestatuserModal
-                        ventestatuser={props.klage.ventestatus}
-                        button={{ variant: 'tertiary' }}
-                    />
-                )}
+            {props.klage.ventestatus.length > 0 && !erBehandlingSattPåVent(props.klage) && (
+                <OppsummeringAvVentestatuserModal
+                    ventestatuser={props.klage.ventestatus}
+                    button={{ variant: 'tertiary' }}
+                />
+            )}
 
             {vilOppretteNyBehandling && (
                 <VelgOmgjøringsbehandlingModal

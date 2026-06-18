@@ -17,7 +17,6 @@ import { SaksbehandlerRolle } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import { BehandlingSettPåVent } from '~/lib/rammebehandling/felles/send-og-godkjenn/sett-på-vent/BehandlingSettPåVent';
 import { BehandlingGjenoppta } from '~/lib/rammebehandling/felles/send-og-godkjenn/gjenoppta/BehandlingGjenoppta';
 import {
-    erSattPaVent,
     skalKunneGjenopptaBehandling,
     skalKunneSetteBehandlingPaVent,
 } from '~/lib/saksbehandler/tilganger';
@@ -26,6 +25,7 @@ import {
     Rammebehandling,
     Rammebehandlingsstatus,
 } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
 
 import style from './BehandlingSendOgGodkjenn.module.css';
 
@@ -66,7 +66,7 @@ export const BehandlingSendOgGodkjenn = ({ behandling, lagringProps }: Props) =>
         (behandling.status === Rammebehandlingsstatus.KLAR_TIL_BEHANDLING ||
             behandling.status === Rammebehandlingsstatus.UNDER_BEHANDLING) &&
         behandling.avbrutt === null &&
-        !erSattPaVent(behandling) &&
+        !erBehandlingSattPåVent(behandling) &&
         erSaksbehandler;
 
     const kanSettePaVent = skalKunneSetteBehandlingPaVent(behandling, innloggetSaksbehandler);

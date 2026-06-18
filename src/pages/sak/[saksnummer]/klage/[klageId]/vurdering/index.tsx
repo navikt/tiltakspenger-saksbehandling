@@ -48,6 +48,7 @@ import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling
 import { MeldekortVedtak } from '~/lib/meldekort/typer/MeldekortVedtak';
 import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
 import AvbrytKlagebehandlingModal from '~/lib/klage/modaler/avbryt/AvbrytKlagebehandlingModal';
+import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
 
 type Props = {
     sak: SakProps;
@@ -288,13 +289,12 @@ const VurderingKlagePage = ({
                             </Button>
                         )
                     )}
-                    {klage.ventestatus.length > 0 &&
-                        klage.ventestatus.at(0)?.erSattPåVent === false && (
-                            <OppsummeringAvVentestatuserModal
-                                ventestatuser={klage.ventestatus}
-                                button={{ variant: 'tertiary' }}
-                            />
-                        )}
+                    {klage.ventestatus.length > 0 && !erBehandlingSattPåVent(klage) && (
+                        <OppsummeringAvVentestatuserModal
+                            ventestatuser={klage.ventestatus}
+                            button={{ variant: 'tertiary' }}
+                        />
+                    )}
                 </VStack>
             )}
             {vilAvslutteBehandlingModal && (

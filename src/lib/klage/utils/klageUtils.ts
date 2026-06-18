@@ -16,11 +16,12 @@ import {
     erKlageinstanshendelseFeilregistrert,
     erKlageinstanshendelseOmgjøringskravbehandlingAvsluttet,
 } from './KlageinstanshendelseUtils';
+import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
 import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
 import {
     erBehandlingIdMeldekortbehandling,
     erBehandlingIdRammebehandling,
-} from '~/lib/behandling-felles/utils/BehandlingUtils';
+} from '~/lib/behandling-felles/utils/behandlingUtils';
 import { erMeldekortbehandlingUnderAktivOmgjøring } from '~/lib/meldekort/utils/MeldekortbehandlingUtils';
 
 /**
@@ -208,8 +209,7 @@ export const hentSisteKlagehendelseUtfallFraKlagebehandling = (
 };
 
 export const erKlagebehandlingSattPåVent = (k: Klagebehandling): boolean => {
-    const sisteVenteHendelse = k.ventestatus.at(0);
-    return !!sisteVenteHendelse && sisteVenteHendelse.erSattPåVent;
+    return erBehandlingSattPåVent(k);
 };
 
 export const avbrytKlagebehandlingStatusLabels: Record<AvbrytKlagebehandlingStatus, string> = {

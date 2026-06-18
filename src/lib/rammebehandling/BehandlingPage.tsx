@@ -16,11 +16,12 @@ import { useSak } from '~/lib/sak/SakContext';
 import OppsummeringAvVentestatus from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatus';
 import { BehandlingSkjemaProvider } from '~/lib/rammebehandling/context/BehandlingSkjemaContext';
 import { PersonoversiktTab } from '~/lib/personoversikt/Personoversikt';
-
-import style from './BehandlingPage.module.css';
 import OppsummeringAvKlageForRammebehandling from '~/lib/behandling-felles/oppsummeringer/klage/oppsummeringAvKlageForRammebehandling/OppsummeringAvKlageForRammebehandling';
 import { OppsummeringAvVentestatuserModal } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
 import { Separator } from '~/lib/_felles/separator/Separator';
+import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
+
+import style from './BehandlingPage.module.css';
 
 export const BehandlingPage = () => {
     const { sak } = useSak();
@@ -41,6 +42,8 @@ export const BehandlingPage = () => {
         saksopplysninger,
     } = behandling;
 
+    const erSattPåVent = erBehandlingSattPåVent(behandling);
+
     return (
         <>
             <PersonaliaHeader
@@ -53,7 +56,7 @@ export const BehandlingPage = () => {
                         : PersonoversiktTab.ÅpneBehandlinger
                 }
             >
-                {finnBehandlingStatusTag(status, false, ventestatus.at(0)?.erSattPåVent)}
+                {finnBehandlingStatusTag(status, false, erSattPåVent)}
             </PersonaliaHeader>
 
             {/*
@@ -70,21 +73,20 @@ export const BehandlingPage = () => {
                     sidebar={
                         <VStack gap="space-32">
                             <BehandlingSaksopplysninger />
-                            {ventestatus.length > 0 &&
-                                ventestatus.at(0)?.erSattPåVent === false && (
-                                    <>
-                                        <Separator />
-                                        <OppsummeringAvVentestatuserModal
-                                            ventestatuser={ventestatus}
-                                            button={{ variant: 'tertiary' }}
-                                        />
-                                    </>
-                                )}
+                            {ventestatus.length > 0 && !erSattPåVent && (
+                                <>
+                                    <Separator />
+                                    <OppsummeringAvVentestatuserModal
+                                        ventestatuser={ventestatus}
+                                        button={{ variant: 'tertiary' }}
+                                    />
+                                </>
+                            )}
                         </VStack>
                     }
                     main={
                         <div className={style.main}>
-                            {ventestatus.at(0)?.erSattPåVent && (
+                            {erSattPåVent && (
                                 <OppsummeringAvVentestatus
                                     ventestatus={ventestatus.at(0)!}
                                     medHistorikkVisning={

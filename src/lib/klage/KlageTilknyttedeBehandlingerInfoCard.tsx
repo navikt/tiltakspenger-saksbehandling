@@ -7,7 +7,7 @@ import { finnBehandlingstypeTekst, behandlingResultatTilText } from '~/utils/tek
 import { behandlingUrl, meldeperiodeUrl } from '~/utils/urls';
 import { MeldekortbehandlingId } from '../meldekort/typer/Meldekortbehandling';
 import { PartialRecord } from '~/types/UtilTypes';
-import { erBehandlingIdMeldekortbehandling } from '../behandling-felles/utils/BehandlingUtils';
+import { erBehandlingIdMeldekortbehandling } from '../behandling-felles/utils/behandlingUtils';
 import { MeldekortbehandlingPropsV2 } from '../meldekort/v2/typer';
 
 const KlageTilknyttedeBehandlingerInfoCard = (props: {

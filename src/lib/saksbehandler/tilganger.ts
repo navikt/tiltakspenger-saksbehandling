@@ -4,6 +4,7 @@ import {
 } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { ÅpenRammebehandlingForOversikt } from '~/lib/personoversikt/typer/ÅpenBehandlingForOversikt';
 import { Saksbehandler, SaksbehandlerRolle } from '~/lib/saksbehandler/SaksbehandlerTyper';
+import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
 
 export const erSaksbehandler = (saksbehandler: Saksbehandler) =>
     saksbehandler.roller.includes(SaksbehandlerRolle.SAKSBEHANDLER);
@@ -140,9 +141,9 @@ export const skalKunneSetteBehandlingPaVent = (
     );
 };
 
-export const erSattPaVent = (behandling: Rammebehandling | ÅpenRammebehandlingForOversikt) => {
+const erSattPaVent = (behandling: Rammebehandling | ÅpenRammebehandlingForOversikt) => {
     if ('ventestatus' in behandling) {
-        return behandling.ventestatus && behandling.ventestatus.at(0)?.erSattPåVent;
+        return erBehandlingSattPåVent(behandling);
     } else {
         return behandling.erSattPåVent;
     }

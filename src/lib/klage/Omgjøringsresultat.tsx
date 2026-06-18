@@ -20,7 +20,7 @@ import KlageTilknyttedeBehandlingerInfoCard from './KlageTilknyttedeBehandlinger
 import {
     erBehandlingIdMeldekortbehandling,
     erBehandlingIdRammebehandling,
-} from '../behandling-felles/utils/BehandlingUtils';
+} from '../behandling-felles/utils/behandlingUtils';
 import { MeldekortbehandlingId } from '../meldekort/typer/Meldekortbehandling';
 import { MeldekortVedtak } from '../meldekort/typer/MeldekortVedtak';
 import { Nullable, PartialRecord } from '~/types/UtilTypes';

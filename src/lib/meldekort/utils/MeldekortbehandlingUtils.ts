@@ -7,6 +7,7 @@ import { SakProps } from '~/lib/sak/SakTyper';
 import { erBeslutter, erSaksbehandler, kanBehandle } from '~/lib/saksbehandler/tilganger';
 import { Saksbehandler } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
+import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
 
 export const erMeldekortbehandlingUnderAktivBehandling = (m: MeldekortbehandlingProps): boolean =>
     m.status === MeldekortbehandlingStatus.UNDER_BEHANDLING ||
@@ -130,7 +131,7 @@ export const skalKunneOvertaMeldekortbehandling = (
 
 export const erMeldekortbehandlingSattPaVent = (
     meldekortbehandling: MeldekortbehandlingProps | MeldekortbehandlingPropsV2,
-): boolean => meldekortbehandling.ventestatus?.at(-1)?.erSattPåVent ?? false;
+): boolean => erBehandlingSattPåVent(meldekortbehandling);
 
 export const skalKunneGjenopptaMeldekortbehandling = (
     meldekortbehandling: MeldekortbehandlingProps | MeldekortbehandlingPropsV2,

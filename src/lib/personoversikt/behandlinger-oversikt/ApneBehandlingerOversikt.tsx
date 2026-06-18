@@ -22,6 +22,7 @@ import KlageMeny from '~/lib/behandling-felles/behandlingmeny/KlageMeny';
 import { hentSisteKlagehendelseUtfallFraKlagebehandling } from '~/lib/klage/utils/klageUtils';
 import { klagehendelseUtfallTilTag } from '~/lib/klage/utils/KlageinstanshendelseUtils';
 import { erMeldekortbehandlingSattPaVent } from '~/lib/meldekort/utils/MeldekortbehandlingUtils';
+import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
 import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
 
 type Props = {
@@ -187,12 +188,12 @@ const propsForRad = (
                 (klagebehandling.åpenBehandlingId &&
                     sak.meldekortbehandlinger[
                         klagebehandling.åpenBehandlingId as MeldekortbehandlingId
-                    ]) ??
+                        ]) ??
                 null;
 
             return {
                 typeTekst,
-                statusTag: klagebehandling.ventestatus.at(0)?.erSattPåVent ? (
+                statusTag: erBehandlingSattPåVent(klagebehandling) ? (
                     <Tag data-color="warning">Satt på vent</Tag>
                 ) : (
                     klagebehandlingStatusTilTag({ status: åpenBehandling.status })

@@ -14,6 +14,7 @@ import {
     klagebehandlingStatusTilTag,
     klagebehandlingResultatTilTag,
 } from '~/utils/tekstformateringUtils';
+import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
 
 export type KlagebehandlingerMedOmgjøringsbehandling = {
     klagebehandling: Klagebehandling;
@@ -65,7 +66,7 @@ const Klageoversikt = (props: {
             const utfall = hentSisteKlagehendelseUtfallFraKlagebehandling(klagebehandling);
 
             return {
-                status: klagebehandling.ventestatus.at(0)?.erSattPåVent ? (
+                status: erBehandlingSattPåVent(klagebehandling) ? (
                     <Tag data-color="warning">Satt på vent</Tag>
                 ) : (
                     klagebehandlingStatusTilTag({ status: klagebehandling.status })

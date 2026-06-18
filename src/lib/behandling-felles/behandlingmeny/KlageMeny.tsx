@@ -32,6 +32,7 @@ import { Nullable } from '~/types/UtilTypes';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { ApiErrorFeilModal, ApiErrorState } from '~/lib/_felles/modaler/ApiErrorFeilModal';
 import AvbrytKlagebehandlingModal from '~/lib/klage/modaler/avbryt/AvbrytKlagebehandlingModal';
+import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
 import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
 
 const KlageMeny = (props: {
@@ -145,7 +146,7 @@ const KlageMeny = (props: {
                                     Tildel meg
                                 </ActionMenu.Item>
 
-                                {props.klage.ventestatus.at(0)?.erSattPåVent && (
+                                {erBehandlingSattPåVent(props.klage) && (
                                     <ActionMenu.Item
                                         icon={<PlayIcon aria-hidden />}
                                         onClick={() => {
@@ -171,7 +172,7 @@ const KlageMeny = (props: {
                                     Legg tilbake
                                 </ActionMenu.Item>
 
-                                {props.klage.ventestatus.at(0)?.erSattPåVent ? (
+                                {erBehandlingSattPåVent(props.klage) ? (
                                     <ActionMenu.Item
                                         icon={<PlayIcon aria-hidden />}
                                         onClick={() => {

@@ -18,7 +18,7 @@ import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 import {
     erBehandlingIdMeldekortbehandling,
     erBehandlingIdRammebehandling,
-} from '~/lib/behandling-felles/utils/BehandlingUtils';
+} from '~/lib/behandling-felles/utils/behandlingUtils';
 import { MeldekortVedtak } from '~/lib/meldekort/typer/MeldekortVedtak';
 import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
 

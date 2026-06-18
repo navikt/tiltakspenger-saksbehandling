@@ -25,6 +25,7 @@ import { OppsummeringAvVentestatuserModal } from '~/lib/behandling-felles/oppsum
 import { useResettableState } from '~/hooks/useResettableState';
 import { personoversiktUrl } from '~/utils/urls';
 import OppsummeringAvAvbruttKlagebehandling from '~/lib/klage/oppsummering/avbrutt/OppsummeringAvAvbruttKlagebehandling';
+import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
 
 type Props = {
     children: ReactElement;
@@ -118,7 +119,7 @@ const KlageLayout = ({ children, saksnummer, activeTab }: Props) => {
                 {klage?.status === KlagebehandlingStatus.AVBRUTT && (
                     <OppsummeringAvAvbruttKlagebehandling avbrutt={klage.avbrutt!} />
                 )}
-                {klage?.ventestatus?.at(0)?.erSattPåVent && (
+                {klage && erBehandlingSattPåVent(klage) && (
                     <OppsummeringAvVentestatus
                         ventestatus={klage.ventestatus.at(0)!}
                         medHistorikkVisning={

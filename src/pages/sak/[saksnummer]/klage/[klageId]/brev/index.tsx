@@ -46,6 +46,7 @@ import { Nullable } from '~/types/UtilTypes';
 import Link from 'next/link';
 import { OppsummeringAvVentestatuserModal } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
 import { Vedtak } from '~/lib/vedtak/typer/Vedtak';
+import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
 
 type Props = {
     sak: SakProps;
@@ -296,13 +297,12 @@ const BrevKlagePage = ({ sak, påklagetVedtak }: Props) => {
                         </LocalAlert>
                     )}
 
-                    {klage.ventestatus.length > 0 &&
-                        klage.ventestatus.at(0)?.erSattPåVent === false && (
-                            <OppsummeringAvVentestatuserModal
-                                ventestatuser={klage.ventestatus}
-                                button={{ variant: 'tertiary' }}
-                            />
-                        )}
+                    {klage.ventestatus.length > 0 && !erBehandlingSattPåVent(klage) && (
+                        <OppsummeringAvVentestatuserModal
+                            ventestatuser={klage.ventestatus}
+                            button={{ variant: 'tertiary' }}
+                        />
+                    )}
                 </VStack>
             </VStack>
         </form>

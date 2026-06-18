@@ -34,7 +34,7 @@ import {
 import { useAvsluttBehandling } from './useAvsluttBehandling';
 import { useSak } from '~/lib/sak/SakContext';
 import { Saksbehandler } from '~/lib/saksbehandler/SaksbehandlerTyper';
-import { eierBehandling, erSattPaVent } from '~/lib/saksbehandler/tilganger';
+import { eierBehandling } from '~/lib/saksbehandler/tilganger';
 import router from 'next/router';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { useSettBehandlingPåVent } from './useSettBehandlingPåVent';
@@ -57,7 +57,7 @@ const visAvsluttBehandlingMenyvalg = (
         behandlingKanAvsluttes &&
         erRelevantMenyValgForStatus &&
         eierBehandling(behandling, innloggetSaksbehandler) &&
-        !erSattPaVent(behandling)
+        !behandling.erSattPåVent
     );
 };
 
