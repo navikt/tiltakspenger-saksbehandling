@@ -8,26 +8,31 @@ import {
     TrashIcon,
     MenuElipsisVerticalIcon,
     HourglassTopFilledIcon,
+    BulletListIcon,
 } from '@navikt/aksel-icons';
 import { useState } from 'react';
 import { useMeldekortbehandling } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2Context';
 import { SaksbehandlerBehandlingKommando as Kommando } from '~/lib/behandling-felles/typer/BehandlingFelles';
-import { MeldekortbehandlingTildelMeg } from '~/lib/meldekort/v2/meldekortbehandling/handlinger-meny/handlinger/MeldekortbehandlingTildelMeg';
-import { MeldekortbehandlingGjenoppta } from '~/lib/meldekort/v2/meldekortbehandling/handlinger-meny/handlinger/MeldekortbehandlingGjenoppta';
-import { MeldekortbehandlingLeggTilbake } from '~/lib/meldekort/v2/meldekortbehandling/handlinger-meny/handlinger/MeldekortbehandlingLeggTilbake';
-import { MeldekortbehandlingSettPåVent } from '~/lib/meldekort/v2/meldekortbehandling/handlinger-meny/handlinger/MeldekortbehandlingSettPåVent';
-import { MeldekortbehandlingOverta } from '~/lib/meldekort/v2/meldekortbehandling/handlinger-meny/handlinger/MeldekortbehandlingOverta';
-import { MeldekortbehandlingAvslutt } from '~/lib/meldekort/v2/meldekortbehandling/handlinger-meny/handlinger/MeldekortbehandlingAvslutt';
+import { MeldekortbehandlingTildelMeg } from '~/lib/meldekort/v2/meldekortbehandling/meny/handlinger/MeldekortbehandlingTildelMeg';
+import { MeldekortbehandlingGjenoppta } from '~/lib/meldekort/v2/meldekortbehandling/meny/handlinger/MeldekortbehandlingGjenoppta';
+import { MeldekortbehandlingLeggTilbake } from '~/lib/meldekort/v2/meldekortbehandling/meny/handlinger/MeldekortbehandlingLeggTilbake';
+import { MeldekortbehandlingSettPåVent } from '~/lib/meldekort/v2/meldekortbehandling/meny/handlinger/MeldekortbehandlingSettPåVent';
+import { MeldekortbehandlingOverta } from '~/lib/meldekort/v2/meldekortbehandling/meny/handlinger/MeldekortbehandlingOverta';
+import { MeldekortbehandlingAvslutt } from '~/lib/meldekort/v2/meldekortbehandling/meny/handlinger/MeldekortbehandlingAvslutt';
 import { OppsummeringAvVentestatuserModal } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
+import { OppsummeringAvAttesteringerModal } from '~/lib/behandling-felles/attestering/OppsummeringAvAttesteringerModal';
 
-export const MeldekortbehandlingHandlingerMeny = () => {
-    const { gyldigeKommandoer, ventestatus } = useMeldekortbehandling();
+export const MeldekortbehandlingMeny = () => {
+    const { gyldigeKommandoer, ventestatus, attesteringer } = useMeldekortbehandling();
 
     const [aktivDialog, setAktivDialog] = useState<AktivDialog | null>(null);
 
-    const harVentestatuser = ventestatus.length > 0;
+    const onClose = () => setAktivDialog(null);
 
-    if (gyldigeKommandoer.length === 0 && !harVentestatuser) {
+    const harVentestatuser = ventestatus.length > 0;
+    const harAttesteringer = attesteringer.length > 0;
+
+    if (gyldigeKommandoer.length === 0 && !harVentestatuser && !harAttesteringer) {
         return null;
     }
 
@@ -102,16 +107,24 @@ export const MeldekortbehandlingHandlingerMeny = () => {
                         </ActionMenu.Item>
                     )}
 
+                    {(harVentestatuser || harAttesteringer) && <ActionMenu.Divider />}
+
                     {harVentestatuser && (
-                        <>
-                            <ActionMenu.Divider />
-                            <ActionMenu.Item
-                                icon={<HourglassTopFilledIcon aria-hidden />}
-                                onSelect={() => setAktivDialog('ventehistorikk')}
-                            >
-                                {'Se ventestatus-historikk'}
-                            </ActionMenu.Item>
-                        </>
+                        <ActionMenu.Item
+                            icon={<HourglassTopFilledIcon aria-hidden />}
+                            onSelect={() => setAktivDialog('ventehistorikk')}
+                        >
+                            {'Se ventestatus-historikk'}
+                        </ActionMenu.Item>
+                    )}
+
+                    {harAttesteringer && (
+                        <ActionMenu.Item
+                            icon={<BulletListIcon aria-hidden />}
+                            onSelect={() => setAktivDialog('attesteringer')}
+                        >
+                            {'Se attesteringer'}
+                        </ActionMenu.Item>
                     )}
 
                     {kanAvslutte && (
@@ -132,50 +145,52 @@ export const MeldekortbehandlingHandlingerMeny = () => {
             {kanTa && (
                 <MeldekortbehandlingTildelMeg
                     åpen={aktivDialog === 'tildelMeg'}
-                    onClose={() => setAktivDialog(null)}
+                    onClose={onClose}
                 />
             )}
 
             {kanGjenoppta && (
                 <MeldekortbehandlingGjenoppta
                     åpen={aktivDialog === 'gjenoppta'}
-                    onClose={() => setAktivDialog(null)}
+                    onClose={onClose}
                 />
             )}
 
             {kanLeggeTilbake && (
                 <MeldekortbehandlingLeggTilbake
                     åpen={aktivDialog === 'leggTilbake'}
-                    onClose={() => setAktivDialog(null)}
+                    onClose={onClose}
                 />
             )}
 
             {kanSettePåVent && (
                 <MeldekortbehandlingSettPåVent
                     åpen={aktivDialog === 'settPåVent'}
-                    onClose={() => setAktivDialog(null)}
+                    onClose={onClose}
                 />
             )}
 
             {kanOverta && (
-                <MeldekortbehandlingOverta
-                    åpen={aktivDialog === 'overta'}
-                    onClose={() => setAktivDialog(null)}
-                />
+                <MeldekortbehandlingOverta åpen={aktivDialog === 'overta'} onClose={onClose} />
             )}
 
             {kanAvslutte && (
-                <MeldekortbehandlingAvslutt
-                    åpen={aktivDialog === 'avslutt'}
-                    onClose={() => setAktivDialog(null)}
-                />
+                <MeldekortbehandlingAvslutt åpen={aktivDialog === 'avslutt'} onClose={onClose} />
             )}
 
             {harVentestatuser && (
                 <OppsummeringAvVentestatuserModal
                     ventestatuser={ventestatus}
                     åpen={aktivDialog === 'ventehistorikk'}
-                    onClose={() => setAktivDialog(null)}
+                    onClose={onClose}
+                />
+            )}
+
+            {harAttesteringer && (
+                <OppsummeringAvAttesteringerModal
+                    attesteringer={attesteringer}
+                    åpen={aktivDialog === 'attesteringer'}
+                    onClose={onClose}
                 />
             )}
         </>
@@ -189,4 +204,5 @@ type AktivDialog =
     | 'settPåVent'
     | 'overta'
     | 'avslutt'
-    | 'ventehistorikk';
+    | 'ventehistorikk'
+    | 'attesteringer';

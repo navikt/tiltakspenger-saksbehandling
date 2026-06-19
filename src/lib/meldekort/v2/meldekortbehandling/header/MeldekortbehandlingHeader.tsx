@@ -5,7 +5,7 @@ import { formaterDatotekst } from '~/utils/date';
 import { DetaljHorisontal } from '~/lib/_felles/detaljer/DetaljHorisontal';
 import { MeldekortbehandlingStatusTags } from '~/lib/meldekort/v2/meldekortbehandling/header/status/MeldekortbehandlingStatusTags';
 import { MeldekortbehandlingSeksjon } from '~/lib/meldekort/v2/meldekortbehandling/layout/seksjon/MeldekortbehandlingSeksjon';
-import { MeldekortbehandlingHandlingerMeny } from '~/lib/meldekort/v2/meldekortbehandling/handlinger-meny/MeldekortbehandlingHandlingerMeny';
+import { MeldekortbehandlingMeny } from '~/lib/meldekort/v2/meldekortbehandling/meny/MeldekortbehandlingMeny';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
 import OppsummeringAvVentestatus from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatus';
 
@@ -55,7 +55,7 @@ export const MeldekortbehandlingHeader = () => {
                     </VStack>
 
                     <VStack justify={'end'}>
-                        <MeldekortbehandlingHandlingerMeny />
+                        <MeldekortbehandlingMeny />
                     </VStack>
                 </HStack>
             </MeldekortbehandlingSeksjon.Høyre>
