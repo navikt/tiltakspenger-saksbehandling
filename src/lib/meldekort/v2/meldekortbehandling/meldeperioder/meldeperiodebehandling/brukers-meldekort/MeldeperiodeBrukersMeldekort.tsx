@@ -1,13 +1,4 @@
-import {
-    BodyShort,
-    Button,
-    Heading,
-    HelpText,
-    HStack,
-    InlineMessage,
-    Select,
-    VStack,
-} from '@navikt/ds-react';
+import { Button, Heading, HStack, InlineMessage, Select, VStack } from '@navikt/ds-react';
 import { formaterTidspunkt } from '~/utils/date';
 import { MeldeperiodeKjedePropsV2 } from '~/lib/meldekort/v2/typer';
 import { ChevronRightDoubleIcon } from '@navikt/aksel-icons';
@@ -71,15 +62,9 @@ export const MeldeperiodeBrukersMeldekort = ({ meldeperiodeKjede }: Props) => {
                             </option>
                         ))}
                 </Select>
-
-                <HelpText>
-                    <BodyShort size={'small'} spacing={true}>
-                        {'Mottatt: '}
-                        <strong>{formaterTidspunkt(valgtMeldekort.mottatt)}</strong>
-                    </BodyShort>
-                    <BrukersMeldekortAutomatiskBehandlingStatus meldekort={valgtMeldekort} />
-                </HelpText>
             </HStack>
+
+            <BrukersMeldekortAutomatiskBehandlingStatus meldekort={valgtMeldekort} />
 
             {!erReadonly && (
                 <Button

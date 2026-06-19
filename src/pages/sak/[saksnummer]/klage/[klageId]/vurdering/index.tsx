@@ -43,7 +43,7 @@ import { Nullable, PartialRecord } from '~/types/UtilTypes';
 import { erRammebehandlingUnderAktivOmgjøring } from '~/lib/rammebehandling/rammebehandlingUtils';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import Omgjøringsresultat from '~/lib/klage/Omgjøringsresultat';
-import { OppsummeringAvVentestatuserModal } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
+import { OppsummeringAvVentestatuser } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
 import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { MeldekortVedtak } from '~/lib/meldekort/typer/MeldekortVedtak';
 import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
@@ -295,10 +295,7 @@ const VurderingKlagePage = ({
                         )
                     )}
                     {klage.ventestatus.length > 0 && !erBehandlingSattPåVent(klage) && (
-                        <OppsummeringAvVentestatuserModal
-                            ventestatuser={klage.ventestatus}
-                            button={{ variant: 'tertiary' }}
-                        />
+                        <OppsummeringAvVentestatuser ventestatuser={klage.ventestatus} />
                     )}
                 </VStack>
             )}

@@ -1,62 +1,79 @@
 import { VentestatusHendelse } from '~/types/Ventestatus';
 import OppsummeringAvVentestatus from './OppsummeringAvVentestatus';
-import { Button, Heading, Modal } from '@navikt/ds-react';
+import { Button, Dialog, Heading } from '@navikt/ds-react';
 import { useState } from 'react';
 import { Separator } from '~/lib/_felles/separator/Separator';
-import styles from './OppsummeringAvVentestatuser.module.css';
 
-export const OppsummeringAvVentestatuserModal = (props: {
+type Props = {
     ventestatuser: VentestatusHendelse[];
-    button?: {
-        variant: 'primary' | 'secondary' | 'tertiary';
-    };
-}) => {
+};
+
+export const OppsummeringAvVentestatuser = ({ ventestatuser }: Props) => {
     const [åpen, setÅpen] = useState(false);
+
     return (
         <div>
             <Button
-                type="button"
-                size="small"
-                variant={props.button?.variant || 'secondary'}
+                type={'button'}
+                size={'small'}
+                variant={'tertiary'}
                 onClick={() => setÅpen(true)}
             >
-                Se ventestatus-historikk
+                {'Se ventestatus-historikk'}
             </Button>
-            <Modal
-                open={åpen}
+
+            <OppsummeringAvVentestatuserModal
+                ventestatuser={ventestatuser}
+                åpen={åpen}
                 onClose={() => setÅpen(false)}
-                aria-label="Ventestatus-historikk"
-                width={'medium'}
-            >
-                <Modal.Header>
-                    <Heading size="medium" level="2">
-                        Ventestatus-historikk
-                    </Heading>
-                </Modal.Header>
-                <Modal.Body>
-                    <OppsummeringAvVentestatuser ventestatuser={props.ventestatuser} />
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button type="button" variant="secondary" onClick={() => setÅpen(false)}>
-                        Lukk
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+            />
         </div>
     );
 };
 
-const OppsummeringAvVentestatuser = (props: { ventestatuser: VentestatusHendelse[] }) => {
-    return (
-        <ul className={styles['ventestatuser-container']}>
-            {props.ventestatuser.map((ventestatus, index) => (
-                <ol key={`ventestatus-${index}`}>
-                    <OppsummeringAvVentestatus ventestatus={ventestatus} size="small" />
-                    <Separator />
-                </ol>
-            ))}
-        </ul>
-    );
+type ModalProps = {
+    ventestatuser: VentestatusHendelse[];
+    åpen: boolean;
+    onClose: () => void;
 };
 
-export default OppsummeringAvVentestatuser;
+export const OppsummeringAvVentestatuserModal = ({ ventestatuser, åpen, onClose }: ModalProps) => {
+    return (
+        <Dialog
+            open={åpen}
+            onOpenChange={(skalÅpne) => {
+                if (!skalÅpne) {
+                    onClose();
+                }
+            }}
+        >
+            <Dialog.Popup>
+                <Dialog.Header>
+                    <Heading size={'medium'} level={'2'}>
+                        {'Ventestatus - historikk'}
+                    </Heading>
+                </Dialog.Header>
+                <Dialog.Body>
+                    <ul>
+                        {ventestatuser.map((ventestatus) => (
+                            <ol key={ventestatus.tidspunkt}>
+                                <OppsummeringAvVentestatus
+                                    ventestatus={ventestatus}
+                                    size={'small'}
+                                />
+                                <Separator />
+                            </ol>
+                        ))}
+                    </ul>
+                </Dialog.Body>
+                <Dialog.Footer>
+                    <Dialog.CloseTrigger>
+                        <Button type={'button'} variant={'secondary'}>
+                            {'Lukk'}
+                        </Button>
+                    </Dialog.CloseTrigger>
+                </Dialog.Footer>
+            </Dialog.Popup>
+        </Dialog>
+    );
+};

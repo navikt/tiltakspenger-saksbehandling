@@ -34,7 +34,7 @@ import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import styles from './index.module.css';
 import { MeldekortVedtak } from '~/lib/meldekort/typer/MeldekortVedtak';
 import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
-import { OppsummeringAvVentestatuserModal } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
+import { OppsummeringAvVentestatuser } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
 import AvbrytKlagebehandlingModal from '~/lib/klage/modaler/avbryt/AvbrytKlagebehandlingModal';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
 import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
@@ -278,10 +278,7 @@ const FormkravKlagePage = ({
                     )}
 
                     {klage.ventestatus.length > 0 && !erBehandlingSattPåVent(klage) && (
-                        <OppsummeringAvVentestatuserModal
-                            ventestatuser={klage.ventestatus}
-                            button={{ variant: 'tertiary' }}
-                        />
+                        <OppsummeringAvVentestatuser ventestatuser={klage.ventestatus} />
                     )}
                 </VStack>
             </form>

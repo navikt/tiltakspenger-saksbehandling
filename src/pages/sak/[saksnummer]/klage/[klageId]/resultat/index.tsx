@@ -50,7 +50,7 @@ import { KlageHendelseKlagebehandlingAvsluttetUtfall } from '~/lib/klage/typer/K
 import FerdigstillKlageModalWrapper from '~/lib/klage/modaler/FerdigstillKlagebehandlingModal';
 import Omgjøringsresultat from '~/lib/klage/Omgjøringsresultat';
 import KlageTilknyttedeBehandlingerInfoCard from '~/lib/klage/KlageTilknyttedeBehandlingerInfoCard';
-import { OppsummeringAvVentestatuserModal } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
+import { OppsummeringAvVentestatuser } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
 import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { MeldekortVedtak } from '~/lib/meldekort/typer/MeldekortVedtak';
 import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
@@ -367,10 +367,7 @@ const OpprettholdResultat = (props: {
             </HStack>
 
             {props.klage.ventestatus.length > 0 && !erBehandlingSattPåVent(props.klage) && (
-                <OppsummeringAvVentestatuserModal
-                    ventestatuser={props.klage.ventestatus}
-                    button={{ variant: 'tertiary' }}
-                />
+                <OppsummeringAvVentestatuser ventestatuser={props.klage.ventestatus} />
             )}
 
             {vilOppretteNyBehandling && (

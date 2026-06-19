@@ -1,63 +1,58 @@
-import styles from './OppsummeringAvVentestatus.module.css';
 import { Box, Heading, HStack, VStack } from '@navikt/ds-react';
 import { formaterDatotekst, formaterTidspunkt } from '~/utils/date';
 import { OppsummeringsPar } from '../oppsummeringspar/OppsummeringsPar';
 import { classNames } from '~/utils/classNames';
 import { VentestatusHendelse } from '~/types/Ventestatus';
+import { OppsummeringAvVentestatuser } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
 
-const OppsummeringAvVentestatus = (props: {
+import styles from './OppsummeringAvVentestatus.module.css';
+
+type Props = {
     ventestatus: VentestatusHendelse;
-    wrapperClassName?: string;
+    historikk?: VentestatusHendelse[];
+    className?: string;
     size?: 'medium' | 'small';
-    medHistorikkVisning?: () => React.ReactNode;
-}) => {
+};
+
+export const OppsummeringAvVentestatus = ({ ventestatus, className, size, historikk }: Props) => {
     return (
-        <Box
-            className={classNames(
-                styles.box,
-                props.size === 'small' ? styles['box-small'] : styles['box-medium'],
-                props.wrapperClassName,
-            )}
-        >
+        <Box className={classNames(styles.box, size === 'small' && styles.boxSmall, className)}>
             <VStack gap="space-24">
                 <VStack gap={'space-24'}>
-                    <Heading size={props.size ?? 'medium'} level="3">
-                        {props.ventestatus.erSattPåVent
+                    <Heading size={size ?? 'medium'} level="3">
+                        {ventestatus.erSattPåVent
                             ? 'Behandlingen er satt på vent'
                             : 'Behandlingen er gjenopptatt'}
                     </Heading>
                     <HStack gap={'space-24'}>
                         <OppsummeringsPar
-                            label={
-                                props.ventestatus.erSattPåVent
-                                    ? 'Satt på vent av'
-                                    : 'Gjenopptatt av'
-                            }
-                            verdi={props.ventestatus.sattPåVentAv}
+                            label={ventestatus.erSattPåVent ? 'Satt på vent av' : 'Gjenopptatt av'}
+                            verdi={ventestatus.sattPåVentAv}
                             retning="vertikal"
                         />
                         <OppsummeringsPar
                             label={'Tidspunkt'}
-                            verdi={formaterTidspunkt(props.ventestatus.tidspunkt)}
+                            verdi={formaterTidspunkt(ventestatus.tidspunkt)}
                             retning="vertikal"
                         />
-                        {props.ventestatus.frist && (
+                        {ventestatus.frist && (
                             <OppsummeringsPar
                                 label={'Frist'}
-                                verdi={formaterDatotekst(props.ventestatus.frist)}
+                                verdi={formaterDatotekst(ventestatus.frist)}
                                 retning="vertikal"
                             />
                         )}
                     </HStack>
-                    {props.ventestatus.begrunnelse && (
+                    {ventestatus.begrunnelse && (
                         <OppsummeringsPar
                             label={'Begrunnelse'}
-                            verdi={props.ventestatus.begrunnelse}
+                            verdi={ventestatus.begrunnelse}
                             retning="vertikal"
                         />
                     )}
                 </VStack>
-                {props.medHistorikkVisning && props.medHistorikkVisning()}
+
+                {historikk && <OppsummeringAvVentestatuser ventestatuser={historikk} />}
             </VStack>
         </Box>
     );

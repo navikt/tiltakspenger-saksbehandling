@@ -6,6 +6,8 @@ import { DetaljHorisontal } from '~/lib/_felles/detaljer/DetaljHorisontal';
 import { MeldekortbehandlingStatusTags } from '~/lib/meldekort/v2/meldekortbehandling/header/status/MeldekortbehandlingStatusTags';
 import { MeldekortbehandlingSeksjon } from '~/lib/meldekort/v2/meldekortbehandling/layout/seksjon/MeldekortbehandlingSeksjon';
 import { MeldekortbehandlingHandlingerMeny } from '~/lib/meldekort/v2/meldekortbehandling/handlinger-meny/MeldekortbehandlingHandlingerMeny';
+import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
+import OppsummeringAvVentestatus from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatus';
 
 import style from './MeldekortbehandlingHeader.module.css';
 
@@ -13,10 +15,10 @@ export const MeldekortbehandlingHeader = () => {
     const { førsteDagSomGirRett, sisteDagSomGirRett, kanSendeInnHelgForMeldekort } = useSak().sak;
 
     const meldekortbehandling = useMeldekortbehandling();
-    const { saksbehandler, beslutter } = meldekortbehandling;
+    const { saksbehandler, beslutter, ventestatus } = meldekortbehandling;
 
     return (
-        <MeldekortbehandlingSeksjon className={style.outer}>
+        <MeldekortbehandlingSeksjon className={style.outer} gap={'space-16'}>
             <MeldekortbehandlingSeksjon.Venstre gap={'space-16'}>
                 <Heading size={'medium'} level={'1'}>
                     {'Meldekortbehandling'}
@@ -57,6 +59,15 @@ export const MeldekortbehandlingHeader = () => {
                     </VStack>
                 </HStack>
             </MeldekortbehandlingSeksjon.Høyre>
+
+            {erBehandlingSattPåVent(meldekortbehandling) && (
+                <MeldekortbehandlingSeksjon.FullBredde>
+                    <OppsummeringAvVentestatus
+                        ventestatus={ventestatus.at(0)!}
+                        historikk={ventestatus}
+                    />
+                </MeldekortbehandlingSeksjon.FullBredde>
+            )}
         </MeldekortbehandlingSeksjon>
     );
 };

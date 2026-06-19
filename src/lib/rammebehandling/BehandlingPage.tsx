@@ -17,7 +17,7 @@ import OppsummeringAvVentestatus from '~/lib/behandling-felles/oppsummeringer/ve
 import { BehandlingSkjemaProvider } from '~/lib/rammebehandling/context/BehandlingSkjemaContext';
 import { PersonoversiktTab } from '~/lib/personoversikt/Personoversikt';
 import OppsummeringAvKlageForRammebehandling from '~/lib/behandling-felles/oppsummeringer/klage/oppsummeringAvKlageForRammebehandling/OppsummeringAvKlageForRammebehandling';
-import { OppsummeringAvVentestatuserModal } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
+import { OppsummeringAvVentestatuser } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
 import { Separator } from '~/lib/_felles/separator/Separator';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
 
@@ -76,10 +76,7 @@ export const BehandlingPage = () => {
                             {ventestatus.length > 0 && !erSattPåVent && (
                                 <>
                                     <Separator />
-                                    <OppsummeringAvVentestatuserModal
-                                        ventestatuser={ventestatus}
-                                        button={{ variant: 'tertiary' }}
-                                    />
+                                    <OppsummeringAvVentestatuser ventestatuser={ventestatus} />
                                 </>
                             )}
                         </VStack>
@@ -89,16 +86,7 @@ export const BehandlingPage = () => {
                             {erSattPåVent && (
                                 <OppsummeringAvVentestatus
                                     ventestatus={ventestatus.at(0)!}
-                                    medHistorikkVisning={
-                                        ventestatus.length > 0
-                                            ? () => (
-                                                  <OppsummeringAvVentestatuserModal
-                                                      ventestatuser={ventestatus}
-                                                      button={{ variant: 'tertiary' }}
-                                                  />
-                                              )
-                                            : undefined
-                                    }
+                                    historikk={ventestatus}
                                 />
                             )}
                             <Tidslinjer sak={sak} />

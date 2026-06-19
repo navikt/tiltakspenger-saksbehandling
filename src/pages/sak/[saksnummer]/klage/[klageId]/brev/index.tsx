@@ -44,7 +44,7 @@ import {
 } from '~/lib/klage/api/KlageApi';
 import { Nullable } from '~/types/UtilTypes';
 import Link from 'next/link';
-import { OppsummeringAvVentestatuserModal } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
+import { OppsummeringAvVentestatuser } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
 import { Vedtak } from '~/lib/vedtak/typer/Vedtak';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
 
@@ -298,10 +298,7 @@ const BrevKlagePage = ({ sak, påklagetVedtak }: Props) => {
                     )}
 
                     {klage.ventestatus.length > 0 && !erBehandlingSattPåVent(klage) && (
-                        <OppsummeringAvVentestatuserModal
-                            ventestatuser={klage.ventestatus}
-                            button={{ variant: 'tertiary' }}
-                        />
+                        <OppsummeringAvVentestatuser ventestatuser={klage.ventestatus} />
                     )}
                 </VStack>
             </VStack>

@@ -21,7 +21,6 @@ import OppsummeringAvVentestatus from '~/lib/behandling-felles/oppsummeringer/ve
 import { hentSisteKlagehendelseUtfallFraKlagebehandling } from '~/lib/klage/utils/klageUtils';
 import { klagehendelseUtfallTilTag } from '~/lib/klage/utils/KlageinstanshendelseUtils';
 import { OppsummeringsPar } from '~/lib/behandling-felles/oppsummeringer/oppsummeringspar/OppsummeringsPar';
-import { OppsummeringAvVentestatuserModal } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
 import { useResettableState } from '~/hooks/useResettableState';
 import { personoversiktUrl } from '~/utils/urls';
 import OppsummeringAvAvbruttKlagebehandling from '~/lib/klage/oppsummering/avbrutt/OppsummeringAvAvbruttKlagebehandling';
@@ -122,16 +121,7 @@ const KlageLayout = ({ children, saksnummer, activeTab }: Props) => {
                 {klage && erBehandlingSattPåVent(klage) && (
                     <OppsummeringAvVentestatus
                         ventestatus={klage.ventestatus.at(0)!}
-                        medHistorikkVisning={
-                            klage.ventestatus.length > 0
-                                ? () => (
-                                      <OppsummeringAvVentestatuserModal
-                                          ventestatuser={klage.ventestatus}
-                                          button={{ variant: 'tertiary' }}
-                                      />
-                                  )
-                                : undefined
-                        }
+                        historikk={klage.ventestatus}
                     />
                 )}
                 {klage?.resultat?.begrunnelseFerdigstilling && (

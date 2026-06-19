@@ -19,7 +19,7 @@ import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import style from './Meldekortbehandling.module.css';
 import Divider from '~/lib/_felles/divider/Divider';
 import OppsummeringAvVentestatus from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatus';
-import { OppsummeringAvVentestatuserModal } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
+import { OppsummeringAvVentestatuser } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
 import { BekreftelsesModal } from '~/lib/_felles/modaler/BekreftelsesModal';
 import { useRef, useState } from 'react';
 import {
@@ -80,16 +80,7 @@ export const Meldekortbehandling = ({ meldekortbehandling, klagebehandling }: Pr
                 <>
                     <OppsummeringAvVentestatus
                         ventestatus={sisteVentestatus}
-                        medHistorikkVisning={
-                            meldekortbehandling.ventestatus.length > 0
-                                ? () => (
-                                      <OppsummeringAvVentestatuserModal
-                                          ventestatuser={meldekortbehandling.ventestatus}
-                                          button={{ variant: 'tertiary' }}
-                                      />
-                                  )
-                                : undefined
-                        }
+                        historikk={meldekortbehandling.ventestatus}
                     />
                     <MeldekortOppsummering
                         meldekortbehandling={meldekortbehandling}
@@ -111,9 +102,8 @@ export const Meldekortbehandling = ({ meldekortbehandling, klagebehandling }: Pr
                     <VStack gap="space-16">
                         <HStack gap="space-8" align="end">
                             {meldekortbehandling.ventestatus.length > 0 && (
-                                <OppsummeringAvVentestatuserModal
+                                <OppsummeringAvVentestatuser
                                     ventestatuser={meldekortbehandling.ventestatus}
-                                    button={{ variant: 'tertiary' }}
                                 />
                             )}
                             {kanSettePåVent && (

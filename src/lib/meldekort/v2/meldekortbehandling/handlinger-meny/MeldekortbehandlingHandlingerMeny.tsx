@@ -2,11 +2,12 @@ import { ActionMenu, Button } from '@navikt/ds-react';
 import {
     ArrowUndoIcon,
     ArrowsSquarepathIcon,
-    ChevronDownIcon,
     PauseIcon,
     PersonIcon,
     PlayIcon,
     TrashIcon,
+    MenuElipsisVerticalIcon,
+    HourglassTopFilledIcon,
 } from '@navikt/aksel-icons';
 import { useState } from 'react';
 import { useMeldekortbehandling } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2Context';
@@ -17,17 +18,16 @@ import { MeldekortbehandlingLeggTilbake } from '~/lib/meldekort/v2/meldekortbeha
 import { MeldekortbehandlingSettPåVent } from '~/lib/meldekort/v2/meldekortbehandling/handlinger-meny/handlinger/MeldekortbehandlingSettPåVent';
 import { MeldekortbehandlingOverta } from '~/lib/meldekort/v2/meldekortbehandling/handlinger-meny/handlinger/MeldekortbehandlingOverta';
 import { MeldekortbehandlingAvslutt } from '~/lib/meldekort/v2/meldekortbehandling/handlinger-meny/handlinger/MeldekortbehandlingAvslutt';
-
-type AktivDialog = 'tildelMeg' | 'gjenoppta' | 'leggTilbake' | 'settPåVent' | 'overta' | 'avslutt';
+import { OppsummeringAvVentestatuserModal } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
 
 export const MeldekortbehandlingHandlingerMeny = () => {
-    const meldekortbehandling = useMeldekortbehandling();
+    const { gyldigeKommandoer, ventestatus } = useMeldekortbehandling();
 
     const [aktivDialog, setAktivDialog] = useState<AktivDialog | null>(null);
 
-    const gyldigeKommandoer = meldekortbehandling.gyldigeKommandoer;
+    const harVentestatuser = ventestatus.length > 0;
 
-    if (gyldigeKommandoer.length === 0) {
+    if (gyldigeKommandoer.length === 0 && !harVentestatuser) {
         return null;
     }
 
@@ -50,10 +50,10 @@ export const MeldekortbehandlingHandlingerMeny = () => {
                 <ActionMenu.Trigger>
                     <Button
                         variant={'secondary'}
-                        icon={<ChevronDownIcon aria-hidden />}
+                        icon={<MenuElipsisVerticalIcon aria-hidden />}
                         iconPosition={'right'}
                     >
-                        {'Handlinger'}
+                        {'Meny'}
                     </Button>
                 </ActionMenu.Trigger>
                 <ActionMenu.Content>
@@ -100,6 +100,18 @@ export const MeldekortbehandlingHandlingerMeny = () => {
                         >
                             {'Overta behandling'}
                         </ActionMenu.Item>
+                    )}
+
+                    {harVentestatuser && (
+                        <>
+                            <ActionMenu.Divider />
+                            <ActionMenu.Item
+                                icon={<HourglassTopFilledIcon aria-hidden />}
+                                onSelect={() => setAktivDialog('ventehistorikk')}
+                            >
+                                {'Se ventestatus-historikk'}
+                            </ActionMenu.Item>
+                        </>
                     )}
 
                     {kanAvslutte && (
@@ -158,6 +170,23 @@ export const MeldekortbehandlingHandlingerMeny = () => {
                     onClose={() => setAktivDialog(null)}
                 />
             )}
+
+            {harVentestatuser && (
+                <OppsummeringAvVentestatuserModal
+                    ventestatuser={ventestatus}
+                    åpen={aktivDialog === 'ventehistorikk'}
+                    onClose={() => setAktivDialog(null)}
+                />
+            )}
         </>
     );
 };
+
+type AktivDialog =
+    | 'tildelMeg'
+    | 'gjenoppta'
+    | 'leggTilbake'
+    | 'settPåVent'
+    | 'overta'
+    | 'avslutt'
+    | 'ventehistorikk';

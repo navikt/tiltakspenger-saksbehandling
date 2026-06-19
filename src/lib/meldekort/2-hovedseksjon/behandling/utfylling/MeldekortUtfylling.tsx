@@ -34,7 +34,7 @@ import { hookFormErrorsTilFeiloppsummering } from '~/utils/validering';
 import { Nullable } from '~/types/UtilTypes';
 import { useNotification } from '~/lib/_felles/notifications/NotificationContext';
 import { BekreftelsesModal } from '~/lib/_felles/modaler/BekreftelsesModal';
-import { OppsummeringAvVentestatuserModal } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
+import { OppsummeringAvVentestatuser } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
 import { SakId } from '~/lib/sak/SakTyper';
 import { FetcherError } from '~/utils/fetch/fetch';
 import { PersonoversiktTab } from '~/lib/personoversikt/Personoversikt';
@@ -376,9 +376,8 @@ const MeldekortUtfyllingFooter = (props: {
                         </Button>
                     )}
                     {props.meldekortbehandling.ventestatus.length > 0 && (
-                        <OppsummeringAvVentestatuserModal
+                        <OppsummeringAvVentestatuser
                             ventestatuser={props.meldekortbehandling.ventestatus}
-                            button={{ variant: 'tertiary' }}
                         />
                     )}
                 </HStack>
