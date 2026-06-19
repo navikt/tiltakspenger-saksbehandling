@@ -25,11 +25,13 @@ import { MeldekortbehandlingId } from '../meldekort/typer/Meldekortbehandling';
 import { MeldekortVedtak } from '../meldekort/typer/MeldekortVedtak';
 import { Nullable, PartialRecord } from '~/types/UtilTypes';
 import { MeldekortbehandlingPropsV2 } from '../meldekort/v2/typer';
+import { MeldeperiodeKjedeProps } from '../meldekort/typer/Meldeperiode';
 
 const Omgjøringsresultat = (props: {
     klage: Klagebehandling & { resultat: KlagebehandlingsresultatOmgjør };
     rammevedtak: Rammevedtak[];
     meldekortvedtak: MeldekortVedtak[];
+    meldeperiodekjeder: MeldeperiodeKjedeProps[];
     søknader: Søknad[];
     rammebehandlinger: Rammebehandling[];
     meldekortbehandlinger: PartialRecord<MeldekortbehandlingId, MeldekortbehandlingPropsV2>;
@@ -49,6 +51,7 @@ const Omgjøringsresultat = (props: {
                 rammevedtak={props.rammevedtak}
                 søknader={props.søknader}
                 meldekortvedtak={props.meldekortvedtak}
+                meldeperiodekjeder={props.meldeperiodekjeder}
                 omgjøringsbehandling={
                     props.meldekortbehandlinger[
                         props.klage.åpenBehandlingId as MeldekortbehandlingId
@@ -128,6 +131,7 @@ const KlageOmgjøringsbehandlingAksjoner = (props: {
     rammevedtak: Rammevedtak[];
     søknader: Søknad[];
     meldekortvedtak: MeldekortVedtak[];
+    meldeperiodekjeder: MeldeperiodeKjedeProps[];
     omgjøringsbehandling: Nullable<MeldekortbehandlingPropsV2 | Rammebehandling>;
 }) => {
     const erReadonlyForSaksbehandler =
@@ -201,6 +205,7 @@ const KlageOmgjøringsbehandlingAksjoner = (props: {
                     rammevedtak={props.rammevedtak}
                     søknader={props.søknader}
                     meldekortvedtak={props.meldekortvedtak}
+                    meldeperiodekjeder={props.meldeperiodekjeder}
                     åpen={vilVelgeOmgjøringsbehandlingModal}
                     onClose={() => setVilVelgeOmgjøringsbehandlingModal(false)}
                 />

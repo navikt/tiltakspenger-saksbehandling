@@ -49,6 +49,7 @@ import { MeldekortVedtak } from '~/lib/meldekort/typer/MeldekortVedtak';
 import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
 import AvbrytKlagebehandlingModal from '~/lib/klage/modaler/avbryt/AvbrytKlagebehandlingModal';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
+import { MeldeperiodeKjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
 
 type Props = {
     sak: SakProps;
@@ -61,6 +62,7 @@ type Props = {
     søknader: Søknad[];
     rammebehandlinger: Rammebehandling[];
     meldekortbehandlinger: PartialRecord<MeldekortbehandlingId, MeldekortbehandlingPropsV2>;
+    meldeperiodekjeder: MeldeperiodeKjedeProps[];
 };
 
 export const getServerSideProps = pageWithAuthentication(async (context) => {
@@ -100,6 +102,7 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
             omgjøringsbehandling: omgjøringsbehandling,
             rammebehandlinger: sak.behandlinger,
             meldekortbehandlinger: sak.meldekortbehandlinger,
+            meldeperiodekjeder: sak.meldeperiodeKjeder,
         } satisfies Props,
     };
 });
@@ -112,6 +115,7 @@ const VurderingKlagePage = ({
     omgjøringsbehandling,
     rammebehandlinger,
     meldekortbehandlinger,
+    meldeperiodekjeder,
 }: Props) => {
     const { klage, setKlage } = useKlage();
     const { innloggetSaksbehandler } = useSaksbehandler();
@@ -271,6 +275,7 @@ const VurderingKlagePage = ({
                             innloggetSaksbehandler={innloggetSaksbehandler}
                             meldekortvedtak={meldekortvedtak}
                             meldekortbehandlinger={meldekortbehandlinger}
+                            meldeperiodekjeder={meldeperiodekjeder}
                         />
                     )}
 

@@ -55,6 +55,7 @@ import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling
 import { MeldekortVedtak } from '~/lib/meldekort/typer/MeldekortVedtak';
 import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
+import { MeldeperiodeKjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
 
 type Props = {
     sak: SakProps;
@@ -65,6 +66,7 @@ type Props = {
     søknader: Søknad[];
     rammebehandlinger: Rammebehandling[];
     meldekortbehandlinger: PartialRecord<MeldekortbehandlingId, MeldekortbehandlingPropsV2>;
+    meldeperiodekjeder: MeldeperiodeKjedeProps[];
 };
 
 export const getServerSideProps = pageWithAuthentication(async (context) => {
@@ -99,7 +101,8 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
             søknader: sak.søknader,
             rammebehandlinger: sak.behandlinger,
             meldekortbehandlinger: sak.meldekortbehandlinger,
-        },
+            meldeperiodekjeder: sak.meldeperiodeKjeder,
+        } satisfies Props,
     };
 });
 
@@ -111,6 +114,7 @@ const ResultatPage = ({
     søknader,
     rammebehandlinger,
     meldekortbehandlinger,
+    meldeperiodekjeder,
 }: Props) => {
     const { klage } = useKlage();
     const { innloggetSaksbehandler } = useSaksbehandler();
@@ -132,6 +136,7 @@ const ResultatPage = ({
                     rammebehandlinger={rammebehandlinger}
                     meldekortbehandlinger={meldekortbehandlinger}
                     meldekortvedtak={meldekortvedtak}
+                    meldeperiodekjeder={meldeperiodekjeder}
                 />
             ) : (
                 <OpprettholdResultat
@@ -148,6 +153,7 @@ const ResultatPage = ({
                     rammebehandlinger={rammebehandlinger}
                     meldekortbehandlinger={meldekortbehandlinger}
                     meldekortvedtak={meldekortvedtak}
+                    meldeperiodekjeder={meldeperiodekjeder}
                 />
             )}
         </VStack>
@@ -159,6 +165,7 @@ const OpprettholdResultat = (props: {
     klage: Klagebehandling & { resultat: KlagebehandlingsresultatOpprettholdt };
     rammevedtak: Rammevedtak[];
     meldekortvedtak: MeldekortVedtak[];
+    meldeperiodekjeder: MeldeperiodeKjedeProps[];
     omgjøringsbehandling: Nullable<Rammebehandling>;
     søknader: Søknad[];
     innloggetSaksbehandler: Saksbehandler;
@@ -373,6 +380,7 @@ const OpprettholdResultat = (props: {
                     klagebehandling={props.klage}
                     rammevedtak={props.rammevedtak}
                     meldekortvedtak={props.meldekortvedtak}
+                    meldeperiodekjeder={props.meldeperiodekjeder}
                     søknader={props.søknader}
                     åpen={vilOppretteNyBehandling}
                     onClose={() => setVilOppretteNyBehandling(false)}

@@ -21,6 +21,9 @@ import {
 } from '~/lib/behandling-felles/utils/behandlingUtils';
 import { MeldekortVedtak } from '~/lib/meldekort/typer/MeldekortVedtak';
 import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
+import { MeldeperiodeKjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
+
+import { MeldekortbehandlingStatus } from '~/lib/meldekort/typer/Meldekortbehandling';
 
 export const VelgOmgjøringsbehandlingModal = (props: {
     sakId: string;
@@ -29,6 +32,7 @@ export const VelgOmgjøringsbehandlingModal = (props: {
     rammevedtak: Rammevedtak[];
     søknader: Søknad[];
     meldekortvedtak: MeldekortVedtak[];
+    meldeperiodekjeder: MeldeperiodeKjedeProps[];
     åpen: boolean;
     onClose: () => void;
 }) => {
@@ -82,6 +86,7 @@ export const VelgOmgjøringsbehandlingModal = (props: {
                         søknader={props.søknader}
                         klagebehandling={props.klagebehandling}
                         meldekortvedtak={props.meldekortvedtak}
+                        meldeperiodekjeder={props.meldeperiodekjeder}
                     />
                 </Modal.Body>
                 <Modal.Footer>
@@ -117,6 +122,7 @@ const VelgOmgjøringsbehandlingForm = (props: {
     søknader: Søknad[];
     klagebehandling: Klagebehandling;
     meldekortvedtak: MeldekortVedtak[];
+    meldeperiodekjeder: MeldeperiodeKjedeProps[];
 }) => {
     const behandlingstype = useWatch({
         control: props.control,
@@ -136,6 +142,16 @@ const VelgOmgjøringsbehandlingForm = (props: {
     const klagerPåUtbetalingsvedtak = !!props.meldekortvedtak.find(
         (v) => v.id === props.klagebehandling.formkrav.vedtakDetKlagesPå,
     );
+
+    const kjederSomKanOpprettesMeldekortbehandlingerFor = props.meldeperiodekjeder
+        .filter((kjede) =>
+            kjede.meldekortbehandlinger.some(
+                (mb) =>
+                    mb.status === MeldekortbehandlingStatus.GODKJENT ||
+                    mb.status === MeldekortbehandlingStatus.AUTOMATISK_BEHANDLET,
+            ),
+        )
+        .map((k) => k.id);
 
     return (
         <VStack gap="space-16">
@@ -220,10 +236,7 @@ const VelgOmgjøringsbehandlingForm = (props: {
                     render={({ field, fieldState }) => (
                         <Select {...field} label="Periode" error={fieldState.error?.message}>
                             <option value="">-- Velg periode --</option>
-                            {[
-                                //dedupper kjede-id'er for å unngå duplikate perioder i dropdownen
-                                ...new Set(props.meldekortvedtak.map((vedtak) => vedtak.kjedeId)),
-                            ].map((kjedeId) => (
+                            {kjederSomKanOpprettesMeldekortbehandlingerFor.map((kjedeId) => (
                                 <option key={kjedeId} value={kjedeId}>
                                     {formaterDatotekst(kjedeId.split('/')[0])} -{' '}
                                     {formaterDatotekst(kjedeId.split('/')[1])}
