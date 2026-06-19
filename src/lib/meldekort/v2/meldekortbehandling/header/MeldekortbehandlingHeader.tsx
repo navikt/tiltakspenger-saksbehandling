@@ -3,11 +3,15 @@ import { useSak } from '~/lib/sak/SakContext';
 import { useMeldekortbehandling } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2Context';
 import { formaterDatotekst } from '~/utils/date';
 import { DetaljHorisontal } from '~/lib/_felles/detaljer/DetaljHorisontal';
-import { MeldekortbehandlingStatusTags } from '~/lib/meldekort/v2/meldekortbehandling/header/status/MeldekortbehandlingStatusTags';
+import { MeldekortbehandlingStatusTags } from '~/lib/meldekort/v2/meldekortbehandling/header/behandling-status/MeldekortbehandlingStatusTags';
 import { MeldekortbehandlingSeksjon } from '~/lib/meldekort/v2/meldekortbehandling/layout/seksjon/MeldekortbehandlingSeksjon';
 import { MeldekortbehandlingMeny } from '~/lib/meldekort/v2/meldekortbehandling/meny/MeldekortbehandlingMeny';
-import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
+import {
+    erBehandlingSattPåVent,
+    erBehandlingUnderkjent,
+} from '~/lib/behandling-felles/utils/behandlingUtils';
 import OppsummeringAvVentestatus from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatus';
+import { MeldekortbehandlingUnderkjentStatus } from '~/lib/meldekort/v2/meldekortbehandling/header/underkjent-status/MeldekortbehandlingUnderkjentStatus';
 
 import style from './MeldekortbehandlingHeader.module.css';
 
@@ -15,7 +19,7 @@ export const MeldekortbehandlingHeader = () => {
     const { førsteDagSomGirRett, sisteDagSomGirRett, kanSendeInnHelgForMeldekort } = useSak().sak;
 
     const meldekortbehandling = useMeldekortbehandling();
-    const { saksbehandler, beslutter, ventestatus } = meldekortbehandling;
+    const { saksbehandler, beslutter, ventestatus, attesteringer } = meldekortbehandling;
 
     return (
         <MeldekortbehandlingSeksjon className={style.outer} gap={'space-16'}>
@@ -60,13 +64,19 @@ export const MeldekortbehandlingHeader = () => {
                 </HStack>
             </MeldekortbehandlingSeksjon.Høyre>
 
+            {erBehandlingUnderkjent(meldekortbehandling.attesteringer) && (
+                <MeldekortbehandlingSeksjon.Høyre>
+                    <MeldekortbehandlingUnderkjentStatus attesteringer={attesteringer} />
+                </MeldekortbehandlingSeksjon.Høyre>
+            )}
+
             {erBehandlingSattPåVent(meldekortbehandling) && (
-                <MeldekortbehandlingSeksjon.FullBredde>
+                <MeldekortbehandlingSeksjon.Høyre>
                     <OppsummeringAvVentestatus
                         ventestatus={ventestatus.at(0)!}
                         historikk={ventestatus}
                     />
-                </MeldekortbehandlingSeksjon.FullBredde>
+                </MeldekortbehandlingSeksjon.Høyre>
             )}
         </MeldekortbehandlingSeksjon>
     );

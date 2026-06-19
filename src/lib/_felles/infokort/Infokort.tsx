@@ -7,13 +7,15 @@ import {
 } from '@navikt/aksel-icons';
 import { ComponentProps, PropsWithChildren, ReactNode } from 'react';
 
-type InfocardMessageProps = ComponentProps<typeof InfoCard.Message>;
+type InfocardProps = ComponentProps<typeof InfoCard>;
 
 export type InfokortVariant = 'feil' | 'advarsel' | 'info' | 'suksess';
 
-type Props = PropsWithChildren<
-    Omit<InfocardMessageProps, 'icon'> & Partial<Pick<InfocardMessageProps, 'icon'>>
-> & { header?: string; variant?: InfokortVariant };
+type Props = PropsWithChildren<Omit<InfocardProps, 'icon'> & Partial<InfocardProps>> & {
+    header?: string;
+    variant?: InfokortVariant;
+    icon?: ReactNode;
+};
 
 export const Infokort = ({
     header,
@@ -50,7 +52,7 @@ const Ikoner: Record<InfokortVariant, ReactNode> = {
     suksess: <CheckmarkCircleIcon aria-hidden />,
 };
 
-const DataColors: Record<InfokortVariant, InfocardMessageProps['data-color']> = {
+const DataColors: Record<InfokortVariant, InfocardProps['data-color']> = {
     feil: 'danger',
     advarsel: 'warning',
     info: 'info',

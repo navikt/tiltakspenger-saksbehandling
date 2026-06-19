@@ -19,10 +19,7 @@ export const OppsummeringAvAttesteringer = ({ attesteringer }: Props) => {
             <Heading size="small">Attesteringer</Heading>
             <ul className={styles.attesteringerContainer}>
                 {attesteringer.map((attestering) => (
-                    <li
-                        key={`attestering-${attestering.endretTidspunkt}`}
-                        className={styles.attesteringContainer}
-                    >
+                    <li key={attestering.endretTidspunkt} className={styles.attesteringContainer}>
                         <VStack gap="space-8">
                             <HStack gap="space-4" align={'center'}>
                                 {attestering.status === Attesteringsstatus.SENDT_TILBAKE && (

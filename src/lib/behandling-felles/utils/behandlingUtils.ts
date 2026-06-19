@@ -8,6 +8,7 @@ import {
     RammebehandlingPrefix,
 } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { VentestatusHendelse } from '~/types/Ventestatus';
+import { Attestering, Attesteringsstatus } from '~/lib/behandling-felles/typer/Attestering';
 
 export const erBehandlingIdRammebehandling = (id: BehandlingId): id is RammebehandlingId =>
     id.startsWith(RammebehandlingPrefix);
@@ -19,4 +20,8 @@ type MedVentestatus = { ventestatus: VentestatusHendelse[] };
 
 export const erBehandlingSattPåVent = ({ ventestatus }: MedVentestatus): boolean => {
     return ventestatus.at(0)?.erSattPåVent ?? false;
+};
+
+export const erBehandlingUnderkjent = (attesteringer: Attestering[]) => {
+    return attesteringer.at(0)?.status === Attesteringsstatus.SENDT_TILBAKE;
 };
