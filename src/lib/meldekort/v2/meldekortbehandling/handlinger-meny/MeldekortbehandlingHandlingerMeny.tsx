@@ -52,9 +52,8 @@ export const MeldekortbehandlingHandlingerMeny = () => {
                         variant={'secondary'}
                         icon={<ChevronDownIcon aria-hidden />}
                         iconPosition={'right'}
-                        size={'small'}
                     >
-                        {'Flere handlinger'}
+                        {'Handlinger'}
                     </Button>
                 </ActionMenu.Trigger>
                 <ActionMenu.Content>

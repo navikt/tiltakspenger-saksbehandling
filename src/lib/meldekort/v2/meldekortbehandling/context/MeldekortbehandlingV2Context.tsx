@@ -74,17 +74,14 @@ export const MeldekortbehandlingV2Provider = ({ id, children }: Props) => {
                     value={{
                         ...skjema,
                         erReadonly,
-                        textAreas: {
-                            begrunnelse: {
-                                ref: begrunnelseRef,
-                                getValue: getBegrunnelse,
-                            },
-                            brevtekst: {
-                                ref: brevtekstRef,
-                                getValue: getBrevtekst,
-                            },
+                        begrunnelse: {
+                            ref: begrunnelseRef,
+                            getValue: getBegrunnelse,
                         },
-
+                        brevtekst: {
+                            ref: brevtekstRef,
+                            getValue: getBrevtekst,
+                        },
                     }}
                 >
                     <MeldekortbehandlingLagringProvider>

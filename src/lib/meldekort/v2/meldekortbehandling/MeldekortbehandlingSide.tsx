@@ -9,10 +9,12 @@ import { MeldekortbehandlingSeksjon } from '~/lib/meldekort/v2/meldekortbehandli
 import { useRouter } from 'next/router';
 import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { meldekortbehandlingUrl } from '~/utils/urls';
-import { useEffect, useState } from 'react';
+import { PropsWithChildren, useEffect, useState } from 'react';
 import { MeldekortbehandlingFritekstOgSendInn } from '~/lib/meldekort/v2/meldekortbehandling/fritekst-og-innsending/MeldekortbehandlingFritekstOgSendInn';
+import { classNames } from '~/utils/classNames';
 
 import style from './MeldekortbehandlingSide.module.css';
+import { MeldekortbehandlingLagre } from '~/lib/meldekort/v2/meldekortbehandling/lagre/MeldekortbehandlingLagre';
 
 const DEFAULT_STEG = 1;
 
@@ -53,23 +55,32 @@ export const MeldekortbehandlingSide = () => {
                     </MeldekortbehandlingSeksjon>
                 </VStack>
 
-                <KomponentForSteg steg={aktivtSteg} />
+                <MeldekortbehandlingLagre />
+
+                <KomponentForSteg steg={1} aktivtSteg={aktivtSteg}>
+                    <Meldeperiodebehandlinger />
+                </KomponentForSteg>
+                <KomponentForSteg steg={2} aktivtSteg={aktivtSteg}>
+                    <MeldekortbehandlingBeregningOgSimulering />
+                </KomponentForSteg>
+                <KomponentForSteg steg={3} aktivtSteg={aktivtSteg}>
+                    <MeldekortbehandlingFritekstOgSendInn />
+                </KomponentForSteg>
             </VStack>
         </>
     );
 };
 
-const KomponentForSteg = ({ steg }: { steg: number }) => {
-    switch (steg) {
-        case 1:
-            return <Meldeperiodebehandlinger />;
-        case 2:
-            return <MeldekortbehandlingBeregningOgSimulering />;
-        case 3:
-            return <MeldekortbehandlingFritekstOgSendInn />;
-    }
-
-    return <KomponentForSteg steg={DEFAULT_STEG} />;
+const KomponentForSteg = ({
+    steg,
+    aktivtSteg,
+    children,
+}: PropsWithChildren<{ steg: number; aktivtSteg: number }>) => {
+    return (
+        <div className={classNames(style.stegKomponent, steg === aktivtSteg && style.aktiv)}>
+            {children}
+        </div>
+    );
 };
 
 type StegProps = {
