@@ -21,7 +21,6 @@ import { Datovelger } from '~/lib/_felles/datovelger/Datovelger';
 import dayjs from 'dayjs';
 import { MeldekortVedtak } from '~/lib/meldekort/typer/MeldekortVedtak';
 import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
-import { useFeatureToggles } from '~/context/FeatureTogglesContext';
 
 const FormkravForm = (props: {
     control: Control<FormkravFormData>;
@@ -33,13 +32,10 @@ const FormkravForm = (props: {
     fnrFraPersonopplysninger: Nullable<string>;
     readonly?: boolean;
 }) => {
-    const { meldekortvedtakKlageToggle } = useFeatureToggles();
-
-    const vedtakSomKanKlagesPå = (
-        meldekortvedtakKlageToggle
-            ? [...props.rammevedtakOgBehandlinger, ...props.meldekortvedtakOgBehandlinger]
-            : props.rammevedtakOgBehandlinger
-    ).toSorted((a, b) => dayjs(a.vedtak.opprettet).diff(dayjs(b.vedtak.opprettet)));
+    const vedtakSomKanKlagesPå = [
+        ...props.rammevedtakOgBehandlinger,
+        ...props.meldekortvedtakOgBehandlinger,
+    ].toSorted((a, b) => dayjs(a.vedtak.opprettet).diff(dayjs(b.vedtak.opprettet)));
 
     const erKlagefristOverholdt = useWatch({
         control: props.control,
@@ -91,11 +87,9 @@ const FormkravForm = (props: {
                         <option value="">Ikke valgt</option>
                         <option value={INGEN_VEDTAK}>Har ikke klaget på et vedtak</option>
                         <option value={VedtakstypeFormkravFormData.RAMMEVEDTAK}>Rammevedtak</option>
-                        {meldekortvedtakKlageToggle && (
-                            <option value={VedtakstypeFormkravFormData.MELDEKORTVEDTAK}>
-                                Meldekortvedtak
-                            </option>
-                        )}
+                        <option value={VedtakstypeFormkravFormData.MELDEKORTVEDTAK}>
+                            Meldekortvedtak
+                        </option>
                     </Select>
                 )}
             />
@@ -125,8 +119,7 @@ const FormkravForm = (props: {
                                         </option>
                                     );
                                 })}
-                            {meldekortvedtakKlageToggle &&
-                                vedtakstype === VedtakstypeFormkravFormData.MELDEKORTVEDTAK &&
+                            {vedtakstype === VedtakstypeFormkravFormData.MELDEKORTVEDTAK &&
                                 props.meldekortvedtakOgBehandlinger.map(
                                     ({ vedtak, behandling }) => {
                                         const ukerString = `${ukenummerFraDatotekst(behandling.periode.fraOgMed)} og ${ukenummerFraDatotekst(behandling.periode.tilOgMed)}`;
