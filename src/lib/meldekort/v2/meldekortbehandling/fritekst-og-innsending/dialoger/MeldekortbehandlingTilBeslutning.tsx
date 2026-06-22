@@ -18,6 +18,7 @@ import { MeldekortbehandlingValideringsfeil } from '~/lib/meldekort/v2/meldekort
 export const MeldekortbehandlingTilBeslutning = () => {
     const { sak } = useSak();
     const { id } = useMeldekortbehandling();
+
     const { navigateWithNotification } = useNotification();
 
     const skjema = useMeldekortbehandlingSkjema();
@@ -39,7 +40,7 @@ export const MeldekortbehandlingTilBeslutning = () => {
         });
     };
 
-    const skjemaValideringsfeil = validerMeldekortbehandlingSkjema(skjema);
+    const skjemaValideringsfeil = validerMeldekortbehandlingSkjema(skjema, sak);
 
     return (
         <VStack gap={'space-16'} align={'end'}>

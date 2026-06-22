@@ -77,8 +77,24 @@ export const erFullstendigPeriode = (periode: Partial<Periode>): periode is Peri
 export const perioderErLike = (periode1: Periode, periode2: Periode) =>
     periode1.fraOgMed === periode2.fraOgMed && periode1.tilOgMed == periode2.tilOgMed;
 
-export const perioderErSammenhengende = (periode1: Periode, periode2: Periode) => {
-    return nesteDag(periode1.tilOgMed) === periode2.fraOgMed;
+export const perioderErSammenhengende = (...perioder: Periode[]) => {
+    if (perioder.length === 0) {
+        throw Error('Må ha minst en periode');
+    }
+
+    if (perioder.length === 1) {
+        return true;
+    }
+
+    return perioder.every((periode, index, array) => {
+        if (index === 0) {
+            return true;
+        }
+
+        const forrigePeriode = array.at(index - 1)!;
+
+        return nesteDag(forrigePeriode.tilOgMed) === periode.fraOgMed;
+    });
 };
 
 export const periodiseringerErLike = <T>(

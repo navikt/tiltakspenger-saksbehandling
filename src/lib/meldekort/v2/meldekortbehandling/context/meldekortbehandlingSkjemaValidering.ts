@@ -6,6 +6,10 @@ import {
 import { MeldekortbehandlingDagStatus } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { nonNullishPredicate } from '~/utils/array';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
+import { Periode } from '~/types/Periode';
+import { perioderErSammenhengende } from '~/utils/periode';
+import { SakProps } from '~/lib/sak/SakTyper';
+import { hentMeldeperiodekjede } from '~/lib/sak/sakUtils';
 
 export type MeldekortDagValideringsfeil = {
     dato: string;
@@ -24,40 +28,88 @@ export const validerMeldekortDagSkjema = (
 
 export type MeldeperiodeSkjemaValideringsfeil = {
     kjedeId: MeldeperiodeKjedeId;
-    dager: MeldekortDagValideringsfeil[];
+    dagerFeil: MeldekortDagValideringsfeil[];
+    overordnedeFeil: string[];
 };
 
 export const validerMeldeperiodeSkjema = (
-    meldeperiode: MeldeperiodeSkjema,
+    skjema: MeldeperiodeSkjema,
+    sak: SakProps,
 ): MeldeperiodeSkjemaValideringsfeil | null => {
-    const dagerFeil = meldeperiode.dager
+    const { kjedeId, dager } = skjema;
+
+    const { sisteMeldeperiode } = hentMeldeperiodekjede(sak, kjedeId);
+    const maksAntallDager = sisteMeldeperiode.antallDager;
+
+    const overordnedeFeil: string[] = [];
+
+    const dagerFeil = dager
         .map((dag) => validerMeldekortDagSkjema(dag))
         .filter(nonNullishPredicate);
 
-    if (dagerFeil.length != 0) {
-        return {
-            kjedeId: meldeperiode.kjedeId,
-            dager: dagerFeil,
-        };
+    const antallDager = dager.filter((dag) => deltattEllerFraværStatus.has(dag.status)).length;
+
+    if (antallDager > maksAntallDager) {
+        overordnedeFeil.push(
+            `For mange dager med deltatt eller fravær. ${antallDager} dager utfylt, ${maksAntallDager} er maks for meldeperioden.`,
+        );
     }
 
-    return null;
+    if (dagerFeil.length === 0 && overordnedeFeil.length === 0) {
+        return null;
+    }
+
+    return {
+        kjedeId,
+        dagerFeil,
+        overordnedeFeil,
+    };
 };
 
 export type MeldekortbehandlingSkjemaValideringsfeil = {
-    meldeperioder: MeldeperiodeSkjemaValideringsfeil[];
+    meldeperioderFeil: MeldeperiodeSkjemaValideringsfeil[];
+    overordnedeFeil: string[];
 };
 
 export const validerMeldekortbehandlingSkjema = (
     skjema: MeldekortbehandlingSkjemaState,
+    sak: SakProps,
 ): MeldekortbehandlingSkjemaValideringsfeil | null => {
+    const overordnedeFeil: string[] = [];
+
     const meldeperioderFeil = skjema.meldeperioder
-        .map((meldeperiode) => validerMeldeperiodeSkjema(meldeperiode))
+        .map((mpSkjema) => validerMeldeperiodeSkjema(mpSkjema, sak))
         .filter(nonNullishPredicate);
 
-    if (meldeperioderFeil.length > 0) {
-        return { meldeperioder: meldeperioderFeil };
+    const perioder = skjema.meldeperioder.map(
+        (mp): Periode => ({
+            fraOgMed: mp.dager.at(0)!.dato,
+            tilOgMed: mp.dager.at(-1)!.dato,
+        }),
+    );
+
+    if (!perioderErSammenhengende(...perioder)) {
+        overordnedeFeil.push(
+            'Valgte meldeperioder er ikke sammenhengende, dette støtter vi ikke ennå.',
+        );
     }
 
-    return null;
+    if (meldeperioderFeil.length === 0 && overordnedeFeil.length === 0) {
+        return null;
+    }
+
+    return {
+        meldeperioderFeil,
+        overordnedeFeil,
+    };
 };
+
+const deltattEllerFraværStatus: ReadonlySet<MeldekortbehandlingDagStatus> = new Set([
+    MeldekortbehandlingDagStatus.DeltattUtenLønnITiltaket,
+    MeldekortbehandlingDagStatus.DeltattMedLønnITiltaket,
+    MeldekortbehandlingDagStatus.FraværSyk,
+    MeldekortbehandlingDagStatus.FraværSyktBarn,
+    MeldekortbehandlingDagStatus.FraværSterkeVelferdsgrunnerEllerJobbintervju,
+    MeldekortbehandlingDagStatus.FraværGodkjentAvNav,
+    MeldekortbehandlingDagStatus.FraværAnnet,
+]);

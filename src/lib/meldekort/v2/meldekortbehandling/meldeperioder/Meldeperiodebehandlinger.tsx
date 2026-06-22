@@ -64,8 +64,10 @@ export const Meldeperiodebehandlinger = () => {
                                         meldeperiode.kjedeId,
                                     );
 
-                                    const harValideringsfeil =
-                                        !!validerMeldeperiodeSkjema(meldeperiode);
+                                    const harValideringsfeil = !!validerMeldeperiodeSkjema(
+                                        meldeperiode,
+                                        sak,
+                                    );
 
                                     return (
                                         <Tabs.Tab
