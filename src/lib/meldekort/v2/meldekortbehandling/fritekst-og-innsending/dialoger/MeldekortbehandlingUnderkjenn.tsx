@@ -16,6 +16,7 @@ export const MeldekortbehandlingUnderkjenn = () => {
     const { navigateWithNotification } = useNotification();
 
     const [begrunnelse, setBegrunnelse] = useState('');
+
     const [valideringsfeil, setValideringsfeil] = useState<string | null>(null);
 
     const { trigger, error, isMutating } = useFetchJsonFraApi<
@@ -24,12 +25,14 @@ export const MeldekortbehandlingUnderkjenn = () => {
     >(`/sak/${sak.sakId}/meldekort/${id}/underkjenn`, 'POST');
 
     const underkjenn = () => {
-        if (begrunnelse === '') {
+        const begrunnelseTrimmed = begrunnelse.trim();
+
+        if (begrunnelseTrimmed === '') {
             setValideringsfeil('Begrunnelse er påkrevd');
             return;
         }
 
-        trigger({ begrunnelse }).then((response) => {
+        trigger({ begrunnelse: begrunnelseTrimmed }).then((response) => {
             if (response) {
                 navigateWithNotification(
                     personoversiktUrl(sak.saksnummer, PersonoversiktTab.Meldekort),
@@ -57,7 +60,8 @@ export const MeldekortbehandlingUnderkjenn = () => {
                         label={'Begrunnelse'}
                         value={begrunnelse}
                         onChange={(event) => {
-                            setBegrunnelse(event.target.value.trim());
+                            setBegrunnelse(event.target.value);
+
                             if (valideringsfeil) {
                                 setValideringsfeil(null);
                             }

@@ -17,7 +17,7 @@ export const MeldekortbehandlingTilBeslutning = () => {
 
     const { isDirty } = useMeldekortbehandlingSkjemaLagring();
 
-    const { trigger, error, isMutating } = useFetchJsonFraApi<MeldeperiodeKjedeProps>(
+    const { trigger, error, isMutating, reset } = useFetchJsonFraApi<MeldeperiodeKjedeProps>(
         `/sak/${sak.sakId}/meldekort/${id}/sendtilbeslutning`,
         'POST',
     );
@@ -35,7 +35,7 @@ export const MeldekortbehandlingTilBeslutning = () => {
 
     return (
         <VStack gap={'space-8'} align={'end'}>
-            <Dialog>
+            <Dialog onOpenChange={reset}>
                 <Dialog.Trigger>
                     <Button variant={'primary'} icon={<ArrowRightIcon />} disabled={isDirty}>
                         {'Send til beslutning'}
@@ -59,16 +59,14 @@ export const MeldekortbehandlingTilBeslutning = () => {
                     </Dialog.Body>
 
                     <Dialog.Footer>
-                        <Dialog.CloseTrigger>
-                            <Button
-                                variant={'primary'}
-                                icon={<ArrowRightIcon />}
-                                loading={isMutating}
-                                onClick={sendTilBeslutning}
-                            >
-                                {'Send til beslutning'}
-                            </Button>
-                        </Dialog.CloseTrigger>
+                        <Button
+                            variant={'primary'}
+                            icon={<ArrowRightIcon />}
+                            loading={isMutating}
+                            onClick={sendTilBeslutning}
+                        >
+                            {'Send til beslutning'}
+                        </Button>
 
                         <Dialog.CloseTrigger>
                             <Button variant={'secondary'}>{'Avbryt'}</Button>
