@@ -76,7 +76,6 @@ const genererDtoFraBehandling = (
         ...meldekortbehandlingSkjemaInitialState(behandling),
         begrunnelse: behandling.begrunnelse,
         tekstTilVedtaksbrev: behandling.tekstTilVedtaksbrev,
-        v2: true,
     };
 };
 
@@ -91,7 +90,6 @@ const genererDtoFraSkjema = (
         skalSendeVedtaksbrev: skjema.skalSendeVedtaksbrev,
         begrunnelse: skjema.begrunnelse.getValue(),
         tekstTilVedtaksbrev: skjema.brevtekst.getValue(),
-        v2: true,
     };
 };
 

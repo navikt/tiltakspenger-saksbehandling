@@ -1,6 +1,5 @@
 import { Button, HStack } from '@navikt/ds-react';
 import { BekreftelsesModal } from '~/lib/_felles/modaler/BekreftelsesModal';
-import { useMeldeperiodeKjede } from '../../../context/MeldeperiodeKjedeContext';
 import { useGodkjennMeldekort } from './useGodkjennMeldekort';
 import { useSak } from '~/lib/sak/SakContext';
 import { useRef } from 'react';
@@ -17,9 +16,9 @@ type Props = {
 };
 
 export const MeldekortTaBeslutning = ({ meldekortbehandling }: Props) => {
-    const { sakId, saksnummer } = useSak().sak;
+    const { sak, setSak } = useSak();
+    const { sakId, saksnummer } = sak;
     const { navigateWithNotification } = useNotification();
-    const { setMeldeperiodeKjede } = useMeldeperiodeKjede();
 
     const { godkjennMeldekort, godkjennMeldekortLaster, reset, godkjennMeldekortFeil } =
         useGodkjennMeldekort(meldekortbehandling.id, sakId);
@@ -70,9 +69,9 @@ export const MeldekortTaBeslutning = ({ meldekortbehandling }: Props) => {
                         size={'small'}
                         loading={godkjennMeldekortLaster}
                         onClick={() =>
-                            godkjennMeldekort().then((oppdatertKjede) => {
-                                if (oppdatertKjede) {
-                                    setMeldeperiodeKjede(oppdatertKjede);
+                            godkjennMeldekort().then((oppdatertSak) => {
+                                if (oppdatertSak) {
+                                    setSak(oppdatertSak);
                                     navigateWithNotification(
                                         personoversiktUrl(saksnummer),
                                         'Meldekortet er godkjent',

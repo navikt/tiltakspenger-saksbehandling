@@ -60,7 +60,7 @@ export const MeldekortUtfylling = ({ meldekortbehandling }: Props) => {
     const { sak, setSak } = useSak();
     const { sakId, saksnummer } = sak;
     const { navigateWithNotification } = useNotification();
-    const { meldeperiodeKjede, setMeldeperiodeKjede } = useMeldeperiodeKjede();
+    const { meldeperiodeKjede } = useMeldeperiodeKjede();
     const { innloggetSaksbehandler } = useSaksbehandler();
     const [visSettPåVentModal, setVisSettPåVentModal] = useState(false);
 
@@ -100,24 +100,20 @@ export const MeldekortUtfylling = ({ meldekortbehandling }: Props) => {
     const oppdaterMeldekortbehandling = useOppdaterMeldekortbehandling({
         sakId,
         meldekortbehandlingId,
-        onSuccess: (oppdatertKjede) => {
-            if (oppdatertKjede) {
-                setMeldeperiodeKjede(oppdatertKjede);
-            }
+        onSuccess: (oppdatertSak) => {
+            setSak(oppdatertSak);
         },
     });
 
     const sendMeldekortTilBeslutter = useSendMeldekortbehandlingTilBeslutning({
         sakId,
         meldekortbehandlingId,
-        onSuccess: (oppdatertKjede) => {
-            if (oppdatertKjede) {
-                setMeldeperiodeKjede(oppdatertKjede);
-                navigateWithNotification(
-                    personoversiktUrl(saksnummer, PersonoversiktTab.Meldekort),
-                    'Meldekortet er sendt til beslutter!',
-                );
-            }
+        onSuccess: (oppdatertSak) => {
+            setSak(oppdatertSak);
+            navigateWithNotification(
+                personoversiktUrl(saksnummer, PersonoversiktTab.Meldekort),
+                'Meldekortet er sendt til beslutter!',
+            );
         },
     });
 

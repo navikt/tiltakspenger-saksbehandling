@@ -6,37 +6,36 @@ import { SakId, SakProps } from '~/lib/sak/SakTyper';
 import { Nullable } from '~/types/UtilTypes';
 import { FetcherError } from '~/utils/fetch/fetch';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
-import { MeldeperiodeKjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
 
-type MeldekortApiProps<Response> = {
+type MeldekortApiProps = {
     sakId: SakId;
     meldekortbehandlingId: MeldekortbehandlingId;
-    onSuccess?: (response: Response) => void;
+    onSuccess?: (response: SakProps) => void;
     onError?: (error: FetcherError) => void;
 };
 
-export const useSettMeldekortbehandlingPåVent = (args: MeldekortApiProps<SakProps>) =>
+export const useSettMeldekortbehandlingPåVent = (args: MeldekortApiProps) =>
     useFetchJsonFraApi<SakProps, { begrunnelse: string; frist: Nullable<string> }>(
         `/sak/${args.sakId}/meldekort/${args.meldekortbehandlingId}/vent`,
         'PATCH',
         { onSuccess: args.onSuccess, onError: args.onError },
     );
 
-export const useGjenopptaMeldekortbehandling = (args: MeldekortApiProps<SakProps>) =>
+export const useGjenopptaMeldekortbehandling = (args: MeldekortApiProps) =>
     useFetchJsonFraApi<SakProps>(
         `/sak/${args.sakId}/meldekort/${args.meldekortbehandlingId}/gjenoppta`,
         'PATCH',
         { onSuccess: args.onSuccess, onError: args.onError },
     );
 
-export const useTaMeldekortbehandling = (args: MeldekortApiProps<SakProps>) =>
+export const useTaMeldekortbehandling = (args: MeldekortApiProps) =>
     useFetchJsonFraApi<SakProps>(
         `/sak/${args.sakId}/meldekort/${args.meldekortbehandlingId}/ta`,
         'POST',
         { onSuccess: args.onSuccess, onError: args.onError },
     );
 
-export const useLeggTilbakeMeldekortbehandling = (args: MeldekortApiProps<SakProps>) =>
+export const useLeggTilbakeMeldekortbehandling = (args: MeldekortApiProps) =>
     useFetchJsonFraApi<SakProps>(
         `/sak/${args.sakId}/meldekort/${args.meldekortbehandlingId}/legg-tilbake`,
         'POST',
@@ -48,8 +47,8 @@ export const useOppdaterMeldekortbehandling = ({
     meldekortbehandlingId,
     onSuccess,
     onError,
-}: MeldekortApiProps<MeldeperiodeKjedeProps>) =>
-    useFetchJsonFraApi<MeldeperiodeKjedeProps, OppdaterMeldekortbehandlingDTO>(
+}: MeldekortApiProps) =>
+    useFetchJsonFraApi<SakProps, OppdaterMeldekortbehandlingDTO>(
         `/sak/${sakId}/meldekort/${meldekortbehandlingId}/oppdater`,
         'POST',
         { onSuccess, onError },
@@ -60,8 +59,8 @@ export const useSendMeldekortbehandlingTilBeslutning = ({
     meldekortbehandlingId,
     onSuccess,
     onError,
-}: MeldekortApiProps<MeldeperiodeKjedeProps>) =>
-    useFetchJsonFraApi<MeldeperiodeKjedeProps>(
+}: MeldekortApiProps) =>
+    useFetchJsonFraApi<SakProps>(
         `/sak/${sakId}/meldekort/${meldekortbehandlingId}/sendtilbeslutning`,
         'POST',
         {

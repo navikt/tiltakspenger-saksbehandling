@@ -6,11 +6,9 @@ import {
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { sorterMeldekortbehandlingerDesc } from '~/lib/meldekort/utils/MeldekortbehandlingUtils';
 import { BrukersMeldekortProps } from '~/lib/meldekort/typer/BrukersMeldekort';
-import { useResettableState } from '~/hooks/useResettableState';
 
 export type MeldeperioderContextState = {
     meldeperiodeKjede: MeldeperiodeKjedeProps;
-    setMeldeperiodeKjede: (meldeperiodeKjede: MeldeperiodeKjedeProps) => void;
     finnForrigeMeldekortbehandling: (
         meldekortId: MeldekortbehandlingId,
     ) => MeldekortbehandlingProps | undefined;
@@ -30,12 +28,7 @@ type Props = {
     children: React.ReactNode;
 };
 
-export const MeldeperiodeKjedeProvider = ({
-    meldeperiodeKjede: meldeperiodeKjedeInitial,
-    children,
-}: Props) => {
-    const [meldeperiodeKjede, setMeldeperiodeKjede] = useResettableState(meldeperiodeKjedeInitial);
-
+export const MeldeperiodeKjedeProvider = ({ meldeperiodeKjede, children }: Props) => {
     const { meldekortbehandlinger, avbrutteMeldekortbehandlinger } = meldeperiodeKjede;
 
     const alleMeldekortbehandlinger = meldekortbehandlinger.toSorted(
@@ -53,7 +46,6 @@ export const MeldeperiodeKjedeProvider = ({
         <MeldeperiodeKjedeContext.Provider
             value={{
                 meldeperiodeKjede,
-                setMeldeperiodeKjede,
                 finnForrigeMeldekortbehandling,
                 alleMeldekortbehandlinger,
                 sisteMeldekortbehandling,

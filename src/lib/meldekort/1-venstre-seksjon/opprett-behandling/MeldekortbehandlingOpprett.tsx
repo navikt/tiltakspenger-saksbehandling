@@ -16,8 +16,9 @@ type Props = {
 };
 
 export const MeldekortbehandlingOpprett = ({ type }: Props) => {
-    const { sakId, saksnummer } = useSak().sak;
-    const { setMeldeperiodeKjede, meldeperiodeKjede } = useMeldeperiodeKjede();
+    const { sak, setSak } = useSak();
+    const { sakId, saksnummer } = sak;
+    const { meldeperiodeKjede } = useMeldeperiodeKjede();
 
     const { id: kjedeId, periodeMedÅpenBehandling, sisteMeldeperiode } = meldeperiodeKjede;
 
@@ -86,9 +87,9 @@ export const MeldekortbehandlingOpprett = ({ type }: Props) => {
                         icon={laster && <Loader />}
                         disabled={laster}
                         onClick={() => {
-                            opprett().then((oppdatertKjede) => {
-                                if (oppdatertKjede) {
-                                    setMeldeperiodeKjede(oppdatertKjede);
+                            opprett().then((oppdatertSak) => {
+                                if (oppdatertSak) {
+                                    setSak(oppdatertSak);
                                     lukkModal();
                                 }
                             });

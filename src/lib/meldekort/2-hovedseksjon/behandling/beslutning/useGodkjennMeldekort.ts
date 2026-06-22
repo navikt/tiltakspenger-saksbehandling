@@ -1,6 +1,5 @@
-import { SakId } from '~/lib/sak/SakTyper';
+import { SakId, SakProps } from '~/lib/sak/SakTyper';
 import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
-import { MeldeperiodeKjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 
 export const useGodkjennMeldekort = (meldekortId: MeldekortbehandlingId, sakId: SakId) => {
@@ -9,10 +8,7 @@ export const useGodkjennMeldekort = (meldekortId: MeldekortbehandlingId, sakId: 
         isMutating: godkjennMeldekortLaster,
         error: godkjennMeldekortFeil,
         reset,
-    } = useFetchJsonFraApi<MeldeperiodeKjedeProps>(
-        `/sak/${sakId}/meldekort/${meldekortId}/iverksett`,
-        'POST',
-    );
+    } = useFetchJsonFraApi<SakProps>(`/sak/${sakId}/meldekort/${meldekortId}/iverksett`, 'POST');
 
     return {
         godkjennMeldekort,
