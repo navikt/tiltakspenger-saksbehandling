@@ -8,7 +8,7 @@ import { Klagebehandling } from '../klage/typer/Klage';
 import { Klagevedtak } from '../klage/typer/Klagevedtak';
 import { Søknad } from '~/types/Søknad';
 import { TilbakekrevingBehandling } from '~/lib/tilbakekreving/typer/Tilbakekreving';
-import { MeldekortVedtak } from '~/lib/meldekort/typer/MeldekortVedtak';
+import { Meldekortvedtak } from '~/lib/meldekort/typer/Meldekortvedtak';
 import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { Nullable, PartialRecord } from '~/types/UtilTypes';
 import { MeldekortbehandlingPropsV2, MeldeperiodeKjedePropsV2 } from '~/lib/meldekort/v2/typer';
@@ -34,7 +34,7 @@ export type SakProps = {
     søknader: Søknad[];
     tilbakekrevinger: TilbakekrevingBehandling[];
     kanSendeInnHelgForMeldekort: boolean;
-    meldekortvedtak: MeldekortVedtak[];
+    meldekortvedtak: Meldekortvedtak[];
     meldekortbehandlinger: PartialRecord<MeldekortbehandlingId, MeldekortbehandlingPropsV2>;
     meldeperiodeKjederV2: MeldeperiodeKjedePropsV2[];
     åpenMeldekortbehandlingId: Nullable<MeldekortbehandlingId>;

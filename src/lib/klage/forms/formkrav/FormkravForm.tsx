@@ -9,8 +9,7 @@ import {
     VedtakstypeFormkravFormData,
 } from './FormkravFormUtils';
 import { HStack, LocalAlert, Radio, RadioGroup, Select, VStack } from '@navikt/ds-react';
-import { Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
-import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { RammevedtakMedBehandling } from '~/lib/rammebehandling/typer/Rammevedtak';
 import JournalpostId from '~/lib/_felles/journalpostId/JournalpostId';
 import { Nullable } from '~/types/UtilTypes';
 import styles from './FormkravForm.module.css';
@@ -19,23 +18,19 @@ import { benkBehandlingstypeTekst } from '~/lib/benk/benkSideUtils';
 import { behandlingResultatTilText } from '~/utils/tekstformateringUtils';
 import { Datovelger } from '~/lib/_felles/datovelger/Datovelger';
 import dayjs from 'dayjs';
-import { MeldekortVedtak } from '~/lib/meldekort/typer/MeldekortVedtak';
-import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
+import { MeldekortvedtakMedBehandling } from '~/lib/meldekort/typer/Meldekortvedtak';
 
 const FormkravForm = (props: {
     control: Control<FormkravFormData>;
-    rammevedtakOgBehandlinger: Array<{ vedtak: Rammevedtak; behandling: Rammebehandling }>;
-    meldekortvedtakOgBehandlinger: Array<{
-        vedtak: MeldekortVedtak;
-        behandling: MeldekortbehandlingProps;
-    }>;
+    rammevedtakOgBehandlinger: RammevedtakMedBehandling[];
+    meldekortvedtakOgBehandlinger: MeldekortvedtakMedBehandling[];
     fnrFraPersonopplysninger: Nullable<string>;
     readonly?: boolean;
 }) => {
     const vedtakSomKanKlagesPå = [
         ...props.rammevedtakOgBehandlinger,
         ...props.meldekortvedtakOgBehandlinger,
-    ].toSorted((a, b) => dayjs(a.vedtak.opprettet).diff(dayjs(b.vedtak.opprettet)));
+    ].toSorted((a, b) => dayjs(a.opprettet).diff(dayjs(b.opprettet)));
 
     const erKlagefristOverholdt = useWatch({
         control: props.control,
@@ -47,9 +42,7 @@ const FormkravForm = (props: {
         name: 'vedtakDetPåklages',
     });
 
-    const valgtVedtak = vedtakSomKanKlagesPå.find(
-        ({ vedtak }) => vedtak.id === valgtVedtakId,
-    )?.vedtak;
+    const valgtVedtak = vedtakSomKanKlagesPå.find(({ id }) => id === valgtVedtakId);
 
     const valgtInnsendingsdato = useWatch({
         control: props.control,
@@ -107,7 +100,7 @@ const FormkravForm = (props: {
                         >
                             <option value="">Ikke valgt</option>
                             {vedtakstype === VedtakstypeFormkravFormData.RAMMEVEDTAK &&
-                                props.rammevedtakOgBehandlinger.map(({ vedtak, behandling }) => {
+                                props.rammevedtakOgBehandlinger.map(({ behandling, ...vedtak }) => {
                                     return (
                                         <option
                                             key={`${vedtak.id}-${behandling.id}`}
@@ -121,7 +114,7 @@ const FormkravForm = (props: {
                                 })}
                             {vedtakstype === VedtakstypeFormkravFormData.MELDEKORTVEDTAK &&
                                 props.meldekortvedtakOgBehandlinger.map(
-                                    ({ vedtak, behandling }) => {
+                                    ({ behandling, ...vedtak }) => {
                                         const ukerString = `${ukenummerFraDatotekst(behandling.periode.fraOgMed)} og ${ukenummerFraDatotekst(behandling.periode.tilOgMed)}`;
 
                                         return (

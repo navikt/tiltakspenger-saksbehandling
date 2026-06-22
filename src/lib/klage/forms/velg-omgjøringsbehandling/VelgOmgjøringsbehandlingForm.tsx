@@ -19,7 +19,7 @@ import {
     erBehandlingIdMeldekortbehandling,
     erBehandlingIdRammebehandling,
 } from '~/lib/behandling-felles/utils/behandlingUtils';
-import { MeldekortVedtak } from '~/lib/meldekort/typer/MeldekortVedtak';
+import { Meldekortvedtak } from '~/lib/meldekort/typer/Meldekortvedtak';
 import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
 import { MeldeperiodeKjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
 
@@ -31,7 +31,7 @@ export const VelgOmgjøringsbehandlingModal = (props: {
     klagebehandling: Klagebehandling;
     rammevedtak: Rammevedtak[];
     søknader: Søknad[];
-    meldekortvedtak: MeldekortVedtak[];
+    meldekortvedtak: Meldekortvedtak[];
     meldeperiodekjeder: MeldeperiodeKjedeProps[];
     åpen: boolean;
     onClose: () => void;
@@ -121,7 +121,7 @@ const VelgOmgjøringsbehandlingForm = (props: {
     rammevedtak: Rammevedtak[];
     søknader: Søknad[];
     klagebehandling: Klagebehandling;
-    meldekortvedtak: MeldekortVedtak[];
+    meldekortvedtak: Meldekortvedtak[];
     meldeperiodekjeder: MeldeperiodeKjedeProps[];
 }) => {
     const behandlingstype = useWatch({
@@ -135,8 +135,8 @@ const VelgOmgjøringsbehandlingForm = (props: {
             vedtak.resultat === RevurderingResultat.INNVILGELSE,
     );
 
-    const harVedtakSomKanOmgjøres = !!props.rammevedtak.find((vedtak) =>
-        vedtak.gyldigeKommandoer.OMGJØR ? true : false,
+    const harVedtakSomKanOmgjøres = !!props.rammevedtak.find(
+        (vedtak) => !!vedtak.gyldigeKommandoer.OMGJØR,
     );
 
     const klagerPåUtbetalingsvedtak = !!props.meldekortvedtak.find(
@@ -217,9 +217,7 @@ const VelgOmgjøringsbehandlingForm = (props: {
                         >
                             <option value="">-- Velg omgjøringsvedtak --</option>
                             {props.rammevedtak
-                                .filter((vedtak) =>
-                                    vedtak.gyldigeKommandoer.OMGJØR ? true : false,
-                                )
+                                .filter((vedtak) => !!vedtak.gyldigeKommandoer.OMGJØR)
                                 .map((vedtak) => (
                                     <option key={vedtak.id} value={vedtak.id}>
                                         {formaterTidspunkt(vedtak.opprettet)}

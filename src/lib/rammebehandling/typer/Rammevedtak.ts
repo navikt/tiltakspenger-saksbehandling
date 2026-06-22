@@ -1,5 +1,5 @@
 import { Nullable } from '~/types/UtilTypes';
-import { Periode } from '../../../types/Periode';
+import { Periode } from '~/types/Periode';
 import { Barnetillegg } from './Barnetillegg';
 import { RammebehandlingId, Rammebehandling, RammebehandlingResultat } from './Rammebehandling';
 import { Innvilgelsesperiode } from '~/lib/rammebehandling/typer/Innvilgelsesperiode';
@@ -34,7 +34,9 @@ type GyldigeKommandoerMap = {
     [Type in RammevedtakKommandoType]?: Extract<RammevedtakKommando, { type: Type }>;
 };
 
-export type RammevedtakMedBehandling = Rammevedtak & { behandling: Rammebehandling };
+export type RammevedtakMedBehandling = Rammevedtak & {
+    behandling: Rammebehandling;
+};
 
 export enum RammevedtakKommandoType {
     OMGJØR = 'OMGJØR',

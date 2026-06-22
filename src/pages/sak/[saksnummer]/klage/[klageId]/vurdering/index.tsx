@@ -45,7 +45,7 @@ import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import Omgjøringsresultat from '~/lib/klage/Omgjøringsresultat';
 import { OppsummeringAvVentestatuser } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
 import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
-import { MeldekortVedtak } from '~/lib/meldekort/typer/MeldekortVedtak';
+import { Meldekortvedtak } from '~/lib/meldekort/typer/Meldekortvedtak';
 import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
 import AvbrytKlagebehandlingModal from '~/lib/klage/modaler/avbryt/AvbrytKlagebehandlingModal';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
@@ -58,7 +58,7 @@ type Props = {
     };
     omgjøringsbehandling: Nullable<Rammebehandling>;
     rammevedtak: Rammevedtak[];
-    meldekortvedtak: MeldekortVedtak[];
+    meldekortvedtak: Meldekortvedtak[];
     søknader: Søknad[];
     rammebehandlinger: Rammebehandling[];
     meldekortbehandlinger: PartialRecord<MeldekortbehandlingId, MeldekortbehandlingPropsV2>;

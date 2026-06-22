@@ -6,10 +6,8 @@ import {
     OpprettKlageRequest,
     KlageInnsendingskilde,
 } from '~/lib/klage/typer/Klage';
-import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
-import { MeldekortVedtak } from '~/lib/meldekort/typer/MeldekortVedtak';
-import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
-import { Rammevedtak, VedtakId } from '~/lib/rammebehandling/typer/Rammevedtak';
+import { MeldekortvedtakMedBehandling } from '~/lib/meldekort/typer/Meldekortvedtak';
+import { RammevedtakMedBehandling, VedtakId } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { Nullable } from '~/types/UtilTypes';
 import { dateTilISOTekst } from '~/utils/date';
 
@@ -234,38 +232,30 @@ export const klagefristUnntakSvarordFormDataTilKlagebehandlingKlagefristUnntakSv
 
 export const klageTilFormkravFormData = (
     klage: Klagebehandling,
-    rammevedtakOgBehandling: Array<{
-        vedtak: Rammevedtak;
-        behandling: Rammebehandling;
-    }>,
-    meldekortvedtakOgBehandling: Array<{
-        vedtak: MeldekortVedtak;
-        behandling: MeldekortbehandlingProps;
-    }>,
+    rammevedtakOgBehandling: RammevedtakMedBehandling[],
+    meldekortvedtakOgBehandling: MeldekortvedtakMedBehandling[],
 ): FormkravFormData => {
     const vedtakDetKlagesPå = (() => {
         if (!klage.formkrav.vedtakDetKlagesPå) {
             return null;
         }
         const rammevedtak =
-            rammevedtakOgBehandling.find((v) => v.vedtak.id === klage.formkrav.vedtakDetKlagesPå) ??
-            null;
+            rammevedtakOgBehandling.find((v) => v.id === klage.formkrav.vedtakDetKlagesPå) ?? null;
 
         if (rammevedtak) {
             return {
-                vedtakId: rammevedtak.vedtak.id,
+                vedtakId: rammevedtak.id,
                 behandlingstype: VedtakstypeFormkravFormData.RAMMEVEDTAK,
             };
         }
 
         const meldekortvedtak =
-            meldekortvedtakOgBehandling.find(
-                (v) => v.vedtak.id === klage.formkrav.vedtakDetKlagesPå,
-            ) ?? null;
+            meldekortvedtakOgBehandling.find((v) => v.id === klage.formkrav.vedtakDetKlagesPå) ??
+            null;
 
         if (meldekortvedtak) {
             return {
-                vedtakId: meldekortvedtak.vedtak.id,
+                vedtakId: meldekortvedtak.id,
                 behandlingstype: VedtakstypeFormkravFormData.MELDEKORTVEDTAK,
             };
         }

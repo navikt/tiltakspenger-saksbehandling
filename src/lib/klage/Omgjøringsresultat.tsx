@@ -22,7 +22,7 @@ import {
     erBehandlingIdRammebehandling,
 } from '../behandling-felles/utils/behandlingUtils';
 import { MeldekortbehandlingId } from '../meldekort/typer/Meldekortbehandling';
-import { MeldekortVedtak } from '../meldekort/typer/MeldekortVedtak';
+import { Meldekortvedtak } from '../meldekort/typer/Meldekortvedtak';
 import { Nullable, PartialRecord } from '~/types/UtilTypes';
 import { MeldekortbehandlingPropsV2 } from '../meldekort/v2/typer';
 import { MeldeperiodeKjedeProps } from '../meldekort/typer/Meldeperiode';
@@ -30,7 +30,7 @@ import { MeldeperiodeKjedeProps } from '../meldekort/typer/Meldeperiode';
 const Omgjøringsresultat = (props: {
     klage: Klagebehandling & { resultat: KlagebehandlingsresultatOmgjør };
     rammevedtak: Rammevedtak[];
-    meldekortvedtak: MeldekortVedtak[];
+    meldekortvedtak: Meldekortvedtak[];
     meldeperiodekjeder: MeldeperiodeKjedeProps[];
     søknader: Søknad[];
     rammebehandlinger: Rammebehandling[];
@@ -130,7 +130,7 @@ const KlageOmgjøringsbehandlingAksjoner = (props: {
     innloggetSaksbehandler: Saksbehandler;
     rammevedtak: Rammevedtak[];
     søknader: Søknad[];
-    meldekortvedtak: MeldekortVedtak[];
+    meldekortvedtak: Meldekortvedtak[];
     meldeperiodekjeder: MeldeperiodeKjedeProps[];
     omgjøringsbehandling: Nullable<MeldekortbehandlingPropsV2 | Rammebehandling>;
 }) => {

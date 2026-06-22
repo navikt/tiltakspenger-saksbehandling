@@ -52,7 +52,7 @@ import Omgjøringsresultat from '~/lib/klage/Omgjøringsresultat';
 import KlageTilknyttedeBehandlingerInfoCard from '~/lib/klage/KlageTilknyttedeBehandlingerInfoCard';
 import { OppsummeringAvVentestatuser } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
 import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
-import { MeldekortVedtak } from '~/lib/meldekort/typer/MeldekortVedtak';
+import { Meldekortvedtak } from '~/lib/meldekort/typer/Meldekortvedtak';
 import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
 import { MeldeperiodeKjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
@@ -62,7 +62,7 @@ type Props = {
     initialKlage: Klagebehandling;
     omgjøringsbehandling: Nullable<Rammebehandling>;
     rammevedtak: Rammevedtak[];
-    meldekortvedtak: MeldekortVedtak[];
+    meldekortvedtak: Meldekortvedtak[];
     søknader: Søknad[];
     rammebehandlinger: Rammebehandling[];
     meldekortbehandlinger: PartialRecord<MeldekortbehandlingId, MeldekortbehandlingPropsV2>;
@@ -164,7 +164,7 @@ const OpprettholdResultat = (props: {
     sak: SakProps;
     klage: Klagebehandling & { resultat: KlagebehandlingsresultatOpprettholdt };
     rammevedtak: Rammevedtak[];
-    meldekortvedtak: MeldekortVedtak[];
+    meldekortvedtak: Meldekortvedtak[];
     meldeperiodekjeder: MeldeperiodeKjedeProps[];
     omgjøringsbehandling: Nullable<Rammebehandling>;
     søknader: Søknad[];

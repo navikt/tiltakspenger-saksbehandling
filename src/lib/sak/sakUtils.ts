@@ -1,12 +1,15 @@
 import { SøknadsbehandlingResultat } from '~/lib/rammebehandling/typer/Søknadsbehandling';
 import { SakProps } from '~/lib/sak/SakTyper';
-import { VedtakId } from '~/lib/rammebehandling/typer/Rammevedtak';
+import { RammevedtakMedBehandling, VedtakId } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { Periode } from '~/types/Periode';
 import { perioderOverlapper } from '~/utils/periode';
 import { removeDuplicatesFilter } from '~/utils/array';
 import { TilbakekrevingId } from '~/lib/tilbakekreving/typer/Tilbakekreving';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
-import { MeldeperiodeKjedePropsV2 } from '~/lib/meldekort/v2/typer';
+import { MeldekortbehandlingPropsV2, MeldeperiodeKjedePropsV2 } from '~/lib/meldekort/v2/typer';
+import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
+import { Rammebehandling, RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { MeldekortvedtakMedBehandling } from '~/lib/meldekort/typer/Meldekortvedtak';
 
 export const hentVedtatteSøknadsbehandlinger = (sak: SakProps) => {
     const { alleRammevedtak, behandlinger } = sak;
@@ -48,4 +51,49 @@ export const hentMeldeperiodekjede = (
     }
 
     return kjede;
+};
+
+// Henter meldekortbehandlingen for id, eller kaster dersom den ikke finnes
+export const hentMeldekortbehandling = (
+    sak: SakProps,
+    id: MeldekortbehandlingId,
+): MeldekortbehandlingPropsV2 => {
+    const meldekortbehandling = sak.meldekortbehandlinger[id];
+
+    if (!meldekortbehandling) {
+        throw Error(`Fant ikke meldekortbehandling med id ${id}`);
+    }
+
+    return meldekortbehandling;
+};
+
+// Henter rammebehandlingen for id, eller kaster dersom den ikke finnes
+export const hentRammebehandling = (sak: SakProps, id: RammebehandlingId): Rammebehandling => {
+    const rammebehandling = sak.behandlinger.find((beh) => beh.id === id);
+
+    if (!rammebehandling) {
+        throw Error(`Fant ikke rammebehandling med id ${id}`);
+    }
+
+    return rammebehandling;
+};
+
+export const hentRammevedtakMedBehandlinger = (sak: SakProps): RammevedtakMedBehandling[] => {
+    return sak.alleRammevedtak.map((vedtak) => {
+        return {
+            ...vedtak,
+            behandling: hentRammebehandling(sak, vedtak.behandlingId),
+        };
+    });
+};
+
+export const hentMeldekortvedtakMedBehandlinger = (
+    sak: SakProps,
+): MeldekortvedtakMedBehandling[] => {
+    return sak.meldekortvedtak.map((vedtak) => {
+        return {
+            ...vedtak,
+            behandling: hentMeldekortbehandling(sak, vedtak.meldekortId),
+        };
+    });
 };

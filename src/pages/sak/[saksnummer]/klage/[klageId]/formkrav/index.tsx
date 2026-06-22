@@ -3,7 +3,7 @@ import { ReactElement, useState } from 'react';
 import { pageWithAuthentication } from '~/auth/pageWithAuthentication';
 import { BodyShort, Button, Heading, HStack, InfoCard, LocalAlert, VStack } from '@navikt/ds-react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
+import { RammevedtakMedBehandling } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { fetchSak } from '~/utils/fetch/fetch-server';
 import { logger } from '@navikt/next-logger';
@@ -32,25 +32,22 @@ import { useOppdaterFormkrav } from '~/lib/klage/api/KlageApi';
 import { Nullable } from '~/types/UtilTypes';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import styles from './index.module.css';
-import { MeldekortVedtak } from '~/lib/meldekort/typer/MeldekortVedtak';
-import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
+import { MeldekortvedtakMedBehandling } from '~/lib/meldekort/typer/Meldekortvedtak';
 import { OppsummeringAvVentestatuser } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
 import AvbrytKlagebehandlingModal from '~/lib/klage/modaler/avbryt/AvbrytKlagebehandlingModal';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
 import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
+import {
+    hentMeldekortvedtakMedBehandlinger,
+    hentRammevedtakMedBehandlinger,
+} from '~/lib/sak/sakUtils';
 
 type Props = {
     sak: SakProps;
     initialKlage: Klagebehandling;
     omgjøringsbehandling: Nullable<Rammebehandling | MeldekortbehandlingPropsV2>;
-    rammevedtakOgBehandling: Array<{
-        vedtak: Rammevedtak;
-        behandling: Rammebehandling;
-    }>;
-    meldekortvedtakOgBehandling: Array<{
-        vedtak: MeldekortVedtak;
-        behandling: MeldekortbehandlingProps;
-    }>;
+    rammevedtakOgBehandling: RammevedtakMedBehandling[];
+    meldekortvedtakOgBehandling: MeldekortvedtakMedBehandling[];
 };
 
 export const getServerSideProps = pageWithAuthentication(async (context) => {
@@ -80,29 +77,8 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
             sak,
             initialKlage,
             omgjøringsbehandling,
-            rammevedtakOgBehandling: sak.alleRammevedtak
-                .map((vedtak) => {
-                    const behandling = sak.behandlinger.find(
-                        (behandling) => behandling.id === vedtak.behandlingId,
-                    );
-                    return { vedtak, behandling };
-                })
-                .filter(({ behandling }) => behandling !== undefined) as Array<{
-                vedtak: Rammevedtak;
-                behandling: Rammebehandling;
-            }>,
-            meldekortvedtakOgBehandling: sak.meldekortvedtak
-                .map((v) => {
-                    const behandling = sak.meldeperiodeKjeder
-                        .find((k) => k.id === v.kjedeId)
-                        ?.meldekortbehandlinger.find((b) => b.id === v.meldekortId);
-
-                    return { vedtak: v, behandling };
-                })
-                .filter(({ behandling }) => behandling !== undefined) as Array<{
-                vedtak: MeldekortVedtak;
-                behandling: MeldekortbehandlingProps;
-            }>,
+            rammevedtakOgBehandling: hentRammevedtakMedBehandlinger(sak),
+            meldekortvedtakOgBehandling: hentMeldekortvedtakMedBehandlinger(sak),
         } satisfies Props,
     };
 });
@@ -188,33 +164,8 @@ const FormkravKlagePage = ({
                         }
                         fnrFraPersonopplysninger={personopplysninger?.fnr ?? null}
                         control={form.control}
-                        rammevedtakOgBehandlinger={
-                            sak.alleRammevedtak
-                                .map((vedtak) => {
-                                    const behandling = sak.behandlinger.find(
-                                        (behandling) => behandling.id === vedtak.behandlingId,
-                                    );
-                                    return { vedtak, behandling };
-                                })
-                                .filter(({ behandling }) => behandling !== undefined) as Array<{
-                                vedtak: Rammevedtak;
-                                behandling: Rammebehandling;
-                            }>
-                        }
-                        meldekortvedtakOgBehandlinger={
-                            sak.meldekortvedtak
-                                .map((v) => {
-                                    const behandling = sak.meldeperiodeKjeder
-                                        .find((k) => k.id === v.kjedeId)
-                                        ?.meldekortbehandlinger.find((b) => b.id === v.meldekortId);
-
-                                    return { vedtak: v, behandling };
-                                })
-                                .filter(({ behandling }) => behandling !== undefined) as Array<{
-                                vedtak: MeldekortVedtak;
-                                behandling: MeldekortbehandlingProps;
-                            }>
-                        }
+                        rammevedtakOgBehandlinger={hentRammevedtakMedBehandlinger(sak)}
+                        meldekortvedtakOgBehandlinger={hentMeldekortvedtakMedBehandlinger(sak)}
                     />
 
                     {oppdaterFormkrav.error && (
