@@ -5,11 +5,17 @@
 }
 
 .tabPanel {
-    padding-top: 1rem;
-}
-
-.meldekortbehandlinger {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+
+    & > :first-child {
+        margin-top: 1rem;
+    }
+}
+
+.panelElement {
+    border: 1px solid var(--ax-border-neutral-subtle);
+    border-radius: var(--ax-radius-8);
+    padding: var(--ax-space-16);
 }

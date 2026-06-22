@@ -1,19 +1,18 @@
-import { BodyShort, HStack, Tabs, VStack } from '@navikt/ds-react';
+import { Tabs, VStack } from '@navikt/ds-react';
 import { useMeldeperiodeKjedeV2 } from '~/lib/meldekort/v2/meldeperiodekjede/context/MeldeperiodeKjedeContextV2';
 import { MeldeperiodekjedeGjeldendeBeregning } from '~/lib/meldekort/v2/meldeperiodekjede/høyre-seksjon/gjeldende-beregning/MeldeperiodekjedeGjeldendeBeregning';
 import { CurrencyExchangeIcon, DocPencilIcon, PersonPencilIcon } from '@navikt/aksel-icons';
 import { MeldekortBehandlingOppsummeringForKjede } from '~/lib/meldekort/v2/meldeperiodekjede/høyre-seksjon/meldekortbehandling-oppsummering/MeldekortBehandlingOppsummeringForKjede';
-import { classNames } from '~/utils/classNames';
 import { useSak } from '~/lib/sak/SakContext';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
-import { BrukersMeldekortUker } from '~/lib/meldekort/v2/brukers-meldekort/BrukersMeldekortUker';
-import { formaterTidspunkt } from '~/utils/date';
-import { BrukersMeldekortAutomatiskBehandlingStatus } from '~/lib/meldekort/3-høyre-seksjon/brukers-meldekort/automatisk-behandling-status/BrukersMeldekortAutomatiskBehandlingStatus';
+import { BrukersMeldekortForKjede } from '~/lib/meldekort/v2/meldeperiodekjede/høyre-seksjon/brukers-meldekort/BrukersMeldekortForKjede';
+import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
+import { meldekortbehandlingUrl } from '~/utils/urls';
 
 import style from './MeldeperiodekjedeHøyreSeksjon.module.css';
 
 export const MeldeperiodekjedeHøyreSeksjon = () => {
-    const { åpenMeldekortbehandlingId } = useSak().sak;
+    const { åpenMeldekortbehandlingId, saksnummer } = useSak().sak;
 
     const { meldeperiodeKjede } = useMeldeperiodeKjedeV2();
     const { id, gjeldendeBeregning, brukersMeldekort, meldekortbehandlingIder } = meldeperiodeKjede;
@@ -26,7 +25,12 @@ export const MeldeperiodekjedeHøyreSeksjon = () => {
         <VStack gap={'space-24'} className={style.seksjon}>
             {harÅpenBehandling && (
                 <Infokort icon={<DocPencilIcon />}>
-                    {'Saken har en åpen meldekortbehandling som omfatter denne meldeperioden'}
+                    {'Saken har en åpen meldekortbehandling som omfatter denne meldeperioden. '}
+                    <InternLenke
+                        href={meldekortbehandlingUrl(saksnummer, åpenMeldekortbehandlingId!)}
+                    >
+                        {'Til behandlingen'}
+                    </InternLenke>
                 </Infokort>
             )}
 
@@ -53,17 +57,18 @@ export const MeldeperiodekjedeHøyreSeksjon = () => {
                 </Tabs.List>
 
                 <Tabs.Panel value={TabVerdi.Beregning} className={style.tabPanel}>
-                    <MeldeperiodekjedeGjeldendeBeregning beregning={gjeldendeBeregning} />
+                    <MeldeperiodekjedeGjeldendeBeregning
+                        beregning={gjeldendeBeregning}
+                        className={style.panelElement}
+                    />
                 </Tabs.Panel>
 
-                <Tabs.Panel
-                    value={TabVerdi.Behandlinger}
-                    className={classNames(style.tabPanel, style.meldekortbehandlinger)}
-                >
+                <Tabs.Panel value={TabVerdi.Behandlinger} className={style.tabPanel}>
                     {meldekortbehandlingIder.toReversed().map((mkbId) => (
                         <MeldekortBehandlingOppsummeringForKjede
                             meldekortbehandlingId={mkbId}
                             kjedeId={id}
+                            className={style.panelElement}
                             key={mkbId}
                         />
                     ))}
@@ -72,26 +77,12 @@ export const MeldeperiodekjedeHøyreSeksjon = () => {
                 <Tabs.Panel value={TabVerdi.BrukersMeldekort} className={style.tabPanel}>
                     {brukersMeldekort
                         .toSorted((a, b) => b.mottatt.localeCompare(a.mottatt))
-                        .map((brukersMeldekort) => (
-                            <VStack gap={'space-8'} key={brukersMeldekort.id}>
-                                <HStack gap={'space-4'} align={'center'} justify={'space-between'}>
-                                    <BodyShort size={'small'}>
-                                        {'Mottatt: '}
-                                        <strong>
-                                            {formaterTidspunkt(brukersMeldekort.mottatt)}
-                                        </strong>
-                                    </BodyShort>
-                                    <BrukersMeldekortAutomatiskBehandlingStatus
-                                        meldekort={brukersMeldekort}
-                                    />
-                                </HStack>
-
-                                <BrukersMeldekortUker
-                                    key={brukersMeldekort.id}
-                                    brukersMeldekort={brukersMeldekort}
-                                    kompakt={true}
-                                />
-                            </VStack>
+                        .map((meldekort) => (
+                            <BrukersMeldekortForKjede
+                                meldekort={meldekort}
+                                className={style.panelElement}
+                                key={meldekort.id}
+                            />
                         ))}
                 </Tabs.Panel>
             </Tabs>

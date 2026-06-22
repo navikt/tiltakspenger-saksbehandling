@@ -10,19 +10,22 @@ import { MeldekortBeløp } from '~/lib/meldekort/0-felles-komponenter/beløp/Mel
 import { useFeatureToggles } from '~/context/FeatureTogglesContext';
 import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 
-import style from './MeldeperiodekjedeGjeldendeBeregning.module.css';
-
 type Props = {
     beregning: MeldeperiodeBeregningProps | null;
+    className?: string;
 };
 
-export const MeldeperiodekjedeGjeldendeBeregning = ({ beregning }: Props) => {
-    return beregning ? (
-        <GjeldendeBeregning {...beregning} />
-    ) : (
-        <Alert variant={'info'}>
-            {'Det finnes ingen beregninger for denne meldeperioden ennå'}
-        </Alert>
+export const MeldeperiodekjedeGjeldendeBeregning = ({ beregning, className }: Props) => {
+    return (
+        <VStack gap={'space-16'} className={className}>
+            {beregning ? (
+                <GjeldendeBeregning {...beregning} />
+            ) : (
+                <Alert variant={'info'}>
+                    {'Det finnes ingen beregninger for denne meldeperioden ennå'}
+                </Alert>
+            )}
+        </VStack>
     );
 };
 
@@ -31,7 +34,7 @@ const GjeldendeBeregning = ({ dager, beregningKilde, beløp }: MeldeperiodeBereg
     const { meldekortbehandlingV2Toggle } = useFeatureToggles();
 
     return (
-        <VStack gap={'space-16'} className={style.beregning}>
+        <>
             <BodyShort>
                 {'Kilde for beregningen: '}
                 <InternLenke
@@ -46,6 +49,6 @@ const GjeldendeBeregning = ({ dager, beregningKilde, beløp }: MeldeperiodeBereg
             <MeldekortUker dager={dager} />
 
             <MeldekortBeløp beløp={beløp} />
-        </VStack>
+        </>
     );
 };

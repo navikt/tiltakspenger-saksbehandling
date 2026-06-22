@@ -21,11 +21,13 @@ import style from './MeldekortBehandlingOppsummeringForKjede.module.css';
 type Props = {
     meldekortbehandlingId: MeldekortbehandlingId;
     kjedeId: MeldeperiodeKjedeId;
+    className?: string;
 };
 
 export const MeldekortBehandlingOppsummeringForKjede = ({
     meldekortbehandlingId,
     kjedeId,
+    className,
 }: Props) => {
     const { sak } = useSak();
 
@@ -33,9 +35,9 @@ export const MeldekortBehandlingOppsummeringForKjede = ({
 
     if (!meldekortbehandling) {
         return (
-            <Alert
-                variant={'error'}
-            >{`Teknisk feil: Fant ikke meldekortbehandling med id ${meldekortbehandlingId}`}</Alert>
+            <Alert variant={'error'}>
+                {`Teknisk feil: Fant ikke meldekortbehandling med id ${meldekortbehandlingId}`}
+            </Alert>
         );
     }
 
@@ -46,14 +48,14 @@ export const MeldekortBehandlingOppsummeringForKjede = ({
 
     if (!meldeperiodebehandlingForKjede) {
         return (
-            <Alert
-                variant={'error'}
-            >{`Teknisk feil: Fant ingen behandling av denne meldeperioden på ${meldekortbehandlingId}`}</Alert>
+            <Alert variant={'error'}>
+                {`Teknisk feil: Fant ingen behandling av denne meldeperioden på ${meldekortbehandlingId}`}
+            </Alert>
         );
     }
 
     return (
-        <VStack gap={'space-16'} className={style.oppsummering}>
+        <VStack gap={'space-16'} className={className}>
             <HStack className={style.header} gap={'space-12'}>
                 <VStack>
                     <Heading level={'3'} size={'small'}>
