@@ -23,5 +23,5 @@ export const erBehandlingSattPåVent = ({ ventestatus }: MedVentestatus): boolea
 };
 
 export const erBehandlingUnderkjent = (attesteringer: Attestering[]) => {
-    return attesteringer.at(0)?.status === Attesteringsstatus.SENDT_TILBAKE;
+    return attesteringer.at(-1)?.status === Attesteringsstatus.SENDT_TILBAKE;
 };

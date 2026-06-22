@@ -8,7 +8,7 @@ type Props = {
 };
 
 export const MeldekortbehandlingUnderkjentStatus = ({ attesteringer }: Props) => {
-    const sisteAttestering = attesteringer.at(0);
+    const sisteAttestering = attesteringer.at(-1);
 
     if (sisteAttestering?.status !== Attesteringsstatus.SENDT_TILBAKE) {
         return null;
