@@ -64,7 +64,6 @@ export const MeldekortbehandlingBeregningOgSimulering = () => {
                 <SimuleringOppsummering
                     simulertBeregning={simulertBeregning}
                     behandlingId={id}
-                    oppdaterBehandlingEllerKjede={() => null}
                     visOppdaterKnapp={!erReadonly}
                 />
             </MeldekortbehandlingSeksjon.Venstre>

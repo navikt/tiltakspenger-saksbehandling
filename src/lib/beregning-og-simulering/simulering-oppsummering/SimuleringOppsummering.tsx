@@ -4,30 +4,27 @@ import {
     SimuleringResultat,
     SimulertBeregning,
 } from '~/lib/beregning-og-simulering/typer/SimulertBeregning';
-import {
-    OppdaterSimuleringKnapp,
-    OppdaterSimuleringProps,
-} from '~/lib/beregning-og-simulering/oppdater-simulering/OppdaterSimuleringKnapp';
+import { OppdaterSimuleringKnapp } from '~/lib/beregning-og-simulering/oppdater-simulering/OppdaterSimuleringKnapp';
 import { BehandlingId } from '~/lib/behandling-felles/typer/BehandlingFelles';
 
 import style from './SimuleringOppsummering.module.css';
 
-type Props<BehId extends BehandlingId> = {
+type Props = {
     simulertBeregning: SimulertBeregning;
-} & (
-    | ({
-          visOppdaterKnapp: true;
-      } & OppdaterSimuleringProps<BehId>)
-    | {
-          visOppdaterKnapp: false;
-      }
-);
+    visOppdaterKnapp: boolean;
+    behandlingId: BehandlingId;
+};
 
-export const SimuleringOppsummering = <BehId extends BehandlingId>(props: Props<BehId>) => {
-    const { simulertBeregning, visOppdaterKnapp } = props;
+export const SimuleringOppsummering = ({
+    simulertBeregning,
+    visOppdaterKnapp,
+    behandlingId,
+}: Props) => {
     const { simuleringResultat, simulerteBeløp } = simulertBeregning;
 
-    const oppdaterKnapp = visOppdaterKnapp && <OppdaterSimuleringKnapp {...props} />;
+    const oppdaterKnapp = visOppdaterKnapp && (
+        <OppdaterSimuleringKnapp behandlingId={behandlingId} />
+    );
 
     if (simuleringResultat === SimuleringResultat.IKKE_SIMULERT) {
         return (

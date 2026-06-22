@@ -8,7 +8,6 @@ import { BeregningOppsummering } from '~/lib/beregning-og-simulering/beregning-o
 import { SimuleringOppsummering } from '~/lib/beregning-og-simulering/simulering-oppsummering/SimuleringOppsummering';
 import { SimulertBeregningDetaljer } from '~/lib/beregning-og-simulering/detaljer/SimulertBeregningDetaljer';
 import { useMeldeperiodeKjede } from '~/lib/meldekort/context/MeldeperiodeKjedeContext';
-import { MeldeperiodeKjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
 import { BeregningOgSimuleringHeader } from '~/lib/beregning-og-simulering/header/BeregningOgSimuleringHeader';
 import { kanBehandle } from '~/lib/saksbehandler/tilganger';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
@@ -22,7 +21,7 @@ type Props = {
 
 export const MeldekortBeregningOgSimulering = ({ meldekortbehandling, className }: Props) => {
     const { innloggetSaksbehandler } = useSaksbehandler();
-    const { setMeldeperiodeKjede, sisteMeldekortbehandling } = useMeldeperiodeKjede();
+    const { sisteMeldekortbehandling } = useMeldeperiodeKjede();
 
     const {
         status,
@@ -73,9 +72,6 @@ export const MeldekortBeregningOgSimulering = ({ meldekortbehandling, className 
             <SimuleringOppsummering
                 simulertBeregning={simulertBeregning}
                 behandlingId={meldekortbehandling.id}
-                oppdaterBehandlingEllerKjede={(meldeperiodeKjede) =>
-                    setMeldeperiodeKjede(meldeperiodeKjede as MeldeperiodeKjedeProps)
-                }
                 visOppdaterKnapp={kanSaksbehandleForMeldekort(
                     meldekortbehandling,
                     innloggetSaksbehandler,

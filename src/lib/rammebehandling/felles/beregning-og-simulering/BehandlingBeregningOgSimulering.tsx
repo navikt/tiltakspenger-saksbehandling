@@ -10,6 +10,7 @@ import { kanSaksbehandleForBehandling } from '~/lib/saksbehandler/tilganger';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import {
     Rammebehandling,
+    RammebehandlingId,
     Rammebehandlingsstatus,
 } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { formaterTidspunkt } from '~/utils/date';
@@ -48,6 +49,7 @@ export const BehandlingBeregningOgSimulering = () => {
                     <UtbetalingskontrollSeksjon
                         utbetalingskontroll={utbetalingskontroll}
                         behandlingsstatus={behandling.status}
+                        behandlingId={behandling.id}
                     />
                     <Separator />
                 </>
@@ -65,7 +67,6 @@ const BeregningOgSimuleringSeksjon = ({
     behandling,
     utbetaling,
 }: BeregningOgSimuleringSeksjonProps) => {
-    const { setBehandling } = useBehandling();
     const { innloggetSaksbehandler } = useSaksbehandler();
 
     const { status, utbetalingskontroll, tilbakekrevingId } = behandling;
@@ -108,9 +109,6 @@ const BeregningOgSimuleringSeksjon = ({
                     <SimuleringOppsummering
                         simulertBeregning={simulertBeregning}
                         behandlingId={behandling.id}
-                        oppdaterBehandlingEllerKjede={(behandling) =>
-                            setBehandling(behandling as Rammebehandling)
-                        }
                         visOppdaterKnapp={kanSaksbehandleForBehandling(
                             behandling,
                             innloggetSaksbehandler,
@@ -148,7 +146,7 @@ const BeregningOgSimuleringSeksjon = ({
 };
 
 const UtenBeregnetUtbetaling = () => {
-    const { behandling, setBehandling } = useBehandling();
+    const { behandling } = useBehandling();
 
     return (
         <VedtakSeksjon>
@@ -156,10 +154,7 @@ const UtenBeregnetUtbetaling = () => {
                 <Alert variant={'info'} inline={true}>
                     {'Ingen beregning/simulering av utbetaling tilgjengelig'}
                 </Alert>
-                <OppdaterSimuleringKnapp
-                    behandlingId={behandling.id}
-                    oppdaterBehandlingEllerKjede={setBehandling}
-                />
+                <OppdaterSimuleringKnapp behandlingId={behandling.id} />
             </VedtakSeksjon.Venstre>
         </VedtakSeksjon>
     );
@@ -168,9 +163,14 @@ const UtenBeregnetUtbetaling = () => {
 type KontrollProps = {
     utbetalingskontroll: UtbetalingskontrollMedEndring;
     behandlingsstatus: Rammebehandlingsstatus;
+    behandlingId: RammebehandlingId;
 };
 
-const UtbetalingskontrollSeksjon = ({ utbetalingskontroll, behandlingsstatus }: KontrollProps) => {
+const UtbetalingskontrollSeksjon = ({
+    utbetalingskontroll,
+    behandlingsstatus,
+    behandlingId,
+}: KontrollProps) => {
     const { tidspunkt, simulertBeregning } = utbetalingskontroll;
 
     return (
@@ -190,6 +190,7 @@ const UtbetalingskontrollSeksjon = ({ utbetalingskontroll, behandlingsstatus }: 
                 <SimuleringOppsummering
                     simulertBeregning={simulertBeregning}
                     visOppdaterKnapp={false}
+                    behandlingId={behandlingId}
                 />
             </VedtakSeksjon.Venstre>
 

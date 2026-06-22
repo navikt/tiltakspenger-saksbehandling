@@ -1,49 +1,41 @@
 import { Alert, Button, HStack } from '@navikt/ds-react';
-import { useOppdaterSimulering } from './useOppdaterSimulering';
-import { MeldeperiodeKjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
 import { useSak } from '~/lib/sak/SakContext';
 import { BehandlingId } from '~/lib/behandling-felles/typer/BehandlingFelles';
-import { RammebehandlingId, Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
+import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
+import { SakProps } from '~/lib/sak/SakTyper';
 
-export type OppdaterSimuleringProps<BehId extends BehandlingId> = {
-    behandlingId: BehId;
-    oppdaterBehandlingEllerKjede: (
-        behandlingEllerKjede: BehId extends RammebehandlingId
-            ? Rammebehandling
-            : MeldeperiodeKjedeProps,
-    ) => void;
+type Props = {
+    behandlingId: BehandlingId;
 };
 
-export const OppdaterSimuleringKnapp = <BehId extends BehandlingId>({
-    behandlingId,
-    oppdaterBehandlingEllerKjede,
-}: OppdaterSimuleringProps<BehId>) => {
-    const { sakId } = useSak().sak;
+export const OppdaterSimuleringKnapp = ({ behandlingId }: Props) => {
+    const { sak, setSak } = useSak();
+    const { sakId } = sak;
 
-    const { oppdaterSimulering, oppdaterSimuleringError, oppdaterSimuleringLaster } =
-        useOppdaterSimulering(sakId, behandlingId);
+    const { trigger, isMutating, error } = useFetchJsonFraApi<SakProps>(
+        `/sak/${sakId}/behandling/${behandlingId}/oppdaterSimulering`,
+        'POST',
+    );
 
     return (
         <HStack gap={'space-20'} align={'center'}>
-            {oppdaterSimuleringError && (
+            {error && (
                 <Alert variant={'error'} size={'small'} inline={true}>
-                    {oppdaterSimuleringError.message}
+                    {error.message}
                 </Alert>
             )}
             <Button
                 onClick={() =>
-                    oppdaterSimulering().then((oppdatertBehandlingEllerKjede) => {
-                        if (!oppdatertBehandlingEllerKjede) {
-                            return;
+                    trigger().then((oppdatertSak) => {
+                        if (oppdatertSak) {
+                            setSak(oppdatertSak);
                         }
-
-                        oppdaterBehandlingEllerKjede(oppdatertBehandlingEllerKjede);
                     })
                 }
                 variant={'secondary'}
                 size={'small'}
                 type={'button'}
-                loading={oppdaterSimuleringLaster}
+                loading={isMutating}
             >
                 {'Oppdater simulering'}
             </Button>
