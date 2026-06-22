@@ -22,6 +22,8 @@ export const erBehandlingSattPåVent = ({ ventestatus }: MedVentestatus): boolea
     return ventestatus.at(0)?.erSattPåVent ?? false;
 };
 
-export const erBehandlingUnderkjent = (attesteringer: Attestering[]) => {
+type MedAttesteringer = { attesteringer: Attestering[] };
+
+export const erBehandlingUnderkjent = ({ attesteringer }: MedAttesteringer) => {
     return attesteringer.at(-1)?.status === Attesteringsstatus.SENDT_TILBAKE;
 };

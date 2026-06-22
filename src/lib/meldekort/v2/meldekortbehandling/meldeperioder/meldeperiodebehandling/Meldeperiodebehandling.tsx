@@ -24,6 +24,7 @@ import { MeldeperiodeInfo } from '~/lib/meldekort/v2/meldekortbehandling/meldepe
 import { MeldeperiodeBrukersMeldekort } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/meldeperiodebehandling/brukers-meldekort/MeldeperiodeBrukersMeldekort';
 import { classNames } from '~/utils/classNames';
 import { MeldeperiodebehandlingBeregning } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/meldeperiodebehandling/beregning/MeldeperiodebehandlingBeregning';
+import { validerMeldekortDagSkjema } from '~/lib/meldekort/v2/meldekortbehandling/context/meldekortbehandlingSkjemaValidering';
 
 import style from './Meldeperiodebehandling.module.css';
 
@@ -142,6 +143,8 @@ const MeldeperiodeUke = ({
                             !erReadonly &&
                             status !== MeldekortbehandlingDagStatus.IkkeRettTilTiltakspenger;
 
+                        const harValideringsfeil = !!validerMeldekortDagSkjema(dag);
+
                         return (
                             <Table.Row key={dag.dato}>
                                 <Table.DataCell>{ukedagFraDatoKort(dag.dato)}</Table.DataCell>
@@ -157,6 +160,7 @@ const MeldeperiodeUke = ({
                                             hideLabel={true}
                                             value={status}
                                             className={style.status}
+                                            error={harValideringsfeil}
                                             onChange={(e) =>
                                                 dispatch({
                                                     type: 'oppdaterDagStatus',

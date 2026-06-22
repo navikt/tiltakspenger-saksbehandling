@@ -64,7 +64,7 @@ export const MeldekortbehandlingHeader = () => {
                 </HStack>
             </MeldekortbehandlingSeksjon.Høyre>
 
-            {erBehandlingUnderkjent(meldekortbehandling.attesteringer) && (
+            {erBehandlingUnderkjent(meldekortbehandling) && (
                 <MeldekortbehandlingSeksjon.Høyre>
                     <MeldekortbehandlingUnderkjentStatus attesteringer={attesteringer} />
                 </MeldekortbehandlingSeksjon.Høyre>

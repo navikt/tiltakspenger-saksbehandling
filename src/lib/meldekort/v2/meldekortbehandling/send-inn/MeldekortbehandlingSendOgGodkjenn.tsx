@@ -17,7 +17,7 @@ export const MeldekortbehandlingSendOgGodkjenn = () => {
 
     return (
         <MeldekortbehandlingSeksjon>
-            <MeldekortbehandlingSeksjon.FullBredde align={'end'}>
+            <MeldekortbehandlingSeksjon.FullBredde align={'end'} gap={'space-16'}>
                 {kanSaksbehandleForMeldekort(meldekortbehandling, innloggetSaksbehandler) && (
                     <MeldekortbehandlingTilBeslutning />
                 )}

@@ -10,6 +10,8 @@ import { MeldekortbehandlingSeksjon } from '~/lib/meldekort/v2/meldekortbehandli
 import { useState } from 'react';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
 import { Periode } from '~/types/Periode';
+import { validerMeldeperiodeSkjema } from '~/lib/meldekort/v2/meldekortbehandling/context/meldekortbehandlingSkjemaValidering';
+import { classNames } from '~/utils/classNames';
 
 import style from './Meldeperiodebehandlinger.module.css';
 
@@ -61,12 +63,16 @@ export const Meldeperiodebehandlinger = () => {
                                         sak,
                                         meldeperiode.kjedeId,
                                     );
+
+                                    const harValideringsfeil =
+                                        !!validerMeldeperiodeSkjema(meldeperiode);
+
                                     return (
                                         <Tabs.Tab
                                             key={meldeperiode.kjedeId}
                                             value={meldeperiode.kjedeId}
                                             label={<TabLabel periode={periode} />}
-                                            className={style.tab}
+                                            className={classNames(harValideringsfeil && style.feil)}
                                         />
                                     );
                                 })}

@@ -1,5 +1,12 @@
 import { MedPeriode, Periode } from '~/types/Periode';
 import { datoMax, datoMin, forrigeDag, nesteDag } from '~/utils/date';
+import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
+
+export const meldeperiodeKjedeIdTilPeriode = (kjedeId: MeldeperiodeKjedeId): Periode => {
+    const [fraOgMed, tilOgMed] = kjedeId.split('/');
+
+    return { fraOgMed, tilOgMed };
+};
 
 // Sjekker at periodiseringen er i kronologisk rekkefølge uten overlapp
 export const validerPeriodisering = (periodisering: MedPeriode[], tillatHull: boolean): boolean => {

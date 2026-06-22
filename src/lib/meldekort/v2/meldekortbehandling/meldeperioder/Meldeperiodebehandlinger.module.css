@@ -5,3 +5,8 @@
 .nobreak {
     white-space: nowrap;
 }
+
+.feil {
+    background-color: var(--ax-bg-danger-moderate);
+    box-shadow: inset 0 -4px var(--ax-border-danger);
+}

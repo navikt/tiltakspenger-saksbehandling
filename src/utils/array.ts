@@ -12,3 +12,6 @@ export const removeDuplicatesFilter = <Type>(isEqualPredicate?: (a: Type, b: Typ
           }
         : (item: Type, index: number, array: Type[] | ReadonlyArray<Type>) =>
               array.indexOf(item) === index;
+
+export const nonNullishPredicate = <T>(value: T): value is Exclude<T, null | undefined> =>
+    value !== null && value !== undefined;
