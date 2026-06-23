@@ -1,13 +1,14 @@
 import { Button, VStack } from '@navikt/ds-react';
 import { EnvelopeOpenIcon } from '@navikt/aksel-icons';
 import { useFetchBlobFraApi } from '~/utils/fetch/useFetchFraApi';
-import { ForhåndsvisMeldekortbehandlingBrevRequest } from '~/lib/meldekort/2-hovedseksjon/behandling/utfylling/meldekortUtfyllingUtils';
 import { useSak } from '~/lib/sak/SakContext';
 import {
     useMeldekortbehandling,
     useMeldekortbehandlingSkjema,
 } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2Context';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
+import { OppdatertMeldeperiodeDTO } from '~/lib/meldekort/typer/Meldekortbehandling';
+import { Nullable } from '~/types/UtilTypes';
 
 import style from './MeldekortbehandlingForhåndsvisBrev.module.css';
 
@@ -18,7 +19,7 @@ export const MeldekortbehandlingForhåndsvisBrev = () => {
     const { meldeperioder, brevtekst, skalSendeVedtaksbrev } = useMeldekortbehandlingSkjema();
 
     const { trigger, error, isMutating } =
-        useFetchBlobFraApi<ForhåndsvisMeldekortbehandlingBrevRequest>(
+        useFetchBlobFraApi<ForhåndsvisMeldekortbehandlingBrevBody>(
             `/sak/${sakId}/meldekortbehandling/${id}/forhandsvis`,
             'POST',
         );
@@ -38,7 +39,10 @@ export const MeldekortbehandlingForhåndsvisBrev = () => {
                 className={style.knapp}
                 onClick={async () => {
                     return trigger({
-                        dager: meldeperioder.at(0)!.dager,
+                        meldeperioder: meldeperioder.map((mp) => ({
+                            kjedeId: mp.kjedeId,
+                            dager: mp.dager,
+                        })),
                         tekstTilVedtaksbrev: brevtekst.getValue(),
                     }).then((blob) => {
                         if (blob) {
@@ -56,4 +60,9 @@ export const MeldekortbehandlingForhåndsvisBrev = () => {
             )}
         </VStack>
     );
+};
+
+export type ForhåndsvisMeldekortbehandlingBrevBody = {
+    meldeperioder: OppdatertMeldeperiodeDTO[];
+    tekstTilVedtaksbrev: Nullable<string>;
 };

@@ -5,7 +5,6 @@ import {
     OppdaterMeldekortbehandlingDTO,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { formaterDatotekst } from '~/utils/date';
-import { Nullable } from '~/types/UtilTypes';
 import { GyldigeMeldekortDagUfyllingsvalg } from '~/lib/meldekort/0-felles-komponenter/uker/MeldekortUkeBehandling';
 import { FieldErrors } from 'react-hook-form';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
@@ -73,11 +72,6 @@ export type MeldekortbehandlingForm = {
     tekstTilVedtaksbrev: string;
     skalSendeVedtaksbrev: boolean;
 };
-
-export interface ForhåndsvisMeldekortbehandlingBrevRequest {
-    dager: Nullable<MeldekortDagProps[]>;
-    tekstTilVedtaksbrev: Nullable<string>;
-}
 
 export const meldekortbehandlingFormTilDto = (
     data: MeldekortbehandlingForm,

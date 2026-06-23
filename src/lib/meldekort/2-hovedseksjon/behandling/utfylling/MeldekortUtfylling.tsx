@@ -10,7 +10,6 @@ import {
 } from '@navikt/ds-react';
 import { useSak } from '~/lib/sak/SakContext';
 import {
-    ForhåndsvisMeldekortbehandlingBrevRequest,
     MeldekortbehandlingForm,
     meldekortbehandlingFormTilDto,
     meldekortUtfyllingValidation,
@@ -51,6 +50,7 @@ import {
 } from '~/lib/meldekort/api/MeldekortApi';
 
 import styles from './MeldekortUtfylling.module.css';
+import { ForhåndsvisMeldekortbehandlingBrevBody } from '~/lib/meldekort/v2/meldekortbehandling/fritekst-og-innsending/begrunnelse-og-brev/forhåndsvis-brev/MeldekortbehandlingForhåndsvisBrev';
 
 type Props = {
     meldekortbehandling: MeldekortbehandlingProps;
@@ -92,7 +92,7 @@ export const MeldekortUtfylling = ({ meldekortbehandling }: Props) => {
         .dager.every((dag) => dag.status !== MeldekortbehandlingDagStatus.IkkeBesvart);
     const skalViseBeregningVarsel = skjemaErEndret && skjemaErUtfylt;
 
-    const forhåndsvisBrev = useFetchBlobFraApi<ForhåndsvisMeldekortbehandlingBrevRequest>(
+    const forhåndsvisBrev = useFetchBlobFraApi<ForhåndsvisMeldekortbehandlingBrevBody>(
         `/sak/${sakId}/meldekortbehandling/${meldekortbehandlingId}/forhandsvis`,
         'POST',
     );
@@ -245,15 +245,12 @@ export const MeldekortUtfylling = ({ meldekortbehandling }: Props) => {
                                     )
                                         ? formContext.getValues('tekstTilVedtaksbrev')
                                         : null,
-                                    dager: formContext
-                                        .getValues('dager')
-                                        .every(
-                                            (dag) =>
-                                                dag.status !==
-                                                MeldekortbehandlingDagStatus.IkkeBesvart,
-                                        )
-                                        ? formContext.getValues('dager')
-                                        : null,
+                                    meldeperioder: [
+                                        {
+                                            dager: formContext.getValues('dager'),
+                                            kjedeId,
+                                        },
+                                    ],
                                 },
                                 { onSuccess: (blob) => window.open(URL.createObjectURL(blob!)) },
                             );

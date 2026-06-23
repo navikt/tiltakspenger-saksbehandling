@@ -6,11 +6,12 @@ import { MeldekortBegrunnelse } from '../begrunnelse/MeldekortBegrunnelse';
 import { MeldekortBeregningOgSimulering } from '~/lib/meldekort/0-felles-komponenter/beregning-simulering/MeldekortBeregningOgSimulering';
 import Divider from '~/lib/_felles/divider/Divider';
 import { useFetchBlobFraApi } from '~/utils/fetch/useFetchFraApi';
-import { ForhåndsvisMeldekortbehandlingBrevRequest } from '../../2-hovedseksjon/behandling/utfylling/meldekortUtfyllingUtils';
 import styles from './MeldekortOppsummering.module.css';
 import { Klagebehandling } from '~/lib/klage/typer/Klage';
 import { Nullable } from '~/types/UtilTypes';
 import OppsummeringAvKlageForRammebehandling from '~/lib/behandling-felles/oppsummeringer/klage/oppsummeringAvKlageForRammebehandling/OppsummeringAvKlageForRammebehandling';
+import { useMeldeperiodeKjede } from '~/lib/meldekort/context/MeldeperiodeKjedeContext';
+import { ForhåndsvisMeldekortbehandlingBrevBody } from '~/lib/meldekort/v2/meldekortbehandling/fritekst-og-innsending/begrunnelse-og-brev/forhåndsvis-brev/MeldekortbehandlingForhåndsvisBrev';
 
 type Props = {
     meldekortbehandling: MeldekortbehandlingProps;
@@ -21,7 +22,9 @@ export const MeldekortOppsummering = ({ meldekortbehandling, klagebehandling }: 
     const { sakId, id, beregning, begrunnelse, godkjentTidspunkt, dager, tekstTilVedtaksbrev } =
         meldekortbehandling;
 
-    const forhåndsvisBrev = useFetchBlobFraApi<ForhåndsvisMeldekortbehandlingBrevRequest>(
+    const { id: kjedeId } = useMeldeperiodeKjede().meldeperiodeKjede;
+
+    const forhåndsvisBrev = useFetchBlobFraApi<ForhåndsvisMeldekortbehandlingBrevBody>(
         `/sak/${sakId}/meldekortbehandling/${id}/forhandsvis`,
         'POST',
     );
@@ -68,7 +71,10 @@ export const MeldekortOppsummering = ({ meldekortbehandling, klagebehandling }: 
                     }
                     onClick={() => {
                         forhåndsvisBrev.trigger(
-                            { tekstTilVedtaksbrev: tekstTilVedtaksbrev, dager: dager },
+                            {
+                                tekstTilVedtaksbrev: tekstTilVedtaksbrev,
+                                meldeperioder: [{ dager, kjedeId }],
+                            },
                             { onSuccess: (blob) => window.open(URL.createObjectURL(blob!)) },
                         );
                     }}

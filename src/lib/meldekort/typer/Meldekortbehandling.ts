@@ -116,7 +116,7 @@ export type OppdaterMeldekortbehandlingDTO = {
     skalSendeVedtaksbrev: boolean;
 };
 
-type OppdatertMeldeperiodeDTO = {
+export type OppdatertMeldeperiodeDTO = {
     dager: OppdaterMeldekortdagDTO[];
     kjedeId: MeldeperiodeKjedeId;
 };
