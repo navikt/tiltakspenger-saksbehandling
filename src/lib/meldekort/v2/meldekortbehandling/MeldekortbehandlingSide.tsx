@@ -34,19 +34,19 @@ export const MeldekortbehandlingSide = () => {
 
     const [aktivtSteg, setAktivtSteg] = useState(DEFAULT_STEG);
 
-    useEffect(() => {
-        const stegFraHash = asPath.split('#').at(1)?.split('-').at(1);
-        const stegIndex = stegFraHash ? Number(stegFraHash) : DEFAULT_STEG;
-        //eslint-disable-next-line react-hooks/set-state-in-effect
-        setAktivtSteg(stegIndex);
-    }, [asPath]);
-
     const { sakId, saksnummer } = useSak().sak;
 
     const { erReadonly } = useMeldekortbehandlingSkjema();
 
     const meldekortbehandling = useMeldekortbehandling();
     const { innloggetSaksbehandler } = useSaksbehandler();
+
+    useEffect(() => {
+        const stegFraHash = asPath.split('#').at(1)?.split('-').at(1);
+        const stegIndex = stegFraHash ? Number(stegFraHash) : DEFAULT_STEG;
+        //eslint-disable-next-line react-hooks/set-state-in-effect
+        setAktivtSteg(stegIndex);
+    }, [asPath]);
 
     return (
         <>

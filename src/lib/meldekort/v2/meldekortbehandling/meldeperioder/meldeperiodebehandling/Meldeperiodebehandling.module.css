@@ -1,5 +1,6 @@
 .uker {
     text-wrap: nowrap;
+    margin-bottom: 1rem;
 }
 
 .ukerHeader {
@@ -32,13 +33,5 @@
     padding: 1rem;
     border-top-right-radius: var(--ax-radius-4);
     border-bottom-right-radius: var(--ax-radius-4);
-}
-
-.info {
-    background-color: var(--ax-bg-brand-blue-moderate);
-}
-
-.meldekort {
-    border: 2px solid var(--ax-border-info-subtle);
-    border-left: none;
+    background-color: var(--ax-bg-brand-blue-soft);
 }

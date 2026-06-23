@@ -11,7 +11,7 @@ import { useState } from 'react';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
 import { Periode } from '~/types/Periode';
 import { validerMeldeperiodeSkjema } from '~/lib/meldekort/v2/meldekortbehandling/context/meldekortbehandlingSkjemaValidering';
-import { classNames } from '~/utils/classNames';
+import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
 
 import style from './Meldeperiodebehandlinger.module.css';
 
@@ -74,7 +74,13 @@ export const Meldeperiodebehandlinger = () => {
                                             key={meldeperiode.kjedeId}
                                             value={meldeperiode.kjedeId}
                                             label={<TabLabel periode={periode} />}
-                                            className={classNames(harValideringsfeil && style.feil)}
+                                            icon={
+                                                harValideringsfeil && (
+                                                    <ExclamationmarkTriangleFillIcon
+                                                        className={style.feilIcon}
+                                                    />
+                                                )
+                                            }
                                         />
                                     );
                                 })}

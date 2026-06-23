@@ -22,9 +22,14 @@ import { hentMeldeperiodekjede } from '~/lib/sak/sakUtils';
 import { MeldekortbehandlingSeksjon } from '~/lib/meldekort/v2/meldekortbehandling/layout/seksjon/MeldekortbehandlingSeksjon';
 import { MeldeperiodeInfo } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/meldeperiodebehandling/info-panel/MeldeperiodeInfo';
 import { MeldeperiodeBrukersMeldekort } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/meldeperiodebehandling/brukers-meldekort/MeldeperiodeBrukersMeldekort';
-import { classNames } from '~/utils/classNames';
 import { MeldeperiodebehandlingBeregning } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/meldeperiodebehandling/beregning/MeldeperiodebehandlingBeregning';
-import { validerMeldekortDagSkjema } from '~/lib/meldekort/v2/meldekortbehandling/context/meldekortbehandlingSkjemaValidering';
+import {
+    validerMeldekortDagSkjema,
+    validerMeldeperiodeSkjema,
+} from '~/lib/meldekort/v2/meldekortbehandling/context/meldekortbehandlingSkjemaValidering';
+import { MeldeperiodebehandlingValideringsfeil } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/meldeperiodebehandling/validering/MeldeperiodebehandlingValideringsfeil';
+import { Separator } from '~/lib/_felles/separator/Separator';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
 
 import style from './Meldeperiodebehandling.module.css';
 
@@ -52,48 +57,51 @@ export const Meldeperiodebehandling = ({ meldeperiodeSkjema }: Props) => {
         }
     });
 
+    const valideringsfeil = validerMeldeperiodeSkjema(meldeperiodeSkjema, sak);
+
     return (
         <MeldekortbehandlingSeksjon gap={'space-16'}>
-            <MeldekortbehandlingSeksjon.Venstre
-                gap={'space-16'}
-                className={classNames(style.venstre, style.info)}
-            >
+            <MeldekortbehandlingSeksjon.Venstre gap={'space-8'} className={style.venstre}>
                 <MeldeperiodeInfo
                     meldeperiodeKjede={kjede}
                     meldeperiodebehandling={meldeperiodebehandling}
                 />
-            </MeldekortbehandlingSeksjon.Venstre>
 
-            <MeldekortbehandlingSeksjon.Høyre>
-                <MeldeperiodebehandlingBeregning kjedeId={kjedeId} />
-            </MeldekortbehandlingSeksjon.Høyre>
+                <Separator />
 
-            <MeldekortbehandlingSeksjon.Venstre
-                className={classNames(style.venstre, style.meldekort)}
-            >
                 <MeldeperiodeBrukersMeldekort meldeperiodeKjede={kjede} />
             </MeldekortbehandlingSeksjon.Venstre>
 
-            <MeldekortbehandlingSeksjon.Høyre gap={'space-24'} className={style.uker}>
-                <Heading size={'small'} level={'3'} className={style.ukerHeader}>
-                    {'Behandling'}
-                </Heading>
+            <MeldekortbehandlingSeksjon.Høyre gap={'space-16'}>
+                {valideringsfeil && (
+                    <Infokort header={'Feil eller mangler i behandlingen'} variant={'advarsel'}>
+                        <MeldeperiodebehandlingValideringsfeil valideringsfeil={valideringsfeil} />
+                    </Infokort>
+                )}
 
-                <MeldeperiodeUke
-                    dager={dager.slice(0, 7)}
-                    dagIndexOffset={0}
-                    kjedeId={kjedeId}
-                    beregningsdagPerDato={beregningsdagPerDato}
-                    erReadonly={erReadonly}
-                />
+                <VStack className={style.uker} gap={'space-16'}>
+                    <Heading size={'small'} level={'3'} className={style.ukerHeader}>
+                        {'Behandling'}
+                    </Heading>
 
-                <MeldeperiodeUke
-                    dager={dager.slice(7, 14)}
-                    dagIndexOffset={7}
-                    kjedeId={kjedeId}
-                    beregningsdagPerDato={beregningsdagPerDato}
-                    erReadonly={erReadonly}
-                />
+                    <MeldeperiodeUke
+                        dager={dager.slice(0, 7)}
+                        dagIndexOffset={0}
+                        kjedeId={kjedeId}
+                        beregningsdagPerDato={beregningsdagPerDato}
+                        erReadonly={erReadonly}
+                    />
+
+                    <MeldeperiodeUke
+                        dager={dager.slice(7, 14)}
+                        dagIndexOffset={7}
+                        kjedeId={kjedeId}
+                        beregningsdagPerDato={beregningsdagPerDato}
+                        erReadonly={erReadonly}
+                    />
+                </VStack>
+
+                <MeldeperiodebehandlingBeregning kjedeId={kjedeId} />
             </MeldekortbehandlingSeksjon.Høyre>
         </MeldekortbehandlingSeksjon>
     );

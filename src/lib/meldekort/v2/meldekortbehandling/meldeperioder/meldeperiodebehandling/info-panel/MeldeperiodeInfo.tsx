@@ -1,4 +1,4 @@
-import { BodyShort, Heading } from '@navikt/ds-react';
+import { BodyShort, Heading, VStack } from '@navikt/ds-react';
 import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { meldeperiodeUrl } from '~/utils/urls';
 import { useSak } from '~/lib/sak/SakContext';
@@ -26,7 +26,7 @@ export const MeldeperiodeInfo = ({ meldeperiodeKjede, meldeperiodebehandling }: 
             : MeldeperiodebehandlingType.KORRIGERING);
 
     return (
-        <>
+        <VStack gap={'space-16'}>
             <Heading size={'small'} level={'3'} className={style.heading}>
                 {meldeperiodebehandlingTypeIkoner[type]}
                 {meldeperiodebehandlingTypeTekst[type]}
@@ -45,6 +45,6 @@ export const MeldeperiodeInfo = ({ meldeperiodeKjede, meldeperiodebehandling }: 
             <InternLenke href={meldeperiodeUrl(saksnummer, periode)}>
                 {'Til oversikt for meldeperioden'}
             </InternLenke>
-        </>
+        </VStack>
     );
 };
