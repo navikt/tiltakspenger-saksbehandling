@@ -1,7 +1,12 @@
 .outer {
-    margin-bottom: 1rem;
-    padding-bottom: 1rem;
+    position: sticky;
+    top: 0;
+    margin: 0 -1rem 1rem -1rem;
+    padding: 1rem;
+    background: var(--ax-bg-brand-beige-soft);
+    border-top: 1px dashed var(--ax-border-neutral);
     border-bottom: 1px dashed var(--ax-border-neutral);
+    z-index: 2;
 }
 
 .skjult {

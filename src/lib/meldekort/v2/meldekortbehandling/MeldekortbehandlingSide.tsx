@@ -23,6 +23,7 @@ import {
     kanSaksbehandleForMeldekort,
 } from '~/lib/meldekort/utils/MeldekortbehandlingUtils';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
+import { Separator } from '~/lib/_felles/separator/Separator';
 
 import style from './MeldekortbehandlingSide.module.css';
 
@@ -72,7 +73,7 @@ export const MeldekortbehandlingSide = () => {
                     </MeldekortbehandlingSeksjon>
                 </VStack>
 
-                {!erReadonly && <MeldekortbehandlingLagre />}
+                {erReadonly ? <Separator /> : <MeldekortbehandlingLagre />}
 
                 <StegKomponentWrapper steg={1} aktivtSteg={aktivtSteg}>
                     <Meldeperiodebehandlinger />
