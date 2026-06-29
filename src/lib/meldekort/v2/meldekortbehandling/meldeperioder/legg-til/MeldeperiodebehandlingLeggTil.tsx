@@ -31,34 +31,56 @@ export const MeldeperiodebehandlingLeggTil = ({ onLeggTil }: Props) => {
         (kjede) => !valgteKjedeIder.has(kjede.id),
     );
 
-    const leggTil = (valgtKjedeId: MeldeperiodeKjedeId) => {
+    const ubehandledeKjeder = tilgjengeligeKjeder.filter(
+        (kjede) =>
+            kjede.brukersMeldekortStatus === BrukersMeldekortKjedeStatus.VENTER_BEHANDLING ||
+            kjede.brukersMeldekortStatus ===
+                BrukersMeldekortKjedeStatus.KORRIGERING_VENTER_BEHANDLING,
+    );
+
+    const leggTil = () => {
+        const valgtKjedeId = selectRef.current!.value as MeldeperiodeKjedeId;
+
         dispatch({
-            type: 'leggTilMeldeperiode',
-            payload: { meldeperiodeKjede: hentMeldeperiodekjede(sak, valgtKjedeId) },
+            type: 'leggTilMeldeperioder',
+            payload: { meldeperiodeKjeder: [hentMeldeperiodekjede(sak, valgtKjedeId)] },
         });
 
         onLeggTil(valgtKjedeId);
+    };
+
+    const leggTilAlleUbehandlede = () => {
+        if (ubehandledeKjeder.length === 0) {
+            return;
+        }
+
+        dispatch({
+            type: 'leggTilMeldeperioder',
+            payload: { meldeperiodeKjeder: ubehandledeKjeder },
+        });
+
+        onLeggTil(ubehandledeKjeder.at(0)!.id);
     };
 
     return (
         <Dialog>
             <Dialog.Trigger>
                 <Button size={'small'} variant={'tertiary'} icon={<PlusIcon />}>
-                    {'Legg til flere'}
+                    {'Legg til meldeperioder'}
                 </Button>
             </Dialog.Trigger>
 
             <Dialog.Popup>
                 <Dialog.Header>
-                    <strong>{'Legg til meldeperiode'}</strong>
+                    <strong>{'Legg til meldeperioder'}</strong>
                 </Dialog.Header>
 
                 <Dialog.Body>
                     <Select
+                        className={style.select}
                         label={'Legg til meldeperiode'}
                         hideLabel={true}
                         ref={selectRef}
-                        className={style.select}
                     >
                         {tilgjengeligeKjeder.map((kjede) => {
                             const { id, brukersMeldekortStatus, periode } = kjede;
@@ -74,11 +96,18 @@ export const MeldeperiodebehandlingLeggTil = ({ onLeggTil }: Props) => {
 
                 <Dialog.Footer>
                     <Dialog.CloseTrigger>
+                        <Button variant={'primary'} onClick={leggTil}>
+                            {'Legg til valgt'}
+                        </Button>
+                    </Dialog.CloseTrigger>
+
+                    <Dialog.CloseTrigger>
                         <Button
                             variant={'primary'}
-                            onClick={() => leggTil(selectRef.current!.value as MeldeperiodeKjedeId)}
+                            onClick={leggTilAlleUbehandlede}
+                            disabled={ubehandledeKjeder.length === 0}
                         >
-                            {'Legg til'}
+                            {`Legg til alle ubehandlede (${ubehandledeKjeder.length})`}
                         </Button>
                     </Dialog.CloseTrigger>
 

@@ -63,25 +63,23 @@ export const meldekortbehandlingSkjemaReducer: Reducer<
             return { ...state, skalSendeVedtaksbrev: action.payload.skalSendeVedtaksbrev };
         }
 
-        case 'leggTilMeldeperiode': {
-            const { meldeperiodeKjede } = action.payload;
+        case 'leggTilMeldeperioder': {
+            const { meldeperiodeKjeder } = action.payload;
 
-            const harMeldeperiodekjeden = state.meldeperioder.some(
-                (meldeperiode) => meldeperiode.kjedeId === meldeperiodeKjede.id,
-            );
-
-            if (harMeldeperiodekjeden) {
-                throw new Error(
-                    `Meldeperiodekjeden ${meldeperiodeKjede.id} finnes allerede i behandlingen`,
-                );
-            }
+            const fraIkkeDuplikateKjeder = meldeperiodeKjeder
+                .filter(
+                    (eksisterendeKjede) =>
+                        !state.meldeperioder.some(
+                            (meldeperiode) => meldeperiode.kjedeId === eksisterendeKjede.id,
+                        ),
+                )
+                .map((kjede) => meldeperiodeKjedeTilContext(kjede));
 
             return {
                 ...state,
-                meldeperioder: [
-                    ...state.meldeperioder,
-                    meldeperiodeKjedeTilContext(meldeperiodeKjede),
-                ].toSorted((a, b) => (a.kjedeId > b.kjedeId ? 1 : -1)),
+                meldeperioder: [...state.meldeperioder, ...fraIkkeDuplikateKjeder].toSorted(
+                    (a, b) => (a.kjedeId > b.kjedeId ? 1 : -1),
+                ),
             };
         }
 
