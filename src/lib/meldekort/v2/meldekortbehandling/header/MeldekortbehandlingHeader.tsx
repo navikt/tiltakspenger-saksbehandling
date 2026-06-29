@@ -12,6 +12,7 @@ import {
 } from '~/lib/behandling-felles/utils/behandlingUtils';
 import OppsummeringAvVentestatus from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatus';
 import { MeldekortbehandlingUnderkjentStatus } from '~/lib/meldekort/v2/meldekortbehandling/header/underkjent-status/MeldekortbehandlingUnderkjentStatus';
+import { TilbakekrevingOppsummering } from '~/lib/tilbakekreving/TilbakekrevingOppsummering';
 
 import style from './MeldekortbehandlingHeader.module.css';
 
@@ -19,7 +20,8 @@ export const MeldekortbehandlingHeader = () => {
     const { førsteDagSomGirRett, sisteDagSomGirRett, kanSendeInnHelgForMeldekort } = useSak().sak;
 
     const meldekortbehandling = useMeldekortbehandling();
-    const { saksbehandler, beslutter, ventestatus, attesteringer } = meldekortbehandling;
+    const { saksbehandler, beslutter, ventestatus, attesteringer, tilbakekrevingId } =
+        meldekortbehandling;
 
     return (
         <MeldekortbehandlingSeksjon className={style.outer} gap={'space-16'}>
@@ -31,7 +33,7 @@ export const MeldekortbehandlingHeader = () => {
                 <MeldekortbehandlingStatusTags meldekortbehandling={meldekortbehandling} />
             </MeldekortbehandlingSeksjon.Venstre>
 
-            <MeldekortbehandlingSeksjon.Høyre>
+            <MeldekortbehandlingSeksjon.Høyre gap={'space-24'}>
                 <HStack gap={'space-16'} justify={'space-between'}>
                     <VStack gap={'space-8'}>
                         <HStack gap={'space-16'}>
@@ -62,22 +64,22 @@ export const MeldekortbehandlingHeader = () => {
                         <MeldekortbehandlingMeny />
                     </VStack>
                 </HStack>
-            </MeldekortbehandlingSeksjon.Høyre>
 
-            {erBehandlingUnderkjent(meldekortbehandling) && (
-                <MeldekortbehandlingSeksjon.Høyre>
+                {erBehandlingUnderkjent(meldekortbehandling) && (
                     <MeldekortbehandlingUnderkjentStatus attesteringer={attesteringer} />
-                </MeldekortbehandlingSeksjon.Høyre>
-            )}
+                )}
 
-            {erBehandlingSattPåVent(meldekortbehandling) && (
-                <MeldekortbehandlingSeksjon.Høyre>
+                {erBehandlingSattPåVent(meldekortbehandling) && (
                     <OppsummeringAvVentestatus
                         ventestatus={ventestatus.at(0)!}
                         historikk={ventestatus}
                     />
-                </MeldekortbehandlingSeksjon.Høyre>
-            )}
+                )}
+
+                {tilbakekrevingId && (
+                    <TilbakekrevingOppsummering tilbakekrevingId={tilbakekrevingId} />
+                )}
+            </MeldekortbehandlingSeksjon.Høyre>
         </MeldekortbehandlingSeksjon>
     );
 };

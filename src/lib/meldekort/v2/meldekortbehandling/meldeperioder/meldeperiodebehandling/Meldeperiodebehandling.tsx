@@ -30,6 +30,7 @@ import {
 import { MeldeperiodebehandlingValideringsfeil } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/meldeperiodebehandling/validering/MeldeperiodebehandlingValideringsfeil';
 import { Separator } from '~/lib/_felles/separator/Separator';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
+import { classNames } from '~/utils/classNames';
 
 import style from './Meldeperiodebehandling.module.css';
 
@@ -74,7 +75,11 @@ export const Meldeperiodebehandling = ({ meldeperiodeSkjema }: Props) => {
 
             <MeldekortbehandlingSeksjon.Høyre gap={'space-16'}>
                 {valideringsfeil && (
-                    <Infokort header={'Feil eller mangler i behandlingen'} variant={'advarsel'}>
+                    <Infokort
+                        header={'Feil eller mangler i behandlingen'}
+                        variant={'advarsel'}
+                        size={'small'}
+                    >
                         <MeldeperiodebehandlingValideringsfeil valideringsfeil={valideringsfeil} />
                     </Infokort>
                 )}
@@ -184,7 +189,9 @@ const MeldeperiodeUke = ({
                                             {dagStatusOptions}
                                         </Select>
                                     ) : (
-                                        <BodyShort className={style.statusReadonly}>
+                                        <BodyShort
+                                            className={classNames(style.status, style.readonly)}
+                                        >
                                             {meldekortbehandlingDagStatusTekst[status]}
                                         </BodyShort>
                                     )}

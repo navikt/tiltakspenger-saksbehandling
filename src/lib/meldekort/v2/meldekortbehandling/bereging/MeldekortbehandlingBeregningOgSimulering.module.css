@@ -1,0 +1,4 @@
+.heading {
+    border-bottom: 1px solid var(--ax-border-neutral);
+    padding-bottom: 0.75rem;
+}

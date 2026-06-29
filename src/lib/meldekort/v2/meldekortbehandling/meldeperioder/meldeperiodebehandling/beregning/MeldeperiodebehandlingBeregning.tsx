@@ -11,17 +11,19 @@ type Props = {
 export const MeldeperiodebehandlingBeregning = ({ kjedeId }: Props) => {
     const { simulertBeregning } = useMeldekortbehandling();
 
-    const beregning = simulertBeregning?.meldeperioder.find(
+    const simuleringOgBeregning = simulertBeregning?.meldeperioder.find(
         (it) => it.kjedeId == kjedeId,
-    )?.beregning;
+    );
 
-    if (!beregning) {
+    if (!simuleringOgBeregning) {
         return (
             <Infokort header={'Beregning mangler'} variant={'advarsel'}>
-                {'Lagre behandlingen for å beregne'}
+                {'Lagre behandlingen for å beregne og simulere meldeperioden'}
             </Infokort>
         );
     }
+
+    const { beregning } = simuleringOgBeregning;
 
     return (
         <VStack gap={'space-8'}>

@@ -35,7 +35,7 @@ export const Meldeperiodebehandlinger = () => {
             <MeldekortbehandlingSeksjon>
                 <MeldekortbehandlingSeksjon.FullBredde>
                     <HStack gap={'space-16'} align={'center'}>
-                        <Heading size={'small'} level={'3'}>
+                        <Heading size={'medium'} level={'2'}>
                             {'Behandlede meldeperioder'}
                         </Heading>
 

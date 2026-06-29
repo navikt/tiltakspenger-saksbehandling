@@ -20,12 +20,11 @@
 
 .status {
     min-height: 2rem;
-}
 
-.statusReadonly {
-    display: flex;
-    align-items: center;
-    min-height: 2rem;
+    &.readonly {
+        display: flex;
+        align-items: center;
+    }
 }
 
 .venstre {

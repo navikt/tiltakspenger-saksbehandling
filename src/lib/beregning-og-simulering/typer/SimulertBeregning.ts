@@ -12,7 +12,7 @@ export enum SimulerertBehandlingstype {
     MELDERKORT = 'MELDEKORT',
 }
 
-interface SimulertBeregningBase {
+type SimulertBeregningBase = {
     behandlingId: MeldekortbehandlingId | RammebehandlingId;
     behandlingstype: SimulerertBehandlingstype;
     meldeperioder: SimulertBeregningPerMeldeperiode[];
@@ -23,31 +23,31 @@ interface SimulertBeregningBase {
     simuleringTotalBeløp: Nullable<number>;
     simulerteBeløp: Nullable<SimulerteBeløp>;
     simuleringResultat: SimuleringResultat;
-}
+};
 
-interface SimulertBeregningMedEndring extends SimulertBeregningBase {
+type SimulertBeregningMedEndring = SimulertBeregningBase & {
     simuleringsdato: string;
     simuleringTotalBeløp: number;
     simuleringstidspunkt: string;
     simulerteBeløp: Nullable<SimulerteBeløp>;
     simuleringResultat: SimuleringResultat.ENDRING;
-}
+};
 
-interface SimulertBeregningIngenEndring extends SimulertBeregningBase {
+type SimulertBeregningIngenEndring = SimulertBeregningBase & {
     simuleringsdato: null;
     simuleringTotalBeløp: null;
     simulerteBeløp: null;
     simuleringstidspunkt: string;
     simuleringResultat: SimuleringResultat.INGEN_ENDRING;
-}
+};
 
-interface SimulertBeregningUtenSimulering extends SimulertBeregningBase {
+type SimulertBeregningUtenSimulering = SimulertBeregningBase & {
     simuleringsdato: null;
     simuleringTotalBeløp: null;
     simulerteBeløp: null;
     simuleringstidspunkt: null;
     simuleringResultat: SimuleringResultat.IKKE_SIMULERT;
-}
+};
 
 export type SimulertBeregning =
     | SimulertBeregningMedEndring

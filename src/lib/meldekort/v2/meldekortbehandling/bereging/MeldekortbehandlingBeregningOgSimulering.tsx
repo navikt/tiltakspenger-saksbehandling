@@ -10,11 +10,14 @@ import {
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { kanBehandle } from '~/lib/saksbehandler/tilganger';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
-import { TilbakekrevingOppsummering } from '~/lib/tilbakekreving/TilbakekrevingOppsummering';
 import { BeregningOppsummering } from '~/lib/beregning-og-simulering/beregning-oppsummering/BeregningOppsummering';
 import { SimuleringOppsummering } from '~/lib/beregning-og-simulering/simulering-oppsummering/SimuleringOppsummering';
-import { SimulertBeregningDetaljer } from '~/lib/beregning-og-simulering/detaljer/SimulertBeregningDetaljer';
+import { SimulertBeregningDetaljerTabell } from '~/lib/beregning-og-simulering/detaljer/SimulertBeregningDetaljer';
 import { BeregningOgSimuleringHeader } from '~/lib/beregning-og-simulering/header/BeregningOgSimuleringHeader';
+import { Heading, HStack } from '@navikt/ds-react';
+import { OppdaterSimuleringKnapp } from '~/lib/beregning-og-simulering/oppdater-simulering/OppdaterSimuleringKnapp';
+
+import style from './MeldekortbehandlingBeregningOgSimulering.module.css';
 
 export const MeldekortbehandlingBeregningOgSimulering = () => {
     const { erReadonly } = useMeldekortbehandlingSkjema();
@@ -22,7 +25,6 @@ export const MeldekortbehandlingBeregningOgSimulering = () => {
     const {
         simulertBeregning,
         saksbehandler,
-        tilbakekrevingId,
         status,
         id,
         utbetalingsstatus,
@@ -58,24 +60,30 @@ export const MeldekortbehandlingBeregningOgSimulering = () => {
         harKorrigering && kanBehandle(innloggetSaksbehandler, saksbehandler);
 
     return (
-        <MeldekortbehandlingSeksjon>
+        <MeldekortbehandlingSeksjon gap={'space-24'}>
+            <MeldekortbehandlingSeksjon.FullBredde className={style.heading}>
+                <HStack justify={'space-between'}>
+                    <Heading level={'2'} size={'medium'}>
+                        {'Beregning og simulering'}
+                    </Heading>
+                    {!erReadonly && <OppdaterSimuleringKnapp behandlingId={id} />}
+                </HStack>
+            </MeldekortbehandlingSeksjon.FullBredde>
+
             <MeldekortbehandlingSeksjon.Venstre gap={'space-32'}>
                 <BeregningOppsummering beregninger={beregning} />
                 <SimuleringOppsummering
                     simulertBeregning={simulertBeregning}
                     behandlingId={id}
-                    visOppdaterKnapp={!erReadonly}
+                    visOppdaterKnapp={false}
                 />
             </MeldekortbehandlingSeksjon.Venstre>
 
-            <MeldekortbehandlingSeksjon.Høyre>
-                {/* Denne burde ikke vises her, bør ha en egen seksjon kanskje? */}
-                {tilbakekrevingId && (
-                    <TilbakekrevingOppsummering tilbakekrevingId={tilbakekrevingId} />
-                )}
+            <MeldekortbehandlingSeksjon.Høyre gap={'space-24'}>
                 {skalViseUtfallVarsel && (
                     <Infokort data-color={'warning'}>{utfallTekst(beløpDiff)}</Infokort>
                 )}
+
                 <BeregningOgSimuleringHeader
                     utbetalingsstatus={erIverksatt ? utbetalingsstatus : undefined}
                     navkontor={navkontor}
@@ -84,7 +92,8 @@ export const MeldekortbehandlingBeregningOgSimulering = () => {
                     kanIkkeIverksetteUtbetaling={kanIkkeIverksetteUtbetaling}
                     erOmberegning={harKorrigering}
                 />
-                <SimulertBeregningDetaljer simulertBeregning={simulertBeregning} />
+
+                <SimulertBeregningDetaljerTabell simulertBeregning={simulertBeregning} />
             </MeldekortbehandlingSeksjon.Høyre>
         </MeldekortbehandlingSeksjon>
     );
