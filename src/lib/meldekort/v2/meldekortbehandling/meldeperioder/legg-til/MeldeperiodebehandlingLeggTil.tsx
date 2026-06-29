@@ -1,4 +1,4 @@
-import { Button, Dialog, Select } from '@navikt/ds-react';
+import { Button, Dialog, Select, VStack } from '@navikt/ds-react';
 import { formaterMeldeperiode } from '~/utils/date';
 import { useSak } from '~/lib/sak/SakContext';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
@@ -10,8 +10,7 @@ import { hentMeldeperiodekjede } from '~/lib/sak/sakUtils';
 import { PlusIcon } from '@navikt/aksel-icons';
 import { useRef } from 'react';
 import { BrukersMeldekortKjedeStatus } from '~/lib/meldekort/typer/BrukersMeldekort';
-
-import style from './MeldeperiodebehandlingLeggTil.module.css';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
 
 type Props = {
     onLeggTil: (kjedeId: MeldeperiodeKjedeId) => void;
@@ -76,22 +75,28 @@ export const MeldeperiodebehandlingLeggTil = ({ onLeggTil }: Props) => {
                 </Dialog.Header>
 
                 <Dialog.Body>
-                    <Select
-                        className={style.select}
-                        label={'Legg til meldeperiode'}
-                        hideLabel={true}
-                        ref={selectRef}
-                    >
-                        {tilgjengeligeKjeder.map((kjede) => {
-                            const { id, brukersMeldekortStatus, periode } = kjede;
+                    <VStack gap={'space-8'}>
+                        <Infokort variant={'info'}>
+                            {
+                                'Du kan legge til en og en valgt meldeperiode, eller alle meldeperioder som har et ubehandlet meldekort fra bruker. '
+                            }
+                            {
+                                'Meldeperiodene i en behandling må være sammenhengede (denne restriksjonen vil fjernes på sikt.)'
+                            }
+                        </Infokort>
 
-                            return (
-                                <option key={id} value={id}>
-                                    {`${formaterMeldeperiode(periode)} - ${brukersMeldekortStatusTekst[brukersMeldekortStatus]}`}
-                                </option>
-                            );
-                        })}
-                    </Select>
+                        <Select label={'Legg til meldeperiode'} hideLabel={true} ref={selectRef}>
+                            {tilgjengeligeKjeder.map((kjede) => {
+                                const { id, brukersMeldekortStatus, periode } = kjede;
+
+                                return (
+                                    <option key={id} value={id}>
+                                        {`${formaterMeldeperiode(periode)} - ${brukersMeldekortStatusTekst[brukersMeldekortStatus]}`}
+                                    </option>
+                                );
+                            })}
+                        </Select>
+                    </VStack>
                 </Dialog.Body>
 
                 <Dialog.Footer>
