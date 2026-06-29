@@ -9,6 +9,7 @@ import {
 import { hentMeldeperiodekjede } from '~/lib/sak/sakUtils';
 import { PlusIcon } from '@navikt/aksel-icons';
 import { useRef } from 'react';
+import { BrukersMeldekortKjedeStatus } from '~/lib/meldekort/typer/BrukersMeldekort';
 
 import style from './MeldeperiodebehandlingLeggTil.module.css';
 
@@ -59,11 +60,15 @@ export const MeldeperiodebehandlingLeggTil = ({ onLeggTil }: Props) => {
                         ref={selectRef}
                         className={style.select}
                     >
-                        {tilgjengeligeKjeder.map((kjede) => (
-                            <option key={kjede.id} value={kjede.id}>
-                                {formaterMeldeperiode(kjede.periode)}
-                            </option>
-                        ))}
+                        {tilgjengeligeKjeder.map((kjede) => {
+                            const { id, brukersMeldekortStatus, periode } = kjede;
+
+                            return (
+                                <option key={id} value={id}>
+                                    {`${formaterMeldeperiode(periode)} - ${brukersMeldekortStatusTekst[brukersMeldekortStatus]}`}
+                                </option>
+                            );
+                        })}
                     </Select>
                 </Dialog.Body>
 
@@ -84,4 +89,12 @@ export const MeldeperiodebehandlingLeggTil = ({ onLeggTil }: Props) => {
             </Dialog.Popup>
         </Dialog>
     );
+};
+
+const brukersMeldekortStatusTekst: Record<BrukersMeldekortKjedeStatus, string> = {
+    IKKE_MOTTATT: 'Ikke mottatt',
+    VENTER_BEHANDLING: 'Mottatt, ikke behandlet',
+    BEHANDLET: 'Behandlet',
+    KORRIGERING_VENTER_BEHANDLING: 'Mottatt, ikke behandlet (korrigering)',
+    KORRIGERING_BEHANDLET: 'Behandlet (korrigering)',
 };
