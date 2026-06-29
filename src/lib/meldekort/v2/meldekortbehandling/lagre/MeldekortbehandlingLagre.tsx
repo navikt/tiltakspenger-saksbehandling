@@ -27,7 +27,11 @@ export const MeldekortbehandlingLagre = () => {
     >(`/sak/${sak.sakId}/meldekort/${id}/oppdater`, 'POST');
 
     return (
-        <HStack justify={'space-between'} gap={'space-16'} className={style.outer}>
+        <HStack
+            justify={'space-between'}
+            gap={'space-16'}
+            className={classNames(style.outer, isDirty && style.dirty)}
+        >
             <VStack gap={'space-4'}>
                 <BodyShort
                     size={'small'}

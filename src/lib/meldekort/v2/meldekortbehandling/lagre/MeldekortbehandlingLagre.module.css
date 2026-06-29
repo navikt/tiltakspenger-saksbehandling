@@ -3,10 +3,13 @@
     top: 0;
     margin: 0 -1rem 1rem -1rem;
     padding: 1rem;
-    background: var(--ax-bg-brand-beige-soft);
-    border-top: 1px dashed var(--ax-border-neutral);
+    background: var(--ax-bg-neutral-soft);
     border-bottom: 1px dashed var(--ax-border-neutral);
     z-index: 2;
+
+    &.dirty {
+        background: var(--ax-bg-warning-moderate);
+    }
 }
 
 .skjult {
@@ -15,14 +18,14 @@
 
 .knapp {
     width: fit-content;
-}
 
-.dirty {
-    animation-duration: 0.5s;
-    animation-name: pulse;
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
-    animation-timing-function: ease-in;
+    &.dirty {
+        animation-duration: 0.5s;
+        animation-name: pulse;
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
+        animation-timing-function: ease-in;
+    }
 }
 
 @keyframes pulse {

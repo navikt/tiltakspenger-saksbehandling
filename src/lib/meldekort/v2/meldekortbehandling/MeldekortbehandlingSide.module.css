@@ -21,7 +21,9 @@ main:has(.meldekortbehandling) {
 }
 
 .topp {
-    padding-bottom: 1rem;
+    margin: 0 -1rem;
+    padding: 0 1rem 1rem 1rem;
+    border-bottom: 1px dashed var(--ax-border-neutral);
 }
 
 .stegKomponent:not(.aktiv) {
