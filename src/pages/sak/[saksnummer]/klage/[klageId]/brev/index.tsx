@@ -110,9 +110,9 @@ const BrevKlagePage = ({ sak, påklagetVedtak }: Props) => {
         sakId: sak.sakId,
         klageId: klage.id,
         onSuccess: (blob) => {
-            if (blob) {
-                window.open(URL.createObjectURL(blob));
-            }
+            blob.forEach((pdfBlob) => {
+                window.open(URL.createObjectURL(pdfBlob));
+            });
         },
     });
 

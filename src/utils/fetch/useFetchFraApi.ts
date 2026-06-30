@@ -1,5 +1,10 @@
 import useSWRMutation, { SWRMutationConfiguration } from 'swr/mutation';
-import { fetchBlobFraApiClientSide, FetcherError, fetchJsonFraApiClientSide } from './fetch';
+import {
+    fetchBlobFraApiClientSide,
+    FetcherError,
+    fetchFraApiClientSide,
+    fetchJsonFraApiClientSide,
+} from './fetch';
 
 type SWRArg<BodyType> = {
     arg: BodyType;
@@ -42,6 +47,23 @@ export const useFetchBlobFraApi = <BodyType = undefined>(
         });
 
     return useSWRMutation<Blob, FetcherError, string, BodyType>(url, fetcher, {
+        throwOnError: false,
+        ...swrOptions,
+    });
+};
+
+export const useFetchResponseFromApi = <BodyType = undefined>(
+    url: string,
+    method: Method,
+    swrOptions?: SWRMutationConfiguration<Response, FetcherError, string, BodyType>,
+) => {
+    const fetcher = async (_url: string, { arg }: SWRArg<BodyType>) =>
+        fetchFraApiClientSide(_url, {
+            method,
+            body: arg ? JSON.stringify(arg) : undefined,
+        });
+
+    return useSWRMutation<Response, FetcherError, string, BodyType>(url, fetcher, {
         throwOnError: false,
         ...swrOptions,
     });
