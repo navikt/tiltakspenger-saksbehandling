@@ -20,15 +20,13 @@ import { ikonForMeldekortbehandlingDagStatusV2 } from './meldekortIkonerV2';
 import { useSak } from '~/lib/sak/SakContext';
 import { hentMeldeperiodekjede } from '~/lib/sak/sakUtils';
 import { MeldekortbehandlingSeksjon } from '~/lib/meldekort/v2/meldekortbehandling/layout/seksjon/MeldekortbehandlingSeksjon';
-import { MeldeperiodeInfo } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/meldeperiodebehandling/info-panel/MeldeperiodeInfo';
-import { MeldeperiodeBrukersMeldekort } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/meldeperiodebehandling/brukers-meldekort/MeldeperiodeBrukersMeldekort';
+import { MeldeperiodeInfo } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/meldeperiodebehandling/meldeperiode-info/MeldeperiodeInfo';
 import { MeldeperiodebehandlingBeregning } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/meldeperiodebehandling/beregning/MeldeperiodebehandlingBeregning';
 import {
     validerMeldekortDagSkjema,
     validerMeldeperiodeSkjema,
 } from '~/lib/meldekort/v2/meldekortbehandling/context/meldekortbehandlingSkjemaValidering';
 import { MeldeperiodebehandlingValideringsfeil } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/meldeperiodebehandling/validering/MeldeperiodebehandlingValideringsfeil';
-import { Separator } from '~/lib/_felles/separator/Separator';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { classNames } from '~/utils/classNames';
 
@@ -62,15 +60,11 @@ export const Meldeperiodebehandling = ({ meldeperiodeSkjema }: Props) => {
 
     return (
         <MeldekortbehandlingSeksjon gap={'space-16'}>
-            <MeldekortbehandlingSeksjon.Venstre gap={'space-8'} className={style.venstre}>
+            <MeldekortbehandlingSeksjon.Venstre gap={'space-8'}>
                 <MeldeperiodeInfo
                     meldeperiodeKjede={kjede}
                     meldeperiodebehandling={meldeperiodebehandling}
                 />
-
-                <Separator />
-
-                <MeldeperiodeBrukersMeldekort meldeperiodeKjede={kjede} />
             </MeldekortbehandlingSeksjon.Venstre>
 
             <MeldekortbehandlingSeksjon.Høyre gap={'space-16'}>
@@ -84,11 +78,7 @@ export const Meldeperiodebehandling = ({ meldeperiodeSkjema }: Props) => {
                     </Infokort>
                 )}
 
-                <VStack className={style.uker} gap={'space-16'}>
-                    <Heading size={'small'} level={'3'} className={style.ukerHeader}>
-                        {'Behandling'}
-                    </Heading>
-
+                <VStack className={style.uker} gap={'space-24'}>
                     <MeldeperiodeUke
                         dager={dager.slice(0, 7)}
                         dagIndexOffset={0}

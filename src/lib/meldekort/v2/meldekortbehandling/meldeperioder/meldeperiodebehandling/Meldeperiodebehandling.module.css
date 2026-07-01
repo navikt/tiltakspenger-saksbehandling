@@ -3,11 +3,6 @@
     margin-bottom: 1rem;
 }
 
-.ukerHeader {
-    border-bottom: 1px solid var(--ax-border-neutral-subtle);
-    padding-bottom: 0.375rem;
-}
-
 .ikon:global(.aksel-table__data-cell) {
     padding-right: 0;
     text-align: center;
@@ -25,12 +20,4 @@
         display: flex;
         align-items: center;
     }
-}
-
-.venstre {
-    margin-left: -1rem;
-    padding: 1rem;
-    border-top-right-radius: var(--ax-radius-4);
-    border-bottom-right-radius: var(--ax-radius-4);
-    background-color: var(--ax-bg-brand-blue-soft);
 }

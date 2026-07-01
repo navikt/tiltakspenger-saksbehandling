@@ -1,0 +1,17 @@
+.heading {
+    display: flex;
+    align-items: center;
+    gap: var(--ax-space-8);
+}
+
+.tabsPanel {
+    margin-top: 1rem;
+}
+
+.seksjon {
+    margin-left: -1rem;
+    padding: 1rem;
+    border-top-right-radius: var(--ax-radius-4);
+    border-bottom-right-radius: var(--ax-radius-4);
+    background-color: var(--ax-bg-brand-blue-soft);
+}
