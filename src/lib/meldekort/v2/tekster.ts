@@ -1,4 +1,5 @@
 import {
+    MeldekortbehandlingDagStatus,
     MeldekortbehandlingStatus,
     MeldeperiodebehandlingType,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
@@ -17,4 +18,17 @@ export const meldekortbehandlingStatusTekst: Record<MeldekortbehandlingStatus, s
     [MeldekortbehandlingStatus.IKKE_RETT_TIL_TILTAKSPENGER]: 'Ikke rett til tiltakspenger',
     [MeldekortbehandlingStatus.AUTOMATISK_BEHANDLET]: 'Automatisk behandlet',
     [MeldekortbehandlingStatus.AVBRUTT]: 'Avbrutt',
+} as const;
+
+export const meldekortbehandlingDagStatusTekstKort: Record<MeldekortbehandlingDagStatus, string> = {
+    [MeldekortbehandlingDagStatus.IkkeRettTilTiltakspenger]: 'Ikke rett',
+    [MeldekortbehandlingDagStatus.DeltattMedLønnITiltaket]: 'Deltatt m/lønn',
+    [MeldekortbehandlingDagStatus.DeltattUtenLønnITiltaket]: 'Deltatt',
+    [MeldekortbehandlingDagStatus.FraværSyk]: 'Syk',
+    [MeldekortbehandlingDagStatus.FraværSyktBarn]: 'Sykt barn',
+    [MeldekortbehandlingDagStatus.FraværSterkeVelferdsgrunnerEllerJobbintervju]: 'Velferdsgrunner',
+    [MeldekortbehandlingDagStatus.FraværGodkjentAvNav]: 'Godkjent fravær',
+    [MeldekortbehandlingDagStatus.FraværAnnet]: 'Annet fravær',
+    [MeldekortbehandlingDagStatus.IkkeBesvart]: 'Ikke besvart',
+    [MeldekortbehandlingDagStatus.IkkeTiltaksdag]: 'Ikke tiltaksdag',
 } as const;

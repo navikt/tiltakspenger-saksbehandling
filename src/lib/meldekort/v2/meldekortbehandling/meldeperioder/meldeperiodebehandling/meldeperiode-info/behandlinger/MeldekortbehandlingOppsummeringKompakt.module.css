@@ -1,0 +1,18 @@
+.header {
+    align-items: center;
+    justify-content: space-between;
+}
+
+.spacerRow {
+    border-bottom: none;
+    height: 1rem;
+}
+
+.status {
+    width: 100%;
+}
+
+.sats {
+    white-space: nowrap;
+    text-align: right;
+}

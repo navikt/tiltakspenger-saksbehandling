@@ -8,7 +8,7 @@ import { meldeperiodebehandlingTypeTekst } from '~/lib/meldekort/v2/tekster';
 import { MeldeperiodebehandlingType } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { meldeperiodebehandlingTypeIkoner } from '~/lib/meldekort/v2/ikoner';
 import { MeldeperiodeBrukersMeldekort } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/meldeperiodebehandling/meldeperiode-info/brukers-meldekort/MeldeperiodeBrukersMeldekort';
-import { MeldeperiodeMeldekortbehandlinger } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/meldeperiodebehandling/meldeperiode-info/behandlinger/MeldeperiodeMeldekortbehandlinger';
+import { MeldekortbehandlingerForKjede } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/meldeperiodebehandling/meldeperiode-info/behandlinger/MeldekortbehandlingerForKjede';
 
 import style from './MeldeperiodeInfo.module.css';
 import { formaterMeldeperiode } from '~/utils/date';
@@ -78,7 +78,7 @@ export const MeldeperiodeInfo = ({ meldeperiodeKjede, meldeperiodebehandling }: 
                 </Tabs.Panel>
 
                 <Tabs.Panel value={TabVerdi.Meldekortbehandlinger} className={style.tabsPanel}>
-                    <MeldeperiodeMeldekortbehandlinger meldeperiodeKjede={meldeperiodeKjede} />
+                    <MeldekortbehandlingerForKjede meldeperiodeKjede={meldeperiodeKjede} />
                 </Tabs.Panel>
             </Tabs>
         </>

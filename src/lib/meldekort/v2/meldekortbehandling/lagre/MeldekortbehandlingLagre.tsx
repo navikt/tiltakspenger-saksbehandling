@@ -37,7 +37,7 @@ export const MeldekortbehandlingLagre = () => {
         }
 
         const observer = new IntersectionObserver(([entry]) => setErStuck(!entry.isIntersecting), {
-            rootMargin: `0px`,
+            rootMargin: `${erStuck ? '-24' : '0'}px 0px 0px 0px`,
             threshold: 1,
         });
 
