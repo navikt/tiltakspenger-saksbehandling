@@ -1,5 +1,8 @@
 import { Heading, HStack, Tabs, VStack } from '@navikt/ds-react';
-import { useMeldekortbehandlingSkjema } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2Context';
+import {
+    useMeldekortbehandling,
+    useMeldekortbehandlingSkjema,
+} from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2Context';
 import { Meldeperiodebehandling } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/meldeperiodebehandling/Meldeperiodebehandling';
 import { MeldeperiodebehandlingLeggTil } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/legg-til/MeldeperiodebehandlingLeggTil';
 import { MeldeperiodebehandlingFjern } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/fjern/MeldeperiodebehandlingFjern';
@@ -17,6 +20,7 @@ import style from './Meldeperiodebehandlinger.module.css';
 
 export const Meldeperiodebehandlinger = () => {
     const { meldeperioder, erReadonly } = useMeldekortbehandlingSkjema();
+    const meldekortbehandling = useMeldekortbehandling();
 
     const [valgtKjede, setValgtKjede] = useState<MeldeperiodeKjedeId | undefined>(
         meldeperioder.at(0)?.kjedeId,
@@ -66,6 +70,7 @@ export const Meldeperiodebehandlinger = () => {
 
                                     const harValideringsfeil = !!validerMeldeperiodeSkjema(
                                         meldeperiode,
+                                        meldekortbehandling,
                                         sak,
                                     );
 

@@ -56,13 +56,11 @@ export const MeldekortbehandlingerForKjede = ({ meldeperiodeKjede }: Props) => {
                     {alleBehandlinger.map((behandling) => {
                         const { id, sistEndret, status } = behandling;
 
+                        const erBehandlingenSomVises = id === meldekortbehandlingIdFraContext;
+
                         return (
-                            <option
-                                key={id}
-                                value={id}
-                                disabled={id === meldekortbehandlingIdFraContext}
-                            >
-                                {`${formaterTidspunkt(sistEndret)} (${meldekortbehandlingStatusTekst[status]})`}
+                            <option key={id} value={id} disabled={erBehandlingenSomVises}>
+                                {`${formaterTidspunkt(sistEndret)} (${meldekortbehandlingStatusTekst[status]})${erBehandlingenSomVises ? ' (aktiv)' : ''}`}
                             </option>
                         );
                     })}

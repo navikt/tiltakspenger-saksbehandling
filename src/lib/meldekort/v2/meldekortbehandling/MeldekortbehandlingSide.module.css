@@ -26,6 +26,10 @@ main:has(.meldekortbehandling) {
     border-bottom: 1px dashed var(--ax-border-neutral);
 }
 
-.stegKomponent:not(.aktiv) {
-    display: none;
+.stegKomponent {
+    margin-top: 2rem;
+
+    &:not(.aktiv) {
+        display: none;
+    }
 }

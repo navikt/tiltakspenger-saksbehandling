@@ -4,32 +4,30 @@ import {
 } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2Context';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { MeldekortbehandlingSeksjon } from '~/lib/meldekort/v2/meldekortbehandling/layout/MeldekortbehandlingSeksjon';
-import {
-    MeldekortbehandlingStatus,
-    MeldeperiodebehandlingType,
-} from '~/lib/meldekort/typer/Meldekortbehandling';
+import { MeldeperiodebehandlingType } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { BeregningOppsummering } from '~/lib/beregning-og-simulering/beregning-oppsummering/BeregningOppsummering';
 import { SimuleringOppsummering } from '~/lib/beregning-og-simulering/simulering-oppsummering/SimuleringOppsummering';
 import { SimulertBeregningDetaljerTabell } from '~/lib/beregning-og-simulering/detaljer/SimulertBeregningDetaljer';
 import { BeregningOgSimuleringHeader } from '~/lib/beregning-og-simulering/header/BeregningOgSimuleringHeader';
 import { Heading, HStack, VStack } from '@navikt/ds-react';
 import { OppdaterSimuleringKnapp } from '~/lib/beregning-og-simulering/oppdater-simulering/OppdaterSimuleringKnapp';
+import { erMeldekortbehandlingGodkjent } from '~/lib/meldekort/utils/MeldekortbehandlingUtils';
 
 import style from './MeldekortbehandlingBeregningOgSimulering.module.css';
 
 export const MeldekortbehandlingBeregningOgSimulering = () => {
     const { erReadonly } = useMeldekortbehandlingSkjema();
 
+    const meldekortbehandling = useMeldekortbehandling();
     const {
         simulertBeregning,
-        status,
         id,
         utbetalingsstatus,
         navkontorNavn,
         navkontor,
         kanIkkeIverksetteUtbetaling,
         meldeperioder,
-    } = useMeldekortbehandling();
+    } = meldekortbehandling;
 
     if (!simulertBeregning) {
         return (
@@ -41,9 +39,7 @@ export const MeldekortbehandlingBeregningOgSimulering = () => {
 
     const { beregning } = simulertBeregning;
 
-    const erIverksatt =
-        status === MeldekortbehandlingStatus.AUTOMATISK_BEHANDLET ||
-        status === MeldekortbehandlingStatus.GODKJENT;
+    const erIverksatt = erMeldekortbehandlingGodkjent(meldekortbehandling);
 
     const harKorrigering = meldeperioder.some(
         (it) => it.type === MeldeperiodebehandlingType.KORRIGERING,

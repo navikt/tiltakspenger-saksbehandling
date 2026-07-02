@@ -2,8 +2,6 @@ import {
     MeldekortbehandlingProps,
     MeldekortbehandlingStatus,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
-import { MeldeperiodeKjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
-import { SakProps } from '~/lib/sak/SakTyper';
 import { erBeslutter, erSaksbehandler, kanBehandle } from '~/lib/saksbehandler/tilganger';
 import { Saksbehandler } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
@@ -18,35 +16,6 @@ export const sorterMeldekortbehandlingerDesc = (
     a: MeldekortbehandlingProps,
     b: MeldekortbehandlingProps,
 ) => (a.opprettet > b.opprettet ? -1 : 1);
-
-export const oppdaterMeldeperiodeKjedeMedMeldekortbehandling = (
-    meldeperiodeKjede: MeldeperiodeKjedeProps,
-    oppdatertMeldekortbehandling: MeldekortbehandlingProps,
-): MeldeperiodeKjedeProps => ({
-    ...meldeperiodeKjede,
-    meldekortbehandlinger: meldeperiodeKjede.meldekortbehandlinger.map((meldekortbehandling) =>
-        meldekortbehandling.id === oppdatertMeldekortbehandling.id
-            ? oppdatertMeldekortbehandling
-            : meldekortbehandling,
-    ),
-});
-
-export const oppdaterSakMedMeldekortbehandling = (
-    sak: SakProps,
-    oppdatertMeldekortbehandling: MeldekortbehandlingProps,
-): SakProps => ({
-    ...sak,
-    meldeperiodeKjeder: sak.meldeperiodeKjeder.map((meldeperiodeKjede) =>
-        meldeperiodeKjede.meldekortbehandlinger.some(
-            (meldekortbehandling) => meldekortbehandling.id === oppdatertMeldekortbehandling.id,
-        )
-            ? oppdaterMeldeperiodeKjedeMedMeldekortbehandling(
-                  meldeperiodeKjede,
-                  oppdatertMeldekortbehandling,
-              )
-            : meldeperiodeKjede,
-    ),
-});
 
 export const kanSaksbehandleForMeldekort = (
     meldekortbehandling: MeldekortbehandlingProps | MeldekortbehandlingPropsV2,
@@ -169,3 +138,10 @@ export const erMeldekortbehandlingUnderAktivOmgjøring = (
 ): boolean =>
     mb.status == MeldekortbehandlingStatus.KLAR_TIL_BEHANDLING ||
     mb.status == MeldekortbehandlingStatus.UNDER_BEHANDLING;
+
+export const erMeldekortbehandlingGodkjent = (mb: MeldekortbehandlingPropsV2): boolean => {
+    return (
+        mb.status === MeldekortbehandlingStatus.GODKJENT ||
+        mb.status === MeldekortbehandlingStatus.AUTOMATISK_BEHANDLET
+    );
+};

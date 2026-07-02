@@ -10,15 +10,22 @@ import { Periode } from '~/types/Periode';
 import { perioderErSammenhengende } from '~/utils/periode';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { hentMeldeperiodekjede } from '~/lib/sak/sakUtils';
+import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
+import { erMeldekortbehandlingGodkjent } from '~/lib/meldekort/utils/MeldekortbehandlingUtils';
 
-export type MeldekortDagValideringsfeil = {
+type MeldekortDagValideringsfeil = {
     dato: string;
     feil: string;
 };
 
-export const validerMeldekortDagSkjema = (
+const validerMeldekortDagSkjema = (
     dag: MeldekortDagSkjema,
+    behandling: MeldekortbehandlingPropsV2,
 ): MeldekortDagValideringsfeil | null => {
+    if (erMeldekortbehandlingGodkjent(behandling)) {
+        return null;
+    }
+
     if (dag.status === MeldekortbehandlingDagStatus.IkkeBesvart) {
         return { dato: dag.dato, feil: 'Status må besvares' };
     }
@@ -34,8 +41,13 @@ export type MeldeperiodeSkjemaValideringsfeil = {
 
 export const validerMeldeperiodeSkjema = (
     skjema: MeldeperiodeSkjema,
+    behandling: MeldekortbehandlingPropsV2,
     sak: SakProps,
 ): MeldeperiodeSkjemaValideringsfeil | null => {
+    if (erMeldekortbehandlingGodkjent(behandling)) {
+        return null;
+    }
+
     const { kjedeId, dager } = skjema;
 
     const { sisteMeldeperiode } = hentMeldeperiodekjede(sak, kjedeId);
@@ -44,7 +56,7 @@ export const validerMeldeperiodeSkjema = (
     const overordnedeFeil: string[] = [];
 
     const dagerFeil = dager
-        .map((dag) => validerMeldekortDagSkjema(dag))
+        .map((dag) => validerMeldekortDagSkjema(dag, behandling))
         .filter(nonNullishPredicate);
 
     const antallDager = dager.filter((dag) => deltattEllerFraværStatus.has(dag.status)).length;
@@ -73,12 +85,17 @@ export type MeldekortbehandlingSkjemaValideringsfeil = {
 
 export const validerMeldekortbehandlingSkjema = (
     skjema: MeldekortbehandlingSkjemaState,
+    behandling: MeldekortbehandlingPropsV2,
     sak: SakProps,
 ): MeldekortbehandlingSkjemaValideringsfeil | null => {
+    if (erMeldekortbehandlingGodkjent(behandling)) {
+        return null;
+    }
+
     const overordnedeFeil: string[] = [];
 
     const meldeperioderFeil = skjema.meldeperioder
-        .map((mpSkjema) => validerMeldeperiodeSkjema(mpSkjema, sak))
+        .map((mpSkjema) => validerMeldeperiodeSkjema(mpSkjema, behandling, sak))
         .filter(nonNullishPredicate);
 
     const perioder = skjema.meldeperioder.map(

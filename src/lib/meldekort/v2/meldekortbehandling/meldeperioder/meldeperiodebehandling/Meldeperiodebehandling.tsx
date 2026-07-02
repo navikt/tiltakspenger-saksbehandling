@@ -23,7 +23,7 @@ import { MeldekortbehandlingSeksjon } from '~/lib/meldekort/v2/meldekortbehandli
 import { MeldeperiodeInfo } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/meldeperiodebehandling/meldeperiode-info/MeldeperiodeInfo';
 import { MeldeperiodebehandlingBeregning } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/meldeperiodebehandling/beregning/MeldeperiodebehandlingBeregning';
 import {
-    validerMeldekortDagSkjema,
+    MeldeperiodeSkjemaValideringsfeil,
     validerMeldeperiodeSkjema,
 } from '~/lib/meldekort/v2/meldekortbehandling/context/meldekortbehandlingSkjemaValidering';
 import { MeldeperiodebehandlingValideringsfeil } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/meldeperiodebehandling/validering/MeldeperiodebehandlingValideringsfeil';
@@ -43,7 +43,8 @@ export const Meldeperiodebehandling = ({ meldeperiodeSkjema }: Props) => {
 
     const kjede = hentMeldeperiodekjede(sak, kjedeId);
 
-    const { meldeperioder } = useMeldekortbehandling();
+    const meldekortbehandling = useMeldekortbehandling();
+    const { meldeperioder } = meldekortbehandling;
 
     const { erReadonly } = useMeldekortbehandlingSkjema();
 
@@ -56,7 +57,7 @@ export const Meldeperiodebehandling = ({ meldeperiodeSkjema }: Props) => {
         }
     });
 
-    const valideringsfeil = validerMeldeperiodeSkjema(meldeperiodeSkjema, sak);
+    const valideringsfeil = validerMeldeperiodeSkjema(meldeperiodeSkjema, meldekortbehandling, sak);
 
     return (
         <MeldekortbehandlingSeksjon gap={'space-16'}>
@@ -85,6 +86,7 @@ export const Meldeperiodebehandling = ({ meldeperiodeSkjema }: Props) => {
                         kjedeId={kjedeId}
                         beregningsdagPerDato={beregningsdagPerDato}
                         erReadonly={erReadonly}
+                        valideringsfeil={valideringsfeil}
                     />
 
                     <MeldeperiodeUke
@@ -93,6 +95,7 @@ export const Meldeperiodebehandling = ({ meldeperiodeSkjema }: Props) => {
                         kjedeId={kjedeId}
                         beregningsdagPerDato={beregningsdagPerDato}
                         erReadonly={erReadonly}
+                        valideringsfeil={valideringsfeil}
                     />
                 </VStack>
 
@@ -108,6 +111,7 @@ type UkeProps = {
     kjedeId: MeldeperiodeKjedeId;
     beregningsdagPerDato: Map<string, MeldekortBeregningsdag>;
     erReadonly: boolean;
+    valideringsfeil: MeldeperiodeSkjemaValideringsfeil | null;
 };
 
 const MeldeperiodeUke = ({
@@ -116,6 +120,7 @@ const MeldeperiodeUke = ({
     kjedeId,
     beregningsdagPerDato,
     erReadonly,
+    valideringsfeil,
 }: UkeProps) => {
     const dispatch = useMeldekortbehandlingSkjemaDispatch();
 
@@ -146,7 +151,9 @@ const MeldeperiodeUke = ({
                             !erReadonly &&
                             status !== MeldekortbehandlingDagStatus.IkkeRettTilTiltakspenger;
 
-                        const harValideringsfeil = !!validerMeldekortDagSkjema(dag);
+                        const harValideringsfeil = valideringsfeil?.dagerFeil.some(
+                            (dag) => dag.dato === dato,
+                        );
 
                         return (
                             <Table.Row key={dag.dato}>
