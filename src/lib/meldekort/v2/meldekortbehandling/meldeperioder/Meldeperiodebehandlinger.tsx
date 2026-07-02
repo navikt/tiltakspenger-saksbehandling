@@ -15,6 +15,11 @@ import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
 import { Periode } from '~/types/Periode';
 import { validerMeldeperiodeSkjema } from '~/lib/meldekort/v2/meldekortbehandling/context/meldekortbehandlingSkjemaValidering';
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
+import {
+    erMeldekortbehandlingGodkjent,
+    finnAntallUbehandledeMeldekort,
+} from '~/lib/meldekort/utils/MeldekortbehandlingUtils';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
 
 import style from './Meldeperiodebehandlinger.module.css';
 
@@ -34,19 +39,34 @@ export const Meldeperiodebehandlinger = () => {
         setValgtKjede(meldeperioder.at(0)?.kjedeId);
     }
 
+    const antallUbehandlede = finnAntallUbehandledeMeldekort(
+        sak.meldeperiodeKjederV2,
+        meldeperioder,
+    );
+
     return (
         <VStack gap={'space-16'}>
             <MeldekortbehandlingSeksjon>
-                <MeldekortbehandlingSeksjon.FullBredde>
+                <MeldekortbehandlingSeksjon.FullBredde gap={'space-16'}>
+                    {!erMeldekortbehandlingGodkjent(meldekortbehandling) &&
+                        antallUbehandlede > 0 && (
+                            <Infokort variant={'advarsel'}>
+                                {`Det finnes ${antallUbehandlede} perioder med ${antallUbehandlede > 1 ? 'ubehandlede' : 'ubehandlet'} meldekort på saken`}
+                            </Infokort>
+                        )}
+
                     <HStack gap={'space-16'} align={'center'}>
                         <Heading size={'medium'} level={'2'}>
                             {'Behandlede meldeperioder'}
                         </Heading>
 
-                        {!erReadonly && <MeldeperiodebehandlingLeggTil onLeggTil={setValgtKjede} />}
-
-                        {!erReadonly && meldeperioder.length > 1 && valgtKjede && (
-                            <MeldeperiodebehandlingFjern kjedeId={valgtKjede} />
+                        {!erReadonly && (
+                            <>
+                                <MeldeperiodebehandlingLeggTil onLeggTil={setValgtKjede} />
+                                {meldeperioder.length > 1 && valgtKjede && (
+                                    <MeldeperiodebehandlingFjern kjedeId={valgtKjede} />
+                                )}
+                            </>
                         )}
                     </HStack>
                 </MeldekortbehandlingSeksjon.FullBredde>

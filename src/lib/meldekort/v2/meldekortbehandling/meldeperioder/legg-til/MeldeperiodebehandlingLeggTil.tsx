@@ -86,7 +86,7 @@ export const MeldeperiodebehandlingLeggTil = ({ onLeggTil }: Props) => {
                         </Infokort>
 
                         <Select label={'Legg til meldeperiode'} hideLabel={true} ref={selectRef}>
-                            {tilgjengeligeKjeder.map((kjede) => {
+                            {tilgjengeligeKjeder.toReversed().map((kjede) => {
                                 const { id, brukersMeldekortStatus, periode } = kjede;
 
                                 return (

@@ -4,8 +4,11 @@ import {
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { erBeslutter, erSaksbehandler, kanBehandle } from '~/lib/saksbehandler/tilganger';
 import { Saksbehandler } from '~/lib/saksbehandler/SaksbehandlerTyper';
-import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
+import { MeldekortbehandlingPropsV2, MeldeperiodeKjedePropsV2 } from '~/lib/meldekort/v2/typer';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
+import { MeldeperiodeSkjema } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2ContextTyper';
+import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
+import { BrukersMeldekortKjedeStatus } from '~/lib/meldekort/typer/BrukersMeldekort';
 
 export const erMeldekortbehandlingUnderAktivBehandling = (m: MeldekortbehandlingProps): boolean =>
     m.status === MeldekortbehandlingStatus.UNDER_BEHANDLING ||
@@ -144,4 +147,22 @@ export const erMeldekortbehandlingGodkjent = (mb: MeldekortbehandlingPropsV2): b
         mb.status === MeldekortbehandlingStatus.GODKJENT ||
         mb.status === MeldekortbehandlingStatus.AUTOMATISK_BEHANDLET
     );
+};
+
+export const finnAntallUbehandledeMeldekort = (
+    kjeder: MeldeperiodeKjedePropsV2[],
+    skjema?: MeldeperiodeSkjema[],
+): number => {
+    const valgteKjedeIder = new Set<MeldeperiodeKjedeId>(skjema?.map((m) => m.kjedeId));
+
+    const tilgjengeligeKjeder = kjeder.filter((kjede) => !valgteKjedeIder.has(kjede.id));
+
+    const ubehandledeKjeder = tilgjengeligeKjeder.filter(
+        (kjede) =>
+            kjede.brukersMeldekortStatus === BrukersMeldekortKjedeStatus.VENTER_BEHANDLING ||
+            kjede.brukersMeldekortStatus ===
+                BrukersMeldekortKjedeStatus.KORRIGERING_VENTER_BEHANDLING,
+    );
+
+    return ubehandledeKjeder.length;
 };
