@@ -1,4 +1,4 @@
-import { Alert, Heading, HStack, Table, Tag, VStack } from '@navikt/ds-react';
+import { Alert, BodyShort, Heading, HStack, Table, Tag, VStack } from '@navikt/ds-react';
 import { AkselColor } from '@navikt/ds-react/types/theme';
 import {
     MeldekortbehandlingId,
@@ -18,17 +18,14 @@ import {
 import { ikonForMeldekortbehandlingDagStatus } from '~/lib/meldekort/0-felles-komponenter/MeldekortIkoner';
 import { hentMeldekortbehandling } from '~/lib/sak/sakUtils';
 
-import style from './MeldekortbehandlingOppsummeringKompakt.module.css';
+import style from './MeldekortbehandlingForKjedeKompakt.module.css';
 
 type Props = {
     meldekortbehandlingId: MeldekortbehandlingId;
     kjedeId: MeldeperiodeKjedeId;
 };
 
-export const MeldekortbehandlingOppsummeringKompakt = ({
-    meldekortbehandlingId,
-    kjedeId,
-}: Props) => {
+export const MeldekortbehandlingForKjedeKompakt = ({ meldekortbehandlingId, kjedeId }: Props) => {
     const { sak } = useSak();
 
     const meldekortbehandling = hentMeldekortbehandling(sak, meldekortbehandlingId);
@@ -64,7 +61,11 @@ export const MeldekortbehandlingOppsummeringKompakt = ({
                 </Tag>
             </HStack>
 
-            <Table size={'small'}>
+            <InternLenke href={meldekortbehandlingUrl(sak.saksnummer, meldekortbehandling.id)}>
+                <BodyShort size={'small'}>{'Åpne behandlingen'}</BodyShort>
+            </InternLenke>
+
+            <Table size={'small'} className={style.tabell}>
                 <Table.Body>
                     <Uke dager={dager.slice(0, 7)} />
                     <Table.Row>
@@ -73,10 +74,6 @@ export const MeldekortbehandlingOppsummeringKompakt = ({
                     <Uke dager={dager.slice(7, 14)} />
                 </Table.Body>
             </Table>
-
-            <InternLenke href={meldekortbehandlingUrl(sak.saksnummer, meldekortbehandling.id)}>
-                {'Åpne behandlingen'}
-            </InternLenke>
         </VStack>
     );
 };

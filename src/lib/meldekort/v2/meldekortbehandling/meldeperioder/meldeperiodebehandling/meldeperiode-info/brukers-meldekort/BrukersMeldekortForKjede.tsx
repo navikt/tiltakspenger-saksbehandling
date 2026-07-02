@@ -16,7 +16,7 @@ type Props = {
     meldeperiodeKjede: MeldeperiodeKjedePropsV2;
 };
 
-export const MeldeperiodeBrukersMeldekort = ({ meldeperiodeKjede }: Props) => {
+export const BrukersMeldekortForKjede = ({ meldeperiodeKjede }: Props) => {
     const { brukersMeldekort, sisteMeldeperiode, id } = meldeperiodeKjede;
 
     const sisteBrukersMeldekort = brukersMeldekort.at(-1);

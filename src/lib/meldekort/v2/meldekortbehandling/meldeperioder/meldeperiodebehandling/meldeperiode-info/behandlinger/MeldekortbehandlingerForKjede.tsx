@@ -1,15 +1,13 @@
 import { Heading, HStack, InlineMessage, Select, VStack } from '@navikt/ds-react';
 import { useState } from 'react';
 import { MeldeperiodeKjedePropsV2 } from '~/lib/meldekort/v2/typer';
-import {
-    MeldekortbehandlingId,
-    MeldekortbehandlingStatus,
-} from '~/lib/meldekort/typer/Meldekortbehandling';
+import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { useSak } from '~/lib/sak/SakContext';
-import { formaterTidspunktKort } from '~/utils/date';
-import { MeldekortbehandlingOppsummeringKompakt } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/meldeperiodebehandling/meldeperiode-info/behandlinger/MeldekortbehandlingOppsummeringKompakt';
+import { formaterTidspunkt } from '~/utils/date';
+import { MeldekortbehandlingForKjedeKompakt } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/meldeperiodebehandling/meldeperiode-info/behandlinger/MeldekortbehandlingForKjedeKompakt';
 import { hentMeldekortbehandling } from '~/lib/sak/sakUtils';
 import { useMeldekortbehandling } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2Context';
+import { meldekortbehandlingStatusTekst } from '~/lib/meldekort/v2/tekster';
 
 type Props = {
     meldeperiodeKjede: MeldeperiodeKjedePropsV2;
@@ -21,7 +19,9 @@ export const MeldekortbehandlingerForKjede = ({ meldeperiodeKjede }: Props) => {
     const { sak } = useSak();
     const { id: meldekortbehandlingIdFraContext } = useMeldekortbehandling();
 
-    const sisteBehandlingId = meldekortbehandlingIder.at(-1);
+    const sisteBehandlingId = meldekortbehandlingIder
+        .filter((it) => it !== meldekortbehandlingIdFraContext)
+        .at(-1);
 
     const [valgtBehandlingId, setValgtBehandlingId] = useState<MeldekortbehandlingId | undefined>(
         sisteBehandlingId,
@@ -35,21 +35,15 @@ export const MeldekortbehandlingerForKjede = ({ meldeperiodeKjede }: Props) => {
         );
     }
 
-    const godkjenteBehandlinger = meldekortbehandlingIder
+    const alleBehandlinger = meldekortbehandlingIder
         .map((id) => hentMeldekortbehandling(sak, id))
-        .filter(
-            (beh) =>
-                (beh.id !== meldekortbehandlingIdFraContext &&
-                    beh.status === MeldekortbehandlingStatus.AUTOMATISK_BEHANDLET) ||
-                beh.status === MeldekortbehandlingStatus.GODKJENT,
-        )
         .toReversed();
 
     return (
         <VStack gap={'space-24'}>
             <HStack justify={'space-between'} align={'center'}>
                 <Heading size={'xsmall'} level={'4'} spacing={true}>
-                    {'Andre meldekortbehandlinger'}
+                    {'Alle meldekortbehandlinger'}
                 </Heading>
 
                 <Select
@@ -59,21 +53,23 @@ export const MeldekortbehandlingerForKjede = ({ meldeperiodeKjede }: Props) => {
                     value={valgtBehandlingId}
                     onChange={(e) => setValgtBehandlingId(e.target.value as MeldekortbehandlingId)}
                 >
-                    {godkjenteBehandlinger.map((behandling, index) => {
-                        const { id, godkjentTidspunkt } = behandling;
+                    {alleBehandlinger.map((behandling) => {
+                        const { id, sistEndret, status } = behandling;
 
                         return (
-                            <option key={id} value={id}>
-                                {`Godkjent ${formaterTidspunktKort(godkjentTidspunkt!)}${
-                                    index === 0 ? ' (gjeldende)' : ''
-                                }`}
+                            <option
+                                key={id}
+                                value={id}
+                                disabled={id === meldekortbehandlingIdFraContext}
+                            >
+                                {`${formaterTidspunkt(sistEndret)} (${meldekortbehandlingStatusTekst[status]})`}
                             </option>
                         );
                     })}
                 </Select>
             </HStack>
 
-            <MeldekortbehandlingOppsummeringKompakt
+            <MeldekortbehandlingForKjedeKompakt
                 meldekortbehandlingId={valgtBehandlingId}
                 kjedeId={kjedeId}
             />

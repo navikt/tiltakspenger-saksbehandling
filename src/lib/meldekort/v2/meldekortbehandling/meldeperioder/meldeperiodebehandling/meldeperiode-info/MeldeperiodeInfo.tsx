@@ -7,7 +7,7 @@ import { DetaljHorisontal } from '~/lib/_felles/detaljer/DetaljHorisontal';
 import { meldeperiodebehandlingTypeTekst } from '~/lib/meldekort/v2/tekster';
 import { MeldeperiodebehandlingType } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { meldeperiodebehandlingTypeIkoner } from '~/lib/meldekort/v2/ikoner';
-import { MeldeperiodeBrukersMeldekort } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/meldeperiodebehandling/meldeperiode-info/brukers-meldekort/MeldeperiodeBrukersMeldekort';
+import { BrukersMeldekortForKjede } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/meldeperiodebehandling/meldeperiode-info/brukers-meldekort/BrukersMeldekortForKjede';
 import { MeldekortbehandlingerForKjede } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/meldeperiodebehandling/meldeperiode-info/behandlinger/MeldekortbehandlingerForKjede';
 
 import style from './MeldeperiodeInfo.module.css';
@@ -74,7 +74,7 @@ export const MeldeperiodeInfo = ({ meldeperiodeKjede, meldeperiodebehandling }: 
                 </Tabs.List>
 
                 <Tabs.Panel value={TabVerdi.BrukersMeldekort} className={style.tabsPanel}>
-                    <MeldeperiodeBrukersMeldekort meldeperiodeKjede={meldeperiodeKjede} />
+                    <BrukersMeldekortForKjede meldeperiodeKjede={meldeperiodeKjede} />
                 </Tabs.Panel>
 
                 <Tabs.Panel value={TabVerdi.Meldekortbehandlinger} className={style.tabsPanel}>
