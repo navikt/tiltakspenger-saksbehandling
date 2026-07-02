@@ -351,10 +351,11 @@ const MeldekortUtfyllingFooter = (props: {
                     <AvsluttMeldekortbehandling
                         sakId={props.sakId}
                         meldekortbehandlingId={props.meldekortbehandling.id}
-                        personoversiktUrl={meldeperiodeUrl(
+                        redirectUrlEtterSuksess={meldeperiodeUrl(
                             props.saksnummer,
                             props.meldekortbehandling.periode,
                         )}
+                        saksnummer={props.saksnummer}
                         buttonProps={{ variant: 'tertiary' }}
                     />
                     {props.kanSettePåVent && (

@@ -44,7 +44,8 @@ export const BehandlingAvslutt = ({ behandling }: Props) => {
                     }}
                     footer={{
                         isMutating: avsluttBehandlingIsMutating,
-                        error: avsluttBehandlingError ? avsluttBehandlingError.message : null,
+                        error: avsluttBehandlingError ?? null,
+                        saksnummer: behandling.saksnummer,
                     }}
                 />
             )}

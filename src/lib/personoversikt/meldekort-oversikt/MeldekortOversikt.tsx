@@ -217,7 +217,8 @@ export const MeldeperiodeKjedeOversiktMeny = ({
                     onClose={() => setVilAvslutteBehandling(false)}
                     sakId={sakId}
                     meldekortbehandlingId={meldekortbehandling.id}
-                    personoversiktUrl={personoversiktUrl(saksnummer)}
+                    redirectUrlEtterSuksess={personoversiktUrl(saksnummer)}
+                    saksnummer={saksnummer}
                 />
             )}
 

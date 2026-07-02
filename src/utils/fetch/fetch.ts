@@ -36,8 +36,8 @@ export const errorFraApiResponse = async (res: Response) => {
         });
     } catch {
         return new FetcherError({
-            status: 500,
-            message: 'Noe har gått galt på serversiden, kontakt utviklingsteamet.',
+            status: res.status,
+            message: 'Klarte ikke å tolke feilmeldingen fra serveren, kontakt utviklingsteamet.',
         });
     }
 };

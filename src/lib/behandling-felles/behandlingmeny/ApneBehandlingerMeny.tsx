@@ -224,7 +224,8 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
                     textareaLabel={`Hvorfor avsluttes ${erRevurdering ? 'revurderingen' : 'behandlingen'}? (obligatorisk)`}
                     footer={{
                         isMutating: avsluttBehandlingIsMutating,
-                        error: avsluttBehandlingError ? avsluttBehandlingError.message : null,
+                        error: avsluttBehandlingError ?? null,
+                        saksnummer: behandling.saksnummer,
                     }}
                 />
             )}
