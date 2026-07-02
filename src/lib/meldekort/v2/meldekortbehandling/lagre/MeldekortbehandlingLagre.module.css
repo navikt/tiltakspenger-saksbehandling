@@ -1,19 +1,34 @@
+.sentinel {
+    height: 0;
+    padding-top: 0.675rem;
+}
+
 .outer {
     position: sticky;
     top: 0;
-    margin: 0 -1rem 1rem -1rem;
-    padding: 1rem;
-    background: var(--ax-bg-success-soft);
+    margin-bottom: 1rem;
+    padding-top: 0.325rem;
+    padding-bottom: 1rem;
     border-bottom: 1px dashed var(--ax-border-neutral);
     z-index: 2;
+    transition: padding 0.15s ease;
+
+    &.stuck {
+        padding-bottom: 0.325rem;
+    }
+}
+
+.bakgrunn {
+    margin-left: -1rem;
+    margin-right: -1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+
+    background: var(--ax-bg-success-soft);
 
     &.dirty {
         background: var(--ax-bg-warning-moderate);
     }
-}
-
-.skjult {
-    visibility: hidden;
 }
 
 .knapp {

@@ -1,4 +1,4 @@
-import { BodyShort, Button, HStack, InlineMessage, VStack } from '@navikt/ds-react';
+import { Button, HStack, InlineMessage, VStack } from '@navikt/ds-react';
 import { useSak } from '~/lib/sak/SakContext';
 import {
     useMeldekortbehandling,
@@ -11,6 +11,7 @@ import { SakProps } from '~/lib/sak/SakTyper';
 import { OppdaterMeldekortbehandlingDTO } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { classNames } from '~/utils/classNames';
 import { formaterTidspunktMedSekunder } from '~/utils/date';
+import { useEffect, useRef, useState } from 'react';
 
 import style from './MeldekortbehandlingLagre.module.css';
 
@@ -26,43 +27,72 @@ export const MeldekortbehandlingLagre = () => {
         OppdaterMeldekortbehandlingDTO
     >(`/sak/${sak.sakId}/meldekort/${id}/oppdater`, 'POST');
 
+    const sentinelRef = useRef<HTMLDivElement>(null);
+    const [erStuck, setErStuck] = useState(false);
+
+    useEffect(() => {
+        const sentinel = sentinelRef.current;
+        if (!sentinel) {
+            return;
+        }
+
+        const observer = new IntersectionObserver(([entry]) => setErStuck(!entry.isIntersecting), {
+            rootMargin: `0px`,
+            threshold: 1,
+        });
+
+        observer.observe(sentinel);
+
+        return () => observer.disconnect();
+    }, [erStuck]);
+
     return (
-        <HStack
-            justify={'space-between'}
-            gap={'space-16'}
-            className={classNames(style.outer, isDirty && style.dirty)}
-        >
-            <VStack gap={'space-4'}>
-                <BodyShort
-                    size={'small'}
-                >{`Sist lagret: ${formaterTidspunktMedSekunder(sistEndret)}`}</BodyShort>
+        <>
+            <div
+                ref={sentinelRef}
+                className={classNames(style.sentinel, style.bakgrunn, isDirty && style.dirty)}
+            />
 
-                <InlineMessage status={'warning'} className={classNames(!isDirty && style.skjult)}>
-                    {'Du har ulagrede endringer'}
-                </InlineMessage>
-            </VStack>
-
-            <VStack align={'end'} gap={'space-8'}>
-                <Button
-                    loading={isMutating}
-                    onClick={() => {
-                        trigger(dto).then((sak) => {
-                            if (sak) {
-                                setSak(sak);
-                            }
-                        });
-                    }}
-                    className={classNames(style.knapp, isDirty && style.dirty)}
-                    disabled={erReadonly}
-                >
-                    {'Lagre og oppdater beregning'}
-                </Button>
-                {error && (
-                    <Infokort variant={'feil'}>
-                        {`Feil ved lagring: ${error.message} (kode ${error.status})`}
-                    </Infokort>
+            <HStack
+                justify={'space-between'}
+                gap={'space-16'}
+                className={classNames(
+                    style.outer,
+                    style.bakgrunn,
+                    isDirty && style.dirty,
+                    erStuck && style.stuck,
                 )}
-            </VStack>
-        </HStack>
+            >
+                <HStack gap={'space-8'} align={'center'}>
+                    <InlineMessage status={isDirty ? 'warning' : 'success'}>
+                        {isDirty ? 'Du har ulagrede endringer - ' : ''}
+                        {`Sist lagret: ${formaterTidspunktMedSekunder(sistEndret)}`}
+                    </InlineMessage>
+                </HStack>
+
+                <VStack align={'end'} gap={'space-8'}>
+                    <Button
+                        loading={isMutating}
+                        onClick={() => {
+                            trigger(dto).then((sak) => {
+                                if (sak) {
+                                    setSak(sak);
+                                }
+                            });
+                        }}
+                        className={classNames(style.knapp, isDirty && style.dirty)}
+                        disabled={erReadonly}
+                        size={erStuck ? 'small' : 'medium'}
+                    >
+                        {'Lagre og oppdater beregning'}
+                    </Button>
+                    {error && (
+                        <Infokort variant={'feil'}>
+                            {`Feil ved lagring: ${error.message} (kode ${error.status})`}
+                        </Infokort>
+                    )}
+                </VStack>
+            </HStack>
+        </>
     );
 };
