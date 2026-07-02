@@ -1,11 +1,12 @@
 import React, { createContext, useContext } from 'react';
-import { MeldeperiodeKjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
+import { MeldeperiodeKjedeId, MeldeperiodeKjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
 import {
     MeldekortbehandlingId,
     MeldekortbehandlingProps,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { sorterMeldekortbehandlingerDesc } from '~/lib/meldekort/utils/MeldekortbehandlingUtils';
 import { BrukersMeldekortProps } from '~/lib/meldekort/typer/BrukersMeldekort';
+import { useSak } from '~/lib/sak/SakContext';
 
 export type MeldeperioderContextState = {
     meldeperiodeKjede: MeldeperiodeKjedeProps;
@@ -24,11 +25,19 @@ export const MeldeperiodeKjedeContext = createContext<MeldeperioderContextState>
 );
 
 type Props = {
-    meldeperiodeKjede: MeldeperiodeKjedeProps;
+    kjedeId: MeldeperiodeKjedeId;
     children: React.ReactNode;
 };
 
-export const MeldeperiodeKjedeProvider = ({ meldeperiodeKjede, children }: Props) => {
+export const MeldeperiodeKjedeProvider = ({ kjedeId, children }: Props) => {
+    const { sak } = useSak();
+
+    const meldeperiodeKjede = sak.meldeperiodeKjeder.find((it) => it.id === kjedeId);
+
+    if (!meldeperiodeKjede) {
+        throw Error(`Fant ikke meldeperiodekjeden med id ${kjedeId} på sak ${sak.sakId}`);
+    }
+
     const { meldekortbehandlinger, avbrutteMeldekortbehandlinger } = meldeperiodeKjede;
 
     const alleMeldekortbehandlinger = meldekortbehandlinger.toSorted(

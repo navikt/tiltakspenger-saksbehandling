@@ -3,9 +3,7 @@ import { MeldekortbehandlingId, MeldekortbehandlingProps } from './Meldekortbeha
 import { BrukersMeldekortProps } from './BrukersMeldekort';
 import { MeldeperiodeBeregningProps } from '~/lib/beregning-og-simulering/typer/Beregning';
 
-type MeldeperiodeDato = `${number}-${number}-${number}`;
-
-export type MeldeperiodeKjedeId = `${MeldeperiodeDato}/${MeldeperiodeDato}`;
+export type MeldeperiodeKjedeId = `${string}/${string}`;
 
 export type MeldeperiodeId = `meldeperiode_${string}`;
 

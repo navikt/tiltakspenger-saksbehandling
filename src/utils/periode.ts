@@ -8,6 +8,10 @@ export const meldeperiodeKjedeIdTilPeriode = (kjedeId: MeldeperiodeKjedeId): Per
     return { fraOgMed, tilOgMed };
 };
 
+export const periodeTilMeldeperiodeKjedeId = (periode: Periode): MeldeperiodeKjedeId => {
+    return `${periode.fraOgMed}/${periode.tilOgMed}`;
+};
+
 // Sjekker at periodiseringen er i kronologisk rekkefølge uten overlapp
 export const validerPeriodisering = (periodisering: MedPeriode[], tillatHull: boolean): boolean => {
     return periodisering
