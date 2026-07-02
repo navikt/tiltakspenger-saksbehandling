@@ -3,7 +3,7 @@
     top: 0;
     margin: 0 -1rem 1rem -1rem;
     padding: 1rem;
-    background: var(--ax-bg-neutral-soft);
+    background: var(--ax-bg-success-soft);
     border-bottom: 1px dashed var(--ax-border-neutral);
     z-index: 2;
 

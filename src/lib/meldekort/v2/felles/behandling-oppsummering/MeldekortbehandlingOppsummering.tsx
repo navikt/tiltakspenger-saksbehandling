@@ -16,7 +16,7 @@ import {
     meldeperiodebehandlingTypeTekst,
 } from '~/lib/meldekort/v2/tekster';
 
-import style from './MeldekortBehandlingOppsummeringForKjede.module.css';
+import style from './MeldekortBehandlingOppsummering.module.css';
 
 type Props = {
     meldekortbehandlingId: MeldekortbehandlingId;
@@ -24,7 +24,7 @@ type Props = {
     className?: string;
 };
 
-export const MeldekortBehandlingOppsummeringForKjede = ({
+export const MeldekortbehandlingOppsummering = ({
     meldekortbehandlingId,
     kjedeId,
     className,

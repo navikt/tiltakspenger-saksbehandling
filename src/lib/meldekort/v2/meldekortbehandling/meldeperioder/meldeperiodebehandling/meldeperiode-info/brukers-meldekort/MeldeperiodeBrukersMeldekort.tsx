@@ -2,7 +2,7 @@ import { Button, Heading, HStack, InlineMessage, Select, VStack } from '@navikt/
 import { formaterTidspunkt } from '~/utils/date';
 import { MeldeperiodeKjedePropsV2 } from '~/lib/meldekort/v2/typer';
 import { ChevronRightDoubleIcon } from '@navikt/aksel-icons';
-import { BrukersMeldekortUker } from '~/lib/meldekort/v2/brukers-meldekort/BrukersMeldekortUker';
+import { BrukersMeldekortUker } from '~/lib/meldekort/v2/felles/brukers-meldekort/BrukersMeldekortUker';
 import { hentMeldekortForhåndsutfyllingFraBrukersMeldekort } from '~/lib/meldekort/0-felles-komponenter/meldekortForhåndsutfyllingUtils';
 import {
     useMeldekortbehandlingSkjema,
@@ -31,7 +31,7 @@ export const MeldeperiodeBrukersMeldekort = ({ meldeperiodeKjede }: Props) => {
     if (!sisteBrukersMeldekort) {
         return (
             <InlineMessage status={'info'} size={'small'}>
-                {'Ingen meldekort mottatt for denne perioden'}
+                {'Ingen meldekort mottatt fra bruker for denne perioden'}
             </InlineMessage>
         );
     }

@@ -2,7 +2,7 @@ import { BrukersMeldekortProps } from '~/lib/meldekort/typer/BrukersMeldekort';
 import { HStack, VStack } from '@navikt/ds-react';
 import { formaterTidspunkt } from '~/utils/date';
 import { BrukersMeldekortAutomatiskBehandlingStatus } from '~/lib/meldekort/3-høyre-seksjon/brukers-meldekort/automatisk-behandling-status/BrukersMeldekortAutomatiskBehandlingStatus';
-import { BrukersMeldekortUker } from '~/lib/meldekort/v2/brukers-meldekort/BrukersMeldekortUker';
+import { BrukersMeldekortUker } from '~/lib/meldekort/v2/felles/brukers-meldekort/BrukersMeldekortUker';
 import { DetaljHorisontal } from '~/lib/_felles/detaljer/DetaljHorisontal';
 
 type Props = {

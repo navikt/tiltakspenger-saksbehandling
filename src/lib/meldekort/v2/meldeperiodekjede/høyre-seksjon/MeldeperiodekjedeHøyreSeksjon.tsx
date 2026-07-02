@@ -2,7 +2,7 @@ import { Tabs, VStack } from '@navikt/ds-react';
 import { useMeldeperiodeKjedeV2 } from '~/lib/meldekort/v2/meldeperiodekjede/context/MeldeperiodeKjedeContextV2';
 import { MeldeperiodekjedeGjeldendeBeregning } from '~/lib/meldekort/v2/meldeperiodekjede/høyre-seksjon/gjeldende-beregning/MeldeperiodekjedeGjeldendeBeregning';
 import { CurrencyExchangeIcon, DocPencilIcon, PersonPencilIcon } from '@navikt/aksel-icons';
-import { MeldekortBehandlingOppsummeringForKjede } from '~/lib/meldekort/v2/meldeperiodekjede/høyre-seksjon/meldekortbehandling-oppsummering/MeldekortBehandlingOppsummeringForKjede';
+import { MeldekortbehandlingOppsummering } from '~/lib/meldekort/v2/felles/behandling-oppsummering/MeldekortbehandlingOppsummering';
 import { useSak } from '~/lib/sak/SakContext';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { BrukersMeldekortForKjede } from '~/lib/meldekort/v2/meldeperiodekjede/høyre-seksjon/brukers-meldekort/BrukersMeldekortForKjede';
@@ -65,7 +65,7 @@ export const MeldeperiodekjedeHøyreSeksjon = () => {
 
                 <Tabs.Panel value={TabVerdi.Behandlinger} className={style.tabPanel}>
                     {meldekortbehandlingIder.toReversed().map((mkbId) => (
-                        <MeldekortBehandlingOppsummeringForKjede
+                        <MeldekortbehandlingOppsummering
                             meldekortbehandlingId={mkbId}
                             kjedeId={id}
                             className={style.panelElement}

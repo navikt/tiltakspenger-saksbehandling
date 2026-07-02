@@ -1,4 +1,4 @@
-import { MeldekortbehandlingSeksjon } from '~/lib/meldekort/v2/meldekortbehandling/layout/seksjon/MeldekortbehandlingSeksjon';
+import { MeldekortbehandlingSeksjon } from '~/lib/meldekort/v2/meldekortbehandling/layout/MeldekortbehandlingSeksjon';
 import { MeldekortbehandlingTilBeslutning } from '~/lib/meldekort/v2/meldekortbehandling/fritekst-og-innsending/dialoger/MeldekortbehandlingTilBeslutning';
 import { MeldekortbehandlingGodkjenn } from '~/lib/meldekort/v2/meldekortbehandling/fritekst-og-innsending/dialoger/MeldekortbehandlingGodkjenn';
 import { MeldekortbehandlingUnderkjenn } from '~/lib/meldekort/v2/meldekortbehandling/fritekst-og-innsending/dialoger/MeldekortbehandlingUnderkjenn';

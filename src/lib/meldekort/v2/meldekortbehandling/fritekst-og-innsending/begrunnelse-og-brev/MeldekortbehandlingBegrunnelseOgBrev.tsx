@@ -1,4 +1,4 @@
-import { MeldekortbehandlingSeksjon } from '~/lib/meldekort/v2/meldekortbehandling/layout/seksjon/MeldekortbehandlingSeksjon';
+import { MeldekortbehandlingSeksjon } from '~/lib/meldekort/v2/meldekortbehandling/layout/MeldekortbehandlingSeksjon';
 import { FritekstInput } from '~/lib/_felles/fritekst/FritekstInput';
 import {
     useMeldekortbehandlingSkjema,

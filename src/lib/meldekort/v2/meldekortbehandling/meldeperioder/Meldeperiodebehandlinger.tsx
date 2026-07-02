@@ -6,7 +6,7 @@ import { MeldeperiodebehandlingFjern } from '~/lib/meldekort/v2/meldekortbehandl
 import { useSak } from '~/lib/sak/SakContext';
 import { hentMeldeperiodekjede } from '~/lib/sak/sakUtils';
 import { formaterPeriodeKort, ukenummerFraPeriode } from '~/utils/date';
-import { MeldekortbehandlingSeksjon } from '~/lib/meldekort/v2/meldekortbehandling/layout/seksjon/MeldekortbehandlingSeksjon';
+import { MeldekortbehandlingSeksjon } from '~/lib/meldekort/v2/meldekortbehandling/layout/MeldekortbehandlingSeksjon';
 import { useState } from 'react';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
 import { Periode } from '~/types/Periode';

@@ -19,7 +19,7 @@ import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
 import { ikonForMeldekortbehandlingDagStatusV2 } from './meldekortIkonerV2';
 import { useSak } from '~/lib/sak/SakContext';
 import { hentMeldeperiodekjede } from '~/lib/sak/sakUtils';
-import { MeldekortbehandlingSeksjon } from '~/lib/meldekort/v2/meldekortbehandling/layout/seksjon/MeldekortbehandlingSeksjon';
+import { MeldekortbehandlingSeksjon } from '~/lib/meldekort/v2/meldekortbehandling/layout/MeldekortbehandlingSeksjon';
 import { MeldeperiodeInfo } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/meldeperiodebehandling/meldeperiode-info/MeldeperiodeInfo';
 import { MeldeperiodebehandlingBeregning } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/meldeperiodebehandling/beregning/MeldeperiodebehandlingBeregning';
 import {
@@ -67,7 +67,7 @@ export const Meldeperiodebehandling = ({ meldeperiodeSkjema }: Props) => {
                 />
             </MeldekortbehandlingSeksjon.Venstre>
 
-            <MeldekortbehandlingSeksjon.Høyre gap={'space-16'}>
+            <MeldekortbehandlingSeksjon.Høyre gap={'space-16'} className={style.behandling}>
                 {valideringsfeil && (
                     <Infokort
                         header={'Feil eller mangler i behandlingen'}

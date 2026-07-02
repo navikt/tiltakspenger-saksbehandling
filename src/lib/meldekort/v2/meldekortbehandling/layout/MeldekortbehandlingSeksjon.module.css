@@ -1,7 +1,7 @@
 .main {
     display: grid;
-    grid-template-columns: 350px 750px;
-    grid-column-gap: 1rem;
+    grid-template-columns: 380px 770px;
+    grid-column-gap: 1.25rem;
     width: fit-content;
 }
 

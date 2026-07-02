@@ -11,6 +11,7 @@ import { MeldeperiodeBrukersMeldekort } from '~/lib/meldekort/v2/meldekortbehand
 import { MeldeperiodeMeldekortbehandlinger } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/meldeperiodebehandling/meldeperiode-info/behandlinger/MeldeperiodeMeldekortbehandlinger';
 
 import style from './MeldeperiodeInfo.module.css';
+import { formaterMeldeperiode } from '~/utils/date';
 
 type Props = {
     meldeperiodeKjede: MeldeperiodeKjedePropsV2;
@@ -35,6 +36,10 @@ export const MeldeperiodeInfo = ({ meldeperiodeKjede, meldeperiodebehandling }: 
                     {meldeperiodebehandlingTypeIkoner[type]}
                     {meldeperiodebehandlingTypeTekst[type]}
                 </Heading>
+
+                <DetaljHorisontal navn={'Periode'}>
+                    {formaterMeldeperiode(periode)}
+                </DetaljHorisontal>
 
                 <DetaljHorisontal navn={'Tiltak:'}>
                     {tiltaksnavn.length > 0
