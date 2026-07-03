@@ -11,6 +11,9 @@ import { formaterTidspunktKort } from '~/utils/date';
 import { AkselColor } from '@navikt/ds-react/types/theme';
 import { meldekortbehandlingUrl } from '~/utils/urls';
 import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
+import { TilbakekrevingOppsummering } from '~/lib/tilbakekreving/TilbakekrevingOppsummering';
+import OppsummeringAvKlageForRammebehandling from '~/lib/behandling-felles/oppsummeringer/klage/oppsummeringAvKlageForRammebehandling/OppsummeringAvKlageForRammebehandling';
+import { hentKlagebehandling } from '~/lib/sak/sakUtils';
 import {
     meldekortbehandlingStatusTekst,
     meldeperiodebehandlingTypeTekst,
@@ -41,8 +44,16 @@ export const MeldekortbehandlingOppsummering = ({
         );
     }
 
-    const { status, meldeperioder, saksbehandler, beslutter, opprettet, godkjentTidspunkt } =
-        meldekortbehandling;
+    const {
+        status,
+        meldeperioder,
+        saksbehandler,
+        beslutter,
+        opprettet,
+        godkjentTidspunkt,
+        tilbakekrevingId,
+        klagebehandlingId,
+    } = meldekortbehandling;
 
     const meldeperiodebehandlingForKjede = meldeperioder.find((it) => it.kjedeId === kjedeId);
 
@@ -100,6 +111,14 @@ export const MeldekortbehandlingOppsummering = ({
             </div>
 
             <MeldekortUker dager={meldeperiodebehandlingForKjede.dager} />
+
+            {tilbakekrevingId && <TilbakekrevingOppsummering tilbakekrevingId={tilbakekrevingId} />}
+
+            {klagebehandlingId && (
+                <OppsummeringAvKlageForRammebehandling
+                    klagebehandling={hentKlagebehandling(sak, klagebehandlingId)}
+                />
+            )}
         </VStack>
     );
 };
