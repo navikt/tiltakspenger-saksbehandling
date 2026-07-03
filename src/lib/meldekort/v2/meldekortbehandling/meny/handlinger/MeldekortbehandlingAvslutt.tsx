@@ -1,6 +1,6 @@
 import { Button, Dialog, Textarea } from '@navikt/ds-react';
 import { TrashIcon } from '@navikt/aksel-icons';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { useSak } from '~/lib/sak/SakContext';
@@ -20,7 +20,7 @@ export const MeldekortbehandlingAvslutt = ({ åpen, onClose }: Props) => {
     const { id } = useMeldekortbehandling();
     const { navigateWithNotification } = useNotification();
 
-    const [begrunnelse, setBegrunnelse] = useState('');
+    const begrunnelseRef = useRef<HTMLTextAreaElement>(null);
     const [valideringsfeil, setValideringsfeil] = useState<string | null>(null);
 
     const { trigger, error, isMutating } = useFetchJsonFraApi<
@@ -29,8 +29,8 @@ export const MeldekortbehandlingAvslutt = ({ åpen, onClose }: Props) => {
     >(`/sak/${sak.sakId}/meldekort/${id}/avbryt`, 'POST');
 
     const avslutt = () => {
-        const begrunnelseTrimmet = begrunnelse.trim();
-        if (begrunnelseTrimmet === '') {
+        const begrunnelseTrimmet = begrunnelseRef?.current?.value.trim();
+        if (!begrunnelseTrimmet) {
             setValideringsfeil('Du må fylle ut en begrunnelse');
             return;
         }
@@ -60,14 +60,13 @@ export const MeldekortbehandlingAvslutt = ({ åpen, onClose }: Props) => {
                     <Textarea
                         label={'Hvorfor avsluttes behandlingen? (obligatorisk)'}
                         maxLength={200}
-                        value={begrunnelse}
-                        onChange={(event) => {
-                            setBegrunnelse(event.target.value);
+                        onChange={() => {
                             if (valideringsfeil) {
                                 setValideringsfeil(null);
                             }
                         }}
                         error={valideringsfeil ?? undefined}
+                        ref={begrunnelseRef}
                     />
 
                     {error && (

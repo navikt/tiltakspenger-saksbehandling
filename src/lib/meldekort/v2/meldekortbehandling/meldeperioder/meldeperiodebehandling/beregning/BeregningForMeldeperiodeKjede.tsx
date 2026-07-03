@@ -1,24 +1,30 @@
 import { Heading, VStack } from '@navikt/ds-react';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
-import { useMeldekortbehandling } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2Context';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { UtbetalingBeløp } from '~/lib/_felles/utbetaling/beløp/UtbetalingBeløp';
+import { SimulertBeregning } from '~/lib/beregning-og-simulering/typer/SimulertBeregning';
 
 type Props = {
     kjedeId: MeldeperiodeKjedeId;
+    simulertBeregning: SimulertBeregning;
+    headerTekst?: string;
+    className?: string;
 };
 
-export const MeldeperiodebehandlingBeregning = ({ kjedeId }: Props) => {
-    const { simulertBeregning } = useMeldekortbehandling();
-
-    const simuleringOgBeregning = simulertBeregning?.meldeperioder.find(
+export const BeregningForMeldeperiodeKjede = ({
+    kjedeId,
+    simulertBeregning,
+    headerTekst,
+    className,
+}: Props) => {
+    const simuleringOgBeregning = simulertBeregning.meldeperioder.find(
         (it) => it.kjedeId == kjedeId,
     );
 
     if (!simuleringOgBeregning) {
         return (
             <Infokort header={'Beregning mangler'} variant={'advarsel'}>
-                {'Lagre behandlingen for å beregne og simulere meldeperioden'}
+                {'Beregning mangler for meldeperioden'}
             </Infokort>
         );
     }
@@ -26,10 +32,12 @@ export const MeldeperiodebehandlingBeregning = ({ kjedeId }: Props) => {
     const { beregning } = simuleringOgBeregning;
 
     return (
-        <VStack gap={'space-8'}>
-            <Heading size={'xsmall'} level={'4'}>
-                {'Beregnede beløp for meldeperioden'}
-            </Heading>
+        <VStack gap={'space-8'} className={className}>
+            {headerTekst && (
+                <Heading size={'xsmall'} level={'4'}>
+                    {headerTekst}
+                </Heading>
+            )}
             <VStack gap={'space-4'}>
                 <UtbetalingBeløp
                     tekst={'Totalt beløp'}

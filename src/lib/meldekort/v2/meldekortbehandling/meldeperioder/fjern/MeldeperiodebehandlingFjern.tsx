@@ -25,7 +25,7 @@ export const MeldeperiodebehandlingFjern = ({ kjedeId }: Props) => {
         <Dialog>
             <Dialog.Trigger>
                 <Button size={'small'} variant={'tertiary'} icon={<TrashIcon />}>
-                    {'Fjern valgt'}
+                    {'Fjern valgt meldeperiode'}
                 </Button>
             </Dialog.Trigger>
 

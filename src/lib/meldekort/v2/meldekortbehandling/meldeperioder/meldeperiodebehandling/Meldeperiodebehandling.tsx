@@ -16,12 +16,11 @@ import { formaterDatotekst, ukedagFraDatoKort, ukenummerFraDatotekst } from '~/u
 import { meldekortbehandlingDagStatusTekst } from '~/utils/tekstformateringUtils';
 import { formatterBeløp } from '~/utils/beløp';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
-import { ikonForMeldekortbehandlingDagStatusV2 } from './meldekortIkonerV2';
 import { useSak } from '~/lib/sak/SakContext';
 import { hentMeldeperiodekjede } from '~/lib/sak/sakUtils';
 import { MeldekortbehandlingSeksjon } from '~/lib/meldekort/v2/meldekortbehandling/layout/MeldekortbehandlingSeksjon';
 import { MeldeperiodeInfo } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/meldeperiodebehandling/meldeperiode-info/MeldeperiodeInfo';
-import { MeldeperiodebehandlingBeregning } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/meldeperiodebehandling/beregning/MeldeperiodebehandlingBeregning';
+import { BeregningForMeldeperiodeKjede } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/meldeperiodebehandling/beregning/BeregningForMeldeperiodeKjede';
 import {
     MeldeperiodeSkjemaValideringsfeil,
     validerMeldeperiodeSkjema,
@@ -31,6 +30,7 @@ import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { classNames } from '~/utils/classNames';
 
 import style from './Meldeperiodebehandling.module.css';
+import { ikonForMeldekortbehandlingDagStatusV2 } from '~/lib/meldekort/v2/ikoner';
 
 type Props = {
     meldeperiodeSkjema: MeldeperiodeSkjema;
@@ -44,7 +44,7 @@ export const Meldeperiodebehandling = ({ meldeperiodeSkjema }: Props) => {
     const kjede = hentMeldeperiodekjede(sak, kjedeId);
 
     const meldekortbehandling = useMeldekortbehandling();
-    const { meldeperioder } = meldekortbehandling;
+    const { meldeperioder, simulertBeregning } = meldekortbehandling;
 
     const { erReadonly } = useMeldekortbehandlingSkjema();
 
@@ -99,7 +99,17 @@ export const Meldeperiodebehandling = ({ meldeperiodeSkjema }: Props) => {
                     />
                 </VStack>
 
-                <MeldeperiodebehandlingBeregning kjedeId={kjedeId} />
+                {simulertBeregning ? (
+                    <BeregningForMeldeperiodeKjede
+                        kjedeId={kjedeId}
+                        simulertBeregning={simulertBeregning}
+                        headerTekst={'Beregnede beløp for meldeperioden'}
+                    />
+                ) : (
+                    <Infokort variant={'info'}>
+                        {'Lagre behandlingen for å vise beregning av meldeperioden'}
+                    </Infokort>
+                )}
             </MeldekortbehandlingSeksjon.Høyre>
         </MeldekortbehandlingSeksjon>
     );

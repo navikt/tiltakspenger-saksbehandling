@@ -1,6 +1,6 @@
 import { Button, Dialog, Textarea, VStack } from '@navikt/ds-react';
 import { PauseIcon } from '@navikt/aksel-icons';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { Nullable } from '~/types/UtilTypes';
@@ -23,7 +23,7 @@ export const MeldekortbehandlingSettPåVent = ({ åpen, onClose }: Props) => {
     const { id } = useMeldekortbehandling();
     const { navigateWithNotification } = useNotification();
 
-    const [begrunnelse, setBegrunnelse] = useState('');
+    const begrunnelseRef = useRef<HTMLTextAreaElement>(null);
     const [frist, setFrist] = useState<Nullable<string>>(null);
     const [valideringsfeil, setValideringsfeil] = useState<string | null>(null);
 
@@ -33,8 +33,8 @@ export const MeldekortbehandlingSettPåVent = ({ åpen, onClose }: Props) => {
     >(`/sak/${sak.sakId}/meldekort/${id}/vent`, 'PATCH');
 
     const settPåVent = () => {
-        const begrunnelseTrimmet = begrunnelse.trim();
-        if (begrunnelseTrimmet === '') {
+        const begrunnelseTrimmet = begrunnelseRef?.current?.value.trim();
+        if (!begrunnelseTrimmet) {
             setValideringsfeil('Du må fylle ut en begrunnelse');
             return;
         }
@@ -60,9 +60,8 @@ export const MeldekortbehandlingSettPåVent = ({ åpen, onClose }: Props) => {
                     <VStack gap={'space-16'}>
                         <Textarea
                             label={'Hvorfor settes behandlingen på vent? (obligatorisk)'}
-                            value={begrunnelse}
-                            onChange={(event) => {
-                                setBegrunnelse(event.target.value);
+                            ref={begrunnelseRef}
+                            onChange={() => {
                                 if (valideringsfeil) {
                                     setValideringsfeil(null);
                                 }

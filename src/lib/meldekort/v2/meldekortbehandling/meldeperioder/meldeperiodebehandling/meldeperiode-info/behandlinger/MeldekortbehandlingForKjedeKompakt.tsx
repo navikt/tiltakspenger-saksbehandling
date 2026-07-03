@@ -9,7 +9,13 @@ import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
 import { useSak } from '~/lib/sak/SakContext';
 import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { meldekortbehandlingUrl } from '~/utils/urls';
-import { ukedagFraDatoKort, ukenummerFraDatotekst } from '~/utils/date';
+import {
+    ukedagFraDatoKort,
+    ukenummerFraDatotekst,
+    formaterDatotekst,
+    ukedagFraDato,
+} from '~/utils/date';
+import { formatterBeløp } from '~/utils/beløp';
 import {
     meldekortbehandlingDagStatusTekstKort,
     meldekortbehandlingStatusTekst,
@@ -17,6 +23,9 @@ import {
 } from '~/lib/meldekort/v2/tekster';
 import { ikonForMeldekortbehandlingDagStatus } from '~/lib/meldekort/0-felles-komponenter/MeldekortIkoner';
 import { hentMeldekortbehandling } from '~/lib/sak/sakUtils';
+import { RichTooltip } from '~/lib/_felles/tooltip/RichTooltip';
+import { DetaljHorisontal } from '~/lib/_felles/detaljer/DetaljHorisontal';
+import { BeregningForMeldeperiodeKjede } from '~/lib/meldekort/v2/meldekortbehandling/meldeperioder/meldeperiodebehandling/beregning/BeregningForMeldeperiodeKjede';
 
 import style from './MeldekortbehandlingForKjedeKompakt.module.css';
 
@@ -28,16 +37,17 @@ type Props = {
 export const MeldekortbehandlingForKjedeKompakt = ({ meldekortbehandlingId, kjedeId }: Props) => {
     const { sak } = useSak();
 
-    const meldekortbehandling = hentMeldekortbehandling(sak, meldekortbehandlingId);
-
-    const meldeperiodebehandling = meldekortbehandling.meldeperioder.find(
-        (it) => it.kjedeId === kjedeId,
+    const { id, meldeperioder, status, simulertBeregning } = hentMeldekortbehandling(
+        sak,
+        meldekortbehandlingId,
     );
+
+    const meldeperiodebehandling = meldeperioder.find((it) => it.kjedeId === kjedeId);
 
     if (!meldeperiodebehandling) {
         return (
             <Alert variant={'error'}>
-                {`Teknisk feil: Fant ingen behandling av denne meldeperioden på ${meldekortbehandling.id}`}
+                {`Teknisk feil: Fant ingen behandling av denne meldeperioden på ${id}`}
             </Alert>
         );
     }
@@ -53,15 +63,15 @@ export const MeldekortbehandlingForKjedeKompakt = ({ meldekortbehandlingId, kjed
                     {meldeperiodebehandlingTypeTekst[meldeperiodebehandling.type]}
                 </Heading>
                 <Tag
-                    data-color={meldekortbehandlingStatusFarge[meldekortbehandling.status]}
+                    data-color={meldekortbehandlingStatusFarge[status]}
                     variant={'outline'}
                     size={'small'}
                 >
-                    {meldekortbehandlingStatusTekst[meldekortbehandling.status]}
+                    {meldekortbehandlingStatusTekst[status]}
                 </Tag>
             </HStack>
 
-            <InternLenke href={meldekortbehandlingUrl(sak.saksnummer, meldekortbehandling.id)}>
+            <InternLenke href={meldekortbehandlingUrl(sak.saksnummer, id)}>
                 <BodyShort size={'small'}>{'Åpne behandlingen'}</BodyShort>
             </InternLenke>
 
@@ -74,15 +84,19 @@ export const MeldekortbehandlingForKjedeKompakt = ({ meldekortbehandlingId, kjed
                     <Uke dager={dager.slice(7, 14)} />
                 </Table.Body>
             </Table>
+
+            {simulertBeregning && (
+                <BeregningForMeldeperiodeKjede
+                    kjedeId={kjedeId}
+                    simulertBeregning={simulertBeregning}
+                    className={style.beregning}
+                />
+            )}
         </VStack>
     );
 };
 
 const Uke = ({ dager }: { dager: MeldekortDagBeregnetProps[] }) => {
-    if (dager.length === 0) {
-        return null;
-    }
-
     return (
         <>
             <Table.Row>
@@ -92,20 +106,56 @@ const Uke = ({ dager }: { dager: MeldekortDagBeregnetProps[] }) => {
             </Table.Row>
 
             {dager.map(({ dato, status, beregningsdag }) => (
-                <Table.Row key={dato}>
-                    <Table.DataCell>{ukedagFraDatoKort(dato)}</Table.DataCell>
-                    <Table.DataCell className={style.status}>
-                        <HStack align={'center'} gap={'space-12'} wrap={false}>
-                            {ikonForMeldekortbehandlingDagStatus[status]}
-                            {meldekortbehandlingDagStatusTekstKort[status]}
-                        </HStack>
-                    </Table.DataCell>
-                    <Table.DataCell className={style.sats}>
-                        {beregningsdag ? `${beregningsdag.prosent} %` : '–'}
-                    </Table.DataCell>
-                </Table.Row>
+                <RichTooltip
+                    key={dato}
+                    content={<DagDetaljer dato={dato} beregningsdag={beregningsdag} />}
+                    placement={'right'}
+                >
+                    <Table.Row>
+                        <Table.DataCell>{ukedagFraDatoKort(dato)}</Table.DataCell>
+                        <Table.DataCell className={style.status}>
+                            <HStack align={'center'} gap={'space-12'} wrap={false}>
+                                {ikonForMeldekortbehandlingDagStatus[status]}
+                                {meldekortbehandlingDagStatusTekstKort[status]}
+                            </HStack>
+                        </Table.DataCell>
+                        <Table.DataCell className={style.sats}>
+                            {beregningsdag ? `${beregningsdag.prosent}%` : '–'}
+                        </Table.DataCell>
+                    </Table.Row>
+                </RichTooltip>
             ))}
         </>
+    );
+};
+
+const DagDetaljer = ({
+    dato,
+    beregningsdag,
+}: {
+    dato: string;
+    beregningsdag: MeldekortDagBeregnetProps['beregningsdag'];
+}) => {
+    return (
+        <VStack gap={'space-4'}>
+            <BodyShort weight={'semibold'}>
+                {`${ukedagFraDato(dato)} ${formaterDatotekst(dato)}`}
+            </BodyShort>
+
+            {beregningsdag && (
+                <>
+                    <DetaljHorisontal navn={'Sats:'} size={'small'}>
+                        {`${beregningsdag.prosent}%`}
+                    </DetaljHorisontal>
+                    <DetaljHorisontal navn={'Beløp:'} size={'small'}>
+                        {formatterBeløp(beregningsdag.beløp)}
+                    </DetaljHorisontal>
+                    <DetaljHorisontal navn={'Barnetillegg:'} size={'small'}>
+                        {formatterBeløp(beregningsdag.barnetillegg)}
+                    </DetaljHorisontal>
+                </>
+            )}
+        </VStack>
     );
 };
 

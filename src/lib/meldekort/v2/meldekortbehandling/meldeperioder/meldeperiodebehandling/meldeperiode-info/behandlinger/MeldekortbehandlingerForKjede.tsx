@@ -30,7 +30,7 @@ export const MeldekortbehandlingerForKjede = ({ meldeperiodeKjede }: Props) => {
     if (!valgtBehandlingId) {
         return (
             <InlineMessage status={'info'} size={'small'}>
-                {'Ingen meldekortbehandlinger for denne perioden'}
+                {'Ingen tidligere meldekortbehandlinger for denne perioden'}
             </InlineMessage>
         );
     }
@@ -60,7 +60,7 @@ export const MeldekortbehandlingerForKjede = ({ meldeperiodeKjede }: Props) => {
 
                         return (
                             <option key={id} value={id} disabled={erBehandlingenSomVises}>
-                                {`${formaterTidspunkt(sistEndret)} (${meldekortbehandlingStatusTekst[status]})${erBehandlingenSomVises ? ' (aktiv)' : ''}`}
+                                {`${formaterTidspunkt(sistEndret)} (${meldekortbehandlingStatusTekst[status]})${erBehandlingenSomVises ? ' (denne)' : ''}`}
                             </option>
                         );
                     })}
