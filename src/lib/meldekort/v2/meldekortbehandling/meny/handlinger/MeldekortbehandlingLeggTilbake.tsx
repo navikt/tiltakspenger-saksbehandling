@@ -3,20 +3,21 @@ import { ArrowUndoIcon } from '@navikt/aksel-icons';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { useSak } from '~/lib/sak/SakContext';
-import { useMeldekortbehandling } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2Context';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { useNotification } from '~/lib/_felles/notifications/NotificationContext';
 import { personoversiktUrl } from '~/utils/urls';
 import { PersonoversiktTab } from '~/lib/personoversikt/Personoversikt';
+import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
 
 type Props = {
+    meldekortbehandling: MeldekortbehandlingPropsV2;
     åpen: boolean;
     onClose: () => void;
 };
 
-export const MeldekortbehandlingLeggTilbake = ({ åpen, onClose }: Props) => {
+export const MeldekortbehandlingLeggTilbake = ({ meldekortbehandling, åpen, onClose }: Props) => {
     const { sak } = useSak();
-    const { id } = useMeldekortbehandling();
+    const { id } = meldekortbehandling;
     const { navigateWithNotification } = useNotification();
 
     const { trigger, error, isMutating } = useFetchJsonFraApi<SakProps>(

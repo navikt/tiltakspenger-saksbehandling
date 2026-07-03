@@ -2,21 +2,21 @@ import { Button, Dialog } from '@navikt/ds-react';
 import { ArrowsSquarepathIcon } from '@navikt/aksel-icons';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { useSak } from '~/lib/sak/SakContext';
-import { useMeldekortbehandling } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2Context';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { meldekortbehandlingUrl } from '~/utils/urls';
 import { useRouter } from 'next/router';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { MeldekortbehandlingStatus } from '~/lib/meldekort/typer/Meldekortbehandling';
+import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
 
 type Props = {
+    meldekortbehandling: MeldekortbehandlingPropsV2;
     åpen: boolean;
     onClose: () => void;
 };
 
-export const MeldekortbehandlingOverta = ({ åpen, onClose }: Props) => {
+export const MeldekortbehandlingOverta = ({ meldekortbehandling, åpen, onClose }: Props) => {
     const { sak, setSak } = useSak();
-    const meldekortbehandling = useMeldekortbehandling();
 
     const router = useRouter();
 

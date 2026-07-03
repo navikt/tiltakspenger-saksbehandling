@@ -4,20 +4,21 @@ import { useRef, useState } from 'react';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { useSak } from '~/lib/sak/SakContext';
-import { useMeldekortbehandling } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2Context';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { useNotification } from '~/lib/_felles/notifications/NotificationContext';
 import { personoversiktUrl } from '~/utils/urls';
 import { PersonoversiktTab } from '~/lib/personoversikt/Personoversikt';
+import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
 
 type Props = {
+    meldekortbehandling: MeldekortbehandlingPropsV2;
     åpen: boolean;
     onClose: () => void;
 };
 
-export const MeldekortbehandlingAvslutt = ({ åpen, onClose }: Props) => {
+export const MeldekortbehandlingAvslutt = ({ meldekortbehandling, åpen, onClose }: Props) => {
     const { sak } = useSak();
-    const { id } = useMeldekortbehandling();
+    const { id } = meldekortbehandling;
     const { navigateWithNotification } = useNotification();
 
     const begrunnelseRef = useRef<HTMLTextAreaElement>(null);

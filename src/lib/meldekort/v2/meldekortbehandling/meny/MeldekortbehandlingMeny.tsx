@@ -23,7 +23,8 @@ import { OppsummeringAvVentestatuserModal } from '~/lib/behandling-felles/oppsum
 import { OppsummeringAvAttesteringerModal } from '~/lib/behandling-felles/attestering/OppsummeringAvAttesteringerModal';
 
 export const MeldekortbehandlingMeny = () => {
-    const { gyldigeKommandoer, ventestatus, attesteringer } = useMeldekortbehandling();
+    const meldekortbehandling = useMeldekortbehandling();
+    const { gyldigeKommandoer, ventestatus, attesteringer } = meldekortbehandling;
 
     const [aktivDialog, setAktivDialog] = useState<AktivDialog | null>(null);
 
@@ -144,6 +145,7 @@ export const MeldekortbehandlingMeny = () => {
 
             {kanTa && (
                 <MeldekortbehandlingTildelMeg
+                    meldekortbehandling={meldekortbehandling}
                     åpen={aktivDialog === 'tildelMeg'}
                     onClose={onClose}
                 />
@@ -151,6 +153,7 @@ export const MeldekortbehandlingMeny = () => {
 
             {kanGjenoppta && (
                 <MeldekortbehandlingGjenoppta
+                    meldekortbehandling={meldekortbehandling}
                     åpen={aktivDialog === 'gjenoppta'}
                     onClose={onClose}
                 />
@@ -158,6 +161,7 @@ export const MeldekortbehandlingMeny = () => {
 
             {kanLeggeTilbake && (
                 <MeldekortbehandlingLeggTilbake
+                    meldekortbehandling={meldekortbehandling}
                     åpen={aktivDialog === 'leggTilbake'}
                     onClose={onClose}
                 />
@@ -165,17 +169,26 @@ export const MeldekortbehandlingMeny = () => {
 
             {kanSettePåVent && (
                 <MeldekortbehandlingSettPåVent
+                    meldekortbehandling={meldekortbehandling}
                     åpen={aktivDialog === 'settPåVent'}
                     onClose={onClose}
                 />
             )}
 
             {kanOverta && (
-                <MeldekortbehandlingOverta åpen={aktivDialog === 'overta'} onClose={onClose} />
+                <MeldekortbehandlingOverta
+                    meldekortbehandling={meldekortbehandling}
+                    åpen={aktivDialog === 'overta'}
+                    onClose={onClose}
+                />
             )}
 
             {kanAvslutte && (
-                <MeldekortbehandlingAvslutt åpen={aktivDialog === 'avslutt'} onClose={onClose} />
+                <MeldekortbehandlingAvslutt
+                    meldekortbehandling={meldekortbehandling}
+                    åpen={aktivDialog === 'avslutt'}
+                    onClose={onClose}
+                />
             )}
 
             {harVentestatuser && (

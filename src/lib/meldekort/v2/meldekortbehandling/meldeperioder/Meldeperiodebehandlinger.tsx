@@ -55,7 +55,7 @@ export const Meldeperiodebehandlinger = () => {
                             </Infokort>
                         )}
 
-                    <HStack gap={'space-16'} align={'center'}>
+                    <HStack gap={'space-16'} align={'center'} className={style.header}>
                         <Heading size={'medium'} level={'2'}>
                             {'Behandlede meldeperioder'}
                         </Heading>

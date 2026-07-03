@@ -10,6 +10,7 @@ import { MeldekortbehandlingPropsV2, MeldeperiodeKjedePropsV2 } from '~/lib/meld
 import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { Rammebehandling, RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { MeldekortvedtakMedBehandling } from '~/lib/meldekort/typer/Meldekortvedtak';
+import { Klagebehandling, KlageId } from '~/lib/klage/typer/Klage';
 
 export const hentVedtatteSøknadsbehandlinger = (sak: SakProps) => {
     const { alleRammevedtak, behandlinger } = sak;
@@ -96,4 +97,14 @@ export const hentMeldekortvedtakMedBehandlinger = (
             behandling: hentMeldekortbehandling(sak, vedtak.meldekortId),
         };
     });
+};
+
+export const hentKlagebehandling = (sak: SakProps, klageId: KlageId): Klagebehandling => {
+    const klagebehandling = sak.klageBehandlinger.find((klage) => klage.id === klageId);
+
+    if (!klagebehandling) {
+        throw Error(`Fant ikke klagebehandling med id ${klageId}`);
+    }
+
+    return klagebehandling;
 };

@@ -13,15 +13,24 @@ import {
 import OppsummeringAvVentestatus from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatus';
 import { MeldekortbehandlingUnderkjentStatus } from '~/lib/meldekort/v2/meldekortbehandling/header/underkjent-status/MeldekortbehandlingUnderkjentStatus';
 import { TilbakekrevingOppsummering } from '~/lib/tilbakekreving/TilbakekrevingOppsummering';
+import OppsummeringAvKlageForRammebehandling from '~/lib/behandling-felles/oppsummeringer/klage/oppsummeringAvKlageForRammebehandling/OppsummeringAvKlageForRammebehandling';
+import { hentKlagebehandling } from '~/lib/sak/sakUtils';
 
 import style from './MeldekortbehandlingHeader.module.css';
 
 export const MeldekortbehandlingHeader = () => {
-    const { førsteDagSomGirRett, sisteDagSomGirRett, kanSendeInnHelgForMeldekort } = useSak().sak;
+    const { sak } = useSak();
+    const { førsteDagSomGirRett, sisteDagSomGirRett, kanSendeInnHelgForMeldekort } = sak;
 
     const meldekortbehandling = useMeldekortbehandling();
-    const { saksbehandler, beslutter, ventestatus, attesteringer, tilbakekrevingId } =
-        meldekortbehandling;
+    const {
+        saksbehandler,
+        beslutter,
+        ventestatus,
+        attesteringer,
+        tilbakekrevingId,
+        klagebehandlingId,
+    } = meldekortbehandling;
 
     return (
         <MeldekortbehandlingSeksjon className={style.outer} gap={'space-16'}>
@@ -78,6 +87,13 @@ export const MeldekortbehandlingHeader = () => {
 
                 {tilbakekrevingId && (
                     <TilbakekrevingOppsummering tilbakekrevingId={tilbakekrevingId} />
+                )}
+
+                {/* TODO: egen oppsummeringskomponent for meldekort? */}
+                {klagebehandlingId && (
+                    <OppsummeringAvKlageForRammebehandling
+                        klagebehandling={hentKlagebehandling(sak, klagebehandlingId)}
+                    />
                 )}
             </MeldekortbehandlingSeksjon.Høyre>
         </MeldekortbehandlingSeksjon>

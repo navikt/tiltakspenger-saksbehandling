@@ -13,6 +13,7 @@ import { KanIkkeIverksetteUtbetalingGrunn, Utbetalingsstatus } from '~/types/Utb
 import { Attestering } from '../../behandling-felles/typer/Attestering';
 import { TilbakekrevingId } from '~/lib/tilbakekreving/typer/Tilbakekreving';
 import { VentestatusHendelse } from '~/types/Ventestatus';
+import { KlageId } from '~/lib/klage/typer/Klage';
 
 export const MeldekortbehandlingPrefix = 'meldekort_' as const;
 
@@ -82,7 +83,7 @@ export type MeldekortbehandlingProps = {
     skalSendeVedtaksbrev: boolean;
     ventestatus: VentestatusHendelse[];
     harFlereMeldeperioder: boolean;
-    klagebehandlingId: Nullable<string>;
+    klagebehandlingId: Nullable<KlageId>;
 };
 
 export type MeldekortDagProps = {

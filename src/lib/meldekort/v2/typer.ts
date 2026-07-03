@@ -28,6 +28,7 @@ import { SimulertBeregning } from '~/lib/beregning-og-simulering/typer/SimulertB
 import { TilbakekrevingId } from '~/lib/tilbakekreving/typer/Tilbakekreving';
 import { VentestatusHendelse } from '~/types/Ventestatus';
 import { SaksbehandlerBehandlingKommando } from '~/lib/behandling-felles/typer/BehandlingFelles';
+import { KlageId } from '~/lib/klage/typer/Klage';
 
 export type MeldeperiodeKjedePropsV2 = {
     id: MeldeperiodeKjedeId;
@@ -74,6 +75,7 @@ export type MeldekortbehandlingPropsV2 = {
     kanIkkeIverksetteUtbetaling: Nullable<KanIkkeIverksetteUtbetalingGrunn>;
     tekstTilVedtaksbrev: Nullable<string>;
     tilbakekrevingId: Nullable<TilbakekrevingId>;
+    klagebehandlingId: Nullable<KlageId>;
     skalSendeVedtaksbrev: boolean;
     ventestatus: VentestatusHendelse[];
     gyldigeKommandoer: SaksbehandlerBehandlingKommando[];

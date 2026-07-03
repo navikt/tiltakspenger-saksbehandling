@@ -2,18 +2,19 @@ import { Button, Dialog } from '@navikt/ds-react';
 import { PersonIcon } from '@navikt/aksel-icons';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { useSak } from '~/lib/sak/SakContext';
-import { useMeldekortbehandling } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2Context';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { SakProps } from '~/lib/sak/SakTyper';
+import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
 
 type Props = {
+    meldekortbehandling: MeldekortbehandlingPropsV2;
     åpen: boolean;
     onClose: () => void;
 };
 
-export const MeldekortbehandlingTildelMeg = ({ åpen, onClose }: Props) => {
+export const MeldekortbehandlingTildelMeg = ({ meldekortbehandling, åpen, onClose }: Props) => {
     const { sak, setSak } = useSak();
-    const { id } = useMeldekortbehandling();
+    const { id } = meldekortbehandling;
 
     const { trigger, error, isMutating } = useFetchJsonFraApi<SakProps>(
         `/sak/${sak.sakId}/meldekort/${id}/ta`,
