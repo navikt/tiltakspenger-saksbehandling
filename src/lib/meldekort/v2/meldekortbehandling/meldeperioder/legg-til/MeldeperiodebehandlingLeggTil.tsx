@@ -11,6 +11,7 @@ import { PlusIcon } from '@navikt/aksel-icons';
 import { useRef } from 'react';
 import { BrukersMeldekortKjedeStatus } from '~/lib/meldekort/typer/BrukersMeldekort';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
+import { brukersMeldekortKjedeStatusTekst } from '~/lib/meldekort/v2/tekster';
 
 type Props = {
     onLeggTil: (kjedeId: MeldeperiodeKjedeId) => void;
@@ -88,7 +89,7 @@ export const MeldeperiodebehandlingLeggTil = ({ onLeggTil }: Props) => {
 
                                 return (
                                     <option key={id} value={id}>
-                                        {`${formaterMeldeperiode(periode)} - ${brukersMeldekortStatusTekst[brukersMeldekortStatus]}`}
+                                        {`${formaterMeldeperiode(periode)} - ${brukersMeldekortKjedeStatusTekst[brukersMeldekortStatus]}`}
                                     </option>
                                 );
                             })}
@@ -120,12 +121,4 @@ export const MeldeperiodebehandlingLeggTil = ({ onLeggTil }: Props) => {
             </Dialog.Popup>
         </Dialog>
     );
-};
-
-const brukersMeldekortStatusTekst: Record<BrukersMeldekortKjedeStatus, string> = {
-    IKKE_MOTTATT: 'Ikke mottatt',
-    VENTER_BEHANDLING: 'Mottatt, ikke behandlet',
-    BEHANDLET: 'Behandlet',
-    KORRIGERING_VENTER_BEHANDLING: 'Mottatt, ikke behandlet (korrigering)',
-    KORRIGERING_BEHANDLET: 'Behandlet (korrigering)',
 };

@@ -39,6 +39,8 @@ import Klageoversikt, {
 } from './klageoversikt/Klageoversikt';
 import { TilbakekrevingOversikt } from '~/lib/personoversikt/tilbakekreving/TilbakekrevingOversikt';
 import { personoversiktUrl } from '~/utils/urls';
+import { useFeatureToggles } from '~/context/FeatureTogglesContext';
+import { MeldekortOversiktV2 } from '~/lib/personoversikt/meldekort-oversikt/v2/MeldekortOversiktV2';
 
 export enum PersonoversiktTab {
     ÅpneBehandlinger = 'apne-behandlinger',
@@ -54,6 +56,8 @@ export const Personoversikt = () => {
     const { sak } = useSak();
     const [startRevurderingModalÅpen, setStartRevurderingModalÅpen] = useState(false);
     const [registrerSøknadManueltModalÅpen, setRegistrerSøknadManueltModalÅpen] = useState(false);
+
+    const { meldekortbehandlingV2Toggle } = useFeatureToggles();
 
     const {
         sakId,
@@ -235,18 +239,24 @@ export const Personoversikt = () => {
                         <ApneBehandlingerOversikt åpneBehandlinger={åpneBehandlinger} />
                     </Tabs.Panel>
                     <Tabs.Panel value={PersonoversiktTab.Meldekort} className={styles.panel}>
-                        <div className={styles.meldekortHeaderRad}>
-                            <MeldekortHelgToggle />
-                            {meldeperiodeKjederIkkeKlare && (
-                                <MeldekortOversiktIkkeKlar
-                                    meldeperiodeKjeder={meldeperiodeKjederIkkeKlare}
-                                />
-                            )}
-                        </div>
-                        {meldeperiodeKjederKanBehandles && (
-                            <MeldekortOversikt
-                                meldeperiodeKjeder={meldeperiodeKjederKanBehandles}
-                            />
+                        {meldekortbehandlingV2Toggle ? (
+                            <MeldekortOversiktV2 />
+                        ) : (
+                            <>
+                                <div className={styles.meldekortHeaderRad}>
+                                    <MeldekortHelgToggle />
+                                    {meldeperiodeKjederIkkeKlare && (
+                                        <MeldekortOversiktIkkeKlar
+                                            meldeperiodeKjeder={meldeperiodeKjederIkkeKlare}
+                                        />
+                                    )}
+                                </div>
+                                {meldeperiodeKjederKanBehandles && (
+                                    <MeldekortOversikt
+                                        meldeperiodeKjeder={meldeperiodeKjederKanBehandles}
+                                    />
+                                )}
+                            </>
                         )}
                     </Tabs.Panel>
                     <Tabs.Panel

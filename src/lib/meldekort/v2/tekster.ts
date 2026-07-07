@@ -3,6 +3,16 @@ import {
     MeldekortbehandlingStatus,
     MeldeperiodebehandlingType,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
+import { BrukersMeldekortKjedeStatus } from '~/lib/meldekort/typer/BrukersMeldekort';
+
+export const brukersMeldekortKjedeStatusTekst: Record<BrukersMeldekortKjedeStatus, string> = {
+    [BrukersMeldekortKjedeStatus.IKKE_MOTTATT]: 'Ikke mottatt',
+    [BrukersMeldekortKjedeStatus.VENTER_BEHANDLING]: 'Mottatt, ikke behandlet',
+    [BrukersMeldekortKjedeStatus.BEHANDLET]: 'Behandlet',
+    [BrukersMeldekortKjedeStatus.KORRIGERING_VENTER_BEHANDLING]:
+        'Mottatt, ikke behandlet (korrigering)',
+    [BrukersMeldekortKjedeStatus.KORRIGERING_BEHANDLET]: 'Behandlet (korrigering)',
+} as const;
 
 export const meldeperiodebehandlingTypeTekst: Record<MeldeperiodebehandlingType, string> = {
     [MeldeperiodebehandlingType.FØRSTE_BEHANDLING]: 'Førstegangsbehandling',

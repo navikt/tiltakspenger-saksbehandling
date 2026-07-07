@@ -11,7 +11,7 @@ import {
     BulletListIcon,
 } from '@navikt/aksel-icons';
 import { useState } from 'react';
-import { useMeldekortbehandling } from '~/lib/meldekort/v2/meldekortbehandling/context/MeldekortbehandlingV2Context';
+import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
 import { SaksbehandlerBehandlingKommando as Kommando } from '~/lib/behandling-felles/typer/BehandlingFelles';
 import { MeldekortbehandlingTildelMeg } from '~/lib/meldekort/v2/meldekortbehandling/meny/handlinger/MeldekortbehandlingTildelMeg';
 import { MeldekortbehandlingGjenoppta } from '~/lib/meldekort/v2/meldekortbehandling/meny/handlinger/MeldekortbehandlingGjenoppta';
@@ -22,8 +22,11 @@ import { MeldekortbehandlingAvslutt } from '~/lib/meldekort/v2/meldekortbehandli
 import { OppsummeringAvVentestatuserModal } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
 import { OppsummeringAvAttesteringerModal } from '~/lib/behandling-felles/attestering/OppsummeringAvAttesteringerModal';
 
-export const MeldekortbehandlingMeny = () => {
-    const meldekortbehandling = useMeldekortbehandling();
+type Props = {
+    meldekortbehandling: MeldekortbehandlingPropsV2;
+};
+
+export const MeldekortbehandlingMeny = ({ meldekortbehandling }: Props) => {
     const { gyldigeKommandoer, ventestatus, attesteringer } = meldekortbehandling;
 
     const [aktivDialog, setAktivDialog] = useState<AktivDialog | null>(null);
@@ -58,6 +61,7 @@ export const MeldekortbehandlingMeny = () => {
                         variant={'secondary'}
                         icon={<MenuElipsisVerticalIcon aria-hidden />}
                         iconPosition={'right'}
+                        size={'small'}
                     >
                         {'Meny'}
                     </Button>
