@@ -80,9 +80,6 @@ export const MeldeperiodebehandlingLeggTil = ({ onLeggTil }: Props) => {
                             {
                                 'Du kan legge til en og en valgt meldeperiode, eller alle meldeperioder som har et ubehandlet meldekort fra bruker. '
                             }
-                            {
-                                'Meldeperiodene i en behandling må være sammenhengede (denne restriksjonen vil fjernes på sikt.)'
-                            }
                         </Infokort>
 
                         <Select label={'Legg til meldeperiode'} hideLabel={true} ref={selectRef}>

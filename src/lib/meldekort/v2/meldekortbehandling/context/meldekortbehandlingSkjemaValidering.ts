@@ -6,8 +6,6 @@ import {
 import { MeldekortbehandlingDagStatus } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { nonNullishPredicate } from '~/utils/array';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
-import { Periode } from '~/types/Periode';
-import { perioderErSammenhengende } from '~/utils/periode';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { hentMeldeperiodekjede } from '~/lib/sak/sakUtils';
 import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
@@ -97,19 +95,6 @@ export const validerMeldekortbehandlingSkjema = (
     const meldeperioderFeil = skjema.meldeperioder
         .map((mpSkjema) => validerMeldeperiodeSkjema(mpSkjema, behandling, sak))
         .filter(nonNullishPredicate);
-
-    const perioder = skjema.meldeperioder.map(
-        (mp): Periode => ({
-            fraOgMed: mp.dager.at(0)!.dato,
-            tilOgMed: mp.dager.at(-1)!.dato,
-        }),
-    );
-
-    if (!perioderErSammenhengende(...perioder)) {
-        overordnedeFeil.push(
-            'Valgte meldeperioder er ikke sammenhengende, dette støtter vi ikke ennå.',
-        );
-    }
 
     if (meldeperioderFeil.length === 0 && overordnedeFeil.length === 0) {
         return null;
