@@ -51,11 +51,13 @@ import FerdigstillKlageModalWrapper from '~/lib/klage/modaler/FerdigstillKlagebe
 import Omgjøringsresultat from '~/lib/klage/Omgjøringsresultat';
 import KlageTilknyttedeBehandlingerInfoCard from '~/lib/klage/KlageTilknyttedeBehandlingerInfoCard';
 import { OppsummeringAvVentestatuser } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
-import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
+import {
+    MeldekortbehandlingId,
+    MeldekortbehandlingPropsV2,
+} from '~/lib/meldekort/typer/Meldekortbehandling';
 import { Meldekortvedtak } from '~/lib/meldekort/typer/Meldekortvedtak';
-import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
-import { MeldeperiodeKjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
+import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
 
 type Props = {
     sak: SakProps;
@@ -66,7 +68,7 @@ type Props = {
     søknader: Søknad[];
     rammebehandlinger: Rammebehandling[];
     meldekortbehandlinger: PartialRecord<MeldekortbehandlingId, MeldekortbehandlingPropsV2>;
-    meldeperiodekjeder: MeldeperiodeKjedeProps[];
+    meldeperiodekjeder: MeldeperiodekjedeProps[];
 };
 
 export const getServerSideProps = pageWithAuthentication(async (context) => {
@@ -101,7 +103,7 @@ export const getServerSideProps = pageWithAuthentication(async (context) => {
             søknader: sak.søknader,
             rammebehandlinger: sak.behandlinger,
             meldekortbehandlinger: sak.meldekortbehandlinger,
-            meldeperiodekjeder: sak.meldeperiodeKjeder,
+            meldeperiodekjeder: sak.meldeperiodeKjederV2,
         } satisfies Props,
     };
 });
@@ -165,7 +167,7 @@ const OpprettholdResultat = (props: {
     klage: Klagebehandling & { resultat: KlagebehandlingsresultatOpprettholdt };
     rammevedtak: Rammevedtak[];
     meldekortvedtak: Meldekortvedtak[];
-    meldeperiodekjeder: MeldeperiodeKjedeProps[];
+    meldeperiodekjeder: MeldeperiodekjedeProps[];
     omgjøringsbehandling: Nullable<Rammebehandling>;
     søknader: Søknad[];
     innloggetSaksbehandler: Saksbehandler;

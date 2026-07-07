@@ -1,9 +1,0 @@
-.v2Toggle {
-    position: fixed;
-    z-index: 10;
-    bottom: 4rem;
-    left: 1rem;
-    padding: 0 0.5rem;
-    border-radius: 8px;
-    background-color: var(--ax-brand-blue-300A);
-}

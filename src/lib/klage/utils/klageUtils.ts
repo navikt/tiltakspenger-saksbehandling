@@ -17,12 +17,12 @@ import {
     erKlageinstanshendelseOmgjøringskravbehandlingAvsluttet,
 } from './KlageinstanshendelseUtils';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
-import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
 import {
     erBehandlingIdMeldekortbehandling,
     erBehandlingIdRammebehandling,
 } from '~/lib/behandling-felles/utils/behandlingUtils';
-import { erMeldekortbehandlingUnderAktivOmgjøring } from '~/lib/meldekort/utils/MeldekortbehandlingUtils';
+import { erMeldekortbehandlingUnderAktivOmgjøring } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
+import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/typer/Meldekortbehandling';
 
 /**
  *

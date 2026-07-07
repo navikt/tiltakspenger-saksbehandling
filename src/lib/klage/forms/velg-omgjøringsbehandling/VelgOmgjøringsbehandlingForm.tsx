@@ -20,10 +20,12 @@ import {
     erBehandlingIdRammebehandling,
 } from '~/lib/behandling-felles/utils/behandlingUtils';
 import { Meldekortvedtak } from '~/lib/meldekort/typer/Meldekortvedtak';
-import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
-import { MeldeperiodeKjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
 
-import { MeldekortbehandlingStatus } from '~/lib/meldekort/typer/Meldekortbehandling';
+import {
+    MeldekortbehandlingPropsV2,
+    MeldekortbehandlingStatus,
+} from '~/lib/meldekort/typer/Meldekortbehandling';
+import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
 
 export const VelgOmgjøringsbehandlingModal = (props: {
     sakId: string;
@@ -32,7 +34,7 @@ export const VelgOmgjøringsbehandlingModal = (props: {
     rammevedtak: Rammevedtak[];
     søknader: Søknad[];
     meldekortvedtak: Meldekortvedtak[];
-    meldeperiodekjeder: MeldeperiodeKjedeProps[];
+    meldeperiodekjeder: MeldeperiodekjedeProps[];
     åpen: boolean;
     onClose: () => void;
 }) => {
@@ -122,7 +124,7 @@ const VelgOmgjøringsbehandlingForm = (props: {
     søknader: Søknad[];
     klagebehandling: Klagebehandling;
     meldekortvedtak: Meldekortvedtak[];
-    meldeperiodekjeder: MeldeperiodeKjedeProps[];
+    meldeperiodekjeder: MeldeperiodekjedeProps[];
 }) => {
     const behandlingstype = useWatch({
         control: props.control,
@@ -144,12 +146,10 @@ const VelgOmgjøringsbehandlingForm = (props: {
     );
 
     const kjederSomKanOpprettesMeldekortbehandlingerFor = props.meldeperiodekjeder
-        .filter((kjede) =>
-            kjede.meldekortbehandlinger.some(
-                (mb) =>
-                    mb.status === MeldekortbehandlingStatus.GODKJENT ||
-                    mb.status === MeldekortbehandlingStatus.AUTOMATISK_BEHANDLET,
-            ),
+        .filter(
+            (kjede) =>
+                kjede.meldekortbehandlingStatus === MeldekortbehandlingStatus.GODKJENT ||
+                kjede.meldekortbehandlingStatus === MeldekortbehandlingStatus.AUTOMATISK_BEHANDLET,
         )
         .map((k) => k.id);
 

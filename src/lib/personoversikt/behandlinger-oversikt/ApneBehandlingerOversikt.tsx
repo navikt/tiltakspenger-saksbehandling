@@ -9,20 +9,20 @@ import {
     finnTypeBehandlingTekstForOversikt,
     klagebehandlingResultatTilTag,
     klagebehandlingStatusTilTag,
-    meldeperiodeKjedeStatusTag,
 } from '~/utils/tekstformateringUtils';
-import { formaterTidspunkt, formaterPeriode, formaterMeldeperiode } from '~/utils/date';
+import { formaterTidspunkt, formaterPeriode } from '~/utils/date';
 import { ApneBehandlingerMeny } from '~/lib/behandling-felles/behandlingmeny/ApneBehandlingerMeny';
-import { MeldeperiodeKjedeOversiktMeny } from '~/lib/personoversikt/meldekort-oversikt/MeldekortOversikt';
 import { SakProps } from '~/lib/sak/SakTyper';
+import { Periode } from '~/types/Periode';
 import { useSak } from '~/lib/sak/SakContext';
 import { Nullable } from '~/types/UtilTypes';
 import KlageMeny from '~/lib/behandling-felles/behandlingmeny/KlageMeny';
 import { hentSisteKlagehendelseUtfallFraKlagebehandling } from '~/lib/klage/utils/klageUtils';
 import { klagehendelseUtfallTilTag } from '~/lib/klage/utils/KlageinstanshendelseUtils';
-import { erMeldekortbehandlingSattPaVent } from '~/lib/meldekort/utils/MeldekortbehandlingUtils';
+import { erMeldekortbehandlingSattPaVent } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
 import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
+import { hentMeldekortbehandling } from '~/lib/sak/sakUtils';
 
 type Props = {
     åpneBehandlinger: ÅpenBehandlingForOversikt[];
@@ -68,7 +68,9 @@ export const ApneBehandlingerOversikt = ({ åpneBehandlinger }: Props) => {
                             <Table.DataCell>{statusTag}</Table.DataCell>
                             <Table.DataCell>{formaterTidspunkt(opprettet)}</Table.DataCell>
                             <Table.DataCell>{kravtidspunkt ?? '-'}</Table.DataCell>
-                            <Table.DataCell>{periode ?? '-'}</Table.DataCell>
+                            <Table.DataCell>
+                                {periode ? `${formaterPeriode(periode)}` : '-'}
+                            </Table.DataCell>
                             <Table.DataCell>{saksbehandler ?? 'Ikke tildelt'}</Table.DataCell>
                             <Table.DataCell>{beslutter ?? 'Ikke tildelt'}</Table.DataCell>
                             <Table.DataCell scope="col" align={'right'}>
@@ -87,7 +89,7 @@ type ÅpenBehandlingOversiktRadProps = {
     resultatTag?: React.ReactNode;
     statusTag: React.ReactNode;
     kravtidspunkt?: string;
-    periode?: string;
+    periode?: Nullable<Periode>;
     saksbehandler?: Nullable<string>;
     beslutter?: Nullable<string>;
     meny: React.ReactNode;
@@ -132,7 +134,7 @@ const propsForRad = (
                 ),
                 saksbehandler,
                 beslutter,
-                periode: periode ? formaterPeriode(periode) : undefined,
+                periode,
                 kravtidspunkt:
                     type === ÅpenBehandlingForOversiktType.SØKNADSBEHANDLING
                         ? formaterTidspunkt(åpenBehandling.kravtidspunkt)
@@ -143,13 +145,10 @@ const propsForRad = (
             };
         }
         case ÅpenBehandlingForOversiktType.MELDEKORT: {
-            const { periode, meldekortbehandlingId, id, saksbehandler, beslutter, status } =
-                åpenBehandling;
+            const { periode, meldekortbehandlingId, saksbehandler, beslutter } = åpenBehandling;
 
             const meldekortbehandling = meldekortbehandlingId
-                ? sak.meldeperiodeKjeder
-                      .find((kjede) => kjede.id === id)
-                      ?.meldekortbehandlinger.find((it) => it.id === meldekortbehandlingId)
+                ? hentMeldekortbehandling(sak, meldekortbehandlingId)
                 : undefined;
 
             return {
@@ -157,18 +156,11 @@ const propsForRad = (
                 statusTag:
                     meldekortbehandling && erMeldekortbehandlingSattPaVent(meldekortbehandling) ? (
                         <Tag data-color="warning">Satt på vent</Tag>
-                    ) : (
-                        meldeperiodeKjedeStatusTag[status]
-                    ),
+                    ) : null,
                 saksbehandler,
                 beslutter,
-                periode: periode ? formaterMeldeperiode(periode) : undefined,
-                meny: (
-                    <MeldeperiodeKjedeOversiktMeny
-                        kjedePeriode={periode}
-                        meldekortbehandling={meldekortbehandling}
-                    />
-                ),
+                periode,
+                meny: null,
             };
         }
         case ÅpenBehandlingForOversiktType.KLAGE: {

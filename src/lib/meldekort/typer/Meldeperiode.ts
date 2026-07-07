@@ -1,26 +1,17 @@
 import { Periode } from '~/types/Periode';
-import { MeldekortbehandlingId, MeldekortbehandlingProps } from './Meldekortbehandling';
-import { BrukersMeldekortProps } from './BrukersMeldekort';
+import {
+    MeldekortbehandlingId,
+    MeldekortbehandlingStatus,
+} from '~/lib/meldekort/typer/Meldekortbehandling';
+import {
+    BrukersMeldekortKjedeStatus,
+    BrukersMeldekortProps,
+} from '~/lib/meldekort/typer/BrukersMeldekort';
 import { MeldeperiodeBeregningProps } from '~/lib/beregning-og-simulering/typer/Beregning';
 
 export type MeldeperiodeKjedeId = `${string}/${string}`;
 
 export type MeldeperiodeId = `meldeperiode_${string}`;
-
-export enum MeldeperiodeKjedeStatus {
-    AVVENTER_MELDEKORT = 'AVVENTER_MELDEKORT',
-    KLAR_TIL_BEHANDLING = 'KLAR_TIL_BEHANDLING',
-    UNDER_BEHANDLING = 'UNDER_BEHANDLING',
-    KLAR_TIL_BESLUTNING = 'KLAR_TIL_BESLUTNING',
-    UNDER_BESLUTNING = 'UNDER_BESLUTNING',
-    GODKJENT = 'GODKJENT',
-    AUTOMATISK_BEHANDLET = 'AUTOMATISK_BEHANDLET',
-    IKKE_RETT_TIL_TILTAKSPENGER = 'IKKE_RETT_TIL_TILTAKSPENGER',
-    IKKE_KLAR_TIL_BEHANDLING = 'IKKE_KLAR_TIL_BEHANDLING',
-    AVBRUTT = 'AVBRUTT',
-    KORRIGERT_MELDEKORT = 'KORRIGERT_MELDEKORT',
-    VENTER_AUTOMATISK_BEHANDLING = 'VENTER_AUTOMATISK_BEHANDLING',
-}
 
 export type MeldeperiodeProps = {
     id: MeldeperiodeId;
@@ -33,24 +24,14 @@ export type MeldeperiodeProps = {
     ingenDagerGirRett: boolean;
 };
 
-export type MeldeperiodeKjedeProps = {
+export type MeldeperiodekjedeProps = {
     id: MeldeperiodeKjedeId;
     periode: Periode;
-    status: MeldeperiodeKjedeStatus;
-    periodeMedÅpenBehandling?: Periode;
     tiltaksnavn: string[];
     sisteMeldeperiode: MeldeperiodeProps;
-    meldekortbehandlinger: MeldekortbehandlingProps[];
+    meldekortbehandlingIder: MeldekortbehandlingId[];
+    meldekortbehandlingStatus: MeldekortbehandlingStatus | null;
     brukersMeldekort: BrukersMeldekortProps[];
-    korrigeringFraTidligerePeriode?: MeldeperiodeKorrigering;
-    avbrutteMeldekortbehandlinger: MeldekortbehandlingProps[];
-    sisteBeregning: MeldeperiodeBeregningProps;
-};
-
-export type MeldeperiodeKorrigering = {
-    meldekortId: MeldekortbehandlingId;
-    kjedeId: MeldeperiodeKjedeId;
-    periode: Periode;
-    iverksatt: string;
-    beregning: MeldeperiodeBeregningProps;
+    brukersMeldekortStatus: BrukersMeldekortKjedeStatus;
+    gjeldendeBeregning: MeldeperiodeBeregningProps | null;
 };

@@ -21,7 +21,8 @@ import {
     useFetchResponseFromApi,
 } from '~/utils/fetch/useFetchFraApi';
 import { Nullable } from '~/types/UtilTypes';
-import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
+
+import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/typer/Meldekortbehandling';
 
 export const useOpprettKlage = (args: {
     sakId: string;

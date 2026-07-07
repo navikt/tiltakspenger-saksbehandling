@@ -9,7 +9,7 @@ import { SøknadId } from '../../../types/Søknad';
 import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 import { SøknadsbehandlingResultat } from '~/lib/rammebehandling/typer/Søknadsbehandling';
 import { Nullable } from '~/types/UtilTypes';
-import { MeldeperiodeKjedeId, MeldeperiodeKjedeStatus } from '~/lib/meldekort/typer/Meldeperiode';
+import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
 import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { KlagebehandlingResultat, KlagebehandlingStatus, KlageId } from '../../klage/typer/Klage';
 
@@ -81,7 +81,7 @@ export interface MeldeperiodeKjedeSomMåBehandles extends ÅpenBehandlingBase {
     meldekortbehandlingId: Nullable<MeldekortbehandlingId>;
     type: ÅpenBehandlingForOversiktType.MELDEKORT;
     periode: Periode;
-    status: MeldeperiodeKjedeStatus;
+    status: string;
     saksbehandler?: Nullable<string>;
     beslutter?: Nullable<string>;
 }

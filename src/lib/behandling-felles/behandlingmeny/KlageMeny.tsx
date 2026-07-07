@@ -33,7 +33,8 @@ import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { ApiErrorFeilModal, ApiErrorState } from '~/lib/_felles/modaler/ApiErrorFeilModal';
 import AvbrytKlagebehandlingModal from '~/lib/klage/modaler/avbryt/AvbrytKlagebehandlingModal';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
-import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
+
+import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/typer/Meldekortbehandling';
 
 const KlageMeny = (props: {
     klage: Klagebehandling;

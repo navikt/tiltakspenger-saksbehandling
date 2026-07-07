@@ -1,0 +1,56 @@
+import { Box, Table } from '@navikt/ds-react';
+import { formaterDatotekst, ukedagFraDatoKort } from '~/utils/date';
+import { MeldekortDagBeregnetProps } from '~/lib/meldekort/typer/Meldekortbehandling';
+import { meldekortbehandlingDagStatusTekst } from '~/utils/tekstformateringUtils';
+import { ikonForMeldekortbehandlingDagStatus } from '../../utils/ikoner';
+import { formatterBeløp } from '~/utils/beløp';
+
+import styles from './MeldekortUke.module.css';
+
+type Props = {
+    dager: MeldekortDagBeregnetProps[];
+    ukeIndex: 0 | 1;
+};
+
+export const MeldekortUke = ({ dager }: Props) => {
+    return (
+        <Box className={styles.uke}>
+            <Table size="small">
+                <Table.Header>
+                    <Table.Row>
+                        <Table.HeaderCell>{'Dag'}</Table.HeaderCell>
+                        <Table.HeaderCell>{'Dato'}</Table.HeaderCell>
+                        <Table.HeaderCell colSpan={2}>{'Status'}</Table.HeaderCell>
+                        <Table.HeaderCell>{'Sats'}</Table.HeaderCell>
+                        <Table.HeaderCell>{'Beløp'}</Table.HeaderCell>
+                        <Table.HeaderCell>{'Barn'}</Table.HeaderCell>
+                    </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                    {dager.map((dag) => (
+                        <Table.Row key={dag.dato}>
+                            <Table.DataCell>{ukedagFraDatoKort(dag.dato)}</Table.DataCell>
+                            <Table.DataCell>{formaterDatotekst(dag.dato)}</Table.DataCell>
+                            <Table.DataCell className={styles.ikon}>
+                                {ikonForMeldekortbehandlingDagStatus[dag.status]}
+                            </Table.DataCell>
+                            <Table.DataCell>
+                                {meldekortbehandlingDagStatusTekst[dag.status]}
+                            </Table.DataCell>
+                            <Table.DataCell>
+                                {dag.beregningsdag && `${dag.beregningsdag.prosent}%`}
+                            </Table.DataCell>
+                            <Table.DataCell>
+                                {dag.beregningsdag && formatterBeløp(dag.beregningsdag.beløp)}
+                            </Table.DataCell>
+                            <Table.DataCell>
+                                {dag.beregningsdag &&
+                                    formatterBeløp(dag.beregningsdag.barnetillegg)}
+                            </Table.DataCell>
+                        </Table.Row>
+                    ))}
+                </Table.Body>
+            </Table>
+        </Box>
+    );
+};

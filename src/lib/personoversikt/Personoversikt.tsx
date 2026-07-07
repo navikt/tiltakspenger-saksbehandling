@@ -1,16 +1,12 @@
 import styles from './Personoversikt.module.css';
 import { ActionMenu, Box, Button, Heading, HStack, Tabs } from '@navikt/ds-react';
-import { MeldekortOversikt } from './meldekort-oversikt/MeldekortOversikt';
 import { ApneBehandlingerOversikt } from './behandlinger-oversikt/ApneBehandlingerOversikt';
 import { StartRevurderingModal } from './opprett-revurdering/StartRevurderingModal';
 import { PersonaliaHeader } from '../personaliaheader/PersonaliaHeader';
 import { useSak } from '~/lib/sak/SakContext';
 import { AvsluttedeBehandlinger } from './behandlinger-oversikt/AvsluttedeBehandlinger';
-import { MeldeperiodeKjedeStatus } from '~/lib/meldekort/typer/Meldeperiode';
-import { MeldekortOversiktIkkeKlar } from './meldekort-oversikt/ikke-klar/MeldekortOversiktIkkeKlar';
 import { VedtatteBehandlinger } from '~/lib/personoversikt/behandlinger-oversikt/vedtatte-behandlinger/VedtatteBehandlinger';
 import NotificationBanner from '~/lib/_felles/notifications/NotificationBanner';
-import { MeldekortHelgToggle } from '~/lib/personoversikt/helg-toggle/MeldekortHelgToggle';
 import {
     Rammebehandling,
     Rammebehandlingsstatus,
@@ -39,9 +35,8 @@ import Klageoversikt, {
 } from './klageoversikt/Klageoversikt';
 import { TilbakekrevingOversikt } from '~/lib/personoversikt/tilbakekreving/TilbakekrevingOversikt';
 import { personoversiktUrl } from '~/utils/urls';
-import { useFeatureToggles } from '~/context/FeatureTogglesContext';
-import { MeldekortOversiktV2 } from '~/lib/personoversikt/meldekort-oversikt/v2/MeldekortOversiktV2';
-import { MeldeperiodeV2Velger } from '~/lib/meldekort/v2/v2-velger/MeldeperiodeV2Velger';
+import { MeldekortOversikt } from '~/lib/personoversikt/meldekort-oversikt/MeldekortOversikt';
+import { finnAntallUbehandledeMeldekort } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
 
 export enum PersonoversiktTab {
     ÅpneBehandlinger = 'apne-behandlinger',
@@ -52,19 +47,11 @@ export enum PersonoversiktTab {
     Tilbakekreving = 'Tilbakekreving',
 }
 
-type Props = {
-    /** Leses fra V2-cookien i getServerSideProps, slik at server og klient rendrer det samme. */
-    harValgtV2Initial?: boolean;
-};
-
-export const Personoversikt = ({ harValgtV2Initial = false }: Props) => {
+export const Personoversikt = () => {
     const router = useRouter();
     const { sak } = useSak();
     const [startRevurderingModalÅpen, setStartRevurderingModalÅpen] = useState(false);
     const [registrerSøknadManueltModalÅpen, setRegistrerSøknadManueltModalÅpen] = useState(false);
-
-    const { meldekortbehandlingV2Toggle } = useFeatureToggles();
-    const [harValgtV2, setHarValgtV2] = useState(harValgtV2Initial);
 
     const {
         sakId,
@@ -72,19 +59,11 @@ export const Personoversikt = ({ harValgtV2Initial = false }: Props) => {
         behandlinger,
         åpneBehandlinger,
         klageBehandlinger,
-        meldeperiodeKjeder,
         alleRammevedtak,
         alleKlagevedtak,
         tilbakekrevinger,
+        meldeperiodeKjederV2,
     } = sak;
-
-    const { meldeperiodeKjederIkkeKlare, meldeperiodeKjederKanBehandles } = Object.groupBy(
-        meldeperiodeKjeder,
-        ({ status }) =>
-            status === MeldeperiodeKjedeStatus.IKKE_KLAR_TIL_BEHANDLING
-                ? 'meldeperiodeKjederIkkeKlare'
-                : 'meldeperiodeKjederKanBehandles',
-    );
 
     const avbrutteRammebehandlinger = behandlinger.filter((behandling) => behandling.avbrutt);
     const avbrutteKlagebehandlinger = klageBehandlinger.filter(
@@ -136,9 +115,6 @@ export const Personoversikt = ({ harValgtV2Initial = false }: Props) => {
 
     return (
         <>
-            {meldekortbehandlingV2Toggle && (
-                <MeldeperiodeV2Velger harValgtV2={harValgtV2} setHarValgtV2={setHarValgtV2} />
-            )}
             <NotificationBanner />
             <PersonaliaHeader sakId={sakId} saksnummer={saksnummer} />
             <Box className={styles.wrapper}>
@@ -173,7 +149,7 @@ export const Personoversikt = ({ harValgtV2Initial = false }: Props) => {
                             value={PersonoversiktTab.Meldekort}
                             label={labelWithCounter(
                                 'Meldekort',
-                                meldeperiodeKjederKanBehandles?.length ?? 0,
+                                finnAntallUbehandledeMeldekort(meldeperiodeKjederV2),
                             )}
                             icon={<InboxIcon aria-hidden />}
                             className={styles.tab}
@@ -249,25 +225,7 @@ export const Personoversikt = ({ harValgtV2Initial = false }: Props) => {
                         <ApneBehandlingerOversikt åpneBehandlinger={åpneBehandlinger} />
                     </Tabs.Panel>
                     <Tabs.Panel value={PersonoversiktTab.Meldekort} className={styles.panel}>
-                        {meldekortbehandlingV2Toggle && harValgtV2 ? (
-                            <MeldekortOversiktV2 />
-                        ) : (
-                            <>
-                                <div className={styles.meldekortHeaderRad}>
-                                    <MeldekortHelgToggle />
-                                    {meldeperiodeKjederIkkeKlare && (
-                                        <MeldekortOversiktIkkeKlar
-                                            meldeperiodeKjeder={meldeperiodeKjederIkkeKlare}
-                                        />
-                                    )}
-                                </div>
-                                {meldeperiodeKjederKanBehandles && (
-                                    <MeldekortOversikt
-                                        meldeperiodeKjeder={meldeperiodeKjederKanBehandles}
-                                    />
-                                )}
-                            </>
-                        )}
+                        <MeldekortOversikt />
                     </Tabs.Panel>
                     <Tabs.Panel
                         value={PersonoversiktTab.VedtatteBehandlinger}
