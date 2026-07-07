@@ -49,7 +49,8 @@ const AvbrytKlagebehandlingModal = (props: {
             onSubmit={form.handleSubmit(onSubmit)}
             footer={{
                 isMutating: avbrytKlageBehandling?.isMutating ?? false,
-                error: avbrytKlageBehandling?.error?.message ?? null,
+                error: avbrytKlageBehandling?.error ?? null,
+                saksnummer: props.saksnummer,
             }}
             bodyInnhold={<AvbrytKlagebehandlingForm control={form.control} />}
         />

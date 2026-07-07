@@ -14,7 +14,8 @@ import { Controller, FieldErrors, useForm } from 'react-hook-form';
 export const AvsluttMeldekortbehandlingModal = (props: {
     sakId: SakId;
     meldekortbehandlingId: MeldekortbehandlingId;
-    personoversiktUrl: string;
+    redirectUrlEtterSuksess: string;
+    saksnummer: string;
     åpen: boolean;
     onClose: () => void;
 }) => {
@@ -35,7 +36,7 @@ export const AvsluttMeldekortbehandlingModal = (props: {
         { begrunnelse: string }
     >(`/sak/${props.sakId}/meldekort/${props.meldekortbehandlingId}/avbryt`, 'POST', {
         onSuccess: () => {
-            router.push(props.personoversiktUrl);
+            router.push(props.redirectUrlEtterSuksess);
         },
     });
 
@@ -65,7 +66,8 @@ export const AvsluttMeldekortbehandlingModal = (props: {
             onSubmit={form.handleSubmit(onSubmit)}
             footer={{
                 isMutating: avsluttMeldekortbehandlingApi.isMutating,
-                error: avsluttMeldekortbehandlingApi.error?.message ?? null,
+                error: avsluttMeldekortbehandlingApi.error ?? null,
+                saksnummer: props.saksnummer,
             }}
         />
     );
@@ -74,7 +76,8 @@ export const AvsluttMeldekortbehandlingModal = (props: {
 const AvsluttMeldekortbehandling = (props: {
     sakId: SakId;
     meldekortbehandlingId: MeldekortbehandlingId;
-    personoversiktUrl: string;
+    redirectUrlEtterSuksess: string;
+    saksnummer: string;
     buttonProps?: {
         size?: ButtonProps['size'];
         variant?: ButtonProps['variant'];
@@ -90,7 +93,8 @@ const AvsluttMeldekortbehandling = (props: {
                     onClose={() => setVilAvslutteBehandling(false)}
                     sakId={props.sakId}
                     meldekortbehandlingId={props.meldekortbehandlingId}
-                    personoversiktUrl={props.personoversiktUrl}
+                    redirectUrlEtterSuksess={props.redirectUrlEtterSuksess}
+                    saksnummer={props.saksnummer}
                 />
             )}
             <Button
