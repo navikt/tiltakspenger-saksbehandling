@@ -7,12 +7,12 @@ import { meldekortbehandlingUrl } from '~/utils/urls';
 import { useRouter } from 'next/router';
 import { SakProps } from '~/lib/sak/SakTyper';
 import {
-    MeldekortbehandlingPropsV2,
+    MeldekortbehandlingProps,
     MeldekortbehandlingStatus,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 
 type Props = {
-    meldekortbehandling: MeldekortbehandlingPropsV2;
+    meldekortbehandling: MeldekortbehandlingProps;
     åpen: boolean;
     onClose: () => void;
 };

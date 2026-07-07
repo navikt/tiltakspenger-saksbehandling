@@ -1,5 +1,5 @@
 import { Tabs, VStack } from '@navikt/ds-react';
-import { useMeldeperiodeKjedeV2 } from '~/lib/meldekort/meldeperiodekjede/context/MeldeperiodeKjedeContextV2';
+import { useMeldeperiodekjede } from '~/lib/meldekort/meldeperiodekjede/context/MeldeperiodekjedeContext';
 import { MeldeperiodekjedeGjeldendeBeregning } from '~/lib/meldekort/meldeperiodekjede/høyre-seksjon/gjeldende-beregning/MeldeperiodekjedeGjeldendeBeregning';
 import { CurrencyExchangeIcon, DocPencilIcon, PersonPencilIcon } from '@navikt/aksel-icons';
 import { MeldekortbehandlingOppsummering } from '~/lib/meldekort/meldeperiodekjede/høyre-seksjon/behandling-oppsummering/MeldekortbehandlingOppsummering';
@@ -14,7 +14,7 @@ import style from './MeldeperiodekjedeHøyreSeksjon.module.css';
 export const MeldeperiodekjedeHøyreSeksjon = () => {
     const { åpenMeldekortbehandlingId, saksnummer } = useSak().sak;
 
-    const { meldeperiodeKjede } = useMeldeperiodeKjedeV2();
+    const { meldeperiodeKjede } = useMeldeperiodekjede();
     const { id, gjeldendeBeregning, brukersMeldekort, meldekortbehandlingIder } = meldeperiodeKjede;
 
     const harÅpenBehandling = åpenMeldekortbehandlingId

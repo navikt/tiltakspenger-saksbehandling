@@ -9,7 +9,7 @@ import {
     RobotSmileIcon,
 } from '@navikt/aksel-icons';
 import {
-    MeldekortbehandlingPropsV2,
+    MeldekortbehandlingProps,
     MeldekortbehandlingStatus,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { erMeldekortbehandlingSattPaVent } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
@@ -18,7 +18,7 @@ import { meldekortbehandlingStatusTekst } from '~/lib/meldekort/utils/tekster';
 import style from './MeldekortbehandlingStatusTags.module.css';
 
 type Props = {
-    meldekortbehandling: MeldekortbehandlingPropsV2;
+    meldekortbehandling: MeldekortbehandlingProps;
 };
 
 export const MeldekortbehandlingStatusTags = ({ meldekortbehandling }: Props) => {

@@ -5,7 +5,7 @@ import { useSak } from '~/lib/sak/SakContext';
 import { formaterTidspunkt } from '~/utils/date';
 import { MeldekortbehandlingForKjedeKompakt } from '~/lib/meldekort/meldekortbehandling/meldeperioder/meldeperiodebehandling/meldeperiode-info/behandlinger/MeldekortbehandlingForKjedeKompakt';
 import { hentMeldekortbehandling } from '~/lib/sak/sakUtils';
-import { useMeldekortbehandling } from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingV2Context';
+import { useMeldekortbehandling } from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingContext';
 import { meldekortbehandlingStatusTekst } from '~/lib/meldekort/utils/tekster';
 import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
 

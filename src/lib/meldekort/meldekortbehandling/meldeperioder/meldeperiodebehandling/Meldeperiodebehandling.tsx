@@ -6,12 +6,12 @@ import {
 import {
     MeldekortDagSkjema,
     MeldeperiodeSkjema,
-} from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingV2ContextTyper';
+} from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingContextTyper';
 import {
     useMeldekortbehandling,
     useMeldekortbehandlingSkjema,
     useMeldekortbehandlingSkjemaDispatch,
-} from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingV2Context';
+} from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingContext';
 import { formaterDatotekst, ukedagFraDatoKort, ukenummerFraDatotekst } from '~/utils/date';
 import { meldekortbehandlingDagStatusTekst } from '~/utils/tekstformateringUtils';
 import { formatterBeløp } from '~/utils/beløp';

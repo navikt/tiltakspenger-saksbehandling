@@ -10,10 +10,10 @@ import {
 import {
     MeldekortbehandlingSkjemaActions,
     MeldekortbehandlingSkjemaContext,
-} from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingV2ContextTyper';
+} from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingContextTyper';
 import {
     MeldekortbehandlingId,
-    MeldekortbehandlingPropsV2,
+    MeldekortbehandlingProps,
     MeldekortbehandlingStatus,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 import {
@@ -26,7 +26,7 @@ import { getTextAreaRefValue } from '~/utils/textarea';
 import { useSak } from '~/lib/sak/SakContext';
 import { MeldekortbehandlingLagringProvider } from '~/lib/meldekort/meldekortbehandling/lagre/MeldekortbehandlingLagringProvider';
 
-const MeldekortbehandlingContext = createContext({} as MeldekortbehandlingPropsV2);
+const MeldekortbehandlingContext = createContext({} as MeldekortbehandlingProps);
 
 // Separate contexts for å hindre re-renders for komponenter som kun bruker dispatch
 const SkjemaContext = createContext({} as MeldekortbehandlingSkjemaContext);
@@ -36,7 +36,7 @@ type Props = PropsWithChildren<{
     id: MeldekortbehandlingId;
 }>;
 
-export const MeldekortbehandlingV2Provider = ({ id, children }: Props) => {
+export const MeldekortbehandlingProvider = ({ id, children }: Props) => {
     const meldekortbehandling = useSak().sak.meldekortbehandlinger[id];
 
     if (!meldekortbehandling) {

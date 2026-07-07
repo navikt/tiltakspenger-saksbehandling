@@ -1,6 +1,6 @@
 import { Heading, HStack, VStack } from '@navikt/ds-react';
 import { useSak } from '~/lib/sak/SakContext';
-import { useMeldekortbehandling } from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingV2Context';
+import { useMeldekortbehandling } from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingContext';
 import { formaterDatotekst } from '~/utils/date';
 import { DetaljHorisontal } from '~/lib/_felles/detaljer/DetaljHorisontal';
 import { MeldekortbehandlingStatusTags } from '~/lib/meldekort/meldekortbehandling/header/behandling-status/MeldekortbehandlingStatusTags';

@@ -1,16 +1,16 @@
 import {
-    MeldekortbehandlingPropsV2,
+    MeldekortbehandlingProps,
     MeldekortbehandlingStatus,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { erBeslutter, kanBehandle } from '~/lib/saksbehandler/tilganger';
 import { Saksbehandler } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
-import { MeldeperiodeSkjema } from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingV2ContextTyper';
+import { MeldeperiodeSkjema } from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingContextTyper';
 import { MeldeperiodeKjedeId, MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
 import { BrukersMeldekortKjedeStatus } from '~/lib/meldekort/typer/BrukersMeldekort';
 
 export const kanSaksbehandleForMeldekort = (
-    meldekortbehandling: MeldekortbehandlingPropsV2,
+    meldekortbehandling: MeldekortbehandlingProps,
     innloggetSaksbehandler: Saksbehandler,
 ): boolean =>
     kanBehandle(innloggetSaksbehandler, meldekortbehandling.saksbehandler) &&
@@ -18,7 +18,7 @@ export const kanSaksbehandleForMeldekort = (
     !erMeldekortbehandlingSattPaVent(meldekortbehandling);
 
 export const kanBeslutteForMeldekort = (
-    meldekort: MeldekortbehandlingPropsV2,
+    meldekort: MeldekortbehandlingProps,
     innloggetSaksbehandler: Saksbehandler,
 ): boolean => {
     const { status, saksbehandler } = meldekort;
@@ -32,7 +32,7 @@ export const kanBeslutteForMeldekort = (
 };
 
 export const erMeldekortbehandlingSattPaVent = (
-    meldekortbehandling: MeldekortbehandlingPropsV2,
+    meldekortbehandling: MeldekortbehandlingProps,
 ): boolean => erBehandlingSattPåVent(meldekortbehandling);
 
 /**
@@ -40,11 +40,11 @@ export const erMeldekortbehandlingSattPaVent = (
  *
  * @param mb - nullable fordi klage ikke alltid har en tilknyttet meldekortbehandling & fordi det blitt litt cleanere kode fra klage-sidene sin side :-)
  */
-export const erMeldekortbehandlingUnderAktivOmgjøring = (mb: MeldekortbehandlingPropsV2): boolean =>
+export const erMeldekortbehandlingUnderAktivOmgjøring = (mb: MeldekortbehandlingProps): boolean =>
     mb.status == MeldekortbehandlingStatus.KLAR_TIL_BEHANDLING ||
     mb.status == MeldekortbehandlingStatus.UNDER_BEHANDLING;
 
-export const erMeldekortbehandlingGodkjent = (mb: MeldekortbehandlingPropsV2): boolean => {
+export const erMeldekortbehandlingGodkjent = (mb: MeldekortbehandlingProps): boolean => {
     return (
         mb.status === MeldekortbehandlingStatus.GODKJENT ||
         mb.status === MeldekortbehandlingStatus.AUTOMATISK_BEHANDLET

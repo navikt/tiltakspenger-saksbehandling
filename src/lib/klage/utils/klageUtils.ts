@@ -22,7 +22,7 @@ import {
     erBehandlingIdRammebehandling,
 } from '~/lib/behandling-felles/utils/behandlingUtils';
 import { erMeldekortbehandlingUnderAktivOmgjøring } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
-import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/typer/Meldekortbehandling';
+import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
 
 /**
  *
@@ -34,7 +34,7 @@ import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/typer/Meldekortbehan
  */
 export const kanBehandleKlage = (
     k: Klagebehandling,
-    omgjøringsbehandling: Nullable<Rammebehandling | MeldekortbehandlingPropsV2>,
+    omgjøringsbehandling: Nullable<Rammebehandling | MeldekortbehandlingProps>,
 ): boolean => {
     if (k.status === 'KLAR_TIL_BEHANDLING' || k.status === 'UNDER_BEHANDLING') {
         if (k.resultat?.type === KlagebehandlingResultat.OMGJØR && !!omgjøringsbehandling) {
@@ -49,7 +49,7 @@ export const kanBehandleKlage = (
 
 export const kanVidereBehandleKlage = (
     k: Klagebehandling,
-    omgjøringsbehandling: Nullable<Rammebehandling | MeldekortbehandlingPropsV2>,
+    omgjøringsbehandling: Nullable<Rammebehandling | MeldekortbehandlingProps>,
 ): boolean =>
     k.status === KlagebehandlingStatus.MOTTATT_FRA_KLAGEINSTANS ||
     (k.status === KlagebehandlingStatus.OMGJØRING_ETTER_KLAGEINSTANS &&
@@ -220,7 +220,7 @@ export const avbrytKlagebehandlingStatusLabels: Record<AvbrytKlagebehandlingStat
 };
 
 export const erKlagebehandlingsOmgjøringsbehandlingUnderAktivOmgjøring = (
-    omgjøringsbehandling: Nullable<Rammebehandling | MeldekortbehandlingPropsV2>,
+    omgjøringsbehandling: Nullable<Rammebehandling | MeldekortbehandlingProps>,
 ): boolean => {
     if (!omgjøringsbehandling) {
         return false;
@@ -232,7 +232,7 @@ export const erKlagebehandlingsOmgjøringsbehandlingUnderAktivOmgjøring = (
 
     if (erBehandlingIdMeldekortbehandling(omgjøringsbehandling.id)) {
         return erMeldekortbehandlingUnderAktivOmgjøring(
-            omgjøringsbehandling as MeldekortbehandlingPropsV2,
+            omgjøringsbehandling as MeldekortbehandlingProps,
         );
     }
 

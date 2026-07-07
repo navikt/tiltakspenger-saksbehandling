@@ -2,7 +2,7 @@ import { Heading, HStack, Tabs, VStack } from '@navikt/ds-react';
 import {
     useMeldekortbehandling,
     useMeldekortbehandlingSkjema,
-} from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingV2Context';
+} from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingContext';
 import { Meldeperiodebehandling } from '~/lib/meldekort/meldekortbehandling/meldeperioder/meldeperiodebehandling/Meldeperiodebehandling';
 import { MeldeperiodebehandlingLeggTil } from '~/lib/meldekort/meldekortbehandling/meldeperioder/legg-til/MeldeperiodebehandlingLeggTil';
 import { MeldeperiodebehandlingFjern } from '~/lib/meldekort/meldekortbehandling/meldeperioder/fjern/MeldeperiodebehandlingFjern';

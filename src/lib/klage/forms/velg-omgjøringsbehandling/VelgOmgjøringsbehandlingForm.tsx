@@ -22,7 +22,7 @@ import {
 import { Meldekortvedtak } from '~/lib/meldekort/typer/Meldekortvedtak';
 
 import {
-    MeldekortbehandlingPropsV2,
+    MeldekortbehandlingProps,
     MeldekortbehandlingStatus,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
@@ -57,7 +57,7 @@ export const VelgOmgjøringsbehandlingModal = (props: {
                 router.push(
                     meldeperiodeUrl(
                         props.saksnummer,
-                        (behandling as MeldekortbehandlingPropsV2).periode,
+                        (behandling as MeldekortbehandlingProps).periode,
                     ),
                 );
             }

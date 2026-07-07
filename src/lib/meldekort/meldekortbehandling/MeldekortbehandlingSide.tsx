@@ -4,7 +4,7 @@ import { Stepper, VStack } from '@navikt/ds-react';
 import {
     useMeldekortbehandling,
     useMeldekortbehandlingSkjema,
-} from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingV2Context';
+} from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingContext';
 import { Meldeperiodebehandlinger } from '~/lib/meldekort/meldekortbehandling/meldeperioder/Meldeperiodebehandlinger';
 import { MeldekortbehandlingHeader } from '~/lib/meldekort/meldekortbehandling/header/MeldekortbehandlingHeader';
 import { MeldekortbehandlingBeregningOgSimulering } from '~/lib/meldekort/meldekortbehandling/bereging/MeldekortbehandlingBeregningOgSimulering';
@@ -24,7 +24,7 @@ import {
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 
 import style from './MeldekortbehandlingSide.module.css';
-import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/typer/Meldekortbehandling';
+import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
 
 const DEFAULT_STEG = 1;
 
@@ -120,7 +120,7 @@ const Steg = ({ steg, children }: StegProps) => {
 };
 
 const sisteStegTekst = (
-    behandling: MeldekortbehandlingPropsV2,
+    behandling: MeldekortbehandlingProps,
     saksbehandler: Saksbehandler,
 ): string => {
     if (kanSaksbehandleForMeldekort(behandling, saksbehandler)) {

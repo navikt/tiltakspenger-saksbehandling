@@ -7,7 +7,7 @@ import { finnBehandlingstypeTekst, behandlingResultatTilText } from '~/utils/tek
 import { behandlingUrl, meldeperiodeUrl } from '~/utils/urls';
 import {
     MeldekortbehandlingId,
-    MeldekortbehandlingPropsV2,
+    MeldekortbehandlingProps,
 } from '../meldekort/typer/Meldekortbehandling';
 import { PartialRecord } from '~/types/UtilTypes';
 import { erBehandlingIdMeldekortbehandling } from '../behandling-felles/utils/behandlingUtils';
@@ -15,7 +15,7 @@ import { erBehandlingIdMeldekortbehandling } from '../behandling-felles/utils/be
 const KlageTilknyttedeBehandlingerInfoCard = (props: {
     klage: Klagebehandling;
     rammebehandlinger: Rammebehandling[];
-    meldekortbehandlinger: PartialRecord<MeldekortbehandlingId, MeldekortbehandlingPropsV2>;
+    meldekortbehandlinger: PartialRecord<MeldekortbehandlingId, MeldekortbehandlingProps>;
 }) => {
     const tilknyttedeIkkeÅpneBehandlinger = props.klage.tilknyttedeBehandlingIder.filter(
         (id) => id !== props.klage.åpenBehandlingId,

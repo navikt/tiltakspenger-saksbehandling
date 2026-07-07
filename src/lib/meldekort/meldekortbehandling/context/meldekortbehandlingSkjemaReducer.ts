@@ -4,15 +4,15 @@ import {
     MeldekortbehandlingSkjemaState,
     MeldekortDagSkjema,
     MeldeperiodeSkjema,
-} from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingV2ContextTyper';
+} from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingContextTyper';
 import {
     MeldekortbehandlingDagStatus,
-    MeldekortbehandlingPropsV2,
+    MeldekortbehandlingProps,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { MeldeperiodeKjedeId, MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
 
 export const meldekortbehandlingSkjemaInitialState = (
-    meldekortbehandling: MeldekortbehandlingPropsV2,
+    meldekortbehandling: MeldekortbehandlingProps,
 ): MeldekortbehandlingSkjemaState => ({
     meldeperioder: meldekortbehandling.meldeperioder.map<MeldeperiodeSkjema>((meldeperiode) => ({
         kjedeId: meldeperiode.kjedeId,

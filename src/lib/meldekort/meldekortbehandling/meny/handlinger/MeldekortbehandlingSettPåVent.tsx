@@ -12,10 +12,10 @@ import { personoversiktUrl } from '~/utils/urls';
 import { PersonoversiktTab } from '~/lib/personoversikt/Personoversikt';
 import { dateTilISOTekst } from '~/utils/date';
 
-import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/typer/Meldekortbehandling';
+import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
 
 type Props = {
-    meldekortbehandling: MeldekortbehandlingPropsV2;
+    meldekortbehandling: MeldekortbehandlingProps;
     åpen: boolean;
     onClose: () => void;
 };

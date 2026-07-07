@@ -53,7 +53,7 @@ import KlageTilknyttedeBehandlingerInfoCard from '~/lib/klage/KlageTilknyttedeBe
 import { OppsummeringAvVentestatuser } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
 import {
     MeldekortbehandlingId,
-    MeldekortbehandlingPropsV2,
+    MeldekortbehandlingProps,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { Meldekortvedtak } from '~/lib/meldekort/typer/Meldekortvedtak';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
@@ -67,7 +67,7 @@ type Props = {
     meldekortvedtak: Meldekortvedtak[];
     søknader: Søknad[];
     rammebehandlinger: Rammebehandling[];
-    meldekortbehandlinger: PartialRecord<MeldekortbehandlingId, MeldekortbehandlingPropsV2>;
+    meldekortbehandlinger: PartialRecord<MeldekortbehandlingId, MeldekortbehandlingProps>;
     meldeperiodekjeder: MeldeperiodekjedeProps[];
 };
 
@@ -172,7 +172,7 @@ const OpprettholdResultat = (props: {
     søknader: Søknad[];
     innloggetSaksbehandler: Saksbehandler;
     rammebehandlinger: Rammebehandling[];
-    meldekortbehandlinger: PartialRecord<MeldekortbehandlingId, MeldekortbehandlingPropsV2>;
+    meldekortbehandlinger: PartialRecord<MeldekortbehandlingId, MeldekortbehandlingProps>;
 }) => {
     const [vilOppretteNyBehandling, setVilOppretteNyBehandling] = useState(false);
     const erReadonlyForSaksbehandler =

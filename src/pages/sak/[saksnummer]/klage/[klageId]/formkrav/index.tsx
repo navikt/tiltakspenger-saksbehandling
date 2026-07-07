@@ -40,12 +40,12 @@ import {
     hentMeldekortvedtakMedBehandlinger,
     hentRammevedtakMedBehandlinger,
 } from '~/lib/sak/sakUtils';
-import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/typer/Meldekortbehandling';
+import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
 
 type Props = {
     sak: SakProps;
     initialKlage: Klagebehandling;
-    omgjøringsbehandling: Nullable<Rammebehandling | MeldekortbehandlingPropsV2>;
+    omgjøringsbehandling: Nullable<Rammebehandling | MeldekortbehandlingProps>;
     rammevedtakOgBehandling: RammevedtakMedBehandling[];
     meldekortvedtakOgBehandling: MeldekortvedtakMedBehandling[];
 };

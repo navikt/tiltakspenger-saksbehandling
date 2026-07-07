@@ -5,7 +5,7 @@ import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
 import {
     useMeldekortbehandlingSkjema,
     useMeldekortbehandlingSkjemaDispatch,
-} from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingV2Context';
+} from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingContext';
 import { hentMeldeperiodekjede } from '~/lib/sak/sakUtils';
 import { PlusIcon } from '@navikt/aksel-icons';
 import { useRef } from 'react';

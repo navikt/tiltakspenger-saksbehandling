@@ -5,7 +5,7 @@ import { MeldekortHelgToggle } from '~/lib/personoversikt/helg-toggle/MeldekortH
 import { MeldeperiodeKjederOversikt } from './MeldeperiodeKjederOversikt';
 import { MeldekortbehandlingerOversikt } from './MeldekortbehandlingerOversikt';
 
-import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/typer/Meldekortbehandling';
+import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
 
 enum OversiktVisning {
     Meldeperiodekjeder = 'meldeperiodekjeder',
@@ -20,7 +20,7 @@ export const MeldekortOversikt = () => {
 
     const meldekortbehandlinger = Object.values(
         sak.meldekortbehandlinger,
-    ) as MeldekortbehandlingPropsV2[];
+    ) as MeldekortbehandlingProps[];
 
     return (
         <VStack gap={'space-16'}>

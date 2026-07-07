@@ -8,10 +8,10 @@ import { useNotification } from '~/lib/_felles/notifications/NotificationContext
 import { personoversiktUrl } from '~/utils/urls';
 import { PersonoversiktTab } from '~/lib/personoversikt/Personoversikt';
 
-import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/typer/Meldekortbehandling';
+import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
 
 type Props = {
-    meldekortbehandling: MeldekortbehandlingPropsV2;
+    meldekortbehandling: MeldekortbehandlingProps;
     åpen: boolean;
     onClose: () => void;
 };

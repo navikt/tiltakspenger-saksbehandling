@@ -22,7 +22,7 @@ import {
 } from '~/utils/fetch/useFetchFraApi';
 import { Nullable } from '~/types/UtilTypes';
 
-import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/typer/Meldekortbehandling';
+import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
 
 export const useOpprettKlage = (args: {
     sakId: string;
@@ -57,7 +57,7 @@ export const useVurderKlage = (args: {
 export const useOpprettRammebehandlingForKlage = (args: {
     sakId: string;
     klageId: KlageId;
-    onSuccess: (behandling: Rammebehandling | MeldekortbehandlingPropsV2) => void;
+    onSuccess: (behandling: Rammebehandling | MeldekortbehandlingProps) => void;
 }) =>
     useFetchJsonFraApi<Rammebehandling, OpprettOmgjøringsbehandlingForKlageRequest>(
         `/sak/${args.sakId}/klage/${args.klageId}/opprettBehandling`,

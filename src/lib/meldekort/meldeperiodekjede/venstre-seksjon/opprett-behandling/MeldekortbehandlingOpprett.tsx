@@ -4,18 +4,18 @@ import { useRef } from 'react';
 import { useSak } from '~/lib/sak/SakContext';
 import { MeldeperiodebehandlingType } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { meldekortbehandlingUrl } from '~/utils/urls';
-import { useMeldeperiodeKjedeV2 } from '~/lib/meldekort/meldeperiodekjede/context/MeldeperiodeKjedeContextV2';
-import { useOpprettMeldekortbehandlingV2 } from '~/lib/meldekort/meldeperiodekjede/venstre-seksjon/opprett-behandling/useOpprettMeldekortbehandlingV2';
+import { useMeldeperiodekjede } from '~/lib/meldekort/meldeperiodekjede/context/MeldeperiodekjedeContext';
+import { useOpprettMeldekortbehandling } from '~/lib/meldekort/meldeperiodekjede/venstre-seksjon/opprett-behandling/useOpprettMeldekortbehandling';
 import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { useRouter } from 'next/router';
 
-import style from './MeldekortbehandlingOpprettV2.module.css';
+import style from './MeldekortbehandlingOpprett.module.css';
 
-export const MeldekortbehandlingOpprettV2 = () => {
+export const MeldekortbehandlingOpprett = () => {
     const { sakId, saksnummer, åpenMeldekortbehandlingId } = useSak().sak;
-    const { id: kjedeId, meldekortbehandlingIder } = useMeldeperiodeKjedeV2().meldeperiodeKjede;
+    const { id: kjedeId, meldekortbehandlingIder } = useMeldeperiodekjede().meldeperiodeKjede;
 
-    const { opprett, laster, feil } = useOpprettMeldekortbehandlingV2({
+    const { opprett, laster, feil } = useOpprettMeldekortbehandling({
         kjedeId,
         sakId,
     });

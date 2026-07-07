@@ -23,7 +23,7 @@ import {
 } from '../behandling-felles/utils/behandlingUtils';
 import {
     MeldekortbehandlingId,
-    MeldekortbehandlingPropsV2,
+    MeldekortbehandlingProps,
 } from '../meldekort/typer/Meldekortbehandling';
 import { Meldekortvedtak } from '../meldekort/typer/Meldekortvedtak';
 import { Nullable, PartialRecord } from '~/types/UtilTypes';
@@ -36,7 +36,7 @@ const Omgjøringsresultat = (props: {
     meldeperiodekjeder: MeldeperiodekjedeProps[];
     søknader: Søknad[];
     rammebehandlinger: Rammebehandling[];
-    meldekortbehandlinger: PartialRecord<MeldekortbehandlingId, MeldekortbehandlingPropsV2>;
+    meldekortbehandlinger: PartialRecord<MeldekortbehandlingId, MeldekortbehandlingProps>;
     innloggetSaksbehandler: Saksbehandler;
 }) => {
     return (
@@ -134,7 +134,7 @@ const KlageOmgjøringsbehandlingAksjoner = (props: {
     søknader: Søknad[];
     meldekortvedtak: Meldekortvedtak[];
     meldeperiodekjeder: MeldeperiodekjedeProps[];
-    omgjøringsbehandling: Nullable<MeldekortbehandlingPropsV2 | Rammebehandling>;
+    omgjøringsbehandling: Nullable<MeldekortbehandlingProps | Rammebehandling>;
 }) => {
     const erReadonlyForSaksbehandler =
         props.innloggetSaksbehandler.navIdent !== props.klage.saksbehandler;
@@ -169,7 +169,7 @@ const KlageOmgjøringsbehandlingAksjoner = (props: {
                             variant="secondary"
                             href={meldeperiodeUrl(
                                 props.klage.saksnummer,
-                                (props.omgjøringsbehandling as MeldekortbehandlingPropsV2).periode,
+                                (props.omgjøringsbehandling as MeldekortbehandlingProps).periode,
                             )}
                         >
                             Gå til omgjøringsbehandling

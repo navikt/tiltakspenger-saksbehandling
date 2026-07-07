@@ -6,7 +6,7 @@ type MeldeperioderContextState = {
     meldeperiodeKjede: MeldeperiodekjedeProps;
 };
 
-const MeldeperiodeKjedeContext = createContext<MeldeperioderContextState>(
+const MeldeperiodekjedeContext = createContext<MeldeperioderContextState>(
     {} as MeldeperioderContextState,
 );
 
@@ -15,18 +15,18 @@ type Props = {
     children: React.ReactNode;
 };
 
-export const MeldeperiodeKjedeV2Provider = ({ meldeperiodeKjede, children }: Props) => {
+export const MeldeperiodekjedeProvider = ({ meldeperiodeKjede, children }: Props) => {
     return (
-        <MeldeperiodeKjedeContext.Provider
+        <MeldeperiodekjedeContext.Provider
             value={{
                 meldeperiodeKjede,
             }}
         >
             {children}
-        </MeldeperiodeKjedeContext.Provider>
+        </MeldeperiodekjedeContext.Provider>
     );
 };
 
-export const useMeldeperiodeKjedeV2 = () => {
-    return useContext(MeldeperiodeKjedeContext);
+export const useMeldeperiodekjede = () => {
+    return useContext(MeldeperiodekjedeContext);
 };

@@ -1,7 +1,7 @@
 import {
     useMeldekortbehandling,
     useMeldekortbehandlingSkjema,
-} from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingV2Context';
+} from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingContext';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { MeldekortbehandlingSeksjon } from '~/lib/meldekort/meldekortbehandling/layout/MeldekortbehandlingSeksjon';
 import { MeldeperiodebehandlingType } from '~/lib/meldekort/typer/Meldekortbehandling';

@@ -5,7 +5,7 @@ import { useSak } from '~/lib/sak/SakContext';
 import {
     useMeldekortbehandling,
     useMeldekortbehandlingSkjema,
-} from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingV2Context';
+} from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingContext';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { OppdatertMeldeperiodeDTO } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { Nullable } from '~/types/UtilTypes';

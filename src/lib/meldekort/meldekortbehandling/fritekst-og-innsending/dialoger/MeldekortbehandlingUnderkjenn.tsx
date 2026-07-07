@@ -3,7 +3,7 @@ import { XMarkIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { useSak } from '~/lib/sak/SakContext';
-import { useMeldekortbehandling } from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingV2Context';
+import { useMeldekortbehandling } from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingContext';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { useNotification } from '~/lib/_felles/notifications/NotificationContext';
 import { personoversiktUrl } from '~/utils/urls';

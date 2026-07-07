@@ -5,7 +5,7 @@ import { useSak } from '~/lib/sak/SakContext';
 import {
     useMeldekortbehandling,
     useMeldekortbehandlingSkjema,
-} from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingV2Context';
+} from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingContext';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { useNotification } from '~/lib/_felles/notifications/NotificationContext';
 import { personoversiktUrl } from '~/utils/urls';

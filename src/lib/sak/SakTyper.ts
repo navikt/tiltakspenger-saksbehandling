@@ -10,7 +10,7 @@ import { TilbakekrevingBehandling } from '~/lib/tilbakekreving/typer/Tilbakekrev
 import { Meldekortvedtak } from '~/lib/meldekort/typer/Meldekortvedtak';
 import {
     MeldekortbehandlingId,
-    MeldekortbehandlingPropsV2,
+    MeldekortbehandlingProps,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { Nullable, PartialRecord } from '~/types/UtilTypes';
 import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
@@ -36,7 +36,7 @@ export type SakProps = {
     tilbakekrevinger: TilbakekrevingBehandling[];
     kanSendeInnHelgForMeldekort: boolean;
     meldekortvedtak: Meldekortvedtak[];
-    meldekortbehandlinger: PartialRecord<MeldekortbehandlingId, MeldekortbehandlingPropsV2>;
+    meldekortbehandlinger: PartialRecord<MeldekortbehandlingId, MeldekortbehandlingProps>;
     meldeperiodeKjederV2: MeldeperiodekjedeProps[];
     åpenMeldekortbehandlingId: Nullable<MeldekortbehandlingId>;
 };

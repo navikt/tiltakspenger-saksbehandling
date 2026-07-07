@@ -2,7 +2,7 @@ import { Button, Dialog } from '@navikt/ds-react';
 import { formaterMeldeperiode } from '~/utils/date';
 import { useSak } from '~/lib/sak/SakContext';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
-import { useMeldekortbehandlingSkjemaDispatch } from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingV2Context';
+import { useMeldekortbehandlingSkjemaDispatch } from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingContext';
 import { hentMeldeperiodekjede } from '~/lib/sak/sakUtils';
 import { TrashIcon } from '@navikt/aksel-icons';
 

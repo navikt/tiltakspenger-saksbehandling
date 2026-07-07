@@ -5,10 +5,10 @@ import { useSak } from '~/lib/sak/SakContext';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { SakProps } from '~/lib/sak/SakTyper';
 
-import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/typer/Meldekortbehandling';
+import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
 
 type Props = {
-    meldekortbehandling: MeldekortbehandlingPropsV2;
+    meldekortbehandling: MeldekortbehandlingProps;
     åpen: boolean;
     onClose: () => void;
 };

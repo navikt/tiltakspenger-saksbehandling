@@ -1,7 +1,7 @@
 import { VedtakId } from '../../rammebehandling/typer/Rammevedtak';
 import { SakId } from '../../sak/SakTyper';
 import { Nullable } from '~/types/UtilTypes';
-import { MeldekortbehandlingId, MeldekortbehandlingPropsV2 } from './Meldekortbehandling';
+import { MeldekortbehandlingId, MeldekortbehandlingProps } from './Meldekortbehandling';
 
 export type Meldekortvedtak = {
     id: VedtakId;
@@ -12,5 +12,5 @@ export type Meldekortvedtak = {
 };
 
 export type MeldekortvedtakMedBehandling = Meldekortvedtak & {
-    behandling: MeldekortbehandlingPropsV2;
+    behandling: MeldekortbehandlingProps;
 };

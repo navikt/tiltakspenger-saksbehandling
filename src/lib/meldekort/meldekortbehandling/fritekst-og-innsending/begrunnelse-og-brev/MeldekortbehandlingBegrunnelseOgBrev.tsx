@@ -3,7 +3,7 @@ import { FritekstInput } from '~/lib/_felles/fritekst/FritekstInput';
 import {
     useMeldekortbehandlingSkjema,
     useMeldekortbehandlingSkjemaDispatch,
-} from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingV2Context';
+} from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingContext';
 import { Checkbox, Heading, HStack, InlineMessage } from '@navikt/ds-react';
 import { MeldekortbehandlingForhåndsvisBrev } from '~/lib/meldekort/meldekortbehandling/fritekst-og-innsending/begrunnelse-og-brev/forhåndsvis-brev/MeldekortbehandlingForhåndsvisBrev';
 

@@ -4,7 +4,7 @@ import { SakProps } from '~/lib/sak/SakTyper';
 import { SakProvider } from '~/lib/sak/SakContext';
 import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { MeldekortbehandlingSide } from '~/lib/meldekort/meldekortbehandling/MeldekortbehandlingSide';
-import { MeldekortbehandlingV2Provider } from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingV2Context';
+import { MeldekortbehandlingProvider } from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingContext';
 
 type Props = {
     sak: SakProps;
@@ -14,9 +14,9 @@ type Props = {
 const Meldekortbehandling = ({ sak, meldekortbehandlingId }: Props) => {
     return (
         <SakProvider sak={sak}>
-            <MeldekortbehandlingV2Provider id={meldekortbehandlingId}>
+            <MeldekortbehandlingProvider id={meldekortbehandlingId}>
                 <MeldekortbehandlingSide />
-            </MeldekortbehandlingV2Provider>
+            </MeldekortbehandlingProvider>
         </SakProvider>
     );
 };

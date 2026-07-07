@@ -6,14 +6,14 @@ import { utbetalingsstatusTekst } from '~/utils/tekstformateringUtils';
 import { meldekortbehandlingStatusTekst } from '~/lib/meldekort/utils/tekster';
 import { meldekortbehandlingUrl } from '~/utils/urls';
 import { MeldekortbehandlingMeny } from '~/lib/meldekort/meldekortbehandling/meny/MeldekortbehandlingMeny';
-import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/typer/Meldekortbehandling';
+import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
 
 type Props = {
     saksnummer: string;
-    meldekortbehandlinger: MeldekortbehandlingPropsV2[];
+    meldekortbehandlinger: MeldekortbehandlingProps[];
 };
 
-const beregnetBeløpForBehandling = (meldekortbehandling: MeldekortbehandlingPropsV2) => {
+const beregnetBeløpForBehandling = (meldekortbehandling: MeldekortbehandlingProps) => {
     const meldeperioderMedBeregning = meldekortbehandling.meldeperioder.filter(
         (meldeperiode) => meldeperiode.beregning !== null,
     );

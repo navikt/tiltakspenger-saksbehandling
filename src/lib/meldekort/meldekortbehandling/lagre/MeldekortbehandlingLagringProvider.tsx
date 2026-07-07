@@ -9,12 +9,12 @@ import {
 import {
     useMeldekortbehandling,
     useMeldekortbehandlingSkjema,
-} from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingV2Context';
+} from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingContext';
 import {
-    MeldekortbehandlingPropsV2,
+    MeldekortbehandlingProps,
     OppdaterMeldekortbehandlingDTO,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
-import { MeldekortbehandlingSkjemaContext } from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingV2ContextTyper';
+import { MeldekortbehandlingSkjemaContext } from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingContextTyper';
 import { meldekortbehandlingSkjemaInitialState } from '~/lib/meldekort/meldekortbehandling/context/meldekortbehandlingSkjemaReducer';
 import { isEqualJson } from '~/utils/is-equal-json';
 
@@ -72,7 +72,7 @@ export const MeldekortbehandlingLagringProvider = ({ children }: PropsWithChildr
 
 // Brukes for å avgjøre om skjemaet er endret siden forrige lagring av meldekortbehandlingen
 const genererDtoFraBehandling = (
-    behandling: MeldekortbehandlingPropsV2,
+    behandling: MeldekortbehandlingProps,
 ): OppdaterMeldekortbehandlingDTO => {
     return {
         ...meldekortbehandlingSkjemaInitialState(behandling),

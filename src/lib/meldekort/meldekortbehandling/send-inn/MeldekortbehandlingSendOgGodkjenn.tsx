@@ -3,7 +3,7 @@ import { MeldekortbehandlingTilBeslutning } from '~/lib/meldekort/meldekortbehan
 import { MeldekortbehandlingGodkjenn } from '~/lib/meldekort/meldekortbehandling/fritekst-og-innsending/dialoger/MeldekortbehandlingGodkjenn';
 import { MeldekortbehandlingUnderkjenn } from '~/lib/meldekort/meldekortbehandling/fritekst-og-innsending/dialoger/MeldekortbehandlingUnderkjenn';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
-import { useMeldekortbehandling } from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingV2Context';
+import { useMeldekortbehandling } from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingContext';
 import {
     kanBeslutteForMeldekort,
     kanSaksbehandleForMeldekort,

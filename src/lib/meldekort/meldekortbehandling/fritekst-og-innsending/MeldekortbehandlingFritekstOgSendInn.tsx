@@ -1,7 +1,7 @@
 import { MeldekortbehandlingBegrunnelseOgBrev } from '~/lib/meldekort/meldekortbehandling/fritekst-og-innsending/begrunnelse-og-brev/MeldekortbehandlingBegrunnelseOgBrev';
 import { MeldekortbehandlingSendOgGodkjenn } from '~/lib/meldekort/meldekortbehandling/send-inn/MeldekortbehandlingSendOgGodkjenn';
 import { Separator } from '~/lib/_felles/separator/Separator';
-import { useMeldekortbehandling } from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingV2Context';
+import { useMeldekortbehandling } from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingContext';
 import { kanBehandle } from '~/lib/saksbehandler/tilganger';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
 import { MeldeperiodebehandlingType } from '~/lib/meldekort/typer/Meldekortbehandling';

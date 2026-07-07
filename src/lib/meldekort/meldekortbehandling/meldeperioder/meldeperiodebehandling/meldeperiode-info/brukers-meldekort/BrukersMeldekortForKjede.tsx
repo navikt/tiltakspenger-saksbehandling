@@ -6,7 +6,7 @@ import { hentMeldekortForhåndsutfyllingFraBrukersMeldekort } from '~/lib/meldek
 import {
     useMeldekortbehandlingSkjema,
     useMeldekortbehandlingSkjemaDispatch,
-} from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingV2Context';
+} from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingContext';
 import { BrukersMeldekortAutomatiskBehandlingStatus } from '~/lib/meldekort/felles/brukers-meldekort/automatisk-behandling-status/BrukersMeldekortAutomatiskBehandlingStatus';
 import { useState } from 'react';
 import { BrukersMeldekortId } from '~/lib/meldekort/typer/BrukersMeldekort';

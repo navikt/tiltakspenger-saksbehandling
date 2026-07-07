@@ -2,10 +2,10 @@ import {
     MeldekortbehandlingSkjemaState,
     MeldekortDagSkjema,
     MeldeperiodeSkjema,
-} from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingV2ContextTyper';
+} from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingContextTyper';
 import {
     MeldekortbehandlingDagStatus,
-    MeldekortbehandlingPropsV2,
+    MeldekortbehandlingProps,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { nonNullishPredicate } from '~/utils/array';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
@@ -20,7 +20,7 @@ type MeldekortDagValideringsfeil = {
 
 const validerMeldekortDagSkjema = (
     dag: MeldekortDagSkjema,
-    behandling: MeldekortbehandlingPropsV2,
+    behandling: MeldekortbehandlingProps,
 ): MeldekortDagValideringsfeil | null => {
     if (erMeldekortbehandlingGodkjent(behandling)) {
         return null;
@@ -41,7 +41,7 @@ export type MeldeperiodeSkjemaValideringsfeil = {
 
 export const validerMeldeperiodeSkjema = (
     skjema: MeldeperiodeSkjema,
-    behandling: MeldekortbehandlingPropsV2,
+    behandling: MeldekortbehandlingProps,
     sak: SakProps,
 ): MeldeperiodeSkjemaValideringsfeil | null => {
     if (erMeldekortbehandlingGodkjent(behandling)) {
@@ -85,7 +85,7 @@ export type MeldekortbehandlingSkjemaValideringsfeil = {
 
 export const validerMeldekortbehandlingSkjema = (
     skjema: MeldekortbehandlingSkjemaState,
-    behandling: MeldekortbehandlingPropsV2,
+    behandling: MeldekortbehandlingProps,
     sak: SakProps,
 ): MeldekortbehandlingSkjemaValideringsfeil | null => {
     if (erMeldekortbehandlingGodkjent(behandling)) {

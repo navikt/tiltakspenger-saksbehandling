@@ -98,7 +98,7 @@ export type MeldeperiodebehandlingProps = {
     type: MeldeperiodebehandlingType;
 };
 
-export type MeldekortbehandlingPropsV2 = {
+export type MeldekortbehandlingProps = {
     id: MeldekortbehandlingId;
     sakId: SakId;
     saksbehandler: Nullable<string>;

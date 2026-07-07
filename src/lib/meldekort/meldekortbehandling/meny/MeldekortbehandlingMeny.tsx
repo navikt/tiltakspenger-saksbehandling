@@ -20,10 +20,10 @@ import { MeldekortbehandlingOverta } from '~/lib/meldekort/meldekortbehandling/m
 import { MeldekortbehandlingAvslutt } from '~/lib/meldekort/meldekortbehandling/meny/handlinger/MeldekortbehandlingAvslutt';
 import { OppsummeringAvVentestatuserModal } from '~/lib/behandling-felles/oppsummeringer/ventestatus/OppsummeringAvVentestatuser';
 import { OppsummeringAvAttesteringerModal } from '~/lib/behandling-felles/attestering/OppsummeringAvAttesteringerModal';
-import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/typer/Meldekortbehandling';
+import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
 
 type Props = {
-    meldekortbehandling: MeldekortbehandlingPropsV2;
+    meldekortbehandling: MeldekortbehandlingProps;
 };
 
 export const MeldekortbehandlingMeny = ({ meldekortbehandling }: Props) => {

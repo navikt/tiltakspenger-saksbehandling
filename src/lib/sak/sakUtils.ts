@@ -8,7 +8,7 @@ import { TilbakekrevingId } from '~/lib/tilbakekreving/typer/Tilbakekreving';
 import { MeldeperiodeKjedeId, MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
 import {
     MeldekortbehandlingId,
-    MeldekortbehandlingPropsV2,
+    MeldekortbehandlingProps,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { Rammebehandling, RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { MeldekortvedtakMedBehandling } from '~/lib/meldekort/typer/Meldekortvedtak';
@@ -60,7 +60,7 @@ export const hentMeldeperiodekjede = (
 export const hentMeldekortbehandling = (
     sak: SakProps,
     id: MeldekortbehandlingId,
-): MeldekortbehandlingPropsV2 => {
+): MeldekortbehandlingProps => {
     const meldekortbehandling = sak.meldekortbehandlinger[id];
 
     if (!meldekortbehandling) {
