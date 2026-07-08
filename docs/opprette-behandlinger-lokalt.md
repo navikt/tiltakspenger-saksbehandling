@@ -7,6 +7,9 @@ har noe konkret å teste på i frontend:
 - en **meldekortbehandling**, og
 - en **klagebehandling**.
 
+I tillegg dekker den [forhåndsvisning av alle PDF-brevene](#forhåndsvise-pdf-er-vedtaksbrev-meldekortbrev-klagebrev)
+(vedtaksbrev, meldekortvedtaksbrev og klagebrev) via routes.
+
 Alt kan gjøres på to måter, som begge er dokumentert under:
 
 1. **Scripts** (`curl` under panseret) — raskest for å generere testdata.
@@ -273,6 +276,103 @@ Under er full klikksti i frontend. Den speiler curl-stegene over.
 12. På saken, velg **opprett klage** / **ny klagebehandling**.
 13. Fyll ut klageskjemaet (klager er part, klagefrist overholdt, klagen er signert,
     innsendingsdato, innsendingskilde) og lagre.
+
+---
+
+## Forhåndsvise PDF-er (vedtaksbrev, meldekortbrev, klagebrev)
+
+Alle brev som kan hentes via en route kan testes lokalt med forhåndsvisning.
+PDF-er som kun genereres av jobber (journalføring av vedtaksbrev til Gosys m.m.)
+dekkes **ikke** her — de har ingen route å teste mot.
+
+### Forutsetninger
+
+- `LokalMain` bruker **ekte pdfgen-klient** (ikke fake), så **pdfgen** (port `8081`)
+  og **pdfgenrs** (port `8084`) må kjøre i docker (`docker compose up -d` i
+  metarepoet). Docker-imagene bygges fra lokal kildekode — har malene endret seg
+  siden sist, må de bygges på nytt:
+  `docker compose up -d --build pdfgen-service pdfgenrs-service`.
+- Lokalt gjøres skygge-kall mot pdfgenrs i parallell med pdfgen (som i dev), så
+  forhåndsvisnings-routene svarer med **multipart/mixed med to PDF-er**: pdfgen
+  først, pdfgenrs som nummer to. Scriptene splitter og lagrer begge, med suffiks
+  `-pdfgen.pdf` og `-pdfgenrs.pdf` — sammenlign dem side om side.
+- PDF-ene lagres i `$PDF_UT_DIR` (default `/tmp/tiltakspenger-pdfer`).
+
+### Raskeste vei: alle PDF-er på én gang
+
+```bash
+./scripts/testdata/forhandsvis-alle-pdfer.sh
+```
+
+Oppretter en innvilget sak og forhåndsviser alle brevtypene:
+
+| Brev | Route | Testdata som opprettes |
+| --- | --- | --- |
+| Vedtaksbrev innvilgelse (søknad) | `POST /sak/{sakId}/behandling/{behandlingId}/forhandsvis` | iverksatt søknadsbehandling |
+| Vedtaksbrev avslag | samme | samme behandling, body med `resultat: AVSLAG` |
+| Stansvedtaksbrev | samme | åpen stans-revurdering |
+| Vedtaksbrev revurdering innvilgelse | samme | åpen revurdering innvilgelse |
+| Omgjøringsbrev innvilgelse + opphør | samme | åpen omgjøring av rammevedtaket |
+| Meldekortvedtaksbrev | `POST /sak/{sakId}/meldekortbehandling/{meldekortId}/forhandsvis` | åpen meldekortbehandling |
+| Klagebrev avvisning | `POST /sak/{sakId}/klage/{klagebehandlingId}/forhandsvis` | klage uten påklaget vedtak |
+| Klagebrev innstilling | samme | klage på rammevedtaket, vurdert til OPPRETTHOLD |
+
+### Enkeltbrev (byggeklosser)
+
+```bash
+# Rammevedtaksbrev — på en søknadsbehandling eller revurdering
+./scripts/testdata/forhandsvis-vedtaksbrev.sh SAK_ID BEH_ID INNVILGELSE INTERN_DELTAKELSE_ID
+./scripts/testdata/forhandsvis-vedtaksbrev.sh SAK_ID BEH_ID AVSLAG
+
+# Stans/revurdering/omgjøring trenger en åpen revurdering først
+./scripts/testdata/start-revurdering.sh SAK_ID STANS                       # -> BEH_ID
+./scripts/testdata/forhandsvis-vedtaksbrev.sh SAK_ID BEH_ID STANS
+
+./scripts/testdata/start-revurdering.sh SAK_ID REVURDERING_INNVILGELSE     # -> BEH_ID INTERN_DELTAKELSE_ID
+./scripts/testdata/forhandsvis-vedtaksbrev.sh SAK_ID BEH_ID REVURDERING_INNVILGELSE INTERN_DELTAKELSE_ID
+
+./scripts/testdata/start-revurdering.sh SAK_ID OMGJØRING RAMMEVEDTAK_ID    # -> BEH_ID INTERN_DELTAKELSE_ID
+./scripts/testdata/forhandsvis-vedtaksbrev.sh SAK_ID BEH_ID OMGJØRING INTERN_DELTAKELSE_ID
+./scripts/testdata/forhandsvis-vedtaksbrev.sh SAK_ID BEH_ID OMGJØRING_OPPHØR
+
+# Meldekortvedtaksbrev — på en åpen meldekortbehandling
+./scripts/testdata/forhandsvis-meldekortbrev.sh SAKSNUMMER MELDEKORT_ID
+
+# Klagebrev
+./scripts/testdata/opprett-klage.sh SAK_ID                                  # avvisning
+./scripts/testdata/forhandsvis-klagebrev.sh SAK_ID KLAGE_ID klagebrev-avvisning
+
+./scripts/testdata/opprett-klage.sh SAK_ID RAMMEVEDTAK_ID                  # klage på vedtak
+./scripts/testdata/vurder-klage-oppretthold.sh SAK_ID KLAGE_ID
+./scripts/testdata/forhandsvis-klagebrev.sh SAK_ID KLAGE_ID klagebrev-innstilling
+```
+
+`RAMMEVEDTAK_ID` finner du med `./scripts/testdata/hent-sak.sh SAKSNUMMER "alleRammevedtak[0].id"`,
+og `INTERN_DELTAKELSE_ID` med
+`./scripts/testdata/hent-sak.sh SAKSNUMMER "behandlinger[0].saksopplysninger.tiltaksdeltagelse[0].internDeltakelseId"`.
+
+### Manuell curl (eksempel: stansvedtaksbrev)
+
+```bash
+curl -sf -X POST "$B/sak/$SAK_ID/behandling/$BEH_ID/forhandsvis" -H "$T1" -H "$CT" -d '{
+  "resultat":"STANS",
+  "fritekst":"test",
+  "harValgtStansFraFørsteDagSomGirRett":true,
+  "stansFraOgMed":null,
+  "valgteHjemler":["DeltarIkkePåArbeidsmarkedstiltak"]
+}' -o stansvedtak.multipart
+```
+
+Responsen er multipart — bruk scriptene over for automatisk splitting, eller se
+`post_og_lagre_pdfer` i [`scripts/testdata/_lib.sh`](../scripts/testdata/_lib.sh)
+for hvordan den parses. Requestbodyene for de andre resultatene finner du i
+`ForhåndsvisVedtaksbrevRequestBody.kt` i `tiltakspenger-saksbehandling-api`.
+
+### GUI
+
+Alle brevene kan også forhåndsvises fra frontend («Forhåndsvis brev»-knappen i
+behandlingen/klagen/meldekortbehandlingen). Lokalt og i dev åpnes **to**
+PDF-vinduer (pdfgen + pdfgenrs) — husk å **tillate popups** i nettleseren.
 
 ---
 

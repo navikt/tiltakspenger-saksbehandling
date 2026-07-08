@@ -132,6 +132,90 @@ pretty_json() {
     python3 -m json.tool
 }
 
+PDF_UT_DIR="${PDF_UT_DIR:-/tmp/tiltakspenger-pdfer}"
+
+# POST-er mot en forhåndsvisnings-route og lagrer PDF-responsen(e) til fil.
+# Lokalt kjører pdfgen og pdfgenrs i parallell (skygge-kall), så responsen er
+# multipart med to PDF-er: pdfgen først, pdfgenrs som nummer to. Enkel
+# application/pdf-respons håndteres også. Skriver ut filstiene som lagres.
+post_og_lagre_pdfer() {
+    if [[ $# -ne 3 ]]; then
+        fail "post_og_lagre_pdfer krever PATH, BODY og NAVN."
+    fi
+    local path="$1"
+    local body="$2"
+    local navn="$3"
+
+    mkdir -p "$PDF_UT_DIR"
+    local headerfil bodyfil
+    headerfil="$(mktemp)"
+    bodyfil="$(mktemp)"
+
+    local http_status
+    http_status="$(
+        curl -sS -X POST "${BASE_URL}${path}" \
+            -H "Authorization: Bearer ${TOKEN_SAKSBEHANDLER}" \
+            -H "Content-Type: application/json" \
+            --data "$body" \
+            -D "$headerfil" -o "$bodyfil" -w '%{http_code}'
+    )"
+    if [[ ! "$http_status" =~ ^2[0-9][0-9]$ ]]; then
+        local feilmelding
+        feilmelding="$(cat "$bodyfil")"
+        rm -f "$headerfil" "$bodyfil"
+        fail "Forhåndsvisning feilet (HTTP ${http_status}): ${feilmelding}"
+    fi
+
+    local content_type
+    content_type="$(grep -i '^content-type:' "$headerfil" | tail -1 | tr -d '\r')"
+
+    if [[ "$content_type" == *multipart* ]]; then
+        python3 - "$bodyfil" "$content_type" "$PDF_UT_DIR" "$navn" <<'PY'
+import re
+import sys
+
+bodyfil, content_type, ut_dir, navn = sys.argv[1:5]
+
+match = re.search(r'boundary="?([^";]+)"?', content_type)
+if not match:
+    print(f"Fant ikke boundary i content-type: {content_type}", file=sys.stderr)
+    sys.exit(1)
+boundary = match.group(1).encode()
+
+with open(bodyfil, "rb") as f:
+    data = f.read()
+
+suffixes = ["pdfgen", "pdfgenrs"]
+index = 0
+for raw in data.split(b"--" + boundary)[1:]:
+    if raw.startswith(b"--"):
+        break
+    part = raw[2:] if raw.startswith(b"\r\n") else raw
+    _, sep, body = part.partition(b"\r\n\r\n")
+    if not sep:
+        continue
+    if body.endswith(b"\r\n"):
+        body = body[:-2]
+    suffix = suffixes[index] if index < len(suffixes) else str(index + 1)
+    path = f"{ut_dir}/{navn}-{suffix}.pdf"
+    with open(path, "wb") as f:
+        f.write(body)
+    print(path)
+    index += 1
+
+if index == 0:
+    print("Fant ingen PDF-deler i multipart-responsen.", file=sys.stderr)
+    sys.exit(1)
+PY
+        rm -f "$headerfil" "$bodyfil"
+    else
+        local utfil="${PDF_UT_DIR}/${navn}.pdf"
+        mv "$bodyfil" "$utfil"
+        rm -f "$headerfil"
+        printf '%s\n' "$utfil"
+    fi
+}
+
 urlencode() {
     if [[ $# -ne 1 ]]; then
         fail "urlencode krever én streng."
