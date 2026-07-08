@@ -1,4 +1,5 @@
-import { useFetchBlobFraApi } from '~/utils/fetch/useFetchFraApi';
+import { useFetchResponseFromApi } from '~/utils/fetch/useFetchFraApi';
+import { parseMultipartPdfs } from '~/utils/fetch/multipartPdf';
 import { Nullable } from '~/types/UtilTypes';
 import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { BarnetilleggPeriode } from '~/lib/rammebehandling/typer/Barnetillegg';
@@ -79,13 +80,27 @@ export type BrevForhåndsvisningDTO =
     | OmgjøringBrevForhåndsvisningDTO;
 
 export const useHentVedtaksbrevForhåndsvisning = (behandling: Rammebehandling) => {
-    const { trigger, error, isMutating } = useFetchBlobFraApi<BrevForhåndsvisningDTO>(
+    const { trigger, error, isMutating } = useFetchResponseFromApi<BrevForhåndsvisningDTO>(
         `/sak/${behandling.sakId}/behandling/${behandling.id}/forhandsvis`,
         'POST',
     );
 
+    // I dev sender backend to PDF-er (pdfgen + pdfgenrs) som multipart for manuell sammenligning
+    const hentForhåndsvisning = async (
+        dto: BrevForhåndsvisningDTO,
+    ): Promise<Blob[] | undefined> => {
+        const response = await trigger(dto);
+        if (!response) {
+            return undefined;
+        }
+        if (response.headers.get('content-type')?.includes('multipart')) {
+            return parseMultipartPdfs(response);
+        }
+        return [await response.blob()];
+    };
+
     return {
-        hentForhåndsvisning: trigger,
+        hentForhåndsvisning,
         forhåndsvisningError: error,
         forhåndsvisningLaster: isMutating,
     };

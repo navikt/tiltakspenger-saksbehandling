@@ -56,10 +56,10 @@ export const VedtaksbrevForhåndsvisning = ({
                         return;
                     }
 
-                    return hentForhåndsvisning(hentDto()).then((blob) => {
-                        if (blob) {
+                    return hentForhåndsvisning(hentDto()).then((blobs) => {
+                        blobs?.forEach((blob) => {
                             window.open(URL.createObjectURL(blob));
-                        }
+                        });
                     });
                 }}
             >
