@@ -8,21 +8,32 @@ jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
     env:
       BRUK_LOKAL_FAKE_TOKEN: 'true'
       LOKAL_FAKE_TOKEN: 'TokenMcTokenface'
       TILTAKSPENGER_SAKSBEHANDLING_API_URL: 'http://localhost:4000'
+      
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
       with:
         node-version: lts/*
+
+    - name: Authenticate to GitHub Packages
+      run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> .npmrc
+
     - name: Install dependencies
       run: npm install -g pnpm && pnpm install
+      
     - name: Install Playwright Browsers
       run: pnpm exec playwright install --with-deps
+    
     - name: Run Playwright tests
       run: pnpm exec playwright test
+    
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
