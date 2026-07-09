@@ -14,6 +14,8 @@ Repoet bruker Jest. Rene logikk-tester (`*.test.ts`) kjører i node-miljøet og 
 
 For React-komponenttester (`*.test.tsx`) med `@testing-library/react`:
 
+For e2e tester (`*.spec.ts`) bruker vi `playwright`.
+
 - Sett jsdom-miljø **per fil** med docblocken `/** @jest-environment jsdom */` øverst — ikke endre den globale Jest-konfigurasjonen.
 - Importer matchers via `@testing-library/jest-dom/jest-globals` (ikke `@testing-library/jest-dom`), slik at `toBeInTheDocument` m.fl. typer riktig sammen med `expect` fra `@jest/globals`.
 - jsdom mangler `<dialog>`, som Aksel sin `Modal` bruker. Polyfill i `beforeAll`:

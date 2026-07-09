@@ -38,6 +38,26 @@ export const Tidslinjer = ({ sak, heading = true, className }: Props) => {
 
     const { startDate, endDate, scrollTidslinje } = useTidslinjeDateRange(tidslinje);
 
+    // Uten perioder faller datointervallet tilbake på `dayjs(undefined)` (nåtidspunktet). Det gir
+    // ulik server-/klient-render (hydration-mismatch) og en meningsløs «i dag–i dag»-tidslinje.
+    // Vis heller en placeholder når det ikke finnes noe å tegne.
+    const harIngenPerioder = tidslinje.elementer.length === 0 && utbetalingstidslinje.length === 0;
+
+    if (harIngenPerioder) {
+        return (
+            <div className={classNames(style.wrapper, className)}>
+                <div className={style.header}>
+                    {heading && (
+                        <Heading size={'small'} level={'2'}>
+                            {'Gjeldende vedtak og siste beregnede utbetalinger'}
+                        </Heading>
+                    )}
+                </div>
+                <BodyShort>{'Ingen vedtak eller utbetalinger å vise på tidslinjen.'}</BodyShort>
+            </div>
+        );
+    }
+
     return (
         <div className={classNames(style.wrapper, className)}>
             <div className={style.header}>

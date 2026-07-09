@@ -4,9 +4,19 @@ import globals from 'globals';
 import css from '@eslint/css';
 import nextConfig from 'eslint-config-next';
 
-export default [
+const eslintConfig = [
     {
-        ignores: ['dist', '*.cjs', '*.mjs', '*.js', 'tests', '.next'],
+        ignores: [
+            'dist',
+            '*.cjs',
+            '*.mjs',
+            '*.js',
+            'tests',
+            '.next',
+            '.next-e2e',
+            'playwright-report',
+            'test-results',
+        ],
     },
     ...nextConfig,
     {
@@ -37,6 +47,17 @@ export default [
             'react/react-in-jsx-scope': 'off',
             '@typescript-eslint/ban-ts-comment': 'off',
             'react-hooks/refs': 'off',
+            'no-restricted-imports': [
+                'error',
+                {
+                    patterns: [
+                        {
+                            group: ['**/e2e/**'],
+                            message: 'App code must not import from the e2e/ folder.',
+                        },
+                    ],
+                },
+            ],
         },
         linterOptions: {
             reportUnusedDisableDirectives: 'off',
@@ -59,3 +80,5 @@ export default [
         },
     },
 ];
+
+export default eslintConfig;

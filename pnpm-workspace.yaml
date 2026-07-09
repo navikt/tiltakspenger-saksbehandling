@@ -1,6 +1,8 @@
 # Tillat byggescript for spesifikke pakker selv om .npmrc har ignore-scripts=true.
 # sharp:          native bildebehandling brukt av Next.js sin next/image
 # unrs-resolver:  Rust-basert modulresolver brukt av eslint-config-next
+# msw:            Mock Service Worker, brukt til å mocke API-kall i e2e-tester (Playwright)
 allowBuilds:
   sharp: true
   unrs-resolver: true
+  msw: true
