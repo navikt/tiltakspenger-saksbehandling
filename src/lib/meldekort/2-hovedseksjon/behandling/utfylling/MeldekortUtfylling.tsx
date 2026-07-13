@@ -28,7 +28,7 @@ import AvsluttMeldekortbehandling from '~/lib/personoversikt/meldekort-oversikt/
 import { meldeperiodeUrl, personoversiktUrl } from '~/utils/urls';
 import { MeldekortBeregningOgSimulering } from '~/lib/meldekort/0-felles-komponenter/beregning-simulering/MeldekortBeregningOgSimulering';
 import Divider from '~/lib/_felles/divider/Divider';
-import { useFetchBlobFraApi } from '~/utils/fetch/useFetchFraApi';
+import { useFetchResponseFromApi } from '~/utils/fetch/useFetchFraApi';
 import { hookFormErrorsTilFeiloppsummering } from '~/utils/validering';
 import { Nullable } from '~/types/UtilTypes';
 import { useNotification } from '~/lib/_felles/notifications/NotificationContext';
@@ -51,6 +51,7 @@ import {
 
 import styles from './MeldekortUtfylling.module.css';
 import { ForhåndsvisMeldekortbehandlingBrevBody } from '~/lib/meldekort/v2/meldekortbehandling/fritekst-og-innsending/begrunnelse-og-brev/forhåndsvis-brev/MeldekortbehandlingForhåndsvisBrev';
+import { parseMultipartPdfs } from '~/utils/fetch/multipartPdf';
 
 type Props = {
     meldekortbehandling: MeldekortbehandlingProps;
@@ -92,9 +93,25 @@ export const MeldekortUtfylling = ({ meldekortbehandling }: Props) => {
         .dager.every((dag) => dag.status !== MeldekortbehandlingDagStatus.IkkeBesvart);
     const skalViseBeregningVarsel = skjemaErEndret && skjemaErUtfylt;
 
-    const forhåndsvisBrev = useFetchBlobFraApi<ForhåndsvisMeldekortbehandlingBrevBody>(
+    const forhåndsvisDobbelBrev = useFetchResponseFromApi<ForhåndsvisMeldekortbehandlingBrevBody>(
         `/sak/${sakId}/meldekortbehandling/${meldekortbehandlingId}/forhandsvis`,
         'POST',
+        {
+            onSuccess: async (response) => {
+                const contentType = response.headers.get('content-type');
+
+                if (contentType?.includes('multipart')) {
+                    const pdfs = await parseMultipartPdfs(response);
+                    pdfs.forEach((pdfBlob) => {
+                        window.open(URL.createObjectURL(pdfBlob));
+                    });
+                } else {
+                    response.blob().then((blob) => {
+                        window.open(URL.createObjectURL(blob));
+                    });
+                }
+            },
+        },
     );
 
     const oppdaterMeldekortbehandling = useOppdaterMeldekortbehandling({
@@ -129,7 +146,7 @@ export const MeldekortUtfylling = ({ meldekortbehandling }: Props) => {
                 break;
             case 'lagreOgBeregn':
                 //fordi brevet krever at beregning gjøres for å forhåndsvise, fjerner vi tidligere feil som kan ha oppstått
-                forhåndsvisBrev.reset();
+                forhåndsvisDobbelBrev.reset();
                 oppdaterMeldekortbehandling.reset();
                 oppdaterMeldekortbehandling.trigger(meldekortbehandlingFormTilDto(data, kjedeId));
                 break;
@@ -233,12 +250,12 @@ export const MeldekortUtfylling = ({ meldekortbehandling }: Props) => {
                         type="button"
                         variant="secondary"
                         size="small"
-                        loading={forhåndsvisBrev.isMutating}
+                        loading={forhåndsvisDobbelBrev.isMutating}
                         disabled={meldekortbehandling.erAvsluttet || !skalSendeVedtaksbrev}
                         onClick={() => {
                             //resetter eventuelle tidligere feil før ny request
-                            forhåndsvisBrev.reset();
-                            forhåndsvisBrev.trigger(
+                            forhåndsvisDobbelBrev.reset();
+                            forhåndsvisDobbelBrev.trigger(
                                 {
                                     tekstTilVedtaksbrev: formContext.getValues(
                                         'tekstTilVedtaksbrev',
@@ -252,16 +269,32 @@ export const MeldekortUtfylling = ({ meldekortbehandling }: Props) => {
                                         },
                                     ],
                                 },
-                                { onSuccess: (blob) => window.open(URL.createObjectURL(blob!)) },
+                                {
+                                    //litt dobelt opp siden dette er kun midlertidig
+                                    onSuccess: async (response) => {
+                                        const contentType = response.headers.get('content-type');
+
+                                        if (contentType?.includes('multipart')) {
+                                            const pdfs = await parseMultipartPdfs(response);
+                                            pdfs.forEach((pdfBlob) => {
+                                                window.open(URL.createObjectURL(pdfBlob));
+                                            });
+                                        } else {
+                                            response.blob().then((blob) => {
+                                                window.open(URL.createObjectURL(blob));
+                                            });
+                                        }
+                                    },
+                                },
                             );
                         }}
                     >
                         Forhåndsvis brev
                     </Button>
-                    {forhåndsvisBrev.error && (
+                    {forhåndsvisDobbelBrev.error && (
                         <Alert variant="error" size="small">
                             <BodyShort>Feil ved forhåndsvisning av brev</BodyShort>
-                            <BodyShort>{forhåndsvisBrev.error.message}</BodyShort>
+                            <BodyShort>{forhåndsvisDobbelBrev.error.message}</BodyShort>
                         </Alert>
                     )}
                     <Divider orientation="horizontal" />
