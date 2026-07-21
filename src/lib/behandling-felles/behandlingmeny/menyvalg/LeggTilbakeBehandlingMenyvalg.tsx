@@ -1,4 +1,3 @@
-import router from 'next/router';
 import { ActionMenu } from '@navikt/ds-react';
 import { ÅpenRammebehandlingForOversikt } from '~/lib/personoversikt/typer/ÅpenBehandlingForOversikt';
 import { useLeggTilbakeBehandling } from '~/lib/behandling-felles/behandlingmeny/useLeggTilbakeBehandling';
@@ -6,7 +5,8 @@ import { eierBehandling } from '~/lib/saksbehandler/tilganger';
 import { Saksbehandler } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
 import { Rammebehandlingsstatus } from '~/lib/rammebehandling/typer/Rammebehandling';
-import { personoversiktUrl } from '~/utils/urls';
+import { SakProps } from '~/lib/sak/SakTyper';
+import { FetcherError } from '~/utils/fetch/fetch';
 
 export const visLeggTilbakeMenyvalg = (
     behandling: ÅpenRammebehandlingForOversikt,
@@ -21,19 +21,22 @@ export const visLeggTilbakeMenyvalg = (
 
 type Props = {
     behandling: ÅpenRammebehandlingForOversikt;
+    onSuccess: (oppdatertSak: SakProps) => void;
+    onError: (error: FetcherError) => void;
 };
 
-const LeggTilbakeMenyvalg = ({ behandling }: Props) => {
-    const { leggTilbakeBehandling } = useLeggTilbakeBehandling(behandling.sakId, behandling.id);
+const LeggTilbakeMenyvalg = ({ behandling, onSuccess, onError }: Props) => {
+    const { leggTilbakeBehandling } = useLeggTilbakeBehandling(behandling.sakId, behandling.id, {
+        onSuccess,
+        onError,
+    });
 
     return (
         <ActionMenu.Item
             icon={<ArrowLeftIcon aria-hidden />}
             onClick={(e) => {
                 e.preventDefault();
-                leggTilbakeBehandling().then(() => {
-                    router.push(personoversiktUrl(behandling.saksnummer));
-                });
+                leggTilbakeBehandling();
             }}
         >
             Legg tilbake

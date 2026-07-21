@@ -171,7 +171,13 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
                     {visFortsettBehandling && (
                         <FortsettBehandlingMenyvalg behandling={behandling} />
                     )}
-                    {visLeggTilbake && <LeggTilbakeBehandlingMenyValg behandling={behandling} />}
+                    {visLeggTilbake && (
+                        <LeggTilbakeBehandlingMenyValg
+                            behandling={behandling}
+                            onSuccess={(oppdatertSak) => setSak(oppdatertSak)}
+                            onError={(error) => setApiError({ visFeilModal: true, feil: error })}
+                        />
+                    )}
                     {visSettBehandlingPåVent && (
                         <SettBehandlingPåVentMenyvalg
                             setVisSettBehandlingPåVentModal={setVisSettBehandlingPåVentModal}

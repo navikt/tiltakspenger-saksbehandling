@@ -1,4 +1,4 @@
-import { Button, LocalAlert, Modal } from '@navikt/ds-react';
+import { BodyLong, Button, Modal } from '@navikt/ds-react';
 import { Nullable } from '~/types/UtilTypes';
 import { FetcherError } from '~/utils/fetch/fetch';
 
@@ -13,16 +13,14 @@ export const ApiErrorFeilModal = (props: {
     error: FetcherError;
 }) => {
     return (
-        <Modal aria-label="Feil ved handling" open={props.åpen} onClose={props.onClose}>
+        <Modal
+            header={{ heading: 'Handlingen kunne ikke utføres' }}
+            open={props.åpen}
+            onClose={props.onClose}
+            width="small"
+        >
             <Modal.Body>
-                {props.error && (
-                    <LocalAlert status="error">
-                        <LocalAlert.Header>
-                            <LocalAlert.Title>En feil skjedde</LocalAlert.Title>
-                        </LocalAlert.Header>
-                        <LocalAlert.Content>{props.error.message}</LocalAlert.Content>
-                    </LocalAlert>
-                )}
+                <BodyLong>{props.error.message}</BodyLong>
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={props.onClose} size="small">

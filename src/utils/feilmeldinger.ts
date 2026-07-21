@@ -26,6 +26,8 @@ const feilmeldinger: Record<string, string> = {
     ikke_implementert: 'Vi mangler en implementasjon for å gjennomføre denne handlingen',
     kan_ikke_stanse_utbetalt_dag: 'Kan ikke stanse utbetalt dag',
     meldeperioden_er_utdatert: 'Meldeperioden er utdatert',
+    ugyldig_status_for_legg_tilbake:
+        'Behandlingen har endret status etter at siden ble lastet. Last siden på nytt og prøv igjen.',
 } as const;
 
 export const finnFetchFeilmelding = (error?: JsonError): string => {
