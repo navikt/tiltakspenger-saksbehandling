@@ -8,16 +8,21 @@ import type {
     VurderKlageRequest,
 } from '~/lib/klage/typer/Klage';
 import { KlageHendelseKlagebehandlingAvsluttetUtfall } from '~/lib/klage/typer/Klageinstanshendelse';
+import type { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import {
     journalpostId,
     klageId,
     lagInitiellKlage,
+    lagOmgjøringsbehandling,
     lagSak,
+    lagSøknad,
+    omgjøringsbehandlingId,
     personopplysninger,
     saksbehandler,
     saksnummer,
     simulerSvarFraKlageinstans,
     skalAvvises,
+    søknadId,
     vedtakId,
 } from './klageTestUtils';
 const { test, expect, http, HttpResponse } = pkg;
@@ -425,5 +430,173 @@ test.describe('Klage', () => {
         await expect(klageTabell.getByRole('cell', { name: 'Ferdigstilt' })).toBeVisible();
         await expect(klageTabell.getByRole('cell', { name: 'Opprettholdt' })).toBeVisible();
         await expect(klageTabell.getByRole('cell', { name: 'Stadfestelse' })).toBeVisible();
+    });
+
+    test('kan omgjøre en klage', async ({ page, msw }) => {
+        let klage: Klagebehandling | null = null;
+        let omgjøringsbehandling: Rammebehandling | null = null;
+
+        msw.use(
+            http.get('*/saksbehandler', () => HttpResponse.json(saksbehandler)),
+            http.post('*/journalpost/valider', () =>
+                HttpResponse.json({
+                    journalpostFinnes: true,
+                    gjelderInnsendtFnr: true,
+                    datoOpprettet: '2025-04-01',
+                }),
+            ),
+            http.get('*/sak/:sakId/personopplysninger', () =>
+                HttpResponse.json(personopplysninger),
+            ),
+            http.post('*/sak/:sakId/klage', async ({ request }) => {
+                const body = (await request.json()) as OpprettKlageRequest;
+
+                const nyKlage = lagInitiellKlage();
+                nyKlage.klagensJournalpostId = body.journalpostId;
+                nyKlage.formkrav = {
+                    vedtakDetKlagesPå: body.vedtakDetKlagesPå as KlageFormkrav['vedtakDetKlagesPå'],
+                    erKlagerPartISaken: body.erKlagerPartISaken,
+                    klagesDetPåKonkreteElementerIVedtaket:
+                        body.klagesDetPåKonkreteElementerIVedtaket,
+                    erKlagefristenOverholdt: body.erKlagefristenOverholdt,
+                    erUnntakForKlagefrist: body.erUnntakForKlagefrist,
+                    erKlagenSignert: body.erKlagenSignert,
+                    innsendingsdato: body.innsendingsdato,
+                    innsendingskilde: body.innsendingskilde,
+                };
+
+                klage = nyKlage;
+                return HttpResponse.json(nyKlage);
+            }),
+            http.patch('*/sak/:sakId/klage/:klageId/vurder', async ({ request }) => {
+                const gjeldendeKlage = klage;
+                if (!gjeldendeKlage) return new HttpResponse(null, { status: 404 });
+
+                const body = (await request.json()) as VurderKlageRequest;
+
+                gjeldendeKlage.resultat = {
+                    type: KlagebehandlingResultat.OMGJØR,
+                    årsak: body.årsak!,
+                    begrunnelse: body.begrunnelse ?? '',
+                    begrunnelseFerdigstilling: null,
+                    ferdigstiltTidspunkt: null,
+                };
+                gjeldendeKlage.sistEndret = '2025-04-03T10:00:00';
+
+                return HttpResponse.json(gjeldendeKlage);
+            }),
+            http.post('*/sak/:sakId/klage/:klageId/opprettBehandling', () => {
+                const gjeldendeKlage = klage;
+                if (!gjeldendeKlage || gjeldendeKlage.resultat?.type !== 'OMGJØR') {
+                    return new HttpResponse(null, { status: 404 });
+                }
+
+                const nyBehandling = lagOmgjøringsbehandling();
+                omgjøringsbehandling = nyBehandling;
+                gjeldendeKlage.åpenBehandlingId = nyBehandling.id;
+                gjeldendeKlage.tilknyttedeBehandlingIder = [nyBehandling.id];
+
+                return HttpResponse.json(nyBehandling);
+            }),
+            http.get('*/sak/:saksnummer', () => {
+                const sak = lagSak(klage, { søknader: [lagSøknad()] });
+                if (omgjøringsbehandling) {
+                    sak.behandlinger = [...sak.behandlinger, omgjøringsbehandling];
+                }
+                return HttpResponse.json(sak);
+            }),
+        );
+
+        // 1. Saksbehandler starter på personoversikten.
+        await page.goto(`/sak/${saksnummer}`);
+
+        await expect(page.getByRole('heading', { name: 'Personoversikt' })).toBeVisible({
+            timeout: 60_000,
+        });
+
+        // 2. Registrer en ny klage fra personoversikten.
+        await page.getByRole('button', { name: 'Opprett behandling' }).click();
+        await page.getByRole('menuitem', { name: 'Registrer klage' }).click();
+
+        await expect(page).toHaveURL(new RegExp(`/sak/${saksnummer}/klage/opprett$`));
+        await expect(page.getByRole('heading', { name: 'Formkrav' })).toBeVisible({
+            timeout: 60_000,
+        });
+
+        // 3. Fyll ut skjemaet. Klagen er signert og klages på et rammevedtak -> kan vurderes.
+        await page.getByRole('textbox', { name: 'JournalpostId' }).fill(journalpostId);
+        await page.getByLabel('Vedtakstype').selectOption({ label: 'Rammevedtak' });
+        await page.getByLabel('Vedtaket som er påklaget').selectOption(vedtakId);
+        await page.getByRole('textbox', { name: 'Innsendingsdato for klagen' }).fill('01.04.2025');
+        await page.getByLabel('Innsendingskilde for klagen').selectOption({ label: 'Digitalt' });
+        await page
+            .getByRole('radiogroup', { name: 'Er klager part i saken?' })
+            .getByRole('radio', { name: 'Ja' })
+            .check();
+        await page
+            .getByRole('radiogroup', { name: 'Klages det på konkrete elementer i vedtaket?' })
+            .getByRole('radio', { name: 'Ja' })
+            .check();
+        await page
+            .getByRole('radiogroup', { name: 'Er klagefristen overholdt?' })
+            .getByRole('radio', { name: 'Ja' })
+            .check();
+        await page
+            .getByRole('radiogroup', { name: 'Er klagen signert?' })
+            .getByRole('radio', { name: 'Ja' })
+            .check();
+
+        await page.getByRole('button', { name: 'Lagre', exact: true }).click();
+
+        // 4. Etter opprettelse havner saksbehandler på formkrav-steget for den nye klagen.
+        await expect(page).toHaveURL(new RegExp(`/sak/${saksnummer}/klage/${klageId}/formkrav$`));
+        await expect(page.getByRole('heading', { name: 'Formkrav' })).toBeVisible({
+            timeout: 60_000,
+        });
+
+        // 5. Gå videre til vurderingssteget (formkrav oppfylt -> vurdering).
+        await page.getByRole('button', { name: 'Fortsett' }).click();
+
+        await expect(page).toHaveURL(new RegExp(`/sak/${saksnummer}/klage/${klageId}/vurdering$`));
+        await expect(page.getByRole('heading', { name: 'Vurdering' })).toBeVisible({
+            timeout: 60_000,
+        });
+
+        // 6. Velg å omgjøre vedtaket, med årsak og begrunnelse.
+        await page.getByLabel('Vedtak').selectOption({ label: 'Omgjør vedtak' });
+        await page.getByLabel('Årsak').selectOption({ label: 'Feil eller endret fakta' });
+        await page
+            .getByRole('textbox', { name: 'Begrunnelse' })
+            .fill('Nye opplysninger viser at vedtaket er feil og må omgjøres.');
+
+        await page.getByRole('button', { name: 'Lagre', exact: true }).click();
+
+        // 7. Etter lagret vurdering vises omgjøringsresultatet.
+        await expect(page.getByText('Omgjøring av vedtak')).toBeVisible();
+
+        // 8. Saksbehandler oppretter en ny omgjøringsbehandling for klagen.
+        await page.getByRole('button', { name: 'Opprett ny behandling' }).click();
+
+        const omgjøringsmodal = page.getByRole('dialog', { name: 'Velg omgjøringsbehandling' });
+        await omgjøringsmodal
+            .getByLabel('Behandlingstype')
+            .selectOption({ label: 'Søknadsbehandling' });
+        await omgjøringsmodal.getByLabel('Velg søknad').selectOption(søknadId);
+        await omgjøringsmodal.getByRole('button', { name: 'Opprett omgjøringsbehandling' }).click();
+
+        // 9. Saksbehandler havner på den nye omgjøringsbehandlingen, som viser informasjon
+        //    fra klagen (årsak og begrunnelse for omgjøringen).
+        await expect(page).toHaveURL(
+            new RegExp(`/sak/${saksnummer}/behandling/${omgjøringsbehandlingId}$`),
+        );
+        await expect(
+            page.getByRole('heading', {
+                name: 'Omgjøring etter klage - Vedtak (søknadsbehandling)',
+            }),
+        ).toBeVisible({ timeout: 60_000 });
+        await expect(page.getByRole('heading', { name: 'Informasjon om klagen' })).toBeVisible();
+        await expect(
+            page.getByText('Nye opplysninger viser at vedtaket er feil og må omgjøres.'),
+        ).toBeVisible();
     });
 });

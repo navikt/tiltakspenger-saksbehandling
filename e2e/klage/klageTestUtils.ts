@@ -18,8 +18,11 @@ import {
 } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
 import type { RevurderingStans } from '~/lib/rammebehandling/typer/Revurdering';
+import { SøknadsbehandlingResultat } from '~/lib/rammebehandling/typer/Søknadsbehandling';
+import type { Søknadsbehandling } from '~/lib/rammebehandling/typer/Søknadsbehandling';
 import type { RammebehandlingId } from '~/lib/rammebehandling/typer/Rammebehandling';
 import type { Rammevedtak, VedtakId } from '~/lib/rammebehandling/typer/Rammevedtak';
+import type { Søknad, SøknadId } from '~/types/Søknad';
 import {
     KlageHendelseKlagebehandlingAvsluttetUtfall,
     KlageHendelsestype,
@@ -38,7 +41,9 @@ export const beslutterIdent = 'Z99999';
 export const journalpostId = '453827';
 export const vedtakId = 'vedtak_01ABC' as VedtakId;
 export const rammebehandlingId = 'beh_01ABC' as RammebehandlingId;
+export const omgjøringsbehandlingId = 'beh_OMGJORING' as RammebehandlingId;
 export const klageinstanshendelseId = 'klagehendelse_01ABC' as KlageinstanshendelseId;
+export const søknadId = 'soknad_01ABC' as SøknadId;
 
 export const lagInitiellKlage = (): Klagebehandling => ({
     id: klageId,
@@ -130,7 +135,84 @@ export const lagRammebehandling = (): RevurderingStans => ({
     harValgtStansTilSisteDagSomGirRett: null,
 });
 
-export const lagSak = (klage: Klagebehandling | null): SakProps => ({
+export const lagSøknad = (): Søknad => {
+    const ikkeBesvartPeriodeSpm = { svar: 'IKKE_BESVART' as const, periode: vedtaksperiode };
+    const ikkeBesvartJaNeiSpm = { svar: 'IKKE_BESVART' as const };
+    const ikkeBesvartFraOgMedSpm = { svar: 'IKKE_BESVART' as const, fraOgMed: '2025-01-01' };
+
+    return {
+        id: søknadId,
+        journalpostId,
+        tiltak: null,
+        tiltaksdeltakelseperiodeDetErSøktOm: null,
+        barnetillegg: [],
+        søknadstype: 'DIGITAL',
+        behandlingsarsak: null,
+        opprettet: '2025-03-01T10:00:00',
+        tidsstempelHosOss: '2025-03-01T10:00:00',
+        antallVedlegg: 0,
+        avbrutt: null,
+        kanInnvilges: false,
+        svar: {
+            harSøktPåTiltak: undefined,
+            harSøktOmBarnetillegg: undefined,
+            kvp: ikkeBesvartPeriodeSpm,
+            intro: ikkeBesvartPeriodeSpm,
+            institusjon: ikkeBesvartPeriodeSpm,
+            sykepenger: ikkeBesvartPeriodeSpm,
+            etterlønn: ikkeBesvartJaNeiSpm,
+            alderspensjon: ikkeBesvartFraOgMedSpm,
+            gjenlevendepensjon: ikkeBesvartPeriodeSpm,
+            supplerendeStønadAlder: ikkeBesvartPeriodeSpm,
+            supplerendeStønadFlyktning: ikkeBesvartPeriodeSpm,
+            trygdOgPensjon: ikkeBesvartPeriodeSpm,
+            jobbsjansen: ikkeBesvartPeriodeSpm,
+        },
+    };
+};
+
+export const lagOmgjøringsbehandling = (): Søknadsbehandling => ({
+    id: omgjøringsbehandlingId,
+    type: Rammebehandlingstype.SØKNADSBEHANDLING,
+    status: Rammebehandlingsstatus.UNDER_BEHANDLING,
+    resultat: SøknadsbehandlingResultat.IKKE_VALGT,
+    sakId,
+    saksnummer,
+    rammevedtakId: null,
+    saksbehandler: navIdent,
+    beslutter: null,
+    saksopplysninger: {
+        fødselsdato: '1990-01-01',
+        tiltaksdeltagelse: [],
+        periode: vedtaksperiode,
+        ytelser: [],
+        tiltakspengevedtakFraArena: [],
+        oppslagstidspunkt: '2025-04-03T10:00:00',
+    },
+    attesteringer: [],
+    vedtaksperiode: null,
+    fritekstTilVedtaksbrev: null,
+    begrunnelseVilkårsvurdering: null,
+    avbrutt: null,
+    opprettet: '2025-04-03T10:00:00',
+    sistEndret: '2025-04-03T10:00:00',
+    iverksattTidspunkt: null,
+    ventestatus: [],
+    utbetaling: null,
+    utbetalingskontroll: null,
+    klagebehandlingId: klageId,
+    tilbakekrevingId: null,
+    skalSendeVedtaksbrev: true,
+    søknad: lagSøknad(),
+    automatiskSaksbehandlet: false,
+    manueltBehandlesGrunner: [],
+    kanInnvilges: true,
+});
+
+export const lagSak = (
+    klage: Klagebehandling | null,
+    options?: { søknader?: Søknad[] },
+): SakProps => ({
     sakId,
     saksnummer,
     fnr,
@@ -143,7 +225,7 @@ export const lagSak = (klage: Klagebehandling | null): SakProps => ({
     alleRammevedtak: [lagRammevedtak()],
     alleKlagevedtak: [],
     utbetalingstidslinje: [],
-    søknader: [],
+    søknader: options?.søknader ?? [],
     tilbakekrevinger: [],
     kanSendeInnHelgForMeldekort: false,
     meldekortvedtak: [],
