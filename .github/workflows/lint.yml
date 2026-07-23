@@ -1,0 +1,21 @@
+name: Lint workflows
+
+on:
+  pull_request:
+    paths:
+      - '.github/**'
+  push:
+    branches: [ main ]
+    paths:
+      - '.github/**'
+
+# Minste privilegium: toppnivået nullstiller alle token-rettigheter, hver jobb deklarerer eksplisitt det den trenger.
+permissions: {}
+
+jobs:
+  lint:
+    # Delt workflow i metarepoet: actionlint + zizmor (begge blokkerende).
+    # Konvensjoner: https://github.com/navikt/tiltakspenger/blob/main/.github/workflows/README.md
+    permissions:
+      contents: read
+    uses: navikt/tiltakspenger/.github/workflows/lint-workflows.yml@main

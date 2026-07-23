@@ -1,5 +1,11 @@
 name: Build and deploy
 
+# Raske påfølgende pushes ga overlappende NAIS-rollouts i backend-repoene (2026-07-16).
+# Kjør deployene serielt; ved flere ventende kjøringer vinner den nyeste.
+concurrency:
+  group: build-and-deploy
+  cancel-in-progress: false
+
 on:
   push:
     branches:
@@ -8,12 +14,19 @@ on:
       - '**.md'
       - '.env-template'
       - '.gitattributes'
+      # CI-endringer deployer ikke - de verifiseres av branch-gaten og metarepoets lint (beslutning i navikt/tiltakspenger#39).
+      - '.github/**'
       - '.gitignore'
       - '.husky/**'
       - 'CODEOWNERS'
       - 'docker-compose/**'
       - 'LICENSE'
 
+# Minste privilegium: toppnivået nullstiller alle token-rettigheter, hver jobb deklarerer eksplisitt det den trenger.
+permissions: {}
+
+# Image-bygget er lokalt (.test-and-build.yml); deployen er delt - se
+# https://github.com/navikt/tiltakspenger/blob/main/.github/workflows/README.md
 jobs:
   build:
     name: Build and push
@@ -26,9 +39,9 @@ jobs:
       SLACK_VARSEL_WEBHOOK_URL: ${{ secrets.SLACK_VARSEL_WEBHOOK_URL }}
 
   deploy-dev:
-    name: Deploy to NAIS dev
+    name: Deploy to NAIS (dev)
     needs: build
-    uses: ./.github/workflows/.deploy-to-nais.yml
+    uses: navikt/tiltakspenger/.github/workflows/deploy-nais.yml@main
     permissions:
       contents: read
       id-token: write
@@ -37,9 +50,9 @@ jobs:
       IMAGE: ${{ needs.build.outputs.IMAGE }}
 
   deploy-prod:
-    name: Deploy to NAIS prod
+    name: Deploy to NAIS (prod)
     needs: build
-    uses: ./.github/workflows/.deploy-to-nais.yml
+    uses: navikt/tiltakspenger/.github/workflows/deploy-nais.yml@main
     permissions:
       contents: read
       id-token: write

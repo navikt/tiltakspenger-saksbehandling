@@ -3,6 +3,11 @@ name: Build, push, and deploy to dev (manual)
 on:
   workflow_dispatch:
 
+# Minste privilegium: toppnivået nullstiller alle token-rettigheter, hver jobb deklarerer eksplisitt det den trenger.
+permissions: {}
+
+# Image-bygget er lokalt (.test-and-build.yml); deployen er delt - se
+# https://github.com/navikt/tiltakspenger/blob/main/.github/workflows/README.md
 jobs:
   build:
     name: Build and push
@@ -17,7 +22,7 @@ jobs:
   deploy-dev:
     name: Deploy to NAIS (dev)
     needs: build
-    uses: ./.github/workflows/.deploy-to-nais.yml
+    uses: navikt/tiltakspenger/.github/workflows/deploy-nais.yml@main
     permissions:
       contents: read
       id-token: write
