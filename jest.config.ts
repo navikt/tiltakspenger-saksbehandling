@@ -94,7 +94,8 @@ const config: Config = {
     // moduleNameMapper: {},
 
     // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
-    modulePathIgnorePatterns: ['/e2e/'],
+    // .next/standalone inneholder en kopi av package.json som ellers kolliderer i jest-haste-map.
+    modulePathIgnorePatterns: ['/e2e/', '<rootDir>/.next/'],
 
     // Activates notifications for test results
     // notify: false,
