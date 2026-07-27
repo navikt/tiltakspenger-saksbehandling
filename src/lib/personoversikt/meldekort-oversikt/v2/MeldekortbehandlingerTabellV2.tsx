@@ -1,6 +1,6 @@
 import { Link, Table } from '@navikt/ds-react';
 import NextLink from 'next/link';
-import { formaterPeriode, formaterTidspunkt } from '~/utils/date';
+import { formaterMeldeperiode, formaterTidspunkt } from '~/utils/date';
 import { formatterBeløp } from '~/utils/beløp';
 import { utbetalingsstatusTekst } from '~/utils/tekstformateringUtils';
 import { MeldekortbehandlingPropsV2 } from '~/lib/meldekort/v2/typer';
@@ -70,7 +70,7 @@ export const MeldekortbehandlingerTabellV2 = ({ saksnummer, meldekortbehandlinge
                                         {'Åpne'}
                                     </Link>
                                 </Table.DataCell>
-                                <Table.DataCell>{formaterPeriode(periode)}</Table.DataCell>
+                                <Table.DataCell>{formaterMeldeperiode(periode)}</Table.DataCell>
                                 <Table.DataCell>
                                     {meldekortbehandlingStatusTekst[status]}
                                 </Table.DataCell>

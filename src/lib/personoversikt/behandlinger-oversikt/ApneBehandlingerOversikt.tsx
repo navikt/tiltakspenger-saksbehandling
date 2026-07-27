@@ -11,11 +11,10 @@ import {
     klagebehandlingStatusTilTag,
     meldeperiodeKjedeStatusTag,
 } from '~/utils/tekstformateringUtils';
-import { formaterTidspunkt, formaterPeriode } from '~/utils/date';
+import { formaterTidspunkt, formaterPeriode, formaterMeldeperiode } from '~/utils/date';
 import { ApneBehandlingerMeny } from '~/lib/behandling-felles/behandlingmeny/ApneBehandlingerMeny';
 import { MeldeperiodeKjedeOversiktMeny } from '~/lib/personoversikt/meldekort-oversikt/MeldekortOversikt';
 import { SakProps } from '~/lib/sak/SakTyper';
-import { Periode } from '~/types/Periode';
 import { useSak } from '~/lib/sak/SakContext';
 import { Nullable } from '~/types/UtilTypes';
 import KlageMeny from '~/lib/behandling-felles/behandlingmeny/KlageMeny';
@@ -69,9 +68,7 @@ export const ApneBehandlingerOversikt = ({ åpneBehandlinger }: Props) => {
                             <Table.DataCell>{statusTag}</Table.DataCell>
                             <Table.DataCell>{formaterTidspunkt(opprettet)}</Table.DataCell>
                             <Table.DataCell>{kravtidspunkt ?? '-'}</Table.DataCell>
-                            <Table.DataCell>
-                                {periode ? `${formaterPeriode(periode)}` : '-'}
-                            </Table.DataCell>
+                            <Table.DataCell>{periode ?? '-'}</Table.DataCell>
                             <Table.DataCell>{saksbehandler ?? 'Ikke tildelt'}</Table.DataCell>
                             <Table.DataCell>{beslutter ?? 'Ikke tildelt'}</Table.DataCell>
                             <Table.DataCell scope="col" align={'right'}>
@@ -90,7 +87,7 @@ type ÅpenBehandlingOversiktRadProps = {
     resultatTag?: React.ReactNode;
     statusTag: React.ReactNode;
     kravtidspunkt?: string;
-    periode?: Nullable<Periode>;
+    periode?: string;
     saksbehandler?: Nullable<string>;
     beslutter?: Nullable<string>;
     meny: React.ReactNode;
@@ -135,7 +132,7 @@ const propsForRad = (
                 ),
                 saksbehandler,
                 beslutter,
-                periode,
+                periode: periode ? formaterPeriode(periode) : undefined,
                 kravtidspunkt:
                     type === ÅpenBehandlingForOversiktType.SØKNADSBEHANDLING
                         ? formaterTidspunkt(åpenBehandling.kravtidspunkt)
@@ -165,7 +162,7 @@ const propsForRad = (
                     ),
                 saksbehandler,
                 beslutter,
-                periode,
+                periode: periode ? formaterMeldeperiode(periode) : undefined,
                 meny: (
                     <MeldeperiodeKjedeOversiktMeny
                         kjedePeriode={periode}
@@ -188,7 +185,7 @@ const propsForRad = (
                 (klagebehandling.åpenBehandlingId &&
                     sak.meldekortbehandlinger[
                         klagebehandling.åpenBehandlingId as MeldekortbehandlingId
-                        ]) ??
+                    ]) ??
                 null;
 
             return {
