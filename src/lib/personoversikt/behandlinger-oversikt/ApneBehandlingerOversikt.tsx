@@ -10,7 +10,7 @@ import {
     klagebehandlingResultatTilTag,
     klagebehandlingStatusTilTag,
 } from '~/utils/tekstformateringUtils';
-import { formaterTidspunkt, formaterPeriode } from '~/utils/date';
+import { formaterMeldeperiode, formaterPeriode, formaterTidspunkt } from '~/utils/date';
 import { ApneBehandlingerMeny } from '~/lib/behandling-felles/behandlingmeny/ApneBehandlingerMeny';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { Periode } from '~/types/Periode';
@@ -48,7 +48,7 @@ export const ApneBehandlingerOversikt = ({ åpneBehandlinger }: Props) => {
             </Table.Header>
             <Table.Body>
                 {åpneBehandlinger.map((åpenBehandling) => {
-                    const { id, opprettet } = åpenBehandling;
+                    const { id, opprettet, type } = åpenBehandling;
 
                     const {
                         typeTekst,
@@ -61,6 +61,11 @@ export const ApneBehandlingerOversikt = ({ åpneBehandlinger }: Props) => {
                         meny,
                     } = propsForRad(åpenBehandling, sak);
 
+                    const formaterPeriodeFunc =
+                        type === ÅpenBehandlingForOversiktType.MELDEKORT
+                            ? formaterMeldeperiode
+                            : formaterPeriode;
+
                     return (
                         <Table.Row shadeOnHover={false} key={id}>
                             <Table.DataCell>{typeTekst}</Table.DataCell>
@@ -69,7 +74,7 @@ export const ApneBehandlingerOversikt = ({ åpneBehandlinger }: Props) => {
                             <Table.DataCell>{formaterTidspunkt(opprettet)}</Table.DataCell>
                             <Table.DataCell>{kravtidspunkt ?? '-'}</Table.DataCell>
                             <Table.DataCell>
-                                {periode ? `${formaterPeriode(periode)}` : '-'}
+                                {periode ? `${formaterPeriodeFunc(periode)}` : '-'}
                             </Table.DataCell>
                             <Table.DataCell>{saksbehandler ?? 'Ikke tildelt'}</Table.DataCell>
                             <Table.DataCell>{beslutter ?? 'Ikke tildelt'}</Table.DataCell>

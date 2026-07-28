@@ -4,8 +4,7 @@ import { useSak } from '~/lib/sak/SakContext';
 import { MeldekortHelgToggle } from '~/lib/personoversikt/helg-toggle/MeldekortHelgToggle';
 import { MeldeperiodeKjederOversikt } from './MeldeperiodeKjederOversikt';
 import { MeldekortbehandlingerOversikt } from './MeldekortbehandlingerOversikt';
-
-import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
+import { nonNullishPredicate } from '~/utils/array';
 
 enum OversiktVisning {
     Meldeperiodekjeder = 'meldeperiodekjeder',
@@ -18,9 +17,9 @@ export const MeldekortOversikt = () => {
 
     const [visning, setVisning] = useState<OversiktVisning>(OversiktVisning.Meldeperiodekjeder);
 
-    const meldekortbehandlinger = Object.values(
-        sak.meldekortbehandlinger,
-    ) as MeldekortbehandlingProps[];
+    const meldekortbehandlinger = Object.values(sak.meldekortbehandlinger).filter(
+        nonNullishPredicate,
+    );
 
     return (
         <VStack gap={'space-16'}>

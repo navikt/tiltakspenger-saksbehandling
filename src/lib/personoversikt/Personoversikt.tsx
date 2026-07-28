@@ -36,7 +36,6 @@ import Klageoversikt, {
 import { TilbakekrevingOversikt } from '~/lib/personoversikt/tilbakekreving/TilbakekrevingOversikt';
 import { personoversiktUrl } from '~/utils/urls';
 import { MeldekortOversikt } from '~/lib/personoversikt/meldekort-oversikt/MeldekortOversikt';
-import { finnAntallUbehandledeMeldekort } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
 
 export enum PersonoversiktTab {
     ÅpneBehandlinger = 'apne-behandlinger',
@@ -147,10 +146,7 @@ export const Personoversikt = () => {
                         />
                         <Tabs.Tab
                             value={PersonoversiktTab.Meldekort}
-                            label={labelWithCounter(
-                                'Meldekort',
-                                finnAntallUbehandledeMeldekort(meldeperiodeKjederV2),
-                            )}
+                            label={labelWithCounter('Meldekort', meldeperiodeKjederV2.length)}
                             icon={<InboxIcon aria-hidden />}
                             className={styles.tab}
                         />
@@ -224,9 +220,11 @@ export const Personoversikt = () => {
                     <Tabs.Panel value={PersonoversiktTab.ÅpneBehandlinger} className={styles.panel}>
                         <ApneBehandlingerOversikt åpneBehandlinger={åpneBehandlinger} />
                     </Tabs.Panel>
+
                     <Tabs.Panel value={PersonoversiktTab.Meldekort} className={styles.panel}>
                         <MeldekortOversikt />
                     </Tabs.Panel>
+
                     <Tabs.Panel
                         value={PersonoversiktTab.VedtatteBehandlinger}
                         className={styles.panel}
@@ -239,6 +237,7 @@ export const Personoversikt = () => {
                             alleKlagevedtak={alleKlagevedtak}
                         />
                     </Tabs.Panel>
+
                     <Tabs.Panel
                         value={PersonoversiktTab.AvsluttedeBehandlinger}
                         className={styles.panel}
@@ -249,6 +248,7 @@ export const Personoversikt = () => {
                             avbrutteKlageBehandlinger={avbrutteKlagebehandlinger}
                         />
                     </Tabs.Panel>
+
                     <Tabs.Panel value={PersonoversiktTab.Klage} className={styles.panel}>
                         <Klageoversikt
                             klagebehandlingerMedOmgjøringsbehandling={
@@ -257,16 +257,19 @@ export const Personoversikt = () => {
                             klagevedtakMedBehandling={klagevedtakMedBehandling}
                         />
                     </Tabs.Panel>
+
                     <Tabs.Panel value={PersonoversiktTab.Tilbakekreving} className={styles.panel}>
                         <TilbakekrevingOversikt tilbakekrevinger={tilbakekrevinger} />
                     </Tabs.Panel>
                 </Tabs>
             </Box>
+
             <OpprettSøknadModal
                 saksnummer={saksnummer}
                 åpen={registrerSøknadManueltModalÅpen}
                 setÅpen={setRegistrerSøknadManueltModalÅpen}
             />
+
             <StartRevurderingModal
                 sakId={sakId}
                 åpen={startRevurderingModalÅpen}
