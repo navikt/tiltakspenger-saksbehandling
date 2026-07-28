@@ -4,22 +4,17 @@
     }
 }
 
+.helgedag {
+    td {
+        background-color: var(--ax-neutral-100);
+    }
+}
+
 .statusIkon {
     width: 1rem;
 
     & > svg {
         vertical-align: top;
-    }
-}
-
-.simuleringCell {
-    display: flex;
-    justify-content: space-between;
-}
-
-.detaljerRow {
-    & > td {
-        border: none;
     }
 }
 

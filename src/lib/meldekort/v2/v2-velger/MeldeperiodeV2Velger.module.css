@@ -1,5 +1,6 @@
 .v2Toggle {
     position: fixed;
+    z-index: 10;
     bottom: 4rem;
     left: 1rem;
     padding: 0 0.5rem;

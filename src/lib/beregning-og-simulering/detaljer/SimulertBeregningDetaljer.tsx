@@ -2,8 +2,8 @@ import {
     SimuleringResultat,
     SimulertBeregning,
 } from '~/lib/beregning-og-simulering/typer/SimulertBeregning';
-import { Button, Table } from '@navikt/ds-react';
-import { Fragment, useState } from 'react';
+import { Button, VStack } from '@navikt/ds-react';
+import { useState } from 'react';
 import { classNames } from '~/utils/classNames';
 import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { SimulertBeregningMeldeperiodeDetaljer } from '~/lib/beregning-og-simulering/detaljer/meldeperiode/SimulertBeregningMeldeperiodeDetaljer';
@@ -46,22 +46,14 @@ export const SimulertBeregningDetaljerTabell = ({ simulertBeregning, className }
     const { meldeperioder, simuleringResultat } = simulertBeregning;
 
     return (
-        <Table size={'small'} className={className}>
-            <Table.Body>
-                {meldeperioder.map((meldeperiode, index) => (
-                    <Fragment key={meldeperiode.kjedeId}>
-                        <SimulertBeregningMeldeperiodeDetaljer
-                            meldeperiode={meldeperiode}
-                            harSimulering={simuleringResultat !== SimuleringResultat.IKKE_SIMULERT}
-                        />
-                        {index < meldeperioder.length - 1 && (
-                            <Table.Row className={style.spacer} shadeOnHover={false}>
-                                <Table.DataCell />
-                            </Table.Row>
-                        )}
-                    </Fragment>
-                ))}
-            </Table.Body>
-        </Table>
+        <VStack gap={'space-16'} className={className}>
+            {meldeperioder.map((meldeperiode) => (
+                <SimulertBeregningMeldeperiodeDetaljer
+                    meldeperiode={meldeperiode}
+                    harSimulering={simuleringResultat !== SimuleringResultat.IKKE_SIMULERT}
+                    key={meldeperiode.kjedeId}
+                />
+            ))}
+        </VStack>
     );
 };

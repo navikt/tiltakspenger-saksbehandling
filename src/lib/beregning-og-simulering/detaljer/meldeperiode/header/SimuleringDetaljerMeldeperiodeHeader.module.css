@@ -1,7 +1,17 @@
 .header {
     display: flex;
     justify-content: space-between;
-    gap: 1rem;
+    gap: 0.5rem 1rem;
+    flex-wrap: wrap;
+}
+
+.headerHøyre {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem 1rem;
+    flex-wrap: wrap;
+    margin-left: auto;
 }
 
 .headerBeregning {

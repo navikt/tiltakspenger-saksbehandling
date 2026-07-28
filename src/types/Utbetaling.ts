@@ -53,6 +53,8 @@ export type BehandlingUtbetalingProps = {
     status: Utbetalingsstatus;
     simulertBeregning: SimulertBeregning;
     kanIkkeIverksetteUtbetaling: Nullable<KanIkkeIverksetteUtbetalingGrunn>;
+    /** Melding fra backend som kan vises direkte. Null når grunnen alene er dekkende. */
+    kanIkkeIverksetteUtbetalingMelding: Nullable<string>;
 };
 
 export enum KanIkkeIverksetteUtbetalingGrunn {

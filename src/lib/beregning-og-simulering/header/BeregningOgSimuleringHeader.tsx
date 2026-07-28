@@ -15,6 +15,7 @@ type Props = {
     simulertBeregning: SimulertBeregning;
     utbetalingsstatus?: Utbetalingsstatus;
     kanIkkeIverksetteUtbetaling: Nullable<KanIkkeIverksetteUtbetalingGrunn>;
+    kanIkkeIverksetteUtbetalingMelding?: Nullable<string>;
     erOmberegning: boolean;
     className?: string;
 };
@@ -25,6 +26,7 @@ export const BeregningOgSimuleringHeader = ({
     simulertBeregning,
     utbetalingsstatus,
     kanIkkeIverksetteUtbetaling,
+    kanIkkeIverksetteUtbetalingMelding,
     erOmberegning,
     className,
 }: Props) => {
@@ -60,7 +62,8 @@ export const BeregningOgSimuleringHeader = ({
 
             {kanIkkeIverksetteUtbetaling && (
                 <Alert variant={'error'}>
-                    {`Utbetalingen kan ikke iverksettes: ${utbetalingValideringsfeilTekst[kanIkkeIverksetteUtbetaling]}`}
+                    {kanIkkeIverksetteUtbetalingMelding ??
+                        `Utbetalingen kan ikke iverksettes: ${utbetalingValideringsfeilTekst[kanIkkeIverksetteUtbetaling]}`}
                 </Alert>
             )}
 

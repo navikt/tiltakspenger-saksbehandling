@@ -1,0 +1,13 @@
+.rader {
+    display: grid;
+    grid-template-columns: max-content max-content max-content;
+    column-gap: var(--ax-space-16);
+    row-gap: var(--ax-space-4);
+    align-items: center;
+    justify-items: start;
+}
+
+.beløp {
+    justify-self: end;
+    font-variant-numeric: tabular-nums;
+}

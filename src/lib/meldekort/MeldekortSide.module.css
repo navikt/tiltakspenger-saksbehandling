@@ -1,6 +1,7 @@
 .behandlingLayout {
     display: grid;
-    grid-template-columns: 350px 700px 625px;
+    /* Midtseksjonen låner ledig bredde når skjermen har plass, slik at beregningstabellen slipper sidescroll. */
+    grid-template-columns: 350px minmax(700px, 880px) 625px;
     min-height: 100vh;
     background-color: var(--ax-bg-neutral-soft);
     gap: 1.25rem;

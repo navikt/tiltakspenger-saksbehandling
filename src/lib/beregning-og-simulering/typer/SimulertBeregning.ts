@@ -59,11 +59,13 @@ export type SimulertBeregningPerMeldeperiode = {
     dager: SimulertBeregningDag[];
     simulerteBeløp: Nullable<SimulerteBeløp>;
     beregning: BeregningerSummert;
+    flagg: Simuleringsflagg;
+    posteringer: Simuleringspostering[];
 };
 
 export type SimulertBeregningDag = {
     dato: string;
-    simulerteBeløp: Nullable<SimulerteBeløp>;
+    merker: Simuleringsmerke[];
 } & (SimulertBeregningDagMedBeregning | SimulertBeregningDagUtenBeregning);
 
 export type SimulertBeregningDagMedBeregning = {
@@ -84,6 +86,56 @@ export type SimulerteBeløp = {
     totalJustering: number;
     totalTrekk: number;
 };
+
+/**
+ * Fakta om hva simuleringen sier om en meldeperiode.
+ * Backend svarer på hva som er sant; her avgjør vi hvor høyt det skal rope.
+ */
+export type Simuleringsflagg = {
+    harJustering: boolean;
+    justeringGårOppINull: boolean;
+    justeringPåTversAvMeldeperiodeEllerMåned: boolean;
+    harFeilutbetaling: boolean;
+    harTrekk: boolean;
+};
+
+/**
+ * Hva oppdragssystemet har å melde om én dag i beregningen.
+ * Perioden er kildedata og kan alltid vises.
+ * Beløpet er satt kun når posteringen dekker nøyaktig én dag -- for lengre perioder finnes det ingen dagsandel, og perioden vises i stedet.
+ * Fortegnet er kildedata på posteringen og er satt også når beløpet er null.
+ */
+export type Simuleringsmerke = {
+    type: Posteringstype;
+    periodeFraOgMed: string;
+    periodeTilOgMed: string;
+    klassekode: string;
+    beløp: Nullable<number>;
+    erJustering: boolean;
+    erNegativt: boolean;
+};
+
+/**
+ * Én postering slik oppdragssystemet sendte den, knyttet til meldeperioden den treffer.
+ * Beløpet er alltid kildens eget for posteringens periode -- her finnes ingen dagsfordeling.
+ */
+export type Simuleringspostering = {
+    type: Posteringstype;
+    periodeFraOgMed: string;
+    periodeTilOgMed: string;
+    klassekode: string;
+    beløp: number;
+    erJustering: boolean;
+};
+
+export enum Posteringstype {
+    YTELSE = 'YTELSE',
+    FEILUTBETALING = 'FEILUTBETALING',
+    FORSKUDSSKATT = 'FORSKUDSSKATT',
+    JUSTERING = 'JUSTERING',
+    TREKK = 'TREKK',
+    MOTPOSTERING = 'MOTPOSTERING',
+}
 
 export enum SimuleringResultat {
     ENDRING = 'ENDRING',

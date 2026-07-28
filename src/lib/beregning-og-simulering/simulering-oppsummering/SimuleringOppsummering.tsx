@@ -5,6 +5,7 @@ import {
     SimulertBeregning,
 } from '~/lib/beregning-og-simulering/typer/SimulertBeregning';
 import { OppdaterSimuleringKnapp } from '~/lib/beregning-og-simulering/oppdater-simulering/OppdaterSimuleringKnapp';
+import { SimuleringsflaggVarsler } from '~/lib/beregning-og-simulering/flagg/SimuleringsflaggVarsler';
 import { BehandlingId } from '~/lib/behandling-felles/typer/BehandlingFelles';
 
 import style from './SimuleringOppsummering.module.css';
@@ -70,6 +71,9 @@ export const SimuleringOppsummering = ({
                 </Heading>
                 {oppdaterKnapp}
             </HStack>
+            <SimuleringsflaggVarsler
+                flagg={simulertBeregning.meldeperioder.map((meldeperiode) => meldeperiode.flagg)}
+            />
             <UtbetalingBeløp
                 tekst={'Nytt beløp for endrede dager'}
                 beløp={nyUtbetaling}

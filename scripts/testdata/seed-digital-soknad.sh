@@ -6,26 +6,30 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/_lib.sh"
 
 usage() {
-    echo "Bruk: $(basename "$0") [FNR]" >&2
+    echo "Bruk: $(basename "$0") [FNR [FOM TOM]]" >&2
     exit 1
 }
 
-[[ $# -le 1 ]] || usage
+[[ $# -eq 0 || $# -eq 1 || $# -eq 3 ]] || usage
 
 fnr="${1:-}"
+fom="${2:-}"
+tom="${3:-}"
 require_server
 
-if [[ -n "$fnr" ]]; then
-    body="$(python3 - "$fnr" <<'PY'
+body="$(python3 - "$fnr" "$fom" "$tom" <<'PY'
 import json
 import sys
 
-print(json.dumps({"barnetillegg": [], "fnr": sys.argv[1]}, ensure_ascii=False))
+fnr, fom, tom = sys.argv[1], sys.argv[2], sys.argv[3]
+body = {"barnetillegg": []}
+if fnr:
+    body["fnr"] = fnr
+if fom and tom:
+    body["deltakelsesperiode"] = {"fraOgMed": fom, "tilOgMed": tom}
+print(json.dumps(body, ensure_ascii=False))
 PY
 )"
-else
-    body='{"barnetillegg":[]}'
-fi
 
 saksnummer="$(http_noauth POST "/dev/soknad/ny" "$body")"
 [[ -n "$saksnummer" ]] || fail "Mottok tomt saksnummer fra /dev/soknad/ny."
