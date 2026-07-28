@@ -21,8 +21,7 @@ export default defineConfig({
     retries: process.env.CI ? 2 : 0,
     /* Opt out of parallel tests on CI. */
     workers: process.env.CI ? 1 : undefined,
-    /* Gi god margin for kald `next dev`-kompilering av flere sider i én flyt. */
-    timeout: 120_000,
+    timeout: 30000,
     /* Reporter to use. See https://playwright.dev/docs/test-reporters */
     reporter: 'html',
     /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
@@ -73,17 +72,16 @@ export default defineConfig({
     ],
 
     webServer: {
-        command: 'pnpm dev',
+        command: 'pnpm run build && pnpm run start-local',
         port: 3100,
         /* Alltid start en fersk server slik at env under (fake token + mock-API-url) faktisk
          * gjelder. En allerede kjørende dev-server (uten disse env-variablene) ville ellers blitt
          * gjenbrukt, og getServerSideProps ville redirecte til innlogging. Egen port (3100) gjør at
-         * en vanlig `pnpm dev` på 3000 ikke forstyrres. */
+         * en lokal dev server på 3000 ikke forstyrres. */
         reuseExistingServer: false,
-        timeout: 10000,
+        timeout: 30000,
         env: {
             PORT: '3100',
-            /* Skrur av Next dev-indikatoren (se next.config.js) så portalen ikke blokkerer klikk. */
             E2E: 'true',
             /* Bypass Wonderwall/token-validering slik at getServerSideProps ikke redirecter til login. */
             BRUK_LOKAL_FAKE_TOKEN: 'true',

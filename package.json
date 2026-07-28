@@ -12,6 +12,7 @@
         "dev": "next dev -H 127.0.0.1 | pino-pretty",
         "build": "next build",
         "start": "node .next/standalone/server.js",
+        "start-local": "next start",
         "lint": "eslint",
         "lint:fix": "eslint --fix",
         "format:check": "prettier --check .",

@@ -1,18 +1,15 @@
 const isDevelopment = process.env.NODE_ENV === 'development';
 
-// Under e2e (Playwright) bruker vi en egen dist-mappe slik at test-dev-serveren ikke kolliderer
-// med en vanlig `pnpm dev`. Next tillater ikke to dev-servere med samme dist-mappe i samme
-// prosjekt («Another next dev server is already running»), selv på ulike porter.
 const isE2E = process.env.E2E === 'true';
 
 /** @type {import('next').NextConfig} */
 export default {
-    ...(isE2E ? { distDir: '.next-e2e' } : {}),
     experimental: {
         optimizePackageImports: ['@navikt/ds-react', '@navikt/aksel-icons'],
-        testProxy: true,
+        testProxy: isE2E,
     },
-    output: 'standalone',
+    // Dropper optimalizeringen med standalone for tester, slik at test-serveren alltid har alle ressurser tilgjengelig
+    output: isE2E ? undefined : 'standalone',
     async headers() {
         const ContentSecurityPolicy = `
           default-src 'self';
