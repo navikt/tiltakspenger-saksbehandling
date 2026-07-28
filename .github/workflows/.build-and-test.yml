@@ -21,7 +21,7 @@ jobs:
     # libraries they need, so we skip the slow `playwright install-deps` step.
     # NB: keep the image tag in sync with the `@playwright/test` version in package.json.
     container:
-      image: mcr.microsoft.com/playwright:v1.59.1-noble
+      image: mcr.microsoft.com/playwright:v1.61.1-noble
     permissions:
       contents: read
     steps:
