@@ -32,20 +32,20 @@ import type {
     KlageinstanshendelseId,
 } from '~/lib/klage/typer/Klageinstanshendelse';
 
-export const saksnummer = '10001';
-export const sakId = 'sak_01ABC' as SakId;
-export const klageId = 'klage_01ABC' as KlageId;
-export const fnr = '12345678911';
-export const navIdent = 'Z12345';
-export const beslutterIdent = 'Z99999';
-export const journalpostId = '453827';
-export const vedtakId = 'vedtak_01ABC' as VedtakId;
-export const rammebehandlingId = 'beh_01ABC' as RammebehandlingId;
-export const omgjøringsbehandlingId = 'beh_OMGJORING' as RammebehandlingId;
-export const klageinstanshendelseId = 'klagehendelse_01ABC' as KlageinstanshendelseId;
-export const søknadId = 'soknad_01ABC' as SøknadId;
+const saksnummer = '10001';
+const sakId: SakId = 'sak_01ABC';
+const klageId: KlageId = 'klage_01ABC';
+const fnr = '12345678911';
+const navIdent = 'Z12345';
+const beslutterIdent = 'Z99999';
+const journalpostId = '453827';
+const vedtakId: VedtakId = 'vedtak_01ABC';
+const rammebehandlingId: RammebehandlingId = 'beh_01ABC';
+const omgjøringsbehandlingId: RammebehandlingId = 'beh_OMGJORING';
+const klageinstanshendelseId: KlageinstanshendelseId = 'klagehendelse_01ABC';
+const søknadId: SøknadId = 'soknad_01ABC';
 
-export const lagInitiellKlage = (): Klagebehandling => ({
+const lagInitiellKlage = (): Klagebehandling => ({
     id: klageId,
     sakId,
     saksnummer,
@@ -78,7 +78,7 @@ export const lagInitiellKlage = (): Klagebehandling => ({
 
 const vedtaksperiode = { fraOgMed: '2025-01-01', tilOgMed: '2025-03-31' };
 
-export const lagRammevedtak = (): Rammevedtak => ({
+const lagRammevedtak = (): Rammevedtak => ({
     id: vedtakId,
     behandlingId: rammebehandlingId,
     opprettet: '2025-03-25T10:00:00',
@@ -97,7 +97,7 @@ export const lagRammevedtak = (): Rammevedtak => ({
     omgjortGrad: null,
 });
 
-export const lagRammebehandling = (): RevurderingStans => ({
+const lagRammebehandling = (): RevurderingStans => ({
     id: rammebehandlingId,
     type: Rammebehandlingstype.REVURDERING,
     status: Rammebehandlingsstatus.VEDTATT,
@@ -135,7 +135,7 @@ export const lagRammebehandling = (): RevurderingStans => ({
     harValgtStansTilSisteDagSomGirRett: null,
 });
 
-export const lagSøknad = (): Søknad => {
+const lagSøknad = (): Søknad => {
     const ikkeBesvartPeriodeSpm = { svar: 'IKKE_BESVART' as const, periode: vedtaksperiode };
     const ikkeBesvartJaNeiSpm = { svar: 'IKKE_BESVART' as const };
     const ikkeBesvartFraOgMedSpm = { svar: 'IKKE_BESVART' as const, fraOgMed: '2025-01-01' };
@@ -171,7 +171,7 @@ export const lagSøknad = (): Søknad => {
     };
 };
 
-export const lagOmgjøringsbehandling = (): Søknadsbehandling => ({
+const lagOmgjøringsbehandling = (): Søknadsbehandling => ({
     id: omgjøringsbehandlingId,
     type: Rammebehandlingstype.SØKNADSBEHANDLING,
     status: Rammebehandlingsstatus.UNDER_BEHANDLING,
@@ -209,10 +209,7 @@ export const lagOmgjøringsbehandling = (): Søknadsbehandling => ({
     kanInnvilges: true,
 });
 
-export const lagSak = (
-    klage: Klagebehandling | null,
-    options?: { søknader?: Søknad[] },
-): SakProps => ({
+const lagSak = (klage: Klagebehandling | null, options?: { søknader?: Søknad[] }): SakProps => ({
     sakId,
     saksnummer,
     fnr,
@@ -234,14 +231,14 @@ export const lagSak = (
     åpenMeldekortbehandlingId: null,
 });
 
-export const saksbehandler: Saksbehandler = {
+const saksbehandler: Saksbehandler = {
     brukernavn: 'Test Testesen',
     epost: 'test.testesen@nav.no',
     navIdent,
     roller: [SaksbehandlerRolle.SAKSBEHANDLER, SaksbehandlerRolle.BESLUTTER],
 };
 
-export const personopplysninger: Personopplysninger = {
+const personopplysninger: Personopplysninger = {
     fnr,
     fødselsdato: '1990-01-01',
     fornavn: 'Ola',
@@ -255,7 +252,7 @@ export const personopplysninger: Personopplysninger = {
 /**
  * Regner ut om formkravene fører til avvisning, på samme måte som backend/`kanVurdereKlage`.
  */
-export const skalAvvises = (formkrav: OppdaterKlageFormkravRequest): boolean =>
+const skalAvvises = (formkrav: OppdaterKlageFormkravRequest): boolean =>
     !(
         formkrav.vedtakDetKlagesPå !== null &&
         formkrav.erKlagerPartISaken &&
@@ -264,7 +261,7 @@ export const skalAvvises = (formkrav: OppdaterKlageFormkravRequest): boolean =>
         formkrav.erKlagenSignert
     );
 
-export const lagKlagebehandlingAvsluttetHendelse = (
+const lagKlagebehandlingAvsluttetHendelse = (
     utfall: KlageHendelseKlagebehandlingAvsluttetUtfall,
 ): KlagebehandlingAvsluttetHendelse => ({
     klagehendelseId: klageinstanshendelseId,
@@ -282,7 +279,7 @@ export const lagKlagebehandlingAvsluttetHendelse = (
  * Muterer en opprettholdt klage slik den ser ut etter at Nav Klageinstans har journalført,
  * distribuert, mottatt og svart på innstillingsbrevet.
  */
-export const simulerSvarFraKlageinstans = (
+const simulerSvarFraKlageinstans = (
     klage: Klagebehandling,
     utfall: KlageHendelseKlagebehandlingAvsluttetUtfall,
 ): void => {
@@ -299,3 +296,29 @@ export const simulerSvarFraKlageinstans = (
         klageinstanshendelser: [lagKlagebehandlingAvsluttetHendelse(utfall)],
     };
 };
+
+export const klageTestUtils = {
+    saksnummer,
+    sakId,
+    klageId,
+    fnr,
+    navIdent,
+    beslutterIdent,
+    journalpostId,
+    vedtakId,
+    rammebehandlingId,
+    omgjøringsbehandlingId,
+    klageinstanshendelseId,
+    søknadId,
+    saksbehandler,
+    personopplysninger,
+    lagInitiellKlage,
+    lagRammevedtak,
+    lagRammebehandling,
+    lagSøknad,
+    lagOmgjøringsbehandling,
+    lagSak,
+    lagKlagebehandlingAvsluttetHendelse,
+    skalAvvises,
+    simulerSvarFraKlageinstans,
+} as const;

@@ -9,7 +9,9 @@ import type {
 } from '~/lib/klage/typer/Klage';
 import { KlageHendelseKlagebehandlingAvsluttetUtfall } from '~/lib/klage/typer/Klageinstanshendelse';
 import type { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
-import {
+import { klageTestUtils } from './klageTestUtils';
+
+const {
     journalpostId,
     klageId,
     lagInitiellKlage,
@@ -24,7 +26,7 @@ import {
     skalAvvises,
     søknadId,
     vedtakId,
-} from './klageTestUtils';
+} = klageTestUtils;
 const { test, expect, http, HttpResponse } = pkg;
 
 test.describe('Klage', () => {
