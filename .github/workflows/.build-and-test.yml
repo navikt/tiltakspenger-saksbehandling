@@ -57,6 +57,7 @@ jobs:
           # the checkout step chowns $HOME to a non-root user, but the container
           # runs as root, so we point HOME at /root which root owns.
           HOME: /root
+          NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
       # All kontekst går via env (aldri ${{ }} direkte i run), og payloaden bygges med jq så verdier med spesialtegn ikke kan knekke/injisere JSON-en.
       # curl -sSf gjør at et avvist webhook-kall feiler steget synlig i stedet for å forsvinne stille.
       # Webhooken er en app-basert Slack-webhook: den krever JSON-body med Content-Type: application/json (legacy payload=-form ga HTTP 422).
