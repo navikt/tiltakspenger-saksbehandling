@@ -1,26 +1,24 @@
-import { Alert } from '@navikt/ds-react';
+import { InlineMessage } from '@navikt/ds-react';
 import { MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
-import { formaterMeldeperiode } from '~/utils/date';
+import { formaterPeriode } from '~/utils/date';
+import { periodiseringTotalPeriode } from '~/utils/periode';
 
 type Props = {
-    meldeperiodeKjeder: MeldeperiodekjedeProps[];
+    meldeperiodekjeder: MeldeperiodekjedeProps[];
 };
 
-export const MeldekortOversiktIkkeKlar = ({ meldeperiodeKjeder }: Props) => {
-    if (meldeperiodeKjeder.length === 0) {
+export const MeldekortOversiktIkkeKlar = ({ meldeperiodekjeder }: Props) => {
+    const ikkeKlar = meldeperiodekjeder.filter((kjede) => !kjede.kanBehandles);
+
+    if (ikkeKlar.length === 0) {
         return null;
     }
 
-    const fraOgMed = meldeperiodeKjeder.at(0)!.periode.fraOgMed;
-    const tilOgMed = meldeperiodeKjeder.at(-1)!.periode.tilOgMed;
-
-    const periodeTekst = formaterMeldeperiode({ fraOgMed, tilOgMed });
+    const { fraOgMed, tilOgMed } = periodiseringTotalPeriode(ikkeKlar);
 
     return (
-        <Alert
-            inline={true}
-            variant={'info'}
-            size={'small'}
-        >{`${meldeperiodeKjeder.length} meldekort ikke klare til behandling i perioden ${periodeTekst}`}</Alert>
+        <InlineMessage status={'info'} size={'small'}>
+            {`${ikkeKlar.length} meldeperioder ikke klare til behandling i perioden ${formaterPeriode({ fraOgMed, tilOgMed })}`}
+        </InlineMessage>
     );
 };

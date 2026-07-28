@@ -5,6 +5,7 @@ import { MeldekortHelgToggle } from '~/lib/personoversikt/helg-toggle/MeldekortH
 import { MeldeperiodeKjederOversikt } from './MeldeperiodeKjederOversikt';
 import { MeldekortbehandlingerOversikt } from './MeldekortbehandlingerOversikt';
 import { nonNullishPredicate } from '~/utils/array';
+import { MeldekortOversiktIkkeKlar } from '~/lib/personoversikt/meldekort-oversikt/ikke-klar/MeldekortOversiktIkkeKlar';
 
 enum OversiktVisning {
     Meldeperiodekjeder = 'meldeperiodekjeder',
@@ -35,7 +36,11 @@ export const MeldekortOversikt = () => {
                         {`Meldekortbehandlinger (${meldekortbehandlinger.length})`}
                     </ToggleGroup.Item>
                 </ToggleGroup>
-                <MeldekortHelgToggle />
+
+                <HStack gap={'space-16'} align={'center'}>
+                    <MeldekortOversiktIkkeKlar meldeperiodekjeder={meldeperiodeKjederV2} />
+                    <MeldekortHelgToggle />
+                </HStack>
             </HStack>
 
             {visning === OversiktVisning.Meldeperiodekjeder ? (
