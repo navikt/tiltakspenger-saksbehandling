@@ -1,6 +1,7 @@
 .main {
     display: grid;
-    grid-template-columns: 380px 770px;
+    /* Hovedkolonnen låner ledig bredde når skjermen har plass, slik at beregningstabellen slipper sidescroll. */
+    grid-template-columns: 380px minmax(770px, 880px);
     grid-column-gap: 1.25rem;
     width: fit-content;
 }

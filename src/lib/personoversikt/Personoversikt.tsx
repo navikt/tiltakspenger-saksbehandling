@@ -41,6 +41,7 @@ import { TilbakekrevingOversikt } from '~/lib/personoversikt/tilbakekreving/Tilb
 import { personoversiktUrl } from '~/utils/urls';
 import { useFeatureToggles } from '~/context/FeatureTogglesContext';
 import { MeldekortOversiktV2 } from '~/lib/personoversikt/meldekort-oversikt/v2/MeldekortOversiktV2';
+import { MeldeperiodeV2Velger } from '~/lib/meldekort/v2/v2-velger/MeldeperiodeV2Velger';
 
 export enum PersonoversiktTab {
     ÅpneBehandlinger = 'apne-behandlinger',
@@ -51,13 +52,19 @@ export enum PersonoversiktTab {
     Tilbakekreving = 'Tilbakekreving',
 }
 
-export const Personoversikt = () => {
+type Props = {
+    /** Leses fra V2-cookien i getServerSideProps, slik at server og klient rendrer det samme. */
+    harValgtV2Initial?: boolean;
+};
+
+export const Personoversikt = ({ harValgtV2Initial = false }: Props) => {
     const router = useRouter();
     const { sak } = useSak();
     const [startRevurderingModalÅpen, setStartRevurderingModalÅpen] = useState(false);
     const [registrerSøknadManueltModalÅpen, setRegistrerSøknadManueltModalÅpen] = useState(false);
 
     const { meldekortbehandlingV2Toggle } = useFeatureToggles();
+    const [harValgtV2, setHarValgtV2] = useState(harValgtV2Initial);
 
     const {
         sakId,
@@ -129,6 +136,9 @@ export const Personoversikt = () => {
 
     return (
         <>
+            {meldekortbehandlingV2Toggle && (
+                <MeldeperiodeV2Velger harValgtV2={harValgtV2} setHarValgtV2={setHarValgtV2} />
+            )}
             <NotificationBanner />
             <PersonaliaHeader sakId={sakId} saksnummer={saksnummer} />
             <Box className={styles.wrapper}>
@@ -239,7 +249,7 @@ export const Personoversikt = () => {
                         <ApneBehandlingerOversikt åpneBehandlinger={åpneBehandlinger} />
                     </Tabs.Panel>
                     <Tabs.Panel value={PersonoversiktTab.Meldekort} className={styles.panel}>
-                        {meldekortbehandlingV2Toggle ? (
+                        {meldekortbehandlingV2Toggle && harValgtV2 ? (
                             <MeldekortOversiktV2 />
                         ) : (
                             <>

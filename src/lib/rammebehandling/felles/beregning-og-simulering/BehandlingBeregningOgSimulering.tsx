@@ -77,6 +77,7 @@ const BeregningOgSimuleringSeksjon = ({
         navkontor,
         navkontorNavn,
         kanIkkeIverksetteUtbetaling,
+        kanIkkeIverksetteUtbetalingMelding,
     } = utbetaling;
 
     const { beregning, simuleringstidspunkt, beregningstidspunkt } = simulertBeregning;
@@ -101,6 +102,7 @@ const BeregningOgSimuleringSeksjon = ({
                                 : undefined
                         }
                         kanIkkeIverksetteUtbetaling={kanIkkeIverksetteUtbetaling}
+                        kanIkkeIverksetteUtbetalingMelding={kanIkkeIverksetteUtbetalingMelding}
                         erOmberegning={true}
                     />
 

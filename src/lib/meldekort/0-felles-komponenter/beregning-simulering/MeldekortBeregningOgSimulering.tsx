@@ -32,6 +32,7 @@ export const MeldekortBeregningOgSimulering = ({ meldekortbehandling, className 
         saksbehandler,
         type,
         kanIkkeIverksetteUtbetaling,
+        kanIkkeIverksetteUtbetalingMelding,
         tilbakekrevingId,
     } = meldekortbehandling;
 
@@ -61,6 +62,7 @@ export const MeldekortBeregningOgSimulering = ({ meldekortbehandling, className 
                 navkontorNavn={navkontorNavn}
                 simulertBeregning={simulertBeregning}
                 kanIkkeIverksetteUtbetaling={kanIkkeIverksetteUtbetaling}
+                kanIkkeIverksetteUtbetalingMelding={kanIkkeIverksetteUtbetalingMelding}
                 erOmberegning={type === MeldeperiodebehandlingType.KORRIGERING}
             />
             {skalViseUtfallVarsel && (

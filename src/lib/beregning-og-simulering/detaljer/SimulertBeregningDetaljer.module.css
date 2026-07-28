@@ -18,11 +18,3 @@
         display: block;
     }
 }
-
-.spacer {
-    margin-bottom: 1rem;
-
-    td {
-        border: none;
-    }
-}

@@ -26,6 +26,7 @@ export const MeldekortbehandlingBeregningOgSimulering = () => {
         navkontorNavn,
         navkontor,
         kanIkkeIverksetteUtbetaling,
+        kanIkkeIverksetteUtbetalingMelding,
         meldeperioder,
     } = meldekortbehandling;
 
@@ -72,6 +73,7 @@ export const MeldekortbehandlingBeregningOgSimulering = () => {
                     navkontorNavn={navkontorNavn}
                     simulertBeregning={simulertBeregning}
                     kanIkkeIverksetteUtbetaling={kanIkkeIverksetteUtbetaling}
+                    kanIkkeIverksetteUtbetalingMelding={kanIkkeIverksetteUtbetalingMelding}
                     erOmberegning={harKorrigering}
                 />
 

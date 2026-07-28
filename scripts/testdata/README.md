@@ -22,6 +22,8 @@ Lagvis shell-bibliotek for lokal testdata mot LokalMain (`http://localhost:8080`
 - `ta-behandling.sh` – beslutter tar behandlingen (4-øyne).
 - `iverksett.sh` – beslutter iverksetter behandlingen.
 - `opprett-meldekortbehandling.sh` – oppretter meldekortbehandling for kjede.
+- `_meldekort_flyt.py` – delt driver for meldekortflyten (opprett, fyll ut,
+  til beslutning, ta, iverksett); brukes av meldekort-scriptene under.
 - `opprett-klage.sh SAK_ID [VEDTAK_ID]` – oppretter klagebehandling (med VEDTAK_ID:
   klage på vedtaket, kan opprettholdes).
 - `start-revurdering.sh SAK_ID TYPE [RAMMEVEDTAK_ID]` – starter revurdering
@@ -40,11 +42,25 @@ Lagvis shell-bibliotek for lokal testdata mot LokalMain (`http://localhost:8080`
 - `innvilg-og-iverksett.sh` – kjører oppdater → sendtilbeslutning → ta → iverksett.
 - `opprett-innvilget-sak-digital.sh` – digital flyt frem til iverksatt innvilgelse.
 - `opprett-innvilget-sak-papir.sh` – papirflyt frem til iverksatt innvilgelse.
+- `fyll-og-iverksett-meldekort.sh SAKSNUMMER [DATO=STATUS ...]` – oppretter, fyller
+  ut og iverksetter meldekort på første kjede (default: rett-hverdager deltatt).
+- `opprett-meldekort-korrigering.sh SAKSNUMMER [DATO=STATUS ...]` – korrigerende
+  meldekortbehandling som blir stående åpen, med simulering i behandlingsbildet.
 
 ## Lag 3 – toppnivå
 
 - `opprett-alt-digital.sh` – digital innvilgelse + meldekortbehandling + klage.
 - `opprett-alt-papir.sh` – papir innvilgelse + meldekortbehandling + klage.
+- `opprett-simuleringsscenarioer.sh` – elleve saker som dekker simuleringsvisningene:
+  ren ytelse, feilutbetaling, justering endags/flerdags, ubalansert justering,
+  trekk med reversering, trekk med justering på tvers av meldeperioder (dev-casen
+  i `TrekkMedJusteringFraDevTest`, tillates med advarsel), justering over
+  månedsskiftet, ytelse flyttet mellom meldeperioder (sperres), feilutbetaling
+  + etterbetaling splittet av månedsskiftet, og en eksakt avspilling av dev-casen
+  i `TrekkMedJusteringFraDevTest` (innspilte responser, valgt på meldeperiode). Sperre-scenarioene trigges av faste
+  test-fødselsnumre som simuleringsfaken kjenner igjen (`DevSimuleringsscenario`
+  i saksbehandling-api). Personer gjenbrukes mellom kjøringer lokalt – endrer du
+  et scenariooppsett, bytt fnr i både enumen og skriptet, eller nullstill basen.
 - `forhandsvis-alle-pdfer.sh` – innvilget sak + forhåndsvisning av alle PDF-brev
   (vedtaksbrev, meldekortvedtaksbrev, klagebrev). PDF-ene lagres i `$PDF_UT_DIR`
   (default `/tmp/tiltakspenger-pdfer`); lokalt får du både pdfgen- og

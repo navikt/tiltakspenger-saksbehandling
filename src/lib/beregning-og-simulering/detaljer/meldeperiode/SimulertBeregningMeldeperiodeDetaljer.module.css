@@ -1,12 +1,19 @@
-.headerCell {
-    border: none;
+.header {
+    padding: 0.25rem 0.75rem;
     border-top-left-radius: var(--ax-radius-4);
     border-top-right-radius: var(--ax-radius-4);
     background-color: var(--ax-neutral-100);
 }
 
-.lukket {
-    display: none;
+/* Bare dagtabellen skroller når den er bredere enn kortet - den skal aldri klippes stille. */
+.tabellScroll {
+    overflow-x: auto;
+
+    /* Elleve kolonner gjør tabellen bredere enn kortet med Aksels standardpadding; strammere padding lar den som regel få plass uten scroll. */
+    th,
+    td {
+        padding-inline: 0.375rem;
+    }
 }
 
 .tabellHeaderOver {
@@ -32,15 +39,6 @@
     border-bottom: 2px solid var(--ax-neutral-500);
 }
 
-.simuleringCell {
-    /* Overstyrer aksel spesifisitet */
-    && {
-        padding: 0.5rem 0;
-        border: 0;
-    }
-}
-
-.endringOgVisMerCell {
-    display: flex;
-    justify-content: space-between;
+.simuleringSeksjon {
+    padding: 0.5rem 0;
 }

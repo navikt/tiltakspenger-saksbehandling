@@ -78,6 +78,8 @@ export type MeldekortbehandlingProps = {
     avbrutt?: Avbrutt;
     simulertBeregning: Nullable<SimulertBeregning>;
     kanIkkeIverksetteUtbetaling: Nullable<KanIkkeIverksetteUtbetalingGrunn>;
+    /** Melding fra backend som kan vises direkte. Null når grunnen alene er dekkende. */
+    kanIkkeIverksetteUtbetalingMelding: Nullable<string>;
     tekstTilVedtaksbrev: Nullable<string>;
     tilbakekrevingId: Nullable<TilbakekrevingId>;
     skalSendeVedtaksbrev: boolean;
