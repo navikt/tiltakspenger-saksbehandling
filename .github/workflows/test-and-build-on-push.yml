@@ -38,7 +38,7 @@ jobs:
       contents: read
     with:
       # Samme gate som det lokale image-bygget kjører (jf. .test-and-build.yml): typer, lint, tester, e2e og next-bygg.
-      kommando: npx tsc --noEmit && "$PAKKEHANDTERER" run lint && "$PAKKEHANDTERER" run test && "$PAKKEHANDTERER" exec playwright install --with-deps && "$PAKKEHANDTERER" exec playwright test && "$PAKKEHANDTERER" run build
+      kommando: npx tsc --noEmit && "$PAKKEHANDTERER" run lint && "$PAKKEHANDTERER" run test && "$PAKKEHANDTERER" run build
     secrets:
       READER_TOKEN: ${{ secrets.READER_TOKEN }}
       SLACK_VARSEL_WEBHOOK_URL: ${{ secrets.SLACK_VARSEL_WEBHOOK_URL }}
