@@ -7,12 +7,10 @@ import {
 import { MeldekortbehandlingDagStatus } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { erHelg, formaterDatotekst, ukedagFraDatoKort } from '~/utils/date';
 import { classNames } from '~/utils/classNames';
-import { formaterDatotekst } from '~/utils/date';
-import { ikonForMeldekortbehandlingDagStatus } from '~/lib/meldekort/utils/ikoner';
-import { ikonForMeldekortbehandlingDagStatus } from '~/lib/meldekort/0-felles-komponenter/MeldekortIkoner';
 import { meldekortbehandlingDagStatusTekst } from '~/utils/tekstformateringUtils';
 import { beløpStyle } from '~/lib/_felles/utbetaling/beløp/beløpStyle';
 import { tilKompakteMerker } from './simuleringsmerker';
+import { ikonForMeldekortbehandlingDagStatus } from '~/lib/meldekort/utils/ikoner';
 
 import style from './SimulertBeregningDagDetaljer.module.css';
 
