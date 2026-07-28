@@ -1,17 +1,9 @@
-name: Test and build
+name: Build and test
 
-# Lokalt image-bygg (bevisst ikke delt, jf. metarepo-README): kjører hele gaten og bygger+pusher docker-image til nais-registryet.
+# Testgaten (bevisst ikke delt, jf. metarepo-README): typesjekk, lint, enhetstester, e2e og next-bygg.
+# Bygger ikke docker-image - det gjøres av .build-for-deploy.yml.
 on:
   workflow_call:
-    inputs:
-      buildImage:
-        required: false
-        type: boolean
-        default: true
-    outputs:
-      IMAGE:
-        description: "Docker image"
-        value: ${{ jobs.build.outputs.IMAGE }}
     secrets:
       READER_TOKEN:
         required: true
@@ -22,14 +14,16 @@ on:
 permissions: {}
 
 jobs:
-  build:
-    name: Test and build
+  test:
+    name: Build and test
     runs-on: ubuntu-latest
+    # Use Playwright's official image — ships with all browsers and the system
+    # libraries they need, so we skip the slow `playwright install-deps` step.
+    # NB: keep the image tag in sync with the `@playwright/test` version in package.json.
+    container:
+      image: mcr.microsoft.com/playwright:v1.59.1-noble
     permissions:
       contents: read
-      id-token: write
-    outputs:
-      IMAGE: ${{ steps.docker-push.outputs.image }}
     steps:
       - name: Checkout
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -53,17 +47,19 @@ jobs:
         run: pnpm exec tsc --noEmit
       - name: Run linting
         run: pnpm run lint
-      - name: Run tests
+      - name: Run unit tests
         run: pnpm run test
       - name: Build app
         run: pnpm run build
-      - name: Build and push docker image
-        # Versjonsoversikt (tag -> SHA): https://github.com/nais/docker-build-push/tags
-        uses: nais/docker-build-push@31c3a7321909bcb20799fdf46153fec721fd9512 # v0
-        if: inputs.buildImage == true
-        id: docker-push
-        with:
-          team: tpts
+      - name: Run Playwright tests
+        run: pnpm exec playwright test
+        env:
+          CI: true
+          # Required by Firefox when running in the Playwright container image —
+          # the checkout step chowns $HOME to a non-root user, but the container
+          # runs as root, so we point HOME at /root which root owns.
+          HOME: /root
+          NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
       # All kontekst går via env (aldri ${{ }} direkte i run), og payloaden bygges med jq så verdier med spesialtegn ikke kan knekke/injisere JSON-en.
       # curl -sSf gjør at et avvist webhook-kall feiler steget synlig i stedet for å forsvinne stille.
       # Webhooken er en app-basert Slack-webhook: den krever JSON-body med Content-Type: application/json (legacy payload=-form ga HTTP 422).

@@ -1,0 +1,54 @@
+name: Build for deploy
+
+# Lokalt image-bygg (bevisst ikke delt, jf. metarepo-README): next-bygg og docker-image til nais-registryet.
+# Kjører ingen tester - det gjøres av .build-and-test.yml.
+on:
+  workflow_call:
+    outputs:
+      IMAGE:
+        description: "Docker image"
+        value: ${{ jobs.build.outputs.IMAGE }}
+    secrets:
+      READER_TOKEN:
+        required: true
+
+# Minste privilegium: toppnivået nullstiller alle token-rettigheter, hver jobb deklarerer eksplisitt det den trenger.
+permissions: {}
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    # id-token: write er kun for OIDC-føderasjonen i docker-build-push; GITHUB_TOKEN har bare lesetilgang.
+    permissions:
+      contents: read
+      id-token: write
+    outputs:
+      IMAGE: ${{ steps.docker-push.outputs.image }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          # Ikke la tokenet ligge igjen i .git/config - stegene kjører avhengigheters kode.
+          persist-credentials: false
+      # pnpm-versjonen leses fra packageManager-feltet i package.json.
+      - name: Set up pnpm
+        uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '24'
+          registry-url: https://npm.pkg.github.com
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+      - name: Build app
+        run: pnpm run build
+      - name: Build and push docker image
+        # Versjonsoversikt (tag -> SHA): https://github.com/nais/docker-build-push/tags
+        uses: nais/docker-build-push@31c3a7321909bcb20799fdf46153fec721fd9512 # v0
+        id: docker-push
+        with:
+          team: tpts

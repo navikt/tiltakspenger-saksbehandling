@@ -23,22 +23,30 @@ on:
 # Minste privilegium: toppnivået nullstiller alle token-rettigheter, hver jobb deklarerer eksplisitt det den trenger.
 permissions: {}
 
-# Image-bygget er lokalt (.test-and-build.yml); deployen er delt - se
+# Testgaten og deployene er delte; image-bygget er lokalt (.build-for-deploy.yml) - se
 # https://github.com/navikt/tiltakspenger/blob/main/.github/workflows/README.md
 jobs:
+  test:
+    name: Run tests
+    uses: ./.github/workflows/.build-and-test.yml
+    permissions:
+      contents: read
+    secrets:
+      READER_TOKEN: ${{ secrets.READER_TOKEN }}
+      SLACK_VARSEL_WEBHOOK_URL: ${{ secrets.SLACK_VARSEL_WEBHOOK_URL }}
+
   build:
-    name: Build and push
-    uses: ./.github/workflows/.test-and-build.yml
+    name: Build and push image
+    uses: ./.github/workflows/.build-for-deploy.yml
     permissions:
       contents: read
       id-token: write
     secrets:
       READER_TOKEN: ${{ secrets.READER_TOKEN }}
-      SLACK_VARSEL_WEBHOOK_URL: ${{ secrets.SLACK_VARSEL_WEBHOOK_URL }}
 
   deploy-dev:
     name: Deploy to NAIS (dev)
-    needs: build
+    needs: [ test, build ]
     uses: navikt/tiltakspenger/.github/workflows/deploy-nais.yml@main
     permissions:
       contents: read
@@ -49,7 +57,7 @@ jobs:
 
   deploy-prod:
     name: Deploy to NAIS (prod)
-    needs: build
+    needs: [ test, build ]
     uses: navikt/tiltakspenger/.github/workflows/deploy-nais.yml@main
     permissions:
       contents: read
