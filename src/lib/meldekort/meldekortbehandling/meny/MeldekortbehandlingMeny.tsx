@@ -63,7 +63,6 @@ export const MeldekortbehandlingMeny = ({ meldekortbehandling }: Props) => {
                         variant={'secondary'}
                         icon={<MenuElipsisVerticalIcon aria-hidden />}
                         iconPosition={'right'}
-                        size={'small'}
                     >
                         {'Meny'}
                     </Button>
