@@ -1,11 +1,12 @@
 import { Button, Table } from '@navikt/ds-react';
-import { formaterMeldeperiode, formaterTidspunkt } from '~/utils/date';
+import { formaterTidspunkt } from '~/utils/date';
 import { formatterBeløp } from '~/utils/beløp';
 import { utbetalingsstatusTekst } from '~/utils/tekstformateringUtils';
 import { meldekortbehandlingStatusTekst } from '~/lib/meldekort/utils/tekster';
 import { meldekortbehandlingUrl } from '~/utils/urls';
 import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
+import { formaterMeldeperioder } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
 
 type Props = {
     saksnummer: string;
@@ -48,7 +49,6 @@ export const MeldekortbehandlingerOversikt = ({ saksnummer, meldekortbehandlinge
                     .map((meldekortbehandling) => {
                         const {
                             id,
-                            periode,
                             status,
                             utbetalingsstatus,
                             saksbehandler,
@@ -70,7 +70,9 @@ export const MeldekortbehandlingerOversikt = ({ saksnummer, meldekortbehandlinge
                                         {'Åpne'}
                                     </Button>
                                 </Table.DataCell>
-                                <Table.DataCell>{formaterMeldeperiode(periode)}</Table.DataCell>
+                                <Table.DataCell>
+                                    {formaterMeldeperioder(meldekortbehandling)}
+                                </Table.DataCell>
                                 <Table.DataCell>
                                     {meldekortbehandlingStatusTekst[status]}
                                 </Table.DataCell>

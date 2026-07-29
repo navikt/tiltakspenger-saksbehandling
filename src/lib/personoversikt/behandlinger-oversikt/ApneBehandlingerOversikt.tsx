@@ -10,12 +10,7 @@ import {
     klagebehandlingResultatTilTag,
     klagebehandlingStatusTilTag,
 } from '~/utils/tekstformateringUtils';
-import {
-    formaterMeldeperiode,
-    formaterPeriode,
-    formaterTidspunkt,
-    ukenummerFraPeriode,
-} from '~/utils/date';
+import { formaterMeldeperiode, formaterPeriode, formaterTidspunkt } from '~/utils/date';
 import { ApneBehandlingerMeny } from '~/lib/behandling-felles/behandlingmeny/ApneBehandlingerMeny';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { useSak } from '~/lib/sak/SakContext';
@@ -23,7 +18,10 @@ import { Nullable } from '~/types/UtilTypes';
 import KlageMeny from '~/lib/behandling-felles/behandlingmeny/KlageMeny';
 import { hentSisteKlagehendelseUtfallFraKlagebehandling } from '~/lib/klage/utils/klageUtils';
 import { klagehendelseUtfallTilTag } from '~/lib/klage/utils/KlageinstanshendelseUtils';
-import { erMeldekortbehandlingSattPaVent } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
+import {
+    erMeldekortbehandlingSattPaVent,
+    formaterMeldeperioder,
+} from '~/lib/meldekort/utils/meldekortbehandlingUtils';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
 import {
     MeldekortbehandlingId,
@@ -35,6 +33,7 @@ import { hentMeldekortbehandling } from '~/lib/sak/sakUtils';
 import { meldekortbehandlingUrl, meldeperiodeUrl } from '~/utils/urls';
 import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { MeldeperiodekjedeTab } from '~/lib/meldekort/meldeperiodekjede/høyre-seksjon/MeldeperiodekjedeHøyreSeksjon';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
 
 type Props = {
     åpneBehandlinger: ÅpenBehandlingForOversikt[];
@@ -42,6 +41,10 @@ type Props = {
 
 export const ApneBehandlingerOversikt = ({ åpneBehandlinger }: Props) => {
     const { sak } = useSak();
+
+    if (åpneBehandlinger.length === 0) {
+        return <Infokort variant={'info'}>{'Ingen åpne behandlinger på denne saken'}</Infokort>;
+    }
 
     return (
         <Table>
@@ -160,15 +163,7 @@ const propsForRad = (
             if (subtype === ÅpentMeldekortSubType.MELDEKORTBEHANDLING) {
                 const meldekortbehandling = hentMeldekortbehandling(sak, åpenBehandling.id);
 
-                const { status, periode, id, meldeperioder, saksbehandler, beslutter } =
-                    meldekortbehandling;
-
-                const antallPerioder = meldeperioder.length;
-
-                const periodeTekst =
-                    antallPerioder > 1
-                        ? `${formaterPeriode(periode)} (${antallPerioder} meldeperioder, uke ${ukenummerFraPeriode(periode)})`
-                        : formaterMeldeperiode(periode);
+                const { status, id, saksbehandler, beslutter } = meldekortbehandling;
 
                 return {
                     typeTekst: meldekortSubTypeTekst[subtype],
@@ -187,7 +182,7 @@ const propsForRad = (
                     ),
                     saksbehandler,
                     beslutter,
-                    periodeTekst,
+                    periodeTekst: formaterMeldeperioder(meldekortbehandling),
                     meny: (
                         <InternLenke href={meldekortbehandlingUrl(saksnummer, id)}>
                             {'Åpne'}

@@ -8,6 +8,7 @@ import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlin
 import { MeldeperiodeSkjema } from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingContextTyper';
 import { MeldeperiodeKjedeId, MeldeperiodekjedeProps } from '~/lib/meldekort/typer/Meldeperiode';
 import { BrukersMeldekortKjedeStatus } from '~/lib/meldekort/typer/BrukersMeldekort';
+import { formaterMeldeperiode, formaterPeriode, ukenummerFraPeriode } from '~/utils/date';
 
 export const kanSaksbehandleForMeldekort = (
     meldekortbehandling: MeldekortbehandlingProps,
@@ -67,7 +68,11 @@ export const finnUbehandledeMeldekort = (
     );
 };
 
-export const finnAntallUbehandledeMeldekort = (
-    kjeder: MeldeperiodekjedeProps[],
-    skjema?: MeldeperiodeSkjema[],
-): number => finnUbehandledeMeldekort(kjeder, skjema).length;
+export const formaterMeldeperioder = (meldekortbehandling: MeldekortbehandlingProps) => {
+    const { meldeperioder, periode } = meldekortbehandling;
+    const antallPerioder = meldeperioder.length;
+
+    return antallPerioder > 1
+        ? `${formaterPeriode(periode)} (${antallPerioder} meldeperioder, uke ${ukenummerFraPeriode(periode)})`
+        : formaterMeldeperiode(periode);
+};
