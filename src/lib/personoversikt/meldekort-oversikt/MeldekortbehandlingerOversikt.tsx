@@ -1,12 +1,11 @@
-import { Link, Table } from '@navikt/ds-react';
-import NextLink from 'next/link';
+import { Button, Table } from '@navikt/ds-react';
 import { formaterMeldeperiode, formaterTidspunkt } from '~/utils/date';
 import { formatterBeløp } from '~/utils/beløp';
 import { utbetalingsstatusTekst } from '~/utils/tekstformateringUtils';
 import { meldekortbehandlingStatusTekst } from '~/lib/meldekort/utils/tekster';
 import { meldekortbehandlingUrl } from '~/utils/urls';
-import { MeldekortbehandlingMeny } from '~/lib/meldekort/meldekortbehandling/meny/MeldekortbehandlingMeny';
 import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
+import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 
 type Props = {
     saksnummer: string;
@@ -41,7 +40,6 @@ export const MeldekortbehandlingerOversikt = ({ saksnummer, meldekortbehandlinge
                     <Table.HeaderCell scope="col">Saksbehandler</Table.HeaderCell>
                     <Table.HeaderCell scope="col">Beslutter</Table.HeaderCell>
                     <Table.HeaderCell scope="col">Opprettet</Table.HeaderCell>
-                    <Table.HeaderCell scope="col"></Table.HeaderCell>
                 </Table.Row>
             </Table.Header>
             <Table.Body>
@@ -63,12 +61,14 @@ export const MeldekortbehandlingerOversikt = ({ saksnummer, meldekortbehandlinge
                         return (
                             <Table.Row shadeOnHover={false} key={id}>
                                 <Table.DataCell>
-                                    <Link
-                                        as={NextLink}
+                                    <Button
+                                        as={InternLenke}
                                         href={meldekortbehandlingUrl(saksnummer, id)}
+                                        variant={'tertiary'}
+                                        size={'small'}
                                     >
                                         {'Åpne'}
-                                    </Link>
+                                    </Button>
                                 </Table.DataCell>
                                 <Table.DataCell>{formaterMeldeperiode(periode)}</Table.DataCell>
                                 <Table.DataCell>
@@ -83,11 +83,6 @@ export const MeldekortbehandlingerOversikt = ({ saksnummer, meldekortbehandlinge
                                 <Table.DataCell>{saksbehandler ?? '-'}</Table.DataCell>
                                 <Table.DataCell>{beslutter ?? '-'}</Table.DataCell>
                                 <Table.DataCell>{formaterTidspunkt(opprettet)}</Table.DataCell>
-                                <Table.DataCell scope="col" align="right">
-                                    <MeldekortbehandlingMeny
-                                        meldekortbehandling={meldekortbehandling}
-                                    />
-                                </Table.DataCell>
                             </Table.Row>
                         );
                     })}

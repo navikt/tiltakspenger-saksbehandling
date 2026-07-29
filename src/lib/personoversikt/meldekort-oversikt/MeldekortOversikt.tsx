@@ -6,6 +6,10 @@ import { MeldeperiodeKjederOversikt } from './MeldeperiodeKjederOversikt';
 import { MeldekortbehandlingerOversikt } from './MeldekortbehandlingerOversikt';
 import { nonNullishPredicate } from '~/utils/array';
 import { MeldekortOversiktIkkeKlar } from '~/lib/personoversikt/meldekort-oversikt/ikke-klar/MeldekortOversiktIkkeKlar';
+import { ApenMeldekortbehandlingOppsummering } from '~/lib/personoversikt/meldekort-oversikt/åpen-behandling/ApenMeldekortbehandlingOppsummering';
+import { UbehandledeMeldekortVarsel } from '~/lib/meldekort/felles/ubehandlede-meldekort/UbehandledeMeldekortVarsel';
+
+import style from './MeldekortOversikt.module.css';
 
 enum OversiktVisning {
     Meldeperiodekjeder = 'meldeperiodekjeder',
@@ -24,6 +28,12 @@ export const MeldekortOversikt = () => {
 
     return (
         <VStack gap={'space-16'}>
+            <VStack gap={'space-16'} className={style.toppSeksjon}>
+                <UbehandledeMeldekortVarsel meldeperiodekjeder={meldeperiodeKjederV2} />
+
+                <ApenMeldekortbehandlingOppsummering />
+            </VStack>
+
             <HStack justify={'space-between'} align={'center'} gap={'space-16'}>
                 <ToggleGroup
                     value={visning}

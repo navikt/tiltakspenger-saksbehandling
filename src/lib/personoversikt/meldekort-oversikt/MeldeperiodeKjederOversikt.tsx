@@ -1,4 +1,4 @@
-import { Table } from '@navikt/ds-react';
+import { Button, Table } from '@navikt/ds-react';
 import { formaterMeldeperiode } from '~/utils/date';
 import { formatterBeløp } from '~/utils/beløp';
 import {
@@ -21,8 +21,12 @@ export const MeldeperiodeKjederOversikt = ({ saksnummer, meldeperiodeKjeder }: P
                 <Table.Row>
                     <Table.HeaderCell scope="col" />
                     <Table.HeaderCell scope="col">{'Periode'}</Table.HeaderCell>
-                    <Table.HeaderCell scope="col">{'Status meldekort (antall)'}</Table.HeaderCell>
-                    <Table.HeaderCell scope="col">{'Status behandling (antall)'}</Table.HeaderCell>
+                    <Table.HeaderCell scope="col">
+                        {'Siste meldekort status (antall)'}
+                    </Table.HeaderCell>
+                    <Table.HeaderCell scope="col">
+                        {'Siste behandling status (antall)'}
+                    </Table.HeaderCell>
                     <Table.HeaderCell scope="col">{'Tiltak'}</Table.HeaderCell>
                     <Table.HeaderCell scope="col">{'Beregnet beløp'}</Table.HeaderCell>
                 </Table.Row>
@@ -43,11 +47,16 @@ export const MeldeperiodeKjederOversikt = ({ saksnummer, meldeperiodeKjeder }: P
                         } = kjede;
 
                         return (
-                            <Table.Row key={id}>
+                            <Table.Row shadeOnHover={false} key={id}>
                                 <Table.DataCell>
-                                    <InternLenke href={meldeperiodeUrl(saksnummer, periode)}>
+                                    <Button
+                                        as={InternLenke}
+                                        href={meldeperiodeUrl(saksnummer, periode)}
+                                        variant={'tertiary'}
+                                        size={'small'}
+                                    >
                                         {'Åpne'}
-                                    </InternLenke>
+                                    </Button>
                                 </Table.DataCell>
                                 <Table.DataCell>{formaterMeldeperiode(periode)}</Table.DataCell>
                                 <Table.DataCell>

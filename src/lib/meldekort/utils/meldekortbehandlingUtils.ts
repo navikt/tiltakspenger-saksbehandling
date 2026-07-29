@@ -51,20 +51,23 @@ export const erMeldekortbehandlingGodkjent = (mb: MeldekortbehandlingProps): boo
     );
 };
 
-export const finnAntallUbehandledeMeldekort = (
+export const finnUbehandledeMeldekort = (
     kjeder: MeldeperiodekjedeProps[],
     skjema?: MeldeperiodeSkjema[],
-): number => {
+): MeldeperiodekjedeProps[] => {
     const valgteKjedeIder = new Set<MeldeperiodeKjedeId>(skjema?.map((m) => m.kjedeId));
 
     const tilgjengeligeKjeder = kjeder.filter((kjede) => !valgteKjedeIder.has(kjede.id));
 
-    const ubehandledeKjeder = tilgjengeligeKjeder.filter(
+    return tilgjengeligeKjeder.filter(
         (kjede) =>
             kjede.brukersMeldekortStatus === BrukersMeldekortKjedeStatus.VENTER_BEHANDLING ||
             kjede.brukersMeldekortStatus ===
                 BrukersMeldekortKjedeStatus.KORRIGERING_VENTER_BEHANDLING,
     );
-
-    return ubehandledeKjeder.length;
 };
+
+export const finnAntallUbehandledeMeldekort = (
+    kjeder: MeldeperiodekjedeProps[],
+    skjema?: MeldeperiodeSkjema[],
+): number => finnUbehandledeMeldekort(kjeder, skjema).length;

@@ -83,7 +83,7 @@ export const ApneBehandlingerOversikt = ({ åpneBehandlinger }: Props) => {
                             <Table.DataCell>{periodeTekst ?? '-'}</Table.DataCell>
                             <Table.DataCell>{saksbehandler ?? 'Ikke tildelt'}</Table.DataCell>
                             <Table.DataCell>{beslutter ?? 'Ikke tildelt'}</Table.DataCell>
-                            <Table.DataCell scope="col" align={'right'}>
+                            <Table.DataCell scope={'col'} align={'right'}>
                                 {meny}
                             </Table.DataCell>
                         </Table.Row>

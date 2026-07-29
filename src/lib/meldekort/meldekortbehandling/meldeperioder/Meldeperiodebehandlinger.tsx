@@ -15,11 +15,6 @@ import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
 import { Periode } from '~/types/Periode';
 import { validerMeldeperiodeSkjema } from '~/lib/meldekort/meldekortbehandling/context/meldekortbehandlingSkjemaValidering';
 import { ExclamationmarkTriangleFillIcon } from '@navikt/aksel-icons';
-import {
-    erMeldekortbehandlingGodkjent,
-    finnAntallUbehandledeMeldekort,
-} from '~/lib/meldekort/utils/meldekortbehandlingUtils';
-import { Infokort } from '~/lib/_felles/infokort/Infokort';
 
 import style from './Meldeperiodebehandlinger.module.css';
 
@@ -39,24 +34,10 @@ export const Meldeperiodebehandlinger = () => {
         setValgtKjede(meldeperioder.at(0)?.kjedeId);
     }
 
-    const antallUbehandlede = finnAntallUbehandledeMeldekort(
-        sak.meldeperiodeKjederV2,
-        meldeperioder,
-    );
-
-    const harFlere = antallUbehandlede > 1;
-
     return (
         <VStack gap={'space-16'}>
             <MeldekortbehandlingSeksjon>
                 <MeldekortbehandlingSeksjon.FullBredde gap={'space-16'}>
-                    {!erMeldekortbehandlingGodkjent(meldekortbehandling) &&
-                        antallUbehandlede > 0 && (
-                            <Infokort variant={'advarsel'}>
-                                {`Det finnes ${antallUbehandlede} periode${harFlere ? 'r' : ''} med ${harFlere ? 'ubehandlede' : 'ubehandlet'} meldekort på saken`}
-                            </Infokort>
-                        )}
-
                     <HStack gap={'space-16'} align={'center'} className={style.header}>
                         <Heading size={'medium'} level={'2'}>
                             {'Behandlede meldeperioder'}

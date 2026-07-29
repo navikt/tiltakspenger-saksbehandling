@@ -61,7 +61,7 @@ const meldekortStatusTagColor: Record<
     KLAR_TIL_BESLUTNING: 'meta-purple',
     UNDER_BEHANDLING: 'info',
     UNDER_BESLUTNING: 'meta-purple',
-    AVBRUTT: 'warning',
+    AVBRUTT: 'neutral',
 } as const;
 
 const meldekortStatusIkon: Record<MeldekortbehandlingStatus, React.ReactNode> = {

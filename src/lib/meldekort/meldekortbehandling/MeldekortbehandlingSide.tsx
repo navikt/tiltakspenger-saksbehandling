@@ -22,9 +22,9 @@ import {
     kanSaksbehandleForMeldekort,
 } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
 import { useSaksbehandler } from '~/lib/saksbehandler/SaksbehandlerContext';
+import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
 
 import style from './MeldekortbehandlingSide.module.css';
-import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
 
 const DEFAULT_STEG = 1;
 
@@ -33,7 +33,8 @@ export const MeldekortbehandlingSide = () => {
 
     const [aktivtSteg, setAktivtSteg] = useState(DEFAULT_STEG);
 
-    const { sakId, saksnummer } = useSak().sak;
+    const { sak } = useSak();
+    const { sakId, saksnummer } = sak;
 
     const { erReadonly } = useMeldekortbehandlingSkjema();
 

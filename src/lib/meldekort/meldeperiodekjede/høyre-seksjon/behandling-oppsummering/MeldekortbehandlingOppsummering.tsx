@@ -13,7 +13,7 @@ import { meldekortbehandlingUrl } from '~/utils/urls';
 import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { TilbakekrevingOppsummering } from '~/lib/tilbakekreving/TilbakekrevingOppsummering';
 import OppsummeringAvKlageForRammebehandling from '~/lib/behandling-felles/oppsummeringer/klage/oppsummeringAvKlageForRammebehandling/OppsummeringAvKlageForRammebehandling';
-import { hentKlagebehandling } from '~/lib/sak/sakUtils';
+import { hentKlagebehandling, hentMeldekortbehandling } from '~/lib/sak/sakUtils';
 import {
     meldekortbehandlingStatusTekst,
     meldeperiodebehandlingTypeTekst,
@@ -34,15 +34,7 @@ export const MeldekortbehandlingOppsummering = ({
 }: Props) => {
     const { sak } = useSak();
 
-    const meldekortbehandling = sak.meldekortbehandlinger[meldekortbehandlingId];
-
-    if (!meldekortbehandling) {
-        return (
-            <Alert variant={'error'}>
-                {`Teknisk feil: Fant ikke meldekortbehandling med id ${meldekortbehandlingId}`}
-            </Alert>
-        );
-    }
+    const meldekortbehandling = hentMeldekortbehandling(sak, meldekortbehandlingId);
 
     const {
         status,
@@ -130,6 +122,6 @@ const meldekortbehandlingStatusFarge: Record<MeldekortbehandlingStatus, AkselCol
     [MeldekortbehandlingStatus.UNDER_BESLUTNING]: 'info',
     [MeldekortbehandlingStatus.GODKJENT]: 'success',
     [MeldekortbehandlingStatus.AUTOMATISK_BEHANDLET]: 'success',
-    [MeldekortbehandlingStatus.IKKE_RETT_TIL_TILTAKSPENGER]: 'warning',
+    [MeldekortbehandlingStatus.IKKE_RETT_TIL_TILTAKSPENGER]: 'danger',
     [MeldekortbehandlingStatus.AVBRUTT]: 'neutral',
 };

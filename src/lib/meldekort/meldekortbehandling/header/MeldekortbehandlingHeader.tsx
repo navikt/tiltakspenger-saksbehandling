@@ -1,6 +1,9 @@
 import { Heading, HStack, VStack } from '@navikt/ds-react';
 import { useSak } from '~/lib/sak/SakContext';
-import { useMeldekortbehandling } from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingContext';
+import {
+    useMeldekortbehandling,
+    useMeldekortbehandlingSkjema,
+} from '~/lib/meldekort/meldekortbehandling/context/MeldekortbehandlingContext';
 import { formaterDatotekst } from '~/utils/date';
 import { DetaljHorisontal } from '~/lib/_felles/detaljer/DetaljHorisontal';
 import { MeldekortbehandlingStatusTags } from '~/lib/meldekort/meldekortbehandling/header/behandling-status/MeldekortbehandlingStatusTags';
@@ -17,6 +20,8 @@ import OppsummeringAvKlageForRammebehandling from '~/lib/behandling-felles/oppsu
 import { hentKlagebehandling } from '~/lib/sak/sakUtils';
 
 import style from './MeldekortbehandlingHeader.module.css';
+import { erMeldekortbehandlingGodkjent } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
+import { UbehandledeMeldekortVarsel } from '~/lib/meldekort/felles/ubehandlede-meldekort/UbehandledeMeldekortVarsel';
 
 export const MeldekortbehandlingHeader = () => {
     const { sak } = useSak();
@@ -31,6 +36,8 @@ export const MeldekortbehandlingHeader = () => {
         tilbakekrevingId,
         klagebehandlingId,
     } = meldekortbehandling;
+
+    const { meldeperioder } = useMeldekortbehandlingSkjema();
 
     return (
         <MeldekortbehandlingSeksjon className={style.outer} gap={'space-16'}>
@@ -93,6 +100,13 @@ export const MeldekortbehandlingHeader = () => {
                 {klagebehandlingId && (
                     <OppsummeringAvKlageForRammebehandling
                         klagebehandling={hentKlagebehandling(sak, klagebehandlingId)}
+                    />
+                )}
+
+                {!erMeldekortbehandlingGodkjent(meldekortbehandling) && (
+                    <UbehandledeMeldekortVarsel
+                        meldeperiodekjeder={sak.meldeperiodeKjederV2}
+                        skjema={meldeperioder}
                     />
                 )}
             </MeldekortbehandlingSeksjon.Høyre>

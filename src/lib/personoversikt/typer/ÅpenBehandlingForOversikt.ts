@@ -11,7 +11,7 @@ import { SøknadsbehandlingResultat } from '~/lib/rammebehandling/typer/Søknads
 import { Nullable } from '~/types/UtilTypes';
 import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { KlagebehandlingResultat, KlagebehandlingStatus, KlageId } from '../../klage/typer/Klage';
-import { BrukersMeldekortId } from '~/lib/meldekort/typer/BrukersMeldekort';
+import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
 
 // Kan være:
 // 1. Søknad uten opprettet behandling
@@ -44,7 +44,7 @@ export enum ÅpentMeldekortSubType {
 }
 
 interface ÅpenBehandlingBase {
-    id: SøknadId | RammebehandlingId | BrukersMeldekortId | KlageId | MeldekortbehandlingId;
+    id: SøknadId | RammebehandlingId | MeldeperiodeKjedeId | KlageId | MeldekortbehandlingId;
     sakId: SakId;
     saksnummer: string;
     opprettet: string;
@@ -92,7 +92,7 @@ export interface ÅpenMeldekortbehandling extends ÅpenBehandlingBase {
 }
 
 export interface BrukersMeldekortUtenBehandling extends ÅpenBehandlingBase {
-    id: BrukersMeldekortId;
+    id: MeldeperiodeKjedeId;
     type: ÅpenBehandlingForOversiktType.MELDEKORT;
     subtype: ÅpentMeldekortSubType.INNSENDT_MELDEKORT | ÅpentMeldekortSubType.KORRIGERT_MELDEKORT;
     periode: Periode;
