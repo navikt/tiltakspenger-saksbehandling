@@ -34,7 +34,7 @@ export const MeldekortbehandlingLagre = () => {
         >
             <HStack gap={'space-8'} align={'center'}>
                 <InlineMessage status={isDirty ? 'warning' : 'success'}>
-                    {isDirty ? 'Du har ulagrede endringer - ' : ''}
+                    {isDirty ? 'Det finnes ulagrede endringer - ' : ''}
                     {`Sist lagret: ${formaterTidspunktMedSekunder(sistEndret)}`}
                 </InlineMessage>
             </HStack>

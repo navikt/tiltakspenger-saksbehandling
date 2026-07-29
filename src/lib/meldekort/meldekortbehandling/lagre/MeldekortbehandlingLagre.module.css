@@ -8,8 +8,6 @@
 
     border-bottom: 1px dashed var(--ax-border-neutral);
 
-    background: var(--ax-bg-success-soft);
-
     &.dirty {
         background: var(--ax-bg-warning-moderate);
     }

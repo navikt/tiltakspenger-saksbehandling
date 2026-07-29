@@ -1,5 +1,6 @@
 .outer {
-    background-color: var(--ax-bg-brand-blue-moderate);
+    background-color: var(--ax-bg-info-moderate);
+    border-bottom: 2px solid var(--ax-border-info-subtle);
     padding: 1rem;
     margin: -1rem;
     margin-bottom: 2rem;
