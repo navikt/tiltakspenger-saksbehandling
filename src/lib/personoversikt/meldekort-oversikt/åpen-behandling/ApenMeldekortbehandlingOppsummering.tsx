@@ -39,7 +39,7 @@ export const ApenMeldekortbehandlingOppsummering = ({ className }: Props) => {
                 <MeldekortbehandlingStatusTags meldekortbehandling={meldekortbehandling} />
             </HStack>
 
-            <InternLenke href={meldekortbehandlingUrl(saksnummer, id)}>
+            <InternLenke href={meldekortbehandlingUrl(saksnummer, id)} className={style.lenke}>
                 {'Til behandlingen'}
             </InternLenke>
 
