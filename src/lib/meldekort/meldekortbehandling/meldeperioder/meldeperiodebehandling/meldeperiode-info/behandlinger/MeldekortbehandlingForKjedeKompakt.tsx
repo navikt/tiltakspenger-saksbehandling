@@ -1,8 +1,7 @@
 import { Alert, BodyShort, Heading, HStack, Table, Tag, VStack } from '@navikt/ds-react';
-import { AkselColor } from '@navikt/ds-react/types/theme';
+import { meldekortbehandlingStatusFarge } from '~/lib/meldekort/utils/statusProps';
 import {
     MeldekortbehandlingId,
-    MeldekortbehandlingStatus,
     MeldekortDagBeregnetProps,
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
@@ -157,15 +156,4 @@ const DagDetaljer = ({
             )}
         </VStack>
     );
-};
-
-const meldekortbehandlingStatusFarge: Record<MeldekortbehandlingStatus, AkselColor> = {
-    [MeldekortbehandlingStatus.KLAR_TIL_BEHANDLING]: 'info',
-    [MeldekortbehandlingStatus.UNDER_BEHANDLING]: 'info',
-    [MeldekortbehandlingStatus.KLAR_TIL_BESLUTNING]: 'info',
-    [MeldekortbehandlingStatus.UNDER_BESLUTNING]: 'info',
-    [MeldekortbehandlingStatus.GODKJENT]: 'success',
-    [MeldekortbehandlingStatus.AUTOMATISK_BEHANDLET]: 'success',
-    [MeldekortbehandlingStatus.IKKE_RETT_TIL_TILTAKSPENGER]: 'danger',
-    [MeldekortbehandlingStatus.AVBRUTT]: 'neutral',
 };

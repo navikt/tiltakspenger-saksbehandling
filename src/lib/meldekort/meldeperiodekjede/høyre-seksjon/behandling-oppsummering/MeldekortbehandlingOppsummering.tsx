@@ -8,7 +8,7 @@ import { MeldeperiodeKjedeId } from '~/lib/meldekort/typer/Meldeperiode';
 import { MeldekortUker } from '~/lib/meldekort/felles/uker/MeldekortUker';
 import { OppsummeringsPar } from '~/lib/behandling-felles/oppsummeringer/oppsummeringspar/OppsummeringsPar';
 import { formaterTidspunktKort } from '~/utils/date';
-import { AkselColor } from '@navikt/ds-react/types/theme';
+import { meldekortbehandlingStatusFarge } from '~/lib/meldekort/utils/statusProps';
 import { meldekortbehandlingUrl } from '~/utils/urls';
 import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { TilbakekrevingOppsummering } from '~/lib/tilbakekreving/TilbakekrevingOppsummering';
@@ -113,15 +113,4 @@ export const MeldekortbehandlingOppsummering = ({
             )}
         </VStack>
     );
-};
-
-const meldekortbehandlingStatusFarge: Record<MeldekortbehandlingStatus, AkselColor> = {
-    [MeldekortbehandlingStatus.KLAR_TIL_BEHANDLING]: 'info',
-    [MeldekortbehandlingStatus.UNDER_BEHANDLING]: 'info',
-    [MeldekortbehandlingStatus.KLAR_TIL_BESLUTNING]: 'info',
-    [MeldekortbehandlingStatus.UNDER_BESLUTNING]: 'info',
-    [MeldekortbehandlingStatus.GODKJENT]: 'success',
-    [MeldekortbehandlingStatus.AUTOMATISK_BEHANDLET]: 'success',
-    [MeldekortbehandlingStatus.IKKE_RETT_TIL_TILTAKSPENGER]: 'danger',
-    [MeldekortbehandlingStatus.AVBRUTT]: 'neutral',
 };

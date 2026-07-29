@@ -1,4 +1,4 @@
-import { Alert, BodyShort, Button, InlineMessage, Loader, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, InlineMessage, Loader, VStack } from '@navikt/ds-react';
 import { BekreftelsesModal } from '~/lib/_felles/modaler/BekreftelsesModal';
 import { useRef } from 'react';
 import { useSak } from '~/lib/sak/SakContext';
@@ -8,6 +8,7 @@ import { useMeldeperiodekjede } from '~/lib/meldekort/meldeperiodekjede/context/
 import { useOpprettMeldekortbehandling } from '~/lib/meldekort/meldeperiodekjede/venstre-seksjon/opprett-behandling/useOpprettMeldekortbehandling';
 import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
 import { useRouter } from 'next/router';
+import { Infokort } from '~/lib/_felles/infokort/Infokort';
 
 import style from './MeldekortbehandlingOpprett.module.css';
 
@@ -35,11 +36,7 @@ export const MeldekortbehandlingOpprett = () => {
 
     return (
         <VStack gap={'space-16'}>
-            {feil && (
-                <Alert variant={'error'} className={style.varsel}>
-                    {feil.message}
-                </Alert>
-            )}
+            {feil && <Infokort variant={'feil'}>{feil.message}</Infokort>}
 
             {åpenMeldekortbehandlingId && (
                 <InlineMessage status={'info'}>
@@ -90,7 +87,7 @@ export const MeldekortbehandlingOpprett = () => {
     );
 };
 
-const teksterForType = {
+const teksterForType: Record<MeldeperiodebehandlingType, Record<string, string>> = {
     [MeldeperiodebehandlingType.FØRSTE_BEHANDLING]: {
         start: 'Start behandling',
         kanIkkeStarte: 'Kan ikke starte behandling av meldekortet',
@@ -103,4 +100,4 @@ const teksterForType = {
         modalTittel: 'Start korrigering av meldekortet',
         modalTekst: 'Vil du starte korrigering av dette meldekortet?',
     },
-} as const satisfies Record<MeldeperiodebehandlingType, Record<string, string>>;
+} as const;

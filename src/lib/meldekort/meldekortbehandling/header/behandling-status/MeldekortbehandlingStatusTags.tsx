@@ -1,4 +1,4 @@
-import React, { ComponentProps } from 'react';
+import React from 'react';
 import { HStack, Tag } from '@navikt/ds-react';
 import {
     CheckmarkIcon,
@@ -14,6 +14,7 @@ import {
 } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { erMeldekortbehandlingSattPaVent } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
 import { meldekortbehandlingStatusTekst } from '~/lib/meldekort/utils/tekster';
+import { meldekortbehandlingStatusFarge } from '~/lib/meldekort/utils/statusProps';
 
 import style from './MeldekortbehandlingStatusTags.module.css';
 
@@ -40,7 +41,7 @@ export const MeldekortbehandlingStatusTags = ({ meldekortbehandling }: Props) =>
             )}
             <Tag
                 variant={'moderate'}
-                data-color={meldekortStatusTagColor[status]}
+                data-color={meldekortbehandlingStatusFarge[status]}
                 icon={meldekortStatusIkon[status]}
                 className={style.tag}
             >
@@ -49,20 +50,6 @@ export const MeldekortbehandlingStatusTags = ({ meldekortbehandling }: Props) =>
         </HStack>
     );
 };
-
-const meldekortStatusTagColor: Record<
-    MeldekortbehandlingStatus,
-    ComponentProps<typeof Tag>['data-color']
-> = {
-    AUTOMATISK_BEHANDLET: 'success',
-    GODKJENT: 'success',
-    IKKE_RETT_TIL_TILTAKSPENGER: 'warning',
-    KLAR_TIL_BEHANDLING: 'info',
-    KLAR_TIL_BESLUTNING: 'meta-purple',
-    UNDER_BEHANDLING: 'info',
-    UNDER_BESLUTNING: 'meta-purple',
-    AVBRUTT: 'neutral',
-} as const;
 
 const meldekortStatusIkon: Record<MeldekortbehandlingStatus, React.ReactNode> = {
     IKKE_RETT_TIL_TILTAKSPENGER: <CircleSlashIcon />,

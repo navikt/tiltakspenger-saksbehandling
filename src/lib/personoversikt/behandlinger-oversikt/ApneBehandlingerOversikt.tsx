@@ -23,12 +23,9 @@ import {
     formaterMeldeperioder,
 } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
-import {
-    MeldekortbehandlingId,
-    MeldekortbehandlingStatus,
-} from '~/lib/meldekort/typer/Meldekortbehandling';
+import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { meldekortbehandlingStatusTekst } from '~/lib/meldekort/utils/tekster';
-import { AkselColor } from '@navikt/ds-react/types/theme';
+import { meldekortbehandlingStatusFarge } from '~/lib/meldekort/utils/statusProps';
 import { hentMeldekortbehandling } from '~/lib/sak/sakUtils';
 import { meldekortbehandlingUrl, meldeperiodeUrl } from '~/utils/urls';
 import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
@@ -258,17 +255,6 @@ const typeBehandlingTekst: Record<ÅpenBehandlingForOversiktType, string> = {
     SØKNAD: 'Søknad',
     MELDEKORT: 'Meldekort',
     KLAGE: 'Klage',
-} as const;
-
-const meldekortbehandlingStatusFarge: Record<MeldekortbehandlingStatus, AkselColor> = {
-    [MeldekortbehandlingStatus.KLAR_TIL_BEHANDLING]: 'info',
-    [MeldekortbehandlingStatus.UNDER_BEHANDLING]: 'info',
-    [MeldekortbehandlingStatus.KLAR_TIL_BESLUTNING]: 'info',
-    [MeldekortbehandlingStatus.UNDER_BESLUTNING]: 'info',
-    [MeldekortbehandlingStatus.GODKJENT]: 'success',
-    [MeldekortbehandlingStatus.AUTOMATISK_BEHANDLET]: 'success',
-    [MeldekortbehandlingStatus.IKKE_RETT_TIL_TILTAKSPENGER]: 'danger',
-    [MeldekortbehandlingStatus.AVBRUTT]: 'neutral',
 } as const;
 
 const meldekortSubTypeTekst: Record<ÅpentMeldekortSubType, string> = {
