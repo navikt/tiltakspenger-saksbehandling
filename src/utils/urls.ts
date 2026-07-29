@@ -4,9 +4,10 @@ import { BeregningKilde, BeregningKildeType } from '~/lib/beregning-og-simulerin
 import { SakProps } from '~/lib/sak/SakTyper';
 import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
 import type { PersonoversiktTab } from '~/lib/personoversikt/Personoversikt';
+import type { MeldeperiodekjedeTab } from '~/lib/meldekort/meldeperiodekjede/høyre-seksjon/MeldeperiodekjedeHøyreSeksjon';
 
-export const meldeperiodeUrl = (saksnummer: string, periode: Periode) =>
-    `/sak/${saksnummer}/meldeperiode/${periode.fraOgMed}/${periode.tilOgMed}`;
+export const meldeperiodeUrl = (saksnummer: string, periode: Periode, tab?: MeldeperiodekjedeTab) =>
+    `/sak/${saksnummer}/meldeperiode/${periode.fraOgMed}/${periode.tilOgMed}${tab ? `#${tab}` : ''}`;
 
 export const behandlingUrl = ({ saksnummer, id }: Pick<Rammebehandling, 'saksnummer' | 'id'>) =>
     `/sak/${saksnummer}/behandling/${id}`;

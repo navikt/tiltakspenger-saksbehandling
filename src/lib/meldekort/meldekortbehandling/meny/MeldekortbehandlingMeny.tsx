@@ -22,6 +22,8 @@ import { OppsummeringAvVentestatuserModal } from '~/lib/behandling-felles/oppsum
 import { OppsummeringAvAttesteringerModal } from '~/lib/behandling-felles/attestering/OppsummeringAvAttesteringerModal';
 import { MeldekortbehandlingProps } from '~/lib/meldekort/typer/Meldekortbehandling';
 
+import style from './MeldekortbehandlingMeny.module.css';
+
 type Props = {
     meldekortbehandling: MeldekortbehandlingProps;
 };
@@ -112,7 +114,9 @@ export const MeldekortbehandlingMeny = ({ meldekortbehandling }: Props) => {
                         </ActionMenu.Item>
                     )}
 
-                    {(harVentestatuser || harAttesteringer) && <ActionMenu.Divider />}
+                    {(harVentestatuser || harAttesteringer) && (
+                        <ActionMenu.Divider className={style.divider} />
+                    )}
 
                     {harVentestatuser && (
                         <ActionMenu.Item
@@ -134,7 +138,7 @@ export const MeldekortbehandlingMeny = ({ meldekortbehandling }: Props) => {
 
                     {kanAvslutte && (
                         <>
-                            <ActionMenu.Divider />
+                            <ActionMenu.Divider className={style.divider} />
                             <ActionMenu.Item
                                 variant={'danger'}
                                 icon={<TrashIcon aria-hidden />}

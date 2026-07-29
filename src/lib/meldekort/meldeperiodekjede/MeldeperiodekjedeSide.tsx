@@ -28,9 +28,9 @@ export const MeldeperiodekjedeSide = ({ kjedeId }: Props) => {
                     </div>
                 </MeldeperiodekjedeProvider>
             ) : (
-                <Infokort
-                    data-color={'danger'}
-                >{`Fant ikke meldeperiodekjede ${kjedeId}`}</Infokort>
+                <Infokort data-color={'danger'}>
+                    {`Fant ikke meldeperiodekjede ${kjedeId}`}
+                </Infokort>
             )}
         </>
     );

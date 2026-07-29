@@ -10,7 +10,6 @@ import {
 import { Utbetalingsstatus } from '~/types/Utbetaling';
 import { SøknadsbehandlingResultat } from '~/lib/rammebehandling/typer/Søknadsbehandling';
 import { RevurderingResultat } from '~/lib/rammebehandling/typer/Revurdering';
-import { ÅpenBehandlingForOversiktType } from '~/lib/personoversikt/typer/ÅpenBehandlingForOversikt';
 import { Behandlingsårsak, Søknadstype } from '~/types/Søknad';
 import {
     SøknadBehandlingsårsakManueltRegistrertSøknad,
@@ -124,14 +123,6 @@ export const meldekortbehandlingDagStatusTekst: Record<MeldekortbehandlingDagSta
 export const finnBehandlingstypeTekst: Record<Rammebehandlingstype, string> = {
     [Rammebehandlingstype.SØKNADSBEHANDLING]: 'Søknadsbehandling',
     [Rammebehandlingstype.REVURDERING]: 'Revurdering',
-} as const;
-
-export const finnTypeBehandlingTekstForOversikt: Record<ÅpenBehandlingForOversiktType, string> = {
-    [ÅpenBehandlingForOversiktType.SØKNADSBEHANDLING]: 'Søknadsbehandling',
-    [ÅpenBehandlingForOversiktType.REVURDERING]: 'Revurdering',
-    [ÅpenBehandlingForOversiktType.SØKNAD]: 'Søknad',
-    [ÅpenBehandlingForOversiktType.MELDEKORT]: 'Meldekort',
-    [ÅpenBehandlingForOversiktType.KLAGE]: 'Klage',
 } as const;
 
 export const behandlingResultatTilText: Record<RammebehandlingResultat, string> = {

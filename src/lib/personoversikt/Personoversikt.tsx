@@ -183,12 +183,12 @@ export const Personoversikt = () => {
                         <ActionMenu>
                             <ActionMenu.Trigger>
                                 <Button
-                                    variant="tertiary"
+                                    variant={'tertiary'}
                                     icon={<ChevronDownIcon aria-hidden />}
-                                    iconPosition="right"
+                                    iconPosition={'right'}
                                     className={styles.tab}
                                 >
-                                    Opprett behandling
+                                    {'Opprett behandling'}
                                 </Button>
                             </ActionMenu.Trigger>
                             <ActionMenu.Content>
@@ -196,7 +196,7 @@ export const Personoversikt = () => {
                                     icon={<FilePlusIcon aria-hidden />}
                                     onSelect={() => router.push(`/sak/${saksnummer}/klage/opprett`)}
                                 >
-                                    Registrer klage
+                                    {'Registrer klage'}
                                 </ActionMenu.Item>
 
                                 <ActionMenu.Item

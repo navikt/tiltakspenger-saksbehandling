@@ -1,19 +1,23 @@
 import {
     ÅpenBehandlingForOversikt,
     ÅpenBehandlingForOversiktType,
+    ÅpentMeldekortSubType,
 } from '~/lib/personoversikt/typer/ÅpenBehandlingForOversikt';
 import { Alert, HStack, Table, Tag } from '@navikt/ds-react';
 import {
     behandlingResultatTilTag,
     finnBehandlingStatusTag,
-    finnTypeBehandlingTekstForOversikt,
     klagebehandlingResultatTilTag,
     klagebehandlingStatusTilTag,
 } from '~/utils/tekstformateringUtils';
-import { formaterMeldeperiode, formaterPeriode, formaterTidspunkt } from '~/utils/date';
+import {
+    formaterMeldeperiode,
+    formaterPeriode,
+    formaterTidspunkt,
+    ukenummerFraPeriode,
+} from '~/utils/date';
 import { ApneBehandlingerMeny } from '~/lib/behandling-felles/behandlingmeny/ApneBehandlingerMeny';
 import { SakProps } from '~/lib/sak/SakTyper';
-import { Periode } from '~/types/Periode';
 import { useSak } from '~/lib/sak/SakContext';
 import { Nullable } from '~/types/UtilTypes';
 import KlageMeny from '~/lib/behandling-felles/behandlingmeny/KlageMeny';
@@ -21,8 +25,16 @@ import { hentSisteKlagehendelseUtfallFraKlagebehandling } from '~/lib/klage/util
 import { klagehendelseUtfallTilTag } from '~/lib/klage/utils/KlageinstanshendelseUtils';
 import { erMeldekortbehandlingSattPaVent } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
-import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
+import {
+    MeldekortbehandlingId,
+    MeldekortbehandlingStatus,
+} from '~/lib/meldekort/typer/Meldekortbehandling';
+import { meldekortbehandlingStatusTekst } from '~/lib/meldekort/utils/tekster';
+import { AkselColor } from '@navikt/ds-react/types/theme';
 import { hentMeldekortbehandling } from '~/lib/sak/sakUtils';
+import { meldekortbehandlingUrl, meldeperiodeUrl } from '~/utils/urls';
+import { InternLenke } from '~/lib/_felles/intern-lenke/InternLenke';
+import { MeldeperiodekjedeTab } from '~/lib/meldekort/meldeperiodekjede/høyre-seksjon/MeldeperiodekjedeHøyreSeksjon';
 
 type Props = {
     åpneBehandlinger: ÅpenBehandlingForOversikt[];
@@ -47,24 +59,19 @@ export const ApneBehandlingerOversikt = ({ åpneBehandlinger }: Props) => {
                 </Table.Row>
             </Table.Header>
             <Table.Body>
-                {åpneBehandlinger.map((åpenBehandling) => {
-                    const { id, opprettet, type } = åpenBehandling;
+                {åpneBehandlinger.map((behandling) => {
+                    const { id, opprettet } = behandling;
 
                     const {
                         typeTekst,
                         resultatTag,
                         statusTag,
                         kravtidspunkt,
-                        periode,
+                        periodeTekst,
                         saksbehandler,
                         beslutter,
                         meny,
-                    } = propsForRad(åpenBehandling, sak);
-
-                    const formaterPeriodeFunc =
-                        type === ÅpenBehandlingForOversiktType.MELDEKORT
-                            ? formaterMeldeperiode
-                            : formaterPeriode;
+                    } = propsForRad(behandling, sak);
 
                     return (
                         <Table.Row shadeOnHover={false} key={id}>
@@ -73,9 +80,7 @@ export const ApneBehandlingerOversikt = ({ åpneBehandlinger }: Props) => {
                             <Table.DataCell>{statusTag}</Table.DataCell>
                             <Table.DataCell>{formaterTidspunkt(opprettet)}</Table.DataCell>
                             <Table.DataCell>{kravtidspunkt ?? '-'}</Table.DataCell>
-                            <Table.DataCell>
-                                {periode ? `${formaterPeriodeFunc(periode)}` : '-'}
-                            </Table.DataCell>
+                            <Table.DataCell>{periodeTekst ?? '-'}</Table.DataCell>
                             <Table.DataCell>{saksbehandler ?? 'Ikke tildelt'}</Table.DataCell>
                             <Table.DataCell>{beslutter ?? 'Ikke tildelt'}</Table.DataCell>
                             <Table.DataCell scope="col" align={'right'}>
@@ -94,7 +99,7 @@ type ÅpenBehandlingOversiktRadProps = {
     resultatTag?: React.ReactNode;
     statusTag: React.ReactNode;
     kravtidspunkt?: string;
-    periode?: Nullable<Periode>;
+    periodeTekst?: string;
     saksbehandler?: Nullable<string>;
     beslutter?: Nullable<string>;
     meny: React.ReactNode;
@@ -104,9 +109,9 @@ const propsForRad = (
     åpenBehandling: ÅpenBehandlingForOversikt,
     sak: SakProps,
 ): ÅpenBehandlingOversiktRadProps => {
-    const { type } = åpenBehandling;
+    const { type, saksnummer } = åpenBehandling;
 
-    const typeTekst = finnTypeBehandlingTekstForOversikt[type];
+    const typeTekst = typeBehandlingTekst[åpenBehandling.type];
 
     switch (type) {
         case ÅpenBehandlingForOversiktType.SØKNAD: {
@@ -139,7 +144,7 @@ const propsForRad = (
                 ),
                 saksbehandler,
                 beslutter,
-                periode,
+                periodeTekst: periode ? formaterPeriode(periode) : undefined,
                 kravtidspunkt:
                     type === ÅpenBehandlingForOversiktType.SØKNADSBEHANDLING
                         ? formaterTidspunkt(åpenBehandling.kravtidspunkt)
@@ -150,22 +155,64 @@ const propsForRad = (
             };
         }
         case ÅpenBehandlingForOversiktType.MELDEKORT: {
-            const { periode, meldekortbehandlingId, saksbehandler, beslutter } = åpenBehandling;
+            const { periode, subtype } = åpenBehandling;
 
-            const meldekortbehandling = meldekortbehandlingId
-                ? hentMeldekortbehandling(sak, meldekortbehandlingId)
-                : undefined;
+            if (subtype === ÅpentMeldekortSubType.MELDEKORTBEHANDLING) {
+                const meldekortbehandling = hentMeldekortbehandling(sak, åpenBehandling.id);
+
+                const { status, periode, id, meldeperioder, saksbehandler, beslutter } =
+                    meldekortbehandling;
+
+                const antallPerioder = meldeperioder.length;
+
+                const periodeTekst =
+                    antallPerioder > 1
+                        ? `${formaterPeriode(periode)} (${antallPerioder} meldeperioder, uke ${ukenummerFraPeriode(periode)})`
+                        : formaterMeldeperiode(periode);
+
+                return {
+                    typeTekst: meldekortSubTypeTekst[subtype],
+                    statusTag: (
+                        <HStack gap="space-4">
+                            <Tag
+                                data-color={meldekortbehandlingStatusFarge[status]}
+                                variant="outline"
+                            >
+                                {meldekortbehandlingStatusTekst[status]}
+                            </Tag>
+                            {erMeldekortbehandlingSattPaVent(meldekortbehandling) && (
+                                <Tag data-color="warning">{'Satt på vent'}</Tag>
+                            )}
+                        </HStack>
+                    ),
+                    saksbehandler,
+                    beslutter,
+                    periodeTekst,
+                    meny: (
+                        <InternLenke href={meldekortbehandlingUrl(saksnummer, id)}>
+                            {'Åpne'}
+                        </InternLenke>
+                    ),
+                };
+            }
 
             return {
-                typeTekst,
-                statusTag:
-                    meldekortbehandling && erMeldekortbehandlingSattPaVent(meldekortbehandling) ? (
-                        <Tag data-color="warning">Satt på vent</Tag>
-                    ) : null,
-                saksbehandler,
-                beslutter,
-                periode,
-                meny: null,
+                typeTekst: meldekortSubTypeTekst[subtype],
+                statusTag: null,
+                saksbehandler: null,
+                beslutter: null,
+                periodeTekst: periode ? formaterMeldeperiode(periode) : undefined,
+                meny: (
+                    <InternLenke
+                        href={meldeperiodeUrl(
+                            saksnummer,
+                            periode,
+                            MeldeperiodekjedeTab.BrukersMeldekort,
+                        )}
+                    >
+                        {'Åpne'}
+                    </InternLenke>
+                ),
             };
         }
         case ÅpenBehandlingForOversiktType.KLAGE: {
@@ -209,3 +256,28 @@ const propsForRad = (
         }
     }
 };
+
+const typeBehandlingTekst: Record<ÅpenBehandlingForOversiktType, string> = {
+    SØKNADSBEHANDLING: 'Søknadsbehandling',
+    REVURDERING: 'Revurdering',
+    SØKNAD: 'Søknad',
+    MELDEKORT: 'Meldekort',
+    KLAGE: 'Klage',
+} as const;
+
+const meldekortbehandlingStatusFarge: Record<MeldekortbehandlingStatus, AkselColor> = {
+    [MeldekortbehandlingStatus.KLAR_TIL_BEHANDLING]: 'info',
+    [MeldekortbehandlingStatus.UNDER_BEHANDLING]: 'info',
+    [MeldekortbehandlingStatus.KLAR_TIL_BESLUTNING]: 'info',
+    [MeldekortbehandlingStatus.UNDER_BESLUTNING]: 'info',
+    [MeldekortbehandlingStatus.GODKJENT]: 'success',
+    [MeldekortbehandlingStatus.AUTOMATISK_BEHANDLET]: 'success',
+    [MeldekortbehandlingStatus.IKKE_RETT_TIL_TILTAKSPENGER]: 'danger',
+    [MeldekortbehandlingStatus.AVBRUTT]: 'neutral',
+} as const;
+
+const meldekortSubTypeTekst: Record<ÅpentMeldekortSubType, string> = {
+    INNSENDT_MELDEKORT: 'Innsendt meldekort',
+    KORRIGERT_MELDEKORT: 'Korrigert meldekort',
+    MELDEKORTBEHANDLING: 'Meldekortbehandling',
+} as const;

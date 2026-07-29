@@ -43,10 +43,10 @@ export const MeldeperiodeKjederOversikt = ({ saksnummer, meldeperiodeKjeder }: P
                         } = kjede;
 
                         return (
-                            <Table.Row shadeOnHover={false} key={id}>
+                            <Table.Row key={id}>
                                 <Table.DataCell>
                                     <InternLenke href={meldeperiodeUrl(saksnummer, periode)}>
-                                        {'Se mer'}
+                                        {'Åpne'}
                                     </InternLenke>
                                 </Table.DataCell>
                                 <Table.DataCell>{formaterMeldeperiode(periode)}</Table.DataCell>

@@ -44,6 +44,8 @@ export const Meldeperiodebehandlinger = () => {
         meldeperioder,
     );
 
+    const harFlere = antallUbehandlede > 1;
+
     return (
         <VStack gap={'space-16'}>
             <MeldekortbehandlingSeksjon>
@@ -51,7 +53,7 @@ export const Meldeperiodebehandlinger = () => {
                     {!erMeldekortbehandlingGodkjent(meldekortbehandling) &&
                         antallUbehandlede > 0 && (
                             <Infokort variant={'advarsel'}>
-                                {`Det finnes ${antallUbehandlede} perioder med ${antallUbehandlede > 1 ? 'ubehandlede' : 'ubehandlet'} meldekort på saken`}
+                                {`Det finnes ${antallUbehandlede} periode${harFlere ? 'r' : ''} med ${harFlere ? 'ubehandlede' : 'ubehandlet'} meldekort på saken`}
                             </Infokort>
                         )}
 
