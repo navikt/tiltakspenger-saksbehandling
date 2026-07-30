@@ -1,9 +1,5 @@
 import React, { useState } from 'react';
 import { ActionMenu, Button } from '@navikt/ds-react';
-import {
-    ÅpenBehandlingForOversiktType,
-    ÅpenRammebehandlingForOversikt,
-} from '~/lib/personoversikt/typer/ÅpenBehandlingForOversikt';
 import { visOvertaBehandlingMenyvalg } from './menyvalg/OvertaBehandlingMenyvalg';
 import AvsluttBehandlingMenyvalg from '~/lib/personoversikt/avsluttBehandling/AvsluttBehandlingMenyvalg';
 import FortsettBehandlingMenyvalg, {
@@ -30,11 +26,13 @@ import { behandlingUrl } from '~/utils/urls';
 import {
     Rammebehandling,
     Rammebehandlingsstatus,
+    Rammebehandlingstype,
 } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { useAvsluttBehandling } from './useAvsluttBehandling';
 import { useSak } from '~/lib/sak/SakContext';
 import { Saksbehandler } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import { eierBehandling } from '~/lib/saksbehandler/tilganger';
+import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
 import router from 'next/router';
 import { useFetchJsonFraApi } from '~/utils/fetch/useFetchFraApi';
 import { useSettBehandlingPåVent } from './useSettBehandlingPåVent';
@@ -42,12 +40,12 @@ import { ApiErrorFeilModal, ApiErrorState } from '~/lib/_felles/modaler/ApiError
 import AvbrytRammebehandlingModal from '~/lib/rammebehandling/modaler/AvbrytRammebehandlingModal';
 
 type Props = {
-    behandling: ÅpenRammebehandlingForOversikt;
+    behandling: Rammebehandling;
     medAvsluttBehandling: boolean;
 };
 
 const visAvsluttBehandlingMenyvalg = (
-    behandling: ÅpenRammebehandlingForOversikt,
+    behandling: Rammebehandling,
     innloggetSaksbehandler: Saksbehandler,
     behandlingKanAvsluttes: boolean,
 ) => {
@@ -57,7 +55,7 @@ const visAvsluttBehandlingMenyvalg = (
         behandlingKanAvsluttes &&
         erRelevantMenyValgForStatus &&
         eierBehandling(behandling, innloggetSaksbehandler) &&
-        !behandling.erSattPåVent
+        !erBehandlingSattPåVent(behandling)
     );
 };
 
@@ -143,7 +141,7 @@ export const ApneBehandlingerMeny = ({ behandling, medAvsluttBehandling }: Props
         );
     }
 
-    const erRevurdering = behandling.type === ÅpenBehandlingForOversiktType.REVURDERING;
+    const erRevurdering = behandling.type === Rammebehandlingstype.REVURDERING;
 
     return (
         <>

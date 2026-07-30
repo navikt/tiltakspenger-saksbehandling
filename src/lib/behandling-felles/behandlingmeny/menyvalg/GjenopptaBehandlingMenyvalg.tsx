@@ -1,5 +1,5 @@
+import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 import { ActionMenu } from '@navikt/ds-react';
-import { ÅpenRammebehandlingForOversikt } from '~/lib/personoversikt/typer/ÅpenBehandlingForOversikt';
 import { skalKunneGjenopptaBehandling } from '~/lib/saksbehandler/tilganger';
 import { Saksbehandler } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import { PlayIcon } from '@navikt/aksel-icons';
@@ -9,14 +9,14 @@ import { behandlingUrl } from '~/utils/urls';
 import { useSak } from '~/lib/sak/SakContext';
 
 export const visGjenopptaBehandlingMenyvalg = (
-    behandling: ÅpenRammebehandlingForOversikt,
+    behandling: Rammebehandling,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     return skalKunneGjenopptaBehandling(behandling, innloggetSaksbehandler);
 };
 
 type Props = {
-    behandling: ÅpenRammebehandlingForOversikt;
+    behandling: Rammebehandling;
 };
 
 const GjenopptaBehandlingMenyvalg = ({ behandling }: Props) => {

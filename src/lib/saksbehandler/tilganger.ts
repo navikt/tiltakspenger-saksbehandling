@@ -2,7 +2,6 @@ import {
     Rammebehandling,
     Rammebehandlingsstatus,
 } from '~/lib/rammebehandling/typer/Rammebehandling';
-import { ÅpenRammebehandlingForOversikt } from '~/lib/personoversikt/typer/ÅpenBehandlingForOversikt';
 import { Saksbehandler, SaksbehandlerRolle } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
 
@@ -55,7 +54,7 @@ export const hentRolleForBehandling = (
 };
 
 export const eierBehandling = (
-    behandling: ÅpenRammebehandlingForOversikt | Rammebehandling,
+    behandling: Rammebehandling,
     innloggetSaksbehandler: Saksbehandler,
 ): boolean => {
     const { status, saksbehandler, beslutter } = behandling;
@@ -71,7 +70,7 @@ export const eierBehandling = (
 };
 
 export const skalKunneTaBehandling = (
-    behandling: ÅpenRammebehandlingForOversikt | Rammebehandling,
+    behandling: Rammebehandling,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     const { status, saksbehandler } = behandling;
@@ -90,7 +89,7 @@ export const skalKunneTaBehandling = (
 };
 
 export const skalKunneOvertaBehandling = (
-    behandling: ÅpenRammebehandlingForOversikt | Rammebehandling,
+    behandling: Rammebehandling,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     const { status, saksbehandler, beslutter } = behandling;
@@ -116,11 +115,11 @@ export const skalKunneOvertaBehandling = (
 };
 
 export const skalKunneGjenopptaBehandling = (
-    behandling: Rammebehandling | ÅpenRammebehandlingForOversikt,
+    behandling: Rammebehandling,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     return (
-        erSattPaVent(behandling) &&
+        erBehandlingSattPåVent(behandling) &&
         (skalKunneTaBehandling(behandling, innloggetSaksbehandler) ||
             skalKunneOvertaBehandling(behandling, innloggetSaksbehandler) ||
             eierBehandling(behandling, innloggetSaksbehandler))
@@ -128,7 +127,7 @@ export const skalKunneGjenopptaBehandling = (
 };
 
 export const skalKunneSetteBehandlingPaVent = (
-    behandling: Rammebehandling | ÅpenRammebehandlingForOversikt,
+    behandling: Rammebehandling,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     const erRelevantMenyValgForStatus =
@@ -136,15 +135,7 @@ export const skalKunneSetteBehandlingPaVent = (
         behandling.status === Rammebehandlingsstatus.UNDER_BESLUTNING;
     return (
         erRelevantMenyValgForStatus &&
-        !erSattPaVent(behandling) &&
+        !erBehandlingSattPåVent(behandling) &&
         eierBehandling(behandling, innloggetSaksbehandler)
     );
-};
-
-const erSattPaVent = (behandling: Rammebehandling | ÅpenRammebehandlingForOversikt) => {
-    if ('ventestatus' in behandling) {
-        return erBehandlingSattPåVent(behandling);
-    } else {
-        return behandling.erSattPåVent;
-    }
 };

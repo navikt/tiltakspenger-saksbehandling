@@ -5,10 +5,10 @@ import '@testing-library/jest-dom/jest-globals';
 import { afterEach, beforeAll, beforeEach, describe, expect, jest, test } from '@jest/globals';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { ActionMenu } from '@navikt/ds-react';
-import { ÅpenRammebehandlingForOversikt } from '~/lib/personoversikt/typer/ÅpenBehandlingForOversikt';
 import LeggTilbakeBehandlingMenyvalg from './LeggTilbakeBehandlingMenyvalg';
 import { SakProvider } from '~/lib/sak/SakContext';
 import { SakProps } from '~/lib/sak/SakTyper';
+import { Rammebehandling } from '~/lib/rammebehandling/typer/Rammebehandling';
 
 // jsdom implementerer ikke ResizeObserver, som Aksel sin ActionMenu (Radix) baserer seg på.
 beforeAll(() => {
@@ -45,7 +45,7 @@ afterEach(() => {
 
 const behandling = {
     id: 'beh_123',
-} as unknown as ÅpenRammebehandlingForOversikt;
+} as unknown as Rammebehandling;
 
 const sak = {
     sakId: 'sak_123',

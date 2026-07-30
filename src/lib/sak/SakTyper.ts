@@ -1,4 +1,4 @@
-import { ÅpenBehandlingForOversikt } from '../personoversikt/typer/ÅpenBehandlingForOversikt';
+import { ÅpenBehandlingId } from '../personoversikt/typer/ÅpenBehandling';
 import { Rammevedtak } from '~/lib/rammebehandling/typer/Rammevedtak';
 import { UtbetalingstidslinjePeriode } from '~/types/Utbetaling';
 import { Rammebehandling } from '../rammebehandling/typer/Rammebehandling';
@@ -28,7 +28,7 @@ export type SakProps = {
 
     søknader: Søknad[];
 
-    åpneBehandlinger: ÅpenBehandlingForOversikt[];
+    åpneBehandlingerIder: ÅpenBehandlingId[];
 
     rammebehandlinger: Rammebehandling[];
     klagebehandlinger: Klagebehandling[];

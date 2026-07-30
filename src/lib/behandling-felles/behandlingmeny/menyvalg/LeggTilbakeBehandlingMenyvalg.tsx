@@ -1,16 +1,18 @@
 import { ActionMenu } from '@navikt/ds-react';
-import { ÅpenRammebehandlingForOversikt } from '~/lib/personoversikt/typer/ÅpenBehandlingForOversikt';
 import { useLeggTilbakeBehandling } from '~/lib/behandling-felles/behandlingmeny/useLeggTilbakeBehandling';
 import { eierBehandling } from '~/lib/saksbehandler/tilganger';
 import { Saksbehandler } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
-import { Rammebehandlingsstatus } from '~/lib/rammebehandling/typer/Rammebehandling';
+import {
+    Rammebehandling,
+    Rammebehandlingsstatus,
+} from '~/lib/rammebehandling/typer/Rammebehandling';
 import { SakProps } from '~/lib/sak/SakTyper';
 import { FetcherError } from '~/utils/fetch/fetch';
 import { useSak } from '~/lib/sak/SakContext';
 
 export const visLeggTilbakeMenyvalg = (
-    behandling: ÅpenRammebehandlingForOversikt,
+    behandling: Rammebehandling,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     const erRelevantMenyValgForStatus =
@@ -21,7 +23,7 @@ export const visLeggTilbakeMenyvalg = (
 };
 
 type Props = {
-    behandling: ÅpenRammebehandlingForOversikt;
+    behandling: Rammebehandling;
     onSuccess: (oppdatertSak: SakProps) => void;
     onError: (error: FetcherError) => void;
 };

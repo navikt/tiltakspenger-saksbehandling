@@ -18,6 +18,7 @@ import { MeldekortvedtakMedBehandling } from '~/lib/meldekort/typer/Meldekortved
 import { Klagebehandling, KlageId } from '~/lib/klage/typer/Klage';
 import { KlagevedtakMedBehandling } from '~/lib/klage/typer/Klagevedtak';
 import { VedtakType } from '~/lib/behandling-felles/typer/BehandlingFelles';
+import { Søknad, SøknadId } from '~/types/Søknad';
 
 export const hentVedtatteSøknadsbehandlinger = (sak: SakProps) => {
     const { alleRammevedtak, rammebehandlinger } = sak;
@@ -41,6 +42,17 @@ export const hentGjeldendeRammevedtakIPeriode = (sak: SakProps, periode: Periode
         .filter((el) => perioderOverlapper(el.periode, periode))
         .map((el) => el.rammevedtak)
         .filter(removeDuplicatesFilter((a, b) => a.id === b.id));
+};
+
+// Henter søknaden for id, eller kaster dersom den ikke finnes
+export const hentSøknad = (sak: SakProps, søknadId: SøknadId): Søknad => {
+    const søknad = sak.søknader.find((it) => it.id === søknadId);
+
+    if (!søknad) {
+        throw Error(`Fant ikke søknad med id ${søknadId}`);
+    }
+
+    return søknad;
 };
 
 // Henter tilbakekrevingen for id, eller kaster dersom den ikke finnes

@@ -1,15 +1,18 @@
 import { ActionMenu } from '@navikt/ds-react';
-import { ÅpenRammebehandlingForOversikt } from '~/lib/personoversikt/typer/ÅpenBehandlingForOversikt';
 import Link from 'next/link';
 import { eierBehandling } from '~/lib/saksbehandler/tilganger';
 import { Saksbehandler } from '~/lib/saksbehandler/SaksbehandlerTyper';
 import { ArrowRightIcon } from '@navikt/aksel-icons';
 import { behandlingUrl } from '~/utils/urls';
-import { Rammebehandlingsstatus } from '~/lib/rammebehandling/typer/Rammebehandling';
+import {
+    Rammebehandling,
+    Rammebehandlingsstatus,
+} from '~/lib/rammebehandling/typer/Rammebehandling';
+import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
 import { useSak } from '~/lib/sak/SakContext';
 
 export const visFortsettBehandlingMenyvalg = (
-    behandling: ÅpenRammebehandlingForOversikt,
+    behandling: Rammebehandling,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     const erReleventMenyValgForStatus =
@@ -18,13 +21,13 @@ export const visFortsettBehandlingMenyvalg = (
 
     return (
         erReleventMenyValgForStatus &&
-        !behandling.erSattPåVent &&
+        !erBehandlingSattPåVent(behandling) &&
         eierBehandling(behandling, innloggetSaksbehandler)
     );
 };
 
 type Props = {
-    behandling: ÅpenRammebehandlingForOversikt;
+    behandling: Rammebehandling;
 };
 
 const FortsettBehandlingMenyvalg = ({ behandling }: Props) => {

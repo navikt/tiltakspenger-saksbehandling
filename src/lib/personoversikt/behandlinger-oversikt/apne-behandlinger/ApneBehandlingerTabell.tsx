@@ -1,7 +1,4 @@
-import {
-    ÅpenBehandlingForOversikt,
-    ÅpenBehandlingForOversiktType,
-} from '~/lib/personoversikt/typer/ÅpenBehandlingForOversikt';
+import { ÅpenBehandlingId, ÅpenBehandlingType } from '~/lib/personoversikt/typer/ÅpenBehandling';
 import { Alert, Button, Heading, HStack, Table, Tag, VStack } from '@navikt/ds-react';
 import {
     behandlingResultatTilTag,
@@ -20,11 +17,20 @@ import {
     erMeldekortbehandlingSattPaVent,
     formaterMeldeperioder,
 } from '~/lib/meldekort/utils/meldekortbehandlingUtils';
-import { erBehandlingSattPåVent } from '~/lib/behandling-felles/utils/behandlingUtils';
+import {
+    erBehandlingSattPåVent,
+    erBehandlingUnderkjent,
+} from '~/lib/behandling-felles/utils/behandlingUtils';
 import { MeldekortbehandlingId } from '~/lib/meldekort/typer/Meldekortbehandling';
 import { meldekortbehandlingStatusTekst } from '~/lib/meldekort/utils/tekster';
 import { meldekortbehandlingStatusFarge } from '~/lib/meldekort/utils/statusProps';
-import { hentMeldekortbehandling, hentTilbakekreving } from '~/lib/sak/sakUtils';
+import {
+    hentKlagebehandling,
+    hentMeldekortbehandling,
+    hentRammebehandling,
+    hentSøknad,
+    hentTilbakekreving,
+} from '~/lib/sak/sakUtils';
 import { meldekortbehandlingUrl } from '~/utils/urls';
 import { Infokort } from '~/lib/_felles/infokort/Infokort';
 import { MeldekortbehandlingMeny } from '~/lib/meldekort/felles/meny/MeldekortbehandlingMeny';
@@ -32,35 +38,36 @@ import NextLink from 'next/link';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { formatterBeløp } from '~/utils/beløp';
 import { TilbakekrevingStatusTags } from '~/lib/tilbakekreving/status-tags/TilbakekrevingStatusTags';
+import { Rammebehandlingstype } from '~/lib/rammebehandling/typer/Rammebehandling';
 
 type Props = {
     sak: SakProps;
 };
 
 export const ApneBehandlingerTabell = ({ sak }: Props) => {
-    const { åpneBehandlinger } = sak;
+    const { åpneBehandlingerIder } = sak;
 
     return (
         <VStack gap={'space-8'}>
             <Heading size={'small'} level={'2'}>
-                {`Åpne behandlinger (${åpneBehandlinger.length})`}
+                {`Åpne behandlinger (${åpneBehandlingerIder.length})`}
             </Heading>
 
-            {åpneBehandlinger.length === 0 ? (
+            {åpneBehandlingerIder.length === 0 ? (
                 <Infokort variant={'info'}>{'Ingen åpne behandlinger på denne saken'}</Infokort>
             ) : (
-                <Tabell åpneBehandlinger={åpneBehandlinger} sak={sak} />
+                <Tabell åpneBehandlingerIder={åpneBehandlingerIder} sak={sak} />
             )}
         </VStack>
     );
 };
 
 type TabellProps = {
-    åpneBehandlinger: ÅpenBehandlingForOversikt[];
+    åpneBehandlingerIder: ÅpenBehandlingId[];
     sak: SakProps;
 };
 
-const Tabell = ({ åpneBehandlinger, sak }: TabellProps) => {
+const Tabell = ({ åpneBehandlingerIder, sak }: TabellProps) => {
     return (
         <Table>
             <Table.Header>
@@ -77,22 +84,21 @@ const Tabell = ({ åpneBehandlinger, sak }: TabellProps) => {
                 </Table.Row>
             </Table.Header>
             <Table.Body>
-                {åpneBehandlinger.map((behandling) => {
-                    const { id, opprettet } = behandling;
-
+                {åpneBehandlingerIder.map((åpenBehandlingId) => {
                     const {
                         typeTekst,
                         resultatTag,
                         statusTag,
+                        opprettet,
                         kravtidspunkt,
                         periodeTekst,
                         saksbehandler,
                         beslutter,
                         meny,
-                    } = propsForRad(behandling, sak);
+                    } = propsForRad(åpenBehandlingId, sak);
 
                     return (
-                        <Table.Row shadeOnHover={false} key={id}>
+                        <Table.Row shadeOnHover={false} key={åpenBehandlingId.id}>
                             <Table.DataCell>{typeTekst}</Table.DataCell>
                             <Table.DataCell>{resultatTag ?? '-'}</Table.DataCell>
                             <Table.DataCell>{statusTag}</Table.DataCell>
@@ -116,6 +122,7 @@ type ÅpenBehandlingOversiktRadProps = {
     typeTekst: string;
     resultatTag?: React.ReactNode;
     statusTag: React.ReactNode;
+    opprettet: string;
     kravtidspunkt?: string;
     periodeTekst?: string;
     saksbehandler?: Nullable<string>;
@@ -124,24 +131,26 @@ type ÅpenBehandlingOversiktRadProps = {
 };
 
 const propsForRad = (
-    åpenBehandling: ÅpenBehandlingForOversikt,
+    åpenBehandlingId: ÅpenBehandlingId,
     sak: SakProps,
 ): ÅpenBehandlingOversiktRadProps => {
-    const { type } = åpenBehandling;
     const { saksnummer } = sak;
 
-    const typeTekst = typeBehandlingTekst[åpenBehandling.type];
+    const typeTekst = typeBehandlingTekst[åpenBehandlingId.type];
 
-    switch (type) {
-        case ÅpenBehandlingForOversiktType.SØKNAD: {
+    switch (åpenBehandlingId.type) {
+        case ÅpenBehandlingType.SØKNAD: {
+            const { opprettet, tidsstempelHosOss } = hentSøknad(sak, åpenBehandlingId.id);
+
             return {
                 typeTekst,
+                opprettet,
                 statusTag: (
                     <Tag data-color="neutral" variant="outline">
                         {'Søknad'}
                     </Tag>
                 ),
-                kravtidspunkt: formaterTidspunkt(åpenBehandling.kravtidspunkt),
+                kravtidspunkt: formaterTidspunkt(tidsstempelHosOss),
                 meny: (
                     <Alert variant={'info'} size={'small'} inline={true}>
                         {'Søknadsbehandling opprettes automatisk'}
@@ -149,37 +158,45 @@ const propsForRad = (
                 ),
             };
         }
-        case ÅpenBehandlingForOversiktType.SØKNADSBEHANDLING:
-        case ÅpenBehandlingForOversiktType.REVURDERING: {
-            const { saksbehandler, beslutter, resultat, periode } = åpenBehandling;
+        case ÅpenBehandlingType.SØKNADSBEHANDLING:
+        case ÅpenBehandlingType.REVURDERING: {
+            const rammebehandling = hentRammebehandling(sak, åpenBehandlingId.id);
+
+            const { opprettet, status, resultat, saksbehandler, beslutter, vedtaksperiode } =
+                rammebehandling;
 
             return {
                 typeTekst,
+                opprettet,
                 resultatTag: behandlingResultatTilTag(resultat),
                 statusTag: finnBehandlingStatusTag(
-                    åpenBehandling.status,
-                    åpenBehandling.underkjent,
-                    åpenBehandling.erSattPåVent,
+                    status,
+                    erBehandlingUnderkjent(rammebehandling),
+                    erBehandlingSattPåVent(rammebehandling),
                 ),
                 saksbehandler,
                 beslutter,
-                periodeTekst: periode ? formaterPeriode(periode) : undefined,
+                periodeTekst: vedtaksperiode ? formaterPeriode(vedtaksperiode) : undefined,
                 kravtidspunkt:
-                    type === ÅpenBehandlingForOversiktType.SØKNADSBEHANDLING
-                        ? formaterTidspunkt(åpenBehandling.kravtidspunkt)
+                    rammebehandling.type === Rammebehandlingstype.SØKNADSBEHANDLING
+                        ? formaterTidspunkt(rammebehandling.søknad.tidsstempelHosOss)
                         : undefined,
                 meny: (
-                    <ApneBehandlingerMeny behandling={åpenBehandling} medAvsluttBehandling={true} />
+                    <ApneBehandlingerMeny
+                        behandling={rammebehandling}
+                        medAvsluttBehandling={true}
+                    />
                 ),
             };
         }
-        case ÅpenBehandlingForOversiktType.MELDEKORT: {
-            const meldekortbehandling = hentMeldekortbehandling(sak, åpenBehandling.id);
+        case ÅpenBehandlingType.MELDEKORT: {
+            const meldekortbehandling = hentMeldekortbehandling(sak, åpenBehandlingId.id);
 
-            const { status, id, saksbehandler, beslutter } = meldekortbehandling;
+            const { id, opprettet, status, saksbehandler, beslutter } = meldekortbehandling;
 
             return {
                 typeTekst,
+                opprettet,
                 statusTag: (
                     <HStack gap="space-4">
                         <Tag data-color={meldekortbehandlingStatusFarge[status]} variant="outline">
@@ -213,37 +230,39 @@ const propsForRad = (
                 ),
             };
         }
-        case ÅpenBehandlingForOversiktType.KLAGE: {
-            const klagebehandling = sak.klagebehandlinger.find(
-                (klage) => klage.id === åpenBehandling.id,
-            )!;
+        case ÅpenBehandlingType.KLAGE: {
+            const klagebehandling = hentKlagebehandling(sak, åpenBehandlingId.id);
+
+            const {
+                opprettet,
+                status,
+                resultat,
+                saksbehandler,
+                åpenBehandlingId: omgjøringId,
+            } = klagebehandling;
 
             const utfall = hentSisteKlagehendelseUtfallFraKlagebehandling(klagebehandling);
 
             const omgjøringsbehandling =
-                sak.rammebehandlinger.find(
-                    (omgjøring) => omgjøring.id === klagebehandling.åpenBehandlingId,
-                ) ??
-                (klagebehandling.åpenBehandlingId &&
-                    sak.meldekortbehandlinger[
-                        klagebehandling.åpenBehandlingId as MeldekortbehandlingId
-                    ]) ??
+                sak.rammebehandlinger.find((omgjøring) => omgjøring.id === omgjøringId) ??
+                (omgjøringId && sak.meldekortbehandlinger[omgjøringId as MeldekortbehandlingId]) ??
                 null;
 
             return {
                 typeTekst,
+                opprettet,
                 statusTag: erBehandlingSattPåVent(klagebehandling) ? (
-                    <Tag data-color="warning">Satt på vent</Tag>
+                    <Tag data-color="warning">{'Satt på vent'}</Tag>
                 ) : (
-                    klagebehandlingStatusTilTag({ status: åpenBehandling.status })
+                    klagebehandlingStatusTilTag({ status })
                 ),
-                resultatTag: åpenBehandling.resultat ? (
+                resultatTag: resultat ? (
                     <HStack gap="space-4">
-                        {klagebehandlingResultatTilTag({ resultat: åpenBehandling.resultat })}
-                        {utfall && klagehendelseUtfallTilTag({ utfall: utfall })}
+                        {klagebehandlingResultatTilTag({ resultat: resultat.type })}
+                        {utfall && klagehendelseUtfallTilTag({ utfall })}
                     </HStack>
                 ) : undefined,
-                saksbehandler: åpenBehandling.saksbehandler,
+                saksbehandler,
                 meny: (
                     <KlageMeny
                         klage={klagebehandling}
@@ -252,19 +271,26 @@ const propsForRad = (
                 ),
             };
         }
-        case ÅpenBehandlingForOversiktType.TILBAKEKREVING: {
-            const { periode, status, totaltFeilutbetaltBeløp, saksbehandler, beslutter } =
-                åpenBehandling;
-
-            const { url, venter } = hentTilbakekreving(sak, åpenBehandling.id);
+        case ÅpenBehandlingType.TILBAKEKREVING: {
+            const {
+                opprettet,
+                status,
+                venter,
+                url,
+                kravgrunnlagTotalPeriode,
+                totaltFeilutbetaltBeløp,
+                saksbehandler,
+                beslutter,
+            } = hentTilbakekreving(sak, åpenBehandlingId.id);
 
             return {
                 typeTekst,
+                opprettet,
                 resultatTag: `Feilutbetalt: ${formatterBeløp(totaltFeilutbetaltBeløp)}`,
                 statusTag: <TilbakekrevingStatusTags status={status} venter={venter} />,
                 saksbehandler,
                 beslutter,
-                periodeTekst: formaterPeriode(periode),
+                periodeTekst: formaterPeriode(kravgrunnlagTotalPeriode),
                 meny: (
                     <Button
                         as={'a'}
@@ -283,7 +309,7 @@ const propsForRad = (
     }
 };
 
-const typeBehandlingTekst: Record<ÅpenBehandlingForOversiktType, string> = {
+const typeBehandlingTekst: Record<ÅpenBehandlingType, string> = {
     SØKNADSBEHANDLING: 'Søknadsbehandling',
     REVURDERING: 'Revurdering',
     SØKNAD: 'Søknad',

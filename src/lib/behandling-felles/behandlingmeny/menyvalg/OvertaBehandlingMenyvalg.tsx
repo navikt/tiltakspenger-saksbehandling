@@ -1,10 +1,12 @@
-import { ÅpenRammebehandlingForOversikt } from '~/lib/personoversikt/typer/ÅpenBehandlingForOversikt';
 import { skalKunneOvertaBehandling } from '~/lib/saksbehandler/tilganger';
 import { Saksbehandler } from '~/lib/saksbehandler/SaksbehandlerTyper';
-import { Rammebehandlingsstatus } from '~/lib/rammebehandling/typer/Rammebehandling';
+import {
+    Rammebehandling,
+    Rammebehandlingsstatus,
+} from '~/lib/rammebehandling/typer/Rammebehandling';
 
 export const visOvertaBehandlingMenyvalg = (
-    behandling: ÅpenRammebehandlingForOversikt,
+    behandling: Rammebehandling,
     innloggetSaksbehandler: Saksbehandler,
 ) => {
     const erRelevantMenyValgForStatus =
